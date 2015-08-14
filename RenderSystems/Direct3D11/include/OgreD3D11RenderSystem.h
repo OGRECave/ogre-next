@@ -181,8 +181,6 @@ namespace Ogre
 
         bool mRenderSystemWasInited;
 
-        IDXGIFactoryN*  mpDXGIFactory;
-
         D3D11PixelFormatToShaderType mD3D11PixelFormatToShaderType;
 		
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
