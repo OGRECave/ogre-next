@@ -58,9 +58,7 @@ namespace v1 {
         mParentTexture(parentTexture),
         mDevice(device),
         mSubresourceIndex(subresourceIndex),
-        mFace(face),
-        mDataForStaticUsageLock(0),
-        mStagingBuffer(NULL)
+        mFace(face)
     {
         if(mUsage & TU_RENDERTARGET)
         {
@@ -94,12 +92,6 @@ namespace v1 {
                     Root::getSingleton().getRenderSystem()->destroyRenderTarget(mSliceTRT[zoffset]->getName());
             }
         }
-
-        //if (mDataForStaticUsageLock != NULL)
-        {
-            SAFE_DELETE_ARRAY(mDataForStaticUsageLock) ;
-        }
-        SAFE_RELEASE(mStagingBuffer);
     }
     //-----------------------------------------------------------------------------  
     void D3D11HardwarePixelBuffer::_map(ID3D11Resource *res, D3D11_MAP flags, PixelBox & box)
@@ -109,7 +101,7 @@ namespace v1 {
         UINT subresource = 0;
         UINT numMips = 0;
 
-        if( res != mStagingBuffer )
+        if( res != mStagingBuffer.Get() )
         {
             subresource = mSubresourceIndex;
             numMips     = mParentTexture->getNumMipmaps() + 1;
@@ -192,10 +184,8 @@ namespace v1 {
     void *D3D11HardwarePixelBuffer::_mapstaticbuffer(PixelBox lock)
     {
         // for static usage just alloc
-        size_t sizeOfImage = lock.getConsecutiveSize();
-        
-        mDataForStaticUsageLock = new int8[sizeOfImage];
-        return mDataForStaticUsageLock;
+        mDataForStaticUsageLock.resize(lock.getConsecutiveSize());
+        return mDataForStaticUsageLock.data();
     }
     //-----------------------------------------------------------------------------  
     void D3D11HardwarePixelBuffer::_mapstagingbuffer(D3D11_MAP flags, PixelBox &box)
@@ -222,14 +212,14 @@ namespace v1 {
                                                              mLockBox.front,
                                                              mParentTexture->getNumMipmaps()+1 );
             mDevice.GetImmediateContext()->CopySubresourceRegion(
-                        mStagingBuffer, 0,
+                        mStagingBuffer.Get(), 0,
                         mLockBox.left, mLockBox.top, 0,
                         mParentTexture->getTextureResource(), subresource, &srcBoxDx11 );
         }
         else if(flags == D3D11_MAP_WRITE_DISCARD)
             flags = D3D11_MAP_WRITE; // stagingbuffer doesn't support discarding
 
-        _map(mStagingBuffer, flags, box);
+        _map(mStagingBuffer.Get(), flags, box);
     }
     //-----------------------------------------------------------------------------  
     PixelBox D3D11HardwarePixelBuffer::lockImpl(const Image::Box &lockBox, LockOptions options)
@@ -285,9 +275,8 @@ namespace v1 {
         }
         else
         {
-            size_t sizeOfImage = rval.getConsecutiveSize();
-            mDataForStaticUsageLock = new int8[sizeOfImage];
-            rval.data = mDataForStaticUsageLock;
+            mDataForStaticUsageLock.resize(rval.getConsecutiveSize());
+            rval.data = mDataForStaticUsageLock.data();
         }
         // save without offset
         mCurrentLock = rval;
@@ -304,7 +293,7 @@ namespace v1 {
         UINT subresource = 0;
         UINT numMips = 0;
 
-        if( res != mStagingBuffer )
+        if( res != mStagingBuffer.Get() )
         {
             subresource = mSubresourceIndex;
             numMips     = mParentTexture->getNumMipmaps() + 1;
@@ -366,7 +355,7 @@ namespace v1 {
 
                 mDevice.GetImmediateContext()->UpdateSubresource(mParentTexture->GetTex1D(), 
                     static_cast<UINT>(mSubresourceIndex), &dstBoxDx11, 
-                    mDataForStaticUsageLock, rowWidth, 0);
+                    mDataForStaticUsageLock.data(), rowWidth, 0);
                 if (mDevice.isError())
                 {
                     String errorDescription = mDevice.getErrorDescription();
@@ -382,7 +371,7 @@ namespace v1 {
                 mDevice.GetImmediateContext()->UpdateSubresource(mParentTexture->GetTex2D(), 
                     D3D11CalcSubresource(static_cast<UINT>(mSubresourceIndex), mFace, mParentTexture->getNumMipmaps()+1),
                     &dstBoxDx11, 
-                    mDataForStaticUsageLock, rowWidth, 0);
+                    mDataForStaticUsageLock.data(), rowWidth, 0);
 
                 if (mDevice.isError())
                 {
@@ -397,7 +386,7 @@ namespace v1 {
             {
                 mDevice.GetImmediateContext()->UpdateSubresource(mParentTexture->GetTex2D(), 
                     D3D11CalcSubresource(static_cast<UINT>(mSubresourceIndex), mLockBox.front, mParentTexture->getNumMipmaps()+1),
-                    &dstBoxDx11, mDataForStaticUsageLock, rowWidth, 0);
+                    &dstBoxDx11, mDataForStaticUsageLock.data(), rowWidth, 0);
 
                 if (mDevice.isError())
                 {
@@ -413,7 +402,7 @@ namespace v1 {
                 size_t sliceWidth = PixelUtil::getMemorySize(mCurrentLock.getWidth(), mCurrentLock.getHeight(), 1, mFormat);
 
                 mDevice.GetImmediateContext()->UpdateSubresource(mParentTexture->GetTex3D(), static_cast<UINT>(mSubresourceIndex), 
-                    &dstBoxDx11, mDataForStaticUsageLock, rowWidth, sliceWidth);
+                    &dstBoxDx11, mDataForStaticUsageLock.data(), rowWidth, sliceWidth);
                 if (mDevice.isError())
                 {
                     String errorDescription = mDevice.getErrorDescription();
@@ -425,12 +414,12 @@ namespace v1 {
             break;
         }
 
-        SAFE_DELETE_ARRAY(mDataForStaticUsageLock) ;
+        mDataForStaticUsageLock.swap(vector<int8>::type()); // i.e. shrink_to_fit
     }
     //-----------------------------------------------------------------------------  
     void D3D11HardwarePixelBuffer::_unmapstagingbuffer(bool copyback)
     {
-        _unmap(mStagingBuffer);
+        _unmap(mStagingBuffer.Get());
 
         if(copyback)
         {
@@ -453,9 +442,9 @@ namespace v1 {
                         mParentTexture->getTextureResource(),
                         dstSubresource,
                         mLockBox.left, mLockBox.top, 0, //TODO: Support 3D array textures
-                        mStagingBuffer, 0, &srcBoxDx11 );
+                        mStagingBuffer.Get(), 0, &srcBoxDx11 );
 
-            SAFE_RELEASE(mStagingBuffer);
+            mStagingBuffer.Reset();
         }
     }
     //-----------------------------------------------------------------------------  
@@ -931,7 +920,7 @@ namespace v1 {
                 desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE | D3D11_CPU_ACCESS_READ;
                 desc.Usage = D3D11_USAGE_STAGING;
 
-                mDevice->CreateTexture1D(&desc, NULL, (ID3D11Texture1D**)(&mStagingBuffer));
+                mDevice->CreateTexture1D(&desc, NULL, (ID3D11Texture1D**)mStagingBuffer.ReleaseAndGetAddressOf());
             }                   
             break;
         case TEX_TYPE_2D:
@@ -949,7 +938,7 @@ namespace v1 {
                 desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE | D3D11_CPU_ACCESS_READ;
                 desc.Usage = D3D11_USAGE_STAGING;
 
-                mDevice->CreateTexture2D(&desc, NULL, (ID3D11Texture2D**)(&mStagingBuffer));
+                mDevice->CreateTexture2D(&desc, NULL, (ID3D11Texture2D**)mStagingBuffer.ReleaseAndGetAddressOf());
             }
             break;
         case TEX_TYPE_3D:
@@ -966,7 +955,7 @@ namespace v1 {
                 desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE | D3D11_CPU_ACCESS_READ;
                 desc.Usage = D3D11_USAGE_STAGING;
 
-                mDevice->CreateTexture3D(&desc, NULL, (ID3D11Texture3D**)(&mStagingBuffer));
+                mDevice->CreateTexture3D(&desc, NULL, (ID3D11Texture3D**)mStagingBuffer.ReleaseAndGetAddressOf());
             }
             break;
         }
