@@ -51,13 +51,6 @@ namespace Ogre
         ManualResourceLoader* loader, D3D11Device & device)
         :Texture(creator, name, handle, group, isManual, loader),
         mDevice(device),
-        mp1DTex(NULL),
-        mp2DTex(NULL),
-        mp3DTex(NULL),
-        mpTex(NULL),
-        mpResolveTexture( 0 ),
-        mpShaderResourceView(NULL),
-        mpShaderResourceViewMsaa(NULL),
         mDynamicTextures(false),
         mCurrentCacheCursor( 0 ),
         mAutoMipMapGeneration(false),
@@ -99,9 +92,9 @@ namespace Ogre
         other = static_cast< D3D11Texture * >( target.get() );
 
         if( mpResolveTexture && !other->mpResolveTexture )
-            mDevice.GetImmediateContext()->CopyResource( other->getTextureResource(), mpResolveTexture );
+            mDevice.GetImmediateContext()->CopyResource( other->getTextureResource(), mpResolveTexture.Get() );
         else
-            mDevice.GetImmediateContext()->CopyResource( other->getTextureResource(), mpTex );
+            mDevice.GetImmediateContext()->CopyResource( other->getTextureResource(), mpTex.Get() );
         if (mDevice.isError())
         {
             String errorDescription = mDevice.getErrorDescription();
@@ -123,7 +116,7 @@ namespace Ogre
     {
         assert(mpShaderResourceView);
 
-        ID3D11ShaderResourceView *retVal = mpShaderResourceView;
+        ID3D11ShaderResourceView *retVal = mpShaderResourceView.Get();
 
         if( mpResolveTexture )
         {
@@ -141,7 +134,7 @@ namespace Ogre
             else if( renderTarget->isFsaaResolveDirty() )
             {
                 //Explicit resolves. Only use the Fsaa texture before it has been resolved
-                retVal = mpShaderResourceViewMsaa;
+                retVal = mpShaderResourceViewMsaa.Get();
             }
         }
 
@@ -162,8 +155,7 @@ namespace Ogre
     {
         assert( cacheIdx < 16 );
 
-        if( mCachedUavViews[cacheIdx].uavView )
-            mCachedUavViews[cacheIdx].uavView->Release();
+        mCachedUavViews[cacheIdx].uavView.Reset();
 
         mCachedUavViews[cacheIdx].mipmapLevel       = mipmapLevel;
         mCachedUavViews[cacheIdx].textureArrayIndex = textureArrayIndex;
@@ -200,11 +192,11 @@ namespace Ogre
             break;
         }
 
-        mDevice.get()->CreateUnorderedAccessView( mpTex, &descUAV, &mCachedUavViews[cacheIdx].uavView );
+        mDevice.get()->CreateUnorderedAccessView( mpTex.Get(), &descUAV, mCachedUavViews[cacheIdx].uavView.ReleaseAndGetAddressOf() );
 
         mCurrentCacheCursor = (cacheIdx + 1) % 4;
 
-        return mCachedUavViews[cacheIdx].uavView;
+        return mCachedUavViews[cacheIdx].uavView.Get();
     }
     //---------------------------------------------------------------------
     ID3D11UnorderedAccessView* D3D11Texture::getUavView( int32 mipmapLevel,
@@ -220,7 +212,7 @@ namespace Ogre
                 textureArrayIndex == mCachedUavViews[i].textureArrayIndex &&
                 pixelFormat == mCachedUavViews[i].pixelFormat )
             {
-                uavView = mCachedUavViews[i].uavView;
+                uavView = mCachedUavViews[i].uavView.Get();
                 break;
             }
             else if( !mCachedUavViews[i].uavView )
@@ -277,21 +269,17 @@ namespace Ogre
     void D3D11Texture::freeInternalResourcesImpl()
     {
         mSurfaceList.clear();        
-        SAFE_RELEASE(mpTex);
-        SAFE_RELEASE(mpResolveTexture);
-        SAFE_RELEASE(mpShaderResourceView);
-        SAFE_RELEASE(mpShaderResourceViewMsaa);
-        SAFE_RELEASE(mp1DTex);
-        SAFE_RELEASE(mp2DTex);
-        SAFE_RELEASE(mp3DTex);
+        mpTex.Reset();
+        mpResolveTexture.Reset();
+        mpShaderResourceView.Reset();
+        mpShaderResourceViewMsaa.Reset();
+        mp1DTex.Reset();
+        mp2DTex.Reset();
+        mp3DTex.Reset();
 
         for( int i=0; i<4; ++i )
         {
-            if( mCachedUavViews[i].uavView )
-            {
-                mCachedUavViews[i].uavView->Release();
-                mCachedUavViews[i].uavView = 0;
-            }
+            mCachedUavViews[i].uavView.Reset();
         }
     }
     //---------------------------------------------------------------------
@@ -389,7 +377,7 @@ namespace Ogre
                 memoryptr->size(),
                 &loadInfo,
                 NULL, 
-                &mpTex, 
+                mpTex.ReleaseAndGetAddressOf(),
                 NULL );
         }
         else
@@ -399,7 +387,7 @@ namespace Ogre
                 memoryptr->size(),
                 NULL,
                 NULL, 
-                &mpTex, 
+                mpTex.ReleaseAndGetAddressOf(),
                 NULL );
         }
 
@@ -546,7 +534,7 @@ namespace Ogre
         hr = mDevice->CreateTexture1D(  
             &desc,
             NULL,
-            &mp1DTex);                      // data pointer
+            mp1DTex.ReleaseAndGetAddressOf());                      // data pointer
         // check result and except if failed
         if (FAILED(hr) || mDevice.isError())
         {
@@ -584,7 +572,7 @@ namespace Ogre
             mD3dFormat = srvDesc.Format,
             mD3dViewDimension = srvDesc.ViewDimension;
 
-            hr = mDevice->CreateShaderResourceView( mp1DTex, &srvDesc, &mpShaderResourceView );
+            hr = mDevice->CreateShaderResourceView( mp1DTex.Get(), &srvDesc, mpShaderResourceView.ReleaseAndGetAddressOf() );
             if (FAILED(hr) || mDevice.isError())
             {
                 String errorDescription = mDevice.getErrorDescription(hr);
@@ -687,7 +675,7 @@ namespace Ogre
         hr = mDevice->CreateTexture2D(  
             &desc,
             NULL,// data pointer
-            &mp2DTex);                      
+            mp2DTex.ReleaseAndGetAddressOf());
         // check result and except if failed
         if (FAILED(hr) || mDevice.isError())
         {
@@ -789,7 +777,7 @@ namespace Ogre
 
             if( mFSAA > 1 || atoi(mFSAAHint.c_str()) > 0 )
             {
-                hr = mDevice->CreateShaderResourceView( mp2DTex, &srvDesc, &mpShaderResourceViewMsaa );
+                hr = mDevice->CreateShaderResourceView( mp2DTex.Get(), &srvDesc, mpShaderResourceViewMsaa.ReleaseAndGetAddressOf() );
                 if (FAILED(hr) || mDevice.isError())
                 {
                     String errorDescription = mDevice.getErrorDescription(hr);
@@ -817,8 +805,8 @@ namespace Ogre
                     break;
                 }
 
-                ID3D11Texture2D *resolveTexture = static_cast<ID3D11Texture2D*>( mpResolveTexture );
-                hr = mDevice->CreateShaderResourceView( resolveTexture, &srvDesc, &mpShaderResourceView );
+                ID3D11Texture2D *resolveTexture = static_cast<ID3D11Texture2D*>( mpResolveTexture.Get() );
+                hr = mDevice->CreateShaderResourceView( resolveTexture, &srvDesc, mpShaderResourceView.ReleaseAndGetAddressOf() );
 
                 if (FAILED(hr) || mDevice.isError())
                 {
@@ -831,7 +819,7 @@ namespace Ogre
             }
             else
             {
-                hr = mDevice->CreateShaderResourceView( mp2DTex, &srvDesc, &mpShaderResourceView );
+                hr = mDevice->CreateShaderResourceView( mp2DTex.Get(), &srvDesc, mpShaderResourceView.ReleaseAndGetAddressOf() );
                 if (FAILED(hr) || mDevice.isError())
                 {
                     String errorDescription = mDevice.getErrorDescription(hr);
@@ -885,7 +873,7 @@ namespace Ogre
         hr = mDevice->CreateTexture3D(  
             &desc,
             NULL,
-            &mp3DTex);                      // data pointer
+            mp3DTex.ReleaseAndGetAddressOf());                      // data pointer
         // check result and except if failed
         if (FAILED(hr) || mDevice.isError())
         {
@@ -920,7 +908,7 @@ namespace Ogre
             srvDesc.Texture3D.MipLevels = desc.MipLevels;
             mD3dFormat = srvDesc.Format,
             mD3dViewDimension = srvDesc.ViewDimension;
-            hr = mDevice->CreateShaderResourceView( mp3DTex, &srvDesc, &mpShaderResourceView );
+            hr = mDevice->CreateShaderResourceView( mp3DTex.Get(), &srvDesc, mpShaderResourceView.ReleaseAndGetAddressOf() );
             if (FAILED(hr) || mDevice.isError())
             {
                 String errorDescription = mDevice.getErrorDescription(hr);
@@ -1044,7 +1032,7 @@ namespace Ogre
     //---------------------------------------------------------------------
     void D3D11Texture::_autogenerateMipmaps(void)
     {
-        mDevice.GetImmediateContext()->GenerateMips( mpShaderResourceView );
+        mDevice.GetImmediateContext()->GenerateMips( mpShaderResourceView.Get() );
         mSurfaceList[0]->getRenderTarget()->_setMipmapsUpdated();
     }
     //---------------------------------------------------------------------

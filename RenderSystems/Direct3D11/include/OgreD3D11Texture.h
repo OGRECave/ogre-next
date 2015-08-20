@@ -45,7 +45,7 @@ namespace Ogre {
     {
         struct CachedUavView
         {
-            ID3D11UnorderedAccessView   *uavView;
+            ComPtr<ID3D11UnorderedAccessView> uavView;
             int32           mipmapLevel;
             int32           textureArrayIndex;
             PixelFormat     pixelFormat;
@@ -68,19 +68,19 @@ namespace Ogre {
 		/// @copydoc Texture::getBuffer
         v1::HardwarePixelBufferSharedPtr getBuffer(size_t face, size_t mipmap);
 
-		ID3D11Resource *getTextureResource() { assert(mpTex); return mpTex; }
+		ID3D11Resource *getTextureResource() { assert(mpTex); return mpTex.Get(); }
         ID3D11Resource *getResolveTextureResource()
-                                            { assert(mpResolveTexture); return mpResolveTexture; }
-        bool hasResolveTextureResource() const  { return mpResolveTexture != 0; }
+                                            { assert(mpResolveTexture); return mpResolveTexture.Get(); }
+        bool hasResolveTextureResource() const  { return mpResolveTexture.Get() != 0; }
 		/// retrieves a pointer to the actual texture
         ID3D11ShaderResourceView *getTexture();
 
         ID3D11UnorderedAccessView* getUavView( int32 mipmapLevel, int32 textureArrayIndex,
                                                PixelFormat pixelFormat );
 
-		ID3D11Texture1D * GetTex1D() { return mp1DTex; };
-		ID3D11Texture2D * GetTex2D() { return mp2DTex; };
-		ID3D11Texture3D	* GetTex3D() { return mp3DTex; };
+		ID3D11Texture1D * GetTex1D() { return mp1DTex.Get(); };
+		ID3D11Texture2D * GetTex2D() { return mp2DTex.Get(); };
+		ID3D11Texture3D	* GetTex3D() { return mp3DTex.Get(); };
 
 		bool HasAutoMipMapGenerationEnabled() const { return mAutoMipMapGeneration; }
 
@@ -98,27 +98,27 @@ namespace Ogre {
 		D3D11Device	&	mDevice;
 
         // 1D texture pointer
-        ID3D11Texture1D *mp1DTex;
+        ComPtr<ID3D11Texture1D> mp1DTex;
         // 2D texture pointer
-        ID3D11Texture2D *mp2DTex;
+        ComPtr<ID3D11Texture2D> mp2DTex;
         /// cubic texture pointer
-		ID3D11Texture3D	*mp3DTex;
+        ComPtr<ID3D11Texture3D> mp3DTex;
         /// actual texture pointer
-		ID3D11Resource 	*mpTex;
+        ComPtr<ID3D11Resource> mpTex;
         /// Used by MSAA only.
-        ID3D11Resource  *mpResolveTexture;
+        ComPtr<ID3D11Resource> mpResolveTexture;
 
-        ID3D11ShaderResourceView* mpShaderResourceView;
-        ID3D11ShaderResourceView* mpShaderResourceViewMsaa;
+        ComPtr<ID3D11ShaderResourceView> mpShaderResourceView;
+        ComPtr<ID3D11ShaderResourceView> mpShaderResourceViewMsaa;
         CachedUavView  mCachedUavViews[4];
         uint8          mCurrentCacheCursor;
 
         bool mAutoMipMapGeneration;
 
         template<typename fromtype, typename totype>
-        void _queryInterface(fromtype *from, totype **to)
+        void _queryInterface(const ComPtr<fromtype>& from, ComPtr<totype> *to)
         {
-            HRESULT hr = from->QueryInterface(__uuidof(totype), (void **)to);
+            HRESULT hr = from.As(to);
 
             if(FAILED(hr) || mDevice.isError())
             {
