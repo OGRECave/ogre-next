@@ -115,7 +115,6 @@ namespace Ogre
     class D3D11DynamicBuffer;
     class D3D11VideoMode;
     class D3D11VideoModeList;
-    class D3D11GpuProgram;
     class D3D11GpuProgramManager;
     struct D3D11HlmsPso;
     class D3D11HLSLProgramFactory;
@@ -132,7 +131,6 @@ namespace Ogre
         class D3D11HardwarePixelBuffer;
     }
 
-    typedef SharedPtr<D3D11GpuProgram>  D3D11GpuProgramPtr;
     typedef SharedPtr<D3D11HLSLProgram> D3D11HLSLProgramPtr;
     typedef SharedPtr<D3D11Texture>     D3D11TexturePtr;
 

@@ -39,7 +39,6 @@ THE SOFTWARE.
 #include "OgreD3D11HardwareBufferManager.h"
 #include "OgreD3D11HardwareIndexBuffer.h"
 #include "OgreD3D11HardwareVertexBuffer.h"
-#include "OgreD3D11GpuProgram.h"
 #include "OgreD3D11GpuProgramManager.h"
 #include "OgreD3D11HLSLProgramFactory.h"
 
@@ -1135,7 +1134,7 @@ bail:
             mHardwareBufferManager = new v1::D3D11HardwareBufferManager(mDevice);
 
 			// Create the GPU program manager
-			mGpuProgramManager = new D3D11GpuProgramManager(mDevice);
+			mGpuProgramManager = new D3D11GpuProgramManager();
 			// create & register HLSL factory
 			if (mHLSLProgramFactory == NULL)
 				mHLSLProgramFactory = new D3D11HLSLProgramFactory(mDevice);
