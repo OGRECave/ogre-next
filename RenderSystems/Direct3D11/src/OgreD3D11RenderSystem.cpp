@@ -36,6 +36,7 @@ THE SOFTWARE.
 #include "OgreD3D11Texture.h"
 #include "OgreViewport.h"
 #include "OgreLogManager.h"
+#include "OgreMeshManager.h"
 #include "OgreD3D11HardwareBufferManager.h"
 #include "OgreD3D11HardwareIndexBuffer.h"
 #include "OgreD3D11HardwareVertexBuffer.h"
@@ -176,6 +177,9 @@ namespace Ogre
         // Clear class instance storage
         memset(mClassInstances, 0, sizeof(mClassInstances));
         memset(mNumClassInstances, 0, sizeof(mNumClassInstances));
+
+        mEventNames.push_back("DeviceLost");
+        mEventNames.push_back("DeviceRestored");            
     }
     //---------------------------------------------------------------------
     D3D11RenderSystem::~D3D11RenderSystem()
@@ -1789,6 +1793,42 @@ namespace Ogre
         //will be consistent.
         if( mFeatureLevel >= D3D_FEATURE_LEVEL_11_0 )
             DepthBuffer::DefaultDepthBufferFormat = PF_D32_FLOAT_X24_S8_UINT;
+    }
+    //-----------------------------------------------------------------------
+    void D3D11RenderSystem::validateDevice()
+    {
+        if(!mDevice.isNull() && mDevice.IsDeviceLost())
+        {
+            LogManager::getSingleton().logMessage("D3D11 : Device was lost, recreating.");
+
+            // release device depended resources
+            fireDeviceEvent(&mDevice, "DeviceLost");
+
+            notifyDeviceLost(&mDevice);
+
+            // Release all automatic temporary buffers and free unused
+            // temporary buffers, so we doesn't need to recreate them,
+            // and they will reallocate on demand.
+            v1::HardwareBufferManager::getSingleton()._releaseBufferCopies(true);
+
+            // Cleanup depth stencils surfaces.
+            _cleanupDepthBuffers();
+
+            // recreate device
+            createDevice();
+
+            // recreate device depended resources
+            notifyDeviceRestored(&mDevice);
+
+            v1::MeshManager::getSingleton().reloadAll(true);
+
+            // Invalidate active view port.
+            mActiveViewport = NULL;
+
+            fireDeviceEvent(&mDevice, "DeviceRestored");
+
+            LogManager::getSingleton().logMessage("D3D11 : Device was restored.");
+        }
     }
     //---------------------------------------------------------------------
 #if OGRE_PLATFORM != OGRE_PLATFORM_WINRT

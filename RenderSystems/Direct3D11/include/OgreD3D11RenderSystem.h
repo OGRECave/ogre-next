@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "OgreD3D11Prerequisites.h"
 #include "OgreRenderSystem.h"
 #include "OgreD3D11Device.h"
+#include "OgreD3D11DeviceResource.h"
 #include "OgreD3D11Mappings.h"
 #include "OgreD3D11PixelFormatToShaderType.h"
 
@@ -47,7 +48,9 @@ namespace Ogre
     /**
     Implementation of DirectX11 as a rendering system.
     */
-    class _OgreD3D11Export D3D11RenderSystem : public RenderSystem
+    class _OgreD3D11Export D3D11RenderSystem
+        : public RenderSystem
+        , protected D3D11DeviceResourceManager
     {
     private:
         Ogre::String mDriverName;    // it`s hint rather than hard requirement, could be ignored if empty or device removed
@@ -239,6 +242,7 @@ namespace Ogre
         void setConfigOption( const String &name, const String &value );
         void reinitialise();
         void shutdown();
+        void validateDevice();
         void setShadingType( ShadeOptions so );
         void setLightingEnabled( bool enabled );
         void destroyRenderTarget(const String& name);
