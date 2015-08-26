@@ -29,7 +29,7 @@ THE SOFTWARE.
 #define __D3D11TEXTURE_H__
 
 #include "OgreD3D11Prerequisites.h"
-#include "OgreD3D11Device.h"
+#include "OgreD3D11DeviceResource.h"
 #include "OgreTexture.h"
 #include "OgreRenderTexture.h"
 #include "OgreSharedPtr.h"
@@ -41,7 +41,9 @@ THE SOFTWARE.
 #endif
 
 namespace Ogre {
-    class _OgreD3D11Export D3D11Texture : public Texture
+    class _OgreD3D11Export D3D11Texture
+        : public Texture
+        , protected D3D11DeviceResource
     {
         struct CachedUavView
         {
@@ -189,6 +191,9 @@ namespace Ogre {
         /// mipmap level. This method must be called after the D3D texture object was created
         void _createSurfaceList(void);
 
+        void notifyDeviceLost(D3D11Device* device);
+        void notifyDeviceRestored(D3D11Device* device);
+
         /// @copydoc Resource::prepareImpl
         void prepareImpl(void);
         /// @copydoc Resource::unprepareImpl
@@ -209,7 +214,9 @@ namespace Ogre {
     };
 
     /// RenderTexture implementation for D3D11
-    class _OgreD3D11Export D3D11RenderTexture : public RenderTexture
+    class _OgreD3D11Export D3D11RenderTexture
+        : public RenderTexture
+        , protected D3D11DeviceResource
     {
         D3D11Device & mDevice;
         ComPtr<ID3D11RenderTargetView> mRenderTargetView;
@@ -226,6 +233,10 @@ namespace Ogre {
         bool requiresTextureFlipping() const { return false; }
 
         virtual void swapBuffers(void);
+
+    protected:
+        void notifyDeviceLost(D3D11Device* device);
+        void notifyDeviceRestored(D3D11Device* device);
     };
 
 }
