@@ -1354,6 +1354,43 @@ void SceneManager::_setDestinationRenderSystem(RenderSystem* sys)
         mForwardPlusSystem->_changeRenderSystem( sys );
 }
 //-----------------------------------------------------------------------
+void SceneManager::_releaseManualHardwareResources()
+{
+    // release stencil shadows index buffer
+    mShadowIndexBuffer.setNull();
+
+    // release hardware resources inside all billboard sets - would be recreated automatically
+    SceneManager::MovableObjectIterator it = getMovableObjectIterator(v1::BillboardSetFactory::FACTORY_TYPE_NAME);
+    while(it.hasMoreElements())
+    {
+        v1::BillboardSet* bs = static_cast<v1::BillboardSet*>(it.getNext());
+        bs->_releaseManualHardwareResources();
+    }
+
+    // release hardware resources inside all manual objects - should be restored manually or will just disappear
+    it = getMovableObjectIterator(ManualObjectFactory::FACTORY_TYPE_NAME);
+    while(it.hasMoreElements())
+    {
+        ManualObject* mo = static_cast<ManualObject*>(it.getNext());
+        mo->clear();
+    }
+}
+//-----------------------------------------------------------------------
+void SceneManager::_restoreManualHardwareResources()
+{
+#if 0
+    // restore stencil shadows index buffer
+    if(isShadowTechniqueStencilBased())
+    {
+        mShadowIndexBuffer = HardwareBufferManager::getSingleton().
+            createIndexBuffer(HardwareIndexBuffer::IT_16BIT,
+                mShadowIndexBufferSize,
+                HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE,
+                false);
+    }
+#endif
+}
+//-----------------------------------------------------------------------
 void SceneManager::prepareWorldGeometry(const String& filename)
 {
     // This default implementation cannot handle world geometry

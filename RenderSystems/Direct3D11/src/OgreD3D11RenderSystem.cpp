@@ -1804,6 +1804,10 @@ namespace Ogre
             // release device depended resources
             fireDeviceEvent(&mDevice, "DeviceLost");
 
+            SceneManagerEnumerator::SceneManagerIterator scnIt = SceneManagerEnumerator::getSingleton().getSceneManagerIterator();
+            while(scnIt.hasMoreElements())
+                scnIt.getNext()->_releaseManualHardwareResources();
+
             notifyDeviceLost(&mDevice);
 
             // Release all automatic temporary buffers and free unused
@@ -1821,6 +1825,10 @@ namespace Ogre
             notifyDeviceRestored(&mDevice);
 
             v1::MeshManager::getSingleton().reloadAll(true);
+
+            scnIt = SceneManagerEnumerator::getSingleton().getSceneManagerIterator();
+            while(scnIt.hasMoreElements())
+                scnIt.getNext()->_restoreManualHardwareResources();
 
             // Invalidate active view port.
             mActiveViewport = NULL;

@@ -824,6 +824,8 @@ namespace v1 {
         */
         void notifyBillboardDataChanged(void) { mBillboardDataChanged = true; }
 
+        void _releaseManualHardwareResources() { _destroyBuffers(); }
+
         virtual void setMaterial( const MaterialPtr& material );
         virtual void setDatablock( HlmsDatablock *datablock );
         virtual void _setNullDatablock(void);
