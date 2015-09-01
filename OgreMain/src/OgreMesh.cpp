@@ -325,6 +325,8 @@ namespace v1 {
         // Clear SubMesh lists
         mSubMeshList.clear();
         mSubMeshNameMap.clear();
+
+        freeEdgeList();
 #if !OGRE_NO_MESHLOD
         // Removes all LOD data
         removeLodLevels();
