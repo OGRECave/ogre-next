@@ -1824,7 +1824,7 @@ namespace Ogre
             // recreate device depended resources
             notifyDeviceRestored(&mDevice);
 
-            v1::MeshManager::getSingleton().reloadAll(true);
+            v1::MeshManager::getSingleton().reloadAll(Resource::LF_PRESERVE_STATE);
 
             scnIt = SceneManagerEnumerator::getSingleton().getSceneManagerIterator();
             while(scnIt.hasMoreElements())

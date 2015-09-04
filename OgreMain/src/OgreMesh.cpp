@@ -345,6 +345,24 @@ namespace v1 {
         setSkeletonName(BLANKSTRING);
     }
     //-----------------------------------------------------------------------
+    void Mesh::reload(LoadingFlags flags)
+    {
+        bool wasPreparedForShadowVolumes = mPreparedForShadowVolumes;
+        bool wasEdgeListsBuilt = mEdgeListsBuilt;
+        bool wasAutoBuildEdgeLists = mAutoBuildEdgeLists;
+
+        Resource::reload(flags);
+
+        if(flags & LF_PRESERVE_STATE)
+        {
+            if(wasPreparedForShadowVolumes)
+                prepareForShadowVolume();
+            if(wasEdgeListsBuilt)
+                buildEdgeList();
+            setAutoBuildEdgeLists(wasAutoBuildEdgeLists);
+        }
+    }
+    //-----------------------------------------------------------------------
     void Mesh::importV2( Ogre::Mesh *mesh )
     {
         if( mLoadingState.get() != LOADSTATE_UNLOADED )
