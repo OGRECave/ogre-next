@@ -1355,25 +1355,30 @@ void SceneManager::_setDestinationRenderSystem(RenderSystem* sys)
 //-----------------------------------------------------------------------
 void SceneManager::_releaseManualHardwareResources()
 {
-    // release hardware resources inside all billboard sets - would be recreated automatically
-    SceneManager::MovableObjectIterator it = getMovableObjectIterator(v1::BillboardSetFactory::FACTORY_TYPE_NAME);
-    while(it.hasMoreElements())
+    // release hardware resources inside all movable objects
+    OGRE_LOCK_MUTEX(mMovableObjectCollectionMapMutex);
+    for(MovableObjectCollectionMap::iterator ci = mMovableObjectCollectionMap.begin(),
+        ci_end = mMovableObjectCollectionMap.end(); ci != ci_end; ++ci)
     {
-        v1::BillboardSet* bs = static_cast<v1::BillboardSet*>(it.getNext());
-        bs->_releaseManualHardwareResources();
-    }
-
-    // release hardware resources inside all manual objects - should be restored manually or will just disappear
-    it = getMovableObjectIterator(ManualObjectFactory::FACTORY_TYPE_NAME);
-    while(it.hasMoreElements())
-    {
-        ManualObject* mo = static_cast<ManualObject*>(it.getNext());
-        mo->clear();
+        MovableObjectCollection* coll = ci->second;
+        OGRE_LOCK_MUTEX(coll->mutex);
+        for(MovableObjectVec::iterator i = coll->movableObjects.begin(), i_end = coll->movableObjects.end(); i != i_end; ++i)
+            (*i)->_releaseManualHardwareResources();
     }
 }
 //-----------------------------------------------------------------------
 void SceneManager::_restoreManualHardwareResources()
 {
+    // restore hardware resources inside all movable objects
+    OGRE_LOCK_MUTEX(mMovableObjectCollectionMapMutex);
+    for(MovableObjectCollectionMap::iterator ci = mMovableObjectCollectionMap.begin(),
+        ci_end = mMovableObjectCollectionMap.end(); ci != ci_end; ++ci)
+    {
+        MovableObjectCollection* coll = ci->second;
+        OGRE_LOCK_MUTEX(coll->mutex);
+        for(MovableObjectVec::iterator i = coll->movableObjects.begin(), i_end = coll->movableObjects.end(); i != i_end; ++i)
+            (*i)->_restoreManualHardwareResources();
+    }
 }
 //-----------------------------------------------------------------------
 void SceneManager::prepareWorldGeometry(const String& filename)
