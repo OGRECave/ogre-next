@@ -82,6 +82,7 @@ namespace Ogre
 
         void freeDevice(void);
         void createDevice();
+        void handleDeviceLost();
 #if OGRE_PLATFORM != OGRE_PLATFORM_WINRT
             bool isWindows8OrGreater();
 #endif
