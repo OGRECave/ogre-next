@@ -244,7 +244,7 @@ namespace Ogre
         void setConfigOption( const String &name, const String &value );
         void reinitialise();
         void shutdown();
-        void validateDevice();
+        void validateDevice(bool forceDeviceElection = false);
         void setShadingType( ShadeOptions so );
         void setLightingEnabled( bool enabled );
         void destroyRenderTarget(const String& name);
