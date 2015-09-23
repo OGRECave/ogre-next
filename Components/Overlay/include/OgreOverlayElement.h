@@ -200,6 +200,11 @@ namespace v1 {
         /** Initialise gui element */
         virtual void initialise(void) = 0;
 
+        /** Notifies that hardware resources were lost */
+        virtual void _releaseManualHardwareResources() {}
+        /** Notifies that hardware resources should be restored */
+        virtual void _restoreManualHardwareResources() {}
+
         /** Gets the name of this overlay. */
         const String& getName(void) const;
 

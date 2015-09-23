@@ -31,6 +31,7 @@ THE SOFTWARE.
 
 #include "OgreOverlayPrerequisites.h"
 #include "OgreRenderQueueListener.h"
+#include "OgreRenderSystem.h"
 
 #if OGRE_PROFILING
 #include "OgreOverlayProfileSessionListener.h"
@@ -54,7 +55,10 @@ namespace v1 {
         To make the overlays visible (= render into your viewports) you have to register this
         instance as a RenderQueueListener in your scenemanager(s).
     */
-    class _OgreOverlayExport OverlaySystem : public OverlayAlloc , public Ogre::RenderQueueListener
+    class _OgreOverlayExport OverlaySystem
+        : public OverlayAlloc
+        , public Ogre::RenderQueueListener
+        , public Ogre::RenderSystem::Listener
     {
     public:
         OverlaySystem();
@@ -63,6 +67,10 @@ namespace v1 {
         /// @see RenderQueueListener
         virtual void renderQueueStarted( RenderQueue *rq, uint8 queueGroupId, const String& invocation,
                                          bool& skipThisInvocation);
+
+        /// @see RenderSystem::Listener
+        virtual void eventOccurred(const String& eventName, const NameValuePairList* parameters);
+
     private:
         OverlayManager* mOverlayManager;
         FontManager* mFontManager;

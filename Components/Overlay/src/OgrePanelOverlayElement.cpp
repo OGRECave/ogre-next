@@ -102,22 +102,58 @@ namespace v1 {
             // Basic vertex data
             mRenderOp.vertexData->vertexStart = 0;
             mRenderOp.vertexData->vertexCount = 4;
-
-            // Vertex buffer #1
-            HardwareVertexBufferSharedPtr vbuf =
-                HardwareBufferManager::getSingleton().createVertexBuffer(
-                decl->getVertexSize(POSITION_BINDING), mRenderOp.vertexData->vertexCount,
-                HardwareBuffer::HBU_STATIC_WRITE_ONLY// mostly static except during resizing
-                );
-            // Bind buffer
-            mRenderOp.vertexData->vertexBufferBinding->setBinding(POSITION_BINDING, vbuf);
-
             // No indexes & issue as a strip
             mRenderOp.useIndexes = false;
             mRenderOp.operationType = OT_TRIANGLE_STRIP;
             mRenderOp.useGlobalInstancingVertexBufferIsAvailable = false;
 
             mInitialised = true;
+
+            _restoreManualHardwareResources();
+        }
+    }
+    //---------------------------------------------------------------------
+    void PanelOverlayElement::_restoreManualHardwareResources()
+    {
+        if(!mInitialised)
+            return;
+
+        VertexDeclaration* decl = mRenderOp.vertexData->vertexDeclaration;
+
+        // Vertex buffer #1
+        HardwareVertexBufferSharedPtr vbuf =
+            HardwareBufferManager::getSingleton().createVertexBuffer(
+            decl->getVertexSize(POSITION_BINDING), mRenderOp.vertexData->vertexCount,
+            HardwareBuffer::HBU_STATIC_WRITE_ONLY// mostly static except during resizing
+            );
+        // Bind buffer
+        mRenderOp.vertexData->vertexBufferBinding->setBinding(POSITION_BINDING, vbuf);
+
+        // Buffers are restored, but with trash within
+        mGeomPositionsOutOfDate = true;
+        mGeomUVsOutOfDate = true;
+    }
+    //---------------------------------------------------------------------
+    void PanelOverlayElement::_releaseManualHardwareResources()
+    {
+        if(!mInitialised)
+            return;
+
+        VertexBufferBinding* bind = mRenderOp.vertexData->vertexBufferBinding;
+        bind->unsetBinding(POSITION_BINDING);
+
+        // Remove all texcoord element declarations
+        if(mNumTexCoordsInBuffer > 0)
+        {
+            bind->unsetBinding(TEXCOORD_BINDING);
+
+            VertexDeclaration* decl = mRenderOp.vertexData->vertexDeclaration;
+            for(size_t i = mNumTexCoordsInBuffer; i > 0; --i)
+            {
+                decl->removeElement(VES_TEXTURE_COORDINATES,
+                    static_cast<unsigned short>(i - 1));
+            }
+            mNumTexCoordsInBuffer = 0;
         }
     }
     //---------------------------------------------------------------------
@@ -281,7 +317,7 @@ namespace v1 {
                 for (size_t i = mNumTexCoordsInBuffer; i > numLayers; --i)
                 {
                     decl->removeElement(VES_TEXTURE_COORDINATES, 
-                        static_cast<unsigned short>(i));
+                        static_cast<unsigned short>(i - 1));
                 }
             }
             else if (mNumTexCoordsInBuffer < numLayers)

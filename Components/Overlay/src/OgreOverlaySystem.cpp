@@ -88,5 +88,17 @@ namespace v1 {
         }
     }
     //---------------------------------------------------------------------
+	void OverlaySystem::eventOccurred(const String& eventName, const NameValuePairList* parameters)
+	{
+		if(eventName == "DeviceLost")
+		{
+			mOverlayManager->_releaseManualHardwareResources();
+		}
+		else if(eventName == "DeviceRestored")
+		{
+			mOverlayManager->_restoreManualHardwareResources();
+		}
+	}
+	//---------------------------------------------------------------------
 }
 }
