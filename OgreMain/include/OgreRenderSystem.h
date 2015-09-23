@@ -1343,6 +1343,16 @@ namespace Ogre
             virtual void eventOccurred(const String& eventName, 
                 const NameValuePairList* parameters = 0) = 0;
         };
+
+        /** Sets shared listener.
+        @remarks
+        Shared listener could be set even if no render system is selected yet.
+        This listener will receive "RenderSystemChanged" event on each Root::setRenderSystem call.
+        */
+        static void setSharedListener(Listener* listener);
+        /** Retrieve a pointer to the current shared render system listener. */
+        static Listener* getSharedListener(void);
+
         /** Adds a listener to the custom events that this render system can raise.
         @remarks
         Some render systems have quite specific, internally generated events 
@@ -1559,6 +1569,7 @@ namespace Ogre
 
         typedef list<Listener*>::type ListenerList;
         ListenerList mEventListeners;
+        static Listener* msSharedEventListener;
 
         typedef list<HardwareOcclusionQuery*>::type HardwareOcclusionQueryList;
         HardwareOcclusionQueryList mHwOcclusionQueries;
