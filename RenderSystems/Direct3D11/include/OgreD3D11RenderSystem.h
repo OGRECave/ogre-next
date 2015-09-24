@@ -83,7 +83,6 @@ namespace Ogre
 
         void freeDevice(void);
         void createDevice();
-        void handleDeviceLost();
 #if OGRE_PLATFORM != OGRE_PLATFORM_WINRT
             bool isWindows8OrGreater();
 #endif
@@ -249,6 +248,7 @@ namespace Ogre
         void reinitialise();
         void shutdown();
         void validateDevice(bool forceDeviceElection = false);
+        void handleDeviceLost();
         void setShadingType( ShadeOptions so );
         void setLightingEnabled( bool enabled );
         void destroyRenderTarget(const String& name);

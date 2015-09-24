@@ -500,13 +500,16 @@ namespace Ogre
 
         // width and height can be zero to autodetect size, therefore do not rely on them
         HRESULT hr = mpSwapChain->ResizeBuffers(mSwapChainDesc.BufferCount, width, height, _getSwapChainFormat(), 0);
-        if (FAILED(hr))
+        if(hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET)
         {
-            const String errorDescription = mDevice.getErrorDescription(hr);
-            OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr,
-                "Unable to resize swap chain\nError Description:" + errorDescription,
-                "D3D11RenderWindow::_resizeSwapChainBuffers");
+            rsys->handleDeviceLost();
+            // Everything is set up now. Do not continue execution of this method. HandleDeviceLost will reenter this method 
+            // and correctly set up the new device.
+            return;
         }
+        else if(FAILED(hr))
+            OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr, "Error resizing surfaces", "D3D11RenderWindowSwapChainBased::_resizeSwapChainBuffers");
+
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
         mpSwapChain->GetDesc(&mSwapChainDesc);
         mWidth = mSwapChainDesc.BufferDesc.Width;
