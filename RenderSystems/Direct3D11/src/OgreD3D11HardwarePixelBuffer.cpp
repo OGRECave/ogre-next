@@ -96,8 +96,6 @@ namespace v1 {
     //-----------------------------------------------------------------------------  
     void D3D11HardwarePixelBuffer::_map(ID3D11Resource *res, D3D11_MAP flags, PixelBox & box)
     {
-        mDevice.clearStoredErrorMessages();
-
         UINT subresource = 0;
         UINT numMips = 0;
 
