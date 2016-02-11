@@ -3468,104 +3468,80 @@ bail:
                         "D3D11 device cannot set index buffer\nError Description:" + errorDescription,
                         "D3D11RenderSystem::_render");
                 }
+            }
 
-                do
+            mDevice.GetImmediateContext()->IASetPrimitiveTopology( primType );
+            if (mDevice.isError())
+            {
+                String errorDescription = mDevice.getErrorDescription();
+                OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
+                    "D3D11 device cannot set primitive topology\nError Description:" + errorDescription,
+                    "D3D11RenderSystem::_render");
+            }
+
+            do
+            {
+                if(op.useIndexes)
                 {
-                    // do indexed draw operation
-                    mDevice.GetImmediateContext()->IASetPrimitiveTopology( primType );
-                    if (mDevice.isError())
+                    if(hasInstanceData)
                     {
-                        String errorDescription = mDevice.getErrorDescription();
-                        OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
-                            "D3D11 device cannot set primitive topology\nError Description:" + errorDescription,
-                            "D3D11RenderSystem::_render");
-                    }
-                    
-                    if (hasInstanceData)
-                    {
-                        mDevice.GetImmediateContext()->DrawIndexedInstanced(    
+                        mDevice.GetImmediateContext()->DrawIndexedInstanced(
                             static_cast<UINT>(op.indexData->indexCount), 
                             static_cast<UINT>(numberOfInstances), 
                             static_cast<UINT>(op.indexData->indexStart), 
                             static_cast<INT>(op.vertexData->vertexStart),
-                            0
-                            );
-                        if (mDevice.isError())
-                        {
-                            String errorDescription = mDevice.getErrorDescription();
-                            OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
-                                "D3D11 device cannot draw indexed instanced\nError Description:" + errorDescription,
-                                "D3D11RenderSystem::_render");
-                        }
+                            0);
                     }
                     else
                     {
-                        mDevice.GetImmediateContext()->DrawIndexed(    
-                            static_cast<UINT>(op.indexData->indexCount), 
-                            static_cast<UINT>(op.indexData->indexStart), 
-                            static_cast<INT>(op.vertexData->vertexStart)
-                            );
-                        if (mDevice.isError())
-                        {
-                            String errorDescription = mDevice.getErrorDescription();
-                            OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
-                                "D3D11 device cannot draw indexed\nError Description:" + errorDescription +
-                                "Active OGRE vertex shader name: " + mPso->vertexShader->getName() +
-                                "\nActive OGRE fragment shader name: " + mPso->pixelShader->getName(),
-                                "D3D11RenderSystem::_render");
-                        }
+                        mDevice.GetImmediateContext()->DrawIndexed(
+                            static_cast<UINT>(op.indexData->indexCount),
+                            static_cast<UINT>(op.indexData->indexStart),
+                            static_cast<INT>(op.vertexData->vertexStart));
                     }
-                } while (updatePassIterationRenderState());
-            }
-            else
-            {
-                // nfz: gpu_iterate
-                do
+                }
+                else // non indexed
                 {
-                    // Unindexed, a little simpler!
-                    mDevice.GetImmediateContext()->IASetPrimitiveTopology( primType );
-                    if (mDevice.isError())
+                    if(op.vertexData->vertexCount == -1) // -1 is a sign to use DrawAuto
                     {
-                        String errorDescription = mDevice.getErrorDescription();
-                        OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
-                            "D3D11 device cannot set primitive topology\nError Description:" + errorDescription,
-                            "D3D11RenderSystem::_render");
-                    }       
-                    
-                    if (op.vertexData->vertexCount == -1) // -1 is a sign to use DrawAuto
+                        mDevice.GetImmediateContext()->DrawAuto();
+                    }
+                    else if(hasInstanceData)
                     {
-                        mDevice.GetImmediateContext()->DrawAuto(); 
+                        mDevice.GetImmediateContext()->DrawInstanced(
+                            static_cast<UINT>(op.vertexData->vertexCount),
+                            static_cast<UINT>(numberOfInstances),
+                            static_cast<UINT>(op.vertexData->vertexStart),
+                            0);
                     }
                     else
                     {
-                        if (hasInstanceData)
-                        {
-                            mDevice.GetImmediateContext()->DrawInstanced(
-                                static_cast<UINT>(op.vertexData->vertexCount),
-                                static_cast<UINT>(numberOfInstances), 
-                                static_cast<UINT>(op.vertexData->vertexStart),
-                                static_cast<UINT>(0)
-                                ); 
-                        }
-                        else
-                        {
-                            mDevice.GetImmediateContext()->Draw(
-                                static_cast<UINT>(op.vertexData->vertexCount), 
-                                static_cast<UINT>(op.vertexData->vertexStart)
-                                ); 
-                        }
+                        mDevice.GetImmediateContext()->Draw(
+                            static_cast<UINT>(op.vertexData->vertexCount),
+                            static_cast<UINT>(op.vertexData->vertexStart));
                     }
-                    if (mDevice.isError())
-                    {
-                        String errorDescription = mDevice.getErrorDescription();
-                        OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
-                            "D3D11 device cannot draw\nError Description:" + errorDescription,
-                            "D3D11RenderSystem::_render");
-                    }       
+                }
 
+                if(mDevice.isError())
+                {
+                    String errorDescription = "D3D11 device cannot draw";
+                    if(!op.useIndexes && op.vertexData->vertexCount == -1) // -1 is a sign to use DrawAuto
+                        errorDescription.append(" auto");
+                    else
+                        errorDescription.append(op.useIndexes ? " indexed" : "").append(hasInstanceData ? " instanced" : "");
+                    errorDescription.append("\nError Description:").append(mDevice.getErrorDescription());
+                    errorDescription.append("\nActive OGRE shaders:")
+                        .append(mPso->vertexShader ? ("\nVS = " + mPso->vertexShader->getName()).c_str() : "")
+                        .append(mPso->hullShader ? ("\nHS = " + mPso->hullShader->getName()).c_str() : "")
+                        .append(mPso->domainShader ? ("\nDS = " + mPso->domainShader->getName()).c_str() : "")
+                        .append(mPso->geometryShader ? ("\nGS = " + mPso->geometryShader->getName()).c_str() : "")
+                        .append(mPso->pixelShader ? ("\nFS = " +mPso->pixelShader->getName()).c_str() : "")
+                        .append(mBoundComputeProgram ? ("\nCS = " + mBoundComputeProgram->getName()).c_str() : "");
 
-                } while (updatePassIterationRenderState());
-            } 
+                    OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, errorDescription, "D3D11RenderSystem::_render");
+                }
+
+            }while(updatePassIterationRenderState());
         }
 
 
