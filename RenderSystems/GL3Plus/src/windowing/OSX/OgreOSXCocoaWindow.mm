@@ -73,7 +73,7 @@ namespace Ogre {
 
     CocoaWindow::CocoaWindow() : mWindow(nil), mView(nil), mGLContext(nil), mGLPixelFormat(nil), mWindowOriginPt(NSZeroPoint),
         mWindowDelegate(NULL), mActive(false), mClosed(false), mHidden(false), mVSync(true), mHasResized(false), mIsExternal(false), mWindowTitle(""),
-        mUseNSView(false), mContentScalingFactor(1.0)
+        mUseOgreGLView(true), mContentScalingFactor(1.0)
     {
         // Set vsync by default to save battery and reduce tearing
     }
@@ -83,6 +83,11 @@ namespace Ogre {
 		[mGLContext clearDrawable];
 
         destroy();
+        
+        if(mView && mUseOgreGLView)
+        {
+            [(OgreGL3PlusView*)mView setOgreWindow:NULL];
+        }
     }
 	
 	void CocoaWindow::create(const String& name, unsigned int widthPt, unsigned int heightPt,
@@ -185,7 +190,7 @@ namespace Ogre {
 #endif
             }
             
-            if(miscParams->find("externalGLContext") == miscParams->end())
+            if(!miscParams || miscParams->find("externalGLContext") == miscParams->end())
             {
                 NSOpenGLPixelFormatAttribute attribs[30];
                 int i = 0;
@@ -241,7 +246,7 @@ namespace Ogre {
             if(miscParams)
                 opt = miscParams->find("externalGLContext");
             
-            if(opt != miscParams->end())
+            if(miscParams && opt != miscParams->end())
             {
                 NSOpenGLContext *openGLContext = (__bridge NSOpenGLContext *)(void*)StringConverter::parseSizeT(opt->second);
                 mGLContext = openGLContext;
@@ -273,24 +278,28 @@ namespace Ogre {
             }
             else
             {
-                NameValuePairList::const_iterator param_useNSView_pair;
-                param_useNSView_pair = miscParams->find("macAPICocoaUseNSView");
+                NSObject* externalHandle = (__bridge NSObject*)(void*)StringConverter::parseSizeT(opt->second);
+                if([externalHandle isKindOfClass:[NSWindow class]])
+                {
+                    mView = [(NSWindow*)externalHandle contentView];
+                    mUseOgreGLView = [mView isKindOfClass:[OgreGL3PlusView class]];
+                    LogManager::getSingleton().logMessage(mUseOgreGLView ?
+                        "Mac Cocoa Window: Rendering on an external NSWindow with nested OgreGL3PlusView" :
+                        "Mac Cocoa Window: Rendering on an external NSWindow with nested NSView");
+                }
+                else
+                {
+                    assert([externalHandle isKindOfClass:[NSView class]]);
+                    mView = (NSView*)externalHandle;
+                    mUseOgreGLView = [mView isKindOfClass:[OgreGL3PlusView class]];
+                    LogManager::getSingleton().logMessage(mUseOgreGLView ?
+                        "Mac Cocoa Window: Rendering on an external OgreGL3PlusView" :
+                        "Mac Cocoa Window: Rendering on an external NSView");
+                }
                 
-                if(param_useNSView_pair != miscParams->end())
-                    if(param_useNSView_pair->second == "true")
-                        mUseNSView = true;
-                // If the macAPICocoaUseNSView parameter was set, use the winhandler as pointer to an NSView
-                // Otherwise we assume the user created the interface with Interface Builder and instantiated an OgreView.
-                
-                if(mUseNSView) {
-                    LogManager::getSingleton().logMessage("Mac Cocoa Window: Rendering on an external plain NSView*");
-                    NSView *nsview = (__bridge NSView*)(void*)StringConverter::parseSizeT(opt->second);
-                    mView = nsview;
-                } else {
-                    LogManager::getSingleton().logMessage("Mac Cocoa Window: Rendering on an external OgreGL3PlusView*");
-                    OgreGL3PlusView *view = (__bridge OgreGL3PlusView*)(void*)StringConverter::parseSizeT(opt->second);
-                    [view setOgreWindow:this];
-                    mView = view;
+                if(mUseOgreGLView)
+                {
+                    [(OgreGL3PlusView*)mView setOgreWindow:this];
                 }
                 
                 NSRect b = [mView bounds];
