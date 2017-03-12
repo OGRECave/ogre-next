@@ -1,0 +1,4 @@
+<map id="Ogre::MetalWindow" name="Ogre::MetalWindow">
+<area shape="rect" id="node2" href="$class_ogre_1_1_window.html" title="Ogre::Window" alt="" coords="21,80,127,107"/>
+<area shape="rect" id="node3" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="16,5,132,32"/>
+</map>

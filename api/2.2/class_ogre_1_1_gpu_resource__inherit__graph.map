@@ -1,0 +1,15 @@
+<map id="Ogre::GpuResource" name="Ogre::GpuResource">
+<area shape="rect" id="node3" href="$class_ogre_1_1_texture_gpu.html" title="Ogre::TextureGpu" alt="" coords="347,111,473,138"/>
+<area shape="rect" id="node2" href="$class_ogre_1_1_allocated_object.html" title="Superclass for all objects that wish to use custom memory allocators when their new / delete operator..." alt="" coords="5,111,112,138"/>
+<area shape="rect" id="node4" href="$class_ogre_1_1_d3_d11_texture_gpu.html" title="Ogre::D3D11TextureGpu" alt="" coords="526,22,693,49"/>
+<area shape="rect" id="node7" href="$class_ogre_1_1_g_l3_plus_texture_gpu.html" title="Ogre::GL3PlusTextureGpu" alt="" coords="521,82,697,109"/>
+<area shape="rect" id="node10" href="$class_ogre_1_1_metal_texture_gpu.html" title="Ogre::MetalTextureGpu" alt="" coords="530,137,689,163"/>
+<area shape="rect" id="node13" href="$class_ogre_1_1_n_u_l_l_texture_gpu.html" title="Ogre::NULLTextureGpu" alt="" coords="529,194,689,221"/>
+<area shape="rect" id="node5" href="$class_ogre_1_1_d3_d11_texture_gpu_render_target.html" title="Ogre::D3D11TextureGpuRender\lTarget" alt="" coords="750,5,959,47"/>
+<area shape="rect" id="node6" href="$class_ogre_1_1_d3_d11_texture_gpu_window.html" title="Ogre::D3D11TextureGpuWindow" alt="" coords="1016,13,1231,39"/>
+<area shape="rect" id="node8" href="$class_ogre_1_1_g_l3_plus_texture_gpu_render_target.html" title="Ogre::GL3PlusTextureGpuRender\lTarget" alt="" coords="745,71,964,112"/>
+<area shape="rect" id="node9" href="$class_ogre_1_1_g_l3_plus_texture_gpu_window.html" title="Ogre::GL3PlusTextureGpuWindow" alt="" coords="1012,78,1235,105"/>
+<area shape="rect" id="node11" href="$class_ogre_1_1_metal_texture_gpu_render_target.html" title="Ogre::MetalTextureGpuRender\lTarget" alt="" coords="755,136,955,177"/>
+<area shape="rect" id="node12" href="$class_ogre_1_1_metal_texture_gpu_window.html" title="Ogre::MetalTextureGpuWindow" alt="" coords="1021,143,1226,170"/>
+<area shape="rect" id="node14" href="$class_ogre_1_1_n_u_l_l_texture_gpu_render_target.html" title="Ogre::NULLTextureGpuRender\lTarget" alt="" coords="753,201,956,243"/>
+</map>
