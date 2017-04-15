@@ -322,6 +322,8 @@ namespace Ogre {
     class ExternalTextureSource;
     class TextureUnitState;
     class Texture;
+    class TextureGpu;
+    struct TextureBox;
     class TextureManager;
     struct Transform;
     class Timer;

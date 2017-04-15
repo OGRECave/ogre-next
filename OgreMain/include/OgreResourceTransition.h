@@ -1,4 +1,4 @@
-﻿/*
+/*
 -----------------------------------------------------------------------------
 This source file is part of OGRE
     (Object-oriented Graphics Rendering Engine)
@@ -130,12 +130,12 @@ namespace Ogre
         void    *mRsData;       /// Render-System specific data
     };
 
-    struct GpuResource
+    struct GpuResource2
     {
     };
 
-    typedef map<GpuResource*, ResourceLayout::Layout>::type ResourceLayoutMap;
-    typedef map<GpuResource*, ResourceAccess::ResourceAccess>::type ResourceAccessMap;
+    typedef map<GpuResource2*, ResourceLayout::Layout>::type ResourceLayoutMap;
+    typedef map<GpuResource2*, ResourceAccess::ResourceAccess>::type ResourceAccessMap;
 
     /** @} */
     /** @} */
