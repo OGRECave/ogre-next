@@ -27,6 +27,7 @@ THE SOFTWARE.
 */
 
 #include "OgreTextureGpu.h"
+#include "OgrePixelFormatGpuUtils.h"
 
 #define TODO_createResourcesIfThisIsRttOrUavOrManual 1
 #define TODO_automaticBatching_or_manualFromOnStorage 1
@@ -34,17 +35,19 @@ THE SOFTWARE.
 namespace Ogre
 {
     TextureGpu::TextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                            VaoManager *vaoManager, uint32 textureFlags ) :
-        GpuResource( pageOutStrategy, vaoManager ),
+                            VaoManager *vaoManager, IdString name, uint32 textureFlags ) :
+        GpuResource( pageOutStrategy, vaoManager, name ),
         mWidth( 0 ),
         mHeight( 0 ),
         mDepthOrSlices( 0 ),
         mNumMipmaps( 1 ),
         mMsaa( 1 ),
         mMsaaPattern( MsaaPatterns::Undefined ),
+        mInternalSliceStart( 0 ),
         mTextureType( TextureTypes::Unknown ),
         mPixelFormat( PFG_UNKNOWN ),
-        mTextureFlags( textureFlags )
+        mTextureFlags( textureFlags ),
+        mSysRamCopy( 0 )
     {
         assert( !hasAutomaticBatching() ||
                 (hasAutomaticBatching() && isTexture() && !isRenderToTexture() && !isUav()) );
@@ -91,6 +94,16 @@ namespace Ogre
         return mPixelFormat;
     }
     //-----------------------------------------------------------------------------------
+    uint8 TextureGpu::getNumMipmaps(void) const
+    {
+        return mNumMipmaps;
+    }
+    //-----------------------------------------------------------------------------------
+    uint32 TextureGpu::getInternalSliceStart(void) const
+    {
+        return mInternalSliceStart;
+    }
+    //-----------------------------------------------------------------------------------
     void TextureGpu::setMsaa( uint8 msaa )
     {
         mMsaa = std::max<uint8>( msaa, 1u );
@@ -109,6 +122,11 @@ namespace Ogre
     MsaaPatterns::MsaaPatterns TextureGpu::getMsaaPattern(void) const
     {
         return mMsaaPattern;
+    }
+    //-----------------------------------------------------------------------------------
+    bool TextureGpu::isMsaaPatternSupported( MsaaPatterns::MsaaPatterns pattern )
+    {
+        return pattern == MsaaPatterns::Undefined;
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::_init(void)
@@ -155,5 +173,20 @@ namespace Ogre
     bool TextureGpu::hasAutoMipmapAuto(void) const
     {
         return (mTextureFlags & TextureFlags::AutomipmapsAuto) != 0;
+    }
+    //-----------------------------------------------------------------------------------
+    uint8* TextureGpu::_getSysRamCopy(void)
+    {
+        return mSysRamCopy;
+    }
+    //-----------------------------------------------------------------------------------
+    size_t TextureGpu::_getSysRamCopyBytesPerRow(void)
+    {
+        return PixelFormatGpuUtils::getSizeBytes( mWidth, 1u, 1u, 1u, mPixelFormat, 4u );
+    }
+    //-----------------------------------------------------------------------------------
+    size_t TextureGpu::_getSysRamCopyBytesPerImage(void)
+    {
+        return PixelFormatGpuUtils::getSizeBytes( mWidth, mHeight, 1u, 1u, mPixelFormat, 4u );
     }
 }

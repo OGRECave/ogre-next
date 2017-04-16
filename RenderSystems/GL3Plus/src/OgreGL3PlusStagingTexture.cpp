@@ -132,6 +132,7 @@ namespace Ogre
 
         assert(( !srcBox.bytesPerRow || (srcBox.bytesPerImage % srcBox.bytesPerRow)) &&
                "srcBox.bytesPerImage must be a multiple of srcBox.bytesPerRow!" );
+        assert( dstTexture->getMsaa() <= 1u && "Cannot upload to an MSAA texture!" );
 
         OCGE( glPixelStorei( GL_UNPACK_ALIGNMENT, 4 ) );
         if( bytesPerPixel > 0 )
@@ -156,7 +157,8 @@ namespace Ogre
         GLint xPos      = static_cast<GLint>( dstBox ? dstBox->x : 0 );
         GLint yPos      = static_cast<GLint>( dstBox ? dstBox->y : 0 );
         GLint zPos      = static_cast<GLint>( dstBox ? dstBox->z : 0 );
-        GLint slicePos  = static_cast<GLint>( dstBox ? dstBox->sliceStart : 0 );
+        GLint slicePos  = static_cast<GLint>( (dstBox ? dstBox->sliceStart : 0) +
+                                              dstTexture->getInternalSliceStart() );
         GLsizei width   = static_cast<GLsizei>( dstBox ? dstBox->width  : dstTexture->getWidth() );
         GLsizei height  = static_cast<GLsizei>( dstBox ? dstBox->height : dstTexture->getHeight() );
         GLsizei depth   = static_cast<GLsizei>( dstBox ? dstBox->depth  : dstTexture->getDepth() );

@@ -46,8 +46,10 @@ namespace Ogre
 
     public:
         GL3PlusTextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                           VaoManager *vaoManager, uint32 textureFlags );
+                           VaoManager *vaoManager, IdString name, uint32 textureFlags );
         virtual ~GL3PlusTextureGpu();
+
+        virtual void getSubsampleLocations( vector<Vector2>::type locations );
 
         GLuint getGlTextureName(void) const         { return mTextureName; }
 

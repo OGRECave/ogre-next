@@ -30,6 +30,8 @@ THE SOFTWARE.
 #define _OgreGpuResource_H_
 
 #include "OgrePrerequisites.h"
+#include "OgreIdString.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
@@ -115,10 +117,18 @@ namespace Ogre
 
         VaoManager  *mVaoManager;
 
+        IdString mName;
+
     public:
         GpuResource( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                     VaoManager *vaoManager );
+                     VaoManager *vaoManager, IdString name );
         virtual ~GpuResource();
+
+        GpuResidency::GpuResidency getResidencyStatus(void) const;
+        GpuPageOutStrategy::GpuPageOutStrategy getGpuPageOutStrategy(void) const;
+
+        IdString getName(void) const;
+        String getNameStr(void) const;
     };
 }
 

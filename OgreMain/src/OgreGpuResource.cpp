@@ -33,17 +33,39 @@ THE SOFTWARE.
 namespace Ogre
 {
     GpuResource::GpuResource( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                              VaoManager *vaoManager ) :
+                              VaoManager *vaoManager, IdString name ) :
         mResidencyStatus( GpuResidency::OnStorage ),
         mPageOutStrategy( pageOutStrategy ),
         mRank( 1 ),
         mLastFrameUsed( vaoManager->getFrameCount() ),
         mLowestDistanceToCamera( 0 ),
-        mVaoManager( vaoManager )
+        mVaoManager( vaoManager ),
+        mName( name )
     {
     }
     //-----------------------------------------------------------------------------------
     GpuResource::~GpuResource()
     {
+    }
+    //-----------------------------------------------------------------------------------
+    GpuResidency::GpuResidency GpuResource::getResidencyStatus(void) const
+    {
+        return mResidencyStatus;
+    }
+    //-----------------------------------------------------------------------------------
+    GpuPageOutStrategy::GpuPageOutStrategy GpuResource::getGpuPageOutStrategy(void) const
+    {
+        return mPageOutStrategy;
+    }
+    //-----------------------------------------------------------------------------------
+    IdString GpuResource::getName(void) const
+    {
+        return mName;
+    }
+    //-----------------------------------------------------------------------------------
+    String GpuResource::getNameStr(void) const
+    {
+        //TODO: Get friendly name from manager which will be kept in a std::map
+        return mName.getFriendlyText();
     }
 }

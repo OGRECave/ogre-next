@@ -29,13 +29,15 @@ THE SOFTWARE.
 #include "OgreGL3PlusTextureGpu.h"
 #include "OgreGL3PlusMappings.h"
 
+#include "OgreVector2.h"
+
 #include "OgreException.h"
 
 namespace Ogre
 {
     GL3PlusTextureGpu::GL3PlusTextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                                          VaoManager *vaoManager, uint32 textureFlags ) :
-        TextureGpu( pageOutStrategy, vaoManager, textureFlags ),
+                                          VaoManager *vaoManager, IdString name, uint32 textureFlags ) :
+        TextureGpu( pageOutStrategy, vaoManager, name, textureFlags ),
         mTextureName( 0 ),
         mGlTextureTarget( GL_NONE )
     {
@@ -52,6 +54,13 @@ namespace Ogre
 
         mGlTextureTarget = GL3PlusMappings::get( mTextureType );
 
+        if( mMsaa > 1u )
+        {
+            assert( mTextureType == TextureTypes::Type2D || mTextureType == TextureTypes::Type2DArray );
+            mGlTextureTarget = mTextureType == TextureTypes::Type2D ? GL_TEXTURE_2D_MULTISAMPLE :
+                                                                      GL_TEXTURE_2D_MULTISAMPLE_ARRAY;
+        }
+
         OCGE( glBindTexture( mGlTextureTarget, mTextureName ) );
         OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_BASE_LEVEL, 0 ) );
         OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_MAX_LEVEL, 0 ) );
@@ -64,39 +73,58 @@ namespace Ogre
 
         GLenum format = GL3PlusMappings::get( mPixelFormat );
 
-        switch( mTextureType )
+        if( mMsaa <= 1u )
         {
-        case TextureTypes::Unknown:
-            OGRE_EXCEPT( Exception::ERR_INVALID_STATE, "Ogre should never hit this path",
-                         "GL3PlusTextureGpu::createInternalResourcesImpl" );
-            break;
-        case TextureTypes::Type1D:
-            OCGE( glTexStorage1D( GL_TEXTURE_1D, GLsizei(mNumMipmaps), format, GLsizei(mWidth) ) );
-            break;
-        case TextureTypes::Type1DArray:
-            OCGE( glTexStorage2D( GL_TEXTURE_1D_ARRAY, GLsizei(mNumMipmaps), format,
-                                  GLsizei(mWidth), GLsizei(mDepthOrSlices) ) );
-            break;
-        case TextureTypes::Type2D:
-            OCGE( glTexStorage2D( GL_TEXTURE_2D, GLsizei(mNumMipmaps), format,
-                                  GLsizei(mWidth), GLsizei(mHeight) ) );
-            break;
-        case TextureTypes::Type2DArray:
-            OCGE( glTexStorage3D( GL_TEXTURE_2D_ARRAY, GLsizei(mNumMipmaps), format,
-                                  GLsizei(mWidth), GLsizei(mHeight), GLsizei(mDepthOrSlices) ) );
-            break;
-        case TextureTypes::TypeCube:
-            OCGE( glTexStorage2D( GL_TEXTURE_CUBE_MAP, GLsizei(mNumMipmaps), format,
-                                  GLsizei(mWidth), GLsizei(mHeight) ) );
-            break;
-        case TextureTypes::TypeCubeArray:
-            OCGE( glTexStorage3D( GL_TEXTURE_CUBE_MAP_ARRAY, GLsizei(mNumMipmaps), format,
-                                  GLsizei(mWidth), GLsizei(mHeight), GLsizei(mDepthOrSlices) ) );
-            break;
-        case TextureTypes::Type3D:
-            OCGE( glTexStorage3D( GL_TEXTURE_3D, GLsizei(mNumMipmaps), format,
-                                  GLsizei(mWidth), GLsizei(mHeight), GLsizei(mDepthOrSlices) ) );
-            break;
+            switch( mTextureType )
+            {
+            case TextureTypes::Unknown:
+                OGRE_EXCEPT( Exception::ERR_INVALID_STATE, "Ogre should never hit this path",
+                             "GL3PlusTextureGpu::createInternalResourcesImpl" );
+                break;
+            case TextureTypes::Type1D:
+                OCGE( glTexStorage1D( GL_TEXTURE_1D, GLsizei(mNumMipmaps), format, GLsizei(mWidth) ) );
+                break;
+            case TextureTypes::Type1DArray:
+                OCGE( glTexStorage2D( GL_TEXTURE_1D_ARRAY, GLsizei(mNumMipmaps), format,
+                                      GLsizei(mWidth), GLsizei(mDepthOrSlices) ) );
+                break;
+            case TextureTypes::Type2D:
+                OCGE( glTexStorage2D( GL_TEXTURE_2D, GLsizei(mNumMipmaps), format,
+                                      GLsizei(mWidth), GLsizei(mHeight) ) );
+                break;
+            case TextureTypes::Type2DArray:
+                OCGE( glTexStorage3D( GL_TEXTURE_2D_ARRAY, GLsizei(mNumMipmaps), format,
+                                      GLsizei(mWidth), GLsizei(mHeight), GLsizei(mDepthOrSlices) ) );
+                break;
+            case TextureTypes::TypeCube:
+                OCGE( glTexStorage2D( GL_TEXTURE_CUBE_MAP, GLsizei(mNumMipmaps), format,
+                                      GLsizei(mWidth), GLsizei(mHeight) ) );
+                break;
+            case TextureTypes::TypeCubeArray:
+                OCGE( glTexStorage3D( GL_TEXTURE_CUBE_MAP_ARRAY, GLsizei(mNumMipmaps), format,
+                                      GLsizei(mWidth), GLsizei(mHeight), GLsizei(mDepthOrSlices) ) );
+                break;
+            case TextureTypes::Type3D:
+                OCGE( glTexStorage3D( GL_TEXTURE_3D, GLsizei(mNumMipmaps), format,
+                                      GLsizei(mWidth), GLsizei(mHeight), GLsizei(mDepthOrSlices) ) );
+                break;
+            }
+        }
+        else
+        {
+            const GLboolean fixedsamplelocations = mMsaaPattern != MsaaPatterns::Undefined;
+
+            if( mTextureType == TextureTypes::Type2D )
+            {
+                glTexImage2DMultisample( mGlTextureTarget, mMsaa, format,
+                                         GLsizei(mWidth), GLsizei(mHeight), fixedsamplelocations );
+            }
+            else
+            {
+                glTexImage3DMultisample( mGlTextureTarget, mMsaa, format,
+                                         GLsizei(mWidth), GLsizei(mHeight), GLsizei(mDepthOrSlices),
+                                         fixedsamplelocations );
+            }
         }
 
         //Allocate internal buffers for automipmaps before we load anything into them
@@ -110,6 +138,26 @@ namespace Ogre
         {
             glDeleteTextures( 1, &mTextureName );
             mTextureName = 0;
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void GL3PlusTextureGpu::getSubsampleLocations( vector<Vector2>::type locations )
+    {
+        locations.reserve( mMsaa );
+        if( mMsaa <= 1u )
+        {
+            locations.push_back( Vector2( 0.0f, 0.0f ) );
+        }
+        else
+        {
+            assert( mMsaaPattern != MsaaPatterns::Undefined );
+
+            float vals[2];
+            for( int i=0; i<mMsaa; ++i )
+            {
+                glGetMultisamplefv( GL_SAMPLE_POSITION, i, vals );
+                locations.push_back( Vector2( vals[0], vals[1] ) * 2.0f - 1.0f );
+            }
         }
     }
 }

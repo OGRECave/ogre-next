@@ -49,8 +49,14 @@ namespace Ogre
     {
         enum MsaaPatterns
         {
+            /// Let the GPU decide.
             Undefined,
+            /// The subsample locations follow a fixed known pattern.
+            /// Call TextureGpu::getSubsampleLocations to get them.
             Standard,
+            /// The subsample locations are centered in a grid.
+            /// May not be supported by the GPU/API, in which case Standard will be used instead
+            /// Call TextureGpu::isMsaaPatternSupported to check whether it will be honoured.
             Center
         };
     }
@@ -138,6 +144,10 @@ namespace Ogre
         uint8       mMsaa;
         MsaaPatterns::MsaaPatterns  mMsaaPattern;
 
+        /// Used when AutomaticBatching is set. It indicates in which slice
+        /// our actual data is, inside a texture array which we do not own.
+        uint32      mInternalSliceStart;
+
         /// This setting can only be altered if mResidencyStatus == OnStorage).
         TextureTypes::TextureTypes  mTextureType;
         PixelFormatGpu              mPixelFormat;
@@ -146,12 +156,14 @@ namespace Ogre
         uint32      mTextureFlags;
         BufferType  mBufferType;
 
+        uint8       *mSysRamCopy;
+
         virtual void createInternalResourcesImpl(void) = 0;
         virtual void destroyInternalResourcesImpl(void) = 0;
 
     public:
         TextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                    VaoManager *vaoManager, uint32 textureFlags );
+                    VaoManager *vaoManager, IdString name, uint32 textureFlags );
         virtual ~TextureGpu();
 
         void upload( const TextureBox &box, uint8 mipmapLevel, uint32 slice );
@@ -166,6 +178,8 @@ namespace Ogre
         /// For TypeCube this value returns 6.
         /// For TypeCubeArray, value returns numSlices * 6u.
         uint32 getNumSlices(void) const;
+        uint8 getNumMipmaps(void) const;
+        uint32 getInternalSliceStart(void) const;
         TextureTypes::TextureTypes getTextureTypes(void) const;
         PixelFormatGpu getPixelFormat(void) const;
 
@@ -175,6 +189,12 @@ namespace Ogre
 
         void setMsaaPattern( MsaaPatterns::MsaaPatterns pattern );
         MsaaPatterns::MsaaPatterns getMsaaPattern(void) const;
+        virtual bool isMsaaPatternSupported( MsaaPatterns::MsaaPatterns pattern );
+        /** Get the MSAA subsample locations. mMsaaPatterns must not be MsaaPatterns::Undefined.
+        @param locations
+            Outputs an array with the locations for each subsample. Values are in range [-1; 1]
+        */
+        virtual void getSubsampleLocations( vector<Vector2>::type locations ) = 0;
 
         void _init(void);
 
@@ -184,6 +204,10 @@ namespace Ogre
         bool isUav(void) const;
         bool allowsAutoMipmaps(void) const;
         bool hasAutoMipmapAuto(void) const;
+
+        uint8* _getSysRamCopy(void);
+        size_t _getSysRamCopyBytesPerRow(void);
+        size_t _getSysRamCopyBytesPerImage(void);
     };
 
     /** @} */

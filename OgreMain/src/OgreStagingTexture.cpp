@@ -27,6 +27,7 @@ THE SOFTWARE.
 */
 
 #include "OgreStagingTexture.h"
+#include "OgrePixelFormatGpuUtils.h"
 #include "Vao/OgreVaoManager.h"
 
 #include "OgreLogManager.h"
@@ -108,18 +109,72 @@ namespace Ogre
         mMapRegionStarted = false;
         mUserQueriedIfUploadWillStall = false;
 #endif
+        const TextureBox fullDstTextureBox( dstTexture->getWidth(), dstTexture->getHeight(),
+                                            dstTexture->getDepth(), dstTexture->getNumSlices() );
+
         assert( !dstBox || srcBox.equalSize( *dstBox ) && "Src & Dst must be equal" );
-        assert( !dstBox ||
-                TextureBox( dstTexture->getWidth(), dstTexture->getHeight(),
-                            dstTexture->getDepth(), dstTexture->getNumSlices() ).
-                fullyContains( *dstBox ) );
-        assert( TextureBox( dstTexture->getWidth(), dstTexture->getHeight(),
-                            dstTexture->getDepth(), dstTexture->getNumSlices() ).
-                fullyContains( srcBox ) );
+        assert( !dstBox || fullDstTextureBox.fullyContains( *dstBox ) );
+        assert( fullDstTextureBox.fullyContains( srcBox ) );
+        assert( mipLevel < dstTexture->getNumMipmaps() );
         assert( srcBox.x == 0 && srcBox.y == 0 && srcBox.z == 0 && srcBox.sliceStart == 0 );
         assert( belongsToUs( srcBox ) &&
                 "This srcBox does not belong to us! Was it created with mapRegion? "
                 "Did you modify it? Did it get corrupted?" );
+
+        if( dstTexture->getResidencyStatus() == GpuResidency::OnStorage )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                         "Cannot upload to texture '" + dstTexture->getNameStr() +
+                         "' which is in GpuResidency::OnStorage mode",
+                         "StagingTexture::upload" );
+        }
+
+        if( dstTexture->_getSysRamCopy() )
+        {
+            uint8 *sysRamCopyBase = dstTexture->_getSysRamCopy();
+            const size_t sysRamCopyBytesPerRow = dstTexture->_getSysRamCopyBytesPerRow();
+            const size_t sysRamCopyBytesPerImage = dstTexture->_getSysRamCopyBytesPerImage();
+
+            if( !dstBox || dstBox->equalSize( fullDstTextureBox ) )
+            {
+                const uint32 depthOrSlices = dstTexture->getDepthOrSlices();
+                for( size_t z=0; z<depthOrSlices; ++z )
+                {
+                    uint8 *dstPtr = sysRamCopyBase + sysRamCopyBytesPerImage * z;
+                    uint8 *srcPtr = static_cast<uint8*>( srcBox.data ) + srcBox.bytesPerImage * z;
+                    memcpy( dstPtr, srcPtr, sysRamCopyBytesPerRow * dstTexture->getHeight() );
+                }
+            }
+            else
+            {
+                const uint32 xPos       = dstBox ? dstBox->x : 0;
+                const uint32 yPos       = dstBox ? dstBox->y : 0;
+                const uint32 zPos       = dstBox ? dstBox->z : 0;
+                const uint32 slicePos   = dstBox ? dstBox->sliceStart : 0;
+                const uint32 width      = dstBox ? dstBox->width  : dstTexture->getWidth();
+                const uint32 height     = dstBox ? dstBox->height : dstTexture->getHeight();
+                const uint32 depth      = dstBox ? dstBox->depth  : dstTexture->getDepth();
+                const uint32 numSlices  = dstBox ? dstBox->numSlices : dstTexture->getNumSlices();
+                const uint32 zPosOrSlice    = std::max( zPos, slicePos );
+                const uint32 depthOrSlices  = std::max( depth, numSlices );
+
+                const size_t bytesPerPixel =
+                        PixelFormatGpuUtils::getBytesPerPixel( dstTexture->getPixelFormat() );
+
+                for( size_t z=zPosOrSlice; z<zPosOrSlice + depthOrSlices; ++z )
+                {
+                    uint8 *dstPtr = sysRamCopyBase + sysRamCopyBytesPerImage * z + bytesPerPixel * xPos;
+                    uint8 *srcPtr = static_cast<uint8*>( srcBox.data )  + srcBox.bytesPerImage * z;
+
+                    for( size_t y=yPos; y<yPos + height; ++y )
+                    {
+                        memcpy( dstPtr, srcPtr, width * bytesPerPixel );
+                        dstPtr += sysRamCopyBytesPerRow;
+                        srcPtr += srcBox.bytesPerRow;
+                    }
+                }
+            }
+        }
 
         mLastFrameUsed = mVaoManager->getFrameCount();
     }
