@@ -67,7 +67,7 @@ namespace Ogre
         return box.data >= mMappedPtr && box.data <= static_cast<uint8*>( mMappedPtr ) + mCurrentOffset;
     }
     //-----------------------------------------------------------------------------------
-    DECL_MALLOC void* GL3PlusStagingTexture::mapRegionImpl(void)
+    void* RESTRICT_ALIAS_RETURN GL3PlusStagingTexture::mapRegionImpl(void)
     {
         return static_cast<uint8*>( mMappedPtr ) + mCurrentOffset;
     }
