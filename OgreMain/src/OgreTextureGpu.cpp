@@ -35,7 +35,8 @@ THE SOFTWARE.
 namespace Ogre
 {
     TextureGpu::TextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                            VaoManager *vaoManager, IdString name, uint32 textureFlags ) :
+                            VaoManager *vaoManager, IdString name, uint32 textureFlags,
+                            TextureGpuManager *textureManager ) :
         GpuResource( pageOutStrategy, vaoManager, name ),
         mWidth( 0 ),
         mHeight( 0 ),
@@ -47,7 +48,8 @@ namespace Ogre
         mTextureType( TextureTypes::Unknown ),
         mPixelFormat( PFG_UNKNOWN ),
         mTextureFlags( textureFlags ),
-        mSysRamCopy( 0 )
+        mSysRamCopy( 0 ),
+        mTextureManager( textureManager )
     {
         assert( !hasAutomaticBatching() ||
                 (hasAutomaticBatching() && isTexture() && !isRenderToTexture() && !isUav()) );
@@ -139,6 +141,18 @@ namespace Ogre
         //if( msaa > 1 && ((mNumMipmaps > 1) || !isRenderToTexture() && !isUav()) )
         //  OGRE_EXCEPT()
 
+        //if( hasMsaaExplicitResolves() && mMsaa <= 1u )
+        //  OGRE_EXCEPT()
+
+        //if( msaa > 1u && mTextureType != TextureTypes::Type2D && mTextureType != TextureTypes::Type2DArray )
+        //  OGRE_EXCEPT()
+
+        //if( msaa > 1u && mTextureType == TextureTypes::Type2DArray && !hasMsaaExplicitResolves() )
+        //  OGRE_EXCEPT( only explicit resolves );
+
+        //if( msaa > 1u && mNumMipmaps > 1u )
+        //  OGRE_EXCEPT( If you want mipmaps, use explicit resolves );
+
         if( TODO_automaticBatching_or_manualFromOnStorage )
         {
             //Delegate to the manager (thread) for loading.
@@ -173,6 +187,11 @@ namespace Ogre
     bool TextureGpu::hasAutoMipmapAuto(void) const
     {
         return (mTextureFlags & TextureFlags::AutomipmapsAuto) != 0;
+    }
+    //-----------------------------------------------------------------------------------
+    bool TextureGpu::hasMsaaExplicitResolves(void) const
+    {
+        return (mTextureFlags & TextureFlags::MsaaExplicitResolve);
     }
     //-----------------------------------------------------------------------------------
     uint8* TextureGpu::_getSysRamCopy(void)

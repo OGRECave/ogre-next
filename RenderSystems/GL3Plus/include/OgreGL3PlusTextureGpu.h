@@ -38,20 +38,44 @@ namespace Ogre
 {
     class _OgreGL3PlusExport GL3PlusTextureGpu : public TextureGpu
     {
-        GLuint  mTextureName;
+        /// This will not be owned by us if hasAutomaticBatching is true.
+        /// It will also not be owned by us if we're not in GpuResidency::Resident
+        /// This will always point to:
+        ///     * A GL texture owned by us.
+        ///     * A 4x4 dummy texture (now owned by us).
+        ///     * A 64x64 mipmapped texture of us (but now owned by us).
+        ///     * A GL texture not owned by us, but contains the final information.
+        GLuint  mDisplayTextureName;
         GLenum  mGlTextureTarget;
+
+        /// When we're transitioning to GpuResidency::Resident but we're not there yet,
+        /// we will be either displaying a 4x4 dummy texture or a 64x64 one. However
+        /// we reserve a spot to a final place will already be there for us once the
+        /// texture data is fully uploaded. This variable contains that texture.
+        /// Async upload operations should stack to this variable.
+        /// May contain:
+        ///     1. The texture
+        ///     2. An msaa texture (hasMsaaExplicitResolves == true)
+        ///     3. The msaa resolved texture (hasMsaaExplicitResolves==false)
+        GLuint  mFinalTextureName;
+        /// Only used when hasMsaaExplicitResolves() == false.
+        GLuint  mMsaaFramebufferName;
 
         virtual void createInternalResourcesImpl(void);
         virtual void destroyInternalResourcesImpl(void);
 
     public:
         GL3PlusTextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                           VaoManager *vaoManager, IdString name, uint32 textureFlags );
+                           VaoManager *vaoManager, IdString name, uint32 textureFlags,
+                           TextureGpuManager *textureManager );
         virtual ~GL3PlusTextureGpu();
 
         virtual void getSubsampleLocations( vector<Vector2>::type locations );
 
-        GLuint getGlTextureName(void) const         { return mTextureName; }
+        virtual void _setToDisplayDummyTexture(void);
+
+        GLuint getDisplayTextureName(void) const    { return mDisplayTextureName; }
+        GLuint getFinalTextureName(void) const      { return mFinalTextureName; }
 
         /// Returns GL_TEXTURE_2D / GL_TEXTURE_2D_ARRAY / etc
         GLenum getGlTextureTarget(void) const       { return mGlTextureTarget; }

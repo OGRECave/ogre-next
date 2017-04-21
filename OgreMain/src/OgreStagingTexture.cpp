@@ -121,6 +121,14 @@ namespace Ogre
                 "This srcBox does not belong to us! Was it created with mapRegion? "
                 "Did you modify it? Did it get corrupted?" );
 
+        if( dstTexture->getMsaa() > 1u )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "Cannot upload to texture '" + dstTexture->getNameStr() +
+                         "' because it's using MSAA",
+                         "StagingTexture::upload" );
+        }
+
         if( dstTexture->getResidencyStatus() == GpuResidency::OnStorage )
         {
             OGRE_EXCEPT( Exception::ERR_INVALID_STATE,

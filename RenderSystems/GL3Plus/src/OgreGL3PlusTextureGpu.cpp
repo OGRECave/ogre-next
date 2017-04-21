@@ -28,6 +28,7 @@ THE SOFTWARE.
 
 #include "OgreGL3PlusTextureGpu.h"
 #include "OgreGL3PlusMappings.h"
+#include "OgreGL3PlusTextureGpuManager.h"
 
 #include "OgreVector2.h"
 
@@ -36,10 +37,13 @@ THE SOFTWARE.
 namespace Ogre
 {
     GL3PlusTextureGpu::GL3PlusTextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                                          VaoManager *vaoManager, IdString name, uint32 textureFlags ) :
-        TextureGpu( pageOutStrategy, vaoManager, name, textureFlags ),
-        mTextureName( 0 ),
-        mGlTextureTarget( GL_NONE )
+                                          VaoManager *vaoManager, IdString name, uint32 textureFlags,
+                                          TextureGpuManager *textureManager ) :
+        TextureGpu( pageOutStrategy, vaoManager, name, textureFlags, textureManager ),
+        mDisplayTextureName( 0 ),
+        mGlTextureTarget( GL_NONE ),
+        mFinalTextureName( 0 ),
+        mMsaaFramebufferName( 0 )
     {
     }
     //-----------------------------------------------------------------------------------
@@ -50,31 +54,24 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void GL3PlusTextureGpu::createInternalResourcesImpl(void)
     {
-        OCGE( glGenTextures( 1u, &mTextureName ) );
-
-        mGlTextureTarget = GL3PlusMappings::get( mTextureType );
-
-        if( mMsaa > 1u )
-        {
-            assert( mTextureType == TextureTypes::Type2D || mTextureType == TextureTypes::Type2DArray );
-            mGlTextureTarget = mTextureType == TextureTypes::Type2D ? GL_TEXTURE_2D_MULTISAMPLE :
-                                                                      GL_TEXTURE_2D_MULTISAMPLE_ARRAY;
-        }
-
-        OCGE( glBindTexture( mGlTextureTarget, mTextureName ) );
-        OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_BASE_LEVEL, 0 ) );
-        OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_MAX_LEVEL, 0 ) );
-        OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_MIN_FILTER, GL_NEAREST ) );
-        OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_MAG_FILTER, GL_NEAREST ) );
-        OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE ) );
-        OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE ) );
-        OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE ) );
-        OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_MAX_LEVEL, mNumMipmaps - 1u ) );
-
         GLenum format = GL3PlusMappings::get( mPixelFormat );
 
-        if( mMsaa <= 1u )
+        if( !hasMsaaExplicitResolves() )
         {
+            OCGE( glGenTextures( 1u, &mFinalTextureName ) );
+
+            mGlTextureTarget = GL3PlusMappings::get( mTextureType );
+
+            OCGE( glBindTexture( mGlTextureTarget, mFinalTextureName ) );
+            OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_BASE_LEVEL, 0 ) );
+            OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_MAX_LEVEL, 0 ) );
+            OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_MIN_FILTER, GL_NEAREST ) );
+            OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_MAG_FILTER, GL_NEAREST ) );
+            OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE ) );
+            OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE ) );
+            OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE ) );
+            OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_MAX_LEVEL, mNumMipmaps - 1u ) );
+
             switch( mTextureType )
             {
             case TextureTypes::Unknown:
@@ -109,36 +106,74 @@ namespace Ogre
                                       GLsizei(mWidth), GLsizei(mHeight), GLsizei(mDepthOrSlices) ) );
                 break;
             }
+
+            //Allocate internal buffers for automipmaps before we load anything into them
+            if( allowsAutoMipmaps() )
+                OCGE( glGenerateMipmap( mGlTextureTarget ) );
         }
-        else
+
+        if( mMsaa > 1u )
         {
             const GLboolean fixedsamplelocations = mMsaaPattern != MsaaPatterns::Undefined;
 
-            if( mTextureType == TextureTypes::Type2D )
+            if( !hasMsaaExplicitResolves() )
             {
-                glTexImage2DMultisample( mGlTextureTarget, mMsaa, format,
-                                         GLsizei(mWidth), GLsizei(mHeight), fixedsamplelocations );
+                OCGE( glGenRenderbuffers( 1, &mMsaaFramebufferName ) );
+                OCGE( glBindRenderbuffer( GL_RENDERBUFFER, mMsaaFramebufferName ) );
+                OCGE( glRenderbufferStorageMultisample( GL_RENDERBUFFER, mMsaa, format,
+                                                        GLsizei(mWidth), GLsizei(mHeight) ) );
+                OCGE( glBindRenderbuffer( GL_RENDERBUFFER, 0 ) );
             }
             else
             {
-                glTexImage3DMultisample( mGlTextureTarget, mMsaa, format,
-                                         GLsizei(mWidth), GLsizei(mHeight), GLsizei(mDepthOrSlices),
-                                         fixedsamplelocations );
+                OCGE( glGenTextures( 1u, &mFinalTextureName ) );
+
+                assert( mTextureType == TextureTypes::Type2D ||
+                        mTextureType == TextureTypes::Type2DArray );
+                mGlTextureTarget =
+                        mTextureType == TextureTypes::Type2D ? GL_TEXTURE_2D_MULTISAMPLE :
+                                                               GL_TEXTURE_2D_MULTISAMPLE_ARRAY;
+
+                OCGE( glBindTexture( mGlTextureTarget, mFinalTextureName ) );
+                OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_BASE_LEVEL, 0 ) );
+                OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_MAX_LEVEL, 0 ) );
+                OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_MIN_FILTER, GL_NEAREST ) );
+                OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_MAG_FILTER, GL_NEAREST ) );
+                OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE ) );
+                OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE ) );
+                OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE ) );
+                OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_MAX_LEVEL, mNumMipmaps - 1u ) );
+
+                if( mTextureType == TextureTypes::Type2D )
+                {
+                    glTexImage2DMultisample( mGlTextureTarget, mMsaa, format,
+                                             GLsizei(mWidth), GLsizei(mHeight), fixedsamplelocations );
+                }
+                else
+                {
+                    glTexImage3DMultisample( mGlTextureTarget, mMsaa, format,
+                                             GLsizei(mWidth), GLsizei(mHeight), GLsizei(mDepthOrSlices),
+                                             fixedsamplelocations );
+                }
             }
         }
-
-        //Allocate internal buffers for automipmaps before we load anything into them
-        if( hasAutomaticBatching() )
-            OCGE( glGenerateMipmap( mGlTextureTarget ) );
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusTextureGpu::destroyInternalResourcesImpl(void)
     {
-        if( mTextureName )
+        if( mFinalTextureName )
         {
-            glDeleteTextures( 1, &mTextureName );
-            mTextureName = 0;
+            glDeleteTextures( 1, &mFinalTextureName );
+            mFinalTextureName = 0;
         }
+
+        _setToDisplayDummyTexture();
+    }
+    //-----------------------------------------------------------------------------------
+    void GL3PlusTextureGpu::_setToDisplayDummyTexture(void)
+    {
+        GL3PlusTextureGpuManager *textureManagerGl = static_cast<GL3PlusTextureGpuManager*>( mTextureManager );
+        mDisplayTextureName = textureManagerGl->getBlankTextureGlName( mTextureType );
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusTextureGpu::getSubsampleLocations( vector<Vector2>::type locations )

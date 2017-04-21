@@ -121,6 +121,7 @@ namespace Ogre
                 OCGE( glCompressedTexSubImage2D( targetGl, mipLevel, xPos, yPos, width, height,
                                                  format, sizeBytes, offsetPtr ) );
             }
+            OCGE( glBindTexture( targetGl, 0 ) );
             offsetPtr += srcBox.bytesPerImage;
         }
     }
@@ -147,7 +148,7 @@ namespace Ogre
         GL3PlusTextureGpu *dstTextureGl = static_cast<GL3PlusTextureGpu*>( dstTexture );
 
         const GLenum targetGl   = dstTextureGl->getGlTextureTarget();
-        const GLuint texName    = dstTextureGl->getGlTextureName();
+        const GLuint texName    = dstTextureGl->getFinalTextureName();
 
         if( textureType != TextureTypes::TypeCube )
             OCGE( glBindTexture( targetGl, texName ) );

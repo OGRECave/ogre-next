@@ -158,12 +158,15 @@ namespace Ogre
 
         uint8       *mSysRamCopy;
 
+        TextureGpuManager   *mTextureManager;
+
         virtual void createInternalResourcesImpl(void) = 0;
         virtual void destroyInternalResourcesImpl(void) = 0;
 
     public:
         TextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                    VaoManager *vaoManager, IdString name, uint32 textureFlags );
+                    VaoManager *vaoManager, IdString name, uint32 textureFlags,
+                    TextureGpuManager *textureManager );
         virtual ~TextureGpu();
 
         void upload( const TextureBox &box, uint8 mipmapLevel, uint32 slice );
@@ -204,6 +207,9 @@ namespace Ogre
         bool isUav(void) const;
         bool allowsAutoMipmaps(void) const;
         bool hasAutoMipmapAuto(void) const;
+        bool hasMsaaExplicitResolves(void) const;
+
+        virtual void _setToDisplayDummyTexture(void) = 0;
 
         uint8* _getSysRamCopy(void);
         size_t _getSysRamCopyBytesPerRow(void);

@@ -1,0 +1,130 @@
+/*
+-----------------------------------------------------------------------------
+This source file is part of OGRE
+    (Object-oriented Graphics Rendering Engine)
+For the latest info, see http://www.ogre3d.org/
+
+Copyright (c) 2000-2017 Torus Knot Software Ltd
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-----------------------------------------------------------------------------
+*/
+
+#include "OgreGL3PlusTextureGpuManager.h"
+#include "OgreGL3PlusMappings.h"
+
+#include "OgreVector2.h"
+
+#include "OgreException.h"
+
+namespace Ogre
+{
+    GL3PlusTextureGpuManager::GL3PlusTextureGpuManager()
+    {
+        memset( mBlankTexture, 0, sizeof(mBlankTexture) );
+
+        OCGE( glGenTextures( TextureTypes::Type3D - 1u, &mBlankTexture[1u] ) );
+        mBlankTexture[TextureTypes::Unknown] = mBlankTexture[TextureTypes::Type2D];
+
+        const GLenum targets[] =
+        {
+            GL_NONE,
+            GL_TEXTURE_1D,
+            GL_TEXTURE_1D_ARRAY,
+            GL_TEXTURE_2D,
+            GL_TEXTURE_2D_ARRAY,
+            GL_TEXTURE_CUBE_MAP,
+            GL_TEXTURE_CUBE_MAP_ARRAY,
+            GL_TEXTURE_3D
+        };
+
+        //Must be large enough to hold the biggest transfer we'll do.
+        uint8 c_whiteData[4*4*6*4];
+        memset( c_whiteData, 0xff, sizeof( c_whiteData ) );
+
+        for( int i=1; i<=TextureTypes::Type3D; ++i )
+        {
+            OCGE( glBindTexture( targets[i], mBlankTexture[i] ) );
+            OCGE( glTexParameteri( targets[i], GL_TEXTURE_BASE_LEVEL, 0 ) );
+            OCGE( glTexParameteri( targets[i], GL_TEXTURE_MAX_LEVEL, 0 ) );
+            OCGE( glTexParameteri( targets[i], GL_TEXTURE_MIN_FILTER, GL_NEAREST ) );
+            OCGE( glTexParameteri( targets[i], GL_TEXTURE_MAG_FILTER, GL_NEAREST ) );
+            OCGE( glTexParameteri( targets[i], GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE ) );
+            OCGE( glTexParameteri( targets[i], GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE ) );
+            OCGE( glTexParameteri( targets[i], GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE ) );
+            OCGE( glTexParameteri( targets[i], GL_TEXTURE_MAX_LEVEL, 0 ) );
+
+            switch( i )
+            {
+            case TextureTypes::Unknown:
+                OGRE_EXCEPT( Exception::ERR_INVALID_STATE, "Ogre should never hit this path",
+                             "GL3PlusTextureGpuManager::GL3PlusTextureGpuManager" );
+                break;
+            case TextureTypes::Type1D:
+                OCGE( glTexStorage1D( targets[i], 1, GL_RGBA8, 4 ) );
+                OCGE( glTexSubImage1D( targets[i], 0, 0, 4, GL_RGBA,
+                                       GL_UNSIGNED_INT_8_8_8_8_REV, c_whiteData ) );
+                break;
+            case TextureTypes::Type1DArray:
+                OCGE( glTexStorage2D( targets[i], 1, GL_RGBA8, 4, 1 ) );
+                OCGE( glTexSubImage2D( targets[i], 0, 0, 0, 4, 1, GL_RGBA,
+                                       GL_UNSIGNED_INT_8_8_8_8_REV, c_whiteData ) );
+                break;
+            case TextureTypes::Type2D:
+                OCGE( glTexStorage2D( targets[i], 1, GL_RGBA8, 4, 4 ) );
+                OCGE( glTexSubImage2D( targets[i], 0, 0, 0, 4, 4, GL_RGBA,
+                                       GL_UNSIGNED_INT_8_8_8_8_REV, c_whiteData ) );
+                break;
+            case TextureTypes::TypeCube:
+                OCGE( glTexStorage2D( targets[i], 1, GL_RGBA8, 4, 4 ) );
+                for( int j=0; j<6; ++j )
+                {
+                    OCGE( glBindTexture( GL_TEXTURE_CUBE_MAP_POSITIVE_X + j, mBlankTexture[i] ) );
+                    OCGE( glTexSubImage2D( GL_TEXTURE_CUBE_MAP_POSITIVE_X + j, 0, 0, 0, 4, 4, GL_RGBA,
+                                           GL_UNSIGNED_INT_8_8_8_8_REV, c_whiteData ) );
+                    OCGE( glBindTexture( GL_TEXTURE_CUBE_MAP_POSITIVE_X + j, 0 ) );
+                }
+                break;
+            case TextureTypes::TypeCubeArray:
+                OCGE( glTexStorage3D( targets[i], 1, GL_RGBA8, 4, 4, 6 ) );
+                OCGE( glTexSubImage3D( targets[i], 0, 0, 0, 0, 4, 4, 6, GL_RGBA,
+                                       GL_UNSIGNED_INT_8_8_8_8_REV, c_whiteData ) );
+                break;
+            case TextureTypes::Type2DArray:
+            case TextureTypes::Type3D:
+                OCGE( glTexStorage3D( targets[i], 1, GL_RGBA8, 4, 4, 4 ) );
+                OCGE( glTexSubImage3D( targets[i], 0, 0, 0, 0, 4, 4, 4, GL_RGBA,
+                                       GL_UNSIGNED_INT_8_8_8_8_REV, c_whiteData ) );
+                break;
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    GL3PlusTextureGpuManager::~GL3PlusTextureGpuManager()
+    {
+        OCGE( glDeleteTextures( TextureTypes::Type3D - 1u, &mBlankTexture[1u] ) );
+        memset( mBlankTexture, 0, sizeof(mBlankTexture) );
+    }
+    //-----------------------------------------------------------------------------------
+    GLuint GL3PlusTextureGpuManager::getBlankTextureGlName(
+            TextureTypes::TextureTypes textureType ) const
+    {
+        return mBlankTexture[textureType];
+    }
+}
