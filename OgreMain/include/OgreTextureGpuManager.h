@@ -30,6 +30,8 @@ THE SOFTWARE.
 #define _OgreTextureGpuManager_H_
 
 #include "OgrePrerequisites.h"
+#include "OgreTextureGpu.h"
+#include "OgreLightweightMutex.h"
 
 #include "OgreHeaderPrefix.h"
 
@@ -41,13 +43,93 @@ namespace Ogre
     /** \addtogroup Resources
     *  @{
     */
+
+    typedef vector<TextureGpu*>::type TextureGpuVec;
+
+    struct _OgreExport TexturePool
+    {
+        TextureGpu  *masterTexture;
+        uint16                  usedMemory;
+        vector<uint16>::type    availableSlots;
+        TextureGpuVec           usedSlots;
+
+        bool hasFreeSlot(void) const;
+    };
+
+    typedef list<TexturePool>::type TexturePoolList;
+    typedef vector<TexturePool*>::type TexturePoolVec;
+
 	class _OgreExport TextureGpuManager
     {
-	protected:
+    public:
+        struct PoolParameters
+        {
+            /// Pool shall grow until maxBytesPerPool is reached.
+            /// Once that's reached, a new pool will be created.
+            /// Otherwise GPU RAM fragmentation may cause out of memory even
+            /// though it could otherwise fulfill our request.
+            /// Includes mipmaps.
+            /// This value may actually be exceeded if a single texture surpasses this limit,
+            /// or if minSlicesPerPool is > 1 (it takes higher priority)
+            size_t  maxBytesPerPool;
+            /// Minimum slices per pool, regardless of maxBytesPerPool.
+            /// It's also the starting num of slices. See maxResolutionToApplyMinSlices
+            uint16  minSlicesPerPool[4];
+            /// If texture resolution is <= maxResolutionToApplyMinSlices[i];
+            /// we'll apply minSlicesPerPool[i]. Otherwise, we'll apply minSlicesPerPool[i+1]
+            /// If resolution > maxResolutionToApplyMinSlices[N]; then minSlicesPerPool = 1;
+            uint32  maxResolutionToApplyMinSlices[4];
+        };
+
+    protected:
+        struct ResourceEntry
+        {
+            String      name;
+            TextureGpu  *texture;
+
+            ResourceEntry() : texture( 0 ) {}
+            ResourceEntry( const String &_name, TextureGpu *_texture ) :
+                name( _name ), texture( _texture ) {}
+        };
+
+        typedef map<IdString, ResourceEntry>::type ResourceEntryMap;
+
+        LightweightMutex    mMutex;
+
+        TexturePoolList     mTexturePool;
+        ResourceEntryMap    mEntries;
+        TexturePoolVec      mPoolsPending[2];
+
+        PoolParameters      mDefaultPoolParameters;
+
+        VaoManager          *mVaoManager;
+
+        virtual TextureGpu* createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+                                               IdString name, uint32 textureFlags ) = 0;
+
+        uint16 getNumSlicesFor( TextureGpu *texture ) const;
 
     public:
-		TextureGpuManager() {}
-		virtual ~TextureGpuManager() {}
+        TextureGpuManager( VaoManager *vaoManager );
+        virtual ~TextureGpuManager();
+
+        void _reserveSlotForTexture( TextureGpu *texture, const TexturePool **outPool,
+                                     uint16 &outSliceIdx );
+
+        void update(void);
+
+        /**
+        @param name
+        @param pageOutStrategy
+        @param textureFlags
+            See TextureFlags::TextureFlags
+        @return
+        */
+        TextureGpu* createTexture( const String &name,
+                                   GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+                                   uint32 textureFlags );
+
+        const String* findNameStr( IdString idName ) const;
     };
 
     /** @} */

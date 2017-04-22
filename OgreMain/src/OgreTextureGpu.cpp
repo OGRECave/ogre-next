@@ -28,9 +28,12 @@ THE SOFTWARE.
 
 #include "OgreTextureGpu.h"
 #include "OgrePixelFormatGpuUtils.h"
+#include "OgreTextureGpuManager.h"
+#include "OgreTextureBox.h"
 
-#define TODO_createResourcesIfThisIsRttOrUavOrManual 1
-#define TODO_automaticBatching_or_manualFromOnStorage 1
+#include "OgreException.h"
+
+#define TODO_Create_download_ticket 1
 
 namespace Ogre
 {
@@ -49,7 +52,8 @@ namespace Ogre
         mPixelFormat( PFG_UNKNOWN ),
         mTextureFlags( textureFlags ),
         mSysRamCopy( 0 ),
-        mTextureManager( textureManager )
+        mTextureManager( textureManager ),
+        mTexturePool( 0 )
     {
         assert( !hasAutomaticBatching() ||
                 (hasAutomaticBatching() && isTexture() && !isRenderToTexture() && !isUav()) );
@@ -59,6 +63,27 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     TextureGpu::~TextureGpu()
     {
+    }
+    //-----------------------------------------------------------------------------------
+    String TextureGpu::getNameStr(void) const
+    {
+        String retVal;
+        const String *nameStr = mTextureManager->findNameStr( mName );
+
+        if( nameStr )
+            retVal = *nameStr;
+        else
+            retVal = mName.getFriendlyText();
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpu::setResolution( uint32 width, uint32 height, uint32 depthOrSlices )
+    {
+        assert( mResidencyStatus == GpuResidency::OnStorage );
+        mWidth = width;
+        mHeight = height;
+        mDepthOrSlices = depthOrSlices;
     }
     //-----------------------------------------------------------------------------------
     uint32 TextureGpu::getWidth(void) const
@@ -86,19 +111,37 @@ namespace Ogre
         return (mTextureType != TextureTypes::Type3D) ? mDepthOrSlices : 1u;
     }
     //-----------------------------------------------------------------------------------
-    TextureTypes::TextureTypes TextureGpu::getTextureTypes(void) const
+    void TextureGpu::setNumMipmaps( uint8 numMipmaps )
     {
-        return mTextureType;
-    }
-    //-----------------------------------------------------------------------------------
-    PixelFormatGpu TextureGpu::getPixelFormat(void) const
-    {
-        return mPixelFormat;
+        assert( mResidencyStatus == GpuResidency::OnStorage );
+        mNumMipmaps = numMipmaps;
     }
     //-----------------------------------------------------------------------------------
     uint8 TextureGpu::getNumMipmaps(void) const
     {
         return mNumMipmaps;
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpu::setTextureType( TextureTypes::TextureTypes textureType )
+    {
+        assert( mResidencyStatus == GpuResidency::OnStorage );
+        mTextureType = textureType;
+    }
+    //-----------------------------------------------------------------------------------
+    TextureTypes::TextureTypes TextureGpu::getTextureType(void) const
+    {
+        return mTextureType;
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpu::setPixelFormat( PixelFormatGpu pixelFormat )
+    {
+        assert( mResidencyStatus == GpuResidency::OnStorage );
+        mPixelFormat = pixelFormat;
+    }
+    //-----------------------------------------------------------------------------------
+    PixelFormatGpu TextureGpu::getPixelFormat(void) const
+    {
+        return mPixelFormat;
     }
     //-----------------------------------------------------------------------------------
     uint32 TextureGpu::getInternalSliceStart(void) const
@@ -131,32 +174,152 @@ namespace Ogre
         return pattern == MsaaPatterns::Undefined;
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpu::_init(void)
+    void TextureGpu::checkValidSettings(void)
     {
-        if( TODO_createResourcesIfThisIsRttOrUavOrManual )
+        if( mMsaa > 1u )
+        {
+            if( (mNumMipmaps > 1) || isRenderToTexture() || isUav() )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                             "MSAA Textures cannot have mipmaps (use explict resolves for that), "
+                             "and must be either RenderToTexture or Uav",
+                             "TextureGpu::transitionToResident" );
+            }
+
+            if( mTextureType == TextureTypes::Type2DArray && !hasMsaaExplicitResolves() )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                             "Only explicit resolves support Type2DArray",
+                             "TextureGpu::transitionToResident" );
+            }
+
+            if( mTextureType != TextureTypes::Type2D && mTextureType != TextureTypes::Type2DArray )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                             "MSAA can only be used with Type2D or Type2DArray",
+                             "TextureGpu::transitionToResident" );
+            }
+
+            if( hasAutomaticBatching() )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                             "MSAA textures cannot use AutomaticBatching",
+                             "TextureGpu::transitionToResident" );
+            }
+        }
+
+        if( mPageOutStrategy == GpuPageOutStrategy::AlwaysKeepSystemRamCopy &&
+            (isRenderToTexture() || isUav()) )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "Cannot use AlwaysKeepSystemRamCopy with RenderToTexture or Uav",
+                         "TextureGpu::transitionToResident" );
+        }
+
+        if( hasAutomaticBatching() && (mTextureType != TextureTypes::Type2D ||
+            isRenderToTexture() || isUav()) )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "AutomaticBatching can only be used with Type2D textures, "
+                         "and they cannot be RenderToTexture or Uav",
+                         "TextureGpu::transitionToResident" );
+        }
+
+        if( hasMsaaExplicitResolves() && mMsaa <= 1u )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "A texture is requesting explicit resolves but MSAA is disabled.",
+                         "TextureGpu::transitionToResident" );
+        }
+
+        if( mWidth < 1u || mHeight < 1u || mDepthOrSlices < 1u || mPixelFormat == PFG_UNKNOWN )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "Invalid settings!",
+                         "TextureGpu::transitionToResident" );
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpu::transitionToResident(void)
+    {
+        checkValidSettings();
+
+        if( !hasAutomaticBatching() )
         {
             //At this point we should have all valid settings (pixel format, width, height)
+            //Create our own resource
+            createInternalResourcesImpl();
         }
-
-        //if( msaa > 1 && ((mNumMipmaps > 1) || !isRenderToTexture() && !isUav()) )
-        //  OGRE_EXCEPT()
-
-        //if( hasMsaaExplicitResolves() && mMsaa <= 1u )
-        //  OGRE_EXCEPT()
-
-        //if( msaa > 1u && mTextureType != TextureTypes::Type2D && mTextureType != TextureTypes::Type2DArray )
-        //  OGRE_EXCEPT()
-
-        //if( msaa > 1u && mTextureType == TextureTypes::Type2DArray && !hasMsaaExplicitResolves() )
-        //  OGRE_EXCEPT( only explicit resolves );
-
-        //if( msaa > 1u && mNumMipmaps > 1u )
-        //  OGRE_EXCEPT( If you want mipmaps, use explicit resolves );
-
-        if( TODO_automaticBatching_or_manualFromOnStorage )
+        else
         {
-            //Delegate to the manager (thread) for loading.
+            //Ask the manager for the internal resource.
+            mTextureManager->_reserveSlotForTexture( this, &mTexturePool, mInternalSliceStart );
         }
+
+        //Delegate to the manager (thread) for loading.
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpu::transitionTo( GpuResidency::GpuResidency newResidency, uint8 *sysRamCopy )
+    {
+        assert( newResidency != mResidencyStatus );
+
+        if( newResidency == GpuResidency::Resident )
+        {
+            if( mPageOutStrategy != GpuPageOutStrategy::AlwaysKeepSystemRamCopy )
+            {
+                if( mSysRamCopy )
+                {
+                    OGRE_FREE_SIMD( mSysRamCopy, MEMCATEGORY_RESOURCE );
+                    mSysRamCopy = 0;
+                }
+            }
+            else
+            {
+                assert( sysRamCopy && "Must provide a SysRAM copy if using AlwaysKeepSystemRamCopy" );
+                mSysRamCopy = sysRamCopy;
+            }
+
+            transitionToResident();
+        }
+        else if( newResidency == GpuResidency::OnSystemRam )
+        {
+            if( mResidencyStatus == GpuResidency::OnStorage )
+            {
+                assert( mSysRamCopy && "It should be impossible to have SysRAM copy in this stage!" );
+                checkValidSettings();
+
+                assert( sysRamCopy &&
+                        "Must provide a SysRAM copy when transitioning from OnStorage to OnSystemRam!" );
+                mSysRamCopy = sysRamCopy;
+            }
+            else
+            {
+                assert( (mSysRamCopy || mPageOutStrategy != GpuPageOutStrategy::AlwaysKeepSystemRamCopy)
+                        && "We should already have a SysRAM copy if we were AlwaysKeepSystemRamCopy; or"
+                        " we shouldn't have a SysRAM copy if we weren't in that strategy." );
+
+                if( !mSysRamCopy )
+                    TODO_Create_download_ticket;
+            }
+        }
+        else
+        {
+            if( mSysRamCopy )
+            {
+                OGRE_FREE_SIMD( mSysRamCopy, MEMCATEGORY_RESOURCE );
+                mSysRamCopy = 0;
+            }
+
+            destroyInternalResourcesImpl();
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpu::copyTo( TextureGpu *dst, const TextureBox &srcBox, uint8 srcMipLevel,
+                             const TextureBox &dstBox, uint8 dstMipLevel )
+    {
+        assert( srcBox.equalSize( dstBox ) );
+        assert( this != dst || !srcBox.overlaps( dstBox ) );
+        assert( srcMipLevel < this->getNumMipmaps() && dstMipLevel < dst->getNumMipmaps() );
     }
     //-----------------------------------------------------------------------------------
     bool TextureGpu::hasAutomaticBatching(void) const

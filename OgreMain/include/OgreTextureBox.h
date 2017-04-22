@@ -67,6 +67,7 @@ namespace Ogre
         uint32 getMaxY(void) const      { return y + height; }
         uint32 getMaxZ(void) const      { return z + depth; }
         uint32 getMaxSlice(void) const  { return sliceStart + numSlices; }
+        uint32 getDepthOrSlices(void) const { return std::max( depth, numSlices ); }
 
         /// Returns true if 'other' & 'this' have the same dimensions.
         bool equalSize( const TextureBox &other ) const
@@ -84,6 +85,19 @@ namespace Ogre
                    other.y >= this->y && other.getMaxY() <= this->getMaxY() &&
                    other.z >= this->z && other.getMaxZ() <= this->getMaxZ() &&
                    other.sliceStart >= this->sliceStart && other.getMaxSlice() <= this->getMaxSlice();
+        }
+
+        /// Returns true if 'this' and 'other' are in partial or full collision.
+        bool overlaps( const TextureBox &other ) const
+        {
+            return!(other.x >= this->getMaxX() ||
+                    other.y >= this->getMaxY() ||
+                    other.z >= this->getMaxZ() ||
+                    other.sliceStart >= this->getMaxSlice() ||
+                    other.getMaxX() <= this->x ||
+                    other.getMaxY() <= this->y ||
+                    other.getMaxZ() <= this->z ||
+                    other.getMaxSlice() <= this->sliceStart);
         }
     };
 }

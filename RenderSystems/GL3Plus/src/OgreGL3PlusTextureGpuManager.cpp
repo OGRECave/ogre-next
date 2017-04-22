@@ -28,6 +28,7 @@ THE SOFTWARE.
 
 #include "OgreGL3PlusTextureGpuManager.h"
 #include "OgreGL3PlusMappings.h"
+#include "OgreGL3PlusTextureGpu.h"
 
 #include "OgreVector2.h"
 
@@ -35,7 +36,10 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    GL3PlusTextureGpuManager::GL3PlusTextureGpuManager()
+    GL3PlusTextureGpuManager::GL3PlusTextureGpuManager( VaoManager *vaoManager,
+                                                        const GL3PlusSupport &support ) :
+        TextureGpuManager( vaoManager ),
+        mSupport( support )
     {
         memset( mBlankTexture, 0, sizeof(mBlankTexture) );
 
@@ -126,5 +130,12 @@ namespace Ogre
             TextureTypes::TextureTypes textureType ) const
     {
         return mBlankTexture[textureType];
+    }
+    //-----------------------------------------------------------------------------------
+    TextureGpu* GL3PlusTextureGpuManager::createTextureImpl(
+            GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+            IdString name, uint32 textureFlags )
+    {
+        return OGRE_NEW GL3PlusTextureGpu( pageOutStrategy, mVaoManager, name, textureFlags, this );
     }
 }

@@ -94,6 +94,7 @@ namespace Ogre
 
     class _OgreExport GpuResource : public ResourceAlloc
     {
+    protected:
         GpuResidency::GpuResidency              mResidencyStatus;
         GpuPageOutStrategy::GpuPageOutStrategy  mPageOutStrategy;
 
@@ -128,7 +129,8 @@ namespace Ogre
         GpuPageOutStrategy::GpuPageOutStrategy getGpuPageOutStrategy(void) const;
 
         IdString getName(void) const;
-        String getNameStr(void) const;
+        /// Retrieves a user-friendly name. May involve a look up.
+        virtual String getNameStr(void) const;
     };
 }
 

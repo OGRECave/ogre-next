@@ -54,9 +54,10 @@ namespace Ogre
         /// texture data is fully uploaded. This variable contains that texture.
         /// Async upload operations should stack to this variable.
         /// May contain:
-        ///     1. The texture
-        ///     2. An msaa texture (hasMsaaExplicitResolves == true)
-        ///     3. The msaa resolved texture (hasMsaaExplicitResolves==false)
+        ///     1. 0, if not resident or resident but not yet reached main thread.
+        ///     2. The texture
+        ///     3. An msaa texture (hasMsaaExplicitResolves == true)
+        ///     4. The msaa resolved texture (hasMsaaExplicitResolves==false)
         GLuint  mFinalTextureName;
         /// Only used when hasMsaaExplicitResolves() == false.
         GLuint  mMsaaFramebufferName;
@@ -70,9 +71,13 @@ namespace Ogre
                            TextureGpuManager *textureManager );
         virtual ~GL3PlusTextureGpu();
 
+        virtual void copyTo( TextureGpu *dst, const TextureBox &srcBox, uint8 srcMipLevel,
+                             const TextureBox &dstBox, uint8 dstMipLevel );
+
         virtual void getSubsampleLocations( vector<Vector2>::type locations );
 
         virtual void _setToDisplayDummyTexture(void);
+        virtual void _notifyTextureSlotReserved(void);
 
         GLuint getDisplayTextureName(void) const    { return mDisplayTextureName; }
         GLuint getFinalTextureName(void) const      { return mFinalTextureName; }

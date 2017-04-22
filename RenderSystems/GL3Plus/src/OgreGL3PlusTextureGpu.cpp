@@ -29,10 +29,16 @@ THE SOFTWARE.
 #include "OgreGL3PlusTextureGpu.h"
 #include "OgreGL3PlusMappings.h"
 #include "OgreGL3PlusTextureGpuManager.h"
+#include "OgreGL3PlusSupport.h"
 
+#include "OgreTextureBox.h"
 #include "OgreVector2.h"
 
+#include "Vao/OgreVaoManager.h"
+
 #include "OgreException.h"
+
+#define TODO_use_StagingTexture_with_GPU_GPU_visibility 1
 
 namespace Ogre
 {
@@ -45,6 +51,7 @@ namespace Ogre
         mFinalTextureName( 0 ),
         mMsaaFramebufferName( 0 )
     {
+        _setToDisplayDummyTexture();
     }
     //-----------------------------------------------------------------------------------
     GL3PlusTextureGpu::~GL3PlusTextureGpu()
@@ -161,10 +168,13 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void GL3PlusTextureGpu::destroyInternalResourcesImpl(void)
     {
-        if( mFinalTextureName )
+        if( !hasAutomaticBatching() )
         {
-            glDeleteTextures( 1, &mFinalTextureName );
-            mFinalTextureName = 0;
+            if( mFinalTextureName )
+            {
+                glDeleteTextures( 1, &mFinalTextureName );
+                mFinalTextureName = 0;
+            }
         }
 
         _setToDisplayDummyTexture();
@@ -172,8 +182,85 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void GL3PlusTextureGpu::_setToDisplayDummyTexture(void)
     {
-        GL3PlusTextureGpuManager *textureManagerGl = static_cast<GL3PlusTextureGpuManager*>( mTextureManager );
-        mDisplayTextureName = textureManagerGl->getBlankTextureGlName( mTextureType );
+        GL3PlusTextureGpuManager *textureManagerGl =
+                static_cast<GL3PlusTextureGpuManager*>( mTextureManager );
+        if( hasAutomaticBatching() )
+            mDisplayTextureName = textureManagerGl->getBlankTextureGlName( TextureTypes::Type2DArray );
+        else
+            mDisplayTextureName = textureManagerGl->getBlankTextureGlName( mTextureType );
+    }
+    //-----------------------------------------------------------------------------------
+    void GL3PlusTextureGpu::_notifyTextureSlotReserved(void)
+    {
+        _setToDisplayDummyTexture();
+
+        mGlTextureTarget = GL_TEXTURE_2D_ARRAY;
+
+        //mTexturePool->masterTexture may not be resident if we were created
+        //in a worker thread and not yet reached the main thread.
+        if( mTexturePool->masterTexture->getResidencyStatus() == GpuResidency::Resident )
+        {
+            assert( dynamic_cast<GL3PlusTextureGpu*>( mTexturePool->masterTexture ) );
+            GL3PlusTextureGpu *masterTexture = static_cast<GL3PlusTextureGpu*>(mTexturePool->masterTexture);
+            mFinalTextureName = masterTexture->mFinalTextureName;
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void GL3PlusTextureGpu::copyTo( TextureGpu *dst, const TextureBox &srcBox, uint8 srcMipLevel,
+                                    const TextureBox &dstBox, uint8 dstMipLevel )
+    {
+        TextureGpu::copyTo( dst, srcBox, srcMipLevel, dstBox, dstMipLevel );
+
+        assert( dynamic_cast<GL3PlusTextureGpu*>( dst ) );
+
+        GL3PlusTextureGpu *dstGl = static_cast<GL3PlusTextureGpu*>( dst );
+        GL3PlusTextureGpuManager *textureManagerGl =
+                static_cast<GL3PlusTextureGpuManager*>( mTextureManager );
+        const GL3PlusSupport &support = textureManagerGl->getGlSupport();
+
+        if( support.hasMinGLVersion( 4, 3 ) || support.checkExtension( "GL_ARB_copy_image" ) )
+        {
+            OCGE( glCopyImageSubData( this->mFinalTextureName, this->mGlTextureTarget,
+                                      srcMipLevel, srcBox.x, srcBox.y, srcBox.z,
+                                      dstGl->mFinalTextureName, dstGl->mGlTextureTarget,
+                                      dstMipLevel, dstBox.x, dstBox.y, dstBox.z,
+                                      srcBox.width, srcBox.height, srcBox.getDepthOrSlices() ) );
+        }
+        /*TODO
+        else if( support.checkExtension( "GL_NV_copy_image" ) )
+        {
+            OCGE( glCopyImageSubDataNV( this->mFinalTextureName, this->mGlTextureTarget,
+                                        srcMipLevel, srcBox.x, srcBox.y, srcBox.z,
+                                        dstGl->mFinalTextureName, dstGl->mGlTextureTarget,
+                                        dstMipLevel, dstBox.x, dstBox.y, dstBox.z,
+                                        srcBox.width, srcBox.height, srcBox.getDepthOrSlices() ) );
+        }*/
+        /*TODO: These are for OpenGL ES 3.0+
+        else if( support.checkExtension( "GL_OES_copy_image" ) )
+        {
+            OCGE( glCopyImageSubDataOES( this->mFinalTextureName, this->mGlTextureTarget,
+                                         srcMipLevel, srcBox.x, srcBox.y, srcBox.z,
+                                         dstGl->mFinalTextureName, dstGl->mGlTextureTarget,
+                                         dstMipLevel, dstBox.x, dstBox.y, dstBox.z,
+                                         srcBox.width, srcBox.height, srcBox.getDepthOrSlices() ) );
+        }
+        else if( support.checkExtension( "GL_EXT_copy_image" ) )
+        {
+            OCGE( glCopyImageSubDataEXT( this->mFinalTextureName, this->mGlTextureTarget,
+                                         srcMipLevel, srcBox.x, srcBox.y, srcBox.z,
+                                         dstGl->mFinalTextureName, dstGl->mGlTextureTarget,
+                                         dstMipLevel, dstBox.x, dstBox.y, dstBox.z,
+                                         srcBox.width, srcBox.height, srcBox.getDepthOrSlices() ) );
+        }*/
+        else
+        {
+//            GLenum format, type;
+//            GL3PlusMappings::getFormatAndType( mPixelFormat, format, type );
+//            glGetTexImage( this->mFinalTextureName, srcMipLevel, format, type,  );
+            //glGetCompressedTexImage
+            TODO_use_StagingTexture_with_GPU_GPU_visibility;
+            OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "", "GL3PlusTextureGpu::copyTo" );
+        }
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusTextureGpu::getSubsampleLocations( vector<Vector2>::type locations )

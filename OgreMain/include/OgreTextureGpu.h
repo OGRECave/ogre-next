@@ -146,7 +146,7 @@ namespace Ogre
 
         /// Used when AutomaticBatching is set. It indicates in which slice
         /// our actual data is, inside a texture array which we do not own.
-        uint32      mInternalSliceStart;
+        uint16      mInternalSliceStart;
 
         /// This setting can only be altered if mResidencyStatus == OnStorage).
         TextureTypes::TextureTypes  mTextureType;
@@ -159,9 +159,14 @@ namespace Ogre
         uint8       *mSysRamCopy;
 
         TextureGpuManager   *mTextureManager;
+        /// Used if hasAutomaticBatching() == true
+        TexturePool const   *mTexturePool;
 
         virtual void createInternalResourcesImpl(void) = 0;
         virtual void destroyInternalResourcesImpl(void) = 0;
+
+        void checkValidSettings(void);
+        void transitionToResident(void);
 
     public:
         TextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
@@ -169,10 +174,13 @@ namespace Ogre
                     TextureGpuManager *textureManager );
         virtual ~TextureGpu();
 
+        virtual String getNameStr(void) const;
+
         void upload( const TextureBox &box, uint8 mipmapLevel, uint32 slice );
 
         //AsyncTextureTicketPtr readRequest( const PixelBox &box );
 
+        void setResolution( uint32 width, uint32 height, uint32 depthOrSlices=1u );
         uint32 getWidth(void) const;
         uint32 getHeight(void) const;
         uint32 getDepthOrSlices(void) const;
@@ -181,9 +189,16 @@ namespace Ogre
         /// For TypeCube this value returns 6.
         /// For TypeCubeArray, value returns numSlices * 6u.
         uint32 getNumSlices(void) const;
+
+        void setNumMipmaps( uint8 numMipmaps );
         uint8 getNumMipmaps(void) const;
+
         uint32 getInternalSliceStart(void) const;
-        TextureTypes::TextureTypes getTextureTypes(void) const;
+
+        void setTextureType( TextureTypes::TextureTypes textureType );
+        TextureTypes::TextureTypes getTextureType(void) const;
+
+        void setPixelFormat( PixelFormatGpu pixelFormat );
         PixelFormatGpu getPixelFormat(void) const;
 
         /// Note: Passing 0 will be forced to 1.
@@ -199,7 +214,26 @@ namespace Ogre
         */
         virtual void getSubsampleLocations( vector<Vector2>::type locations ) = 0;
 
-        void _init(void);
+        /** This function may be called manually (if user is manually managing a texture)
+            or automatically (e.g. loading from file, or automatic batching is enabled)
+            Once you call this function, you're no longer in OnStorage mode; and will
+            transition to either OnSystemRam or Resident depending on whether auto
+            batching is enabled.
+        @remarks
+            Do NOT call this function yourself if you've created this function with
+            AutomaticBatching as Ogre will call this, from a worker thread!
+        @par
+            Make sure you're done using mSysRamCopy before calling this function,
+            as we may free that pointer.
+        @param sysRamCopy
+            System RAM copy that backs this GPU data. May be null.
+            Must've been allocated with OGRE_MALLOC_SIMD( size, MEMCATEGORY_RESOURCE );
+            We will deallocate it.
+        */
+        void transitionTo( GpuResidency::GpuResidency newResidency, uint8 *sysRamCopy );
+
+        virtual void copyTo( TextureGpu *dst, const TextureBox &srcBox, uint8 srcMipLevel,
+                             const TextureBox &dstBox, uint8 dstMipLevel );
 
         bool hasAutomaticBatching(void) const;
         bool isTexture(void) const;
@@ -210,6 +244,7 @@ namespace Ogre
         bool hasMsaaExplicitResolves(void) const;
 
         virtual void _setToDisplayDummyTexture(void) = 0;
+        virtual void _notifyTextureSlotReserved(void) = 0;
 
         uint8* _getSysRamCopy(void);
         size_t _getSysRamCopyBytesPerRow(void);

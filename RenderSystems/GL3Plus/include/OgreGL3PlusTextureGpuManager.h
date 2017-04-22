@@ -50,11 +50,18 @@ namespace Ogre
         /// 4x4 texture for when we have nothing to display.
         GLuint  mBlankTexture[TextureTypes::Type3D + 1u];
 
+        const GL3PlusSupport &mSupport;
+
+        virtual TextureGpu* createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+                                               IdString name, uint32 textureFlags );
+
     public:
-        GL3PlusTextureGpuManager();
+        GL3PlusTextureGpuManager( VaoManager *vaoManager, const GL3PlusSupport &support );
         virtual ~GL3PlusTextureGpuManager();
 
         GLuint getBlankTextureGlName( TextureTypes::TextureTypes textureType ) const;
+
+        const GL3PlusSupport& getGlSupport(void) const          { return mSupport; }
     };
 
     /** @} */
