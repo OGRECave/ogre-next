@@ -253,7 +253,7 @@ namespace Ogre
         else
         {
             //Ask the manager for the internal resource.
-            mTextureManager->_reserveSlotForTexture( this, &mTexturePool, mInternalSliceStart );
+            mTextureManager->_reserveSlotForTexture( this );
         }
 
         //Delegate to the manager (thread) for loading.
@@ -355,6 +355,12 @@ namespace Ogre
     bool TextureGpu::hasMsaaExplicitResolves(void) const
     {
         return (mTextureFlags & TextureFlags::MsaaExplicitResolve);
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpu::_notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice )
+    {
+        mTexturePool = newPool;
+        mInternalSliceStart = slice;
     }
     //-----------------------------------------------------------------------------------
     uint8* TextureGpu::_getSysRamCopy(void)

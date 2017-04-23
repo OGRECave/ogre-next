@@ -28,16 +28,22 @@ THE SOFTWARE.
 
 #include "OgreTextureGpuManager.h"
 #include "OgreTextureGpu.h"
+#include "OgreStagingTexture.h"
 
 #include "OgreId.h"
 #include "OgreLwString.h"
+#include "OgreCommon.h"
+
+#include "Vao/OgreVaoManager.h"
 
 #include "OgreException.h"
 
+#define TODO_grow_pool 1
+
 namespace Ogre
 {
-    const int c_mainThread = 0;
-    const int c_workerThread = 1;
+    static const int c_mainThread = 0;
+    static const int c_workerThread = 1;
 
     TextureGpuManager::TextureGpuManager( VaoManager *vaoManager ) :
         mVaoManager( vaoManager )
@@ -56,6 +62,73 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     TextureGpuManager::~TextureGpuManager()
     {
+        assert( mAvailableStagingTextures.empty() && "Derived class didn't call destroyAll!" );
+        assert( mUsedStagingTextures.empty() && "Derived class didn't call destroyAll!" );
+        assert( mEntries.empty() && "Derived class didn't call destroyAll!" );
+        assert( mTexturePool.empty() && "Derived class didn't call destroyAll!" );
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::destroyAll(void)
+    {
+        destroyAllStagingBuffers();
+        destroyAllTextures();
+        destroyAllPools();
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::destroyAllStagingBuffers(void)
+    {
+        StagingTextureVec::iterator itor = mAvailableStagingTextures.begin();
+        StagingTextureVec::iterator end  = mAvailableStagingTextures.end();
+
+        while( itor != end )
+        {
+            destroyStagingTextureImpl( *itor );
+            delete *itor;
+            ++itor;
+        }
+
+        mAvailableStagingTextures.clear();
+
+        itor = mUsedStagingTextures.begin();
+        end  = mUsedStagingTextures.end();
+
+        while( itor != end )
+        {
+            destroyStagingTextureImpl( *itor );
+            delete *itor;
+            ++itor;
+        }
+
+        mUsedStagingTextures.clear();
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::destroyAllTextures(void)
+    {
+        ResourceEntryMap::const_iterator itor = mEntries.begin();
+        ResourceEntryMap::const_iterator end  = mEntries.end();
+
+        while( itor != end )
+        {
+            const ResourceEntry &entry = itor->second;
+            delete entry.texture;
+            ++itor;
+        }
+
+        mEntries.clear();
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::destroyAllPools(void)
+    {
+        TexturePoolList::const_iterator itor = mTexturePool.begin();
+        TexturePoolList::const_iterator end  = mTexturePool.end();
+
+        while( itor != end )
+        {
+            delete itor->masterTexture;
+            ++itor;
+        }
+
+        mTexturePool.clear();
     }
     //-----------------------------------------------------------------------------------
     uint16 TextureGpuManager::getNumSlicesFor( TextureGpu *texture ) const
@@ -97,6 +170,73 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
+    void TextureGpuManager::destroyTexture( TextureGpu *texture )
+    {
+        ResourceEntryMap::iterator itor = mEntries.find( texture->getName() );
+
+        if( itor == mEntries.end() )
+        {
+            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                         "Texture with name '" + texture->getName().getFriendlyText() +
+                         "' not found. Perhaps already destroyed?",
+                         "TextureGpuManager::destroyTexture" );
+        }
+
+        delete texture;
+        mEntries.erase( itor );
+    }
+    //-----------------------------------------------------------------------------------
+    StagingTexture* TextureGpuManager::getStagingTexture( uint32 width, uint32 height,
+                                                          uint32 depth, uint32 slices,
+                                                          PixelFormatGpu pixelFormat )
+    {
+        StagingTexture *retVal = 0;
+        StagingTextureVec::iterator itor = mAvailableStagingTextures.begin();
+        StagingTextureVec::iterator end  = mAvailableStagingTextures.end();
+
+        while( itor != end && !retVal )
+        {
+            StagingTexture *stagingTexture = *itor;
+
+            if( stagingTexture->supportsFormat( width, height, depth, slices, pixelFormat ) )
+            {
+                if( !stagingTexture->uploadWillStall() )
+                {
+                    retVal = stagingTexture;
+                    mUsedStagingTextures.push_back( stagingTexture );
+                    mAvailableStagingTextures.erase( itor );
+                }
+            }
+
+            ++itor;
+        }
+
+        if( !retVal )
+        {
+            //Couldn't find an existing StagingTexture that could handle our request. Create one.
+            retVal = createStagingTextureImpl( width, height, depth, slices, pixelFormat );
+            mUsedStagingTextures.push_back( retVal );
+        }
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::removeStagingTexture( StagingTexture *stagingTexture )
+    {
+        //Reverse search to speed up since most removals are
+        //likely to remove what has just been requested.
+        StagingTextureVec::reverse_iterator ritor = std::find( mUsedStagingTextures.rbegin(),
+                                                               mUsedStagingTextures.rend(),
+                                                               stagingTexture );
+        assert( ritor != mUsedStagingTextures.rend() &&
+                "StagingTexture does not belong to this TextureGpuManager or already removed" );
+
+        StagingTextureVec::iterator itor = ritor.base() - 1u;
+        efficientVectorRemove( mUsedStagingTextures, itor );
+
+        mAvailableStagingTextures.push_back( stagingTexture );
+    }
+    //-----------------------------------------------------------------------------------
     const String* TextureGpuManager::findNameStr( IdString idName ) const
     {
         const String *retVal = 0;
@@ -109,9 +249,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::_reserveSlotForTexture( TextureGpu *texture,
-                                                    TexturePool const * *outPool,
-                                                    uint16 &outSliceIdx )
+    void TextureGpuManager::_reserveSlotForTexture( TextureGpu *texture )
     {
         bool matchFound = false;
 
@@ -130,8 +268,12 @@ namespace Ogre
                     pool.masterTexture->getPixelFormat() == texture->getPixelFormat() &&
                     pool.masterTexture->getNumMipmaps() == texture->getNumMipmaps();
 
+            TODO_grow_pool;
+
             ++itor;
         }
+
+        bool queueToMainThread = false;
 
         if( itor == end )
         {
@@ -157,56 +299,99 @@ namespace Ogre
             itor = --mTexturePool.end();
 
             //itor->masterTexture->transitionTo( GpuResidency::Resident, 0 );
-            {
-                mMutex.lock();
-                mPoolsPending[c_workerThread].push_back( &(*itor) );
-                mMutex.unlock();
-            }
+            queueToMainThread = true;
         }
 
-        *outPool = &(*itor);
+        uint16 sliceIdx = 0;
         //See if we can reuse a slot that was previously acquired and released
         if( !itor->availableSlots.empty() )
         {
-            outSliceIdx = itor->availableSlots.back();
+            sliceIdx = itor->availableSlots.back();
             itor->availableSlots.pop_back();
         }
         else
         {
-            outSliceIdx = itor->usedMemory++;
+            sliceIdx = itor->usedMemory++;
         }
         itor->usedSlots.push_back( texture );
-        texture->_notifyTextureSlotReserved();
+        texture->_notifyTextureSlotChanged( &(*itor), sliceIdx );
+
+        //Must happen after _notifyTextureSlotChanged to avoid race condition.
+        if( queueToMainThread )
+        {
+            mMutex.lock();
+                mPoolsPending[c_workerThread].push_back( &(*itor) );
+            mMutex.unlock();
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::_releaseSlotFromTexture( TextureGpu *texture )
+    {
+        //const_cast? Yes. We own it. We could do a linear search to mTexturePool;
+        //but it's O(N) vs O(1); and O(N) can quickly turn into O(N!).
+        TexturePool *texturePool = const_cast<TexturePool*>( texture->getTexturePool() );
+        TextureGpuVec::iterator itor = std::find( texturePool->usedSlots.begin(),
+                                                  texturePool->usedSlots.end(), texture );
+        assert( itor != texturePool->usedSlots.end() );
+        efficientVectorRemove( texturePool->usedSlots, itor );
+
+        const uint16 internalSliceStart = texture->getInternalSliceStart();
+        if( texturePool->usedMemory == internalSliceStart + 1u )
+            --texturePool->usedMemory;
+        else
+            texturePool->availableSlots.push_back( internalSliceStart );
+
+        texture->_notifyTextureSlotChanged( 0, 0 );
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::update(void)
     {
         {
             mMutex.lock();
-            mPoolsPending[c_mainThread].swap( mPoolsPending[c_workerThread] );
+                mPoolsPending[c_mainThread].swap( mPoolsPending[c_workerThread] );
             mMutex.unlock();
         }
 
-        TexturePoolVec::const_iterator itor = mPoolsPending[c_mainThread].begin();
-        TexturePoolVec::const_iterator end  = mPoolsPending[c_mainThread].end();
-
-        while( itor != end )
         {
-            TexturePool *pool = *itor;
-            pool->masterTexture->transitionTo( GpuResidency::Resident, 0 );
-            TextureGpuVec::const_iterator itTex = pool->usedSlots.begin();
-            TextureGpuVec::const_iterator enTex = pool->usedSlots.end();
+            TexturePoolVec::const_iterator itor = mPoolsPending[c_mainThread].begin();
+            TexturePoolVec::const_iterator end  = mPoolsPending[c_mainThread].end();
 
-            while( itTex != enTex )
+            while( itor != end )
             {
-                (*itTex)->_notifyTextureSlotReserved();
-                ++itTex;
+                TexturePool *pool = *itor;
+                pool->masterTexture->transitionTo( GpuResidency::Resident, 0 );
+                TextureGpuVec::const_iterator itTex = pool->usedSlots.begin();
+                TextureGpuVec::const_iterator enTex = pool->usedSlots.end();
+
+                while( itTex != enTex )
+                {
+                    (*itTex)->_notifyTextureSlotChanged( pool, (*itTex)->getInternalSliceStart() );
+                    ++itTex;
+                }
+
+                ++itor;
             }
 
-            ++itor;
+            mPoolsPending[c_mainThread].clear();
         }
 
-        mPoolsPending[c_mainThread].clear();
+        {
+            StagingTextureVec::iterator itor = mAvailableStagingTextures.begin();
+            StagingTextureVec::iterator end  = mAvailableStagingTextures.end();
+
+            const uint32 numFramesThreshold = mVaoManager->getDynamicBufferMultiplier() + 2u;
+
+            //They're kept in order.
+            while( itor != end &&
+                   (*itor)->getLastFrameUsed() - mVaoManager->getFrameCount() > numFramesThreshold )
+            {
+                destroyStagingTextureImpl( *itor );
+                delete *itor;
+                ++itor;
+            }
+
+            mAvailableStagingTextures.erase( mAvailableStagingTextures.begin(), itor );
+        }
     }
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------

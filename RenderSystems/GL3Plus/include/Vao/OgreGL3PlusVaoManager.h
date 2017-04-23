@@ -261,6 +261,17 @@ namespace Ogre
         virtual AsyncTicketPtr createAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
                                                   size_t elementStart, size_t elementCount );
 
+        /// See GL3PlusTextureGpuManager::createStagingTextureImpl. TextureManager delegates
+        /// to the VaoManager because behind the scenes, in GL StagingTextures are just a
+        /// buffer with CPU access. However we won't track them, so it's the TextureManager's
+        /// job to call destroyStagingTexture before the VaoManager gets deleted.
+        /// This case is more of an exception because of D3D11.
+        GL3PlusStagingTexture* createStagingTexture( size_t sizeBytes );
+        /// Important: Does not delete the stagingTexture. The TextureManager should do that.
+        /// Caller is also responsible for ensuring it is safe to destroy stagingTexture
+        /// (i.e. no hazards).
+        void destroyStagingTexture( GL3PlusStagingTexture *stagingTexture );
+
         virtual void _update(void);
 
         /// See VaoManager::waitForTailFrameToFinish

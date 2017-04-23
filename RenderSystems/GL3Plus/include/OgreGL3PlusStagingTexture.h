@@ -40,7 +40,6 @@ namespace Ogre
 {
     class _OgreGL3PlusExport GL3PlusStagingTexture : public StagingTextureBufferImpl
     {
-        size_t                  mInternalBufferStart;
         GL3PlusDynamicBuffer    *mDynamicBuffer;
         size_t                  mUnmapTicket;
         void                    *mMappedPtr;
@@ -55,8 +54,9 @@ namespace Ogre
                             GLsizei width, GLsizei height, GLsizei numSlices );
 
     public:
-        GL3PlusStagingTexture( size_t internalBufferStart, GL3PlusDynamicBuffer *dynamicBuffer,
-                               VaoManager *vaoManager, size_t size );
+        GL3PlusStagingTexture( VaoManager *vaoManager, size_t size,
+                               size_t internalBufferStart, size_t vboPoolIdx,
+                               GL3PlusDynamicBuffer *dynamicBuffer );
         virtual ~GL3PlusStagingTexture();
 
         virtual void startMapRegion(void);
@@ -64,6 +64,9 @@ namespace Ogre
 
         virtual void upload( const TextureBox &srcBox, TextureGpu *dstTexture,
                              uint8 mipLevel, const TextureBox *dstBox=0 );
+
+        GL3PlusDynamicBuffer* _getDynamicBuffer(void)           { return mDynamicBuffer; }
+        void _resetDynamicBuffer(void)                          { mDynamicBuffer = 0; }
     };
 }
 

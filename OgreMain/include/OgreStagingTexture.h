@@ -64,6 +64,7 @@ namespace Ogre
         stagingTexture->stopMapRegion();
         stagingTexture->upload( box0, texture0 );
         stagingTexture->upload( box1, texture1 );
+        textureManager.removeStagingTexture( stagingTexture );
     @par
         There are other possibilities, as you can request a StagingTexture with twice the
         width & height and then start calling mapRegion with smaller textures and we'll
@@ -72,9 +73,9 @@ namespace Ogre
     @par
         Notably derived classes are:
             * StagingTextureBufferImpl
-                * GL3PlusStagingTextureImpl
-                * MetalStagingTextureImpl
-            * D3D11StagingTextureImpl
+                * GL3PlusStagingTexture
+                * MetalStagingTexture
+            * D3D11StagingTexture
     */
     class _OgreExport StagingTexture : public RenderSysAlloc
     {
@@ -100,7 +101,8 @@ namespace Ogre
         /// This function will return true if the StagingTexture can be used with the given format.
         /// On all the other RenderSystems, this nonsense does not exist thus it returns always
         /// true
-        virtual bool supportsFormat( PixelFormatGpu pixelFormat ) const;
+        virtual bool supportsFormat( uint32 width, uint32 height, uint32 depth, uint32 slices,
+                                     PixelFormatGpu pixelFormat ) const = 0;
 
         /// If it returns true, startMapRegion will stall.
         bool uploadWillStall(void);
@@ -145,6 +147,8 @@ namespace Ogre
         */
         virtual void upload( const TextureBox &srcBox, TextureGpu *dstTexture,
                              uint8 mipLevel, const TextureBox *dstBox=0 );
+
+        uint32 getLastFrameUsed(void) const             { return mLastFrameUsed; }
     };
 
     /** @} */

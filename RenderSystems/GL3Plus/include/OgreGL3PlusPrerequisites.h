@@ -36,6 +36,7 @@ namespace Ogre {
     // Forward declarations
     class GL3PlusDynamicBuffer;
     class GL3PlusStagingBuffer;
+    class GL3PlusStagingTexture;
     class GL3PlusSupport;
     class GL3PlusRenderSystem;
     class GL3PlusTexture;

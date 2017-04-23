@@ -29,7 +29,11 @@ THE SOFTWARE.
 #include "OgreGL3PlusTextureGpuManager.h"
 #include "OgreGL3PlusMappings.h"
 #include "OgreGL3PlusTextureGpu.h"
+#include "OgreGL3PlusStagingTexture.h"
 
+#include "Vao/OgreGL3PlusVaoManager.h"
+
+#include "OgrePixelFormatGpuUtils.h"
 #include "OgreVector2.h"
 
 #include "OgreException.h"
@@ -122,6 +126,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     GL3PlusTextureGpuManager::~GL3PlusTextureGpuManager()
     {
+        destroyAll();
+
         OCGE( glDeleteTextures( TextureTypes::Type3D - 1u, &mBlankTexture[1u] ) );
         memset( mBlankTexture, 0, sizeof(mBlankTexture) );
     }
@@ -137,5 +143,26 @@ namespace Ogre
             IdString name, uint32 textureFlags )
     {
         return OGRE_NEW GL3PlusTextureGpu( pageOutStrategy, mVaoManager, name, textureFlags, this );
+    }
+    //-----------------------------------------------------------------------------------
+    StagingTexture* GL3PlusTextureGpuManager::createStagingTextureImpl( uint32 width, uint32 height,
+                                                                        uint32 depth,
+                                                                        uint32 slices,
+                                                                        PixelFormatGpu pixelFormat )
+    {
+        const uint32 rowAlignment = 4u;
+        const size_t sizeBytes = PixelFormatGpuUtils::getSizeBytes( width, height, depth, slices,
+                                                                    pixelFormat, rowAlignment );
+
+        GL3PlusVaoManager *vaoManager = static_cast<GL3PlusVaoManager*>( mVaoManager );
+        return vaoManager->createStagingTexture( sizeBytes );
+    }
+    //-----------------------------------------------------------------------------------
+    void GL3PlusTextureGpuManager::destroyStagingTextureImpl( StagingTexture *stagingTexture )
+    {
+        assert( dynamic_cast<GL3PlusStagingTexture*>( stagingTexture ) );
+
+        GL3PlusVaoManager *vaoManager = static_cast<GL3PlusVaoManager*>( mVaoManager );
+        vaoManager->destroyStagingTexture( static_cast<GL3PlusStagingTexture*>( stagingTexture ) );
     }
 }

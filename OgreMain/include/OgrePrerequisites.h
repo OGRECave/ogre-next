@@ -310,6 +310,7 @@ namespace Ogre {
     class Sphere;
     class SphereSceneQuery;
     class StagingBuffer;
+    class StagingTexture;
     class StreamSerialiser;
     class StringConverter;
     class StringInterface;

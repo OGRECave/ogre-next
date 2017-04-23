@@ -59,6 +59,8 @@ namespace Ogre
     typedef list<TexturePool>::type TexturePoolList;
     typedef vector<TexturePool*>::type TexturePoolVec;
 
+    typedef vector<StagingTexture*>::type StagingTextureVec;
+
 	class _OgreExport TextureGpuManager
     {
     public:
@@ -102,10 +104,21 @@ namespace Ogre
 
         PoolParameters      mDefaultPoolParameters;
 
+        StagingTextureVec   mUsedStagingTextures;
+        StagingTextureVec   mAvailableStagingTextures;
+
         VaoManager          *mVaoManager;
+
+        void destroyAll(void);
+        void destroyAllStagingBuffers(void);
+        void destroyAllTextures(void);
+        void destroyAllPools(void);
 
         virtual TextureGpu* createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                                IdString name, uint32 textureFlags ) = 0;
+        virtual StagingTexture* createStagingTextureImpl( uint32 width, uint32 height, uint32 depth,
+                                                          uint32 slices, PixelFormatGpu pixelFormat )=0;
+        virtual void destroyStagingTextureImpl( StagingTexture *stagingTexture ) = 0;
 
         uint16 getNumSlicesFor( TextureGpu *texture ) const;
 
@@ -113,10 +126,11 @@ namespace Ogre
         TextureGpuManager( VaoManager *vaoManager );
         virtual ~TextureGpuManager();
 
-        void _reserveSlotForTexture( TextureGpu *texture, const TexturePool **outPool,
-                                     uint16 &outSliceIdx );
+        void _reserveSlotForTexture( TextureGpu *texture );
+        void _releaseSlotFromTexture( TextureGpu *texture );
 
         void update(void);
+
 
         /**
         @param name
@@ -128,6 +142,11 @@ namespace Ogre
         TextureGpu* createTexture( const String &name,
                                    GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                    uint32 textureFlags );
+        void destroyTexture( TextureGpu *texture );
+
+        StagingTexture* getStagingTexture( uint32 width, uint32 height, uint32 depth,
+                                           uint32 slices, PixelFormatGpu pixelFormat );
+        void removeStagingTexture( StagingTexture *stagingTexture );
 
         const String* findNameStr( IdString idName ) const;
     };

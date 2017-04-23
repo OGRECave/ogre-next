@@ -54,6 +54,9 @@ namespace Ogre
 
         virtual TextureGpu* createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                                IdString name, uint32 textureFlags );
+        virtual StagingTexture* createStagingTextureImpl( uint32 width, uint32 height, uint32 depth,
+                                                          uint32 slices, PixelFormatGpu pixelFormat );
+        virtual void destroyStagingTextureImpl( StagingTexture *stagingTexture );
 
     public:
         GL3PlusTextureGpuManager( VaoManager *vaoManager, const GL3PlusSupport &support );

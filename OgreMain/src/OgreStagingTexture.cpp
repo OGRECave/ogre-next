@@ -48,7 +48,8 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    bool StagingTexture::supportsFormat( PixelFormatGpu pixelFormat ) const
+    bool StagingTexture::supportsFormat( uint32 width, uint32 height, uint32 depth, uint32 slices,
+                                         PixelFormatGpu pixelFormat ) const
     {
         return true;
     }
@@ -85,7 +86,7 @@ namespace Ogre
     TextureBox StagingTexture::mapRegion( uint32 width, uint32 height, uint32 depth, uint32 slices,
                                           PixelFormatGpu pixelFormat )
     {
-        assert( supportsFormat( pixelFormat ) );
+        assert( supportsFormat( width, height, depth, slices, pixelFormat ) );
 #if OGRE_DEBUG_MODE
         assert( mMapRegionStarted && "You must call startMapRegion first!" );
 #endif

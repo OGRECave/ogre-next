@@ -32,15 +32,27 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    StagingTextureBufferImpl::StagingTextureBufferImpl( VaoManager *vaoManager, size_t size ) :
+    StagingTextureBufferImpl::StagingTextureBufferImpl( VaoManager *vaoManager, size_t size,
+                                                        size_t internalBufferStart, size_t vboPoolIdx ) :
         StagingTexture( vaoManager ),
+        mInternalBufferStart( internalBufferStart ),
         mCurrentOffset( 0 ),
-        mSize( size )
+        mSize( size ),
+        mVboPoolIdx( vboPoolIdx )
     {
     }
     //-----------------------------------------------------------------------------------
 	StagingTextureBufferImpl::~StagingTextureBufferImpl()
     {
+    }
+    //-----------------------------------------------------------------------------------
+    bool StagingTextureBufferImpl::supportsFormat( uint32 width, uint32 height, uint32 depth,
+                                                   uint32 slices, PixelFormatGpu pixelFormat ) const
+    {
+        const uint32 rowAlignment = 4u;
+        size_t requiredSize = PixelFormatGpuUtils::getSizeBytes( width, height, depth, slices,
+                                                                 pixelFormat, rowAlignment );
+        return requiredSize <= mSize;
     }
     //-----------------------------------------------------------------------------------
     void StagingTextureBufferImpl::startMapRegion(void)
@@ -53,7 +65,7 @@ namespace Ogre
                                                         uint32 slices, PixelFormatGpu pixelFormat )
     {
         const uint32 rowAlignment = 4u;
-		const size_t sizeBytes = PixelFormatGpuUtils::getSizeBytes( width, height, depth, slices,
+        const size_t sizeBytes = PixelFormatGpuUtils::getSizeBytes( width, height, depth, slices,
                                                                     pixelFormat, rowAlignment );
 
         TextureBox retVal;

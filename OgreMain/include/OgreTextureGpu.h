@@ -244,7 +244,9 @@ namespace Ogre
         bool hasMsaaExplicitResolves(void) const;
 
         virtual void _setToDisplayDummyTexture(void) = 0;
-        virtual void _notifyTextureSlotReserved(void) = 0;
+        virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
+
+        const TexturePool* getTexturePool(void) const           { return mTexturePool; }
 
         uint8* _getSysRamCopy(void);
         size_t _getSysRamCopyBytesPerRow(void);

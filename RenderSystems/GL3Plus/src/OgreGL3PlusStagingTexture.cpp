@@ -36,11 +36,10 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    GL3PlusStagingTexture::GL3PlusStagingTexture( size_t internalBufferStart,
-                                                  GL3PlusDynamicBuffer *dynamicBuffer,
-                                                  VaoManager *vaoManager, size_t size ) :
-        StagingTextureBufferImpl( vaoManager, size ),
-        mInternalBufferStart( internalBufferStart ),
+    GL3PlusStagingTexture::GL3PlusStagingTexture( VaoManager *vaoManager, size_t size,
+                                                  size_t internalBufferStart, size_t vboPoolIdx,
+                                                  GL3PlusDynamicBuffer *dynamicBuffer ) :
+        StagingTextureBufferImpl( vaoManager, size, internalBufferStart, vboPoolIdx ),
         mDynamicBuffer( dynamicBuffer ),
         mUnmapTicket( std::numeric_limits<size_t>::max() ),
         mMappedPtr( 0 )
@@ -85,6 +84,8 @@ namespace Ogre
     {
         const bool canPersistentMap = static_cast<GL3PlusVaoManager*>( mVaoManager )->
                 supportsArbBufferStorage();
+
+        mDynamicBuffer->flush( mUnmapTicket, 0, mCurrentOffset );
 
         if( !canPersistentMap )
         {

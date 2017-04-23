@@ -176,6 +176,15 @@ namespace Ogre
                 mFinalTextureName = 0;
             }
         }
+        else
+        {
+            if( mTexturePool )
+            {
+                //This will end up calling _notifyTextureSlotChanged,
+                //setting mTexturePool & mInternalSliceStart to 0
+                mTextureManager->_releaseSlotFromTexture( this );
+            }
+        }
 
         _setToDisplayDummyTexture();
     }
@@ -190,15 +199,17 @@ namespace Ogre
             mDisplayTextureName = textureManagerGl->getBlankTextureGlName( mTextureType );
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusTextureGpu::_notifyTextureSlotReserved(void)
+    void GL3PlusTextureGpu::_notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice )
     {
+        TextureGpu::_notifyTextureSlotChanged( newPool, slice );
+
         _setToDisplayDummyTexture();
 
         mGlTextureTarget = GL_TEXTURE_2D_ARRAY;
 
         //mTexturePool->masterTexture may not be resident if we were created
         //in a worker thread and not yet reached the main thread.
-        if( mTexturePool->masterTexture->getResidencyStatus() == GpuResidency::Resident )
+        if( mTexturePool && mTexturePool->masterTexture->getResidencyStatus() == GpuResidency::Resident )
         {
             assert( dynamic_cast<GL3PlusTextureGpu*>( mTexturePool->masterTexture ) );
             GL3PlusTextureGpu *masterTexture = static_cast<GL3PlusTextureGpu*>(mTexturePool->masterTexture);
