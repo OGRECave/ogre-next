@@ -93,8 +93,8 @@ namespace Ogre
     {
         enum TextureFlags
         {
-            /// Texture can be used as a regular texture (bound to SRV in D3D11 terms)
-            Texture             = 1u << 0u,
+            /// Texture cannot be used as a regular texture (bound to SRV in D3D11 terms)
+            NotTexture          = 1u << 0u,
             /// Texture can be used as an RTT (FBO in GL terms)
             RenderToTexture     = 1u << 1u,
             /// Texture can be used as an UAV

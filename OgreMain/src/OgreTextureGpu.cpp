@@ -181,6 +181,7 @@ namespace Ogre
             if( (mNumMipmaps > 1) || isRenderToTexture() || isUav() )
             {
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                             "Texture '" + getNameStr() + "': "
                              "MSAA Textures cannot have mipmaps (use explict resolves for that), "
                              "and must be either RenderToTexture or Uav",
                              "TextureGpu::transitionToResident" );
@@ -189,6 +190,7 @@ namespace Ogre
             if( mTextureType == TextureTypes::Type2DArray && !hasMsaaExplicitResolves() )
             {
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                             "Texture '" + getNameStr() + "': "
                              "Only explicit resolves support Type2DArray",
                              "TextureGpu::transitionToResident" );
             }
@@ -196,6 +198,7 @@ namespace Ogre
             if( mTextureType != TextureTypes::Type2D && mTextureType != TextureTypes::Type2DArray )
             {
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                             "Texture '" + getNameStr() + "': "
                              "MSAA can only be used with Type2D or Type2DArray",
                              "TextureGpu::transitionToResident" );
             }
@@ -203,9 +206,18 @@ namespace Ogre
             if( hasAutomaticBatching() )
             {
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                             "Texture '" + getNameStr() + "': "
                              "MSAA textures cannot use AutomaticBatching",
                              "TextureGpu::transitionToResident" );
             }
+        }
+
+        if( mTextureType == TextureTypes::Unknown )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "Texture '" + getNameStr() + "': "
+                         "TextureType cannot be TextureTypes::Unknown",
+                         "TextureGpu::transitionToResident" );
         }
 
         if( mPageOutStrategy == GpuPageOutStrategy::AlwaysKeepSystemRamCopy &&
@@ -220,6 +232,7 @@ namespace Ogre
             isRenderToTexture() || isUav()) )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "Texture '" + getNameStr() + "': "
                          "AutomaticBatching can only be used with Type2D textures, "
                          "and they cannot be RenderToTexture or Uav",
                          "TextureGpu::transitionToResident" );
@@ -228,6 +241,7 @@ namespace Ogre
         if( hasMsaaExplicitResolves() && mMsaa <= 1u )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "Texture '" + getNameStr() + "': "
                          "A texture is requesting explicit resolves but MSAA is disabled.",
                          "TextureGpu::transitionToResident" );
         }
@@ -235,6 +249,7 @@ namespace Ogre
         if( mWidth < 1u || mHeight < 1u || mDepthOrSlices < 1u || mPixelFormat == PFG_UNKNOWN )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "Texture '" + getNameStr() + "': "
                          "Invalid settings!",
                          "TextureGpu::transitionToResident" );
         }
@@ -312,6 +327,8 @@ namespace Ogre
 
             destroyInternalResourcesImpl();
         }
+
+        mResidencyStatus = newResidency;
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::copyTo( TextureGpu *dst, const TextureBox &srcBox, uint8 srcMipLevel,
@@ -329,7 +346,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool TextureGpu::isTexture(void) const
     {
-        return (mTextureFlags & TextureFlags::Texture) != 0;
+        return (mTextureFlags & TextureFlags::NotTexture) == 0;
     }
     //-----------------------------------------------------------------------------------
     bool TextureGpu::isRenderToTexture(void) const

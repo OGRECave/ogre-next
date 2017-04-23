@@ -56,8 +56,8 @@ namespace Ogre
             /// Explicit APIs (D3D12 / Vulkan) may use true OS residency funcs.
             OnSystemRam,
 
-            /// It's loaded on VRAM.
-            /// Ready to be used by GPU.
+            /// VRAM and other GPU resources have been allocated for this resource.
+            /// Data may not be yet fully uploaded to GPU though (but should be imminent).
             /// May keep a copy on system RAM (user tweakable)
             /// Texture may transition directly from OnStorage to Resident.
             /// However, Sys. RAM is a very attractive option for 64-bit editors

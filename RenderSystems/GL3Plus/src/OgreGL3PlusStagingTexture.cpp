@@ -48,13 +48,17 @@ namespace Ogre
                 supportsArbBufferStorage();
 
         if( canPersistentMap )
+        {
+            OCGE( glBindBuffer( GL_COPY_WRITE_BUFFER, mDynamicBuffer->getVboName() ) );
             mMappedPtr = mDynamicBuffer->map( mInternalBufferStart, mSize, mUnmapTicket );
+        }
     }
     //-----------------------------------------------------------------------------------
     GL3PlusStagingTexture::~GL3PlusStagingTexture()
     {
         if( mUnmapTicket != std::numeric_limits<size_t>::max() )
         {
+            OCGE( glBindBuffer( GL_COPY_WRITE_BUFFER, mDynamicBuffer->getVboName() ) );
             mDynamicBuffer->unmap( mUnmapTicket );
             mUnmapTicket = std::numeric_limits<size_t>::max();
             mMappedPtr = 0;
@@ -66,18 +70,23 @@ namespace Ogre
         return box.data >= mMappedPtr && box.data <= static_cast<uint8*>( mMappedPtr ) + mCurrentOffset;
     }
     //-----------------------------------------------------------------------------------
-    void* RESTRICT_ALIAS_RETURN GL3PlusStagingTexture::mapRegionImpl(void)
+    void* RESTRICT_ALIAS_RETURN GL3PlusStagingTexture::mapRegionImplRawPtr(void)
     {
         return static_cast<uint8*>( mMappedPtr ) + mCurrentOffset;
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusStagingTexture::startMapRegion(void)
     {
+        StagingTexture::startMapRegion();
+
         const bool canPersistentMap = static_cast<GL3PlusVaoManager*>( mVaoManager )->
                 supportsArbBufferStorage();
 
         if( !canPersistentMap )
+        {
+            OCGE( glBindBuffer( GL_COPY_WRITE_BUFFER, mDynamicBuffer->getVboName() ) );
             mMappedPtr = mDynamicBuffer->map( mInternalBufferStart, mSize, mUnmapTicket );
+        }
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusStagingTexture::stopMapRegion(void)
@@ -85,6 +94,7 @@ namespace Ogre
         const bool canPersistentMap = static_cast<GL3PlusVaoManager*>( mVaoManager )->
                 supportsArbBufferStorage();
 
+        OCGE( glBindBuffer( GL_COPY_WRITE_BUFFER, mDynamicBuffer->getVboName() ) );
         mDynamicBuffer->flush( mUnmapTicket, 0, mCurrentOffset );
 
         if( !canPersistentMap )
@@ -93,6 +103,8 @@ namespace Ogre
             mUnmapTicket = std::numeric_limits<size_t>::max();
             mMappedPtr = 0;
         }
+
+        StagingTexture::stopMapRegion();
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusStagingTexture::uploadCubemap( const TextureBox &srcBox, PixelFormatGpu pixelFormat,
@@ -108,7 +120,7 @@ namespace Ogre
         const GLsizei sizeBytes = static_cast<GLsizei>(
                 PixelFormatGpuUtils::getSizeBytes( srcBox.width, srcBox.height, 1u, 1u, pixelFormat ) );
 
-        for( size_t i=0; i<numSlices; ++i )
+        for( size_t i=0; i<(size_t)numSlices; ++i )
         {
             const GLenum targetGl = static_cast<GLenum>( GL_TEXTURE_CUBE_MAP_POSITIVE_X + i + slicePos );
             OCGE( glBindTexture( targetGl, texName ) );
@@ -130,10 +142,10 @@ namespace Ogre
     void GL3PlusStagingTexture::upload( const TextureBox &srcBox, TextureGpu *dstTexture,
                                         uint8 mipLevel, const TextureBox *dstBox )
     {
+        StagingTexture::upload( srcBox, dstTexture, mipLevel, dstBox );
+
         size_t bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( dstTexture->getPixelFormat() );
 
-        assert(( !srcBox.bytesPerRow || (srcBox.bytesPerImage % srcBox.bytesPerRow)) &&
-               "srcBox.bytesPerImage must be a multiple of srcBox.bytesPerRow!" );
         assert( dstTexture->getMsaa() <= 1u && "Cannot upload to an MSAA texture!" );
 
         OCGE( glPixelStorei( GL_UNPACK_ALIGNMENT, 4 ) );

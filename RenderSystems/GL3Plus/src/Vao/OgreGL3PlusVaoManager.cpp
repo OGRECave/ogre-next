@@ -1033,9 +1033,9 @@ namespace Ogre
             //Because it's BT_DYNAMIC_PERSISTENT, allocateVbo will automatically multiply sizeBytes
             //by mDynamicBufferMultiplier, however this is a special case and we don't want that,
             //so we divide by mDynamicBufferMultiplier first (rounded up),
-            sizeBytes = alignToNextMultiple( sizeBytes, mDynamicBufferMultiplier ) /
-                    mDynamicBufferMultiplier;
-            allocateVbo( sizeBytes, alignment, BT_DYNAMIC_PERSISTENT, vboIdx, bufferOffset );
+            sizeBytes = alignToNextMultiple( sizeBytes, mDynamicBufferMultiplier );
+            allocateVbo( sizeBytes / mDynamicBufferMultiplier, alignment,
+                         BT_DYNAMIC_PERSISTENT, vboIdx, bufferOffset );
 
             VboFlag vboFlag = bufferTypeToVboFlag( BT_DYNAMIC_PERSISTENT );
             Vbo &vbo = mVbos[vboFlag][vboIdx];

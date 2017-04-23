@@ -82,7 +82,7 @@ namespace Ogre
                                                                     pixelFormat, rowAlignment );
             retVal.bytesPerImage = PixelFormatGpuUtils::getSizeBytes( width, height, 1, 1,
                                                                       pixelFormat, rowAlignment );
-            retVal.data = mapRegionImpl();
+            retVal.data = mapRegionImplRawPtr();
             mCurrentOffset += sizeBytes;
         }
 

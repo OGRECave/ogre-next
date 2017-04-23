@@ -284,7 +284,7 @@ namespace Ogre
 
             TexturePool newPool;
             newPool.masterTexture = createTextureImpl( GpuPageOutStrategy::Discard,
-                                                       texName.c_str(), TextureFlags::Texture );
+                                                       texName.c_str(), 0 );
             const uint16 numSlices = getNumSlicesFor( texture );
 
             newPool.usedMemory = 0;

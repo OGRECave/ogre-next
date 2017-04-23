@@ -45,7 +45,7 @@ namespace Ogre
         void                    *mMappedPtr;
 
         virtual bool belongsToUs( const TextureBox &box );
-        virtual void* RESTRICT_ALIAS_RETURN mapRegionImpl(void);
+        virtual void* RESTRICT_ALIAS_RETURN mapRegionImplRawPtr(void);
 
         void uploadCubemap( const TextureBox &srcBox, PixelFormatGpu pixelFormat,
                             GLuint texName, uint8 mipLevel,

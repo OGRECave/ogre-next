@@ -57,7 +57,7 @@ namespace Ogre
         virtual bool supportsFormat( uint32 width, uint32 height, uint32 depth, uint32 slices,
                                      PixelFormatGpu pixelFormat ) const;
 
-        virtual DECL_MALLOC void* mapRegionImpl(void) = 0;
+        virtual DECL_MALLOC void* mapRegionImplRawPtr(void) = 0;
         virtual TextureBox mapRegionImpl( uint32 width, uint32 height, uint32 depth, uint32 slices,
                                           PixelFormatGpu pixelFormat );
 

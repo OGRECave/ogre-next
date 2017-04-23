@@ -82,7 +82,9 @@ namespace Ogre
             switch( mTextureType )
             {
             case TextureTypes::Unknown:
-                OGRE_EXCEPT( Exception::ERR_INVALID_STATE, "Ogre should never hit this path",
+                OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                             "Texture '" + getNameStr() + "': "
+                             "Ogre should never hit this path",
                              "GL3PlusTextureGpu::createInternalResourcesImpl" );
                 break;
             case TextureTypes::Type1D:

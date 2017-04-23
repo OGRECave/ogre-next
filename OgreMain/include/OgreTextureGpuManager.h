@@ -31,7 +31,7 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 #include "OgreTextureGpu.h"
-#include "OgreLightweightMutex.h"
+#include "Threading/OgreLightweightMutex.h"
 
 #include "OgreHeaderPrefix.h"
 

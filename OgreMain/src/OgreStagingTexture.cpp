@@ -106,8 +106,7 @@ namespace Ogre
                                  uint8 mipLevel, const TextureBox *dstBox )
     {
 #if OGRE_DEBUG_MODE
-        assert( mMapRegionStarted && "You must call stopMapRegion before you can upload!" );
-        mMapRegionStarted = false;
+        assert( !mMapRegionStarted && "You must call stopMapRegion before you can upload!" );
         mUserQueriedIfUploadWillStall = false;
 #endif
         const TextureBox fullDstTextureBox( dstTexture->getWidth(), dstTexture->getHeight(),
@@ -118,6 +117,8 @@ namespace Ogre
         assert( fullDstTextureBox.fullyContains( srcBox ) );
         assert( mipLevel < dstTexture->getNumMipmaps() );
         assert( srcBox.x == 0 && srcBox.y == 0 && srcBox.z == 0 && srcBox.sliceStart == 0 );
+        assert(( !srcBox.bytesPerRow || (srcBox.bytesPerImage % srcBox.bytesPerRow) == 0) &&
+               "srcBox.bytesPerImage must be a multiple of srcBox.bytesPerRow!" );
         assert( belongsToUs( srcBox ) &&
                 "This srcBox does not belong to us! Was it created with mapRegion? "
                 "Did you modify it? Did it get corrupted?" );

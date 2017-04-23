@@ -46,33 +46,33 @@ namespace Ogre {
         enum PixelFormatFlags
         {
             /// Pixel Format is an actual float (32-bit float)
-            PFF_FLOAT,
+            PFF_FLOAT       = 1u << 0u,
             /// Pixel Format is 16-bit float
-            PFF_HALF,
+            PFF_HALF        = 1u << 1u,
             /// Pixel Format is float, but is neither 32-bit nor 16-bit
             /// (some weird one, could have shared exponent or not)
-            PFF_FLOAT_RARE,
+            PFF_FLOAT_RARE  = 1u << 2u,
             /// Pixel Format is (signed/unsigned) integer. May be
             /// normalized if PFF_NORMALIZED is present.
-            PFF_INTEGER,
+            PFF_INTEGER     = 1u << 3u,
             /// Pixel Format is either in range [-1; 1] or [0; 1]
-            PFF_NORMALIZED,
+            PFF_NORMALIZED  = 1u << 4u,
             /// Pixel Format can only be positive or negative.
             /// It's implicit for float/half formats. Lack
             /// of this flag means it's unsigned.
-            PFF_SIGNED,
+            PFF_SIGNED      = 1u << 5u,
             /// This is a depth format. Can be combined with
             /// PFF_FLOAT/PFF_HALF/PFF_INTEGER/PFF_NORMALIZED to get
             /// more info about the depth.
-            PFF_DEPTH,
+            PFF_DEPTH       = 1u << 6u,
             /// This format has stencil.
-            PFF_STENCIL,
+            PFF_STENCIL     = 1u << 7u,
             /// Format is in sRGB space.
-            PFF_SRGB,
+            PFF_SRGB        = 1u << 8u,
             /// Format is compressed
-            PFF_COMPRESSED,
+            PFF_COMPRESSED  = 1u << 9u,
             /// Format is palletized
-            PFF_PALLETE
+            PFF_PALLETE     = 1u << 10u
         };
 
     protected:
