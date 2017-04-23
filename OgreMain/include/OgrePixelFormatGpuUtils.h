@@ -40,7 +40,7 @@ namespace Ogre {
     *  @{
     */
     /** The pixel format used for images, textures, and render surfaces */
-    class PixelFormatGpuUtils
+    class _OgreExport PixelFormatGpuUtils
     {
     public:
         enum PixelFormatFlags
