@@ -682,6 +682,10 @@ namespace Ogre {
 
         mGLInitialised = 0;
 
+        OCGE( glBindVertexArray( 0 ) );
+        OCGE( glDeleteVertexArrays( 1, &mGlobalVao ) );
+        mGlobalVao = 0;
+
         // RenderSystem::shutdown();
     }
 
@@ -2974,8 +2978,8 @@ namespace Ogre {
         RenderTarget* target = mActiveViewport->getTarget();
         bool scissorsNeeded = mActiveViewport->getActualLeft() != 0 ||
                                 mActiveViewport->getActualTop() != 0 ||
-                                mActiveViewport->getActualWidth() != target->getWidth() ||
-                                mActiveViewport->getActualHeight() != target->getHeight();
+                                mActiveViewport->getActualWidth() != (int)target->getWidth() ||
+                                mActiveViewport->getActualHeight() != (int)target->getHeight();
 
         if( scissorsNeeded )
         {
