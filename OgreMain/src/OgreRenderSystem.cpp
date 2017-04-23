@@ -46,6 +46,7 @@ THE SOFTWARE.
 #include "OgreMaterialManager.h"
 #include "OgreHardwareOcclusionQuery.h"
 #include "OgreHlmsPso.h"
+#include "OgreTextureGpuManager.h"
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreVertexArrayObject.h"
 
@@ -58,6 +59,7 @@ namespace Ogre {
         : mActiveRenderTarget(0)
         , mTextureManager(0)
         , mVaoManager(0)
+        , mTextureGpuManager(0)
         , mActiveViewport(0)
         , mWBuffer(false)
         , mBatchCount(0)
@@ -703,6 +705,8 @@ namespace Ogre {
 
         _cleanupDepthBuffers();
 
+        OGRE_DELETE mTextureGpuManager;
+        mTextureGpuManager = 0;
         OGRE_DELETE mVaoManager;
         mVaoManager = 0;
 
@@ -1016,6 +1020,7 @@ namespace Ogre {
     //---------------------------------------------------------------------
     void RenderSystem::_update(void)
     {
+        mTextureGpuManager->_update();
         mVaoManager->_update();
         cleanReleasedDepthBuffers();
     }

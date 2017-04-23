@@ -61,7 +61,7 @@ namespace Ogre
 
     typedef vector<StagingTexture*>::type StagingTextureVec;
 
-	class _OgreExport TextureGpuManager
+    class _OgreExport TextureGpuManager : public ResourceAlloc
     {
     public:
         struct PoolParameters
@@ -129,7 +129,7 @@ namespace Ogre
         void _reserveSlotForTexture( TextureGpu *texture );
         void _releaseSlotFromTexture( TextureGpu *texture );
 
-        void update(void);
+        void _update(void);
 
 
         /**

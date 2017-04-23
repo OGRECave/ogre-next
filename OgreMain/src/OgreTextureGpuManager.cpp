@@ -344,7 +344,7 @@ namespace Ogre
         texture->_notifyTextureSlotChanged( 0, 0 );
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::update(void)
+    void TextureGpuManager::_update(void)
     {
         {
             mMutex.lock();

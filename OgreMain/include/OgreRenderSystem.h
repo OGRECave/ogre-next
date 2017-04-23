@@ -1156,6 +1156,8 @@ namespace Ogre
 
         VaoManager* getVaoManager(void) const           { return mVaoManager; }
 
+        TextureGpuManager* getTextureGpuManager(void) const { return mTextureGpuManager; }
+
         /**
          * Gets the native shading language version for this render system.
          * Formatted so that it can be used within a shading program. 
@@ -1476,7 +1478,8 @@ namespace Ogre
         // managed by the RenderSystem
         TextureManager* mTextureManager;
 
-        VaoManager   *mVaoManager;
+        VaoManager          *mVaoManager;
+        TextureGpuManager   *mTextureGpuManager;
 
         // Active viewport (dest for future rendering operations)
         Viewport* mActiveViewport;

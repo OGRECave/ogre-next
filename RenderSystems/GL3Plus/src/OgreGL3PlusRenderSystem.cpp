@@ -56,6 +56,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreGLSLMonolithicProgramManager.h"
 #include "OgreGL3PlusPixelFormat.h"
 #include "OgreGL3PlusVertexArrayObject.h"
+#include "OgreGL3PlusTextureGpuManager.h"
 #include "OgreGL3PlusHlmsPso.h"
 #include "OgreHlmsDatablock.h"
 #include "OgreHlmsSamplerblock.h"
@@ -781,6 +782,8 @@ namespace Ogre {
             // use real capabilities if custom capabilities are not available
             if (!mUseCustomCapabilities)
                 mCurrentCapabilities = mRealCapabilities;
+
+            mTextureGpuManager = OGRE_NEW GL3PlusTextureGpuManager( mVaoManager, *mGLSupport );
 
             fireEvent("RenderSystemCapabilitiesCreated");
 
