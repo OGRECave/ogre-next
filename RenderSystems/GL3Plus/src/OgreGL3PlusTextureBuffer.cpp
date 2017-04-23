@@ -141,6 +141,8 @@ namespace v1 {
 
     void GL3PlusTextureBuffer::upload(const PixelBox &data, const Image::Box &dest)
     {
+        OGRE_CHECK_GL_ERROR(glPixelStorei(GL_UNPACK_ROW_LENGTH, 0));
+        OGRE_CHECK_GL_ERROR(glPixelStorei(GL_UNPACK_IMAGE_HEIGHT, 0));
         OGRE_CHECK_GL_ERROR(glPixelStorei(GL_UNPACK_ALIGNMENT, 1));
         OGRE_CHECK_GL_ERROR(glBindTexture(mTarget, mTextureID));
 
