@@ -100,7 +100,7 @@ namespace Ogre
     {
         size_t freeRegionOffset = getFreeDownloadRegion( srcLength );
 
-        if( freeRegionOffset == -1u )
+        if( freeRegionOffset == (size_t)-1u )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          "Cannot download the request amount of " +

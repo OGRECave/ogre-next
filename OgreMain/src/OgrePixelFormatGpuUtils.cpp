@@ -154,67 +154,67 @@ namespace Ogre
     bool PixelFormatGpuUtils::isFloat( PixelFormatGpu format )
     {
         const PixelFormatDesc &desc = getDescriptionFor( format );
-        return desc.flags & PFF_FLOAT;
+        return (desc.flags & PFF_FLOAT) != 0;
     }
     //-----------------------------------------------------------------------------------
     bool PixelFormatGpuUtils::isHalf( PixelFormatGpu format )
     {
         const PixelFormatDesc &desc = getDescriptionFor( format );
-        return desc.flags & PFF_HALF;
+        return (desc.flags & PFF_HALF) != 0;
     }
     //-----------------------------------------------------------------------------------
     bool PixelFormatGpuUtils::isFloatRare( PixelFormatGpu format )
     {
         const PixelFormatDesc &desc = getDescriptionFor( format );
-        return desc.flags & PFF_FLOAT_RARE;
+        return (desc.flags & PFF_FLOAT_RARE) != 0;
     }
     //-----------------------------------------------------------------------------------
     bool PixelFormatGpuUtils::isInteger( PixelFormatGpu format )
     {
         const PixelFormatDesc &desc = getDescriptionFor( format );
-        return desc.flags & PFF_INTEGER;
+        return (desc.flags & PFF_INTEGER) != 0;
     }
     //-----------------------------------------------------------------------------------
     bool PixelFormatGpuUtils::isNormalized( PixelFormatGpu format )
     {
         const PixelFormatDesc &desc = getDescriptionFor( format );
-        return desc.flags & PFF_NORMALIZED;
+        return (desc.flags & PFF_NORMALIZED) != 0;
     }
     //-----------------------------------------------------------------------------------
     bool PixelFormatGpuUtils::isSigned( PixelFormatGpu format )
     {
         const PixelFormatDesc &desc = getDescriptionFor( format );
-        return desc.flags & PFF_SIGNED;
+        return (desc.flags & PFF_SIGNED) != 0;
     }
     //-----------------------------------------------------------------------------------
     bool PixelFormatGpuUtils::isDepth( PixelFormatGpu format )
     {
         const PixelFormatDesc &desc = getDescriptionFor( format );
-        return desc.flags & PFF_DEPTH;
+        return (desc.flags & PFF_DEPTH) != 0;
     }
     //-----------------------------------------------------------------------------------
     bool PixelFormatGpuUtils::isStencil( PixelFormatGpu format )
     {
         const PixelFormatDesc &desc = getDescriptionFor( format );
-        return desc.flags & PFF_STENCIL;
+        return (desc.flags & PFF_STENCIL) != 0;
     }
     //-----------------------------------------------------------------------------------
     bool PixelFormatGpuUtils::isSRgb( PixelFormatGpu format )
     {
         const PixelFormatDesc &desc = getDescriptionFor( format );
-        return desc.flags & PFF_SRGB;
+        return (desc.flags & PFF_SRGB) != 0;
     }
     //-----------------------------------------------------------------------------------
     bool PixelFormatGpuUtils::isCompressed( PixelFormatGpu format )
     {
         const PixelFormatDesc &desc = getDescriptionFor( format );
-        return desc.flags & PFF_COMPRESSED;
+        return (desc.flags & PFF_COMPRESSED) != 0;
     }
     //-----------------------------------------------------------------------------------
     bool PixelFormatGpuUtils::isPallete( PixelFormatGpu format )
     {
         const PixelFormatDesc &desc = getDescriptionFor( format );
-        return desc.flags & PFF_PALLETE;
+        return (desc.flags & PFF_PALLETE) != 0;
     }
 
     static const uint32 PFF_COMPRESSED_COMMON = PixelFormatGpuUtils::PFF_COMPRESSED|

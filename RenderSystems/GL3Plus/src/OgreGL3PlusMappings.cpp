@@ -54,6 +54,9 @@ namespace Ogre
         case TextureTypes::Type3D:
             return GL_TEXTURE_3D;
         }
+
+        //Satisfy some compiler warnings
+        return GL_TEXTURE_2D;
     }
     //-----------------------------------------------------------------------------------
     GLenum GL3PlusMappings::get( PixelFormatGpu pf )
