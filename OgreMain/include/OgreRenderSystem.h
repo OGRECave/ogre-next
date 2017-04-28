@@ -652,10 +652,6 @@ namespace Ogre
         virtual void _setTextureUnitSettings(size_t texUnit, TextureUnitState& tl);
         /** Set texture unit binding type */
         virtual void _setBindingType(TextureUnitState::BindingType bindigType);
-        /** Turns off a texture unit. */
-        virtual void _disableTextureUnit(size_t texUnit);
-        /** Disables all texture units from the given unit upwards */
-        virtual void _disableTextureUnitsFrom(size_t texUnit);
         /** Sets the surface properties to be used for future rendering.
 
         This method sets the the properties of the surfaces of objects
@@ -819,6 +815,8 @@ namespace Ogre
         */
         virtual void _setTexture(size_t unit, bool enabled, const String &texname);
 
+        virtual void _setTextures( uint32 slotStart, const DescriptorSet *set ) = 0;
+
         virtual void _resourceTransitionCreated( ResourceTransition *resTransition )    {}
         virtual void _resourceTransitionDestroyed( ResourceTransition *resTransition )  {}
         virtual void _executeResourceTransition( ResourceTransition *resTransition )    {}
@@ -831,6 +829,8 @@ namespace Ogre
         virtual void _hlmsBlendblockDestroyed( HlmsBlendblock *block ) {}
         virtual void _hlmsSamplerblockCreated( HlmsSamplerblock *newBlock ) {}
         virtual void _hlmsSamplerblockDestroyed( HlmsSamplerblock *block ) {}
+        virtual void _descriptorSetCreated( DescriptorSet *newSet ) {}
+        virtual void _descriptorSetDestroyed( DescriptorSet *set ) {}
 
         virtual void _setIndirectBuffer( IndirectBufferPacked *indirectBuffer ) = 0;
 
@@ -851,17 +851,6 @@ namespace Ogre
         virtual void _setGeometryTexture(size_t unit, const TexturePtr& tex);
         virtual void _setTessellationHullTexture(size_t unit, const TexturePtr& tex);
         virtual void _setTessellationDomainTexture(size_t unit, const TexturePtr& tex);
-
-        /**
-        Sets the texture coordinate set to use for a texture unit.
-
-        Meant for use internally - not generally used directly by apps - the Material and TextureUnitState
-        classes let you manage textures far more easily.
-
-        @param unit Texture unit as above
-        @param index The index of the texture coordinate set to use.
-        */
-        virtual void _setTextureCoordSet(size_t unit, size_t index) = 0;
 
         /**
         Sets a method for automatically calculating texture coordinates for a stage.

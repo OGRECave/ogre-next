@@ -42,13 +42,6 @@ namespace Ogre
         CbTexture( uint16 _texUnit, bool _bEnabled, Texture *_texture,
                    const HlmsSamplerblock *_samplerBlock = 0 );
     };
-
-    struct _OgreExport CbTextureDisableFrom : public CbBase
-    {
-        uint16 fromTexUnit;
-
-        CbTextureDisableFrom( uint16 _fromTexUnit );
-    };
 }
 
 #endif

@@ -726,8 +726,6 @@ namespace Ogre
                     ++itor;
                 }
 
-                *commandBuffer->addCommand<CbTextureDisableFrom>() = CbTextureDisableFrom( texUnit );
-
                 mLastTextureHash = datablock->mTextureHash;
             }
         }

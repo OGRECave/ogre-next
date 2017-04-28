@@ -399,9 +399,6 @@ namespace Ogre {
 
         _setHlmsSamplerblock( texUnit, tl.getSamplerblock() );
 
-        // Set texture coordinate set
-        _setTextureCoordSet(texUnit, tl.getTextureCoordSet());
-
         // Set blend modes
         // Note, colour before alpha is important
         _setTextureBlendMode(texUnit, tl.getColourBlendMode());
@@ -510,23 +507,6 @@ namespace Ogre {
             "you should use the regular texture samplers which are shared between "
             "the vertex and fragment units.", 
             "RenderSystem::_setTessellationDomainTexture");
-    }
-    //-----------------------------------------------------------------------
-    void RenderSystem::_disableTextureUnit(size_t texUnit)
-    {
-        _setTexture(texUnit, false, sNullTexPtr.get());
-    }
-    //---------------------------------------------------------------------
-    void RenderSystem::_disableTextureUnitsFrom(size_t texUnit)
-    {
-        size_t disableTo = OGRE_MAX_TEXTURE_LAYERS;
-        if (disableTo > mDisabledTexUnitsFrom)
-            disableTo = mDisabledTexUnitsFrom;
-        mDisabledTexUnitsFrom = texUnit;
-        for (size_t i = texUnit; i < disableTo; ++i)
-        {
-            _disableTextureUnit(i);
-        }
     }
     //---------------------------------------------------------------------
     void RenderSystem::setUavStartingSlot( uint32 startingSlot )

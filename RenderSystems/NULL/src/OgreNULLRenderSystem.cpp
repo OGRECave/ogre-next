@@ -238,7 +238,7 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    void NULLRenderSystem::_setTextureCoordSet(size_t unit, size_t index)
+    void NULLRenderSystem::_setTextures( uint32 slotStart, const DescriptorSet *set )
     {
     }
     //-------------------------------------------------------------------------

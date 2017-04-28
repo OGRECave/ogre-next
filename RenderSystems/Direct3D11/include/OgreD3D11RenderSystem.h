@@ -158,8 +158,6 @@ namespace Ogre
         {
             /// the type of the texture
             TextureType type;
-            /// which texCoordIndex to use
-            size_t coordIndex;
 
             /// texture 
             ID3D11ShaderResourceView  *pTex;
@@ -273,8 +271,6 @@ namespace Ogre
         void _setGeometryTexture(size_t unit, const TexturePtr& tex);
         void _setTessellationHullTexture(size_t unit, const TexturePtr& tex);
         void _setTessellationDomainTexture(size_t unit, const TexturePtr& tex);
-        void _disableTextureUnit(size_t texUnit);
-        void _setTextureCoordSet( size_t unit, size_t index );
         void _setTextureCoordCalculation(size_t unit, TexCoordCalcMethod m, const Frustum* frustum = 0);
         void _setTextureBlendMode( size_t unit, const LayerBlendModeEx& bm );
         void _setTextureMatrix( size_t unit, const Matrix4 &xform );

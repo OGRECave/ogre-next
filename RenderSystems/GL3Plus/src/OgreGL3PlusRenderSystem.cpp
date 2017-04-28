@@ -57,6 +57,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreGL3PlusPixelFormat.h"
 #include "OgreGL3PlusVertexArrayObject.h"
 #include "OgreGL3PlusTextureGpuManager.h"
+#include "OgreGL3PlusTextureGpu.h"
 #include "OgreGL3PlusHlmsPso.h"
 #include "OgreHlmsDatablock.h"
 #include "OgreHlmsSamplerblock.h"
@@ -171,7 +172,6 @@ namespace Ogre {
         for (i = 0; i < OGRE_MAX_TEXTURE_LAYERS; i++)
         {
             // Dummy value
-            mTextureCoordIndex[i] = 99;
             mTextureTypes[i] = GL_TEXTURE_2D;
         }
 
@@ -1072,6 +1072,37 @@ namespace Ogre {
         activateGLTextureUnit(0);
     }
 
+    void GL3PlusRenderSystem::_setTextures( uint32 slotStart, const DescriptorSet *set )
+    {
+        uint32 texUnit = slotStart;
+
+        FastArray<TextureGpu*>::const_iterator itor = set->mTextures.begin();
+        FastArray<TextureGpu*>::const_iterator end  = set->mTextures.end();
+
+        while( itor != end )
+        {
+            OCGE( glActiveTexture( static_cast<uint32>( GL_TEXTURE0 + texUnit ) ) );
+
+            if( *itor )
+            {
+                GL3PlusTextureGpu *textureGpu = static_cast<GL3PlusTextureGpu*>( *itor );
+                const GLenum texTarget  = textureGpu->getGlTextureTarget();
+                const GLuint texName    = textureGpu->getDisplayTextureName();
+                OCGE( glBindTexture( texTarget, texName ) );
+                mTextureTypes[texUnit] = texTarget;
+            }
+            else
+            {
+                OCGE( glBindTexture( mTextureTypes[texUnit], 0 ) );
+            }
+
+            ++texUnit;
+            ++itor;
+        }
+
+        OCGE( glActiveTexture( GL_TEXTURE0 ) );
+    }
+
     void GL3PlusRenderSystem::_setVertexTexture( size_t unit, const TexturePtr &tex )
     {
         _setTexture(unit, true, tex.get());
@@ -1090,11 +1121,6 @@ namespace Ogre {
     void GL3PlusRenderSystem::_setTessellationDomainTexture( size_t unit, const TexturePtr &tex )
     {
         _setTexture(unit, true, tex.get());
-    }
-
-    void GL3PlusRenderSystem::_setTextureCoordSet(size_t stage, size_t index)
-    {
-        mTextureCoordIndex[stage] = index;
     }
 
     void GL3PlusRenderSystem::setUavStartingSlot( uint32 startingSlot )
@@ -3138,9 +3164,6 @@ namespace Ogre {
         }
         if (mCurrentComputeShader)
             mCurrentComputeShader->unbind();
-
-        // Disable textures
-        _disableTextureUnitsFrom(0);
 
         // It's ready for switching
         if (mCurrentContext)

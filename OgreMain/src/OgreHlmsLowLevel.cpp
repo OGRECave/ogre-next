@@ -333,7 +333,7 @@ namespace Ogre
         }
 
         // Disable remaining texture units
-        mRenderSystem->_disableTextureUnitsFrom( pass->getNumTextureUnitStates() );
+        //mRenderSystem->_disableTextureUnitsFrom( pass->getNumTextureUnitStates() );
 
         pass->_updateAutoParams( mAutoParamDataSource, GPV_ALL );
 

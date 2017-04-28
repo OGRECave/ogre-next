@@ -76,9 +76,6 @@ namespace Ogre {
         */
         size_t mTextureMipmapCount;
 
-        /// What texture coord set each texture unit is using
-        size_t mTextureCoordIndex[OGRE_MAX_TEXTURE_LAYERS];
-
         /// Holds texture type settings for every stage
         GLenum mTextureTypes[OGRE_MAX_TEXTURE_LAYERS];
 
@@ -356,10 +353,8 @@ namespace Ogre {
             RenderSystem
         */
         void _setTexture(size_t unit, bool enabled, Texture *tex);
-        /** See
-            RenderSystem
-        */
-        void _setTextureCoordSet(size_t stage, size_t index);
+        /// See RenderSystem
+        virtual void _setTextures( uint32 slotStart, const DescriptorSet *set );
         /** See
             RenderSystem
         */

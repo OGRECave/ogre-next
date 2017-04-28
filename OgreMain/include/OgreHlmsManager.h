@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "OgreHlmsCommon.h"
 #include "OgreHlmsDatablock.h"
 #include "OgreHlmsSamplerblock.h"
+#include "OgreDescriptorSet.h"
 #if !OGRE_NO_JSON
     #include "OgreScriptLoader.h"
 #endif
@@ -73,6 +74,9 @@ namespace Ogre
         BlockIdxVec         mActiveBlocks[NUM_BASIC_BLOCKS];
         BlockIdxVec         mFreeBlockIds[NUM_BASIC_BLOCKS];
         BasicBlock          *mBlocks[NUM_BASIC_BLOCKS][OGRE_HLMS_MAX_BASIC_BLOCKS];
+
+        typedef set<DescriptorSet>::type DescriptorSetSet;
+        DescriptorSetSet    mDescriptorSets;
 
         struct InputLayouts
         {
@@ -166,6 +170,9 @@ namespace Ogre
 
         /// @See destroyMacroblock
         void destroySamplerblock( const HlmsSamplerblock *Samplerblock );
+
+        const DescriptorSet* getDescriptorSet( const DescriptorSet &baseParams );
+        void destroyDescriptorSet( const DescriptorSet *descSet );
 
         uint8 _addInputLayoutId( VertexElement2VecVec vertexElements, OperationType opType );
         void _removeInputLayoutIdReference( uint8 layoutId );

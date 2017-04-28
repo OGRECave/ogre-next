@@ -130,8 +130,8 @@ namespace v1 {
         /// Flag indicating if this panel should be visual or just group things
         bool mTransparent;
         // Texture tiling
-        Real mTileX[OGRE_MAX_TEXTURE_LAYERS];
-        Real mTileY[OGRE_MAX_TEXTURE_LAYERS];
+        Real mTileX[/*OGRE_MAX_TEXTURE_LAYERS*/16];
+        Real mTileY[/*OGRE_MAX_TEXTURE_LAYERS*/16];
         size_t mNumTexCoordsInBuffer;
         Real mU1, mV1, mU2, mV2;
 

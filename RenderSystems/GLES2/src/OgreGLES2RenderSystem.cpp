@@ -128,7 +128,6 @@ namespace Ogre {
         for( size_t i = 0; i < OGRE_MAX_TEXTURE_LAYERS; i++ )
         {
             // Dummy value
-            mTextureCoordIndex[i] = 99;
             mTextureTypes[i] = 0;
         }
 
@@ -891,11 +890,6 @@ namespace Ogre {
         }
 
         mStateCacheManager->activateGLTextureUnit(0);
-    }
-
-    void GLES2RenderSystem::_setTextureCoordSet(size_t stage, size_t index)
-    {
-        mTextureCoordIndex[stage] = index;
     }
 
     GLint GLES2RenderSystem::getTextureAddressingMode(TextureAddressingMode tam) const
@@ -2209,9 +2203,6 @@ namespace Ogre {
             mCurrentVertexProgram->unbindProgram();
         if (mCurrentFragmentProgram)
             mCurrentFragmentProgram->unbindProgram();
-        
-        // Disable textures
-        _disableTextureUnitsFrom(0);
 
         // It's ready for switching
         if(mCurrentContext)

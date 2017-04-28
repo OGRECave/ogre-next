@@ -1890,7 +1890,6 @@ bail:
         if (!mDevice.isNull() && mCurrentCapabilities)
         {
             // Set all texture units to nothing to release texture surfaces
-            _disableTextureUnitsFrom(0);
             _cleanupDepthBuffers( false );
             // Clean up depth stencil surfaces
             mDevice.ReleaseAll();
@@ -2110,19 +2109,6 @@ bail:
             _setTexture(stage, false, tex.get());
         else
             _setTexture(stage, true, tex.get());
-    }
-    //---------------------------------------------------------------------
-    void D3D11RenderSystem::_disableTextureUnit(size_t texUnit)
-    {
-        RenderSystem::_disableTextureUnit(texUnit);
-        // also disable vertex texture unit
-        static TexturePtr nullPtr;
-        _setVertexTexture(texUnit, nullPtr);
-    }
-    //---------------------------------------------------------------------
-    void D3D11RenderSystem::_setTextureCoordSet( size_t stage, size_t index )
-    {
-        mTexStageDesc[stage].coordIndex = index;
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setTextureCoordCalculation( size_t stage, TexCoordCalcMethod m,

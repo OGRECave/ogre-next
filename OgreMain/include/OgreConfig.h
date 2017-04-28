@@ -69,7 +69,7 @@ THE SOFTWARE.
 
 /** Define max number of texture layers allowed per pass on any card.
 */
-#define OGRE_MAX_TEXTURE_LAYERS 16
+#define OGRE_MAX_TEXTURE_LAYERS 128
 
 /** Define max number of lights allowed per pass.
 */

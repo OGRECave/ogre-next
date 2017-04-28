@@ -1495,10 +1495,6 @@ namespace Ogre
                     ++texUnit;
                 }
             }
-            else
-            {
-                *commandBuffer->addCommand<CbTextureDisableFrom>() = CbTextureDisableFrom( 1 );
-            }
 
             mLastTextureHash = 0;
             mLastBoundPool = 0;
@@ -1754,8 +1750,6 @@ namespace Ogre
                     }
                     ++itor;
                 }
-
-                *commandBuffer->addCommand<CbTextureDisableFrom>() = CbTextureDisableFrom( texUnit );
 
                 mLastTextureHash = datablock->mTextureHash;
             }

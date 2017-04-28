@@ -53,17 +53,4 @@ namespace Ogre
         if( cmd->samplerBlock )
             _this->mRenderSystem->_setHlmsSamplerblock( cmd->texUnit, cmd->samplerBlock );
     }
-
-    CbTextureDisableFrom::CbTextureDisableFrom( uint16 _fromTexUnit ) :
-        CbBase( CB_TEXTURE_DISABLE_FROM ),
-        fromTexUnit( _fromTexUnit )
-    {
-    }
-
-    void CommandBuffer::execute_disableTextureUnitsFrom( CommandBuffer *_this,
-                                                         const CbBase * RESTRICT_ALIAS _cmd )
-    {
-        const CbTextureDisableFrom *cmd = static_cast<const CbTextureDisableFrom*>( _cmd );
-        _this->mRenderSystem->_disableTextureUnitsFrom( cmd->fromTexUnit );
-    }
 }

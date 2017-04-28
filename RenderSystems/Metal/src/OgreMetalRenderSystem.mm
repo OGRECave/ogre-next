@@ -555,8 +555,44 @@ namespace Ogre
         [mActiveRenderEncoder setFragmentTexture:metalTexture atIndex:unit];
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::_setTextureCoordSet(size_t unit, size_t index)
+    void MetalRenderSystem::_setTextures( uint32 slotStart, const DescriptorSet *set )
     {
+#define TODO_useRsSystemAndCreate_arrays_to_bind_in_one_call 1
+        TODO_useRsSystemAndCreate_arrays_to_bind_in_one_call;
+        /*uint32 texUnit = slotStart;
+        FastArray<TextureGpu*>::const_iterator itor = set->mTextures.begin();
+
+        for( size_t i=0u; i<NumShaderTypes; ++i )
+        {
+            const size_t numTexturesUsed = set->mShaderTypeTexCount[i];
+            for( size_t j=0u; i<numTexturesUsed; ++j )
+            {
+                MetalTextureGpu *metalTex = static_cast<MetalTextureGpu*>( *itor );
+                __unsafe_unretained id<MTLTexture> metalTexture = 0;
+
+                switch( i )
+                {
+                case VertexShader:
+                    [mActiveRenderEncoder setVertexTexture:metalTexture atIndex:texUnit];
+                    break;
+                case PixelShader:
+                    [mActiveRenderEncoder setFragmentTexture:metalTexture atIndex:texUnit];
+                    break;
+                case GeometryShader:
+                    [mActiveRenderEncoder setVertexTexture:metalTexture atIndex:texUnit];
+                    break;
+                case HullShader:
+                    [mActiveRenderEncoder setFragmentTexture:metalTexture atIndex:texUnit];
+                    break;
+                case DomainShader:
+                    [mActiveRenderEncoder setFragmentTexture:metalTexture atIndex:texUnit];
+                    break;
+                }
+
+                ++texUnit;
+                ++itor;
+            }
+        }*/
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_setTextureCoordCalculation( size_t unit, TexCoordCalcMethod m,

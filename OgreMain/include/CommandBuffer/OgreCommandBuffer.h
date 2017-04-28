@@ -85,7 +85,6 @@ namespace Ogre
         static CommandBufferExecuteFunc execute_setTextureBufferInvalid;
         static CommandBufferExecuteFunc execute_setPso;
         static CommandBufferExecuteFunc execute_setTexture;
-        static CommandBufferExecuteFunc execute_disableTextureUnitsFrom;
         static CommandBufferExecuteFunc execute_startV1LegacyRendering;
         static CommandBufferExecuteFunc execute_setV1RenderOp;
         static CommandBufferExecuteFunc execute_drawV1Indexed;
