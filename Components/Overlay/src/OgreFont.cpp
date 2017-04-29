@@ -25,14 +25,12 @@ THE SOFTWARE
 -------------------------------------------------------------------------*/
 
 #include "OgreFont.h"
-#include "OgreMaterialManager.h"
-#include "OgreTextureManager.h"
-#include "OgreTexture.h"
+#include "OgreTextureGpuManager.h"
+#include "OgreStagingTexture.h"
+#include "OgrePixelFormatGpuUtils.h"
 #include "OgreLogManager.h"
 #include "OgreStringConverter.h"
 #include "OgreException.h"
-#include "OgreTextureUnitState.h"
-#include "OgreTechnique.h"
 #include "OgreBitwise.h"
 
 #include "OgreRoot.h"
@@ -174,30 +172,20 @@ namespace Ogre
     void Font::loadImpl()
     {
         // Create a new material
-        mMaterial =  MaterialManager::getSingleton().create(
-            "Fonts/" + mName,  mGroup);
-
-        if (mMaterial.isNull())
-        {
-            OGRE_EXCEPT(Exception::ERR_INTERNAL_ERROR,
-                "Error creating new material!", "Font::load" );
-        }
-
-        TextureUnitState *texLayer;
         bool blendByAlpha = true;
         if (mType == FT_TRUETYPE)
         {
             createTextureFromFont();
-            texLayer = mMaterial->getTechnique(0)->getPass(0)->getTextureUnitState(0);
             // Always blend by alpha
             blendByAlpha = true;
         }
         else
         {
             // Manually load since we need to load to get alpha
-            mTexture = TextureManager::getSingleton().load(mSource, mGroup, TEX_TYPE_2D, 0);
-            blendByAlpha = mTexture->hasAlpha();
-            texLayer = mMaterial->getTechnique(0)->getPass(0)->createTextureUnitState(mSource);
+#define TODO 1
+            TODO;
+            //mTexture = TextureManager::getSingleton().load(mSource, mGroup, TEX_TYPE_2D, 0);
+            //blendByAlpha = mTexture->hasAlpha();
         }
 
         Hlms *hlmsGui = Root::getSingleton().getHlmsManager()->getHlms( HLMS_UNLIT );
@@ -234,106 +222,98 @@ namespace Ogre
 
         assert( dynamic_cast<OverlayUnlitDatablock*>( mHlmsDatablock ) );
 
-        OverlayUnlitDatablock *guiDatablock = static_cast<OverlayUnlitDatablock*>(mHlmsDatablock);
-#ifdef OGRE_BUILD_COMPONENT_HLMS_UNLIT
-        guiDatablock->setTexture( 0, 0, mTexture );
-#else
-        guiDatablock->setTexture( 0, mTexture, OverlayUnlitDatablock::UvAtlasParams() );
-#endif
-        guiDatablock->calculateHash();
-        if (mType == FT_TRUETYPE || !blendByAlpha) {
-            //Source the alpha from the green channel.
-            guiDatablock->setTextureSwizzle( 0, HlmsUnlitDatablock::R_MASK, HlmsUnlitDatablock::R_MASK,
-                                    HlmsUnlitDatablock::R_MASK, HlmsUnlitDatablock::G_MASK );
-        }
-
-        // Make sure material is aware of colour per vertex.
-        mMaterial->getTechnique(0)->getPass(0)->setVertexColourTracking(TVC_DIFFUSE);
-        HlmsSamplerblock samplerblock = *texLayer->getSamplerblock();
+        HlmsSamplerblock samplerblock;
         // Clamp to avoid fuzzy edges
         samplerblock.setAddressingMode( TAM_CLAMP );
         // Allow min/mag filter, but no mip
         samplerblock.mMinFilter = FO_LINEAR;
         samplerblock.mMagFilter = FO_LINEAR;
         samplerblock.mMipFilter = FO_NONE;
-        texLayer->setSamplerblock( samplerblock );
+
+        OverlayUnlitDatablock *guiDatablock = static_cast<OverlayUnlitDatablock*>(mHlmsDatablock);
+#ifdef OGRE_BUILD_COMPONENT_HLMS_UNLIT
+        guiDatablock->setTexture( 0, mTexture, &samplerblock );
+#else
+        guiDatablock->setTexture( 0, mTexture, OverlayUnlitDatablock::UvAtlasParams() );
+#endif
+        if( mType == FT_TRUETYPE || !blendByAlpha )
+        {
+            //Source the alpha from the green channel.
+            guiDatablock->setTextureSwizzle( 0,
+                                             HlmsUnlitDatablock::R_MASK, HlmsUnlitDatablock::R_MASK,
+                                             HlmsUnlitDatablock::R_MASK, HlmsUnlitDatablock::G_MASK );
+        }
     }
     //---------------------------------------------------------------------
     void Font::unloadImpl()
     {
-        if (!mMaterial.isNull())
-        {
-            MaterialManager::getSingleton().remove(mMaterial->getHandle());
-            mMaterial.setNull();
-        }
+        RenderSystem *renderSystem = Root::getSingleton().getRenderSystem();
+        TextureGpuManager *textureManager = renderSystem->getTextureGpuManager();
 
         mHlmsDatablock->getCreator()->destroyDatablock( mHlmsDatablock->getName() );
         mHlmsDatablock = 0;
 
-        if (!mTexture.isNull())
+        if( mTexture )
         {
-            mTexture->unload();
-            mTexture.setNull();
+            textureManager->destroyTexture( mTexture );
+            mTexture = 0;
         }
     }
     //---------------------------------------------------------------------
     void Font::createTextureFromFont(void)
     {
+        RenderSystem *renderSystem = Root::getSingleton().getRenderSystem();
+        TextureGpuManager *textureManager = renderSystem->getTextureGpuManager();
 
         // Just create the texture here, and point it at ourselves for when
         // it wants to (re)load for real
-        String texName = mName + "Texture";
+        String texName = mName + "/Texture";
         // Create, setting isManual to true and passing self as loader
-        mTexture = TextureManager::getSingleton().create(
-            texName, mGroup, true, this);
-        mTexture->setTextureType(TEX_TYPE_2D);
-        mTexture->setNumMipmaps(0);
-        mTexture->load();
+        //mGroup
+        mTexture = textureManager->createTexture( mName, GpuPageOutStrategy::SaveToSystemRam, 0 );
+        mTexture->setPixelFormat( PFG_RG8_UNORM );
+        mTexture->setTextureType( TextureTypes::Type2D );
+        mTexture->setNumMipmaps( 1u );
 
-        TextureUnitState* t = mMaterial->getTechnique(0)->getPass(0)->createTextureUnitState( texName );
-        // Allow min/mag filter, but no mip
-        HlmsSamplerblock samplerblock = *t->getSamplerblock();
-        // Clamp to avoid fuzzy edges
-        samplerblock.setAddressingMode( TAM_CLAMP );
-        // Allow min/mag filter, but no mip
-        samplerblock.mMinFilter = FO_LINEAR;
-        samplerblock.mMagFilter = FO_LINEAR;
-        samplerblock.mMipFilter = FO_NONE;
-        t->setSamplerblock( samplerblock );
+        loadTextureFromFont( textureManager );
     }
     //---------------------------------------------------------------------
-    void Font::loadResource(Resource* res)
+    void Font::loadTextureFromFont( TextureGpuManager *textureManager )
     {
         // ManualResourceLoader implementation - load the texture
         FT_Library ftLibrary;
         // Init freetype
         if( FT_Init_FreeType( &ftLibrary ) )
+        {
             OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR, "Could not init FreeType library!",
-            "Font::Font");
+                         "Font::Font" );
+        }
 
         FT_Face face;
 
         // Locate ttf file, load it pre-buffered into memory by wrapping the
         // original DataStream in a MemoryDataStream
-        DataStreamPtr dataStreamPtr =
-            ResourceGroupManager::getSingleton().openResource(
-                mSource, mGroup, true, this);
-        MemoryDataStream ttfchunk(dataStreamPtr);
+        DataStreamPtr dataStreamPtr = ResourceGroupManager::getSingleton().openResource(
+                    mSource, mGroup, true, this );
+        MemoryDataStream ttfchunk( dataStreamPtr );
 
         // Load font
-        if( FT_New_Memory_Face( ftLibrary, ttfchunk.getPtr(), (FT_Long)ttfchunk.size() , 0, &face ) )
-            OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR,
-            "Could not open font face!", "Font::createTextureFromFont" );
+        if( FT_New_Memory_Face( ftLibrary, ttfchunk.getPtr(), (FT_Long)ttfchunk.size(), 0, &face ) )
+        {
+            OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR, "Could not open font face!",
+                         "Font::createTextureFromFont" );
+        }
 
 
         // Convert our point size to freetype 26.6 fixed point format
         FT_F26Dot6 ftSize = (FT_F26Dot6)(mTtfSize * (1 << 6));
         if( FT_Set_Char_Size( face, ftSize, 0, mTtfResolution, mTtfResolution ) )
-            OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR,
-            "Could not set char size!", "Font::createTextureFromFont" );
+        {
+            OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR, "Could not set char size!",
+                         "Font::createTextureFromFont" );
+        }
 
         //FILE *fo_def = stdout;
-
         FT_Pos max_height = 0, max_width = 0;
 
         // Backwards compatibility - if codepoints not supplied, assume 33-166
@@ -385,61 +365,71 @@ namespace Ogre
         }
         finalWidth = roundUpSize;
 
+        mTexture->setResolution( finalWidth, finalHeight );
+
         Real textureAspect = (Real)finalWidth / (Real)finalHeight;
 
-        const size_t pixel_bytes = 2;
-        size_t data_width = finalWidth * pixel_bytes;
-        size_t data_size = finalWidth * finalHeight * pixel_bytes;
+        const uint32 rowAlignment = 4u;
+        const size_t dataSize = PixelFormatGpuUtils::getSizeBytes( finalWidth, finalHeight, 1u, 1u,
+                                                                   mTexture->getPixelFormat(),
+                                                                   rowAlignment );
+        const size_t bytesPerRow = mTexture->_getSysRamCopyBytesPerRow();
+        const size_t bytesPerPixel = 2u;
 
-        LogManager::getSingleton().logMessage("Font " + mName + " using texture size " +
-            StringConverter::toString(finalWidth) + "x" + StringConverter::toString(finalHeight));
+        LogManager::getSingleton().logMessage(
+                    "Font " + mName + " using texture size " +
+                    StringConverter::toString(finalWidth) + "x" +
+                    StringConverter::toString(finalHeight) );
 
-        uchar* imageData = OGRE_ALLOC_T(uchar, data_size, MEMCATEGORY_GENERAL);
+        uint8 *imageData = reinterpret_cast<uint8*>( OGRE_MALLOC_SIMD( dataSize,
+                                                                       MEMCATEGORY_RESOURCE ) );
         // Reset content (White, transparent)
-        for (size_t i = 0; i < data_size; i += pixel_bytes)
+        for( size_t i=0; i<dataSize; i += bytesPerPixel )
         {
             imageData[i + 0] = 0xFF; // luminance
             imageData[i + 1] = 0x00; // alpha
         }
 
         size_t l = 0, m = 0;
-        for (CodePointRangeList::const_iterator r = mCodePointRangeList.begin();
-            r != mCodePointRangeList.end(); ++r)
+        CodePointRangeList::const_iterator itor = mCodePointRangeList.begin();
+        CodePointRangeList::const_iterator end  = mCodePointRangeList.end();
+        while( itor != end )
         {
-            const CodePointRange& range = *r;
+            const CodePointRange& range = *itor;
             for(CodePoint cp = range.first; cp <= range.second; ++cp )
             {
                 FT_Error ftResult;
 
                 // Load & render glyph
                 ftResult = FT_Load_Char( face, cp, FT_LOAD_RENDER );
-                if (ftResult)
+                if( ftResult )
                 {
                     // problem loading this glyph, continue
-                    LogManager::getSingleton().logMessage("Info: cannot load character " +
-                        StringConverter::toString(cp) + " in font " + mName, LML_CRITICAL);
+                    LogManager::getSingleton().logMessage(
+                                "Info: cannot load character " +
+                                StringConverter::toString(cp) + " in font " + mName, LML_CRITICAL );
                     continue;
                 }
 
                 FT_Pos advance = face->glyph->advance.x >> 6;
 
-                unsigned char* buffer = face->glyph->bitmap.buffer;
-
-                if (!buffer)
+                uint8 const *buffer = face->glyph->bitmap.buffer;
+                if( !buffer )
                 {
                     // Yuck, FT didn't detect this but generated a null pointer!
-                    LogManager::getSingleton().logMessage("Info: Freetype returned null for character " +
-                        StringConverter::toString(cp) + " in font " + mName);
+                    LogManager::getSingleton().logMessage(
+                                "Info: Freetype returned null for character " +
+                                StringConverter::toString(cp) + " in font " + mName );
                     continue;
                 }
 
                 FT_Pos y_bearing = ( mTtfMaxBearingY >> 6 ) - ( face->glyph->metrics.horiBearingY >> 6 );
                 FT_Pos x_bearing = face->glyph->metrics.horiBearingX >> 6;
 
-                for(int j = 0; j < face->glyph->bitmap.rows; j++ )
+                for( int j=0; j<face->glyph->bitmap.rows; ++j )
                 {
                     size_t row = j + m + y_bearing;
-                    uchar* pDest = &imageData[(row * data_width) + (l + x_bearing) * pixel_bytes];
+                    uint8 *pDest = &imageData[(row * bytesPerRow) + (l + x_bearing) * bytesPerPixel];
                     for(int k = 0; k < face->glyph->bitmap.width; k++ )
                     {
                         if (mAntialiasColour)
@@ -476,21 +466,23 @@ namespace Ogre
                     l = 0;
                 }
             }
+
+            ++itor;
         }
 
-        DataStreamPtr memStream(
-            OGRE_NEW MemoryDataStream(imageData, data_size, true));
+        mTexture->transitionTo( GpuResidency::Resident, imageData );
 
-        Image img;
-        img.loadRawData( memStream, finalWidth, finalHeight, PF_RG8 );
-
-        Texture* tex = static_cast<Texture*>(res);
-
-        // Call internal _loadImages, not loadImage since that's external and 
-        // will determine load status etc again, and this is a manual loader inside load()
-        ConstImagePtrList imagePtrs;
-        imagePtrs.push_back(&img);
-        tex->_loadImages( imagePtrs );
+        StagingTexture *stagingTexture = textureManager->getStagingTexture( finalWidth, finalHeight,
+                                                                            1u, 1u,
+                                                                            mTexture->getPixelFormat() );
+        stagingTexture->startMapRegion();
+        TextureBox texBox = stagingTexture->mapRegion( finalWidth, finalHeight, 1u, 1u,
+                                                       mTexture->getPixelFormat() );
+        memcpy( texBox.data, imageData, dataSize );
+        stagingTexture->stopMapRegion();
+        stagingTexture->upload( texBox, mTexture, 0, 0, true );
+        textureManager->removeStagingTexture( stagingTexture );
+        stagingTexture = 0;
 
         FT_Done_FreeType(ftLibrary);
     }

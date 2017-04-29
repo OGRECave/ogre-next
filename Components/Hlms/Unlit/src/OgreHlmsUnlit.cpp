@@ -48,6 +48,8 @@ THE SOFTWARE.
 #include "Vao/OgreTexBufferPacked.h"
 #include "Vao/OgreStagingBuffer.h"
 
+#include "OgreDescriptorSetTexture.h"
+
 #include "CommandBuffer/OgreCommandBuffer.h"
 #include "CommandBuffer/OgreCbTexture.h"
 #include "CommandBuffer/OgreCbShaderBuffer.h"
@@ -63,7 +65,8 @@ namespace Ogre
                          ExtraBufferParams( 64 * NUM_UNLIT_TEXTURE_TYPES ) ),
         mCurrentPassBuffer( 0 ),
         mLastBoundPool( 0 ),
-        mLastTextureHash( 0 )
+        mLastDescTexture( 0 ),
+        mLastDescSampler( 0 )
     {
         //Override defaults
         mLightGatheringMode = LightGatherNone;
@@ -73,12 +76,13 @@ namespace Ogre
     }
     HlmsUnlit::HlmsUnlit( Archive *dataFolder, ArchiveVec *libraryFolders,
                           HlmsTypes type, const String &typeName ) :
-        HlmsBufferManager(type, typeName, dataFolder, libraryFolders),
-        ConstBufferPool(HlmsUnlitDatablock::MaterialSizeInGpuAligned,
-        ExtraBufferParams(64 * NUM_UNLIT_TEXTURE_TYPES)),
-        mCurrentPassBuffer(0),
-        mLastBoundPool(0),
-        mLastTextureHash(0)
+        HlmsBufferManager( type, typeName, dataFolder, libraryFolders ),
+        ConstBufferPool( HlmsUnlitDatablock::MaterialSizeInGpuAligned,
+                         ExtraBufferParams( 64 * NUM_UNLIT_TEXTURE_TYPES ) ),
+        mCurrentPassBuffer( 0 ),
+        mLastBoundPool( 0 ),
+        mLastDescTexture( 0 ),
+        mLastDescSampler( 0 )
     {
         //Override defaults
         mLightGatheringMode = LightGatherNone;
@@ -559,7 +563,8 @@ namespace Ogre
             mTexBuffers.push_back( newBuffer );
         }
 
-        mLastTextureHash = 0;
+        mLastDescTexture = 0;
+        mLastDescSampler = 0;
         mLastBoundPool = 0;
 
         uploadDirtyDatablocks();
@@ -606,7 +611,8 @@ namespace Ogre
         if( OGRE_EXTRACT_HLMS_TYPE_FROM_CACHE_HASH( lastCacheHash ) != HLMS_UNLIT )
         {
             //We changed HlmsType, rebind the shared textures.
-            mLastTextureHash = 0;
+            mLastDescTexture = 0;
+            mLastDescSampler = 0;
             mLastBoundPool = 0;
 
             //layout(binding = 0) uniform PassBuffer {} pass
@@ -711,7 +717,7 @@ namespace Ogre
 
         if( !casterPass )
         {
-            if( datablock->mTextureHash != mLastTextureHash )
+            /*if( datablock->mTextureHash != mLastTextureHash )
             {
                 //Rebind textures
                 size_t texUnit = 2;
@@ -727,6 +733,31 @@ namespace Ogre
                 }
 
                 mLastTextureHash = datablock->mTextureHash;
+            }*/
+
+            if( datablock->mTexturesDescSet != mLastDescTexture )
+            {
+                //Bind textures
+                size_t texUnit = 2;
+
+                if( datablock->mTexturesDescSet )
+                {
+                    *commandBuffer->addCommand<CbTextures>() =
+                            CbTextures( texUnit, datablock->mTexturesDescSet );
+                }
+                *commandBuffer->addCommand<CbSamplers>() =
+                        CbSamplers( texUnit, datablock->mSamplersDescSet );
+                texUnit += datablock->mTexturesDescSet->mTextures.size();
+
+                mLastDescTexture = datablock->mTexturesDescSet;
+            }
+            if( datablock->mSamplersDescSet != mLastDescSampler )
+            {
+                //Bind samplers
+                size_t texUnit = 2;
+                *commandBuffer->addCommand<CbSamplers>() =
+                        CbSamplers( texUnit, datablock->mSamplersDescSet );
+                mLastDescSampler = datablock->mSamplersDescSet;
             }
         }
 

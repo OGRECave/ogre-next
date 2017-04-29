@@ -229,6 +229,8 @@ namespace Ogre
             System RAM copy that backs this GPU data. May be null.
             Must've been allocated with OGRE_MALLOC_SIMD( size, MEMCATEGORY_RESOURCE );
             We will deallocate it.
+            MUST respect _getSysRamCopyBytesPerRow & _getSysRamCopyBytesPerImage.
+            If in doubt, use PixelFormatGpuUtils::getSizeBytes with rowAlignment = 4u;
         */
         void transitionTo( GpuResidency::GpuResidency newResidency, uint8 *sysRamCopy );
 

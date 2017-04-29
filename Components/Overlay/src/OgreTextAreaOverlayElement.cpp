@@ -438,7 +438,7 @@ namespace v1 {
         {
             mFont->load();
             // Ugly hack, but we need to override for lazy-load
-            *const_cast<MaterialPtr*>(&mMaterial) = mFont->getMaterial();
+            //*const_cast<MaterialPtr*>(&mMaterial) = mFont->getMaterial();
         }
         return mMaterial;
     }

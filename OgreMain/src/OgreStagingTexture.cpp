@@ -103,7 +103,8 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void StagingTexture::upload( const TextureBox &srcBox, TextureGpu *dstTexture,
-                                 uint8 mipLevel, const TextureBox *dstBox )
+                                 uint8 mipLevel, const TextureBox *dstBox,
+                                 bool skipSysRamCopy )
     {
 #if OGRE_DEBUG_MODE
         assert( !mMapRegionStarted && "You must call stopMapRegion before you can upload!" );
@@ -139,7 +140,7 @@ namespace Ogre
                          "StagingTexture::upload" );
         }
 
-        if( dstTexture->_getSysRamCopy() )
+        if( dstTexture->_getSysRamCopy() && !skipSysRamCopy )
         {
             uint8 *sysRamCopyBase = dstTexture->_getSysRamCopy();
             const size_t sysRamCopyBytesPerRow = dstTexture->_getSysRamCopyBytesPerRow();

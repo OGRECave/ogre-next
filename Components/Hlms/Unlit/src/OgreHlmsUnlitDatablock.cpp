@@ -270,6 +270,7 @@ namespace Ogre
             }
         }
 
+        if( mTexturesDescSet )
         {
             FastArray<const TextureGpu*>::const_iterator itor = mTexturesDescSet->mTextures.begin();
             FastArray<const TextureGpu*>::const_iterator end  = mTexturesDescSet->mTextures.end();
@@ -279,6 +280,7 @@ namespace Ogre
                 ++itor;
             }
         }
+        if( mSamplersDescSet )
         {
             FastArray<const HlmsSamplerblock*>::const_iterator itor= mSamplersDescSet->mSamplers.begin();
             FastArray<const HlmsSamplerblock*>::const_iterator end = mSamplersDescSet->mSamplers.end();

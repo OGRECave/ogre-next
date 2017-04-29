@@ -67,7 +67,9 @@ namespace Ogre
 
         ConstBufferPool::BufferPool const *mLastBoundPool;
 
-        uint32 mLastTextureHash;
+        //uint32 mLastTextureHash;
+        DescriptorSetTexture const *mLastDescTexture;
+        DescriptorSetSampler const *mLastDescSampler;
 
 
         virtual const HlmsCache* createShaderCacheEntry( uint32 renderableHash,

@@ -144,9 +144,16 @@ namespace Ogre
             Optional. Region inside dstTexture to copy to. Must have the same dimensions
             as srcBox.
             Values inside dstBox such as bytesPerRow, bytesPerImage & data will be ignored.
+        @param skipSysRamCopy
+            Whether to skip the copy to system RAM. Should only be used if the System RAM
+            copy is already up to date, which is often the case when you're transitioning
+            to Resident while loading at the same time.
+            If misused, readbacks will be incorrect as data in CPU won't mirror that of
+            the data in GPU, and possibly other bugs too.
         */
         virtual void upload( const TextureBox &srcBox, TextureGpu *dstTexture,
-                             uint8 mipLevel, const TextureBox *dstBox=0 );
+                             uint8 mipLevel, const TextureBox *dstBox=0,
+                             bool skipSysRamCopy=false );
 
         uint32 getLastFrameUsed(void) const             { return mLastFrameUsed; }
     };
