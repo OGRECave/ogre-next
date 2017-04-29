@@ -203,6 +203,7 @@ namespace Ogre
         rsc->setCapability(RSC_HW_GAMMA);
         rsc->setCapability(RSC_TEXTURE_GATHER);
         rsc->setCapability(RSC_TEXTURE_2D_ARRAY);
+        rsc->setCapability(RSC_SEPARATE_SAMPLERS_FROM_TEXTURES);
 
         //These don't make sense on Metal, so just use flexible defaults.
         rsc->setVertexProgramConstantFloatCount( 16384 );
@@ -555,7 +556,7 @@ namespace Ogre
         [mActiveRenderEncoder setFragmentTexture:metalTexture atIndex:unit];
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::_setTextures( uint32 slotStart, const DescriptorSet *set )
+    void MetalRenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture *set )
     {
 #define TODO_useRsSystemAndCreate_arrays_to_bind_in_one_call 1
         TODO_useRsSystemAndCreate_arrays_to_bind_in_one_call;
@@ -593,6 +594,12 @@ namespace Ogre
                 ++itor;
             }
         }*/
+    }
+    //-------------------------------------------------------------------------
+    void MetalRenderSystem::_setSamplers( uint32 slotStart, const DescriptorSetSampler *set )
+    {
+#define TODO_samplers 1
+        TODO_samplers;
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_setTextureCoordCalculation( size_t unit, TexCoordCalcMethod m,

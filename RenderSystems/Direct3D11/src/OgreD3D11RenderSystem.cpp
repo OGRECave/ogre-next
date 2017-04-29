@@ -1337,6 +1337,7 @@ bail:
 
         rsc->setCapability(RSC_VERTEX_BUFFER_INSTANCE_DATA);
         rsc->setCapability(RSC_CAN_GET_COMPILED_SHADER_BUFFER);
+        rsc->setCapability(RSC_SEPARATE_SAMPLERS_FROM_TEXTURES);
 
         return rsc;
 

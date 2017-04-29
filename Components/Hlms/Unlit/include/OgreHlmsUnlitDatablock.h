@@ -84,23 +84,34 @@ namespace Ogre
         bool    mEnabledAnimationMatrices[NUM_UNLIT_TEXTURE_TYPES];
 
         UnlitBakedTextureArray mBakedTextures;
+        DescriptorSetTexture const *mTexturesDescSet;
+        DescriptorSetSampler const *mSamplersDescSet;
+
         /// The way to read this variable is i.e. get diffuse texture 0,
         /// mBakedTextures[mTexToBakedTextureIdx[0]]
         /// Then read mTexIndices[0] to know which slice of the texture array.
         uint8   mTexToBakedTextureIdx[NUM_UNLIT_TEXTURE_TYPES];
         uint8   mTextureSwizzles[NUM_UNLIT_TEXTURE_TYPES];
 
+        bool mTextureSetDirty;
+        bool mSamplerSetDirty;
+        TextureGpu const        *mTextures[NUM_UNLIT_TEXTURE_TYPES];
         HlmsSamplerblock const  *mSamplerblocks[NUM_UNLIT_TEXTURE_TYPES];
 
         void scheduleConstBufferUpdate(void);
         virtual void uploadToConstBuffer( char *dstPtr );
         virtual void uploadToExtraBuffer( char *dstPtr );
 
+        void textureSetDirty(void);
+        void samplerSetDirty(void);
+
         /// Sets the appropiate mTexIndices[texUnit], and returns the texture pointer
         TexturePtr setTexture( const String &name, uint8 texUnit );
 
         void decompileBakedTextures( UnlitBakedTexture outTextures[NUM_UNLIT_TEXTURE_TYPES] );
         void bakeTextures( const UnlitBakedTexture textures[NUM_UNLIT_TEXTURE_TYPES] );
+        bool bakeTextures(void);
+        bool bakeSamplers(void);
 
     public:
         /** Valid parameters in params:
@@ -196,6 +207,8 @@ namespace Ogre
         /// Note: If there is no texture assigned to the given texType, returned value is undefined
         uint16 _getTextureIdx( uint8 texType ) const                    { return mTexIndices[texType]; }
 
+        void setTexture( uint8 texType, const TextureGpu *texture, const HlmsSamplerblock *refParams=0 );
+
         /** Sets the final swizzle when sampling the given texture. e.g.
             calling setTextureSwizzle( 0, R_MASK, G_MASK, R_MASK, G_MASK );
             will generated the following pixel shader:
@@ -269,6 +282,11 @@ namespace Ogre
         /// Returns the index to mBakedTextures. Returns NUM_PBSM_TEXTURE_TYPES if
         /// there is no texture assigned to texType
         uint8 getBakedTextureIdx( uint8 texType ) const;
+        uint8 getIndexToDescriptorTexture( uint8 texType ) const;
+        /// Do not call this function if RSC_SEPARATE_SAMPLERS_FROM_TEXTURES is not set.
+        /// If not set, then just the result value from getIndexToDescriptorTexture
+        /// instead
+        uint8 getIndexToDescriptorSampler( uint8 texType ) const;
 
         virtual void calculateHash();
 

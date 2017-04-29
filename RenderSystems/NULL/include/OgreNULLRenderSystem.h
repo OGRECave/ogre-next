@@ -120,7 +120,8 @@ namespace Ogre
         virtual void _setHlmsSamplerblockCS( uint8 texUnit, const HlmsSamplerblock *samplerblock );
 
         virtual void _setTexture(size_t unit, bool enabled,  Texture *texPtr);
-        virtual void _setTextures( uint32 slotStart, const DescriptorSet *set );
+        virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set );
+        virtual void _setSamplers( uint32 slotStart, const DescriptorSetSampler *set );
 
         virtual void _setTextureCoordCalculation(size_t unit, TexCoordCalcMethod m,
                                                  const Frustum* frustum = 0);

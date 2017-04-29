@@ -26,8 +26,8 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#ifndef _OgreDescriptorSet_H_
-#define _OgreDescriptorSet_H_
+#ifndef _OgreDescriptorSetTexture_H_
+#define _OgreDescriptorSetTexture_H_
 
 #include "OgrePrerequisites.h"
 #include "OgreCommon.h"
@@ -47,39 +47,60 @@ namespace Ogre
         They must be pushed to mTexture in the order of ShaderType.
         For example if you want to use 2 textures bound to the pixel shader stage
         and 1 in the Geometry Shader stage:
-            DescriptorSet descSet;
+            DescriptorSetTexture descSet;
             descSet.mTextures.push_back( pixelShaderTex0 );
             descSet.mTextures.push_back( pixelShaderTex1 );
             descSet.mTextures.push_back( geometryShaderTex1 );
             descSet.mShaderTypeTexCount[PixelShader] = 2u;
             descSet.mShaderTypeTexCount[GeometryShader] = 1u;
 
-            const DescriptorSet *finalSet = hlmsManager->getDescriptorSet( descSet );
+            const DescriptorSetTexture *finalSet = hlmsManager->getDescriptorSet( descSet );
             // finalSet can be used with RenderSystem::_setTextures
 
             // Remove finalSet once you're done using it.
             hlmsManager->destroyDescriptorSet( finalSet );
             finalSet = 0;
-    @par
+    @remarks
         Do not create and destroy a set every frame. You should create it once, and reuse
         it until it is no longer necessary, then you should destroy it.
     */
-    struct _OgreExport DescriptorSet
+    struct _OgreExport DescriptorSetTexture
     {
         uint16      mRefCount;
         uint16      mShaderTypeTexCount[NumShaderTypes];
         void        *mRsData;           /// Render-System specific data
 
-        FastArray<TextureGpu*> mTextures;
+        FastArray<const TextureGpu*> mTextures;
 
-        DescriptorSet() :
+        DescriptorSetTexture() :
             mRefCount( 0 ),
             mRsData( 0 )
         {
             memset( mShaderTypeTexCount, 0, sizeof(mShaderTypeTexCount) );
         }
 
-        bool operator < ( const DescriptorSet &other ) const
+        bool operator != ( const DescriptorSetTexture &other ) const
+        {
+            const size_t thisNumTextures = mTextures.size();
+            if( thisNumTextures != other.mTextures.size() )
+                return true;
+
+            for( size_t i=0; i<thisNumTextures; ++i )
+            {
+                if( this->mTextures[i] != other.mTextures[i] )
+                    return true;
+            }
+
+            for( size_t i=0; i<NumShaderTypes; ++i )
+            {
+                if( this->mShaderTypeTexCount[i] != other.mShaderTypeTexCount[i] )
+                    return true;
+            }
+
+            return false;
+        }
+
+        bool operator < ( const DescriptorSetTexture &other ) const
         {
             const size_t thisNumTextures = mTextures.size();
             if( thisNumTextures != other.mTextures.size() )
@@ -108,9 +129,9 @@ namespace Ogre
                 totalTexturesUsed += mShaderTypeTexCount[i];
 
             assert( totalTexturesUsed > 0 &&
-                    "This DescriptorSet doesn't use any texture! Perhaps incorrectly setup?" );
+                    "This DescriptorSetTexture doesn't use any texture! Perhaps incorrectly setup?" );
             assert( totalTexturesUsed == mTextures.size() &&
-                    "This DescriptorSet doesn't use as many textures as it "
+                    "This DescriptorSetTexture doesn't use as many textures as it "
                     "claims to have, or uses more than it has provided" );
         }
     };

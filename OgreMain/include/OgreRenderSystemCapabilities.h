@@ -209,6 +209,8 @@ namespace Ogre
         /// Not set for D3D11, and GL. Doesn't mean ResourceTransition aren't
         /// required (i.e. GL needs them for UAVs and Compute Shaders)
         RSC_EXPLICIT_API = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 5),
+        /// Textures and samplers are separate in the shader. OpenGL can't do this.
+        RSC_SEPARATE_SAMPLERS_FROM_TEXTURES = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 6),
 
         // ***** DirectX specific caps *****
         /// Is DirectX feature "per stage constants" supported

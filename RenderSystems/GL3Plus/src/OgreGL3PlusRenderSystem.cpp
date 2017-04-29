@@ -1072,12 +1072,12 @@ namespace Ogre {
         activateGLTextureUnit(0);
     }
 
-    void GL3PlusRenderSystem::_setTextures( uint32 slotStart, const DescriptorSet *set )
+    void GL3PlusRenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture *set )
     {
         uint32 texUnit = slotStart;
 
-        FastArray<TextureGpu*>::const_iterator itor = set->mTextures.begin();
-        FastArray<TextureGpu*>::const_iterator end  = set->mTextures.end();
+        FastArray<const TextureGpu*>::const_iterator itor = set->mTextures.begin();
+        FastArray<const TextureGpu*>::const_iterator end  = set->mTextures.end();
 
         while( itor != end )
         {
@@ -1085,7 +1085,7 @@ namespace Ogre {
 
             if( *itor )
             {
-                GL3PlusTextureGpu *textureGpu = static_cast<GL3PlusTextureGpu*>( *itor );
+                const GL3PlusTextureGpu *textureGpu = static_cast<const GL3PlusTextureGpu*>( *itor );
                 const GLenum texTarget  = textureGpu->getGlTextureTarget();
                 const GLuint texName    = textureGpu->getDisplayTextureName();
                 OCGE( glBindTexture( texTarget, texName ) );
@@ -1101,6 +1101,35 @@ namespace Ogre {
         }
 
         OCGE( glActiveTexture( GL_TEXTURE0 ) );
+    }
+
+    void GL3PlusRenderSystem::_setSamplers( uint32 slotStart, const DescriptorSetSampler *set )
+    {
+        uint32 texUnit = slotStart;
+
+        FastArray<const HlmsSamplerblock*>::const_iterator itor = set->mSamplers.begin();
+        FastArray<const HlmsSamplerblock*>::const_iterator end  = set->mSamplers.end();
+
+        while( itor != end )
+        {
+            const HlmsSamplerblock *samplerblock = *itor;
+
+            assert( (!samplerblock || samplerblock->mRsData) &&
+                    "The block must have been created via HlmsManager::getSamplerblock!" );
+
+            if( !samplerblock )
+            {
+                glBindSampler( texUnit, 0 );
+            }
+            else
+            {
+                glBindSampler( texUnit, static_cast<GLuint>(
+                                   reinterpret_cast<intptr_t>( samplerblock->mRsData ) ) );
+            }
+
+            ++texUnit;
+            ++itor;
+        }
     }
 
     void GL3PlusRenderSystem::_setVertexTexture( size_t unit, const TexturePtr &tex )

@@ -382,7 +382,71 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    const DescriptorSet* HlmsManager::getDescriptorSet( const DescriptorSet &baseParams )
+    void createDescriptorSetTextureImpl( RenderSystem *renderSystem, DescriptorSetTexture *desc )
+    {
+        renderSystem->_descriptorSetTextureCreated( desc );
+    }
+    void destroyDescriptorSetTextureImpl( RenderSystem *renderSystem, DescriptorSetTexture *desc )
+    {
+        renderSystem->_descriptorSetTextureDestroyed( desc );
+    }
+    void createDescriptorSetSamplerImpl( RenderSystem *renderSystem, DescriptorSetSampler *desc )
+    {
+        renderSystem->_descriptorSetSamplerCreated( desc );
+    }
+    void destroyDescriptorSetSamplerImpl( RenderSystem *renderSystem, DescriptorSetSampler *desc )
+    {
+        renderSystem->_descriptorSetSamplerDestroyed( desc );
+    }
+    template <typename T>
+    const T* HlmsManager::getDescriptorSet( typename set<T>::type &container, const T &baseParams,
+                                            void (*renderSysFunc)(RenderSystem*, T*) )
+    {
+        typename set<T>::type::const_iterator itor = container.find( baseParams );
+
+        if( itor == container.end() )
+        {
+            T newDescSet = baseParams;
+            newDescSet.mRefCount = 1;
+            (*renderSysFunc)( mRenderSystem, &newDescSet );
+            std::pair<typename set<T>::type::iterator, bool> entry =
+                    container.insert( newDescSet );
+            itor = entry.first;
+        }
+
+        const T *retVal = &(*itor);
+        return retVal;
+    }
+    template <typename T>
+    //-----------------------------------------------------------------------------------
+    void HlmsManager::destroyDescriptorSet( typename set<T>::type &container, const T *descSet,
+                                            void (*renderSysFunc)( RenderSystem*, T*) )
+    {
+        typename set<T>::type::iterator itor = container.find( *descSet );
+
+        if( itor == container.end() || &(*itor) != descSet )
+        {
+            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                         "The DescriptorSet wasn't created with this manager!",
+                         "HlmsManager::destroyDescriptorSet" );
+        }
+
+        //We have to const_cast because std::set protects programmers from altering the
+        //order. However we will only be touching mRefCount & mRsData elements, which
+        //are not used by our sorting operators.
+        T *descSetPtr = const_cast<T*>( &(*itor) );
+
+        --descSetPtr->mRefCount;
+
+        if( !descSetPtr->mRefCount )
+        {
+            (*renderSysFunc)( mRenderSystem, descSetPtr );
+            container.erase( itor );
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    const DescriptorSetTexture* HlmsManager::getDescriptorSetTexture(
+            const DescriptorSetTexture &baseParams )
     {
         assert( mRenderSystem && "A render system must be selected first!" );
 
@@ -394,44 +458,29 @@ namespace Ogre
                 "Recompile Ogre w/ a different OGRE_MAX_TEXTURE_LAYERS value if you "
                 "want to bind more textures (API/HW restrictions may also apply)" );
 
-        DescriptorSetSet::const_iterator itor = mDescriptorSets.find( baseParams );
-
-        if( itor == mDescriptorSets.end() )
-        {
-            DescriptorSet newDescSet = baseParams;
-            newDescSet.mRefCount = 1;
-            mRenderSystem->_descriptorSetCreated( &newDescSet );
-            std::pair<DescriptorSetSet::iterator, bool> entry = mDescriptorSets.insert( newDescSet );
-            itor = entry.first;
-        }
-
-        const DescriptorSet *retVal = &(*itor);
+        const DescriptorSetTexture *retVal = getDescriptorSet( mDescriptorSetTextures, baseParams,
+                                                               createDescriptorSetTextureImpl );
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void HlmsManager::destroyDescriptorSet( const DescriptorSet *descSet )
+    void HlmsManager::destroyDescriptorSetTexture( const DescriptorSetTexture *descSet )
     {
-        DescriptorSetSet::iterator itor = mDescriptorSets.find( *descSet );
+        destroyDescriptorSet( mDescriptorSetTextures, descSet, destroyDescriptorSetTextureImpl );
+    }
+    //-----------------------------------------------------------------------------------
+    const DescriptorSetSampler* HlmsManager::getDescriptorSetSampler(
+            const DescriptorSetSampler &baseParams )
+    {
+        assert( mRenderSystem && "A render system must be selected first!" );
 
-        if( itor == mDescriptorSets.end() || &(*itor) != descSet )
-        {
-            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
-                         "The DescriptorSet wasn't created with this manager!",
-                         "HlmsManager::destroyDescriptorSet" );
-        }
-
-        //We have to const_cast because std::set protects programmers from altering the
-        //order. However we will only be touching mRefCount & mRsData elements, which
-        //are not used by our sorting operators.
-        DescriptorSet *descSetPtr = const_cast<DescriptorSet*>( &(*itor) );
-
-        --descSetPtr->mRefCount;
-
-        if( !descSetPtr->mRefCount )
-        {
-            mRenderSystem->_descriptorSetDestroyed( descSetPtr );
-            mDescriptorSets.erase( itor );
-        }
+        const DescriptorSetSampler *retVal = getDescriptorSet( mDescriptorSetSamplers, baseParams,
+                                                               createDescriptorSetSamplerImpl );
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsManager::destroyDescriptorSetSampler( const DescriptorSetSampler *descSet )
+    {
+        destroyDescriptorSet( mDescriptorSetSamplers, descSet, destroyDescriptorSetSamplerImpl );
     }
     //-----------------------------------------------------------------------------------
     uint8 HlmsManager::_addInputLayoutId( VertexElement2VecVec vertexElements, OperationType opType )
@@ -661,13 +710,24 @@ namespace Ogre
             }
 
             {
-                DescriptorSetSet::iterator itor = mDescriptorSets.begin();
-                DescriptorSetSet::iterator end  = mDescriptorSets.end();
+                DescriptorSetTextureSet::iterator itor = mDescriptorSetTextures.begin();
+                DescriptorSetTextureSet::iterator end  = mDescriptorSetTextures.end();
                 while( itor != end )
                 {
-                    //const_cast see HlmsManager::destroyDescriptorSet comments
-                    DescriptorSet *descSetPtr = const_cast<DescriptorSet*>( &(*itor) );
-                    mRenderSystem->_descriptorSetDestroyed( descSetPtr );
+                    //const_cast see HlmsManager::destroyDescriptorSetTexture comments
+                    DescriptorSetTexture *descSetPtr = const_cast<DescriptorSetTexture*>( &(*itor) );
+                    mRenderSystem->_descriptorSetTextureDestroyed( descSetPtr );
+                    ++itor;
+                }
+            }
+            {
+                DescriptorSetSamplerSet::iterator itor = mDescriptorSetSamplers.begin();
+                DescriptorSetSamplerSet::iterator end  = mDescriptorSetSamplers.end();
+                while( itor != end )
+                {
+                    //const_cast see HlmsManager::destroyDescriptorSetTexture comments
+                    DescriptorSetSampler *descSetPtr = const_cast<DescriptorSetSampler*>( &(*itor) );
+                    mRenderSystem->_descriptorSetSamplerDestroyed( descSetPtr );
                     ++itor;
                 }
             }
@@ -699,13 +759,24 @@ namespace Ogre
             }
 
             {
-                DescriptorSetSet::iterator itor = mDescriptorSets.begin();
-                DescriptorSetSet::iterator end  = mDescriptorSets.end();
+                DescriptorSetTextureSet::iterator itor = mDescriptorSetTextures.begin();
+                DescriptorSetTextureSet::iterator end  = mDescriptorSetTextures.end();
                 while( itor != end )
                 {
-                    //const_cast see HlmsManager::destroyDescriptorSet comments
-                    DescriptorSet *descSetPtr = const_cast<DescriptorSet*>( &(*itor) );
-                    mRenderSystem->_descriptorSetCreated( descSetPtr );
+                    //const_cast see HlmsManager::destroyDescriptorSetTexture comments
+                    DescriptorSetTexture *descSetPtr = const_cast<DescriptorSetTexture*>( &(*itor) );
+                    mRenderSystem->_descriptorSetTextureCreated( descSetPtr );
+                    ++itor;
+                }
+            }
+            {
+                DescriptorSetSamplerSet::iterator itor = mDescriptorSetSamplers.begin();
+                DescriptorSetSamplerSet::iterator end  = mDescriptorSetSamplers.end();
+                while( itor != end )
+                {
+                    //const_cast see HlmsManager::destroyDescriptorSetSampler comments
+                    DescriptorSetSampler *descSetPtr = const_cast<DescriptorSetSampler*>( &(*itor) );
+                    mRenderSystem->_descriptorSetSamplerCreated( descSetPtr );
                     ++itor;
                 }
             }

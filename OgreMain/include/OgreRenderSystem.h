@@ -815,7 +815,8 @@ namespace Ogre
         */
         virtual void _setTexture(size_t unit, bool enabled, const String &texname);
 
-        virtual void _setTextures( uint32 slotStart, const DescriptorSet *set ) = 0;
+        virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set ) = 0;
+        virtual void _setSamplers( uint32 slotStart, const DescriptorSetSampler *set ) = 0;
 
         virtual void _resourceTransitionCreated( ResourceTransition *resTransition )    {}
         virtual void _resourceTransitionDestroyed( ResourceTransition *resTransition )  {}
@@ -829,8 +830,10 @@ namespace Ogre
         virtual void _hlmsBlendblockDestroyed( HlmsBlendblock *block ) {}
         virtual void _hlmsSamplerblockCreated( HlmsSamplerblock *newBlock ) {}
         virtual void _hlmsSamplerblockDestroyed( HlmsSamplerblock *block ) {}
-        virtual void _descriptorSetCreated( DescriptorSet *newSet ) {}
-        virtual void _descriptorSetDestroyed( DescriptorSet *set ) {}
+        virtual void _descriptorSetTextureCreated( DescriptorSetTexture *newSet ) {}
+        virtual void _descriptorSetTextureDestroyed( DescriptorSetTexture *set ) {}
+        virtual void _descriptorSetSamplerCreated( DescriptorSetSampler *newSet ) {}
+        virtual void _descriptorSetSamplerDestroyed( DescriptorSetSampler *set ) {}
 
         virtual void _setIndirectBuffer( IndirectBufferPacked *indirectBuffer ) = 0;
 

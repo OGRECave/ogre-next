@@ -175,7 +175,8 @@ namespace Ogre {
     class DefaultWorkQueue;
     class Degree;
     class DepthBuffer;
-    struct DescriptorSet;
+    struct DescriptorSetSampler;
+    struct DescriptorSetTexture;
     class DynLib;
     class DynLibManager;
     class ErrorDialog;

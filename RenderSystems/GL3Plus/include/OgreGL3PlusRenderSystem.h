@@ -354,7 +354,8 @@ namespace Ogre {
         */
         void _setTexture(size_t unit, bool enabled, Texture *tex);
         /// See RenderSystem
-        virtual void _setTextures( uint32 slotStart, const DescriptorSet *set );
+        virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set );
+        virtual void _setSamplers( uint32 slotStart, const DescriptorSetSampler *set );
         /** See
             RenderSystem
         */

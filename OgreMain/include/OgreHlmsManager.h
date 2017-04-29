@@ -31,7 +31,8 @@ THE SOFTWARE.
 #include "OgreHlmsCommon.h"
 #include "OgreHlmsDatablock.h"
 #include "OgreHlmsSamplerblock.h"
-#include "OgreDescriptorSet.h"
+#include "OgreDescriptorSetTexture.h"
+#include "OgreDescriptorSetSampler.h"
 #if !OGRE_NO_JSON
     #include "OgreScriptLoader.h"
 #endif
@@ -75,8 +76,10 @@ namespace Ogre
         BlockIdxVec         mFreeBlockIds[NUM_BASIC_BLOCKS];
         BasicBlock          *mBlocks[NUM_BASIC_BLOCKS][OGRE_HLMS_MAX_BASIC_BLOCKS];
 
-        typedef set<DescriptorSet>::type DescriptorSetSet;
-        DescriptorSetSet    mDescriptorSets;
+        typedef set<DescriptorSetTexture>::type DescriptorSetTextureSet;
+        typedef set<DescriptorSetSampler>::type DescriptorSetSamplerSet;
+        DescriptorSetTextureSet mDescriptorSetTextures;
+        DescriptorSetSamplerSet mDescriptorSetSamplers;
 
         struct InputLayouts
         {
@@ -108,6 +111,13 @@ namespace Ogre
         void renderSystemDestroyAllBlocks(void);
         uint16 getFreeBasicBlock( uint8 type );
         void destroyBasicBlock( BasicBlock *block );
+
+        template <typename T>
+        const T* getDescriptorSet( typename set<T>::type &container, const T &baseParams,
+                                   void (*renderSysFunc)( RenderSystem*, T*) );
+        template <typename T>
+        void destroyDescriptorSet( typename set<T>::type &container, const T *descSet,
+                                   void (*renderSysFunc)( RenderSystem*, T*) );
 
     public:
         HlmsManager();
@@ -171,8 +181,11 @@ namespace Ogre
         /// @See destroyMacroblock
         void destroySamplerblock( const HlmsSamplerblock *Samplerblock );
 
-        const DescriptorSet* getDescriptorSet( const DescriptorSet &baseParams );
-        void destroyDescriptorSet( const DescriptorSet *descSet );
+        const DescriptorSetTexture* getDescriptorSetTexture( const DescriptorSetTexture &baseParams );
+        void destroyDescriptorSetTexture( const DescriptorSetTexture *descSet );
+
+        const DescriptorSetSampler* getDescriptorSetSampler( const DescriptorSetSampler &baseParams );
+        void destroyDescriptorSetSampler( const DescriptorSetSampler *descSet );
 
         uint8 _addInputLayoutId( VertexElement2VecVec vertexElements, OperationType opType );
         void _removeInputLayoutIdReference( uint8 layoutId );
