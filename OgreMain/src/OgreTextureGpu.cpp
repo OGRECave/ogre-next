@@ -371,7 +371,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool TextureGpu::hasMsaaExplicitResolves(void) const
     {
-        return (mTextureFlags & TextureFlags::MsaaExplicitResolve);
+        return (mTextureFlags & TextureFlags::MsaaExplicitResolve) != 0;
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::_notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice )
