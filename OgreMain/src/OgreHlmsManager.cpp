@@ -473,6 +473,10 @@ namespace Ogre
     {
         assert( mRenderSystem && "A render system must be selected first!" );
 
+#if OGRE_DEBUG_MODE
+        baseParams.checkValidity();
+#endif
+
         const DescriptorSetSampler *retVal = getDescriptorSet( mDescriptorSetSamplers, baseParams,
                                                                createDescriptorSetSamplerImpl );
         return retVal;

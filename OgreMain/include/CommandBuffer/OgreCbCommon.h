@@ -57,6 +57,8 @@ namespace Ogre
         CB_SET_TEXTURE_BUFFER_INVALID,
         CB_SET_PSO,
         CB_SET_TEXTURE,
+        CB_SET_TEXTURES,
+        CB_SET_SAMPLERS,
         CB_START_V1_LEGACY_RENDERING,
         CB_SET_V1_RENDER_OP,
         CB_DRAW_V1_INDEXED,

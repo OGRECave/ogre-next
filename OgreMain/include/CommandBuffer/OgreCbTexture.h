@@ -42,6 +42,22 @@ namespace Ogre
         CbTexture( uint16 _texUnit, bool _bEnabled, Texture *_texture,
                    const HlmsSamplerblock *_samplerBlock = 0 );
     };
+
+    struct _OgreExport CbTextures : public CbBase
+    {
+        uint16                      texUnit;
+        const DescriptorSetTexture *descSet;
+
+        CbTextures( uint16 _texUnit, const DescriptorSetTexture *_descSet );
+    };
+
+    struct _OgreExport CbSamplers : public CbBase
+    {
+        uint16                      texUnit;
+        const DescriptorSetSampler *descSet;
+
+        CbSamplers( uint16 _texUnit, const DescriptorSetSampler *_descSet );
+    };
 }
 
 #endif

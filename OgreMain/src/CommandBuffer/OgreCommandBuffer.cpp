@@ -61,6 +61,8 @@ namespace Ogre
         &CommandBuffer::execute_setTextureBufferInvalid,
         &CommandBuffer::execute_setPso,
         &CommandBuffer::execute_setTexture,
+        &CommandBuffer::execute_setTextures,
+        &CommandBuffer::execute_setSamplers,
         &CommandBuffer::execute_startV1LegacyRendering,
         &CommandBuffer::execute_setV1RenderOp,
         &CommandBuffer::execute_drawV1Indexed,

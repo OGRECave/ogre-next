@@ -53,4 +53,30 @@ namespace Ogre
         if( cmd->samplerBlock )
             _this->mRenderSystem->_setHlmsSamplerblock( cmd->texUnit, cmd->samplerBlock );
     }
+
+    CbTextures::CbTextures( uint16 _texUnit, const DescriptorSetTexture *_descSet ) :
+        CbBase( CB_SET_TEXTURES ),
+        texUnit( _texUnit ),
+        descSet( _descSet )
+    {
+    }
+
+    void CommandBuffer::execute_setTextures( CommandBuffer *_this, const CbBase * RESTRICT_ALIAS _cmd )
+    {
+        const CbTextures *cmd = static_cast<const CbTextures*>( _cmd );
+        _this->mRenderSystem->_setTextures( cmd->texUnit, cmd->descSet );
+    }
+
+    CbSamplers::CbSamplers( uint16 _texUnit, const DescriptorSetSampler *_descSet ) :
+        CbBase( CB_SET_SAMPLERS ),
+        texUnit( _texUnit ),
+        descSet( _descSet )
+    {
+    }
+
+    void CommandBuffer::execute_setSamplers( CommandBuffer *_this, const CbBase * RESTRICT_ALIAS _cmd )
+    {
+        const CbSamplers *cmd = static_cast<const CbSamplers*>( _cmd );
+        _this->mRenderSystem->_setSamplers( cmd->texUnit, cmd->descSet );
+    }
 }

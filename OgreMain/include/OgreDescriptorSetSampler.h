@@ -45,6 +45,7 @@ namespace Ogre
 
     /** Descriptor sets describe what samplers should be bound together in one place.
         Must be created via HlmsManager.
+        See DescriptorSetTexture.
     @remarks
         Do not create and destroy a set every frame. You should create it once, and reuse
         it until it is no longer necessary, then you should destroy it.
@@ -52,6 +53,7 @@ namespace Ogre
     struct _OgreExport DescriptorSetSampler
     {
         uint16      mRefCount;
+        uint16      mShaderTypeSamplerCount[NumShaderTypes];
         void        *mRsData;           /// Render-System specific data
 
         FastArray<const HlmsSamplerblock*> mSamplers;
@@ -90,6 +92,20 @@ namespace Ogre
             }
 
             return false;
+        }
+
+        void checkValidity() const
+        {
+            size_t totalSamplersUsed = 0u;
+
+            for( size_t i=0; i<NumShaderTypes; ++i )
+                totalSamplersUsed += mShaderTypeSamplerCount[i];
+
+            assert( totalSamplersUsed > 0 &&
+                    "This DescriptorSetSampler doesn't use any sampler! Perhaps incorrectly setup?" );
+            assert( totalSamplersUsed == mSamplers.size() &&
+                    "This DescriptorSetSampler doesn't use as many samplers as it "
+                    "claims to have, or uses more than it has provided" );
         }
     };
 

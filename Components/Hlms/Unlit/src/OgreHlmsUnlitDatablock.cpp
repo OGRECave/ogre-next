@@ -463,6 +463,8 @@ namespace Ogre
         }
 
         baseSet.mShaderTypeTexCount[PixelShader] = static_cast<uint16>( baseSet.mTextures.size() );
+        baseSampler.mShaderTypeSamplerCount[PixelShader] =
+                static_cast<uint16>( baseSampler.mSamplers.size() );
 
         bool needsRecalculateHash = false;
 
@@ -522,6 +524,9 @@ namespace Ogre
                     itor = baseSampler.mSamplers.insert( itor, mSamplerblocks[i] );
             }
         }
+
+        baseSampler.mShaderTypeSamplerCount[PixelShader] =
+                static_cast<uint16>( baseSampler.mSamplers.size() );
 
         bool needsRecalculateHash = false;
 
