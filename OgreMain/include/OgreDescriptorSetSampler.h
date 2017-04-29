@@ -62,6 +62,7 @@ namespace Ogre
             mRefCount( 0 ),
             mRsData( 0 )
         {
+            memset( mShaderTypeSamplerCount, 0, sizeof(mShaderTypeSamplerCount) );
         }
 
         bool operator != ( const DescriptorSetSampler &other ) const
