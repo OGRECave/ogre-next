@@ -67,7 +67,7 @@ namespace Ogre
 
         ConstBufferPool::BufferPool const *mLastBoundPool;
 
-        //uint32 mLastTextureHash;
+        bool mHasSeparateSamplers;
         DescriptorSetTexture const *mLastDescTexture;
         DescriptorSetSampler const *mLastDescSampler;
 
@@ -82,8 +82,7 @@ namespace Ogre
                                                     const HlmsBlendblock *blendblock,
                                                     const HlmsParamVec &paramVec );
 
-        void setTextureProperty( IdString propertyName, HlmsUnlitDatablock *datablock,
-                                 uint8 texType );
+        void setTextureProperty( LwString &propertyName, HlmsUnlitDatablock *datablock, uint8 texType );
 
         virtual void calculateHashForPreCreate( Renderable *renderable, PiecesMap *inOutPieces );
         virtual void calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces );

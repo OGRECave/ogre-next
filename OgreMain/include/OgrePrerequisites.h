@@ -234,6 +234,7 @@ namespace Ogre {
     class LogManager;
     class LodStrategy;
     class LodStrategyManager;
+    class LwString;
     class ManualResourceLoader;
     class Material;
     class MaterialManager;

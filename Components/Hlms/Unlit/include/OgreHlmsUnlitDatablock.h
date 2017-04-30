@@ -93,8 +93,6 @@ namespace Ogre
         uint8   mTexToBakedTextureIdx[NUM_UNLIT_TEXTURE_TYPES];
         uint8   mTextureSwizzles[NUM_UNLIT_TEXTURE_TYPES];
 
-        bool mTextureSetDirty;
-        bool mSamplerSetDirty;
         TextureGpu const        *mTextures[NUM_UNLIT_TEXTURE_TYPES];
         HlmsSamplerblock const  *mSamplerblocks[NUM_UNLIT_TEXTURE_TYPES];
 
@@ -102,15 +100,14 @@ namespace Ogre
         virtual void uploadToConstBuffer( char *dstPtr );
         virtual void uploadToExtraBuffer( char *dstPtr );
 
-        void textureSetDirty(void);
-        void samplerSetDirty(void);
+        void updateDescriptorSets( bool textureSetDirty, bool samplerSetDirty );
 
         /// Sets the appropiate mTexIndices[texUnit], and returns the texture pointer
         TexturePtr setTexture( const String &name, uint8 texUnit );
 
         void decompileBakedTextures( UnlitBakedTexture outTextures[NUM_UNLIT_TEXTURE_TYPES] );
         void bakeTextures( const UnlitBakedTexture textures[NUM_UNLIT_TEXTURE_TYPES] );
-        bool bakeTextures(void);
+        bool bakeTextures( bool hasSeparateSamplers );
         bool bakeSamplers(void);
 
     public:
@@ -197,17 +194,44 @@ namespace Ogre
             Optional. We'll create (or retrieve an existing) samplerblock based on the input parameters.
             When null, we leave the previously set samplerblock (if a texture is being set, and if no
             samplerblock was set, we'll create a default one)
+        @param bUpdateDescriptorSets
+            Default value is true. When false, it can be used as an optimization if you're changing
+            all textures at once. For example:
         */
         void setTexture( uint8 texType, uint16 arrayIndex, const TexturePtr &newTexture,
                          const HlmsSamplerblock *refParams=0 );
 
-        TexturePtr getTexture( uint8 texType ) const;
+        //TexturePtr getTexture( uint8 texType ) const;
 
         /// Returns the internal index to the array in a texture array.
         /// Note: If there is no texture assigned to the given texType, returned value is undefined
         uint16 _getTextureIdx( uint8 texType ) const                    { return mTexIndices[texType]; }
 
-        void setTexture( uint8 texType, const TextureGpu *texture, const HlmsSamplerblock *refParams=0 );
+        /** Sets a new texture for rendering. Calling this function may trigger an
+            HlmsDatablock::flushRenderables if the texture or the samplerblock changes.
+            Might not be called if old and new texture belong to the same TexturePool.
+        @param texType
+            Texture unit. Must be in range [0; NUM_UNLIT_TEXTURE_TYPES)
+        @param texture
+            Texture to change to. If it is null and previously wasn't (or viceversa), will
+            trigger HlmsDatablock::flushRenderables.
+        @param refParams
+            Optional. We'll create (or retrieve an existing) samplerblock based on the input parameters.
+            When null, we leave the previously set samplerblock (if a texture is being set, and if no
+            samplerblock was set, we'll create a default one)
+        @param bUpdateDescriptorSets
+            Default value is true. When false, it can be used as an optimization if you're changing
+            all textures at once. For example:
+                setTexture( 0, tex0, refParams, false );
+                setTexture( 1, tex1, refParams, false );
+                setTexture( 2, tex2, refParams, true ); //Update desc sets on the last one.
+            This is merely a performance optimization when you know you will be updating
+            multiple textures. But beware that failing to update the descriptor sets once you're
+            done setting all the textures will result in undefined behavior.
+        */
+        void setTexture( uint8 texType, const TextureGpu *texture, const HlmsSamplerblock *refParams=0,
+                         bool bUpdateDescriptorSets=true );
+        const TextureGpu* getTexture( uint8 texType ) const;
 
         /** Sets the final swizzle when sampling the given texture. e.g.
             calling setTextureSwizzle( 0, R_MASK, G_MASK, R_MASK, G_MASK );
@@ -282,11 +306,11 @@ namespace Ogre
         /// Returns the index to mBakedTextures. Returns NUM_PBSM_TEXTURE_TYPES if
         /// there is no texture assigned to texType
         uint8 getBakedTextureIdx( uint8 texType ) const;
-        uint8 getIndexToDescriptorTexture( uint8 texType ) const;
+        uint8 getIndexToDescriptorTexture( uint8 texType );
         /// Do not call this function if RSC_SEPARATE_SAMPLERS_FROM_TEXTURES is not set.
         /// If not set, then just the result value from getIndexToDescriptorTexture
         /// instead
-        uint8 getIndexToDescriptorSampler( uint8 texType ) const;
+        uint8 getIndexToDescriptorSampler( uint8 texType );
 
         virtual void calculateHash();
 

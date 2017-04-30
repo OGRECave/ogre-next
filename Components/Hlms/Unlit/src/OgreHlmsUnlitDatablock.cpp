@@ -86,9 +86,7 @@ namespace Ogre
         mHasColour( false ),
         mR( 1.0f ), mG( 1.0f ), mB( 1.0f ), mA( 1.0f ),
         mTexturesDescSet( 0 ),
-        mSamplersDescSet( 0 ),
-        mTextureSetDirty( false ),
-        mSamplerSetDirty( false )
+        mSamplersDescSet( 0 )
     {
         for( size_t i=0; i<NUM_UNLIT_TEXTURE_TYPES; ++i )
         {
@@ -305,20 +303,6 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsUnlitDatablock::uploadToConstBuffer( char *dstPtr )
     {
-        if( mTextureSetDirty || mSamplerSetDirty )
-        {
-            bool needsRecalculateHash = false;
-
-            if( mTextureSetDirty )
-                needsRecalculateHash |= bakeTextures();
-
-            if( mSamplerSetDirty )
-                needsRecalculateHash |= bakeSamplers();
-
-            if( needsRecalculateHash )
-                calculateHash();
-        }
-
         memcpy( dstPtr, &mAlphaTestThreshold, sizeof( float ) );
         dstPtr += 4 * sizeof(float);
         memcpy( dstPtr, &mR, MaterialSizeInGpu - 4 * sizeof(float) );
@@ -336,22 +320,22 @@ namespace Ogre
 #endif
     }
     //-----------------------------------------------------------------------------------
-    void HlmsUnlitDatablock::textureSetDirty(void)
+    void HlmsUnlitDatablock::updateDescriptorSets( bool textureSetDirty, bool samplerSetDirty )
     {
-        if( !mTextureSetDirty )
-        {
-            scheduleConstBufferUpdate();
-            mTextureSetDirty = true;
-        }
-    }
-    //-----------------------------------------------------------------------------------
-    void HlmsUnlitDatablock::samplerSetDirty(void)
-    {
-        if( !mSamplerSetDirty )
-        {
-            scheduleConstBufferUpdate();
-            mSamplerSetDirty = true;
-        }
+        const RenderSystem *renderSystem = mCreator->getRenderSystem();
+        const RenderSystemCapabilities *caps = renderSystem->getCapabilities();
+        const bool hasSeparateSamplers = caps->hasCapability( RSC_SEPARATE_SAMPLERS_FROM_TEXTURES );
+
+        bool needsRecalculateHash = false;
+
+        if( textureSetDirty || (samplerSetDirty && !hasSeparateSamplers) )
+            needsRecalculateHash |= bakeTextures( hasSeparateSamplers );
+
+        if( samplerSetDirty && hasSeparateSamplers )
+            needsRecalculateHash |= bakeSamplers();
+
+        if( needsRecalculateHash )
+            calculateHash();
     }
     //-----------------------------------------------------------------------------------
     void HlmsUnlitDatablock::decompileBakedTextures( UnlitBakedTexture outTextures[NUM_UNLIT_TEXTURE_TYPES] )
@@ -422,12 +406,8 @@ namespace Ogre
 
         return _a->getName() < _b->getName();
     }
-    bool HlmsUnlitDatablock::bakeTextures(void)
+    bool HlmsUnlitDatablock::bakeTextures( bool hasSeparateSamplers )
     {
-        const RenderSystem *renderSystem = mCreator->getRenderSystem();
-        const RenderSystemCapabilities *caps = renderSystem->getCapabilities();
-        const bool hasSeparateSamplers = caps->hasCapability( RSC_SEPARATE_SAMPLERS_FROM_TEXTURES );
-
         DescriptorSetTexture baseSet;
         DescriptorSetSampler baseSampler;
         for( size_t i=0; i<NUM_UNLIT_TEXTURE_TYPES; ++i )
@@ -479,7 +459,6 @@ namespace Ogre
             needsRecalculateHash = true;
             if( !hasSeparateSamplers )
             {
-                mSamplerSetDirty = false; // Do not call bakeSamplers
                 hlmsManager->destroyDescriptorSetSampler( mSamplersDescSet );
                 mSamplersDescSet = 0;
             }
@@ -493,7 +472,6 @@ namespace Ogre
             needsRecalculateHash = true;
             if( !hasSeparateSamplers )
             {
-                mSamplerSetDirty = false; // Do not call bakeSamplers
                 if( mSamplersDescSet )
                     hlmsManager->destroyDescriptorSetSampler( mSamplersDescSet );
                 mSamplersDescSet = hlmsManager->getDescriptorSetSampler( baseSampler );
@@ -632,29 +610,20 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    TexturePtr HlmsUnlitDatablock::getTexture( uint8 texType ) const
-    {
-        assert( texType < NUM_UNLIT_TEXTURE_TYPES );
-
-        TexturePtr retVal;
-
-        if( mTexToBakedTextureIdx[texType] < mBakedTextures.size() )
-            retVal = mBakedTextures[mTexToBakedTextureIdx[texType]].texture;
-
-        return retVal;
-    }
-    //-----------------------------------------------------------------------------------
     void HlmsUnlitDatablock::setTexture( uint8 texType, const TextureGpu *texture,
-                                         const HlmsSamplerblock *refParams )
+                                         const HlmsSamplerblock *refParams, bool bUpdateDescriptorSets )
     {
         assert( texType < NUM_UNLIT_TEXTURE_TYPES );
+
+        bool textureSetDirty = false;
+        bool samplerSetDirty = false;
 
         if( mTextures[texType] != texture )
         {
             if( (!mTextures[texType] && texture) ||
                 (mTextures[texType] && !texture) )
             {
-                textureSetDirty();
+                textureSetDirty = true;
             }
 
             TexturePool const *prevPool = 0;
@@ -664,7 +633,9 @@ namespace Ogre
             mTextures[texType] = texture;
 
             if( texture && prevPool != texture->getTexturePool() )
-                textureSetDirty();
+                textureSetDirty = true;
+
+            scheduleConstBufferUpdate();
         }
 
         //Set the new samplerblock
@@ -673,6 +644,9 @@ namespace Ogre
             HlmsManager *hlmsManager = mCreator->getHlmsManager();
             const HlmsSamplerblock *oldSamplerblock = mSamplerblocks[texType];
             mSamplerblocks[texType] = hlmsManager->getSamplerblock( *refParams );
+
+            if( oldSamplerblock != mSamplerblocks[texType] )
+                samplerSetDirty = true;
 
             if( oldSamplerblock )
                 hlmsManager->destroySamplerblock( oldSamplerblock );
@@ -683,8 +657,17 @@ namespace Ogre
             HlmsSamplerblock samplerBlockRef;
             HlmsManager *hlmsManager = mCreator->getHlmsManager();
             mSamplerblocks[texType] = hlmsManager->getSamplerblock( samplerBlockRef );
-            samplerSetDirty();
+            samplerSetDirty = true;
         }
+
+        if( bUpdateDescriptorSets )
+            updateDescriptorSets( textureSetDirty, samplerSetDirty );
+    }
+    //-----------------------------------------------------------------------------------
+    const TextureGpu* HlmsUnlitDatablock::getTexture( uint8 texType ) const
+    {
+        assert( texType < NUM_UNLIT_TEXTURE_TYPES );
+        return mTextures[texType];
     }
     //-----------------------------------------------------------------------------------
     void HlmsUnlitDatablock::setTextureSwizzle( uint8 texType, uint8 r, uint8 g, uint8 b, uint8 a )
@@ -700,17 +683,17 @@ namespace Ogre
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
         mSamplerblocks[texType] = hlmsManager->getSamplerblock( params );
 
-        if( oldSamplerblock )
-            hlmsManager->destroySamplerblock( oldSamplerblock );
-
         if( oldSamplerblock != mSamplerblocks[texType] )
         {
             UnlitBakedTexture textures[NUM_UNLIT_TEXTURE_TYPES];
             decompileBakedTextures( textures );
             bakeTextures( textures );
 
-            samplerSetDirty();
+            updateDescriptorSets( false, true );
         }
+
+        if( oldSamplerblock )
+            hlmsManager->destroySamplerblock( oldSamplerblock );
     }
     //-----------------------------------------------------------------------------------
     const HlmsSamplerblock* HlmsUnlitDatablock::getSamplerblock( uint8 texType ) const
@@ -812,13 +795,13 @@ namespace Ogre
         return mTexToBakedTextureIdx[texType];
     }
     //-----------------------------------------------------------------------------------
-    uint8 HlmsUnlitDatablock::getIndexToDescriptorTexture( uint8 texType ) const
+    uint8 HlmsUnlitDatablock::getIndexToDescriptorTexture( uint8 texType )
     {
         assert( texType < NUM_UNLIT_TEXTURE_TYPES );
         uint8 retVal = NUM_UNLIT_TEXTURE_TYPES;
 
         const TextureGpu *texture = mTextures[texType];
-        if( texture && mTexturesDescSet )
+        if( texture )
         {
             FastArray<const TextureGpu*>::const_iterator itor =
                     std::lower_bound( mTexturesDescSet->mTextures.begin(),
@@ -833,7 +816,7 @@ namespace Ogre
                 const bool hasSeparateSamplers =
                         caps->hasCapability( RSC_SEPARATE_SAMPLERS_FROM_TEXTURES );
 
-                if( hasSeparateSamplers )
+                if( !hasSeparateSamplers )
                 {
                     while( mSamplerblocks[texType] != mSamplersDescSet->mSamplers[idx] )
                         ++idx;
@@ -847,13 +830,13 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    uint8 HlmsUnlitDatablock::getIndexToDescriptorSampler( uint8 texType ) const
+    uint8 HlmsUnlitDatablock::getIndexToDescriptorSampler( uint8 texType )
     {
         assert( texType < NUM_UNLIT_TEXTURE_TYPES );
         uint8 retVal = NUM_UNLIT_TEXTURE_TYPES;
 
         const HlmsSamplerblock *sampler = mSamplerblocks[texType];
-        if( sampler && mSamplersDescSet )
+        if( sampler )
         {
             assert( mCreator->getRenderSystem()->
                     getCapabilities()->hasCapability( RSC_SEPARATE_SAMPLERS_FROM_TEXTURES ) );
