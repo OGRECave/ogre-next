@@ -191,6 +191,14 @@ namespace Ogre
         _setToDisplayDummyTexture();
     }
     //-----------------------------------------------------------------------------------
+    void GL3PlusTextureGpu::notifyDataIsReady(void)
+    {
+        assert( mResidencyStatus == GpuResidency::Resident );
+        assert( mFinalTextureName );
+
+        mDisplayTextureName = mFinalTextureName;
+    }
+    //-----------------------------------------------------------------------------------
     void GL3PlusTextureGpu::_setToDisplayDummyTexture(void)
     {
         GL3PlusTextureGpuManager *textureManagerGl =

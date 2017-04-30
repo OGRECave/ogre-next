@@ -484,6 +484,8 @@ namespace Ogre
         textureManager->removeStagingTexture( stagingTexture );
         stagingTexture = 0;
 
+        mTexture->notifyDataIsReady();
+
         FT_Done_FreeType(ftLibrary);
     }
     //-----------------------------------------------------------------------

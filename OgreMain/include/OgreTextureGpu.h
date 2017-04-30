@@ -234,6 +234,9 @@ namespace Ogre
         */
         void transitionTo( GpuResidency::GpuResidency newResidency, uint8 *sysRamCopy );
 
+        /// Notifies it is safe to use the real data. Everything has been uploaded.
+        virtual void notifyDataIsReady(void) = 0;
+
         virtual void copyTo( TextureGpu *dst, const TextureBox &srcBox, uint8 srcMipLevel,
                              const TextureBox &dstBox, uint8 dstMipLevel );
 
