@@ -43,23 +43,6 @@ namespace Ogre
     *  @{
     */
 
-    struct UnlitBakedTexture
-    {
-        TexturePtr              texture;
-        HlmsSamplerblock const *samplerBlock;
-
-        UnlitBakedTexture() : samplerBlock( 0 ) {}
-        UnlitBakedTexture( const TexturePtr tex, const HlmsSamplerblock *_samplerBlock ) :
-            texture( tex ), samplerBlock( _samplerBlock ) {}
-
-        bool operator == ( const UnlitBakedTexture &_r ) const
-        {
-            return texture == _r.texture && samplerBlock == _r.samplerBlock;
-        }
-    };
-
-    typedef FastArray<UnlitBakedTexture> UnlitBakedTextureArray;
-
     /** Contains information needed by PBS (Physically Based Shading) for OpenGL 3+ & D3D11+
     */
     class _OgreHlmsUnlitExport HlmsUnlitDatablock : public HlmsDatablock, public ConstBufferPoolUser
@@ -83,14 +66,9 @@ namespace Ogre
         uint8   mBlendModes[NUM_UNLIT_TEXTURE_TYPES];
         bool    mEnabledAnimationMatrices[NUM_UNLIT_TEXTURE_TYPES];
 
-        UnlitBakedTextureArray mBakedTextures;
         DescriptorSetTexture const *mTexturesDescSet;
         DescriptorSetSampler const *mSamplersDescSet;
 
-        /// The way to read this variable is i.e. get diffuse texture 0,
-        /// mBakedTextures[mTexToBakedTextureIdx[0]]
-        /// Then read mTexIndices[0] to know which slice of the texture array.
-        uint8   mTexToBakedTextureIdx[NUM_UNLIT_TEXTURE_TYPES];
         uint8   mTextureSwizzles[NUM_UNLIT_TEXTURE_TYPES];
 
         TextureGpu const        *mTextures[NUM_UNLIT_TEXTURE_TYPES];
@@ -102,11 +80,8 @@ namespace Ogre
 
         void updateDescriptorSets( bool textureSetDirty, bool samplerSetDirty );
 
-        /// Sets the appropiate mTexIndices[texUnit], and returns the texture pointer
-        TexturePtr setTexture( const String &name, uint8 texUnit );
+        void setTexture( uint8 texUnit, const String &name );
 
-        void decompileBakedTextures( UnlitBakedTexture outTextures[NUM_UNLIT_TEXTURE_TYPES] );
-        void bakeTextures( const UnlitBakedTexture textures[NUM_UNLIT_TEXTURE_TYPES] );
         bool bakeTextures( bool hasSeparateSamplers );
         bool bakeSamplers(void);
 
@@ -202,10 +177,6 @@ namespace Ogre
                          const HlmsSamplerblock *refParams=0 );
 
         //TexturePtr getTexture( uint8 texType ) const;
-
-        /// Returns the internal index to the array in a texture array.
-        /// Note: If there is no texture assigned to the given texType, returned value is undefined
-        uint16 _getTextureIdx( uint8 texType ) const                    { return mTexIndices[texType]; }
 
         /** Sets a new texture for rendering. Calling this function may trigger an
             HlmsDatablock::flushRenderables if the texture or the samplerblock changes.
@@ -303,9 +274,6 @@ namespace Ogre
         void setAnimationMatrix( uint8 textureUnit, const Matrix4 &matrix );
         const Matrix4 & getAnimationMatrix( uint8 textureUnit ) const;
 
-        /// Returns the index to mBakedTextures. Returns NUM_PBSM_TEXTURE_TYPES if
-        /// there is no texture assigned to texType
-        uint8 getBakedTextureIdx( uint8 texType ) const;
         uint8 getIndexToDescriptorTexture( uint8 texType );
         /// Do not call this function if RSC_SEPARATE_SAMPLERS_FROM_TEXTURES is not set.
         /// If not set, then just the result value from getIndexToDescriptorTexture

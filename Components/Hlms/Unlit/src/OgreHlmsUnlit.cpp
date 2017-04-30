@@ -209,9 +209,7 @@ namespace Ogre
     {
         const size_t basePropSize = propertyName.size(); // diffuse_map0
 
-        uint8 idx = datablock->getIndexToDescriptorTexture( texType );
-        if( idx == NUM_UNLIT_TEXTURE_TYPES )
-            idx = datablock->getBakedTextureIdx( texType );
+        const uint8 idx = datablock->getIndexToDescriptorTexture( texType );
 
         if( idx != NUM_UNLIT_TEXTURE_TYPES )
         {
@@ -232,7 +230,7 @@ namespace Ogre
 
             if( mHasSeparateSamplers )
             {
-                uint8 samplerIdx = datablock->getIndexToDescriptorSampler( texType );
+                const uint8 samplerIdx = datablock->getIndexToDescriptorSampler( texType );
                 propertyName.resize( basePropSize );
                 propertyName.a( "_sampler" );           //diffuse_map0_sampler
                 setProperty( propertyName.c_str(), samplerIdx );
@@ -754,24 +752,6 @@ namespace Ogre
 
         if( !casterPass )
         {
-            /*if( datablock->mTextureHash != mLastTextureHash )
-            {
-                //Rebind textures
-                size_t texUnit = 2;
-
-                UnlitBakedTextureArray::const_iterator itor = datablock->mBakedTextures.begin();
-                UnlitBakedTextureArray::const_iterator end  = datablock->mBakedTextures.end();
-
-                while( itor != end )
-                {
-                    *commandBuffer->addCommand<CbTexture>() =
-                            CbTexture( texUnit++, true, itor->texture.get(), itor->samplerBlock );
-                    ++itor;
-                }
-
-                mLastTextureHash = datablock->mTextureHash;
-            }*/
-
             if( datablock->mTexturesDescSet != mLastDescTexture )
             {
                 //Bind textures
