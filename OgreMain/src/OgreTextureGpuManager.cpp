@@ -27,14 +27,18 @@ THE SOFTWARE.
 */
 
 #include "OgreTextureGpuManager.h"
+#include "OgreObjCmdBuffer.h"
 #include "OgreTextureGpu.h"
 #include "OgreStagingTexture.h"
+#include "OgrePixelFormatGpuUtils.h"
 
 #include "OgreId.h"
 #include "OgreLwString.h"
 #include "OgreCommon.h"
 
 #include "Vao/OgreVaoManager.h"
+#include "OgreResourceGroupManager.h"
+#include "OgreImage2.h"
 
 #include "OgreException.h"
 
@@ -42,6 +46,33 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    inline uint32 ctz64( uint64 value )
+    {
+        if( value == 0 )
+            return 64u;
+
+    #if OGRE_COMPILER == OGRE_COMPILER_MSVC
+        unsigned long trailingZero = 0;
+        _BitScanForward64( &trailingZero, value );
+        return trailingZero;
+    #else
+        return __builtin_ctzl( value );
+    #endif
+    }
+    inline uint32 clz64( uint64 value )
+    {
+        if( value == 0 )
+            return 64u;
+
+    #if OGRE_COMPILER == OGRE_COMPILER_MSVC
+        unsigned long trailingZero = 0;
+        _BitScanReverse64( &trailingZero, value );
+        return trailingZero;
+    #else
+        return __builtin_clzl( value );
+    #endif
+    }
+
     static const int c_mainThread = 0;
     static const int c_workerThread = 1;
 
@@ -52,12 +83,15 @@ namespace Ogre
         mDefaultPoolParameters.maxBytesPerPool = 64 * 1024 * 1024;
         mDefaultPoolParameters.minSlicesPerPool[0] = 16;
         mDefaultPoolParameters.minSlicesPerPool[1] = 8;
-        mDefaultPoolParameters.minSlicesPerPool[2] = 6;
+        mDefaultPoolParameters.minSlicesPerPool[2] = 4;
         mDefaultPoolParameters.minSlicesPerPool[3] = 2;
         mDefaultPoolParameters.maxResolutionToApplyMinSlices[0] = 256;
         mDefaultPoolParameters.maxResolutionToApplyMinSlices[1] = 512;
         mDefaultPoolParameters.maxResolutionToApplyMinSlices[2] = 1024;
         mDefaultPoolParameters.maxResolutionToApplyMinSlices[3] = 4096;
+
+        for( int i=0; i<2; ++i )
+            mThreadData[i].objCmdBuffer = new ObjCmdBuffer();
     }
     //-----------------------------------------------------------------------------------
     TextureGpuManager::~TextureGpuManager()
@@ -66,6 +100,12 @@ namespace Ogre
         assert( mUsedStagingTextures.empty() && "Derived class didn't call destroyAll!" );
         assert( mEntries.empty() && "Derived class didn't call destroyAll!" );
         assert( mTexturePool.empty() && "Derived class didn't call destroyAll!" );
+
+        for( int i=0; i<2; ++i )
+        {
+            delete mThreadData[i].objCmdBuffer;
+            mThreadData[i].objCmdBuffer = 0;
+        }
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::destroyAll(void)
@@ -249,6 +289,23 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
+    TextureGpu* TextureGpuManager::loadFromFile( const String &name, const String &resourceGroup,
+                                                 GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+                                                 uint32 textureFlags )
+    {
+        ResourceGroupManager &resourceGroupManager = ResourceGroupManager::getSingleton();
+        Archive *archive = resourceGroupManager._getArchiveToResource( name, resourceGroup );
+
+        TextureGpu *texture = createTexture( name, pageOutStrategy, textureFlags );
+
+        ThreadData &mainData = mThreadData[c_mainThread];
+        mLoadRequestsMutex.lock();
+            mainData.loadRequests.push_back( LoadRequest( name, texture, archive ) );
+        mLoadRequestsMutex.unlock();
+
+        return texture;
+    }
+    //-----------------------------------------------------------------------------------
     void TextureGpuManager::_reserveSlotForTexture( TextureGpu *texture )
     {
         bool matchFound = false;
@@ -319,9 +376,10 @@ namespace Ogre
         //Must happen after _notifyTextureSlotChanged to avoid race condition.
         if( queueToMainThread )
         {
-            mMutex.lock();
-                mPoolsPending[c_workerThread].push_back( &(*itor) );
-            mMutex.unlock();
+            ThreadData &workerData = mThreadData[c_workerThread];
+            mPoolsPendingMutex.lock();
+                workerData.poolsPending.push_back( &(*itor) );
+            mPoolsPendingMutex.unlock();
         }
     }
     //-----------------------------------------------------------------------------------
@@ -344,17 +402,263 @@ namespace Ogre
         texture->_notifyTextureSlotChanged( 0, 0 );
     }
     //-----------------------------------------------------------------------------------
+    TextureBox TextureGpuManager::getStreaming( ThreadData &workerData, const TextureBox &box,
+                                                PixelFormatGpu pixelFormat,
+                                                StagingTexture **outStagingTexture )
+    {
+        bool isRare = true;
+
+        TextureBox retVal;
+
+        StagingTextureVec::iterator itor = workerData.usedStagingTex.begin();
+        StagingTextureVec::iterator end  = workerData.usedStagingTex.end();
+
+        while( itor != end && !retVal.data )
+        {
+            retVal = (*itor)->mapRegion( box.width, box.height, box.depth, box.numSlices, pixelFormat );
+            if( !retVal.data )
+            {
+                //If one of these staging textures supports this upload request, then it's not rare.
+                isRare &= !(*itor)->supportsFormat( box.width, box.height, box.depth,
+                                                    box.numSlices, pixelFormat );
+            }
+            else
+            {
+                *outStagingTexture = *itor;
+                isRare = false;
+            }
+
+            ++itor;
+        }
+
+        itor = workerData.availableStagingTex.begin();
+        end  = workerData.availableStagingTex.end();
+
+        while( itor != end && !retVal.data )
+        {
+            retVal = (*itor)->mapRegion( box.width, box.height, box.depth, box.numSlices, pixelFormat );
+            if( !retVal.data )
+            {
+                //If one of these staging textures supports this upload request, then it's not rare.
+                isRare &= !(*itor)->supportsFormat( box.width, box.height, box.depth,
+                                                    box.numSlices, pixelFormat );
+                ++itor;
+            }
+            else
+            {
+                *outStagingTexture = *itor;
+                isRare = false;
+
+                //We need to move this to the 'used' textures
+                workerData.usedStagingTex.push_back( *itor );
+                itor = efficientVectorRemove( workerData.availableStagingTex, itor );
+                end  = workerData.availableStagingTex.end();
+            }
+        }
+
+        if( isRare )
+        {
+            bool foundMatchingRare = false;
+            RareRequestVec::iterator itRare = workerData.rareRequests.begin();
+            RareRequestVec::iterator enRare = workerData.rareRequests.end();
+
+            while( itRare != enRare && !foundMatchingRare )
+            {
+                if( itRare->pixelFormat == pixelFormat )
+                {
+                    const uint32 rowAlignment = 4u;
+                    size_t requiredBytes = PixelFormatGpuUtils::getSizeBytes( box.width, box.height,
+                                                                              box.depth, box.numSlices,
+                                                                              pixelFormat,
+                                                                              rowAlignment );
+                    itRare->accumSizeBytes += requiredBytes;
+                    foundMatchingRare = true;
+                }
+                ++itRare;
+            }
+
+            if( !foundMatchingRare )
+            {
+                workerData.rareRequests.push_back( RareRequest( box.width, box.height,
+                                                                box.getDepthOrSlices(),
+                                                                pixelFormat ) );
+            }
+        }
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::processQueuedImage( QueuedImage &queuedImage, ThreadData &workerData )
+    {
+        Image2 &img = queuedImage.image;
+        TextureGpu *texture = queuedImage.dstTexture;
+        ObjCmdBuffer *commandBuffer = workerData.objCmdBuffer;
+
+        const uint8 firstMip = queuedImage.getMinMipLevel();
+        const uint8 numMips = queuedImage.getMaxMipLevelPlusOne();
+
+        for( uint8 i=firstMip; i<numMips; ++i )
+        {
+            if( queuedImage.isMipQueued( i ) )
+            {
+                TextureBox srcBox = img.getData( i );
+                StagingTexture *stagingTexture = 0;
+                TextureBox dstBox = getStreaming( workerData, srcBox, img.getPixelFormat(),
+                                                  &stagingTexture );
+                if( dstBox.data )
+                {
+                    //Upload to staging area. CPU -> GPU
+                    memcpy( dstBox.data, srcBox.data, dstBox.bytesPerImage * dstBox.getDepthOrSlices() );
+
+                    //Schedule a command to copy from staging to final texture, GPU -> GPU
+                    ObjCmdBuffer::UploadFromStagingTex *uploadCmd = commandBuffer->addCommand<
+                            ObjCmdBuffer::UploadFromStagingTex>();
+                    new (uploadCmd) ObjCmdBuffer::UploadFromStagingTex( stagingTexture, dstBox,
+                                                                        texture, i );
+                    //This mip has been processed, flag it as done.
+                    queuedImage.unqueueMip( i );
+                }
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::_updateStreaming(void)
+    {
+        /*
+        Thread Input                Thread Output
+        ------------------------------------------
+        Fresh StagingTextures       Used StagingTextures
+        Load Requests               Filled memory
+        Empty CommandBuffers        Set textures (resolution, type, pixel format)
+                                    Upload commands
+                                    Rare Requests
+
+        Load Requests are protected by mLoadRequestsMutex (short lock) to prevent
+        blocking main thread every time a texture is created.
+
+        Set textures is not protected, so reading pixel format, resolution or type
+        could potentially invoke a race condition.
+
+        The rest is protected by mMutex, which takes longer. That means the worker
+        thread processes a batch of textures together and when it cannot continue
+        (whether it's because it ran out of space or it ran out of work) it delivers
+        the commands to the main thread.
+        */
+
+        ThreadData &workerData  = mThreadData[c_workerThread];
+        ThreadData &mainData    = mThreadData[c_mainThread];
+
+        mLoadRequestsMutex.lock();
+            if( workerData.loadRequests.empty() )
+            {
+                workerData.loadRequests.swap( mainData.loadRequests );
+            }
+            else
+            {
+                workerData.loadRequests.insert( workerData.loadRequests.end(),
+                                                mainData.loadRequests.begin(),
+                                                mainData.loadRequests.end() );
+                mainData.loadRequests.clear();
+            }
+        mLoadRequestsMutex.unlock();
+
+        mMutex.lock();
+
+        ObjCmdBuffer *commandBuffer = workerData.objCmdBuffer;
+
+        //First, try to upload the queued images that failed in the previous iteration.
+        QueuedImageVec::iterator itQueue = mQueuedImages.begin();
+        QueuedImageVec::iterator enQueue = mQueuedImages.end();
+
+        while( itQueue != enQueue )
+        {
+            processQueuedImage( *itQueue, workerData );
+            if( itQueue->empty() )
+            {
+                itQueue->destroy();
+                itQueue = efficientVectorRemove( mQueuedImages, itQueue );
+                enQueue = mQueuedImages.end();
+            }
+            else
+            {
+                ++itQueue;
+            }
+        }
+
+        //Now process new requests from main thread
+        LoadRequestVec::const_iterator itor = workerData.loadRequests.begin();
+        LoadRequestVec::const_iterator end  = workerData.loadRequests.end();
+
+        while( itor != end )
+        {
+            const LoadRequest &loadRequest = *itor;
+
+            DataStreamPtr data = loadRequest.archive->open( loadRequest.name );
+            {
+                //Load the image from file into system RAM
+                Image2 img;
+                img.load( data );
+
+                loadRequest.texture->setResolution( img.getWidth(), img.getHeight(),
+                                                    img.getDepthOrSlices() );
+                loadRequest.texture->setTextureType( img.getTextureType() );
+                loadRequest.texture->setPixelFormat( img.getPixelFormat() );
+
+                void *sysRamCopy = 0;
+                if( loadRequest.texture->getGpuPageOutStrategy() ==
+                        GpuPageOutStrategy::AlwaysKeepSystemRamCopy )
+                {
+                    sysRamCopy = img.getData(0).data;
+                }
+
+                //We have enough to transition the texture to Resident.
+                ObjCmdBuffer::TransitionToResident *transitionCmd = commandBuffer->addCommand<
+                        ObjCmdBuffer::TransitionToResident>();
+                new (transitionCmd) ObjCmdBuffer::TransitionToResident( loadRequest.texture,
+                                                                        sysRamCopy );
+
+                //Queue the image for upload to GPU.
+                mQueuedImages.push_back( QueuedImage( img, img.getNumMipmaps(), loadRequest.texture ) );
+            }
+
+            //Try to upload the queued image right now (all of its mipmaps).
+            processQueuedImage( mQueuedImages.back(), workerData );
+
+            if( mQueuedImages.back().empty() )
+            {
+                mQueuedImages.back().destroy();
+                mQueuedImages.pop_back();
+            }
+
+            ++itor;
+        }
+
+        mMutex.unlock();
+
+        workerData.loadRequests.clear();
+    }
+    //-----------------------------------------------------------------------------------
     void TextureGpuManager::_update(void)
     {
+        ThreadData &mainData = mThreadData[c_mainThread];
         {
-            mMutex.lock();
-                mPoolsPending[c_mainThread].swap( mPoolsPending[c_workerThread] );
+            ThreadData &workerData = mThreadData[c_workerThread];
+            mPoolsPendingMutex.lock();
+                mainData.poolsPending.swap( workerData.poolsPending );
+            mPoolsPendingMutex.unlock();
+            bool lockSucceeded = mMutex.tryLock();
+            if( lockSucceeded )
+            {
+                std::swap( mainData.objCmdBuffer, workerData.objCmdBuffer );
+                mainData.usedStagingTex.swap( workerData.usedStagingTex );
+                workerData.availableStagingTex.insert(  );
+            }
             mMutex.unlock();
         }
 
         {
-            TexturePoolVec::const_iterator itor = mPoolsPending[c_mainThread].begin();
-            TexturePoolVec::const_iterator end  = mPoolsPending[c_mainThread].end();
+            TexturePoolVec::const_iterator itor = mainData.poolsPending.begin();
+            TexturePoolVec::const_iterator end  = mainData.poolsPending.end();
 
             while( itor != end )
             {
@@ -372,7 +676,7 @@ namespace Ogre
                 ++itor;
             }
 
-            mPoolsPending[c_mainThread].clear();
+            mainData.poolsPending.clear();
         }
 
         {
@@ -392,6 +696,9 @@ namespace Ogre
 
             mAvailableStagingTextures.erase( mAvailableStagingTextures.begin(), itor );
         }
+
+        mainData.objCmdBuffer->execute();
+        mainData.objCmdBuffer->clear();
     }
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
@@ -399,5 +706,93 @@ namespace Ogre
     bool TexturePool::hasFreeSlot(void) const
     {
         return !availableSlots.empty() || usedMemory < masterTexture->getNumSlices();
+    }
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    TextureGpuManager::RareRequest::RareRequest( uint32 _width, uint32 _height, uint32 _depthOrSlices,
+                                                 PixelFormatGpu _pixelFormat ) :
+        width( _width ),
+        height( _height ),
+        pixelFormat( _pixelFormat ),
+        accumSizeBytes( PixelFormatGpuUtils::getSizeBytes( _width, _height, _depthOrSlices,
+                                                           1u, _pixelFormat, 4u ) )
+    {
+    }
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    TextureGpuManager::QueuedImage::QueuedImage( Image2 &srcImage, uint8 numMips,
+                                                 TextureGpu *_dstTexture ) :
+        dstTexture( _dstTexture )
+    {
+        srcImage._setAutoDelete( false );
+        image = srcImage;
+
+        for( int i=0; i<4; ++i )
+        {
+            if( numMips >= 64u )
+            {
+                mipLevelBitSet[i] = 0xffffffffffffffff;
+                numMips -= 64u;
+            }
+            else
+            {
+                mipLevelBitSet[i] = (1ul << numMips) - 1ul;
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::QueuedImage::destroy(void)
+    {
+        if( dstTexture->getGpuPageOutStrategy() != GpuPageOutStrategy::AlwaysKeepSystemRamCopy )
+        {
+            image._setAutoDelete( true );
+            image.freeMemory();
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    bool TextureGpuManager::QueuedImage::empty(void) const
+    {
+        return  mipLevelBitSet[0] == 0ul && mipLevelBitSet[1] == 0ul &&
+                mipLevelBitSet[2] == 0ul && mipLevelBitSet[3] == 0ul;
+    }
+    //-----------------------------------------------------------------------------------
+    bool TextureGpuManager::QueuedImage::isMipQueued( uint8 mipLevel ) const
+    {
+        size_t idx  = mipLevel / 64u;
+        uint64 mask = mipLevel % 64u;
+        mask = 1ul << mask;
+        return (mipLevelBitSet[idx] & mask) != 0;
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::QueuedImage::unqueueMip( uint8 mipLevel )
+    {
+        size_t idx  = mipLevel / 64u;
+        uint64 mask = mipLevel % 64u;
+        mask = 1ul << mask;
+        mipLevelBitSet[idx] = mipLevelBitSet[idx] & ~mask;
+    }
+    //-----------------------------------------------------------------------------------
+    uint8 TextureGpuManager::QueuedImage::getMinMipLevel(void) const
+    {
+        for( size_t i=0; i<4u; ++i )
+        {
+            if( mipLevelBitSet[i] != 0u )
+                return static_cast<uint8>( ctz64( mipLevelBitSet[i] ) );
+        }
+
+        return 255u;
+    }
+    //-----------------------------------------------------------------------------------
+    uint8 TextureGpuManager::QueuedImage::getMaxMipLevelPlusOne(void) const
+    {
+        for( size_t i=4u; i--; )
+        {
+            if( mipLevelBitSet[i] != 0u )
+                return static_cast<uint8>( 64u - clz64( mipLevelBitSet[i] ) + 64u * i );
+        }
+
+        return 0u;
     }
 }

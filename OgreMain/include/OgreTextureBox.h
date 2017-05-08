@@ -41,6 +41,7 @@ namespace Ogre
     {
         uint32 x, y, z, sliceStart;
         uint32 width, height, depth, numSlices;
+        size_t bytesPerPixel;
         size_t bytesPerRow;
         size_t bytesPerImage;
         /// Pointer is never owned by us. Do not alter where
@@ -50,7 +51,7 @@ namespace Ogre
         TextureBox() :
             x( 0 ), y( 0 ), z( 0 ), sliceStart( 0 ),
             width( 0 ), height( 0 ), depth( 0 ), numSlices( 0 ),
-            bytesPerRow( 0 ), bytesPerImage( 0 ),
+            bytesPerPixel( 0 ), bytesPerRow( 0 ), bytesPerImage( 0 ),
             data( 0 )
         {
         }
@@ -58,7 +59,7 @@ namespace Ogre
         TextureBox( uint32 _width, uint32 _height, uint32 _depth, uint32 _numSlices ) :
             x( 0 ), y( 0 ), z( 0 ), sliceStart( 0 ),
             width( _width ), height( _height ), depth( _depth ), numSlices( _numSlices ),
-            bytesPerRow( 0 ), bytesPerImage( 0 ),
+            bytesPerPixel( 0 ), bytesPerRow( 0 ), bytesPerImage( 0 ),
             data( 0 )
         {
         }
@@ -98,6 +99,13 @@ namespace Ogre
                     other.getMaxY() <= this->y ||
                     other.getMaxZ() <= this->z ||
                     other.getMaxSlice() <= this->sliceStart);
+        }
+
+        /// x, y & z are in pixels. Only works for non-compressed formats.
+        void* at( size_t xPos, size_t yPos, size_t zPos )
+        {
+            return reinterpret_cast<uint8*>( data ) +
+                    zPos * bytesPerImage + yPos * bytesPerRow + xPos * bytesPerPixel;
         }
     };
 }

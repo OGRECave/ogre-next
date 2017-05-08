@@ -102,7 +102,8 @@ namespace Ogre
         /// based on texture families (for example all PFG_RGBA32_* belong to the same family).
         /// This function will return true if the StagingTexture can be used with the given format.
         /// On all the other RenderSystems, this nonsense does not exist thus it returns always
-        /// true
+        /// true unless the request is so big it could never be fullfilled (it's larger than
+        /// our maximum capacity)
         virtual bool supportsFormat( uint32 width, uint32 height, uint32 depth, uint32 slices,
                                      PixelFormatGpu pixelFormat ) const = 0;
 

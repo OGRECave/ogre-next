@@ -96,6 +96,8 @@ namespace Ogre
     {
     protected:
         GpuResidency::GpuResidency              mResidencyStatus;
+        /// Developer notes: Strategy cannot be changed immediately,
+        /// it has to be queued (due to multithreading safety).
         GpuPageOutStrategy::GpuPageOutStrategy  mPageOutStrategy;
 
         /// User tells us priorities via a "rank" system.
@@ -130,6 +132,7 @@ namespace Ogre
 
         IdString getName(void) const;
         /// Retrieves a user-friendly name. May involve a look up.
+        /// NOT THREAD SAFE. ONLY CALL FROM MAIN THREAD.
         virtual String getNameStr(void) const;
     };
 }

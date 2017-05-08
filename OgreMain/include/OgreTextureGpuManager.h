@@ -31,6 +31,7 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 #include "OgreTextureGpu.h"
+#include "OgreImage2.h"
 #include "Threading/OgreLightweightMutex.h"
 
 #include "OgreHeaderPrefix.h"
@@ -45,6 +46,7 @@ namespace Ogre
     */
 
     typedef vector<TextureGpu*>::type TextureGpuVec;
+    class ObjCmdBuffer;
 
     struct _OgreExport TexturePool
     {
@@ -93,14 +95,69 @@ namespace Ogre
             ResourceEntry( const String &_name, TextureGpu *_texture ) :
                 name( _name ), texture( _texture ) {}
         };
-
         typedef map<IdString, ResourceEntry>::type ResourceEntryMap;
 
+        struct LoadRequest
+        {
+            String      name;
+            TextureGpu  *texture;
+            Archive     *archive;
+
+            LoadRequest( const String &_name, TextureGpu *_texture, Archive *_archive ) :
+                name( _name ), texture( _texture ), archive( _archive ) {}
+        };
+
+        typedef vector<LoadRequest>::type LoadRequestVec;
+
+        /// A rare request is a texture which we could not upload because
+        /// no StagingTexture in availableStagingTex was capable of
+        /// handling, so we need to tell the main thread about it.
+        struct RareRequest
+        {
+            uint32 width;
+            uint32 height;
+            PixelFormatGpu pixelFormat;
+            size_t accumSizeBytes;
+            RareRequest( uint32 _width, uint32 _height, uint32 _depthOrSlices,
+                         PixelFormatGpu _pixelFormat );
+        };
+        typedef vector<RareRequest>::type RareRequestVec;
+
+        struct QueuedImage
+        {
+            Image2      image;
+            uint64      mipLevelBitSet[4];
+            TextureGpu  *dstTexture;
+
+            QueuedImage( Image2 &srcImage, uint8 numMips, TextureGpu *_dstTexture );
+            void destroy(void);
+            bool empty(void) const;
+            bool isMipQueued( uint8 mipLevel ) const;
+            void unqueueMip( uint8 mipLevel );
+            uint8 getMinMipLevel(void) const;
+            uint8 getMaxMipLevelPlusOne(void) const;
+        };
+
+        typedef vector<QueuedImage>::type QueuedImageVec;
+
+        struct ThreadData
+        {
+            TexturePoolVec  poolsPending;
+            LoadRequestVec  loadRequests;
+            ObjCmdBuffer    *objCmdBuffer;
+            RareRequestVec  rareRequests;
+            StagingTextureVec availableStagingTex;
+            StagingTextureVec usedStagingTex;
+        };
+
+        LightweightMutex    mPoolsPendingMutex;
+        LightweightMutex    mLoadRequestsMutex;
         LightweightMutex    mMutex;
+        ThreadData          mThreadData[2];
+        QueuedImageVec      mQueuedImages;
 
         TexturePoolList     mTexturePool;
         ResourceEntryMap    mEntries;
-        TexturePoolVec      mPoolsPending[2];
 
         PoolParameters      mDefaultPoolParameters;
 
@@ -122,12 +179,32 @@ namespace Ogre
 
         uint16 getNumSlicesFor( TextureGpu *texture ) const;
 
+        /** Finds a StagingTexture that can map the given region defined by the box & pixelFormat.
+            Searches in both used & available textures.
+            If no staging texture supports this request, it will fill a RareRequest entry.
+        @remarks
+            Assumes workerData is protected by a mutex.
+        @param workerData
+            Worker thread data.
+        @param box
+        @param pixelFormat
+        @param outStagingTexture
+            StagingTexture that mapped the return value. Unmodified if we couldn't map.
+        @return
+            The mapped region. If TextureBox::data is null, it couldn't be mapped.
+        */
+        static TextureBox getStreaming( ThreadData &workerData, const TextureBox &box,
+                                        PixelFormatGpu pixelFormat, StagingTexture **outStagingTexture );
+        static void processQueuedImage( QueuedImage &queuedImage, ThreadData &workerData );
+
     public:
         TextureGpuManager( VaoManager *vaoManager );
         virtual ~TextureGpuManager();
 
         void _reserveSlotForTexture( TextureGpu *texture );
         void _releaseSlotFromTexture( TextureGpu *texture );
+
+        void _updateStreaming(void);
 
         void _update(void);
 
@@ -149,6 +226,10 @@ namespace Ogre
         void removeStagingTexture( StagingTexture *stagingTexture );
 
         const String* findNameStr( IdString idName ) const;
+
+        TextureGpu* loadFromFile( const String &name, const String &resourceGroup,
+                                  GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+                                  uint32 textureFlags );
     };
 
     /** @} */

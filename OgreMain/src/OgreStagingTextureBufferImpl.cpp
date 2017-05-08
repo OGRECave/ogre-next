@@ -78,6 +78,7 @@ namespace Ogre
             retVal.height   = height;
             retVal.depth    = depth;
             retVal.numSlices= slices;
+            retVal.bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( pixelFormat );
             retVal.bytesPerRow = PixelFormatGpuUtils::getSizeBytes( width, 1, 1, 1,
                                                                     pixelFormat, rowAlignment );
             retVal.bytesPerImage = PixelFormatGpuUtils::getSizeBytes( width, height, 1, 1,

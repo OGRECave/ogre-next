@@ -116,6 +116,49 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    size_t PixelFormatGpuUtils::calculateSizeBytes( uint32 width, uint32 height, uint32 depth,
+                                                    uint32 slices, PixelFormatGpu format,
+                                                    uint8 numMipmaps, uint32 rowAlignment )
+    {
+        size_t totalBytes = 0;
+        while( (width > 1u || height > 1u || depth > 1u) && numMipmaps > 0 )
+        {
+            totalBytes += PixelFormatGpuUtils::getSizeBytes( width, height, depth, slices,
+                                                             format, rowAlignment );
+            width   = std::max( 1u, width  >> 1u );
+            height  = std::max( 1u, height >> 1u );
+            depth   = std::max( 1u, depth  >> 1u );
+            --numMipmaps;
+        }
+
+        return totalBytes;
+    }
+    //-----------------------------------------------------------------------
+    uint8 PixelFormatGpuUtils::getMaxMipmapCount( uint32 maxResolution )
+    {
+        if( !maxResolution ) //log( 0 ) is undefined.
+            return 0;
+
+        uint8 numMipmaps;
+#if (ANDROID || (OGRE_COMPILER == OGRE_COMPILER_MSVC && OGRE_COMP_VER < 1800))
+        numMipmaps = static_cast<uint8>( floorf( logf( static_cast<float>(maxResolution) ) /
+                                                 logf( 2.0f ) ) );
+#else
+        numMipmaps = static_cast<uint8>( floorf( log2f( static_cast<float>(maxResolution) ) ) );
+#endif
+        return numMipmaps + 1u;
+    }
+    //-----------------------------------------------------------------------
+    uint8 PixelFormatGpuUtils::getMaxMipmapCount( uint32 width, uint32 height )
+    {
+        return getMaxMipmapCount( std::max( width, height ) );
+    }
+    //-----------------------------------------------------------------------
+    uint8 PixelFormatGpuUtils::getMaxMipmapCount( uint32 width, uint32 height, uint32 depth )
+    {
+        return getMaxMipmapCount( std::max( std::max( width, height ), depth ) );
+    }
+    //-----------------------------------------------------------------------------------
     const char* PixelFormatGpuUtils::toString( PixelFormatGpu format )
     {
         const PixelFormatDesc &desc = getDescriptionFor( format );

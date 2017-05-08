@@ -94,6 +94,21 @@ namespace Ogre {
                                     uint32 slices, PixelFormatGpu format,
                                     uint32 rowAlignment=1u );
 
+        static size_t calculateSizeBytes( uint32 width, uint32 height, uint32 depth,
+                                          uint32 slices, PixelFormatGpu format,
+                                          uint8 numMipmaps, uint32 rowAlignment=1u );
+
+        /** Returns the maximum number of mipmaps given the resolution
+            e.g. at 4x4 there's 3 mipmaps. At 1x1 there's 1 mipmaps.
+        @note
+            Can return 0 if maxResolution = 0.
+        @return
+            Mip count.
+        */
+        static uint8 getMaxMipmapCount( uint32 maxResolution );
+        static uint8 getMaxMipmapCount( uint32 width, uint32 height );
+        static uint8 getMaxMipmapCount( uint32 width, uint32 height, uint32 depth );
+
         static const char* toString( PixelFormatGpu format );
 
         /** Makes a O(N) search to return the PixelFormatGpu based on its string version.

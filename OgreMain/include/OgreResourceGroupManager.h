@@ -768,6 +768,10 @@ namespace Ogre {
             const String& groupName = DEFAULT_RESOURCE_GROUP_NAME,
             bool searchGroupsIfNotFound = true, Resource* resourceBeingLoaded = 0);
 
+        Archive* _getArchiveToResource( const String& resourceName,
+                                        const String& groupName = DEFAULT_RESOURCE_GROUP_NAME,
+                                        bool searchGroupsIfNotFound = true );
+
         /** Open all resources matching a given pattern (which can contain
             the character '*' as a wildcard), and return a collection of 
             DataStream objects on them.
