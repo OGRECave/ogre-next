@@ -167,16 +167,20 @@ namespace Ogre
             TexturePoolVec  poolsPending;
             LoadRequestVec  loadRequests;
             ObjCmdBuffer    *objCmdBuffer;
-            UsageStatsVec   stats;
-            StagingTextureVec availableStagingTex;
             StagingTextureVec usedStagingTex;
+        };
+        struct StreamingData
+        {
+            StagingTextureVec   availableStagingTex;
+            QueuedImageVec      queuedImages;  /// Used by worker thread.
+            UsageStatsVec       usageStats;
         };
 
         LightweightMutex    mPoolsPendingMutex;
         LightweightMutex    mLoadRequestsMutex;
         LightweightMutex    mMutex;
         ThreadData          mThreadData[2];
-        QueuedImageVec      mQueuedImages;
+        StreamingData       mStreamingData;
 
         TexturePoolList     mTexturePool;
         ResourceEntryMap    mEntries;
@@ -227,9 +231,11 @@ namespace Ogre
         @return
             The mapped region. If TextureBox::data is null, it couldn't be mapped.
         */
-        static TextureBox getStreaming( ThreadData &workerData, const TextureBox &box,
-                                        PixelFormatGpu pixelFormat, StagingTexture **outStagingTexture );
-        static void processQueuedImage( QueuedImage &queuedImage, ThreadData &workerData );
+        static TextureBox getStreaming( ThreadData &workerData, StreamingData &streamingData,
+                                        const TextureBox &box, PixelFormatGpu pixelFormat,
+                                        StagingTexture **outStagingTexture );
+        static void processQueuedImage( QueuedImage &queuedImage, ThreadData &workerData,
+                                        StreamingData &streamingData );
 
     public:
         TextureGpuManager( VaoManager *vaoManager );

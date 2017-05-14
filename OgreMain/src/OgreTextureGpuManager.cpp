@@ -445,8 +445,8 @@ namespace Ogre
     {
         const uint32 frameCount = mVaoManager->getFrameCount();
 
-        UsageStatsVec::iterator itStats = workerData.stats.begin();
-        UsageStatsVec::iterator enStats = workerData.stats.end();
+        UsageStatsVec::iterator itStats = mStreamingData.usageStats.begin();
+        UsageStatsVec::iterator enStats = mStreamingData.usageStats.end();
 
         while( itStats != enStats )
         {
@@ -472,8 +472,8 @@ namespace Ogre
 
             bool isSupported = false;
 
-            StagingTextureVec::iterator itor = workerData.availableStagingTex.begin();
-            StagingTextureVec::iterator end  = workerData.availableStagingTex.end();
+            StagingTextureVec::iterator itor = mStreamingData.availableStagingTex.begin();
+            StagingTextureVec::iterator end  = mStreamingData.availableStagingTex.end();
 
             while( itor != end && !isSupported )
             {
@@ -483,8 +483,8 @@ namespace Ogre
                 if( isSupported )
                 {
                     mTmpAvailableStagingTex.push_back( *itor );
-                    itor = workerData.availableStagingTex.erase( itor );
-                    end  = workerData.availableStagingTex.end();
+                    itor = mStreamingData.availableStagingTex.erase( itor );
+                    end  = mStreamingData.availableStagingTex.end();
                 }
                 else
                 {
@@ -504,8 +504,8 @@ namespace Ogre
             ++itStats;
         }
 
-        itStats = workerData.stats.begin();
-        enStats = workerData.stats.end();
+        itStats = mStreamingData.usageStats.begin();
+        enStats = mStreamingData.usageStats.end();
 
         //Get rid of stat entries that are no longer in use.
         while( itStats != enStats )
@@ -513,8 +513,8 @@ namespace Ogre
             //If both are 1, then the stats didn't get used since last time we reset.
             if( itStats->width == 1u && itStats->height == 1u )
             {
-                itStats = efficientVectorRemove( workerData.stats, itStats );
-                enStats = workerData.stats.end();
+                itStats = efficientVectorRemove( mStreamingData.usageStats, itStats );
+                enStats = mStreamingData.usageStats.end();
             }
             else
             {
@@ -533,8 +533,8 @@ namespace Ogre
         {
             bool isSupported = false;
 
-            StagingTextureVec::iterator itor = workerData.availableStagingTex.begin();
-            StagingTextureVec::iterator end  = workerData.availableStagingTex.end();
+            StagingTextureVec::iterator itor = mStreamingData.availableStagingTex.begin();
+            StagingTextureVec::iterator end  = mStreamingData.availableStagingTex.end();
 
             while( itor != end && !isSupported )
             {
@@ -549,8 +549,8 @@ namespace Ogre
                 if( isSupported )
                 {
                     mTmpAvailableStagingTex.push_back( *itor );
-                    itor = workerData.availableStagingTex.erase( itor );
-                    end  = workerData.availableStagingTex.end();
+                    itor = mStreamingData.availableStagingTex.erase( itor );
+                    end  = mStreamingData.availableStagingTex.end();
                 }
                 else
                 {
@@ -576,8 +576,8 @@ namespace Ogre
                 if( isSupported )
                 {
                     mTmpAvailableStagingTex.push_back( *itor );
-                    itor = workerData.availableStagingTex.erase( itor );
-                    end  = workerData.availableStagingTex.end();
+                    itor = mStreamingData.availableStagingTex.erase( itor );
+                    end  = mStreamingData.availableStagingTex.end();
                 }
                 else
                 {
@@ -606,7 +606,8 @@ namespace Ogre
     void TextureGpuManager::fullfillBudget( ThreadData &workerData )
     {
         //Ensure availableStagingTex is sorted in ascending order
-        std::sort( workerData.availableStagingTex.begin(), workerData.availableStagingTex.end(),
+        std::sort( mStreamingData.availableStagingTex.begin(),
+                   mStreamingData.availableStagingTex.end(),
                    OrderByStagingTexture );
 
         fullfillUsageStats( workerData );
@@ -614,8 +615,8 @@ namespace Ogre
 
         {
             //The textures that are left are wasting memory, thus can be removed.
-            StagingTextureVec::const_iterator itor = workerData.availableStagingTex.begin();
-            StagingTextureVec::const_iterator end  = workerData.availableStagingTex.end();
+            StagingTextureVec::const_iterator itor = mStreamingData.availableStagingTex.begin();
+            StagingTextureVec::const_iterator end  = mStreamingData.availableStagingTex.end();
 
             while( itor != end )
             {
@@ -624,16 +625,18 @@ namespace Ogre
                 ++itor;
             }
 
-            workerData.availableStagingTex.clear();
+            mStreamingData.availableStagingTex.clear();
         }
 
-        workerData.availableStagingTex.insert( workerData.availableStagingTex.end(),
-                                               mTmpAvailableStagingTex.begin(),
-                                               mTmpAvailableStagingTex.end() );
+        mStreamingData.availableStagingTex.insert( mStreamingData.availableStagingTex.end(),
+                                                         mTmpAvailableStagingTex.begin(),
+                                                         mTmpAvailableStagingTex.end() );
         mTmpAvailableStagingTex.clear();
     }
     //-----------------------------------------------------------------------------------
-    TextureBox TextureGpuManager::getStreaming( ThreadData &workerData, const TextureBox &box,
+    TextureBox TextureGpuManager::getStreaming( ThreadData &workerData,
+                                                StreamingData &streamingData,
+                                                const TextureBox &box,
                                                 PixelFormatGpu pixelFormat,
                                                 StagingTexture **outStagingTexture )
     {
@@ -651,8 +654,8 @@ namespace Ogre
             ++itor;
         }
 
-        itor = workerData.availableStagingTex.begin();
-        end  = workerData.availableStagingTex.end();
+        itor = streamingData.availableStagingTex.begin();
+        end  = streamingData.availableStagingTex.end();
 
         while( itor != end && !retVal.data )
         {
@@ -663,15 +666,15 @@ namespace Ogre
 
                 //We need to move this to the 'used' textures
                 workerData.usedStagingTex.push_back( *itor );
-                itor = efficientVectorRemove( workerData.availableStagingTex, itor );
-                end  = workerData.availableStagingTex.end();
+                itor = efficientVectorRemove( streamingData.availableStagingTex, itor );
+                end  = streamingData.availableStagingTex.end();
             }
         }
 
         //Keep track of requests so main thread knows our current workload.
         const PixelFormatGpu formatFamily = PixelFormatGpuUtils::getFamily( pixelFormat );
-        UsageStatsVec::iterator itStats = workerData.stats.begin();
-        UsageStatsVec::iterator enStats = workerData.stats.end();
+        UsageStatsVec::iterator itStats = streamingData.usageStats.begin();
+        UsageStatsVec::iterator enStats = streamingData.usageStats.end();
 
         while( itStats != enStats && itStats->formatFamily != formatFamily )
             ++itStats;
@@ -684,8 +687,9 @@ namespace Ogre
 
         if( itStats == enStats )
         {
-            workerData.stats.push_back( UsageStats( box.width, box.height, box.getDepthOrSlices(),
-                                                    formatFamily ) );
+            streamingData.usageStats.push_back( UsageStats( box.width, box.height,
+                                                            box.getDepthOrSlices(),
+                                                            formatFamily ) );
         }
         else
         {
@@ -697,7 +701,8 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::processQueuedImage( QueuedImage &queuedImage, ThreadData &workerData )
+    void TextureGpuManager::processQueuedImage( QueuedImage &queuedImage, ThreadData &workerData,
+                                                StreamingData &streamingData )
     {
         Image2 &img = queuedImage.image;
         TextureGpu *texture = queuedImage.dstTexture;
@@ -712,8 +717,8 @@ namespace Ogre
             {
                 TextureBox srcBox = img.getData( i );
                 StagingTexture *stagingTexture = 0;
-                TextureBox dstBox = getStreaming( workerData, srcBox, img.getPixelFormat(),
-                                                  &stagingTexture );
+                TextureBox dstBox = getStreaming( workerData, streamingData, srcBox,
+                                                  img.getPixelFormat(), &stagingTexture );
                 if( dstBox.data )
                 {
                     //Upload to staging area. CPU -> GPU
@@ -774,8 +779,8 @@ namespace Ogre
         mMutex.lock();
 
         //Reset our stats
-        UsageStatsVec::iterator itStats = workerData.stats.begin();
-        UsageStatsVec::iterator enStats = workerData.stats.end();
+        UsageStatsVec::iterator itStats = mStreamingData.usageStats.begin();
+        UsageStatsVec::iterator enStats = mStreamingData.usageStats.end();
         while( itStats != enStats )
         {
             //If these match then we got downsized in the main thread (we spent 3
@@ -794,17 +799,17 @@ namespace Ogre
         ObjCmdBuffer *commandBuffer = workerData.objCmdBuffer;
 
         //First, try to upload the queued images that failed in the previous iteration.
-        QueuedImageVec::iterator itQueue = mQueuedImages.begin();
-        QueuedImageVec::iterator enQueue = mQueuedImages.end();
+        QueuedImageVec::iterator itQueue = mStreamingData.queuedImages.begin();
+        QueuedImageVec::iterator enQueue = mStreamingData.queuedImages.end();
 
         while( itQueue != enQueue )
         {
-            processQueuedImage( *itQueue, workerData );
+            processQueuedImage( *itQueue, workerData, mStreamingData );
             if( itQueue->empty() )
             {
                 itQueue->destroy();
-                itQueue = efficientVectorRemove( mQueuedImages, itQueue );
-                enQueue = mQueuedImages.end();
+                itQueue = efficientVectorRemove( mStreamingData.queuedImages, itQueue );
+                enQueue = mStreamingData.queuedImages.end();
             }
             else
             {
@@ -845,16 +850,17 @@ namespace Ogre
                                                                         sysRamCopy );
 
                 //Queue the image for upload to GPU.
-                mQueuedImages.push_back( QueuedImage( img, img.getNumMipmaps(), loadRequest.texture ) );
+                mStreamingData.queuedImages.push_back( QueuedImage( img, img.getNumMipmaps(),
+                                                                    loadRequest.texture ) );
             }
 
             //Try to upload the queued image right now (all of its mipmaps).
-            processQueuedImage( mQueuedImages.back(), workerData );
+            processQueuedImage( mStreamingData.queuedImages.back(), workerData, mStreamingData );
 
-            if( mQueuedImages.back().empty() )
+            if( mStreamingData.queuedImages.back().empty() )
             {
-                mQueuedImages.back().destroy();
-                mQueuedImages.pop_back();
+                mStreamingData.queuedImages.back().destroy();
+                mStreamingData.queuedImages.pop_back();
             }
 
             ++itor;
