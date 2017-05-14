@@ -31,6 +31,7 @@ THE SOFTWARE.
 
 #include "OgreGL3PlusPrerequisites.h"
 #include "Vao/OgreVaoManager.h"
+#include "OgrePixelFormatGpu.h"
 
 namespace Ogre
 {
@@ -266,7 +267,7 @@ namespace Ogre
         /// buffer with CPU access. However we won't track them, so it's the TextureManager's
         /// job to call destroyStagingTexture before the VaoManager gets deleted.
         /// This case is more of an exception because of D3D11.
-        GL3PlusStagingTexture* createStagingTexture( size_t sizeBytes );
+        GL3PlusStagingTexture* createStagingTexture( PixelFormatGpu formatFamily, size_t sizeBytes );
         /// Important: Does not delete the stagingTexture. The TextureManager should do that.
         /// Caller is also responsible for ensuring it is safe to destroy stagingTexture
         /// (i.e. no hazards).

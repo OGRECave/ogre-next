@@ -32,9 +32,11 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    StagingTextureBufferImpl::StagingTextureBufferImpl( VaoManager *vaoManager, size_t size,
-                                                        size_t internalBufferStart, size_t vboPoolIdx ) :
-        StagingTexture( vaoManager ),
+    StagingTextureBufferImpl::StagingTextureBufferImpl( VaoManager *vaoManager,
+                                                        PixelFormatGpu formatFamily,
+                                                        size_t size, size_t internalBufferStart,
+                                                        size_t vboPoolIdx ) :
+        StagingTexture( vaoManager, formatFamily ),
         mInternalBufferStart( internalBufferStart ),
         mCurrentOffset( 0 ),
         mSize( size ),
@@ -53,6 +55,17 @@ namespace Ogre
         size_t requiredSize = PixelFormatGpuUtils::getSizeBytes( width, height, depth, slices,
                                                                  pixelFormat, rowAlignment );
         return requiredSize <= mSize;
+    }
+    //-----------------------------------------------------------------------------------
+    bool StagingTextureBufferImpl::isSmaller( const StagingTexture *other ) const
+    {
+        assert( dynamic_cast<const StagingTextureBufferImpl*>( other ) );
+        return this->mSize < static_cast<const StagingTextureBufferImpl*>( other )->mSize;
+    }
+    //-----------------------------------------------------------------------------------
+    size_t StagingTextureBufferImpl::_getSizeBytes(void)
+    {
+        return mSize;
     }
     //-----------------------------------------------------------------------------------
     void StagingTextureBufferImpl::startMapRegion(void)

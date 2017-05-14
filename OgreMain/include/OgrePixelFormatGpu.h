@@ -44,7 +44,7 @@ namespace Ogre {
     {
         PFG_UNKNOWN,
 
-		// Starting Here, we must maintain 1:1 correspondency with DXGI_FORMAT_*
+        // Starting Here, start D3D11 formats (it isn't 1:1 with DXGI_FORMAT_* though)
 
         PFG_RGBA32_FLOAT,
         PFG_RGBA32_UINT,
@@ -139,12 +139,15 @@ namespace Ogre {
 
         PFG_B5G6R5_UNORM,
         PFG_B5G5R5A1_UNORM,
+        /// Avoid this one (prefer RGBA8).
         PFG_BGRA8_UNORM,
+        /// Avoid this one (prefer RGBA8).
         PFG_BGRX8_UNORM,
         PFG_R10G10B10_XR_BIAS_A2_UNORM,
 
+        /// Avoid this one (prefer RGBA8).
         PFG_BGRA8_UNORM_SRGB,
-
+        /// Avoid this one (prefer RGBA8).
         PFG_BGRX8_UNORM_SRGB,
 
         /// BC6H format (unsigned 16 bit float)
@@ -175,7 +178,7 @@ namespace Ogre {
         PFG_V208,
         PFG_V408,
 
-		// Here ends 1:1 correspondency with DXGI_FORMAT_*
+        // Here ends D3D11 formats (it isn't 1:1 with DXGI_FORMAT_* though)
 
         /// PVRTC (PowerVR) RGB 2 bpp
         PFG_PVRTC_RGB2,

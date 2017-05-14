@@ -259,6 +259,127 @@ namespace Ogre
         const PixelFormatDesc &desc = getDescriptionFor( format );
         return (desc.flags & PFF_PALLETE) != 0;
     }
+    //-----------------------------------------------------------------------------------
+    PixelFormatGpu PixelFormatGpuUtils::getFamily( PixelFormatGpu format )
+    {
+        switch( format )
+        {
+        case PFG_RGBA32_FLOAT:
+        case PFG_RGBA32_UINT:
+        case PFG_RGBA32_SINT:
+            return PFG_RGBA32_UINT;
+
+        case PFG_RGB32_FLOAT:
+        case PFG_RGB32_UINT:
+        case PFG_RGB32_SINT:
+            return PFG_RGB32_UINT;
+
+        case PFG_RGBA16_FLOAT:
+        case PFG_RGBA16_UNORM:
+        case PFG_RGBA16_UINT:
+        case PFG_RGBA16_SNORM:
+        case PFG_RGBA16_SINT:
+            return PFG_RGBA16_UINT;
+
+        case PFG_RG32_FLOAT:
+        case PFG_RG32_UINT:
+        case PFG_RG32_SINT:
+            return PFG_RG32_UINT;
+
+        case PFG_R10G10B10A2_UNORM:
+        case PFG_R10G10B10A2_UINT:
+            return PFG_R10G10B10A2_UINT;
+
+        case PFG_R11G11B10_FLOAT:
+            return PFG_R11G11B10_FLOAT;
+
+        case PFG_RGBA8_UNORM:
+        case PFG_RGBA8_UNORM_SRGB:
+        case PFG_RGBA8_UINT:
+        case PFG_RGBA8_SNORM:
+        case PFG_RGBA8_SINT:
+            return PFG_RGBA8_UNORM;
+
+        case PFG_RG16_FLOAT:
+        case PFG_RG16_UNORM:
+        case PFG_RG16_UINT:
+        case PFG_RG16_SNORM:
+        case PFG_RG16_SINT:
+            return PFG_RG16_UINT;
+
+        case PFG_D32_FLOAT:
+        case PFG_R32_FLOAT:
+        case PFG_R32_UINT:
+        case PFG_R32_SINT:
+            return PFG_R32_UINT;
+
+        case PFG_D24_UNORM:
+        case PFG_D24_UNORM_S8_UINT:
+            return PFG_D24_UNORM_S8_UINT;
+
+        case PFG_RG8_UNORM:
+        case PFG_RG8_UINT:
+        case PFG_RG8_SNORM:
+        case PFG_RG8_SINT:
+            return PFG_RG8_UINT;
+
+        case PFG_R16_FLOAT:
+        case PFG_D16_UNORM:
+        case PFG_R16_UNORM:
+        case PFG_R16_UINT:
+        case PFG_R16_SNORM:
+        case PFG_R16_SINT:
+            return PFG_R16_UINT;
+
+        case PFG_R8_UNORM:
+        case PFG_R8_UINT:
+        case PFG_R8_SNORM:
+        case PFG_R8_SINT:
+        case PFG_A8_UNORM:
+            return PFG_R8_UINT;
+
+        case PFG_R8G8_B8G8_UNORM:
+        case PFG_G8R8_G8B8_UNORM:
+            return PFG_R8G8_B8G8_UNORM;
+
+        case PFG_BC1_UNORM:
+        case PFG_BC1_UNORM_SRGB:
+            return PFG_BC1_UNORM;
+        case PFG_BC2_UNORM:
+        case PFG_BC2_UNORM_SRGB:
+            return PFG_BC2_UNORM;
+        case PFG_BC3_UNORM:
+        case PFG_BC3_UNORM_SRGB:
+            return PFG_BC3_UNORM;
+        case PFG_BC4_UNORM:
+        case PFG_BC4_SNORM:
+            return PFG_BC4_UNORM;
+        case PFG_BC5_UNORM:
+        case PFG_BC5_SNORM:
+            return PFG_BC5_UNORM;
+
+        case PFG_BGRA8_UNORM:
+        case PFG_BGRA8_UNORM_SRGB:
+            return PFG_BGRA8_UNORM;
+
+        case PFG_BGRX8_UNORM:
+        case PFG_BGRX8_UNORM_SRGB:
+            return PFG_BGRX8_UNORM;
+
+        case PFG_BC6H_UF16:
+        case PFG_BC6H_SF16:
+            return PFG_BC6H_UF16;
+
+        case PFG_BC7_UNORM:
+        case PFG_BC7_UNORM_SRGB:
+            return PFG_BC7_UNORM;
+
+        default:
+            return format;
+        }
+
+        return format;
+    }
 
     static const uint32 PFF_COMPRESSED_COMMON = PixelFormatGpuUtils::PFF_COMPRESSED|
                                                 PixelFormatGpuUtils::PFF_INTEGER|

@@ -90,6 +90,24 @@ namespace Ogre
         mDefaultPoolParameters.maxResolutionToApplyMinSlices[2] = 1024;
         mDefaultPoolParameters.maxResolutionToApplyMinSlices[3] = 4096;
 
+        PixelFormatGpu format;
+        //64MB for RGBA8, that's one 4096x4096 texture.
+        format = PixelFormatGpuUtils::getFamily( PFG_RGBA8_UNORM );
+        mDefaultPoolParameters.budget.push_back( BudgetEntry( format, 4096u, 1u ) );
+        //16MB for BC1, that's two 4096x4096 texture.
+        format = PixelFormatGpuUtils::getFamily( PFG_BC1_UNORM );
+        mDefaultPoolParameters.budget.push_back( BudgetEntry( format, 4096u, 2u ) );
+        //16MB for BC3, that's one 4096x4096 texture.
+        format = PixelFormatGpuUtils::getFamily( PFG_BC3_UNORM );
+        mDefaultPoolParameters.budget.push_back( BudgetEntry( format, 4096u, 1u ) );
+        //16MB for BC5, that's one 4096x4096 texture.
+        format = PixelFormatGpuUtils::getFamily( PFG_BC5_UNORM );
+        mDefaultPoolParameters.budget.push_back( BudgetEntry( format, 4096u, 1u ) );
+
+        //Sort in descending order.
+        std::sort( mDefaultPoolParameters.budget.begin(), mDefaultPoolParameters.budget.end(),
+                   BudgetEntry() );
+
         for( int i=0; i<2; ++i )
             mThreadData[i].objCmdBuffer = new ObjCmdBuffer();
     }
@@ -228,21 +246,25 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     StagingTexture* TextureGpuManager::getStagingTexture( uint32 width, uint32 height,
                                                           uint32 depth, uint32 slices,
-                                                          PixelFormatGpu pixelFormat )
+                                                          PixelFormatGpu pixelFormat,
+                                                          size_t minConsumptionRatioThreshold )
     {
-        StagingTexture *retVal = 0;
+        assert( minConsumptionRatioThreshold <= 100u && "Invalid consumptionRatioThreshold value!" );
+
+        StagingTextureVec::iterator bestCandidate = mAvailableStagingTextures.end();
         StagingTextureVec::iterator itor = mAvailableStagingTextures.begin();
         StagingTextureVec::iterator end  = mAvailableStagingTextures.end();
 
-        while( itor != end && !retVal )
+        while( itor != end )
         {
             StagingTexture *stagingTexture = *itor;
 
-            if( stagingTexture->supportsFormat( width, height, depth, slices, pixelFormat ) )
+            if( stagingTexture->supportsFormat( width, height, depth, slices, pixelFormat ) &&
+                (bestCandidate == end || stagingTexture->isSmaller( *bestCandidate )) )
             {
                 if( !stagingTexture->uploadWillStall() )
                 {
-                    retVal = stagingTexture;
+                    bestCandidate = itor;
                     mUsedStagingTextures.push_back( stagingTexture );
                     mAvailableStagingTextures.erase( itor );
                 }
@@ -251,7 +273,24 @@ namespace Ogre
             ++itor;
         }
 
-        if( !retVal )
+        StagingTexture *retVal = 0;
+
+        if( bestCandidate != end && minConsumptionRatioThreshold != 0u )
+        {
+            const size_t requiredSize = PixelFormatGpuUtils::getSizeBytes( width, height, depth,
+                                                                           slices, pixelFormat, 4u );
+            const size_t ratio = (requiredSize * 100u) / (*bestCandidate)->_getSizeBytes();
+            if( ratio < minConsumptionRatioThreshold )
+                bestCandidate = end;
+        }
+
+        if( bestCandidate != end )
+        {
+            retVal = *bestCandidate;
+            mUsedStagingTextures.push_back( *bestCandidate );
+            mAvailableStagingTextures.erase( bestCandidate );
+        }
+        else
         {
             //Couldn't find an existing StagingTexture that could handle our request. Create one.
             retVal = createStagingTextureImpl( width, height, depth, slices, pixelFormat );
@@ -402,12 +441,202 @@ namespace Ogre
         texture->_notifyTextureSlotChanged( 0, 0 );
     }
     //-----------------------------------------------------------------------------------
+    void TextureGpuManager::fullfillUsageStats( ThreadData &workerData )
+    {
+        const uint32 frameCount = mVaoManager->getFrameCount();
+
+        UsageStatsVec::iterator itStats = workerData.stats.begin();
+        UsageStatsVec::iterator enStats = workerData.stats.end();
+
+        while( itStats != enStats )
+        {
+            const uint32 rowAlignment = 4u;
+            size_t oneSliceBytes = PixelFormatGpuUtils::getSizeBytes( itStats->width, itStats->height,
+                                                                      1u, 1u, itStats->formatFamily,
+                                                                      rowAlignment );
+
+            if( itStats->accumSizeBytes >= itStats->prevSizeBytes )
+            {
+                //Keep largest spike for 3 frames.
+                itStats->frameCount = frameCount;
+                itStats->prevSizeBytes = itStats->accumSizeBytes;
+            }
+            else if( (frameCount - itStats->frameCount) >= 3u )
+            {
+                //If for 3 frames we haven't spiked again, then use the new stats.
+                itStats->prevSizeBytes = itStats->accumSizeBytes;
+            }
+
+            //Round up.
+            const size_t numSlices = (itStats->prevSizeBytes + oneSliceBytes - 1u) / oneSliceBytes;
+
+            bool isSupported = false;
+
+            StagingTextureVec::iterator itor = workerData.availableStagingTex.begin();
+            StagingTextureVec::iterator end  = workerData.availableStagingTex.end();
+
+            while( itor != end && !isSupported )
+            {
+                isSupported = (*itor)->supportsFormat( itStats->width, itStats->height, 1u,
+                                                       numSlices, itStats->formatFamily );
+
+                if( isSupported )
+                {
+                    mTmpAvailableStagingTex.push_back( *itor );
+                    itor = workerData.availableStagingTex.erase( itor );
+                    end  = workerData.availableStagingTex.end();
+                }
+                else
+                {
+                    ++itor;
+                }
+            }
+
+            if( !isSupported )
+            {
+                StagingTexture *newStagingTexture = getStagingTexture( itStats->width, itStats->height,
+                                                                       1u, numSlices,
+                                                                       itStats->formatFamily, 50u );
+                newStagingTexture->startMapRegion();
+                mTmpAvailableStagingTex.push_back( newStagingTexture );
+            }
+
+            ++itStats;
+        }
+
+        itStats = workerData.stats.begin();
+        enStats = workerData.stats.end();
+
+        //Get rid of stat entries that are no longer in use.
+        while( itStats != enStats )
+        {
+            //If both are 1, then the stats didn't get used since last time we reset.
+            if( itStats->width == 1u && itStats->height == 1u )
+            {
+                itStats = efficientVectorRemove( workerData.stats, itStats );
+                enStats = workerData.stats.end();
+            }
+            else
+            {
+                ++itStats;
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::fullfillMinimumBudget( ThreadData &workerData,
+                                                   const PoolParameters &poolParams )
+    {
+        BudgetEntryVec::const_iterator itBudget = poolParams.budget.begin();
+        BudgetEntryVec::const_iterator enBudget = poolParams.budget.end();
+
+        while( itBudget != enBudget )
+        {
+            bool isSupported = false;
+
+            StagingTextureVec::iterator itor = workerData.availableStagingTex.begin();
+            StagingTextureVec::iterator end  = workerData.availableStagingTex.end();
+
+            while( itor != end && !isSupported )
+            {
+                if( (*itor)->getFormatFamily() == itBudget->formatFamily )
+                {
+                    isSupported = (*itor)->supportsFormat( itBudget->minResolution,
+                                                           itBudget->minResolution, 1u,
+                                                           itBudget->minNumSlices,
+                                                           itBudget->formatFamily );
+                }
+
+                if( isSupported )
+                {
+                    mTmpAvailableStagingTex.push_back( *itor );
+                    itor = workerData.availableStagingTex.erase( itor );
+                    end  = workerData.availableStagingTex.end();
+                }
+                else
+                {
+                    ++itor;
+                }
+            }
+
+            //We now have to look in mTmpAvailableStagingTex in case fullfillUsageStats
+            //already created a staging texture that fulfills the minimum budget.
+            itor = mTmpAvailableStagingTex.begin();
+            end  = mTmpAvailableStagingTex.end();
+
+            while( itor != end && !isSupported )
+            {
+                if( (*itor)->getFormatFamily() == itBudget->formatFamily )
+                {
+                    isSupported = (*itor)->supportsFormat( itBudget->minResolution,
+                                                           itBudget->minResolution, 1u,
+                                                           itBudget->minNumSlices,
+                                                           itBudget->formatFamily );
+                }
+
+                if( isSupported )
+                {
+                    mTmpAvailableStagingTex.push_back( *itor );
+                    itor = workerData.availableStagingTex.erase( itor );
+                    end  = workerData.availableStagingTex.end();
+                }
+                else
+                {
+                    ++itor;
+                }
+            }
+
+            if( !isSupported )
+            {
+                StagingTexture *newStagingTexture = getStagingTexture( itBudget->minResolution,
+                                                                       itBudget->minResolution, 1u,
+                                                                       itBudget->minNumSlices,
+                                                                       itBudget->formatFamily, 50u );
+                newStagingTexture->startMapRegion();
+                mTmpAvailableStagingTex.push_back( newStagingTexture );
+            }
+
+            ++itBudget;
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    bool OrderByStagingTexture( const StagingTexture *_l, const StagingTexture *_r )
+    {
+        return _l->isSmaller( _r );
+    }
+    void TextureGpuManager::fullfillBudget( ThreadData &workerData )
+    {
+        //Ensure availableStagingTex is sorted in ascending order
+        std::sort( workerData.availableStagingTex.begin(), workerData.availableStagingTex.end(),
+                   OrderByStagingTexture );
+
+        fullfillUsageStats( workerData );
+        fullfillMinimumBudget( workerData, mDefaultPoolParameters );
+
+        {
+            //The textures that are left are wasting memory, thus can be removed.
+            StagingTextureVec::const_iterator itor = workerData.availableStagingTex.begin();
+            StagingTextureVec::const_iterator end  = workerData.availableStagingTex.end();
+
+            while( itor != end )
+            {
+                (*itor)->stopMapRegion();
+                removeStagingTexture( *itor );
+                ++itor;
+            }
+
+            workerData.availableStagingTex.clear();
+        }
+
+        workerData.availableStagingTex.insert( workerData.availableStagingTex.end(),
+                                               mTmpAvailableStagingTex.begin(),
+                                               mTmpAvailableStagingTex.end() );
+        mTmpAvailableStagingTex.clear();
+    }
+    //-----------------------------------------------------------------------------------
     TextureBox TextureGpuManager::getStreaming( ThreadData &workerData, const TextureBox &box,
                                                 PixelFormatGpu pixelFormat,
                                                 StagingTexture **outStagingTexture )
     {
-        bool isRare = true;
-
         TextureBox retVal;
 
         StagingTextureVec::iterator itor = workerData.usedStagingTex.begin();
@@ -416,17 +645,8 @@ namespace Ogre
         while( itor != end && !retVal.data )
         {
             retVal = (*itor)->mapRegion( box.width, box.height, box.depth, box.numSlices, pixelFormat );
-            if( !retVal.data )
-            {
-                //If one of these staging textures supports this upload request, then it's not rare.
-                isRare &= !(*itor)->supportsFormat( box.width, box.height, box.depth,
-                                                    box.numSlices, pixelFormat );
-            }
-            else
-            {
+            if( retVal.data )
                 *outStagingTexture = *itor;
-                isRare = false;
-            }
 
             ++itor;
         }
@@ -437,17 +657,9 @@ namespace Ogre
         while( itor != end && !retVal.data )
         {
             retVal = (*itor)->mapRegion( box.width, box.height, box.depth, box.numSlices, pixelFormat );
-            if( !retVal.data )
-            {
-                //If one of these staging textures supports this upload request, then it's not rare.
-                isRare &= !(*itor)->supportsFormat( box.width, box.height, box.depth,
-                                                    box.numSlices, pixelFormat );
-                ++itor;
-            }
-            else
+            if( retVal.data )
             {
                 *outStagingTexture = *itor;
-                isRare = false;
 
                 //We need to move this to the 'used' textures
                 workerData.usedStagingTex.push_back( *itor );
@@ -456,33 +668,30 @@ namespace Ogre
             }
         }
 
-        if( isRare )
+        //Keep track of requests so main thread knows our current workload.
+        const PixelFormatGpu formatFamily = PixelFormatGpuUtils::getFamily( pixelFormat );
+        UsageStatsVec::iterator itStats = workerData.stats.begin();
+        UsageStatsVec::iterator enStats = workerData.stats.end();
+
+        while( itStats != enStats && itStats->formatFamily != formatFamily )
+            ++itStats;
+
+        const uint32 rowAlignment = 4u;
+        const size_t requiredBytes = PixelFormatGpuUtils::getSizeBytes( box.width, box.height,
+                                                                        box.depth, box.numSlices,
+                                                                        formatFamily,
+                                                                        rowAlignment );
+
+        if( itStats == enStats )
         {
-            bool foundMatchingRare = false;
-            RareRequestVec::iterator itRare = workerData.rareRequests.begin();
-            RareRequestVec::iterator enRare = workerData.rareRequests.end();
-
-            while( itRare != enRare && !foundMatchingRare )
-            {
-                if( itRare->pixelFormat == pixelFormat )
-                {
-                    const uint32 rowAlignment = 4u;
-                    size_t requiredBytes = PixelFormatGpuUtils::getSizeBytes( box.width, box.height,
-                                                                              box.depth, box.numSlices,
-                                                                              pixelFormat,
-                                                                              rowAlignment );
-                    itRare->accumSizeBytes += requiredBytes;
-                    foundMatchingRare = true;
-                }
-                ++itRare;
-            }
-
-            if( !foundMatchingRare )
-            {
-                workerData.rareRequests.push_back( RareRequest( box.width, box.height,
-                                                                box.getDepthOrSlices(),
-                                                                pixelFormat ) );
-            }
+            workerData.stats.push_back( UsageStats( box.width, box.height, box.getDepthOrSlices(),
+                                                    formatFamily ) );
+        }
+        else
+        {
+            itStats->width = std::max( itStats->width, box.width );
+            itStats->height = std::max( itStats->height, box.height );
+            itStats->accumSizeBytes += requiredBytes;
         }
 
         return retVal;
@@ -563,6 +772,24 @@ namespace Ogre
         mLoadRequestsMutex.unlock();
 
         mMutex.lock();
+
+        //Reset our stats
+        UsageStatsVec::iterator itStats = workerData.stats.begin();
+        UsageStatsVec::iterator enStats = workerData.stats.end();
+        while( itStats != enStats )
+        {
+            //If these match then we got downsized in the main thread (we spent 3
+            //frames without spiking). Reset the resolution as well to see how much
+            //we are actually using.
+            if( itStats->accumSizeBytes == itStats->prevSizeBytes )
+            {
+                itStats->width  = 1u;
+                itStats->height = 1u;
+            }
+
+            itStats->accumSizeBytes = 0u;
+            ++itStats;
+        }
 
         ObjCmdBuffer *commandBuffer = workerData.objCmdBuffer;
 
@@ -651,7 +878,7 @@ namespace Ogre
             {
                 std::swap( mainData.objCmdBuffer, workerData.objCmdBuffer );
                 mainData.usedStagingTex.swap( workerData.usedStagingTex );
-                workerData.availableStagingTex.insert(  );
+                fullfillBudget( workerData );
             }
             mMutex.unlock();
         }
@@ -710,13 +937,15 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
-    TextureGpuManager::RareRequest::RareRequest( uint32 _width, uint32 _height, uint32 _depthOrSlices,
-                                                 PixelFormatGpu _pixelFormat ) :
+    TextureGpuManager::UsageStats::UsageStats( uint32 _width, uint32 _height, uint32 _depthOrSlices,
+                                                   PixelFormatGpu _formatFamily ) :
         width( _width ),
         height( _height ),
-        pixelFormat( _pixelFormat ),
+        formatFamily( _formatFamily ),
         accumSizeBytes( PixelFormatGpuUtils::getSizeBytes( _width, _height, _depthOrSlices,
-                                                           1u, _pixelFormat, 4u ) )
+                                                           1u, _formatFamily, 4u ) ),
+        prevSizeBytes( 0 ),
+        frameCount( 0 )
     {
     }
     //-----------------------------------------------------------------------------------
@@ -794,5 +1023,18 @@ namespace Ogre
         }
 
         return 0u;
+    }
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    bool TextureGpuManager::BudgetEntry::operator () ( const BudgetEntry &_l,
+                                                       const BudgetEntry &_r ) const
+    {
+        //Biggest ones come first
+        const size_t lSize = PixelFormatGpuUtils::getSizeBytes( _l.minResolution, _l.minResolution, 1u,
+                                                                _l.minNumSlices, _l.formatFamily, 4u );
+        const size_t rSize = PixelFormatGpuUtils::getSizeBytes( _r.minResolution, _r.minResolution, 1u,
+                                                                _r.minNumSlices, _r.formatFamily, 4u );
+        return lSize > rSize;
     }
 }

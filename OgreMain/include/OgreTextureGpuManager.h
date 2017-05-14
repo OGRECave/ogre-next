@@ -66,6 +66,26 @@ namespace Ogre
     class _OgreExport TextureGpuManager : public ResourceAlloc
     {
     public:
+        /// Specifies the minimum squared resolution & number of slices to keep around
+        /// all the for time StagingTextures. So:
+        /// PixelFormatGpu format = PixelFormatGpuUtils::getFamily(PFG_RGBA8_UNORM);
+        /// BudgetEntry( format, 4096u, 2u );
+        /// Will keep around 128MB of staging texture, with a resolution of 4096x4096 x 2 slices.
+        struct BudgetEntry
+        {
+            PixelFormatGpu formatFamily;
+            uint32 minResolution;
+            uint32 minNumSlices;
+            BudgetEntry() : formatFamily( PFG_UNKNOWN ), minResolution( 0 ), minNumSlices( 0 ) {}
+            BudgetEntry( PixelFormatGpu _formatFamily, uint32 _minResolution, uint32 _minNumSlices ) :
+                formatFamily( _formatFamily ), minResolution( _minResolution ),
+                minNumSlices( _minNumSlices ) {}
+
+            bool operator () ( const BudgetEntry &_l, const BudgetEntry &_r ) const;
+        };
+
+        typedef vector<BudgetEntry>::type BudgetEntryVec;
+
         struct PoolParameters
         {
             /// Pool shall grow until maxBytesPerPool is reached.
@@ -75,14 +95,17 @@ namespace Ogre
             /// Includes mipmaps.
             /// This value may actually be exceeded if a single texture surpasses this limit,
             /// or if minSlicesPerPool is > 1 (it takes higher priority)
-            size_t  maxBytesPerPool;
+            size_t maxBytesPerPool;
             /// Minimum slices per pool, regardless of maxBytesPerPool.
             /// It's also the starting num of slices. See maxResolutionToApplyMinSlices
-            uint16  minSlicesPerPool[4];
+            uint16 minSlicesPerPool[4];
             /// If texture resolution is <= maxResolutionToApplyMinSlices[i];
             /// we'll apply minSlicesPerPool[i]. Otherwise, we'll apply minSlicesPerPool[i+1]
             /// If resolution > maxResolutionToApplyMinSlices[N]; then minSlicesPerPool = 1;
-            uint32  maxResolutionToApplyMinSlices[4];
+            uint32 maxResolutionToApplyMinSlices[4];
+
+            /// See BudgetEntry. Must be sorted by size in bytes (biggest entries first).
+            BudgetEntryVec budget;
         };
 
     protected:
@@ -109,19 +132,18 @@ namespace Ogre
 
         typedef vector<LoadRequest>::type LoadRequestVec;
 
-        /// A rare request is a texture which we could not upload because
-        /// no StagingTexture in availableStagingTex was capable of
-        /// handling, so we need to tell the main thread about it.
-        struct RareRequest
+        struct UsageStats
         {
             uint32 width;
             uint32 height;
-            PixelFormatGpu pixelFormat;
+            PixelFormatGpu formatFamily;
             size_t accumSizeBytes;
-            RareRequest( uint32 _width, uint32 _height, uint32 _depthOrSlices,
-                         PixelFormatGpu _pixelFormat );
+            size_t prevSizeBytes;
+            uint32 frameCount;
+            UsageStats( uint32 _width, uint32 _height, uint32 _depthOrSlices,
+                        PixelFormatGpu _formatFamily );
         };
-        typedef vector<RareRequest>::type RareRequestVec;
+        typedef vector<UsageStats>::type UsageStatsVec;
 
         struct QueuedImage
         {
@@ -145,7 +167,7 @@ namespace Ogre
             TexturePoolVec  poolsPending;
             LoadRequestVec  loadRequests;
             ObjCmdBuffer    *objCmdBuffer;
-            RareRequestVec  rareRequests;
+            UsageStatsVec   stats;
             StagingTextureVec availableStagingTex;
             StagingTextureVec usedStagingTex;
         };
@@ -164,6 +186,8 @@ namespace Ogre
         StagingTextureVec   mUsedStagingTextures;
         StagingTextureVec   mAvailableStagingTextures;
 
+        StagingTextureVec   mTmpAvailableStagingTex;
+
         VaoManager          *mVaoManager;
 
         void destroyAll(void);
@@ -178,6 +202,16 @@ namespace Ogre
         virtual void destroyStagingTextureImpl( StagingTexture *stagingTexture ) = 0;
 
         uint16 getNumSlicesFor( TextureGpu *texture ) const;
+
+        /// Fills mTmpAvailableStagingTex with new StagingTextures that support formats &
+        /// resolutions the worker thread couldn't upload because it lacked a compatible one.
+        /// Assumes we're protected by mMutex! Called from main thread.
+        void fullfillUsageStats( ThreadData &workerData );
+        /// Fills mTmpAvailableStagingTex with new StagingTextures if there's not enough
+        /// in there to meet our minimum budget in poolParams.
+        void fullfillMinimumBudget( ThreadData &workerData, const PoolParameters &poolParams );
+
+        void fullfillBudget( ThreadData &workerData );
 
         /** Finds a StagingTexture that can map the given region defined by the box & pixelFormat.
             Searches in both used & available textures.
@@ -221,8 +255,31 @@ namespace Ogre
                                    uint32 textureFlags );
         void destroyTexture( TextureGpu *texture );
 
+        /**
+        @brief getStagingTexture
+        @remarks
+            We try to find the smallest available texture (won't stall) that can fit the request.
+        @param minConsumptionRatioThreshold
+            Value in range [0; 100].
+            The smallest available texture we find may still be too big (e.g. you need to upload
+            64x64 texture RGBA8 and we return a 8192x8192x4 staging texture which is overkill).
+            For these cases, here you can specify how much "is too big". For example by
+            specifying a consumptionRatio of 50; it means that the data you asked for
+            must occupy at least 50% of the space; otherwise we'll create a new StagingTexture.
+
+            A value of 100 means the StagingTexture must fit exactly (fully used).
+            A value of 0 means any StagingTexture will do, no matter how large.
+
+            StagingTextures that haven't been using in a while will be destroyed. However
+            if for some reason we end up returning a huge texture every frame for small
+            workloads, we'll be keeping that waste potentially forever.
+        @return
+            StagingTexture that meets the criteria. When you're done, remove it by calling
+            removeStagingTexture.
+        */
         StagingTexture* getStagingTexture( uint32 width, uint32 height, uint32 depth,
-                                           uint32 slices, PixelFormatGpu pixelFormat );
+                                           uint32 slices, PixelFormatGpu pixelFormat,
+                                           size_t minConsumptionRatioThreshold=25u );
         void removeStagingTexture( StagingTexture *stagingTexture );
 
         const String* findNameStr( IdString idName ) const;

@@ -84,6 +84,7 @@ namespace Ogre
     protected:
         VaoManager  *mVaoManager;
         uint32      mLastFrameUsed;
+        PixelFormatGpu mFormatFamily;
 
 #if OGRE_DEBUG_MODE
         bool        mMapRegionStarted;
@@ -95,7 +96,7 @@ namespace Ogre
                                           PixelFormatGpu pixelFormat ) = 0;
 
     public:
-        StagingTexture( VaoManager *vaoManager );
+        StagingTexture( VaoManager *vaoManager, PixelFormatGpu formatFamily );
         virtual ~StagingTexture();
 
         /// D3D11 has restrictions about which StagingTextures can be uploaded to which textures
@@ -106,6 +107,24 @@ namespace Ogre
         /// our maximum capacity)
         virtual bool supportsFormat( uint32 width, uint32 height, uint32 depth, uint32 slices,
                                      PixelFormatGpu pixelFormat ) const = 0;
+        virtual bool isSmaller( const StagingTexture *other ) const = 0;
+
+        /** Returns size in bytes. Note it's tagged as advanced use (via _underscore) because
+            Just because a StagingTexture has enough available size, does not mean it can
+            hold the data you'll want (a D3D11 StagingTexture of 256x512 cannot hold
+            1024x1 texture data even though it has the available capacity)
+        @return
+            Size in bytes of this staging texture.
+        */
+        virtual size_t _getSizeBytes(void) = 0;
+
+        /// Returns the format family it was requested. Note that in non-D3D11 RenderSystems,
+        /// supportsFormat may return true despite a format not being from the same family.
+        /// This information is mostly useful for keeping memory budgets consistent between
+        /// different APIs (e.g. on D3D11 two StagingTextures, one that supports RGB8,
+        /// another for BC1 of 64 MB each; on OpenGL we need to request two textures of 64MB
+        /// each, and not just one because the first one can fulfill every request)
+        PixelFormatGpu getFormatFamily(void) const                  { return mFormatFamily; }
 
         /// If it returns true, startMapRegion will stall.
         bool uploadWillStall(void);

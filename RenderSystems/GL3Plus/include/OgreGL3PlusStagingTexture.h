@@ -54,8 +54,8 @@ namespace Ogre
                             GLsizei width, GLsizei height, GLsizei numSlices );
 
     public:
-        GL3PlusStagingTexture( VaoManager *vaoManager, size_t size,
-                               size_t internalBufferStart, size_t vboPoolIdx,
+        GL3PlusStagingTexture( VaoManager *vaoManager, PixelFormatGpu formatFamily,
+                               size_t size, size_t internalBufferStart, size_t vboPoolIdx,
                                GL3PlusDynamicBuffer *dynamicBuffer );
         virtual ~GL3PlusStagingTexture();
 

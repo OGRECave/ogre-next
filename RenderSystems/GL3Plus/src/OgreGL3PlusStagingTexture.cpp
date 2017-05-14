@@ -36,10 +36,11 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    GL3PlusStagingTexture::GL3PlusStagingTexture( VaoManager *vaoManager, size_t size,
-                                                  size_t internalBufferStart, size_t vboPoolIdx,
+    GL3PlusStagingTexture::GL3PlusStagingTexture( VaoManager *vaoManager, PixelFormatGpu formatFamily,
+                                                  size_t size, size_t internalBufferStart,
+                                                  size_t vboPoolIdx,
                                                   GL3PlusDynamicBuffer *dynamicBuffer ) :
-        StagingTextureBufferImpl( vaoManager, size, internalBufferStart, vboPoolIdx ),
+        StagingTextureBufferImpl( vaoManager, formatFamily, size, internalBufferStart, vboPoolIdx ),
         mDynamicBuffer( dynamicBuffer ),
         mUnmapTicket( std::numeric_limits<size_t>::max() ),
         mMappedPtr( 0 )

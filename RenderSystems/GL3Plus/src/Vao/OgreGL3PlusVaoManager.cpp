@@ -1021,7 +1021,8 @@ namespace Ogre
                                                             elementStart, elementCount ) );
     }
     //-----------------------------------------------------------------------------------
-    GL3PlusStagingTexture* GL3PlusVaoManager::createStagingTexture( size_t sizeBytes )
+    GL3PlusStagingTexture* GL3PlusVaoManager::createStagingTexture( PixelFormatGpu formatFamily,
+                                                                    size_t sizeBytes )
     {
         GL3PlusDynamicBuffer *dynamicBuffer = 0;
         size_t vboIdx = 0;
@@ -1053,8 +1054,9 @@ namespace Ogre
             dynamicBuffer = new GL3PlusDynamicBuffer( bufferName, sizeBytes, this, BT_DYNAMIC_DEFAULT );
         }
 
-        GL3PlusStagingTexture *retVal = OGRE_NEW GL3PlusStagingTexture( this, sizeBytes, bufferOffset,
-                                                                        vboIdx, dynamicBuffer );
+        GL3PlusStagingTexture *retVal = OGRE_NEW GL3PlusStagingTexture( this, formatFamily, sizeBytes,
+                                                                        bufferOffset, vboIdx,
+                                                                        dynamicBuffer );
         return retVal;
     }
     //-----------------------------------------------------------------------------------

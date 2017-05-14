@@ -54,17 +54,19 @@ namespace Ogre
         size_t mSize;
         size_t mVboPoolIdx;
 
-        virtual bool supportsFormat( uint32 width, uint32 height, uint32 depth, uint32 slices,
-                                     PixelFormatGpu pixelFormat ) const;
-
         virtual DECL_MALLOC void* RESTRICT_ALIAS_RETURN mapRegionImplRawPtr(void) = 0;
         virtual TextureBox mapRegionImpl( uint32 width, uint32 height, uint32 depth, uint32 slices,
                                           PixelFormatGpu pixelFormat );
 
     public:
-        StagingTextureBufferImpl( VaoManager *vaoManager, size_t size,
-                                  size_t internalBufferStart, size_t vboPoolIdx );
+        StagingTextureBufferImpl( VaoManager *vaoManager, PixelFormatGpu formatFamily,
+                                  size_t size, size_t internalBufferStart, size_t vboPoolIdx );
         virtual ~StagingTextureBufferImpl();
+
+        virtual bool supportsFormat( uint32 width, uint32 height, uint32 depth, uint32 slices,
+                                     PixelFormatGpu pixelFormat ) const;
+        virtual bool isSmaller( const StagingTexture *other ) const;
+        virtual size_t _getSizeBytes(void);
 
         /// @copydoc StagingTexture::notifyStartMapRegion
         virtual void startMapRegion(void);

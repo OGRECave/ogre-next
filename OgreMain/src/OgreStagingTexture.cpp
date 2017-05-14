@@ -34,9 +34,10 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    StagingTexture::StagingTexture( VaoManager *vaoManager ) :
+    StagingTexture::StagingTexture( VaoManager *vaoManager, PixelFormatGpu formatFamily ) :
         mVaoManager( vaoManager ),
-        mLastFrameUsed( vaoManager->getFrameCount() - vaoManager->getDynamicBufferMultiplier() )
+        mLastFrameUsed( vaoManager->getFrameCount() - vaoManager->getDynamicBufferMultiplier() ),
+        mFormatFamily( formatFamily )
   #if OGRE_DEBUG_MODE
         ,mMapRegionStarted( false )
         ,mUserQueriedIfUploadWillStall( false )

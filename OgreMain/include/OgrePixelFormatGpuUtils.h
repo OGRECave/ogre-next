@@ -137,6 +137,8 @@ namespace Ogre {
         static bool isSRgb( PixelFormatGpu format );
         static bool isCompressed( PixelFormatGpu format );
         static bool isPallete( PixelFormatGpu format );
+
+        static PixelFormatGpu getFamily( PixelFormatGpu format );
     };
 
     /** @} */

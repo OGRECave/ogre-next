@@ -155,7 +155,8 @@ namespace Ogre
                                                                     pixelFormat, rowAlignment );
 
         GL3PlusVaoManager *vaoManager = static_cast<GL3PlusVaoManager*>( mVaoManager );
-        return vaoManager->createStagingTexture( sizeBytes );
+        return vaoManager->createStagingTexture( PixelFormatGpuUtils::getFamily( pixelFormat ),
+                                                 sizeBytes );
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusTextureGpuManager::destroyStagingTextureImpl( StagingTexture *stagingTexture )

@@ -39,7 +39,6 @@ THE SOFTWARE.
 namespace Ogre {
     ImageCodec::~ImageCodec() {
     }
-
     //-----------------------------------------------------------------------------
     Image::Image()
         : mWidth(0),
