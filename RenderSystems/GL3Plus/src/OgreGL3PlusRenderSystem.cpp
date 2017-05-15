@@ -797,6 +797,8 @@ namespace Ogre {
             _oneTimeContextInitialization();
             if (mCurrentContext)
                 mCurrentContext->setInitialized();
+
+            mTextureGpuManager->_update();
         }
 
         if ( win->getDepthBufferPool() != DepthBuffer::POOL_NO_DEPTH )
