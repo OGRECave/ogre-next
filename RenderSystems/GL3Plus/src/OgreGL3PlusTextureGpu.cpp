@@ -217,9 +217,7 @@ namespace Ogre
 
         mGlTextureTarget = GL_TEXTURE_2D_ARRAY;
 
-        //mTexturePool->masterTexture may not be resident if we were created
-        //in a worker thread and not yet reached the main thread.
-        if( mTexturePool && mTexturePool->masterTexture->getResidencyStatus() == GpuResidency::Resident )
+        if( mTexturePool )
         {
             assert( dynamic_cast<GL3PlusTextureGpu*>( mTexturePool->masterTexture ) );
             GL3PlusTextureGpu *masterTexture = static_cast<GL3PlusTextureGpu*>(mTexturePool->masterTexture);

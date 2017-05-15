@@ -131,4 +131,15 @@ namespace Ogre
     {
         stagingTexture->upload( box, dstTexture, mipLevel );
     }
+    //-----------------------------------------------------------------------------------
+    ObjCmdBuffer::
+    NotifyDataIsReady::NotifyDataIsReady( TextureGpu *_textureGpu ) :
+        texture( _textureGpu )
+    {
+    }
+    //-----------------------------------------------------------------------------------
+    void ObjCmdBuffer::NotifyDataIsReady::execute(void)
+    {
+        texture->notifyDataIsReady();
+    }
 }

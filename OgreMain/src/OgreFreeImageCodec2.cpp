@@ -429,6 +429,7 @@ namespace Ogre {
         imgData->box.width  = FreeImage_GetWidth( fiBitmap );
         imgData->box.height = FreeImage_GetHeight( fiBitmap );
         imgData->numMipmaps = 1; // no mipmaps in non-DDS
+        imgData->textureType = TextureTypes::Type2D;
 
         // Must derive format first, this may perform conversions
         

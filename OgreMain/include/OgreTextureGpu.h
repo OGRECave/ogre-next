@@ -197,6 +197,7 @@ namespace Ogre
 
         void setTextureType( TextureTypes::TextureTypes textureType );
         TextureTypes::TextureTypes getTextureType(void) const;
+        TextureTypes::TextureTypes getInternalTextureType(void) const;
 
         void setPixelFormat( PixelFormatGpu pixelFormat );
         PixelFormatGpu getPixelFormat(void) const;

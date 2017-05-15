@@ -369,8 +369,6 @@ namespace Ogre
             ++itor;
         }
 
-        bool queueToMainThread = false;
-
         if( itor == end )
         {
             IdType newId = Id::generateNewId<TextureGpuManager>();
@@ -394,8 +392,7 @@ namespace Ogre
             mTexturePool.push_back( newPool );
             itor = --mTexturePool.end();
 
-            //itor->masterTexture->transitionTo( GpuResidency::Resident, 0 );
-            queueToMainThread = true;
+            itor->masterTexture->transitionTo( GpuResidency::Resident, 0 );
         }
 
         uint16 sliceIdx = 0;
@@ -411,15 +408,6 @@ namespace Ogre
         }
         itor->usedSlots.push_back( texture );
         texture->_notifyTextureSlotChanged( &(*itor), sliceIdx );
-
-        //Must happen after _notifyTextureSlotChanged to avoid race condition.
-        if( queueToMainThread )
-        {
-            ThreadData &workerData = mThreadData[c_workerThread];
-            mPoolsPendingMutex.lock();
-                workerData.poolsPending.push_back( &(*itor) );
-            mPoolsPendingMutex.unlock();
-        }
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::_releaseSlotFromTexture( TextureGpu *texture )
@@ -573,16 +561,7 @@ namespace Ogre
                                                            itBudget->formatFamily );
                 }
 
-                if( isSupported )
-                {
-                    mTmpAvailableStagingTex.push_back( *itor );
-                    itor = mStreamingData.availableStagingTex.erase( itor );
-                    end  = mStreamingData.availableStagingTex.end();
-                }
-                else
-                {
-                    ++itor;
-                }
+                ++itor;
             }
 
             if( !isSupported )
@@ -734,6 +713,14 @@ namespace Ogre
                 }
             }
         }
+
+        if( queuedImage.empty() )
+        {
+            queuedImage.destroy();
+            ObjCmdBuffer::NotifyDataIsReady *cmd =
+                    commandBuffer->addCommand<ObjCmdBuffer::NotifyDataIsReady>();
+            new (cmd) ObjCmdBuffer::NotifyDataIsReady( texture );
+        }
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::_updateStreaming(void)
@@ -807,7 +794,6 @@ namespace Ogre
             processQueuedImage( *itQueue, workerData, mStreamingData );
             if( itQueue->empty() )
             {
-                itQueue->destroy();
                 itQueue = efficientVectorRemove( mStreamingData.queuedImages, itQueue );
                 enQueue = mStreamingData.queuedImages.end();
             }
@@ -858,10 +844,7 @@ namespace Ogre
             processQueuedImage( mStreamingData.queuedImages.back(), workerData, mStreamingData );
 
             if( mStreamingData.queuedImages.back().empty() )
-            {
-                mStreamingData.queuedImages.back().destroy();
                 mStreamingData.queuedImages.pop_back();
-            }
 
             ++itor;
         }
@@ -873,12 +856,11 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::_update(void)
     {
+        _updateStreaming();
+
         ThreadData &mainData = mThreadData[c_mainThread];
         {
             ThreadData &workerData = mThreadData[c_workerThread];
-            mPoolsPendingMutex.lock();
-                mainData.poolsPending.swap( workerData.poolsPending );
-            mPoolsPendingMutex.unlock();
             bool lockSucceeded = mMutex.tryLock();
             if( lockSucceeded )
             {
@@ -890,26 +872,14 @@ namespace Ogre
         }
 
         {
-            TexturePoolVec::const_iterator itor = mainData.poolsPending.begin();
-            TexturePoolVec::const_iterator end  = mainData.poolsPending.end();
+            StagingTextureVec::const_iterator itor = mainData.usedStagingTex.begin();
+            StagingTextureVec::const_iterator end  = mainData.usedStagingTex.end();
 
             while( itor != end )
             {
-                TexturePool *pool = *itor;
-                pool->masterTexture->transitionTo( GpuResidency::Resident, 0 );
-                TextureGpuVec::const_iterator itTex = pool->usedSlots.begin();
-                TextureGpuVec::const_iterator enTex = pool->usedSlots.end();
-
-                while( itTex != enTex )
-                {
-                    (*itTex)->_notifyTextureSlotChanged( pool, (*itTex)->getInternalSliceStart() );
-                    ++itTex;
-                }
-
+                (*itor)->stopMapRegion();
                 ++itor;
             }
-
-            mainData.poolsPending.clear();
         }
 
         {
@@ -932,6 +902,19 @@ namespace Ogre
 
         mainData.objCmdBuffer->execute();
         mainData.objCmdBuffer->clear();
+
+        {
+            StagingTextureVec::const_iterator itor = mainData.usedStagingTex.begin();
+            StagingTextureVec::const_iterator end  = mainData.usedStagingTex.end();
+
+            while( itor != end )
+            {
+                removeStagingTexture( *itor );
+                ++itor;
+            }
+
+            mainData.usedStagingTex.clear();
+        }
     }
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
@@ -974,6 +957,7 @@ namespace Ogre
             else
             {
                 mipLevelBitSet[i] = (1ul << numMips) - 1ul;
+                numMips = 0;
             }
         }
     }

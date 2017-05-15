@@ -75,6 +75,7 @@ THE SOFTWARE.
 
 #if OGRE_NO_FREEIMAGE == 0
 #include "OgreFreeImageCodec.h"
+#include "OgreFreeImageCodec2.h"
 #endif
 #if OGRE_NO_DDS_CODEC == 0
 #include "OgreDDSCodec.h"
@@ -242,7 +243,8 @@ namespace Ogre {
 #endif
 #if OGRE_NO_FREEIMAGE == 0
         // Register image codecs
-        FreeImageCodec::startup();
+        //FreeImageCodec::startup();
+        FreeImageCodec2::startup();
 #endif
 #if OGRE_NO_PVRTC_CODEC == 0
         PVRTCCodec::startup();
@@ -318,7 +320,8 @@ namespace Ogre {
         OGRE_DELETE mExternalTextureSourceManager;
 
 #if OGRE_NO_FREEIMAGE == 0
-        FreeImageCodec::shutdown();
+        //FreeImageCodec::shutdown();
+        FreeImageCodec2::shutdown();
 #endif
 #if OGRE_NO_DDS_CODEC == 0
         DDSCodec::shutdown();

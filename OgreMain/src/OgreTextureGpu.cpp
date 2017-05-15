@@ -133,6 +133,11 @@ namespace Ogre
         return mTextureType;
     }
     //-----------------------------------------------------------------------------------
+    TextureTypes::TextureTypes TextureGpu::getInternalTextureType(void) const
+    {
+        return mTexturePool ? mTexturePool->masterTexture->mTextureType : mTextureType;
+    }
+    //-----------------------------------------------------------------------------------
     void TextureGpu::setPixelFormat( PixelFormatGpu pixelFormat )
     {
         assert( mResidencyStatus == GpuResidency::OnStorage );

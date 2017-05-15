@@ -155,7 +155,7 @@ namespace Ogre
         if( srcBox.bytesPerRow > 0 )
             OCGE( glPixelStorei( GL_UNPACK_IMAGE_HEIGHT, srcBox.bytesPerImage / srcBox.bytesPerRow ) );
 
-        const TextureTypes::TextureTypes textureType = dstTexture->getTextureType();
+        const TextureTypes::TextureTypes textureType = dstTexture->getInternalTextureType();
         const PixelFormatGpu pixelFormat = dstTexture->getPixelFormat();
 
         assert( dynamic_cast<GL3PlusTextureGpu*>( dstTexture ) );

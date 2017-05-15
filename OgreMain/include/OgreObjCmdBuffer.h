@@ -96,7 +96,15 @@ namespace Ogre
                                      const TextureBox &_box,
                                      TextureGpu *_dstTexture,
                                      uint8 _mipLevel );
+            virtual void execute(void);
+        };
 
+        class NotifyDataIsReady : public Cmd
+        {
+            TextureGpu      *texture;
+
+        public:
+            NotifyDataIsReady( TextureGpu *_textureGpu );
             virtual void execute(void);
         };
     };

@@ -354,19 +354,20 @@ Pixmap GLXConfigurator::CreateBackdrop(Window rootWindow, int depth) {
         MemoryDataStream *imgStream;
         DataStreamPtr imgStreamPtr;
 
+        TODO;
         // Load backdrop image using OGRE
-        imgStream = new MemoryDataStream(const_cast<unsigned char*>(GLX_backdrop_data), sizeof(GLX_backdrop_data), false);
-        imgStreamPtr = DataStreamPtr(imgStream);
-        img.load(imgStreamPtr, imgType);
+//        imgStream = new MemoryDataStream(const_cast<unsigned char*>(GLX_backdrop_data), sizeof(GLX_backdrop_data), false);
+//        imgStreamPtr = DataStreamPtr(imgStream);
+//        img.load(imgStreamPtr, imgType);
 
-        PixelBox src = img.getPixelBox(0, 0);
+        //PixelBox src = img.getPixelBox(0, 0);
 
         // Convert and copy image
         data = (unsigned char*)malloc(mWidth * mHeight * bpl); // Must be allocated with malloc
 
-        PixelBox dst(src, bpl == 2 ? PF_B5G6R5 : PF_A8R8G8B8, data );
+        //PixelBox dst(src, bpl == 2 ? PF_B5G6R5 : PF_A8R8G8B8, data );
 
-        PixelUtil::bulkPixelConversion(src, dst);
+        //PixelUtil::bulkPixelConversion(src, dst);
     } catch(Exception &e) {
         // Could not find image; never mind
         LogManager::getSingleton().logMessage("WARNING: Can not load backdrop for config dialog. " + e.getDescription(), LML_TRIVIAL);

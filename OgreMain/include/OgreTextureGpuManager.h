@@ -59,7 +59,6 @@ namespace Ogre
     };
 
     typedef list<TexturePool>::type TexturePoolList;
-    typedef vector<TexturePool*>::type TexturePoolVec;
 
     typedef vector<StagingTexture*>::type StagingTextureVec;
 
@@ -164,7 +163,6 @@ namespace Ogre
 
         struct ThreadData
         {
-            TexturePoolVec  poolsPending;
             LoadRequestVec  loadRequests;
             ObjCmdBuffer    *objCmdBuffer;
             StagingTextureVec usedStagingTex;
@@ -176,7 +174,6 @@ namespace Ogre
             UsageStatsVec       usageStats;
         };
 
-        LightweightMutex    mPoolsPendingMutex;
         LightweightMutex    mLoadRequestsMutex;
         LightweightMutex    mMutex;
         ThreadData          mThreadData[2];
@@ -241,7 +238,9 @@ namespace Ogre
         TextureGpuManager( VaoManager *vaoManager );
         virtual ~TextureGpuManager();
 
+        /// Must be called from main thread.
         void _reserveSlotForTexture( TextureGpu *texture );
+        /// Must be called from main thread.
         void _releaseSlotFromTexture( TextureGpu *texture );
 
         void _updateStreaming(void);
@@ -290,6 +289,16 @@ namespace Ogre
 
         const String* findNameStr( IdString idName ) const;
 
+        /**
+        @brief loadFromFile
+        @param name
+        @param resourceGroup
+        @param pageOutStrategy
+            See GpuPageOutStrategy::GpuPageOutStrategy
+        @param textureFlags
+            See TextureFlags::TextureFlags
+        @return
+        */
         TextureGpu* loadFromFile( const String &name, const String &resourceGroup,
                                   GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                   uint32 textureFlags );
