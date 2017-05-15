@@ -30,6 +30,7 @@ THE SOFTWARE.
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreTextureGpuManager.h"
 #include "OgreTextureBox.h"
+#include "OgreTextureGpuListener.h"
 
 #include "OgreException.h"
 
@@ -63,6 +64,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     TextureGpu::~TextureGpu()
     {
+        assert( mListeners.empty() && "There are listeners out there for this TextureGpu! "
+                "This could leave dangling pointers. Ensure you've cleaned up correctly." );
     }
     //-----------------------------------------------------------------------------------
     String TextureGpu::getNameStr(void) const
@@ -135,7 +138,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     TextureTypes::TextureTypes TextureGpu::getInternalTextureType(void) const
     {
-        return mTexturePool ? mTexturePool->masterTexture->mTextureType : mTextureType;
+        return hasAutomaticBatching() ? TextureTypes::Type2DArray : mTextureType;
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::setPixelFormat( PixelFormatGpu pixelFormat )
@@ -300,6 +303,7 @@ namespace Ogre
             }
 
             transitionToResident();
+            notifyAllListenersTextureChanged( TextureGpuListener::GainedResidency );
         }
         else if( newResidency == GpuResidency::OnSystemRam )
         {
@@ -311,6 +315,8 @@ namespace Ogre
                 assert( sysRamCopy &&
                         "Must provide a SysRAM copy when transitioning from OnStorage to OnSystemRam!" );
                 mSysRamCopy = sysRamCopy;
+
+                notifyAllListenersTextureChanged( TextureGpuListener::FromStorageToSysRam );
             }
             else
             {
@@ -320,6 +326,8 @@ namespace Ogre
 
                 if( !mSysRamCopy )
                     TODO_Create_download_ticket;
+
+                notifyAllListenersTextureChanged( TextureGpuListener::LostResidency );
             }
         }
         else
@@ -331,6 +339,8 @@ namespace Ogre
             }
 
             destroyInternalResourcesImpl();
+
+            notifyAllListenersTextureChanged( TextureGpuListener::LostResidency );
         }
 
         mResidencyStatus = newResidency;
@@ -383,6 +393,31 @@ namespace Ogre
     {
         mTexturePool = newPool;
         mInternalSliceStart = slice;
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpu::addListener( TextureGpuListener *listener )
+    {
+        mListeners.push_back( listener );
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpu::removeListener( TextureGpuListener *listener )
+    {
+        vector<TextureGpuListener*>::type::iterator itor = std::find( mListeners.begin(),
+                                                                      mListeners.end(), listener );
+        assert( itor != mListeners.end() );
+        efficientVectorRemove( mListeners, itor );
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpu::notifyAllListenersTextureChanged( uint32 reason )
+    {
+        vector<TextureGpuListener*>::type::iterator itor = mListeners.begin();
+        vector<TextureGpuListener*>::type::iterator end  = mListeners.end();
+
+        while( itor != end )
+        {
+            (*itor)->notifyTextureChanged( this, static_cast<TextureGpuListener::Reason>( reason ) );
+            ++itor;
+        }
     }
     //-----------------------------------------------------------------------------------
     uint8* TextureGpu::_getSysRamCopy(void)

@@ -208,7 +208,7 @@ namespace Ogre
         uint32  mBrdf;
 
         void scheduleConstBufferUpdate(void);
-        virtual void uploadToConstBuffer( char *dstPtr );
+        virtual void uploadToConstBuffer( char *dstPtr, uint8 dirtyFlags );
         virtual void notifyOptimizationStrategyChanged(void);
 
         /// Sets the appropiate mTexIndices[textureType], and returns the texture pointer

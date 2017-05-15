@@ -328,6 +328,7 @@ namespace Ogre {
     class Texture;
     struct TextureBox;
     class TextureGpu;
+    class TextureGpuListener;
     class TextureGpuManager;
     class TextureManager;
     struct TexturePool;

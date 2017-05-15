@@ -205,9 +205,6 @@ namespace Ogre
             }
         }
 
-        updateDescriptorSets( true, true );
-        calculateHash();
-
         //Use the same hash for everything (the number of materials per buffer is high)
         creator->requestSlot( mNumEnabledAnimationMatrices != 0, this,
                               mNumEnabledAnimationMatrices != 0 );
@@ -217,6 +214,12 @@ namespace Ogre
     {
         if( mAssignedPool )
             static_cast<HlmsUnlit*>(mCreator)->releaseSlot( this );
+
+        for( size_t i=0; i<NUM_UNLIT_TEXTURE_TYPES; ++i )
+        {
+            if( mTextures[i] )
+                mTextures[i]->removeListener( this );
+        }
 
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
         if( hlmsManager )
@@ -272,16 +275,28 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void HlmsUnlitDatablock::scheduleConstBufferUpdate(void)
+    void HlmsUnlitDatablock::scheduleConstBufferUpdate( bool updateTextures, bool updateSamplers )
     {
-        static_cast<HlmsUnlit*>(mCreator)->scheduleForUpdate( this );
+        uint8 flags = ConstBufferPool::DirtyConstBuffer;
+        if( updateTextures )
+            flags |= ConstBufferPool::DirtyTextures;
+        if( updateSamplers )
+            flags |= ConstBufferPool::DirtySamplers;
+
+        static_cast<HlmsUnlit*>(mCreator)->scheduleForUpdate( this, flags );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsUnlitDatablock::uploadToConstBuffer( char *dstPtr )
+    void HlmsUnlitDatablock::uploadToConstBuffer( char *dstPtr, uint8 dirtyFlags )
     {
         memcpy( dstPtr, &mAlphaTestThreshold, sizeof( float ) );
         dstPtr += 4 * sizeof(float);
         memcpy( dstPtr, &mR, MaterialSizeInGpu - 4 * sizeof(float) );
+
+        if( dirtyFlags & (ConstBufferPool::DirtyTextures|ConstBufferPool::DirtySamplers) )
+        {
+            updateDescriptorSets( (dirtyFlags & ConstBufferPool::DirtyTextures) != 0,
+                                  (dirtyFlags & ConstBufferPool::DirtySamplers) != 0 );
+        }
     }
     //-----------------------------------------------------------------------------------
     void HlmsUnlitDatablock::uploadToExtraBuffer( char *dstPtr )
@@ -311,7 +326,10 @@ namespace Ogre
             needsRecalculateHash |= bakeSamplers();
 
         if( needsRecalculateHash )
+        {
             calculateHash();
+            flushRenderables();
+        }
     }
     //-----------------------------------------------------------------------------------
     bool OrderTextureByPoolAndName( const TextureGpu *_a, const TextureGpu *_b )
@@ -384,7 +402,6 @@ namespace Ogre
         {
             hlmsManager->destroyDescriptorSetTexture( mTexturesDescSet );
             mTexturesDescSet = 0;
-            flushRenderables();
             needsRecalculateHash = true;
             if( !hasSeparateSamplers )
             {
@@ -399,7 +416,6 @@ namespace Ogre
             if( !baseSet.mTextures.empty() )
             {
                 mTexturesDescSet = hlmsManager->getDescriptorSetTexture( baseSet );
-                flushRenderables();
                 needsRecalculateHash = true;
             }
             if( !hasSeparateSamplers )
@@ -495,8 +511,8 @@ namespace Ogre
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "TODO: REMOVE ME", "" );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsUnlitDatablock::setTexture( uint8 texType, const TextureGpu *texture,
-                                         const HlmsSamplerblock *refParams, bool bUpdateDescriptorSets )
+    void HlmsUnlitDatablock::setTexture( uint8 texType, TextureGpu *texture,
+                                         const HlmsSamplerblock *refParams )
     {
         assert( texType < NUM_UNLIT_TEXTURE_TYPES );
 
@@ -513,13 +529,21 @@ namespace Ogre
 
             TexturePool const *prevPool = 0;
             if( mTextures[texType] )
+            {
                 prevPool = mTextures[texType]->getTexturePool();
+                mTextures[texType]->removeListener( this );
+            }
 
             mTextures[texType] = texture;
             mTexIndices[texType] = texture->getInternalSliceStart();
 
-            if( texture && prevPool != texture->getTexturePool() )
-                textureSetDirty = true;
+            if( texture )
+            {
+                if( prevPool != texture->getTexturePool() )
+                    textureSetDirty = true;
+
+                texture->addListener( this );
+            }
 
             scheduleConstBufferUpdate();
         }
@@ -546,11 +570,11 @@ namespace Ogre
             samplerSetDirty = true;
         }
 
-        if( bUpdateDescriptorSets )
-            updateDescriptorSets( textureSetDirty, samplerSetDirty );
+        if( textureSetDirty || samplerSetDirty )
+            scheduleConstBufferUpdate( textureSetDirty, samplerSetDirty );
     }
     //-----------------------------------------------------------------------------------
-    const TextureGpu* HlmsUnlitDatablock::getTexture( uint8 texType ) const
+    TextureGpu* HlmsUnlitDatablock::getTexture( uint8 texType ) const
     {
         assert( texType < NUM_UNLIT_TEXTURE_TYPES );
         return mTextures[texType];
@@ -570,7 +594,7 @@ namespace Ogre
         mSamplerblocks[texType] = hlmsManager->getSamplerblock( params );
 
         if( oldSamplerblock != mSamplerblocks[texType] )
-            updateDescriptorSets( false, true );
+            scheduleConstBufferUpdate( false, true );
 
         if( oldSamplerblock )
             hlmsManager->destroySamplerblock( oldSamplerblock );
@@ -674,7 +698,7 @@ namespace Ogre
         assert( texType < NUM_UNLIT_TEXTURE_TYPES );
         uint8 retVal = NUM_UNLIT_TEXTURE_TYPES;
 
-        const TextureGpu *texture = mTextures[texType];
+        TextureGpu *texture = mTextures[texType];
         if( texture )
         {
             FastArray<const TextureGpu*>::const_iterator itor =
@@ -727,5 +751,14 @@ namespace Ogre
         }
 
         return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsUnlitDatablock::notifyTextureChanged( TextureGpu *texture,
+                                                   TextureGpuListener::Reason reason )
+    {
+        if( reason == TextureGpuListener::FromStorageToSysRam )
+            return; //Does not affect us at all.
+
+        scheduleConstBufferUpdate( true, false );
     }
 }

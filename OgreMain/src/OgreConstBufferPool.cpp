@@ -108,7 +108,7 @@ namespace Ogre
                 (*itor)->mAssignedSlot  = 0;
                 (*itor)->mAssignedPool  = 0;
                 (*itor)->mGlobalIndex   = -1;
-                (*itor)->mDirty         = false;
+                (*itor)->mDirtyFlags    = DirtyNone;
                 ++itor;
             }
 
@@ -147,10 +147,10 @@ namespace Ogre
             const size_t srcOffset = static_cast<size_t>( data - bufferStart );
             const size_t dstOffset = (*itor)->getAssignedSlot() * materialSizeInGpu;
 
-            (*itor)->uploadToConstBuffer( data );
+            uint8 dirtyFlags = (*itor)->mDirtyFlags;
+            (*itor)->mDirtyFlags = DirtyNone;
+            (*itor)->uploadToConstBuffer( data, dirtyFlags );
             data += materialSizeInGpu;
-
-            (*itor)->mDirty = false;
 
             const BufferPool *usersPool = (*itor)->getAssignedPool();
 
@@ -286,14 +286,14 @@ namespace Ogre
 
         pool->freeSlots.pop_back();
 
-        scheduleForUpdate( user );
+        scheduleForUpdate( user, 0xff );
     }
     //-----------------------------------------------------------------------------------
     void ConstBufferPool::releaseSlot( ConstBufferPoolUser *user )
     {
         BufferPool *pool = user->mAssignedPool;
 
-        if( user->mDirty )
+        if( user->mDirtyFlags != DirtyNone )
         {
             ConstBufferPoolUserVec::iterator it = std::find( mDirtyUsers.begin(),
                                                              mDirtyUsers.end(), user );
@@ -311,7 +311,7 @@ namespace Ogre
         user->mAssignedSlot = 0;
         user->mAssignedPool = 0;
         //user->mPoolOwner    = 0;
-        user->mDirty        = false;
+        user->mDirtyFlags   = DirtyNone;
 
         assert( user->mGlobalIndex < mUsers.size() && user == *(mUsers.begin() + user->mGlobalIndex) &&
                 "mGlobalIndex out of date or argument doesn't belong to this pool manager" );
@@ -323,13 +323,13 @@ namespace Ogre
             (*itor)->mGlobalIndex = itor - mUsers.begin();
     }
     //-----------------------------------------------------------------------------------
-    void ConstBufferPool::scheduleForUpdate( ConstBufferPoolUser *dirtyUser )
+    void ConstBufferPool::scheduleForUpdate( ConstBufferPoolUser *dirtyUser, uint8 dirtyFlags )
     {
-        if( !dirtyUser->mDirty )
-        {
+        assert( dirtyFlags != DirtyNone );
+
+        if( dirtyUser->mDirtyFlags == DirtyNone )
             mDirtyUsers.push_back( dirtyUser );
-            dirtyUser->mDirty = true;
-        }
+        dirtyUser->mDirtyFlags |= dirtyFlags;
     }
     //-----------------------------------------------------------------------------------
     size_t ConstBufferPool::getPoolIndex( ConstBufferPoolUser *user ) const
@@ -464,7 +464,7 @@ namespace Ogre
         mAssignedPool( 0 ),
         //mPoolOwner( 0 ),
         mGlobalIndex( -1 ),
-        mDirty( false )
+        mDirtyFlags( ConstBufferPool::DirtyNone )
     {
     }
 }

@@ -360,7 +360,7 @@ namespace Ogre
         static_cast<HlmsPbs*>(mCreator)->scheduleForUpdate( this );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsPbsDatablock::uploadToConstBuffer( char *dstPtr )
+    void HlmsPbsDatablock::uploadToConstBuffer( char *dstPtr, uint8 dirtyFlags )
     {
         _padding0 = mAlphaTestThreshold;
         float oldFresnelR = mFresnelR;

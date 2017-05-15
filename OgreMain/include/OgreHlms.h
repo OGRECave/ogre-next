@@ -299,7 +299,7 @@ namespace Ogre
         virtual HlmsDatablock* createDatablockImpl( IdString datablockName,
                                                     const HlmsMacroblock *macroblock,
                                                     const HlmsBlendblock *blendblock,
-                                                    const HlmsParamVec &paramVec );
+                                                    const HlmsParamVec &paramVec ) = 0;
 
         virtual HlmsDatablock* createDefaultDatablock(void);
         void _destroyAllDatablocks(void);

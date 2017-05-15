@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "OgreHlmsDatablock.h"
 #include "OgreHlmsTextureManager.h"
 #include "OgreConstBufferPool.h"
+#include "OgreTextureGpuListener.h"
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
@@ -45,7 +46,8 @@ namespace Ogre
 
     /** Contains information needed by PBS (Physically Based Shading) for OpenGL 3+ & D3D11+
     */
-    class _OgreHlmsUnlitExport HlmsUnlitDatablock : public HlmsDatablock, public ConstBufferPoolUser
+    class _OgreHlmsUnlitExport HlmsUnlitDatablock : public HlmsDatablock, public ConstBufferPoolUser,
+                                                    public TextureGpuListener
     {
         friend class HlmsUnlit;
     public:
@@ -71,18 +73,20 @@ namespace Ogre
 
         uint8   mTextureSwizzles[NUM_UNLIT_TEXTURE_TYPES];
 
-        TextureGpu const        *mTextures[NUM_UNLIT_TEXTURE_TYPES];
+        TextureGpu              *mTextures[NUM_UNLIT_TEXTURE_TYPES];
         HlmsSamplerblock const  *mSamplerblocks[NUM_UNLIT_TEXTURE_TYPES];
 
-        void scheduleConstBufferUpdate(void);
-        virtual void uploadToConstBuffer( char *dstPtr );
+        void scheduleConstBufferUpdate( bool updateTextures=false, bool updateSamplers=false );
+        virtual void uploadToConstBuffer( char *dstPtr, uint8 dirtyFlags );
         virtual void uploadToExtraBuffer( char *dstPtr );
 
         void updateDescriptorSets( bool textureSetDirty, bool samplerSetDirty );
 
         void setTexture( uint8 texUnit, const String &name );
 
+        /// Expects caller to call flushRenderables if we return true.
         bool bakeTextures( bool hasSeparateSamplers );
+        /// Expects caller to call flushRenderables if we return true.
         bool bakeSamplers(void);
 
     public:
@@ -142,7 +146,7 @@ namespace Ogre
         virtual ~HlmsUnlitDatablock();
 
         /// Controls whether the value in @see setColour is used.
-        /// Calling this function implies calling @see HlmsDatablock::flushRenderables.
+        /// Calling this function implies calling see HlmsDatablock::flushRenderables.
         void setUseColour( bool useColour );
 
         /// If this returns false, the values of mR, mG, mB & mA will be ignored.
@@ -190,19 +194,9 @@ namespace Ogre
             Optional. We'll create (or retrieve an existing) samplerblock based on the input parameters.
             When null, we leave the previously set samplerblock (if a texture is being set, and if no
             samplerblock was set, we'll create a default one)
-        @param bUpdateDescriptorSets
-            Default value is true. When false, it can be used as an optimization if you're changing
-            all textures at once. For example:
-                setTexture( 0, tex0, refParams, false );
-                setTexture( 1, tex1, refParams, false );
-                setTexture( 2, tex2, refParams, true ); //Update desc sets on the last one.
-            This is merely a performance optimization when you know you will be updating
-            multiple textures. But beware that failing to update the descriptor sets once you're
-            done setting all the textures will result in undefined behavior.
         */
-        void setTexture( uint8 texType, const TextureGpu *texture, const HlmsSamplerblock *refParams=0,
-                         bool bUpdateDescriptorSets=true );
-        const TextureGpu* getTexture( uint8 texType ) const;
+        void setTexture( uint8 texType, TextureGpu *texture, const HlmsSamplerblock *refParams=0 );
+        TextureGpu* getTexture( uint8 texType ) const;
 
         /** Sets the final swizzle when sampling the given texture. e.g.
             calling setTextureSwizzle( 0, R_MASK, G_MASK, R_MASK, G_MASK );
@@ -279,6 +273,8 @@ namespace Ogre
         /// If not set, then just the result value from getIndexToDescriptorTexture
         /// instead
         uint8 getIndexToDescriptorSampler( uint8 texType );
+
+        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason );
 
         virtual void calculateHash();
 

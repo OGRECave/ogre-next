@@ -165,8 +165,7 @@ namespace Ogre
                 int numArrayTextures = 0;
                 while( itor != end )
                 {
-                    if( (*itor)->getTextureType() == TextureTypes::Type2DArray ||
-                        (*itor)->getTexturePool() )
+                    if( (*itor)->getInternalTextureType() == TextureTypes::Type2DArray )
                     {
                         psParams->setNamedConstant( "textureMapsArray[" +
                                                     StringConverter::toString( numArrayTextures++ ) +
@@ -220,8 +219,7 @@ namespace Ogre
             setProperty( propertyName.c_str(), idx );
 
             const TextureGpu *texture = datablock->getTexture( texType );
-            if( texture && (texture->getTextureType() == TextureTypes::Type2DArray ||
-                            texture->getTexturePool()) )
+            if( texture && texture->getInternalTextureType() == TextureTypes::Type2DArray )
             {
                 propertyName.resize( basePropSize );
                 propertyName.a( "_array" );             //diffuse_map0_array
@@ -235,6 +233,22 @@ namespace Ogre
                 propertyName.a( "_sampler" );           //diffuse_map0_sampler
                 setProperty( propertyName.c_str(), samplerIdx );
             }
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsUnlit::calculateHashFor( Renderable *renderable, uint32 &outHash, uint32 &outCasterHash )
+    {
+        assert( dynamic_cast<HlmsUnlitDatablock*>( renderable->getDatablock() ) );
+        HlmsUnlitDatablock *datablock = static_cast<HlmsUnlitDatablock*>( renderable->getDatablock() );
+        if( datablock->getDirtyFlags() & (DirtyTextures|DirtySamplers) )
+        {
+            //Delay hash generation for later, when we have the final (or temporary) descriptor sets.
+            outHash = 0;
+            outCasterHash = 0;
+        }
+        else
+        {
+            Hlms::calculateHashFor( renderable, outHash, outCasterHash );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -272,7 +286,7 @@ namespace Ogre
             {
                 char tmpBuffer[64];
                 LwString propName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
-                if( (*itor)->getTextureType() == TextureTypes::Type2DArray || (*itor)->getTexturePool() )
+                if( (*itor)->getInternalTextureType() == TextureTypes::Type2DArray )
                 {
                     propName.a( "array_texture_bind", numArrayTextures );
                     ++numArrayTextures;

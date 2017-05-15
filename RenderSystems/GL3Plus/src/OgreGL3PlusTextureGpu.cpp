@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "OgreGL3PlusTextureGpuManager.h"
 #include "OgreGL3PlusSupport.h"
 
+#include "OgreTextureGpuListener.h"
 #include "OgreTextureBox.h"
 #include "OgreVector2.h"
 
@@ -197,6 +198,8 @@ namespace Ogre
         assert( mFinalTextureName );
 
         mDisplayTextureName = mFinalTextureName;
+
+        notifyAllListenersTextureChanged( TextureGpuListener::ReadyForDisplay );
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusTextureGpu::_setToDisplayDummyTexture(void)
@@ -204,9 +207,15 @@ namespace Ogre
         GL3PlusTextureGpuManager *textureManagerGl =
                 static_cast<GL3PlusTextureGpuManager*>( mTextureManager );
         if( hasAutomaticBatching() )
+        {
             mDisplayTextureName = textureManagerGl->getBlankTextureGlName( TextureTypes::Type2DArray );
+            mGlTextureTarget = GL_TEXTURE_2D_ARRAY;
+        }
         else
+        {
             mDisplayTextureName = textureManagerGl->getBlankTextureGlName( mTextureType );
+            mGlTextureTarget = GL3PlusMappings::get( mTextureType );
+        }
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusTextureGpu::_notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice )
@@ -223,6 +232,8 @@ namespace Ogre
             GL3PlusTextureGpu *masterTexture = static_cast<GL3PlusTextureGpu*>(mTexturePool->masterTexture);
             mFinalTextureName = masterTexture->mFinalTextureName;
         }
+
+        notifyAllListenersTextureChanged( TextureGpuListener::PoolTextureSlotChanged );
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusTextureGpu::copyTo( TextureGpu *dst, const TextureBox &srcBox, uint8 srcMipLevel,

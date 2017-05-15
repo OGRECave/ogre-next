@@ -1432,14 +1432,6 @@ namespace Ogre
         return mRenderableCache[(hash >> HlmsBits::RenderableShift) & HlmsBits::RenderableMask];
     }
     //-----------------------------------------------------------------------------------
-    HlmsDatablock* Hlms::createDatablockImpl( IdString datablockName,
-                                              const HlmsMacroblock *macroblock,
-                                              const HlmsBlendblock *blendblock,
-                                              const HlmsParamVec &paramVec )
-    {
-        return OGRE_NEW HlmsDatablock( datablockName, this, macroblock, blendblock, paramVec );
-    }
-    //-----------------------------------------------------------------------------------
     HlmsDatablock* Hlms::createDefaultDatablock(void)
     {
         return createDatablock( IdString(), "[Default]",

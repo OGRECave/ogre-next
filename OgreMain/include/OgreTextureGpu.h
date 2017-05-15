@@ -162,6 +162,8 @@ namespace Ogre
         /// Used if hasAutomaticBatching() == true
         TexturePool const   *mTexturePool;
 
+        vector<TextureGpuListener*>::type mListeners;
+
         virtual void createInternalResourcesImpl(void) = 0;
         virtual void destroyInternalResourcesImpl(void) = 0;
 
@@ -253,6 +255,10 @@ namespace Ogre
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
 
         const TexturePool* getTexturePool(void) const           { return mTexturePool; }
+
+        void addListener( TextureGpuListener *listener );
+        void removeListener( TextureGpuListener *listener );
+        void notifyAllListenersTextureChanged( uint32 reason );
 
         uint8* _getSysRamCopy(void);
         size_t _getSysRamCopyBytesPerRow(void);
