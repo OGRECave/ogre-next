@@ -288,15 +288,16 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsUnlitDatablock::uploadToConstBuffer( char *dstPtr, uint8 dirtyFlags )
     {
-        memcpy( dstPtr, &mAlphaTestThreshold, sizeof( float ) );
-        dstPtr += 4 * sizeof(float);
-        memcpy( dstPtr, &mR, MaterialSizeInGpu - 4 * sizeof(float) );
-
         if( dirtyFlags & (ConstBufferPool::DirtyTextures|ConstBufferPool::DirtySamplers) )
         {
+            //Must be called first so mTexIndices[i] gets updated before uploading to GPU.
             updateDescriptorSets( (dirtyFlags & ConstBufferPool::DirtyTextures) != 0,
                                   (dirtyFlags & ConstBufferPool::DirtySamplers) != 0 );
         }
+
+        memcpy( dstPtr, &mAlphaTestThreshold, sizeof( float ) );
+        dstPtr += 4 * sizeof(float);
+        memcpy( dstPtr, &mR, MaterialSizeInGpu - 4 * sizeof(float) );
     }
     //-----------------------------------------------------------------------------------
     void HlmsUnlitDatablock::uploadToExtraBuffer( char *dstPtr )
@@ -361,13 +362,8 @@ namespace Ogre
 
                 const size_t idx = itor - baseSet.mTextures.begin();
 
-                if( mTextures[i]->getTexturePool() &&
-                    mTexIndices[i] != mTextures[i]->getInternalSliceStart() )
-                {
-                    //May have changed if the TextureGpuManager updated the Texture.
-                    mTexIndices[i] = mTextures[i]->getInternalSliceStart();
-                    scheduleConstBufferUpdate();
-                }
+                //May have changed if the TextureGpuManager updated the Texture.
+                mTexIndices[i] = mTextures[i]->getInternalSliceStart();
 
                 if( itor == baseSet.mTextures.end() || (*itor) != mTextures[i] )
                 {
