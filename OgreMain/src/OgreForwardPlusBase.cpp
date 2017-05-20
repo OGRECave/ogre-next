@@ -30,6 +30,7 @@ THE SOFTWARE.
 
 #include "OgreForwardPlusBase.h"
 #include "OgreSceneManager.h"
+#include "OgreViewport.h"
 
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreTexBufferPacked.h"
@@ -47,6 +48,9 @@ namespace Ogre
         mDebugMode( false ),
         mFadeAttenuationRange( true ),
         mEnableVpls( false )
+  #if !OGRE_NO_FINE_LIGHT_MASK_GRANULARITY
+    ,   mFineLightMaskGranularity( true )
+  #endif
     {
     }
     //-----------------------------------------------------------------------------------
@@ -164,6 +168,9 @@ namespace Ogre
             *lightData++ = colour.r;
             *lightData++ = colour.g;
             *lightData++ = colour.b;
+#if !OGRE_NO_FINE_LIGHT_MASK_GRANULARITY
+            *reinterpret_cast<uint32 * RESTRICT_ALIAS>( lightData ) = light->getLightMask();
+#endif
             ++lightData;
 
             //vec3 lights[numLights].specular
@@ -208,6 +215,8 @@ namespace Ogre
     {
         const CompositorShadowNode *shadowNode = mSceneManager->getCurrentShadowNode();
 
+        const uint32 visibilityMask = camera->getLastViewport()->getLightVisibilityMask();
+
         CachedGridVec::iterator itor = mCachedGrid.begin();
         CachedGridVec::iterator end  = mCachedGrid.end();
 
@@ -216,6 +225,7 @@ namespace Ogre
             if( itor->camera == camera &&
                 itor->reflection == camera->isReflected() &&
                 (itor->aspectRatio - camera->getAspectRatio()) < 1e-6f &&
+                itor->visibilityMask == visibilityMask &&
                 itor->shadowNode == shadowNode )
             {
                 bool upToDate = itor->lastFrame == mVaoManager->getFrameCount();
@@ -262,6 +272,7 @@ namespace Ogre
         cachedGrid.lastRot     = camera->getDerivedOrientation();
         cachedGrid.reflection  = camera->isReflected();
         cachedGrid.aspectRatio = camera->getAspectRatio();
+        cachedGrid.visibilityMask = visibilityMask;
         cachedGrid.shadowNode  = mSceneManager->getCurrentShadowNode();
         cachedGrid.lastFrame   = mVaoManager->getFrameCount();
         cachedGrid.currentBufIdx = 0;
@@ -276,6 +287,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool ForwardPlusBase::getCachedGridFor( Camera *camera, const CachedGrid **outCachedGrid ) const
     {
+        const uint32 visibilityMask = camera->getLastViewport()->getLightVisibilityMask();
+
         CachedGridVec::const_iterator itor = mCachedGrid.begin();
         CachedGridVec::const_iterator end  = mCachedGrid.end();
 
@@ -284,6 +297,7 @@ namespace Ogre
             if( itor->camera == camera &&
                 itor->reflection == camera->isReflected() &&
                 (itor->aspectRatio - camera->getAspectRatio()) < 1e-6f &&
+                itor->visibilityMask == visibilityMask &&
                 itor->shadowNode == mSceneManager->getCurrentShadowNode() )
             {
                 bool upToDate = itor->lastFrame == mVaoManager->getFrameCount() &&
@@ -388,5 +402,10 @@ namespace Ogre
 
         if( mEnableVpls )
             hlms->_setProperty( HlmsBaseProp::EnableVpls, 1 );
+
+#if !OGRE_NO_FINE_LIGHT_MASK_GRANULARITY
+        if( mFineLightMaskGranularity )
+            hlms->_setProperty( HlmsBaseProp::ForwardPlusFineLightMask, 1 );
+#endif
     }
 }

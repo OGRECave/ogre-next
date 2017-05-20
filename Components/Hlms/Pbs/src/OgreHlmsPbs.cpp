@@ -92,6 +92,7 @@ namespace Ogre
     const IdString PbsProperty::FresnelWorkflow   = IdString( "fresnel_workflow" );
     const IdString PbsProperty::MetallicWorkflow  = IdString( "metallic_workflow" );
     const IdString PbsProperty::TwoSidedLighting  = IdString( "two_sided_lighting" );
+    const IdString PbsProperty::ReceiveShadows    = IdString( "receive_shadows" );
 
     const IdString PbsProperty::NormalWeight          = IdString( "normal_weight" );
     const IdString PbsProperty::NormalWeightTex       = IdString( "normal_weight_tex" );
@@ -338,19 +339,25 @@ namespace Ogre
 
             if( !mPreparedPass.shadowMaps.empty() )
             {
-                char tmpData[32];
-                LwString texName = LwString::FromEmptyPointer( tmpData, sizeof(tmpData) );
-                texName = "texShadowMap";
-                const size_t baseTexSize = texName.size();
-
-                vector<int>::type shadowMaps;
-                shadowMaps.reserve( mPreparedPass.shadowMaps.size() );
-                for( size_t i=0; i<mPreparedPass.shadowMaps.size(); ++i )
+                if( getProperty( HlmsBaseProp::NumShadowMapLights ) != 0 )
                 {
-                    texName.resize( baseTexSize );
-                    texName.a( (uint32)i );   //texShadowMap0
-                    psParams->setNamedConstant( texName.c_str(), &texUnit, 1, 1 );
-                    shadowMaps.push_back( texUnit++ );
+                    char tmpData[32];
+                    LwString texName = LwString::FromEmptyPointer( tmpData, sizeof(tmpData) );
+                    texName = "texShadowMap";
+                    const size_t baseTexSize = texName.size();
+
+                    for( size_t i=0; i<mPreparedPass.shadowMaps.size(); ++i )
+                    {
+                        texName.resize( baseTexSize );
+                        texName.a( (uint32)i );   //texShadowMap0
+                        psParams->setNamedConstant( texName.c_str(), &texUnit, 1, 1 );
+                        ++texUnit;
+                    }
+                }
+                else
+                {
+                    //No visible lights casting shadow maps.
+                    texUnit += mPreparedPass.shadowMaps.size();
                 }
             }
 
@@ -511,6 +518,9 @@ namespace Ogre
 
         if( datablock->getTwoSidedLighting() )
             setProperty( PbsProperty::TwoSidedLighting, 1 );
+
+        if( datablock->getReceiveShadows() )
+            setProperty( PbsProperty::ReceiveShadows, 1 );
 
         uint32 brdf = datablock->getBrdf();
         if( (brdf & PbsBrdf::BRDF_MASK) == PbsBrdf::Default )
@@ -1373,6 +1383,8 @@ namespace Ogre
             mTexUnitSlotStart += 1;
         if( mPrePassTextures )
             mTexUnitSlotStart += 2;
+        if( mPrePassMsaaDepthTexture )
+            mTexUnitSlotStart += 1;
         if( mSsrTexture )
             mTexUnitSlotStart += 1;
 
@@ -1725,6 +1737,9 @@ namespace Ogre
 
         *reinterpret_cast<float * RESTRICT_ALIAS>( currentMappedConstBuffer+1 ) = datablock->
                                                                                     mShadowConstantBias;
+#if !OGRE_NO_FINE_LIGHT_MASK_GRANULARITY
+        *( currentMappedConstBuffer+2u ) = queuedRenderable.movableObject->getLightMask();
+#endif
         currentMappedConstBuffer += 4;
 
         //---------------------------------------------------------------------------
