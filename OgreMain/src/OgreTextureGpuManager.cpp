@@ -72,7 +72,6 @@ namespace Ogre
             //Scan the low 32 bits.
             _BitScanForward( &trailingZero, static_cast<uint32>(value) );
         #else
-            unsigned long trailingZero = 0;
             _BitScanForward64( &trailingZero, value );
         #endif
         return trailingZero;
