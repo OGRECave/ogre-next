@@ -278,9 +278,7 @@ namespace Ogre
         case PFG_R10G10B10A2_UNORM:
         case PFG_R9G9B9E5_SHAREDEXP:
         case PFG_R8G8_B8G8_UNORM:
-        case PFG_B5G5R5A1_UNORM:
         case PFG_R10G10B10_XR_BIAS_A2_UNORM:
-        case PFG_B4G4R4A4_UNORM:
             format = GL_RGBA;
             break;
         case PFG_RGBA32_UINT:
@@ -297,6 +295,8 @@ namespace Ogre
         case PFG_BGRX8_UNORM:
         case PFG_BGRA8_UNORM_SRGB:
         case PFG_BGRX8_UNORM_SRGB:
+        case PFG_B5G5R5A1_UNORM:
+        case PFG_B4G4R4A4_UNORM:
             format = GL_BGRA;
             break;
         case PFG_AYUV:
@@ -479,7 +479,7 @@ namespace Ogre
             break;
 
         case PFG_B5G6R5_UNORM:
-            type = GL_UNSIGNED_SHORT_5_6_5_REV;
+            type = GL_UNSIGNED_SHORT_5_6_5;
             break;
         case PFG_B5G5R5A1_UNORM:
             type = GL_UNSIGNED_SHORT_1_5_5_5_REV;
@@ -488,7 +488,7 @@ namespace Ogre
         case PFG_BGRX8_UNORM:
         case PFG_BGRA8_UNORM_SRGB:
         case PFG_BGRX8_UNORM_SRGB:
-            type = GL_UNSIGNED_INT_8_8_8_8;
+            type = GL_UNSIGNED_INT_8_8_8_8_REV;
             break;
         case PFG_B4G4R4A4_UNORM:
             type = GL_UNSIGNED_SHORT_4_4_4_4_REV;

@@ -297,96 +297,6 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    /*void PixelFormatGpuUtils::packColour( float r, float g, float b, float a,
-                                          PixelFormatGpu pf, void* dest )
-    {
-        // Catch-it-all here
-        const PixelFormatDescription &des = getDescriptionFor(pf);
-        if(des.flags & PFF_NATIVEENDIAN) {
-            // Do the packing
-            //std::cerr << dest << " " << r << " " << g <<  " " << b << " " << a << std::endl;
-            const unsigned int value = ((Bitwise::floatToFixed(r, des.rbits)<<des.rshift) & des.rmask) |
-                ((Bitwise::floatToFixed(g, des.gbits)<<des.gshift) & des.gmask) |
-                ((Bitwise::floatToFixed(b, des.bbits)<<des.bshift) & des.bmask) |
-                ((Bitwise::floatToFixed(a, des.abits)<<des.ashift) & des.amask);
-            // And write to memory
-            Bitwise::intWrite(dest, des.elemBytes, value);
-        } else {
-            switch(pf)
-            {
-            case PF_FLOAT32_R:
-                ((float*)dest)[0] = r;
-                break;
-            case PF_FLOAT32_GR:
-                ((float*)dest)[0] = g;
-                ((float*)dest)[1] = r;
-                break;
-            case PF_FLOAT32_RGB:
-                ((float*)dest)[0] = r;
-                ((float*)dest)[1] = g;
-                ((float*)dest)[2] = b;
-                break;
-            case PF_FLOAT32_RGBA:
-                ((float*)dest)[0] = r;
-                ((float*)dest)[1] = g;
-                ((float*)dest)[2] = b;
-                ((float*)dest)[3] = a;
-                break;
-            case PF_DEPTH_DEPRECATED:
-            case PF_FLOAT16_R:
-                ((uint16*)dest)[0] = Bitwise::floatToHalf(r);
-                break;
-            case PF_FLOAT16_GR:
-                ((uint16*)dest)[0] = Bitwise::floatToHalf(g);
-                ((uint16*)dest)[1] = Bitwise::floatToHalf(r);
-                break;
-            case PF_FLOAT16_RGB:
-                ((uint16*)dest)[0] = Bitwise::floatToHalf(r);
-                ((uint16*)dest)[1] = Bitwise::floatToHalf(g);
-                ((uint16*)dest)[2] = Bitwise::floatToHalf(b);
-                break;
-            case PF_FLOAT16_RGBA:
-                ((uint16*)dest)[0] = Bitwise::floatToHalf(r);
-                ((uint16*)dest)[1] = Bitwise::floatToHalf(g);
-                ((uint16*)dest)[2] = Bitwise::floatToHalf(b);
-                ((uint16*)dest)[3] = Bitwise::floatToHalf(a);
-                break;
-            case PF_SHORT_RGB:
-                ((uint16*)dest)[0] = (uint16)Bitwise::floatToFixed(r, 16);
-                ((uint16*)dest)[1] = (uint16)Bitwise::floatToFixed(g, 16);
-                ((uint16*)dest)[2] = (uint16)Bitwise::floatToFixed(b, 16);
-                break;
-            case PF_SHORT_RGBA:
-                ((uint16*)dest)[0] = (uint16)Bitwise::floatToFixed(r, 16);
-                ((uint16*)dest)[1] = (uint16)Bitwise::floatToFixed(g, 16);
-                ((uint16*)dest)[2] = (uint16)Bitwise::floatToFixed(b, 16);
-                ((uint16*)dest)[3] = (uint16)Bitwise::floatToFixed(a, 16);
-                break;
-            case PF_BYTE_LA:
-                ((uint8*)dest)[0] = (uint8)Bitwise::floatToFixed(r, 8);
-                ((uint8*)dest)[1] = (uint8)Bitwise::floatToFixed(a, 8);
-                break;
-            case PF_A2B10G10R10:
-            {
-                const uint16 ir = static_cast<uint16>( Math::saturate( r ) * 1023.0f + 0.5f );
-                const uint16 ig = static_cast<uint16>( Math::saturate( g ) * 1023.0f + 0.5f );
-                const uint16 ib = static_cast<uint16>( Math::saturate( b ) * 1023.0f + 0.5f );
-                const uint16 ia = static_cast<uint16>( Math::saturate( a ) * 3.0f + 0.5f );
-
-                ((uint32*)dest)[0] = (ia << 30u) | (ir << 20u) | (ig << 10u) | (ib);
-                break;
-            }
-            default:
-                // Not yet supported
-                OGRE_EXCEPT(
-                    Exception::ERR_NOT_IMPLEMENTED,
-                    "pack to "+getFormatName(pf)+" not implemented",
-                    "PixelUtil::packColour");
-                break;
-            }
-        }
-    }*/
-    //-----------------------------------------------------------------------------------
     template <typename T>
     void PixelFormatGpuUtils::convertToFloat( float *rgbaPtr, const void *srcPtr,
                                               size_t numComponents, uint32 flags )
@@ -606,7 +516,7 @@ namespace Ogre
             const uint8 ig = static_cast<uint8>( Math::saturate( rgbaPtr[1] ) * 63.0f + 0.5f );
             const uint8 ib = static_cast<uint8>( Math::saturate( rgbaPtr[2] ) * 31.0f + 0.5f );
 
-            ((uint16*)dstPtr)[0] = (ir << 11u) | (ig << 6u) | (ib);
+            ((uint16*)dstPtr)[0] = (ir << 11u) | (ig << 5u) | (ib);
             break;
         }
         case PFG_B5G5R5A1_UNORM:
@@ -1392,7 +1302,7 @@ namespace Ogre
         {"PFG_BC5_SNORM",			2u, 0,						PFF_COMPRESSED_COMMON|PFF_SIGNED },
 
         {"PFG_B5G6R5_UNORM",		3u, 1u * sizeof(uint16),	PFF_INTEGER|PFF_NORMALIZED },
-        {"PFG_B5G5R5A1_UNORM",		3u, 2u * sizeof(uint16),	PFF_INTEGER|PFF_NORMALIZED },
+        {"PFG_B5G5R5A1_UNORM",		3u, 1u * sizeof(uint16),	PFF_INTEGER|PFF_NORMALIZED },
         {"PFG_BGRA8_UNORM",			4u, 4u * sizeof(uint8),		PFF_INTEGER|PFF_NORMALIZED },
         {"PFG_BGRX8_UNORM",			4u, 4u * sizeof(uint8),		PFF_INTEGER|PFF_NORMALIZED },
         {"PFG_R10G10B10_XR_BIAS_A2_UNORM",4u, 1u * sizeof(uint32),PFF_FLOAT_RARE },
@@ -1421,7 +1331,7 @@ namespace Ogre
         {"PFG_IA44",				3u, 0,						0 },
         {"PFG_P8",					1u, 1u * sizeof(uint8),		PFF_PALLETE },
         {"PFG_A8P8",				1u, 2u * sizeof(uint8),		PFF_PALLETE },
-        {"PFG_B4G4R4A4_UNORM",		4u, 2u * sizeof(uint16),	PFF_INTEGER|PFF_NORMALIZED },
+        {"PFG_B4G4R4A4_UNORM",		4u, 1u * sizeof(uint16),	PFF_INTEGER|PFF_NORMALIZED },
         {"PFG_P208",				3u, 0,						0 },
         {"PFG_V208",				3u, 0,						0 },
         {"PFG_V408",				3u, 0,						0 },

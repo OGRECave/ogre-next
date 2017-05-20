@@ -368,7 +368,7 @@ Pixmap GLXConfigurator::CreateBackdrop(Window rootWindow, int depth) {
         // Convert and copy image
         data = (unsigned char*)malloc( mWidth * mHeight * bpl ); // Must be allocated with malloc
 
-        const PixelFormatGpu dstFormat = bpl == 2 ? PFG_B5G6R5_UNORM : PFG_RGBA8_UNORM;
+        const PixelFormatGpu dstFormat = bpl == 2 ? PFG_B5G6R5_UNORM : PFG_BGRA8_UNORM;
         TextureBox dstBox( mWidth, mHeight, 1u, 1u,
                            PixelFormatGpuUtils::getBytesPerPixel( dstFormat ),
                            PixelFormatGpuUtils::getSizeBytes( mWidth, 1u, 1u, 1u, dstFormat, 1u ),

@@ -533,9 +533,7 @@ namespace Ogre {
             break;
         case FIT_RGBAF:
             imgData->format = PFG_RGBA32_FLOAT;
-            break;
-            
-            
+            break;  
         };
 
         const uint32 rowAlignment = 4u;
@@ -565,10 +563,37 @@ namespace Ogre {
                 uint8 const *pSrc = srcData + (height - y - 1u) * srcBytesPerRow;
                 for( size_t x=0; x<width; ++x )
                 {
-                    *pDst++ = *pSrc++;
-                    *pDst++ = *pSrc++;
-                    *pDst++ = *pSrc++;
+                    const uint8 b = *pSrc++;
+                    const uint8 g = *pSrc++;
+                    const uint8 r = *pSrc++;
+
+                    *pDst++ = r;
+                    *pDst++ = g;
+                    *pDst++ = b;
                     *pDst++ = 0xFF;
+                }
+            }
+        }
+        else if( bpp == 32u )
+        {
+            const size_t width = imgData->box.width;
+            for( size_t y=0; y<height; ++y )
+            {
+                uint16 *pDst = reinterpret_cast<uint16*>( reinterpret_cast<uint8*>( imgData->box.data ) +
+                                                          y * dstBytesPerRow );
+                uint16 const *pSrc = reinterpret_cast<const uint16*>( srcData + (height - y - 1u) *
+                                                                      srcBytesPerRow );
+                for( size_t x=0; x<width; ++x )
+                {
+                    const uint8 b = *pSrc++;
+                    const uint8 g = *pSrc++;
+                    const uint8 r = *pSrc++;
+                    const uint8 a = *pSrc++;
+
+                    *pDst++ = r;
+                    *pDst++ = g;
+                    *pDst++ = b;
+                    *pDst++ = a;
                 }
             }
         }
@@ -583,10 +608,37 @@ namespace Ogre {
                                                                       srcBytesPerRow );
                 for( size_t x=0; x<width; ++x )
                 {
-                    *pDst++ = *pSrc++;
-                    *pDst++ = *pSrc++;
-                    *pDst++ = *pSrc++;
+                    const uint16 b = *pSrc++;
+                    const uint16 g = *pSrc++;
+                    const uint16 r = *pSrc++;
+
+                    *pDst++ = r;
+                    *pDst++ = g;
+                    *pDst++ = b;
                     *pDst++ = 0xFFFF;
+                }
+            }
+        }
+        else if( bpp == 64u )
+        {
+            const size_t width = imgData->box.width;
+            for( size_t y=0; y<height; ++y )
+            {
+                uint16 *pDst = reinterpret_cast<uint16*>( reinterpret_cast<uint8*>( imgData->box.data ) +
+                                                          y * dstBytesPerRow );
+                uint16 const *pSrc = reinterpret_cast<const uint16*>( srcData + (height - y - 1u) *
+                                                                      srcBytesPerRow );
+                for( size_t x=0; x<width; ++x )
+                {
+                    const uint16 b = *pSrc++;
+                    const uint16 g = *pSrc++;
+                    const uint16 r = *pSrc++;
+                    const uint16 a = *pSrc++;
+
+                    *pDst++ = r;
+                    *pDst++ = g;
+                    *pDst++ = b;
+                    *pDst++ = a;
                 }
             }
         }
