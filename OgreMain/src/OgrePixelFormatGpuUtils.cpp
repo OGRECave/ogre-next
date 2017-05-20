@@ -35,6 +35,13 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+#if OGRE_COMPILER == OGRE_COMPILER_MSVC && OGRE_COMP_VER < 1800
+    inline float roundf( float x )
+    {
+        return x >= 0.0f ? floorf( x + 0.5f ) : ceilf( x - 0.5f );
+    }
+#endif
+
     inline const PixelFormatGpuUtils::PixelFormatDesc& PixelFormatGpuUtils::getDescriptionFor(
             const PixelFormatGpu fmt )
     {
