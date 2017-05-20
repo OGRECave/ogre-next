@@ -79,8 +79,8 @@ namespace Ogre {
         struct PixelFormatDesc
         {
             const char  *name;
-            size_t      bytesPerPixel;
             uint32      components;
+            uint32      bytesPerPixel;
             uint32      flags;
         };
 
