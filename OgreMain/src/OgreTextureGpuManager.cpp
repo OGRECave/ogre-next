@@ -40,6 +40,8 @@ THE SOFTWARE.
 #include "OgreResourceGroupManager.h"
 #include "OgreImage2.h"
 
+#include "Threading/OgreThreads.h"
+
 #include "OgreException.h"
 
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC
@@ -105,7 +107,11 @@ namespace Ogre
     static const int c_mainThread = 0;
     static const int c_workerThread = 1;
 
+    unsigned long updateStreamingWorkerThread( ThreadHandle *threadHandle );
+    THREAD_DECLARE( updateStreamingWorkerThread );
+
     TextureGpuManager::TextureGpuManager( VaoManager *vaoManager ) :
+        mShuttingDown( false ),
         mVaoManager( vaoManager )
     {
         //64MB default
@@ -139,10 +145,20 @@ namespace Ogre
 
         for( int i=0; i<2; ++i )
             mThreadData[i].objCmdBuffer = new ObjCmdBuffer();
+
+#if OGRE_PLATFORM != OGRE_PLATFORM_EMSCRIPTEN
+        mWorkerThread = Threads::CreateThread( THREAD_GET( updateStreamingWorkerThread ), 0, this );
+#endif
     }
     //-----------------------------------------------------------------------------------
     TextureGpuManager::~TextureGpuManager()
     {
+        mShuttingDown = true;
+#if OGRE_PLATFORM != OGRE_PLATFORM_EMSCRIPTEN
+        mWorkerWaitableEvent.wake();
+        Threads::WaitForThreads( 1u, &mWorkerThread );
+#endif
+
         assert( mAvailableStagingTextures.empty() && "Derived class didn't call destroyAll!" );
         assert( mUsedStagingTextures.empty() && "Derived class didn't call destroyAll!" );
         assert( mEntries.empty() && "Derived class didn't call destroyAll!" );
@@ -157,6 +173,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::destroyAll(void)
     {
+        waitForStreamingCompletion();
+
         destroyAllStagingBuffers();
         destroyAllTextures();
         destroyAllPools();
@@ -370,6 +388,7 @@ namespace Ogre
         mLoadRequestsMutex.lock();
             mainData.loadRequests.push_back( LoadRequest( name, texture, archive ) );
         mLoadRequestsMutex.unlock();
+        mWorkerWaitableEvent.wake();
 
         return texture;
     }
@@ -752,6 +771,24 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    unsigned long updateStreamingWorkerThread( ThreadHandle *threadHandle )
+    {
+        TextureGpuManager *textureManager =
+                reinterpret_cast<TextureGpuManager*>( threadHandle->getUserParam() );
+        return textureManager->_updateStreamingWorkerThread( threadHandle );
+    }
+    //-----------------------------------------------------------------------------------
+    unsigned long TextureGpuManager::_updateStreamingWorkerThread( ThreadHandle *threadHandle )
+    {
+        while( !mShuttingDown )
+        {
+            mWorkerWaitableEvent.wait();
+            _updateStreaming();
+        }
+
+        return 0;
+    }
+    //-----------------------------------------------------------------------------------
     void TextureGpuManager::_updateStreaming(void)
     {
         /*
@@ -778,7 +815,13 @@ namespace Ogre
         ThreadData &workerData  = mThreadData[c_workerThread];
         ThreadData &mainData    = mThreadData[c_mainThread];
 
+        mMutex.lock();
+
         mLoadRequestsMutex.lock();
+            //Lock while inside mMutex because _update has access to our
+            //workerData.loadRequests. We still need mLoadRequestsMutex
+            //to keep our access to mainData.loadRequests as short as possible
+            //(we don't want to block the main thread for long).
             if( workerData.loadRequests.empty() )
             {
                 workerData.loadRequests.swap( mainData.loadRequests );
@@ -791,8 +834,6 @@ namespace Ogre
                 mainData.loadRequests.clear();
             }
         mLoadRequestsMutex.unlock();
-
-        mMutex.lock();
 
         //Reset our stats
         UsageStatsVec::iterator itStats = mStreamingData.usageStats.begin();
@@ -813,6 +854,9 @@ namespace Ogre
         }
 
         ObjCmdBuffer *commandBuffer = workerData.objCmdBuffer;
+
+        const bool processedAnyImage = !workerData.loadRequests.empty() ||
+                                       !mStreamingData.queuedImages.empty();
 
         //First, try to upload the queued images that failed in the previous iteration.
         QueuedImageVec::iterator itQueue = mStreamingData.queuedImages.begin();
@@ -878,14 +922,35 @@ namespace Ogre
             ++itor;
         }
 
-        mMutex.unlock();
+        //Two cases:
+        //  1. We did something this iteration, and finished 100%.
+        //     Main thread could be waiting for us. Let them now.
+        //  2. We couldn't everything in this iteration, which means
+        //     we need something from main thread. Wake it up.
+        //Note that normally main thread isn't sleeping, but it could be if
+        //waitForStreamingCompletion was called.
+        bool wakeUpMainThread = false;
+        if( (processedAnyImage && mStreamingData.queuedImages.empty()) ||
+            !mStreamingData.queuedImages.empty() )
+        {
+            wakeUpMainThread = true;
+        }
 
         workerData.loadRequests.clear();
+
+        mMutex.unlock();
+
+        //Wake up outside mMutex to avoid unnecessary contention.
+        if( wakeUpMainThread )
+            mRequestToMainThreadEvent.wake();
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::_update(void)
+    bool TextureGpuManager::_update(void)
     {
+#if OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN
         _updateStreaming();
+#endif
+        bool isDone = false;
 
         ThreadData &mainData = mThreadData[c_mainThread];
         {
@@ -896,6 +961,9 @@ namespace Ogre
                 std::swap( mainData.objCmdBuffer, workerData.objCmdBuffer );
                 mainData.usedStagingTex.swap( workerData.usedStagingTex );
                 fullfillBudget( workerData );
+
+                isDone = workerData.loadRequests.empty() &&
+                         mStreamingData.queuedImages.empty();
             }
             mMutex.unlock();
         }
@@ -943,6 +1011,21 @@ namespace Ogre
             }
 
             mainData.usedStagingTex.clear();
+        }
+
+        mWorkerWaitableEvent.wake();
+
+        return isDone;
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::waitForStreamingCompletion(void)
+    {
+        bool bDone = false;
+        while( !bDone )
+        {
+            bDone = _update();
+            if( !bDone )
+                mRequestToMainThreadEvent.wait();
         }
     }
     //-----------------------------------------------------------------------------------

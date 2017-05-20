@@ -33,6 +33,8 @@ THE SOFTWARE.
 #include "OgreTextureGpu.h"
 #include "OgreImage2.h"
 #include "Threading/OgreLightweightMutex.h"
+#include "Threading/OgreWaitableEvent.h"
+#include "Threading/OgreThreads.h"
 
 #include "OgreHeaderPrefix.h"
 
@@ -174,6 +176,12 @@ namespace Ogre
             UsageStatsVec       usageStats;
         };
 
+        bool                mShuttingDown;
+        ThreadHandlePtr     mWorkerThread;
+        /// Main thread wakes, worker waits.
+        WaitableEvent       mWorkerWaitableEvent;
+        /// Worker wakes, main thread waits. Used by waitForStreamingCompletion();
+        WaitableEvent       mRequestToMainThreadEvent;
         LightweightMutex    mLoadRequestsMutex;
         LightweightMutex    mMutex;
         ThreadData          mThreadData[2];
@@ -243,10 +251,15 @@ namespace Ogre
         /// Must be called from main thread.
         void _releaseSlotFromTexture( TextureGpu *texture );
 
+        unsigned long _updateStreamingWorkerThread( ThreadHandle *threadHandle );
         void _updateStreaming(void);
 
-        void _update(void);
+        /// Returns true if there is no more streaming work to be done yet
+        /// (if false, calls to _update could be needed once again)
+        /// See waitForStreamingCompletion.
+        bool _update(void);
 
+        void waitForStreamingCompletion(void);
 
         /**
         @param name

@@ -249,6 +249,10 @@ if (NOT WIN32)
   )
 endif()
 
+list( APPEND THREAD_SOURCE_FILES
+	src/Threading/OgreWaitableEvent.cpp
+)
+
 
 # Configure threading files
 set(THREAD_HEADER_FILES
@@ -259,6 +263,7 @@ set(THREAD_HEADER_FILES
 	include/Threading/OgreThreads.h
 	include/Threading/OgreDefaultWorkQueue.h
 	include/Threading/OgreUniformScalableTask.h
+	include/Threading/OgreWaitableEvent.h
 )
 if (OGRE_THREAD_PROVIDER EQUAL 0)
 	list(APPEND THREAD_HEADER_FILES
