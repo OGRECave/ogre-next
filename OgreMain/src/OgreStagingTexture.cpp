@@ -112,7 +112,11 @@ namespace Ogre
         mUserQueriedIfUploadWillStall = false;
 #endif
         const TextureBox fullDstTextureBox( dstTexture->getWidth(), dstTexture->getHeight(),
-                                            dstTexture->getDepth(), dstTexture->getNumSlices() );
+                                            dstTexture->getDepth(), dstTexture->getNumSlices(),
+                                            PixelFormatGpuUtils::getBytesPerPixel(
+                                                dstTexture->getPixelFormat() ),
+                                            dstTexture->_getSysRamCopyBytesPerRow(),
+                                            dstTexture->_getSysRamCopyBytesPerImage() );
 
         assert( !dstBox || srcBox.equalSize( *dstBox ) && "Src & Dst must be equal" );
         assert( !dstBox || fullDstTextureBox.fullyContains( *dstBox ) );

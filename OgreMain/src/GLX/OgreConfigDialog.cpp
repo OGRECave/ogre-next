@@ -27,8 +27,9 @@ THE SOFTWARE.
 */
 #include "OgreConfigDialog.h"
 #include "OgreException.h"
-#include "OgreImage.h"
-#include "OgrePixelBox.h"
+#include "OgreTextureBox.h"
+#include "OgreImage2.h"
+#include "OgrePixelFormatGpuUtils.h"
 #include "OgreLogManager.h"
 
 #include <cstdlib>
@@ -333,7 +334,8 @@ bool GLXConfigurator::CreateWindow() {
 Pixmap GLXConfigurator::CreateBackdrop(Window rootWindow, int depth) {
     int bpl;
     /* Find out number of bytes per pixel */
-    switch(depth) {
+    switch(depth)
+    {
     default:
         LogManager::getSingleton().logMessage("GLX backdrop: Unsupported bit depth");
         /* Unsupported bit depth */
@@ -348,29 +350,40 @@ Pixmap GLXConfigurator::CreateBackdrop(Window rootWindow, int depth) {
     /* Create background pixmap */
     unsigned char *data = 0; // Must be allocated with malloc
 
-    try {
+    try
+    {
         String imgType = "png";
-        Image img;
+        Image2 img;
         MemoryDataStream *imgStream;
         DataStreamPtr imgStreamPtr;
 
-        TODO;
         // Load backdrop image using OGRE
-//        imgStream = new MemoryDataStream(const_cast<unsigned char*>(GLX_backdrop_data), sizeof(GLX_backdrop_data), false);
-//        imgStreamPtr = DataStreamPtr(imgStream);
-//        img.load(imgStreamPtr, imgType);
+        imgStream = new MemoryDataStream( const_cast<unsigned char*>(GLX_backdrop_data),
+                                          sizeof(GLX_backdrop_data), false );
+        imgStreamPtr = DataStreamPtr( imgStream );
+        img.load( imgStreamPtr, imgType );
 
-        //PixelBox src = img.getPixelBox(0, 0);
+        TextureBox srcBox = img.getData( 0 );
 
         // Convert and copy image
-        data = (unsigned char*)malloc(mWidth * mHeight * bpl); // Must be allocated with malloc
+        data = (unsigned char*)malloc( mWidth * mHeight * bpl ); // Must be allocated with malloc
 
-        //PixelBox dst(src, bpl == 2 ? PF_B5G6R5 : PF_A8R8G8B8, data );
+        const PixelFormatGpu dstFormat = bpl == 2 ? PFG_B5G6R5_UNORM : PFG_RGBA8_UNORM;
+        TextureBox dstBox( mWidth, mHeight, 1u, 1u,
+                           PixelFormatGpuUtils::getBytesPerPixel( dstFormat ),
+                           PixelFormatGpuUtils::getSizeBytes( mWidth, 1u, 1u, 1u, dstFormat, 1u ),
+                           PixelFormatGpuUtils::getSizeBytes( mWidth, mHeight, 1u, 1u, dstFormat, 1u ) );
+        dstBox.data = data;
 
-        //PixelUtil::bulkPixelConversion(src, dst);
-    } catch(Exception &e) {
+        PixelFormatGpuUtils::bulkPixelConversion( srcBox, img.getPixelFormat(),
+                                                  dstBox, dstFormat );
+    }
+    catch( Exception &e )
+    {
         // Could not find image; never mind
-        LogManager::getSingleton().logMessage("WARNING: Can not load backdrop for config dialog. " + e.getDescription(), LML_TRIVIAL);
+        LogManager::getSingleton().logMessage(
+                    "WARNING: Can not load backdrop for config dialog. " + e.getDescription(),
+                    LML_TRIVIAL );
         return 0;
     }
 

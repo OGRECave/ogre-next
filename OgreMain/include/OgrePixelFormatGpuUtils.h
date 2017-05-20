@@ -80,6 +80,7 @@ namespace Ogre {
         {
             const char  *name;
             size_t      bytesPerPixel;
+            uint32      components;
             uint32      flags;
         };
 
@@ -87,8 +88,16 @@ namespace Ogre {
 
         static inline const PixelFormatDesc& getDescriptionFor( const PixelFormatGpu fmt );
 
+        template <typename T>
+        static void convertFromFloat( const float *rgbaPtr, void *dstPtr,
+                                      size_t numComponents, uint32 flags );
+        template <typename T>
+        static void convertToFloat( float *rgbaPtr, const void *srcPtr,
+                                    size_t numComponents, uint32 flags );
+
     public:
         static size_t getBytesPerPixel( PixelFormatGpu format );
+        static size_t getNumberOfComponents( PixelFormatGpu format );
 
         static size_t getSizeBytes( uint32 width, uint32 height, uint32 depth,
                                     uint32 slices, PixelFormatGpu format,
@@ -109,6 +118,34 @@ namespace Ogre {
         static uint8 getMaxMipmapCount( uint32 width, uint32 height );
         static uint8 getMaxMipmapCount( uint32 width, uint32 height, uint32 depth );
 
+        /** Returns the minimum width for block compressed schemes. ie. DXT1 compresses in blocks
+            of 4x4 pixels. A texture with a width of 2 is just padded to 4.
+            When building UV atlases composed of already compressed data being stitched together,
+            the block size is very important to know as the resolution of the individual textures
+            must be a multiple of this size.
+         @remarks
+            If the format is not compressed, returns 1.
+         @par
+            The function can return a value of 0 (as happens with PVRTC & ETC1 compression); this is
+            because although they may compress in blocks (i.e. PVRTC uses a 4x4 or 8x4 block), this
+            information is useless as the compression scheme doesn't have isolated blocks (modifying
+            a single pixel can change the binary data of the entire stream) making it useless for
+            subimage sampling or creating UV atlas.
+         @param format
+            The format to query for. Can be compressed or not.
+         @param apiStrict
+            When true, obeys the rules of most APIs (i.e. ETC1 can't update subregions according to
+            GLES specs). When false, becomes more practical if manipulating by hand (i.e. ETC1's
+            subregions can be updated just fine by @bulkCompressedSubregion)
+         @return
+            The width of compression block, in pixels. Can be 0 (see remarks). If format is not
+            compressed, returns 1.
+        */
+        static uint32 getCompressedBlockWidth( PixelFormatGpu format, bool apiStrict=true );
+
+        /// @See getCompressedBlockWidth
+        static uint32 getCompressedBlockHeight( PixelFormatGpu format, bool apiStrict=true );
+
         static const char* toString( PixelFormatGpu format );
 
         /** Makes a O(N) search to return the PixelFormatGpu based on its string version.
@@ -123,6 +160,15 @@ namespace Ogre {
         */
         static PixelFormatGpu getFormatFromName( const char *name, uint32 exclusionFlags=0 );
         static PixelFormatGpu getFormatFromName( const String &name, uint32 exclusionFlags=0 );
+
+        static float toSRGB( float x );
+        static float fromSRGB( float x );
+
+        static void packColour( const float *rgbaPtr, PixelFormatGpu pf, void *dstPtr );
+        static void unpackColour( float *rgbaPtr, PixelFormatGpu pf, const void *srcPtr );
+
+        static void bulkPixelConversion( const TextureBox &src, PixelFormatGpu srcFormat,
+                                         const TextureBox &dst, PixelFormatGpu dstFormat );
 
         /// See PixelFormatFlags
         static uint32 getFlags( PixelFormatGpu format );

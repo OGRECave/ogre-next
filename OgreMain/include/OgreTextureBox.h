@@ -56,10 +56,13 @@ namespace Ogre
         {
         }
 
-        TextureBox( uint32 _width, uint32 _height, uint32 _depth, uint32 _numSlices ) :
+        TextureBox( uint32 _width, uint32 _height, uint32 _depth, uint32 _numSlices,
+                    uint32 _bytesPerPixel, uint32 _bytesPerRow, uint32 _bytesPerImage ) :
             x( 0 ), y( 0 ), z( 0 ), sliceStart( 0 ),
             width( _width ), height( _height ), depth( _depth ), numSlices( _numSlices ),
-            bytesPerPixel( 0 ), bytesPerRow( 0 ), bytesPerImage( 0 ),
+            bytesPerPixel( _bytesPerPixel ),
+            bytesPerRow( _bytesPerRow ),
+            bytesPerImage( _bytesPerImage ),
             data( 0 )
         {
         }
@@ -69,6 +72,7 @@ namespace Ogre
         uint32 getMaxZ(void) const      { return z + depth; }
         uint32 getMaxSlice(void) const  { return sliceStart + numSlices; }
         uint32 getDepthOrSlices(void) const { return std::max( depth, numSlices ); }
+        uint32 getZOrSlice(void) const  { return std::max( z, sliceStart ); }
 
         /// Returns true if 'other' & 'this' have the same dimensions.
         bool equalSize( const TextureBox &other ) const
@@ -102,7 +106,8 @@ namespace Ogre
         }
 
         /// x, y & z are in pixels. Only works for non-compressed formats.
-        void* at( size_t xPos, size_t yPos, size_t zPos )
+        /// It can work for compressed formats if xPos & yPos are 0.
+        void* at( size_t xPos, size_t yPos, size_t zPos ) const
         {
             return reinterpret_cast<uint8*>( data ) +
                     zPos * bytesPerImage + yPos * bytesPerRow + xPos * bytesPerPixel;

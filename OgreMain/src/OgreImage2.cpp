@@ -441,10 +441,10 @@ namespace Ogre {
         for( uint8 i=0; i<mipLevel; ++i )
             data += getBytesPerImage( i ) * std::max( getDepth() >> i, getNumSlices() );
 
-        TextureBox retVal( width, height, depth, getNumSlices() );
-        retVal.bytesPerPixel    = PixelFormatGpuUtils::getBytesPerPixel( mPixelFormat );
-        retVal.bytesPerRow      = getBytesPerRow( mipLevel );
-        retVal.bytesPerPixel    = getBytesPerImage( mipLevel );
+        TextureBox retVal( width, height, depth, getNumSlices(),
+                           PixelFormatGpuUtils::getBytesPerPixel( mPixelFormat ),
+                           getBytesPerRow( mipLevel ),
+                           getBytesPerImage( mipLevel ) );
         retVal.data = data;
         return retVal;
     }

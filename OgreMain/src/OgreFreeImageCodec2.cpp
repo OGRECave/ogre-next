@@ -49,7 +49,8 @@ THE SOFTWARE.
 
 // freeimage 3.9.1~3.11.0 interoperability fix
 #ifndef FREEIMAGE_COLORORDER
-// we have freeimage 3.9.1, define these symbols in such way as 3.9.1 really work (do not use 3.11.0 definition, as color order was changed between these two versions on Apple systems)
+// we have freeimage 3.9.1, define these symbols in such way as 3.9.1 really work
+//(do not use 3.11.0 definition, as color order was changed between these two versions on Apple systems)
 #define FREEIMAGE_COLORORDER_BGR    0
 #define FREEIMAGE_COLORORDER_RGB    1
 #if defined(FREEIMAGE_BIGENDIAN)
@@ -103,16 +104,15 @@ namespace Ogre {
         StringStream strExt;
         strExt << "Supported formats: ";
         bool first = true;
-        for (int i = 0; i < FreeImage_GetFIFCount(); ++i)
+        for( int i=0; i<FreeImage_GetFIFCount(); ++i )
         {
-
             // Skip DDS codec since FreeImage does not have the option 
             // to keep DXT data compressed, we'll use our own codec
-            if ((FREE_IMAGE_FORMAT)i == FIF_DDS)
+            if( (FREE_IMAGE_FORMAT)i == FIF_DDS )
                 continue;
             
-            String exts(FreeImage_GetFIFExtensionList((FREE_IMAGE_FORMAT)i));
-            if (!first)
+            String exts( FreeImage_GetFIFExtensionList( (FREE_IMAGE_FORMAT)i ) );
+            if( !first )
             {
                 strExt << ",";
             }
@@ -120,13 +120,13 @@ namespace Ogre {
             strExt << exts;
             
             // Pull off individual formats (separated by comma by FI)
-            StringVector extsVector = StringUtil::split(exts, ",");
-            for (StringVector::iterator v = extsVector.begin(); v != extsVector.end(); ++v)
+            StringVector extsVector = StringUtil::split( exts, "," );
+            for( StringVector::iterator v = extsVector.begin(); v != extsVector.end(); ++v )
             {
                 // FreeImage 3.13 lists many formats twice: once under their own codec and
                 // once under the "RAW" codec, which is listed last. Avoid letting the RAW override
                 // the dedicated codec!
-                if (!Codec::isCodecRegistered(*v))
+                if( !Codec::isCodecRegistered(*v) )
                 {
                     ImageCodec2* codec = OGRE_NEW FreeImageCodec2(*v, i);
                     msCodecList.push_back(codec);
@@ -134,9 +134,8 @@ namespace Ogre {
                 }
             }
         }
-        LogManager::getSingleton().logMessage(
-            LML_NORMAL,
-            strExt.str());
+
+        LogManager::getSingleton().logMessage( LML_NORMAL, strExt.str() );
 
         // Set error handler
         FreeImage_SetOutputMessage(FreeImageLoadErrorHandler2);
@@ -161,221 +160,208 @@ namespace Ogre {
     { 
     }
     //---------------------------------------------------------------------
-    FIBITMAP* FreeImageCodec2::encodeBitmap(MemoryDataStreamPtr& input, CodecDataPtr& pData) const
+    FIBITMAP* FreeImageCodec2::encodeBitmap( MemoryDataStreamPtr &input, CodecDataPtr &pData ) const
     {
-#if 0
         FIBITMAP* ret = 0;
 
-        ImageData2* pImgData = static_cast< ImageData * >( pData.getPointer() );
-        PixelBox src(pImgData->width, pImgData->height, pImgData->depth, pImgData->format, input->getPtr());
+        ImageData2 *pImgData = static_cast<ImageData2*>( pData.getPointer() );
 
-        // The required format, which will adjust to the format
-        // actually supported by FreeImage.
-        PixelFormat requiredFormat = pImgData->format;
-
-        // determine the settings
+        // We need to determine the closest format supported by FreeImage.
         FREE_IMAGE_TYPE imageType;
-        PixelFormat determiningFormat = pImgData->format;
+        const PixelFormatGpu origFormat = pImgData->format;
+        PixelFormatGpu supportedFormat = pImgData->format;
 
-        switch(determiningFormat)
+        switch( origFormat )
         {
-        case PF_R5G6B5:
-        case PF_B5G6R5:
-        case PF_R8G8B8:
-        case PF_B8G8R8:
-        case PF_A8R8G8B8:
-        case PF_X8R8G8B8:
-        case PF_A8B8G8R8:
-        case PF_X8B8G8R8:
-        case PF_B8G8R8A8:
-        case PF_R8G8B8A8:
-        case PF_A4L4:
-        case PF_BYTE_LA:
-        case PF_RG8:
-        case PF_R3G3B2:
-        case PF_A4R4G4B4:
-        case PF_A1R5G5B5:
-        case PF_A2R10G10B10:
-        case PF_A2B10G10R10:
-            // I'd like to be able to use r/g/b masks to get FreeImage to load the data
-            // in it's existing format, but that doesn't work, FreeImage needs to have
-            // data in RGB[A] (big endian) and BGR[A] (little endian), always.
-            if (PixelUtil::hasAlpha(determiningFormat))
-            {
-#if FREEIMAGE_COLORORDER == FREEIMAGE_COLORORDER_RGB
-                requiredFormat = PF_BYTE_RGBA;
-#else
-                requiredFormat = PF_BYTE_BGRA;
-#endif
-            }
-            else
-            {
-#if FREEIMAGE_COLORORDER == FREEIMAGE_COLORORDER_RGB
-                requiredFormat = PF_BYTE_RGB;
-#else
-                requiredFormat = PF_BYTE_BGR;
-#endif
-            }
-            // fall through
-        case PF_L8:
-        case PF_A8:
+        case PFG_RGBA32_FLOAT:
+        case PFG_RGBA32_UINT:
+        case PFG_RGBA32_SINT:
+        case PFG_RGBA16_FLOAT:
+        case PFG_RGBA16_UINT:
+        case PFG_RGBA16_SNORM:
+        case PFG_RGBA16_SINT:
+            supportedFormat = PFG_RGBA32_FLOAT;
+            imageType = FIT_RGBAF;
+            break;
+        case PFG_RGB32_FLOAT:
+        case PFG_RGB32_UINT:
+        case PFG_RGB32_SINT:
+        case PFG_RG32_FLOAT:
+        case PFG_RG32_UINT:
+        case PFG_RG32_SINT:
+        case PFG_D32_FLOAT_S8X24_UINT:
+        case PFG_R11G11B10_FLOAT:
+        case PFG_RG16_FLOAT:
+        case PFG_RG16_UINT:
+        case PFG_RG16_SNORM:
+        case PFG_RG16_SINT:
+        case PFG_D24_UNORM_S8_UINT:
+            supportedFormat = PFG_RGB32_FLOAT;
+            imageType = FIT_RGBF;
+            break;
+        case PFG_RGBA16_UNORM:
+        case PFG_R10G10B10A2_UNORM:
+        case PFG_R10G10B10A2_UINT:
+        case PFG_RG16_UNORM:
+            supportedFormat = PFG_RGBA16_UNORM;
+            imageType = FIT_RGBA16;
+            break;
+        case PFG_RGBA8_UNORM:
+        case PFG_RGBA8_UNORM_SRGB:
+        case PFG_RGBA8_UINT:
+        case PFG_RGBA8_SNORM:
+        case PFG_RGBA8_SINT:
             imageType = FIT_BITMAP;
             break;
 
-        case PF_L16:
-            imageType = FIT_UINT16;
-            break;
-
-        case PF_SHORT_GR:
-            requiredFormat = PF_SHORT_RGB;
-            // fall through
-        case PF_SHORT_RGB:
-            imageType = FIT_RGB16;
-            break;
-
-        case PF_SHORT_RGBA:
-            imageType = FIT_RGBA16;
-            break;
-
-        case PF_FLOAT16_R:
-            requiredFormat = PF_FLOAT32_R;
-            // fall through
-        case PF_FLOAT32_R:
+        case PFG_D32_FLOAT:
+        case PFG_R32_FLOAT:
+        case PFG_R32_UINT:
+        case PFG_R32_SINT:
+        case PFG_D24_UNORM:
+        case PFG_R16_FLOAT:
+            supportedFormat = PFG_R32_FLOAT;
             imageType = FIT_FLOAT;
             break;
 
-        case PF_FLOAT16_GR:
-        case PF_FLOAT16_RGB:
-        case PF_FLOAT32_GR:
-            requiredFormat = PF_FLOAT32_RGB;
-            // fall through
-        case PF_FLOAT32_RGB:
-            imageType = FIT_RGBF;
+        case PFG_RG8_UNORM:
+            supportedFormat = PFG_RGBA8_UNORM;
+            imageType = FIT_BITMAP;
+            break;
+        case PFG_RG8_UINT:
+            supportedFormat = PFG_RGBA8_UINT;
+            imageType = FIT_BITMAP;
+            break;
+        case PFG_RG8_SNORM:
+            supportedFormat = PFG_RGBA8_SNORM;
+            imageType = FIT_BITMAP;
+            break;
+        case PFG_RG8_SINT:
+            supportedFormat = PFG_RGBA8_SINT;
+            imageType = FIT_BITMAP;
             break;
 
-        case PF_FLOAT16_RGBA:
-            requiredFormat = PF_FLOAT32_RGBA;
-            // fall through
-        case PF_FLOAT32_RGBA:
-            imageType = FIT_RGBAF;
+        case PFG_D16_UNORM:
+        case PFG_R16_UNORM:
+        case PFG_R16_UINT:
+        case PFG_R16_SNORM:
+        case PFG_R16_SINT:
+            imageType = FIT_UINT16;
             break;
 
+        case PFG_R8_UNORM:
+        case PFG_R8_UINT:
+        case PFG_R8_SNORM:
+        case PFG_R8_SINT:
+        case PFG_A8_UNORM:
+            imageType = FIT_BITMAP;
+            break;
+
+        case PFG_B5G6R5_UNORM:
+        case PFG_B5G5R5A1_UNORM:
+        case PFG_B4G4R4A4_UNORM:
+            supportedFormat = PFG_RGBA8_UNORM;
+            imageType = FIT_BITMAP;
+            break;
+
+        case PFG_BGRA8_UNORM:
+        case PFG_BGRX8_UNORM:
+        case PFG_BGRA8_UNORM_SRGB:
+        case PFG_BGRX8_UNORM_SRGB:
+            imageType = FIT_BITMAP;
+            break;
         default:
-            OGRE_EXCEPT(Exception::ERR_ITEM_NOT_FOUND, "Invalid image format", "FreeImageCodec2::encode");
+            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                         "Invalid image format",
+                         "FreeImageCodec2::encode" );
         };
 
-        // Check support for this image type & bit depth
-        if (!FreeImage_FIFSupportsExportType((FREE_IMAGE_FORMAT)mFreeImageType, imageType) ||
-            !FreeImage_FIFSupportsExportBPP((FREE_IMAGE_FORMAT)mFreeImageType, (int)PixelUtil::getNumElemBits(requiredFormat)))
-        {
-            // Ok, need to allocate a fallback
-            // Only deal with RGBA -> RGB for now
-            switch (requiredFormat)
-            {
-            case PF_BYTE_RGBA:
-                requiredFormat = PF_BYTE_RGB;
-                break;
-            case PF_BYTE_BGRA:
-                requiredFormat = PF_BYTE_BGR;
-                break;
-            default:
-                break;
-            };
-
-        }
+        const size_t bpp = PixelFormatGpuUtils::getBytesPerPixel( supportedFormat ) /
+                           PixelFormatGpuUtils::getNumberOfComponents( supportedFormat );
 
         bool conversionRequired = false;
 
-        unsigned char* srcData = input->getPtr();
+        unsigned char *srcData = input->getPtr();
 
-        // Check BPP
-        unsigned bpp = static_cast<unsigned>(PixelUtil::getNumElemBits(requiredFormat));
-        if (!FreeImage_FIFSupportsExportBPP((FREE_IMAGE_FORMAT)mFreeImageType, (int)bpp))
-        {
-            if (bpp == 32 && PixelUtil::hasAlpha(pImgData->format) && FreeImage_FIFSupportsExportBPP((FREE_IMAGE_FORMAT)mFreeImageType, 24))
-            {
-                // drop to 24 bit (lose alpha)
-#if FREEIMAGE_COLORORDER == FREEIMAGE_COLORORDER_RGB
-                requiredFormat = PF_BYTE_RGB;
-#else
-                requiredFormat = PF_BYTE_BGR;
-#endif
-                bpp = 24;
-            }
-            else if (bpp == 128 && PixelUtil::hasAlpha(pImgData->format) && FreeImage_FIFSupportsExportBPP((FREE_IMAGE_FORMAT)mFreeImageType, 96))
-            {
-                // drop to 96-bit floating point
-                requiredFormat = PF_FLOAT32_RGB;
-            }
-        }
-
-        PixelBox convBox(pImgData->width, pImgData->height, 1, requiredFormat);
-        if (requiredFormat != pImgData->format)
+        uint32 rowAlignment = 4u;
+        TextureBox convBox( pImgData->box.width, pImgData->box.height, 1u, 1u,
+                            PixelFormatGpuUtils::getBytesPerPixel( supportedFormat ),
+                            PixelFormatGpuUtils::getSizeBytes( pImgData->box.width, 1u,
+                                                               1u, 1u, supportedFormat, rowAlignment ),
+                            PixelFormatGpuUtils::getSizeBytes( pImgData->box.width, pImgData->box.height,
+                                                               1u, 1u, supportedFormat, rowAlignment ) );
+        if( supportedFormat != pImgData->format )
         {
             conversionRequired = true;
+            const size_t requiredBytes = PixelFormatGpuUtils::getSizeBytes( pImgData->box.width,
+                                                                            pImgData->box.height,
+                                                                            1u, 1u,
+                                                                            supportedFormat, 4u );
             // Allocate memory
-            convBox.data = OGRE_ALLOC_T(uchar, convBox.getConsecutiveSize(), MEMCATEGORY_GENERAL);
+            convBox.data = OGRE_MALLOC_SIMD( requiredBytes, MEMCATEGORY_GENERAL );
             // perform conversion and reassign source
-            PixelBox newSrc(pImgData->width, pImgData->height, 1, pImgData->format, input->getPtr());
-            PixelUtil::bulkPixelConversion(newSrc, convBox);
+            PixelFormatGpuUtils::bulkPixelConversion( pImgData->box, pImgData->format,
+                                                      convBox, supportedFormat );
             srcData = static_cast<unsigned char*>(convBox.data);
         }
 
+        ret = FreeImage_AllocateT( imageType,
+                                   static_cast<int>( pImgData->box.width ),
+                                   static_cast<int>( pImgData->box.height ),
+                                   bpp );
 
-        ret = FreeImage_AllocateT(
-            imageType, 
-            static_cast<int>(pImgData->width), 
-            static_cast<int>(pImgData->height), 
-            bpp);
-
-        if (!ret)
+        if( !ret )
         {
-            if (conversionRequired)
-                OGRE_FREE(convBox.data, MEMCATEGORY_GENERAL);
+            if ( conversionRequired )
+                OGRE_FREE( convBox.data, MEMCATEGORY_GENERAL );
 
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, 
-                "FreeImage_AllocateT failed - possibly out of memory. ", 
-                __FUNCTION__);
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "FreeImage_AllocateT failed - possibly out of memory. ",
+                         __FUNCTION__ );
         }
 
-        if (requiredFormat == PF_L8 || requiredFormat == PF_A8)
+        if( PixelFormatGpuUtils::getNumberOfComponents( supportedFormat ) == 1u )
         {
             // Must explicitly tell FreeImage that this is greyscale by setting
             // a "grey" palette (otherwise it will save as a normal RGB
             // palettized image).
-            FIBITMAP *tmp = FreeImage_ConvertToGreyscale(ret);
-            FreeImage_Unload(ret);
+            FIBITMAP *tmp = FreeImage_ConvertToGreyscale( ret );
+            FreeImage_Unload( ret );
             ret = tmp;
         }
         
-        size_t dstPitch = FreeImage_GetPitch(ret);
-        size_t srcPitch = pImgData->width * PixelUtil::getNumElemBytes(requiredFormat);
-
+        size_t dstPitch = FreeImage_GetPitch( ret );
+        size_t srcPitch = pImgData->box.bytesPerRow;
 
         // Copy data, invert scanlines and respect FreeImage pitch
-        uchar* pDst = FreeImage_GetBits(ret);
-        for (size_t y = 0; y < pImgData->height; ++y)
+        uchar *pDst = FreeImage_GetBits( ret );
+        for( size_t y=0; y<pImgData->box.height; ++y )
         {
-            uchar* pSrc = srcData + (pImgData->height - y - 1) * srcPitch;
+            uchar *pSrc = srcData + (pImgData->box.height - y - 1u) * srcPitch;
             memcpy(pDst, pSrc, srcPitch);
             pDst += dstPitch;
         }
 
-        if (conversionRequired)
+        if( conversionRequired )
         {
             // delete temporary conversion area
-            OGRE_FREE(convBox.data, MEMCATEGORY_GENERAL);
+            OGRE_FREE_SIMD( convBox.data, MEMCATEGORY_GENERAL );
+        }
+
+        // Check BPP. Let FreeImage convert from RGBA to RGB.
+        if( !FreeImage_FIFSupportsExportBPP( (FREE_IMAGE_FORMAT)mFreeImageType, (int)bpp ) )
+        {
+            FIBITMAP *tmp = FreeImage_ConvertTo24Bits( ret );
+            FreeImage_Unload( ret );
+            ret = tmp;
         }
 
         return ret;
-#endif
-        OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "", "FreeImageCodec2::encodeBitmap" );
-        return 0;
     }
     //---------------------------------------------------------------------
-    DataStreamPtr FreeImageCodec2::encode(MemoryDataStreamPtr& input, Codec::CodecDataPtr& pData) const
+    DataStreamPtr FreeImageCodec2::encode( MemoryDataStreamPtr &input, Codec::CodecDataPtr &pData ) const
     {        
-        FIBITMAP* fiBitmap = encodeBitmap(input, pData);
+        FIBITMAP *fiBitmap = encodeBitmap( input, pData );
 
         // open memory chunk allocated by FreeImage
         FIMEMORY* mem = FreeImage_OpenMemory();
@@ -553,6 +539,7 @@ namespace Ogre {
         };
 
         const uint32 rowAlignment = 4u;
+        imgData->box.bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( imgData->format );
         imgData->box.bytesPerRow = PixelFormatGpuUtils::getSizeBytes( imgData->box.width,
                                                                       1u, 1u, 1u,
                                                                       imgData->format,
@@ -631,15 +618,16 @@ namespace Ogre {
     String FreeImageCodec2::magicNumberToFileExt(const char *magicNumberPtr, size_t maxbytes) const
     {
         FIMEMORY* fiMem = 
-                    FreeImage_OpenMemory((BYTE*)const_cast<char*>(magicNumberPtr), static_cast<DWORD>(maxbytes));
+                    FreeImage_OpenMemory( (BYTE*)const_cast<char*>(magicNumberPtr),
+                                          static_cast<DWORD>(maxbytes) );
 
-        FREE_IMAGE_FORMAT fif = FreeImage_GetFileTypeFromMemory(fiMem, (int)maxbytes);
+        FREE_IMAGE_FORMAT fif = FreeImage_GetFileTypeFromMemory( fiMem, (int)maxbytes );
         FreeImage_CloseMemory(fiMem);
 
-        if (fif != FIF_UNKNOWN)
+        if( fif != FIF_UNKNOWN )
         {
-            String ext(FreeImage_GetFormatFromFIF(fif));
-            StringUtil::toLowerCase(ext);
+            String ext( FreeImage_GetFormatFromFIF( fif ) );
+            StringUtil::toLowerCase( ext );
             return ext;
         }
         else
