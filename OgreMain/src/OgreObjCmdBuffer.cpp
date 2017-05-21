@@ -114,7 +114,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void ObjCmdBuffer::TransitionToResident::execute(void)
     {
-        texture->transitionTo( GpuResidency::Resident, reinterpret_cast<uint8*>( sysRamCopy ) );
+        texture->_transitionTo( GpuResidency::Resident, reinterpret_cast<uint8*>( sysRamCopy ) );
     }
     //-----------------------------------------------------------------------------------
     ObjCmdBuffer::

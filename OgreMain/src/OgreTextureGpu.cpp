@@ -81,6 +81,12 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
+    void TextureGpu::scheduleTransitionTo( GpuResidency::GpuResidency nextResidency )
+    {
+        mNextResidencyStatus = nextResidency;
+        mTextureManager->_scheduleTransitionTo( this, nextResidency );
+    }
+    //-----------------------------------------------------------------------------------
     void TextureGpu::setResolution( uint32 width, uint32 height, uint32 depthOrSlices )
     {
         assert( mResidencyStatus == GpuResidency::OnStorage );
@@ -282,7 +288,7 @@ namespace Ogre
         //Delegate to the manager (thread) for loading.
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpu::transitionTo( GpuResidency::GpuResidency newResidency, uint8 *sysRamCopy )
+    void TextureGpu::_transitionTo( GpuResidency::GpuResidency newResidency, uint8 *sysRamCopy )
     {
         assert( newResidency != mResidencyStatus );
 

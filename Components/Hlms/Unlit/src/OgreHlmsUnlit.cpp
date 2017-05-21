@@ -250,6 +250,8 @@ namespace Ogre
         {
             Hlms::calculateHashFor( renderable, outHash, outCasterHash );
         }
+
+        datablock->loadAllTextures();
     }
     //-----------------------------------------------------------------------------------
     struct UvOutput

@@ -178,6 +178,20 @@ namespace Ogre
 
         virtual String getNameStr(void) const;
 
+        /** Schedules an async transition in residency. If transitioning from
+            OnStorage to Resident, it will read from file (ResourceGroup was set in createTexture)
+            If transitioning from OnSystemRam to Resident, it will read from the pointer it has.
+            Multiple transitions can be stack together.
+        @remarks
+            If you're not loading from file (i.e. you're creating it programatically),
+            call _transitionTo & _setNextResidencyStatus directly.
+            Once you've called scheduleTransitionTo at least once, calling _transitionTo
+            is very dangerous, as there are race conditions.
+        @param nextResidency
+            The residency to change to.
+        */
+        void scheduleTransitionTo( GpuResidency::GpuResidency nextResidency );
+
         void upload( const TextureBox &box, uint8 mipmapLevel, uint32 slice );
 
         //AsyncTextureTicketPtr readRequest( const PixelBox &box );
@@ -228,6 +242,10 @@ namespace Ogre
         @par
             Make sure you're done using mSysRamCopy before calling this function,
             as we may free that pointer.
+        @par
+            If you're calling _transitionTo yourself (i.e. you're not using scheduleTransitionTo)
+            then you'll need to call _setNextResidencyStatus too, so that both getResidencyStatus
+            and getNextResidencyStatus agree.
         @param sysRamCopy
             System RAM copy that backs this GPU data. May be null.
             Must've been allocated with OGRE_MALLOC_SIMD( size, MEMCATEGORY_RESOURCE );
@@ -235,7 +253,7 @@ namespace Ogre
             MUST respect _getSysRamCopyBytesPerRow & _getSysRamCopyBytesPerImage.
             If in doubt, use PixelFormatGpuUtils::getSizeBytes with rowAlignment = 4u;
         */
-        void transitionTo( GpuResidency::GpuResidency newResidency, uint8 *sysRamCopy );
+        void _transitionTo( GpuResidency::GpuResidency newResidency, uint8 *sysRamCopy );
 
         /// Notifies it is safe to use the real data. Everything has been uploaded.
         virtual void notifyDataIsReady(void) = 0;

@@ -275,6 +275,15 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void HlmsUnlitDatablock::loadAllTextures(void)
+    {
+        for( int i=0; i<NUM_UNLIT_TEXTURE_TYPES; ++i )
+        {
+            if( mTextures[i] && mTextures[i]->getNextResidencyStatus() != GpuResidency::Resident )
+                mTextures[i]->scheduleTransitionTo( GpuResidency::Resident );
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void HlmsUnlitDatablock::scheduleConstBufferUpdate( bool updateTextures, bool updateSamplers )
     {
         uint8 flags = ConstBufferPool::DirtyConstBuffer;

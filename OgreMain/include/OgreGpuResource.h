@@ -96,6 +96,12 @@ namespace Ogre
     {
     protected:
         GpuResidency::GpuResidency              mResidencyStatus;
+        /// Usually mResidencyStatus == mNextResidencyStatus; but if they're not equal,
+        /// that means a change has been scheduled (async). Note: it only stores
+        /// the last residency we'll be transitioning to. For example, it's possible
+        /// Ogre has scheduled OnStorage -> Resident -> OnSystemRam; and none has been
+        /// executed yet, in which case mNextResidencyStatus will be OnSystemRam
+        GpuResidency::GpuResidency              mNextResidencyStatus;
         /// Developer notes: Strategy cannot be changed immediately,
         /// it has to be queued (due to multithreading safety).
         GpuPageOutStrategy::GpuPageOutStrategy  mPageOutStrategy;
@@ -127,7 +133,10 @@ namespace Ogre
                      VaoManager *vaoManager, IdString name );
         virtual ~GpuResource();
 
+        void _setNextResidencyStatus( GpuResidency::GpuResidency nextResidency );
+
         GpuResidency::GpuResidency getResidencyStatus(void) const;
+        GpuResidency::GpuResidency getNextResidencyStatus(void) const;
         GpuPageOutStrategy::GpuPageOutStrategy getGpuPageOutStrategy(void) const;
 
         IdString getName(void) const;

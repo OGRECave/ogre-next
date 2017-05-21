@@ -278,6 +278,8 @@ namespace Ogre
 
         virtual void calculateHash();
 
+        void loadAllTextures(void);
+
         static const size_t MaterialSizeInGpu;
         static const size_t MaterialSizeInGpuAligned;
     };

@@ -470,7 +470,8 @@ namespace Ogre
             ++itor;
         }
 
-        mTexture->transitionTo( GpuResidency::Resident, imageData );
+        mTexture->_transitionTo( GpuResidency::Resident, imageData );
+        mTexture->_setNextResidencyStatus( GpuResidency::Resident );
 
         StagingTexture *stagingTexture = textureManager->getStagingTexture( finalWidth, finalHeight,
                                                                             1u, 1u,

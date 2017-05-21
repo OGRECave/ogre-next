@@ -113,22 +113,26 @@ namespace Ogre
         struct ResourceEntry
         {
             String      name;
+            String      resourceGroup;
             TextureGpu  *texture;
 
             ResourceEntry() : texture( 0 ) {}
-            ResourceEntry( const String &_name, TextureGpu *_texture ) :
-                name( _name ), texture( _texture ) {}
+            ResourceEntry( const String &_name, const String &_resourceGroup, TextureGpu *_texture ) :
+                name( _name ), resourceGroup( _resourceGroup ), texture( _texture ) {}
         };
         typedef map<IdString, ResourceEntry>::type ResourceEntryMap;
 
         struct LoadRequest
         {
             String      name;
-            TextureGpu  *texture;
             Archive     *archive;
+            TextureGpu  *texture;
+            GpuResidency::GpuResidency nextResidency;
 
-            LoadRequest( const String &_name, TextureGpu *_texture, Archive *_archive ) :
-                name( _name ), texture( _texture ), archive( _archive ) {}
+            LoadRequest( const String &_name, Archive *_archive,
+                         TextureGpu *_texture, GpuResidency::GpuResidency _nextResidency ) :
+                name( _name ), archive( _archive ),
+                texture( _texture ), nextResidency( _nextResidency ) {}
         };
 
         typedef vector<LoadRequest>::type LoadRequestVec;
@@ -266,11 +270,14 @@ namespace Ogre
         @param pageOutStrategy
         @param textureFlags
             See TextureFlags::TextureFlags
+        @param resourceGroup
+            Optional, but required if you want to load files from disk
+            (or anything provided by the ResourceGroupManager)
         @return
         */
         TextureGpu* createTexture( const String &name,
                                    GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                                   uint32 textureFlags );
+                                   uint32 textureFlags, const String &resourceGroup=BLANKSTRING );
         void destroyTexture( TextureGpu *texture );
 
         /**
@@ -302,19 +309,7 @@ namespace Ogre
 
         const String* findNameStr( IdString idName ) const;
 
-        /**
-        @brief loadFromFile
-        @param name
-        @param resourceGroup
-        @param pageOutStrategy
-            See GpuPageOutStrategy::GpuPageOutStrategy
-        @param textureFlags
-            See TextureFlags::TextureFlags
-        @return
-        */
-        TextureGpu* loadFromFile( const String &name, const String &resourceGroup,
-                                  GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                                  uint32 textureFlags );
+        void _scheduleTransitionTo( TextureGpu *texture, GpuResidency::GpuResidency nextResidency );
     };
 
     /** @} */

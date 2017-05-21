@@ -257,7 +257,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     TextureGpu* TextureGpuManager::createTexture( const String &name,
                                                   GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                                                  uint32 textureFlags )
+                                                  uint32 textureFlags,
+                                                  const String &resourceGroup )
     {
         IdString idName( name );
 
@@ -270,7 +271,7 @@ namespace Ogre
 
         TextureGpu *retVal = createTextureImpl( pageOutStrategy, idName, textureFlags );
 
-        mEntries[idName] = ResourceEntry( name, retVal );
+        mEntries[idName] = ResourceEntry( name, resourceGroup, retVal );
 
         return retVal;
     }
@@ -375,22 +376,29 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* TextureGpuManager::loadFromFile( const String &name, const String &resourceGroup,
-                                                 GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                                                 uint32 textureFlags )
+    void TextureGpuManager::_scheduleTransitionTo( TextureGpu *texture,
+                                                   GpuResidency::GpuResidency nextResidency )
     {
-        ResourceGroupManager &resourceGroupManager = ResourceGroupManager::getSingleton();
-        Archive *archive = resourceGroupManager._getArchiveToResource( name, resourceGroup );
+        String name, resourceGroup;
+        ResourceEntryMap::const_iterator itor = mEntries.find( texture->getName() );
+        if( itor != mEntries.end() )
+        {
+            name = itor->second.name;
+            resourceGroup = itor->second.resourceGroup;
+        }
 
-        TextureGpu *texture = createTexture( name, pageOutStrategy, textureFlags );
+        Archive *archive = 0;
+        if( resourceGroup != BLANKSTRING )
+        {
+            ResourceGroupManager &resourceGroupManager = ResourceGroupManager::getSingleton();
+            archive = resourceGroupManager._getArchiveToResource( name, resourceGroup );
+        }
 
         ThreadData &mainData = mThreadData[c_mainThread];
         mLoadRequestsMutex.lock();
-            mainData.loadRequests.push_back( LoadRequest( name, texture, archive ) );
+            mainData.loadRequests.push_back( LoadRequest( name, archive, texture, nextResidency ) );
         mLoadRequestsMutex.unlock();
         mWorkerWaitableEvent.wake();
-
-        return texture;
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::_reserveSlotForTexture( TextureGpu *texture )
@@ -440,7 +448,7 @@ namespace Ogre
             mTexturePool.push_back( newPool );
             itor = --mTexturePool.end();
 
-            itor->masterTexture->transitionTo( GpuResidency::Resident, 0 );
+            itor->masterTexture->_transitionTo( GpuResidency::Resident, 0 );
         }
 
         uint16 sliceIdx = 0;
