@@ -38,6 +38,16 @@ THE SOFTWARE.
 #include "OgreRenderSystem.h"
 #include "OgreLogManager.h"
 
+#define _OgreHlmsTextureBaseClassExport _OgreHlmsUnlitExport
+#define OGRE_HLMS_TEXTURE_BASE_CLASS HlmsUnlitBaseTextureDatablock
+#define OGRE_HLMS_TEXTURE_BASE_MAX_TEX NUM_UNLIT_TEXTURE_TYPES
+#define OGRE_HLMS_CREATOR_CLASS HlmsUnlit
+    #include "../../Common/include/OgreHlmsTextureBaseClass.inl"
+#undef _OgreHlmsTextureBaseClassExport
+#undef OGRE_HLMS_TEXTURE_BASE_CLASS
+#undef OGRE_HLMS_TEXTURE_BASE_MAX_TEX
+#undef OGRE_HLMS_CREATOR_CLASS
+
 #define TODO_loadTextureFromFile 1
 
 namespace Ogre
@@ -83,12 +93,10 @@ namespace Ogre
                                             const HlmsMacroblock *macroblock,
                                             const HlmsBlendblock *blendblock,
                                             const HlmsParamVec &params ) :
-        HlmsDatablock( name, creator, macroblock, blendblock, params ),
+        HlmsUnlitBaseTextureDatablock( name, creator, macroblock, blendblock, params ),
         mNumEnabledAnimationMatrices( 0 ),
         mHasColour( false ),
-        mR( 1.0f ), mG( 1.0f ), mB( 1.0f ), mA( 1.0f ),
-        mTexturesDescSet( 0 ),
-        mSamplersDescSet( 0 )
+        mR( 1.0f ), mG( 1.0f ), mB( 1.0f ), mA( 1.0f )
     {
         for( size_t i=0; i<NUM_UNLIT_TEXTURE_TYPES; ++i )
         {
@@ -98,9 +106,6 @@ namespace Ogre
 
         memset( mUvSource, 0, sizeof( mUvSource ) );
         memset( mBlendModes, 0, sizeof( mBlendModes ) );
-
-        memset( mTextures, 0, sizeof( mTextures ) );
-        memset( mSamplerblocks, 0, sizeof( mSamplerblocks ) );
 
         memset( mEnabledAnimationMatrices, 0, sizeof( mEnabledAnimationMatrices ) );
 
@@ -214,33 +219,6 @@ namespace Ogre
     {
         if( mAssignedPool )
             static_cast<HlmsUnlit*>(mCreator)->releaseSlot( this );
-
-        for( size_t i=0; i<NUM_UNLIT_TEXTURE_TYPES; ++i )
-        {
-            if( mTextures[i] )
-                mTextures[i]->removeListener( this );
-        }
-
-        HlmsManager *hlmsManager = mCreator->getHlmsManager();
-        if( hlmsManager )
-        {
-            if( mTexturesDescSet )
-            {
-                hlmsManager->destroyDescriptorSetTexture( mTexturesDescSet );
-                mTexturesDescSet = 0;
-            }
-            if( mSamplersDescSet )
-            {
-                hlmsManager->destroyDescriptorSetSampler( mSamplersDescSet );
-                mSamplersDescSet = 0;
-            }
-
-            for( size_t i=0; i<NUM_UNLIT_TEXTURE_TYPES; ++i )
-            {
-                if( mSamplerblocks[i] )
-                    hlmsManager->destroySamplerblock( mSamplerblocks[i] );
-            }
-        }
     }
     //-----------------------------------------------------------------------------------
     void HlmsUnlitDatablock::calculateHash()
@@ -275,26 +253,6 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void HlmsUnlitDatablock::loadAllTextures(void)
-    {
-        for( int i=0; i<NUM_UNLIT_TEXTURE_TYPES; ++i )
-        {
-            if( mTextures[i] && mTextures[i]->getNextResidencyStatus() != GpuResidency::Resident )
-                mTextures[i]->scheduleTransitionTo( GpuResidency::Resident );
-        }
-    }
-    //-----------------------------------------------------------------------------------
-    void HlmsUnlitDatablock::scheduleConstBufferUpdate( bool updateTextures, bool updateSamplers )
-    {
-        uint8 flags = ConstBufferPool::DirtyConstBuffer;
-        if( updateTextures )
-            flags |= ConstBufferPool::DirtyTextures;
-        if( updateSamplers )
-            flags |= ConstBufferPool::DirtySamplers;
-
-        static_cast<HlmsUnlit*>(mCreator)->scheduleForUpdate( this, flags );
-    }
-    //-----------------------------------------------------------------------------------
     void HlmsUnlitDatablock::uploadToConstBuffer( char *dstPtr, uint8 dirtyFlags )
     {
         if( dirtyFlags & (ConstBufferPool::DirtyTextures|ConstBufferPool::DirtySamplers) )
@@ -306,7 +264,8 @@ namespace Ogre
 
         memcpy( dstPtr, &mAlphaTestThreshold, sizeof( float ) );
         dstPtr += 4 * sizeof(float);
-        memcpy( dstPtr, &mR, MaterialSizeInGpu - 4 * sizeof(float) );
+        memcpy( dstPtr, &mR, MaterialSizeInGpu - 4 * sizeof(float) - sizeof(mTexIndices) );
+        memcpy( dstPtr, mTexIndices, sizeof(mTexIndices) );
     }
     //-----------------------------------------------------------------------------------
     void HlmsUnlitDatablock::uploadToExtraBuffer( char *dstPtr )
@@ -340,146 +299,6 @@ namespace Ogre
             calculateHash();
             flushRenderables();
         }
-    }
-    //-----------------------------------------------------------------------------------
-    bool OrderTextureByPoolAndName( const TextureGpu *_a, const TextureGpu *_b )
-    {
-        const TexturePool *poolA = _a->getTexturePool();
-        const TexturePool *poolB = _b->getTexturePool();
-
-        IdString poolNameA = poolA ? poolA->masterTexture->getName() : IdString();
-        IdString poolNameB = poolB ? poolB->masterTexture->getName() : IdString();
-
-        if( poolA != poolB )
-            return poolNameA < poolNameB;
-
-        return _a->getName() < _b->getName();
-    }
-    bool HlmsUnlitDatablock::bakeTextures( bool hasSeparateSamplers )
-    {
-        DescriptorSetTexture baseSet;
-        DescriptorSetSampler baseSampler;
-        for( size_t i=0; i<NUM_UNLIT_TEXTURE_TYPES; ++i )
-        {
-            if( mTextures[i] )
-            {
-                //Keep it sorted to maximize sharing of descriptor sets.
-                FastArray<const TextureGpu*>::iterator itor =
-                        std::lower_bound( baseSet.mTextures.begin(),
-                                          baseSet.mTextures.end(),
-                                          mTextures[i], OrderTextureByPoolAndName );
-
-                const size_t idx = itor - baseSet.mTextures.begin();
-
-                //May have changed if the TextureGpuManager updated the Texture.
-                mTexIndices[i] = mTextures[i]->getInternalSliceStart();
-
-                if( itor == baseSet.mTextures.end() || (*itor) != mTextures[i] )
-                {
-                    baseSet.mTextures.insert( itor, mTextures[i] );
-                    if( !hasSeparateSamplers )
-                    {
-                        baseSampler.mSamplers.insert( baseSampler.mSamplers.begin() + idx,
-                                                      mSamplerblocks[i] );
-                    }
-                }
-                else if( !hasSeparateSamplers && baseSampler.mSamplers[idx] != mSamplerblocks[i] )
-                {
-                    assert( idx < baseSampler.mSamplers.size() );
-
-                    //Texture is already there, but we have to duplicate
-                    //it because it uses a different samplerblock
-                    baseSet.mTextures.insert( itor, mTextures[i] );
-                    baseSampler.mSamplers.insert( baseSampler.mSamplers.begin() + idx + 1u,
-                                                  mSamplerblocks[i] );
-                }
-            }
-        }
-
-        baseSet.mShaderTypeTexCount[PixelShader] = static_cast<uint16>( baseSet.mTextures.size() );
-        baseSampler.mShaderTypeSamplerCount[PixelShader] =
-                static_cast<uint16>( baseSampler.mSamplers.size() );
-
-        bool needsRecalculateHash = false;
-
-        HlmsManager *hlmsManager = mCreator->getHlmsManager();
-        if( mTexturesDescSet && baseSet.mTextures.empty() )
-        {
-            hlmsManager->destroyDescriptorSetTexture( mTexturesDescSet );
-            mTexturesDescSet = 0;
-            needsRecalculateHash = true;
-            if( !hasSeparateSamplers )
-            {
-                hlmsManager->destroyDescriptorSetSampler( mSamplersDescSet );
-                mSamplersDescSet = 0;
-            }
-        }
-        else if( !mTexturesDescSet || *mTexturesDescSet != baseSet )
-        {
-            if( mTexturesDescSet )
-                hlmsManager->destroyDescriptorSetTexture( mTexturesDescSet );
-            if( !baseSet.mTextures.empty() )
-            {
-                mTexturesDescSet = hlmsManager->getDescriptorSetTexture( baseSet );
-                needsRecalculateHash = true;
-            }
-            if( !hasSeparateSamplers )
-            {
-                if( mSamplersDescSet )
-                    hlmsManager->destroyDescriptorSetSampler( mSamplersDescSet );
-                if( !baseSet.mTextures.empty() )
-                    mSamplersDescSet = hlmsManager->getDescriptorSetSampler( baseSampler );
-            }
-        }
-
-        return needsRecalculateHash;
-    }
-    //-----------------------------------------------------------------------------------
-    bool OrderBlockById( const BasicBlock *_a, const BasicBlock *_b )
-    {
-        return _a->mId < _b->mId;
-    }
-    bool HlmsUnlitDatablock::bakeSamplers(void)
-    {
-        assert( mCreator->getRenderSystem()->
-                getCapabilities()->hasCapability( RSC_SEPARATE_SAMPLERS_FROM_TEXTURES ) );
-
-        DescriptorSetSampler baseSampler;
-        for( size_t i=0; i<NUM_UNLIT_TEXTURE_TYPES; ++i )
-        {
-            if( mSamplerblocks[i] )
-            {
-                //Keep it sorted to maximize sharing of descriptor sets.
-                FastArray<const HlmsSamplerblock*>::iterator itor =
-                        std::lower_bound( baseSampler.mSamplers.begin(),
-                                          baseSampler.mSamplers.end(),
-                                          mSamplerblocks[i], OrderBlockById );
-                if( itor == baseSampler.mSamplers.end() || (*itor) != mSamplerblocks[i] )
-                    itor = baseSampler.mSamplers.insert( itor, mSamplerblocks[i] );
-            }
-        }
-
-        baseSampler.mShaderTypeSamplerCount[PixelShader] =
-                static_cast<uint16>( baseSampler.mSamplers.size() );
-
-        bool needsRecalculateHash = false;
-
-        HlmsManager *hlmsManager = mCreator->getHlmsManager();
-        if( mSamplersDescSet && baseSampler.mSamplers.empty() )
-        {
-            hlmsManager->destroyDescriptorSetSampler( mSamplersDescSet );
-            mSamplersDescSet = 0;
-            needsRecalculateHash = true;
-        }
-        else if( !mSamplersDescSet || *mSamplersDescSet != baseSampler )
-        {
-            if( mSamplersDescSet )
-                hlmsManager->destroyDescriptorSetSampler( mSamplersDescSet );
-            mSamplersDescSet = hlmsManager->getDescriptorSetSampler( baseSampler );
-            needsRecalculateHash = true;
-        }
-
-        return needsRecalculateHash;
     }
     //-----------------------------------------------------------------------------------
     void HlmsUnlitDatablock::setTexture( uint8 texUnit, const String &name )
@@ -516,99 +335,11 @@ namespace Ogre
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "TODO: REMOVE ME", "" );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsUnlitDatablock::setTexture( uint8 texType, TextureGpu *texture,
-                                         const HlmsSamplerblock *refParams )
-    {
-        assert( texType < NUM_UNLIT_TEXTURE_TYPES );
-
-        bool textureSetDirty = false;
-        bool samplerSetDirty = false;
-
-        if( mTextures[texType] != texture )
-        {
-            if( (!mTextures[texType] && texture) ||
-                (mTextures[texType] && !texture) )
-            {
-                textureSetDirty = true;
-            }
-
-            TexturePool const *prevPool = 0;
-            if( mTextures[texType] )
-            {
-                prevPool = mTextures[texType]->getTexturePool();
-                mTextures[texType]->removeListener( this );
-            }
-
-            mTextures[texType] = texture;
-            mTexIndices[texType] = texture->getInternalSliceStart();
-
-            if( texture )
-            {
-                if( prevPool != texture->getTexturePool() )
-                    textureSetDirty = true;
-
-                texture->addListener( this );
-            }
-
-            scheduleConstBufferUpdate();
-        }
-
-        //Set the new samplerblock
-        if( refParams )
-        {
-            HlmsManager *hlmsManager = mCreator->getHlmsManager();
-            const HlmsSamplerblock *oldSamplerblock = mSamplerblocks[texType];
-            mSamplerblocks[texType] = hlmsManager->getSamplerblock( *refParams );
-
-            if( oldSamplerblock != mSamplerblocks[texType] )
-                samplerSetDirty = true;
-
-            if( oldSamplerblock )
-                hlmsManager->destroySamplerblock( oldSamplerblock );
-        }
-        else if( texture && !mSamplerblocks[texType] )
-        {
-            //Adding a texture, but the samplerblock doesn't exist. Create a default one.
-            HlmsSamplerblock samplerBlockRef;
-            HlmsManager *hlmsManager = mCreator->getHlmsManager();
-            mSamplerblocks[texType] = hlmsManager->getSamplerblock( samplerBlockRef );
-            samplerSetDirty = true;
-        }
-
-        if( textureSetDirty || samplerSetDirty )
-            scheduleConstBufferUpdate( textureSetDirty, samplerSetDirty );
-    }
-    //-----------------------------------------------------------------------------------
-    TextureGpu* HlmsUnlitDatablock::getTexture( uint8 texType ) const
-    {
-        assert( texType < NUM_UNLIT_TEXTURE_TYPES );
-        return mTextures[texType];
-    }
-    //-----------------------------------------------------------------------------------
     void HlmsUnlitDatablock::setTextureSwizzle( uint8 texType, uint8 r, uint8 g, uint8 b, uint8 a )
     {
         assert( texType < NUM_UNLIT_TEXTURE_TYPES );
         mTextureSwizzles[texType] = (r << 6u) | ((g & 0x03u) << 4u) | ((b & 0x03u) << 2u) | (a & 0x03u);
         flushRenderables();
-    }
-    //-----------------------------------------------------------------------------------
-    void HlmsUnlitDatablock::setSamplerblock( uint8 texType, const HlmsSamplerblock &params )
-    {
-        const HlmsSamplerblock *oldSamplerblock = mSamplerblocks[texType];
-        HlmsManager *hlmsManager = mCreator->getHlmsManager();
-        mSamplerblocks[texType] = hlmsManager->getSamplerblock( params );
-
-        if( oldSamplerblock != mSamplerblocks[texType] )
-            scheduleConstBufferUpdate( false, true );
-
-        if( oldSamplerblock )
-            hlmsManager->destroySamplerblock( oldSamplerblock );
-    }
-    //-----------------------------------------------------------------------------------
-    const HlmsSamplerblock* HlmsUnlitDatablock::getSamplerblock( uint8 texType ) const
-    {
-        assert( texType < NUM_UNLIT_TEXTURE_TYPES );
-        return mSamplerblocks[texType];
     }
     //-----------------------------------------------------------------------------------
     void HlmsUnlitDatablock::setTextureUvSource( uint8 sourceType, uint8 uvSet )
@@ -696,74 +427,5 @@ namespace Ogre
     const Matrix4& HlmsUnlitDatablock::getAnimationMatrix( uint8 textureUnit ) const
     {
         return mTextureMatrices[textureUnit];
-    }
-    //-----------------------------------------------------------------------------------
-    uint8 HlmsUnlitDatablock::getIndexToDescriptorTexture( uint8 texType )
-    {
-        assert( texType < NUM_UNLIT_TEXTURE_TYPES );
-        uint8 retVal = NUM_UNLIT_TEXTURE_TYPES;
-
-        TextureGpu *texture = mTextures[texType];
-        if( texture )
-        {
-            FastArray<const TextureGpu*>::const_iterator itor =
-                    std::lower_bound( mTexturesDescSet->mTextures.begin(),
-                                      mTexturesDescSet->mTextures.end(),
-                                      texture, OrderTextureByPoolAndName );
-            if( itor != mTexturesDescSet->mTextures.end() && *itor == texture )
-            {
-                size_t idx = itor - mTexturesDescSet->mTextures.begin();
-
-                const RenderSystem *renderSystem = mCreator->getRenderSystem();
-                const RenderSystemCapabilities *caps = renderSystem->getCapabilities();
-                const bool hasSeparateSamplers =
-                        caps->hasCapability( RSC_SEPARATE_SAMPLERS_FROM_TEXTURES );
-
-                if( !hasSeparateSamplers )
-                {
-                    while( mSamplerblocks[texType] != mSamplersDescSet->mSamplers[idx] )
-                        ++idx;
-                    assert( texture == mTexturesDescSet->mTextures[idx] );
-                }
-
-                retVal = static_cast<uint8>( idx );
-            }
-        }
-
-        return retVal;
-    }
-    //-----------------------------------------------------------------------------------
-    uint8 HlmsUnlitDatablock::getIndexToDescriptorSampler( uint8 texType )
-    {
-        assert( texType < NUM_UNLIT_TEXTURE_TYPES );
-        uint8 retVal = NUM_UNLIT_TEXTURE_TYPES;
-
-        const HlmsSamplerblock *sampler = mSamplerblocks[texType];
-        if( sampler )
-        {
-            assert( mCreator->getRenderSystem()->
-                    getCapabilities()->hasCapability( RSC_SEPARATE_SAMPLERS_FROM_TEXTURES ) );
-
-            FastArray<const HlmsSamplerblock*>::const_iterator itor =
-                    std::lower_bound( mSamplersDescSet->mSamplers.begin(),
-                                      mSamplersDescSet->mSamplers.end(),
-                                      sampler, OrderBlockById );
-            if( itor != mSamplersDescSet->mSamplers.end() && *itor == sampler )
-            {
-                const size_t idx = itor - mSamplersDescSet->mSamplers.begin();
-                retVal = static_cast<uint8>( idx );
-            }
-        }
-
-        return retVal;
-    }
-    //-----------------------------------------------------------------------------------
-    void HlmsUnlitDatablock::notifyTextureChanged( TextureGpu *texture,
-                                                   TextureGpuListener::Reason reason )
-    {
-        if( reason == TextureGpuListener::FromStorageToSysRam )
-            return; //Does not affect us at all.
-
-        scheduleConstBufferUpdate( true, false );
     }
 }

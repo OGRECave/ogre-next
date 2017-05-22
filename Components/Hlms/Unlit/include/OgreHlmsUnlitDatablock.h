@@ -29,10 +29,17 @@ THE SOFTWARE.
 #define _OgreHlmsUnlitDatablock_H_
 
 #include "OgreHlmsUnlitPrerequisites.h"
-#include "OgreHlmsDatablock.h"
-#include "OgreHlmsTextureManager.h"
-#include "OgreConstBufferPool.h"
-#include "OgreTextureGpuListener.h"
+
+#define _OgreHlmsTextureBaseClassExport _OgreHlmsUnlitExport
+#define OGRE_HLMS_TEXTURE_BASE_CLASS HlmsUnlitBaseTextureDatablock
+#define OGRE_HLMS_TEXTURE_BASE_MAX_TEX NUM_UNLIT_TEXTURE_TYPES
+#define OGRE_HLMS_CREATOR_CLASS HlmsUnlit
+    #include "../../Common/include/OgreHlmsTextureBaseClass.h"
+#undef _OgreHlmsTextureBaseClassExport
+#undef OGRE_HLMS_TEXTURE_BASE_CLASS
+#undef OGRE_HLMS_TEXTURE_BASE_MAX_TEX
+#undef OGRE_HLMS_CREATOR_CLASS
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
@@ -46,8 +53,7 @@ namespace Ogre
 
     /** Contains information needed by PBS (Physically Based Shading) for OpenGL 3+ & D3D11+
     */
-    class _OgreHlmsUnlitExport HlmsUnlitDatablock : public HlmsDatablock, public ConstBufferPoolUser,
-                                                    public TextureGpuListener
+    class _OgreHlmsUnlitExport HlmsUnlitDatablock : public HlmsUnlitBaseTextureDatablock
     {
         friend class HlmsUnlit;
     public:
@@ -62,32 +68,19 @@ namespace Ogre
         uint8   mNumEnabledAnimationMatrices;
         bool    mHasColour;         /// When false; mR, mG, mB & mA aren't passed to the pixel shader
         float   mR, mG, mB, mA;
-        uint16  mTexIndices[NUM_UNLIT_TEXTURE_TYPES];
 
         uint8   mUvSource[NUM_UNLIT_TEXTURE_TYPES];
         uint8   mBlendModes[NUM_UNLIT_TEXTURE_TYPES];
         bool    mEnabledAnimationMatrices[NUM_UNLIT_TEXTURE_TYPES];
 
-        DescriptorSetTexture const *mTexturesDescSet;
-        DescriptorSetSampler const *mSamplersDescSet;
-
         uint8   mTextureSwizzles[NUM_UNLIT_TEXTURE_TYPES];
 
-        TextureGpu              *mTextures[NUM_UNLIT_TEXTURE_TYPES];
-        HlmsSamplerblock const  *mSamplerblocks[NUM_UNLIT_TEXTURE_TYPES];
-
-        void scheduleConstBufferUpdate( bool updateTextures=false, bool updateSamplers=false );
         virtual void uploadToConstBuffer( char *dstPtr, uint8 dirtyFlags );
         virtual void uploadToExtraBuffer( char *dstPtr );
 
         void updateDescriptorSets( bool textureSetDirty, bool samplerSetDirty );
 
         void setTexture( uint8 texUnit, const String &name );
-
-        /// Expects caller to call flushRenderables if we return true.
-        bool bakeTextures( bool hasSeparateSamplers );
-        /// Expects caller to call flushRenderables if we return true.
-        bool bakeSamplers(void);
 
     public:
         /** Valid parameters in params:
@@ -180,23 +173,7 @@ namespace Ogre
         void setTexture( uint8 texType, uint16 arrayIndex, const TexturePtr &newTexture,
                          const HlmsSamplerblock *refParams=0 );
 
-        //TexturePtr getTexture( uint8 texType ) const;
-
-        /** Sets a new texture for rendering. Calling this function may trigger an
-            HlmsDatablock::flushRenderables if the texture or the samplerblock changes.
-            Might not be called if old and new texture belong to the same TexturePool.
-        @param texType
-            Texture unit. Must be in range [0; NUM_UNLIT_TEXTURE_TYPES)
-        @param texture
-            Texture to change to. If it is null and previously wasn't (or viceversa), will
-            trigger HlmsDatablock::flushRenderables.
-        @param refParams
-            Optional. We'll create (or retrieve an existing) samplerblock based on the input parameters.
-            When null, we leave the previously set samplerblock (if a texture is being set, and if no
-            samplerblock was set, we'll create a default one)
-        */
-        void setTexture( uint8 texType, TextureGpu *texture, const HlmsSamplerblock *refParams=0 );
-        TextureGpu* getTexture( uint8 texType ) const;
+        using HlmsUnlitBaseTextureDatablock::setTexture;
 
         /** Sets the final swizzle when sampling the given texture. e.g.
             calling setTextureSwizzle( 0, R_MASK, G_MASK, R_MASK, G_MASK );
@@ -220,18 +197,6 @@ namespace Ogre
             Default: A_MASK
         */
         void setTextureSwizzle( uint8 texType, uint8 r, uint8 g, uint8 b, uint8 a );
-
-        /** Sets a new sampler block to be associated with the texture
-            (i.e. filtering mode, addressing modes, etc). If the samplerblock changes,
-            this function will always trigger a HlmsDatablock::flushRenderables
-        @param texType
-            Texture unit. Must be in range [0; NUM_UNLIT_TEXTURE_TYPES)
-        @param params
-            The sampler block to use as reference.
-        */
-        void setSamplerblock( uint8 texType, const HlmsSamplerblock &params );
-
-        const HlmsSamplerblock* getSamplerblock( uint8 texType ) const;
 
         /** Sets which UV set to use for the given texture.
             Calling this function triggers a HlmsDatablock::flushRenderables.
@@ -268,17 +233,7 @@ namespace Ogre
         void setAnimationMatrix( uint8 textureUnit, const Matrix4 &matrix );
         const Matrix4 & getAnimationMatrix( uint8 textureUnit ) const;
 
-        uint8 getIndexToDescriptorTexture( uint8 texType );
-        /// Do not call this function if RSC_SEPARATE_SAMPLERS_FROM_TEXTURES is not set.
-        /// If not set, then just the result value from getIndexToDescriptorTexture
-        /// instead
-        uint8 getIndexToDescriptorSampler( uint8 texType );
-
-        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason );
-
         virtual void calculateHash();
-
-        void loadAllTextures(void);
 
         static const size_t MaterialSizeInGpu;
         static const size_t MaterialSizeInGpuAligned;
