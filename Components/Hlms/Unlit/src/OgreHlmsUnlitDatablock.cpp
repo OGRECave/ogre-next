@@ -329,13 +329,6 @@ namespace Ogre
         scheduleConstBufferUpdate();
     }
     //-----------------------------------------------------------------------------------
-    void HlmsUnlitDatablock::setTexture( uint8 texType, uint16 arrayIndex,
-                                         const TexturePtr &newTexture,
-                                         const HlmsSamplerblock *refParams )
-    {
-        OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "TODO: REMOVE ME", "" );
-    }
-    //-----------------------------------------------------------------------------------
     void HlmsUnlitDatablock::setTextureSwizzle( uint8 texType, uint8 r, uint8 g, uint8 b, uint8 a )
     {
         assert( texType < NUM_UNLIT_TEXTURE_TYPES );

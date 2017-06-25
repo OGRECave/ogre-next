@@ -153,27 +153,6 @@ namespace Ogre
         /// Gets the current colour. The returned value is meaningless if mHasColour is false
         ColourValue getColour(void) const               { return ColourValue( mR, mG, mB, mA ); }
 
-        /** Sets a new texture for rendering. Calling this function may trigger an
-            HlmsDatablock::flushRenderables if the texture or the samplerblock changes.
-            Won't be called if only the arrayIndex changes
-        @param texType
-            Texture unit. Must be in range [0; NUM_UNLIT_TEXTURE_TYPES)
-        @param arrayIndex
-            The index in the array texture.
-        @param newTexture
-            Texture to change to. If it is null and previously wasn't (or viceversa), will
-            trigger HlmsDatablock::flushRenderables.
-        @param params
-            Optional. We'll create (or retrieve an existing) samplerblock based on the input parameters.
-            When null, we leave the previously set samplerblock (if a texture is being set, and if no
-            samplerblock was set, we'll create a default one)
-        @param bUpdateDescriptorSets
-            Default value is true. When false, it can be used as an optimization if you're changing
-            all textures at once. For example:
-        */
-        void setTexture( uint8 texType, uint16 arrayIndex, const TexturePtr &newTexture,
-                         const HlmsSamplerblock *refParams=0 );
-
         using HlmsUnlitBaseTextureDatablock::setTexture;
 
         /** Sets the final swizzle when sampling the given texture. e.g.
