@@ -100,9 +100,39 @@ namespace Ogre {
             ResourceGroupMap::value_type(name, grp));
     }
     //-----------------------------------------------------------------------
-    void ResourceGroupManager::initialiseResourceGroup(const String& name)
+    class ScopedCLocale
+    {
+        char mSavedLocale[64];
+        bool mChangeLocaleTemporarily;
+    public:
+        ScopedCLocale( bool changeLocaleTemporarily ) :
+            mChangeLocaleTemporarily( changeLocaleTemporarily )
+        {
+            if( mChangeLocaleTemporarily )
+            {
+                const char *currentLocale = setlocale( LC_NUMERIC, 0 );
+                strncpy( mSavedLocale, currentLocale, 64u );
+                mSavedLocale[63] = '\0';
+                setlocale( LC_NUMERIC, "C" );
+            }
+        }
+        ~ScopedCLocale()
+        {
+            if( mChangeLocaleTemporarily )
+            {
+                //Restore
+                setlocale( LC_NUMERIC, mSavedLocale );
+            }
+        }
+    };
+    //-----------------------------------------------------------------------
+    void ResourceGroupManager::initialiseResourceGroup( const String& name,
+                                                        bool changeLocaleTemporarily )
     {
             OGRE_LOCK_AUTO_MUTEX;
+
+        ScopedCLocale scopedCLocale( changeLocaleTemporarily );
+
         LogManager::getSingleton().logMessage("Initialising resource group " + name);
         ResourceGroup* grp = getResourceGroup(name);
         if (!grp)
@@ -129,9 +159,11 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void ResourceGroupManager::initialiseAllResourceGroups(void)
+    void ResourceGroupManager::initialiseAllResourceGroups( bool changeLocaleTemporarily )
     {
             OGRE_LOCK_AUTO_MUTEX;
+
+        ScopedCLocale scopedCLocale( changeLocaleTemporarily );
 
         // Intialise all declared resource groups
         ResourceGroupMap::iterator i, iend;

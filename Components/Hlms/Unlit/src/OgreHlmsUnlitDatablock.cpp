@@ -108,6 +108,7 @@ namespace Ogre
         memset( mBlendModes, 0, sizeof( mBlendModes ) );
 
         memset( mEnabledAnimationMatrices, 0, sizeof( mEnabledAnimationMatrices ) );
+        memset( mEnablePlanarReflection, 0, sizeof( mEnablePlanarReflection ) );
 
         String paramVal;
 
@@ -427,5 +428,21 @@ namespace Ogre
     const Matrix4& HlmsUnlitDatablock::getAnimationMatrix( uint8 textureUnit ) const
     {
         return mTextureMatrices[textureUnit];
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsUnlitDatablock::setEnablePlanarReflection( uint8 textureUnit, bool bEnable )
+    {
+        assert( textureUnit < NUM_UNLIT_TEXTURE_TYPES );
+
+        if( mEnablePlanarReflection[textureUnit] != bEnable )
+        {
+            mEnablePlanarReflection[textureUnit] = bEnable;
+            flushRenderables();
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    bool HlmsUnlitDatablock::getEnablePlanarReflection( uint8 textureUnit ) const
+    {
+        return mEnablePlanarReflection[textureUnit];
     }
 }

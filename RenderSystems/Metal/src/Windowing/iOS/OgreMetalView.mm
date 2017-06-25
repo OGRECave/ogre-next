@@ -26,7 +26,7 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#import "Windowing/iOS/OgreMetalView.h"
+#import "OgreMetalView.h"
 
 #import <SpriteKit/SpriteKit.h>
 

@@ -6,21 +6,38 @@ include_directories(${CMAKE_SOURCE_DIR}/Components/Overlay/include)
 set( SAMPLE_COMMON_BASIC_RESOURCES "" )
 set( SAMPLE_COMMON_RESOURCES "" )
 set( SAMPLES_PLIST "" )
+set( SAMPLE_COMMON_STORYBOARD_RESOURCE "" )
+
+set (OGRE_BUILD_SAMPLES2_SKIP 0 )
 
 if( NOT OGRE_BUILD_PLATFORM_APPLE_IOS )
-	if (OGRE_BUILD_SAMPLES2 AND NOT SDL2_FOUND)
-		message(STATUS "Could not find dependency: SDL2")
-		message(STATUS "Skipping samples & tests build")
-		set(OGRE_BUILD_SAMPLES2 0)
+	if( OGRE_BUILD_SAMPLES2 AND NOT SDL2_FOUND )
+		message( STATUS "Could not find dependency for samples: SDL2" )
+		set( OGRE_BUILD_SAMPLES2_SKIP 1 )
 	else()
 		include_directories(${SDL2_INCLUDE_DIR})
 	endif()
 endif()
 
+if( NOT OGRE_BUILD_COMPONENT_OVERLAY )
+	message( STATUS "Samples require Overlays (OGRE_BUILD_COMPONENT_OVERLAY) to be set." )
+	set( OGRE_BUILD_SAMPLES2_SKIP 1 )
+endif()
+
+if( OGRE_BUILD_SAMPLES2_SKIP )
+	message(STATUS "Skipping samples & tests build")
+endif()
+
 if( APPLE )
+        if( OGRE_BUILD_PLATFORM_APPLE_IOS )
+            # This needs to be first in the list in order show up in the Copy Bundle Resources build phase.
+            set( SAMPLE_COMMON_STORYBOARD_RESOURCE ${CMAKE_CURRENT_SOURCE_DIR}/Common/src/System/iOS/Resources/Main.storyboard )
+        endif()
+
 	set( SAMPLE_COMMON_BASIC_RESOURCES ${SAMPLE_COMMON_BASIC_RESOURCES}
-		 ${CMAKE_CURRENT_SOURCE_DIR}/Common/src/System/iOS/Resources/Main.storyboard
+                 ${SAMPLE_COMMON_STORYBOARD_RESOURCE}
 		 ${CMAKE_BINARY_DIR}/bin/resources2.cfg
+                 ${CMAKE_BINARY_DIR}/bin/plugins.cfg
 		 ${CMAKE_SOURCE_DIR}/Samples/Media/2.0
 		 ${CMAKE_SOURCE_DIR}/Samples/Media/Hlms
 		 ${CMAKE_SOURCE_DIR}/Samples/Media/packs/DebugPack.zip )
@@ -29,14 +46,18 @@ if( APPLE )
 		 ${CMAKE_SOURCE_DIR}/Samples/Media/models
 		 ${CMAKE_SOURCE_DIR}/Samples/Media/materials/textures )
 
-	set( SAMPLES_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Common/src/System/iOS/Resources/Info.plist )
+        if( OGRE_BUILD_PLATFORM_APPLE_IOS )
+            set( SAMPLES_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Common/src/System/iOS/Resources/Info.plist )
+        else()
+            set( SAMPLES_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Common/src/System/OSX/Resources/Info.plist )
+        endif()
 endif()
 
-if( OGRE_BUILD_SAMPLES2 )
+if( OGRE_BUILD_SAMPLES2 AND NOT OGRE_BUILD_SAMPLES2_SKIP )
     add_subdirectory(Common)
 endif()
 
-if( OGRE_BUILD_SAMPLES2 )
+if( OGRE_BUILD_SAMPLES2 AND NOT OGRE_BUILD_SAMPLES2_SKIP )
 	set( OGRE_SAMPLES_LIBRARIES "OgreSamplesCommon" "OgreOverlay" )
 
 	if( OGRE_STATIC )
@@ -55,6 +76,11 @@ if( OGRE_BUILD_SAMPLES2 )
 #	add_subdirectory(ApiUsage/V1Interfaces)
 #	add_subdirectory(ApiUsage/V2Mesh)
 #	add_subdirectory(ApiUsage/V2ManualObject)
+#	if( OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS )
+#		add_subdirectory(ApiUsage/PlanarReflections)
+#	else()
+#		message(STATUS "Skipping PlanarReflections sample (OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS not set)")
+#	endif()
 #	add_subdirectory(ApiUsage/ScreenSpaceReflections)
 #	add_subdirectory(ApiUsage/StaticShadowMaps)
 #	add_subdirectory(ApiUsage/StencilTest)

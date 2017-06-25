@@ -40,14 +40,13 @@ void ErrorDialog::display(const String& errorMessage, String logName)
 #pragma unused(logName)
     // Because Carbon is missing 64-bit support we have to use Cocoa
     NSApplicationLoad();
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSAlert *alert = [[NSAlert alloc] init];
+    @autoreleasepool {
+        NSAlert *alert = [[NSAlert alloc] init];
 
-    [alert setMessageText:@"An error has occurred!"];
-    [alert setAlertStyle:NSCriticalAlertStyle];
-    [alert setInformativeText:[NSString stringWithCString:errorMessage.c_str()
-                                                 encoding:NSASCIIStringEncoding]];
-    [alert runModal];
-    [alert release];
-    [pool release];
+        [alert setMessageText:@"An error has occurred!"];
+        [alert setAlertStyle:NSCriticalAlertStyle];
+        [alert setInformativeText:[NSString stringWithCString:errorMessage.c_str()
+                                                     encoding:NSASCIIStringEncoding]];
+        [alert runModal];
+    }
 }

@@ -11,7 +11,7 @@ struct ShadowReceiverData
 
 struct Light
 {
-	vec3 position;
+	vec4 position; //.w contains the objLightMask
 	vec3 diffuse;
 	vec3 specular;
 @property( hlms_num_shadow_map_lights )
@@ -28,6 +28,10 @@ layout(binding = 0) uniform PassBuffer
 {
 	//Vertex shader (common to both receiver and casters)
 	mat4 viewProj;
+
+@property( hlms_global_clip_distances )
+	vec4 clipPlane0;
+@end
 
 @property( hlms_shadowcaster_point )
 	vec4 cameraPosWS;	//Camera position in world space
@@ -91,6 +95,8 @@ layout(binding = 0) uniform PassBuffer
 		vec4 fwdScreenToGrid;
 	@end
 @end
+
+	@insertpiece( DeclPlanarReflUniforms )
 
 @property( parallax_correct_cubemaps )
 	CubemapProbe autoProbe;

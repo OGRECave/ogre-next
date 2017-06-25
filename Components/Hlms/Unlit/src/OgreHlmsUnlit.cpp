@@ -53,6 +53,9 @@ THE SOFTWARE.
 #include "Vao/OgreTexBufferPacked.h"
 #include "Vao/OgreStagingBuffer.h"
 
+#include "OgreHlmsManager.h"
+#include "OgreLogManager.h"
+
 #include "CommandBuffer/OgreCommandBuffer.h"
 #include "CommandBuffer/OgreCbTexture.h"
 #include "CommandBuffer/OgreCbShaderBuffer.h"
@@ -70,7 +73,9 @@ namespace Ogre
         mLastBoundPool( 0 ),
         mHasSeparateSamplers( 0 ),
         mLastDescTexture( 0 ),
-        mLastDescSampler( 0 )
+        mLastDescSampler( 0 ),
+        mUsingExponentialShadowMaps( false ),
+        mEsmK( 600u )
     {
         //Override defaults
         mLightGatheringMode = LightGatherNone;
@@ -86,7 +91,9 @@ namespace Ogre
         mCurrentPassBuffer( 0 ),
         mLastBoundPool( 0 ),
         mLastDescTexture( 0 ),
-        mLastDescSampler( 0 )
+        mLastDescSampler( 0 ),
+        mUsingExponentialShadowMaps( false ),
+        mEsmK( 600u )
     {
         //Override defaults
         mLightGatheringMode = LightGatherNone;
@@ -315,6 +322,7 @@ namespace Ogre
 
         bool hasAnimationMatrices = false;
         UvOutputVec uvOutputs;
+        bool hasPlanarReflection = false;
 
         char tmpBuffer[64];
         LwString diffuseMapN( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
@@ -338,6 +346,16 @@ namespace Ogre
                              StringConverter::toString( datablock->mUvSource[i] ) +
                              ". Either change the mesh, or change the UV source settings",
                              "HlmsUnlit::calculateHashForPreCreate" );
+            }
+
+            if( hasTexture )
+            {
+                if( datablock->getEnablePlanarReflection( i ) )
+                {
+                    IdString diffuseMapNReflection( diffuseMapNStr + "_reflection" );
+                    setProperty( diffuseMapNReflection, 1 );
+                    hasPlanarReflection = true;
+                }
             }
 
             //Set the blend mode
@@ -420,6 +438,12 @@ namespace Ogre
         if( hasAnimationMatrices )
             setProperty( UnlitProperty::TextureMatrix, 1 );
 
+        if( hasPlanarReflection )
+        {
+            setProperty( HlmsBaseProp::VPos, 1 );
+            setProperty( UnlitProperty::HasPlanarReflections, 1 );
+        }
+
         size_t halfUvOutputs = (uvOutputs.size() + 1u) >> 1u;
         setProperty( UnlitProperty::OutUvCount, static_cast<int32>( uvOutputs.size() ) );
         setProperty( UnlitProperty::OutUvHalfCount, static_cast<int32>( halfUvOutputs ) );
@@ -488,13 +512,30 @@ namespace Ogre
 
         //Set the properties and create/retrieve the cache.
         if( casterPass )
+        {
             setProperty( HlmsBaseProp::ShadowCaster, 1 );
+            if( mUsingExponentialShadowMaps )
+                setProperty( UnlitProperty::ExponentialShadowMaps, mEsmK );
+
+            const CompositorPass *pass = sceneManager->getCurrentCompositorPass();
+            if( pass )
+            {
+                const uint8 shadowMapIdx = pass->getDefinition()->mShadowMapIdx;
+                const Light *light = shadowNode->getLightAssociatedWith( shadowMapIdx );
+                if( light->getType() == Light::LT_POINT )
+                    setProperty( HlmsBaseProp::ShadowCasterPoint, 1 );
+            }
+        }
 
         RenderTarget *renderTarget = sceneManager->getCurrentViewport()->getTarget();
         setProperty( HlmsBaseProp::ShadowUsesDepthTexture,
                      renderTarget->getForceDisableColourWrites() ? 1 : 0 );
         setProperty( HlmsBaseProp::RenderDepthOnly,
                      renderTarget->getForceDisableColourWrites() ? 1 : 0 );
+
+        Camera *camera = sceneManager->getCameraInProgress();
+        if( camera && camera->isReflected() )
+            setProperty( HlmsBaseProp::GlobalClipDistances, 1 );
 
         mListener->preparePassHash( shadowNode, casterPass, dualParaboloid, sceneManager, this );
 
@@ -518,7 +559,6 @@ namespace Ogre
         retVal.setProperties = mSetProperties;
         retVal.pso.pass = passCache.passPso;
 
-        Camera *camera = sceneManager->getCameraInProgress();
         Matrix4 viewMatrix = camera->getViewMatrix(true);
 
         Matrix4 projectionMatrix = camera->getProjectionMatrixWithRSDepth();
@@ -545,14 +585,32 @@ namespace Ogre
 
         mSetProperties.clear();
 
-        //mat4 viewProj[2];
-        size_t mapSize = (16 + 16) * 4;
+        bool isShadowCastingPointLight = false;
+
+        //mat4 viewProj[2] + vec4 invWindowSize;
+        size_t mapSize = (16 + 16 + 4) * 4;
+
+        const bool isCameraReflected = camera->isReflected();
+        //mat4 invViewProj
+        if( isCameraReflected || (casterPass && (mUsingExponentialShadowMaps || isShadowCastingPointLight)) )
+            mapSize += 16 * 4;
 
         if( casterPass )
         {
-            //vec2 depthRange; (+padding)
-            mapSize += 4 * 4;
+            isShadowCastingPointLight = getProperty( HlmsBaseProp::ShadowCasterPoint ) != 0;
+
+            //vec4 viewZRow
+            if( mUsingExponentialShadowMaps )
+                mapSize += 4 * 4;
+            //vec4 depthRange
+            mapSize += (2 + 2) * 4;
+            //vec4 cameraPosWS
+            if( isShadowCastingPointLight )
+                mapSize += 4 * 4;
         }
+        //vec4 clipPlane0
+        if( isCameraReflected )
+            mapSize += 4 * 4;
 
         mapSize += mListener->getPassBufferSize( shadowNode, casterPass,
                                                  dualParaboloid, sceneManager );
@@ -586,8 +644,36 @@ namespace Ogre
         for( size_t i=0; i<16; ++i )
             *passBufferPtr++ = (float)mPreparedPass.viewProjMatrix[1][0][i];
 
+        //vec4 clipPlane0
+        if( isCameraReflected )
+        {
+            const Plane &reflPlane = camera->getReflectionPlane();
+            *passBufferPtr++ = (float)reflPlane.normal.x;
+            *passBufferPtr++ = (float)reflPlane.normal.y;
+            *passBufferPtr++ = (float)reflPlane.normal.z;
+            *passBufferPtr++ = (float)reflPlane.d;
+        }
+
+        if( isCameraReflected || (casterPass && (mUsingExponentialShadowMaps || isShadowCastingPointLight)) )
+        {
+            //We don't care about the inverse of the identity proj because that's not
+            //really compatible with shadows anyway.
+            Matrix4 invViewProj = mPreparedPass.viewProjMatrix[0].inverse();
+            for( size_t i=0; i<16; ++i )
+                *passBufferPtr++ = (float)invViewProj[0][i];
+        }
+
         if( casterPass )
         {
+            //vec4 viewZRow
+            if( mUsingExponentialShadowMaps )
+            {
+                *passBufferPtr++ = viewMatrix[2][0];
+                *passBufferPtr++ = viewMatrix[2][1];
+                *passBufferPtr++ = viewMatrix[2][2];
+                *passBufferPtr++ = viewMatrix[2][3];
+            }
+
             //vec2 depthRange;
             Real fNear, fFar;
             shadowNode->getMinMaxDepthRange( camera, fNear, fFar );
@@ -595,7 +681,23 @@ namespace Ogre
             *passBufferPtr++ = fNear;
             *passBufferPtr++ = 1.0f / depthRange;
             passBufferPtr += 2;
+
+            //vec4 cameraPosWS;
+            if( isShadowCastingPointLight )
+            {
+                const Vector3 &camPos = camera->getDerivedPosition();
+                *passBufferPtr++ = (float)camPos.x;
+                *passBufferPtr++ = (float)camPos.y;
+                *passBufferPtr++ = (float)camPos.z;
+                *passBufferPtr++ = 1.0f;
+            }
         }
+
+        //vec4 invWindowSize;
+        *passBufferPtr++ = 1.0f / (float)renderTarget->getWidth();
+        *passBufferPtr++ = 1.0f / (float)renderTarget->getHeight();
+        *passBufferPtr++ = 1.0f;
+        *passBufferPtr++ = 1.0f;
 
         passBufferPtr = mListener->preparePassBuffer( shadowNode, casterPass, dualParaboloid,
                                                       sceneManager, passBufferPtr );
@@ -669,6 +771,10 @@ namespace Ogre
             //layout(binding = 0) uniform PassBuffer {} pass
             ConstBufferPacked *passBuffer = mPassBuffers[mCurrentPassBuffer-1];
             *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer( VertexShader,
+                                                                           0, passBuffer, 0,
+                                                                           passBuffer->
+                                                                           getTotalSizeBytes() );
+            *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer( PixelShader,
                                                                            0, passBuffer, 0,
                                                                            passBuffer->
                                                                            getTotalSizeBytes() );
@@ -831,6 +937,25 @@ namespace Ogre
     {
         HlmsBufferManager::frameEnded();
         mCurrentPassBuffer  = 0;
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsUnlit::setShadowSettings( bool useExponentialShadowMaps )
+    {
+        mUsingExponentialShadowMaps = useExponentialShadowMaps;
+
+        if( mUsingExponentialShadowMaps && mHlmsManager->getShadowMappingUseBackFaces() )
+        {
+            LogManager::getSingleton().logMessage(
+                        "QUALITY WARNING: It is highly recommended that you call "
+                        "mHlmsManager->setShadowMappingUseBackFaces( false ) when using Exponential "
+                        "Shadow Maps (HlmsUnlit::setShadowSettings)" );
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsUnlit::setEsmK( uint16 K )
+    {
+        assert( K != 0 && "A value of K = 0 is invalid!" );
+        mEsmK = K;
     }
 #if !OGRE_NO_JSON
 	//-----------------------------------------------------------------------------------

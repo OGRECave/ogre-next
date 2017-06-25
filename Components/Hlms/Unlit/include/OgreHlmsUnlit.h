@@ -63,7 +63,7 @@ namespace Ogre
 
         PassData                mPreparedPass;
         ConstBufferPackedVec    mPassBuffers;
-        uint32                  mCurrentPassBuffer;     /// Resets every to zero every new frame.
+        uint32                  mCurrentPassBuffer;     /// Resets to zero every new frame.
 
         ConstBufferPool::BufferPool const *mLastBoundPool;
 
@@ -71,6 +71,8 @@ namespace Ogre
         DescriptorSetTexture const *mLastDescTexture;
         DescriptorSetSampler const *mLastDescSampler;
 
+        bool    mUsingExponentialShadowMaps;
+        uint16  mEsmK; /// K parameter for ESM.
 
         virtual const HlmsCache* createShaderCacheEntry( uint32 renderableHash,
                                                          const HlmsCache &passCache,
@@ -125,6 +127,14 @@ namespace Ogre
                                          CommandBuffer *commandBuffer );
 
         virtual void frameEnded(void);
+
+        void setShadowSettings( bool useExponentialShadowMaps );
+        bool getShadowFilter(void) const                    { return mUsingExponentialShadowMaps; }
+
+        /// @copydoc HlmsPbs::setEsmK
+        void setEsmK( uint16 K );
+        uint16 getEsmK(void) const                          { return mEsmK; }
+
 #if !OGRE_NO_JSON
 		/// @copydoc Hlms::_loadJson
 		virtual void _loadJson(const rapidjson::Value &jsonValue, const HlmsJson::NamedBlocks &blocks,

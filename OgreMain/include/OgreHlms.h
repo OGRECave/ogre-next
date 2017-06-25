@@ -274,6 +274,13 @@ namespace Ogre
 
         void processPieces( Archive *archive, const StringVector &pieceFiles );
 
+        /** Modifies the PSO's macroblock if there are reasons to do that, and creates
+            a strong reference to the macroblock that the PSO will own.
+        @param pso [in/out]
+            PSO to (potentially) modify.
+        */
+        void applyStrongMacroblockRules( HlmsPso &pso );
+
         /** Creates a shader based on input parameters. Caller is responsible for ensuring
             this shader hasn't already been created.
             Shader template files will be processed and then compiled.
@@ -438,7 +445,7 @@ namespace Ogre
         /// The reason this String doesn't live in HlmsDatablock is to prevent
         /// cache trashing (datablocks are hot iterated every frame, and the
         /// full name is rarely ever used)
-        const String* getFullNameString( IdString name ) const;
+        const String* getNameStr(IdString name) const;
 
         /// Returns the filaname & resource group a datablock was created from, and
         /// is associated with its hashed name (this was passed as in @createDatablock).
@@ -671,6 +678,7 @@ namespace Ogre
         static const IdString LightsSpotParams;
 
         //Change per scene pass
+        static const IdString GlobalClipDistances;
         static const IdString DualParaboloidMapping;
         static const IdString NumShadowMapLights;
         static const IdString NumShadowMapTextures;
@@ -679,6 +687,7 @@ namespace Ogre
         static const IdString ShadowCasterPoint;
         static const IdString ShadowUsesDepthTexture;
         static const IdString RenderDepthOnly;
+        static const IdString FineLightMask;
         static const IdString PrePass;
         static const IdString UsePrePass;
         static const IdString UsePrePassMsaa;

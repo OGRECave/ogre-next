@@ -358,10 +358,13 @@ namespace Ogre
             --mNumPassesLeft;
         }
 
+        CompositorWorkspaceListener *listener = mParentNode->getWorkspace()->getListener();
+        if( listener )
+            listener->passEarlyPreExecute( this );
+
         executeResourceTransitions();
 
         //Fire the listener in case it wants to change anything
-        CompositorWorkspaceListener *listener = mParentNode->getWorkspace()->getListener();
         if( listener )
             listener->passPreExecute( this );
 
@@ -449,9 +452,12 @@ namespace Ogre
                             }
                             else
                             {
+                                //The RTT will be first used as a texture, then
+                                //as an UAV, then as texture again, then UAV, etc.
+                                //So we need to set to Texture first.
                                 addResourceTransition( currentLayout,
-                                                       ResourceLayout::Uav,
-                                                       ReadBarrier::Uav );
+                                                       ResourceLayout::Texture,
+                                                       ReadBarrier::Texture );
                             }
                         }
                     }
