@@ -352,7 +352,9 @@ namespace Ogre
             {
                 if( datablock->getEnablePlanarReflection( i ) )
                 {
-                    IdString diffuseMapNReflection( diffuseMapNStr + "_reflection" );
+                    diffuseMapN.resize( basePropSize + 1u );
+                    diffuseMapN.a( "_reflection" ); //diffuse_map0_reflection
+                    IdString diffuseMapNReflection( diffuseMapN.c_str() );
                     setProperty( diffuseMapNReflection, 1 );
                     hasPlanarReflection = true;
                 }
