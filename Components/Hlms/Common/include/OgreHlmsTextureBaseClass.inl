@@ -45,7 +45,7 @@ namespace Ogre
 				mSamplersDescSet = 0;
 			}
 
-			for( size_t i=0; i<NUM_UNLIT_TEXTURE_TYPES; ++i )
+			for( size_t i=0; i<OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
 			{
 				if( mSamplerblocks[i] )
 					hlmsManager->destroySamplerblock( mSamplerblocks[i] );
@@ -317,6 +317,8 @@ namespace Ogre
 
 				if( !hasSeparateSamplers )
 				{
+					//We may have more than one entry for the same texture
+					//(since they have different samplerblocks).
 					while( mSamplerblocks[texType] != mSamplersDescSet->mSamplers[idx] )
 						++idx;
 					assert( texture == mTexturesDescSet->mTextures[idx] );
