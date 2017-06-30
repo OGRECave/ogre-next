@@ -1,7 +1,7 @@
 /*
 -----------------------------------------------------------------------------
 This source file is part of OGRE
-	(Object-oriented Graphics Rendering Engine)
+    (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
 Copyright (c) 2000-2017 Torus Knot Software Ltd
@@ -34,103 +34,104 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-	/** \addtogroup Core
-	*  @{
-	*/
-	/** \addtogroup Resources
-	*  @{
-	*/
+    /** \addtogroup Core
+    *  @{
+    */
+    /** \addtogroup Resources
+    *  @{
+    */
 
-	/** This is not a regular header, therefore it has no include guards.
-		This header contains a base class that defines
-		common functionality across multiple Hlms datablock implementations that need
-		textures. However C++ does not let us statically define the size of
-		mTexIndices, mTextures & mSamplerblocks array; we would have to either force the
-		same maximum to all implementations, or use the heap.
-	@par
-		Therefore this header uses macros to customize each base class for each implementations.
-		DO NOT INCLUDE THIS HEADER DIRECTLY.
+    /** This is not a regular header, therefore it has no include guards.
+        This header contains a base class that defines
+        common functionality across multiple Hlms datablock implementations that need
+        textures. However C++ does not let us statically define the size of
+        mTexIndices, mTextures & mSamplerblocks array; we would have to either force the
+        same maximum to all implementations, or use the heap.
+    @par
+        Therefore this header uses macros to customize each base class for each implementations.
+        DO NOT INCLUDE THIS HEADER DIRECTLY.
 
-		The way to include this header is by doing:
-		#define _OgreHlmsTextureBaseClassExport _OgreHlmsUnlitExport
-		#define OGRE_HLMS_TEXTURE_BASE_CLASS HlmsUnlitBaseTextureDatablock
-		#define OGRE_HLMS_TEXTURE_BASE_MAX_TEX NUM_UNLIT_TEXTURE_TYPES
-		#define OGRE_HLMS_CREATOR_CLASS HlmsUnlit
-			#include "../../Common/include/OgreHlmsTextureBaseClass.h"
-		#undef _OgreHlmsTextureBaseClassExport
-		#undef OGRE_HLMS_TEXTURE_BASE_CLASS
-		#undef OGRE_HLMS_TEXTURE_BASE_MAX_TEX
-		#undef OGRE_HLMS_CREATOR_CLASS
+        The way to include this header is by doing:
+        #define _OgreHlmsTextureBaseClassExport _OgreHlmsUnlitExport
+        #define OGRE_HLMS_TEXTURE_BASE_CLASS HlmsUnlitBaseTextureDatablock
+        #define OGRE_HLMS_TEXTURE_BASE_MAX_TEX NUM_UNLIT_TEXTURE_TYPES
+        #define OGRE_HLMS_CREATOR_CLASS HlmsUnlit
+            #include "../../Common/include/OgreHlmsTextureBaseClass.h"
+        #undef _OgreHlmsTextureBaseClassExport
+        #undef OGRE_HLMS_TEXTURE_BASE_CLASS
+        #undef OGRE_HLMS_TEXTURE_BASE_MAX_TEX
+        #undef OGRE_HLMS_CREATOR_CLASS
 
-		Where all the necessary macros are defined prior to including this header,
-		and once we're done, we undef these macros.
+        Where all the necessary macros are defined prior to including this header,
+        and once we're done, we undef these macros.
 
-		When OGRE_HLMS_TEXTURE_BASE_CLASS is not defined, the *.inl version of this
-		file will include a few headers in order to get proper syntax highlighting.
-	*/
-	class _OgreHlmsTextureBaseClassExport OGRE_HLMS_TEXTURE_BASE_CLASS :
-			public HlmsDatablock, public ConstBufferPoolUser, public TextureGpuListener
-	{
-	protected:
-		uint16 mTexIndices[OGRE_HLMS_TEXTURE_BASE_MAX_TEX];
+        When OGRE_HLMS_TEXTURE_BASE_CLASS is not defined, the *.inl version of this
+        file will include a few headers in order to get proper syntax highlighting.
+    */
+    class _OgreHlmsTextureBaseClassExport OGRE_HLMS_TEXTURE_BASE_CLASS :
+            public HlmsDatablock, public ConstBufferPoolUser, public TextureGpuListener
+    {
+    protected:
+        uint16 mTexIndices[OGRE_HLMS_TEXTURE_BASE_MAX_TEX];
 
-		DescriptorSetTexture const *mTexturesDescSet;
-		DescriptorSetSampler const *mSamplersDescSet;
+        DescriptorSetTexture const *mTexturesDescSet;
+        DescriptorSetSampler const *mSamplersDescSet;
 
-		TextureGpu              *mTextures[OGRE_HLMS_TEXTURE_BASE_MAX_TEX];
-		HlmsSamplerblock const	*mSamplerblocks[OGRE_HLMS_TEXTURE_BASE_MAX_TEX];
+        TextureGpu              *mTextures[OGRE_HLMS_TEXTURE_BASE_MAX_TEX];
+        HlmsSamplerblock const	*mSamplerblocks[OGRE_HLMS_TEXTURE_BASE_MAX_TEX];
 
-		void scheduleConstBufferUpdate( bool updateTextures=false, bool updateSamplers=false );
+        void scheduleConstBufferUpdate( bool updateTextures=false, bool updateSamplers=false );
 
-		/// Expects caller to call flushRenderables if we return true.
-		bool bakeTextures( bool hasSeparateSamplers );
-		/// Expects caller to call flushRenderables if we return true.
-		bool bakeSamplers(void);
+        /// Expects caller to call flushRenderables if we return true.
+        bool bakeTextures( bool hasSeparateSamplers );
+        /// Expects caller to call flushRenderables if we return true.
+        bool bakeSamplers(void);
 
-	public:
-		OGRE_HLMS_TEXTURE_BASE_CLASS( IdString name, Hlms *creator,
-									  const HlmsMacroblock *macroblock,
-									  const HlmsBlendblock *blendblock,
-									  const HlmsParamVec &params );
-		virtual ~OGRE_HLMS_TEXTURE_BASE_CLASS();
+    public:
+        OGRE_HLMS_TEXTURE_BASE_CLASS( IdString name, Hlms *creator,
+                                      const HlmsMacroblock *macroblock,
+                                      const HlmsBlendblock *blendblock,
+                                      const HlmsParamVec &params );
+        virtual ~OGRE_HLMS_TEXTURE_BASE_CLASS();
 
-		/** Sets a new texture for rendering. Calling this function may trigger an
-			HlmsDatablock::flushRenderables if the texture or the samplerblock changes.
-			Might not be called if old and new texture belong to the same TexturePool.
-		@param texType
-			Texture unit. Must be in range [0; OGRE_HLMS_TEXTURE_BASE_MAX_TEX)
-		@param texture
-			Texture to change to. If it is null and previously wasn't (or viceversa), will
-			trigger HlmsDatablock::flushRenderables.
-		@param refParams
-			Optional. We'll create (or retrieve an existing) samplerblock based on the input parameters.
-			When null, we leave the previously set samplerblock (if a texture is being set, and if no
-			samplerblock was set, we'll create a default one)
-		*/
-		void setTexture( uint8 texType, TextureGpu *texture, const HlmsSamplerblock *refParams=0 );
-		TextureGpu* getTexture( uint8 texType ) const;
+        /** Sets a new texture for rendering. Calling this function may trigger an
+            HlmsDatablock::flushRenderables if the texture or the samplerblock changes.
+            Might not be called if old and new texture belong to the same TexturePool.
+        @param texType
+            Texture unit. Must be in range [0; OGRE_HLMS_TEXTURE_BASE_MAX_TEX)
+        @param texture
+            Texture to change to. If it is null and previously wasn't (or viceversa), will
+            trigger HlmsDatablock::flushRenderables.
+        @param refParams
+            Optional. We'll create (or retrieve an existing) samplerblock based on the input parameters.
+            When null, we leave the previously set samplerblock (if a texture is being set, and if no
+            samplerblock was set, we'll create a default one)
+        */
+        void setTexture( uint8 texType, TextureGpu *texture, const HlmsSamplerblock *refParams=0 );
+        TextureGpu* getTexture( uint8 texType ) const;
 
-		/** Sets a new sampler block to be associated with the texture
-			(i.e. filtering mode, addressing modes, etc). If the samplerblock changes,
-			this function will always trigger a HlmsDatablock::flushRenderables
-		@param texType
-			Texture unit. Must be in range [0; OGRE_HLMS_TEXTURE_BASE_MAX_TEX)
-		@param params
-			The sampler block to use as reference.
-		*/
-		void setSamplerblock( uint8 texType, const HlmsSamplerblock &params );
-		const HlmsSamplerblock* getSamplerblock( uint8 texType ) const;
+        /** Sets a new sampler block to be associated with the texture
+            (i.e. filtering mode, addressing modes, etc). If the samplerblock changes,
+            this function will always trigger a HlmsDatablock::flushRenderables
+        @param texType
+            Texture unit. Must be in range [0; OGRE_HLMS_TEXTURE_BASE_MAX_TEX)
+        @param params
+            The sampler block to use as reference.
+        */
+        void setSamplerblock( uint8 texType, const HlmsSamplerblock &params );
+        const HlmsSamplerblock* getSamplerblock( uint8 texType ) const;
 
-		uint8 getIndexToDescriptorTexture( uint8 texType );
-		/// Do not call this function if RSC_SEPARATE_SAMPLERS_FROM_TEXTURES is not set.
-		/// If not set, then just the result value from getIndexToDescriptorTexture
-		/// instead
-		uint8 getIndexToDescriptorSampler( uint8 texType );
+        /// This function has O( log N ) complexity, but O(1) if the texture was not set.
+        uint8 getIndexToDescriptorTexture( uint8 texType );
+        /// Do not call this function if RSC_SEPARATE_SAMPLERS_FROM_TEXTURES is not set.
+        /// If not set, then just the result value from getIndexToDescriptorTexture
+        /// instead. Same complexity as getIndexToDescriptorTexture
+        uint8 getIndexToDescriptorSampler( uint8 texType );
 
-		virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason );
+        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason );
 
-		void loadAllTextures(void);
-	};
+        void loadAllTextures(void);
+    };
 }
 
 #include "OgreHeaderSuffix.h"
