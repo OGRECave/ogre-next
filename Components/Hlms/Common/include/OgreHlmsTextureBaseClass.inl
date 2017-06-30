@@ -65,6 +65,27 @@ namespace Ogre
         static_cast<OGRE_HLMS_CREATOR_CLASS*>(mCreator)->scheduleForUpdate( this, flags );
     }
     //-----------------------------------------------------------------------------------
+    void OGRE_HLMS_TEXTURE_BASE_CLASS::updateDescriptorSets( bool textureSetDirty, bool samplerSetDirty )
+    {
+        const RenderSystem *renderSystem = mCreator->getRenderSystem();
+        const RenderSystemCapabilities *caps = renderSystem->getCapabilities();
+        const bool hasSeparateSamplers = caps->hasCapability( RSC_SEPARATE_SAMPLERS_FROM_TEXTURES );
+
+        bool needsRecalculateHash = false;
+
+        if( textureSetDirty || (samplerSetDirty && !hasSeparateSamplers) )
+            needsRecalculateHash |= bakeTextures( hasSeparateSamplers );
+
+        if( samplerSetDirty && hasSeparateSamplers )
+            needsRecalculateHash |= bakeSamplers();
+
+        if( needsRecalculateHash )
+        {
+            calculateHash();
+            flushRenderables();
+        }
+    }
+    //-----------------------------------------------------------------------------------
     static bool OrderTextureByPoolAndName( const TextureGpu *_a, const TextureGpu *_b )
     {
         const TexturePool *poolA = _a->getTexturePool();

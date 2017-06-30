@@ -369,6 +369,13 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsPbsDatablock::uploadToConstBuffer( char *dstPtr, uint8 dirtyFlags )
     {
+        if( dirtyFlags & (ConstBufferPool::DirtyTextures|ConstBufferPool::DirtySamplers) )
+        {
+            //Must be called first so mTexIndices[i] gets updated before uploading to GPU.
+            updateDescriptorSets( (dirtyFlags & ConstBufferPool::DirtyTextures) != 0,
+                                  (dirtyFlags & ConstBufferPool::DirtySamplers) != 0 );
+        }
+
         _padding0 = mAlphaTestThreshold;
         float oldFresnelR = mFresnelR;
         float oldFresnelG = mFresnelG;

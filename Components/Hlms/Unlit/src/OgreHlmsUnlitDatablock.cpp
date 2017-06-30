@@ -282,27 +282,6 @@ namespace Ogre
 #endif
     }
     //-----------------------------------------------------------------------------------
-    void HlmsUnlitDatablock::updateDescriptorSets( bool textureSetDirty, bool samplerSetDirty )
-    {
-        const RenderSystem *renderSystem = mCreator->getRenderSystem();
-        const RenderSystemCapabilities *caps = renderSystem->getCapabilities();
-        const bool hasSeparateSamplers = caps->hasCapability( RSC_SEPARATE_SAMPLERS_FROM_TEXTURES );
-
-        bool needsRecalculateHash = false;
-
-        if( textureSetDirty || (samplerSetDirty && !hasSeparateSamplers) )
-            needsRecalculateHash |= bakeTextures( hasSeparateSamplers );
-
-        if( samplerSetDirty && hasSeparateSamplers )
-            needsRecalculateHash |= bakeSamplers();
-
-        if( needsRecalculateHash )
-        {
-            calculateHash();
-            flushRenderables();
-        }
-    }
-    //-----------------------------------------------------------------------------------
     void HlmsUnlitDatablock::setTexture( uint8 texUnit, const String &name )
     {
         TODO_loadTextureFromFile;

@@ -81,6 +81,7 @@ namespace Ogre
         HlmsSamplerblock const	*mSamplerblocks[OGRE_HLMS_TEXTURE_BASE_MAX_TEX];
 
         void scheduleConstBufferUpdate( bool updateTextures=false, bool updateSamplers=false );
+        void updateDescriptorSets( bool textureSetDirty, bool samplerSetDirty );
 
         /// Expects caller to call flushRenderables if we return true.
         bool bakeTextures( bool hasSeparateSamplers );

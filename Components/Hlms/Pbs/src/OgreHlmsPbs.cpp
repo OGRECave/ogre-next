@@ -547,6 +547,24 @@ namespace Ogre
         setTextureProperty( propName.c_str(), datablock, texType );
     }
     //-----------------------------------------------------------------------------------
+    void HlmsPbs::calculateHashFor( Renderable *renderable, uint32 &outHash, uint32 &outCasterHash )
+    {
+        assert( dynamic_cast<HlmsPbsDatablock*>( renderable->getDatablock() ) );
+        HlmsPbsDatablock *datablock = static_cast<HlmsPbsDatablock*>( renderable->getDatablock() );
+        if( datablock->getDirtyFlags() & (DirtyTextures|DirtySamplers) )
+        {
+            //Delay hash generation for later, when we have the final (or temporary) descriptor sets.
+            outHash = 0;
+            outCasterHash = 0;
+        }
+        else
+        {
+            Hlms::calculateHashFor( renderable, outHash, outCasterHash );
+        }
+
+        datablock->loadAllTextures();
+    }
+    //-----------------------------------------------------------------------------------
     void HlmsPbs::calculateHashForPreCreate( Renderable *renderable, PiecesMap *inOutPieces )
     {
         assert( dynamic_cast<HlmsPbsDatablock*>( renderable->getDatablock() ) );

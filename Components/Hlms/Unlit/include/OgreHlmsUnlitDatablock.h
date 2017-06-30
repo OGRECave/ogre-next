@@ -79,8 +79,6 @@ namespace Ogre
         virtual void uploadToConstBuffer( char *dstPtr, uint8 dirtyFlags );
         virtual void uploadToExtraBuffer( char *dstPtr );
 
-        void updateDescriptorSets( bool textureSetDirty, bool samplerSetDirty );
-
         void setTexture( uint8 texUnit, const String &name );
 
     public:

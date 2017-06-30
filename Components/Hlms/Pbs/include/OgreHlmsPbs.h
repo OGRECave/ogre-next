@@ -171,6 +171,7 @@ namespace Ogre
         void setDetailTextureProperty( const char *propertyName, HlmsPbsDatablock *datablock,
                                        PbsTextureTypes baseTexType, uint8 detailIdx );
 
+        virtual void calculateHashFor( Renderable *renderable, uint32 &outHash, uint32 &outCasterHash );
         virtual void calculateHashForPreCreate( Renderable *renderable, PiecesMap *inOutPieces );
         virtual void calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces );
 
