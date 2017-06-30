@@ -106,6 +106,13 @@ namespace Ogre
             AutomipmapsAuto     = 1u << 4u,
             ///
             MsaaExplicitResolve = 1u << 5u,
+            /// When present, you may be creating another TextureGpu that accesses
+            /// the internal resources of this TextureGpu but with a different format
+            /// (e.g. useful for viewing a PFG_RGBA8_UNORM_SRGB as PFG_RGBA8_UNORM)
+            Reinterpretable     = 1u << 6u,
+            /// Prefer loading from files as sRGB when possible.
+            /// e.g. load PFG_RGBA8_UNORM as PFG_RGBA8_UNORM_SRGB
+            PrefersLoadingAsSRGB= 1u << 7u,
             /// When not present:
             /// The Texture is exactly the type requested (e.g. 2D texture won't
             /// get a 2D array instead)
@@ -126,7 +133,7 @@ namespace Ogre
             /// compute the texture hashes.
             /// All of that (except updating slices to the GPU) can be done in a
             /// worker thread, then all the values swapped w/ the Datablock’s.
-            AutomaticBatching   = 1u << 6u
+            AutomaticBatching   = 1u << 8u
         };
     }
 
@@ -215,6 +222,11 @@ namespace Ogre
         TextureTypes::TextureTypes getTextureType(void) const;
         TextureTypes::TextureTypes getInternalTextureType(void) const;
 
+        /** Sets the pixel format.
+        @remarks
+            If prefersLoadingAsSRGB() returns true, the format may not be fully honoured
+            (as we'll use the equivalent _SRGB variation).
+        */
         void setPixelFormat( PixelFormatGpu pixelFormat );
         PixelFormatGpu getPixelFormat(void) const;
 
@@ -268,6 +280,8 @@ namespace Ogre
         bool allowsAutoMipmaps(void) const;
         bool hasAutoMipmapAuto(void) const;
         bool hasMsaaExplicitResolves(void) const;
+        bool isReinterpretable(void) const;
+        bool prefersLoadingAsSRGB(void) const;
 
         virtual void _setToDisplayDummyTexture(void) = 0;
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );

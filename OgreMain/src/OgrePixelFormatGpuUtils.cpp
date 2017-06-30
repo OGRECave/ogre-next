@@ -1096,6 +1096,27 @@ namespace Ogre
         return (desc.flags & PFF_PALLETE) != 0;
     }
     //-----------------------------------------------------------------------------------
+    PixelFormatGpu PixelFormatGpuUtils::getEquivalentSRGB( PixelFormatGpu format )
+    {
+        switch( format )
+        {
+        case PFG_RGBA8_UNORM:       return PFG_RGBA8_UNORM_SRGB;
+        case PFG_BC1_UNORM:         return PFG_BC1_UNORM_SRGB;
+        case PFG_BC2_UNORM:         return PFG_BC2_UNORM_SRGB;
+        case PFG_BC3_UNORM:         return PFG_BC3_UNORM_SRGB;
+        case PFG_BGRA8_UNORM:       return PFG_BGRA8_UNORM_SRGB;
+        case PFG_BGRX8_UNORM:       return PFG_BGRX8_UNORM_SRGB;
+        case PFG_BC7_UNORM:         return PFG_BC7_UNORM_SRGB;
+        case PFG_ETC2_RGB8_UNORM:   return PFG_ETC2_RGB8_UNORM_SRGB;
+        case PFG_ETC2_RGBA8_UNORM:  return PFG_ETC2_RGBA8_UNORM_SRGB;
+        case PFG_ETC2_RGB8A1_UNORM: return PFG_ETC2_RGB8A1_UNORM_SRGB;
+        default:
+            return format;
+        }
+
+        return format;
+    }
+    //-----------------------------------------------------------------------------------
     PixelFormatGpu PixelFormatGpuUtils::getFamily( PixelFormatGpu format )
     {
         switch( format )

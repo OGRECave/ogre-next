@@ -184,6 +184,8 @@ namespace Ogre {
         static bool isCompressed( PixelFormatGpu format );
         static bool isPallete( PixelFormatGpu format );
 
+        static PixelFormatGpu getEquivalentSRGB( PixelFormatGpu format );
+
         static PixelFormatGpu getFamily( PixelFormatGpu format );
     };
 

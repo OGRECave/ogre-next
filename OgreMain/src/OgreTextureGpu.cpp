@@ -150,6 +150,10 @@ namespace Ogre
     void TextureGpu::setPixelFormat( PixelFormatGpu pixelFormat )
     {
         assert( mResidencyStatus == GpuResidency::OnStorage );
+
+        if( prefersLoadingAsSRGB() )
+            pixelFormat = PixelFormatGpuUtils::getEquivalentSRGB( pixelFormat );
+
         mPixelFormat = pixelFormat;
     }
     //-----------------------------------------------------------------------------------
@@ -393,6 +397,16 @@ namespace Ogre
     bool TextureGpu::hasMsaaExplicitResolves(void) const
     {
         return (mTextureFlags & TextureFlags::MsaaExplicitResolve) != 0;
+    }
+    //-----------------------------------------------------------------------------------
+    bool TextureGpu::isReinterpretable(void) const
+    {
+        return (mTextureFlags & TextureFlags::Reinterpretable) != 0;
+    }
+    //-----------------------------------------------------------------------------------
+    bool TextureGpu::prefersLoadingAsSRGB(void) const
+    {
+        return (mTextureFlags & TextureFlags::PrefersLoadingAsSRGB) != 0;
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::_notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice )
