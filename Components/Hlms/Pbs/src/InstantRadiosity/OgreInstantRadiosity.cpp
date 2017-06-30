@@ -27,7 +27,7 @@ THE SOFTWARE.
 */
 
 #include "OgreStableHeaders.h"
-
+#if 0
 #include "InstantRadiosity/OgreInstantRadiosity.h"
 #include "OgreIrradianceVolume.h"
 #include "OgreHlmsPbsDatablock.h"
@@ -1915,3 +1915,4 @@ namespace Ogre
         return vertexData + numVertices * 3u + uvSet * 2u;
     }
 }
+#endif

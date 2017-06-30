@@ -30,8 +30,17 @@ THE SOFTWARE.
 
 #include "OgreHlmsPbsPrerequisites.h"
 #include "OgreHlmsDatablock.h"
-#include "OgreHlmsTextureManager.h"
-#include "OgreConstBufferPool.h"
+
+#define _OgreHlmsTextureBaseClassExport _OgreHlmsPbsExport
+#define OGRE_HLMS_TEXTURE_BASE_CLASS HlmsPbsBaseTextureDatablock
+#define OGRE_HLMS_TEXTURE_BASE_MAX_TEX NUM_PBSM_TEXTURE_TYPES
+#define OGRE_HLMS_CREATOR_CLASS HlmsPbs
+    #include "../../Common/include/OgreHlmsTextureBaseClass.h"
+#undef _OgreHlmsTextureBaseClassExport
+#undef OGRE_HLMS_TEXTURE_BASE_CLASS
+#undef OGRE_HLMS_TEXTURE_BASE_MAX_TEX
+#undef OGRE_HLMS_CREATOR_CLASS
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
@@ -42,31 +51,6 @@ namespace Ogre
     /** \addtogroup Resources
     *  @{
     */
-
-    /// Used by JSON serialization, but can also be used outside of it.
-    /// @see HlmsPbsDatablock::_setTextures
-    struct PackedTexture
-    {
-        TexturePtr  texture;
-        uint16      xIdx;
-        HlmsSamplerblock const * samplerblock;
-        PackedTexture() : xIdx( NUM_PBSM_TEXTURE_TYPES ), samplerblock( 0 ) {}
-    };
-
-    struct PbsBakedTexture
-    {
-        TexturePtr              texture;
-        HlmsSamplerblock const *samplerBlock;
-
-        PbsBakedTexture() : samplerBlock( 0 ) {}
-        PbsBakedTexture( const TexturePtr tex, const HlmsSamplerblock *_samplerBlock ) :
-            texture( tex ), samplerBlock( _samplerBlock ) {}
-
-        bool operator == ( const PbsBakedTexture &_r ) const
-        {
-            return texture == _r.texture && samplerBlock == _r.samplerBlock;
-        }
-    };
 
     namespace PbsBrdf
     {
@@ -130,11 +114,9 @@ namespace Ogre
     };
     }
 
-    typedef FastArray<PbsBakedTexture> PbsBakedTextureArray;
-
     /** Contains information needed by PBS (Physically Based Shading) for OpenGL 3+ & D3D11+
     */
-    class _OgreHlmsPbsExport HlmsPbsDatablock : public HlmsDatablock, public ConstBufferPoolUser
+    class _OgreHlmsPbsExport HlmsPbsDatablock : public HlmsPbsBaseTextureDatablock
     {
         friend class HlmsPbs;
     public:
@@ -192,16 +174,8 @@ namespace Ogre
         float   mDetailNormalWeight[4];
         float   mDetailWeight[4];
         float   mDetailsOffsetScale[8][4];
-        uint16  mTexIndices[NUM_PBSM_TEXTURE_TYPES];
+        //uint16  mTexIndices[NUM_PBSM_TEXTURE_TYPES];
         float   mNormalMapWeight;
-
-        PbsBakedTextureArray mBakedTextures;
-        /// The way to read this variable is i.e. get diffuse texture,
-        /// mBakedTextures[mTexToBakedTextureIdx[PBSM_DIFFUSE]]
-        /// Then read mTexIndices[PBSM_DIFFUSE] to know which slice of the texture array.
-        uint8   mTexToBakedTextureIdx[NUM_PBSM_TEXTURE_TYPES];
-
-        HlmsSamplerblock const  *mSamplerblocks[NUM_PBSM_TEXTURE_TYPES];
 
         CubemapProbe *mCubemapProbe;
 
@@ -214,9 +188,6 @@ namespace Ogre
 
         /// Sets the appropiate mTexIndices[textureType], and returns the texture pointer
         TexturePtr setTexture( const String &name, PbsTextureTypes textureType );
-
-        void decompileBakedTextures( PbsBakedTexture outTextures[NUM_PBSM_TEXTURE_TYPES] );
-        void bakeTextures( const PbsBakedTexture textures[NUM_PBSM_TEXTURE_TYPES] );
 
     public:
         /** Valid parameters in params:
@@ -397,51 +368,7 @@ namespace Ogre
         /// Whether the same fresnel term is used for RGB, or individual ones for each channel
         bool hasSeparateFresnel(void) const;
 
-        /** Advanced function for setting all textures at once,
-            instead of one by one, for performance reasons.
-        @param packedTextures
-            The reference count in packedTextures[i].samplerblock is assumed to have already been
-            increased prior to calling this function. We will not increase.
-            If null, a default samplerblock will be assigned
-        */
-        void _setTextures( const PackedTexture packedTextures[] );
-
-        /** Sets a new texture for rendering. Calling this function may trigger an
-            HlmsDatablock::flushRenderables if the texture or the samplerblock changes.
-            Won't be called if only the arrayIndex changes
-        @param texType
-            Type of the texture.
-        @param arrayIndex
-            The index in the array texture.
-        @param newTexture
-            Texture to change to. If it is null and previously wasn't (or viceversa), will
-            trigger HlmsDatablock::flushRenderables.
-        @param params
-            Optional. We'll create (or retrieve an existing) samplerblock based on the input parameters.
-            When null, we leave the previously set samplerblock (if a texture is being set, and if no
-            samplerblock was set, we'll create a default one)
-        */
-        void setTexture( PbsTextureTypes texType, uint16 arrayIndex, const TexturePtr &newTexture,
-                         const HlmsSamplerblock *refParams=0 );
-
-        TexturePtr getTexture( PbsTextureTypes texType ) const;
-        TexturePtr getTexture( size_t texType ) const;
-
-        /// Returns the internal index to the array in a texture array.
-        /// Note: If there is no texture assigned to the given texType, returned value is undefined
-        uint16 _getTextureIdx( PbsTextureTypes texType ) const          { return mTexIndices[texType]; }
-
-        /** Sets a new sampler block to be associated with the texture
-            (i.e. filtering mode, addressing modes, etc). If the samplerblock changes,
-            this function will always trigger a HlmsDatablock::flushRenderables
-        @param texType
-            Type of texture.
-        @param params
-            The sampler block to use as reference.
-        */
-        void setSamplerblock( PbsTextureTypes texType, const HlmsSamplerblock &params );
-
-        const HlmsSamplerblock* getSamplerblock( PbsTextureTypes texType ) const;
+        using HlmsPbsBaseTextureDatablock::setTexture;
 
         /** Sets which UV set to use for the given texture.
             Calling this function triggers a HlmsDatablock::flushRenderables.
@@ -529,10 +456,6 @@ namespace Ogre
         */
         void setDetailMapOffsetScale( uint8 detailMap, const Vector4 &offsetScale );
         Vector4 getDetailMapOffsetScale( uint8 detailMap ) const;
-
-        /// Returns the index to mBakedTextures. Returns NUM_PBSM_TEXTURE_TYPES if
-        /// there is no texture assigned to texType
-        uint8 getBakedTextureIdx( PbsTextureTypes texType ) const;
 
         /** Allows support for two sided lighting. Disabled by default (faster)
         @remarks
@@ -678,8 +601,8 @@ namespace Ogre
             You could create an alias however, and thus have two copies of the same texture with
             different loading parameters.
         */
-        HlmsTextureManager::TextureMapType suggestMapTypeBasedOnTextureType(
-                                                                PbsTextureTypes type );
+//        HlmsTextureManager::TextureMapType suggestMapTypeBasedOnTextureType(
+//                                                                PbsTextureTypes type );
 
         virtual void calculateHash();
 

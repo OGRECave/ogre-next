@@ -58,6 +58,8 @@ THE SOFTWARE.
 
 #include "Animation/OgreSkeletonInstance.h"
 
+#include "OgreTextureGpu.h"
+
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
     #include "OgrePlanarReflections.h"
 #endif
@@ -232,7 +234,9 @@ namespace Ogre
         mLastBoundPlanarReflection( 0u ),
 #endif
         mLastBoundPool( 0 ),
-        mLastTextureHash( 0 ),
+        mHasSeparateSamplers( 0 ),
+        mLastDescTexture( 0 ),
+        mLastDescSampler( 0 ),
 #if !OGRE_NO_FINE_LIGHT_MASK_GRANULARITY
         mFineLightMaskGranularity( true ),
 #endif
@@ -320,6 +324,8 @@ namespace Ogre
                 mPlanarReflectionsSamplerblock = mHlmsManager->getSamplerblock( samplerblock );
             }
 #endif
+            const RenderSystemCapabilities *caps = newRs->getCapabilities();
+            mHasSeparateSamplers = caps->hasCapability( RSC_SEPARATE_SAMPLERS_FROM_TEXTURES );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -421,7 +427,7 @@ namespace Ogre
             const int32 targetEnvProbeMap   = getProperty( PbsProperty::TargetEnvprobeMap );
             if( (envProbeMap && envProbeMap != targetEnvProbeMap) || parallaxCorrectCubemaps )
             {
-                assert( !datablock->getTexture( PBSM_REFLECTION ).isNull() || parallaxCorrectCubemaps );
+                assert( datablock->getTexture( PBSM_REFLECTION ) || parallaxCorrectCubemaps );
                 if( !envProbeMap || envProbeMap == targetEnvProbeMap )
                     psParams->setNamedConstant( "texEnvProbeMap", cubemapTexUnit );
                 else
@@ -460,14 +466,14 @@ namespace Ogre
             setDetailTextureProperty( PbsProperty::DetailMapN,   datablock, PBSM_DETAIL0, i );
             setDetailTextureProperty( PbsProperty::DetailMapNmN, datablock, PBSM_DETAIL0_NM, i );
 
-            if( !datablock->getTexture( PBSM_DETAIL0 + i ).isNull() )
+            if( datablock->getTexture( PBSM_DETAIL0 + i ) )
             {
                 inOutPieces[PixelShader][*PbsProperty::BlendModes[i]] =
                                                 "@insertpiece( " + c_pbsBlendModes[blendMode] + ")";
                 hasDiffuseMaps = true;
             }
 
-            if( !datablock->getTexture( PBSM_DETAIL0_NM + i ).isNull() )
+            if( datablock->getTexture( PBSM_DETAIL0_NM + i ) )
             {
                 minNormalMap = std::min<uint32>( minNormalMap, i );
                 hasNormalMaps = true;
@@ -480,8 +486,8 @@ namespace Ogre
                 setProperty( *PbsProperty::DetailOffsetsNPtrs[i], 1 );
 
             if( datablock->mDetailWeight[i] != 1.0f &&
-                (!datablock->getTexture( PBSM_DETAIL0 + i ).isNull() ||
-                 !datablock->getTexture( PBSM_DETAIL0_NM + i ).isNull()) )
+                (datablock->getTexture( PBSM_DETAIL0 + i ) ||
+                 datablock->getTexture( PBSM_DETAIL0_NM + i )) )
             {
                 anyDetailWeight = true;
             }
@@ -502,7 +508,7 @@ namespace Ogre
     void HlmsPbs::setTextureProperty( const char *propertyName, HlmsPbsDatablock *datablock,
                                       PbsTextureTypes texType )
     {
-        uint8 idx = datablock->getBakedTextureIdx( texType );
+        uint8 idx = datablock->getIndexToDescriptorTexture( texType );
         if( idx != NUM_PBSM_TEXTURE_TYPES )
         {
             char tmpData[64];
@@ -510,13 +516,24 @@ namespace Ogre
 
             propName = propertyName; //diffuse_map
 
+            const size_t basePropSize = propName.size(); // diffuse_map
+
             //In the template the we subtract the "+1" for the index.
             //We need to increment it now otherwise @property( diffuse_map )
             //can translate to @property( 0 ) which is not what we want.
             setProperty( propertyName, idx + 1 );
 
+            propName.resize( basePropSize );
             propName.a( "_idx" ); //diffuse_map_idx
             setProperty( propName.c_str(), idx );
+
+            if( mHasSeparateSamplers )
+            {
+                const uint8 samplerIdx = datablock->getIndexToDescriptorSampler( texType );
+                propName.resize( basePropSize );
+                propName.a( "_sampler" );           //diffuse_map_sampler
+                setProperty( propName.c_str(), samplerIdx );
+            }
         }
     }
     //-----------------------------------------------------------------------------------
@@ -524,22 +541,10 @@ namespace Ogre
                                             PbsTextureTypes baseTexType, uint8 detailIdx )
     {
         const PbsTextureTypes texType = static_cast<PbsTextureTypes>( baseTexType + detailIdx );
-        const uint8 idx = datablock->getBakedTextureIdx( texType );
-        if( idx != NUM_PBSM_TEXTURE_TYPES )
-        {
-            char tmpData[64];
-            LwString propName = LwString::FromEmptyPointer( tmpData, sizeof(tmpData) );
-
-            propName.a( propertyName, detailIdx ); //detail_map0
-
-            //In the template the we subtract the "+1" for the index.
-            //We need to increment it now otherwise @property( diffuse_map )
-            //can translate to @property( 0 ) which is not what we want.
-            setProperty( propName.c_str(), idx + 1 );
-
-            propName.a( "_idx" ); //detail_map0_idx
-            setProperty( propName.c_str(), idx );
-        }
+        char tmpData[32];
+        LwString propName = LwString::FromEmptyPointer( tmpData, sizeof(tmpData) );
+        propName.a( propertyName, detailIdx ); //detail_map0
+        setTextureProperty( propName.c_str(), datablock, texType );
     }
     //-----------------------------------------------------------------------------------
     void HlmsPbs::calculateHashForPreCreate( Renderable *renderable, PiecesMap *inOutPieces )
@@ -581,7 +586,7 @@ namespace Ogre
             uint8 uvSource = datablock->mUvSource[i];
             setProperty( *PbsProperty::UvSourcePtrs[i], uvSource );
 
-            if( !datablock->getTexture( i ).isNull() &&
+            if( datablock->getTexture( i ) &&
                 getProperty( *HlmsBaseProp::UvCountPtrs[uvSource] ) < 2 )
             {
                 OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
@@ -593,7 +598,7 @@ namespace Ogre
         }
 
         int numNormalWeights = 0;
-        if( datablock->getNormalMapWeight() != 1.0f && !datablock->getTexture( PBSM_NORMAL ).isNull() )
+        if( datablock->getNormalMapWeight() != 1.0f && datablock->getTexture( PBSM_NORMAL ) )
         {
             setProperty( PbsProperty::NormalWeightTex, 1 );
             ++numNormalWeights;
@@ -603,7 +608,7 @@ namespace Ogre
             size_t validDetailMaps = 0;
             for( size_t i=0; i<4; ++i )
             {
-                if( !datablock->getTexture( PBSM_DETAIL0_NM + i ).isNull() )
+                if( datablock->getTexture( PBSM_DETAIL0_NM + i ) )
                 {
                     if( datablock->getDetailNormalWeight( i ) != 1.0f )
                     {
@@ -620,34 +625,35 @@ namespace Ogre
 
         setDetailMapProperties( datablock, inOutPieces );
 
-        bool envMap = datablock->getBakedTextureIdx( PBSM_REFLECTION ) != NUM_PBSM_TEXTURE_TYPES;
-
-        setProperty( PbsProperty::NumTextures, datablock->mBakedTextures.size() - envMap );
-
-        setTextureProperty( PbsProperty::DiffuseMap,    datablock,  PBSM_DIFFUSE );
-        setTextureProperty( PbsProperty::NormalMapTex,  datablock,  PBSM_NORMAL );
-        setTextureProperty( PbsProperty::SpecularMap,   datablock,  PBSM_SPECULAR );
-        setTextureProperty( PbsProperty::RoughnessMap,  datablock,  PBSM_ROUGHNESS );
-        setTextureProperty( PbsProperty::EnvProbeMap,   datablock,  PBSM_REFLECTION );
-        setTextureProperty( PbsProperty::DetailWeightMap,datablock, PBSM_DETAIL_WEIGHT );
-
+        if( datablock->mTexturesDescSet )
         {
+            bool envMap = datablock->getTexture( PBSM_REFLECTION ) != 0;
+            setProperty( PbsProperty::NumTextures,
+                         datablock->mTexturesDescSet->mTextures.size() - envMap );
+
+            setTextureProperty( PbsProperty::DiffuseMap,    datablock,  PBSM_DIFFUSE );
+            setTextureProperty( PbsProperty::NormalMapTex,  datablock,  PBSM_NORMAL );
+            setTextureProperty( PbsProperty::SpecularMap,   datablock,  PBSM_SPECULAR );
+            setTextureProperty( PbsProperty::RoughnessMap,  datablock,  PBSM_ROUGHNESS );
+            setTextureProperty( PbsProperty::EnvProbeMap,   datablock,  PBSM_REFLECTION );
+            setTextureProperty( PbsProperty::DetailWeightMap,datablock, PBSM_DETAIL_WEIGHT );
+
             //Save the name of the cubemap for hazard prevention
             //(don't sample the cubemap and render to it at the same time).
-            TexturePtr reflectionTexture = datablock->getTexture( PBSM_REFLECTION );
-            if( !reflectionTexture.isNull() )
+            const TextureGpu *reflectionTexture = datablock->getTexture( PBSM_REFLECTION );
+            if( reflectionTexture )
             {
                 //Manual reflection texture
                 if( datablock->getCubemapProbe() )
                     setProperty( PbsProperty::UseParallaxCorrectCubemaps, 1 );
-                setProperty( PbsProperty::EnvProbeMap, static_cast<int32>(
-                             IdString( reflectionTexture->getName() ).mHash ) );
+                setProperty( PbsProperty::EnvProbeMap,
+                             static_cast<int32>( reflectionTexture->getName().mHash ) );
             }
         }
 
-        bool usesNormalMap = !datablock->getTexture( PBSM_NORMAL ).isNull();
+        bool usesNormalMap = datablock->getTexture( PBSM_NORMAL ) != 0;
         for( size_t i=PBSM_DETAIL0_NM; i<=PBSM_DETAIL3_NM; ++i )
-            usesNormalMap |= !datablock->getTexture( i ).isNull();
+            usesNormalMap |= datablock->getTexture( i ) != 0;
         setProperty( PbsProperty::NormalMap, usesNormalMap );
 
         /*setProperty( HlmsBaseProp::, !datablock->getTexture( PBSM_DETAIL0 ).isNull() );
@@ -730,17 +736,15 @@ namespace Ogre
             uint8 numTextures = 0;
             for( int i=0; i<4; ++i )
             {
-                if( datablock->mTexToBakedTextureIdx[PBSM_DETAIL0+i] < datablock->mBakedTextures.size() )
-                {
-                    numTextures = std::max<uint8>(
-                                numTextures, datablock->mTexToBakedTextureIdx[PBSM_DETAIL0+i] + 1 );
-                }
+                uint8 idxToDescTex = datablock->getIndexToDescriptorTexture( PBSM_DETAIL0+i );
+                if( idxToDescTex < datablock->mTexturesDescSet->mTextures.size() )
+                    numTextures = std::max<uint8>( numTextures, idxToDescTex + 1u );
             }
 
-            if( datablock->mTexToBakedTextureIdx[PBSM_DIFFUSE] < datablock->mBakedTextures.size() )
             {
-                numTextures = std::max<uint8>(
-                            numTextures, datablock->mTexToBakedTextureIdx[PBSM_DIFFUSE] + 1 );
+                uint8 idxToDescTex = datablock->getIndexToDescriptorTexture( PBSM_DIFFUSE );
+                if( idxToDescTex < datablock->mTexturesDescSet->mTextures.size() )
+                    numTextures = std::max<uint8>( numTextures, idxToDescTex + 1u );
             }
 
             setProperty( PbsProperty::NumTextures, numTextures );
@@ -749,7 +753,7 @@ namespace Ogre
             for( size_t i=0; i<4; ++i )
             {
                 uint8 blendMode = datablock->mBlendModes[i];
-                if( !datablock->getTexture( PBSM_DETAIL0 + i ).isNull() )
+                if( datablock->getTexture( PBSM_DETAIL0 + i ) )
                 {
                     inOutPieces[PixelShader][*PbsProperty::BlendModes[i]] =
                                                     "@insertpiece( " + c_pbsBlendModes[blendMode] + ")";
@@ -1468,8 +1472,8 @@ namespace Ogre
             mTexBuffers.push_back( newBuffer );
         }
 
-        mLastTextureHash = 0;
-
+        mLastDescTexture = 0;
+        mLastDescSampler = 0;
         mLastBoundPool = 0;
 
         if( mShadowFilter == ExponentialShadowMaps )
@@ -1617,7 +1621,8 @@ namespace Ogre
                 }
             }
 
-            mLastTextureHash = 0;
+            mLastDescTexture = 0;
+            mLastDescSampler = 0;
             mLastBoundPool = 0;
 
             //layout(binding = 2) uniform InstanceBuffer {} instance
@@ -1876,25 +1881,34 @@ namespace Ogre
                 mLastBoundPlanarReflection = queuedRenderable.renderable->mCustomParameter;
             }
 #endif
-            if( datablock->mTextureHash != mLastTextureHash )
+            if( datablock->mTexturesDescSet != mLastDescTexture )
             {
-                //Rebind textures
-                size_t texUnit = mTexUnitSlotStart;
-
-                PbsBakedTextureArray::const_iterator itor = datablock->mBakedTextures.begin();
-                PbsBakedTextureArray::const_iterator end  = datablock->mBakedTextures.end();
-
-                while( itor != end )
+                if( datablock->mTexturesDescSet )
                 {
-                    if( itor->texture != mTargetEnvMap )
+                    //Rebind textures
+                    size_t texUnit = mTexUnitSlotStart;
+
+                    *commandBuffer->addCommand<CbTextures>() =
+                            CbTextures( texUnit, datablock->mTexturesDescSet );
+
+                    if( !mHasSeparateSamplers )
                     {
-                        *commandBuffer->addCommand<CbTexture>() =
-                                CbTexture( texUnit++, true, itor->texture.get(), itor->samplerBlock );
+                        *commandBuffer->addCommand<CbSamplers>() =
+                                CbSamplers( texUnit, datablock->mSamplersDescSet );
                     }
-                    ++itor;
+                    //texUnit += datablock->mTexturesDescSet->mTextures.size();
                 }
 
-                mLastTextureHash = datablock->mTextureHash;
+                mLastDescTexture = datablock->mTexturesDescSet;
+            }
+
+            if( datablock->mSamplersDescSet != mLastDescSampler && mHasSeparateSamplers )
+            {
+                //Bind samplers
+                size_t texUnit = mTexUnitSlotStart;
+                *commandBuffer->addCommand<CbSamplers>() =
+                        CbSamplers( texUnit, datablock->mSamplersDescSet );
+                mLastDescSampler = datablock->mSamplersDescSet;
             }
         }
 

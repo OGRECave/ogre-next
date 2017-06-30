@@ -266,6 +266,7 @@ namespace Ogre
         memcpy( dstPtr, &mAlphaTestThreshold, sizeof( float ) );
         dstPtr += 4 * sizeof(float);
         memcpy( dstPtr, &mR, MaterialSizeInGpu - 4 * sizeof(float) - sizeof(mTexIndices) );
+        dstPtr += MaterialSizeInGpu - 4 * sizeof(float) - sizeof(mTexIndices);
         memcpy( dstPtr, mTexIndices, sizeof(mTexIndices) );
     }
     //-----------------------------------------------------------------------------------
