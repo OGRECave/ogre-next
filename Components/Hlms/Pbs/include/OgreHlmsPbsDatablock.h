@@ -186,9 +186,6 @@ namespace Ogre
         virtual void uploadToConstBuffer( char *dstPtr, uint8 dirtyFlags );
         virtual void notifyOptimizationStrategyChanged(void);
 
-        /// Sets the appropiate mTexIndices[textureType], and returns the texture pointer
-        TexturePtr setTexture( const String &name, PbsTextureTypes textureType );
-
     public:
         /** Valid parameters in params:
         @param params

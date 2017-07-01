@@ -78,7 +78,8 @@ namespace Ogre
 	}
 	//-----------------------------------------------------------------------------------
     void HlmsJsonUnlit::loadTexture( const rapidjson::Value &json, const HlmsJson::NamedBlocks &blocks,
-                                     uint8 textureType, HlmsUnlitDatablock *datablock )
+                                     uint8 textureType, HlmsUnlitDatablock *datablock,
+                                     const String &resourceGroup )
 	{
         TextureGpu *texture = 0;
         HlmsSamplerblock const *samplerblock = 0;
@@ -88,8 +89,8 @@ namespace Ogre
 		{
 			const char *textureName = itor->value.GetString();
             const uint32 textureFlags = TextureFlags::AutomaticBatching | TextureFlags::PrefersLoadingAsSRGB;
-            texture = mTextureManager->createTexture( textureName, GpuPageOutStrategy::Discard,
-                                                      textureFlags );
+            texture = mTextureManager->createOrRetrieveTexture( textureName, GpuPageOutStrategy::Discard,
+                                                                textureFlags, resourceGroup );
 		}
 
 		itor = json.FindMember( "sampler" );
@@ -130,8 +131,8 @@ namespace Ogre
             datablock->_setSamplerblock( textureType, samplerblock );
 	}
 	//-----------------------------------------------------------------------------------
-	void HlmsJsonUnlit::loadMaterial(const rapidjson::Value &json, const HlmsJson::NamedBlocks &blocks,
-		HlmsDatablock *datablock)
+    void HlmsJsonUnlit::loadMaterial( const rapidjson::Value &json, const HlmsJson::NamedBlocks &blocks,
+                                      HlmsDatablock *datablock, const String &resourceGroup )
 	{
 		assert(dynamic_cast<HlmsUnlitDatablock*>(datablock));
 		HlmsUnlitDatablock *unlitDatablock = static_cast<HlmsUnlitDatablock*>(datablock);
@@ -160,7 +161,7 @@ namespace Ogre
 			if (itor != json.MemberEnd())
 			{
 				const rapidjson::Value &subobj = itor->value;
-				loadTexture(subobj, blocks, i, unlitDatablock);
+                loadTexture( subobj, blocks, i, unlitDatablock, resourceGroup );
 			}
 		}
 	}

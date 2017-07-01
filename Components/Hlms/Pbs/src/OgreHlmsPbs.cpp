@@ -2022,10 +2022,10 @@ namespace Ogre
 #if !OGRE_NO_JSON
     //-----------------------------------------------------------------------------------
     void HlmsPbs::_loadJson( const rapidjson::Value &jsonValue, const HlmsJson::NamedBlocks &blocks,
-                             HlmsDatablock *datablock ) const
+                             HlmsDatablock *datablock, const String &resourceGroup ) const
     {
         HlmsJsonPbs jsonPbs( mHlmsManager, mRenderSystem->getTextureGpuManager() );
-        jsonPbs.loadMaterial( jsonValue, blocks, datablock );
+        jsonPbs.loadMaterial( jsonValue, blocks, datablock, resourceGroup );
     }
     //-----------------------------------------------------------------------------------
     void HlmsPbs::_saveJson( const HlmsDatablock *datablock, String &outString ) const

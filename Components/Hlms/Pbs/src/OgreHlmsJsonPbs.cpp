@@ -157,7 +157,8 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void HlmsJsonPbs::loadTexture( const rapidjson::Value &json, const HlmsJson::NamedBlocks &blocks,
-                                   PbsTextureTypes textureType, HlmsPbsDatablock *datablock )
+                                   PbsTextureTypes textureType, HlmsPbsDatablock *datablock,
+                                   const String &resourceGroup )
     {
         TextureGpu *texture = 0;
         HlmsSamplerblock const *samplerblock = 0;
@@ -172,8 +173,8 @@ namespace Ogre
             if( datablock->suggestUsingSRGB( textureType ) )
                 textureFlags |= TextureFlags::PrefersLoadingAsSRGB;
 
-            texture = mTextureManager->createTexture( textureName, GpuPageOutStrategy::Discard,
-                                                      textureFlags );
+            texture = mTextureManager->createOrRetrieveTexture( textureName, GpuPageOutStrategy::Discard,
+                                                                textureFlags, resourceGroup );
         }
 
         itor = json.FindMember( "sampler" );
@@ -231,7 +232,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void HlmsJsonPbs::loadMaterial( const rapidjson::Value &json, const HlmsJson::NamedBlocks &blocks,
-                                    HlmsDatablock *datablock )
+                                    HlmsDatablock *datablock, const String &resourceGroup )
     {
         assert( dynamic_cast<HlmsPbsDatablock*>(datablock) );
         HlmsPbsDatablock *pbsDatablock = static_cast<HlmsPbsDatablock*>(datablock);
@@ -285,7 +286,7 @@ namespace Ogre
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &subobj = itor->value;
-            loadTexture( subobj, blocks, PBSM_DIFFUSE, pbsDatablock );
+            loadTexture( subobj, blocks, PBSM_DIFFUSE, pbsDatablock, resourceGroup );
 
             itor = subobj.FindMember( "value" );
             if( itor != subobj.MemberEnd() && itor->value.IsArray() )
@@ -300,7 +301,7 @@ namespace Ogre
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &subobj = itor->value;
-            loadTexture( subobj, blocks, PBSM_SPECULAR, pbsDatablock );
+            loadTexture( subobj, blocks, PBSM_SPECULAR, pbsDatablock, resourceGroup );
 
             itor = subobj.FindMember( "value" );
             if( itor != subobj.MemberEnd() && itor->value.IsArray() )
@@ -311,7 +312,7 @@ namespace Ogre
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &subobj = itor->value;
-            loadTexture( subobj, blocks, PBSM_ROUGHNESS, pbsDatablock );
+            loadTexture( subobj, blocks, PBSM_ROUGHNESS, pbsDatablock, resourceGroup );
 
             itor = subobj.FindMember( "value" );
             if( itor != subobj.MemberEnd() && itor->value.IsNumber() )
@@ -322,7 +323,7 @@ namespace Ogre
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &subobj = itor->value;
-            loadTexture( subobj, blocks, PBSM_SPECULAR, pbsDatablock );
+            loadTexture( subobj, blocks, PBSM_SPECULAR, pbsDatablock, resourceGroup );
 
             bool useIOR = false;
             bool isColoured = false;
@@ -354,7 +355,7 @@ namespace Ogre
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &subobj = itor->value;
-            loadTexture( subobj, blocks, PBSM_METALLIC, pbsDatablock );
+            loadTexture( subobj, blocks, PBSM_METALLIC, pbsDatablock, resourceGroup );
 
             itor = subobj.FindMember( "value" );
             if( itor != subobj.MemberEnd() && itor->value.IsNumber() )
@@ -365,7 +366,7 @@ namespace Ogre
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &subobj = itor->value;
-            loadTexture( subobj, blocks, PBSM_NORMAL, pbsDatablock );
+            loadTexture( subobj, blocks, PBSM_NORMAL, pbsDatablock, resourceGroup );
 
             itor = subobj.FindMember( "value" );
             if( itor != subobj.MemberEnd() && itor->value.IsNumber() )
@@ -376,7 +377,7 @@ namespace Ogre
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &subobj = itor->value;
-            loadTexture( subobj, blocks, PBSM_DETAIL_WEIGHT, pbsDatablock );
+            loadTexture( subobj, blocks, PBSM_DETAIL_WEIGHT, pbsDatablock, resourceGroup );
         }
 
         for( int i=0; i<4; ++i )
@@ -389,7 +390,7 @@ namespace Ogre
             {
                 const rapidjson::Value &subobj = itor->value;
                 loadTexture( subobj, blocks, static_cast<PbsTextureTypes>(PBSM_DETAIL0 + i),
-                             pbsDatablock );
+                             pbsDatablock, resourceGroup );
 
                 itor = subobj.FindMember( "value" );
                 if( itor != subobj.MemberEnd() && itor->value.IsNumber() )
@@ -418,7 +419,7 @@ namespace Ogre
             {
                 const rapidjson::Value &subobj = itor->value;
                 loadTexture( subobj, blocks, static_cast<PbsTextureTypes>(PBSM_DETAIL0_NM + i),
-                             pbsDatablock );
+                             pbsDatablock, resourceGroup );
 
                 itor = subobj.FindMember( "value" );
                 if( itor != subobj.MemberEnd() && itor->value.IsNumber() )
@@ -445,7 +446,7 @@ namespace Ogre
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &subobj = itor->value;
-            loadTexture( subobj, blocks, PBSM_REFLECTION, pbsDatablock );
+            loadTexture( subobj, blocks, PBSM_REFLECTION, pbsDatablock, resourceGroup );
         }
     }
     //-----------------------------------------------------------------------------------

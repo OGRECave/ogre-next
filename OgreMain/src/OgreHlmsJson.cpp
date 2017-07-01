@@ -484,7 +484,7 @@ namespace Ogre
                                                                       filename, resourceGroup );
                     loadDatablockCommon( itor->value, blocks, datablock );
 
-                    hlms->_loadJson( itor->value, blocks, datablock );
+                    hlms->_loadJson( itor->value, blocks, datablock, resourceGroup );
                 }
                 catch( Exception &e )
                 {

@@ -43,6 +43,7 @@ THE SOFTWARE.
 #include "Threading/OgreThreads.h"
 
 #include "OgreException.h"
+#include "OgreLogManager.h"
 
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC
     #include <intrin.h>
@@ -272,6 +273,22 @@ namespace Ogre
         TextureGpu *retVal = createTextureImpl( pageOutStrategy, idName, textureFlags );
 
         mEntries[idName] = ResourceEntry( name, resourceGroup, retVal );
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    TextureGpu* TextureGpuManager::createOrRetrieveTexture(
+            const String &name, GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+            uint32 textureFlags, const String &resourceGroup )
+    {
+        TextureGpu *retVal = 0;
+
+        IdString idName( name );
+        ResourceEntryMap::const_iterator itor = mEntries.find( idName );
+        if( itor != mEntries.end() )
+            retVal = itor->second.texture;
+        else
+            retVal = createTexture( name, pageOutStrategy, textureFlags, resourceGroup );
 
         return retVal;
     }
@@ -891,6 +908,13 @@ namespace Ogre
         while( itor != end )
         {
             const LoadRequest &loadRequest = *itor;
+
+            if( !loadRequest.archive )
+            {
+                LogManager::getSingleton().logMessage(
+                            "ERROR: Did you call createTexture with a valid resourceGroup? "
+                            "Texture: " + loadRequest.name, LML_CRITICAL );
+            }
 
             DataStreamPtr data = loadRequest.archive->open( loadRequest.name );
             {

@@ -278,6 +278,12 @@ namespace Ogre
         TextureGpu* createTexture( const String &name,
                                    GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                    uint32 textureFlags, const String &resourceGroup=BLANKSTRING );
+        /// If the texture doesn't exists, behaves exactly as createTexture. If the texture with
+        /// that name already exists, it returns it and the rest of the arguments will be ignored.
+        TextureGpu* createOrRetrieveTexture( const String &name,
+                                             GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+                                             uint32 textureFlags,
+                                             const String &resourceGroup=BLANKSTRING );
         void destroyTexture( TextureGpu *texture );
 
         /**

@@ -175,40 +175,58 @@ namespace Ogre
             }
         }
 
-#if 0
-        HlmsManager *hlmsManager = mCreator->getHlmsManager();
+        TextureGpuManager *textureManager = mCreator->getRenderSystem()->getTextureGpuManager();
 
         if( Hlms::findParamInVec( params, "diffuse_map", paramVal ) )
         {
-            textures[PBSM_DIFFUSE].texture = setTexture( paramVal, PBSM_DIFFUSE );
-            mSamplerblocks[PBSM_DIFFUSE] = hlmsManager->getSamplerblock( HlmsSamplerblock() );
+            TextureGpu *texture = textureManager->createOrRetrieveTexture(
+                                      paramVal, GpuPageOutStrategy::Discard,
+                                      TextureFlags::AutomaticBatching |
+                                      TextureFlags::PrefersLoadingAsSRGB,
+                                      ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+            setTexture( PBSM_DIFFUSE, texture );
         }
         if( Hlms::findParamInVec( params, "normal_map", paramVal ) )
         {
-            textures[PBSM_NORMAL].texture = setTexture( paramVal, PBSM_NORMAL );
-            mSamplerblocks[PBSM_NORMAL] = hlmsManager->getSamplerblock( HlmsSamplerblock() );
+            TextureGpu *texture = textureManager->createOrRetrieveTexture(
+                                      paramVal, GpuPageOutStrategy::Discard,
+                                      TextureFlags::AutomaticBatching,
+                                      ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+            setTexture( PBSM_NORMAL, texture );
         }
         if( Hlms::findParamInVec( params, "specular_map", paramVal ) )
         {
-            textures[PBSM_SPECULAR].texture = setTexture( paramVal, PBSM_SPECULAR );
-            mSamplerblocks[PBSM_SPECULAR] = hlmsManager->getSamplerblock( HlmsSamplerblock() );
+            TextureGpu *texture = textureManager->createOrRetrieveTexture(
+                                      paramVal, GpuPageOutStrategy::Discard,
+                                      TextureFlags::AutomaticBatching |
+                                      TextureFlags::PrefersLoadingAsSRGB,
+                                      ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+            setTexture( PBSM_SPECULAR, texture );
         }
         if( Hlms::findParamInVec( params, "roughness_map", paramVal ) )
         {
-            textures[PBSM_ROUGHNESS].texture = setTexture( paramVal, PBSM_ROUGHNESS );
-            mSamplerblocks[PBSM_ROUGHNESS] = hlmsManager->getSamplerblock( HlmsSamplerblock() );
+            TextureGpu *texture = textureManager->createOrRetrieveTexture(
+                                      paramVal, GpuPageOutStrategy::Discard,
+                                      TextureFlags::AutomaticBatching,
+                                      ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+            setTexture( PBSM_ROUGHNESS, texture );
         }
         if( Hlms::findParamInVec( params, "detail_weight_map", paramVal ) )
         {
-            textures[PBSM_DETAIL_WEIGHT].texture = setTexture( paramVal, PBSM_DETAIL_WEIGHT );
-            mSamplerblocks[PBSM_DETAIL_WEIGHT] = hlmsManager->getSamplerblock( HlmsSamplerblock() );
+            TextureGpu *texture = textureManager->createOrRetrieveTexture(
+                                      paramVal, GpuPageOutStrategy::Discard,
+                                      TextureFlags::AutomaticBatching,
+                                      ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+            setTexture( PBSM_DETAIL_WEIGHT, texture );
         }
         if( Hlms::findParamInVec( params, "reflection_map", paramVal ) )
         {
-            textures[PBSM_REFLECTION].texture = setTexture( paramVal, PBSM_REFLECTION );
-            mSamplerblocks[PBSM_REFLECTION] = hlmsManager->getSamplerblock( HlmsSamplerblock() );
+            TextureGpu *texture = textureManager->createOrRetrieveTexture(
+                                      paramVal, GpuPageOutStrategy::Discard,
+                                      TextureFlags::AutomaticBatching,
+                                      ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+            setTexture( PBSM_REFLECTION, texture );
         }
-#endif
 
         if( Hlms::findParamInVec( params, "uv_diffuse_map", paramVal ) )
             setTextureUvSource( PBSM_DIFFUSE, StringConverter::parseUnsignedInt( paramVal ) );
@@ -224,7 +242,6 @@ namespace Ogre
                                 StringConverter::parseUnsignedInt( paramVal ) );
         }
 
-#if 0
         //Detail maps default to wrap mode.
         HlmsSamplerblock detailSamplerRef;
         detailSamplerRef.mU = TAM_WRAP;
@@ -236,19 +253,23 @@ namespace Ogre
             String key = "detail_map" + StringConverter::toString( i );
             if( Hlms::findParamInVec( params, key, paramVal ) )
             {
-                textures[PBSM_DETAIL0 + i].texture = setTexture(
-                            paramVal, static_cast<PbsTextureTypes>( PBSM_DETAIL0 + i ) );
-                mSamplerblocks[PBSM_DETAIL0 + i] = hlmsManager->getSamplerblock( detailSamplerRef );
+                TextureGpu *texture;
+                texture = textureManager->createOrRetrieveTexture(
+                              paramVal, GpuPageOutStrategy::Discard,
+                              TextureFlags::AutomaticBatching | TextureFlags::PrefersLoadingAsSRGB,
+                              ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+                setTexture( PBSM_DETAIL0 + i, texture, &detailSamplerRef );
             }
 
             key = "detail_normal_map" + StringConverter::toString( i );
             if( Hlms::findParamInVec( params, key, paramVal ) )
             {
-                textures[PBSM_DETAIL0_NM + i].texture = setTexture(
-                            paramVal, static_cast<PbsTextureTypes>( PBSM_DETAIL0_NM + i ) );
-                mSamplerblocks[PBSM_DETAIL0_NM + i] = hlmsManager->getSamplerblock( detailSamplerRef );
+                TextureGpu *texture;
+                texture = textureManager->createOrRetrieveTexture(
+                              paramVal, GpuPageOutStrategy::Discard, TextureFlags::AutomaticBatching,
+                              ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+                setTexture( PBSM_DETAIL0_NM + i, texture, &detailSamplerRef );
             }
-
 
             key = "detail_blend_mode" + StringConverter::toString( i );
             if( Hlms::findParamInVec( params, key, paramVal ) )
@@ -301,7 +322,6 @@ namespace Ogre
                                     StringConverter::parseUnsignedInt( paramVal ) );
             }
         }
-#endif
 
         creator->requestSlot( /*mTextureHash*/0, this, false );
         calculateHash();
@@ -418,69 +438,6 @@ namespace Ogre
     void HlmsPbsDatablock::notifyOptimizationStrategyChanged(void)
     {
         calculateHash();
-    }
-    //-----------------------------------------------------------------------------------
-    TexturePtr HlmsPbsDatablock::setTexture( const String &name,
-                                             PbsTextureTypes textureType )
-    {
-        const HlmsTextureManager::TextureMapType texMapTypes[NUM_PBSM_TEXTURE_TYPES] =
-        {
-            HlmsTextureManager::TEXTURE_TYPE_DIFFUSE,
-            HlmsTextureManager::TEXTURE_TYPE_NORMALS,
-
-            mWorkflow == MetallicWorkflow
-                ? HlmsTextureManager::TEXTURE_TYPE_MONOCHROME
-                : HlmsTextureManager::TEXTURE_TYPE_DIFFUSE,
-
-            HlmsTextureManager::TEXTURE_TYPE_MONOCHROME,
-            HlmsTextureManager::TEXTURE_TYPE_NON_COLOR_DATA,
-#ifdef OGRE_TEXTURE_ATLAS
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL,
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL,
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL,
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL,
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL_NORMAL_MAP,
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL_NORMAL_MAP,
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL_NORMAL_MAP,
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL_NORMAL_MAP,
-#else
-            HlmsTextureManager::TEXTURE_TYPE_DIFFUSE,
-            HlmsTextureManager::TEXTURE_TYPE_DIFFUSE,
-            HlmsTextureManager::TEXTURE_TYPE_DIFFUSE,
-            HlmsTextureManager::TEXTURE_TYPE_DIFFUSE,
-            HlmsTextureManager::TEXTURE_TYPE_NORMALS,
-            HlmsTextureManager::TEXTURE_TYPE_NORMALS,
-            HlmsTextureManager::TEXTURE_TYPE_NORMALS,
-            HlmsTextureManager::TEXTURE_TYPE_NORMALS,
-#endif
-            HlmsTextureManager::TEXTURE_TYPE_ENV_MAP
-        };
-
-        HlmsManager *hlmsManager = mCreator->getHlmsManager();
-        HlmsTextureManager *hlmsTextureManager = hlmsManager->getTextureManager();
-        HlmsTextureManager::TextureLocation texLocation = hlmsTextureManager->
-                                                    createOrRetrieveTexture( name,
-                                                                             texMapTypes[textureType] );
-
-        assert( texLocation.texture->isTextureTypeArray() || textureType == PBSM_REFLECTION );
-
-        //If HLMS texture manager failed to find a reflection texture, have look int standard texture manager
-        //NB we only do this for reflection textures as all other textures must be texture arrays for performance reasons
-        if (textureType == PBSM_REFLECTION && texLocation.texture == hlmsTextureManager->getBlankTexture().texture)
-        {
-            Ogre::TexturePtr tex = Ogre::TextureManager::getSingleton().getByName(name);
-            if (tex.isNull() == false)
-            {
-                texLocation.texture = tex;
-                texLocation.xIdx = 0;
-                texLocation.yIdx = 0;
-                texLocation.divisor = 1;
-            }
-        }
-
-        mTexIndices[textureType] = texLocation.xIdx;
-
-        return texLocation.texture;
     }
     //-----------------------------------------------------------------------------------
     void HlmsPbsDatablock::setBackgroundDiffuse( const ColourValue &bgDiffuse )

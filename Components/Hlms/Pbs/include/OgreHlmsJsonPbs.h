@@ -63,7 +63,8 @@ namespace Ogre
                 const ColourValue &defaultValue = ColourValue::White );
 
         void loadTexture( const rapidjson::Value &json, const HlmsJson::NamedBlocks &blocks,
-                          PbsTextureTypes textureType, HlmsPbsDatablock *datablock );
+                          PbsTextureTypes textureType, HlmsPbsDatablock *datablock,
+                          const String &resourceGroup );
 
         static void toQuotedStr( HlmsPbsDatablock::Workflows value, String &outString );
         static void toQuotedStr( uint32 value, String &outString );
@@ -93,7 +94,7 @@ namespace Ogre
         HlmsJsonPbs( HlmsManager *hlmsManager, TextureGpuManager *textureManager );
 
         void loadMaterial( const rapidjson::Value &json, const HlmsJson::NamedBlocks &blocks,
-                           HlmsDatablock *datablock );
+                           HlmsDatablock *datablock, const String &resourceGroup );
         void saveMaterial( const HlmsDatablock *datablock, String &outString );
 
         static void collectSamplerblocks( const HlmsDatablock *datablock,

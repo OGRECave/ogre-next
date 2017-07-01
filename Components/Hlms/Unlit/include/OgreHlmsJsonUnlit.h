@@ -51,8 +51,9 @@ namespace Ogre
 	
 		UnlitBlendModes parseBlendMode(const char *value);
 		void parseAnimation(const rapidjson::Value &jsonArray, Matrix4 &mat);
-		void loadTexture(const rapidjson::Value & json, const HlmsJson::NamedBlocks & blocks, 
-			uint8 textureType, HlmsUnlitDatablock * datablock);
+        void loadTexture( const rapidjson::Value &json, const HlmsJson::NamedBlocks &blocks,
+                          uint8 textureType, HlmsUnlitDatablock *datablock,
+                          const String &resourceGroup );
 
 		void saveTexture( const char *blockName,
                           uint8 textureType,
@@ -63,7 +64,7 @@ namespace Ogre
         HlmsJsonUnlit( HlmsManager *hlmsManager, TextureGpuManager *textureManager );
 
         void loadMaterial( const rapidjson::Value &json, const HlmsJson::NamedBlocks &blocks,
-                           HlmsDatablock *datablock );
+                           HlmsDatablock *datablock, const String &resourceGroup );
         void saveMaterial( const HlmsDatablock *datablock, String &outString );
 
         static void collectSamplerblocks( const HlmsDatablock *datablock,
