@@ -11,8 +11,17 @@
 
 PROJECT(OgreHlmsUnlit)
 
-file(GLOB HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/../Common/include/*.h")
-file(GLOB SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/../Common/src/*.cpp")
+file(
+    GLOB HEADER_FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Common/include/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Common/include/*.inl"
+)
+file(
+    GLOB SOURCE_FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Common/src/*.cpp"
+)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../Common/include)
