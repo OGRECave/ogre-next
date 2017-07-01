@@ -286,7 +286,7 @@ namespace Ogre
 
         pool->freeSlots.pop_back();
 
-        scheduleForUpdate( user, 0xff );
+        scheduleForUpdate( user, DirtyConstBuffer );
     }
     //-----------------------------------------------------------------------------------
     void ConstBufferPool::releaseSlot( ConstBufferPoolUser *user )
