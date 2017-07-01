@@ -279,6 +279,8 @@ namespace Ogre
 
         void _changeRenderSystem( RenderSystem *newRs );
 
+        RenderSystem* getRenderSystem(void) const           { return mRenderSystem; }
+
 #if !OGRE_NO_JSON
         /** Opens a file containing a JSON string to load all Hlms materials from.
         @remarks

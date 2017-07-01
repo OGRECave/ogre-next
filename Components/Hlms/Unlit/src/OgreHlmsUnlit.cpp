@@ -964,13 +964,13 @@ namespace Ogre
 	void HlmsUnlit::_loadJson(const rapidjson::Value &jsonValue, const HlmsJson::NamedBlocks &blocks,
 		HlmsDatablock *datablock) const
 	{
-		HlmsJsonUnlit jsonUnlit(mHlmsManager);
+        HlmsJsonUnlit jsonUnlit( mHlmsManager, mRenderSystem->getTextureGpuManager() );
 		jsonUnlit.loadMaterial(jsonValue, blocks, datablock);
 	}
 	//-----------------------------------------------------------------------------------
 	void HlmsUnlit::_saveJson(const HlmsDatablock *datablock, String &outString) const
 	{
-		HlmsJsonUnlit jsonUnlit(mHlmsManager);
+        HlmsJsonUnlit jsonUnlit( mHlmsManager, mRenderSystem->getTextureGpuManager() );
 		jsonUnlit.saveMaterial(datablock, outString);
 	}
 	//-----------------------------------------------------------------------------------

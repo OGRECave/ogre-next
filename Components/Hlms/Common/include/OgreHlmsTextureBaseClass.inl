@@ -232,6 +232,29 @@ namespace Ogre
     {
         assert( texType < OGRE_HLMS_TEXTURE_BASE_MAX_TEX );
 
+        HlmsManager *hlmsManager = mCreator->getHlmsManager();
+
+        //Set the new samplerblock
+        HlmsSamplerblock const *samplerblockPtr = 0;
+        if( refParams )
+        {
+            samplerblockPtr = hlmsManager->getSamplerblock( *refParams );
+        }
+        else if( texture && !mSamplerblocks[texType] )
+        {
+            //Adding a texture, but the samplerblock doesn't exist. Create a default one.
+            HlmsSamplerblock defaultSamplerblockRef;
+            samplerblockPtr = hlmsManager->getSamplerblock( defaultSamplerblockRef );
+        }
+
+        _setTexture( texType, texture, samplerblockPtr );
+    }
+    //-----------------------------------------------------------------------------------
+    void OGRE_HLMS_TEXTURE_BASE_CLASS::_setTexture( uint8 texType, TextureGpu *texture,
+                                                    const HlmsSamplerblock *samplerblockPtr )
+    {
+        assert( texType < OGRE_HLMS_TEXTURE_BASE_MAX_TEX );
+
         bool textureSetDirty = false;
         bool samplerSetDirty = false;
 
@@ -265,24 +288,16 @@ namespace Ogre
         }
 
         //Set the new samplerblock
-        if( refParams )
+        if( mSamplerblocks[texType] )
         {
+            //Decrease ref count of our old block. The new one already has its ref count increased.
             HlmsManager *hlmsManager = mCreator->getHlmsManager();
-            const HlmsSamplerblock *oldSamplerblock = mSamplerblocks[texType];
-            mSamplerblocks[texType] = hlmsManager->getSamplerblock( *refParams );
-
-            if( oldSamplerblock != mSamplerblocks[texType] )
-                samplerSetDirty = true;
-
-            if( oldSamplerblock )
-                hlmsManager->destroySamplerblock( oldSamplerblock );
+            hlmsManager->destroySamplerblock( mSamplerblocks[texType] );
         }
-        else if( texture && !mSamplerblocks[texType] )
+
+        if( mSamplerblocks[texType] != samplerblockPtr )
         {
-            //Adding a texture, but the samplerblock doesn't exist. Create a default one.
-            HlmsSamplerblock samplerBlockRef;
-            HlmsManager *hlmsManager = mCreator->getHlmsManager();
-            mSamplerblocks[texType] = hlmsManager->getSamplerblock( samplerBlockRef );
+            mSamplerblocks[texType] = samplerblockPtr;
             samplerSetDirty = true;
         }
 
@@ -298,15 +313,26 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void OGRE_HLMS_TEXTURE_BASE_CLASS::setSamplerblock( uint8 texType, const HlmsSamplerblock &params )
     {
-        const HlmsSamplerblock *oldSamplerblock = mSamplerblocks[texType];
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
-        mSamplerblocks[texType] = hlmsManager->getSamplerblock( params );
+        const HlmsSamplerblock *samplerblockPtr = hlmsManager->getSamplerblock( params );
+        _setSamplerblock( texType, samplerblockPtr );
+    }
+    //-----------------------------------------------------------------------------------
+    void OGRE_HLMS_TEXTURE_BASE_CLASS::_setSamplerblock( uint8 texType,
+                                                         const HlmsSamplerblock *samplerblockPtr )
+    {
+        if( mSamplerblocks[texType] )
+        {
+            //Decrease ref count of our old block. The new one already has its ref count increased.
+            HlmsManager *hlmsManager = mCreator->getHlmsManager();
+            hlmsManager->destroySamplerblock( mSamplerblocks[texType] );
+        }
 
-        if( oldSamplerblock != mSamplerblocks[texType] )
+        if( mSamplerblocks[texType] != samplerblockPtr )
+        {
+            mSamplerblocks[texType] = samplerblockPtr;
             scheduleConstBufferUpdate( false, true );
-
-        if( oldSamplerblock )
-            hlmsManager->destroySamplerblock( oldSamplerblock );
+        }
     }
     //-----------------------------------------------------------------------------------
     const HlmsSamplerblock* OGRE_HLMS_TEXTURE_BASE_CLASS::getSamplerblock( uint8 texType ) const

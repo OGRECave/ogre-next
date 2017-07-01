@@ -111,6 +111,14 @@ namespace Ogre
         void setTexture( uint8 texType, TextureGpu *texture, const HlmsSamplerblock *refParams=0 );
         TextureGpu* getTexture( uint8 texType ) const;
 
+        /// Same as setTexture, but samplerblockPtr is a raw samplerblock retrieved from HlmsManager,
+        /// and is assumed to have its reference count already be incremented for us
+        /// (note HlmsManager::getSamplerblock() already increments the ref. count).
+        /// Mostly for internal use, but can speed up loading if you already manage samplerblocks
+        /// manually and have the raw ptr.
+        void _setTexture( uint8 texType, TextureGpu *texture,
+                          const HlmsSamplerblock *samplerblockPtr=0 );
+
         /** Sets a new sampler block to be associated with the texture
             (i.e. filtering mode, addressing modes, etc). If the samplerblock changes,
             this function will always trigger a HlmsDatablock::flushRenderables
@@ -121,6 +129,11 @@ namespace Ogre
         */
         void setSamplerblock( uint8 texType, const HlmsSamplerblock &params );
         const HlmsSamplerblock* getSamplerblock( uint8 texType ) const;
+
+        /// Same as setSamplerblock, but samplerblockPtr is a raw samplerblock retrieved from
+        /// HlmsManager, and is assumed to have its reference count already be incremented for us.
+        /// See _setTexture.
+        void _setSamplerblock( uint8 texType, const HlmsSamplerblock *samplerblockPtr );
 
         /// This function has O( log N ) complexity, but O(1) if the texture was not set.
         uint8 getIndexToDescriptorTexture( uint8 texType );

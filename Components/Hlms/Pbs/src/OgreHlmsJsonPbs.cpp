@@ -32,8 +32,7 @@ THE SOFTWARE.
 
 #include "OgreHlmsJsonPbs.h"
 #include "OgreHlmsManager.h"
-#include "OgreHlmsTextureManager.h"
-#include "OgreTextureManager.h"
+#include "OgreTextureGpuManager.h"
 
 #include "OgreLwString.h"
 
@@ -56,8 +55,9 @@ namespace Ogre
         "Fade"
     };
 
-    HlmsJsonPbs::HlmsJsonPbs( HlmsManager *hlmsManager ) :
-        mHlmsManager( hlmsManager )
+    HlmsJsonPbs::HlmsJsonPbs( HlmsManager *hlmsManager, TextureGpuManager *textureManager ) :
+        mHlmsManager( hlmsManager ),
+        mTextureManager( textureManager )
     {
     }
     //-----------------------------------------------------------------------------------
@@ -157,88 +157,43 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void HlmsJsonPbs::loadTexture( const rapidjson::Value &json, const HlmsJson::NamedBlocks &blocks,
-                                   PbsTextureTypes textureType, HlmsPbsDatablock *datablock,
-                                   PackedTexture textures[] )
+                                   PbsTextureTypes textureType, HlmsPbsDatablock *datablock )
     {
-        const HlmsTextureManager::TextureMapType texMapTypes[NUM_PBSM_TEXTURE_TYPES] =
-        {
-            HlmsTextureManager::TEXTURE_TYPE_DIFFUSE,
-            HlmsTextureManager::TEXTURE_TYPE_NORMALS,
+        TextureGpu *texture = 0;
+        HlmsSamplerblock const *samplerblock = 0;
 
-            datablock->getWorkflow() == HlmsPbsDatablock::MetallicWorkflow
-                ? HlmsTextureManager::TEXTURE_TYPE_MONOCHROME
-                : HlmsTextureManager::TEXTURE_TYPE_DIFFUSE,
-
-            HlmsTextureManager::TEXTURE_TYPE_MONOCHROME,
-            HlmsTextureManager::TEXTURE_TYPE_NON_COLOR_DATA,
-#ifdef OGRE_TEXTURE_ATLAS
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL,
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL,
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL,
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL,
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL_NORMAL_MAP,
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL_NORMAL_MAP,
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL_NORMAL_MAP,
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL_NORMAL_MAP,
-#else
-            HlmsTextureManager::TEXTURE_TYPE_DIFFUSE,
-            HlmsTextureManager::TEXTURE_TYPE_DIFFUSE,
-            HlmsTextureManager::TEXTURE_TYPE_DIFFUSE,
-            HlmsTextureManager::TEXTURE_TYPE_DIFFUSE,
-            HlmsTextureManager::TEXTURE_TYPE_NORMALS,
-            HlmsTextureManager::TEXTURE_TYPE_NORMALS,
-            HlmsTextureManager::TEXTURE_TYPE_NORMALS,
-            HlmsTextureManager::TEXTURE_TYPE_NORMALS,
-#endif
-            HlmsTextureManager::TEXTURE_TYPE_ENV_MAP
-        };
-
-        rapidjson::Value::ConstMemberIterator itor = json.FindMember("texture");
+        rapidjson::Value::ConstMemberIterator itor = json.FindMember( "texture" );
         if( itor != json.MemberEnd() && itor->value.IsString() )
         {
             const char *textureName = itor->value.GetString();
 
-            HlmsTextureManager *hlmsTextureManager = mHlmsManager->getTextureManager();
-            HlmsTextureManager::TextureLocation texLocation = hlmsTextureManager->
-                createOrRetrieveTexture(textureName,
-                texMapTypes[textureType]);
+            uint32 textureFlags = TextureFlags::AutomaticBatching;
 
-            assert(texLocation.texture->isTextureTypeArray() || textureType == PBSM_REFLECTION);
+            if( datablock->suggestUsingSRGB( textureType ) )
+                textureFlags |= TextureFlags::PrefersLoadingAsSRGB;
 
-            //If HLMS texture manager failed to find a reflection
-            //texture, have look in standard texture manager.
-            //NB we only do this for reflection textures as all other
-            //textures must be texture arrays for performance reasons
-            if( textureType == PBSM_REFLECTION &&
-                texLocation.texture == hlmsTextureManager->getBlankTexture().texture )
-            {
-                Ogre::TexturePtr tex = Ogre::TextureManager::getSingleton().getByName(textureName);
-                if (tex.isNull() == false)
-                {
-                    texLocation.texture = tex;
-                    texLocation.xIdx = 0;
-                    texLocation.yIdx = 0;
-                    texLocation.divisor = 1;
-                }
-            }
-
-            textures[textureType].texture = texLocation.texture;
-            textures[textureType].xIdx = texLocation.xIdx;
+            texture = mTextureManager->createTexture( textureName, GpuPageOutStrategy::Discard,
+                                                      textureFlags );
         }
 
-        itor = json.FindMember("sampler");
+        itor = json.FindMember( "sampler" );
         if( itor != json.MemberEnd() && itor->value.IsString() )
         {
             map<LwConstString, const HlmsSamplerblock*>::type::const_iterator it =
                     blocks.samplerblocks.find( LwConstString::FromUnsafeCStr(itor->value.GetString()) );
             if( it != blocks.samplerblocks.end() )
             {
-                textures[textureType].samplerblock = it->second;
-                mHlmsManager->addReference( textures[textureType].samplerblock );
+                samplerblock = it->second;
+                mHlmsManager->addReference( samplerblock );
             }
         }
 
-        itor = json.FindMember("uv");
+        if( texture )
+            datablock->_setTexture( textureType, texture, samplerblock );
+        else if( samplerblock )
+            datablock->_setSamplerblock( textureType, samplerblock );
+
+        itor = json.FindMember( "uv" );
         if( itor != json.MemberEnd() && itor->value.IsUint() )
         {
             unsigned uv = itor->value.GetUint();
@@ -326,13 +281,11 @@ namespace Ogre
                                            useAlphaFromTextures, changeBlendblock );
         }
 
-        PackedTexture packedTextures[NUM_PBSM_TEXTURE_TYPES];
-
         itor = json.FindMember("diffuse");
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &subobj = itor->value;
-            loadTexture( subobj, blocks, PBSM_DIFFUSE, pbsDatablock, packedTextures );
+            loadTexture( subobj, blocks, PBSM_DIFFUSE, pbsDatablock );
 
             itor = subobj.FindMember( "value" );
             if( itor != subobj.MemberEnd() && itor->value.IsArray() )
@@ -347,7 +300,7 @@ namespace Ogre
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &subobj = itor->value;
-            loadTexture( subobj, blocks, PBSM_SPECULAR, pbsDatablock, packedTextures );
+            loadTexture( subobj, blocks, PBSM_SPECULAR, pbsDatablock );
 
             itor = subobj.FindMember( "value" );
             if( itor != subobj.MemberEnd() && itor->value.IsArray() )
@@ -358,7 +311,7 @@ namespace Ogre
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &subobj = itor->value;
-            loadTexture( subobj, blocks, PBSM_ROUGHNESS, pbsDatablock, packedTextures );
+            loadTexture( subobj, blocks, PBSM_ROUGHNESS, pbsDatablock );
 
             itor = subobj.FindMember( "value" );
             if( itor != subobj.MemberEnd() && itor->value.IsNumber() )
@@ -369,7 +322,7 @@ namespace Ogre
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &subobj = itor->value;
-            loadTexture( subobj, blocks, PBSM_SPECULAR, pbsDatablock, packedTextures );
+            loadTexture( subobj, blocks, PBSM_SPECULAR, pbsDatablock );
 
             bool useIOR = false;
             bool isColoured = false;
@@ -401,7 +354,7 @@ namespace Ogre
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &subobj = itor->value;
-            loadTexture( subobj, blocks, PBSM_METALLIC, pbsDatablock, packedTextures );
+            loadTexture( subobj, blocks, PBSM_METALLIC, pbsDatablock );
 
             itor = subobj.FindMember( "value" );
             if( itor != subobj.MemberEnd() && itor->value.IsNumber() )
@@ -412,7 +365,7 @@ namespace Ogre
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &subobj = itor->value;
-            loadTexture( subobj, blocks, PBSM_NORMAL, pbsDatablock, packedTextures );
+            loadTexture( subobj, blocks, PBSM_NORMAL, pbsDatablock );
 
             itor = subobj.FindMember( "value" );
             if( itor != subobj.MemberEnd() && itor->value.IsNumber() )
@@ -423,7 +376,7 @@ namespace Ogre
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &subobj = itor->value;
-            loadTexture( subobj, blocks, PBSM_DETAIL_WEIGHT, pbsDatablock, packedTextures );
+            loadTexture( subobj, blocks, PBSM_DETAIL_WEIGHT, pbsDatablock );
         }
 
         for( int i=0; i<4; ++i )
@@ -436,7 +389,7 @@ namespace Ogre
             {
                 const rapidjson::Value &subobj = itor->value;
                 loadTexture( subobj, blocks, static_cast<PbsTextureTypes>(PBSM_DETAIL0 + i),
-                             pbsDatablock, packedTextures );
+                             pbsDatablock );
 
                 itor = subobj.FindMember( "value" );
                 if( itor != subobj.MemberEnd() && itor->value.IsNumber() )
@@ -465,7 +418,7 @@ namespace Ogre
             {
                 const rapidjson::Value &subobj = itor->value;
                 loadTexture( subobj, blocks, static_cast<PbsTextureTypes>(PBSM_DETAIL0_NM + i),
-                             pbsDatablock, packedTextures );
+                             pbsDatablock );
 
                 itor = subobj.FindMember( "value" );
                 if( itor != subobj.MemberEnd() && itor->value.IsNumber() )
@@ -492,10 +445,8 @@ namespace Ogre
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &subobj = itor->value;
-            loadTexture( subobj, blocks, PBSM_REFLECTION, pbsDatablock, packedTextures );
+            loadTexture( subobj, blocks, PBSM_REFLECTION, pbsDatablock );
         }
-
-        pbsDatablock->_setTextures( packedTextures );
     }
     //-----------------------------------------------------------------------------------
     void HlmsJsonPbs::toQuotedStr( HlmsPbsDatablock::Workflows value, String &outString )
@@ -650,16 +601,10 @@ namespace Ogre
 
         if( writeTexture )
         {
-            HlmsTextureManager::TextureLocation texLocation;
-            texLocation.texture = datablock->getTexture( textureType );
-            if( !texLocation.texture.isNull() )
+            TextureGpu *texture = datablock->getTexture( textureType );
+            if( texture )
             {
-                texLocation.xIdx = datablock->_getTextureIdx( textureType );
-                texLocation.yIdx = 0;
-                texLocation.divisor = 1;
-
-                const String *texName = mHlmsManager->getTextureManager()->findAliasName( texLocation );
-
+                const String *texName = mTextureManager->findNameStr( texture->getName() );
                 if( texName )
                 {
                     outString += ",\n\t\t\t\t\"texture\" : \"";
@@ -739,7 +684,7 @@ namespace Ogre
         }
 
         if( pbsDatablock->getNormalMapWeight() != 1.0f ||
-            !pbsDatablock->getTexture( PBSM_NORMAL ).isNull() )
+            pbsDatablock->getTexture( PBSM_NORMAL ) )
         {
             saveTexture( pbsDatablock->getNormalMapWeight(), "normal", PBSM_NORMAL,
                          pbsDatablock, outString );
@@ -748,7 +693,7 @@ namespace Ogre
         saveTexture( pbsDatablock->getRoughness(), "roughness", PBSM_ROUGHNESS,
                      pbsDatablock, outString );
 
-        if( !pbsDatablock->getTexture( PBSM_DETAIL_WEIGHT ).isNull() )
+        if( pbsDatablock->getTexture( PBSM_DETAIL_WEIGHT ) )
             saveTexture( "detail_weight", PBSM_DETAIL_WEIGHT, pbsDatablock, outString );
 
         for( int i=0; i<4; ++i )
@@ -762,7 +707,7 @@ namespace Ogre
 
             if( blendMode != PBSM_BLEND_NORMAL_NON_PREMUL || offset != Vector2::ZERO ||
                 scale != Vector2::UNIT_SCALE || pbsDatablock->getDetailMapWeight( i ) != 1.0f ||
-                !pbsDatablock->getTexture( textureType ).isNull() )
+                pbsDatablock->getTexture( textureType ) )
             {
                 char tmpBuffer[64];
                 LwString blockName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
@@ -785,7 +730,7 @@ namespace Ogre
 
             if( offset != Vector2::ZERO || scale != Vector2::UNIT_SCALE ||
                 pbsDatablock->getDetailNormalWeight( i ) != 1.0f ||
-                !pbsDatablock->getTexture( textureType ).isNull() )
+                pbsDatablock->getTexture( textureType ) )
             {
                 char tmpBuffer[64];
                 LwString blockName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
@@ -797,7 +742,7 @@ namespace Ogre
             }
         }
 
-        if( !pbsDatablock->getTexture( PBSM_REFLECTION ).isNull() )
+        if( pbsDatablock->getTexture( PBSM_REFLECTION ) )
             saveTexture( "reflection", PBSM_REFLECTION, pbsDatablock, outString );
     }
     //-----------------------------------------------------------------------------------

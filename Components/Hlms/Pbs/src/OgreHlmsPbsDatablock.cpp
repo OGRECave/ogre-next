@@ -941,6 +941,19 @@ namespace Ogre
         setRoughness( roughness );
     }
     //-----------------------------------------------------------------------------------
+    bool HlmsPbsDatablock::suggestUsingSRGB( PbsTextureTypes type ) const
+    {
+        if( type == PBSM_NORMAL || type == PBSM_ROUGHNESS || type == PBSM_DETAIL_WEIGHT ||
+            (type >= PBSM_DETAIL0_NM && type <= PBSM_DETAIL3_NM) )
+        {
+            return false;
+        }
+
+        if( type == PBSM_SPECULAR && this->getWorkflow() == MetallicWorkflow )
+            return false;
+
+        return true;
+    }
     /*HlmsTextureManager::TextureMapType HlmsPbsDatablock::suggestMapTypeBasedOnTextureType(
                                                                         PbsTextureTypes type )
     {

@@ -32,8 +32,7 @@ THE SOFTWARE.
 
 #include "OgreHlmsJsonUnlit.h"
 #include "OgreHlmsManager.h"
-#include "OgreHlmsTextureManager.h"
-#include "OgreTextureManager.h"
+#include "OgreTextureGpuManager.h"
 
 #include "OgreLwString.h"
 
@@ -43,8 +42,9 @@ namespace Ogre
 {
 	extern const String c_unlitBlendModes[];
 
-    HlmsJsonUnlit::HlmsJsonUnlit( HlmsManager *hlmsManager ) :
-        mHlmsManager( hlmsManager )
+    HlmsJsonUnlit::HlmsJsonUnlit( HlmsManager *hlmsManager, TextureGpuManager *textureManager ) :
+        mHlmsManager( hlmsManager ),
+        mTextureManager( textureManager )
     {
     }
 	//-----------------------------------------------------------------------------------
@@ -77,20 +77,19 @@ namespace Ogre
 		}
 	}
 	//-----------------------------------------------------------------------------------
-	void HlmsJsonUnlit::loadTexture( const rapidjson::Value &json, const HlmsJson::NamedBlocks &blocks,
-		uint8 textureType, HlmsUnlitDatablock *datablock )
+    void HlmsJsonUnlit::loadTexture( const rapidjson::Value &json, const HlmsJson::NamedBlocks &blocks,
+                                     uint8 textureType, HlmsUnlitDatablock *datablock )
 	{
-		bool setTex = false;
-		HlmsTextureManager::TextureLocation texLocation;
-		HlmsSamplerblock const * samplerBlock = 0;
+        TextureGpu *texture = 0;
+        HlmsSamplerblock const *samplerblock = 0;
+
 		rapidjson::Value::ConstMemberIterator itor = json.FindMember( "texture" );
 		if ( itor != json.MemberEnd() && itor->value.IsString() )
 		{
 			const char *textureName = itor->value.GetString();
-
-			HlmsTextureManager *hlmsTextureManager = mHlmsManager->getTextureManager();
-			texLocation = hlmsTextureManager->createOrRetrieveTexture( textureName, Ogre::HlmsTextureManager::TEXTURE_TYPE_DIFFUSE );
-			setTex = true;
+            const uint32 textureFlags = TextureFlags::AutomaticBatching | TextureFlags::PrefersLoadingAsSRGB;
+            texture = mTextureManager->createTexture( textureName, GpuPageOutStrategy::Discard,
+                                                      textureFlags );
 		}
 
 		itor = json.FindMember( "sampler" );
@@ -98,11 +97,11 @@ namespace Ogre
 		{
 			map<LwConstString, const HlmsSamplerblock*>::type::const_iterator it =
 				blocks.samplerblocks.find( LwConstString::FromUnsafeCStr( itor->value.GetString()) );
-			if ( it != blocks.samplerblocks.end() )
-			{
-				samplerBlock = it->second;
-				mHlmsManager->addReference( samplerBlock );
-			}
+            if ( it != blocks.samplerblocks.end() )
+            {
+                samplerblock = it->second;
+                mHlmsManager->addReference( samplerblock );
+            }
 		}
 
 		itor = json.FindMember( "blendmode" );
@@ -125,8 +124,10 @@ namespace Ogre
 			datablock->setAnimationMatrix( textureType, mat );
 		}
 
-		if ( setTex )
-			datablock->setTexture( textureType, texLocation.xIdx, texLocation.texture, samplerBlock );
+        if( texture )
+            datablock->_setTexture( textureType, texture, samplerblock );
+        else if( samplerblock )
+            datablock->_setSamplerblock( textureType, samplerblock );
 	}
 	//-----------------------------------------------------------------------------------
 	void HlmsJsonUnlit::loadMaterial(const rapidjson::Value &json, const HlmsJson::NamedBlocks &blocks,
@@ -175,28 +176,22 @@ namespace Ogre
 
 		const size_t currentOffset = outString.size();
 
-		if (writeTexture)
-		{
-			HlmsTextureManager::TextureLocation texLocation;
-			texLocation.texture = datablock->getTexture(textureType);
-			if (!texLocation.texture.isNull())
-			{
-                texLocation.xIdx = datablock->_getTextureIdx( textureType );
-				texLocation.yIdx = 0;
-				texLocation.divisor = 1;
+        if( writeTexture )
+        {
+            TextureGpu *texture = datablock->getTexture( textureType );
+            if( texture )
+            {
+                const String *texName = mTextureManager->findNameStr( texture->getName() );
+                if( texName )
+                {
+                    outString += ",\n\t\t\t\t\"texture\" : \"";
+                    outString += *texName;
+                    outString += '"';
+                }
+            }
 
-				const String *texName = mHlmsManager->getTextureManager()->findAliasName(texLocation);
-
-				if (texName)
-				{
-					outString += ",\n\t\t\t\t\"texture\" : \"";
-					outString += *texName;
-					outString += '"';
-				}
-			}
-
-			const HlmsSamplerblock *samplerblock = datablock->getSamplerblock(textureType);
-			if (samplerblock)
+            const HlmsSamplerblock *samplerblock = datablock->getSamplerblock( textureType );
+            if( samplerblock )
 			{
 				outString += ",\n\t\t\t\t\"sampler\" : ";
 				outString += HlmsJson::getName(samplerblock);
@@ -295,14 +290,14 @@ namespace Ogre
 			HlmsJson::toStr(value, outString);
 		}
 
-		for (uint8 i = 0; i<NUM_UNLIT_TEXTURE_TYPES; ++i)
+        for( uint8 i=0; i<NUM_UNLIT_TEXTURE_TYPES; ++i )
 		{
-			if (!unlitDatablock->getTexture(i).isNull())
+            if( unlitDatablock->getTexture( i ) )
 			{
 				char tmpBuffer[64];
 				LwString blockName(LwString::FromEmptyPointer(tmpBuffer, sizeof(tmpBuffer)));
-				blockName.a("diffuse_map", i);
-				saveTexture(blockName.c_str(), i, unlitDatablock, outString);
+                blockName.a( "diffuse_map", i );
+                saveTexture( blockName.c_str(), i, unlitDatablock, outString );
 			}
 		}
 	}

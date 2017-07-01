@@ -46,7 +46,8 @@ namespace Ogre
 
     class _OgreHlmsUnlitExport HlmsJsonUnlit
     {
-        HlmsManager *mHlmsManager;
+        HlmsManager         *mHlmsManager;
+        TextureGpuManager   *mTextureManager;
 	
 		UnlitBlendModes parseBlendMode(const char *value);
 		void parseAnimation(const rapidjson::Value &jsonArray, Matrix4 &mat);
@@ -59,7 +60,7 @@ namespace Ogre
                           bool writeTexture=true );
 
     public:
-        HlmsJsonUnlit( HlmsManager *hlmsManager );
+        HlmsJsonUnlit( HlmsManager *hlmsManager, TextureGpuManager *textureManager );
 
         void loadMaterial( const rapidjson::Value &json, const HlmsJson::NamedBlocks &blocks,
                            HlmsDatablock *datablock );

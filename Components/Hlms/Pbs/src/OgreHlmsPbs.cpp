@@ -2024,13 +2024,13 @@ namespace Ogre
     void HlmsPbs::_loadJson( const rapidjson::Value &jsonValue, const HlmsJson::NamedBlocks &blocks,
                              HlmsDatablock *datablock ) const
     {
-        HlmsJsonPbs jsonPbs( mHlmsManager );
+        HlmsJsonPbs jsonPbs( mHlmsManager, mRenderSystem->getTextureGpuManager() );
         jsonPbs.loadMaterial( jsonValue, blocks, datablock );
     }
     //-----------------------------------------------------------------------------------
     void HlmsPbs::_saveJson( const HlmsDatablock *datablock, String &outString ) const
     {
-        HlmsJsonPbs jsonPbs( mHlmsManager );
+        HlmsJsonPbs jsonPbs( mHlmsManager, mRenderSystem->getTextureGpuManager() );
         jsonPbs.saveMaterial( datablock, outString );
     }
     //-----------------------------------------------------------------------------------

@@ -603,6 +603,7 @@ namespace Ogre
         */
 //        HlmsTextureManager::TextureMapType suggestMapTypeBasedOnTextureType(
 //                                                                PbsTextureTypes type );
+        bool suggestUsingSRGB( PbsTextureTypes type ) const;
 
         virtual void calculateHash();
 
