@@ -1066,7 +1066,7 @@ namespace Ogre
         {
             deallocateVbo( stagingTexture->getVboPoolIndex(),
                            stagingTexture->_getInternalBufferStart(),
-                           stagingTexture->_getInternalTotalSizeBytes(),
+                           stagingTexture->_getInternalTotalSizeBytes() / mDynamicBufferMultiplier,
                            BT_DYNAMIC_PERSISTENT );
         }
         else

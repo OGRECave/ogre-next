@@ -259,6 +259,7 @@ namespace Ogre
     TextureGpu* TextureGpuManager::createTexture( const String &name,
                                                   GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                                   uint32 textureFlags,
+                                                  TextureTypes::TextureTypes initialType,
                                                   const String &resourceGroup )
     {
         IdString idName( name );
@@ -270,7 +271,16 @@ namespace Ogre
                          "TextureGpuManager::createTexture" );
         }
 
+        if( initialType != TextureTypes::Unknown && initialType != TextureTypes::Type2D &&
+            textureFlags & TextureFlags::AutomaticBatching )
+        {
+            OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM,
+                         "Only Type2D textures can use TextureFlags::AutomaticBatching.",
+                         "TextureGpuManager::createTexture" );
+        }
+
         TextureGpu *retVal = createTextureImpl( pageOutStrategy, idName, textureFlags );
+        retVal->setTextureType( initialType );
 
         mEntries[idName] = ResourceEntry( name, resourceGroup, retVal );
 
@@ -279,7 +289,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     TextureGpu* TextureGpuManager::createOrRetrieveTexture(
             const String &name, GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-            uint32 textureFlags, const String &resourceGroup )
+            uint32 textureFlags, TextureTypes::TextureTypes initialType, const String &resourceGroup )
     {
         TextureGpu *retVal = 0;
 
@@ -288,7 +298,7 @@ namespace Ogre
         if( itor != mEntries.end() )
             retVal = itor->second.texture;
         else
-            retVal = createTexture( name, pageOutStrategy, textureFlags, resourceGroup );
+            retVal = createTexture( name, pageOutStrategy, textureFlags, initialType, resourceGroup );
 
         return retVal;
     }
@@ -699,9 +709,13 @@ namespace Ogre
 
         while( itor != end && !retVal.data )
         {
-            retVal = (*itor)->mapRegion( box.width, box.height, box.depth, box.numSlices, pixelFormat );
-            if( retVal.data )
+            if( (*itor)->supportsFormat( box.width, box.height, box.depth, box.numSlices, pixelFormat ) )
+            {
+                retVal = (*itor)->mapRegion( box.width, box.height, box.depth,
+                                             box.numSlices, pixelFormat );
+                assert( retVal.data && "StagingTexture says supported, but returned nullptr! (01)" );
                 *outStagingTexture = *itor;
+            }
 
             ++itor;
         }
@@ -711,15 +725,22 @@ namespace Ogre
 
         while( itor != end && !retVal.data )
         {
-            retVal = (*itor)->mapRegion( box.width, box.height, box.depth, box.numSlices, pixelFormat );
-            if( retVal.data )
+            if( (*itor)->supportsFormat( box.width, box.height, box.depth, box.numSlices, pixelFormat ) )
             {
+                retVal = (*itor)->mapRegion( box.width, box.height, box.depth,
+                                             box.numSlices, pixelFormat );
+                assert( retVal.data && "StagingTexture says supported, but returned nullptr! (02)" );
+
                 *outStagingTexture = *itor;
 
                 //We need to move this to the 'used' textures
                 workerData.usedStagingTex.push_back( *itor );
                 itor = efficientVectorRemove( streamingData.availableStagingTex, itor );
                 end  = streamingData.availableStagingTex.end();
+            }
+            else
+            {
+                ++itor;
             }
         }
 
@@ -837,10 +858,10 @@ namespace Ogre
         the commands to the main thread.
         */
 
+        mMutex.lock();
+
         ThreadData &workerData  = mThreadData[c_workerThread];
         ThreadData &mainData    = mThreadData[c_mainThread];
-
-        mMutex.lock();
 
         mLoadRequestsMutex.lock();
             //Lock while inside mMutex because _update has access to our
@@ -926,6 +947,7 @@ namespace Ogre
                                                     img.getDepthOrSlices() );
                 loadRequest.texture->setTextureType( img.getTextureType() );
                 loadRequest.texture->setPixelFormat( img.getPixelFormat() );
+                loadRequest.texture->setNumMipmaps( img.getNumMipmaps() );
 
                 void *sysRamCopy = 0;
                 if( loadRequest.texture->getGpuPageOutStrategy() ==

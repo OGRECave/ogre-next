@@ -173,8 +173,16 @@ namespace Ogre
             if( datablock->suggestUsingSRGB( textureType ) )
                 textureFlags |= TextureFlags::PrefersLoadingAsSRGB;
 
+            TextureTypes::TextureTypes internalTextureType = TextureTypes::Type2D;
+            if( textureType == PBSM_REFLECTION )
+            {
+                internalTextureType = TextureTypes::TypeCube;
+                textureFlags &= ~TextureFlags::AutomaticBatching;
+            }
+
             texture = mTextureManager->createOrRetrieveTexture( textureName, GpuPageOutStrategy::Discard,
-                                                                textureFlags, resourceGroup );
+                                                                textureFlags, internalTextureType,
+                                                                resourceGroup );
         }
 
         itor = json.FindMember( "sampler" );

@@ -90,7 +90,8 @@ namespace Ogre
 			const char *textureName = itor->value.GetString();
             const uint32 textureFlags = TextureFlags::AutomaticBatching | TextureFlags::PrefersLoadingAsSRGB;
             texture = mTextureManager->createOrRetrieveTexture( textureName, GpuPageOutStrategy::Discard,
-                                                                textureFlags, resourceGroup );
+                                                                textureFlags, TextureTypes::Type2D,
+                                                                resourceGroup );
 		}
 
 		itor = json.FindMember( "sampler" );

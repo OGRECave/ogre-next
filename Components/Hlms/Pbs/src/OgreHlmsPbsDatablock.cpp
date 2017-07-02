@@ -183,6 +183,7 @@ namespace Ogre
                                       paramVal, GpuPageOutStrategy::Discard,
                                       TextureFlags::AutomaticBatching |
                                       TextureFlags::PrefersLoadingAsSRGB,
+                                      TextureTypes::Type2D,
                                       ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
             setTexture( PBSM_DIFFUSE, texture );
         }
@@ -191,6 +192,7 @@ namespace Ogre
             TextureGpu *texture = textureManager->createOrRetrieveTexture(
                                       paramVal, GpuPageOutStrategy::Discard,
                                       TextureFlags::AutomaticBatching,
+                                      TextureTypes::Type2D,
                                       ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
             setTexture( PBSM_NORMAL, texture );
         }
@@ -200,6 +202,7 @@ namespace Ogre
                                       paramVal, GpuPageOutStrategy::Discard,
                                       TextureFlags::AutomaticBatching |
                                       TextureFlags::PrefersLoadingAsSRGB,
+                                      TextureTypes::Type2D,
                                       ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
             setTexture( PBSM_SPECULAR, texture );
         }
@@ -208,6 +211,7 @@ namespace Ogre
             TextureGpu *texture = textureManager->createOrRetrieveTexture(
                                       paramVal, GpuPageOutStrategy::Discard,
                                       TextureFlags::AutomaticBatching,
+                                      TextureTypes::Type2D,
                                       ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
             setTexture( PBSM_ROUGHNESS, texture );
         }
@@ -216,6 +220,7 @@ namespace Ogre
             TextureGpu *texture = textureManager->createOrRetrieveTexture(
                                       paramVal, GpuPageOutStrategy::Discard,
                                       TextureFlags::AutomaticBatching,
+                                      TextureTypes::Type2D,
                                       ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
             setTexture( PBSM_DETAIL_WEIGHT, texture );
         }
@@ -223,7 +228,8 @@ namespace Ogre
         {
             TextureGpu *texture = textureManager->createOrRetrieveTexture(
                                       paramVal, GpuPageOutStrategy::Discard,
-                                      TextureFlags::AutomaticBatching,
+                                      TextureFlags::PrefersLoadingAsSRGB,
+                                      TextureTypes::TypeCube,
                                       ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
             setTexture( PBSM_REFLECTION, texture );
         }
@@ -257,6 +263,7 @@ namespace Ogre
                 texture = textureManager->createOrRetrieveTexture(
                               paramVal, GpuPageOutStrategy::Discard,
                               TextureFlags::AutomaticBatching | TextureFlags::PrefersLoadingAsSRGB,
+                              TextureTypes::Type2D,
                               ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
                 setTexture( PBSM_DETAIL0 + i, texture, &detailSamplerRef );
             }
@@ -267,6 +274,7 @@ namespace Ogre
                 TextureGpu *texture;
                 texture = textureManager->createOrRetrieveTexture(
                               paramVal, GpuPageOutStrategy::Discard, TextureFlags::AutomaticBatching,
+                              TextureTypes::Type2D,
                               ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
                 setTexture( PBSM_DETAIL0_NM + i, texture, &detailSamplerRef );
             }

@@ -79,6 +79,7 @@ THE SOFTWARE.
 #endif
 #if OGRE_NO_DDS_CODEC == 0
 #include "OgreDDSCodec.h"
+#include "OgreDDSCodec2.h"
 #endif
 #if OGRE_NO_STBI_CODEC == 0
 #include "OgreSTBICodec.h"
@@ -239,7 +240,8 @@ namespace Ogre {
 
 #if OGRE_NO_DDS_CODEC == 0
         // Register image codecs
-        DDSCodec::startup();
+        //DDSCodec::startup();
+        DDSCodec2::startup();
 #endif
 #if OGRE_NO_FREEIMAGE == 0
         // Register image codecs
@@ -324,7 +326,8 @@ namespace Ogre {
         FreeImageCodec2::shutdown();
 #endif
 #if OGRE_NO_DDS_CODEC == 0
-        DDSCodec::shutdown();
+        //DDSCodec::shutdown();
+        DDSCodec2::shutdown();
 #endif
 #if OGRE_NO_PVRTC_CODEC == 0
         PVRTCCodec::shutdown();

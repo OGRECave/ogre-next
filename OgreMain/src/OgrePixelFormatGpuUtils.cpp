@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "OgreMath.h"
 #include "OgreBitwise.h"
 #include "OgreCommon.h"
+#include "OgreColourValue.h"
 #include "OgreException.h"
 
 namespace Ogre
@@ -885,6 +886,34 @@ namespace Ogre
                          "PixelFormatGpuUtils::unpackColour" );
             break;
         }
+    }
+    //-----------------------------------------------------------------------------------
+    void PixelFormatGpuUtils::packColour( const ColourValue &rgbaPtr, PixelFormatGpu pf, void *dstPtr )
+    {
+#if !OGRE_DOUBLE_PRECISION
+        packColour( rgbaPtr.ptr(), pf, dstPtr );
+#else
+        float tmpVal[4];
+        tmpVal[0] = rgbaPtr.r;
+        tmpVal[1] = rgbaPtr.g;
+        tmpVal[2] = rgbaPtr.b;
+        tmpVal[3] = rgbaPtr.a;
+        packColour( tmpVal, pf, dstPtr );
+#endif
+    }
+    //-----------------------------------------------------------------------------------
+    void PixelFormatGpuUtils::unpackColour( ColourValue *rgbaPtr, PixelFormatGpu pf, const void *srcPtr )
+    {
+#if !OGRE_DOUBLE_PRECISION
+        unpackColour( rgbaPtr->ptr(), pf, srcPtr );
+#else
+        float tmpVal[4];
+        unpackColour( tmpVal, pf, srcPtr );
+        rgbaPtr->r = tmpVal[0];
+        rgbaPtr->g = tmpVal[1];
+        rgbaPtr->b = tmpVal[2];
+        rgbaPtr->a = tmpVal[3];
+#endif
     }
     //-----------------------------------------------------------------------------------
     void PixelFormatGpuUtils::bulkPixelConversion( const TextureBox &src, PixelFormatGpu srcFormat,

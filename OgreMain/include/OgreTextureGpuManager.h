@@ -270,6 +270,14 @@ namespace Ogre
         @param pageOutStrategy
         @param textureFlags
             See TextureFlags::TextureFlags
+        @param initialType
+            Strictly not required (i.e. can be left TextureTypes::Unknown) however it
+            can be needed if set to a material before it is fully loaded; and the
+            shader expects a particular type (e.g. it expects a cubemap).
+            While it's not yet loaded, a dummy texture will that matches the type will
+            be used; and it's important that the right dummy texture is selected.
+            So if you know in advance a particular type is needed, this parameter
+            tells Ogre what dummy to use.
         @param resourceGroup
             Optional, but required if you want to load files from disk
             (or anything provided by the ResourceGroupManager)
@@ -277,12 +285,14 @@ namespace Ogre
         */
         TextureGpu* createTexture( const String &name,
                                    GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                                   uint32 textureFlags, const String &resourceGroup=BLANKSTRING );
+                                   uint32 textureFlags, TextureTypes::TextureTypes initialType,
+                                   const String &resourceGroup=BLANKSTRING );
         /// If the texture doesn't exists, behaves exactly as createTexture. If the texture with
         /// that name already exists, it returns it and the rest of the arguments will be ignored.
         TextureGpu* createOrRetrieveTexture( const String &name,
                                              GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                              uint32 textureFlags,
+                                             TextureTypes::TextureTypes initialType,
                                              const String &resourceGroup=BLANKSTRING );
         void destroyTexture( TextureGpu *texture );
 
