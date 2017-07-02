@@ -109,8 +109,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusStagingTexture::uploadCubemap( const TextureBox &srcBox, PixelFormatGpu pixelFormat,
-                                               GLuint texName, uint8 mipLevel,
-                                               GLenum format, GLenum type,
+                                               uint8 mipLevel, GLenum format, GLenum type,
                                                GLint xPos, GLint yPos, GLint slicePos,
                                                GLsizei width, GLsizei height, GLsizei numSlices )
     {
@@ -124,7 +123,6 @@ namespace Ogre
         for( size_t i=0; i<(size_t)numSlices; ++i )
         {
             const GLenum targetGl = static_cast<GLenum>( GL_TEXTURE_CUBE_MAP_POSITIVE_X + i + slicePos );
-            OCGE( glBindTexture( targetGl, texName ) );
             if( type != GL_NONE )
             {
                 OCGE( glTexSubImage2D( targetGl, mipLevel, xPos, yPos, width, height,
@@ -135,7 +133,6 @@ namespace Ogre
                 OCGE( glCompressedTexSubImage2D( targetGl, mipLevel, xPos, yPos, width, height,
                                                  format, sizeBytes, offsetPtr ) );
             }
-            OCGE( glBindTexture( targetGl, 0 ) );
             offsetPtr += srcBox.bytesPerImage;
         }
     }
@@ -164,8 +161,7 @@ namespace Ogre
         const GLenum targetGl   = dstTextureGl->getGlTextureTarget();
         const GLuint texName    = dstTextureGl->getFinalTextureName();
 
-        if( textureType != TextureTypes::TypeCube )
-            OCGE( glBindTexture( targetGl, texName ) );
+        OCGE( glBindTexture( targetGl, texName ) );
 
         OCGE( glBindBuffer( GL_PIXEL_UNPACK_BUFFER, mDynamicBuffer->getVboName() ) );
 
@@ -174,9 +170,15 @@ namespace Ogre
         GLint zPos      = static_cast<GLint>( dstBox ? dstBox->z : 0 );
         GLint slicePos  = static_cast<GLint>( (dstBox ? dstBox->sliceStart : 0) +
                                               dstTexture->getInternalSliceStart() );
-        GLsizei width   = static_cast<GLsizei>( dstBox ? dstBox->width  : dstTexture->getWidth() );
-        GLsizei height  = static_cast<GLsizei>( dstBox ? dstBox->height : dstTexture->getHeight() );
-        GLsizei depth   = static_cast<GLsizei>( dstBox ? dstBox->depth  : dstTexture->getDepth() );
+        GLsizei width   = static_cast<GLsizei>(
+                              dstBox ? dstBox->width :
+                                       std::max( 1u, (dstTexture->getWidth() >> mipLevel) ) );
+        GLsizei height  = static_cast<GLsizei>(
+                              dstBox ? dstBox->height :
+                                       std::max( 1u, (dstTexture->getHeight() >> mipLevel) ) );
+        GLsizei depth   = static_cast<GLsizei>(
+                              dstBox ? dstBox->depth :
+                                       std::max( 1u, (dstTexture->getDepth() >> mipLevel) ) );
         GLsizei numSlices=static_cast<GLsizei>( dstBox ? dstBox->numSlices :
                                                          dstTexture->getNumSlices() );
 
@@ -208,7 +210,7 @@ namespace Ogre
                                        format, type, offsetPtr ) );
                 break;
             case TextureTypes::TypeCube:
-                uploadCubemap( srcBox, pixelFormat, texName, mipLevel, format, type,
+                uploadCubemap( srcBox, pixelFormat, mipLevel, format, type,
                                xPos, yPos, slicePos, width, height, numSlices );
                 break;
             case TextureTypes::Type2DArray:
@@ -251,7 +253,7 @@ namespace Ogre
                                                  format, sizeBytes, offsetPtr ) );
                 break;
             case TextureTypes::TypeCube:
-                uploadCubemap( srcBox, pixelFormat, texName, mipLevel, format, GL_NONE,
+                uploadCubemap( srcBox, pixelFormat, mipLevel, format, GL_NONE,
                                xPos, yPos, slicePos, width, height, numSlices );
                 break;
             case TextureTypes::Type2DArray:

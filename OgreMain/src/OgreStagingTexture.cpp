@@ -111,8 +111,10 @@ namespace Ogre
         assert( !mMapRegionStarted && "You must call stopMapRegion before you can upload!" );
         mUserQueriedIfUploadWillStall = false;
 #endif
-        const TextureBox fullDstTextureBox( dstTexture->getWidth(), dstTexture->getHeight(),
-                                            dstTexture->getDepth(), dstTexture->getNumSlices(),
+        const TextureBox fullDstTextureBox( dstTexture->getWidth() >> mipLevel,
+                                            dstTexture->getHeight() >> mipLevel,
+                                            dstTexture->getDepth() >> mipLevel,
+                                            dstTexture->getNumSlices(),
                                             PixelFormatGpuUtils::getBytesPerPixel(
                                                 dstTexture->getPixelFormat() ),
                                             dstTexture->_getSysRamCopyBytesPerRow(),
@@ -167,9 +169,12 @@ namespace Ogre
                 const uint32 yPos       = dstBox ? dstBox->y : 0;
                 const uint32 zPos       = dstBox ? dstBox->z : 0;
                 const uint32 slicePos   = dstBox ? dstBox->sliceStart : 0;
-                const uint32 width      = dstBox ? dstBox->width  : dstTexture->getWidth();
-                const uint32 height     = dstBox ? dstBox->height : dstTexture->getHeight();
-                const uint32 depth      = dstBox ? dstBox->depth  : dstTexture->getDepth();
+                const uint32 width      = dstBox ? dstBox->width  :
+                                                   std::max( 1u, (dstTexture->getWidth() >> mipLevel) );
+                const uint32 height     = dstBox ? dstBox->height :
+                                                   std::max( 1u, (dstTexture->getHeight() >> mipLevel) );
+                const uint32 depth      = dstBox ? dstBox->depth  :
+                                                   std::max( 1u, (dstTexture->getDepth() >> mipLevel) );
                 const uint32 numSlices  = dstBox ? dstBox->numSlices : dstTexture->getNumSlices();
                 const uint32 zPosOrSlice    = std::max( zPos, slicePos );
                 const uint32 depthOrSlices  = std::max( depth, numSlices );

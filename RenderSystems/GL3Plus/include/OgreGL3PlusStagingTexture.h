@@ -48,8 +48,7 @@ namespace Ogre
         virtual void* RESTRICT_ALIAS_RETURN mapRegionImplRawPtr(void);
 
         void uploadCubemap( const TextureBox &srcBox, PixelFormatGpu pixelFormat,
-                            GLuint texName, uint8 mipLevel,
-                            GLenum format, GLenum type,
+                            uint8 mipLevel, GLenum format, GLenum type,
                             GLint xPos, GLint yPos, GLint slicePos,
                             GLsizei width, GLsizei height, GLsizei numSlices );
 
