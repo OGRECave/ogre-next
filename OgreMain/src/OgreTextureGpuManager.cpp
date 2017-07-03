@@ -1018,8 +1018,8 @@ namespace Ogre
 
                 isDone = workerData.loadRequests.empty() &&
                          mStreamingData.queuedImages.empty();
+                mMutex.unlock();
             }
-            mMutex.unlock();
         }
 
         {
