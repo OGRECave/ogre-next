@@ -194,6 +194,7 @@ namespace Ogre
         TexturePoolList     mTexturePool;
         ResourceEntryMap    mEntries;
 
+        size_t              mEntriesToProcessPerIteration;
         PoolParameters      mDefaultPoolParameters;
 
         StagingTextureVec   mUsedStagingTextures;

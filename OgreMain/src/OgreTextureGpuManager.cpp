@@ -113,6 +113,7 @@ namespace Ogre
 
     TextureGpuManager::TextureGpuManager( VaoManager *vaoManager ) :
         mShuttingDown( false ),
+        mEntriesToProcessPerIteration( 3u ),
         mVaoManager( vaoManager )
     {
         //64MB default
@@ -708,12 +709,14 @@ namespace Ogre
 
         while( itor != end && !retVal.data )
         {
+            //supportsFormat will return false if it could never fit, or the format is not compatible.
             if( (*itor)->supportsFormat( box.width, box.height, box.depth, box.numSlices, pixelFormat ) )
             {
                 retVal = (*itor)->mapRegion( box.width, box.height, box.depth,
                                              box.numSlices, pixelFormat );
-                assert( retVal.data && "StagingTexture says supported, but returned nullptr! (01)" );
-                *outStagingTexture = *itor;
+                //retVal.data may be null if there's not enough free space (e.g. it's half empty).
+                if( retVal.data )
+                    *outStagingTexture = *itor;
             }
 
             ++itor;
@@ -728,14 +731,19 @@ namespace Ogre
             {
                 retVal = (*itor)->mapRegion( box.width, box.height, box.depth,
                                              box.numSlices, pixelFormat );
-                assert( retVal.data && "StagingTexture says supported, but returned nullptr! (02)" );
+                if( retVal.data )
+                {
+                    *outStagingTexture = *itor;
 
-                *outStagingTexture = *itor;
-
-                //We need to move this to the 'used' textures
-                workerData.usedStagingTex.push_back( *itor );
-                itor = efficientVectorRemove( streamingData.availableStagingTex, itor );
-                end  = streamingData.availableStagingTex.end();
+                    //We need to move this to the 'used' textures
+                    workerData.usedStagingTex.push_back( *itor );
+                    itor = efficientVectorRemove( streamingData.availableStagingTex, itor );
+                    end  = streamingData.availableStagingTex.end();
+                }
+                else
+                {
+                    ++itor;
+                }
             }
             else
             {
@@ -921,11 +929,13 @@ namespace Ogre
             }
         }
 
+        const size_t entriesToProcessPerIteration = mEntriesToProcessPerIteration;
+        size_t entriesProcessed = 0;
         //Now process new requests from main thread
         LoadRequestVec::const_iterator itor = workerData.loadRequests.begin();
         LoadRequestVec::const_iterator end  = workerData.loadRequests.end();
 
-        while( itor != end )
+        while( itor != end && entriesProcessed < entriesToProcessPerIteration )
         {
             const LoadRequest &loadRequest = *itor;
 
@@ -972,6 +982,7 @@ namespace Ogre
             if( mStreamingData.queuedImages.back().empty() )
                 mStreamingData.queuedImages.pop_back();
 
+            ++entriesProcessed;
             ++itor;
         }
 
@@ -989,8 +1000,8 @@ namespace Ogre
             wakeUpMainThread = true;
         }
 
-        workerData.loadRequests.clear();
-
+        workerData.loadRequests.erase( workerData.loadRequests.begin(),
+                                       workerData.loadRequests.begin() + entriesProcessed );
         mMutex.unlock();
 
         //Wake up outside mMutex to avoid unnecessary contention.
