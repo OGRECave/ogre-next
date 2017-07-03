@@ -68,8 +68,11 @@ namespace Ogre
     public:
         GL3PlusTextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                            VaoManager *vaoManager, IdString name, uint32 textureFlags,
+                           TextureTypes::TextureTypes initialType,
                            TextureGpuManager *textureManager );
         virtual ~GL3PlusTextureGpu();
+
+        virtual void setTextureType( TextureTypes::TextureTypes textureType );
 
         virtual void copyTo( TextureGpu *dst, const TextureBox &srcBox, uint8 srcMipLevel,
                              const TextureBox &dstBox, uint8 dstMipLevel );

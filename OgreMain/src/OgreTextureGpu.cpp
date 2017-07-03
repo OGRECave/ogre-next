@@ -40,6 +40,7 @@ namespace Ogre
 {
     TextureGpu::TextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                             VaoManager *vaoManager, IdString name, uint32 textureFlags,
+                            TextureTypes::TextureTypes initialType,
                             TextureGpuManager *textureManager ) :
         GpuResource( pageOutStrategy, vaoManager, name ),
         mWidth( 0 ),
@@ -49,7 +50,7 @@ namespace Ogre
         mMsaa( 1 ),
         mMsaaPattern( MsaaPatterns::Undefined ),
         mInternalSliceStart( 0 ),
-        mTextureType( TextureTypes::Unknown ),
+        mTextureType( initialType ),
         mPixelFormat( PFG_UNKNOWN ),
         mTextureFlags( textureFlags ),
         mSysRamCopy( 0 ),

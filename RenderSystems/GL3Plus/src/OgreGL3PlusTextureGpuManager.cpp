@@ -64,7 +64,9 @@ namespace Ogre
 
         //Must be large enough to hold the biggest transfer we'll do.
         uint8 c_whiteData[4*4*6*4];
+        uint8 c_blackData[4*4*6*4];
         memset( c_whiteData, 0xff, sizeof( c_whiteData ) );
+        memset( c_blackData, 0x00, sizeof( c_blackData ) );
 
         for( int i=1; i<=TextureTypes::Type3D; ++i )
         {
@@ -103,10 +105,8 @@ namespace Ogre
                 OCGE( glTexStorage2D( targets[i], 1, GL_RGBA8, 4, 4 ) );
                 for( int j=0; j<6; ++j )
                 {
-                    OCGE( glBindTexture( GL_TEXTURE_CUBE_MAP_POSITIVE_X + j, mBlankTexture[i] ) );
                     OCGE( glTexSubImage2D( GL_TEXTURE_CUBE_MAP_POSITIVE_X + j, 0, 0, 0, 4, 4, GL_RGBA,
-                                           GL_UNSIGNED_INT_8_8_8_8_REV, c_whiteData ) );
-                    OCGE( glBindTexture( GL_TEXTURE_CUBE_MAP_POSITIVE_X + j, 0 ) );
+                                           GL_UNSIGNED_INT_8_8_8_8_REV, c_blackData ) );
                 }
                 break;
             case TextureTypes::TypeCubeArray:
@@ -140,9 +140,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     TextureGpu* GL3PlusTextureGpuManager::createTextureImpl(
             GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-            IdString name, uint32 textureFlags )
+            IdString name, uint32 textureFlags, TextureTypes::TextureTypes initialType )
     {
-        return OGRE_NEW GL3PlusTextureGpu( pageOutStrategy, mVaoManager, name, textureFlags, this );
+        return OGRE_NEW GL3PlusTextureGpu( pageOutStrategy, mVaoManager, name,
+                                           textureFlags, initialType, this );
     }
     //-----------------------------------------------------------------------------------
     StagingTexture* GL3PlusTextureGpuManager::createStagingTextureImpl( uint32 width, uint32 height,

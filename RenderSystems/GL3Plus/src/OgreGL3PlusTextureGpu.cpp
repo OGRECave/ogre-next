@@ -45,8 +45,9 @@ namespace Ogre
 {
     GL3PlusTextureGpu::GL3PlusTextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                           VaoManager *vaoManager, IdString name, uint32 textureFlags,
+                                          TextureTypes::TextureTypes initialType,
                                           TextureGpuManager *textureManager ) :
-        TextureGpu( pageOutStrategy, vaoManager, name, textureFlags, textureManager ),
+        TextureGpu( pageOutStrategy, vaoManager, name, textureFlags, initialType, textureManager ),
         mDisplayTextureName( 0 ),
         mGlTextureTarget( GL_NONE ),
         mFinalTextureName( 0 ),
@@ -234,6 +235,15 @@ namespace Ogre
         }
 
         notifyAllListenersTextureChanged( TextureGpuListener::PoolTextureSlotChanged );
+    }
+    //-----------------------------------------------------------------------------------
+    void GL3PlusTextureGpu::setTextureType( TextureTypes::TextureTypes textureType )
+    {
+        const TextureTypes::TextureTypes oldType = mTextureType;
+        TextureGpu::setTextureType( textureType );
+
+        if( oldType != mTextureType && mDisplayTextureName != mFinalTextureName )
+            _setToDisplayDummyTexture();
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusTextureGpu::copyTo( TextureGpu *dst, const TextureBox &srcBox, uint8 srcMipLevel,

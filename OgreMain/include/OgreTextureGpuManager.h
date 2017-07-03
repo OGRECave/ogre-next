@@ -209,7 +209,8 @@ namespace Ogre
         void destroyAllPools(void);
 
         virtual TextureGpu* createTextureImpl( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                                               IdString name, uint32 textureFlags ) = 0;
+                                               IdString name, uint32 textureFlags,
+                                               TextureTypes::TextureTypes initialType ) = 0;
         virtual StagingTexture* createStagingTextureImpl( uint32 width, uint32 height, uint32 depth,
                                                           uint32 slices, PixelFormatGpu pixelFormat )=0;
         virtual void destroyStagingTextureImpl( StagingTexture *stagingTexture ) = 0;

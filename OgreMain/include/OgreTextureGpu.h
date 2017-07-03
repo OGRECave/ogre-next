@@ -180,6 +180,7 @@ namespace Ogre
     public:
         TextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                     VaoManager *vaoManager, IdString name, uint32 textureFlags,
+                    TextureTypes::TextureTypes initialType,
                     TextureGpuManager *textureManager );
         virtual ~TextureGpu();
 
@@ -218,7 +219,7 @@ namespace Ogre
 
         uint32 getInternalSliceStart(void) const;
 
-        void setTextureType( TextureTypes::TextureTypes textureType );
+        virtual void setTextureType( TextureTypes::TextureTypes textureType );
         TextureTypes::TextureTypes getTextureType(void) const;
         TextureTypes::TextureTypes getInternalTextureType(void) const;
 
