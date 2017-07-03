@@ -440,18 +440,31 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    uint8* TextureGpu::_getSysRamCopy(void)
+    uint8* TextureGpu::_getSysRamCopy( uint8 mipLevel )
     {
-        return mSysRamCopy;
+        assert( mipLevel < mNumMipmaps );
+
+        uint32 width            = mWidth;
+        uint32 height           = mHeight;
+        uint32 depth            = getDepth();
+        const uint32 numSlices  = getNumSlices();
+        void *data = PixelFormatGpuUtils::advancePointerToMip( mSysRamCopy, width, height, depth,
+                                                               numSlices, mipLevel, mPixelFormat );
+        return reinterpret_cast<uint8*>( data );
     }
     //-----------------------------------------------------------------------------------
-    size_t TextureGpu::_getSysRamCopyBytesPerRow(void)
+    size_t TextureGpu::_getSysRamCopyBytesPerRow( uint8 mipLevel )
     {
-        return PixelFormatGpuUtils::getSizeBytes( mWidth, 1u, 1u, 1u, mPixelFormat, 4u );
+        assert( mipLevel < mNumMipmaps );
+        uint32 width = std::max( mWidth >> mipLevel, 1u );
+        return PixelFormatGpuUtils::getSizeBytes( width, 1u, 1u, 1u, mPixelFormat, 4u );
     }
     //-----------------------------------------------------------------------------------
-    size_t TextureGpu::_getSysRamCopyBytesPerImage(void)
+    size_t TextureGpu::_getSysRamCopyBytesPerImage( uint8 mipLevel )
     {
-        return PixelFormatGpuUtils::getSizeBytes( mWidth, mHeight, 1u, 1u, mPixelFormat, 4u );
+        assert( mipLevel < mNumMipmaps );
+        uint32 width  = std::max( mWidth >> mipLevel, 1u );
+        uint32 height = std::max( mHeight >> mipLevel, 1u );
+        return PixelFormatGpuUtils::getSizeBytes( width, height, 1u, 1u, mPixelFormat, 4u );
     }
 }

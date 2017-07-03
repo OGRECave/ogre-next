@@ -292,9 +292,9 @@ namespace Ogre
         void removeListener( TextureGpuListener *listener );
         void notifyAllListenersTextureChanged( uint32 reason );
 
-        uint8* _getSysRamCopy(void);
-        size_t _getSysRamCopyBytesPerRow(void);
-        size_t _getSysRamCopyBytesPerImage(void);
+        uint8* _getSysRamCopy( uint8 mipLevel );
+        size_t _getSysRamCopyBytesPerRow( uint8 mipLevel );
+        size_t _getSysRamCopyBytesPerImage( uint8 mipLevel );
     };
 
     /** @} */

@@ -238,6 +238,26 @@ namespace Ogre
         return getFormatFromName( name.c_str(), exclusionFlags );
     }
     //-----------------------------------------------------------------------------------
+    void* PixelFormatGpuUtils::advancePointerToMip( void *basePtr, uint32 width, uint32 height,
+                                                    uint32 depth, uint32 numSlices, uint8 mipLevel,
+                                                    PixelFormatGpu format )
+    {
+        uint8 *data = reinterpret_cast<uint8*>( basePtr );
+
+        for( uint8 i=0; i<mipLevel; ++i )
+        {
+            size_t bytesPerMip = PixelFormatGpuUtils::getSizeBytes( width, height, depth, numSlices,
+                                                                    format, 4u );
+            data += bytesPerMip;
+
+            width   = std::max( 1u, width  >> 1u );
+            height  = std::max( 1u, height >> 1u );
+            depth   = std::max( 1u, depth  >> 1u );
+        }
+
+        return data;
+    }
+    //-----------------------------------------------------------------------------------
     PixelFormatGpu PixelFormatGpuUtils::getFormatFromName( const char *name, uint32 exclusionFlags )
     {
         for( int i=0; i<PFG_COUNT; ++i )

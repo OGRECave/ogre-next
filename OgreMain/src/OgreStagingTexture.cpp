@@ -117,8 +117,8 @@ namespace Ogre
                                             dstTexture->getNumSlices(),
                                             PixelFormatGpuUtils::getBytesPerPixel(
                                                 dstTexture->getPixelFormat() ),
-                                            dstTexture->_getSysRamCopyBytesPerRow(),
-                                            dstTexture->_getSysRamCopyBytesPerImage() );
+                                            dstTexture->_getSysRamCopyBytesPerRow( mipLevel ),
+                                            dstTexture->_getSysRamCopyBytesPerImage( mipLevel ) );
 
         assert( !dstBox || srcBox.equalSize( *dstBox ) && "Src & Dst must be equal" );
         assert( !dstBox || fullDstTextureBox.fullyContains( *dstBox ) );
@@ -147,11 +147,11 @@ namespace Ogre
                          "StagingTexture::upload" );
         }
 
-        if( dstTexture->_getSysRamCopy() && !skipSysRamCopy )
+        uint8 *sysRamCopyBase = dstTexture->_getSysRamCopy( mipLevel );
+        if( sysRamCopyBase && !skipSysRamCopy )
         {
-            uint8 *sysRamCopyBase = dstTexture->_getSysRamCopy();
-            const size_t sysRamCopyBytesPerRow = dstTexture->_getSysRamCopyBytesPerRow();
-            const size_t sysRamCopyBytesPerImage = dstTexture->_getSysRamCopyBytesPerImage();
+            const size_t sysRamCopyBytesPerRow = dstTexture->_getSysRamCopyBytesPerRow( mipLevel );
+            const size_t sysRamCopyBytesPerImage = dstTexture->_getSysRamCopyBytesPerImage( mipLevel );
 
             if( !dstBox || dstBox->equalSize( fullDstTextureBox ) )
             {

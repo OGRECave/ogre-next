@@ -430,18 +430,17 @@ namespace Ogre {
     {
         assert( mipLevel < mNumMipmaps );
 
-        uint32 width    = mWidth;
-        uint32 height   = mHeight;
-        uint32 depth    = getDepth();
-        uint8 *data = reinterpret_cast<uint8*>( mBuffer );
-
+        uint32 width            = mWidth;
+        uint32 height           = mHeight;
+        uint32 depth            = getDepth();
+        const uint32 numSlices  = getNumSlices();
+        void *data = PixelFormatGpuUtils::advancePointerToMip( mBuffer, width, height, depth,
+                                                               numSlices, mipLevel, mPixelFormat );
         width   = std::max( 1u, width  >> mipLevel );
         height  = std::max( 1u, height >> mipLevel );
         depth   = std::max( 1u, depth  >> mipLevel );
-        for( uint8 i=0; i<mipLevel; ++i )
-            data += getBytesPerImage( i ) * std::max( getDepth() >> i, getNumSlices() );
 
-        TextureBox retVal( width, height, depth, getNumSlices(),
+        TextureBox retVal( width, height, depth, numSlices,
                            PixelFormatGpuUtils::getBytesPerPixel( mPixelFormat ),
                            getBytesPerRow( mipLevel ),
                            getBytesPerImage( mipLevel ) );

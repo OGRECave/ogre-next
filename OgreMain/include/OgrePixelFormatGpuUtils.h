@@ -161,6 +161,12 @@ namespace Ogre {
         static PixelFormatGpu getFormatFromName( const char *name, uint32 exclusionFlags=0 );
         static PixelFormatGpu getFormatFromName( const String &name, uint32 exclusionFlags=0 );
 
+        /// Takes an image allocated for GPU usage (i.e. rowAlignment = 4u) from the beginning of
+        /// its base mip level 0, and returns a pointer at the beginning of the specified mipLevel.
+        static void* advancePointerToMip( void *basePtr, uint32 width, uint32 height,
+                                          uint32 depth, uint32 numSlices, uint8 mipLevel,
+                                          PixelFormatGpu format );
+
         static float toSRGB( float x );
         static float fromSRGB( float x );
 
