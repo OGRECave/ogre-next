@@ -724,7 +724,7 @@ namespace Ogre {
 
         ImageData2 *imgData = OGRE_NEW ImageData2();
 
-        imgData->box.depth = 1; // (deal with volume later)
+        imgData->box.depth = 1u; // (deal with volume later)
         imgData->box.width  = header.width;
         imgData->box.height = header.height;
 

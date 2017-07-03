@@ -465,7 +465,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------------------
     uint32 Image2::getDepth(void) const
     {
-        return (mTextureType == TextureTypes::Type3D) ? 1u : mDepthOrSlices;
+        return (mTextureType != TextureTypes::Type3D) ? 1u : mDepthOrSlices;
     }
     //-----------------------------------------------------------------------------------
     uint32 Image2::getNumSlices(void) const

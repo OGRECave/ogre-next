@@ -111,9 +111,9 @@ namespace Ogre
         assert( !mMapRegionStarted && "You must call stopMapRegion before you can upload!" );
         mUserQueriedIfUploadWillStall = false;
 #endif
-        const TextureBox fullDstTextureBox( dstTexture->getWidth() >> mipLevel,
-                                            dstTexture->getHeight() >> mipLevel,
-                                            dstTexture->getDepth() >> mipLevel,
+        const TextureBox fullDstTextureBox( std::max( 1u, dstTexture->getWidth() >> mipLevel ),
+                                            std::max( 1u, dstTexture->getHeight() >> mipLevel ),
+                                            std::max( 1u, dstTexture->getDepth() >> mipLevel ),
                                             dstTexture->getNumSlices(),
                                             PixelFormatGpuUtils::getBytesPerPixel(
                                                 dstTexture->getPixelFormat() ),
