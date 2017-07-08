@@ -34,19 +34,19 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    /** In Ogre 2.0 data structures, reading data from GPU back to CPU is asynchronous.
-        @See BufferPacked::readRequest to generate a ticket. While the async transfer
+    /** In Ogre 2.2 reading data from GPU back to CPU is asynchronous.
+        See TextureGpuManager::readRequest to generate a ticket. While the async transfer
         is being performed, you should be doing something else.
     @remarks
         If you call map() before the transfer is done, it will produce a stall as the
         CPU must wait for the GPU to finish all its pending operations.
     @par
-        Use @queryIsTransferDone to query if the transfer has finished. Beware not all
+        Use queryIsTransferDone to query if the transfer has finished. Beware not all
         APIs support querying async transfer status. In those cases there is no reliable
         way to determine when the transfer is done. An almost safe bet is to wait two
         frames before mapping.
     @par
-        Call @BufferPacked::disposeTicket when you're done with this ticket.
+        Call TextureGpuManager::disposeTicket when you're done with this ticket.
     */
     class _OgreExport AsyncTextureTicket : public RenderSysAlloc
     {
@@ -76,14 +76,32 @@ namespace Ogre
                             PixelFormatGpu pixelFormatFamily );
         virtual ~AsyncTextureTicket();
 
+        /** Downloads textureSrc into this ticket.
+            The size (resolution) of this ticket must match exactly of the region to download.
+        @param textureSrc
+            Texture to download from. Must be resident.
+        @param mipLevel
+            Mip level to download.
+        @param accurateTracking
+            When false, you will be mapping this texture much further along (i.e. after 2-3 frames)
+            Useful when constantly streaming GPU content to the CPU with 3 frames delay.
+            When true, we will accurately track the status of this transfer, which has higher
+            driver overhead.
+        @param srcBox
+            When nullptr, we'll download the whole texture (its selected mip level)
+            When not nullptr, we'll download the region within the texture.
+            This region must resolution must match exactly that of this ticket.
+        */
         virtual void download( TextureGpu *textureSrc, uint8 mipLevel,
                                bool accurateTracking, TextureBox *srcBox=0 );
 
         /** Maps the buffer for CPU access. Will stall if transfer from GPU memory to
-            staging area hasn't finished yet. @see queryIsTransferDone.
+            staging area hasn't finished yet. See queryIsTransferDone.
         @remarks
-            Attempting to const cast the returned pointer and write to it is undefined behavior.
-            Only call this function *once*. Once mapped, cannot be remapped again.
+            Attempting to write to the returned pointer is undefined behavior.
+            Be careful of TextureBox::bytesPerRow & bytesPerImage, when
+            downloading a subregion of a texture, these values may not
+            always be what you expect.
         @return
             The pointer with the data read from the GPU. Read only.
         */

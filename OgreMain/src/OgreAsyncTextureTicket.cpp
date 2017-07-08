@@ -84,6 +84,14 @@ namespace Ogre
                          "AsyncTextureTicket::download" );
         }
 
+        if( textureSrc->getResidencyStatus() != GpuResidency::Resident )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "Only Resident textures can be downloaded via AsyncTextureTicket. "
+                         "Trying to download texture: '" + textureSrc->getNameStr() + "'",
+                         "AsyncTextureTicket::download" );
+        }
+
         assert( mipLevel < textureSrc->getNumMipmaps() );
         assert( mPixelFormatFamily == PixelFormatGpuUtils::getFamily( textureSrc->getPixelFormat() ) );
         assert( fullSrcTextureBox.fullyContains( srcTextureBox ) );

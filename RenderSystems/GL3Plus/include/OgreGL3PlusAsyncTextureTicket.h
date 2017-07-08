@@ -35,19 +35,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    /** In Ogre 2.0 data structures, reading data from GPU back to CPU is asynchronous.
-        @See BufferPacked::readRequest to generate a ticket. While the async transfer
-        is being performed, you should be doing something else.
-    @remarks
-        If you call map() before the transfer is done, it will produce a stall as the
-        CPU must wait for the GPU to finish all its pending operations.
-    @par
-        Use @queryIsTransferDone to query if the transfer has finished. Beware not all
-        APIs support querying async transfer status. In those cases there is no reliable
-        way to determine when the transfer is done. An almost safe bet is to wait two
-        frames before mapping.
-    @par
-        Call @BufferPacked::disposeTicket when you're done with this ticket.
+    /** See AsyncTextureTicket
     */
     class _OgreGL3PlusExport GL3PlusAsyncTextureTicket : public AsyncTextureTicket
     {
