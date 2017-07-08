@@ -60,7 +60,7 @@ namespace Ogre
 #if OGRE_DEBUG_MODE
         mUserQueriedIfUploadWillStall = true;
 #endif
-        return mVaoManager->isFrameFinished( mLastFrameUsed );
+        return !mVaoManager->isFrameFinished( mLastFrameUsed );
     }
     //-----------------------------------------------------------------------------------
     void StagingTexture::startMapRegion(void)

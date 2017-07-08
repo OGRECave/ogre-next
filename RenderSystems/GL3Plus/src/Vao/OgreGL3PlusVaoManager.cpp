@@ -1210,11 +1210,11 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool GL3PlusVaoManager::isFrameFinished( uint32 frameCount )
     {
-        bool retVal = true;
+        bool retVal = false;
         if( frameCount == mFrameCount )
         {
             //Full stall
-            //retVal = true;
+            //retVal = false;
         }
         else if( mFrameCount - frameCount <= mDynamicBufferMultiplier )
         {
@@ -1241,18 +1241,18 @@ namespace Ogre
                         nextIdx = (nextIdx + 1u) % mDynamicBufferMultiplier;
                     }
 
-                    retVal = false;
+                    retVal = true;
                 }
             }
             else
             {
-                retVal = false;
+                retVal = true;
             }
         }
         else
         {
             //No stall
-            retVal = false;
+            retVal = true;
         }
 
         return retVal;

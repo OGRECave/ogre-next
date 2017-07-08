@@ -146,11 +146,13 @@ namespace Ogre
 
         assert( dstTexture->getMsaa() <= 1u && "Cannot upload to an MSAA texture!" );
 
+        const GLint rowLength   = bytesPerPixel > 0 ? (srcBox.bytesPerRow / bytesPerPixel) : 0;
+        const GLint imageHeight = (srcBox.bytesPerRow > 0) ?
+                                      (srcBox.bytesPerImage / srcBox.bytesPerRow) : 0;
+
         OCGE( glPixelStorei( GL_UNPACK_ALIGNMENT, 4 ) );
-        if( bytesPerPixel > 0 )
-            OCGE( glPixelStorei( GL_UNPACK_ROW_LENGTH, srcBox.bytesPerRow / bytesPerPixel ) );
-        if( srcBox.bytesPerRow > 0 )
-            OCGE( glPixelStorei( GL_UNPACK_IMAGE_HEIGHT, srcBox.bytesPerImage / srcBox.bytesPerRow ) );
+        OCGE( glPixelStorei( GL_UNPACK_ROW_LENGTH, rowLength) );
+        OCGE( glPixelStorei( GL_UNPACK_IMAGE_HEIGHT, imageHeight ) );
 
         const TextureTypes::TextureTypes textureType = dstTexture->getInternalTextureType();
         const PixelFormatGpu pixelFormat = dstTexture->getPixelFormat();

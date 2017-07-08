@@ -1543,11 +1543,11 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool D3D11VaoManager::isFrameFinished( uint32 frameCount )
     {
-        bool retVal = true;
+        bool retVal = false;
         if( frameCount == mFrameCount )
         {
             //Full stall
-            //retVal = true;
+            //retVal = false;
         }
         else if( mFrameCount - frameCount <= mDynamicBufferMultiplier )
         {
@@ -1591,13 +1591,13 @@ namespace Ogre
             }
             else
             {
-                retVal = false;
+                retVal = true;
             }
         }
         else
         {
             //No stall
-            retVal = false;
+            retVal = true;
         }
 
         return retVal;

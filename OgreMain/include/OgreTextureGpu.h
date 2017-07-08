@@ -294,7 +294,9 @@ namespace Ogre
         void notifyAllListenersTextureChanged( uint32 reason );
 
         uint8* _getSysRamCopy( uint8 mipLevel );
+        /// Note: Returns non-zero even if there is no system ram copy.
         size_t _getSysRamCopyBytesPerRow( uint8 mipLevel );
+        /// Note: Returns non-zero even if there is no system ram copy.
         size_t _getSysRamCopyBytesPerImage( uint8 mipLevel );
     };
 
