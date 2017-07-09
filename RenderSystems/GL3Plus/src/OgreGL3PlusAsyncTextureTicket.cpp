@@ -207,7 +207,7 @@ namespace Ogre
                                             fullSrcTextureBox.getDepthOrSlices() );
             }
 
-            OCGE( glBindTexture( targetGl, mTmpVboName ) );
+            OCGE( glBindBuffer( GL_PIXEL_PACK_BUFFER, mTmpVboName ) );
             mSubregion = srcTextureBox;
             mSubregion.bytesPerPixel    = fullSrcTextureBox.bytesPerPixel;
             mSubregion.bytesPerRow      = fullSrcTextureBox.bytesPerRow;
