@@ -193,6 +193,7 @@ namespace Ogre {
         static bool isPallete( PixelFormatGpu format );
 
         static PixelFormatGpu getEquivalentSRGB( PixelFormatGpu format );
+        static PixelFormatGpu getEquivalentLinear( PixelFormatGpu sRgbFormat );
 
         static PixelFormatGpu getFamily( PixelFormatGpu format );
     };

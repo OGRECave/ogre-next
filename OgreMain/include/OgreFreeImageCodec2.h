@@ -57,6 +57,11 @@ namespace Ogre {
         /** Common encoding routine. */
         FIBITMAP* encodeBitmap(MemoryDataStreamPtr& input, CodecDataPtr& pData) const;
 
+        static void copyData( uint8 *dstData, size_t dstBytesPerRow,
+                              const uint8 *srcData, size_t srcBytesPerRow,
+                              size_t width, size_t height, uint32 bpp,
+                              PixelFormatGpu pixelFormat );
+
     public:
         FreeImageCodec2(const String &type, unsigned int fiType);
         virtual ~FreeImageCodec2() { }

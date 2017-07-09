@@ -91,7 +91,8 @@ namespace Ogre
         @param srcBox
             When nullptr, we'll download the whole texture (its selected mip level)
             When not nullptr, we'll download the region within the texture.
-            This region must resolution must match exactly that of this ticket.
+            This region must resolution must match exactly that of this ticket (e.g.
+            bytesPerRow may be much bigger than you expect!)
         */
         virtual void download( TextureGpu *textureSrc, uint8 mipLevel,
                                bool accurateTracking, TextureBox *srcBox=0 );
@@ -119,6 +120,7 @@ namespace Ogre
         /// For TypeCube this value returns 6.
         /// For TypeCubeArray, value returns numSlices * 6u.
         uint32 getNumSlices(void) const;
+        PixelFormatGpu getPixelFormatFamily(void) const;
 
         size_t getBytesPerRow(void) const;
         size_t getBytesPerImage(void) const;

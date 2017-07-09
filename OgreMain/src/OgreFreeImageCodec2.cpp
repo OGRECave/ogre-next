@@ -160,6 +160,107 @@ namespace Ogre {
     { 
     }
     //---------------------------------------------------------------------
+    void FreeImageCodec2::copyData( uint8 *dstData, size_t dstBytesPerRow,
+                                    const uint8 *srcData, size_t srcBytesPerRow,
+                                    size_t width, size_t height, uint32 bpp,
+                                    PixelFormatGpu pixelFormat )
+    {
+        if( bpp == 24u )
+        {
+            for( size_t y=0; y<height; ++y )
+            {
+                uint8 *pDst = reinterpret_cast<uint8*>( dstData + y * dstBytesPerRow );
+                uint8 const *pSrc = srcData + (height - y - 1u) * srcBytesPerRow;
+                for( size_t x=0; x<width; ++x )
+                {
+                    const uint8 b = *pSrc++;
+                    const uint8 g = *pSrc++;
+                    const uint8 r = *pSrc++;
+
+                    *pDst++ = r;
+                    *pDst++ = g;
+                    *pDst++ = b;
+                    *pDst++ = 0xFF;
+                }
+            }
+        }
+        else if( bpp == 32u )
+        {
+            for( size_t y=0; y<height; ++y )
+            {
+                uint8 *pDst = reinterpret_cast<uint8*>( dstData + y * dstBytesPerRow );
+                uint8 const *pSrc = reinterpret_cast<const uint8*>( srcData + (height - y - 1u) *
+                                                                    srcBytesPerRow );
+                for( size_t x=0; x<width; ++x )
+                {
+                    const uint8 b = *pSrc++;
+                    const uint8 g = *pSrc++;
+                    const uint8 r = *pSrc++;
+                    const uint8 a = *pSrc++;
+
+                    *pDst++ = r;
+                    *pDst++ = g;
+                    *pDst++ = b;
+                    *pDst++ = a;
+                }
+            }
+        }
+        else if( bpp == 48u )
+        {
+            for( size_t y=0; y<height; ++y )
+            {
+                uint16 *pDst = reinterpret_cast<uint16*>( dstData + y * dstBytesPerRow );
+                uint16 const *pSrc = reinterpret_cast<const uint16*>( srcData + (height - y - 1u) *
+                                                                      srcBytesPerRow );
+                for( size_t x=0; x<width; ++x )
+                {
+                    const uint16 b = *pSrc++;
+                    const uint16 g = *pSrc++;
+                    const uint16 r = *pSrc++;
+
+                    *pDst++ = r;
+                    *pDst++ = g;
+                    *pDst++ = b;
+                    *pDst++ = 0xFFFF;
+                }
+            }
+        }
+        else if( bpp == 64u )
+        {
+            for( size_t y=0; y<height; ++y )
+            {
+                uint16 *pDst = reinterpret_cast<uint16*>( dstData + y * dstBytesPerRow );
+                uint16 const *pSrc = reinterpret_cast<const uint16*>( srcData + (height - y - 1u) *
+                                                                      srcBytesPerRow );
+                for( size_t x=0; x<width; ++x )
+                {
+                    const uint16 b = *pSrc++;
+                    const uint16 g = *pSrc++;
+                    const uint16 r = *pSrc++;
+                    const uint16 a = *pSrc++;
+
+                    *pDst++ = r;
+                    *pDst++ = g;
+                    *pDst++ = b;
+                    *pDst++ = a;
+                }
+            }
+        }
+        else
+        {
+            const size_t bytesToCopyPerRow =
+                    width * PixelFormatGpuUtils::getBytesPerPixel( pixelFormat );
+
+            uint8 *pDst = reinterpret_cast<uint8*>( dstData );
+            for( size_t y=0; y<height; ++y )
+            {
+                const uint8 *pSrc = srcData + (height - y - 1u) * srcBytesPerRow;
+                memcpy( pDst, pSrc, bytesToCopyPerRow );
+                pDst += dstBytesPerRow;
+            }
+        }
+    }
+    //---------------------------------------------------------------------
     FIBITMAP* FreeImageCodec2::encodeBitmap( MemoryDataStreamPtr &input, CodecDataPtr &pData ) const
     {
         FIBITMAP* ret = 0;
@@ -276,12 +377,11 @@ namespace Ogre {
                          "FreeImageCodec2::encode" );
         };
 
-        const size_t bpp = PixelFormatGpuUtils::getBytesPerPixel( supportedFormat ) /
-                           PixelFormatGpuUtils::getNumberOfComponents( supportedFormat );
+        const size_t bpp = PixelFormatGpuUtils::getBytesPerPixel( supportedFormat ) << 3u;
 
         bool conversionRequired = false;
 
-        unsigned char *srcData = input->getPtr();
+        uint8 const *srcData = reinterpret_cast<const uint8*>( pImgData->box.data );
 
         uint32 rowAlignment = 4u;
         TextureBox convBox( pImgData->box.width, pImgData->box.height, 1u, 1u,
@@ -302,7 +402,7 @@ namespace Ogre {
             // perform conversion and reassign source
             PixelFormatGpuUtils::bulkPixelConversion( pImgData->box, pImgData->format,
                                                       convBox, supportedFormat );
-            srcData = static_cast<unsigned char*>(convBox.data);
+            srcData = static_cast<const uint8*>(convBox.data);
         }
 
         ret = FreeImage_AllocateT( imageType,
@@ -330,17 +430,14 @@ namespace Ogre {
             ret = tmp;
         }
         
-        size_t dstPitch = FreeImage_GetPitch( ret );
-        size_t srcPitch = pImgData->box.bytesPerRow;
+        const size_t dstBytesPerRow = FreeImage_GetPitch( ret );
+        const size_t srcBytesPerRow = pImgData->box.bytesPerRow;
+        uint8 *dstData = FreeImage_GetBits( ret );
 
         // Copy data, invert scanlines and respect FreeImage pitch
-        uchar *pDst = FreeImage_GetBits( ret );
-        for( size_t y=0; y<pImgData->box.height; ++y )
-        {
-            uchar *pSrc = srcData + (pImgData->box.height - y - 1u) * srcPitch;
-            memcpy(pDst, pSrc, srcPitch);
-            pDst += dstPitch;
-        }
+        FreeImageCodec2::copyData( dstData, dstBytesPerRow,
+                                   reinterpret_cast<const uint8*>( pImgData->box.data ), srcBytesPerRow,
+                                   pImgData->box.width, pImgData->box.height, bpp, pImgData->format );
 
         if( conversionRequired )
         {
@@ -545,113 +642,15 @@ namespace Ogre {
         imgData->box.bytesPerImage = imgData->box.bytesPerRow * imgData->box.height;
 
         const unsigned char *srcData    = FreeImage_GetBits( fiBitmap );
-        const unsigned srcBytesPerRow   = FreeImage_GetPitch( fiBitmap );
+        const size_t srcBytesPerRow     = FreeImage_GetPitch( fiBitmap );
         const size_t dstBytesPerRow     = imgData->box.bytesPerRow;
-        const size_t height = imgData->box.height;
-        const size_t bytesToCopyPerRow =
-                imgData->box.width * PixelFormatGpuUtils::getBytesPerPixel( imgData->format );
 
         // Final data - invert image.
         imgData->box.data = OGRE_MALLOC_SIMD( imgData->box.bytesPerImage, MEMCATEGORY_RESOURCE );
 
-        if( bpp == 24u )
-        {
-            const size_t width = imgData->box.width;
-            for( size_t y=0; y<height; ++y )
-            {
-                uint8 *pDst = reinterpret_cast<uint8*>( imgData->box.data ) + y * dstBytesPerRow;
-                uint8 const *pSrc = srcData + (height - y - 1u) * srcBytesPerRow;
-                for( size_t x=0; x<width; ++x )
-                {
-                    const uint8 b = *pSrc++;
-                    const uint8 g = *pSrc++;
-                    const uint8 r = *pSrc++;
-
-                    *pDst++ = r;
-                    *pDst++ = g;
-                    *pDst++ = b;
-                    *pDst++ = 0xFF;
-                }
-            }
-        }
-        else if( bpp == 32u )
-        {
-            const size_t width = imgData->box.width;
-            for( size_t y=0; y<height; ++y )
-            {
-                uint16 *pDst = reinterpret_cast<uint16*>( reinterpret_cast<uint8*>( imgData->box.data ) +
-                                                          y * dstBytesPerRow );
-                uint16 const *pSrc = reinterpret_cast<const uint16*>( srcData + (height - y - 1u) *
-                                                                      srcBytesPerRow );
-                for( size_t x=0; x<width; ++x )
-                {
-                    const uint8 b = *pSrc++;
-                    const uint8 g = *pSrc++;
-                    const uint8 r = *pSrc++;
-                    const uint8 a = *pSrc++;
-
-                    *pDst++ = r;
-                    *pDst++ = g;
-                    *pDst++ = b;
-                    *pDst++ = a;
-                }
-            }
-        }
-        else if( bpp == 48u )
-        {
-            const size_t width = imgData->box.width;
-            for( size_t y=0; y<height; ++y )
-            {
-                uint16 *pDst = reinterpret_cast<uint16*>( reinterpret_cast<uint8*>( imgData->box.data ) +
-                                                          y * dstBytesPerRow );
-                uint16 const *pSrc = reinterpret_cast<const uint16*>( srcData + (height - y - 1u) *
-                                                                      srcBytesPerRow );
-                for( size_t x=0; x<width; ++x )
-                {
-                    const uint16 b = *pSrc++;
-                    const uint16 g = *pSrc++;
-                    const uint16 r = *pSrc++;
-
-                    *pDst++ = r;
-                    *pDst++ = g;
-                    *pDst++ = b;
-                    *pDst++ = 0xFFFF;
-                }
-            }
-        }
-        else if( bpp == 64u )
-        {
-            const size_t width = imgData->box.width;
-            for( size_t y=0; y<height; ++y )
-            {
-                uint16 *pDst = reinterpret_cast<uint16*>( reinterpret_cast<uint8*>( imgData->box.data ) +
-                                                          y * dstBytesPerRow );
-                uint16 const *pSrc = reinterpret_cast<const uint16*>( srcData + (height - y - 1u) *
-                                                                      srcBytesPerRow );
-                for( size_t x=0; x<width; ++x )
-                {
-                    const uint16 b = *pSrc++;
-                    const uint16 g = *pSrc++;
-                    const uint16 r = *pSrc++;
-                    const uint16 a = *pSrc++;
-
-                    *pDst++ = r;
-                    *pDst++ = g;
-                    *pDst++ = b;
-                    *pDst++ = a;
-                }
-            }
-        }
-        else
-        {
-            uint8 *pDst = reinterpret_cast<uint8*>( imgData->box.data );
-            for( size_t y=0; y<height; ++y )
-            {
-                const uint8 *pSrc = srcData + (height - y - 1u) * srcBytesPerRow;
-                memcpy( pDst, pSrc, bytesToCopyPerRow );
-                pDst += dstBytesPerRow;
-            }
-        }
+        FreeImageCodec2::copyData( reinterpret_cast<uint8*>( imgData->box.data ), dstBytesPerRow,
+                                   srcData, srcBytesPerRow,
+                                   imgData->box.width, imgData->box.height, bpp, imgData->format );
 
         FreeImage_Unload(fiBitmap);
         FreeImage_CloseMemory(fiMem);

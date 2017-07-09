@@ -147,6 +147,11 @@ namespace Ogre
         return (mTextureType != TextureTypes::Type3D) ? mDepthOrSlices : 1u;
     }
     //-----------------------------------------------------------------------------------
+    PixelFormatGpu AsyncTextureTicket::getPixelFormatFamily(void) const
+    {
+        return mPixelFormatFamily;
+    }
+    //-----------------------------------------------------------------------------------
     size_t AsyncTextureTicket::getBytesPerRow(void) const
     {
         return PixelFormatGpuUtils::getSizeBytes( mWidth, 1u, 1u, 1u, mPixelFormatFamily, 4u );
