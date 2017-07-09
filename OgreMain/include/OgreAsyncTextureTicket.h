@@ -31,12 +31,13 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 #include "OgreTextureGpu.h"
+#include "OgreTextureBox.h"
 
 namespace Ogre
 {
     /** In Ogre 2.2 reading data from GPU back to CPU is asynchronous.
-        See TextureGpuManager::readRequest to generate a ticket. While the async transfer
-        is being performed, you should be doing something else.
+        See TextureGpuManager::createAsyncTextureTicket to generate a ticket.
+        While the async transfer is being performed, you should be doing something else.
     @remarks
         If you call map() before the transfer is done, it will produce a stall as the
         CPU must wait for the GPU to finish all its pending operations.
@@ -46,7 +47,7 @@ namespace Ogre
         way to determine when the transfer is done. An almost safe bet is to wait two
         frames before mapping.
     @par
-        Call TextureGpuManager::disposeTicket when you're done with this ticket.
+        Call TextureGpuManager::destroyAsyncTextureTicket when you're done with this ticket.
     */
     class _OgreExport AsyncTextureTicket : public RenderSysAlloc
     {

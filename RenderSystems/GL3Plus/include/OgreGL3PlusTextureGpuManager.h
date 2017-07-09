@@ -59,6 +59,11 @@ namespace Ogre
                                                           uint32 slices, PixelFormatGpu pixelFormat );
         virtual void destroyStagingTextureImpl( StagingTexture *stagingTexture );
 
+        virtual AsyncTextureTicket* createAsyncTextureTicketImpl (uint32 width, uint32 height,
+                                                                  uint32 depthOrSlices,
+                                                                  TextureTypes::TextureTypes textureType,
+                                                                  PixelFormatGpu pixelFormatFamily );
+
     public:
         GL3PlusTextureGpuManager( VaoManager *vaoManager, const GL3PlusSupport &support );
         virtual ~GL3PlusTextureGpuManager();

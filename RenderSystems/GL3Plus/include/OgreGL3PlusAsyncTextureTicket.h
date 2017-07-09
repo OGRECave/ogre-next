@@ -53,8 +53,8 @@ namespace Ogre
 
         GLuint createBuffer( uint32 width, uint32 height, uint32 depthOrSlices );
 
-        virtual TextureBox mapImpl(void) = 0;
-        virtual void unmapImpl(void) = 0;
+        virtual TextureBox mapImpl(void);
+        virtual void unmapImpl(void);
 
         void waitForDownloadToFinish(void);
 

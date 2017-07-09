@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "Vao/OgreGL3PlusVaoManager.h"
 
 #include "OgreTextureBox.h"
+#include "OgreTextureGpuManager.h"
 #include "OgrePixelFormatGpuUtils.h"
 
 namespace Ogre
@@ -123,14 +124,15 @@ namespace Ogre
         }
 
         TextureBox srcTextureBox;
-        const TextureBox fullSrcTextureBox( std::max( 1u, textureSrc->getWidth() >> mipLevel ),
-                                            std::max( 1u, textureSrc->getHeight() >> mipLevel ),
-                                            std::max( 1u, textureSrc->getDepth() >> mipLevel ),
-                                            textureSrc->getNumSlices(),
-                                            PixelFormatGpuUtils::getBytesPerPixel(
-                                                textureSrc->getPixelFormat() ),
-                                            textureSrc->_getSysRamCopyBytesPerRow( mipLevel ),
-                                            textureSrc->_getSysRamCopyBytesPerImage( mipLevel ) );
+        TextureBox fullSrcTextureBox( std::max( 1u, textureSrc->getWidth() >> mipLevel ),
+                                      std::max( 1u, textureSrc->getHeight() >> mipLevel ),
+                                      std::max( 1u, textureSrc->getDepth() >> mipLevel ),
+                                      textureSrc->getNumSlices(),
+                                      PixelFormatGpuUtils::getBytesPerPixel(
+                                          textureSrc->getPixelFormat() ),
+                                      textureSrc->_getSysRamCopyBytesPerRow( mipLevel ),
+                                      textureSrc->_getSysRamCopyBytesPerImage( mipLevel ) );
+
         if( !srcBox )
             srcTextureBox = fullSrcTextureBox;
         else
@@ -139,6 +141,14 @@ namespace Ogre
             srcTextureBox.bytesPerRow   = fullSrcTextureBox.bytesPerRow;
             srcTextureBox.bytesPerPixel = fullSrcTextureBox.bytesPerPixel;
             srcTextureBox.bytesPerImage = fullSrcTextureBox.bytesPerImage;
+        }
+
+        if( textureSrc->hasAutomaticBatching() )
+        {
+            fullSrcTextureBox.sliceStart= textureSrc->getInternalSliceStart();
+            fullSrcTextureBox.numSlices = textureSrc->getTexturePool()->masterTexture->getNumSlices();
+
+            srcTextureBox.sliceStart += textureSrc->getInternalSliceStart();
         }
 
         const size_t bytesPerPixel =
@@ -193,8 +203,8 @@ namespace Ogre
                 //Create temporary BO to hold the whole thing.
                 //When mapping we'll use the subregion via
                 //bytesPer* variables.
-                mTmpVboName = createBuffer( textureSrc->getWidth(), textureSrc->getHeight(),
-                                            textureSrc->getDepthOrSlices() );
+                mTmpVboName = createBuffer( fullSrcTextureBox.width, fullSrcTextureBox.height,
+                                            fullSrcTextureBox.getDepthOrSlices() );
             }
 
             OCGE( glBindTexture( targetGl, mTmpVboName ) );
@@ -305,8 +315,7 @@ namespace Ogre
                                                            rowAlignment );
         }
 
-        retVal.data = glMapBufferRange( GL_PIXEL_PACK_BUFFER, 0, sizeBytes,
-                                        GL_MAP_READ_BIT|GL_MAP_UNSYNCHRONIZED_BIT );
+        retVal.data = glMapBufferRange( GL_PIXEL_PACK_BUFFER, 0, sizeBytes, GL_MAP_READ_BIT );
 
         if( mTmpVboName )
         {

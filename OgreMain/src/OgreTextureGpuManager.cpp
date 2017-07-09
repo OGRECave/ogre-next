@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "OgreTextureGpuManager.h"
 #include "OgreObjCmdBuffer.h"
 #include "OgreTextureGpu.h"
+#include "OgreAsyncTextureTicket.h"
 #include "OgreStagingTexture.h"
 #include "OgrePixelFormatGpuUtils.h"
 
@@ -178,6 +179,7 @@ namespace Ogre
         waitForStreamingCompletion();
 
         destroyAllStagingBuffers();
+        destroyAllAsyncTextureTicket();
         destroyAllTextures();
         destroyAllPools();
     }
@@ -389,6 +391,49 @@ namespace Ogre
         efficientVectorRemove( mUsedStagingTextures, itor );
 
         mAvailableStagingTextures.push_back( stagingTexture );
+    }
+    //-----------------------------------------------------------------------------------
+    AsyncTextureTicket* TextureGpuManager::createAsyncTextureTicket( uint32 width, uint32 height,
+                                                                     uint32 depthOrSlices,
+                                                                     TextureTypes::TextureTypes texType,
+                                                                     PixelFormatGpu pixelFormatFamily )
+    {
+        pixelFormatFamily = PixelFormatGpuUtils::getFamily( pixelFormatFamily );
+        AsyncTextureTicket *retVal = createAsyncTextureTicketImpl( width, height, depthOrSlices,
+                                                                   texType, pixelFormatFamily );
+
+        mAsyncTextureTickets.push_back( retVal );
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::destroyAsyncTextureTicket( AsyncTextureTicket *ticket )
+    {
+        //Reverse search to speed up since most removals are
+        //likely to remove what has just been requested.
+        AsyncTextureTicketVec::reverse_iterator ritor = std::find( mAsyncTextureTickets.rbegin(),
+                                                                   mAsyncTextureTickets.rend(), ticket );
+
+        assert( ritor != mAsyncTextureTickets.rend() &&
+                "AsyncTextureTicket does not belong to this TextureGpuManager or already removed" );
+
+        OGRE_DELETE ticket;
+
+        AsyncTextureTicketVec::iterator itor = ritor.base() - 1u;
+        efficientVectorRemove( mAsyncTextureTickets, itor );
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::destroyAllAsyncTextureTicket(void)
+    {
+        AsyncTextureTicketVec::const_iterator itor = mAsyncTextureTickets.begin();
+        AsyncTextureTicketVec::const_iterator end  = mAsyncTextureTickets.end();
+
+        while( itor != end )
+        {
+            OGRE_DELETE *itor;
+            ++itor;
+        }
+
+        mAsyncTextureTickets.clear();
     }
     //-----------------------------------------------------------------------------------
     const String* TextureGpuManager::findNameStr( IdString idName ) const
@@ -1026,7 +1071,8 @@ namespace Ogre
                 mainData.usedStagingTex.swap( workerData.usedStagingTex );
                 fullfillBudget( workerData );
 
-                isDone = workerData.loadRequests.empty() &&
+                isDone = mainData.loadRequests.empty() &&
+                         workerData.loadRequests.empty() &&
                          mStreamingData.queuedImages.empty();
                 mMutex.unlock();
             }

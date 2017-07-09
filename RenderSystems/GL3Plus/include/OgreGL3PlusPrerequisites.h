@@ -34,6 +34,7 @@ THE SOFTWARE.
 
 namespace Ogre {
     // Forward declarations
+    class GL3PlusAsyncTextureTicket;
     class GL3PlusDynamicBuffer;
     class GL3PlusStagingBuffer;
     class GL3PlusStagingTexture;

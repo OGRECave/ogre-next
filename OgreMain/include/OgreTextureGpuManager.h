@@ -202,6 +202,9 @@ namespace Ogre
 
         StagingTextureVec   mTmpAvailableStagingTex;
 
+        typedef vector<AsyncTextureTicket*>::type AsyncTextureTicketVec;
+        AsyncTextureTicketVec   mAsyncTextureTickets;
+
         VaoManager          *mVaoManager;
 
         void destroyAll(void);
@@ -215,6 +218,11 @@ namespace Ogre
         virtual StagingTexture* createStagingTextureImpl( uint32 width, uint32 height, uint32 depth,
                                                           uint32 slices, PixelFormatGpu pixelFormat )=0;
         virtual void destroyStagingTextureImpl( StagingTexture *stagingTexture ) = 0;
+
+        virtual AsyncTextureTicket* createAsyncTextureTicketImpl( uint32 width, uint32 height,
+                                                                  uint32 depthOrSlices,
+                                                                  TextureTypes::TextureTypes textureType,
+                                                                  PixelFormatGpu pixelFormatFamily ) = 0;
 
         uint16 getNumSlicesFor( TextureGpu *texture ) const;
 
@@ -298,8 +306,9 @@ namespace Ogre
                                              const String &resourceGroup=BLANKSTRING );
         void destroyTexture( TextureGpu *texture );
 
-        /**
-        @brief getStagingTexture
+        /** Creates a StagingTexture which is required to upload data CPU -> GPU into
+            a TextureGpu.
+            To download data GPU -> CPU see readRequest
         @remarks
             We try to find the smallest available texture (won't stall) that can fit the request.
         @param minConsumptionRatioThreshold
@@ -324,6 +333,22 @@ namespace Ogre
                                            uint32 slices, PixelFormatGpu pixelFormat,
                                            size_t minConsumptionRatioThreshold=25u );
         void removeStagingTexture( StagingTexture *stagingTexture );
+
+        /** Creates an AsyncTextureTicket that can be used to download data GPU -> CPU
+            from a TextureGpu.
+            To upload data CPU -> GPU see getStagingTexture
+        @param width
+        @param height
+        @param depthOrSlices
+        @param pixelFormatFamily
+            If the value is not a family value, it will automatically be converted to one.
+        @return
+        */
+        AsyncTextureTicket* createAsyncTextureTicket( uint32 width, uint32 height, uint32 depthOrSlices,
+                                                      TextureTypes::TextureTypes textureType,
+                                                      PixelFormatGpu pixelFormatFamily );
+        void destroyAsyncTextureTicket( AsyncTextureTicket *ticket );
+        void destroyAllAsyncTextureTicket(void);
 
         const String* findNameStr( IdString idName ) const;
 

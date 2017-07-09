@@ -30,6 +30,8 @@ THE SOFTWARE.
 #include "OgreGL3PlusMappings.h"
 #include "OgreGL3PlusTextureGpu.h"
 #include "OgreGL3PlusStagingTexture.h"
+#include "OgreGL3PlusAsyncTextureTicket.h"
+#include "OgreGL3PlusSupport.h"
 
 #include "Vao/OgreGL3PlusVaoManager.h"
 
@@ -166,5 +168,17 @@ namespace Ogre
 
         GL3PlusVaoManager *vaoManager = static_cast<GL3PlusVaoManager*>( mVaoManager );
         vaoManager->destroyStagingTexture( static_cast<GL3PlusStagingTexture*>( stagingTexture ) );
+    }
+    //-----------------------------------------------------------------------------------
+    AsyncTextureTicket* GL3PlusTextureGpuManager::createAsyncTextureTicketImpl(
+            uint32 width, uint32 height, uint32 depthOrSlices,
+            TextureTypes::TextureTypes textureType, PixelFormatGpu pixelFormatFamily )
+    {
+        GL3PlusVaoManager *vaoManager = static_cast<GL3PlusVaoManager*>( mVaoManager );
+        bool supportsGetTextureSubImage = mSupport.hasMinGLVersion( 4, 5 ) ||
+                                          mSupport.checkExtension( "GL_ARB_get_texture_sub_image" );
+        return OGRE_NEW GL3PlusAsyncTextureTicket( width, height, depthOrSlices, textureType,
+                                                   pixelFormatFamily, vaoManager,
+                                                   supportsGetTextureSubImage );
     }
 }

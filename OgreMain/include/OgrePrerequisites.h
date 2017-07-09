@@ -148,6 +148,7 @@ namespace Ogre {
     class Archive;
     class ArchiveFactory;
     class ArchiveManager;
+    class AsyncTextureTicket;
     class AsyncTicket;
     class AutoParamDataSource;
     class AxisAlignedBox;

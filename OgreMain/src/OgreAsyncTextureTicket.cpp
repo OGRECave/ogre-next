@@ -77,7 +77,7 @@ namespace Ogre
             srcTextureBox.bytesPerImage = fullSrcTextureBox.bytesPerImage;
         }
 
-        if( mStatus != Mapped )
+        if( mStatus == Mapped )
         {
             OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                          "Cannot download to mapped texture. You must call unmap first!",
@@ -107,7 +107,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     TextureBox AsyncTextureTicket::map(void)
     {
-        assert( mStatus == Ready );
+        assert( mStatus != Mapped );
 
         TextureBox retVal = mapImpl();
         mStatus = Mapped;
@@ -145,5 +145,15 @@ namespace Ogre
     uint32 AsyncTextureTicket::getNumSlices(void) const
     {
         return (mTextureType != TextureTypes::Type3D) ? mDepthOrSlices : 1u;
+    }
+    //-----------------------------------------------------------------------------------
+    size_t AsyncTextureTicket::getBytesPerRow(void) const
+    {
+        return PixelFormatGpuUtils::getSizeBytes( mWidth, 1u, 1u, 1u, mPixelFormatFamily, 4u );
+    }
+    //-----------------------------------------------------------------------------------
+    size_t AsyncTextureTicket::getBytesPerImage(void) const
+    {
+        return PixelFormatGpuUtils::getSizeBytes( mWidth, mHeight, 1u, 1u, mPixelFormatFamily, 4u );
     }
 }
