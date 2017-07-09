@@ -75,6 +75,7 @@ namespace Ogre
 
     const IdString TerraProperty::FresnelScalar     = IdString( "fresnel_scalar" );
     const IdString TerraProperty::MetallicWorkflow  = IdString( "metallic_workflow" );
+    const IdString TerraProperty::ReceiveShadows    = IdString( "receive_shadows" );
 
     const IdString TerraProperty::DetailOffsets0   = IdString( "detail_offsets0" );
     const IdString TerraProperty::DetailOffsets1   = IdString( "detail_offsets1" );
@@ -376,6 +377,8 @@ namespace Ogre
         HlmsTerraDatablock *datablock = static_cast<HlmsTerraDatablock*>(
                                                         renderable->getDatablock() );
 
+        setProperty( TerraProperty::ReceiveShadows, 1 );
+
         uint32 brdf = datablock->getBrdf();
         if( (brdf & TerraBrdf::BRDF_MASK) == TerraBrdf::Default )
         {
@@ -408,10 +411,6 @@ namespace Ogre
         setTextureProperty( TerraProperty::DiffuseMap,      datablock, TERRA_DIFFUSE );
         setTextureProperty( TerraProperty::EnvProbeMap,     datablock, TERRA_REFLECTION );
         setTextureProperty( TerraProperty::DetailWeightMap, datablock, TERRA_DETAIL_WEIGHT );
-
-        String slotsPerPoolStr = StringConverter::toString( mSlotsPerPool );
-        inOutPieces[VertexShader][TerraProperty::MaterialsPerBuffer] = slotsPerPoolStr;
-        inOutPieces[PixelShader][TerraProperty::MaterialsPerBuffer] = slotsPerPoolStr;
     }
     //-----------------------------------------------------------------------------------
     HlmsCache HlmsTerra::preparePassHash( const CompositorShadowNode *shadowNode, bool casterPass,
@@ -717,7 +716,7 @@ namespace Ogre
 
         passBufferPtr += alignToNextMultiple( numPssmSplits, 4 ) - numPssmSplits;
 
-        if( shadowNode )
+        if( numShadowMapLights > 0 )
         {
             //All directional lights (caster and non-caster) are sent.
             //Then non-directional shadow-casting shadow lights are sent.
@@ -807,17 +806,6 @@ namespace Ogre
                 *passBufferPtr++ = light->getSpotlightFalloff();
                 ++passBufferPtr;
             }
-
-            mPreparedPass.shadowMaps.reserve( contiguousShadowMapTex.size() );
-
-            TextureVec::const_iterator itShadowMap = contiguousShadowMapTex.begin();
-            TextureVec::const_iterator enShadowMap = contiguousShadowMapTex.end();
-
-            while( itShadowMap != enShadowMap )
-            {
-                mPreparedPass.shadowMaps.push_back( itShadowMap->get() );
-                ++itShadowMap;
-            }
         }
         else
         {
@@ -851,6 +839,20 @@ namespace Ogre
                 *passBufferPtr++ = colour.g;
                 *passBufferPtr++ = colour.b;
                 ++passBufferPtr;
+            }
+        }
+
+        if( shadowNode )
+        {
+            mPreparedPass.shadowMaps.reserve( contiguousShadowMapTex.size() );
+
+            TextureVec::const_iterator itShadowMap = contiguousShadowMapTex.begin();
+            TextureVec::const_iterator enShadowMap = contiguousShadowMapTex.end();
+
+            while( itShadowMap != enShadowMap )
+            {
+                mPreparedPass.shadowMaps.push_back( itShadowMap->get() );
+                ++itShadowMap;
             }
         }
 

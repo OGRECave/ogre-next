@@ -470,9 +470,10 @@ namespace Ogre
             inOutPieces[VertexShader][outPrefix + "_swizzle"] = i % 2 ? "zw" : "xy";
         }
 
-        String slotsPerPoolStr = StringConverter::toString( mSlotsPerPool );
-        inOutPieces[VertexShader][UnlitProperty::MaterialsPerBuffer] = slotsPerPoolStr;
-        inOutPieces[PixelShader][UnlitProperty::MaterialsPerBuffer]  = slotsPerPoolStr;
+        if( mFastShaderBuildHack )
+            setProperty( UnlitProperty::MaterialsPerBuffer, static_cast<int>( 2 ) );
+        else
+            setProperty( UnlitProperty::MaterialsPerBuffer, static_cast<int>( mSlotsPerPool ) );
     }
     //-----------------------------------------------------------------------------------
     void HlmsUnlit::calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces )
@@ -502,9 +503,10 @@ namespace Ogre
             }
         }
 
-        String slotsPerPoolStr = StringConverter::toString( mSlotsPerPool );
-        inOutPieces[VertexShader][UnlitProperty::MaterialsPerBuffer] = slotsPerPoolStr;
-        inOutPieces[PixelShader][UnlitProperty::MaterialsPerBuffer] = slotsPerPoolStr;
+        if( mFastShaderBuildHack )
+            setProperty( UnlitProperty::MaterialsPerBuffer, static_cast<int>( 2 ) );
+        else
+            setProperty( UnlitProperty::MaterialsPerBuffer, static_cast<int>( mSlotsPerPool ) );
     }
     //-----------------------------------------------------------------------------------
     HlmsCache HlmsUnlit::preparePassHash( const CompositorShadowNode *shadowNode, bool casterPass,
@@ -763,7 +765,7 @@ namespace Ogre
         const HlmsUnlitDatablock *datablock = static_cast<const HlmsUnlitDatablock*>(
                                                 queuedRenderable.renderable->getDatablock() );
 
-        if( OGRE_EXTRACT_HLMS_TYPE_FROM_CACHE_HASH( lastCacheHash ) != HLMS_UNLIT )
+        if( OGRE_EXTRACT_HLMS_TYPE_FROM_CACHE_HASH( lastCacheHash ) != mType )
         {
             //We changed HlmsType, rebind the shared textures.
             mLastDescTexture = 0;

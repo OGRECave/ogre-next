@@ -1143,7 +1143,9 @@ namespace Ogre
                             HlmsPbsDatablock *pbsDatablock = static_cast<HlmsPbsDatablock*>( datablock );
                             //TODO: Should we account fresnel here? What about metalness?
                             material.diffuse = pbsDatablock->getDiffuse();
-                            if( pbsDatablock->getTexture( PBSM_DIFFUSE ).isNull() )
+                            TexturePtr diffuseTex = pbsDatablock->getTexture( PBSM_DIFFUSE );
+                            if( diffuseTex.isNull() ||
+                                PixelUtil::isCompressed( diffuseTex->getFormat() ) )
                             {
                                 const ColourValue &bgDiffuse = pbsDatablock->getBackgroundDiffuse();
                                 material.diffuse.x *= bgDiffuse.r;
@@ -1152,8 +1154,7 @@ namespace Ogre
                             }
                             else if( mUseTextures )
                             {
-                                material.image[imageIdx] = &downloadTexture(
-                                            pbsDatablock->getTexture( PBSM_DIFFUSE ) );
+                                material.image[imageIdx] = &downloadTexture( diffuseTex );
                                 material.uvSet[imageIdx] =
                                         pbsDatablock->getTextureUvSource( PBSM_DIFFUSE );
                                 material.needsUv = true;
@@ -1167,7 +1168,8 @@ namespace Ogre
                                     const PbsTextureTypes texType = static_cast<PbsTextureTypes>(
                                                                                 PBSM_DETAIL0 + k );
                                     TexturePtr detailTex = pbsDatablock->getTexture( texType );
-                                    if( !detailTex.isNull() )
+                                    if( !detailTex.isNull() &&
+                                        !PixelUtil::isCompressed( detailTex->getFormat() ) )
                                     {
                                         material.image[imageIdx] = &downloadTexture( detailTex );
                                         material.uvSet[imageIdx] =
