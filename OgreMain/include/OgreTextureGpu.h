@@ -202,8 +202,7 @@ namespace Ogre
 
         void upload( const TextureBox &box, uint8 mipmapLevel, uint32 slice );
 
-        //AsyncTextureTicketPtr readRequest( const PixelBox &box );
-
+        // See isMetadataReady for threadsafety on these functions.
         void setResolution( uint32 width, uint32 height, uint32 depthOrSlices=1u );
         uint32 getWidth(void) const;
         uint32 getHeight(void) const;
@@ -298,6 +297,34 @@ namespace Ogre
         size_t _getSysRamCopyBytesPerRow( uint8 mipLevel );
         /// Note: Returns non-zero even if there is no system ram copy.
         size_t _getSysRamCopyBytesPerImage( uint8 mipLevel );
+
+        /// It is threadsafe to call this function from main thread.
+        /// If this returns true, then the following functions are not threadsafe:
+        /// Setters must not be called, and getters may change from a worker thread:
+        ///     * setResolution
+        ///     * getWidth, getHeight, getDepth, getDepthOrSlices, getNumSlices
+        ///     * set/getPixelFormat
+        ///     * set/getNumMipmaps
+        ///     * set/getTextureType
+        /// Note that this function may return false but the worker thread
+        /// may still be uploading to this texture. Use isDataReady to
+        /// see if the worker thread is fully done with this texture.
+        bool isMetadataReady(void) const;
+
+        /// True if this texture is fully ready to be used for displaying.
+        /// If this is true, then isMetadataReady is also true.
+        /// See isMetadataReady.
+        virtual bool isDataReady(void) const = 0;
+
+        /// Blocks main thread until metadata is ready. Afterwards isMetadataReady
+        /// should return true. If it doesn't, then there was a problem loading
+        /// the texture.
+        void waitForMetadata(void);
+
+        /// Blocks main thread until data is ready. Afterwards isDataReady
+        /// should return true. If it doesn't, then there was a problem loading
+        /// the texture.
+        void waitForData(void);
     };
 
     /** @} */

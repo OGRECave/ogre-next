@@ -431,8 +431,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpu::notifyAllListenersTextureChanged( uint32 reason )
     {
-        vector<TextureGpuListener*>::type::iterator itor = mListeners.begin();
-        vector<TextureGpuListener*>::type::iterator end  = mListeners.end();
+        //Iterate through a copy in case one of the listeners decides to remove itself.
+        vector<TextureGpuListener*>::type listenersVec = mListeners;
+        vector<TextureGpuListener*>::type::iterator itor = listenersVec.begin();
+        vector<TextureGpuListener*>::type::iterator end  = listenersVec.end();
 
         while( itor != end )
         {
@@ -470,5 +472,21 @@ namespace Ogre
         uint32 width  = std::max( mWidth >> mipLevel, 1u );
         uint32 height = std::max( mHeight >> mipLevel, 1u );
         return PixelFormatGpuUtils::getSizeBytes( width, height, 1u, 1u, mPixelFormat, 4u );
+    }
+    //-----------------------------------------------------------------------------------
+    bool TextureGpu::isMetadataReady(void) const
+    {
+        return mResidencyStatus == GpuResidency::Resident &&
+               mNextResidencyStatus == GpuResidency::Resident;
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpu::waitForMetadata(void)
+    {
+        mTextureManager->_waitFor( this, true );
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpu::waitForData(void)
+    {
+        mTextureManager->_waitFor( this, false );
     }
 }

@@ -33,6 +33,8 @@ THE SOFTWARE.
 #include "OgreTextureBox.h"
 #include "OgrePixelFormatGpuUtils.h"
 
+#include "OgreLogManager.h"
+
 namespace Ogre
 {
     AsyncTextureTicket::AsyncTextureTicket( uint32 width, uint32 height, uint32 depthOrSlices,
@@ -52,10 +54,16 @@ namespace Ogre
     {
         if( mStatus == Mapped )
             unmap();
+
+        if( mDelayedDownload.textureSrc )
+        {
+            mDelayedDownload.textureSrc->removeListener( this );
+            mDelayedDownload = DelayedDownload();
+        }
     }
     //-----------------------------------------------------------------------------------
-    void AsyncTextureTicket::download( TextureGpu *textureSrc, uint8 mipLevel,
-                                       bool accurateTracking, TextureBox *srcBox )
+    void AsyncTextureTicket::downloadFromGpu( TextureGpu *textureSrc, uint8 mipLevel,
+                                              bool accurateTracking, TextureBox *srcBox )
     {
         TextureBox srcTextureBox;
         const TextureBox fullSrcTextureBox( std::max( 1u, textureSrc->getWidth() >> mipLevel ),
@@ -77,20 +85,6 @@ namespace Ogre
             srcTextureBox.bytesPerImage = fullSrcTextureBox.bytesPerImage;
         }
 
-        if( mStatus == Mapped )
-        {
-            OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
-                         "Cannot download to mapped texture. You must call unmap first!",
-                         "AsyncTextureTicket::download" );
-        }
-
-        if( textureSrc->getResidencyStatus() != GpuResidency::Resident )
-        {
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "Only Resident textures can be downloaded via AsyncTextureTicket. "
-                         "Trying to download texture: '" + textureSrc->getNameStr() + "'",
-                         "AsyncTextureTicket::download" );
-        }
 
         assert( mipLevel < textureSrc->getNumMipmaps() );
         assert( mPixelFormatFamily == PixelFormatGpuUtils::getFamily( textureSrc->getPixelFormat() ) );
@@ -99,6 +93,67 @@ namespace Ogre
         assert( srcTextureBox.height == mHeight );
         assert( srcTextureBox.getDepthOrSlices() == mDepthOrSlices );
         assert( textureSrc->getMsaa() <= 1u && "Cannot download from an MSAA texture!" );
+    }
+    //-----------------------------------------------------------------------------------
+    void AsyncTextureTicket::notifyTextureChanged( TextureGpu *texture,
+                                                   TextureGpuListener::Reason reason )
+    {
+        if( reason == ReadyForDisplay )
+        {
+            mDelayedDownload.textureSrc->removeListener( this );
+            downloadFromGpu( mDelayedDownload.textureSrc, mDelayedDownload.mipLevel,
+                             mDelayedDownload.accurateTracking,
+                             mDelayedDownload.hasSrcBox ? &mDelayedDownload.srcBox : 0 );
+            mDelayedDownload = DelayedDownload();
+        }
+        else if( reason == LostResidency )
+        {
+            mDelayedDownload.textureSrc->removeListener( this );
+            mDelayedDownload = DelayedDownload();
+            LogManager::getSingleton().logMessage(
+                        "WARNING: AsyncTextureTicket was waiting on texture to become "
+                        "ready to download its contents, but Texture '" + texture->getNameStr() +
+                        "' lost residency!", LML_CRITICAL );
+            mStatus = Ready;
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void AsyncTextureTicket::download( TextureGpu *textureSrc, uint8 mipLevel,
+                                       bool accurateTracking, TextureBox *srcBox )
+    {
+        if( mDelayedDownload.textureSrc )
+        {
+            mDelayedDownload.textureSrc->removeListener( this );
+            mDelayedDownload = DelayedDownload();
+        }
+
+        if( mStatus == Mapped )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                         "Cannot download to mapped texture. You must call unmap first!",
+                         "AsyncTextureTicket::download" );
+        }
+
+        if( !textureSrc->isDataReady() &&
+            textureSrc->getNextResidencyStatus() == GpuResidency::Resident )
+        {
+            //Texture is not resident but will be, or is resident but not yet ready.
+            //Register ourselves to listen for when that happens, we'll download then.
+            textureSrc->addListener( this );
+            mDelayedDownload = DelayedDownload( textureSrc, mipLevel, accurateTracking, srcBox );
+        }
+        else if( textureSrc->getResidencyStatus() != GpuResidency::Resident )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "Only Resident textures can be downloaded via AsyncTextureTicket. "
+                         "Trying to download texture: '" + textureSrc->getNameStr() + "'",
+                         "AsyncTextureTicket::download" );
+        }
+        else
+        {
+            //Download now!
+            downloadFromGpu( textureSrc, mipLevel, accurateTracking, srcBox );
+        }
 
         mNumInaccurateQueriesWasCalledInIssuingFrame = 0;
 
@@ -108,6 +163,9 @@ namespace Ogre
     TextureBox AsyncTextureTicket::map(void)
     {
         assert( mStatus != Mapped );
+
+        if( mDelayedDownload.textureSrc )
+            mDelayedDownload.textureSrc->waitForData();
 
         TextureBox retVal = mapImpl();
         mStatus = Mapped;
@@ -160,5 +218,10 @@ namespace Ogre
     size_t AsyncTextureTicket::getBytesPerImage(void) const
     {
         return PixelFormatGpuUtils::getSizeBytes( mWidth, mHeight, 1u, 1u, mPixelFormatFamily, 4u );
+    }
+    //-----------------------------------------------------------------------------------
+    bool AsyncTextureTicket::queryIsTransferDone(void)
+    {
+        return mDelayedDownload.textureSrc == 0;
     }
 }

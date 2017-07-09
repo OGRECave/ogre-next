@@ -58,6 +58,9 @@ namespace Ogre
 
         void waitForDownloadToFinish(void);
 
+        virtual void downloadFromGpu( TextureGpu *textureSrc, uint8 mipLevel,
+                                      bool accurateTracking, TextureBox *srcBox=0 );
+
     public:
         GL3PlusAsyncTextureTicket( uint32 width, uint32 height, uint32 depthOrSlices,
                                    TextureTypes::TextureTypes textureType,
@@ -65,9 +68,6 @@ namespace Ogre
                                    GL3PlusVaoManager *vaoManager,
                                    bool supportsGetTextureSubImage );
         virtual ~GL3PlusAsyncTextureTicket();
-
-        virtual void download( TextureGpu *textureSrc, uint8 mipLevel,
-                               bool accurateTracking, TextureBox *srcBox=0 );
 
         virtual bool queryIsTransferDone(void);
     };

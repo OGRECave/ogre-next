@@ -273,7 +273,11 @@ namespace Ogre
         /// See waitForStreamingCompletion.
         bool _update(void);
 
+        /// Blocks main thread until are pending textures are fully loaded.
         void waitForStreamingCompletion(void);
+
+        /// Do not use directly. See TextureGpu::waitForMetadata & TextureGpu::waitForDataReady
+        void _waitFor( TextureGpu *texture, bool metadataOnly );
 
         /**
         @param name

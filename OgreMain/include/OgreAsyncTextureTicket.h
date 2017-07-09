@@ -31,6 +31,7 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 #include "OgreTextureGpu.h"
+#include "OgreTextureGpuListener.h"
 #include "OgreTextureBox.h"
 
 namespace Ogre
@@ -49,7 +50,7 @@ namespace Ogre
     @par
         Call TextureGpuManager::destroyAsyncTextureTicket when you're done with this ticket.
     */
-    class _OgreExport AsyncTextureTicket : public RenderSysAlloc
+    class _OgreExport AsyncTextureTicket : public TextureGpuListener
     {
     public:
         enum Status
@@ -57,6 +58,27 @@ namespace Ogre
             Ready,
             Downloading,
             Mapped
+        };
+        struct DelayedDownload
+        {
+            TextureGpu *textureSrc;
+            uint8       mipLevel;
+            bool        accurateTracking;
+            bool        hasSrcBox;
+            TextureBox  srcBox;
+
+            DelayedDownload() :
+                textureSrc( 0 ), mipLevel( 0 ), accurateTracking( false ),
+                hasSrcBox( false ), srcBox() {}
+            DelayedDownload( TextureGpu *_textureSrc, uint8 _mipLevel,
+                             bool _accurateTracking, TextureBox *_srcBox ) :
+                textureSrc( _textureSrc ),
+                mipLevel( _mipLevel ),
+                accurateTracking( _accurateTracking ),
+                hasSrcBox( _srcBox != 0 ),
+                srcBox( _srcBox ? *_srcBox : TextureBox() )
+            {
+            }
         };
 
     protected:
@@ -68,8 +90,13 @@ namespace Ogre
         PixelFormatGpu              mPixelFormatFamily;
         uint8   mNumInaccurateQueriesWasCalledInIssuingFrame;
 
+        DelayedDownload     mDelayedDownload;
+
         virtual TextureBox mapImpl(void) = 0;
         virtual void unmapImpl(void) = 0;
+
+        virtual void downloadFromGpu( TextureGpu *textureSrc, uint8 mipLevel,
+                                      bool accurateTracking, TextureBox *srcBox=0 );
 
     public:
         AsyncTextureTicket( uint32 width, uint32 height, uint32 depthOrSlices,
@@ -77,8 +104,18 @@ namespace Ogre
                             PixelFormatGpu pixelFormatFamily );
         virtual ~AsyncTextureTicket();
 
+        /// TextureGpuListener overload
+        virtual void notifyTextureChanged( TextureGpu *texture,
+                                           TextureGpuListener::Reason reason );
+
         /** Downloads textureSrc into this ticket.
             The size (resolution) of this ticket must match exactly of the region to download.
+        @remarks
+            The texture must either be Resident, or being streamed (i.e. scheduled to become Resident)
+            If the texture isn't done streaming, the ticket will automatically schedule itself
+            to perform the actual download once the streaming is done.
+            If the Texture has a SystemRAM copy, it won't be used. You must access that directly,
+            not via AsyncTextureTicket.
         @param textureSrc
             Texture to download from. Must be resident.
         @param mipLevel
@@ -94,8 +131,8 @@ namespace Ogre
             This region must resolution must match exactly that of this ticket (e.g.
             bytesPerRow may be much bigger than you expect!)
         */
-        virtual void download( TextureGpu *textureSrc, uint8 mipLevel,
-                               bool accurateTracking, TextureBox *srcBox=0 );
+        void download( TextureGpu *textureSrc, uint8 mipLevel,
+                       bool accurateTracking, TextureBox *srcBox=0 );
 
         /** Maps the buffer for CPU access. Will stall if transfer from GPU memory to
             staging area hasn't finished yet. See queryIsTransferDone.
@@ -125,7 +162,7 @@ namespace Ogre
         size_t getBytesPerRow(void) const;
         size_t getBytesPerImage(void) const;
 
-        virtual bool queryIsTransferDone(void)              { return true; }
+        virtual bool queryIsTransferDone(void);
     };
 }
 

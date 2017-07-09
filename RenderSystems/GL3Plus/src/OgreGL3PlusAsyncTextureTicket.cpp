@@ -45,7 +45,8 @@ namespace Ogre
                                                           PixelFormatGpu pixelFormatFamily,
                                                           GL3PlusVaoManager *vaoManager,
                                                           bool supportsGetTextureSubImage ) :
-        AsyncTextureTicket( width, height, depthOrSlices, textureType, pixelFormatFamily ),
+        AsyncTextureTicket( width, height, depthOrSlices, textureType,
+                            pixelFormatFamily ),
         mVboName( 0 ),
         mTmpVboName( 0 ),
         mDownloadFrame( 0 ),
@@ -105,10 +106,10 @@ namespace Ogre
         return vboName;
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusAsyncTextureTicket::download( TextureGpu *textureSrc, uint8 mipLevel,
-                                              bool accurateTracking, TextureBox *srcBox )
+    void GL3PlusAsyncTextureTicket::downloadFromGpu( TextureGpu *textureSrc, uint8 mipLevel,
+                                                     bool accurateTracking, TextureBox *srcBox )
     {
-        AsyncTextureTicket::download( textureSrc, mipLevel, accurateTracking, srcBox );
+        AsyncTextureTicket::downloadFromGpu( textureSrc, mipLevel, accurateTracking, srcBox );
 
         mDownloadFrame = mVaoManager->getFrameCount();
 
@@ -355,6 +356,13 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool GL3PlusAsyncTextureTicket::queryIsTransferDone(void)
     {
+        if( !AsyncTextureTicket::queryIsTransferDone() )
+        {
+            //Early out. The texture is not even finished being ready.
+            //We didn't even start the actual download.
+            return false;
+        }
+
         bool retVal = false;
 
         if( mStatus != Downloading )

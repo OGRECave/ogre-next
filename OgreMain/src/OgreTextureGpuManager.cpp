@@ -1139,6 +1139,25 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void TextureGpuManager::_waitFor( TextureGpu *texture, bool metadataOnly )
+    {
+        bool bDone = false;
+        while( !bDone )
+        {
+            bDone = _update();
+            if( !bDone )
+            {
+                if( texture->isDataReady() )
+                    bDone = true;
+                else if( metadataOnly && texture->isMetadataReady() )
+                    bDone = true;
+
+                if( !bDone )
+                    mRequestToMainThreadEvent.wait();
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     bool TexturePool::hasFreeSlot(void) const
