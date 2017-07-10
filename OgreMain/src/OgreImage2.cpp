@@ -35,6 +35,8 @@ THE SOFTWARE.
 #include "OgrePixelBox.h"
 #include "OgreImageResampler.h"
 #include "OgreImageDownsampler.h"
+#include "OgreTextureGpuManager.h"
+#include "OgreAsyncTextureTicket.h"
 #include "OgreResourceGroupManager.h"
 
 namespace Ogre {
@@ -266,6 +268,77 @@ namespace Ogre {
         mNumMipmaps = std::min( maxMipCount, mNumMipmaps );
     }
     //-----------------------------------------------------------------------------------
+    void Image2::convertFromTexture( TextureGpu *texture, uint8 minMip, uint8 maxMip )
+    {
+        assert( minMip <= maxMip );
+
+        if( texture->getResidencyStatus() != GpuResidency::Resident ||
+            texture->getNextResidencyStatus() != GpuResidency::Resident )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "Texture '" + texture->getNameStr() +
+                         "' must be resident or becoming resident!!!",
+                         "Image2::convertFromTexture" );
+        }
+
+        freeMemory();
+
+        texture->waitForData();
+
+        mWidth          = std::max( 1u, texture->getWidth() >> minMip );
+        mHeight         = std::max( 1u, texture->getHeight() >> minMip );
+        mDepthOrSlices  = std::max( 1u, texture->getDepth() >> minMip );
+        mDepthOrSlices  = std::max( mDepthOrSlices, texture->getNumSlices() );
+        mTextureType    = texture->getTextureType();
+        mPixelFormat    = texture->getPixelFormat();
+        mNumMipmaps     = maxMip - minMip + 1u;
+        mAutoDelete     = true;
+
+        const uint32 rowAlignment = 4u;
+        const size_t totalBytes = PixelFormatGpuUtils::calculateSizeBytes( mWidth, mHeight,
+                                                                           getDepth(),
+                                                                           getNumSlices(),
+                                                                           mPixelFormat, mNumMipmaps,
+                                                                           rowAlignment );
+        mBuffer = OGRE_MALLOC_SIMD( totalBytes, MEMCATEGORY_RESOURCE );
+
+        TextureGpuManager *textureManager = texture->getTextureManager();
+
+        for( uint8 mip=minMip; mip<=maxMip; ++mip )
+        {
+            const uint32 width  = std::max( 1u, texture->getWidth() >> mip );
+            const uint32 height = std::max( 1u, texture->getHeight() >> mip );
+            const uint32 depth  = std::max( 1u, texture->getDepth() >> mip );
+            const uint32 depthOrSlices = std::max( depth, texture->getNumSlices() );
+
+            AsyncTextureTicket *asyncTicket =
+                    textureManager->createAsyncTextureTicket( width, height, depthOrSlices,
+                                                              texture->getTextureType(),
+                                                              texture->getPixelFormat() );
+            asyncTicket->download( texture, mip, true );
+
+            const TextureBox srcBox = asyncTicket->map();
+            const TextureBox dstBox = this->getData( mip - minMip );
+
+            for( size_t z=0; z<srcBox.getDepthOrSlices(); ++z )
+            {
+                for( size_t y=0; z<srcBox.height; ++y )
+                {
+                    const void *srcData = srcBox.at( 0, y, z );
+                    void *dstData = dstBox.at( 0, y, z );
+
+                    //Note: Do NOT use srcBox.bytesPerRow
+                    memcpy( dstData, srcData, dstBox.bytesPerRow );
+                }
+            }
+
+            asyncTicket->unmap();
+
+            textureManager->destroyAsyncTextureTicket( asyncTicket );
+            asyncTicket = 0;
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void Image2::load( const String& strFileName, const String& group )
     {
         String strExt;
@@ -426,7 +499,7 @@ namespace Ogre {
             return BLANKSTRING;
     }
     //-----------------------------------------------------------------------------------
-    TextureBox Image2::getData( uint8 mipLevel )
+    TextureBox Image2::getData( uint8 mipLevel ) const
     {
         assert( mipLevel < mNumMipmaps );
 

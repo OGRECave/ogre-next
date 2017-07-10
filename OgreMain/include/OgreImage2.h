@@ -168,6 +168,15 @@ namespace Ogre {
                                TextureTypes::TextureTypes textureType, PixelFormatGpu format,
                                bool autoDelete, uint8 numMipmaps=1u );
 
+        /** Synchronously downloads the selected mips from a TextureGpu into this Image.
+            This function is for convenience for when going async is not important.
+        @param minMip
+            First mipmap to download, inclusive.
+        @param maxMip
+            Last mipmap to download, inclusive.
+        */
+        void convertFromTexture( TextureGpu *texture, uint8 minMip, uint8 maxMip );
+
         /** Loads an image file.
             @remarks
                 This method loads an image into memory. Any format for which 
@@ -225,7 +234,7 @@ namespace Ogre {
         DataStreamPtr encode( const String& formatextension, uint8 mipLevel, uint8 numMipmaps );
 
         /// Returns a pointer to the internal image buffer.
-        TextureBox getData( uint8 mipLevel );
+        TextureBox getData( uint8 mipLevel ) const;
 
         uint32 getWidth(void) const;
         uint32 getHeight(void) const;

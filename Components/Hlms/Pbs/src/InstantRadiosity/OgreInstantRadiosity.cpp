@@ -27,7 +27,7 @@ THE SOFTWARE.
 */
 
 #include "OgreStableHeaders.h"
-#if 0
+
 #include "InstantRadiosity/OgreInstantRadiosity.h"
 #include "OgreIrradianceVolume.h"
 #include "OgreHlmsPbsDatablock.h"
@@ -44,8 +44,9 @@ THE SOFTWARE.
 #include "OgreItem.h"
 #include "OgreLwString.h"
 
-#include "OgreTextureManager.h"
-#include "OgreHardwarePixelBuffer.h"
+#include "OgreTextureGpu.h"
+#include "OgrePixelFormatGpuUtils.h"
+#include "OgreImage2.h"
 
 #if (OGRE_COMPILER == OGRE_COMPILER_MSVC ||\
     OGRE_PLATFORM == OGRE_PLATFORM_APPLE ||\
@@ -242,10 +243,12 @@ namespace Ogre
                     interpUV.y += texHeight;
 
                 //TODO: Do blending modes
-                ColourValue colourVal =
-                        hit.material.image[i]->getColourAt( static_cast<size_t>(interpUV.x),
-                                                            static_cast<size_t>(interpUV.y),
-                                                            0u );
+                ColourValue colourVal;
+                PixelFormatGpuUtils::unpackColour( &colourVal, hit.material.image[i]->getPixelFormat(),
+                                                   hit.material.box[i].at(
+                                                       static_cast<size_t>(interpUV.x),
+                                                       static_cast<size_t>(interpUV.y),
+                                                       0u ) );
                 diffuseTerm.x *= colourVal.r;
                 diffuseTerm.y *= colourVal.g;
                 diffuseTerm.z *= colourVal.b;
@@ -1030,15 +1033,15 @@ namespace Ogre
         return &mMeshDataMapV1[renderOp];
     }
     //-----------------------------------------------------------------------------------
-    const Image& InstantRadiosity::downloadTexture( const TexturePtr &texture )
+    const Image2 &InstantRadiosity::downloadTexture( TextureGpu *texture )
     {
-        ImageMap::iterator itor = mImageMap.find( texture.get() );
+        ImageMap::iterator itor = mImageMap.find( texture );
         if( itor != mImageMap.end() )
             return itor->second;
 
-        mImageMap[texture.get()] = Image();
-        itor = mImageMap.find( texture.get() );
-        texture->convertToImage( itor->second, false, mMipmapBias );
+        mImageMap[texture] = Image2();
+        itor = mImageMap.find( texture );
+        itor->second.convertFromTexture( texture, mMipmapBias, mMipmapBias );
 
         return itor->second;
     }
@@ -1143,9 +1146,11 @@ namespace Ogre
                             HlmsPbsDatablock *pbsDatablock = static_cast<HlmsPbsDatablock*>( datablock );
                             //TODO: Should we account fresnel here? What about metalness?
                             material.diffuse = pbsDatablock->getDiffuse();
-                            TexturePtr diffuseTex = pbsDatablock->getTexture( PBSM_DIFFUSE );
-                            if( diffuseTex.isNull() ||
-                                PixelUtil::isCompressed( diffuseTex->getFormat() ) )
+                            TextureGpu *diffuseTex = pbsDatablock->getTexture( PBSM_DIFFUSE );
+                            if( diffuseTex )
+                                diffuseTex->waitForMetadata();
+                            if( !diffuseTex ||
+                                PixelFormatGpuUtils::isCompressed( diffuseTex->getPixelFormat() ) )
                             {
                                 const ColourValue &bgDiffuse = pbsDatablock->getBackgroundDiffuse();
                                 material.diffuse.x *= bgDiffuse.r;
@@ -1155,6 +1160,7 @@ namespace Ogre
                             else if( mUseTextures )
                             {
                                 material.image[imageIdx] = &downloadTexture( diffuseTex );
+                                material.box[imageIdx]   = material.image[imageIdx]->getData(0);
                                 material.uvSet[imageIdx] =
                                         pbsDatablock->getTextureUvSource( PBSM_DIFFUSE );
                                 material.needsUv = true;
@@ -1167,11 +1173,15 @@ namespace Ogre
                                 {
                                     const PbsTextureTypes texType = static_cast<PbsTextureTypes>(
                                                                                 PBSM_DETAIL0 + k );
-                                    TexturePtr detailTex = pbsDatablock->getTexture( texType );
-                                    if( !detailTex.isNull() &&
-                                        !PixelUtil::isCompressed( detailTex->getFormat() ) )
+                                    TextureGpu *detailTex = pbsDatablock->getTexture( texType );
+                                    if( detailTex )
+                                        detailTex->waitForMetadata();
+                                    if( detailTex &&
+                                        !PixelFormatGpuUtils::isCompressed(
+                                            detailTex->getPixelFormat() ) )
                                     {
                                         material.image[imageIdx] = &downloadTexture( detailTex );
+                                        material.box[imageIdx]   = material.image[imageIdx]->getData(0);
                                         material.uvSet[imageIdx] =
                                                 pbsDatablock->getTextureUvSource( texType );
                                         material.needsUv = true;
@@ -1917,4 +1927,3 @@ namespace Ogre
         return vertexData + numVertices * 3u + uvSet * 2u;
     }
 }
-#endif

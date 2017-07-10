@@ -443,6 +443,11 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    TextureGpuManager* TextureGpu::getTextureManager(void) const
+    {
+        return mTextureManager;
+    }
+    //-----------------------------------------------------------------------------------
     uint8* TextureGpu::_getSysRamCopy( uint8 mipLevel )
     {
         if( !mSysRamCopy )
@@ -482,11 +487,15 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpu::waitForMetadata(void)
     {
+        if( isMetadataReady() )
+            return;
         mTextureManager->_waitFor( this, true );
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::waitForData(void)
     {
+        if( isDataReady() )
+            return;
         mTextureManager->_waitFor( this, false );
     }
 }
