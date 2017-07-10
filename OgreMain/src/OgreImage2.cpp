@@ -285,6 +285,9 @@ namespace Ogre {
 
         texture->waitForData();
 
+        minMip = std::min<uint8>( minMip, texture->getNumMipmaps() - 1u );
+        maxMip = std::min<uint8>( maxMip, texture->getNumMipmaps() - 1u );
+
         mWidth          = std::max( 1u, texture->getWidth() >> minMip );
         mHeight         = std::max( 1u, texture->getHeight() >> minMip );
         mDepthOrSlices  = std::max( 1u, texture->getDepth() >> minMip );
@@ -322,7 +325,7 @@ namespace Ogre {
 
             for( size_t z=0; z<srcBox.getDepthOrSlices(); ++z )
             {
-                for( size_t y=0; z<srcBox.height; ++y )
+                for( size_t y=0; y<srcBox.height; ++y )
                 {
                     const void *srcData = srcBox.at( 0, y, z );
                     void *dstData = dstBox.at( 0, y, z );
