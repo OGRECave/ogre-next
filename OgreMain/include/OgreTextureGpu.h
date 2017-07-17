@@ -57,7 +57,9 @@ namespace Ogre
             /// The subsample locations are centered in a grid.
             /// May not be supported by the GPU/API, in which case Standard will be used instead
             /// Call TextureGpu::isMsaaPatternSupported to check whether it will be honoured.
-            Center
+            Center,
+            /// All subsamples are at 0, 0; effectively "disabling" msaa.
+            CenterZero
         };
     }
 
@@ -270,8 +272,8 @@ namespace Ogre
         /// Notifies it is safe to use the real data. Everything has been uploaded.
         virtual void notifyDataIsReady(void) = 0;
 
-        virtual void copyTo( TextureGpu *dst, const TextureBox &srcBox, uint8 srcMipLevel,
-                             const TextureBox &dstBox, uint8 dstMipLevel );
+        virtual void copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
+                             const TextureBox &srcBox, uint8 srcMipLevel );
 
         bool hasAutomaticBatching(void) const;
         bool isTexture(void) const;

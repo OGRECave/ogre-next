@@ -266,6 +266,8 @@ namespace Ogre
         void _setPointParameters(Real size, bool attenuationEnabled, 
             Real constant, Real linear, Real quadratic, Real minSize, Real maxSize);
         void _setTexture(size_t unit, bool enabled, Texture *texPtr);
+        virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set );
+        virtual void _setSamplers( uint32 slotStart, const DescriptorSetSampler *set );
         void _setBindingType(TextureUnitState::BindingType bindingType);
         void _setVertexTexture(size_t unit, const TexturePtr& tex);
         void _setGeometryTexture(size_t unit, const TexturePtr& tex);
@@ -303,6 +305,8 @@ namespace Ogre
         virtual void _hlmsBlendblockDestroyed( HlmsBlendblock *block );
         virtual void _hlmsSamplerblockCreated( HlmsSamplerblock *newBlock );
         virtual void _hlmsSamplerblockDestroyed( HlmsSamplerblock *block );
+        virtual void _descriptorSetTextureCreated( DescriptorSetTexture *newSet );
+        virtual void _descriptorSetTextureDestroyed( DescriptorSetTexture *set );
         void _setHlmsMacroblock( const HlmsMacroblock *macroblock );
         void _setHlmsBlendblock( const HlmsBlendblock *blendblock );
         virtual void _setHlmsSamplerblock( uint8 texUnit, const HlmsSamplerblock *samplerblock );

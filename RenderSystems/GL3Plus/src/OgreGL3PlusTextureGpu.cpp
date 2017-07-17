@@ -251,10 +251,10 @@ namespace Ogre
             _setToDisplayDummyTexture();
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusTextureGpu::copyTo( TextureGpu *dst, const TextureBox &srcBox, uint8 srcMipLevel,
-                                    const TextureBox &dstBox, uint8 dstMipLevel )
+    void GL3PlusTextureGpu::copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
+                                    const TextureBox &srcBox, uint8 srcMipLevel )
     {
-        TextureGpu::copyTo( dst, srcBox, srcMipLevel, dstBox, dstMipLevel );
+        TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel );
 
         assert( dynamic_cast<GL3PlusTextureGpu*>( dst ) );
 

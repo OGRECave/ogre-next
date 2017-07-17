@@ -203,7 +203,7 @@ namespace Ogre
                              "Texture '" + getNameStr() + "': "
                              "MSAA Textures cannot have mipmaps (use explict resolves for that), "
                              "and must be either RenderToTexture or Uav",
-                             "TextureGpu::transitionToResident" );
+                             "TextureGpu::checkValidSettings" );
             }
 
             if( mTextureType == TextureTypes::Type2DArray && !hasMsaaExplicitResolves() )
@@ -211,7 +211,7 @@ namespace Ogre
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                              "Texture '" + getNameStr() + "': "
                              "Only explicit resolves support Type2DArray",
-                             "TextureGpu::transitionToResident" );
+                             "TextureGpu::checkValidSettings" );
             }
 
             if( mTextureType != TextureTypes::Type2D && mTextureType != TextureTypes::Type2DArray )
@@ -219,7 +219,7 @@ namespace Ogre
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                              "Texture '" + getNameStr() + "': "
                              "MSAA can only be used with Type2D or Type2DArray",
-                             "TextureGpu::transitionToResident" );
+                             "TextureGpu::checkValidSettings" );
             }
 
             if( hasAutomaticBatching() )
@@ -227,7 +227,7 @@ namespace Ogre
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                              "Texture '" + getNameStr() + "': "
                              "MSAA textures cannot use AutomaticBatching",
-                             "TextureGpu::transitionToResident" );
+                             "TextureGpu::checkValidSettings" );
             }
         }
 
@@ -236,7 +236,7 @@ namespace Ogre
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          "Texture '" + getNameStr() + "': "
                          "TextureType cannot be TextureTypes::Unknown",
-                         "TextureGpu::transitionToResident" );
+                         "TextureGpu::checkValidSettings" );
         }
 
         if( mPageOutStrategy == GpuPageOutStrategy::AlwaysKeepSystemRamCopy &&
@@ -244,7 +244,7 @@ namespace Ogre
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          "Cannot use AlwaysKeepSystemRamCopy with RenderToTexture or Uav",
-                         "TextureGpu::transitionToResident" );
+                         "TextureGpu::checkValidSettings" );
         }
 
         if( hasAutomaticBatching() && (mTextureType != TextureTypes::Type2D ||
@@ -254,7 +254,7 @@ namespace Ogre
                          "Texture '" + getNameStr() + "': "
                          "AutomaticBatching can only be used with Type2D textures, "
                          "and they cannot be RenderToTexture or Uav",
-                         "TextureGpu::transitionToResident" );
+                         "TextureGpu::checkValidSettings" );
         }
 
         if( hasMsaaExplicitResolves() && mMsaa <= 1u )
@@ -262,7 +262,15 @@ namespace Ogre
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          "Texture '" + getNameStr() + "': "
                          "A texture is requesting explicit resolves but MSAA is disabled.",
-                         "TextureGpu::transitionToResident" );
+                         "TextureGpu::checkValidSettings" );
+        }
+
+        if( allowsAutoMipmaps() && !isRenderToTexture() )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "Texture '" + getNameStr() + "': "
+                         "AllowAutomipmaps requires RenderToTexture.",
+                         "TextureGpu::checkValidSettings" );
         }
 
         if( mWidth < 1u || mHeight < 1u || mDepthOrSlices < 1u || mPixelFormat == PFG_UNKNOWN )
@@ -270,7 +278,7 @@ namespace Ogre
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          "Texture '" + getNameStr() + "': "
                          "Invalid settings!",
-                         "TextureGpu::transitionToResident" );
+                         "TextureGpu::checkValidSettings" );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -357,8 +365,8 @@ namespace Ogre
         mResidencyStatus = newResidency;
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpu::copyTo( TextureGpu *dst, const TextureBox &srcBox, uint8 srcMipLevel,
-                             const TextureBox &dstBox, uint8 dstMipLevel )
+    void TextureGpu::copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
+                             const TextureBox &srcBox, uint8 srcMipLevel )
     {
         assert( srcBox.equalSize( dstBox ) );
         assert( this != dst || !srcBox.overlaps( dstBox ) );

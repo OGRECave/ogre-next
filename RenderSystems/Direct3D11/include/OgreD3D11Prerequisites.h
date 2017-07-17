@@ -101,6 +101,7 @@ namespace Ogre
 #endif
 
     // Predefine classes
+    class D3D11AsyncTextureTicket;
     class D3D11RenderSystem;
     class D3D11RenderWindowBase;
     class D3D11CompatBufferInterface;
@@ -118,6 +119,8 @@ namespace Ogre
     class D3D11HLSLProgramFactory;
     class D3D11HLSLProgram;
     class D3D11Device;
+    class D3D11StagingTexture;
+    class D3D11TextureGpu;
     class D3D11VaoManager;
     struct D3D11VertexArrayObjectShared;
 

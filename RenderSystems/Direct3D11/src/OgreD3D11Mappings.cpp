@@ -616,6 +616,177 @@ namespace Ogre
 		return _isDynamic(usage) ? D3D11_CPU_ACCESS_WRITE : 0;
     }
     //---------------------------------------------------------------------
+    UINT D3D11Mappings::get( MsaaPatterns::MsaaPatterns msaaPatterns )
+    {
+        switch( msaaPatterns )
+        {
+        default:
+        case MsaaPatterns::Undefined:       return 0;
+        case MsaaPatterns::Standard:        return D3D11_STANDARD_MULTISAMPLE_PATTERN;
+        case MsaaPatterns::Center:          return D3D11_STANDARD_MULTISAMPLE_PATTERN;
+        case MsaaPatterns::CenterZero:      return D3D11_CENTER_MULTISAMPLE_PATTERN;
+        }
+
+        return 0;
+    }
+    //---------------------------------------------------------------------
+    D3D11_SRV_DIMENSION D3D11Mappings::get( TextureTypes::TextureTypes type,
+                                            bool cubemapsAs2DArrays, bool forMsaa )
+    {
+        switch( type )
+        {
+        case TextureTypes::Unknown:
+            return D3D11_SRV_DIMENSION_UNKNOWN;
+        case TextureTypes::Type1D:
+            return D3D11_SRV_DIMENSION_TEXTURE1D;
+        case TextureTypes::Type1DArray:
+            return D3D11_SRV_DIMENSION_TEXTURE1DARRAY;
+        case TextureTypes::Type2D:
+            return forMsaa ? D3D11_SRV_DIMENSION_TEXTURE2DMS : D3D11_SRV_DIMENSION_TEXTURE2D;
+        case TextureTypes::Type2DArray:
+            return forMsaa ? D3D11_SRV_DIMENSION_TEXTURE2DMSARRAY : D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
+        case TextureTypes::TypeCube:
+            return cubemapsAs2DArrays ? D3D11_SRV_DIMENSION_TEXTURE2DARRAY :
+                                        D3D11_SRV_DIMENSION_TEXTURECUBE;
+        case TextureTypes::TypeCubeArray:
+            return cubemapsAs2DArrays ? D3D11_SRV_DIMENSION_TEXTURE2DARRAY :
+                                        D3D11_SRV_DIMENSION_TEXTURECUBEARRAY;
+        }
+
+        return D3D11_SRV_DIMENSION_UNKNOWN;
+    }
+    //---------------------------------------------------------------------
+    DXGI_FORMAT D3D11Mappings::get( PixelFormatGpu pf )
+    {
+        switch( pf )
+        {
+        case PFG_UNKNOWN:                   return DXGI_FORMAT_UNKNOWN;
+        case PFG_RGBA32_FLOAT:              return DXGI_FORMAT_R32G32B32A32_FLOAT;
+        case PFG_RGBA32_UINT:               return DXGI_FORMAT_R32G32B32A32_UINT;
+        case PFG_RGBA32_SINT:               return DXGI_FORMAT_R32G32B32A32_SINT;
+        case PFG_RGB32_FLOAT:               return DXGI_FORMAT_R32G32B32_FLOAT;
+        case PFG_RGB32_UINT:                return DXGI_FORMAT_R32G32B32_UINT;
+        case PFG_RGB32_SINT:                return DXGI_FORMAT_R32G32B32_SINT;
+        case PFG_RGBA16_FLOAT:              return DXGI_FORMAT_R16G16B16A16_FLOAT;
+        case PFG_RGBA16_UNORM:              return DXGI_FORMAT_R16G16B16A16_UNORM;
+        case PFG_RGBA16_UINT:               return DXGI_FORMAT_R16G16B16A16_UINT;
+        case PFG_RGBA16_SNORM:              return DXGI_FORMAT_R16G16B16A16_SNORM;
+        case PFG_RGBA16_SINT:               return DXGI_FORMAT_R16G16B16A16_SINT;
+        case PFG_RG32_FLOAT:                return DXGI_FORMAT_R32G32_FLOAT;
+        case PFG_RG32_UINT:                 return DXGI_FORMAT_R32G32_UINT;
+        case PFG_RG32_SINT:                 return DXGI_FORMAT_R32G32_SINT;
+        case PFG_D32_FLOAT_S8X24_UINT:      return DXGI_FORMAT_D32_FLOAT_S8X24_UINT;
+        case PFG_R10G10B10A2_UNORM:         return DXGI_FORMAT_R10G10B10A2_UNORM;
+        case PFG_R10G10B10A2_UINT:          return DXGI_FORMAT_R10G10B10A2_UINT;
+        case PFG_R11G11B10_FLOAT:           return DXGI_FORMAT_R11G11B10_FLOAT;
+        case PFG_RGBA8_UNORM:               return DXGI_FORMAT_R8G8B8A8_UNORM;
+        case PFG_RGBA8_UNORM_SRGB:          return DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+        case PFG_RGBA8_UINT:                return DXGI_FORMAT_R8G8B8A8_UINT;
+        case PFG_RGBA8_SNORM:               return DXGI_FORMAT_R8G8B8A8_SNORM;
+        case PFG_RGBA8_SINT:                return DXGI_FORMAT_R8G8B8A8_SINT;
+        case PFG_RG16_FLOAT:                return DXGI_FORMAT_R16G16_FLOAT;
+        case PFG_RG16_UNORM:                return DXGI_FORMAT_R16G16_UNORM;
+        case PFG_RG16_UINT:                 return DXGI_FORMAT_R16G16_UINT;
+        case PFG_RG16_SNORM:                return DXGI_FORMAT_R16G16_SNORM;
+        case PFG_RG16_SINT:                 return DXGI_FORMAT_R16G16_SINT;
+        case PFG_D32_FLOAT:                 return DXGI_FORMAT_D32_FLOAT;
+        case PFG_R32_FLOAT:                 return DXGI_FORMAT_R32_FLOAT;
+        case PFG_R32_UINT:                  return DXGI_FORMAT_R32_UINT;
+        case PFG_R32_SINT:                  return DXGI_FORMAT_R32_SINT;
+        case PFG_D24_UNORM:                 return DXGI_FORMAT_D24_UNORM_S8_UINT;
+        case PFG_D24_UNORM_S8_UINT:         return DXGI_FORMAT_D24_UNORM_S8_UINT;
+        case PFG_RG8_UNORM:                 return DXGI_FORMAT_R8G8_UNORM;
+        case PFG_RG8_UINT:                  return DXGI_FORMAT_R8G8_UINT;
+        case PFG_RG8_SNORM:                 return DXGI_FORMAT_R8G8_SNORM;
+        case PFG_RG8_SINT:                  return DXGI_FORMAT_R8G8_SINT;
+        case PFG_R16_FLOAT:                 return DXGI_FORMAT_R16_FLOAT;
+        case PFG_D16_UNORM:                 return DXGI_FORMAT_D16_UNORM;
+        case PFG_R16_UNORM:                 return DXGI_FORMAT_R16_UNORM;
+        case PFG_R16_UINT:                  return DXGI_FORMAT_R16_UINT;
+        case PFG_R16_SNORM:                 return DXGI_FORMAT_R16_SNORM;
+        case PFG_R16_SINT:                  return DXGI_FORMAT_R16_SINT;
+        case PFG_R8_UNORM:                  return DXGI_FORMAT_R8_UNORM;
+        case PFG_R8_UINT:                   return DXGI_FORMAT_R8_UINT;
+        case PFG_R8_SNORM:                  return DXGI_FORMAT_R8_SNORM;
+        case PFG_R8_SINT:                   return DXGI_FORMAT_R8_SINT;
+        case PFG_A8_UNORM:                  return DXGI_FORMAT_A8_UNORM;
+        case PFG_R1_UNORM:                  return DXGI_FORMAT_R1_UNORM;
+        case PFG_R9G9B9E5_SHAREDEXP:        return DXGI_FORMAT_R9G9B9E5_SHAREDEXP;
+        case PFG_R8G8_B8G8_UNORM:           return DXGI_FORMAT_R8G8_B8G8_UNORM;
+        case PFG_G8R8_G8B8_UNORM:           return DXGI_FORMAT_G8R8_G8B8_UNORM;
+        case PFG_BC1_UNORM:                 return DXGI_FORMAT_BC1_UNORM;
+        case PFG_BC1_UNORM_SRGB:            return DXGI_FORMAT_BC1_UNORM_SRGB;
+        case PFG_BC2_UNORM:                 return DXGI_FORMAT_BC2_UNORM;
+        case PFG_BC2_UNORM_SRGB:            return DXGI_FORMAT_BC2_UNORM_SRGB;
+        case PFG_BC3_UNORM:                 return DXGI_FORMAT_BC3_UNORM;
+        case PFG_BC3_UNORM_SRGB:            return DXGI_FORMAT_BC3_UNORM_SRGB;
+        case PFG_BC4_UNORM:                 return DXGI_FORMAT_BC4_UNORM;
+        case PFG_BC4_SNORM:                 return DXGI_FORMAT_BC4_SNORM;
+        case PFG_BC5_UNORM:                 return DXGI_FORMAT_BC5_UNORM;
+        case PFG_BC5_SNORM:                 return DXGI_FORMAT_BC5_SNORM;
+        case PFG_B5G6R5_UNORM:              return DXGI_FORMAT_B5G6R5_UNORM;
+        case PFG_B5G5R5A1_UNORM:            return DXGI_FORMAT_B5G5R5A1_UNORM;
+        case PFG_BGRA8_UNORM:               return DXGI_FORMAT_B8G8R8A8_UNORM;
+        case PFG_BGRX8_UNORM:               return DXGI_FORMAT_B8G8R8X8_UNORM;
+        case PFG_R10G10B10_XR_BIAS_A2_UNORM:return DXGI_FORMAT_R10G10B10_XR_BIAS_A2_UNORM;
+        case PFG_BGRA8_UNORM_SRGB:          return DXGI_FORMAT_B8G8R8A8_UNORM_SRGB;
+        case PFG_BGRX8_UNORM_SRGB:          return DXGI_FORMAT_B8G8R8X8_UNORM_SRGB;
+        case PFG_BC6H_UF16:                 return DXGI_FORMAT_BC6H_UF16;
+        case PFG_BC6H_SF16:                 return DXGI_FORMAT_BC6H_SF16;
+        case PFG_BC7_UNORM:                 return DXGI_FORMAT_BC7_UNORM;
+        case PFG_BC7_UNORM_SRGB:            return DXGI_FORMAT_BC7_UNORM_SRGB;
+        case PFG_AYUV:                      return DXGI_FORMAT_AYUV;
+        case PFG_Y410:                      return DXGI_FORMAT_Y410;
+        case PFG_Y416:                      return DXGI_FORMAT_Y416;
+        case PFG_NV12:                      return DXGI_FORMAT_NV12;
+        case PFG_P010:                      return DXGI_FORMAT_P010;
+        case PFG_P016:                      return DXGI_FORMAT_P016;
+        case PFG_420_OPAQUE:                return DXGI_FORMAT_420_OPAQUE;
+        case PFG_YUY2:                      return DXGI_FORMAT_YUY2;
+        case PFG_Y210:                      return DXGI_FORMAT_Y210;
+        case PFG_Y216:                      return DXGI_FORMAT_Y216;
+        case PFG_NV11:                      return DXGI_FORMAT_NV11;
+        case PFG_AI44:                      return DXGI_FORMAT_AI44;
+        case PFG_IA44:                      return DXGI_FORMAT_IA44;
+        case PFG_P8:                        return DXGI_FORMAT_P8;
+        case PFG_A8P8:                      return DXGI_FORMAT_A8P8;
+        case PFG_B4G4R4A4_UNORM:            return DXGI_FORMAT_B4G4R4A4_UNORM;
+#if 0
+        //TODO: Not always defined. Must research why.
+        case PFG_P208:                      return DXGI_FORMAT_P208;
+        case PFG_V208:                      return DXGI_FORMAT_V208;
+        case PFG_V408:                      return DXGI_FORMAT_V408;
+#endif
+        case PFG_P208:
+        case PFG_V208:
+        case PFG_V408:
+        case PFG_PVRTC_RGB2:
+        case PFG_PVRTC_RGBA2:
+        case PFG_PVRTC_RGB4:
+        case PFG_PVRTC_RGBA4:
+        case PFG_PVRTC2_2BPP:
+        case PFG_PVRTC2_4BPP:
+        case PFG_ETC1_RGB8_UNORM:
+        case PFG_ETC2_RGB8_UNORM:
+        case PFG_ETC2_RGB8_UNORM_SRGB:
+        case PFG_ETC2_RGBA8_UNORM:
+        case PFG_ETC2_RGBA8_UNORM_SRGB:
+        case PFG_ETC2_RGB8A1_UNORM:
+        case PFG_ETC2_RGB8A1_UNORM_SRGB:
+        case PFG_EAC_R11_UNORM:
+        case PFG_EAC_R11_SNORM:
+        case PFG_EAC_R11G11_UNORM:
+        case PFG_EAC_R11G11_SNORM:
+        case PFG_ATC_RGB:
+        case PFG_ATC_RGBA_EXPLICIT_ALPHA:
+        case PFG_ATC_RGBA_INTERPOLATED_ALPHA:
+        default:
+            return DXGI_FORMAT_UNKNOWN;
+        }
+
+        return DXGI_FORMAT_UNKNOWN;
+    }
+    //---------------------------------------------------------------------
     TextureType D3D11Mappings::_getTexType(D3D11_SRV_DIMENSION type)
     {
         switch(type)

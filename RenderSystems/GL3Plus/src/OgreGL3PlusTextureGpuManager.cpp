@@ -114,7 +114,7 @@ namespace Ogre
             case TextureTypes::TypeCubeArray:
                 OCGE( glTexStorage3D( targets[i], 1, GL_RGBA8, 4, 4, 6 ) );
                 OCGE( glTexSubImage3D( targets[i], 0, 0, 0, 0, 4, 4, 6, GL_RGBA,
-                                       GL_UNSIGNED_INT_8_8_8_8_REV, c_whiteData ) );
+                                       GL_UNSIGNED_INT_8_8_8_8_REV, c_blackData ) );
                 break;
             case TextureTypes::Type2DArray:
             case TextureTypes::Type3D:

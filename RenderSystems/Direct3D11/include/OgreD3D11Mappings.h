@@ -33,6 +33,8 @@ THE SOFTWARE.
 #include "OgreHlmsSamplerblock.h"
 #include "OgreRenderSystem.h"
 #include "OgreRoot.h"
+#include "OgrePixelFormatGpu.h"
+#include "OgreTextureGpu.h"
 #include "OgreD3D11RenderSystem.h"
 
 namespace Ogre 
@@ -86,7 +88,12 @@ namespace Ogre
         static bool _isDynamic(TextureUsage usage) { return _isDynamic(static_cast<v1::HardwareBuffer::Usage>(usage)); }
 
 		/// utility method, find closest Ogre pixel format that D3D11 can support
-		static PixelFormat _getClosestSupportedPF(PixelFormat ogrePF);
+        static PixelFormat _getClosestSupportedPF(PixelFormat ogrePF);
+
+        static UINT get( MsaaPatterns::MsaaPatterns msaaPatterns );
+        static D3D11_SRV_DIMENSION get( TextureTypes::TextureTypes type,
+                                        bool cubemapsAs2DArrays, bool forMsaa );
+        static DXGI_FORMAT get( PixelFormatGpu pf );
 
 		static TextureType _getTexType(D3D11_SRV_DIMENSION type);
 

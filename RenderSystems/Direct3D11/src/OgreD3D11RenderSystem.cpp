@@ -42,6 +42,7 @@ THE SOFTWARE.
 #include "OgreD3D11GpuProgram.h"
 #include "OgreD3D11GpuProgramManager.h"
 #include "OgreD3D11HLSLProgramFactory.h"
+#include "OgreD3D11TextureGpu.h"
 
 #include "OgreD3D11HardwareOcclusionQuery.h"
 #include "OgreFrustum.h"
@@ -81,6 +82,7 @@ THE SOFTWARE.
 #include <d3d10.h>
 #include <OgreNsightChecker.h>
 
+#define TODO_port
 
 namespace Ogre 
 {
@@ -2099,6 +2101,43 @@ bail:
         mSamplerStatesChanged = true;
     }
     //---------------------------------------------------------------------
+    void D3D11RenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture *set )
+    {
+        ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
+        ID3D11ShaderResourceView **srvList =
+                reinterpret_cast<ID3D11ShaderResourceView**>( set->mRsData );
+        UINT texIdx = 0;
+        for( size_t i=0u; i<NumShaderTypes; ++i )
+        {
+            const UINT numTexturesUsed = set->mShaderTypeTexCount[i];
+            switch( i )
+            {
+            case VertexShader:
+                context->VSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
+                break;
+            case PixelShader:
+                context->PSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
+                break;
+            case GeometryShader:
+                context->GSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
+                break;
+            case HullShader:
+                context->HSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
+                break;
+            case DomainShader:
+                context->DSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
+                break;
+            }
+
+            texIdx += numTexturesUsed;
+        }
+    }
+    //---------------------------------------------------------------------
+    void D3D11RenderSystem::_setSamplers( uint32 slotStart, const DescriptorSetSampler *set )
+    {
+        TODO_port;
+    }
+    //---------------------------------------------------------------------
     void D3D11RenderSystem::_setBindingType(TextureUnitState::BindingType bindingType)
     {
         mBindingType = bindingType;
@@ -2936,6 +2975,41 @@ bail:
         ID3D11SamplerState *samplerState = reinterpret_cast<ID3D11SamplerState*>( block->mRsData );
         samplerState->Release();
         block->mRsData = 0;
+    }
+    //---------------------------------------------------------------------
+    void D3D11RenderSystem::_descriptorSetTextureCreated( DescriptorSetTexture *newSet )
+    {
+        const size_t numElements = newSet->mTextures.size();
+        ID3D11ShaderResourceView **srvList = new ID3D11ShaderResourceView*[numElements];
+        newSet->mRsData = srvList;
+
+        size_t texIdx = 0;
+        FastArray<const TextureGpu*>::const_iterator itor = newSet->mTextures.begin();
+
+        for( size_t i=0u; i<NumShaderTypes; ++i )
+        {
+            const size_t numTexturesUsed = newSet->mShaderTypeTexCount[i];
+            for( size_t j=0u; i<numTexturesUsed; ++j )
+            {
+                const D3D11TextureGpu *texture = static_cast<const D3D11TextureGpu*>( *itor );
+                srvList[texIdx] = texture->createSrv( texture->getPixelFormat(), false );
+
+                ++texIdx;
+                ++itor;
+            }
+        }
+    }
+    //---------------------------------------------------------------------
+    void D3D11RenderSystem::_descriptorSetTextureDestroyed( DescriptorSetTexture *set )
+    {
+        const size_t numElements = set->mTextures.size();
+        ID3D11ShaderResourceView **srvList =
+                reinterpret_cast<ID3D11ShaderResourceView**>( set->mRsData );
+        for( size_t i=0; i<numElements; ++i )
+            srvList[i]->Release();
+
+        delete [] srvList;
+        set->mRsData = 0;
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setHlmsMacroblock( const HlmsMacroblock *macroblock )

@@ -26,27 +26,34 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#ifndef _OgreGL3PlusTextureGpu_H_
-#define _OgreGL3PlusTextureGpu_H_
+#ifndef _OgreD3D11TextureGpu_H_
+#define _OgreD3D11TextureGpu_H_
 
-#include "OgreGL3PlusPrerequisites.h"
+#include "OgreD3D11Prerequisites.h"
 #include "OgreTextureGpu.h"
 
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
-    class _OgreGL3PlusExport GL3PlusTextureGpu : public TextureGpu
+    class _OgreD3D11Export D3D11TextureGpu : public TextureGpu
     {
+        /// The general case is that the whole D3D11 texture will be accessed through the SRV.
+        /// That means: createSrv( this->getPixelFormat(), false );
+        /// To avoid creating multiple unnecessary copies of the SRV, we keep a cache of that
+        /// default SRV with us; and calling createSrv with default params will return
+        /// this cache instead.
+        /// mDefaultDisplaySrv will increase its ref count every time createSrv is called.
+        ID3D11ShaderResourceView *mDefaultDisplaySrv;
+
         /// This will not be owned by us if hasAutomaticBatching is true.
         /// It will also not be owned by us if we're not in GpuResidency::Resident
         /// This will always point to:
-        ///     * A GL texture owned by us.
+        ///     * A D3D11 SRV owned by us.
         ///     * A 4x4 dummy texture (now owned by us).
         ///     * A 64x64 mipmapped texture of us (but now owned by us).
-        ///     * A GL texture not owned by us, but contains the final information.
-        GLuint  mDisplayTextureName;
-        GLenum  mGlTextureTarget;
+        ///     * A D3D11 SRV not owned by us, but contains the final information.
+        ID3D11Resource *mDisplayTextureName;
 
         /// When we're transitioning to GpuResidency::Resident but we're not there yet,
         /// we will be either displaying a 4x4 dummy texture or a 64x64 one. However
@@ -58,38 +65,46 @@ namespace Ogre
         ///     2. The texture
         ///     3. An msaa texture (hasMsaaExplicitResolves == true)
         ///     4. The msaa resolved texture (hasMsaaExplicitResolves==false)
-        GLuint  mFinalTextureName;
+        ID3D11Resource  *mFinalTextureName;
+
+
         /// Only used when hasMsaaExplicitResolves() == false.
-        GLuint  mMsaaFramebufferName;
+        ID3D11Resource  *mMsaaFramebufferName;
+
+        void create1DTexture(void);
+        void create2DTexture(void);
+        void create3DTexture(void);
 
         virtual void createInternalResourcesImpl(void);
         virtual void destroyInternalResourcesImpl(void);
 
+        ID3D11ShaderResourceView* _createSrv( PixelFormatGpu format, bool cubemapsAs2DArrays ) const;
+
     public:
-        GL3PlusTextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
-                           VaoManager *vaoManager, IdString name, uint32 textureFlags,
-                           TextureTypes::TextureTypes initialType,
-                           TextureGpuManager *textureManager );
-        virtual ~GL3PlusTextureGpu();
+        D3D11TextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+                         VaoManager *vaoManager, IdString name, uint32 textureFlags,
+                         TextureTypes::TextureTypes initialType,
+                         TextureGpuManager *textureManager );
+        virtual ~D3D11TextureGpu();
+
+        virtual void notifyDataIsReady(void);
+        virtual bool isDataReady(void) const;
 
         virtual void setTextureType( TextureTypes::TextureTypes textureType );
 
         virtual void copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
                              const TextureBox &srcBox, uint8 srcMipLevel );
 
-        virtual void getSubsampleLocations( vector<Vector2>::type locations );
-
-        virtual void notifyDataIsReady(void);
-        virtual bool isDataReady(void) const;
-
         virtual void _setToDisplayDummyTexture(void);
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
 
-        GLuint getDisplayTextureName(void) const    { return mDisplayTextureName; }
-        GLuint getFinalTextureName(void) const      { return mFinalTextureName; }
+        ID3D11ShaderResourceView* createSrv( PixelFormatGpu format, bool cubemapsAs2DArrays ) const;
 
-        /// Returns GL_TEXTURE_2D / GL_TEXTURE_2D_ARRAY / etc
-        GLenum getGlTextureTarget(void) const       { return mGlTextureTarget; }
+        virtual bool isMsaaPatternSupported( MsaaPatterns::MsaaPatterns pattern );
+        virtual void getSubsampleLocations( vector<Vector2>::type locations );
+
+        ID3D11Resource* getDisplayTextureName(void) const   { return mDisplayTextureName; }
+        ID3D11Resource* getFinalTextureName(void) const     { return mFinalTextureName; }
     };
 }
 

@@ -86,7 +86,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    static bool OrderTextureByPoolAndName( const TextureGpu *_a, const TextureGpu *_b )
+    static bool OrderTextureByPoolThenName( const TextureGpu *_a, const TextureGpu *_b )
     {
         const TexturePool *poolA = _a->getTexturePool();
         const TexturePool *poolB = _b->getTexturePool();
@@ -112,7 +112,7 @@ namespace Ogre
                 FastArray<const TextureGpu*>::iterator itor =
                         std::lower_bound( baseSet.mTextures.begin(),
                                           baseSet.mTextures.end(),
-                                          mTextures[i], OrderTextureByPoolAndName );
+                                          mTextures[i], OrderTextureByPoolThenName );
 
                 const size_t idx = itor - baseSet.mTextures.begin();
 
@@ -352,7 +352,7 @@ namespace Ogre
             FastArray<const TextureGpu*>::const_iterator itor =
                     std::lower_bound( mTexturesDescSet->mTextures.begin(),
                                       mTexturesDescSet->mTextures.end(),
-                                      texture, OrderTextureByPoolAndName );
+                                      texture, OrderTextureByPoolThenName );
             if( itor != mTexturesDescSet->mTextures.end() && *itor == texture )
             {
                 size_t idx = itor - mTexturesDescSet->mTextures.begin();
