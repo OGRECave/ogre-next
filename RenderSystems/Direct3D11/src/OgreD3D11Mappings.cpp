@@ -735,6 +735,7 @@ namespace Ogre
         case PFG_BC6H_SF16:                 return DXGI_FORMAT_BC6H_SF16;
         case PFG_BC7_UNORM:                 return DXGI_FORMAT_BC7_UNORM;
         case PFG_BC7_UNORM_SRGB:            return DXGI_FORMAT_BC7_UNORM_SRGB;
+#if defined(_WIN32_WINNT_WIN8) && (_WIN32_WINNT >= _WIN32_WINNT_WIN8)
         case PFG_AYUV:                      return DXGI_FORMAT_AYUV;
         case PFG_Y410:                      return DXGI_FORMAT_Y410;
         case PFG_Y416:                      return DXGI_FORMAT_Y416;
@@ -751,6 +752,7 @@ namespace Ogre
         case PFG_P8:                        return DXGI_FORMAT_P8;
         case PFG_A8P8:                      return DXGI_FORMAT_A8P8;
         case PFG_B4G4R4A4_UNORM:            return DXGI_FORMAT_B4G4R4A4_UNORM;
+#endif
 #if 0
         //TODO: Not always defined. Must research why.
         case PFG_P208:                      return DXGI_FORMAT_P208;

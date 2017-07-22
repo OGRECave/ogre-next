@@ -50,7 +50,7 @@ namespace Ogre
         CloseHandle( mEvent );
     }
     //-----------------------------------------------------------------------------------
-    void WaitableEvent::wait()
+    bool WaitableEvent::wait()
     {
         DWORD result = WaitForSingleObject( mEvent, INFINITE );
         return result == WAIT_OBJECT_0;

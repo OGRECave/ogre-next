@@ -99,6 +99,8 @@ namespace Ogre
         const uint32 depthOrSlices = std::max( depth, slices );
         if( depthOrSlices > mDepthOrSlices )
             return false;
+
+        return true;
     }
     //-----------------------------------------------------------------------------------
     bool D3D11StagingTexture::isSmallerThan( const StagingTexture *other ) const
