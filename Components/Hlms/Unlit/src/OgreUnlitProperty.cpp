@@ -56,6 +56,7 @@ namespace Ogre
 
     const IdString UnlitProperty::NumArrayTextures      = IdString( "num_array_textures" );
     const IdString UnlitProperty::NumTextures           = IdString( "num_textures" );
+    const IdString UnlitProperty::NumSamplers           = IdString( "num_samplers" );
 
     const IdString UnlitProperty::DiffuseMap            = IdString( "diffuse_map" );
     //const IdString UnlitProperty::DiffuseMap0           = IdString( "diffuse_map0" );

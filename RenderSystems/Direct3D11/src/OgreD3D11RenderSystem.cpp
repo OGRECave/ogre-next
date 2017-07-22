@@ -82,7 +82,6 @@ THE SOFTWARE.
 #include <d3d10.h>
 #include <OgreNsightChecker.h>
 
-#define TODO_port
 
 namespace Ogre 
 {
@@ -2135,7 +2134,43 @@ bail:
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setSamplers( uint32 slotStart, const DescriptorSetSampler *set )
     {
-        TODO_port;
+        ID3D11SamplerState *samplers[32];
+
+        FastArray<const HlmsSamplerblock*>::const_iterator itor = set->mSamplers.begin();
+
+        ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
+        UINT samplerIdx = slotStart;
+        for( size_t i=0u; i<NumShaderTypes; ++i )
+        {
+            const UINT numSamplersUsed = set->mShaderTypeSamplerCount[i];
+            for( size_t j=0; j<numSamplersUsed; ++j )
+            {
+                ID3D11SamplerState *samplerState =
+                        reinterpret_cast<ID3D11SamplerState*>( (*itor)->mRsData );
+                samplers[j] = samplerState;
+            }
+
+            switch( i )
+            {
+            case VertexShader:
+                context->VSSetSamplers( samplerIdx, numSamplersUsed, samplers );
+                break;
+            case PixelShader:
+                context->PSSetSamplers( samplerIdx, numSamplersUsed, samplers );
+                break;
+            case GeometryShader:
+                context->GSSetSamplers( samplerIdx, numSamplersUsed, samplers );
+                break;
+            case HullShader:
+                context->HSSetSamplers( samplerIdx, numSamplersUsed, samplers );
+                break;
+            case DomainShader:
+                context->DSSetSamplers( samplerIdx, numSamplersUsed, samplers );
+                break;
+            }
+
+            samplerIdx += numSamplersUsed;
+        }
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setBindingType(TextureUnitState::BindingType bindingType)

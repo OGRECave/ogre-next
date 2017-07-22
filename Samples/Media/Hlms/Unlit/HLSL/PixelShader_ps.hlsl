@@ -22,10 +22,9 @@ Texture2DArray textureMapsArray@n : register(t@value(array_texture_bind@n));@end
 @foreach( num_textures, n )
 Texture2D textureMaps@n : register(t@value(texture_bind@n));@end
 
-@padd( numSamplerStates, num_array_textures, num_textures )
 @pset( samplerStateBind, 2 )
 
-@foreach( numSamplerStates, n )
+@foreach( num_samplers, n )
 SamplerState samplerState@n : register(s@counter(samplerStateBind));@end
 
 @property( diffuse )@piece( MultiplyDiffuseConst )* material.diffuse@end @end

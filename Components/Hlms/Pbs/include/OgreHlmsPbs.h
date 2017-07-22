@@ -286,6 +286,7 @@ namespace Ogre
         static const IdString HasPlanarReflections;
 
         static const IdString NumTextures;
+        static const IdString NumSamplers;
         static const char *DiffuseMap;
         static const char *NormalMapTex;
         static const char *SpecularMap;

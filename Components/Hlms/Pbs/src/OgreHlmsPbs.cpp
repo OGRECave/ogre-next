@@ -77,6 +77,7 @@ namespace Ogre
     const IdString PbsProperty::HasPlanarReflections=IdString( "has_planar_reflections" );
 
     const IdString PbsProperty::NumTextures     = IdString( "num_textures" );
+    const IdString PbsProperty::NumSamplers     = IdString( "num_samplers" );
     const char *PbsProperty::DiffuseMap         = "diffuse_map";
     const char *PbsProperty::NormalMapTex       = "normal_map_tex";
     const char *PbsProperty::SpecularMap        = "specular_map";
@@ -642,6 +643,13 @@ namespace Ogre
         setProperty( PbsProperty::NormalWeight, numNormalWeights );
 
         setDetailMapProperties( datablock, inOutPieces );
+
+        if( datablock->mSamplersDescSet )
+        {
+            bool envMap = datablock->getTexture( PBSM_REFLECTION ) != 0;
+            setProperty( PbsProperty::NumSamplers,
+                         datablock->mSamplersDescSet->mSamplers.size() - envMap );
+        }
 
         if( datablock->mTexturesDescSet )
         {

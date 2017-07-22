@@ -30,6 +30,7 @@ THE SOFTWARE.
 
 #include "OgreHlmsUnlit.h"
 #include "OgreHlmsUnlitDatablock.h"
+#include "OgreUnlitProperty.h"
 #include "OgreHlmsListener.h"
 
 #if !OGRE_NO_JSON
@@ -59,7 +60,7 @@ THE SOFTWARE.
 #include "CommandBuffer/OgreCommandBuffer.h"
 #include "CommandBuffer/OgreCbTexture.h"
 #include "CommandBuffer/OgreCbShaderBuffer.h"
-#include "OgreUnlitProperty.h"
+
 namespace Ogre
 {
 
@@ -317,6 +318,9 @@ namespace Ogre
 
         setProperty( UnlitProperty::NumArrayTextures, numArrayTextures );
         setProperty( UnlitProperty::NumTextures, numTextures );
+
+        if( datablock->mSamplersDescSet )
+            setProperty( UnlitProperty::NumSamplers, datablock->mSamplersDescSet->mSamplers.size() );
 
         setProperty( UnlitProperty::DiffuseMap, datablock->mTexturesDescSet != 0 );
 
