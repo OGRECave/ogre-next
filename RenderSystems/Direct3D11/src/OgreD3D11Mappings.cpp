@@ -787,6 +787,119 @@ namespace Ogre
         return DXGI_FORMAT_UNKNOWN;
     }
     //---------------------------------------------------------------------
+    DXGI_FORMAT D3D11Mappings::getFamily( PixelFormatGpu pf )
+    {
+        switch( pf )
+        {
+        case PFG_RGBA32_FLOAT:
+        case PFG_RGBA32_UINT:
+        case PFG_RGBA32_SINT:
+            return DXGI_FORMAT_R32G32B32A32_TYPELESS;
+        case PFG_RGB32_FLOAT:
+        case PFG_RGB32_UINT:
+        case PFG_RGB32_SINT:
+            return DXGI_FORMAT_R32G32B32_TYPELESS;
+        case PFG_RGBA16_FLOAT:
+        case PFG_RGBA16_UNORM:
+        case PFG_RGBA16_UINT:
+        case PFG_RGBA16_SNORM:
+        case PFG_RGBA16_SINT:
+            return DXGI_FORMAT_R16G16B16A16_TYPELESS;
+        case PFG_RG32_FLOAT:
+        case PFG_RG32_UINT:
+        case PFG_RG32_SINT:
+            return DXGI_FORMAT_R32G32_TYPELESS;
+
+        case PFG_D32_FLOAT_S8X24_UINT:
+            return DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS;
+
+        case PFG_R10G10B10A2_UNORM:
+        case PFG_R10G10B10A2_UINT:
+            return DXGI_FORMAT_R10G10B10A2_TYPELESS;
+
+        case PFG_RGBA8_UNORM:
+        case PFG_RGBA8_UNORM_SRGB:
+        case PFG_RGBA8_UINT:
+        case PFG_RGBA8_SNORM:
+        case PFG_RGBA8_SINT:
+            return DXGI_FORMAT_R8G8B8A8_TYPELESS;
+
+        case PFG_RG16_FLOAT:
+        case PFG_RG16_UNORM:
+        case PFG_RG16_UINT:
+        case PFG_RG16_SNORM:
+        case PFG_RG16_SINT:
+            return DXGI_FORMAT_R16G16_TYPELESS;
+
+        case PFG_D32_FLOAT:
+        case PFG_R32_FLOAT:
+        case PFG_R32_UINT:
+        case PFG_R32_SINT:
+            return DXGI_FORMAT_R32_TYPELESS;
+
+        case PFG_D24_UNORM:
+        case PFG_D24_UNORM_S8_UINT:
+            return DXGI_FORMAT_R24G8_TYPELESS;
+
+        case PFG_RG8_UNORM:
+        case PFG_RG8_UINT:
+        case PFG_RG8_SNORM:
+        case PFG_RG8_SINT:
+            return DXGI_FORMAT_R8G8_TYPELESS;
+
+        case PFG_R16_FLOAT:
+        case PFG_D16_UNORM:
+        case PFG_R16_UNORM:
+        case PFG_R16_UINT:
+        case PFG_R16_SNORM:
+        case PFG_R16_SINT:
+            return DXGI_FORMAT_R16_TYPELESS;
+
+        case PFG_R8_UNORM:
+        case PFG_R8_UINT:
+        case PFG_R8_SNORM:
+        case PFG_R8_SINT:
+            return DXGI_FORMAT_R8_TYPELESS;
+
+        case PFG_BC1_UNORM:
+        case PFG_BC1_UNORM_SRGB:
+            return DXGI_FORMAT_BC1_TYPELESS;
+        case PFG_BC2_UNORM:
+        case PFG_BC2_UNORM_SRGB:
+            return DXGI_FORMAT_BC2_TYPELESS;
+        case PFG_BC3_UNORM:
+        case PFG_BC3_UNORM_SRGB:
+            return DXGI_FORMAT_BC3_TYPELESS;
+        case PFG_BC4_UNORM:
+        case PFG_BC4_SNORM:
+            return DXGI_FORMAT_BC4_TYPELESS;
+        case PFG_BC5_UNORM:
+        case PFG_BC5_SNORM:
+            return DXGI_FORMAT_BC5_TYPELESS;
+
+        case PFG_BGRA8_UNORM:
+        case PFG_BGRA8_UNORM_SRGB:
+            return DXGI_FORMAT_B8G8R8A8_TYPELESS;
+
+        case PFG_BGRX8_UNORM:
+        case PFG_BGRX8_UNORM_SRGB:
+            return DXGI_FORMAT_B8G8R8X8_TYPELESS;
+
+        case PFG_BC6H_UF16:
+        case PFG_BC6H_SF16:
+            return DXGI_FORMAT_BC6H_TYPELESS;
+
+        case PFG_BC7_UNORM:
+        case PFG_BC7_UNORM_SRGB:
+            return DXGI_FORMAT_BC7_TYPELESS;
+
+        default:
+            return get( pf );
+        }
+
+        return get( pf );
+    }
+    //---------------------------------------------------------------------
     TextureType D3D11Mappings::_getTexType(D3D11_SRV_DIMENSION type)
     {
         switch(type)

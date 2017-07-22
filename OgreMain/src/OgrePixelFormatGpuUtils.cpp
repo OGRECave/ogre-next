@@ -1262,12 +1262,7 @@ namespace Ogre
         case PFG_R8_UINT:
         case PFG_R8_SNORM:
         case PFG_R8_SINT:
-        case PFG_A8_UNORM:
             return PFG_R8_UINT;
-
-        case PFG_R8G8_B8G8_UNORM:
-        case PFG_G8R8_G8B8_UNORM:
-            return PFG_R8G8_B8G8_UNORM;
 
         case PFG_BC1_UNORM:
         case PFG_BC1_UNORM_SRGB:

@@ -172,17 +172,11 @@ namespace Ogre
         GLint zPos      = static_cast<GLint>( dstBox ? dstBox->z : 0 );
         GLint slicePos  = static_cast<GLint>( (dstBox ? dstBox->sliceStart : 0) +
                                               dstTexture->getInternalSliceStart() );
-        GLsizei width   = static_cast<GLsizei>(
-                              dstBox ? dstBox->width :
-                                       std::max( 1u, (dstTexture->getWidth() >> mipLevel) ) );
-        GLsizei height  = static_cast<GLsizei>(
-                              dstBox ? dstBox->height :
-                                       std::max( 1u, (dstTexture->getHeight() >> mipLevel) ) );
-        GLsizei depth   = static_cast<GLsizei>(
-                              dstBox ? dstBox->depth :
-                                       std::max( 1u, (dstTexture->getDepth() >> mipLevel) ) );
-        GLsizei numSlices=static_cast<GLsizei>( dstBox ? dstBox->numSlices :
-                                                         dstTexture->getNumSlices() );
+        //Dst & src must have the same resolution & number of slices, so just pick src's dimensions.
+        GLsizei width   = static_cast<GLsizei>( srcBox.width );
+        GLsizei height  = static_cast<GLsizei>( srcBox.height  );
+        GLsizei depth   = static_cast<GLsizei>( srcBox.depth );
+        GLsizei numSlices=static_cast<GLsizei>( srcBox.numSlices );
 
         const size_t distToStart = static_cast<uint8*>( srcBox.data ) -
                                     static_cast<uint8*>( mMappedPtr );

@@ -175,7 +175,7 @@ namespace Ogre
     ID3D11ShaderResourceView* D3D11TextureGpuManager::getBlankTextureSrv(
             TextureTypes::TextureTypes textureType ) const
     {
-        mDefaultSrv[textureType];
+        return mDefaultSrv[textureType];
     }
     //-----------------------------------------------------------------------------------
     TextureGpu* D3D11TextureGpuManager::createTextureImpl(
