@@ -337,7 +337,7 @@ namespace Ogre
             StagingTexture *stagingTexture = *itor;
 
             if( stagingTexture->supportsFormat( width, height, depth, slices, pixelFormat ) &&
-                (bestCandidate == end || stagingTexture->isSmaller( *bestCandidate )) )
+                (bestCandidate == end || stagingTexture->isSmallerThan( *bestCandidate )) )
             {
                 if( !stagingTexture->uploadWillStall() )
                 {
@@ -708,7 +708,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool OrderByStagingTexture( const StagingTexture *_l, const StagingTexture *_r )
     {
-        return _l->isSmaller( _r );
+        return _l->isSmallerThan( _r );
     }
     void TextureGpuManager::fullfillBudget( ThreadData &workerData )
     {

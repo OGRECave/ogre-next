@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "OgreD3D11TextureGpuManager.h"
 #include "OgreD3D11Mappings.h"
 #include "OgreD3D11TextureGpu.h"
-//#include "OgreD3D11StagingTexture.h"
+#include "OgreD3D11StagingTexture.h"
 //#include "OgreD3D11AsyncTextureTicket.h"
 
 #include "Vao/OgreD3D11VaoManager.h"
@@ -191,21 +191,16 @@ namespace Ogre
                                                                         uint32 slices,
                                                                         PixelFormatGpu pixelFormat )
     {
-        const uint32 rowAlignment = 4u;
-        const size_t sizeBytes = PixelFormatGpuUtils::getSizeBytes( width, height, depth, slices,
-                                                                    pixelFormat, rowAlignment );
-
-        D3D11VaoManager *vaoManager = static_cast<D3D11VaoManager*>( mVaoManager );
-        return vaoManager->createStagingTexture( PixelFormatGpuUtils::getFamily( pixelFormat ),
-                                                 sizeBytes );
+        D3D11StagingTexture *retVal =
+                OGRE_NEW D3D11StagingTexture( mVaoManager,
+                                              PixelFormatGpuUtils::getFamily( pixelFormat ),
+                                              width, height, std::max( depth, slices ), mDevice );
+        return retVal;
     }
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpuManager::destroyStagingTextureImpl( StagingTexture *stagingTexture )
     {
-        assert( dynamic_cast<D3D11StagingTexture*>( stagingTexture ) );
-
-        D3D11VaoManager *vaoManager = static_cast<D3D11VaoManager*>( mVaoManager );
-        vaoManager->destroyStagingTexture( static_cast<D3D11StagingTexture*>( stagingTexture ) );
+        delete stagingTexture;
     }
     //-----------------------------------------------------------------------------------
     AsyncTextureTicket* D3D11TextureGpuManager::createAsyncTextureTicketImpl(

@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "Vao/OgreD3D11VaoManager.h"
 
 #include "OgrePixelFormatGpuUtils.h"
+#include "OgreLogManager.h"
 
 namespace Ogre
 {
@@ -74,12 +75,56 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     D3D11StagingTexture::~D3D11StagingTexture()
     {
+        if( mMapRegionStarted )
+        {
+            LogManager::getSingleton().logMessage(
+                        "WARNING: D3D11StagingTexture being deleted did not "
+                        "call stopMapRegion. Calling it for you.", LML_CRITICAL );
+            stopMapRegion();
+        }
         SAFE_RELEASE( mStagingTexture );
+    }
+    //-----------------------------------------------------------------------------------
+    bool D3D11StagingTexture::supportsFormat( uint32 width, uint32 height, uint32 depth, uint32 slices,
+                                              PixelFormatGpu pixelFormat ) const
+    {
+        if( mFormatFamily != PixelFormatGpuUtils::getFamily( pixelFormat ) )
+            return false;
+
+        if( width > mWidth )
+            return false;
+        if( height > mHeight )
+            return false;
+
+        const uint32 depthOrSlices = std::max( depth, slices );
+        if( depthOrSlices > mDepthOrSlices )
+            return false;
+    }
+    //-----------------------------------------------------------------------------------
+    bool D3D11StagingTexture::isSmallerThan( const StagingTexture *other ) const
+    {
+        const D3D11StagingTexture *otherD3d = static_cast<const D3D11StagingTexture*>( other );
+        size_t thisSize = PixelFormatGpuUtils::getSizeBytes( this->mWidth, this->mHeight,
+                                                             this->mDepthOrSlices, 1u,
+                                                             this->mFormatFamily, 4u );
+        size_t otherSize= PixelFormatGpuUtils::getSizeBytes( otherD3d->mWidth, otherD3d->mHeight,
+                                                             otherD3d->mDepthOrSlices, 1u,
+                                                             otherD3d->mFormatFamily, 4u );
+        return thisSize < otherSize;
+    }
+    //-----------------------------------------------------------------------------------
+    size_t D3D11StagingTexture::_getSizeBytes(void)
+    {
+        return PixelFormatGpuUtils::getSizeBytes( this->mWidth, this->mHeight,
+                                                  this->mDepthOrSlices, 1u,
+                                                  this->mFormatFamily, 4u );
     }
     //-----------------------------------------------------------------------------------
     bool D3D11StagingTexture::belongsToUs( const TextureBox &box )
     {
-        return box.data >= mMappedPtr && box.data <= static_cast<uint8*>( mMappedPtr ) + mCurrentOffset;
+        return box.data >= mSubresourceData.pData &&
+               box.data < (static_cast<uint8*>( mSubresourceData.pData ) +
+                           mSubresourceData.DepthPitch * mDepthOrSlices);
     }
     //-----------------------------------------------------------------------------------
     void D3D11StagingTexture::shrinkRecords( size_t slice, StagingBoxVec::iterator record,
@@ -119,6 +164,26 @@ namespace Ogre
 
         //We need to split the record into 3 parts (2 parts are free, 1 is consumed).
         //To do that, we'll overwrite the existing record, and create one more.
+        // If this is the record (origin is at upper left corner in this graph):
+        //  -----------------
+        //  |               |
+        //  |               |
+        //  |               |
+        //  |               |
+        //  |-              |
+        //  |R|             |
+        //  -----------------
+        //Then we slice it like this:
+        //  -----------------
+        //  | |             |
+        //  | |             |
+        //  |0|      1      |
+        //  | |             |
+        //  |-|             |
+        //  |R|             |
+        //  -----------------
+
+        // New slice #0
         StagingBox originalRecord = *record;
         record->width   = consumedBox.width;
         record->y       = consumedBox.height;
@@ -126,11 +191,12 @@ namespace Ogre
         if( record->height == 0 )
             efficientVectorRemove( mFreeBoxes[slice], record );
 
-        StagingBox newRecord1 = originalRecord;
-        newRecord1.x    = consumedBox.width;
-        newRecord1.width= originalRecord.width - consumedBox.width;
-        if( newRecord1.width > 0 )
-            mFreeBoxes[slice].push_back( newRecord1 );
+        // New slice #1
+        StagingBox newRecord = originalRecord;
+        newRecord.x     = consumedBox.width;
+        newRecord.width = originalRecord.width - consumedBox.width;
+        if( newRecord.width > 0 )
+            mFreeBoxes[slice].push_back( newRecord );
     }
     //-----------------------------------------------------------------------------------
     void D3D11StagingTexture::shrinkMultisliceRecords( size_t slice, StagingBoxVec::iterator record,
@@ -138,14 +204,63 @@ namespace Ogre
     {
         if( record->x == consumedBox.x && record->y == consumedBox.y )
         {
-            //Trivial case. Consumed box is at the start of the record.
+            //Trivial case. Consumed box is at the origin of the record.
             shrinkRecords( slice, record, consumedBox );
             return;
         }
 
-        //The consumed box isn't at the start of the record. It's in the middle. Therefore we need
-        //to divide the record in 4, and leave a hole in the middle.
-        asd;
+        //The consumed box isn't at the origin of the record. It's somewhere in the middle.
+        //Therefore we need to divide the record in 4, and leave a hole in the middle.
+        //If this is the record (origin is at upper left corner in this graph):
+        //  -----------------
+        //  |               |
+        //  |     -         |
+        //  |    |R|        |
+        //  |     -         |
+        //  |               |
+        //  |               |
+        //  -----------------
+        //Then we slice it like this:
+        //  -----------------
+        //  |       0       |
+        //  |---------------|
+        //  | 1  |R|   2    |
+        //  |---------------|
+        //  |       3       |
+        //  |               |
+        //  -----------------
+
+        // New slice #0
+        StagingBox originalRecord = *record;
+        record->height = consumedBox.y;
+        if( record->height == 0 )
+            efficientVectorRemove( mFreeBoxes[slice], record );
+
+        StagingBox newRecord;
+
+        // New slice #1
+        newRecord = originalRecord;
+        newRecord.width     = consumedBox.x;
+        newRecord.y         = consumedBox.y;
+        newRecord.height    = consumedBox.height;
+        if( newRecord.width > 0 )
+            mFreeBoxes[slice].push_back( newRecord );
+
+        // New slice #2
+        newRecord = originalRecord;
+        newRecord.x         = consumedBox.x + consumedBox.width;
+        newRecord.width     = originalRecord.width - newRecord.x;
+        newRecord.y         = consumedBox.y;
+        newRecord.height    = consumedBox.height;
+        if( newRecord.width > 0 )
+            mFreeBoxes[slice].push_back( newRecord );
+
+        // New slice #3
+        newRecord = originalRecord;
+        newRecord.y         = consumedBox.y + consumedBox.height;
+        newRecord.height    = originalRecord.height - newRecord.y;
+        if( newRecord.height > 0 )
+            mFreeBoxes[slice].push_back( newRecord );
     }
     //-----------------------------------------------------------------------------------
     TextureBox D3D11StagingTexture::mapMultipleSlices( uint32 width, uint32 height, uint32 depth,

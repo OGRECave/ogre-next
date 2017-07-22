@@ -57,7 +57,7 @@ namespace Ogre
         return requiredSize <= mSize;
     }
     //-----------------------------------------------------------------------------------
-    bool StagingTextureBufferImpl::isSmaller( const StagingTexture *other ) const
+    bool StagingTextureBufferImpl::isSmallerThan( const StagingTexture *other ) const
     {
         assert( dynamic_cast<const StagingTextureBufferImpl*>( other ) );
         return this->mSize < static_cast<const StagingTextureBufferImpl*>( other )->mSize;

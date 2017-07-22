@@ -107,7 +107,7 @@ namespace Ogre
         /// our maximum capacity)
         virtual bool supportsFormat( uint32 width, uint32 height, uint32 depth, uint32 slices,
                                      PixelFormatGpu pixelFormat ) const = 0;
-        virtual bool isSmaller( const StagingTexture *other ) const = 0;
+        virtual bool isSmallerThan( const StagingTexture *other ) const = 0;
 
         /** Returns size in bytes. Note it's tagged as advanced use (via _underscore) because
             Just because a StagingTexture has enough available size, does not mean it can
