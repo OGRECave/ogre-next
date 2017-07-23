@@ -37,9 +37,9 @@ namespace Ogre
     StagingTexture::StagingTexture( VaoManager *vaoManager, PixelFormatGpu formatFamily ) :
         mVaoManager( vaoManager ),
         mLastFrameUsed( vaoManager->getFrameCount() - vaoManager->getDynamicBufferMultiplier() ),
-        mFormatFamily( formatFamily )
+        mFormatFamily( formatFamily ),
+        mMapRegionStarted( false )
   #if OGRE_DEBUG_MODE
-        ,mMapRegionStarted( false )
         ,mUserQueriedIfUploadWillStall( false )
   #endif
     {
@@ -65,10 +65,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void StagingTexture::startMapRegion(void)
     {
-#if OGRE_DEBUG_MODE
         assert( !mMapRegionStarted && "startMapRegion already called!" );
         mMapRegionStarted = true;
 
+#if OGRE_DEBUG_MODE
         if( mVaoManager->getFrameCount() - mLastFrameUsed < mVaoManager->getDynamicBufferMultiplier() &&
             !mUserQueriedIfUploadWillStall )
         {
@@ -88,27 +88,23 @@ namespace Ogre
                                           PixelFormatGpu pixelFormat )
     {
         assert( supportsFormat( width, height, depth, slices, pixelFormat ) );
-#if OGRE_DEBUG_MODE
         assert( mMapRegionStarted && "You must call startMapRegion first!" );
-#endif
 
         return mapRegionImpl( width, height, depth, slices, pixelFormat );
     }
     //-----------------------------------------------------------------------------------
     void StagingTexture::stopMapRegion(void)
     {
-#if OGRE_DEBUG_MODE
         assert( mMapRegionStarted && "You didn't call startMapRegion first!" );
         mMapRegionStarted = false;
-#endif
     }
     //-----------------------------------------------------------------------------------
     void StagingTexture::upload( const TextureBox &srcBox, TextureGpu *dstTexture,
                                  uint8 mipLevel, const TextureBox *dstBox,
                                  bool skipSysRamCopy )
     {
-#if OGRE_DEBUG_MODE
         assert( !mMapRegionStarted && "You must call stopMapRegion before you can upload!" );
+#if OGRE_DEBUG_MODE
         mUserQueriedIfUploadWillStall = false;
 #endif
         const TextureBox fullDstTextureBox( std::max( 1u, dstTexture->getWidth() >> mipLevel ),
