@@ -124,9 +124,12 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool D3D11StagingTexture::belongsToUs( const TextureBox &box )
     {
-        return box.data >= mSubresourceData.pData &&
-               box.data < (static_cast<uint8*>( mSubresourceData.pData ) +
-                           mSubresourceData.DepthPitch * mDepthOrSlices);
+        return  box.x + box.width <= mWidth &&
+                box.y + box.height <= mHeight &&
+                box.getZOrSlice() + box.getDepthOrSlices() <= mDepthOrSlices &&
+                box.data >= mSubresourceData.pData &&
+                box.data < (static_cast<uint8*>( mSubresourceData.pData ) +
+                            mSubresourceData.DepthPitch * mDepthOrSlices);
     }
     //-----------------------------------------------------------------------------------
     void D3D11StagingTexture::shrinkRecords( size_t slice, StagingBoxVec::iterator record,
