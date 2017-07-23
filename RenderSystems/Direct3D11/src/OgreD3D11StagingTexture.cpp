@@ -482,8 +482,8 @@ namespace Ogre
         srcBoxD3d.left  = srcBox.x;
         srcBoxD3d.top   = srcBox.y;
         srcBoxD3d.front = srcBox.getZOrSlice();
-        srcBoxD3d.right = srcBox.width;
-        srcBoxD3d.bottom= srcBox.height;
+        srcBoxD3d.right = srcBox.x + srcBox.width;
+        srcBoxD3d.bottom= srcBox.y + srcBox.height;
         //We copy one slice at a time, so add only srcBox.depth;
         //which is either 1u, or more than 1u for 3D textures.
         srcBoxD3d.back  = srcBox.getZOrSlice() + srcBox.depth;
@@ -507,6 +507,15 @@ namespace Ogre
             ++slicePos;
             ++srcBoxD3d.front;
             ++srcBoxD3d.back;
+        }
+
+        if( mDevice.isError() )
+        {
+            String errorDescription = mDevice.getErrorDescription();
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "Error after calling CopySubresourceRegion\n"
+                         "Error Description:" + errorDescription,
+                         "D3D11StagingTexture::upload" );
         }
     }
 }
