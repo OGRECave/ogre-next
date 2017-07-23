@@ -303,7 +303,7 @@ namespace Ogre
                 }
                 else
                 {
-                    propName.a( "numTextures", numTextures );
+                    propName.a( "texture_bind", numTextures );
                     ++numTextures;
                 }
 

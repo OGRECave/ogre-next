@@ -112,6 +112,45 @@ namespace Ogre
             return reinterpret_cast<uint8*>( data ) +
                     zPos * bytesPerImage + yPos * bytesPerRow + xPos * bytesPerPixel;
         }
+
+        void copyFrom( const TextureBox &src )
+        {
+            assert( this->width  == src.width &&
+                    this->height == src.height &&
+                    this->getDepthOrSlices() >= src.getDepthOrSlices() );
+
+            if( this->x == 0 && src.x == 0 &&
+                this->y == 0 && src.y == 0 &&
+                this->bytesPerRow == src.bytesPerRow &&
+                this->bytesPerImage == src.bytesPerImage )
+            {
+                const void *srcData = src.at( 0, 0, src.z );
+                void *dstData       = this->at( 0, 0, this->z );
+                memcpy( dstData, srcData, bytesPerImage * src.getDepthOrSlices() );
+            }
+            else
+            {
+                const uint32 finalDepthOrSlices = getDepthOrSlices();
+                const uint32 finalHeight      = this->height;
+                const uint32 finalBytesPerRow = std::min( this->bytesPerRow, src.bytesPerRow );
+                for( size_t _z=0; _z<finalDepthOrSlices; ++_z )
+                {
+                    for( size_t _y=0; _y<finalHeight; ++_y )
+                    {
+                        const void *srcData = src.at( src.x,   _y + src.y,   _z + src.z );
+                        void *dstData       = this->at( this->x, _y + this->y, _z + this->z );
+                        memcpy( dstData, srcData, finalBytesPerRow );
+                    }
+                }
+            }
+        }
+
+        void copyFrom( void *srcData, uint32 _width, uint32 _height, uint32 _bytesPerRow )
+        {
+            TextureBox box( _width, _height, 1u, 1u, 0, _bytesPerRow, _bytesPerRow * _height );
+            box.data = srcData;
+            copyFrom( box );
+        }
     };
 }
 

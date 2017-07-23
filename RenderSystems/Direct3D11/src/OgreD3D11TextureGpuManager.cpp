@@ -207,7 +207,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpuManager::destroyStagingTextureImpl( StagingTexture *stagingTexture )
     {
-        delete stagingTexture;
+        //Do nothing, caller will delete stagingTexture.
     }
     //-----------------------------------------------------------------------------------
     AsyncTextureTicket* D3D11TextureGpuManager::createAsyncTextureTicketImpl(

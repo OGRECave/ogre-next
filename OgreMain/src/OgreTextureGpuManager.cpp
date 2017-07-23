@@ -847,23 +847,7 @@ namespace Ogre
                 if( dstBox.data )
                 {
                     //Upload to staging area. CPU -> GPU
-                    if( dstBox.bytesPerImage == srcBox.bytesPerImage )
-                    {
-                        memcpy( dstBox.data, srcBox.data,
-                                dstBox.bytesPerImage * dstBox.getDepthOrSlices() );
-                    }
-                    else
-                    {
-                        for( size_t z=0; z<srcBox.getDepthOrSlices(); ++z )
-                        {
-                            for( size_t y=0; y<srcBox.height; ++y )
-                            {
-                                const void *srcData = srcBox.at( 0, y, z );
-                                void *dstData       = dstBox.at( 0, y, z );
-                                memcpy( dstData, srcData, srcBox.bytesPerRow );
-                            }
-                        }
-                    }
+                    dstBox.copyFrom( srcBox );
 
                     //Schedule a command to copy from staging to final texture, GPU -> GPU
                     ObjCmdBuffer::UploadFromStagingTex *uploadCmd = commandBuffer->addCommand<

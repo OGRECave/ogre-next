@@ -480,7 +480,7 @@ namespace Ogre
         stagingTexture->startMapRegion();
         TextureBox texBox = stagingTexture->mapRegion( finalWidth, finalHeight, 1u, 1u,
                                                        mTexture->getPixelFormat() );
-        memcpy( texBox.data, imageData, dataSize );
+        texBox.copyFrom( imageData, finalWidth, finalHeight, bytesPerRow );
         stagingTexture->stopMapRegion();
         stagingTexture->upload( texBox, mTexture, 0, 0, true );
         textureManager->removeStagingTexture( stagingTexture );
