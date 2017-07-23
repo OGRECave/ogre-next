@@ -566,22 +566,29 @@ namespace Ogre
 
         while( itStats != enStats )
         {
-            const uint32 rowAlignment = 4u;
-            size_t oneSliceBytes = PixelFormatGpuUtils::getSizeBytes( itStats->width, itStats->height,
-                                                                      1u, 1u, itStats->formatFamily,
-                                                                      rowAlignment );
-
-            if( itStats->accumSizeBytes >= itStats->prevSizeBytes )
+            if( itStats->accumSizeBytes >= itStats->prevSizeBytes ||
+                itStats->width >= itStats->prevWidth ||
+                itStats->height >= itStats->prevHeight )
             {
                 //Keep largest spike for 3 frames.
                 itStats->frameCount = frameCount;
-                itStats->prevSizeBytes = itStats->accumSizeBytes;
+                itStats->prevWidth      = itStats->width;
+                itStats->prevHeight     = itStats->height;
+                itStats->prevSizeBytes  = itStats->accumSizeBytes;
             }
             else if( (frameCount - itStats->frameCount) >= 3u )
             {
                 //If for 3 frames we haven't spiked again, then use the new stats.
-                itStats->prevSizeBytes = itStats->accumSizeBytes;
+                itStats->prevWidth      = itStats->width;
+                itStats->prevHeight     = itStats->height;
+                itStats->prevSizeBytes  = itStats->accumSizeBytes;
             }
+
+            const uint32 rowAlignment = 4u;
+            size_t oneSliceBytes = PixelFormatGpuUtils::getSizeBytes( itStats->prevWidth,
+                                                                      itStats->prevHeight,
+                                                                      1u, 1u, itStats->formatFamily,
+                                                                      rowAlignment );
 
             //Round up.
             const size_t numSlices = (itStats->prevSizeBytes + oneSliceBytes - 1u) / oneSliceBytes;
@@ -938,16 +945,17 @@ namespace Ogre
         UsageStatsVec::iterator enStats = mStreamingData.usageStats.end();
         while( itStats != enStats )
         {
-            //If these match then we got downsized in the main thread (we spent 3
-            //frames without spiking). Reset the resolution as well to see how much
+            //If these match then either main thread is keeping last iteration
+            //as a spike for 3 frames, or we got downsized (we spent 3 frames
+            //without spiking). Reset the resolution as well to see how much
             //we are actually using.
             if( itStats->accumSizeBytes == itStats->prevSizeBytes )
             {
                 itStats->width  = 1u;
                 itStats->height = 1u;
+                itStats->accumSizeBytes = 0u;
             }
 
-            itStats->accumSizeBytes = 0u;
             ++itStats;
         }
 
@@ -1185,6 +1193,8 @@ namespace Ogre
         formatFamily( _formatFamily ),
         accumSizeBytes( PixelFormatGpuUtils::getSizeBytes( _width, _height, _depthOrSlices,
                                                            1u, _formatFamily, 4u ) ),
+        prevWidth( 0 ),
+        prevHeight( 0 ),
         prevSizeBytes( 0 ),
         frameCount( 0 )
     {

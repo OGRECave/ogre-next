@@ -143,6 +143,8 @@ namespace Ogre
             uint32 height;
             PixelFormatGpu formatFamily;
             size_t accumSizeBytes;
+            uint32 prevWidth;
+            uint32 prevHeight;
             size_t prevSizeBytes;
             uint32 frameCount;
             UsageStats( uint32 _width, uint32 _height, uint32 _depthOrSlices,
