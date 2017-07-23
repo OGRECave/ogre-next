@@ -68,6 +68,7 @@ namespace Ogre
         desc2.MipLevels = 1u;
         desc2.ArraySize = 1u;
         desc2.Format    = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+        desc2.SampleDesc.Count = 1u;
         desc2.Usage     = D3D11_USAGE_IMMUTABLE;
         desc2.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 
@@ -86,14 +87,18 @@ namespace Ogre
         memset( c_blackData, 0x00, sizeof( c_blackData ) );
 
         D3D11_SUBRESOURCE_DATA dataWhite;
-        D3D11_SUBRESOURCE_DATA dataBlack;
+        D3D11_SUBRESOURCE_DATA dataBlack[6];
 
         dataWhite.pSysMem           = c_whiteData;
         dataWhite.SysMemPitch       = 4u * sizeof(uint32);
         dataWhite.SysMemSlicePitch  = dataWhite.SysMemPitch * 4u;
-        dataBlack.pSysMem           = c_blackData;
-        dataBlack.SysMemPitch       = 4u * sizeof(uint32);
-        dataBlack.SysMemSlicePitch  = dataBlack.SysMemPitch * 4u;
+
+        for( size_t i=0; i<6u; ++i )
+        {
+            dataBlack[i].pSysMem            = c_blackData;
+            dataBlack[i].SysMemPitch        = 4u * sizeof(uint32);
+            dataBlack[i].SysMemSlicePitch   = dataBlack[i].SysMemPitch * 4u;
+        }
 
         ID3D11Texture1D *tex1D;
         ID3D11Texture2D *tex2D;
@@ -120,10 +125,12 @@ namespace Ogre
                 break;
             case TextureTypes::TypeCube:
             case TextureTypes::TypeCubeArray:
+                desc2.ArraySize = 6;
                 desc2.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
-                hr = mDevice->CreateTexture2D( &desc2, &dataBlack, &tex2D );
+                hr = mDevice->CreateTexture2D( &desc2, dataBlack, &tex2D );
                 mBlankTexture[i] = tex2D;
                 desc2.MiscFlags = 0;
+                desc2.ArraySize = 1;
                 break;
             case TextureTypes::Type3D:
                 hr = mDevice->CreateTexture3D( &desc3, &dataWhite, &tex3D );

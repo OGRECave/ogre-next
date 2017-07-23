@@ -337,11 +337,13 @@ namespace Ogre
         {
             mDisplayTextureName = textureManagerD3d->getBlankTextureD3dName( TextureTypes::Type2DArray );
             mDefaultDisplaySrv = textureManagerD3d->getBlankTextureSrv( TextureTypes::Type2DArray );
+            mDefaultDisplaySrv->AddRef();
         }
         else
         {
             mDisplayTextureName = textureManagerD3d->getBlankTextureD3dName( mTextureType );
             mDefaultDisplaySrv = textureManagerD3d->getBlankTextureSrv( mTextureType );
+            mDefaultDisplaySrv->AddRef();
         }
     }
     //-----------------------------------------------------------------------------------

@@ -43,6 +43,7 @@ THE SOFTWARE.
 #include "OgreD3D11GpuProgramManager.h"
 #include "OgreD3D11HLSLProgramFactory.h"
 #include "OgreD3D11TextureGpu.h"
+#include "OgreD3D11TextureGpuManager.h"
 
 #include "OgreD3D11HardwareOcclusionQuery.h"
 #include "OgreFrustum.h"
@@ -1151,6 +1152,10 @@ bail:
 
             assert( !mVaoManager );
             mVaoManager = OGRE_NEW D3D11VaoManager( false, mDevice, this );
+
+            mTextureGpuManager = OGRE_NEW D3D11TextureGpuManager( mVaoManager, mDevice );
+
+            mTextureGpuManager->_update();
 		}
 		else
 		{
