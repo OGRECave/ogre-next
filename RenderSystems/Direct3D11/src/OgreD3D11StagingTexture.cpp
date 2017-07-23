@@ -358,9 +358,7 @@ namespace Ogre
                                            PixelFormatGpuUtils::getBytesPerPixel( pixelFormat ),
                                            mSubresourceData.RowPitch, mSubresourceData.DepthPitch );
                         retVal.data = reinterpret_cast<uint8*>( mSubresourceData.pData ) +
-                                      mSubresourceData.DepthPitch * (slice - numBackwardSlices) +
-                                      mSubresourceData.RowPitch * itor->y +
-                                      retVal.bytesPerPixel * itor->x;
+                                      mSubresourceData.DepthPitch * (slice - numBackwardSlices);
 
                         for( size_t i=0; i<depthOrSlices; ++i )
                         {
@@ -406,7 +404,7 @@ namespace Ogre
                 if( width <= itor->width &&
                     height <= itor->height )
                 {
-                    if( bestMatch == end ||
+                    if( bestMatch == mFreeBoxes[bestMatchSlice].end() ||
                         itor->width < bestMatch->width ||
                         itor->height < bestMatch->height )
                     {
@@ -427,9 +425,7 @@ namespace Ogre
             retVal.x = bestMatch->x;
             retVal.y = bestMatch->y;
             retVal.data = reinterpret_cast<uint8*>( mSubresourceData.pData ) +
-                          mSubresourceData.DepthPitch * bestMatchSlice +
-                          mSubresourceData.RowPitch * bestMatch->y +
-                          retVal.bytesPerPixel * bestMatch->x;
+                          mSubresourceData.DepthPitch * bestMatchSlice;
 
             //Now shrink our records.
             shrinkRecords( bestMatchSlice, bestMatch, retVal );
