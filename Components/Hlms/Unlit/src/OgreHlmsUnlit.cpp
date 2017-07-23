@@ -905,11 +905,14 @@ namespace Ogre
 
             if( datablock->mSamplersDescSet != mLastDescSampler && mHasSeparateSamplers )
             {
-                //Bind samplers
-                size_t texUnit = 2;
-                *commandBuffer->addCommand<CbSamplers>() =
-                        CbSamplers( texUnit, datablock->mSamplersDescSet );
-                mLastDescSampler = datablock->mSamplersDescSet;
+                if( datablock->mSamplersDescSet )
+                {
+                    //Bind samplers
+                    size_t texUnit = 2;
+                    *commandBuffer->addCommand<CbSamplers>() =
+                            CbSamplers( texUnit, datablock->mSamplersDescSet );
+                    mLastDescSampler = datablock->mSamplersDescSet;
+                }
             }
         }
 

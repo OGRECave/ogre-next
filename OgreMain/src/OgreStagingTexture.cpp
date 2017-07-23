@@ -122,9 +122,7 @@ namespace Ogre
 
         assert( !dstBox || srcBox.equalSize( *dstBox ) && "Src & Dst must be equal" );
         assert( !dstBox || fullDstTextureBox.fullyContains( *dstBox ) );
-        assert( fullDstTextureBox.fullyContains( srcBox ) );
         assert( mipLevel < dstTexture->getNumMipmaps() );
-        assert( srcBox.x == 0 && srcBox.y == 0 && srcBox.z == 0 && srcBox.sliceStart == 0 );
         assert(( !srcBox.bytesPerRow || (srcBox.bytesPerImage % srcBox.bytesPerRow) == 0) &&
                "srcBox.bytesPerImage must be a multiple of srcBox.bytesPerRow!" );
         assert( belongsToUs( srcBox ) &&
@@ -150,51 +148,21 @@ namespace Ogre
         uint8 *sysRamCopyBase = dstTexture->_getSysRamCopy( mipLevel );
         if( sysRamCopyBase && !skipSysRamCopy )
         {
-            const size_t sysRamCopyBytesPerRow = dstTexture->_getSysRamCopyBytesPerRow( mipLevel );
-            const size_t sysRamCopyBytesPerImage = dstTexture->_getSysRamCopyBytesPerImage( mipLevel );
+            TextureBox dstSysRamBox;
 
-            if( !dstBox || dstBox->equalSize( fullDstTextureBox ) )
-            {
-                const uint32 depthOrSlices = dstTexture->getDepthOrSlices();
-                for( size_t z=0; z<depthOrSlices; ++z )
-                {
-                    uint8 *dstPtr = sysRamCopyBase + sysRamCopyBytesPerImage * z;
-                    uint8 *srcPtr = static_cast<uint8*>( srcBox.data ) + srcBox.bytesPerImage * z;
-                    memcpy( dstPtr, srcPtr, sysRamCopyBytesPerRow * dstTexture->getHeight() );
-                }
-            }
+            if( !dstBox )
+                dstSysRamBox = dstTexture->_getSysRamCopyAsBox( mipLevel );
             else
             {
-                const uint32 xPos       = dstBox ? dstBox->x : 0;
-                const uint32 yPos       = dstBox ? dstBox->y : 0;
-                const uint32 zPos       = dstBox ? dstBox->z : 0;
-                const uint32 slicePos   = dstBox ? dstBox->sliceStart : 0;
-                const uint32 width      = dstBox ? dstBox->width  :
-                                                   std::max( 1u, (dstTexture->getWidth() >> mipLevel) );
-                const uint32 height     = dstBox ? dstBox->height :
-                                                   std::max( 1u, (dstTexture->getHeight() >> mipLevel) );
-                const uint32 depth      = dstBox ? dstBox->depth  :
-                                                   std::max( 1u, (dstTexture->getDepth() >> mipLevel) );
-                const uint32 numSlices  = dstBox ? dstBox->numSlices : dstTexture->getNumSlices();
-                const uint32 zPosOrSlice    = std::max( zPos, slicePos );
-                const uint32 depthOrSlices  = std::max( depth, numSlices );
-
-                const size_t bytesPerPixel =
+                dstSysRamBox = *dstBox;
+                dstSysRamBox.data = sysRamCopyBase;
+                dstSysRamBox.bytesPerPixel =
                         PixelFormatGpuUtils::getBytesPerPixel( dstTexture->getPixelFormat() );
-
-                for( size_t z=zPosOrSlice; z<zPosOrSlice + depthOrSlices; ++z )
-                {
-                    uint8 *dstPtr = sysRamCopyBase + sysRamCopyBytesPerImage * z + bytesPerPixel * xPos;
-                    uint8 *srcPtr = static_cast<uint8*>( srcBox.data )  + srcBox.bytesPerImage * z;
-
-                    for( size_t y=yPos; y<yPos + height; ++y )
-                    {
-                        memcpy( dstPtr, srcPtr, width * bytesPerPixel );
-                        dstPtr += sysRamCopyBytesPerRow;
-                        srcPtr += srcBox.bytesPerRow;
-                    }
-                }
+                dstSysRamBox.bytesPerRow = dstTexture->_getSysRamCopyBytesPerRow( mipLevel );
+                dstSysRamBox.bytesPerImage = dstTexture->_getSysRamCopyBytesPerImage( mipLevel );
             }
+
+            dstSysRamBox.copyFrom( srcBox );
         }
 
         mLastFrameUsed = mVaoManager->getFrameCount();

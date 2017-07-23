@@ -202,8 +202,6 @@ namespace Ogre
         */
         void scheduleTransitionTo( GpuResidency::GpuResidency nextResidency );
 
-        void upload( const TextureBox &box, uint8 mipmapLevel, uint32 slice );
-
         // See isMetadataReady for threadsafety on these functions.
         void setResolution( uint32 width, uint32 height, uint32 depthOrSlices=1u );
         uint32 getWidth(void) const;
@@ -296,6 +294,7 @@ namespace Ogre
 
         TextureGpuManager* getTextureManager(void) const;
 
+        TextureBox _getSysRamCopyAsBox( uint8 mipLevel );
         uint8* _getSysRamCopy( uint8 mipLevel );
         /// Note: Returns non-zero even if there is no system ram copy.
         size_t _getSysRamCopyBytesPerRow( uint8 mipLevel );

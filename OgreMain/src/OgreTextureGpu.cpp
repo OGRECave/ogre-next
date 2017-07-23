@@ -456,6 +456,31 @@ namespace Ogre
         return mTextureManager;
     }
     //-----------------------------------------------------------------------------------
+    TextureBox TextureGpu::_getSysRamCopyAsBox( uint8 mipLevel )
+    {
+        if( !mSysRamCopy )
+            return TextureBox();
+
+        assert( mipLevel < mNumMipmaps );
+
+        uint32 width            = mWidth;
+        uint32 height           = mHeight;
+        uint32 depth            = getDepth();
+        const uint32 numSlices  = getNumSlices();
+        void *data = PixelFormatGpuUtils::advancePointerToMip( mSysRamCopy, width, height, depth,
+                                                               numSlices, mipLevel, mPixelFormat );
+
+        TextureBox retVal( std::max( 1u, width >> mipLevel ),
+                           std::max( 1u, height >> mipLevel ),
+                           std::max( 1u, depth >> mipLevel ),
+                           numSlices,
+                           PixelFormatGpuUtils::getBytesPerPixel( mPixelFormat ),
+                           this->_getSysRamCopyBytesPerRow( mipLevel ),
+                           this->_getSysRamCopyBytesPerImage( mipLevel ) );
+        retVal.data = data;
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
     uint8* TextureGpu::_getSysRamCopy( uint8 mipLevel )
     {
         if( !mSysRamCopy )
