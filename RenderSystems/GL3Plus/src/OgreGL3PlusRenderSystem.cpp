@@ -802,7 +802,7 @@ namespace Ogre {
             if (mCurrentContext)
                 mCurrentContext->setInitialized();
 
-            mTextureGpuManager->_update();
+            mTextureGpuManager->_update( true );
         }
 
         if ( win->getDepthBufferPool() != DepthBuffer::POOL_NO_DEPTH )

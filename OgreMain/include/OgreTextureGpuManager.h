@@ -268,10 +268,20 @@ namespace Ogre
         unsigned long _updateStreamingWorkerThread( ThreadHandle *threadHandle );
         void _updateStreaming(void);
 
-        /// Returns true if there is no more streaming work to be done yet
-        /// (if false, calls to _update could be needed once again)
-        /// See waitForStreamingCompletion.
-        bool _update(void);
+        /** Returns true if there is no more streaming work to be done yet
+            (if false, calls to _update could be needed once again)
+            See waitForStreamingCompletion.
+        @param syncWithWorkerThread
+            When true, we will wait for the worker thread to release the main mutex
+            instead of just continuing and trying again next time we get called.
+            This is important for waitForStreamingCompletion & _waitFor because
+            otherwise main thread may not see worker thread has finished because
+            it's also grabbing the main mutex; and waitForStreamingCompletion
+            will go to sleep thinking worker thread has yet to finish, and
+            worker thread won't wake up the main thread because it has
+            already notified it.
+        */
+        bool _update( bool syncWithWorkerThread );
 
         /// Blocks main thread until are pending textures are fully loaded.
         void waitForStreamingCompletion(void);

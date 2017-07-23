@@ -1155,7 +1155,7 @@ bail:
 
             mTextureGpuManager = OGRE_NEW D3D11TextureGpuManager( mVaoManager, mDevice );
 
-            mTextureGpuManager->_update();
+            mTextureGpuManager->_update( true );
 		}
 		else
 		{
@@ -2114,6 +2114,9 @@ bail:
         for( size_t i=0u; i<NumShaderTypes; ++i )
         {
             const UINT numTexturesUsed = set->mShaderTypeTexCount[i];
+            if( !numTexturesUsed )
+                continue;
+
             switch( i )
             {
             case VertexShader:
@@ -2148,6 +2151,10 @@ bail:
         for( size_t i=0u; i<NumShaderTypes; ++i )
         {
             const UINT numSamplersUsed = set->mShaderTypeSamplerCount[i];
+
+            if( !numSamplersUsed )
+                continue;
+
             for( size_t j=0; j<numSamplersUsed; ++j )
             {
                 ID3D11SamplerState *samplerState =
@@ -3029,7 +3036,7 @@ bail:
         for( size_t i=0u; i<NumShaderTypes; ++i )
         {
             const size_t numTexturesUsed = newSet->mShaderTypeTexCount[i];
-            for( size_t j=0u; i<numTexturesUsed; ++j )
+            for( size_t j=0u; j<numTexturesUsed; ++j )
             {
                 const D3D11TextureGpu *texture = static_cast<const D3D11TextureGpu*>( *itor );
                 srvList[texIdx] = texture->createSrv( texture->getPixelFormat(), false );

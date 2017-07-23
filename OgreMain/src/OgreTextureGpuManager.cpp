@@ -1049,8 +1049,8 @@ namespace Ogre
 
         //Two cases:
         //  1. We did something this iteration, and finished 100%.
-        //     Main thread could be waiting for us. Let them now.
-        //  2. We couldn't everything in this iteration, which means
+        //     Main thread could be waiting for us. Let them know.
+        //  2. We couldn't do everything in this iteration, which means
         //     we need something from main thread. Wake it up.
         //Note that normally main thread isn't sleeping, but it could be if
         //waitForStreamingCompletion was called.
@@ -1070,7 +1070,7 @@ namespace Ogre
             mRequestToMainThreadEvent.wake();
     }
     //-----------------------------------------------------------------------------------
-    bool TextureGpuManager::_update(void)
+    bool TextureGpuManager::_update( bool syncWithWorkerThread )
     {
 #if OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN
         _updateStreaming();
@@ -1080,7 +1080,18 @@ namespace Ogre
         ThreadData &mainData = mThreadData[c_mainThread];
         {
             ThreadData &workerData = mThreadData[c_workerThread];
-            bool lockSucceeded = mMutex.tryLock();
+            bool lockSucceeded = false;
+
+            if( !syncWithWorkerThread )
+            {
+                lockSucceeded = mMutex.tryLock();
+            }
+            else
+            {
+                lockSucceeded = true;
+                mMutex.lock();
+            }
+
             if( lockSucceeded )
             {
                 std::swap( mainData.objCmdBuffer, workerData.objCmdBuffer );
@@ -1149,7 +1160,7 @@ namespace Ogre
         bool bDone = false;
         while( !bDone )
         {
-            bDone = _update();
+            bDone = _update( true );
             if( !bDone )
                 mRequestToMainThreadEvent.wait();
         }
@@ -1160,7 +1171,7 @@ namespace Ogre
         bool bDone = false;
         while( !bDone )
         {
-            bDone = _update();
+            bDone = _update( true );
             if( !bDone )
             {
                 if( texture->isDataReady() )

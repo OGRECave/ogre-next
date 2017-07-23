@@ -1000,7 +1000,7 @@ namespace Ogre {
     //---------------------------------------------------------------------
     void RenderSystem::_update(void)
     {
-        mTextureGpuManager->_update();
+        mTextureGpuManager->_update( false );
         mVaoManager->_update();
         cleanReleasedDepthBuffers();
     }
