@@ -148,6 +148,14 @@ namespace Ogre
             --numMipmaps;
         }
 
+        if( width == 1u && height == 1u && depth == 1u && numMipmaps > 0 )
+        {
+            //Add 1x1x1 mip.
+            totalBytes += PixelFormatGpuUtils::getSizeBytes( width, height, depth, slices,
+                                                             format, rowAlignment );
+            --numMipmaps;
+        }
+
         return totalBytes;
     }
     //-----------------------------------------------------------------------
