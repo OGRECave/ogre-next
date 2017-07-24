@@ -86,8 +86,8 @@ namespace Ogre
         uint32      mLastFrameUsed;
         PixelFormatGpu mFormatFamily;
 
-#if OGRE_DEBUG_MODE
         bool        mMapRegionStarted;
+#if OGRE_DEBUG_MODE
         bool        mUserQueriedIfUploadWillStall;
 #endif
 
