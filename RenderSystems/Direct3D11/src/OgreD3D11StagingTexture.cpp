@@ -376,6 +376,7 @@ namespace Ogre
                         }
                     }
 
+                    std::reverse( selectedRecords.begin(), selectedRecords.end() );
                     selectedRecords.push_back( itor );
                     lastNumSlices = 1u;
 
@@ -403,15 +404,20 @@ namespace Ogre
                         }
                     }
 
-                    if( (numBackwardSlices + numForwardSlices) < depthOrSlices - 1u )
+                    if( (numBackwardSlices + numForwardSlices) == depthOrSlices - 1u )
                     {
                         //Found it!
                         TextureBox retVal( width, height, depth, slices,
                                            PixelFormatGpuUtils::getBytesPerPixel( pixelFormat ),
                                            mSubresourceData[0].RowPitch,
                                            mSubresourceData[0].DepthPitch );
-                        retVal.data = reinterpret_cast<uint8*>( mSubresourceData[0].pData ) +
-                                      mSubresourceData[0].DepthPitch * (slice - numBackwardSlices);
+                        retVal.data = reinterpret_cast<uint8*>( mSubresourceData[0].pData );
+                        retVal.x = itor->x;
+                        retVal.y = itor->y;
+                        if( depth > 1u )
+                            retVal.z = slice - numBackwardSlices;
+                        else
+                            retVal.sliceStart = slice - numBackwardSlices;
 
                         for( size_t i=0; i<depthOrSlices; ++i )
                         {
@@ -480,8 +486,11 @@ namespace Ogre
         {
             retVal.x = bestMatch->x;
             retVal.y = bestMatch->y;
-            retVal.data = reinterpret_cast<uint8*>( mSubresourceData[sliceIdx].pData ) +
-                          mSubresourceData[sliceIdx].DepthPitch * bestMatchSlice;
+            if( !mIsArray2DTexture )
+                retVal.z = bestMatchSlice;
+            else
+                retVal.sliceStart = bestMatchSlice;
+            retVal.data = reinterpret_cast<uint8*>( mSubresourceData[sliceIdx].pData );
 
             //Now shrink our records.
             shrinkRecords( bestMatchSlice, bestMatch, retVal );
