@@ -84,6 +84,7 @@ namespace Ogre {
         mHeight         = img.mHeight;
         mDepthOrSlices  = img.mDepthOrSlices;
         mNumMipmaps     = img.mNumMipmaps;
+        mTextureType    = img.mTextureType;
         mPixelFormat    = img.mPixelFormat;
         mAutoDelete     = img.mAutoDelete;
         //Only create/copy when previous data was not dynamic data
