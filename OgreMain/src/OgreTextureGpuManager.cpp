@@ -559,88 +559,64 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::fullfillUsageStats( ThreadData &workerData )
     {
-        const uint32 frameCount = mVaoManager->getFrameCount();
-
-        UsageStatsVec::iterator itStats = mStreamingData.usageStats.begin();
-        UsageStatsVec::iterator enStats = mStreamingData.usageStats.end();
+        UsageStatsVec::iterator itStats = mStreamingData.prevStats.begin();
+        UsageStatsVec::iterator enStats = mStreamingData.prevStats.end();
 
         while( itStats != enStats )
         {
-            if( itStats->accumSizeBytes >= itStats->prevSizeBytes ||
-                itStats->width >= itStats->prevWidth ||
-                itStats->height >= itStats->prevHeight )
+            --itStats->loopCount;
+            if( itStats->loopCount == 0 )
             {
-                //Keep largest spike for 3 frames.
-                itStats->frameCount = frameCount;
-                itStats->prevWidth      = itStats->width;
-                itStats->prevHeight     = itStats->height;
-                itStats->prevSizeBytes  = itStats->accumSizeBytes;
-            }
-            else if( (frameCount - itStats->frameCount) >= 3u )
-            {
-                //If for 3 frames we haven't spiked again, then use the new stats.
-                itStats->prevWidth      = itStats->width;
-                itStats->prevHeight     = itStats->height;
-                itStats->prevSizeBytes  = itStats->accumSizeBytes;
-            }
-
-            const uint32 rowAlignment = 4u;
-            size_t oneSliceBytes = PixelFormatGpuUtils::getSizeBytes( itStats->prevWidth,
-                                                                      itStats->prevHeight,
-                                                                      1u, 1u, itStats->formatFamily,
-                                                                      rowAlignment );
-
-            //Round up.
-            const size_t numSlices = (itStats->prevSizeBytes + oneSliceBytes - 1u) / oneSliceBytes;
-
-            bool isSupported = false;
-
-            StagingTextureVec::iterator itor = mStreamingData.availableStagingTex.begin();
-            StagingTextureVec::iterator end  = mStreamingData.availableStagingTex.end();
-
-            while( itor != end && !isSupported )
-            {
-                isSupported = (*itor)->supportsFormat( itStats->width, itStats->height, 1u,
-                                                       numSlices, itStats->formatFamily );
-
-                if( isSupported )
-                {
-                    mTmpAvailableStagingTex.push_back( *itor );
-                    itor = mStreamingData.availableStagingTex.erase( itor );
-                    end  = mStreamingData.availableStagingTex.end();
-                }
-                else
-                {
-                    ++itor;
-                }
-            }
-
-            if( !isSupported )
-            {
-                StagingTexture *newStagingTexture = getStagingTexture( itStats->width, itStats->height,
-                                                                       1u, numSlices,
-                                                                       itStats->formatFamily, 50u );
-                newStagingTexture->startMapRegion();
-                mTmpAvailableStagingTex.push_back( newStagingTexture );
-            }
-
-            ++itStats;
-        }
-
-        itStats = mStreamingData.usageStats.begin();
-        enStats = mStreamingData.usageStats.end();
-
-        //Get rid of stat entries that are no longer in use.
-        while( itStats != enStats )
-        {
-            //If both are 1, then the stats didn't get used since last time we reset.
-            if( itStats->width == 1u && itStats->height == 1u )
-            {
-                itStats = efficientVectorRemove( mStreamingData.usageStats, itStats );
-                enStats = mStreamingData.usageStats.end();
+                //This record has been here too long without the worker thread touching it.
+                //Remove it.
+                itStats = efficientVectorRemove( mStreamingData.prevStats, itStats );
+                enStats = mStreamingData.prevStats.end();
             }
             else
             {
+                const uint32 rowAlignment = 4u;
+                size_t oneSliceBytes = PixelFormatGpuUtils::getSizeBytes( itStats->width,
+                                                                          itStats->height,
+                                                                          1u, 1u, itStats->formatFamily,
+                                                                          rowAlignment );
+
+                //Round up.
+                const size_t numSlices = (itStats->accumSizeBytes + oneSliceBytes - 1u) / oneSliceBytes;
+
+                bool isSupported = false;
+
+                StagingTextureVec::iterator itor = mStreamingData.availableStagingTex.begin();
+                StagingTextureVec::iterator end  = mStreamingData.availableStagingTex.end();
+
+                while( itor != end && !isSupported )
+                {
+                    //Check if the free StagingTextures can take the current usage load.
+                    isSupported = (*itor)->supportsFormat( itStats->width, itStats->height, 1u,
+                                                           numSlices, itStats->formatFamily );
+
+                    if( isSupported )
+                    {
+                        mTmpAvailableStagingTex.push_back( *itor );
+                        itor = mStreamingData.availableStagingTex.erase( itor );
+                        end  = mStreamingData.availableStagingTex.end();
+                    }
+                    else
+                    {
+                        ++itor;
+                    }
+                }
+
+                if( !isSupported )
+                {
+                    //It cannot. We need a bigger StagingTexture (or one that supports a specific format)
+                    StagingTexture *newStagingTexture = getStagingTexture( itStats->width,
+                                                                           itStats->height,
+                                                                           1u, numSlices,
+                                                                           itStats->formatFamily, 50u );
+                    newStagingTexture->startMapRegion();
+                    mTmpAvailableStagingTex.push_back( newStagingTexture );
+                }
+
                 ++itStats;
             }
         }
@@ -746,6 +722,41 @@ namespace Ogre
                                                          mTmpAvailableStagingTex.begin(),
                                                          mTmpAvailableStagingTex.end() );
         mTmpAvailableStagingTex.clear();
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::mergeUsageStatsIntoPrevStats(void)
+    {
+        UsageStatsVec::const_iterator itor = mStreamingData.usageStats.begin();
+        UsageStatsVec::const_iterator end  = mStreamingData.usageStats.end();
+
+        while( itor != end )
+        {
+            UsageStatsVec::iterator itPrev = mStreamingData.prevStats.begin();
+            UsageStatsVec::iterator enPrev = mStreamingData.prevStats.end();
+
+            while( itPrev != enPrev && itPrev->formatFamily != itor->formatFamily )
+                ++itPrev;
+
+            if( itPrev != enPrev )
+            {
+                //Average current stats with the previous one.
+                //But if current one's was bigger, keep current.
+                itPrev->width  = std::max( itor->width, (itPrev->width + itor->width) >> 1u );
+                itPrev->height = std::max( itor->height, (itPrev->height + itor->height) >> 1u );
+                itPrev->accumSizeBytes = std::max( itor->accumSizeBytes, (itPrev->accumSizeBytes +
+                                                                          itor->accumSizeBytes) >> 1u );
+                itPrev->loopCount = 15u;
+            }
+            else
+            {
+                mStreamingData.prevStats.push_back( *itor );
+                mStreamingData.prevStats.back().loopCount = 15u;
+            }
+
+            ++itor;
+        }
+
+        mStreamingData.usageStats.clear();
     }
     //-----------------------------------------------------------------------------------
     TextureBox TextureGpuManager::getStreaming( ThreadData &workerData,
@@ -940,25 +951,6 @@ namespace Ogre
             }
         mLoadRequestsMutex.unlock();
 
-        //Reset our stats
-        UsageStatsVec::iterator itStats = mStreamingData.usageStats.begin();
-        UsageStatsVec::iterator enStats = mStreamingData.usageStats.end();
-        while( itStats != enStats )
-        {
-            //If these match then either main thread is keeping last iteration
-            //as a spike for 3 frames, or we got downsized (we spent 3 frames
-            //without spiking). Reset the resolution as well to see how much
-            //we are actually using.
-            if( itStats->accumSizeBytes == itStats->prevSizeBytes )
-            {
-                itStats->width  = 1u;
-                itStats->height = 1u;
-                itStats->accumSizeBytes = 0u;
-            }
-
-            ++itStats;
-        }
-
         ObjCmdBuffer *commandBuffer = workerData.objCmdBuffer;
 
         const bool processedAnyImage = !workerData.loadRequests.empty() ||
@@ -1055,6 +1047,7 @@ namespace Ogre
 
         workerData.loadRequests.erase( workerData.loadRequests.begin(),
                                        workerData.loadRequests.begin() + entriesProcessed );
+        mergeUsageStatsIntoPrevStats();
         mMutex.unlock();
 
         //Wake up outside mMutex to avoid unnecessary contention.
@@ -1193,10 +1186,7 @@ namespace Ogre
         formatFamily( _formatFamily ),
         accumSizeBytes( PixelFormatGpuUtils::getSizeBytes( _width, _height, _depthOrSlices,
                                                            1u, _formatFamily, 4u ) ),
-        prevWidth( 0 ),
-        prevHeight( 0 ),
-        prevSizeBytes( 0 ),
-        frameCount( 0 )
+        loopCount( 0 )
     {
     }
     //-----------------------------------------------------------------------------------

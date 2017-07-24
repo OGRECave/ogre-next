@@ -143,10 +143,11 @@ namespace Ogre
             uint32 height;
             PixelFormatGpu formatFamily;
             size_t accumSizeBytes;
-            uint32 prevWidth;
-            uint32 prevHeight;
-            size_t prevSizeBytes;
-            uint32 frameCount;
+            /// This value gets reset in worker thread every time UsageStats have
+            /// been updated for this formatFamily. Main thread will decrease it
+            /// with every fullfillUsageStats call. When it reaches 0, the
+            /// stat will be removed.
+            uint32 loopCount;
             UsageStats( uint32 _width, uint32 _height, uint32 _depthOrSlices,
                         PixelFormatGpu _formatFamily );
         };
@@ -180,6 +181,7 @@ namespace Ogre
             StagingTextureVec   availableStagingTex;
             QueuedImageVec      queuedImages;  /// Used by worker thread.
             UsageStatsVec       usageStats;
+            UsageStatsVec       prevStats;
         };
 
         bool                mShuttingDown;
@@ -237,6 +239,9 @@ namespace Ogre
         void fullfillMinimumBudget( ThreadData &workerData, const PoolParameters &poolParams );
 
         void fullfillBudget( ThreadData &workerData );
+
+        /// Must be called from worker thread.
+        void mergeUsageStatsIntoPrevStats(void);
 
         /** Finds a StagingTexture that can map the given region defined by the box & pixelFormat.
             Searches in both used & available textures.
