@@ -43,6 +43,7 @@ namespace Ogre
         GL3PlusDynamicBuffer    *mDynamicBuffer;
         size_t                  mUnmapTicket;
         void                    *mMappedPtr;
+        void                    *mLastMappedPtr;
 
         virtual bool belongsToUs( const TextureBox &box );
         virtual void* RESTRICT_ALIAS_RETURN mapRegionImplRawPtr(void);

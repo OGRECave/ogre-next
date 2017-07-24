@@ -141,6 +141,8 @@ namespace Ogre
             at the same time, also you can't call anything else either.
         @remarks
             You must have called startMapRegion before.
+            Textures that are bigger than 2048x2048 can only map one slice at a time
+            due to limitations in the D3D11 API.
         @return
             TextureBox to write to. Please note TextureBox::data may be null. If so, that
             means we don't have enough space to fulfill your request.

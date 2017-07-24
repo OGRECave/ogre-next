@@ -194,9 +194,8 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     StagingTexture* D3D11TextureGpuManager::createStagingTextureImpl( uint32 width, uint32 height,
-                                                                        uint32 depth,
-                                                                        uint32 slices,
-                                                                        PixelFormatGpu pixelFormat )
+                                                                      uint32 depth, uint32 slices,
+                                                                      PixelFormatGpu pixelFormat )
     {
         D3D11StagingTexture *retVal =
                 OGRE_NEW D3D11StagingTexture( mVaoManager,

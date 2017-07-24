@@ -45,27 +45,70 @@ namespace Ogre
         mWidth( width ),
         mHeight( height ),
         mDepthOrSlices( depthOrSlices ),
+        mIsArray2DTexture( false ),
         mDevice( device )
     {
-        memset( &mSubresourceData, 0, sizeof( mSubresourceData ) );
+        HRESULT hr;
+        if( mDepthOrSlices > 1u &&
+            mWidth <= D3D10_REQ_TEXTURE3D_U_V_OR_W_DIMENSION &&
+            mHeight <= D3D10_REQ_TEXTURE3D_U_V_OR_W_DIMENSION )
+        {
+            D3D11_TEXTURE3D_DESC desc;
+            memset( &desc, 0, sizeof( desc ) );
 
-        D3D11_TEXTURE3D_DESC desc;
-        memset( &desc, 0, sizeof( desc ) );
+            desc.Width      = static_cast<UINT>( mWidth );
+            desc.Height     = static_cast<UINT>( mHeight );
+            desc.Depth      = static_cast<UINT>( mDepthOrSlices );
+            desc.MipLevels  = 1u;
+            desc.Format     = D3D11Mappings::getFamily( mFormatFamily );
+            desc.Usage              = D3D11_USAGE_STAGING;
+            desc.BindFlags          = 0;
+            desc.CPUAccessFlags     = D3D11_CPU_ACCESS_WRITE;
+            desc.MiscFlags          = 0;
 
-        desc.Width      = static_cast<UINT>( mWidth );
-        desc.Height     = static_cast<UINT>( mHeight );
-        desc.Depth      = static_cast<UINT>( mDepthOrSlices );
-        desc.MipLevels  = 1u;
-        desc.Format     = D3D11Mappings::getFamily( mFormatFamily );
-        desc.Usage              = D3D11_USAGE_STAGING;
-        desc.BindFlags          = 0;
-        desc.CPUAccessFlags     = D3D11_CPU_ACCESS_WRITE;
-        desc.MiscFlags          = 0;
+            ID3D11Texture3D *texture = 0;
+            hr = mDevice->CreateTexture3D( &desc, 0, &texture );
+            mStagingTexture = texture;
+            mIsArray2DTexture = false;
 
-        HRESULT hr = mDevice->CreateTexture3D( &desc, 0, &mStagingTexture );
+            mSubresourceData.resize( 1u );
+            mLastSubresourceData.resize( 1u );
+            memset( &mSubresourceData[0], 0, sizeof( D3D11_MAPPED_SUBRESOURCE ) );
+            memset( &mLastSubresourceData[0], 0, sizeof( D3D11_MAPPED_SUBRESOURCE ) );
+        }
+        else
+        {
+            D3D11_TEXTURE2D_DESC desc;
+            memset( &desc, 0, sizeof( desc ) );
+
+            desc.Width      = static_cast<UINT>( mWidth );
+            desc.Height     = static_cast<UINT>( mHeight );
+            desc.MipLevels  = 1u;
+            desc.ArraySize  = static_cast<UINT>( mDepthOrSlices );
+            desc.Format     = D3D11Mappings::getFamily( mFormatFamily );
+            desc.SampleDesc.Count   = 1u;
+            desc.Usage              = D3D11_USAGE_STAGING;
+            desc.BindFlags          = 0;
+            desc.CPUAccessFlags     = D3D11_CPU_ACCESS_WRITE;
+            desc.MiscFlags          = 0;
+
+            ID3D11Texture2D *texture = 0;
+            hr = mDevice->CreateTexture2D( &desc, 0, &texture );
+            mStagingTexture = texture;
+            mIsArray2DTexture = true;
+
+            mSubresourceData.resize( mDepthOrSlices );
+            mLastSubresourceData.resize( mDepthOrSlices );
+            for( size_t i=0; i<mDepthOrSlices; ++i )
+            {
+                memset( &mSubresourceData[i], 0, sizeof( D3D11_MAPPED_SUBRESOURCE ) );
+                memset( &mLastSubresourceData[i], 0, sizeof( D3D11_MAPPED_SUBRESOURCE ) );
+            }
+        }
 
         if( FAILED(hr) || mDevice.isError() )
         {
+            SAFE_RELEASE( mStagingTexture );
             String errorDescription = mDevice.getErrorDescription( hr );
             OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
                             "Error creating StagingTexture\nError Description:" + errorDescription,
@@ -82,6 +125,7 @@ namespace Ogre
                         "call stopMapRegion. Calling it for you.", LML_CRITICAL );
             stopMapRegion();
         }
+
         SAFE_RELEASE( mStagingTexture );
     }
     //-----------------------------------------------------------------------------------
@@ -124,12 +168,17 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool D3D11StagingTexture::belongsToUs( const TextureBox &box )
     {
+        if( box.numSlices > 1u && mIsArray2DTexture )
+            return false;
+
+        const size_t sliceIdx = mIsArray2DTexture ? box.sliceStart : 0;
+
         return  box.x + box.width <= mWidth &&
                 box.y + box.height <= mHeight &&
                 box.getZOrSlice() + box.getDepthOrSlices() <= mDepthOrSlices &&
-                box.data >= mSubresourceData.pData &&
-                box.data < (static_cast<uint8*>( mSubresourceData.pData ) +
-                            mSubresourceData.DepthPitch * mDepthOrSlices);
+                box.data >= mLastSubresourceData[sliceIdx].pData &&
+                box.data < (static_cast<uint8*>( mLastSubresourceData[sliceIdx].pData ) +
+                            mLastSubresourceData[sliceIdx].DepthPitch * mDepthOrSlices);
     }
     //-----------------------------------------------------------------------------------
     void D3D11StagingTexture::shrinkRecords( size_t slice, StagingBoxVec::iterator record,
@@ -271,6 +320,9 @@ namespace Ogre
     TextureBox D3D11StagingTexture::mapMultipleSlices( uint32 width, uint32 height, uint32 depth,
                                                        uint32 slices, PixelFormatGpu pixelFormat )
     {
+        //By definition, we can't map multiple slices if this is an array texture
+        assert( !mIsArray2DTexture );
+
         const uint32 depthOrSlices = std::max( depth, slices );
 
         vector<StagingBoxVec::iterator>::type selectedRecords;
@@ -356,9 +408,10 @@ namespace Ogre
                         //Found it!
                         TextureBox retVal( width, height, depth, slices,
                                            PixelFormatGpuUtils::getBytesPerPixel( pixelFormat ),
-                                           mSubresourceData.RowPitch, mSubresourceData.DepthPitch );
-                        retVal.data = reinterpret_cast<uint8*>( mSubresourceData.pData ) +
-                                      mSubresourceData.DepthPitch * (slice - numBackwardSlices);
+                                           mSubresourceData[0].RowPitch,
+                                           mSubresourceData[0].DepthPitch );
+                        retVal.data = reinterpret_cast<uint8*>( mSubresourceData[0].pData ) +
+                                      mSubresourceData[0].DepthPitch * (slice - numBackwardSlices);
 
                         for( size_t i=0; i<depthOrSlices; ++i )
                         {
@@ -417,15 +470,18 @@ namespace Ogre
             }
         }
 
+        const size_t sliceIdx = mIsArray2DTexture ? bestMatchSlice : 0;
+
         TextureBox retVal( width, height, depth, slices,
                            PixelFormatGpuUtils::getBytesPerPixel( pixelFormat ),
-                           mSubresourceData.RowPitch, mSubresourceData.DepthPitch );
+                           mSubresourceData[sliceIdx].RowPitch,
+                           mSubresourceData[sliceIdx].DepthPitch );
         if( bestMatch != mFreeBoxes[0].end() )
         {
             retVal.x = bestMatch->x;
             retVal.y = bestMatch->y;
-            retVal.data = reinterpret_cast<uint8*>( mSubresourceData.pData ) +
-                          mSubresourceData.DepthPitch * bestMatchSlice;
+            retVal.data = reinterpret_cast<uint8*>( mSubresourceData[sliceIdx].pData ) +
+                          mSubresourceData[sliceIdx].DepthPitch * bestMatchSlice;
 
             //Now shrink our records.
             shrinkRecords( bestMatchSlice, bestMatch, retVal );
@@ -439,14 +495,21 @@ namespace Ogre
         StagingTexture::startMapRegion();
 
         ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
-        HRESULT hr = context->Map( mStagingTexture, 0, D3D11_MAP_WRITE, 0, &mSubresourceData );
-
-        if( FAILED(hr) || mDevice.isError() )
+        const uint32 numSlices = mIsArray2DTexture ? mDepthOrSlices : 1u;
+        for( uint32 i=0; i<numSlices; ++i )
         {
-            String errorDescription = mDevice.getErrorDescription( hr );
-            OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
-                            "Error mapping StagingTexture\nError Description:" + errorDescription,
-                            "D3D11StagingTexture::startMapRegion" );
+            const UINT subresourceIdx = D3D11CalcSubresource( 0, i, 1u );
+            HRESULT hr = context->Map( mStagingTexture, subresourceIdx,
+                                       D3D11_MAP_WRITE, 0, &mSubresourceData[i] );
+            mLastSubresourceData[i] = mSubresourceData[i];
+
+            if( FAILED(hr) || mDevice.isError() )
+            {
+                String errorDescription = mDevice.getErrorDescription( hr );
+                OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
+                                "Error mapping StagingTexture\nError Description:" + errorDescription,
+                                "D3D11StagingTexture::startMapRegion" );
+            }
         }
 
         mFreeBoxes.reserve( mDepthOrSlices );
@@ -461,8 +524,13 @@ namespace Ogre
     void D3D11StagingTexture::stopMapRegion(void)
     {
         ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
-        context->Unmap( mStagingTexture, 0 );
-        memset( &mSubresourceData, 0, sizeof( mSubresourceData ) );
+        const uint32 numSlices = mIsArray2DTexture ? mDepthOrSlices : 1u;
+        for( uint32 i=0; i<numSlices; ++i )
+        {
+            const UINT subresourceIdx = D3D11CalcSubresource( 0, i, 1u );
+            context->Unmap( mStagingTexture, subresourceIdx );
+            memset( &mSubresourceData[i], 0, sizeof( D3D11_MAPPED_SUBRESOURCE ) );
+        }
         mFreeBoxes.clear();
 
         StagingTexture::stopMapRegion();
@@ -483,11 +551,12 @@ namespace Ogre
         //We copy one slice at a time, so add only srcBox.depth;
         //which is either 1u, or more than 1u for 3D textures.
         srcBoxD3d.back  = srcBox.getZOrSlice() + srcBox.depth;
+        UINT srcSlicePos = srcBox.sliceStart;
 
         const UINT xPos = static_cast<UINT>( dstBox ? dstBox->x : 0 );
         const UINT yPos = static_cast<UINT>( dstBox ? dstBox->y : 0 );
         const UINT zPos = static_cast<UINT>( dstBox ? dstBox->getZOrSlice() : 0 );
-        UINT slicePos = static_cast<UINT>( dstBox ? dstBox->sliceStart : 0 );
+        UINT dstSlicePos = static_cast<UINT>( dstBox ? dstBox->sliceStart : 0 );
 
         assert( dynamic_cast<D3D11TextureGpu*>( dstTexture ) );
         D3D11TextureGpu *dstTextureD3d = static_cast<D3D11TextureGpu*>( dstTexture );
@@ -496,13 +565,21 @@ namespace Ogre
 
         for( UINT slice=0; slice<(UINT)srcBox.numSlices; ++slice )
         {
-            const UINT dstSubResourceIdx = D3D11CalcSubresource( mipLevel, slicePos,
+            const UINT srcSubResourceIdx = mIsArray2DTexture ?
+                        D3D11CalcSubresource( 0, srcSlicePos, 1u ) : 0;
+            const UINT dstSubResourceIdx = D3D11CalcSubresource( mipLevel, dstSlicePos,
                                                                  dstTexture->getNumMipmaps() );
+
             context->CopySubresourceRegion( dstTextureD3d->getFinalTextureName(), dstSubResourceIdx,
-                                            xPos, yPos, zPos, mStagingTexture, 0, &srcBoxD3d );
-            ++slicePos;
-            ++srcBoxD3d.front;
-            ++srcBoxD3d.back;
+                                            xPos, yPos, zPos, mStagingTexture,
+                                            srcSubResourceIdx, &srcBoxD3d );
+            ++srcSlicePos;
+            ++dstSlicePos;
+            if( !mIsArray2DTexture )
+            {
+                ++srcBoxD3d.front;
+                ++srcBoxD3d.back;
+            }
         }
 
         if( mDevice.isError() )

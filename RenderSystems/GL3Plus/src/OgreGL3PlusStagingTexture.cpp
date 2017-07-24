@@ -43,7 +43,8 @@ namespace Ogre
         StagingTextureBufferImpl( vaoManager, formatFamily, size, internalBufferStart, vboPoolIdx ),
         mDynamicBuffer( dynamicBuffer ),
         mUnmapTicket( std::numeric_limits<size_t>::max() ),
-        mMappedPtr( 0 )
+        mMappedPtr( 0 ),
+        mLastMappedPtr( 0 )
     {
         const bool canPersistentMap = static_cast<GL3PlusVaoManager*>( mVaoManager )->
                 supportsArbBufferStorage();
@@ -52,6 +53,7 @@ namespace Ogre
         {
             OCGE( glBindBuffer( GL_COPY_WRITE_BUFFER, mDynamicBuffer->getVboName() ) );
             mMappedPtr = mDynamicBuffer->map( mInternalBufferStart, mSize, mUnmapTicket );
+            mLastMappedPtr = mMappedPtr;
         }
     }
     //-----------------------------------------------------------------------------------
@@ -68,7 +70,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool GL3PlusStagingTexture::belongsToUs( const TextureBox &box )
     {
-        return box.data >= mMappedPtr && box.data <= static_cast<uint8*>( mMappedPtr ) + mCurrentOffset;
+        return box.data >= mLastMappedPtr &&
+               box.data <= static_cast<uint8*>( mLastMappedPtr ) + mCurrentOffset;
     }
     //-----------------------------------------------------------------------------------
     void* RESTRICT_ALIAS_RETURN GL3PlusStagingTexture::mapRegionImplRawPtr(void)
@@ -87,6 +90,7 @@ namespace Ogre
         {
             OCGE( glBindBuffer( GL_COPY_WRITE_BUFFER, mDynamicBuffer->getVboName() ) );
             mMappedPtr = mDynamicBuffer->map( mInternalBufferStart, mSize, mUnmapTicket );
+            mLastMappedPtr = mMappedPtr;
         }
     }
     //-----------------------------------------------------------------------------------
@@ -102,7 +106,7 @@ namespace Ogre
         {
             mDynamicBuffer->unmap( mUnmapTicket );
             mUnmapTicket = std::numeric_limits<size_t>::max();
-            mMappedPtr = 0;
+            mMappedPtr = 0; //Do not zero it so belongsToUs can work.
         }
 
         StagingTexture::stopMapRegion();

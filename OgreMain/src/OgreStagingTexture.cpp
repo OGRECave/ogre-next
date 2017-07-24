@@ -49,12 +49,6 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    bool StagingTexture::supportsFormat( uint32 width, uint32 height, uint32 depth, uint32 slices,
-                                         PixelFormatGpu pixelFormat ) const
-    {
-        return true;
-    }
-    //-----------------------------------------------------------------------------------
     bool StagingTexture::uploadWillStall(void)
     {
 #if OGRE_DEBUG_MODE
@@ -89,6 +83,13 @@ namespace Ogre
     {
         assert( supportsFormat( width, height, depth, slices, pixelFormat ) );
         assert( mMapRegionStarted && "You must call startMapRegion first!" );
+        if( slices >= 1u && width > 2048 && height > 2048 )
+        {
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "Textures larger than 2048x2048 can only be mapped one "
+                         "slice at a time due to limitations in the D3D11 API!",
+                         "StagingTexture::mapRegion" );
+        }
 
         return mapRegionImpl( width, height, depth, slices, pixelFormat );
     }

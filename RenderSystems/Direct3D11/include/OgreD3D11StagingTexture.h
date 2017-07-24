@@ -40,11 +40,20 @@ namespace Ogre
 {
     class _OgreD3D11Export D3D11StagingTexture : public StagingTexture
     {
-        ID3D11Texture3D *mStagingTexture;
-        D3D11_MAPPED_SUBRESOURCE mSubresourceData;
+        typedef vector<D3D11_MAPPED_SUBRESOURCE>::type D3D11_MAPPED_SUBRESOURCEVec;
+
+        /// mStagingTexture is either a 3D texture (if depthOrSlices > 1 and
+        /// resolution is below 2048x2048) or else it's a 2D array texture.
+        /// Fortunately D3D11 allows us to copy slices of 3D textures into
+        /// 2D textures; so we use 3D Staging Textures whenever possible
+        /// because they can be mapped like in other APIs.
+        ID3D11Resource *mStagingTexture;
+        D3D11_MAPPED_SUBRESOURCEVec mSubresourceData;
+        D3D11_MAPPED_SUBRESOURCEVec mLastSubresourceData;
         uint32 mWidth;
         uint32 mHeight;
         uint32 mDepthOrSlices;
+        bool mIsArray2DTexture;
         D3D11Device &mDevice;
 
         struct StagingBox
