@@ -340,23 +340,10 @@ namespace Ogre
                 (bestCandidate == end || stagingTexture->isSmallerThan( *bestCandidate )) )
             {
                 if( !stagingTexture->uploadWillStall() )
-                {
                     bestCandidate = itor;
-                    mUsedStagingTextures.push_back( stagingTexture );
-                    const size_t idx = itor - mAvailableStagingTextures.begin();
-                    mAvailableStagingTextures.erase( itor );
-                    itor = mAvailableStagingTextures.begin() + idx;
-                    end  = mAvailableStagingTextures.end();
-                }
-                else
-                {
-                    ++itor;
-                }
             }
-            else
-            {
-                ++itor;
-            }
+
+            ++itor;
         }
 
         StagingTexture *retVal = 0;
