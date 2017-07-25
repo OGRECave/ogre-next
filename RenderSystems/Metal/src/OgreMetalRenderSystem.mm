@@ -53,11 +53,13 @@ Copyright (c) 2000-2016 Torus Knot Software Ltd
 
 #include "OgreFrustum.h"
 #include "OgreViewport.h"
+#include "Compositor/OgreCompositorManager2.h"
 
 #include "OgreMetalMappings.h"
 
 #import <Metal/Metal.h>
 #import <Foundation/NSEnumerator.h>
+
 
 namespace Ogre
 {
@@ -1020,6 +1022,11 @@ namespace Ogre
         static_cast<MetalVaoManager*>( mVaoManager )->bindDrawId();
         [mActiveRenderEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
         flushUAVs();
+        
+        if (mStencilEnabled)
+        {
+            [mActiveRenderEncoder setStencilReferenceValue:mStencilRefValue];
+        }
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_notifyActiveEncoderEnded(void)
@@ -1646,6 +1653,13 @@ namespace Ogre
 
         for( uint32 i=cmd->numDraws; i--; )
         {
+#if OGRE_DEBUG_MODE
+            assert( ((drawCmd->firstVertexIndex * bytesPerIndexElement) & 0x03) == 0
+                    && "Index Buffer must be aligned to 4 bytes. If you're messing with "
+                    "VertexArrayObject::setPrimitiveRange, you've entered an invalid "
+                    "primStart; not supported by the Metal API." );
+#endif
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
             for( size_t j=0; j<numVertexBuffers; ++j )
             {
                 //Manually set vertex buffer offsets since in iOS baseVertex is not supported
@@ -1658,19 +1672,22 @@ namespace Ogre
             [mActiveRenderEncoder setVertexBufferOffset:drawCmd->baseInstance * sizeof(uint32)
                                                 atIndex:15];
 
-#if OGRE_DEBUG_MODE
-            assert( ((drawCmd->firstVertexIndex * bytesPerIndexElement) & 0x03) == 0
-                    && "Index Buffer must be aligned to 4 bytes. If you're messing with "
-                    "VertexArrayObject::setPrimitiveRange, you've entered an invalid "
-                    "primStart; not supported by the Metal API." );
-#endif
-
             [mActiveRenderEncoder drawIndexedPrimitives:primType
                        indexCount:drawCmd->primCount
                         indexType:indexType
                       indexBuffer:indexBuffer
                 indexBufferOffset:drawCmd->firstVertexIndex * bytesPerIndexElement
                     instanceCount:drawCmd->instanceCount];
+#else
+            [mActiveRenderEncoder drawIndexedPrimitives:primType
+                       indexCount:drawCmd->primCount
+                        indexType:indexType
+                      indexBuffer:indexBuffer
+                indexBufferOffset:drawCmd->firstVertexIndex * bytesPerIndexElement
+                    instanceCount:drawCmd->instanceCount
+                       baseVertex:drawCmd->baseVertex
+                     baseInstance:drawCmd->baseInstance];
+#endif
             ++drawCmd;
         }
     }
@@ -1694,6 +1711,7 @@ namespace Ogre
 
         for( uint32 i=cmd->numDraws; i--; )
         {
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
             //Setup baseInstance.
             [mActiveRenderEncoder setVertexBufferOffset:drawCmd->baseInstance * sizeof(uint32)
                                                 atIndex:15];
@@ -1701,6 +1719,13 @@ namespace Ogre
                       vertexStart:drawCmd->firstVertexIndex
                       vertexCount:drawCmd->primCount
                     instanceCount:drawCmd->instanceCount];
+#else
+            [mActiveRenderEncoder drawPrimitives:primType
+                      vertexStart:drawCmd->firstVertexIndex
+                      vertexCount:drawCmd->primCount
+                    instanceCount:drawCmd->instanceCount
+                     baseInstance:drawCmd->baseInstance];
+#endif
             ++drawCmd;
         }
     }
@@ -2264,4 +2289,38 @@ namespace Ogre
         mMetalProgramFactory = new MetalProgramFactory( &mDevice );
         HighLevelGpuProgramManager::getSingleton().addFactory( mMetalProgramFactory );
     }
-}
+    //-------------------------------------------------------------------------
+    void MetalRenderSystem::updateCompositorManager( CompositorManager2 *compositorManager,
+                                                     SceneManagerEnumerator &sceneManagers,
+                                                     HlmsManager *hlmsManager )
+    {
+        // Metal requires that a frame's worth of rendering be invoked inside an autorelease pool.
+        // This is true for both iOS and macOS.
+        @autoreleasepool
+        {
+            compositorManager->_updateImplementation( sceneManagers, hlmsManager );
+        }
+    }
+    //-------------------------------------------------------------------------
+    void MetalRenderSystem::setStencilBufferParams( uint32 refValue, const StencilParams &stencilParams )
+    {
+        RenderSystem::setStencilBufferParams( refValue, stencilParams );
+        
+        // There are two main cases:
+        // 1. The active render encoder is valid and will be subsequently used for drawing.
+        //      We need to set the stencil reference value on this encoder. We do this below.
+        // 2. The active render is invalid or is about to go away.
+        //      In this case, we need to set the stencil reference value on the new encoder when it is created
+        //      (see createRenderEncoder). (In this case, the setStencilReferenceValue below in this wasted, but it is inexpensive).
+
+        // Save this info so we can transfer it into a new encoder if necessary
+        mStencilEnabled = stencilParams.enabled;
+        if (mStencilEnabled)
+        {
+            mStencilRefValue = refValue;
+
+            if( mActiveRenderEncoder )
+                [mActiveRenderEncoder setStencilReferenceValue:refValue];
+        }
+    }
+ }

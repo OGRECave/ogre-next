@@ -99,6 +99,9 @@ namespace Ogre
         CachedDepthStencilStateVec          mDepthStencilStates;
         MetalHlmsPso const                  *mPso;
         HlmsComputePso const                *mComputePso;
+        
+        bool mStencilEnabled;
+        uint32_t mStencilRefValue;
 
         //For v1 rendering.
         v1::IndexData       *mCurrentIndexBuffer;
@@ -227,6 +230,8 @@ namespace Ogre
         virtual DepthBuffer* _createDepthBufferFor( RenderTarget *renderTarget,
                                                     bool exactMatchFormat );
 
+        virtual void setStencilBufferParams( uint32 refValue, const StencilParams &stencilParams );
+
         /// See VaoManager::waitForTailFrameToFinish
         virtual void _waitForTailFrameToFinish(void);
         virtual bool _willTailFrameStall(void);
@@ -306,7 +311,11 @@ namespace Ogre
         virtual bool hasAnisotropicMipMapFilter() const         { return true; }
 
         virtual void setClipPlanesImpl(const PlaneList& clipPlanes);
-        virtual void initialiseFromRenderSystemCapabilities(RenderSystemCapabilities* caps, RenderTarget* primary);
+        virtual void initialiseFromRenderSystemCapabilities( RenderSystemCapabilities* caps,
+                                                             RenderTarget* primary );
+        virtual void updateCompositorManager( CompositorManager2 *compositorManager,
+                                              SceneManagerEnumerator &sceneManagers,
+                                              HlmsManager *hlmsManager );
 
         MetalDevice* getActiveDevice(void)                      { return mActiveDevice; }
         MetalProgramFactory* getMetalProgramFactory(void)       { return mMetalProgramFactory; }

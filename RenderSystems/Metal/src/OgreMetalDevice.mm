@@ -61,12 +61,15 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalDevice::init(void)
     {
-        mDevice = MTLCreateSystemDefaultDevice();
-        mMainCommandQueue = [mDevice newCommandQueue];
-        mCurrentCommandBuffer = [mMainCommandQueue commandBuffer];
-        mBlitEncoder = 0;
-        mComputeEncoder = 0;
-        mRenderEncoder = 0;
+        @autoreleasepool
+        {
+            mDevice = MTLCreateSystemDefaultDevice();
+            mMainCommandQueue = [mDevice newCommandQueue];
+            mCurrentCommandBuffer = [mMainCommandQueue commandBuffer];
+            mBlitEncoder = 0;
+            mComputeEncoder = 0;
+            mRenderEncoder = 0;
+        }
     }
     //-------------------------------------------------------------------------
     void MetalDevice::endBlitEncoder(void)
@@ -114,7 +117,10 @@ namespace Ogre
         endAllEncoders();
         //Push the command buffer to the GPU
         [mCurrentCommandBuffer commit];
-        mCurrentCommandBuffer = [mMainCommandQueue commandBuffer];
+        @autoreleasepool
+        {
+            mCurrentCommandBuffer = [mMainCommandQueue commandBuffer];
+        }
     }
     //-------------------------------------------------------------------------
     id<MTLBlitCommandEncoder> MetalDevice::getBlitEncoder(void)
@@ -124,7 +130,10 @@ namespace Ogre
             endRenderEncoder();
             endComputeEncoder();
 
-            mBlitEncoder = [mCurrentCommandBuffer blitCommandEncoder];
+            @autoreleasepool
+            {
+                mBlitEncoder = [mCurrentCommandBuffer blitCommandEncoder];
+            }
         }
 
         return mBlitEncoder;
