@@ -566,7 +566,7 @@ namespace Ogre
         texture->_notifyTextureSlotChanged( 0, 0 );
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::fullfillUsageStats( ThreadData &workerData )
+    void TextureGpuManager::fulfillUsageStats( ThreadData &workerData )
     {
         UsageStatsVec::iterator itStats = mStreamingData.prevStats.begin();
         UsageStatsVec::iterator enStats = mStreamingData.prevStats.end();
@@ -631,8 +631,8 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::fullfillMinimumBudget( ThreadData &workerData,
-                                                   const PoolParameters &poolParams )
+    void TextureGpuManager::fulfillMinimumBudget( ThreadData &workerData,
+                                                  const PoolParameters &poolParams )
     {
         BudgetEntryVec::const_iterator itBudget = poolParams.budget.begin();
         BudgetEntryVec::const_iterator enBudget = poolParams.budget.end();
@@ -666,7 +666,7 @@ namespace Ogre
                 }
             }
 
-            //We now have to look in mTmpAvailableStagingTex in case fullfillUsageStats
+            //We now have to look in mTmpAvailableStagingTex in case fulfillUsageStats
             //already created a staging texture that fulfills the minimum budget.
             itor = mTmpAvailableStagingTex.begin();
             end  = mTmpAvailableStagingTex.end();
@@ -709,8 +709,8 @@ namespace Ogre
                    mStreamingData.availableStagingTex.end(),
                    OrderByStagingTexture );
 
-        fullfillUsageStats( workerData );
-        fullfillMinimumBudget( workerData, mDefaultPoolParameters );
+        fulfillUsageStats( workerData );
+        fulfillMinimumBudget( workerData, mDefaultPoolParameters );
 
         {
             //The textures that are left are wasting memory, thus can be removed.

@@ -145,7 +145,7 @@ namespace Ogre
             size_t accumSizeBytes;
             /// This value gets reset in worker thread every time UsageStats have
             /// been updated for this formatFamily. Main thread will decrease it
-            /// with every fullfillUsageStats call. When it reaches 0, the
+            /// with every fulfillUsageStats call. When it reaches 0, the
             /// stat will be removed.
             uint32 loopCount;
             UsageStats( uint32 _width, uint32 _height, uint32 _depthOrSlices,
@@ -233,10 +233,10 @@ namespace Ogre
         /// Fills mTmpAvailableStagingTex with new StagingTextures that support formats &
         /// resolutions the worker thread couldn't upload because it lacked a compatible one.
         /// Assumes we're protected by mMutex! Called from main thread.
-        void fullfillUsageStats( ThreadData &workerData );
+        void fulfillUsageStats( ThreadData &workerData );
         /// Fills mTmpAvailableStagingTex with new StagingTextures if there's not enough
         /// in there to meet our minimum budget in poolParams.
-        void fullfillMinimumBudget( ThreadData &workerData, const PoolParameters &poolParams );
+        void fulfillMinimumBudget( ThreadData &workerData, const PoolParameters &poolParams );
 
         void fullfillBudget( ThreadData &workerData );
 
