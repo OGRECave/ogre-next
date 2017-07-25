@@ -240,11 +240,22 @@ namespace Ogre
         {
             samplerblockPtr = hlmsManager->getSamplerblock( *refParams );
         }
-        else if( texture && !mSamplerblocks[texType] )
+        else if( texture )
         {
-            //Adding a texture, but the samplerblock doesn't exist. Create a default one.
-            HlmsSamplerblock defaultSamplerblockRef;
-            samplerblockPtr = hlmsManager->getSamplerblock( defaultSamplerblockRef );
+            if( !mSamplerblocks[texType] )
+            {
+                //Adding a texture, but the samplerblock doesn't exist. Create a default one.
+                HlmsSamplerblock defaultSamplerblockRef;
+                samplerblockPtr = hlmsManager->getSamplerblock( defaultSamplerblockRef );
+            }
+            else
+            {
+                //Keeping the current samplerblock. Increase its
+                //ref. count because _setTexture will decrease it.
+                samplerblockPtr = mSamplerblocks[texType];
+                HlmsManager *hlmsManager = mCreator->getHlmsManager();
+                hlmsManager->addReference( samplerblockPtr );
+            }
         }
 
         _setTexture( texType, texture, samplerblockPtr );
