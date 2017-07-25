@@ -482,7 +482,7 @@ namespace Ogre
                            PixelFormatGpuUtils::getBytesPerPixel( pixelFormat ),
                            mSubresourceData[sliceIdx].RowPitch,
                            mSubresourceData[sliceIdx].DepthPitch );
-        if( bestMatch != mFreeBoxes[0].end() )
+        if( !(bestMatchSlice == 0 && bestMatch == mFreeBoxes[0].end()) )
         {
             retVal.x = bestMatch->x;
             retVal.y = bestMatch->y;
