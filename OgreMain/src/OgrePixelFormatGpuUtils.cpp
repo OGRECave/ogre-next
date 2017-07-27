@@ -26,6 +26,8 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
+#include "OgreStableHeaders.h"
+
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreTextureBox.h"
 #include "OgreMath.h"

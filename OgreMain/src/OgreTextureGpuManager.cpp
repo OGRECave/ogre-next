@@ -26,6 +26,8 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
+#include "OgreStableHeaders.h"
+
 #include "OgreTextureGpuManager.h"
 #include "OgreObjCmdBuffer.h"
 #include "OgreTextureGpu.h"
