@@ -31,7 +31,9 @@ THE SOFTWARE.
 #include "OgreHlmsUnlitPrerequisites.h"
 #include "OgreHlmsBufferManager.h"
 #include "OgreConstBufferPool.h"
+#include "OgreMatrix4.h"
 #include "OgreHeaderPrefix.h"
+#include "OgreRoot.h"
 
 namespace Ogre
 {
@@ -134,6 +136,9 @@ namespace Ogre
         /// @copydoc HlmsPbs::setEsmK
         void setEsmK( uint16 K );
         uint16 getEsmK(void) const                          { return mEsmK; }
+
+        /// @copydoc HlmsPbs::getDefaultPaths
+        static void getDefaultPaths( String& outDataFolderPath, StringVector& outLibraryFoldersPaths );
 
 #if !OGRE_NO_JSON
         /// @copydoc Hlms::_loadJson

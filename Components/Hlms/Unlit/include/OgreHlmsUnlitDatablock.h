@@ -40,6 +40,8 @@ THE SOFTWARE.
 #undef OGRE_HLMS_TEXTURE_BASE_MAX_TEX
 #undef OGRE_HLMS_CREATOR_CLASS
 
+#include "OgreMatrix4.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
