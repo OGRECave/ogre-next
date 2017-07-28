@@ -79,6 +79,10 @@ namespace Ogre
             memset( mShaderTypeTexCount, 0, sizeof(mShaderTypeTexCount) );
         }
 
+        /// Warning: This operator won't see changes in SRVs (i.e. data baked into mRsData).
+        /// If you get notifyTextureChanged call, the SRV has changed and you must
+        /// assume the DescriptorSetTexture has changed.
+        /// SRV = Shader Resource View.
         bool operator != ( const DescriptorSetTexture &other ) const
         {
             const size_t thisNumTextures = mTextures.size();

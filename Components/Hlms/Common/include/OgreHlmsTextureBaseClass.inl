@@ -420,6 +420,15 @@ namespace Ogre
         if( reason == TextureGpuListener::FromStorageToSysRam )
             return; //Does not affect us at all.
 
+        if( mTexturesDescSet )
+        {
+            //The texture's baked SRV has changed. We always need a new descriptor,
+            //and DescriptorSetTexture::!= operator won't see this.
+            HlmsManager *hlmsManager = mCreator->getHlmsManager();
+            hlmsManager->destroyDescriptorSetTexture( mTexturesDescSet );
+            mTexturesDescSet = 0;
+        }
+
         scheduleConstBufferUpdate( true, false );
     }
     //-----------------------------------------------------------------------------------
