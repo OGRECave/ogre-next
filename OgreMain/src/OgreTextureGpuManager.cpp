@@ -180,16 +180,29 @@ namespace Ogre
     {
         waitForStreamingCompletion();
 
+        mMutex.lock();
         destroyAllStagingBuffers();
         destroyAllAsyncTextureTicket();
         destroyAllTextures();
         destroyAllPools();
+        mMutex.unlock();
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::destroyAllStagingBuffers(void)
     {
-        StagingTextureVec::iterator itor = mAvailableStagingTextures.begin();
-        StagingTextureVec::iterator end  = mAvailableStagingTextures.end();
+        StagingTextureVec::iterator itor = mStreamingData.availableStagingTex.begin();
+        StagingTextureVec::iterator end  = mStreamingData.availableStagingTex.end();
+
+        while( itor != end )
+        {
+            (*itor)->stopMapRegion();
+            ++itor;
+        }
+
+        mStreamingData.availableStagingTex.clear();
+
+        itor = mAvailableStagingTextures.begin();
+        end  = mAvailableStagingTextures.end();
 
         while( itor != end )
         {

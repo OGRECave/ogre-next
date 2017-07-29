@@ -57,6 +57,9 @@ namespace Ogre
     D3D11TextureGpu::~D3D11TextureGpu()
     {
         destroyInternalResourcesImpl();
+
+        //destroyInternalResourcesImpl grabbed the dummy SRV again. Release it.
+        SAFE_RELEASE( mDefaultDisplaySrv );
     }
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpu::create1DTexture(void)
@@ -282,9 +285,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpu::destroyInternalResourcesImpl(void)
     {
+        SAFE_RELEASE( mDefaultDisplaySrv );
+
         if( !hasAutomaticBatching() )
         {
-            SAFE_RELEASE( mFinalTextureName );
             SAFE_RELEASE( mFinalTextureName );
             SAFE_RELEASE( mMsaaFramebufferName );
         }
@@ -306,11 +310,7 @@ namespace Ogre
         assert( mResidencyStatus == GpuResidency::Resident );
         assert( mFinalTextureName );
 
-        if( mDefaultDisplaySrv )
-        {
-            mDefaultDisplaySrv->Release();
-            mDefaultDisplaySrv = 0;
-        }
+        SAFE_RELEASE( mDefaultDisplaySrv );
 
         mDisplayTextureName = mFinalTextureName;
         mDefaultDisplaySrv = _createSrv( mPixelFormat, false );
@@ -325,11 +325,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpu::_setToDisplayDummyTexture(void)
     {
-        if( mDefaultDisplaySrv )
-        {
-            mDefaultDisplaySrv->Release();
-            mDefaultDisplaySrv = 0;
-        }
+        SAFE_RELEASE( mDefaultDisplaySrv );
 
         D3D11TextureGpuManager *textureManagerD3d =
                 static_cast<D3D11TextureGpuManager*>( mTextureManager );
@@ -471,13 +467,18 @@ namespace Ogre
     ID3D11ShaderResourceView* D3D11TextureGpu::createSrv( PixelFormatGpu format,
                                                           bool cubemapsAs2DArrays ) const
     {
-        if( format != mPixelFormat || cubemapsAs2DArrays || !mDefaultDisplaySrv )
-            return _createSrv( format, cubemapsAs2DArrays );
+        assert( mDefaultDisplaySrv &&
+                "Either the texture wasn't properly loaded or _setToDisplayDummyTexture "
+                "wasn't called when it should have been" );
+
+        ID3D11ShaderResourceView *retVal = 0;
+        if( format != mPixelFormat || cubemapsAs2DArrays )
+            retVal = _createSrv( format, cubemapsAs2DArrays );
         else
-        {
-            mDefaultDisplaySrv->AddRef();
-            return mDefaultDisplaySrv;
-        }
+            retVal = mDefaultDisplaySrv;
+
+        retVal->AddRef();
+        return retVal;
     }
     //-----------------------------------------------------------------------------------
     bool D3D11TextureGpu::isMsaaPatternSupported( MsaaPatterns::MsaaPatterns pattern )
