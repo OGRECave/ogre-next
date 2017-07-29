@@ -849,29 +849,39 @@ namespace Ogre
         TextureGpu *texture = queuedImage.dstTexture;
         ObjCmdBuffer *commandBuffer = workerData.objCmdBuffer;
 
+        const bool is3DVolume = img.getDepth() > 1u;
+
         const uint8 firstMip = queuedImage.getMinMipLevel();
         const uint8 numMips = queuedImage.getMaxMipLevelPlusOne();
 
         for( uint8 i=firstMip; i<numMips; ++i )
         {
-            if( queuedImage.isMipQueued( i ) )
+            for( uint32 z=0; z<img.getDepthOrSlices(); ++z )
             {
                 TextureBox srcBox = img.getData( i );
-                StagingTexture *stagingTexture = 0;
-                TextureBox dstBox = getStreaming( workerData, streamingData, srcBox,
-                                                  img.getPixelFormat(), &stagingTexture );
-                if( dstBox.data )
+                if( queuedImage.isMipSliceQueued( i, z ) )
                 {
-                    //Upload to staging area. CPU -> GPU
-                    dstBox.copyFrom( srcBox );
+                    srcBox.z            = is3DVolume ? z : 0;
+                    srcBox.sliceStart   = is3DVolume ? 0 : z;
+                    srcBox.depth        = 1u;
+                    srcBox.numSlices    = 1u;
 
-                    //Schedule a command to copy from staging to final texture, GPU -> GPU
-                    ObjCmdBuffer::UploadFromStagingTex *uploadCmd = commandBuffer->addCommand<
-                            ObjCmdBuffer::UploadFromStagingTex>();
-                    new (uploadCmd) ObjCmdBuffer::UploadFromStagingTex( stagingTexture, dstBox,
-                                                                        texture, i );
-                    //This mip has been processed, flag it as done.
-                    queuedImage.unqueueMip( i );
+                    StagingTexture *stagingTexture = 0;
+                    TextureBox dstBox = getStreaming( workerData, streamingData, srcBox,
+                                                      img.getPixelFormat(), &stagingTexture );
+                    if( dstBox.data )
+                    {
+                        //Upload to staging area. CPU -> GPU
+                        dstBox.copyFrom( srcBox );
+
+                        //Schedule a command to copy from staging to final texture, GPU -> GPU
+                        ObjCmdBuffer::UploadFromStagingTex *uploadCmd = commandBuffer->addCommand<
+                                                                        ObjCmdBuffer::UploadFromStagingTex>();
+                        new (uploadCmd) ObjCmdBuffer::UploadFromStagingTex( stagingTexture, dstBox,
+                                                                            texture, srcBox, i );
+                        //This mip has been processed, flag it as done.
+                        queuedImage.unqueueMipSlice( i, z );
+                    }
                 }
             }
         }
@@ -1016,6 +1026,7 @@ namespace Ogre
 
                 //Queue the image for upload to GPU.
                 mStreamingData.queuedImages.push_back( QueuedImage( img, img.getNumMipmaps(),
+                                                                    img.getDepthOrSlices(),
                                                                     loadRequest.texture ) );
             }
 
@@ -1190,24 +1201,31 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
-    TextureGpuManager::QueuedImage::QueuedImage( Image2 &srcImage, uint8 numMips,
+    TextureGpuManager::QueuedImage::QueuedImage( Image2 &srcImage, uint8 numMips, uint8 _numSlices,
                                                  TextureGpu *_dstTexture ) :
-        dstTexture( _dstTexture )
+        dstTexture( _dstTexture ),
+        numSlices( _numSlices )
     {
+        assert( numSlices >= 1u );
+
         srcImage._setAutoDelete( false );
         image = srcImage;
 
+        uint32 numMipSlices = numMips * numSlices;
+
+        assert( numMipSlices < 256u );
+
         for( int i=0; i<4; ++i )
         {
-            if( numMips >= 64u )
+            if( numMipSlices >= 64u )
             {
                 mipLevelBitSet[i] = 0xffffffffffffffff;
-                numMips -= 64u;
+                numMipSlices -= 64u;
             }
             else
             {
-                mipLevelBitSet[i] = (1ul << numMips) - 1ul;
-                numMips = 0;
+                mipLevelBitSet[i] = (1ul << numMipSlices) - 1ul;
+                numMipSlices = 0;
             }
         }
     }
@@ -1227,18 +1245,20 @@ namespace Ogre
                 mipLevelBitSet[2] == 0ul && mipLevelBitSet[3] == 0ul;
     }
     //-----------------------------------------------------------------------------------
-    bool TextureGpuManager::QueuedImage::isMipQueued( uint8 mipLevel ) const
+    bool TextureGpuManager::QueuedImage::isMipSliceQueued( uint8 mipLevel, uint8 slice ) const
     {
-        size_t idx  = mipLevel / 64u;
-        uint64 mask = mipLevel % 64u;
+        uint32 mipSlice = mipLevel * numSlices + slice;
+        size_t idx  = mipSlice / 64u;
+        uint64 mask = mipSlice % 64u;
         mask = ((uint64)1ul) << mask;
         return (mipLevelBitSet[idx] & mask) != 0;
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::QueuedImage::unqueueMip( uint8 mipLevel )
+    void TextureGpuManager::QueuedImage::unqueueMipSlice( uint8 mipLevel, uint8 slice )
     {
-        size_t idx  = mipLevel / 64u;
-        uint64 mask = mipLevel % 64u;
+        uint32 mipSlice = mipLevel * numSlices + slice;
+        size_t idx  = mipSlice / 64u;
+        uint64 mask = mipSlice % 64u;
         mask = ((uint64)1ul) << mask;
         mipLevelBitSet[idx] = mipLevelBitSet[idx] & ~mask;
     }
@@ -1248,7 +1268,10 @@ namespace Ogre
         for( size_t i=0; i<4u; ++i )
         {
             if( mipLevelBitSet[i] != 0u )
-                return static_cast<uint8>( ctz64( mipLevelBitSet[i] ) );
+            {
+                uint8 firstBitSet = static_cast<uint8>( ctz64( mipLevelBitSet[i] ) );
+                return (firstBitSet + 64u * i) / numSlices;
+            }
         }
 
         return 255u;
@@ -1259,7 +1282,10 @@ namespace Ogre
         for( size_t i=4u; i--; )
         {
             if( mipLevelBitSet[i] != 0u )
-                return static_cast<uint8>( 64u - clz64( mipLevelBitSet[i] ) + 64u * i );
+            {
+                uint8 lastBitSet = static_cast<uint8>( 64u - clz64( mipLevelBitSet[i] ) + 64u * i );
+                return (lastBitSet + numSlices - 1u) / numSlices;
+            }
         }
 
         return 0u;

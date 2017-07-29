@@ -121,17 +121,19 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     ObjCmdBuffer::
     UploadFromStagingTex::UploadFromStagingTex( StagingTexture *_stagingTexture, const TextureBox &_box,
-                                                TextureGpu *_dstTexture, uint8 _mipLevel ) :
+                                                TextureGpu *_dstTexture, const TextureBox &_dstBox,
+                                                uint8 _mipLevel ) :
         stagingTexture( _stagingTexture ),
         box( _box ),
         dstTexture( _dstTexture ),
+        dstBox( _dstBox ),
         mipLevel( _mipLevel )
     {
     }
     //-----------------------------------------------------------------------------------
     void ObjCmdBuffer::UploadFromStagingTex::execute(void)
     {
-        stagingTexture->upload( box, dstTexture, mipLevel );
+        stagingTexture->upload( box, dstTexture, mipLevel, &dstBox );
     }
     //-----------------------------------------------------------------------------------
     ObjCmdBuffer::

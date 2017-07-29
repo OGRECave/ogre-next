@@ -89,13 +89,15 @@ namespace Ogre
             StagingTexture  *stagingTexture;
             TextureBox      box;
             TextureGpu      *dstTexture;
+            TextureBox      dstBox;
             uint8           mipLevel;
 
         public:
             UploadFromStagingTex( StagingTexture *_stagingTexture,
-                                     const TextureBox &_box,
-                                     TextureGpu *_dstTexture,
-                                     uint8 _mipLevel );
+                                  const TextureBox &_box,
+                                  TextureGpu *_dstTexture,
+                                  const TextureBox &_dstBox,
+                                  uint8 _mipLevel );
             virtual void execute(void);
         };
 

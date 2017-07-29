@@ -158,12 +158,13 @@ namespace Ogre
             Image2      image;
             uint64      mipLevelBitSet[4];
             TextureGpu  *dstTexture;
+            uint8       numSlices;
 
-            QueuedImage( Image2 &srcImage, uint8 numMips, TextureGpu *_dstTexture );
+            QueuedImage( Image2 &srcImage, uint8 numMips, uint8 _numSlices, TextureGpu *_dstTexture );
             void destroy(void);
             bool empty(void) const;
-            bool isMipQueued( uint8 mipLevel ) const;
-            void unqueueMip( uint8 mipLevel );
+            bool isMipSliceQueued( uint8 mipLevel, uint8 slice ) const;
+            void unqueueMipSlice( uint8 mipLevel, uint8 slice );
             uint8 getMinMipLevel(void) const;
             uint8 getMaxMipLevelPlusOne(void) const;
         };
