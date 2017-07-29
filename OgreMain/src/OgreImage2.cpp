@@ -522,6 +522,8 @@ namespace Ogre {
                            getBytesPerRow( mipLevel ),
                            getBytesPerImage( mipLevel ) );
         retVal.data = data;
+        if( PixelFormatGpuUtils::isCompressed( mPixelFormat ) )
+            retVal.setCompressedPixelFormat( mPixelFormat );
         return retVal;
     }
     //-----------------------------------------------------------------------------------

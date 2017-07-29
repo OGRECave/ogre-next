@@ -157,6 +157,8 @@ namespace Ogre
                     this->getDepthOrSlices() >= src.getDepthOrSlices() );
 
             const uint32 finalDepthOrSlices = src.getDepthOrSlices();
+            const uint32 srcZorSlice = src.getZOrSlice();
+            const uint32 dstZorSlice = this->getZOrSlice();
 
             if( this->x == 0 && src.x == 0 &&
                 this->y == 0 && src.y == 0 &&
@@ -164,8 +166,8 @@ namespace Ogre
                 this->bytesPerImage == src.bytesPerImage )
             {
                 //Raw copy
-                const void *srcData = src.at( 0, 0, src.z );
-                void *dstData       = this->at( 0, 0, this->z );
+                const void *srcData = src.at( 0, 0, srcZorSlice );
+                void *dstData       = this->at( 0, 0, dstZorSlice );
                 memcpy( dstData, srcData, bytesPerImage * finalDepthOrSlices );
             }
             else
@@ -179,8 +181,8 @@ namespace Ogre
                     {
                         for( size_t _y=0; _y<finalHeight; ++_y )
                         {
-                            const void *srcData = src.at( src.x,   _y + src.y,   _z + src.z );
-                            void *dstData       = this->at( this->x, _y + this->y, _z + this->z );
+                            const void *srcData = src.at( src.x,   _y + src.y,   _z + srcZorSlice );
+                            void *dstData       = this->at( this->x, _y + this->y, _z + dstZorSlice );
                             memcpy( dstData, srcData, finalBytesPerRow );
                         }
                     }
@@ -197,8 +199,8 @@ namespace Ogre
                     {
                         for( size_t _y=0; _y<finalHeight; _y += blockHeight )
                         {
-                            const void *srcData = src.at( src.x,   _y + src.y,   _z + src.z );
-                            void *dstData       = this->at( this->x, _y + this->y, _z + this->z );
+                            const void *srcData = src.at( src.x,   _y + src.y,   _z + srcZorSlice );
+                            void *dstData       = this->at( this->x, _y + this->y, _z + dstZorSlice );
                             memcpy( dstData, srcData, finalBytesPerRow );
                         }
                     }

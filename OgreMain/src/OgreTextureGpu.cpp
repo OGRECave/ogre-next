@@ -480,6 +480,8 @@ namespace Ogre
                            this->_getSysRamCopyBytesPerRow( mipLevel ),
                            this->_getSysRamCopyBytesPerImage( mipLevel ) );
         retVal.data = data;
+        if( PixelFormatGpuUtils::isCompressed( mPixelFormat ) )
+            retVal.setCompressedPixelFormat( mPixelFormat );
         return retVal;
     }
     //-----------------------------------------------------------------------------------

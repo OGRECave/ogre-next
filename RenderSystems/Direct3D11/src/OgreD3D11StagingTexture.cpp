@@ -140,6 +140,12 @@ namespace Ogre
         if( height > mHeight )
             return false;
 
+        //Don't allow copying from TextureArray to 3D volume textures.
+        //It may be possible but complicates D3D11StagingTexture::upload a lot
+        //(also complicates mapRegionImpl)
+        if( depth > 1u && mIsArray2DTexture )
+            return false;
+
         const uint32 depthOrSlices = std::max( depth, slices );
         if( depthOrSlices > mDepthOrSlices )
             return false;
@@ -570,6 +576,14 @@ namespace Ogre
         //which is either 1u, or more than 1u for 3D textures.
         srcBoxD3d.back  = srcBox.getZOrSlice() + srcBox.depth;
         UINT srcSlicePos = srcBox.sliceStart;
+
+        if( PixelFormatGpuUtils::isCompressed( mFormatFamily ) )
+        {
+            uint32 blockWidth = PixelFormatGpuUtils::getCompressedBlockWidth( mFormatFamily, false );
+            uint32 blockHeight= PixelFormatGpuUtils::getCompressedBlockHeight( mFormatFamily, false );
+            srcBoxD3d.right = alignToNextMultiple( srcBoxD3d.right, blockWidth );
+            srcBoxD3d.bottom = alignToNextMultiple( srcBoxD3d.bottom, blockHeight );
+        }
 
         const UINT xPos = static_cast<UINT>( dstBox ? dstBox->x : 0 );
         const UINT yPos = static_cast<UINT>( dstBox ? dstBox->y : 0 );

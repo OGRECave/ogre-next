@@ -171,6 +171,9 @@ namespace Ogre
         TextureBox retVal = mapImpl();
         mStatus = Mapped;
 
+        if( PixelFormatGpuUtils::isCompressed( mPixelFormatFamily ) )
+            retVal.setCompressedPixelFormat( mPixelFormatFamily );
+
         return retVal;
     }
     //-----------------------------------------------------------------------------------
