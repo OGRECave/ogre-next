@@ -79,6 +79,8 @@ namespace Ogre
 
         StagingBoxVecVec mFreeBoxes;
 
+        uint32 findRealSlice( void *data ) const;
+
         virtual bool belongsToUs( const TextureBox &box );
 
         void shrinkRecords( size_t slice, StagingBoxVec::iterator record,

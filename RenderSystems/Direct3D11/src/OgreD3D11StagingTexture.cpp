@@ -172,19 +172,36 @@ namespace Ogre
                                                   this->mFormatFamily, 4u );
     }
     //-----------------------------------------------------------------------------------
+    uint32 D3D11StagingTexture::findRealSlice( void *data ) const
+    {
+        const size_t numSlices = mLastSubresourceData.size();
+        for( size_t slice=0; slice<numSlices; ++slice )
+        {
+            if( data == mLastSubresourceData[slice].pData )
+                return slice;
+        }
+
+        return -1;
+    }
+    //-----------------------------------------------------------------------------------
     bool D3D11StagingTexture::belongsToUs( const TextureBox &box )
     {
         if( box.numSlices > 1u && mIsArray2DTexture )
             return false;
 
-        const size_t sliceIdx = mIsArray2DTexture ? box.sliceStart : 0;
+        if( box.x + box.width > mWidth ||
+            box.y + box.height > mHeight ||
+            box.getZOrSlice() + box.getDepthOrSlices() > mDepthOrSlices )
+        {
+            return false;
+        }
 
-        return  box.x + box.width <= mWidth &&
-                box.y + box.height <= mHeight &&
-                box.getZOrSlice() + box.getDepthOrSlices() <= mDepthOrSlices &&
-                box.data >= mLastSubresourceData[sliceIdx].pData &&
-                box.data < (static_cast<uint8*>( mLastSubresourceData[sliceIdx].pData ) +
-                            mLastSubresourceData[sliceIdx].DepthPitch * mDepthOrSlices);
+        if( !mIsArray2DTexture )
+            return box.data == mLastSubresourceData[0].pData;
+
+        const uint32 realSlice = findRealSlice( box.data );
+
+        return realSlice < mLastSubresourceData.size();
     }
     //-----------------------------------------------------------------------------------
     void D3D11StagingTexture::shrinkRecords( size_t slice, StagingBoxVec::iterator record,
@@ -255,14 +272,14 @@ namespace Ogre
         // New slice #0
         StagingBox originalRecord = *record;
         record->width   = consumedBox.width;
-        record->y       = consumedBox.height;
+        record->y       = consumedBox.y + consumedBox.height;
         record->height  = originalRecord.height - consumedBox.height;
         if( record->height == 0 )
             efficientVectorRemove( mFreeBoxes[slice], record );
 
         // New slice #1
         StagingBox newRecord = originalRecord;
-        newRecord.x     = consumedBox.width;
+        newRecord.x     = consumedBox.x + consumedBox.width;
         newRecord.width = originalRecord.width - consumedBox.width;
         if( newRecord.width > 0 )
             mFreeBoxes[slice].push_back( newRecord );
@@ -503,8 +520,6 @@ namespace Ogre
             retVal.y = bestMatch->y;
             if( !mIsArray2DTexture )
                 retVal.z = bestMatchSlice;
-            else
-                retVal.sliceStart = bestMatchSlice;
             retVal.data = reinterpret_cast<uint8*>( mSubresourceData[sliceIdx].pData );
 
             //Now shrink our records.
@@ -590,7 +605,7 @@ namespace Ogre
         }
         else
         {
-            srcSlicePos = srcBox.getZOrSlice();
+            srcSlicePos = findRealSlice( srcBox.data );
             srcBoxD3d.front = 0;
             srcBoxD3d.back  = 1u;
         }
@@ -605,7 +620,7 @@ namespace Ogre
 
         const UINT xPos = static_cast<UINT>( dstBox ? dstBox->x : 0 );
         const UINT yPos = static_cast<UINT>( dstBox ? dstBox->y : 0 );
-        const UINT zPos = static_cast<UINT>( dstBox ? dstBox->getZOrSlice() : 0 );
+        const UINT zPos = static_cast<UINT>( dstBox ? dstBox->z : 0 );
         UINT dstSlicePos = static_cast<UINT>( dstBox ? dstBox->sliceStart : 0 );
 
         assert( dynamic_cast<D3D11TextureGpu*>( dstTexture ) );
