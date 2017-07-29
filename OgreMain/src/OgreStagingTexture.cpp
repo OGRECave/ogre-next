@@ -93,7 +93,11 @@ namespace Ogre
                          "StagingTexture::mapRegion" );
         }
 
-        return mapRegionImpl( width, height, depth, slices, pixelFormat );
+        TextureBox retVal = mapRegionImpl( width, height, depth, slices, pixelFormat );
+        if( PixelFormatGpuUtils::isCompressed( pixelFormat ) )
+            retVal.setCompressedPixelFormat( pixelFormat );
+
+        return retVal;
     }
     //-----------------------------------------------------------------------------------
     void StagingTexture::stopMapRegion(void)

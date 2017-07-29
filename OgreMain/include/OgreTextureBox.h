@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _OgreTextureBox_H_
 
 #include "OgrePrerequisites.h"
+#include "OgrePixelFormatGpuUtils.h"
 
 #include "OgreHeaderPrefix.h"
 
@@ -41,6 +42,8 @@ namespace Ogre
     {
         uint32 x, y, z, sliceStart;
         uint32 width, height, depth, numSlices;
+        /// When TextureBox contains a compressed format, bytesPerPixel contains
+        /// the pixel format instead. See getCompressedPixelFormat.
         size_t bytesPerPixel;
         size_t bytesPerRow;
         size_t bytesPerImage;
@@ -73,6 +76,23 @@ namespace Ogre
         uint32 getMaxSlice(void) const  { return sliceStart + numSlices; }
         uint32 getDepthOrSlices(void) const { return std::max( depth, numSlices ); }
         uint32 getZOrSlice(void) const  { return std::max( z, sliceStart ); }
+
+        void setCompressedPixelFormat( PixelFormatGpu pixelFormat )
+        {
+            assert( PixelFormatGpuUtils::isCompressed( pixelFormat ) );
+            bytesPerPixel = 0xF0000000 + pixelFormat;
+        }
+        PixelFormatGpu getCompressedPixelFormat(void) const
+        {
+            if( bytesPerPixel < 0xF0000000 )
+                return PFG_UNKNOWN;
+            return static_cast<PixelFormatGpu>( bytesPerPixel - 0xF0000000 );
+        }
+
+        bool isCompressed(void) const
+        {
+            return bytesPerPixel >= 0xF0000000;
+        }
 
         /// Returns true if 'other' & 'this' have the same dimensions.
         bool equalSize( const TextureBox &other ) const
@@ -109,8 +129,25 @@ namespace Ogre
         /// It can work for compressed formats if xPos & yPos are 0.
         void* at( size_t xPos, size_t yPos, size_t zPos ) const
         {
-            return reinterpret_cast<uint8*>( data ) +
-                    zPos * bytesPerImage + yPos * bytesPerRow + xPos * bytesPerPixel;
+            if( !isCompressed() )
+            {
+                return reinterpret_cast<uint8*>( data ) +
+                        zPos * bytesPerImage + yPos * bytesPerRow + xPos * bytesPerPixel;
+            }
+            else
+            {
+                const PixelFormatGpu pixelFormat = getCompressedPixelFormat();
+                const size_t blockSize = PixelFormatGpuUtils::getCompressedBlockSize( pixelFormat );
+                const uint32 blockWidth = PixelFormatGpuUtils::getCompressedBlockWidth( pixelFormat,
+                                                                                        false );
+                const uint32 blockHeight= PixelFormatGpuUtils::getCompressedBlockHeight( pixelFormat,
+                                                                                         false );
+                const size_t yBlock = yPos / blockHeight;
+                const uint32 xBlock = xPos / blockWidth;
+                return reinterpret_cast<uint8*>( data ) +
+                        zPos * bytesPerImage + yBlock * bytesPerRow + xBlock * blockSize;
+            }
+
         }
 
         void copyFrom( const TextureBox &src )
@@ -119,27 +156,51 @@ namespace Ogre
                     this->height == src.height &&
                     this->getDepthOrSlices() >= src.getDepthOrSlices() );
 
+            const uint32 finalDepthOrSlices = src.getDepthOrSlices();
+
             if( this->x == 0 && src.x == 0 &&
                 this->y == 0 && src.y == 0 &&
                 this->bytesPerRow == src.bytesPerRow &&
                 this->bytesPerImage == src.bytesPerImage )
             {
+                //Raw copy
                 const void *srcData = src.at( 0, 0, src.z );
                 void *dstData       = this->at( 0, 0, this->z );
-                memcpy( dstData, srcData, bytesPerImage * src.getDepthOrSlices() );
+                memcpy( dstData, srcData, bytesPerImage * finalDepthOrSlices );
             }
             else
             {
-                const uint32 finalDepthOrSlices = getDepthOrSlices();
-                const uint32 finalHeight      = this->height;
-                const uint32 finalBytesPerRow = std::min( this->bytesPerRow, src.bytesPerRow );
-                for( size_t _z=0; _z<finalDepthOrSlices; ++_z )
+                if( !isCompressed() )
                 {
-                    for( size_t _y=0; _y<finalHeight; ++_y )
+                    //Copy row by row, uncompressed.
+                    const uint32 finalHeight        = this->height;
+                    const uint32 finalBytesPerRow   = std::min( this->bytesPerRow, src.bytesPerRow );
+                    for( size_t _z=0; _z<finalDepthOrSlices; ++_z )
                     {
-                        const void *srcData = src.at( src.x,   _y + src.y,   _z + src.z );
-                        void *dstData       = this->at( this->x, _y + this->y, _z + this->z );
-                        memcpy( dstData, srcData, finalBytesPerRow );
+                        for( size_t _y=0; _y<finalHeight; ++_y )
+                        {
+                            const void *srcData = src.at( src.x,   _y + src.y,   _z + src.z );
+                            void *dstData       = this->at( this->x, _y + this->y, _z + this->z );
+                            memcpy( dstData, srcData, finalBytesPerRow );
+                        }
+                    }
+                }
+                else
+                {
+                    //Copy row of blocks by row of blocks, compressed.
+                    const PixelFormatGpu pixelFormat = getCompressedPixelFormat();
+                    const uint32 blockHeight= PixelFormatGpuUtils::getCompressedBlockHeight( pixelFormat,
+                                                                                             false );
+                    const uint32 finalHeight        = this->height;
+                    const uint32 finalBytesPerRow   = std::min( this->bytesPerRow, src.bytesPerRow );
+                    for( size_t _z=0; _z<finalDepthOrSlices; ++_z )
+                    {
+                        for( size_t _y=0; _y<finalHeight; _y += blockHeight )
+                        {
+                            const void *srcData = src.at( src.x,   _y + src.y,   _z + src.z );
+                            void *dstData       = this->at( this->x, _y + this->y, _z + this->z );
+                            memcpy( dstData, srcData, finalBytesPerRow );
+                        }
                     }
                 }
             }

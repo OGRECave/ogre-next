@@ -143,8 +143,11 @@ namespace Ogre {
         */
         static uint32 getCompressedBlockWidth( PixelFormatGpu format, bool apiStrict=true );
 
-        /// @See getCompressedBlockWidth
+        /// See getCompressedBlockWidth
         static uint32 getCompressedBlockHeight( PixelFormatGpu format, bool apiStrict=true );
+
+        /// Returns in bytes, the size of the compressed block
+        static size_t getCompressedBlockSize( PixelFormatGpu format );
 
         static const char* toString( PixelFormatGpu format );
 
@@ -176,7 +179,7 @@ namespace Ogre {
         static void unpackColour( ColourValue *rgbaPtr, PixelFormatGpu pf, const void *srcPtr );
 
         static void bulkPixelConversion( const TextureBox &src, PixelFormatGpu srcFormat,
-                                         const TextureBox &dst, PixelFormatGpu dstFormat );
+                                         TextureBox &dst, PixelFormatGpu dstFormat );
 
         /// See PixelFormatFlags
         static uint32 getFlags( PixelFormatGpu format );

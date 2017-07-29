@@ -162,7 +162,10 @@ namespace Ogre
         else if( !mTexturesDescSet || *mTexturesDescSet != baseSet )
         {
             if( mTexturesDescSet )
+            {
                 hlmsManager->destroyDescriptorSetTexture( mTexturesDescSet );
+                mTexturesDescSet = 0;
+            }
             if( !baseSet.mTextures.empty() )
             {
                 mTexturesDescSet = hlmsManager->getDescriptorSetTexture( baseSet );

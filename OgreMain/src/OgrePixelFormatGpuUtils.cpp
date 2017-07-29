@@ -237,6 +237,47 @@ namespace Ogre
         return getCompressedBlockWidth( format, apiStrict );
     }
     //-----------------------------------------------------------------------------------
+    size_t PixelFormatGpuUtils::getCompressedBlockSize( PixelFormatGpu format )
+    {
+        switch( format )
+        {
+            case PFG_BC1_UNORM: case PFG_BC1_UNORM_SRGB:
+            case PFG_BC4_UNORM: case PFG_BC4_SNORM:
+            case PFG_EAC_R11_UNORM:     case PFG_EAC_R11_SNORM:
+            case PFG_ETC1_RGB8_UNORM:   case PFG_ETC2_RGB8_UNORM_SRGB:
+            case PFG_ETC2_RGB8A1_UNORM: case PFG_ETC2_RGB8A1_UNORM_SRGB:
+            case PFG_ATC_RGB:
+                return 8u;
+            case PFG_BC2_UNORM: case PFG_BC2_UNORM_SRGB:
+            case PFG_BC3_UNORM: case PFG_BC3_UNORM_SRGB:
+            case PFG_BC5_UNORM: case PFG_BC5_SNORM:
+            case PFG_BC6H_UF16: case PFG_BC6H_SF16:
+            case PFG_BC7_UNORM: case PFG_BC7_UNORM_SRGB:
+            case PFG_ETC2_RGBA8_UNORM:          case PFG_ETC2_RGBA8_UNORM_SRGB:
+            case PFG_EAC_R11G11_UNORM:          case PFG_EAC_R11G11_SNORM:
+            case PFG_ATC_RGBA_EXPLICIT_ALPHA:   case PFG_ATC_RGBA_INTERPOLATED_ALPHA:
+                return 16u;
+
+            // Size calculations from the PVRTC OpenGL extension spec
+            // http://www.khronos.org/registry/gles/extensions/IMG/IMG_texture_compression_pvrtc.txt
+            //  "Sub-images are not supportable because the PVRTC
+            //  algorithm uses significant adjacency information, so there is
+            //  no discrete block of texels that can be decoded as a standalone
+            //  sub-unit, and so it follows that no stand alone sub-unit of
+            //  data can be loaded without changing the decoding of surrounding
+            //  texels."
+            // In other words, if the user wants atlas, they can't be automatic
+            case PFG_PVRTC_RGB2: case PFG_PVRTC_RGBA2:
+            case PFG_PVRTC_RGB4: case PFG_PVRTC_RGBA4:
+            case PFG_PVRTC2_2BPP: case PFG_PVRTC2_4BPP:
+                return 32u;
+
+            default:
+                assert( !isCompressed( format ) );
+                return 1u;
+        }
+    }
+    //-----------------------------------------------------------------------------------
     const char* PixelFormatGpuUtils::toString( PixelFormatGpu format )
     {
         const PixelFormatDesc &desc = getDescriptionFor( format );
@@ -947,104 +988,22 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void PixelFormatGpuUtils::bulkPixelConversion( const TextureBox &src, PixelFormatGpu srcFormat,
-                                                   const TextureBox &dst, PixelFormatGpu dstFormat )
+                                                   TextureBox &dst, PixelFormatGpu dstFormat )
     {
-        assert( src.equalSize( dst ) );
-
-        if( src.bytesPerImage == dst.bytesPerImage &&
-            srcFormat == dstFormat &&
-            src.x == 0 && dst.x == 0 &&
-            src.y == 0 && dst.y == 0 &&
-            src.z == 0 && dst.z == 0 )
-        {
-            //Easy case. Raw copy.
-            memcpy( dst.at( 0u, 0u, dst.sliceStart ),
-                    src.at( 0u, 0u, src.sliceStart ),
-                    src.bytesPerImage * src.numSlices );
-            return;
-        }
-
-        // Check for compressed formats, we don't support decompression, compression or recoding
-        if( isCompressed( srcFormat ) || isCompressed( dstFormat ) )
-        {
-            if( srcFormat == dstFormat )
-            {
-                const uint32 blockWidth  = getCompressedBlockWidth( dstFormat, false );
-                const uint32 blockHeight = getCompressedBlockHeight( dstFormat, false );
-
-                if( blockWidth == 0 || blockHeight == 0 )
-                {
-                    OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
-                                 "This format should be consecutive!",
-                                 "PixelFormatGpuUtils::bulkPixelConversion" );
-                }
-
-                uint8 *srcptr = static_cast<uint8*>(src.data) +
-                                (src.x + blockWidth - 1u) / blockWidth +
-                                (src.y + blockHeight - 1u) / blockHeight * src.bytesPerRow +
-                                src.getZOrSlice() * src.bytesPerImage;
-                uint8 *dstptr = static_cast<uint8*>(dst.data) +
-                                (dst.x + blockWidth - 1u) / blockWidth +
-                                (dst.y + blockHeight - 1u) / blockHeight * dst.bytesPerRow +
-                                dst.getZOrSlice() * dst.bytesPerImage;
-
-                // Calculate pitches+skips in bytes
-                const size_t srcBytesPerRow     = src.bytesPerRow;
-                const size_t srcSliceSkipBytes  = src.bytesPerImage;
-
-                const size_t dstBytesPerRow     = dst.bytesPerRow;
-                const size_t dstSliceSkipBytes  = dst.bytesPerImage;
-
-                const size_t compressedSrcY = (src.y + blockHeight - 1u) / blockHeight;
-                const size_t compressedSrcMaxY = (src.y + src.height + blockHeight - 1u) / blockHeight;
-
-                for( size_t z=src.getZOrSlice(); z<src.getZOrSlice() + src.getMaxSlice(); ++z )
-                {
-                    uint8 *srcData = srcptr;
-                    uint8 *dstData = dstptr;
-
-                    for( size_t y=compressedSrcY; y<compressedSrcMaxY; ++y )
-                    {
-                        memcpy( dstData, srcData, srcBytesPerRow );
-                        srcData += srcBytesPerRow;
-                        dstData += dstBytesPerRow;
-                    }
-
-                    srcptr += srcSliceSkipBytes;
-                    dstptr += dstSliceSkipBytes;
-                }
-
-                return;
-            }
-            else
-            {
-                OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
-                             "This method can not be used to compress or decompress images",
-                             "PixelFormatGpuUtils::bulkPixelConversion" );
-            }
-        }
-
-        // The easy case
         if( srcFormat == dstFormat )
         {
-            uint8 *srcData = reinterpret_cast<uint8*>( src.at( src.x, src.y, src.getZOrSlice() ) );
-            uint8 *dstData = reinterpret_cast<uint8*>( dst.at( dst.x, dst.y, dst.getZOrSlice() ) );
-
-            for( size_t z=0; z<src.getDepthOrSlices(); ++z )
-            {
-                uint8 *srcPtr = srcData + src.bytesPerImage * z;
-                uint8 *dstPtr = dstData + dst.bytesPerImage * z;
-
-                for( size_t y=0; y<src.height; ++y )
-                {
-                    memcpy( dstPtr, srcPtr, src.width * src.bytesPerPixel );
-                    srcPtr += src.bytesPerRow;
-                    dstPtr += dst.bytesPerRow;
-                }
-            }
-
+            dst.copyFrom( src );
             return;
         }
+
+        if( isCompressed( srcFormat ) || isCompressed( dstFormat ) )
+        {
+            OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
+                         "This method can not be used to compress or decompress images",
+                         "PixelFormatGpuUtils::bulkPixelConversion" );
+        }
+
+        assert( src.equalSize( dst ) );
 
         // Is there a specialized, inlined, conversion?
         /*if(doOptimizedConversion(src, dst))

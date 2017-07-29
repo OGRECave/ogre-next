@@ -417,7 +417,7 @@ namespace Ogre
     const T* HlmsManager::getDescriptorSet( typename set<T>::type &container, const T &baseParams,
                                             void (*renderSysFunc)(RenderSystem*, T*) )
     {
-        typename set<T>::type::const_iterator itor = container.find( baseParams );
+        typename set<T>::type::iterator itor = container.find( baseParams );
 
         if( itor == container.end() )
         {
@@ -429,7 +429,10 @@ namespace Ogre
             itor = entry.first;
         }
 
-        const T *retVal = &(*itor);
+        //std::set cannot be modified because the value is the key. However we use
+        //a custom comparison operator in which mRefCount is not included.
+        T *retVal = const_cast<T*>( &(*itor) );
+        retVal->mRefCount = 0;
         return retVal;
     }
     template <typename T>
