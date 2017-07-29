@@ -67,14 +67,7 @@ namespace Ogre
                                               bool accurateTracking, TextureBox *srcBox )
     {
         TextureBox srcTextureBox;
-        const TextureBox fullSrcTextureBox( std::max( 1u, textureSrc->getWidth() >> mipLevel ),
-                                            std::max( 1u, textureSrc->getHeight() >> mipLevel ),
-                                            std::max( 1u, textureSrc->getDepth() >> mipLevel ),
-                                            textureSrc->getNumSlices(),
-                                            PixelFormatGpuUtils::getBytesPerPixel(
-                                                textureSrc->getPixelFormat() ),
-                                            textureSrc->_getSysRamCopyBytesPerRow( mipLevel ),
-                                            textureSrc->_getSysRamCopyBytesPerImage( mipLevel ) );
+        const TextureBox fullSrcTextureBox( textureSrc->getEmptyBox( mipLevel ) );
 
         if( !srcBox )
             srcTextureBox = fullSrcTextureBox;
@@ -161,14 +154,15 @@ namespace Ogre
         mStatus = Downloading;
     }
     //-----------------------------------------------------------------------------------
-    TextureBox AsyncTextureTicket::map(void)
+    TextureBox AsyncTextureTicket::map( uint32 slice )
     {
         assert( mStatus != Mapped );
+        assert( slice < getNumSlices() );
 
         if( mDelayedDownload.textureSrc )
             mDelayedDownload.textureSrc->waitForData();
 
-        TextureBox retVal = mapImpl();
+        TextureBox retVal = mapImpl( slice );
         mStatus = Mapped;
 
         if( PixelFormatGpuUtils::isCompressed( mPixelFormatFamily ) )

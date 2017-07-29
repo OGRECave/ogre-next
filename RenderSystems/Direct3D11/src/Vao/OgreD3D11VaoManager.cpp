@@ -1633,4 +1633,27 @@ namespace Ogre
     {
         return waitFor( fenceName, mDevice.GetImmediateContext() );
     }
+    //-----------------------------------------------------------------------------------
+    bool D3D11VaoManager::queryIsDone( ID3D11Query *fenceName, ID3D11DeviceContextN *deviceContext )
+    {
+        HRESULT hr = deviceContext->GetData( fenceName, NULL, 0, 0 );
+
+        if( FAILED( hr ) )
+        {
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "Failure while waiting for a D3D11 Fence. Could be out of GPU memory. "
+                         "Update your video card drivers. If that doesn't help, "
+                         "contact the developers.",
+                         "D3D11VaoManager::queryFor" );
+
+            return true;
+        }
+
+        return hr != S_FALSE;
+    }
+    //-----------------------------------------------------------------------------------
+    bool D3D11VaoManager::queryIsDone( ID3D11Query *fenceName )
+    {
+        return queryIsDone( fenceName, mDevice.GetImmediateContext() );
+    }
 }

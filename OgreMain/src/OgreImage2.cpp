@@ -321,22 +321,25 @@ namespace Ogre {
                                                               texture->getPixelFormat() );
             asyncTicket->download( texture, mip, true );
 
-            const TextureBox srcBox = asyncTicket->map();
-            const TextureBox dstBox = this->getData( mip - minMip );
+            TextureBox dstBox = this->getData( mip - minMip );
 
-            for( size_t z=0; z<srcBox.getDepthOrSlices(); ++z )
+            if( asyncTicket->canMapMoreThanOneSlice() )
             {
-                for( size_t y=0; y<srcBox.height; ++y )
+                const TextureBox srcBox = asyncTicket->map( 0 );
+                dstBox.copyFrom( srcBox );
+                asyncTicket->unmap();
+            }
+            else
+            {
+                for( size_t i=0; i<asyncTicket->getNumSlices(); ++i )
                 {
-                    const void *srcData = srcBox.at( 0, y, z );
-                    void *dstData = dstBox.at( 0, y, z );
-
-                    //Note: Do NOT use srcBox.bytesPerRow
-                    memcpy( dstData, srcData, dstBox.bytesPerRow );
+                    const TextureBox srcBox = asyncTicket->map( i );
+                    dstBox.copyFrom( srcBox );
+                    dstBox.data = dstBox.at( 0, 0, 1u );
+                    --dstBox.numSlices;
+                    asyncTicket->unmap();
                 }
             }
-
-            asyncTicket->unmap();
 
             textureManager->destroyAsyncTextureTicket( asyncTicket );
             asyncTicket = 0;

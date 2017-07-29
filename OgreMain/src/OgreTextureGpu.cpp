@@ -458,6 +458,21 @@ namespace Ogre
         return mTextureManager;
     }
     //-----------------------------------------------------------------------------------
+    TextureBox TextureGpu::getEmptyBox( uint8 mipLevel )
+    {
+        TextureBox retVal( std::max( 1u, mWidth >> mipLevel ),
+                           std::max( 1u, mHeight >> mipLevel ),
+                           std::max( 1u, getDepth() >> mipLevel ),
+                           getNumSlices(),
+                           PixelFormatGpuUtils::getBytesPerPixel( mPixelFormat ),
+                           this->_getSysRamCopyBytesPerRow( mipLevel ),
+                           this->_getSysRamCopyBytesPerImage( mipLevel ) );
+        if( PixelFormatGpuUtils::isCompressed( mPixelFormat ) )
+            retVal.setCompressedPixelFormat( mPixelFormat );
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
     TextureBox TextureGpu::_getSysRamCopyAsBox( uint8 mipLevel )
     {
         if( !mSysRamCopy )

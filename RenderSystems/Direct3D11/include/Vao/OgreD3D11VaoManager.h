@@ -269,7 +269,8 @@ namespace Ogre
                          D3D11RenderSystem *renderSystem );
         virtual ~D3D11VaoManager();
 
-        D3D11RenderSystem* getD3D11RenderSystem(void) const              { return mD3D11RenderSystem; }
+        D3D11RenderSystem* getD3D11RenderSystem(void) const             { return mD3D11RenderSystem; }
+        D3D11Device& getDevice(void) const                              { return mDevice; }
 
         /// Binds the Draw ID to the currently bound vertex array object.
         void bindDrawId( uint32 bindSlotId );
@@ -309,6 +310,9 @@ namespace Ogre
         */
         static ID3D11Query* waitFor( ID3D11Query *fenceName, ID3D11DeviceContextN *deviceContext );
         ID3D11Query* waitFor( ID3D11Query *fenceName );
+
+        static bool queryIsDone( ID3D11Query *fenceName, ID3D11DeviceContextN *deviceContext );
+        bool queryIsDone( ID3D11Query *fenceName );
     };
 }
 

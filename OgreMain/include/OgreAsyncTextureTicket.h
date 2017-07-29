@@ -92,7 +92,7 @@ namespace Ogre
 
         DelayedDownload     mDelayedDownload;
 
-        virtual TextureBox mapImpl(void) = 0;
+        virtual TextureBox mapImpl( uint32 slice ) = 0;
         virtual void unmapImpl(void) = 0;
 
         virtual void downloadFromGpu( TextureGpu *textureSrc, uint8 mipLevel,
@@ -141,13 +141,24 @@ namespace Ogre
             Be careful of TextureBox::bytesPerRow & bytesPerImage, when
             downloading a subregion of a texture, these values may not
             always be what you expect.
+        @par
+            NOTE: When mapping a texture bigger than 2048x2048; in D3D11 the
+            the returned pointer will return TextureBox::numSlices = 1,
+            In this case you will have to use that slice, unmap this
+            ticket, and map it again with the next slice.
+        @param slice
+            First slice to map. Textures below 2048x2048 are guaranteed to
+            be able to access [slice; getNumSlices).
+            Textures above that will only be able to access [slice; slice+1)
         @return
             The pointer with the data read from the GPU. Read only.
         */
-        TextureBox map(void);
+        TextureBox map( uint32 slice );
 
         /// Unmaps the pointer mapped with map().
         void unmap(void);
+
+        virtual bool canMapMoreThanOneSlice(void) const     { return true; }
 
         uint32 getWidth(void) const;
         uint32 getHeight(void) const;

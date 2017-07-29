@@ -569,13 +569,31 @@ namespace Ogre
 
         srcBoxD3d.left  = srcBox.x;
         srcBoxD3d.top   = srcBox.y;
-        srcBoxD3d.front = srcBox.getZOrSlice();
         srcBoxD3d.right = srcBox.x + srcBox.width;
         srcBoxD3d.bottom= srcBox.y + srcBox.height;
-        //We copy one slice at a time, so add only srcBox.depth;
-        //which is either 1u, or more than 1u for 3D textures.
-        srcBoxD3d.back  = srcBox.getZOrSlice() + srcBox.depth;
-        UINT srcSlicePos = srcBox.sliceStart;
+        //These are the possibilities:
+        //  Volume -> Array
+        //  Volume -> Volume
+        //  Array  -> Array
+        //  Array  -> Volume    Not possible unless copying one slice due to the restrictions
+        //                      in mapRegion. Also supportsFormat prevents this.
+        //If we're an Array, we need to copy 1 slice at a time, no matter what type src is.
+        UINT srcSlicePos = 0;
+        if( !mIsArray2DTexture )
+        {
+            srcSlicePos = 0;
+            //If destination is Array, we'll be copying one slice at a time,
+            //so add only srcBox.depth; which will be either 1u, or more
+            //than 1u if destination is a 3D texture.
+            srcBoxD3d.front = srcBox.getZOrSlice();
+            srcBoxD3d.back  = srcBox.getZOrSlice() + srcBox.depth;
+        }
+        else
+        {
+            srcSlicePos = srcBox.getZOrSlice();
+            srcBoxD3d.front = 0;
+            srcBoxD3d.back  = 1u;
+        }
 
         if( PixelFormatGpuUtils::isCompressed( mFormatFamily ) )
         {
@@ -597,20 +615,22 @@ namespace Ogre
 
         for( UINT slice=0; slice<(UINT)srcBox.numSlices; ++slice )
         {
-            const UINT srcSubResourceIdx = mIsArray2DTexture ?
-                        D3D11CalcSubresource( 0, srcSlicePos, 1u ) : 0;
+            const UINT srcSubResourceIdx = D3D11CalcSubresource( 0, srcSlicePos, 1u );
             const UINT dstSubResourceIdx = D3D11CalcSubresource( mipLevel, dstSlicePos,
                                                                  dstTexture->getNumMipmaps() );
 
             context->CopySubresourceRegion( dstTextureD3d->getFinalTextureName(), dstSubResourceIdx,
                                             xPos, yPos, zPos, mStagingTexture,
                                             srcSubResourceIdx, &srcBoxD3d );
-            ++srcSlicePos;
             ++dstSlicePos;
             if( !mIsArray2DTexture )
             {
                 ++srcBoxD3d.front;
                 ++srcBoxD3d.back;
+            }
+            else
+            {
+                ++srcSlicePos;
             }
         }
 

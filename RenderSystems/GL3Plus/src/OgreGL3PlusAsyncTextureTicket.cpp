@@ -125,14 +125,7 @@ namespace Ogre
         }
 
         TextureBox srcTextureBox;
-        TextureBox fullSrcTextureBox( std::max( 1u, textureSrc->getWidth() >> mipLevel ),
-                                      std::max( 1u, textureSrc->getHeight() >> mipLevel ),
-                                      std::max( 1u, textureSrc->getDepth() >> mipLevel ),
-                                      textureSrc->getNumSlices(),
-                                      PixelFormatGpuUtils::getBytesPerPixel(
-                                          textureSrc->getPixelFormat() ),
-                                      textureSrc->_getSysRamCopyBytesPerRow( mipLevel ),
-                                      textureSrc->_getSysRamCopyBytesPerImage( mipLevel ) );
+        TextureBox fullSrcTextureBox( textureSrc->getEmptyBox( mipLevel ) );
 
         if( !srcBox )
             srcTextureBox = fullSrcTextureBox;
@@ -288,7 +281,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    TextureBox GL3PlusAsyncTextureTicket::mapImpl(void)
+    TextureBox GL3PlusAsyncTextureTicket::mapImpl( uint32 slice )
     {
         waitForDownloadToFinish();
 
@@ -316,16 +309,25 @@ namespace Ogre
                                                            rowAlignment );
         }
 
+        if( PixelFormatGpuUtils::isCompressed( mPixelFormatFamily ) )
+            retVal.setCompressedPixelFormat( mPixelFormatFamily );
+
         retVal.data = glMapBufferRange( GL_PIXEL_PACK_BUFFER, 0, sizeBytes, GL_MAP_READ_BIT );
 
         if( mTmpVboName )
         {
             //Offset to the beginning of the region.
-            retVal.data = retVal.at( retVal.x, retVal.y, std::max( retVal.z, retVal.sliceStart ) );
+            retVal.data = retVal.at( retVal.x, retVal.y, std::max( retVal.z,
+                                                                   retVal.sliceStart + slice ) );
             retVal.x = 0;
             retVal.y = 0;
             retVal.z = 0;
             retVal.sliceStart = 0;
+        }
+        else
+        {
+            retVal.data = retVal.at( 0, 0, slice );
+            retVal.numSlices -= slice;
         }
 
         return retVal;
@@ -352,6 +354,8 @@ namespace Ogre
             mVaoManager->waitForSpecificFrameToFinish( mDownloadFrame );
             mNumInaccurateQueriesWasCalledInIssuingFrame = 0;
         }
+
+        mStatus = Ready;
     }
     //-----------------------------------------------------------------------------------
     bool GL3PlusAsyncTextureTicket::queryIsTransferDone(void)

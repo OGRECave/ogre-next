@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "OgreD3D11Mappings.h"
 #include "OgreD3D11TextureGpu.h"
 #include "OgreD3D11StagingTexture.h"
-//#include "OgreD3D11AsyncTextureTicket.h"
+#include "OgreD3D11AsyncTextureTicket.h"
 
 #include "Vao/OgreD3D11VaoManager.h"
 

@@ -26,10 +26,10 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#ifndef _OgreGL3PlusAsyncTextureTicket_H_
-#define _OgreGL3PlusAsyncTextureTicket_H_
+#ifndef _OgreD3D11AsyncTextureTicket_H_
+#define _OgreD3D11AsyncTextureTicket_H_
 
-#include "OgreGL3PlusPrerequisites.h"
+#include "OgreD3D11Prerequisites.h"
 #include "OgreAsyncTextureTicket.h"
 #include "OgreTextureBox.h"
 
@@ -37,24 +37,21 @@ namespace Ogre
 {
     /** See AsyncTextureTicket
     */
-    class _OgreGL3PlusExport GL3PlusAsyncTextureTicket : public AsyncTextureTicket
+    class _OgreD3D11Export D3D11AsyncTextureTicket : public AsyncTextureTicket
     {
     protected:
-        GLuint      mVboName;
-        /// In case GL_ARB_get_texture_sub_image / GL 4.5 is not available and
-        /// user requested to only download a subregion of the texture.
-        GLuint      mTmpVboName;
-        TextureBox  mSubregion;
+        ID3D11Resource  *mStagingTexture;
 
-        uint32      mDownloadFrame;
-        GLsync      mAccurateFence;
-        GL3PlusVaoManager   *mVaoManager;
-        bool                mSupportsGetTextureSubImage;
-
-        GLuint createBuffer( uint32 width, uint32 height, uint32 depthOrSlices );
+        uint32          mDownloadFrame;
+        ID3D11Query     *mAccurateFence;
+        D3D11VaoManager *mVaoManager;
+        uint32          mMappedSlice;
+        bool            mIsArray2DTexture;
 
         virtual TextureBox mapImpl( uint32 slice );
         virtual void unmapImpl(void);
+
+        virtual bool canMapMoreThanOneSlice(void) const;
 
         void waitForDownloadToFinish(void);
 
@@ -62,12 +59,11 @@ namespace Ogre
                                       bool accurateTracking, TextureBox *srcBox=0 );
 
     public:
-        GL3PlusAsyncTextureTicket( uint32 width, uint32 height, uint32 depthOrSlices,
-                                   TextureTypes::TextureTypes textureType,
-                                   PixelFormatGpu pixelFormatFamily,
-                                   GL3PlusVaoManager *vaoManager,
-                                   bool supportsGetTextureSubImage );
-        virtual ~GL3PlusAsyncTextureTicket();
+        D3D11AsyncTextureTicket( uint32 width, uint32 height, uint32 depthOrSlices,
+                                 TextureTypes::TextureTypes textureType,
+                                 PixelFormatGpu pixelFormatFamily,
+                                 D3D11VaoManager *vaoManager );
+        virtual ~D3D11AsyncTextureTicket();
 
         virtual bool queryIsTransferDone(void);
     };
