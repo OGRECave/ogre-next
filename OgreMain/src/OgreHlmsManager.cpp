@@ -422,7 +422,7 @@ namespace Ogre
         if( itor == container.end() )
         {
             T newDescSet = baseParams;
-            newDescSet.mRefCount = 1;
+            newDescSet.mRefCount = 0;
             (*renderSysFunc)( mRenderSystem, &newDescSet );
             std::pair<typename set<T>::type::iterator, bool> entry =
                     container.insert( newDescSet );
@@ -432,7 +432,7 @@ namespace Ogre
         //std::set cannot be modified because the value is the key. However we use
         //a custom comparison operator in which mRefCount is not included.
         T *retVal = const_cast<T*>( &(*itor) );
-        retVal->mRefCount = 0;
+        ++retVal->mRefCount;
         return retVal;
     }
     template <typename T>
