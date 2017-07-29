@@ -174,8 +174,8 @@ namespace Ogre
         UINT numSlices = srcTextureBox.numSlices;
         if( mIsArray2DTexture )
         {
-            numSlices = srcBox->getDepthOrSlices();
-            srcBoxD3d.front = srcBoxD3d.back + 1u;
+            numSlices = srcTextureBox.getDepthOrSlices();
+            srcBoxD3d.back = srcBoxD3d.front + 1u;
         }
         UINT zPos = 0;
         UINT dstSlicePos = 0;
