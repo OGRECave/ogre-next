@@ -82,7 +82,7 @@ namespace Ogre
         virtual bool belongsToUs( const TextureBox &box );
 
         void shrinkRecords( size_t slice, StagingBoxVec::iterator record,
-                            const TextureBox &consumedBox );
+                            TextureBox consumedBox );
         void shrinkMultisliceRecords( size_t slice, StagingBoxVec::iterator record,
                                       const TextureBox &consumedBox );
         TextureBox mapMultipleSlices( uint32 width, uint32 height, uint32 depth, uint32 slices,

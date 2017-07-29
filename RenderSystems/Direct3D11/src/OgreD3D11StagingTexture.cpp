@@ -182,8 +182,17 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void D3D11StagingTexture::shrinkRecords( size_t slice, StagingBoxVec::iterator record,
-                                             const TextureBox &consumedBox )
+                                             TextureBox consumedBox )
     {
+        if( PixelFormatGpuUtils::isCompressed( mFormatFamily ) )
+        {
+            //Always consume the whole block for compressed formats.
+            uint32 blockWidth = PixelFormatGpuUtils::getCompressedBlockWidth( mFormatFamily, false );
+            uint32 blockHeight= PixelFormatGpuUtils::getCompressedBlockHeight( mFormatFamily, false );
+            consumedBox.width   = alignToNextMultiple( consumedBox.width, blockWidth );
+            consumedBox.height  = alignToNextMultiple( consumedBox.height, blockHeight );
+        }
+
         if( record->width == consumedBox.width && record->height == consumedBox.height )
         {
             //Whole record was consumed. Easy case.
