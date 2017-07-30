@@ -26,8 +26,6 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#include "OgreStableHeaders.h"
-
 #include "OgreD3D11AsyncTextureTicket.h"
 #include "OgreD3D11TextureGpu.h"
 #include "OgreD3D11Mappings.h"
@@ -129,9 +127,6 @@ namespace Ogre
 
         SAFE_RELEASE( mAccurateFence );
 
-        if( accurateTracking )
-            mAccurateFence = mVaoManager->createFence();
-
         TextureBox srcTextureBox;
         TextureBox fullSrcTextureBox( textureSrc->getEmptyBox( mipLevel ) );
 
@@ -209,6 +204,9 @@ namespace Ogre
             else
                 ++dstSlicePos;
         }
+
+        if( accurateTracking )
+            mAccurateFence = mVaoManager->createFence();
     }
     //-----------------------------------------------------------------------------------
     TextureBox D3D11AsyncTextureTicket::mapImpl( uint32 slice )

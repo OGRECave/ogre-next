@@ -211,6 +211,8 @@ namespace Ogre
         RSC_EXPLICIT_API = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 5),
         /// Textures and samplers are separate in the shader. OpenGL can't do this.
         RSC_SEPARATE_SAMPLERS_FROM_TEXTURES = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 6),
+        /// Supports doing MSAA on TextureTypes::Type2DArray
+        RSC_MSAA_2D_ARRAY = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 7),
 
         // ***** DirectX specific caps *****
         /// Is DirectX feature "per stage constants" supported

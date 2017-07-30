@@ -26,8 +26,6 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#include "OgreStableHeaders.h"
-
 #include "OgreGL3PlusAsyncTextureTicket.h"
 #include "OgreGL3PlusTextureGpu.h"
 #include "OgreGL3PlusMappings.h"
@@ -117,11 +115,6 @@ namespace Ogre
         {
             OCGE( glDeleteSync( mAccurateFence ) );
             mAccurateFence = 0;
-        }
-
-        if( accurateTracking )
-        {
-            OCGE( mAccurateFence = glFenceSync( GL_SYNC_GPU_COMMANDS_COMPLETE, 0 ) );
         }
 
         TextureBox srcTextureBox;
@@ -278,6 +271,11 @@ namespace Ogre
                                                       width, height, depthOrSlices,
                                                       std::numeric_limits<int>::max(), 0 ) );
             }
+        }
+
+        if( accurateTracking )
+        {
+            OCGE( mAccurateFence = glFenceSync( GL_SYNC_GPU_COMMANDS_COMPLETE, 0 ) );
         }
     }
     //-----------------------------------------------------------------------------------

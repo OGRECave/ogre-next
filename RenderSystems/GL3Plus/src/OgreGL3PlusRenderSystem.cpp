@@ -354,6 +354,9 @@ namespace Ogre {
             rsc->setCapability(RSC_TEXTURE_COMPRESSION_BC6H_BC7);
         }
 
+        // Supported since GL 3.2; our minimum is GL 3.3
+        rsc->setCapability(RSC_MSAA_2D_ARRAY);
+
         //Technically D3D10.1 hardware (GL3) supports gather and exposes this extension.
         //However we have bug reports that textureGather isn't working properly, and
         //sadly these cards no longer receive updates. So, assume modern cards and
