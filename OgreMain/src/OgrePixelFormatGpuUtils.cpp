@@ -117,14 +117,14 @@ namespace Ogre
             // Size calculations from the PVRTC OpenGL extension spec
             // http://www.khronos.org/registry/gles/extensions/IMG/IMG_texture_compression_pvrtc.txt
             // Basically, 32 bytes is the minimum texture size.  Smaller textures are padded up to 32 bytes
-            case PFG_PVRTC_RGB2:
-            case PFG_PVRTC_RGBA2:
-            case PFG_PVRTC2_2BPP:
+            case PFG_PVRTC_RGB2:    case PFG_PVRTC_RGB2_SRGB:
+            case PFG_PVRTC_RGBA2:   case PFG_PVRTC_RGBA2_SRGB:
+            case PFG_PVRTC2_2BPP:   case PFG_PVRTC2_2BPP_SRGB:
                 return (std::max<uint32>( width, 16u ) * std::max<uint32>( height, 8u ) * 2u + 7u) / 8u
                         * depth * slices;
-            case PFG_PVRTC_RGB4:
-            case PFG_PVRTC_RGBA4:
-            case PFG_PVRTC2_4BPP:
+            case PFG_PVRTC_RGB4:    case PFG_PVRTC_RGB4_SRGB:
+            case PFG_PVRTC_RGBA4:   case PFG_PVRTC_RGBA4_SRGB:
+            case PFG_PVRTC2_4BPP:   case PFG_PVRTC2_4BPP_SRGB:
                 return (std::max<uint32>( width, 8u ) * std::max<uint32>( height, 8u ) * 4u + 7u) / 8u
                         * depth * slices;
             default:
@@ -221,9 +221,12 @@ namespace Ogre
             //  data can be loaded without changing the decoding of surrounding
             //  texels."
             // In other words, if the user wants atlas, they can't be automatic
-            case PFG_PVRTC_RGB2: case PFG_PVRTC_RGBA2:
-            case PFG_PVRTC_RGB4: case PFG_PVRTC_RGBA4:
-            case PFG_PVRTC2_2BPP: case PFG_PVRTC2_4BPP:
+            case PFG_PVRTC_RGB2:    case PFG_PVRTC_RGB2_SRGB:
+            case PFG_PVRTC_RGBA2:   case PFG_PVRTC_RGBA2_SRGB:
+            case PFG_PVRTC_RGB4:    case PFG_PVRTC_RGB4_SRGB:
+            case PFG_PVRTC_RGBA4:   case PFG_PVRTC_RGBA4_SRGB:
+            case PFG_PVRTC2_2BPP:   case PFG_PVRTC2_2BPP_SRGB:
+            case PFG_PVRTC2_4BPP:   case PFG_PVRTC2_4BPP_SRGB:
                 return 0u;
 
             default:
@@ -241,40 +244,43 @@ namespace Ogre
     {
         switch( format )
         {
-            case PFG_BC1_UNORM: case PFG_BC1_UNORM_SRGB:
-            case PFG_BC4_UNORM: case PFG_BC4_SNORM:
-            case PFG_EAC_R11_UNORM:     case PFG_EAC_R11_SNORM:
-            case PFG_ETC1_RGB8_UNORM:   case PFG_ETC2_RGB8_UNORM_SRGB:
-            case PFG_ETC2_RGB8A1_UNORM: case PFG_ETC2_RGB8A1_UNORM_SRGB:
-            case PFG_ATC_RGB:
-                return 8u;
-            case PFG_BC2_UNORM: case PFG_BC2_UNORM_SRGB:
-            case PFG_BC3_UNORM: case PFG_BC3_UNORM_SRGB:
-            case PFG_BC5_UNORM: case PFG_BC5_SNORM:
-            case PFG_BC6H_UF16: case PFG_BC6H_SF16:
-            case PFG_BC7_UNORM: case PFG_BC7_UNORM_SRGB:
-            case PFG_ETC2_RGBA8_UNORM:          case PFG_ETC2_RGBA8_UNORM_SRGB:
-            case PFG_EAC_R11G11_UNORM:          case PFG_EAC_R11G11_SNORM:
-            case PFG_ATC_RGBA_EXPLICIT_ALPHA:   case PFG_ATC_RGBA_INTERPOLATED_ALPHA:
-                return 16u;
+        case PFG_BC1_UNORM: case PFG_BC1_UNORM_SRGB:
+        case PFG_BC4_UNORM: case PFG_BC4_SNORM:
+        case PFG_EAC_R11_UNORM:     case PFG_EAC_R11_SNORM:
+        case PFG_ETC1_RGB8_UNORM:   case PFG_ETC2_RGB8_UNORM_SRGB:
+        case PFG_ETC2_RGB8A1_UNORM: case PFG_ETC2_RGB8A1_UNORM_SRGB:
+        case PFG_ATC_RGB:
+            return 8u;
+        case PFG_BC2_UNORM: case PFG_BC2_UNORM_SRGB:
+        case PFG_BC3_UNORM: case PFG_BC3_UNORM_SRGB:
+        case PFG_BC5_UNORM: case PFG_BC5_SNORM:
+        case PFG_BC6H_UF16: case PFG_BC6H_SF16:
+        case PFG_BC7_UNORM: case PFG_BC7_UNORM_SRGB:
+        case PFG_ETC2_RGBA8_UNORM:          case PFG_ETC2_RGBA8_UNORM_SRGB:
+        case PFG_EAC_R11G11_UNORM:          case PFG_EAC_R11G11_SNORM:
+        case PFG_ATC_RGBA_EXPLICIT_ALPHA:   case PFG_ATC_RGBA_INTERPOLATED_ALPHA:
+            return 16u;
 
-            // Size calculations from the PVRTC OpenGL extension spec
-            // http://www.khronos.org/registry/gles/extensions/IMG/IMG_texture_compression_pvrtc.txt
-            //  "Sub-images are not supportable because the PVRTC
-            //  algorithm uses significant adjacency information, so there is
-            //  no discrete block of texels that can be decoded as a standalone
-            //  sub-unit, and so it follows that no stand alone sub-unit of
-            //  data can be loaded without changing the decoding of surrounding
-            //  texels."
-            // In other words, if the user wants atlas, they can't be automatic
-            case PFG_PVRTC_RGB2: case PFG_PVRTC_RGBA2:
-            case PFG_PVRTC_RGB4: case PFG_PVRTC_RGBA4:
-            case PFG_PVRTC2_2BPP: case PFG_PVRTC2_4BPP:
+        // Size calculations from the PVRTC OpenGL extension spec
+        // http://www.khronos.org/registry/gles/extensions/IMG/IMG_texture_compression_pvrtc.txt
+        //  "Sub-images are not supportable because the PVRTC
+        //  algorithm uses significant adjacency information, so there is
+        //  no discrete block of texels that can be decoded as a standalone
+        //  sub-unit, and so it follows that no stand alone sub-unit of
+        //  data can be loaded without changing the decoding of surrounding
+        //  texels."
+        // In other words, if the user wants atlas, they can't be automatic
+        case PFG_PVRTC_RGB2:    case PFG_PVRTC_RGB2_SRGB:
+        case PFG_PVRTC_RGBA2:   case PFG_PVRTC_RGBA2_SRGB:
+        case PFG_PVRTC_RGB4:    case PFG_PVRTC_RGB4_SRGB:
+        case PFG_PVRTC_RGBA4:   case PFG_PVRTC_RGBA4_SRGB:
+        case PFG_PVRTC2_2BPP:   case PFG_PVRTC2_2BPP_SRGB:
+        case PFG_PVRTC2_4BPP:   case PFG_PVRTC2_4BPP_SRGB:
                 return 32u;
 
-            default:
-                assert( !isCompressed( format ) );
-                return 1u;
+        default:
+            assert( !isCompressed( format ) );
+            return 1u;
         }
     }
     //-----------------------------------------------------------------------------------
@@ -672,9 +678,12 @@ namespace Ogre
         case PFG_BC5_UNORM: case PFG_BC5_SNORM:
         case PFG_BC6H_UF16: case PFG_BC6H_SF16:
         case PFG_BC7_UNORM: case PFG_BC7_UNORM_SRGB:
-        case PFG_PVRTC_RGB2: case PFG_PVRTC_RGBA2:
-        case PFG_PVRTC_RGB4: case PFG_PVRTC_RGBA4:
-        case PFG_PVRTC2_2BPP: case PFG_PVRTC2_4BPP:
+        case PFG_PVRTC_RGB2:    case PFG_PVRTC_RGB2_SRGB:
+        case PFG_PVRTC_RGBA2:   case PFG_PVRTC_RGBA2_SRGB:
+        case PFG_PVRTC_RGB4:    case PFG_PVRTC_RGB4_SRGB:
+        case PFG_PVRTC_RGBA4:   case PFG_PVRTC_RGBA4_SRGB:
+        case PFG_PVRTC2_2BPP:   case PFG_PVRTC2_2BPP_SRGB:
+        case PFG_PVRTC2_4BPP:   case PFG_PVRTC2_4BPP_SRGB:
         case PFG_ETC1_RGB8_UNORM:
         case PFG_ETC2_RGB8_UNORM: case PFG_ETC2_RGB8_UNORM_SRGB:
         case PFG_ETC2_RGBA8_UNORM: case PFG_ETC2_RGBA8_UNORM_SRGB:
@@ -941,9 +950,12 @@ namespace Ogre
         case PFG_BC5_UNORM: case PFG_BC5_SNORM:
         case PFG_BC6H_UF16: case PFG_BC6H_SF16:
         case PFG_BC7_UNORM: case PFG_BC7_UNORM_SRGB:
-        case PFG_PVRTC_RGB2: case PFG_PVRTC_RGBA2:
-        case PFG_PVRTC_RGB4: case PFG_PVRTC_RGBA4:
-        case PFG_PVRTC2_2BPP: case PFG_PVRTC2_4BPP:
+        case PFG_PVRTC_RGB2:    case PFG_PVRTC_RGB2_SRGB:
+        case PFG_PVRTC_RGBA2:   case PFG_PVRTC_RGBA2_SRGB:
+        case PFG_PVRTC_RGB4:    case PFG_PVRTC_RGB4_SRGB:
+        case PFG_PVRTC_RGBA4:   case PFG_PVRTC_RGBA4_SRGB:
+        case PFG_PVRTC2_2BPP:   case PFG_PVRTC2_2BPP_SRGB:
+        case PFG_PVRTC2_4BPP:   case PFG_PVRTC2_4BPP_SRGB:
         case PFG_ETC1_RGB8_UNORM:
         case PFG_ETC2_RGB8_UNORM: case PFG_ETC2_RGB8_UNORM_SRGB:
         case PFG_ETC2_RGBA8_UNORM: case PFG_ETC2_RGBA8_UNORM_SRGB:
@@ -1399,11 +1411,17 @@ namespace Ogre
         {"PFG_V408",				3u, 0,						0 },
 
         {"PFG_PVRTC_RGB2",			3u, 0,						PFF_COMPRESSED_COMMON },
+        {"PFG_PVRTC_RGB2_SRGB",		3u, 0,						PFF_COMPRESSED_COMMON|PFF_SRGB },
         {"PFG_PVRTC_RGBA2",			4u, 0,						PFF_COMPRESSED_COMMON },
+        {"PFG_PVRTC_RGBA2_SRGB",	4u, 0,						PFF_COMPRESSED_COMMON|PFF_SRGB },
         {"PFG_PVRTC_RGB4",			3u, 0,						PFF_COMPRESSED_COMMON },
+        {"PFG_PVRTC_RGB4_SRGB",		3u, 0,						PFF_COMPRESSED_COMMON|PFF_SRGB },
         {"PFG_PVRTC_RGBA4",			4u, 0,						PFF_COMPRESSED_COMMON },
+        {"PFG_PVRTC_RGBA4_SRGB",	4u, 0,						PFF_COMPRESSED_COMMON|PFF_SRGB },
         {"PFG_PVRTC2_2BPP",			3u, 0,						PFF_COMPRESSED_COMMON },
+        {"PFG_PVRTC2_2BPP_SRGB",	3u, 0,						PFF_COMPRESSED_COMMON|PFF_SRGB },
         {"PFG_PVRTC2_4BPP",			3u, 0,						PFF_COMPRESSED_COMMON },
+        {"PFG_PVRTC2_4BPP_SRGB",    3u, 0,						PFF_COMPRESSED_COMMON|PFF_SRGB },
 
         {"PFG_ETC1_RGB8_UNORM",		3u, 0,						PFF_COMPRESSED_COMMON },
         {"PFG_ETC2_RGB8_UNORM",		3u, 0,						PFF_COMPRESSED_COMMON },

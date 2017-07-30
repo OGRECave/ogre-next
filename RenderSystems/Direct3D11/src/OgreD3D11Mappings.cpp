@@ -763,11 +763,17 @@ namespace Ogre
         case PFG_V208:
         case PFG_V408:
         case PFG_PVRTC_RGB2:
+        case PFG_PVRTC_RGB2_SRGB:
         case PFG_PVRTC_RGBA2:
+        case PFG_PVRTC_RGBA2_SRGB:
         case PFG_PVRTC_RGB4:
+        case PFG_PVRTC_RGB4_SRGB:
         case PFG_PVRTC_RGBA4:
+        case PFG_PVRTC_RGBA4_SRGB:
         case PFG_PVRTC2_2BPP:
+        case PFG_PVRTC2_2BPP_SRGB:
         case PFG_PVRTC2_4BPP:
+        case PFG_PVRTC2_4BPP_SRGB:
         case PFG_ETC1_RGB8_UNORM:
         case PFG_ETC2_RGB8_UNORM:
         case PFG_ETC2_RGB8_UNORM_SRGB:

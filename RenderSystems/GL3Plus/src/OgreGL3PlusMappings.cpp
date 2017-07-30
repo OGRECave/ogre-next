@@ -182,11 +182,17 @@ namespace Ogre
         case PFG_V408:                          return GL_NONE;
 
         case PFG_PVRTC_RGB2:                    return GL_NONE;
+        case PFG_PVRTC_RGB2_SRGB:               return GL_NONE;
         case PFG_PVRTC_RGBA2:                   return GL_NONE;
+        case PFG_PVRTC_RGBA2_SRGB:              return GL_NONE;
         case PFG_PVRTC_RGB4:                    return GL_NONE;
+        case PFG_PVRTC_RGB4_SRGB:               return GL_NONE;
         case PFG_PVRTC_RGBA4:                   return GL_NONE;
+        case PFG_PVRTC_RGBA4_SRGB:              return GL_NONE;
         case PFG_PVRTC2_2BPP:                   return GL_NONE;
+        case PFG_PVRTC2_2BPP_SRGB:              return GL_NONE;
         case PFG_PVRTC2_4BPP:                   return GL_NONE;
+        case PFG_PVRTC2_4BPP_SRGB:              return GL_NONE;
 
         //ETC2 is backwards compatible with ETC1
         case PFG_ETC1_RGB8_UNORM:               return GL_COMPRESSED_RGB8_ETC2;

@@ -87,12 +87,12 @@ namespace Ogre
         size_t bytesPerImage    = srcBox.bytesPerImage;
 
         // PVR textures must have 0 on these.
-        if( mFormatFamily == PFG_PVRTC2_2BPP ||
-            mFormatFamily == PFG_PVRTC2_4BPP ||
-            mFormatFamily == PFG_PVRTC_RGB2  ||
-            mFormatFamily == PFG_PVRTC_RGB4  ||
-            mFormatFamily == PFG_PVRTC_RGBA2 ||
-            mFormatFamily == PFG_PVRTC_RGBA4 )
+        if( mFormatFamily == PFG_PVRTC2_2BPP || mFormatFamily == PFG_PVRTC2_2BPP_SRGB ||
+            mFormatFamily == PFG_PVRTC2_4BPP || mFormatFamily == PFG_PVRTC2_4BPP_SRGB ||
+            mFormatFamily == PFG_PVRTC_RGB2  || mFormatFamily == PFG_PVRTC_RGB2_SRGB  ||
+            mFormatFamily == PFG_PVRTC_RGB4  || mFormatFamily == PFG_PVRTC_RGB4_SRGB  ||
+            mFormatFamily == PFG_PVRTC_RGBA2 || mFormatFamily == PFG_PVRTC_RGBA2_SRGB ||
+            mFormatFamily == PFG_PVRTC_RGBA4 || mFormatFamily == PFG_PVRTC_RGBA4_SRGB )
         {
             bytesPerRow = 0;
             bytesPerImage = 0;

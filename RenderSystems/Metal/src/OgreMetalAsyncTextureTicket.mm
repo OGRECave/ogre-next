@@ -115,12 +115,12 @@ namespace Ogre
         size_t bytesPerRow  = srcTextureBox.bytesPerRow;
         size_t bytesPerImage= srcTextureBox.bytesPerImage;
 
-        if( mPixelFormatFamily == PFG_PVRTC2_2BPP ||
-            mPixelFormatFamily == PFG_PVRTC2_4BPP ||
-            mPixelFormatFamily == PFG_PVRTC_RGB2  ||
-            mPixelFormatFamily == PFG_PVRTC_RGB4  ||
-            mPixelFormatFamily == PFG_PVRTC_RGBA2 ||
-            mPixelFormatFamily == PFG_PVRTC_RGBA4 )
+        if( mPixelFormatFamily == PFG_PVRTC2_2BPP || mPixelFormatFamily == PFG_PVRTC2_2BPP_SRGB ||
+            mPixelFormatFamily == PFG_PVRTC2_4BPP || mPixelFormatFamily == PFG_PVRTC2_4BPP_SRGB ||
+            mPixelFormatFamily == PFG_PVRTC_RGB2  || mPixelFormatFamily == PFG_PVRTC_RGB2_SRGB  ||
+            mPixelFormatFamily == PFG_PVRTC_RGB4  || mPixelFormatFamily == PFG_PVRTC_RGB4_SRGB  ||
+            mPixelFormatFamily == PFG_PVRTC_RGBA2 || mPixelFormatFamily == PFG_PVRTC_RGBA2_SRGB ||
+            mPixelFormatFamily == PFG_PVRTC_RGBA4 || mPixelFormatFamily == PFG_PVRTC_RGBA4_SRGB )
         {
             bytesPerRow = 0;
             bytesPerImage = 0;

@@ -182,16 +182,22 @@ namespace Ogre {
 
         /// PVRTC (PowerVR) RGB 2 bpp
         PFG_PVRTC_RGB2,
+        PFG_PVRTC_RGB2_SRGB,
         /// PVRTC (PowerVR) RGBA 2 bpp
         PFG_PVRTC_RGBA2,
+        PFG_PVRTC_RGBA2_SRGB,
         /// PVRTC (PowerVR) RGB 4 bpp
         PFG_PVRTC_RGB4,
+        PFG_PVRTC_RGB4_SRGB,
         /// PVRTC (PowerVR) RGBA 4 bpp
         PFG_PVRTC_RGBA4,
+        PFG_PVRTC_RGBA4_SRGB,
         /// PVRTC (PowerVR) Version 2, 2 bpp
         PFG_PVRTC2_2BPP,
+        PFG_PVRTC2_2BPP_SRGB,
         /// PVRTC (PowerVR) Version 2, 4 bpp
         PFG_PVRTC2_4BPP,
+        PFG_PVRTC2_4BPP_SRGB,
 
         /// ETC1 (Ericsson Texture Compression)
         PFG_ETC1_RGB8_UNORM,
