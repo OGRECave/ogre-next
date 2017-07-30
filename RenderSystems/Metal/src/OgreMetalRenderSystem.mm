@@ -570,7 +570,7 @@ namespace Ogre
             const size_t numTexturesUsed = set->mShaderTypeTexCount[i];
             for( size_t j=0u; i<numTexturesUsed; ++j )
             {
-                MetalTextureGpu *metalTex = static_cast<MetalTextureGpu*>( *itor );
+                const MetalTextureGpu *metalTex = static_cast<const MetalTextureGpu*>( *itor );
                 __unsafe_unretained id<MTLTexture> metalTexture = metalTex->getFinalTextureName();
 
                 switch( i )
