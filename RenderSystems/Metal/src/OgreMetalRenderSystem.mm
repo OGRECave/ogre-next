@@ -40,6 +40,7 @@ Copyright (c) 2000-2016 Torus Knot Software Ltd
 #include "OgreMetalProgramFactory.h"
 #include "OgreMetalTexture.h"
 #include "OgreMetalMultiRenderTarget.h"
+#include "OgreMetalTextureGpu.h"
 
 #include "OgreMetalHardwareBufferManager.h"
 #include "OgreMetalHardwareIndexBuffer.h"
@@ -560,18 +561,17 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture *set )
     {
-#define TODO_useRsSystemAndCreate_arrays_to_bind_in_one_call 1
-        TODO_useRsSystemAndCreate_arrays_to_bind_in_one_call;
-        /*uint32 texUnit = slotStart;
-        FastArray<TextureGpu*>::const_iterator itor = set->mTextures.begin();
+        uint32 texUnit = slotStart;
+        FastArray<const TextureGpu*>::const_iterator itor = set->mTextures.begin();
 
-        for( size_t i=0u; i<NumShaderTypes; ++i )
+        //for( size_t i=0u; i<NumShaderTypes; ++i )
+        for( size_t i=0u; i<PixelShader + 1u; ++i )
         {
             const size_t numTexturesUsed = set->mShaderTypeTexCount[i];
             for( size_t j=0u; i<numTexturesUsed; ++j )
             {
                 MetalTextureGpu *metalTex = static_cast<MetalTextureGpu*>( *itor );
-                __unsafe_unretained id<MTLTexture> metalTexture = 0;
+                __unsafe_unretained id<MTLTexture> metalTexture = metalTex->getFinalTextureName();
 
                 switch( i )
                 {
@@ -582,26 +582,54 @@ namespace Ogre
                     [mActiveRenderEncoder setFragmentTexture:metalTexture atIndex:texUnit];
                     break;
                 case GeometryShader:
-                    [mActiveRenderEncoder setVertexTexture:metalTexture atIndex:texUnit];
-                    break;
                 case HullShader:
-                    [mActiveRenderEncoder setFragmentTexture:metalTexture atIndex:texUnit];
-                    break;
                 case DomainShader:
-                    [mActiveRenderEncoder setFragmentTexture:metalTexture atIndex:texUnit];
                     break;
                 }
 
                 ++texUnit;
                 ++itor;
             }
-        }*/
+        }
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_setSamplers( uint32 slotStart, const DescriptorSetSampler *set )
     {
-#define TODO_samplers 1
-        TODO_samplers;
+        __unsafe_unretained id <MTLSamplerState> samplers[16];
+
+        FastArray<const HlmsSamplerblock*>::const_iterator itor = set->mSamplers.begin();
+
+        NSRange texUnitRange;
+        texUnitRange.location = slotStart;
+        //for( size_t i=0u; i<NumShaderTypes; ++i )
+        for( size_t i=0u; i<PixelShader + 1u; ++i )
+        {
+            const NSUInteger numSamplersUsed = set->mShaderTypeSamplerCount[i];
+
+            if( !numSamplersUsed )
+                continue;
+
+            for( size_t j=0; j<numSamplersUsed; ++j )
+                samplers[j] = (__bridge id<MTLSamplerState>)(*itor)->mRsData;
+
+            texUnitRange.length = numSamplersUsed;
+
+            switch( i )
+            {
+            case VertexShader:
+                [mActiveRenderEncoder setVertexSamplerStates:samplers withRange:texUnitRange];
+                break;
+            case PixelShader:
+                [mActiveRenderEncoder setFragmentSamplerStates:samplers withRange:texUnitRange];
+                break;
+            case GeometryShader:
+            case HullShader:
+            case DomainShader:
+                break;
+            }
+
+            texUnitRange.location += numSamplersUsed;
+        }
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_setTextureCoordCalculation( size_t unit, TexCoordCalcMethod m,
