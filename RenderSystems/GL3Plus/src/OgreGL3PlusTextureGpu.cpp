@@ -179,6 +179,11 @@ namespace Ogre
                 glDeleteTextures( 1, &mFinalTextureName );
                 mFinalTextureName = 0;
             }
+            if( mMsaaFramebufferName )
+            {
+                glDeleteTextures( 1, &mMsaaFramebufferName );
+                mMsaaFramebufferName = 0;
+            }
         }
         else
         {
