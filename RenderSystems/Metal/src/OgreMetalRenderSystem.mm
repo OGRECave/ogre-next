@@ -46,6 +46,8 @@ Copyright (c) 2000-2016 Torus Knot Software Ltd
 #include "OgreMetalHardwareIndexBuffer.h"
 #include "OgreMetalHardwareVertexBuffer.h"
 
+#include "OgreMetalTextureGpuManager.h"
+
 #include "Vao/OgreMetalConstBufferPacked.h"
 #include "Vao/OgreMetalUavBufferPacked.h"
 #include "Vao/OgreIndirectBufferPacked.h"
@@ -340,6 +342,7 @@ namespace Ogre
             mTextureManager = new MetalTextureManager( &mDevice );
             mVaoManager = OGRE_NEW MetalVaoManager( c_inFlightCommandBuffers, &mDevice );
             mHardwareBufferManager = new v1::MetalHardwareBufferManager( &mDevice, mVaoManager );
+            mTextureGpuManager = OGRE_NEW MetalTextureGpuManager( mVaoManager, &mDevice );
 
             mInitialized = true;
         }
@@ -568,10 +571,10 @@ namespace Ogre
         for( size_t i=0u; i<PixelShader + 1u; ++i )
         {
             const size_t numTexturesUsed = set->mShaderTypeTexCount[i];
-            for( size_t j=0u; i<numTexturesUsed; ++j )
+            for( size_t j=0u; j<numTexturesUsed; ++j )
             {
                 const MetalTextureGpu *metalTex = static_cast<const MetalTextureGpu*>( *itor );
-                __unsafe_unretained id<MTLTexture> metalTexture = metalTex->getFinalTextureName();
+                __unsafe_unretained id<MTLTexture> metalTexture = metalTex->getDisplayTextureName();
 
                 switch( i )
                 {

@@ -48,6 +48,7 @@ namespace Ogre
         resourceOptions |= MTLResourceStorageModeManaged;
 #endif
         mVboName = [mDevice->mDevice newBufferWithLength:sizeBytes options:resourceOptions];
+        mMappedPtr = [mVboName contents];
     }
     //-----------------------------------------------------------------------------------
     MetalStagingTexture::~MetalStagingTexture()

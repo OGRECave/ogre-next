@@ -101,6 +101,10 @@ namespace Ogre
                 desc.depth = 4u;
             else
                 desc.depth = 1u;
+            if( i == TextureTypes::Type1D || i == TextureTypes::Type1DArray )
+                desc.height = 1u;
+            else
+                desc.height = 4u;
 
             desc.textureType = textureTypes[i];
             mBlankTexture[i] = [device->mDevice newTextureWithDescriptor:desc];
@@ -120,10 +124,12 @@ namespace Ogre
             }
             else
             {
-                [mBlankTexture[i] replaceRegion:MTLRegionMake3D( 0, 0, 0, 4u, 4u, desc.depth )
+                [mBlankTexture[i] replaceRegion:MTLRegionMake3D( 0, 0, 0, 4u, desc.height, desc.depth )
                                     mipmapLevel:0
+                                          slice:0
                                       withBytes:c_whiteData
-                                    bytesPerRow:4u*4u];
+                                    bytesPerRow:4u*4u
+                                  bytesPerImage:4u*4u*4u];
             }
         }
 
