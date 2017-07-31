@@ -504,8 +504,13 @@ namespace Ogre
         case PFG_R32_FLOAT:		                return MTLPixelFormatR32Float;
         case PFG_R32_UINT:		                return MTLPixelFormatR32Uint;
         case PFG_R32_SINT:		                return MTLPixelFormatR32Sint;
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
         case PFG_D24_UNORM:		                return MTLPixelFormatDepth24Unorm_Stencil8;
         case PFG_D24_UNORM_S8_UINT:             return MTLPixelFormatDepth24Unorm_Stencil8;
+#else
+        case PFG_D24_UNORM:		                return MTLPixelFormatDepth32Float;
+        case PFG_D24_UNORM_S8_UINT:             return MTLPixelFormatDepth32Float_Stencil8;
+#endif
         case PFG_RG8_UNORM:		                return MTLPixelFormatRG8Unorm;
         case PFG_RG8_UINT:		                return MTLPixelFormatRG8Uint;
         case PFG_RG8_SNORM:		                return MTLPixelFormatRG8Snorm;
@@ -525,6 +530,7 @@ namespace Ogre
         case PFG_R9G9B9E5_SHAREDEXP:		    return MTLPixelFormatRGB9E5Float;
         case PFG_R8G8_B8G8_UNORM:               return MTLPixelFormatGBGR422;
         case PFG_G8R8_G8B8_UNORM:               return MTLPixelFormatBGRG422;
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
         case PFG_BC1_UNORM:                     return MTLPixelFormatBC1_RGBA;
         case PFG_BC1_UNORM_SRGB:                return MTLPixelFormatBC1_RGBA_sRGB;
         case PFG_BC2_UNORM:                     return MTLPixelFormatBC2_RGBA;
@@ -535,17 +541,25 @@ namespace Ogre
         case PFG_BC4_SNORM:                     return MTLPixelFormatBC4_RSnorm;
         case PFG_BC5_UNORM:                     return MTLPixelFormatBC5_RGUnorm;
         case PFG_BC5_SNORM:                     return MTLPixelFormatBC5_RGSnorm;
+#endif
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
         case PFG_B5G6R5_UNORM:                  return MTLPixelFormatB5G6R5Unorm;
         case PFG_B5G5R5A1_UNORM:                return MTLPixelFormatBGR5A1Unorm;
+#endif
         case PFG_BGRA8_UNORM:                   return MTLPixelFormatBGRA8Unorm;
         case PFG_BGRX8_UNORM:                   return MTLPixelFormatBGRA8Unorm;
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
         case PFG_R10G10B10_XR_BIAS_A2_UNORM:    return MTLPixelFormatBGRA10_XR;
+#endif
         case PFG_BGRA8_UNORM_SRGB:              return MTLPixelFormatBGRA8Unorm_sRGB;
         case PFG_BGRX8_UNORM_SRGB:              return MTLPixelFormatBGRA8Unorm_sRGB;
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
         case PFG_BC6H_UF16:                     return MTLPixelFormatBC6H_RGBUfloat;
         case PFG_BC6H_SF16:                     return MTLPixelFormatBC6H_RGBFloat;
         case PFG_BC7_UNORM:                     return MTLPixelFormatBC7_RGBAUnorm;
         case PFG_BC7_UNORM_SRGB:                return MTLPixelFormatBC7_RGBAUnorm_sRGB;
+#endif
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
         case PFG_B4G4R4A4_UNORM:                return MTLPixelFormatABGR4Unorm;
         case PFG_PVRTC_RGB2:		            return MTLPixelFormatPVRTC_RGB_2BPP;
         case PFG_PVRTC_RGB2_SRGB:               return MTLPixelFormatPVRTC_RGB_2BPP_sRGB;
@@ -573,6 +587,7 @@ namespace Ogre
         case PFG_ATC_RGB:                       return MTLPixelFormatInvalid;   //Not supported
         case PFG_ATC_RGBA_EXPLICIT_ALPHA:       return MTLPixelFormatInvalid;   //Not supported
         case PFG_ATC_RGBA_INTERPOLATED_ALPHA:   return MTLPixelFormatInvalid;   //Not supported
+#endif
 
         case PFG_AYUV:
         case PFG_Y410:
