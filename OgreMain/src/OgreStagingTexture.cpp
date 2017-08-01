@@ -85,7 +85,7 @@ namespace Ogre
     {
         assert( supportsFormat( width, height, depth, slices, pixelFormat ) );
         assert( mMapRegionStarted && "You must call startMapRegion first!" );
-        if( (depth > 1u || slices >= 1u) && (width > 2048 || height > 2048) )
+        if( (depth > 1u || slices > 1u) && (width > 2048 || height > 2048) )
         {
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
                          "Textures larger than 2048x2048 can only be mapped one "
