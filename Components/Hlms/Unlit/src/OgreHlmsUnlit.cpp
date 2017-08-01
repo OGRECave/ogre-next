@@ -898,8 +898,9 @@ namespace Ogre
                         *commandBuffer->addCommand<CbSamplers>() =
                                 CbSamplers( texUnit, datablock->mSamplersDescSet );
                     }
+
+                    texUnit += datablock->mTexturesDescSet->mTextures.size();
                 }
-                texUnit += datablock->mTexturesDescSet->mTextures.size();
 
                 mLastDescTexture = datablock->mTexturesDescSet;
             }
