@@ -102,7 +102,7 @@ namespace Ogre
         };
     }
 
-    struct RenderPassTargetBase
+    struct _OgreExport RenderPassTargetBase
     {
         TextureGpu  *texture;
         TextureGpu  *resolveTexture;
@@ -119,7 +119,7 @@ namespace Ogre
         RenderPassTargetBase();
     };
 
-    struct RenderPassColourTarget : RenderPassTargetBase
+    struct _OgreExport RenderPassColourTarget : RenderPassTargetBase
     {
         ColourValue clearColour;
         /// When true, slice will be ignored, and
@@ -127,14 +127,14 @@ namespace Ogre
         bool        allLayers;
         RenderPassColourTarget();
     };
-    struct RenderPassDepthTarget : RenderPassTargetBase
+    struct _OgreExport RenderPassDepthTarget : RenderPassTargetBase
     {
         Real    clearDepth;
         /// Assume attachment is read only (it's a hint, not an enforcement)
         bool    readOnly;
         RenderPassDepthTarget();
     };
-    struct RenderPassStencilTarget : RenderPassTargetBase
+    struct _OgreExport RenderPassStencilTarget : RenderPassTargetBase
     {
         uint32  clearStencil;
         /// Assume attachment is read only (it's a hint, not an enforcement)

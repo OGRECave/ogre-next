@@ -43,7 +43,7 @@ namespace Ogre
     *  @{
     */
 
-    class _OgreExport GL3PlusRenderPassDescriptor : public RenderPassDescriptor
+    class _OgreGL3PlusExport GL3PlusRenderPassDescriptor : public RenderPassDescriptor
     {
     protected:
         GLuint  mFboName;
