@@ -130,6 +130,11 @@ namespace Ogre
 
         virtual void _setIndirectBuffer( IndirectBufferPacked *indirectBuffer );
 
+        virtual RenderPassDescriptor* createRenderPassDescriptor(void);
+
+        virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc );
+        virtual void endRenderPassDescriptor( RenderPassDescriptor *desc );
+
         virtual DepthBuffer* _createDepthBufferFor( RenderTarget *renderTarget,
                                                     bool exactMatchFormat );
 

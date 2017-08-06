@@ -93,11 +93,11 @@ namespace Ogre
             DontCare,
             /// Keep the contents of what we've just rendered
             Store,
-            /// Resolve MSAA rendering into resolve texture. Contents of MSAA
-            /// texture are discarded.
+            /// Resolve MSAA rendering into resolve texture.
+            /// Contents of MSAA texture are discarded.
             MultisampleResolve,
-            /// Resolve MSAA rendering into resolve texture. Contents of MSAA
-            /// texture are kept.
+            /// Resolve MSAA rendering into resolve texture.
+            /// Contents of MSAA texture are kept.
             StoreAndMultisampleResolve
         };
     }
@@ -142,7 +142,7 @@ namespace Ogre
         RenderPassStencilTarget();
     };
 
-    class _OgreExport RenderPassDescriptor
+    class _OgreExport RenderPassDescriptor : public RenderSysAlloc
     {
     public:
         RenderPassColourTarget  mColour[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
@@ -172,7 +172,9 @@ namespace Ogre
         virtual void setClearDepth( Real clearDepth );
         virtual void setClearStencil( uint32 clearStencil );
 
-        /// Sets the clear colour to all entries.
+        /// Sets the clear colour to all entries. In some APIs may be faster
+        /// than calling setClearColour( idx, clearColour ) for each entry
+        /// individually.
         virtual void setClearColour( const ColourValue &clearColour );
     };
 

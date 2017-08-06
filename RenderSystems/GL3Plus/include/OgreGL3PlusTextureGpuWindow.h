@@ -26,52 +26,26 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#ifndef _OgreGL3PlusTextureGpu_H_
-#define _OgreGL3PlusTextureGpu_H_
+#ifndef _OgreGL3PlusTextureGpuWindow_H_
+#define _OgreGL3PlusTextureGpuWindow_H_
 
-#include "OgreGL3PlusPrerequisites.h"
-#include "OgreTextureGpu.h"
+#include "OgreGL3PlusTextureGpu.h"
 
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
-    class _OgreGL3PlusExport GL3PlusTextureGpu : public TextureGpu
+    class _OgreGL3PlusExport GL3PlusTextureGpuWindow : public GL3PlusTextureGpu
     {
-    protected:
-        /// This will not be owned by us if hasAutomaticBatching is true.
-        /// It will also not be owned by us if we're not in GpuResidency::Resident
-        /// This will always point to:
-        ///     * A GL texture owned by us.
-        ///     * A 4x4 dummy texture (now owned by us).
-        ///     * A 64x64 mipmapped texture of us (but now owned by us).
-        ///     * A GL texture not owned by us, but contains the final information.
-        GLuint  mDisplayTextureName;
-        GLenum  mGlTextureTarget;
-
-        /// When we're transitioning to GpuResidency::Resident but we're not there yet,
-        /// we will be either displaying a 4x4 dummy texture or a 64x64 one. However
-        /// we reserve a spot to a final place will already be there for us once the
-        /// texture data is fully uploaded. This variable contains that texture.
-        /// Async upload operations should stack to this variable.
-        /// May contain:
-        ///     1. 0, if not resident or resident but not yet reached main thread.
-        ///     2. The texture
-        ///     3. An msaa texture (hasMsaaExplicitResolves == true)
-        ///     4. The msaa resolved texture (hasMsaaExplicitResolves==false)
-        GLuint  mFinalTextureName;
-        /// Only used when hasMsaaExplicitResolves() == false.
-        GLuint  mMsaaFramebufferName;
-
         virtual void createInternalResourcesImpl(void);
         virtual void destroyInternalResourcesImpl(void);
 
     public:
-        GL3PlusTextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+        GL3PlusTextureGpuWindow( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                            VaoManager *vaoManager, IdString name, uint32 textureFlags,
                            TextureTypes::TextureTypes initialType,
                            TextureGpuManager *textureManager );
-        virtual ~GL3PlusTextureGpu();
+        virtual ~GL3PlusTextureGpuWindow();
 
         virtual void setTextureType( TextureTypes::TextureTypes textureType );
 
@@ -85,14 +59,6 @@ namespace Ogre
 
         virtual void _setToDisplayDummyTexture(void);
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
-
-        GLuint getDisplayTextureName(void) const    { return mDisplayTextureName; }
-        GLuint getFinalTextureName(void) const      { return mFinalTextureName; }
-
-        GLuint getMsaaFramebufferName(void) const   { return mMsaaFramebufferName; }
-
-        /// Returns GL_TEXTURE_2D / GL_TEXTURE_2D_ARRAY / etc
-        GLenum getGlTextureTarget(void) const       { return mGlTextureTarget; }
     };
 }
 

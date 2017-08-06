@@ -43,16 +43,20 @@ namespace Ogre
     *  @{
     */
 
-    class _OgreExport GL3PlusRenderPassDescriptor : RenderPassDescriptor
+    class _OgreExport GL3PlusRenderPassDescriptor : public RenderPassDescriptor
     {
     protected:
         GLuint  mFboName;
         GLuint  mFboMsaaResolve;
         bool    mAllClearColoursSetAndIdentical;
         bool    mAnyColourLoadActionsSetToClear;
+        bool    mHasRenderWindow;
 
         RenderSystem    *mRenderSystem;
 
+        void checkRenderWindowStatus(void);
+        void switchToRenderWindow(void);
+        void switchToFBO(void);
         void analyzeClearColour(void);
 
     public:

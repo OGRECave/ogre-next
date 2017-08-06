@@ -34,8 +34,7 @@ THE SOFTWARE.
 
 #include "OgreRenderSystem.h"
 #include "OgreHlmsDatablock.h"
-
-#define TODO_support_GL_BACK_if_renderWindow
+#include "OgrePixelFormatGpuUtils.h"
 
 namespace Ogre
 {
@@ -44,16 +43,9 @@ namespace Ogre
         mFboMsaaResolve( 0 ),
         mAllClearColoursSetAndIdentical( false ),
         mAnyColourLoadActionsSetToClear( false ),
+        mHasRenderWindow( false ),
         mRenderSystem( renderSystem )
     {
-        OCGE( glGenFramebuffers( 1, &mFboName ) );
-
-        OCGE( glBindFramebuffer( GL_FRAMEBUFFER, mFboName ) );
-
-        //Disable target independent rasterization to let the driver warn us
-        //of wrong behavior during regular rendering.
-        OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, 0 ) );
-        OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, 0 ) );
     }
     //-----------------------------------------------------------------------------------
     GL3PlusRenderPassDescriptor::~GL3PlusRenderPassDescriptor()
@@ -64,8 +56,69 @@ namespace Ogre
             mFboMsaaResolve = 0;
         }
 
-        OCGE( glDeleteFramebuffers( 1, &mFboName ) );
-        mFboName = 0;
+        if( mFboName )
+        {
+            OCGE( glDeleteFramebuffers( 1, &mFboName ) );
+            mFboName = 0;
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void GL3PlusRenderPassDescriptor::checkRenderWindowStatus(void)
+    {
+        if( (mNumColourEntries > 0 && mColour[0].texture->isRenderWindowSpecific()) ||
+            (mDepth.texture && !mDepth.texture->isRenderWindowSpecific()) ||
+            (mStencil.texture && !mStencil.texture->isRenderWindowSpecific()) )
+        {
+            if( mNumColourEntries <= 1u )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                             "Cannot use RenderWindow as MRT with other colour textures",
+                             "GL3PlusRenderPassDescriptor::colourEntriesModified" );
+            }
+            if( (mNumColourEntries > 0 && !mColour[0].texture->isRenderWindowSpecific()) ||
+                (mDepth.texture && !mDepth.texture->isRenderWindowSpecific()) ||
+                (mStencil.texture && !mStencil.texture->isRenderWindowSpecific()) )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                             "Cannot mix RenderWindow colour texture with depth or stencil buffer "
+                             "that aren't for RenderWindows, or viceversa",
+                             "GL3PlusRenderPassDescriptor::checkRenderWindowStatus" );
+            }
+
+            switchToRenderWindow();
+        }
+        else if( !mFboName )
+        {
+            switchToFBO();
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void GL3PlusRenderPassDescriptor::switchToRenderWindow(void)
+    {
+        if( mFboName )
+        {
+            OCGE( glDeleteFramebuffers( 1, &mFboName ) );
+            mFboName = 0;
+        }
+
+        mHasRenderWindow = true;
+    }
+    //-----------------------------------------------------------------------------------
+    void GL3PlusRenderPassDescriptor::switchToFBO(void)
+    {
+        if( !mFboName )
+        {
+            OCGE( glGenFramebuffers( 1, &mFboName ) );
+
+            OCGE( glBindFramebuffer( GL_FRAMEBUFFER, mFboName ) );
+
+            //Disable target independent rasterization to let the driver warn us
+            //of wrong behavior during regular rendering.
+            OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, 0 ) );
+            OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, 0 ) );
+        }
+
+        mHasRenderWindow = false;
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusRenderPassDescriptor::analyzeClearColour(void)
@@ -101,9 +154,11 @@ namespace Ogre
 
         RenderPassDescriptor::colourEntriesModified();
 
+        checkRenderWindowStatus();
+
         OCGE( glBindFramebuffer( GL_FRAMEBUFFER, mFboName ) );
 
-        if( mNumColourEntries < lastNumColourEntries )
+        if( mNumColourEntries < lastNumColourEntries && !mHasRenderWindow )
         {
             for( size_t i=mNumColourEntries; i<lastNumColourEntries; ++i )
             {
@@ -120,33 +175,45 @@ namespace Ogre
         {
             assert( mColour[i].texture->getResidencyStatus() == GpuResidency::Resident );
 
-            assert( dynamic_cast<GL3PlusTextureGpu*>( mColour[i].texture ) );
-            GL3PlusTextureGpu *texture = static_cast<GL3PlusTextureGpu*>( mColour[i].texture );
-            if( mColour[i].allLayers )
+            if( !mHasRenderWindow )
             {
-                if( !texture->hasMsaaExplicitResolves() && texture->getMsaa() > 1u )
+                assert( dynamic_cast<GL3PlusTextureGpu*>( mColour[i].texture ) );
+                GL3PlusTextureGpu *texture = static_cast<GL3PlusTextureGpu*>( mColour[i].texture );
+
+                if( texture->isRenderWindowSpecific() )
                 {
-                    OCGE( glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i,
-                                                     texture->getMsaaFramebufferName(), 0 ) );
+                    OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                                 "Cannot use RenderWindow as MRT with other colour textures",
+                                 "GL3PlusRenderPassDescriptor::colourEntriesModified" );
+                }
+
+                if( mColour[i].allLayers )
+                {
+                    if( !texture->hasMsaaExplicitResolves() && texture->getMsaa() > 1u )
+                    {
+                        OCGE( glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i,
+                                                         texture->getMsaaFramebufferName(), 0 ) );
+                    }
+                    else
+                    {
+                        OCGE( glFramebufferTexture( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i,
+                                                    texture->getFinalTextureName(),
+                                                    mColour[i].mipLevel ) );
+                    }
                 }
                 else
                 {
-                    OCGE( glFramebufferTexture( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i,
-                                                texture->getFinalTextureName(), mColour[i].mipLevel ) );
-                }
-            }
-            else
-            {
-                if( !texture->hasMsaaExplicitResolves() && texture->getMsaa() > 1u )
-                {
-                    OCGE( glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i,
-                                                     texture->getMsaaFramebufferName(), 0 ) );
-                }
-                else
-                {
-                    OCGE( glFramebufferTextureLayer( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i,
-                                                     texture->getFinalTextureName(),
-                                                     mColour[i].mipLevel, mColour[i].slice ) );
+                    if( !texture->hasMsaaExplicitResolves() && texture->getMsaa() > 1u )
+                    {
+                        OCGE( glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i,
+                                                         texture->getMsaaFramebufferName(), 0 ) );
+                    }
+                    else
+                    {
+                        OCGE( glFramebufferTextureLayer( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i,
+                                                         texture->getFinalTextureName(),
+                                                         mColour[i].mipLevel, mColour[i].slice ) );
+                    }
                 }
             }
 
@@ -172,6 +239,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void GL3PlusRenderPassDescriptor::depthModified(void)
     {
+        checkRenderWindowStatus();
+        if( mHasRenderWindow )
+            return;
+
         OCGE( glBindFramebuffer( GL_FRAMEBUFFER, mFboName ) );
 
         if( !mDepth.texture )
@@ -199,6 +270,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void GL3PlusRenderPassDescriptor::stencilModified(void)
     {
+        checkRenderWindowStatus();
+        if( mHasRenderWindow )
+            return;
+
         OCGE( glBindFramebuffer( GL_FRAMEBUFFER, mFboName ) );
 
         if( !mStencil.texture )
@@ -242,6 +317,24 @@ namespace Ogre
                                                           bool depthWrite,
                                                           uint32 stencilWriteMask )
     {
+        OCGE( glBindFramebuffer( GL_FRAMEBUFFER, mFboName ) );
+
+        if( mHasRenderWindow )
+        {
+            if( !mNumColourEntries )
+            {
+                //Do not render to colour Render Windows.
+                OCGE( glDrawBuffer( GL_NONE ) );
+            }
+            else
+            {
+                //Make sure colour writes are enabled for RenderWindows.
+                OCGE( glDrawBuffer( GL_BACK ) );
+            }
+        }
+
+        OCGE( glEnable( GL_FRAMEBUFFER_SRGB ) );
+
         const RenderSystemCapabilities *capabilities = mRenderSystem->getCapabilities();
         const bool isTiler = capabilities->hasCapability( RSC_IS_TILER );
 
@@ -390,10 +483,10 @@ namespace Ogre
             ++numAttachments;
         }
 
-        TODO_support_GL_BACK_if_renderWindow;
         if( numAttachments > 0 && hasArbInvalidateSubdata )
         {
-            OCGE( glInvalidateFramebuffer( GL_FRAMEBUFFER, numAttachments, attachments ) );
+            GLenum target = mHasRenderWindow ? GL_BACK : GL_FRAMEBUFFER;
+            OCGE( glInvalidateFramebuffer( target, numAttachments, attachments ) );
         }
 
         OCGE( glBindFramebuffer( GL_READ_FRAMEBUFFER, 0 ) );

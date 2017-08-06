@@ -279,6 +279,10 @@ namespace Ogre {
         void _getDepthStencilFormatFor( GLenum internalColourFormat, GLenum *depthFormat,
                                         GLenum *stencilFormat );
 
+        virtual RenderPassDescriptor* createRenderPassDescriptor(void);
+        virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc );
+        virtual void endRenderPassDescriptor( RenderPassDescriptor *desc );
+
         /// @copydoc RenderSystem::createMultiRenderTarget
         virtual MultiRenderTarget * createMultiRenderTarget(const String & name);
 

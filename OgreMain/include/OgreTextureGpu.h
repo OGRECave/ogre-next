@@ -115,6 +115,13 @@ namespace Ogre
             /// Prefer loading from files as sRGB when possible.
             /// e.g. load PFG_RGBA8_UNORM as PFG_RGBA8_UNORM_SRGB
             PrefersLoadingAsSRGB= 1u << 7u,
+            /// Indicates this texture contains a RenderWindow. In several APIs render windows
+            /// have particular limitations:
+            ///     * Cannot be sampled as textures (i.e. NotTexture will be set)
+            ///     * OpenGL cannot share the depth & stencil buffers with other textures.
+            ///     * Metal requires special maintenance.
+            ///     * etc.
+            RenderWindowSpecific= 1u << 8u,
             /// When not present:
             /// The Texture is exactly the type requested (e.g. 2D texture won't
             /// get a 2D array instead)
@@ -135,7 +142,7 @@ namespace Ogre
             /// compute the texture hashes.
             /// All of that (except updating slices to the GPU) can be done in a
             /// worker thread, then all the values swapped w/ the Datablock’s.
-            AutomaticBatching   = 1u << 8u
+            AutomaticBatching   = 1u << 9u
         };
     }
 
@@ -282,6 +289,7 @@ namespace Ogre
         bool hasMsaaExplicitResolves(void) const;
         bool isReinterpretable(void) const;
         bool prefersLoadingAsSRGB(void) const;
+        bool isRenderWindowSpecific(void) const;
 
         virtual void _setToDisplayDummyTexture(void) = 0;
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );

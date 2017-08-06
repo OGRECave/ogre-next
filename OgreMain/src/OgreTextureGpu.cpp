@@ -420,6 +420,11 @@ namespace Ogre
         return (mTextureFlags & TextureFlags::PrefersLoadingAsSRGB) != 0;
     }
     //-----------------------------------------------------------------------------------
+    bool TextureGpu::isRenderWindowSpecific(void) const
+    {
+        return (mTextureFlags & TextureFlags::RenderWindowSpecific) != 0;
+    }
+    //-----------------------------------------------------------------------------------
     void TextureGpu::_notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice )
     {
         mTexturePool = newPool;

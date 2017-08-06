@@ -58,6 +58,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreGL3PlusVertexArrayObject.h"
 #include "OgreGL3PlusTextureGpuManager.h"
 #include "OgreGL3PlusTextureGpu.h"
+#include "OgreGL3PlusRenderPassDescriptor.h"
 #include "OgreGL3PlusHlmsPso.h"
 #include "OgreHlmsDatablock.h"
 #include "OgreHlmsSamplerblock.h"
@@ -890,7 +891,26 @@ namespace Ogre {
     {
         mRTTManager->getBestDepthStencil( internalColourFormat, depthFormat, stencilFormat );
     }
-
+    //-----------------------------------------------------------------------------------
+    RenderPassDescriptor* GL3PlusRenderSystem::createRenderPassDescriptor(void)
+    {
+        RenderPassDescriptor *retVal = OGRE_NEW GL3PlusRenderPassDescriptor( this );
+        mRenderPassDescs.insert( retVal );
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void GL3PlusRenderSystem::beginRenderPassDescriptor( RenderPassDescriptor *desc )
+    {
+        GL3PlusRenderPassDescriptor *passDesc = static_cast<GL3PlusRenderPassDescriptor*>( desc );
+        passDesc->performLoadActions( mBlendChannelMask, mDepthWrite, mStencilParams.writeMask );
+    }
+    //-----------------------------------------------------------------------------------
+    void GL3PlusRenderSystem::endRenderPassDescriptor( RenderPassDescriptor *desc )
+    {
+        GL3PlusRenderPassDescriptor *passDesc = static_cast<GL3PlusRenderPassDescriptor*>( desc );
+        passDesc->performStoreActions( mHasArbInvalidateSubdata );
+    }
+    //-----------------------------------------------------------------------------------
     MultiRenderTarget* GL3PlusRenderSystem::createMultiRenderTarget(const String & name)
     {
         MultiRenderTarget *retval = mRTTManager->createMultiRenderTarget(name);

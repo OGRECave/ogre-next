@@ -509,6 +509,26 @@ namespace Ogre {
             "the vertex and fragment units.", 
             "RenderSystem::_setTessellationDomainTexture");
     }
+    //-----------------------------------------------------------------------
+    void RenderSystem::destroyRenderPassDescriptor( RenderPassDescriptor *renderPassDesc )
+    {
+        RenderPassDescriptorSet::iterator itor = mRenderPassDescs.find( renderPassDesc );
+        assert( itor != mRenderPassDescs.end() && "Already destroyed?" );
+        if( itor != mRenderPassDescs.end() )
+            mRenderPassDescs.erase( itor );
+        delete renderPassDesc;
+    }
+    //---------------------------------------------------------------------
+    void RenderSystem::destroyAllRenderPassDescriptors(void)
+    {
+        RenderPassDescriptorSet::const_iterator itor = mRenderPassDescs.begin();
+        RenderPassDescriptorSet::const_iterator end  = mRenderPassDescs.end();
+
+        while( itor != end )
+            delete *itor++;
+
+        mRenderPassDescs.clear();
+    }
     //---------------------------------------------------------------------
     void RenderSystem::setUavStartingSlot( uint32 startingSlot )
     {
@@ -685,6 +705,8 @@ namespace Ogre {
         mHwOcclusionQueries.clear();
 
         _cleanupDepthBuffers();
+
+        destroyAllRenderPassDescriptors();
 
         OGRE_DELETE mTextureGpuManager;
         mTextureGpuManager = 0;

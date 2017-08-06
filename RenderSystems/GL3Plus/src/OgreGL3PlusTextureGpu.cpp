@@ -261,6 +261,13 @@ namespace Ogre
     {
         TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel );
 
+        if( dst->isRenderWindowSpecific() )
+        {
+            OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
+                         "TODO: Copying to RenderWindow",
+                         "GL3PlusTextureGpu::copyTo" );
+        }
+
         assert( dynamic_cast<GL3PlusTextureGpu*>( dst ) );
 
         GL3PlusTextureGpu *dstGl = static_cast<GL3PlusTextureGpu*>( dst );

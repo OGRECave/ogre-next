@@ -725,6 +725,12 @@ namespace Ogre
         */
         virtual void _setTexture(size_t unit, bool enabled,  Texture *texPtr) = 0;
 
+        virtual RenderPassDescriptor* createRenderPassDescriptor(void) = 0;
+        void destroyRenderPassDescriptor( RenderPassDescriptor *renderPassDesc );
+
+        virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc ) = 0;
+        virtual void endRenderPassDescriptor( RenderPassDescriptor *desc ) = 0;
+
         /** In Direct3D11, UAV & RenderTargets share the same slots. Because of this,
             we enforce the same behavior on all RenderSystems.
             An unfortunate consequence is that if you attach an MRT consisting of 3 RTs;
@@ -1450,11 +1456,15 @@ namespace Ogre
    
     protected:
 
+        void destroyAllRenderPassDescriptors(void);
         void cleanReleasedDepthBuffers(void);
 
         /** DepthBuffers to be attached to render targets */
         DepthBufferMap  mDepthBufferPool;
         DepthBufferVec  mReleasedDepthBuffers;
+
+        typedef set<RenderPassDescriptor*>::type RenderPassDescriptorSet;
+        RenderPassDescriptorSet mRenderPassDescs;
 
         /** The render targets. */
         RenderTargetMap mRenderTargets;

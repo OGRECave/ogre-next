@@ -263,6 +263,19 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
+    RenderPassDescriptor* NULLRenderSystem::createRenderPassDescriptor(void)
+    {
+        return 0;
+    }
+    //-------------------------------------------------------------------------
+    void NULLRenderSystem::beginRenderPassDescriptor( RenderPassDescriptor *desc )
+    {
+    }
+    //-------------------------------------------------------------------------
+    void NULLRenderSystem::endRenderPassDescriptor( RenderPassDescriptor *desc )
+    {
+    }
+    //-------------------------------------------------------------------------
     DepthBuffer* NULLRenderSystem::_createDepthBufferFor( RenderTarget *renderTarget,
                                                           bool exactMatchFormat )
     {
