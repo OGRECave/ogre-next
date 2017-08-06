@@ -213,6 +213,10 @@ namespace Ogre
         RSC_SEPARATE_SAMPLERS_FROM_TEXTURES = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 6),
         /// Supports doing MSAA on TextureTypes::Type2DArray
         RSC_MSAA_2D_ARRAY = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 7),
+        /// GPU is a tiler, and thus benefits from tight LoadAction & SaveAction
+        /// semanticsthat avoid loading from & storing contents of what's been
+        /// drawn from the tiler's cache to RAM.
+        RSC_IS_TILER = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 8),
 
         // ***** DirectX specific caps *****
         /// Is DirectX feature "per stage constants" supported

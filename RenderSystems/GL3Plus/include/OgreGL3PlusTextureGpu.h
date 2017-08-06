@@ -88,6 +88,8 @@ namespace Ogre
         GLuint getDisplayTextureName(void) const    { return mDisplayTextureName; }
         GLuint getFinalTextureName(void) const      { return mFinalTextureName; }
 
+        GLuint getMsaaFramebufferName(void) const   { return mMsaaFramebufferName; }
+
         /// Returns GL_TEXTURE_2D / GL_TEXTURE_2D_ARRAY / etc
         GLenum getGlTextureTarget(void) const       { return mGlTextureTarget; }
     };
