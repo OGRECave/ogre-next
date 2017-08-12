@@ -30,6 +30,7 @@ THE SOFTWARE.
 
 #include "OgreRenderPassDescriptor.h"
 #include "OgreTextureGpu.h"
+#include "OgreException.h"
 
 namespace Ogre
 {
@@ -92,14 +93,47 @@ namespace Ogre
         while( mNumColourEntries < OGRE_MAX_MULTIPLE_RENDER_TARGETS &&
                mColour[mNumColourEntries].texture )
         {
-            TextureGpu *texture = mColour[mNumColourEntries].texture;
-            assert( texture->hasMsaaExplicitResolves() || texture->getMsaa() <= 1u ||
-                    (mColour[mNumColourEntries].mipLevel == 0 &&
-                     mColour[mNumColourEntries].slice == 0) &&
-                    "MSAA textures can only render to mipLevel 0 and slice 0 "
-                    "unless using explicit resolves" );
-            assert( (!mColour[mNumColourEntries].allLayers || mColour[mNumColourEntries].slice == 0) &&
-                    "Layered Rendering (i.e. binding 2D array or cubemap) only supported if slice = 0" );
+            const RenderPassColourTarget &colourEntry = mColour[mNumColourEntries];
+            TextureGpu *texture = colourEntry.texture;
+
+            if( colourEntry.storeAction == StoreAction::MultisampleResolve &&
+                !colourEntry.resolveTexture )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                             "When storeAction == StoreAction::MultisampleResolve, "
+                             "there MUST be a resolve texture set.",
+                             "RenderPassDescriptor::colourEntriesModified" );
+            }
+
+            if( colourEntry.resolveTexture )
+            {
+                if( colourEntry.texture->getMsaa() <= 1u )
+                {
+                    OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                                 "Resolve Texture '" + colourEntry.resolveTexture->getNameStr() +
+                                 "' specified, but texture to render to '" +
+                                 colourEntry.texture->getNameStr() + "' is not MSAA",
+                                 "RenderPassDescriptor::colourEntriesModified" );
+                }
+                if( colourEntry.resolveTexture == colourEntry.texture &&
+                    colourEntry.mipLevel != 0 || colourEntry.slice != 0 )
+                {
+                    OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                                 "MSAA textures can only render to mipLevel 0 and slice 0 "
+                                 "unless using explicit resolves. Texture: " +
+                                 colourEntry.texture->getNameStr(),
+                                 "RenderPassDescriptor::colourEntriesModified" );
+                }
+            }
+
+            if( colourEntry.allLayers && colourEntry.slice != 0 )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                             "Layered Rendering (i.e. binding 2D array or cubemap) "
+                             "only supported if slice = 0. Texture: " +
+                             colourEntry.texture->getNameStr(),
+                             "RenderPassDescriptor::colourEntriesModified" );
+            }
 
             ++mNumColourEntries;
         }

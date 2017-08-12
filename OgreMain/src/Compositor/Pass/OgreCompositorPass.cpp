@@ -176,17 +176,87 @@ namespace Ogre
                                                 const RenderTargetViewEntry &rtvEntry,
                                                 TextureGpu *colourAttachment )
     {
-        if( rtvEntry.textureName == IdString() )
+        if( colourAttachment )
         {
-            RenderSystem *renderSystem = mParentNode->getRenderSystem();
-            renderPassTargetAttachment->texture =
-                    renderSystem->getDepthBufferFor( colourAttachment );
+            //This is depth or stencil
+            if( rtvEntry.textureName == IdString() )
+            {
+                RenderSystem *renderSystem = mParentNode->getRenderSystem();
+                renderPassTargetAttachment->texture =
+                        renderSystem->getDepthBufferFor( colourAttachment );
+            }
+            else
+            {
+                renderPassTargetAttachment->texture =
+                        mParentNode->getDefinedTexture( rtvEntry.textureName );
+            }
         }
-        else
+        else if( rtvEntry.textureName != IdString() )
         {
+            //This is colour
             renderPassTargetAttachment->texture =
                     mParentNode->getDefinedTexture( rtvEntry.textureName );
+
+            if( !renderPassTargetAttachment->texture )
+            {
+                OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                             "Couldn't find texture for RTV with name " +
+                             rtvEntry.textureName.getFriendlyText(),
+                             "CompositorPass::setupRenderPassTarget" );
+            }
+
+            //Deal with MSAA resolve textures.
+            if( renderPassTargetAttachment->texture->getMsaa() > 1u )
+            {
+                if( renderPassTargetAttachment->storeAction == StoreAction::MultisampleResolve ||
+                    renderPassTargetAttachment->storeAction == StoreAction::StoreAndMultisampleResolve )
+                {
+                    if( rtvEntry.resolveTextureName == IdString() )
+                    {
+                        if( !renderPassTargetAttachment->texture->hasMsaaExplicitResolves() )
+                        {
+                            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                                         "Must specify resolveTextureName for RTV when using explicit "
+                                         "resolves and store action is either "
+                                         "StoreAction::MultisampleResolve or "
+                                         "StoreAction::StoreAndMultisampleResolve. "
+                                         "Texture: " + renderPassTargetAttachment->texture->getNameStr(),
+                                         "CompositorPass::setupRenderPassTarget" );
+                        }
+
+                        renderPassTargetAttachment->resolveTexture = renderPassTargetAttachment->texture;
+                    }
+                    else
+                    {
+                        //Resolve texture is explicitly defined.
+                        //Allow this even if the texture has implicit resolves.
+                        renderPassTargetAttachment->resolveTexture =
+                                mParentNode->getDefinedTexture( rtvEntry.resolveTextureName );
+
+                        if( !renderPassTargetAttachment->resolveTexture )
+                        {
+                            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                                         "Couldn't find resolve texture for RTV with name " +
+                                         rtvEntry.resolveTextureName.getFriendlyText(),
+                                         "CompositorPass::setupRenderPassTarget" );
+                        }
+
+                        if( renderPassTargetAttachment->resolveTexture->getMsaa() > 1u )
+                        {
+                            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                                         "Cannot specify a non-MSAA texture for resolving an "
+                                         "MSAA texture."
+                                         "\nMSAA Texture: " +
+                                         renderPassTargetAttachment->texture->getNameStr() +
+                                         "\nBroken Resolve Texture: " +
+                                         renderPassTargetAttachment->resolveTexture->getNameStr(),
+                                         "CompositorPass::setupRenderPassTarget" );
+                        }
+                    }
+                }
+            }
         }
+
         renderPassTargetAttachment->mipLevel        = rtvEntry.mipLevel;
         renderPassTargetAttachment->resolveMipLevel = rtvEntry.resolveMipLevel;
         renderPassTargetAttachment->slice           = rtvEntry.slice;

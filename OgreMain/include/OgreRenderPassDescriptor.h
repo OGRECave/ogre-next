@@ -95,9 +95,11 @@ namespace Ogre
             Store,
             /// Resolve MSAA rendering into resolve texture.
             /// Contents of MSAA texture are discarded.
+            /// It is invalid to use this flag without an MSAA texture.
             MultisampleResolve,
             /// Resolve MSAA rendering into resolve texture.
             /// Contents of MSAA texture are kept.
+            /// It is valid to use this flag without an MSAA texture.
             StoreAndMultisampleResolve
         };
     }

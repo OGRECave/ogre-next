@@ -444,8 +444,9 @@ namespace Ogre
 
         for( size_t i=0; i<mNumColourEntries; ++i )
         {
-            if( mColour[i].storeAction == StoreAction::MultisampleResolve ||
-                mColour[i].storeAction == StoreAction::StoreAndMultisampleResolve )
+            if( (mColour[i].storeAction == StoreAction::MultisampleResolve ||
+                 mColour[i].storeAction == StoreAction::StoreAndMultisampleResolve) &&
+                mColour[i].resolveTexture )
             {
                 assert( mColour[i].resolveTexture->getResidencyStatus() == GpuResidency::Resident );
                 assert( dynamic_cast<GL3PlusTextureGpu*>( mColour[i].resolveTexture ) );

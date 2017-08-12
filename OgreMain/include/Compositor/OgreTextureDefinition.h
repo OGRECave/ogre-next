@@ -49,6 +49,7 @@ namespace Ogre
     struct _OgreExport RenderTargetViewEntry
     {
         IdString    textureName;
+        IdString    resolveTextureName;
         uint8       mipLevel;
         uint8       resolveMipLevel;
 
@@ -71,9 +72,6 @@ namespace Ogre
         RenderTargetViewEntry       depthAttachment;
         RenderTargetViewEntry       stencilAttachment;
 
-        bool depthReadOnly;
-        bool stencilReadOnly;
-
         /// Depth Buffer's pool ID. Ignored if depthAttachment.textureName or
         /// stencilAttachment.textureName are explicitly set.
         uint16          depthBufferId;
@@ -88,6 +86,9 @@ namespace Ogre
         */
         bool            preferDepthTexture;
         PixelFormatGpu  depthBufferFormat;
+
+        bool depthReadOnly;
+        bool stencilReadOnly;
 
         RenderTargetViewDef() :
             depthBufferId( 1u ), preferDepthTexture( false ), depthBufferFormat( PFG_UNKNOWN ),
