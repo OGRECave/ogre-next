@@ -41,10 +41,10 @@ THE SOFTWARE.
 namespace Ogre
 {
     CompositorPassClear::CompositorPassClear( const CompositorPassClearDef *definition,
-                                                SceneManager *sceneManager,
-                                                const CompositorChannel &target,
-                                                CompositorNode *parentNode ) :
-                CompositorPass( definition, target, parentNode ),
+                                              SceneManager *sceneManager,
+                                              const RenderTargetViewDef *rtv,
+                                              CompositorNode *parentNode ) :
+                CompositorPass( definition, rtv, parentNode ),
                 mSceneManager( sceneManager ),
                 mDefinition( definition )
     {
@@ -66,6 +66,7 @@ namespace Ogre
 
         executeResourceTransitions();
 
+#if TODO_OGRE_2_2
         mSceneManager->_setViewport( mViewport );
 
         //Fire the listener in case it wants to change anything
@@ -82,6 +83,7 @@ namespace Ogre
             mViewport->clear( mDefinition->mClearBufferFlags, mDefinition->mColourValue,
                               mDefinition->mDepthValue, mDefinition->mStencilValue );
         }
+#endif
 
         if( listener )
             listener->passPosExecute( this );
@@ -91,6 +93,7 @@ namespace Ogre
                                                                     ResourceAccessMap &uavsAccess,
                                                                     ResourceLayoutMap &resourcesLayout )
     {
+#if TODO_placeBarriersAndEmulateUavExecution
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
         const RenderSystemCapabilities *caps = renderSystem->getCapabilities();
         const bool explicitApi = caps->hasCapability( RSC_EXPLICIT_API );
@@ -113,5 +116,6 @@ namespace Ogre
 
         //Do not use base class functionality at all.
         //CompositorPass::_placeBarriersAndEmulateUavExecution();
+#endif
     }
 }

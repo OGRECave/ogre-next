@@ -1232,6 +1232,7 @@ namespace Ogre
         mIds["target_height_scaled"]= ID_TARGET_HEIGHT_SCALED;
         mIds["no_gamma"]            = ID_NO_GAMMA;
         mIds["no_fsaa"]             = ID_NO_FSAA;
+        mIds["msaa"]                = ID_MSAA;
         mIds["explicit_resolve"]    = ID_EXPLICIT_RESOLVE;
         mIds["depth_pool"]          = ID_DEPTH_POOL;
         mIds["depth_texture"]       = ID_DEPTH_TEXTURE;
@@ -1239,6 +1240,7 @@ namespace Ogre
         mIds["2d_array"]            = ID_2D_ARRAY;
         //mIds["3d"]                = ID_3D;
         mIds["cubemap"]             = ID_CUBEMAP;
+        mIds["cubemap_array"]       = ID_CUBEMAP_ARRAY;
         mIds["mipmaps"]             = ID_MIPMAPS;
         mIds["automipmaps"]         = ID_AUTOMIPMAPS;
 

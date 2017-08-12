@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "OgrePrerequisites.h"
 #include "OgreIdString.h"
 #include "OgreResourceTransition.h"
+#include "OgreRenderPassDescriptor.h"
 
 namespace Ogre
 {
@@ -107,11 +108,17 @@ namespace Ogre
         /// Custom value in case there's a listener attached (to identify the pass)
         uint32              mIdentifier;
 
-        /// True if a previous pass doesn't alter the contents of the same render target we do
-        ///TODO: Fill this automatically.
-        bool                mBeginRtUpdate;
-        /// End if we're the last consecutive pass to alter the contents of the same render target
-        bool                mEndRtUpdate;
+        ColourValue mClearColour[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
+        float       mClearDepth;
+        uint32      mClearStencil;
+        LoadAction::LoadAction mLoadActionColour[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
+        LoadAction::LoadAction mLoadActionDepth;
+        LoadAction::LoadAction mLoadActionStencil;
+        StoreAction::StoreAction mStoreActionColour[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
+        StoreAction::StoreAction mStoreActionDepth;
+        StoreAction::StoreAction mStoreActionStencil;
+
+        bool mWarnIfRtvWasReset;
 
         /// When false will not really bind the RenderTarget for rendering and
         /// use a null colour buffer instead. Useful for depth prepass, or if
@@ -165,14 +172,28 @@ namespace Ogre
             mVpScissorWidth( 1 ), mVpScissorHeight( 1 ),
             mShadowMapIdx( -1 ),
             mNumInitialPasses( -1 ), mIdentifier( 0 ),
-            mBeginRtUpdate( true ), mEndRtUpdate( true ),
+            mClearDepth( 1.0f ),
+            mClearStencil( 0 ),
+            mLoadActionDepth( LoadAction::Load ),
+            mLoadActionStencil( LoadAction::Load ),
+            mStoreActionDepth( StoreAction::StoreAndMultisampleResolve ),
+            mStoreActionStencil( StoreAction::StoreAndMultisampleResolve ),
+            mWarnIfRtvWasReset( false ),
             mColourWrite( true ),
             mReadOnlyDepth( false ),
             mReadOnlyStencil( false ),
             mIncludeOverlays( false ),
             mExecutionMask( 0xFF ),
             mViewportModifierMask( 0xFF ),
-            mShadowMapFullViewport( false ) {}
+            mShadowMapFullViewport( false )
+        {
+            for( int i=0; i<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
+            {
+                mClearColour[i] = ColourValue::Black;
+                mLoadActionColour[i] = LoadAction::Load;
+                mStoreActionColour[i] = StoreAction::StoreAndMultisampleResolve;
+            }
+        }
         virtual ~CompositorPassDef() {}
 
         CompositorPassType getType() const              { return mPassType; }

@@ -60,7 +60,7 @@ namespace Ogre
 
     public:
         CompositorPassClear( const CompositorPassClearDef *definition, SceneManager *sceneManager,
-                             const CompositorChannel &target, CompositorNode *parentNode );
+                             const RenderTargetViewDef *rtv, CompositorNode *parentNode );
 
         virtual void execute( const Camera *lodCamera );
 

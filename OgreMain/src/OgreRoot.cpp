@@ -812,18 +812,16 @@ namespace Ogre {
 
     }
     //-----------------------------------------------------------------------
-    SceneManager* Root::createSceneManager(const String& typeName, size_t numWorkerThreads,
-        InstancingThreadedCullingMethod threadedCullingMethod, const String& instanceName)
+    SceneManager* Root::createSceneManager( const String& typeName, size_t numWorkerThreads,
+                                            const String& instanceName )
     {
-        return mSceneManagerEnum->createSceneManager(typeName, numWorkerThreads,
-                                                     threadedCullingMethod, instanceName);
+        return mSceneManagerEnum->createSceneManager( typeName, numWorkerThreads, instanceName );
     }
     //-----------------------------------------------------------------------
-    SceneManager* Root::createSceneManager(SceneTypeMask typeMask, size_t numWorkerThreads,
-        InstancingThreadedCullingMethod threadedCullingMethod, const String& instanceName)
+    SceneManager* Root::createSceneManager( SceneTypeMask typeMask, size_t numWorkerThreads,
+                                            const String& instanceName )
     {
-        return mSceneManagerEnum->createSceneManager(typeMask, numWorkerThreads,
-                                                     threadedCullingMethod, instanceName);
+        return mSceneManagerEnum->createSceneManager( typeMask, numWorkerThreads, instanceName );
     }
     //-----------------------------------------------------------------------
     void Root::destroySceneManager(SceneManager* sm)

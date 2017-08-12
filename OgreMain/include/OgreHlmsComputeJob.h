@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "OgreHlmsDatablock.h"
 #include "OgreResourceTransition.h"
 #include "OgreShaderParams.h"
+#include "OgrePixelFormatGpu.h"
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
@@ -83,7 +84,7 @@ namespace Ogre
             BufferPacked *buffer;
             size_t offset;
             size_t sizeBytes;
-            TexturePtr texture;
+            TextureGpu *texture;
             /// Samplerblock is only used by regular textures (not UAVs or buffers)
             HlmsSamplerblock const *samplerblock;
 
@@ -92,12 +93,12 @@ namespace Ogre
             ResourceAccess::ResourceAccess access;
             int32           mipmapLevel;
             int32           textureArrayIndex;
-            PixelFormat     pixelFormat;
+            PixelFormatGpu  pixelFormat;
 
             TextureSlot() :
-                buffer( 0 ), offset( 0 ), sizeBytes( 0 ), samplerblock( 0 ),
+                buffer( 0 ), offset( 0 ), sizeBytes( 0 ), texture( 0 ), samplerblock( 0 ),
                 access( ResourceAccess::Undefined ), mipmapLevel( 0 ), textureArrayIndex( 0 ),
-                pixelFormat( PF_UNKNOWN ) {}
+                pixelFormat( PFG_UNKNOWN ) {}
         };
 
         typedef vector<ConstBufferSlot>::type ConstBufferSlotVec;
@@ -300,7 +301,7 @@ namespace Ogre
         void removeTexUnit( uint8 slotIdx );
         size_t getNumTexUnits(void) const               { return mTextureSlots.size(); }
 
-        const TexturePtr& getTexture( uint8 slotIdx ) const;
+        TextureGpu* getTexture( uint8 slotIdx ) const;
 
         /// @copydoc setNumTexUnits
         void setNumUavUnits( uint8 numSlots );
@@ -308,7 +309,7 @@ namespace Ogre
         void removeUavUnit( uint8 slotIdx );
         size_t getNumUavUnits(void) const               { return mUavSlots.size(); }
 
-        const TexturePtr& getUavTexture( uint8 slotIdx ) const;
+        TextureGpu *getUavTexture( uint8 slotIdx ) const;
         UavBufferPacked* getUavBuffer( uint8 slotIdx ) const;
 
         /** Sets a texture buffer at the given slot ID.
@@ -367,8 +368,8 @@ namespace Ogre
             When null, we leave the previously set samplerblock (if a texture is being set, and if no
             samplerblock was set, we'll create a default one)
         */
-        void setTexture( uint8 slotIdx, TexturePtr &texture,
-						 const HlmsSamplerblock *refParams=0 );
+        void setTexture( uint8 slotIdx, TextureGpu *texture,
+                         const HlmsSamplerblock *refParams=0 );
 
         /** Sets a samplerblock based on reference parameters
         @param slotIdx
@@ -444,9 +445,9 @@ namespace Ogre
         @param mipmapLevel
         @param pixelFormat
         */
-        void _setUavTexture( uint8 slotIdx, TexturePtr &texture, int32 textureArrayIndex,
+        void _setUavTexture( uint8 slotIdx, TextureGpu *texture, int32 textureArrayIndex,
                              ResourceAccess::ResourceAccess access, int32 mipmapLevel,
-                             PixelFormat pixelFormat );
+                             PixelFormatGpu pixelFormat );
 
         HlmsComputeJob *clone( const String &cloneName );
         void cloneTo( HlmsComputeJob *dstJob );

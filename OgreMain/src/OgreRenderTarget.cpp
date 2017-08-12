@@ -222,10 +222,6 @@ namespace Ogre {
     void RenderTarget::_updateViewportCullPhase01( Viewport* viewport, Camera *camera,
                                                    const Camera *lodCamera, uint8 firstRq, uint8 lastRq )
     {
-        assert( viewport->getTarget() == this &&
-                "RenderTarget::_updateViewportCullPhase the requested viewport is "
-                "not bound to the rendertarget!" );
-
         fireViewportPreUpdate(viewport);
         viewport->_updateCullPhase01( camera, lodCamera, firstRq, lastRq );
     }
@@ -234,10 +230,6 @@ namespace Ogre {
                                                      const Camera *lodCamera, uint8 firstRq,
                                                      uint8 lastRq, bool updateStatistics )
     {
-        assert( viewport->getTarget() == this &&
-                "RenderTarget::_updateViewport the requested viewport is "
-                "not bound to the rendertarget!" );
-
         viewport->_updateRenderPhase02( camera, lodCamera, firstRq, lastRq );
         if(updateStatistics)
         {
@@ -250,7 +242,7 @@ namespace Ogre {
     Viewport* RenderTarget::addViewport( float left, float top, float width, float height )
     {       
         // Add viewport to list
-        Viewport* vp = OGRE_NEW Viewport( this, left, top, width, height );
+        Viewport* vp = OGRE_NEW Viewport( left, top, width, height );
         mViewportList.push_back( vp );
 
         vp->mGlobalIndex = mViewportList.size() - 1;

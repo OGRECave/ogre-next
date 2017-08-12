@@ -32,8 +32,6 @@ THE SOFTWARE.
 #include "OgreHeaderPrefix.h"
 #include "Compositor/OgreCompositorCommon.h"
 
-#include "OgreTexture.h"
-
 namespace Ogre
 {
     /** \addtogroup Core
@@ -44,28 +42,11 @@ namespace Ogre
     */
 
     /** A channel in the compositor transports textures between nodes.
-        Unfortunately, Ogre's design of RenderTargets, Textures & MRTs isn't as straightforward
-        and encapsulated as we wanted them to be. Therefore we need this Channel structure
-        to abstract them.
-    @par
-        In short, when we want to render to a texture, we need a RenderTarget. When we want
-        to sample from, we need a Texture. Until here there is an almost 1:1 relationship.
-        However when MRTs come into play, this relationship is destroyed and not handled
-        very well by Ogre. We do.
+        In Ogre 2.1 there were issues with MRT (Multiple Render Targets) that caused a struct
+        to be used as a workaround.
+        But starting Ogre 2.2; CompositorChannel is just a typedef to a single TextureGpu.
     */
-    struct CompositorChannel
-    {
-        typedef vector<TexturePtr>::type TextureVec;
-        RenderTarget    *target;
-        TextureVec      textures;
-
-        CompositorChannel() : target( 0 ) {}
-
-        bool isMrt() const                              { return textures.size() > 1; }
-        bool isValid() const                            { return target != 0; }
-        bool operator == ( const CompositorChannel &right ) const   { return target == right.target; }
-    };
-
+    typedef TextureGpu* CompositorChannel;
     typedef vector<CompositorChannel>::type CompositorChannelVec;
 
     /** @} */

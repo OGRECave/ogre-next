@@ -57,7 +57,8 @@ namespace Ogre
     }
 
     RenderPassDescriptor::RenderPassDescriptor() :
-        mNumColourEntries( 0 )
+        mNumColourEntries( 0 ),
+        mRequiresTextureFlipping( false )
     {
     }
     //-----------------------------------------------------------------------------------
@@ -65,9 +66,28 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
+    void RenderPassDescriptor::checkRequiresTextureFlipping(void)
+    {
+        mRequiresTextureFlipping = false;
+
+        for( size_t i=0; i<mNumColourEntries && !mRequiresTextureFlipping; ++i )
+        {
+            TextureGpu *texture = mColour[i].texture;
+            mRequiresTextureFlipping = texture->requiresTextureFlipping();
+        }
+
+        if( !mRequiresTextureFlipping && mDepth.texture )
+            mRequiresTextureFlipping = mDepth.texture->requiresTextureFlipping();
+
+        if( !mRequiresTextureFlipping && mStencil.texture )
+            mRequiresTextureFlipping = mStencil.texture->requiresTextureFlipping();
+    }
+    //-----------------------------------------------------------------------------------
     void RenderPassDescriptor::colourEntriesModified(void)
     {
         mNumColourEntries = 0;
+
+        mRequiresTextureFlipping = false;
 
         while( mNumColourEntries < OGRE_MAX_MULTIPLE_RENDER_TARGETS &&
                mColour[mNumColourEntries].texture )
@@ -80,8 +100,21 @@ namespace Ogre
                     "unless using explicit resolves" );
             assert( (!mColour[mNumColourEntries].allLayers || mColour[mNumColourEntries].slice == 0) &&
                     "Layered Rendering (i.e. binding 2D array or cubemap) only supported if slice = 0" );
+
             ++mNumColourEntries;
         }
+
+        checkRequiresTextureFlipping();
+    }
+    //-----------------------------------------------------------------------------------
+    void RenderPassDescriptor::depthModified(void)
+    {
+        checkRequiresTextureFlipping();
+    }
+    //-----------------------------------------------------------------------------------
+    void RenderPassDescriptor::stencilModified(void)
+    {
+        checkRequiresTextureFlipping();
     }
     //-----------------------------------------------------------------------------------
     void RenderPassDescriptor::setClearColour( uint8 idx, const ColourValue &clearColour )

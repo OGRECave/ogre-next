@@ -472,6 +472,7 @@ namespace Ogre
         switch( pf )
         {
         case PFG_UNKNOWN:                       return MTLPixelFormatInvalid;
+        case PFG_NULL:                          return MTLPixelFormatInvalid;
         case PFG_RGBA32_FLOAT:		            return MTLPixelFormatRGBA32Float;
         case PFG_RGBA32_UINT:		            return MTLPixelFormatRGBA32Uint;
         case PFG_RGBA32_SINT:		            return MTLPixelFormatRGBA32Sint;

@@ -43,9 +43,9 @@ THE SOFTWARE.
 namespace Ogre
 {
     CompositorPassScene::CompositorPassScene( const CompositorPassSceneDef *definition,
-                                                Camera *defaultCamera, const CompositorChannel &target,
-                                                CompositorNode *parentNode ) :
-                CompositorPass( definition, target, parentNode ),
+                                              Camera *defaultCamera, const RenderTargetViewDef *rtv,
+                                              CompositorNode *parentNode ) :
+                CompositorPass( definition, rtv, parentNode ),
                 mDefinition( definition ),
                 mShadowNode( 0 ),
                 mCamera( 0 ),
@@ -84,27 +84,28 @@ namespace Ogre
         else
             mCullCamera = mCamera;
 
-        if( mDefinition->mPrePassMode == PrePassUse && mDefinition->mPrePassTexture != IdString() )
+        if( mDefinition->mPrePassMode == PrePassUse && !mDefinition->mPrePassTexture.empty() )
         {
             {
-                const CompositorChannel *channel = parentNode->_getDefinedTexture(
-                            mDefinition->mPrePassTexture );
-                mPrePassTextures = &channel->textures;
+                IdStringVec::const_iterator itPrePassTexName = mDefinition->mPrePassTexture.begin();
+                IdStringVec::const_iterator enPrePassTexName = mDefinition->mPrePassTexture.end();
+                while( itPrePassTexName != enPrePassTexName )
+                {
+                    TextureGpu *channel = parentNode->getDefinedTexture( *itPrePassTexName );
+                    mPrePassTextures.push_back( channel );
+                    ++itPrePassTexName;
+                }
             }
 
             if( mDefinition->mPrePassDepthTexture != IdString() )
             {
-                const CompositorChannel *channel = parentNode->_getDefinedTexture(
-                            mDefinition->mPrePassDepthTexture );
-                mPrePassDepthTexture = &channel->textures;
-                assert( mPrePassDepthTexture->size() == 1u );
+                mPrePassDepthTexture = parentNode->getDefinedTexture(
+                                           mDefinition->mPrePassDepthTexture );
             };
 
             if( mDefinition->mPrePassSsrTexture != IdString() )
             {
-                const CompositorChannel *ssrChannel = parentNode->_getDefinedTexture(
-                            mDefinition->mPrePassSsrTexture );
-                mSsrTexture = &ssrChannel->textures;
+                mSsrTexture = parentNode->getDefinedTexture( mDefinition->mPrePassSsrTexture );
             }
         }
     }
@@ -131,17 +132,11 @@ namespace Ogre
         if( lodCamera && mCamera == mLodCamera )
             usedLodCamera = lodCamera;
 
+#if TODO_OGRE_2_2
         //store the viewports current material scheme and use the one set in the scene pass def
         String oldViewportMatScheme = mViewport->getMaterialScheme();
         mViewport->setMaterialScheme(mDefinition->mMaterialScheme);
-
-        //Let the code receive valid camera->getLastViewport() return values.
-        mCamera->_notifyViewport( mViewport );
-        const_cast<Camera*>(usedLodCamera)->_notifyViewport( mViewport ); //TODO: Ugly const_cast
-
-        //Call beginUpdate if we're the first to use this RT
-        if( mDefinition->mBeginRtUpdate )
-            mTarget->_beginUpdate();
+#endif
 
         SceneManager *sceneManager = mCamera->getSceneManager();
 
@@ -168,7 +163,8 @@ namespace Ogre
                                                                                     SHADOW_NODE_REUSE );
         }
 
-        mViewport->_setVisibilityMask( mDefinition->mVisibilityMask, mDefinition->mLightVisibilityMask );
+        Viewport *viewport = sceneManager->getCurrentViewport();
+        viewport->_setVisibilityMask( mDefinition->mVisibilityMask, mDefinition->mLightVisibilityMask );
 
         //Fire the listener in case it wants to change anything
         if( listener )
@@ -177,24 +173,24 @@ namespace Ogre
         if( mUpdateShadowNode && shadowNode )
         {
             //We need to prepare for rendering another RT (we broke the contiguous chain)
-            mTarget->_endUpdate();
 
             //Save the value in case the listener changed it
-            const uint32 oldVisibilityMask = mViewport->getVisibilityMask();
-            const uint32 oldLightVisibilityMask = mViewport->getLightVisibilityMask();
+            const uint32 oldVisibilityMask = viewport->getVisibilityMask();
+            const uint32 oldLightVisibilityMask = viewport->getLightVisibilityMask();
 
             shadowNode->_update( mCamera, usedLodCamera, sceneManager );
 
             //ShadowNode passes may've overriden these settings.
             sceneManager->_setCurrentShadowNode( shadowNode, mDefinition->mShadowNodeRecalculation ==
                                                                                     SHADOW_NODE_REUSE );
-            sceneManager->_setCompositorTarget( mTargetTexture );
-            mViewport->_setVisibilityMask( oldVisibilityMask, oldLightVisibilityMask );
-            mCamera->_notifyViewport( mViewport );
+            viewport->_setVisibilityMask( oldVisibilityMask, oldLightVisibilityMask );
+            mCamera->_notifyViewport( viewport );
 
             //We need to restore the previous RT's update
-            mTarget->_beginUpdate();
         }
+
+        setRenderPassDescToCurrent();
+
         sceneManager->_setForwardPlusEnabledInPass( mDefinition->mEnableForwardPlus );
         sceneManager->_setPrePassMode( mDefinition->mPrePassMode, mPrePassTextures,
                                        mPrePassDepthTexture, mSsrTexture );
@@ -202,15 +198,17 @@ namespace Ogre
 
         if( !mDefinition->mReuseCullData )
         {
-            mTarget->_updateViewportCullPhase01( mViewport, mCullCamera, usedLodCamera,
-                                                 mDefinition->mFirstRQ, mDefinition->mLastRQ );
+            viewport->_updateCullPhase01( mCullCamera, usedLodCamera,
+                                          mDefinition->mFirstRQ, mDefinition->mLastRQ );
         }
 
         executeResourceTransitions();
 
+#if TODO_OGRE_2_2
         mTarget->setFsaaResolveDirty();
-        mTarget->_updateViewportRenderPhase02( mViewport, mCamera, usedLodCamera,
-                                               mDefinition->mFirstRQ, mDefinition->mLastRQ, true );
+#endif
+        viewport->_updateRenderPhase02( mCamera, usedLodCamera,
+                                        mDefinition->mFirstRQ, mDefinition->mLastRQ );
 
         if( mDefinition->mCameraCubemapReorient )
         {
@@ -218,10 +216,12 @@ namespace Ogre
             mCamera->setOrientation( oldCameraOrientation );
         }
 
+#if TODO_OGRE_2_2
         //restore viewport material scheme
         mViewport->setMaterialScheme(oldViewportMatScheme);
+#endif
 
-        sceneManager->_setPrePassMode( PrePassNone, 0, 0, 0 );
+        sceneManager->_setPrePassMode( PrePassNone, TextureGpuVec(), 0, 0 );
         sceneManager->_setCurrentCompositorPass( 0 );
 
         if( mDefinition->mShadowNodeRecalculation != SHADOW_NODE_CASTER_PASS )
@@ -232,16 +232,13 @@ namespace Ogre
 
         if( listener )
             listener->passPosExecute( this );
-
-        //Call endUpdate if we're the last pass in a row to use this RT
-        if( mDefinition->mEndRtUpdate )
-            mTarget->_endUpdate();
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassScene::_placeBarriersAndEmulateUavExecution( BoundUav boundUavs[64],
                                                                     ResourceAccessMap &uavsAccess,
                                                                     ResourceLayoutMap &resourcesLayout )
     {
+#if TODO_placeBarriersAndEmulateUavExecution
         if( mShadowNode && mUpdateShadowNode )
         {
             mShadowNode->_placeBarriersAndEmulateUavExecution( boundUavs, uavsAccess,
@@ -320,6 +317,7 @@ namespace Ogre
         }
 
         CompositorPass::_placeBarriersAndEmulateUavExecution( boundUavs, uavsAccess, resourcesLayout );
+#endif
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassScene::notifyCleared(void)

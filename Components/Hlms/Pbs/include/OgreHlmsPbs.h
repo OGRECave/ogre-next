@@ -105,7 +105,7 @@ namespace Ogre
 
         struct PassData
         {
-            FastArray<Texture*> shadowMaps;
+            FastArray<TextureGpu*> shadowMaps;
             FastArray<float>    vertexShaderSharedBuffer;
             FastArray<float>    pixelShaderSharedBuffer;
 
@@ -118,7 +118,6 @@ namespace Ogre
         HlmsSamplerblock const  *mShadowmapCmpSamplerblock; /// For depth textures & D3D11
         HlmsSamplerblock const  *mShadowmapEsmSamplerblock; /// For ESM.
         HlmsSamplerblock const  *mCurrentShadowmapSamplerblock;
-        TexturePtr              mTargetEnvMap;
         ParallaxCorrectedCubemap    *mParallaxCorrectedCubemap;
 
         uint32                  mCurrentPassBuffer;     /// Resets to zero every new frame.
@@ -128,9 +127,9 @@ namespace Ogre
 
         uint32                  mTexUnitSlotStart;
 
-        TextureVec const        *mPrePassTextures;
-        TexturePtr              mPrePassMsaaDepthTexture;
-        TextureVec const        *mSsrTexture;
+        TextureGpuVec const     *mPrePassTextures;
+        TextureGpu              *mPrePassMsaaDepthTexture;
+        TextureGpu              *mSsrTexture;
         IrradianceVolume        *mIrradianceVolume;
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
         //TODO: After texture refactor it should be possible to abstract this,

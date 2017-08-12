@@ -52,12 +52,11 @@ THE SOFTWARE.
 #include "Vao/OgreVertexArrayObject.h"
 
 namespace Ogre {
-
-    static const TexturePtr sNullTexPtr;
-
     //-----------------------------------------------------------------------
     RenderSystem::RenderSystem()
-        : mActiveRenderTarget(0)
+        : mCurrentRenderPassDescriptor(0)
+        , mCurrentRenderViewport( 0, 0, 0, 0 )
+        , mActiveRenderTarget(0)
         , mTextureManager(0)
         , mVaoManager(0)
         , mTextureGpuManager(0)
@@ -307,7 +306,7 @@ namespace Ogre {
         // This method is only ever called to set a texture unit to valid details
         // The method _disableTextureUnit is called to turn a unit off
 
-        const TexturePtr& tex = tl._getTexturePtr();
+        TextureGpu *tex = tl._getTexturePtr();
         bool isValidBinding = false;
         
         if (mCurrentCapabilities->hasCapability(RSC_COMPLETE_TEXTURE_BINDING))
@@ -324,13 +323,13 @@ namespace Ogre {
                 _setVertexTexture(texUnit, tex);
                 // bind nothing to fragment unit (hardware isn't shared but fragment
                 // unit can't be using the same index
-                _setTexture(texUnit, true, sNullTexPtr.get());
+                _setTexture(texUnit, true, 0);
             }
             else
             {
                 // vice versa
-                _setVertexTexture(texUnit, sNullTexPtr);
-                _setTexture(texUnit, true, tex.get());
+                _setVertexTexture(texUnit, 0);
+                _setTexture(texUnit, true, tex);
             }
         }
 
@@ -343,13 +342,13 @@ namespace Ogre {
                 _setGeometryTexture(texUnit, tex);
                 // bind nothing to fragment unit (hardware isn't shared but fragment
                 // unit can't be using the same index
-                _setTexture(texUnit, true, sNullTexPtr.get());
+                _setTexture(texUnit, true, 0);
             }
             else
             {
                 // vice versa
-                _setGeometryTexture(texUnit, sNullTexPtr);
-                _setTexture(texUnit, true, tex.get());
+                _setGeometryTexture(texUnit, 0);
+                _setTexture(texUnit, true, tex);
             }
         }
 
@@ -362,13 +361,13 @@ namespace Ogre {
                 _setTessellationDomainTexture(texUnit, tex);
                 // bind nothing to fragment unit (hardware isn't shared but fragment
                 // unit can't be using the same index
-                _setTexture(texUnit, true, sNullTexPtr.get());
+                _setTexture(texUnit, true, 0);
             }
             else
             {
                 // vice versa
-                _setTessellationDomainTexture(texUnit, sNullTexPtr);
-                _setTexture(texUnit, true, tex.get());
+                _setTessellationDomainTexture(texUnit, 0);
+                _setTexture(texUnit, true, tex);
             }
         }
 
@@ -381,13 +380,13 @@ namespace Ogre {
                 _setTessellationHullTexture(texUnit, tex);
                 // bind nothing to fragment unit (hardware isn't shared but fragment
                 // unit can't be using the same index
-                _setTexture(texUnit, true, sNullTexPtr.get());
+                _setTexture(texUnit, true, 0);
             }
             else
             {
                 // vice versa
-                _setTessellationHullTexture(texUnit, sNullTexPtr);
-                _setTexture(texUnit, true, tex.get());
+                _setTessellationHullTexture(texUnit, 0);
+                _setTexture(texUnit, true, tex);
             }
         }
 
@@ -395,7 +394,7 @@ namespace Ogre {
         {
             // Shared vertex / fragment textures or no vertex texture support
             // Bind texture (may be blank)
-            _setTexture(texUnit, true, tex.get());
+            _setTexture(texUnit, true, tex);
         }
 
         _setHlmsSamplerblock( texUnit, tl.getSamplerblock() );
@@ -460,13 +459,6 @@ namespace Ogre {
 
     }
     //-----------------------------------------------------------------------
-    void RenderSystem::_setTexture(size_t unit, bool enabled, 
-        const String &texname)
-    {
-        TexturePtr t = TextureManager::getSingleton().getByName(texname);
-        _setTexture(unit, enabled, t.get());
-    }
-    //-----------------------------------------------------------------------
     void RenderSystem::_setBindingType(TextureUnitState::BindingType bindingType)
     {
         OGRE_EXCEPT(Exception::ERR_NOT_IMPLEMENTED, 
@@ -474,7 +466,7 @@ namespace Ogre {
             "RenderSystem::_setBindingType");
     }
     //-----------------------------------------------------------------------
-    void RenderSystem::_setVertexTexture(size_t unit, const TexturePtr& tex)
+    void RenderSystem::_setVertexTexture(size_t unit, TextureGpu *tex)
     {
         OGRE_EXCEPT(Exception::ERR_NOT_IMPLEMENTED, 
             "This rendersystem does not support separate vertex texture samplers, "
@@ -483,7 +475,7 @@ namespace Ogre {
             "RenderSystem::_setVertexTexture");
     }
     //-----------------------------------------------------------------------
-    void RenderSystem::_setGeometryTexture(size_t unit, const TexturePtr& tex)
+    void RenderSystem::_setGeometryTexture(size_t unit, TextureGpu *tex)
     {
         OGRE_EXCEPT(Exception::ERR_NOT_IMPLEMENTED, 
             "This rendersystem does not support separate geometry texture samplers, "
@@ -492,7 +484,7 @@ namespace Ogre {
             "RenderSystem::_setGeometryTexture");
     }
     //-----------------------------------------------------------------------
-    void RenderSystem::_setTessellationHullTexture(size_t unit, const TexturePtr& tex)
+    void RenderSystem::_setTessellationHullTexture(size_t unit, TextureGpu *tex)
     {
         OGRE_EXCEPT(Exception::ERR_NOT_IMPLEMENTED, 
             "This rendersystem does not support separate tessellation hull texture samplers, "
@@ -501,7 +493,7 @@ namespace Ogre {
             "RenderSystem::_setTessellationHullTexture");
     }
     //-----------------------------------------------------------------------
-    void RenderSystem::_setTessellationDomainTexture(size_t unit, const TexturePtr& tex)
+    void RenderSystem::_setTessellationDomainTexture(size_t unit, TextureGpu *tex)
     {
         OGRE_EXCEPT(Exception::ERR_NOT_IMPLEMENTED, 
             "This rendersystem does not support separate tessellation domain texture samplers, "
@@ -528,6 +520,24 @@ namespace Ogre {
             delete *itor++;
 
         mRenderPassDescs.clear();
+    }
+    //---------------------------------------------------------------------
+    void RenderSystem::beginRenderPassDescriptor( RenderPassDescriptor *desc,
+                                                  const Vector4 &viewportSize,
+                                                  const Vector4 &scissors,
+                                                  bool overlaysEnabled )
+    {
+        mCurrentRenderPassDescriptor = desc;
+        mCurrentRenderViewport.setDimensions( viewportSize.x, viewportSize.y,
+                                              viewportSize.z, viewportSize.w,
+                                              false );
+        mCurrentRenderViewport.setScissors( scissors.x, scissors.y, scissors.z, scissors.w );
+        mCurrentRenderViewport.setOverlaysEnabled( overlaysEnabled );
+    }
+    //---------------------------------------------------------------------
+    void RenderSystem::endRenderPassDescriptor(void)
+    {
+        mCurrentRenderPassDescriptor = 0;
     }
     //---------------------------------------------------------------------
     void RenderSystem::setUavStartingSlot( uint32 startingSlot )

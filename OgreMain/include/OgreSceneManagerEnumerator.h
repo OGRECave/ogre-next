@@ -52,16 +52,14 @@ namespace Ogre {
         ~DefaultSceneManagerFactory() {}
         /// Factory type name
         static const String FACTORY_TYPE_NAME;
-        SceneManager* createInstance(const String& instanceName, size_t numWorkerThreads,
-                                    InstancingThreadedCullingMethod threadedCullingMethod);
+        SceneManager* createInstance( const String& instanceName, size_t numWorkerThreads );
         void destroyInstance(SceneManager* instance);
     };
     /// Default scene manager
     class _OgreExport DefaultSceneManager : public SceneManager
     {
     public:
-        DefaultSceneManager(const String& name, size_t numWorkerThreads,
-                            InstancingThreadedCullingMethod threadedCullingMethod);
+        DefaultSceneManager( const String& name, size_t numWorkerThreads );
         ~DefaultSceneManager();
         const String& getTypeName(void) const;
     };
@@ -151,7 +149,6 @@ namespace Ogre {
             created. If you leave this blank, an auto name will be assigned.
         */
         SceneManager* createSceneManager(const String& typeName, size_t numWorkerThreads,
-            InstancingThreadedCullingMethod threadedCullingMethod,
             const String& instanceName = BLANKSTRING);
 
         /** Create a SceneManager instance based on scene type support.
@@ -167,7 +164,6 @@ namespace Ogre {
             created. If you leave this blank, an auto name will be assigned.
         */
         SceneManager* createSceneManager(SceneTypeMask typeMask, size_t numWorkerThreads,
-            InstancingThreadedCullingMethod threadedCullingMethod,
             const String& instanceName = BLANKSTRING );
 
         /** Destroy an instance of a SceneManager. */

@@ -40,7 +40,7 @@ namespace Ogre
     class CompositorWorkspace;
     class CompositorWorkspaceListener;
     class RenderTarget;
-    struct CompositorChannel;
+    typedef TextureGpu* CompositorChannel;
 
     class CompositorNodeDef;
     class CompositorShadowNodeDef;

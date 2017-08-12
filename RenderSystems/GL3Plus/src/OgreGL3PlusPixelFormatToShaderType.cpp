@@ -30,8 +30,9 @@ Copyright (c) 2000-2016 Torus Knot Software Ltd
 
 namespace Ogre
 {
-    const char* GL3PlusPixelFormatToShaderType::getPixelFormatType( PixelFormat pixelFormat ) const
+    const char* GL3PlusPixelFormatToShaderType::getPixelFormatType( PixelFormatGpu pixelFormat ) const
     {
+        asd;
         switch( pixelFormat )
         {
         //UNORM formats

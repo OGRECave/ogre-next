@@ -103,7 +103,7 @@ namespace Ogre
 #if !USE_RTT_DIRECTLY
             if( mStatic )
             {
-                const CompositorChannel &channel = mWorkspace->getExternalRenderTargets()[0];
+                TextureGpu *channel = mWorkspace->getExternalRenderTargets()[0];
                 mCreator->releaseTmpRtt( channel.textures[0] );
             }
 #endif
@@ -349,7 +349,7 @@ namespace Ogre
         {
 #if !USE_RTT_DIRECTLY
             //Copy from tmp RTT to real texture.
-            const CompositorChannel &channel = mWorkspace->getExternalRenderTargets()[0];
+            TextureGpu *channel = mWorkspace->getExternalRenderTargets()[0];
             channel.textures[0]->copyToTexture( mTexture );
 #endif
 

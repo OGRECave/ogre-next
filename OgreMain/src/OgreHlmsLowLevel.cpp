@@ -327,7 +327,7 @@ namespace Ogre
                         "HlmsLowLevel::fillBuffersFor" );
                 }
 
-                pTex->_setTexturePtr( (*itor->textures)[pTex->getReferencedMRTIndex()] );
+                pTex->_setTexturePtr( itor->texture );
             }
 
             mRenderSystem->_setTextureUnitSettings( unit, *pTex );

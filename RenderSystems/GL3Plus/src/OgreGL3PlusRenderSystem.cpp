@@ -1053,9 +1053,9 @@ namespace Ogre {
         // Point sprites are always on in OpenGL 3.2 and up.
     }
 
-    void GL3PlusRenderSystem::_setTexture(size_t stage, bool enabled, Texture *texPtr)
+    void GL3PlusRenderSystem::_setTexture( size_t stage, bool enabled, TextureGpu *texPtr )
     {
-        GL3PlusTexture *tex = static_cast<GL3PlusTexture*>( texPtr );
+        GL3PlusTextureGpu *tex = static_cast<GL3PlusTextureGpu*>( texPtr );
 
         if (!activateGLTextureUnit(stage))
             return;
@@ -1161,24 +1161,24 @@ namespace Ogre {
         }
     }
 
-    void GL3PlusRenderSystem::_setVertexTexture( size_t unit, const TexturePtr &tex )
+    void GL3PlusRenderSystem::_setVertexTexture( size_t unit, TextureGpu *tex )
     {
-        _setTexture(unit, true, tex.get());
+        _setTexture(unit, true, tex);
     }
 
-    void GL3PlusRenderSystem::_setGeometryTexture( size_t unit, const TexturePtr &tex )
+    void GL3PlusRenderSystem::_setGeometryTexture( size_t unit, TextureGpu *tex )
     {
-        _setTexture(unit, true, tex.get());
+        _setTexture(unit, true, tex);
     }
 
-    void GL3PlusRenderSystem::_setTessellationHullTexture( size_t unit, const TexturePtr &tex )
+    void GL3PlusRenderSystem::_setTessellationHullTexture( size_t unit, TextureGpu *tex )
     {
-        _setTexture(unit, true, tex.get());
+        _setTexture(unit, true, tex);
     }
 
-    void GL3PlusRenderSystem::_setTessellationDomainTexture( size_t unit, const TexturePtr &tex )
+    void GL3PlusRenderSystem::_setTessellationDomainTexture( size_t unit, TextureGpu *tex )
     {
-        _setTexture(unit, true, tex.get());
+        _setTexture(unit, true, tex);
     }
 
     void GL3PlusRenderSystem::setUavStartingSlot( uint32 startingSlot )

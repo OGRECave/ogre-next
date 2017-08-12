@@ -151,7 +151,7 @@ namespace Ogre
         */
         CompositorNode( IdType id, IdString name, const CompositorNodeDef *definition,
                         CompositorWorkspace *workspace, RenderSystem *renderSys,
-                        const RenderTarget *finalTarget );
+                        TextureGpu *finalTarget );
         virtual ~CompositorNode();
 
         IdString getName(void) const                                { return mName; }
@@ -202,7 +202,7 @@ namespace Ogre
         @param inChannelA
             In which channel number to inject to.
         */
-        void connectExternalRT( const CompositorChannel &externalTexture, size_t inChannelA );
+        void connectExternalRT( TextureGpu *externalTexture, size_t inChannelA );
 
         /** Connects (injects) an external buffer into the given channel. Usually used for
             the 'connect_buffer_external' directive.
@@ -226,15 +226,10 @@ namespace Ogre
             refer to an input texture, a local texture, or a global one.
             If the global texture wasn't registered with addTextureSourceName,
             it will fail.
-        @param mrtIndex
-            The MRT (Multiple Render Target) index. If the texture isn't MRT or has
-            less RTs than the index, it returns the highest valid index found.
         @return
             Null if not found (or global texture not registered). The texture otherwise
         */
-        TexturePtr getDefinedTexture( IdString textureName, size_t mrtIndex ) const;
-
-        const CompositorChannel* _getDefinedTexture( IdString textureName ) const;
+        TextureGpu* getDefinedTexture( IdString textureName ) const;
 
         /** Returns the buffer pointer of a buffer based on it's name.
         @remarks
@@ -302,7 +297,7 @@ namespace Ogre
         @param newChannel
             The new replacement textures
         */
-        void notifyRecreated( const CompositorChannel &oldChannel, const CompositorChannel &newChannel );
+        void notifyRecreated( TextureGpu *channel );
         void notifyRecreated( const UavBufferPacked *oldBuffer, UavBufferPacked *newBuffer );
 
         /** Call this function when caller has destroyed a RenderTarget in which the callee
@@ -310,7 +305,7 @@ namespace Ogre
         @param channel
             Channel containing the pointer about to be destroyed (must still be valid)
         */
-        void notifyDestroyed( const CompositorChannel &channel );
+        void notifyDestroyed( TextureGpu *channel );
         void notifyDestroyed( const UavBufferPacked *buffer );
 
         /** Internal Use. Called when connections are all being zero'ed. We rely our
@@ -330,7 +325,7 @@ namespace Ogre
             The Final Target (i.e. RenderWindow) from which we'll base our local textures'
             resolution.
         */
-        virtual void finalTargetResized( const RenderTarget *finalTarget );
+        virtual void finalTargetResized( const TextureGpu *finalTarget );
 
         /// @copydoc CompositorWorkspace::resetAllNumPassesLeft
         void resetAllNumPassesLeft(void);

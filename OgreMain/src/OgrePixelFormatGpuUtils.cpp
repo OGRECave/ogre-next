@@ -666,7 +666,7 @@ namespace Ogre
         case PFG_NV11: case PFG_AI44: case PFG_IA44:
         case PFG_P8:   case PFG_A8P8:
         case PFG_P208: case PFG_V208: case PFG_V408:
-        case PFG_UNKNOWN: case PFG_COUNT:
+        case PFG_UNKNOWN: case PFG_NULL: case PFG_COUNT:
             OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "",
                          "PixelFormatGpuUtils::packColour" );
             break;
@@ -938,7 +938,7 @@ namespace Ogre
         case PFG_NV11: case PFG_AI44: case PFG_IA44:
         case PFG_P8:   case PFG_A8P8:
         case PFG_P208: case PFG_V208: case PFG_V408:
-        case PFG_UNKNOWN: case PFG_COUNT:
+        case PFG_UNKNOWN: case PFG_NULL: case PFG_COUNT:
             OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "",
                          "PixelFormatGpuUtils::unpackColour" );
             break;
@@ -1291,6 +1291,7 @@ namespace Ogre
     PixelFormatGpuUtils::PixelFormatDesc PixelFormatGpuUtils::msPixelFormatDesc[PFG_COUNT + 1u] =
     {
         {"PFG_UNKNOWN", 1u, 0, 0 },
+        {"PFG_NULL", 1u, 0, 0 },
         {"PFG_RGBA32_FLOAT",		4u, 4u * sizeof(uint32),    PFF_FLOAT },
         {"PFG_RGBA32_UINT",			4u, 4u * sizeof(uint32),	PFF_INTEGER },
         {"PFG_RGBA32_INT",			4u, 4u * sizeof(uint32),	PFF_INTEGER|PFF_SIGNED },

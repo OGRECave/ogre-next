@@ -463,9 +463,11 @@ namespace Ogre
             }
             else
             {
+#if TODO_OGRE_2_2
                 mRenderSystem->_setTextureCS( slotIdx, !itTex->texture.isNull(), itTex->texture.get() );
                 if( itTex->samplerblock )
                     mRenderSystem->_setHlmsSamplerblockCS( slotIdx, itTex->samplerblock );
+#endif
             }
 
             ++slotIdx;
@@ -485,9 +487,11 @@ namespace Ogre
             }
             else
             {
+#if TODO_OGRE_2_2
                 mRenderSystem->_bindTextureUavCS( slotIdx, itUav->texture.get(),
                                                   itUav->access, itUav->mipmapLevel,
                                                   itUav->textureArrayIndex, itUav->pixelFormat );
+#endif
             }
 
             ++slotIdx;

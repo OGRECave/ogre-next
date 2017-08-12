@@ -82,11 +82,11 @@ namespace Ogre
         if( initialUavAccess )
             mInitialUavsAccess = *initialUavAccess;
 
-        RenderTarget *finalTarget = getFinalTarget();
+        TextureGpu *finalTarget = getFinalTarget();
 
         //We need this so OpenGL can switch contexts (if needed) before creating the textures
         if( finalTarget )
-            mRenderSys->_setRenderTarget( finalTarget, VP_RTT_COLOUR_WRITE );
+            mRenderSys->_setCurrentDeviceFromTexture( finalTarget );
 
         //Create global textures
         TextureDefinitionBase::createTextures( definition->mLocalTextureDefs, mGlobalTextures,
@@ -104,7 +104,7 @@ namespace Ogre
 
         //Some RenderSystems assume we start the frame with empty pointer.
         if( finalTarget )
-            mRenderSys->_setRenderTarget( 0, VP_RTT_COLOUR_WRITE );
+            mRenderSys->_setCurrentDeviceFromTexture( finalTarget );
     }
     //-----------------------------------------------------------------------------------
     CompositorWorkspace::~CompositorWorkspace()
@@ -128,7 +128,7 @@ namespace Ogre
 
         const CompositorManager2 *compoManager = mDefinition->mCompositorManager;
 
-        RenderTarget *finalTarget = getFinalTarget();
+        TextureGpu *finalTarget = getFinalTarget();
 
         while( itor != end )
         {
@@ -303,7 +303,7 @@ namespace Ogre
                     CompositorChannelVec::const_iterator enChannels = inputChannels.end();
                     while( itChannels != enChannels )
                     {
-                        if( !itChannels->isValid() )
+                        if( !*itChannels )
                         {
                             const size_t channelIdx = itChannels - inputChannels.begin();
                             LogManager::getSingleton().logMessage( "\t\t\t Channel # " +
@@ -494,6 +494,7 @@ namespace Ogre
         const RenderSystemCapabilities *caps = mRenderSys->getCapabilities();
         const bool explicitApi = caps->hasCapability( RSC_EXPLICIT_API );
 
+#if TODO_OGRE_2_2
         if( explicitApi )
         {
             //Check the output is still a RenderTarget at the end.
@@ -519,6 +520,7 @@ namespace Ogre
                 }
             }
         }
+#endif
 
         mBarriersDirty = false;
     }
@@ -613,11 +615,11 @@ namespace Ogre
         return mSceneManager->findCamera( cameraName );
     }
     //-----------------------------------------------------------------------------------
-    RenderTarget* CompositorWorkspace::getFinalTarget(void) const
+    TextureGpu* CompositorWorkspace::getFinalTarget(void) const
     {
-        RenderTarget *finalTarget = 0;
+        TextureGpu *finalTarget = 0;
         if( !mExternalRenderTargets.empty() )
-            finalTarget = mExternalRenderTargets.front().target;
+            finalTarget = mExternalRenderTargets.front();
 
         return finalTarget;
     }
@@ -641,12 +643,15 @@ namespace Ogre
     {
         //We need to do this so that D3D9 (and D3D11?) knows which device
         //is active now, so that _beginFrame calls go to the right device.
-        RenderTarget *finalTarget = getFinalTarget();
-        mRenderSys->_setRenderTarget( finalTarget, VP_RTT_COLOUR_WRITE );
-        if( finalTarget->isRenderWindow() || forceBeginFrame )
+        TextureGpu *finalTarget = getFinalTarget();
+        if( finalTarget )
         {
-            // Begin the frame
-            mRenderSys->_beginFrame();
+            mRenderSys->_setCurrentDeviceFromTexture( finalTarget );
+            if( finalTarget->isRenderWindowSpecific() || forceBeginFrame )
+            {
+                // Begin the frame
+                mRenderSys->_beginFrame();
+            }
         }
     }
     //-----------------------------------------------------------------------------------
@@ -654,12 +659,15 @@ namespace Ogre
     {
         //We need to do this so that D3D9 (and D3D11?) knows which device
         //is active now, so that _endFrame calls go to the right device.
-        RenderTarget *finalTarget = getFinalTarget();
-        mRenderSys->_setRenderTarget( finalTarget, VP_RTT_COLOUR_WRITE );
-        if( finalTarget->isRenderWindow() || forceEndFrame )
+        TextureGpu *finalTarget = getFinalTarget();
+        if( finalTarget )
         {
-            // End the frame
-            mRenderSys->_endFrame();
+            mRenderSys->_setCurrentDeviceFromTexture( finalTarget );
+            if( finalTarget->isRenderWindowSpecific() || forceEndFrame )
+            {
+                // End the frame
+                mRenderSys->_endFrame();
+            }
         }
     }
     //-----------------------------------------------------------------------------------
@@ -682,10 +690,10 @@ namespace Ogre
         if( mListener )
             mListener->workspacePreUpdate( this );
 
-        RenderTarget *finalTarget = getFinalTarget();
+        TextureGpu *finalTarget = getFinalTarget();
         //We need to do this so that D3D9 (and D3D11?) knows which device
         //is active now, so that our calls go to the right device.
-        mRenderSys->_setRenderTarget( finalTarget, VP_RTT_COLOUR_WRITE );
+        mRenderSys->_setCurrentDeviceFromTexture( finalTarget );
 
         if( mCurrentWidth != finalTarget->getWidth() || mCurrentHeight != finalTarget->getHeight() )
         {
@@ -723,8 +731,8 @@ namespace Ogre
             allNodes.insert( allNodes.end(), mNodeSequence.begin(), mNodeSequence.end() );
             allNodes.insert( allNodes.end(), mShadowNodes.begin(), mShadowNodes.end() );
             TextureDefinitionBase::recreateResizableTextures( mDefinition->mLocalTextureDefs,
-                                                                mGlobalTextures, finalTarget,
-                                                                mRenderSys, allNodes, 0 );
+                                                              mGlobalTextures, finalTarget,
+                                                              allNodes, 0 );
             TextureDefinitionBase::recreateResizableBuffers( mDefinition->mLocalBufferDefs,
                                                              mGlobalBuffers, finalTarget,
                                                              mRenderSys, allNodes, 0 );
@@ -756,14 +764,14 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorWorkspace::_swapFinalTarget( vector<RenderTarget*>::type &swappedTargets )
+    void CompositorWorkspace::_swapFinalTarget( vector<TextureGpu*>::type &swappedTargets )
     {
         CompositorChannelVec::const_iterator itor = mExternalRenderTargets.begin();
         CompositorChannelVec::const_iterator end  = mExternalRenderTargets.end();
 
         while( itor != end )
         {
-            RenderTarget *externalTarget = itor->target;
+            TextureGpu *externalTarget = *itor;
             const bool alreadySwapped = std::find( swappedTargets.begin(),
                                                    swappedTargets.end(),
                                                    externalTarget ) != swappedTargets.end();
@@ -780,7 +788,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorWorkspace::_validateFinalTarget(void)
     {
-        mRenderSys->_setRenderTarget( getFinalTarget(), VP_RTT_COLOUR_WRITE );
+        TextureGpu *finalTarget = getFinalTarget();
+        if( finalTarget )
+            mRenderSys->_setCurrentDeviceFromTexture( finalTarget );
     }
     //-----------------------------------------------------------------------------------
     CompositorShadowNode* CompositorWorkspace::findShadowNode( IdString nodeDefName ) const
@@ -809,7 +819,7 @@ namespace Ogre
         {
             //Not found, create one.
             const CompositorManager2 *compoManager = mDefinition->mCompositorManager;
-            RenderTarget *finalTarget = getFinalTarget();
+            TextureGpu *finalTarget = getFinalTarget();
             const CompositorShadowNodeDef *def = compoManager->getShadowNodeDefinition( nodeDefName );
             retVal = OGRE_NEW CompositorShadowNode( Id::generateNewId<CompositorNode>(),
                                                     def, this, mRenderSys, finalTarget );

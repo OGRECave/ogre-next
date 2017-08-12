@@ -320,6 +320,17 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
+    TextureGpu* TextureGpuManager::findTextureNoThrow( IdString name ) const
+    {
+        TextureGpu *retVal = 0;
+        ResourceEntryMap::const_iterator itor = mEntries.find( name );
+
+        if( itor != mEntries.end() )
+            retVal = itor->second.texture;
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
     void TextureGpuManager::destroyTexture( TextureGpu *texture )
     {
         ResourceEntryMap::iterator itor = mEntries.find( texture->getName() );

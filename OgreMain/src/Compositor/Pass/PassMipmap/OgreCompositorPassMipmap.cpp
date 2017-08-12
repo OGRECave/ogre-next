@@ -39,6 +39,7 @@ THE SOFTWARE.
 
 #include "OgreTextureManager.h"
 #include "OgreLwString.h"
+#include "OgreTextureGpuManager.h"
 
 #include "OgreRoot.h"
 #include "OgreHlmsManager.h"
@@ -50,19 +51,36 @@ THE SOFTWARE.
 namespace Ogre
 {
     CompositorPassMipmap::CompositorPassMipmap( const CompositorPassMipmapDef *definition,
-                                                const CompositorChannel &target,
+                                                const RenderTargetViewDef *rtv,
                                                 CompositorNode *parentNode ) :
-                CompositorPass( definition, target, parentNode ),
+                CompositorPass( definition, rtv, parentNode ),
                 mDefinition( definition )
     {
-        mTextures = target.textures;
-
-        if( mTextures.empty() )
+        size_t numColourEntries = mRenderPassDesc->getNumColourEntries();
+        for( size_t i=0; i<numColourEntries; ++i )
         {
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "PASS_MIPMAP can only be used with RenderTargets that can "
-                         "be interpreted as textures",
-                         "CompositorPassMipmap::CompositorPassMipmap" );
+            if( mRenderPassDesc->mColour[i].resolveTexture )
+                mTextures.push_back( mRenderPassDesc->mColour[i].resolveTexture );
+            else
+            {
+                if( mRenderPassDesc->mColour[i].texture->getMsaa() > 1u )
+                {
+                    OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                                 "Cannot generate mipmaps for MSAA textures! Node: " +
+                                 mParentNode->getName().getFriendlyText(),
+                                 "CompositorPassMipmap::CompositorPassMipmap" );
+                }
+
+                if( !mRenderPassDesc->mColour[i].texture->isTexture() )
+                {
+                    OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                                 "PASS_MIPMAP can only be used with textures that can "
+                                 "be interpreted as textures and as UAVs",
+                                 "CompositorPassMipmap::CompositorPassMipmap" );
+                }
+
+                mTextures.push_back( mRenderPassDesc->mColour[i].texture );
+            }
         }
 
         if( mDefinition->mMipmapGenerationMethod == CompositorPassMipmapDef::Compute ||
@@ -79,10 +97,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorPassMipmap::destroyComputeShaders(void)
     {
+        RenderSystem *renderSystem = mParentNode->getRenderSystem();
+
         if( !mJobs.empty() )
         {
-            RenderSystem *renderSystem = mParentNode->getRenderSystem();
-
             assert( dynamic_cast<HlmsCompute*>( mJobs[0].job->getCreator() ) );
             HlmsCompute *hlmsCompute = static_cast<HlmsCompute*>( mJobs[0].job->getCreator() );
 
@@ -99,14 +117,12 @@ namespace Ogre
             mJobs.clear();
         }
 
-        TextureVec::iterator itor = mTmpTextures.begin();
-        TextureVec::iterator end  = mTmpTextures.end();
+        TextureGpuManager *textureManager = renderSystem->getTextureGpuManager();
+        TextureGpuVec::iterator itor = mTmpTextures.begin();
+        TextureGpuVec::iterator end  = mTmpTextures.end();
 
         while( itor != end )
-        {
-            TextureManager::getSingleton().remove( (*itor)->getHandle() );
-            ++itor;
-        }
+            textureManager->destroyTexture( *itor++ );
 
         mTmpTextures.clear();
     }
@@ -153,19 +169,19 @@ namespace Ogre
         setGaussianFilterParams( blurV, mDefinition->mKernelRadius,
                                  mDefinition->mGaussianDeviationFactor );
 
-        TextureVec::iterator itor = mTextures.begin();
-        TextureVec::iterator end  = mTextures.end();
+        TextureGpuVec::iterator itor = mTextures.begin();
+        TextureGpuVec::iterator end  = mTextures.end();
 
         while( itor != end )
         {
-            TexturePtr &texture = *itor;
+            TextureGpu *texture = *itor;
 
-            if( texture->getNumMipmaps() > 0 )
+            if( texture->getNumMipmaps() > 1u )
             {
-                if( !(texture->getUsage() & TU_UAV) || (texture->getUsage() & TU_NOT_TEXTURE) )
+                if( !texture->isUav() || !texture->isTexture() )
                 {
-                    OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Texture '" + texture->getName() +
-                                 "' must be flagged as UAV texture in order to be able to generate "
+                    OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Texture '" + texture->getNameStr() +
+                                 "' must be flagged as UAV and Texture in order to be able to generate "
                                  "mipmaps using Compute Shaders",
                                  "CompositorPassMipmap::CompositorPassMipmap" );
                 }
@@ -173,18 +189,20 @@ namespace Ogre
                 const String newId = StringConverter::toString(
                             Id::generateNewId<CompositorPassMipmap>() );
 
-                TexturePtr tmpTex = TextureManager::getSingleton().
-                        createManual( "MipmapTmpTexture " + newId,
-                                      ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME,
-                                      texture->getTextureType(),
-                                      texture->getWidth() >> 1u, texture->getHeight(),
-                                      texture->getNumMipmaps(), texture->getFormat(),
-                                      TU_RENDERTARGET|TU_UAV, 0, texture->isHardwareGammaEnabled() );
-
+                TextureGpuManager *textureManager = renderSystem->getTextureGpuManager();
+                TextureGpu *tmpTex = textureManager->createTexture( "MipmapTmpTexture " + newId,
+                                                                    GpuPageOutStrategy::Discard,
+                                                                    TextureFlags::Uav,
+                                                                    texture->getTextureType() );
                 mTmpTextures.push_back( tmpTex );
 
-                const uint8 numMips = texture->getNumMipmaps() + 1u;
-                const PixelFormat pf = texture->getFormat();
+                tmpTex->setResolution( texture->getWidth(), texture->getHeight(),
+                                            texture->getDepth() );
+                tmpTex->setPixelFormat( texture->getPixelFormat() );
+                tmpTex->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+
+                const uint8 numMips = texture->getNumMipmaps();
+                const PixelFormatGpu pf = texture->getPixelFormat();
 
                 uint32 currWidth  = texture->getWidth();
                 uint32 currHeight = texture->getHeight();
@@ -372,17 +390,13 @@ namespace Ogre
 
         if( !usesCompute )
         {
-            TextureVec::const_iterator itor = mTextures.begin();
-            TextureVec::const_iterator end  = mTextures.end();
+            TextureGpuVec::const_iterator itor = mTextures.begin();
+            TextureGpuVec::const_iterator end  = mTextures.end();
 
             while( itor != end )
             {
-                if( (*itor)->getNumMipmaps() > 0 &&
-                        ((*itor)->getUsage() & (TU_AUTOMIPMAP|TU_RENDERTARGET)) ==
-                        (TU_AUTOMIPMAP|TU_RENDERTARGET) )
-                {
+                if( (*itor)->getNumMipmaps() > 1u && (*itor)->allowsAutoMipmaps() )
                     (*itor)->_autogenerateMipmaps();
-                }
                 ++itor;
             }
         }
@@ -415,6 +429,7 @@ namespace Ogre
                                                                      ResourceAccessMap &uavsAccess,
                                                                      ResourceLayoutMap &resourcesLayout )
     {
+#if TODO_placeBarriersAndEmulateUavExecution
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
         const RenderSystemCapabilities *caps = renderSystem->getCapabilities();
         const bool explicitApi = caps->hasCapability( RSC_EXPLICIT_API );
@@ -422,14 +437,14 @@ namespace Ogre
         const bool usesCompute = !mJobs.empty();
 
         //Check <anything> -> RT for every RTT in the textures we'll be generating mipmaps.
-        TextureVec::const_iterator itTex = mTextures.begin();
-        TextureVec::const_iterator enTex = mTextures.end();
+        TextureVec::const_iterator itTex = mTexture.begin();
+        TextureVec::const_iterator enTex = mTexture.end();
 
         while( itTex != enTex )
         {
             const Ogre::TexturePtr tex = *itTex;
             const size_t numFaces = tex->getNumFaces();
-            const uint8 numMips = tex->getNumMipmaps() + 1;
+            const uint8 numMips = tex->getNumMipmaps();
             const uint32 numSlices = tex->getTextureType() == TEX_TYPE_CUBE_MAP ? 1u :
                                                                                   tex->getDepth();
             for( size_t face=0; face<numFaces; ++face )
@@ -469,17 +484,14 @@ namespace Ogre
 
         //Do not use base class functionality at all.
         //CompositorPass::_placeBarriersAndEmulateUavExecution();
+#endif
     }
     //-----------------------------------------------------------------------------------
-    void CompositorPassMipmap::notifyRecreated( const CompositorChannel &oldChannel,
-                                                const CompositorChannel &newChannel )
+    bool CompositorPassMipmap::notifyRecreated( TextureGpu *channel )
     {
-        CompositorPass::notifyRecreated( oldChannel, newChannel );
+        bool usedByUs = CompositorPass::notifyRecreated( channel );
 
-        if( mTextures == oldChannel.textures )
-        {
-            mTextures = newChannel.textures;
+        if( usedByUs )
             setupComputeShaders();
-        }
     }
 }

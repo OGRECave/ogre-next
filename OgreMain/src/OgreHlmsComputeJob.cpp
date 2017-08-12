@@ -37,7 +37,7 @@ THE SOFTWARE.
 #include "Vao/OgreTexBufferPacked.h"
 #include "Vao/OgreUavBufferPacked.h"
 
-#include "OgreTexture.h"
+#include "OgreTextureGpu.h"
 #include "OgreLwString.h"
 
 #include "OgreLogManager.h"
@@ -132,23 +132,7 @@ namespace Ogre
             removeProperty( propName.c_str() );
             propName.resize( texturePropSize );
 
-            propName.a( "_is_1d" );                 //texture0_is_1d
-            removeProperty( propName.c_str() );
-            propName.resize( texturePropSize );
-
-            propName.a( "_is_2d" );                 //texture0_is_2d
-            removeProperty( propName.c_str() );
-            propName.resize( texturePropSize );
-
-            propName.a( "_is_3d" );                 //texture0_is_3d
-            removeProperty( propName.c_str() );
-            propName.resize( texturePropSize );
-
-            propName.a( "_is_cubemap" );            //texture0_is_cubemap
-            removeProperty( propName.c_str() );
-            propName.resize( texturePropSize );
-
-            propName.a( "_is_2d_array" );           //texture0_is_2d_array
+            propName.a( "_texture_type" );          //texture0_texture_type
             removeProperty( propName.c_str() );
             propName.resize( texturePropSize );
 
@@ -165,6 +149,20 @@ namespace Ogre
             }
         }
 
+        const IdString c_textureTypesProps[8] =
+        {
+            "TextureTypes_Unknown",
+            "TextureTypes_Type1D",
+            "TextureTypes_Type1DArray",
+            "TextureTypes_Type2D",
+            "TextureTypes_Type2DArray",
+            "TextureTypes_TypeCube",
+            "TextureTypes_TypeCubeArray",
+            "TextureTypes_Type3D"
+        };
+        for( size_t i=0; i<8; ++i )
+            removeProperty( c_textureTypesProps[i] );
+
         //Set the new value.
         maxTexUnitReached = static_cast<uint8>( textureSlots.size() );
 
@@ -174,6 +172,9 @@ namespace Ogre
 
             RenderSystem *renderSystem = mCreator->getRenderSystem();
             const PixelFormatToShaderType *toShaderType = renderSystem->getPixelFormatToShaderType();
+
+            for( size_t i=0; i<8; ++i )
+                setProperty( c_textureTypesProps[i], c_textureTypesProps[i].mHash );
 
             TextureSlotVec::const_iterator begin= textureSlots.begin();
             TextureSlotVec::const_iterator itor = textureSlots.begin();
@@ -187,9 +188,9 @@ namespace Ogre
                 const size_t texturePropSize = propName.size();
                 setProperty( propName.c_str(), 1 );
 
-                if( !itor->texture.isNull() )
+                if( itor->texture )
                 {
-                    const TexturePtr &texture = itor->texture;
+                    const TextureGpu *texture = itor->texture;
 
                     propName.a( "_width" );                 //texture0_width
                     setProperty( propName.c_str(), texture->getWidth() );
@@ -200,44 +201,28 @@ namespace Ogre
                     propName.resize( texturePropSize );
 
                     propName.a( "_depth" );                 //texture0_depth
-                    setProperty( propName.c_str(), std::max<uint32>( texture->getDepth(),
-                                                                     texture->getNumFaces() ) );
+                    setProperty( propName.c_str(), texture->getDepthOrSlices() );
                     propName.resize( texturePropSize );
 
                     propName.a( "_mipmaps" );               //texture0_mipmaps
-                    setProperty( propName.c_str(), texture->getNumMipmaps() + 1 );
+                    setProperty( propName.c_str(), texture->getNumMipmaps() );
                     propName.resize( texturePropSize );
 
                     propName.a( "_msaa" );                  //texture0_msaa
-                    setProperty( propName.c_str(), texture->getFSAA() > 1 ? 1 : 0 );
+                    setProperty( propName.c_str(), texture->getMsaa() > 1u ? 1 : 0 );
                     propName.resize( texturePropSize );
 
                     propName.a( "_msaa_samples" );          //texture0_msaa_samples
-                    setProperty( propName.c_str(), texture->getFSAA() );
+                    setProperty( propName.c_str(), texture->getMsaa() );
                     propName.resize( texturePropSize );
 
-                    propName.a( "_is_1d" );                 //texture0_is_1d
-                    setProperty( propName.c_str(), texture->getTextureType() == TEX_TYPE_1D );
+                    propName.a( "_texture_type" );          //_texture_type
+                    setProperty( propName.c_str(),
+                                 c_textureTypesProps[texture->getTextureType()].mHash );
                     propName.resize( texturePropSize );
 
-                    propName.a( "_is_2d" );                 //texture0_is_2d
-                    setProperty( propName.c_str(), texture->getTextureType() == TEX_TYPE_2D );
-                    propName.resize( texturePropSize );
-
-                    propName.a( "_is_3d" );                 //texture0_is_3d
-                    setProperty( propName.c_str(), texture->getTextureType() == TEX_TYPE_3D );
-                    propName.resize( texturePropSize );
-
-                    propName.a( "_is_cubemap" );            //texture0_is_cubemap
-                    setProperty( propName.c_str(), texture->getTextureType() == TEX_TYPE_CUBE_MAP );
-                    propName.resize( texturePropSize );
-
-                    propName.a( "_is_2d_array" );           //texture0_is_2d_array
-                    setProperty( propName.c_str(), texture->getTextureType() == TEX_TYPE_2D_ARRAY );
-                    propName.resize( texturePropSize );
-
-                    propName.a( "_pf_type" );           //uav0_pf_type
-                    const char *typeName = toShaderType->getPixelFormatType( texture->getFormat() );
+                    propName.a( "_pf_type" );               //uav0_pf_type
+                    const char *typeName = toShaderType->getPixelFormatType( texture->getPixelFormat() );
                     if( typeName )
                         setPiece( propName.c_str(), typeName );
                     propName.resize( texturePropSize );
@@ -246,7 +231,7 @@ namespace Ogre
                     if( propTexture == ComputeProperty::Uav )
                     {
                         uint32 mipLevel = std::min<uint32>( itor->mipmapLevel,
-                                                            texture->getNumMipmaps() );
+                                                            texture->getNumMipmaps() - 1u );
 
                         propName.a( "_width_with_lod" );    //uav0_width_with_lod
                         setProperty( propName.c_str(), std::max( texture->getWidth() >>
@@ -354,17 +339,14 @@ namespace Ogre
                         mTextureSlots : mUavSlots;
 
             if( mThreadGroupsBasedOnTexSlot < texSlots.size() &&
-                !texSlots[mThreadGroupsBasedOnTexSlot].texture.isNull() )
+                texSlots[mThreadGroupsBasedOnTexSlot].texture )
             {
-                const TexturePtr &tex = texSlots[mThreadGroupsBasedOnTexSlot].texture;
+                const TextureGpu *tex = texSlots[mThreadGroupsBasedOnTexSlot].texture;
 
                 uint32 resolution[3];
                 resolution[0] = tex->getWidth();
                 resolution[1] = tex->getHeight();
-                resolution[2] = tex->getDepth();
-
-                if( tex->getTextureType() == TEX_TYPE_CUBE_MAP )
-                    resolution[2] = tex->getNumFaces();
+                resolution[2] = tex->getDepthOrSlices();
 
                 for( int i=0; i<3; ++i )
                 {
@@ -514,10 +496,10 @@ namespace Ogre
         texSlot.sizeBytes   = sizeBytes;
         texSlot.access      = access;
 
-        if( mInformHlmsOfTextureData && !texSlot.texture.isNull() )
+        if( mInformHlmsOfTextureData && texSlot.texture )
             mPsoCacheHash = -1;
 
-        texSlot.texture.setNull();
+        texSlot.texture = 0;
 
         if( texSlot.samplerblock )
         {
@@ -541,7 +523,7 @@ namespace Ogre
             mPsoCacheHash = -1;
     }
     //-----------------------------------------------------------------------------------
-    const TexturePtr& HlmsComputeJob::getTexture( uint8 slotIdx ) const
+    TextureGpu* HlmsComputeJob::getTexture( uint8 slotIdx ) const
     {
         return mTextureSlots[slotIdx].texture;
     }
@@ -560,7 +542,7 @@ namespace Ogre
             mPsoCacheHash = -1;
     }
     //-----------------------------------------------------------------------------------
-    const TexturePtr& HlmsComputeJob::getUavTexture( uint8 slotIdx ) const
+    TextureGpu* HlmsComputeJob::getUavTexture( uint8 slotIdx ) const
     {
         return mUavSlots[slotIdx].texture;
     }
@@ -576,7 +558,7 @@ namespace Ogre
         setBuffer( slotIdx, texBuffer, offset, sizeBytes, ResourceAccess::Undefined, mTextureSlots );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsComputeJob::setTexture( uint8 slotIdx, TexturePtr &texture,
+    void HlmsComputeJob::setTexture( uint8 slotIdx, TextureGpu *texture,
                                      const HlmsSamplerblock *refParams )
     {
         assert( slotIdx < mTextureSlots.size() );
@@ -585,14 +567,14 @@ namespace Ogre
         texSlot.buffer = 0;
 
         if( mInformHlmsOfTextureData && texSlot.texture != texture &&
-            (texture.isNull() || texSlot.texture.isNull() ||
-            texSlot.texture->getWidth() != texture->getWidth() ||
-            texSlot.texture->getHeight() != texture->getHeight() ||
-            texSlot.texture->getDepth() != texture->getDepth() ||
-            texSlot.texture->getNumFaces() != texture->getNumFaces() ||
-            texSlot.texture->getNumMipmaps() != texture->getNumMipmaps() ||
-            texSlot.texture->getFSAA() != texture->getFSAA() ||
-            texSlot.texture->getTextureType() != texture->getTextureType()) )
+            (!texture || !texSlot.texture ||
+             texSlot.texture->getWidth() != texture->getWidth() ||
+             texSlot.texture->getHeight() != texture->getHeight() ||
+             texSlot.texture->getDepthOrSlices() != texture->getDepthOrSlices() ||
+             texSlot.texture->getNumMipmaps() != texture->getNumMipmaps() ||
+             texSlot.texture->getPixelFormat() != texture->getPixelFormat() ||
+             texSlot.texture->getMsaa() != texture->getMsaa() ||
+             texSlot.texture->getTextureType() != texture->getTextureType()) )
         {
             mPsoCacheHash = -1;
         }
@@ -616,8 +598,8 @@ namespace Ogre
         texSlot.textureArrayIndex   = 0;
         texSlot.access              = ResourceAccess::Undefined;
         texSlot.mipmapLevel         = 0;
-        if( !texture.isNull() )
-            texSlot.pixelFormat = texture->getFormat();
+        if( texture )
+            texSlot.pixelFormat = texture->getPixelFormat();
     }
     //-----------------------------------------------------------------------------------
     void HlmsComputeJob::setSamplerblock( uint8 slotIdx, const HlmsSamplerblock &refParams )
@@ -655,9 +637,9 @@ namespace Ogre
         setBuffer( slotIdx, uavBuffer, offset, sizeBytes, access, mUavSlots );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsComputeJob::_setUavTexture( uint8 slotIdx, TexturePtr &texture, int32 textureArrayIndex,
+    void HlmsComputeJob::_setUavTexture( uint8 slotIdx, TextureGpu *texture, int32 textureArrayIndex,
                                          ResourceAccess::ResourceAccess access, int32 mipmapLevel,
-                                         PixelFormat pixelFormat )
+                                         PixelFormatGpu pixelFormat )
     {
         assert( slotIdx < mUavSlots.size() );
 
@@ -666,14 +648,14 @@ namespace Ogre
         texSlot.samplerblock = 0;
 
         if( mInformHlmsOfTextureData && texSlot.texture != texture &&
-            (texture.isNull() || texSlot.texture.isNull() ||
-            texSlot.texture->getWidth() != texture->getWidth() ||
-            texSlot.texture->getHeight() != texture->getHeight() ||
-            texSlot.texture->getDepth() != texture->getDepth() ||
-            texSlot.texture->getNumFaces() != texture->getNumFaces() ||
-            texSlot.texture->getNumMipmaps() != texture->getNumMipmaps() ||
-            texSlot.texture->getFSAA() != texture->getFSAA() ||
-            texSlot.texture->getTextureType() != texture->getTextureType()) )
+            (!texture || !texSlot.texture ||
+             texSlot.texture->getWidth() != texture->getWidth() ||
+             texSlot.texture->getHeight() != texture->getHeight() ||
+             texSlot.texture->getDepthOrSlices() != texture->getDepthOrSlices() ||
+             texSlot.texture->getNumMipmaps() != texture->getNumMipmaps() ||
+             texSlot.texture->getPixelFormat() != texture->getPixelFormat() ||
+             texSlot.texture->getMsaa() != texture->getMsaa() ||
+             texSlot.texture->getTextureType() != texture->getTextureType()) )
         {
             mPsoCacheHash = -1;
         }
@@ -684,8 +666,8 @@ namespace Ogre
         texSlot.mipmapLevel         = mipmapLevel;
         texSlot.pixelFormat         = pixelFormat;
 
-        if( pixelFormat == PF_UNKNOWN && !texture.isNull() )
-            texSlot.pixelFormat = texture->getFormat();
+        if( pixelFormat == PFG_UNKNOWN && texture )
+            texSlot.pixelFormat = texture->getPixelFormat();
     }
     //-----------------------------------------------------------------------------------
     HlmsComputeJob* HlmsComputeJob::clone( const String &cloneName )

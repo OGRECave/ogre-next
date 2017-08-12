@@ -49,10 +49,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     CompositorPassStencil::CompositorPassStencil( const CompositorPassStencilDef *definition,
-                                                    const CompositorChannel &target,
-                                                    CompositorNode *parentNode,
-                                                    RenderSystem *renderSystem ) :
-                CompositorPass( definition, target, parentNode ),
+                                                  const RenderTargetViewDef *rtv,
+                                                  CompositorNode *parentNode,
+                                                  RenderSystem *renderSystem ) :
+                CompositorPass( definition, rtv, parentNode ),
                 mDefinition( definition ),
                 mRenderSystem( renderSystem )
     {

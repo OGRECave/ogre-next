@@ -45,7 +45,7 @@ namespace Ogre
     *  @{
     */
 
-    typedef vector<TexturePtr>::type TextureVec;
+    typedef vector<TextureGpu*>::type TextureGpuVec;
 
     /** Shadow Nodes are special nodes (not to be confused with @see CompositorNode)
         that are only used for rendering shadow maps.
@@ -99,7 +99,7 @@ namespace Ogre
         {
             ShadowCameraSetupPtr    shadowCameraSetup;
             Camera                  *camera;
-            /// TexturePtr is at mLocalTextures[idxToLocalTextures]
+            /// TextureGpu is at mLocalTextures[idxToLocalTextures]
             uint32                  idxToLocalTextures;
             /// Index to mContiguousShadowMapTex[idxToContiguousTex]
             /// mContiguousShadowMapTex keeps them together for binding quickly
@@ -121,7 +121,7 @@ namespace Ogre
         /// mContiguousShadowMapTex.size() == 1. We can't use mLocalTextures
         /// directly because it could have textures unrelated to shadow mapping
         /// (or indirectly related)
-        TextureVec              mContiguousShadowMapTex;
+        TextureGpuVec           mContiguousShadowMapTex;
 
         Camera const *          mLastCamera;
         size_t                  mLastFrame;
@@ -183,7 +183,7 @@ namespace Ogre
     public:
         CompositorShadowNode( IdType id, const CompositorShadowNodeDef *definition,
                               CompositorWorkspace *workspace, RenderSystem *renderSys,
-                              const RenderTarget *finalTarget );
+                              TextureGpu *finalTarget );
         virtual ~CompositorShadowNode();
 
         const CompositorShadowNodeDef* getDefinition() const            { return mDefinition; }
@@ -256,7 +256,7 @@ namespace Ogre
 
         const LightsBitSet& getAffectedLightsBitSet(void) const     { return mAffectedLights; }
 
-        const TextureVec& getContiguousShadowMapTex(void) const     { return mContiguousShadowMapTex; }
+        const TextureGpuVec& getContiguousShadowMapTex(void) const  { return mContiguousShadowMapTex; }
         uint32 getIndexToContiguousShadowMapTex( size_t shadowMapIdx ) const;
 
         /** Marks a shadow map as statically updated, and ties the given light to always use
@@ -314,7 +314,7 @@ namespace Ogre
         void setStaticShadowMapDirty( size_t shadowMapIdx, bool includeLinked=true );
 
         /// @copydoc CompositorNode::finalTargetResized
-        virtual void finalTargetResized( const RenderTarget *finalTarget );
+        virtual void finalTargetResized( const TextureGpu *finalTarget );
     };
 
     /** @} */

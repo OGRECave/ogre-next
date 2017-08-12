@@ -116,7 +116,7 @@ namespace Ogre {
         const Camera* mCurrentCamera;
         const LightList* mCurrentLightList;
         const Frustum* mCurrentTextureProjector[OGRE_MAX_SIMULTANEOUS_LIGHTS];
-        const RenderTarget* mCurrentRenderTarget;
+        const RenderPassDescriptor* mCurrentRenderPassDesc;
         const Viewport* mCurrentViewport;
         const SceneManager* mCurrentSceneManager;
         const Pass* mCurrentPass;
@@ -205,7 +205,7 @@ namespace Ogre {
          const Matrix4& getSpotlightWorldViewProjMatrix(size_t index) const;
          const Matrix4& getTextureTransformMatrix(size_t index) const;
          const vector<Real>::type& getPssmSplits( size_t shadowMapIdx ) const;
-         const RenderTarget* getCurrentRenderTarget(void) const;
+         const RenderPassDescriptor* getCurrentRenderPassDesc(void) const;
          const Renderable* getCurrentRenderable(void) const;
          const Pass* getCurrentPass(void) const;
          const HlmsComputeJob* getCurrentJob(void) const;

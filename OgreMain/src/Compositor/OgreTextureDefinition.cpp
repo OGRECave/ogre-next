@@ -35,6 +35,8 @@ THE SOFTWARE.
 #include "OgreHardwarePixelBuffer.h"
 #include "OgreRenderSystem.h"
 #include "OgreTextureManager.h"
+#include "OgreTextureGpuManager.h"
+#include "OgrePixelFormatGpuUtils.h"
 #include "OgreDepthBuffer.h"
 #include "Vao/OgreVaoManager.h"
 
@@ -227,7 +229,7 @@ namespace Ogre
     void TextureDefinitionBase::createTextures( const TextureDefinitionVec &textureDefs,
                                                 CompositorChannelVec &inOutTexContainer,
                                                 IdType id, bool uniqueNames,
-                                                const RenderTarget *finalTarget,
+                                                const TextureGpu *finalTarget,
                                                 RenderSystem *renderSys )
     {
         inOutTexContainer.reserve( textureDefs.size() );
@@ -251,149 +253,109 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     CompositorChannel TextureDefinitionBase::createTexture( const TextureDefinition &textureDef,
-                                            const String &texName, const RenderTarget *finalTarget,
-                                            RenderSystem *renderSys )
+                                                            const String &texName,
+                                                            const TextureGpu *finalTarget,
+                                                            RenderSystem *renderSys )
     {
-        CompositorChannel newChannel;
+        assert( textureDef.depthOrSlices > 0 &&
+                (textureDef.depthOrSlices == 1u || textureDef.textureType > TextureTypes::Type2D ) &&
+                (textureDef.depthOrSlices == 6 || textureDef.textureType != TextureTypes::TypeCube) );
 
-        bool defaultHwGamma     = false;
-        uint defaultFsaa        = 0;
-        String defaultFsaaHint  = BLANKSTRING;
+        TextureGpuManager *textureManager = renderSys->getTextureGpuManager();
+        TextureGpu *tex = textureManager->createTexture( texName, GpuPageOutStrategy::Discard,
+                                                         textureDef.textureFlags,
+                                                         textureDef.textureType );
+        setupTexture( tex, textureDef, finalTarget );
+
+        return tex;
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureDefinitionBase::setupTexture( TextureGpu *tex, const TextureDefinition &textureDef,
+                                              const TextureGpu *finalTarget )
+    {
+        uint8 defaultMsaa                               = 1u;
+        MsaaPatterns::MsaaPatterns defaultMsaaPattern   = MsaaPatterns::Undefined;
+        PixelFormatGpu defaultPixelFormat               = PFG_RGBA8_UNORM_SRGB;
         if( finalTarget )
         {
-            // Inherit settings from target
-            defaultHwGamma  = finalTarget->isHardwareGammaEnabled();
-            defaultFsaa     = finalTarget->getFSAA();
-            defaultFsaaHint = finalTarget->getFSAAHint();
+            //Inherit settings from target
+            defaultMsaa         = finalTarget->getMsaa();
+            defaultMsaaPattern  = finalTarget->getMsaaPattern();
+            defaultPixelFormat  = finalTarget->getPixelFormat();
         }
-
-        //If undefined, use main target's hw gamma settings, else use explicit setting
-        bool hwGamma    = textureDef.hwGammaWrite == BoolUndefined ?
-                                defaultHwGamma : (textureDef.hwGammaWrite == BoolTrue);
-        //If true, use main target's fsaa settings, else disable
-        uint fsaa       = textureDef.fsaa ? defaultFsaa : 0;
-        const String &fsaaHint = textureDef.fsaa ? defaultFsaaHint : BLANKSTRING;
-
-        uint width  = textureDef.width;
-        uint height = textureDef.height;
+        uint32 width  = textureDef.width;
+        uint32 height = textureDef.height;
         if( finalTarget )
         {
             if( textureDef.width == 0 )
-                width = static_cast<uint>( ceilf( finalTarget->getWidth() * textureDef.widthFactor ) );
-            if( textureDef.height == 0 )
-                height = static_cast<uint>( ceilf( finalTarget->getHeight() * textureDef.heightFactor ) );
-        }
-
-        uint numMips = textureDef.numMipmaps;
-        if( textureDef.numMipmaps < 0 )
-            numMips = MIP_UNLIMITED;
-
-        uint32 texUsageFlags = TU_RENDERTARGET;
-
-        if( numMips != 0 ) //Allow calling _autogenerateMipmaps
-            texUsageFlags |= TU_AUTOMIPMAP;
-
-        if( textureDef.uav )
-            texUsageFlags |= TU_UAV;
-        if( textureDef.automipmaps )
-        {
-            texUsageFlags |= TU_AUTOMIPMAP|TU_AUTOMIPMAP_AUTO;
-            if( numMips == 0 )
-                numMips = MIP_UNLIMITED;
-        }
-
-        assert( textureDef.depth > 0 &&
-                (textureDef.depth == 1 || textureDef.textureType > TEX_TYPE_2D) &&
-                (textureDef.depth == 6 || textureDef.textureType != TEX_TYPE_CUBE_MAP) );
-
-        if( textureDef.formatList.size() == 1 )
-        {
-            //Normal RT
-            TexturePtr tex = TextureManager::getSingleton().createManual( texName,
-                                            ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME,
-                                            textureDef.textureType, width, height, textureDef.depth,
-                                            numMips, textureDef.formatList[0], (int)texUsageFlags, 0,
-                                            hwGamma, fsaa, fsaaHint, textureDef.fsaaExplicitResolve,
-                                            textureDef.depthBufferId != DepthBuffer::POOL_NON_SHAREABLE );
-            RenderTexture* rt = tex->getBuffer()->getRenderTarget();
-            rt->setDepthBufferPool( textureDef.depthBufferId );
-            if( !PixelUtil::isDepth( textureDef.formatList[0] ) )
-                rt->setPreferDepthTexture( textureDef.preferDepthTexture );
-            if( textureDef.depthBufferFormat != PF_UNKNOWN )
-                rt->setDesiredDepthBufferFormat( textureDef.depthBufferFormat );
-            newChannel.target = rt;
-            newChannel.textures.push_back( tex );
-        }
-        else
-        {
-            //MRT
-            MultiRenderTarget* mrt = renderSys->createMultiRenderTarget( texName );
-            PixelFormatList::const_iterator pixIt = textureDef.formatList.begin();
-            PixelFormatList::const_iterator pixEn = textureDef.formatList.end();
-
-            mrt->setDepthBufferPool( textureDef.depthBufferId );
-            if( !PixelUtil::isDepth( textureDef.formatList[0] ) )
-                mrt->setPreferDepthTexture( textureDef.preferDepthTexture );
-            if( textureDef.depthBufferFormat != PF_UNKNOWN )
-                mrt->setDesiredDepthBufferFormat( textureDef.depthBufferFormat );
-            newChannel.target = mrt;
-
-            while( pixIt != pixEn )
             {
-                size_t rtNum = pixIt - textureDef.formatList.begin();
-                TexturePtr tex = TextureManager::getSingleton().createManual(
-                                            texName + StringConverter::toString( rtNum ),
-                                            ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME,
-                                            textureDef.textureType, width, height, textureDef.depth, 0,
-                                            *pixIt, (int)texUsageFlags, 0, hwGamma,
-                                            fsaa, fsaaHint, textureDef.fsaaExplicitResolve,
-                                            textureDef.depthBufferId != DepthBuffer::POOL_NON_SHAREABLE );
-                RenderTexture* rt = tex->getBuffer()->getRenderTarget();
-                mrt->bindSurface( rtNum, rt );
-                newChannel.textures.push_back( tex );
-                ++pixIt;
+                width = static_cast<uint32>( ceilf( finalTarget->getWidth() *
+                                                    textureDef.widthFactor ) );
+            }
+            if( textureDef.height == 0 )
+            {
+                height = static_cast<uint32>( ceilf( finalTarget->getHeight() *
+                                                     textureDef.heightFactor ) );
             }
         }
 
-        return newChannel;
+        assert( textureDef.depthOrSlices > 0 &&
+                (textureDef.depthOrSlices == 1u || textureDef.textureType > TextureTypes::Type2D ) &&
+                (textureDef.depthOrSlices == 6 || textureDef.textureType != TextureTypes::TypeCube) );
+
+        tex->setResolution( width, height, textureDef.depthOrSlices );
+        if( textureDef.format != PFG_UNKNOWN )
+            tex->setPixelFormat( textureDef.format );
+        else
+            tex->setPixelFormat( defaultPixelFormat );
+        if( textureDef.numMipmaps != 0 )
+        {
+            tex->setNumMipmaps( textureDef.numMipmaps );
+        }
+        else
+        {
+            tex->setNumMipmaps( PixelFormatGpuUtils::getMaxMipmapCount( width, height,
+                                                                        tex->getDepth() ) );
+        }
+        if( textureDef.msaa != 0 )
+        {
+            tex->setMsaa( textureDef.msaa );
+            tex->setMsaaPattern( textureDef.msaaPattern );
+        }
+        else
+        {
+            tex->setMsaa( defaultMsaa );
+            tex->setMsaaPattern( defaultMsaaPattern );
+        }
+
+        tex->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+
+//        RenderTexture* rt = tex->getBuffer()->getRenderTarget();
+//        rt->setDepthBufferPool( textureDef.depthBufferId );
+//        if( !PixelUtil::isDepth( textureDef.formatList[0] ) )
+//            rt->setPreferDepthTexture( textureDef.preferDepthTexture );
+//        if( textureDef.depthBufferFormat != PF_UNKNOWN )
+//            rt->setDesiredDepthBufferFormat( textureDef.depthBufferFormat );
     }
     //-----------------------------------------------------------------------------------
     void TextureDefinitionBase::destroyTextures( CompositorChannelVec &inOutTexContainer,
                                                  RenderSystem *renderSys )
     {
+        TextureGpuManager *textureManager = renderSys->getTextureGpuManager();
         CompositorChannelVec::const_iterator itor = inOutTexContainer.begin();
         CompositorChannelVec::const_iterator end  = inOutTexContainer.end();
 
         while( itor != end )
-        {
-            if( itor->isValid() )
-            {
-                if( !itor->isMrt() )
-                {
-                    //Normal RT. We don't hold any reference to, so just deregister from TextureManager
-                    TextureManager::getSingleton().remove( itor->textures[0]->getName() );
-                }
-                else
-                {
-                    //MRT. We need to destroy both the MultiRenderTarget ptr AND the textures
-                    renderSys->destroyRenderTarget( itor->target->getName() );
-                    for( size_t i=0; i<itor->textures.size(); ++i )
-                        TextureManager::getSingleton().remove( itor->textures[i]->getName() );
-                }
-            }
-
-            ++itor;
-        }
+            textureManager->destroyTexture( *itor++ );
 
         inOutTexContainer.clear();
     }
     //-----------------------------------------------------------------------------------
     void TextureDefinitionBase::recreateResizableTextures( const TextureDefinitionVec &textureDefs,
-                                                            CompositorChannelVec &inOutTexContainer,
-                                                            const RenderTarget *finalTarget,
-                                                            RenderSystem *renderSys,
-                                                            const CompositorNodeVec &connectedNodes,
-                                                            const CompositorPassVec *passes )
+                                                           CompositorChannelVec &inOutTexContainer,
+                                                           const TextureGpu *finalTarget,
+                                                           const CompositorNodeVec &connectedNodes,
+                                                           const CompositorPassVec *passes )
     {
         TextureDefinitionVec::const_iterator itor = textureDefs.begin();
         TextureDefinitionVec::const_iterator end  = textureDefs.end();
@@ -402,13 +364,10 @@ namespace Ogre
 
         while( itor != end )
         {
-            if( (itor->width == 0 || itor->height == 0) && itorTex->isValid() )
+            if( (itor->width == 0 || itor->height == 0) )
             {
-                for( size_t i=0; i<itorTex->textures.size(); ++i )
-                    TextureManager::getSingleton().remove( itorTex->textures[i]->getName() );
-
-                CompositorChannel newChannel = createTexture( *itor, itorTex->target->getName(),
-                                                                finalTarget, renderSys );
+                (*itorTex)->_transitionTo( GpuResidency::OnStorage, (uint8*)0 );
+                setupTexture( *itorTex, *itor, finalTarget );
 
                 if( passes )
                 {
@@ -416,7 +375,7 @@ namespace Ogre
                     CompositorPassVec::const_iterator passEn = passes->end();
                     while( passIt != passEn )
                     {
-                        (*passIt)->notifyRecreated( *itorTex, newChannel );
+                        (*passIt)->notifyRecreated( *itorTex );
                         ++passIt;
                     }
                 }
@@ -426,14 +385,9 @@ namespace Ogre
 
                 while( itNodes != enNodes )
                 {
-                    (*itNodes)->notifyRecreated( *itorTex, newChannel );
+                    (*itNodes)->notifyRecreated( *itorTex );
                     ++itNodes;
                 }
-
-                if( !itorTex->isMrt() )
-                    renderSys->destroyRenderTarget( itorTex->target->getName() );
-
-                *itorTex = newChannel;
             }
             ++itorTex;
             ++itor;
@@ -525,7 +479,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureDefinitionBase::createBuffers( const BufferDefinitionVec &bufferDefs,
                                                CompositorNamedBufferVec &inOutBufContainer,
-                                               const RenderTarget *finalTarget, RenderSystem *renderSys )
+                                               const TextureGpu *finalTarget, RenderSystem *renderSys )
     {
         CompositorNamedBuffer cmp;
 
@@ -553,7 +507,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     UavBufferPacked* TextureDefinitionBase::createBuffer( const BufferDefinition &bufferDef,
-                                                          const RenderTarget *finalTarget,
+                                                          const TextureGpu *finalTarget,
                                                           VaoManager *vaoManager )
     {
         size_t numElements = bufferDef.numElements;
@@ -601,7 +555,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureDefinitionBase::recreateResizableBuffers( const BufferDefinitionVec &bufferDefs,
                                                           CompositorNamedBufferVec &inOutBufContainer,
-                                                          const RenderTarget *finalTarget,
+                                                          const TextureGpu *finalTarget,
                                                           RenderSystem *renderSys,
                                                           const CompositorNodeVec &connectedNodes,
                                                           const CompositorPassVec *passes )

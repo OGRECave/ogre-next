@@ -62,9 +62,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     CompositorPassDepthCopy::CompositorPassDepthCopy( const CompositorPassDepthCopyDef *definition,
-                                                      const CompositorChannel &target,
+                                                      const RenderTargetViewDef *rtv,
                                                       CompositorNode *parentNode ) :
-                CompositorPass( definition, target, parentNode ),
+                CompositorPass( definition, rtv, parentNode ),
                 mDefinition( definition ),
                 mCopyFailed( false )
     {
@@ -84,22 +84,17 @@ namespace Ogre
         if( listener )
             listener->passEarlyPreExecute( this );
 
-        //Call beginUpdate if we're the first to use this RT
-        if( mDefinition->mBeginRtUpdate )
-            mTarget->_beginUpdate();
-
         //Fire the listener in case it wants to change anything
         if( listener )
             listener->passPreExecute( this );
 
         executeResourceTransitions();
 
+#if TODO_OGRE_2_2
         //Should we retrieve every update, or cache the return values
         //and listen to notifyRecreated and family of funtions?
-        const CompositorChannel *srcChannel = mParentNode->_getDefinedTexture(
-                                                mDefinition->mSrcDepthTextureName );
-        const CompositorChannel *dstChannel = mParentNode->_getDefinedTexture(
-                                                mDefinition->mDstDepthTextureName );
+        TextureGpu *srcChannel = mParentNode->_getDefinedTexture( mDefinition->mSrcDepthTextureName );
+        TextureGpu *dstChannel = mParentNode->_getDefinedTexture( mDefinition->mDstDepthTextureName );
 
         DepthBuffer *srcDepthBuffer = srcChannel->target->getDepthBuffer();
         DepthBuffer *dstDepthBuffer = dstChannel->target->getDepthBuffer();
@@ -113,19 +108,17 @@ namespace Ogre
         {
             dstChannel->target->attachDepthBuffer( srcDepthBuffer, false );
         }
+#endif
 
         if( listener )
             listener->passPosExecute( this );
-
-        //Call endUpdate if we're the last pass in a row to use this RT
-        if( mDefinition->mEndRtUpdate )
-            mTarget->_endUpdate();
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassDepthCopy::_placeBarriersAndEmulateUavExecution( BoundUav boundUavs[64],
                                                                         ResourceAccessMap &uavsAccess,
                                                                         ResourceLayoutMap &resourcesLayout )
     {
+#if TODO_placeBarriersAndEmulateUavExecution
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
         const RenderSystemCapabilities *caps = renderSystem->getCapabilities();
         const bool explicitApi = caps->hasCapability( RSC_EXPLICIT_API );
@@ -165,5 +158,6 @@ namespace Ogre
 
         //Do not use base class functionality at all.
         //CompositorPass::_placeBarriersAndEmulateUavExecution();
+#endif
     }
 }

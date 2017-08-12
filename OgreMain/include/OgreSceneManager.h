@@ -43,7 +43,6 @@ Torus Knot Software Ltd.
 #include "OgreRenderQueue.h"
 #include "OgreResourceGroupManager.h"
 #include "OgreShadowTextureManager.h"
-#include "OgreInstanceManager.h"
 #include "OgreRenderSystem.h"
 #include "OgreLodListener.h"
 #include "OgreManualObject2.h"
@@ -63,72 +62,13 @@ namespace Ogre {
     *  @{
     */
 
+    typedef vector<TextureGpu*>::type TextureGpuVec;
+
     /** Structure for holding a position & orientation pair. */
     struct ViewPoint
     {
         Vector3 position;
         Quaternion orientation;
-    };
-
-    /** There are two Instancing techniques that perform culling of their own:
-            * HW Basic
-            * HW VTF
-        Frustum culling is highly parallelizable & scalable. However, we first cull
-        InstanceBatches & regular entities, then ask the culled InstanceBatches to
-        perform their culling to the InstancedEntities they own.
-        This results performance boost for skipping large amounts of instanced entities
-        when the whole batch isn't visible.
-        However, this also means threading frustum culling of instanced entities got harder.
-    @par
-        There are four approaches:
-            * Ask all existing batches to frustum cull. Then use only the ones we want. Sheer
-              brute force. Scales very well with cores, but sacrifices performance unnecessary
-              when only a few batches are visible. This approach is not taken by Ogre.
-
-            * Sync every time an InstanceBatchHW or InstanceBatchHW_VTF tries to frustum cull to
-              delegate the job on worker threads. Considering there could be hundreds of
-              InstanceBatches, this would cause a huge amount of thread synchronization overhead &
-              context switches. This approach is not taken by Ogre.
-
-            * Each thread after having culled all InstancedBatches & Entities, will parse the
-              culled list to ask all MovableObjects to perform culling of their own. Entities
-              will ignore this call (however they add to a small overhead for traversing them
-              and calling a virtual function) while InstanceBatchHW & InstanceBatchHW_VTF will
-              perform their own culling from within the multiple threads. This approach scales
-              well with cores and only visible batches. However load balancing may be an issue
-              for certain scenes:
-              eg. an InstanceBatch with 5000 InstancedEntities in one thread, while the other
-              three threads get one InstanceBatch each with 50 InstancedEntities. The first
-              thread will have considerably more work to do than the other three.
-              This approach is a good balance when compared to the first two. This is the
-              approach taken by Ogre when INSTANCING_CULLING_THREADED is on
-
-            * Don't multithread instanced entitites' frustum culling. Only the InstanceBatch &
-              Entity's frustum culling will be threaded. This is what happens when
-              INSTANCING_CULLING_SINGLE is on.
-
-        Whether INSTANCING_CULLING_THREADED improves or degrades performance depends highly on your
-        scene.
-    @par
-        <b>When to use INSTANCING_CULLING_SINGLETHREAD?</b>
-        If your scene doesn't use HW Basic or HW VTF instancing techniques, or you have very few
-        Instanced entities compared to the amount of regular Entities.
-        Turning threading on, you'll be wasting your time traversing the list from multiple threads
-        in search of InstanceBatchHW & InstanceBatchHW_VTF
-
-        <b>When to use INSTANCING_CULLING_THREADED?</b>
-        If your scene makes intensive use of HW Basic and/or HW VTF instancing techniques. Note
-        that threaded culling is performed in SCENE_STATIC instances too.
-        The most advantage is seen when the instances per batch is very high and when doing many
-        PASS_SCENE, which require frustum culling multiple times per frame (eg. pssm shadows,
-        multiple light sources with shadows, very advanced compositing, etc)
-
-        Note that you can switch between methods at any time at runtime.
-    */
-    enum InstancingThreadedCullingMethod
-    {
-        INSTANCING_CULLING_SINGLETHREAD,
-        INSTANCING_CULLING_THREADED,
     };
 
     typedef FastArray<MovableObject::MovableObjectArray> VisibleObjectsPerRq;
@@ -220,20 +160,6 @@ namespace Ogre {
 
         UpdateTransformRequest( const Transform &_t, size_t _numNodesPerThread, size_t _numTotalNodes ) :
             t( _t ), numNodesPerThread( _numNodesPerThread ), numTotalNodes( _numTotalNodes )
-        {
-        }
-    };
-
-    struct InstanceBatchCullRequest
-    {
-        Frustum const   *frustum;
-        Camera const    *lodCamera;
-        uint32          combinedVisibilityFlags;
-        InstanceBatchCullRequest() : frustum( 0 ), lodCamera( 0 ), combinedVisibilityFlags( 0 ) {}
-        InstanceBatchCullRequest( const Frustum *_frustum, const Camera *_lodCamera,
-                                  uint32 _combinedVisibilityFlags ) :
-                        frustum( _frustum ), lodCamera( _lodCamera ),
-                        combinedVisibilityFlags( _combinedVisibilityFlags )
         {
         }
     };
@@ -474,9 +400,9 @@ namespace Ogre {
         bool                    mStaticEntitiesDirty;
 
         PrePassMode             mPrePassMode;
-        TextureVec const        *mPrePassTextures;
-        TextureVec const        *mPrePassDepthTexture;
-        TextureVec const        *mSsrTexture;
+        TextureGpuVec   mPrePassTextures;
+        TextureGpu      *mPrePassDepthTexture;
+        TextureGpu      *mSsrTexture;
 
         /// Instance name
         String mName;
@@ -518,9 +444,6 @@ namespace Ogre {
 
         typedef map<String, v1::StaticGeometry* >::type StaticGeometryList;
         StaticGeometryList mStaticGeometryList;
-
-        typedef vector<v1::InstanceManager*>::type  InstanceManagerVec;
-        InstanceManagerVec  mInstanceManagers;
 
         /** Central list of SceneNodes - for easy memory management.
             @note
@@ -821,18 +744,6 @@ namespace Ogre {
         void checkMovableObjectIntegrity( const typename vector<T*>::type &container,
                                             const T *mo ) const;
 
-#ifdef OGRE_LEGACY_ANIMATIONS
-        /// Updates all instance managers' animations
-        void updateInstanceManagerAnimations(void);
-#endif
-
-        /** Updates all instance managers with dirty instance batches from multiple threads.
-            @see updateInstanceManagers and @see InstanceBatch::_updateEntitiesBoundsThread */
-        void updateInstanceManagersThread( size_t threadIdx );
-
-        /** Updates all instance managers with dirty instance batches. @see _addDirtyInstanceManager */
-        void updateInstanceManagers(void);
-
         /** Culls the scene in a high level fashion (i.e. Octree, Portal, etc.) by taking into account all
             registered cameras. Produces a list of culled Entities & SceneNodes that must follow a very
             strict set of rules:
@@ -889,7 +800,6 @@ namespace Ogre {
         GpuProgramParametersSharedPtr mShadowTextureCustomCasterFPParams;
 
         CompositorTextureVec        mCompositorTextures;
-        CompositorTexture           mCompositorTarget;
 
         /// Visibility mask used to show / hide objects
         uint32 mVisibilityMask;
@@ -904,8 +814,6 @@ namespace Ogre {
             UPDATE_ALL_TAG_ON_TAG_TRANSFORMS,
             UPDATE_ALL_BOUNDS,
             UPDATE_ALL_LODS,
-            UPDATE_INSTANCE_MANAGERS,
-            CULL_FRUSTUM_INSTANCEDENTS,
             BUILD_LIGHT_LIST01,
             BUILD_LIGHT_LIST02,
             USER_UNIFORM_SCALABLE_TASK,
@@ -919,8 +827,6 @@ namespace Ogre {
         UpdateLodRequest                mUpdateLodRequest;
         UpdateTransformRequest          mUpdateTransformRequest;
         ObjectMemoryManagerVec const    *mUpdateBoundsRequest;
-        InstancingThreadedCullingMethod mInstancingThreadedCullingMethod;
-        InstanceBatchCullRequest        mInstanceBatchCullRequest;
         UniformScalableTask *mUserTask;
         RequestType         mRequestType;
         Barrier             *mWorkerThreadsBarrier;
@@ -1033,14 +939,6 @@ namespace Ogre {
         */
         void updateAllLodsThread( const UpdateLodRequest &request, size_t threadIdx );
 
-        /** Traverses mVisibleObjects[threadIdx] from each thread to call
-            MovableObject::instanceBatchCullFrustumThreaded (which is supposed to cull objects)
-        @param threadIdx
-            Thread index so we know at which point we should start at.
-            Must be unique for each worker thread
-        */
-        void instanceBatchCullFrustumThread( const InstanceBatchCullRequest &request, size_t threadIdx );
-
         /** Low level culling, culls all objects against the given frustum active cameras. This
             includes checking visibility flags (both scene and viewport's)
             @See MovableObject::cullFrustum
@@ -1067,8 +965,7 @@ namespace Ogre {
     public:
         /** Constructor.
         */
-        SceneManager(const String& instanceName, size_t numWorkerThreads,
-                    InstancingThreadedCullingMethod threadedCullingMethod);
+        SceneManager( const String& instanceName, size_t numWorkerThreads );
 
         /** Default destructor.
         */
@@ -1332,12 +1229,12 @@ namespace Ogre {
 
         /// For internal use.
         /// @see CompositorPassSceneDef::mPrePassMode
-        void _setPrePassMode( PrePassMode mode, const TextureVec *prepassTextures,
-                              const TextureVec *prepassDepthTexture, const TextureVec *ssrTexture );
+        void _setPrePassMode( PrePassMode mode, const TextureGpuVec &prepassTextures,
+                              TextureGpu *prepassDepthTexture, TextureGpu *ssrTexture );
         PrePassMode getCurrentPrePassMode(void) const               { return mPrePassMode; }
-        const TextureVec* getCurrentPrePassTextures(void) const     { return mPrePassTextures; }
-        const TextureVec* getCurrentPrePassDepthTexture(void) const { return mPrePassDepthTexture; }
-        const TextureVec* getCurrentSsrTexture(void) const          { return mSsrTexture; }
+        const TextureGpuVec& getCurrentPrePassTextures(void) const  { return mPrePassTextures; }
+        TextureGpu* getCurrentPrePassDepthTexture(void) const       { return mPrePassDepthTexture; }
+        TextureGpu* getCurrentSsrTexture(void) const                { return mSsrTexture; }
 
         NodeMemoryManager& _getNodeMemoryManager(SceneMemoryMgrTypes sceneType)
                                                                 { return mNodeMemoryManager[sceneType]; }
@@ -1497,7 +1394,7 @@ namespace Ogre {
         @param tex
             The actual texture(s) associated with that name
         */
-        void _addCompositorTexture( IdString name, const TextureVec *texs );
+        void _addCompositorTexture( IdString name, TextureGpu *tex );
 
         /// @see CompositorPassDef::mExposedTextures for the textures that are available
         /// in the current compositor pass. The compositor script keyword is "expose".
@@ -1508,12 +1405,6 @@ namespace Ogre {
 
         /// Removes all compositor textures from 'from' to end.
         void _removeCompositorTextures( size_t from );
-
-        /// The compositor we are currently writing to.
-        void _setCompositorTarget( const CompositorTexture &compoTarget );
-
-        /// The compositor we are currently writing to.
-        const CompositorTexture& getCompositorTarget(void) const   { return mCompositorTarget; }
 
         /// Creates an instance of a skeleton based on the given definition.
         SkeletonInstance* createSkeletonInstance( const SkeletonDef *skeletonDef );
@@ -1836,9 +1727,6 @@ namespace Ogre {
 
         /// @See mTmpVisibleObjects
         VisibleObjectsPerThreadArray& _getTmpVisibleObjectsList()           { return mTmpVisibleObjects; }
-
-        InstancingThreadedCullingMethod getInstancingThreadedCullingMethod() const
-                                                            { return mInstancingThreadedCullingMethod; }
 
         /** Notifies that the given MovableObject is dirty (i.e. the AABBs have changed).
             Note that the parent SceneNodes of this/these objects are not updated and you will
@@ -2779,88 +2667,6 @@ namespace Ogre {
         /** Remove & destroy all StaticGeometry instances. */
         virtual void destroyAllStaticGeometry(void);
 
-        /** Creates an InstanceManager interface to create & manipulate instanced entities
-            You need to call this function at least once before start calling createInstancedEntity
-            to build up an instance based on the given mesh.
-        @remarks
-            Instancing is a way of batching up geometry into a much more 
-            efficient form, but with some limitations, and still be able to move & animate it.
-            Please @see InstanceManager class documentation for full information.
-        @param customName Custom name for referencing. Must be unique
-        @param meshName The mesh name the instances will be based upon
-        @param groupName The resource name where the mesh lives
-        @param technique Technique to use, which may be shader based, or hardware based.
-        @param numInstancesPerBatch Suggested number of instances per batch. The actual number
-        may end up being lower if the technique doesn't support having so many. It can't be zero
-        @param flags @see InstanceManagerFlags
-        @param subMeshIdx InstanceManager only supports using one submesh from the base mesh. This parameter
-        says which submesh to pick (must be <= Mesh::getNumSubMeshes())
-        @return The new InstanceManager instance
-        */
-        virtual v1::InstanceManager* createInstanceManager( const String &customName,
-                                                            const String &meshName,
-                                                            const String &groupName,
-                                                            v1::InstanceManager::InstancingTechnique technique,
-                                                            size_t numInstancesPerBatch, uint16 flags=0,
-                                                            unsigned short subMeshIdx=0 );
-
-        /** Retrieves an existing InstanceManager by it's name.
-        @note Throws an exception if the named InstanceManager does not exist
-        */
-        virtual v1::InstanceManager* getInstanceManager( IdString name ) const;
-
-    /** Returns whether an InstanceManager with the given name exists. */
-    virtual bool hasInstanceManager( IdString managerName ) const;
-
-        /** Destroys an InstanceManager <b>if</b> it was created with createInstanceManager()
-        @remarks
-            Be sure you don't have any InstancedEntity referenced somewhere which was created with
-            this manager, since it will become a dangling pointer.
-        @param name Name of the manager to remove
-        */
-        virtual void destroyInstanceManager( IdString name );
-        virtual void destroyInstanceManager( v1::InstanceManager *instanceManager );
-
-        virtual void destroyAllInstanceManagers(void);
-
-        /** @see InstanceManager::getMaxOrBestNumInstancesPerBatch
-        @remarks
-            If you've already created an InstanceManager, you can call it's
-            getMaxOrBestNumInstancesPerBatch() function directly.
-            Another (not recommended) way to know if the technique is unsupported is by creating
-            an InstanceManager and use createInstancedEntity, which will return null pointer.
-            The input parameter "numInstancesPerBatch" is a suggested value when using IM_VTFBESTFIT
-            flag (in that case it should be non-zero)
-        @return
-            The ideal (or maximum, depending on flags) number of instances per batch for
-            the given technique. Zero if technique is unsupported or errors were spotted
-        */
-        virtual size_t getNumInstancesPerBatch( const String &meshName, const String &groupName,
-                                                const String &materialName,
-                                                v1::InstanceManager::InstancingTechnique technique,
-                                                size_t numInstancesPerBatch, uint16 flags=0,
-                                                unsigned short subMeshIdx=0 );
-
-        /** Creates an InstancedEntity based on an existing InstanceManager (@see createInstanceManager)
-        @remarks
-            * Return value may be null if the InstanceManger technique isn't supported
-            * Try to keep the number of entities with different materials <b>to a minimum</b>
-            * For more information @see InstancedManager @see InstancedBatch, @see InstancedEntity
-            * Alternatively you can call InstancedManager::createInstanceEntity using the returned
-            pointer from createInstanceManager
-        @param materialName Material name 
-        @param managerName Name of the instance manager
-        @return An InstancedEntity ready to be attached to a SceneNode
-        */
-        virtual v1::InstancedEntity* createInstancedEntity( const String &materialName,
-                                                            const String &managerName );
-
-        /** Removes an InstancedEntity, @see SceneManager::createInstancedEntity &
-            @see InstanceBatch::removeInstancedEntity
-        @param instancedEntity Instance to remove
-        */
-        virtual void destroyInstancedEntity( v1::InstancedEntity *instancedEntity );
-
         /** Create a movable object of the type specified without a name.
         @remarks
         This is the generalised form of MovableObject creation where you can
@@ -3112,7 +2918,6 @@ namespace Ogre {
             Will block until all threads are done.
         */
         void fireCullFrustumThreads( const CullFrustumRequest &request );
-        void fireCullFrustumInstanceBatchThreads( const InstanceBatchCullRequest &request );
         void startWorkerThreads();
         void stopWorkerThreads();
 
@@ -3269,8 +3074,7 @@ namespace Ogre {
         @remarks
         Don't call directly, use SceneManagerEnumerator::createSceneManager.
         */
-        virtual SceneManager* createInstance(const String& instanceName, size_t numWorkerThreads,
-                                            InstancingThreadedCullingMethod threadedCullingMethod) = 0;
+        virtual SceneManager* createInstance(const String& instanceName, size_t numWorkerThreads) = 0;
         /** Destroy an instance of a SceneManager. */
         virtual void destroyInstance(SceneManager* instance) = 0;
 

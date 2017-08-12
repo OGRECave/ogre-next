@@ -2234,6 +2234,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_notifyCompositorNodeSwitchedRenderTarget( RenderTarget *previousTarget )
     {
+        TODO;
         if( previousTarget )
         {
             bool mustClear = false;

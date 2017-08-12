@@ -77,7 +77,7 @@ namespace Ogre
 
     CompositorShadowNode::CompositorShadowNode( IdType id, const CompositorShadowNodeDef *definition,
                                                 CompositorWorkspace *workspace, RenderSystem *renderSys,
-                                                const RenderTarget *finalTarget ) :
+                                                TextureGpu *finalTarget ) :
             CompositorNode( id, definition->getName(), definition, workspace, renderSys, finalTarget ),
             mDefinition( definition ),
             mLastCamera( 0 ),
@@ -124,17 +124,10 @@ namespace Ogre
 
                 shadowMapCamera.idxToLocalTextures = static_cast<uint32>( index );
 
-                if( itor->mrtIndex >= mLocalTextures[index].textures.size() )
-                {
-                    OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Texture " +
-                                 itor->getTextureNameStr() + " does not have MRT index " +
-                                 StringConverter::toString( itor->mrtIndex ),
-                                 "CompositorShadowNode::CompositorShadowNode" );
-                }
-
-                TexturePtr &refTex = mLocalTextures[index].textures[itor->mrtIndex];
-                TextureVec::const_iterator itContig = std::find( mContiguousShadowMapTex.begin(),
-                                                                 mContiguousShadowMapTex.end(), refTex );
+                TextureGpu *refTex = mLocalTextures[index];
+                TextureGpuVec::const_iterator itContig = std::find( mContiguousShadowMapTex.begin(),
+                                                                    mContiguousShadowMapTex.end(),
+                                                                    refTex );
                 if( itContig == mContiguousShadowMapTex.end() )
                 {
                     mContiguousShadowMapTex.push_back( refTex );
@@ -632,8 +625,7 @@ namespace Ogre
             {
                 ShadowMapCamera &smCamera = mShadowMapCameras[passDef->mShadowMapIdx];
 
-                const Viewport *vp = pass->getViewport();
-                const Vector2 vpSize = Vector2( vp->getActualWidth(), vp->getActualHeight() );
+                const Vector2 vpSize = pass->getActualDimensions();
 
                 const CompositorTargetDef *targetPass = passDef->getParentTargetDef();
                 uint8 lightTypesLeft = targetPass->getShadowMapSupportedLightTypes();
@@ -740,7 +732,7 @@ namespace Ogre
 
                 //TODO: textures[0] is out of bounds when using shadow atlas. Also see how what
                 //changes need to be done so that UV calculations land on the right place
-                const TexturePtr& shadowTex = mLocalTextures[shadowIdx].textures[0];
+                TextureGpu *shadowTex = mLocalTextures[shadowIdx];
                 texUnit->_setTexturePtr( shadowTex );
 
                 ++shadowIdx;
@@ -757,7 +749,7 @@ namespace Ogre
                 // I know, nasty const_cast
                 TextureUnitState *texUnit = const_cast<TextureUnitState*>(
                                                     pass->getTextureUnitState(texUnitIdx) );
-                texUnit->_setTexturePtr( compoMgr->getNullShadowTexture( PF_R8G8B8A8 ) );
+                texUnit->_setTexturePtr( compoMgr->getNullShadowTexture( PFG_RGBA8_UNORM ) );
 
                 // Projective texturing needs to be disabled explicitly when using vertex shaders.
                 texUnit->setProjectiveTexturing( false, (const Frustum*)0 );
@@ -949,7 +941,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorShadowNode::finalTargetResized( const RenderTarget *finalTarget )
+    void CompositorShadowNode::finalTargetResized( const TextureGpu *finalTarget )
     {
         CompositorNode::finalTargetResized( finalTarget );
 
@@ -963,10 +955,7 @@ namespace Ogre
         while( itor != end )
         {
             if( itor->idxToContiguousTex >= mContiguousShadowMapTex.size() )
-            {
-                mContiguousShadowMapTex.push_back(
-                            mLocalTextures[itor->idxToLocalTextures].textures[itDef->mrtIndex] );
-            }
+                mContiguousShadowMapTex.push_back( mLocalTextures[itor->idxToLocalTextures] );
 
             ++itDef;
             ++itor;

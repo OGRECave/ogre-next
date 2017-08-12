@@ -42,6 +42,9 @@ THE SOFTWARE.
 #include "Math/Array/OgreObjectMemoryManager.h"
 
 #include "OgreRectangle2D.h"
+#include "OgreTextureGpuManager.h"
+#include "OgrePixelFormatGpuUtils.h"
+#include "OgreStagingTexture.h"
 #include "OgreTextureManager.h"
 #include "OgreHardwarePixelBuffer.h"
 #include "OgreRenderSystem.h"
@@ -185,8 +188,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     CompositorManager2::~CompositorManager2()
     {
-        for( TextureVec::iterator i = mNullTextureList.begin(); i != mNullTextureList.end(); ++i )
-            TextureManager::getSingleton().remove( (*i)->getHandle() );
+        TextureGpuManager *textureManager = mRenderSystem->getTextureGpuManager();
+        for( TextureGpuVec::iterator i = mNullTextureList.begin(); i != mNullTextureList.end(); ++i )
+            textureManager->destroyTexture( *i );
+        mNullTextureList.clear();
 
         removeAllWorkspaces();
 
@@ -455,7 +460,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     CompositorWorkspace* CompositorManager2::addWorkspace( SceneManager *sceneManager,
-                                             RenderTarget *finalRenderTarget, Camera *defaultCam,
+                                             TextureGpu *finalRenderTarget, Camera *defaultCam,
                                              IdString definitionName, bool bEnabled, int position,
                                              const UavBufferPackedVec *uavBuffers,
                                              const ResourceLayoutMap* initialLayouts,
@@ -464,8 +469,7 @@ namespace Ogre
                                              uint8 vpModifierMask, uint8 executionMask )
     {
         CompositorChannelVec channels;
-        channels.push_back( CompositorChannel() );
-        channels.back().target = finalRenderTarget;
+        channels.push_back( finalRenderTarget );
         return addWorkspace( sceneManager, channels, defaultCam, definitionName, bEnabled, position,
                              uavBuffers, initialLayouts, initialUavAccess,
                              vpOffsetScale, vpModifierMask, executionMask );
@@ -576,36 +580,41 @@ namespace Ogre
         deleteAllSecondClear( mNodeDefinitions );
     }
     //-----------------------------------------------------------------------------------
-    TexturePtr CompositorManager2::getNullShadowTexture( PixelFormat format )
+    TextureGpu* CompositorManager2::getNullShadowTexture( PixelFormatGpu format )
     {
-        for (TextureVec::iterator t = mNullTextureList.begin(); t != mNullTextureList.end(); ++t)
+        for( TextureGpuVec::iterator t = mNullTextureList.begin(); t != mNullTextureList.end(); ++t )
         {
-            const TexturePtr& tex = *t;
-
-            if (format == tex->getFormat())
+            TextureGpu *tex = *t;
+            if( format == tex->getPixelFormat() )
             {
                 // Ok, a match
                 return tex;
             }
         }
 
+        TextureGpuManager *textureManager = mRenderSystem->getTextureGpuManager();
+
         // not found, create a new one
         // A 1x1 texture of the correct format, not a render target
         static const String baseName = "Ogre/ShadowTextureNull";
         String targName = baseName + StringConverter::toString( mNullTextureList.size() );
-        TexturePtr shadowTex = TextureManager::getSingleton().createManual(
-            targName, ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME, 
-            TEX_TYPE_2D, 1, 1, 0, format, TU_STATIC_WRITE_ONLY );
+        TextureGpu *shadowTex = textureManager->createTexture( targName, GpuPageOutStrategy::Discard,
+                                                               0, TextureTypes::Type2D );
+        shadowTex->setResolution( 1u, 1u, 1u );
+        shadowTex->setPixelFormat( format );
         mNullTextureList.push_back( shadowTex );
 
-        // lock & populate the texture based on format
-        shadowTex->getBuffer()->lock(v1::HardwareBuffer::HBL_DISCARD);
-        const PixelBox& box = shadowTex->getBuffer()->getCurrentLock();
+        StagingTexture *stagingTexture = textureManager->getStagingTexture( 1u, 1u, 1u, 1u,
+                                                                            shadowTex->getPixelFormat() );
+        stagingTexture->startMapRegion();
+        TextureBox texBox = stagingTexture->mapRegion( 1u, 1u, 1u, 1u, shadowTex->getPixelFormat() );
 
-        // set high-values across all bytes of the format 
-        PixelUtil::packColour( 1.0f, 1.0f, 1.0f, 1.0f, format, box.data );
+        PixelFormatGpuUtils::packColour( ColourValue::White, format, texBox.data );
 
-        shadowTex->getBuffer()->unlock();
+        stagingTexture->stopMapRegion();
+        stagingTexture->upload( texBox, shadowTex, 0, 0, true );
+        textureManager->removeStagingTexture( stagingTexture );
+        stagingTexture = 0;
 
         return shadowTex;
     }
@@ -745,7 +754,7 @@ namespace Ogre
         WorkspaceVec::const_iterator itor = mWorkspaces.begin();
         WorkspaceVec::const_iterator end  = mWorkspaces.end();
 
-        vector<RenderTarget*>::type swappedTargets;
+        vector<TextureGpu*>::type swappedTargets;
         swappedTargets.reserve( mWorkspaces.size() * 2u );
 
         while( itor != end )

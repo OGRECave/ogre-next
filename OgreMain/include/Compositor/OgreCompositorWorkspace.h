@@ -243,7 +243,7 @@ namespace Ogre
         @remarks
             Call this after _endUpdate
         */
-        void _swapFinalTarget( vector<RenderTarget*>::type &swappedTargets );
+        void _swapFinalTarget( vector<TextureGpu*>::type &swappedTargets );
 
         /** For compatibility with D3D9, forces a device lost check
             on the RenderWindow, so that BeginScene doesn't fail.
@@ -295,7 +295,7 @@ namespace Ogre
 															{ return mExternalRenderTargets; }
         /// Returns the RenderTarget we're rendering to. May be null.
         /// @see getExternalRenderTargets
-        RenderTarget* getFinalTarget(void) const;
+        TextureGpu* getFinalTarget(void) const;
 
         uint8 getViewportModifierMask(void) const           { return mViewportModifierMask; }
         const Vector4& getViewportModifier(void) const      { return mViewportModifier; }

@@ -30,7 +30,7 @@ Copyright (c) 2000-2017 Torus Knot Software Ltd
 
 namespace Ogre
 {
-    const char* MetalPixelFormatToShaderType::getPixelFormatType( PixelFormat pixelFormat ) const
+    const char* MetalPixelFormatToShaderType::getPixelFormatType( PixelFormatGpu pixelFormat ) const
     {
         switch( pixelFormat )
         {

@@ -35,7 +35,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    CbTexture::CbTexture( uint16 _texUnit, bool _bEnabled, Texture *_texture,
+    CbTexture::CbTexture( uint16 _texUnit, bool _bEnabled, TextureGpu *_texture,
                           const HlmsSamplerblock *_samplerBlock ) :
         CbBase( CB_SET_TEXTURE ),
         texUnit( _texUnit ),

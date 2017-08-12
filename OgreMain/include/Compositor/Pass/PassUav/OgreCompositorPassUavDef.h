@@ -33,7 +33,7 @@ THE SOFTWARE.
 
 #include "../OgreCompositorPassDef.h"
 #include "OgreCommon.h"
-#include "OgreTexture.h"
+#include "OgrePixelFormatGpu.h"
 #include "OgreResourceTransition.h"
 
 namespace Ogre
@@ -57,21 +57,18 @@ namespace Ogre
             /// Name of the texture (can come from input channel, local textures, or global ones)
             /// Not used if externalTextureName is not empty
             IdString    textureName;
-            /// Name of the external texture, if empty, textureName is used.
-            String      externalTextureName;
-            /// Index in case of MRT. Ignored if textureSource isn't mrt
-            uint32      mrtIndex;
+            IdString    externalTextureName;
 
             ResourceAccess::ResourceAccess access;
             int32           mipmapLevel;
-            PixelFormat     pixelFormat;
+            PixelFormatGpu  pixelFormat;
 
             TextureSource( uint32 _uavSlot, IdString _textureName,
-                           const String &_externalTextureName,
-                           uint32 _mrtIndex, ResourceAccess::ResourceAccess _access,
-                           int32 _mipmapLevel, PixelFormat _pixelFormat ) :
+                           IdString _externalTextureName,
+                           ResourceAccess::ResourceAccess _access,
+                           int32 _mipmapLevel, PixelFormatGpu _pixelFormat ) :
                 uavSlot( _uavSlot ), textureName( _textureName ),
-                externalTextureName( _externalTextureName ), mrtIndex( _mrtIndex ),
+                externalTextureName( _externalTextureName ),
                 access( _access ), mipmapLevel( _mipmapLevel ), pixelFormat( _pixelFormat ) {}
         };
         typedef vector<TextureSource>::type TextureSources;
@@ -123,8 +120,8 @@ namespace Ogre
         @param textureName
             Name of the texture. When empty, it will clear the slots.
         */
-        void setUav( uint32 slot, bool isExternal, const String &textureName, uint32 mrtIndex,
-                     ResourceAccess::ResourceAccess access, int32 mipmapLevel, PixelFormat pixelFormat );
+        void setUav( uint32 slot, bool isExternal, const String &textureName,
+                     ResourceAccess::ResourceAccess access, int32 mipmapLevel, PixelFormatGpu pixelFormat );
 
         void addUavBuffer( uint32 slotIdx, IdString bufferName,
                            ResourceAccess::ResourceAccess access, size_t offset=0,

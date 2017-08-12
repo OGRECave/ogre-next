@@ -56,8 +56,6 @@ THE SOFTWARE.
 #include "OgreParticleSystemManager.h"
 #include "OgreParticleSystem.h"
 #include "OgreProfiler.h"
-#include "OgreInstanceBatch.h"
-#include "OgreInstancedEntity.h"
 #include "OgreRenderTexture.h"
 #include "OgreTextureManager.h"
 #include "OgreSceneNode.h"
@@ -91,12 +89,10 @@ uint32 SceneManager::QUERY_STATICGEOMETRY_DEFAULT_MASK = 0x20000000;
 uint32 SceneManager::QUERY_LIGHT_DEFAULT_MASK          = 0x10000000;
 uint32 SceneManager::QUERY_FRUSTUM_DEFAULT_MASK        = 0x08000000;
 //-----------------------------------------------------------------------
-SceneManager::SceneManager(const String& name, size_t numWorkerThreads,
-                           InstancingThreadedCullingMethod threadedCullingMethod) :
+SceneManager::SceneManager( const String& name, size_t numWorkerThreads ) :
 mStaticMinDepthLevelDirty( 0 ),
 mStaticEntitiesDirty( true ),
 mPrePassMode( PrePassNone ),
-mPrePassTextures( 0 ),
 mSsrTexture( 0 ),
 mName(name),
 mRenderQueue( 0 ),
@@ -140,12 +136,10 @@ mShadowTextureOffset(0.6),
 mShadowTextureFadeStart(0.7), 
 mShadowTextureFadeEnd(0.9),
 mShadowTextureCustomCasterPass(0),
-mCompositorTarget( IdString(), 0 ),
 mVisibilityMask(0xFFFFFFFF & VisibilityFlags::RESERVED_VISIBILITY_FLAGS),
 mFindVisibleObjects(true),
 mNumWorkerThreads( numWorkerThreads ),
 mUpdateBoundsRequest( 0 ),
-mInstancingThreadedCullingMethod( threadedCullingMethod ),
 mUserTask( 0 ),
 mRequestType( NUM_REQUESTS ),
 mWorkerThreadsBarrier( 0 ),
@@ -156,9 +150,6 @@ mLastLightHashGpuProgram(0),
 mGpuParamsDirty((uint16)GPV_ALL)
 {
     assert( numWorkerThreads >= 1 );
-
-    if( numWorkerThreads <= 1 )
-        mInstancingThreadedCullingMethod = INSTANCING_CULLING_SINGLETHREAD;
 
     for( size_t i=0; i<NUM_SCENE_MEMORY_MANAGER_TYPES; ++i )
         mSceneRoot[i] = 0;
@@ -580,19 +571,14 @@ void SceneManager::destroyAllRectangle2D(void)
     destroyAllMovableObjectsByType(v1::Rectangle2DFactory::FACTORY_TYPE_NAME);
 }
 //-----------------------------------------------------------------------
-void SceneManager::_addCompositorTexture( IdString name, const TextureVec *texs )
+void SceneManager::_addCompositorTexture( IdString name, TextureGpu *tex )
 {
-    mCompositorTextures.push_back( CompositorTexture( name, texs ) );
+    mCompositorTextures.push_back( CompositorTexture( name, tex ) );
 }
 //-----------------------------------------------------------------------
 void SceneManager::_removeCompositorTextures( size_t from )
 {
     mCompositorTextures.erase( mCompositorTextures.begin() + from, mCompositorTextures.end() );
-}
-//-----------------------------------------------------------------------
-void SceneManager::_setCompositorTarget( const CompositorTexture &compoTarget )
-{
-    mCompositorTarget = compoTarget;
 }
 //-----------------------------------------------------------------------
 SkeletonInstance* SceneManager::createSkeletonInstance( const SkeletonDef *skeletonDef )
@@ -693,7 +679,6 @@ void SceneManager::destroyAllParticleSystems(void)
 void SceneManager::clearScene(void)
 {
     destroyAllStaticGeometry();
-    destroyAllInstanceManagers();
     destroyAllMovableObjects();
 
     // Clear root node of all children
@@ -929,9 +914,9 @@ void SceneManager::_setForwardPlusEnabledInPass( bool bEnable )
         mForwardPlusImpl = 0;
 }
 //-----------------------------------------------------------------------
-void SceneManager::_setPrePassMode( PrePassMode mode, const TextureVec *prepassTextures,
-                                    const TextureVec *prepassDepthTexture,
-                                    const TextureVec *ssrTexture )
+void SceneManager::_setPrePassMode( PrePassMode mode, const TextureGpuVec &prepassTextures,
+                                    TextureGpu *prepassDepthTexture,
+                                    TextureGpu *ssrTexture )
 {
     mPrePassMode = mode;
     mPrePassTextures = prepassTextures;
@@ -1120,14 +1105,6 @@ void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera, Viewp
         if (mFindVisibleObjects)
         {
             OgreProfileGroup("_updateRenderQueue", OGREPROF_CULLING);
-
-            if( mInstancingThreadedCullingMethod == INSTANCING_CULLING_THREADED )
-            {
-                fireCullFrustumInstanceBatchThreads( InstanceBatchCullRequest( camera, lodCamera,
-                                                     (vp->getVisibilityMask() & getVisibilityMask()) |
-                                                     (vp->getVisibilityMask() &
-                                                       ~VisibilityFlags::RESERVED_VISIBILITY_FLAGS) ) );
-            }
 
             //mVisibleObjects should be filled in phase 01
             VisibleObjectsPerThreadArray::const_iterator it = mVisibleObjects.begin();
@@ -2206,28 +2183,6 @@ void SceneManager::updateAllLods( const Camera *lodCamera, Real lodBias, uint8 f
     fireWorkerThreadsAndWait();
 }
 //-----------------------------------------------------------------------
-void SceneManager::instanceBatchCullFrustumThread( const InstanceBatchCullRequest &request,
-                                                   size_t threadIdx )
-{
-    VisibleObjectsPerRq::const_iterator it = mVisibleObjects[threadIdx].begin();
-    VisibleObjectsPerRq::const_iterator en = mVisibleObjects[threadIdx].begin();
-
-    while( it != en )
-    {
-        MovableObject::MovableObjectArray::const_iterator itor = it->begin();
-        MovableObject::MovableObjectArray::const_iterator end  = it->end();
-
-        while( itor != end )
-        {
-            (*itor)->instanceBatchCullFrustumThreaded( request.frustum, request.lodCamera,
-                                                       request.combinedVisibilityFlags );
-            ++itor;
-        }
-
-        ++it;
-    }
-}
-//-----------------------------------------------------------------------
 void SceneManager::cullFrustum( const CullFrustumRequest &request, size_t threadIdx )
 {
     VisibleObjectsPerRq &visibleObjectsPerRq = *(mVisibleObjects.begin() + threadIdx);
@@ -2680,10 +2635,6 @@ void SceneManager::updateSceneGraph()
     updateAllTransforms();
     updateAllAnimations();
     updateAllTagPoints();
-#ifdef OGRE_LEGACY_ANIMATIONS
-    updateInstanceManagerAnimations();
-#endif
-    updateInstanceManagers();
     updateAllBounds( mEntitiesMemoryManagerUpdateList );
     updateAllBounds( mLightsMemoryManagerCulledList );
 
@@ -4428,159 +4379,6 @@ void SceneManager::destroyAllStaticGeometry(void)
     mStaticGeometryList.clear();
 }
 //---------------------------------------------------------------------
-v1::InstanceManager* SceneManager::createInstanceManager( const String &customName,
-                                                          const String &meshName,
-                                                          const String &groupName,
-                                                          v1::InstanceManager::InstancingTechnique technique,
-                                                          size_t numInstancesPerBatch, uint16 flags,
-                                                          unsigned short subMeshIdx )
-{
-    InstanceManagerVec::iterator itor = std::lower_bound( mInstanceManagers.begin(),
-                                                          mInstanceManagers.end(),
-                                                          customName, v1::InstanceManagerCmp() );
-    if (itor != mInstanceManagers.end() && (*itor)->getName() == customName )
-    {
-        OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM, 
-            "InstancedManager with name '" + customName + "' already exists!", 
-            "SceneManager::createInstanceManager");
-    }
-
-    v1::InstanceManager *retVal = new v1::InstanceManager( customName, this, meshName, groupName,
-                                                           technique, flags, numInstancesPerBatch,
-                                                           subMeshIdx );
-
-    mInstanceManagers.insert( itor, retVal );
-    return retVal;
-}
-//---------------------------------------------------------------------
-v1::InstanceManager* SceneManager::getInstanceManager( IdString managerName ) const
-{
-    InstanceManagerVec::const_iterator itor = std::lower_bound( mInstanceManagers.begin(),
-                                                                mInstanceManagers.end(),
-                                                                managerName, v1::InstanceManagerCmp() );
-    if (itor == mInstanceManagers.end() || (*itor)->getName() != managerName )
-    {
-        OGRE_EXCEPT(Exception::ERR_ITEM_NOT_FOUND, 
-                "InstancedManager with name '" + managerName.getFriendlyText() + "' not found",
-                "SceneManager::getInstanceManager");
-    }
-
-    return *itor;
-}
-//---------------------------------------------------------------------
-bool SceneManager::hasInstanceManager( IdString managerName ) const
-{
-    InstanceManagerVec::const_iterator itor = std::lower_bound( mInstanceManagers.begin(),
-                                                                mInstanceManagers.end(),
-                                                                managerName, v1::InstanceManagerCmp() );
-    return itor != mInstanceManagers.end() && (*itor)->getName() == managerName;
-}
-//---------------------------------------------------------------------
-void SceneManager::destroyInstanceManager( IdString name )
-{
-    InstanceManagerVec::iterator itor = std::lower_bound( mInstanceManagers.begin(),
-                                                            mInstanceManagers.end(),
-                                                            name, v1::InstanceManagerCmp() );
-    if (itor != mInstanceManagers.end() && (*itor)->getName() == name )
-    {
-        OGRE_DELETE *itor;
-        mInstanceManagers.erase( itor );
-    }
-}
-//---------------------------------------------------------------------
-void SceneManager::destroyInstanceManager( v1::InstanceManager *instanceManager )
-{
-    destroyInstanceManager( instanceManager->getName() );
-}
-//---------------------------------------------------------------------
-void SceneManager::destroyAllInstanceManagers(void)
-{
-    InstanceManagerVec::iterator itor = mInstanceManagers.begin();
-    InstanceManagerVec::iterator end  = mInstanceManagers.end();
-
-    while( itor != end )
-        OGRE_DELETE *itor++;
-
-    mInstanceManagers.clear();
-}
-//---------------------------------------------------------------------
-size_t SceneManager::getNumInstancesPerBatch( const String &meshName, const String &groupName,
-                                              const String &materialName,
-                                              v1::InstanceManager::InstancingTechnique technique,
-                                              size_t numInstancesPerBatch, uint16 flags,
-                                              unsigned short subMeshIdx )
-{
-    v1::InstanceManager tmpMgr( "TmpInstanceManager", this, meshName, groupName,
-                                technique, flags, numInstancesPerBatch, subMeshIdx );
-    
-    return tmpMgr.getMaxOrBestNumInstancesPerBatch( materialName, numInstancesPerBatch, flags );
-}
-//---------------------------------------------------------------------
-v1::InstancedEntity* SceneManager::createInstancedEntity( const String &materialName,
-                                                          const String &managerName )
-{
-    InstanceManagerVec::const_iterator itor = std::lower_bound( mInstanceManagers.begin(),
-                                                                mInstanceManagers.end(),
-                                                                managerName, v1::InstanceManagerCmp() );
-
-    if (itor == mInstanceManagers.end() || (*itor)->getName() != managerName )
-    {
-        OGRE_EXCEPT(Exception::ERR_ITEM_NOT_FOUND, 
-                "InstancedManager with name '" + managerName + "' not found", 
-                "SceneManager::createInstanceEntity");
-    }
-
-    return (*itor)->createInstancedEntity( materialName );
-}
-//---------------------------------------------------------------------
-void SceneManager::destroyInstancedEntity( v1::InstancedEntity *instancedEntity )
-{
-    instancedEntity->_getOwner()->removeInstancedEntity( instancedEntity );
-}
-//---------------------------------------------------------------------
-#ifdef OGRE_LEGACY_ANIMATIONS
-void SceneManager::updateInstanceManagerAnimations(void)
-{
-    InstanceManagerVec::const_iterator itor = mInstanceManagers.begin();
-    InstanceManagerVec::const_iterator end  = mInstanceManagers.end();
-
-    while( itor != end )
-    {
-        (*itor)->_updateAnimations();
-        ++itor;
-    }
-}
-#endif
-//---------------------------------------------------------------------
-void SceneManager::updateInstanceManagersThread( size_t threadIdx )
-{
-    InstanceManagerVec::const_iterator itor = mInstanceManagers.begin();
-    InstanceManagerVec::const_iterator end  = mInstanceManagers.end();
-
-    while( itor != end )
-    {
-        (*itor)->_updateDirtyBatchesThread( threadIdx );
-        ++itor;
-    }
-}
-//---------------------------------------------------------------------
-void SceneManager::updateInstanceManagers(void)
-{
-    // First update the individual instances from multiple threads
-    mRequestType = UPDATE_INSTANCE_MANAGERS;
-    fireWorkerThreadsAndWait();
-
-    // Now perform the final pass from a single thread
-    InstanceManagerVec::const_iterator itor = mInstanceManagers.begin();
-    InstanceManagerVec::const_iterator end  = mInstanceManagers.end();
-
-    while( itor != end )
-    {
-        (*itor)->_updateDirtyBatches();
-        ++itor;
-    }
-}
-//---------------------------------------------------------------------
 AxisAlignedBoxSceneQuery* 
 SceneManager::createAABBQuery(const AxisAlignedBox& box, uint32 mask)
 {
@@ -5112,15 +4910,6 @@ void SceneManager::fireCullFrustumThreads( const CullFrustumRequest &request )
     fireWorkerThreadsAndWait();
 }
 //---------------------------------------------------------------------
-void SceneManager::fireCullFrustumInstanceBatchThreads( const InstanceBatchCullRequest &request )
-{
-    mInstanceBatchCullRequest = request;
-    mRequestType = CULL_FRUSTUM_INSTANCEDENTS;
-    mInstanceBatchCullRequest.frustum->getFrustumPlanes(); // Ensure they're up to date.
-    mInstanceBatchCullRequest.lodCamera->getFrustumPlanes(); // Ensure they're up to date.
-    fireWorkerThreadsAndWait();
-}
-//---------------------------------------------------------------------
 void SceneManager::executeUserScalableTask( UniformScalableTask *task, bool bBlock )
 {
     mRequestType = USER_UNIFORM_SCALABLE_TASK;
@@ -5210,9 +4999,6 @@ unsigned long SceneManager::_updateWorkerThread( ThreadHandle *threadHandle )
             break;
         case UPDATE_ALL_LODS:
             updateAllLodsThread( mUpdateLodRequest, threadIdx );
-            break;
-        case UPDATE_INSTANCE_MANAGERS:
-            updateInstanceManagersThread( threadIdx );
             break;
         case BUILD_LIGHT_LIST01:
             buildLightListThread01( mBuildLightListRequestPerThread[threadIdx], threadIdx );

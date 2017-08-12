@@ -2464,7 +2464,7 @@ namespace Ogre
                     _writeRawConstant(i->physicalIndex, source->getInverseTransposeViewProjMatrix(),i->elementCount);
                     break;
                 case ACT_RENDER_TARGET_FLIPPING:
-                    _writeRawConstant(i->physicalIndex, source->getCurrentRenderTarget()->requiresTextureFlipping() ? -1.f : +1.f);
+                    _writeRawConstant(i->physicalIndex, source->getCurrentRenderPassDesc()->requiresTextureFlipping() ? -1.f : +1.f);
                     break;
                 case ACT_VERTEX_WINDING:
                     {

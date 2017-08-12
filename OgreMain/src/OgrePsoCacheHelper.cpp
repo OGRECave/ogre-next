@@ -31,8 +31,7 @@ THE SOFTWARE.
 #include "OgrePsoCacheHelper.h"
 
 #include "OgreRenderSystem.h"
-#include "OgreRenderTarget.h"
-#include "OgreDepthBuffer.h"
+#include "OgreRenderPassDescriptor.h"
 
 namespace Ogre
 {
@@ -111,21 +110,35 @@ namespace Ogre
         return itor->hashToMainCache;
     }
     //-----------------------------------------------------------------------------------
-    void PsoCacheHelper::setRenderTarget( RenderTarget *renderTarget )
+    void PsoCacheHelper::setRenderTarget( const RenderPassDescriptor *renderPassDesc )
     {
         mLastFinalHash = std::numeric_limits<uint32>::max();
         mLastPso = 0;
         mCurrentState.pass.stencilParams = mRenderSystem->getStencilBufferParams();
 
-        renderTarget->getFormatsForPso( mCurrentState.pass.colourFormat, mCurrentState.pass.hwGamma );
+        for( int i=0; i<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
+        {
+            if( renderPassDesc->mColour[i].texture )
+            {
+                mCurrentState.pass.colourFormat[i] =
+                        renderPassDesc->mColour[i].texture->getPixelFormat();
+                mCurrentState.pass.multisampleCount =
+                        renderPassDesc->mColour[i].texture->getMsaa();
+                mCurrentState.pass.multisampleQuality =
+                        renderPassDesc->mColour[i].texture->getMsaaPattern();
+            }
+            else
+                mCurrentState.pass.colourFormat[i] = PFG_NULL;
+        }
 
-        mCurrentState.pass.depthFormat = PF_NULL;
-        const DepthBuffer *depthBuffer = renderTarget->getDepthBuffer();
-        if( depthBuffer )
-            mCurrentState.pass.depthFormat = depthBuffer->getFormat();
+        mCurrentState.pass.depthFormat = PFG_NULL;
+        if( renderPassDesc->mDepth.texture )
+        {
+            mCurrentState.pass.depthFormat          = renderPassDesc->mDepth.texture->getPixelFormat();
+            mCurrentState.pass.multisampleCount     = renderPassDesc->mDepth.texture->getMsaa();
+            mCurrentState.pass.multisampleQuality   = renderPassDesc->mDepth.texture->getMsaaPattern();
+        }
 
-        mCurrentState.pass.multisampleCount   = std::max( renderTarget->getFSAA(), 1u );
-        mCurrentState.pass.multisampleQuality = StringConverter::parseInt( renderTarget->getFSAAHint() );
         mCurrentState.pass.adapterId = 1; //TODO: Ask RenderSystem current adapter ID.
         mCurrentState.sampleMask = 0xffffffff; //TODO
 

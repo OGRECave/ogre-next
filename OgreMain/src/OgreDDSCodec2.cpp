@@ -235,7 +235,7 @@ namespace Ogre {
     void DDSCodec2::encodeToFile( MemoryDataStreamPtr &input, const String& outFileName,
                                   Codec::CodecDataPtr &pData ) const
     {
-#if 0
+#if TODO_OGRE_2_2
         // Unwrap codecDataPtr - data is cleaned by calling function
         DDSCodec2 *imgData = static_cast<DDSCodec2*>( pData.getPointer() );
 

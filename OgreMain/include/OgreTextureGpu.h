@@ -106,7 +106,20 @@ namespace Ogre
             /// Texture will auto generate mipmaps every time it's dirty, automatically.
             /// Requires AllowAutomipmaps.
             AutomipmapsAuto     = 1u << 4u,
-            ///
+            /** MSAA rendering is an antialiasing technique. MSAA works by rendering
+                to a special surface (an MSAA surface) and once we're done, "resolving"
+                from MSAA surface into a regular texture for later sampling.
+            @par
+                Without explicit resolves, Ogre will automatically resolve the MSAA
+                surface into the texture whenever it detects you will be sampling
+                from this texture.
+            @par
+                However there are cases where you want to directly access the MSAA
+                surface directly for advanced special effects (i.e. via Texture2DMS in
+                HLSL).
+                For cases like that, use MsaaExplicitResolve; which will let you to
+                manually manage MSAA surfaces and when you want to resolve it.
+            */
             MsaaExplicitResolve = 1u << 5u,
             /// When present, you may be creating another TextureGpu that accesses
             /// the internal resources of this TextureGpu but with a different format
@@ -121,7 +134,8 @@ namespace Ogre
             ///     * OpenGL cannot share the depth & stencil buffers with other textures.
             ///     * Metal requires special maintenance.
             ///     * etc.
-            RenderWindowSpecific= 1u << 8u,
+            RenderWindowSpecific= 1u << 9u,
+            RequiresTextureFlipping = 1u << 10u,
             /// When not present:
             /// The Texture is exactly the type requested (e.g. 2D texture won't
             /// get a 2D array instead)
@@ -142,7 +156,7 @@ namespace Ogre
             /// compute the texture hashes.
             /// All of that (except updating slices to the GPU) can be done in a
             /// worker thread, then all the values swapped w/ the Datablock’s.
-            AutomaticBatching   = 1u << 9u
+            AutomaticBatching   = 1u << 11u
         };
     }
 
@@ -280,6 +294,13 @@ namespace Ogre
         virtual void copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
                              const TextureBox &srcBox, uint8 srcMipLevel );
 
+        /// Tells the API to let the HW autogenerate mipmaps. Assumes the
+        /// allowsAutoMipmaps() == true and isRenderToTexture() == true
+        virtual void _autogenerateMipmaps(void) = 0;
+        /// Only valid for TextureGpu classes.
+        /// TODO: This may be moved to a different class.
+        virtual void swapBuffers(void) {}
+
         bool hasAutomaticBatching(void) const;
         bool isTexture(void) const;
         bool isRenderToTexture(void) const;
@@ -290,6 +311,7 @@ namespace Ogre
         bool isReinterpretable(void) const;
         bool prefersLoadingAsSRGB(void) const;
         bool isRenderWindowSpecific(void) const;
+        bool requiresTextureFlipping(void) const;
 
         virtual void _setToDisplayDummyTexture(void) = 0;
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );

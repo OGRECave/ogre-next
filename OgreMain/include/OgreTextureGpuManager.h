@@ -326,6 +326,7 @@ namespace Ogre
                                              uint32 textureFlags,
                                              TextureTypes::TextureTypes initialType,
                                              const String &resourceGroup=BLANKSTRING );
+        TextureGpu* findTextureNoThrow( IdString name ) const;
         void destroyTexture( TextureGpu *texture );
 
         /** Creates a StagingTexture which is required to upload data CPU -> GPU into

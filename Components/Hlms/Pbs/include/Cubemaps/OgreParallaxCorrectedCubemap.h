@@ -81,7 +81,7 @@ namespace Ogre
         Camera                          *mBlendProxyCamera;
         CompositorWorkspace             *mBlendWorkspace;
         CompositorWorkspace             *mCopyWorkspace;
-        TexturePtr                      mBlendCubemap;
+        TextureGpu                      *mBlendCubemap;
         HlmsSamplerblock const          *mSamplerblockPoint;
         HlmsSamplerblock const          *mSamplerblockTrilinear;
         float                           mCurrentMip;
@@ -220,8 +220,9 @@ namespace Ogre
         SceneManager* getSceneManager(void) const;
         const CompositorWorkspaceDef* getDefaultWorkspaceDef(void) const;
 
-        TexturePtr getBlendCubemap(void) const          { return mBlendCubemap; }
-        const HlmsSamplerblock* getBlendCubemapTrilinearSamplerblock(void)  { return mSamplerblockTrilinear; }
+        TextureGpu* getBlendCubemap(void) const         { return mBlendCubemap; }
+        const HlmsSamplerblock* getBlendCubemapTrilinearSamplerblock(void)
+                                                        { return mSamplerblockTrilinear; }
 
         /// Returns the RenderQueue ID you told us you reserved for storing our internal objects.
         /// Do not attempt to render the objects that match in that Rq ID & visibility mask.

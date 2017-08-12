@@ -835,11 +835,6 @@ namespace Ogre
                 {
                     writeValue("alpha");
                 }
-
-                if (pTex->getDesiredFormat() != PF_UNKNOWN)
-                {
-                    writeValue(PixelUtil::getFormatName(pTex->getDesiredFormat()));
-                }
             }
 
             //anim. texture
@@ -1101,7 +1096,6 @@ namespace Ogre
                 case TextureUnitState::CONTENT_COMPOSITOR:
                     writeValue("compositor");
                     writeValue(quoteWord(pTex->getTextureName()));
-                    writeValue(StringConverter::toString(pTex->getReferencedMRTIndex()));
                     break;
                 };
             }

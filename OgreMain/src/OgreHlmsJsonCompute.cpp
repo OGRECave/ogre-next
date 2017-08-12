@@ -37,14 +37,15 @@ THE SOFTWARE.
 #include "OgreHlmsTextureManager.h"
 #include "OgreLwString.h"
 #include "OgreLogManager.h"
-#include "OgreTextureManager.h"
+#include "OgreTextureGpuManager.h"
 
 #include "rapidjson/document.h"
 
 namespace Ogre
 {
-    HlmsJsonCompute::HlmsJsonCompute( HlmsManager *hlmsManager ) :
-        mHlmsManager( hlmsManager )
+    HlmsJsonCompute::HlmsJsonCompute( HlmsManager *hlmsManager, TextureGpuManager *textureManager ) :
+        mHlmsManager( hlmsManager ),
+        mTextureManager( textureManager )
     {
     }
     //-----------------------------------------------------------------------------------
@@ -253,7 +254,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void HlmsJsonCompute::loadTexture( const rapidjson::Value &json, const HlmsJson::NamedBlocks &blocks,
-                                       HlmsComputeJob *job, uint8 slotIdx )
+                                       HlmsComputeJob *job, uint8 slotIdx, const String &resourceGroup )
     {
         rapidjson::Value::ConstMemberIterator itor = json.FindMember( "sampler" );
         if( itor != json.MemberEnd() && itor->value.IsString() )
@@ -274,37 +275,13 @@ namespace Ogre
         {
             const char *textureName = itor->value.GetString();
 
-            TexturePtr texture = TextureManager::getSingleton().getByName(
-                        textureName, ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+            //TODO: allow specifying texture flags.
+            uint32 textureFlags = TextureFlags::AutomaticBatching;
+            TextureGpu *texture = mTextureManager->createOrRetrieveTexture(
+                                      textureName, GpuPageOutStrategy::Discard,
+                                      textureFlags, TextureTypes::Unknown,
+                                      resourceGroup );
             job->setTexture( slotIdx, texture );
-        }
-
-        itor = json.FindMember( "texture_hlms" );
-        if( itor != json.MemberEnd() && itor->value.IsArray() &&
-            itor->value.Size() >= 1u && itor->value.Size() <= 2u &&
-            itor->value[0].IsString() )
-        {
-            const rapidjson::Value &jsonArray = itor->value;
-
-            const char *textureName = jsonArray[0].GetString();
-            HlmsTextureManager *hlmsTextureManager = mHlmsManager->getTextureManager();
-            HlmsTextureManager::TextureLocation texLocation = hlmsTextureManager->
-                    createOrRetrieveTexture( textureName,
-                                             HlmsTextureManager::TEXTURE_TYPE_DIFFUSE );
-            job->setTexture( slotIdx, texLocation.texture );
-
-            if( jsonArray.Size() >= 2u && jsonArray[1].IsString() )
-            {
-                ShaderParams &shaderParams = job->getShaderParams( "default" );
-                ShaderParams::Param param;
-                param.name = jsonArray[1].GetString();
-                param.isAutomatic = false;
-                param.isDirty     = true;
-                param.mp.elementType    = ShaderParams::ElementInt;
-                param.mp.dataSizeBytes  = sizeof(int32);
-                memcpy( param.mp.dataBytes, &texLocation.xIdx, sizeof(int32) );
-                shaderParams.mParams.push_back( param );
-            }
         }
 
         //TODO: Implement named buffers
@@ -385,7 +362,8 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void HlmsJsonCompute::loadJob( const rapidjson::Value &json, const HlmsJson::NamedBlocks &blocks,
-                                   HlmsComputeJob *job, const String &jobName )
+                                   HlmsComputeJob *job, const String &jobName,
+                                   const String &resourceGroup )
     {
         rapidjson::Value::ConstMemberIterator itor = json.FindMember( "threads_per_group" );
         if( itor != json.MemberEnd() && itor->value.IsArray() )
@@ -506,7 +484,7 @@ namespace Ogre
             for( uint8 i=0; i<arraySize; ++i )
             {
                 if( jsonArray[i].IsObject() )
-                    loadTexture( jsonArray[i], blocks, job, i );
+                    loadTexture( jsonArray[i], blocks, job, i, resourceGroup );
             }
         }
 
@@ -518,7 +496,8 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void HlmsJsonCompute::loadJobs( const rapidjson::Value &json, const HlmsJson::NamedBlocks &blocks )
+    void HlmsJsonCompute::loadJobs( const rapidjson::Value &json, const HlmsJson::NamedBlocks &blocks,
+                                    const String &resourceGroup )
     {
         HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
 
@@ -553,7 +532,7 @@ namespace Ogre
                     HlmsComputeJob *job = hlmsCompute->createComputeJob( jobName, jobName,
                                                                          itor->value.GetString(),
                                                                          pieceFiles );
-                    loadJob( itJob->value, blocks, job, jobName );
+                    loadJob( itJob->value, blocks, job, jobName, resourceGroup );
                 }
             }
 

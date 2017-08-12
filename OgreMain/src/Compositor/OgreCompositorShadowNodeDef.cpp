@@ -65,7 +65,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     ShadowTextureDefinition* CompositorShadowNodeDef::addShadowTextureDefinition(
-            size_t lightIdx, size_t split, const String &name, uint8 mrtIndex,
+            size_t lightIdx, size_t split, const String &name,
             const Vector2 &uvOffset, const Vector2 &uvLength, uint8 arrayIdx )
     {
         if( name.empty() )
@@ -104,7 +104,7 @@ namespace Ogre
 
         mNumLights += newLight;
 
-        mShadowMapTexDefinitions.push_back( ShadowTextureDefinition( mDefaultTechnique, name, mrtIndex,
+        mShadowMapTexDefinitions.push_back( ShadowTextureDefinition( mDefaultTechnique, name,
                                                                      uvOffset, uvLength, arrayIdx,
                                                                      lightIdx, split ) );
 

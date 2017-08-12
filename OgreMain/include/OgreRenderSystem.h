@@ -40,6 +40,8 @@ THE SOFTWARE.
 #include "OgrePlane.h"
 #include "OgreHardwareVertexBuffer.h"
 #include "OgreResourceTransition.h"
+#include "OgrePixelFormatGpu.h"
+#include "OgreViewport.h"
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
@@ -723,13 +725,40 @@ namespace Ogre
         @param enabled Boolean to turn the unit on/off
         @param texPtr Pointer to the texture to use.
         */
-        virtual void _setTexture(size_t unit, bool enabled,  Texture *texPtr) = 0;
+        virtual void _setTexture(size_t unit, bool enabled,  TextureGpu *texPtr) = 0;
+
+        /** Because Ogre doesn't (yet) have the notion of a 'device' or 'GL context',
+            this function lets Ogre know which device should be used by providing
+            a texture.
+        @param texture
+            Cannot be null.
+        */
+        virtual void _setCurrentDeviceFromTexture( TextureGpu *texture ) = 0;
 
         virtual RenderPassDescriptor* createRenderPassDescriptor(void) = 0;
         void destroyRenderPassDescriptor( RenderPassDescriptor *renderPassDesc );
 
-        virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc ) = 0;
-        virtual void endRenderPassDescriptor( RenderPassDescriptor *desc ) = 0;
+        RenderPassDescriptor* getCurrentPassDescriptor(void)    { return mCurrentRenderPassDescriptor; }
+        /** When the descriptor is set to Load clear, two possible things may happen:
+                1. The region is cleared.
+                2. The whole texture is cleared.
+            What actually happens is undefined (depends on the API). But calling
+            "beginRenderPassDescriptor( desc, viewportSettings );" with the same
+            descriptor but different viewports (without changing the desc)
+            guarantees that each region is cleared:
+                1. Each time the subregion is switched
+                2. Only once (the whole texture), when the first viewport was set.
+        @brief beginRenderPassDescriptor
+        @param desc
+        @param viewportSettings
+        */
+        virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc,
+                                                const Vector4 &viewportSize,
+                                                const Vector4 &scissors,
+                                                bool overlaysEnabled );
+        virtual void endRenderPassDescriptor(void);
+
+        virtual TextureGpu* getDepthBufferFor( TextureGpu *colourTexture ) = 0;
 
         /** In Direct3D11, UAV & RenderTargets share the same slots. Because of this,
             we enforce the same behavior on all RenderSystems.
@@ -763,10 +792,10 @@ namespace Ogre
             Texture format to be read in by shader. This may be different than the bound texture format.
             Will be the same is left as PF_UNKNOWN
         */
-        virtual void queueBindUAV( uint32 slot, TexturePtr texture,
+        virtual void queueBindUAV( uint32 slot, TextureGpu *texture,
                                    ResourceAccess::ResourceAccess access = ResourceAccess::ReadWrite,
                                    int32 mipmapLevel = 0, int32 textureArrayIndex = 0,
-                                   PixelFormat pixelFormat = PF_UNKNOWN ) = 0;
+                                   PixelFormatGpu pixelFormat = PFG_UNKNOWN ) = 0;
 
         /** See other overload. The slots are shared with the textures'
         @param offset
@@ -806,21 +835,6 @@ namespace Ogre
         virtual void _setTextureCS( uint32 slot, bool enabled, Texture *texPtr ) = 0;
         virtual void _setHlmsSamplerblockCS( uint8 texUnit, const HlmsSamplerblock *Samplerblock ) = 0;
 
-        /**
-        Sets the texture to bind to a given texture unit.
-
-        User processes would not normally call this direct unless rendering
-        primitives themselves.
-
-        @param unit The index of the texture unit to modify. Multitexturing 
-        hardware can support multiple units (see 
-        RenderSystemCapabilites::getNumTextureUnits)
-        @param enabled Boolean to turn the unit on/off
-        @param texname The name of the texture to use - this should have
-        already been loaded with TextureManager::load.
-        */
-        virtual void _setTexture(size_t unit, bool enabled, const String &texname);
-
         virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set ) = 0;
         virtual void _setSamplers( uint32 slotStart, const DescriptorSetSampler *set ) = 0;
 
@@ -856,10 +870,10 @@ namespace Ogre
         fragment units; calling this method will throw an exception.
         @see RenderSystemCapabilites::getVertexTextureUnitsShared
         */
-        virtual void _setVertexTexture(size_t unit, const TexturePtr& tex);
-        virtual void _setGeometryTexture(size_t unit, const TexturePtr& tex);
-        virtual void _setTessellationHullTexture(size_t unit, const TexturePtr& tex);
-        virtual void _setTessellationDomainTexture(size_t unit, const TexturePtr& tex);
+        virtual void _setVertexTexture(size_t unit, TextureGpu *tex);
+        virtual void _setGeometryTexture(size_t unit, TextureGpu *tex);
+        virtual void _setTessellationHullTexture(size_t unit, TextureGpu *tex);
+        virtual void _setTessellationDomainTexture(size_t unit, TextureGpu *tex);
 
         /**
         Sets a method for automatically calculating texture coordinates for a stage.
@@ -1282,45 +1296,6 @@ namespace Ogre
          */
         virtual void _setRenderTarget( RenderTarget *target, uint8 viewportRenderTargetFlags ) = 0;
 
-        /** This function was created because of Metal. The Metal API doesn't have a
-            'device->clear( texture )' function. Instead we must specify we want to
-            start rendering to a cleared surface. This allows mobile TBDR GPUs to begin
-            rendering without having to load any data from memory (saves a lot of bandwidth
-            and battery).
-        @par
-            But it also means Ogre must do an effort to delay the clear operation as much as
-            possible (until actual rendering to it, or until the texture is used for
-            reading/sampling).
-        @par
-            Normally, we'd want to stop deferring a clear and immediately issue it when
-            _setRenderTarget gets called with a different pointer. However, the following
-            scenario is too common:
-            target rtt
-            {
-                pass clear {}
-                pass render_scene
-                {
-                    shadows myShadowNode
-                }
-            }
-
-            Ogre will first issue a clear, then begin executing the shadow node (which switches
-            to the shadow map) then switch back to the original rtt to resume regular rendinering.
-            In this common case we want to delay the clear, but _setRenderTarget is clearly
-            not an trusted indication (we would get many false positives).
-        @par
-            Therefore the compositor has much better knowledge, and it informs of this fact
-            via this call.
-        @remarks
-            TODO: This function will eventually be removed. The Compositor should be creating
-            a resource transition. We only need to force clear when we're going to be using
-            the target as a texture for reading/sampling. That's exactly what
-            ResourceTransitions are for.
-        @param previousRenderTarget
-            RenderTarget that was being used (and we should clear if we have to).
-        */
-        virtual void _notifyCompositorNodeSwitchedRenderTarget( RenderTarget *previousTarget ) {}
-
         /** Defines a listener on the custom events that this render system 
         can raise.
         @see RenderSystem::addListener
@@ -1465,6 +1440,8 @@ namespace Ogre
 
         typedef set<RenderPassDescriptor*>::type RenderPassDescriptorSet;
         RenderPassDescriptorSet mRenderPassDescs;
+        RenderPassDescriptor    *mCurrentRenderPassDescriptor;
+        Viewport                mCurrentRenderViewport;
 
         /** The render targets. */
         RenderTargetMap mRenderTargets;

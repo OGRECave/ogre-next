@@ -364,7 +364,7 @@ namespace Ogre
                 texUnit += 2;
             }
 
-            if( mPrePassTextures )
+            if( !mPrePassTextures->empty() )
             {
                 psParams->setNamedConstant( "gBuf_normals",         texUnit++ );
                 psParams->setNamedConstant( "gBuf_shadowRoughness", texUnit++ );
@@ -881,26 +881,23 @@ namespace Ogre
             }
         }
 
-        mTargetEnvMap.setNull();
+        mPrePassTextures = &sceneManager->getCurrentPrePassTextures();
+        assert( mPrePassTextures->size() == 2u );
 
-        mPrePassTextures = sceneManager->getCurrentPrePassTextures();
-        assert( !mPrePassTextures || mPrePassTextures->size() == 2u );
-
-        mPrePassMsaaDepthTexture.reset();
-        if( mPrePassTextures && (*mPrePassTextures)[0]->getFSAA() > 1u )
+        mPrePassMsaaDepthTexture = 0;
+        if( !mPrePassTextures->empty() && (*mPrePassTextures)[0]->getMsaa() > 1u )
         {
-            const TextureVec *msaaDepthTexture = sceneManager->getCurrentPrePassDepthTexture();
+            TextureGpu *msaaDepthTexture = sceneManager->getCurrentPrePassDepthTexture();
             if( msaaDepthTexture )
-                mPrePassMsaaDepthTexture = (*msaaDepthTexture)[0];
-            assert( (!mPrePassTextures ||
-                    (mPrePassMsaaDepthTexture &&
-                     mPrePassMsaaDepthTexture->getFSAA() == (*mPrePassTextures)[0]->getFSAA())) &&
+                mPrePassMsaaDepthTexture = msaaDepthTexture;
+            assert( (mPrePassMsaaDepthTexture &&
+                     mPrePassMsaaDepthTexture->getMsaa() == (*mPrePassTextures)[0]->getMsaa()) &&
                     "Prepass + MSAA must specify an MSAA depth texture" );
         }
 
         mSsrTexture = sceneManager->getCurrentSsrTexture();
-        assert( !(!mPrePassTextures && mSsrTexture) && "Using SSR *requires* to be in prepass mode" );
-        assert( !mSsrTexture || mSsrTexture->size() == 1u );
+        assert( !(mPrePassTextures->empty() && mSsrTexture) &&
+                "Using SSR *requires* to be in prepass mode" );
 
         AmbientLightMode ambientMode = mAmbientLightMode;
         ColourValue upperHemisphere = sceneManager->getAmbientLightUpperHemisphere();
@@ -936,15 +933,14 @@ namespace Ogre
                 setProperty( PbsProperty::EnvMapScale, 1 );
 
             //Save cubemap's name so that we never try to render & sample to/from it at the same time
-            const CompositorTexture &compoTarget = sceneManager->getCompositorTarget();
-            if( !compoTarget.textures->empty() )
+            RenderPassDescriptor *renderPassDescriptor = mRenderSystem->getCurrentPassDescriptor();
+            if( renderPassDescriptor->getNumColourEntries() > 0u )
             {
-                const TexturePtr &firstTargetTex = (*compoTarget.textures)[0];
-                if( firstTargetTex->getTextureType() == TEX_TYPE_CUBE_MAP )
+                TextureGpu *firstColourTarget = renderPassDescriptor->mColour[0].texture;
+                if( firstColourTarget->getTextureType() == TextureTypes::TypeCube )
                 {
                     setProperty( PbsProperty::TargetEnvprobeMap,
-                                 static_cast<int32>( IdString(firstTargetTex->getName()).mHash ) );
-                    mTargetEnvMap = firstTargetTex;
+                                 static_cast<int32>( firstColourTarget->getName().mHash ) );
                 }
             }
 
@@ -1043,7 +1039,7 @@ namespace Ogre
                 mapSize += (4 * 4) * numShadowMapLights;
 
             //float windowHeight + padding
-            if( mPrePassTextures )
+            if( !mPrePassTextures->empty() )
                 mapSize += 4 * 4;
 
             //vec3 ambientUpperHemi + float envMapScale
@@ -1157,7 +1153,7 @@ namespace Ogre
                 *passBufferPtr++ = (float)viewMatrix[0][i];
 
             size_t shadowMapTexIdx = 0;
-            const TextureVec &contiguousShadowMapTex = shadowNode->getContiguousShadowMapTex();
+            const TextureGpuVec &contiguousShadowMapTex = shadowNode->getContiguousShadowMapTex();
 
             for( int32 i=0; i<numShadowMapLights; ++i )
             {
@@ -1235,7 +1231,7 @@ namespace Ogre
                     ++passBufferPtr;
             }
 
-            if( mPrePassTextures )
+            if( !mPrePassTextures->empty() )
             {
                 //vec4 windowHeight
                 const float windowHeight = renderTarget->getHeight();
@@ -1443,12 +1439,12 @@ namespace Ogre
             {
                 mPreparedPass.shadowMaps.reserve( contiguousShadowMapTex.size() );
 
-                TextureVec::const_iterator itShadowMap = contiguousShadowMapTex.begin();
-                TextureVec::const_iterator enShadowMap = contiguousShadowMapTex.end();
+                TextureGpuVec::const_iterator itShadowMap = contiguousShadowMapTex.begin();
+                TextureGpuVec::const_iterator enShadowMap = contiguousShadowMapTex.end();
 
                 while( itShadowMap != enShadowMap )
                 {
-                    mPreparedPass.shadowMaps.push_back( itShadowMap->get() );
+                    mPreparedPass.shadowMaps.push_back( *itShadowMap );
                     ++itShadowMap;
                 }
             }
@@ -1529,7 +1525,7 @@ namespace Ogre
             mTexUnitSlotStart += 1;
         if( mParallaxCorrectedCubemap )
             mTexUnitSlotStart += 1;
-        if( mPrePassTextures )
+        if( !mPrePassTextures->empty() )
             mTexUnitSlotStart += 2;
         if( mPrePassMsaaDepthTexture )
             mTexUnitSlotStart += 1;
@@ -1607,40 +1603,40 @@ namespace Ogre
                             CbShaderBuffer( PixelShader, 2, mGlobalLightListBuffer, 0, 0 );
                 }
 
-                if( mPrePassTextures )
+                if( !mPrePassTextures->empty() )
                 {
                     *commandBuffer->addCommand<CbTexture>() =
-                            CbTexture( texUnit++, true, (*mPrePassTextures)[0].get(), 0 );
+                            CbTexture( texUnit++, true, (*mPrePassTextures)[0], 0 );
                     *commandBuffer->addCommand<CbTexture>() =
-                            CbTexture( texUnit++, true, (*mPrePassTextures)[1].get(), 0 );
+                            CbTexture( texUnit++, true, (*mPrePassTextures)[1], 0 );
                 }
 
                 if( mPrePassMsaaDepthTexture )
                 {
                     *commandBuffer->addCommand<CbTexture>() =
-                            CbTexture( texUnit++, true, mPrePassMsaaDepthTexture.get(), 0 );
+                            CbTexture( texUnit++, true, mPrePassMsaaDepthTexture, 0 );
                 }
 
                 if( mSsrTexture )
                 {
                     *commandBuffer->addCommand<CbTexture>() =
-                            CbTexture( texUnit++, true, (*mSsrTexture)[0].get(), 0 );
+                            CbTexture( texUnit++, true, mSsrTexture, 0 );
                 }
 
                 if( mIrradianceVolume )
                 {
-                    const TexturePtr &irradianceTex = mIrradianceVolume->getIrradianceVolumeTexture();
+                    TextureGpu *irradianceTex = mIrradianceVolume->getIrradianceVolumeTexture();
                     const HlmsSamplerblock *samplerblock = mIrradianceVolume->getIrradSamplerblock();
 
                     *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit, true,
-                                                                         irradianceTex.get(),
+                                                                         irradianceTex,
                                                                          samplerblock );
                     ++texUnit;
                 }
 
                 //We changed HlmsType, rebind the shared textures.
-                FastArray<Texture*>::const_iterator itor = mPreparedPass.shadowMaps.begin();
-                FastArray<Texture*>::const_iterator end  = mPreparedPass.shadowMaps.end();
+                FastArray<TextureGpu*>::const_iterator itor = mPreparedPass.shadowMaps.begin();
+                FastArray<TextureGpu*>::const_iterator end  = mPreparedPass.shadowMaps.end();
                 while( itor != end )
                 {
                     *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit, true, *itor,
@@ -1651,7 +1647,7 @@ namespace Ogre
 
                 if( mParallaxCorrectedCubemap )
                 {
-                    Texture *pccTexture = mParallaxCorrectedCubemap->getBlendCubemap().get();
+                    TextureGpu *pccTexture = mParallaxCorrectedCubemap->getBlendCubemap();
                     const HlmsSamplerblock *samplerblock =
                             mParallaxCorrectedCubemap->getBlendCubemapTrilinearSamplerblock();
                     *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit, true, pccTexture,
@@ -1990,7 +1986,7 @@ namespace Ogre
         {
             //We need to unbind the depth texture, it may be used as a depth buffer later.
             size_t texUnit = mGridBuffer ? 3 : 1;
-            if( mPrePassTextures )
+            if( !mPrePassTextures->empty() )
                 texUnit += 2;
 
             mRenderSystem->_setTexture( texUnit, false, 0 );

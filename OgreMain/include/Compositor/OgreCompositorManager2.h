@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "OgreIdString.h"
 #include "OgreResourceTransition.h"
 #include "OgreVector4.h"
+#include "OgrePixelFormatGpu.h"
 #include "Compositor/OgreCompositorChannel.h"
 
 #include "OgreTexture.h"
@@ -46,7 +47,7 @@ namespace Ogre
     }
     class CompositorPassProvider;
 
-    typedef vector<TexturePtr>::type TextureVec;
+    typedef vector<TextureGpu*>::type TextureGpuVec;
     typedef vector<UavBufferPacked*>::type UavBufferPackedVec;
 
     /** \addtogroup Core
@@ -140,7 +141,7 @@ namespace Ogre
 
         RenderSystem            *mRenderSystem;
 
-        TextureVec              mNullTextureList;
+        TextureGpuVec           mNullTextureList;
         v1::Rectangle2D         *mSharedTriangleFS;
         v1::Rectangle2D         *mSharedQuadFS;
         ObjectMemoryManager     *mDummyObjectMemoryManager;
@@ -218,7 +219,7 @@ namespace Ogre
         /** Get an appropriately defined 'null' texture, i.e. one which will always
             result in no shadows.
         */
-        TexturePtr getNullShadowTexture( PixelFormat format );
+        TextureGpu* getNullShadowTexture( PixelFormatGpu format );
 
         /** Returns a shared fullscreen rectangle/triangle useful for PASS_QUAD passes
         @remarks
@@ -331,7 +332,7 @@ namespace Ogre
             This is useful when you want to skip a pass (like Clear) when rendering the second
             eye (or the second split from the second player).
         */
-        CompositorWorkspace* addWorkspace( SceneManager *sceneManager, RenderTarget *finalRenderTarget,
+        CompositorWorkspace* addWorkspace( SceneManager *sceneManager, TextureGpu *finalRenderTarget,
                                            Camera *defaultCam, IdString definitionName, bool bEnabled,
                                            int position=-1, const UavBufferPackedVec *uavBuffers=0,
                                            const ResourceLayoutMap* initialLayouts=0,
@@ -339,7 +340,7 @@ namespace Ogre
                                            const Vector4 &vpOffsetScale = Vector4::ZERO,
                                            uint8 vpModifierMask=0x00, uint8 executionMask=0xFF );
 
-        /// Overload that allows a full RenderTexture to be used as render target (see CubeMapping demo)
+        /// Overload that allows having multiple external input/outputs
         CompositorWorkspace* addWorkspace( SceneManager *sceneManager,
                                            const CompositorChannelVec &externalRenderTargets,
                                            Camera *defaultCam, IdString definitionName, bool bEnabled,

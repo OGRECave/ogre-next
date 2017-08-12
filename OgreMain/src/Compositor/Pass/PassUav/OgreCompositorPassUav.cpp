@@ -39,14 +39,13 @@ THE SOFTWARE.
 
 #include "OgreRenderTexture.h"
 #include "OgreRenderSystem.h"
-#include "OgreTextureManager.h"
-#include "OgreHardwarePixelBuffer.h"
+#include "OgreTextureGpuManager.h"
 
 namespace Ogre
 {
     void CompositorPassUavDef::setUav( uint32 slot, bool isExternal, const String &textureName,
-                                       uint32 mrtIndex, ResourceAccess::ResourceAccess access,
-                                       int32 mipmapLevel, PixelFormat pixelFormat )
+                                       ResourceAccess::ResourceAccess access,
+                                       int32 mipmapLevel, PixelFormatGpu pixelFormat )
     {
         IdString internalName;
         String externalName;
@@ -67,7 +66,7 @@ namespace Ogre
         if( textureName.empty() )
             internalName = IdString();
 
-        mTextureSources.push_back( TextureSource( slot, internalName, externalName, mrtIndex,
+        mTextureSources.push_back( TextureSource( slot, internalName, externalName,
                                                   access, mipmapLevel, pixelFormat ) );
     }
     //-----------------------------------------------------------------------------------
@@ -82,8 +81,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     CompositorPassUav::CompositorPassUav( const CompositorPassUavDef *definition,
                                           CompositorNode *parentNode,
-                                          const CompositorChannel &target ) :
-                CompositorPass( definition, target, parentNode ),
+                                          const RenderTargetViewDef *rtv ) :
+                CompositorPass( definition, rtv, parentNode ),
                 mDefinition( definition )
     {
     }
@@ -101,10 +100,6 @@ namespace Ogre
         CompositorWorkspaceListener *listener = mParentNode->getWorkspace()->getListener();
         if( listener )
             listener->passEarlyPreExecute( this );
-
-        //Call beginUpdate if we're the first to use this RT
-        if( mDefinition->mBeginRtUpdate )
-            mTarget->_beginUpdate();
 
         //Fire the listener in case it wants to change anything
         if( listener )
@@ -131,22 +126,22 @@ namespace Ogre
             CompositorPassUavDef::TextureSources::const_iterator end  = textureSources.end();
             while( itor != end )
             {
-                TexturePtr texture;
+                TextureGpu *texture;
 
-                if( itor->externalTextureName.empty() )
+                if( itor->externalTextureName == IdString() )
                 {
-                    texture = mParentNode->getDefinedTexture( itor->textureName, itor->mrtIndex );
+                    texture = mParentNode->getDefinedTexture( itor->textureName );
                 }
-                else if( itor->textureName != IdString() )
+                else
                 {
-                    texture = TextureManager::getSingleton().getByName(
-                                itor->externalTextureName,
-                                ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+                    TextureGpuManager *textureManager = renderSystem->getTextureGpuManager();
+                    texture = textureManager->findTextureNoThrow( itor->externalTextureName );
 
-                    if( texture.isNull() )
+                    if( !texture )
                     {
                         OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
-                                     "Texture with name: " + itor->externalTextureName +
+                                     "Texture with name: " +
+                                     itor->externalTextureName.getFriendlyText() +
                                      " does not exist. The texture must exist by the time the "
                                      "workspace is executed. Are you trying to use a texture "
                                      "defined by the compositor? If so you need to set it via "
@@ -181,16 +176,13 @@ namespace Ogre
 
         if( listener )
             listener->passPosExecute( this );
-
-        //Call endUpdate if we're the last pass in a row to use this RT
-        if( mDefinition->mEndRtUpdate )
-            mTarget->_endUpdate();
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassUav::_placeBarriersAndEmulateUavExecution(
                                             BoundUav boundUavs[64], ResourceAccessMap &uavsAccess,
                                             ResourceLayoutMap &resourcesLayout )
     {
+#if TODO_placeBarriersAndEmulateUavExecution
         {
             const CompositorPassUavDef::TextureSources &textureSources =
                     mDefinition->getTextureSources();
@@ -202,7 +194,7 @@ namespace Ogre
 
                 if( itor->externalTextureName.empty() )
                 {
-                    texture = mParentNode->getDefinedTexture( itor->textureName, itor->mrtIndex );
+                    texture = mParentNode->getDefinedTexture( itor->textureName );
                 }
                 else if( itor->textureName != IdString() )
                 {
@@ -261,5 +253,6 @@ namespace Ogre
 
         //Do not use base class functionality at all.
         //CompositorPass::_placeBarriersAndEmulateUavExecution();
+#endif
     }
 }

@@ -48,22 +48,20 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    void CompositorPassComputeDef::addTextureSource( uint32 texUnitIdx, const String &textureName,
-                                                     uint32 mrtIndex )
+    void CompositorPassComputeDef::addTextureSource( uint32 texUnitIdx, const String &textureName )
     {
         if( textureName.find( "global_" ) == 0 )
         {
             mParentNodeDef->addTextureSourceName( textureName, 0,
                                                   TextureDefinitionBase::TEXTURE_GLOBAL );
         }
-        mTextureSources.push_back( ComputeTextureSource( texUnitIdx, textureName, mrtIndex ) );
+        mTextureSources.push_back( ComputeTextureSource( texUnitIdx, textureName ) );
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassComputeDef::addUavSource( uint32 texUnitIdx, const String &textureName,
-                                                 uint32 mrtIndex,
                                                  ResourceAccess::ResourceAccess access,
                                                  int32 textureArrayIndex, int32 mipmapLevel,
-                                                 PixelFormat pixelFormat,
+                                                 PixelFormatGpu pixelFormat,
                                                  bool allowWriteAfterWrite )
     {
         if( textureName.find( "global_" ) == 0 )
@@ -71,7 +69,7 @@ namespace Ogre
             mParentNodeDef->addTextureSourceName( textureName, 0,
                                                   TextureDefinitionBase::TEXTURE_GLOBAL );
         }
-        mUavSources.push_back( ComputeTextureSource( texUnitIdx, textureName, mrtIndex, access,
+        mUavSources.push_back( ComputeTextureSource( texUnitIdx, textureName, access,
                                                      mipmapLevel, textureArrayIndex, pixelFormat,
                                                      allowWriteAfterWrite ) );
     }
@@ -95,8 +93,8 @@ namespace Ogre
     CompositorPassCompute::CompositorPassCompute( const CompositorPassComputeDef *definition,
                                                   Camera *defaultCamera,
                                                   CompositorNode *parentNode,
-                                                  const CompositorChannel &target ) :
-        CompositorPass( definition, target, parentNode ),
+                                                  const RenderTargetViewDef *rtv ) :
+        CompositorPass( definition, rtv, parentNode ),
         mDefinition( definition ),
         mCamera( 0 )
     {
@@ -114,17 +112,14 @@ namespace Ogre
 		CompositorPassComputeDef::TextureSources::const_iterator end  = textureSources.end();
         while( itor != end )
         {
-            const CompositorChannel *channel = mParentNode->_getDefinedTexture( itor->textureName );
+            TextureGpu *channel = mParentNode->getDefinedTexture( itor->textureName );
             CompositorTextureVec::const_iterator it = mTextureDependencies.begin();
             CompositorTextureVec::const_iterator en = mTextureDependencies.end();
             while( it != en && it->name != itor->textureName )
                 ++it;
 
             if( it == en )
-            {
-                mTextureDependencies.push_back( CompositorTexture( itor->textureName,
-                                                                   &channel->textures ) );
-            }
+                mTextureDependencies.push_back( CompositorTexture( itor->textureName, channel ) );
 
             ++itor;
         }
@@ -163,7 +158,7 @@ namespace Ogre
             CompositorPassComputeDef::TextureSources::const_iterator end  = textureSources.end();
             while( itor != end )
             {
-                TexturePtr texture = mParentNode->getDefinedTexture( itor->textureName, itor->mrtIndex );
+                TextureGpu *texture = mParentNode->getDefinedTexture( itor->textureName );
                 mComputeJob->setTexture( itor->texUnitIdx, texture );
                 ++itor;
             }
@@ -173,7 +168,7 @@ namespace Ogre
             end  = uavSources.end();
             while( itor != end )
             {
-                TexturePtr texture = mParentNode->getDefinedTexture( itor->textureName, itor->mrtIndex );
+                TextureGpu *texture = mParentNode->getDefinedTexture( itor->textureName );
                 mComputeJob->_setUavTexture( itor->texUnitIdx, texture, itor->textureArrayIndex,
                                              itor->access, itor->mipmapLevel, itor->pixelFormat );
                 ++itor;
@@ -210,10 +205,6 @@ namespace Ogre
         if( listener )
             listener->passEarlyPreExecute( this );
 
-        //Call beginUpdate if we're the first to use this RT
-        if( mDefinition->mBeginRtUpdate )
-            mTarget->_beginUpdate();
-
         executeResourceTransitions();
 
         //Set textures/uavs every frame
@@ -234,16 +225,13 @@ namespace Ogre
 
         if( listener )
             listener->passPosExecute( this );
-
-        //Call endUpdate if we're the last pass in a row to use this RT
-        if( mDefinition->mEndRtUpdate )
-            mTarget->_endUpdate();
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassCompute::_placeBarriersAndEmulateUavExecution( BoundUav boundUavs[64],
                                                                       ResourceAccessMap &uavsAccess,
                                                                       ResourceLayoutMap &resourcesLayout )
     {
+#if TODO_placeBarriersAndEmulateUavExecution
         CompositorPass::_placeBarriersAndEmulateUavExecution( boundUavs, uavsAccess, resourcesLayout );
 
         {
@@ -254,7 +242,7 @@ namespace Ogre
 
             while( itor != end )
             {
-                TexturePtr uavTex = mParentNode->getDefinedTexture( itor->textureName, itor->mrtIndex );
+                TexturePtr uavTex = mParentNode->getDefinedTexture( itor->textureName );
 
                 //TODO: Do we have to do this for all slices? Or just one? Refactor is needed.
                 RenderTarget *uavRt = uavTex->getBuffer( 0, 0 )->getRenderTarget( 0 );
@@ -330,5 +318,6 @@ namespace Ogre
                 ++itor;
             }
         }
+#endif
     }
 }

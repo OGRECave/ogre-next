@@ -1251,16 +1251,16 @@ namespace Ogre
         {
             for( size_t i=0; i<OGRE_MAX_CUBE_PROBES; ++i )
             {
-                const float mipLevel = ( mCurrentMip * (mCollectedProbes[i]->mTexture->getNumMipmaps() +
-                                                       1.0f) ) / (mBlendCubemap->getNumMipmaps() + 1.0f);
+                const float mipLevel = ( mCurrentMip * mCollectedProbes[i]->mTexture->getNumMipmaps() ) /
+                                       mBlendCubemap->getNumMipmaps();
                 mBlendCubemapParams[i]->setNamedConstant( "lodLevel", mipLevel );
             }
             ++mCurrentMip;
         }
         else if( pass->getType() == PASS_QUAD && pass->getDefinition()->mIdentifier == 0 )
         {
-            const float mipLevel = ( mCurrentMip * (mCollectedProbes[0]->mTexture->getNumMipmaps() +
-                                                   1.0f) ) / (mBlendCubemap->getNumMipmaps() + 1.0f);
+            const float mipLevel = ( mCurrentMip * mCollectedProbes[0]->mTexture->getNumMipmaps() ) /
+                                    mBlendCubemap->getNumMipmaps();
             for( size_t i=0; i<6; ++i )
                 mCopyCubemapParams[i]->setNamedConstant( "lodLevel", mipLevel );
             ++mCurrentMip;

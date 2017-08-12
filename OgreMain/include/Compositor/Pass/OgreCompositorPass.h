@@ -36,8 +36,11 @@ THE SOFTWARE.
 namespace Ogre
 {
     class RenderTarget;
-    struct CompositorChannel;
+    typedef TextureGpu* CompositorChannel;
     class CompositorNode;
+    struct RenderTargetViewDef;
+    struct RenderTargetViewEntry;
+    typedef vector<TextureGpu*>::type TextureGpuVec;
 
     /** \addtogroup Core
     *  @{
@@ -45,16 +48,13 @@ namespace Ogre
     /** \addtogroup Effects
     *  @{
     */
-
-    typedef vector<TexturePtr>::type TextureVec;
-
     struct CompositorTexture
     {
-        IdString            name;
-        TextureVec const    *textures;
+        IdString    name;
+        TextureGpu  *texture;
 
-        CompositorTexture( IdString _name, const TextureVec *_textures ) :
-                name( _name ), textures( _textures ) {}
+        CompositorTexture( IdString _name, TextureGpu *_texture ) :
+                name( _name ), texture( _texture ) {}
 
         bool operator == ( IdString right ) const
         {
@@ -86,14 +86,15 @@ namespace Ogre
     protected:
         static const Quaternion CubemapRotations[6];
 
-        RenderTarget    *mTarget;
-        Viewport        *mViewport;
+        RenderPassDescriptor    *mRenderPassDesc;
+        /// Contains the first valid texture in mRenderPassDesc, to be used for reference
+        /// (e.g. width, height, etc). Could be colour, depth, stencil, or nullptr.
+        TextureGpu              *mAnyTargetTexture;
 
         uint32          mNumPassesLeft;
 
         CompositorNode  *mParentNode;
 
-        CompositorTexture       mTargetTexture;
         CompositorTextureVec    mTextureDependencies;
 
         typedef vector<ResourceTransition>::type ResourceTransitionVec;
@@ -105,14 +106,28 @@ namespace Ogre
         /// mNumValidResourceTransitions = mResourceTransitions.size()
         uint32                  mNumValidResourceTransitions;
 
+        RenderPassDescriptor* createRenderPassDesc( const RenderTargetViewDef *rtv );
+        /**
+        @param renderPassTargetAttachment
+        @param rtvEntry
+        @param colourAttachment
+            When setting depth & stencil, we'll use this argument for finding
+            a depth buffer in the same depth pool (unless the depth buffer is
+            explicit)
+        */
+        void setupRenderPassTarget( RenderPassTargetBase *renderPassTargetAttachment,
+                                    const RenderTargetViewEntry &rtvEntry,
+                                    TextureGpu *colourAttachment=0 );
+
+        void setRenderPassDescToCurrent(void);
+
         void populateTextureDependenciesFromExposedTextures(void);
 
         void executeResourceTransitions(void);
 
-        RenderTarget* calculateRenderTarget( size_t rtIndex, const CompositorChannel &source );
-
     public:
-        CompositorPass( const CompositorPassDef *definition, const CompositorChannel &target,
+        CompositorPass( const CompositorPassDef *definition,
+                        const RenderTargetViewDef *rtv,
                         CompositorNode *parentNode );
         virtual ~CompositorPass();
 
@@ -148,12 +163,11 @@ namespace Ogre
         void _removeAllBarriers(void);
 
         /// @See CompositorNode::notifyRecreated
-        virtual void notifyRecreated( const CompositorChannel &oldChannel,
-                                        const CompositorChannel &newChannel );
+        virtual bool notifyRecreated( TextureGpu *channel );
         virtual void notifyRecreated( const UavBufferPacked *oldBuffer, UavBufferPacked *newBuffer );
 
         /// @See CompositorNode::notifyDestroyed
-        virtual void notifyDestroyed( const CompositorChannel &channel );
+        virtual void notifyDestroyed( TextureGpu *channel );
         virtual void notifyDestroyed( const UavBufferPacked *buffer );
 
         /// @See CompositorNode::_notifyCleared
@@ -161,17 +175,14 @@ namespace Ogre
 
         void resetNumPassesLeft(void);
 
+        Vector2 getActualDimensions(void) const;
+
         CompositorPassType getType() const  { return mDefinition->getType(); }
-
-        Viewport* getViewport() const       { return mViewport; }
-
-        RenderTarget* getRenderTarget(void) const           { return mTarget; }
 
         const CompositorPassDef* getDefinition(void) const  { return mDefinition; }
 
 		const CompositorNode* getParentNode(void) const		{ return mParentNode; }
 
-        const CompositorTexture& getTargetTexture(void) const           { return mTargetTexture; }
         const CompositorTextureVec& getTextureDependencies(void) const  { return mTextureDependencies; }
     };
 

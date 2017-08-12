@@ -30,14 +30,14 @@ Copyright (c) 2000-2017 Torus Knot Software Ltd
 #define _OgreMetalPixelFormatToShaderType_H_
 
 #include "OgreMetalPrerequisites.h"
-#include "OgrePixelFormat.h"
+#include "OgrePixelFormatGpu.h"
 
 namespace Ogre
 {
     class _OgreMetalExport MetalPixelFormatToShaderType : public PixelFormatToShaderType
     {
     public:
-        virtual const char* getPixelFormatType( PixelFormat pixelFormat ) const;
+        virtual const char* getPixelFormatType( PixelFormatGpu pixelFormat ) const;
     };
 }
 

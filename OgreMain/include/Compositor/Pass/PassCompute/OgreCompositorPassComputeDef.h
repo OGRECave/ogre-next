@@ -33,7 +33,7 @@ THE SOFTWARE.
 
 #include "../OgreCompositorPassDef.h"
 #include "OgreCommon.h"
-#include "OgrePixelFormat.h"
+#include "OgrePixelFormatGpu.h"
 
 namespace Ogre
 {
@@ -56,26 +56,24 @@ namespace Ogre
             uint32      texUnitIdx;
             /// Name of the texture (can come from input channel, local textures, or global ones)
             IdString    textureName;
-            /// Index in case of MRT. Ignored if textureSource isn't mrt
-            uint32      mrtIndex;
 
             //Used by UAVs
             ResourceAccess::ResourceAccess access;
             int32           mipmapLevel;
             int32           textureArrayIndex;
-            PixelFormat     pixelFormat;
+            PixelFormatGpu  pixelFormat;
             bool            allowWriteAfterWrite;
 
-			ComputeTextureSource( size_t _texUnitIdx, IdString _textureName, size_t _mrtIndex ) :
-                texUnitIdx( _texUnitIdx ), textureName( _textureName ), mrtIndex( _mrtIndex ),
+            ComputeTextureSource( size_t _texUnitIdx, IdString _textureName ) :
+                texUnitIdx( _texUnitIdx ), textureName( _textureName ),
                 access( ResourceAccess::Undefined ), mipmapLevel( 0 ), textureArrayIndex( 0 ),
-                pixelFormat( PF_UNKNOWN ), allowWriteAfterWrite( false ) {}
+                pixelFormat( PFG_UNKNOWN ), allowWriteAfterWrite( false ) {}
 
-            ComputeTextureSource( size_t _texUnitIdx, IdString _textureName, size_t _mrtIndex,
+            ComputeTextureSource( size_t _texUnitIdx, IdString _textureName,
                                   ResourceAccess::ResourceAccess _access, int32 _mipmapLevel,
-                                  int32 _textureArrayIndex, PixelFormat _pixelFormat,
+                                  int32 _textureArrayIndex, PixelFormatGpu _pixelFormat,
                                   bool _allowWriteAfterWrite ) :
-                texUnitIdx( _texUnitIdx ), textureName( _textureName ), mrtIndex( _mrtIndex ),
+                texUnitIdx( _texUnitIdx ), textureName( _textureName ),
                 access( _access ), mipmapLevel( _mipmapLevel ), textureArrayIndex( _textureArrayIndex ),
                 pixelFormat( _pixelFormat ), allowWriteAfterWrite( _allowWriteAfterWrite ) {}
         };
@@ -89,7 +87,7 @@ namespace Ogre
             size_t      offset;
             size_t      sizeBytes;
             bool        allowWriteAfterWrite;
-            //PixelFormat pixelFormat; /// PF_UNKNOWN if used as UAV.
+            //PixelFormatGpu pixelFormat; /// PFG_UNKNOWN if used as UAV.
 
             BufferSource( uint32 _slotIdx, IdString _bufferName,
                           ResourceAccess::ResourceAccess _access, size_t _offset=0,
@@ -120,11 +118,11 @@ namespace Ogre
         /** Indicates the pass to change the texture units to use the specified texture sources.
             @See ComputeTextureSource for params
         */
-        void addTextureSource( uint32 texUnitIdx, const String &textureName, uint32 mrtIndex );
+        void addTextureSource( uint32 texUnitIdx, const String &textureName );
 
-        void addUavSource( uint32 texUnitIdx, const String &textureName, uint32 mrtIndex,
+        void addUavSource( uint32 texUnitIdx, const String &textureName,
                            ResourceAccess::ResourceAccess access, int32 textureArrayIndex,
-                           int32 mipmapLevel, PixelFormat pixelFormat, bool allowWriteAfterWrite );
+                           int32 mipmapLevel, PixelFormatGpu pixelFormat, bool allowWriteAfterWrite );
 
 //        void addTexBuffer( uint32 slotIdx, const String &bufferName,
 //                           size_t offset=0, size_t sizeBytes=0 );

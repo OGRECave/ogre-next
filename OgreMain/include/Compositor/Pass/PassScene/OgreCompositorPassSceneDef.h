@@ -87,7 +87,7 @@ namespace Ogre
         IdString                mCullCameraName;
 
         /// Only used if mPrePassMode == PrePassUse
-        IdString        mPrePassTexture;
+        IdStringVec     mPrePassTexture;
         IdString        mPrePassDepthTexture;
         IdString        mPrePassSsrTexture;
 
@@ -166,13 +166,14 @@ namespace Ogre
             mLightVisibilityMask = visibilityMask & VisibilityFlags::RESERVED_VISIBILITY_FLAGS;
         }
 
-        void setUseDepthPrePass( IdString textureName, IdString depthTextureName, IdString ssrTexture )
+        void setUseDepthPrePass( const IdStringVec &textureName, IdString depthTextureName,
+                                 IdString ssrTexture )
         {
             mPrePassMode = PrePassUse;
             mPrePassTexture = textureName;
             mPrePassDepthTexture = depthTextureName;
             mPrePassSsrTexture = ssrTexture;
-            mExposedTextures.push_back( textureName );
+            mExposedTextures.insert( mExposedTextures.end(), textureName.begin(), textureName.end() );
 
             mReadOnlyDepth = true;
             mReadOnlyStencil = true;

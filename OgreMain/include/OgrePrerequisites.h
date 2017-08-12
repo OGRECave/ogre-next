@@ -218,13 +218,6 @@ namespace Ogre {
     struct HlmsTexturePack;
     class IndexBufferPacked;
     class IndirectBufferPacked;
-    class InstanceBatch;
-    class InstanceBatchHW;
-    class InstanceBatchHW_VTF;
-    class InstanceBatchShader;
-    class InstanceBatchVTF;
-    class InstanceManager;
-    class InstancedEntity;
     class IntersectionSceneQuery;
     class IntersectionSceneQueryListener;
     class Image;
@@ -391,13 +384,6 @@ namespace Ogre {
         class HardwarePixelBuffer;
         class HardwarePixelBufferSharedPtr;
         class IndexData;
-        class InstanceBatch;
-        class InstanceBatchHW;
-        class InstanceBatchHW_VTF;
-        class InstanceBatchShader;
-        class InstanceBatchVTF;
-        class InstanceManager;
-        class InstancedEntity;
         class KeyFrame;
         class ManualObject;
         class Mesh;

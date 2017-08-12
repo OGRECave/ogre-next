@@ -239,6 +239,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void GL3PlusRenderPassDescriptor::depthModified(void)
     {
+        RenderPassDescriptor::depthModified();
         checkRenderWindowStatus();
         if( mHasRenderWindow )
             return;
@@ -270,6 +271,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void GL3PlusRenderPassDescriptor::stencilModified(void)
     {
+        RenderPassDescriptor::stencilModified();
         checkRenderWindowStatus();
         if( mHasRenderWindow )
             return;

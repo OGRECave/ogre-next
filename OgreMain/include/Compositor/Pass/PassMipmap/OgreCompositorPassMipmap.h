@@ -44,7 +44,7 @@ namespace Ogre
     */
 
     /** Implementation of CompositorPass
-        This implementation will Mipmap the texture used by this RenderTarget
+        This implementation will generate mipmaps for the specified texture
     @author
         Matias N. Goldberg
     @version
@@ -59,10 +59,10 @@ namespace Ogre
             ResourceTransition  resourceTransition;
         };
 
-        TextureVec      mTextures;
+        TextureGpuVec   mTextures;
 
         /// Compute
-        TextureVec                      mTmpTextures;
+        TextureGpuVec                   mTmpTextures;
         vector<JobWithBarrier>::type    mJobs;
 
         void setupComputeShaders(void);
@@ -72,7 +72,7 @@ namespace Ogre
 
     public:
         CompositorPassMipmap( const CompositorPassMipmapDef *definition,
-                              const CompositorChannel &target, CompositorNode *parentNode );
+                              const RenderTargetViewDef *rtv, CompositorNode *parentNode );
         virtual ~CompositorPassMipmap();
 
         virtual void execute( const Camera *lodCamera );
@@ -81,8 +81,7 @@ namespace Ogre
                                                            ResourceAccessMap &uavsAccess,
                                                            ResourceLayoutMap &resourcesLayout );
 
-        virtual void notifyRecreated( const CompositorChannel &oldChannel,
-                                      const CompositorChannel &newChannel );
+        virtual bool notifyRecreated( TextureGpu *channel );
 
     private:
         CompositorPassMipmapDef const *mDefinition;

@@ -43,7 +43,7 @@ namespace Ogre
     class _OgreNULLExport NULLPixelFormatToShaderType : public PixelFormatToShaderType
     {
     public:
-        virtual const char* getPixelFormatType( PixelFormat pixelFormat ) const { return 0; }
+        virtual const char* getPixelFormatType( PixelFormatGpu pixelFormat ) const { return 0; }
     };
 
     /**

@@ -64,6 +64,7 @@ namespace Ogre
         switch( pf )
         {
         case PFG_UNKNOWN:                       return GL_NONE;
+        case PFG_NULL:                          return GL_NONE;
 
         case PFG_RGBA32_FLOAT:                  return GL_RGBA32F;
         case PFG_RGBA32_UINT:                   return GL_RGBA32UI;
@@ -371,6 +372,7 @@ namespace Ogre
                          "GL3PlusMappings::getFormatAndType" );
             break;
         case PFG_UNKNOWN:
+        case PFG_NULL:
         case PFG_COUNT:
             format = GL_NONE;
             OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
@@ -566,6 +568,7 @@ namespace Ogre
                          "GL3PlusMappings::getFormatAndType" );
             break;
         case PFG_UNKNOWN:
+        case PFG_NULL:
         case PFG_COUNT:
             format = GL_NONE;
             OGRE_EXCEPT( Exception::ERR_INVALID_STATE,

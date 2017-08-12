@@ -48,6 +48,7 @@ THE SOFTWARE.
 #include "OgreViewport.h"
 #include "OgreRenderTarget.h"
 #include "OgreDepthBuffer.h"
+#include "OgrePixelFormatGpuUtils.h"
 #include "OgreLwString.h"
 
 #include "OgreHlmsListener.h"
@@ -2189,7 +2190,7 @@ namespace Ogre
                     numPssmSplits = static_cast<int32>( pssmSplits->size() - 1 );
                 setProperty( HlmsBaseProp::PssmSplits, numPssmSplits );
 
-                const TextureVec &contiguousShadowMapTex = shadowNode->getContiguousShadowMapTex();
+                const TextureGpuVec &contiguousShadowMapTex = shadowNode->getContiguousShadowMapTex();
 
                 size_t numShadowMapLights = shadowNode->getNumActiveShadowCastingLights();
                 if( numPssmSplits )
@@ -2308,7 +2309,7 @@ namespace Ogre
                 {
                     bool missmatch = false;
 
-                    if( PixelUtil::isDepth( contiguousShadowMapTex[i]->getFormat() ) )
+                    if( PixelFormatGpuUtils::isDepth( contiguousShadowMapTex[i]->getPixelFormat() ) )
                     {
                         missmatch = usesDepthTextures == 0;
                         usesDepthTextures = 1;
@@ -2346,8 +2347,8 @@ namespace Ogre
                 //we need to always flip because origin is different, but it's consistent
                 //between texture and render window. In GL, RenderWindows don't need
                 //to flip, but textures do.
-                RenderTarget *renderTarget = sceneManager->getCurrentViewport()->getTarget();
-                setProperty( HlmsBaseProp::ForwardPlusFlipY, renderTarget->requiresTextureFlipping() );
+                const RenderPassDescriptor *renderPassDesc = mRenderSystem->getCurrentPassDescriptor();
+                setProperty( HlmsBaseProp::ForwardPlusFlipY, renderPassDesc->requiresTextureFlipping() );
             }
 
             uint numLightsPerType[Light::NUM_LIGHT_TYPES];
@@ -2462,19 +2463,19 @@ namespace Ogre
             setProperty( HlmsBaseProp::LightsPoint,       0 );
             setProperty( HlmsBaseProp::LightsSpot,        0 );
 
-            RenderTarget *renderTarget = sceneManager->getCurrentViewport()->getTarget();
+            const RenderPassDescriptor *renderPassDesc = mRenderSystem->getCurrentPassDescriptor();
 
             setProperty( HlmsBaseProp::ShadowUsesDepthTexture,
-                         renderTarget->getForceDisableColourWrites() ? 1 : 0 );
+                         (renderPassDesc->getNumColourEntries() > 0) ? 1 : 0 );
         }
 
         Camera *camera = sceneManager->getCameraInProgress();
         if( camera && camera->isReflected() )
             setProperty( HlmsBaseProp::GlobalClipDistances, 1 );
 
-        RenderTarget *renderTarget = sceneManager->getCurrentViewport()->getTarget();
+        const RenderPassDescriptor *renderPassDesc = mRenderSystem->getCurrentPassDescriptor();
         setProperty( HlmsBaseProp::RenderDepthOnly,
-                     renderTarget->getForceDisableColourWrites() ? 1 : 0 );
+                     (renderPassDesc->getNumColourEntries() > 0) ? 1 : 0 );
 
         if( sceneManager->getCurrentPrePassMode() == PrePassCreate )
             setProperty( HlmsBaseProp::PrePass, 1 );
@@ -2484,10 +2485,10 @@ namespace Ogre
             setProperty( HlmsBaseProp::VPos, 1 );
 
             {
-                const TextureVec *prePassTextures = sceneManager->getCurrentPrePassTextures();
-                assert( prePassTextures && !prePassTextures->empty() );
-                if( (*prePassTextures)[0]->getFSAA() > 1 )
-                    setProperty( HlmsBaseProp::UsePrePassMsaa, (*prePassTextures)[0]->getFSAA() );
+                const TextureGpuVec &prePassTextures = sceneManager->getCurrentPrePassTextures();
+                assert( !prePassTextures.empty() );
+                if( prePassTextures[0]->getMsaa() > 1u )
+                    setProperty( HlmsBaseProp::UsePrePassMsaa, prePassTextures[0]->getMsaa() );
             }
 
             if( sceneManager->getCurrentSsrTexture() != 0 )
@@ -2520,7 +2521,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     HlmsPassPso Hlms::getPassPsoForScene( SceneManager *sceneManager )
     {
-        RenderTarget *renderTarget = sceneManager->getCurrentViewport()->getTarget();
+        const RenderPassDescriptor *renderPassDesc = mRenderSystem->getCurrentPassDescriptor();
 
         HlmsPassPso passPso;
 
@@ -2529,15 +2530,26 @@ namespace Ogre
 
         passPso.stencilParams = mRenderSystem->getStencilBufferParams();
 
-        renderTarget->getFormatsForPso( passPso.colourFormat, passPso.hwGamma );
+        for( int i=0; i<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
+        {
+            if( renderPassDesc->mColour[i].texture )
+            {
+                passPso.colourFormat[i]     = renderPassDesc->mColour[i].texture->getPixelFormat();
+                passPso.multisampleCount    = renderPassDesc->mColour[i].texture->getMsaa();
+                passPso.multisampleQuality  = renderPassDesc->mColour[i].texture->getMsaaPattern();
+            }
+            else
+                passPso.colourFormat[i] = PFG_NULL;
+        }
 
-        passPso.depthFormat = PF_NULL;
-        const DepthBuffer *depthBuffer = renderTarget->getDepthBuffer();
-        if( depthBuffer )
-            passPso.depthFormat = depthBuffer->getFormat();
+        passPso.depthFormat = PFG_NULL;
+        if( renderPassDesc->mDepth.texture )
+        {
+            passPso.depthFormat     = renderPassDesc->mDepth.texture->getPixelFormat();
+            passPso.multisampleCount= renderPassDesc->mDepth.texture->getMsaa();
+            passPso.multisampleQuality = renderPassDesc->mDepth.texture->getMsaaPattern();
+        }
 
-        passPso.multisampleCount   = std::max( renderTarget->getFSAA(), 1u );
-        passPso.multisampleQuality = StringConverter::parseInt( renderTarget->getFSAAHint() );
         passPso.adapterId = 1; //TODO: Ask RenderSystem current adapter ID.
 
         if( sceneManager->getCurrentPrePassMode() == PrePassUse )
@@ -2545,8 +2557,8 @@ namespace Ogre
 
         const bool invertVertexWinding = mRenderSystem->getInvertVertexWinding();
 
-        if( (renderTarget->requiresTextureFlipping() && !invertVertexWinding) ||
-            (!renderTarget->requiresTextureFlipping() && invertVertexWinding) )
+        if( (renderPassDesc->requiresTextureFlipping() && !invertVertexWinding) ||
+            (!renderPassDesc->requiresTextureFlipping() && invertVertexWinding) )
         {
             passPso.strongMacroblockBits |= HlmsPassPso::InvertVertexWinding;
         }

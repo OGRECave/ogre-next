@@ -295,7 +295,6 @@ namespace Ogre
         virtual Real getMaximumDepthInputValue(void);
 
         virtual void _setRenderTarget(RenderTarget *target, uint8 viewportRenderTargetFlags);
-        virtual void _notifyCompositorNodeSwitchedRenderTarget( RenderTarget *previousTarget );
         virtual void preExtraThreadsStarted();
         virtual void postExtraThreadsStarted();
         virtual void registerThread();

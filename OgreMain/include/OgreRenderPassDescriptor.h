@@ -151,6 +151,9 @@ namespace Ogre
 
     protected:
         uint8                   mNumColourEntries;
+        bool                    mRequiresTextureFlipping;
+
+        void checkRequiresTextureFlipping(void);
 
     public:
         RenderPassDescriptor();
@@ -164,8 +167,8 @@ namespace Ogre
             Prefer changing those values using those calls since it's faster.
         */
         virtual void colourEntriesModified(void);
-        virtual void depthModified(void) = 0;
-        virtual void stencilModified(void) = 0;
+        virtual void depthModified(void);
+        virtual void stencilModified(void);
 
         /// Sets the clear colour to specific entry.
         virtual void setClearColour( uint8 idx, const ColourValue &clearColour );
@@ -176,6 +179,9 @@ namespace Ogre
         /// than calling setClearColour( idx, clearColour ) for each entry
         /// individually.
         virtual void setClearColour( const ColourValue &clearColour );
+
+        uint8 getNumColourEntries(void) const       { return mNumColourEntries; }
+        bool requiresTextureFlipping(void) const    { return mRequiresTextureFlipping; }
     };
 
     /** @} */

@@ -62,8 +62,8 @@ namespace Ogre
 
     public:
         CompositorPassStencil( const CompositorPassStencilDef *definition,
-                                const CompositorChannel &target, CompositorNode *parentNode,
-                                RenderSystem *renderSystem );
+                               const RenderTargetViewDef *rtv, CompositorNode *parentNode,
+                               RenderSystem *renderSystem );
 
         virtual void execute( const Camera *lodCamera );
     };

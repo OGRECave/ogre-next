@@ -87,7 +87,7 @@ namespace Ogre
                                                CompositorNodeDef *parentNodeDef ) = 0;
 
         virtual CompositorPass* addPass( const CompositorPassDef *definition, Camera *defaultCamera,
-                                         CompositorNode *parentNode, const CompositorChannel &target,
+                                         CompositorNode *parentNode, TextureGpu *target,
                                          SceneManager *sceneManager ) = 0;
     };
 

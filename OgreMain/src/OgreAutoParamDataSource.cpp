@@ -42,6 +42,7 @@ THE SOFTWARE.
 #include "OgreSceneNode.h"
 #include "OgrePass.h"
 #include "OgreViewport.h"
+#include "OgreTexture.h"
 #include "OgreHlmsComputeJob.h"
 
 #include "Compositor/OgreCompositorShadowNode.h"
@@ -77,7 +78,7 @@ namespace Ogre {
          mCurrentRenderable(0),
          mCurrentCamera(0), 
          mCurrentLightList(0),
-         mCurrentRenderTarget(0),
+         mCurrentRenderPassDesc(0),
          mCurrentViewport(0), 
          mCurrentSceneManager(0),
          mCurrentPass(0),
@@ -352,7 +353,7 @@ namespace Ogre {
             {
                 mProjectionMatrix = mCurrentCamera->getProjectionMatrixWithRSDepth();
             }
-            if (mCurrentRenderTarget && mCurrentRenderTarget->requiresTextureFlipping())
+            if (mCurrentRenderPassDesc && mCurrentRenderPassDesc->requiresTextureFlipping())
             {
                 // Because we're not using setProjectionMatrix, this needs to be done here
                 // Invert transformed y
@@ -542,8 +543,8 @@ namespace Ogre {
 
         if( mCurrentJob && index < mCurrentJob->getNumTexUnits() )
         {
-            const TexturePtr& tex = mCurrentJob->getTexture( static_cast<uint8>(index) );
-            if (!tex.isNull())
+            const TextureGpu *tex = mCurrentJob->getTexture( static_cast<uint8>(index) );
+            if( tex )
             {
                 size.x = static_cast<Real>(tex->getWidth());
                 size.y = static_cast<Real>(tex->getHeight());
@@ -552,9 +553,9 @@ namespace Ogre {
         }
         else if (index < mCurrentPass->getNumTextureUnitStates())
         {
-            const TexturePtr& tex = mCurrentPass->getTextureUnitState(
+            const TextureGpu *tex = mCurrentPass->getTextureUnitState(
                 static_cast<unsigned short>(index))->_getTexturePtr();
-            if (!tex.isNull())
+            if( tex )
             {
                 size.x = static_cast<Real>(tex->getWidth());
                 size.y = static_cast<Real>(tex->getHeight());
@@ -803,15 +804,16 @@ namespace Ogre {
         return *retVal;
     }
     //-----------------------------------------------------------------------------
-    const RenderTarget* AutoParamDataSource::getCurrentRenderTarget(void) const
+    const RenderPassDescriptor* AutoParamDataSource::getCurrentRenderPassDesc(void) const
     {
-        return mCurrentRenderTarget;
+        return mCurrentRenderPassDesc;
     }
     //-----------------------------------------------------------------------------
     void AutoParamDataSource::setCurrentViewport(const Viewport* viewport)
     {
         mCurrentViewport = viewport;
-        mCurrentRenderTarget = viewport->getTarget();
+        RenderSystem *rs = Root::getSingleton().getRenderSystem();
+        mCurrentRenderPassDesc = rs->getCurrentPassDescriptor();
     }
     //-----------------------------------------------------------------------------
     void AutoParamDataSource::setShadowDirLightExtrusionDistance(Real dist)

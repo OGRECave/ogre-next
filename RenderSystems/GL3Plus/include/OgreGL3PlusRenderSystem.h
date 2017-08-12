@@ -341,23 +341,23 @@ namespace Ogre {
         /** See
          RenderSystem
          */
-        void _setVertexTexture(size_t unit, const TexturePtr &tex);
+        void _setVertexTexture(size_t unit, TextureGpu *tex);
         /** See
          RenderSystem
          */
-        void _setGeometryTexture(size_t unit, const TexturePtr &tex);
+        void _setGeometryTexture(size_t unit, TextureGpu *tex);
         /** See
          RenderSystem
          */
-        void _setTessellationHullTexture(size_t unit, const TexturePtr &tex);
+        void _setTessellationHullTexture(size_t unit, TextureGpu *tex);
         /** See
          RenderSystem
          */
-        void _setTessellationDomainTexture(size_t unit, const TexturePtr &tex);
+        void _setTessellationDomainTexture(size_t unit, TextureGpu *tex);
         /** See
             RenderSystem
         */
-        void _setTexture(size_t unit, bool enabled, Texture *tex);
+        void _setTexture(size_t unit, bool enabled, TextureGpu *tex);
         /// See RenderSystem
         virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set );
         virtual void _setSamplers( uint32 slotStart, const DescriptorSetSampler *set );

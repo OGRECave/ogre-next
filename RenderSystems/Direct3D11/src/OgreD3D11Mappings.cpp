@@ -661,6 +661,7 @@ namespace Ogre
         switch( pf )
         {
         case PFG_UNKNOWN:                   return DXGI_FORMAT_UNKNOWN;
+        case PFG_NULL:                      return DXGI_FORMAT_UNKNOWN;
         case PFG_RGBA32_FLOAT:              return DXGI_FORMAT_R32G32B32A32_FLOAT;
         case PFG_RGBA32_UINT:               return DXGI_FORMAT_R32G32B32A32_UINT;
         case PFG_RGBA32_SINT:               return DXGI_FORMAT_R32G32B32A32_SINT;

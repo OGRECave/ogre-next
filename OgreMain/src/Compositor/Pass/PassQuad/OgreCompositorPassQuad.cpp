@@ -44,23 +44,22 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    void CompositorPassQuadDef::addQuadTextureSource( size_t texUnitIdx, const String &textureName,
-                                                        size_t mrtIndex )
+    void CompositorPassQuadDef::addQuadTextureSource( size_t texUnitIdx, const String &textureName )
     {
         if( textureName.find( "global_" ) == 0 )
         {
             mParentNodeDef->addTextureSourceName( textureName, 0,
                                                     TextureDefinitionBase::TEXTURE_GLOBAL );
         }
-        mTextureSources.push_back( QuadTextureSource( texUnitIdx, textureName, mrtIndex ) );
+        mTextureSources.push_back( QuadTextureSource( texUnitIdx, textureName ) );
     }
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     CompositorPassQuad::CompositorPassQuad( const CompositorPassQuadDef *definition,
                                             Camera *defaultCamera, CompositorNode *parentNode,
-                                            const CompositorChannel &target, Real horizonalTexelOffset,
+                                            const RenderTargetViewDef *rtv, Real horizonalTexelOffset,
                                             Real verticalTexelOffset ) :
-                CompositorPass( definition, target, parentNode ),
+                CompositorPass( definition, rtv, parentNode ),
                 mDefinition( definition ),
                 mFsRect( 0 ),
                 mDatablock( 0 ),
@@ -125,7 +124,7 @@ namespace Ogre
         CompositorPassQuadDef::TextureSources::const_iterator end  = textureSources.end();
         while( itor != end )
         {
-            const CompositorChannel *channel = mParentNode->_getDefinedTexture( itor->textureName );
+            TextureGpu *channel = mParentNode->getDefinedTexture( itor->textureName );
             CompositorTextureVec::const_iterator it = mTextureDependencies.begin();
             CompositorTextureVec::const_iterator en = mTextureDependencies.end();
             while( it != en && it->name != itor->textureName )
@@ -134,7 +133,7 @@ namespace Ogre
             if( it == en )
             {
                 mTextureDependencies.push_back( CompositorTexture( itor->textureName,
-                                                                   &channel->textures ) );
+                                                                   channel ) );
             }
 
             ++itor;
@@ -155,9 +154,7 @@ namespace Ogre
         if( listener )
             listener->passEarlyPreExecute( this );
 
-        //Call beginUpdate if we're the first to use this RT
-        if( mDefinition->mBeginRtUpdate )
-            mTarget->_beginUpdate();
+        setRenderPassDescToCurrent();
 
         if( mPass )
         {
@@ -171,8 +168,7 @@ namespace Ogre
                 if( itor->texUnitIdx < mPass->getNumTextureUnitStates() )
                 {
                     TextureUnitState *tu = mPass->getTextureUnitState( itor->texUnitIdx );
-                    tu->setTexture( mParentNode->getDefinedTexture( itor->textureName,
-                                                                    itor->mrtIndex ) );
+                    tu->setTexture( mParentNode->getDefinedTexture( itor->textureName ) );
                 }
 
                 ++itor;
@@ -181,8 +177,8 @@ namespace Ogre
 
         if( mHorizonalTexelOffset != 0 || mVerticalTexelOffset != 0 )
         {
-            const Real hOffset = 2.0f * mHorizonalTexelOffset / mTarget->getWidth();
-            const Real vOffset = 2.0f * mVerticalTexelOffset / mTarget->getHeight();
+            const Real hOffset = 2.0f * mHorizonalTexelOffset / mAnyTargetTexture->getWidth();
+            const Real vOffset = 2.0f * mVerticalTexelOffset / mAnyTargetTexture->getHeight();
 
             //The rectangle is shared, set the corners each time
             mFsRect->setCorners( 0.0f + hOffset, 0.0f - vOffset, 1.0f, 1.0f );
@@ -257,15 +253,17 @@ namespace Ogre
 
         executeResourceTransitions();
 
-        SceneManager *sceneManager = mCamera->getSceneManager();
-        sceneManager->_setViewport( mViewport );
+        setRenderPassDescToCurrent();
 
         //Fire the listener in case it wants to change anything
         if( listener )
             listener->passPreExecute( this );
 
+#if TODO_OGRE_2_2
         mTarget->setFsaaResolveDirty();
+#endif
 
+        SceneManager *sceneManager = mCamera->getSceneManager();
         sceneManager->_setCurrentCompositorPass( this );
 
         //sceneManager->_injectRenderWithPass( mPass, mFsRect, mCamera, false, false );
@@ -285,9 +283,5 @@ namespace Ogre
 
         if( listener )
             listener->passPosExecute( this );
-
-        //Call endUpdate if we're the last pass in a row to use this RT
-        if( mDefinition->mEndRtUpdate )
-            mTarget->_endUpdate();
     }
 }

@@ -425,6 +425,11 @@ namespace Ogre
         return (mTextureFlags & TextureFlags::RenderWindowSpecific) != 0;
     }
     //-----------------------------------------------------------------------------------
+    bool TextureGpu::requiresTextureFlipping(void) const
+    {
+        return (mTextureFlags & TextureFlags::RequiresTextureFlipping) != 0;
+    }
+    //-----------------------------------------------------------------------------------
     void TextureGpu::_notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice )
     {
         mTexturePool = newPool;

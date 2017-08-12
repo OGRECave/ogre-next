@@ -63,7 +63,7 @@ namespace Ogre
 
     public:
         CompositorPassUav( const CompositorPassUavDef *definition, CompositorNode *parentNode,
-                           const CompositorChannel &target );
+                           const RenderTargetViewDef *rtv );
 
         virtual void execute( const Camera *lodCamera );
 

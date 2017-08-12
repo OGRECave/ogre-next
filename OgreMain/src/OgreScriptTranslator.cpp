@@ -49,6 +49,7 @@ THE SOFTWARE.
 
 #include "OgreHlms.h"
 #include "OgreHlmsManager.h"
+#include "OgrePixelFormatGpuUtils.h"
 
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorWorkspaceDef.h"
@@ -61,6 +62,8 @@ THE SOFTWARE.
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
 #include "Compositor/Pass/PassStencil/OgreCompositorPassStencilDef.h"
 #include "Compositor/Pass/PassUav/OgreCompositorPassUavDef.h"
+
+#define TODO_move_this_to_RTV
 
 namespace Ogre{
 
@@ -3151,10 +3154,9 @@ namespace Ogre{
                         String val;
                         if(getString(*j, &val))
                         {
-                            TextureType texType = TEX_TYPE_2D;
+                            TextureTypes::TextureTypes texType = TextureTypes::Type2D;
                             bool isAlpha = false;
                             bool sRGBRead = false;
-                            PixelFormat format = PF_UNKNOWN;
                             int mipmaps = MIP_DEFAULT;
 
                             ++j;
@@ -3173,20 +3175,21 @@ namespace Ogre{
 
                                             if (rs->getCapabilities()->hasCapability(RSC_TEXTURE_1D))
                                             {
-                                                texType = TEX_TYPE_1D;
+                                                texType = TextureTypes::Type1D;
                                                 break;
                                             }
-                                        }                                                                       case ID_2D:
-                                        texType = TEX_TYPE_2D;
+                                        }
+                                    case ID_2D:
+                                        texType = TextureTypes::Type2D;
                                         break;
                                     case ID_3D:
-                                        texType = TEX_TYPE_3D;
+                                        texType = TextureTypes::Type3D;
                                         break;
                                     case ID_CUBIC:
-                                        texType = TEX_TYPE_CUBE_MAP;
+                                        texType = TextureTypes::TypeCube;
                                         break;
                                     case ID_2DARRAY:
-                                        texType = TEX_TYPE_2D_ARRAY;
+                                        texType = TextureTypes::Type2DArray;
                                         break;
                                     case ID_UNLIMITED:
                                         mipmaps = MIP_UNLIMITED;
@@ -3200,8 +3203,6 @@ namespace Ogre{
                                     default:
                                         if(StringConverter::isNumber(atom->value))
                                             mipmaps = StringConverter::parseInt(atom->value);
-                                        else
-                                            format = PixelUtil::getFormatFromName(atom->value, true);
                                     }
                                 }
                                 else
@@ -3216,7 +3217,6 @@ namespace Ogre{
                             compiler->_fireEvent(&evt, 0);
 
                             mUnit->setTextureName(evt.mName, texType);
-                            mUnit->setDesiredFormat(format);
                             mUnit->setIsAlpha(isAlpha);
                             mUnit->setNumMipmaps(mipmaps);
                             mUnit->setHardwareGammaEnabled(sRGBRead);
@@ -4458,16 +4458,7 @@ namespace Ogre{
                                     String textureName;
                                     getString(*getNodeAt(prop->values, 1), &textureName);
                                     
-                                    if (prop->values.size() == 3)
-                                    {
-                                        uint32 mrtIndex;
-                                        getUInt(*getNodeAt(prop->values, 2), (uint32*)&mrtIndex);
-                                        mUnit->setCompositorReference(textureName, mrtIndex);
-                                    }
-                                    else
-                                    {
-                                        mUnit->setCompositorReference(textureName);
-                                    }
+                                    mUnit->setCompositorReference(textureName);
                                 }
                                 else
                                 {
@@ -6214,20 +6205,17 @@ namespace Ogre{
         // Save the first atom, should be name
         AtomAbstractNode *atom0 = (AtomAbstractNode*)(*it).get();
 
-        TextureType textureType = TEX_TYPE_2D;
-        uint width = 0, height = 0, depth = 1;
+        TextureTypes::TextureTypes textureType = TextureTypes::Type2D;
+        uint width = 0, height = 0, depthOrSlices = 1u;
         float widthFactor = 1.0f, heightFactor = 1.0f;
-        bool widthSet = false, heightSet = false, formatSet = false;
-        TextureDefinitionBase::BoolSetting hwGammaWrite = TextureDefinitionBase::BoolUndefined;
-        bool fsaa = true;
-        bool fsaaExplicitResolve = false;
-        uint16 depthBufferId = DepthBuffer::POOL_INVALID;
-        PixelFormat depthBufferFormat = PF_UNKNOWN;
-        int numMipmaps = 0;
-        bool automipmaps = false;
-        bool isUav = false;
-        bool preferDepthTexture = false;
-        Ogre::PixelFormatList formats;
+        bool widthSet = false, heightSet = false;
+        uint8 msaa = 1u;
+        uint32 textureFlags = TextureFlags::RenderToTexture;
+//        uint16 depthBufferId = DepthBuffer::POOL_INVALID;
+//        PixelFormat depthBufferFormat = PF_UNKNOWN;
+//        bool preferDepthTexture = false;
+        uint8 numMipmaps = 1u;
+        PixelFormatGpu format;
 
         while (atomIndex < prop->values.size())
         {
@@ -6287,19 +6275,26 @@ namespace Ogre{
                     *pSetFlag = true;
                 }
                 break;
-            case ID_GAMMA:
-                hwGammaWrite = TextureDefinitionBase::BoolTrue;
-                break;
-            case ID_NO_GAMMA:
-                hwGammaWrite = TextureDefinitionBase::BoolFalse;
-                break;
-            case ID_NO_FSAA:
-                fsaa = false;
+            case ID_MSAA:
+                // advance to next to get the MSAA setting
+                it = getNodeAt(prop->values, static_cast<int>(atomIndex++));
+                if(prop->values.end() == it || (*it)->type != ANT_ATOM)
+                {
+                    compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line);
+                    return;
+                }
+                atom = (AtomAbstractNode*)(*it).get();
+                if( !StringConverter::isNumber(atom->value) )
+                {
+                    compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line);
+                    return;
+                }
+                msaa = StringConverter::parseInt(atom->value);
                 break;
             case ID_EXPLICIT_RESOLVE:
-                fsaaExplicitResolve = true;
+                textureFlags |= TextureFlags::MsaaExplicitResolve;
                 break;
-            case ID_DEPTH_POOL:
+            /*case ID_DEPTH_POOL:
                 {
                     // advance to next to get the ID
                     it = getNodeAt(prop->values, static_cast<int>(atomIndex++));
@@ -6339,9 +6334,9 @@ namespace Ogre{
                         return;
                     }
                 }
-                break;
+                break;*/
             case ID_UAV:
-                isUav = true;
+                textureFlags |= TextureFlags::Uav;
                 break;
             case ID_MIPMAP:
             case ID_MIPMAPS:
@@ -6364,11 +6359,12 @@ namespace Ogre{
                 }
                 break;
             case ID_AUTOMIPMAPS:
-                automipmaps = true;
+                textureFlags |= TextureFlags::AllowAutomipmaps;
                 break;
-            case ID_2D_ARRAY:   textureType = TEX_TYPE_2D_ARRAY; break;
-            case ID_3D:         textureType = TEX_TYPE_3D; break;
-            case ID_CUBEMAP:    textureType = TEX_TYPE_CUBE_MAP; break;
+            case ID_2D_ARRAY:       textureType = TextureTypes::Type2DArray; break;
+            case ID_3D:             textureType = TextureTypes::Type3D; break;
+            case ID_CUBEMAP:        textureType = TextureTypes::TypeCube; break;
+            case ID_CUBEMAP_ARRAY:  textureType = TextureTypes::TypeCubeArray; break;
             default:
                 if (StringConverter::isNumber(atom->value))
                 {
@@ -6384,7 +6380,7 @@ namespace Ogre{
                     }
                     else if (atomIndex == 4)
                     {
-                        depth = StringConverter::parseInt(atom->value);
+                        depthOrSlices = StringConverter::parseInt(atom->value);
                     }
                     else
                     {
@@ -6395,58 +6391,51 @@ namespace Ogre{
                 else
                 {
                     // pixel format?
-                    PixelFormat format = PixelUtil::getFormatFromName(atom->value, false);
-                    if (format == PF_UNKNOWN)
+                    format = PixelFormatGpuUtils::getFormatFromName( atom->value );
+                    if( format == PFG_UNKNOWN )
                     {
                         compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
                                            "Unrecognized PixelFormat");
                         return;
                     }
-                    formats.push_back(format);
-                    formatSet = true;
 
-                    if( depthBufferId == DepthBuffer::POOL_INVALID )
-                    {
-                        if( PixelUtil::isDepth( format ) )
-                            depthBufferId = DepthBuffer::POOL_NON_SHAREABLE;
-                        else if( format == PF_NULL )
-                            depthBufferId = DepthBuffer::POOL_NO_DEPTH;
-                        else
-                            depthBufferId = DepthBuffer::POOL_DEFAULT;
-                    }
+                    TODO_move_this_to_RTV;
+//                    if( depthBufferId == DepthBuffer::POOL_INVALID )
+//                    {
+//                        if( PixelUtil::isDepth( format ) )
+//                            depthBufferId = DepthBuffer::POOL_NON_SHAREABLE;
+//                        else if( format == PF_NULL )
+//                            depthBufferId = DepthBuffer::POOL_NO_DEPTH;
+//                        else
+//                            depthBufferId = DepthBuffer::POOL_DEFAULT;
+//                    }
                 }
 
             }
         }
-        if (!widthSet || !heightSet || !formatSet)
+        if( !widthSet || !heightSet )
         {
             compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line);
             return;
         }
 
-        if( textureType == TEX_TYPE_2D )
-            depth = 1;
-        else if( textureType == TEX_TYPE_CUBE_MAP )
-            depth = 6;
+        if( textureType == TextureTypes::Type2D )
+            depthOrSlices = 1u;
+        else if( textureType == TextureTypes::TypeCube )
+            depthOrSlices = 6u;
 
         // No errors, create
         TextureDefinitionBase::TextureDefinition *td = defBase->addTextureDefinition( atom0->value );
         td->textureType     = textureType;
         td->width           = width;
         td->height          = height;
-        td->depth           = depth;
+        td->depthOrSlices   = depthOrSlices;
         td->numMipmaps      = numMipmaps;
         td->widthFactor     = widthFactor;
         td->heightFactor    = heightFactor;
-        td->formatList      = formats;
-        td->fsaa            = fsaa;
-        td->uav             = isUav;
-        td->automipmaps     = automipmaps;
-        td->hwGammaWrite    = hwGammaWrite;
-        td->depthBufferId   = depthBufferId;
-        td->depthBufferFormat   = depthBufferFormat;
-        td->preferDepthTexture  = preferDepthTexture;
-        td->fsaaExplicitResolve = fsaaExplicitResolve;
+        td->format          = format;
+        td->msaa            = msaa;
+        td->textureFlags    = textureFlags;
     }
     //-----------------------------------------------------------------------------------
     void CompositorTextureBaseTranslator::translateBufferProperty( TextureDefinitionBase *defBase,
@@ -7122,7 +7111,6 @@ namespace Ogre{
         //AtomAbstractNode *atom0 = (AtomAbstractNode*)(*it).get();
 
         String texName = "";
-        uint8       mrtIndex = 0;
         Vector2     uvOffset( Vector2::ZERO );
         Vector2     uvLength( Vector2::UNIT_SCALE );
         uint8       arrayIdx = 0;
@@ -7236,15 +7224,6 @@ namespace Ogre{
                         if( getString( *it, &texName ) )
                             isValid = true;
                     }
-                    else if( atomIndex == 3 )
-                    {
-                        uint32 val = 0;
-                        if( getUInt( *it, &val ) )
-                        {
-                            isValid = true;
-                            mrtIndex = static_cast<uint32>( val );
-                        }
-                    }
 
                     if( !isValid )
                     {
@@ -7261,7 +7240,7 @@ namespace Ogre{
         }
 
         ShadowTextureDefinition *td = mShadowNodeDef->addShadowTextureDefinition(
-                    lightIdx, splitIdx, texName, mrtIndex, uvOffset, uvLength, arrayIdx );
+                    lightIdx, splitIdx, texName, uvOffset, uvLength, arrayIdx );
         // No errors, create
         td->pssmLambda      = defaultParams.pssmLambda;
         td->splitPadding    = defaultParams.splitPadding;
@@ -7333,7 +7312,7 @@ namespace Ogre{
         mShadowNodeDef->setNumTargetPass( numTargetPasses );
         mShadowNodeDef->setNumOutputChannels( numOutputChannels );
 
-        ShadowTextureDefinition defaultParams( SHADOWMAP_UNIFORM, "", 0, Vector2::ZERO,
+        ShadowTextureDefinition defaultParams( SHADOWMAP_UNIFORM, "", Vector2::ZERO,
                                                Vector2::UNIT_SCALE, 0, 0, 0 );
 
         AbstractNodeList::iterator i = obj->children.begin();
@@ -8286,17 +8265,7 @@ namespace Ogre{
                         String name;
                         if( getUInt(*it0, &id) && getString(*it1, &name) )
                         {
-                            uint32 index = 0;
-                            if(it2 != prop->values.end())
-                            {
-                                if(!getUInt(*it2, &index))
-                                {
-                                    compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line);
-                                    return;
-                                }
-                            }
-
-                            passQuad->addQuadTextureSource( id, name, index );
+                            passQuad->addQuadTextureSource( id, name );
                         }
                         else
                         {
@@ -8652,23 +8621,27 @@ namespace Ogre{
                     {
                         compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line);
                     }
-                    else if(prop->values.size() != 2 && prop->values.size() != 3)
+                    else if(prop->values.size() != 3 && prop->values.size() != 4)
                     {
                         compiler->addError(ScriptCompiler::CE_FEWERPARAMETERSEXPECTED, prop->file, prop->line,
-                                           "use_prepass only supports 2 or 3 arguments: the GBuffer's' "
+                                           "use_prepass only supports 3 or 4 arguments: the GBuffer's' "
                                            "texture name, the depth texture, & optionally the SSR texture name");
                     }
                     else
                     {
-                        IdString gbuffer, gbufDepthTexture, ssr;
+                        IdStringVec gbuffer;
+                        IdString gbufDepthTexture, ssr;
+                        gbuffer.resize( 2 );
 
-                        AbstractNodeList::const_iterator it2 = prop->values.begin();
-                        AbstractNodeList::const_iterator it0 = it2++;
-                        AbstractNodeList::const_iterator it1 = it2++;
+                        AbstractNodeList::const_iterator it3 = prop->values.begin();
+                        AbstractNodeList::const_iterator it0 = it3++;
+                        AbstractNodeList::const_iterator it1 = it3++;
+                        AbstractNodeList::const_iterator it2 = it3++;
 
-                        if( !getIdString( *it0, &gbuffer ) ||
-                            !getIdString( *it1, &gbufDepthTexture ) ||
-                            (it2 != prop->values.end() && !getIdString( *it2, &ssr )) )
+                        if( !getIdString( *it0, &gbuffer[0] ) ||
+                            !getIdString( *it1, &gbuffer[1] ) ||
+                            !getIdString( *it2, &gbufDepthTexture ) ||
+                            (it3 != prop->values.end() && !getIdString( *it3, &ssr )) )
                         {
                             compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
                                 "use_prepass must be the name of a texture available in the local or global scope");
@@ -8866,7 +8839,7 @@ namespace Ogre{
                         }
 
                         // Clearing the UAV
-                        passUav->setUav( slot, false, "", 0, ResourceAccess::Read, 0, PF_UNKNOWN );
+                        passUav->setUav( slot, false, "", ResourceAccess::Read, 0, PFG_UNKNOWN );
                     }
                     else
                     {
@@ -8885,8 +8858,7 @@ namespace Ogre{
                         if(getString(*j, &val))
                         {
                             uint32 access = 0;
-                            uint32 mrtIndex = 0;
-                            PixelFormat format = PF_UNKNOWN;
+                            PixelFormatGpu format = PFG_UNKNOWN;
                             int32 mipmap = 0;
                             bool mipmapFollows = false;
 
@@ -8916,11 +8888,9 @@ namespace Ogre{
                                                 mipmap = StringConverter::parseInt(atom->value);
                                                 mipmapFollows = false;
                                             }
-                                            else
-                                                mrtIndex = StringConverter::parseInt(atom->value);
                                         }
                                         else
-                                            format = PixelUtil::getFormatFromName(atom->value, true);
+                                            format = PixelFormatGpuUtils::getFormatFromName(atom->value);
                                     }
                                 }
                                 else
@@ -8940,7 +8910,7 @@ namespace Ogre{
                                                     "UAV must have the 'read' and/or 'write' access tokens." );
                             }
 
-                            passUav->setUav( slot, isExternal, evt.mName, mrtIndex,
+                            passUav->setUav( slot, isExternal, evt.mName,
                                              static_cast<ResourceAccess::ResourceAccess>(access),
                                              mipmap, format );
                         }
@@ -9175,8 +9145,7 @@ namespace Ogre{
                         AbstractNodeList::const_iterator j = prop->values.begin();
 
                         uint32 slot = ~0u;
-                        uint32 mrtIndex = 0;
-                        PixelFormat pixelFormat = PF_UNKNOWN;
+                        PixelFormatGpu pixelFormat = PFG_UNKNOWN;
                         int32 slice = 0;
                         int32 mipmap = 0;
                         uint32 access = ResourceAccess::Undefined;
@@ -9222,11 +9191,9 @@ namespace Ogre{
                                                 mipmap = StringConverter::parseInt(atom->value);
                                                 mipmapFollows = false;
                                             }
-                                            else
-                                                mrtIndex = StringConverter::parseInt(atom->value);
                                         }
                                         else
-                                            pixelFormat = PixelUtil::getFormatFromName(atom->value, true);
+                                            pixelFormat = PixelFormatGpuUtils::getFormatFromName( atom->value );
                                     }
                                 }
                                 else
@@ -9246,7 +9213,7 @@ namespace Ogre{
                                                     "UAV must have the 'read' and/or 'write' access tokens." );
                             }
 
-                            passCompute->addUavSource( slot, evt.mName, mrtIndex,
+                            passCompute->addUavSource( slot, evt.mName,
                                                        static_cast<ResourceAccess::ResourceAccess>(access),
                                                        slice, mipmap, pixelFormat,
                                                        allowWriteAfterWrite );
@@ -9376,17 +9343,7 @@ namespace Ogre{
                         String name;
                         if( getUInt(*it0, &id) && getString(*it1, &name) )
                         {
-                            uint32 index = 0;
-                            if(it2 != prop->values.end())
-                            {
-                                if(!getUInt(*it2, &index))
-                                {
-                                    compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line);
-                                    return;
-                                }
-                            }
-
-                            passCompute->addTextureSource( id, name, index );
+                            passCompute->addTextureSource( id, name );
                         }
                         else
                         {
