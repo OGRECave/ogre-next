@@ -199,7 +199,8 @@ namespace Ogre
     protected:
         friend class CompositorNode;
         friend class CompositorWorkspace;
-        typedef map<IdString, uint32>::type         NameToChannelMap;
+        typedef map<IdString, uint32>::type                 NameToChannelMap;
+        typedef map<IdString, RenderTargetViewDef>::type    RenderTargetViewDefMap;
 
         /** TextureSource to use by addLocalTextureDefinition. Could be either
             TEXTURE_LOCAL or TEXTURE_GLOBAL (!!depends on our derived class!!)
@@ -208,6 +209,7 @@ namespace Ogre
         TextureDefinitionVec    mLocalTextureDefs;
         BufferDefinitionVec     mLocalBufferDefs;
         IdStringVec             mInputBuffers;
+        RenderTargetViewDefMap  mLocalRtvs;
 
         /** Similar to @see CompositorNodeDef::mOutChannelMapping,
             associates a given name with the input, local or global textures.
@@ -333,6 +335,9 @@ namespace Ogre
         TextureDefinitionVec& getLocalTextureDefinitionsNonConst(void)      { return mLocalTextureDefs; }
 
         const NameToChannelMap& getNameToChannelMap(void) const             { return mNameToChannelMap; }
+
+        RenderTargetViewDef* addRenderTextureView( IdString name );
+        const RenderTargetViewDef* getRenderTargetViewDef( IdString name ) const;
 
         /** Utility function to create the textures based on a given set of
             texture definitions and put them in a container.

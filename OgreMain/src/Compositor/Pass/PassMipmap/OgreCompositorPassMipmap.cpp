@@ -493,5 +493,7 @@ namespace Ogre
 
         if( usedByUs )
             setupComputeShaders();
+
+        return usedByUs;
     }
 }

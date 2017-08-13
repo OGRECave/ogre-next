@@ -42,6 +42,8 @@ namespace Ogre
     *  @{
     */
 
+    struct RenderTargetViewDef;
+
     /** Base class that users can derive from in order to implement custom passes for the compositor.
     @par
         How to implement one:
@@ -87,7 +89,7 @@ namespace Ogre
                                                CompositorNodeDef *parentNodeDef ) = 0;
 
         virtual CompositorPass* addPass( const CompositorPassDef *definition, Camera *defaultCamera,
-                                         CompositorNode *parentNode, TextureGpu *target,
+                                         CompositorNode *parentNode, const RenderTargetViewDef *rtvDef,
                                          SceneManager *sceneManager ) = 0;
     };
 

@@ -226,6 +226,35 @@ namespace Ogre
         return &mLocalTextureDefs.back();
     }
     //-----------------------------------------------------------------------------------
+    RenderTargetViewDef* TextureDefinitionBase::addRenderTextureView( IdString name )
+    {
+        if( mLocalRtvs.find( name ) != mLocalRtvs.end() )
+        {
+            OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM,
+                         "RenderTextureView definition with name '" +
+                         name.getFriendlyText() + "' already exists.",
+                         "TextureDefinitionBase::addRenderTextureView" );
+        }
+
+        RenderTargetViewDef &retVal = mLocalRtvs[name];
+
+        return &retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    const RenderTargetViewDef* TextureDefinitionBase::getRenderTargetViewDef( IdString name ) const
+    {
+        RenderTargetViewDefMap::const_iterator itor = mLocalRtvs.find( name );
+
+        if( itor == mLocalRtvs.end() )
+        {
+            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                         "Could not find RenderTargetView with name " + name.getFriendlyText(),
+                         "CompositorNodeDef::getRenderTargetViewDef" );
+        }
+
+        return &itor->second;
+    }
+    //-----------------------------------------------------------------------------------
     void TextureDefinitionBase::createTextures( const TextureDefinitionVec &textureDefs,
                                                 CompositorChannelVec &inOutTexContainer,
                                                 IdType id, bool uniqueNames,

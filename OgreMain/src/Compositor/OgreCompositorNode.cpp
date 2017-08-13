@@ -672,24 +672,8 @@ namespace Ogre
 
         while( itor != end )
         {
-            CompositorChannel const * channel = 0;
-            size_t index;
-            TextureDefinitionBase::TextureSource textureSource;
-            mDefinition->getTextureSource( itor->getRenderTargetName(), index, textureSource );
-            switch( textureSource )
-            {
-            case TextureDefinitionBase::TEXTURE_INPUT:
-                channel = &mInTextures[index];
-                break;
-            case TextureDefinitionBase::TEXTURE_LOCAL:
-                channel = &mLocalTextures[index];
-                break;
-            case TextureDefinitionBase::TEXTURE_GLOBAL:
-                channel = &mWorkspace->getGlobalTexture( itor->getRenderTargetName() );
-                break;
-            default:
-                continue;
-            }
+            const RenderTargetViewDef *rtvDef =
+                    mDefinition->getRenderTargetViewDef( itor->getRenderTargetName() );
 
             const CompositorPassDefVec &passes = itor->getCompositorPasses();
             CompositorPassDefVec::const_iterator itPass = passes.begin();
@@ -703,51 +687,51 @@ namespace Ogre
                 case PASS_CLEAR:
                     newPass = OGRE_NEW CompositorPassClear(
                                             static_cast<CompositorPassClearDef*>(*itPass),
-                                            mWorkspace->getSceneManager(), *channel, this );
+                                            mWorkspace->getSceneManager(), rtvDef, this );
                     break;
                 case PASS_QUAD:
                     newPass = OGRE_NEW CompositorPassQuad(
                                             static_cast<CompositorPassQuadDef*>(*itPass),
-                                            mWorkspace->getDefaultCamera(), this, *channel,
+                                            mWorkspace->getDefaultCamera(), this, rtvDef,
                                             mRenderSystem->getHorizontalTexelOffset(),
                                             mRenderSystem->getVerticalTexelOffset() );
                     break;
                 case PASS_SCENE:
                     newPass = OGRE_NEW CompositorPassScene(
                                             static_cast<CompositorPassSceneDef*>(*itPass),
-                                            mWorkspace->getDefaultCamera(), *channel, this );
+                                            mWorkspace->getDefaultCamera(), rtvDef, this );
                     break;
                 case PASS_STENCIL:
                     newPass = OGRE_NEW CompositorPassStencil(
                                             static_cast<CompositorPassStencilDef*>(*itPass),
-                                            *channel, this, mRenderSystem );
+                                            rtvDef, this, mRenderSystem );
                     break;
                 case PASS_DEPTHCOPY:
                     newPass = OGRE_NEW CompositorPassDepthCopy(
                                             static_cast<CompositorPassDepthCopyDef*>(*itPass),
-                                            *channel, this );
+                                            rtvDef, this );
                     break;
                 case PASS_UAV:
                     newPass = OGRE_NEW CompositorPassUav(
                                             static_cast<CompositorPassUavDef*>(*itPass),
-                                            this, *channel );
+                                            this, rtvDef );
                     break;
                 case PASS_MIPMAP:
                     newPass = OGRE_NEW CompositorPassMipmap(
                                             static_cast<CompositorPassMipmapDef*>(*itPass),
-                                            *channel, this );
+                                            rtvDef, this );
                     break;
                 case PASS_COMPUTE:
                     newPass = OGRE_NEW CompositorPassCompute(
                                             static_cast<CompositorPassComputeDef*>(*itPass),
-                                            mWorkspace->getDefaultCamera(),  this, *channel );
+                                            mWorkspace->getDefaultCamera(),  this, rtvDef );
                     break;
                 case PASS_CUSTOM:
                     {
                         CompositorPassProvider *passProvider = mWorkspace->getCompositorManager()->
                                                                         getCompositorPassProvider();
                         newPass = passProvider->addPass( *itPass, mWorkspace->getDefaultCamera(), this,
-                                                         *channel, mWorkspace->getSceneManager() );
+                                                         rtvDef, mWorkspace->getSceneManager() );
                     }
                     break;
                 default:
