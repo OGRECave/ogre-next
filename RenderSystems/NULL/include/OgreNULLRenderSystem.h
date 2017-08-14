@@ -116,7 +116,7 @@ namespace Ogre
                                         ResourceAccess::ResourceAccess access,
                                         int32 mipmapLevel, int32 textureArrayIndex,
                                         PixelFormat pixelFormat );
-        virtual void _setTextureCS( uint32 slot, bool enabled, Texture *texPtr );
+        virtual void _setTextureCS( uint32 slot, TextureGpu *texPtr );
         virtual void _setHlmsSamplerblockCS( uint8 texUnit, const HlmsSamplerblock *samplerblock );
 
         virtual void _setTexture(size_t unit, bool enabled,  Texture *texPtr);
@@ -131,9 +131,6 @@ namespace Ogre
         virtual void _setIndirectBuffer( IndirectBufferPacked *indirectBuffer );
 
         virtual RenderPassDescriptor* createRenderPassDescriptor(void);
-
-        virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc );
-        virtual void endRenderPassDescriptor( RenderPassDescriptor *desc );
 
         virtual DepthBuffer* _createDepthBufferFor( RenderTarget *renderTarget,
                                                     bool exactMatchFormat );

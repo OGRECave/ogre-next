@@ -58,6 +58,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreGL3PlusVertexArrayObject.h"
 #include "OgreGL3PlusTextureGpuManager.h"
 #include "OgreGL3PlusTextureGpu.h"
+#include "OgreGL3PlusMappings.h"
 #include "OgreGL3PlusRenderPassDescriptor.h"
 #include "OgreGL3PlusHlmsPso.h"
 #include "OgreHlmsDatablock.h"
@@ -899,16 +900,59 @@ namespace Ogre {
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusRenderSystem::beginRenderPassDescriptor( RenderPassDescriptor *desc )
+    void GL3PlusRenderSystem::beginRenderPassDescriptor( RenderPassDescriptor *desc,
+                                                         TextureGpu *anyTarget,
+                                                         const Vector4 &viewportSize,
+                                                         const Vector4 &scissors,
+                                                         bool overlaysEnabled )
     {
+        RenderSystem::beginRenderPassDescriptor( desc, anyTarget, viewportSize,
+                                                 scissors, overlaysEnabled );
+
+        GLsizei x, y, w, h;
+
+        // Calculate the "lower-left" corner of the viewport
+        w = mCurrentRenderViewport.getActualWidth();
+        h = mCurrentRenderViewport.getActualHeight();
+        x = mCurrentRenderViewport.getActualLeft();
+        y = mCurrentRenderViewport.getActualTop();
+
+        if( !desc->requiresTextureFlipping() )
+        {
+            // Convert "upper-left" corner to "lower-left"
+            y = anyTarget->getHeight() - h - y;
+        }
+
+        OCGE( glViewport( x, y, w, h ) );
+
+        w = mCurrentRenderViewport.getScissorActualWidth();
+        h = mCurrentRenderViewport.getScissorActualHeight();
+        x = mCurrentRenderViewport.getScissorActualLeft();
+        y = mCurrentRenderViewport.getScissorActualTop();
+
+        if( !desc->requiresTextureFlipping() )
+        {
+            // Convert "upper-left" corner to "lower-left"
+            y = anyTarget->getHeight() - h - y;
+        }
+
+        // Configure the viewport clipping
+        OCGE( glScissor( x, y, w, h ) );
+
+        //Attachments, actions to do, or viewport settings.
+        TODO_only_perform_load_if_anything_changed;
+
         GL3PlusRenderPassDescriptor *passDesc = static_cast<GL3PlusRenderPassDescriptor*>( desc );
         passDesc->performLoadActions( mBlendChannelMask, mDepthWrite, mStencilParams.writeMask );
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusRenderSystem::endRenderPassDescriptor( RenderPassDescriptor *desc )
+    void GL3PlusRenderSystem::endRenderPassDescriptor(void)
     {
-        GL3PlusRenderPassDescriptor *passDesc = static_cast<GL3PlusRenderPassDescriptor*>( desc );
+        GL3PlusRenderPassDescriptor *passDesc =
+                static_cast<GL3PlusRenderPassDescriptor*>( mCurrentRenderPassDescriptor );
         passDesc->performStoreActions( mHasArbInvalidateSubdata );
+
+        RenderSystem::endRenderPassDescriptor();
     }
     //-----------------------------------------------------------------------------------
     MultiRenderTarget* GL3PlusRenderSystem::createMultiRenderTarget(const String & name)
@@ -1053,52 +1097,27 @@ namespace Ogre {
         // Point sprites are always on in OpenGL 3.2 and up.
     }
 
-    void GL3PlusRenderSystem::_setTexture( size_t stage, bool enabled, TextureGpu *texPtr )
+    void GL3PlusRenderSystem::_setTexture( size_t stage, TextureGpu *texPtr )
     {
-        GL3PlusTextureGpu *tex = static_cast<GL3PlusTextureGpu*>( texPtr );
-
-        if (!activateGLTextureUnit(stage))
+        if( !activateGLTextureUnit( stage ) )
             return;
 
-        if (enabled)
+        if( texPtr )
         {
-            GLenum oldTexType = mTextureTypes[stage];
-
-            if ( tex )
-            {
-                // Note used
-                tex->touch();
-                mTextureTypes[stage] = tex->getGL3PlusTextureTarget();
-
-                // Store the number of mipmaps.
-                mTextureMipmapCount = tex->getNumMipmaps();
-            }
-            else
-                // Assume 2D.
-                mTextureTypes[stage] = GL_TEXTURE_2D;
-
-            if( oldTexType != mTextureTypes[stage] )
-                OCGE( glBindTexture( oldTexType, 0 ) );
-
-            if( tex )
-            {
-                bool isFsaa;
-                GLuint id = tex->getGLID( isFsaa );
-                OGRE_CHECK_GL_ERROR(glBindTexture( isFsaa ?
-                                            GL_TEXTURE_2D_MULTISAMPLE : mTextureTypes[stage], id ));
-            }
-            else
-            {
-                OGRE_CHECK_GL_ERROR(glBindTexture( mTextureTypes[stage], static_cast<GL3PlusTextureManager*>(mTextureManager)->getWarningTextureID() ));
-            }
+            GL3PlusTextureGpu *tex = static_cast<GL3PlusTextureGpu*>( texPtr );
+            GLenum target = tex->getGlTextureTarget();
+            GLuint textureName = tex->getDisplayTextureName();
+            OCGE( glBindTexture( target, textureName ) );
         }
         else
         {
-            // Bind zero texture.
-            OGRE_CHECK_GL_ERROR(glBindTexture(mTextureTypes[stage], 0));
+            // Bind zero texture. GL_TEXTURE_2D & GL_TEXTURE_2D_ARRAY are
+            //the most common but not necessarily correct.
+            OCGE( glBindTexture( GL_TEXTURE_2D, 0 ) );
+            OCGE( glBindTexture( GL_TEXTURE_2D_ARRAY, 0 ) );
         }
 
-        activateGLTextureUnit(0);
+        activateGLTextureUnit( 0 );
     }
 
     void GL3PlusRenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture *set )
@@ -1163,22 +1182,22 @@ namespace Ogre {
 
     void GL3PlusRenderSystem::_setVertexTexture( size_t unit, TextureGpu *tex )
     {
-        _setTexture(unit, true, tex);
+        _setTexture(unit, tex);
     }
 
     void GL3PlusRenderSystem::_setGeometryTexture( size_t unit, TextureGpu *tex )
     {
-        _setTexture(unit, true, tex);
+        _setTexture(unit, tex);
     }
 
     void GL3PlusRenderSystem::_setTessellationHullTexture( size_t unit, TextureGpu *tex )
     {
-        _setTexture(unit, true, tex);
+        _setTexture(unit, tex);
     }
 
     void GL3PlusRenderSystem::_setTessellationDomainTexture( size_t unit, TextureGpu *tex )
     {
-        _setTexture(unit, true, tex);
+        _setTexture(unit, tex);
     }
 
     void GL3PlusRenderSystem::setUavStartingSlot( uint32 startingSlot )
@@ -1187,7 +1206,7 @@ namespace Ogre {
         {
             for( uint32 i=0; i<64; ++i )
             {
-                if( !mUavs[i].texture.isNull() )
+                if( mUavs[i].texture )
                     mUavs[i].dirty = true;
             }
         }
@@ -1195,41 +1214,48 @@ namespace Ogre {
         RenderSystem::setUavStartingSlot( startingSlot );
     }
 
-    void GL3PlusRenderSystem::queueBindUAV( uint32 slot, TexturePtr texture,
+    void GL3PlusRenderSystem::queueBindUAV( uint32 slot, TextureGpu *texture,
                                             ResourceAccess::ResourceAccess access,
                                             int32 mipmapLevel, int32 textureArrayIndex,
-                                            PixelFormat pixelFormat )
+                                            PixelFormatGpu pixelFormat )
     {
         assert( slot < 64 );
 
-        if( !mUavs[slot].buffer && mUavs[slot].texture.isNull() && texture.isNull() )
+        if( !mUavs[slot].buffer && !mUavs[slot].texture && !texture )
             return;
 
         mUavs[slot].dirty       = true;
         mUavs[slot].texture     = texture;
         mUavs[slot].buffer      = 0;
 
-        if( !texture.isNull() )
+        if( texture )
         {
-            if( !(texture->getUsage() & TU_UAV) )
+            if( !texture->isUav() )
             {
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                             "Texture " + texture->getName() +
-                             " must have been created with TU_UAV to be bound as UAV",
+                             "Texture " + texture->getNameStr() +
+                             " must have been created with TextureFlags::Uav to be bound as UAV",
                              "GL3PlusRenderSystem::queueBindUAV" );
             }
 
-            bool isFsaa;
+            if( pixelFormat == PFG_UNKNOWN )
+                pixelFormat = texture->getPixelFormat();
 
-            if( pixelFormat == PF_UNKNOWN )
-                pixelFormat = texture->getFormat();
-
-            mUavs[slot].textureName = static_cast<GL3PlusTexture*>( texture.get() )->getGLID( isFsaa );
+            mUavs[slot].textureName = static_cast<GL3PlusTextureGpu*>(texture)->getDisplayTextureName();
             mUavs[slot].mipmap      = mipmapLevel;
-            mUavs[slot].isArrayTexture = texture->getTextureType() == TEX_TYPE_2D_ARRAY ? GL_TRUE :
-                                                                                          GL_FALSE;
+            const TextureTypes::TextureTypes textureType = texture->getTextureType();
+            if( textureType == TextureTypes::Type1DArray ||
+                textureType == TextureTypes::Type2DArray ||
+                textureType == TextureTypes::TypeCubeArray )
+            {
+                mUavs[slot].isArrayTexture = GL_TRUE;
+            }
+            else
+            {
+                mUavs[slot].isArrayTexture = GL_FALSE;
+            }
             mUavs[slot].arrayIndex  = textureArrayIndex;
-            mUavs[slot].format      = GL3PlusPixelUtil::getClosestGLImageInternalFormat( pixelFormat );
+            mUavs[slot].format      = GL3PlusMappings::get( pixelFormat );
 
             switch( access )
             {
@@ -1259,12 +1285,12 @@ namespace Ogre {
     {
         assert( slot < 64 );
 
-        if( mUavs[slot].texture.isNull() && !mUavs[slot].buffer && !buffer )
+        if( !mUavs[slot].texture && !mUavs[slot].buffer && !buffer )
             return;
 
-        mUavs[slot].dirty       = true;
-        mUavs[slot].buffer      = buffer;
-        mUavs[slot].texture.setNull();
+        mUavs[slot].dirty   = true;
+        mUavs[slot].buffer  = buffer;
+        mUavs[slot].texture = 0;
 
         if( buffer )
         {
@@ -1279,11 +1305,11 @@ namespace Ogre {
     {
         for( size_t i=0; i<64; ++i )
         {
-            if( !mUavs[i].texture.isNull() )
+            if( mUavs[i].texture )
             {
                 mUavs[i].dirty = true;
                 mUavs[i].buffer = 0;
-                mUavs[i].texture.setNull();
+                mUavs[i].texture= 0;
                 mMaxModifiedUavPlusOne = i + 1;
             }
         }
@@ -1295,12 +1321,12 @@ namespace Ogre {
         {
             if( mUavs[i].dirty )
             {
-                if( !mUavs[i].texture.isNull() )
+                if( mUavs[i].texture )
                 {
                     OCGE( glBindImageTexture( mUavStartingSlot + i, mUavs[i].textureName,
                                               mUavs[i].mipmap, mUavs[i].isArrayTexture,
                                               mUavs[i].arrayIndex, mUavs[i].access,
-                                              mUavs[i].format) );
+                                              mUavs[i].format ) );
                 }
                 else if( mUavs[i].buffer )
                 {
@@ -1321,10 +1347,10 @@ namespace Ogre {
         mMaxModifiedUavPlusOne = 0;
     }
 
-    void GL3PlusRenderSystem::_bindTextureUavCS( uint32 slot, Texture *texture,
+    void GL3PlusRenderSystem::_bindTextureUavCS( uint32 slot, TextureGpu *texture,
                                                  ResourceAccess::ResourceAccess _access,
                                                  int32 mipmapLevel, int32 textureArrayIndex,
-                                                 PixelFormat pixelFormat )
+                                                 PixelFormatGpu pixelFormat )
     {
         //Tag as dirty so next flushUAVs will get called when regular rendering resumes.
         mMaxModifiedUavPlusOne = std::max( static_cast<uint8>(mUavStartingSlot + slot + 1u),
@@ -1352,11 +1378,23 @@ namespace Ogre {
                 break;
             }
 
-            bool isFsaa;
-            const GLuint    textureName = static_cast<GL3PlusTexture*>( texture )->getGLID( isFsaa );
-            const GLboolean isArrayTexture = texture->getTextureType() == TEX_TYPE_2D_ARRAY ? GL_TRUE :
-                                                                                              GL_FALSE;
-            const GLenum    format = GL3PlusPixelUtil::getClosestGLImageInternalFormat( pixelFormat );
+            if( pixelFormat == PFG_UNKNOWN )
+                pixelFormat = texture->getPixelFormat();
+
+            const GLuint textureName = static_cast<GL3PlusTextureGpu*>(texture)->getDisplayTextureName();
+            GLboolean isArrayTexture;
+            const TextureTypes::TextureTypes textureType = texture->getTextureType();
+            if( textureType == TextureTypes::Type1DArray ||
+                textureType == TextureTypes::Type2DArray ||
+                textureType == TextureTypes::TypeCubeArray )
+            {
+                isArrayTexture = GL_TRUE;
+            }
+            else
+            {
+                isArrayTexture = GL_FALSE;
+            }
+            const GLenum format = GL3PlusMappings::get( pixelFormat );
 
             OCGE( glBindImageTexture( slot, textureName, mipmapLevel, isArrayTexture,
                                       textureArrayIndex, access, format ) );
@@ -1367,9 +1405,9 @@ namespace Ogre {
         }
     }
 
-    void GL3PlusRenderSystem::_setTextureCS( uint32 slot, bool enabled, Texture *texPtr )
+    void GL3PlusRenderSystem::_setTextureCS( uint32 slot, TextureGpu *texPtr )
     {
-        this->_setTexture( slot, enabled, texPtr );
+        this->_setTexture( slot, texPtr );
     }
 
     void GL3PlusRenderSystem::_setHlmsSamplerblockCS( uint8 texUnit, const HlmsSamplerblock *samplerblock )
@@ -1546,6 +1584,7 @@ namespace Ogre {
 
     void GL3PlusRenderSystem::_setViewport(Viewport *vp)
     {
+#if TODO_OGRE_2_2
         // Check if viewport is different
         if (!vp)
         {
@@ -1596,6 +1635,7 @@ namespace Ogre {
         {
             flushUAVs();
         }
+#endif
     }
 
     void GL3PlusRenderSystem::_resourceTransitionCreated( ResourceTransition *resTransition )
@@ -3038,6 +3078,7 @@ namespace Ogre {
                                                const ColourValue& colour,
                                                Real depth, unsigned short stencil)
     {
+#if TODO_OGRE_2_2
         bool colourMask = mBlendChannelMask != HlmsBlendblock::BlendChannelAll;
 
         GLbitfield flags = 0;
@@ -3146,6 +3187,7 @@ namespace Ogre {
         {
             OGRE_CHECK_GL_ERROR(glStencilMask(mStencilParams.writeMask));
         }
+#endif
     }
 
     void GL3PlusRenderSystem::discardFrameBuffer( unsigned int buffers )
@@ -3381,6 +3423,7 @@ namespace Ogre {
 
     void GL3PlusRenderSystem::_setRenderTarget(RenderTarget *target, uint8 viewportRenderTargetFlags)
     {
+#if TODO_OGRE_2_2
         mActiveViewport = 0;
 
         // Unbind frame buffer object
@@ -3491,6 +3534,7 @@ namespace Ogre {
         }
 
         flushUAVs();
+#endif
     }
 
     GLint GL3PlusRenderSystem::convertCompareFunction(CompareFunction func) const

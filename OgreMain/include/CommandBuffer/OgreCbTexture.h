@@ -35,11 +35,10 @@ namespace Ogre
     struct _OgreExport CbTexture : public CbBase
     {
         uint16                  texUnit;
-        bool                    bEnabled;
         TextureGpu              *texture;
         HlmsSamplerblock const  *samplerBlock;
 
-        CbTexture( uint16 _texUnit, bool _bEnabled, TextureGpu *_texture,
+        CbTexture( uint16 _texUnit, TextureGpu *_texture,
                    const HlmsSamplerblock *_samplerBlock = 0 );
     };
 

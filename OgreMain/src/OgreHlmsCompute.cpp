@@ -463,11 +463,9 @@ namespace Ogre
             }
             else
             {
-#if TODO_OGRE_2_2
-                mRenderSystem->_setTextureCS( slotIdx, !itTex->texture.isNull(), itTex->texture.get() );
+                mRenderSystem->_setTextureCS( slotIdx, itTex->texture );
                 if( itTex->samplerblock )
                     mRenderSystem->_setHlmsSamplerblockCS( slotIdx, itTex->samplerblock );
-#endif
             }
 
             ++slotIdx;

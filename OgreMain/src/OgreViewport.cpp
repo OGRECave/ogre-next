@@ -182,8 +182,11 @@ namespace Ogre {
         return mScissorsMatchViewport;
     }
     //---------------------------------------------------------------------
-    void Viewport::setDimensions(Real left, Real top, Real width, Real height, bool overrideScissors)
+    void Viewport::setDimensions( TextureGpu *newTarget, Real left, Real top,
+                                  Real width, Real height, bool overrideScissors )
     {
+        mCurrentTarget = newTarget;
+
         mRelLeft = left;
         mRelTop = top;
         mRelWidth = width;

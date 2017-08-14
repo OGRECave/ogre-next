@@ -166,7 +166,8 @@ namespace Ogre {
             Dimensions relative to the size of the target, represented as real values
             between 0 and 1. i.e. the full target area is 0, 0, 1, 1.
         */
-        void setDimensions( Real left, Real top, Real width, Real height, bool overrideScissors=true );
+        void setDimensions( TextureGpu *newTarget, Real left, Real top, Real width, Real height,
+                            bool overrideScissors=true );
 
         /** Only sets the scissor regions. The scissor rectangle must be fully inside
             the viewport rectangle. @See setDimensions for param description

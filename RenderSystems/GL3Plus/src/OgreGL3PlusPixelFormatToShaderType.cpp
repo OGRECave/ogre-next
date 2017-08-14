@@ -32,117 +32,103 @@ namespace Ogre
 {
     const char* GL3PlusPixelFormatToShaderType::getPixelFormatType( PixelFormatGpu pixelFormat ) const
     {
-        asd;
         switch( pixelFormat )
         {
         //UNORM formats
-        case PF_L8:
-        case PF_A8:
-        case PF_R8:
+        case PFG_R8_UNORM:
+        case PFG_A8_UNORM:
             return "r8";
-        case PF_L16:
+        case PFG_R16_UNORM:
             return "r16";
-        case PF_RG8:
-        case PF_BYTE_LA:
+        case PFG_RG8_UNORM:
             return "rg8";
-        case PF_SHORT_GR:
+        case PFG_RG16_UNORM:
             return "rg16";
-        case PF_R8G8B8:
-        case PF_B8G8R8:
-        case PF_A8R8G8B8:
-        case PF_A8B8G8R8:
-        case PF_B8G8R8A8:
-        case PF_R8G8B8A8:
-        case PF_X8R8G8B8:
-        case PF_X8B8G8R8:
+        case PFG_RGBA8_UNORM:
+        case PFG_RGBA8_UNORM_SRGB:
+        case PFG_BGRA8_UNORM:
+        case PFG_BGRA8_UNORM_SRGB:
+        case PFG_BGRX8_UNORM:
+        case PFG_BGRX8_UNORM_SRGB:
             return "rgba8";
-        case PF_A2R10G10B10:
-        case PF_A2B10G10R10:
+        case PFG_R10G10B10A2_UNORM:
             return "rgb10_a2";
-        case PF_SHORT_RGB:
-        case PF_SHORT_RGBA:
+        case PFG_RGBA16_UNORM:
             return "rgba16";
 
         //SNORM formats
-        case PF_R8_SNORM:
+        case PFG_R8_SNORM:
             return "r8_snorm";
-        case PF_R16_SNORM:
+        case PFG_R16_SNORM:
             return "r16_snorm";
-        case PF_R8G8_SNORM:
+        case PFG_RG8_SNORM:
             return "rg8_snorm";
-        case PF_R16G16_SNORM:
+        case PFG_RG16_SNORM:
             return "rg16_snorm";
-        case PF_R8G8B8_SNORM:
-        case PF_R8G8B8A8_SNORM:
+        case PFG_RGBA8_SNORM:
             return "rgba8_snorm";
-        case PF_R16G16B16_SNORM:
-        case PF_R16G16B16A16_SNORM:
+        case PFG_RGBA16_SNORM:
             return "rgba16_snorm";
 
         //SINT formats
-        case PF_R8_SINT:
+        case PFG_R8_SINT:
             return "r8i";
-        case PF_R16_SINT:
+        case PFG_R16_SINT:
             return "r16i";
-        case PF_R32_SINT:
+        case PFG_R32_SINT:
             return "r32i";
-        case PF_R8G8_SINT:
+        case PFG_RG8_SINT:
             return "rg8i";
-        case PF_R16G16_SINT:
+        case PFG_RG16_SINT:
             return "rg16i";
-        case PF_R32G32_SINT:
+        case PFG_RG32_SINT:
             return "rg32i";
-        case PF_R8G8B8_SINT:
-        case PF_R8G8B8A8_SINT:
+        case PFG_RGBA8_SINT:
             return "rgba8i";
-        case PF_R16G16B16_SINT:
-        case PF_R16G16B16A16_SINT:
+        case PFG_RGBA16_SINT:
             return "rgba16i";
-        case PF_R32G32B32_SINT:
-        case PF_R32G32B32A32_SINT:
+        case PFG_RGB32_SINT:
+        case PFG_RGBA32_SINT:
             return "rgba32i";
 
         //UINT formats
-        case PF_R8_UINT:
+        case PFG_R8_UINT:
             return "r8ui";
-        case PF_R16_UINT:
+        case PFG_R16_UINT:
             return "r16ui";
-        case PF_R32_UINT:
+        case PFG_R32_UINT:
             return "r32ui";
-        case PF_R8G8_UINT:
+        case PFG_RG8_UINT:
             return "rg8ui";
-        case PF_R16G16_UINT:
+        case PFG_RG16_UINT:
             return "rg16ui";
-        case PF_R32G32_UINT:
+        case PFG_RG32_UINT:
             return "rg32ui";
-        case PF_R8G8B8_UINT:
-        case PF_R8G8B8A8_UINT:
+        case PFG_RGBA8_UINT:
             return "rgba8ui";
-//        case PF_R10G10B10A2_UINT:
-//            return "rgb10_a2ui";
-        case PF_R16G16B16_UINT:
-        case PF_R16G16B16A16_UINT:
+        case PFG_R10G10B10A2_UINT:
+            return "rgb10_a2ui";
+        case PFG_RGBA16_UINT:
             return "rgba16ui";
-        case PF_R32G32B32_UINT:
-        case PF_R32G32B32A32_UINT:
+        case PFG_RGB32_UINT:
+        case PFG_RGBA32_UINT:
             return "rgba32ui";
 
-        //Pure floating point
-        case PF_FLOAT16_R:
+        //FLOAT formats
+        case PFG_R16_FLOAT:
             return "r16f";
-        case PF_FLOAT32_R:
+        case PFG_R32_FLOAT:
             return "r32f";
-        case PF_FLOAT16_GR:
+        case PFG_RG16_FLOAT:
             return "rg16f";
-        case PF_FLOAT32_GR:
+        case PFG_RG32_FLOAT:
             return "rg32f";
-        case PF_R11G11B10_FLOAT:
+        case PFG_R11G11B10_FLOAT:
             return "r11f_g11f_b10f";
-        case PF_FLOAT16_RGB:
-        case PF_FLOAT16_RGBA:
+        case PFG_RGBA16_FLOAT:
             return "rgba16f";
-        case PF_FLOAT32_RGB:
-        case PF_FLOAT32_RGBA:
+        case PFG_RGB32_FLOAT:
+        case PFG_RGBA32_FLOAT:
             return "rgba32f";
         default:
             return 0;

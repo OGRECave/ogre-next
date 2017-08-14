@@ -171,7 +171,7 @@ namespace Ogre {
         struct Uav
         {
             bool        dirty;
-            TexturePtr  texture;
+            TextureGpu  *texture;
             GLuint      textureName;
             GLint       mipmap;
             GLboolean   isArrayTexture;
@@ -183,7 +183,7 @@ namespace Ogre {
             GLsizeiptr  sizeBytes;
 
             Uav() :
-                dirty( false ), textureName( 0 ), mipmap( 0 ),
+                dirty( false ), texture( 0 ), textureName( 0 ), mipmap( 0 ),
                 isArrayTexture( GL_FALSE ), arrayIndex( 0 ),
                 access( GL_READ_ONLY ), format( GL_RGBA8 ), buffer( 0 ),
                 offset( 0 ), sizeBytes( 0 ) {}
@@ -280,8 +280,12 @@ namespace Ogre {
                                         GLenum *stencilFormat );
 
         virtual RenderPassDescriptor* createRenderPassDescriptor(void);
-        virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc );
-        virtual void endRenderPassDescriptor( RenderPassDescriptor *desc );
+        virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc,
+                                                TextureGpu *anyTarget,
+                                                const Vector4 &viewportSize,
+                                                const Vector4 &scissors,
+                                                bool overlaysEnabled );
+        virtual void endRenderPassDescriptor(void);
 
         /// @copydoc RenderSystem::createMultiRenderTarget
         virtual MultiRenderTarget * createMultiRenderTarget(const String & name);
@@ -357,7 +361,7 @@ namespace Ogre {
         /** See
             RenderSystem
         */
-        void _setTexture(size_t unit, bool enabled, TextureGpu *tex);
+        void _setTexture( size_t unit, TextureGpu *tex );
         /// See RenderSystem
         virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set );
         virtual void _setSamplers( uint32 slotStart, const DescriptorSetSampler *set );
@@ -377,10 +381,10 @@ namespace Ogre {
 
         virtual void setUavStartingSlot( uint32 startingSlot );
 
-        virtual void queueBindUAV( uint32 slot, TexturePtr texture,
+        virtual void queueBindUAV( uint32 slot, TextureGpu *texture,
                                    ResourceAccess::ResourceAccess access = ResourceAccess::ReadWrite,
                                    int32 mipmapLevel = 0, int32 textureArrayIndex = 0,
-                                   PixelFormat pixelFormat = PF_UNKNOWN );
+                                   PixelFormatGpu pixelFormat = PFG_UNKNOWN );
         virtual void queueBindUAV( uint32 slot, UavBufferPacked *buffer,
                                    ResourceAccess::ResourceAccess access = ResourceAccess::ReadWrite,
                                    size_t offset = 0, size_t sizeBytes = 0 );
@@ -389,11 +393,11 @@ namespace Ogre {
 
         virtual void flushUAVs(void);
 
-        virtual void _bindTextureUavCS( uint32 slot, Texture *texture,
+        virtual void _bindTextureUavCS( uint32 slot, TextureGpu *texture,
                                         ResourceAccess::ResourceAccess access,
                                         int32 mipmapLevel, int32 textureArrayIndex,
-                                        PixelFormat pixelFormat );
-        virtual void _setTextureCS( uint32 slot, bool enabled, Texture *texPtr );
+                                        PixelFormatGpu pixelFormat );
+        virtual void _setTextureCS( uint32 slot, TextureGpu *texPtr );
         virtual void _setHlmsSamplerblockCS( uint8 texUnit, const HlmsSamplerblock *samplerblock );
 
         /** See

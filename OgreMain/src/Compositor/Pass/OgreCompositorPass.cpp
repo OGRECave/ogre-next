@@ -110,8 +110,8 @@ namespace Ogre
         Vector4 scissors( scLeft, scTop, scWidth, scHeight );
 
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
-        renderSystem->beginRenderPassDescriptor( mRenderPassDesc, vpSize, scissors,
-                                                 mDefinition->mIncludeOverlays );
+        renderSystem->beginRenderPassDescriptor( mRenderPassDesc, mAnyTargetTexture, vpSize,
+                                                 scissors, mDefinition->mIncludeOverlays );
     }
     //-----------------------------------------------------------------------------------
     CompositorPass::~CompositorPass()

@@ -184,7 +184,7 @@ namespace Ogre {
         setContentType(CONTENT_NAMED);
         mTextureLoadFailed = false;
 
-        if (texType == TEX_TYPE_CUBE_MAP)
+        if (texType == TextureTypes::TypeCube)
         {
             // delegate to cubic texture implementation
             setCubicTextureName(name, true);
@@ -225,7 +225,7 @@ namespace Ogre {
         setContentType(CONTENT_NAMED);
         mTextureLoadFailed = false;
 
-        if (texPtr->getTextureType() == TEX_TYPE_CUBE_MAP)
+        if (texPtr->getTextureType() == TextureTypes::TypeCube)
         {
             // delegate to cubic texture implementation
             setCubicTexture(&texPtr, true);
@@ -364,7 +364,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     bool TextureUnitState::is3D(void) const
     {
-        return mTextureType == TEX_TYPE_CUBE_MAP;
+        return mTextureType == TextureTypes::TypeCube;
     }
     //-----------------------------------------------------------------------
     TextureTypes::TextureTypes TextureUnitState::getTextureType(void) const
@@ -1336,7 +1336,7 @@ namespace Ogre {
                     // if cubic or 3D
                     if (mCubic)
                     {
-                        setCubicTextureName(aliasEntry->second, mTextureType == TEX_TYPE_CUBE_MAP);
+                        setCubicTextureName(aliasEntry->second, mTextureType == TextureTypes::TypeCube);
                     }
                     else
                     {

@@ -323,13 +323,13 @@ namespace Ogre {
                 _setVertexTexture(texUnit, tex);
                 // bind nothing to fragment unit (hardware isn't shared but fragment
                 // unit can't be using the same index
-                _setTexture(texUnit, true, 0);
+                _setTexture( texUnit, 0 );
             }
             else
             {
                 // vice versa
                 _setVertexTexture(texUnit, 0);
-                _setTexture(texUnit, true, tex);
+                _setTexture( texUnit, tex );
             }
         }
 
@@ -342,13 +342,13 @@ namespace Ogre {
                 _setGeometryTexture(texUnit, tex);
                 // bind nothing to fragment unit (hardware isn't shared but fragment
                 // unit can't be using the same index
-                _setTexture(texUnit, true, 0);
+                _setTexture(texUnit, 0);
             }
             else
             {
                 // vice versa
                 _setGeometryTexture(texUnit, 0);
-                _setTexture(texUnit, true, tex);
+                _setTexture(texUnit, tex);
             }
         }
 
@@ -361,13 +361,13 @@ namespace Ogre {
                 _setTessellationDomainTexture(texUnit, tex);
                 // bind nothing to fragment unit (hardware isn't shared but fragment
                 // unit can't be using the same index
-                _setTexture(texUnit, true, 0);
+                _setTexture(texUnit, 0);
             }
             else
             {
                 // vice versa
                 _setTessellationDomainTexture(texUnit, 0);
-                _setTexture(texUnit, true, tex);
+                _setTexture(texUnit, tex);
             }
         }
 
@@ -380,13 +380,13 @@ namespace Ogre {
                 _setTessellationHullTexture(texUnit, tex);
                 // bind nothing to fragment unit (hardware isn't shared but fragment
                 // unit can't be using the same index
-                _setTexture(texUnit, true, 0);
+                _setTexture(texUnit, 0);
             }
             else
             {
                 // vice versa
                 _setTessellationHullTexture(texUnit, 0);
-                _setTexture(texUnit, true, tex);
+                _setTexture(texUnit, tex);
             }
         }
 
@@ -394,7 +394,7 @@ namespace Ogre {
         {
             // Shared vertex / fragment textures or no vertex texture support
             // Bind texture (may be blank)
-            _setTexture(texUnit, true, tex);
+            _setTexture(texUnit, tex);
         }
 
         _setHlmsSamplerblock( texUnit, tl.getSamplerblock() );
@@ -523,12 +523,14 @@ namespace Ogre {
     }
     //---------------------------------------------------------------------
     void RenderSystem::beginRenderPassDescriptor( RenderPassDescriptor *desc,
+                                                  TextureGpu *anyTarget,
                                                   const Vector4 &viewportSize,
                                                   const Vector4 &scissors,
                                                   bool overlaysEnabled )
     {
         mCurrentRenderPassDescriptor = desc;
-        mCurrentRenderViewport.setDimensions( viewportSize.x, viewportSize.y,
+        mCurrentRenderViewport.setDimensions( anyTarget,
+                                              viewportSize.x, viewportSize.y,
                                               viewportSize.z, viewportSize.w,
                                               false );
         mCurrentRenderViewport.setScissors( scissors.x, scissors.y, scissors.z, scissors.w );

@@ -320,6 +320,16 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void GL3PlusTextureGpu::_autogenerateMipmaps(void)
+    {
+        if( !mFinalTextureName )
+            return;
+
+        const GLenum texTarget = getGlTextureTarget();
+        OCGE( glBindTexture( texTarget, mFinalTextureName ) );
+        OCGE( glGenerateMipmap( texTarget ) );
+    }
+    //-----------------------------------------------------------------------------------
     void GL3PlusTextureGpu::getSubsampleLocations( vector<Vector2>::type locations )
     {
         locations.reserve( mMsaa );

@@ -226,7 +226,7 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    void NULLRenderSystem::_setTextureCS( uint32 slot, bool enabled, Texture *texPtr )
+    void NULLRenderSystem::_setTextureCS( uint32 slot, TextureGpu *texPtr )
     {
     }
     //-------------------------------------------------------------------------
@@ -266,14 +266,6 @@ namespace Ogre
     RenderPassDescriptor* NULLRenderSystem::createRenderPassDescriptor(void)
     {
         return 0;
-    }
-    //-------------------------------------------------------------------------
-    void NULLRenderSystem::beginRenderPassDescriptor( RenderPassDescriptor *desc )
-    {
-    }
-    //-------------------------------------------------------------------------
-    void NULLRenderSystem::endRenderPassDescriptor( RenderPassDescriptor *desc )
-    {
     }
     //-------------------------------------------------------------------------
     DepthBuffer* NULLRenderSystem::_createDepthBufferFor( RenderTarget *renderTarget,

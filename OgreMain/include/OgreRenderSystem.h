@@ -725,7 +725,7 @@ namespace Ogre
         @param enabled Boolean to turn the unit on/off
         @param texPtr Pointer to the texture to use.
         */
-        virtual void _setTexture(size_t unit, bool enabled,  TextureGpu *texPtr) = 0;
+        virtual void _setTexture( size_t unit, TextureGpu *texPtr ) = 0;
 
         /** Because Ogre doesn't (yet) have the notion of a 'device' or 'GL context',
             this function lets Ogre know which device should be used by providing
@@ -750,9 +750,13 @@ namespace Ogre
                 2. Only once (the whole texture), when the first viewport was set.
         @brief beginRenderPassDescriptor
         @param desc
-        @param viewportSettings
+        @param anyTarget
+            Contains the first valid texture in mRenderPassDesc, to be used for reference
+            (e.g. width, height, etc). Could be colour, depth, stencil, or nullptr.
+        @param viewportSize
         */
         virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc,
+                                                TextureGpu *anyTarget,
                                                 const Vector4 &viewportSize,
                                                 const Vector4 &scissors,
                                                 bool overlaysEnabled );
@@ -826,13 +830,13 @@ namespace Ogre
             OpenGL however, does not make this distinction. Hence once we switch back to
             3D rendering, we need to restore UAVs set via queueBindUAV.
         */
-        virtual void _bindTextureUavCS( uint32 slot, Texture *texture,
+        virtual void _bindTextureUavCS( uint32 slot, TextureGpu *texture,
                                         ResourceAccess::ResourceAccess access,
                                         int32 mipmapLevel, int32 textureArrayIndex,
-                                        PixelFormat pixelFormat ) = 0;
+                                        PixelFormatGpu pixelFormat ) = 0;
 
         /// Binds a regular texture to a Compute Shader.
-        virtual void _setTextureCS( uint32 slot, bool enabled, Texture *texPtr ) = 0;
+        virtual void _setTextureCS( uint32 slot, TextureGpu *texPtr ) = 0;
         virtual void _setHlmsSamplerblockCS( uint8 texUnit, const HlmsSamplerblock *Samplerblock ) = 0;
 
         virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set ) = 0;
