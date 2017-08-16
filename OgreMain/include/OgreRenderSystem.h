@@ -764,6 +764,11 @@ namespace Ogre
                                                 bool overlaysEnabled );
         virtual void endRenderPassDescriptor(void);
 
+    protected:
+        virtual TextureGpu* createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
+                                                  PixelFormatGpu depthBufferFormat );
+
+    public:
         virtual TextureGpu* getDepthBufferFor( TextureGpu *colourTexture, uint16 poolId,
                                                bool preferDepthTexture,
                                                PixelFormatGpu depthBufferFormat );

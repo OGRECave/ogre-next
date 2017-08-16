@@ -51,6 +51,8 @@ THE SOFTWARE.
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreVertexArrayObject.h"
 
+#include "OgreLwString.h"
+
 namespace Ogre {
     //-----------------------------------------------------------------------
     RenderSystem::RenderSystem()
@@ -542,6 +544,32 @@ namespace Ogre {
         mCurrentRenderPassDescriptor = 0;
     }
     //---------------------------------------------------------------------
+    TextureGpu* RenderSystem::createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
+                                                    PixelFormatGpu depthBufferFormat )
+    {
+        uint32 textureFlags = TextureFlags::RenderToTexture;
+
+        if( !preferDepthTexture )
+            textureFlags |= TextureFlags::NotTexture;
+
+        char tmpBuffer[64];
+        LwString depthBufferName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+        depthBufferName.a( "DepthBuffer_", Id::generateNewId<TextureGpu>() );
+
+        TextureGpu *retVal = mTextureGpuManager->createTexture( depthBufferName.c_str(),
+                                                                GpuPageOutStrategy::Discard,
+                                                                textureFlags, TextureTypes::Type2D );
+
+        retVal->setResolution( colourTexture->getWidth(), colourTexture->getHeight() );
+        retVal->setMsaa( colourTexture->getMsaa() );
+        retVal->setMsaaPattern( colourTexture->getMsaaPattern() );
+        retVal->setPixelFormat( depthBufferFormat );
+
+        retVal->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+
+        return retVal;
+    }
+    //---------------------------------------------------------------------
     TextureGpu* RenderSystem::getDepthBufferFor( TextureGpu *colourTexture, uint16 poolId,
                                                  bool preferDepthTexture,
                                                  PixelFormatGpu depthBufferFormat )
@@ -551,9 +579,9 @@ namespace Ogre {
 
         if( poolId == DepthBuffer::POOL_NON_SHAREABLE )
         {
-            TODO_should_this_be_done_here;
-            createUniqueDepthBufferFor( colourTexture, preferDepthTexture, depthBufferFormat );
-            return asd;
+            TextureGpu *retVal = createDepthBufferFor( colourTexture, preferDepthTexture,
+                                                       depthBufferFormat );
+            return retVal;
         }
 
         //Find a depth buffer in the pool
@@ -581,7 +609,8 @@ namespace Ogre {
         //Not found yet? Create a new one!
         if( !retVal )
         {
-            retVal = createDepthBufferFor( colourTexture );
+            retVal = createDepthBufferFor( colourTexture, preferDepthTexture, depthBufferFormat );
+            mDepthBufferPool2[poolId].push_back( retVal );
 
             if( !retVal )
             {

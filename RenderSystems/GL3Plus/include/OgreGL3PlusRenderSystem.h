@@ -288,6 +288,9 @@ namespace Ogre {
                                                 bool overlaysEnabled );
         virtual void endRenderPassDescriptor(void);
 
+        TextureGpu* createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
+                                          PixelFormatGpu depthBufferFormat );
+
         /// @copydoc RenderSystem::createMultiRenderTarget
         virtual MultiRenderTarget * createMultiRenderTarget(const String & name);
 

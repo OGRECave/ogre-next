@@ -854,7 +854,7 @@ namespace Ogre
                     writeValue(quoteWord(pTex->getFrameTextureName(n)));
 
                 //combinedUVW/separateUW
-                if (pTex->getTextureType() == TEX_TYPE_CUBE_MAP)
+                if (pTex->getTextureType() == TextureTypes::TypeCube)
                     writeValue("combinedUVW");
                 else
                     writeValue("separateUV");

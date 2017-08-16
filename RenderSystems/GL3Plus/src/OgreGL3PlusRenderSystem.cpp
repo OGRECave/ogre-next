@@ -964,6 +964,25 @@ namespace Ogre {
         RenderSystem::endRenderPassDescriptor();
     }
     //-----------------------------------------------------------------------------------
+    TextureGpu* GL3PlusRenderSystem::createDepthBufferFor( TextureGpu *colourTexture,
+                                                           bool preferDepthTexture,
+                                                           PixelFormatGpu depthBufferFormat )
+    {
+        if( depthBufferFormat == PFG_UNKNOWN )
+        {
+            //GeForce 8 & 9 series are faster using 24-bit depth buffers. Likely
+            //other HW from that era has the same issue. Assume GL <4.0 is old
+            //HW that prefers 24-bit.
+            if( mDriverVersion.hasMinVersion( 4, 0 ) )
+                depthBufferFormat = PFG_D32_FLOAT_S8X24_UINT;
+            else
+                depthBufferFormat = PFG_D24_UNORM_S8_UINT;
+        }
+
+        return RenderSystem::createDepthBufferFor( colourTexture, preferDepthTexture,
+                                                   depthBufferFormat );
+    }
+    //-----------------------------------------------------------------------------------
     MultiRenderTarget* GL3PlusRenderSystem::createMultiRenderTarget(const String & name)
     {
         MultiRenderTarget *retval = mRTTManager->createMultiRenderTarget(name);

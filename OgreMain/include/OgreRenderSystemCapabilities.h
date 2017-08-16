@@ -283,6 +283,11 @@ namespace Ogre
             }
 
         }
+
+        bool hasMinVersion( int minMajor, int minMinor ) const
+        {
+            return major > minMajor || (major == minMajor && minor >= minMinor);
+        }
     };
 
     /** Enumeration of GPU vendors. */

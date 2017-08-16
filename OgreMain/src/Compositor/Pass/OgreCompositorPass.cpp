@@ -152,14 +152,16 @@ namespace Ogre
             renderPassDesc->mColour[i].allLayers   = rtv->colourAttachments[i].colourAllLayers;
         }
         setupRenderPassTarget( &renderPassDesc->mDepth, rtv->depthAttachment,
-                               renderPassDesc->mColour[0].texture );
+                               renderPassDesc->mColour[0].texture, rtv->depthBufferId,
+                               rtv->preferDepthTexture, rtv->depthBufferFormat );
         renderPassDesc->mDepth.loadAction       = mDefinition->mLoadActionDepth;
         renderPassDesc->mDepth.storeAction      = mDefinition->mStoreActionDepth;
         renderPassDesc->mDepth.clearDepth       = mDefinition->mClearDepth;
         renderPassDesc->mDepth.readOnly         = rtv->depthReadOnly && mDefinition->mReadOnlyDepth;
 
         setupRenderPassTarget( &renderPassDesc->mStencil, rtv->stencilAttachment,
-                               renderPassDesc->mColour[0].texture );
+                               renderPassDesc->mColour[0].texture, rtv->depthBufferId,
+                               rtv->preferDepthTexture, rtv->depthBufferFormat );
         renderPassDesc->mStencil.loadAction     = mDefinition->mLoadActionStencil;
         renderPassDesc->mStencil.storeAction    = mDefinition->mStoreActionStencil;
         renderPassDesc->mStencil.clearStencil   = mDefinition->mClearStencil;
@@ -174,7 +176,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorPass::setupRenderPassTarget( RenderPassTargetBase *renderPassTargetAttachment,
                                                 const RenderTargetViewEntry &rtvEntry,
-                                                TextureGpu *colourAttachment )
+                                                TextureGpu *colourAttachment, uint16 depthBufferId,
+                                                bool preferDepthTexture,
+                                                PixelFormatGpu depthBufferFormat )
     {
         if( colourAttachment )
         {
@@ -183,7 +187,8 @@ namespace Ogre
             {
                 RenderSystem *renderSystem = mParentNode->getRenderSystem();
                 renderPassTargetAttachment->texture =
-                        renderSystem->getDepthBufferFor( colourAttachment );
+                        renderSystem->getDepthBufferFor( colourAttachment, depthBufferId,
+                                                         preferDepthTexture, depthBufferFormat );
             }
             else
             {

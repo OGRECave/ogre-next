@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "OgreHeaderPrefix.h"
 
 #include "Compositor/Pass/OgreCompositorPassDef.h"
+#include "OgrePixelFormatGpu.h"
 
 namespace Ogre
 {
@@ -117,7 +118,9 @@ namespace Ogre
         */
         void setupRenderPassTarget( RenderPassTargetBase *renderPassTargetAttachment,
                                     const RenderTargetViewEntry &rtvEntry,
-                                    TextureGpu *colourAttachment=0 );
+                                    TextureGpu *colourAttachment=0, uint16 depthBufferId = 0,
+                                    bool preferDepthTexture = false,
+                                    PixelFormatGpu depthBufferFormat = PFG_UNKNOWN );
 
         void setRenderPassDescToCurrent(void);
 
