@@ -100,6 +100,44 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
+    void RenderPassDescriptor::checkWarnIfRtvWasFlushed( uint32 entriesToFlush )
+    {
+        bool mustWarn = false;
+
+        for( size_t i=0; i<mNumColourEntries && !mustWarn; ++i )
+        {
+            if( mColour[i].loadAction == LoadAction::Load &&
+                (entriesToFlush & (RenderPassDescriptor::Colour0 << i)) )
+            {
+                mustWarn = true;
+            }
+        }
+
+        if( mDepth.loadAction == LoadAction::Load && mDepth.texture &&
+            (entriesToFlush & RenderPassDescriptor::Depth) )
+        {
+            mustWarn = true;
+        }
+
+        if( mStencil.loadAction == LoadAction::Load && mStencil.texture &&
+            (entriesToFlush & RenderPassDescriptor::Stencil) )
+        {
+            mustWarn = true;
+        }
+
+        if( mustWarn )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                         "RenderTarget is getting flushed sooner than expected. "
+                         "This is a performance and/or correctness warning and "
+                         "the developer explicitly told us to warn you. Disable "
+                         "warn_if_rtv_was_flushed / CompositorPassDef::mWarnIfRtvWasFlushed "
+                         "to ignore this; use a LoadAction::Clear or don't break the two "
+                         "passes with something in the middle that causes the flush.",
+                         "RenderPassDescriptor::warnIfRtvWasFlushed" );
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void RenderPassDescriptor::checkRequiresTextureFlipping(void)
     {
         mRequiresTextureFlipping = false;

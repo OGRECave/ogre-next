@@ -152,9 +152,17 @@ namespace Ogre
     public:
         enum EntryTypes
         {
-            Colour      = 1u << 0u,
-            Depth       = 1u << 1u,
-            Stencil     = 1u << 2u,
+            Colour0     = 1u << 0u,
+            Colour1     = 1u << 1u,
+            Colour2     = 1u << 2u,
+            Colour3     = 1u << 3u,
+            Colour4     = 1u << 4u,
+            Colour5     = 1u << 5u,
+            Colour6     = 1u << 6u,
+            Colour7     = 1u << 7u,
+            Depth       = 1u << 30u,
+            Stencil     = 1u << 31u,
+            Colour      = Colour0|Colour1|Colour2|Colour3|Colour4|Colour5|Colour6|Colour7,
             All         = Colour|Depth|Stencil
         };
 
@@ -166,6 +174,7 @@ namespace Ogre
         uint8                   mNumColourEntries;
         bool                    mRequiresTextureFlipping;
 
+        void checkWarnIfRtvWasFlushed( uint32 entriesToFlush );
         void checkRequiresTextureFlipping(void);
         virtual void colourEntriesModified(void);
 

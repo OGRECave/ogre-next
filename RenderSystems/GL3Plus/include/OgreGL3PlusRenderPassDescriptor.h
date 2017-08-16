@@ -94,10 +94,10 @@ namespace Ogre
         virtual void updateStencilFbo(void);
 
         /// Returns a mask of RenderPassDescriptor::EntryTypes bits set that indicates
-        /// if 'this' and 'other' have different clear colour, depth and/or stencil values.
-        /// If using MRT, if one colour attachment has a different colour, then we consider
-        /// all colours could be different and clear them all.
-        uint32 clearValuesMatch( GL3PlusRenderPassDescriptor *other ) const;
+        /// if 'other' wants to perform clears on colour, depth and/or stencil values.
+        /// If using MRT, each colour is evaluated independently (only the ones marked
+        /// as clear will be cleared).
+        uint32 checkForClearActions( GL3PlusRenderPassDescriptor *other ) const;
 
     public:
         GL3PlusRenderPassDescriptor( GL3PlusRenderSystem *renderSystem );
@@ -108,7 +108,8 @@ namespace Ogre
         virtual void setClearColour( uint8 idx, const ColourValue &clearColour );
         virtual void setClearColour( const ColourValue &clearColour );
 
-        uint32 willSwitchTo( GL3PlusRenderPassDescriptor *newDesc, bool viewportChanged ) const;
+        uint32 willSwitchTo( GL3PlusRenderPassDescriptor *newDesc, bool viewportChanged,
+                             bool warnIfRtvWasFlushed ) const;
 
         void performLoadActions( uint8 blendChannelMask, bool depthWrite, uint32 stencilWriteMask,
                                  uint32 entriesToFlush );

@@ -355,7 +355,7 @@ namespace Ogre
         analyzeClearColour();
     }
     //-----------------------------------------------------------------------------------
-    uint32 GL3PlusRenderPassDescriptor::clearValuesMatch( GL3PlusRenderPassDescriptor *other ) const
+    uint32 GL3PlusRenderPassDescriptor::checkForClearActions( GL3PlusRenderPassDescriptor *other ) const
     {
         uint32 entriesToFlush = 0;
 
@@ -365,28 +365,25 @@ namespace Ogre
         const RenderSystemCapabilities *capabilities = mRenderSystem->getCapabilities();
         const bool isTiler = capabilities->hasCapability( RSC_IS_TILER );
 
-        for( size_t i=0; i<mNumColourEntries && !(entriesToFlush & RenderPassDescriptor::Colour); ++i )
+        for( size_t i=0; i<mNumColourEntries; ++i )
         {
             //this->mColour[i].allLayers doesn't need to be analyzed
             //because it requires a different FBO.
-            if( (other->mColour[i].loadAction == LoadAction::Clear ||
-                 (isTiler && mColour[i].loadAction == LoadAction::ClearOnTilers)) &&
-                this->mColour[i].clearColour != other->mColour[i].clearColour )
+            if( other->mColour[i].loadAction == LoadAction::Clear ||
+                (isTiler && mColour[i].loadAction == LoadAction::ClearOnTilers) )
             {
-                entriesToFlush |= RenderPassDescriptor::Colour;
+                entriesToFlush |= RenderPassDescriptor::Colour0 << i;
             }
         }
 
-        if( (other->mDepth.loadAction == LoadAction::Clear ||
-             (isTiler && mDepth.loadAction == LoadAction::ClearOnTilers)) &&
-            this->mDepth.clearDepth != other->mDepth.clearDepth )
+        if( other->mDepth.loadAction == LoadAction::Clear ||
+            (isTiler && mDepth.loadAction == LoadAction::ClearOnTilers) )
         {
             entriesToFlush |= RenderPassDescriptor::Depth;
         }
 
-        if( (other->mStencil.loadAction == LoadAction::Clear ||
-             (isTiler && mStencil.loadAction == LoadAction::ClearOnTilers)) &&
-            this->mStencil.clearStencil != other->mStencil.clearStencil )
+        if( other->mStencil.loadAction == LoadAction::Clear ||
+            (isTiler && mStencil.loadAction == LoadAction::ClearOnTilers) )
         {
             entriesToFlush |= RenderPassDescriptor::Stencil;
         }
@@ -395,14 +392,18 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     uint32 GL3PlusRenderPassDescriptor::willSwitchTo( GL3PlusRenderPassDescriptor *newDesc,
-                                                      bool viewportChanged ) const
+                                                      bool viewportChanged,
+                                                      bool warnIfRtvWasFlushed ) const
     {
         uint32 entriesToFlush = 0;
 
         if( viewportChanged || !newDesc || this->mFboName != newDesc->mFboName )
             entriesToFlush = RenderPassDescriptor::All;
         else
-            entriesToFlush |= clearValuesMatch( newDesc );
+            entriesToFlush |= checkForClearActions( newDesc );
+
+        if( warnIfRtvWasFlushed )
+            newDesc->checkWarnIfRtvWasFlushed( entriesToFlush );
 
         return entriesToFlush;
     }
@@ -437,9 +438,11 @@ namespace Ogre
 
         GLbitfield flags = 0;
 
+        uint32 fullColourMask = (1u << mNumColourEntries) - 1u;
         if( entriesToFlush & RenderPassDescriptor::Colour )
         {
-            if( mNumColourEntries > 0 && mAllClearColoursSetAndIdentical )
+            if( mNumColourEntries > 0 && mAllClearColoursSetAndIdentical &&
+                (entriesToFlush & fullColourMask) == fullColourMask )
             {
                 //All at the same time
                 flags |= GL_COLOR_BUFFER_BIT;
@@ -465,9 +468,10 @@ namespace Ogre
 
                 for( size_t i=0; i<mNumColourEntries; ++i )
                 {
-                    if( mColour[i].loadAction == LoadAction::Clear ||
-                        (isTiler && (mColour[i].loadAction == LoadAction::DontCare ||
-                                     mColour[i].loadAction == LoadAction::ClearOnTilers)) )
+                    if( (entriesToFlush & (RenderPassDescriptor::Colour0 << i)) &&
+                        (mColour[i].loadAction == LoadAction::Clear ||
+                         (isTiler && (mColour[i].loadAction == LoadAction::DontCare ||
+                                      mColour[i].loadAction == LoadAction::ClearOnTilers))) )
                     {
                         GLfloat clearColour[4];
                         clearColour[0] = mColour[i].clearColour.r;
@@ -515,7 +519,7 @@ namespace Ogre
         }
 
         //Restore state
-        if( (entriesToFlush & RenderPassDescriptor::Colour) &&
+        if( (entriesToFlush & fullColourMask) == fullColourMask &&
             colourMask && mNumColourEntries > 0 &&
             (mAllClearColoursSetAndIdentical || mAnyColourLoadActionsSetToClear) )
         {
@@ -551,34 +555,38 @@ namespace Ogre
         {
             for( size_t i=0; i<mNumColourEntries; ++i )
             {
-                if( (mColour[i].storeAction == StoreAction::MultisampleResolve ||
-                     mColour[i].storeAction == StoreAction::StoreAndMultisampleResolve) &&
-                    mColour[i].resolveTexture )
+                if( entriesToFlush & (RenderPassDescriptor::Colour0 << i) )
                 {
-                    assert( mColour[i].resolveTexture->getResidencyStatus() == GpuResidency::Resident );
-                    assert( dynamic_cast<GL3PlusTextureGpu*>( mColour[i].resolveTexture ) );
-                    GL3PlusTextureGpu *resolveTexture =
-                            static_cast<GL3PlusTextureGpu*>( mColour[i].resolveTexture );
+                    if( (mColour[i].storeAction == StoreAction::MultisampleResolve ||
+                         mColour[i].storeAction == StoreAction::StoreAndMultisampleResolve) &&
+                        mColour[i].resolveTexture )
+                    {
+                        assert( mColour[i].resolveTexture->getResidencyStatus() ==
+                                GpuResidency::Resident );
+                        assert( dynamic_cast<GL3PlusTextureGpu*>( mColour[i].resolveTexture ) );
+                        GL3PlusTextureGpu *resolveTexture =
+                                static_cast<GL3PlusTextureGpu*>( mColour[i].resolveTexture );
 
-                    // Blit from multisample buffer to final buffer, triggers resolve
-                    OCGE( glBindFramebuffer( GL_READ_FRAMEBUFFER, mFboName ) );
-                    OCGE( glBindFramebuffer( GL_DRAW_FRAMEBUFFER, mFboMsaaResolve ) );
-                    OCGE( glFramebufferTextureLayer( GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-                                                     resolveTexture->getFinalTextureName(),
-                                                     mColour[i].resolveMipLevel,
-                                                     mColour[i].resolveSlice ) );
-                    OCGE( glReadBuffer( GL_COLOR_ATTACHMENT0 + i ) );
-                    OCGE( glDrawBuffer( GL_COLOR_ATTACHMENT0 + 0 ) );
-                    OCGE( glBlitFramebuffer( x, y, width, height, x, y, width, height,
-                                             GL_COLOR_BUFFER_BIT, GL_NEAREST ) );
+                        // Blit from multisample buffer to final buffer, triggers resolve
+                        OCGE( glBindFramebuffer( GL_READ_FRAMEBUFFER, mFboName ) );
+                        OCGE( glBindFramebuffer( GL_DRAW_FRAMEBUFFER, mFboMsaaResolve ) );
+                        OCGE( glFramebufferTextureLayer( GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                                         resolveTexture->getFinalTextureName(),
+                                                         mColour[i].resolveMipLevel,
+                                                         mColour[i].resolveSlice ) );
+                        OCGE( glReadBuffer( GL_COLOR_ATTACHMENT0 + i ) );
+                        OCGE( glDrawBuffer( GL_COLOR_ATTACHMENT0 + 0 ) );
+                        OCGE( glBlitFramebuffer( x, y, width, height, x, y, width, height,
+                                                 GL_COLOR_BUFFER_BIT, GL_NEAREST ) );
 
-                    unbindReadDrawFramebuffers = true;
-                }
-                else if( mColour[i].storeAction == StoreAction::DontCare ||
-                         mColour[i].storeAction == StoreAction::MultisampleResolve )
-                {
-                    attachments[numAttachments] = GL_COLOR_ATTACHMENT0 + i;
-                    ++numAttachments;
+                        unbindReadDrawFramebuffers = true;
+                    }
+                    else if( mColour[i].storeAction == StoreAction::DontCare ||
+                             mColour[i].storeAction == StoreAction::MultisampleResolve )
+                    {
+                        attachments[numAttachments] = GL_COLOR_ATTACHMENT0 + i;
+                        ++numAttachments;
+                    }
                 }
             }
         }

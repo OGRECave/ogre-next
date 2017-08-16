@@ -118,7 +118,20 @@ namespace Ogre
         StoreAction::StoreAction mStoreActionDepth;
         StoreAction::StoreAction mStoreActionStencil;
 
-        bool mWarnIfRtvWasReset;
+        /** Will issue a warning (by raising an exception) if Ogre is forced to flush
+            the RenderTarget, which is very bad for performance on mobile, and can
+            cause serious performance problems in Desktop if using MSAA, and also
+            cause correctness problems (i.e. bad rendering) if store action is
+            StoreAction::Resolve.
+        @remarks
+            Flushes are caused by splitting rendering to the same RenderTarget
+            in multiple passes while rendering to a different RenderTarget in the middle.
+            It's not always possible to avoid it, but if so, consider doing it.
+        @par
+            No warning will be issued if the RenderTargets getting flushed have their
+            LoadAction set to LoadAction::Clear (or LoadAction::ClearOnTilers on tilers).
+        */
+        bool mWarnIfRtvWasFlushed;
 
         /// When false will not really bind the RenderTarget for rendering and
         /// use a null colour buffer instead. Useful for depth prepass, or if
@@ -178,7 +191,7 @@ namespace Ogre
             mLoadActionStencil( LoadAction::Load ),
             mStoreActionDepth( StoreAction::StoreAndMultisampleResolve ),
             mStoreActionStencil( StoreAction::StoreAndMultisampleResolve ),
-            mWarnIfRtvWasReset( false ),
+            mWarnIfRtvWasFlushed( false ),
             mColourWrite( true ),
             mReadOnlyDepth( false ),
             mReadOnlyStencil( false ),

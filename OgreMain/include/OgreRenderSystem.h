@@ -764,15 +764,15 @@ namespace Ogre
             Contains the first valid texture in mRenderPassDesc, to be used for reference
             (e.g. width, height, etc). Could be colour, depth, stencil, or nullptr.
         @param viewportSize
-        @param warnIfRtvWasReset
-            See CompositorPassDef::mWarnIfRtvWasReset
+        @param warnIfRtvWasFlushed
+            See CompositorPassDef::mWarnIfRtvWasFlushed
         */
         virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc,
                                                 TextureGpu *anyTarget,
                                                 const Vector4 &viewportSize,
                                                 const Vector4 &scissors,
                                                 bool overlaysEnabled,
-                                                bool warnIfRtvWasReset );
+                                                bool warnIfRtvWasFlushed );
         virtual void endRenderPassDescriptor(void);
 
     protected:

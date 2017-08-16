@@ -290,7 +290,7 @@ namespace Ogre {
                                                 const Vector4 &viewportSize,
                                                 const Vector4 &scissors,
                                                 bool overlaysEnabled,
-                                                bool warnIfRtvWasReset );
+                                                bool warnIfRtvWasFlushed );
         virtual void endRenderPassDescriptor(void);
 
         TextureGpu* createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
