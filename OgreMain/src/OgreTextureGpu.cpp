@@ -463,6 +463,23 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    bool TextureGpu::supportsAsDepthBufferFor( TextureGpu *colourTarget ) const
+    {
+        assert( PixelFormatGpuUtils::isDepth( this->mPixelFormat ) );
+        assert( !PixelFormatGpuUtils::isDepth( colourTarget->mPixelFormat ) );
+
+        if( this->mWidth == colourTarget->mWidth &&
+            this->mHeight == colourTarget->mHeight &&
+            this->getMsaa() == colourTarget->getMsaa() &&
+            this->getMsaaPattern() == colourTarget->getMsaaPattern() &&
+            this->isRenderWindowSpecific() == colourTarget->isRenderWindowSpecific() )
+        {
+            return true;
+        }
+
+        return false;
+    }
+    //-----------------------------------------------------------------------------------
     TextureGpuManager* TextureGpu::getTextureManager(void) const
     {
         return mTextureManager;

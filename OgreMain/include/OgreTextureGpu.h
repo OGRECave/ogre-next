@@ -322,6 +322,10 @@ namespace Ogre
         void removeListener( TextureGpuListener *listener );
         void notifyAllListenersTextureChanged( uint32 reason );
 
+        virtual bool supportsAsDepthBufferFor( TextureGpu *colourTarget ) const;
+
+        virtual void getCustomAttribute( IdString name, void *pData ) {}
+
         TextureGpuManager* getTextureManager(void) const;
 
         TextureBox getEmptyBox( uint8 mipLevel );

@@ -893,6 +893,15 @@ namespace Ogre {
         mRTTManager->getBestDepthStencil( internalColourFormat, depthFormat, stencilFormat );
     }
     //-----------------------------------------------------------------------------------
+    static const IdString CustomAttributeIdString_GLCONTEXT( "GLCONTEXT" );
+    void GL3PlusRenderSystem::_setCurrentDeviceFromTexture( TextureGpu *texture )
+    {
+        GL3PlusContext *newContext = 0;
+        texture->getCustomAttribute( CustomAttributeIdString_GLCONTEXT, &newContext );
+        if( newContext && mCurrentContext != newContext )
+            _switchContext( newContext );
+    }
+    //-----------------------------------------------------------------------------------
     RenderPassDescriptor* GL3PlusRenderSystem::createRenderPassDescriptor(void)
     {
         RenderPassDescriptor *retVal = OGRE_NEW GL3PlusRenderPassDescriptor( this );

@@ -53,8 +53,10 @@ namespace Ogre
     *  @{
     */
 
+    typedef vector<TextureGpu*>::type TextureGpuVec;
     typedef vector<DepthBuffer*>::type DepthBufferVec;
     typedef map< uint16, DepthBufferVec >::type DepthBufferMap;
+    typedef map< uint16, TextureGpuVec >::type DepthBufferMap2;
     typedef map< String, RenderTarget * >::type RenderTargetMap;
 
     class TextureManager;
@@ -762,7 +764,9 @@ namespace Ogre
                                                 bool overlaysEnabled );
         virtual void endRenderPassDescriptor(void);
 
-        virtual TextureGpu* getDepthBufferFor( TextureGpu *colourTexture ) = 0;
+        virtual TextureGpu* getDepthBufferFor( TextureGpu *colourTexture, uint16 poolId,
+                                               bool preferDepthTexture,
+                                               PixelFormatGpu depthBufferFormat );
 
         /** In Direct3D11, UAV & RenderTargets share the same slots. Because of this,
             we enforce the same behavior on all RenderSystems.
@@ -1437,6 +1441,8 @@ namespace Ogre
 
         void destroyAllRenderPassDescriptors(void);
         void cleanReleasedDepthBuffers(void);
+
+        DepthBufferMap2 mDepthBufferPool2;
 
         /** DepthBuffers to be attached to render targets */
         DepthBufferMap  mDepthBufferPool;

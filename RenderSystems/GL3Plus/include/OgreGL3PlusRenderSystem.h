@@ -279,6 +279,7 @@ namespace Ogre {
         void _getDepthStencilFormatFor( GLenum internalColourFormat, GLenum *depthFormat,
                                         GLenum *stencilFormat );
 
+        virtual void _setCurrentDeviceFromTexture( TextureGpu *texture );
         virtual RenderPassDescriptor* createRenderPassDescriptor(void);
         virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc,
                                                 TextureGpu *anyTarget,

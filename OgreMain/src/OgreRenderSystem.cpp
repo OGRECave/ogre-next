@@ -542,6 +542,58 @@ namespace Ogre {
         mCurrentRenderPassDescriptor = 0;
     }
     //---------------------------------------------------------------------
+    TextureGpu* RenderSystem::getDepthBufferFor( TextureGpu *colourTexture, uint16 poolId,
+                                                 bool preferDepthTexture,
+                                                 PixelFormatGpu depthBufferFormat )
+    {
+        if( poolId == DepthBuffer::POOL_NO_DEPTH )
+            return 0; //RenderTarget explicitly requested no depth buffer
+
+        if( poolId == DepthBuffer::POOL_NON_SHAREABLE )
+        {
+            TODO_should_this_be_done_here;
+            createUniqueDepthBufferFor( colourTexture, preferDepthTexture, depthBufferFormat );
+            return asd;
+        }
+
+        //Find a depth buffer in the pool
+        TextureGpuVec::const_iterator itor = mDepthBufferPool2[poolId].begin();
+        TextureGpuVec::const_iterator end  = mDepthBufferPool2[poolId].end();
+
+        TextureGpu *retVal = 0;
+
+        while( itor != end && !retVal )
+        {
+            if( preferDepthTexture == (*itor)->isTexture() &&
+                (depthBufferFormat == PFG_UNKNOWN ||
+                 depthBufferFormat == (*itor)->getPixelFormat()) &&
+                (*itor)->supportsAsDepthBufferFor( colourTexture ) )
+            {
+                retVal = *itor;
+            }
+            else
+            {
+                retVal = 0;
+            }
+            ++itor;
+        }
+
+        //Not found yet? Create a new one!
+        if( !retVal )
+        {
+            retVal = createDepthBufferFor( colourTexture );
+
+            if( !retVal )
+            {
+                LogManager::getSingleton().logMessage( "WARNING: Couldn't create a suited "
+                                                       "DepthBuffer for RTT: " +
+                                                       colourTexture->getNameStr(), LML_CRITICAL );
+            }
+        }
+
+        return retVal;
+    }
+    //---------------------------------------------------------------------
     void RenderSystem::setUavStartingSlot( uint32 startingSlot )
     {
         mUavStartingSlot = startingSlot;
