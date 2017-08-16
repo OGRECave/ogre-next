@@ -31,19 +31,20 @@ THE SOFTWARE.
 #include "OgreGL3PlusRenderPassDescriptor.h"
 
 #include "OgreGL3PlusTextureGpu.h"
+#include "OgreGL3PlusRenderSystem.h"
 
-#include "OgreRenderSystem.h"
 #include "OgreHlmsDatablock.h"
 #include "OgrePixelFormatGpuUtils.h"
 
 namespace Ogre
 {
-    GL3PlusRenderPassDescriptor::GL3PlusRenderPassDescriptor( RenderSystem *renderSystem ) :
+    GL3PlusRenderPassDescriptor::GL3PlusRenderPassDescriptor( GL3PlusRenderSystem *renderSystem ) :
         mFboName( 0 ),
         mFboMsaaResolve( 0 ),
         mAllClearColoursSetAndIdentical( false ),
         mAnyColourLoadActionsSetToClear( false ),
         mHasRenderWindow( false ),
+        mSharedFboItor( renderSystem->_getFrameBufferDescMap().end() ),
         mRenderSystem( renderSystem )
     {
     }
@@ -56,9 +57,16 @@ namespace Ogre
             mFboMsaaResolve = 0;
         }
 
-        if( mFboName )
+        FrameBufferDescMap &frameBufferDescMap = mRenderSystem->_getFrameBufferDescMap();
+        if( mSharedFboItor != frameBufferDescMap.end() )
         {
-            OCGE( glDeleteFramebuffers( 1, &mFboName ) );
+            --mSharedFboItor->second.refCount;
+            if( !mSharedFboItor->second.refCount )
+            {
+                OCGE( glDeleteFramebuffers( 1, &mSharedFboItor->second.fboName ) );
+                frameBufferDescMap.erase( mSharedFboItor );
+            }
+            mSharedFboItor = frameBufferDescMap.end();
             mFboName = 0;
         }
     }
@@ -87,7 +95,7 @@ namespace Ogre
 
             switchToRenderWindow();
         }
-        else if( !mFboName )
+        else
         {
             switchToFBO();
         }
@@ -95,9 +103,16 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void GL3PlusRenderPassDescriptor::switchToRenderWindow(void)
     {
-        if( mFboName )
+        FrameBufferDescMap &frameBufferDescMap = mRenderSystem->_getFrameBufferDescMap();
+        if( mSharedFboItor != frameBufferDescMap.end() )
         {
-            OCGE( glDeleteFramebuffers( 1, &mFboName ) );
+            --mSharedFboItor->second.refCount;
+            if( !mSharedFboItor->second.refCount )
+            {
+                OCGE( glDeleteFramebuffers( 1, &mSharedFboItor->second.fboName ) );
+                frameBufferDescMap.erase( mSharedFboItor );
+            }
+            mSharedFboItor = frameBufferDescMap.end();
             mFboName = 0;
         }
 
@@ -106,19 +121,40 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void GL3PlusRenderPassDescriptor::switchToFBO(void)
     {
-        if( !mFboName )
-        {
-            TODO_share_FBOs;
-            OCGE( glGenFramebuffers( 1, &mFboName ) );
+        FrameBufferDescKey key( *this );
+        FrameBufferDescMap &frameBufferDescMap = mRenderSystem->_getFrameBufferDescMap();
+        FrameBufferDescMap::iterator newItor = frameBufferDescMap.find( key );
 
-            OCGE( glBindFramebuffer( GL_FRAMEBUFFER, mFboName ) );
+        if( newItor == frameBufferDescMap.end() )
+        {
+            FrameBufferDescValue value;
+            value.refCount = 0;
+
+            OCGE( glGenFramebuffers( 1, &value.fboName ) );
+
+            OCGE( glBindFramebuffer( GL_FRAMEBUFFER, value.fboName ) );
 
             //Disable target independent rasterization to let the driver warn us
             //of wrong behavior during regular rendering.
             OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, 0 ) );
             OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, 0 ) );
+            frameBufferDescMap[key] = value;
         }
 
+        ++newItor->second.refCount;
+
+        if( mSharedFboItor != frameBufferDescMap.end() )
+        {
+            --mSharedFboItor->second.refCount;
+            if( !mSharedFboItor->second.refCount )
+            {
+                OCGE( glDeleteFramebuffers( 1, &mSharedFboItor->second.fboName ) );
+                frameBufferDescMap.erase( mSharedFboItor );
+            }
+        }
+
+        mSharedFboItor = newItor;
+        mFboName = mSharedFboItor->second.fboName;
         mHasRenderWindow = false;
     }
     //-----------------------------------------------------------------------------------
@@ -573,4 +609,51 @@ namespace Ogre
             OCGE( glBindFramebuffer( GL_DRAW_FRAMEBUFFER, 0 ) );
         }
     }
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    FrameBufferDescKey::FrameBufferDescKey()
+    {
+        memset( this, 0, sizeof( *this ) );
+    }
+    //-----------------------------------------------------------------------------------
+    FrameBufferDescKey::FrameBufferDescKey( const RenderPassDescriptor &desc )
+    {
+        memset( this, 0, sizeof( *this ) );
+        numColourEntries = desc.getNumColourEntries();
+
+        for( size_t i=0; i<numColourEntries; ++i )
+        {
+            colour[i] = desc.mColour[i];
+            allLayers[i] = desc.mColour[i].allLayers;
+        }
+
+        depth = desc.mDepth;
+        stencil = desc.mStencil;
+    }
+    //-----------------------------------------------------------------------------------
+    bool FrameBufferDescKey::operator < ( const FrameBufferDescKey &other ) const
+    {
+        if( this->numColourEntries != other.numColourEntries )
+            return this->numColourEntries < other.numColourEntries;
+
+        for( size_t i=0; i<numColourEntries; ++i )
+        {
+            if( this->allLayers[i] != other.allLayers[i] )
+                return this->allLayers[i] < other.allLayers[i];
+            if( this->colour[i] != other.colour[i] )
+                return this->colour[i] < other.colour[i];
+        }
+
+        if( this->depth != other.depth )
+            return this->depth < other.depth;
+        if( this->stencil != other.stencil )
+            return this->stencil < other.stencil;
+
+        return false;
+    }
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    FrameBufferDescValue::FrameBufferDescValue() : fboName( 0 ), refCount( 0 ) {}
 }

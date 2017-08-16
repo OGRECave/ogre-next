@@ -119,6 +119,9 @@ namespace Ogre
         StoreAction::StoreAction    storeAction;
 
         RenderPassTargetBase();
+
+        bool operator != ( const RenderPassTargetBase &other ) const;
+        bool operator < ( const RenderPassTargetBase &other ) const;
     };
 
     struct _OgreExport RenderPassColourTarget : RenderPassTargetBase

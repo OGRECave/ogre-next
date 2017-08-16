@@ -38,6 +38,39 @@ namespace Ogre
     {
         memset( this, 0, sizeof(*this) );
     }
+    bool RenderPassTargetBase::operator != ( const RenderPassTargetBase &other ) const
+    {
+        return  this->texture != other.texture ||
+                this->resolveTexture != other.resolveTexture ||
+                this->mipLevel != other.mipLevel ||
+                this->resolveMipLevel != other.resolveMipLevel ||
+                this->slice != other.slice ||
+                this->resolveSlice != other.resolveSlice ||
+                this->loadAction != other.loadAction ||
+                this->storeAction != other.storeAction;
+    }
+    bool RenderPassTargetBase::operator < ( const RenderPassTargetBase &other ) const
+    {
+        if( this->texture != other.texture )
+            return this->texture < other.texture;
+        if( this->resolveTexture != other.resolveTexture )
+            return this->resolveTexture < other.resolveTexture;
+        if( this->mipLevel != other.mipLevel )
+            return this->mipLevel < other.mipLevel;
+        if( this->resolveMipLevel != other.resolveMipLevel )
+            return this->resolveMipLevel < other.resolveMipLevel;
+        if( this->slice != other.slice )
+            return this->slice < other.slice;
+        if( this->resolveSlice != other.resolveSlice )
+            return this->resolveSlice < other.resolveSlice;
+        if( this->loadAction != other.loadAction )
+            return this->loadAction < other.loadAction;
+        if( this->storeAction != other.storeAction )
+            return this->storeAction < other.storeAction;
+
+        return false;
+    }
+
     RenderPassColourTarget::RenderPassColourTarget() :
         RenderPassTargetBase(),
         clearColour( ColourValue::Black ),

@@ -750,18 +750,29 @@ namespace Ogre
             guarantees that each region is cleared:
                 1. Each time the subregion is switched
                 2. Only once (the whole texture), when the first viewport was set.
-        @brief beginRenderPassDescriptor
+        @par
+            When switching between render targets, two beginRenderPassDescriptor
+            in a row automatically implies calls endRenderPassDescriptor.
+            In fact this is faster to perfom than calling beginRenderPassDescriptor -
+            endRenderPassDescriptor in pairs, because we can smartly flush only what
+            needs to be flushed.
+            endRenderPassDescriptor only needs to be called when no other
+            beginRenderPassDescriptor will follow (i.e. at the end of the frame or
+            when starting compute jobs)
         @param desc
         @param anyTarget
             Contains the first valid texture in mRenderPassDesc, to be used for reference
             (e.g. width, height, etc). Could be colour, depth, stencil, or nullptr.
         @param viewportSize
+        @param warnIfRtvWasReset
+            See CompositorPassDef::mWarnIfRtvWasReset
         */
         virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc,
                                                 TextureGpu *anyTarget,
                                                 const Vector4 &viewportSize,
                                                 const Vector4 &scissors,
-                                                bool overlaysEnabled );
+                                                bool overlaysEnabled,
+                                                bool warnIfRtvWasReset );
         virtual void endRenderPassDescriptor(void);
 
     protected:

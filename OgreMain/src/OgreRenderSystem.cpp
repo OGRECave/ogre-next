@@ -528,7 +528,8 @@ namespace Ogre {
                                                   TextureGpu *anyTarget,
                                                   const Vector4 &viewportSize,
                                                   const Vector4 &scissors,
-                                                  bool overlaysEnabled )
+                                                  bool overlaysEnabled,
+                                                  bool warnIfRtvWasReset )
     {
         mCurrentRenderPassDescriptor = desc;
         mCurrentRenderViewport.setDimensions( anyTarget,

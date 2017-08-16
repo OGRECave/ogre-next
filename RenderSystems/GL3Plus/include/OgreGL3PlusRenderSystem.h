@@ -36,6 +36,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreHlmsSamplerblock.h"
 #include "OgreGLSLShader.h"
 #include "OgreGL3PlusPixelFormatToShaderType.h"
+#include "OgreGL3PlusRenderPassDescriptor.h"
 
 namespace Ogre {
     class GL3PlusContext;
@@ -199,6 +200,8 @@ namespace Ogre {
 
         GL3PlusPixelFormatToShaderType mPixelFormatToShaderType;
 
+        FrameBufferDescMap mFrameBufferDescMap;
+
         GLint getTextureAddressingMode(TextureAddressingMode tam) const;
         static GLenum getBlendMode(SceneBlendFactor ogreBlend);
         static GLenum getBlendOperation( SceneBlendOperation op );
@@ -280,12 +283,14 @@ namespace Ogre {
                                         GLenum *stencilFormat );
 
         virtual void _setCurrentDeviceFromTexture( TextureGpu *texture );
+        virtual FrameBufferDescMap& _getFrameBufferDescMap(void)        { return mFrameBufferDescMap; }
         virtual RenderPassDescriptor* createRenderPassDescriptor(void);
         virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc,
                                                 TextureGpu *anyTarget,
                                                 const Vector4 &viewportSize,
                                                 const Vector4 &scissors,
-                                                bool overlaysEnabled );
+                                                bool overlaysEnabled,
+                                                bool warnIfRtvWasReset );
         virtual void endRenderPassDescriptor(void);
 
         TextureGpu* createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,

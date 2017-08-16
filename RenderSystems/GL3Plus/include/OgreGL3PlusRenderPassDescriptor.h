@@ -43,6 +43,32 @@ namespace Ogre
     *  @{
     */
 
+    struct FrameBufferDescKey
+    {
+        uint8                   numColourEntries;
+        bool                    allLayers[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
+        RenderPassTargetBase    colour[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
+        RenderPassTargetBase    depth;
+        RenderPassTargetBase    stencil;
+
+        FrameBufferDescKey();
+        FrameBufferDescKey( const RenderPassDescriptor &desc );
+
+        bool operator < ( const FrameBufferDescKey &other ) const;
+    };
+    struct FrameBufferDescValue
+    {
+        GLuint  fboName;
+        uint16  refCount;
+        FrameBufferDescValue();
+    };
+
+    typedef map<FrameBufferDescKey, FrameBufferDescValue>::type FrameBufferDescMap;
+
+    /** GL3+ will share FBO handles between all GL3PlusRenderPassDescriptor that share the
+        same FBO setup. This doesn't mean these RenderPassDescriptor are exactly the
+        same, as they may have different clear, loadAction or storeAction values.
+    */
     class _OgreGL3PlusExport GL3PlusRenderPassDescriptor : public RenderPassDescriptor
     {
     protected:
@@ -52,21 +78,29 @@ namespace Ogre
         bool    mAnyColourLoadActionsSetToClear;
         bool    mHasRenderWindow;
 
-        RenderSystem    *mRenderSystem;
+        FrameBufferDescMap::iterator mSharedFboItor;
+
+        GL3PlusRenderSystem *mRenderSystem;
 
         void checkRenderWindowStatus(void);
         void switchToRenderWindow(void);
         void switchToFBO(void);
+        /// Sets mAllClearColoursSetAndIdentical & mAnyColourLoadActionsSetToClear
+        /// which can be used for quickly taking fast paths during rendering.
         void analyzeClearColour(void);
 
         virtual void updateColourFbo( uint8 lastNumColourEntries );
         virtual void updateDepthFbo(void);
         virtual void updateStencilFbo(void);
 
+        /// Returns a mask of RenderPassDescriptor::EntryTypes bits set that indicates
+        /// if 'this' and 'other' have different clear colour, depth and/or stencil values.
+        /// If using MRT, if one colour attachment has a different colour, then we consider
+        /// all colours could be different and clear them all.
         uint32 clearValuesMatch( GL3PlusRenderPassDescriptor *other ) const;
 
     public:
-        GL3PlusRenderPassDescriptor( RenderSystem *renderSystem );
+        GL3PlusRenderPassDescriptor( GL3PlusRenderSystem *renderSystem );
         virtual ~GL3PlusRenderPassDescriptor();
 
         virtual void entriesModified( uint32 entryTypes );

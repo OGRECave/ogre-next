@@ -913,15 +913,16 @@ namespace Ogre {
                                                          TextureGpu *anyTarget,
                                                          const Vector4 &viewportSize,
                                                          const Vector4 &scissors,
-                                                         bool overlaysEnabled )
+                                                         bool overlaysEnabled,
+                                                         bool warnIfRtvWasReset )
     {
         const int oldWidth = mCurrentRenderViewport.getActualWidth();
         const int oldHeight = mCurrentRenderViewport.getActualHeight();
         const int oldX = mCurrentRenderViewport.getActualLeft();
         const int oldY = mCurrentRenderViewport.getActualTop();
 
-        RenderSystem::beginRenderPassDescriptor( desc, anyTarget, viewportSize,
-                                                 scissors, overlaysEnabled );
+        RenderSystem::beginRenderPassDescriptor( desc, anyTarget, viewportSize, scissors,
+                                                 overlaysEnabled, warnIfRtvWasReset );
 
         GLsizei x, y, w, h;
 
@@ -948,6 +949,17 @@ namespace Ogre {
 
             if( entriesToFlush != 0 )
             {
+                if( warnIfRtvWasReset )
+                {
+                    OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                                 "RenderTarget is getting flushed sooner than expected. "
+                                 "This is a performance and/or correctness warning and "
+                                 "the developer explicitly told us to warn you. Disable "
+                                 "warn_if_rtv_was_reset / CompositorPassDef::mWarnIfRtvWasReset "
+                                 "to ignore this.",
+                                 "GL3PlusRenderSystem::beginRenderPassDescriptor" );
+                }
+
                 currPassDesc->performStoreActions( mHasArbInvalidateSubdata, oldX, oldY,
                                                    oldWidth, oldHeight, entriesToFlush );
             }
@@ -3314,7 +3326,7 @@ namespace Ogre {
         }
 
         assert( numAttachments && "Bad flags provided" );
-        assert( numAttachments <= sizeof(attachments) / sizeof(attachments[0]) );
+        assert( numAttachments <= (GLsizei)(sizeof(attachments) / sizeof(attachments[0])) );
         glInvalidateFramebuffer( GL_FRAMEBUFFER, numAttachments, attachments );
     }
 

@@ -111,7 +111,8 @@ namespace Ogre
 
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
         renderSystem->beginRenderPassDescriptor( mRenderPassDesc, mAnyTargetTexture, vpSize,
-                                                 scissors, mDefinition->mIncludeOverlays );
+                                                 scissors, mDefinition->mIncludeOverlays,
+                                                 mDefinition->mWarnIfRtvWasReset );
     }
     //-----------------------------------------------------------------------------------
     CompositorPass::~CompositorPass()
