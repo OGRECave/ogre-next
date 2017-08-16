@@ -915,24 +915,57 @@ namespace Ogre {
                                                          const Vector4 &scissors,
                                                          bool overlaysEnabled )
     {
+        const int oldWidth = mCurrentRenderViewport.getActualWidth();
+        const int oldHeight = mCurrentRenderViewport.getActualHeight();
+        const int oldX = mCurrentRenderViewport.getActualLeft();
+        const int oldY = mCurrentRenderViewport.getActualTop();
+
         RenderSystem::beginRenderPassDescriptor( desc, anyTarget, viewportSize,
                                                  scissors, overlaysEnabled );
 
         GLsizei x, y, w, h;
 
-        // Calculate the "lower-left" corner of the viewport
+        // Calculate the new "lower-left" corner of the viewport to compare with the old one
         w = mCurrentRenderViewport.getActualWidth();
         h = mCurrentRenderViewport.getActualHeight();
         x = mCurrentRenderViewport.getActualLeft();
         y = mCurrentRenderViewport.getActualTop();
 
-        if( !desc->requiresTextureFlipping() )
+        const bool vpChanged = oldX != x || oldY != y || oldWidth != w || oldHeight != h;
+
+        GL3PlusRenderPassDescriptor *currPassDesc =
+                static_cast<GL3PlusRenderPassDescriptor*>( mCurrentRenderPassDescriptor );
+        GL3PlusRenderPassDescriptor *newPassDesc =
+                static_cast<GL3PlusRenderPassDescriptor*>( desc );
+
+        //Determine whether:
+        //  1. We need to store current active RenderPassDescriptor
+        //  2. We need to perform clears when loading the new RenderPassDescriptor
+        uint32 entriesToFlush = 0;
+        if( currPassDesc )
         {
-            // Convert "upper-left" corner to "lower-left"
-            y = anyTarget->getHeight() - h - y;
+            entriesToFlush = currPassDesc->willSwitchTo( newPassDesc, vpChanged );
+
+            if( entriesToFlush != 0 )
+            {
+                currPassDesc->performStoreActions( mHasArbInvalidateSubdata, oldX, oldY,
+                                                   oldWidth, oldHeight, entriesToFlush );
+            }
+        }
+        else
+        {
+            entriesToFlush = RenderPassDescriptor::All;
         }
 
-        OCGE( glViewport( x, y, w, h ) );
+        if( vpChanged )
+        {
+            if( !desc->requiresTextureFlipping() )
+            {
+                // Convert "upper-left" corner to "lower-left"
+                y = anyTarget->getHeight() - h - y;
+            }
+            OCGE( glViewport( x, y, w, h ) );
+        }
 
         w = mCurrentRenderViewport.getScissorActualWidth();
         h = mCurrentRenderViewport.getScissorActualHeight();
@@ -948,18 +981,21 @@ namespace Ogre {
         // Configure the viewport clipping
         OCGE( glScissor( x, y, w, h ) );
 
-        //Attachments, actions to do, or viewport settings.
-        TODO_only_perform_load_if_anything_changed;
-
-        GL3PlusRenderPassDescriptor *passDesc = static_cast<GL3PlusRenderPassDescriptor*>( desc );
-        passDesc->performLoadActions( mBlendChannelMask, mDepthWrite, mStencilParams.writeMask );
+        newPassDesc->performLoadActions( mBlendChannelMask, mDepthWrite,
+                                         mStencilParams.writeMask, entriesToFlush );
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusRenderSystem::endRenderPassDescriptor(void)
     {
+        uint32 x, y, w, h;
+        w = mCurrentRenderViewport.getActualWidth();
+        h = mCurrentRenderViewport.getActualHeight();
+        x = mCurrentRenderViewport.getActualLeft();
+        y = mCurrentRenderViewport.getActualTop();
+
         GL3PlusRenderPassDescriptor *passDesc =
                 static_cast<GL3PlusRenderPassDescriptor*>( mCurrentRenderPassDescriptor );
-        passDesc->performStoreActions( mHasArbInvalidateSubdata );
+        passDesc->performStoreActions( mHasArbInvalidateSubdata, x, y, w, h, RenderPassDescriptor::All );
 
         RenderSystem::endRenderPassDescriptor();
     }

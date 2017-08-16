@@ -167,9 +167,7 @@ namespace Ogre
         renderPassDesc->mStencil.clearStencil   = mDefinition->mClearStencil;
         renderPassDesc->mStencil.readOnly       = rtv->stencilReadOnly && mDefinition->mReadOnlyStencil;
 
-        renderPassDesc->colourEntriesModified();
-        renderPassDesc->depthModified();
-        renderPassDesc->stencilModified();
+        renderPassDesc->entriesModified( RenderPassDescriptor::All );
 
         return renderPassDesc;
     }
@@ -543,9 +541,7 @@ namespace Ogre
         if( usedByUs )
         {
             mNumPassesLeft = mDefinition->mNumInitialPasses;
-            mRenderPassDesc->colourEntriesModified();
-            mRenderPassDesc->depthModified();
-            mRenderPassDesc->stencilModified();
+            mRenderPassDesc->entriesModified( RenderPassDescriptor::All );
         }
 
         return usedByUs;

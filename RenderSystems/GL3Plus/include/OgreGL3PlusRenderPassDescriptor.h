@@ -59,26 +59,27 @@ namespace Ogre
         void switchToFBO(void);
         void analyzeClearColour(void);
 
+        virtual void updateColourFbo( uint8 lastNumColourEntries );
+        virtual void updateDepthFbo(void);
+        virtual void updateStencilFbo(void);
+
+        uint32 clearValuesMatch( GL3PlusRenderPassDescriptor *other ) const;
+
     public:
         GL3PlusRenderPassDescriptor( RenderSystem *renderSystem );
         virtual ~GL3PlusRenderPassDescriptor();
 
-        /** Call this when you're done modified mEntries. Note there must be no gaps,
-            e.g. mEntries[1] is empty but mEntries[0] & mEntries[2] are not.
-        @remarks
-            Values that are modified by calling setClearColour et al don't need to call
-            entriesModified.
-            Prefer changing those values using those calls since it's faster.
-        */
-        virtual void colourEntriesModified(void);
-        virtual void depthModified(void);
-        virtual void stencilModified(void);
+        virtual void entriesModified( uint32 entryTypes );
 
         virtual void setClearColour( uint8 idx, const ColourValue &clearColour );
         virtual void setClearColour( const ColourValue &clearColour );
 
-        void performLoadActions( uint8 blendChannelMask, bool depthWrite, uint32 stencilWriteMask );
-        void performStoreActions( bool hasArbInvalidateSubdata );
+        uint32 willSwitchTo( GL3PlusRenderPassDescriptor *newDesc, bool viewportChanged ) const;
+
+        void performLoadActions( uint8 blendChannelMask, bool depthWrite, uint32 stencilWriteMask,
+                                 uint32 entriesToFlush );
+        void performStoreActions( bool hasArbInvalidateSubdata, uint32 x, uint32 y,
+                                  uint32 width, uint32 height, uint32 entriesToFlush );
     };
 
     /** @} */

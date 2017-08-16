@@ -94,7 +94,6 @@ namespace Ogre
                mColour[mNumColourEntries].texture )
         {
             const RenderPassColourTarget &colourEntry = mColour[mNumColourEntries];
-            TextureGpu *texture = colourEntry.texture;
 
             if( colourEntry.storeAction == StoreAction::MultisampleResolve &&
                 !colourEntry.resolveTexture )
@@ -116,7 +115,7 @@ namespace Ogre
                                  "RenderPassDescriptor::colourEntriesModified" );
                 }
                 if( colourEntry.resolveTexture == colourEntry.texture &&
-                    colourEntry.mipLevel != 0 || colourEntry.slice != 0 )
+                    (colourEntry.mipLevel != 0 || colourEntry.slice != 0) )
                 {
                     OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                                  "MSAA textures can only render to mipLevel 0 and slice 0 "
@@ -141,13 +140,12 @@ namespace Ogre
         checkRequiresTextureFlipping();
     }
     //-----------------------------------------------------------------------------------
-    void RenderPassDescriptor::depthModified(void)
+    void RenderPassDescriptor::entriesModified( uint32 entryTypes )
     {
-        checkRequiresTextureFlipping();
-    }
-    //-----------------------------------------------------------------------------------
-    void RenderPassDescriptor::stencilModified(void)
-    {
+        assert( (entryTypes & RenderPassDescriptor::All) != 0 );
+
+        if( entryTypes & RenderPassDescriptor::Colour )
+            colourEntriesModified();
         checkRequiresTextureFlipping();
     }
     //-----------------------------------------------------------------------------------

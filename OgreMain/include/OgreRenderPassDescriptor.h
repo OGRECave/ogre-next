@@ -147,6 +147,14 @@ namespace Ogre
     class _OgreExport RenderPassDescriptor : public RenderSysAlloc
     {
     public:
+        enum EntryTypes
+        {
+            Colour      = 1u << 0u,
+            Depth       = 1u << 1u,
+            Stencil     = 1u << 2u,
+            All         = Colour|Depth|Stencil
+        };
+
         RenderPassColourTarget  mColour[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
         RenderPassDepthTarget   mDepth;
         RenderPassStencilTarget mStencil;
@@ -156,6 +164,7 @@ namespace Ogre
         bool                    mRequiresTextureFlipping;
 
         void checkRequiresTextureFlipping(void);
+        virtual void colourEntriesModified(void);
 
     public:
         RenderPassDescriptor();
@@ -167,10 +176,10 @@ namespace Ogre
             Values that are modified by calling setClearColour et al don't need to call
             *entriesModified.
             Prefer changing those values using those calls since it's faster.
+        @param entryTypes
+            Bitmask. See EntryTypes
         */
-        virtual void colourEntriesModified(void);
-        virtual void depthModified(void);
-        virtual void stencilModified(void);
+        virtual void entriesModified( uint32 entryTypes );
 
         /// Sets the clear colour to specific entry.
         virtual void setClearColour( uint8 idx, const ColourValue &clearColour );
