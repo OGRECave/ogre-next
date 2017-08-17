@@ -974,8 +974,6 @@ namespace Ogre
         HlmsCache retVal = Hlms::preparePassHashBase( shadowNode, casterPass,
                                                       dualParaboloid, sceneManager );
 
-        RenderTarget *renderTarget = sceneManager->getCurrentViewport()->getTarget();
-
         const RenderSystemCapabilities *capabilities = mRenderSystem->getCapabilities();
         setProperty( PbsProperty::HwGammaRead, capabilities->hasCapability( RSC_HW_GAMMA ) );
 //        setProperty( PbsProperty::HwGammaWrite, capabilities->hasCapability( RSC_HW_GAMMA ) &&
@@ -989,8 +987,9 @@ namespace Ogre
         Matrix4 viewMatrix = camera->getViewMatrix(true);
 
         Matrix4 projectionMatrix = camera->getProjectionMatrixWithRSDepth();
+        RenderPassDescriptor *renderPassDesc = mRenderSystem->getCurrentPassDescriptor();
 
-        if( renderTarget->requiresTextureFlipping() )
+        if( renderPassDesc->requiresTextureFlipping() )
         {
             projectionMatrix[1][0] = -projectionMatrix[1][0];
             projectionMatrix[1][1] = -projectionMatrix[1][1];
@@ -1145,6 +1144,8 @@ namespace Ogre
         mPreparedPass.viewMatrix        = viewMatrix;
 
         mPreparedPass.shadowMaps.clear();
+
+        TextureGpu *renderTarget = mRenderSystem->_getViewport()->getCurrentTarget();
 
         if( !casterPass )
         {
@@ -1606,21 +1607,21 @@ namespace Ogre
                 if( !mPrePassTextures->empty() )
                 {
                     *commandBuffer->addCommand<CbTexture>() =
-                            CbTexture( texUnit++, true, (*mPrePassTextures)[0], 0 );
+                            CbTexture( texUnit++, (*mPrePassTextures)[0], 0 );
                     *commandBuffer->addCommand<CbTexture>() =
-                            CbTexture( texUnit++, true, (*mPrePassTextures)[1], 0 );
+                            CbTexture( texUnit++, (*mPrePassTextures)[1], 0 );
                 }
 
                 if( mPrePassMsaaDepthTexture )
                 {
                     *commandBuffer->addCommand<CbTexture>() =
-                            CbTexture( texUnit++, true, mPrePassMsaaDepthTexture, 0 );
+                            CbTexture( texUnit++, mPrePassMsaaDepthTexture, 0 );
                 }
 
                 if( mSsrTexture )
                 {
                     *commandBuffer->addCommand<CbTexture>() =
-                            CbTexture( texUnit++, true, mSsrTexture, 0 );
+                            CbTexture( texUnit++, mSsrTexture, 0 );
                 }
 
                 if( mIrradianceVolume )
@@ -1628,7 +1629,7 @@ namespace Ogre
                     TextureGpu *irradianceTex = mIrradianceVolume->getIrradianceVolumeTexture();
                     const HlmsSamplerblock *samplerblock = mIrradianceVolume->getIrradSamplerblock();
 
-                    *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit, true,
+                    *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit,
                                                                          irradianceTex,
                                                                          samplerblock );
                     ++texUnit;
@@ -1639,7 +1640,7 @@ namespace Ogre
                 FastArray<TextureGpu*>::const_iterator end  = mPreparedPass.shadowMaps.end();
                 while( itor != end )
                 {
-                    *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit, true, *itor,
+                    *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit, *itor,
                                                                          mCurrentShadowmapSamplerblock );
                     ++texUnit;
                     ++itor;
@@ -1650,7 +1651,7 @@ namespace Ogre
                     TextureGpu *pccTexture = mParallaxCorrectedCubemap->getBlendCubemap();
                     const HlmsSamplerblock *samplerblock =
                             mParallaxCorrectedCubemap->getBlendCubemapTrilinearSamplerblock();
-                    *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit, true, pccTexture,
+                    *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit, pccTexture,
                                                                          samplerblock );
                     ++texUnit;
                 }
@@ -1911,7 +1912,7 @@ namespace Ogre
                 const uint8 activeActorIdx = queuedRenderable.renderable->mCustomParameter & 0x7F;
                 TexturePtr planarReflTex = mPlanarReflections->getTexture( activeActorIdx );
                 *commandBuffer->addCommand<CbTexture>() =
-                        CbTexture( mTexUnitSlotStart - 1u, true, planarReflTex.get(),
+                        CbTexture( mTexUnitSlotStart - 1u, planarReflTex,
                                    mPlanarReflectionsSamplerblock );
                 mLastBoundPlanarReflection = queuedRenderable.renderable->mCustomParameter;
             }
@@ -1989,7 +1990,7 @@ namespace Ogre
             if( !mPrePassTextures->empty() )
                 texUnit += 2;
 
-            mRenderSystem->_setTexture( texUnit, false, 0 );
+            mRenderSystem->_setTexture( texUnit, 0 );
         }
     }
     //-----------------------------------------------------------------------------------

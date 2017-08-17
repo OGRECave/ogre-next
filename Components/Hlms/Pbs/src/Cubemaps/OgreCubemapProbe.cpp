@@ -28,6 +28,7 @@ THE SOFTWARE.
 
 #include "OgreStableHeaders.h"
 
+#if TODO_OGRE_2_2
 #include "Cubemaps/OgreCubemapProbe.h"
 #include "Cubemaps/OgreParallaxCorrectedCubemap.h"
 
@@ -57,7 +58,7 @@ namespace Ogre
         mOrientation( Matrix3::IDENTITY ),
         mInvOrientation( Matrix3::IDENTITY ),
         mProbeShape( Aabb::BOX_NULL ),
-        mFsaa( 1 ),
+        mMsaa( 1u ),
         mClearWorkspace( 0 ),
         mWorkspace( 0 ),
         mCamera( 0 ),
@@ -124,15 +125,15 @@ namespace Ogre
     void CubemapProbe::destroyTexture(void)
     {
         assert( !mWorkspace );
-        if( !mTexture.isNull() )
+        if( mTexture )
         {
             TextureManager::getSingleton().remove( mTexture->getHandle() );
-            mTexture.setNull();
+            mTexture = 0;
         }
     }
     //-----------------------------------------------------------------------------------
     void CubemapProbe::setTextureParams( uint32 width, uint32 height, bool useManual,
-                                         PixelFormat pf, bool isStatic, uint8 fsaa )
+                                         PixelFormatGpu pf, bool isStatic, uint8 msaa )
     {
         float cameraNear = 0.5;
         float cameraFar = 1000;
@@ -172,13 +173,13 @@ namespace Ogre
         const uint numMips = PixelUtil::getMaxMipmapCount( width, height, 1 );
 #endif
 
-        mFsaa = fsaa;
-        fsaa = isStatic ? 0 : fsaa;
+        mMsaa = msaa;
+        msaa = isStatic ? 0 : msaa;
 
         mTexture = TextureManager::getSingleton().createManual(
                     texName.c_str(), ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
                     TEX_TYPE_CUBE_MAP, width, height, numMips,
-                    pf, flags, 0, true, fsaa );
+                    pf, flags, 0, true, msaa );
         mStatic = isStatic;
         mDirty = true;
 
@@ -188,7 +189,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CubemapProbe::initWorkspace( float cameraNear, float cameraFar, IdString workspaceDefOverride )
     {
-        assert( !mTexture.isNull() && "Call setTextureParams first!" );
+        assert( mTexture != 0 && "Call setTextureParams first!" );
 
         destroyWorkspace();
 
@@ -200,14 +201,14 @@ namespace Ogre
 
         mWorkspaceDefName = workspaceDef->getName();
         SceneManager *sceneManager = mCreator->getSceneManager();
-        mCamera = sceneManager->createCamera( mTexture->getName(), true, true );
+        mCamera = sceneManager->createCamera( mTexture->getNameStr(), true, true );
         mCamera->setFOVy( Degree(90) );
         mCamera->setAspectRatio( 1 );
         mCamera->setFixedYawAxis(false);
         mCamera->setNearClipDistance( cameraNear );
         mCamera->setFarClipDistance( cameraFar );
 
-        TexturePtr rtt = mTexture;
+        TextureGpu *rtt = mTexture;
         if( mStatic )
         {
 #if !USE_RTT_DIRECTLY
@@ -222,11 +223,7 @@ namespace Ogre
             mCamera->setLightCullingVisibility( true, true );
         }
 
-        CompositorChannel channel;
-        channel.target = rtt->getBuffer()->getRenderTarget();
-        channel.textures.push_back( rtt );
-        CompositorChannelVec channels( 1, channel );
-
+        CompositorChannelVec channels( 1, rtt );
         mWorkspace = compositorManager->addWorkspace( sceneManager, channels, mCamera,
                                                       mWorkspaceDefName, false );
 
@@ -277,10 +274,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CubemapProbe::setStatic( bool isStatic )
     {
-        if( mStatic != isStatic && !mTexture.isNull() )
+        if( mStatic != isStatic && mTexture )
         {
             setTextureParams( mTexture->getWidth(), mTexture->getHeight(), mTexture->getNumMipmaps() > 0,
-                              mTexture->getFormat(), isStatic, mTexture->getFSAA() );
+                              mTexture->getPixelFormat(), isStatic, mTexture->getMsaa() );
         }
         else
         {
@@ -389,3 +386,4 @@ namespace Ogre
         }
     }
 }
+#endif

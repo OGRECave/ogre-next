@@ -169,6 +169,8 @@ namespace Ogre {
         void setDimensions( TextureGpu *newTarget, Real left, Real top, Real width, Real height,
                             bool overrideScissors=true );
 
+        TextureGpu* getCurrentTarget(void) const        { return mCurrentTarget; }
+
         /** Only sets the scissor regions. The scissor rectangle must be fully inside
             the viewport rectangle. @See setDimensions for param description
         @remarks

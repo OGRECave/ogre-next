@@ -33,8 +33,10 @@ THE SOFTWARE.
 #include "OgreHlmsPbs.h"
 #include "OgreHlmsManager.h"
 
-#include "OgreTextureManager.h"
-#include "OgreHardwarePixelBuffer.h"
+#include "OgreTextureGpuManager.h"
+#include "OgreStagingTexture.h"
+
+#include "OgreLwString.h"
 
 namespace Ogre
 {
@@ -260,12 +262,19 @@ namespace Ogre
         mSlicePitch = mRowPitch * height;
 
         //const uint32 maxMipCount = PixelUtil::getMaxMipmapCount( width, height, depth );
-        const uint32 maxMipCount = 0; //TODO?
+        //const uint32 maxMipCount = 0; //TODO?
 
-        mIrradianceVolume = TextureManager::getSingleton().createManual(
-                    "InstantRadiosity_IrradianceVolume",
-                    ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                    TEX_TYPE_3D, width, height, depth, maxMipCount, PF_A2R10G10B10, TU_DEFAULT );
+        char tmpBuffer[64];
+        LwString texName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+        texName.a( "InstantRadiosity_IrradianceVolume", Id::generateNewId<IrradianceVolume>() );
+
+        TextureGpuManager *textureManager = mHlmsManager->getRenderSystem()->getTextureGpuManager();
+        mIrradianceVolume = textureManager->createTexture( texName.c_str(), GpuPageOutStrategy::Discard,
+                                                           0, TextureTypes::Type3D );
+        mIrradianceVolume->setResolution( width, height, depth );
+        mIrradianceVolume->setPixelFormat( PFG_R10G10B10A2_UNORM );
+        //mIrradianceVolume->setNumMipmaps( maxMipCount );
+        //mIrradianceVolume->_transitionTo( GpuResidency::Resident, (uint8*)0 );
 
         HlmsSamplerblock samplerblock;
         samplerblock.mMinFilter = FO_LINEAR;
@@ -278,10 +287,11 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void IrradianceVolume::destroyIrradianceVolumeTexture()
     {
-        if( !mIrradianceVolume.isNull() )
+        if( mIrradianceVolume )
         {
-            TextureManager::getSingleton().remove( mIrradianceVolume->getHandle() );
-            mIrradianceVolume.setNull();
+            TextureGpuManager *textureManager = mHlmsManager->getRenderSystem()->getTextureGpuManager();
+            textureManager->destroyTexture( mIrradianceVolume );
+            mIrradianceVolume = 0;
         }
 
         if( mIrradianceSamplerblock )
@@ -315,9 +325,9 @@ namespace Ogre
     {
         freeMemory();
 
-        if (mIrradianceVolume)
+        if( mIrradianceVolume )
         {
-            const int32 texWidth = static_cast<int32>(mIrradianceVolume->getWidth());
+            const int32 texWidth = static_cast<int32>( mIrradianceVolume->getWidth() );
             const int32 texHeight = static_cast<int32>( mIrradianceVolume->getHeight() );
             const int32 texDepth  = static_cast<int32>( mIrradianceVolume->getDepth() );
 
@@ -340,33 +350,49 @@ namespace Ogre
 
         gaussFilter( mBlurredVolumeData, mVolumeData, texWidth, texHeight, texDepth );
 
-        const PixelBox &lockBox = mIrradianceVolume->getBuffer()->lock(
-                            Box( 0, 0, 0, texWidth, texHeight, texDepth ), v1::HardwareBuffer::HBL_NORMAL );
+        TextureGpuManager *textureManager = mHlmsManager->getRenderSystem()->getTextureGpuManager();
 
-        const size_t bytesPerPixel = PixelUtil::getNumElemBytes( mIrradianceVolume->getFormat() );
-        const size_t texRowPitch = lockBox.rowPitchAlwaysBytes();
-        const size_t texSlicePitch = lockBox.slicePitchAlwaysBytes();
+        StagingTexture *stagingTexture =
+                textureManager->getStagingTexture( mIrradianceVolume->getWidth(),
+                                                   mIrradianceVolume->getHeight(),
+                                                   mIrradianceVolume->getDepth(),
+                                                   mIrradianceVolume->getNumSlices(),
+                                                   mIrradianceVolume->getPixelFormat(), 100u );
 
-        uint8 * RESTRICT_ALIAS dstData = reinterpret_cast<uint8 * RESTRICT_ALIAS>( lockBox.data );
+        stagingTexture->startMapRegion();
+        TextureBox dstBox = stagingTexture->mapRegion( mIrradianceVolume->getWidth(),
+                                                       mIrradianceVolume->getHeight(),
+                                                       mIrradianceVolume->getDepth(),
+                                                       mIrradianceVolume->getNumSlices(),
+                                                       mIrradianceVolume->getPixelFormat() );
 
-        const size_t rowPitch = texWidth * 3u;
+        const size_t bytesPerPixel = dstBox.bytesPerPixel;
+
+        const size_t rowPitch   = texWidth * 3u;
         const size_t slicePitch = rowPitch * texHeight;
 
         for (size_t z = 0; z<(size_t)texDepth; ++z)
         {
             for( size_t y=0; y<(size_t)texHeight; ++y )
             {
+                uint8 * RESTRICT_ALIAS dstData =
+                        reinterpret_cast<uint8 * RESTRICT_ALIAS>( dstBox.at( 0, y, z ) );
                 for( size_t x=0; x<(size_t)texWidth; ++x )
                 {
                     const size_t srcIdx = z * slicePitch + y * rowPitch + x * 3u;
-                    const size_t dstIdx = z * texSlicePitch + y * texRowPitch + x * bytesPerPixel;
-                    PixelUtil::packColour( mBlurredVolumeData[srcIdx+0], mBlurredVolumeData[srcIdx+1],
-                                           mBlurredVolumeData[srcIdx+2], 1.0f,
-                                           PF_A2R10G10B10, &dstData[dstIdx] );
+                    const size_t dstIdx = x * bytesPerPixel;
+                    float rgba[4];
+                    rgba[0] = mBlurredVolumeData[srcIdx+0];
+                    rgba[1] = mBlurredVolumeData[srcIdx+1];
+                    rgba[2] = mBlurredVolumeData[srcIdx+2];
+                    rgba[3] = 1.0f;
+                    PixelFormatGpuUtils::packColour( rgba, PFG_R10G10B10A2_UNORM, &dstData[dstIdx] );
                 }
             }
         }
 
-        mIrradianceVolume->getBuffer()->unlock();
+        stagingTexture->stopMapRegion();
+        stagingTexture->upload( dstBox, mIrradianceVolume, 0 );
+        textureManager->removeStagingTexture( stagingTexture );
     }
 }

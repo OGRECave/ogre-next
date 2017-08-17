@@ -536,11 +536,11 @@ namespace Ogre
             }
         }
 
-        RenderTarget *renderTarget = sceneManager->getCurrentViewport()->getTarget();
+        RenderPassDescriptor *renderPassDesc = mRenderSystem->getCurrentPassDescriptor();
         setProperty( HlmsBaseProp::ShadowUsesDepthTexture,
-                     renderTarget->getForceDisableColourWrites() ? 1 : 0 );
+                     (renderPassDesc->getNumColourEntries() > 0) ? 1 : 0 );
         setProperty( HlmsBaseProp::RenderDepthOnly,
-                     renderTarget->getForceDisableColourWrites() ? 1 : 0 );
+                     (renderPassDesc->getNumColourEntries() > 0) ? 1 : 0 );
 
         Camera *camera = sceneManager->getCameraInProgress();
         if( camera && camera->isReflected() )
@@ -576,7 +576,7 @@ namespace Ogre
         mRenderSystem->_convertProjectionMatrix( Matrix4::IDENTITY,
                                                  identityProjMat, true );
 
-        if( renderTarget->requiresTextureFlipping() )
+        if( renderPassDesc->requiresTextureFlipping() )
         {
             projectionMatrix[1][0]  = -projectionMatrix[1][0];
             projectionMatrix[1][1]  = -projectionMatrix[1][1];
@@ -702,6 +702,7 @@ namespace Ogre
             }
         }
 
+        TextureGpu *renderTarget = mRenderSystem->_getViewport()->getCurrentTarget();
         //vec4 invWindowSize;
         *passBufferPtr++ = 1.0f / (float)renderTarget->getWidth();
         *passBufferPtr++ = 1.0f / (float)renderTarget->getHeight();

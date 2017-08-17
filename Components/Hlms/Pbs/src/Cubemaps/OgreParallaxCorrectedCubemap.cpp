@@ -28,6 +28,7 @@ THE SOFTWARE.
 
 #include "OgreStableHeaders.h"
 
+#if TODO_OGRE_2_2
 #include "Cubemaps/OgreParallaxCorrectedCubemap.h"
 
 #include "Compositor/OgreCompositorManager2.h"
@@ -1286,3 +1287,4 @@ namespace Ogre
             this->updateRender();
     }
 }
+#endif

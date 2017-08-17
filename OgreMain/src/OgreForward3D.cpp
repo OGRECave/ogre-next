@@ -409,7 +409,7 @@ namespace Ogre
         return (1 + mNumSlices) * 4 * 4;
     }
     //-----------------------------------------------------------------------------------
-    void Forward3D::fillConstBufferData( RenderTarget *renderTarget,
+    void Forward3D::fillConstBufferData( TextureGpu *renderTarget,
                                          float * RESTRICT_ALIAS passBufferPtr ) const
     {
         //vec4 f3dData;

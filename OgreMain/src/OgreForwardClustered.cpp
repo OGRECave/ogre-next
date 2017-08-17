@@ -614,8 +614,8 @@ namespace Ogre
         return (4 + 4) * 4;
     }
     //-----------------------------------------------------------------------------------
-    void ForwardClustered::fillConstBufferData( RenderTarget *renderTarget,
-                                         float * RESTRICT_ALIAS passBufferPtr ) const
+    void ForwardClustered::fillConstBufferData( TextureGpu *renderTarget,
+                                                float * RESTRICT_ALIAS passBufferPtr ) const
     {
         const float renderTargetWidth = static_cast<float>( renderTarget->getWidth() );
         const float renderTargetHeight = static_cast<float>( renderTarget->getHeight() );

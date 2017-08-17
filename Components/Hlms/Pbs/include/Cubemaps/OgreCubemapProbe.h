@@ -32,8 +32,7 @@ THE SOFTWARE.
 #include "OgreVector3.h"
 #include "Math/Simple/OgreAabb.h"
 #include "OgreIdString.h"
-#include "OgrePixelFormat.h"
-#include "OgreTexture.h"
+#include "OgreTextureGpu.h"
 #include "OgreHeaderPrefix.h"
 
 //It's slightly more accurate if we render the cubemaps and generate the cubemaps, then blend.
@@ -61,8 +60,8 @@ namespace Ogre
         /// The general shape this probe is supposed to represent.
         Aabb    mProbeShape;
 
-        TexturePtr  mTexture;
-        uint8       mFsaa;
+        TextureGpu  *mTexture;
+        uint8       mMsaa;
 
         IdString            mWorkspaceDefName;
         CompositorWorkspace *mClearWorkspace;
@@ -114,14 +113,14 @@ namespace Ogre
         @param pf
         @param isStatic
             Set to False if it should be updated every frame. True if only updated when dirty
-        @param fsaa
+        @param msaa
         @param useManual
             Set to true if you plan on using thie probe for manually rendering, so we keep
             mipmaps at the probe level. User is responsible for supplying a workspace
             definition that will generate mipmaps though!
         */
         void setTextureParams( uint32 width, uint32 height, bool useManual=false,
-                               PixelFormat pf=PF_A8B8G8R8, bool isStatic=true, uint8 fsaa=0 );
+                               PixelFormatGpu pf=PFG_RGBA8_UNORM_SRGB, bool isStatic=true, uint8 msaa=0 );
 
         /** Initializes the workspace so we can actually render to the cubemap.
             You must call setTextureParams first.
@@ -186,7 +185,7 @@ namespace Ogre
         const Matrix3& getOrientation(void) const           { return mOrientation; }
         const Aabb& getProbeShape(void) const               { return mProbeShape; }
 
-        TexturePtr getInternalTexture(void) const           { return mTexture; }
+        TextureGpu* getInternalTexture(void) const          { return mTexture; }
         void _addReference(void);
         void _removeReference(void);
 
