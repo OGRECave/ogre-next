@@ -70,8 +70,6 @@ namespace Ogre
         mIsTopLevel( false ),
         mIsExternal( false ),
         mIsExternalGLControl( false ),
-        mLeft( 0 ),
-        mTop( 0 ),
         mGLSupport( glsupport ),
         mWindow( 0 ),
         mContext( 0 )
@@ -523,17 +521,17 @@ namespace Ogre
 
         mLeft = left;
         mTop = top;
-//        mActive = true;
+        mFocused = true;
         mClosed = false;
     }
     //-----------------------------------------------------------------------------------
     void GLXWindow::destroy(void)
     {
-        if (mClosed)
+        if( mClosed )
             return;
 
         mClosed = true;
-//        mActive = false;
+        mFocused = false;
 
         if( !mIsExternal )
             WindowEventUtilities::_removeRenderWindow(this);
@@ -542,6 +540,7 @@ namespace Ogre
         {
             mGLSupport->switchMode();
             switchFullScreen( false );
+            mRequestedFullscreenMode = false;
         }
     }
 

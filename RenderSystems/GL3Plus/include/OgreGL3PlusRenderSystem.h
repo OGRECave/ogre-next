@@ -249,7 +249,7 @@ namespace Ogre {
         /** See
             RenderSystem
         */
-        RenderWindow* _initialise(bool autoCreateWindow, const String& windowTitle = "OGRE Render Window");
+        Window* _initialise( bool autoCreateWindow, const String& windowTitle = "OGRE Render Window" );
         /** See
             RenderSystem
         */
@@ -268,12 +268,12 @@ namespace Ogre {
         void shutdown(void);
 
         /// @copydoc RenderSystem::_createRenderWindow
-        RenderWindow* _createRenderWindow(const String &name, unsigned int width, unsigned int height,
-                                          bool fullScreen, const NameValuePairList *miscParams = 0);
+        Window *_createRenderWindow( const String &name, uint32 width, uint32 height,
+                                     bool fullScreen, const NameValuePairList *miscParams = 0 );
 
         /// @copydoc RenderSystem::_createRenderWindows
-        bool _createRenderWindows(const RenderWindowDescriptionList& renderWindowDescriptions,
-                                  RenderWindowList& createdWindows);
+        bool _createRenderWindows( const RenderWindowDescriptionList &renderWindowDescriptions,
+                                   WindowList &createdWindows );
 
         /// @copydoc RenderSystem::_createDepthBufferFor
         DepthBuffer* _createDepthBufferFor( RenderTarget *renderTarget, bool exactMatchFormat );
@@ -538,7 +538,7 @@ namespace Ogre {
             only need to be set once, like the LightingModel can be defined here.
         */
         void _oneTimeContextInitialization();
-        void initialiseContext(RenderWindow* primary);
+        void initialiseContext( Window *primary );
         /**
          * Set current render target to target, enabling its GL context if needed
          */

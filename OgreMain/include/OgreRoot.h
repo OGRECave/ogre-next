@@ -110,7 +110,7 @@ namespace Ogre
 
         FrameStats* mFrameStats;
         Timer* mTimer;
-        RenderWindow* mAutoWindow;
+        Window* mAutoWindow;
         Profiler* mProfiler;
         HighLevelGpuProgramManager* mHighLevelGpuProgramManager;
         ExternalTextureSourceManager* mExternalTextureSourceManager;
@@ -339,8 +339,8 @@ namespace Ogre
                 A pointer to the automatically created window, if
                 requested, otherwise <b>NULL</b>.
         */
-        RenderWindow* initialise(bool autoCreateWindow, const String& windowTitle = "OGRE Render Window",
-                                    const String& customCapabilitiesConfig = BLANKSTRING);
+        Window* initialise( bool autoCreateWindow, const String& windowTitle = "OGRE Render Window",
+                            const String& customCapabilitiesConfig = BLANKSTRING );
 
 		/** Returns whether the system is initialised or not. */
 		bool isInitialised(void) const { return mIsInitialised; }
@@ -690,17 +690,17 @@ namespace Ogre
                 returns a null pointer when Root has not been initialised with
                 the option of creating a window.
         */
-        RenderWindow* getAutoCreatedWindow(void);
+        Window* getAutoCreatedWindow(void);
 
         /** @copydoc RenderSystem::_createRenderWindow
         */
-        RenderWindow* createRenderWindow(const String &name, unsigned int width, unsigned int height, 
-            bool fullScreen, const NameValuePairList *miscParams = 0) ;
+        Window* createRenderWindow( const String &name, uint32 width, uint32 height,
+                                    bool fullScreen, const NameValuePairList *miscParams = 0);
 
         /** @copydoc RenderSystem::_createRenderWindows
         */
         bool createRenderWindows(const RenderWindowDescriptionList& renderWindowDescriptions,
-            RenderWindowList& createdWindows);
+            WindowList &createdWindows);
     
         /** Detaches a RenderTarget from the active render system
         and returns a pointer to it.

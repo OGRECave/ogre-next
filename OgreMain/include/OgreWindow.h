@@ -66,14 +66,22 @@ namespace Ogre
         bool    mRequestedFullscreenMode;
         bool    mBorderless;
 
+        bool    mFocused;
+        bool    mIsPrimary;
+
         bool    mVSync;
         uint32  mVSyncInterval;
+
+        int32 mLeft;
+        int32 mTop;
 
         void setFinalResolution( uint32 width, uint32 height );
 
     public:
         Window( const String &title, uint32 width, uint32 height, bool fullscreenMode );
         virtual ~Window();
+
+        virtual void destroy(void) = 0;
 
         virtual void setTitle( const String &title );
         const String& getTitle(void) const;
@@ -143,6 +151,38 @@ namespace Ogre
             You don't need to call this unless you created the window externally.
         */
         virtual void windowMovedOrResized() {}
+
+        /// Indicates whether the window has been closed by the user.
+        virtual bool isClosed(void) const = 0;
+
+        /// Set the visibility state
+        virtual void setVisible(bool visible) = 0;
+        ////Indicates whether the window is visible (not minimized or obscured)
+        virtual bool isVisible(void) const = 0;
+
+        /** Hide (or show) the window. If called with hidden=true, this
+            will make the window completely invisible to the user.
+        @remarks
+            Setting a window to hidden is useful to create a dummy primary
+            RenderWindow hidden from the user so that you can create and
+            recreate your actual RenderWindows without having to recreate
+            all your resources.
+        */
+        virtual void setHidden( bool hidden ) = 0;
+        /// Indicates whether the window was set to hidden (not displayed)
+        virtual bool isHidden(void) const = 0;
+
+        void setFocused( bool focused );
+        bool isFocused(void) const;
+
+        /// Indicates that this is the primary window.
+        /// Only to be called by Ogre::Root
+        void _setPrimary(void);
+        bool isPrimary(void) const;
+
+        /// Overloaded version of getMetrics from RenderTarget, including extra details
+        /// specific to windowing systems. Result is in pixels.
+        virtual void getMetrics( uint32 &width, uint32 &height, int32 &left, int32 &top ) const;
 
         /// WARNING: Attempting to change the TextureGpu (e.g. setResolution, setPixelFormat)
         /// is undefined behavior

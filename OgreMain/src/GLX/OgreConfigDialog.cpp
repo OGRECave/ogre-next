@@ -110,7 +110,7 @@ public:
     void Exit();
 protected:
     Display *mDisplay;
-    Window mWindow;
+    ::Window mWindow;
     Pixmap mBackDrop;
 
     int mWidth, mHeight;
@@ -121,7 +121,7 @@ protected:
     /**
      * Create backdrop image, and return it as a Pixmap.
      */
-    virtual Pixmap CreateBackdrop(Window rootWindow, int depth);
+    virtual Pixmap CreateBackdrop(::Window rootWindow, int depth);
     /**
      * Called after window initialisation.
      */
@@ -241,7 +241,7 @@ bool GLXConfigurator::CreateWindow() {
     /* Find out display and screen used */
     mDisplay = XtDisplay(toplevel);
     int screen = DefaultScreen(mDisplay);
-    Window rootWindow = RootWindow(mDisplay,screen);
+    ::Window rootWindow = RootWindow(mDisplay,screen);
 
     /* Move to center of display */
     int w = DisplayWidth(mDisplay, screen);
@@ -331,7 +331,7 @@ bool GLXConfigurator::CreateWindow() {
     return true;
 }
 
-Pixmap GLXConfigurator::CreateBackdrop(Window rootWindow, int depth) {
+Pixmap GLXConfigurator::CreateBackdrop(::Window rootWindow, int depth) {
     int bpl;
     /* Find out number of bytes per pixel */
     switch(depth)

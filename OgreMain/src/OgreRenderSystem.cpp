@@ -47,6 +47,7 @@ THE SOFTWARE.
 #include "OgreHardwareOcclusionQuery.h"
 #include "OgreHlmsPso.h"
 #include "OgreTextureGpuManager.h"
+#include "OgreWindow.h"
 #include "Compositor/OgreCompositorManager2.h"
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreVertexArrayObject.h"
@@ -118,7 +119,7 @@ namespace Ogre {
 
     }
     //-----------------------------------------------------------------------
-    RenderWindow* RenderSystem::_initialise(bool autoCreateWindow, const String& windowTitle)
+    Window *RenderSystem::_initialise( bool autoCreateWindow, const String& windowTitle )
     {
         // Have I been registered by call to Root::setRenderSystem?
         /** Don't do this anymore, just allow via Root
@@ -159,7 +160,7 @@ namespace Ogre {
 
     //---------------------------------------------------------------------------------------------
     bool RenderSystem::_createRenderWindows(const RenderWindowDescriptionList& renderWindowDescriptions, 
-        RenderWindowList& createdWindows)
+        WindowList &createdWindows)
     {
         unsigned int fullscreenWindowsCount = 0;
 
@@ -819,6 +820,10 @@ namespace Ogre {
         }
         OGRE_DELETE primary;
         mRenderTargets.clear();
+
+#if TODO_OGRE_2_2
+        TODO_destroy_Windows;
+#endif
     }
     //-----------------------------------------------------------------------
     void RenderSystem::_beginGeometryCount(void)

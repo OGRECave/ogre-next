@@ -55,11 +55,12 @@ namespace Ogre {
         void setConfigOption(const String &name, const String &value);
 
         /// @copydoc GL3PlusSupport::createWindow
-        RenderWindow* createWindow(bool autoCreateWindow, GL3PlusRenderSystem* renderSystem, const String& windowTitle);
+        Window* createWindow( bool autoCreateWindow, GL3PlusRenderSystem* renderSystem,
+                              const String& windowTitle );
 
         /// @copydoc RenderSystem::createRenderWindow
-        RenderWindow* newWindow(const String &name, unsigned int width, unsigned int height,
-                                bool fullScreen, const NameValuePairList *miscParams = 0);
+        Window* newWindow( const String &name, uint32 width, uint32 height,
+                           bool fullScreen, const NameValuePairList *miscParams = 0 );
 
         /** @copydoc see GL3PlusSupport::start */
         void start();

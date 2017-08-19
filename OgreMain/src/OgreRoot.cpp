@@ -93,6 +93,7 @@ THE SOFTWARE.
 #include "OgreExternalTextureSourceManager.h"
 #include "OgreScriptCompiler.h"
 #include "OgreWindowEventUtilities.h"
+#include "OgreWindow.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
 #include "macUtils.h"
@@ -696,7 +697,8 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
-    RenderWindow* Root::initialise(bool autoCreateWindow, const String& windowTitle, const String& customCapabilitiesConfig)
+    Window* Root::initialise( bool autoCreateWindow, const String& windowTitle,
+                              const String& customCapabilitiesConfig )
     {
         if (!mActiveRenderer)
             OGRE_EXCEPT(Exception::ERR_INVALID_STATE,
@@ -752,7 +754,7 @@ namespace Ogre {
 
 
         PlatformInformation::log(LogManager::getSingleton().getDefaultLog());
-        mAutoWindow =  mActiveRenderer->_initialise(autoCreateWindow, windowTitle);
+        mAutoWindow = mActiveRenderer->_initialise( autoCreateWindow, windowTitle );
 
 
         if (autoCreateWindow && !mFirstTimePostWindowInit)
@@ -1284,13 +1286,13 @@ namespace Ogre {
         mActiveRenderer->convertColourValue(colour, pDest);
     }
     //-----------------------------------------------------------------------
-    RenderWindow* Root::getAutoCreatedWindow(void)
+    Window* Root::getAutoCreatedWindow(void)
     {
         return mAutoWindow;
     }
     //-----------------------------------------------------------------------
-    RenderWindow* Root::createRenderWindow(const String &name, unsigned int width, unsigned int height,
-            bool fullScreen, const NameValuePairList *miscParams)
+    Window* Root::createRenderWindow( const String &name, uint32 width, uint32 height,
+                                      bool fullScreen, const NameValuePairList *miscParams )
     {
         if (!mIsInitialised)
         {
@@ -1304,7 +1306,7 @@ namespace Ogre {
             "Cannot create window - no render "
             "system has been selected.", "Root::createRenderWindow");
         }
-        RenderWindow* ret;
+        Window* ret;
         ret = mActiveRenderer->_createRenderWindow(name, width, height, fullScreen, miscParams);
 
         // Initialisation for classes dependent on first window created
@@ -1315,11 +1317,10 @@ namespace Ogre {
         }
 
         return ret;
-
     }
     //-----------------------------------------------------------------------
     bool Root::createRenderWindows(const RenderWindowDescriptionList& renderWindowDescriptions,
-        RenderWindowList& createdWindows)
+        WindowList &createdWindows)
     {
         if (!mIsInitialised)
         {

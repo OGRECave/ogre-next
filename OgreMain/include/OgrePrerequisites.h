@@ -340,6 +340,7 @@ namespace Ogre {
     class VertexAnimationTrack;
     struct VertexArrayObject;
     class VertexBufferPacked;
+    class Window;
     class WireAabb;
     class WireBoundingBox;
     class WorkQueue;

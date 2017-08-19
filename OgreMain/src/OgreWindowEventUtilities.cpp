@@ -30,15 +30,16 @@ THE SOFTWARE.
 #include "OgreWindowEventUtilities.h"
 #include "OgreRenderWindow.h"
 #include "OgreLogManager.h"
+#include "OgreWindow.h"
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 #include <X11/Xlib.h>
-void GLXProc( Ogre::RenderWindow *win, const XEvent &event );
+void GLXProc( Ogre::Window *win, const XEvent &event );
 #endif
 
 //using namespace Ogre;
 
 Ogre::WindowEventUtilities::WindowEventListeners Ogre::WindowEventUtilities::_msListeners;
-Ogre::RenderWindowList Ogre::WindowEventUtilities::_msWindows;
+Ogre::WindowList Ogre::WindowEventUtilities::_msWindows;
 
 namespace Ogre {
 //--------------------------------------------------------------------------------//
@@ -54,8 +55,8 @@ void WindowEventUtilities::messagePump()
     }
 #elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX
     //GLX Message Pump
-    RenderWindowList::iterator win = _msWindows.begin();
-    RenderWindowList::iterator end = _msWindows.end();
+    WindowList::iterator win = _msWindows.begin();
+    WindowList::iterator end = _msWindows.end();
 
     Display* xDisplay = 0; // same for all windows
     
@@ -100,13 +101,13 @@ void WindowEventUtilities::messagePump()
 }
 
 //--------------------------------------------------------------------------------//
-void WindowEventUtilities::addWindowEventListener( RenderWindow* window, WindowEventListener* listener )
+void WindowEventUtilities::addWindowEventListener( Window *window, WindowEventListener* listener )
 {
     _msListeners.insert(std::make_pair(window, listener));
 }
 
 //--------------------------------------------------------------------------------//
-void WindowEventUtilities::removeWindowEventListener( RenderWindow* window, WindowEventListener* listener )
+void WindowEventUtilities::removeWindowEventListener( Window* window, WindowEventListener* listener )
 {
     WindowEventListeners::iterator i = _msListeners.begin(), e = _msListeners.end();
 
@@ -121,15 +122,15 @@ void WindowEventUtilities::removeWindowEventListener( RenderWindow* window, Wind
 }
 
 //--------------------------------------------------------------------------------//
-void WindowEventUtilities::_addRenderWindow(RenderWindow* window)
+void WindowEventUtilities::_addRenderWindow( Window *window )
 {
     _msWindows.push_back(window);
 }
 
 //--------------------------------------------------------------------------------//
-void WindowEventUtilities::_removeRenderWindow(RenderWindow* window)
+void WindowEventUtilities::_removeRenderWindow( Window *window )
 {
-    RenderWindowList::iterator i = std::find(_msWindows.begin(), _msWindows.end(), window);
+    WindowList::iterator i = std::find( _msWindows.begin(), _msWindows.end(), window );
     if( i != _msWindows.end() )
         _msWindows.erase( i );
 }
@@ -256,7 +257,7 @@ LRESULT CALLBACK WindowEventUtilities::_WndProc(HWND hWnd, UINT uMsg, WPARAM wPa
 }
 #elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 //--------------------------------------------------------------------------------//
-void GLXProc( Ogre::RenderWindow *win, const XEvent &event )
+void GLXProc( Ogre::Window *win, const XEvent &event )
 {
     //An iterator for the window listeners
   Ogre::WindowEventUtilities::WindowEventListeners::iterator index,
@@ -301,40 +302,41 @@ void GLXProc( Ogre::RenderWindow *win, const XEvent &event )
     case ConfigureNotify:
     {    
         // This could be slightly more efficient if windowMovedOrResized took arguments:
-        unsigned int oldWidth, oldHeight, oldDepth;
-        int oldLeft, oldTop;
-        win->getMetrics(oldWidth, oldHeight, oldDepth, oldLeft, oldTop);
+        Ogre::uint32 oldWidth, oldHeight;
+        Ogre::int32 oldLeft, oldTop;
+        win->getMetrics(oldWidth, oldHeight, oldLeft, oldTop);
         win->windowMovedOrResized();
 
-        unsigned int newWidth, newHeight, newDepth;
-        int newLeft, newTop;
-        win->getMetrics(newWidth, newHeight, newDepth, newLeft, newTop);
+        Ogre::uint32 newWidth, newHeight;
+        Ogre::int32 newLeft, newTop;
+        win->getMetrics(newWidth, newHeight, newLeft, newTop);
 
-        if (newLeft != oldLeft || newTop != oldTop)
+        if( newLeft != oldLeft || newTop != oldTop )
         {
-            for(index = start ; index != end; ++index)
-                (index->second)->windowMoved(win);
+            for( index = start; index != end; ++index )
+                (index->second)->windowMoved( win );
         }
 
-        if (newWidth != oldWidth || newHeight != oldHeight)
+        if( newWidth != oldWidth || newHeight != oldHeight )
         {
-            for(index = start ; index != end; ++index)
-                (index->second)->windowResized(win);
+            for( index = start; index != end; ++index )
+                (index->second)->windowResized( win );
         }
         break;
     }
     case FocusIn:     // Gained keyboard focus
     case FocusOut:    // Lost keyboard focus
+        win->setFocused( event.type == FocusIn );
         for(index = start ; index != end; ++index)
             (index->second)->windowFocusChange(win);
         break;
     case MapNotify:   //Restored
-        win->setActive( true );
+        win->setFocused( true );
         for(index = start ; index != end; ++index)
             (index->second)->windowFocusChange(win);
         break;
     case UnmapNotify: //Minimised
-        win->setActive( false );
+        win->setFocused( false );
         win->setVisible( false );
         for(index = start ; index != end; ++index)
             (index->second)->windowFocusChange(win);
@@ -343,15 +345,15 @@ void GLXProc( Ogre::RenderWindow *win, const XEvent &event )
         switch(event.xvisibility.state)
         {
         case VisibilityUnobscured:
-            win->setActive( true );
+            win->setFocused( true );
             win->setVisible( true );
             break;
         case VisibilityPartiallyObscured:
-            win->setActive( true );
+            win->setFocused( true );
             win->setVisible( true );
             break;
         case VisibilityFullyObscured:
-            win->setActive( false );
+            win->setFocused( false );
             win->setVisible( false );
             break;
         }

@@ -939,7 +939,7 @@ namespace Ogre {
     typedef vector<RenderWindowDescription>::type RenderWindowDescriptionList;
 
     /// Render window container.
-    typedef vector<RenderWindow*>::type RenderWindowList;
+    typedef vector<Window*>::type WindowList;
 
     /** @} */
     /** @} */

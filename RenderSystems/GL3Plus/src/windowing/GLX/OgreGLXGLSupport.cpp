@@ -340,9 +340,10 @@ namespace Ogre
     }
 
     //-------------------------------------------------------------------------------------------------//
-    RenderWindow* GLXGLSupport::createWindow(bool autoCreateWindow, GL3PlusRenderSystem* renderSystem, const String& windowTitle)
+    Window* GLXGLSupport::createWindow( bool autoCreateWindow, GL3PlusRenderSystem* renderSystem,
+                                        const String& windowTitle )
     {
-        RenderWindow *window = 0;
+        Window *window = 0;
 
         if (autoCreateWindow)
         {
@@ -387,22 +388,20 @@ namespace Ogre
 			miscParams["stereoMode"] = opt->second.currentValue;			
 #endif
 
-            window = renderSystem->_createRenderWindow(windowTitle, w, h, fullscreen, &miscParams);
+            window = renderSystem->_createRenderWindow( windowTitle, w, h, fullscreen, &miscParams );
         }
 
         return window;
     }
 
     //-------------------------------------------------------------------------------------------------//
-    RenderWindow* GLXGLSupport::newWindow(const String &name, unsigned int width, unsigned int height, bool fullScreen, const NameValuePairList *miscParams)
+    Window* GLXGLSupport::newWindow( const String &name, uint32 width, uint32 height,
+                                     bool fullscreen, const NameValuePairList *miscParams )
     {
-        GLXWindow* window = new GLXWindow(this);
-
-        window->create(name, width, height, fullScreen, miscParams);
-
+        GLXWindow* window = new GLXWindow( name, width, height, fullscreen,
+                                           PFG_UNKNOWN, miscParams, this );
         return window;
     }
-
     //-------------------------------------------------------------------------------------------------//
     void GLXGLSupport::start()
     {

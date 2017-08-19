@@ -45,14 +45,20 @@ namespace Ogre
         mFullscreenMode( false ),
         mRequestedFullscreenMode( fullscreenMode ),
         mBorderless( false ),
+        mFocused( true ),
+        mIsPrimary( false ),
         mVSync( false ),
-        mVSyncInterval( 1u )
+        mVSyncInterval( 1u ),
+        mLeft( 0 ),
+        mTop( 0 )
     {
     }
     //-----------------------------------------------------------------------------------
     Window::~Window()
     {
+#if TODO_OGRE_2_2
         TODO_what_to_do_with_mTexture;
+#endif
     }
     //-----------------------------------------------------------------------------------
     void Window::setFinalResolution( uint32 width, uint32 height )
@@ -175,6 +181,34 @@ namespace Ogre
     bool Window::wantsToGoWindowed(void) const
     {
         return !mRequestedFullscreenMode && mRequestedFullscreenMode != mFullscreenMode;
+    }
+    //-----------------------------------------------------------------------------------
+    void Window::setFocused( bool focused )
+    {
+        mFocused = focused;
+    }
+    //-----------------------------------------------------------------------------------
+    bool Window::isFocused(void) const
+    {
+        return mFocused;
+    }
+    //-----------------------------------------------------------------------------------
+    void Window::_setPrimary(void)
+    {
+        mIsPrimary = true;
+    }
+    //-----------------------------------------------------------------------------------
+    bool Window::isPrimary(void) const
+    {
+        return mIsPrimary;
+    }
+    //-----------------------------------------------------------------------------------
+    void Window::getMetrics( uint32 &width, uint32 &height, int32 &left, int32 &top ) const
+    {
+        left    = mLeft;
+        top     = mTop;
+        width   = mTexture ? mTexture->getWidth() : mRequestedWidth;
+        height  = mTexture ? mTexture->getHeight() : mRequestedHeight;
     }
     //-----------------------------------------------------------------------------------
     TextureGpu* Window::getTexture(void) const

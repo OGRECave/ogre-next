@@ -58,15 +58,12 @@ namespace Ogre
             */
             virtual String validateConfig() = 0;
             virtual ConfigOptionMap& getConfigOptions(void);
-            virtual RenderWindow* createWindow(bool autoCreateWindow,
-                                               GL3PlusRenderSystem *renderSystem,
-                                               const String& windowTitle) = 0;
+            virtual Window* createWindow( bool autoCreateWindow, GL3PlusRenderSystem* renderSystem,
+                                          const String& windowTitle ) = 0;
 
             /// @copydoc RenderSystem::_createRenderWindow
-            virtual RenderWindow* newWindow(const String &name,
-                                            unsigned int width, unsigned int height,
-                                            bool fullScreen,
-                                            const NameValuePairList *miscParams = 0) = 0;
+            virtual Window* newWindow( const String &name, uint32 width, uint32 height,
+                                       bool fullScreen, const NameValuePairList *miscParams = 0 ) = 0;
 
             /**
             * Get vendor information

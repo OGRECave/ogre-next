@@ -46,9 +46,6 @@ namespace Ogre
         bool mIsExternal;
         bool mIsExternalGLControl;
 
-        int32 mLeft;
-        int32 mTop;
-
         GLXGLSupport* mGLSupport;
         ::Window      mWindow;
         GLXContext*   mContext;
@@ -71,10 +68,10 @@ namespace Ogre
                                       uint32 frequencyNumerator, uint32 frequencyDenominator );
         
         /** @copydoc see RenderWindow::destroy */
-        void destroy(void);
+        virtual void destroy(void);
         
         /** @copydoc see RenderWindow::isClosed */
-        bool isClosed(void) const;
+        virtual bool isClosed(void) const;
         
         /** @copydoc see RenderWindow::isVisible */
         bool isVisible(void) const;

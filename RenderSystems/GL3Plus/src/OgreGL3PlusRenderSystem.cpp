@@ -73,6 +73,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreRoot.h"
 #include "OgreConfig.h"
 #include "OgreViewport.h"
+#include "OgreWindow.h"
 #include "OgreGL3PlusPixelFormat.h"
 
 #if OGRE_DEBUG_MODE
@@ -241,13 +242,12 @@ namespace Ogre {
         return mGLSupport->validateConfig();
     }
 
-    RenderWindow* GL3PlusRenderSystem::_initialise(bool autoCreateWindow,
-                                                   const String& windowTitle)
+    Window* GL3PlusRenderSystem::_initialise( bool autoCreateWindow,
+                                              const String &windowTitle )
     {
         mGLSupport->start();
 
-        RenderWindow *autoWindow = mGLSupport->createWindow(autoCreateWindow,
-                                                            this, windowTitle);
+        Window *autoWindow = mGLSupport->createWindow( autoCreateWindow, this, windowTitle );
         RenderSystem::_initialise(autoCreateWindow, windowTitle);
         return autoWindow;
     }
@@ -698,8 +698,9 @@ namespace Ogre {
         // RenderSystem::shutdown();
     }
 
-    bool GL3PlusRenderSystem::_createRenderWindows(const RenderWindowDescriptionList& renderWindowDescriptions,
-                                                   RenderWindowList& createdWindows)
+    bool GL3PlusRenderSystem::_createRenderWindows(
+            const RenderWindowDescriptionList& renderWindowDescriptions,
+            WindowList &createdWindows )
     {
         // Call base render system method.
         if (false == RenderSystem::_createRenderWindows(renderWindowDescriptions, createdWindows))
@@ -709,7 +710,7 @@ namespace Ogre {
         for (size_t i = 0; i < renderWindowDescriptions.size(); ++i)
         {
             const RenderWindowDescription& curRenderWindowDescription = renderWindowDescriptions[i];
-            RenderWindow* curWindow = NULL;
+            Window* curWindow = NULL;
 
             curWindow = _createRenderWindow(curRenderWindowDescription.name,
                                             curRenderWindowDescription.width,
@@ -723,8 +724,9 @@ namespace Ogre {
         return true;
     }
 
-    RenderWindow* GL3PlusRenderSystem::_createRenderWindow(const String &name, unsigned int width, unsigned int height,
-                                                           bool fullScreen, const NameValuePairList *miscParams)
+    Window* GL3PlusRenderSystem::_createRenderWindow( const String &name, uint32 width, uint32 height,
+                                                      bool fullScreen,
+                                                      const NameValuePairList *miscParams )
     {
         if (mRenderTargets.find(name) != mRenderTargets.end())
         {
@@ -755,10 +757,9 @@ namespace Ogre {
         }
 
         // Create the window
-        RenderWindow* win = mGLSupport->newWindow(name, width, height, fullScreen, miscParams);
-        attachRenderTarget((Ogre::RenderTarget&) *win);
+        Window *win = mGLSupport->newWindow( name, width, height, fullScreen, miscParams );
 
-        if (!mGLInitialised)
+        if( !mGLInitialised )
         {
             initialiseContext(win);
 
@@ -808,23 +809,6 @@ namespace Ogre {
                 mCurrentContext->setInitialized();
 
             mTextureGpuManager->_update( true );
-        }
-
-        if ( win->getDepthBufferPool() != DepthBuffer::POOL_NO_DEPTH )
-        {
-            // Unlike D3D9, OGL doesn't allow sharing the main depth buffer, so keep them separate.
-            // Only Copy does, but Copy means only one depth buffer...
-            GL3PlusContext *windowContext = 0;
-            win->getCustomAttribute( GL3PlusRenderTexture::CustomAttributeString_GLCONTEXT, &windowContext );
-            GL3PlusDepthBuffer *depthBuffer = new GL3PlusDepthBuffer( DepthBuffer::POOL_DEFAULT, this,
-                                                                      windowContext, GL_NONE, GL_NONE,
-                                                                      win->getWidth(), win->getHeight(),
-                                                                      win->getFSAA(), 0, PF_UNKNOWN,
-                                                                      false, true );
-
-            mDepthBufferPool[depthBuffer->getPoolId()].push_back( depthBuffer );
-
-            win->attachDepthBuffer( depthBuffer, false );
         }
 
         return win;
@@ -3449,11 +3433,12 @@ namespace Ogre {
         }
     }
 
-    void GL3PlusRenderSystem::initialiseContext(RenderWindow* primary)
+    void GL3PlusRenderSystem::initialiseContext( Window *primary )
     {
         // Set main and current context
         mMainContext = 0;
-        primary->getCustomAttribute(GL3PlusRenderTexture::CustomAttributeString_GLCONTEXT, &mMainContext);
+        primary->getCustomAttribute( GL3PlusRenderTexture::CustomAttributeString_GLCONTEXT,
+                                     &mMainContext );
         mCurrentContext = mMainContext;
 
         // Set primary context as active

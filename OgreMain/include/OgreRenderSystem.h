@@ -190,7 +190,8 @@ namespace Ogre
         @return
         A pointer to the automatically created window, if requested, otherwise null.
         */
-        virtual RenderWindow* _initialise(bool autoCreateWindow, const String& windowTitle = "OGRE Render Window");
+        virtual Window* _initialise( bool autoCreateWindow,
+                                     const String& windowTitle = "OGRE Render Window" );
 
         /*
         Returns whether under the current render system buffers marked as TU_STATIC can be locked for update
@@ -532,8 +533,9 @@ namespace Ogre
             <td>Android Specific</td>
         </tr>
         */
-        virtual RenderWindow* _createRenderWindow(const String &name, unsigned int width, unsigned int height, 
-            bool fullScreen, const NameValuePairList *miscParams = 0) = 0;
+        virtual Window* _createRenderWindow( const String &name, uint32 width, uint32 height,
+                                             bool fullScreen,
+                                             const NameValuePairList *miscParams = 0 ) = 0;
 
         /** Creates multiple rendering windows.     
         @param
@@ -551,7 +553,7 @@ namespace Ogre
         true on success.        
         */
         virtual bool _createRenderWindows(const RenderWindowDescriptionList& renderWindowDescriptions, 
-            RenderWindowList& createdWindows);
+            WindowList &createdWindows);
 
         
         /** Create a MultiRenderTarget, which is a render target that renders to multiple RenderTextures
