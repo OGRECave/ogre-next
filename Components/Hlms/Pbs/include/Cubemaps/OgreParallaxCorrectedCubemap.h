@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "OgreIdString.h"
 #include "OgreId.h"
 #include "OgreFrameListener.h"
+#include "OgreGpuProgramParams.h"
 #include "Compositor/OgreCompositorWorkspaceListener.h"
 #include "OgreHeaderPrefix.h"
 

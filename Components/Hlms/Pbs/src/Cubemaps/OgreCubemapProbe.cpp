@@ -28,14 +28,11 @@ THE SOFTWARE.
 
 #include "OgreStableHeaders.h"
 
-#if TODO_OGRE_2_2
 #include "Cubemaps/OgreCubemapProbe.h"
 #include "Cubemaps/OgreParallaxCorrectedCubemap.h"
 
-#include "OgreTextureManager.h"
-#include "OgreTexture.h"
-#include "OgreHardwarePixelBuffer.h"
-#include "OgreRenderTexture.h"
+#include "OgreTextureGpuManager.h"
+#include "OgrePixelFormatGpuUtils.h"
 #include "OgreLogManager.h"
 #include "OgreLwString.h"
 #include "OgreId.h"
@@ -127,7 +124,10 @@ namespace Ogre
         assert( !mWorkspace );
         if( mTexture )
         {
-            TextureManager::getSingleton().remove( mTexture->getHandle() );
+            SceneManager *sceneManager = mCreator->getSceneManager();
+            TextureGpuManager *textureManager =
+                    sceneManager->getDestinationRenderSystem()->getTextureGpuManager();
+            textureManager->destroyTexture( mTexture );
             mTexture = 0;
         }
     }
@@ -156,18 +156,18 @@ namespace Ogre
         const uint32 flags = isStatic ? TU_STATIC_WRITE_ONLY : (TU_RENDERTARGET|TU_AUTOMIPMAP);
 #else
     #if GENERATE_MIPMAPS_ON_BLEND
-        uint32 flags = TU_RENDERTARGET;
+        uint32 flags = TextureFlags::RenderToTexture;
     #else
-        const uint32 flags = TU_RENDERTARGET|TU_AUTOMIPMAP;
+        const uint32 flags = TextureFlags::RenderToTexture|TextureFlags::AllowAutomipmaps;
     #endif
 #endif
 
 #if GENERATE_MIPMAPS_ON_BLEND
-        uint numMips = 0;
+        uint numMips = 1u;
         if( useManual )
         {
-            numMips = PixelUtil::getMaxMipmapCount( width, height, 1 );
-            flags |= TU_AUTOMIPMAP;
+            numMips = PixelFormatGpuUtils::getMaxMipmapCount( width, height );
+            flags |= TextureFlags::AllowAutomipmaps;
         }
 #else
         const uint numMips = PixelUtil::getMaxMipmapCount( width, height, 1 );
@@ -176,10 +176,15 @@ namespace Ogre
         mMsaa = msaa;
         msaa = isStatic ? 0 : msaa;
 
-        mTexture = TextureManager::getSingleton().createManual(
-                    texName.c_str(), ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                    TEX_TYPE_CUBE_MAP, width, height, numMips,
-                    pf, flags, 0, true, msaa );
+        SceneManager *sceneManager = mCreator->getSceneManager();
+        TextureGpuManager *textureManager =
+                sceneManager->getDestinationRenderSystem()->getTextureGpuManager();
+        mTexture = textureManager->createTexture(texName.c_str(), GpuPageOutStrategy::Discard,
+                                                flags, TextureTypes::TypeCube );
+        mTexture->setResolution( width, height );
+        mTexture->setPixelFormat( pf );
+        mTexture->setNumMipmaps( numMips );
+        mTexture->setMsaa( msaa );
         mStatic = isStatic;
         mDirty = true;
 
@@ -386,4 +391,3 @@ namespace Ogre
         }
     }
 }
-#endif
