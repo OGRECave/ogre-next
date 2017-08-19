@@ -24,6 +24,7 @@
 #include "OgreOverlaySystem.h"
 
 #include "OgreWindowEventUtilities.h"
+#include "OgreWindow.h"
 
 #if OGRE_USE_SDL2
     #include <SDL_syswm.h>
@@ -66,7 +67,7 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     GraphicsSystem::~GraphicsSystem()
     {
-        assert( !mRoot && "deinitialize() not called!!!" );
+        //assert( !mRoot && "deinitialize() not called!!!" );
     }
     //-----------------------------------------------------------------------------------
     void GraphicsSystem::initialize( const Ogre::String &windowTitle )
@@ -331,17 +332,15 @@ namespace Demo
                 int w,h;
                 SDL_GetWindowSize( mSdlWindow, &w, &h );
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
-                mRenderWindow->resize( w, h );
-#else
-                mRenderWindow->windowMovedOrResized();
+                mRenderWindow->requestResolution( w, h );
 #endif
+                mRenderWindow->windowMovedOrResized();
                 break;
             case SDL_WINDOWEVENT_RESIZED:
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
-                mRenderWindow->resize( evt.window.data1, evt.window.data2 );
-#else
-                mRenderWindow->windowMovedOrResized();
+                mRenderWindow->requestResolution( evt.window.data1, evt.window.data2 );
 #endif
+                mRenderWindow->windowMovedOrResized();
                 break;
             case SDL_WINDOWEVENT_CLOSE:
                 break;
@@ -543,23 +542,16 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void GraphicsSystem::chooseSceneManager(void)
     {
-        Ogre::InstancingThreadedCullingMethod threadedCullingMethod =
-                Ogre::INSTANCING_CULLING_SINGLETHREAD;
 #if OGRE_DEBUG_MODE
         //Debugging multithreaded code is a PITA, disable it.
         const size_t numThreads = 1;
 #else
         //getNumLogicalCores() may return 0 if couldn't detect
         const size_t numThreads = std::max<size_t>( 1, Ogre::PlatformInformation::getNumLogicalCores() );
-        //See doxygen documentation regarding culling methods.
-        //In some cases you may still want to use single thread.
-        //if( numThreads > 1 )
-        //	threadedCullingMethod = Ogre::INSTANCING_CULLING_THREADED;
 #endif
         // Create the SceneManager, in this case a generic one
         mSceneManager = mRoot->createSceneManager( Ogre::ST_GENERIC,
                                                    numThreads,
-                                                   threadedCullingMethod,
                                                    "ExampleSMInstance" );
 
         mSceneManager->addRenderQueueListener( mOverlaySystem );
@@ -593,7 +585,7 @@ namespace Demo
                                                         Ogre::IdString() );
         }
 
-        return compositorManager->addWorkspace( mSceneManager, mRenderWindow, mCamera,
+        return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(), mCamera,
                                                 workspaceName, true );
     }
     //-----------------------------------------------------------------------------------

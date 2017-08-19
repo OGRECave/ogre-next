@@ -3,7 +3,7 @@
 #include "Forward3DGameState.h"
 
 #include "OgreRoot.h"
-#include "OgreRenderWindow.h"
+#include "OgreWindow.h"
 #include "Compositor/OgreCompositorManager2.h"
 
 //Declares WinMain / main
@@ -27,7 +27,7 @@ namespace Demo
         {
             //We reuse the ShadowMapDebugging sample's workspace. Pretty handful.
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
-            return compositorManager->addWorkspace( mSceneManager, mRenderWindow, mCamera,
+            return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(), mCamera,
                                                     "ShadowMapDebuggingWorkspace", true );
         }
 

@@ -78,12 +78,13 @@ namespace Ogre
 
         virtual void reinitialise(void);
 
-        virtual RenderWindow* _initialise(bool autoCreateWindow, const String& windowTitle = "OGRE Render Window");
+        virtual Window* _initialise( bool autoCreateWindow,
+                                     const String& windowTitle = "OGRE Render Window" );
 
-        virtual RenderWindow* _createRenderWindow( const String &name,
-                                                   unsigned int width, unsigned int height,
-                                                   bool fullScreen,
-                                                   const NameValuePairList *miscParams = 0);
+        virtual Window* _createRenderWindow( const String &name,
+                                             uint32 width, uint32 height,
+                                             bool fullScreen,
+                                             const NameValuePairList *miscParams = 0);
 
         virtual MultiRenderTarget* createMultiRenderTarget(const String & name);
 

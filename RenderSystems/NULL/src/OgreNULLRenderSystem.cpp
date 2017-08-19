@@ -124,9 +124,9 @@ namespace Ogre
         this->_initialise(true);
     }
     //-------------------------------------------------------------------------
-    RenderWindow* NULLRenderSystem::_initialise( bool autoCreateWindow, const String& windowTitle )
+    Window* NULLRenderSystem::_initialise( bool autoCreateWindow, const String& windowTitle )
     {
-        RenderWindow *autoWindow = 0;
+        Window *autoWindow = 0;
         if( autoCreateWindow )
             autoWindow = _createRenderWindow( windowTitle, 1, 1, false );
         RenderSystem::_initialise(autoCreateWindow, windowTitle);
@@ -134,12 +134,12 @@ namespace Ogre
         return autoWindow;
     }
     //-------------------------------------------------------------------------
-    RenderWindow* NULLRenderSystem::_createRenderWindow( const String &name,
-                                                         unsigned int width, unsigned int height,
-                                                         bool fullScreen,
-                                                         const NameValuePairList *miscParams )
+    Window* NULLRenderSystem::_createRenderWindow( const String &name,
+                                                   uint32 width, uint32 height,
+                                                   bool fullScreen,
+                                                   const NameValuePairList *miscParams )
     {
-        RenderWindow *win = OGRE_NEW NULLRenderWindow();
+        Window *win = OGRE_NEW NULLRenderWindow();
 
         if( !mInitialized )
         {

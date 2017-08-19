@@ -27,6 +27,9 @@
 #include "OgreIrradianceVolume.h"
 #include "OgreForward3D.h"
 
+#include "OgreTextureGpu.h"
+#include "OgreTextureGpuManager.h"
+
 using namespace Demo;
 
 namespace Demo

@@ -31,7 +31,7 @@ namespace Demo
     #endif
 
         Ogre::Root                  *mRoot;
-        Ogre::RenderWindow          *mRenderWindow;
+        Ogre::Window                *mRenderWindow;
         Ogre::SceneManager          *mSceneManager;
         Ogre::Camera                *mCamera;
         Ogre::CompositorWorkspace   *mWorkspace;
@@ -122,7 +122,7 @@ namespace Demo
         float getAccumTimeSinceLastLogicFrame(void) const       { return mAccumTimeSinceLastLogicFrame; }
 
         Ogre::Root* getRoot(void) const                         { return mRoot; }
-        Ogre::RenderWindow* getRenderWindow(void) const         { return mRenderWindow; }
+        Ogre::Window* getRenderWindow(void) const               { return mRenderWindow; }
         Ogre::SceneManager* getSceneManager(void) const         { return mSceneManager; }
         Ogre::Camera* getCamera(void) const                     { return mCamera; }
         Ogre::CompositorWorkspace* getCompositorWorkspace(void) const { return mWorkspace; }

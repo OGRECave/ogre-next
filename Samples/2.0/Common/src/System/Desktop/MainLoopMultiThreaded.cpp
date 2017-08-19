@@ -38,7 +38,7 @@ THE SOFTWARE.
 
 #include "Threading/YieldTimer.h"
 
-#include "OgreRenderWindow.h"
+#include "OgreWindow.h"
 #include "OgreTimer.h"
 
 #include "Threading/OgreThreads.h"
@@ -125,7 +125,7 @@ unsigned long renderThreadApp( Ogre::ThreadHandle *threadHandle )
     inputHandler->setMouseVisible( false );
     #endif
 
-    Ogre::RenderWindow *renderWindow = graphicsSystem->getRenderWindow();
+    Ogre::Window *renderWindow = graphicsSystem->getRenderWindow();
 
     Ogre::Timer timer;
 
@@ -208,7 +208,7 @@ unsigned long logicThread( Ogre::ThreadHandle *threadHandle )
     logicSystem->createScene02();
     barrier->sync();
 
-    Ogre::RenderWindow *renderWindow = graphicsSystem->getRenderWindow();
+    Ogre::Window *renderWindow = graphicsSystem->getRenderWindow();
 
     Ogre::Timer timer;
     YieldTimer yieldTimer( &timer );
