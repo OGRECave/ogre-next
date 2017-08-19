@@ -41,12 +41,17 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    extern const IdString CustomAttributeIdString_GLCONTEXT;
+
     GL3PlusTextureGpuWindow::GL3PlusTextureGpuWindow(
             GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
             VaoManager *vaoManager, IdString name, uint32 textureFlags,
             TextureTypes::TextureTypes initialType,
-            TextureGpuManager *textureManager ) :
-        GL3PlusTextureGpu( pageOutStrategy, vaoManager, name, textureFlags, initialType, textureManager )
+            TextureGpuManager *textureManager,
+            GL3PlusContext *context ) :
+        GL3PlusTextureGpu( pageOutStrategy, vaoManager, name,
+                           textureFlags, initialType, textureManager ),
+        mContext( context )
     {
         mTextureType = TextureTypes::Type2D;
     }
@@ -73,6 +78,12 @@ namespace Ogre
     bool GL3PlusTextureGpuWindow::isDataReady(void) const
     {
         return mResidencyStatus == GpuResidency::Resident;
+    }
+    //-----------------------------------------------------------------------------------
+    void GL3PlusTextureGpuWindow::getCustomAttribute( IdString name, void *pData )
+    {
+        if( name == CustomAttributeIdString_GLCONTEXT )
+            *static_cast<GL3PlusContext**>(pData) = mContext;
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusTextureGpuWindow::_setToDisplayDummyTexture(void)

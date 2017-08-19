@@ -37,8 +37,7 @@
 #include "OgreGLXGLSupport.h"
 #include "OgreGL3PlusPixelFormat.h"
 #include "OgreWindowEventUtilities.h"
-#include "OgreViewport.h"
-#include "OgrePixelBox.h"
+#include "OgrePixelFormatGpuUtils.h"
 
 #include <iostream>
 #include <algorithm>
@@ -61,25 +60,28 @@ extern "C"
 
 namespace Ogre
 {
-    //-------------------------------------------------------------------------------------------------//
-    GLXWindow::GLXWindow(GLXGLSupport *glsupport) :
-        mGLSupport(glsupport), mContext(0)
+    GLXWindow::GLXWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode,
+                          PixelFormatGpu depthStencilFormat, const NameValuePairList *miscParams,
+                          GLXGLSupport* glsupport ) :
+        Window( title, width, height, fullscreenMode ),
+        mClosed( false ),
+        mVisible( true ),
+        mHidden( false ),
+        mIsTopLevel( false ),
+        mIsExternal( false ),
+        mIsExternalGLControl( false ),
+        mLeft( 0 ),
+        mTop( 0 ),
+        mGLSupport( glsupport ),
+        mWindow( 0 ),
+        mContext( 0 )
     {
-        mWindow = 0;
+        assert( depthStencilFormat == PFG_NULL || depthStencilFormat == PFG_UNKNOWN ||
+                PixelFormatGpuUtils::isDepth( depthStencilFormat ) );
 
-        mIsTopLevel = false;
-        mIsFullScreen = false;
-        mIsExternal = false;
-        mIsExternalGLControl = false;
-        mClosed = false;
-        mVisible = true;
-        mActive = false;
-        mHidden = false;
-        mVSync = false;
-        mVSyncInterval = 1;
+        create( depthStencilFormat, miscParams );
     }
-
-    //-------------------------------------------------------------------------------------------------//
+    //-----------------------------------------------------------------------------------
     GLXWindow::~GLXWindow()
     {
         Display* xDisplay = mGLSupport->getXDisplay();
@@ -104,30 +106,24 @@ namespace Ogre
         mContext = 0;
         mWindow = 0;
     }
-
-    //-------------------------------------------------------------------------------------------------//
-    void GLXWindow::create(const String& name, uint width, uint height,
-                           bool fullScreen, const NameValuePairList *miscParams)
+    //-----------------------------------------------------------------------------------
+    void GLXWindow::create( PixelFormatGpu depthStencilFormat, const NameValuePairList *miscParams )
     {
         Display *xDisplay = mGLSupport->getXDisplay();
-        String title = name;
-        uint samples = 0;
-        short frequency = 0;
-        bool vsync = false;
+        uint8 samples = 0;
         bool hidden = false;
-        unsigned int vsyncInterval = 1;
-        int gamma = 0;
-        ::GLXContext glxContext = 0;
-        ::GLXDrawable glxDrawable = 0;
-        Window externalWindow = 0;
-        Window parentWindow = DefaultRootWindow(xDisplay);
-        int left = DisplayWidth(xDisplay, DefaultScreen(xDisplay))/2 - width/2;
-        int top  = DisplayHeight(xDisplay, DefaultScreen(xDisplay))/2 - height/2;
+        bool vSync = false;
+        uint32 vSyncInterval = 1u;
+        bool gamma = 0;
+        ::GLXContext glxContext     = 0;
+        ::GLXDrawable glxDrawable   = 0;
+        ::Window externalWindow     = 0;
+        ::Window parentWindow       = DefaultRootWindow(xDisplay);
+        int left = DisplayWidth( xDisplay, DefaultScreen(xDisplay) ) / 2 - mRequestedWidth / 2u;
+        int top  = DisplayHeight( xDisplay, DefaultScreen(xDisplay) ) / 2 - mRequestedHeight / 2u;
         String border;
 
-        mIsFullScreen = fullScreen;
-
-        if(miscParams)
+        if( miscParams )
         {
             NameValuePairList::const_iterator opt;
             NameValuePairList::const_iterator end = miscParams->end();
@@ -139,12 +135,14 @@ namespace Ogre
             //   application programmers would be responsible for these
             //   segfaults, they are better discovering them in their code.
 
-            if ((opt = miscParams->find("currentGLContext")) != end &&
-                StringConverter::parseBool(opt->second))
+            if( (opt = miscParams->find("currentGLContext")) != end &&
+                StringConverter::parseBool(opt->second) )
             {
-                if (! glXGetCurrentContext())
+                if( !glXGetCurrentContext() )
                 {
-                    OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, "currentGLContext was specified with no current GL context", "GLXWindow::create");
+                    OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                                 "currentGLContext was specified with no current GL context",
+                                 "GLXWindow::create" );
                 }
 
                 glxContext = glXGetCurrentContext();
@@ -152,20 +150,22 @@ namespace Ogre
             }
 
             // Note: Some platforms support AA inside ordinary windows
-            if((opt = miscParams->find("FSAA")) != end)
+            if( (opt = miscParams->find("FSAA")) != end )
+                samples = StringConverter::parseUnsignedInt(opt->second);
+            if( (opt = miscParams->find("MSAA")) != end )
                 samples = StringConverter::parseUnsignedInt(opt->second);
 
             if( (opt = miscParams->find("displayFrequency")) != end && opt->second != "N/A" )
-                frequency = (short)StringConverter::parseInt(opt->second);
+                mFrequencyNumerator = StringConverter::parseUnsignedInt( opt->second );
 
             if((opt = miscParams->find("vsync")) != end)
-                vsync = StringConverter::parseBool(opt->second);
+                vSync = StringConverter::parseBool(opt->second);
 
             if((opt = miscParams->find("hidden")) != end)
                 hidden = StringConverter::parseBool(opt->second);
 
             if((opt = miscParams->find("vsyncInterval")) != end)
-                vsyncInterval = StringConverter::parseUnsignedInt(opt->second);
+                vSyncInterval = StringConverter::parseUnsignedInt(opt->second);
 
             if ((opt = miscParams->find("gamma")) != end)
                 gamma = StringConverter::parseBool(opt->second);
@@ -175,9 +175,6 @@ namespace Ogre
 
             if((opt = miscParams->find("top")) != end)
                 top = StringConverter::parseInt(opt->second);
-
-            if((opt = miscParams->find("title")) != end)
-                title = opt->second;
 
             if ((opt = miscParams->find("externalGLControl")) != end)
                 mIsExternalGLControl = StringConverter::parseBool(opt->second);
@@ -191,7 +188,7 @@ namespace Ogre
 			}
 #endif
 
-            if((opt = miscParams->find("parentWindowHandle")) != end)
+            if( (opt = miscParams->find("parentWindowHandle")) != end )
             {
                 vector<String>::type tokens = StringUtil::split(opt->second, " :");
 
@@ -232,35 +229,39 @@ namespace Ogre
                 }
             }
 
-            if ((opt = miscParams->find("border")) != end)
+            if( (opt = miscParams->find("border")) != end )
                 border = opt->second;
         }
 
         // Ignore fatal XErrorEvents during parameter validation:
-        oldXErrorHandler = XSetErrorHandler(safeXErrorHandler);
+        oldXErrorHandler = XSetErrorHandler( safeXErrorHandler );
         // Validate parentWindowHandle
 
-        if (parentWindow != DefaultRootWindow(xDisplay))
+        if( parentWindow != DefaultRootWindow(xDisplay) )
         {
             XWindowAttributes windowAttrib;
 
-            if (! XGetWindowAttributes(xDisplay, parentWindow, &windowAttrib) ||
-                windowAttrib.root != DefaultRootWindow(xDisplay))
+            if( !XGetWindowAttributes( xDisplay, parentWindow, &windowAttrib ) ||
+                windowAttrib.root != DefaultRootWindow(xDisplay) )
             {
-                OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, "Invalid parentWindowHandle (wrong server or screen)", "GLXWindow::create");
+                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                             "Invalid parentWindowHandle (wrong server or screen)",
+                             "GLXWindow::create" );
             }
         }
 
         // Validate externalWindowHandle
 
-        if (externalWindow != 0)
+        if( externalWindow != 0 )
         {
             XWindowAttributes windowAttrib;
 
-            if (! XGetWindowAttributes(xDisplay, externalWindow, &windowAttrib) ||
-                windowAttrib.root != DefaultRootWindow(xDisplay))
+            if( !XGetWindowAttributes(xDisplay, externalWindow, &windowAttrib) ||
+                windowAttrib.root != DefaultRootWindow(xDisplay) )
             {
-                OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, "Invalid externalWindowHandle (wrong server or screen)", "GLXWindow::create");
+                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                             "Invalid externalWindowHandle (wrong server or screen)",
+                             "GLXWindow::create");
             }
             glxDrawable = externalWindow;
         }
@@ -269,91 +270,154 @@ namespace Ogre
 
         ::GLXFBConfig fbConfig = 0;
 
-        if (glxDrawable)
+        if( glxDrawable )
         {
-            fbConfig = mGLSupport->getFBConfigFromDrawable (glxDrawable, &width, &height);
+            unsigned int width = mRequestedWidth;
+            unsigned int height = mRequestedHeight;
+            fbConfig = mGLSupport->getFBConfigFromDrawable( glxDrawable, &width, &height );
+            setFinalResolution( width, height );
         }
 
-        if (! fbConfig && glxContext)
-        {
-            fbConfig = mGLSupport->getFBConfigFromContext (glxContext);
-        }
+        if( !fbConfig && glxContext )
+            fbConfig = mGLSupport->getFBConfigFromContext( glxContext );
 
         mIsExternal = (glxDrawable != 0);
 
-        XSetErrorHandler(oldXErrorHandler);
+        XSetErrorHandler( oldXErrorHandler );
 
-        if (! fbConfig)
+        if( !fbConfig )
         {
-            int minAttribs[] = {
-                GLX_DRAWABLE_TYPE,  GLX_WINDOW_BIT,
-                GLX_RENDER_TYPE,        GLX_RGBA_BIT,
-                GLX_RED_SIZE,      1,
-                GLX_BLUE_SIZE,    1,
-                GLX_GREEN_SIZE,  1,
+            const int MAX_ATTRIB_COUNT = 64;
+            int minAttribs[MAX_ATTRIB_COUNT];
+            memset( minAttribs, 0, sizeof( minAttribs ) );
+            int attrib = 0;
+            minAttribs[attrib++] = GLX_DRAWABLE_TYPE;   minAttribs[attrib++] = GLX_WINDOW_BIT;
+            minAttribs[attrib++] = GLX_RENDER_TYPE;     minAttribs[attrib++] = GLX_RGBA_BIT;
+            minAttribs[attrib++] = GLX_RED_SIZE;        minAttribs[attrib++] = 1;
+            minAttribs[attrib++] = GLX_GREEN_SIZE;      minAttribs[attrib++] = 1;
+            minAttribs[attrib++] = GLX_BLUE_SIZE;       minAttribs[attrib++] = 1;
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
-				GLX_STEREO, mStereoEnabled ? True : False,
+            minAttribs[attrib++] = GLX_STEREO;          minAttribs[attrib++] = mStereoEnabled ? True :
+                                                                                                False;
 #endif
-                None
-            };
+            if( depthStencilFormat == PFG_NULL )
+            {
+                minAttribs[attrib++] = GLX_DEPTH_SIZE;
+                minAttribs[attrib++] = 0;
+            }
+            else
+            {
+                minAttribs[attrib++] = GLX_DEPTH_SIZE;
+                minAttribs[attrib++] = 24;
+            }
+            minAttribs[attrib++] = None;
 
-            int maxAttribs[] = {
-                GLX_SAMPLES,            static_cast<int>(samples),
-                GLX_DOUBLEBUFFER,   1,
-                GLX_STENCIL_SIZE,   INT_MAX,
-                GLX_FRAMEBUFFER_SRGB_CAPABLE_EXT, 1,
-                None
-            };
+            attrib = 0;
 
-            fbConfig = mGLSupport->selectFBConfig(minAttribs, maxAttribs);
+            int maxAttribs[MAX_ATTRIB_COUNT];
+            memset( maxAttribs, 0, sizeof( maxAttribs ) );
+            maxAttribs[attrib++] = GLX_SAMPLES;         maxAttribs[attrib++] = static_cast<int>(samples);
+            maxAttribs[attrib++] = GLX_DOUBLEBUFFER;    maxAttribs[attrib++] = 1;
+            if( depthStencilFormat == PFG_D24_UNORM_S8_UINT || depthStencilFormat == PFG_D24_UNORM )
+            {
+                //If user wants a 24-bit format, we'll restrict it.
+                maxAttribs[attrib++] = GLX_DEPTH_SIZE;
+                maxAttribs[attrib++] = 24;
+            }
+            else if( depthStencilFormat == PFG_NULL )
+            {
+                //User wants no depth buffer, restrict it even more.
+                maxAttribs[attrib++] = GLX_DEPTH_SIZE;
+                maxAttribs[attrib++] = 0;
+            }
+            if( depthStencilFormat == PFG_D24_UNORM_S8_UINT ||
+                depthStencilFormat == PFG_D32_FLOAT_S8X24_UINT ||
+                depthStencilFormat == PFG_UNKNOWN )
+            {
+                maxAttribs[attrib++] = GLX_STENCIL_SIZE;
+                maxAttribs[attrib++] = INT_MAX;
+            }
+            else
+            {
+                maxAttribs[attrib++] = GLX_STENCIL_SIZE;
+                maxAttribs[attrib++] = 0;
+            }
+            maxAttribs[attrib++] = GLX_FRAMEBUFFER_SRGB_CAPABLE_EXT;    maxAttribs[attrib++] = 1;
+            maxAttribs[attrib++] = None;
+
+            assert( attrib < MAX_ATTRIB_COUNT );
+
+            fbConfig = mGLSupport->selectFBConfig( minAttribs, maxAttribs );
 
             // Now check the actual supported fsaa value
             GLint maxSamples;
-            mGLSupport->getFBConfigAttrib(fbConfig, GLX_SAMPLES, &maxSamples);
-            mFSAA = maxSamples;
+            mGLSupport->getFBConfigAttrib( fbConfig, GLX_SAMPLES, &maxSamples );
+            mTexture->setMsaa( maxSamples );
+            if( mDepthBuffer )
+                mDepthBuffer->setMsaa( maxSamples );
+            if( mStencilBuffer )
+                mStencilBuffer->setMsaa( maxSamples );
 
-            if (gamma != 0)
+            mTexture->setPixelFormat( PFG_RGBA8_UNORM );
+
+            GLint depthSupport = 0, stencilSupport = 0;
+            mGLSupport->getFBConfigAttrib( fbConfig, GLX_DEPTH_SIZE, &depthSupport );
+            mGLSupport->getFBConfigAttrib( fbConfig, GLX_STENCIL_SIZE, &stencilSupport );
+            if( depthSupport == 0 )
+
+            if( gamma )
             {
-                mGLSupport->getFBConfigAttrib(fbConfig, GL_FRAMEBUFFER_SRGB_CAPABLE_EXT, &gamma);
+                GLint gammaSupport = 0;
+                mGLSupport->getFBConfigAttrib( fbConfig, GL_FRAMEBUFFER_SRGB_CAPABLE_EXT,
+                                               &gammaSupport );
+                if( gammaSupport )
+                    mTexture->setPixelFormat( PFG_RGBA8_UNORM_SRGB );
             }
-
-            mHwGamma = (gamma != 0);
         }
 
-        if (! fbConfig)
+        if( !fbConfig )
         {
             // This should never happen.
-            OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, "Unexpected failure to determine a GLXFBConfig","GLXWindow::create");
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "Unexpected failure to determine a GLXFBConfig",
+                         "GLXWindow::create" );
         }
 
-        mIsTopLevel = (! mIsExternal && parentWindow == DefaultRootWindow(xDisplay));
+        mIsTopLevel = !mIsExternal && parentWindow == DefaultRootWindow(xDisplay);
 
-        if (! mIsTopLevel)
+        if( !mIsTopLevel )
         {
-            mIsFullScreen = false;
+            mFullscreenMode = false;
+            mRequestedFullscreenMode = false;
             left = top = 0;
         }
 
-        if (mIsFullScreen)
+        if( mRequestedFullscreenMode )
         {
-            mGLSupport->switchMode (width, height, frequency);
+            mGLSupport->switchMode( mRequestedWidth, mRequestedHeight,
+                                    static_cast<short>( mFrequencyNumerator ) );
+            mFullscreenMode = true;
         }
 
-        if (! mIsExternal)
+        if( !mIsExternal )
         {
             XSetWindowAttributes attr;
             ulong mask;
-            XVisualInfo *visualInfo = mGLSupport->getVisualFromFBConfig (fbConfig);
+            XVisualInfo *visualInfo = mGLSupport->getVisualFromFBConfig( fbConfig );
 
             attr.background_pixel = 0;
             attr.border_pixel = 0;
-            attr.colormap = XCreateColormap(xDisplay, DefaultRootWindow(xDisplay), visualInfo->visual, AllocNone);
+            attr.colormap = XCreateColormap( xDisplay, DefaultRootWindow(xDisplay),
+                                             visualInfo->visual, AllocNone );
             attr.event_mask = StructureNotifyMask | VisibilityChangeMask | FocusChangeMask;
             mask = CWBackPixel | CWBorderPixel | CWColormap | CWEventMask;
 
-            if(mIsFullScreen && mGLSupport->mAtomFullScreen == None)
+            if( mFullscreenMode && mGLSupport->mAtomFullScreen == None )
             {
-                LogManager::getSingleton().logMessage("GLXWindow::switchFullScreen: Your WM has no fullscreen support");
+                mRequestedFullscreenMode = false;
+                mFullscreenMode = false;
+                LogManager::getSingleton().logMessage(
+                            "GLXWindow::switchFullScreen: Your WM has no fullscreen support" );
 
                 // A second best approach for outdated window managers
                 attr.backing_store = NotUseful;
@@ -364,32 +428,37 @@ namespace Ogre
             }
 
             // Create window on server
-            mWindow = XCreateWindow(xDisplay, parentWindow, left, top, width, height, 0, visualInfo->depth, InputOutput, visualInfo->visual, mask, &attr);
+            mWindow = XCreateWindow( xDisplay, parentWindow, left, top,
+                                     mRequestedWidth, mRequestedHeight, 0,
+                                     visualInfo->depth, InputOutput, visualInfo->visual, mask, &attr );
 
-            XFree(visualInfo);
+            XFree( visualInfo );
 
-            if(!mWindow)
+            if( !mWindow )
             {
-                OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, "Unable to create an X Window", "GLXWindow::create");
+                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                             "Unable to create an X Window",
+                             "GLXWindow::create" );
             }
 
-            if (mIsTopLevel)
+            if( mIsTopLevel )
             {
                 XWMHints *wmHints;
                 XSizeHints *sizeHints;
 
-                if ((wmHints = XAllocWMHints()) != NULL)
+                if( (wmHints = XAllocWMHints()) != NULL )
                 {
                     wmHints->initial_state = NormalState;
                     wmHints->input = True;
                     wmHints->flags = StateHint | InputHint;
 
-                    int depth = DisplayPlanes(xDisplay, DefaultScreen(xDisplay));
+                    int depth = DisplayPlanes( xDisplay, DefaultScreen(xDisplay) );
 
                     // Check if we can give it an icon
-                    if(depth == 24 || depth == 32)
+                    if( depth == 24 || depth == 32 )
                     {
-                        if(mGLSupport->loadIcon("GLX_icon.png", &wmHints->icon_pixmap, &wmHints->icon_mask))
+                        if( mGLSupport->loadIcon( "GLX_icon.png", &wmHints->icon_pixmap,
+                                                  &wmHints->icon_mask ) )
                         {
                             wmHints->flags |= IconPixmapHint | IconMaskHint;
                         }
@@ -397,29 +466,30 @@ namespace Ogre
                 }
 
                 // Is this really necessary ? Which broken WM might need it?
-                if ((sizeHints = XAllocSizeHints()) != NULL)
+                if( (sizeHints = XAllocSizeHints()) != NULL )
                 {
                     // Is this really necessary ? Which broken WM might need it?
                     sizeHints->flags = USPosition;
 
-                    if(!fullScreen && border == "fixed")
+                    if( !mRequestedFullscreenMode && border == "fixed" )
                     {
-                        sizeHints->min_width = sizeHints->max_width = width;
-                        sizeHints->min_height = sizeHints->max_height = height;
+                        sizeHints->min_width = sizeHints->max_width = mRequestedWidth;
+                        sizeHints->min_height = sizeHints->max_height = mRequestedHeight;
                         sizeHints->flags |= PMaxSize | PMinSize;
                     }
                 }
 
                 XTextProperty titleprop;
-                char *lst = const_cast<char *>(title.c_str());
-                XStringListToTextProperty((char **)&lst, 1, &titleprop);
-                XSetWMProperties(xDisplay, mWindow, &titleprop, NULL, NULL, 0, sizeHints, wmHints, NULL);
+                char *lst = const_cast<char*>( mTitle.c_str() );
+                XStringListToTextProperty( (char**)&lst, 1, &titleprop );
+                XSetWMProperties( xDisplay, mWindow, &titleprop, NULL, NULL,
+                                  0, sizeHints, wmHints, NULL );
 
-                XFree(titleprop.value);
-                XFree(wmHints);
-                XFree(sizeHints);
+                XFree( titleprop.value );
+                XFree( wmHints );
+                XFree( sizeHints );
 
-                XSetWMProtocols(xDisplay, mWindow, &mGLSupport->mAtomDeleteWindow, 1);
+                XSetWMProtocols( xDisplay, mWindow, &mGLSupport->mAtomDeleteWindow, 1 );
 
                 XWindowAttributes windowAttrib;
 
@@ -427,8 +497,7 @@ namespace Ogre
 
                 left = windowAttrib.x;
                 top = windowAttrib.y;
-                width = windowAttrib.width;
-                height = windowAttrib.height;
+                setFinalResolution( windowAttrib.width, windowAttrib.height );
             }
 
             glxDrawable = mWindow;
@@ -441,105 +510,106 @@ namespace Ogre
             WindowEventUtilities::_addRenderWindow(this);
         }
 
-        mContext = new GLXContext(mGLSupport, fbConfig, glxDrawable, glxContext);
+        mContext = new GLXContext( mGLSupport, fbConfig, glxDrawable, glxContext );
 
-        // apply vsync settings. call setVSyncInterval first to avoid
-        // setting vsync more than once.
-        setVSyncInterval(vsyncInterval);
-        setVSyncEnabled(vsync);
+        setVSync( vSync, vSyncInterval );
 
         int fbConfigID;
 
-        mGLSupport->getFBConfigAttrib(fbConfig, GLX_FBCONFIG_ID, &fbConfigID);
+        mGLSupport->getFBConfigAttrib( fbConfig, GLX_FBCONFIG_ID, &fbConfigID );
 
-        LogManager::getSingleton().logMessage("GLXWindow::create used FBConfigID = " + StringConverter::toString(fbConfigID));
+        LogManager::getSingleton().logMessage( "GLXWindow::create used FBConfigID = " +
+                                               StringConverter::toString(fbConfigID) );
 
-        mName = name;
-        mWidth = width;
-        mHeight = height;
         mLeft = left;
         mTop = top;
-        mActive = true;
+//        mActive = true;
         mClosed = false;
-
     }
-
-    //-------------------------------------------------------------------------------------------------//
+    //-----------------------------------------------------------------------------------
     void GLXWindow::destroy(void)
     {
         if (mClosed)
             return;
 
         mClosed = true;
-        mActive = false;
+//        mActive = false;
 
-        if (! mIsExternal)
+        if( !mIsExternal )
             WindowEventUtilities::_removeRenderWindow(this);
 
-        if (mIsFullScreen)
+        if( mFullscreenMode )
         {
             mGLSupport->switchMode();
-            switchFullScreen(false);
+            switchFullScreen( false );
         }
     }
 
-    //-------------------------------------------------------------------------------------------------//
-    void GLXWindow::setFullscreen(bool fullscreen, uint width, uint height)
+    //-----------------------------------------------------------------------------------
+    void GLXWindow::requestFullscreenSwitch( bool goFullscreen, bool borderless, uint32 monitorIdx,
+                                             uint32 width, uint32 height,
+                                             uint32 frequencyNumerator, uint32 frequencyDenominator )
     {
-        short frequency = 0;
-
-        if (mClosed || ! mIsTopLevel)
+        if( mClosed || !mIsTopLevel )
             return;
 
-        if (fullscreen == mIsFullScreen && width == mWidth && height == mHeight)
-            return;
-
-        if (mIsFullScreen != fullscreen && mGLSupport->mAtomFullScreen == None)
+        if( goFullscreen == mFullscreenMode &&
+            width == mRequestedWidth && height == mRequestedHeight &&
+            mTexture->getWidth() == width && mTexture->getHeight() == height &&
+            mFrequencyNumerator == frequencyNumerator )
         {
-            // Without WM support it is best to give up.
-            LogManager::getSingleton().logMessage("GLXWindow::switchFullScreen: Your WM has no fullscreen support");
+            mRequestedFullscreenMode = mFullscreenMode;
             return;
         }
-        else if (fullscreen)
+
+        if( goFullscreen && mGLSupport->mAtomFullScreen == None )
         {
-            mGLSupport->switchMode(width, height, frequency);
+            // Without WM support it is best to give up.
+            LogManager::getSingleton().logMessage(
+                        "GLXWindow::switchFullScreen: Your WM has no fullscreen support" );
+            mRequestedFullscreenMode = false;
+            mFullscreenMode = false;
+            return;
+        }
+
+        Window::requestFullscreenSwitch( goFullscreen, borderless, monitorIdx,
+                                         width, height, frequencyNumerator, frequencyDenominator );
+
+        if( goFullscreen )
+        {
+            mGLSupport->switchMode( width, height, frequencyNumerator );
         }
         else
         {
             mGLSupport->switchMode();
         }
 
-        if (mIsFullScreen != fullscreen)
-        {
-            switchFullScreen(fullscreen);
-        }
+        if( mFullscreenMode != goFullscreen )
+            switchFullScreen( goFullscreen );
 
-        if (! mIsFullScreen)
+        if( !mFullscreenMode )
         {
-            resize(width, height);
-            reposition(mLeft, mTop);
+            requestResolution( width, height );
+            reposition( mLeft, mTop );
         }
     }
 
-    //-------------------------------------------------------------------------------------------------//
+    //-----------------------------------------------------------------------------------
     bool GLXWindow::isClosed() const
     {
         return mClosed;
     }
-
-    //-------------------------------------------------------------------------------------------------//
+    //-----------------------------------------------------------------------------------
     bool GLXWindow::isVisible() const
     {
         return mVisible;
     }
-
-    //-------------------------------------------------------------------------------------------------//
+    //-----------------------------------------------------------------------------------
     void GLXWindow::setVisible(bool visible)
     {
         mVisible = visible;
     }
-
-    //-------------------------------------------------------------------------------------------------//
+    //-----------------------------------------------------------------------------------
     void GLXWindow::setHidden(bool hidden)
     {
         mHidden = hidden;
@@ -548,32 +618,22 @@ namespace Ogre
         if (mIsExternal)
             return;
 
-        if (hidden)
+        if( hidden )
         {
-            XUnmapWindow(mGLSupport->getXDisplay(), mWindow);
+            XUnmapWindow( mGLSupport->getXDisplay(), mWindow );
         }
         else
         {
-            XMapWindow(mGLSupport->getXDisplay(), mWindow);
-            if (mIsFullScreen)
-            {
-                switchFullScreen(true);
-            }
+            XMapWindow( mGLSupport->getXDisplay(), mWindow );
+            if( mFullscreenMode )
+                switchFullScreen( true );
         }
     }
-
-    //-------------------------------------------------------------------------------------------------//
-    void GLXWindow::setVSyncInterval(unsigned int interval)
+    //-----------------------------------------------------------------------------------
+    void GLXWindow::setVSync( bool vSync, uint32 vSyncInterval )
     {
-        mVSyncInterval = interval;
-        if (mVSync)
-            setVSyncEnabled(true);
-    }
+        Window::setVSync( vSync, vSyncInterval );
 
-    //-------------------------------------------------------------------------------------------------//
-    void GLXWindow::setVSyncEnabled(bool vsync)
-    {
-        mVSync = vsync;
         // we need to make our context current to set vsync
         // store previous context to restore when finished.
         ::GLXDrawable oldDrawable = glXGetCurrentDrawable();
@@ -582,92 +642,74 @@ namespace Ogre
         mContext->setCurrent();
 
         PFNGLXSWAPINTERVALEXTPROC _glXSwapIntervalEXT;
-        _glXSwapIntervalEXT = (PFNGLXSWAPINTERVALEXTPROC)mGLSupport->getProcAddress("glXSwapIntervalEXT");
+        _glXSwapIntervalEXT =
+                (PFNGLXSWAPINTERVALEXTPROC)mGLSupport->getProcAddress("glXSwapIntervalEXT");
         PFNGLXSWAPINTERVALMESAPROC _glXSwapIntervalMESA;
-        _glXSwapIntervalMESA = (PFNGLXSWAPINTERVALMESAPROC)mGLSupport->getProcAddress("glXSwapIntervalMESA");
+        _glXSwapIntervalMESA =
+                (PFNGLXSWAPINTERVALMESAPROC)mGLSupport->getProcAddress("glXSwapIntervalMESA");
         PFNGLXSWAPINTERVALSGIPROC _glXSwapIntervalSGI;
-        _glXSwapIntervalSGI = (PFNGLXSWAPINTERVALSGIPROC)mGLSupport->getProcAddress("glXSwapIntervalSGI");
+        _glXSwapIntervalSGI =
+                (PFNGLXSWAPINTERVALSGIPROC)mGLSupport->getProcAddress("glXSwapIntervalSGI");
 
-        if (! mIsExternalGLControl )
+        if( !mIsExternalGLControl )
         {
             if( _glXSwapIntervalEXT )
             {
                 _glXSwapIntervalEXT( mGLSupport->getGLDisplay(), mContext->mDrawable,
-                                     vsync ? mVSyncInterval : 0 );
+                                     mVSync ? mVSyncInterval : 0 );
             }
             else if( _glXSwapIntervalMESA )
-                _glXSwapIntervalMESA( vsync ? mVSyncInterval : 0 );
+                _glXSwapIntervalMESA( mVSync ? mVSyncInterval : 0 );
             else
-                _glXSwapIntervalSGI( vsync ? mVSyncInterval : 0 );
+                _glXSwapIntervalSGI( mVSync ? mVSyncInterval : 0 );
         }
 
         mContext->endCurrent();
 
-        glXMakeCurrent (mGLSupport->getGLDisplay(), oldDrawable, oldContext);
+        glXMakeCurrent( mGLSupport->getGLDisplay(), oldDrawable, oldContext );
     }
-
-    //-------------------------------------------------------------------------------------------------//
-    bool GLXWindow::isVSyncEnabled() const
+    //-----------------------------------------------------------------------------------
+    void GLXWindow::reposition( int32 left, int32 top )
     {
-        return mVSync;
-    }
-
-    //-------------------------------------------------------------------------------------------------//
-    unsigned int GLXWindow::getVSyncInterval() const
-    {
-        return mVSyncInterval;
-    }
-
-    //-------------------------------------------------------------------------------------------------//
-    void GLXWindow::reposition(int left, int top)
-    {
-        if (mClosed || ! mIsTopLevel)
+        if( mClosed || ! mIsTopLevel )
             return;
 
-        XMoveWindow(mGLSupport->getXDisplay(), mWindow, left, top);
+        XMoveWindow( mGLSupport->getXDisplay(), mWindow, left, top );
     }
-
-    //-------------------------------------------------------------------------------------------------//
-    void GLXWindow::resize(uint width, uint height)
+    //-----------------------------------------------------------------------------------
+    void GLXWindow::requestResolution( uint32 width, uint32 height )
     {
-        if (mClosed)
+        if( mClosed )
             return;
 
-        if(mWidth == width && mHeight == height)
+        if( mTexture && mTexture->getWidth() == width && mTexture->getHeight() == height )
             return;
 
-        if(width != 0 && height != 0)
+        Window::requestResolution( width, height );
+
+        if( width != 0 && height != 0 )
         {
-            if (!mIsExternal)
-            {
-                XResizeWindow(mGLSupport->getXDisplay(), mWindow, width, height);
-            }
+            if( !mIsExternal )
+                XResizeWindow( mGLSupport->getXDisplay(), mWindow, width, height );
             else
-            {
-                mWidth = width;
-                mHeight = height;
-
-                for (ViewportList::iterator it = mViewportList.begin(); it != mViewportList.end(); ++it)
-                    (*it)->_updateDimensions();
-            }
+                setFinalResolution( width, height );
         }
     }
-
-    //-------------------------------------------------------------------------------------------------//
+    //-----------------------------------------------------------------------------------
     void GLXWindow::windowMovedOrResized()
     {
-        if (mClosed || !mWindow)
+        if( mClosed || !mWindow )
             return;
 
         Display* xDisplay = mGLSupport->getXDisplay();
         XWindowAttributes windowAttrib;
 
-        if (mIsTopLevel && !mIsFullScreen)
+        if( mIsTopLevel && !mFullscreenMode )
         {
-            Window parent, root, *children;
+            ::Window parent, root, *children;
             uint nChildren;
 
-            XQueryTree(xDisplay, mWindow, &root, &parent, &children, &nChildren);
+            XQueryTree( xDisplay, mWindow, &root, &parent, &children, &nChildren );
 
             if (children)
                 XFree(children);
@@ -678,31 +720,19 @@ namespace Ogre
             mTop  = windowAttrib.y;
         }
 
-        XGetWindowAttributes(xDisplay, mWindow, &windowAttrib);
+        XGetWindowAttributes( xDisplay, mWindow, &windowAttrib );
 
-        if (mWidth == (size_t)windowAttrib.width && mHeight == (size_t)windowAttrib.height)
-            return;
-
-        mWidth = windowAttrib.width;
-        mHeight = windowAttrib.height;
-
-        for (ViewportList::iterator it = mViewportList.begin(); it != mViewportList.end(); ++it)
-            (*it)->_updateDimensions();
+        setFinalResolution( windowAttrib.width, windowAttrib.height );
     }
-
-    //-------------------------------------------------------------------------------------------------//
+    //-----------------------------------------------------------------------------------
     void GLXWindow::swapBuffers()
     {
-        RenderWindow::swapBuffers();
-
-        if (mClosed || mIsExternalGLControl)
+        if( mClosed || mIsExternalGLControl )
             return;
 
-        glXSwapBuffers(mGLSupport->getGLDisplay(), mContext->mDrawable);
-        RenderWindow::swapBuffers();
+        glXSwapBuffers( mGLSupport->getGLDisplay(), mContext->mDrawable );
     }
-
-    //-------------------------------------------------------------------------------------------------//
+    //-----------------------------------------------------------------------------------
     void GLXWindow::getCustomAttribute( const String& name, void* pData )
     {
         if( name == "DISPLAY NAME" )
@@ -732,62 +762,14 @@ namespace Ogre
         }
         else if( name == "WINDOW" )
         {
-            *static_cast<Window*>(pData) = mWindow;
+            *static_cast< ::Window* >(pData) = mWindow;
             return;
         }
     }
-
-    //-------------------------------------------------------------------------------------------------//
-    void GLXWindow::copyContentsToMemory(const PixelBox &dst, FrameBuffer buffer)
+    //-----------------------------------------------------------------------------------
+    void GLXWindow::switchFullScreen( bool fullscreen )
     {
-        if (mClosed)
-            return;
-
-        if (dst.getWidth() > mWidth ||
-            dst.getHeight() > mHeight ||
-            dst.front != 0 || dst.back != 1)
-        {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, "Invalid box.", "GLXWindow::copyContentsToMemory" );
-        }
-
-        if (buffer == FB_AUTO)
-        {
-            buffer = mIsFullScreen? FB_FRONT : FB_BACK;
-        }
-
-        GLenum format = Ogre::GL3PlusPixelUtil::getGLOriginFormat(dst.format);
-        GLenum type = Ogre::GL3PlusPixelUtil::getGLOriginDataType(dst.format);
-
-        if ((format == GL_NONE) || (type == 0))
-        {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, "Unsupported format.", "GLXWindow::copyContentsToMemory" );
-        }
-
-        // Switch context if different from current one
-        RenderSystem* rsys = Root::getSingleton().getRenderSystem();
-        rsys->_setViewport(this->getViewport(0));
-
-        if(dst.getWidth() != dst.rowPitch)
-            glPixelStorei(GL_PACK_ROW_LENGTH, dst.rowPitch);
-        // Must change the packing to ensure no overruns!
-        glPixelStorei(GL_PACK_ALIGNMENT, 1);
-
-        glReadBuffer((buffer == FB_FRONT)? GL_FRONT : GL_BACK);
-        glReadPixels((GLint)0, (GLint)(mHeight - dst.getHeight()),
-                     (GLsizei)dst.getWidth(), (GLsizei)dst.getHeight(),
-                     format, type, dst.getTopLeftFrontPixelPtr());
-
-        // restore default alignment
-        glPixelStorei(GL_PACK_ALIGNMENT, 4);
-        glPixelStorei(GL_PACK_ROW_LENGTH, 0);
-
-        PixelUtil::bulkPixelVerticalFlip(dst);
-    }
-
-    //-------------------------------------------------------------------------------------------------//
-    void GLXWindow::switchFullScreen(bool fullscreen)
-    {
-        if (mGLSupport->mAtomFullScreen != None)
+        if( mGLSupport->mAtomFullScreen != None )
         {
             Display* xDisplay = mGLSupport->getXDisplay();
             XClientMessageEvent xMessage;
@@ -802,9 +784,10 @@ namespace Ogre
             xMessage.data.l[1] = mGLSupport->mAtomFullScreen;
             xMessage.data.l[2] = 0;
 
-            XSendEvent(xDisplay, DefaultRootWindow(xDisplay), False, SubstructureRedirectMask | SubstructureNotifyMask, (XEvent*)&xMessage);
+            XSendEvent( xDisplay, DefaultRootWindow(xDisplay), False,
+                        SubstructureRedirectMask | SubstructureNotifyMask, (XEvent*)&xMessage );
 
-            mIsFullScreen = fullscreen;
+            mFullscreenMode = fullscreen;
         }
     }
 }

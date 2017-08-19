@@ -113,7 +113,7 @@ namespace Ogre {
          * @param height         Receiver for requested and final drawable height
          * @param height         Receiver for requested and final drawable frequency
          */
-        void switchMode (uint& width, uint& height, short& frequency);
+        void switchMode( uint32 width, uint32 height, short frequency );
 
         /**
          * Switch back to original video mode

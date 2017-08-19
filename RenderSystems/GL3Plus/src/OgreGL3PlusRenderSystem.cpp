@@ -893,7 +893,8 @@ namespace Ogre {
         mRTTManager->getBestDepthStencil( internalColourFormat, depthFormat, stencilFormat );
     }
     //-----------------------------------------------------------------------------------
-    static const IdString CustomAttributeIdString_GLCONTEXT( "GLCONTEXT" );
+    extern const IdString CustomAttributeIdString_GLCONTEXT;
+    const IdString CustomAttributeIdString_GLCONTEXT( "GLCONTEXT" );
     void GL3PlusRenderSystem::_setCurrentDeviceFromTexture( TextureGpu *texture )
     {
         GL3PlusContext *newContext = 0;

@@ -909,7 +909,7 @@ namespace Ogre
     }
 
     //-------------------------------------------------------------------------------------------------//
-    void GLXGLSupport::switchMode(uint& width, uint& height, short& frequency)
+    void GLXGLSupport::switchMode( uint32 width, uint32 height, short frequency )
     {
         int size = 0;
         int newSize = -1;
