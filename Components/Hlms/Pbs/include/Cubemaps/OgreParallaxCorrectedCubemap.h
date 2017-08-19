@@ -98,7 +98,7 @@ namespace Ogre
 
         struct TempRtt
         {
-            TexturePtr  texture;
+            TextureGpu  *texture;
             uint32      refCount;
         };
 
@@ -190,9 +190,9 @@ namespace Ogre
         @param maxHeight
             See maxHeight.
         @param pixelFormat
-            PixelFormat of the final blended/merged cubemap.
+            PixelFormatGpu of the final blended/merged cubemap.
         */
-        void setEnabled( bool bEnabled, uint32 maxWidth, uint32 maxHeight, PixelFormat pixelFormat );
+        void setEnabled( bool bEnabled, uint32 maxWidth, uint32 maxHeight, PixelFormatGpu pixelFormat );
         bool getEnabled(void) const;
 
         /// By default the probes will be constructed when the user enters its vecinity.
@@ -212,8 +212,8 @@ namespace Ogre
 
         /// See mTmpRtt. Finds an RTT that is compatible to copy to baseParams.
         /// Creates one if none found.
-        TexturePtr findTmpRtt( const TexturePtr &baseParams );
-        void releaseTmpRtt( const TexturePtr &tmpRtt );
+        TextureGpu* findTmpRtt( const TextureGpu *baseParams );
+        void releaseTmpRtt( const TextureGpu *tmpRtt );
 
         void _addManuallyActiveProbe( CubemapProbe *probe );
         void _removeManuallyActiveProbe( CubemapProbe *probe );

@@ -95,7 +95,14 @@ namespace Ogre
         assert( mResidencyStatus == GpuResidency::OnStorage );
         mWidth = width;
         mHeight = height;
-        mDepthOrSlices = depthOrSlices;
+        if( mTextureType == TextureTypes::TypeCube )
+            mDepthOrSlices = 6u;
+        else
+        {
+            assert( (mTextureType != TextureTypes::TypeCubeArray || (mTextureType % 6u) == 0) &&
+                    "depthOrSlices must be a multiple of 6 for TypeCubeArray textures!" );
+            mDepthOrSlices = depthOrSlices;
+        }
     }
     //-----------------------------------------------------------------------------------
     uint32 TextureGpu::getWidth(void) const
@@ -138,6 +145,8 @@ namespace Ogre
     {
         assert( mResidencyStatus == GpuResidency::OnStorage );
         mTextureType = textureType;
+        if( mTextureType == TextureTypes::TypeCube )
+            mDepthOrSlices = 6u;
     }
     //-----------------------------------------------------------------------------------
     TextureTypes::TextureTypes TextureGpu::getTextureType(void) const

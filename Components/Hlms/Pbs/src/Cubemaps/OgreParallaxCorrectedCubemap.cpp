@@ -28,7 +28,6 @@ THE SOFTWARE.
 
 #include "OgreStableHeaders.h"
 
-#if TODO_OGRE_2_2
 #include "Cubemaps/OgreParallaxCorrectedCubemap.h"
 
 #include "Compositor/OgreCompositorManager2.h"
@@ -41,15 +40,14 @@ THE SOFTWARE.
 
 #include "OgreRoot.h"
 #include "OgreSceneManager.h"
-#include "OgreRenderTexture.h"
+#include "OgreTextureGpuManager.h"
+#include "OgrePixelFormatGpuUtils.h"
 #include "OgreHlmsManager.h"
 #include "OgreHlms.h"
 #include "OgreDepthBuffer.h"
 
-#include "OgreTextureManager.h"
 #include "OgreMaterialManager.h"
 #include "OgreTechnique.h"
-#include "OgreHardwarePixelBuffer.h"
 #include "OgreLwString.h"
 
 #include "OgreMeshManager2.h"
@@ -162,16 +160,18 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     ParallaxCorrectedCubemap::~ParallaxCorrectedCubemap()
     {
-        setEnabled( false, 0, 0, PF_UNKNOWN );
+        setEnabled( false, 0, 0, PFG_UNKNOWN );
 
         destroyAllProbes();
 
         destroyProxyGeometry();
 
-        if( !mBlendCubemap.isNull() )
+        if( mBlendCubemap )
         {
-            TextureManager::getSingleton().remove( mBlendCubemap->getHandle() );
-            mBlendCubemap.setNull();
+            TextureGpuManager *textureGpuManager =
+                    mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
+            textureGpuManager->destroyTexture( mBlendCubemap );
+            mBlendCubemap = 0;
         }
 
         HlmsManager *hlmsManager = mRoot->getHlmsManager();
@@ -211,11 +211,13 @@ namespace Ogre
     void ParallaxCorrectedCubemap::destroyAllProbes(void)
     {
         {
+            TextureGpuManager *textureGpuManager =
+                    mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
             TempRttVec::const_iterator itor = mTmpRtt.begin();
             TempRttVec::const_iterator end  = mTmpRtt.end();
             while( itor != end )
             {
-                TextureManager::getSingleton().remove( itor->texture->getHandle() );
+                textureGpuManager->destroyTexture( itor->texture );
                 ++itor;
             }
             mTmpRtt.clear();
@@ -284,28 +286,30 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemap::setEnabled( bool bEnabled, uint32 maxWidth,
-                                               uint32 maxHeight, PixelFormat pixelFormat )
+                                               uint32 maxHeight, PixelFormatGpu pixelFormat )
     {
         if( bEnabled == getEnabled() )
             return;
 
         if( bEnabled )
         {
-            mBlendCubemap = TextureManager::getSingleton().createManual(
-                        "ParallaxCorrectedCubemap Blend Result " + StringConverter::toString( getId() ),
-                        ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                        TEX_TYPE_CUBE_MAP, maxWidth, maxHeight,
-                        PixelUtil::getMaxMipmapCount( maxWidth, maxHeight, 1 ), pixelFormat,
-            #if GENERATE_MIPMAPS_ON_BLEND
-                        TU_RENDERTARGET|TU_AUTOMIPMAP, 0, true );
-            #else
-                        TU_RENDERTARGET, 0, true );
-            #endif
-            for( size_t i=0; i<6; ++i )
-            {
-                RenderTarget *renderTarget = mBlendCubemap->getBuffer( i )->getRenderTarget();
-                renderTarget->setDepthBufferPool( DepthBuffer::POOL_NO_DEPTH );
-            }
+            TextureGpuManager *textureGpuManager =
+                    mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
+            mBlendCubemap = textureGpuManager->createTexture(
+                                "ParallaxCorrectedCubemap Blend Result " +
+                                StringConverter::toString( getId() ),
+                                GpuPageOutStrategy::Discard,
+                    #if GENERATE_MIPMAPS_ON_BLEND
+                                TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps,
+                    #else
+                                TextureFlags::RenderToTexture,
+                    #endif
+                                TextureTypes::TypeCube );
+            mBlendCubemap->setResolution( maxWidth, maxHeight );
+            mBlendCubemap->setPixelFormat( pixelFormat );
+            mBlendCubemap->setNumMipmaps( PixelFormatGpuUtils::getMaxMipmapCount( maxWidth,
+                                                                                  maxHeight ) );
+            mBlendCubemap->_transitionTo( GpuResidency::Resident, (uint8*)0 );
 
             createCubemapBlendWorkspace();
 
@@ -532,10 +536,7 @@ namespace Ogre
         mBlendProxyCamera->setNearClipDistance( 0.01 );
         mBlendProxyCamera->setFarClipDistance( 0.0 );
 
-        CompositorChannel channel;
-        channel.target = mBlendCubemap->getBuffer()->getRenderTarget();
-        channel.textures.push_back( mBlendCubemap );
-        CompositorChannelVec channels( 1, channel );
+        CompositorChannelVec channels( 1, mBlendCubemap );
 
         IdString workspaceName( "AutoGen_ParallaxCorrectedCubemapBlending_Workspace" );
 
@@ -1159,9 +1160,9 @@ namespace Ogre
         *passBufferPtr++ = 1.0f;
     }
     //-----------------------------------------------------------------------------------
-    TexturePtr ParallaxCorrectedCubemap::findTmpRtt( const TexturePtr &baseParams )
+    TextureGpu* ParallaxCorrectedCubemap::findTmpRtt( const TextureGpu *baseParams )
     {
-        TexturePtr retVal;
+        TextureGpu *retVal;
 
         TempRttVec::iterator itor = mTmpRtt.begin();
         TempRttVec::iterator end  = mTmpRtt.end();
@@ -1170,8 +1171,8 @@ namespace Ogre
         {
             if( itor->texture->getWidth() == baseParams->getWidth() &&
                 itor->texture->getHeight() == baseParams->getHeight() &&
-                itor->texture->getFormat() == baseParams->getFormat() &&
-                itor->texture->getFSAA() == baseParams->getFSAA() )
+                itor->texture->getPixelFormat() == baseParams->getPixelFormat() &&
+                itor->texture->getMsaa() == baseParams->getMsaa() )
             {
                 retVal = itor->texture;
                 ++itor->refCount;
@@ -1180,15 +1181,23 @@ namespace Ogre
             ++itor;
         }
 
-        if( retVal.isNull() )
+        if( !retVal )
         {
             TempRtt tmpRtt;
-            retVal = TextureManager::getSingleton().createManual(
-                        "ParallaxCorrectedCubemap Temp RTT " + StringConverter::toString( getId() ),
-                        ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                        TEX_TYPE_CUBE_MAP, baseParams->getWidth(), baseParams->getHeight(),
-                        baseParams->getNumMipmaps(), baseParams->getFormat(),
-                        TU_RENDERTARGET|TU_AUTOMIPMAP, 0, true, baseParams->getFSAA() );
+            TextureGpuManager *textureGpuManager =
+                    mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
+            retVal = textureGpuManager->createTexture(
+                         "ParallaxCorrectedCubemap Temp RTT " + StringConverter::toString( getId() ),
+                         GpuPageOutStrategy::Discard,
+                         TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps,
+                         TextureTypes::TypeCube );
+            retVal->setResolution( baseParams->getWidth(), baseParams->getHeight() );
+            retVal->setPixelFormat( baseParams->getPixelFormat() );
+            retVal->setNumMipmaps( baseParams->getNumMipmaps() );
+            retVal->setMsaa( baseParams->getMsaa() );
+            retVal->setMsaaPattern( baseParams->getMsaaPattern() );
+            retVal->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+
             tmpRtt.texture = retVal;
             tmpRtt.refCount = 1;
             mTmpRtt.push_back( tmpRtt );
@@ -1197,7 +1206,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemap::releaseTmpRtt( const TexturePtr &tmpRtt )
+    void ParallaxCorrectedCubemap::releaseTmpRtt( const TextureGpu *tmpRtt )
     {
         TempRttVec::iterator itor = mTmpRtt.begin();
         TempRttVec::iterator end  = mTmpRtt.end();
@@ -1210,7 +1219,9 @@ namespace Ogre
             --itor->refCount;
             if( !itor->refCount )
             {
-                TextureManager::getSingleton().remove( tmpRtt->getHandle() );
+                TextureGpuManager *textureGpuManager =
+                        mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
+                textureGpuManager->destroyTexture( itor->texture );
                 efficientVectorRemove( mTmpRtt, itor );
             }
         }
@@ -1287,4 +1298,3 @@ namespace Ogre
             this->updateRender();
     }
 }
-#endif
