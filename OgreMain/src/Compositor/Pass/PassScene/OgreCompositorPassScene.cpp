@@ -178,6 +178,8 @@ namespace Ogre
             const uint32 oldVisibilityMask = viewport->getVisibilityMask();
             const uint32 oldLightVisibilityMask = viewport->getLightVisibilityMask();
 
+            mCamera->_notifyViewport( viewport );
+
             shadowNode->_update( mCamera, usedLodCamera, sceneManager );
 
             //ShadowNode passes may've overriden these settings.

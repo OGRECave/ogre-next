@@ -35,7 +35,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    class _OgreGL3PlusExport GL3PlusTextureGpuWindow : public GL3PlusTextureGpu
+    class _OgreGL3PlusExport GL3PlusTextureGpuWindow : public GL3PlusTextureGpuRenderTarget
     {
         GL3PlusContext  *mContext;
         Window          *mWindow;

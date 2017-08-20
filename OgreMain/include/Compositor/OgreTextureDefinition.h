@@ -151,6 +151,13 @@ namespace Ogre
             /// Note that RenderToTexture & Uav can coexist.
             uint32 textureFlags;
 
+            /// This is a default value for the texture,
+            /// but can be overriden by an RTV definition.
+            /// See RenderTargetViewEntry::depthBufferId
+            uint16          depthBufferId;
+            bool            preferDepthTexture;
+            PixelFormatGpu  depthBufferFormat;
+
             /// Do not call directly. @see TextureDefinition::renameTexture instead.
             void _setName( IdString newName )   { name = newName; }
             IdString getName(void) const        { return name; }
@@ -159,7 +166,8 @@ namespace Ogre
                     width( 0 ), height( 0 ), depthOrSlices( 1u ), numMipmaps( 1u ),
                     widthFactor( 1.0f ), heightFactor( 1.0f ),
                     format( PFG_UNKNOWN ), msaa( 1u ), msaaPattern( MsaaPatterns::Undefined ),
-                    textureFlags( TextureFlags::RenderToTexture ) {}
+                    textureFlags( TextureFlags::RenderToTexture ),
+                    depthBufferId( 1u ), preferDepthTexture( false ), depthBufferFormat( PFG_UNKNOWN ) {}
         };
         typedef vector<TextureDefinition>::type     TextureDefinitionVec;
 

@@ -155,9 +155,23 @@ namespace Ogre
             GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
             IdString name, uint32 textureFlags, TextureTypes::TextureTypes initialType )
     {
-        return OGRE_NEW GL3PlusTextureGpu( pageOutStrategy, mVaoManager, name,
-                                           textureFlags | TextureFlags::RequiresTextureFlipping,
-                                           initialType, this );
+        GL3PlusTextureGpu *retVal = 0;
+        if( textureFlags & TextureFlags::RenderToTexture )
+        {
+            retVal = OGRE_NEW GL3PlusTextureGpuRenderTarget(
+                         pageOutStrategy, mVaoManager, name,
+                         textureFlags | TextureFlags::RequiresTextureFlipping,
+                         initialType, this );
+        }
+        else
+        {
+            retVal = OGRE_NEW GL3PlusTextureGpu(
+                         pageOutStrategy, mVaoManager, name,
+                         textureFlags | TextureFlags::RequiresTextureFlipping,
+                         initialType, this );
+        }
+
+        return retVal;
     }
     //-----------------------------------------------------------------------------------
     StagingTexture* GL3PlusTextureGpuManager::createStagingTextureImpl( uint32 width, uint32 height,

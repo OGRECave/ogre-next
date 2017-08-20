@@ -182,23 +182,20 @@ namespace Ogre {
         return mScissorsMatchViewport;
     }
     //---------------------------------------------------------------------
-    void Viewport::setDimensions( TextureGpu *newTarget, Real left, Real top,
-                                  Real width, Real height, bool overrideScissors )
+    void Viewport::setDimensions( TextureGpu *newTarget, const Vector4 &relativeVp,
+                                  const Vector4 &scissors )
     {
         mCurrentTarget = newTarget;
 
-        mRelLeft = left;
-        mRelTop = top;
-        mRelWidth = width;
-        mRelHeight = height;
+        mRelLeft    = relativeVp.x;
+        mRelTop     = relativeVp.y;
+        mRelWidth   = relativeVp.z;
+        mRelHeight  = relativeVp.w;
 
-        if( overrideScissors )
-        {
-            mScissorRelLeft     = left;
-            mScissorRelTop      = top;
-            mScissorRelWidth    = width;
-            mScissorRelHeight   = height;
-        }
+        mScissorRelLeft     = scissors.x;
+        mScissorRelTop      = scissors.y;
+        mScissorRelWidth    = scissors.z;
+        mScissorRelHeight   = scissors.w;
 
         _updateDimensions();
     }

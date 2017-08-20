@@ -357,6 +357,9 @@ namespace Ogre
             tex->setMsaaPattern( defaultMsaaPattern );
         }
 
+        tex->_setDepthBufferDefaults( textureDef.depthBufferId, textureDef.preferDepthTexture,
+                                      textureDef.depthBufferFormat );
+
         tex->_transitionTo( GpuResidency::Resident, (uint8*)0 );
 
 //        RenderTexture* rt = tex->getBuffer()->getRenderTarget();

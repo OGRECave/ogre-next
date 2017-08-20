@@ -294,6 +294,37 @@ namespace Ogre
         virtual void copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
                              const TextureBox &srcBox, uint8 srcMipLevel );
 
+        /** These 3 values  are used as defaults for the compositor to use, but they may be
+            explicitly overriden by a RenderPassDescriptor.
+            Particularly required when passing the textures between nodes as input and
+            output (since only the TextureGpu pointer is passed, and thus this information is lost)
+        @remarks
+            Changing these settings won't take immediate effect because they're only used
+            when creating the compositor.
+        @param depthBufferPoolId
+            Sets the pool ID this RenderTarget should query from. Default value is POOL_DEFAULT.
+            Set to POOL_NO_DEPTH to avoid using a DepthBuffer (or manually controlling it)
+        @param preferDepthTexture
+            Whether this RT should be attached to a depth texture, or a regular depth buffer.
+            On older GPUs, preferring depth textures may result in certain depth precisions
+            to not be available (or use integer precision instead of floating point, etc).
+            True to use depth textures. False otherwise (default).
+        @param desiredDepthBufferFormat
+            Ogre will try to honour this request, but if it's not supported,
+            you may get lower precision.
+            All formats will try to fallback to PF_D24_UNORM_S8_UINT if not supported.
+            Must be one of the following:
+                PFG_D24_UNORM_S8_UINT
+                PFG_D16_UNORM
+                PFG_D32_FLOAT
+                PFG_D32_FLOAT_X24_S8_UINT
+        */
+        virtual void _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
+                                              PixelFormatGpu desiredDepthBufferFormat );
+        virtual uint16 getDepthBufferPoolId(void) const;
+        virtual bool getPreferDepthTexture(void) const;
+        virtual PixelFormatGpu getDesiredDepthBufferFormat(void) const;
+
         /// Tells the API to let the HW autogenerate mipmaps. Assumes the
         /// allowsAutoMipmaps() == true and isRenderToTexture() == true
         virtual void _autogenerateMipmaps(void) = 0;

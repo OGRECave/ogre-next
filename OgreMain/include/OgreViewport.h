@@ -166,8 +166,8 @@ namespace Ogre {
             Dimensions relative to the size of the target, represented as real values
             between 0 and 1. i.e. the full target area is 0, 0, 1, 1.
         */
-        void setDimensions( TextureGpu *newTarget, Real left, Real top, Real width, Real height,
-                            bool overrideScissors=true );
+        void setDimensions( TextureGpu *newTarget, const Vector4 &relativeVp,
+                            const Vector4 &scissors );
 
         TextureGpu* getCurrentTarget(void) const        { return mCurrentTarget; }
 

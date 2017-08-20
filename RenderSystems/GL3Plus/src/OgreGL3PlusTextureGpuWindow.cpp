@@ -50,8 +50,8 @@ namespace Ogre
             TextureTypes::TextureTypes initialType,
             TextureGpuManager *textureManager,
             GL3PlusContext *context, Window *window ) :
-        GL3PlusTextureGpu( pageOutStrategy, vaoManager, name,
-                           textureFlags, initialType, textureManager ),
+        GL3PlusTextureGpuRenderTarget( pageOutStrategy, vaoManager, name,
+                                       textureFlags, initialType, textureManager ),
         mContext( context ),
         mWindow( window )
     {

@@ -96,6 +96,26 @@ namespace Ogre
         /// Returns GL_TEXTURE_2D / GL_TEXTURE_2D_ARRAY / etc
         GLenum getGlTextureTarget(void) const       { return mGlTextureTarget; }
     };
+
+    class _OgreGL3PlusExport GL3PlusTextureGpuRenderTarget : public GL3PlusTextureGpu
+    {
+    protected:
+        uint16          mDepthBufferPoolId;
+        bool            mPreferDepthTexture;
+        PixelFormatGpu  mDesiredDepthBufferFormat;
+
+    public:
+        GL3PlusTextureGpuRenderTarget( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+                                       VaoManager *vaoManager, IdString name, uint32 textureFlags,
+                                       TextureTypes::TextureTypes initialType,
+                                       TextureGpuManager *textureManager );
+
+        virtual void _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
+                                              PixelFormatGpu desiredDepthBufferFormat );
+        virtual uint16 getDepthBufferPoolId(void) const;
+        virtual bool getPreferDepthTexture(void) const;
+        virtual PixelFormatGpu getDesiredDepthBufferFormat(void) const;
+    };
 }
 
 #include "OgreHeaderSuffix.h"

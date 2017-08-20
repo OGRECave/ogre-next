@@ -63,7 +63,7 @@ THE SOFTWARE.
 #include "Compositor/Pass/PassStencil/OgreCompositorPassStencilDef.h"
 #include "Compositor/Pass/PassUav/OgreCompositorPassUavDef.h"
 
-#define TODO_move_this_to_RTV
+#define TODO_better_describe_input_if_depth
 
 namespace Ogre{
 
@@ -6211,9 +6211,9 @@ namespace Ogre{
         bool widthSet = false, heightSet = false;
         uint8 msaa = 1u;
         uint32 textureFlags = TextureFlags::RenderToTexture;
-//        uint16 depthBufferId = DepthBuffer::POOL_INVALID;
-//        PixelFormat depthBufferFormat = PF_UNKNOWN;
-//        bool preferDepthTexture = false;
+        uint16 depthBufferId = DepthBuffer::POOL_INVALID;
+        PixelFormatGpu depthBufferFormat = PFG_UNKNOWN;
+        bool preferDepthTexture = false;
         uint8 numMipmaps = 1u;
         PixelFormatGpu format;
 
@@ -6294,7 +6294,7 @@ namespace Ogre{
             case ID_EXPLICIT_RESOLVE:
                 textureFlags |= TextureFlags::MsaaExplicitResolve;
                 break;
-            /*case ID_DEPTH_POOL:
+            case ID_DEPTH_POOL:
                 {
                     // advance to next to get the ID
                     it = getNodeAt(prop->values, static_cast<int>(atomIndex++));
@@ -6327,14 +6327,14 @@ namespace Ogre{
                     }
                     atom = (AtomAbstractNode*)(*it).get();
 
-                    depthBufferFormat = PixelUtil::getFormatFromName(atom->value, false);
-                    if( depthBufferFormat == PF_UNKNOWN )
+                    depthBufferFormat = PixelFormatGpuUtils::getFormatFromName( atom->value );
+                    if( depthBufferFormat == PFG_UNKNOWN )
                     {
                         compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line);
                         return;
                     }
                 }
-                break;*/
+                break;
             case ID_UAV:
                 textureFlags |= TextureFlags::Uav;
                 break;
@@ -6399,16 +6399,15 @@ namespace Ogre{
                         return;
                     }
 
-                    TODO_move_this_to_RTV;
-//                    if( depthBufferId == DepthBuffer::POOL_INVALID )
-//                    {
-//                        if( PixelUtil::isDepth( format ) )
-//                            depthBufferId = DepthBuffer::POOL_NON_SHAREABLE;
-//                        else if( format == PF_NULL )
-//                            depthBufferId = DepthBuffer::POOL_NO_DEPTH;
-//                        else
-//                            depthBufferId = DepthBuffer::POOL_DEFAULT;
-//                    }
+                    if( depthBufferId == DepthBuffer::POOL_INVALID )
+                    {
+                        if( PixelFormatGpuUtils::isDepth( format ) )
+                            depthBufferId = DepthBuffer::POOL_NON_SHAREABLE;
+                        else if( format == PF_NULL )
+                            depthBufferId = DepthBuffer::POOL_NO_DEPTH;
+                        else
+                            depthBufferId = DepthBuffer::POOL_DEFAULT;
+                    }
                 }
 
             }
@@ -6436,6 +6435,26 @@ namespace Ogre{
         td->format          = format;
         td->msaa            = msaa;
         td->textureFlags    = textureFlags;
+        td->depthBufferId       = depthBufferId;
+        td->preferDepthTexture  = preferDepthTexture;
+        td->depthBufferFormat   = depthBufferFormat;
+
+        RenderTargetViewDef *rtv = defBase->addRenderTextureView( atom0->value );
+        if( !PixelFormatGpuUtils::isDepth( format ) )
+        {
+            RenderTargetViewEntry attachment;
+            attachment.textureName = atom0->value;
+            rtv->colourAttachments.push_back( attachment );
+            rtv->depthBufferId      = depthBufferId;
+            rtv->preferDepthTexture = preferDepthTexture;
+            rtv->depthBufferFormat  = depthBufferFormat;
+        }
+        else
+        {
+            rtv->depthAttachment.textureName = atom0->value;
+            if( format == PFG_D24_UNORM_S8_UINT || format == PFG_D32_FLOAT_S8X24_UINT )
+                rtv->stencilAttachment.textureName = atom0->value;
+        }
     }
     //-----------------------------------------------------------------------------------
     void CompositorTextureBaseTranslator::translateBufferProperty( TextureDefinitionBase *defBase,
@@ -6972,6 +6991,24 @@ namespace Ogre{
                         {
                             mNodeDef->addTextureSourceName( textureName, inChannel,
                                                             TextureDefinitionBase::TEXTURE_INPUT );
+
+                            TODO_better_describe_input_if_depth;
+                            RenderTargetViewDef *rtv = mNodeDef->addRenderTextureView( textureName );
+                            //if( !PixelFormatGpuUtils::isDepth( format ) )
+                            {
+                                RenderTargetViewEntry attachment;
+                                attachment.textureName = textureName;
+                                rtv->colourAttachments.push_back( attachment );
+//                                rtv->depthBufferId      = depthBufferId;
+//                                rtv->preferDepthTexture = preferDepthTexture;
+//                                rtv->depthBufferFormat  = depthBufferFormat;
+                            }
+//                            else
+//                            {
+//                                rtv->depthAttachment.textureName = atom0->value;
+//                                if( format == PFG_D24_UNORM_S8_UINT || format == PFG_D32_FLOAT_S8X24_UINT )
+//                                    rtv->stencilAttachment.textureName = atom0->value;
+//                            }
                         }
                         else
                         {

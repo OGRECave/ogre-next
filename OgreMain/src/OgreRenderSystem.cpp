@@ -533,11 +533,7 @@ namespace Ogre {
                                                   bool warnIfRtvWasFlushed )
     {
         mCurrentRenderPassDescriptor = desc;
-        mCurrentRenderViewport.setDimensions( anyTarget,
-                                              viewportSize.x, viewportSize.y,
-                                              viewportSize.z, viewportSize.w,
-                                              false );
-        mCurrentRenderViewport.setScissors( scissors.x, scissors.y, scissors.z, scissors.w );
+        mCurrentRenderViewport.setDimensions( anyTarget, viewportSize, scissors );
         mCurrentRenderViewport.setOverlaysEnabled( overlaysEnabled );
     }
     //---------------------------------------------------------------------
