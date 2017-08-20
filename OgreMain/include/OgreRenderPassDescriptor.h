@@ -100,7 +100,13 @@ namespace Ogre
             /// Resolve MSAA rendering into resolve texture.
             /// Contents of MSAA texture are kept.
             /// It is valid to use this flag without an MSAA texture.
-            StoreAndMultisampleResolve
+            StoreAndMultisampleResolve,
+            /// If texture is MSAA, has same effects as MultisampleResolve.
+            /// If texture is not MSAA, has same effects as Store.
+            ///
+            /// To be used only by the Compositor.
+            /// Should not be used in the actual RenderPassDescriptor directly.
+            StoreOrResolve
         };
     }
 

@@ -4,16 +4,21 @@ compositor_node PbsMaterialsRenderingNode
 
 	target rt_renderwindow
 	{
-		
-		pass clear
-		{
-			colour_value 0.2 0.4 0.6 1
-		}
-
 		pass render_scene
 		{
+			load
+			{
+				all				clear
+				clear_colour	0.2 0.4 0.6 1
+			}
+			store
+			{
+				colour	store_or_resolve
+				depth	dont_care
+				stencil	dont_care
+			}
 			overlays	on
-			shadows		PbsMaterialsShadowNode
+			//shadows		PbsMaterialsShadowNode
 		}
 	}
 }

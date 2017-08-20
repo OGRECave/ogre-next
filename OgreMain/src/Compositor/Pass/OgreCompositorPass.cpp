@@ -146,27 +146,34 @@ namespace Ogre
         //TODO: All other settings to fill are in RenderTargetView
         for( size_t i=0; i<numColourAttachments; ++i )
         {
-            setupRenderPassTarget( &renderPassDesc->mColour[i], rtv->colourAttachments[i] );
             renderPassDesc->mColour[i].loadAction  = mDefinition->mLoadActionColour[i];
             renderPassDesc->mColour[i].storeAction = mDefinition->mStoreActionColour[i];
             renderPassDesc->mColour[i].clearColour = mDefinition->mClearColour[i];
             renderPassDesc->mColour[i].allLayers   = rtv->colourAttachments[i].colourAllLayers;
+            setupRenderPassTarget( &renderPassDesc->mColour[i], rtv->colourAttachments[i] );
         }
-        setupRenderPassTarget( &renderPassDesc->mDepth, rtv->depthAttachment,
-                               renderPassDesc->mColour[0].texture, rtv->depthBufferId,
-                               rtv->preferDepthTexture, rtv->depthBufferFormat );
+
         renderPassDesc->mDepth.loadAction       = mDefinition->mLoadActionDepth;
         renderPassDesc->mDepth.storeAction      = mDefinition->mStoreActionDepth;
         renderPassDesc->mDepth.clearDepth       = mDefinition->mClearDepth;
         renderPassDesc->mDepth.readOnly         = rtv->depthReadOnly && mDefinition->mReadOnlyDepth;
-
-        setupRenderPassTarget( &renderPassDesc->mStencil, rtv->stencilAttachment,
+        setupRenderPassTarget( &renderPassDesc->mDepth, rtv->depthAttachment,
                                renderPassDesc->mColour[0].texture, rtv->depthBufferId,
                                rtv->preferDepthTexture, rtv->depthBufferFormat );
+
         renderPassDesc->mStencil.loadAction     = mDefinition->mLoadActionStencil;
         renderPassDesc->mStencil.storeAction    = mDefinition->mStoreActionStencil;
         renderPassDesc->mStencil.clearStencil   = mDefinition->mClearStencil;
         renderPassDesc->mStencil.readOnly       = rtv->stencilReadOnly && mDefinition->mReadOnlyStencil;
+        setupRenderPassTarget( &renderPassDesc->mStencil, rtv->stencilAttachment,
+                               renderPassDesc->mColour[0].texture, rtv->depthBufferId,
+                               rtv->preferDepthTexture, rtv->depthBufferFormat );
+        if( renderPassDesc->mStencil.texture )
+        {
+            const PixelFormatGpu stencilFormat = renderPassDesc->mStencil.texture->getPixelFormat();
+            if( stencilFormat != PFG_D24_UNORM_S8_UINT && stencilFormat != PFG_D32_FLOAT_S8X24_UINT )
+                renderPassDesc->mStencil.texture = 0;
+        }
 
         renderPassDesc->entriesModified( RenderPassDescriptor::All );
 
@@ -213,8 +220,10 @@ namespace Ogre
             if( renderPassTargetAttachment->texture->getMsaa() > 1u )
             {
                 if( renderPassTargetAttachment->storeAction == StoreAction::MultisampleResolve ||
-                    renderPassTargetAttachment->storeAction == StoreAction::StoreAndMultisampleResolve )
+                    renderPassTargetAttachment->storeAction == StoreAction::StoreAndMultisampleResolve ||
+                    renderPassTargetAttachment->storeAction == StoreAction::StoreOrResolve )
                 {
+                    //If we're here, the texture is MSAA _AND_ we'll resolve it.
                     if( rtvEntry.resolveTextureName == IdString() )
                     {
                         if( !renderPassTargetAttachment->texture->hasMsaaExplicitResolves() )
@@ -222,8 +231,9 @@ namespace Ogre
                             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                                          "Must specify resolveTextureName for RTV when using explicit "
                                          "resolves and store action is either "
-                                         "StoreAction::MultisampleResolve or "
-                                         "StoreAction::StoreAndMultisampleResolve. "
+                                         "StoreAction::MultisampleResolve, "
+                                         "StoreAction::StoreAndMultisampleResolve or "
+                                         "StoreAction::StoreOrResolve. "
                                          "Texture: " + renderPassTargetAttachment->texture->getNameStr(),
                                          "CompositorPass::setupRenderPassTarget" );
                         }
@@ -265,6 +275,19 @@ namespace Ogre
         renderPassTargetAttachment->resolveMipLevel = rtvEntry.resolveMipLevel;
         renderPassTargetAttachment->slice           = rtvEntry.slice;
         renderPassTargetAttachment->resolveSlice    = rtvEntry.resolveSlice;
+
+        if( renderPassTargetAttachment->storeAction == StoreAction::StoreOrResolve )
+        {
+            if( !renderPassTargetAttachment->texture )
+                renderPassTargetAttachment->storeAction = StoreAction::DontCare;
+            else
+            {
+                if( renderPassTargetAttachment->texture->getMsaa() > 1u )
+                    renderPassTargetAttachment->storeAction = StoreAction::MultisampleResolve;
+                else
+                    renderPassTargetAttachment->storeAction = StoreAction::Store;
+            }
+        }
     }
     //-----------------------------------------------------------------------------------
     void CompositorPass::populateTextureDependenciesFromExposedTextures(void)

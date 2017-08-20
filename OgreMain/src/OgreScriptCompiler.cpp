@@ -1256,6 +1256,13 @@ namespace Ogre
         mIds["write"]           = ID_WRITE;
         mIds["mipmap"]          = ID_MIPMAP;
 
+        mIds["load"]            = ID_LOAD;
+        mIds["store"]           = ID_STORE;
+        mIds["all"]             = ID_ALL;
+        mIds["clear_colour"]    = ID_CLEAR_COLOUR;
+        mIds["clear_depth"]     = ID_CLEAR_DEPTH;
+        mIds["clear_stencil"]   = ID_CLEAR_STENCIL;
+        mIds["warn_if_rtv_was_flushed"]   = ID_WARN_IF_RTV_WAS_FLUSHED;
         mIds["viewport"]        = ID_VIEWPORT;
         mIds["num_initial"]     = ID_NUM_INITIAL;
         mIds["identifier"]      = ID_IDENTIFIER;

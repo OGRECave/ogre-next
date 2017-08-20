@@ -6403,7 +6403,7 @@ namespace Ogre{
                     {
                         if( PixelFormatGpuUtils::isDepth( format ) )
                             depthBufferId = DepthBuffer::POOL_NON_SHAREABLE;
-                        else if( format == PF_NULL )
+                        else if( format == PFG_NULL )
                             depthBufferId = DepthBuffer::POOL_NO_DEPTH;
                         else
                             depthBufferId = DepthBuffer::POOL_DEFAULT;
@@ -7963,6 +7963,432 @@ namespace Ogre{
                 (*itor)->mShadowMapIdx      = static_cast<uint32>(shadowMapIdx);
                 (*itor)->mIncludeOverlays   = false;
                 ++itor;
+            }
+        }
+    }
+
+    /**************************************************************************
+     * CompositorLoadActionTranslator
+     *************************************************************************/
+    CompositorLoadActionTranslator::CompositorLoadActionTranslator() : mPassDef( 0 )
+    {
+    }
+    //-------------------------------------------------------------------------
+    bool CompositorLoadActionTranslator::getLoadAction( const Ogre::AbstractNodePtr &node,
+                                                        LoadAction::LoadAction *result )
+    {
+        if (node->type != ANT_ATOM)
+            return false;
+
+        AtomAbstractNode *atom = (AtomAbstractNode*)node.get();
+
+        if( atom->value == "dont_care" )
+            *result = LoadAction::DontCare;
+        else if( atom->value == "clear" )
+            *result = LoadAction::Clear;
+        else if( atom->value == "clear_on_tilers" )
+            *result = LoadAction::ClearOnTilers;
+        else if( atom->value == "load" )
+            *result = LoadAction::Load;
+        else
+            return false; // Conversion failed
+
+        return true;
+    }
+    //-------------------------------------------------------------------------
+    void CompositorLoadActionTranslator::translate( ScriptCompiler *compiler, const AbstractNodePtr &node )
+    {
+        mPassDef = any_cast<CompositorPassDef*>(node->parent->context);
+
+        ObjectAbstractNode *obj = reinterpret_cast<ObjectAbstractNode*>(node.get());
+        obj->context = Any(mPassDef);
+
+        for(AbstractNodeList::iterator i = obj->children.begin(); i != obj->children.end(); ++i)
+        {
+            if((*i)->type == ANT_OBJECT)
+            {
+                processNode(compiler, *i);
+            }
+            else if((*i)->type == ANT_PROPERTY)
+            {
+                PropertyAbstractNode *prop = reinterpret_cast<PropertyAbstractNode*>((*i).get());
+                switch(prop->id)
+                {
+                case ID_ALL:
+                {
+                    if(prop->values.empty())
+                    {
+                        compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line);
+                        return;
+                    }
+
+                    LoadAction::LoadAction loadAction;
+                    AbstractNodeList::const_iterator it0 = prop->values.begin();
+                    if( getLoadAction( *it0, &loadAction ) )
+                    {
+                        mPassDef->setAllLoadActions( loadAction );
+                    }
+                    else
+                    {
+                         compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line);
+                    }
+                }
+                    break;
+                case ID_COLOUR:
+                {
+                    if(prop->values.size() != 1u && prop->values.size() != 2u)
+                    {
+                        compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line,
+                                           "1 or 2 arguments expected");
+                        return;
+                    }
+
+                    if( prop->values.size() == 1u )
+                    {
+                        LoadAction::LoadAction loadAction;
+                        AbstractNodeList::const_iterator it0 = prop->values.begin();
+                        if( getLoadAction( *it0, &loadAction ) )
+                        {
+                            for( int j=0; j<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++j )
+                                mPassDef->mLoadActionColour[j] = loadAction;
+                        }
+                        else
+                        {
+                            compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line,
+                                               "Expected dont_care|load|clear|clear_on_tilers" );
+                        }
+                    }
+                    else
+                    {
+                        uint32 colourIdx;
+                        LoadAction::LoadAction loadAction;
+                        AbstractNodeList::const_iterator it1 = prop->values.begin();
+                        AbstractNodeList::const_iterator it0 = it1++;
+                        if( getUInt( *it0, &colourIdx ) && getLoadAction( *it1, &loadAction ) )
+                        {
+                            if( colourIdx < OGRE_MAX_MULTIPLE_RENDER_TARGETS )
+                                mPassDef->mLoadActionColour[colourIdx] = loadAction;
+                            else
+                            {
+                                compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
+                                                   "Number must be between 0 and " +
+                                                   StringConverter::toString(OGRE_MAX_MULTIPLE_RENDER_TARGETS) );
+                            }
+                        }
+                        else
+                        {
+                            compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line,
+                                               "Number expected, followed by dont_care|load|clear|clear_on_tilers");
+                        }
+                    }
+                }
+                    break;
+                case ID_DEPTH:
+                {
+                    if(prop->values.empty())
+                    {
+                        compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line);
+                        return;
+                    }
+
+                    LoadAction::LoadAction loadAction;
+                    AbstractNodeList::const_iterator it0 = prop->values.begin();
+                    if( getLoadAction( *it0, &loadAction ) )
+                        mPassDef->mLoadActionDepth = loadAction;
+                    else
+                    {
+                        compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line,
+                                           "Expected dont_care|load|clear|clear_on_tilers" );
+                    }
+                }
+                    break;
+                case ID_STENCIL:
+                {
+                    if(prop->values.empty())
+                    {
+                        compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line);
+                        return;
+                    }
+
+                    LoadAction::LoadAction loadAction;
+                    AbstractNodeList::const_iterator it0 = prop->values.begin();
+                    if( getLoadAction( *it0, &loadAction ) )
+                        mPassDef->mLoadActionStencil = loadAction;
+                    else
+                    {
+                        compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line,
+                                           "Expected dont_care|load|clear|clear_on_tilers" );
+                    }
+                }
+                    break;
+                case ID_CLEAR_COLOUR:
+                {
+                    if(prop->values.size() != 4u && prop->values.size() != 5u)
+                    {
+                        compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line,
+                                           "4 or 5 arguments expected");
+                        return;
+                    }
+
+                    if( prop->values.size() == 4u )
+                    {
+                        ColourValue clearColour;
+                        if( getColour( prop->values.begin(), prop->values.end(), &clearColour ) )
+                        {
+                            for( int j=0; j<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++j )
+                                mPassDef->mClearColour[j] = clearColour;
+                        }
+                        else
+                        {
+                            compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line );
+                        }
+                    }
+                    else
+                    {
+                        uint32 colourIdx;
+                        ColourValue clearColour;
+                        AbstractNodeList::const_iterator it1 = prop->values.begin();
+                        AbstractNodeList::const_iterator it0 = it1++;
+                        if( getUInt( *it0, &colourIdx ) &&
+                            getColour( it1, prop->values.end(), &clearColour ) )
+                        {
+                            if( colourIdx < OGRE_MAX_MULTIPLE_RENDER_TARGETS )
+                                mPassDef->mClearColour[colourIdx] = clearColour;
+                            else
+                            {
+                                compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
+                                                   "Number must be between 0 and " +
+                                                   StringConverter::toString(OGRE_MAX_MULTIPLE_RENDER_TARGETS) );
+                            }
+                        }
+                        else
+                        {
+                            compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line,
+                                               "Number expected, followed by dont_care|load|clear|clear_on_tilers");
+                        }
+                    }
+                }
+                    break;
+                case ID_CLEAR_DEPTH:
+                {
+                    if(prop->values.empty())
+                    {
+                        compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line,
+                                           "1 float expected");
+                        return;
+                    }
+
+                    Real clearDepth;
+                    AbstractNodeList::const_iterator it0 = prop->values.begin();
+                    if( getReal( *it0, &clearDepth ) )
+                        mPassDef->mClearDepth = clearDepth;
+                    else
+                    {
+                        compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line );
+                    }
+                }
+                    break;
+                case ID_CLEAR_STENCIL:
+                {
+                    if(prop->values.empty())
+                    {
+                        compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line,
+                                           "1 float expected");
+                        return;
+                    }
+
+                    uint32 clearStencil;
+                    AbstractNodeList::const_iterator it0 = prop->values.begin();
+                    if( getUInt( *it0, &clearStencil ) )
+                        mPassDef->mClearStencil = clearStencil;
+                    else
+                    {
+                        compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line );
+                    }
+                }
+                    break;
+                case ID_WARN_IF_RTV_WAS_FLUSHED:
+                {
+                    if(prop->values.empty())
+                    {
+                        compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line,
+                                           "1 bool expected");
+                        return;
+                    }
+
+                    AbstractNodeList::const_iterator it0 = prop->values.begin();
+                    if( !getBoolean( *it0, &mPassDef->mWarnIfRtvWasFlushed ) )
+                        compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line );
+                }
+                    break;
+                default:
+                    compiler->addError(ScriptCompiler::CE_UNEXPECTEDTOKEN, prop->file, prop->line,
+                        "token \"" + prop->name + "\" is not recognized");
+                }
+            }
+        }
+    }
+
+    /**************************************************************************
+     * CompositorStoreActionTranslator
+     *************************************************************************/
+    CompositorStoreActionTranslator::CompositorStoreActionTranslator() : mPassDef( 0 )
+    {
+    }
+    //-------------------------------------------------------------------------
+    bool CompositorStoreActionTranslator::getStoreAction( const Ogre::AbstractNodePtr &node,
+                                                          StoreAction::StoreAction *result )
+    {
+        if (node->type != ANT_ATOM)
+            return false;
+
+        AtomAbstractNode *atom = (AtomAbstractNode*)node.get();
+
+        if( atom->value == "dont_care" )
+            *result = StoreAction::DontCare;
+        else if( atom->value == "store" )
+            *result = StoreAction::Store;
+        else if( atom->value == "resolve" )
+            *result = StoreAction::MultisampleResolve;
+        else if( atom->value == "store_and_resolve" )
+            *result = StoreAction::StoreAndMultisampleResolve;
+        else if( atom->value == "store_or_resolve" )
+            *result = StoreAction::StoreOrResolve;
+        else
+            return false; // Conversion failed
+
+        return true;
+    }
+    //-------------------------------------------------------------------------
+    void CompositorStoreActionTranslator::translate( ScriptCompiler *compiler, const AbstractNodePtr &node )
+    {
+        mPassDef = any_cast<CompositorPassDef*>(node->parent->context);
+
+        ObjectAbstractNode *obj = reinterpret_cast<ObjectAbstractNode*>(node.get());
+        obj->context = Any(mPassDef);
+
+        for(AbstractNodeList::iterator i = obj->children.begin(); i != obj->children.end(); ++i)
+        {
+            if((*i)->type == ANT_OBJECT)
+            {
+                processNode(compiler, *i);
+            }
+            else if((*i)->type == ANT_PROPERTY)
+            {
+                PropertyAbstractNode *prop = reinterpret_cast<PropertyAbstractNode*>((*i).get());
+                switch(prop->id)
+                {
+                case ID_ALL:
+                {
+                    if(prop->values.empty())
+                    {
+                        compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line);
+                        return;
+                    }
+
+                    StoreAction::StoreAction storeAction;
+                    AbstractNodeList::const_iterator it0 = prop->values.begin();
+                    if( getStoreAction( *it0, &storeAction ) )
+                    {
+                        mPassDef->setAllStoreActions( storeAction );
+                    }
+                    else
+                    {
+                         compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line);
+                    }
+                }
+                    break;
+                case ID_COLOUR:
+                {
+                    if(prop->values.size() != 1u && prop->values.size() != 2u)
+                    {
+                        compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line,
+                                           "1 or 2 arguments expected");
+                        return;
+                    }
+
+                    if( prop->values.size() == 1u )
+                    {
+                        StoreAction::StoreAction storeAction;
+                        AbstractNodeList::const_iterator it0 = prop->values.begin();
+                        if( getStoreAction( *it0, &storeAction ) )
+                        {
+                            for( int j=0; j<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++j )
+                                mPassDef->mStoreActionColour[j] = storeAction;
+                        }
+                        else
+                        {
+                            compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line,
+                                               "Expected dont_care|store|clear|clear_on_tilers" );
+                        }
+                    }
+                    else
+                    {
+                        uint32 colourIdx;
+                        StoreAction::StoreAction storeAction;
+                        AbstractNodeList::const_iterator it1 = prop->values.begin();
+                        AbstractNodeList::const_iterator it0 = it1++;
+                        if( getUInt( *it0, &colourIdx ) && getStoreAction( *it1, &storeAction ) )
+                        {
+                            if( colourIdx < OGRE_MAX_MULTIPLE_RENDER_TARGETS )
+                                mPassDef->mStoreActionColour[colourIdx] = storeAction;
+                            else
+                            {
+                                compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
+                                                   "Number must be between 0 and " +
+                                                   StringConverter::toString(OGRE_MAX_MULTIPLE_RENDER_TARGETS) );
+                            }
+                        }
+                        else
+                        {
+                            compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line,
+                                               "Number expected, followed by dont_care|store|clear|clear_on_tilers");
+                        }
+                    }
+                }
+                    break;
+                case ID_DEPTH:
+                {
+                    if(prop->values.empty())
+                    {
+                        compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line);
+                        return;
+                    }
+
+                    StoreAction::StoreAction storeAction;
+                    AbstractNodeList::const_iterator it0 = prop->values.begin();
+                    if( getStoreAction( *it0, &storeAction ) )
+                        mPassDef->mStoreActionDepth = storeAction;
+                    else
+                    {
+                        compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line,
+                                           "Expected dont_care|store|clear|clear_on_tilers" );
+                    }
+                }
+                    break;
+                case ID_STENCIL:
+                {
+                    if(prop->values.empty())
+                    {
+                        compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line);
+                        return;
+                    }
+
+                    StoreAction::StoreAction storeAction;
+                    AbstractNodeList::const_iterator it0 = prop->values.begin();
+                    if( getStoreAction( *it0, &storeAction ) )
+                        mPassDef->mStoreActionStencil = storeAction;
+                    else
+                    {
+                        compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line,
+                                           "Expected dont_care|store|clear|clear_on_tilers" );
+                    }
+                }
+                    break;
+                default:
+                    compiler->addError(ScriptCompiler::CE_UNEXPECTEDTOKEN, prop->file, prop->line,
+                        "token \"" + prop->name + "\" is not recognized");
+                }
             }
         }
     }
@@ -9648,6 +10074,19 @@ namespace Ogre{
                 PropertyAbstractNode *prop = reinterpret_cast<PropertyAbstractNode*>((*i).get());
                 switch(prop->id)
                 {
+                case ID_WARN_IF_RTV_WAS_FLUSHED:
+                {
+                    if(prop->values.empty())
+                    {
+                        compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line,
+                                           "1 bool expected");
+                        return;
+                    }
+
+                    AbstractNodeList::const_iterator it0 = prop->values.begin();
+                    if( !getBoolean( *it0, &mPassDef->mWarnIfRtvWasFlushed ) )
+                        compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line );
+                }
                 case ID_VIEWPORT:
                     {
                         if(prop->values.size() != 4 && prop->values.size() != 8)
@@ -9987,6 +10426,10 @@ namespace Ogre{
             else if(obj->id == ID_SHADOW_MAP && parent &&
                     (parent->id == ID_SHADOW_MAP_TARGET_TYPE || parent->id == ID_SHADOW_MAP_REPEAT))
                 translator = &mCompositorShadowMapTargetTranslator;
+            else if(obj->id == ID_LOAD && parent && parent->id == ID_PASS)
+                translator = &mCompositorLoadActionTranslator;
+            else if(obj->id == ID_STORE && parent && parent->id == ID_PASS)
+                translator = &mCompositorStoreActionTranslator;
             else if(obj->id == ID_PASS && parent && (parent->id == ID_TARGET || parent->id == ID_SHADOW_MAP))
                 translator = &mCompositorPassTranslator;
         }

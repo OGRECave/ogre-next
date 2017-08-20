@@ -189,8 +189,8 @@ namespace Ogre
             mClearStencil( 0 ),
             mLoadActionDepth( LoadAction::Load ),
             mLoadActionStencil( LoadAction::Load ),
-            mStoreActionDepth( StoreAction::StoreAndMultisampleResolve ),
-            mStoreActionStencil( StoreAction::StoreAndMultisampleResolve ),
+            mStoreActionDepth( StoreAction::StoreOrResolve ),
+            mStoreActionStencil( StoreAction::StoreOrResolve ),
             mWarnIfRtvWasFlushed( false ),
             mColourWrite( true ),
             mReadOnlyDepth( false ),
@@ -204,7 +204,7 @@ namespace Ogre
             {
                 mClearColour[i] = ColourValue::Black;
                 mLoadActionColour[i] = LoadAction::Load;
-                mStoreActionColour[i] = StoreAction::StoreAndMultisampleResolve;
+                mStoreActionColour[i] = StoreAction::StoreOrResolve;
             }
         }
         virtual ~CompositorPassDef() {}
