@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "OgreGL3PlusTextureGpuManager.h"
 #include "OgreGL3PlusMappings.h"
 #include "OgreGL3PlusTextureGpu.h"
+#include "OgreGL3PlusTextureGpuWindow.h"
 #include "OgreGL3PlusStagingTexture.h"
 #include "OgreGL3PlusAsyncTextureTicket.h"
 #include "OgreGL3PlusSupport.h"
@@ -134,6 +135,15 @@ namespace Ogre
         memset( mBlankTexture, 0, sizeof(mBlankTexture) );
     }
     //-----------------------------------------------------------------------------------
+    TextureGpu* GL3PlusTextureGpuManager::createTextureGpuWindow( GL3PlusContext *context )
+    {
+        return OGRE_NEW GL3PlusTextureGpuWindow( GpuPageOutStrategy::Discard, mVaoManager,
+                                                 "RenderWindow",
+                                                 TextureFlags::NotTexture|
+                                                 TextureFlags::RenderWindowSpecific,
+                                                 TextureTypes::Type2D, this, context );
+    }
+    //-----------------------------------------------------------------------------------
     GLuint GL3PlusTextureGpuManager::getBlankTextureGlName(
             TextureTypes::TextureTypes textureType ) const
     {
@@ -145,7 +155,8 @@ namespace Ogre
             IdString name, uint32 textureFlags, TextureTypes::TextureTypes initialType )
     {
         return OGRE_NEW GL3PlusTextureGpu( pageOutStrategy, mVaoManager, name,
-                                           textureFlags, initialType, this );
+                                           textureFlags | TextureFlags::RequiresTextureFlipping,
+                                           initialType, this );
     }
     //-----------------------------------------------------------------------------------
     StagingTexture* GL3PlusTextureGpuManager::createStagingTextureImpl( uint32 width, uint32 height,

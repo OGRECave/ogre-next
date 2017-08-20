@@ -60,6 +60,8 @@ namespace Ogre
                    GLXGLSupport* glsupport );
         virtual ~GLXWindow();
 
+        virtual void _initialize( TextureGpuManager *textureManager );
+
         virtual void setVSync( bool vSync, uint32 vSyncInterval );
         virtual void reposition( int32 left, int32 top);
         

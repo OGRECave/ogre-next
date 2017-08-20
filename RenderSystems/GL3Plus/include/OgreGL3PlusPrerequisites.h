@@ -45,6 +45,7 @@ namespace Ogre {
     class GL3PlusContext;
     struct GL3PlusHlmsPso;
     class GL3PlusRTTManager;
+    class GL3PlusTextureGpuManager;
     class GL3PlusFBOManager;
     class GL3PlusDepthBuffer;
     class GL3PlusVaoManager;

@@ -48,6 +48,8 @@ namespace Ogre {
         
         /// @copydoc GL3PlusContext::clone
         GL3PlusContext* clone() const;
+
+        ::GLXFBConfig _getFbConfig(void) const  { return mFBConfig; }
         
         ::GLXDrawable  mDrawable;
         ::GLXContext   mContext;

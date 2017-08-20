@@ -180,6 +180,8 @@ namespace Ogre
         void _setPrimary(void);
         bool isPrimary(void) const;
 
+        virtual void _initialize( TextureGpuManager *textureGpuManager ) = 0;
+
         /// Overloaded version of getMetrics from RenderTarget, including extra details
         /// specific to windowing systems. Result is in pixels.
         virtual void getMetrics( uint32 &width, uint32 &height, int32 &left, int32 &top ) const;

@@ -56,9 +56,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     Window::~Window()
     {
-#if TODO_OGRE_2_2
-        TODO_what_to_do_with_mTexture;
-#endif
+        assert( !mTexture && "Derived class didn't properly free resources" );
+        assert( !mDepthBuffer && "Derived class didn't properly free resources" );
+        assert( !mStencilBuffer && "Derived class didn't properly free resources" );
     }
     //-----------------------------------------------------------------------------------
     void Window::setFinalResolution( uint32 width, uint32 height )

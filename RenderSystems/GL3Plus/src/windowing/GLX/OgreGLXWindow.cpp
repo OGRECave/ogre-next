@@ -29,13 +29,14 @@
 #include "OgreGLXWindow.h"
 #include "OgreRoot.h"
 #include "OgreGL3PlusRenderSystem.h"
+#include "OgreGL3PlusTextureGpuWindow.h"
 #include "OgreImageCodec.h"
 #include "OgreException.h"
 #include "OgreLogManager.h"
 #include "OgreStringConverter.h"
 #include "OgreGLXUtils.h"
 #include "OgreGLXGLSupport.h"
-#include "OgreGL3PlusPixelFormat.h"
+#include "OgreGL3PlusTextureGpuManager.h"
 #include "OgreWindowEventUtilities.h"
 #include "OgrePixelFormatGpuUtils.h"
 
@@ -98,6 +99,14 @@ namespace Ogre
         {
             delete mContext;
         }
+
+        OGRE_DELETE mTexture;
+        mTexture = 0;
+        OGRE_DELETE mDepthBuffer;
+        mDepthBuffer = 0;
+        //Depth & Stencil buffers are the same pointer
+        //OGRE_DELETE mStencilBuffer;
+        mStencilBuffer = 0;
 
         XSetErrorHandler(oldXErrorHandler);
 
@@ -308,6 +317,8 @@ namespace Ogre
                 minAttribs[attrib++] = GLX_DEPTH_SIZE;
                 minAttribs[attrib++] = 24;
             }
+            minAttribs[attrib++] = GLX_FRAMEBUFFER_SRGB_CAPABLE_EXT;
+            minAttribs[attrib++] = gamma == true;
             minAttribs[attrib++] = None;
 
             attrib = 0;
@@ -340,37 +351,13 @@ namespace Ogre
                 maxAttribs[attrib++] = GLX_STENCIL_SIZE;
                 maxAttribs[attrib++] = 0;
             }
-            maxAttribs[attrib++] = GLX_FRAMEBUFFER_SRGB_CAPABLE_EXT;    maxAttribs[attrib++] = 1;
+            maxAttribs[attrib++] = GLX_FRAMEBUFFER_SRGB_CAPABLE_EXT;
+            maxAttribs[attrib++] = gamma == true;
             maxAttribs[attrib++] = None;
 
             assert( attrib < MAX_ATTRIB_COUNT );
 
             fbConfig = mGLSupport->selectFBConfig( minAttribs, maxAttribs );
-
-            // Now check the actual supported fsaa value
-            GLint maxSamples;
-            mGLSupport->getFBConfigAttrib( fbConfig, GLX_SAMPLES, &maxSamples );
-            mTexture->setMsaa( maxSamples );
-            if( mDepthBuffer )
-                mDepthBuffer->setMsaa( maxSamples );
-            if( mStencilBuffer )
-                mStencilBuffer->setMsaa( maxSamples );
-
-            mTexture->setPixelFormat( PFG_RGBA8_UNORM );
-
-            GLint depthSupport = 0, stencilSupport = 0;
-            mGLSupport->getFBConfigAttrib( fbConfig, GLX_DEPTH_SIZE, &depthSupport );
-            mGLSupport->getFBConfigAttrib( fbConfig, GLX_STENCIL_SIZE, &stencilSupport );
-            if( depthSupport == 0 )
-
-            if( gamma )
-            {
-                GLint gammaSupport = 0;
-                mGLSupport->getFBConfigAttrib( fbConfig, GL_FRAMEBUFFER_SRGB_CAPABLE_EXT,
-                                               &gammaSupport );
-                if( gammaSupport )
-                    mTexture->setPixelFormat( PFG_RGBA8_UNORM_SRGB );
-            }
         }
 
         if( !fbConfig )
@@ -523,6 +510,54 @@ namespace Ogre
         mTop = top;
         mFocused = true;
         mClosed = false;
+    }
+    //-----------------------------------------------------------------------------------
+    void GLXWindow::_initialize( TextureGpuManager *_textureManager )
+    {
+        GL3PlusTextureGpuManager *textureManager =
+                static_cast<GL3PlusTextureGpuManager*>( _textureManager );
+
+        mTexture = textureManager->createTextureGpuWindow( mContext );
+
+        ::GLXFBConfig fbConfig = mContext->_getFbConfig();
+
+        // Now check the actual supported fsaa value
+        GLint maxSamples;
+        mGLSupport->getFBConfigAttrib( fbConfig, GLX_SAMPLES, &maxSamples );
+        mTexture->setMsaa( maxSamples );
+
+        mTexture->setPixelFormat( PFG_RGBA8_UNORM );
+
+        GLint depthSupport = 0, stencilSupport = 0;
+        mGLSupport->getFBConfigAttrib( fbConfig, GLX_DEPTH_SIZE, &depthSupport );
+        mGLSupport->getFBConfigAttrib( fbConfig, GLX_STENCIL_SIZE, &stencilSupport );
+        if( depthSupport != 0 )
+        {
+            mDepthBuffer = textureManager->createTextureGpuWindow( mContext );
+            mDepthBuffer->setMsaa( maxSamples );
+
+            if( depthSupport == 24 )
+            {
+                mDepthBuffer->setPixelFormat( stencilSupport == 0 ? PFG_D24_UNORM :
+                                                                    PFG_D24_UNORM_S8_UINT );
+            }
+            else
+            {
+                mDepthBuffer->setPixelFormat( stencilSupport == 0 ? PFG_D32_FLOAT :
+                                                                    PFG_D32_FLOAT_S8X24_UINT );
+            }
+
+            if( stencilSupport != 0 )
+                mStencilBuffer = mDepthBuffer;
+        }
+
+        GLint gammaSupport = 0;
+        mGLSupport->getFBConfigAttrib( fbConfig, GL_FRAMEBUFFER_SRGB_CAPABLE_EXT,
+                                       &gammaSupport );
+        if( gammaSupport )
+            mTexture->setPixelFormat( PFG_RGBA8_UNORM_SRGB );
+
+        setFinalResolution( mRequestedWidth, mRequestedHeight );
     }
     //-----------------------------------------------------------------------------------
     void GLXWindow::destroy(void)

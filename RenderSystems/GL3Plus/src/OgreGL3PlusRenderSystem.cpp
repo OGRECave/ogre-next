@@ -757,7 +757,7 @@ namespace Ogre {
         }
 
         // Create the window
-        Window *win = mGLSupport->newWindow( name, width, height, fullScreen, miscParams );
+        Ogre::Window *win = mGLSupport->newWindow( name, width, height, fullScreen, miscParams );
 
         if( !mGLInitialised )
         {
@@ -810,6 +810,8 @@ namespace Ogre {
 
             mTextureGpuManager->_update( true );
         }
+
+        win->_initialize( mTextureGpuManager );
 
         return win;
     }

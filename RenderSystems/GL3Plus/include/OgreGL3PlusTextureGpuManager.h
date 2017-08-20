@@ -68,6 +68,12 @@ namespace Ogre
         GL3PlusTextureGpuManager( VaoManager *vaoManager, const GL3PlusSupport &support );
         virtual ~GL3PlusTextureGpuManager();
 
+        /** Creates a special GL3PlusTextureGpuWindow pointer, to be used by Ogre::Window.
+            The pointer can be freed by a regular OGRE_DELETE. We do not track this pointer.
+            If caller doesnt' delete it, it will leak.
+        */
+        TextureGpu* createTextureGpuWindow( GL3PlusContext *context );
+
         GLuint getBlankTextureGlName( TextureTypes::TextureTypes textureType ) const;
 
         const GL3PlusSupport& getGlSupport(void) const          { return mSupport; }
