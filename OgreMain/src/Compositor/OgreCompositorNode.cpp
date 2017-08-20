@@ -629,9 +629,6 @@ namespace Ogre
             break;
         }
 
-        assert( !channel->isRenderWindowSpecific() &&
-                "Are you trying to use the RenderWindow as a texture???" );
-
         return channel;
     }
     //-----------------------------------------------------------------------------------

@@ -209,6 +209,10 @@ namespace Ogre
         }
         virtual ~CompositorPassDef() {}
 
+        void setAllClearColours( const ColourValue &clearValue );
+        void setAllLoadActions( LoadAction::LoadAction loadAction );
+        void setAllStoreActions( StoreAction::StoreAction storeAction );
+
         CompositorPassType getType() const              { return mPassType; }
         uint32 getRtIndex(void) const;
         const CompositorTargetDef* getParentTargetDef(void) const;

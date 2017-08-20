@@ -579,6 +579,13 @@ namespace Ogre {
         if( poolId == DepthBuffer::POOL_NO_DEPTH )
             return 0; //RenderTarget explicitly requested no depth buffer
 
+        if( colourTexture->isRenderWindowSpecific() )
+        {
+            Window *window;
+            colourTexture->getCustomAttribute( "Window", &window );
+            return window->getDepthBuffer();
+        }
+
         if( poolId == DepthBuffer::POOL_NON_SHAREABLE )
         {
             TextureGpu *retVal = createDepthBufferFor( colourTexture, preferDepthTexture,

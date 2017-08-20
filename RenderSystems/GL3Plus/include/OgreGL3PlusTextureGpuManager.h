@@ -72,7 +72,7 @@ namespace Ogre
             The pointer can be freed by a regular OGRE_DELETE. We do not track this pointer.
             If caller doesnt' delete it, it will leak.
         */
-        TextureGpu* createTextureGpuWindow( GL3PlusContext *context );
+        TextureGpu* createTextureGpuWindow( GL3PlusContext *context, Window *window );
 
         GLuint getBlankTextureGlName( TextureTypes::TextureTypes textureType ) const;
 

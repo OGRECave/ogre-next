@@ -882,7 +882,7 @@ namespace Ogre
         }
 
         mPrePassTextures = &sceneManager->getCurrentPrePassTextures();
-        assert( mPrePassTextures->size() == 2u );
+        assert( mPrePassTextures->empty() || mPrePassTextures->size() == 2u );
 
         mPrePassMsaaDepthTexture = 0;
         if( !mPrePassTextures->empty() && (*mPrePassTextures)[0]->getMsaa() > 1u )

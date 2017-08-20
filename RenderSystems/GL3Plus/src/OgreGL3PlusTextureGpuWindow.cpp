@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "OgreTextureGpuListener.h"
 #include "OgreTextureBox.h"
 #include "OgreVector2.h"
+#include "OgreWindow.h"
 
 #include "Vao/OgreVaoManager.h"
 
@@ -48,10 +49,11 @@ namespace Ogre
             VaoManager *vaoManager, IdString name, uint32 textureFlags,
             TextureTypes::TextureTypes initialType,
             TextureGpuManager *textureManager,
-            GL3PlusContext *context ) :
+            GL3PlusContext *context, Window *window ) :
         GL3PlusTextureGpu( pageOutStrategy, vaoManager, name,
                            textureFlags, initialType, textureManager ),
-        mContext( context )
+        mContext( context ),
+        mWindow( window )
     {
         mTextureType = TextureTypes::Type2D;
     }
@@ -80,10 +82,17 @@ namespace Ogre
         return mResidencyStatus == GpuResidency::Resident;
     }
     //-----------------------------------------------------------------------------------
+    void GL3PlusTextureGpuWindow::swapBuffers(void)
+    {
+        mWindow->swapBuffers();
+    }
+    //-----------------------------------------------------------------------------------
     void GL3PlusTextureGpuWindow::getCustomAttribute( IdString name, void *pData )
     {
         if( name == CustomAttributeIdString_GLCONTEXT )
             *static_cast<GL3PlusContext**>(pData) = mContext;
+        else if( name == "Window" )
+            *static_cast<Window**>(pData) = mWindow;
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusTextureGpuWindow::_setToDisplayDummyTexture(void)

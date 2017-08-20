@@ -123,6 +123,7 @@ mFlipCullingOnNegativeScale(true),
 mShadowCasterPlainBlackPass(0),
 mDisplayNodes(false),
 mShowBoundingBoxes(false),
+mAutoParamDataSource(0),
 mLateMaterialResolving(false),
 mShadowColour(ColourValue(0.25, 0.25, 0.25)),
 mShadowIndexBufferUsedSize(0),
@@ -1227,6 +1228,7 @@ void SceneManager::_frameEnded(void)
 void SceneManager::_setDestinationRenderSystem(RenderSystem* sys)
 {
     mDestRenderSystem = sys;
+    setViewport( &mDestRenderSystem->_getCurrentRenderViewport() );
 
     if( mForwardPlusSystem )
         mForwardPlusSystem->_changeRenderSystem( sys );
@@ -3619,7 +3621,8 @@ void SceneManager::setViewport(Viewport* vp)
     mCurrentViewport = vp;
     // Set viewport in render system
     mDestRenderSystem->_setViewport(vp);
-    mAutoParamDataSource->setCurrentViewport(vp);
+    if( mAutoParamDataSource )
+        mAutoParamDataSource->setCurrentViewport(vp);
     // Set the active material scheme for this viewport
     MaterialManager::getSingleton().setActiveScheme(vp->getMaterialScheme());
 }

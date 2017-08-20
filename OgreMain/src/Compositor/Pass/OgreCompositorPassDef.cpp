@@ -112,6 +112,28 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
+    void CompositorPassDef::setAllClearColours( const ColourValue &clearValue )
+    {
+        for( int i=0; i<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
+            mClearColour[i] = clearValue;
+    }
+    //-----------------------------------------------------------------------------------
+    void CompositorPassDef::setAllLoadActions( LoadAction::LoadAction loadAction )
+    {
+        for( int i=0; i<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
+            mLoadActionColour[i] = loadAction;
+        mLoadActionDepth    = loadAction;
+        mLoadActionStencil  = loadAction;
+    }
+    //-----------------------------------------------------------------------------------
+    void CompositorPassDef::setAllStoreActions( StoreAction::StoreAction storeAction )
+    {
+        for( int i=0; i<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
+            mStoreActionColour[i] = storeAction;
+        mStoreActionDepth    = storeAction;
+        mStoreActionStencil  = storeAction;
+    }
+    //-----------------------------------------------------------------------------------
     uint32 CompositorPassDef::getRtIndex() const
     {
         return mParentTargetDef->getRtIndex();

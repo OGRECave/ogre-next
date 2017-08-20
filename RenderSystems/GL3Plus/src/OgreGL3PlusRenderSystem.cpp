@@ -1636,6 +1636,7 @@ namespace Ogre {
 
     void GL3PlusRenderSystem::_setViewport(Viewport *vp)
     {
+        mActiveViewport = vp;
 #if TODO_OGRE_2_2
         // Check if viewport is different
         if (!vp)

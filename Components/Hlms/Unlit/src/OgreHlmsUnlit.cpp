@@ -538,9 +538,9 @@ namespace Ogre
 
         RenderPassDescriptor *renderPassDesc = mRenderSystem->getCurrentPassDescriptor();
         setProperty( HlmsBaseProp::ShadowUsesDepthTexture,
-                     (renderPassDesc->getNumColourEntries() > 0) ? 1 : 0 );
+                     (renderPassDesc->getNumColourEntries() > 0) ? 0 : 1 );
         setProperty( HlmsBaseProp::RenderDepthOnly,
-                     (renderPassDesc->getNumColourEntries() > 0) ? 1 : 0 );
+                     (renderPassDesc->getNumColourEntries() > 0) ? 0 : 1 );
 
         Camera *camera = sceneManager->getCameraInProgress();
         if( camera && camera->isReflected() )

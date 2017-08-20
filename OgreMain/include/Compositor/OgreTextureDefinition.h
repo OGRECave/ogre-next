@@ -49,6 +49,9 @@ namespace Ogre
     struct _OgreExport RenderTargetViewEntry
     {
         IdString    textureName;
+        /// Can be left blank if texture is implicitly resolved (will be filled automatically)
+        /// But must be present if the texture in textureName is explicitly resolved and
+        /// StoreAction is set to Resolve.
         IdString    resolveTextureName;
         uint8       mipLevel;
         uint8       resolveMipLevel;

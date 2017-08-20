@@ -74,15 +74,16 @@ namespace Ogre
     void GL3PlusRenderPassDescriptor::checkRenderWindowStatus(void)
     {
         if( (mNumColourEntries > 0 && mColour[0].texture->isRenderWindowSpecific()) ||
-            (mDepth.texture && !mDepth.texture->isRenderWindowSpecific()) ||
-            (mStencil.texture && !mStencil.texture->isRenderWindowSpecific()) )
+            (mDepth.texture && mDepth.texture->isRenderWindowSpecific()) ||
+            (mStencil.texture && mStencil.texture->isRenderWindowSpecific()) )
         {
-            if( mNumColourEntries <= 1u )
+            if( mNumColourEntries > 1u )
             {
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                              "Cannot use RenderWindow as MRT with other colour textures",
                              "GL3PlusRenderPassDescriptor::colourEntriesModified" );
             }
+
             if( (mNumColourEntries > 0 && !mColour[0].texture->isRenderWindowSpecific()) ||
                 (mDepth.texture && !mDepth.texture->isRenderWindowSpecific()) ||
                 (mStencil.texture && !mStencil.texture->isRenderWindowSpecific()) )
@@ -579,6 +580,12 @@ namespace Ogre
                         OCGE( glBlitFramebuffer( x, y, width, height, x, y, width, height,
                                                  GL_COLOR_BUFFER_BIT, GL_NEAREST ) );
 
+                        if( mColour[i].storeAction == StoreAction::MultisampleResolve )
+                        {
+                            attachments[numAttachments] = mHasRenderWindow ? GL_COLOR :
+                                                                             GL_COLOR_ATTACHMENT0 + i;
+                        }
+
                         unbindReadDrawFramebuffers = true;
                     }
                     else if( mColour[i].storeAction == StoreAction::DontCare ||
@@ -594,21 +601,20 @@ namespace Ogre
         if( (entriesToFlush & RenderPassDescriptor::Depth) &&
             mDepth.storeAction == StoreAction::DontCare )
         {
-            attachments[numAttachments] = GL_DEPTH_ATTACHMENT;
+            attachments[numAttachments] = mHasRenderWindow ? GL_DEPTH : GL_DEPTH_ATTACHMENT;
             ++numAttachments;
         }
 
         if( (entriesToFlush & RenderPassDescriptor::Stencil) &&
             mStencil.storeAction == StoreAction::DontCare )
         {
-            attachments[numAttachments] = GL_STENCIL_ATTACHMENT;
+            attachments[numAttachments] = mHasRenderWindow ? GL_STENCIL : GL_STENCIL_ATTACHMENT;
             ++numAttachments;
         }
 
         if( numAttachments > 0 && hasArbInvalidateSubdata )
         {
-            GLenum target = mHasRenderWindow ? GL_BACK : GL_FRAMEBUFFER;
-            OCGE( glInvalidateFramebuffer( target, numAttachments, attachments ) );
+            OCGE( glInvalidateFramebuffer( GL_FRAMEBUFFER, numAttachments, attachments ) );
         }
 
         if( unbindReadDrawFramebuffers )

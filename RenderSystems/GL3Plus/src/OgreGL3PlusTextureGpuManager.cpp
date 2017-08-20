@@ -135,13 +135,14 @@ namespace Ogre
         memset( mBlankTexture, 0, sizeof(mBlankTexture) );
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* GL3PlusTextureGpuManager::createTextureGpuWindow( GL3PlusContext *context )
+    TextureGpu* GL3PlusTextureGpuManager::createTextureGpuWindow( GL3PlusContext *context,
+                                                                  Window *window )
     {
         return OGRE_NEW GL3PlusTextureGpuWindow( GpuPageOutStrategy::Discard, mVaoManager,
                                                  "RenderWindow",
                                                  TextureFlags::NotTexture|
                                                  TextureFlags::RenderWindowSpecific,
-                                                 TextureTypes::Type2D, this, context );
+                                                 TextureTypes::Type2D, this, context, window );
     }
     //-----------------------------------------------------------------------------------
     GLuint GL3PlusTextureGpuManager::getBlankTextureGlName(

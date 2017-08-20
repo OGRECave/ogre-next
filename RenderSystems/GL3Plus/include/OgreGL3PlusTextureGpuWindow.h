@@ -38,6 +38,7 @@ namespace Ogre
     class _OgreGL3PlusExport GL3PlusTextureGpuWindow : public GL3PlusTextureGpu
     {
         GL3PlusContext  *mContext;
+        Window          *mWindow;
 
         virtual void createInternalResourcesImpl(void);
         virtual void destroyInternalResourcesImpl(void);
@@ -47,7 +48,7 @@ namespace Ogre
                                  VaoManager *vaoManager, IdString name, uint32 textureFlags,
                                  TextureTypes::TextureTypes initialType,
                                  TextureGpuManager *textureManager,
-                                 GL3PlusContext *context );
+                                 GL3PlusContext *context, Window *window );
         virtual ~GL3PlusTextureGpuWindow();
 
         virtual void setTextureType( TextureTypes::TextureTypes textureType );
@@ -59,6 +60,8 @@ namespace Ogre
 
         virtual void notifyDataIsReady(void);
         virtual bool isDataReady(void) const;
+
+        virtual void swapBuffers(void);
 
         virtual void getCustomAttribute( IdString name, void *pData );
 

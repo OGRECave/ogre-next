@@ -778,21 +778,25 @@ namespace Ogre
 
         //Input texture
         nodeDef->addTextureSourceName( "WindowRT", 0, TextureDefinitionBase::TEXTURE_INPUT );
+        RenderTargetViewDef *rtv = nodeDef->addRenderTextureView( "WindowRT" );
+
+        RenderTargetViewEntry attachment;
+        attachment.textureName          = "WindowRT";
+        rtv->colourAttachments.push_back( attachment );
 
         nodeDef->setNumTargetPass( 1 );
         {
             CompositorTargetDef *targetDef = nodeDef->addTargetPass( "WindowRT" );
-            targetDef->setNumPasses( 2 );
+            targetDef->setNumPasses( 1 );
             {
-                {
-                    CompositorPassClearDef *passClear = static_cast<CompositorPassClearDef*>
-                                                            ( targetDef->addPass( PASS_CLEAR ) );
-                    passClear->mColourValue = backgroundColour;
-                }
                 {
                     CompositorPassSceneDef *passScene = static_cast<CompositorPassSceneDef*>
                                                                 ( targetDef->addPass( PASS_SCENE ) );
                     passScene->mShadowNode = shadowNodeName;
+                    passScene->setAllClearColours( backgroundColour );
+                    passScene->setAllLoadActions( LoadAction::Clear );
+                    passScene->mStoreActionDepth    = StoreAction::DontCare;
+                    passScene->mStoreActionStencil  = StoreAction::DontCare;
                 }
             }
         }

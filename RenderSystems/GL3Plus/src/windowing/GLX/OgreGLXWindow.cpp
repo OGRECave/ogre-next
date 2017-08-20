@@ -517,7 +517,7 @@ namespace Ogre
         GL3PlusTextureGpuManager *textureManager =
                 static_cast<GL3PlusTextureGpuManager*>( _textureManager );
 
-        mTexture = textureManager->createTextureGpuWindow( mContext );
+        mTexture = textureManager->createTextureGpuWindow( mContext, this );
 
         ::GLXFBConfig fbConfig = mContext->_getFbConfig();
 
@@ -533,7 +533,7 @@ namespace Ogre
         mGLSupport->getFBConfigAttrib( fbConfig, GLX_STENCIL_SIZE, &stencilSupport );
         if( depthSupport != 0 )
         {
-            mDepthBuffer = textureManager->createTextureGpuWindow( mContext );
+            mDepthBuffer = textureManager->createTextureGpuWindow( mContext, this );
             mDepthBuffer->setMsaa( maxSamples );
 
             if( depthSupport == 24 )
@@ -558,6 +558,10 @@ namespace Ogre
             mTexture->setPixelFormat( PFG_RGBA8_UNORM_SRGB );
 
         setFinalResolution( mRequestedWidth, mRequestedHeight );
+
+        mTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+        if( mDepthBuffer )
+            mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8*)0 );
     }
     //-----------------------------------------------------------------------------------
     void GLXWindow::destroy(void)

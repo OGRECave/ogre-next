@@ -2466,7 +2466,7 @@ namespace Ogre
             const RenderPassDescriptor *renderPassDesc = mRenderSystem->getCurrentPassDescriptor();
 
             setProperty( HlmsBaseProp::ShadowUsesDepthTexture,
-                         (renderPassDesc->getNumColourEntries() > 0) ? 1 : 0 );
+                         (renderPassDesc->getNumColourEntries() > 0) ? 0 : 1 );
         }
 
         Camera *camera = sceneManager->getCameraInProgress();
@@ -2475,7 +2475,7 @@ namespace Ogre
 
         const RenderPassDescriptor *renderPassDesc = mRenderSystem->getCurrentPassDescriptor();
         setProperty( HlmsBaseProp::RenderDepthOnly,
-                     (renderPassDesc->getNumColourEntries() > 0) ? 1 : 0 );
+                     (renderPassDesc->getNumColourEntries() > 0) ? 0 : 1 );
 
         if( sceneManager->getCurrentPrePassMode() == PrePassCreate )
             setProperty( HlmsBaseProp::PrePass, 1 );

@@ -743,6 +743,8 @@ namespace Ogre
         void destroyRenderPassDescriptor( RenderPassDescriptor *renderPassDesc );
 
         RenderPassDescriptor* getCurrentPassDescriptor(void)    { return mCurrentRenderPassDescriptor; }
+        Viewport& _getCurrentRenderViewport(void)               { return mCurrentRenderViewport; }
+
         /** When the descriptor is set to Load clear, two possible things may happen:
                 1. The region is cleared.
                 2. The whole texture is cleared.
