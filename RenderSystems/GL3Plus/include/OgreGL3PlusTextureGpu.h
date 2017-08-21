@@ -104,6 +104,9 @@ namespace Ogre
         bool            mPreferDepthTexture;
         PixelFormatGpu  mDesiredDepthBufferFormat;
 
+        virtual void createInternalResourcesImpl(void);
+        virtual void destroyInternalResourcesImpl(void);
+
     public:
         GL3PlusTextureGpuRenderTarget( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                        VaoManager *vaoManager, IdString name, uint32 textureFlags,

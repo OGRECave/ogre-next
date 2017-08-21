@@ -65,7 +65,7 @@ namespace Ogre
     {
         GLenum format = GL3PlusMappings::get( mPixelFormat );
 
-        if( !hasMsaaExplicitResolves() )
+        if( mMsaa <= 1u || !hasMsaaExplicitResolves() )
         {
             OCGE( glGenTextures( 1u, &mFinalTextureName ) );
 
@@ -181,7 +181,10 @@ namespace Ogre
             }
             if( mMsaaFramebufferName )
             {
-                glDeleteTextures( 1, &mMsaaFramebufferName );
+                if( mMsaa > 1u && !hasMsaaExplicitResolves() )
+                    glDeleteRenderbuffers( 1, &mMsaaFramebufferName );
+                else
+                    glDeleteTextures( 1, &mMsaaFramebufferName );
                 mMsaaFramebufferName = 0;
             }
         }
@@ -363,6 +366,47 @@ namespace Ogre
         mPreferDepthTexture( false ),
         mDesiredDepthBufferFormat( PFG_UNKNOWN )
     {
+    }
+    //-----------------------------------------------------------------------------------
+    void GL3PlusTextureGpuRenderTarget::createInternalResourcesImpl(void)
+    {
+        if( isTexture() || !PixelFormatGpuUtils::isDepth( mPixelFormat ) )
+        {
+            GL3PlusTextureGpu::createInternalResourcesImpl();
+            return;
+        }
+
+        OCGE( glGenRenderbuffers( 1, &mFinalTextureName ) );
+        OCGE( glBindRenderbuffer( GL_RENDERBUFFER, mFinalTextureName ) );
+
+        GLenum format = GL3PlusMappings::get( mPixelFormat );
+
+        if( !mMsaa <= 1u )
+        {
+            OCGE( glRenderbufferStorage( GL_RENDERBUFFER, format,
+                                         GLsizei(mWidth), GLsizei(mHeight) ) );
+        }
+        else
+        {
+            OCGE( glRenderbufferStorageMultisample( GL_RENDERBUFFER, GLsizei(mMsaa), format,
+                                                    GLsizei(mWidth), GLsizei(mHeight) ) );
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void GL3PlusTextureGpuRenderTarget::destroyInternalResourcesImpl(void)
+    {
+        if( isTexture() || !PixelFormatGpuUtils::isDepth( mPixelFormat ) )
+        {
+            GL3PlusTextureGpu::destroyInternalResourcesImpl();
+            return;
+        }
+
+        if( mFinalTextureName )
+        {
+            glDeleteRenderbuffers( 1, &mFinalTextureName );
+            mFinalTextureName = 0;
+        }
+        _setToDisplayDummyTexture();
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusTextureGpuRenderTarget::_setDepthBufferDefaults(

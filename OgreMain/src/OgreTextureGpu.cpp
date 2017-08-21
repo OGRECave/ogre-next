@@ -206,6 +206,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpu::checkValidSettings(void)
     {
+        //Make sure depth buffers/textures always have MsaaExplicitResolve set (with or without MSAA).
+        if( PixelFormatGpuUtils::isDepth( mPixelFormat ) )
+            mTextureFlags |= TextureFlags::MsaaExplicitResolve;
+
         if( mMsaa > 1u )
         {
             if( (mNumMipmaps > 1) || isRenderToTexture() || isUav() )
@@ -265,14 +269,6 @@ namespace Ogre
                          "Texture '" + getNameStr() + "': "
                          "AutomaticBatching can only be used with Type2D textures, "
                          "and they cannot be RenderToTexture or Uav",
-                         "TextureGpu::checkValidSettings" );
-        }
-
-        if( hasMsaaExplicitResolves() && mMsaa <= 1u )
-        {
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "Texture '" + getNameStr() + "': "
-                         "A texture is requesting explicit resolves but MSAA is disabled.",
                          "TextureGpu::checkValidSettings" );
         }
 
