@@ -217,6 +217,7 @@ namespace Ogre
         /// semanticsthat avoid loading from & storing contents of what's been
         /// drawn from the tiler's cache to RAM.
         RSC_IS_TILER = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 8),
+        RSC_CONST_BUFFER_SLOTS_IN_SHADER = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 9),
 
         // ***** DirectX specific caps *****
         /// Is DirectX feature "per stage constants" supported
@@ -281,7 +282,11 @@ namespace Ogre
                 if (tokens.size() > 3)
                     build = StringConverter::parseInt(tokens[3]);
             }
+        }
 
+        bool hasMinVersion( int minMajor, int minMinor ) const
+        {
+            return major > minMajor || (major == minMajor && minor >= minMinor);
         }
 
         bool hasMinVersion( int minMajor, int minMinor ) const

@@ -209,6 +209,14 @@ namespace Ogre
             mRenderSystem->bindGpuProgramParameters( GPT_FRAGMENT_PROGRAM, psParams, GPV_ALL );
         }
 
+        if( !mRenderSystem->getCapabilities()->hasCapability( RSC_CONST_BUFFER_SLOTS_IN_SHADER ) )
+        {
+            //Setting it to the vertex shader will set it to the PSO actually.
+            retVal->pso.vertexShader->setUniformBlockBinding( "PassBuffer", 0 );
+            retVal->pso.vertexShader->setUniformBlockBinding( "MaterialBuf", 1 );
+            retVal->pso.vertexShader->setUniformBlockBinding( "InstanceBuffer", 2 );
+        }
+
         return retVal;
     }
     //-----------------------------------------------------------------------------------
@@ -971,7 +979,6 @@ namespace Ogre
         assert( K != 0 && "A value of K = 0 is invalid!" );
         mEsmK = K;
     }
-#if !OGRE_NO_JSON
     //-----------------------------------------------------------------------------------
     void HlmsUnlit::getDefaultPaths( String &outDataFolderPath, StringVector &outLibraryFoldersPaths )
     {
@@ -993,6 +1000,7 @@ namespace Ogre
         //Fill the data folder path
         outDataFolderPath = "Hlms/Unlit/" + shaderSyntax;
     }
+#if !OGRE_NO_JSON
 	//-----------------------------------------------------------------------------------
     void HlmsUnlit::_loadJson( const rapidjson::Value &jsonValue, const HlmsJson::NamedBlocks &blocks,
                                HlmsDatablock *datablock, const String &resourceGroup ) const

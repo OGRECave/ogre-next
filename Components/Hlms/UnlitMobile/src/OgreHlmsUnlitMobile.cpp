@@ -1,4 +1,4 @@
-﻿/*
+/*
 -----------------------------------------------------------------------------
 This source file is part of OGRE
     (Object-oriented Graphics Rendering Engine)
@@ -37,7 +37,9 @@ THE SOFTWARE.
 #include "OgreSceneManager.h"
 #include "OgreViewport.h"
 #include "OgreRenderTarget.h"
+#include "OgreCamera.h"
 #include "Compositor/OgreCompositorShadowNode.h"
+#include "OgreCamera.h"
 
 namespace Ogre
 {
@@ -225,7 +227,6 @@ namespace Ogre
             {
                 assert( !datablock->mBakedDiffuseTextures[texUnit].isNull() );
                 diffuseTex.push_back( texUnit );
-                ++texUnit;
             }
 
             psParams->setNamedConstant( "texDiffuseMap", &diffuseTex[0], diffuseTex.size(), 1 );
@@ -448,7 +449,6 @@ namespace Ogre
                 mRenderSystem->_setTexture( texUnit, true,
                                             datablock->mBakedDiffuseTextures[texUnit].get() );
                 mRenderSystem->_setHlmsSamplerblock( texUnit, datablock->mBakedSamplerblocks[texUnit] );
-                ++texUnit;
             }
 
             mRenderSystem->_disableTextureUnitsFrom( datablock->mNumTextureUnits );

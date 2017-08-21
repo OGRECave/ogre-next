@@ -147,6 +147,9 @@ namespace Ogre
 
         /// True if ARB_buffer_storage is supported (Persistent Mapping and immutable buffers)
         bool    mArbBufferStorage;
+        bool    mEmulateTexBuffers;
+
+        GLint   mMaxVertexAttribs;
 
         static const GLuint VERTEX_ATTRIBUTE_INDEX[VES_COUNT];
         VertexBufferPacked  *mDrawId;
@@ -243,7 +246,8 @@ namespace Ogre
         static VboFlag bufferTypeToVboFlag( BufferType bufferType );
 
     public:
-        GL3PlusVaoManager( bool supportsArbBufferStorage, bool supportsIndirectBuffers,
+        GL3PlusVaoManager( bool supportsArbBufferStorage, bool emulateTexBuffers,
+                           bool supportsIndirectBuffers, bool _supportsBaseInstance,
                            bool supportsSsbo );
         virtual ~GL3PlusVaoManager();
 
@@ -251,6 +255,7 @@ namespace Ogre
         void bindDrawId(void);
 
         bool supportsArbBufferStorage(void) const       { return mArbBufferStorage; }
+        GLint getMaxVertexAttribs(void) const           { return mMaxVertexAttribs; }
 
         /** Creates a new staging buffer and adds it to the pool. @see getStagingBuffer.
         @remarks

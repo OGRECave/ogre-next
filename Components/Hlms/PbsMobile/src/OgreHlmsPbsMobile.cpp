@@ -34,11 +34,14 @@ THE SOFTWARE.
 
 #include "OgreViewport.h"
 #include "OgreRenderTarget.h"
+#include "OgreCamera.h"
 #include "OgreHighLevelGpuProgramManager.h"
 #include "OgreHighLevelGpuProgram.h"
 
 #include "OgreSceneManager.h"
 #include "Compositor/OgreCompositorShadowNode.h"
+
+#include "OgreCamera.h"
 
 namespace Ogre
 {

@@ -1372,6 +1372,8 @@ bail:
         rsc->setCapability(RSC_CAN_GET_COMPILED_SHADER_BUFFER);
         rsc->setCapability(RSC_SEPARATE_SAMPLERS_FROM_TEXTURES);
 
+        rsc->setCapability(RSC_CONST_BUFFER_SLOTS_IN_SHADER);
+
         return rsc;
 
     }

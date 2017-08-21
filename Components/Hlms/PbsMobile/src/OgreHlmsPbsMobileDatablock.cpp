@@ -33,8 +33,10 @@ THE SOFTWARE.
 #include "OgreHlmsManager.h"
 #include "OgreHlmsTextureManager.h"
 #include "OgrePbsMobileShaderCreationData.h"
+#include "OgreStringConverter.h"
 #include "OgreTexture.h"
 #include "OgreLogManager.h"
+#include "OgreStringConverter.h"
 
 namespace Ogre
 {
