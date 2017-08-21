@@ -103,6 +103,8 @@ namespace Ogre
         GL3PlusRenderPassDescriptor( GL3PlusRenderSystem *renderSystem );
         virtual ~GL3PlusRenderPassDescriptor();
 
+        GLuint getFboName(void) const       { return mFboName; }
+
         virtual void entriesModified( uint32 entryTypes );
 
         virtual void setClearColour( uint8 idx, const ColourValue &clearColour );

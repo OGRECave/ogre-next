@@ -309,6 +309,7 @@ namespace Ogre
             mBlendCubemap->setPixelFormat( pixelFormat );
             mBlendCubemap->setNumMipmaps( PixelFormatGpuUtils::getMaxMipmapCount( maxWidth,
                                                                                   maxHeight ) );
+            mBlendCubemap->_setDepthBufferDefaults( DepthBuffer::POOL_NO_DEPTH, false, PFG_UNKNOWN );
             mBlendCubemap->_transitionTo( GpuResidency::Resident, (uint8*)0 );
 
             createCubemapBlendWorkspace();
@@ -416,17 +417,11 @@ namespace Ogre
             {
                 CompositorTargetDef *targetDef = nodeDef->addTargetPass( "BlendedProbeRT", i );
 #if GENERATE_MIPMAPS_ON_BLEND
-                targetDef->setNumPasses( i == 5 ? 3 : 2 );
+                targetDef->setNumPasses( i == 5 ? 2 : 1 );
 #else
-                targetDef->setNumPasses( 2 );
+                targetDef->setNumPasses( 1 );
 #endif
                 {
-                    {
-                        CompositorPassClearDef *passClear = static_cast<CompositorPassClearDef*>
-                                                                ( targetDef->addPass( PASS_CLEAR ) );
-                        passClear->mColourValue      = ColourValue::Black;
-                        passClear->mClearBufferFlags = FBT_COLOUR;
-                    }
                     {
                         CompositorPassSceneDef *passScene = static_cast<CompositorPassSceneDef*>
                                                                 ( targetDef->addPass( PASS_SCENE ) );
@@ -437,6 +432,9 @@ namespace Ogre
                         passScene->mEnableForwardPlus = false;
                         passScene->mIncludeOverlays = false;
                         passScene->mVisibilityMask  = mProxyVisibilityMask;
+
+                        passScene->mLoadActionColour[0] = LoadAction::Clear;
+                        passScene->mClearColour[0]      = ColourValue::Black;
                     }
 #if GENERATE_MIPMAPS_ON_BLEND
                     if( i == 5 )
@@ -467,17 +465,11 @@ namespace Ogre
             {
                 CompositorTargetDef *targetDef = nodeDef->addTargetPass( "CopyProbeRT", i );
 #if GENERATE_MIPMAPS_ON_BLEND
-                targetDef->setNumPasses( i == 5 ? 3 : 2 );
+                targetDef->setNumPasses( i == 5 ? 2 : 1 );
 #else
-                targetDef->setNumPasses( 2 );
+                targetDef->setNumPasses( 1 );
 #endif
                 {
-                    {
-                        CompositorPassClearDef *passClear = static_cast<CompositorPassClearDef*>
-                                                                ( targetDef->addPass( PASS_CLEAR ) );
-                        passClear->mColourValue      = ColourValue::Black;
-                        passClear->mClearBufferFlags = FBT_COLOUR;
-                    }
                     {
                         CompositorPassQuadDef *passQuad = static_cast<CompositorPassQuadDef*>
                                                                 ( targetDef->addPass( PASS_QUAD ) );
@@ -485,6 +477,9 @@ namespace Ogre
                         materialName.a( cSuffixes[i] );
                         passQuad->mIdentifier = i;
                         passQuad->mMaterialName = materialName.c_str();
+
+                        passQuad->mLoadActionColour[0]  = LoadAction::Clear;
+                        passQuad->mClearColour[0]       = ColourValue::Black;
                     }
 #if GENERATE_MIPMAPS_ON_BLEND
                     if( i == 5 )
@@ -515,7 +510,7 @@ namespace Ogre
                     {
                         CompositorPassClearDef *passClear = static_cast<CompositorPassClearDef*>
                                                                 ( targetDef->addPass( PASS_CLEAR ) );
-                        passClear->mColourValue = ColourValue::Black;
+                        passClear->mClearColour[0] = ColourValue::Black;
                     }
                 }
             }

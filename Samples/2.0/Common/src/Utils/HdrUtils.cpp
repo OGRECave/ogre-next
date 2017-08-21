@@ -86,8 +86,10 @@ namespace Demo
         assert( passDef->getType() == Ogre::PASS_CLEAR &&
                 dynamic_cast<Ogre::CompositorPassClearDef*>(passDef) );
 
+#if TODO_OGRE_2_2
         Ogre::CompositorPassClearDef *clearDef = static_cast<Ogre::CompositorPassClearDef*>( passDef );
         clearDef->mColourValue = colour * multiplier;
+#endif
     }
     //-----------------------------------------------------------------------------------
     void HdrUtils::setExposure( float exposure, float minAutoExposure, float maxAutoExposure )

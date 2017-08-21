@@ -108,7 +108,7 @@ namespace Ogre
             {
                 {
                     CompositorPassClearDef *passClear = static_cast<CompositorPassClearDef*>( targetDef->addPass( PASS_CLEAR ) );
-                    passClear->mColourValue = ColourValue( 0.6f, 0.0f, 0.6f );
+                    passClear->setAllClearColours( ColourValue( 0.6f, 0.0f, 0.6f ) );
                 }
                 {
                     CompositorPassQuadDef *passQuad = static_cast<CompositorPassQuadDef*>( targetDef->addPass( PASS_QUAD ) );

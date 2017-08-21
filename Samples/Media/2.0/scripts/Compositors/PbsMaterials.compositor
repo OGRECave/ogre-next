@@ -18,7 +18,7 @@ compositor_node PbsMaterialsRenderingNode
 				stencil	dont_care
 			}
 			overlays	on
-			//shadows		PbsMaterialsShadowNode
+			shadows		PbsMaterialsShadowNode
 		}
 	}
 }

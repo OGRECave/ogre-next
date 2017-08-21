@@ -66,6 +66,12 @@ namespace Ogre
 
         executeResourceTransitions();
 
+        //Fire the listener in case it wants to change anything
+        if( listener )
+            listener->passPreExecute( this );
+
+        RenderSystem *renderSystem = mParentNode->getRenderSystem();
+        renderSystem ->clearFrameBuffer( mRenderPassDesc, mAnyTargetTexture );
 #if TODO_OGRE_2_2
         mSceneManager->_setViewport( mViewport );
 

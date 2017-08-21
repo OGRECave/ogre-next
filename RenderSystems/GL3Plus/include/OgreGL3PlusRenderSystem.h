@@ -502,9 +502,8 @@ namespace Ogre {
         virtual void _render( const v1::CbDrawCallIndexed *cmd );
         virtual void _render( const v1::CbDrawCallStrip *cmd );
 
-        virtual void clearFrameBuffer( unsigned int buffers,
-                                       const ColourValue& colour = ColourValue::Black,
-                                       Real depth = 1.0f, unsigned short stencil = 0 );
+        virtual void clearFrameBuffer( RenderPassDescriptor *renderPassDesc,
+                                       TextureGpu *anyTarget );
         virtual void discardFrameBuffer( unsigned int buffers );
         HardwareOcclusionQuery* createHardwareOcclusionQuery(void);
         Real getHorizontalTexelOffset(void) { return 0.0; }               // No offset in GL

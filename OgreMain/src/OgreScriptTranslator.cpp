@@ -8430,13 +8430,13 @@ namespace Ogre{
                                 switch(((AtomAbstractNode*)(*k).get())->id)
                                 {
                                 case ID_COLOUR:
-                                    buffers |= FBT_COLOUR;
+                                    buffers |= RenderPassDescriptor::Colour;
                                     break;
                                 case ID_DEPTH:
-                                    buffers |= FBT_DEPTH;
+                                    buffers |= RenderPassDescriptor::Depth;
                                     break;
                                 case ID_STENCIL:
-                                    buffers |= FBT_STENCIL;
+                                    buffers |= RenderPassDescriptor::Stencil;
                                     break;
                                 default:
                                     compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line);
@@ -8455,7 +8455,12 @@ namespace Ogre{
                             compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line);
                             return;
                         }
-                        if( !getColour(prop->values.begin(), prop->values.end(), &passClear->mColourValue) )
+                        ColourValue clearColour;
+                        if( getColour(prop->values.begin(), prop->values.end(), &clearColour) )
+                        {
+                            passClear->setAllClearColours( clearColour );
+                        }
+                        else
                         {
                             compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line);
                         }
@@ -8468,7 +8473,7 @@ namespace Ogre{
                             compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line);
                             return;
                         }
-                        if( !getReal(prop->values.front(), &passClear->mDepthValue) )
+                        if( !getReal(prop->values.front(), &passClear->mClearDepth) )
                         {
                             compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line);
                         }
@@ -8481,7 +8486,7 @@ namespace Ogre{
                             compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line);
                             return;
                         }
-                        if( !getUInt(prop->values.front(), &passClear->mStencilValue) )
+                        if( !getUInt(prop->values.front(), &passClear->mClearStencil) )
                         {
                             compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line);
                         }
@@ -8489,18 +8494,8 @@ namespace Ogre{
                     break;
                 case ID_DISCARD_ONLY:
                     {
-                        if(prop->values.empty())
-                        {
-                            compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line);
-                            return;
-                        }
-
-                        AbstractNodeList::const_iterator it0 = prop->values.begin();
-                        if( !getBoolean( *it0, &passClear->mDiscardOnly ) )
-                        {
-                             compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
-                                "discard_only argument must be 'true', 'false', 'yes', 'no', 'on', or 'off'");
-                        }
+                         compiler->addError(ScriptCompiler::CE_UNSUPPORTEDBYRENDERSYSTEM, prop->file, prop->line,
+                            "discard_only is deprecated and does nothing now. Use StoreActions instead.");
                     }
                     break;
                 case ID_VIEWPORT:

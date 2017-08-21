@@ -140,6 +140,7 @@ namespace Ogre
             OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, 0 ) );
             OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, 0 ) );
             frameBufferDescMap[key] = value;
+            newItor = frameBufferDescMap.find( key );
         }
 
         ++newItor->second.refCount;

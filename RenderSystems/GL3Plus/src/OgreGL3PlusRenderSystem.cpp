@@ -908,6 +908,9 @@ namespace Ogre {
         const int oldX = mCurrentRenderViewport.getActualLeft();
         const int oldY = mCurrentRenderViewport.getActualTop();
 
+        GL3PlusRenderPassDescriptor *currPassDesc =
+                static_cast<GL3PlusRenderPassDescriptor*>( mCurrentRenderPassDescriptor );
+
         RenderSystem::beginRenderPassDescriptor( desc, anyTarget, viewportSize, scissors,
                                                  overlaysEnabled, warnIfRtvWasFlushed );
 
@@ -921,8 +924,6 @@ namespace Ogre {
 
         const bool vpChanged = oldX != x || oldY != y || oldWidth != w || oldHeight != h;
 
-        GL3PlusRenderPassDescriptor *currPassDesc =
-                static_cast<GL3PlusRenderPassDescriptor*>( mCurrentRenderPassDescriptor );
         GL3PlusRenderPassDescriptor *newPassDesc =
                 static_cast<GL3PlusRenderPassDescriptor*>( desc );
 
@@ -3127,120 +3128,11 @@ namespace Ogre {
                     cmd->baseInstance ) );
     }
 
-    void GL3PlusRenderSystem::clearFrameBuffer(unsigned int buffers,
-                                               const ColourValue& colour,
-                                               Real depth, unsigned short stencil)
+    void GL3PlusRenderSystem::clearFrameBuffer( RenderPassDescriptor *desc,
+                                                TextureGpu *anyTarget )
     {
-#if TODO_OGRE_2_2
-        bool colourMask = mBlendChannelMask != HlmsBlendblock::BlendChannelAll;
-
-        GLbitfield flags = 0;
-        if (buffers & FBT_COLOUR)
-        {
-            flags |= GL_COLOR_BUFFER_BIT;
-            // Enable buffer for writing if it isn't
-            if (colourMask)
-            {
-                OGRE_CHECK_GL_ERROR(glColorMask(true, true, true, true));
-            }
-            OGRE_CHECK_GL_ERROR(glClearColor(colour.r, colour.g, colour.b, colour.a));
-        }
-        if (buffers & FBT_DEPTH)
-        {
-            flags |= GL_DEPTH_BUFFER_BIT;
-            // Enable buffer for writing if it isn't
-            if (!mDepthWrite)
-            {
-                OGRE_CHECK_GL_ERROR(glDepthMask(GL_TRUE));
-            }
-            OGRE_CHECK_GL_ERROR(glClearDepth(depth));
-        }
-        if (buffers & FBT_STENCIL)
-        {
-            flags |= GL_STENCIL_BUFFER_BIT;
-            // Enable buffer for writing if it isn't
-            OGRE_CHECK_GL_ERROR(glStencilMask(0xFFFFFFFF));
-            OGRE_CHECK_GL_ERROR(glClearStencil(stencil));
-        }
-
-        RenderTarget* target = mActiveViewport->getTarget();
-        bool scissorsNeeded = mActiveViewport->getActualLeft() != 0 ||
-                                mActiveViewport->getActualTop() != 0 ||
-                                mActiveViewport->getActualWidth() != (int)target->getWidth() ||
-                                mActiveViewport->getActualHeight() != (int)target->getHeight();
-
-        if( scissorsNeeded )
-        {
-            //We clear the viewport area. The Viewport may not
-            //coincide with the current clipping region
-            GLsizei x, y, w, h;
-            w = mActiveViewport->getActualWidth();
-            h = mActiveViewport->getActualHeight();
-            x = mActiveViewport->getActualLeft();
-            y = mActiveViewport->getActualTop();
-
-            if( !target->requiresTextureFlipping() )
-            {
-                // Convert "upper-left" corner to "lower-left"
-                y = target->getHeight() - h - y;
-            }
-
-            OGRE_CHECK_GL_ERROR(glScissor(x, y, w, h));
-        }
-
-        if( scissorsNeeded && !mScissorsEnabled )
-        {
-            // Clear the buffers
-            // Subregion clears need scissort tests enabled.
-            OGRE_CHECK_GL_ERROR(glEnable(GL_SCISSOR_TEST));
-            OGRE_CHECK_GL_ERROR(glClear(flags));
-            OGRE_CHECK_GL_ERROR(glDisable(GL_SCISSOR_TEST));
-        }
-        else
-        {
-            // Clear the buffers
-            // Either clearing the whole screen, or scissor test is already enabled.
-            OGRE_CHECK_GL_ERROR(glClear(flags));
-        }
-
-        if( scissorsNeeded )
-        {
-            //Restore the clipping region
-            GLsizei x, y, w, h;
-            w = mActiveViewport->getScissorActualWidth();
-            h = mActiveViewport->getScissorActualHeight();
-            x = mActiveViewport->getScissorActualLeft();
-            y = mActiveViewport->getScissorActualTop();
-
-            if( !target->requiresTextureFlipping() )
-            {
-                // Convert "upper-left" corner to "lower-left"
-                y = target->getHeight() - h - y;
-            }
-
-            OGRE_CHECK_GL_ERROR(glScissor(x, y, w, h));
-        }
-
-        // Reset buffer write state
-        if (!mDepthWrite && (buffers & FBT_DEPTH))
-        {
-            OGRE_CHECK_GL_ERROR(glDepthMask(GL_FALSE));
-        }
-
-        if (colourMask && (buffers & FBT_COLOUR))
-        {
-            GLboolean r = (mBlendChannelMask & HlmsBlendblock::BlendChannelRed) != 0;
-            GLboolean g = (mBlendChannelMask & HlmsBlendblock::BlendChannelGreen) != 0;
-            GLboolean b = (mBlendChannelMask & HlmsBlendblock::BlendChannelBlue) != 0;
-            GLboolean a = (mBlendChannelMask & HlmsBlendblock::BlendChannelAlpha) != 0;
-            OCGE( glColorMask( r, g, b, a ) );
-        }
-
-        if (buffers & FBT_STENCIL)
-        {
-            OGRE_CHECK_GL_ERROR(glStencilMask(mStencilParams.writeMask));
-        }
-#endif
+        Vector4 fullVp( 0, 0, 1, 1 );
+        beginRenderPassDescriptor( desc, anyTarget, fullVp, fullVp, false, false );
     }
 
     void GL3PlusRenderSystem::discardFrameBuffer( unsigned int buffers )

@@ -1237,16 +1237,19 @@ namespace Ogre
         */
         virtual bool getInvertVertexWinding(void) const;
 
-        /** Clears one or more frame buffers on the active render target. 
-        @param buffers Combination of one or more elements of FrameBufferType
-        denoting which buffers are to be cleared
-        @param colour The colour to clear the colour buffer with, if enabled
-        @param depth The value to initialise the depth buffer with, if enabled
-        @param stencil The value to initialise the stencil buffer with, if enabled.
+        /** Immediately clears the whole frame buffer on the selected RenderPassDescriptor.
+            Prefer clearing using the LoadAction semantics in the RenderPassDescriptor.
+            This function is provided for two reasons:
+                1. Backwards compatibility (i.e. easier porting from 2.1)
+                2. Non-tilers desktop GPUs may be faster to clear the whole framebuffer at once.
+        @remarks
+            Will break an existing RenderPassDescriptor set via beginRenderPassDescriptor.
+        @param renderPassDesc
+            RenderPassDescriptor filled with LoadActions set to clear and StoreActions
+            set to Store.
         */
-        virtual void clearFrameBuffer(unsigned int buffers, 
-            const ColourValue& colour = ColourValue::Black, 
-            Real depth = 1.0f, unsigned short stencil = 0) = 0;
+        virtual void clearFrameBuffer( RenderPassDescriptor *renderPassDesc,
+                                       TextureGpu *anyTarget ) = 0;
 
         /// @copydoc Viewport::discard
         virtual void discardFrameBuffer( unsigned int buffers ) = 0;
