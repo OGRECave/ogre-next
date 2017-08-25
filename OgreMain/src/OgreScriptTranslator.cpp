@@ -8420,6 +8420,18 @@ namespace Ogre{
                 PropertyAbstractNode *prop = reinterpret_cast<PropertyAbstractNode*>((*i).get());
                 switch(prop->id)
                 {
+                case ID_NON_TILERS_ONLY:
+                {
+                    if(prop->values.empty())
+                    {
+                        compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line);
+                        return;
+                    }
+                    if( !getBoolean(prop->values.front(), &passClear->mNonTilersOnly) )
+                    {
+                        compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line);
+                    }
+                }
                 case ID_BUFFERS:
                     {
                         uint32 buffers = 0;

@@ -905,6 +905,7 @@ namespace Ogre
                     ID_ALIAS_ON_COPY_FAILURE,
 
                     //Used by PASS_CLEAR
+                    ID_NON_TILERS_ONLY,
                     ID_BUFFERS,
                     ID_COLOUR,
                     ID_DEPTH,

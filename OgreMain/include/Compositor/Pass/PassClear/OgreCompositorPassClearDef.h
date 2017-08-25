@@ -49,6 +49,8 @@ namespace Ogre
     public:
         /// See RenderPassDescriptor::EntryTypes
         uint32                  mClearBufferFlags;
+        /// Only execute this pass on non-tilers
+        bool                    mNonTilersOnly;
 
         /** By default clear all buffers. Stencil needs to be cleared because it hinders Fast Z Clear
             on GPU architectures that don't separate the stencil from depth and the program requested
@@ -56,7 +58,8 @@ namespace Ogre
         */
         CompositorPassClearDef( CompositorTargetDef *parentTargetDef ) :
             CompositorPassDef( PASS_CLEAR, parentTargetDef ),
-            mClearBufferFlags( RenderPassDescriptor::All )
+            mClearBufferFlags( RenderPassDescriptor::All ),
+            mNonTilersOnly( false )
         {
             //Override so that it only gets executed on the first execution on the
             //whole screen (i.e. clear the whole viewport during the left eye pass)

@@ -1304,6 +1304,7 @@ namespace Ogre
 
         mIds["alias_on_copy_failure"]           = ID_ALIAS_ON_COPY_FAILURE;
 
+        mIds["non_tilers_only"] = ID_NON_TILERS_ONLY;
         mIds["buffers"]         = ID_BUFFERS;
         mIds["colour"]          = ID_COLOUR;
         mIds["depth"]           = ID_DEPTH;

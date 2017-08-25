@@ -70,26 +70,12 @@ namespace Ogre
         if( listener )
             listener->passPreExecute( this );
 
+
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
-        renderSystem ->clearFrameBuffer( mRenderPassDesc, mAnyTargetTexture );
-#if TODO_OGRE_2_2
-        mSceneManager->_setViewport( mViewport );
 
-        //Fire the listener in case it wants to change anything
-        if( listener )
-            listener->passPreExecute( this );
-
-        if( mDefinition->mDiscardOnly )
-        {
-            mViewport->discard( mDefinition->mClearBufferFlags );
-        }
-        else
-        {
-            mTarget->setFsaaResolveDirty();
-            mViewport->clear( mDefinition->mClearBufferFlags, mDefinition->mColourValue,
-                              mDefinition->mDepthValue, mDefinition->mStencilValue );
-        }
-#endif
+        const RenderSystemCapabilities *capabilities = renderSystem->getCapabilities();
+        if( !mDefinition->mNonTilersOnly || !capabilities->hasCapability( RSC_IS_TILER ) )
+            renderSystem->clearFrameBuffer( mRenderPassDesc, mAnyTargetTexture );
 
         if( listener )
             listener->passPosExecute( this );
