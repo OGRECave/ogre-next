@@ -746,6 +746,8 @@ namespace Ogre
 
         mRenderSystem->_update();
 
+        mRenderSystem->endRenderPassDescriptor();
+
         ++mFrameCount;
     }
     //-----------------------------------------------------------------------------------

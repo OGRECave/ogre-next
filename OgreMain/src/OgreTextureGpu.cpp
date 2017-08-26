@@ -95,7 +95,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpu::setResolution( uint32 width, uint32 height, uint32 depthOrSlices )
     {
-        assert( mResidencyStatus == GpuResidency::OnStorage );
+        assert( mResidencyStatus == GpuResidency::OnStorage || isRenderWindowSpecific() );
         mWidth = width;
         mHeight = height;
         if( mTextureType == TextureTypes::TypeCube )
