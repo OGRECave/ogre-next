@@ -780,7 +780,6 @@ namespace Ogre
 
         //Input texture
         nodeDef->addTextureSourceName( "WindowRT", 0, TextureDefinitionBase::TEXTURE_INPUT );
-        RenderTargetViewDef *rtv = nodeDef->addRenderTextureView( "WindowRT" );
 
         nodeDef->setNumTargetPass( 1 );
         {
