@@ -34,7 +34,7 @@ abstract target cubemap_target_shadow
 		}
 		store
 		{
-			//We only care about the contents of the point shadows
+			//We only care about the contents of the colour target with point shadows
 			depth			dont_care
 			stencil			dont_care
 		}
@@ -46,8 +46,8 @@ compositor_node_shadow PbsMaterialsShadowNode
 {
 	technique pssm
 
-	texture atlas 2048 7168 PFG_D32_FLOAT
-	texture tmpCubemap 1024 1024 PFG_R32_FLOAT cubemap depth_format PFG_D32_FLOAT
+	texture atlas		2048 7168 PFG_D32_FLOAT
+	texture tmpCubemap	1024 1024 PFG_R32_FLOAT cubemap depth_format PFG_D32_FLOAT
 
 	num_splits		3
 	pssm_lambda		0.95
@@ -74,7 +74,11 @@ compositor_node_shadow PbsMaterialsShadowNode
 		{
 			pass render_scene
 			{
-				load { all clear_on_tilers }
+				load
+				{
+					all				clear_on_tilers
+					clear_colour	1 1 1 1
+				}
 			}
 		}
 	}
@@ -85,7 +89,11 @@ compositor_node_shadow PbsMaterialsShadowNode
 		{
 			pass render_scene
 			{
-				load { all clear_on_tilers }
+				load
+				{
+					all				clear_on_tilers
+					clear_colour	1 1 1 1
+				}
 			}
 		}
 	}
@@ -105,6 +113,7 @@ compositor_node_shadow PbsMaterialsShadowNode
 			{
 				pass render_quad
 				{
+					load { all dont_care }
 					material Ogre/DPSM/CubeToDpsm
 					input 0 tmpCubemap
 				}

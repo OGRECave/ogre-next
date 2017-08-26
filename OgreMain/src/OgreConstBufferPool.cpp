@@ -221,8 +221,12 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void ConstBufferPool::requestSlot( uint32 hash, ConstBufferPoolUser *user, bool wantsExtraBuffer )
     {
+        uint8 oldDirtyFlags = 0;
         if( user->mAssignedPool )
+        {
+            oldDirtyFlags = user->mDirtyFlags;
             releaseSlot( user );
+        }
 
         BufferPoolVecMap::iterator it = mPools.find( hash );
 
@@ -286,7 +290,7 @@ namespace Ogre
 
         pool->freeSlots.pop_back();
 
-        scheduleForUpdate( user, DirtyConstBuffer );
+        scheduleForUpdate( user, DirtyConstBuffer|oldDirtyFlags );
     }
     //-----------------------------------------------------------------------------------
     void ConstBufferPool::releaseSlot( ConstBufferPoolUser *user )

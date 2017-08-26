@@ -8432,6 +8432,7 @@ namespace Ogre{
                         compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line);
                     }
                 }
+                    break;
                 case ID_BUFFERS:
                     {
                         uint32 buffers = 0;

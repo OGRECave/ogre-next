@@ -372,7 +372,10 @@ namespace Ogre
         mResidencyStatus = newResidency;
 
         if( !isTexture() || isRenderToTexture() || isUav() )
+        {
+            mNextResidencyStatus = mResidencyStatus;
             this->notifyDataIsReady();
+        }
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,

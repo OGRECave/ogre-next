@@ -298,7 +298,7 @@ namespace Ogre
                 texture->addListener( this );
             }
 
-            scheduleConstBufferUpdate();
+            scheduleConstBufferUpdate( textureSetDirty, samplerSetDirty );
         }
 
         //Set the new samplerblock
