@@ -343,6 +343,8 @@ namespace Ogre
                          "TextureGpuManager::destroyTexture" );
         }
 
+        texture->notifyAllListenersTextureChanged( TextureGpuListener::Deleted );
+
         delete texture;
         mEntries.erase( itor );
     }

@@ -207,6 +207,8 @@ namespace Ogre
                     TextureGpuManager *textureManager );
         virtual ~TextureGpu();
 
+        void notifyTextureIsBeingDeleted(void);
+
         virtual String getNameStr(void) const;
 
         /** Schedules an async transition in residency. If transitioning from

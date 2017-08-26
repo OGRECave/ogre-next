@@ -37,6 +37,7 @@
 #include "OgreGLXUtils.h"
 #include "OgreGLXGLSupport.h"
 #include "OgreGL3PlusTextureGpuManager.h"
+#include "OgreTextureGpuListener.h"
 #include "OgreWindowEventUtilities.h"
 #include "OgrePixelFormatGpuUtils.h"
 
@@ -100,10 +101,18 @@ namespace Ogre
             delete mContext;
         }
 
-        OGRE_DELETE mTexture;
-        mTexture = 0;
-        OGRE_DELETE mDepthBuffer;
-        mDepthBuffer = 0;
+        if( mTexture )
+        {
+            mTexture->notifyAllListenersTextureChanged( TextureGpuListener::Deleted );
+            OGRE_DELETE mTexture;
+            mTexture = 0;
+        }
+        if( mDepthBuffer )
+        {
+            mDepthBuffer->notifyAllListenersTextureChanged( TextureGpuListener::Deleted );
+            OGRE_DELETE mDepthBuffer;
+            mDepthBuffer = 0;
+        }
         //Depth & Stencil buffers are the same pointer
         //OGRE_DELETE mStencilBuffer;
         mStencilBuffer = 0;

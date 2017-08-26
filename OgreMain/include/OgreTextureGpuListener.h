@@ -52,11 +52,13 @@ namespace Ogre
             LostResidency,
             PoolTextureSlotChanged,
             ReadyForDisplay,
+            Deleted
         };
 
 		/// Called when a TextureGpu changed in a way that affects how it is displayed:
 		///		1. TextureGpu::notifyDataIsReady got called (texture is ready to be displayed)
 		///		2. Texture changed residency status.
+        ///     3. Texture is being deleted. It won't be a valid pointer after this call.
         virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason ) = 0;
     };
 

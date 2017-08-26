@@ -288,10 +288,12 @@ namespace Ogre
             }
 
             mTextures[texType] = texture;
-            mTexIndices[texType] = texture->getInternalSliceStart();
+            mTexIndices[texType] = 0;
 
             if( texture )
             {
+                mTexIndices[texType] = texture->getInternalSliceStart();
+
                 if( prevPool != texture->getTexturePool() )
                     textureSetDirty = true;
 
@@ -422,6 +424,15 @@ namespace Ogre
     {
         if( reason == TextureGpuListener::FromStorageToSysRam )
             return; //Does not affect us at all.
+
+        if( reason == TextureGpuListener::Deleted )
+        {
+            for( int i=0; i<OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
+            {
+                if( mTextures[i] == texture )
+                    setTexture( i, 0, mSamplerblocks[i] );
+            }
+        }
 
         if( mTexturesDescSet )
         {

@@ -67,8 +67,11 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     TextureGpu::~TextureGpu()
     {
-        assert( mListeners.empty() && "There are listeners out there for this TextureGpu! "
-                "This could leave dangling pointers. Ensure you've cleaned up correctly." );
+        assert( mListeners.empty() &&
+                "There are listeners out there for this TextureGpu! "
+                "notifyAllListenersTextureChanged( TextureGpuListener::Deleted ) wasn't called!"
+                "This could leave dangling pointers. Ensure you've cleaned up correctly. "
+                "Most likely there are Materials/Datablocks still using this texture" );
     }
     //-----------------------------------------------------------------------------------
     String TextureGpu::getNameStr(void) const
