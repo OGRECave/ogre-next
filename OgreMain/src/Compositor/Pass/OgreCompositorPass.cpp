@@ -78,7 +78,7 @@ namespace Ogre
 
         mRenderPassDesc = createRenderPassDesc( rtv );
 
-        for( int i=0; i<mRenderPassDesc->getNumColourEntries() && mAnyTargetTexture; ++i )
+        for( int i=0; i<mRenderPassDesc->getNumColourEntries() && !mAnyTargetTexture; ++i )
             mAnyTargetTexture = mRenderPassDesc->mColour[i].texture;
         if( !mAnyTargetTexture )
             mAnyTargetTexture = mRenderPassDesc->mDepth.texture;

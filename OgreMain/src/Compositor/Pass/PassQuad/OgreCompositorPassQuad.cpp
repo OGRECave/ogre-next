@@ -154,8 +154,6 @@ namespace Ogre
         if( listener )
             listener->passEarlyPreExecute( this );
 
-        setRenderPassDescToCurrent();
-
         if( mPass )
         {
             //Set the material textures every frame (we don't clone the material)

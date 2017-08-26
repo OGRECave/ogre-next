@@ -532,6 +532,8 @@ namespace Ogre {
                                                   bool overlaysEnabled,
                                                   bool warnIfRtvWasFlushed )
     {
+        assert( anyTarget );
+
         mCurrentRenderPassDescriptor = desc;
         mCurrentRenderViewport.setDimensions( anyTarget, viewportSize, scissors );
         mCurrentRenderViewport.setOverlaysEnabled( overlaysEnabled );

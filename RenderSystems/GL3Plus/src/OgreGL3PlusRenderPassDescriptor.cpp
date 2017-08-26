@@ -218,7 +218,11 @@ namespace Ogre
                                  "GL3PlusRenderPassDescriptor::colourEntriesModified" );
                 }
 
-                if( mColour[i].allLayers )
+                TextureTypes::TextureTypes textureType = mColour[i].texture->getTextureType();
+                const bool hasLayers = textureType != TextureTypes::Type1D &&
+                                       textureType != TextureTypes::Type2D;
+
+                if( mColour[i].allLayers || !hasLayers )
                 {
                     if( !texture->hasMsaaExplicitResolves() && texture->getMsaa() > 1u )
                     {
