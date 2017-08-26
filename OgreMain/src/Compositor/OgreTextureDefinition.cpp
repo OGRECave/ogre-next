@@ -96,7 +96,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     IdString TextureDefinitionBase::addTextureSourceName( const String &name, size_t index,
-                                                            TextureSource textureSource )
+                                                          TextureSource textureSource )
     {
         String::size_type findResult = name.find( "global_" );
         if( textureSource == TEXTURE_LOCAL && findResult == 0 )
@@ -125,6 +125,12 @@ namespace Ogre
         }
 
         mNameToChannelMap[hashedName] = value;
+
+        if( textureSource == TEXTURE_INPUT )
+        {
+            RenderTargetViewDef *rtv = this->addRenderTextureView( hashedName );
+            rtv->setRuntimeAnalyzed( hashedName );
+        }
 
         return hashedName;
     }
@@ -635,5 +641,16 @@ namespace Ogre
 
             ++itor;
         }
+    }
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    void RenderTargetViewDef::setRuntimeAnalyzed( IdString texName )
+    {
+        colourAttachments.clear();
+        RenderTargetViewEntry entry;
+        entry.textureName = texName;
+        colourAttachments.push_back( entry );
+        bIsRuntimeAnalyzed = true;
     }
 }

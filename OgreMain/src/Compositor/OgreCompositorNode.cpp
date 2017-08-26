@@ -78,7 +78,7 @@ namespace Ogre
 
         //Create local textures
         TextureDefinitionBase::createTextures( definition->mLocalTextureDefs, mLocalTextures,
-                                               id, false, finalTarget, mRenderSystem );
+                                               id, true, finalTarget, mRenderSystem );
 
         const CompositorNamedBufferVec &globalBuffers = workspace->getGlobalBuffers();
 

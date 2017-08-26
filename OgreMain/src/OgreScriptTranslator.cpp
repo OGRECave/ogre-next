@@ -63,8 +63,6 @@ THE SOFTWARE.
 #include "Compositor/Pass/PassStencil/OgreCompositorPassStencilDef.h"
 #include "Compositor/Pass/PassUav/OgreCompositorPassUavDef.h"
 
-#define TODO_better_describe_input_if_depth
-
 namespace Ogre{
 
     GpuProgramType translateIDToGpuProgramType(uint32 id)
@@ -6991,24 +6989,6 @@ namespace Ogre{
                         {
                             mNodeDef->addTextureSourceName( textureName, inChannel,
                                                             TextureDefinitionBase::TEXTURE_INPUT );
-
-                            TODO_better_describe_input_if_depth;
-                            RenderTargetViewDef *rtv = mNodeDef->addRenderTextureView( textureName );
-                            //if( !PixelFormatGpuUtils::isDepth( format ) )
-                            {
-                                RenderTargetViewEntry attachment;
-                                attachment.textureName = textureName;
-                                rtv->colourAttachments.push_back( attachment );
-//                                rtv->depthBufferId      = depthBufferId;
-//                                rtv->preferDepthTexture = preferDepthTexture;
-//                                rtv->depthBufferFormat  = depthBufferFormat;
-                            }
-//                            else
-//                            {
-//                                rtv->depthAttachment.textureName = atom0->value;
-//                                if( format == PFG_D24_UNORM_S8_UINT || format == PFG_D32_FLOAT_S8X24_UINT )
-//                                    rtv->stencilAttachment.textureName = atom0->value;
-//                            }
                         }
                         else
                         {

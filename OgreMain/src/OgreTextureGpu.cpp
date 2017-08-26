@@ -377,7 +377,8 @@ namespace Ogre
         if( !isTexture() || isRenderToTexture() || isUav() )
         {
             mNextResidencyStatus = mResidencyStatus;
-            this->notifyDataIsReady();
+            if( mResidencyStatus == GpuResidency::Resident )
+                this->notifyDataIsReady();
         }
     }
     //-----------------------------------------------------------------------------------

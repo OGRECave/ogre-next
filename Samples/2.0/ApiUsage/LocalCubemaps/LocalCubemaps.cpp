@@ -5,7 +5,7 @@
 #include "OgreSceneManager.h"
 #include "OgreCamera.h"
 #include "OgreRoot.h"
-#include "OgreRenderWindow.h"
+#include "OgreWindow.h"
 #include "OgreConfigFile.h"
 #include "Compositor/OgreCompositorManager2.h"
 
@@ -34,8 +34,8 @@ namespace Demo
 //            return static_cast<LocalCubemapsGameState*>(mCurrentGameState)->setupCompositor();
 
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
-            return compositorManager->addWorkspace( mSceneManager, mRenderWindow, mCamera,
-                                                    "LocalCubemapsWorkspace", true );
+            return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(),
+                                                    mCamera, "LocalCubemapsWorkspace", true );
         }
 
         virtual void setupResources(void)

@@ -204,7 +204,12 @@ namespace Ogre
         //Attach colour entries
         for( size_t i=0; i<mNumColourEntries; ++i )
         {
-            assert( mColour[i].texture->getResidencyStatus() == GpuResidency::Resident );
+            if( mColour[i].texture->getResidencyStatus() != GpuResidency::Resident )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "RenderTexture '" +
+                             mColour[i].texture->getNameStr() + "' must be resident!",
+                             "GL3PlusRenderPassDescriptor::updateColourFbo" );
+            }
 
             if( !mHasRenderWindow )
             {
@@ -283,7 +288,12 @@ namespace Ogre
             return;
         }
 
-        assert( mDepth.texture->getResidencyStatus() == GpuResidency::Resident );
+        if( mDepth.texture->getResidencyStatus() != GpuResidency::Resident )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "RenderTexture '" +
+                         mDepth.texture->getNameStr() + "' must be resident!",
+                         "GL3PlusRenderPassDescriptor::updateDepthFbo" );
+        }
 
         assert( dynamic_cast<GL3PlusTextureGpu*>( mDepth.texture ) );
         GL3PlusTextureGpu *texture = static_cast<GL3PlusTextureGpu*>( mDepth.texture );
@@ -311,7 +321,12 @@ namespace Ogre
             return;
         }
 
-        assert( mStencil.texture->getResidencyStatus() == GpuResidency::Resident );
+        if( mStencil.texture->getResidencyStatus() != GpuResidency::Resident )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "RenderTexture '" +
+                         mStencil.texture->getNameStr() + "' must be resident!",
+                         "GL3PlusRenderPassDescriptor::updateStencilFbo" );
+        }
 
         assert( dynamic_cast<GL3PlusTextureGpu*>( mStencil.texture ) );
         GL3PlusTextureGpu *texture = static_cast<GL3PlusTextureGpu*>( mStencil.texture );
@@ -641,14 +656,22 @@ namespace Ogre
         memset( this, 0, sizeof( *this ) );
         numColourEntries = desc.getNumColourEntries();
 
+        //Load & Store actions don't matter for generating different FBOs.
+
         for( size_t i=0; i<numColourEntries; ++i )
         {
             colour[i] = desc.mColour[i];
             allLayers[i] = desc.mColour[i].allLayers;
+            colour[i].loadAction = LoadAction::DontCare;
+            colour[i].storeAction = StoreAction::DontCare;
         }
 
         depth = desc.mDepth;
+        depth.loadAction = LoadAction::DontCare;
+        depth.storeAction = StoreAction::DontCare;
         stencil = desc.mStencil;
+        stencil.loadAction = LoadAction::DontCare;
+        stencil.storeAction = StoreAction::DontCare;
     }
     //-----------------------------------------------------------------------------------
     bool FrameBufferDescKey::operator < ( const FrameBufferDescKey &other ) const

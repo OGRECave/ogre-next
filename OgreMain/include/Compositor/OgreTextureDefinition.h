@@ -92,11 +92,26 @@ namespace Ogre
 
         bool depthReadOnly;
         bool stencilReadOnly;
+        protected: bool bIsRuntimeAnalyzed;
 
+    public:
         RenderTargetViewDef() :
             depthBufferId( 1u ), preferDepthTexture( false ), depthBufferFormat( PFG_UNKNOWN ),
-            depthReadOnly( false ), stencilReadOnly( false )
+            depthReadOnly( false ), stencilReadOnly( false ), bIsRuntimeAnalyzed( false )
         {}
+
+        /** If the texture comes from an input channel, we don't have yet enough information,
+            as we're missing:
+                * Whether the texture is colour or depth
+                * The default depth settings (prefersDepthTexture, depth format, etc)
+            Use this function to force the given texture to be analyzed at runtime when
+            creating the pass.
+        @remarks
+            Cannot be used for MRT.
+        @param texName
+        */
+        void setRuntimeAnalyzed( IdString texName );
+        bool isRuntimeAnalyzed(void) const                  { return bIsRuntimeAnalyzed; }
     };
 
     /** Centralized class for dealing with declarations of textures in Node &

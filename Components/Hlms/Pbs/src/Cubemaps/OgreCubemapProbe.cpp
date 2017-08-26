@@ -55,6 +55,7 @@ namespace Ogre
         mOrientation( Matrix3::IDENTITY ),
         mInvOrientation( Matrix3::IDENTITY ),
         mProbeShape( Aabb::BOX_NULL ),
+        mTexture( 0 ),
         mMsaa( 1u ),
         mClearWorkspace( 0 ),
         mWorkspace( 0 ),
@@ -117,6 +118,9 @@ namespace Ogre
             compositorManager->removeWorkspace( mClearWorkspace );
             mClearWorkspace = 0;
         }
+
+        if( mTexture && mTexture->getResidencyStatus() != GpuResidency::OnStorage )
+            mTexture->_transitionTo( GpuResidency::OnStorage, (uint8*)0 );
     }
     //-----------------------------------------------------------------------------------
     void CubemapProbe::destroyTexture(void)
@@ -227,6 +231,8 @@ namespace Ogre
         {
             mCamera->setLightCullingVisibility( true, true );
         }
+
+        mTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
 
         CompositorChannelVec channels( 1, rtt );
         mWorkspace = compositorManager->addWorkspace( sceneManager, channels, mCamera,

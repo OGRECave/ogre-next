@@ -33,8 +33,7 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorNode.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 
-#include "OgreHardwarePixelBuffer.h"
-#include "OgreRenderTexture.h"
+#include "OgrePixelFormatGpuUtils.h"
 #include "OgreViewport.h"
 
 #include "OgreRenderSystem.h"
@@ -129,6 +128,32 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     RenderPassDescriptor* CompositorPass::createRenderPassDesc( const RenderTargetViewDef *rtv )
     {
+        if( rtv->isRuntimeAnalyzed() )
+        {
+            TextureGpu *texture =
+                    mParentNode->getDefinedTexture( rtv->colourAttachments[0].textureName );
+            RenderTargetViewDef tmpRtv;
+            if( PixelFormatGpuUtils::isDepth( texture->getPixelFormat() ) )
+            {
+                tmpRtv.depthAttachment.textureName = rtv->colourAttachments[0].textureName;
+
+                if( texture->getPixelFormat() == PFG_D24_UNORM_S8_UINT ||
+                    texture->getPixelFormat() == PFG_D32_FLOAT_S8X24_UINT )
+                {
+                    tmpRtv.stencilAttachment.textureName = rtv->colourAttachments[0].textureName;
+                }
+            }
+            else
+            {
+                tmpRtv.colourAttachments.push_back( rtv->colourAttachments[0] );
+                tmpRtv.depthBufferId        = texture->getDepthBufferPoolId();
+                tmpRtv.preferDepthTexture   = texture->getPreferDepthTexture();
+                tmpRtv.depthBufferFormat    = texture->getDesiredDepthBufferFormat();
+            }
+
+            return createRenderPassDesc( &tmpRtv );
+        }
+
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
         RenderPassDescriptor *renderPassDesc = renderSystem->createRenderPassDescriptor();
 

@@ -72,7 +72,7 @@ namespace Demo
                     mGraphicsSystem->getSceneManager(),
                     workspaceDef, 250, 1u << 25u );
 
-        mParallaxCorrectedCubemap->setEnabled( true, 1024, 1024, Ogre::PF_R8G8B8A8 );
+        mParallaxCorrectedCubemap->setEnabled( true, 1024, 1024, Ogre::PFG_RGBA8_UNORM_SRGB );
 
         Ogre::CubemapProbe *probe = 0;
         Ogre::Aabb roomShape( Ogre::Vector3( -0.505, 3.400016, 5.066226 ),
