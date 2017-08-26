@@ -146,10 +146,10 @@ namespace Ogre
         //TODO: All other settings to fill are in RenderTargetView
         for( size_t i=0; i<numColourAttachments; ++i )
         {
-            renderPassDesc->mColour[i].loadAction  = mDefinition->mLoadActionColour[i];
-            renderPassDesc->mColour[i].storeAction = mDefinition->mStoreActionColour[i];
-            renderPassDesc->mColour[i].clearColour = mDefinition->mClearColour[i];
-            renderPassDesc->mColour[i].allLayers   = rtv->colourAttachments[i].colourAllLayers;
+            renderPassDesc->mColour[i].loadAction   = mDefinition->mLoadActionColour[i];
+            renderPassDesc->mColour[i].storeAction  = mDefinition->mStoreActionColour[i];
+            renderPassDesc->mColour[i].clearColour  = mDefinition->mClearColour[i];
+            renderPassDesc->mColour[i].allLayers    = rtv->colourAttachments[i].colourAllLayers;
             setupRenderPassTarget( &renderPassDesc->mColour[i], rtv->colourAttachments[i] );
         }
 
@@ -273,8 +273,17 @@ namespace Ogre
 
         renderPassTargetAttachment->mipLevel        = rtvEntry.mipLevel;
         renderPassTargetAttachment->resolveMipLevel = rtvEntry.resolveMipLevel;
-        renderPassTargetAttachment->slice           = rtvEntry.slice;
-        renderPassTargetAttachment->resolveSlice    = rtvEntry.resolveSlice;
+        if( colourAttachment || mDefinition->getRtIndex() == 0 )
+        {
+            renderPassTargetAttachment->slice       = rtvEntry.slice;
+            renderPassTargetAttachment->resolveSlice= rtvEntry.resolveSlice;
+        }
+        else
+        {
+            //This is colour target asking to override the RTV.
+            renderPassTargetAttachment->slice       = mDefinition->getRtIndex();
+            renderPassTargetAttachment->resolveSlice= mDefinition->getRtIndex();
+        }
 
         if( renderPassTargetAttachment->storeAction == StoreAction::StoreOrResolve )
         {
