@@ -387,7 +387,7 @@ namespace Demo
         mMaxAutoExposure    = preset.maxAutoExposure;
         mBloomFullThreshold = preset.bloomThreshold;
 
-        HdrUtils::setSkyColour( preset.skyColour, 1.0f );
+        HdrUtils::setSkyColour( preset.skyColour, 1.0f, mGraphicsSystem->getCompositorWorkspace() );
         HdrUtils::setExposure( mExposure, mMinAutoExposure, mMaxAutoExposure );
         HdrUtils::setBloomThreshold( Ogre::max( mBloomFullThreshold - 2.0f, 0.0f ),
                                      Ogre::max( mBloomFullThreshold, 0.01f ) );

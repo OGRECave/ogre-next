@@ -1,10 +1,3 @@
-abstract target discardTarget
-{
-	pass clear
-	{
-		discard_only yes
-	}
-}
 
 compositor_node HdrRenderingNode
 {
@@ -13,15 +6,20 @@ compositor_node HdrRenderingNode
 
 	target rt0
 	{
-		pass clear
-		{
-			//colour_value 0.2 0.4 0.6 1
-			colour_value 6.667 13.333 20 1
-			//colour_value 13.333 26.667 40 1
-		}
-
 		pass render_scene
 		{
+			load
+			{
+				all				clear
+				//clear_colour	0.2 0.4 0.6 1
+				clear_colour	6.667 13.333 20 1
+				//clear_colour	13.333 26.667 40 1
+			}
+			store
+			{
+				depth			dont_care
+				stencil			dont_care
+			}
 			//lod_update_list	off					//Turn Lod off?
 			shadows				ShadowMapDebuggingShadowNode
 			overlays			off
@@ -51,13 +49,9 @@ compositor_node HdrMsaaResolve
 
 	target resolvedRt
 	{
-		pass clear
-		{
-			discard_only yes
-		}
-
 		pass render_quad
 		{
+			load { all dont_care }
 			material HDR/Resolve_4xFP32_HDR_Box
 			input 0 hdr_msaa_rt
 			input 1 oldLumRt
@@ -88,67 +82,74 @@ compositor_node HdrPostprocessingNode
 	texture rtIter2	  4   4 PFG_R16_FLOAT	depth_pool 0
 
 	//Calculate luminosity
-	target rtIter0 : discardTarget
+	target rtIter0
 	{
 		pass render_quad
 		{
+			load		{ all dont_care }
 			material	HDR/DownScale01_SumLumStart
 			input		0	rt0
 		}
 	}
 
-	target rtIter1 : discardTarget
+	target rtIter1
 	{
 		pass render_quad
 		{
+			load		{ all dont_care }
 			material	HDR/DownScale02_SumLumIterative
 			input		0	rtIter0
 		}
 	}
 
-	target rtIter2 : discardTarget
+	target rtIter2
 	{
 		pass render_quad
 		{
+			load		{ all dont_care }
 			material	HDR/DownScale02_SumLumIterative
 			input		0	rtIter1
 		}
 	}
 
-	target lumRt0 : discardTarget
+	target lumRt0
 	{
 		pass render_quad
 		{
+			load		{ all dont_care }
 			material	HDR/DownScale03_SumLumEnd
 			input		0	rtIter2
 			input		1	lumRt1
 		}
 	}
 
-	target lumRt1 : discardTarget
+	target lumRt1
 	{
 		pass render_quad
 		{
+			load		{ all dont_care }
 			material	Ogre/Copy/1xFP32
 			input		0	lumRt0
 		}
 	}
 
 	//Perform Bloom
-	target rtBlur0 : discardTarget
+	target rtBlur0
 	{
 		pass render_quad
 		{
+			load		{ all dont_care }
 			material	HDR/BrightPass_Start
 			input		0	rt0
 			input		1	lumRt0
 		}
 	}
 
-	target rtBlur1 : discardTarget
+	target rtBlur1
 	{
 		pass render_quad
 		{
+			load		{ all dont_care }
 			material	HDR/BoxBlurH
 			input		0	rtBlur0
 		}
@@ -158,6 +159,7 @@ compositor_node HdrPostprocessingNode
 	{
 		pass render_quad
 		{
+			load		{ all dont_care }
 			material	HDR/BoxBlurV
 			input		0	rtBlur1
 		}
@@ -167,6 +169,7 @@ compositor_node HdrPostprocessingNode
 	{
 		pass render_quad
 		{
+			load		{ all dont_care }
 			material	HDR/BoxBlurH
 			input		0	rtBlur0
 		}
@@ -176,6 +179,7 @@ compositor_node HdrPostprocessingNode
 	{
 		pass render_quad
 		{
+			load		{ all dont_care }
 			material	HDR/BoxBlurV
 			input		0	rtBlur1
 		}
@@ -185,6 +189,7 @@ compositor_node HdrPostprocessingNode
 	{
 		pass render_quad
 		{
+			load		{ all dont_care }
 			material	HDR/BoxBlurH
 			input		0	rtBlur0
 		}
@@ -194,6 +199,7 @@ compositor_node HdrPostprocessingNode
 	{
 		pass render_quad
 		{
+			load		{ all dont_care }
 			material	HDR/BoxBlurH
 			input		0	rtBlur1
 		}
@@ -203,6 +209,7 @@ compositor_node HdrPostprocessingNode
 	{
 		pass render_quad
 		{
+			load		{ all dont_care }
 			material	HDR/BoxBlurH
 			input		0	rtBlur0
 		}
@@ -212,15 +219,17 @@ compositor_node HdrPostprocessingNode
 	{
 		pass render_quad
 		{
+			load		{ all dont_care }
 			material	HDR/BoxBlurH
 			input		0	rtBlur1
 		}
 	}
 
-	target rt_output : discardTarget
+	target rt_output
 	{
 		pass render_quad
 		{
+			load		{ colour dont_care }
 			material	HDR/FinalToneMapping
 			input		0	rt0
 			input		1	lumRt0

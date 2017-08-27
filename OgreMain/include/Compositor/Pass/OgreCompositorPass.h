@@ -183,6 +183,8 @@ namespace Ogre
 
         CompositorPassType getType() const  { return mDefinition->getType(); }
 
+        RenderPassDescriptor* getRenderPassDesc(void) const { return mRenderPassDesc; }
+
         const CompositorPassDef* getDefinition(void) const  { return mDefinition; }
 
 		const CompositorNode* getParentNode(void) const		{ return mParentNode; }
