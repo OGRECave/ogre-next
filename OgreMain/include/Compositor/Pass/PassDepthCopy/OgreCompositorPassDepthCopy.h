@@ -56,9 +56,6 @@ namespace Ogre
     class _OgreExport CompositorPassDepthCopy : public CompositorPass
     {
         CompositorPassDepthCopyDef const *mDefinition;
-    protected:
-        bool mCopyFailed;
-
     public:
         CompositorPassDepthCopy( const CompositorPassDepthCopyDef *definition,
                                  const RenderTargetViewDef *rtv,

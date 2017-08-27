@@ -8,8 +8,8 @@ abstract target discardTarget
 
 compositor_node HdrRenderingNode
 {
-	texture rt0         target_width target_height PF_FLOAT16_RGBA explicit_resolve
-	texture oldLumRt   1   1 PF_FLOAT16_R	no_fsaa depth_pool 0
+	texture rt0			target_width target_height PFG_RGBA16_FLOAT msaa 0 explicit_resolve
+	texture oldLumRt	           1             1 PFG_RGBA16_FLOAT depth_pool 0
 
 	target rt0
 	{
@@ -47,7 +47,7 @@ compositor_node HdrMsaaResolve
 	in 0 hdr_msaa_rt
 	in 1 oldLumRt
 
-	texture resolvedRt target_width target_height PF_FLOAT16_RGBA no_fsaa depth_pool 0
+	texture resolvedRt target_width target_height PFG_RGBA16_FLOAT depth_pool 0
 
 	target resolvedRt
 	{
@@ -75,19 +75,17 @@ compositor_node HdrPostprocessingNode
 
 	//For maximum quality use these as FLOAT16_RGBA, however they're slower on
 	//AMD cards (0.748ms slower on AMD Radeon HD 7770 at 1920x1080).
-	//texture rtBlur0	256 256 PF_FLOAT16_RGBA	no_fsaa depth_pool 0
-	//texture rtBlur1	256 256 PF_FLOAT16_RGBA	no_fsaa depth_pool 0
+	//texture rtBlur0	256 256 PFG_RGBA16_FLOAT	depth_pool 0
+	//texture rtBlur1	256 256 PFG_RGBA16_FLOAT	depth_pool 0
 
-	texture rtBlur0	256 256 PF_A2R10G10B10	no_fsaa depth_pool 0
-	texture rtBlur1	256 256 PF_A2R10G10B10	no_fsaa depth_pool 0
+	texture rtBlur0	256 256 PFG_R10G10B10A2_UNORM	depth_pool 0
+	texture rtBlur1	256 256 PFG_R10G10B10A2_UNORM	depth_pool 0
 
-	texture lumRt0	  1   1 PF_FLOAT16_R	no_fsaa depth_pool 0
-	//texture lumRt1 1   1 PF_FLOAT16_R	no_fsaa depth_pool 0
-	texture rtIter0	 64  64 PF_FLOAT16_R	no_fsaa depth_pool 0
-	texture rtIter1	 16  16 PF_FLOAT16_R	no_fsaa depth_pool 0
-	texture rtIter2	  4   4 PF_FLOAT16_R	no_fsaa depth_pool 0
-
-	texture rtt0 target_width target_height PF_R8G8B8A8 no_fsaa
+	texture lumRt0	  1   1 PFG_R16_FLOAT	depth_pool 0
+	//texture lumRt1  1   1 PFG_R16_FLOAT	depth_pool 0
+	texture rtIter0	 64  64 PFG_R16_FLOAT	depth_pool 0
+	texture rtIter1	 16  16 PFG_R16_FLOAT	depth_pool 0
+	texture rtIter2	  4   4 PFG_R16_FLOAT	depth_pool 0
 
 	//Calculate luminosity
 	target rtIter0 : discardTarget

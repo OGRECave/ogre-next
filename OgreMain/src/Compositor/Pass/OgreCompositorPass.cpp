@@ -137,11 +137,8 @@ namespace Ogre
             {
                 tmpRtv.depthAttachment.textureName = rtv->colourAttachments[0].textureName;
 
-                if( texture->getPixelFormat() == PFG_D24_UNORM_S8_UINT ||
-                    texture->getPixelFormat() == PFG_D32_FLOAT_S8X24_UINT )
-                {
+                if( PixelFormatGpuUtils::isStencil( texture->getPixelFormat() ) )
                     tmpRtv.stencilAttachment.textureName = rtv->colourAttachments[0].textureName;
-                }
             }
             else
             {
@@ -199,14 +196,14 @@ namespace Ogre
                              "CompositorPass::setupRenderPassTarget" );
             }
             PixelFormatGpu preferredFormat = stencilTexture->getPixelFormat();
-            if( preferredFormat == PFG_D24_UNORM_S8_UINT || stencilFormat == PFG_D32_FLOAT_S8X24_UINT )
+            if( PixelFormatGpuUtils::isStencil( preferredFormat ) )
                 stencilFormat = preferredFormat;
         }
         else if( renderPassDesc->mColour[0].texture )
         {
             PixelFormatGpu desiredFormat =
                     renderPassDesc->mColour[0].texture->getDesiredDepthBufferFormat();
-            if( desiredFormat == PFG_D24_UNORM_S8_UINT || desiredFormat == PFG_D32_FLOAT_S8X24_UINT )
+            if( PixelFormatGpuUtils::isStencil( desiredFormat ) )
                 stencilFormat = desiredFormat;
         }
 

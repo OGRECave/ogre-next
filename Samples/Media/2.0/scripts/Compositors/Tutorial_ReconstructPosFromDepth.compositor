@@ -35,16 +35,6 @@ compositor_node Tutorial_ReconstructPosFromDepthNode
 	
 	target rt_renderwindow
 	{
-		pass depth_copy
-		{
-			//When alias_on_copy_failure is on, if the copy fails (i.e. hardware doesn't support it)
-			//then 'depthTextureCopy' will internally point to the same buffer as depthTexture.
-			//For a lot of cases this is harmless and a nice fallback.
-			alias_on_copy_failure	on
-			in		depthTexture
-			out		depthTextureCopy
-		}
-		
 		pass render_quad
 		{
 			load
@@ -53,7 +43,7 @@ compositor_node Tutorial_ReconstructPosFromDepthNode
 			}
 
 			material ReconstructPosFromDepth
-	    	input 0 depthTextureCopy
+			input 0 depthTexture
 
 			quad_normals	camera_far_corners_view_space
 		}

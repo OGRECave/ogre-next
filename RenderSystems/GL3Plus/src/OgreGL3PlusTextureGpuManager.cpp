@@ -49,6 +49,7 @@ namespace Ogre
         mSupport( support )
     {
         memset( mBlankTexture, 0, sizeof(mBlankTexture) );
+        memset( mTmpFbo, 0, sizeof(mTmpFbo) );
 
         OCGE( glGenTextures( TextureTypes::Type3D - 1u, &mBlankTexture[1u] ) );
         mBlankTexture[TextureTypes::Unknown] = mBlankTexture[TextureTypes::Type2D];
@@ -125,11 +126,16 @@ namespace Ogre
                 break;
             }
         }
+
+        OCGE( glGenFramebuffers( 2u, mTmpFbo ) );
     }
     //-----------------------------------------------------------------------------------
     GL3PlusTextureGpuManager::~GL3PlusTextureGpuManager()
     {
         destroyAll();
+
+        OCGE( glDeleteFramebuffers( 2u, mTmpFbo ) );
+        memset( mTmpFbo, 0, sizeof(mTmpFbo) );
 
         OCGE( glDeleteTextures( TextureTypes::Type3D - 1u, &mBlankTexture[1u] ) );
         memset( mBlankTexture, 0, sizeof(mBlankTexture) );

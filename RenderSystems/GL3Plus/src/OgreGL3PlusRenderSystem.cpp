@@ -566,6 +566,8 @@ namespace Ogre {
         // Check if render to vertex buffer (transform feedback in OpenGL)
         rsc->setCapability(RSC_HWRENDER_TO_VERTEX_BUFFER);
 
+        rsc->setCapability(RSC_EXPLICIT_FSAA_RESOLVE);
+
         if( mDriverVersion.hasMinVersion( 4, 2 ) ||
             mGLSupport->checkExtension("GL_ARB_shading_language_420pack" ) )
         {

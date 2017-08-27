@@ -918,9 +918,6 @@ namespace Ogre
                         ID_CAMERA_DIRECTION,
                     ID_INPUT,
 
-                    //Used by ID_DEPTH_COPY
-                    ID_ALIAS_ON_COPY_FAILURE,
-
                     //Used by PASS_CLEAR
                     ID_NON_TILERS_ONLY,
                     ID_BUFFERS,

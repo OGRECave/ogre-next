@@ -1,6 +1,6 @@
 compositor_node HdrSmaaRttNode
 {
-	texture rt0 target_width target_height PF_R8G8B8A8 no_fsaa
+	texture rt0 target_width target_height PFG_RGBA8_UNORM_SRGB
 	out 0 rt0
 }
 

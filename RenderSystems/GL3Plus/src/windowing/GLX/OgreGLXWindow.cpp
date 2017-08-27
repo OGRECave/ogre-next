@@ -348,8 +348,7 @@ namespace Ogre
                 maxAttribs[attrib++] = GLX_DEPTH_SIZE;
                 maxAttribs[attrib++] = 0;
             }
-            if( depthStencilFormat == PFG_D24_UNORM_S8_UINT ||
-                depthStencilFormat == PFG_D32_FLOAT_S8X24_UINT ||
+            if( PixelFormatGpuUtils::isStencil( depthStencilFormat ) ||
                 depthStencilFormat == PFG_UNKNOWN )
             {
                 maxAttribs[attrib++] = GLX_STENCIL_SIZE;

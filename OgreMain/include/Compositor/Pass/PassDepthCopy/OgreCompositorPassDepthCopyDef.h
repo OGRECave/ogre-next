@@ -48,18 +48,6 @@ namespace Ogre
     class _OgreExport CompositorPassDepthCopyDef : public CompositorPassDef
     {
         friend class CompositorPassDepthCopy;
-    public:
-        /// DX10 HW (or the API) doesn't support copying depth buffers. Which means
-        /// Whatever composition you're trying to do will fail to render correctly.
-        /// However, most of the time this pass is used to prevent the depth buffer
-        /// from decompressing; but you could still get away without the pass, i.e.
-        /// as if it never existed (and use just one depth texture).
-        /// If this is your case, when mAliasDepthBufferOnCopyFailure = true and the
-        /// copy failed, the destination texture will have its own depth buffer
-        /// detached, and will be attached to the same depth buffer as the source
-        /// texture (effectively aliasing both textures to the same depth buffer).
-        bool        mAliasDepthBufferOnCopyFailure;
-
     protected:
         /// Name of the src RT (can come from input channel, local textures, or global ones)
         IdString    mSrcDepthTextureName;
@@ -72,7 +60,6 @@ namespace Ogre
         CompositorPassDepthCopyDef( CompositorNodeDef *parentNodeDef,
                                     CompositorTargetDef *parentTargetDef ) :
             CompositorPassDef( PASS_DEPTHCOPY, parentTargetDef ),
-            mAliasDepthBufferOnCopyFailure( false ),
             mParentNodeDef( parentNodeDef )
         {
         }

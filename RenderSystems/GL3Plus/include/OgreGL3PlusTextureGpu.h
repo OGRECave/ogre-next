@@ -59,12 +59,21 @@ namespace Ogre
         ///     2. The texture
         ///     3. An msaa texture (hasMsaaExplicitResolves == true)
         ///     4. The msaa resolved texture (hasMsaaExplicitResolves==false)
+        /// This value may be a renderbuffer instead of a texture if isRenderbuffer() returns true.
         GLuint  mFinalTextureName;
         /// Only used when hasMsaaExplicitResolves() == false.
+        /// This value is always an FBO.
         GLuint  mMsaaFramebufferName;
 
         virtual void createInternalResourcesImpl(void);
         virtual void destroyInternalResourcesImpl(void);
+
+        bool isRenderbuffer(void) const;
+
+        void bindTextureToFrameBuffer( GLenum target, uint8 mipLevel, uint32 depthOrSlice );
+
+        void copyViaFramebuffer( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
+                                 const TextureBox &srcBox, uint8 srcMipLevel );
 
     public:
         GL3PlusTextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,

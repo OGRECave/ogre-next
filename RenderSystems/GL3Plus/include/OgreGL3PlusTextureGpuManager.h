@@ -49,6 +49,7 @@ namespace Ogre
     protected:
         /// 4x4 texture for when we have nothing to display.
         GLuint  mBlankTexture[TextureTypes::Type3D + 1u];
+        GLuint  mTmpFbo[2];
 
         const GL3PlusSupport &mSupport;
 
@@ -75,6 +76,9 @@ namespace Ogre
         TextureGpu* createTextureGpuWindow( GL3PlusContext *context, Window *window );
 
         GLuint getBlankTextureGlName( TextureTypes::TextureTypes textureType ) const;
+
+        /// fboIdx must be in range [0; 1]
+        GLuint getTemporaryFbo( uint32 fboIdx ) const           { return mTmpFbo[fboIdx]; }
 
         const GL3PlusSupport& getGlSupport(void) const          { return mSupport; }
     };

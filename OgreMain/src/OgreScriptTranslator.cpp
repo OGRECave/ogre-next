@@ -6450,7 +6450,7 @@ namespace Ogre{
         else
         {
             rtv->depthAttachment.textureName = atom0->value;
-            if( format == PFG_D24_UNORM_S8_UINT || format == PFG_D32_FLOAT_S8X24_UINT )
+            if( PixelFormatGpuUtils::isStencil( format ) )
                 rtv->stencilAttachment.textureName = atom0->value;
         }
     }
@@ -8866,22 +8866,6 @@ namespace Ogre{
                 PropertyAbstractNode *prop = reinterpret_cast<PropertyAbstractNode*>((*i).get());
                 switch(prop->id)
                 {
-                case ID_ALIAS_ON_COPY_FAILURE:
-                    {
-                        if(prop->values.size() != 1)
-                        {
-                            compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line,
-                                               "Boolean value expected");
-                            return;
-                        }
-
-                        AbstractNodeList::const_iterator it0 = prop->values.begin();
-                        if( !getBoolean( *it0, &passDepthCopy->mAliasDepthBufferOnCopyFailure ) )
-                        {
-                             compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line);
-                        }
-                    }
-                    break;
                 case ID_IN:
                     {
                         if(prop->values.empty())

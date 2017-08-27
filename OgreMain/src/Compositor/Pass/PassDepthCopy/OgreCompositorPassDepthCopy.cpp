@@ -37,6 +37,7 @@ THE SOFTWARE.
 
 #include "OgreDepthBuffer.h"
 #include "OgreRenderTarget.h"
+#include "OgreTextureBox.h"
 
 #include "OgreRenderSystem.h"
 
@@ -65,8 +66,7 @@ namespace Ogre
                                                       const RenderTargetViewDef *rtv,
                                                       CompositorNode *parentNode ) :
                 CompositorPass( definition, rtv, parentNode ),
-                mDefinition( definition ),
-                mCopyFailed( false )
+                mDefinition( definition )
     {
     }
     //-----------------------------------------------------------------------------------
@@ -90,25 +90,14 @@ namespace Ogre
 
         executeResourceTransitions();
 
-#if TODO_OGRE_2_2
         //Should we retrieve every update, or cache the return values
         //and listen to notifyRecreated and family of funtions?
-        TextureGpu *srcChannel = mParentNode->_getDefinedTexture( mDefinition->mSrcDepthTextureName );
-        TextureGpu *dstChannel = mParentNode->_getDefinedTexture( mDefinition->mDstDepthTextureName );
+        TextureGpu *srcChannel = mParentNode->getDefinedTexture( mDefinition->mSrcDepthTextureName );
+        TextureGpu *dstChannel = mParentNode->getDefinedTexture( mDefinition->mDstDepthTextureName );
 
-        DepthBuffer *srcDepthBuffer = srcChannel->target->getDepthBuffer();
-        DepthBuffer *dstDepthBuffer = dstChannel->target->getDepthBuffer();
-        if( !mCopyFailed )
-        {
-            mCopyFailed = !srcDepthBuffer->copyTo( dstDepthBuffer );
-        }
-
-        if( mCopyFailed && srcDepthBuffer != dstDepthBuffer &&
-            mDefinition->mAliasDepthBufferOnCopyFailure )
-        {
-            dstChannel->target->attachDepthBuffer( srcDepthBuffer, false );
-        }
-#endif
+        TextureBox srcBox = srcChannel->getEmptyBox( 0 );
+        TextureBox dstBox = dstChannel->getEmptyBox( 0 );
+        srcChannel->copyTo( dstChannel, dstBox, 0, srcBox, 0 );
 
         if( listener )
             listener->passPosExecute( this );

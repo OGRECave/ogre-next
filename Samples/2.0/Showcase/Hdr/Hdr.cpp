@@ -5,7 +5,7 @@
 #include "OgreSceneManager.h"
 #include "OgreCamera.h"
 #include "OgreRoot.h"
-#include "OgreRenderWindow.h"
+#include "OgreWindow.h"
 #include "OgreConfigFile.h"
 #include "Compositor/OgreCompositorManager2.h"
 
@@ -34,11 +34,11 @@ namespace Demo
             const Ogre::RenderSystemCapabilities *caps = renderSystem->getCapabilities();
 
             Ogre::String compositorName = "HdrWorkspace";
-            if( mRenderWindow->getFSAA() > 1u && caps->hasCapability( Ogre::RSC_EXPLICIT_FSAA_RESOLVE ) )
+            if( mRenderWindow->getMsaa() > 1u && caps->hasCapability( Ogre::RSC_EXPLICIT_FSAA_RESOLVE ) )
                 compositorName = "HdrWorkspaceMsaa";
 
-            return compositorManager->addWorkspace( mSceneManager, mRenderWindow, mCamera,
-                                                    compositorName, true );
+            return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(),
+                                                    mCamera, compositorName, true );
         }
 
         virtual void setupResources(void)

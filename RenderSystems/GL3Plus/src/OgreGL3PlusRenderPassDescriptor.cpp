@@ -229,7 +229,8 @@ namespace Ogre
 
                 if( mColour[i].allLayers || !hasLayers )
                 {
-                    if( !texture->hasMsaaExplicitResolves() && texture->getMsaa() > 1u )
+                    if( texture->getMsaa() > 1u && (!texture->hasMsaaExplicitResolves() ||
+                                                    !texture->isTexture()) )
                     {
                         OCGE( glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i,
                                                          texture->getMsaaFramebufferName(), 0 ) );
@@ -243,7 +244,8 @@ namespace Ogre
                 }
                 else
                 {
-                    if( !texture->hasMsaaExplicitResolves() && texture->getMsaa() > 1u )
+                    if( texture->getMsaa() > 1u && (!texture->hasMsaaExplicitResolves() ||
+                                                    !texture->isTexture()) )
                     {
                         OCGE( glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i,
                                                          texture->getMsaaFramebufferName(), 0 ) );
