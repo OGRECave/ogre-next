@@ -261,6 +261,17 @@ namespace Ogre
         return &itor->second;
     }
     //-----------------------------------------------------------------------------------
+    RenderTargetViewDef* TextureDefinitionBase::getRenderTargetViewDefNonConstNoThrow( IdString name )
+    {
+        RenderTargetViewDef *retVal = 0;
+        RenderTargetViewDefMap::iterator itor = mLocalRtvs.find( name );
+
+        if( itor != mLocalRtvs.end() )
+            retVal = &itor->second;
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
     void TextureDefinitionBase::createTextures( const TextureDefinitionVec &textureDefs,
                                                 CompositorChannelVec &inOutTexContainer,
                                                 IdType id, bool uniqueNames,

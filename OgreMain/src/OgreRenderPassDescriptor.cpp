@@ -217,6 +217,14 @@ namespace Ogre
 
         if( entryTypes & RenderPassDescriptor::Colour )
             colourEntriesModified();
+
+        if( mNumColourEntries == 0 && !mDepth.texture && !mStencil.texture )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "RenderPassDescriptor has no colour, depth nor stencil attachments!",
+                         "RenderPassDescriptor::entriesModified" );
+        }
+
         checkRequiresTextureFlipping();
     }
     //-----------------------------------------------------------------------------------

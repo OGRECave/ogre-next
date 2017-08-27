@@ -1225,6 +1225,17 @@ namespace Ogre
         mIds["in_buffer"]       = ID_IN_BUFFER;
         mIds["out_buffer"]      = ID_OUT_BUFFER;
         mIds["custom_id"]       = ID_CUSTOM_ID;
+        mIds["rtv"]             = ID_RTV;
+        mIds["resolve"]         = ID_RESOLVE;
+        mIds["mip"]             = ID_MIP;
+        mIds["resolve_mip"]     = ID_RESOLVE_MIP;
+        mIds["resolve_mipmap"]  = ID_RESOLVE_MIPMAP;
+        mIds["slice"]           = ID_SLICE;
+        mIds["resolve_slice"]   = ID_RESOLVE_SLICE;
+        mIds["all_layers"]      = ID_ALL_LAYERS;
+        mIds["depth_stencil"]   = ID_DEPTH_STENCIL;
+        mIds["depth_read_only"] = ID_DEPTH_READ_ONLY;
+        mIds["stencil_read_only"]=ID_STENCIL_READ_ONLY;
         mIds["buffer"]          = ID_BUFFER;
         mIds["target_width"]        = ID_TARGET_WIDTH;
         mIds["target_height"]       = ID_TARGET_HEIGHT;

@@ -7522,6 +7522,340 @@ namespace Ogre{
     }
 
     /**************************************************************************
+     * CompositorRenderTargetViewTranslator
+     *************************************************************************/
+    CompositorRenderTargetViewTranslator::CompositorRenderTargetViewTranslator() : mRtv(0)
+    {
+    }
+
+    void CompositorRenderTargetViewTranslator::translateRenderTargetViewEntry(
+            RenderTargetViewEntry &attachment, PropertyAbstractNode *prop,
+            ScriptCompiler *compiler, bool isColour )
+    {
+        if( (isColour && prop->values.size() < 2u) ||
+            (!isColour && prop->values.size() < 1u) )
+        {
+            compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line);
+            return;
+        }
+
+        AbstractNodeList::const_iterator itor = prop->values.begin();
+        AbstractNodeList::const_iterator end  = prop->values.end();
+
+        if( isColour )
+            ++itor; //Skip the attachment index
+
+        if( !getIdString( *itor, &attachment.textureName ) )
+        {
+            compiler->addError( ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
+                                "Could not retrieve texture name for this RTV entry" );
+            return;
+        }
+        ++itor;
+
+        bool resolveMipSet = false;
+        bool resolveSliceSet = false;
+
+        while( itor != end )
+        {
+            AtomAbstractNode *atom = (AtomAbstractNode*)(*itor).get();
+            switch( atom->id )
+            {
+            case ID_RESOLVE:
+                break;
+            case ID_MIP:
+            case ID_MIPMAP:
+            {
+                uint32 mip = 0;
+                if( getUInt( *itor, &mip ) )
+                {
+                    attachment.mipLevel = static_cast<uint8>( mip );
+                    if( !resolveMipSet )
+                        attachment.resolveMipLevel = static_cast<uint8>( mip );
+                }
+                else
+                {
+                    compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line);
+                }
+            }
+                break;
+            case ID_RESOLVE_MIP:
+            case ID_RESOLVE_MIPMAP:
+            {
+                uint32 mip = 0;
+                if( getUInt( *itor, &mip ) )
+                {
+                    attachment.resolveMipLevel = static_cast<uint8>( mip );
+                    resolveMipSet = true;
+                }
+                else
+                {
+                    compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line);
+                }
+            }
+                break;
+            case ID_SLICE:
+            {
+                uint32 slice = 0;
+                if( getUInt( *itor, &slice ) )
+                {
+                    attachment.slice = static_cast<uint8>( slice );
+                    if( !resolveSliceSet )
+                        attachment.resolveSlice = static_cast<uint8>( slice );
+                }
+                else
+                {
+                    compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line);
+                }
+            }
+                break;
+            case ID_RESOLVE_SLICE:
+            {
+                uint32 slice = 0;
+                if( getUInt( *itor, &slice ) )
+                {
+                    attachment.resolveSlice = static_cast<uint8>( slice );
+                    resolveSliceSet = true;
+                }
+                else
+                {
+                    compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line);
+                }
+            }
+            case ID_ALL_LAYERS:
+            {
+                if( !getBoolean( *itor, &attachment.colourAllLayers ) )
+                {
+                    compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line);
+                }
+            }
+                break;
+            }
+
+            ++itor;
+        }
+    }
+
+    void CompositorRenderTargetViewTranslator::translate(ScriptCompiler *compiler, const AbstractNodePtr &node)
+    {
+        ObjectAbstractNode *obj = reinterpret_cast<ObjectAbstractNode*>(node.get());
+        if(obj->name.empty())
+        {
+            compiler->addError(ScriptCompiler::CE_OBJECTNAMEEXPECTED, obj->file, obj->line);
+            return;
+        }
+
+        CompositorNodeDef *nodeDef = any_cast<CompositorNodeDef*>(obj->parent->context);
+
+        //First edit an existing RTV. If none found, create a new one.
+        mRtv = nodeDef->getRenderTargetViewDefNonConstNoThrow( obj->name );
+        if( !mRtv )
+            mRtv = nodeDef->addRenderTextureView( obj->name );
+
+        if(mRtv == 0)
+        {
+            compiler->addError(ScriptCompiler::CE_OBJECTALLOCATIONERROR, obj->file, obj->line);
+            return;
+        }
+
+        // Prepare the compositor
+        obj->context = Any(mRtv);
+
+        AbstractNodeList::iterator i = obj->children.begin();
+        try
+        {
+        for(i = obj->children.begin(); i != obj->children.end(); ++i)
+        {
+            if((*i)->type == ANT_OBJECT)
+            {
+                processNode(compiler, *i);
+            }
+            else if((*i)->type == ANT_PROPERTY)
+            {
+                PropertyAbstractNode *prop = reinterpret_cast<PropertyAbstractNode*>((*i).get());
+                switch(prop->id)
+                {
+                case ID_COLOUR:
+                {
+                    if(prop->values.empty())
+                    {
+                        compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line);
+                    }
+                    else
+                    {
+                        uint32 colourAttachmentIdx;
+                        if( getUInt( *prop->values.begin(), &colourAttachmentIdx ) )
+                        {
+                            //Specifying a colour RTT in detail at a given location
+                            if( colourAttachmentIdx >= mRtv->colourAttachments.size() )
+                                mRtv->colourAttachments.resize( colourAttachmentIdx + 1u );
+                            translateRenderTargetViewEntry( mRtv->colourAttachments[colourAttachmentIdx],
+                                                            prop, compiler, true );
+                        }
+                        else
+                        {
+                            //Specifying one or multiple colour RTT, no detail
+                            size_t colourIdx = 0;
+                            AbstractNodeList::const_iterator it = prop->values.begin();
+                            AbstractNodeList::const_iterator en = prop->values.end();
+
+                            while( it != en )
+                            {
+                                IdString texName;
+                                if( getIdString( *it, &texName ) )
+                                {
+                                    if( colourIdx >= mRtv->colourAttachments.size() )
+                                        mRtv->colourAttachments.push_back( RenderTargetViewEntry() );
+                                    mRtv->colourAttachments.back().textureName = texName;
+                                    ++colourIdx;
+                                }
+                                else
+                                {
+                                    compiler->addError( ScriptCompiler::CE_STRINGEXPECTED,
+                                                        prop->file, prop->line );
+                                }
+
+                                ++it;
+                            }
+                        }
+                    }
+                }
+                    break;
+                case ID_DEPTH:
+                    translateRenderTargetViewEntry( mRtv->depthAttachment, prop, compiler, false );
+                    mRtv->depthBufferId = DepthBuffer::POOL_NON_SHAREABLE;
+                    break;
+                case ID_STENCIL:
+                    translateRenderTargetViewEntry( mRtv->stencilAttachment, prop, compiler, false );
+                    mRtv->depthBufferId = DepthBuffer::POOL_NON_SHAREABLE;
+                    break;
+                case ID_DEPTH_STENCIL:
+                    translateRenderTargetViewEntry( mRtv->depthAttachment, prop, compiler, false );
+                    mRtv->stencilAttachment = mRtv->depthAttachment;
+                    break;
+                case ID_DEPTH_TEXTURE:
+                    if(prop->values.size() != 1)
+                    {
+                        compiler->addError( ScriptCompiler::CE_INVALIDPARAMETERS,
+                                            prop->file, prop->line,
+                                            "depth_texture argument must be \"true\", \"false\", "
+                                            "\"yes\", \"no\", \"on\", or \"off\"" );
+                    }
+                    else
+                    {
+                        AbstractNodeList::const_iterator it0 = prop->values.begin();
+
+                        if( !getBoolean( *it0, &mRtv->preferDepthTexture ) )
+                        {
+                            compiler->addError( ScriptCompiler::CE_INVALIDPARAMETERS,
+                                                prop->file, prop->line,
+                                                "depth_texture argument must be \"true\", \"false\", "
+                                                "\"yes\", \"no\", \"on\", or \"off\"" );
+                        }
+                    }
+                    break;
+                case ID_DEPTH_POOL:
+                    if(prop->values.size() != 1)
+                    {
+                        compiler->addError( ScriptCompiler::CE_NUMBEREXPECTED,
+                                            prop->file, prop->line );
+                    }
+                    else
+                    {
+                        AbstractNodeList::const_iterator it0 = prop->values.begin();
+
+                        uint32 depthBufferPool = 0;
+                        if( getUInt( *it0, &depthBufferPool ) )
+                            mRtv->depthBufferId = depthBufferPool;
+                        else
+                        {
+                            compiler->addError( ScriptCompiler::CE_NUMBEREXPECTED,
+                                                prop->file, prop->line );
+                        }
+                    }
+                    break;
+                case ID_DEPTH_FORMAT:
+                    if(prop->values.size() != 1)
+                    {
+                        compiler->addError( ScriptCompiler::CE_STRINGEXPECTED,
+                                            prop->file, prop->line );
+                    }
+                    else
+                    {
+                        AbstractNodeList::const_iterator it0 = prop->values.begin();
+
+                        AtomAbstractNode *atom0 = (AtomAbstractNode*)(*it0).get();
+                        mRtv->depthBufferFormat = PixelFormatGpuUtils::getFormatFromName( atom0->value );
+
+                        if( !PixelFormatGpuUtils::isDepth( mRtv->depthBufferFormat ) )
+                        {
+                            compiler->addError( ScriptCompiler::CE_INVALIDPARAMETERS,
+                                                prop->file, prop->line,
+                                                "PixelFormat not recognized or is not depth" );
+                        }
+                    }
+                    break;
+                case ID_DEPTH_READ_ONLY:
+                    if(prop->values.size() != 1)
+                    {
+                        compiler->addError( ScriptCompiler::CE_INVALIDPARAMETERS,
+                                            prop->file, prop->line,
+                                            "depth_read_only argument must be \"true\", \"false\", "
+                                            "\"yes\", \"no\", \"on\", or \"off\"" );
+                    }
+                    else
+                    {
+                        AbstractNodeList::const_iterator it0 = prop->values.begin();
+                        if( !getBoolean( *it0, &mRtv->depthReadOnly ) )
+                        {
+                            compiler->addError( ScriptCompiler::CE_INVALIDPARAMETERS,
+                                                prop->file, prop->line,
+                                                "depth_read_only argument must be \"true\", \"false\", "
+                                                "\"yes\", \"no\", \"on\", or \"off\"" );
+                        }
+                    }
+                    break;
+                case ID_STENCIL_READ_ONLY:
+                    if(prop->values.size() != 1)
+                    {
+                        compiler->addError( ScriptCompiler::CE_INVALIDPARAMETERS,
+                                            prop->file, prop->line,
+                                            "stencil_read_only argument must be \"true\", \"false\", "
+                                            "\"yes\", \"no\", \"on\", or \"off\"" );
+                    }
+                    else
+                    {
+                        AbstractNodeList::const_iterator it0 = prop->values.begin();
+                        if( !getBoolean( *it0, &mRtv->stencilReadOnly ) )
+                        {
+                            compiler->addError( ScriptCompiler::CE_INVALIDPARAMETERS,
+                                                prop->file, prop->line,
+                                                "stencil_read_only argument must be \"true\", \"false\", "
+                                                "\"yes\", \"no\", \"on\", or \"off\"" );
+                        }
+                    }
+                    break;
+                default:
+                    compiler->addError(ScriptCompiler::CE_UNEXPECTEDTOKEN, prop->file, prop->line,
+                        "token \"" + prop->name + "\" is not recognized");
+                }
+            }
+            else
+            {
+                compiler->addError(ScriptCompiler::CE_UNEXPECTEDTOKEN, (*i)->file, (*i)->line,
+                    "token not recognized");
+            }
+        }
+        }
+        catch( Exception &e )
+        {
+            if( i != obj->children.end() )
+                compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, (*i)->file, (*i)->line);
+            throw e;
+        }
+    }
+
+    /**************************************************************************
      * CompositorTargetTranslator
      *************************************************************************/
     CompositorTargetTranslator::CompositorTargetTranslator() : mTargetDef(0)
@@ -10407,6 +10741,9 @@ namespace Ogre{
                     (parent->id == ID_COMPOSITOR_NODE || parent->id == ID_SHADOW_NODE ||
                      parent->id == ID_SHADOW_MAP_REPEAT))
                 translator = &mCompositorTargetTranslator;
+            else if( obj->id == ID_RTV && (parent->id == ID_COMPOSITOR_NODE ||
+                                           parent->id == ID_SHADOW_NODE) )
+                translator = &mCompositorRenderTargetViewTranslator;
             else if(obj->id == ID_SHADOW_MAP_TARGET_TYPE && parent && parent->id == ID_SHADOW_NODE)
                 translator = &mCompositorShadowMapTargetTypeTranslator;
             else if(obj->id == ID_SHADOW_MAP_REPEAT && parent && parent->id == ID_SHADOW_MAP_TARGET_TYPE)

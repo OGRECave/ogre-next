@@ -39,6 +39,8 @@ THE SOFTWARE.
 namespace Ogre{
 	struct IdString;
     class TextureDefinitionBase;
+    struct RenderTargetViewDef;
+    struct RenderTargetViewEntry;
 
     /** \addtogroup Core
     *  @{
@@ -284,6 +286,19 @@ namespace Ogre{
         CompositorShadowNodeTranslator();
         void translate(ScriptCompiler *compiler, const AbstractNodePtr &node);
     };
+    class _OgreExport CompositorRenderTargetViewTranslator : public ScriptTranslator
+    {
+    protected:
+        RenderTargetViewDef *mRtv;
+
+        void translateRenderTargetViewEntry( RenderTargetViewEntry &attachment,
+                                             PropertyAbstractNode *prop, ScriptCompiler *compiler,
+                                             bool isColour );
+
+    public:
+        CompositorRenderTargetViewTranslator();
+        void translate( ScriptCompiler *compiler, const AbstractNodePtr &node );
+    };
     class _OgreExport CompositorTargetTranslator : public ScriptTranslator
     {
     protected:
@@ -382,6 +397,7 @@ namespace Ogre{
         CompositorWorkspaceTranslator mCompositorWorkspaceTranslator;
         CompositorNodeTranslator mCompositorNodeTranslator;
         CompositorShadowNodeTranslator mCompositorShadowNodeTranslator;
+        CompositorRenderTargetViewTranslator mCompositorRenderTargetViewTranslator;
         CompositorTargetTranslator mCompositorTargetTranslator;
         CompositorShadowMapTargetTypeTranslator mCompositorShadowMapTargetTypeTranslator;
         CompositorShadowMapRepeatTranslator mCompositorShadowMapRepeatTranslator;

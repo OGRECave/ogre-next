@@ -111,14 +111,15 @@ namespace Ogre
         /**
         @param renderPassTargetAttachment
         @param rtvEntry
-        @param colourAttachment
+        @param linkedColourAttachment
             When setting depth & stencil, we'll use this argument for finding
             a depth buffer in the same depth pool (unless the depth buffer is
             explicit)
         */
         void setupRenderPassTarget( RenderPassTargetBase *renderPassTargetAttachment,
                                     const RenderTargetViewEntry &rtvEntry,
-                                    TextureGpu *colourAttachment=0, uint16 depthBufferId = 0,
+                                    bool isColourAttachment,
+                                    TextureGpu *linkedColourAttachment=0, uint16 depthBufferId = 0,
                                     bool preferDepthTexture = false,
                                     PixelFormatGpu depthBufferFormat = PFG_UNKNOWN );
 

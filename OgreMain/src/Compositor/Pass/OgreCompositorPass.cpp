@@ -168,36 +168,57 @@ namespace Ogre
                          "CompositorPass::createRenderPassDesc" );
         }
 
-        //TODO: All other settings to fill are in RenderTargetView
         for( size_t i=0; i<numColourAttachments; ++i )
         {
             renderPassDesc->mColour[i].loadAction   = mDefinition->mLoadActionColour[i];
             renderPassDesc->mColour[i].storeAction  = mDefinition->mStoreActionColour[i];
             renderPassDesc->mColour[i].clearColour  = mDefinition->mClearColour[i];
             renderPassDesc->mColour[i].allLayers    = rtv->colourAttachments[i].colourAllLayers;
-            setupRenderPassTarget( &renderPassDesc->mColour[i], rtv->colourAttachments[i] );
+            setupRenderPassTarget( &renderPassDesc->mColour[i], rtv->colourAttachments[i], true );
         }
 
         renderPassDesc->mDepth.loadAction       = mDefinition->mLoadActionDepth;
         renderPassDesc->mDepth.storeAction      = mDefinition->mStoreActionDepth;
         renderPassDesc->mDepth.clearDepth       = mDefinition->mClearDepth;
         renderPassDesc->mDepth.readOnly         = rtv->depthReadOnly && mDefinition->mReadOnlyDepth;
-        setupRenderPassTarget( &renderPassDesc->mDepth, rtv->depthAttachment,
+        setupRenderPassTarget( &renderPassDesc->mDepth, rtv->depthAttachment, false,
                                renderPassDesc->mColour[0].texture, rtv->depthBufferId,
                                rtv->preferDepthTexture, rtv->depthBufferFormat );
 
-        renderPassDesc->mStencil.loadAction     = mDefinition->mLoadActionStencil;
-        renderPassDesc->mStencil.storeAction    = mDefinition->mStoreActionStencil;
-        renderPassDesc->mStencil.clearStencil   = mDefinition->mClearStencil;
-        renderPassDesc->mStencil.readOnly       = rtv->stencilReadOnly && mDefinition->mReadOnlyStencil;
-        setupRenderPassTarget( &renderPassDesc->mStencil, rtv->stencilAttachment,
-                               renderPassDesc->mColour[0].texture, rtv->depthBufferId,
-                               rtv->preferDepthTexture, rtv->depthBufferFormat );
-        if( renderPassDesc->mStencil.texture )
+        //Check if stencil is required.
+        PixelFormatGpu stencilFormat = PFG_UNKNOWN;
+        if( rtv->stencilAttachment.textureName != IdString() )
         {
-            const PixelFormatGpu stencilFormat = renderPassDesc->mStencil.texture->getPixelFormat();
-            if( stencilFormat != PFG_D24_UNORM_S8_UINT && stencilFormat != PFG_D32_FLOAT_S8X24_UINT )
-                renderPassDesc->mStencil.texture = 0;
+            TextureGpu *stencilTexture =
+                    mParentNode->getDefinedTexture( rtv->stencilAttachment.textureName );
+            if( !stencilTexture )
+            {
+                OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                             "Couldn't find texture for RTV with name " +
+                             rtv->stencilAttachment.textureName.getFriendlyText(),
+                             "CompositorPass::setupRenderPassTarget" );
+            }
+            PixelFormatGpu preferredFormat = stencilTexture->getPixelFormat();
+            if( preferredFormat == PFG_D24_UNORM_S8_UINT || stencilFormat == PFG_D32_FLOAT_S8X24_UINT )
+                stencilFormat = preferredFormat;
+        }
+        else if( renderPassDesc->mColour[0].texture )
+        {
+            PixelFormatGpu desiredFormat =
+                    renderPassDesc->mColour[0].texture->getDesiredDepthBufferFormat();
+            if( desiredFormat == PFG_D24_UNORM_S8_UINT || desiredFormat == PFG_D32_FLOAT_S8X24_UINT )
+                stencilFormat = desiredFormat;
+        }
+
+        if( stencilFormat != PFG_UNKNOWN )
+        {
+            renderPassDesc->mStencil.loadAction     = mDefinition->mLoadActionStencil;
+            renderPassDesc->mStencil.storeAction    = mDefinition->mStoreActionStencil;
+            renderPassDesc->mStencil.clearStencil   = mDefinition->mClearStencil;
+            renderPassDesc->mStencil.readOnly       = rtv->stencilReadOnly && mDefinition->mReadOnlyStencil;
+            setupRenderPassTarget( &renderPassDesc->mStencil, rtv->stencilAttachment, false,
+                                   renderPassDesc->mColour[0].texture, rtv->depthBufferId,
+                                   rtv->preferDepthTexture, rtv->depthBufferFormat );
         }
 
         renderPassDesc->entriesModified( RenderPassDescriptor::All );
@@ -207,24 +228,33 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorPass::setupRenderPassTarget( RenderPassTargetBase *renderPassTargetAttachment,
                                                 const RenderTargetViewEntry &rtvEntry,
-                                                TextureGpu *colourAttachment, uint16 depthBufferId,
+                                                bool isColourAttachment,
+                                                TextureGpu *linkedColourAttachment, uint16 depthBufferId,
                                                 bool preferDepthTexture,
                                                 PixelFormatGpu depthBufferFormat )
     {
-        if( colourAttachment )
+        if( !isColourAttachment )
         {
             //This is depth or stencil
-            if( rtvEntry.textureName == IdString() )
-            {
-                RenderSystem *renderSystem = mParentNode->getRenderSystem();
-                renderPassTargetAttachment->texture =
-                        renderSystem->getDepthBufferFor( colourAttachment, depthBufferId,
-                                                         preferDepthTexture, depthBufferFormat );
-            }
-            else
+            if( rtvEntry.textureName != IdString() )
             {
                 renderPassTargetAttachment->texture =
                         mParentNode->getDefinedTexture( rtvEntry.textureName );
+
+                if( !renderPassTargetAttachment->texture )
+                {
+                    OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                                 "Couldn't find texture for RTV with name " +
+                                 rtvEntry.textureName.getFriendlyText(),
+                                 "CompositorPass::setupRenderPassTarget" );
+                }
+            }
+            else if( linkedColourAttachment )
+            {
+                RenderSystem *renderSystem = mParentNode->getRenderSystem();
+                renderPassTargetAttachment->texture =
+                        renderSystem->getDepthBufferFor( linkedColourAttachment, depthBufferId,
+                                                         preferDepthTexture, depthBufferFormat );
             }
         }
         else if( rtvEntry.textureName != IdString() )
@@ -298,7 +328,7 @@ namespace Ogre
 
         renderPassTargetAttachment->mipLevel        = rtvEntry.mipLevel;
         renderPassTargetAttachment->resolveMipLevel = rtvEntry.resolveMipLevel;
-        if( colourAttachment || mDefinition->getRtIndex() == 0 )
+        if( !isColourAttachment || mDefinition->getRtIndex() == 0 )
         {
             renderPassTargetAttachment->slice       = rtvEntry.slice;
             renderPassTargetAttachment->resolveSlice= rtvEntry.resolveSlice;
