@@ -30,6 +30,7 @@
 
 #include "OgreTextureGpuManager.h"
 #include "OgreStagingTexture.h"
+#include "OgreDepthBuffer.h"
 
 #define COMPOSITORS_PER_PAGE 8
 
@@ -75,6 +76,7 @@ namespace Demo
 
         {
             tex->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+            tex->_setNextResidencyStatus( GpuResidency::Resident );
             StagingTexture *stagingTexture = textureManager->getStagingTexture( 64u, 64u,
                                                                                 64u, 1u,
                                                                                 tex->getPixelFormat() );
@@ -121,6 +123,7 @@ namespace Demo
 
         {
             tex->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+            tex->_setNextResidencyStatus( GpuResidency::Resident );
             StagingTexture *stagingTexture = textureManager->getStagingTexture( tex->getWidth(),
                                                                                 tex->getHeight(),
                                                                                 tex->getDepth(),
@@ -412,10 +415,21 @@ namespace Demo
                 texDef->heightFactor    = 0.25f;
                 texDef->format = Ogre::PFG_RGBA8_UNORM_SRGB;
 
+                RenderTargetViewDef *rtv = bloomDef->addRenderTextureView( "rt0" );
+                RenderTargetViewEntry attachment;
+                attachment.textureName = "rt0";
+                rtv->colourAttachments.push_back( attachment );
+                rtv->depthBufferId = Ogre::DepthBuffer::POOL_NO_DEPTH;
+
                 texDef = bloomDef->addTextureDefinition( "rt1" );
                 texDef->widthFactor     = 0.25f;
                 texDef->heightFactor    = 0.25f;
                 texDef->format = Ogre::PFG_RGBA8_UNORM_SRGB;
+
+                rtv = bloomDef->addRenderTextureView( "rt1" );
+                attachment.textureName = "rt1";
+                rtv->colourAttachments.push_back( attachment );
+                rtv->depthBufferId = Ogre::DepthBuffer::POOL_NO_DEPTH;
             }
 
             bloomDef->setNumTargetPass( 4 );
@@ -517,6 +531,12 @@ namespace Demo
                 texDef->width   = 0;
                 texDef->height  = 0;
                 texDef->format = Ogre::PFG_RGBA8_UNORM_SRGB;
+
+                RenderTargetViewDef *rtv = motionBlurDef->addRenderTextureView( "sum" );
+                RenderTargetViewEntry attachment;
+                attachment.textureName = "sum";
+                rtv->colourAttachments.push_back( attachment );
+                rtv->depthBufferId = Ogre::DepthBuffer::POOL_NO_DEPTH;
             }
 
             motionBlurDef->setNumTargetPass( 3 );

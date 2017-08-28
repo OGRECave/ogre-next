@@ -92,7 +92,8 @@ namespace Ogre
 
     RenderPassDescriptor::RenderPassDescriptor() :
         mNumColourEntries( 0 ),
-        mRequiresTextureFlipping( false )
+        mRequiresTextureFlipping( false ),
+        mInformationOnly( false )
     {
     }
     //-----------------------------------------------------------------------------------
@@ -248,5 +249,32 @@ namespace Ogre
     {
         for( uint8 i=0; i<mNumColourEntries; ++i )
             setClearColour( i, clearColour );
+    }
+    //-----------------------------------------------------------------------------------
+    bool RenderPassDescriptor::hasSameAttachments( const RenderPassDescriptor *otherPassDesc ) const
+    {
+        if( this->mNumColourEntries != otherPassDesc->mNumColourEntries )
+            return false;
+
+        for( size_t i=0; i<this->mNumColourEntries; ++i )
+        {
+            if( this->mColour[i].texture != otherPassDesc->mColour[i].texture ||
+                this->mColour[i].resolveTexture != otherPassDesc->mColour[i].resolveTexture ||
+                this->mColour[i].mipLevel != otherPassDesc->mColour[i].mipLevel ||
+                this->mColour[i].resolveMipLevel != otherPassDesc->mColour[i].resolveMipLevel ||
+                this->mColour[i].slice != otherPassDesc->mColour[i].slice ||
+                this->mColour[i].resolveSlice != otherPassDesc->mColour[i].resolveSlice )
+            {
+                return false;
+            }
+        }
+
+        if( this->mDepth.texture != otherPassDesc->mDepth.texture ||
+            this->mStencil.texture != otherPassDesc->mStencil.texture )
+        {
+            return false;
+        }
+
+        return true;
     }
 }

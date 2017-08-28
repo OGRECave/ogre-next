@@ -179,6 +179,12 @@ namespace Ogre
     protected:
         uint8                   mNumColourEntries;
         bool                    mRequiresTextureFlipping;
+        /// When true, beginRenderPassDescriptor & endRenderPassDescriptor won't actually
+        /// load/store this pass descriptor; but will still set the mCurrentRenderPassDescriptor
+        /// so we have required information by some passes.
+        /// Examples of these are stencil passes.
+        public: bool            mInformationOnly;
+    protected:
 
         void checkWarnIfRtvWasFlushed( uint32 entriesToFlush );
         void checkRequiresTextureFlipping(void);
@@ -208,6 +214,8 @@ namespace Ogre
         /// than calling setClearColour( idx, clearColour ) for each entry
         /// individually.
         virtual void setClearColour( const ColourValue &clearColour );
+
+        virtual bool hasSameAttachments( const RenderPassDescriptor *otherPassDesc ) const;
 
         uint8 getNumColourEntries(void) const       { return mNumColourEntries; }
         bool requiresTextureFlipping(void) const    { return mRequiresTextureFlipping; }

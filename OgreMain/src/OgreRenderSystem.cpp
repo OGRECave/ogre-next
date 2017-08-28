@@ -872,8 +872,9 @@ namespace Ogre {
 
         // NB: We should always treat CCW as front face for consistent with default
         // culling mode.
-        const bool mustFlip = ((mInvertVertexWinding && !mActiveRenderTarget->requiresTextureFlipping()) ||
-                               (!mInvertVertexWinding && mActiveRenderTarget->requiresTextureFlipping()));
+        const bool mustFlip =
+                ((mInvertVertexWinding && !mCurrentRenderPassDescriptor->requiresTextureFlipping()) ||
+                 (!mInvertVertexWinding && mCurrentRenderPassDescriptor->requiresTextureFlipping()));
 
         if( mustFlip )
         {

@@ -420,8 +420,12 @@ namespace Ogre
     {
         uint32 entriesToFlush = 0;
 
-        if( viewportChanged || !newDesc || this->mFboName != newDesc->mFboName )
+        if( viewportChanged || !newDesc ||
+            this->mFboName != newDesc->mFboName ||
+            this->mInformationOnly || newDesc->mInformationOnly )
+        {
             entriesToFlush = RenderPassDescriptor::All;
+        }
         else
             entriesToFlush |= checkForClearActions( newDesc );
 
@@ -436,6 +440,9 @@ namespace Ogre
                                                           uint32 stencilWriteMask,
                                                           uint32 entriesToFlush )
     {
+        if( mInformationOnly )
+            return;
+
         OCGE( glBindFramebuffer( GL_FRAMEBUFFER, mFboName ) );
 
         if( mHasRenderWindow )
@@ -569,6 +576,9 @@ namespace Ogre
                                                            uint32 width, uint32 height,
                                                            uint32 entriesToFlush )
     {
+        if( mInformationOnly )
+            return;
+
         GLsizei numAttachments = 0;
         GLenum attachments[OGRE_MAX_MULTIPLE_RENDER_TARGETS+2u];
 

@@ -549,7 +549,7 @@ namespace Ogre {
             PixelFormatGpu pf = cTranslateDdsPixelFormatGpu[i].format;
 
             const size_t bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( pf );
-            const size_t bitsPerPixel = bytesPerPixel << 2u;
+            const size_t bitsPerPixel = bytesPerPixel << 3u;
             if( (bitsPerPixel == rgbBits || (bitsPerPixel == 32u && rgbBits == 24u)) &&
                 PixelFormatGpuUtils::isSigned( pf ) == isSigned )
             {
@@ -727,6 +727,8 @@ namespace Ogre {
         imgData->box.depth = 1u; // (deal with volume later)
         imgData->box.width  = header.width;
         imgData->box.height = header.height;
+        imgData->box.numSlices = 1u;
+        imgData->textureType = TextureTypes::Type2D;
 
         if( header.caps.caps1 & DDSCAPS_MIPMAP )
             imgData->numMipmaps = static_cast<uint8>( header.mipMapCount );

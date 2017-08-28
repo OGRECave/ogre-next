@@ -1089,7 +1089,12 @@ namespace Ogre {
                                                                      textureFlags,
                                                                      mTextureType,
                                                                      mParent->getResourceGroup() );
-                    mFramePtrs[frame]->waitForData();
+
+                    if( mFramePtrs[frame]->getNextResidencyStatus() != GpuResidency::Resident )
+                    {
+                        mFramePtrs[frame]->scheduleTransitionTo( GpuResidency::Resident );
+                        mFramePtrs[frame]->waitForData();
+                    }
                 }
                 catch (Exception &e)
                 {
@@ -1105,7 +1110,11 @@ namespace Ogre {
             else
             {
                 // Just ensure existing pointer is loaded
-                mFramePtrs[frame]->waitForData();
+                if( mFramePtrs[frame]->getNextResidencyStatus() != GpuResidency::Resident )
+                {
+                    mFramePtrs[frame]->scheduleTransitionTo( GpuResidency::Resident );
+                    mFramePtrs[frame]->waitForData();
+                }
             }
         }
     }

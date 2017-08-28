@@ -56,6 +56,7 @@ namespace Ogre
                 mDefinition( definition ),
                 mRenderSystem( renderSystem )
     {
+        mRenderPassDesc->mInformationOnly = true;
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassStencil::execute( const Camera *lodCamera )
@@ -77,6 +78,8 @@ namespace Ogre
         //Fire the listener in case it wants to change anything
         if( listener )
             listener->passPreExecute( this );
+
+        setRenderPassDescToCurrent();
 
         mRenderSystem->setStencilBufferParams( mDefinition->mStencilRef, mDefinition->mStencilParams );
 
