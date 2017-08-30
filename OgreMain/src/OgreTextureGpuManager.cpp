@@ -472,6 +472,27 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
+    void TextureGpuManager::scheduleLoadRequest( TextureGpu *texture,
+                                                 GpuResidency::GpuResidency nextResidency,
+                                                 const String &name,
+                                                 const String &resourceGroup,
+                                                 uint32 sliceOrDepth )
+    {
+        Archive *archive = 0;
+        if( resourceGroup != BLANKSTRING )
+        {
+            ResourceGroupManager &resourceGroupManager = ResourceGroupManager::getSingleton();
+            archive = resourceGroupManager._getArchiveToResource( name, resourceGroup );
+        }
+
+        ThreadData &mainData = mThreadData[c_mainThread];
+        mLoadRequestsMutex.lock();
+            mainData.loadRequests.push_back( LoadRequest( name, archive, texture,
+                                                          nextResidency, sliceOrDepth ) );
+        mLoadRequestsMutex.unlock();
+        mWorkerWaitableEvent.wake();
+    }
+    //-----------------------------------------------------------------------------------
     void TextureGpuManager::_scheduleTransitionTo( TextureGpu *texture,
                                                    GpuResidency::GpuResidency nextResidency )
     {
@@ -483,18 +504,43 @@ namespace Ogre
             resourceGroup = itor->second.resourceGroup;
         }
 
-        Archive *archive = 0;
-        if( resourceGroup != BLANKSTRING )
+        if( texture->getTextureType() != TextureTypes::TypeCube )
+            scheduleLoadRequest( texture, nextResidency, name, resourceGroup );
+        else
         {
-            ResourceGroupManager &resourceGroupManager = ResourceGroupManager::getSingleton();
-            archive = resourceGroupManager._getArchiveToResource( name, resourceGroup );
-        }
+            String baseName;
+            String ext;
+            String::size_type pos = name.find_last_of( '.' );
+            if( pos != String::npos )
+            {
+                baseName    = name.substr( 0, pos );
+                ext         = name.substr( pos + 1u );
+            }
+            else
+            {
+                baseName = name;
+            }
 
-        ThreadData &mainData = mThreadData[c_mainThread];
-        mLoadRequestsMutex.lock();
-            mainData.loadRequests.push_back( LoadRequest( name, archive, texture, nextResidency ) );
-        mLoadRequestsMutex.unlock();
-        mWorkerWaitableEvent.wake();
+            String lowercaseExt = ext;
+            StringUtil::toLowerCase( lowercaseExt );
+
+            if( lowercaseExt == "dds" )
+            {
+                // XX HACK there should be a better way to specify whether
+                // all faces are in the same file or not
+                scheduleLoadRequest( texture, nextResidency, name, resourceGroup );
+            }
+            else
+            {
+                static const String suffixes[6] = { "_rt.", "_lf.", "_up.", "_dn.", "_fr.", "_bk." };
+
+                for( int i=0; i<6; ++i )
+                {
+                    scheduleLoadRequest( texture, nextResidency, baseName + suffixes[i] + ext,
+                                         resourceGroup, i );
+                }
+            }
+        }
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::_reserveSlotForTexture( TextureGpu *texture )
@@ -899,6 +945,13 @@ namespace Ogre
                     {
                         //Upload to staging area. CPU -> GPU
                         dstBox.copyFrom( srcBox );
+                        if( queuedImage.dstSliceOrDepth != std::numeric_limits<uint32>::max() )
+                        {
+                            if( !is3DVolume )
+                                srcBox.sliceStart += queuedImage.dstSliceOrDepth;
+                            else
+                                srcBox.z += queuedImage.dstSliceOrDepth;
+                        }
 
                         //Schedule a command to copy from staging to final texture, GPU -> GPU
                         ObjCmdBuffer::UploadFromStagingTex *uploadCmd = commandBuffer->addCommand<
@@ -1031,29 +1084,38 @@ namespace Ogre
                 Image2 img;
                 img.load( data );
 
-                loadRequest.texture->setResolution( img.getWidth(), img.getHeight(),
-                                                    img.getDepthOrSlices() );
-                loadRequest.texture->setTextureType( img.getTextureType() );
-                loadRequest.texture->setPixelFormat( img.getPixelFormat() );
-                loadRequest.texture->setNumMipmaps( img.getNumMipmaps() );
-
-                void *sysRamCopy = 0;
-                if( loadRequest.texture->getGpuPageOutStrategy() ==
-                        GpuPageOutStrategy::AlwaysKeepSystemRamCopy )
+                if( loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max() ||
+                    loadRequest.sliceOrDepth == 0 )
                 {
-                    sysRamCopy = img.getData(0).data;
-                }
+                    loadRequest.texture->setResolution( img.getWidth(), img.getHeight(),
+                                                        img.getDepthOrSlices() );
+                    if( loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max() )
+                        loadRequest.texture->setTextureType( img.getTextureType() );
+                    loadRequest.texture->setPixelFormat( img.getPixelFormat() );
+                    loadRequest.texture->setNumMipmaps( img.getNumMipmaps() );
 
-                //We have enough to transition the texture to Resident.
-                ObjCmdBuffer::TransitionToResident *transitionCmd = commandBuffer->addCommand<
-                        ObjCmdBuffer::TransitionToResident>();
-                new (transitionCmd) ObjCmdBuffer::TransitionToResident( loadRequest.texture,
-                                                                        sysRamCopy );
+                    void *sysRamCopy = 0;
+                    if( loadRequest.texture->getGpuPageOutStrategy() ==
+                            GpuPageOutStrategy::AlwaysKeepSystemRamCopy )
+                    {
+                        assert( img.getTextureType() == loadRequest.texture->getTextureType() &&
+                                "Cannot load cubemaps partially file by file into each face"
+                                "when using GpuPageOutStrategy::AlwaysKeepSystemRamCopy" );
+                        sysRamCopy = img.getData(0).data;
+                    }
+
+                    //We have enough to transition the texture to Resident.
+                    ObjCmdBuffer::TransitionToResident *transitionCmd = commandBuffer->addCommand<
+                            ObjCmdBuffer::TransitionToResident>();
+                    new (transitionCmd) ObjCmdBuffer::TransitionToResident( loadRequest.texture,
+                                                                            sysRamCopy );
+                }
 
                 //Queue the image for upload to GPU.
                 mStreamingData.queuedImages.push_back( QueuedImage( img, img.getNumMipmaps(),
                                                                     img.getDepthOrSlices(),
-                                                                    loadRequest.texture ) );
+                                                                    loadRequest.texture,
+                                                                    loadRequest.sliceOrDepth ) );
             }
 
             //Try to upload the queued image right now (all of its mipmaps).
@@ -1228,9 +1290,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     TextureGpuManager::QueuedImage::QueuedImage( Image2 &srcImage, uint8 numMips, uint8 _numSlices,
-                                                 TextureGpu *_dstTexture ) :
+                                                 TextureGpu *_dstTexture, uint32 _dstSliceOrDepth ) :
         dstTexture( _dstTexture ),
-        numSlices( _numSlices )
+        numSlices( _numSlices ),
+        dstSliceOrDepth( _dstSliceOrDepth )
     {
         assert( numSlices >= 1u );
 

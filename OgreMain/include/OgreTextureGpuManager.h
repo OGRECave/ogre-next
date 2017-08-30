@@ -128,11 +128,16 @@ namespace Ogre
             Archive     *archive;
             TextureGpu  *texture;
             GpuResidency::GpuResidency nextResidency;
+            /// Slice to upload this image to (in case we're uploading a 2D image into an cubemap)
+            /// std::numeric_limits<uint32>::max() to disable it.
+            uint32      sliceOrDepth;
 
             LoadRequest( const String &_name, Archive *_archive,
-                         TextureGpu *_texture, GpuResidency::GpuResidency _nextResidency ) :
+                         TextureGpu *_texture, GpuResidency::GpuResidency _nextResidency,
+                         uint32 _sliceOrDepth ) :
                 name( _name ), archive( _archive ),
-                texture( _texture ), nextResidency( _nextResidency ) {}
+                texture( _texture ), nextResidency( _nextResidency ),
+                sliceOrDepth( _sliceOrDepth ) {}
         };
 
         typedef vector<LoadRequest>::type LoadRequestVec;
@@ -159,8 +164,11 @@ namespace Ogre
             uint64      mipLevelBitSet[4];
             TextureGpu  *dstTexture;
             uint8       numSlices;
+            /// See LoadRequest::sliceOrDepth
+            uint32      dstSliceOrDepth;
 
-            QueuedImage( Image2 &srcImage, uint8 numMips, uint8 _numSlices, TextureGpu *_dstTexture );
+            QueuedImage( Image2 &srcImage, uint8 numMips, uint8 _numSlices, TextureGpu *_dstTexture,
+                         uint32 _dstSliceOrDepth );
             void destroy(void);
             bool empty(void) const;
             bool isMipSliceQueued( uint8 mipLevel, uint8 slice ) const;
@@ -375,6 +383,11 @@ namespace Ogre
 
         const String* findNameStr( IdString idName ) const;
 
+    protected:
+        void scheduleLoadRequest( TextureGpu *texture, GpuResidency::GpuResidency nextResidency,
+                                  const String &name, const String &resourceGroup,
+                                  uint32 sliceOrDepth=std::numeric_limits<uint32>::max() );
+    public:
         void _scheduleTransitionTo( TextureGpu *texture, GpuResidency::GpuResidency nextResidency );
     };
 
