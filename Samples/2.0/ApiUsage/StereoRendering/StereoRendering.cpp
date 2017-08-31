@@ -5,7 +5,7 @@
 #include "OgreSceneManager.h"
 #include "OgreCamera.h"
 #include "OgreRoot.h"
-#include "OgreRenderWindow.h"
+#include "OgreWindow.h"
 #include "Compositor/OgreCompositorManager2.h"
 
 //Declares WinMain / main
@@ -78,7 +78,8 @@ namespace Demo
             vpModifierMask  = 0x01;
             executionMask   = 0x01;
             vpOffsetScale   = Ogre::Vector4( 0.0f, 0.0f, 0.5f, 1.0f );
-            mEyeWorkspaces[0] = compositorManager->addWorkspace( mSceneManager, mRenderWindow,
+            mEyeWorkspaces[0] = compositorManager->addWorkspace( mSceneManager,
+                                                                 mRenderWindow->getTexture(),
                                                                  mEyeCameras[0], workspaceName,
                                                                  true, -1, (Ogre::UavBufferPackedVec*)0,
                                                                  (Ogre::ResourceLayoutMap*)0,
@@ -90,7 +91,8 @@ namespace Demo
             vpModifierMask  = 0x02;
             executionMask   = 0x02;
             vpOffsetScale   = Ogre::Vector4( 0.5f, 0.0f, 0.5f, 1.0f );
-            mEyeWorkspaces[1] = compositorManager->addWorkspace( mSceneManager, mRenderWindow,
+            mEyeWorkspaces[1] = compositorManager->addWorkspace( mSceneManager,
+                                                                 mRenderWindow->getTexture(),
                                                                  mEyeCameras[1], workspaceName,
                                                                  true, -1, (Ogre::UavBufferPackedVec*)0,
                                                                  (Ogre::ResourceLayoutMap*)0,

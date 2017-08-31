@@ -12,12 +12,22 @@ compositor_node StereoRenderingNode
 			//Don't be affected by the modifier, apply to the whole screen
 			viewport_modifier_mask	0x00
 
-			colour_value 0.2 0.4 0.6 1
+			//On non-tilers, clear everything at once in the first pass
+			non_tilers_only			yes
+
+			colour_value			0.2 0.4 0.6 1
 		}
 
 		//Eye render
 		pass render_scene
 		{
+			load
+			{
+				//On tilers, clear the specific region we'll be rendering to during each pass
+				all				clear_on_tilers
+				clear_colour	0.2 0.4 0.6 1
+			}
+
 			//Get executed in all eyes
 			execution_mask			0xff
 			//Be affected by the modifier, so we render just to a portion of the screen.
