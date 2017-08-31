@@ -1,7 +1,14 @@
 compositor_node ScreenSpaceReflectionsRenderingNode
 {
-	texture mrtGBuffer target_width target_height PF_A2R10G10B10 PF_SHORT_GR depth_format PF_D32_FLOAT depth_texture depth_pool 5 explicit_resolve
-	texture mrtDepthBuffer target_width target_height PF_D32_FLOAT depth_pool 5
+	texture gBufferNormals			target_width target_height PFG_R10G10B10A2_UNORM  msaa 0 explicit_resolve
+	texture gBufferShadowRoughness	target_width target_height PFG_RG16_UNORM  msaa 0 explicit_resolve
+	texture gBufferDepthBuffer		target_width target_height PFG_D32_FLOAT msaa 0
+
+	rtv mrtGBuffer
+	{
+		colour	gBufferNormals gBufferShadowRoughness
+		depth	gBufferDepthBuffer
+	}
 
 	target mrtGBuffer
 	{
@@ -19,53 +26,58 @@ compositor_node ScreenSpaceReflectionsRenderingNode
 		}
 	}
 
-	out 0 mrtGBuffer
-	out 1 mrtDepthBuffer
+	out 0 gBufferDepthBuffer
+	out 1 gBufferNormals
+	out 2 gBufferShadowRoughness
 }
 
 compositor_node ScreenSpaceReflectionsMsaaDepthResolve
 {
-	in 0 mrtGBuffer
-	in 1 mrtDepthBuffer
+	in 0 gBufferDepthBuffer
+	//in 1 gBufferNormals
+	//in 2 gBufferShadowRoughness
 
-	texture resolvedDepthBuffer target_width target_height PF_FLOAT32_R depth_pool 0 no_fsaa
+	texture resolvedDepthBuffer target_width target_height PFG_R32_FLOAT depth_pool 0
 
 	//We need to "downsample/resolve" mrtDepthBuffer because the impact
 	//performance on SSR/ScreenSpaceReflectionsVectors is gigantic.
 	target resolvedDepthBuffer
 	{
-		pass clear
-		{
-			colour_value 0 0 0 0
-			discard_only true
-		}
-
 		pass render_quad
 		{
+			load { all dont_care }
 			material Ogre/Resolve/1xFP32_Subsample0
-			input 0 mrtDepthBuffer
+			input 0 gBufferDepthBuffer
 		}
 	}
 
-	out 0 mrtGBuffer
-	out 1 mrtDepthBuffer
-	out 2 resolvedDepthBuffer
+	//out 0 gBufferDepthBuffer
+	//out 1 gBufferNormals
+	//out 2 gBufferShadowRoughness
+	out 0 resolvedDepthBuffer
 }
 
 compositor_node ScreenSpaceReflectionsPostprocessNode
 {
-	in 0 mrtGBuffer
-	in 1 mrtDepthBuffer
-	in 2 resolvedDepthBuffer
-	in 3 rt_renderwindow
+	in 0 gBufferDepthBuffer
+	in 1 gBufferNormals
+	in 2 gBufferShadowRoughness
+	in 3 resolvedDepthBuffer
+	in 4 rt_renderwindow
 
-	texture prevFrame target_width target_height PF_R8G8B8A8 mipmap -1 no_fsaa no_gamma uav depth_pool 0
+	//TODO: Add sRGB support
+	texture prevFrame				target_width target_height PFG_RGBA8_UNORM mipmap -1 uav depth_pool 0
 	//Needed to calculate the difference in depths (if it's too high, then we can't use this result)
-	texture prevFrameDepthBuffer target_width target_height PF_FLOAT32_R no_fsaa uav
-	texture rtt target_width target_height PF_FLOAT32_RGBA depth_format PF_D32_FLOAT depth_texture depth_pool 5
+	texture prevFrameDepthBuffer	target_width target_height PFG_R32_FLOAT uav
+	texture rtt						target_width target_height PFG_RGBA32_FLOAT
 
-	texture rayTracingBuffer target_width_scaled 0.5 target_height_scaled 0.5 PF_SHORT_RGBA depth_pool 0 no_fsaa
-	texture reflectionBuffer target_width target_height PF_R8G8B8A8 depth_pool 0 no_fsaa
+	rtv rtt
+	{
+		depth_stencil	gBufferDepthBuffer
+	}
+
+	texture rayTracingBuffer target_width_scaled 0.5 target_height_scaled 0.5 PFG_RGBA16_UNORM depth_pool 0
+	texture reflectionBuffer target_width target_height PFG_RGBA8_UNORM_SRGB depth_pool 0
 
 	target prevFrame
 	{
@@ -78,29 +90,29 @@ compositor_node ScreenSpaceReflectionsPostprocessNode
 
 	target rayTracingBuffer
 	{
-		pass clear { discard_only true }
 		pass render_quad
 		{
+			load { all dont_care }
 			quad_normals	camera_far_corners_view_space_normalized_lh
 
 			material SSR/ScreenSpaceReflectionsVectors
 			input 0 resolvedDepthBuffer
-			input 1 mrtGBuffer 0
+			input 1 gBufferNormals
 			input 2 prevFrameDepthBuffer
 		}
 	}
 
 	target reflectionBuffer
 	{
-		pass clear { discard_only true }
 		pass render_quad
 		{
+			load { all dont_care }
 			quad_normals	camera_far_corners_view_space_normalized_lh
 
 			material SSR/ScreenSpaceReflectionsCombine
 			input 0 resolvedDepthBuffer
-			input 1 mrtGBuffer 0
-			input 2 mrtGBuffer 1
+			input 1 gBufferNormals
+			input 2 gBufferShadowRoughness
 			input 3 prevFrame
 			input 4 rayTracingBuffer
 		}
@@ -109,18 +121,18 @@ compositor_node ScreenSpaceReflectionsPostprocessNode
 	//Use prevFrame as a temporary for ping pong (since we can discard prevFrame's contents now)
 	target prevFrame
 	{
-		pass clear { discard_only true }
 		pass render_quad
 		{
+			load { all dont_care }
 			material SSR/Quincunx
 			input 0 reflectionBuffer
 		}
 	}
 	target reflectionBuffer
 	{
-		pass clear { discard_only true }
 		pass render_quad
 		{
+			load { all dont_care }
 			material SSR/Quincunx
 			input 0 prevFrame
 		}
@@ -128,32 +140,27 @@ compositor_node ScreenSpaceReflectionsPostprocessNode
 
 	target rtt
 	{
-		pass clear
-		{
-			colour_value 0.2 0.4 0.6 1
-			buffers colour
-		}
-
 		pass render_scene
 		{
+			load
+			{
+				colour			clear
+				clear_colour	0.2 0.4 0.6 1
+			}
+
 			overlays	off
 			shadows		ScreenSpaceReflectionsShadowNode
 
-			use_prepass			mrtGBuffer mrtDepthBuffer reflectionBuffer
+			use_prepass			gBufferNormals gBufferShadowRoughness gBufferDepthBuffer reflectionBuffer
 			lod_update_list		false
 		}
 	}
 
 	target prevFrame
 	{
-		/*pass clear
+		/*pass render_quad
 		{
-			colour_value 0 0 0 0
-			discard_only true
-		}
-
-		pass render_quad
-		{
+			load { all dont_care }
 			material Ogre/Copy/4xFP32
 			input 0 rtt
 		}*/
@@ -177,14 +184,9 @@ compositor_node ScreenSpaceReflectionsPostprocessNode
 
 	target rt_renderwindow
 	{
-		pass clear
-		{
-			colour_value 0 0 0 0
-			discard_only true
-		}
-
 		pass render_quad
 		{
+			load { all dont_care }
 			material Ogre/Copy/4xFP32
 			input 0 rtt
 			//input 0 reflectionBuffer
@@ -206,7 +208,7 @@ compositor_node_shadow ScreenSpaceReflectionsShadowNode
 {
 	technique pssm
 
-	texture atlas 3072 2048 PF_D32_FLOAT no_fsaa
+	texture atlas 3072 2048 PFG_D32_FLOAT
 
 	num_splits		3
 	pssm_lambda		0.95
@@ -219,6 +221,7 @@ compositor_node_shadow ScreenSpaceReflectionsShadowNode
 		pass clear
 		{
 			colour_value 1 1 1 1
+			non_tilers_only yes
 		}
 	}
 
@@ -228,6 +231,11 @@ compositor_node_shadow ScreenSpaceReflectionsShadowNode
 		{
 			pass render_scene
 			{
+				load
+				{
+					all				clear_on_tilers
+					clear_colour	1 1 1 1
+				}
 			}
 		}
 	}
@@ -235,12 +243,13 @@ compositor_node_shadow ScreenSpaceReflectionsShadowNode
 
 workspace ScreenSpaceReflectionsWorkspace
 {
-	connect			ScreenSpaceReflectionsRenderingNode	0 1 1	ScreenSpaceReflectionsPostprocessNode	0 1 2
-	connect_output												ScreenSpaceReflectionsPostprocessNode	3
+	connect			ScreenSpaceReflectionsRenderingNode	0 1 2 0	ScreenSpaceReflectionsPostprocessNode	0 1 2 3
+	connect_output												ScreenSpaceReflectionsPostprocessNode	4
 }
 workspace ScreenSpaceReflectionsWorkspaceMsaa
 {
-	connect			ScreenSpaceReflectionsRenderingNode		0 1		ScreenSpaceReflectionsMsaaDepthResolve	0 1
+	connect			ScreenSpaceReflectionsRenderingNode		0		ScreenSpaceReflectionsMsaaDepthResolve	0
 	connect			ScreenSpaceReflectionsMsaaDepthResolve	0 1 2	ScreenSpaceReflectionsPostprocessNode	0 1 2
-	connect_output	ScreenSpaceReflectionsPostprocessNode	3
+	connect			ScreenSpaceReflectionsMsaaDepthResolve	0		ScreenSpaceReflectionsPostprocessNode	3
+	connect_output	ScreenSpaceReflectionsPostprocessNode	4
 }
