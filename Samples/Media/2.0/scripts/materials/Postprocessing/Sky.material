@@ -9,7 +9,7 @@ material PostprocessingSample/Sky : SkyPostprocess
 			texture_unit
 			{
 				//Dummy command to set the gamma correction
-				texture morning.jpg gamma
+				texture morning.jpg gamma cubic
 				cubic_texture morning.jpg combinedUVW
 			}
 		}

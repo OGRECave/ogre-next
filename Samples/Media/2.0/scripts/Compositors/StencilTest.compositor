@@ -5,8 +5,13 @@ compositor_node StencilTestNode
 	//We need to render to an RTT because otherwise we can't share the depth buffer between
 	//rtt_depthbuffer & rt_renderwindow in OpenGL (basically, an issue with GL)
 	//see RSC_RTT_MAIN_DEPTHBUFFER_ATTACHABLE
-	texture rtt				target_width target_height PF_R8G8B8 depth_format PF_D32_FLOAT_X24_S8_UINT depth_texture depth_pool 1
-	texture rtt_depthbuffer	target_width target_height PF_D32_FLOAT_X24_S8_UINT depth_pool 1
+	texture rtt				target_width target_height PFG_RGBA8_UNORM_SRGB
+	texture rtt_depthbuffer	target_width target_height PFG_D32_FLOAT_S8X24_UINT
+
+	rtv rtt
+	{
+		depth_stencil rtt_depthbuffer
+	}
 
 	target rtt
 	{
@@ -110,13 +115,14 @@ compositor_node StencilTestNode
 	//Copy results to render window
 	target rt_renderwindow
 	{
-		pass clear
-		{
-			colour_value 0.2 0.4 0.6 1
-		}
-		
 		pass render_quad
 		{
+			load { all dont_care }
+			store
+			{
+				depth		dont_care
+				stencil		dont_care
+			}
 			material Ogre/Copy/4xFP32
 			input 0 rtt
 		}
