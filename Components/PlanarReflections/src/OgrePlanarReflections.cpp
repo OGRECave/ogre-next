@@ -30,14 +30,13 @@ THE SOFTWARE.
 
 #include "OgrePlanarReflections.h"
 #include "OgreSceneManager.h"
-#include "OgreTextureManager.h"
-#include "OgreHardwarePixelBuffer.h"
-#include "OgreRenderTexture.h"
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Math/Array/OgreBooleanMask.h"
 #include "OgreHlmsDatablock.h"
 #include "OgreHlms.h"
+#include "OgreTextureGpuManager.h"
+#include "OgrePixelFormatGpuUtils.h"
 #include "OgreLogManager.h"
 
 namespace Ogre
@@ -79,6 +78,9 @@ namespace Ogre
             mCapacityActorsSoA = 0;
         }
 
+        TextureGpuManager *textureGpuManager =
+                mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
+
         ActiveActorDataVec::const_iterator itor = mActiveActorData.begin();
         ActiveActorDataVec::const_iterator end  = mActiveActorData.end();
 
@@ -86,7 +88,7 @@ namespace Ogre
         {
             mCompositorManager->removeWorkspace( itor->workspace );
             mSceneManager->destroyCamera( itor->reflectionCamera );
-            TextureManager::getSingleton().remove( itor->reflectionTexture );
+            textureGpuManager->destroyTexture( itor->reflectionTexture );
             ++itor;
         }
 
@@ -101,11 +103,14 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void PlanarReflections::setMaxActiveActors( uint8 maxActiveActors, IdString workspaceName,
                                                 bool useAccurateLighting, uint32 width, uint32 height,
-                                                bool withMipmaps, PixelFormat pixelFormat,
+                                                bool withMipmaps, PixelFormatGpu pixelFormat,
                                                 bool mipmapMethodCompute )
     {
         if( maxActiveActors < mMaxActiveActors )
         {
+            TextureGpuManager *textureGpuManager =
+                    mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
+
             //Shrinking
             ActiveActorDataVec::const_iterator itor = mActiveActorData.begin() + maxActiveActors;
             ActiveActorDataVec::const_iterator end  = mActiveActorData.end();
@@ -114,7 +119,7 @@ namespace Ogre
             {
                 mCompositorManager->removeWorkspace( itor->workspace );
                 mSceneManager->destroyCamera( itor->reflectionCamera );
-                TextureManager::getSingleton().remove( itor->reflectionTexture );
+                textureGpuManager->destroyTexture( itor->reflectionTexture );
                 if( itor->isReserved )
                 {
                     const size_t slotIdx = itor - mActiveActorData.begin();
@@ -158,25 +163,34 @@ namespace Ogre
                 actorData.reflectionCamera = mSceneManager->createCamera( cameraName, useAccurateLighting );
                 actorData.reflectionCamera->setAutoAspectRatio( false );
 
-                int usage = TU_RENDERTARGET;
-                usage |= (withMipmaps && mipmapMethodCompute) ? TU_UAV : TU_AUTOMIPMAP;
-                uint32 numMips = !withMipmaps ? 0 : PixelUtil::getMaxMipmapCount( width, height, 1u );
-                numMips = numMips - std::min( 4u, numMips ); //Mips below 16x16 are problematic.
+                uint32 textureFlags = TextureFlags::RenderToTexture;
+                textureFlags |= (withMipmaps && mipmapMethodCompute) ? TextureFlags::Uav :
+                                                                       TextureFlags::AllowAutomipmaps;
+                uint32 numMips = !withMipmaps ? 1u :
+                                                PixelFormatGpuUtils::getMaxMipmapCount( width,
+                                                                                        height, 1u );
+                numMips = numMips - std::min( 4u, numMips - 1u ); //Mips below 16x16 are problematic.
 
                 //Always use HW Gamma, except when using compute mipmaps, which has issues.
                 const bool hwGamma = !(withMipmaps && mipmapMethodCompute);
+                if( hwGamma )
+                    pixelFormat = PixelFormatGpuUtils::getEquivalentSRGB( pixelFormat );
+                else
+                    pixelFormat = PixelFormatGpuUtils::getEquivalentLinear( pixelFormat );
 
+                TextureGpuManager *textureGpuManager =
+                            mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();;
                 actorData.reflectionTexture =
-                        TextureManager::getSingleton().createManual(
+                        textureGpuManager->createTexture(
                             "PlanarReflections #" + StringConverter::toString( uniqueId ),
-                            ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                            TEX_TYPE_2D, width, height, numMips, pixelFormat, usage, 0, hwGamma );
+                            GpuPageOutStrategy::Discard, textureFlags, TextureTypes::Type2D );
+                actorData.reflectionTexture->setResolution( width, height );
+                actorData.reflectionTexture->setPixelFormat( pixelFormat );
+                actorData.reflectionTexture->setNumMipmaps( numMips );
+                actorData.reflectionTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
 
-                CompositorChannel channel;
-                channel.textures.push_back( actorData.reflectionTexture );
-                channel.target = actorData.reflectionTexture->getBuffer()->getRenderTarget();
                 CompositorChannelVec channels;
-                channels.push_back( channel );
+                channels.push_back( actorData.reflectionTexture );
                 actorData.workspace = mCompositorManager->addWorkspace( mSceneManager, channels,
                                                                         actorData.reflectionCamera,
                                                                         workspaceName, false, 0 );
@@ -822,7 +836,7 @@ namespace Ogre
         return (4u * mMaxActiveActors + 4u * 4u + 4u) * sizeof(float);
     }
     //-----------------------------------------------------------------------------------
-    void PlanarReflections::fillConstBufferData( RenderTarget *renderTarget, Camera *camera,
+    void PlanarReflections::fillConstBufferData( TextureGpu *renderTarget, Camera *camera,
                                                  const Matrix4 &projectionMatrix,
                                                  float * RESTRICT_ALIAS passBufferPtr ) const
     {
@@ -865,10 +879,10 @@ namespace Ogre
         *passBufferPtr++ = 1.0f;
     }
     //-----------------------------------------------------------------------------------
-    TexturePtr PlanarReflections::getTexture( uint8 actorIdx ) const
+    TextureGpu* PlanarReflections::getTexture( uint8 actorIdx ) const
     {
         if( actorIdx >= mActiveActorData.size() )
-            return TexturePtr();
+            return 0;
         return mActiveActorData[actorIdx].reflectionTexture;
     }
     //-----------------------------------------------------------------------------------

@@ -29,7 +29,7 @@ THE SOFTWARE.
 #define _OgrePlanarReflections_H_
 
 #include "OgrePlanarReflectionActor.h"
-#include "OgreTexture.h"
+#include "OgrePixelFormatGpu.h"
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
@@ -45,7 +45,7 @@ namespace Ogre
     {
         Camera              *reflectionCamera;
         CompositorWorkspace *workspace;
-        TexturePtr          reflectionTexture;
+        TextureGpu          *reflectionTexture;
         bool                isReserved;
     };
 
@@ -189,7 +189,7 @@ namespace Ogre
             will filter the RTT with a compute filter (usually for higher quality).
         */
         void setMaxActiveActors( uint8 maxActiveActors, IdString workspaceName, bool useAccurateLighting,
-                                 uint32 width, uint32 height, bool withMipmaps, PixelFormat pixelFormat,
+                                 uint32 width, uint32 height, bool withMipmaps, PixelFormatGpu pixelFormat,
                                  bool mipmapMethodCompute );
 
         /** Adds an actor plane that other objects can use as source for reflections if they're
@@ -251,10 +251,10 @@ namespace Ogre
         @remarks
             Assumes 'passBufferPtr' is aligned to a vec4/float4 boundary.
         */
-        void fillConstBufferData( RenderTarget *renderTarget, Camera *camera,
+        void fillConstBufferData( TextureGpu *renderTarget, Camera *camera,
                                   const Matrix4 &projectionMatrix,
                                   float * RESTRICT_ALIAS passBufferPtr ) const;
-        TexturePtr getTexture( uint8 actorIdx ) const;
+        TextureGpu* getTexture( uint8 actorIdx ) const;
 
         /// Returns true if the Camera settings (position, orientation, aspect ratio, etc)
         /// match with the reflection we have in cache.

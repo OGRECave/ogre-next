@@ -1918,7 +1918,7 @@ namespace Ogre
                 mLastBoundPlanarReflection != queuedRenderable.renderable->mCustomParameter )
             {
                 const uint8 activeActorIdx = queuedRenderable.renderable->mCustomParameter & 0x7F;
-                TexturePtr planarReflTex = mPlanarReflections->getTexture( activeActorIdx );
+                TextureGpu *planarReflTex = mPlanarReflections->getTexture( activeActorIdx );
                 *commandBuffer->addCommand<CbTexture>() =
                         CbTexture( mTexUnitSlotStart - 1u, planarReflTex,
                                    mPlanarReflectionsSamplerblock );

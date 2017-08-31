@@ -111,11 +111,11 @@ namespace Demo
         //The perfect mirror doesn't need mipmaps.
         mPlanarReflections->setMaxActiveActors( 1u, "PlanarReflectionsReflectiveWorkspace",
                                                 true, 512, 512, false,
-                                                Ogre::PF_R8G8B8A8, useComputeMipmaps );
+                                                Ogre::PFG_RGBA8_UNORM_SRGB, useComputeMipmaps );
         //The rest of the reflections do.
         mPlanarReflections->setMaxActiveActors( 2u, "PlanarReflectionsReflectiveWorkspace",
                                                 true, 512, 512, true,
-                                                Ogre::PF_R8G8B8A8, useComputeMipmaps );
+                                                Ogre::PFG_RGBA8_UNORM_SRGB, useComputeMipmaps );
         const Ogre::Vector2 mirrorSize( 10.0f, 10.0f );
 
         //Create the plane mesh
@@ -164,7 +164,7 @@ namespace Demo
         //Make sure it's always activated (i.e. always win against other actors)
         //unless it's not visible by the camera.
         actor->mActivationPriority = 0;
-        mirror->setTexture( 0, 0, mPlanarReflections->getTexture( 0 ) );
+        mirror->setTexture( 0, mPlanarReflections->getTexture( 0 ) );
         mirror->setEnablePlanarReflection( 0, true );
         item->setDatablock( mirror );
 
