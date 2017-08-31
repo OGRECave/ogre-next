@@ -8436,6 +8436,7 @@ namespace Ogre{
                 }
                     break;
                 case ID_CLEAR_COLOUR:
+                case ID_COLOUR_VALUE:
                 {
                     if(prop->values.size() != 4u && prop->values.size() != 5u)
                     {
