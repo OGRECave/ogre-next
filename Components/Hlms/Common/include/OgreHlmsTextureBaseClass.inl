@@ -94,8 +94,10 @@ namespace Ogre
         IdString poolNameA = poolA ? poolA->masterTexture->getName() : IdString();
         IdString poolNameB = poolB ? poolB->masterTexture->getName() : IdString();
 
+        //Invert pool order so that textures without pools end up last
+        //(specially important for cubemaps!!! Cubemaps must go last!)
         if( poolA != poolB )
-            return poolNameA < poolNameB;
+            return !(poolNameA < poolNameB);
 
         return _a->getName() < _b->getName();
     }

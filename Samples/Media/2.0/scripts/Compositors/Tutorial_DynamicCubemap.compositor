@@ -1,12 +1,19 @@
 abstract target cubemap_target
 {
-	pass clear
-	{
-		colour_value 0 0 0 1
-	}
-
 	pass render_scene
 	{
+		load
+		{
+			all				clear
+			clear_colour	0 0 0 1
+		}
+		store
+		{
+			//We only care about the contents of the colour target
+			depth			dont_care
+			stencil			dont_care
+		}
+
 		//Filter stuff that shouldn't be reflected (vampires?)
 		visibility_mask		0x00000005
 		overlays			off
@@ -16,6 +23,13 @@ abstract target cubemap_target
 	//Render sky (see TutorialSky_Postprocess)
 	pass render_quad
 	{
+		store
+		{
+			//We only care about the contents of the colour target
+			depth			dont_care
+			stencil			dont_care
+		}
+
 		quad_normals	camera_direction
 		material SkyPostprocess
 		camera_cubemap_reorient true
@@ -46,13 +60,19 @@ compositor_node Tutorial_DynamicCubemapRenderingNode
 
 	target rt_renderwindow
 	{
-		pass clear
-		{
-			colour_value 0 0 0 0 1
-		}
-
 		pass render_scene
 		{
+			load
+			{
+				all				clear
+				clear_colour	0 0 0 1
+			}
+			store
+			{
+				depth			dont_care
+				stencil			dont_care
+			}
+
 			//Our materials in this pass will be using this cubemap,
 			//so we need to expose it to the pass.
 			//Note: Even if it "just works" without exposing, the reason for
@@ -68,6 +88,11 @@ compositor_node Tutorial_DynamicCubemapRenderingNode
 		//Render sky (see TutorialSky_Postprocess)
 		pass render_quad
 		{
+			store
+			{
+				depth			dont_care
+				stencil			dont_care
+			}
 			quad_normals	camera_direction
 			material SkyPostprocess
 		}
@@ -75,6 +100,11 @@ compositor_node Tutorial_DynamicCubemapRenderingNode
 		//Render transparent stuff after sky
 		pass render_scene
 		{
+			store
+			{
+				depth			dont_care
+				stencil			dont_care
+			}
 			overlays	on
 			rq_first	2
 		}
@@ -83,9 +113,19 @@ compositor_node Tutorial_DynamicCubemapRenderingNode
 
 abstract target cubemap_target_shadow
 {
-	pass clear { colour_value 1 1 1 1 }
 	pass render_scene
 	{
+		load
+		{
+			all				clear
+			clear_colour	1 1 1 1
+		}
+		store
+		{
+			//We only care about the contents of the colour target with point shadows
+			depth			dont_care
+			stencil			dont_care
+		}
 		camera_cubemap_reorient true
 	}
 }
@@ -94,8 +134,8 @@ compositor_node_shadow Tutorial_DynamicCubemapShadowNode
 {
 	technique pssm
 
-	texture atlas 2048 7168 PF_D32_FLOAT no_fsaa
-	texture tmpCubemap 1024 1024 PF_FLOAT32_R cubemap no_fsaa
+	texture atlas		2048 7168 PFG_D32_FLOAT
+	texture tmpCubemap	1024 1024 PFG_R32_FLOAT cubemap depth_format PFG_D32_FLOAT
 
 	num_splits		3
 	pssm_lambda		0.95
@@ -112,6 +152,7 @@ compositor_node_shadow Tutorial_DynamicCubemapShadowNode
 		pass clear
 		{
 			colour_value 1 1 1 1
+			non_tilers_only yes
 		}
 	}
 
@@ -121,6 +162,11 @@ compositor_node_shadow Tutorial_DynamicCubemapShadowNode
 		{
 			pass render_scene
 			{
+				load
+				{
+					all				clear_on_tilers
+					clear_colour	1 1 1 1
+				}
 			}
 		}
 	}
@@ -131,6 +177,11 @@ compositor_node_shadow Tutorial_DynamicCubemapShadowNode
 		{
 			pass render_scene
 			{
+				load
+				{
+					all				clear_on_tilers
+					clear_colour	1 1 1 1
+				}
 			}
 		}
 	}
@@ -150,6 +201,7 @@ compositor_node_shadow Tutorial_DynamicCubemapShadowNode
 			{
 				pass render_quad
 				{
+					load { all dont_care }
 					material Ogre/DPSM/CubeToDpsm
 					input 0 tmpCubemap
 				}

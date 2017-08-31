@@ -5,8 +5,6 @@
 #include "OgrePrerequisites.h"
 #include "TutorialGameState.h"
 
-#include "OgreTexture.h"
-
 namespace Demo
 {
     class DynamicCubemapGameState : public TutorialGameState
@@ -21,7 +19,7 @@ namespace Demo
         std::vector<Ogre::MovableObject*> mObjects;
 
         Ogre::Camera                *mCubeCamera;
-        Ogre::TexturePtr            mDynamicCubemap;
+        Ogre::TextureGpu            *mDynamicCubemap;
         Ogre::CompositorWorkspace   *mDynamicCubemapWorkspace;
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );

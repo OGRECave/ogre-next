@@ -11,19 +11,17 @@
 #include "OgreMesh2.h"
 
 #include "OgreCamera.h"
-#include "OgreRenderWindow.h"
+#include "OgreWindow.h"
 
 #include "OgreHlmsPbsDatablock.h"
 #include "OgreHlmsSamplerblock.h"
 
 #include "OgreRoot.h"
 #include "OgreHlmsManager.h"
-#include "OgreHlmsTextureManager.h"
 #include "OgreHlmsPbs.h"
 
-#include "OgreTextureManager.h"
-#include "OgreHardwarePixelBuffer.h"
-#include "OgreRenderTexture.h"
+#include "OgreTextureGpuManager.h"
+#include "OgrePixelFormatGpuUtils.h"
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorWorkspaceDef.h"
 
@@ -53,18 +51,23 @@ namespace Demo
 
         Root *root = mGraphicsSystem->getRoot();
         SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
-        RenderWindow *renderWindow = mGraphicsSystem->getRenderWindow();
+        Window *renderWindow = mGraphicsSystem->getRenderWindow();
         Camera *camera = mGraphicsSystem->getCamera();
         CompositorManager2 *compositorManager = root->getCompositorManager2();
 
         //A RenderTarget created with TU_AUTOMIPMAP means the compositor still needs to
         //explicitly generate the mipmaps by calling generate_mipmaps. It's just an API
         //hint to tell the GPU we will be using the mipmaps auto generation routines.
-        mDynamicCubemap = TextureManager::getSingleton().createManual(
-                    "DynamicCubemap", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                    TEX_TYPE_CUBE_MAP, 1024, 1024,
-                    PixelUtil::getMaxMipmapCount( 1024, 1024, 1 ),
-                    PF_A8B8G8R8, TU_RENDERTARGET|TU_AUTOMIPMAP, 0, true );
+        TextureGpuManager *textureManager = root->getRenderSystem()->getTextureGpuManager();
+        mDynamicCubemap = textureManager->createTexture( "DynamicCubemap",
+                                                         GpuPageOutStrategy::Discard,
+                                                         TextureFlags::RenderToTexture|
+                                                         TextureFlags::AllowAutomipmaps,
+                                                         TextureTypes::TypeCube );
+        mDynamicCubemap->setResolution( 1024u, 1024u );
+        mDynamicCubemap->setNumMipmaps( PixelFormatGpuUtils::getMaxMipmapCount( 1024u, 1024u ) );
+        mDynamicCubemap->setPixelFormat( PFG_RGBA8_UNORM_SRGB );
+        mDynamicCubemap->_transitionTo( GpuResidency::Resident, (uint8*)0 );
 
         // Create the camera used to render to our cubemap
         mCubeCamera = sceneManager->createCamera( "CubeMapCamera", true, true );
@@ -80,8 +83,7 @@ namespace Demo
         //Setup the cubemap's compositor.
         CompositorChannelVec cubemapExternalChannels( 1 );
         //Any of the cubemap's render targets will do
-        cubemapExternalChannels[0].target = mDynamicCubemap->getBuffer(0)->getRenderTarget();
-        cubemapExternalChannels[0].textures.push_back( mDynamicCubemap );
+        cubemapExternalChannels[0] = mDynamicCubemap;
 
         const Ogre::String workspaceName( "Tutorial_DynamicCubemap_cubemap" );
         if( !compositorManager->hasWorkspaceDefinition( workspaceName ) )
@@ -103,9 +105,8 @@ namespace Demo
         //Now setup the regular renderer
         CompositorChannelVec externalChannels( 2 );
         //Render window
-        externalChannels[0].target = renderWindow;
-        externalChannels[1].target = mDynamicCubemap->getBuffer(0)->getRenderTarget();
-        externalChannels[1].textures.push_back( mDynamicCubemap );
+        externalChannels[0] = renderWindow->getTexture();
+        externalChannels[1] = mDynamicCubemap;
 
         return compositorManager->addWorkspace( sceneManager, externalChannels, camera,
                                                 "Tutorial_DynamicCubemapWorkspace",
@@ -154,7 +155,7 @@ namespace Demo
             //Set the new samplerblock. The Hlms system will
             //automatically create the API block if necessary
             datablock->setSamplerblock( Ogre::PBSM_ROUGHNESS, samplerblock );
-            datablock->setTexture( Ogre::PBSM_REFLECTION, 0, mDynamicCubemap );
+            datablock->setTexture( Ogre::PBSM_REFLECTION, mDynamicCubemap );
         }
 
         for( int i=0; i<4; ++i )
@@ -199,7 +200,6 @@ namespace Demo
         {
             size_t numSpheres = 0;
             Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
-            Ogre::HlmsTextureManager *hlmsTextureManager = hlmsManager->getTextureManager();
 
             assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
 
@@ -208,7 +208,7 @@ namespace Demo
             {
                 Ogre::HlmsPbsDatablock *datablock = static_cast<Ogre::HlmsPbsDatablock*>(
                             hlmsPbs->getDatablock( "Rocks" ) );
-                datablock->setTexture( Ogre::PBSM_REFLECTION, 0, mDynamicCubemap );
+                datablock->setTexture( Ogre::PBSM_REFLECTION, mDynamicCubemap );
             }
 
             const int numX = 8;
@@ -231,7 +231,7 @@ namespace Demo
                                                           Ogre::HlmsParamVec() ) );
 
                     //Set the dynamic cubemap to these materials.
-                    datablock->setTexture( Ogre::PBSM_REFLECTION, 0, mDynamicCubemap );
+                    datablock->setTexture( Ogre::PBSM_REFLECTION, mDynamicCubemap );
                     datablock->setDiffuse( Ogre::Vector3( 0.0f, 1.0f, 0.0f ) );
 
                     datablock->setRoughness( std::max( 0.02f, x / Ogre::max( 1, (float)(numX-1) ) ) );
@@ -310,8 +310,9 @@ namespace Demo
         compositorManager->removeWorkspace( mDynamicCubemapWorkspace );
         mDynamicCubemapWorkspace = 0;
 
-        Ogre::TextureManager::getSingleton().remove( mDynamicCubemap->getHandle() );
-        mDynamicCubemap.setNull();
+        Ogre::TextureGpuManager *textureManager = root->getRenderSystem()->getTextureGpuManager();
+        textureManager->destroyTexture( mDynamicCubemap );
+        mDynamicCubemap = 0;
 
         sceneManager->destroyCamera( mCubeCamera );
         mCubeCamera = 0;
