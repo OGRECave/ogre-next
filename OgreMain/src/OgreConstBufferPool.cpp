@@ -118,29 +118,41 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void ConstBufferPool::uploadDirtyDatablocks(void)
     {
-        if( mDirtyUsers.empty() )
-            return;
+        while( !mDirtyUsers.empty() )
+        {
+            //While inside ConstBufferPool::uploadToConstBuffer, the pool user may tag
+            //itself dirty again, in which case we need to loop again. Move users
+            //to a temporary array to avoid iterator invalidation from screwing us.
+            mDirtyUsersTmp.swap( mDirtyUsers );
+            uploadDirtyDatablocksImpl();
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void ConstBufferPool::uploadDirtyDatablocksImpl(void)
+    {
+        assert( !mDirtyUsersTmp.empty() );
 
         const size_t materialSizeInGpu = mBytesPerSlot;
         const size_t extraBufferSizeInGpu = mExtraBufferParams.bytesPerSlot;
 
-        std::sort( mDirtyUsers.begin(), mDirtyUsers.end(), OrderConstBufferPoolUserByPoolThenSlot );
+        std::sort( mDirtyUsersTmp.begin(), mDirtyUsersTmp.end(),
+                   OrderConstBufferPoolUserByPoolThenSlot );
 
-        const size_t uploadSize = (materialSizeInGpu + extraBufferSizeInGpu) * mDirtyUsers.size();
+        const size_t uploadSize = (materialSizeInGpu + extraBufferSizeInGpu) * mDirtyUsersTmp.size();
         StagingBuffer *stagingBuffer = _mVaoManager->getStagingBuffer( uploadSize, true );
 
         StagingBuffer::DestinationVec destinations;
         StagingBuffer::DestinationVec extraDestinations;
 
-        destinations.reserve( mDirtyUsers.size() );
-        extraDestinations.reserve( mDirtyUsers.size() );
+        destinations.reserve( mDirtyUsersTmp.size() );
+        extraDestinations.reserve( mDirtyUsersTmp.size() );
 
-        ConstBufferPoolUserVec::const_iterator itor = mDirtyUsers.begin();
-        ConstBufferPoolUserVec::const_iterator end  = mDirtyUsers.end();
+        ConstBufferPoolUserVec::const_iterator itor = mDirtyUsersTmp.begin();
+        ConstBufferPoolUserVec::const_iterator end  = mDirtyUsersTmp.end();
 
         char *bufferStart = reinterpret_cast<char*>( stagingBuffer->map( uploadSize ) );
         char *data      = bufferStart;
-        char *extraData = bufferStart + materialSizeInGpu * mDirtyUsers.size();
+        char *extraData = bufferStart + materialSizeInGpu * mDirtyUsersTmp.size();
 
         while( itor != end )
         {
@@ -216,7 +228,7 @@ namespace Ogre
         stagingBuffer->unmap( destinations );
         stagingBuffer->removeReferenceCount();
 
-        mDirtyUsers.clear();
+        mDirtyUsersTmp.clear();
     }
     //-----------------------------------------------------------------------------------
     void ConstBufferPool::requestSlot( uint32 hash, ConstBufferPoolUser *user, bool wantsExtraBuffer )

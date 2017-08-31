@@ -50,8 +50,6 @@ THE SOFTWARE.
 #undef OGRE_HLMS_TEXTURE_BASE_MAX_TEX
 #undef OGRE_HLMS_CREATOR_CLASS
 
-#define TODO_port_cubemap_probes
-
 namespace Ogre
 {
     extern const String c_pbsBlendModes[];
@@ -835,8 +833,7 @@ namespace Ogre
             if( mCubemapProbe )
             {
                 mCubemapProbe->_addReference();
-                TODO_port_cubemap_probes;
-                //setTexture( PBSM_REFLECTION, mCubemapProbe->getInternalTexture() );
+                setTexture( PBSM_REFLECTION, mCubemapProbe->getInternalTexture() );
             }
             else
             {

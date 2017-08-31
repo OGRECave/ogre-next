@@ -113,6 +113,7 @@ namespace Ogre
     protected:
 
         ConstBufferPoolUserVec mDirtyUsers;
+        ConstBufferPoolUserVec mDirtyUsersTmp;
         ConstBufferPoolUserVec mUsers;
 
         OptimizationStrategy    mOptimizationStrategy;
@@ -120,6 +121,7 @@ namespace Ogre
         void destroyAllPools(void);
 
         void uploadDirtyDatablocks(void);
+        void uploadDirtyDatablocksImpl(void);
 
     public:
         ConstBufferPool( uint32 bytesPerSlot, const ExtraBufferParams &extraBufferParams );
