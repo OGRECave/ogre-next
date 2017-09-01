@@ -1090,7 +1090,15 @@ namespace Ogre
                     loadRequest.texture->setResolution( img.getWidth(), img.getHeight(),
                                                         img.getDepthOrSlices() );
                     if( loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max() )
-                        loadRequest.texture->setTextureType( img.getTextureType() );
+                    {
+                        //If the texture had already been set it to 1D
+                        //and it is viable, then keep the 1D setting.
+                        if( img.getHeight() != 1u ||
+                            loadRequest.texture->getTextureType() != TextureTypes::Type1D )
+                        {
+                            loadRequest.texture->setTextureType( img.getTextureType() );
+                        }
+                    }
                     loadRequest.texture->setPixelFormat( img.getPixelFormat() );
                     loadRequest.texture->setNumMipmaps( img.getNumMipmaps() );
 
