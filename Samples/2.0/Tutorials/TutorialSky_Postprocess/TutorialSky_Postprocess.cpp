@@ -2,7 +2,7 @@
 #include "GraphicsSystem.h"
 #include "TutorialSky_PostprocessGameState.h"
 
-#include "OgreRenderWindow.h"
+#include "OgreWindow.h"
 
 #include "OgreRoot.h"
 #include "Compositor/OgreCompositorManager2.h"
@@ -28,8 +28,8 @@ namespace Demo
         virtual Ogre::CompositorWorkspace* setupCompositor()
         {
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
-            return compositorManager->addWorkspace( mSceneManager, mRenderWindow, mCamera,
-                                                    "TutorialSky_PostprocessWorkspace", true );
+            return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(),
+                                                    mCamera, "TutorialSky_PostprocessWorkspace", true );
         }
 
         virtual void setupResources(void)
