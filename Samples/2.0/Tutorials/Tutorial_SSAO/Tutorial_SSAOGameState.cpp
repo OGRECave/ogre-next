@@ -12,15 +12,17 @@
 #include "OgreMesh2.h"
 
 #include "OgreCamera.h"
-#include "OgreRenderWindow.h"
+#include "OgreWindow.h"
 
 #include "OgreHlmsPbsDatablock.h"
 #include "OgreHlmsSamplerblock.h"
 
 #include "OgreRoot.h"
 #include "OgreHlmsManager.h"
-#include "OgreHlmsTextureManager.h"
 #include "OgreHlmsPbs.h"
+#include "OgreTextureGpuManager.h"
+#include "OgreTextureBox.h"
+#include "OgreStagingTexture.h"
 
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreVertexArrayObject.h"
@@ -30,7 +32,6 @@
 #include "OgrePass.h"
 
 #include "OgreResourceGroupManager.h"
-#include "OgreTextureManager.h"
 #include "Ogre.h"
 
 using namespace Demo;
@@ -93,9 +94,8 @@ namespace Demo
 
 
 		{
-			mNumSpheres = 0;
-			Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
-			Ogre::HlmsTextureManager *hlmsTextureManager = hlmsManager->getTextureManager();
+            mNumSpheres = 0;
+            Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
 
 			assert(dynamic_cast<Ogre::HlmsPbs*>(hlmsManager->getHlms(Ogre::HLMS_PBS)));
 
@@ -107,6 +107,9 @@ namespace Demo
 			const float armsLength = 2.0f;
 			const float startX = (numX - 1) / 2.0f;
 			const float startZ = (numZ - 1) / 2.0f;
+
+            Ogre::Root *root = mGraphicsSystem->getRoot();
+            Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
 
             for( int x=0; x<numX; ++x )
             {
@@ -120,11 +123,15 @@ namespace Demo
                                                           Ogre::HlmsBlendblock(),
                                                           Ogre::HlmsParamVec() ) );
 
-                    Ogre::HlmsTextureManager::TextureLocation texLocation = hlmsTextureManager->
-                            createOrRetrieveTexture( "SaintPetersBasilica.dds",
-                                                     Ogre::HlmsTextureManager::TEXTURE_TYPE_ENV_MAP );
+                    Ogre::TextureGpu *texture = textureMgr->createOrRetrieveTexture(
+                                                    "SaintPetersBasilica.dds",
+                                                    Ogre::GpuPageOutStrategy::Discard,
+                                                    Ogre::TextureFlags::PrefersLoadingAsSRGB,
+                                                    Ogre::TextureTypes::TypeCube,
+                                                    Ogre::ResourceGroupManager::
+                                                    AUTODETECT_RESOURCE_GROUP_NAME );
 
-                    datablock->setTexture( Ogre::PBSM_REFLECTION, texLocation.xIdx, texLocation.texture );
+                    datablock->setTexture( Ogre::PBSM_REFLECTION, texture );
                     datablock->setDiffuse( Ogre::Vector3( 0.0f, 1.0f, 0.0f ) );
 
                     datablock->setRoughness( std::max( 0.02f, x / Ogre::max( 1, (float)(numX-1) ) ) );
@@ -239,38 +246,44 @@ namespace Demo
 		}
 
 		//Next generate noise texture
-        Ogre::TexturePtr noiseTexture = Ogre::TextureManager::getSingleton().createManual(
-                    "noiseTexture",
-                    Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                    Ogre::TEX_TYPE_2D, 2, 2, 0,
-                    Ogre::PF_R8G8B8A8_SNORM,
-                    Ogre::TU_STATIC_WRITE_ONLY );
+        Ogre::Root *root = mGraphicsSystem->getRoot();
+        Ogre::TextureGpuManager *textureManager = root->getRenderSystem()->getTextureGpuManager();
+        Ogre::TextureGpu *noiseTexture =
+                textureManager->createTexture( "noiseTexture",
+                                               Ogre::GpuPageOutStrategy::SaveToSystemRam,
+                                               0, Ogre::TextureTypes::Type2D );
+        noiseTexture->setResolution( 2u, 2u );
+        noiseTexture->setPixelFormat( Ogre::PFG_RGBA8_SNORM );
+        noiseTexture->_transitionTo( Ogre::GpuResidency::Resident, (Ogre::uint8*)0 );
+        noiseTexture->_setNextResidencyStatus( Ogre::GpuResidency::Resident );
 
-		
-        Ogre::v1::HardwarePixelBufferSharedPtr pixelBuffer = noiseTexture->getBuffer();
-        const Ogre::PixelBox& pixelBox = pixelBuffer->lock(
-                    Ogre::Box( 0, 0, noiseTexture->getWidth(), noiseTexture->getHeight() ),
-                    Ogre::v1::HardwareBuffer::HBL_DISCARD );
+        Ogre::StagingTexture *stagingTexture =
+                textureManager->getStagingTexture( 2u, 2u, 1u, 1u, Ogre::PFG_RGBA8_SNORM );
+        stagingTexture->startMapRegion();
+        Ogre::TextureBox texBox = stagingTexture->mapRegion( 2u, 2u, 1u, 1u, Ogre::PFG_RGBA8_SNORM );
 
-        for( size_t j=0; j<pixelBox.getWidth(); ++j )
+        for( size_t j=0; j<texBox.height; ++j )
 		{
-            for( size_t i=0; i<pixelBox.getHeight(); ++i )
+            for( size_t i=0; i<texBox.width; ++i )
 			{
                 Ogre::Vector3 noise = Ogre::Vector3( Ogre::Math::RangeRandom(-1.0f, 1.0f),
                                                      Ogre::Math::RangeRandom(-1.0f, 1.0f),
                                                      0.0f );
 				noise.normalise();
 
-                const size_t pixelSize = Ogre::PixelUtil::getNumElemBytes( Ogre::PF_R8G8B8A8_SNORM );
-                const size_t pixelOffset = pixelSize * ( j * pixelBox.rowPitch + i );
-                Ogre::uint8 *pixelData = reinterpret_cast<Ogre::uint8*>( pixelBox.data ) + pixelOffset;
+                Ogre::uint8 *pixelData = reinterpret_cast<Ogre::uint8*>( texBox.at( i, j, 0 ) );
                 pixelData[0] = Ogre::Bitwise::floatToSnorm8( noise.x );
                 pixelData[1] = Ogre::Bitwise::floatToSnorm8( noise.y );
                 pixelData[2] = Ogre::Bitwise::floatToSnorm8( noise.z );
                 pixelData[3] = Ogre::Bitwise::floatToSnorm8( 1.0f );
 			}
-		}
-        pixelBuffer->unlock();
+        }
+
+        stagingTexture->stopMapRegion();
+        stagingTexture->upload( texBox, noiseTexture, 0, 0 );
+        textureManager->removeStagingTexture( stagingTexture );
+        stagingTexture = 0;
+        noiseTexture->notifyDataIsReady();
 
 		//---------------------------------------------------------------------------------
 		//Get GpuProgramParametersSharedPtr to set uniforms that we need
@@ -285,7 +298,7 @@ namespace Demo
 
 		//Lets set uniforms for shader
 		//Set texture uniform for noise
-		Ogre::TextureUnitState* noiseTextureState = pass->getTextureUnitState("noiseTexture");
+        Ogre::TextureUnitState *noiseTextureState = pass->getTextureUnitState("noiseTexture");
 		noiseTextureState->setTexture(noiseTexture);
 
 		//Reconstruct position from depth. Position is needed in SSAO
