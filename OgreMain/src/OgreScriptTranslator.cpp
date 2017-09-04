@@ -8773,7 +8773,7 @@ namespace Ogre{
                             else
                                 compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line);
                         }
-                        passClear->mClearBufferFlags = buffers;
+                        passClear->setBuffersToClear( buffers );
                     }
                     break;
                 case ID_COLOUR_VALUE:

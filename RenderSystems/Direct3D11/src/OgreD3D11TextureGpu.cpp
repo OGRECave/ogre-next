@@ -230,10 +230,13 @@ namespace Ogre
         if( isUav() )
             desc.BindFlags |= D3D11_BIND_UNORDERED_ACCESS;
 
-        if( mTextureType == TextureTypes::TypeCube ||mTextureType == TextureTypes::TypeCubeArray )
+        if( mTextureType == TextureTypes::TypeCube || mTextureType == TextureTypes::TypeCubeArray )
             desc.MiscFlags |= D3D11_RESOURCE_MISC_TEXTURECUBE;
         if( allowsAutoMipmaps() )
+        {
+            desc.BindFlags |= D3D11_BIND_SHADER_RESOURCE|D3D11_BIND_RENDER_TARGET;
             desc.MiscFlags |= D3D11_RESOURCE_MISC_GENERATE_MIPS;
+        }
 
         D3D11TextureGpuManager *textureManagerD3d =
                 static_cast<D3D11TextureGpuManager*>( mTextureManager );
@@ -462,6 +465,17 @@ namespace Ogre
         }
 
         return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11TextureGpu::_autogenerateMipmaps(void)
+    {
+        if( !mFinalTextureName || !isDataReady() )
+            return;
+
+        D3D11TextureGpuManager *textureManagerD3d =
+                static_cast<D3D11TextureGpuManager*>( mTextureManager );
+        D3D11Device &device = textureManagerD3d->getDevice();
+        device.GetImmediateContext()->GenerateMips( mDefaultDisplaySrv );
     }
     //-----------------------------------------------------------------------------------
     ID3D11ShaderResourceView* D3D11TextureGpu::createSrv( PixelFormatGpu format,

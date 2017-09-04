@@ -849,7 +849,9 @@ namespace Ogre
 			mIsExternal = false;
 			mHWnd = CreateWindowEx(dwStyleEx, OGRE_D3D11_WIN_CLASS_NAME, title.c_str(), getWindowStyle(fullScreen),
 				mLeft, mTop, winWidth, winHeight, parentHWnd, 0, hInst, this);
+#if TODO_OGRE_2_2
 			WindowEventUtilities::_addRenderWindow(this);
+#endif
 		}
 		else
 		{
@@ -888,7 +890,9 @@ namespace Ogre
 
         if (mHWnd && !mIsExternal)
         {
+#if TODO_OGRE_2_2
             WindowEventUtilities::_removeRenderWindow(this);
+#endif
             DestroyWindow(mHWnd);
         }
 

@@ -98,6 +98,8 @@ namespace Ogre
         virtual void _setToDisplayDummyTexture(void);
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
 
+        virtual void _autogenerateMipmaps(void);
+
         ID3D11ShaderResourceView* createSrv( PixelFormatGpu format, bool cubemapsAs2DArrays ) const;
 
         virtual bool isMsaaPatternSupported( MsaaPatterns::MsaaPatterns pattern );
@@ -105,6 +107,7 @@ namespace Ogre
 
         ID3D11Resource* getDisplayTextureName(void) const   { return mDisplayTextureName; }
         ID3D11Resource* getFinalTextureName(void) const     { return mFinalTextureName; }
+        ID3D11Resource* getMsaaFramebufferName(void) const  { return mMsaaFramebufferName; }
     };
 }
 

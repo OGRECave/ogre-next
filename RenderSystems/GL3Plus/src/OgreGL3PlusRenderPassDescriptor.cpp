@@ -620,8 +620,9 @@ namespace Ogre
 
                         unbindReadDrawFramebuffers = true;
                     }
-                    else if( mColour[i].storeAction == StoreAction::DontCare ||
-                             mColour[i].storeAction == StoreAction::MultisampleResolve )
+
+                    if( mColour[i].storeAction == StoreAction::DontCare ||
+                        mColour[i].storeAction == StoreAction::MultisampleResolve )
                     {
                         attachments[numAttachments] = GL_COLOR_ATTACHMENT0 + i;
                         ++numAttachments;

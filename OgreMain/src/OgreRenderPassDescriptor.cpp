@@ -30,6 +30,7 @@ THE SOFTWARE.
 
 #include "OgreRenderPassDescriptor.h"
 #include "OgreTextureGpu.h"
+#include "OgrePixelFormatGpuUtils.h"
 #include "OgreException.h"
 
 namespace Ogre
@@ -226,6 +227,22 @@ namespace Ogre
                          "RenderPassDescriptor::entriesModified" );
         }
 
+        if( mDepth.texture && !PixelFormatGpuUtils::isDepth( mDepth.texture->getPixelFormat() ) )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "RenderPassDescriptor depth attachment '" +
+                         mDepth.texture->getNameStr() + "' is not a depth format!",
+                         "RenderPassDescriptor::entriesModified" );
+        }
+
+        if( mStencil.texture && !PixelFormatGpuUtils::isStencil( mStencil.texture->getPixelFormat() ) )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "RenderPassDescriptor stencil attachment '" +
+                         mStencil.texture->getNameStr() + "' is not a stencil format!",
+                         "RenderPassDescriptor::entriesModified" );
+        }
+
         checkRequiresTextureFlipping();
     }
     //-----------------------------------------------------------------------------------
@@ -276,5 +293,11 @@ namespace Ogre
         }
 
         return true;
+    }
+    //-----------------------------------------------------------------------------------
+    bool RenderPassDescriptor::hasStencilFormat(void) const
+    {
+        return mStencil.texture || (mDepth.texture &&
+                                    PixelFormatGpuUtils::isStencil( mDepth.texture->getPixelFormat() ));
     }
 }

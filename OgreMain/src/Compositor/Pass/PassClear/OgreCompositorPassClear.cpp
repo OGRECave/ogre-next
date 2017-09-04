@@ -37,6 +37,7 @@ THE SOFTWARE.
 #include "OgreViewport.h"
 #include "OgreSceneManager.h"
 #include "OgreRenderTarget.h"
+#include "OgrePixelFormatGpuUtils.h"
 
 namespace Ogre
 {
@@ -48,6 +49,32 @@ namespace Ogre
                 mSceneManager( sceneManager ),
                 mDefinition( definition )
     {
+        RenderSystem *renderSystem = mParentNode->getRenderSystem();
+        const RenderSystemCapabilities *capabilities = renderSystem->getCapabilities();
+
+        if( mDefinition->mNonTilersOnly && capabilities->hasCapability( RSC_IS_TILER ) &&
+            !capabilities->hasCapability( RSC_TILER_CAN_CLEAR_STENCIL_REGION ) &&
+            (mRenderPassDesc->hasStencilFormat() &&
+             mRenderPassDesc->mDepth.loadAction == LoadAction::Clear ||
+             mRenderPassDesc->mStencil.loadAction == LoadAction::Clear) )
+        {
+            //Normally this clear would be a no-op (because we're on a tiler GPU
+            //and this is a non-tiler pass). However depth-stencil formats
+            //must be cleared like a non-tiler. We must update our RenderPassDesc to
+            //avoid clearing the colour (since that will still behave like tiler)
+            uint32 entryTypes = 0;
+            for( size_t i=0; i<mRenderPassDesc->getNumColourEntries(); ++i )
+            {
+                if( mRenderPassDesc->mColour[i].loadAction != LoadAction::Load )
+                {
+                    entryTypes |= RenderPassDescriptor::Colour0 << i;
+                    mRenderPassDesc->mColour[i].loadAction = LoadAction::Load;
+                }
+            }
+
+            if( entryTypes )
+                mRenderPassDesc->entriesModified( entryTypes );
+        }
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassClear::execute( const Camera *lodCamera )
@@ -70,12 +97,18 @@ namespace Ogre
         if( listener )
             listener->passPreExecute( this );
 
-
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
 
         const RenderSystemCapabilities *capabilities = renderSystem->getCapabilities();
-        if( !mDefinition->mNonTilersOnly || !capabilities->hasCapability( RSC_IS_TILER ) )
+        if( !mDefinition->mNonTilersOnly ||
+            !capabilities->hasCapability( RSC_IS_TILER ) ||
+            (!capabilities->hasCapability( RSC_TILER_CAN_CLEAR_STENCIL_REGION ) &&
+             (mRenderPassDesc->hasStencilFormat() &&
+              mRenderPassDesc->mDepth.loadAction == LoadAction::Clear ||
+              mRenderPassDesc->mStencil.loadAction == LoadAction::Clear)) )
+        {
             renderSystem->clearFrameBuffer( mRenderPassDesc, mAnyTargetTexture );
+        }
 
         if( listener )
             listener->passPosExecute( this );

@@ -32,125 +32,111 @@ namespace Ogre
 {
     const char* D3D11PixelFormatToShaderType::getPixelFormatType( PixelFormatGpu pixelFormat ) const
     {
-        asd;
         switch( pixelFormat )
         {
         //UNORM formats
-        case PF_L8:
-        case PF_A8:
-        case PF_R8:
-        case PF_D16_UNORM:
-        case PF_D24_UNORM:
-        case PF_D24_UNORM_S8_UINT:
-        case PF_D24_UNORM_X8:
+        case PFG_D24_UNORM:
+        case PFG_D24_UNORM_S8_UINT:
+        case PFG_D16_UNORM:
+        case PFG_R16_UNORM:
+        case PFG_R8_UNORM:
+        case PFG_BC4_UNORM:
             return "unorm float";
-        case PF_L16:
-            return "unorm float";
-        case PF_RG8:
-        case PF_BYTE_LA:
+        case PFG_RG16_UNORM:
+        case PFG_RG8_UNORM:
+        case PFG_BC5_UNORM:
             return "unorm float2";
-        case PF_SHORT_GR:
-            return "unorm float2";
-        case PF_R8G8B8:
-        case PF_B8G8R8:
-        case PF_A8R8G8B8:
-        case PF_A8B8G8R8:
-        case PF_B8G8R8A8:
-        case PF_R8G8B8A8:
-        case PF_X8R8G8B8:
-        case PF_X8B8G8R8:
-            return "unorm float4";
-        case PF_A2R10G10B10:
-        case PF_A2B10G10R10:
-            return "unorm float4";
-        case PF_SHORT_RGB:
-        case PF_SHORT_RGBA:
+        case PFG_B5G6R5_UNORM:
+            return "unorm float3";
+        case PFG_RGBA16_UNORM:
+        case PFG_R10G10B10A2_UNORM:
+        case PFG_RGBA8_UNORM:
+        case PFG_RGBA8_UNORM_SRGB:
+        case PFG_A8_UNORM:
+        case PFG_R1_UNORM:
+        case PFG_R8G8_B8G8_UNORM:
+        case PFG_G8R8_G8B8_UNORM:
+        case PFG_BC1_UNORM:
+        case PFG_BC1_UNORM_SRGB:
+        case PFG_BC2_UNORM:
+        case PFG_BC2_UNORM_SRGB:
+        case PFG_BC3_UNORM:
+        case PFG_BC3_UNORM_SRGB:
+        case PFG_B5G5R5A1_UNORM:
+        case PFG_BGRA8_UNORM:
+        case PFG_BGRX8_UNORM:
+        case PFG_R10G10B10_XR_BIAS_A2_UNORM:
+        case PFG_BGRA8_UNORM_SRGB:
+        case PFG_BGRX8_UNORM_SRGB:
+        case PFG_BC7_UNORM:
+        case PFG_BC7_UNORM_SRGB:
+        case PFG_B4G4R4A4_UNORM:
             return "unorm float4";
 
         //SNORM formats
-        case PF_R8_SNORM:
+        case PFG_R16_SNORM:
+        case PFG_R8_SNORM:
+        case PFG_BC4_SNORM:
             return "snorm float";
-        case PF_R16_SNORM:
-            return "snorm float";
-        case PF_R8G8_SNORM:
+        case PFG_RG16_SNORM:
+        case PFG_RG8_SNORM:
+        case PFG_BC5_SNORM:
             return "snorm float2";
-        case PF_R16G16_SNORM:
-            return "snorm float2";
-        case PF_R8G8B8_SNORM:
-        case PF_R8G8B8A8_SNORM:
-            return "snorm float4";
-        case PF_R16G16B16_SNORM:
-        case PF_R16G16B16A16_SNORM:
+        case PFG_RGBA16_SNORM:
+        case PFG_RGBA8_SNORM:
             return "snorm float4";
 
         //SINT formats
-        case PF_R8_SINT:
+        case PFG_R32_SINT:
+        case PFG_R16_SINT:
+        case PFG_R8_SINT:
             return "int";
-        case PF_R16_SINT:
-            return "int";
-        case PF_R32_SINT:
-            return "int";
-        case PF_R8G8_SINT:
+        case PFG_RG32_SINT:
+        case PFG_RG16_SINT:
+        case PFG_RG8_SINT:
             return "int2";
-        case PF_R16G16_SINT:
-            return "int2";
-        case PF_R32G32_SINT:
-            return "int2";
-        case PF_R8G8B8_SINT:
-        case PF_R8G8B8A8_SINT:
-            return "int4";
-        case PF_R16G16B16_SINT:
-        case PF_R16G16B16A16_SINT:
-            return "int4";
-        case PF_R32G32B32_SINT:
-        case PF_R32G32B32A32_SINT:
+        case PFG_RGB32_SINT:
+            return "int3";
+        case PFG_RGBA32_SINT:
+        case PFG_RGBA16_SINT:
+        case PFG_RGBA8_SINT:
             return "int4";
 
         //UINT formats
-        case PF_R8_UINT:
+        case PFG_R32_UINT:
+        case PFG_R16_UINT:
+        case PFG_R8_UINT:
             return "uint";
-        case PF_R16_UINT:
-            return "uint";
-        case PF_R32_UINT:
-            return "uint";
-        case PF_R8G8_UINT:
+        case PFG_RG32_UINT:
+        case PFG_RG16_UINT:
+        case PFG_RG8_UINT:
             return "uint2";
-        case PF_R16G16_UINT:
-            return "uint2";
-        case PF_R32G32_UINT:
-            return "uint2";
-        case PF_R8G8B8_UINT:
-        case PF_R8G8B8A8_UINT:
-            return "uint4";
-//        case PF_R10G10B10A2_UINT:
-//            return "uint4";
-        case PF_R16G16B16_UINT:
-        case PF_R16G16B16A16_UINT:
-            return "uint4";
-        case PF_R32G32B32_UINT:
-        case PF_R32G32B32A32_UINT:
+        case PFG_RGB32_UINT:
+            return "uint3";
+        case PFG_RGBA32_UINT:
+        case PFG_RGBA16_UINT:
+        case PFG_R10G10B10A2_UINT:
+        case PFG_RGBA8_UINT:
             return "uint4";
 
-        //Pure floating point
-        case PF_FLOAT16_R:
+        //FLOAT formats
+        case PFG_D32_FLOAT_S8X24_UINT:
+        case PFG_D32_FLOAT:
+        case PFG_R32_FLOAT:
+        case PFG_R16_FLOAT:
             return "float";
-        case PF_FLOAT32_R:
-        case PF_D32_FLOAT:
-        case PF_D32_FLOAT_X24_S8_UINT:
-        case PF_D32_FLOAT_X24_X8:
-            return "float";
-        case PF_FLOAT16_GR:
+        case PFG_RG32_FLOAT:
+        case PFG_RG16_FLOAT:
             return "float2";
-        case PF_FLOAT32_GR:
-            return "float2";
-        case PF_R11G11B10_FLOAT:
+        case PFG_RGB32_FLOAT:
             return "float3";
-        case PF_FLOAT16_RGB:
-        case PF_FLOAT16_RGBA:
+        case PFG_RGBA32_FLOAT:
+        case PFG_RGBA16_FLOAT:
+        case PFG_R11G11B10_FLOAT:
+        case PFG_BC6H_UF16:
+        case PFG_BC6H_SF16:
             return "float4";
-        case PF_FLOAT32_RGB:
-        case PF_FLOAT32_RGBA:
-            return "float4";
+
         default:
             return 0;
         }

@@ -44,6 +44,8 @@ THE SOFTWARE.
 #include "OgreD3D11HLSLProgramFactory.h"
 #include "OgreD3D11TextureGpu.h"
 #include "OgreD3D11TextureGpuManager.h"
+#include "OgreD3D11RenderPassDescriptor.h"
+#include "OgrePixelFormatGpuUtils.h"
 
 #include "OgreD3D11HardwareOcclusionQuery.h"
 #include "OgreFrustum.h"
@@ -771,9 +773,9 @@ bail:
         return mOptions;
     }
     //---------------------------------------------------------------------
-    RenderWindow* D3D11RenderSystem::_initialise( bool autoCreateWindow, const String& windowTitle )
+    Window* D3D11RenderSystem::_initialise( bool autoCreateWindow, const String& windowTitle )
     {
-        RenderWindow* autoWindow = NULL;
+        Window* autoWindow = NULL;
         LogManager::getSingleton().logMessage( "D3D11 : Subsystem Initialising" );
 
 		if(IsWorkingUnderNsight())
@@ -996,12 +998,12 @@ bail:
                 OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, "Can't find VSync Interval options!", "D3D11RenderSystem::initialise");
             miscParams["vsyncInterval"] = opt->second.currentValue;
 
-            autoWindow = this->_createRenderWindow( windowTitle, width, height, 
-                fullScreen, &miscParams );
+            autoWindow = this->_createRenderWindow( windowTitle, width, height,
+                                                    fullScreen, &miscParams );
 
             // If we have 16bit depth buffer enable w-buffering.
             assert( autoWindow );
-            if ( PixelUtil::getNumElemBits( autoWindow->getFormat() ) == 16 )
+            if ( PixelFormatGpuUtils::getBytesPerPixel( autoWindow->getPixelFormat() ) * 8u == 16u )
             { 
                 mWBuffer = true;
             } 
@@ -1048,9 +1050,9 @@ bail:
         SAFE_DELETE( mGpuProgramManager );
     }
     //---------------------------------------------------------------------
-	RenderWindow* D3D11RenderSystem::_createRenderWindow(const String &name,
-		unsigned int width, unsigned int height, bool fullScreen,
-		const NameValuePairList *miscParams)
+    Window* D3D11RenderSystem::_createRenderWindow( const String &name,
+                                                    uint32 width, uint32 height, bool fullScreen,
+                                                    const NameValuePairList *miscParams )
 	{
 
 		// Check we're not creating a secondary window when the primary
@@ -1834,8 +1836,7 @@ bail:
 
         descDSV.ViewDimension = (BBDesc.SampleDesc.Count > 1) ? D3D11_DSV_DIMENSION_TEXTURE2DMS :
                                                                 D3D11_DSV_DIMENSION_TEXTURE2D;
-        descDSV.Flags = 0 /* D3D11_DSV_READ_ONLY_DEPTH | D3D11_DSV_READ_ONLY_STENCIL */;    // TODO: Allows bind depth buffer as depth view AND texture simultaneously.
-                                                                                            // TODO: Decide how to expose this feature
+        descDSV.Flags = 0 /* D3D11_DSV_READ_ONLY_DEPTH | D3D11_DSV_READ_ONLY_STENCIL */;
         descDSV.Texture2D.MipSlice = 0;
         hr = mDevice->CreateDepthStencilView( pDepthStencil, &descDSV, &depthStencilView );
         if( FAILED(hr) )
@@ -2349,6 +2350,8 @@ bail:
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setViewport( Viewport *vp )
     {
+        mActiveViewport = vp;
+#if TODO_OGRE_2_2
         if (!vp)
         {
             mActiveViewport = NULL;
@@ -2433,6 +2436,7 @@ bail:
                 flushUAVs();
             }
         }
+#endif
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::queueBindUAV( uint32 slot, TexturePtr texture,
@@ -2620,10 +2624,12 @@ bail:
     {
         mUavsDirty = false;
 
+#if TODO_OGRE_2_2
         uint8 flags = VP_RTT_COLOUR_WRITE;
         if( mActiveViewport )
             flags = mActiveViewport->getViewportRenderTargetFlags();
         _setRenderTargetViews( flags );
+#endif
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_bindTextureUavCS( uint32 slot, Texture *texture,
@@ -4221,50 +4227,12 @@ bail:
     {
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::clearFrameBuffer(unsigned int buffers, 
-        const ColourValue& colour, Real depth, unsigned short stencil)
+    void D3D11RenderSystem::clearFrameBuffer( RenderPassDescriptor *renderPassDesc,
+                                              TextureGpu *anyTarget )
     {
-        if (mActiveRenderTarget)
-        {
-            ID3D11RenderTargetView * pRTView[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
-            memset(pRTView, 0, sizeof(pRTView));
-
-            mActiveRenderTarget->getCustomAttribute( "ID3D11RenderTargetView", &pRTView );
-            
-            if (buffers & FBT_COLOUR)
-            {
-                float ClearColor[4];
-                D3D11Mappings::get(colour, ClearColor);
-
-                // Clear all views
-                uint numberOfViews;
-                mActiveRenderTarget->getCustomAttribute( "numberOfViews", &numberOfViews );
-                for( uint i = 0; i < numberOfViews; ++i )
-                    mDevice.GetImmediateContext()->ClearRenderTargetView( pRTView[i], ClearColor );
-
-            }
-            UINT ClearFlags = 0;
-            if (buffers & FBT_DEPTH)
-            {
-                ClearFlags |= D3D11_CLEAR_DEPTH;
-            }
-            if (buffers & FBT_STENCIL)
-            {
-                ClearFlags |= D3D11_CLEAR_STENCIL;
-            }
-
-            if (ClearFlags)
-            {
-                D3D11DepthBuffer *depthBuffer = static_cast<D3D11DepthBuffer*>(
-                                                    mActiveRenderTarget->getDepthBuffer());
-                if( depthBuffer )
-                {
-                    mDevice.GetImmediateContext()->ClearDepthStencilView(
-                                                        depthBuffer->getDepthStencilView(0),
-                                                        ClearFlags, depth, static_cast<UINT8>(stencil) );
-                }
-            }
-        }
+        D3D11RenderPassDescriptor *renderPassDescD3d =
+                static_cast<D3D11RenderPassDescriptor*>( renderPassDesc );
+        renderPassDescD3d->clearFrameBuffer();
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::discardFrameBuffer( unsigned int buffers )

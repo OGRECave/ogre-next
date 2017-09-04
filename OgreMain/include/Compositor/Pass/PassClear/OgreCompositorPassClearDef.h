@@ -47,8 +47,6 @@ namespace Ogre
     class _OgreExport CompositorPassClearDef : public CompositorPassDef
     {
     public:
-        /// See RenderPassDescriptor::EntryTypes
-        uint32                  mClearBufferFlags;
         /// Only execute this pass on non-tilers
         bool                    mNonTilersOnly;
 
@@ -58,7 +56,6 @@ namespace Ogre
         */
         CompositorPassClearDef( CompositorTargetDef *parentTargetDef ) :
             CompositorPassDef( PASS_CLEAR, parentTargetDef ),
-            mClearBufferFlags( RenderPassDescriptor::All ),
             mNonTilersOnly( false )
         {
             //Override so that it only gets executed on the first execution on the
@@ -73,6 +70,36 @@ namespace Ogre
             mLoadActionStencil  = LoadAction::Clear;
 
             setAllStoreActions( StoreAction::StoreAndMultisampleResolve );
+        }
+
+        /** Sets which buffers you want to clear for each attachment. Replaces
+            'mClearBufferFlags' from previous versions of Ogre.
+        @remarks
+            Manually setting load actions to anything other than
+            LoadAction::Clear or LoadAction::Load when there is a valid buffer
+            is undefined behavior.
+        @param buffersToClear
+            Bitmask. See RenderPassDescriptor::EntryTypes
+        */
+        void setBuffersToClear( uint32 buffersToClear )
+        {
+            for( size_t i=0; i<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
+            {
+                if( buffersToClear & (RenderPassDescriptor::Colour0 << i) )
+                    mLoadActionColour[i] = LoadAction::Clear;
+                else
+                    mLoadActionColour[i] = LoadAction::Load;
+            }
+
+            if( buffersToClear & RenderPassDescriptor::Depth )
+                mLoadActionDepth = LoadAction::Clear;
+            else
+                mLoadActionDepth = LoadAction::Load;
+
+            if( buffersToClear & RenderPassDescriptor::Stencil )
+                mLoadActionStencil = LoadAction::Clear;
+            else
+                mLoadActionStencil = LoadAction::Load;
         }
     };
 

@@ -214,10 +214,10 @@ namespace Ogre
         // Overridden RenderSystem functions
         ConfigOptionMap& getConfigOptions(void);
         String validateConfigOptions(void);
-        RenderWindow* _initialise( bool autoCreateWindow, const String& windowTitle = "OGRE Render Window"  );
+        Window* _initialise( bool autoCreateWindow, const String& windowTitle = "OGRE Render Window"  );
         /// @copydoc RenderSystem::_createRenderWindow
-        RenderWindow* _createRenderWindow(const String &name, unsigned int width, unsigned int height, 
-            bool fullScreen, const NameValuePairList *miscParams = 0);
+        Window* _createRenderWindow( const String &name, uint32 width, uint32 height,
+                                     bool fullScreen, const NameValuePairList *miscParams = 0 );
 
         /// @copydoc RenderSystem::fireDeviceEvent
         void fireDeviceEvent( D3D11Device* device, const String & name, D3D11RenderWindowBase* sendingWindow = NULL);
@@ -353,9 +353,8 @@ namespace Ogre
          */
         void bindGpuProgramPassIterationParameters(GpuProgramType gptype);
 
-        void clearFrameBuffer(unsigned int buffers, 
-            const ColourValue& colour = ColourValue::Black, 
-            Real depth = 1.0f, unsigned short stencil = 0);
+        virtual void clearFrameBuffer( RenderPassDescriptor *renderPassDesc,
+                                       TextureGpu *anyTarget );
         void discardFrameBuffer( unsigned int buffers );
         void setClipPlane (ushort index, Real A, Real B, Real C, Real D);
         void enableClipPlane (ushort index, bool enable);

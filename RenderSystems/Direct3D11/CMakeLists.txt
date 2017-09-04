@@ -9,8 +9,18 @@
 
 # Configure Direct3D11 RenderSystem build
 
-file(GLOB HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/include/Vao/*.h" )
-file(GLOB SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/src/Vao/*.cpp" )
+file( GLOB HEADER_FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/Vao/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/Windowing/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/Windowing/WIN32/*.h"
+)
+file( GLOB SOURCE_FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/Vao/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/Windowing/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/Windowing/WIN32/*.cpp"
+)
 
 if(OGRE_CONFIG_ENABLE_QUAD_BUFFER_STEREO)
   include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${DirectX11_INCLUDE_DIR} ${AMDQBS_INCLUDE_DIR} ${NVAPI_INCLUDE_DIR})

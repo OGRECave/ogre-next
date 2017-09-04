@@ -219,6 +219,8 @@ namespace Ogre
 
         uint8 getNumColourEntries(void) const       { return mNumColourEntries; }
         bool requiresTextureFlipping(void) const    { return mRequiresTextureFlipping; }
+        /// Returns true if either Stencil is set, or if Depth is set with depth-stencil attachment.
+        bool hasStencilFormat(void) const;
     };
 
     /** @} */

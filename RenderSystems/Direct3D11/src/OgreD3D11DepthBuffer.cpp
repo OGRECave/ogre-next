@@ -170,13 +170,14 @@ namespace Ogre
     //---------------------------------------------------------------------
     ID3D11DepthStencilView* D3D11DepthBuffer::getDepthStencilView( uint8 viewportRenderTargetFlags )
     {
+#if TODO_OGRE_2_2
         if( viewportRenderTargetFlags & (VP_RTT_READ_ONLY_DEPTH|VP_RTT_READ_ONLY_STENCIL) )
         {
             if( !mDepthStencilView[1] )
                 createReadOnlySRV();
             return mDepthStencilView[1];
         }
-
+#endif
         return mDepthStencilView[0];
     }
     //---------------------------------------------------------------------

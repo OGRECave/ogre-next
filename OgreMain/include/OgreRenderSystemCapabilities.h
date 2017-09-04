@@ -217,7 +217,11 @@ namespace Ogre
         /// semanticsthat avoid loading from & storing contents of what's been
         /// drawn from the tiler's cache to RAM.
         RSC_IS_TILER = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 8),
-        RSC_CONST_BUFFER_SLOTS_IN_SHADER = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 9),
+        /// When RSC_IS_TILER is set, this variable being set means the stencil can
+        /// also be cleared like colour and depth in a tiler-fashion. Otherwise,
+        /// stencil is cleared as if GPU were a non-tiler.
+        RSC_TILER_CAN_CLEAR_STENCIL_REGION = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 9),
+        RSC_CONST_BUFFER_SLOTS_IN_SHADER = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 10),
 
         // ***** DirectX specific caps *****
         /// Is DirectX feature "per stage constants" supported

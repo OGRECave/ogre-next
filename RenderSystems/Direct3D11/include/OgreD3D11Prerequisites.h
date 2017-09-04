@@ -63,10 +63,10 @@ THE SOFTWARE.
 
 #undef NOMINMAX
 #define NOMINMAX // required to stop windows.h screwing up std::min definition
-#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT || OGRE_D3D11_PROFILING
-#include <d3d11_1.h>
+#if defined( _WIN32_WINNT_WIN8 ) || OGRE_COMPILER != OGRE_COMPILER_MSVC
+    #include <d3d11_1.h>
 #else
-#include <d3d11.h>
+    #include <d3d11.h>
 #endif
 
 #if __OGRE_WINRT_PHONE_80
