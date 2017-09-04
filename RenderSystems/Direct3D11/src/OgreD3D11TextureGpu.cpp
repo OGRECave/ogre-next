@@ -88,7 +88,7 @@ namespace Ogre
         if( isUav() )
             desc.BindFlags |= D3D11_BIND_UNORDERED_ACCESS;
 
-        if( mTextureType == TextureTypes::TypeCube ||mTextureType == TextureTypes::TypeCubeArray )
+        if( mTextureType == TextureTypes::TypeCube || mTextureType == TextureTypes::TypeCubeArray )
             desc.MiscFlags |= D3D11_RESOURCE_MISC_TEXTURECUBE;
         if( allowsAutoMipmaps() )
             desc.MiscFlags |= D3D11_RESOURCE_MISC_GENERATE_MIPS;
@@ -152,7 +152,7 @@ namespace Ogre
         if( isUav() )
             desc.BindFlags |= D3D11_BIND_UNORDERED_ACCESS;
 
-        if( mTextureType == TextureTypes::TypeCube ||mTextureType == TextureTypes::TypeCubeArray )
+        if( mTextureType == TextureTypes::TypeCube || mTextureType == TextureTypes::TypeCubeArray )
             desc.MiscFlags |= D3D11_RESOURCE_MISC_TEXTURECUBE;
         if( allowsAutoMipmaps() )
             desc.MiscFlags |= D3D11_RESOURCE_MISC_GENERATE_MIPS;
@@ -183,6 +183,14 @@ namespace Ogre
             //We just created the resolve texture. Must create the actual MSAA surface now.
             desc.SampleDesc.Count   = mMsaa;
             desc.SampleDesc.Quality = D3D11Mappings::get( mMsaaPattern );
+
+            //Reset bind flags. We won't bind it as SRV, allows more aggressive
+            //optimizations on AMD cards (DCC - Delta Color Compression since GCN 1.2)
+            if( PixelFormatGpuUtils::isDepth( mPixelFormat ) )
+                desc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+            else
+                desc.BindFlags = D3D11_BIND_RENDER_TARGET;
+            desc.MiscFlags = 0;
 
             texture = 0;
             hr = device->CreateTexture2D( &desc, 0, &texture );
