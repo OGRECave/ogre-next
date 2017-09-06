@@ -47,7 +47,7 @@ namespace Ogre {
         , mFormat( PF_UNKNOWN )
         , mDepthBufferPoolId( DepthBuffer::POOL_DEFAULT )
         , mPreferDepthTexture( false )
-        , mDesiredDepthBufferFormat( DepthBuffer::DefaultDepthBufferFormat )
+        , mDesiredDepthBufferFormat( PF_D24_UNORM_S8_UINT )
         , mDepthBuffer(0)
         , mActive(true)
         , mHwGamma(false)

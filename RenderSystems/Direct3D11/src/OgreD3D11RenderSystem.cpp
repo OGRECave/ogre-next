@@ -88,65 +88,6 @@ THE SOFTWARE.
 
 namespace Ogre 
 {
-#if 1
-    HRESULT WINAPI D3D11CreateDeviceN(
-        _In_opt_ IDXGIAdapter* pAdapter,
-        D3D_DRIVER_TYPE DriverType,
-        HMODULE Software,
-        UINT Flags,
-        /*_In_reads_opt_( FeatureLevels )*/ CONST D3D_FEATURE_LEVEL* pFeatureLevels,
-        UINT FeatureLevels,
-        UINT SDKVersion,
-        _Out_opt_ ID3D11DeviceN** ppDevice,
-        _Out_opt_ D3D_FEATURE_LEVEL* pFeatureLevel,
-        _Out_opt_ ID3D11DeviceContextN** ppImmediateContext )
-    {
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-        return D3D11CreateDevice(pAdapter, DriverType, Software, Flags, pFeatureLevels, FeatureLevels, SDKVersion, ppDevice, pFeatureLevel, ppImmediateContext);
-
-#elif OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-        ID3D11Device * device = NULL;
-        ID3D11DeviceContext * context = NULL;
-        ID3D11DeviceN * deviceN = NULL;
-        ID3D11DeviceContextN * contextN = NULL;
-        D3D_FEATURE_LEVEL featureLevel;
-
-        HRESULT hr = D3D11CreateDevice(pAdapter, DriverType, Software, Flags, pFeatureLevels, FeatureLevels, SDKVersion, 
-                                        (ppDevice ? &device : NULL), &featureLevel, (ppImmediateContext ? &context : NULL));
-        if(FAILED(hr)) goto bail;
-
-        hr = device ? device->QueryInterface(__uuidof(ID3D11DeviceN), (void **)&deviceN) : hr;
-        if(FAILED(hr)) goto bail;
-
-        hr = context ? context->QueryInterface(__uuidof(ID3D11DeviceContextN), (void **)&contextN) : hr;
-        if(FAILED(hr)) goto bail;
-
-        if(ppDevice)            { *ppDevice = deviceN; deviceN = NULL; }
-        if(pFeatureLevel)       { *pFeatureLevel = featureLevel; }
-        if(ppImmediateContext)  { *ppImmediateContext = contextN; contextN = NULL; }
-
-bail:
-        SAFE_RELEASE(deviceN);
-        SAFE_RELEASE(contextN);
-        SAFE_RELEASE(device);
-        SAFE_RELEASE(context);
-        return hr;
-#endif
-    }
-#else
-    HRESULT WINAPI D3D11CreateDeviceN(
-        IDXGIAdapter* pAdapter,
-        D3D_DRIVER_TYPE DriverType,
-        HMODULE Software,
-        UINT Flags,
-        /*_In_reads_opt_( FeatureLevels )*/ CONST D3D_FEATURE_LEVEL* pFeatureLevels,
-        UINT FeatureLevels,
-        UINT SDKVersion,
-        ID3D11DeviceN** ppDevice,
-        D3D_FEATURE_LEVEL* pFeatureLevel,
-        ID3D11DeviceContextN** ppImmediateContext );
-#endif
-
     //---------------------------------------------------------------------
     D3D11RenderSystem::D3D11RenderSystem()
         : mDevice(),
@@ -224,10 +165,13 @@ bail:
         return mDriverList;
     }
     //---------------------------------------------------------------------
-	ID3D11DeviceN* D3D11RenderSystem::createD3D11Device(D3D11Driver* d3dDriver, OGRE_D3D11_DRIVER_TYPE ogreDriverType,
-		D3D_FEATURE_LEVEL minFL, D3D_FEATURE_LEVEL maxFL, D3D_FEATURE_LEVEL* pFeatureLevel)
+    void D3D11RenderSystem::createD3D11Device( D3D11Driver* d3dDriver, OGRE_D3D11_DRIVER_TYPE ogreDriverType,
+                                               D3D_FEATURE_LEVEL minFL, D3D_FEATURE_LEVEL maxFL,
+                                               D3D_FEATURE_LEVEL* pFeatureLevel,
+                                               ID3D11DeviceN **outDevice, ID3D11Device1 **outDevice1 )
 	{
-		IDXGIAdapterN* pAdapter = (d3dDriver && ogreDriverType == DT_HARDWARE) ? d3dDriver->getDeviceAdapter() : NULL;
+        IDXGIAdapterN* pAdapter = (d3dDriver && ogreDriverType == DT_HARDWARE) ?
+                                      d3dDriver->getDeviceAdapter() : NULL;
 
 		D3D_DRIVER_TYPE driverType = D3D_DRIVER_TYPE_UNKNOWN;
 		switch(ogreDriverType)
@@ -235,8 +179,8 @@ bail:
 		case DT_HARDWARE:
 			if(d3dDriver == NULL)
 				driverType = D3D_DRIVER_TYPE_HARDWARE;
-			else if(0 == wcscmp(d3dDriver->getAdapterIdentifier().Description, L"NVIDIA PerfHUD"))
-					driverType = D3D_DRIVER_TYPE_REFERENCE;
+            else if( 0 == wcscmp(d3dDriver->getAdapterIdentifier().Description, L"NVIDIA PerfHUD") )
+                driverType = D3D_DRIVER_TYPE_REFERENCE;
 			break;
 		case DT_SOFTWARE:
 			driverType = D3D_DRIVER_TYPE_SOFTWARE;
@@ -252,19 +196,21 @@ bail:
 		// This flag is required in order to enable compatibility with Direct2D.
 		deviceFlags |= D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 #endif
-		if(OGRE_DEBUG_MODE && !IsWorkingUnderNsight() && D3D11Device::D3D_NO_EXCEPTION != D3D11Device::getExceptionsErrorLevel())
+        if( OGRE_DEBUG_MODE && !IsWorkingUnderNsight() &&
+            D3D11Device::D3D_NO_EXCEPTION != D3D11Device::getExceptionsErrorLevel() )
 		{
 			deviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 		}
-		if(!OGRE_THREAD_SUPPORT)
-		{
-			deviceFlags |= D3D11_CREATE_DEVICE_SINGLETHREADED;
-		}
+        if( !OGRE_THREAD_SUPPORT )
+            deviceFlags |= D3D11_CREATE_DEVICE_SINGLETHREADED;
 
 		// determine feature levels
-		D3D_FEATURE_LEVEL requestedLevels[] = {
-#if !__OGRE_WINRT_PHONE // Windows Phone support only FL 9.3, but simulator can create much more capable device, so restrict it artificially here
-#if defined(_WIN32_WINNT_WIN8) && _WIN32_WINNT >= _WIN32_WINNT_WIN8
+        D3D_FEATURE_LEVEL requestedLevels[] =
+        {
+            // Windows Phone support only FL 9.3, but simulator can create
+            // much more capable device, so restrict it artificially here
+#if !__OGRE_WINRT_PHONE
+#if defined( _WIN32_WINNT_WIN8 )
 			D3D_FEATURE_LEVEL_11_1,
 #endif
 			D3D_FEATURE_LEVEL_11_0,
@@ -276,40 +222,80 @@ bail:
 			D3D_FEATURE_LEVEL_9_1
 		};
 
-		D3D_FEATURE_LEVEL *pFirstFL = requestedLevels, *pLastFL = pFirstFL + ARRAYSIZE(requestedLevels) - 1;
-		for(unsigned int i = 0; i < ARRAYSIZE(requestedLevels); i++)
+        D3D_FEATURE_LEVEL *pFirstFL = requestedLevels;
+        D3D_FEATURE_LEVEL *pLastFL  = pFirstFL + ARRAYSIZE(requestedLevels) - 1;
+        for( size_t i = 0; i <ARRAYSIZE(requestedLevels); ++i )
 		{
-			if(minFL == requestedLevels[i])
-				pLastFL = &requestedLevels[i];
-			if(maxFL == requestedLevels[i])
-				pFirstFL = &requestedLevels[i];
+            if( minFL == requestedLevels[i] )
+                pLastFL = &requestedLevels[i];
+            if( maxFL == requestedLevels[i] )
+                pFirstFL = &requestedLevels[i];
 		}
-		if(pLastFL < pFirstFL)
+        if( pLastFL < pFirstFL )
 		{
-			OGRE_EXCEPT(Exception::ERR_INTERNAL_ERROR,
-				"Requested min level feature is bigger the requested max level feature.",
-				"D3D11RenderSystem::initialise");
+            OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR,
+                         "Requested min level feature is bigger the requested max level feature.",
+                         "D3D11RenderSystem::initialise" );
 		}
 
 		// create device
-		ID3D11DeviceN* device = NULL;
-		HRESULT hr = D3D11CreateDeviceN(pAdapter, driverType, NULL, deviceFlags, pFirstFL, pLastFL - pFirstFL + 1, D3D11_SDK_VERSION, &device, pFeatureLevel, 0);
+        ID3D11Device *device = NULL;
+        HRESULT hr = D3D11CreateDevice( pAdapter, driverType, NULL, deviceFlags, pFirstFL,
+                                        pLastFL - pFirstFL + 1u, D3D11_SDK_VERSION,
+                                        &device, pFeatureLevel, NULL );
 
-		if(FAILED(hr) && 0 != (deviceFlags & D3D11_CREATE_DEVICE_DEBUG))
+#if defined( _WIN32_WINNT_WIN8 )
+        if ( hr == E_INVALIDARG && *pFirstFL == D3D_FEATURE_LEVEL_11_1 )
+        {
+            StringStream error;
+            error << "Failed to create Direct3D 11.1 device(" << hr <<
+                     ")\nRetrying asking for 11.0 device";
+            Ogre::LogManager::getSingleton().logMessage( error.str() );
+
+            pFirstFL= pFirstFL + 1u;
+            pLastFL = pLastFL - 1u;
+            if( pFirstFL > pLastFL )
+            {
+                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                             "Direct3D 11.1 not supported. If you're on Windows Vista or Windows 7, "
+                             "try installing the KB2670838 update",
+                             "D3D11RenderSystem::initialise" );
+            }
+
+            // DirectX 11.0 platforms will not recognize D3D_FEATURE_LEVEL_11_1
+            // so we need to retry without it
+            hr = D3D11CreateDevice( pAdapter, driverType, NULL, deviceFlags, pFirstFL,
+                                    pLastFL - pFirstFL + 1u, D3D11_SDK_VERSION,
+                                    &device, pFeatureLevel, NULL );
+        }
+#endif
+
+        if( FAILED(hr) && 0 != (deviceFlags & D3D11_CREATE_DEVICE_DEBUG) )
 		{
 			StringStream error;
-			error << "Failed to create Direct3D11 device with debug layer (" << hr << ")\nRetrying without debug layer.";
-			Ogre::LogManager::getSingleton().logMessage(error.str());
+            error << "Failed to create Direct3D11 device with debug layer (" << hr <<
+                     ")\nRetrying without debug layer.";
+            Ogre::LogManager::getSingleton().logMessage( error.str() );
 
 			// create device - second attempt, without debug layer
 			deviceFlags &= ~D3D11_CREATE_DEVICE_DEBUG;
-			hr = D3D11CreateDeviceN(pAdapter, driverType, NULL, deviceFlags, pFirstFL, pLastFL - pFirstFL + 1, D3D11_SDK_VERSION, &device, pFeatureLevel, 0);
+            hr = D3D11CreateDevice( pAdapter, driverType, NULL, deviceFlags, pFirstFL,
+                                    pLastFL - pFirstFL + 1u, D3D11_SDK_VERSION,
+                                    &device, pFeatureLevel, NULL );
 		}
-		if(FAILED(hr))
+
+        if( FAILED(hr) )
 		{
-			OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr, "Failed to create Direct3D11 device", "D3D11RenderSystem::D3D11RenderSystem");
+            OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
+                            "Failed to create Direct3D11 device",
+                            "D3D11RenderSystem::D3D11RenderSystem" );
 		}
-		return device;
+
+        *outDevice = device;
+        *outDevice1 = 0;
+
+        hr = device->QueryInterface( __uuidof(ID3D11Device1),
+                                     reinterpret_cast<void**>(outDevice1) );
 	}
     //---------------------------------------------------------------------
     void D3D11RenderSystem::initConfigOptions()
@@ -685,7 +671,11 @@ bail:
         if (driver)
         {
             it = mOptions.find("Video Mode");
-            ID3D11DeviceN* device = createD3D11Device(driver, mDriverType, mMinRequestedFeatureLevel, mMaxRequestedFeatureLevel, NULL);
+            ID3D11DeviceN *device = 0;
+            ID3D11Device1 *device1 = 0;
+            createD3D11Device( driver, mDriverType,
+                               mMinRequestedFeatureLevel, mMaxRequestedFeatureLevel,
+                               NULL, &device, &device1 );
             D3D11VideoMode* videoMode = driver->getVideoModeList()->item(it->second.currentValue); // Could be NULL if working over RDP/Simulator
             DXGI_FORMAT format = videoMode ? videoMode->getFormat() : DXGI_FORMAT_R8G8B8A8_UNORM;
             UINT numLevels = 0;
@@ -716,6 +706,7 @@ bail:
                 }
             }
             SAFE_RELEASE(device);
+            SAFE_RELEASE(device1);
         }
 
         if(optFSAA->possibleValues.empty())
@@ -863,7 +854,11 @@ bail:
             if(D3D11Driver* d3dDriverOverride = (mDriverType == DT_HARDWARE && mUseNVPerfHUD) ? getDirect3DDrivers()->item("NVIDIA PerfHUD") : NULL)
                 d3dDriver = d3dDriverOverride;
 
-            ID3D11DeviceN * device = createD3D11Device(d3dDriver, mDriverType, mMinRequestedFeatureLevel, mMaxRequestedFeatureLevel, &mFeatureLevel);
+            ID3D11DeviceN *device = 0;
+            ID3D11Device1 *device1 = 0;
+            createD3D11Device( d3dDriver, mDriverType,
+                               mMinRequestedFeatureLevel, mMaxRequestedFeatureLevel,
+                               &mFeatureLevel, &device, &device1 );
 
             IDXGIDeviceN * pDXGIDevice;
             device->QueryInterface(__uuidof(IDXGIDeviceN), (void **)&pDXGIDevice);
@@ -900,7 +895,7 @@ bail:
             SAFE_RELEASE(pDXGIAdapter);
             SAFE_RELEASE(pDXGIDevice);
 
-            mDevice.TransferOwnership(device) ;
+            mDevice.TransferOwnership( device, device1 ) ;
 
             //On AMD's GCN cards, there is no performance or memory difference between
             //PF_D24_UNORM_S8_UINT & PF_D32_FLOAT_X24_S8_UINT, so prefer the latter
@@ -908,7 +903,7 @@ bail:
             //NVIDIA's preference? Dunno, they don't tell. But at least the quality
             //will be consistent.
             if( mFeatureLevel >= D3D_FEATURE_LEVEL_11_0 )
-                DepthBuffer::DefaultDepthBufferFormat = PF_D32_FLOAT_X24_S8_UINT;
+                DepthBuffer::DefaultDepthBufferFormat = PFG_D32_FLOAT_S8X24_UINT;
         }
 
         if( autoCreateWindow )
@@ -1166,7 +1161,6 @@ bail:
 
 		return win;
 	}
-
     //---------------------------------------------------------------------
     void D3D11RenderSystem::fireDeviceEvent(D3D11Device* device, const String & name, D3D11RenderWindowBase* sendingWindow /* = NULL */)
     {
@@ -1601,7 +1595,7 @@ bail:
     //-----------------------------------------------------------------------------------
     RenderPassDescriptor* D3D11RenderSystem::createRenderPassDescriptor(void)
     {
-        RenderPassDescriptor *retVal = OGRE_NEW D3D11RenderPassDescriptor( this );
+        RenderPassDescriptor *retVal = OGRE_NEW D3D11RenderPassDescriptor( mDevice, this );
         mRenderPassDescs.insert( retVal );
         return retVal;
     }
@@ -1678,7 +1672,7 @@ bail:
         scissorRc.bottom= scissorRc.bottom + mCurrentRenderViewport.getScissorActualHeight();
         context->RSSetScissorRects( 1u, &scissorRc );
 
-        newPassDesc->performLoadActions( mCurrentRenderViewport, entriesToFlush );
+        newPassDesc->performLoadActions( &mCurrentRenderViewport, entriesToFlush );
     }
     //-----------------------------------------------------------------------------------
     void D3D11RenderSystem::endRenderPassDescriptor(void)
@@ -1704,10 +1698,7 @@ bail:
             //GeForce 8 & 9 series are faster using 24-bit depth buffers. Likely
             //other HW from that era has the same issue. Assume D3D10.1 is old
             //HW that prefers 24-bit.
-            if( mFeatureLevel > D3D_FEATURE_LEVEL_10_1 )
-                depthBufferFormat = PFG_D32_FLOAT_S8X24_UINT;
-            else
-                depthBufferFormat = PFG_D24_UNORM_S8_UINT;
+            depthBufferFormat = DepthBuffer::DefaultDepthBufferFormat;
         }
 
         return RenderSystem::createDepthBufferFor( colourTexture, preferDepthTexture,
@@ -4689,8 +4680,12 @@ bail:
         ZeroMemory(mTexStageDesc, OGRE_MAX_TEXTURE_LAYERS * sizeof(sD3DTextureStageDesc));
         mReadBackAsTexture = false;
 
-        ID3D11DeviceN * device = createD3D11Device(NULL, DT_HARDWARE, mMinRequestedFeatureLevel, mMaxRequestedFeatureLevel, 0);
-        mDevice.TransferOwnership(device);
+        ID3D11DeviceN *device = 0;
+        ID3D11Device1 *device1 = 0;
+        createD3D11Device( NULL, DT_HARDWARE,
+                           mMinRequestedFeatureLevel, mMaxRequestedFeatureLevel, 0,
+                           &device, &device1 );
+        mDevice.TransferOwnership( device, device1 );
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::getCustomAttribute(const String& name, void* pData)

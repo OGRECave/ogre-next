@@ -619,21 +619,6 @@ namespace Ogre {
             mShaderManager->setSaveMicrocodesToCache(true);
         }
 
-        if( mGLSupport->hasMinGLVersion( 4, 3 ) )
-        {
-            //On AMD's GCN cards, there is no performance or memory difference between
-            //PF_D24_UNORM_S8_UINT & PF_D32_FLOAT_X24_S8_UINT, so prefer the latter
-            //on modern cards (GL >= 4.3) and that also claim to support this format.
-            //NVIDIA's preference? Dunno, they don't tell. But at least the quality
-            //will be consistent.
-            GLenum depthFormat, stencilFormat;
-            static_cast<GL3PlusFBOManager*>(mRTTManager)->getBestDepthStencil( PF_D32_FLOAT_X24_S8_UINT,
-                                                                               PF_D32_FLOAT_X24_S8_UINT,
-                                                                               &depthFormat,
-                                                                               &stencilFormat );
-            DepthBuffer::DefaultDepthBufferFormat = PF_D32_FLOAT_X24_S8_UINT;
-        }
-
         mGLInitialised = true;
     }
 
@@ -815,6 +800,16 @@ namespace Ogre {
             // use real capabilities if custom capabilities are not available
             if (!mUseCustomCapabilities)
                 mCurrentCapabilities = mRealCapabilities;
+
+            //On AMD's GCN cards, there is no performance or memory difference between
+            //PF_D24_UNORM_S8_UINT & PF_D32_FLOAT_X24_S8_UINT, so prefer the latter
+            //on modern cards (GL >= 4.3) and that also claim to support this format.
+            //NVIDIA's preference? Dunno, they don't tell. But at least the quality
+            //will be consistent.
+            if( mDriverVersion.hasMinVersion( 4, 0 ) )
+                DepthBuffer::DefaultDepthBufferFormat = PFG_D32_FLOAT_S8X24_UINT;
+            else
+                DepthBuffer::DefaultDepthBufferFormat = PFG_D24_UNORM_S8_UINT;
 
             mTextureGpuManager = OGRE_NEW GL3PlusTextureGpuManager( mVaoManager, *mGLSupport );
 
@@ -1020,10 +1015,7 @@ namespace Ogre {
             //GeForce 8 & 9 series are faster using 24-bit depth buffers. Likely
             //other HW from that era has the same issue. Assume GL <4.0 is old
             //HW that prefers 24-bit.
-            if( mDriverVersion.hasMinVersion( 4, 0 ) )
-                depthBufferFormat = PFG_D32_FLOAT_S8X24_UINT;
-            else
-                depthBufferFormat = PFG_D24_UNORM_S8_UINT;
+            depthBufferFormat = DepthBuffer::DefaultDepthBufferFormat;
         }
 
         return RenderSystem::createDepthBufferFor( colourTexture, preferDepthTexture,

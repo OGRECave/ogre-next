@@ -79,8 +79,10 @@ namespace Ogre
         bool mUseNVPerfHUD;
 		int mSwitchingFullscreenCounter;	// Are we switching from windowed to fullscreen 
 
-        static ID3D11DeviceN* createD3D11Device(D3D11Driver* d3dDriver, OGRE_D3D11_DRIVER_TYPE driverType,
-                         D3D_FEATURE_LEVEL minFL, D3D_FEATURE_LEVEL maxFL, D3D_FEATURE_LEVEL* pFeatureLevel);
+        static void createD3D11Device( D3D11Driver* d3dDriver, OGRE_D3D11_DRIVER_TYPE driverType,
+                                       D3D_FEATURE_LEVEL minFL, D3D_FEATURE_LEVEL maxFL,
+                                       D3D_FEATURE_LEVEL* pFeatureLevel,
+                                       ID3D11DeviceN **outDevice, ID3D11Device1 **outDevice1 );
 
         D3D11DriverList* getDirect3DDrivers(void);
         void refreshD3DSettings(void);

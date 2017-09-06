@@ -32,7 +32,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    PixelFormat DepthBuffer::DefaultDepthBufferFormat = PF_D24_UNORM_S8_UINT;
+    PixelFormatGpu DepthBuffer::DefaultDepthBufferFormat = PFG_D24_UNORM_S8_UINT;
 
     DepthBuffer::DepthBuffer( uint16 poolId, uint16 bitDepth, uint32 width, uint32 height,
                               uint32 fsaa, const String &fsaaHint, PixelFormat pixelFormat,

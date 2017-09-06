@@ -34,7 +34,9 @@ namespace Ogre
     //---------------------------------------------------------------------
     D3D11Device::D3D11Device()
         : mD3D11Device(NULL)
+        , mD3D11Device1(NULL)
         , mImmediateContext(NULL)
+        , mImmediateContext1(NULL)
         , mClassLinkage(NULL)
         , mInfoQueue(NULL)
 #if OGRE_D3D11_PROFILING
@@ -61,6 +63,7 @@ namespace Ogre
 #endif
         SAFE_RELEASE(mInfoQueue);
         SAFE_RELEASE(mClassLinkage);
+        SAFE_RELEASE(mImmediateContext1);
         SAFE_RELEASE(mImmediateContext);
 
         /*
@@ -76,10 +79,11 @@ namespace Ogre
             }
         }*/
 
+        SAFE_RELEASE(mD3D11Device1);
         SAFE_RELEASE(mD3D11Device);
     }
     //---------------------------------------------------------------------
-    void D3D11Device::TransferOwnership(ID3D11DeviceN* d3d11device)
+    void D3D11Device::TransferOwnership( ID3D11DeviceN* d3d11device, ID3D11Device1 *device1 )
     {
         assert(mD3D11Device != d3d11device);
         ReleaseAll();
@@ -89,12 +93,11 @@ namespace Ogre
             HRESULT hr = S_OK;
 
             mD3D11Device = d3d11device;
+            mD3D11Device1= device1;
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
             mD3D11Device->GetImmediateContext(&mImmediateContext);
-#elif OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-            mD3D11Device->GetImmediateContext1(&mImmediateContext);
-#endif
+            if( mD3D11Device1 )
+                mD3D11Device1->GetImmediateContext1(&mImmediateContext1);
 
 #if OGRE_D3D11_PROFILING
             hr = mImmediateContext->QueryInterface(__uuidof(ID3DUserDefinedAnnotation), (LPVOID*)&mPerf);

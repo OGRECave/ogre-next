@@ -37,7 +37,9 @@ namespace Ogre
     {
     private:
         ID3D11DeviceN*             mD3D11Device;
+        ID3D11Device1*             mD3D11Device1;
         ID3D11DeviceContextN*      mImmediateContext;
+        ID3D11DeviceContext1*      mImmediateContext1;
         ID3D11ClassLinkage*        mClassLinkage;
         ID3D11InfoQueue*           mInfoQueue;
 #if OGRE_D3D11_PROFILING
@@ -51,11 +53,12 @@ namespace Ogre
         ~D3D11Device();
 
         void ReleaseAll();
-        void TransferOwnership(ID3D11DeviceN* device);
+        void TransferOwnership( ID3D11DeviceN* device, ID3D11Device1* device1 );
 
         bool isNull()                                { return mD3D11Device == 0; }
         ID3D11DeviceN* get()                         { return mD3D11Device; }
         ID3D11DeviceContextN* GetImmediateContext()  { return mImmediateContext; }
+        ID3D11DeviceContext1* GetImmediateContext1() { return mImmediateContext1; }
         ID3D11ClassLinkage* GetClassLinkage()        { return mClassLinkage; }
 #if OGRE_D3D11_PROFILING
         ID3DUserDefinedAnnotation* GetProfiler()     { return mPerf; }

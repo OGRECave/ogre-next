@@ -30,6 +30,7 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 #include "OgrePixelFormat.h"
+#include "OgrePixelFormatGpu.h"
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
@@ -162,7 +163,7 @@ namespace Ogre
         */
         virtual void _notifyRenderTargetDetached( RenderTarget *renderTarget );
 
-        static PixelFormat DefaultDepthBufferFormat;
+        static PixelFormatGpu DefaultDepthBufferFormat;
 
     protected:
         typedef set<RenderTarget*>::type RenderTargetSet;
