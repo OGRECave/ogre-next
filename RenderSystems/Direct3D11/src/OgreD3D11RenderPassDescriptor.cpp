@@ -554,16 +554,16 @@ namespace Ogre
     void D3D11RenderPassDescriptor::clearFrameBuffer(void)
     {
         ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
-        const size_t numColourEntries = renderPassDesc->getNumColourEntries();
+        const size_t numColourEntries = mNumColourEntries;
         for( size_t i=0; i<numColourEntries; ++i )
         {
             if( mColour[i].loadAction == LoadAction::Clear )
             {
                 FLOAT clearValue[4];
-                clearValue[0] = renderPassDesc->mColour[i].clearColour.r;
-                clearValue[1] = renderPassDesc->mColour[i].clearColour.g;
-                clearValue[2] = renderPassDesc->mColour[i].clearColour.b;
-                clearValue[3] = renderPassDesc->mColour[i].clearColour.a;
+                clearValue[0] = mColour[i].clearColour.r;
+                clearValue[1] = mColour[i].clearColour.g;
+                clearValue[2] = mColour[i].clearColour.b;
+                clearValue[3] = mColour[i].clearColour.a;
                 context->ClearRenderTargetView( mColourRtv[i], clearValue );
             }
         }

@@ -542,6 +542,7 @@ namespace Ogre {
     void RenderSystem::endRenderPassDescriptor(void)
     {
         mCurrentRenderPassDescriptor = 0;
+        mCurrentRenderViewport.setDimensions( 0, Vector4::ZERO, Vector4::ZERO );
     }
     //---------------------------------------------------------------------
     TextureGpu* RenderSystem::createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,

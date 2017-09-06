@@ -576,4 +576,43 @@ namespace Ogre
             }
         }
     }
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    D3D11TextureGpuRenderTarget::D3D11TextureGpuRenderTarget(
+            GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+            VaoManager *vaoManager, IdString name, uint32 textureFlags,
+            TextureTypes::TextureTypes initialType,
+            TextureGpuManager *textureManager ) :
+        D3D11TextureGpu( pageOutStrategy, vaoManager, name,
+                         textureFlags, initialType, textureManager ),
+        mDepthBufferPoolId( 1u ),
+        mPreferDepthTexture( false ),
+        mDesiredDepthBufferFormat( PFG_UNKNOWN )
+    {
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11TextureGpuRenderTarget::_setDepthBufferDefaults(
+            uint16 depthBufferPoolId, bool preferDepthTexture, PixelFormatGpu desiredDepthBufferFormat )
+    {
+        assert( isRenderToTexture() );
+        mDepthBufferPoolId          = depthBufferPoolId;
+        mPreferDepthTexture         = preferDepthTexture;
+        mDesiredDepthBufferFormat   = desiredDepthBufferFormat;
+    }
+    //-----------------------------------------------------------------------------------
+    uint16 D3D11TextureGpuRenderTarget::getDepthBufferPoolId(void) const
+    {
+        return mDepthBufferPoolId;
+    }
+    //-----------------------------------------------------------------------------------
+    bool D3D11TextureGpuRenderTarget::getPreferDepthTexture(void) const
+    {
+        return mPreferDepthTexture;
+    }
+    //-----------------------------------------------------------------------------------
+    PixelFormatGpu D3D11TextureGpuRenderTarget::getDesiredDepthBufferFormat(void) const
+    {
+        return mDesiredDepthBufferFormat;
+    }
 }

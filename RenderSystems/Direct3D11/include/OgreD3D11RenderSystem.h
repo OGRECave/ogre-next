@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "OgreD3D11Prerequisites.h"
 #include "OgreRenderSystem.h"
 #include "OgreD3D11Device.h"
+#include "OgreD3D11RenderPassDescriptor.h"
 #include "OgreD3D11Mappings.h"
 #include "OgreD3D11PixelFormatToShaderType.h"
 
@@ -167,6 +168,7 @@ namespace Ogre
         size_t     mLastTextureUnitState;
 		bool       mSamplerStatesChanged;
 
+        FrameBufferDescMap mFrameBufferDescMap;
 
 
         /// Primary window, the one used to create the device
@@ -226,6 +228,19 @@ namespace Ogre
         RenderTexture * createRenderTexture( const String & name, unsigned int width, unsigned int height,
             TextureType texType = TEX_TYPE_2D, PixelFormat internalFormat = PF_X8R8G8B8, 
             const NameValuePairList *miscParams = 0 ); 
+
+        virtual FrameBufferDescMap& _getFrameBufferDescMap(void)        { return mFrameBufferDescMap; }
+        virtual RenderPassDescriptor* createRenderPassDescriptor(void);
+        virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc,
+                                                TextureGpu *anyTarget,
+                                                const Vector4 &viewportSize,
+                                                const Vector4 &scissors,
+                                                bool overlaysEnabled,
+                                                bool warnIfRtvWasFlushed );
+        virtual void endRenderPassDescriptor(void);
+
+        TextureGpu* createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
+                                          PixelFormatGpu depthBufferFormat );
 
         /// @copydoc RenderSystem::createMultiRenderTarget
         virtual MultiRenderTarget * createMultiRenderTarget(const String & name);

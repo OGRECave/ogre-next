@@ -189,8 +189,19 @@ namespace Ogre
             GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
             IdString name, uint32 textureFlags, TextureTypes::TextureTypes initialType )
     {
-        return OGRE_NEW D3D11TextureGpu( pageOutStrategy, mVaoManager, name,
-                                         textureFlags, initialType, this );
+        D3D11TextureGpu *retVal = 0;
+        if( textureFlags & TextureFlags::RenderToTexture )
+        {
+            retVal = OGRE_NEW D3D11TextureGpuRenderTarget( pageOutStrategy, mVaoManager, name,
+                                                           textureFlags, initialType, this );
+        }
+        else
+        {
+            retVal = OGRE_NEW D3D11TextureGpu( pageOutStrategy, mVaoManager, name,
+                                               textureFlags, initialType, this );
+        }
+
+        return retVal;
     }
     //-----------------------------------------------------------------------------------
     StagingTexture* D3D11TextureGpuManager::createStagingTextureImpl( uint32 width, uint32 height,

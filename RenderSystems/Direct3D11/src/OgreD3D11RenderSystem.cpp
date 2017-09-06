@@ -157,12 +157,12 @@ bail:
           mMaxBoundUavCS( 0 ),
           mCurrentVertexBuffer( 0 ),
           mCurrentIndexBuffer( 0 ),
-          mpDXGIFactory(0),
           mNumberOfViews( 0 ),
           mDepthStencilView( 0 ),
           mMaxModifiedUavPlusOne( 0 ),
           mUavsDirty( false ),
-          mDSTResView(0)
+          mDSTResView(0),
+          mpDXGIFactory( 0 )
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
 		 ,mStereoDriver(NULL)
 #endif	
@@ -1597,6 +1597,121 @@ bail:
     bool D3D11RenderSystem::_checkTextureFilteringSupported(TextureType ttype, PixelFormat format, int usage)
     {
         return true;
+    }
+    //-----------------------------------------------------------------------------------
+    RenderPassDescriptor* D3D11RenderSystem::createRenderPassDescriptor(void)
+    {
+        RenderPassDescriptor *retVal = OGRE_NEW D3D11RenderPassDescriptor( this );
+        mRenderPassDescs.insert( retVal );
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11RenderSystem::beginRenderPassDescriptor( RenderPassDescriptor *desc,
+                                                       TextureGpu *anyTarget,
+                                                       const Vector4 &viewportSize,
+                                                       const Vector4 &scissors,
+                                                       bool overlaysEnabled,
+                                                       bool warnIfRtvWasFlushed )
+    {
+        if( desc->mInformationOnly && desc->hasSameAttachments( desc ) )
+            return;
+
+        const int oldWidth = mCurrentRenderViewport.getActualWidth();
+        const int oldHeight = mCurrentRenderViewport.getActualHeight();
+        const int oldX = mCurrentRenderViewport.getActualLeft();
+        const int oldY = mCurrentRenderViewport.getActualTop();
+
+        D3D11RenderPassDescriptor *currPassDesc =
+                static_cast<D3D11RenderPassDescriptor*>( mCurrentRenderPassDescriptor );
+
+        RenderSystem::beginRenderPassDescriptor( desc, anyTarget, viewportSize, scissors,
+                                                 overlaysEnabled, warnIfRtvWasFlushed );
+
+        int x, y, w, h;
+
+        // Calculate the new "lower-left" corner of the viewport to compare with the old one
+        w = mCurrentRenderViewport.getActualWidth();
+        h = mCurrentRenderViewport.getActualHeight();
+        x = mCurrentRenderViewport.getActualLeft();
+        y = mCurrentRenderViewport.getActualTop();
+
+        ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
+
+        const bool vpChanged = oldX != x || oldY != y || oldWidth != w || oldHeight != h;
+
+        D3D11RenderPassDescriptor *newPassDesc =
+                static_cast<D3D11RenderPassDescriptor*>( desc );
+
+        //Determine whether:
+        //  1. We need to store current active RenderPassDescriptor
+        //  2. We need to perform clears when loading the new RenderPassDescriptor
+        uint32 entriesToFlush = 0;
+        if( currPassDesc )
+        {
+            entriesToFlush = currPassDesc->willSwitchTo( newPassDesc, vpChanged, warnIfRtvWasFlushed );
+
+            if( entriesToFlush != 0 )
+                currPassDesc->performStoreActions( oldX, oldY, oldWidth, oldHeight, entriesToFlush );
+        }
+        else
+        {
+            entriesToFlush = RenderPassDescriptor::All;
+        }
+
+        if( vpChanged )
+        {
+            D3D11_VIEWPORT d3dViewport;
+            d3dViewport.TopLeftX= mCurrentRenderViewport.getActualLeft();
+            d3dViewport.TopLeftY= mCurrentRenderViewport.getActualTop();
+            d3dViewport.Width   = mCurrentRenderViewport.getActualWidth();
+            d3dViewport.Height  = mCurrentRenderViewport.getActualHeight();
+            d3dViewport.MinDepth= 0.0f;
+            d3dViewport.MaxDepth= 1.0f;
+            context->RSSetViewports( 1u, &d3dViewport );
+        }
+
+        // Configure the viewport clipping
+        D3D11_RECT scissorRc;
+        scissorRc.left  = mCurrentRenderViewport.getScissorActualLeft();
+        scissorRc.top   = mCurrentRenderViewport.getScissorActualTop();
+        scissorRc.right = scissorRc.left + mCurrentRenderViewport.getScissorActualWidth();
+        scissorRc.bottom= scissorRc.bottom + mCurrentRenderViewport.getScissorActualHeight();
+        context->RSSetScissorRects( 1u, &scissorRc );
+
+        newPassDesc->performLoadActions( mCurrentRenderViewport, entriesToFlush );
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11RenderSystem::endRenderPassDescriptor(void)
+    {
+        uint32 x, y, w, h;
+        w = mCurrentRenderViewport.getActualWidth();
+        h = mCurrentRenderViewport.getActualHeight();
+        x = mCurrentRenderViewport.getActualLeft();
+        y = mCurrentRenderViewport.getActualTop();
+
+        D3D11RenderPassDescriptor *passDesc =
+                static_cast<D3D11RenderPassDescriptor*>( mCurrentRenderPassDescriptor );
+        passDesc->performStoreActions( x, y, w, h, RenderPassDescriptor::All );
+
+        RenderSystem::endRenderPassDescriptor();
+    }
+    //-----------------------------------------------------------------------------------
+    TextureGpu* D3D11RenderSystem::createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
+                                                         PixelFormatGpu depthBufferFormat )
+    {
+        if( depthBufferFormat == PFG_UNKNOWN )
+        {
+            //GeForce 8 & 9 series are faster using 24-bit depth buffers. Likely
+            //other HW from that era has the same issue. Assume D3D10.1 is old
+            //HW that prefers 24-bit.
+            if( mFeatureLevel > D3D_FEATURE_LEVEL_10_1 )
+                depthBufferFormat = PFG_D32_FLOAT_S8X24_UINT;
+            else
+                depthBufferFormat = PFG_D24_UNORM_S8_UINT;
+        }
+
+        return RenderSystem::createDepthBufferFor( colourTexture, preferDepthTexture,
+                                                   depthBufferFormat );
     }
     //-----------------------------------------------------------------------
     MultiRenderTarget * D3D11RenderSystem::createMultiRenderTarget(const String & name)

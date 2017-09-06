@@ -101,7 +101,20 @@ namespace Ogre {
     void Viewport::_updateDimensions(void)
     {
         if( !mCurrentTarget )
+        {
+            mActLeft    = 0;
+            mActTop     = 0;
+            mActWidth   = 0;
+            mActHeight  = 0;
+            mScissorActLeft     = 0;
+            mScissorActTop      = 0;
+            mScissorActWidth    = 0;
+            mScissorActHeight   = 0;
+
+            mScissorsMatchViewport = true;
+            mCoversEntireTarget = true;
             return;
+        }
         Real height = (Real) mCurrentTarget->getHeight();
         Real width = (Real) mCurrentTarget->getWidth();
 
