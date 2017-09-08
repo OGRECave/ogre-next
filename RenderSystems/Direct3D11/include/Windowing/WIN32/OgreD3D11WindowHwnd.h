@@ -48,13 +48,21 @@ namespace Ogre
         static BOOL CALLBACK createMonitorsInfoEnumProc( HMONITOR hMonitor, HDC hdcMonitor,
                                                          LPRECT lprcMonitor, LPARAM dwData );
 
+        void updateViewportsDimensions(void);
+        void updateWindowRect(void);
         void adjustWindow( uint32 clientWidth, uint32 clientHeight,
                            uint32 *outDrawableWidth, uint32 *outDrawableHeight );
 
+        template <typename T>
+        void setCommonSwapChain( T &sd );
         void createSwapChain(void);
+        void resizeSwapChainBuffers( uint32 width, uint32 height );
+
 
         void create( bool fullscreenMode, const NameValuePairList *miscParams );
         void destroy(void);
+
+        uint8 getBufferCount(void) const;
 
     public:
         D3D11WindowHwnd( const String &title, uint32 width, uint32 height,
@@ -62,6 +70,20 @@ namespace Ogre
                          const NameValuePairList *miscParams,
                          D3D11Device &device, IDXGIFactoryN *pDXGIFactory );
         virtual ~D3D11WindowHwnd();
+
+        virtual void reposition( int32 left, int32 top );
+        virtual void requestResolution( uint32 width, uint32 height );
+        virtual void requestFullscreenSwitch( bool goFullscreen, bool borderless, uint32 monitorIdx,
+                                              uint32 width, uint32 height,
+                                              uint32 frequencyNumerator, uint32 frequencyDenominator );
+
+        bool isClosed(void) const;
+        virtual void _setVisible( bool visible );
+        virtual bool isVisible(void) const;
+        virtual void setHidden( bool hidden );
+        virtual bool isHidden(void) const;
+        virtual void _initialize( TextureGpuManager *textureGpuManager ) {}
+        virtual void swapBuffers(void);
     };
 }
 

@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "OgreD3D11Driver.h"
 #include "OgreD3D11VideoModeList.h"
 #include "OgreD3D11VideoMode.h"
-#include "OgreD3D11RenderWindow.h"
+#include "OgreD3D11Window.h"
 #include "OgreD3D11TextureManager.h"
 #include "OgreD3D11Texture.h"
 #include "OgreViewport.h"
@@ -111,6 +111,7 @@ namespace Ogre
         LogManager::getSingleton().logMessage( "D3D11 : " + getName() + " created." );
 
         memset( mRenderTargetViews, 0, sizeof( mRenderTargetViews ) );
+        memset( mUavTexPtr, 0, sizeof( mUavTexPtr ) );
         memset( mUavBuffers, 0, sizeof( mUavBuffers ) );
         memset( mUavs, 0, sizeof( mUavs ) );
 
@@ -1052,7 +1053,7 @@ namespace Ogre
 
 		// Check we're not creating a secondary window when the primary
 		// was fullscreen
-		if (mPrimaryWindow && mPrimaryWindow->isFullScreen() && fullScreen == false)
+        if (mPrimaryWindow && mPrimaryWindow->isFullscreen() && fullScreen == false)
 		{
 			OGRE_EXCEPT(Exception::ERR_INVALID_STATE,
 				"Cannot create secondary windows not in full screen when the primary is full screen",
@@ -1090,7 +1091,9 @@ namespace Ogre
 		}
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-		D3D11RenderWindowBase* win = new D3D11RenderWindowHwnd(mDevice, mpDXGIFactory);
+        D3D11Window* win = new D3D11WindowHwnd(  name, width, height, fullScreen,
+                                                 DepthBuffer::DefaultDepthBufferFormat,
+                                                 miscParams, mDevice, mpDXGIFactory );
 #elif OGRE_PLATFORM == OGRE_PLATFORM_WINRT
 		String windowType;
 		if(miscParams)
@@ -1109,9 +1112,6 @@ namespace Ogre
 		if(win == NULL)
 			win = new D3D11RenderWindowCoreWindow(mDevice, mpDXGIFactory);
 #endif
-		win->create(name, width, height, fullScreen, miscParams);
-
-		attachRenderTarget(*win);
 
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
 		// Must be called after device has been linked to window
@@ -1123,7 +1123,7 @@ namespace Ogre
 		if (!mPrimaryWindow)
 		{
 			mPrimaryWindow = win;
-			win->getCustomAttribute("D3DDEVICE", &mDevice);
+            //win->getCustomAttribute("D3DDEVICE", &mDevice);
 
 			// Create the texture manager for use by others
 			mTextureManager = new D3D11TextureManager(mDevice);
@@ -1162,13 +1162,14 @@ namespace Ogre
 		return win;
 	}
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::fireDeviceEvent(D3D11Device* device, const String & name, D3D11RenderWindowBase* sendingWindow /* = NULL */)
+    void D3D11RenderSystem::fireDeviceEvent( D3D11Device* device, const String & name,
+                                             D3D11Window* sendingWindow /* = NULL */)
     {
         NameValuePairList params;
         params["D3DDEVICE"] =  StringConverter::toString((size_t)device->get());
         if(sendingWindow)
-            params["RenderWindow"] = StringConverter::toString((size_t)sendingWindow);
-        fireEvent(name, &params);
+            params["Window"] = StringConverter::toString((size_t)sendingWindow);
+        fireEvent( name, &params );
     }
     //---------------------------------------------------------------------
     RenderSystemCapabilities* D3D11RenderSystem::createRenderSystemCapabilities() const
@@ -1375,7 +1376,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------
     void D3D11RenderSystem::initialiseFromRenderSystemCapabilities(
-        RenderSystemCapabilities* caps, RenderTarget* primary)
+        RenderSystemCapabilities* caps, Window* primary)
     {
         if(caps->getRenderSystemName() != getName())
         {
@@ -1981,30 +1982,16 @@ namespace Ogre
     RenderTarget* D3D11RenderSystem::detachRenderTarget(const String &name)
     {
         RenderTarget* target = RenderSystem::detachRenderTarget(name);
-        detachRenderTargetImpl(name);
         return target;
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::detachRenderTargetImpl(const String& name)
+    void D3D11RenderSystem::_notifyWindowDestroyed( Window *window )
     {
         // Check in specialized lists
-		if (mPrimaryWindow != NULL && mPrimaryWindow->getName() == name)
+        if( mPrimaryWindow == window )
         {
             // We're destroying the primary window, so reset device and window
 			mPrimaryWindow = NULL;
-        }
-        else
-        {
-            // Check secondary windows
-            SecondaryWindowList::iterator sw;
-            for (sw = mSecondaryWindows.begin(); sw != mSecondaryWindows.end(); ++sw)
-            {
-                if ((*sw)->getName() == name)
-                {
-                    mSecondaryWindows.erase(sw);
-                    break;
-                }
-            }
         }
     }
     //---------------------------------------------------------------------
@@ -2013,8 +2000,6 @@ namespace Ogre
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
 		D3D11StereoDriverBridge::getSingleton().removeRenderWindow(name);
 #endif
-
-        detachRenderTargetImpl(name);
 
         // Do the real removal
         RenderSystem::destroyRenderTarget(name);
@@ -2190,31 +2175,23 @@ namespace Ogre
     {
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::_setTexture( size_t stage, bool enabled, Texture *tex )
+    void D3D11RenderSystem::_setTexture( size_t stage, TextureGpu *texPtr )
     {
-        D3D11Texture *dt = static_cast<D3D11Texture*>( tex );
-        if (enabled && dt && dt->getSize() > 0)
+        if( texPtr )
         {
-            // note used
-            dt->touch();
-            ID3D11ShaderResourceView * pTex = dt->getTexture();
-            mTexStageDesc[stage].pTex = pTex;
-            mTexStageDesc[stage].used = true;
-            mTexStageDesc[stage].type = dt->getTextureType();
-
-            mLastTextureUnitState = stage+1;
-
-            mDevice.GetImmediateContext()->VSSetShaderResources(static_cast<UINT>(stage), static_cast<UINT>(1), &pTex);
-            mDevice.GetImmediateContext()->PSSetShaderResources(static_cast<UINT>(stage), static_cast<UINT>(1), &pTex);
-            //mDevice.GetImmediateContext()->VSSetShaderResources(static_cast<UINT>(0), static_cast<UINT>(opState->mTexturesCount), &opState->mTextures[0]);
+            D3D11TextureGpu *tex = static_cast<D3D11TextureGpu*>( texPtr );
+            ID3D11ShaderResourceView *view = tex->getDefaultDisplaySrv();
+            mDevice.GetImmediateContext()->VSSetShaderResources( static_cast<UINT>(stage), 1u, &view );
+            mDevice.GetImmediateContext()->PSSetShaderResources( static_cast<UINT>(stage), 1u, &view );
         }
         else
         {
-            mTexStageDesc[stage].used = false;
-            // now we now what's the last texture unit set
-			mLastTextureUnitState = std::min(mLastTextureUnitState,stage);
+            ID3D11ShaderResourceView *nullView = 0;
+            mDevice.GetImmediateContext()->VSSetShaderResources( static_cast<UINT>(stage), 1u,
+                                                                 &nullView );
+            mDevice.GetImmediateContext()->PSSetShaderResources( static_cast<UINT>(stage), 1u,
+                                                                 &nullView );
         }
-        mSamplerStatesChanged = true;
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture *set )
@@ -2302,36 +2279,24 @@ namespace Ogre
         mBindingType = bindingType;
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::_setVertexTexture(size_t stage, const TexturePtr& tex)
+    void D3D11RenderSystem::_setVertexTexture(size_t stage, TextureGpu *tex)
     {
-        if (tex.isNull())
-            _setTexture(stage, false, tex.get());
-        else
-            _setTexture(stage, true, tex.get());
+        _setTexture(stage, tex);
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::_setGeometryTexture(size_t stage, const TexturePtr& tex)
+    void D3D11RenderSystem::_setGeometryTexture(size_t stage, TextureGpu *tex)
     {
-        if (tex.isNull())
-            _setTexture(stage, false, tex.get());
-        else
-            _setTexture(stage, true, tex.get());
+        _setTexture(stage, tex);
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::_setTessellationHullTexture(size_t stage, const TexturePtr& tex)
+    void D3D11RenderSystem::_setTessellationHullTexture(size_t stage, TextureGpu *tex)
     {
-        if (tex.isNull())
-            _setTexture(stage, false, tex.get());
-        else
-            _setTexture(stage, true, tex.get());
+        _setTexture(stage, tex);
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::_setTessellationDomainTexture(size_t stage, const TexturePtr& tex)
+    void D3D11RenderSystem::_setTessellationDomainTexture(size_t stage, TextureGpu *tex)
     {
-        if (tex.isNull())
-            _setTexture(stage, false, tex.get());
-        else
-            _setTexture(stage, true, tex.get());
+        _setTexture(stage, tex);
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setTextureCoordCalculation( size_t stage, TexCoordCalcMethod m,
@@ -2395,6 +2360,7 @@ namespace Ogre
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setRenderTargetViews( uint8 viewportRenderTargetFlags )
     {
+#if TODO_OGRE_2_2
         RenderTarget *target = mActiveRenderTarget;
 
         if (target)
@@ -2452,6 +2418,7 @@ namespace Ogre
                     "D3D11RenderSystem::_setRenderTargetViews");
             }
         }
+#endif
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setViewport( Viewport *vp )
@@ -2545,14 +2512,14 @@ namespace Ogre
 #endif
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::queueBindUAV( uint32 slot, TexturePtr texture,
+    void D3D11RenderSystem::queueBindUAV( uint32 slot, TextureGpu *texture,
                                           ResourceAccess::ResourceAccess access,
                                           int32 mipmapLevel, int32 textureArrayIndex,
-                                          PixelFormat pixelFormat )
+                                          PixelFormatGpu pixelFormat )
     {
         assert( slot < 64 );
 
-        if( !mUavBuffers[slot] && mUavTexPtr[slot].isNull() && texture.isNull() )
+        if( !mUavBuffers[slot] && !mUavTexPtr[slot] && !texture )
             return;
 
         mUavsDirty = true;
@@ -2572,9 +2539,9 @@ namespace Ogre
         ID3D11UnorderedAccessView *oldUav = mUavs[slot];
         mUavs[slot] = 0;
 
-        if( !texture.isNull() )
+        if( texture )
         {
-            if( !(texture->getUsage() & TU_UAV) )
+            if( !texture->isUav() )
             {
                 if( oldUav )
                 {
@@ -2583,32 +2550,41 @@ namespace Ogre
                 }
 
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                             "Texture " + texture->getName() +
-                             "must have been created with TU_UAV to be bound as UAV",
+                             "Texture " + texture->getNameStr() +
+                             "must have been created as Uav to be bound as UAV",
                              "D3D11RenderSystem::queueBindUAV" );
             }
 
             D3D11_UNORDERED_ACCESS_VIEW_DESC descUAV;
-            descUAV.Format = D3D11Mappings::_getPF( pixelFormat );
+            descUAV.Format = D3D11Mappings::get( pixelFormat );
 
             switch( texture->getTextureType() )
             {
-            case TEX_TYPE_1D:
+            case TextureTypes::Type1D:
                 descUAV.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE1D;
                 descUAV.Texture1D.MipSlice = static_cast<UINT>( mipmapLevel );
                 break;
-            case TEX_TYPE_2D:
+            case TextureTypes::Type1DArray:
+                descUAV.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE1D;
+                descUAV.Texture1DArray.MipSlice         = static_cast<UINT>( mipmapLevel );
+                descUAV.Texture1DArray.FirstArraySlice  = static_cast<UINT>( textureArrayIndex );
+                descUAV.Texture1DArray.ArraySize        = static_cast<UINT>( texture->getNumSlices() -
+                                                                             textureArrayIndex );
+                break;
+            case TextureTypes::Type2D:
                 descUAV.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE2D;
                 descUAV.Texture2D.MipSlice = static_cast<UINT>( mipmapLevel );
                 break;
-            case TEX_TYPE_2D_ARRAY:
+            case TextureTypes::Type2DArray:
+            case TextureTypes::TypeCube:
+            case TextureTypes::TypeCubeArray:
                 descUAV.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE2DARRAY;
                 descUAV.Texture2DArray.MipSlice         = static_cast<UINT>( mipmapLevel );
                 descUAV.Texture2DArray.FirstArraySlice  = textureArrayIndex;
-                descUAV.Texture2DArray.ArraySize        = static_cast<UINT>( texture->getDepth() -
+                descUAV.Texture2DArray.ArraySize        = static_cast<UINT>( texture->getNumSlices() -
                                                                              textureArrayIndex );
                 break;
-            case TEX_TYPE_3D:
+            case TextureTypes::Type3D:
                 descUAV.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE3D;
                 descUAV.Texture3D.MipSlice      = static_cast<UINT>( mipmapLevel );
                 descUAV.Texture3D.FirstWSlice   = 0;
@@ -2618,9 +2594,9 @@ namespace Ogre
                 break;
             }
 
-            D3D11Texture *dt = static_cast<D3D11Texture*>( texture.get() );
+            D3D11TextureGpu *dt = static_cast<D3D11TextureGpu*>( texture );
 
-            HRESULT hr = mDevice->CreateUnorderedAccessView( dt->getTextureResource(), &descUAV,
+            HRESULT hr = mDevice->CreateUnorderedAccessView( dt->getFinalTextureName(), &descUAV,
                                                              &mUavs[slot] );
             if( FAILED(hr) )
             {
@@ -2632,7 +2608,7 @@ namespace Ogre
 
                 String errorDescription = mDevice.getErrorDescription(hr);
                 OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr,
-                    "Failed to create UAV state on texture '" + texture->getName() +
+                    "Failed to create UAV state on texture '" + texture->getNameStr() +
                     "'\nError Description: " + errorDescription,
                     "D3D11RenderSystem::queueBindUAV" );
             }
@@ -2662,7 +2638,7 @@ namespace Ogre
     {
         assert( slot < 64 );
 
-        if( mUavTexPtr[slot].isNull() && !mUavBuffers[slot] && !buffer )
+        if( !mUavTexPtr[slot] && !mUavBuffers[slot] && !buffer )
             return;
 
         mUavsDirty = true;
@@ -2674,7 +2650,7 @@ namespace Ogre
         }
 
         mUavBuffers[slot] = buffer;
-        mUavTexPtr[slot].setNull();
+        mUavTexPtr[slot] = 0;
 
         //Release oldUav *after* we've created the new UAV (if D3D11 needs
         //to return the same UAV, if we release it earlier we may cause
@@ -2714,7 +2690,7 @@ namespace Ogre
 
         for( size_t i=0; i<64; ++i )
         {
-            mUavTexPtr[i].setNull();
+            mUavTexPtr[i] = 0;
 
             if( mUavs[i] )
             {
@@ -2738,14 +2714,15 @@ namespace Ogre
 #endif
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::_bindTextureUavCS( uint32 slot, Texture *texture,
+    void D3D11RenderSystem::_bindTextureUavCS( uint32 slot, TextureGpu *texture,
                                                ResourceAccess::ResourceAccess access,
                                                int32 mipmapLevel, int32 textureArrayIndex,
-                                               PixelFormat pixelFormat )
+                                               PixelFormatGpu pixelFormat )
     {
+#if TODO_OGRE_2_2
         if( texture )
         {
-            D3D11Texture *dt = static_cast<D3D11Texture*>( texture );
+            D3D11TextureGpu *dt = static_cast<D3D11TextureGpu*>( texture );
             ID3D11UnorderedAccessView *uavView = dt->getUavView( mipmapLevel, textureArrayIndex, pixelFormat );
             mDevice.GetImmediateContext()->CSSetUnorderedAccessViews( slot, 1, &uavView, NULL );
 
@@ -2756,23 +2733,22 @@ namespace Ogre
             ID3D11UnorderedAccessView *nullUavView = NULL;
             mDevice.GetImmediateContext()->CSSetUnorderedAccessViews( slot, 1, &nullUavView, NULL );
         }
+#endif
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::_setTextureCS( uint32 slot, bool enabled, Texture *texPtr )
+    void D3D11RenderSystem::_setTextureCS( uint32 slot, TextureGpu *texPtr )
     {
-        D3D11Texture *dt = static_cast<D3D11Texture*>( texPtr );
-        if (enabled && dt && dt->getSize() > 0)
+        if( texPtr )
         {
-            // note used
-            dt->touch();
-            ID3D11ShaderResourceView * pTex = dt->getTexture();
-
-            mDevice.GetImmediateContext()->CSSetShaderResources(static_cast<UINT>(slot), static_cast<UINT>(1), &pTex);
+            D3D11TextureGpu *tex = static_cast<D3D11TextureGpu*>( texPtr );
+            ID3D11ShaderResourceView *view = tex->getDefaultDisplaySrv();
+            mDevice.GetImmediateContext()->CSSetShaderResources( static_cast<UINT>(slot), 1u, &view );
         }
         else
         {
-            ID3D11ShaderResourceView *nullSrv = NULL;
-            mDevice.GetImmediateContext()->CSSetShaderResources(static_cast<UINT>(slot), static_cast<UINT>(1), &nullSrv);
+            ID3D11ShaderResourceView *nullView = 0;
+            mDevice.GetImmediateContext()->CSSetShaderResources( static_cast<UINT>(slot), 1u,
+                                                                 &nullView );
         }
     }
     //---------------------------------------------------------------------

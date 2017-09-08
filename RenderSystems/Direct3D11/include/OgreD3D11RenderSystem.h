@@ -97,7 +97,7 @@ namespace Ogre
         /// Internal method for populating the capabilities structure
         RenderSystemCapabilities* createRenderSystemCapabilities() const;
         /** See RenderSystem definition */
-        void initialiseFromRenderSystemCapabilities(RenderSystemCapabilities* caps, RenderTarget* primary);
+        void initialiseFromRenderSystemCapabilities(RenderSystemCapabilities* caps, Window* primary);
 
         void convertVertexShaderCaps(RenderSystemCapabilities* rsc) const;
         void convertPixelShaderCaps(RenderSystemCapabilities* rsc) const;
@@ -107,7 +107,6 @@ namespace Ogre
         void convertComputeShaderCaps(RenderSystemCapabilities* rsc) const;
 
         bool checkVertexTextureFormats(void);
-        void detachRenderTargetImpl(const String& name);
         
         //TODO: Looks like dead code or useless now
         bool mReadBackAsTexture;
@@ -122,7 +121,7 @@ namespace Ogre
         ID3D11RenderTargetView *mRenderTargetViews[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
         ID3D11DepthStencilView *mDepthStencilView;
 
-        TexturePtr                  mUavTexPtr[64];
+        TextureGpu                  *mUavTexPtr[64];
         UavBufferPacked             *mUavBuffers[64];
         ID3D11UnorderedAccessView   *mUavs[64];
 
@@ -174,9 +173,9 @@ namespace Ogre
 
 
         /// Primary window, the one used to create the device
-        D3D11RenderWindowBase* mPrimaryWindow;
+        D3D11Window* mPrimaryWindow;
 
-        typedef vector<D3D11RenderWindowBase*>::type SecondaryWindowList;
+        typedef vector<D3D11Window*>::type SecondaryWindowList;
         // List of additional windows after the first (swap chains)
         SecondaryWindowList mSecondaryWindows;
 
@@ -209,7 +208,7 @@ namespace Ogre
 		
 		
 		int getSwitchingFullscreenCounter() const					{ return mSwitchingFullscreenCounter; }
-		void addToSwitchingFullscreenCounter()					{ mSwitchingFullscreenCounter++; }
+        void addToSwitchingFullscreenCounter()                      { ++mSwitchingFullscreenCounter; }
 		
         void initRenderSystem();
 
@@ -222,14 +221,22 @@ namespace Ogre
         /// @copydoc RenderSystem::_createRenderWindow
         Window* _createRenderWindow( const String &name, uint32 width, uint32 height,
                                      bool fullScreen, const NameValuePairList *miscParams = 0 );
+        void _notifyWindowDestroyed( Window *window );
 
         /// @copydoc RenderSystem::fireDeviceEvent
-        void fireDeviceEvent( D3D11Device* device, const String & name, D3D11RenderWindowBase* sendingWindow = NULL);
+        void fireDeviceEvent( D3D11Device* device, const String & name,
+                              D3D11Window *sendingWindow );
+#if !TODO_OGRE_2_2
+        void fireDeviceEvent( D3D11Device* device, const String & name,
+                              D3D11RenderWindowBase *sendingWindow = NULL ) {}
+#endif
 
         /// @copydoc RenderSystem::createRenderTexture
         RenderTexture * createRenderTexture( const String & name, unsigned int width, unsigned int height,
             TextureType texType = TEX_TYPE_2D, PixelFormat internalFormat = PF_X8R8G8B8, 
             const NameValuePairList *miscParams = 0 ); 
+
+        virtual void _setCurrentDeviceFromTexture( TextureGpu *texture ) {}
 
         virtual FrameBufferDescMap& _getFrameBufferDescMap(void)        { return mFrameBufferDescMap; }
         virtual RenderPassDescriptor* createRenderPassDescriptor(void);
@@ -282,23 +289,23 @@ namespace Ogre
         void _setPointSpritesEnabled(bool enabled);
         void _setPointParameters(Real size, bool attenuationEnabled, 
             Real constant, Real linear, Real quadratic, Real minSize, Real maxSize);
-        void _setTexture(size_t unit, bool enabled, Texture *texPtr);
+        virtual void _setTexture( size_t unit, TextureGpu *texPtr );
         virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set );
         virtual void _setSamplers( uint32 slotStart, const DescriptorSetSampler *set );
         void _setBindingType(TextureUnitState::BindingType bindingType);
-        void _setVertexTexture(size_t unit, const TexturePtr& tex);
-        void _setGeometryTexture(size_t unit, const TexturePtr& tex);
-        void _setTessellationHullTexture(size_t unit, const TexturePtr& tex);
-        void _setTessellationDomainTexture(size_t unit, const TexturePtr& tex);
+        void _setVertexTexture(size_t unit, TextureGpu *tex);
+        void _setGeometryTexture(size_t unit, TextureGpu *tex);
+        void _setTessellationHullTexture(size_t unit, TextureGpu *tex);
+        void _setTessellationDomainTexture(size_t unit, TextureGpu *tex);
         void _setTextureCoordCalculation(size_t unit, TexCoordCalcMethod m, const Frustum* frustum = 0);
         void _setTextureBlendMode( size_t unit, const LayerBlendModeEx& bm );
         void _setTextureMatrix( size_t unit, const Matrix4 &xform );
         void _setViewport( Viewport *vp );
 
-        virtual void queueBindUAV( uint32 slot, TexturePtr texture,
+        virtual void queueBindUAV( uint32 slot, TextureGpu *texture,
                                    ResourceAccess::ResourceAccess access = ResourceAccess::ReadWrite,
                                    int32 mipmapLevel = 0, int32 textureArrayIndex = 0,
-                                   PixelFormat pixelFormat = PF_UNKNOWN );
+                                   PixelFormatGpu pixelFormat = PFG_UNKNOWN );
         virtual void queueBindUAV( uint32 slot, UavBufferPacked *buffer,
                                    ResourceAccess::ResourceAccess access = ResourceAccess::ReadWrite,
                                    size_t offset = 0, size_t sizeBytes = 0 );
@@ -307,11 +314,11 @@ namespace Ogre
 
         virtual void flushUAVs(void);
 
-        virtual void _bindTextureUavCS( uint32 slot, Texture *texture,
+        virtual void _bindTextureUavCS( uint32 slot, TextureGpu *texture,
                                         ResourceAccess::ResourceAccess access,
                                         int32 mipmapLevel, int32 textureArrayIndex,
-                                        PixelFormat pixelFormat );
-        virtual void _setTextureCS( uint32 slot, bool enabled, Texture *texPtr );
+                                        PixelFormatGpu pixelFormat );
+        virtual void _setTextureCS( uint32 slot, TextureGpu *texPtr );
         virtual void _setHlmsSamplerblockCS( uint8 texUnit, const HlmsSamplerblock *samplerblock );
 
         virtual void _hlmsPipelineStateObjectCreated( HlmsPso *newPso );

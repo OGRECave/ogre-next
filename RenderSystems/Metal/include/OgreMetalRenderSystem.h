@@ -311,7 +311,7 @@ namespace Ogre
 
         virtual void setClipPlanesImpl(const PlaneList& clipPlanes);
         virtual void initialiseFromRenderSystemCapabilities( RenderSystemCapabilities* caps,
-                                                             RenderTarget* primary );
+                                                             Window *primary );
         virtual void updateCompositorManager( CompositorManager2 *compositorManager,
                                               SceneManagerEnumerator &sceneManagers,
                                               HlmsManager *hlmsManager );

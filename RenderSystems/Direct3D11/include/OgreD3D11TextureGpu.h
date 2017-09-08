@@ -38,6 +38,7 @@ namespace Ogre
 {
     class _OgreD3D11Export D3D11TextureGpu : public TextureGpu
     {
+    protected:
         /// The general case is that the whole D3D11 texture will be accessed through the SRV.
         /// That means: createSrv( this->getPixelFormat(), false );
         /// To avoid creating multiple unnecessary copies of the SRV, we keep a cache of that
@@ -100,7 +101,9 @@ namespace Ogre
 
         virtual void _autogenerateMipmaps(void);
 
+        //The returned pointer has its ref. count incremented! Caller must decrease it!
         ID3D11ShaderResourceView* createSrv( PixelFormatGpu format, bool cubemapsAs2DArrays ) const;
+        ID3D11ShaderResourceView* getDefaultDisplaySrv(void) const  { return mDefaultDisplaySrv; }
 
         virtual bool isMsaaPatternSupported( MsaaPatterns::MsaaPatterns pattern );
         virtual void getSubsampleLocations( vector<Vector2>::type locations );

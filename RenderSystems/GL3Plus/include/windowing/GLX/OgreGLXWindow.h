@@ -77,9 +77,8 @@ namespace Ogre
         
         /** @copydoc see RenderWindow::isVisible */
         bool isVisible(void) const;
-        
-        /** @copydoc see RenderWindow::setVisible */
-        void setVisible(bool visible);
+
+        virtual void _setVisible(bool visible);
 
         /** @copydoc see RenderWindow::isHidden */
         bool isHidden(void) const { return mHidden; }

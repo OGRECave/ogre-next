@@ -419,7 +419,7 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    void NULLRenderSystem::initialiseFromRenderSystemCapabilities(RenderSystemCapabilities* caps, RenderTarget* primary)
+    void NULLRenderSystem::initialiseFromRenderSystemCapabilities(RenderSystemCapabilities* caps, Window *primary)
     {
     }
 }

@@ -69,6 +69,12 @@ namespace Ogre
         D3D11TextureGpuManager( VaoManager *vaoManager, D3D11Device &device );
         virtual ~D3D11TextureGpuManager();
 
+        /** Creates a special D3D11TextureGpuWindow pointer, to be used by Ogre::Window.
+            The pointer can be freed by a regular OGRE_DELETE. We do not track this pointer.
+            If caller doesnt' delete it, it will leak.
+        */
+        TextureGpu* createTextureGpuWindow( ID3D11Texture2D *backbuffer, Window *window );
+
         ID3D11Resource* getBlankTextureD3dName( TextureTypes::TextureTypes textureType ) const;
         ID3D11ShaderResourceView* getBlankTextureSrv( TextureTypes::TextureTypes textureType ) const;
 

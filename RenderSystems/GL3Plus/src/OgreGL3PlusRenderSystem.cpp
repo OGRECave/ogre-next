@@ -520,7 +520,7 @@ namespace Ogre {
         // Compute Program Properties
         if (mGLSupport->checkExtension("GL_ARB_compute_shader") || mHasGL43)
         {
-            rsc->setCapability(RSC_COMPUTE_PROGRAM);
+            //rsc->setCapability(RSC_COMPUTE_PROGRAM);
 
             //FIXME Is this correct?
             OGRE_CHECK_GL_ERROR(glGetFloatv(GL_MAX_COMPUTE_UNIFORM_COMPONENTS, &floatConstantCount));
@@ -577,7 +577,8 @@ namespace Ogre {
         return rsc;
     }
 
-    void GL3PlusRenderSystem::initialiseFromRenderSystemCapabilities(RenderSystemCapabilities* caps, RenderTarget* primary)
+    void GL3PlusRenderSystem::initialiseFromRenderSystemCapabilities(RenderSystemCapabilities* caps,
+                                                                     Window* primary)
     {
         if (caps->getRenderSystemName() != getName())
         {
@@ -815,7 +816,7 @@ namespace Ogre {
 
             fireEvent("RenderSystemCapabilitiesCreated");
 
-            initialiseFromRenderSystemCapabilities(mCurrentCapabilities, (RenderTarget *) win);
+            initialiseFromRenderSystemCapabilities(mCurrentCapabilities, win);
 
             // Initialise the main context
             _oneTimeContextInitialization();

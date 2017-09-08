@@ -150,14 +150,14 @@ namespace Ogre
         @remarks
             You don't need to call this unless you created the window externally.
         */
-        virtual void windowMovedOrResized() {}
+        virtual void windowMovedOrResized(void) {}
 
         /// Indicates whether the window has been closed by the user.
         virtual bool isClosed(void) const = 0;
 
-        /// Set the visibility state
-        virtual void setVisible(bool visible) = 0;
-        ////Indicates whether the window is visible (not minimized or obscured)
+        /// Internal method to notify the window it has been obscured or minimized
+        virtual void _setVisible( bool visible ) = 0;
+        ////Indicates whether the window is visible (not minimized or fully obscured)
         virtual bool isVisible(void) const = 0;
 
         /** Hide (or show) the window. If called with hidden=true, this
@@ -172,7 +172,7 @@ namespace Ogre
         /// Indicates whether the window was set to hidden (not displayed)
         virtual bool isHidden(void) const = 0;
 
-        void setFocused( bool focused );
+        virtual void setFocused( bool focused );
         bool isFocused(void) const;
 
         /// Indicates that this is the primary window.

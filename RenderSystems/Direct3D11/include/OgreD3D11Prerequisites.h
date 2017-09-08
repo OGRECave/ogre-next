@@ -123,6 +123,7 @@ namespace Ogre
     class D3D11TextureGpu;
     class D3D11VaoManager;
     struct D3D11VertexArrayObjectShared;
+    class D3D11Window;
 
     namespace v1
     {

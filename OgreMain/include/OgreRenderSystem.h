@@ -1578,7 +1578,7 @@ namespace Ogre
         virtual void setClipPlanesImpl(const PlaneList& clipPlanes) = 0;
 
         /** Initialize the render system from the capabilities*/
-        virtual void initialiseFromRenderSystemCapabilities(RenderSystemCapabilities* caps, RenderTarget* primary) = 0;
+        virtual void initialiseFromRenderSystemCapabilities(RenderSystemCapabilities* caps, Window* primary) = 0;
 
 
         DriverVersion mDriverVersion;

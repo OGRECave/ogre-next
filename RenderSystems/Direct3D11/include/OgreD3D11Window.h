@@ -48,6 +48,7 @@ namespace Ogre
         bool mHidden;
         bool mAlwaysWindowedMode;
         bool mHwGamma;
+        bool mVisible;
 
         /// Effective FSAA mode, limited by hardware capabilities
         DXGI_SAMPLE_DESC mMsaaDesc;
@@ -59,6 +60,8 @@ namespace Ogre
         ID3D11Texture2D         *mpBackBufferNoMSAA;
         //ID3D11RenderTargetView  *mRenderTargetView;
 
+        D3D11RenderSystem       *mRenderSystem;
+
         //IDXGIDeviceN* _queryDxgiDevice();       // release after use!
 
     public:
@@ -66,7 +69,7 @@ namespace Ogre
                      bool fullscreenMode, PixelFormatGpu depthStencilFormat,
                      const NameValuePairList *miscParams,
                      D3D11Device &device, IDXGIFactory1 *dxgiFactory1,
-                     IDXGIFactory2 *dxgiFactory2 );
+                     IDXGIFactory2 *dxgiFactory2, D3D11RenderSystem *renderSystem );
         virtual ~D3D11Window();
 
         bool isClosed() const                                   { return mClosed; }

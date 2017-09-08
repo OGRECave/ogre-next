@@ -29,10 +29,13 @@ THE SOFTWARE.
 #include "OgreD3D11Window.h"
 #include "OgreD3D11Device.h"
 #include "OgreD3D11Mappings.h"
+#include "OgreD3D11TextureGpuWindow.h"
 #include "OgreWindowEventUtilities.h"
 #include "OgreStringConverter.h"
 
 #include "OgreException.h"
+
+#define TODO_notify_listeners
 
 #if UNICODE
     #define OGRE_D3D11_WIN_CLASS_NAME L"OgreD3D11Wnd"
@@ -86,6 +89,45 @@ namespace Ogre
         return TRUE;
     }
     //-----------------------------------------------------------------------------------
+    void D3D11WindowHwnd::updateViewportsDimensions(void)
+    {
+        TODO_notify_listeners;
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11WindowHwnd::updateWindowRect(void)
+    {
+        RECT rc;
+        BOOL result;
+        result = GetWindowRect( mHwnd, &rc );
+        if( result == FALSE )
+        {
+            mTop = 0;
+            mLeft = 0;
+            setFinalResolution( 0, 0 );
+            return;
+        }
+
+        mTop = rc.top;
+        mLeft = rc.left;
+        result = GetClientRect( mHwnd, &rc );
+        if( result == FALSE )
+        {
+            mTop = 0;
+            mLeft = 0;
+            setFinalResolution( 0, 0 );
+            return;
+        }
+        uint32 width = static_cast<uint32>( rc.right - rc.left );
+        uint32 height = static_cast<uint32>( rc.bottom - rc.top );
+        if( width != getWidth() || height != getHeight() )
+        {
+            mRequestedWidth  = static_cast<uint32>( rc.right - rc.left );
+            mRequestedHeight = static_cast<uint32>( rc.bottom - rc.top );
+            resizeSwapChainBuffers( mRequestedWidth , mRequestedHeight );
+            updateViewportsDimensions();
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void D3D11WindowHwnd::adjustWindow( uint32 clientWidth, uint32 clientHeight,
                                         uint32 *outDrawableWidth, uint32 *outDrawableHeight )
     {
@@ -94,6 +136,45 @@ namespace Ogre
         AdjustWindowRect( &rc, getWindowStyle(mRequestedFullscreenMode), false );
         *outDrawableWidth   = rc.right - rc.left;
         *outDrawableHeight  = rc.bottom - rc.top;
+    }
+    //-----------------------------------------------------------------------------------
+    template <typename T>
+    void D3D11WindowHwnd::setCommonSwapChain( T &sd )
+    {
+        if( mUseFlipSequentialMode )
+        {
+            sd.SampleDesc.Count     = 1u;
+            sd.SampleDesc.Quality   = 0;
+        }
+        else
+        {
+#if TODO_OGRE_2_2
+            sd.SampleDesc.Count     = mFSAAType.Count;
+            sd.SampleDesc.Quality   = mFSAAType.Quality;
+#else
+            sd.SampleDesc.Count     = 1u;
+            sd.SampleDesc.Quality   = 0;
+#endif
+        }
+
+        sd.Flags        = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+        sd.BufferUsage  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+
+#if defined(_WIN32_WINNT_WIN8 )
+        if( isWindows8OrGreater() )
+#else
+        if( 0 )
+#endif
+        {
+            sd.BufferCount  = getBufferCount();
+            sd.SwapEffect   = mUseFlipSequentialMode ? DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL :
+                                                       DXGI_SWAP_EFFECT_DISCARD;
+        }
+        else
+        {
+            sd.BufferCount  = getBufferCount();
+            sd.SwapEffect   = DXGI_SWAP_EFFECT_DISCARD;
+        }
     }
     //-----------------------------------------------------------------------------------
     void D3D11WindowHwnd::createSwapChain(void)
@@ -109,16 +190,14 @@ namespace Ogre
             sd.Width  = mRequestedWidth;
             sd.Height = mRequestedHeight;
             sd.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-            sd.SampleDesc.Count = 1;
-            sd.SampleDesc.Quality = 0;
-            sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-            sd.BufferCount = 1;
+
+            setCommonSwapChain( sd );
 
             DXGI_SWAP_CHAIN_FULLSCREEN_DESC fsDesc;
             ZeroMemory( &fsDesc, sizeof(fsDesc) );
             fsDesc.RefreshRate.Numerator    = mFrequencyNumerator;
             fsDesc.RefreshRate.Denominator  = mFrequencyDenominator;
-            fsDesc.Windowed = mRequestedFullscreenMode;
+            fsDesc.Windowed = mRequestedFullscreenMode && !mAlwaysWindowedMode;
 
             hr = mDxgiFactory2->CreateSwapChainForHwnd( mDevice.get(), mHwnd, &sd,
                                                         &fsDesc, nullptr, &mSwapChain1 );
@@ -135,20 +214,83 @@ namespace Ogre
             // DirectX 11.0 systems
             DXGI_SWAP_CHAIN_DESC sd;
             ZeroMemory( &sd, sizeof(sd) );
-            sd.BufferCount = 1;
+            setCommonSwapChain( sd );
             sd.BufferDesc.Width = mRequestedWidth;
             sd.BufferDesc.Height = mRequestedHeight;
             sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
             sd.BufferDesc.RefreshRate.Numerator     = mFrequencyNumerator;
             sd.BufferDesc.RefreshRate.Denominator   = mFrequencyDenominator;
-            sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
             sd.OutputWindow = mHwnd;
-            sd.SampleDesc.Count = 1;
-            sd.SampleDesc.Quality = 0;
-            sd.Windowed = mRequestedFullscreenMode;
+            sd.Windowed = mRequestedFullscreenMode && !mAlwaysWindowedMode;
 
             hr = mDxgiFactory1->CreateSwapChain( mDevice.get(), &sd, &mSwapChain );
         }
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11WindowHwnd::resizeSwapChainBuffers( uint32 width, uint32 height )
+    {
+        mRenderSystem->fireDeviceEvent( &mDevice, "WindowBeforeResize", this );
+
+        mDepthBuffer->_transitionTo( GpuResidency::OnStorage, (uint8*)0 );
+        mTexture->_transitionTo( GpuResidency::OnStorage, (uint8*)0 );
+        mpBackBuffer->Release();
+        mpBackBuffer = 0;
+
+        // Call flush before resize buffers to ensure destruction of resources.
+        // not doing so may result in 'Out of memory' exception.
+        mDevice.GetImmediateContext()->Flush();
+
+        // width and height can be zero to autodetect size, therefore do not rely on them
+        HRESULT hr = mSwapChain->ResizeBuffers( getBufferCount(), width, height,
+                                                DXGI_FORMAT_R8G8B8A8_UNORM, 0 );
+        if( FAILED(hr) )
+        {
+            const String errorDescription = mDevice.getErrorDescription(hr);
+            OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
+                            "Unable to resize swap chain\nError Description:" + errorDescription,
+                            "D3D11WindowHwnd::resizeSwapChainBuffers" );
+        }
+        if( mSwapChain1 )
+        {
+            DXGI_SWAP_CHAIN_DESC1 desc;
+            mSwapChain1->GetDesc1( &desc );
+            setFinalResolution( desc.Width, desc.Height );
+            DXGI_SWAP_CHAIN_FULLSCREEN_DESC fsDesc;
+            mSwapChain1->GetFullscreenDesc( &fsDesc );
+            //Alt-Enter together with SetWindowAssociation() can change this state
+            mRequestedFullscreenMode    = fsDesc.Windowed == 0;
+            mFullscreenMode             = mRequestedFullscreenMode;
+        }
+        else
+        {
+            DXGI_SWAP_CHAIN_DESC desc;
+            mSwapChain->GetDesc( &desc );
+            setFinalResolution( desc.BufferDesc.Width, desc.BufferDesc.Height );
+            //Alt-Enter together with SetWindowAssociation() can change this state
+            mRequestedFullscreenMode    = desc.Windowed == 0;
+            mFullscreenMode             = mRequestedFullscreenMode;
+        }
+
+        // Obtain back buffer from swapchain
+        hr = mSwapChain->GetBuffer( 0, __uuidof(ID3D11Texture2D), (LPVOID*)&mpBackBuffer );
+
+        if( FAILED(hr) )
+        {
+            OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
+                            "Unable to Get Back Buffer for swap chain",
+                            "D3D11WindowHwnd::resizeSwapChainBuffers" );
+        }
+
+        assert( dynamic_cast<D3D11TextureGpuWindow*>( mTexture ) );
+        D3D11TextureGpuWindow *texWindow = static_cast<D3D11TextureGpuWindow*>( mTexture );
+        texWindow->_setBackbuffer( mpBackBuffer );
+
+        mTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+        mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+
+        // Notify viewports of resize
+        updateViewportsDimensions();
+        mRenderSystem->fireDeviceEvent( &mDevice, "WindowResized", this );
     }
     //-----------------------------------------------------------------------------------
     void D3D11WindowHwnd::create( bool fullscreenMode, const NameValuePairList *miscParams )
@@ -426,5 +568,267 @@ namespace Ogre
         mHwnd = 0;
 
         D3D11WindowSwapChainBased::destroy();
+    }
+    //-----------------------------------------------------------------------------------
+    uint8 D3D11WindowHwnd::getBufferCount(void) const
+    {
+        VaoManager *vaoManager = mRenderSystem->getVaoManager();
+
+#if defined(_WIN32_WINNT_WIN8 )
+        if( isWindows8OrGreater() )
+#else
+        if( 0 )
+#endif
+        {
+            return mUseFlipSequentialMode ? 2 : vaoManager->getDynamicBufferMultiplier() - 1u;
+        }
+
+        return vaoManager->getDynamicBufferMultiplier() - 1u;
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11WindowHwnd::reposition( int32 left, int32 top )
+    {
+        if( mHwnd && !mRequestedFullscreenMode )
+        {
+            SetWindowPos( mHwnd, 0, top, left, 0, 0,
+                          SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE );
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11WindowHwnd::requestResolution( uint32 width, uint32 height )
+    {
+        if (!mIsExternal)
+        {
+            if( mHwnd && !mRequestedFullscreenMode )
+            {
+                uint32 winWidth, winHeight;
+                adjustWindow( width, height, &winWidth, &winHeight );
+                SetWindowPos( mHwnd, 0, 0, 0, winWidth, winHeight,
+                              SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE );
+            }
+        }
+        else
+            updateWindowRect();
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11WindowHwnd::requestFullscreenSwitch( bool goFullscreen, bool borderless, uint32 monitorIdx,
+                                                   uint32 width, uint32 height,
+                                                   uint32 frequencyNumerator, uint32 frequencyDenominator )
+    {
+        if( goFullscreen != mRequestedFullscreenMode ||
+            width != mRequestedWidth || height != mRequestedHeight )
+        {
+
+            if( goFullscreen != mRequestedFullscreenMode )
+                mRenderSystem->addToSwitchingFullscreenCounter();
+
+            DWORD dwStyle = WS_VISIBLE | WS_CLIPCHILDREN;
+
+            bool oldFullscreen = mRequestedFullscreenMode;
+            mRequestedFullscreenMode = oldFullscreen;
+
+            if( goFullscreen )
+            {
+                HMONITOR hMonitor = 0;
+                if( monitorIdx != -1 )
+                {
+                    DisplayMonitorList monitorList;
+                    EnumDisplayMonitors( NULL, NULL, createMonitorsInfoEnumProc, (LPARAM)&monitorList );
+                    if( monitorIdx < (int)monitorList.size() )
+                        hMonitor = monitorList[monitorIdx];
+                }
+                else
+                    hMonitor = MonitorFromWindow( mHwnd, MONITOR_DEFAULTTONEAREST );
+                MONITORINFO monitorInfo;
+                memset( &monitorInfo, 0, sizeof(MONITORINFO) );
+                monitorInfo.cbSize = sizeof(MONITORINFO);
+                GetMonitorInfo( hMonitor, &monitorInfo );
+                mTop    = monitorInfo.rcMonitor.top;
+                mLeft   = monitorInfo.rcMonitor.left;
+
+                // need different ordering here
+                if( oldFullscreen )
+                {
+                    // was previously fullscreen, just changing the resolution
+                    SetWindowPos( mHwnd, HWND_TOPMOST, 0, 0, width, height, SWP_NOACTIVATE );
+                }
+                else
+                {
+                    SetWindowPos( mHwnd, HWND_TOPMOST, 0, 0, width, height, SWP_NOACTIVATE );
+                    SetWindowLong( mHwnd, GWL_STYLE, dwStyle );
+                    SetWindowPos( mHwnd, 0, 0, 0, 0, 0,
+                                  SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER );
+                }
+            }
+            else
+            {
+                uint32 winWidth, winHeight;
+                winWidth = mRequestedWidth;
+                winHeight = mRequestedHeight;
+                adjustWindow( mRequestedWidth, mRequestedHeight, &winWidth, &winHeight );
+                SetWindowLong( mHwnd, GWL_STYLE, getWindowStyle(mRequestedFullscreenMode) );
+                SetWindowPos( mHwnd, HWND_NOTOPMOST, 0, 0, winWidth, winHeight,
+                              SWP_DRAWFRAME | SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOACTIVATE );
+                updateWindowRect();
+            }
+
+            if( (oldFullscreen && goFullscreen) || mIsExternal )
+            {
+                // Notify viewports of resize
+                updateViewportsDimensions();
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    bool D3D11WindowHwnd::isClosed(void) const
+    {
+        return mClosed;
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11WindowHwnd::_setVisible( bool visible )
+    {
+        mVisible = visible;
+    }
+    //-----------------------------------------------------------------------------------
+    bool D3D11WindowHwnd::isVisible(void) const
+    {
+        bool visible = mVisible && !mHidden;
+
+        //Window minimized or fully obscured (we got notified via _setVisible/WM_PAINT messages)
+        if( !visible )
+            return visible;
+
+        {
+            HWND currentWindowHandle = mHwnd;
+            while( (visible = (IsIconic(currentWindowHandle) == false)) &&
+                   (GetWindowLong(currentWindowHandle, GWL_STYLE) & WS_CHILD) != 0)
+            {
+                currentWindowHandle = GetParent( currentWindowHandle );
+            }
+
+            //Window is minimized
+            if( !visible )
+                return visible;
+        }
+
+        /*
+         *  Poll code to see if we're fully obscured.
+         * Not needed since we do it via WM_PAINT messages.
+         *
+        HDC hdc = GetDC( mHwnd );
+        if( hdc )
+        {
+            RECT rcClip, rcClient;
+            switch( GetClipBox( hdc, &rcClip ) )
+            {
+            case NULLREGION:
+                // Completely covered
+                visible = false;
+                break;
+            case SIMPLEREGION:
+                GetClientRect(hwnd, &rcClient);
+                if( EqualRect( &rcClient, &rcClip ) )
+                {
+                    // Completely uncovered
+                    visible = true;
+                }
+                else
+                {
+                    // Partially covered
+                    visible = true;
+                }
+                break;
+            case COMPLEXREGION:
+                // Partially covered
+                visible = true;
+                break;
+            default:
+                // Error
+                visible = true;
+                break;
+            }
+
+            // If we wanted, we could also use RectVisible
+            // or PtVisible - or go totally overboard by
+            // using GetClipRgn
+            ReleaseDC( mHwnd, hdc );
+        }*/
+
+        return visible;
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11WindowHwnd::setHidden( bool hidden )
+    {
+        mHidden = hidden;
+        if( !mIsExternal )
+        {
+            if( hidden )
+                ShowWindow( mHwnd, SW_HIDE );
+            else
+                ShowWindow( mHwnd, SW_SHOWNORMAL );
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    bool D3D11WindowHwnd::isHidden(void) const
+    {
+        return mHidden;
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11WindowHwnd::swapBuffers(void)
+    {
+        mRenderSystem->fireDeviceEvent( &mDevice,"BeforeDevicePresent",this );
+
+        if( !mDevice.isNull() )
+        {
+#if TODO_OGRE_2_2
+            //Step of resolving MSAA resource for swap chains in FlipSequentialMode
+            //should be done by application rather than by OS.
+            if( mUseFlipSequentialMode && mMsaaDesc.Count > 1u )
+            {
+                //We can't resolve MSAA sRGB -> MSAA non-sRGB, so we need to have 2 textures:
+                // 1. Render to MSAA sRGB
+                // 2. Resolve MSAA sRGB -> sRGB regular tex.
+                // 3. Copy sRGB regular texture to swap chain.
+                ID3D11Texture2D* swapChainBackBuffer = NULL;
+                HRESULT hr = mpSwapChain->GetBuffer( 0, __uuidof(ID3D11Texture2D),
+                                                     (LPVOID*)&swapChainBackBuffer );
+                if( FAILED(hr) )
+                {
+                    OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
+                                    "Error obtaining backbuffer",
+                                    "D3D11WindowHwnd::swapBuffers" );
+                }
+
+                ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
+
+                if( !isHardwareGammaEnabled() )
+                {
+                    assert(_getRenderFormat() == _getSwapChainFormat());
+                    context->ResolveSubresource( swapChainBackBuffer, 0, mpBackBuffer,
+                                                 0, _getRenderFormat() );
+                }
+                else
+                {
+                    assert( mpBackBufferNoMSAA );
+                    context->ResolveSubresource( mpBackBufferNoMSAA, 0, mpBackBuffer,
+                                                 0, _getRenderFormat() );
+                    context->CopyResource( swapChainBackBuffer, mpBackBufferNoMSAA );
+                }
+
+                SAFE_RELEASE(swapChainBackBuffer);
+            }
+#endif
+
+            // flip presentation model swap chains have another semantic for first parameter
+            UINT syncInterval = mUseFlipSequentialMode ? std::max( 1u, mVSyncInterval ) :
+                                                         (mVSync ? mVSyncInterval : 0);
+            HRESULT hr = mSwapChain->Present( syncInterval, 0 );
+            if( FAILED(hr) )
+            {
+                OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
+                                "Error Presenting surfaces",
+                                "D3D11WindowHwnd::swapBuffers");
+            }
+        }
     }
 }

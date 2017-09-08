@@ -257,7 +257,7 @@ namespace Ogre {
         /** See
             RenderSystem
         */
-        void initialiseFromRenderSystemCapabilities(RenderSystemCapabilities* caps, RenderTarget* primary);
+        void initialiseFromRenderSystemCapabilities(RenderSystemCapabilities* caps, Window* primary);
         /** See
             RenderSystem
         */

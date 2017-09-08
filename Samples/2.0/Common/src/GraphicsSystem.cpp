@@ -344,12 +344,18 @@ namespace Demo
                 break;
             case SDL_WINDOWEVENT_CLOSE:
                 break;
-            case SDL_WINDOWEVENT_SHOWN:
-                mRenderWindow->setVisible(true);
-                break;
-            case SDL_WINDOWEVENT_HIDDEN:
-                mRenderWindow->setVisible(false);
-                break;
+        case SDL_WINDOWEVENT_SHOWN:
+            mRenderWindow->_setVisible( true );
+            break;
+        case SDL_WINDOWEVENT_HIDDEN:
+            mRenderWindow->_setVisible( false );
+            break;
+        case SDL_WINDOWEVENT_FOCUS_GAINED:
+            mRenderWindow->setFocused( true );
+            break;
+        case SDL_WINDOWEVENT_FOCUS_LOST:
+            mRenderWindow->setFocused( false );
+            break;
         }
     }
     #endif

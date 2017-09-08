@@ -549,6 +549,11 @@ namespace Ogre
             if( context1 )
                 context1->DiscardView( mDepthStencilRtv );
         }
+
+        //Prevent the runtime from thinking we might be sampling from the render target
+        ID3D11RenderTargetView *nullTargets[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
+        memset( nullTargets, 0, sizeof(nullTargets) );
+        context->OMSetRenderTargets( mNumColourEntries, nullTargets, 0 );
     }
     //-----------------------------------------------------------------------------------
     void D3D11RenderPassDescriptor::clearFrameBuffer(void)

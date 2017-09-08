@@ -27,6 +27,7 @@ THE SOFTWARE.
 */
 
 #include "OgreD3D11Window.h"
+#include "OgreD3D11RenderSystem.h"
 
 #include "OgreStringConverter.h"
 
@@ -36,7 +37,7 @@ namespace Ogre
                               bool fullscreenMode, PixelFormatGpu depthStencilFormat,
                               const NameValuePairList *miscParams,
                               D3D11Device &device, IDXGIFactory1 *dxgiFactory1,
-                              IDXGIFactory2 *dxgiFactory2 ) :
+                              IDXGIFactory2 *dxgiFactory2 , D3D11RenderSystem *renderSystem ) :
         Window( title, width, height, fullscreenMode ),
         mDevice( device ),
         mDxgiFactory1( dxgiFactory1 ),
@@ -47,8 +48,10 @@ namespace Ogre
         mHidden( false ),
         mAlwaysWindowedMode( false ),
         mHwGamma( false ),
+        mVisible( true ),
         mpBackBuffer( 0 ),
-        mpBackBufferNoMSAA( 0 )
+        mpBackBufferNoMSAA( 0 ),
+        mRenderSystem( renderSystem )
     {
         memset( &mMsaaDesc, 0, sizeof(mMsaaDesc) );
 
@@ -72,5 +75,10 @@ namespace Ogre
             if( opt != miscParams->end() )
                 mHwGamma = StringConverter::parseBool(opt->second);
         }
+    }
+    //-----------------------------------------------------------------------------------
+    D3D11Window::~D3D11Window()
+    {
+        mRenderSystem->_notifyWindowDestroyed( this );
     }
 }

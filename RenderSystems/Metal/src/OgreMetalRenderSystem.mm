@@ -2315,7 +2315,7 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::initialiseFromRenderSystemCapabilities(RenderSystemCapabilities* caps, RenderTarget* primary)
+    void MetalRenderSystem::initialiseFromRenderSystemCapabilities(RenderSystemCapabilities* caps, Window *primary)
     {
         DepthBuffer::DefaultDepthBufferFormat = PF_D32_FLOAT_X24_S8_UINT;
         mShaderManager = OGRE_NEW MetalGpuProgramManager( &mDevice );

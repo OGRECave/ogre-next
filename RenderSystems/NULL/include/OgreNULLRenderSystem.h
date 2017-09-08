@@ -200,7 +200,7 @@ namespace Ogre
         virtual bool hasAnisotropicMipMapFilter() const         { return true; }
 
         virtual void setClipPlanesImpl(const PlaneList& clipPlanes);
-        virtual void initialiseFromRenderSystemCapabilities(RenderSystemCapabilities* caps, RenderTarget* primary);
+        virtual void initialiseFromRenderSystemCapabilities(RenderSystemCapabilities* caps, Window *primary);
     };
 }
 

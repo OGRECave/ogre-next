@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "OgreD3D11TextureGpu.h"
 #include "OgreD3D11StagingTexture.h"
 #include "OgreD3D11AsyncTextureTicket.h"
+#include "OgreD3D11TextureGpuWindow.h"
 
 #include "Vao/OgreD3D11VaoManager.h"
 
@@ -171,6 +172,16 @@ namespace Ogre
         }
         memset( mBlankTexture, 0, sizeof(mBlankTexture) );
         memset( mDefaultSrv, 0, sizeof(mDefaultSrv) );
+    }
+    //-----------------------------------------------------------------------------------
+    TextureGpu* D3D11TextureGpuManager::createTextureGpuWindow( ID3D11Texture2D *backbuffer,
+                                                                Window *window )
+    {
+        return OGRE_NEW D3D11TextureGpuWindow( GpuPageOutStrategy::Discard, mVaoManager,
+                                               "RenderWindow",
+                                               TextureFlags::NotTexture|
+                                               TextureFlags::RenderWindowSpecific,
+                                               TextureTypes::Type2D, this, backbuffer, window );
     }
     //-----------------------------------------------------------------------------------
     ID3D11Resource* D3D11TextureGpuManager::getBlankTextureD3dName(

@@ -180,6 +180,14 @@ LRESULT CALLBACK WindowEventUtilities::_WndProc(HWND hWnd, UINT uMsg, WPARAM wPa
             (start->second)->windowFocusChange(win);
         break;
     }
+    case WM_PAINT:
+    {
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint( mHwnd, &ps );
+        win->_setVisible( !IsRectEmpty( &ps.rcPaint ) );
+        EndPaint( mHwnd, &ps );
+        break;
+    }
     case WM_SYSKEYDOWN:
         switch( wParam )
         {
@@ -337,7 +345,7 @@ void GLXProc( Ogre::Window *win, const XEvent &event )
         break;
     case UnmapNotify: //Minimised
         win->setFocused( false );
-        win->setVisible( false );
+        win->_setVisible( false );
         for(index = start ; index != end; ++index)
             (index->second)->windowFocusChange(win);
         break;
@@ -346,15 +354,15 @@ void GLXProc( Ogre::Window *win, const XEvent &event )
         {
         case VisibilityUnobscured:
             win->setFocused( true );
-            win->setVisible( true );
+            win->_setVisible( true );
             break;
         case VisibilityPartiallyObscured:
             win->setFocused( true );
-            win->setVisible( true );
+            win->_setVisible( true );
             break;
         case VisibilityFullyObscured:
             win->setFocused( false );
-            win->setVisible( false );
+            win->_setVisible( false );
             break;
         }
         for(index = start ; index != end; ++index)

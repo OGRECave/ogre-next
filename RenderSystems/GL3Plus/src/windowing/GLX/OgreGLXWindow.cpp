@@ -651,7 +651,7 @@ namespace Ogre
         return mVisible;
     }
     //-----------------------------------------------------------------------------------
-    void GLXWindow::setVisible(bool visible)
+    void GLXWindow::_setVisible(bool visible)
     {
         mVisible = visible;
     }
