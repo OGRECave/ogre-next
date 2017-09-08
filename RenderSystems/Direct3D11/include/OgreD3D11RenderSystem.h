@@ -181,7 +181,8 @@ namespace Ogre
 
         bool mRenderSystemWasInited;
 
-        IDXGIFactoryN*  mpDXGIFactory;
+        IDXGIFactoryN *mpDXGIFactory;
+        IDXGIFactory2 *mpDXGIFactory2;
 
         D3D11PixelFormatToShaderType mD3D11PixelFormatToShaderType;
 		

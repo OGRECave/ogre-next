@@ -103,7 +103,8 @@ namespace Ogre
           mMaxModifiedUavPlusOne( 0 ),
           mUavsDirty( false ),
           mDSTResView(0),
-          mpDXGIFactory( 0 )
+          mpDXGIFactory( 0 ),
+          mpDXGIFactory2( 0 )
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
 		 ,mStereoDriver(NULL)
 #endif	
@@ -1038,6 +1039,7 @@ namespace Ogre
         freeDevice();
         SAFE_DELETE( mDriverList );
         SAFE_RELEASE( mpDXGIFactory );
+        SAFE_RELEASE( mpDXGIFactory2 );
         mActiveD3DDriver = NULL;
         mDevice.ReleaseAll();
         LogManager::getSingleton().logMessage("D3D11 : Shutting down cleanly.");
@@ -1093,7 +1095,8 @@ namespace Ogre
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
         D3D11Window* win = new D3D11WindowHwnd(  name, width, height, fullScreen,
                                                  DepthBuffer::DefaultDepthBufferFormat,
-                                                 miscParams, mDevice, mpDXGIFactory );
+                                                 miscParams, mDevice, mpDXGIFactory, mpDXGIFactory2,
+                                                 this );
 #elif OGRE_PLATFORM == OGRE_PLATFORM_WINRT
 		String windowType;
 		if(miscParams)
@@ -1656,10 +1659,10 @@ namespace Ogre
         if( vpChanged )
         {
             D3D11_VIEWPORT d3dViewport;
-            d3dViewport.TopLeftX= mCurrentRenderViewport.getActualLeft();
-            d3dViewport.TopLeftY= mCurrentRenderViewport.getActualTop();
-            d3dViewport.Width   = mCurrentRenderViewport.getActualWidth();
-            d3dViewport.Height  = mCurrentRenderViewport.getActualHeight();
+            d3dViewport.TopLeftX= static_cast<FLOAT>( mCurrentRenderViewport.getActualLeft() );
+            d3dViewport.TopLeftY= static_cast<FLOAT>( mCurrentRenderViewport.getActualTop() );
+            d3dViewport.Width   = static_cast<FLOAT>( mCurrentRenderViewport.getActualWidth() );
+            d3dViewport.Height  = static_cast<FLOAT>( mCurrentRenderViewport.getActualHeight() );
             d3dViewport.MinDepth= 0.0f;
             d3dViewport.MaxDepth= 1.0f;
             context->RSSetViewports( 1u, &d3dViewport );
@@ -4613,6 +4616,7 @@ namespace Ogre
         mRenderSystemWasInited = true;
         // set pointers to NULL
         mpDXGIFactory = NULL;
+        mpDXGIFactory2 = NULL;
         HRESULT hr;
         hr = CreateDXGIFactory1( __uuidof(IDXGIFactoryN), (void**)&mpDXGIFactory );
         if( FAILED(hr) )

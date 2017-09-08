@@ -81,4 +81,28 @@ namespace Ogre
     {
         mRenderSystem->_notifyWindowDestroyed( this );
     }
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    D3D11WindowSwapChainBased::D3D11WindowSwapChainBased(
+            const String &title, uint32 width, uint32 height, bool fullscreenMode,
+            PixelFormatGpu depthStencilFormat, const NameValuePairList *miscParams,
+            D3D11Device &device, IDXGIFactory1 *dxgiFactory1,
+            IDXGIFactory2 *dxgiFactory2 , D3D11RenderSystem *renderSystem ) :
+        D3D11Window( title, width, height, fullscreenMode,
+                     depthStencilFormat, miscParams,
+                     device, dxgiFactory1,
+                     dxgiFactory2, renderSystem ),
+        mSwapChain( 0 ),
+        mSwapChain1( 0 ),
+        mUseFlipSequentialMode( false ),
+        mPreviousPresentStatsIsValid( false ),
+        mVBlankMissCount( 0 )
+    {
+        memset( &mPreviousPresentStats, 0, sizeof(mPreviousPresentStats) );
+    }
+    //-----------------------------------------------------------------------------------
+    D3D11WindowSwapChainBased::~D3D11WindowSwapChainBased()
+    {
+    }
 }

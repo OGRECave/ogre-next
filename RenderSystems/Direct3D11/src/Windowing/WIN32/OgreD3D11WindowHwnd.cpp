@@ -47,11 +47,13 @@ namespace Ogre
 {
     typedef vector<HMONITOR>::type DisplayMonitorList;
 
-    D3D11WindowHwnd::D3D11WindowHwnd( const String &title, uint32 width, uint32 height, bool fullscreenMode,
-                                      PixelFormatGpu depthStencilFormat, const NameValuePairList *miscParams,
-                                      D3D11Device &device, IDXGIFactoryN *pDXGIFactory ) :
+    D3D11WindowHwnd::D3D11WindowHwnd( const String &title, uint32 width, uint32 height,
+                                      bool fullscreenMode, PixelFormatGpu depthStencilFormat,
+                                      const NameValuePairList *miscParams,
+                                      D3D11Device &device, IDXGIFactory1 *dxgiFactory1,
+                                      IDXGIFactory2 *dxgiFactory2 , D3D11RenderSystem *renderSystem ) :
         D3D11WindowSwapChainBased( title, width, height, fullscreenMode, depthStencilFormat,
-                                   miscParams, device, pDXGIFactory ),
+                                   miscParams, device, dxgiFactory1, dxgiFactory2, renderSystem ),
         mHwnd( 0 ),
         mWindowedWinStyle( 0 ),
         mFullscreenWinStyle( 0 ),
