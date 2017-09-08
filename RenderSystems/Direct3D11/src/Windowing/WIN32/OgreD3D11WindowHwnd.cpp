@@ -200,7 +200,7 @@ namespace Ogre
             fsDesc.Windowed = mRequestedFullscreenMode && !mAlwaysWindowedMode;
 
             hr = mDxgiFactory2->CreateSwapChainForHwnd( mDevice.get(), mHwnd, &sd,
-                                                        &fsDesc, nullptr, &mSwapChain1 );
+                                                        &fsDesc, 0, &mSwapChain1 );
             if( SUCCEEDED(hr) )
             {
                 hr = mSwapChain1->QueryInterface( __uuidof(IDXGISwapChain),

@@ -67,6 +67,7 @@ THE SOFTWARE.
     #include <d3d11_1.h>
 #else
     #include <d3d11.h>
+    #include "OgreD3D11LegacySDKEmulation.h"
 #endif
 
 #if __OGRE_WINRT_PHONE_80

@@ -149,12 +149,12 @@ LRESULT CALLBACK WindowEventUtilities::_WndProc(HWND hWnd, UINT uMsg, WPARAM wPa
 
     // look up window instance
     // note: it is possible to get a WM_SIZE before WM_CREATE
-    RenderWindow* win = (RenderWindow*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
+    Window *win = (Window*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
     if (!win)
         return DefWindowProc(hWnd, uMsg, wParam, lParam);
 
     //LogManager* log = LogManager::getSingletonPtr();
-    //Iterator of all listeners registered to this RenderWindow
+    //Iterator of all listeners registered to this Window
     WindowEventListeners::iterator index,
         start = _msListeners.lower_bound(win),
         end = _msListeners.upper_bound(win);
@@ -164,17 +164,7 @@ LRESULT CALLBACK WindowEventUtilities::_WndProc(HWND hWnd, UINT uMsg, WPARAM wPa
     case WM_ACTIVATE:
     {
         bool active = (LOWORD(wParam) != WA_INACTIVE);
-        if( active )
-        {
-            win->setActive( true );
-        }
-        else
-        {
-            if( win->isDeactivatedOnFocusChange() )
-            {
-                win->setActive( false );
-            }
-        }
+        win->setFocused( active );
 
         for( ; start != end; ++start )
             (start->second)->windowFocusChange(win);
@@ -183,9 +173,9 @@ LRESULT CALLBACK WindowEventUtilities::_WndProc(HWND hWnd, UINT uMsg, WPARAM wPa
     case WM_PAINT:
     {
         PAINTSTRUCT ps;
-        HDC hdc = BeginPaint( mHwnd, &ps );
+        HDC hdc = BeginPaint( hWnd, &ps );
         win->_setVisible( !IsRectEmpty( &ps.rcPaint ) );
-        EndPaint( mHwnd, &ps );
+        EndPaint( hWnd, &ps );
         break;
     }
     case WM_SYSKEYDOWN:
@@ -381,10 +371,10 @@ OSStatus WindowEventUtilities::_CarbonWindowHandler(EventHandlerCallRef nextHand
 
     // Only events from our window should make it here
     // This ensures that our user data is our WindowRef
-    RenderWindow* curWindow = (RenderWindow*)wnd;
+    Window* curWindow = (Window*)wnd;
     if(!curWindow) return eventNotHandledErr;
     
-    //Iterator of all listeners registered to this RenderWindow
+    //Iterator of all listeners registered to this Window
     WindowEventListeners::iterator index,
         start = _msListeners.lower_bound(curWindow),
         end = _msListeners.upper_bound(curWindow);
@@ -395,15 +385,12 @@ OSStatus WindowEventUtilities::_CarbonWindowHandler(EventHandlerCallRef nextHand
     switch( eventKind )
     {
         case kEventWindowActivated:
-            curWindow->setActive( true );
+            curWindow->setFocused( true );
             for( ; start != end; ++start )
                 (start->second)->windowFocusChange(curWindow);
             break;
         case kEventWindowDeactivated:
-            if( curWindow->isDeactivatedOnFocusChange() )
-            {
-                curWindow->setActive( false );
-            }
+            curWindow->setFocused( false );
 
             for( ; start != end; ++start )
                 (start->second)->windowFocusChange(curWindow);
@@ -411,14 +398,14 @@ OSStatus WindowEventUtilities::_CarbonWindowHandler(EventHandlerCallRef nextHand
             break;
         case kEventWindowShown:
         case kEventWindowExpanded:
-            curWindow->setActive( true );
+            curWindow->setFocused( true );
             curWindow->setVisible( true );
             for( ; start != end; ++start )
                 (start->second)->windowFocusChange(curWindow);
             break;
         case kEventWindowHidden:
         case kEventWindowCollapsed:
-            curWindow->setActive( false );
+            curWindow->setFocused( false );
             curWindow->setVisible( false );
             for( ; start != end; ++start )
                 (start->second)->windowFocusChange(curWindow);
