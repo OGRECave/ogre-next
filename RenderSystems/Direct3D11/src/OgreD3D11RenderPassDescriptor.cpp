@@ -226,7 +226,7 @@ namespace Ogre
                     break;
                 }
 
-                assert( dynamic_cast<D3D11TextureGpu*>( mDepth.texture ) );
+                assert( dynamic_cast<D3D11TextureGpu*>( mColour[i].texture ) );
                 D3D11TextureGpu *textureD3d = static_cast<D3D11TextureGpu*>( mColour[i].texture );
 
                 ID3D11Resource *resourceTex = 0;
@@ -402,7 +402,8 @@ namespace Ogre
         {
             for( size_t i=0; i<mNumColourEntries; ++i )
             {
-                if( entriesToFlush & (RenderPassDescriptor::Colour0 << i) )
+                if( entriesToFlush & (RenderPassDescriptor::Colour0 << i) &&
+                    mColourRtv[i] )
                 {
                     if( mColour[i].loadAction == LoadAction::Clear ||
                         (isTiler && mColour[i].loadAction == LoadAction::ClearOnTilers) )
@@ -505,7 +506,8 @@ namespace Ogre
         {
             for( size_t i=0; i<mNumColourEntries; ++i )
             {
-                if( entriesToFlush & (RenderPassDescriptor::Colour0 << i) )
+                if( entriesToFlush & (RenderPassDescriptor::Colour0 << i) &&
+                    mColourRtv[i] )
                 {
                     if( (mColour[i].storeAction == StoreAction::MultisampleResolve ||
                          mColour[i].storeAction == StoreAction::StoreAndMultisampleResolve) &&
@@ -546,7 +548,8 @@ namespace Ogre
 
         if( (entriesToFlush & (RenderPassDescriptor::Depth|RenderPassDescriptor::Stencil)) &&
             mDepth.storeAction == StoreAction::DontCare &&
-            (mStencil.storeAction == StoreAction::DontCare || !mHasStencilFormat) )
+            (mStencil.storeAction == StoreAction::DontCare || !mHasStencilFormat) &&
+            mDepthStencilRtv )
         {
             if( context1 )
                 context1->DiscardView( mDepthStencilRtv );
