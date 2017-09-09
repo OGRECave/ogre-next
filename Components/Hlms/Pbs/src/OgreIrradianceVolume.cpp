@@ -46,6 +46,7 @@ namespace Ogre
         mIrradianceMaxPower( 1 ),
         mIrradianceOrigin( Vector3::ZERO ),
         mIrradianceCellSize( Vector3::UNIT_SCALE ),
+        mIrradianceVolume( 0 ),
         mIrradianceSamplerblock( 0 ),
         mVolumeData( 0 ),
         mBlurredVolumeData( 0 ),
