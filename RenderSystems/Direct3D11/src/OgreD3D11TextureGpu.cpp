@@ -435,13 +435,14 @@ namespace Ogre
         D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
         D3D11_SHADER_RESOURCE_VIEW_DESC *srvDescPtr = 0;
 
-        if( format != mPixelFormat || cubemapsAs2DArrays )
+        if( format != mPixelFormat || cubemapsAs2DArrays ||
+            isReinterpretable() || (isTexture() && PixelFormatGpuUtils::isDepth( mPixelFormat )) )
         {
             memset( &srvDesc, 0, sizeof(srvDesc) );
 
             srvDesc.Format = D3D11Mappings::getForSrv( format );
 
-            const bool isMsaaSrv = mMsaa && hasMsaaExplicitResolves();
+            const bool isMsaaSrv = mMsaa > 1u && hasMsaaExplicitResolves();
             srvDesc.ViewDimension = D3D11Mappings::get( mTextureType, cubemapsAs2DArrays, isMsaaSrv );
 
             if( isMsaaSrv )

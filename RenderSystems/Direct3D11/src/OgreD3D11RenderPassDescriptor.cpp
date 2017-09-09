@@ -181,7 +181,7 @@ namespace Ogre
                 }
                 else if( mColour[i].texture->getTextureType() == TextureTypes::Type2DArray )
                 {
-                    viewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DARRAY;
+                    viewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DMSARRAY;
                     setSliceToRtvDesc( viewDesc.Texture2DMSArray, mColour[i] );
                 }
             }
@@ -285,9 +285,9 @@ namespace Ogre
 
         depthStencilDesc.Format = D3D11Mappings::get( mDepth.texture->getPixelFormat() );
         if( mDepth.texture->getMsaa() > 1u )
-            depthStencilDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-        else
             depthStencilDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
+        else
+            depthStencilDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 
         if( mDepth.readOnly )
             depthStencilDesc.Flags |= D3D11_DSV_READ_ONLY_DEPTH;
