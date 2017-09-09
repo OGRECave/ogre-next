@@ -275,7 +275,8 @@ namespace Ogre
         mIrradianceVolume->setResolution( width, height, depth );
         mIrradianceVolume->setPixelFormat( PFG_R10G10B10A2_UNORM );
         //mIrradianceVolume->setNumMipmaps( maxMipCount );
-        //mIrradianceVolume->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+        mIrradianceVolume->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+        mIrradianceVolume->_setNextResidencyStatus( GpuResidency::Resident );
 
         HlmsSamplerblock samplerblock;
         samplerblock.mMinFilter = FO_LINEAR;
@@ -395,5 +396,7 @@ namespace Ogre
         stagingTexture->stopMapRegion();
         stagingTexture->upload( dstBox, mIrradianceVolume, 0 );
         textureManager->removeStagingTexture( stagingTexture );
+        if( !mIrradianceVolume->isDataReady() )
+            mIrradianceVolume->notifyDataIsReady();
     }
 }
