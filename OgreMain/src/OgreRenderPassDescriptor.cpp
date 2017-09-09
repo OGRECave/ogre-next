@@ -270,6 +270,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool RenderPassDescriptor::hasSameAttachments( const RenderPassDescriptor *otherPassDesc ) const
     {
+        if( !otherPassDesc )
+            return false;
+
         if( this->mNumColourEntries != otherPassDesc->mNumColourEntries )
             return false;
 

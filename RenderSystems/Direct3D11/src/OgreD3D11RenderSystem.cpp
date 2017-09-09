@@ -1616,7 +1616,7 @@ namespace Ogre
                                                        bool overlaysEnabled,
                                                        bool warnIfRtvWasFlushed )
     {
-        if( desc->mInformationOnly && desc->hasSameAttachments( desc ) )
+        if( desc->mInformationOnly && desc->hasSameAttachments( mCurrentRenderPassDescriptor ) )
             return;
 
         const int oldWidth = mCurrentRenderViewport.getActualWidth();

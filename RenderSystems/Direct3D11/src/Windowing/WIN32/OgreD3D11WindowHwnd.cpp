@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "OgreD3D11TextureGpuManager.h"
 #include "OgreWindowEventUtilities.h"
 #include "OgreDepthBuffer.h"
+#include "OgrePixelFormatGpuUtils.h"
 #include "OgreStringConverter.h"
 
 #include "OgreException.h"
@@ -594,6 +595,8 @@ namespace Ogre
 
         mTexture->setPixelFormat( mHwGamma ? PFG_RGBA8_UNORM_SRGB : PFG_RGBA8_UNORM );
         mDepthBuffer->setPixelFormat( DepthBuffer::DefaultDepthBufferFormat );
+        if( PixelFormatGpuUtils::isStencil( mDepthBuffer->getPixelFormat() ) )
+            mStencilBuffer = mDepthBuffer;
 #if TODO_OGRE_2_2
         mTexture->setMsaa(  );
         mTexture->setMsaaPattern( );
