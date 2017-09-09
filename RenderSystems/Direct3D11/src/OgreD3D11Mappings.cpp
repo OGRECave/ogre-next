@@ -796,6 +796,22 @@ namespace Ogre
         return DXGI_FORMAT_UNKNOWN;
     }
     //---------------------------------------------------------------------
+    DXGI_FORMAT D3D11Mappings::getForSrv( PixelFormatGpu pf )
+    {
+        switch( pf )
+        {
+        case PFG_D16_UNORM:                 return DXGI_FORMAT_R16_UNORM;
+        case PFG_D24_UNORM:                 return DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+        case PFG_D24_UNORM_S8_UINT:         return DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+        case PFG_D32_FLOAT:                 return DXGI_FORMAT_R32_FLOAT;
+        case PFG_D32_FLOAT_S8X24_UINT:      return DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS;
+        default:
+            return get( pf );
+        }
+
+        return get( pf );
+    }
+    //---------------------------------------------------------------------
     DXGI_FORMAT D3D11Mappings::getFamily( PixelFormatGpu pf )
     {
         switch( pf )
@@ -820,7 +836,7 @@ namespace Ogre
             return DXGI_FORMAT_R32G32_TYPELESS;
 
         case PFG_D32_FLOAT_S8X24_UINT:
-            return DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS;
+            return DXGI_FORMAT_R32G8X24_TYPELESS;
 
         case PFG_R10G10B10A2_UNORM:
         case PFG_R10G10B10A2_UINT:

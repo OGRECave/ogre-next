@@ -147,6 +147,7 @@ namespace Ogre
         return OGRE_NEW GL3PlusTextureGpuWindow( GpuPageOutStrategy::Discard, mVaoManager,
                                                  "RenderWindow",
                                                  TextureFlags::NotTexture|
+                                                 TextureFlags::RenderToTexture|
                                                  TextureFlags::RenderWindowSpecific,
                                                  TextureTypes::Type2D, this, context, window );
     }

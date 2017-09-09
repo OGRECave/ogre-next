@@ -70,7 +70,10 @@ namespace Ogre
         desc.Width      = static_cast<UINT>( mWidth );
         desc.MipLevels  = static_cast<UINT>( mNumMipmaps );
         desc.ArraySize  = static_cast<UINT>( mDepthOrSlices );
-        desc.Format     = D3D11Mappings::get( mPixelFormat );
+        if( isReinterpretable() || (isTexture() && PixelFormatGpuUtils::isDepth( mPixelFormat )) )
+            desc.Format = D3D11Mappings::getFamily( mPixelFormat );
+        else
+            desc.Format = D3D11Mappings::get( mPixelFormat );
         desc.Usage                  = D3D11_USAGE_DEFAULT;
         desc.BindFlags              = 0;
         desc.CPUAccessFlags         = 0;
@@ -124,7 +127,10 @@ namespace Ogre
         desc.Height     = static_cast<UINT>( mHeight );
         desc.MipLevels  = static_cast<UINT>( mNumMipmaps );
         desc.ArraySize  = static_cast<UINT>( mDepthOrSlices );
-        desc.Format     = D3D11Mappings::get( mPixelFormat );
+        if( isReinterpretable() || (isTexture() && PixelFormatGpuUtils::isDepth( mPixelFormat )) )
+            desc.Format = D3D11Mappings::getFamily( mPixelFormat );
+        else
+            desc.Format = D3D11Mappings::get( mPixelFormat );
         if( mMsaa > 1u && hasMsaaExplicitResolves() )
         {
             desc.SampleDesc.Count   = mMsaa;
@@ -220,7 +226,10 @@ namespace Ogre
         desc.Height     = static_cast<UINT>( mHeight );
         desc.Depth      = static_cast<UINT>( mDepthOrSlices );
         desc.MipLevels  = static_cast<UINT>( mNumMipmaps );
-        desc.Format     = D3D11Mappings::get( mPixelFormat );
+        if( isReinterpretable() || (isTexture() && PixelFormatGpuUtils::isDepth( mPixelFormat )) )
+            desc.Format = D3D11Mappings::getFamily( mPixelFormat );
+        else
+            desc.Format = D3D11Mappings::get( mPixelFormat );
         desc.Usage                  = D3D11_USAGE_DEFAULT;
         desc.BindFlags              = 0;
         desc.CPUAccessFlags         = 0;
@@ -324,7 +333,8 @@ namespace Ogre
         SAFE_RELEASE( mDefaultDisplaySrv );
 
         mDisplayTextureName = mFinalTextureName;
-        mDefaultDisplaySrv = _createSrv( mPixelFormat, false );
+        if( isTexture() )
+            mDefaultDisplaySrv = _createSrv( mPixelFormat, false );
 
         notifyAllListenersTextureChanged( TextureGpuListener::ReadyForDisplay );
     }
@@ -343,14 +353,20 @@ namespace Ogre
         if( hasAutomaticBatching() )
         {
             mDisplayTextureName = textureManagerD3d->getBlankTextureD3dName( TextureTypes::Type2DArray );
-            mDefaultDisplaySrv = textureManagerD3d->getBlankTextureSrv( TextureTypes::Type2DArray );
-            mDefaultDisplaySrv->AddRef();
+            if( isTexture() )
+            {
+                mDefaultDisplaySrv = textureManagerD3d->getBlankTextureSrv( TextureTypes::Type2DArray );
+                mDefaultDisplaySrv->AddRef();
+            }
         }
         else
         {
             mDisplayTextureName = textureManagerD3d->getBlankTextureD3dName( mTextureType );
-            mDefaultDisplaySrv = textureManagerD3d->getBlankTextureSrv( mTextureType );
-            mDefaultDisplaySrv->AddRef();
+            if( isTexture() )
+            {
+                mDefaultDisplaySrv = textureManagerD3d->getBlankTextureSrv( mTextureType );
+                mDefaultDisplaySrv->AddRef();
+            }
         }
     }
     //-----------------------------------------------------------------------------------
@@ -423,7 +439,7 @@ namespace Ogre
         {
             memset( &srvDesc, 0, sizeof(srvDesc) );
 
-            srvDesc.Format = D3D11Mappings::get( format );
+            srvDesc.Format = D3D11Mappings::getForSrv( format );
 
             const bool isMsaaSrv = mMsaa && hasMsaaExplicitResolves();
             srvDesc.ViewDimension = D3D11Mappings::get( mTextureType, cubemapsAs2DArrays, isMsaaSrv );
@@ -489,6 +505,9 @@ namespace Ogre
     ID3D11ShaderResourceView* D3D11TextureGpu::createSrv( PixelFormatGpu format,
                                                           bool cubemapsAs2DArrays ) const
     {
+        assert( isTexture() &&
+                "This texture is marked as 'TextureFlags::NotTexture', which "
+                "means it can't be used for reading as a regular texture." );
         assert( mDefaultDisplaySrv &&
                 "Either the texture wasn't properly loaded or _setToDisplayDummyTexture "
                 "wasn't called when it should have been" );

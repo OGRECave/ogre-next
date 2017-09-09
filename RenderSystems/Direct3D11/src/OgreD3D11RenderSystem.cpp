@@ -1162,6 +1162,8 @@ namespace Ogre
 			mSecondaryWindows.push_back(win);
 		}
 
+        win->_initialize( mTextureGpuManager );
+
 		return win;
 	}
     //---------------------------------------------------------------------

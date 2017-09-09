@@ -74,6 +74,7 @@ namespace Ogre
             If caller doesnt' delete it, it will leak.
         */
         TextureGpu* createTextureGpuWindow( ID3D11Texture2D *backbuffer, Window *window );
+        TextureGpu* createWindowDepthBuffer(void);
 
         ID3D11Resource* getBlankTextureD3dName( TextureTypes::TextureTypes textureType ) const;
         ID3D11ShaderResourceView* getBlankTextureSrv( TextureTypes::TextureTypes textureType ) const;

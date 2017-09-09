@@ -180,8 +180,19 @@ namespace Ogre
         return OGRE_NEW D3D11TextureGpuWindow( GpuPageOutStrategy::Discard, mVaoManager,
                                                "RenderWindow",
                                                TextureFlags::NotTexture|
+                                               TextureFlags::RenderToTexture|
                                                TextureFlags::RenderWindowSpecific,
                                                TextureTypes::Type2D, this, backbuffer, window );
+    }
+    //-----------------------------------------------------------------------------------
+    TextureGpu* D3D11TextureGpuManager::createWindowDepthBuffer(void)
+    {
+        return OGRE_NEW D3D11TextureGpuRenderTarget( GpuPageOutStrategy::Discard, mVaoManager,
+                                                     "RenderWindow DepthBuffer",
+                                                     TextureFlags::NotTexture|
+                                                     TextureFlags::RenderToTexture|
+                                                     TextureFlags::RenderWindowSpecific,
+                                                     TextureTypes::Type2D, this );
     }
     //-----------------------------------------------------------------------------------
     ID3D11Resource* D3D11TextureGpuManager::getBlankTextureD3dName(

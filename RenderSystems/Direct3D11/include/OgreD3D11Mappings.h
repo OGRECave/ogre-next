@@ -94,6 +94,7 @@ namespace Ogre
         static D3D11_SRV_DIMENSION get( TextureTypes::TextureTypes type,
                                         bool cubemapsAs2DArrays, bool forMsaa );
         static DXGI_FORMAT get( PixelFormatGpu pf );
+        static DXGI_FORMAT getForSrv( PixelFormatGpu pf );
         static DXGI_FORMAT getFamily( PixelFormatGpu pf );
 
 		static TextureType _getTexType(D3D11_SRV_DIMENSION type);

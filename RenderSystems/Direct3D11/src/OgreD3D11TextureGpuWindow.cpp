@@ -56,7 +56,7 @@ namespace Ogre
         mTextureType = TextureTypes::Type2D;
         mFinalTextureName = backbuffer;
         mDisplayTextureName = backbuffer;
-        mDefaultDisplaySrv = _createSrv( mPixelFormat, false );
+        mDefaultDisplaySrv = 0;
     }
     //-----------------------------------------------------------------------------------
     D3D11TextureGpuWindow::~D3D11TextureGpuWindow()
@@ -109,13 +109,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpuWindow::_setBackbuffer( ID3D11Texture2D *backbuffer )
     {
-        if( mDefaultDisplaySrv )
-            mDefaultDisplaySrv->Release();
-
         mFinalTextureName = backbuffer;
         mDisplayTextureName = backbuffer;
-        if( backbuffer )
-            mDefaultDisplaySrv = _createSrv( mPixelFormat, false );
     }
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpuWindow::setTextureType( TextureTypes::TextureTypes textureType )

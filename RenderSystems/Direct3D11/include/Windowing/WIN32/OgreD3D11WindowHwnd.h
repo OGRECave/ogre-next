@@ -48,7 +48,7 @@ namespace Ogre
         static BOOL CALLBACK createMonitorsInfoEnumProc( HMONITOR hMonitor, HDC hdcMonitor,
                                                          LPRECT lprcMonitor, LPARAM dwData );
 
-        void updateViewportsDimensions(void);
+        void notifyResolutionChanged(void);
         void updateWindowRect(void);
         void adjustWindow( uint32 clientWidth, uint32 clientHeight,
                            uint32 *outDrawableWidth, uint32 *outDrawableHeight );
@@ -57,6 +57,7 @@ namespace Ogre
         void setCommonSwapChain( T &sd );
         void createSwapChain(void);
         void resizeSwapChainBuffers( uint32 width, uint32 height );
+        void setResolutionFromSwapChain(void);
 
 
         void create( bool fullscreenMode, const NameValuePairList *miscParams );
@@ -71,6 +72,7 @@ namespace Ogre
                          IDXGIFactory2 *dxgiFactory2, D3D11RenderSystem *renderSystem );
         virtual ~D3D11WindowHwnd();
 
+        virtual void _initialize( TextureGpuManager *textureGpuManager );
         virtual void destroy(void);
 
         virtual void reposition( int32 left, int32 top );
@@ -84,7 +86,6 @@ namespace Ogre
         virtual bool isVisible(void) const;
         virtual void setHidden( bool hidden );
         virtual bool isHidden(void) const;
-        virtual void _initialize( TextureGpuManager *textureGpuManager ) {}
         virtual void swapBuffers(void);
     };
 }

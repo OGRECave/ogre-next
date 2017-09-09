@@ -138,6 +138,11 @@ namespace Ogre
         return mTexture->getHeight();
     }
     //-----------------------------------------------------------------------------------
+    PixelFormatGpu Window::getPixelFormat(void) const
+    {
+        return mTexture->getPixelFormat();
+    }
+    //-----------------------------------------------------------------------------------
     uint8 Window::getMsaa(void) const
     {
         return mTexture->getMsaa();

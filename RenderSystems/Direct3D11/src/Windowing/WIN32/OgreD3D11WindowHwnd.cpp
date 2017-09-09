@@ -30,7 +30,9 @@ THE SOFTWARE.
 #include "OgreD3D11Device.h"
 #include "OgreD3D11Mappings.h"
 #include "OgreD3D11TextureGpuWindow.h"
+#include "OgreD3D11TextureGpuManager.h"
 #include "OgreWindowEventUtilities.h"
+#include "OgreDepthBuffer.h"
 #include "OgreStringConverter.h"
 
 #include "OgreException.h"
@@ -92,7 +94,7 @@ namespace Ogre
         return TRUE;
     }
     //-----------------------------------------------------------------------------------
-    void D3D11WindowHwnd::updateViewportsDimensions(void)
+    void D3D11WindowHwnd::notifyResolutionChanged(void)
     {
         TODO_notify_listeners;
     }
@@ -127,7 +129,7 @@ namespace Ogre
             mRequestedWidth  = static_cast<uint32>( rc.right - rc.left );
             mRequestedHeight = static_cast<uint32>( rc.bottom - rc.top );
             resizeSwapChainBuffers( mRequestedWidth , mRequestedHeight );
-            updateViewportsDimensions();
+            notifyResolutionChanged();
         }
     }
     //-----------------------------------------------------------------------------------
@@ -200,7 +202,7 @@ namespace Ogre
             ZeroMemory( &fsDesc, sizeof(fsDesc) );
             fsDesc.RefreshRate.Numerator    = mFrequencyNumerator;
             fsDesc.RefreshRate.Denominator  = mFrequencyDenominator;
-            fsDesc.Windowed = mRequestedFullscreenMode && !mAlwaysWindowedMode;
+            fsDesc.Windowed = !(mRequestedFullscreenMode && !mAlwaysWindowedMode);
 
             hr = mDxgiFactory2->CreateSwapChainForHwnd( mDevice.get(), mHwnd, &sd,
                                                         &fsDesc, 0, &mSwapChain1 );
@@ -224,9 +226,17 @@ namespace Ogre
             sd.BufferDesc.RefreshRate.Numerator     = mFrequencyNumerator;
             sd.BufferDesc.RefreshRate.Denominator   = mFrequencyDenominator;
             sd.OutputWindow = mHwnd;
-            sd.Windowed = mRequestedFullscreenMode && !mAlwaysWindowedMode;
+            sd.Windowed = !(mRequestedFullscreenMode && !mAlwaysWindowedMode);
 
             hr = mDxgiFactory1->CreateSwapChain( mDevice.get(), &sd, &mSwapChain );
+        }
+
+        if( FAILED(hr) )
+        {
+            const String errorDescription = mDevice.getErrorDescription(hr);
+            OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
+                            "Unable to create swap chain\nError Description:" + errorDescription,
+                            "D3D11WindowHwnd::createSwapChain" );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -253,6 +263,16 @@ namespace Ogre
                             "Unable to resize swap chain\nError Description:" + errorDescription,
                             "D3D11WindowHwnd::resizeSwapChainBuffers" );
         }
+
+        setResolutionFromSwapChain();
+
+        // Notify viewports of resize
+        notifyResolutionChanged();
+        mRenderSystem->fireDeviceEvent( &mDevice, "WindowResized", this );
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11WindowHwnd::setResolutionFromSwapChain(void)
+    {
         if( mSwapChain1 )
         {
             DXGI_SWAP_CHAIN_DESC1 desc;
@@ -275,7 +295,7 @@ namespace Ogre
         }
 
         // Obtain back buffer from swapchain
-        hr = mSwapChain->GetBuffer( 0, __uuidof(ID3D11Texture2D), (LPVOID*)&mpBackBuffer );
+        HRESULT hr = mSwapChain->GetBuffer( 0, __uuidof(ID3D11Texture2D), (LPVOID*)&mpBackBuffer );
 
         if( FAILED(hr) )
         {
@@ -290,10 +310,6 @@ namespace Ogre
 
         mTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
         mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8*)0 );
-
-        // Notify viewports of resize
-        updateViewportsDimensions();
-        mRenderSystem->fireDeviceEvent( &mDevice, "WindowResized", this );
     }
     //-----------------------------------------------------------------------------------
     void D3D11WindowHwnd::create( bool fullscreenMode, const NameValuePairList *miscParams )
@@ -553,7 +569,39 @@ namespace Ogre
         GetClientRect( mHwnd, &rc );
         setFinalResolution( rc.right - rc.left, rc.bottom - rc.top );
 
+        setHidden( mHidden );
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11WindowHwnd::_initialize( TextureGpuManager *textureGpuManager )
+    {
         createSwapChain();
+
+        D3D11TextureGpuManager *textureManager =
+                static_cast<D3D11TextureGpuManager*>( textureGpuManager );
+
+        // Obtain back buffer from swapchain
+        HRESULT hr = mSwapChain->GetBuffer( 0, __uuidof(ID3D11Texture2D), (LPVOID*)&mpBackBuffer );
+
+        if( FAILED(hr) )
+        {
+            OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
+                            "Unable to Get Back Buffer for swap chain",
+                            "D3D11WindowHwnd::resizeSwapChainBuffers" );
+        }
+
+        mTexture        = textureManager->createTextureGpuWindow( mpBackBuffer, this );
+        mDepthBuffer    = textureManager->createWindowDepthBuffer();
+
+        mTexture->setPixelFormat( mHwGamma ? PFG_RGBA8_UNORM_SRGB : PFG_RGBA8_UNORM );
+        mDepthBuffer->setPixelFormat( DepthBuffer::DefaultDepthBufferFormat );
+#if TODO_OGRE_2_2
+        mTexture->setMsaa(  );
+        mTexture->setMsaaPattern( );
+
+        mDepthBuffer->setMsaa(  );
+        mDepthBuffer->setMsaaPattern( );
+#endif
+        setResolutionFromSwapChain();
 
         mDxgiFactory1->MakeWindowAssociation( mHwnd,
                                               mAlwaysWindowedMode == true ? DXGI_MWA_NO_ALT_ENTER : 0 );
@@ -676,7 +724,7 @@ namespace Ogre
             if( (oldFullscreen && goFullscreen) || mIsExternal )
             {
                 // Notify viewports of resize
-                updateViewportsDimensions();
+                notifyResolutionChanged();
             }
         }
     }

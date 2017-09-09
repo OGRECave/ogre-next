@@ -158,7 +158,9 @@ namespace Ogre
                              mColour[i].texture->getNameStr() + "' must be resident!",
                              "D3D11RenderPassDescriptor::updateColourRtv" );
             }
-            if( mColour[i].texture->isRenderWindowSpecific() )
+            if( (i != 0 && mColour[i].texture->isRenderWindowSpecific()) ||
+                (mColour[0].texture->isRenderWindowSpecific() &&
+                 !mColour[i].texture->isRenderWindowSpecific()) )
             {
                 //This is a GL restriction actually, which we mimic for consistency
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
