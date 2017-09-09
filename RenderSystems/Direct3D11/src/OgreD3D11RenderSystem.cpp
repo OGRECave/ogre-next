@@ -104,7 +104,8 @@ namespace Ogre
           mUavsDirty( false ),
           mDSTResView(0),
           mpDXGIFactory( 0 ),
-          mpDXGIFactory2( 0 )
+          mpDXGIFactory2( 0 ),
+          mMaxComputeShaderSrvCount( 0 )
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
 		 ,mStereoDriver(NULL)
 #endif	
@@ -115,6 +116,8 @@ namespace Ogre
         memset( mUavTexPtr, 0, sizeof( mUavTexPtr ) );
         memset( mUavBuffers, 0, sizeof( mUavBuffers ) );
         memset( mUavs, 0, sizeof( mUavs ) );
+        memset( mNullViews, 0, sizeof(mNullViews) );
+        memset( mMaxSrvCount, 0, sizeof(mMaxSrvCount) );
 
         mRenderSystemWasInited = false;
         mSwitchingFullscreenCounter = 0;
@@ -1651,7 +1654,21 @@ namespace Ogre
             entriesToFlush = currPassDesc->willSwitchTo( newPassDesc, vpChanged, warnIfRtvWasFlushed );
 
             if( entriesToFlush != 0 )
+            {
                 currPassDesc->performStoreActions( oldX, oldY, oldWidth, oldHeight, entriesToFlush );
+
+                //Set all textures to 0 to prevent the runtime from thinkin we might
+                //be sampling from the render target (common when doing shadow map
+                //rendering)
+                context->VSSetShaderResources( 0, mMaxSrvCount[VertexShader],   mNullViews );
+                context->PSSetShaderResources( 0, mMaxSrvCount[PixelShader],    mNullViews );
+                context->HSSetShaderResources( 0, mMaxSrvCount[HullShader],     mNullViews );
+                context->DSSetShaderResources( 0, mMaxSrvCount[DomainShader],   mNullViews );
+                context->GSSetShaderResources( 0, mMaxSrvCount[GeometryShader], mNullViews );
+                context->CSSetShaderResources( 0, mMaxComputeShaderSrvCount,    mNullViews );
+                memset( mMaxSrvCount, 0, sizeof(mMaxSrvCount) );
+                mMaxComputeShaderSrvCount = 0;
+            }
         }
         else
         {
@@ -1692,6 +1709,19 @@ namespace Ogre
         D3D11RenderPassDescriptor *passDesc =
                 static_cast<D3D11RenderPassDescriptor*>( mCurrentRenderPassDescriptor );
         passDesc->performStoreActions( x, y, w, h, RenderPassDescriptor::All );
+
+        ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
+        //Set all textures to 0 to prevent the runtime from thinkin we might
+        //be sampling from the render target (common when doing shadow map
+        //rendering)
+        context->VSSetShaderResources( 0, mMaxSrvCount[VertexShader],   mNullViews );
+        context->PSSetShaderResources( 0, mMaxSrvCount[PixelShader],    mNullViews );
+        context->HSSetShaderResources( 0, mMaxSrvCount[HullShader],     mNullViews );
+        context->DSSetShaderResources( 0, mMaxSrvCount[DomainShader],   mNullViews );
+        context->GSSetShaderResources( 0, mMaxSrvCount[GeometryShader], mNullViews );
+        context->CSSetShaderResources( 0, mMaxComputeShaderSrvCount,    mNullViews );
+        memset( mMaxSrvCount, 0, sizeof(mMaxSrvCount) );
+        mMaxComputeShaderSrvCount = 0;
 
         RenderSystem::endRenderPassDescriptor();
     }
@@ -2188,6 +2218,8 @@ namespace Ogre
             ID3D11ShaderResourceView *view = tex->getDefaultDisplaySrv();
             mDevice.GetImmediateContext()->VSSetShaderResources( static_cast<UINT>(stage), 1u, &view );
             mDevice.GetImmediateContext()->PSSetShaderResources( static_cast<UINT>(stage), 1u, &view );
+            mMaxSrvCount[VertexShader]  = std::max( mMaxSrvCount[VertexShader], stage + 1u );
+            mMaxSrvCount[PixelShader]   = std::max( mMaxSrvCount[PixelShader], stage + 1u );
         }
         else
         {
@@ -2229,6 +2261,8 @@ namespace Ogre
                 context->DSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
                 break;
             }
+
+            mMaxSrvCount[i] = std::max( mMaxSrvCount[i], slotStart + texIdx + numTexturesUsed );
 
             texIdx += numTexturesUsed;
         }
@@ -2748,6 +2782,7 @@ namespace Ogre
             D3D11TextureGpu *tex = static_cast<D3D11TextureGpu*>( texPtr );
             ID3D11ShaderResourceView *view = tex->getDefaultDisplaySrv();
             mDevice.GetImmediateContext()->CSSetShaderResources( static_cast<UINT>(slot), 1u, &view );
+            mMaxComputeShaderSrvCount = std::max( mMaxComputeShaderSrvCount, slot + 1u );
         }
         else
         {

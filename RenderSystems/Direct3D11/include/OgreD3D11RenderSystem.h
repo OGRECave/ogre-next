@@ -185,6 +185,10 @@ namespace Ogre
         IDXGIFactory2 *mpDXGIFactory2;
 
         D3D11PixelFormatToShaderType mD3D11PixelFormatToShaderType;
+
+        ID3D11ShaderResourceView *mNullViews[D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT];
+        uint32 mMaxSrvCount[NumShaderTypes];
+        uint32 mMaxComputeShaderSrvCount;
 		
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
 		D3D11StereoDriverBridge* mStereoDriver;
