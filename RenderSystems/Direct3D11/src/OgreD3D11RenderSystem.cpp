@@ -1673,7 +1673,7 @@ namespace Ogre
         scissorRc.left  = mCurrentRenderViewport.getScissorActualLeft();
         scissorRc.top   = mCurrentRenderViewport.getScissorActualTop();
         scissorRc.right = scissorRc.left + mCurrentRenderViewport.getScissorActualWidth();
-        scissorRc.bottom= scissorRc.bottom + mCurrentRenderViewport.getScissorActualHeight();
+        scissorRc.bottom= scissorRc.top + mCurrentRenderViewport.getScissorActualHeight();
         context->RSSetScissorRects( 1u, &scissorRc );
 
         newPassDesc->performLoadActions( &mCurrentRenderViewport, entriesToFlush );

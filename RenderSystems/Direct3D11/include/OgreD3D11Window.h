@@ -51,7 +51,7 @@ namespace Ogre
         bool mVisible;
 
         /// Effective FSAA mode, limited by hardware capabilities
-        DXGI_SAMPLE_DESC mMsaaDesc;
+        //DXGI_SAMPLE_DESC mMsaaDesc;
 
         // Window size depended resources - must be released
         // before swapchain resize and recreated later
@@ -98,7 +98,8 @@ namespace Ogre
         D3D11WindowSwapChainBased( const String &title, uint32 width, uint32 height,
                                    bool fullscreenMode, PixelFormatGpu depthStencilFormat,
                                    const NameValuePairList *miscParams,
-                                   D3D11Device &device, IDXGIFactoryN *pDXGIFactory );
+                                   D3D11Device &device, IDXGIFactory1 *dxgiFactory1,
+                                   IDXGIFactory2 *dxgiFactory2, D3D11RenderSystem *renderSystem );
         virtual ~D3D11WindowSwapChainBased();
     };
 }

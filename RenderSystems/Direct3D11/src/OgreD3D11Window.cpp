@@ -53,7 +53,7 @@ namespace Ogre
         mpBackBufferNoMSAA( 0 ),
         mRenderSystem( renderSystem )
     {
-        memset( &mMsaaDesc, 0, sizeof(mMsaaDesc) );
+//        memset( &mMsaaDesc, 0, sizeof(mMsaaDesc) );
 
         if( miscParams )
         {
@@ -62,10 +62,12 @@ namespace Ogre
             opt = miscParams->find("hidden");
             if( opt != miscParams->end() )
                 mHidden = StringConverter::parseBool(opt->second);
+#if TODO_OGRE_2_2
             // MSAA
             opt = miscParams->find("MSAA");
             if( opt != miscParams->end() )
                 mMsaaDesc.Count = StringConverter::parseUnsignedInt(opt->second);
+#endif
             // FSAA quality (TODO)
 //            opt = miscParams->find("FSAAHint");
 //            if( opt != miscParams->end() )

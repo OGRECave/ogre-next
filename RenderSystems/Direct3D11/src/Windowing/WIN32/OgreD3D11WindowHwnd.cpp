@@ -59,6 +59,7 @@ namespace Ogre
         mFullscreenWinStyle( 0 ),
         mLastSwitchingFullscreenCounter( 0 )
     {
+        create( fullscreenMode, miscParams );
     }
     //-----------------------------------------------------------------------------------
     D3D11WindowHwnd::~D3D11WindowHwnd()
@@ -568,8 +569,6 @@ namespace Ogre
 
         DestroyWindow( mHwnd );
         mHwnd = 0;
-
-        D3D11WindowSwapChainBased::destroy();
     }
     //-----------------------------------------------------------------------------------
     uint8 D3D11WindowHwnd::getBufferCount(void) const
@@ -785,7 +784,7 @@ namespace Ogre
 #if TODO_OGRE_2_2
             //Step of resolving MSAA resource for swap chains in FlipSequentialMode
             //should be done by application rather than by OS.
-            if( mUseFlipSequentialMode && mMsaaDesc.Count > 1u )
+            if( mUseFlipSequentialMode && getMsaa() > 1u )
             {
                 //We can't resolve MSAA sRGB -> MSAA non-sRGB, so we need to have 2 textures:
                 // 1. Render to MSAA sRGB

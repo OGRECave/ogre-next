@@ -60,7 +60,6 @@ namespace Ogre
 
 
         void create( bool fullscreenMode, const NameValuePairList *miscParams );
-        void destroy(void);
 
         uint8 getBufferCount(void) const;
 
@@ -71,6 +70,8 @@ namespace Ogre
                          D3D11Device &device, IDXGIFactory1 *dxgiFactory1,
                          IDXGIFactory2 *dxgiFactory2, D3D11RenderSystem *renderSystem );
         virtual ~D3D11WindowHwnd();
+
+        virtual void destroy(void);
 
         virtual void reposition( int32 left, int32 top );
         virtual void requestResolution( uint32 width, uint32 height );
