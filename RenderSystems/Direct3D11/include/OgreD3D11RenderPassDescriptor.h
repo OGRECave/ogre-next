@@ -31,6 +31,8 @@ THE SOFTWARE.
 
 #include "OgreD3D11Prerequisites.h"
 #include "OgreRenderPassDescriptor.h"
+#include "OgreRenderSystem.h"
+#include "OgreCommon.h"
 
 #include "OgreHeaderPrefix.h"
 
@@ -68,12 +70,14 @@ namespace Ogre
         share the same RTV setup. This doesn't mean these RenderPassDescriptor are exactly the
         same, as they may have different clear, loadAction or storeAction values.
     */
-    class _OgreD3D11Export D3D11RenderPassDescriptor : public RenderPassDescriptor
+    class _OgreD3D11Export D3D11RenderPassDescriptor : public RenderPassDescriptor,
+                                                       public RenderSystem::Listener
     {
     protected:
         ID3D11RenderTargetView  *mColourRtv[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
         ID3D11DepthStencilView  *mDepthStencilRtv;
         bool                    mHasStencilFormat;
+        bool                    mHasRenderWindow;
 
         FrameBufferDescMap::iterator mSharedFboItor;
 
@@ -109,6 +113,10 @@ namespace Ogre
                                   uint32 width, uint32 height, uint32 entriesToFlush );
 
         void clearFrameBuffer(void);
+
+        // RenderSystem::Listener overload
+        virtual void eventOccurred( const String &eventName,
+                                    const NameValuePairList *parameters );
     };
 
     /** @} */

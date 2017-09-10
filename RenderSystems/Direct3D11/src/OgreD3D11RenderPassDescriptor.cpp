@@ -30,6 +30,7 @@ THE SOFTWARE.
 
 #include "OgreD3D11TextureGpu.h"
 #include "OgreD3D11RenderSystem.h"
+#include "OgreD3D11Window.h"
 
 #include "OgreHlmsDatablock.h"
 #include "OgrePixelFormatGpuUtils.h"
@@ -40,6 +41,7 @@ namespace Ogre
                                                           D3D11RenderSystem *renderSystem ) :
         mDepthStencilRtv( 0 ),
         mHasStencilFormat( false ),
+        mHasRenderWindow( false ),
         mSharedFboItor( renderSystem->_getFrameBufferDescMap().end() ),
         mDevice( device ),
         mRenderSystem( renderSystem )
@@ -50,10 +52,7 @@ namespace Ogre
     D3D11RenderPassDescriptor::~D3D11RenderPassDescriptor()
     {
         for( size_t i=0u; i<mNumColourEntries; ++i )
-        {
-            mColourRtv[i]->Release();
-            mColourRtv[i] = 0;
-        }
+            SAFE_RELEASE( mColourRtv[i] );
 
         SAFE_RELEASE( mDepthStencilRtv );
 
@@ -65,6 +64,9 @@ namespace Ogre
                 frameBufferDescMap.erase( mSharedFboItor );
             mSharedFboItor = frameBufferDescMap.end();
         }
+
+        if( mHasRenderWindow )
+            mRenderSystem->removeListener( this );
     }
     //-----------------------------------------------------------------------------------
     void D3D11RenderPassDescriptor::checkRenderWindowStatus(void)
@@ -88,6 +90,21 @@ namespace Ogre
                              "Cannot mix RenderWindow colour texture with depth or stencil buffer "
                              "that aren't for RenderWindows, or viceversa",
                              "D3D11RenderPassDescriptor::checkRenderWindowStatus" );
+            }
+
+            if( !mHasRenderWindow )
+            {
+                mHasRenderWindow = true;
+                //Listen for swapchain resizes
+                mRenderSystem->addListener( this );
+            }
+        }
+        else
+        {
+            if( mHasRenderWindow )
+            {
+                mRenderSystem->removeListener( this );
+                mHasRenderWindow = false;
             }
         }
 
@@ -143,8 +160,7 @@ namespace Ogre
             for( size_t i=mNumColourEntries; i<lastNumColourEntries; ++i )
             {
                 //Detach removed colour entries
-                mColourRtv[i]->Release();
-                mColourRtv[i] = 0;
+                SAFE_RELEASE( mColourRtv[i] );
             }
         }
 
@@ -158,9 +174,7 @@ namespace Ogre
                              mColour[i].texture->getNameStr() + "' must be resident!",
                              "D3D11RenderPassDescriptor::updateColourRtv" );
             }
-            if( (i != 0 && mColour[i].texture->isRenderWindowSpecific()) ||
-                (mColour[0].texture->isRenderWindowSpecific() &&
-                 !mColour[i].texture->isRenderWindowSpecific()) )
+            if( mHasRenderWindow != mColour[i].texture->isRenderWindowSpecific() )
             {
                 //This is a GL restriction actually, which we mimic for consistency
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
@@ -589,6 +603,39 @@ namespace Ogre
                 flags |= D3D11_CLEAR_STENCIL;
             context->ClearDepthStencilView( mDepthStencilRtv, flags,
                                             mDepth.clearDepth, mStencil.clearStencil );
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11RenderPassDescriptor::eventOccurred( const String &eventName,
+                                                   const NameValuePairList *parameters )
+    {
+        if( !parameters )
+            return;
+
+        if( eventName != "WindowBeforeResize" && eventName != "WindowResized" )
+            return;
+
+        NameValuePairList::const_iterator itor = parameters->find( "Window" );
+
+        if( itor == parameters->end() )
+        {
+            OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR,
+                         "Window pointer not passed on SwapChain resize",
+                         "D3D11RenderPassDescriptor::eventOccurred" );
+        }
+
+        D3D11Window *window = (D3D11Window*)StringConverter::parseSizeT( itor->second );
+        if( mNumColourEntries > 0 && mColour[0].texture == window->getTexture() )
+        {
+            if( eventName == "WindowBeforeResize" )
+            {
+                SAFE_RELEASE( mColourRtv[0] );
+                SAFE_RELEASE( mDepthStencilRtv );
+            }
+            else
+            {
+                entriesModified( RenderPassDescriptor::All );
+            }
         }
     }
     //-----------------------------------------------------------------------------------
