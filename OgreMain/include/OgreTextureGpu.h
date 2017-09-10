@@ -207,7 +207,7 @@ namespace Ogre
                     TextureGpuManager *textureManager );
         virtual ~TextureGpu();
 
-        void notifyTextureIsBeingDeleted(void);
+        void _resetTextureManager(void);
 
         virtual String getNameStr(void) const;
 

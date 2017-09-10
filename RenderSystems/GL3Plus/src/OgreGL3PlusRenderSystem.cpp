@@ -752,6 +752,7 @@ namespace Ogre {
 
         // Create the window
         Ogre::Window *win = mGLSupport->newWindow( name, width, height, fullScreen, miscParams );
+        mWindows.insert( win );
 
         if( !mGLInitialised )
         {
@@ -1028,60 +1029,6 @@ namespace Ogre {
         MultiRenderTarget *retval = mRTTManager->createMultiRenderTarget(name);
         attachRenderTarget(*retval);
         return retval;
-    }
-
-    void GL3PlusRenderSystem::destroyRenderWindow(RenderWindow* pWin)
-    {
-        // Find it to remove from list.
-        RenderTargetMap::iterator i = mRenderTargets.begin();
-
-        while (i != mRenderTargets.end())
-        {
-            if (i->second == pWin)
-            {
-                GL3PlusContext *windowContext = 0;
-                pWin->getCustomAttribute(GL3PlusRenderTexture::CustomAttributeString_GLCONTEXT, &windowContext);
-
-                // 1 Window <-> 1 Context, should be always true.
-                assert( windowContext );
-
-                bool bFound = false;
-                // Find the depth buffer from this window and remove it.
-                DepthBufferMap::iterator itMap = mDepthBufferPool.begin();
-                DepthBufferMap::iterator enMap = mDepthBufferPool.end();
-
-                while( itMap != enMap && !bFound )
-                {
-                    DepthBufferVec::iterator itor = itMap->second.begin();
-                    DepthBufferVec::iterator end  = itMap->second.end();
-
-                    while( itor != end )
-                    {
-                        // A DepthBuffer with no depth & stencil pointers is a dummy one,
-                        // look for the one that matches the same GL context.
-                        GL3PlusDepthBuffer *depthBuffer = static_cast<GL3PlusDepthBuffer*>(*itor);
-                        GL3PlusContext *glContext = depthBuffer->getGLContext();
-
-                        if( glContext == windowContext &&
-                            (depthBuffer->getDepthBuffer() || depthBuffer->getStencilBuffer()) )
-                        {
-                            bFound = true;
-
-                            delete *itor;
-                            itMap->second.erase( itor );
-                            break;
-                        }
-                        ++itor;
-                    }
-
-                    ++itMap;
-                }
-
-                mRenderTargets.erase(i);
-                delete pWin;
-                break;
-            }
-        }
     }
 
     String GL3PlusRenderSystem::getErrorDescription(long errorNumber) const

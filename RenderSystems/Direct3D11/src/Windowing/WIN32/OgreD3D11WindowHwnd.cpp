@@ -247,8 +247,7 @@ namespace Ogre
 
         mDepthBuffer->_transitionTo( GpuResidency::OnStorage, (uint8*)0 );
         mTexture->_transitionTo( GpuResidency::OnStorage, (uint8*)0 );
-        mpBackBuffer->Release();
-        mpBackBuffer = 0;
+        SAFE_RELEASE( mpBackBuffer );
 
         // Call flush before resize buffers to ensure destruction of resources.
         // not doing so may result in 'Out of memory' exception.
@@ -262,6 +261,16 @@ namespace Ogre
             const String errorDescription = mDevice.getErrorDescription(hr);
             OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
                             "Unable to resize swap chain\nError Description:" + errorDescription,
+                            "D3D11WindowHwnd::resizeSwapChainBuffers" );
+        }
+
+        // Obtain back buffer from swapchain
+        hr = mSwapChain->GetBuffer( 0, __uuidof(ID3D11Texture2D), (LPVOID*)&mpBackBuffer );
+
+        if( FAILED(hr) )
+        {
+            OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
+                            "Unable to Get Back Buffer for swap chain",
                             "D3D11WindowHwnd::resizeSwapChainBuffers" );
         }
 
@@ -295,15 +304,7 @@ namespace Ogre
             mFullscreenMode             = mRequestedFullscreenMode;
         }
 
-        // Obtain back buffer from swapchain
-        HRESULT hr = mSwapChain->GetBuffer( 0, __uuidof(ID3D11Texture2D), (LPVOID*)&mpBackBuffer );
-
-        if( FAILED(hr) )
-        {
-            OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
-                            "Unable to Get Back Buffer for swap chain",
-                            "D3D11WindowHwnd::resizeSwapChainBuffers" );
-        }
+        assert( mpBackBuffer && "Back buffer should've been obtained by now!" );
 
         assert( dynamic_cast<D3D11TextureGpuWindow*>( mTexture ) );
         D3D11TextureGpuWindow *texWindow = static_cast<D3D11TextureGpuWindow*>( mTexture );
@@ -580,6 +581,7 @@ namespace Ogre
         D3D11TextureGpuManager *textureManager =
                 static_cast<D3D11TextureGpuManager*>( textureGpuManager );
 
+        SAFE_RELEASE( mpBackBuffer );
         // Obtain back buffer from swapchain
         HRESULT hr = mSwapChain->GetBuffer( 0, __uuidof(ID3D11Texture2D), (LPVOID*)&mpBackBuffer );
 
@@ -587,7 +589,7 @@ namespace Ogre
         {
             OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
                             "Unable to Get Back Buffer for swap chain",
-                            "D3D11WindowHwnd::resizeSwapChainBuffers" );
+                            "D3D11WindowHwnd::_initialize" );
         }
 
         mTexture        = textureManager->createTextureGpuWindow( mpBackBuffer, this );
@@ -613,6 +615,23 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11WindowHwnd::destroy(void)
     {
+        SAFE_RELEASE( mpBackBuffer );
+        SAFE_RELEASE( mSwapChain );
+        SAFE_RELEASE( mSwapChain1 );
+
+        if( mTexture )
+        {
+            OGRE_DELETE mTexture;
+            mTexture = 0;
+        }
+
+        if( mDepthBuffer )
+        {
+            OGRE_DELETE mDepthBuffer;
+            mDepthBuffer = 0;
+        }
+        mStencilBuffer = 0;
+
         if( !mHwnd )
             return;
 
@@ -730,6 +749,15 @@ namespace Ogre
                 notifyResolutionChanged();
             }
         }
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11WindowHwnd::windowMovedOrResized(void)
+    {
+        if( !mHwnd || IsIconic(mHwnd) || !mSwapChain )
+            return;
+
+        updateWindowRect();
+        notifyResolutionChanged();
     }
     //-----------------------------------------------------------------------------------
     bool D3D11WindowHwnd::isClosed(void) const

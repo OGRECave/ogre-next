@@ -217,9 +217,18 @@ namespace Ogre {
     }
 
     //---------------------------------------------------------------------------------------------
-    void RenderSystem::destroyRenderWindow(const String& name)
+    void RenderSystem::destroyRenderWindow( Window *window )
     {
-        destroyRenderTarget(name);
+        WindowSet::iterator itor = mWindows.find( window );
+
+        if( itor == mWindows.end() )
+        {
+            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                         "Window does not belong to us or is already deleted!",
+                         "RenderSystem::destroyRenderWindow" );
+        }
+        mWindows.erase( window );
+        OGRE_DELETE window;
     }
     //---------------------------------------------------------------------------------------------
     void RenderSystem::destroyRenderTexture(const String& name)
@@ -814,6 +823,35 @@ namespace Ogre {
         OGRE_DELETE mVaoManager;
         mVaoManager = 0;
 
+        {
+            // Remove all windows.
+            // (destroy primary window last since others may depend on it)
+            Window *primary = 0;
+            WindowSet::const_iterator itor = mWindows.begin();
+            WindowSet::const_iterator end  = mWindows.end();
+
+            while( itor != end )
+            {
+                //Set mTextureManager to 0 as it is no longer valid on shutdown
+                if( (*itor)->getTexture() )
+                    (*itor)->getTexture()->_resetTextureManager();
+                if( (*itor)->getDepthBuffer() )
+                    (*itor)->getDepthBuffer()->_resetTextureManager();
+                if( (*itor)->getStencilBuffer() )
+                    (*itor)->getStencilBuffer()->_resetTextureManager();
+
+                if( !primary && (*itor)->isPrimary() )
+                    primary = *itor;
+                else
+                    OGRE_DELETE *itor;
+
+                ++itor;
+            }
+
+            OGRE_DELETE primary;
+            mWindows.clear();
+        }
+
         // Remove all the render targets.
         // (destroy primary target last since others may depend on it)
         RenderTarget* primary = 0;
@@ -826,10 +864,6 @@ namespace Ogre {
         }
         OGRE_DELETE primary;
         mRenderTargets.clear();
-
-#if TODO_OGRE_2_2
-        TODO_destroy_Windows;
-#endif
     }
     //-----------------------------------------------------------------------
     void RenderSystem::_beginGeometryCount(void)

@@ -1119,6 +1119,8 @@ namespace Ogre
 			win = new D3D11RenderWindowCoreWindow(mDevice, mpDXGIFactory);
 #endif
 
+        mWindows.insert( win );
+
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
 		// Must be called after device has been linked to window
 		D3D11StereoDriverBridge::getSingleton().addRenderWindow(win);

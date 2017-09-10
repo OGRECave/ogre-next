@@ -80,6 +80,7 @@ namespace Ogre
         virtual void requestFullscreenSwitch( bool goFullscreen, bool borderless, uint32 monitorIdx,
                                               uint32 width, uint32 height,
                                               uint32 frequencyNumerator, uint32 frequencyDenominator );
+        virtual void windowMovedOrResized(void);
 
         bool isClosed(void) const;
         virtual void _setVisible( bool visible );

@@ -167,6 +167,12 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void MetalTextureGpu::_setToDisplayDummyTexture(void)
     {
+        if( !mTextureManager )
+        {
+            assert( isRenderWindowSpecific() );
+            return; //This can happen if we're a window and we're on shutdown
+        }
+
         MetalTextureGpuManager *textureManagerMetal =
                 static_cast<MetalTextureGpuManager*>( mTextureManager );
         if( hasAutomaticBatching() )

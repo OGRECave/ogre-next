@@ -51,7 +51,7 @@ namespace Ogre
         memset( mBlankTexture, 0, sizeof(mBlankTexture) );
         memset( mTmpFbo, 0, sizeof(mTmpFbo) );
 
-        OCGE( glGenTextures( TextureTypes::Type3D - 1u, &mBlankTexture[1u] ) );
+        OCGE( glGenTextures( TextureTypes::Type3D, &mBlankTexture[1u] ) );
         mBlankTexture[TextureTypes::Unknown] = mBlankTexture[TextureTypes::Type2D];
 
         const GLenum targets[] =

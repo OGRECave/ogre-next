@@ -563,7 +563,7 @@ namespace Ogre
         virtual MultiRenderTarget * createMultiRenderTarget(const String & name) = 0; 
 
         /** Destroys a render window */
-        virtual void destroyRenderWindow(const String& name);
+        virtual void destroyRenderWindow( Window *window );
         /** Destroys a render texture */
         virtual void destroyRenderTexture(const String& name);
         /** Destroys a render target of any sort */
@@ -1480,6 +1480,8 @@ namespace Ogre
         RenderPassDescriptor    *mCurrentRenderPassDescriptor;
         Viewport                mCurrentRenderViewport;
 
+        typedef set<Window*>::type WindowSet;
+        WindowSet mWindows;
         /** The render targets. */
         RenderTargetMap mRenderTargets;
         /** The Active render target. */

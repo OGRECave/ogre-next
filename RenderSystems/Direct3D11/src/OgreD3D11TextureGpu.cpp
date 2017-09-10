@@ -348,6 +348,12 @@ namespace Ogre
     {
         SAFE_RELEASE( mDefaultDisplaySrv );
 
+        if( !mTextureManager )
+        {
+            assert( isRenderWindowSpecific() );
+            return; //This can happen if we're a window and we're on shutdown
+        }
+
         D3D11TextureGpuManager *textureManagerD3d =
                 static_cast<D3D11TextureGpuManager*>( mTextureManager );
         if( hasAutomaticBatching() )

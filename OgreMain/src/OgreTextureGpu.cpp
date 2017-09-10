@@ -74,6 +74,11 @@ namespace Ogre
                 "Most likely there are Materials/Datablocks still using this texture" );
     }
     //-----------------------------------------------------------------------------------
+    void TextureGpu::_resetTextureManager(void)
+    {
+        mTextureManager = 0;
+    }
+    //-----------------------------------------------------------------------------------
     String TextureGpu::getNameStr(void) const
     {
         String retVal;

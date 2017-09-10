@@ -302,10 +302,6 @@ namespace Ogre {
         /** See
             RenderSystem
         */
-        void destroyRenderWindow(RenderWindow* pWin);
-        /** See
-            RenderSystem
-        */
         String getErrorDescription(long errorNumber) const;
         /** See
             RenderSystem

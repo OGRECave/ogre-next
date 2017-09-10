@@ -221,6 +221,12 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void GL3PlusTextureGpu::_setToDisplayDummyTexture(void)
     {
+        if( !mTextureManager )
+        {
+            assert( isRenderWindowSpecific() );
+            return; //This can happen if we're a window and we're on shutdown
+        }
+
         GL3PlusTextureGpuManager *textureManagerGl =
                 static_cast<GL3PlusTextureGpuManager*>( mTextureManager );
         if( hasAutomaticBatching() )
