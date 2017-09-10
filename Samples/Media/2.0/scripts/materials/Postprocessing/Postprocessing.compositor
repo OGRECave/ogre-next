@@ -6,8 +6,8 @@ compositor_node Bloom
 
 	custom_id Ogre/Postprocess
 
-	texture rt0 target_width_scaled 0.25 target_height_scaled 0.25 PFG_RGBA8_UNORM_SRGB
-	texture rt1 target_width_scaled 0.25 target_height_scaled 0.25 PFG_RGBA8_UNORM_SRGB
+	texture rt0 target_width_scaled 0.25 target_height_scaled 0.25 PFG_RGBA8_UNORM_SRGB depth_pool 0
+	texture rt1 target_width_scaled 0.25 target_height_scaled 0.25 PFG_RGBA8_UNORM_SRGB depth_pool 0
 
 	target rt0
 	{
@@ -539,8 +539,8 @@ compositor_node PostprocessingSampleStdRenderer
 	//Another advantage from this approach (besides saving tons of VRAM) is that HDR renderers can
 	//pass RTs with floating point formats, thus for example, a simple compositor wouldn't lose
 	//precision converting from FP16 to PFG_RGBA8_UNORM_SRGB.
-	texture rt0 target_width target_height PFG_RGBA8_UNORM_SRGB
-	texture rt1 target_width target_height PFG_RGBA8_UNORM_SRGB
+	texture rt0 target_width target_height PFG_RGBA8_UNORM_SRGB msaa_auto
+	texture rt1 target_width target_height PFG_RGBA8_UNORM_SRGB msaa_auto
 
 	target rt0
 	{

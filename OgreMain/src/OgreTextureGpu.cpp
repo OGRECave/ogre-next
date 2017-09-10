@@ -215,7 +215,7 @@ namespace Ogre
 
         if( mMsaa > 1u )
         {
-            if( (mNumMipmaps > 1) || isRenderToTexture() || isUav() )
+            if( (mNumMipmaps > 1u) || (!isRenderToTexture() && !isUav()) )
             {
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                              "Texture '" + getNameStr() + "': "

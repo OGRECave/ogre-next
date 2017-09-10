@@ -233,7 +233,8 @@ namespace Ogre
                                                     !texture->isTexture()) )
                     {
                         OCGE( glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i,
-                                                         texture->getMsaaFramebufferName(), 0 ) );
+                                                         GL_RENDERBUFFER,
+                                                         texture->getMsaaFramebufferName() ) );
                     }
                     else
                     {
@@ -248,7 +249,8 @@ namespace Ogre
                                                     !texture->isTexture()) )
                     {
                         OCGE( glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i,
-                                                         texture->getMsaaFramebufferName(), 0 ) );
+                                                         GL_RENDERBUFFER,
+                                                         texture->getMsaaFramebufferName() ) );
                     }
                     else
                     {
@@ -584,7 +586,7 @@ namespace Ogre
 
         bool unbindReadDrawFramebuffers = false;
 
-        if( entriesToFlush & RenderPassDescriptor::Colour )
+        if( entriesToFlush & RenderPassDescriptor::Colour && !mHasRenderWindow )
         {
             for( size_t i=0; i<mNumColourEntries; ++i )
             {
@@ -600,13 +602,27 @@ namespace Ogre
                         GL3PlusTextureGpu *resolveTexture =
                                 static_cast<GL3PlusTextureGpu*>( mColour[i].resolveTexture );
 
+                        const TextureTypes::TextureTypes resolveTextureType =
+                                mColour[i].resolveTexture->getTextureType();
+                        const bool hasLayers = resolveTextureType != TextureTypes::Type1D &&
+                                               resolveTextureType != TextureTypes::Type2D;
+
                         // Blit from multisample buffer to final buffer, triggers resolve
                         OCGE( glBindFramebuffer( GL_READ_FRAMEBUFFER, mFboName ) );
                         OCGE( glBindFramebuffer( GL_DRAW_FRAMEBUFFER, mFboMsaaResolve ) );
-                        OCGE( glFramebufferTextureLayer( GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-                                                         resolveTexture->getFinalTextureName(),
-                                                         mColour[i].resolveMipLevel,
-                                                         mColour[i].resolveSlice ) );
+                        if( !hasLayers )
+                        {
+                            OCGE( glFramebufferTexture( GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                                        resolveTexture->getFinalTextureName(),
+                                                        mColour[i].mipLevel ) );
+                        }
+                        else
+                        {
+                            OCGE( glFramebufferTextureLayer( GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                                             resolveTexture->getFinalTextureName(),
+                                                             mColour[i].resolveMipLevel,
+                                                             mColour[i].resolveSlice ) );
+                        }
                         OCGE( glReadBuffer( GL_COLOR_ATTACHMENT0 + i ) );
                         OCGE( glDrawBuffer( GL_COLOR_ATTACHMENT0 + 0 ) );
                         OCGE( glBlitFramebuffer( x, y, width, height, x, y, width, height,

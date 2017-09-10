@@ -6289,6 +6289,9 @@ namespace Ogre{
                 }
                 msaa = StringConverter::parseInt(atom->value);
                 break;
+            case ID_MSAA_AUTO:
+                msaa = 0;
+                break;
             case ID_EXPLICIT_RESOLVE:
                 textureFlags |= TextureFlags::MsaaExplicitResolve;
                 break;

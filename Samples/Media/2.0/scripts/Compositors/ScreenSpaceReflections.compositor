@@ -1,8 +1,8 @@
 compositor_node ScreenSpaceReflectionsRenderingNode
 {
-	texture gBufferNormals			target_width target_height PFG_R10G10B10A2_UNORM  msaa 0 explicit_resolve
-	texture gBufferShadowRoughness	target_width target_height PFG_RG16_UNORM  msaa 0 explicit_resolve
-	texture gBufferDepthBuffer		target_width target_height PFG_D32_FLOAT msaa 0
+	texture gBufferNormals			target_width target_height PFG_R10G10B10A2_UNORM	msaa_auto explicit_resolve
+	texture gBufferShadowRoughness	target_width target_height PFG_RG16_UNORM			msaa_auto explicit_resolve
+	texture gBufferDepthBuffer		target_width target_height PFG_D32_FLOAT			msaa_auto
 
 	rtv mrtGBuffer
 	{

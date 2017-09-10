@@ -279,7 +279,7 @@ namespace Ogre
                     //If we're here, the texture is MSAA _AND_ we'll resolve it.
                     if( rtvEntry.resolveTextureName == IdString() )
                     {
-                        if( !renderPassTargetAttachment->texture->hasMsaaExplicitResolves() )
+                        if( renderPassTargetAttachment->texture->hasMsaaExplicitResolves() )
                         {
                             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                                          "Must specify resolveTextureName for RTV when using explicit "

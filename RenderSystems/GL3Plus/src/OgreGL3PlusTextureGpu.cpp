@@ -306,7 +306,7 @@ namespace Ogre
             if( mMsaa > 1u && (!hasMsaaExplicitResolves() || !isTexture()) )
             {
                 OCGE( glFramebufferRenderbuffer( target, GL_COLOR_ATTACHMENT0,
-                                                 mMsaaFramebufferName, 0 ) );
+                                                 GL_RENDERBUFFER, mMsaaFramebufferName ) );
             }
             else
             {
@@ -587,23 +587,24 @@ namespace Ogre
         if( isTexture() || !PixelFormatGpuUtils::isDepth( mPixelFormat ) )
         {
             GL3PlusTextureGpu::createInternalResourcesImpl();
-            return;
-        }
-
-        OCGE( glGenRenderbuffers( 1, &mFinalTextureName ) );
-        OCGE( glBindRenderbuffer( GL_RENDERBUFFER, mFinalTextureName ) );
-
-        GLenum format = GL3PlusMappings::get( mPixelFormat );
-
-        if( mMsaa <= 1u )
-        {
-            OCGE( glRenderbufferStorage( GL_RENDERBUFFER, format,
-                                         GLsizei(mWidth), GLsizei(mHeight) ) );
         }
         else
         {
-            OCGE( glRenderbufferStorageMultisample( GL_RENDERBUFFER, GLsizei(mMsaa), format,
-                                                    GLsizei(mWidth), GLsizei(mHeight) ) );
+            OCGE( glGenRenderbuffers( 1, &mFinalTextureName ) );
+            OCGE( glBindRenderbuffer( GL_RENDERBUFFER, mFinalTextureName ) );
+
+            GLenum format = GL3PlusMappings::get( mPixelFormat );
+
+            if( mMsaa <= 1u )
+            {
+                OCGE( glRenderbufferStorage( GL_RENDERBUFFER, format,
+                                             GLsizei(mWidth), GLsizei(mHeight) ) );
+            }
+            else
+            {
+                OCGE( glRenderbufferStorageMultisample( GL_RENDERBUFFER, GLsizei(mMsaa), format,
+                                                        GLsizei(mWidth), GLsizei(mHeight) ) );
+            }
         }
     }
     //-----------------------------------------------------------------------------------
