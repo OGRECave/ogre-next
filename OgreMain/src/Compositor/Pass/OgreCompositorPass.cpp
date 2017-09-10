@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "Compositor/Pass/OgreCompositorPass.h"
 #include "Compositor/OgreCompositorChannel.h"
 #include "Compositor/OgreCompositorNode.h"
+#include "Compositor/OgreCompositorNodeDef.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 
 #include "OgrePixelFormatGpuUtils.h"
@@ -75,7 +76,9 @@ namespace Ogre
     {
         assert( definition->mNumInitialPasses && "Definition is broken, pass will never execute!" );
 
-        mRenderPassDesc = createRenderPassDesc( rtv );
+        RenderSystem *renderSystem = mParentNode->getRenderSystem();
+        mRenderPassDesc = renderSystem->createRenderPassDescriptor();
+        setupRenderPassDesc( rtv );
 
         for( int i=0; i<mRenderPassDesc->getNumColourEntries() && !mAnyTargetTexture; ++i )
             mAnyTargetTexture = mRenderPassDesc->mColour[i].texture;
@@ -126,7 +129,7 @@ namespace Ogre
         _removeAllBarriers();
     }
     //-----------------------------------------------------------------------------------
-    RenderPassDescriptor* CompositorPass::createRenderPassDesc( const RenderTargetViewDef *rtv )
+    void CompositorPass::setupRenderPassDesc( const RenderTargetViewDef *rtv )
     {
         if( rtv->isRuntimeAnalyzed() )
         {
@@ -148,11 +151,11 @@ namespace Ogre
                 tmpRtv.depthBufferFormat    = texture->getDesiredDepthBufferFormat();
             }
 
-            return createRenderPassDesc( &tmpRtv );
+            setupRenderPassDesc( &tmpRtv );
+            return;
         }
 
-        RenderSystem *renderSystem = mParentNode->getRenderSystem();
-        RenderPassDescriptor *renderPassDesc = renderSystem->createRenderPassDescriptor();
+        RenderPassDescriptor *renderPassDesc = mRenderPassDesc;
 
         const size_t numColourAttachments = rtv->colourAttachments.size();
 
@@ -219,8 +222,6 @@ namespace Ogre
         }
 
         renderPassDesc->entriesModified( RenderPassDescriptor::All );
-
-        return renderPassDesc;
     }
     //-----------------------------------------------------------------------------------
     void CompositorPass::setupRenderPassTarget( RenderPassTargetBase *renderPassTargetAttachment,
@@ -626,7 +627,22 @@ namespace Ogre
         if( usedByUs )
         {
             mNumPassesLeft = mDefinition->mNumInitialPasses;
-            mRenderPassDesc->entriesModified( RenderPassDescriptor::All );
+
+            //Reset texture pointers and setup RenderPassDescriptor again
+            mRenderPassDesc->mDepth.texture = 0;
+            mRenderPassDesc->mStencil.texture = 0;
+
+            for( int i=0; i<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
+            {
+                mRenderPassDesc->mColour[i].texture = 0;
+                mRenderPassDesc->mColour[i].resolveTexture = 0;
+            }
+
+            const CompositorNodeDef *nodeDef = mParentNode->getDefinition();
+            const CompositorTargetDef *targetDef = mDefinition->getParentTargetDef();
+            const RenderTargetViewDef *rtvDef =
+                    nodeDef->getRenderTargetViewDef( targetDef->getRenderTargetName() );
+            setupRenderPassDesc( rtvDef );
         }
 
         return usedByUs;

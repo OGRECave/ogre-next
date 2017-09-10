@@ -107,7 +107,8 @@ namespace Ogre
         /// mNumValidResourceTransitions = mResourceTransitions.size()
         uint32                  mNumValidResourceTransitions;
 
-        RenderPassDescriptor* createRenderPassDesc( const RenderTargetViewDef *rtv );
+        /// Modifies mRenderPassDesc
+        void setupRenderPassDesc( const RenderTargetViewDef *rtv );
         /**
         @param renderPassTargetAttachment
         @param rtvEntry
