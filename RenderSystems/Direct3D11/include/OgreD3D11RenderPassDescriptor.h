@@ -114,6 +114,8 @@ namespace Ogre
 
         void clearFrameBuffer(void);
 
+        virtual void getCustomAttribute( IdString name, void *pData, uint32 extraParam );
+
         // RenderSystem::Listener overload
         virtual void eventOccurred( const String &eventName,
                                     const NameValuePairList *parameters );

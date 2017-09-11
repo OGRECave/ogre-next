@@ -31,6 +31,7 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 #include "OgreColourValue.h"
+#include "OgreIdString.h"
 
 #include "OgreHeaderPrefix.h"
 
@@ -221,6 +222,18 @@ namespace Ogre
         bool requiresTextureFlipping(void) const    { return mRequiresTextureFlipping; }
         /// Returns true if either Stencil is set, or if Depth is set with depth-stencil attachment.
         bool hasStencilFormat(void) const;
+
+        /**
+        @param name
+            When it's set to "ID3D11RenderTargetView", extraParam must be in range
+            [0;OGRE_MAX_MULTIPLE_RENDER_TARGETS)
+            When it's set to "ID3D11DepthStencilView", extraParam can be any value
+        @param pData
+            Output
+        @param extraParam
+            See name
+         */
+        virtual void getCustomAttribute( IdString name, void *pData, uint32 extraParam ) {}
     };
 
     /** @} */

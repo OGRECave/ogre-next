@@ -603,6 +603,19 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void D3D11TextureGpu::getCustomAttribute( IdString name, void *pData )
+    {
+        if( name == "ID3D11Resource" )
+        {
+            ID3D11Resource **pTex = (ID3D11Resource**)pData;
+            *pTex = mFinalTextureName;
+        }
+        else
+        {
+            TextureGpu::getCustomAttribute( name, pData );
+        }
+    }
+    //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     D3D11TextureGpuRenderTarget::D3D11TextureGpuRenderTarget(

@@ -55,8 +55,8 @@ namespace Ogre
         if( mDefinition->mNonTilersOnly && capabilities->hasCapability( RSC_IS_TILER ) &&
             !capabilities->hasCapability( RSC_TILER_CAN_CLEAR_STENCIL_REGION ) &&
             (mRenderPassDesc->hasStencilFormat() &&
-             mRenderPassDesc->mDepth.loadAction == LoadAction::Clear ||
-             mRenderPassDesc->mStencil.loadAction == LoadAction::Clear) )
+             (mRenderPassDesc->mDepth.loadAction == LoadAction::Clear ||
+             mRenderPassDesc->mStencil.loadAction == LoadAction::Clear)) )
         {
             //Normally this clear would be a no-op (because we're on a tiler GPU
             //and this is a non-tiler pass). However depth-stencil formats
@@ -104,8 +104,8 @@ namespace Ogre
             !capabilities->hasCapability( RSC_IS_TILER ) ||
             (!capabilities->hasCapability( RSC_TILER_CAN_CLEAR_STENCIL_REGION ) &&
              (mRenderPassDesc->hasStencilFormat() &&
-              mRenderPassDesc->mDepth.loadAction == LoadAction::Clear ||
-              mRenderPassDesc->mStencil.loadAction == LoadAction::Clear)) )
+              (mRenderPassDesc->mDepth.loadAction == LoadAction::Clear ||
+              mRenderPassDesc->mStencil.loadAction == LoadAction::Clear))) )
         {
             renderSystem->clearFrameBuffer( mRenderPassDesc, mAnyTargetTexture );
         }

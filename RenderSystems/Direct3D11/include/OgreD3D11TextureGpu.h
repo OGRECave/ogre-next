@@ -108,6 +108,8 @@ namespace Ogre
         virtual bool isMsaaPatternSupported( MsaaPatterns::MsaaPatterns pattern );
         virtual void getSubsampleLocations( vector<Vector2>::type locations );
 
+        virtual void getCustomAttribute( IdString name, void *pData );
+
         ID3D11Resource* getDisplayTextureName(void) const   { return mDisplayTextureName; }
         ID3D11Resource* getFinalTextureName(void) const     { return mFinalTextureName; }
         ID3D11Resource* getMsaaFramebufferName(void) const  { return mMsaaFramebufferName; }

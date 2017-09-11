@@ -606,6 +606,31 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void D3D11RenderPassDescriptor::getCustomAttribute( IdString name, void *pData, uint32 extraParam )
+    {
+        if( name == "ID3D11RenderTargetView" )
+        {
+            if( extraParam >= OGRE_MAX_MULTIPLE_RENDER_TARGETS )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                             "extraParams out of bounds for ID3D11RenderTargetView",
+                             "D3D11RenderPassDescriptor::getCustomAttribute" );
+            }
+
+            ID3D11RenderTargetView **outRtv = (ID3D11RenderTargetView**)pData;
+            *outRtv = mColourRtv[extraParam];
+        }
+        else if( name == "ID3D11DepthStencilView" )
+        {
+            ID3D11DepthStencilView **outDsv = (ID3D11DepthStencilView**)pData;
+            *outDsv = mDepthStencilRtv;
+        }
+        else
+        {
+            RenderPassDescriptor::getCustomAttribute( name, pData, extraParam );
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void D3D11RenderPassDescriptor::eventOccurred( const String &eventName,
                                                    const NameValuePairList *parameters )
     {
