@@ -44,7 +44,7 @@ namespace Ogre
     *  @{
     */
 
-    class _OgreExport Window
+    class _OgreExport Window : public RenderSysAlloc
     {
     protected:
         String      mTitle;

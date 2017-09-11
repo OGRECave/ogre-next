@@ -103,24 +103,25 @@ namespace Ogre
         virtual void _setPointParameters(Real size, bool attenuationEnabled,
             Real constant, Real linear, Real quadratic, Real minSize, Real maxSize);
 
-        virtual void queueBindUAV( uint32 slot, TexturePtr texture,
-                                           ResourceAccess::ResourceAccess access = ResourceAccess::ReadWrite,
-                                           int32 mipmapLevel = 0, int32 textureArrayIndex = 0,
-                                           PixelFormat pixelFormat = PF_UNKNOWN );
+        virtual void queueBindUAV( uint32 slot, TextureGpu *texture,
+                                   ResourceAccess::ResourceAccess access = ResourceAccess::ReadWrite,
+                                   int32 mipmapLevel = 0, int32 textureArrayIndex = 0,
+                                   PixelFormatGpu pixelFormat = PFG_UNKNOWN );
         virtual void queueBindUAV( uint32 slot, UavBufferPacked *buffer,
                                    ResourceAccess::ResourceAccess access = ResourceAccess::ReadWrite,
                                    size_t offset = 0, size_t sizeBytes = 0 );
         virtual void clearUAVs(void);
         virtual void flushUAVs(void);
 
-        virtual void _bindTextureUavCS( uint32 slot, Texture *texture,
+        virtual void _bindTextureUavCS( uint32 slot, TextureGpu *texture,
                                         ResourceAccess::ResourceAccess access,
                                         int32 mipmapLevel, int32 textureArrayIndex,
-                                        PixelFormat pixelFormat );
+                                        PixelFormatGpu pixelFormat );
         virtual void _setTextureCS( uint32 slot, TextureGpu *texPtr );
         virtual void _setHlmsSamplerblockCS( uint8 texUnit, const HlmsSamplerblock *samplerblock );
 
-        virtual void _setTexture(size_t unit, bool enabled,  Texture *texPtr);
+        virtual void _setCurrentDeviceFromTexture( TextureGpu *texture );
+        virtual void _setTexture( size_t unit,  TextureGpu *texPtr );
         virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set );
         virtual void _setSamplers( uint32 slotStart, const DescriptorSetSampler *set );
 
@@ -174,9 +175,8 @@ namespace Ogre
             GpuProgramParametersSharedPtr params, uint16 variabilityMask);
         virtual void bindGpuProgramPassIterationParameters(GpuProgramType gptype);
 
-        virtual void clearFrameBuffer(unsigned int buffers,
-            const ColourValue& colour = ColourValue::Black,
-            Real depth = 1.0f, unsigned short stencil = 0);
+        virtual void clearFrameBuffer( RenderPassDescriptor *renderPassDesc,
+                                       TextureGpu *anyTarget );
         virtual void discardFrameBuffer( unsigned int buffers );
 
         virtual Real getHorizontalTexelOffset(void);

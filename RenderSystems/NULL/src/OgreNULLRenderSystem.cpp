@@ -27,8 +27,10 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 */
 
 #include "OgreNULLRenderSystem.h"
-#include "OgreNULLRenderWindow.h"
+#include "OgreNULLWindow.h"
 #include "OgreNULLTextureManager.h"
+#include "OgreNULLTextureGpuManager.h"
+#include "OgreRenderPassDescriptor.h"
 #include "Vao/OgreNULLVaoManager.h"
 
 #include "OgreDefaultHardwareBufferManager.h"
@@ -140,7 +142,8 @@ namespace Ogre
                                                    bool fullScreen,
                                                    const NameValuePairList *miscParams )
     {
-        Window *win = OGRE_NEW NULLRenderWindow();
+        Window *win = OGRE_NEW NULLWindow( name, width, height, fullScreen );
+        mWindows.insert( win );
 
         if( !mInitialized )
         {
@@ -150,9 +153,12 @@ namespace Ogre
             mHardwareBufferManager = new v1::DefaultHardwareBufferManager();
             mTextureManager = new NULLTextureManager();
             mVaoManager = OGRE_NEW NULLVaoManager();
+            mTextureGpuManager = OGRE_NEW NULLTextureGpuManager( mVaoManager );
 
             mInitialized = true;
         }
+
+        win->_initialize( mTextureGpuManager );
 
         return win;
     }
@@ -199,10 +205,10 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    void NULLRenderSystem::queueBindUAV( uint32 slot, TexturePtr texture,
+    void NULLRenderSystem::queueBindUAV( uint32 slot, TextureGpu *texture,
                                          ResourceAccess::ResourceAccess access,
                                          int32 mipmapLevel, int32 textureArrayIndex,
-                                         PixelFormat pixelFormat )
+                                         PixelFormatGpu pixelFormat )
     {
     }
     //-------------------------------------------------------------------------
@@ -220,10 +226,10 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    void NULLRenderSystem::_bindTextureUavCS( uint32 slot, Texture *texture,
+    void NULLRenderSystem::_bindTextureUavCS( uint32 slot, TextureGpu *texture,
                                               ResourceAccess::ResourceAccess access,
                                               int32 mipmapLevel, int32 textureArrayIndex,
-                                              PixelFormat pixelFormat )
+                                              PixelFormatGpu pixelFormat )
     {
     }
     //-------------------------------------------------------------------------
@@ -235,7 +241,12 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    void NULLRenderSystem::_setTexture(size_t unit, bool enabled,  Texture *texPtr)
+    void NULLRenderSystem::_setCurrentDeviceFromTexture( TextureGpu *texture )
+    {
+
+    }
+    //-------------------------------------------------------------------------
+    void NULLRenderSystem::_setTexture( size_t unit, TextureGpu *texPtr )
     {
     }
     //-------------------------------------------------------------------------
@@ -266,7 +277,9 @@ namespace Ogre
     //-------------------------------------------------------------------------
     RenderPassDescriptor* NULLRenderSystem::createRenderPassDescriptor(void)
     {
-        return 0;
+        RenderPassDescriptor *retVal = OGRE_NEW RenderPassDescriptor();
+        mRenderPassDescs.insert( retVal );
+        return retVal;
     }
     //-------------------------------------------------------------------------
     DepthBuffer* NULLRenderSystem::_createDepthBufferFor( RenderTarget *renderTarget,
@@ -349,8 +362,8 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    void NULLRenderSystem::clearFrameBuffer( unsigned int buffers, const ColourValue& colour,
-                                             Real depth, unsigned short stencil )
+    void NULLRenderSystem::clearFrameBuffer( RenderPassDescriptor *renderPassDesc,
+                                             TextureGpu *anyTarget )
     {
     }
     //-------------------------------------------------------------------------
