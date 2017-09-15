@@ -74,6 +74,8 @@ namespace Ogre
 
         bool isClosed() const                                   { return mClosed; }
         bool isHidden() const                                   { return mHidden; }
+
+        virtual void getCustomAttribute( IdString name, void* pData );
     };
 
     class _OgreD3D11Export D3D11WindowSwapChainBased : public D3D11Window

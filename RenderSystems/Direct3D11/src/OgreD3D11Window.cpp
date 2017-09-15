@@ -92,6 +92,19 @@ namespace Ogre
         mRenderSystem->_notifyWindowDestroyed( this );
     }
     //-----------------------------------------------------------------------------------
+    void D3D11Window::getCustomAttribute( IdString name, void* pData )
+    {
+        if( name == "D3DDEVICE" )
+        {
+            ID3D11DeviceN  **device = (ID3D11DeviceN**)pData;
+            *device = mDevice.get();
+        }
+        else
+        {
+            Window::getCustomAttribute( name, pData );
+        }
+    }
+    //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     D3D11WindowSwapChainBased::D3D11WindowSwapChainBased(

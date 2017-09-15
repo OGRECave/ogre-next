@@ -192,7 +192,7 @@ namespace Ogre
         TextureGpu* getDepthBuffer(void) const;
         TextureGpu* getStencilBuffer(void) const;
 
-        virtual void getCustomAttribute( const String& name, void* pData ) {}
+        virtual void getCustomAttribute( IdString name, void* pData ) {}
 
         virtual void swapBuffers(void) = 0;
     };

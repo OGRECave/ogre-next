@@ -88,6 +88,8 @@ namespace Ogre
         virtual void setHidden( bool hidden );
         virtual bool isHidden(void) const;
         virtual void swapBuffers(void);
+
+        virtual void getCustomAttribute( IdString name, void* pData );
     };
 }
 
