@@ -43,7 +43,7 @@ namespace Ogre
     *  @{
     */
 
-    class _OgreExport NULLTextureGpu : public TextureGpu
+    class _OgreNULLExport NULLTextureGpu : public TextureGpu
     {
     protected:
         virtual void createInternalResourcesImpl(void);

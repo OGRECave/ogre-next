@@ -46,6 +46,14 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
+    void NULLTextureGpu::createInternalResourcesImpl(void)
+    {
+    }
+    //-----------------------------------------------------------------------------------
+    void NULLTextureGpu::destroyInternalResourcesImpl(void)
+    {
+    }
+    //-----------------------------------------------------------------------------------
     void NULLTextureGpu::getSubsampleLocations( vector<Vector2>::type locations )
     {
         uint8 msaaCount = mMsaa;
