@@ -621,7 +621,8 @@ namespace Ogre
         const UINT xPos = static_cast<UINT>( dstBox ? dstBox->x : 0 );
         const UINT yPos = static_cast<UINT>( dstBox ? dstBox->y : 0 );
         const UINT zPos = static_cast<UINT>( dstBox ? dstBox->z : 0 );
-        UINT dstSlicePos = static_cast<UINT>( dstBox ? dstBox->sliceStart : 0 );
+        UINT dstSlicePos = static_cast<UINT>( dstBox ? dstBox->sliceStart : 0 ) +
+                           dstTexture->getInternalSliceStart();
 
         assert( dynamic_cast<D3D11TextureGpu*>( dstTexture ) );
         D3D11TextureGpu *dstTextureD3d = static_cast<D3D11TextureGpu*>( dstTexture );

@@ -558,13 +558,13 @@ namespace Ogre
                     pool.hasFreeSlot() &&
                     pool.masterTexture->getWidth() == texture->getWidth() &&
                     pool.masterTexture->getHeight() == texture->getHeight() &&
-                    pool.masterTexture->getDepthOrSlices() == texture->getDepthOrSlices() &&
                     pool.masterTexture->getPixelFormat() == texture->getPixelFormat() &&
                     pool.masterTexture->getNumMipmaps() == texture->getNumMipmaps();
 
             TODO_grow_pool;
 
-            ++itor;
+            if( !matchFound )
+                ++itor;
         }
 
         if( itor == end )
