@@ -779,7 +779,7 @@ namespace Ogre
         glXSwapBuffers( mGLSupport->getGLDisplay(), mContext->mDrawable );
     }
     //-----------------------------------------------------------------------------------
-    void GLXWindow::getCustomAttribute( const String& name, void* pData )
+    void GLXWindow::getCustomAttribute( IdString name, void *pData )
     {
         if( name == "DISPLAY NAME" )
         {

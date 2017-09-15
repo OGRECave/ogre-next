@@ -188,7 +188,7 @@ namespace Ogre
         optVSync.name = "VSync";
         optVSync.immutable = false;
 
-        optFSAA.name = "FSAA";
+        optFSAA.name = "MSAA";
         optFSAA.immutable = false;
 
         optRTTMode.name = "RTT Preferred Mode";
@@ -372,8 +372,8 @@ namespace Ogre
                 }
             }
 
-            if((opt = mOptions.find("FSAA")) != end)
-                miscParams["FSAA"] = opt->second.currentValue;
+            if((opt = mOptions.find("MSAA")) != end)
+                miscParams["MSAA"] = opt->second.currentValue;
 
             if((opt = mOptions.find("VSync")) != end)
                 miscParams["vsync"] = opt->second.currentValue;

@@ -280,7 +280,6 @@ namespace Ogre
                 //Keeping the current samplerblock. Increase its
                 //ref. count because _setTexture will decrease it.
                 samplerblockPtr = mSamplerblocks[texType];
-                HlmsManager *hlmsManager = mCreator->getHlmsManager();
                 hlmsManager->addReference( samplerblockPtr );
             }
         }
@@ -394,8 +393,8 @@ namespace Ogre
                                       mTexturesDescSet->mTextures.end(),
                                       texture, OrderTextureByPoolThenName );
             if( itor != mTexturesDescSet->mTextures.end() &&
-                ((*itor)->getTexturePool() && (*itor)->getTexturePool() == texture->getTexturePool()) ||
-                *itor == texture )
+                (((*itor)->getTexturePool() && (*itor)->getTexturePool() == texture->getTexturePool()) ||
+                 *itor == texture) )
             {
                 size_t idx = itor - mTexturesDescSet->mTextures.begin();
 

@@ -104,7 +104,7 @@ namespace Ogre
            * DISPLAYNAME    The X Server name for the connected display.
            * ATOM          The X Atom used in client delete events.
            */
-        virtual void getCustomAttribute(const String& name, void* pData);
+        virtual void getCustomAttribute( IdString name, void* pData );
         
         bool requiresTextureFlipping() const { return false; }
     };
