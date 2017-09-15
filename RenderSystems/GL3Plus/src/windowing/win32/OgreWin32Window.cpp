@@ -149,10 +149,10 @@ namespace Ogre {
             if ((opt = miscParams->find("vsyncInterval")) != end)
                 mVSyncInterval = StringConverter::parseUnsignedInt(opt->second);
 
-            if ((opt = miscParams->find("FSAA")) != end)
+            if ((opt = miscParams->find("MSAA")) != end)
                 mFSAA = StringConverter::parseUnsignedInt(opt->second);
 
-            if ((opt = miscParams->find("FSAAHint")) != end)
+            if ((opt = miscParams->find("MSAA_quality")) != end)
                 mFSAAHint = opt->second;
 
             if ((opt = miscParams->find("gamma")) != end)

@@ -154,13 +154,7 @@ namespace Ogre
         }
         else
         {
-#if TODO_OGRE_2_2
-            sd.SampleDesc.Count     = mFSAAType.Count;
-            sd.SampleDesc.Quality   = mFSAAType.Quality;
-#else
-            sd.SampleDesc.Count     = 1u;
-            sd.SampleDesc.Quality   = 0;
-#endif
+            sd.SampleDesc = mMsaaDesc;
         }
 
         sd.Flags        = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
@@ -599,11 +593,12 @@ namespace Ogre
         mDepthBuffer->setPixelFormat( DepthBuffer::DefaultDepthBufferFormat );
         if( PixelFormatGpuUtils::isStencil( mDepthBuffer->getPixelFormat() ) )
             mStencilBuffer = mDepthBuffer;
-#if TODO_OGRE_2_2
-        mTexture->setMsaa(  );
-        mTexture->setMsaaPattern( );
 
-        mDepthBuffer->setMsaa(  );
+        mTexture->setMsaa( mMsaaDesc.Count );
+        mDepthBuffer->setMsaa( mMsaaDesc.Count );
+
+#if TODO_OGRE_2_2
+        mTexture->setMsaaPattern( );
         mDepthBuffer->setMsaaPattern( );
 #endif
         setResolutionFromSwapChain();

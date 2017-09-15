@@ -31,6 +31,8 @@ THE SOFTWARE.
 
 #include "OgreStringConverter.h"
 
+#define TODO_convert_to_MSAA_pattern
+
 namespace Ogre
 {
     D3D11Window::D3D11Window( const String &title, uint32 width, uint32 height,
@@ -53,7 +55,8 @@ namespace Ogre
         mpBackBufferNoMSAA( 0 ),
         mRenderSystem( renderSystem )
     {
-//        memset( &mMsaaDesc, 0, sizeof(mMsaaDesc) );
+        mMsaaDesc.Count     = 1u;
+        mMsaaDesc.Quality   = 0;
 
         if( miscParams )
         {
@@ -62,16 +65,21 @@ namespace Ogre
             opt = miscParams->find("hidden");
             if( opt != miscParams->end() )
                 mHidden = StringConverter::parseBool(opt->second);
-#if TODO_OGRE_2_2
             // MSAA
             opt = miscParams->find("MSAA");
             if( opt != miscParams->end() )
-                mMsaaDesc.Count = StringConverter::parseUnsignedInt(opt->second);
-#endif
-            // FSAA quality (TODO)
-//            opt = miscParams->find("FSAAHint");
-//            if( opt != miscParams->end() )
-//                mFSAAHint = opt->second;
+            {
+                mMsaaDesc.Count = StringConverter::parseUnsignedInt( opt->second, 1u );
+//                const bool useCSAA = opt->second.find( "[Quality]" ) != String::npos;
+//                if( useCSAA )
+//                    mMsaaDesc.Quality = mMsaaDesc.Count;
+            }
+            opt = miscParams->find("MSAA_quality");
+            if( opt != miscParams->end() )
+            {
+                mMsaaDesc.Quality = StringConverter::parseUnsignedInt(opt->second);
+                TODO_convert_to_MSAA_pattern;
+            }
             // sRGB?
             opt = miscParams->find("gamma");
             if( opt != miscParams->end() )

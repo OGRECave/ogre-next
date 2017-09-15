@@ -375,7 +375,7 @@ namespace Ogre
 		optBackBufferCount.currentValue = "Auto";
 
 
-        optAA.name = "FSAA";
+        optAA.name = "MSAA";
         optAA.immutable = false;
         optAA.possibleValues.push_back( "None" );
         optAA.currentValue = "None";
@@ -672,7 +672,7 @@ namespace Ogre
     void D3D11RenderSystem::refreshFSAAOptions(void)
     {
 
-        ConfigOptionMap::iterator it = mOptions.find( "FSAA" );
+        ConfigOptionMap::iterator it = mOptions.find( "MSAA" );
         ConfigOption* optFSAA = &it->second;
         optFSAA->possibleValues.clear();
 
@@ -697,6 +697,7 @@ namespace Ogre
                 {
                     optFSAA->possibleValues.push_back(StringConverter::toString(n));
 
+#if TODO_OGRE_2_2
                     // 8x could mean 8xCSAA, and we need other designation for 8xMSAA
                     if((n == 8 && SUCCEEDED(device->CheckMultisampleQualityLevels(format, 4, &numLevels)) && numLevels > 8)    // 8x CSAA
                     || (n == 16 && SUCCEEDED(device->CheckMultisampleQualityLevels(format, 4, &numLevels)) && numLevels > 16)  // 16x CSAA
@@ -704,7 +705,9 @@ namespace Ogre
                     {
                         optFSAA->possibleValues.push_back(StringConverter::toString(n) + " [Quality]");
                     }
+#endif
                 }
+#if TODO_OGRE_2_2
                 else if(n == 16) // there could be case when 16xMSAA is not supported but 16xCSAA and may be 16xQ CSAA are supported
                 {
                     bool csaa16x = SUCCEEDED(device->CheckMultisampleQualityLevels(format, 4, &numLevels)) && numLevels > 16;
@@ -714,6 +717,7 @@ namespace Ogre
                     if(csaa16x && csaa16xQ)
                         optFSAA->possibleValues.push_back("16 [Quality]");
                 }
+#endif
             }
             SAFE_RELEASE(device);
             SAFE_RELEASE(device1);
@@ -967,7 +971,7 @@ namespace Ogre
             hwGamma = opt->second.currentValue == "Yes";
             uint fsaa = 0;
             String fsaaHint;
-            if( (opt = mOptions.find("FSAA")) != mOptions.end() )
+            if( (opt = mOptions.find("MSAA")) != mOptions.end() )
             {
                 StringVector values = StringUtil::split(opt->second.currentValue, " ", 1);
                 fsaa = StringConverter::parseUnsignedInt(values[0]);
@@ -986,8 +990,8 @@ namespace Ogre
 
             NameValuePairList miscParams;
             miscParams["colourDepth"] = StringConverter::toString(videoMode ? videoMode->getColourDepth() : 32);
-            miscParams["FSAA"] = StringConverter::toString(fsaa);
-            miscParams["FSAAHint"] = fsaaHint;
+            miscParams["MSAA"] = StringConverter::toString(fsaa);
+            miscParams["MSAA_quality"] = fsaaHint;
             miscParams["useNVPerfHUD"] = StringConverter::toString(mUseNVPerfHUD);
             miscParams["gamma"] = StringConverter::toString(hwGamma);
             //miscParams["useFlipSequentialMode"] = StringConverter::toString(true);

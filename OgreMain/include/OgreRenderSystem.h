@@ -416,16 +416,16 @@ namespace Ogre
              <td>&nbsp;</td>
          </tr>
          <tr>
-            <td>FSAA</td>
-            <td>Positive integer (usually 0, 2, 4, 8, 16)</td>
-            <td>0</td>
-            <td>Full screen antialiasing factor</td>
+            <td>MSAA</td>
+            <td>Positive integer (usually 1, 2, 4, 8, 16)</td>
+            <td>1</td>
+            <td>Multisample antialiasing factor</td>
             <td>&nbsp;</td>
         </tr>
         <tr>
-            <td>FSAAHint</td>
+            <td>MSAA_Quality</td>
             <td>Depends on RenderSystem and hardware. Currently supports:<br/>
-            "Quality": on systems that have an option to prefer higher AA quality over speed, use it</td>
+            0 ... infinite number (depends on HW)</td>
             <td>Blank</td>
             <td>Full screen antialiasing hint</td>
             <td>&nbsp;</td>

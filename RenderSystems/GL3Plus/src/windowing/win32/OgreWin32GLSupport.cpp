@@ -327,8 +327,8 @@ namespace Ogre {
 			mStereoMode = StringConverter::parseStereoMode(opt->second.currentValue);
 #endif
 
-            winOptions["FSAA"] = StringConverter::toString(multisample);
-            winOptions["FSAAHint"] = multisample_hint;
+            winOptions["MSAA"] = StringConverter::toString(multisample);
+            winOptions["MSAA_quality"] = multisample_hint;
 
             opt = mOptions.find("sRGB Gamma Conversion");
             if (opt == mOptions.end())

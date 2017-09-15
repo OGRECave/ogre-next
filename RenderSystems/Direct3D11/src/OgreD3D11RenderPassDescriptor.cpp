@@ -239,32 +239,32 @@ namespace Ogre
                     }
                     break;
                 }
+            }
 
-                assert( dynamic_cast<D3D11TextureGpu*>( mColour[i].texture ) );
-                D3D11TextureGpu *textureD3d = static_cast<D3D11TextureGpu*>( mColour[i].texture );
+            assert( dynamic_cast<D3D11TextureGpu*>( mColour[i].texture ) );
+            D3D11TextureGpu *textureD3d = static_cast<D3D11TextureGpu*>( mColour[i].texture );
 
-                ID3D11Resource *resourceTex = 0;
-                if( mColour[i].texture->getMsaa() > 1u &&
-                    !mColour[i].texture->hasMsaaExplicitResolves() )
-                {
-                    resourceTex = textureD3d->getMsaaFramebufferName();
-                }
-                else
-                {
-                    resourceTex = textureD3d->getFinalTextureName();
-                }
+            ID3D11Resource *resourceTex = 0;
+            if( mColour[i].texture->getMsaa() > 1u &&
+                !mColour[i].texture->hasMsaaExplicitResolves() )
+            {
+                resourceTex = textureD3d->getMsaaFramebufferName();
+            }
+            else
+            {
+                resourceTex = textureD3d->getFinalTextureName();
+            }
 
-                HRESULT hr = mDevice->CreateRenderTargetView( resourceTex, &viewDesc, &mColourRtv[i] );
+            HRESULT hr = mDevice->CreateRenderTargetView( resourceTex, &viewDesc, &mColourRtv[i] );
 
-                if( FAILED(hr) || mDevice.isError() )
-                {
-                    String errorDescription = mDevice.getErrorDescription(hr);
-                    OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
-                                    "Error creating Render Target View for texture '" +
-                                    mColour[i].texture->getNameStr() +"'\nError Description:" +
-                                    errorDescription,
-                                    "D3D11RenderPassDescriptor::updateColourRtv" );
-                }
+            if( FAILED(hr) || mDevice.isError() )
+            {
+                String errorDescription = mDevice.getErrorDescription(hr);
+                OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
+                                "Error creating Render Target View for texture '" +
+                                mColour[i].texture->getNameStr() +"'\nError Description:" +
+                                errorDescription,
+                                "D3D11RenderPassDescriptor::updateColourRtv" );
             }
         }
     }

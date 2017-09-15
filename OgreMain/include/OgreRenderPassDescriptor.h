@@ -104,6 +104,8 @@ namespace Ogre
             StoreAndMultisampleResolve,
             /// If texture is MSAA, has same effects as MultisampleResolve.
             /// If texture is not MSAA, has same effects as Store.
+            /// There is one exception: If texture is MSAA w/ explicit resolves,
+            /// but no resolve texture was set, it has same effects as Store
             ///
             /// To be used only by the Compositor.
             /// Should not be used in the actual RenderPassDescriptor directly.

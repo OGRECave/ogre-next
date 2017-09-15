@@ -274,7 +274,9 @@ namespace Ogre
             {
                 if( renderPassTargetAttachment->storeAction == StoreAction::MultisampleResolve ||
                     renderPassTargetAttachment->storeAction == StoreAction::StoreAndMultisampleResolve ||
-                    renderPassTargetAttachment->storeAction == StoreAction::StoreOrResolve )
+                    (renderPassTargetAttachment->storeAction == StoreAction::StoreOrResolve &&
+                     (!renderPassTargetAttachment->texture->hasMsaaExplicitResolves() ||
+                      rtvEntry.resolveTextureName != IdString())) )
                 {
                     //If we're here, the texture is MSAA _AND_ we'll resolve it.
                     if( rtvEntry.resolveTextureName == IdString() )
@@ -285,8 +287,7 @@ namespace Ogre
                                          "Must specify resolveTextureName for RTV when using explicit "
                                          "resolves and store action is either "
                                          "StoreAction::MultisampleResolve, "
-                                         "StoreAction::StoreAndMultisampleResolve or "
-                                         "StoreAction::StoreOrResolve. "
+                                         "StoreAction::StoreAndMultisampleResolve. "
                                          "Texture: " + renderPassTargetAttachment->texture->getNameStr(),
                                          "CompositorPass::setupRenderPassTarget" );
                         }
@@ -344,8 +345,11 @@ namespace Ogre
                 renderPassTargetAttachment->storeAction = StoreAction::DontCare;
             else
             {
-                if( renderPassTargetAttachment->texture->getMsaa() > 1u )
+                if( renderPassTargetAttachment->texture->getMsaa() > 1u &&
+                    renderPassTargetAttachment->resolveTexture )
+                {
                     renderPassTargetAttachment->storeAction = StoreAction::MultisampleResolve;
+                }
                 else
                     renderPassTargetAttachment->storeAction = StoreAction::Store;
             }

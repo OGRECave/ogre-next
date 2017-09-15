@@ -51,7 +51,7 @@ namespace Ogre
         bool mVisible;
 
         /// Effective FSAA mode, limited by hardware capabilities
-        //DXGI_SAMPLE_DESC mMsaaDesc;
+        DXGI_SAMPLE_DESC mMsaaDesc;
 
         // Window size depended resources - must be released
         // before swapchain resize and recreated later

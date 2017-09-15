@@ -226,7 +226,7 @@ namespace Demo
 
         params.insert( std::make_pair("title", windowTitle) );
         params.insert( std::make_pair("gamma", "true") );
-        params.insert( std::make_pair("FSAA", cfgOpts["FSAA"].currentValue) );
+        params.insert( std::make_pair("MSAA", cfgOpts["MSAA"].currentValue) );
         params.insert( std::make_pair("vsync", cfgOpts["VSync"].currentValue) );
 
         mRenderWindow = Ogre::Root::getSingleton().createRenderWindow( windowTitle, width, height,
