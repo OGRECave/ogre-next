@@ -116,12 +116,14 @@ namespace Ogre
                                           baseSet.mTextures.end(),
                                           mTextures[i], OrderTextureByPoolThenName );
 
-                const size_t idx = itor - baseSet.mTextures.begin();
+                size_t idx = itor - baseSet.mTextures.begin();
 
                 //May have changed if the TextureGpuManager updated the Texture.
                 mTexIndices[i] = mTextures[i]->getInternalSliceStart();
 
-                if( itor == baseSet.mTextures.end() || (*itor) != mTextures[i] )
+                if( itor == baseSet.mTextures.end() ||
+                    ((*itor)->getTexturePool() != mTextures[i]->getTexturePool() ||
+                     (!(*itor)->getTexturePool() && (*itor) != mTextures[i])) )
                 {
                     baseSet.mTextures.insert( itor, mTextures[i] );
                     if( !hasSeparateSamplers )
@@ -132,13 +134,33 @@ namespace Ogre
                 }
                 else if( !hasSeparateSamplers && baseSampler.mSamplers[idx] != mSamplerblocks[i] )
                 {
-                    assert( idx < baseSampler.mSamplers.size() );
-
-                    //Texture is already there, but we have to duplicate
+                    //Texture/pool is already there, but we have to duplicate
                     //it because it uses a different samplerblock
-                    baseSet.mTextures.insert( itor, mTextures[i] );
-                    baseSampler.mSamplers.insert( baseSampler.mSamplers.begin() + idx + 1u,
-                                                  mSamplerblocks[i] );
+                    assert( (*itor)->getTexturePool() &&
+                            "Textures without a texture pool should *always* be matching the "
+                            "samplerblock when hasSeparateSamplers == false" );
+
+                    ++idx;
+                    ++itor;
+
+                    //First check if the pool hasn't already been repeated with this same samplerblock
+                    FastArray<const TextureGpu*>::iterator end = baseSet.mTextures.end();
+                    while( itor != end &&
+                           (*itor)->getTexturePool() == mTextures[i]->getTexturePool() &&
+                           baseSampler.mSamplers[idx] != mSamplerblocks[i] )
+                    {
+                        ++idx;
+                        ++itor;
+                    }
+
+                    if( itor == end || (*itor)->getTexturePool() != mTextures[i]->getTexturePool() )
+                    {
+                        //We couldn't find another entry with the same texture pool and same samplerblock
+                        assert( idx < baseSampler.mSamplers.size() );
+                        baseSet.mTextures.insert( itor, mTextures[i] );
+                        baseSampler.mSamplers.insert( baseSampler.mSamplers.begin() + idx,
+                                                      mSamplerblocks[i] );
+                    }
                 }
             }
         }
@@ -371,7 +393,9 @@ namespace Ogre
                     std::lower_bound( mTexturesDescSet->mTextures.begin(),
                                       mTexturesDescSet->mTextures.end(),
                                       texture, OrderTextureByPoolThenName );
-            if( itor != mTexturesDescSet->mTextures.end() && *itor == texture )
+            if( itor != mTexturesDescSet->mTextures.end() &&
+                ((*itor)->getTexturePool() && (*itor)->getTexturePool() == texture->getTexturePool()) ||
+                *itor == texture )
             {
                 size_t idx = itor - mTexturesDescSet->mTextures.begin();
 
@@ -386,7 +410,9 @@ namespace Ogre
                     //(since they have different samplerblocks).
                     while( mSamplerblocks[texType] != mSamplersDescSet->mSamplers[idx] )
                         ++idx;
-                    assert( texture == mTexturesDescSet->mTextures[idx] );
+                    assert( (texture->getTexturePool() && texture->getTexturePool() ==
+                            mTexturesDescSet->mTextures[idx]->getTexturePool()) ||
+                            texture == mTexturesDescSet->mTextures[idx] );
                 }
 
                 retVal = static_cast<uint8>( idx );
