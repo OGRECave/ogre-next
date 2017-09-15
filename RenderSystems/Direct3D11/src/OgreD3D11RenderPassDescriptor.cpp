@@ -543,9 +543,12 @@ namespace Ogre
                                                                     texture->getDepthOrSlices() );
                         DXGI_FORMAT format = D3D11Mappings::get( resolveTexture->getPixelFormat() );
 
+                        ID3D11Resource *srcRes = texture->hasMsaaExplicitResolves() ?
+                                    texture->getFinalTextureName() : texture->getMsaaFramebufferName();
+
                         context->ResolveSubresource( resolveTexture->getFinalTextureName(),
                                                      dstSubResource,
-                                                     texture->getFinalTextureName(),
+                                                     srcRes,
                                                      srcSubResource,
                                                      format );
                     }

@@ -299,8 +299,10 @@ namespace Ogre
         *outDevice = device;
         *outDevice1 = 0;
 
+#if defined(_WIN32_WINNT_WIN8)
         hr = device->QueryInterface( __uuidof(ID3D11Device1),
                                      reinterpret_cast<void**>(outDevice1) );
+#endif
 	}
     //---------------------------------------------------------------------
     void D3D11RenderSystem::initConfigOptions()

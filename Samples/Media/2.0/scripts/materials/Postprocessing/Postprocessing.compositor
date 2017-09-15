@@ -499,19 +499,9 @@ compositor_node FinalComposition
 
 	target rt_output
 	{
-		//Play nice with Multi-GPU setups by telling the API there is no inter-frame dependency.
-		//On APIs that support discard_only (e.g. DX11) the driver may just ignore the colour value,
-		//and use a different memory region (i.e. the value read from a pixel of a discarded buffer
-		//without having written to it is undefined)
-		pass clear
-		{
-			colour_value	1 0 0 1
-			buffers			colour
-			discard_only	true
-		}
-
 		pass render_quad
 	    {
+			load { all dont_care }
 			//Ignore the alpha channel
 			material Ogre/Copy/4xFP32
 	    	input 0 rtN
@@ -560,20 +550,6 @@ compositor_node PostprocessingSampleStdRenderer
 		{
 			quad_normals	camera_direction
 			material PostprocessingSample/Sky
-		}
-	}
-	
-	//Play nice with Multi-GPU setups by telling the API there is no inter-frame dependency.
-	//On APIs that support discard_only (e.g. DX11) the driver may just ignore the colour value,
-	//and use a different memory region (i.e. the value read from a pixel of a discarded buffer
-	//without having written to it is undefined)
-	target rt1
-	{
-		pass clear
-		{
-			colour_value	0 1 0 1
-			buffers			colour
-			discard_only	true
 		}
 	}
 	
