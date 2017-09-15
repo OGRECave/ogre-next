@@ -71,10 +71,15 @@ float3 qmul( float4 q, float3 v )
 @property( normal_map_tex )float3 getTSNormal( float3 uv )
 {
 	float3 tsNormal;
-@property( signed_int_textures )
-	//Normal texture must be in U8V8 or BC5 format!
+@property( normal_sampling_format == normal_rg_snorm )
+	//Normal texture must be in UV8 or BC5 format!
 	tsNormal.xy = textureMaps[@value( normal_map_tex_idx )].Sample( samplerStates[@value( normal_map_tex_sampler )], uv ).xy;
-@end @property( !signed_int_textures )
+@end
+@property( normal_sampling_format == normal_rg_unorm )
+	//Normal texture must be in RG8 or similar format!
+	tsNormal.xy = textureMaps[@value( normal_map_tex_idx )].Sample( samplerStates[@value( normal_map_tex_sampler )], uv ).xy * 2.0 - 1.0;
+@end
+@property( normal_sampling_format == normal_la )
 	//Normal texture must be in LA format!
 	tsNormal.xy = textureMaps[@value( normal_map_tex_idx )].Sample( samplerStates[@value( normal_map_tex_sampler )], uv ).xw * 2.0 - 1.0;
 @end

@@ -60,6 +60,7 @@ THE SOFTWARE.
 #include "Animation/OgreSkeletonInstance.h"
 
 #include "OgreTextureGpu.h"
+#include "OgrePixelFormatGpuUtils.h"
 
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
     #include "OgrePlanarReflections.h"
@@ -71,7 +72,6 @@ namespace Ogre
 {
     const IdString PbsProperty::HwGammaRead       = IdString( "hw_gamma_read" );
     const IdString PbsProperty::HwGammaWrite      = IdString( "hw_gamma_write" );
-    const IdString PbsProperty::SignedIntTex      = IdString( "signed_int_textures" );
     const IdString PbsProperty::MaterialsPerBuffer= IdString( "materials_per_buffer" );
     const IdString PbsProperty::LowerGpuOverhead  = IdString( "lower_gpu_overhead" );
     const IdString PbsProperty::DebugPssmSplits   = IdString( "debug_pssm_splits" );
@@ -103,6 +103,11 @@ namespace Ogre
     const IdString PbsProperty::TwoSidedLighting  = IdString( "two_sided_lighting" );
     const IdString PbsProperty::ReceiveShadows    = IdString( "receive_shadows" );
     const IdString PbsProperty::UsePlanarReflections=IdString( "use_planar_reflections" );
+
+    const IdString PbsProperty::NormalSamplingFormat  = IdString( "normal_sampling_format" );
+    const IdString PbsProperty::NormalLa              = IdString( "normal_la" );
+    const IdString PbsProperty::NormalRgUnorm        = IdString( "normal_rg_unorm" );
+    const IdString PbsProperty::NormalRgSnorm        = IdString( "normal_rg_snorm" );
 
     const IdString PbsProperty::NormalWeight          = IdString( "normal_weight" );
     const IdString PbsProperty::NormalWeightTex       = IdString( "normal_weight_tex" );
@@ -715,6 +720,27 @@ namespace Ogre
                          "datablock without normal maps.", "HlmsPbs::calculateHashForPreCreate" );
         }
 
+        if( usesNormalMap )
+        {
+            TextureGpu *normalMapTex = datablock->getTexture( PBSM_NORMAL );
+            if( PixelFormatGpuUtils::isSigned( normalMapTex->getPixelFormat() ) )
+            {
+                setProperty( PbsProperty::NormalSamplingFormat, PbsProperty::NormalRgSnorm.mHash );
+                setProperty( PbsProperty::NormalRgSnorm, PbsProperty::NormalRgSnorm.mHash );
+            }
+            else
+            {
+                setProperty( PbsProperty::NormalSamplingFormat, PbsProperty::NormalRgUnorm.mHash );
+                setProperty( PbsProperty::NormalRgUnorm, PbsProperty::NormalRgUnorm.mHash );
+            }
+            //Reserved for supporting LA textures in GLES2.
+//            else
+//            {
+//                setProperty( PbsProperty::NormalSamplingFormat, PbsProperty::NormalLa.mHash );
+//                setProperty( PbsProperty::NormalLa, PbsProperty::NormalLa.mHash );
+//            }
+        }
+
         if( datablock->mUseAlphaFromTextures && datablock->mBlendblock[0]->mIsTransparent &&
             (getProperty( PbsProperty::DiffuseMap ) || getProperty( PbsProperty::DetailMapsDiffuse )) )
         {
@@ -987,8 +1013,6 @@ namespace Ogre
 //        setProperty( PbsProperty::HwGammaWrite, capabilities->hasCapability( RSC_HW_GAMMA ) &&
 //                                                        renderTarget->isHardwareGammaEnabled() );
         setProperty( PbsProperty::HwGammaWrite, 1 );
-        setProperty( PbsProperty::SignedIntTex, capabilities->hasCapability(
-                                                            RSC_TEXTURE_SIGNED_INT ) );
         retVal.setProperties = mSetProperties;
 
         Camera *camera = sceneManager->getCameraInProgress();

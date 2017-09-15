@@ -294,7 +294,6 @@ namespace Ogre
     {
         static const IdString HwGammaRead;
         static const IdString HwGammaWrite;
-        static const IdString SignedIntTex;
         static const IdString MaterialsPerBuffer;
         static const IdString LowerGpuOverhead;
         static const IdString DebugPssmSplits;
@@ -326,6 +325,11 @@ namespace Ogre
         static const IdString TwoSidedLighting;
         static const IdString ReceiveShadows;
         static const IdString UsePlanarReflections;
+
+        static const IdString NormalSamplingFormat;
+        static const IdString NormalLa;
+        static const IdString NormalRgUnorm;
+        static const IdString NormalRgSnorm;
 
         static const IdString NormalWeight;
         static const IdString NormalWeightTex;

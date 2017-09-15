@@ -41,10 +41,15 @@ inline float3 qmul( float4 q, float3 v )
 inline float3 getTSNormal( sampler samplerState, texture2d_array<float> normalMap, float2 uv, ushort normalIdx )
 {
 	float3 tsNormal;
-@property( signed_int_textures )
-	//Normal texture must be in U8V8 or BC5 format!
+@property( normal_sampling_format == normal_rg_snorm )
+	//Normal texture must be in UV8 or BC5 format!
 	tsNormal.xy = normalMap.sample( samplerState, uv, normalIdx ).xy;
-@end @property( !signed_int_textures )
+@end
+@property( normal_sampling_format == normal_rg_unorm )
+	//Normal texture must be in RG8 or similar format!
+	tsNormal.xy = normalMap.sample( samplerState, uv, normalIdx ).xy * 2.0 - 1.0;
+@end
+@property( normal_sampling_format == normal_la )
 	//Normal texture must be in LA format!
 	tsNormal.xy = normalMap.sample( samplerState, uv, normalIdx ).xw * 2.0 - 1.0;
 @end

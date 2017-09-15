@@ -116,10 +116,15 @@ vec3 qmul( vec4 q, vec3 v )
 @property( normal_map_tex )vec3 getTSNormal( vec3 uv )
 {
 	vec3 tsNormal;
-@property( signed_int_textures )
-	//Normal texture must be in U8V8 or BC5 format!
+@property( normal_sampling_format == normal_rg_snorm )
+	//Normal texture must be in UV8 or BC5 format!
 	tsNormal.xy = texture( textureMaps[@value( normal_map_tex_idx )], uv ).xy;
-@end @property( !signed_int_textures )
+@end
+@property( normal_sampling_format == normal_rg_unorm )
+	//Normal texture must be in RG8 or similar format!
+	tsNormal.xy = texture( textureMaps[@value( normal_map_tex_idx )], uv ).xy * 2.0 - 1.0;
+@end
+@property( normal_sampling_format == normal_la )
 	//Normal texture must be in LA format!
 	tsNormal.xy = texture( textureMaps[@value( normal_map_tex_idx )], uv ).xw * 2.0 - 1.0;
 @end
