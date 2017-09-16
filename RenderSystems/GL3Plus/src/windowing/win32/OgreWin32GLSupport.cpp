@@ -28,6 +28,7 @@
 #include "OgreRoot.h"
 #include "OgreException.h"
 #include "OgreLogManager.h"
+#include "OgrePixelFormatGpuUtils.h"
 #include "OgreStringConverter.h"
 
 #include <algorithm>
@@ -262,7 +263,8 @@ namespace Ogre {
         return BLANKSTRING;
     }
 
-    RenderWindow* Win32GLSupport::createWindow(bool autoCreateWindow, GL3PlusRenderSystem* renderSystem, const String& windowTitle)
+    Window *Win32GLSupport::createWindow( bool autoCreateWindow, GL3PlusRenderSystem* renderSystem,
+                                          const String& windowTitle )
     {
         if (autoCreateWindow)
         {
@@ -369,10 +371,11 @@ namespace Ogre {
     }
 
 
-    RenderWindow* Win32GLSupport::newWindow(const String &name, unsigned int width, 
-        unsigned int height, bool fullScreen, const NameValuePairList *miscParams)
+    Window *Win32GLSupport::newWindow( const String &name, uint32 width, uint32 height,
+                                       bool fullScreen, const NameValuePairList *miscParams )
     {       
-        Win32Window* window = OGRE_NEW Win32Window(*this);
+        Win32Window* window = OGRE_NEW Win32Window( name, width, height, fullScreen, PFG_UNKNOWN,
+                                                    miscParams, *this );
         NameValuePairList newParams;
     
         if (miscParams != NULL)
@@ -422,8 +425,6 @@ namespace Ogre {
 
             newParams["monitorHandle"] = StringConverter::toString((size_t)hMonitor);                                                               
         }
-
-        window->create(name, width, height, fullScreen, miscParams);
 
         if(!mInitialWindow)
             mInitialWindow = window;
@@ -633,7 +634,8 @@ namespace Ogre {
         return DefWindowProc(hwnd, umsg, wp, lp);
     }
 
-    bool Win32GLSupport::selectPixelFormat(HDC hdc, int colourDepth, int multisample, bool hwGamma)
+    bool Win32GLSupport::selectPixelFormat( HDC hdc, int colourDepth, int multisample,
+                                            PixelFormatGpu depthStencilFormat, bool hwGamma )
     {
         PIXELFORMATDESCRIPTOR pfd;
         memset(&pfd, 0, sizeof(pfd));
@@ -673,8 +675,33 @@ namespace Ogre {
             attribList.push_back(WGL_ACCELERATION_ARB); attribList.push_back(WGL_FULL_ACCELERATION_ARB);
             attribList.push_back(WGL_COLOR_BITS_ARB); attribList.push_back(pfd.cColorBits);
             attribList.push_back(WGL_ALPHA_BITS_ARB); attribList.push_back(pfd.cAlphaBits);
-            attribList.push_back(WGL_DEPTH_BITS_ARB); attribList.push_back(24);
-            attribList.push_back(WGL_STENCIL_BITS_ARB); attribList.push_back(8);
+
+            attribList.push_back(WGL_DEPTH_BITS_ARB);
+            if( depthStencilFormat == PFG_D24_UNORM_S8_UINT || depthStencilFormat == PFG_D24_UNORM ||
+                depthStencilFormat == PFG_UNKNOWN )
+            {
+                attribList.push_back(24);
+            }
+            else if( depthStencilFormat == PFG_D32_FLOAT ||
+                     depthStencilFormat == PFG_D32_FLOAT_S8X24_UINT )
+            {
+                attribList.push_back(32);
+            }
+            else if( depthStencilFormat == PFG_NULL )
+            {
+                attribList.push_back(0);
+            }
+
+            attribList.push_back(WGL_STENCIL_BITS_ARB);
+            if( PixelFormatGpuUtils::isStencil( depthStencilFormat ) ||
+                depthStencilFormat == PFG_UNKNOWN )
+            {
+                attribList.push_back(WGL_STENCIL_BITS_ARB); attribList.push_back(8);
+            }
+            else
+            {
+                attribList.push_back(WGL_STENCIL_BITS_ARB); attribList.push_back(0);
+            }
             attribList.push_back(WGL_SAMPLES_ARB); attribList.push_back(multisample);
 			
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0

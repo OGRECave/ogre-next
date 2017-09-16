@@ -663,7 +663,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11WindowHwnd::requestResolution( uint32 width, uint32 height )
     {
-        if (!mIsExternal)
+        if( !mIsExternal )
         {
             if( mHwnd && !mRequestedFullscreenMode )
             {

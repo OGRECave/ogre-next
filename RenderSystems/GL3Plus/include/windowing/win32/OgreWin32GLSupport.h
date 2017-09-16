@@ -53,11 +53,12 @@ namespace Ogre
         */
         String validateConfig();
 
-        virtual RenderWindow* createWindow(bool autoCreateWindow, GL3PlusRenderSystem* renderSystem, const String& windowTitle = "OGRE Render Window");
+        virtual Window* createWindow( bool autoCreateWindow, GL3PlusRenderSystem* renderSystem,
+                                      const String& windowTitle = "OGRE Render Window" );
         
         /// @copydoc RenderSystem::_createRenderWindow
-        virtual RenderWindow* newWindow(const String &name, unsigned int width, unsigned int height, 
-            bool fullScreen, const NameValuePairList *miscParams = 0);
+        virtual Window* newWindow( const String &name, uint32 width, uint32 height,
+                                   bool fullScreen, const NameValuePairList *miscParams = 0 );
 
         
         /**
@@ -80,7 +81,8 @@ namespace Ogre
         virtual void initialiseExtensions();
         
 
-        bool selectPixelFormat(HDC hdc, int colourDepth, int multisample, bool hwGamma);
+        bool selectPixelFormat( HDC hdc, int colourDepth, int multisample,
+                                PixelFormatGpu depthStencilFormat, bool hwGamma );
 
         virtual unsigned int getDisplayMonitorCount() const;
 

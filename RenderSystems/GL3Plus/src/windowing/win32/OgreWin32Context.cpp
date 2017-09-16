@@ -37,9 +37,12 @@ THE SOFTWARE.
 
 namespace Ogre {
 
-    Win32Context::Win32Context(HDC HDC, HGLRC Glrc):
-        mHDC(HDC),
-        mGlrc(Glrc)
+    Win32Context::Win32Context( HDC hdc, HGLRC glrc,
+                                uint32 contexMajorVersion, uint32 contexMinorVersion ) :
+        mHDC( hdc ),
+        mGlrc( glrc ),
+        mContexMajorVersion( contexMajorVersion ),
+        mContexMinorVersion( contexMinorVersion )
     {
     }
     
@@ -64,8 +67,8 @@ namespace Ogre {
     {
         const int attribList[] =
         {
-            WGL_CONTEXT_MAJOR_VERSION_ARB, 3,
-            WGL_CONTEXT_MINOR_VERSION_ARB, 3,
+            WGL_CONTEXT_MAJOR_VERSION_ARB, static_cast<int>( mContexMajorVersion ),
+            WGL_CONTEXT_MINOR_VERSION_ARB, static_cast<int>( mContexMinorVersion ),
         #if OGRE_DEBUG_MODE
             WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_DEBUG_BIT_ARB,
         #endif
@@ -83,7 +86,7 @@ namespace Ogre {
                          "Win32Context::clone" );
         }
 
-        return new Win32Context(mHDC, newCtx);
+        return new Win32Context( mHDC, newCtx, mContexMajorVersion, mContexMinorVersion );
     }
 
     void Win32Context::releaseContext()

@@ -30,63 +30,14 @@ THE SOFTWARE.
 #define __Win32Window_H__
 
 #include "OgreWin32Prerequisites.h"
-#include "OgreRenderWindow.h"
+#include "OgreWindow.h"
 
 namespace Ogre {
-    class _OgreGL3PlusExport Win32Window : public RenderWindow
+    class _OgreGL3PlusExport Win32Window : public Window
     {
-    public:
-        Win32Window(Win32GLSupport &glsupport);
-        ~Win32Window();
-
-        void create(const String& name, unsigned int width, unsigned int height,
-            bool fullScreen, const NameValuePairList *miscParams);
-        void setFullscreen(bool fullScreen, unsigned int width, unsigned int height);
-        void destroy(void);
-        bool isActive(void) const;
-        bool isVisible() const;
-        bool isHidden() const { return mHidden; }
-        void setHidden(bool hidden);
-        void setVSyncEnabled(bool vsync);
-        bool isVSyncEnabled() const;
-        void setVSyncInterval(unsigned int interval);
-        unsigned int getVSyncInterval() const;
-        bool isClosed(void) const;
-        void reposition(int left, int top);
-        void resize(unsigned int width, unsigned int height);
-        void swapBuffers();
-
-        /** Overridden - see RenderTarget. */
-        virtual void copyContentsToMemory(const PixelBox &dst, FrameBuffer buffer);
-
-        bool requiresTextureFlipping() const { return false; }
-
-        HWND getWindowHandle() const { return mHWnd; }
-        HDC getHDC() const { return mHDC; }
-        
-        // Method for dealing with resize / move & 3d library
-        virtual void windowMovedOrResized(void);
-
-        void getCustomAttribute( const String& name, void* pData );
-
-        /** Used to set the active state of the render target.
-        */
-        virtual void setActive( bool state );
-
-        void adjustWindow(unsigned int clientWidth, unsigned int clientHeight, 
-            unsigned int* winWidth, unsigned int* winHeight);
-
-    protected:
-        
-        /** Update the window rect. */ 
-        void updateWindowRect();
-
-        /** Return the target window style depending on the fullscreen parameter. */
-        DWORD getWindowStyle(bool fullScreen) const { if (fullScreen) return mFullscreenWinStyle; return mWindowedWinStyle; }
-
     protected:
         Win32GLSupport &mGLSupport;
-        HWND    mHWnd;                  // Win32 Window handle
+        HWND    mHwnd;                  // Win32 Window handle
         HDC     mHDC;
         HGLRC   mGlrc;
         uint32  mColourDepth;
@@ -97,12 +48,53 @@ namespace Ogre {
         bool    mSizing;
         bool    mClosed;
         bool    mHidden;
-        bool    mVSync;
-        unsigned int mVSyncInterval;
-        int     mDisplayFrequency;      // fullscreen only, to restore display
+        bool    mVisible;
+        bool    mHwGamma;
+        uint8   mMsaaCount;
         Win32Context *mContext;
         DWORD   mWindowedWinStyle;      // Windowed mode window style flags.
         DWORD   mFullscreenWinStyle;    // Fullscreen mode window style flags.
+
+        void create( PixelFormatGpu depthStencilFormat, const NameValuePairList *miscParams );
+
+        void updateWindowRect(void);
+        void adjustWindow( uint32 clientWidth, uint32 clientHeight,
+                           uint32 *outDrawableWidth, uint32 *outDrawableHeight );
+        /// Return the target window style depending on the fullscreen parameter.
+        DWORD getWindowStyle( bool fullScreen ) const;
+
+        void notifyResolutionChanged(void);
+
+    public:
+        Win32Window( const String &title, uint32 width, uint32 height, bool fullscreenMode,
+                     PixelFormatGpu depthStencilFormat, const NameValuePairList *miscParams,
+                     Win32GLSupport &glsupport );
+        virtual ~Win32Window();
+
+        virtual void _initialize( TextureGpuManager *textureGpuManager );
+        virtual void destroy(void);
+
+        virtual void reposition( int32 left, int32 top );
+        virtual void requestResolution( uint32 width, uint32 height );
+        virtual void requestFullscreenSwitch( bool goFullscreen, bool borderless, uint32 monitorIdx,
+                                              uint32 width, uint32 height,
+                                              uint32 frequencyNumerator, uint32 frequencyDenominator );
+
+        virtual void windowMovedOrResized(void);
+
+        bool isClosed(void) const;
+        virtual void _setVisible( bool visible );
+        virtual bool isVisible(void) const;
+        virtual void setHidden( bool hidden );
+        virtual bool isHidden(void) const;
+        virtual void setVSync( bool vSync, uint32 vSyncInterval );
+        virtual void swapBuffers(void);
+        virtual void setFocused( bool focused );
+
+        HWND getWindowHandle() const        { return mHwnd; }
+        HDC getHDC() const                  { return mHDC; }
+
+        void getCustomAttribute( IdString name, void* pData );
     };
 }
 
