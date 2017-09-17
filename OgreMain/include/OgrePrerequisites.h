@@ -178,6 +178,7 @@ namespace Ogre {
     class DepthBuffer;
     struct DescriptorSetSampler;
     struct DescriptorSetTexture;
+    struct DescriptorSetUav;
     class DynLib;
     class DynLibManager;
     class ErrorDialog;

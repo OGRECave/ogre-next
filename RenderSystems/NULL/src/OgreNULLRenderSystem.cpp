@@ -258,6 +258,14 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
+    void NULLRenderSystem::_setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set )
+    {
+    }
+    //-------------------------------------------------------------------------
+    void NULLRenderSystem::_setUavCS( uint32 slotStart, const DescriptorSetUav *set )
+    {
+    }
+    //-------------------------------------------------------------------------
     void NULLRenderSystem::_setTextureCoordCalculation( size_t unit, TexCoordCalcMethod m,
                                                         const Frustum* frustum )
     {

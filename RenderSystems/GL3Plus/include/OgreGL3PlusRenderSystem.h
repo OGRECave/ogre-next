@@ -34,6 +34,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreMaterialManager.h"
 #include "OgreRenderSystem.h"
 #include "OgreHlmsSamplerblock.h"
+#include "OgreDescriptorSetUav.h"
 #include "OgreGLSLShader.h"
 #include "OgreGL3PlusPixelFormatToShaderType.h"
 #include "OgreGL3PlusRenderPassDescriptor.h"
@@ -370,6 +371,12 @@ namespace Ogre {
         /// See RenderSystem
         virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set );
         virtual void _setSamplers( uint32 slotStart, const DescriptorSetSampler *set );
+        virtual void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set );
+    protected:
+        virtual void setBufferUavCS( uint32 slot, const DescriptorSetUav::BufferSlot &bufferSlot );
+        virtual void setTextureUavCS( uint32 slot, const DescriptorSetUav::TextureSlot &texSlot );
+    public:
+        virtual void _setUavCS( uint32 slotStart, const DescriptorSetUav *set );
         /** See
             RenderSystem
         */

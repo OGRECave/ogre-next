@@ -413,6 +413,14 @@ namespace Ogre
     {
         renderSystem->_descriptorSetSamplerDestroyed( desc );
     }
+    void createDescriptorSetUavImpl( RenderSystem *renderSystem, DescriptorSetUav *desc )
+    {
+        renderSystem->_descriptorSetUavCreated( desc );
+    }
+    void destroyDescriptorSetUavImpl( RenderSystem *renderSystem, DescriptorSetUav *desc )
+    {
+        renderSystem->_descriptorSetUavDestroyed( desc );
+    }
     template <typename T>
     const T* HlmsManager::getDescriptorSet( typename set<T>::type &container, const T &baseParams,
                                             void (*renderSysFunc)(RenderSystem*, T*) )
@@ -503,6 +511,25 @@ namespace Ogre
     void HlmsManager::destroyDescriptorSetSampler( const DescriptorSetSampler *descSet )
     {
         destroyDescriptorSet( mDescriptorSetSamplers, descSet, destroyDescriptorSetSamplerImpl );
+    }
+    //-----------------------------------------------------------------------------------
+    const DescriptorSetUav* HlmsManager::getDescriptorSetUav(
+            const DescriptorSetUav &baseParams )
+    {
+        assert( mRenderSystem && "A render system must be selected first!" );
+
+#if OGRE_DEBUG_MODE
+        baseParams.checkValidity();
+#endif
+
+        const DescriptorSetUav *retVal = getDescriptorSet( mDescriptorSetUavs, baseParams,
+                                                           createDescriptorSetUavImpl );
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsManager::destroyDescriptorSetUav( const DescriptorSetUav *descSet )
+    {
+        destroyDescriptorSet( mDescriptorSetUavs, descSet, destroyDescriptorSetUavImpl );
     }
     //-----------------------------------------------------------------------------------
     uint8 HlmsManager::_addInputLayoutId( VertexElement2VecVec vertexElements, OperationType opType )

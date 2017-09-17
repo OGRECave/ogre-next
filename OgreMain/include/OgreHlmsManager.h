@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "OgreHlmsSamplerblock.h"
 #include "OgreDescriptorSetTexture.h"
 #include "OgreDescriptorSetSampler.h"
+#include "OgreDescriptorSetUav.h"
 #if !OGRE_NO_JSON
     #include "OgreScriptLoader.h"
 #endif
@@ -78,8 +79,10 @@ namespace Ogre
 
         typedef set<DescriptorSetTexture>::type DescriptorSetTextureSet;
         typedef set<DescriptorSetSampler>::type DescriptorSetSamplerSet;
+        typedef set<DescriptorSetUav>::type DescriptorSetUavSet;
         DescriptorSetTextureSet mDescriptorSetTextures;
         DescriptorSetSamplerSet mDescriptorSetSamplers;
+        DescriptorSetUavSet     mDescriptorSetUavs;
 
         struct InputLayouts
         {
@@ -189,6 +192,9 @@ namespace Ogre
 
         const DescriptorSetSampler* getDescriptorSetSampler( const DescriptorSetSampler &baseParams );
         void destroyDescriptorSetSampler( const DescriptorSetSampler *descSet );
+
+        const DescriptorSetUav* getDescriptorSetUav( const DescriptorSetUav &baseParams );
+        void destroyDescriptorSetUav( const DescriptorSetUav *descSet );
 
         uint8 _addInputLayoutId( VertexElement2VecVec vertexElements, OperationType opType );
         void _removeInputLayoutIdReference( uint8 layoutId );

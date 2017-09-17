@@ -1195,6 +1195,96 @@ namespace Ogre {
         }
     }
 
+    void GL3PlusRenderSystem::_setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set )
+    {
+        _setTextures( slotStart, set );
+    }
+
+    void GL3PlusRenderSystem::setBufferUavCS( uint32 slot,
+                                              const DescriptorSetUav::BufferSlot &bufferSlot )
+    {
+        if( bufferSlot.buffer )
+        {
+            bufferSlot.buffer->bindBufferCS( slot, bufferSlot.offset, bufferSlot.sizeBytes );
+        }
+        else
+        {
+            OCGE( glBindImageTexture( slot, 0, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R32UI ) );
+            OCGE( glBindBufferRange( GL_SHADER_STORAGE_BUFFER, slot, 0, 0, 0 ) );
+        }
+    }
+
+    void GL3PlusRenderSystem::setTextureUavCS( uint32 slot,
+                                               const DescriptorSetUav::TextureSlot &texSlot )
+    {
+        if( texSlot.texture )
+        {
+            GLenum access;
+            switch( texSlot.access )
+            {
+            case ResourceAccess::Read:
+                access = GL_READ_ONLY;
+                break;
+            case ResourceAccess::Write:
+                access = GL_WRITE_ONLY;
+                break;
+            case ResourceAccess::ReadWrite:
+                access = GL_READ_WRITE;
+                break;
+            default:
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Invalid ResourceAccess parameter '" +
+                             StringConverter::toString( texSlot.access ) + "'",
+                             "GL3PlusRenderSystem::_bindTextureUavCS" );
+                break;
+            }
+
+            PixelFormatGpu pixelFormat = texSlot.pixelFormat;
+            if( pixelFormat == PFG_UNKNOWN )
+                pixelFormat = texSlot.texture->getPixelFormat();
+
+            const GLuint textureName =
+                    static_cast<GL3PlusTextureGpu*>(texSlot.texture)->getDisplayTextureName();
+            GLboolean isArrayTexture;
+            const TextureTypes::TextureTypes textureType = texSlot.texture->getTextureType();
+            if( textureType == TextureTypes::Type1DArray ||
+                textureType == TextureTypes::Type2DArray ||
+                textureType == TextureTypes::TypeCubeArray )
+            {
+                isArrayTexture = GL_TRUE;
+            }
+            else
+            {
+                isArrayTexture = GL_FALSE;
+            }
+            const GLenum format = GL3PlusMappings::get( pixelFormat );
+
+            OCGE( glBindImageTexture( slot, textureName, texSlot.mipmapLevel, isArrayTexture,
+                                      texSlot.textureArrayIndex, access, format ) );
+        }
+        else
+        {
+            OCGE( glBindImageTexture( slot, 0, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R32UI ) );
+            OCGE( glBindBufferRange( GL_SHADER_STORAGE_BUFFER, slot, 0, 0, 0 ) );
+        }
+    }
+
+    void GL3PlusRenderSystem::_setUavCS( uint32 slotStart, const DescriptorSetUav *set )
+    {
+        FastArray<DescriptorSetUav::Slot>::const_iterator itor = set->mUavs.begin();
+        FastArray<DescriptorSetUav::Slot>::const_iterator end  = set->mUavs.end();
+
+        while( itor != end )
+        {
+            if( itor->slotType == DescriptorSetUav::SlotTypeBuffer )
+                setBufferUavCS( slotStart, itor->getBuffer() );
+            else
+                setTextureUavCS( slotStart, itor->getTexture() );
+
+            ++slotStart;
+            ++itor;
+        }
+    }
+
     void GL3PlusRenderSystem::_setVertexTexture( size_t unit, TextureGpu *tex )
     {
         _setTexture(unit, tex);
@@ -1416,7 +1506,7 @@ namespace Ogre {
         }
         else
         {
-            glBindImageTexture( 0, 0, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R32UI );
+            glBindImageTexture( slot, 0, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R32UI );
         }
     }
 

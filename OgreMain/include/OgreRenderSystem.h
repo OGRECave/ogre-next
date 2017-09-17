@@ -865,6 +865,8 @@ namespace Ogre
 
         virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set ) = 0;
         virtual void _setSamplers( uint32 slotStart, const DescriptorSetSampler *set ) = 0;
+        virtual void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set ) = 0;
+        virtual void _setUavCS( uint32 slotStart, const DescriptorSetUav *set ) = 0;
 
         virtual void _resourceTransitionCreated( ResourceTransition *resTransition )    {}
         virtual void _resourceTransitionDestroyed( ResourceTransition *resTransition )  {}
@@ -882,6 +884,8 @@ namespace Ogre
         virtual void _descriptorSetTextureDestroyed( DescriptorSetTexture *set ) {}
         virtual void _descriptorSetSamplerCreated( DescriptorSetSampler *newSet ) {}
         virtual void _descriptorSetSamplerDestroyed( DescriptorSetSampler *set ) {}
+        virtual void _descriptorSetUavCreated( DescriptorSetUav *newSet ) {}
+        virtual void _descriptorSetUavDestroyed( DescriptorSetUav *set ) {}
 
         virtual void _setIndirectBuffer( IndirectBufferPacked *indirectBuffer ) = 0;
 
