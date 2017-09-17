@@ -135,9 +135,9 @@ namespace Ogre {
         optVSyncInterval.possibleValues.push_back( "4" );
         optVSyncInterval.currentValue = "1";
 
-        optFSAA.name = "FSAA";
+        optFSAA.name = "MSAA";
         optFSAA.immutable = false;
-        optFSAA.possibleValues.push_back("0");
+        optFSAA.possibleValues.push_back("1");
         for (vector<int>::type::iterator it = mFSAALevels.begin(); it != mFSAALevels.end(); ++it)
         {
             String val = StringConverter::toString(*it);
@@ -148,7 +148,7 @@ namespace Ogre {
             */
 
         }
-        optFSAA.currentValue = "0";
+        optFSAA.currentValue = "1";
 
         optRTTMode.name = "RTT Preferred Mode";
         optRTTMode.possibleValues.push_back("FBO");
@@ -312,9 +312,13 @@ namespace Ogre {
                 winOptions["displayFrequency"] = StringConverter::toString(displayFrequency);
             }
 
-            opt = mOptions.find("FSAA");
-            if (opt == mOptions.end())
-                OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, "Can't find FSAA options!", "Win32GLSupport::createWindow");
+            opt = mOptions.find("MSAA");
+            if( opt == mOptions.end() )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                             "Can't find MSAA options!",
+                             "Win32GLSupport::createWindow" );
+            }
             StringVector aavalues = StringUtil::split(opt->second.currentValue, " ", 1);
             unsigned int multisample = StringConverter::parseUnsignedInt(aavalues[0]);
             String multisample_hint;
@@ -648,6 +652,31 @@ namespace Ogre {
         pfd.cDepthBits = 24;
         pfd.cStencilBits = 8;
 
+        if( depthStencilFormat == PFG_D24_UNORM_S8_UINT || depthStencilFormat == PFG_D24_UNORM ||
+            depthStencilFormat == PFG_UNKNOWN )
+        {
+            pfd.cDepthBits = 24;
+        }
+        else if( depthStencilFormat == PFG_D32_FLOAT ||
+                 depthStencilFormat == PFG_D32_FLOAT_S8X24_UINT )
+        {
+            pfd.cDepthBits = 32;
+        }
+        else if( depthStencilFormat == PFG_NULL )
+        {
+            pfd.cDepthBits = 0;
+        }
+
+        if( PixelFormatGpuUtils::isStencil( depthStencilFormat ) ||
+            depthStencilFormat == PFG_UNKNOWN )
+        {
+            pfd.cStencilBits = 8;
+        }
+        else
+        {
+            pfd.cStencilBits = 0;
+        }
+
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
 		if (SMT_FRAME_SEQUENTIAL == mStereoMode)
 			pfd.dwFlags |= PFD_STEREO;
@@ -675,33 +704,8 @@ namespace Ogre {
             attribList.push_back(WGL_ACCELERATION_ARB); attribList.push_back(WGL_FULL_ACCELERATION_ARB);
             attribList.push_back(WGL_COLOR_BITS_ARB); attribList.push_back(pfd.cColorBits);
             attribList.push_back(WGL_ALPHA_BITS_ARB); attribList.push_back(pfd.cAlphaBits);
-
-            attribList.push_back(WGL_DEPTH_BITS_ARB);
-            if( depthStencilFormat == PFG_D24_UNORM_S8_UINT || depthStencilFormat == PFG_D24_UNORM ||
-                depthStencilFormat == PFG_UNKNOWN )
-            {
-                attribList.push_back(24);
-            }
-            else if( depthStencilFormat == PFG_D32_FLOAT ||
-                     depthStencilFormat == PFG_D32_FLOAT_S8X24_UINT )
-            {
-                attribList.push_back(32);
-            }
-            else if( depthStencilFormat == PFG_NULL )
-            {
-                attribList.push_back(0);
-            }
-
-            attribList.push_back(WGL_STENCIL_BITS_ARB);
-            if( PixelFormatGpuUtils::isStencil( depthStencilFormat ) ||
-                depthStencilFormat == PFG_UNKNOWN )
-            {
-                attribList.push_back(WGL_STENCIL_BITS_ARB); attribList.push_back(8);
-            }
-            else
-            {
-                attribList.push_back(WGL_STENCIL_BITS_ARB); attribList.push_back(0);
-            }
+            attribList.push_back(WGL_DEPTH_BITS_ARB); attribList.push_back(pfd.cDepthBits);
+            attribList.push_back(WGL_STENCIL_BITS_ARB); attribList.push_back(pfd.cStencilBits);
             attribList.push_back(WGL_SAMPLES_ARB); attribList.push_back(multisample);
 			
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0

@@ -561,12 +561,15 @@ namespace Ogre
             mMsaaCount = testFsaa == 0 ? 1u : static_cast<uint8>( testFsaa );
         }
 
+        GLint contextMajor = 4;
+        GLint contextMinor = 5;
+
         if( mOwnsGLContext )
         {
             int attribList[] =
             {
-                WGL_CONTEXT_MAJOR_VERSION_ARB, 4,
-                WGL_CONTEXT_MINOR_VERSION_ARB, 5,
+                WGL_CONTEXT_MAJOR_VERSION_ARB, contextMajor,
+                WGL_CONTEXT_MINOR_VERSION_ARB, contextMinor,
             #if OGRE_DEBUG_MODE
 				WGL_CONTEXT_FLAGS_ARB,  WGL_CONTEXT_DEBUG_BIT_ARB,
             #endif
@@ -585,12 +588,15 @@ namespace Ogre
                 {
                     if( attribList[3] == 0 )
                     {
-                        attribList[1] -= 1;
-                        attribList[3] = 5;
+                        contextMajor -= 1;
+                        contextMinor = 5;
+                        attribList[1] = contextMajor;
+                        attribList[3] = contextMinor;
                     }
                     else
                     {
-                        attribList[3] -= 1;
+                        contextMinor -= 1;
+                        attribList[3] = contextMinor;
                     }
                 }
             }
@@ -601,6 +607,10 @@ namespace Ogre
                              "wglCreateContextAttribsARB failed: " + translateWGLError(),
                              "Win32Window::create" );
             }
+
+            LogManager::getSingleton().logMessage(
+                        "Created GL " + StringConverter::toString(contextMajor) + "." +
+                        StringConverter::toString(contextMinor) + " context" );
         }
 
         if( !wglMakeCurrent( mHDC, mGlrc ) )
@@ -628,18 +638,6 @@ namespace Ogre
                 OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
                              "wglMakeCurrent() failed", "Win32Window::create" );
             }
-        }
-
-        GLint contextMajor = 0;
-        GLint contextMinor = 0;
-        glGetIntegerv( GL_MAJOR_VERSION, &contextMajor );
-        glGetIntegerv( GL_MINOR_VERSION, &contextMinor );
-
-        if( contextMajor == 0 && contextMinor == 0 )
-        {
-            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
-                         "Failing to retrieve major & minor version from created OpenGL context",
-                         "Win32Window::create" );
         }
 
         // Create RenderSystem context
