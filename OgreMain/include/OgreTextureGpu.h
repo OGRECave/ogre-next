@@ -125,16 +125,18 @@ namespace Ogre
             /// the internal resources of this TextureGpu but with a different format
             /// (e.g. useful for viewing a PFG_RGBA8_UNORM_SRGB as PFG_RGBA8_UNORM)
             Reinterpretable     = 1u << 6u,
-            /// Prefer loading from files as sRGB when possible.
+            /// Prefer loading FROM FILES as sRGB when possible.
             /// e.g. load PFG_RGBA8_UNORM as PFG_RGBA8_UNORM_SRGB
-            PrefersLoadingAsSRGB= 1u << 7u,
+            /// This flag does not affect RenderTextures, UAVs, or manually created textures.
+            /// If you're manually creating sRGB textures, set PFG_RGBA8_UNORM_SRGB directly
+            PrefersLoadingFromFileAsSRGB = 1u << 7u,
             /// Indicates this texture contains a RenderWindow. In several APIs render windows
             /// have particular limitations:
             ///     * Cannot be sampled as textures (i.e. NotTexture will be set)
             ///     * OpenGL cannot share the depth & stencil buffers with other textures.
             ///     * Metal requires special maintenance.
             ///     * etc.
-            RenderWindowSpecific= 1u << 9u,
+            RenderWindowSpecific    = 1u << 9u,
             RequiresTextureFlipping = 1u << 10u,
             /// When not present:
             /// The Texture is exactly the type requested (e.g. 2D texture won't
@@ -247,7 +249,7 @@ namespace Ogre
 
         /** Sets the pixel format.
         @remarks
-            If prefersLoadingAsSRGB() returns true, the format may not be fully honoured
+            If prefersLoadingFromFileAsSRGB() returns true, the format may not be fully honoured
             (as we'll use the equivalent _SRGB variation).
         */
         void setPixelFormat( PixelFormatGpu pixelFormat );
@@ -342,7 +344,7 @@ namespace Ogre
         bool hasAutoMipmapAuto(void) const;
         bool hasMsaaExplicitResolves(void) const;
         bool isReinterpretable(void) const;
-        bool prefersLoadingAsSRGB(void) const;
+        bool prefersLoadingFromFileAsSRGB(void) const;
         bool isRenderWindowSpecific(void) const;
         bool requiresTextureFlipping(void) const;
 

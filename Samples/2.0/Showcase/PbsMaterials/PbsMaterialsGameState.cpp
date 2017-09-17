@@ -147,7 +147,7 @@ namespace Demo
                     Ogre::TextureGpu *texture = textureMgr->createOrRetrieveTexture(
                                                     "SaintPetersBasilica.dds",
                                                     Ogre::GpuPageOutStrategy::Discard,
-                                                    Ogre::TextureFlags::PrefersLoadingAsSRGB,
+                                                    Ogre::TextureFlags::PrefersLoadingFromFileAsSRGB,
                                                     Ogre::TextureTypes::TypeCube,
                                                     Ogre::ResourceGroupManager::
                                                     AUTODETECT_RESOURCE_GROUP_NAME );

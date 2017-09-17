@@ -171,7 +171,7 @@ namespace Ogre
     {
         assert( mResidencyStatus == GpuResidency::OnStorage );
 
-        if( prefersLoadingAsSRGB() )
+        if( prefersLoadingFromFileAsSRGB() )
             pixelFormat = PixelFormatGpuUtils::getEquivalentSRGB( pixelFormat );
 
         mPixelFormat = pixelFormat;
@@ -467,9 +467,9 @@ namespace Ogre
         return (mTextureFlags & TextureFlags::Reinterpretable) != 0;
     }
     //-----------------------------------------------------------------------------------
-    bool TextureGpu::prefersLoadingAsSRGB(void) const
+    bool TextureGpu::prefersLoadingFromFileAsSRGB(void) const
     {
-        return (mTextureFlags & TextureFlags::PrefersLoadingAsSRGB) != 0;
+        return (mTextureFlags & TextureFlags::PrefersLoadingFromFileAsSRGB) != 0;
     }
     //-----------------------------------------------------------------------------------
     bool TextureGpu::isRenderWindowSpecific(void) const

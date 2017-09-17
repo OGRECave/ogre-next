@@ -1044,7 +1044,7 @@ namespace Ogre {
                 {
                     uint32 textureFlags = 0;
                     if( mHwGamma )
-                        textureFlags |= TextureFlags::PrefersLoadingAsSRGB;
+                        textureFlags |= TextureFlags::PrefersLoadingFromFileAsSRGB;
                     TextureGpuManager *textureManager = Root::getSingleton().
                                                         getRenderSystem()->getTextureGpuManager();
                     mFramePtrs[frame] =
@@ -1080,7 +1080,7 @@ namespace Ogre {
                 {
                     uint32 textureFlags = 0;
                     if( mHwGamma )
-                        textureFlags |= TextureFlags::PrefersLoadingAsSRGB;
+                        textureFlags |= TextureFlags::PrefersLoadingFromFileAsSRGB;
                     TextureGpuManager *textureManager = Root::getSingleton().
                                                         getRenderSystem()->getTextureGpuManager();
                     mFramePtrs[frame] =
