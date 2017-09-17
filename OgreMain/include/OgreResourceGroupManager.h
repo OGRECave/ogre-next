@@ -198,6 +198,15 @@ namespace Ogre {
         /** This event is called when a resource beings loading. */
         virtual DataStreamPtr resourceLoading(const String &name, const String &group, Resource *resource) = 0;
 
+        /// Gets called when a groupless manager (like TextureGpuManager) wants to check if there's
+        /// a resource with that name provided by this listener.
+        /// This function is called from main thread.
+        virtual bool grouplessResourceExists( const String &name ) = 0;
+
+        /// Gets called when a groupless manager (like TextureGpuManager) loads a resource.
+        /// WARNING: This function is likely going to be called from a worker thread.
+        virtual DataStreamPtr grouplessResourceLoading( const String &name ) = 0;
+
         /** This event is called when a resource stream has been opened, but not processed yet. 
         @remarks
             You may alter the stream if you wish or alter the incoming pointer to point at
