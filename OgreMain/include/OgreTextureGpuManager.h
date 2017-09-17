@@ -49,6 +49,7 @@ namespace Ogre
 
     typedef vector<TextureGpu*>::type TextureGpuVec;
     class ObjCmdBuffer;
+    class ResourceLoadingListener;
 
     struct _OgreExport TexturePool
     {
@@ -124,18 +125,20 @@ namespace Ogre
 
         struct LoadRequest
         {
-            String      name;
-            Archive     *archive;
-            TextureGpu  *texture;
-            GpuResidency::GpuResidency nextResidency;
+            String                      name;
+            Archive                     *archive;
+            ResourceLoadingListener     *loadingListener;
+            TextureGpu                  *texture;
+            GpuResidency::GpuResidency  nextResidency;
             /// Slice to upload this image to (in case we're uploading a 2D image into an cubemap)
             /// std::numeric_limits<uint32>::max() to disable it.
             uint32      sliceOrDepth;
 
             LoadRequest( const String &_name, Archive *_archive,
+                         ResourceLoadingListener *_loadingListener,
                          TextureGpu *_texture, GpuResidency::GpuResidency _nextResidency,
                          uint32 _sliceOrDepth ) :
-                name( _name ), archive( _archive ),
+                name( _name ), archive( _archive ), loadingListener( _loadingListener ),
                 texture( _texture ), nextResidency( _nextResidency ),
                 sliceOrDepth( _sliceOrDepth ) {}
         };

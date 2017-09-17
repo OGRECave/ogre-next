@@ -180,7 +180,7 @@ namespace Ogre
             TextureGpu *texture = textureManager->createOrRetrieveTexture(
                                       paramVal, GpuPageOutStrategy::Discard,
                                       TextureFlags::AutomaticBatching |
-                                      TextureFlags::PrefersLoadingAsSRGB,
+                                      TextureFlags::PrefersLoadingFromFileAsSRGB,
                                       TextureTypes::Type2D,
                                       ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
             setTexture( PBSM_DIFFUSE, texture );
@@ -199,7 +199,7 @@ namespace Ogre
             TextureGpu *texture = textureManager->createOrRetrieveTexture(
                                       paramVal, GpuPageOutStrategy::Discard,
                                       TextureFlags::AutomaticBatching |
-                                      TextureFlags::PrefersLoadingAsSRGB,
+                                      TextureFlags::PrefersLoadingFromFileAsSRGB,
                                       TextureTypes::Type2D,
                                       ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
             setTexture( PBSM_SPECULAR, texture );
@@ -226,7 +226,7 @@ namespace Ogre
         {
             TextureGpu *texture = textureManager->createOrRetrieveTexture(
                                       paramVal, GpuPageOutStrategy::Discard,
-                                      TextureFlags::PrefersLoadingAsSRGB,
+                                      TextureFlags::PrefersLoadingFromFileAsSRGB,
                                       TextureTypes::TypeCube,
                                       ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
             setTexture( PBSM_REFLECTION, texture );
@@ -260,7 +260,8 @@ namespace Ogre
                 TextureGpu *texture;
                 texture = textureManager->createOrRetrieveTexture(
                               paramVal, GpuPageOutStrategy::Discard,
-                              TextureFlags::AutomaticBatching | TextureFlags::PrefersLoadingAsSRGB,
+                              TextureFlags::AutomaticBatching |
+                              TextureFlags::PrefersLoadingFromFileAsSRGB,
                               TextureTypes::Type2D,
                               ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
                 setTexture( PBSM_DETAIL0 + i, texture, &detailSamplerRef );

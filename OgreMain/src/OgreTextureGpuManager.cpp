@@ -479,15 +479,24 @@ namespace Ogre
                                                  uint32 sliceOrDepth )
     {
         Archive *archive = 0;
+        ResourceLoadingListener *loadingListener = 0;
         if( resourceGroup != BLANKSTRING )
         {
             ResourceGroupManager &resourceGroupManager = ResourceGroupManager::getSingleton();
-            archive = resourceGroupManager._getArchiveToResource( name, resourceGroup );
+            ResourceLoadingListener *loadingListener = resourceGroupManager.getLoadingListener();
+            if( loadingListener )
+            {
+                if( !loadingListener->grouplessResourceExists( name ) )
+                    loadingListener = 0;
+            }
+
+            if( !loadingListener )
+                archive = resourceGroupManager._getArchiveToResource( name, resourceGroup );
         }
 
         ThreadData &mainData = mThreadData[c_mainThread];
         mLoadRequestsMutex.lock();
-            mainData.loadRequests.push_back( LoadRequest( name, archive, texture,
+            mainData.loadRequests.push_back( LoadRequest( name, archive, loadingListener, texture,
                                                           nextResidency, sliceOrDepth ) );
         mLoadRequestsMutex.unlock();
         mWorkerWaitableEvent.wake();
@@ -1078,7 +1087,12 @@ namespace Ogre
                             "Texture: " + loadRequest.name, LML_CRITICAL );
             }
 
-            DataStreamPtr data = loadRequest.archive->open( loadRequest.name );
+            DataStreamPtr data;
+            if( loadRequest.loadingListener )
+                data = loadRequest.loadingListener->grouplessResourceLoading( loadRequest.name );
+            else
+                data = loadRequest.archive->open( loadRequest.name );
+
             {
                 //Load the image from file into system RAM
                 Image2 img;

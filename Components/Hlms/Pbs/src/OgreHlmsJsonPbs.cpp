@@ -181,7 +181,7 @@ namespace Ogre
             uint32 textureFlags = TextureFlags::AutomaticBatching;
 
             if( datablock->suggestUsingSRGB( textureType ) )
-                textureFlags |= TextureFlags::PrefersLoadingAsSRGB;
+                textureFlags |= TextureFlags::PrefersLoadingFromFileAsSRGB;
 
             TextureTypes::TextureTypes internalTextureType = TextureTypes::Type2D;
             if( textureType == PBSM_REFLECTION )
