@@ -534,13 +534,13 @@ compositor_node PostprocessingSampleStdRenderer
 
 	target rt0
 	{
-		pass clear
-		{
-			colour_value 0.2 0.4 0.6 1
-		}
-
 		pass render_scene
 		{
+			load
+			{
+				all clear
+				clear_colour 0.2 0.4 0.6 1
+			}
 			//lod_update_list	off					//Turn Lod off?
 			shadows				ShadowMapDebuggingShadowNode
 			overlays			off

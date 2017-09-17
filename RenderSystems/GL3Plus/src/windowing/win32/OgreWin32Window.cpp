@@ -111,6 +111,7 @@ namespace Ogre
         {
             mRequestedWidth  = static_cast<uint32>( rc.right - rc.left );
             mRequestedHeight = static_cast<uint32>( rc.bottom - rc.top );
+            setFinalResolution( mRequestedWidth, mRequestedHeight );
             notifyResolutionChanged();
         }
     }
