@@ -95,7 +95,16 @@ namespace Ogre
     void TextureGpu::scheduleTransitionTo( GpuResidency::GpuResidency nextResidency )
     {
         mNextResidencyStatus = nextResidency;
-        mTextureManager->_scheduleTransitionTo( this, nextResidency );
+        if( isManualTexture() )
+        {
+            //Transition immediately. There's nothing from file or listener to load.
+            this->_transitionTo( nextResidency, (uint8*)0 );
+        }
+        else
+        {
+            //Schedule transition, we'll be loading from a worker thread.
+            mTextureManager->_scheduleTransitionTo( this, nextResidency );
+        }
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::setResolution( uint32 width, uint32 height, uint32 depthOrSlices )
@@ -379,7 +388,7 @@ namespace Ogre
 
         mResidencyStatus = newResidency;
 
-        if( !isTexture() || isRenderToTexture() || isUav() )
+        if( isManualTexture() )
         {
             mNextResidencyStatus = mResidencyStatus;
             if( mResidencyStatus == GpuResidency::Resident )
@@ -480,6 +489,14 @@ namespace Ogre
     bool TextureGpu::requiresTextureFlipping(void) const
     {
         return (mTextureFlags & TextureFlags::RequiresTextureFlipping) != 0;
+    }
+    //-----------------------------------------------------------------------------------
+    bool TextureGpu::isManualTexture(void) const
+    {
+        return ( mTextureFlags & (TextureFlags::NotTexture |
+                                  TextureFlags::Uav |
+                                  TextureFlags::RenderToTexture |
+                                  TextureFlags::ManualTexture) ) == 0;
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::_notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice )
