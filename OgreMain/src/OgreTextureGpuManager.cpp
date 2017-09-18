@@ -1080,7 +1080,7 @@ namespace Ogre
         {
             const LoadRequest &loadRequest = *itor;
 
-            if( !loadRequest.archive )
+            if( !loadRequest.archive && !loadRequest.loadingListener )
             {
                 LogManager::getSingleton().logMessage(
                             "ERROR: Did you call createTexture with a valid resourceGroup? "
