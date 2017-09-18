@@ -138,6 +138,10 @@ namespace Ogre
             ///     * etc.
             RenderWindowSpecific    = 1u << 9u,
             RequiresTextureFlipping = 1u << 10u,
+            /// Indicates this texture will be filled by the user, and won't be loaded
+            /// from file or a listener from within a worker thread. This flag
+            /// is implicit if NotTexture, RenderToTexture or Uav are set.
+            ManualTexture           = 1u << 11u,
             /// When not present:
             /// The Texture is exactly the type requested (e.g. 2D texture won't
             /// get a 2D array instead)
@@ -158,7 +162,7 @@ namespace Ogre
             /// compute the texture hashes.
             /// All of that (except updating slices to the GPU) can be done in a
             /// worker thread, then all the values swapped w/ the Datablock’s.
-            AutomaticBatching   = 1u << 11u
+            AutomaticBatching   = 1u << 12u
         };
     }
 
@@ -350,6 +354,7 @@ namespace Ogre
         bool prefersLoadingFromFileAsSRGB(void) const;
         bool isRenderWindowSpecific(void) const;
         bool requiresTextureFlipping(void) const;
+        bool isManualTexture(void) const;
 
         virtual void _setToDisplayDummyTexture(void) = 0;
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
