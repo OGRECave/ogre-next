@@ -483,7 +483,7 @@ namespace Ogre
         if( resourceGroup != BLANKSTRING )
         {
             ResourceGroupManager &resourceGroupManager = ResourceGroupManager::getSingleton();
-            ResourceLoadingListener *loadingListener = resourceGroupManager.getLoadingListener();
+            loadingListener = resourceGroupManager.getLoadingListener();
             if( loadingListener )
             {
                 if( !loadingListener->grouplessResourceExists( name ) )
