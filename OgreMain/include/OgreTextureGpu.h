@@ -259,6 +259,9 @@ namespace Ogre
         void setMsaa( uint8 msaa );
         uint8 getMsaa(void) const;
 
+        bool hasEquivalentParameters( TextureGpu *other ) const;
+        void setHlmsProperties( Hlms *hlms, LwString &propBaseName );
+
         void setMsaaPattern( MsaaPatterns::MsaaPatterns pattern );
         MsaaPatterns::MsaaPatterns getMsaaPattern(void) const;
         virtual bool isMsaaPatternSupported( MsaaPatterns::MsaaPatterns pattern );

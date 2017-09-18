@@ -59,15 +59,26 @@ namespace Ogre
         };
         struct BufferSlot
         {
+            /// UAV buffer to bind
             UavBufferPacked *buffer;
+            /// 0-based offset. It is possible to bind a region of the buffer.
+            /// Offset needs to be aligned. You can query the RS capabilities for
+            /// the alignment, however 256 bytes is the maximum allowed alignment
+            /// per the OpenGL specification, making it a safe bet to hardcode.
             size_t offset;
+            /// Size in bytes to bind the tex buffer. When zero,
+            /// binds from offset until the end of the buffer.
             size_t sizeBytes;
+            /// Access. Should match what the shader expects. Needed by Ogre to
+            /// resolve memory barrier dependencies.
+            ResourceAccess::ResourceAccess access;
 
             bool operator != ( const BufferSlot &other ) const
             {
                 return  this->buffer != other.buffer ||
                         this->offset != other.offset ||
-                        this->sizeBytes != other.sizeBytes;
+                        this->sizeBytes != other.sizeBytes ||
+                        this->access != other.access;
             }
 
             bool operator < ( const BufferSlot &other ) const
@@ -78,6 +89,8 @@ namespace Ogre
                     return this->offset < other.offset;
                 if( this->sizeBytes != other.sizeBytes )
                     return this->sizeBytes < other.sizeBytes;
+                if( this->access != other.access )
+                    return this->access < other.access;
 
                 return false;
             }
@@ -89,6 +102,7 @@ namespace Ogre
             ResourceAccess::ResourceAccess access;
             uint8           mipmapLevel;
             uint16          textureArrayIndex;
+            /// When left as PFG_UNKNOWN, we'll automatically use the TextureGpu's native format
             PixelFormatGpu  pixelFormat;
 
             bool operator != ( const TextureSlot &other ) const
@@ -126,10 +140,25 @@ namespace Ogre
                 TextureSlot texture;
             };
         public:
+            Slot()
+            {
+                memset( this, 0, sizeof(*this) );
+            }
+
             Slot( SlotType _slotType )
             {
                 memset( this, 0, sizeof(*this) );
                 slotType = _slotType;
+            }
+
+            bool empty(void) const
+            {
+                return buffer.buffer == 0 && texture.texture == 0;
+            }
+
+            bool isBuffer(void) const
+            {
+                return slotType == SlotTypeBuffer;
             }
 
             BufferSlot& getBuffer(void)
@@ -142,6 +171,11 @@ namespace Ogre
             {
                 assert( slotType == SlotTypeBuffer );
                 return buffer;
+            }
+
+            bool isTexture(void) const
+            {
+                return slotType == SlotTypeTexture;
             }
 
             TextureSlot& getTexture(void)

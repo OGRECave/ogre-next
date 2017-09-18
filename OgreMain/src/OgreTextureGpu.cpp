@@ -197,6 +197,18 @@ namespace Ogre
         return mMsaa;
     }
     //-----------------------------------------------------------------------------------
+    bool TextureGpu::hasEquivalentParameters( TextureGpu *other ) const
+    {
+        return this->mWidth != other->mWidth ||
+               this->mHeight != other->mHeight ||
+               this->mDepthOrSlices != other->mDepthOrSlices ||
+               this->mNumMipmaps != other->mNumMipmaps ||
+               this->mPixelFormat != other->mPixelFormat ||
+               this->mMsaa != other->mMsaa ||
+               this->mMsaaPattern != other->mMsaaPattern ||
+               this->mTextureType != other->mTextureType;
+    }
+    //-----------------------------------------------------------------------------------
     void TextureGpu::setMsaaPattern( MsaaPatterns::MsaaPatterns pattern )
     {
         mMsaaPattern = pattern;

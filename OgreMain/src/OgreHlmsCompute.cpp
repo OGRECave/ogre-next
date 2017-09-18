@@ -472,29 +472,7 @@ namespace Ogre
             ++itTex;
         }
 
-        slotIdx = 0u;
-        HlmsComputeJob::TextureSlotVec::const_iterator itUav = job->mUavSlots.begin();
-        HlmsComputeJob::TextureSlotVec::const_iterator enUav = job->mUavSlots.end();
-
-        while( itUav != enUav )
-        {
-            if( itUav->buffer )
-            {
-                static_cast<UavBufferPacked*>( itUav->buffer )->bindBufferCS(
-                            slotIdx, itUav->offset, itUav->sizeBytes );
-            }
-            else
-            {
-#if TODO_OGRE_2_2
-                mRenderSystem->_bindTextureUavCS( slotIdx, itUav->texture.get(),
-                                                  itUav->access, itUav->mipmapLevel,
-                                                  itUav->textureArrayIndex, itUav->pixelFormat );
-#endif
-            }
-
-            ++slotIdx;
-            ++itUav;
-        }
+        mRenderSystem->_setUavCS( 0u, job->mUavsDescSet );
 
         mAutoParamDataSource->setCurrentJob( job );
         mAutoParamDataSource->setCurrentCamera( camera );

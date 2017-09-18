@@ -169,8 +169,13 @@ namespace Ogre
             while( itor != end )
             {
                 TextureGpu *texture = mParentNode->getDefinedTexture( itor->textureName );
-                mComputeJob->_setUavTexture( itor->texUnitIdx, texture, itor->textureArrayIndex,
-                                             itor->access, itor->mipmapLevel, itor->pixelFormat );
+                DescriptorSetUav::TextureSlot texSlot;
+                texSlot.texture             = texture;
+                texSlot.access              = itor->access;
+                texSlot.mipmapLevel         = itor->mipmapLevel;
+                texSlot.textureArrayIndex   = itor->textureArrayIndex;
+                texSlot.pixelFormat         = itor->pixelFormat;
+                mComputeJob->_setUavTexture( itor->texUnitIdx, texSlot );
                 ++itor;
             }
         }
@@ -184,8 +189,12 @@ namespace Ogre
             while( itor != end )
             {
                 UavBufferPacked *uavBuffer = mParentNode->getDefinedBuffer( itor->bufferName );
-                mComputeJob->_setUavBuffer( itor->slotIdx, uavBuffer, itor->access,
-                                            itor->offset, itor->sizeBytes );
+                DescriptorSetUav::BufferSlot bufferSlot;
+                bufferSlot.buffer       = uavBuffer;
+                bufferSlot.offset       = itor->offset;
+                bufferSlot.sizeBytes    = itor->sizeBytes;
+                bufferSlot.access       = itor->access;
+                mComputeJob->_setUavBuffer( itor->slotIdx, bufferSlot );
                 ++itor;
             }
         }

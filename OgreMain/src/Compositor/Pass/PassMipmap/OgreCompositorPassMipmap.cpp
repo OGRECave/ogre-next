@@ -253,10 +253,20 @@ namespace Ogre
                     shaderParams->mParams.push_back( paramDstLodIdx );
                     shaderParams->setDirty();
 
+                    DescriptorSetUav::TextureSlot texSlot;
+                    texSlot.access              = ResourceAccess::Write;
+                    texSlot.textureArrayIndex   = 0;
+                    texSlot.pixelFormat         = pf;
+
+                    texSlot.texture     = tmpTex;
+                    texSlot.mipmapLevel = mip;
                     blurH2->setTexture( 0, texture );
-                    blurH2->_setUavTexture( 0, tmpTex, 0, ResourceAccess::Write, mip, pf );
+                    blurH2->_setUavTexture( 0, texSlot );
+
+                    texSlot.texture     = texture;
+                    texSlot.mipmapLevel = mip + 1u;
                     blurV2->setTexture( 0, tmpTex );
-                    blurV2->_setUavTexture( 0, texture, 0, ResourceAccess::Write, mip + 1u, pf );
+                    blurV2->_setUavTexture( 0, texSlot );
 
                     blurV2->setProperty( "width_with_lod", currWidth );
                     blurV2->setProperty( "height_with_lod", currHeight );
