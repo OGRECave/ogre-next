@@ -508,7 +508,7 @@ namespace Ogre
         return ( mTextureFlags & (TextureFlags::NotTexture |
                                   TextureFlags::Uav |
                                   TextureFlags::RenderToTexture |
-                                  TextureFlags::ManualTexture) ) == 0;
+                                  TextureFlags::ManualTexture) ) != 0;
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::_notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice )
