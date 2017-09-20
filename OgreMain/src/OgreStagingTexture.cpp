@@ -65,6 +65,9 @@ namespace Ogre
         mMapRegionStarted = true;
 
 #if OGRE_DEBUG_MODE
+        //We only warn if uploadWillStall wasn't called. Because if you didn't wait
+        //getDynamicBufferMultiplier frames and never called uploadWillStall to check,
+        //you're risking certain machines (with slower GPUs) to stall even if yours doesn't.
         if( mVaoManager->getFrameCount() - mLastFrameUsed < mVaoManager->getDynamicBufferMultiplier() &&
             !mUserQueriedIfUploadWillStall )
         {
