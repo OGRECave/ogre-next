@@ -70,7 +70,8 @@ namespace Demo
                 mGraphicsSystem->getRoot()->getRenderSystem()->getTextureGpuManager();
         TextureGpu *tex = textureManager->createTexture( "HalftoneVolume",
                                                          GpuPageOutStrategy::SaveToSystemRam,
-                                                         0, TextureTypes::Type3D );
+                                                         TextureFlags::ManualTexture,
+                                                         TextureTypes::Type3D );
         tex->setResolution( 64u, 64u, 64u );
         tex->setPixelFormat( PFG_R8_UNORM );
 
@@ -117,7 +118,8 @@ namespace Demo
 
         tex = textureManager->createTexture( "DitherTex",
                                              GpuPageOutStrategy::SaveToSystemRam,
-                                             0, TextureTypes::Type2D );
+                                             TextureFlags::ManualTexture,
+                                             TextureTypes::Type2D );
         tex->setResolution( renderWindow->getWidth(), renderWindow->getHeight() );
         tex->setPixelFormat( PFG_R8_UNORM );
 
