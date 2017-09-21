@@ -376,17 +376,24 @@ namespace Ogre
         /// Note: Returns non-zero even if there is no system ram copy.
         size_t _getSysRamCopyBytesPerImage( uint8 mipLevel );
 
-        /// It is threadsafe to call this function from main thread.
-        /// If this returns true, then the following functions are not threadsafe:
-        /// Setters must not be called, and getters may change from a worker thread:
-        ///     * setResolution
-        ///     * getWidth, getHeight, getDepth, getDepthOrSlices, getNumSlices
-        ///     * set/getPixelFormat
-        ///     * set/getNumMipmaps
-        ///     * set/getTextureType
-        /// Note that this function may return false but the worker thread
-        /// may still be uploading to this texture. Use isDataReady to
-        /// see if the worker thread is fully done with this texture.
+        /** It is threadsafe to call this function from main thread.
+            If this returns true, then the following functions are not threadsafe:
+            Setters must not be called, and getters may change from a worker thread:
+                * setResolution
+                * getWidth, getHeight, getDepth, getDepthOrSlices, getNumSlices
+                * set/getPixelFormat
+                * set/getNumMipmaps
+                * set/getTextureType
+            Note that this function may return false but the worker thread
+            may still be uploading to this texture. Use isDataReady to
+            see if the worker thread is fully done with this texture.
+
+        @remarks
+            Function for querying/waiting for data and metadata to be ready
+            are for blocking the main thread when a worker thread is loading
+            the texture from file or a listener (i.e. isManualTexture returns false)
+            otherwise you don't need to call these functions.
+        */
         bool isMetadataReady(void) const;
 
         /// True if this texture is fully ready to be used for displaying.
@@ -397,11 +404,13 @@ namespace Ogre
         /// Blocks main thread until metadata is ready. Afterwards isMetadataReady
         /// should return true. If it doesn't, then there was a problem loading
         /// the texture.
+        /// See isMetadataReady remarks.
         void waitForMetadata(void);
 
         /// Blocks main thread until data is ready. Afterwards isDataReady
         /// should return true. If it doesn't, then there was a problem loading
         /// the texture.
+        /// See isMetadataReady remarks.
         void waitForData(void);
     };
 

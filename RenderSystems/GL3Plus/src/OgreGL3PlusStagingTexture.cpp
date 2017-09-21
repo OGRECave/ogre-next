@@ -81,7 +81,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void GL3PlusStagingTexture::startMapRegion(void)
     {
-        StagingTexture::startMapRegion();
+        StagingTextureBufferImpl::startMapRegion();
 
         const bool canPersistentMap = static_cast<GL3PlusVaoManager*>( mVaoManager )->
                 supportsArbBufferStorage();
@@ -109,7 +109,7 @@ namespace Ogre
             mMappedPtr = 0; //Do not zero it so belongsToUs can work.
         }
 
-        StagingTexture::stopMapRegion();
+        StagingTextureBufferImpl::stopMapRegion();
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusStagingTexture::uploadCubemap( const TextureBox &srcBox, PixelFormatGpu pixelFormat,
@@ -144,7 +144,7 @@ namespace Ogre
     void GL3PlusStagingTexture::upload( const TextureBox &srcBox, TextureGpu *dstTexture,
                                         uint8 mipLevel, const TextureBox *dstBox, bool skipSysRamCopy )
     {
-        StagingTexture::upload( srcBox, dstTexture, mipLevel, dstBox, skipSysRamCopy );
+        StagingTextureBufferImpl::upload( srcBox, dstTexture, mipLevel, dstBox, skipSysRamCopy );
 
         size_t bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( dstTexture->getPixelFormat() );
 

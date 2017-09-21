@@ -74,13 +74,13 @@ namespace Ogre
         NSRange range = NSMakeRange( 0, mCurrentOffset );
         [mVboName didModifyRange:range];
 #endif
-        StagingTexture::stopMapRegion();
+        StagingTextureBufferImpl::stopMapRegion();
     }
     //-----------------------------------------------------------------------------------
     void MetalStagingTexture::upload( const TextureBox &srcBox, TextureGpu *dstTexture,
                                       uint8 mipLevel, const TextureBox *dstBox, bool skipSysRamCopy )
     {
-        StagingTexture::upload( srcBox, dstTexture, mipLevel, dstBox, skipSysRamCopy );
+        StagingTextureBufferImpl::upload( srcBox, dstTexture, mipLevel, dstBox, skipSysRamCopy );
 
         __unsafe_unretained id<MTLBlitCommandEncoder> blitEncoder = mDevice->getBlitEncoder();
 
