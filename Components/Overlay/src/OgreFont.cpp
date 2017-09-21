@@ -270,7 +270,8 @@ namespace Ogre
         String texName = mName + "/Texture";
         // Create, setting isManual to true and passing self as loader
         //mGroup
-        mTexture = textureManager->createTexture( mName, GpuPageOutStrategy::SaveToSystemRam, 0,
+        mTexture = textureManager->createTexture( texName, GpuPageOutStrategy::SaveToSystemRam,
+                                                  TextureFlags::ManualTexture,
                                                   TextureTypes::Type2D );
         mTexture->setPixelFormat( PFG_RG8_UNORM );
         mTexture->setTextureType( TextureTypes::Type2D );
