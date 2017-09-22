@@ -63,6 +63,7 @@ namespace Ogre
     protected:
         DescriptorSetUav const *mDescriptorSetUav;
 
+        uint32 calculateNumberUavSlots(void) const;
         void setupDescriptorSetUav(void);
 
     public:

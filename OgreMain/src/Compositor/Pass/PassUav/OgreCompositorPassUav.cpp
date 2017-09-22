@@ -100,6 +100,37 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    uint32 CompositorPassUav::calculateNumberUavSlots(void) const
+    {
+        uint32 retVal = 0;
+
+        {
+            const CompositorPassUavDef::TextureSources &textureSources =
+                    mDefinition->getTextureSources();
+            CompositorPassUavDef::TextureSources::const_iterator itor = textureSources.begin();
+            CompositorPassUavDef::TextureSources::const_iterator end  = textureSources.end();
+
+            while( itor != end )
+            {
+                retVal = std::max( retVal, itor->uavSlot + 1u );
+                ++itor;
+            }
+        }
+
+        {
+            const CompositorPassUavDef::BufferSourceVec &bufferSources = mDefinition->getBufferSources();
+            CompositorPassUavDef::BufferSourceVec::const_iterator itor = bufferSources.begin();
+            CompositorPassUavDef::BufferSourceVec::const_iterator end  = bufferSources.end();
+            while( itor != end )
+            {
+                retVal = std::max( retVal, itor->uavSlot + 1u );
+                ++itor;
+            }
+        }
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
     void CompositorPassUav::setupDescriptorSetUav(void)
     {
         HlmsManager *hlmsManager = Root::getSingleton().getHlmsManager();
@@ -122,6 +153,8 @@ namespace Ogre
 
         DescriptorSetUav descSetUav;
         {
+            descSetUav.mUavs.resize( calculateNumberUavSlots() );
+
             const CompositorPassUavDef::TextureSources &textureSources =
                     mDefinition->getTextureSources();
             CompositorPassUavDef::TextureSources::const_iterator itor = textureSources.begin();
@@ -162,8 +195,7 @@ namespace Ogre
                 textureSlot.textureArrayIndex   = 0;
                 textureSlot.pixelFormat         = itor->pixelFormat;
 
-                descSetUav.mUavs.push_back( slot );
-
+                descSetUav.mUavs[itor->uavSlot] = slot;
                 ++itor;
             }
         }
@@ -185,8 +217,8 @@ namespace Ogre
                 bufferSlot.offset       = itor->offset;
                 bufferSlot.sizeBytes    = itor->sizeBytes;
                 bufferSlot.access       = itor->access;
-                descSetUav.mUavs.push_back( slot );
 
+                descSetUav.mUavs[itor->uavSlot] = slot;
                 ++itor;
             }
         }
