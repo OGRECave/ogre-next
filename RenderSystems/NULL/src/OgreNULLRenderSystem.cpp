@@ -205,31 +205,7 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    void NULLRenderSystem::queueBindUAV( uint32 slot, TextureGpu *texture,
-                                         ResourceAccess::ResourceAccess access,
-                                         int32 mipmapLevel, int32 textureArrayIndex,
-                                         PixelFormatGpu pixelFormat )
-    {
-    }
-    //-------------------------------------------------------------------------
-    void NULLRenderSystem::queueBindUAV( uint32 slot, UavBufferPacked *buffer,
-                                         ResourceAccess::ResourceAccess access,
-                                         size_t offset, size_t sizeBytes )
-    {
-    }
-    //-------------------------------------------------------------------------
-    void NULLRenderSystem::clearUAVs(void)
-    {
-    }
-    //-------------------------------------------------------------------------
     void NULLRenderSystem::flushUAVs(void)
-    {
-    }
-    //-------------------------------------------------------------------------
-    void NULLRenderSystem::_bindTextureUavCS( uint32 slot, TextureGpu *texture,
-                                              ResourceAccess::ResourceAccess access,
-                                              int32 mipmapLevel, int32 textureArrayIndex,
-                                              PixelFormatGpu pixelFormat )
     {
     }
     //-------------------------------------------------------------------------

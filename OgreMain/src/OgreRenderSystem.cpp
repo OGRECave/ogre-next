@@ -76,7 +76,9 @@ namespace Ogre {
         , mDerivedDepthBiasBase(0.0f)
         , mDerivedDepthBiasMultiplier(0.0f)
         , mDerivedDepthBiasSlopeScale(0.0f)
+        , mUavRenderingDirty(false)
         , mUavStartingSlot( 1 )
+        , mUavRenderingDescSet( 0 )
         , mGlobalInstanceVertexBufferVertexDeclaration(NULL)
         , mGlobalNumberOfInstances(1)
         , mVertexProgramBound(false)
@@ -643,6 +645,16 @@ namespace Ogre {
     void RenderSystem::setUavStartingSlot( uint32 startingSlot )
     {
         mUavStartingSlot = startingSlot;
+        mUavRenderingDirty = true;
+    }
+    //---------------------------------------------------------------------
+    void RenderSystem::queueBindUAVs( const DescriptorSetUav *descSetUav )
+    {
+        if( mUavRenderingDescSet != descSetUav )
+        {
+            mUavRenderingDescSet = descSetUav;
+            mUavRenderingDirty = true;
+        }
     }
     //---------------------------------------------------------------------
     void RenderSystem::_cleanupDepthBuffers( bool bCleanManualBuffers )

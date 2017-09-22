@@ -80,7 +80,6 @@ namespace Ogre
             ResourceAccess::ResourceAccess access;
             size_t      offset;
             size_t      sizeBytes;
-            //PixelFormat pixelFormat; /// PF_UNKNOWN if used as UAV.
 
             BufferSource( uint32 _uavSlot, IdString _bufferName,
                           ResourceAccess::ResourceAccess _access, size_t _offset=0,
@@ -94,10 +93,8 @@ namespace Ogre
         TextureSources      mTextureSources;
         BufferSourceVec     mBufferSources;
         CompositorNodeDef   *mParentNodeDef;
-        //bool                mNeedsFlush;
 
     public:
-        bool    mKeepPreviousUavs;
         /// Max value (0xff) means don't alter it.
         /// @see RenderSystem::setUavStartingSlot
         uint8   mStartingSlot;
@@ -105,20 +102,27 @@ namespace Ogre
         CompositorPassUavDef( CompositorNodeDef *parentNodeDef, CompositorTargetDef *parentTargetDef ) :
             CompositorPassDef( PASS_UAV, parentTargetDef ),
             mParentNodeDef( parentNodeDef ),
-            //mNeedsFlush( false ),
-            mKeepPreviousUavs( true ),
             mStartingSlot( 0xFF )
         {
         }
 
         /** Indicates the pass to change the UAV slots to use the specified texture sources.
-            @See RenderSystem::queueBindUAV for params.
+        @param slot
+            The buffer binding location for shader access. For OpenGL this must be unique and
+            is not related to the texture binding point.
         @param isExternal
             True if the texture is a random texture that needs to be loaded via
             TextureManager::getByName; false if it's an RTT controlled by the CompositorManager
             (i.e. a global texture, an input texture, or a local texture)
         @param textureName
             Name of the texture. When empty, it will clear the slots.
+        @param access
+            The texture access privileges given to the shader.
+        @param mipmapLevel
+            The texture mipmap level to use.
+        @param format
+            Texture format to be read in by shader. This may be different than the bound texture format.
+            Will be the same is left as PFG_UNKNOWN
         */
         void setUav( uint32 slot, bool isExternal, const String &textureName,
                      ResourceAccess::ResourceAccess access, int32 mipmapLevel, PixelFormatGpu pixelFormat );

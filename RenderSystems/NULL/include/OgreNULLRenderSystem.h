@@ -103,20 +103,8 @@ namespace Ogre
         virtual void _setPointParameters(Real size, bool attenuationEnabled,
             Real constant, Real linear, Real quadratic, Real minSize, Real maxSize);
 
-        virtual void queueBindUAV( uint32 slot, TextureGpu *texture,
-                                   ResourceAccess::ResourceAccess access = ResourceAccess::ReadWrite,
-                                   int32 mipmapLevel = 0, int32 textureArrayIndex = 0,
-                                   PixelFormatGpu pixelFormat = PFG_UNKNOWN );
-        virtual void queueBindUAV( uint32 slot, UavBufferPacked *buffer,
-                                   ResourceAccess::ResourceAccess access = ResourceAccess::ReadWrite,
-                                   size_t offset = 0, size_t sizeBytes = 0 );
-        virtual void clearUAVs(void);
         virtual void flushUAVs(void);
 
-        virtual void _bindTextureUavCS( uint32 slot, TextureGpu *texture,
-                                        ResourceAccess::ResourceAccess access,
-                                        int32 mipmapLevel, int32 textureArrayIndex,
-                                        PixelFormatGpu pixelFormat );
         virtual void _setTextureCS( uint32 slot, TextureGpu *texPtr );
         virtual void _setHlmsSamplerblockCS( uint8 texUnit, const HlmsSamplerblock *samplerblock );
 

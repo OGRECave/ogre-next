@@ -166,38 +166,14 @@ namespace Ogre {
 
         unsigned char *mSwIndirectBufferPtr;
 
+        uint8   mFirstUavBoundSlot;
+        uint8   mLastUavBoundPlusOne;
+
         uint8                   mClipDistances;
         GL3PlusHlmsPso const    *mPso;
         GLSLShader *mCurrentComputeShader;
 
-        struct Uav
-        {
-            bool        dirty;
-            TextureGpu  *texture;
-            GLuint      textureName;
-            GLint       mipmap;
-            GLboolean   isArrayTexture;
-            GLint       arrayIndex;
-            GLenum      access;
-            GLenum      format;
-            UavBufferPacked *buffer;
-            GLintptr    offset;
-            GLsizeiptr  sizeBytes;
-
-            Uav() :
-                dirty( false ), texture( 0 ), textureName( 0 ), mipmap( 0 ),
-                isArrayTexture( GL_FALSE ), arrayIndex( 0 ),
-                access( GL_READ_ONLY ), format( GL_RGBA8 ), buffer( 0 ),
-                offset( 0 ), sizeBytes( 0 ) {}
-        };
-
         GLuint  mNullColourFramebuffer;
-
-        Uav     mUavs[64];
-        /// In range [0; 64]; note that a user may use
-        /// mUavs[0] & mUavs[2] leaving mUavs[1] empty.
-        /// and still mMaxUavIndexPlusOne = 3.
-        uint8   mMaxModifiedUavPlusOne;
 
         GL3PlusPixelFormatToShaderType mPixelFormatToShaderType;
 
@@ -391,24 +367,8 @@ namespace Ogre {
         */
         void _setTextureMatrix(size_t stage, const Matrix4& xform) { };   // Not supported
 
-        virtual void setUavStartingSlot( uint32 startingSlot );
-
-        virtual void queueBindUAV( uint32 slot, TextureGpu *texture,
-                                   ResourceAccess::ResourceAccess access = ResourceAccess::ReadWrite,
-                                   int32 mipmapLevel = 0, int32 textureArrayIndex = 0,
-                                   PixelFormatGpu pixelFormat = PFG_UNKNOWN );
-        virtual void queueBindUAV( uint32 slot, UavBufferPacked *buffer,
-                                   ResourceAccess::ResourceAccess access = ResourceAccess::ReadWrite,
-                                   size_t offset = 0, size_t sizeBytes = 0 );
-
-        virtual void clearUAVs(void);
-
         virtual void flushUAVs(void);
 
-        virtual void _bindTextureUavCS( uint32 slot, TextureGpu *texture,
-                                        ResourceAccess::ResourceAccess access,
-                                        int32 mipmapLevel, int32 textureArrayIndex,
-                                        PixelFormatGpu pixelFormat );
         virtual void _setTextureCS( uint32 slot, TextureGpu *texPtr );
         virtual void _setHlmsSamplerblockCS( uint8 texUnit, const HlmsSamplerblock *samplerblock );
 

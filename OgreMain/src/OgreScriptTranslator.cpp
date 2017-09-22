@@ -9810,17 +9810,10 @@ namespace Ogre{
                 break;
                 case ID_KEEP_PREVIOUS_UAV:
                 {
-                    if(prop->values.empty())
-                    {
-                        compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line);
-                        return;
-                    }
-
-                    AbstractNodeList::const_iterator it0 = prop->values.begin();
-                    if( !getBoolean( *it0, &passUav->mKeepPreviousUavs ) )
-                    {
-                         compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line);
-                    }
+                    compiler->addError( ScriptCompiler::CE_REFERENCETOANONEXISTINGOBJECT,
+                                        prop->file, prop->line,
+                                        "keep_previous_uav was removed. "
+                                        "You must redefine all UAVs now!" );
                 }
                 break;
                 //case ID_VIEWPORT:
