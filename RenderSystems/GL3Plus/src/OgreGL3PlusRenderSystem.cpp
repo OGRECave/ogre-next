@@ -520,7 +520,7 @@ namespace Ogre {
         // Compute Program Properties
         if (mGLSupport->checkExtension("GL_ARB_compute_shader") || mHasGL43)
         {
-            //rsc->setCapability(RSC_COMPUTE_PROGRAM);
+            rsc->setCapability(RSC_COMPUTE_PROGRAM);
 
             //FIXME Is this correct?
             OGRE_CHECK_GL_ERROR(glGetFloatv(GL_MAX_COMPUTE_UNIFORM_COMPONENTS, &floatConstantCount));
@@ -1004,6 +1004,7 @@ namespace Ogre {
         GL3PlusRenderPassDescriptor *passDesc =
                 static_cast<GL3PlusRenderPassDescriptor*>( mCurrentRenderPassDescriptor );
         passDesc->performStoreActions( mHasArbInvalidateSubdata, x, y, w, h, RenderPassDescriptor::All );
+        OCGE( glBindFramebuffer( GL_FRAMEBUFFER, 0 ) );
 
         RenderSystem::endRenderPassDescriptor();
     }

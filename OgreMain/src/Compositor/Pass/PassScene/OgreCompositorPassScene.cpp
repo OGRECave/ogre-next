@@ -240,7 +240,6 @@ namespace Ogre
                                                                     ResourceAccessMap &uavsAccess,
                                                                     ResourceLayoutMap &resourcesLayout )
     {
-#if TODO_placeBarriersAndEmulateUavExecution
         if( mShadowNode && mUpdateShadowNode )
         {
             mShadowNode->_placeBarriersAndEmulateUavExecution( boundUavs, uavsAccess,
@@ -252,20 +251,17 @@ namespace Ogre
         const bool explicitApi = caps->hasCapability( RSC_EXPLICIT_API );
 
         //Check <anything> -> Texture (GBuffers)
-        if( mPrePassTextures )
         {
-            TextureVec::const_iterator itor = mPrePassTextures->begin();
-            TextureVec::const_iterator end  = mPrePassTextures->end();
+            TextureGpuVec::const_iterator itor = mPrePassTextures.begin();
+            TextureGpuVec::const_iterator end  = mPrePassTextures.end();
 
             while( itor != end )
             {
-                const TexturePtr &texture = *itor;
-                RenderTarget *renderTarget = texture->getBuffer()->getRenderTarget();
-
-                ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( renderTarget );
+                TextureGpu *texture = *itor;
+                ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( texture );
 
                 if( (currentLayout->second != ResourceLayout::Texture && explicitApi) ||
-                        currentLayout->second == ResourceLayout::Uav )
+                    currentLayout->second == ResourceLayout::Uav )
                 {
                     addResourceTransition( currentLayout,
                                            ResourceLayout::Texture,
@@ -279,10 +275,9 @@ namespace Ogre
         //Check <anything> -> DepthTexture (Depth Texture)
         if( mPrePassDepthTexture )
         {
-            const TexturePtr &texture = (*mPrePassDepthTexture)[0];
-            RenderTarget *renderTarget = texture->getBuffer()->getRenderTarget();
+            TextureGpu *texture = mPrePassDepthTexture;
 
-            ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( renderTarget );
+            ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( texture );
 
             if( (currentLayout->second != ResourceLayout::Texture && explicitApi) ||
                 currentLayout->second == ResourceLayout::Uav )
@@ -296,30 +291,20 @@ namespace Ogre
         //Check <anything> -> Texture (SSR Texture)
         if( mSsrTexture )
         {
-            TextureVec::const_iterator itor = mSsrTexture->begin();
-            TextureVec::const_iterator end  = mSsrTexture->end();
+            TextureGpu *texture = mSsrTexture;
 
-            while( itor != end )
+            ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( texture );
+
+            if( (currentLayout->second != ResourceLayout::Texture && explicitApi) ||
+                currentLayout->second == ResourceLayout::Uav )
             {
-                const TexturePtr &texture = *itor;
-                RenderTarget *renderTarget = texture->getBuffer()->getRenderTarget();
-
-                ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( renderTarget );
-
-                if( (currentLayout->second != ResourceLayout::Texture && explicitApi) ||
-                        currentLayout->second == ResourceLayout::Uav )
-                {
-                    addResourceTransition( currentLayout,
-                                           ResourceLayout::Texture,
-                                           ReadBarrier::Texture );
-                }
-
-                ++itor;
+                addResourceTransition( currentLayout,
+                                       ResourceLayout::Texture,
+                                       ReadBarrier::Texture );
             }
         }
 
         CompositorPass::_placeBarriersAndEmulateUavExecution( boundUavs, uavsAccess, resourcesLayout );
-#endif
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassScene::notifyCleared(void)

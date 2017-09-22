@@ -461,7 +461,6 @@ namespace Ogre
                                             BoundUav boundUavs[64], ResourceAccessMap &uavsAccess,
                                             ResourceLayoutMap &resourcesLayout )
     {
-#if TODO_placeBarriersAndEmulateUavExecution
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
         const RenderSystemCapabilities *caps = renderSystem->getCapabilities();
         const bool explicitApi = caps->hasCapability( RSC_EXPLICIT_API );
@@ -479,7 +478,7 @@ namespace Ogre
                     itor->writeBarrierBits & WriteBarrier::Uav &&
                     itor->readBarrierBits & ReadBarrier::Uav )
                 {
-                    RenderTarget *renderTarget = 0;
+                    TextureGpu *renderTarget = 0;
                     resourcesLayout[renderTarget] = ResourceLayout::Uav;
                     //Set to undefined so that following passes
                     //can see it's safe / shielded by a barrier
@@ -489,15 +488,43 @@ namespace Ogre
             }
         }
 
+        if( mRenderPassDesc )
         {
             //Check <anything> -> RT
-            ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( mTarget );
-            if( (currentLayout->second != ResourceLayout::RenderTarget && explicitApi) ||
-                currentLayout->second == ResourceLayout::Uav )
+            ResourceLayoutMap::iterator currentLayout;
+            for( int i=0; i<mRenderPassDesc->getNumColourEntries(); ++i )
             {
-                addResourceTransition( currentLayout,
-                                       ResourceLayout::RenderTarget,
-                                       ReadBarrier::RenderTarget );
+                currentLayout = resourcesLayout.find( mRenderPassDesc->mColour[i].texture );
+                if( (currentLayout->second != ResourceLayout::RenderTarget && explicitApi) ||
+                    currentLayout->second == ResourceLayout::Uav )
+                {
+                    addResourceTransition( currentLayout,
+                                           ResourceLayout::RenderTarget,
+                                           ReadBarrier::RenderTarget );
+                }
+            }
+            if( mRenderPassDesc->mDepth.texture )
+            {
+                currentLayout = resourcesLayout.find( mRenderPassDesc->mDepth.texture );
+                if( (currentLayout->second != ResourceLayout::RenderDepth && explicitApi) ||
+                    currentLayout->second == ResourceLayout::Uav )
+                {
+                    addResourceTransition( currentLayout,
+                                           ResourceLayout::RenderDepth,
+                                           ReadBarrier::DepthStencil );
+                }
+            }
+            if( mRenderPassDesc->mStencil.texture &&
+                mRenderPassDesc->mStencil.texture != mRenderPassDesc->mDepth.texture )
+            {
+                currentLayout = resourcesLayout.find( mRenderPassDesc->mStencil.texture );
+                if( (currentLayout->second != ResourceLayout::RenderDepth && explicitApi) ||
+                    currentLayout->second == ResourceLayout::Uav )
+                {
+                    addResourceTransition( currentLayout,
+                                           ResourceLayout::RenderDepth,
+                                           ReadBarrier::DepthStencil );
+                }
             }
         }
 
@@ -508,15 +535,13 @@ namespace Ogre
 
             while( itDep != enDep )
             {
-                TexturePtr texture = itDep->textures->front();
-                RenderTarget *renderTarget = texture->getBuffer()->getRenderTarget();
+                TextureGpu *renderTarget = itDep->texture;
 
                 ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( renderTarget );
 
                 if( (currentLayout->second != ResourceLayout::Texture && explicitApi) ||
                      currentLayout->second == ResourceLayout::Uav )
                 {
-                    //TODO: Account for depth textures.
                     addResourceTransition( currentLayout,
                                            ResourceLayout::Texture,
                                            ReadBarrier::Texture );
@@ -534,7 +559,7 @@ namespace Ogre
 
         while( itor != end )
         {
-            GpuResource2 *uavRt = boundUavs[itor->uavSlot].rttOrBuffer;
+            GpuTrackedResource *uavRt = boundUavs[itor->uavSlot].rttOrBuffer;
 
             if( !uavRt )
             {
@@ -587,7 +612,6 @@ namespace Ogre
 
             ++itor;
         }
-#endif
     }
     //-----------------------------------------------------------------------------------
     void CompositorPass::_removeAllBarriers(void)

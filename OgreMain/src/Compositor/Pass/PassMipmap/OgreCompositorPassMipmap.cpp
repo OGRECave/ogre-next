@@ -196,8 +196,8 @@ namespace Ogre
                                                                     texture->getTextureType() );
                 mTmpTextures.push_back( tmpTex );
 
-                tmpTex->setResolution( texture->getWidth(), texture->getHeight(),
-                                            texture->getDepth() );
+                tmpTex->setResolution( texture->getWidth() >> 1u, texture->getHeight(),
+                                       texture->getDepth() );
                 tmpTex->setPixelFormat( texture->getPixelFormat() );
                 tmpTex->_transitionTo( GpuResidency::Resident, (uint8*)0 );
 
@@ -416,6 +416,7 @@ namespace Ogre
             HlmsCompute *hlmsCompute = static_cast<HlmsCompute*>( mJobs[0].job->getCreator() );
 
             RenderSystem *renderSystem = mParentNode->getRenderSystem();
+            renderSystem->endRenderPassDescriptor();
 
             vector<JobWithBarrier>::type::iterator itor = mJobs.begin();
             vector<JobWithBarrier>::type::iterator end  = mJobs.end();
@@ -439,7 +440,6 @@ namespace Ogre
                                                                      ResourceAccessMap &uavsAccess,
                                                                      ResourceLayoutMap &resourcesLayout )
     {
-#if TODO_placeBarriersAndEmulateUavExecution
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
         const RenderSystemCapabilities *caps = renderSystem->getCapabilities();
         const bool explicitApi = caps->hasCapability( RSC_EXPLICIT_API );
@@ -447,45 +447,32 @@ namespace Ogre
         const bool usesCompute = !mJobs.empty();
 
         //Check <anything> -> RT for every RTT in the textures we'll be generating mipmaps.
-        TextureVec::const_iterator itTex = mTexture.begin();
-        TextureVec::const_iterator enTex = mTexture.end();
+        TextureGpuVec::const_iterator itTex = mTextures.begin();
+        TextureGpuVec::const_iterator enTex = mTextures.end();
 
         while( itTex != enTex )
         {
-            const Ogre::TexturePtr tex = *itTex;
-            const size_t numFaces = tex->getNumFaces();
-            const uint8 numMips = tex->getNumMipmaps();
-            const uint32 numSlices = tex->getTextureType() == TEX_TYPE_CUBE_MAP ? 1u :
-                                                                                  tex->getDepth();
-            for( size_t face=0; face<numFaces; ++face )
+            TextureGpu *tex = *itTex;
+
+            ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( tex );
+            if( (currentLayout->second != ResourceLayout::RenderTarget && explicitApi) ||
+                (currentLayout->second == ResourceLayout::Uav && !usesCompute) ||
+                usesCompute )
             {
-                for( uint8 mip=0; mip<numMips; ++mip )
+                if( !usesCompute )
                 {
-                    for( uint32 slice=0; slice<numSlices; ++slice )
-                    {
-                        RenderTarget *rt = tex->getBuffer( face, mip )->getRenderTarget( slice );
-                        ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( rt );
-                        if( (currentLayout->second != ResourceLayout::RenderTarget && explicitApi) ||
-                            (currentLayout->second == ResourceLayout::Uav && !usesCompute) ||
-                            usesCompute )
-                        {
-                            if( !usesCompute )
-                            {
-                                addResourceTransition( currentLayout,
-                                                       ResourceLayout::RenderTarget,
-                                                       ReadBarrier::RenderTarget );
-                            }
-                            else
-                            {
-                                //The RTT will be first used as a texture, then
-                                //as an UAV, then as texture again, then UAV, etc.
-                                //So we need to set to Texture first.
-                                addResourceTransition( currentLayout,
-                                                       ResourceLayout::Texture,
-                                                       ReadBarrier::Texture );
-                            }
-                        }
-                    }
+                    addResourceTransition( currentLayout,
+                                           ResourceLayout::RenderTarget,
+                                           ReadBarrier::RenderTarget );
+                }
+                else
+                {
+                    //The RTT will be first used as a texture, then
+                    //as an UAV, then as texture again, then UAV, etc.
+                    //So we need to set to Texture first.
+                    addResourceTransition( currentLayout,
+                                           ResourceLayout::Texture,
+                                           ReadBarrier::Texture );
                 }
             }
 
@@ -494,7 +481,6 @@ namespace Ogre
 
         //Do not use base class functionality at all.
         //CompositorPass::_placeBarriersAndEmulateUavExecution();
-#endif
     }
     //-----------------------------------------------------------------------------------
     bool CompositorPassMipmap::notifyRecreated( TextureGpu *channel )

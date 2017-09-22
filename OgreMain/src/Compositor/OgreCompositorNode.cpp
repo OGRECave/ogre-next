@@ -752,86 +752,30 @@ namespace Ogre
                                               const CompositorChannelVec &compositorChannels,
                                               ResourceLayout::Layout layout )
     {
-#if TODO_placeBarriersAndEmulateUavExecution
         CompositorChannelVec::const_iterator itor = compositorChannels.begin();
         CompositorChannelVec::const_iterator end  = compositorChannels.end();
 
         while( itor != end )
         {
-            outResourcesLayout[itor->target] = layout;
-
-            TextureVec::const_iterator itTex = itor->textures.begin();
-            TextureVec::const_iterator enTex = itor->textures.end();
-
-            while( itTex != enTex )
-            {
-                const Ogre::TexturePtr tex = *itTex;
-                const size_t numFaces = tex->getNumFaces();
-                const uint8 numMips = tex->getNumMipmaps();
-                const uint32 numSlices = tex->getTextureType() == TEX_TYPE_CUBE_MAP ? 1u :
-                                                                                      tex->getDepth();
-                for( size_t face=0; face<numFaces; ++face )
-                {
-                    for( uint8 mip=0; mip<numMips; ++mip )
-                    {
-                        for( uint32 slice=0; slice<numSlices; ++slice )
-                        {
-                            RenderTarget *rt = tex->getBuffer( face, mip )->getRenderTarget( slice );
-                            outResourcesLayout[rt] = layout;
-                        }
-                    }
-                }
-
-                ++itTex;
-            }
-
+            outResourcesLayout[*itor] = layout;
             ++itor;
         }
-#endif
     }
     //-----------------------------------------------------------------------------------
     void CompositorNode::initResourcesLayout( ResourceLayoutMap &outResourcesLayout,
                                               const CompositorChannelVec &compositorChannels,
                                               ResourceLayout::Layout layout )
     {
-#if TODO_placeBarriersAndEmulateUavExecution
         CompositorChannelVec::const_iterator itor = compositorChannels.begin();
         CompositorChannelVec::const_iterator end  = compositorChannels.end();
 
         while( itor != end )
         {
-            if( outResourcesLayout.find( itor->target ) == outResourcesLayout.end() )
-                outResourcesLayout[itor->target] = layout;
-
-            TextureVec::const_iterator itTex = itor->textures.begin();
-            TextureVec::const_iterator enTex = itor->textures.end();
-
-            while( itTex != enTex )
-            {
-                const Ogre::TexturePtr tex = *itTex;
-                const size_t numFaces = tex->getNumFaces();
-                const uint8 numMips = tex->getNumMipmaps() + 1;
-                const uint32 numSlices = tex->getTextureType() == TEX_TYPE_CUBE_MAP ? 1u :
-                                                                                      tex->getDepth();
-                for( size_t face=0; face<numFaces; ++face )
-                {
-                    for( uint8 mip=0; mip<numMips; ++mip )
-                    {
-                        for( uint32 slice=0; slice<numSlices; ++slice )
-                        {
-                            RenderTarget *rt = tex->getBuffer( face, mip )->getRenderTarget( slice );
-                            if( outResourcesLayout.find( rt ) == outResourcesLayout.end() )
-                                outResourcesLayout[rt] = layout;
-                        }
-                    }
-                }
-
-                ++itTex;
-            }
-
+            TextureGpu *texture = *itor;
+            if( outResourcesLayout.find( texture ) == outResourcesLayout.end() )
+                outResourcesLayout[texture] = layout;
             ++itor;
         }
-#endif
     }
     //-----------------------------------------------------------------------------------
     void CompositorNode::initResourcesLayout( ResourceLayoutMap &outResourcesLayout,
@@ -853,7 +797,6 @@ namespace Ogre
                                                                ResourceAccessMap &uavsAccess,
                                                                ResourceLayoutMap &resourcesLayout )
     {
-#if TODO_placeBarriersAndEmulateUavExecution
         //All locally defined textures start as 'undefined'.
         fillResourcesLayout( resourcesLayout, mLocalTextures, ResourceLayout::Undefined );
         initResourcesLayout( resourcesLayout, mBuffers, ResourceLayout::Undefined );
@@ -868,7 +811,6 @@ namespace Ogre
 
             ++itPasses;
         }
-#endif
     }
     //-----------------------------------------------------------------------------------
     void CompositorNode::_removeAllBarriers(void)

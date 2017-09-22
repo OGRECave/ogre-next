@@ -182,7 +182,6 @@ namespace Ogre
                                             BoundUav boundUavs[64], ResourceAccessMap &uavsAccess,
                                             ResourceLayoutMap &resourcesLayout )
     {
-#if TODO_placeBarriersAndEmulateUavExecution
         {
             const CompositorPassUavDef::TextureSources &textureSources =
                     mDefinition->getTextureSources();
@@ -190,22 +189,26 @@ namespace Ogre
             CompositorPassUavDef::TextureSources::const_iterator end  = textureSources.end();
             while( itor != end )
             {
-                TexturePtr texture;
+                TextureGpu *texture = 0;
 
-                if( itor->externalTextureName.empty() )
+                if( itor->externalTextureName == IdString() )
                 {
                     texture = mParentNode->getDefinedTexture( itor->textureName );
                 }
                 else if( itor->textureName != IdString() )
                 {
-                    texture = TextureManager::getSingleton().getByName(
-                                itor->externalTextureName,
-                                ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+                    RenderSystem *renderSystem = mParentNode->getRenderSystem();
+                    TextureGpuManager *textureManager = renderSystem->getTextureGpuManager();
+                    //TODO: Should we be using createOrRetrieve???
+                    texture = textureManager->findTextureNoThrow(
+                                itor->externalTextureName/*,
+                                ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME*/ );
 
-                    if( texture.isNull() )
+                    if( !texture )
                     {
                         OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
-                                     "Texture with name: " + itor->externalTextureName +
+                                     "Texture with name: " +
+                                     itor->externalTextureName.getFriendlyText() +
                                      " does not exist. The texture must exist by the time the workspace"
                                      " is executed. Are you trying to use a texture defined by the "
                                      "compositor? If so you need to set it via 'uav' instead of "
@@ -214,17 +217,17 @@ namespace Ogre
                     }
                 }
 
-                if( !(texture->getUsage() & TU_UAV) )
+                if( !texture->isUav() )
                 {
                     OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                                 "Texture " + texture->getName() +
-                                 " must have been created with TU_UAV to be bound as UAV",
+                                 "Texture " + texture->getNameStr() +
+                                 " must have been created with TextureFlags:Uav to be bound as UAV",
                                  "CompositorPassUav::_placeBarriersAndEmulateUavExecution" );
                 }
 
                 //Only "simulate the bind" of UAVs. We will evaluate the actual resource
                 //transition when the UAV is actually used in the subsequent passes.
-                boundUavs[itor->uavSlot].rttOrBuffer = texture->getBuffer()->getRenderTarget();
+                boundUavs[itor->uavSlot].rttOrBuffer = texture;
                 boundUavs[itor->uavSlot].boundAccess = itor->access;
 
                 ++itor;
@@ -253,6 +256,5 @@ namespace Ogre
 
         //Do not use base class functionality at all.
         //CompositorPass::_placeBarriersAndEmulateUavExecution();
-#endif
     }
 }

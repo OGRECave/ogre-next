@@ -494,7 +494,6 @@ namespace Ogre
         const RenderSystemCapabilities *caps = mRenderSys->getCapabilities();
         const bool explicitApi = caps->hasCapability( RSC_EXPLICIT_API );
 
-#if TODO_OGRE_2_2
         if( explicitApi )
         {
             //Check the output is still a RenderTarget at the end.
@@ -506,8 +505,8 @@ namespace Ogre
                 CompositorChannelVec::const_iterator end  = mExternalRenderTargets.end();
                 while( itor != end )
                 {
-                    RenderTarget *renderTarget = itor->target;
-                    if( renderTarget->isRenderWindow() )
+                    TextureGpu *renderTarget = *itor;
+                    if( renderTarget->isRenderWindowSpecific() )
                     {
                         ResourceLayoutMap::iterator currentLayout =
                                 mResourcesLayout.find( renderTarget );
@@ -520,7 +519,6 @@ namespace Ogre
                 }
             }
         }
-#endif
 
         mBarriersDirty = false;
     }

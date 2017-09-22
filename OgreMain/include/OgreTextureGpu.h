@@ -166,7 +166,7 @@ namespace Ogre
         };
     }
 
-    class _OgreExport TextureGpu : public GpuResource
+    class _OgreExport TextureGpu : public GpuTrackedResource, public GpuResource
     {
     protected:
         uint32      mWidth;

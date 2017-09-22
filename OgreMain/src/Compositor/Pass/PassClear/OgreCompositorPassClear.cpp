@@ -118,7 +118,6 @@ namespace Ogre
                                                                     ResourceAccessMap &uavsAccess,
                                                                     ResourceLayoutMap &resourcesLayout )
     {
-#if TODO_placeBarriersAndEmulateUavExecution
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
         const RenderSystemCapabilities *caps = renderSystem->getCapabilities();
         const bool explicitApi = caps->hasCapability( RSC_EXPLICIT_API );
@@ -127,20 +126,43 @@ namespace Ogre
             return;
 
         //Check <anything> -> Clear
-        ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( mTarget );
-        if( currentLayout->second != ResourceLayout::Clear )
+        ResourceLayoutMap::iterator currentLayout;
+        for( int i=0; i<mRenderPassDesc->getNumColourEntries(); ++i )
         {
-            addResourceTransition( currentLayout,
-                                   ResourceLayout::Clear,
-                                   ReadBarrier::RenderTarget );
+            currentLayout = resourcesLayout.find( mRenderPassDesc->mColour[i].texture );
+            if( (currentLayout->second != ResourceLayout::RenderTarget && explicitApi) ||
+                currentLayout->second == ResourceLayout::Uav )
+            {
+                addResourceTransition( currentLayout,
+                                       ResourceLayout::Clear,
+                                       ReadBarrier::RenderTarget );
+            }
         }
-
-        OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
-                     "D3D12/Vulkan/Mantle - Missing DepthBuffer ResourceTransition code",
-                     "CompositorPassDepthCopy::_placeBarriersAndEmulateUavExecution" );
+        if( mRenderPassDesc->mDepth.texture )
+        {
+            currentLayout = resourcesLayout.find( mRenderPassDesc->mDepth.texture );
+            if( (currentLayout->second != ResourceLayout::RenderDepth && explicitApi) ||
+                currentLayout->second == ResourceLayout::Uav )
+            {
+                addResourceTransition( currentLayout,
+                                       ResourceLayout::Clear,
+                                       ReadBarrier::DepthStencil );
+            }
+        }
+        if( mRenderPassDesc->mStencil.texture &&
+            mRenderPassDesc->mStencil.texture != mRenderPassDesc->mDepth.texture )
+        {
+            currentLayout = resourcesLayout.find( mRenderPassDesc->mStencil.texture );
+            if( (currentLayout->second != ResourceLayout::RenderDepth && explicitApi) ||
+                currentLayout->second == ResourceLayout::Uav )
+            {
+                addResourceTransition( currentLayout,
+                                       ResourceLayout::Clear,
+                                       ReadBarrier::DepthStencil );
+            }
+        }
 
         //Do not use base class functionality at all.
         //CompositorPass::_placeBarriersAndEmulateUavExecution();
-#endif
     }
 }

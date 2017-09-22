@@ -240,7 +240,6 @@ namespace Ogre
                                                                       ResourceAccessMap &uavsAccess,
                                                                       ResourceLayoutMap &resourcesLayout )
     {
-#if TODO_placeBarriersAndEmulateUavExecution
         CompositorPass::_placeBarriersAndEmulateUavExecution( boundUavs, uavsAccess, resourcesLayout );
 
         {
@@ -251,22 +250,19 @@ namespace Ogre
 
             while( itor != end )
             {
-                TexturePtr uavTex = mParentNode->getDefinedTexture( itor->textureName );
+                TextureGpu *uavTex = mParentNode->getDefinedTexture( itor->textureName );
 
-                //TODO: Do we have to do this for all slices? Or just one? Refactor is needed.
-                RenderTarget *uavRt = uavTex->getBuffer( 0, 0 )->getRenderTarget( 0 );
-
-                ResourceAccessMap::iterator itResAccess = uavsAccess.find( uavRt );
+                ResourceAccessMap::iterator itResAccess = uavsAccess.find( uavTex );
 
                 if( itResAccess == uavsAccess.end() )
                 {
                     //First time accessing the UAV. If we need a barrier,
                     //we will see it in the second pass.
-                    uavsAccess[uavRt] = ResourceAccess::Undefined;
-                    itResAccess = uavsAccess.find( uavRt );
+                    uavsAccess[uavTex] = ResourceAccess::Undefined;
+                    itResAccess = uavsAccess.find( uavTex );
                 }
 
-                ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( uavRt );
+                ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( uavTex );
 
                 if( currentLayout->second != ResourceLayout::Uav ||
                         !( (itor->access == ResourceAccess::Read &&
@@ -327,6 +323,5 @@ namespace Ogre
                 ++itor;
             }
         }
-#endif
     }
 }

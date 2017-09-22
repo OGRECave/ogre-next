@@ -197,6 +197,8 @@ namespace Ogre {
     class GpuProgram;
     class GpuProgramManager;
     class GpuProgramUsage;
+    class GpuResource;
+    struct GpuTrackedResource;
     class HardwareOcclusionQuery;
     class HighLevelGpuProgram;
     class HighLevelGpuProgramManager;

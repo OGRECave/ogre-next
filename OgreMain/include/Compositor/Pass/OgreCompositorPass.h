@@ -67,7 +67,7 @@ namespace Ogre
 
     struct BoundUav
     {
-        GpuResource2                    *rttOrBuffer;
+        GpuTrackedResource              *rttOrBuffer;
         ResourceAccess::ResourceAccess  boundAccess;
     };
 
