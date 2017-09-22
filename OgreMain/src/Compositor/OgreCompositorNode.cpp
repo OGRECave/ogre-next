@@ -669,8 +669,10 @@ namespace Ogre
 
         while( itor != end )
         {
-            const RenderTargetViewDef *rtvDef =
-                    mDefinition->getRenderTargetViewDef( itor->getRenderTargetName() );
+            RenderTargetViewDef const *rtvDef = 0;
+
+            if( itor->getRenderTargetName() != IdString() )
+                rtvDef = mDefinition->getRenderTargetViewDef( itor->getRenderTargetName() );
 
             const CompositorPassDefVec &passes = itor->getCompositorPasses();
             CompositorPassDefVec::const_iterator itPass = passes.begin();

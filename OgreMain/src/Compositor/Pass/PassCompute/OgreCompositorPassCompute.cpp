@@ -94,7 +94,7 @@ namespace Ogre
                                                   Camera *defaultCamera,
                                                   CompositorNode *parentNode,
                                                   const RenderTargetViewDef *rtv ) :
-        CompositorPass( definition, rtv, parentNode ),
+        CompositorPass( definition, rtv, parentNode, true ),
         mDefinition( definition ),
         mCamera( 0 )
     {

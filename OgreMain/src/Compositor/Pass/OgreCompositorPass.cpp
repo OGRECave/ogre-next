@@ -66,7 +66,8 @@ namespace Ogre
 
     CompositorPass::CompositorPass( const CompositorPassDef *definition,
                                     const RenderTargetViewDef *rtv,
-                                    CompositorNode *parentNode ) :
+                                    CompositorNode *parentNode,
+                                    bool supportsNoRtv ) :
             mDefinition( definition ),
             mRenderPassDesc( 0 ),
             mAnyTargetTexture( 0 ),
@@ -76,16 +77,30 @@ namespace Ogre
     {
         assert( definition->mNumInitialPasses && "Definition is broken, pass will never execute!" );
 
-        RenderSystem *renderSystem = mParentNode->getRenderSystem();
-        mRenderPassDesc = renderSystem->createRenderPassDescriptor();
-        setupRenderPassDesc( rtv );
+        if( !supportsNoRtv && !rtv )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "No RenderTargetViewDef provided to this compositor pass "
+                         "(e.g. you wrote target {} instead of target myTexture {}.\n"
+                         "Only a few compositor passes support this (e.g. Compute passes)\n"
+                         "Node with error: " +
+                         definition->getParentTargetDef()->getParentNodeDef()->getNameStr() + "\n",
+                         "CompositorPass::CompositorPass" );
+        }
 
-        for( int i=0; i<mRenderPassDesc->getNumColourEntries() && !mAnyTargetTexture; ++i )
-            mAnyTargetTexture = mRenderPassDesc->mColour[i].texture;
-        if( !mAnyTargetTexture )
-            mAnyTargetTexture = mRenderPassDesc->mDepth.texture;
-        if( !mAnyTargetTexture )
-            mAnyTargetTexture = mRenderPassDesc->mStencil.texture;
+        RenderSystem *renderSystem = mParentNode->getRenderSystem();
+        if( rtv )
+        {
+            mRenderPassDesc = renderSystem->createRenderPassDescriptor();
+            setupRenderPassDesc( rtv );
+
+            for( int i=0; i<mRenderPassDesc->getNumColourEntries() && !mAnyTargetTexture; ++i )
+                mAnyTargetTexture = mRenderPassDesc->mColour[i].texture;
+            if( !mAnyTargetTexture )
+                mAnyTargetTexture = mRenderPassDesc->mDepth.texture;
+            if( !mAnyTargetTexture )
+                mAnyTargetTexture = mRenderPassDesc->mStencil.texture;
+        }
 
         populateTextureDependenciesFromExposedTextures();
     }
