@@ -147,6 +147,45 @@ namespace Ogre
         return resourceView;
     }
     //-----------------------------------------------------------------------------------
+    ID3D11UnorderedAccessView* D3D11UavBufferPacked::createUav(
+            const DescriptorSetUav::BufferSlot &bufferSlot ) const
+    {
+        assert( bufferSlot.offset < (mNumElements - 1) );
+        assert( bufferSlot.sizeBytes < mNumElements );
+
+        const size_t sizeBytes = !bufferSlot.sizeBytes ? (mNumElements * mBytesPerElement -
+                                                          bufferSlot.offset) : bufferSlot.sizeBytes;
+
+        D3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc;
+        memset( &uavDesc, 0, sizeof( uavDesc ) );
+
+        // Format must be must be DXGI_FORMAT_UNKNOWN, when creating a View of a Structured Buffer
+        // Format must be DXGI_FORMAT_R32_TYPELESS, when creating Raw Unordered Access View
+        uavDesc.Format               = DXGI_FORMAT_UNKNOWN;
+        uavDesc.ViewDimension        = D3D11_UAV_DIMENSION_BUFFER;
+        uavDesc.Buffer.FirstElement  = (mFinalBufferStart + bufferSlot.offset) / mBytesPerElement;
+        uavDesc.Buffer.NumElements   = sizeBytes / mBytesPerElement;
+        uavDesc.Buffer.Flags         = 0;
+
+        assert( dynamic_cast<D3D11CompatBufferInterface*>( mBufferInterface ) );
+        D3D11CompatBufferInterface *bufferInterface = static_cast<D3D11CompatBufferInterface*>(
+                    mBufferInterface );
+        ID3D11Buffer *vboName = bufferInterface->getVboName();
+
+        ID3D11UnorderedAccessView *retVal = 0;
+        HRESULT hr = mDevice->CreateUnorderedAccessView( vboName, &uavDesc, &retVal );
+        if( FAILED(hr) )
+        {
+            String errorDescription = mDevice.getErrorDescription(hr);
+            OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
+                            "Failed to create UAV view on buffer."
+                            "\nError Description: " + errorDescription,
+                            "D3D11UavBufferPacked::createUav" );
+        }
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
 //    void D3D11UavBufferPacked::bindBufferVS( uint16 slot, size_t offset, size_t sizeBytes )
 //    {
 //        ID3D11UnorderedAccessView *resourceView = _bindBufferCommon( offset, sizeBytes );

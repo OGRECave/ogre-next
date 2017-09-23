@@ -1009,10 +1009,6 @@ namespace Ogre {
         passDesc->performStoreActions( mHasArbInvalidateSubdata, x, y, w, h, RenderPassDescriptor::All );
         OCGE( glBindFramebuffer( GL_FRAMEBUFFER, 0 ) );
 
-        //Where graphics ends, compute may start, or a new frame.
-        //Very likely we'll have to flush the UAVs again, so assume we need.
-        mUavRenderingDirty = true;
-
         RenderSystem::endRenderPassDescriptor();
     }
     //-----------------------------------------------------------------------------------
@@ -1206,6 +1202,11 @@ namespace Ogre {
     void GL3PlusRenderSystem::_setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set )
     {
         _setTextures( slotStart, set );
+    }
+
+    void GL3PlusRenderSystem::_setSamplersCS( uint32 slotStart, const DescriptorSetSampler *set )
+    {
+        _setSamplers( slotStart, set );
     }
 
     void GL3PlusRenderSystem::setBufferUavCS( uint32 slot,

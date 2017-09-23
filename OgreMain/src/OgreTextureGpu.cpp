@@ -238,6 +238,8 @@ namespace Ogre
         //Make sure depth buffers/textures always have MsaaExplicitResolve set (with or without MSAA).
         if( PixelFormatGpuUtils::isDepth( mPixelFormat ) )
             mTextureFlags |= TextureFlags::MsaaExplicitResolve;
+        if( mPixelFormat == PFG_NULL && isTexture() )
+            mTextureFlags |= TextureFlags::NotTexture;
 
         if( mMsaa > 1u )
         {
@@ -316,6 +318,9 @@ namespace Ogre
                          "Invalid settings!",
                          "TextureGpu::checkValidSettings" );
         }
+
+        mNumMipmaps = std::min( mNumMipmaps,
+                                PixelFormatGpuUtils::getMaxMipmapCount( mWidth, mHeight, getDepth() ) );
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::transitionToResident(void)

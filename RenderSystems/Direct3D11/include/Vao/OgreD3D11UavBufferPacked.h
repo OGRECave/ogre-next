@@ -31,6 +31,7 @@ THE SOFTWARE.
 
 #include "OgreD3D11Prerequisites.h"
 #include "Vao/OgreUavBufferPacked.h"
+#include "OgreDescriptorSetUav.h"
 
 namespace Ogre
 {
@@ -63,6 +64,8 @@ namespace Ogre
         virtual ~D3D11UavBufferPacked();
 
         ID3D11UnorderedAccessView* _bindBufferCommon( size_t offset, size_t sizeBytes );
+
+        ID3D11UnorderedAccessView* createUav( const DescriptorSetUav::BufferSlot &bufferSlot ) const;
 
 //        virtual void bindBufferVS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );
 //        virtual void bindBufferPS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );

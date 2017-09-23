@@ -265,11 +265,7 @@ namespace Ogre
             return false;
         }
 
-        void checkValidity() const
-        {
-            assert( !mUavs.empty() &&
-                    "This DescriptorSetUav doesn't use any texture/buffer! Perhaps incorrectly setup?" );
-        }
+        void checkValidity() const;
     };
 
     /** @} */

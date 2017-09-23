@@ -113,6 +113,7 @@ namespace Ogre
         virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set );
         virtual void _setSamplers( uint32 slotStart, const DescriptorSetSampler *set );
         virtual void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set );
+        virtual void _setSamplersCS( uint32 slotStart, const DescriptorSetSampler *set );
         virtual void _setUavCS( uint32 slotStart, const DescriptorSetUav *set );
 
         virtual void _setTextureCoordCalculation(size_t unit, TexCoordCalcMethod m,

@@ -279,6 +279,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpu::createInternalResourcesImpl(void)
     {
+        if( mPixelFormat == PFG_NULL )
+            return; //Nothing to do
+
         switch( mTextureType )
         {
         case TextureTypes::Unknown:
@@ -328,7 +331,7 @@ namespace Ogre
     void D3D11TextureGpu::notifyDataIsReady(void)
     {
         assert( mResidencyStatus == GpuResidency::Resident );
-        assert( mFinalTextureName );
+        assert( mFinalTextureName || mPixelFormat == PFG_NULL );
 
         SAFE_RELEASE( mDefaultDisplaySrv );
 
@@ -529,6 +532,74 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
+    ID3D11UnorderedAccessView* D3D11TextureGpu::createUav(
+            const DescriptorSetUav::TextureSlot &texSlot ) const
+    {
+        D3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc;
+        memset( &uavDesc, 0, sizeof( uavDesc ) );
+
+        PixelFormatGpu finalFormat;
+        if( texSlot.pixelFormat == PFG_UNKNOWN )
+            finalFormat = PixelFormatGpuUtils::getEquivalentLinear( mPixelFormat );
+        else
+            finalFormat = texSlot.pixelFormat;
+
+        uavDesc.Format = D3D11Mappings::get( finalFormat );
+
+        switch( mTextureType )
+        {
+        case TextureTypes::Type1D:
+            uavDesc.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE1D;
+            uavDesc.Texture1D.MipSlice = static_cast<UINT>( texSlot.mipmapLevel );
+            break;
+        case TextureTypes::Type1DArray:
+            uavDesc.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE1D;
+            uavDesc.Texture1DArray.MipSlice         = static_cast<UINT>( texSlot.mipmapLevel );
+            uavDesc.Texture1DArray.FirstArraySlice  = static_cast<UINT>( texSlot.textureArrayIndex );
+            uavDesc.Texture1DArray.ArraySize        = static_cast<UINT>( getNumSlices() -
+                                                                         texSlot.textureArrayIndex );
+            break;
+        case TextureTypes::Type2D:
+            uavDesc.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE2D;
+            uavDesc.Texture2D.MipSlice = static_cast<UINT>( texSlot.mipmapLevel );
+            break;
+        case TextureTypes::Type2DArray:
+        case TextureTypes::TypeCube:
+        case TextureTypes::TypeCubeArray:
+            uavDesc.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE2DARRAY;
+            uavDesc.Texture2DArray.MipSlice         = static_cast<UINT>( texSlot.mipmapLevel );
+            uavDesc.Texture2DArray.FirstArraySlice  = texSlot.textureArrayIndex;
+            uavDesc.Texture2DArray.ArraySize        = static_cast<UINT>( getNumSlices() -
+                                                                         texSlot.textureArrayIndex );
+            break;
+        case TextureTypes::Type3D:
+            uavDesc.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE3D;
+            uavDesc.Texture3D.MipSlice      = static_cast<UINT>( texSlot.mipmapLevel );
+            uavDesc.Texture3D.FirstWSlice   = 0;
+            uavDesc.Texture3D.WSize         = static_cast<UINT>( getDepth() );
+            break;
+        default:
+            break;
+        }
+
+        D3D11TextureGpuManager *textureManagerD3d =
+                static_cast<D3D11TextureGpuManager*>( mTextureManager );
+        D3D11Device &device = textureManagerD3d->getDevice();
+
+        ID3D11UnorderedAccessView *retVal = 0;
+        HRESULT hr = device->CreateUnorderedAccessView( mFinalTextureName, &uavDesc, &retVal );
+        if( FAILED(hr) )
+        {
+            String errorDescription = device.getErrorDescription(hr);
+            OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
+                            "Failed to create UAV view on texture '" + this->getNameStr() +
+                            "'\nError Description: " + errorDescription,
+                            "D3D11TextureGpu::createUav" );
+        }
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
     bool D3D11TextureGpu::isMsaaPatternSupported( MsaaPatterns::MsaaPatterns pattern )
     {
         return pattern != MsaaPatterns::Center;
@@ -629,6 +700,8 @@ namespace Ogre
         mPreferDepthTexture( false ),
         mDesiredDepthBufferFormat( PFG_UNKNOWN )
     {
+        if( mPixelFormat == PFG_NULL )
+            mDepthBufferPoolId = 0;
     }
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpuRenderTarget::_setDepthBufferDefaults(

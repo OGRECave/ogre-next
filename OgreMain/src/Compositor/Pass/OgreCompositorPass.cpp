@@ -521,6 +521,12 @@ namespace Ogre
             if( mRenderPassDesc->mDepth.texture )
             {
                 currentLayout = resourcesLayout.find( mRenderPassDesc->mDepth.texture );
+                if( currentLayout == resourcesLayout.end() )
+                {
+                    resourcesLayout[mRenderPassDesc->mDepth.texture] = ResourceLayout::Undefined;
+                    currentLayout = resourcesLayout.find( mRenderPassDesc->mDepth.texture );
+                }
+
                 if( (currentLayout->second != ResourceLayout::RenderDepth && explicitApi) ||
                     currentLayout->second == ResourceLayout::Uav )
                 {
@@ -533,6 +539,12 @@ namespace Ogre
                 mRenderPassDesc->mStencil.texture != mRenderPassDesc->mDepth.texture )
             {
                 currentLayout = resourcesLayout.find( mRenderPassDesc->mStencil.texture );
+                if( currentLayout == resourcesLayout.end() )
+                {
+                    resourcesLayout[mRenderPassDesc->mStencil.texture] = ResourceLayout::Undefined;
+                    currentLayout = resourcesLayout.find( mRenderPassDesc->mStencil.texture );
+                }
+
                 if( (currentLayout->second != ResourceLayout::RenderDepth && explicitApi) ||
                     currentLayout->second == ResourceLayout::Uav )
                 {

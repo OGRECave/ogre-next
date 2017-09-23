@@ -238,6 +238,10 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
+    void NULLRenderSystem::_setSamplersCS( uint32 slotStart, const DescriptorSetSampler *set )
+    {
+    }
+    //-------------------------------------------------------------------------
     void NULLRenderSystem::_setUavCS( uint32 slotStart, const DescriptorSetUav *set )
     {
     }

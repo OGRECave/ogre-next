@@ -5,7 +5,7 @@
 #include "OgreSceneManager.h"
 #include "OgreCamera.h"
 #include "OgreRoot.h"
-#include "OgreRenderWindow.h"
+#include "OgreWindow.h"
 #include "OgreConfigFile.h"
 #include "Compositor/OgreCompositorManager2.h"
 
@@ -29,7 +29,7 @@ namespace Demo
         virtual Ogre::CompositorWorkspace* setupCompositor()
         {
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
-            const bool useMsaa = mRenderWindow->getFSAA() > 1;
+            const bool useMsaa = mRenderWindow->getMsaa() > 1u;
 
             if( useMsaa && mRoot->getRenderSystem()->getName() == "OpenGL 3+ Rendering Subsystem" )
             {
@@ -46,8 +46,8 @@ namespace Demo
             if( useMsaa )
                 compositorName = "ScreenSpaceReflectionsWorkspaceMsaa";
 
-            return compositorManager->addWorkspace( mSceneManager, mRenderWindow, mCamera,
-                                                    compositorName, true );
+            return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(),
+                                                    mCamera, compositorName, true );
         }
 
         virtual void setupResources(void)

@@ -31,6 +31,7 @@ THE SOFTWARE.
 
 #include "OgreD3D11Prerequisites.h"
 #include "OgreTextureGpu.h"
+#include "OgreDescriptorSetUav.h"
 
 #include "OgreHeaderPrefix.h"
 
@@ -104,6 +105,8 @@ namespace Ogre
         //The returned pointer has its ref. count incremented! Caller must decrease it!
         ID3D11ShaderResourceView* createSrv( PixelFormatGpu format, bool cubemapsAs2DArrays ) const;
         ID3D11ShaderResourceView* getDefaultDisplaySrv(void) const  { return mDefaultDisplaySrv; }
+
+        ID3D11UnorderedAccessView* createUav( const DescriptorSetUav::TextureSlot &texSlot ) const;
 
         virtual bool isMsaaPatternSupported( MsaaPatterns::MsaaPatterns pattern );
         virtual void getSubsampleLocations( vector<Vector2>::type locations );

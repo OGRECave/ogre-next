@@ -554,6 +554,10 @@ namespace Ogre {
     {
         mCurrentRenderPassDescriptor = 0;
         mCurrentRenderViewport.setDimensions( 0, Vector4::ZERO, Vector4::ZERO );
+
+        //Where graphics ends, compute may start, or a new frame.
+        //Very likely we'll have to flush the UAVs again, so assume we need.
+        mUavRenderingDirty = true;
     }
     //---------------------------------------------------------------------
     TextureGpu* RenderSystem::createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,

@@ -828,6 +828,7 @@ namespace Ogre
         virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set ) = 0;
         virtual void _setSamplers( uint32 slotStart, const DescriptorSetSampler *set ) = 0;
         virtual void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set ) = 0;
+        virtual void _setSamplersCS( uint32 slotStart, const DescriptorSetSampler *set ) = 0;
         virtual void _setUavCS( uint32 slotStart, const DescriptorSetUav *set ) = 0;
 
         virtual void _resourceTransitionCreated( ResourceTransition *resTransition )    {}
