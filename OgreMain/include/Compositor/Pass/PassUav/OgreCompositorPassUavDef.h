@@ -57,18 +57,18 @@ namespace Ogre
             /// Name of the texture (can come from input channel, local textures, or global ones)
             /// Not used if externalTextureName is not empty
             IdString    textureName;
-            IdString    externalTextureName;
+            bool        isExternal;
 
             ResourceAccess::ResourceAccess access;
             int32           mipmapLevel;
             PixelFormatGpu  pixelFormat;
 
             TextureSource( uint32 _uavSlot, IdString _textureName,
-                           IdString _externalTextureName,
+                           bool _isExternal,
                            ResourceAccess::ResourceAccess _access,
                            int32 _mipmapLevel, PixelFormatGpu _pixelFormat ) :
                 uavSlot( _uavSlot ), textureName( _textureName ),
-                externalTextureName( _externalTextureName ),
+                isExternal( _isExternal ),
                 access( _access ), mipmapLevel( _mipmapLevel ), pixelFormat( _pixelFormat ) {}
         };
         typedef vector<TextureSource>::type TextureSources;

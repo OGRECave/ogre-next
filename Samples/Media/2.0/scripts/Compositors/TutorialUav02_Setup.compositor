@@ -2,12 +2,12 @@ compositor_node TutorialUav02_SetupRenderingNode
 {
 	in 0 rt_renderwindow
 
-	texture nullDummy target_width target_height PF_NULL
+	texture nullDummy target_width target_height PFG_NULL
 	
 	//D3D11 doesn't support UAV typed loads until D3D 11.3. OpenGL does though, but
 	//we'll emulate the conversion on both for compatibility and simplicity (rather
 	//than having two separate paths)
-	texture testTexture target_width target_height PF_R32_UINT depth_pool 0 no_gamma uav
+	texture testTexture target_width target_height PFG_R32_UINT depth_pool 0 uav
 
 	target nullDummy
 	{
@@ -15,11 +15,6 @@ compositor_node TutorialUav02_SetupRenderingNode
 		pass bind_uav
 		{
 			starting_slot 1
-
-			// When true, we only affect the UAVs we're changing.
-			// When false, we clear all UAVs settings from all slots.
-			keep_previous_uavs	false
-
 			uav 0 testTexture			write
 		}
 

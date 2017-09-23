@@ -207,7 +207,7 @@ namespace Ogre
     void GL3PlusTextureGpu::notifyDataIsReady(void)
     {
         assert( mResidencyStatus == GpuResidency::Resident );
-        assert( mFinalTextureName );
+        assert( mFinalTextureName || mPixelFormat == PFG_NULL );
 
         mDisplayTextureName = mFinalTextureName;
 
@@ -586,10 +586,15 @@ namespace Ogre
         mPreferDepthTexture( false ),
         mDesiredDepthBufferFormat( PFG_UNKNOWN )
     {
+        if( mPixelFormat == PFG_NULL )
+            mDepthBufferPoolId = 0;
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusTextureGpuRenderTarget::createInternalResourcesImpl(void)
     {
+        if( mPixelFormat == PFG_NULL )
+            return; //Nothing to do
+
         if( isTexture() || !PixelFormatGpuUtils::isDepth( mPixelFormat ) )
         {
             GL3PlusTextureGpu::createInternalResourcesImpl();

@@ -65,6 +65,7 @@ namespace Ogre
 
         uint32 calculateNumberUavSlots(void) const;
         void setupDescriptorSetUav(void);
+        void destroyDescriptorSetUav(void);
 
     public:
         CompositorPassUav( const CompositorPassUavDef *definition, CompositorNode *parentNode,

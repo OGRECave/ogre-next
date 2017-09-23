@@ -2,8 +2,8 @@ compositor_node TutorialUav01_SetupRenderingNode
 {
 	in 0 rt_renderwindow
 
-	texture nullDummy target_width target_height PF_NULL
-	texture testTexture target_width target_height PF_R8G8B8A8 depth_pool 0 no_gamma uav
+	texture nullDummy target_width target_height PFG_NULL
+	texture testTexture target_width target_height PFG_RGBA8_UNORM depth_pool 0 uav
 
 	//UAVs can be cleared
 	target testTexture
@@ -25,10 +25,6 @@ compositor_node TutorialUav01_SetupRenderingNode
 			//	layout (rgba8) uniform restrict image2D testTexture; //Needs to point to 1
 			//	RWTexture2D<float4> testTexture : register(u1);
 			starting_slot 1
-
-			// When true, we only affect the UAVs we're changing.
-			// When false, we clear all UAVs settings from all slots.
-			keep_previous_uavs	false
 
 			uav 0 testTexture			write
 
@@ -54,7 +50,6 @@ compositor_node TutorialUav01_SetupRenderingNode
 		//after finding out testTexture needs to be unbound.
 		pass bind_uav
 		{
-			keep_previous_uavs	false
 		}
 	}
 
