@@ -998,15 +998,18 @@ namespace Ogre {
     //-----------------------------------------------------------------------------------
     void GL3PlusRenderSystem::endRenderPassDescriptor(void)
     {
-        uint32 x, y, w, h;
-        w = mCurrentRenderViewport.getActualWidth();
-        h = mCurrentRenderViewport.getActualHeight();
-        x = mCurrentRenderViewport.getActualLeft();
-        y = mCurrentRenderViewport.getActualTop();
+        if( mCurrentRenderPassDescriptor )
+        {
+            uint32 x, y, w, h;
+            w = mCurrentRenderViewport.getActualWidth();
+            h = mCurrentRenderViewport.getActualHeight();
+            x = mCurrentRenderViewport.getActualLeft();
+            y = mCurrentRenderViewport.getActualTop();
 
-        GL3PlusRenderPassDescriptor *passDesc =
-                static_cast<GL3PlusRenderPassDescriptor*>( mCurrentRenderPassDescriptor );
-        passDesc->performStoreActions( mHasArbInvalidateSubdata, x, y, w, h, RenderPassDescriptor::All );
+            GL3PlusRenderPassDescriptor *passDesc =
+                    static_cast<GL3PlusRenderPassDescriptor*>( mCurrentRenderPassDescriptor );
+            passDesc->performStoreActions( mHasArbInvalidateSubdata, x, y, w, h, RenderPassDescriptor::All );
+        }
         OCGE( glBindFramebuffer( GL_FRAMEBUFFER, 0 ) );
 
         RenderSystem::endRenderPassDescriptor();

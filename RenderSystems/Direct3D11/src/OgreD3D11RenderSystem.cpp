@@ -1706,15 +1706,18 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11RenderSystem::endRenderPassDescriptor(void)
     {
-        uint32 x, y, w, h;
-        w = mCurrentRenderViewport.getActualWidth();
-        h = mCurrentRenderViewport.getActualHeight();
-        x = mCurrentRenderViewport.getActualLeft();
-        y = mCurrentRenderViewport.getActualTop();
+        if( mCurrentRenderPassDescriptor )
+        {
+            uint32 x, y, w, h;
+            w = mCurrentRenderViewport.getActualWidth();
+            h = mCurrentRenderViewport.getActualHeight();
+            x = mCurrentRenderViewport.getActualLeft();
+            y = mCurrentRenderViewport.getActualTop();
 
-        D3D11RenderPassDescriptor *passDesc =
-                static_cast<D3D11RenderPassDescriptor*>( mCurrentRenderPassDescriptor );
-        passDesc->performStoreActions( x, y, w, h, RenderPassDescriptor::All );
+            D3D11RenderPassDescriptor *passDesc =
+                    static_cast<D3D11RenderPassDescriptor*>( mCurrentRenderPassDescriptor );
+            passDesc->performStoreActions( x, y, w, h, RenderPassDescriptor::All );
+        }
 
         ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
         //Set all textures to 0 to prevent the runtime from thinkin we might

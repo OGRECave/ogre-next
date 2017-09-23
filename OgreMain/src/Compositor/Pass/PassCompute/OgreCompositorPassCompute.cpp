@@ -94,7 +94,7 @@ namespace Ogre
                                                   Camera *defaultCamera,
                                                   CompositorNode *parentNode,
                                                   const RenderTargetViewDef *rtv ) :
-        CompositorPass( definition, rtv, parentNode, true ),
+        CompositorPass( definition, 0, parentNode, true ),
         mDefinition( definition ),
         mCamera( 0 )
     {
@@ -213,6 +213,9 @@ namespace Ogre
         CompositorWorkspaceListener *listener = mParentNode->getWorkspace()->getListener();
         if( listener )
             listener->passEarlyPreExecute( this );
+
+        RenderSystem *renderSystem = mParentNode->getRenderSystem();
+        renderSystem->endRenderPassDescriptor();
 
         executeResourceTransitions();
 
