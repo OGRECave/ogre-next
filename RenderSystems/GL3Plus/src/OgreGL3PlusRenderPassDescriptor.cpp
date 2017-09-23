@@ -479,6 +479,13 @@ namespace Ogre
                 OCGE( glDrawBuffer( GL_BACK ) );
             }
         }
+        else
+        {
+            GLenum colourBuffs[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
+            for( int i=0; i<mNumColourEntries; ++i )
+                colourBuffs[i] = GL_COLOR_ATTACHMENT0 + i;
+            OCGE( glDrawBuffers( mNumColourEntries, colourBuffs ) );
+        }
 
         OCGE( glEnable( GL_FRAMEBUFFER_SRGB ) );
 
