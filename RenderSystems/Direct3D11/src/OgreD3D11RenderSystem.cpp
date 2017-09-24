@@ -2376,6 +2376,8 @@ namespace Ogre
         ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
         context->CSSetUnorderedAccessViews( slotStart, static_cast<UINT>( set->mUavs.size() ),
                                             uavList, 0 );
+
+        mMaxBoundUavCS = std::max( mMaxBoundUavCS, slotStart + set->mUavs.size() );
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setBindingType(TextureUnitState::BindingType bindingType)
