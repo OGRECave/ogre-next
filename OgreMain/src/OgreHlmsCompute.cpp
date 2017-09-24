@@ -450,9 +450,12 @@ namespace Ogre
             ++itConst;
         }
 
-        mRenderSystem->_setTexturesCS( 0, job->mTexturesDescSet );
-        mRenderSystem->_setSamplersCS( 0, job->mSamplersDescSet );
-        mRenderSystem->_setUavCS( 0u, job->mUavsDescSet );
+        if( job->mTexturesDescSet )
+            mRenderSystem->_setTexturesCS( 0, job->mTexturesDescSet );
+        if( job->mSamplersDescSet )
+            mRenderSystem->_setSamplersCS( 0, job->mSamplersDescSet );
+        if( job->mUavsDescSet )
+            mRenderSystem->_setUavCS( 0u, job->mUavsDescSet );
 
         mAutoParamDataSource->setCurrentJob( job );
         mAutoParamDataSource->setCurrentCamera( camera );

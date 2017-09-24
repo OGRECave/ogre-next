@@ -282,7 +282,8 @@ namespace Ogre
                                       textureFlags, TextureTypes::Unknown,
                                       resourceGroup );
 
-            DescriptorSetTexture2::TextureSlot texSlot;
+            DescriptorSetTexture2::TextureSlot texSlot( DescriptorSetTexture2::TextureSlot::
+                                                        makeEmpty() );
             texSlot.texture = texture;
             job->setTexture( slotIdx, texSlot );
         }

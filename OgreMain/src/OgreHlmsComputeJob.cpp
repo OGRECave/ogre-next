@@ -88,6 +88,9 @@ namespace Ogre
         destroyDescriptorTextures();
         destroyDescriptorUavs();
 
+        removeListenerFromTextures( mUavSlots, 0, mUavSlots.size() );
+        removeListenerFromTextures( mTexSlots, 0, mTexSlots.size() );
+
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
         FastArray<const HlmsSamplerblock*>::const_iterator itor = mSamplerSlots.begin();
         FastArray<const HlmsSamplerblock*>::const_iterator end  = mSamplerSlots.end();
@@ -100,6 +103,19 @@ namespace Ogre
         }
 
         mSamplerSlots.clear();
+    }
+    //-----------------------------------------------------------------------------------
+    template <typename T>
+    void HlmsComputeJob::removeListenerFromTextures( T &container, size_t first, size_t lastPlusOne )
+    {
+        typename T::const_iterator itor = container.begin()  + first;
+        typename T::const_iterator end  = container.end()    + lastPlusOne;
+        while( itor != end )
+        {
+            if( itor->isTexture() && itor->getTexture().texture )
+                itor->getTexture().texture->removeListener( this );
+            ++itor;
+        }
     }
     //-----------------------------------------------------------------------------------
     void HlmsComputeJob::destroyDescriptorSamplers(void)
@@ -623,6 +639,8 @@ namespace Ogre
                     hlmsManager->destroySamplerblock( *itor );
                 ++itor;
             }
+
+            removeListenerFromTextures( mTexSlots, numSlots, mTexSlots.size() );
         }
 
         mSamplerSlots.resize( numSlots );
@@ -641,6 +659,7 @@ namespace Ogre
             HlmsManager *hlmsManager = mCreator->getHlmsManager();
             hlmsManager->destroySamplerblock( mSamplerSlots[slotIdx] );
         }
+        removeListenerFromTextures( mTexSlots, slotIdx, slotIdx + 1u );
 
         mSamplerSlots.erase( mSamplerSlots.begin() + slotIdx );
         mTexSlots.erase( mTexSlots.begin() + slotIdx );
@@ -660,6 +679,11 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsComputeJob::setNumUavUnits( uint8 numSlots )
     {
+        destroyDescriptorUavs();
+
+        if( numSlots < mSamplerSlots.size() )
+            removeListenerFromTextures( mUavSlots, numSlots, mUavSlots.size() );
+
         mUavSlots.resize( numSlots );
         if( mInformHlmsOfTextureData )
             mPsoCacheHash = -1;
@@ -667,6 +691,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsComputeJob::removeUavUnit( uint8 slotIdx )
     {
+        destroyDescriptorUavs();
+        removeListenerFromTextures( mUavSlots, slotIdx, slotIdx + 1u );
         mUavSlots.erase( mUavSlots.begin() + slotIdx );
         if( mInformHlmsOfTextureData )
             mPsoCacheHash = -1;
@@ -735,6 +761,11 @@ namespace Ogre
             {
                 mPsoCacheHash = -1;
             }
+
+            if( texSlot.texture )
+                texSlot.texture->removeListener( this );
+            if( newSlot.texture )
+                newSlot.texture->addListener( this );
 
             texSlot = newSlot;
             destroyDescriptorTextures();    //Descriptor is dirty
@@ -831,6 +862,11 @@ namespace Ogre
                 mPsoCacheHash = -1;
             }
 
+            if( texSlot.texture )
+                texSlot.texture->removeListener( this );
+            if( newSlot.texture )
+                newSlot.texture->addListener( this );
+
             texSlot = newSlot;
             destroyDescriptorUavs();    //Descriptor is dirty
         }
@@ -872,5 +908,13 @@ namespace Ogre
                 hlmsManager->addReference( *itor );
             ++itor;
         }
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsComputeJob::notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason )
+    {
+        if( texture->isTexture() )
+            destroyDescriptorTextures();
+        if( texture->isUav() )
+            destroyDescriptorUavs();
     }
 }

@@ -253,8 +253,9 @@ namespace Ogre
                     shaderParams->mParams.push_back( paramDstLodIdx );
                     shaderParams->setDirty();
 
-                    DescriptorSetTexture2::TextureSlot texSlot;
-                    DescriptorSetUav::TextureSlot uavSlot;
+                    DescriptorSetTexture2::TextureSlot texSlot( DescriptorSetTexture2::TextureSlot::
+                                                                makeEmpty() );
+                    DescriptorSetUav::TextureSlot uavSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
                     uavSlot.access              = ResourceAccess::Write;
                     uavSlot.textureArrayIndex   = 0;
                     uavSlot.pixelFormat         = pf;

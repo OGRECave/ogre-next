@@ -338,7 +338,8 @@ namespace Ogre
         mDisplayTextureName = mFinalTextureName;
         if( isTexture() )
         {
-            DescriptorSetTexture2::TextureSlot texSlot;
+            DescriptorSetTexture2::TextureSlot texSlot( DescriptorSetTexture2::TextureSlot::
+                                                        makeEmpty() );
             mDefaultDisplaySrv = createSrv( texSlot );
         }
 

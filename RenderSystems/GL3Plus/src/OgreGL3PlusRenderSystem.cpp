@@ -1176,9 +1176,6 @@ namespace Ogre {
 
     void GL3PlusRenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture2 *set )
     {
-        if( !set )
-            return;
-
         uint32 texUnit = slotStart;
 
         FastArray<DescriptorSetTexture2::Slot>::const_iterator itor = set->mTextures.begin();
@@ -1223,9 +1220,6 @@ namespace Ogre {
 
     void GL3PlusRenderSystem::_setSamplers( uint32 slotStart, const DescriptorSetSampler *set )
     {
-        if( !set )
-            return;
-
         uint32 texUnit = slotStart;
 
         FastArray<const HlmsSamplerblock*>::const_iterator itor = set->mSamplers.begin();

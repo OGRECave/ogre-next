@@ -167,6 +167,13 @@ namespace Ogre
 
                 return false;
             }
+
+            static BufferSlot makeEmpty(void)
+            {
+                BufferSlot retVal;
+                memset( &retVal, 0, sizeof( retVal ) );
+                return retVal;
+            }
         };
         struct TextureSlot
         {
@@ -197,6 +204,13 @@ namespace Ogre
                     return this->pixelFormat < other.pixelFormat;
 
                 return false;
+            }
+
+            static TextureSlot makeEmpty(void)
+            {
+                TextureSlot retVal;
+                memset( &retVal, 0, sizeof( retVal ) );
+                return retVal;
             }
         };
         struct Slot

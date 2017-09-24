@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "OgreResourceTransition.h"
 #include "OgreShaderParams.h"
 #include "OgrePixelFormatGpu.h"
+#include "OgreTextureGpuListener.h"
 #include "OgreDescriptorSetUav.h"
 #include "OgreDescriptorSetTexture.h"
 #include "OgreHeaderPrefix.h"
@@ -46,7 +47,7 @@ namespace Ogre
     */
 
     //class _OgreExport HlmsComputeJob : public HlmsDatablock
-    class _OgreExport HlmsComputeJob : public PassAlloc
+    class _OgreExport HlmsComputeJob : public TextureGpuListener
     {
         friend class HlmsCompute;
 
@@ -118,6 +119,9 @@ namespace Ogre
         size_t          mPsoCacheHash;
 
         map<IdString, ShaderParams>::type mShaderParams;
+
+        template <typename T>
+        void removeListenerFromTextures( T &container, size_t first, size_t lastPlusOne );
 
         void destroyDescriptorSamplers(void);
         void destroyDescriptorTextures(void);
@@ -400,6 +404,9 @@ namespace Ogre
 
         HlmsComputeJob *clone( const String &cloneName );
         void cloneTo( HlmsComputeJob *dstJob );
+
+        // TextureGpuListener overloads
+        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason );
     };
 
     /** @} */
