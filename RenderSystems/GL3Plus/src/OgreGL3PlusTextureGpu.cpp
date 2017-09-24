@@ -127,7 +127,10 @@ namespace Ogre
 
         if( mMsaa > 1u )
         {
-            const GLboolean fixedsamplelocations = mMsaaPattern != MsaaPatterns::Undefined;
+            //const GLboolean fixedsamplelocations = mMsaaPattern != MsaaPatterns::Undefined;
+            //RENDERBUFFERS have fixedsamplelocations implicitly set to true. Be consistent
+            //with non-texture depth buffers.
+            const GLboolean fixedsamplelocations = GL_TRUE;
 
             if( !isTexture() ||
                 (!hasMsaaExplicitResolves() && !PixelFormatGpuUtils::isDepth( mPixelFormat )) )
