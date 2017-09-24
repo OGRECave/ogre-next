@@ -195,7 +195,8 @@ namespace Ogre
         renderPassDesc->mDepth.loadAction       = mDefinition->mLoadActionDepth;
         renderPassDesc->mDepth.storeAction      = mDefinition->mStoreActionDepth;
         renderPassDesc->mDepth.clearDepth       = mDefinition->mClearDepth;
-        renderPassDesc->mDepth.readOnly         = rtv->depthReadOnly && mDefinition->mReadOnlyDepth;
+        renderPassDesc->mDepth.readOnly         = rtv->depthReadOnly ||
+                                                  mDefinition->mReadOnlyDepth;
         setupRenderPassTarget( &renderPassDesc->mDepth, rtv->depthAttachment, false,
                                renderPassDesc->mColour[0].texture, rtv->depthBufferId,
                                rtv->preferDepthTexture, rtv->depthBufferFormat );
@@ -230,7 +231,8 @@ namespace Ogre
             renderPassDesc->mStencil.loadAction     = mDefinition->mLoadActionStencil;
             renderPassDesc->mStencil.storeAction    = mDefinition->mStoreActionStencil;
             renderPassDesc->mStencil.clearStencil   = mDefinition->mClearStencil;
-            renderPassDesc->mStencil.readOnly       = rtv->stencilReadOnly && mDefinition->mReadOnlyStencil;
+            renderPassDesc->mStencil.readOnly       = rtv->stencilReadOnly ||
+                                                      mDefinition->mReadOnlyStencil;
             setupRenderPassTarget( &renderPassDesc->mStencil, rtv->stencilAttachment, false,
                                    renderPassDesc->mColour[0].texture, rtv->depthBufferId,
                                    rtv->preferDepthTexture, rtv->depthBufferFormat );

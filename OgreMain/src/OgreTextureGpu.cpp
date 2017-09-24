@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "OgreTextureBox.h"
 #include "OgreTextureGpuListener.h"
 
+#include "OgreLwString.h"
 #include "OgreException.h"
 
 #define TODO_Create_download_ticket 1
@@ -90,6 +91,17 @@ namespace Ogre
             retVal = mName.getFriendlyText();
 
         return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    String TextureGpu::getSettingsDesc(void) const
+    {
+        char tmpBuffer[92];
+        LwString desc( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+
+        desc.a( mWidth, "x", mHeight, "x", mDepthOrSlices );
+        desc.a( " ", mMsaa, "xMSAA ", PixelFormatGpuUtils::toString( mPixelFormat ) );
+
+        return String( desc.c_str() );
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::scheduleTransitionTo( GpuResidency::GpuResidency nextResidency )

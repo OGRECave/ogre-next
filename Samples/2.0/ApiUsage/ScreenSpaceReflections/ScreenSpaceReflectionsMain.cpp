@@ -31,15 +31,6 @@ namespace Demo
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
             const bool useMsaa = mRenderWindow->getMsaa() > 1u;
 
-            if( useMsaa && mRoot->getRenderSystem()->getName() == "OpenGL 3+ Rendering Subsystem" )
-            {
-                OGRE_EXCEPT( Ogre::Exception::ERR_NOT_IMPLEMENTED,
-                             "MSAA + OpenGL is not yet implemented due to missing MSAA + MRT. "
-                             "You'll have to wait until the texture refactor. It works OK on D3D11. "
-                             "Sorry.",
-                             "ScreenSpaceReflectionsGraphicsSystem" );
-            }
-
             ScreenSpaceReflections::setupSSR( useMsaa, true, compositorManager );
 
             Ogre::String compositorName = "ScreenSpaceReflectionsWorkspace";

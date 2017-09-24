@@ -216,6 +216,7 @@ namespace Ogre
         void _resetTextureManager(void);
 
         virtual String getNameStr(void) const;
+        String getSettingsDesc(void) const;
 
         /** Schedules an async transition in residency. If transitioning from
             OnStorage to Resident, it will read from file (ResourceGroup was set in createTexture)

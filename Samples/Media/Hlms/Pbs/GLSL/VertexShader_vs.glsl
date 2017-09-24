@@ -186,7 +186,7 @@ void main()
 	outVs.drawId = drawId;@end
 
 	@property( hlms_use_prepass_msaa > 1 )
-		outVs.zwDepth.xy = outVs.gl_Position.zw;
+		outVs.zwDepth.xy = gl_Position.zw;
 	@end
 
 @property( hlms_global_clip_distances )
