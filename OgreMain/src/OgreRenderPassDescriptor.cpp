@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "OgreRenderPassDescriptor.h"
 #include "OgreTextureGpu.h"
 #include "OgrePixelFormatGpuUtils.h"
+#include "OgreStringConverter.h"
 #include "OgreException.h"
 
 namespace Ogre

@@ -80,7 +80,7 @@ namespace Ogre
         OCGE( glDeleteTextures( 1, &mTexName ) );
     }
     //-----------------------------------------------------------------------------------
-    inline void GL3PlusTexBufferEmulatedPacked::bindBuffer( uint16 slot, size_t offset, size_t sizeBytes )
+    inline void GL3PlusTexBufferEmulatedPacked::bindBuffer( size_t offset, size_t sizeBytes )
     {
         assert( dynamic_cast<GL3PlusBufferInterface*>( mBufferInterface ) );
         assert( offset < (mNumElements * mBytesPerElement - 1) );
@@ -103,7 +103,6 @@ namespace Ogre
         }
 
         OCGE( glBindBuffer( GL_PIXEL_UNPACK_BUFFER, bufferInterface->getVboName() ) );
-        OCGE( glActiveTexture( GL_TEXTURE0 + slot ) );
         OCGE( glBindTexture( GL_TEXTURE_2D, mTexName ) );
         OCGE( glTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, texWidth, texHeight,
                                mOriginFormat, mOriginDataType, reinterpret_cast<void*>(
@@ -114,11 +113,21 @@ namespace Ogre
         {
             OCGE( glPixelStorei( GL_UNPACK_ALIGNMENT, 4 ) );
         }
-
+    }
+    //-----------------------------------------------------------------------------------
+    inline void GL3PlusTexBufferEmulatedPacked::bindBuffer( uint16 slot, size_t offset, size_t sizeBytes )
+    {
+        OCGE( glActiveTexture( GL_TEXTURE0 + slot ) );
+        bindBuffer( offset, sizeBytes );
         //TODO: Get rid of this nonsense of restoring the active texture.
         //RenderSystem is always restores to 0 after using,
         //plus activateGLTextureUnit won't see our changes otherwise.
         OCGE( glActiveTexture( GL_TEXTURE0 ) );
+    }
+    //-----------------------------------------------------------------------------------
+    void GL3PlusTexBufferEmulatedPacked::_bindBufferDirectly( size_t offset, size_t sizeBytes )
+    {
+        bindBuffer( offset, sizeBytes );
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusTexBufferEmulatedPacked::bindBufferVS( uint16 slot, size_t offset, size_t sizeBytes )

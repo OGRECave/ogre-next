@@ -95,8 +95,9 @@ namespace Ogre
             return false;
         }
 
-        void checkValidity() const
+        void checkValidity(void) const
         {
+#if OGRE_DEBUG_MODE
             size_t totalSamplersUsed = 0u;
 
             for( size_t i=0; i<NumShaderTypes; ++i )
@@ -107,6 +108,7 @@ namespace Ogre
             assert( totalSamplersUsed == mSamplers.size() &&
                     "This DescriptorSetSampler doesn't use as many samplers as it "
                     "claims to have, or uses more than it has provided" );
+#endif
         }
     };
 

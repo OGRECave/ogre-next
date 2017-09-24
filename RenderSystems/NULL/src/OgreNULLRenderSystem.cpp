@@ -230,11 +230,19 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
+    void NULLRenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture2 *set )
+    {
+    }
+    //-------------------------------------------------------------------------
     void NULLRenderSystem::_setSamplers( uint32 slotStart, const DescriptorSetSampler *set )
     {
     }
     //-------------------------------------------------------------------------
     void NULLRenderSystem::_setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set )
+    {
+    }
+    //-------------------------------------------------------------------------
+    void NULLRenderSystem::_setTexturesCS( uint32 slotStart, const DescriptorSetTexture2 *set )
     {
     }
     //-------------------------------------------------------------------------

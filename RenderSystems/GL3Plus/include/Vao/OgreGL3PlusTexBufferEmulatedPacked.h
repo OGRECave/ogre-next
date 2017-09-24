@@ -47,6 +47,7 @@ namespace Ogre
         size_t mInternalNumElemBytes;
         size_t mInternalNumElements;
 
+        inline void bindBuffer( size_t offset, size_t sizeBytes );
         inline void bindBuffer( uint16 slot, size_t offset, size_t sizeBytes );
 
     public:
@@ -57,6 +58,8 @@ namespace Ogre
                                         VaoManager *vaoManager, GL3PlusBufferInterface *bufferInterface,
                                         Ogre::PixelFormat pf );
         virtual ~GL3PlusTexBufferEmulatedPacked();
+
+        virtual void _bindBufferDirectly( size_t offset, size_t sizeBytes );
 
         virtual void bindBufferVS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );
         virtual void bindBufferPS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );

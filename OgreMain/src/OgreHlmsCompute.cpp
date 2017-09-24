@@ -450,28 +450,8 @@ namespace Ogre
             ++itConst;
         }
 
-        uint32 slotIdx = 0u;
-        HlmsComputeJob::TextureSlotVec::const_iterator itTex = job->mTextureSlots.begin();
-        HlmsComputeJob::TextureSlotVec::const_iterator enTex = job->mTextureSlots.end();
-
-        while( itTex != enTex )
-        {
-            if( itTex->buffer )
-            {
-                static_cast<TexBufferPacked*>( itTex->buffer )->bindBufferCS(
-                            slotIdx, itTex->offset, itTex->sizeBytes );
-            }
-            else
-            {
-                mRenderSystem->_setTextureCS( slotIdx, itTex->texture );
-                if( itTex->samplerblock )
-                    mRenderSystem->_setHlmsSamplerblockCS( slotIdx, itTex->samplerblock );
-            }
-
-            ++slotIdx;
-            ++itTex;
-        }
-
+        mRenderSystem->_setTexturesCS( 0, job->mTexturesDescSet );
+        mRenderSystem->_setSamplersCS( 0, job->mSamplersDescSet );
         mRenderSystem->_setUavCS( 0u, job->mUavsDescSet );
 
         mAutoParamDataSource->setCurrentJob( job );

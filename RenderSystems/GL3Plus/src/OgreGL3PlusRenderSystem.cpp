@@ -68,6 +68,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "Vao/OgreGL3PlusBufferInterface.h"
 #include "Vao/OgreIndexBufferPacked.h"
 #include "Vao/OgreIndirectBufferPacked.h"
+#include "Vao/OgreTexBufferPacked.h"
 #include "Vao/OgreUavBufferPacked.h"
 #include "CommandBuffer/OgreCbDrawCall.h"
 #include "OgreRoot.h"
@@ -1173,8 +1174,58 @@ namespace Ogre {
         OCGE( glActiveTexture( GL_TEXTURE0 ) );
     }
 
+    void GL3PlusRenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture2 *set )
+    {
+        if( !set )
+            return;
+
+        uint32 texUnit = slotStart;
+
+        FastArray<DescriptorSetTexture2::Slot>::const_iterator itor = set->mTextures.begin();
+        FastArray<DescriptorSetTexture2::Slot>::const_iterator end  = set->mTextures.end();
+
+        while( itor != end )
+        {
+            OCGE( glActiveTexture( static_cast<uint32>( GL_TEXTURE0 + texUnit ) ) );
+
+            if( itor->slotType == DescriptorSetUav::SlotTypeBuffer )
+            {
+                //Bind buffer
+                const DescriptorSetTexture2::BufferSlot &bufferSlot = itor->getBuffer();
+                if( bufferSlot.buffer )
+                    bufferSlot.buffer->_bindBufferDirectly( bufferSlot.offset, bufferSlot.sizeBytes );
+            }
+            else
+            {
+                //Bind texture
+                const DescriptorSetTexture2::TextureSlot &texSlot = itor->getTexture();
+                if( texSlot.texture )
+                {
+                    const GL3PlusTextureGpu *textureGpu =
+                            static_cast<const GL3PlusTextureGpu*>( texSlot.texture );
+                    const GLenum texTarget  = textureGpu->getGlTextureTarget();
+                    const GLuint texName    = textureGpu->getDisplayTextureName();
+                    OCGE( glBindTexture( texTarget, texName ) );
+                    mTextureTypes[texUnit] = texTarget;
+                }
+                else
+                {
+                    OCGE( glBindTexture( mTextureTypes[texUnit], 0 ) );
+                }
+            }
+
+            ++texUnit;
+            ++itor;
+        }
+
+        OCGE( glActiveTexture( GL_TEXTURE0 ) );
+    }
+
     void GL3PlusRenderSystem::_setSamplers( uint32 slotStart, const DescriptorSetSampler *set )
     {
+        if( !set )
+            return;
+
         uint32 texUnit = slotStart;
 
         FastArray<const HlmsSamplerblock*>::const_iterator itor = set->mSamplers.begin();
@@ -1203,6 +1254,11 @@ namespace Ogre {
     }
 
     void GL3PlusRenderSystem::_setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set )
+    {
+        _setTextures( slotStart, set );
+    }
+
+    void GL3PlusRenderSystem::_setTexturesCS( uint32 slotStart, const DescriptorSetTexture2 *set )
     {
         _setTextures( slotStart, set );
     }

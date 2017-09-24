@@ -84,18 +84,51 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     HlmsComputeJob::~HlmsComputeJob()
     {
+        destroyDescriptorSamplers();
+        destroyDescriptorTextures();
+        destroyDescriptorUavs();
+
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
-        TextureSlotVec::iterator itor = mTextureSlots.begin();
-        TextureSlotVec::iterator end  = mTextureSlots.end();
+        FastArray<const HlmsSamplerblock*>::const_iterator itor = mSamplerSlots.begin();
+        FastArray<const HlmsSamplerblock*>::const_iterator end  = mSamplerSlots.end();
 
         while( itor != end )
         {
-            if( itor->samplerblock )
-            {
-                hlmsManager->destroySamplerblock( itor->samplerblock );
-                itor->samplerblock = 0;
-            }
+            if( *itor )
+                hlmsManager->destroySamplerblock( *itor );
             ++itor;
+        }
+
+        mSamplerSlots.clear();
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsComputeJob::destroyDescriptorSamplers(void)
+    {
+        if( mSamplersDescSet )
+        {
+            HlmsManager *hlmsManager = mCreator->getHlmsManager();
+            hlmsManager->destroyDescriptorSetSampler( mSamplersDescSet );
+            mSamplersDescSet = 0;
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsComputeJob::destroyDescriptorTextures(void)
+    {
+        if( mTexturesDescSet )
+        {
+            HlmsManager *hlmsManager = mCreator->getHlmsManager();
+            hlmsManager->destroyDescriptorSetTexture2( mTexturesDescSet );
+            mTexturesDescSet = 0;
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsComputeJob::destroyDescriptorUavs(void)
+    {
+        if( mUavsDescSet )
+        {
+            HlmsManager *hlmsManager = mCreator->getHlmsManager();
+            hlmsManager->destroyDescriptorSetUav( mUavsDescSet );
+            mUavsDescSet = 0;
         }
     }
     //-----------------------------------------------------------------------------------
@@ -244,14 +277,14 @@ namespace Ogre
             {
                 //Inform number of UAVs
                 setProperty( ComputeProperty::NumTextureSlots,
-                             static_cast<int32>( mTextureSlots.size() ) );
+                             static_cast<int32>( mTexSlots.size() ) );
 
                 propName = ComputeProperty::Texture;
                 const size_t texturePropNameSize = propName.size();
 
-                TextureSlotVec::const_iterator begin= mTextureSlots.begin();
-                TextureSlotVec::const_iterator itor = mTextureSlots.begin();
-                TextureSlotVec::const_iterator end  = mTextureSlots.end();
+                DescriptorSetTexSlotArray::const_iterator begin= mTexSlots.begin();
+                DescriptorSetTexSlotArray::const_iterator itor = mTexSlots.begin();
+                DescriptorSetTexSlotArray::const_iterator end  = mTexSlots.end();
 
                 while( itor != end )
                 {
@@ -260,24 +293,26 @@ namespace Ogre
                     propName.a( static_cast<uint32>(slotIdx) ); //texture0
                     const size_t texturePropSize = propName.size();
 
-                    if( itor->buffer || itor->texture )
+                    if( !itor->empty() )
+                    {
                         setProperty( propName.c_str(), 1 );
 
-                    if( itor->texture )
-                    {
-                        setTextureProperties( itor->texture, propName, toShaderType );
-                    }
-                    else if( itor->buffer )
-                    {
-                        propName.a( "_is_buffer" );             //texture0_is_buffer
-                        setProperty( propName.c_str(), 1 );
-                        propName.resize( texturePropSize );
+                        if( itor->isTexture() )
+                        {
+                            setTextureProperties( itor->getTexture().texture, propName, toShaderType );
+                        }
+                        else if( itor->isBuffer() )
+                        {
+                            propName.a( "_is_buffer" );             //texture0_is_buffer
+                            setProperty( propName.c_str(), 1 );
+                            propName.resize( texturePropSize );
+                        }
                     }
 
                     ++itor;
                 }
 
-                mMaxTexUnitReached = mTextureSlots.size();
+                mMaxTexUnitReached = mTexSlots.size();
             }
 
             //Deal with UAVs
@@ -333,7 +368,7 @@ namespace Ogre
                     ++itor;
                 }
 
-                mMaxUavUnitReached = mTextureSlots.size();
+                mMaxUavUnitReached = mUavSlots.size();
             }
         }
     }
@@ -388,12 +423,12 @@ namespace Ogre
         if( mThreadGroupsBasedOnTexture != ThreadGroupsBasedOnNothing )
         {
             const size_t maxSlots = mThreadGroupsBasedOnTexture == ThreadGroupsBasedOnTexture ?
-                                        mTextureSlots.size() : mUavSlots.size();
+                                        mTexSlots.size() : mUavSlots.size();
             TextureGpu const *tex = 0;
             if( mThreadGroupsBasedOnTexSlot < maxSlots )
             {
                 if( mThreadGroupsBasedOnTexture == ThreadGroupsBasedOnTexture )
-                    tex = mTextureSlots[mThreadGroupsBasedOnTexSlot].texture;
+                    tex = mTexSlots[mThreadGroupsBasedOnTexSlot].getTexture().texture;
                 else if( mUavSlots[mThreadGroupsBasedOnTexSlot].isTexture() )
                     tex = mUavSlots[mThreadGroupsBasedOnTexSlot].getTexture().texture;
             }
@@ -431,7 +466,7 @@ namespace Ogre
         if( hasChanged )
             mPsoCacheHash = -1;
 
-        if( !mUavsDescSet )
+        if( !mUavsDescSet && !mUavSlots.empty() )
         {
             //UAV desc set is dirty. Time to calculate it again.
             HlmsManager *hlmsManager = mCreator->getHlmsManager();
@@ -439,6 +474,28 @@ namespace Ogre
             DescriptorSetUav baseParams;
             baseParams.mUavs = mUavSlots;
             mUavsDescSet = hlmsManager->getDescriptorSetUav( baseParams );
+        }
+
+        if( !mTexturesDescSet && !mTexSlots.empty() )
+        {
+            //Texture desc set is dirty. Time to calculate it again.
+            HlmsManager *hlmsManager = mCreator->getHlmsManager();
+
+            DescriptorSetTexture2 baseParams;
+            baseParams.mTextures = mTexSlots;
+            baseParams.mShaderTypeTexCount[0] = mTexSlots.size();
+            mTexturesDescSet = hlmsManager->getDescriptorSetTexture2( baseParams );
+        }
+
+        if( !mSamplersDescSet && !mSamplerSlots.empty() )
+        {
+            //Sampler desc set is dirty. Time to calculate it again.
+            HlmsManager *hlmsManager = mCreator->getHlmsManager();
+
+            DescriptorSetSampler baseParams;
+            baseParams.mSamplers = mSamplerSlots;
+            baseParams.mShaderTypeSamplerCount[0] = mSamplerSlots.size();
+            mSamplersDescSet = hlmsManager->getDescriptorSetSampler( baseParams );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -551,21 +608,54 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsComputeJob::setNumTexUnits( uint8 numSlots )
     {
-        mTextureSlots.resize( numSlots );
+        destroyDescriptorSamplers();
+        destroyDescriptorTextures();
+
+        if( numSlots < mSamplerSlots.size() )
+        {
+            HlmsManager *hlmsManager = mCreator->getHlmsManager();
+            FastArray<const HlmsSamplerblock*>::const_iterator itor = mSamplerSlots.begin() + numSlots;
+            FastArray<const HlmsSamplerblock*>::const_iterator end  = mSamplerSlots.end();
+
+            while( itor != end )
+            {
+                if( *itor )
+                    hlmsManager->destroySamplerblock( *itor );
+                ++itor;
+            }
+        }
+
+        mSamplerSlots.resize( numSlots );
+        mTexSlots.resize( numSlots );
         if( mInformHlmsOfTextureData )
             mPsoCacheHash = -1;
     }
     //-----------------------------------------------------------------------------------
     void HlmsComputeJob::removeTexUnit( uint8 slotIdx )
     {
-        mTextureSlots.erase( mTextureSlots.begin() + slotIdx );
+        destroyDescriptorSamplers();
+        destroyDescriptorTextures();
+
+        if( mSamplerSlots[slotIdx] )
+        {
+            HlmsManager *hlmsManager = mCreator->getHlmsManager();
+            hlmsManager->destroySamplerblock( mSamplerSlots[slotIdx] );
+        }
+
+        mSamplerSlots.erase( mSamplerSlots.begin() + slotIdx );
+        mTexSlots.erase( mTexSlots.begin() + slotIdx );
         if( mInformHlmsOfTextureData )
             mPsoCacheHash = -1;
     }
     //-----------------------------------------------------------------------------------
     TextureGpu* HlmsComputeJob::getTexture( uint8 slotIdx ) const
     {
-        return mTextureSlots[slotIdx].texture;
+        TextureGpu *retVal = 0;
+
+        if( mTexSlots[slotIdx].isTexture() )
+            retVal = mTexSlots[slotIdx].getTexture().texture;
+
+        return retVal;
     }
     //-----------------------------------------------------------------------------------
     void HlmsComputeJob::setNumUavUnits( uint8 numSlots )
@@ -592,56 +682,75 @@ namespace Ogre
         return mUavSlots[slotIdx].getBuffer().buffer;
     }
     //-----------------------------------------------------------------------------------
-    void HlmsComputeJob::setTexBuffer( uint8 slotIdx, TexBufferPacked *texBuffer,
-                                       size_t offset, size_t sizeBytes )
+    void HlmsComputeJob::setTexBuffer( uint8 slotIdx, const DescriptorSetTexture2::BufferSlot &newSlot )
     {
-        assert( slotIdx < mTextureSlots.size() );
+        assert( slotIdx < mTexSlots.size() );
 
-        TextureSlot &texSlot = mTextureSlots[slotIdx];
-
-        texSlot.buffer      = texBuffer;
-        texSlot.offset      = offset;
-        texSlot.sizeBytes   = sizeBytes;
-
-        if( mInformHlmsOfTextureData && texSlot.texture )
-            mPsoCacheHash = -1;
-
-        texSlot.texture = 0;
-
-        if( texSlot.samplerblock )
+        DescriptorSetTexture2::Slot &slot = mTexSlots[slotIdx];
+        if( slot.slotType != DescriptorSetTexture2::SlotTypeBuffer ||
+            slot.getBuffer() != newSlot )
         {
-            HlmsManager *hlmsManager = mCreator->getHlmsManager();
-            hlmsManager->destroySamplerblock( texSlot.samplerblock );
-            texSlot.samplerblock = 0;
+            if( mInformHlmsOfTextureData &&
+                slot.slotType == DescriptorSetTexture2::SlotTypeTexture &&
+                slot.getTexture().texture )
+            {
+                mPsoCacheHash = -1;
+            }
+
+            slot.slotType = DescriptorSetTexture2::SlotTypeBuffer;
+            DescriptorSetTexture2::BufferSlot &bufferSlot = slot.getBuffer();
+            bufferSlot = newSlot;
+            destroyDescriptorTextures();    //Descriptor is dirty
+
+            //Remove sampler
+            if( mSamplerSlots[slotIdx] )
+            {
+                destroyDescriptorSamplers();    //Sampler descriptors are also dirty
+
+                HlmsManager *hlmsManager = mCreator->getHlmsManager();
+                hlmsManager->destroySamplerblock( mSamplerSlots[slotIdx] );
+                mSamplerSlots[slotIdx] = 0;
+            }
         }
     }
     //-----------------------------------------------------------------------------------
-    void HlmsComputeJob::setTexture( uint8 slotIdx, TextureGpu *texture,
+    void HlmsComputeJob::setTexture( uint8 slotIdx, const DescriptorSetTexture2::TextureSlot &newSlot,
                                      const HlmsSamplerblock *refParams )
     {
-        assert( slotIdx < mTextureSlots.size() );
-
-        TextureSlot &texSlot = mTextureSlots[slotIdx];
-        texSlot.buffer = 0;
-
-        if( mInformHlmsOfTextureData && texSlot.texture != texture &&
-            (!texture || !texSlot.texture ||
-             !texSlot.texture->hasEquivalentParameters( texture )) )
-        {
-            mPsoCacheHash = -1;
-        }
-
-        texSlot.texture = texture;
+        assert( slotIdx < mTexSlots.size() );
 
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
 
-        if( refParams || !texSlot.samplerblock )
+        DescriptorSetTexture2::Slot &slot = mTexSlots[slotIdx];
+        if( slot.slotType != DescriptorSetTexture2::SlotTypeTexture ||
+            slot.getTexture() != newSlot )
         {
-            const HlmsSamplerblock *oldSamplerblock = texSlot.samplerblock;
+            slot.slotType = DescriptorSetTexture2::SlotTypeTexture;
+            DescriptorSetTexture2::TextureSlot &texSlot = slot.getTexture();
+
+            if( mInformHlmsOfTextureData &&
+                texSlot.texture != newSlot.texture &&
+                (!texSlot.texture || !newSlot.texture ||
+                 !texSlot.texture->hasEquivalentParameters( newSlot.texture )) )
+            {
+                mPsoCacheHash = -1;
+            }
+
+            texSlot = newSlot;
+            destroyDescriptorTextures();    //Descriptor is dirty
+        }
+
+        //Set explicit sampler, or create a default one if needed.
+        if( refParams || (!mSamplerSlots[slotIdx] && newSlot.texture) )
+        {
+            const HlmsSamplerblock *oldSamplerblock = mSamplerSlots[slotIdx];
             if( refParams )
-                texSlot.samplerblock = hlmsManager->getSamplerblock( *refParams );
+                mSamplerSlots[slotIdx] = hlmsManager->getSamplerblock( *refParams );
             else
-                texSlot.samplerblock = hlmsManager->getSamplerblock( HlmsSamplerblock() );
+                mSamplerSlots[slotIdx] = hlmsManager->getSamplerblock( HlmsSamplerblock() );
+
+            if( oldSamplerblock != mSamplerSlots[slotIdx] )
+                destroyDescriptorSamplers();    //Sampler descriptors are also dirty
 
             if( oldSamplerblock )
                 hlmsManager->destroySamplerblock( oldSamplerblock );
@@ -650,13 +759,15 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsComputeJob::setSamplerblock( uint8 slotIdx, const HlmsSamplerblock &refParams )
     {
-        assert( slotIdx < mTextureSlots.size() );
+        assert( slotIdx < mSamplerSlots.size() );
 
-        TextureSlot &texSlot = mTextureSlots[slotIdx];
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
 
-        const HlmsSamplerblock *oldSamplerblock = texSlot.samplerblock;
-        texSlot.samplerblock = hlmsManager->getSamplerblock( refParams );
+        const HlmsSamplerblock *oldSamplerblock = mSamplerSlots[slotIdx];
+        mSamplerSlots[slotIdx] = hlmsManager->getSamplerblock( refParams );
+
+        if( oldSamplerblock != mSamplerSlots[slotIdx] )
+            destroyDescriptorSamplers();    //Sampler descriptors are dirty
 
         if( oldSamplerblock )
             hlmsManager->destroySamplerblock( oldSamplerblock );
@@ -664,13 +775,15 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsComputeJob::_setSamplerblock( uint8 slotIdx, const HlmsSamplerblock *refParams )
     {
-        assert( slotIdx < mTextureSlots.size() );
+        assert( slotIdx < mSamplerSlots.size() );
 
-        TextureSlot &texSlot = mTextureSlots[slotIdx];
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
 
-        const HlmsSamplerblock *oldSamplerblock = texSlot.samplerblock;
-        texSlot.samplerblock = refParams;
+        const HlmsSamplerblock *oldSamplerblock = mSamplerSlots[slotIdx];
+        mSamplerSlots[slotIdx] = refParams;
+
+        if( oldSamplerblock != mSamplerSlots[slotIdx] )
+            destroyDescriptorSamplers();    //Sampler descriptors are dirty
 
         if( oldSamplerblock )
             hlmsManager->destroySamplerblock( oldSamplerblock );
@@ -695,14 +808,7 @@ namespace Ogre
             DescriptorSetUav::BufferSlot &bufferSlot = slot.getBuffer();
 
             bufferSlot = newSlot;
-
-            if( mUavsDescSet )
-            {
-                //Descriptor is dirty
-                HlmsManager *hlmsManager = mCreator->getHlmsManager();
-                hlmsManager->destroyDescriptorSetUav( mUavsDescSet );
-                mUavsDescSet = 0;
-            }
+            destroyDescriptorUavs();    //Descriptor is dirty
         }
     }
     //-----------------------------------------------------------------------------------
@@ -726,14 +832,7 @@ namespace Ogre
             }
 
             texSlot = newSlot;
-
-            if( mUavsDescSet )
-            {
-                //Descriptor is dirty
-                HlmsManager *hlmsManager = mCreator->getHlmsManager();
-                hlmsManager->destroyDescriptorSetUav( mUavsDescSet );
-                mUavsDescSet = 0;
-            }
+            destroyDescriptorUavs();    //Descriptor is dirty
         }
     }
     //-----------------------------------------------------------------------------------
@@ -756,13 +855,21 @@ namespace Ogre
         dstJob->mName = originalName;
 
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
-        TextureSlotVec::const_iterator itor = dstJob->mTextureSlots.begin();
-        TextureSlotVec::const_iterator end  = dstJob->mTextureSlots.end();
+
+        if( mTexturesDescSet )
+            dstJob->mTexturesDescSet = hlmsManager->getDescriptorSetTexture2( *this->mTexturesDescSet );
+        if( mSamplersDescSet )
+            dstJob->mSamplersDescSet = hlmsManager->getDescriptorSetSampler( *this->mSamplersDescSet );
+        if( mUavsDescSet )
+            dstJob->mUavsDescSet = hlmsManager->getDescriptorSetUav( *this->mUavsDescSet );
+
+        FastArray<const HlmsSamplerblock*>::const_iterator itor = dstJob->mSamplerSlots.begin();
+        FastArray<const HlmsSamplerblock*>::const_iterator end  = dstJob->mSamplerSlots.end();
 
         while( itor != end )
         {
-            if( itor->samplerblock )
-                hlmsManager->addReference( itor->samplerblock );
+            if( *itor )
+                hlmsManager->addReference( *itor );
             ++itor;
         }
     }

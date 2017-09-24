@@ -265,7 +265,7 @@ namespace Ogre
             return false;
         }
 
-        void checkValidity() const;
+        void checkValidity(void) const;
     };
 
     /** @} */

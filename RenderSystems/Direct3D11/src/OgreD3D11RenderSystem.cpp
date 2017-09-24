@@ -64,6 +64,7 @@ THE SOFTWARE.
 #include "Vao/OgreD3D11VaoManager.h"
 #include "Vao/OgreD3D11BufferInterface.h"
 #include "Vao/OgreD3D11VertexArrayObject.h"
+#include "Vao/OgreD3D11TexBufferPacked.h"
 #include "Vao/OgreD3D11UavBufferPacked.h"
 #include "Vao/OgreIndexBufferPacked.h"
 #include "Vao/OgreIndirectBufferPacked.h"
@@ -2277,6 +2278,43 @@ namespace Ogre
         }
     }
     //---------------------------------------------------------------------
+    void D3D11RenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture2 *set )
+    {
+        ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
+        ID3D11ShaderResourceView **srvList =
+                reinterpret_cast<ID3D11ShaderResourceView**>( set->mRsData );
+        UINT texIdx = 0;
+        for( size_t i=0u; i<NumShaderTypes; ++i )
+        {
+            const UINT numTexturesUsed = set->mShaderTypeTexCount[i];
+            if( !numTexturesUsed )
+                continue;
+
+            switch( i )
+            {
+            case VertexShader:
+                context->VSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
+                break;
+            case PixelShader:
+                context->PSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
+                break;
+            case GeometryShader:
+                context->GSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
+                break;
+            case HullShader:
+                context->HSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
+                break;
+            case DomainShader:
+                context->DSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
+                break;
+            }
+
+            mMaxSrvCount[i] = std::max( mMaxSrvCount[i], slotStart + texIdx + numTexturesUsed );
+
+            texIdx += numTexturesUsed;
+        }
+    }
+    //---------------------------------------------------------------------
     void D3D11RenderSystem::_setSamplers( uint32 slotStart, const DescriptorSetSampler *set )
     {
         ID3D11SamplerState *samplers[32];
@@ -2323,6 +2361,26 @@ namespace Ogre
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set )
+    {
+        ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
+        ID3D11ShaderResourceView **srvList =
+                reinterpret_cast<ID3D11ShaderResourceView**>( set->mRsData );
+        UINT texIdx = 0;
+        for( size_t i=0u; i<NumShaderTypes; ++i )
+        {
+            const UINT numTexturesUsed = set->mShaderTypeTexCount[i];
+            if( !numTexturesUsed )
+                continue;
+
+            context->CSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
+
+            mMaxComputeShaderSrvCount = std::max( mMaxComputeShaderSrvCount,
+                                                  slotStart + texIdx + numTexturesUsed );
+            texIdx += numTexturesUsed;
+        }
+    }
+    //---------------------------------------------------------------------
+    void D3D11RenderSystem::_setTexturesCS( uint32 slotStart, const DescriptorSetTexture2 *set )
     {
         ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
         ID3D11ShaderResourceView **srvList =
@@ -3015,7 +3073,7 @@ namespace Ogre
             for( size_t j=0u; j<numTexturesUsed; ++j )
             {
                 const D3D11TextureGpu *texture = static_cast<const D3D11TextureGpu*>( *itor );
-                srvList[texIdx] = texture->createSrv( texture->getPixelFormat(), false );
+                srvList[texIdx] = texture->createSrv();
 
                 ++texIdx;
                 ++itor;
@@ -3024,6 +3082,48 @@ namespace Ogre
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_descriptorSetTextureDestroyed( DescriptorSetTexture *set )
+    {
+        const size_t numElements = set->mTextures.size();
+        ID3D11ShaderResourceView **srvList =
+                reinterpret_cast<ID3D11ShaderResourceView**>( set->mRsData );
+        for( size_t i=0; i<numElements; ++i )
+            srvList[i]->Release();
+
+        delete [] srvList;
+        set->mRsData = 0;
+    }
+    //---------------------------------------------------------------------
+    void D3D11RenderSystem::_descriptorSetTexture2Created( DescriptorSetTexture2 *newSet )
+    {
+        const size_t numElements = newSet->mTextures.size();
+        ID3D11ShaderResourceView **srvList = new ID3D11ShaderResourceView*[numElements];
+        newSet->mRsData = srvList;
+
+        FastArray<DescriptorSetTexture2::Slot>::const_iterator itor = newSet->mTextures.begin();
+
+        for( size_t i=0u; i<numElements; ++i )
+        {
+            if( itor->empty() )
+                srvList[i] = 0;
+            else if( itor->isTexture() )
+            {
+                const DescriptorSetTexture2::TextureSlot &texSlot = itor->getTexture();
+                const D3D11TextureGpu *texture = static_cast<const D3D11TextureGpu*>( texSlot.texture );
+                srvList[i] = texture->createSrv( texSlot );
+            }
+            else
+            {
+                const DescriptorSetTexture2::BufferSlot &bufferSlot = itor->getBuffer();
+                const D3D11TexBufferPacked *texBuffer =
+                        static_cast<const D3D11TexBufferPacked*>( bufferSlot.buffer );
+                srvList[i] = texBuffer->createSrv( bufferSlot );
+            }
+
+            ++itor;
+        }
+    }
+    //---------------------------------------------------------------------
+    void D3D11RenderSystem::_descriptorSetTexture2Destroyed( DescriptorSetTexture2 *set )
     {
         const size_t numElements = set->mTextures.size();
         ID3D11ShaderResourceView **srvList =
@@ -3068,8 +3168,8 @@ namespace Ogre
     void D3D11RenderSystem::_descriptorSetUavDestroyed( DescriptorSetUav *set )
     {
         const size_t numElements = set->mUavs.size();
-        ID3D11ShaderResourceView **uavList =
-                reinterpret_cast<ID3D11ShaderResourceView**>( set->mRsData );
+        ID3D11UnorderedAccessView **uavList =
+                reinterpret_cast<ID3D11UnorderedAccessView**>( set->mRsData );
         for( size_t i=0; i<numElements; ++i )
             uavList[i]->Release();
 

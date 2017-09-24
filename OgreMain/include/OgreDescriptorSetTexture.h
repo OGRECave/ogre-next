@@ -31,6 +31,7 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 #include "OgreCommon.h"
+#include "OgrePixelFormatGpu.h"
 
 #include "OgreHeaderPrefix.h"
 
@@ -125,19 +126,229 @@ namespace Ogre
             return false;
         }
 
-        void checkValidity() const
+        void checkValidity(void) const;
+    };
+
+    struct _OgreExport DescriptorSetTexture2
+    {
+        enum SlotType
         {
-            size_t totalTexturesUsed = 0u;
+            SlotTypeBuffer,
+            SlotTypeTexture
+        };
+        struct BufferSlot
+        {
+            /// Texture buffer to bind
+            TexBufferPacked *buffer;
+            /// 0-based offset. It is possible to bind a region of the buffer.
+            /// Offset needs to be aligned. You can query the RS capabilities for
+            /// the alignment, however 256 bytes is the maximum allowed alignment
+            /// per the OpenGL specification, making it a safe bet to hardcode.
+            size_t offset;
+            /// Size in bytes to bind the tex buffer. When zero,
+            /// binds from offset until the end of the buffer.
+            size_t sizeBytes;
+
+            bool operator != ( const BufferSlot &other ) const
+            {
+                return  this->buffer != other.buffer ||
+                        this->offset != other.offset ||
+                        this->sizeBytes != other.sizeBytes;
+            }
+
+            bool operator < ( const BufferSlot &other ) const
+            {
+                if( this->buffer != other.buffer )
+                    return this->buffer < other.buffer;
+                if( this->offset != other.offset )
+                    return this->offset < other.offset;
+                if( this->sizeBytes != other.sizeBytes )
+                    return this->sizeBytes < other.sizeBytes;
+
+                return false;
+            }
+        };
+        struct TextureSlot
+        {
+            TextureGpu      *texture;
+            bool            cubemapsAs2DArrays;
+            uint8           mipmapLevel;
+            uint16          textureArrayIndex;
+            /// When left as PFG_UNKNOWN, we'll automatically use the TextureGpu's native format
+            PixelFormatGpu  pixelFormat;
+
+            bool operator != ( const TextureSlot &other ) const
+            {
+                return  this->texture != other.texture ||
+                        this->mipmapLevel != other.mipmapLevel ||
+                        this->textureArrayIndex != other.textureArrayIndex ||
+                        this->pixelFormat != other.pixelFormat;
+            }
+
+            bool operator < ( const TextureSlot &other ) const
+            {
+                if( this->texture != other.texture )
+                    return this->texture < other.texture;
+                if( this->mipmapLevel != other.mipmapLevel )
+                    return this->mipmapLevel < other.mipmapLevel;
+                if( this->textureArrayIndex != other.textureArrayIndex )
+                    return this->textureArrayIndex < other.textureArrayIndex;
+                if( this->pixelFormat != other.pixelFormat )
+                    return this->pixelFormat < other.pixelFormat;
+
+                return false;
+            }
+        };
+        struct Slot
+        {
+            SlotType        slotType;
+        protected:
+            union
+            {
+                BufferSlot  buffer;
+                TextureSlot texture;
+            };
+        public:
+            Slot()
+            {
+                memset( this, 0, sizeof(*this) );
+            }
+
+            Slot( SlotType _slotType )
+            {
+                memset( this, 0, sizeof(*this) );
+                slotType = _slotType;
+            }
+
+            bool empty(void) const
+            {
+                return buffer.buffer == 0 && texture.texture == 0;
+            }
+
+            bool isBuffer(void) const
+            {
+                return slotType == SlotTypeBuffer;
+            }
+
+            BufferSlot& getBuffer(void)
+            {
+                assert( slotType == SlotTypeBuffer );
+                return buffer;
+            }
+
+            const BufferSlot& getBuffer(void) const
+            {
+                assert( slotType == SlotTypeBuffer );
+                return buffer;
+            }
+
+            bool isTexture(void) const
+            {
+                return slotType == SlotTypeTexture;
+            }
+
+            TextureSlot& getTexture(void)
+            {
+                assert( slotType == SlotTypeTexture );
+                return texture;
+            }
+
+            const TextureSlot& getTexture(void) const
+            {
+                assert( slotType == SlotTypeTexture );
+                return texture;
+            }
+
+            bool operator != ( const Slot &other ) const
+            {
+                if( this->slotType != other.slotType )
+                    return true;
+
+                if( this->slotType == SlotTypeBuffer )
+                {
+                    return this->buffer != other.buffer;
+                }
+                else
+                {
+                    return this->texture != other.texture;
+                }
+            }
+
+            bool operator < ( const Slot &other ) const
+            {
+                if( this->slotType != other.slotType )
+                    return this->slotType < other.slotType;
+
+                if( this->slotType == SlotTypeBuffer )
+                {
+                    return this->buffer < other.buffer;
+                }
+                else
+                {
+                    return this->texture < other.texture;
+                }
+            }
+        };
+
+        uint16          mRefCount;
+        void            *mRsData;           /// Render-System specific data
+        uint16          mShaderTypeTexCount[NumShaderTypes];
+        FastArray<Slot> mTextures;
+
+        DescriptorSetTexture2() :
+            mRefCount( 0 ),
+            mRsData( 0 )
+        {
+            memset( mShaderTypeTexCount, 0, sizeof(mShaderTypeTexCount) );
+        }
+
+        /// Warning: This operator won't see changes in SRV (i.e. data baked into mRsData).
+        /// If you get notifyTextureChanged call, the Texture has changed and you must
+        /// assume the DescriptorSetTexture2 has changed.
+        /// SRV = Shader Resource View.
+        bool operator != ( const DescriptorSetTexture2 &other ) const
+        {
+            const size_t thisNumTextures = mTextures.size();
+            if( thisNumTextures != other.mTextures.size() )
+                return true;
+
+            for( size_t i=0; i<thisNumTextures; ++i )
+            {
+                if( this->mTextures[i] != other.mTextures[i] )
+                    return true;
+            }
 
             for( size_t i=0; i<NumShaderTypes; ++i )
-                totalTexturesUsed += mShaderTypeTexCount[i];
+            {
+                if( this->mShaderTypeTexCount[i] != other.mShaderTypeTexCount[i] )
+                    return true;
+            }
 
-            assert( totalTexturesUsed > 0 &&
-                    "This DescriptorSetTexture doesn't use any texture! Perhaps incorrectly setup?" );
-            assert( totalTexturesUsed == mTextures.size() &&
-                    "This DescriptorSetTexture doesn't use as many textures as it "
-                    "claims to have, or uses more than it has provided" );
+            return false;
         }
+
+        bool operator < ( const DescriptorSetTexture2 &other ) const
+        {
+            const size_t thisNumTextures = mTextures.size();
+            if( thisNumTextures != other.mTextures.size() )
+                return thisNumTextures < other.mTextures.size();
+
+            for( size_t i=0; i<thisNumTextures; ++i )
+            {
+                if( this->mTextures[i] != other.mTextures[i] )
+                    return this->mTextures[i] < other.mTextures[i];
+            }
+
+            for( size_t i=0; i<NumShaderTypes; ++i )
+            {
+                if( this->mShaderTypeTexCount[i] != other.mShaderTypeTexCount[i] )
+                    return this->mShaderTypeTexCount[i] < other.mShaderTypeTexCount[i];
+            }
+
+            return false;
+        }
+
+        void checkValidity(void) const;
     };
 
     /** @} */

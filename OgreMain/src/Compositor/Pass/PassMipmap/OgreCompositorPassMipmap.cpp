@@ -253,20 +253,23 @@ namespace Ogre
                     shaderParams->mParams.push_back( paramDstLodIdx );
                     shaderParams->setDirty();
 
-                    DescriptorSetUav::TextureSlot texSlot;
-                    texSlot.access              = ResourceAccess::Write;
-                    texSlot.textureArrayIndex   = 0;
-                    texSlot.pixelFormat         = pf;
-
-                    texSlot.texture     = tmpTex;
-                    texSlot.mipmapLevel = mip;
-                    blurH2->setTexture( 0, texture );
-                    blurH2->_setUavTexture( 0, texSlot );
+                    DescriptorSetTexture2::TextureSlot texSlot;
+                    DescriptorSetUav::TextureSlot uavSlot;
+                    uavSlot.access              = ResourceAccess::Write;
+                    uavSlot.textureArrayIndex   = 0;
+                    uavSlot.pixelFormat         = pf;
 
                     texSlot.texture     = texture;
-                    texSlot.mipmapLevel = mip + 1u;
-                    blurV2->setTexture( 0, tmpTex );
-                    blurV2->_setUavTexture( 0, texSlot );
+                    uavSlot.texture     = tmpTex;
+                    uavSlot.mipmapLevel = mip;
+                    blurH2->setTexture( 0, texSlot );
+                    blurH2->_setUavTexture( 0, uavSlot );
+
+                    texSlot.texture     = tmpTex;
+                    uavSlot.texture     = texture;
+                    uavSlot.mipmapLevel = mip + 1u;
+                    blurV2->setTexture( 0, texSlot );
+                    blurV2->_setUavTexture( 0, uavSlot );
 
                     blurV2->setProperty( "width_with_lod", currWidth );
                     blurV2->setProperty( "height_with_lod", currHeight );

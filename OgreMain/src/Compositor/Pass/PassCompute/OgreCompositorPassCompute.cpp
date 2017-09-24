@@ -158,8 +158,9 @@ namespace Ogre
             CompositorPassComputeDef::TextureSources::const_iterator end  = textureSources.end();
             while( itor != end )
             {
-                TextureGpu *texture = mParentNode->getDefinedTexture( itor->textureName );
-                mComputeJob->setTexture( itor->texUnitIdx, texture );
+                DescriptorSetTexture2::TextureSlot texSlot;
+                texSlot.texture = mParentNode->getDefinedTexture( itor->textureName );
+                mComputeJob->setTexture( itor->texUnitIdx, texSlot );
                 ++itor;
             }
 

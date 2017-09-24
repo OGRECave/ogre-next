@@ -79,6 +79,10 @@ namespace Ogre
         virtual void bindBufferHS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) = 0;
         virtual void bindBufferCS( uint16 slot, size_t offset=0, size_t sizeBytes=0 ) = 0;
 
+        /// To be overriden only by GL3+. Does the same as bindBufferXX but
+        /// assumes the current GL_TEXTURE slot is already set.
+        virtual void _bindBufferDirectly( size_t offset, size_t sizeBytes ) {}
+
         PixelFormat getPixelFormat(void) const           { return mPixelFormat; }
     };
 }

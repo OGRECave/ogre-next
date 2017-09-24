@@ -28,7 +28,7 @@ THE SOFTWARE.
 
 #include "OgreStableHeaders.h"
 
-#include "OgreDescriptorSetUav.h"
+#include "OgreDescriptorSetTexture.h"
 #include "OgreTextureGpu.h"
 #include "OgrePixelFormatGpuUtils.h"
 
@@ -36,13 +36,42 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    void DescriptorSetUav::checkValidity(void) const
+    void DescriptorSetTexture::checkValidity(void) const
     {
-        assert( !mUavs.empty() &&
-                "This DescriptorSetUav doesn't use any texture/buffer! Perhaps incorrectly setup?" );
+#if OGRE_DEBUG_MODE
+            size_t totalTexturesUsed = 0u;
 
-        FastArray<Slot>::const_iterator itor = mUavs.begin();
-        FastArray<Slot>::const_iterator end  = mUavs.end();
+            for( size_t i=0; i<NumShaderTypes; ++i )
+                totalTexturesUsed += mShaderTypeTexCount[i];
+
+            assert( totalTexturesUsed > 0 &&
+                    "This DescriptorSetTexture doesn't use any texture! Perhaps incorrectly setup?" );
+            assert( totalTexturesUsed == mTextures.size() &&
+                    "This DescriptorSetTexture doesn't use as many textures as it "
+                    "claims to have, or uses more than it has provided" );
+#endif
+    }
+    //-----------------------------------------------------------------------------------
+    void DescriptorSetTexture2::checkValidity(void) const
+    {
+        assert( !mTextures.empty() &&
+                "This DescriptorSetTexture2 doesn't use any texture/buffer! Perhaps incorrectly setup?" );
+
+#if OGRE_DEBUG_MODE
+        size_t totalTexturesUsed = 0u;
+
+        for( size_t i=0; i<NumShaderTypes; ++i )
+            totalTexturesUsed += mShaderTypeTexCount[i];
+
+        assert( totalTexturesUsed > 0 &&
+                "This DescriptorSetTexture doesn't use any texture! Perhaps incorrectly setup?" );
+        assert( totalTexturesUsed == mTextures.size() &&
+                "This DescriptorSetTexture doesn't use as many textures as it "
+                "claims to have, or uses more than it has provided" );
+#endif
+
+        FastArray<Slot>::const_iterator itor = mTextures.begin();
+        FastArray<Slot>::const_iterator end  = mTextures.end();
 
         while( itor != end )
         {
@@ -52,23 +81,18 @@ namespace Ogre
                 const TextureSlot &texSlot = slot.getTexture();
 
                 PixelFormatGpu pixelFormat = texSlot.pixelFormat;
-                if( pixelFormat == PFG_UNKNOWN )
-                {
-                    pixelFormat = PixelFormatGpuUtils::getEquivalentLinear(
-                                      texSlot.texture->getPixelFormat() );
-                }
-
-                if( pixelFormat != texSlot.texture->getPixelFormat() &&
+                if( pixelFormat != PFG_UNKNOWN &&
+                    pixelFormat != texSlot.texture->getPixelFormat() &&
                     !texSlot.texture->isReinterpretable() )
                 {
                     //This warning here is for
                     OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                                 "UAV sRGB textures must be bound as non-sRGB. "
-                                 "You must set the reinterpretable flag "
+                                 "To reinterpret the texture as a different format, "
+                                 "you must set the reinterpretable flag "
                                  "(TextureFlags::Reinterpretable) for "
                                  "texture: '" + texSlot.texture->getNameStr() + "' " +
                                  texSlot.texture->getSettingsDesc(),
-                                 "DescriptorSetUav::checkValidity" );
+                                 "DescriptorSetTexture::checkValidity" );
                 }
             }
 

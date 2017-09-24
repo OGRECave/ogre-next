@@ -286,8 +286,10 @@ namespace Ogre
             Real constant, Real linear, Real quadratic, Real minSize, Real maxSize);
         virtual void _setTexture( size_t unit, TextureGpu *texPtr );
         virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set );
+        virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture2 *set );
         virtual void _setSamplers( uint32 slotStart, const DescriptorSetSampler *set );
         virtual void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set );
+        virtual void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture2 *set );
         virtual void _setSamplersCS( uint32 slotStart, const DescriptorSetSampler *set );
         virtual void _setUavCS( uint32 slotStart, const DescriptorSetUav *set );
         void _setBindingType(TextureUnitState::BindingType bindingType);
@@ -315,6 +317,8 @@ namespace Ogre
         virtual void _hlmsSamplerblockDestroyed( HlmsSamplerblock *block );
         virtual void _descriptorSetTextureCreated( DescriptorSetTexture *newSet );
         virtual void _descriptorSetTextureDestroyed( DescriptorSetTexture *set );
+        virtual void _descriptorSetTexture2Created( DescriptorSetTexture2 *newSet );
+        virtual void _descriptorSetTexture2Destroyed( DescriptorSetTexture2 *set );
         virtual void _descriptorSetUavCreated( DescriptorSetUav *newSet );
         virtual void _descriptorSetUavDestroyed( DescriptorSetUav *set );
         void _setHlmsMacroblock( const HlmsMacroblock *macroblock );

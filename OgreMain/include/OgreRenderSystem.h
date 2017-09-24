@@ -826,8 +826,10 @@ namespace Ogre
         virtual void _setHlmsSamplerblockCS( uint8 texUnit, const HlmsSamplerblock *Samplerblock ) = 0;
 
         virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set ) = 0;
+        virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture2 *set ) = 0;
         virtual void _setSamplers( uint32 slotStart, const DescriptorSetSampler *set ) = 0;
         virtual void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set ) = 0;
+        virtual void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture2 *set ) = 0;
         virtual void _setSamplersCS( uint32 slotStart, const DescriptorSetSampler *set ) = 0;
         virtual void _setUavCS( uint32 slotStart, const DescriptorSetUav *set ) = 0;
 
@@ -845,6 +847,8 @@ namespace Ogre
         virtual void _hlmsSamplerblockDestroyed( HlmsSamplerblock *block ) {}
         virtual void _descriptorSetTextureCreated( DescriptorSetTexture *newSet ) {}
         virtual void _descriptorSetTextureDestroyed( DescriptorSetTexture *set ) {}
+        virtual void _descriptorSetTexture2Created( DescriptorSetTexture2 *newSet ) {}
+        virtual void _descriptorSetTexture2Destroyed( DescriptorSetTexture2 *set ) {}
         virtual void _descriptorSetSamplerCreated( DescriptorSetSampler *newSet ) {}
         virtual void _descriptorSetSamplerDestroyed( DescriptorSetSampler *set ) {}
         virtual void _descriptorSetUavCreated( DescriptorSetUav *newSet ) {}

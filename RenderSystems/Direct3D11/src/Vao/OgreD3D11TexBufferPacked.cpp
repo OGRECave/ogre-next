@@ -144,6 +144,58 @@ namespace Ogre
         return resourceView;
     }
     //-----------------------------------------------------------------------------------
+    ID3D11ShaderResourceView* D3D11TexBufferPacked::createSrv(
+            const DescriptorSetTexture2::BufferSlot &bufferSlot ) const
+    {
+        assert( bufferSlot.offset < (mNumElements - 1) );
+        assert( bufferSlot.sizeBytes < mNumElements );
+
+        const size_t formatSize = PixelUtil::getNumElemBytes( mPixelFormat );
+
+        const size_t sizeBytes = !bufferSlot.sizeBytes ? (mNumElements * mBytesPerElement -
+                                                          bufferSlot.offset) : bufferSlot.sizeBytes;
+
+        D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+        memset( &srvDesc, 0, sizeof( srvDesc ) );
+
+        srvDesc.Format               = mInternalFormat;
+        srvDesc.ViewDimension        = D3D11_SRV_DIMENSION_BUFFER;
+        srvDesc.Buffer.FirstElement  = (mFinalBufferStart + bufferSlot.offset) / formatSize;
+        srvDesc.Buffer.NumElements   = sizeBytes / mBytesPerElement;
+
+        D3D11RenderSystem *rs = static_cast<D3D11VaoManager*>(mVaoManager)->getD3D11RenderSystem();
+        ID3D11Buffer *vboName = 0;
+
+        if( rs->_getFeatureLevel() > D3D_FEATURE_LEVEL_11_0 )
+        {
+            assert( dynamic_cast<D3D11BufferInterface*>( mBufferInterface ) );
+            D3D11BufferInterface *bufferInterface = static_cast<D3D11BufferInterface*>(
+                        mBufferInterface );
+            vboName = bufferInterface->getVboName();
+        }
+        else
+        {
+            assert( dynamic_cast<D3D11CompatBufferInterface*>( mBufferInterface ) );
+            D3D11CompatBufferInterface *bufferInterface = static_cast<D3D11CompatBufferInterface*>(
+                        mBufferInterface );
+            vboName = bufferInterface->getVboName();
+        }
+
+        ID3D11ShaderResourceView *retVal = 0;
+        HRESULT hr = mDevice->CreateShaderResourceView( vboName, &srvDesc, &retVal );
+
+        if( FAILED(hr) )
+        {
+            String errorDescription = mDevice.getErrorDescription(hr);
+            OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
+                            "Failed to create SRV view on buffer."
+                            "\nError Description: " + errorDescription,
+                            "D3D11TexBufferPacked::createUav" );
+        }
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
     void D3D11TexBufferPacked::bindBufferVS( uint16 slot, size_t offset, size_t sizeBytes )
     {
         ID3D11ShaderResourceView *resourceView = bindBufferCommon( offset, sizeBytes );
