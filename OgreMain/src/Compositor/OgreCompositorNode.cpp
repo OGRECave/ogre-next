@@ -94,22 +94,28 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     CompositorNode::~CompositorNode()
     {
+        //Passes need to be destroyed before destroying all nodes, since some
+        //passes may hold listener references to these TextureGpus
+        assert( mPasses.empty() && "CompositorNode::destroyAllPasses not called!" );
+
         //Don't leave dangling pointers
         disconnectOutput();
-
-        {
-            //Destroy all passes
-            CompositorPassVec::const_iterator itor = mPasses.begin();
-            CompositorPassVec::const_iterator end  = mPasses.end();
-            while( itor != end )
-                OGRE_DELETE *itor++;
-        }
 
         //Destroy our local buffers
         TextureDefinitionBase::destroyBuffers( mDefinition->mLocalBufferDefs, mBuffers, mRenderSystem );
 
         //Destroy our local textures
         TextureDefinitionBase::destroyTextures( mLocalTextures, mRenderSystem );
+    }
+    //-----------------------------------------------------------------------------------
+    void CompositorNode::destroyAllPasses(void)
+    {
+        //Destroy all passes
+        CompositorPassVec::const_iterator itor = mPasses.begin();
+        CompositorPassVec::const_iterator end  = mPasses.end();
+        while( itor != end )
+            OGRE_DELETE *itor++;
+        mPasses.clear();
     }
     //-----------------------------------------------------------------------------------
     void CompositorNode::routeOutputs()

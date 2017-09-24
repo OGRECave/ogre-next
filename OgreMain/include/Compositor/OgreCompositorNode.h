@@ -154,6 +154,8 @@ namespace Ogre
                         TextureGpu *finalTarget );
         virtual ~CompositorNode();
 
+        void destroyAllPasses(void);
+
         IdString getName(void) const                                { return mName; }
         const CompositorNodeDef* getDefinition() const              { return mDefinition; }
 

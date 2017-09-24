@@ -149,6 +149,48 @@ namespace Ogre
             mCamera = defaultCamera;
     }
     //-----------------------------------------------------------------------------------
+    CompositorPassCompute::~CompositorPassCompute()
+    {
+        //Clear all our bindings to prevent leaving dangling pointers
+        {
+            const CompositorPassComputeDef::TextureSources &textureSources =
+                    mDefinition->getTextureSources();
+            CompositorPassComputeDef::TextureSources::const_iterator itor = textureSources.begin();
+            CompositorPassComputeDef::TextureSources::const_iterator end  = textureSources.end();
+            while( itor != end )
+            {
+                DescriptorSetTexture2::TextureSlot texSlot( DescriptorSetTexture2::TextureSlot::
+                                                            makeEmpty() );
+                mComputeJob->setTexture( itor->texUnitIdx, texSlot );
+                ++itor;
+            }
+
+            const CompositorPassComputeDef::TextureSources &uavSources = mDefinition->getUavSources();
+            itor = uavSources.begin();
+            end  = uavSources.end();
+            while( itor != end )
+            {
+                DescriptorSetUav::TextureSlot texSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
+                mComputeJob->_setUavTexture( itor->texUnitIdx, texSlot );
+                ++itor;
+            }
+        }
+
+        {
+            const CompositorPassComputeDef::BufferSourceVec &bufferSources =
+                    mDefinition->getBufferSources();
+            CompositorPassComputeDef::BufferSourceVec::const_iterator itor = bufferSources.begin();
+            CompositorPassComputeDef::BufferSourceVec::const_iterator end  = bufferSources.end();
+
+            while( itor != end )
+            {
+                DescriptorSetUav::BufferSlot bufferSlot( DescriptorSetUav::BufferSlot::makeEmpty() );
+                mComputeJob->_setUavBuffer( itor->slotIdx, bufferSlot );
+                ++itor;
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void CompositorPassCompute::setResourcesToJob(void)
     {
         {
