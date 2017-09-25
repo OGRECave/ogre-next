@@ -217,10 +217,7 @@ namespace Ogre {
         GLenum GLShaderType = getGLShaderType(mType);
         OGRE_CHECK_GL_ERROR(mGLShaderHandle = glCreateShader(GLShaderType));
 
-        //TODO GL 4.3 KHR_debug
-
-        // if (getGLSupport()->checkExtension("GL_KHR_debug") || mHasGL43)
-        //     glObjectLabel(GL_SHADER, mGLShaderHandle, 0, mName.c_str());
+        ogreGlObjectLabel( GL_SHADER, mGLShaderHandle, mName );
 
         // if (Root::getSingleton().getRenderSystem()->getCapabilities()->hasCapability(RSC_SEPARATE_SHADER_OBJECTS))
         // {

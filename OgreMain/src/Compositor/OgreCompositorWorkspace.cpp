@@ -376,6 +376,13 @@ namespace Ogre
             CompositorShadowNodeVec::const_iterator end  = mShadowNodes.end();
 
             while( itor != end )
+            {
+                (*itor)->destroyAllPasses();
+                ++itor;
+            }
+
+            itor = mShadowNodes.begin();
+            while( itor != end )
                 OGRE_DELETE *itor++;
             mShadowNodes.clear();
         }

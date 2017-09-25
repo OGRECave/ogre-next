@@ -141,6 +141,19 @@ static void APIENTRY GLDebugCallback(GLenum source,
 
 namespace Ogre {
 
+    static bool g_hasDebugObjectLabel = false;
+    void ogreGlObjectLabel( GLenum identifier, GLuint name, GLsizei length, const GLchar *label )
+    {
+        if( g_hasDebugObjectLabel )
+        {
+            OCGE( glObjectLabel( identifier, name, length, label ) );
+        }
+    }
+    void ogreGlObjectLabel( GLenum identifier, GLuint name, const String &label )
+    {
+        ogreGlObjectLabel( identifier, name, label.size(), label.c_str() );
+    }
+
     GL3PlusRenderSystem::GL3PlusRenderSystem()
         : mBlendChannelMask( HlmsBlendblock::BlendChannelAll ),
           mDepthWrite(true),
@@ -3370,6 +3383,7 @@ namespace Ogre {
         // Set provoking vertex convention
         OGRE_CHECK_GL_ERROR(glProvokingVertex(GL_FIRST_VERTEX_CONVENTION));
 
+        g_hasDebugObjectLabel = false;
         if (mGLSupport->checkExtension("GL_KHR_debug") || mHasGL43)
         {
 #if OGRE_DEBUG_MODE
@@ -3378,6 +3392,7 @@ namespace Ogre {
             OGRE_CHECK_GL_ERROR(glEnable(GL_DEBUG_OUTPUT));
             OGRE_CHECK_GL_ERROR(glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS));
 #endif
+            g_hasDebugObjectLabel = true;
         }
     }
 

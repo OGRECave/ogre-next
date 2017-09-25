@@ -123,6 +123,9 @@ namespace Ogre
             //Allocate internal buffers for automipmaps before we load anything into them
             if( allowsAutoMipmaps() )
                 OCGE( glGenerateMipmap( mGlTextureTarget ) );
+
+            //Set debug name for RenderDoc and similar tools
+            ogreGlObjectLabel( GL_TEXTURE, mFinalTextureName, getNameStr() );
         }
 
         if( mMsaa > 1u )
@@ -140,6 +143,10 @@ namespace Ogre
                 OCGE( glRenderbufferStorageMultisample( GL_RENDERBUFFER, mMsaa, format,
                                                         GLsizei(mWidth), GLsizei(mHeight) ) );
                 OCGE( glBindRenderbuffer( GL_RENDERBUFFER, 0 ) );
+
+                //Set debug name for RenderDoc and similar tools
+                ogreGlObjectLabel( GL_RENDERBUFFER, mMsaaFramebufferName,
+                                   getNameStr() + "/MsaaImplicit" );
             }
             else
             {
@@ -167,6 +174,9 @@ namespace Ogre
                                              GLsizei(mWidth), GLsizei(mHeight), GLsizei(mDepthOrSlices),
                                              fixedsamplelocations );
                 }
+
+                //Set debug name for RenderDoc and similar tools
+                ogreGlObjectLabel( GL_TEXTURE, mFinalTextureName, getNameStr() );
             }
         }
     }
@@ -614,6 +624,9 @@ namespace Ogre
                 OCGE( glRenderbufferStorageMultisample( GL_RENDERBUFFER, GLsizei(mMsaa), format,
                                                         GLsizei(mWidth), GLsizei(mHeight) ) );
             }
+
+            //Set debug name for RenderDoc and similar tools
+            ogreGlObjectLabel( GL_RENDERBUFFER, mFinalTextureName, getNameStr() );
         }
     }
     //-----------------------------------------------------------------------------------

@@ -142,4 +142,10 @@ namespace Ogre {
 
 #define OCGE OGRE_CHECK_GL_ERROR
 
+namespace Ogre
+{
+    extern void ogreGlObjectLabel( GLenum identifier, GLuint name, GLsizei length, const GLchar *label );
+    extern void ogreGlObjectLabel( GLenum identifier, GLuint name, const String &label );
+}
+
 #endif //#ifndef __GL3PlusPrerequisites_H__
