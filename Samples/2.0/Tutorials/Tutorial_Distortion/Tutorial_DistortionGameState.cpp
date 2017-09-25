@@ -11,7 +11,7 @@
 #include "OgreMesh2.h"
 
 #include "OgreCamera.h"
-#include "OgreRenderWindow.h"
+#include "OgreWindow.h"
 
 #include "OgreHlmsPbsDatablock.h"
 #include "OgreHlmsUnlitDatablock.h"
@@ -26,6 +26,8 @@
 #include "OgreMaterialManager.h"
 #include "OgreTechnique.h"
 #include "OgrePass.h"
+
+#include "OgreTextureGpuManager.h"
 
 using namespace Demo;
 
@@ -128,8 +130,7 @@ namespace Demo
 
 		{
 			mNumSpheres = 0;
-			Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
-			Ogre::HlmsTextureManager *hlmsTextureManager = hlmsManager->getTextureManager();
+            Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
 
 			assert(dynamic_cast<Ogre::HlmsPbs*>(hlmsManager->getHlms(Ogre::HLMS_PBS)));
 
@@ -141,6 +142,9 @@ namespace Demo
 			const float armsLength = 1.0f;
 			const float startX = (numX - 1) / 2.0f;
 			const float startZ = (numZ - 1) / 2.0f;
+
+            Ogre::Root *root = mGraphicsSystem->getRoot();
+            Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
 
 			for (int x = 0; x<numX; ++x)
 			{
@@ -154,11 +158,15 @@ namespace Demo
 							Ogre::HlmsBlendblock(),
 							Ogre::HlmsParamVec()));
 
-					Ogre::HlmsTextureManager::TextureLocation texLocation = hlmsTextureManager->
-						createOrRetrieveTexture("SaintPetersBasilica.dds",
-							Ogre::HlmsTextureManager::TEXTURE_TYPE_ENV_MAP);
+                    Ogre::TextureGpu *texture = textureMgr->createOrRetrieveTexture(
+                                                    "SaintPetersBasilica.dds",
+                                                    Ogre::GpuPageOutStrategy::Discard,
+                                                    Ogre::TextureFlags::PrefersLoadingFromFileAsSRGB,
+                                                    Ogre::TextureTypes::TypeCube,
+                                                    Ogre::ResourceGroupManager::
+                                                    AUTODETECT_RESOURCE_GROUP_NAME );
 
-					datablock->setTexture(Ogre::PBSM_REFLECTION, texLocation.xIdx, texLocation.texture);
+                    datablock->setTexture(Ogre::PBSM_REFLECTION, texture);
 					datablock->setDiffuse(Ogre::Vector3(0.0f, 1.0f, 0.0f));
 
 					datablock->setRoughness(std::max(0.02f, x / Ogre::max(1, (float)(numX - 1))));
@@ -235,8 +243,7 @@ namespace Demo
 			//Lets setup a new render queue for distortion pass. Set ID 6 to be our distortion queue
             mGraphicsSystem->getSceneManager()->getRenderQueue()->setRenderQueueMode(6, Ogre::RenderQueue::FAST);
 
-			Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
-			Ogre::HlmsTextureManager *hlmsTextureManager = hlmsManager->getTextureManager();
+            Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
 
 			assert(dynamic_cast<Ogre::HlmsUnlit*>(hlmsManager->getHlms(Ogre::HLMS_UNLIT)));
 
@@ -270,12 +277,17 @@ namespace Demo
 						blendBlock,
 						Ogre::HlmsParamVec()));
 
+                Ogre::Root *root = mGraphicsSystem->getRoot();
+                Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
 				//Use non-color data as texture type because distortion is stored as x,y vectors to texture.
-				Ogre::HlmsTextureManager::TextureLocation texLocation = hlmsTextureManager->
-					createOrRetrieveTexture("distort_deriv.png",
-						Ogre::HlmsTextureManager::TEXTURE_TYPE_NON_COLOR_DATA);
-
-				datablock->setTexture(0, texLocation.xIdx, texLocation.texture);
+                Ogre::TextureGpu *texture = textureMgr->createOrRetrieveTexture(
+                                                "distort_deriv.png",
+                                                Ogre::GpuPageOutStrategy::Discard,
+                                                0,
+                                                Ogre::TextureTypes::Type2D,
+                                                Ogre::ResourceGroupManager::
+                                                AUTODETECT_RESOURCE_GROUP_NAME );
+                datablock->setTexture( 0, texture );
 
 				//Set material to use vertex colors. Vertex colors are used to control distortion intensity (alpha value)
 				datablock->setUseColour(true);

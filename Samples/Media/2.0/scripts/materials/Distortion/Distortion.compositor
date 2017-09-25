@@ -3,18 +3,19 @@ compositor_node SceneRenderingNode
 	// rt_scene is used to render the scene
 	// rt_distortion is the texture we will be rendering distortion objects. The texture is later used to postprocess the scene
 	
-	texture rt_scene target_width target_height PF_FLOAT16_RGBA depth_texture depth_format PF_D32_FLOAT depth_pool 2
-    texture rt_distortion target_width target_height PF_FLOAT16_RGBA depth_pool 2
+	texture rt_scene		target_width target_height PFG_RGBA16_FLOAT depth_pool 2 depth_format PFG_D32_FLOAT
+	texture rt_distortion	target_width target_height PFG_RGBA16_FLOAT depth_pool 2 depth_format PFG_D32_FLOAT
     
 	target rt_scene
 	{
-		pass clear
-		{
-			colour_value 0.6 0.6 0.6 1
-		}
-
 		pass render_scene
 		{
+			load
+			{
+				all				clear
+				clear_colour	0.6 0.6 0.6 1
+			}
+
 			//lod_update_list	off					//Turn Lod off?
 			shadows				PbsMaterialsShadowNode
 			overlays			off
@@ -24,17 +25,18 @@ compositor_node SceneRenderingNode
 	}
     
     target rt_distortion
-	{
-		pass clear
-		{
-			// Clear distortion texture to default values. R and G are representing distortion vectors along X and Y axis. A is controlling distortion strenght.
-			colour_value 0.5 0.5 0 0
-			buffers	colour
-		}
-		
+    {
 		//Render distortion to its own texture with render queue id 6
 		pass render_scene
 		{
+			load
+			{
+				// Clear distortion texture to default values. R and G are representing
+				// distortion vectors along X and Y axis. A is controlling distortion strenght.
+				colour			clear
+				clear_colour	0.5 0.5 0 0
+			}
+
 			lod_update_list	off
 			overlays			off
             rq_first	6
@@ -54,13 +56,12 @@ compositor_node DistortionNode
     
 	target rt_output
 	{
-		pass clear
-		{
-			discard_only	true
-		}
-
 		pass render_quad
 		{
+			load
+			{
+				all dont_care
+			}
 			material Distortion/Quad
 	    	input 0 rt_scene
             input 1 rt_distortion

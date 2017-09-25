@@ -13,7 +13,7 @@
 #include "GraphicsSystem.h"
 #include "GameState.h"
 
-#include "OgreRenderWindow.h"
+#include "OgreWindow.h"
 #include "OgreTimer.h"
 
 #include "Threading/OgreThreads.h"
@@ -77,7 +77,7 @@ int mainApp( int argc, const char *argv[] )
         return 0; //User cancelled config
     }
 
-    Ogre::RenderWindow *renderWindow = graphicsSystem.getRenderWindow();
+    Ogre::Window *renderWindow = graphicsSystem.getRenderWindow();
 
     graphicsSystem.createScene01();
     graphicsSystem.createScene02();

@@ -11,7 +11,7 @@
 #include "Vao/OgreVertexArrayObject.h"
 
 #include "OgreCamera.h"
-#include "OgreRenderWindow.h"
+#include "OgreWindow.h"
 
 #include "Terra/Terra.h"
 #include "Terra/TerraShadowMapper.h"
@@ -68,7 +68,7 @@ namespace Demo
 
         Root *root = mGraphicsSystem->getRoot();
         SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
-        RenderWindow *renderWindow = mGraphicsSystem->getRenderWindow();
+        Window *renderWindow = mGraphicsSystem->getRenderWindow();
         Camera *camera = mGraphicsSystem->getCamera();
         CompositorManager2 *compositorManager = root->getCompositorManager2();
 

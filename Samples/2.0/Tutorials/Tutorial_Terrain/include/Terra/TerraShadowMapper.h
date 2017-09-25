@@ -10,7 +10,7 @@
 
 namespace Ogre
 {
-    struct CompositorChannel;
+    typedef TextureGpu* CompositorChannel;
 
     class ShadowMapper
     {
