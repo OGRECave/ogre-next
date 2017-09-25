@@ -38,6 +38,8 @@
 #include "OgreGLSLPreprocessor.h"
 #include "OgreGL3PlusUtil.h"
 
+#include "OgreLwString.h"
+
 namespace Ogre {
 
     String operationTypeToString(OperationType val);
@@ -217,7 +219,12 @@ namespace Ogre {
         GLenum GLShaderType = getGLShaderType(mType);
         OGRE_CHECK_GL_ERROR(mGLShaderHandle = glCreateShader(GLShaderType));
 
-        ogreGlObjectLabel( GL_SHADER, mGLShaderHandle, mName );
+        {
+            char tmpBuffer[256];
+            LwString compundName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+            compundName.a( mName.c_str(), " (", mFilename.c_str(), ")" );
+            ogreGlObjectLabel( GL_SHADER, mGLShaderHandle, compundName.size(), compundName.c_str() );
+        }
 
         // if (Root::getSingleton().getRenderSystem()->getCapabilities()->hasCapability(RSC_SEPARATE_SHADER_OBJECTS))
         // {
