@@ -269,6 +269,8 @@ namespace Ogre
 
         /// @copydoc CompositorManager2::getNodeDefinitionNonConst
         CompositorPassDefVec& getCompositorPassesNonConst()     { return mCompositorPasses; }
+
+        const CompositorNodeDef* getParentNodeDef(void) const   { return mParentNodeDef; }
     };
 
     /** @} */

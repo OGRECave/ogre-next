@@ -75,6 +75,22 @@ namespace Ogre
         OCGE( glActiveTexture( GL_TEXTURE0 ) );
     }
     //-----------------------------------------------------------------------------------
+    void GL3PlusTexBufferPacked::bindDirectly( size_t offset, size_t sizeBytes )
+    {
+        assert( dynamic_cast<GL3PlusBufferInterface*>( mBufferInterface ) );
+        assert( offset < (mNumElements * mBytesPerElement - 1) );
+        assert( (offset + sizeBytes) <= mNumElements * mBytesPerElement );
+
+        sizeBytes = !sizeBytes ? (mNumElements * mBytesPerElement - offset) : sizeBytes;
+
+        GL3PlusBufferInterface *bufferInterface = static_cast<GL3PlusBufferInterface*>(
+                                                                      mBufferInterface );
+        OCGE( glBindTexture( GL_TEXTURE_BUFFER, mTexName ) );
+        OCGE(
+          glTexBufferRange( GL_TEXTURE_BUFFER, mInternalFormat, bufferInterface->getVboName(),
+                            mFinalBufferStart * mBytesPerElement + offset, sizeBytes ) );
+    }
+    //-----------------------------------------------------------------------------------
     void GL3PlusTexBufferPacked::bindBufferVS( uint16 slot, size_t offset, size_t sizeBytes )
     {
         bindBuffer( slot, offset, sizeBytes);

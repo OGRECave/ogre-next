@@ -5,7 +5,7 @@
 #include "OgreSceneManager.h"
 #include "OgreCamera.h"
 #include "OgreRoot.h"
-#include "OgreRenderWindow.h"
+#include "OgreWindow.h"
 #include "OgreConfigFile.h"
 #include "Compositor/OgreCompositorManager2.h"
 
@@ -29,16 +29,7 @@ namespace Demo
         virtual Ogre::CompositorWorkspace* setupCompositor()
         {
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
-            const bool useMsaa = mRenderWindow->getFSAA() > 1;
-
-            if( useMsaa && mRoot->getRenderSystem()->getName() == "OpenGL 3+ Rendering Subsystem" )
-            {
-                OGRE_EXCEPT( Ogre::Exception::ERR_NOT_IMPLEMENTED,
-                             "MSAA + OpenGL is not yet implemented due to missing MSAA + MRT. "
-                             "You'll have to wait until the texture refactor. It works OK on D3D11. "
-                             "Sorry.",
-                             "ScreenSpaceReflectionsGraphicsSystem" );
-            }
+            const bool useMsaa = mRenderWindow->getMsaa() > 1u;
 
             ScreenSpaceReflections::setupSSR( useMsaa, true, compositorManager );
 
@@ -46,8 +37,8 @@ namespace Demo
             if( useMsaa )
                 compositorName = "ScreenSpaceReflectionsWorkspaceMsaa";
 
-            return compositorManager->addWorkspace( mSceneManager, mRenderWindow, mCamera,
-                                                    compositorName, true );
+            return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(),
+                                                    mCamera, compositorName, true );
         }
 
         virtual void setupResources(void)

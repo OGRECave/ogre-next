@@ -2,10 +2,9 @@ compositor_node TutorialComputeTest01_UavTextureRenderingNode
 {
 	in 0 rt_renderwindow
 
-	texture nullDummy target_width target_height PF_NULL
-	texture testTexture target_width target_height PF_R8G8B8A8 depth_pool 0 no_gamma uav
-	
-	target nullDummy
+	texture testTexture target_width target_height PFG_RGBA8_UNORM depth_pool 0 uav
+
+	target
 	{
 		pass compute
 		{

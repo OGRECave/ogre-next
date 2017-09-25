@@ -76,7 +76,9 @@ namespace Ogre {
         , mDerivedDepthBiasBase(0.0f)
         , mDerivedDepthBiasMultiplier(0.0f)
         , mDerivedDepthBiasSlopeScale(0.0f)
+        , mUavRenderingDirty(false)
         , mUavStartingSlot( 1 )
+        , mUavRenderingDescSet( 0 )
         , mGlobalInstanceVertexBufferVertexDeclaration(NULL)
         , mGlobalNumberOfInstances(1)
         , mVertexProgramBound(false)
@@ -552,6 +554,10 @@ namespace Ogre {
     {
         mCurrentRenderPassDescriptor = 0;
         mCurrentRenderViewport.setDimensions( 0, Vector4::ZERO, Vector4::ZERO );
+
+        //Where graphics ends, compute may start, or a new frame.
+        //Very likely we'll have to flush the UAVs again, so assume we need.
+        mUavRenderingDirty = true;
     }
     //---------------------------------------------------------------------
     TextureGpu* RenderSystem::createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
@@ -643,6 +649,16 @@ namespace Ogre {
     void RenderSystem::setUavStartingSlot( uint32 startingSlot )
     {
         mUavStartingSlot = startingSlot;
+        mUavRenderingDirty = true;
+    }
+    //---------------------------------------------------------------------
+    void RenderSystem::queueBindUAVs( const DescriptorSetUav *descSetUav )
+    {
+        if( mUavRenderingDescSet != descSetUav )
+        {
+            mUavRenderingDescSet = descSetUav;
+            mUavRenderingDirty = true;
+        }
     }
     //---------------------------------------------------------------------
     void RenderSystem::_cleanupDepthBuffers( bool bCleanManualBuffers )

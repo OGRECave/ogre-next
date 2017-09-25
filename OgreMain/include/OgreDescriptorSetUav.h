@@ -26,11 +26,12 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#ifndef _OgreDescriptorSetTexture_H_
-#define _OgreDescriptorSetTexture_H_
+#ifndef _OgreDescriptorSetUav_H_
+#define _OgreDescriptorSetUav_H_
 
 #include "OgrePrerequisites.h"
 #include "OgreCommon.h"
+#include "OgreResourceTransition.h"
 #include "OgrePixelFormatGpu.h"
 
 #include "OgreHeaderPrefix.h"
@@ -44,92 +45,12 @@ namespace Ogre
     *  @{
     */
 
-    /** Descriptor sets describe what textures should be bound together in one place.
-        They must be pushed to mTexture in the order of ShaderType.
-        For example if you want to use 2 textures bound to the pixel shader stage
-        and 1 in the Geometry Shader stage:
-            DescriptorSetTexture descSet;
-            descSet.mTextures.push_back( pixelShaderTex0 );
-            descSet.mTextures.push_back( pixelShaderTex1 );
-            descSet.mTextures.push_back( geometryShaderTex1 );
-            descSet.mShaderTypeTexCount[PixelShader] = 2u;
-            descSet.mShaderTypeTexCount[GeometryShader] = 1u;
-
-            const DescriptorSetTexture *finalSet = hlmsManager->getDescriptorSet( descSet );
-            // finalSet can be used with RenderSystem::_setTextures
-
-            // Remove finalSet once you're done using it.
-            hlmsManager->destroyDescriptorSet( finalSet );
-            finalSet = 0;
+    /** Descriptor sets describe what uavs should be bound together in one place.
     @remarks
         Do not create and destroy a set every frame. You should create it once, and reuse
-        it until it is no longer necessary, then you should destroy it.
+        it until it is no longer necessary, only then you should destroy it.
     */
-    struct _OgreExport DescriptorSetTexture
-    {
-        uint16      mRefCount;
-        uint16      mShaderTypeTexCount[NumShaderTypes];
-        void        *mRsData;           /// Render-System specific data
-
-        FastArray<const TextureGpu*> mTextures;
-
-        DescriptorSetTexture() :
-            mRefCount( 0 ),
-            mRsData( 0 )
-        {
-            memset( mShaderTypeTexCount, 0, sizeof(mShaderTypeTexCount) );
-        }
-
-        /// Warning: This operator won't see changes in SRVs (i.e. data baked into mRsData).
-        /// If you get notifyTextureChanged call, the SRV has changed and you must
-        /// assume the DescriptorSetTexture has changed.
-        /// SRV = Shader Resource View.
-        bool operator != ( const DescriptorSetTexture &other ) const
-        {
-            const size_t thisNumTextures = mTextures.size();
-            if( thisNumTextures != other.mTextures.size() )
-                return true;
-
-            for( size_t i=0; i<thisNumTextures; ++i )
-            {
-                if( this->mTextures[i] != other.mTextures[i] )
-                    return true;
-            }
-
-            for( size_t i=0; i<NumShaderTypes; ++i )
-            {
-                if( this->mShaderTypeTexCount[i] != other.mShaderTypeTexCount[i] )
-                    return true;
-            }
-
-            return false;
-        }
-
-        bool operator < ( const DescriptorSetTexture &other ) const
-        {
-            const size_t thisNumTextures = mTextures.size();
-            if( thisNumTextures != other.mTextures.size() )
-                return thisNumTextures < other.mTextures.size();
-
-            for( size_t i=0; i<thisNumTextures; ++i )
-            {
-                if( this->mTextures[i] != other.mTextures[i] )
-                    return this->mTextures[i] < other.mTextures[i];
-            }
-
-            for( size_t i=0; i<NumShaderTypes; ++i )
-            {
-                if( this->mShaderTypeTexCount[i] != other.mShaderTypeTexCount[i] )
-                    return this->mShaderTypeTexCount[i] < other.mShaderTypeTexCount[i];
-            }
-
-            return false;
-        }
-
-        void checkValidity(void) const;
-    };
-
-    struct _OgreExport DescriptorSetTexture2
+    struct _OgreExport DescriptorSetUav
     {
         enum SlotType
         {
@@ -138,8 +59,8 @@ namespace Ogre
         };
         struct BufferSlot
         {
-            /// Texture buffer to bind
-            TexBufferPacked *buffer;
+            /// UAV buffer to bind
+            UavBufferPacked *buffer;
             /// 0-based offset. It is possible to bind a region of the buffer.
             /// Offset needs to be aligned. You can query the RS capabilities for
             /// the alignment, however 256 bytes is the maximum allowed alignment
@@ -148,12 +69,16 @@ namespace Ogre
             /// Size in bytes to bind the tex buffer. When zero,
             /// binds from offset until the end of the buffer.
             size_t sizeBytes;
+            /// Access. Should match what the shader expects. Needed by Ogre to
+            /// resolve memory barrier dependencies.
+            ResourceAccess::ResourceAccess access;
 
             bool operator != ( const BufferSlot &other ) const
             {
                 return  this->buffer != other.buffer ||
                         this->offset != other.offset ||
-                        this->sizeBytes != other.sizeBytes;
+                        this->sizeBytes != other.sizeBytes ||
+                        this->access != other.access;
             }
 
             bool operator < ( const BufferSlot &other ) const
@@ -164,6 +89,8 @@ namespace Ogre
                     return this->offset < other.offset;
                 if( this->sizeBytes != other.sizeBytes )
                     return this->sizeBytes < other.sizeBytes;
+                if( this->access != other.access )
+                    return this->access < other.access;
 
                 return false;
             }
@@ -177,8 +104,9 @@ namespace Ogre
         };
         struct TextureSlot
         {
-            TextureGpu      *texture;
-            bool            cubemapsAs2DArrays;
+            TextureGpu *texture;
+
+            ResourceAccess::ResourceAccess access;
             uint8           mipmapLevel;
             uint16          textureArrayIndex;
             /// When left as PFG_UNKNOWN, we'll automatically use the TextureGpu's native format
@@ -187,6 +115,7 @@ namespace Ogre
             bool operator != ( const TextureSlot &other ) const
             {
                 return  this->texture != other.texture ||
+                        this->access != other.access ||
                         this->mipmapLevel != other.mipmapLevel ||
                         this->textureArrayIndex != other.textureArrayIndex ||
                         this->pixelFormat != other.pixelFormat;
@@ -196,6 +125,8 @@ namespace Ogre
             {
                 if( this->texture != other.texture )
                     return this->texture < other.texture;
+                if( this->access != other.access )
+                    return this->access < other.access;
                 if( this->mipmapLevel != other.mipmapLevel )
                     return this->mipmapLevel < other.mipmapLevel;
                 if( this->textureArrayIndex != other.textureArrayIndex )
@@ -306,57 +237,43 @@ namespace Ogre
 
         uint16          mRefCount;
         void            *mRsData;           /// Render-System specific data
-        uint16          mShaderTypeTexCount[NumShaderTypes];
-        FastArray<Slot> mTextures;
+        FastArray<Slot> mUavs;
 
-        DescriptorSetTexture2() :
+        DescriptorSetUav() :
             mRefCount( 0 ),
             mRsData( 0 )
         {
-            memset( mShaderTypeTexCount, 0, sizeof(mShaderTypeTexCount) );
         }
 
-        /// Warning: This operator won't see changes in SRV (i.e. data baked into mRsData).
-        /// If you get notifyTextureChanged call, the Texture has changed and you must
-        /// assume the DescriptorSetTexture2 has changed.
-        /// SRV = Shader Resource View.
-        bool operator != ( const DescriptorSetTexture2 &other ) const
+        /// Warning: This operator won't see changes in UAVs (i.e. data baked into mRsData).
+        /// If you get notifyTextureChanged call, the UAV has changed and you must
+        /// assume the DescriptorSetUav has changed.
+        /// UAV = Unordered Access View.
+        bool operator != ( const DescriptorSetUav &other ) const
         {
-            const size_t thisNumTextures = mTextures.size();
-            if( thisNumTextures != other.mTextures.size() )
+            const size_t thisNumUavs = mUavs.size();
+            if( thisNumUavs != other.mUavs.size() )
                 return true;
 
-            for( size_t i=0; i<thisNumTextures; ++i )
+            for( size_t i=0; i<thisNumUavs; ++i )
             {
-                if( this->mTextures[i] != other.mTextures[i] )
-                    return true;
-            }
-
-            for( size_t i=0; i<NumShaderTypes; ++i )
-            {
-                if( this->mShaderTypeTexCount[i] != other.mShaderTypeTexCount[i] )
+                if( this->mUavs[i] != other.mUavs[i] )
                     return true;
             }
 
             return false;
         }
 
-        bool operator < ( const DescriptorSetTexture2 &other ) const
+        bool operator < ( const DescriptorSetUav &other ) const
         {
-            const size_t thisNumTextures = mTextures.size();
-            if( thisNumTextures != other.mTextures.size() )
-                return thisNumTextures < other.mTextures.size();
+            const size_t thisNumUavs = mUavs.size();
+            if( thisNumUavs != other.mUavs.size() )
+                return thisNumUavs < other.mUavs.size();
 
-            for( size_t i=0; i<thisNumTextures; ++i )
+            for( size_t i=0; i<thisNumUavs; ++i )
             {
-                if( this->mTextures[i] != other.mTextures[i] )
-                    return this->mTextures[i] < other.mTextures[i];
-            }
-
-            for( size_t i=0; i<NumShaderTypes; ++i )
-            {
-                if( this->mShaderTypeTexCount[i] != other.mShaderTypeTexCount[i] )
-                    return this->mShaderTypeTexCount[i] < other.mShaderTypeTexCount[i];
+                if( this->mUavs[i] != other.mUavs[i] )
+                    return this->mUavs[i] < other.mUavs[i];
             }
 
             return false;

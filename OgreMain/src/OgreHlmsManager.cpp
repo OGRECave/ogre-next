@@ -405,6 +405,14 @@ namespace Ogre
     {
         renderSystem->_descriptorSetTextureDestroyed( desc );
     }
+    void createDescriptorSetTexture2Impl( RenderSystem *renderSystem, DescriptorSetTexture2 *desc )
+    {
+        renderSystem->_descriptorSetTexture2Created( desc );
+    }
+    void destroyDescriptorSetTexture2Impl( RenderSystem *renderSystem, DescriptorSetTexture2 *desc )
+    {
+        renderSystem->_descriptorSetTexture2Destroyed( desc );
+    }
     void createDescriptorSetSamplerImpl( RenderSystem *renderSystem, DescriptorSetSampler *desc )
     {
         renderSystem->_descriptorSetSamplerCreated( desc );
@@ -412,6 +420,14 @@ namespace Ogre
     void destroyDescriptorSetSamplerImpl( RenderSystem *renderSystem, DescriptorSetSampler *desc )
     {
         renderSystem->_descriptorSetSamplerDestroyed( desc );
+    }
+    void createDescriptorSetUavImpl( RenderSystem *renderSystem, DescriptorSetUav *desc )
+    {
+        renderSystem->_descriptorSetUavCreated( desc );
+    }
+    void destroyDescriptorSetUavImpl( RenderSystem *renderSystem, DescriptorSetUav *desc )
+    {
+        renderSystem->_descriptorSetUavDestroyed( desc );
     }
     template <typename T>
     const T* HlmsManager::getDescriptorSet( typename set<T>::type &container, const T &baseParams,
@@ -468,9 +484,7 @@ namespace Ogre
     {
         assert( mRenderSystem && "A render system must be selected first!" );
 
-#if OGRE_DEBUG_MODE
         baseParams.checkValidity();
-#endif
 
         assert( baseParams.mTextures.size() < OGRE_MAX_TEXTURE_LAYERS &&
                 "Recompile Ogre w/ a different OGRE_MAX_TEXTURE_LAYERS value if you "
@@ -486,14 +500,33 @@ namespace Ogre
         destroyDescriptorSet( mDescriptorSetTextures, descSet, destroyDescriptorSetTextureImpl );
     }
     //-----------------------------------------------------------------------------------
+    const DescriptorSetTexture2* HlmsManager::getDescriptorSetTexture2(
+            const DescriptorSetTexture2 &baseParams )
+    {
+        assert( mRenderSystem && "A render system must be selected first!" );
+
+        baseParams.checkValidity();
+
+        assert( baseParams.mTextures.size() < OGRE_MAX_TEXTURE_LAYERS &&
+                "Recompile Ogre w/ a different OGRE_MAX_TEXTURE_LAYERS value if you "
+                "want to bind more textures (API/HW restrictions may also apply)" );
+
+        const DescriptorSetTexture2 *retVal = getDescriptorSet( mDescriptorSetTextures2, baseParams,
+                                                                createDescriptorSetTexture2Impl );
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsManager::destroyDescriptorSetTexture2( const DescriptorSetTexture2 *descSet )
+    {
+        destroyDescriptorSet( mDescriptorSetTextures2, descSet, destroyDescriptorSetTexture2Impl );
+    }
+    //-----------------------------------------------------------------------------------
     const DescriptorSetSampler* HlmsManager::getDescriptorSetSampler(
             const DescriptorSetSampler &baseParams )
     {
         assert( mRenderSystem && "A render system must be selected first!" );
 
-#if OGRE_DEBUG_MODE
         baseParams.checkValidity();
-#endif
 
         const DescriptorSetSampler *retVal = getDescriptorSet( mDescriptorSetSamplers, baseParams,
                                                                createDescriptorSetSamplerImpl );
@@ -503,6 +536,23 @@ namespace Ogre
     void HlmsManager::destroyDescriptorSetSampler( const DescriptorSetSampler *descSet )
     {
         destroyDescriptorSet( mDescriptorSetSamplers, descSet, destroyDescriptorSetSamplerImpl );
+    }
+    //-----------------------------------------------------------------------------------
+    const DescriptorSetUav* HlmsManager::getDescriptorSetUav(
+            const DescriptorSetUav &baseParams )
+    {
+        assert( mRenderSystem && "A render system must be selected first!" );
+
+        baseParams.checkValidity();
+
+        const DescriptorSetUav *retVal = getDescriptorSet( mDescriptorSetUavs, baseParams,
+                                                           createDescriptorSetUavImpl );
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsManager::destroyDescriptorSetUav( const DescriptorSetUav *descSet )
+    {
+        destroyDescriptorSet( mDescriptorSetUavs, descSet, destroyDescriptorSetUavImpl );
     }
     //-----------------------------------------------------------------------------------
     uint8 HlmsManager::_addInputLayoutId( VertexElement2VecVec vertexElements, OperationType opType )
@@ -743,6 +793,17 @@ namespace Ogre
                 }
             }
             {
+                DescriptorSetTexture2Set::iterator itor = mDescriptorSetTextures2.begin();
+                DescriptorSetTexture2Set::iterator end  = mDescriptorSetTextures2.end();
+                while( itor != end )
+                {
+                    //const_cast see HlmsManager::destroyDescriptorSetTexture comments
+                    DescriptorSetTexture2 *descSetPtr = const_cast<DescriptorSetTexture2*>( &(*itor) );
+                    mRenderSystem->_descriptorSetTexture2Destroyed( descSetPtr );
+                    ++itor;
+                }
+            }
+            {
                 DescriptorSetSamplerSet::iterator itor = mDescriptorSetSamplers.begin();
                 DescriptorSetSamplerSet::iterator end  = mDescriptorSetSamplers.end();
                 while( itor != end )
@@ -788,6 +849,17 @@ namespace Ogre
                     //const_cast see HlmsManager::destroyDescriptorSetTexture comments
                     DescriptorSetTexture *descSetPtr = const_cast<DescriptorSetTexture*>( &(*itor) );
                     mRenderSystem->_descriptorSetTextureCreated( descSetPtr );
+                    ++itor;
+                }
+            }
+            {
+                DescriptorSetTexture2Set::iterator itor = mDescriptorSetTextures2.begin();
+                DescriptorSetTexture2Set::iterator end  = mDescriptorSetTextures2.end();
+                while( itor != end )
+                {
+                    //const_cast see HlmsManager::destroyDescriptorSetTexture comments
+                    DescriptorSetTexture2 *descSetPtr = const_cast<DescriptorSetTexture2*>( &(*itor) );
+                    mRenderSystem->_descriptorSetTexture2Created( descSetPtr );
                     ++itor;
                 }
             }

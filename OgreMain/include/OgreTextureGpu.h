@@ -166,7 +166,7 @@ namespace Ogre
         };
     }
 
-    class _OgreExport TextureGpu : public GpuResource
+    class _OgreExport TextureGpu : public GpuTrackedResource, public GpuResource
     {
     protected:
         uint32      mWidth;
@@ -216,6 +216,7 @@ namespace Ogre
         void _resetTextureManager(void);
 
         virtual String getNameStr(void) const;
+        String getSettingsDesc(void) const;
 
         /** Schedules an async transition in residency. If transitioning from
             OnStorage to Resident, it will read from file (ResourceGroup was set in createTexture)
@@ -262,6 +263,9 @@ namespace Ogre
         /// Note: Passing 0 will be forced to 1.
         void setMsaa( uint8 msaa );
         uint8 getMsaa(void) const;
+
+        bool hasEquivalentParameters( TextureGpu *other ) const;
+        void setHlmsProperties( Hlms *hlms, LwString &propBaseName );
 
         void setMsaaPattern( MsaaPatterns::MsaaPatterns pattern );
         MsaaPatterns::MsaaPatterns getMsaaPattern(void) const;

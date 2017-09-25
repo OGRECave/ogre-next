@@ -64,6 +64,7 @@ THE SOFTWARE.
 #include "Vao/OgreD3D11VaoManager.h"
 #include "Vao/OgreD3D11BufferInterface.h"
 #include "Vao/OgreD3D11VertexArrayObject.h"
+#include "Vao/OgreD3D11TexBufferPacked.h"
 #include "Vao/OgreD3D11UavBufferPacked.h"
 #include "Vao/OgreIndexBufferPacked.h"
 #include "Vao/OgreIndirectBufferPacked.h"
@@ -100,8 +101,6 @@ namespace Ogre
           mCurrentIndexBuffer( 0 ),
           mNumberOfViews( 0 ),
           mDepthStencilView( 0 ),
-          mMaxModifiedUavPlusOne( 0 ),
-          mUavsDirty( false ),
           mDSTResView(0),
           mpDXGIFactory( 0 ),
           mpDXGIFactory2( 0 ),
@@ -113,9 +112,6 @@ namespace Ogre
         LogManager::getSingleton().logMessage( "D3D11 : " + getName() + " created." );
 
         memset( mRenderTargetViews, 0, sizeof( mRenderTargetViews ) );
-        memset( mUavTexPtr, 0, sizeof( mUavTexPtr ) );
-        memset( mUavBuffers, 0, sizeof( mUavBuffers ) );
-        memset( mUavs, 0, sizeof( mUavs ) );
         memset( mNullViews, 0, sizeof(mNullViews) );
         memset( mMaxSrvCount, 0, sizeof(mMaxSrvCount) );
 
@@ -1570,8 +1566,6 @@ namespace Ogre
             rsc->addShaderProfile("cs_5_0");
         }
 
-
-
         // TODO: constant buffers have no limits but lower models do
         // 16 boolean params allowed
         rsc->setComputeProgramConstantBoolCount(16);
@@ -1579,7 +1573,6 @@ namespace Ogre
         rsc->setComputeProgramConstantIntCount(16);
         // float params, always 4D
         rsc->setComputeProgramConstantFloatCount(512);
-
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::convertGeometryShaderCaps(RenderSystemCapabilities* rsc) const
@@ -1708,20 +1701,24 @@ namespace Ogre
         scissorRc.bottom= scissorRc.top + mCurrentRenderViewport.getScissorActualHeight();
         context->RSSetScissorRects( 1u, &scissorRc );
 
-        newPassDesc->performLoadActions( &mCurrentRenderViewport, entriesToFlush );
+        newPassDesc->performLoadActions( &mCurrentRenderViewport, entriesToFlush,
+                                         mUavStartingSlot, mUavRenderingDescSet );
     }
     //-----------------------------------------------------------------------------------
     void D3D11RenderSystem::endRenderPassDescriptor(void)
     {
-        uint32 x, y, w, h;
-        w = mCurrentRenderViewport.getActualWidth();
-        h = mCurrentRenderViewport.getActualHeight();
-        x = mCurrentRenderViewport.getActualLeft();
-        y = mCurrentRenderViewport.getActualTop();
+        if( mCurrentRenderPassDescriptor )
+        {
+            uint32 x, y, w, h;
+            w = mCurrentRenderViewport.getActualWidth();
+            h = mCurrentRenderViewport.getActualHeight();
+            x = mCurrentRenderViewport.getActualLeft();
+            y = mCurrentRenderViewport.getActualTop();
 
-        D3D11RenderPassDescriptor *passDesc =
-                static_cast<D3D11RenderPassDescriptor*>( mCurrentRenderPassDescriptor );
-        passDesc->performStoreActions( x, y, w, h, RenderPassDescriptor::All );
+            D3D11RenderPassDescriptor *passDesc =
+                    static_cast<D3D11RenderPassDescriptor*>( mCurrentRenderPassDescriptor );
+            passDesc->performStoreActions( x, y, w, h, RenderPassDescriptor::All );
+        }
 
         ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
         //Set all textures to 0 to prevent the runtime from thinkin we might
@@ -2281,6 +2278,43 @@ namespace Ogre
         }
     }
     //---------------------------------------------------------------------
+    void D3D11RenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture2 *set )
+    {
+        ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
+        ID3D11ShaderResourceView **srvList =
+                reinterpret_cast<ID3D11ShaderResourceView**>( set->mRsData );
+        UINT texIdx = 0;
+        for( size_t i=0u; i<NumShaderTypes; ++i )
+        {
+            const UINT numTexturesUsed = set->mShaderTypeTexCount[i];
+            if( !numTexturesUsed )
+                continue;
+
+            switch( i )
+            {
+            case VertexShader:
+                context->VSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
+                break;
+            case PixelShader:
+                context->PSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
+                break;
+            case GeometryShader:
+                context->GSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
+                break;
+            case HullShader:
+                context->HSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
+                break;
+            case DomainShader:
+                context->DSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
+                break;
+            }
+
+            mMaxSrvCount[i] = std::max( mMaxSrvCount[i], slotStart + texIdx + numTexturesUsed );
+
+            texIdx += numTexturesUsed;
+        }
+    }
+    //---------------------------------------------------------------------
     void D3D11RenderSystem::_setSamplers( uint32 slotStart, const DescriptorSetSampler *set )
     {
         ID3D11SamplerState *samplers[32];
@@ -2324,6 +2358,84 @@ namespace Ogre
 
             samplerIdx += numSamplersUsed;
         }
+    }
+    //---------------------------------------------------------------------
+    void D3D11RenderSystem::_setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set )
+    {
+        ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
+        ID3D11ShaderResourceView **srvList =
+                reinterpret_cast<ID3D11ShaderResourceView**>( set->mRsData );
+        UINT texIdx = 0;
+        for( size_t i=0u; i<NumShaderTypes; ++i )
+        {
+            const UINT numTexturesUsed = set->mShaderTypeTexCount[i];
+            if( !numTexturesUsed )
+                continue;
+
+            context->CSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
+
+            mMaxComputeShaderSrvCount = std::max( mMaxComputeShaderSrvCount,
+                                                  slotStart + texIdx + numTexturesUsed );
+            texIdx += numTexturesUsed;
+        }
+    }
+    //---------------------------------------------------------------------
+    void D3D11RenderSystem::_setTexturesCS( uint32 slotStart, const DescriptorSetTexture2 *set )
+    {
+        ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
+        ID3D11ShaderResourceView **srvList =
+                reinterpret_cast<ID3D11ShaderResourceView**>( set->mRsData );
+        UINT texIdx = 0;
+        for( size_t i=0u; i<NumShaderTypes; ++i )
+        {
+            const UINT numTexturesUsed = set->mShaderTypeTexCount[i];
+            if( !numTexturesUsed )
+                continue;
+
+            context->CSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
+
+            mMaxComputeShaderSrvCount = std::max( mMaxComputeShaderSrvCount,
+                                                  slotStart + texIdx + numTexturesUsed );
+            texIdx += numTexturesUsed;
+        }
+    }
+    //---------------------------------------------------------------------
+    void D3D11RenderSystem::_setSamplersCS( uint32 slotStart, const DescriptorSetSampler *set )
+    {
+        ID3D11SamplerState *samplers[32];
+
+        FastArray<const HlmsSamplerblock*>::const_iterator itor = set->mSamplers.begin();
+
+        ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
+        UINT samplerIdx = slotStart;
+        for( size_t i=0u; i<NumShaderTypes; ++i )
+        {
+            const UINT numSamplersUsed = set->mShaderTypeSamplerCount[i];
+
+            if( !numSamplersUsed )
+                continue;
+
+            for( size_t j=0; j<numSamplersUsed; ++j )
+            {
+                ID3D11SamplerState *samplerState =
+                        reinterpret_cast<ID3D11SamplerState*>( (*itor)->mRsData );
+                samplers[j] = samplerState;
+            }
+
+            context->CSSetSamplers( samplerIdx, numSamplersUsed, samplers );
+            samplerIdx += numSamplersUsed;
+        }
+    }
+    //---------------------------------------------------------------------
+    void D3D11RenderSystem::_setUavCS( uint32 slotStart, const DescriptorSetUav *set )
+    {
+        ID3D11UnorderedAccessView **uavList =
+                reinterpret_cast<ID3D11UnorderedAccessView**>( set->mRsData );
+        ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
+        context->CSSetUnorderedAccessViews( slotStart, static_cast<UINT>( set->mUavs.size() ),
+                                            uavList, 0 );
+
+        mMaxBoundUavCS = std::max( mMaxBoundUavCS, slotStart + set->mUavs.size() );
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setBindingType(TextureUnitState::BindingType bindingType)
@@ -2560,230 +2672,6 @@ namespace Ogre
             {
                 flushUAVs();
             }
-        }
-#endif
-    }
-    //---------------------------------------------------------------------
-    void D3D11RenderSystem::queueBindUAV( uint32 slot, TextureGpu *texture,
-                                          ResourceAccess::ResourceAccess access,
-                                          int32 mipmapLevel, int32 textureArrayIndex,
-                                          PixelFormatGpu pixelFormat )
-    {
-        assert( slot < 64 );
-
-        if( !mUavBuffers[slot] && !mUavTexPtr[slot] && !texture )
-            return;
-
-        mUavsDirty = true;
-
-        mUavTexPtr[slot] = texture;
-
-        if( mUavBuffers[slot] )
-        {
-            //If the UAV view belonged to a buffer, don't decrement the reference count.
-            mUavBuffers[slot] = 0;
-            mUavs[slot] = 0;
-        }
-
-        //Release oldUav *after* we've created the new UAV (if D3D11 needs
-        //to return the same UAV, if we release it earlier we may cause
-        //unnecessary alloc/deallocations)
-        ID3D11UnorderedAccessView *oldUav = mUavs[slot];
-        mUavs[slot] = 0;
-
-        if( texture )
-        {
-            if( !texture->isUav() )
-            {
-                if( oldUav )
-                {
-                    oldUav->Release();
-                    oldUav = 0;
-                }
-
-                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                             "Texture " + texture->getNameStr() +
-                             "must have been created as Uav to be bound as UAV",
-                             "D3D11RenderSystem::queueBindUAV" );
-            }
-
-            D3D11_UNORDERED_ACCESS_VIEW_DESC descUAV;
-            descUAV.Format = D3D11Mappings::get( pixelFormat );
-
-            switch( texture->getTextureType() )
-            {
-            case TextureTypes::Type1D:
-                descUAV.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE1D;
-                descUAV.Texture1D.MipSlice = static_cast<UINT>( mipmapLevel );
-                break;
-            case TextureTypes::Type1DArray:
-                descUAV.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE1D;
-                descUAV.Texture1DArray.MipSlice         = static_cast<UINT>( mipmapLevel );
-                descUAV.Texture1DArray.FirstArraySlice  = static_cast<UINT>( textureArrayIndex );
-                descUAV.Texture1DArray.ArraySize        = static_cast<UINT>( texture->getNumSlices() -
-                                                                             textureArrayIndex );
-                break;
-            case TextureTypes::Type2D:
-                descUAV.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE2D;
-                descUAV.Texture2D.MipSlice = static_cast<UINT>( mipmapLevel );
-                break;
-            case TextureTypes::Type2DArray:
-            case TextureTypes::TypeCube:
-            case TextureTypes::TypeCubeArray:
-                descUAV.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE2DARRAY;
-                descUAV.Texture2DArray.MipSlice         = static_cast<UINT>( mipmapLevel );
-                descUAV.Texture2DArray.FirstArraySlice  = textureArrayIndex;
-                descUAV.Texture2DArray.ArraySize        = static_cast<UINT>( texture->getNumSlices() -
-                                                                             textureArrayIndex );
-                break;
-            case TextureTypes::Type3D:
-                descUAV.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE3D;
-                descUAV.Texture3D.MipSlice      = static_cast<UINT>( mipmapLevel );
-                descUAV.Texture3D.FirstWSlice   = 0;
-                descUAV.Texture3D.WSize         = static_cast<UINT>(texture->getDepth());
-                break;
-            default:
-                break;
-            }
-
-            D3D11TextureGpu *dt = static_cast<D3D11TextureGpu*>( texture );
-
-            HRESULT hr = mDevice->CreateUnorderedAccessView( dt->getFinalTextureName(), &descUAV,
-                                                             &mUavs[slot] );
-            if( FAILED(hr) )
-            {
-                if( oldUav )
-                {
-                    oldUav->Release();
-                    oldUav = 0;
-                }
-
-                String errorDescription = mDevice.getErrorDescription(hr);
-                OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr,
-                    "Failed to create UAV state on texture '" + texture->getNameStr() +
-                    "'\nError Description: " + errorDescription,
-                    "D3D11RenderSystem::queueBindUAV" );
-            }
-
-            mMaxModifiedUavPlusOne = std::max( mMaxModifiedUavPlusOne, static_cast<uint8>( slot + 1 ) );
-        }
-        else
-        {
-            if( slot + 1 == mMaxModifiedUavPlusOne )
-            {
-                --mMaxModifiedUavPlusOne;
-                while( mMaxModifiedUavPlusOne != 0 && !mUavs[mMaxModifiedUavPlusOne-1] )
-                    --mMaxModifiedUavPlusOne;
-            }
-        }
-
-        if( oldUav )
-        {
-            oldUav->Release();
-            oldUav = 0;
-        }
-    }
-    //---------------------------------------------------------------------
-    void D3D11RenderSystem::queueBindUAV( uint32 slot, UavBufferPacked *buffer,
-                                          ResourceAccess::ResourceAccess access,
-                                          size_t offset, size_t sizeBytes )
-    {
-        assert( slot < 64 );
-
-        if( !mUavTexPtr[slot] && !mUavBuffers[slot] && !buffer )
-            return;
-
-        mUavsDirty = true;
-
-        if( mUavBuffers[slot] )
-        {
-            //If the UAV view belonged to a buffer, don't decrement the reference count.
-            mUavs[slot] = 0;
-        }
-
-        mUavBuffers[slot] = buffer;
-        mUavTexPtr[slot] = 0;
-
-        //Release oldUav *after* we've created the new UAV (if D3D11 needs
-        //to return the same UAV, if we release it earlier we may cause
-        //unnecessary alloc/deallocations)
-        ID3D11UnorderedAccessView *oldUav = mUavs[slot];
-        mUavs[slot] = 0;
-
-        if( buffer )
-        {
-            assert( dynamic_cast<D3D11UavBufferPacked*>( buffer ) );
-            D3D11UavBufferPacked *uavBufferPacked = static_cast<D3D11UavBufferPacked*>( buffer );
-
-            mUavs[slot] = uavBufferPacked->_bindBufferCommon( offset, sizeBytes );
-
-            mMaxModifiedUavPlusOne = std::max( mMaxModifiedUavPlusOne, static_cast<uint8>( slot + 1 ) );
-        }
-        else
-        {
-            if( slot + 1 == mMaxModifiedUavPlusOne )
-            {
-                --mMaxModifiedUavPlusOne;
-                while( mMaxModifiedUavPlusOne != 0 && !mUavs[mMaxModifiedUavPlusOne-1] )
-                    --mMaxModifiedUavPlusOne;
-            }
-        }
-
-        if( oldUav )
-        {
-            oldUav->Release();
-            oldUav = 0;
-        }
-    }
-    //---------------------------------------------------------------------
-    void D3D11RenderSystem::clearUAVs(void)
-    {
-        mUavsDirty = true;
-
-        for( size_t i=0; i<64; ++i )
-        {
-            mUavTexPtr[i] = 0;
-
-            if( mUavs[i] )
-            {
-                //If the UAV view belonged to a buffer, don't decrement the reference count.
-                if( !mUavBuffers[i] )
-                    mUavs[i]->Release();
-                mUavs[i] = 0;
-            }
-        }
-    }
-    //---------------------------------------------------------------------
-    void D3D11RenderSystem::flushUAVs(void)
-    {
-        mUavsDirty = false;
-
-#if TODO_OGRE_2_2
-        uint8 flags = VP_RTT_COLOUR_WRITE;
-        if( mActiveViewport )
-            flags = mActiveViewport->getViewportRenderTargetFlags();
-        _setRenderTargetViews( flags );
-#endif
-    }
-    //---------------------------------------------------------------------
-    void D3D11RenderSystem::_bindTextureUavCS( uint32 slot, TextureGpu *texture,
-                                               ResourceAccess::ResourceAccess access,
-                                               int32 mipmapLevel, int32 textureArrayIndex,
-                                               PixelFormatGpu pixelFormat )
-    {
-#if TODO_OGRE_2_2
-        if( texture )
-        {
-            D3D11TextureGpu *dt = static_cast<D3D11TextureGpu*>( texture );
-            ID3D11UnorderedAccessView *uavView = dt->getUavView( mipmapLevel, textureArrayIndex, pixelFormat );
-            mDevice.GetImmediateContext()->CSSetUnorderedAccessViews( slot, 1, &uavView, NULL );
-
-            mMaxBoundUavCS = std::max( mMaxBoundUavCS, slot );
-        }
-        else
-        {
-            ID3D11UnorderedAccessView *nullUavView = NULL;
-            mDevice.GetImmediateContext()->CSSetUnorderedAccessViews( slot, 1, &nullUavView, NULL );
         }
 #endif
     }
@@ -3185,7 +3073,7 @@ namespace Ogre
             for( size_t j=0u; j<numTexturesUsed; ++j )
             {
                 const D3D11TextureGpu *texture = static_cast<const D3D11TextureGpu*>( *itor );
-                srvList[texIdx] = texture->createSrv( texture->getPixelFormat(), false );
+                srvList[texIdx] = texture->createSrv();
 
                 ++texIdx;
                 ++itor;
@@ -3202,6 +3090,90 @@ namespace Ogre
             srvList[i]->Release();
 
         delete [] srvList;
+        set->mRsData = 0;
+    }
+    //---------------------------------------------------------------------
+    void D3D11RenderSystem::_descriptorSetTexture2Created( DescriptorSetTexture2 *newSet )
+    {
+        const size_t numElements = newSet->mTextures.size();
+        ID3D11ShaderResourceView **srvList = new ID3D11ShaderResourceView*[numElements];
+        newSet->mRsData = srvList;
+
+        FastArray<DescriptorSetTexture2::Slot>::const_iterator itor = newSet->mTextures.begin();
+
+        for( size_t i=0u; i<numElements; ++i )
+        {
+            if( itor->empty() )
+                srvList[i] = 0;
+            else if( itor->isTexture() )
+            {
+                const DescriptorSetTexture2::TextureSlot &texSlot = itor->getTexture();
+                const D3D11TextureGpu *texture = static_cast<const D3D11TextureGpu*>( texSlot.texture );
+                srvList[i] = texture->createSrv( texSlot );
+            }
+            else
+            {
+                const DescriptorSetTexture2::BufferSlot &bufferSlot = itor->getBuffer();
+                const D3D11TexBufferPacked *texBuffer =
+                        static_cast<const D3D11TexBufferPacked*>( bufferSlot.buffer );
+                srvList[i] = texBuffer->createSrv( bufferSlot );
+            }
+
+            ++itor;
+        }
+    }
+    //---------------------------------------------------------------------
+    void D3D11RenderSystem::_descriptorSetTexture2Destroyed( DescriptorSetTexture2 *set )
+    {
+        const size_t numElements = set->mTextures.size();
+        ID3D11ShaderResourceView **srvList =
+                reinterpret_cast<ID3D11ShaderResourceView**>( set->mRsData );
+        for( size_t i=0; i<numElements; ++i )
+            srvList[i]->Release();
+
+        delete [] srvList;
+        set->mRsData = 0;
+    }
+    //---------------------------------------------------------------------
+    void D3D11RenderSystem::_descriptorSetUavCreated( DescriptorSetUav *newSet )
+    {
+        const size_t numElements = newSet->mUavs.size();
+        ID3D11UnorderedAccessView **uavList = new ID3D11UnorderedAccessView*[numElements];
+        newSet->mRsData = uavList;
+
+        FastArray<DescriptorSetUav::Slot>::const_iterator itor = newSet->mUavs.begin();
+
+        for( size_t i=0u; i<numElements; ++i )
+        {
+            if( itor->empty() )
+                uavList[i] = 0;
+            else if( itor->isTexture() )
+            {
+                const DescriptorSetUav::TextureSlot &texSlot = itor->getTexture();
+                const D3D11TextureGpu *texture = static_cast<const D3D11TextureGpu*>( texSlot.texture );
+                uavList[i] = texture->createUav( texSlot );
+            }
+            else
+            {
+                const DescriptorSetUav::BufferSlot &bufferSlot = itor->getBuffer();
+                const D3D11UavBufferPacked *uavBuffer =
+                        static_cast<const D3D11UavBufferPacked*>( bufferSlot.buffer );
+                uavList[i] = uavBuffer->createUav( bufferSlot );
+            }
+
+            ++itor;
+        }
+    }
+    //---------------------------------------------------------------------
+    void D3D11RenderSystem::_descriptorSetUavDestroyed( DescriptorSetUav *set )
+    {
+        const size_t numElements = set->mUavs.size();
+        ID3D11UnorderedAccessView **uavList =
+                reinterpret_cast<ID3D11UnorderedAccessView**>( set->mRsData );
+        for( size_t i=0; i<numElements; ++i )
+            uavList[i]->Release();
+
+        delete [] uavList;
         set->mRsData = 0;
     }
     //---------------------------------------------------------------------
@@ -3376,13 +3348,6 @@ namespace Ogre
         if( pso )
         {
             newComputeShader = reinterpret_cast<D3D11HLSLProgram*>( pso->rsData );
-
-            {
-                //Using Compute Shaders? Unset the UAV from rendering
-                mDevice.GetImmediateContext()->OMSetRenderTargets( 0, 0, 0 );
-                mUavsDirty = true;
-            }
-
             if( mBoundComputeProgram == newComputeShader )
                 return;
         }

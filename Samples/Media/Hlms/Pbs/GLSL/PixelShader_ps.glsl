@@ -299,10 +299,12 @@ void main()
 		//SV_Coverage/gl_SampleMaskIn is always before depth & stencil tests,
 		//so we need to perform the test ourselves
 		//See http://www.yosoygames.com.ar/wp/2017/02/beware-of-sv_coverage/
+		uint sampleMask = uint( gl_SampleMaskIn[0] );
 		float msaaDepth;
-		int subsampleDepthMask;
+		uint subsampleDepthMask;
 		float pixelDepthZ;
 		float pixelDepthW;
+		vec2 pixelDepthZW;
 		float pixelDepth;
 		int intPixelDepth;
 		int intMsaaDepth;
@@ -310,20 +312,21 @@ void main()
 		//200 & 5 are arbitrary, but were empirically found to be very good values.
 		int ulpError = int( lerp( 200.0, 5.0, gl_FragCoord.z ) );
 		@foreach( hlms_use_prepass_msaa, n )
-			pixelDepthZ = interpolateAtSample( inPs.zwDepth.x, @n );
-			pixelDepthW = interpolateAtSample( inPs.zwDepth.y, @n );
+			pixelDepthZW = interpolateAtSample( inPs.zwDepth, @n );
+			pixelDepthZ = pixelDepthZW.x;
+			pixelDepthW = pixelDepthZW.y;
 			pixelDepth = pixelDepthZ / pixelDepthW;
-			msaaDepth = texelFetch( gBuf_depthTexture, iFragCoord.xy, @n );
+			msaaDepth = texelFetch( gBuf_depthTexture, iFragCoord.xy, @n ).x;
 			intPixelDepth = floatBitsToInt( pixelDepth );
 			intMsaaDepth = floatBitsToInt( msaaDepth );
-			subsampleDepthMask = int( (abs( intPixelDepth - intMsaaDepth ) <= ulpError) ? 0xffffffffu : ~(1u << @nu) );
+			subsampleDepthMask = (abs( intPixelDepth - intMsaaDepth ) <= ulpError) ? 0xffffffffu : ~(1u << @nu);
 			//subsampleDepthMask = int( (pixelDepth <= msaaDepth) ? 0xffffffffu : ~(1u << @nu) );
-			gl_SampleMaskIn &= subsampleDepthMask;
+			sampleMask &= subsampleDepthMask;
 		@end
 
-		gl_SampleMaskIn[0] = gl_SampleMaskIn[0] == 0u ? 1u : gl_SampleMaskIn[0];
+		sampleMask = sampleMask == 0u ? 1u : sampleMask;
 
-		int gBufSubsample = findLSB( gl_SampleMaskIn[0] );
+		int gBufSubsample = int( findLSB( sampleMask ) );
 	@end @property( !hlms_use_prepass_msaa )
 		//On non-msaa RTTs gBufSubsample is the LOD level.
 		int gBufSubsample = 0;

@@ -60,7 +60,7 @@ namespace Ogre {
         @version
             1.0
      */
-    class _OgreExport RenderTarget : public GpuResource2, public RenderSysAlloc
+    class _OgreExport RenderTarget : public GpuTrackedResource, public RenderSysAlloc
     {
     public:
         enum StatFlags

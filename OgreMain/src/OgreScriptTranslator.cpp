@@ -7879,55 +7879,47 @@ namespace Ogre{
         else
             nodeDef = any_cast<CompositorNodeDef*>(obj->parent->context);
 
-        if( !obj->name.empty() )
+        uint32 rtIndex = 0;
+        if( !obj->values.empty() )
         {
-            uint32 rtIndex = 0;
-            if( !obj->values.empty() )
+            AbstractNodeList::const_iterator sliceIt = obj->values.begin();
+
+            if( !getUInt( *sliceIt, &rtIndex ) )
             {
-                AbstractNodeList::const_iterator sliceIt = obj->values.begin();
-
-                if( !getUInt( *sliceIt, &rtIndex ) )
+                String cubemapHint;
+                if( getString( *sliceIt, &cubemapHint ) )
                 {
-                    String cubemapHint;
-                    if( getString( *sliceIt, &cubemapHint ) )
-                    {
-                        StringUtil::toUpperCase( cubemapHint );
+                    StringUtil::toUpperCase( cubemapHint );
 
-                        if( cubemapHint == "+X" || cubemapHint == "X" )
-                        {
-                            rtIndex = 0;
-                        }
-                        else if( cubemapHint == "-X" )
-                        {
-                            rtIndex = 1;
-                        }
-                        else if( cubemapHint == "+Y" || cubemapHint == "Y" )
-                        {
-                            rtIndex = 2;
-                        }
-                        else if( cubemapHint == "-Y" )
-                        {
-                            rtIndex = 3;
-                        }
-                        else if( cubemapHint == "+Z" || cubemapHint == "Z" )
-                        {
-                            rtIndex = 4;
-                        }
-                        else if( cubemapHint == "-Z" )
-                        {
-                            rtIndex = 5;
-                        }
+                    if( cubemapHint == "+X" || cubemapHint == "X" )
+                    {
+                        rtIndex = 0;
+                    }
+                    else if( cubemapHint == "-X" )
+                    {
+                        rtIndex = 1;
+                    }
+                    else if( cubemapHint == "+Y" || cubemapHint == "Y" )
+                    {
+                        rtIndex = 2;
+                    }
+                    else if( cubemapHint == "-Y" )
+                    {
+                        rtIndex = 3;
+                    }
+                    else if( cubemapHint == "+Z" || cubemapHint == "Z" )
+                    {
+                        rtIndex = 4;
+                    }
+                    else if( cubemapHint == "-Z" )
+                    {
+                        rtIndex = 5;
                     }
                 }
             }
+        }
 
-            mTargetDef = nodeDef->addTargetPass( obj->name, rtIndex );
-        }
-        else
-        {
-            compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, node->file, node->line);
-            return;
-        }
+        mTargetDef = nodeDef->addTargetPass( obj->name, rtIndex );
 
         obj->context = Any(mTargetDef);
 
@@ -9818,17 +9810,10 @@ namespace Ogre{
                 break;
                 case ID_KEEP_PREVIOUS_UAV:
                 {
-                    if(prop->values.empty())
-                    {
-                        compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line);
-                        return;
-                    }
-
-                    AbstractNodeList::const_iterator it0 = prop->values.begin();
-                    if( !getBoolean( *it0, &passUav->mKeepPreviousUavs ) )
-                    {
-                         compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line);
-                    }
+                    compiler->addError( ScriptCompiler::CE_REFERENCETOANONEXISTINGOBJECT,
+                                        prop->file, prop->line,
+                                        "keep_previous_uav was removed. "
+                                        "You must redefine all UAVs now!" );
                 }
                 break;
                 //case ID_VIEWPORT:

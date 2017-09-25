@@ -127,7 +127,10 @@ namespace Ogre
 
         if( mMsaa > 1u )
         {
-            const GLboolean fixedsamplelocations = mMsaaPattern != MsaaPatterns::Undefined;
+            //const GLboolean fixedsamplelocations = mMsaaPattern != MsaaPatterns::Undefined;
+            //RENDERBUFFERS have fixedsamplelocations implicitly set to true. Be consistent
+            //with non-texture depth buffers.
+            const GLboolean fixedsamplelocations = GL_TRUE;
 
             if( !isTexture() ||
                 (!hasMsaaExplicitResolves() && !PixelFormatGpuUtils::isDepth( mPixelFormat )) )
@@ -151,11 +154,6 @@ namespace Ogre
                 OCGE( glBindTexture( mGlTextureTarget, mFinalTextureName ) );
                 OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_BASE_LEVEL, 0 ) );
                 OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_MAX_LEVEL, 0 ) );
-                OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_MIN_FILTER, GL_NEAREST ) );
-                OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_MAG_FILTER, GL_NEAREST ) );
-                OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE ) );
-                OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE ) );
-                OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE ) );
                 OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_MAX_LEVEL, mNumMipmaps - 1u ) );
 
                 if( mTextureType == TextureTypes::Type2D )
@@ -207,7 +205,7 @@ namespace Ogre
     void GL3PlusTextureGpu::notifyDataIsReady(void)
     {
         assert( mResidencyStatus == GpuResidency::Resident );
-        assert( mFinalTextureName );
+        assert( mFinalTextureName || mPixelFormat == PFG_NULL );
 
         mDisplayTextureName = mFinalTextureName;
 
@@ -586,10 +584,15 @@ namespace Ogre
         mPreferDepthTexture( false ),
         mDesiredDepthBufferFormat( PFG_UNKNOWN )
     {
+        if( mPixelFormat == PFG_NULL )
+            mDepthBufferPoolId = 0;
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusTextureGpuRenderTarget::createInternalResourcesImpl(void)
     {
+        if( mPixelFormat == PFG_NULL )
+            return; //Nothing to do
+
         if( isTexture() || !PixelFormatGpuUtils::isDepth( mPixelFormat ) )
         {
             GL3PlusTextureGpu::createInternalResourcesImpl();

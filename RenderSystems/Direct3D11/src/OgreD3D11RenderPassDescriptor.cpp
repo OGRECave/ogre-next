@@ -182,6 +182,9 @@ namespace Ogre
                              "D3D11RenderPassDescriptor::updateColourRtv" );
             }
 
+            if( mColour[i].texture->getPixelFormat() == PFG_NULL )
+                continue;
+
             D3D11_RENDER_TARGET_VIEW_DESC viewDesc;
             memset( &viewDesc, 0, sizeof(viewDesc) );
             viewDesc.Format = D3D11Mappings::get( mColour[i].texture->getPixelFormat() );
@@ -398,7 +401,9 @@ namespace Ogre
         return entriesToFlush;
     }
     //-----------------------------------------------------------------------------------
-    void D3D11RenderPassDescriptor::performLoadActions( Viewport *viewport, uint32 entriesToFlush )
+    void D3D11RenderPassDescriptor::performLoadActions( Viewport *viewport, uint32 entriesToFlush,
+                                                        uint32 uavStartingSlot,
+                                                        const DescriptorSetUav *descSetUav )
     {
         if( mInformationOnly )
             return;
@@ -503,7 +508,17 @@ namespace Ogre
             }
         }
 
-        context->OMSetRenderTargets( mNumColourEntries, mColourRtv, mDepthStencilRtv );
+        if( !descSetUav )
+            context->OMSetRenderTargets( mNumColourEntries, mColourRtv, mDepthStencilRtv );
+        else
+        {
+            const UINT numUavs = static_cast<UINT>( descSetUav->mUavs.size() );
+            ID3D11UnorderedAccessView **uavList =
+                    reinterpret_cast<ID3D11UnorderedAccessView**>( descSetUav->mRsData );
+            context->OMSetRenderTargetsAndUnorderedAccessViews( mNumColourEntries, mColourRtv,
+                                                                mDepthStencilRtv, uavStartingSlot,
+                                                                numUavs, uavList, 0 );
+        }
     }
     //-----------------------------------------------------------------------------------
     void D3D11RenderPassDescriptor::performStoreActions( uint32 x, uint32 y,
@@ -573,9 +588,7 @@ namespace Ogre
         }
 
         //Prevent the runtime from thinking we might be sampling from the render target
-        ID3D11RenderTargetView *nullTargets[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
-        memset( nullTargets, 0, sizeof(nullTargets) );
-        context->OMSetRenderTargets( mNumColourEntries, nullTargets, 0 );
+        context->OMSetRenderTargets( 0, 0, 0 );
     }
     //-----------------------------------------------------------------------------------
     void D3D11RenderPassDescriptor::clearFrameBuffer(void)

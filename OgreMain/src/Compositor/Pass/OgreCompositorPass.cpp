@@ -66,7 +66,8 @@ namespace Ogre
 
     CompositorPass::CompositorPass( const CompositorPassDef *definition,
                                     const RenderTargetViewDef *rtv,
-                                    CompositorNode *parentNode ) :
+                                    CompositorNode *parentNode,
+                                    bool supportsNoRtv ) :
             mDefinition( definition ),
             mRenderPassDesc( 0 ),
             mAnyTargetTexture( 0 ),
@@ -76,16 +77,30 @@ namespace Ogre
     {
         assert( definition->mNumInitialPasses && "Definition is broken, pass will never execute!" );
 
-        RenderSystem *renderSystem = mParentNode->getRenderSystem();
-        mRenderPassDesc = renderSystem->createRenderPassDescriptor();
-        setupRenderPassDesc( rtv );
+        if( !supportsNoRtv && !rtv )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "No RenderTargetViewDef provided to this compositor pass "
+                         "(e.g. you wrote target {} instead of target myTexture {}.\n"
+                         "Only a few compositor passes support this (e.g. Compute passes)\n"
+                         "Node with error: " +
+                         definition->getParentTargetDef()->getParentNodeDef()->getNameStr() + "\n",
+                         "CompositorPass::CompositorPass" );
+        }
 
-        for( int i=0; i<mRenderPassDesc->getNumColourEntries() && !mAnyTargetTexture; ++i )
-            mAnyTargetTexture = mRenderPassDesc->mColour[i].texture;
-        if( !mAnyTargetTexture )
-            mAnyTargetTexture = mRenderPassDesc->mDepth.texture;
-        if( !mAnyTargetTexture )
-            mAnyTargetTexture = mRenderPassDesc->mStencil.texture;
+        RenderSystem *renderSystem = mParentNode->getRenderSystem();
+        if( rtv )
+        {
+            mRenderPassDesc = renderSystem->createRenderPassDescriptor();
+            setupRenderPassDesc( rtv );
+
+            for( int i=0; i<mRenderPassDesc->getNumColourEntries() && !mAnyTargetTexture; ++i )
+                mAnyTargetTexture = mRenderPassDesc->mColour[i].texture;
+            if( !mAnyTargetTexture )
+                mAnyTargetTexture = mRenderPassDesc->mDepth.texture;
+            if( !mAnyTargetTexture )
+                mAnyTargetTexture = mRenderPassDesc->mStencil.texture;
+        }
 
         populateTextureDependenciesFromExposedTextures();
     }
@@ -180,7 +195,8 @@ namespace Ogre
         renderPassDesc->mDepth.loadAction       = mDefinition->mLoadActionDepth;
         renderPassDesc->mDepth.storeAction      = mDefinition->mStoreActionDepth;
         renderPassDesc->mDepth.clearDepth       = mDefinition->mClearDepth;
-        renderPassDesc->mDepth.readOnly         = rtv->depthReadOnly && mDefinition->mReadOnlyDepth;
+        renderPassDesc->mDepth.readOnly         = rtv->depthReadOnly ||
+                                                  mDefinition->mReadOnlyDepth;
         setupRenderPassTarget( &renderPassDesc->mDepth, rtv->depthAttachment, false,
                                renderPassDesc->mColour[0].texture, rtv->depthBufferId,
                                rtv->preferDepthTexture, rtv->depthBufferFormat );
@@ -215,7 +231,8 @@ namespace Ogre
             renderPassDesc->mStencil.loadAction     = mDefinition->mLoadActionStencil;
             renderPassDesc->mStencil.storeAction    = mDefinition->mStoreActionStencil;
             renderPassDesc->mStencil.clearStencil   = mDefinition->mClearStencil;
-            renderPassDesc->mStencil.readOnly       = rtv->stencilReadOnly && mDefinition->mReadOnlyStencil;
+            renderPassDesc->mStencil.readOnly       = rtv->stencilReadOnly ||
+                                                      mDefinition->mReadOnlyStencil;
             setupRenderPassTarget( &renderPassDesc->mStencil, rtv->stencilAttachment, false,
                                    renderPassDesc->mColour[0].texture, rtv->depthBufferId,
                                    rtv->preferDepthTexture, rtv->depthBufferFormat );
@@ -461,7 +478,6 @@ namespace Ogre
                                             BoundUav boundUavs[64], ResourceAccessMap &uavsAccess,
                                             ResourceLayoutMap &resourcesLayout )
     {
-#if TODO_placeBarriersAndEmulateUavExecution
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
         const RenderSystemCapabilities *caps = renderSystem->getCapabilities();
         const bool explicitApi = caps->hasCapability( RSC_EXPLICIT_API );
@@ -479,7 +495,7 @@ namespace Ogre
                     itor->writeBarrierBits & WriteBarrier::Uav &&
                     itor->readBarrierBits & ReadBarrier::Uav )
                 {
-                    RenderTarget *renderTarget = 0;
+                    TextureGpu *renderTarget = 0;
                     resourcesLayout[renderTarget] = ResourceLayout::Uav;
                     //Set to undefined so that following passes
                     //can see it's safe / shielded by a barrier
@@ -489,15 +505,55 @@ namespace Ogre
             }
         }
 
+        if( mRenderPassDesc )
         {
             //Check <anything> -> RT
-            ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( mTarget );
-            if( (currentLayout->second != ResourceLayout::RenderTarget && explicitApi) ||
-                currentLayout->second == ResourceLayout::Uav )
+            ResourceLayoutMap::iterator currentLayout;
+            for( int i=0; i<mRenderPassDesc->getNumColourEntries(); ++i )
             {
-                addResourceTransition( currentLayout,
-                                       ResourceLayout::RenderTarget,
-                                       ReadBarrier::RenderTarget );
+                currentLayout = resourcesLayout.find( mRenderPassDesc->mColour[i].texture );
+                if( (currentLayout->second != ResourceLayout::RenderTarget && explicitApi) ||
+                    currentLayout->second == ResourceLayout::Uav )
+                {
+                    addResourceTransition( currentLayout,
+                                           ResourceLayout::RenderTarget,
+                                           ReadBarrier::RenderTarget );
+                }
+            }
+            if( mRenderPassDesc->mDepth.texture )
+            {
+                currentLayout = resourcesLayout.find( mRenderPassDesc->mDepth.texture );
+                if( currentLayout == resourcesLayout.end() )
+                {
+                    resourcesLayout[mRenderPassDesc->mDepth.texture] = ResourceLayout::Undefined;
+                    currentLayout = resourcesLayout.find( mRenderPassDesc->mDepth.texture );
+                }
+
+                if( (currentLayout->second != ResourceLayout::RenderDepth && explicitApi) ||
+                    currentLayout->second == ResourceLayout::Uav )
+                {
+                    addResourceTransition( currentLayout,
+                                           ResourceLayout::RenderDepth,
+                                           ReadBarrier::DepthStencil );
+                }
+            }
+            if( mRenderPassDesc->mStencil.texture &&
+                mRenderPassDesc->mStencil.texture != mRenderPassDesc->mDepth.texture )
+            {
+                currentLayout = resourcesLayout.find( mRenderPassDesc->mStencil.texture );
+                if( currentLayout == resourcesLayout.end() )
+                {
+                    resourcesLayout[mRenderPassDesc->mStencil.texture] = ResourceLayout::Undefined;
+                    currentLayout = resourcesLayout.find( mRenderPassDesc->mStencil.texture );
+                }
+
+                if( (currentLayout->second != ResourceLayout::RenderDepth && explicitApi) ||
+                    currentLayout->second == ResourceLayout::Uav )
+                {
+                    addResourceTransition( currentLayout,
+                                           ResourceLayout::RenderDepth,
+                                           ReadBarrier::DepthStencil );
+                }
             }
         }
 
@@ -508,15 +564,13 @@ namespace Ogre
 
             while( itDep != enDep )
             {
-                TexturePtr texture = itDep->textures->front();
-                RenderTarget *renderTarget = texture->getBuffer()->getRenderTarget();
+                TextureGpu *renderTarget = itDep->texture;
 
                 ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( renderTarget );
 
                 if( (currentLayout->second != ResourceLayout::Texture && explicitApi) ||
                      currentLayout->second == ResourceLayout::Uav )
                 {
-                    //TODO: Account for depth textures.
                     addResourceTransition( currentLayout,
                                            ResourceLayout::Texture,
                                            ReadBarrier::Texture );
@@ -534,7 +588,7 @@ namespace Ogre
 
         while( itor != end )
         {
-            GpuResource2 *uavRt = boundUavs[itor->uavSlot].rttOrBuffer;
+            GpuTrackedResource *uavRt = boundUavs[itor->uavSlot].rttOrBuffer;
 
             if( !uavRt )
             {
@@ -587,7 +641,6 @@ namespace Ogre
 
             ++itor;
         }
-#endif
     }
     //-----------------------------------------------------------------------------------
     void CompositorPass::_removeAllBarriers(void)

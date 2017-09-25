@@ -108,7 +108,8 @@ namespace Ogre
         uint32 willSwitchTo( D3D11RenderPassDescriptor *newDesc, bool viewportChanged,
                              bool warnIfRtvWasFlushed ) const;
 
-        void performLoadActions( Viewport *viewport, uint32 entriesToFlush );
+        void performLoadActions( Viewport *viewport, uint32 entriesToFlush,
+                                 uint32 uavStartingSlot, const DescriptorSetUav *descSetUav );
         void performStoreActions( uint32 x, uint32 y,
                                   uint32 width, uint32 height, uint32 entriesToFlush );
 

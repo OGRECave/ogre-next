@@ -68,6 +68,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "Vao/OgreGL3PlusBufferInterface.h"
 #include "Vao/OgreIndexBufferPacked.h"
 #include "Vao/OgreIndirectBufferPacked.h"
+#include "Vao/OgreTexBufferPacked.h"
 #include "Vao/OgreUavBufferPacked.h"
 #include "CommandBuffer/OgreCbDrawCall.h"
 #include "OgreRoot.h"
@@ -154,8 +155,7 @@ namespace Ogre {
           mRTTManager(0),
           mActiveTextureUnit(0),
           mHasArbInvalidateSubdata( false ),
-          mNullColourFramebuffer( 0 ),
-          mMaxModifiedUavPlusOne( 0 )
+          mNullColourFramebuffer( 0 )
     {
         size_t i;
 
@@ -187,6 +187,8 @@ namespace Ogre {
         mMinFilter = FO_LINEAR;
         mMipFilter = FO_POINT;
         mSwIndirectBufferPtr = 0;
+        mFirstUavBoundSlot = 255;
+        mLastUavBoundPlusOne = 0;
         mClipDistances = 0;
         mPso = 0;
         mCurrentComputeShader = 0;
@@ -520,7 +522,7 @@ namespace Ogre {
         // Compute Program Properties
         if (mGLSupport->checkExtension("GL_ARB_compute_shader") || mHasGL43)
         {
-            //rsc->setCapability(RSC_COMPUTE_PROGRAM);
+            rsc->setCapability(RSC_COMPUTE_PROGRAM);
 
             //FIXME Is this correct?
             OGRE_CHECK_GL_ERROR(glGetFloatv(GL_MAX_COMPUTE_UNIFORM_COMPONENTS, &floatConstantCount));
@@ -922,6 +924,8 @@ namespace Ogre {
         if( desc->mInformationOnly && desc->hasSameAttachments( mCurrentRenderPassDescriptor ) )
             return;
 
+        flushUAVs();
+
         const int oldWidth = mCurrentRenderViewport.getActualWidth();
         const int oldHeight = mCurrentRenderViewport.getActualHeight();
         const int oldX = mCurrentRenderViewport.getActualLeft();
@@ -995,15 +999,19 @@ namespace Ogre {
     //-----------------------------------------------------------------------------------
     void GL3PlusRenderSystem::endRenderPassDescriptor(void)
     {
-        uint32 x, y, w, h;
-        w = mCurrentRenderViewport.getActualWidth();
-        h = mCurrentRenderViewport.getActualHeight();
-        x = mCurrentRenderViewport.getActualLeft();
-        y = mCurrentRenderViewport.getActualTop();
+        if( mCurrentRenderPassDescriptor )
+        {
+            uint32 x, y, w, h;
+            w = mCurrentRenderViewport.getActualWidth();
+            h = mCurrentRenderViewport.getActualHeight();
+            x = mCurrentRenderViewport.getActualLeft();
+            y = mCurrentRenderViewport.getActualTop();
 
-        GL3PlusRenderPassDescriptor *passDesc =
-                static_cast<GL3PlusRenderPassDescriptor*>( mCurrentRenderPassDescriptor );
-        passDesc->performStoreActions( mHasArbInvalidateSubdata, x, y, w, h, RenderPassDescriptor::All );
+            GL3PlusRenderPassDescriptor *passDesc =
+                    static_cast<GL3PlusRenderPassDescriptor*>( mCurrentRenderPassDescriptor );
+            passDesc->performStoreActions( mHasArbInvalidateSubdata, x, y, w, h, RenderPassDescriptor::All );
+        }
+        OCGE( glBindFramebuffer( GL_FRAMEBUFFER, 0 ) );
 
         RenderSystem::endRenderPassDescriptor();
     }
@@ -1166,6 +1174,50 @@ namespace Ogre {
         OCGE( glActiveTexture( GL_TEXTURE0 ) );
     }
 
+    void GL3PlusRenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture2 *set )
+    {
+        uint32 texUnit = slotStart;
+
+        FastArray<DescriptorSetTexture2::Slot>::const_iterator itor = set->mTextures.begin();
+        FastArray<DescriptorSetTexture2::Slot>::const_iterator end  = set->mTextures.end();
+
+        while( itor != end )
+        {
+            OCGE( glActiveTexture( static_cast<uint32>( GL_TEXTURE0 + texUnit ) ) );
+
+            if( itor->slotType == DescriptorSetUav::SlotTypeBuffer )
+            {
+                //Bind buffer
+                const DescriptorSetTexture2::BufferSlot &bufferSlot = itor->getBuffer();
+                if( bufferSlot.buffer )
+                    bufferSlot.buffer->_bindBufferDirectly( bufferSlot.offset, bufferSlot.sizeBytes );
+            }
+            else
+            {
+                //Bind texture
+                const DescriptorSetTexture2::TextureSlot &texSlot = itor->getTexture();
+                if( texSlot.texture )
+                {
+                    const GL3PlusTextureGpu *textureGpu =
+                            static_cast<const GL3PlusTextureGpu*>( texSlot.texture );
+                    const GLenum texTarget  = textureGpu->getGlTextureTarget();
+                    const GLuint texName    = textureGpu->getDisplayTextureName();
+                    OCGE( glBindTexture( texTarget, texName ) );
+                    mTextureTypes[texUnit] = texTarget;
+                }
+                else
+                {
+                    OCGE( glBindTexture( mTextureTypes[texUnit], 0 ) );
+                }
+            }
+
+            ++texUnit;
+            ++itor;
+        }
+
+        OCGE( glActiveTexture( GL_TEXTURE0 ) );
+    }
+
     void GL3PlusRenderSystem::_setSamplers( uint32 slotStart, const DescriptorSetSampler *set )
     {
         uint32 texUnit = slotStart;
@@ -1195,6 +1247,112 @@ namespace Ogre {
         }
     }
 
+    void GL3PlusRenderSystem::_setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set )
+    {
+        _setTextures( slotStart, set );
+    }
+
+    void GL3PlusRenderSystem::_setTexturesCS( uint32 slotStart, const DescriptorSetTexture2 *set )
+    {
+        _setTextures( slotStart, set );
+    }
+
+    void GL3PlusRenderSystem::_setSamplersCS( uint32 slotStart, const DescriptorSetSampler *set )
+    {
+        _setSamplers( slotStart, set );
+    }
+
+    void GL3PlusRenderSystem::setBufferUavCS( uint32 slot,
+                                              const DescriptorSetUav::BufferSlot &bufferSlot )
+    {
+        if( bufferSlot.buffer )
+        {
+            bufferSlot.buffer->bindBufferCS( slot, bufferSlot.offset, bufferSlot.sizeBytes );
+        }
+        else
+        {
+            OCGE( glBindImageTexture( slot, 0, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R32UI ) );
+            OCGE( glBindBufferRange( GL_SHADER_STORAGE_BUFFER, slot, 0, 0, 0 ) );
+        }
+    }
+
+    void GL3PlusRenderSystem::setTextureUavCS( uint32 slot,
+                                               const DescriptorSetUav::TextureSlot &texSlot )
+    {
+        if( texSlot.texture )
+        {
+            GLenum access;
+            switch( texSlot.access )
+            {
+            case ResourceAccess::Read:
+                access = GL_READ_ONLY;
+                break;
+            case ResourceAccess::Write:
+                access = GL_WRITE_ONLY;
+                break;
+            case ResourceAccess::ReadWrite:
+                access = GL_READ_WRITE;
+                break;
+            default:
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Invalid ResourceAccess parameter '" +
+                             StringConverter::toString( texSlot.access ) + "'",
+                             "GL3PlusRenderSystem::setTextureUavCS" );
+                break;
+            }
+
+            PixelFormatGpu pixelFormat = texSlot.pixelFormat;
+            if( pixelFormat == PFG_UNKNOWN )
+                pixelFormat = texSlot.texture->getPixelFormat();
+
+            const GLuint textureName =
+                    static_cast<GL3PlusTextureGpu*>(texSlot.texture)->getDisplayTextureName();
+            GLboolean isArrayTexture;
+            const TextureTypes::TextureTypes textureType = texSlot.texture->getTextureType();
+            if( textureType == TextureTypes::Type1DArray ||
+                textureType == TextureTypes::Type2DArray ||
+                textureType == TextureTypes::TypeCubeArray )
+            {
+                isArrayTexture = GL_TRUE;
+            }
+            else
+            {
+                isArrayTexture = GL_FALSE;
+            }
+            const GLenum format = GL3PlusMappings::get( pixelFormat );
+
+            OCGE( glBindImageTexture( slot, textureName, texSlot.mipmapLevel, isArrayTexture,
+                                      texSlot.textureArrayIndex, access, format ) );
+        }
+        else
+        {
+            OCGE( glBindImageTexture( slot, 0, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R32UI ) );
+            OCGE( glBindBufferRange( GL_SHADER_STORAGE_BUFFER, slot, 0, 0, 0 ) );
+        }
+    }
+
+    void GL3PlusRenderSystem::_setUavCS( uint32 slotStart, const DescriptorSetUav *set )
+    {
+        if( !set )
+            return;
+
+        FastArray<DescriptorSetUav::Slot>::const_iterator itor = set->mUavs.begin();
+        FastArray<DescriptorSetUav::Slot>::const_iterator end  = set->mUavs.end();
+
+        while( itor != end )
+        {
+            if( itor->slotType == DescriptorSetUav::SlotTypeBuffer )
+                setBufferUavCS( slotStart, itor->getBuffer() );
+            else
+                setTextureUavCS( slotStart, itor->getTexture() );
+
+            ++slotStart;
+            ++itor;
+        }
+
+        mFirstUavBoundSlot   = std::min<uint8>( mFirstUavBoundSlot, slotStart );
+        mLastUavBoundPlusOne = std::max<uint8>( mLastUavBoundPlusOne, slotStart + set->mUavs.size() );
+    }
+
     void GL3PlusRenderSystem::_setVertexTexture( size_t unit, TextureGpu *tex )
     {
         _setTexture(unit, tex);
@@ -1215,208 +1373,44 @@ namespace Ogre {
         _setTexture(unit, tex);
     }
 
-    void GL3PlusRenderSystem::setUavStartingSlot( uint32 startingSlot )
-    {
-        if( startingSlot != mUavStartingSlot )
-        {
-            for( uint32 i=0; i<64; ++i )
-            {
-                if( mUavs[i].texture )
-                    mUavs[i].dirty = true;
-            }
-        }
-
-        RenderSystem::setUavStartingSlot( startingSlot );
-    }
-
-    void GL3PlusRenderSystem::queueBindUAV( uint32 slot, TextureGpu *texture,
-                                            ResourceAccess::ResourceAccess access,
-                                            int32 mipmapLevel, int32 textureArrayIndex,
-                                            PixelFormatGpu pixelFormat )
-    {
-        assert( slot < 64 );
-
-        if( !mUavs[slot].buffer && !mUavs[slot].texture && !texture )
-            return;
-
-        mUavs[slot].dirty       = true;
-        mUavs[slot].texture     = texture;
-        mUavs[slot].buffer      = 0;
-
-        if( texture )
-        {
-            if( !texture->isUav() )
-            {
-                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                             "Texture " + texture->getNameStr() +
-                             " must have been created with TextureFlags::Uav to be bound as UAV",
-                             "GL3PlusRenderSystem::queueBindUAV" );
-            }
-
-            if( pixelFormat == PFG_UNKNOWN )
-                pixelFormat = texture->getPixelFormat();
-
-            mUavs[slot].textureName = static_cast<GL3PlusTextureGpu*>(texture)->getDisplayTextureName();
-            mUavs[slot].mipmap      = mipmapLevel;
-            const TextureTypes::TextureTypes textureType = texture->getTextureType();
-            if( textureType == TextureTypes::Type1DArray ||
-                textureType == TextureTypes::Type2DArray ||
-                textureType == TextureTypes::TypeCubeArray )
-            {
-                mUavs[slot].isArrayTexture = GL_TRUE;
-            }
-            else
-            {
-                mUavs[slot].isArrayTexture = GL_FALSE;
-            }
-            mUavs[slot].arrayIndex  = textureArrayIndex;
-            mUavs[slot].format      = GL3PlusMappings::get( pixelFormat );
-
-            switch( access )
-            {
-            case ResourceAccess::Read:
-                mUavs[slot].access = GL_READ_ONLY;
-                break;
-            case ResourceAccess::Write:
-                mUavs[slot].access = GL_WRITE_ONLY;
-                break;
-            case ResourceAccess::ReadWrite:
-                mUavs[slot].access = GL_READ_WRITE;
-                break;
-            default:
-                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Invalid ResourceAccess parameter '" +
-                             StringConverter::toString( access ) + "'",
-                             "GL3PlusRenderSystem::queueBindUAV" );
-                break;
-            }
-        }
-
-        mMaxModifiedUavPlusOne = std::max( mMaxModifiedUavPlusOne, static_cast<uint8>( slot + 1 ) );
-    }
-
-    void GL3PlusRenderSystem::queueBindUAV( uint32 slot, UavBufferPacked *buffer,
-                                            ResourceAccess::ResourceAccess access,
-                                            size_t offset, size_t sizeBytes )
-    {
-        assert( slot < 64 );
-
-        if( !mUavs[slot].texture && !mUavs[slot].buffer && !buffer )
-            return;
-
-        mUavs[slot].dirty   = true;
-        mUavs[slot].buffer  = buffer;
-        mUavs[slot].texture = 0;
-
-        if( buffer )
-        {
-            mUavs[slot].offset      = offset;
-            mUavs[slot].sizeBytes   = sizeBytes;
-        }
-
-        mMaxModifiedUavPlusOne = std::max( mMaxModifiedUavPlusOne, static_cast<uint8>( slot + 1 ) );
-    }
-
-    void GL3PlusRenderSystem::clearUAVs(void)
-    {
-        for( size_t i=0; i<64; ++i )
-        {
-            if( mUavs[i].texture )
-            {
-                mUavs[i].dirty = true;
-                mUavs[i].buffer = 0;
-                mUavs[i].texture= 0;
-                mMaxModifiedUavPlusOne = i + 1;
-            }
-        }
-    }
-
     void GL3PlusRenderSystem::flushUAVs(void)
     {
-        for( uint32 i=0; i<mMaxModifiedUavPlusOne; ++i )
+        if( mUavRenderingDirty )
         {
-            if( mUavs[i].dirty )
+            //Unbind in range [mFirstUavBoundSlot; mUavStartingSlot)
+            if( mFirstUavBoundSlot < mUavStartingSlot )
             {
-                if( mUavs[i].texture )
+                const size_t startingSlot = mUavStartingSlot;
+                for( size_t i=mFirstUavBoundSlot; i<startingSlot; ++i )
                 {
-                    OCGE( glBindImageTexture( mUavStartingSlot + i, mUavs[i].textureName,
-                                              mUavs[i].mipmap, mUavs[i].isArrayTexture,
-                                              mUavs[i].arrayIndex, mUavs[i].access,
-                                              mUavs[i].format ) );
-                }
-                else if( mUavs[i].buffer )
-                {
-                    //bindBufferCS binds it to all stages in GL, so this will do.
-                    mUavs[i].buffer->bindBufferCS( mUavStartingSlot + i, mUavs[i].offset,
-                                                   mUavs[i].sizeBytes );
-                }
-                else
-                {
-                    OCGE( glBindImageTexture( mUavStartingSlot + i, 0, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R32UI ) );
-                    OCGE( glBindBufferRange( GL_SHADER_STORAGE_BUFFER, mUavStartingSlot + i, 0, 0, 0 ) );
+                    OCGE( glBindImageTexture( i, 0, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R32UI ) );
+                    OCGE( glBindBufferRange( GL_SHADER_STORAGE_BUFFER, i, 0, 0, 0 ) );
                 }
 
-                mUavs[i].dirty = false;
+                mFirstUavBoundSlot = 255;
             }
-        }
 
-        mMaxModifiedUavPlusOne = 0;
-    }
-
-    void GL3PlusRenderSystem::_bindTextureUavCS( uint32 slot, TextureGpu *texture,
-                                                 ResourceAccess::ResourceAccess _access,
-                                                 int32 mipmapLevel, int32 textureArrayIndex,
-                                                 PixelFormatGpu pixelFormat )
-    {
-        //Tag as dirty so next flushUAVs will get called when regular rendering resumes.
-        mMaxModifiedUavPlusOne = std::max( static_cast<uint8>(mUavStartingSlot + slot + 1u),
-                                           mMaxModifiedUavPlusOne );
-        mUavs[mUavStartingSlot + slot].dirty = true;
-
-        if( texture )
-        {
-            GLenum access;
-            switch( _access )
+            //Unbind in range [lastUavToBindPlusOne, mLastUavBoundPlusOne)
+            if( !mUavRenderingDescSet ||
+                mLastUavBoundPlusOne > (mUavStartingSlot + mUavRenderingDescSet->mUavs.size()) )
             {
-            case ResourceAccess::Read:
-                access = GL_READ_ONLY;
-                break;
-            case ResourceAccess::Write:
-                access = GL_WRITE_ONLY;
-                break;
-            case ResourceAccess::ReadWrite:
-                access = GL_READ_WRITE;
-                break;
-            default:
-                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Invalid ResourceAccess parameter '" +
-                             StringConverter::toString( _access ) + "'",
-                             "GL3PlusRenderSystem::_bindTextureUavCS" );
-                break;
+                size_t lastUavToBindPlusOne = mUavStartingSlot;
+                if( mUavRenderingDescSet )
+                    lastUavToBindPlusOne += mUavRenderingDescSet->mUavs.size();
+
+                const size_t lastUavBoundPlusOne = mLastUavBoundPlusOne;
+
+                for( size_t i=lastUavToBindPlusOne; i<lastUavBoundPlusOne; ++i )
+                {
+                    OCGE( glBindImageTexture( i, 0, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R32UI ) );
+                    OCGE( glBindBufferRange( GL_SHADER_STORAGE_BUFFER, i, 0, 0, 0 ) );
+                }
+
+                mLastUavBoundPlusOne = 0;
             }
 
-            if( pixelFormat == PFG_UNKNOWN )
-                pixelFormat = texture->getPixelFormat();
-
-            const GLuint textureName = static_cast<GL3PlusTextureGpu*>(texture)->getDisplayTextureName();
-            GLboolean isArrayTexture;
-            const TextureTypes::TextureTypes textureType = texture->getTextureType();
-            if( textureType == TextureTypes::Type1DArray ||
-                textureType == TextureTypes::Type2DArray ||
-                textureType == TextureTypes::TypeCubeArray )
-            {
-                isArrayTexture = GL_TRUE;
-            }
-            else
-            {
-                isArrayTexture = GL_FALSE;
-            }
-            const GLenum format = GL3PlusMappings::get( pixelFormat );
-
-            OCGE( glBindImageTexture( slot, textureName, mipmapLevel, isArrayTexture,
-                                      textureArrayIndex, access, format ) );
-        }
-        else
-        {
-            glBindImageTexture( 0, 0, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R32UI );
+            _setUavCS( mUavStartingSlot, mUavRenderingDescSet );
+            mUavRenderingDirty = false;
         }
     }
 

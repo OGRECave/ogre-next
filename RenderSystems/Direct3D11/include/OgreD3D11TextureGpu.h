@@ -31,6 +31,8 @@ THE SOFTWARE.
 
 #include "OgreD3D11Prerequisites.h"
 #include "OgreTextureGpu.h"
+#include "OgreDescriptorSetTexture.h"
+#include "OgreDescriptorSetUav.h"
 
 #include "OgreHeaderPrefix.h"
 
@@ -79,8 +81,6 @@ namespace Ogre
         virtual void createInternalResourcesImpl(void);
         virtual void destroyInternalResourcesImpl(void);
 
-        ID3D11ShaderResourceView* _createSrv( PixelFormatGpu format, bool cubemapsAs2DArrays ) const;
-
     public:
         D3D11TextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                          VaoManager *vaoManager, IdString name, uint32 textureFlags,
@@ -102,8 +102,11 @@ namespace Ogre
         virtual void _autogenerateMipmaps(void);
 
         //The returned pointer has its ref. count incremented! Caller must decrease it!
-        ID3D11ShaderResourceView* createSrv( PixelFormatGpu format, bool cubemapsAs2DArrays ) const;
+        ID3D11ShaderResourceView* createSrv( const DescriptorSetTexture2::TextureSlot &texSlot ) const;
+        ID3D11ShaderResourceView* createSrv(void) const;
         ID3D11ShaderResourceView* getDefaultDisplaySrv(void) const  { return mDefaultDisplaySrv; }
+
+        ID3D11UnorderedAccessView* createUav( const DescriptorSetUav::TextureSlot &texSlot ) const;
 
         virtual bool isMsaaPatternSupported( MsaaPatterns::MsaaPatterns pattern );
         virtual void getSubsampleLocations( vector<Vector2>::type locations );

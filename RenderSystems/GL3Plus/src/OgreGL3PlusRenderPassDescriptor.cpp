@@ -199,6 +199,13 @@ namespace Ogre
             }
         }
 
+        if( !mHasRenderWindow )
+        {
+            OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, 0 ) );
+            OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, 0 ) );
+            OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_SAMPLES, 0 ) );
+        }
+
         bool needsMsaaResolveFbo = false;
 
         //Attach colour entries
@@ -211,7 +218,7 @@ namespace Ogre
                              "GL3PlusRenderPassDescriptor::updateColourFbo" );
             }
 
-            if( !mHasRenderWindow )
+            if( !mHasRenderWindow && mColour[i].texture->getPixelFormat() != PFG_NULL )
             {
                 assert( dynamic_cast<GL3PlusTextureGpu*>( mColour[i].texture ) );
                 GL3PlusTextureGpu *texture = static_cast<GL3PlusTextureGpu*>( mColour[i].texture );
@@ -260,9 +267,21 @@ namespace Ogre
                     }
                 }
             }
+            else if( mColour[i].texture->getPixelFormat() == PFG_NULL )
+            {
+                OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH,
+                                               mColour[i].texture->getWidth() ) );
+                OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT,
+                                               mColour[i].texture->getHeight() ) );
 
-            if( mColour[i].storeAction == StoreAction::MultisampleResolve ||
-                mColour[i].storeAction == StoreAction::StoreAndMultisampleResolve )
+                OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_SAMPLES,
+                                               mColour[i].texture->getMsaa() > 1u ?
+                                                   mColour[i].texture->getMsaa() : 0 ) );
+            }
+
+            if( (mColour[i].storeAction == StoreAction::MultisampleResolve ||
+                 mColour[i].storeAction == StoreAction::StoreAndMultisampleResolve) &&
+                mColour[i].resolveTexture )
             {
                 needsMsaaResolveFbo = true;
             }
@@ -459,6 +478,13 @@ namespace Ogre
                 //Make sure colour writes are enabled for RenderWindows.
                 OCGE( glDrawBuffer( GL_BACK ) );
             }
+        }
+        else
+        {
+            GLenum colourBuffs[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
+            for( int i=0; i<mNumColourEntries; ++i )
+                colourBuffs[i] = GL_COLOR_ATTACHMENT0 + i;
+            OCGE( glDrawBuffers( mNumColourEntries, colourBuffs ) );
         }
 
         OCGE( glEnable( GL_FRAMEBUFFER_SRGB ) );

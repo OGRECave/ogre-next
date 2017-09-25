@@ -2,7 +2,7 @@
 #include "GraphicsSystem.h"
 #include "TutorialUav02_SetupGameState.h"
 
-#include "OgreRenderWindow.h"
+#include "OgreWindow.h"
 
 #include "OgreRoot.h"
 #include "Compositor/OgreCompositorManager2.h"
@@ -19,7 +19,7 @@ namespace Demo
         virtual Ogre::CompositorWorkspace* setupCompositor()
         {
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
-            return compositorManager->addWorkspace( mSceneManager, mRenderWindow, mCamera,
+            return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(), mCamera,
                                                     "TutorialUav02_SetupWorkspace", true );
         }
 
@@ -44,7 +44,7 @@ namespace Demo
                 "2.0/scripts/materials/TutorialUav02_Setup/HLSL",
             };
 
-            for( size_t i=0; i<6; ++i )
+            for( size_t i=0; i<3; ++i )
             {
                 Ogre::String dataFolder = originalDataFolder + c_locations[i];
                 addResourceLocation( dataFolder, "FileSystem", "General" );

@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "OgreTextureBox.h"
 #include "OgreTextureGpuListener.h"
 
+#include "OgreLwString.h"
 #include "OgreException.h"
 
 #define TODO_Create_download_ticket 1
@@ -90,6 +91,17 @@ namespace Ogre
             retVal = mName.getFriendlyText();
 
         return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    String TextureGpu::getSettingsDesc(void) const
+    {
+        char tmpBuffer[92];
+        LwString desc( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+
+        desc.a( mWidth, "x", mHeight, "x", mDepthOrSlices );
+        desc.a( " ", mMsaa, "xMSAA ", PixelFormatGpuUtils::toString( mPixelFormat ) );
+
+        return String( desc.c_str() );
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::scheduleTransitionTo( GpuResidency::GpuResidency nextResidency )
@@ -206,6 +218,18 @@ namespace Ogre
         return mMsaa;
     }
     //-----------------------------------------------------------------------------------
+    bool TextureGpu::hasEquivalentParameters( TextureGpu *other ) const
+    {
+        return this->mWidth != other->mWidth ||
+               this->mHeight != other->mHeight ||
+               this->mDepthOrSlices != other->mDepthOrSlices ||
+               this->mNumMipmaps != other->mNumMipmaps ||
+               this->mPixelFormat != other->mPixelFormat ||
+               this->mMsaa != other->mMsaa ||
+               this->mMsaaPattern != other->mMsaaPattern ||
+               this->mTextureType != other->mTextureType;
+    }
+    //-----------------------------------------------------------------------------------
     void TextureGpu::setMsaaPattern( MsaaPatterns::MsaaPatterns pattern )
     {
         mMsaaPattern = pattern;
@@ -226,6 +250,8 @@ namespace Ogre
         //Make sure depth buffers/textures always have MsaaExplicitResolve set (with or without MSAA).
         if( PixelFormatGpuUtils::isDepth( mPixelFormat ) )
             mTextureFlags |= TextureFlags::MsaaExplicitResolve;
+        if( mPixelFormat == PFG_NULL && isTexture() )
+            mTextureFlags |= TextureFlags::NotTexture;
 
         if( mMsaa > 1u )
         {
@@ -304,6 +330,9 @@ namespace Ogre
                          "Invalid settings!",
                          "TextureGpu::checkValidSettings" );
         }
+
+        mNumMipmaps = std::min( mNumMipmaps,
+                                PixelFormatGpuUtils::getMaxMipmapCount( mWidth, mHeight, getDepth() ) );
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::transitionToResident(void)

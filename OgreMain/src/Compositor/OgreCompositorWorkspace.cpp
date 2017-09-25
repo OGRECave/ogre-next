@@ -149,6 +149,13 @@ namespace Ogre
             CompositorNodeVec::const_iterator end  = mNodeSequence.end();
 
             while( itor != end )
+            {
+                (*itor)->destroyAllPasses();
+                ++itor;
+            }
+
+            itor = mNodeSequence.begin();
+            while( itor != end )
                 OGRE_DELETE *itor++;
             mNodeSequence.clear();
         }
@@ -157,6 +164,13 @@ namespace Ogre
             CompositorShadowNodeVec::const_iterator itor = mShadowNodes.begin();
             CompositorShadowNodeVec::const_iterator end  = mShadowNodes.end();
 
+            while( itor != end )
+            {
+                (*itor)->destroyAllPasses();
+                ++itor;
+            }
+
+            itor = mShadowNodes.begin();
             while( itor != end )
                 OGRE_DELETE *itor++;
             mShadowNodes.clear();
@@ -494,7 +508,6 @@ namespace Ogre
         const RenderSystemCapabilities *caps = mRenderSys->getCapabilities();
         const bool explicitApi = caps->hasCapability( RSC_EXPLICIT_API );
 
-#if TODO_OGRE_2_2
         if( explicitApi )
         {
             //Check the output is still a RenderTarget at the end.
@@ -506,8 +519,8 @@ namespace Ogre
                 CompositorChannelVec::const_iterator end  = mExternalRenderTargets.end();
                 while( itor != end )
                 {
-                    RenderTarget *renderTarget = itor->target;
-                    if( renderTarget->isRenderWindow() )
+                    TextureGpu *renderTarget = *itor;
+                    if( renderTarget->isRenderWindowSpecific() )
                     {
                         ResourceLayoutMap::iterator currentLayout =
                                 mResourcesLayout.find( renderTarget );
@@ -520,7 +533,6 @@ namespace Ogre
                 }
             }
         }
-#endif
 
         mBarriersDirty = false;
     }

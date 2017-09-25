@@ -67,7 +67,7 @@ namespace Ogre
 
     struct BoundUav
     {
-        GpuResource2                    *rttOrBuffer;
+        GpuTrackedResource              *rttOrBuffer;
         ResourceAccess::ResourceAccess  boundAccess;
     };
 
@@ -133,7 +133,8 @@ namespace Ogre
     public:
         CompositorPass( const CompositorPassDef *definition,
                         const RenderTargetViewDef *rtv,
-                        CompositorNode *parentNode );
+                        CompositorNode *parentNode,
+                        bool supportsNoRtv=false );
         virtual ~CompositorPass();
 
         virtual void execute( const Camera *lodCameraconst ) = 0;

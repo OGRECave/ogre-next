@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "OgreHlmsSamplerblock.h"
 #include "OgreDescriptorSetTexture.h"
 #include "OgreDescriptorSetSampler.h"
+#include "OgreDescriptorSetUav.h"
 #if !OGRE_NO_JSON
     #include "OgreScriptLoader.h"
 #endif
@@ -76,10 +77,14 @@ namespace Ogre
         BlockIdxVec         mFreeBlockIds[NUM_BASIC_BLOCKS];
         BasicBlock          *mBlocks[NUM_BASIC_BLOCKS][OGRE_HLMS_MAX_BASIC_BLOCKS];
 
-        typedef set<DescriptorSetTexture>::type DescriptorSetTextureSet;
-        typedef set<DescriptorSetSampler>::type DescriptorSetSamplerSet;
-        DescriptorSetTextureSet mDescriptorSetTextures;
-        DescriptorSetSamplerSet mDescriptorSetSamplers;
+        typedef set<DescriptorSetTexture>::type     DescriptorSetTextureSet;
+        typedef set<DescriptorSetTexture2>::type    DescriptorSetTexture2Set;
+        typedef set<DescriptorSetSampler>::type     DescriptorSetSamplerSet;
+        typedef set<DescriptorSetUav>::type         DescriptorSetUavSet;
+        DescriptorSetTextureSet     mDescriptorSetTextures;
+        DescriptorSetTexture2Set    mDescriptorSetTextures2;
+        DescriptorSetSamplerSet     mDescriptorSetSamplers;
+        DescriptorSetUavSet         mDescriptorSetUavs;
 
         struct InputLayouts
         {
@@ -186,9 +191,14 @@ namespace Ogre
 
         const DescriptorSetTexture* getDescriptorSetTexture( const DescriptorSetTexture &baseParams );
         void destroyDescriptorSetTexture( const DescriptorSetTexture *descSet );
+        const DescriptorSetTexture2* getDescriptorSetTexture2( const DescriptorSetTexture2 &baseParams );
+        void destroyDescriptorSetTexture2( const DescriptorSetTexture2 *descSet );
 
         const DescriptorSetSampler* getDescriptorSetSampler( const DescriptorSetSampler &baseParams );
         void destroyDescriptorSetSampler( const DescriptorSetSampler *descSet );
+
+        const DescriptorSetUav* getDescriptorSetUav( const DescriptorSetUav &baseParams );
+        void destroyDescriptorSetUav( const DescriptorSetUav *descSet );
 
         uint8 _addInputLayoutId( VertexElement2VecVec vertexElements, OperationType opType );
         void _removeInputLayoutIdReference( uint8 layoutId );

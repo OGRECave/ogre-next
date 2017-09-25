@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "OgreRenderPassDescriptor.h"
 #include "OgreTextureGpu.h"
 #include "OgrePixelFormatGpuUtils.h"
+#include "OgreStringConverter.h"
 #include "OgreException.h"
 
 namespace Ogre
@@ -241,6 +242,40 @@ namespace Ogre
                          "RenderPassDescriptor stencil attachment '" +
                          mStencil.texture->getNameStr() + "' is not a stencil format!",
                          "RenderPassDescriptor::entriesModified" );
+        }
+
+        if( mDepth.texture )
+        {
+            for( size_t i=0; i<mNumColourEntries; ++i )
+            {
+                if( !mDepth.texture->supportsAsDepthBufferFor( mColour[i].texture ) )
+                {
+                    OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                                 "Manually specified depth buffer '" +
+                                 mDepth.texture->getNameStr() + "' is incompatible with colour RTT #" +
+                                 StringConverter::toString( i ) + "'" + mColour[i].texture->getNameStr()
+                                 + "\nColour: " + mColour[i].texture->getSettingsDesc()
+                                 + "\nDepth: " + mDepth.texture->getSettingsDesc(),
+                                 "RenderPassDescriptor::entriesModified" );
+                }
+            }
+        }
+
+        if( mStencil.texture && mStencil.texture != mDepth.texture )
+        {
+            for( size_t i=0; i<mNumColourEntries; ++i )
+            {
+                if( !mStencil.texture->supportsAsDepthBufferFor( mColour[i].texture ) )
+                {
+                    OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                                 "Manually specified stencil buffer '" +
+                                 mStencil.texture->getNameStr() + "' is incompatible with colour RTT #" +
+                                 StringConverter::toString( i ) + "'" + mColour[i].texture->getNameStr()
+                                 + "'\nColour: " + mColour[i].texture->getSettingsDesc()
+                                 + "\nStencil: " + mStencil.texture->getSettingsDesc(),
+                                 "RenderPassDescriptor::entriesModified" );
+                }
+            }
         }
 
         checkRequiresTextureFlipping();

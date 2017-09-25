@@ -94,7 +94,7 @@ namespace Ogre
                                                   Camera *defaultCamera,
                                                   CompositorNode *parentNode,
                                                   const RenderTargetViewDef *rtv ) :
-        CompositorPass( definition, rtv, parentNode ),
+        CompositorPass( definition, 0, parentNode, true ),
         mDefinition( definition ),
         mCamera( 0 )
     {
@@ -149,6 +149,48 @@ namespace Ogre
             mCamera = defaultCamera;
     }
     //-----------------------------------------------------------------------------------
+    CompositorPassCompute::~CompositorPassCompute()
+    {
+        //Clear all our bindings to prevent leaving dangling pointers
+        {
+            const CompositorPassComputeDef::TextureSources &textureSources =
+                    mDefinition->getTextureSources();
+            CompositorPassComputeDef::TextureSources::const_iterator itor = textureSources.begin();
+            CompositorPassComputeDef::TextureSources::const_iterator end  = textureSources.end();
+            while( itor != end )
+            {
+                DescriptorSetTexture2::TextureSlot texSlot( DescriptorSetTexture2::TextureSlot::
+                                                            makeEmpty() );
+                mComputeJob->setTexture( itor->texUnitIdx, texSlot );
+                ++itor;
+            }
+
+            const CompositorPassComputeDef::TextureSources &uavSources = mDefinition->getUavSources();
+            itor = uavSources.begin();
+            end  = uavSources.end();
+            while( itor != end )
+            {
+                DescriptorSetUav::TextureSlot texSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
+                mComputeJob->_setUavTexture( itor->texUnitIdx, texSlot );
+                ++itor;
+            }
+        }
+
+        {
+            const CompositorPassComputeDef::BufferSourceVec &bufferSources =
+                    mDefinition->getBufferSources();
+            CompositorPassComputeDef::BufferSourceVec::const_iterator itor = bufferSources.begin();
+            CompositorPassComputeDef::BufferSourceVec::const_iterator end  = bufferSources.end();
+
+            while( itor != end )
+            {
+                DescriptorSetUav::BufferSlot bufferSlot( DescriptorSetUav::BufferSlot::makeEmpty() );
+                mComputeJob->_setUavBuffer( itor->slotIdx, bufferSlot );
+                ++itor;
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void CompositorPassCompute::setResourcesToJob(void)
     {
         {
@@ -158,8 +200,10 @@ namespace Ogre
             CompositorPassComputeDef::TextureSources::const_iterator end  = textureSources.end();
             while( itor != end )
             {
-                TextureGpu *texture = mParentNode->getDefinedTexture( itor->textureName );
-                mComputeJob->setTexture( itor->texUnitIdx, texture );
+                DescriptorSetTexture2::TextureSlot texSlot( DescriptorSetTexture2::TextureSlot::
+                                                            makeEmpty() );
+                texSlot.texture = mParentNode->getDefinedTexture( itor->textureName );
+                mComputeJob->setTexture( itor->texUnitIdx, texSlot );
                 ++itor;
             }
 
@@ -169,8 +213,13 @@ namespace Ogre
             while( itor != end )
             {
                 TextureGpu *texture = mParentNode->getDefinedTexture( itor->textureName );
-                mComputeJob->_setUavTexture( itor->texUnitIdx, texture, itor->textureArrayIndex,
-                                             itor->access, itor->mipmapLevel, itor->pixelFormat );
+                DescriptorSetUav::TextureSlot texSlot;
+                texSlot.texture             = texture;
+                texSlot.access              = itor->access;
+                texSlot.mipmapLevel         = itor->mipmapLevel;
+                texSlot.textureArrayIndex   = itor->textureArrayIndex;
+                texSlot.pixelFormat         = itor->pixelFormat;
+                mComputeJob->_setUavTexture( itor->texUnitIdx, texSlot );
                 ++itor;
             }
         }
@@ -184,8 +233,12 @@ namespace Ogre
             while( itor != end )
             {
                 UavBufferPacked *uavBuffer = mParentNode->getDefinedBuffer( itor->bufferName );
-                mComputeJob->_setUavBuffer( itor->slotIdx, uavBuffer, itor->access,
-                                            itor->offset, itor->sizeBytes );
+                DescriptorSetUav::BufferSlot bufferSlot;
+                bufferSlot.buffer       = uavBuffer;
+                bufferSlot.offset       = itor->offset;
+                bufferSlot.sizeBytes    = itor->sizeBytes;
+                bufferSlot.access       = itor->access;
+                mComputeJob->_setUavBuffer( itor->slotIdx, bufferSlot );
                 ++itor;
             }
         }
@@ -204,6 +257,9 @@ namespace Ogre
         CompositorWorkspaceListener *listener = mParentNode->getWorkspace()->getListener();
         if( listener )
             listener->passEarlyPreExecute( this );
+
+        RenderSystem *renderSystem = mParentNode->getRenderSystem();
+        renderSystem->endRenderPassDescriptor();
 
         executeResourceTransitions();
 
@@ -231,7 +287,6 @@ namespace Ogre
                                                                       ResourceAccessMap &uavsAccess,
                                                                       ResourceLayoutMap &resourcesLayout )
     {
-#if TODO_placeBarriersAndEmulateUavExecution
         CompositorPass::_placeBarriersAndEmulateUavExecution( boundUavs, uavsAccess, resourcesLayout );
 
         {
@@ -242,22 +297,19 @@ namespace Ogre
 
             while( itor != end )
             {
-                TexturePtr uavTex = mParentNode->getDefinedTexture( itor->textureName );
+                TextureGpu *uavTex = mParentNode->getDefinedTexture( itor->textureName );
 
-                //TODO: Do we have to do this for all slices? Or just one? Refactor is needed.
-                RenderTarget *uavRt = uavTex->getBuffer( 0, 0 )->getRenderTarget( 0 );
-
-                ResourceAccessMap::iterator itResAccess = uavsAccess.find( uavRt );
+                ResourceAccessMap::iterator itResAccess = uavsAccess.find( uavTex );
 
                 if( itResAccess == uavsAccess.end() )
                 {
                     //First time accessing the UAV. If we need a barrier,
                     //we will see it in the second pass.
-                    uavsAccess[uavRt] = ResourceAccess::Undefined;
-                    itResAccess = uavsAccess.find( uavRt );
+                    uavsAccess[uavTex] = ResourceAccess::Undefined;
+                    itResAccess = uavsAccess.find( uavTex );
                 }
 
-                ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( uavRt );
+                ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( uavTex );
 
                 if( currentLayout->second != ResourceLayout::Uav ||
                         !( (itor->access == ResourceAccess::Read &&
@@ -318,6 +370,5 @@ namespace Ogre
                 ++itor;
             }
         }
-#endif
     }
 }

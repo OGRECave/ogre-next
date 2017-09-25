@@ -121,16 +121,6 @@ namespace Ogre
         ID3D11RenderTargetView *mRenderTargetViews[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
         ID3D11DepthStencilView *mDepthStencilView;
 
-        TextureGpu                  *mUavTexPtr[64];
-        UavBufferPacked             *mUavBuffers[64];
-        ID3D11UnorderedAccessView   *mUavs[64];
-
-        /// In range [0; 64]; note that a user may use
-        /// mUavs[0] & mUavs[2] leaving mUavs[1] empty.
-        /// and still mMaxUavIndexPlusOne = 3.
-        uint8   mMaxModifiedUavPlusOne;
-        bool    mUavsDirty;
-
         /// For rendering legacy objects.
         v1::VertexData  *mCurrentVertexBuffer;
         v1::IndexData   *mCurrentIndexBuffer;
@@ -296,7 +286,12 @@ namespace Ogre
             Real constant, Real linear, Real quadratic, Real minSize, Real maxSize);
         virtual void _setTexture( size_t unit, TextureGpu *texPtr );
         virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set );
+        virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture2 *set );
         virtual void _setSamplers( uint32 slotStart, const DescriptorSetSampler *set );
+        virtual void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set );
+        virtual void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture2 *set );
+        virtual void _setSamplersCS( uint32 slotStart, const DescriptorSetSampler *set );
+        virtual void _setUavCS( uint32 slotStart, const DescriptorSetUav *set );
         void _setBindingType(TextureUnitState::BindingType bindingType);
         void _setVertexTexture(size_t unit, TextureGpu *tex);
         void _setGeometryTexture(size_t unit, TextureGpu *tex);
@@ -307,22 +302,8 @@ namespace Ogre
         void _setTextureMatrix( size_t unit, const Matrix4 &xform );
         void _setViewport( Viewport *vp );
 
-        virtual void queueBindUAV( uint32 slot, TextureGpu *texture,
-                                   ResourceAccess::ResourceAccess access = ResourceAccess::ReadWrite,
-                                   int32 mipmapLevel = 0, int32 textureArrayIndex = 0,
-                                   PixelFormatGpu pixelFormat = PFG_UNKNOWN );
-        virtual void queueBindUAV( uint32 slot, UavBufferPacked *buffer,
-                                   ResourceAccess::ResourceAccess access = ResourceAccess::ReadWrite,
-                                   size_t offset = 0, size_t sizeBytes = 0 );
+        virtual void flushUAVs(void) {}
 
-        virtual void clearUAVs(void);
-
-        virtual void flushUAVs(void);
-
-        virtual void _bindTextureUavCS( uint32 slot, TextureGpu *texture,
-                                        ResourceAccess::ResourceAccess access,
-                                        int32 mipmapLevel, int32 textureArrayIndex,
-                                        PixelFormatGpu pixelFormat );
         virtual void _setTextureCS( uint32 slot, TextureGpu *texPtr );
         virtual void _setHlmsSamplerblockCS( uint8 texUnit, const HlmsSamplerblock *samplerblock );
 
@@ -336,6 +317,10 @@ namespace Ogre
         virtual void _hlmsSamplerblockDestroyed( HlmsSamplerblock *block );
         virtual void _descriptorSetTextureCreated( DescriptorSetTexture *newSet );
         virtual void _descriptorSetTextureDestroyed( DescriptorSetTexture *set );
+        virtual void _descriptorSetTexture2Created( DescriptorSetTexture2 *newSet );
+        virtual void _descriptorSetTexture2Destroyed( DescriptorSetTexture2 *set );
+        virtual void _descriptorSetUavCreated( DescriptorSetUav *newSet );
+        virtual void _descriptorSetUavDestroyed( DescriptorSetUav *set );
         void _setHlmsMacroblock( const HlmsMacroblock *macroblock );
         void _setHlmsBlendblock( const HlmsBlendblock *blendblock );
         virtual void _setHlmsSamplerblock( uint8 texUnit, const HlmsSamplerblock *samplerblock );

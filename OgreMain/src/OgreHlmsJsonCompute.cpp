@@ -281,7 +281,11 @@ namespace Ogre
                                       textureName, GpuPageOutStrategy::Discard,
                                       textureFlags, TextureTypes::Unknown,
                                       resourceGroup );
-            job->setTexture( slotIdx, texture );
+
+            DescriptorSetTexture2::TextureSlot texSlot( DescriptorSetTexture2::TextureSlot::
+                                                        makeEmpty() );
+            texSlot.texture = texture;
+            job->setTexture( slotIdx, texSlot );
         }
 
         //TODO: Implement named buffers
