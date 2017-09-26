@@ -150,11 +150,11 @@ namespace Ogre
     {
         if( !casterPass && mTerra )
         {
-            Ogre::TexturePtr terraShadowTex = mTerra->_getShadowMapTex();
+            Ogre::TextureGpu *terraShadowTex = mTerra->_getShadowMapTex();
 
             //Bind the shadows' texture. Tex. slot must match with
             //the one in HlmsPbsTerraShadows::shaderCacheEntryCreated
-            *commandBuffer->addCommand<CbTexture>() = CbTexture( 12u, true, terraShadowTex.get(),
+            *commandBuffer->addCommand<CbTexture>() = CbTexture( 12u, terraShadowTex,
                                                                  mTerraSamplerblock );
 
 #if OGRE_DEBUG_MODE
@@ -162,7 +162,7 @@ namespace Ogre
             CompositorTextureVec::const_iterator itor = compositorTextures.begin();
             CompositorTextureVec::const_iterator end  = compositorTextures.end();
 
-            while( itor != end && (*itor->textures)[0] != terraShadowTex )
+            while( itor != end && itor->texture != terraShadowTex )
                 ++itor;
 
             if( itor == end )

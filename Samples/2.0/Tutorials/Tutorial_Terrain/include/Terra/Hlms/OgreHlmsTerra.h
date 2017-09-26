@@ -93,9 +93,9 @@ namespace Ogre
 
         struct PassData
         {
-            FastArray<Texture*> shadowMaps;
-            FastArray<float>    vertexShaderSharedBuffer;
-            FastArray<float>    pixelShaderSharedBuffer;
+            FastArray<TextureGpu*>  shadowMaps;
+            FastArray<float>        vertexShaderSharedBuffer;
+            FastArray<float>        pixelShaderSharedBuffer;
 
             Matrix4 viewMatrix;
         };

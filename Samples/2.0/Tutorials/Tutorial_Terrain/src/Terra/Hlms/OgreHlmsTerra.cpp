@@ -514,22 +514,22 @@ namespace Ogre
             setProperty( HlmsBaseProp::LightsDirectional, shadowCasterDirectional );
         }
 
-        RenderTarget *renderTarget = sceneManager->getCurrentViewport()->getTarget();
-
         const RenderSystemCapabilities *capabilities = mRenderSystem->getCapabilities();
         setProperty( TerraProperty::HwGammaRead, capabilities->hasCapability( RSC_HW_GAMMA ) );
-        setProperty( TerraProperty::HwGammaWrite, capabilities->hasCapability( RSC_HW_GAMMA ) &&
-                                                        renderTarget->isHardwareGammaEnabled() );
-        setProperty( TerraProperty::SignedIntTex, capabilities->hasCapability(
-                                                            RSC_TEXTURE_SIGNED_INT ) );
+//        setProperty( TerraProperty::HwGammaWrite, capabilities->hasCapability( RSC_HW_GAMMA ) &&
+//                                                        renderTarget->isHardwareGammaEnabled() );
+        setProperty( TerraProperty::HwGammaWrite, 1 );
+//        setProperty( TerraProperty::SignedIntTex, capabilities->hasCapability(
+//                                                            RSC_TEXTURE_SIGNED_INT ) );
         retVal.setProperties = mSetProperties;
 
         Camera *camera = sceneManager->getCameraInProgress();
         Matrix4 viewMatrix = camera->getViewMatrix(true);
 
         Matrix4 projectionMatrix = camera->getProjectionMatrixWithRSDepth();
+        RenderPassDescriptor *renderPassDesc = mRenderSystem->getCurrentPassDescriptor();
 
-        if( renderTarget->requiresTextureFlipping() )
+        if( renderPassDesc->requiresTextureFlipping() )
         {
             projectionMatrix[1][0] = -projectionMatrix[1][0];
             projectionMatrix[1][1] = -projectionMatrix[1][1];
@@ -620,12 +620,14 @@ namespace Ogre
 
         mPreparedPass.shadowMaps.clear();
 
+        TextureGpu *renderTarget = mRenderSystem->_getViewport()->getCurrentTarget();
+
         //mat4 view;
         for( size_t i=0; i<16; ++i )
             *passBufferPtr++ = (float)viewMatrix[0][i];
 
         size_t shadowMapTexIdx = 0;
-        const TextureVec &contiguousShadowMapTex = shadowNode->getContiguousShadowMapTex();
+        const TextureGpuVec &contiguousShadowMapTex = shadowNode->getContiguousShadowMapTex();
 
         for( int32 i=0; i<numShadowMapLights; ++i )
         {
@@ -849,12 +851,12 @@ namespace Ogre
         {
             mPreparedPass.shadowMaps.reserve( contiguousShadowMapTex.size() );
 
-            TextureVec::const_iterator itShadowMap = contiguousShadowMapTex.begin();
-            TextureVec::const_iterator enShadowMap = contiguousShadowMapTex.end();
+            TextureGpuVec::const_iterator itShadowMap = contiguousShadowMapTex.begin();
+            TextureGpuVec::const_iterator enShadowMap = contiguousShadowMapTex.end();
 
             while( itShadowMap != enShadowMap )
             {
-                mPreparedPass.shadowMaps.push_back( itShadowMap->get() );
+                mPreparedPass.shadowMaps.push_back( *itShadowMap );
                 ++itShadowMap;
             }
         }
@@ -862,7 +864,7 @@ namespace Ogre
         if( forwardPlus )
         {
             forwardPlus->fillConstBufferData( renderTarget, passBufferPtr );
-            passBufferPtr += forwardPlus->getConstBufferSize() >> 2;
+            passBufferPtr += forwardPlus->getConstBufferSize() >> 2u;
         }
 
         passBufferPtr = mListener->preparePassBuffer( shadowNode, casterPass, dualParaboloid,
@@ -948,11 +950,11 @@ namespace Ogre
             }
 
             //We changed HlmsType, rebind the shared textures.
-            FastArray<Texture*>::const_iterator itor = mPreparedPass.shadowMaps.begin();
-            FastArray<Texture*>::const_iterator end  = mPreparedPass.shadowMaps.end();
+            FastArray<TextureGpu*>::const_iterator itor = mPreparedPass.shadowMaps.begin();
+            FastArray<TextureGpu*>::const_iterator end  = mPreparedPass.shadowMaps.end();
             while( itor != end )
             {
-                *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit, true, *itor,
+                *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit, *itor,
                                                                      mCurrentShadowmapSamplerblock );
                 ++texUnit;
                 ++itor;
@@ -995,11 +997,11 @@ namespace Ogre
             //Different Terra? Must change textures then.
             const Terra *terraObj = static_cast<const Terra*>( queuedRenderable.movableObject );
             *commandBuffer->addCommand<CbTexture>() =
-                    CbTexture( 0, true, terraObj->getHeightMapTex().get() );
+                    CbTexture( 0, terraObj->getHeightMapTex() );
             *commandBuffer->addCommand<CbTexture>() =
-                    CbTexture( 1, true, terraObj->getNormalMapTex().get(), mTerraSamplerblock );
+                    CbTexture( 1, terraObj->getNormalMapTex(), mTerraSamplerblock );
             *commandBuffer->addCommand<CbTexture>() =
-                    CbTexture( 2, true, terraObj->_getShadowMapTex().get(), mTerraSamplerblock );
+                    CbTexture( 2, terraObj->_getShadowMapTex(), mTerraSamplerblock );
 
 #if OGRE_DEBUG_MODE
 //          Commented: Hack to get a barrier without dealing with the Compositor while debugging.
@@ -1009,13 +1011,13 @@ namespace Ogre
 //            mRenderSystem->_resourceTransitionCreated( &resourceTransition );
 //            mRenderSystem->_executeResourceTransition( &resourceTransition );
 //            mRenderSystem->_resourceTransitionDestroyed( &resourceTransition );
-            TexturePtr terraShadowText = terraObj->_getShadowMapTex();
+            TextureGpu *terraShadowText = terraObj->_getShadowMapTex();
             const CompositorTextureVec &compositorTextures = queuedRenderable.movableObject->
                     _getManager()->getCompositorTextures();
             CompositorTextureVec::const_iterator itor = compositorTextures.begin();
             CompositorTextureVec::const_iterator end  = compositorTextures.end();
 
-            while( itor != end && (*itor->textures)[0] != terraShadowText )
+            while( itor != end && itor->texture != terraShadowText )
                 ++itor;
 
             if( itor == end )
@@ -1066,8 +1068,6 @@ namespace Ogre
                             CbTexture( texUnit++, true, itor->texture.get(), itor->samplerBlock );
                     ++itor;
                 }
-
-                *commandBuffer->addCommand<CbTextureDisableFrom>() = CbTextureDisableFrom( texUnit );
 
                 mLastTextureHash = datablock->mTextureHash;
             }
