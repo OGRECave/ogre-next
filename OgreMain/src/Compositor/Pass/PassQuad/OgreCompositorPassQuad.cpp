@@ -252,7 +252,6 @@ namespace Ogre
         executeResourceTransitions();
 
         setRenderPassDescToCurrent();
-        sceneManager->_setCameraInProgress( mCamera );
 
         //Fire the listener in case it wants to change anything
         if( listener )
@@ -263,6 +262,7 @@ namespace Ogre
 #endif
 
         SceneManager *sceneManager = mCamera->getSceneManager();
+        sceneManager->_setCameraInProgress( mCamera );
         sceneManager->_setCurrentCompositorPass( this );
 
         //sceneManager->_injectRenderWithPass( mPass, mFsRect, mCamera, false, false );
