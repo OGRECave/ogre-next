@@ -246,6 +246,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
 	void CompositorPassCompute::execute( const Camera *lodCamera )
     {
+        profilingBegin();
+
         //Execute a limited number of times?
         if( mNumPassesLeft != std::numeric_limits<uint32>::max() )
         {
@@ -281,6 +283,8 @@ namespace Ogre
 
         if( listener )
             listener->passPosExecute( this );
+
+        profilingEnd();
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassCompute::_placeBarriersAndEmulateUavExecution( BoundUav boundUavs[64],

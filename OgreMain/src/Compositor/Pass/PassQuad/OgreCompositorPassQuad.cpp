@@ -252,6 +252,7 @@ namespace Ogre
         executeResourceTransitions();
 
         setRenderPassDescToCurrent();
+        sceneManager->_setCameraInProgress( mCamera );
 
         //Fire the listener in case it wants to change anything
         if( listener )

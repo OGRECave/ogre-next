@@ -22,9 +22,12 @@
 #include "Compositor/OgreCompositorManager2.h"
 
 #include "OgreOverlaySystem.h"
+#include "OgreOverlayManager.h"
 
 #include "OgreWindowEventUtilities.h"
 #include "OgreWindow.h"
+
+#include "OgreLogManager.h"
 
 #if OGRE_USE_SDL2
     #include <SDL_syswm.h>
@@ -67,7 +70,11 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     GraphicsSystem::~GraphicsSystem()
     {
-        //assert( !mRoot && "deinitialize() not called!!!" );
+        if( mRoot )
+        {
+            Ogre::LogManager::getSingleton().logMessage(
+                        "WARNING: GraphicsSystem::deinitialize() not called!!!", Ogre::LML_CRITICAL );
+        }
     }
     //-----------------------------------------------------------------------------------
     void GraphicsSystem::initialize( const Ogre::String &windowTitle )
@@ -246,6 +253,11 @@ namespace Demo
     #endif
 
         BaseSystem::initialize();
+
+#if OGRE_PROFILING
+        Ogre::Profiler::getSingleton().setEnabled( true );
+        Ogre::Profiler::getSingleton().endProfile( "" );
+#endif
     }
     //-----------------------------------------------------------------------------------
     void GraphicsSystem::deinitialize(void)
@@ -561,6 +573,9 @@ namespace Demo
                                                    "ExampleSMInstance" );
 
         mSceneManager->addRenderQueueListener( mOverlaySystem );
+        mSceneManager->getRenderQueue()->setSortRenderQueue(
+                    Ogre::v1::OverlayManager::getSingleton().mDefaultRenderQueueId,
+                    Ogre::RenderQueue::StableSort );
 
         //Set sane defaults for proper shadow mapping
         mSceneManager->setShadowDirectionalLightExtrusionDistance( 500.0f );

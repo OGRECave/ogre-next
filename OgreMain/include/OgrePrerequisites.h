@@ -304,7 +304,6 @@ namespace Ogre {
     class ScriptLoader;
     class Serializer;
     class ShadowCameraSetup;
-    class ShadowTextureManager;
     class SimpleMatrixAf4x3;
     class SimpleSpline;
     class SkeletonDef;

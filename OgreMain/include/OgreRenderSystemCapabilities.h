@@ -222,6 +222,7 @@ namespace Ogre
         /// stencil is cleared as if GPU were a non-tiler.
         RSC_TILER_CAN_CLEAR_STENCIL_REGION = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 9),
         RSC_CONST_BUFFER_SLOTS_IN_SHADER = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 10),
+        RSC_TEXTURE_COMPRESSION_ASTC = OGRE_CAPS_VALUE(CAPS_CATEGORY_COMMON_3, 11),
 
         // ***** DirectX specific caps *****
         /// Is DirectX feature "per stage constants" supported

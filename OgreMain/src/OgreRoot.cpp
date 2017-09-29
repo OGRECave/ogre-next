@@ -104,6 +104,9 @@ THE SOFTWARE.
 #if OGRE_NO_ETC_CODEC == 0
 #  include "OgreETCCodec.h"
 #endif
+#if OGRE_NO_ASTC_CODEC == 0
+#  include "OgreASTCCodec.h"
+#endif
 
 namespace Ogre {
     //-----------------------------------------------------------------------
@@ -197,8 +200,6 @@ namespace Ogre {
         // Create SceneManager enumerator (note - will be managed by singleton)
         mSceneManagerEnum = OGRE_NEW SceneManagerEnumerator();
 
-        mShadowTextureManager = OGRE_NEW ShadowTextureManager();
-
         mRenderSystemCapabilitiesManager = OGRE_NEW RenderSystemCapabilitiesManager();
 
         // ..material manager
@@ -257,6 +258,9 @@ namespace Ogre {
 #endif
 #if OGRE_NO_STBI_CODEC == 0
         STBIImageCodec::startup();
+#endif
+#if OGRE_NO_ASTC_CODEC == 0
+        ASTCCodec::startup();
 #endif
 
         mHighLevelGpuProgramManager = OGRE_NEW HighLevelGpuProgramManager();
@@ -317,7 +321,6 @@ namespace Ogre {
         shutdown();
 
         OGRE_DELETE mSceneManagerEnum;
-        OGRE_DELETE mShadowTextureManager;
         OGRE_DELETE mRenderSystemCapabilitiesManager;
 
         OGRE_DELETE mExternalTextureSourceManager;
@@ -338,6 +341,9 @@ namespace Ogre {
 #endif
 #if OGRE_NO_STBI_CODEC == 0
         STBIImageCodec::shutdown();
+#endif
+#if OGRE_NO_ASTC_CODEC == 0
+        ASTCCodec::shutdown();
 #endif
 #if OGRE_PROFILING
         OGRE_DELETE mProfiler;

@@ -42,7 +42,6 @@ Torus Knot Software Ltd.
 #include "OgreAnimationState.h"
 #include "OgreRenderQueue.h"
 #include "OgreResourceGroupManager.h"
-#include "OgreShadowTextureManager.h"
 #include "OgreRenderSystem.h"
 #include "OgreLodListener.h"
 #include "OgreManualObject2.h"
@@ -465,6 +464,7 @@ namespace Ogre {
 
         /// Root scene node
         SceneNode* mSceneRoot[NUM_SCENE_MEMORY_MANAGER_TYPES];
+        SceneNode* mSceneDummy;
 
         /// Autotracking scene nodes
 		struct AutoTrackingSceneNode
@@ -1164,6 +1164,11 @@ namespace Ogre {
         */
         SceneNode* getRootSceneNode( SceneMemoryMgrTypes sceneType = SCENE_DYNAMIC );
 
+        /// Unlike mNodeMemoryManager->_getDummyNode(), this dummy node is fully allocated,
+        /// which makes it possible to actually attach objects to this dummy, while
+        /// we guarantee the dummy won't change its transform.
+        SceneNode* getDummySceneNode(void) const        { return mSceneDummy; }
+
         /** Retrieves a SceneNode based on it's ID from the scene graph.
         @remarks
             @note Returns null if the ID does not exist
@@ -1854,7 +1859,8 @@ namespace Ogre {
         */
         virtual void _setDestinationRenderSystem(RenderSystem* sys);
 
-        void _setViewport( Viewport *vp )                                   { setViewport( vp ); }
+        void _setViewport( Viewport *vp )                               { setViewport( vp ); }
+        void _setCameraInProgress( Camera *camera )                     { mCameraInProgress = camera; }
 
         /** Enables / disables a 'sky plane' i.e. a plane at constant
             distance from the camera representing the sky.

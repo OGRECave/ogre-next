@@ -382,7 +382,7 @@ namespace Ogre
 
         RenderQueue *renderQueue = mSceneManager->getRenderQueue();
         renderQueue->setRenderQueueMode( mReservedRqId, RenderQueue::FAST );
-        renderQueue->setSortRenderQueue( mReservedRqId, false );
+        renderQueue->setSortRenderQueue( mReservedRqId, RenderQueue::DisableSort );
 
         createProxyItems();
     }

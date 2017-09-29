@@ -131,8 +131,8 @@ mFullScreenQuad(0),
 mShadowDirLightExtrudeDist(10000),
 mIlluminationStage(IRS_NONE),
 mLightClippingInfoMapFrameNumber(999),
-mDefaultShadowFarDist(0),
-mDefaultShadowFarDistSquared(0),
+mDefaultShadowFarDist(200),
+mDefaultShadowFarDistSquared(200*200),
 mShadowTextureOffset(0.6), 
 mShadowTextureFadeStart(0.7), 
 mShadowTextureFadeEnd(0.9),
@@ -154,6 +154,7 @@ mGpuParamsDirty((uint16)GPV_ALL)
 
     for( size_t i=0; i<NUM_SCENE_MEMORY_MANAGER_TYPES; ++i )
         mSceneRoot[i] = 0;
+    mSceneDummy = 0;
 
     setAmbientLight( ColourValue::Black, ColourValue::Black, Vector3::UNIT_Y, 1.0f );
 
@@ -222,6 +223,10 @@ mGpuParamsDirty((uint16)GPV_ALL)
         mSceneRoot[i]->setName( "Ogre/SceneRoot" + StringConverter::toString( i ) );
         mSceneRoot[i]->_getDerivedPositionUpdated();
     }
+
+    mSceneDummy = createSceneNodeImpl( (SceneNode*)0, &mNodeMemoryManager[SCENE_DYNAMIC] );
+    mSceneDummy->setName( "Ogre/SceneManager/Dummy");
+    mSceneDummy->_getDerivedPositionUpdated();
 }
 //-----------------------------------------------------------------------
 SceneManager::~SceneManager()
@@ -246,6 +251,9 @@ SceneManager::~SceneManager()
     }
 
     OGRE_DELETE mSkyBoxObj;
+
+    OGRE_DELETE mSceneDummy;
+    mSceneDummy = 0;
 
     for( size_t i=0; i<NUM_SCENE_MEMORY_MANAGER_TYPES; ++i )
     {
@@ -987,7 +995,7 @@ void SceneManager::prepareRenderQueue(void)
 void SceneManager::_cullPhase01( Camera* camera, const Camera *lodCamera, Viewport* vp,
                                  uint8 firstRq, uint8 lastRq )
 {
-    OgreProfileGroup("_cullPhase01", OGREPROF_GENERAL);
+    OgreProfileGroup( "Frustum Culling", OGREPROF_CULLING );
 
     Root::getSingleton()._pushCurrentSceneManager(this);
     mAutoParamDataSource->setCurrentSceneManager(this);
@@ -1009,8 +1017,6 @@ void SceneManager::_cullPhase01( Camera* camera, const Camera *lodCamera, Viewpo
 
         if (mFindVisibleObjects)
         {
-            OgreProfileGroup("cullFrustum", OGREPROF_CULLING);
-
             assert( !mEntitiesMemoryManagerCulledList.empty() );
 
             // Quick way of reducing overhead/stress on VisibleObjectsBoundsInfo
@@ -1047,7 +1053,7 @@ void SceneManager::_cullPhase01( Camera* camera, const Camera *lodCamera, Viewpo
 void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera, Viewport* vp,
                                   uint8 firstRq, uint8 lastRq, bool includeOverlays)
 {
-    OgreProfileGroup("_renderPhase02", OGREPROF_GENERAL);
+    OgreProfileGroup( "Rendering", OGREPROF_RENDERING );
 
     Root::getSingleton()._pushCurrentSceneManager(this);
     mAutoParamDataSource->setCurrentSceneManager(this);
@@ -1094,7 +1100,6 @@ void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera, Viewp
 
         // Prepare render queue for receiving new objects
         {
-            OgreProfileGroup("prepareRenderQueue", OGREPROF_GENERAL);
             prepareRenderQueue();
         }
 
@@ -1105,7 +1110,7 @@ void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera, Viewp
 
         if (mFindVisibleObjects)
         {
-            OgreProfileGroup("_updateRenderQueue", OGREPROF_CULLING);
+            OgreProfileGroup( "V1 Renderable update", OGREPROF_RENDERING );
 
             //mVisibleObjects should be filled in phase 01
             VisibleObjectsPerThreadArray::const_iterator it = mVisibleObjects.begin();
@@ -1170,7 +1175,7 @@ void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera, Viewp
     {
         //OgreProfileGroup("_renderVisibleObjects", OGREPROF_RENDERING);
         //_renderVisibleObjects();
-        OgreProfileGroup("RenderQueue::render", OGREPROF_RENDERING);
+        OgreProfileGroup( "RenderQueue", OGREPROF_RENDERING );
         //TODO: RENDER QUEUE Add Dual Paraboloid mapping
         mRenderQueue->render( mDestRenderSystem, firstRq, lastRq,
                               mIlluminationStage == IRS_RENDER_TO_TEXTURE, false );
@@ -2627,7 +2632,7 @@ void SceneManager::updateSceneGraph()
         camera->_autoTrack();
     }*/
 
-    OgreProfileGroup("updateSceneGraph", OGREPROF_GENERAL);
+    OgreProfileGroup( "updateSceneGraph", OGREPROF_GENERAL );
 
     // Update controllers 
     ControllerManager::getSingleton().updateAllControllers();
