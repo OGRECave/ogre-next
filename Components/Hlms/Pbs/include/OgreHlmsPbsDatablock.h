@@ -415,6 +415,8 @@ namespace Ogre
         bool hasSeparateFresnel(void) const;
 
         using HlmsPbsBaseTextureDatablock::setTexture;
+        void setTexture( PbsTextureTypes texUnit, const String &name,
+                         const HlmsSamplerblock *refParams=0 );
 
         /** Sets which UV set to use for the given texture.
             Calling this function triggers a HlmsDatablock::flushRenderables.

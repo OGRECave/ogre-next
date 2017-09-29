@@ -48,8 +48,6 @@ THE SOFTWARE.
 #undef OGRE_HLMS_TEXTURE_BASE_MAX_TEX
 #undef OGRE_HLMS_CREATOR_CLASS
 
-#define TODO_loadTextureFromFile 1
-
 namespace Ogre
 {
     extern const String c_unlitBlendModes[];
@@ -282,9 +280,18 @@ namespace Ogre
 #endif
     }
     //-----------------------------------------------------------------------------------
-    void HlmsUnlitDatablock::setTexture( uint8 texUnit, const String &name )
+    void HlmsUnlitDatablock::setTexture( uint8 texUnit, const String &name,
+                                         const HlmsSamplerblock *refParams )
     {
-        TODO_loadTextureFromFile;
+        TextureGpuManager *textureManager = mCreator->getRenderSystem()->getTextureGpuManager();
+        TextureGpu *texture =
+                textureManager->createOrRetrieveTexture( name, GpuPageOutStrategy::Discard,
+                                                         TextureFlags::AutomaticBatching |
+                                                         TextureFlags::PrefersLoadingFromFileAsSRGB,
+                                                         TextureTypes::Type2D,
+                                                         ResourceGroupManager::
+                                                         AUTODETECT_RESOURCE_GROUP_NAME );
+        setTexture( texUnit, texture, refParams );
     }
     //-----------------------------------------------------------------------------------
     void HlmsUnlitDatablock::setUseColour( bool useColour )

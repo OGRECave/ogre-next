@@ -578,6 +578,25 @@ namespace Ogre
         return mFresnelTypeSizeBytes != 4;
     }
     //-----------------------------------------------------------------------------------
+    void HlmsPbsDatablock::setTexture( PbsTextureTypes texUnit, const String &name,
+                                       const HlmsSamplerblock *refParams )
+    {
+        uint32 textureFlags = 0;
+
+        if( texUnit != PBSM_REFLECTION )
+            textureFlags |= TextureFlags::AutomaticBatching;
+        if( suggestUsingSRGB( texUnit ) )
+            textureFlags |= TextureFlags::PrefersLoadingFromFileAsSRGB;
+
+        TextureGpuManager *textureManager = mCreator->getRenderSystem()->getTextureGpuManager();
+        TextureGpu *texture =
+                textureManager->createOrRetrieveTexture( name, GpuPageOutStrategy::Discard,
+                                                         textureFlags, TextureTypes::Type2D,
+                                                         ResourceGroupManager::
+                                                         AUTODETECT_RESOURCE_GROUP_NAME );
+        setTexture( texUnit, texture, refParams );
+    }
+    //-----------------------------------------------------------------------------------
     void HlmsPbsDatablock::setTextureUvSource( PbsTextureTypes sourceType, uint8 uvSet )
     {
         if( uvSet >= 8 )
@@ -838,7 +857,7 @@ namespace Ogre
             }
             else
             {
-                setTexture( PBSM_REFLECTION, 0, 0 );
+                setTexture( PBSM_REFLECTION, (TextureGpu*)0, 0 );
             }
         }
     }

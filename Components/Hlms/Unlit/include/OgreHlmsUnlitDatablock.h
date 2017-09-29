@@ -81,8 +81,6 @@ namespace Ogre
         virtual void uploadToConstBuffer( char *dstPtr, uint8 dirtyFlags );
         virtual void uploadToExtraBuffer( char *dstPtr );
 
-        void setTexture( uint8 texUnit, const String &name );
-
     public:
         /** Valid parameters in params:
         @param params
@@ -154,6 +152,8 @@ namespace Ogre
         ColourValue getColour(void) const               { return ColourValue( mR, mG, mB, mA ); }
 
         using HlmsUnlitBaseTextureDatablock::setTexture;
+
+        void setTexture( uint8 texUnit, const String &name, const HlmsSamplerblock *refParams=0 );
 
         /** Sets the final swizzle when sampling the given texture. e.g.
             calling setTextureSwizzle( 0, R_MASK, G_MASK, R_MASK, G_MASK );
