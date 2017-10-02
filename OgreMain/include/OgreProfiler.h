@@ -49,6 +49,7 @@ Ogre-dependent is in the visualization/logging routines and the use of the Timer
 #include "OgreHeaderPrefix.h"
 
 #if OGRE_PROFILING == OGRE_PROFILING_INTERNAL
+#   define OgreProfilerUseStableMarkers true
 #   define OgreProfileL2( a, line ) Ogre::Profile _OgreProfileInstance##line( (a) )
 #   define OgreProfileL( a, line ) OgreProfileL2( a, line )
 #   define OgreProfile( a ) OgreProfileL( a, __LINE__ )
@@ -62,11 +63,16 @@ Ogre-dependent is in the visualization/logging routines and the use of the Timer
 #   define OgreProfileBeginGPUEvent( g ) Ogre::Profiler::getSingleton().beginGPUEvent(g)
 #   define OgreProfileEndGPUEvent( g ) Ogre::Profiler::getSingleton().endGPUEvent(g)
 #   define OgreProfileMarkGPUEvent( e ) Ogre::Profiler::getSingleton().markGPUEvent(e)
+#   define OgreProfileGpuBegin( a )
+#   define OgreProfileGpuBeginDynamic( a )
+#   define OgreProfileGpuBeginDynamicHashed( a, hash )
+#   define OgreProfileGpuEnd( a )
 #elif OGRE_PROFILING == OGRE_PROFILING_REMOTERY
 namespace Ogre
 {
     class RemoteryProfile;
 }
+#   define OgreProfilerUseStableMarkers Ogre::Profiler::getSingleton().getUseStableMarkers()
 #   define OgreProfileL2( a, line )                                                 \
     static rmtU32 ogre_rmt_sample_hash_##line = 0;                                  \
     Ogre::RemoteryProfile _OgreRemoteryProfileInstance##line( (a), ogre_rmt_sample_hash_##line );
@@ -75,11 +81,14 @@ namespace Ogre
 #   define Ogre_rmt_BeginCPUSampleL2( name, flags, line )                           \
     RMT_OPTIONAL(RMT_ENABLED, {                                                     \
         static rmtU32 rmt_sample_hash_##line = 0;                                   \
-        _rmt_BeginCPUSample( name, flags, &rmt_sample_hash_##line );               \
+        _rmt_BeginCPUSample( name, flags, &rmt_sample_hash_##line );                \
     })
 #   define Ogre_rmt_BeginCPUSampleL( name, flags, line ) Ogre_rmt_BeginCPUSampleL2( name, flags, line )
 #   define OgreProfileBegin( name ) Ogre_rmt_BeginCPUSampleL( name, RMTSF_Aggregate, __LINE__ )
-#   define OgreProfileBeginDynamic( name ) RMT_OPTIONAL(RMT_ENABLED, _rmt_BeginCPUSample(name, RMTSF_Aggregate, NULL))
+#   define OgreProfileBeginDynamic( name )                                          \
+    RMT_OPTIONAL(RMT_ENABLED, _rmt_BeginCPUSample(name, RMTSF_Aggregate, NULL))
+#   define OgreProfileBeginDynamicHashed( name, hash )                              \
+    RMT_OPTIONAL(RMT_ENABLED, _rmt_BeginCPUSample(name, RMTSF_Aggregate, hash))
 #   define OgreProfileEnd( a ) RMT_OPTIONAL(RMT_ENABLED, _rmt_EndCPUSample())
 
 #   define OgreProfileGroup( a, g ) OgreProfile( a )
@@ -88,6 +97,17 @@ namespace Ogre
 #   define OgreProfileBeginGPUEvent( g ) Ogre::Profiler::getSingleton().beginGPUEvent(g)
 #   define OgreProfileEndGPUEvent( g ) Ogre::Profiler::getSingleton().endGPUEvent(g)
 #   define OgreProfileMarkGPUEvent( e ) Ogre::Profiler::getSingleton().markGPUEvent(e)
+
+#   define OgreProfileGpuBeginL2( a, line )                                         \
+    static rmtU32 rmt_sample_hash_##line = 0;                                       \
+    Ogre::Profiler::getSingleton().beginGPUSample( a, &rmt_sample_hash_##line );
+#   define OgreProfileGpuBeginL( a, line ) OgreProfileGpuBeginL2( a, line )
+#   define OgreProfileGpuBegin( a ) OgreProfileGpuBeginL( a, __LINE__ )
+#   define OgreProfileGpuBeginDynamic( a ) Ogre::Profiler::getSingleton().beginGPUSample( a, NULL )
+#   define OgreProfileGpuBeginDynamicHashed( a, hash )                              \
+    Ogre::Profiler::getSingleton().beginGPUSample( a, hash )
+#   define OgreProfileGpuEnd( a ) Ogre::Profiler::getSingleton().endGPUSample(a)
+//#   define OgreProfileGpu( g ) Ogre::Profiler::getSingleton().endGPUEvent(g)
 
 namespace Ogre
 {
@@ -106,8 +126,11 @@ namespace Ogre
 }
 
 #else
+#   define OgreProfilerUseStableMarkers true
 #   define OgreProfile( a )
 #   define OgreProfileBegin( a )
+#   define OgreProfileBeginDynamic( a )
+#   define OgreProfileBeginDynamicHashed
 #   define OgreProfileEnd( a )
 #   define OgreProfileGroup( a, g ) 
 #   define OgreProfileBeginGroup( a, g ) 
@@ -115,6 +138,10 @@ namespace Ogre
 #   define OgreProfileBeginGPUEvent( e )
 #   define OgreProfileEndGPUEvent( e )
 #   define OgreProfileMarkGPUEvent( e )
+#   define OgreProfileGpuBegin( a )
+#   define OgreProfileGpuBeginDynamic( a )
+#   define OgreProfileGpuBeginDynamicHashed( a, hash )
+#   define OgreProfileGpuEnd( a )
 #endif
 
 namespace Ogre {
@@ -389,6 +416,9 @@ namespace Ogre {
              */
             void markGPUEvent(const String& event);
 
+            void beginGPUSample( const String &name, uint32 *hashCache );
+            void endGPUSample( const String &name );
+
             /** Sets whether this profiler is enabled. Only takes effect after the
                 the frame has ended.
                 @remarks When this is called the first time with the parameter true,
@@ -398,6 +428,18 @@ namespace Ogre {
 
             /** Gets whether this profiler is enabled */
             bool getEnabled() const;
+
+            /** Sets whether each frame should be tagged with the frame number (starting from 0).
+                This is very useful for tagging and identifying CPU samples with GPU ones,
+                but it causes Remotery to shift colours like a rainbow.
+                Setting this to true forces each frame to not have the frame number embedded in
+                it, which stabilizes the colour.
+                Default is false.
+            @remarks
+                Relevant only when using Remotery.
+            */
+            void setUseStableMarkers( bool useStableMarkers );
+            bool getUseStableMarkers(void) const;
 
             /** Enables a previously disabled profile 
             @remarks Can be safely called in the middle of the profile.
@@ -550,6 +592,7 @@ namespace Ogre {
 
             /// Whether this profiler is enabled
             bool mEnabled;
+            bool mUseStableMarkers;
 
             /// Keeps track of the new enabled/disabled state that the user has requested
             /// which will be applied after the frame ends

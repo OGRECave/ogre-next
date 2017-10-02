@@ -86,6 +86,7 @@ namespace Ogre {
         , mTimer(0)
         , mTotalFrameTime(0)
         , mEnabled(false)
+        , mUseStableMarkers(false)
         , mNewEnableState(false)
         , mProfileMask(0xFFFFFFFF)
         , mMaxTotalFrameTime(0)
@@ -137,6 +138,7 @@ namespace Ogre {
 #if OGRE_PROFILING == OGRE_PROFILING_REMOTERY
         if( mRemotery )
         {
+            Root::getSingleton().getRenderSystem()->deinitGPUProfiling();
             rmt_DestroyGlobalInstance( mRemotery );
             mRemotery = 0;
         }
@@ -162,8 +164,12 @@ namespace Ogre {
                 (*i)->initializeSession();
 
 #if OGRE_PROFILING == OGRE_PROFILING_REMOTERY
+            rmtSettings *settings = rmt_Settings();
+            settings->messageQueueSizeInBytes *= 10;
+            settings->maxNbMessagesPerUpdate *= 10;
             rmt_CreateGlobalInstance( &mRemotery );
             rmt_SetCurrentThreadName( "Main Ogre Thread" );
+            Root::getSingleton().getRenderSystem()->initGPUProfiling();
 #endif
             mInitialized = true;
         }
@@ -176,6 +182,7 @@ namespace Ogre {
             mEnabled = false;
 
 #if OGRE_PROFILING == OGRE_PROFILING_REMOTERY
+            Root::getSingleton().getRenderSystem()->deinitGPUProfiling();
             if( mRemotery )
             {
                 rmt_DestroyGlobalInstance( mRemotery );
@@ -191,6 +198,16 @@ namespace Ogre {
     bool Profiler::getEnabled() const
     {
         return mEnabled;
+    }
+    //-----------------------------------------------------------------------
+    void Profiler::setUseStableMarkers( bool useStableMarkers )
+    {
+        mUseStableMarkers = useStableMarkers;
+    }
+    //-----------------------------------------------------------------------
+    bool Profiler::getUseStableMarkers(void) const
+    {
+        return mUseStableMarkers;
     }
     //-----------------------------------------------------------------------
     void Profiler::changeEnableState() 
@@ -397,6 +414,16 @@ namespace Ogre {
     void Profiler::markGPUEvent(const String& event)
     {
         Root::getSingleton().getRenderSystem()->markProfileEvent(event);
+    }
+    //-----------------------------------------------------------------------
+    void Profiler::beginGPUSample( const String &name, uint32 *hashCache )
+    {
+        Root::getSingleton().getRenderSystem()->beginGPUSampleProfile( name, hashCache );
+    }
+    //-----------------------------------------------------------------------
+    void Profiler::endGPUSample( const String &name )
+    {
+        Root::getSingleton().getRenderSystem()->endGPUSampleProfile( name );
     }
     //-----------------------------------------------------------------------
     void Profiler::processFrameStats(ProfileInstance* instance, Real& maxFrameTime)

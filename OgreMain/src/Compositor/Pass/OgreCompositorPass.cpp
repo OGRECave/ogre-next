@@ -378,7 +378,10 @@ namespace Ogre
     {
 #if OGRE_PROFILING
         if( !mParentNode->getWorkspace()->getAmalgamatedProfiling() )
+        {
             OgreProfileBeginDynamic( mDefinition->mProfilingId.c_str() );
+            OgreProfileGpuBeginDynamic( mDefinition->mProfilingId );
+        }
 #endif
     }
     //-----------------------------------------------------------------------------------
@@ -386,7 +389,10 @@ namespace Ogre
     {
 #if OGRE_PROFILING
         if( !mParentNode->getWorkspace()->getAmalgamatedProfiling() )
+        {
             OgreProfileEnd( mDefinition->mProfilingId );
+            OgreProfileGpuEnd( mDefinition->mProfilingId );
+        }
 #endif
     }
     //-----------------------------------------------------------------------------------
