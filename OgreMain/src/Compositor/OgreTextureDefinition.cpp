@@ -274,7 +274,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureDefinitionBase::createTextures( const TextureDefinitionVec &textureDefs,
                                                 CompositorChannelVec &inOutTexContainer,
-                                                IdType id, bool uniqueNames,
+                                                IdType id,
                                                 const TextureGpu *finalTarget,
                                                 RenderSystem *renderSys )
     {
@@ -288,7 +288,7 @@ namespace Ogre
         {
             String textureName;
             if( uniqueNames )
-                textureName = itor->getName().getFriendlyText() + "_" + StringConverter::toString( id );
+                textureName = (itor->getName() + IdString( id )).getFriendlyText();
             else
                 textureName = itor->getName().getFriendlyText();
 

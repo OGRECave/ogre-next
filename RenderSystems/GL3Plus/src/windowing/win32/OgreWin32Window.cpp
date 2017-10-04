@@ -44,6 +44,7 @@ THE SOFTWARE.
 #include "OgreWindowEventUtilities.h"
 #include "OgreDepthBuffer.h"
 #include "OgreTextureGpuListener.h"
+#include "OgreProfiler.h"
 
 #define TODO_notify_listeners
 
@@ -1028,7 +1029,13 @@ namespace Ogre
     void Win32Window::swapBuffers()
     {
         if( !mIsExternalGLControl )
+        {
+            OgreProfileBeginDynamic( ("SwapBuffers: " + mName).c_str() );
+            OgreProfileGpuBeginDynamic( "SwapBuffers: " + mName );
             SwapBuffers(mHDC);
+            OgreProfileEnd( "SwapBuffers: " + mName );
+            OgreProfileGpuEnd( "SwapBuffers: " + mName );
+        }
     }
     //-----------------------------------------------------------------------------------
     void Win32Window::setFocused( bool focused )
