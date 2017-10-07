@@ -1030,11 +1030,11 @@ namespace Ogre
     {
         if( !mIsExternalGLControl )
         {
-            OgreProfileBeginDynamic( ("SwapBuffers: " + mName).c_str() );
-            OgreProfileGpuBeginDynamic( "SwapBuffers: " + mName );
+            OgreProfileBeginDynamic( ("SwapBuffers: " + mTitle).c_str() );
+            OgreProfileGpuBeginDynamic( "SwapBuffers: " + mTitle );
             SwapBuffers(mHDC);
-            OgreProfileEnd( "SwapBuffers: " + mName );
-            OgreProfileGpuEnd( "SwapBuffers: " + mName );
+            OgreProfileEnd( "SwapBuffers: " + mTitle );
+            OgreProfileGpuEnd( "SwapBuffers: " + mTitle );
         }
     }
     //-----------------------------------------------------------------------------------
