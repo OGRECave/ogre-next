@@ -72,6 +72,19 @@ namespace Ogre
 
     typedef vector<StagingTexture*>::type StagingTextureVec;
 
+    namespace DefaultMipmapGen
+    {
+        enum DefaultMipmapGen
+        {
+            /// Do not generate mipmaps when TextureFilter::TypeGenerateDefaultMipmaps is used
+            NoMipmaps,
+            /// Generate mipmaps via HW when TextureFilter::TypeGenerateDefaultMipmaps is used
+            HwMode,
+            /// Generate mipmaps via SW when TextureFilter::TypeGenerateDefaultMipmaps is used
+            SwMode
+        };
+    }
+
     class _OgreExport TextureGpuManager : public ResourceAlloc
     {
     public:
@@ -210,8 +223,8 @@ namespace Ogre
             UsageStatsVec       prevStats;
         };
 
-        bool                mUseDefaultHwMipmapGeneration;
-        bool                mUseDefaultHwMipmapGenerationCubemaps;
+        DefaultMipmapGen::DefaultMipmapGen mDefaultMipmapGen;
+        DefaultMipmapGen::DefaultMipmapGen mDefaultMipmapGenCubemaps;
         bool                mShuttingDown;
         ThreadHandlePtr     mWorkerThread;
         /// Main thread wakes, worker waits.
@@ -303,9 +316,10 @@ namespace Ogre
         @param hwMipmapGenCubemaps
             Whether to enable HW mipmap generation for cubemap textures. Default is false.
         */
-        void setDefaultHwMipmapGeneration( bool hwMipmapGen, bool hwMipmapGenCubemaps );
-        bool getDefaultHwMipmapGeneration(void) const;
-        bool getDefaultHwMipmapGenerationCubemaps(void) const;
+        void setDefaultMipmapGeneration( DefaultMipmapGen::DefaultMipmapGen defaultMipmapGen,
+                                         DefaultMipmapGen::DefaultMipmapGen defaultMipmapGenCubemaps );
+        DefaultMipmapGen::DefaultMipmapGen getDefaultMipmapGeneration(void) const;
+        DefaultMipmapGen::DefaultMipmapGen getDefaultMipmapGenerationCubemaps(void) const;
 
         /// Must be called from main thread.
         void _reserveSlotForTexture( TextureGpu *texture );

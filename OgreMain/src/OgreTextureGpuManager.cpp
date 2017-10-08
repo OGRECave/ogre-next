@@ -116,8 +116,8 @@ namespace Ogre
     THREAD_DECLARE( updateStreamingWorkerThread );
 
     TextureGpuManager::TextureGpuManager( VaoManager *vaoManager ) :
-        mUseDefaultHwMipmapGeneration( true ),
-        mUseDefaultHwMipmapGenerationCubemaps( false ),
+        mDefaultMipmapGen( DefaultMipmapGen::HwMode ),
+        mDefaultMipmapGenCubemaps( DefaultMipmapGen::SwMode ),
         mShuttingDown( false ),
         mEntriesToProcessPerIteration( 3u ),
         mVaoManager( vaoManager )
@@ -563,20 +563,22 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::setDefaultHwMipmapGeneration( bool hwMipmapGen, bool hwMipmapGenCubemaps )
+    void TextureGpuManager::setDefaultMipmapGeneration(
+            DefaultMipmapGen::DefaultMipmapGen defaultMipmapGen,
+            DefaultMipmapGen::DefaultMipmapGen defaultMipmapGenCubemaps )
     {
-        mUseDefaultHwMipmapGeneration = hwMipmapGen;
-        mUseDefaultHwMipmapGenerationCubemaps = hwMipmapGenCubemaps;
+        mDefaultMipmapGen = defaultMipmapGen;
+        mDefaultMipmapGenCubemaps = defaultMipmapGenCubemaps;
     }
     //-----------------------------------------------------------------------------------
-    bool TextureGpuManager::getDefaultHwMipmapGeneration(void) const
+    DefaultMipmapGen::DefaultMipmapGen TextureGpuManager::getDefaultMipmapGeneration(void) const
     {
-        return mUseDefaultHwMipmapGeneration;
+        return mDefaultMipmapGen;
     }
     //-----------------------------------------------------------------------------------
-    bool TextureGpuManager::getDefaultHwMipmapGenerationCubemaps(void) const
+    DefaultMipmapGen::DefaultMipmapGen TextureGpuManager::getDefaultMipmapGenerationCubemaps(void) const
     {
-        return mUseDefaultHwMipmapGenerationCubemaps;
+        return mDefaultMipmapGenCubemaps;
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::_reserveSlotForTexture( TextureGpu *texture )
