@@ -39,6 +39,7 @@ THE SOFTWARE.
 #include "Vao/OgreVaoManager.h"
 #include "OgreResourceGroupManager.h"
 #include "OgreImage2.h"
+#include "OgreTextureFilters.h"
 
 #include "OgreException.h"
 
@@ -137,13 +138,25 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     ObjCmdBuffer::
-    NotifyDataIsReady::NotifyDataIsReady( TextureGpu *_textureGpu ) :
+    NotifyDataIsReady::NotifyDataIsReady( TextureGpu *_textureGpu, FilterBaseVec &inOutFilters ) :
         texture( _textureGpu )
     {
+        filters.swap( inOutFilters );
     }
     //-----------------------------------------------------------------------------------
     void ObjCmdBuffer::NotifyDataIsReady::execute(void)
     {
+        FilterBaseVec::const_iterator itor = filters.begin();
+        FilterBaseVec::const_iterator end  = filters.end();
+
+        while( itor != end )
+        {
+            (*itor)->_executeSerial( texture );
+            OGRE_DELETE *itor;
+            ++itor;
+        }
+        filters.clear();
+
         texture->notifyDataIsReady();
     }
 }

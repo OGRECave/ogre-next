@@ -264,6 +264,7 @@ namespace Ogre
         void setMsaa( uint8 msaa );
         uint8 getMsaa(void) const;
 
+        void copyParametersFrom( TextureGpu *src );
         bool hasEquivalentParameters( TextureGpu *other ) const;
         void setHlmsProperties( Hlms *hlms, LwString &propBaseName );
 

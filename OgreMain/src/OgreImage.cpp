@@ -777,7 +777,10 @@ namespace Ogre {
                 {
                     PixelBox downFace = this->getPixelBox( j, i );
                     (*downsamplerCubeFunc)( reinterpret_cast<uint8*>( downFace.data ), upFaces,
-                                            dstWidth, dstHeight, srcWidth, srcHeight,
+                                            dstWidth, dstHeight,
+                                            dstWidth * PixelUtil::getNumElemBytes( mFormat ),
+                                            srcWidth, srcHeight,
+                                            srcWidth * PixelUtil::getNumElemBytes( mFormat ),
                                             chosenFilter.kernel,
                                             chosenFilter.kernelStartX, chosenFilter.kernelEndX,
                                             chosenFilter.kernelStartY, chosenFilter.kernelEndY,
@@ -788,7 +791,10 @@ namespace Ogre {
             {
                 (*downsampler2DFunc)( reinterpret_cast<uint8*>( this->getPixelBox( 0, i ).data ),
                                       reinterpret_cast<uint8*>( this->getPixelBox( 0, i - 1 ).data ),
-                                      dstWidth, dstHeight, srcWidth,
+                                      dstWidth, dstHeight,
+                                      dstWidth * PixelUtil::getNumElemBytes( mFormat ),
+                                      srcWidth,
+                                      srcWidth * PixelUtil::getNumElemBytes( mFormat ),
                                       chosenFilter.kernel,
                                       chosenFilter.kernelStartX, chosenFilter.kernelEndX,
                                       chosenFilter.kernelStartY, chosenFilter.kernelEndY );

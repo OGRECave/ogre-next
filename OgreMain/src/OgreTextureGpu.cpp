@@ -218,6 +218,20 @@ namespace Ogre
         return mMsaa;
     }
     //-----------------------------------------------------------------------------------
+    void TextureGpu::copyParametersFrom( TextureGpu *src )
+    {
+        assert( this->mResidencyStatus == GpuResidency::OnStorage );
+
+        this->mWidth            = src->mWidth;
+        this->mHeight           = src->mHeight;
+        this->mDepthOrSlices    = src->mDepthOrSlices;
+        this->mNumMipmaps       = src->mNumMipmaps;
+        this->mPixelFormat      = src->mPixelFormat;
+        this->mMsaa             = src->mMsaa;
+        this->mMsaaPattern      = src->mMsaaPattern;
+        this->mTextureType      = src->mTextureType;
+    }
+    //-----------------------------------------------------------------------------------
     bool TextureGpu::hasEquivalentParameters( TextureGpu *other ) const
     {
         return this->mWidth != other->mWidth ||

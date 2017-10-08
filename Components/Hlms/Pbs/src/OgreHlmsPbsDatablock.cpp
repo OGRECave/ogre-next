@@ -38,6 +38,7 @@ THE SOFTWARE.
 #include "OgreTextureGpu.h"
 #include "OgreTextureGpuManager.h"
 #include "OgreRenderSystem.h"
+#include "OgreTextureFilters.h"
 #include "Cubemaps/OgreCubemapProbe.h"
 
 #define _OgreHlmsTextureBaseClassExport _OgreHlmsPbsExport
@@ -182,7 +183,8 @@ namespace Ogre
                                       TextureFlags::AutomaticBatching |
                                       TextureFlags::PrefersLoadingFromFileAsSRGB,
                                       TextureTypes::Type2D,
-                                      ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+                                      ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                                      TextureFilter::TypeGenerateDefaultMipmaps );
             setTexture( PBSM_DIFFUSE, texture );
         }
         if( Hlms::findParamInVec( params, "normal_map", paramVal ) )
@@ -191,7 +193,9 @@ namespace Ogre
                                       paramVal, GpuPageOutStrategy::Discard,
                                       TextureFlags::AutomaticBatching,
                                       TextureTypes::Type2D,
-                                      ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+                                      ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                                      TextureFilter::TypeGenerateDefaultMipmaps |
+                                      TextureFilter::TypePrepareForNormalMapping );
             setTexture( PBSM_NORMAL, texture );
         }
         if( Hlms::findParamInVec( params, "specular_map", paramVal ) )
@@ -201,7 +205,8 @@ namespace Ogre
                                       TextureFlags::AutomaticBatching |
                                       TextureFlags::PrefersLoadingFromFileAsSRGB,
                                       TextureTypes::Type2D,
-                                      ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+                                      ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                                      TextureFilter::TypeGenerateDefaultMipmaps );
             setTexture( PBSM_SPECULAR, texture );
         }
         if( Hlms::findParamInVec( params, "roughness_map", paramVal ) )
@@ -210,7 +215,9 @@ namespace Ogre
                                       paramVal, GpuPageOutStrategy::Discard,
                                       TextureFlags::AutomaticBatching,
                                       TextureTypes::Type2D,
-                                      ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+                                      ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                                      TextureFilter::TypeGenerateDefaultMipmaps |
+                                      TextureFilter::TypeLeaveChannelR );
             setTexture( PBSM_ROUGHNESS, texture );
         }
         if( Hlms::findParamInVec( params, "detail_weight_map", paramVal ) )
@@ -219,7 +226,8 @@ namespace Ogre
                                       paramVal, GpuPageOutStrategy::Discard,
                                       TextureFlags::AutomaticBatching,
                                       TextureTypes::Type2D,
-                                      ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+                                      ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                                      TextureFilter::TypeGenerateDefaultMipmaps );
             setTexture( PBSM_DETAIL_WEIGHT, texture );
         }
         if( Hlms::findParamInVec( params, "reflection_map", paramVal ) )
@@ -228,7 +236,8 @@ namespace Ogre
                                       paramVal, GpuPageOutStrategy::Discard,
                                       TextureFlags::PrefersLoadingFromFileAsSRGB,
                                       TextureTypes::TypeCube,
-                                      ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+                                      ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                                      TextureFilter::TypeGenerateDefaultMipmaps );
             setTexture( PBSM_REFLECTION, texture );
         }
 
@@ -263,7 +272,8 @@ namespace Ogre
                               TextureFlags::AutomaticBatching |
                               TextureFlags::PrefersLoadingFromFileAsSRGB,
                               TextureTypes::Type2D,
-                              ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+                              ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                              TextureFilter::TypeGenerateDefaultMipmaps );
                 setTexture( PBSM_DETAIL0 + i, texture, &detailSamplerRef );
             }
 
@@ -274,7 +284,9 @@ namespace Ogre
                 texture = textureManager->createOrRetrieveTexture(
                               paramVal, GpuPageOutStrategy::Discard, TextureFlags::AutomaticBatching,
                               TextureTypes::Type2D,
-                              ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+                              ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                              TextureFilter::TypeGenerateDefaultMipmaps |
+                              TextureFilter::TypePrepareForNormalMapping );
                 setTexture( PBSM_DETAIL0_NM + i, texture, &detailSamplerRef );
             }
 
@@ -582,6 +594,9 @@ namespace Ogre
                                        const HlmsSamplerblock *refParams )
     {
         uint32 textureFlags = 0;
+        uint32 filters = TextureFilter::TypeGenerateDefaultMipmaps;
+
+        filters |= suggestFiltersForType( texUnit );
 
         if( texUnit != PBSM_REFLECTION )
             textureFlags |= TextureFlags::AutomaticBatching;
@@ -593,7 +608,8 @@ namespace Ogre
                 textureManager->createOrRetrieveTexture( name, GpuPageOutStrategy::Discard,
                                                          textureFlags, TextureTypes::Type2D,
                                                          ResourceGroupManager::
-                                                         AUTODETECT_RESOURCE_GROUP_NAME );
+                                                         AUTODETECT_RESOURCE_GROUP_NAME,
+                                                         filters );
         setTexture( texUnit, texture, refParams );
     }
     //-----------------------------------------------------------------------------------
@@ -954,6 +970,30 @@ namespace Ogre
             return false;
 
         return true;
+    }
+    //-----------------------------------------------------------------------------------
+    uint32 HlmsPbsDatablock::suggestFiltersForType( PbsTextureTypes type ) const
+    {
+        switch( type )
+        {
+        case PBSM_NORMAL:
+        case PBSM_DETAIL0_NM:
+        case PBSM_DETAIL1_NM:
+        case PBSM_DETAIL2_NM:
+        case PBSM_DETAIL3_NM:
+            return TextureFilter::TypePrepareForNormalMapping;
+        case PBSM_ROUGHNESS:
+            return TextureFilter::TypeLeaveChannelR;
+        case PBSM_SPECULAR:
+            if( this->getWorkflow() == MetallicWorkflow )
+                return TextureFilter::TypeLeaveChannelR;
+            else
+                return 0;
+        default:
+            return 0;
+        }
+
+        return 0;
     }
     /*HlmsTextureManager::TextureMapType HlmsPbsDatablock::suggestMapTypeBasedOnTextureType(
                                                                         PbsTextureTypes type )

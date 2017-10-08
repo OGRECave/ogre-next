@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "OgreHlmsJsonPbs.h"
 #include "OgreHlmsManager.h"
 #include "OgreTextureGpuManager.h"
+#include "OgreTextureFilters.h"
 
 #include "OgreLwString.h"
 
@@ -190,9 +191,12 @@ namespace Ogre
                 textureFlags &= ~TextureFlags::AutomaticBatching;
             }
 
+            uint32 filters = TextureFilter::TypeGenerateDefaultMipmaps;
+            filters |= datablock->suggestFiltersForType( textureType );
+
             texture = mTextureManager->createOrRetrieveTexture( textureName, GpuPageOutStrategy::Discard,
                                                                 textureFlags, internalTextureType,
-                                                                resourceGroup );
+                                                                resourceGroup, filters );
         }
 
         itor = json.FindMember( "sampler" );

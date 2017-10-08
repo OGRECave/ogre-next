@@ -43,6 +43,12 @@ namespace Ogre
     *  @{
     */
 
+    namespace TextureFilter
+    {
+        class FilterBase;
+    }
+    typedef vector<TextureFilter::FilterBase*>::type FilterBaseVec;
+
     class _OgreExport ObjCmdBuffer : public ResourceAlloc
     {
     public:
@@ -104,9 +110,10 @@ namespace Ogre
         class NotifyDataIsReady : public Cmd
         {
             TextureGpu      *texture;
+            FilterBaseVec   filters;
 
         public:
-            NotifyDataIsReady( TextureGpu *_textureGpu );
+            NotifyDataIsReady( TextureGpu *_textureGpu, FilterBaseVec &inOutFilters );
             virtual void execute(void);
         };
     };

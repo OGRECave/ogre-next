@@ -737,7 +737,8 @@ namespace Ogre {
             const size_t totalBytes = PixelFormatGpuUtils::calculateSizeBytes( mWidth, mHeight,
                                                                                getDepth(),
                                                                                getNumSlices(),
-                                                                               mPixelFormat, mNumMipmaps,
+                                                                               mPixelFormat,
+                                                                               numMipmapsRequired,
                                                                                rowAlignment );
             mBuffer = OGRE_MALLOC_SIMD( totalBytes, MEMCATEGORY_RESOURCE );
 
@@ -788,7 +789,8 @@ namespace Ogre {
                 {
                     uint8 *downFace = reinterpret_cast<uint8*>( box1.at( 0, 0, j ) );
                     (*downsamplerCubeFunc)( reinterpret_cast<uint8*>( downFace ), upFaces,
-                                            dstWidth, dstHeight, srcWidth, srcHeight,
+                                            dstWidth, dstHeight, box1.bytesPerRow,
+                                            srcWidth, srcHeight, box0.bytesPerRow,
                                             chosenFilter.kernel,
                                             chosenFilter.kernelStartX, chosenFilter.kernelEndX,
                                             chosenFilter.kernelStartY, chosenFilter.kernelEndY,
@@ -799,7 +801,8 @@ namespace Ogre {
             {
                 (*downsampler2DFunc)( reinterpret_cast<uint8*>( box1.data ),
                                       reinterpret_cast<uint8*>( box0.data ),
-                                      dstWidth, dstHeight, srcWidth,
+                                      dstWidth, dstHeight, box1.bytesPerRow,
+                                      srcWidth, box0.bytesPerRow,
                                       chosenFilter.kernel,
                                       chosenFilter.kernelStartX, chosenFilter.kernelEndX,
                                       chosenFilter.kernelStartY, chosenFilter.kernelEndY );
@@ -913,5 +916,10 @@ namespace Ogre {
     void Image2::_setAutoDelete( bool autoDelete )
     {
         mAutoDelete = autoDelete;
+    }
+    //-----------------------------------------------------------------------------------
+    bool Image2::getAutoDelete(void) const
+    {
+        return mAutoDelete;
     }
 }

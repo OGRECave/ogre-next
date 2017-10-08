@@ -299,6 +299,7 @@ namespace Ogre {
         static String getFileExtFromMagic( DataStreamPtr &stream );
 
         void _setAutoDelete( bool autoDelete );
+        bool getAutoDelete(void) const;
     };
 
     /** @} */

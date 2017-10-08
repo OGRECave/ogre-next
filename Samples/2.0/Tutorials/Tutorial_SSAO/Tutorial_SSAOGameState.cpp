@@ -20,6 +20,7 @@
 #include "OgreRoot.h"
 #include "OgreHlmsManager.h"
 #include "OgreHlmsPbs.h"
+#include "OgreTextureFilters.h"
 #include "OgreTextureGpuManager.h"
 #include "OgreTextureBox.h"
 #include "OgreStagingTexture.h"
@@ -129,7 +130,8 @@ namespace Demo
                                                     Ogre::TextureFlags::PrefersLoadingFromFileAsSRGB,
                                                     Ogre::TextureTypes::TypeCube,
                                                     Ogre::ResourceGroupManager::
-                                                    AUTODETECT_RESOURCE_GROUP_NAME );
+                                                    AUTODETECT_RESOURCE_GROUP_NAME,
+                                                    Ogre::TextureFilter::TypeGenerateDefaultMipmaps );
 
                     datablock->setTexture( Ogre::PBSM_REFLECTION, texture );
                     datablock->setDiffuse( Ogre::Vector3( 0.0f, 1.0f, 0.0f ) );

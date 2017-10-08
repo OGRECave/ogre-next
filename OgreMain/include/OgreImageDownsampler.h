@@ -48,8 +48,8 @@ namespace Ogre
     @param kernelEndY
      */
     typedef void (ImageDownsampler2D)( uint8 *dstPtr, uint8 const *srcPtr,
-                                       int32 dstWidth, int32 dstHeight,
-                                       int32 srcWidth,
+                                       int32 dstWidth, int32 dstHeight, int32 dstBytesPerRow,
+                                       int32 srcWidth, int32 srcBytesPerRow,
                                        const uint8 kernel[5][5],
                                        const int8 kernelStartX, const int8 kernelEndX,
                                        const int8 kernelStartY, const int8 kernelEndY );
@@ -66,8 +66,8 @@ namespace Ogre
     //
 
     typedef void (ImageDownsamplerCube)( uint8 *dstPtr, uint8 const **srcPtr,
-                                       int32 dstWidth, int32 dstHeight,
-                                       int32 srcWidth, int32 srcHeight,
+                                       int32 dstWidth, int32 dstHeight, int32 dstBytesPerRow,
+                                       int32 srcWidth, int32 srcHeight, int32 srcBytesPerRow,
                                        const uint8 kernel[5][5],
                                        const int8 kernelStartX, const int8 kernelEndX,
                                        const int8 kernelStartY, const int8 kernelEndY,

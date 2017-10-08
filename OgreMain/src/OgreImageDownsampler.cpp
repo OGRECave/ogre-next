@@ -401,14 +401,17 @@ namespace Ogre
 namespace Ogre
 {
     void DOWNSAMPLE_NAME( uint8 *_dstPtr, uint8 const *_srcPtr,
-                          int32 dstWidth, int32 dstHeight,
-                          int32 srcWidth,
+                          int32 dstWidth, int32 dstHeight, int32 dstBytesPerRow,
+                          int32 srcWidth, int32 srcBytesPerRow,
                           const uint8 kernel[5][5],
                           const int8 kernelStartX, const int8 kernelEndX,
                           const int8 kernelStartY, const int8 kernelEndY )
     {
         OGRE_UINT8 *dstPtr = reinterpret_cast<OGRE_UINT8*>( _dstPtr );
         OGRE_UINT8 const *srcPtr = reinterpret_cast<OGRE_UINT8 const *>( _srcPtr );
+
+        int32 srcBytesPerRowSkip = srcBytesPerRow - srcWidth * OGRE_TOTAL_SIZE;
+        int32 dstBytesPerRowSkip = dstBytesPerRow - dstWidth * OGRE_TOTAL_SIZE;
 
         for( int32 y=0; y<dstHeight; ++y )
         {
@@ -442,19 +445,19 @@ namespace Ogre
                         uint32 kernelVal = kernel[k_y+2][k_x+2];
 
     #ifdef OGRE_DOWNSAMPLE_R
-                        OGRE_UINT32 r = srcPtr[(k_y * srcWidth + k_x) * OGRE_TOTAL_SIZE + OGRE_DOWNSAMPLE_R];
+                        OGRE_UINT32 r = srcPtr[(k_y * srcBytesPerRow + k_x) * OGRE_TOTAL_SIZE + OGRE_DOWNSAMPLE_R];
                         accumR += OGRE_GAM_TO_LIN( r ) * kernelVal;
     #endif
     #ifdef OGRE_DOWNSAMPLE_G
-                        OGRE_UINT32 g = srcPtr[(k_y * srcWidth + k_x) * OGRE_TOTAL_SIZE + OGRE_DOWNSAMPLE_G];
+                        OGRE_UINT32 g = srcPtr[(k_y * srcBytesPerRow + k_x) * OGRE_TOTAL_SIZE + OGRE_DOWNSAMPLE_G];
                         accumG += OGRE_GAM_TO_LIN( g ) * kernelVal;
     #endif
     #ifdef OGRE_DOWNSAMPLE_B
-                        OGRE_UINT32 b = srcPtr[(k_y * srcWidth + k_x) * OGRE_TOTAL_SIZE + OGRE_DOWNSAMPLE_B];
+                        OGRE_UINT32 b = srcPtr[(k_y * srcBytesPerRow + k_x) * OGRE_TOTAL_SIZE + OGRE_DOWNSAMPLE_B];
                         accumB += OGRE_GAM_TO_LIN( b ) * kernelVal;
     #endif
     #ifdef OGRE_DOWNSAMPLE_A
-                        OGRE_UINT32 a = srcPtr[(k_y * srcWidth + k_x) * OGRE_TOTAL_SIZE + OGRE_DOWNSAMPLE_A];
+                        OGRE_UINT32 a = srcPtr[(k_y * srcBytesPerRow + k_x) * OGRE_TOTAL_SIZE + OGRE_DOWNSAMPLE_A];
                         accumA += a * kernelVal;
     #endif
 
@@ -483,14 +486,15 @@ namespace Ogre
                 srcPtr += OGRE_TOTAL_SIZE * 2;
             }
 
-            srcPtr += (srcWidth - dstWidth * 2) * OGRE_TOTAL_SIZE;
-            srcPtr += srcWidth * OGRE_TOTAL_SIZE;
+            dstPtr += dstBytesPerRowSkip;
+            srcPtr += (srcWidth - dstWidth * 2) * OGRE_TOTAL_SIZE + srcBytesPerRowSkip;
+            srcPtr += srcBytesPerRow;
         }
     }
     //-----------------------------------------------------------------------------------
     void DOWNSAMPLE_CUBE_NAME( uint8 *_dstPtr, uint8 const **_allPtr,
-                               int32 dstWidth, int32 dstHeight,
-                               int32 srcWidth, int32 srcHeight,
+                               int32 dstWidth, int32 dstHeight, int32 dstBytesPerRow,
+                               int32 srcWidth, int32 srcHeight, int32 srcBytesPerRow,
                                const uint8 kernel[5][5],
                                const int8 kernelStartX, const int8 kernelEndX,
                                const int8 kernelStartY, const int8 kernelEndY,
@@ -520,6 +524,8 @@ namespace Ogre
 
         Real invSrcWidth  = 1.0f / srcWidth;
         Real invSrcHeight = 1.0f / srcHeight;
+
+        int32 dstBytesPerRowSkip = dstBytesPerRow - dstWidth * OGRE_TOTAL_SIZE;
 
         OGRE_UINT8 const *srcPtr = 0;
 
@@ -566,7 +572,7 @@ namespace Ogre
                         int iv = std::min( static_cast<int>( floorf( uvi.v * srcHeight ) ),
                                            srcHeight - 1 );
 
-                        srcPtr = allPtr[uvi.face] + (iv * srcWidth + iu) * OGRE_TOTAL_SIZE;
+                        srcPtr = allPtr[uvi.face] + iv * srcBytesPerRow + iu * OGRE_TOTAL_SIZE;
 
     #ifdef OGRE_DOWNSAMPLE_R
                         OGRE_UINT32 r = srcPtr[OGRE_DOWNSAMPLE_R];
@@ -608,6 +614,8 @@ namespace Ogre
 
                 dstPtr += OGRE_TOTAL_SIZE;
             }
+
+            dstPtr += dstBytesPerRowSkip;
         }
     }
 }

@@ -51,6 +51,13 @@ namespace Ogre
     class ObjCmdBuffer;
     class ResourceLoadingListener;
 
+    namespace TextureFilter
+    {
+        class FilterBase;
+    }
+
+    typedef vector<TextureFilter::FilterBase*>::type FilterBaseVec;
+
     struct _OgreExport TexturePool
     {
         TextureGpu  *masterTexture;
@@ -116,10 +123,15 @@ namespace Ogre
             String      name;
             String      resourceGroup;
             TextureGpu  *texture;
+            uint32      filters;
 
             ResourceEntry() : texture( 0 ) {}
-            ResourceEntry( const String &_name, const String &_resourceGroup, TextureGpu *_texture ) :
-                name( _name ), resourceGroup( _resourceGroup ), texture( _texture ) {}
+            ResourceEntry( const String &_name, const String &_resourceGroup,
+                           TextureGpu *_texture, uint32 _filters ) :
+                name( _name ), resourceGroup( _resourceGroup ),
+                texture( _texture ), filters( _filters )
+            {
+            }
         };
         typedef map<IdString, ResourceEntry>::type ResourceEntryMap;
 
@@ -132,15 +144,16 @@ namespace Ogre
             GpuResidency::GpuResidency  nextResidency;
             /// Slice to upload this image to (in case we're uploading a 2D image into an cubemap)
             /// std::numeric_limits<uint32>::max() to disable it.
-            uint32      sliceOrDepth;
+            uint32                      sliceOrDepth;
+            uint32                      filters;
 
             LoadRequest( const String &_name, Archive *_archive,
                          ResourceLoadingListener *_loadingListener,
                          TextureGpu *_texture, GpuResidency::GpuResidency _nextResidency,
-                         uint32 _sliceOrDepth ) :
+                         uint32 _sliceOrDepth, uint32 _filters ) :
                 name( _name ), archive( _archive ), loadingListener( _loadingListener ),
                 texture( _texture ), nextResidency( _nextResidency ),
-                sliceOrDepth( _sliceOrDepth ) {}
+                sliceOrDepth( _sliceOrDepth ), filters( _filters ) {}
         };
 
         typedef vector<LoadRequest>::type LoadRequestVec;
@@ -169,9 +182,10 @@ namespace Ogre
             uint8       numSlices;
             /// See LoadRequest::sliceOrDepth
             uint32      dstSliceOrDepth;
+            FilterBaseVec filters;
 
             QueuedImage( Image2 &srcImage, uint8 numMips, uint8 _numSlices, TextureGpu *_dstTexture,
-                         uint32 _dstSliceOrDepth );
+                         uint32 _dstSliceOrDepth, FilterBaseVec &inOutFilters );
             void destroy(void);
             bool empty(void) const;
             bool isMipSliceQueued( uint8 mipLevel, uint8 slice ) const;
@@ -196,6 +210,8 @@ namespace Ogre
             UsageStatsVec       prevStats;
         };
 
+        bool                mUseDefaultHwMipmapGeneration;
+        bool                mUseDefaultHwMipmapGenerationCubemaps;
         bool                mShuttingDown;
         ThreadHandlePtr     mWorkerThread;
         /// Main thread wakes, worker waits.
@@ -279,6 +295,18 @@ namespace Ogre
         TextureGpuManager( VaoManager *vaoManager );
         virtual ~TextureGpuManager();
 
+        /** Whether to use HW or SW mipmap generation when specifying
+            TextureFilter::TypeGenerateDefaultMipmaps for loading files from textures.
+            This setting has no effect for filters explicitly asking for HW mipmap generation.
+        @param hwMipmapGen
+            Whether to enable HW mipmap generation for textures. Default is true.
+        @param hwMipmapGenCubemaps
+            Whether to enable HW mipmap generation for cubemap textures. Default is false.
+        */
+        void setDefaultHwMipmapGeneration( bool hwMipmapGen, bool hwMipmapGenCubemaps );
+        bool getDefaultHwMipmapGeneration(void) const;
+        bool getDefaultHwMipmapGenerationCubemaps(void) const;
+
         /// Must be called from main thread.
         void _reserveSlotForTexture( TextureGpu *texture );
         /// Must be called from main thread.
@@ -329,14 +357,14 @@ namespace Ogre
         TextureGpu* createTexture( const String &name,
                                    GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                    uint32 textureFlags, TextureTypes::TextureTypes initialType,
-                                   const String &resourceGroup=BLANKSTRING );
-        /// If the texture doesn't exists, behaves exactly as createTexture. If the texture with
-        /// that name already exists, it returns it and the rest of the arguments will be ignored.
+                                   const String &resourceGroup=BLANKSTRING,
+                                   uint32 filters=0 );
         TextureGpu* createOrRetrieveTexture( const String &name,
                                              GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                              uint32 textureFlags,
                                              TextureTypes::TextureTypes initialType,
-                                             const String &resourceGroup=BLANKSTRING );
+                                             const String &resourceGroup=BLANKSTRING,
+                                             uint32 filters=0 );
         TextureGpu* findTextureNoThrow( IdString name ) const;
         void destroyTexture( TextureGpu *texture );
 
@@ -389,6 +417,7 @@ namespace Ogre
     protected:
         void scheduleLoadRequest( TextureGpu *texture, GpuResidency::GpuResidency nextResidency,
                                   const String &name, const String &resourceGroup,
+                                  uint32 filters,
                                   uint32 sliceOrDepth=std::numeric_limits<uint32>::max() );
     public:
         void _scheduleTransitionTo( TextureGpu *texture, GpuResidency::GpuResidency nextResidency );
