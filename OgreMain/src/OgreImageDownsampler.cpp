@@ -145,9 +145,9 @@ namespace Ogre
             //Linear
             {
                 0, 0, 0, 0, 0,
-                0, 0, 1, 1, 0,
-                0, 0, 1, 1, 0,
                 0, 0, 0, 0, 0,
+                0, 0, 1, 1, 0,
+                0, 0, 1, 1, 0,
                 0, 0, 0, 0, 0
             },
             0, 1,
@@ -418,7 +418,7 @@ namespace Ogre
             for( int32 x=0; x<dstWidth; ++x )
             {
                 int kStartY = std::max<int>( -y, kernelStartY );
-                int kEndY   = std::min<int>( dstHeight - 1 - y, kernelEndY );
+                int kEndY   = std::min<int>( dstHeight - y, kernelEndY );
 
     #ifdef OGRE_DOWNSAMPLE_R
                 OGRE_UINT32 accumR = 0;
@@ -445,19 +445,19 @@ namespace Ogre
                         uint32 kernelVal = kernel[k_y+2][k_x+2];
 
     #ifdef OGRE_DOWNSAMPLE_R
-                        OGRE_UINT32 r = srcPtr[(k_y * srcBytesPerRow + k_x) * OGRE_TOTAL_SIZE + OGRE_DOWNSAMPLE_R];
+                        OGRE_UINT32 r = srcPtr[k_y * srcBytesPerRow + k_x * OGRE_TOTAL_SIZE + OGRE_DOWNSAMPLE_R];
                         accumR += OGRE_GAM_TO_LIN( r ) * kernelVal;
     #endif
     #ifdef OGRE_DOWNSAMPLE_G
-                        OGRE_UINT32 g = srcPtr[(k_y * srcBytesPerRow + k_x) * OGRE_TOTAL_SIZE + OGRE_DOWNSAMPLE_G];
+                        OGRE_UINT32 g = srcPtr[k_y * srcBytesPerRow + k_x * OGRE_TOTAL_SIZE + OGRE_DOWNSAMPLE_G];
                         accumG += OGRE_GAM_TO_LIN( g ) * kernelVal;
     #endif
     #ifdef OGRE_DOWNSAMPLE_B
-                        OGRE_UINT32 b = srcPtr[(k_y * srcBytesPerRow + k_x) * OGRE_TOTAL_SIZE + OGRE_DOWNSAMPLE_B];
+                        OGRE_UINT32 b = srcPtr[k_y * srcBytesPerRow + k_x * OGRE_TOTAL_SIZE + OGRE_DOWNSAMPLE_B];
                         accumB += OGRE_GAM_TO_LIN( b ) * kernelVal;
     #endif
     #ifdef OGRE_DOWNSAMPLE_A
-                        OGRE_UINT32 a = srcPtr[(k_y * srcBytesPerRow + k_x) * OGRE_TOTAL_SIZE + OGRE_DOWNSAMPLE_A];
+                        OGRE_UINT32 a = srcPtr[k_y * srcBytesPerRow + k_x * OGRE_TOTAL_SIZE + OGRE_DOWNSAMPLE_A];
                         accumA += a * kernelVal;
     #endif
 
