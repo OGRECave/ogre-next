@@ -108,8 +108,8 @@ namespace Ogre
     template <typename T>
     void HlmsComputeJob::removeListenerFromTextures( T &container, size_t first, size_t lastPlusOne )
     {
-        typename T::const_iterator itor = container.begin()  + first;
-        typename T::const_iterator end  = container.end()    + lastPlusOne;
+        typename T::const_iterator itor = container.begin() + first;
+        typename T::const_iterator end  = container.begin() + lastPlusOne;
         while( itor != end )
         {
             if( itor->isTexture() && itor->getTexture().texture )
