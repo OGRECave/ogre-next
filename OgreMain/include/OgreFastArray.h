@@ -163,6 +163,9 @@ namespace Ogre
             for( size_t i=0; i<mSize; ++i )
                 mData[i].~T();
             ::operator delete( mData );
+            mSize = 0;
+            mCapacity = 0;
+            mData = 0;
         }
 
         size_t size() const                     { return mSize; }

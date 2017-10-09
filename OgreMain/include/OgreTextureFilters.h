@@ -45,7 +45,7 @@ namespace Ogre
     {
         class FilterBase;
     }
-    typedef vector<TextureFilter::FilterBase*>::type FilterBaseVec;
+    typedef FastArray<TextureFilter::FilterBase*> FilterBaseArray;
 
 namespace TextureFilter
 {
@@ -75,7 +75,7 @@ namespace TextureFilter
         /// (except for the steps this filter is supposed to do)
         virtual void _executeSerial( TextureGpu *texture ) {}
 
-        static void createFilters( uint32 filters, FilterBaseVec &outFilters,
+        static void createFilters( uint32 filters, FilterBaseArray &outFilters,
                                    const TextureGpu *texture );
     };
     //-----------------------------------------------------------------------------------

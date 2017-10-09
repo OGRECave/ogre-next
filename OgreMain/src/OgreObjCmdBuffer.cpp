@@ -138,7 +138,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     ObjCmdBuffer::
-    NotifyDataIsReady::NotifyDataIsReady( TextureGpu *_textureGpu, FilterBaseVec &inOutFilters ) :
+    NotifyDataIsReady::NotifyDataIsReady( TextureGpu *_textureGpu, FilterBaseArray &inOutFilters ) :
         texture( _textureGpu )
     {
         filters.swap( inOutFilters );
@@ -146,8 +146,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void ObjCmdBuffer::NotifyDataIsReady::execute(void)
     {
-        FilterBaseVec::const_iterator itor = filters.begin();
-        FilterBaseVec::const_iterator end  = filters.end();
+        FilterBaseArray::const_iterator itor = filters.begin();
+        FilterBaseArray::const_iterator end  = filters.end();
 
         while( itor != end )
         {
@@ -156,6 +156,7 @@ namespace Ogre
             ++itor;
         }
         filters.clear();
+        filters.~FastArray(); //Call destructor manually as ~NotifyDataIsReady won't be called.
 
         texture->notifyDataIsReady();
     }

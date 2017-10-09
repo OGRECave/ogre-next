@@ -56,7 +56,7 @@ namespace Ogre
         class FilterBase;
     }
 
-    typedef vector<TextureFilter::FilterBase*>::type FilterBaseVec;
+    typedef FastArray<TextureFilter::FilterBase*> FilterBaseArray;
 
     struct _OgreExport TexturePool
     {
@@ -195,10 +195,10 @@ namespace Ogre
             uint8       numSlices;
             /// See LoadRequest::sliceOrDepth
             uint32      dstSliceOrDepth;
-            FilterBaseVec filters;
+            FilterBaseArray filters;
 
             QueuedImage( Image2 &srcImage, uint8 numMips, uint8 _numSlices, TextureGpu *_dstTexture,
-                         uint32 _dstSliceOrDepth, FilterBaseVec &inOutFilters );
+                         uint32 _dstSliceOrDepth, FilterBaseArray &inOutFilters );
             void destroy(void);
             bool empty(void) const;
             bool isMipSliceQueued( uint8 mipLevel, uint8 slice ) const;

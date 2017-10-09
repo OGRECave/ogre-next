@@ -1127,7 +1127,7 @@ namespace Ogre
                 Image2 img;
                 img.load( data );
 
-                FilterBaseVec filters;
+                FilterBaseArray filters;
                 TextureFilter::FilterBase::createFilters( loadRequest.filters, filters,
                                                           loadRequest.texture );
 
@@ -1149,8 +1149,8 @@ namespace Ogre
                     loadRequest.texture->setPixelFormat( img.getPixelFormat() );
                     loadRequest.texture->setNumMipmaps( img.getNumMipmaps() );
 
-                    FilterBaseVec::const_iterator itFilters = filters.begin();
-                    FilterBaseVec::const_iterator enFilters = filters.end();
+                    FilterBaseArray::const_iterator itFilters = filters.begin();
+                    FilterBaseArray::const_iterator enFilters = filters.end();
                     while( itFilters != enFilters )
                     {
                         (*itFilters)->_executeStreaming( img, loadRequest.texture );
@@ -1175,8 +1175,8 @@ namespace Ogre
                 }
                 else
                 {
-                    FilterBaseVec::const_iterator itFilters = filters.begin();
-                    FilterBaseVec::const_iterator enFilters = filters.end();
+                    FilterBaseArray::const_iterator itFilters = filters.begin();
+                    FilterBaseArray::const_iterator enFilters = filters.end();
                     while( itFilters != enFilters )
                     {
                         (*itFilters)->_executeStreaming( img, loadRequest.texture );
@@ -1365,7 +1365,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     TextureGpuManager::QueuedImage::QueuedImage( Image2 &srcImage, uint8 numMips, uint8 _numSlices,
                                                  TextureGpu *_dstTexture, uint32 _dstSliceOrDepth,
-                                                 FilterBaseVec &inOutFilters ) :
+                                                 FilterBaseArray &inOutFilters ) :
         dstTexture( _dstTexture ),
         numSlices( _numSlices ),
         dstSliceOrDepth( _dstSliceOrDepth )

@@ -42,7 +42,7 @@ namespace TextureFilter
     {
     }
     //-----------------------------------------------------------------------------------
-    void FilterBase::createFilters( uint32 filters, FilterBaseVec &outFilters,
+    void FilterBase::createFilters( uint32 filters, FilterBaseArray &outFilters,
                                     const TextureGpu *texture )
     {
         const TextureGpuManager *textureManager = texture->getTextureManager();
@@ -51,7 +51,7 @@ namespace TextureFilter
         const DefaultMipmapGen::DefaultMipmapGen defaultMipmapGenerationCubemaps =
                 textureManager->getDefaultMipmapGenerationCubemaps();
 
-        FilterBaseVec filtersVec;
+        FilterBaseArray filtersVec;
         filtersVec.swap( outFilters );
 
         if( filters & TextureFilter::TypePrepareForNormalMapping )
