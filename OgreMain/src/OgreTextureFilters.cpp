@@ -138,12 +138,51 @@ namespace TextureFilter
     //-----------------------------------------------------------------------------------
     void PrepareForNormalMapping::_executeStreaming( Image2 &image, TextureGpu *texture )
     {
-        //PixelFormatGpuUtils::bulkPixelConversion( , )
-        //image.
-//        OGRE_MALLOC_SIMD
-//        Image2 singleChannelImage;
-//        singleChannelImage.loadDynamicImage(  );
-        //TODO;
+        const PixelFormatGpu srcFormat = image.getPixelFormat();
+
+        //Only automatically convert RGBA8 textures. Any other format we assume
+        //the user knows what they're doing (could be compressed, could contain
+        //more data). If you know how to store RGBA16_UNORM in a file, you definitely
+        //know how to store RG16_SNORM as well (e.g. use DDS U16V16 format).
+        if( srcFormat != PFG_RGBA8_UNORM && srcFormat != PFG_RGBA8_UNORM_SRGB )
+            return;
+
+        const uint8 numMipmaps = image.getNumMipmaps();
+
+        const PixelFormatGpu dstFormat = PFG_RG8_SNORM;
+
+        const uint32 rowAlignment = 4u;
+        const size_t dstSizeBytes = PixelFormatGpuUtils::calculateSizeBytes( image.getWidth(),
+                                                                             image.getHeight(),
+                                                                             image.getDepth(),
+                                                                             image.getNumSlices(),
+                                                                             dstFormat, numMipmaps,
+                                                                             rowAlignment );
+
+        void *data = OGRE_MALLOC_SIMD( dstSizeBytes, MEMCATEGORY_RESOURCE );
+
+        for( uint8 mip=0; mip<numMipmaps; ++mip )
+        {
+            TextureBox srcBox = image.getData( mip );
+            const uint32 width          = srcBox.width;
+            const uint32 height         = srcBox.height;
+
+            TextureBox dstBox = srcBox;
+            dstBox.bytesPerPixel= PixelFormatGpuUtils::getBytesPerPixel( dstFormat );
+            dstBox.bytesPerRow  = PixelFormatGpuUtils::getSizeBytes( width, 1u, 1u, 1u, dstFormat, 4u );
+            dstBox.bytesPerImage= PixelFormatGpuUtils::getSizeBytes( width, height, 1u, 1u,
+                                                                     dstFormat, 4u );
+            dstBox.data = PixelFormatGpuUtils::advancePointerToMip( data, width, height, srcBox.depth,
+                                                                    srcBox.numSlices, mip, dstFormat );
+
+            PixelFormatGpuUtils::convertForNormalMapping( srcBox, image.getPixelFormat(),
+                                                          dstBox, dstFormat );
+        }
+
+        assert( image.getAutoDelete() && "This should be impossible. Memory will leak." );
+        image.loadDynamicImage( data, image.getWidth(), image.getHeight(), image.getDepthOrSlices(),
+                                image.getTextureType(), dstFormat, true, numMipmaps );
+        texture->setPixelFormat( dstFormat );
     }
     //-----------------------------------------------------------------------------------
     void LeaveChannelR::_executeStreaming( Image2 &image, TextureGpu *texture )

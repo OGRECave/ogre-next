@@ -150,6 +150,11 @@ namespace Ogre
 
         }
 
+        void* atFromOffsettedOrigin( size_t xPos, size_t yPos, size_t zPos ) const
+        {
+            return at( xPos + x, yPos + y, zPos + getZOrSlice() );
+        }
+
         void copyFrom( const TextureBox &src )
         {
             assert( this->width  == src.width &&

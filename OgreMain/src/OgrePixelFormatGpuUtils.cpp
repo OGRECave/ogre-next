@@ -999,6 +999,48 @@ namespace Ogre
 #endif
     }
     //-----------------------------------------------------------------------------------
+    void PixelFormatGpuUtils::convertForNormalMapping( TextureBox src, PixelFormatGpu srcFormat,
+                                                       TextureBox dst, PixelFormatGpu dstFormat )
+    {
+        assert( src.equalSize( dst ) );
+        assert( dstFormat == PFG_RG8_SNORM || dstFormat == PFG_RG8_UNORM );
+
+        float multPart = 2.0f;
+        float addPart  = 1.0f;
+
+        if( dstFormat == PFG_RG8_UNORM )
+        {
+            multPart = 1.0f;
+            addPart  = 0.0f;
+        }
+
+        float rgba[4];
+        for( size_t z=0; z<src.getDepthOrSlices(); ++z )
+        {
+            for( size_t y=0; y<src.height; ++y )
+            {
+                uint8 const * RESTRICT_ALIAS srcPtr = reinterpret_cast<const uint8*RESTRICT_ALIAS>(
+                                                          src.atFromOffsettedOrigin( 0, y, z ) );
+                uint8 * RESTRICT_ALIAS dstPtr = reinterpret_cast<uint8*RESTRICT_ALIAS>(
+                                                    dst.atFromOffsettedOrigin( 0, y, z ) );
+
+                for( size_t x=0; x<src.width; ++x )
+                {
+                    unpackColour( rgba, srcFormat, srcPtr );
+
+                    // rgba * 2.0 - 1.0
+                    rgba[0] = rgba[0] * multPart - addPart;
+                    rgba[1] = rgba[1] * multPart - addPart;
+
+                    *dstPtr++ = Bitwise::floatToSnorm8( rgba[0] );
+                    *dstPtr++ = Bitwise::floatToSnorm8( rgba[1] );
+
+                    srcPtr += src.bytesPerPixel;
+                }
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void PixelFormatGpuUtils::bulkPixelConversion( const TextureBox &src, PixelFormatGpu srcFormat,
                                                    TextureBox &dst, PixelFormatGpu dstFormat )
     {

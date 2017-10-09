@@ -178,6 +178,8 @@ namespace Ogre {
         static void packColour( const ColourValue &rgbaPtr, PixelFormatGpu pf, void *dstPtr );
         static void unpackColour( ColourValue *rgbaPtr, PixelFormatGpu pf, const void *srcPtr );
 
+        static void convertForNormalMapping( TextureBox src, PixelFormatGpu srcFormat,
+                                             TextureBox dst, PixelFormatGpu dstFormat );
         static void bulkPixelConversion( const TextureBox &src, PixelFormatGpu srcFormat,
                                          TextureBox &dst, PixelFormatGpu dstFormat );
 
