@@ -106,6 +106,7 @@ namespace Ogre
             desc.depth          = 1u;
             desc.arrayLength    = 1u;
             desc.sampleCount    = mMsaa;
+            desc.usage          = MTLTextureUsageRenderTarget;
             mMsaaFramebufferName = [device->mDevice newTextureWithDescriptor:desc];
             mMsaaFramebufferName.label = [NSString stringWithUTF8String:(textureName + "_MSAA").c_str()];
         }
@@ -238,6 +239,15 @@ namespace Ogre
                         destinationLevel:dstMipLevel
                        destinationOrigin:MTLOriginMake( dstBox.x, dstBox.y, dstBox.z )];
         }
+    }
+    //-----------------------------------------------------------------------------------
+    void MetalTextureGpu::_autogenerateMipmaps(void)
+    {
+        MetalTextureGpuManager *textureManagerMetal =
+                static_cast<MetalTextureGpuManager*>( mTextureManager );
+        MetalDevice *device = textureManagerMetal->getDevice();
+        __unsafe_unretained id<MTLBlitCommandEncoder> blitEncoder = device->getBlitEncoder();
+        [blitEncoder generateMipmapsForTexture: mFinalTextureName];
     }
     //-----------------------------------------------------------------------------------
     void MetalTextureGpu::getSubsampleLocations( vector<Vector2>::type locations )

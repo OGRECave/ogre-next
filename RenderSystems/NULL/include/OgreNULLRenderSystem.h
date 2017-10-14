@@ -105,9 +105,6 @@ namespace Ogre
 
         virtual void flushUAVs(void);
 
-        virtual void _setTextureCS( uint32 slot, TextureGpu *texPtr );
-        virtual void _setHlmsSamplerblockCS( uint8 texUnit, const HlmsSamplerblock *samplerblock );
-
         virtual void _setCurrentDeviceFromTexture( TextureGpu *texture );
         virtual void _setTexture( size_t unit,  TextureGpu *texPtr );
         virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set );

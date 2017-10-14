@@ -821,10 +821,6 @@ namespace Ogre
         /// You don't need to call this if you're going to set the render target next.
         virtual void flushUAVs(void) = 0;
 
-        /// Binds a regular texture to a Compute Shader.
-        virtual void _setTextureCS( uint32 slot, TextureGpu *texPtr ) = 0;
-        virtual void _setHlmsSamplerblockCS( uint8 texUnit, const HlmsSamplerblock *Samplerblock ) = 0;
-
         virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set ) = 0;
         virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture2 *set ) = 0;
         virtual void _setSamplers( uint32 slotStart, const DescriptorSetSampler *set ) = 0;

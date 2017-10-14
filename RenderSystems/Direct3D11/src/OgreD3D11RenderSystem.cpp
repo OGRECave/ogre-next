@@ -2678,41 +2678,6 @@ namespace Ogre
 #endif
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::_setTextureCS( uint32 slot, TextureGpu *texPtr )
-    {
-        if( texPtr )
-        {
-            D3D11TextureGpu *tex = static_cast<D3D11TextureGpu*>( texPtr );
-            ID3D11ShaderResourceView *view = tex->getDefaultDisplaySrv();
-            mDevice.GetImmediateContext()->CSSetShaderResources( static_cast<UINT>(slot), 1u, &view );
-            mMaxComputeShaderSrvCount = std::max( mMaxComputeShaderSrvCount, slot + 1u );
-        }
-        else
-        {
-            ID3D11ShaderResourceView *nullView = 0;
-            mDevice.GetImmediateContext()->CSSetShaderResources( static_cast<UINT>(slot), 1u,
-                                                                 &nullView );
-        }
-    }
-    //---------------------------------------------------------------------
-    void D3D11RenderSystem::_setHlmsSamplerblockCS( uint8 texUnit, const HlmsSamplerblock *samplerblock )
-    {
-        assert( samplerblock->mRsData &&
-                "The block must have been created via HlmsManager::getSamplerblock!" );
-
-        ID3D11SamplerState *samplerState = reinterpret_cast<ID3D11SamplerState*>( samplerblock->mRsData );
-
-        mDevice.GetImmediateContext()->CSSetSamplers( static_cast<UINT>(texUnit), static_cast<UINT>(1),
-                                                      &samplerState );
-        if( mDevice.isError() )
-        {
-            String errorDescription = mDevice.getErrorDescription();
-            OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
-                "D3D11 device cannot set pixel shader samplers\nError Description:" + errorDescription,
-                "D3D11RenderSystem::_render");
-        }
-    }
-    //---------------------------------------------------------------------
     void D3D11RenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *block )
     {
         D3D11HlmsPso *pso = new D3D11HlmsPso();

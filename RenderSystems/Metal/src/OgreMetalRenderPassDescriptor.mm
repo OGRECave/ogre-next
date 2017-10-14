@@ -1,0 +1,575 @@
+/*
+-----------------------------------------------------------------------------
+This source file is part of OGRE
+    (Object-oriented Graphics Rendering Engine)
+For the latest info, see http://www.ogre3d.org/
+
+Copyright (c) 2000-2017 Torus Knot Software Ltd
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-----------------------------------------------------------------------------
+*/
+
+#include "OgreMetalRenderPassDescriptor.h"
+
+#include "OgreMetalTextureGpu.h"
+#include "OgreMetalRenderSystem.h"
+
+#include "OgreHlmsDatablock.h"
+#include "OgrePixelFormatGpuUtils.h"
+
+namespace Ogre
+{
+    MetalRenderPassDescriptor::MetalRenderPassDescriptor( MetalDevice *device,
+                                                          MetalRenderSystem *renderSystem ) :
+        mDepthAttachment( 0 ),
+        mStencilAttachment( 0 ),
+        mRequiresManualResolve( false ),
+        mSharedFboItor( renderSystem->_getFrameBufferDescMap().end() ),
+        mDevice( device ),
+        mRenderSystem( renderSystem )
+    {
+    }
+    //-----------------------------------------------------------------------------------
+    MetalRenderPassDescriptor::~MetalRenderPassDescriptor()
+    {
+        for( size_t i=0u; i<mNumColourEntries; ++i )
+        {
+            mColourAttachment[i] = 0;
+            mResolveColourAttachm[i] = 0;
+        }
+        mDepthAttachment = 0;
+        mStencilAttachment = 0;
+
+        FrameBufferDescMap &frameBufferDescMap = mRenderSystem->_getFrameBufferDescMap();
+        if( mSharedFboItor != frameBufferDescMap.end() )
+        {
+            --mSharedFboItor->second.refCount;
+            if( !mSharedFboItor->second.refCount )
+                frameBufferDescMap.erase( mSharedFboItor );
+            mSharedFboItor = frameBufferDescMap.end();
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void MetalRenderPassDescriptor::checkRenderWindowStatus(void)
+    {
+        if( (mNumColourEntries > 0 && mColour[0].texture->isRenderWindowSpecific()) ||
+            (mDepth.texture && mDepth.texture->isRenderWindowSpecific()) ||
+            (mStencil.texture && mStencil.texture->isRenderWindowSpecific()) )
+        {
+            if( mNumColourEntries > 1u )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                             "Cannot use RenderWindow as MRT with other colour textures",
+                             "MetalRenderPassDescriptor::colourEntriesModified" );
+            }
+
+            if( (mNumColourEntries > 0 && !mColour[0].texture->isRenderWindowSpecific()) ||
+                (mDepth.texture && !mDepth.texture->isRenderWindowSpecific()) ||
+                (mStencil.texture && !mStencil.texture->isRenderWindowSpecific()) )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                             "Cannot mix RenderWindow colour texture with depth or stencil buffer "
+                             "that aren't for RenderWindows, or viceversa",
+                             "MetalRenderPassDescriptor::checkRenderWindowStatus" );
+            }
+        }
+
+        calculateSharedKey();
+    }
+    //-----------------------------------------------------------------------------------
+    void MetalRenderPassDescriptor::calculateSharedKey(void)
+    {
+        FrameBufferDescKey key( *this );
+        FrameBufferDescMap &frameBufferDescMap = mRenderSystem->_getFrameBufferDescMap();
+        FrameBufferDescMap::iterator newItor = frameBufferDescMap.find( key );
+
+        if( newItor == frameBufferDescMap.end() )
+        {
+            FrameBufferDescValue value;
+            value.refCount = 0;
+            frameBufferDescMap[key] = value;
+            newItor = frameBufferDescMap.find( key );
+        }
+
+        ++newItor->second.refCount;
+
+        if( mSharedFboItor != frameBufferDescMap.end() )
+        {
+            --mSharedFboItor->second.refCount;
+            if( !mSharedFboItor->second.refCount )
+                frameBufferDescMap.erase( mSharedFboItor );
+        }
+
+        mSharedFboItor = newItor;
+    }
+    //-----------------------------------------------------------------------------------
+    MTLLoadAction MetalRenderPassDescriptor::get( LoadAction::LoadAction action )
+    {
+        switch( action )
+        {
+        case LoadAction::DontCare:
+            return MTLLoadActionDontCare;
+        case LoadAction::Clear:
+            return MTLLoadActionClear;
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+        case LoadAction::ClearOnTilers:
+            return MTLLoadActionClear;
+#else
+        case LoadAction::ClearOnTilers:
+            return MTLLoadActionLoad;
+#endif
+        case LoadAction::Load:
+            return MTLLoadActionLoad;
+        }
+
+        return MTLLoadActionLoad;
+    }
+    //-----------------------------------------------------------------------------------
+    MTLStoreAction MetalRenderPassDescriptor::get( StoreAction::StoreAction action )
+    {
+        switch( action )
+        {
+        case StoreAction::DontCare:
+            return MTLStoreActionDontCare;
+        case StoreAction::Store:
+            return MTLStoreActionStore;
+        case StoreAction::MultisampleResolve:
+            return MTLStoreActionMultisampleResolve;
+        case StoreAction::StoreAndMultisampleResolve:
+            return MTLStoreActionStoreAndMultisampleResolve;
+        case StoreAction::StoreOrResolve:
+            assert( false && "StoreOrResolve is invalid. "
+                    "Compositor should've set one or the other already!" );
+            return MTLStoreActionStore;
+        }
+
+        return MTLStoreActionStore;
+    }
+    //-----------------------------------------------------------------------------------
+    void MetalRenderPassDescriptor::updateColourRtv( uint8 lastNumColourEntries )
+    {
+        mRequiresManualResolve = false;
+        if( mNumColourEntries < lastNumColourEntries )
+        {
+            for( size_t i=mNumColourEntries; i<lastNumColourEntries; ++i )
+            {
+                mColourAttachment[i] = 0;
+                mResolveColourAttachm[i] = 0;
+            }
+        }
+
+        bool hasRenderWindow = false;
+
+        for( size_t i=0; i<mNumColourEntries; ++i )
+        {
+            if( mColour[i].texture->getResidencyStatus() != GpuResidency::Resident )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "RenderTexture '" +
+                             mColour[i].texture->getNameStr() + "' must be resident!",
+                             "MetalRenderPassDescriptor::updateColourRtv" );
+            }
+            if( i > 0 && hasRenderWindow != mColour[i].texture->isRenderWindowSpecific() )
+            {
+                //This is a GL restriction actually, which we mimic for consistency
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                             "Cannot use RenderWindow as MRT with other colour textures",
+                             "MetalRenderPassDescriptor::updateColourRtv" );
+            }
+
+            hasRenderWindow |= mColour[i].texture->isRenderWindowSpecific();
+
+            mColourAttachment[i] = 0;
+
+            if( mColour[i].texture->getPixelFormat() == PFG_NULL )
+                continue;
+
+            mColourAttachment[i] = [MTLRenderPassColorAttachmentDescriptor alloc];
+
+            assert( dynamic_cast<MetalTextureGpu*>( mColour[i].texture ) );
+            MetalTextureGpu *textureMetal = static_cast<MetalTextureGpu*>( mColour[i].texture );
+
+            if( mColour[i].texture->getMsaa() > 1u )
+            {
+                assert( dynamic_cast<MetalTextureGpu*>( mColour[i].resolveTexture ) );
+                MetalTextureGpu *resolveTexture =
+                        static_cast<MetalTextureGpu*>( mColour[i].resolveTexture );
+
+                if( !mColour[i].texture->hasMsaaExplicitResolves() )
+                {
+                    mColourAttachment[i].texture = textureMetal->getMsaaFramebufferName();
+                    mColourAttachment[i].resolveTexture = textureMetal->getFinalTextureName();
+                }
+                else
+                {
+                    mColourAttachment[i].texture = textureMetal->getFinalTextureName();
+                    mColourAttachment[i].resolveTexture = resolveTexture->getFinalTextureName();
+                }
+            }
+            else
+            {
+                mColourAttachment[i].texture = textureMetal->getFinalTextureName();
+            }
+
+            mColourAttachment[i].clearColor = MTLClearColorMake( mColour[i].clearColour.r,
+                                                                 mColour[i].clearColour.g,
+                                                                 mColour[i].clearColour.b,
+                                                                 mColour[i].clearColour.a );
+
+            mColourAttachment[i].level          = mColour[i].mipLevel;
+            mColourAttachment[i].resolveLevel   = mColour[i].resolveMipLevel;
+
+            if( mColour[i].texture->getTextureType() == TextureTypes::Type3D )
+                mColourAttachment[i].depthPlane = mColour[i].slice;
+            else
+                mColourAttachment[i].slice = mColour[i].slice;
+
+            if( mColour[i].resolveTexture->getTextureType() == TextureTypes::Type3D )
+                mColourAttachment[i].resolveDepthPlane = mColour[i].resolveSlice;
+            else
+                mColourAttachment[i].resolveSlice = mColour[i].resolveSlice;
+
+            mColourAttachment[i].loadAction = MetalRenderPassDescriptor::get( mColour[i].loadAction );
+            mColourAttachment[i].storeAction = MetalRenderPassDescriptor::get( mColour[i].storeAction );
+
+            if( mColour[i].storeAction == StoreAction::StoreAndMultisampleResolve &&
+                mColour[i].texture->getMsaa() <= 1u )
+            {
+                //Ogre allows non-MSAA textures to use this flag. Metal may complain.
+                mColourAttachment[i].storeAction = MTLStoreActionStore;
+            }
+
+            //iOS_GPUFamily3_v2, OSX_GPUFamily1_v2
+            if( mColour[i].storeAction == StoreAction::StoreAndMultisampleResolve &&
+                !mRenderSystem->hasStoreAndMultisampleResolve() )
+            {
+                //Must emulate the behavior (slower)
+                mColourAttachment[i].storeAction = MTLStoreActionStore;
+                mResolveColourAttachm[i] = [mColourAttachment[i] copy];
+                mResolveColourAttachm[i].loadAction = MTLLoadActionLoad;
+                mResolveColourAttachm[i].storeAction = MTLStoreActionMultisampleResolve;
+
+                mRequiresManualResolve = true;
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void MetalRenderPassDescriptor::updateDepthRtv(void)
+    {
+        mDepthAttachment = 0;
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+        if( !mDepth.texture )
+        {
+            if( mStencil.texture )
+            {
+                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                             "Stencil without depth (RenderTexture '" +
+                             mStencil.texture->getNameStr() + "'). This is not supported by macOS",
+                             "MetalRenderPassDescriptor::updateDepthRtv" );
+            }
+
+            return;
+        }
+#endif
+
+        if( mDepth.texture->getResidencyStatus() != GpuResidency::Resident )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "RenderTexture '" +
+                         mDepth.texture->getNameStr() + "' must be resident!",
+                         "MetalRenderPassDescriptor::updateDepthRtv" );
+        }
+
+        assert( dynamic_cast<MetalTextureGpu*>( mDepth.texture ) );
+        MetalTextureGpu *textureMetal = static_cast<MetalTextureGpu*>( mDepth.texture );
+
+        mDepthAttachment = [MTLRenderPassDepthAttachmentDescriptor alloc];
+        mDepthAttachment.texture = textureMetal->getFinalTextureName();
+        mDepthAttachment.clearDepth = mDepth.clearDepth;
+
+        mDepthAttachment.loadAction = MetalRenderPassDescriptor::get( mDepth.loadAction );
+        mDepthAttachment.storeAction = MetalRenderPassDescriptor::get( mDepth.storeAction );
+    }
+    //-----------------------------------------------------------------------------------
+    void MetalRenderPassDescriptor::updateStencilRtv(void)
+    {
+        mStencilAttachment = 0;
+
+        if( mStencil.texture->getResidencyStatus() != GpuResidency::Resident )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "RenderTexture '" +
+                         mStencil.texture->getNameStr() + "' must be resident!",
+                         "MetalRenderPassDescriptor::updateStencilRtv" );
+        }
+
+        assert( dynamic_cast<MetalTextureGpu*>( mStencil.texture ) );
+        MetalTextureGpu *textureMetal = static_cast<MetalTextureGpu*>( mStencil.texture );
+
+        mStencilAttachment = [MTLRenderPassStencilAttachmentDescriptor alloc];
+        mStencilAttachment.texture = textureMetal->getFinalTextureName();
+        mStencilAttachment.clearStencil = mStencil.clearStencil;
+
+        mStencilAttachment.loadAction = MetalRenderPassDescriptor::get( mStencil.loadAction );
+        mStencilAttachment.storeAction = MetalRenderPassDescriptor::get( mStencil.storeAction );
+    }
+    //-----------------------------------------------------------------------------------
+    void MetalRenderPassDescriptor::entriesModified( uint32 entryTypes )
+    {
+        uint8 lastNumColourEntries = mNumColourEntries;
+        RenderPassDescriptor::entriesModified( entryTypes );
+
+        checkRenderWindowStatus();
+
+        if( entryTypes & RenderPassDescriptor::Colour )
+            updateColourRtv( lastNumColourEntries );
+
+        if( entryTypes & RenderPassDescriptor::Depth )
+            updateDepthRtv();
+
+        if( entryTypes & RenderPassDescriptor::Stencil )
+            updateStencilRtv();
+    }
+    //-----------------------------------------------------------------------------------
+    void MetalRenderPassDescriptor::setClearColour( uint8 idx, const ColourValue &clearColour )
+    {
+        RenderPassDescriptor::setClearColour( idx, clearColour );
+
+        if( mColourAttachment[idx] )
+        {
+            mColourAttachment[idx] = [mColourAttachment[idx] copy];
+            mColourAttachment[idx].clearColor = MTLClearColorMake( clearColour.r, clearColour.g,
+                                                                   clearColour.b, clearColour.a );
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void MetalRenderPassDescriptor::setClearDepth( Real clearDepth )
+    {
+        RenderPassDescriptor::setClearDepth( clearDepth );
+
+        if( mDepthAttachment )
+        {
+            mDepthAttachment = [mDepthAttachment copy];
+            mDepthAttachment.clearDepth = clearDepth;
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void MetalRenderPassDescriptor::setClearStencil( uint32 clearStencil )
+    {
+        RenderPassDescriptor::setClearStencil( clearStencil );
+
+        if( mStencilAttachment )
+        {
+            mStencilAttachment = [mStencilAttachment copy];
+            mStencilAttachment.clearStencil = clearStencil;
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    uint32 MetalRenderPassDescriptor::checkForClearActions( MetalRenderPassDescriptor *other ) const
+    {
+        uint32 entriesToFlush = 0;
+
+        assert( this->mSharedFboItor == other->mSharedFboItor );
+        assert( this->mNumColourEntries == other->mNumColourEntries );
+
+        const RenderSystemCapabilities *capabilities = mRenderSystem->getCapabilities();
+        const bool isTiler = capabilities->hasCapability( RSC_IS_TILER );
+
+        for( size_t i=0; i<mNumColourEntries; ++i )
+        {
+            //this->mColour[i].allLayers doesn't need to be analyzed
+            //because it requires a different FBO.
+            if( other->mColour[i].loadAction == LoadAction::Clear ||
+                (isTiler && mColour[i].loadAction == LoadAction::ClearOnTilers) )
+            {
+                entriesToFlush |= RenderPassDescriptor::Colour0 << i;
+            }
+        }
+
+        if( other->mDepth.loadAction == LoadAction::Clear ||
+            (isTiler && mDepth.loadAction == LoadAction::ClearOnTilers) )
+        {
+            entriesToFlush |= RenderPassDescriptor::Depth;
+        }
+
+        if( other->mStencil.loadAction == LoadAction::Clear ||
+            (isTiler && mStencil.loadAction == LoadAction::ClearOnTilers) )
+        {
+            entriesToFlush |= RenderPassDescriptor::Stencil;
+        }
+
+        return entriesToFlush;
+    }
+    //-----------------------------------------------------------------------------------
+    uint32 MetalRenderPassDescriptor::willSwitchTo( MetalRenderPassDescriptor *newDesc,
+                                                    bool viewportChanged,
+                                                    bool warnIfRtvWasFlushed ) const
+    {
+        uint32 entriesToFlush = 0;
+
+        if( viewportChanged || !newDesc ||
+            this->mSharedFboItor != newDesc->mSharedFboItor ||
+            this->mInformationOnly || newDesc->mInformationOnly )
+        {
+            entriesToFlush = RenderPassDescriptor::All;
+        }
+        else
+            entriesToFlush |= checkForClearActions( newDesc );
+
+        if( warnIfRtvWasFlushed )
+            newDesc->checkWarnIfRtvWasFlushed( entriesToFlush );
+
+        return entriesToFlush;
+    }
+    //-----------------------------------------------------------------------------------
+    void MetalRenderPassDescriptor::performLoadActions( MTLRenderPassDescriptor *passDesc )
+    {
+        if( mInformationOnly )
+            return;
+
+        if( mNumColourEntries > 0 && mColour[0].texture->isRenderWindowSpecific() )
+        {
+            //The RenderWindow's MetalDrawable changes every frame. We need a
+            //hard copy since the previous descriptor may still be in flight.
+            mColourAttachment[0] = [mColourAttachment[0] copy];
+            MetalTextureGpu *textureMetal = static_cast<MetalTextureGpu*>( mColour[0].texture );
+            mColourAttachment[0].texture = textureMetal->getFinalTextureName();
+        }
+
+        for( size_t i=0; i<mNumColourEntries; ++i )
+            passDesc.colorAttachments[i] = mColourAttachment[i];
+
+        passDesc.depthAttachment = mDepthAttachment;
+        passDesc.stencilAttachment = mStencilAttachment;
+    }
+    //-----------------------------------------------------------------------------------
+    void MetalRenderPassDescriptor::performStoreActions( uint32 x, uint32 y,
+                                                         uint32 width, uint32 height,
+                                                         uint32 entriesToFlush )
+    {
+        if( mInformationOnly )
+            return;
+
+        if( !(entriesToFlush & Colour) )
+            return;
+
+        if( !mRequiresManualResolve )
+            return;
+
+        if( mRenderSystem->hasStoreAndMultisampleResolve() )
+            return;
+
+        MTLRenderPassDescriptor *passDesc = [MTLRenderPassDescriptor renderPassDescriptor];
+        size_t currentColourIdx = 0;
+
+        for( size_t i=0; i<mNumColourEntries; ++i )
+        {
+            if( mColour[i].resolveTexture &&
+                mColour[i].storeAction == StoreAction::StoreAndMultisampleResolve )
+            {
+                passDesc.colorAttachments[currentColourIdx] = mResolveColourAttachm[i];
+                ++currentColourIdx;
+            }
+        }
+
+        mDevice->endAllEncoders();
+        mDevice->mRenderEncoder =
+                [mDevice->mCurrentCommandBuffer renderCommandEncoderWithDescriptor:passDesc];
+
+        MTLViewport mtlVp;
+        mtlVp.originX   = x;
+        mtlVp.originY   = y;
+        mtlVp.width     = width;
+        mtlVp.height    = height;
+        mtlVp.znear     = 0;
+        mtlVp.zfar      = 1;
+        [mDevice->mRenderEncoder setViewport:mtlVp];
+
+        mDevice->endRenderEncoder();
+    }
+    //-----------------------------------------------------------------------------------
+    void MetalRenderPassDescriptor::clearFrameBuffer(void)
+    {
+        MTLRenderPassDescriptor *passDesc = [MTLRenderPassDescriptor renderPassDescriptor];
+        for( size_t i=0; i<mNumColourEntries; ++i )
+            passDesc.colorAttachments[i] = mColourAttachment[i];
+
+        passDesc.depthAttachment = mDepthAttachment;
+        passDesc.stencilAttachment = mStencilAttachment;
+
+        mDevice->endAllEncoders();
+        mDevice->mRenderEncoder =
+                [mDevice->mCurrentCommandBuffer renderCommandEncoderWithDescriptor:passDesc];
+        mDevice->endRenderEncoder();
+    }
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    FrameBufferDescKey::FrameBufferDescKey()
+    {
+        memset( this, 0, sizeof( *this ) );
+    }
+    //-----------------------------------------------------------------------------------
+    FrameBufferDescKey::FrameBufferDescKey( const RenderPassDescriptor &desc )
+    {
+        memset( this, 0, sizeof( *this ) );
+        numColourEntries = desc.getNumColourEntries();
+
+        //Load & Store actions don't matter for generating different FBOs.
+
+        for( size_t i=0; i<numColourEntries; ++i )
+        {
+            colour[i] = desc.mColour[i];
+            allLayers[i] = desc.mColour[i].allLayers;
+            colour[i].loadAction = LoadAction::DontCare;
+            colour[i].storeAction = StoreAction::DontCare;
+        }
+
+        depth = desc.mDepth;
+        depth.loadAction = LoadAction::DontCare;
+        depth.storeAction = StoreAction::DontCare;
+        stencil = desc.mStencil;
+        stencil.loadAction = LoadAction::DontCare;
+        stencil.storeAction = StoreAction::DontCare;
+    }
+    //-----------------------------------------------------------------------------------
+    bool FrameBufferDescKey::operator < ( const FrameBufferDescKey &other ) const
+    {
+        if( this->numColourEntries != other.numColourEntries )
+            return this->numColourEntries < other.numColourEntries;
+
+        for( size_t i=0; i<numColourEntries; ++i )
+        {
+            if( this->allLayers[i] != other.allLayers[i] )
+                return this->allLayers[i] < other.allLayers[i];
+            if( this->colour[i] != other.colour[i] )
+                return this->colour[i] < other.colour[i];
+        }
+
+        if( this->depth != other.depth )
+            return this->depth < other.depth;
+        if( this->stencil != other.stencil )
+            return this->stencil < other.stencil;
+
+        return false;
+    }
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    FrameBufferDescValue::FrameBufferDescValue() : refCount( 0 ) {}
+}

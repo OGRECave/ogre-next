@@ -80,6 +80,8 @@ namespace Ogre
         virtual void copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
                              const TextureBox &srcBox, uint8 srcMipLevel );
 
+        virtual void _autogenerateMipmaps(void);
+
         virtual void getSubsampleLocations( vector<Vector2>::type locations );
 
         virtual void notifyDataIsReady(void);
@@ -90,6 +92,7 @@ namespace Ogre
 
         id<MTLTexture> getDisplayTextureName(void) const    { return mDisplayTextureName; }
         id<MTLTexture> getFinalTextureName(void) const      { return mFinalTextureName; }
+        id<MTLTexture> getMsaaFramebufferName(void) const   { return mMsaaFramebufferName; }
     };
 }
 

@@ -209,17 +209,8 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    void NULLRenderSystem::_setTextureCS( uint32 slot, TextureGpu *texPtr )
-    {
-    }
-    //-------------------------------------------------------------------------
-    void NULLRenderSystem::_setHlmsSamplerblockCS( uint8 texUnit, const HlmsSamplerblock *samplerblock )
-    {
-    }
-    //-------------------------------------------------------------------------
     void NULLRenderSystem::_setCurrentDeviceFromTexture( TextureGpu *texture )
     {
-
     }
     //-------------------------------------------------------------------------
     void NULLRenderSystem::_setTexture( size_t unit, TextureGpu *texPtr )

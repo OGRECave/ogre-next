@@ -144,6 +144,7 @@ namespace Ogre
         dispatch_semaphore_t    mMainGpuSyncSemaphore;
         bool                    mMainSemaphoreAlreadyWaited;
         bool                    mBeginFrameOnceStarted;
+        bool                    mHasStoreAndMultisampleResolve;
 
         void setActiveDevice( MetalDevice *device );
         void createRenderEncoder(void);
@@ -172,16 +173,17 @@ namespace Ogre
 
         virtual void reinitialise(void);
 
-        virtual RenderWindow* _initialise(bool autoCreateWindow, const String& windowTitle = "OGRE Render Window");
+        virtual Window* _initialise( bool autoCreateWindow,
+                                     const String& windowTitle = "OGRE Render Window" );
 
-        virtual RenderWindow* _createRenderWindow( const String &name,
-                                                   unsigned int width, unsigned int height,
-                                                   bool fullScreen,
-                                                   const NameValuePairList *miscParams = 0);
+        virtual Window* _createRenderWindow( const String &name, uint32 width, uint32 height,
+                                             bool fullScreen, const NameValuePairList *miscParams = 0 );
 
         virtual MultiRenderTarget* createMultiRenderTarget(const String & name);
 
         virtual String getErrorDescription(long errorNumber) const;
+
+        bool hasStoreAndMultisampleResolve(void) const      { return mHasStoreAndMultisampleResolve; }
 
         virtual void _useLights(const LightList& lights, unsigned short limit);
         virtual void _setWorldMatrix(const Matrix4 &m);
@@ -210,12 +212,25 @@ namespace Ogre
                                         ResourceAccess::ResourceAccess access,
                                         int32 mipmapLevel, int32 textureArrayIndex,
                                         PixelFormat pixelFormat );
-        virtual void _setTextureCS( uint32 slot, bool enabled, Texture *texPtr );
-        virtual void _setHlmsSamplerblockCS( uint8 texUnit, const HlmsSamplerblock *samplerblock );
 
-        virtual void _setTexture(size_t unit, bool enabled,  Texture *texPtr);
+        virtual void _setTexture( size_t unit, TextureGpu *texPtr );
         virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set );
+        virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture2 *set );
         virtual void _setSamplers( uint32 slotStart, const DescriptorSetSampler *set );
+        virtual void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set );
+        virtual void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture2 *set );
+        virtual void _setSamplersCS( uint32 slotStart, const DescriptorSetSampler *set );
+        virtual void _setUavCS( uint32 slotStart, const DescriptorSetUav *set );
+
+        virtual void _setCurrentDeviceFromTexture( TextureGpu *texture );
+        virtual RenderPassDescriptor* createRenderPassDescriptor(void);
+        virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc,
+                                                TextureGpu *anyTarget,
+                                                const Vector4 &viewportSize,
+                                                const Vector4 &scissors,
+                                                bool overlaysEnabled,
+                                                bool warnIfRtvWasFlushed );
+        virtual void endRenderPassDescriptor(void);
 
         virtual void _setTextureCoordCalculation(size_t unit, TexCoordCalcMethod m,
                                                  const Frustum* frustum = 0);
