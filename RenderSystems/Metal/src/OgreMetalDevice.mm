@@ -82,7 +82,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void MetalDevice::endRenderEncoder(void)
+    void MetalDevice::endRenderEncoder( bool endRenderPassDesc )
     {
         if( mRenderEncoder )
         {
@@ -90,7 +90,7 @@ namespace Ogre
             mRenderEncoder = 0;
 
             if( mRenderSystem->getActiveDevice() == this )
-                mRenderSystem->_notifyActiveEncoderEnded();
+                mRenderSystem->_notifyActiveEncoderEnded( endRenderPassDesc );
         }
     }
     //-------------------------------------------------------------------------

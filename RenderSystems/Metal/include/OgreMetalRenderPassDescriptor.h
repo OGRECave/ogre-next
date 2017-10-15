@@ -114,8 +114,6 @@ namespace Ogre
         void performLoadActions( MTLRenderPassDescriptor *passDesc );
         void performStoreActions( uint32 x, uint32 y, uint32 width, uint32 height,
                                   uint32 entriesToFlush );
-
-        void clearFrameBuffer(void);
     };
 
     /** @} */

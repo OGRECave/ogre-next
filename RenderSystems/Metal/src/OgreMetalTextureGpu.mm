@@ -250,6 +250,50 @@ namespace Ogre
         [blitEncoder generateMipmapsForTexture: mFinalTextureName];
     }
     //-----------------------------------------------------------------------------------
+    id<MTLTexture> MetalTextureGpu::getView( PixelFormatGpu pixelFormat, uint8 mipLevel,
+                                             uint16 arraySlice, bool cubemapsAs2DArrays, bool forUav )
+    {
+        if( pixelFormat == PFG_UNKNOWN )
+        {
+            pixelFormat = mPixelFormat;
+            if( forUav )
+                pixelFormat = PixelFormatGpuUtils::getEquivalentLinear( pixelFormat );
+        }
+        MTLTextureType texType = this->getMetalTextureType();
+
+        if( mMsaa > 1u && hasMsaaExplicitResolves() )
+            texType = MTLTextureType2DMultisample;
+
+        if( cubemapsAs2DArrays &&
+            (mTextureType == TextureTypes::TypeCube ||
+             mTextureType == TextureTypes::TypeCubeArray) )
+        {
+            texType = MTLTextureType2DArray;
+        }
+
+        NSRange mipLevels;
+        mipLevels = NSMakeRange( mipLevel, mNumMipmaps - mipLevel );
+        NSRange slices;
+        slices = NSMakeRange( arraySlice, this->getNumSlices() - arraySlice );
+
+        return [mDisplayTextureName newTextureViewWithPixelFormat:MetalMappings::get( pixelFormat )
+                                                      textureType:texType
+                                                           levels:mipLevels
+                                                           slices:slices];
+    }
+    //-----------------------------------------------------------------------------------
+    id<MTLTexture> MetalTextureGpu::getView( DescriptorSetTexture2::TextureSlot texSlot )
+    {
+        return getView( texSlot.pixelFormat, texSlot.mipmapLevel,
+                        texSlot.textureArrayIndex, texSlot.cubemapsAs2DArrays, false );
+    }
+    //-----------------------------------------------------------------------------------
+    id<MTLTexture> MetalTextureGpu::getView( DescriptorSetUav::TextureSlot texSlot )
+    {
+        return getView( texSlot.pixelFormat, texSlot.mipmapLevel,
+                        texSlot.textureArrayIndex, false, true );
+    }
+    //-----------------------------------------------------------------------------------
     void MetalTextureGpu::getSubsampleLocations( vector<Vector2>::type locations )
     {
         locations.reserve( mMsaa );

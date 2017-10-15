@@ -86,4 +86,14 @@ namespace Ogre
                            offset:mFinalBufferStart * mBytesPerElement + offset
                           atIndex:slot + OGRE_METAL_CS_TEX_SLOT_START];
     }
+    //-----------------------------------------------------------------------------------
+    void MetalTexBufferPacked::bindBufferForDescriptor( __unsafe_unretained id <MTLBuffer> *buffers,
+                                                        NSUInteger *offsets, size_t offset )
+    {
+        assert( dynamic_cast<MetalBufferInterface*>( mBufferInterface ) );
+        MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface*>( mBufferInterface );
+
+        *buffers = bufferInterface->getVboName();
+        *offsets = mFinalBufferStart * mBytesPerElement + offset;
+    }
 }

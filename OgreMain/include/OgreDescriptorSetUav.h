@@ -137,6 +137,9 @@ namespace Ogre
                 return false;
             }
 
+            bool formatNeedsReinterpret(void) const;
+            bool needsDifferentView(void) const;
+
             static TextureSlot makeEmpty(void)
             {
                 TextureSlot retVal;

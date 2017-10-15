@@ -500,22 +500,7 @@ namespace Ogre
         mtlVp.zfar      = 1;
         [mDevice->mRenderEncoder setViewport:mtlVp];
 
-        mDevice->endRenderEncoder();
-    }
-    //-----------------------------------------------------------------------------------
-    void MetalRenderPassDescriptor::clearFrameBuffer(void)
-    {
-        MTLRenderPassDescriptor *passDesc = [MTLRenderPassDescriptor renderPassDescriptor];
-        for( size_t i=0; i<mNumColourEntries; ++i )
-            passDesc.colorAttachments[i] = mColourAttachment[i];
-
-        passDesc.depthAttachment = mDepthAttachment;
-        passDesc.stencilAttachment = mStencilAttachment;
-
-        mDevice->endAllEncoders();
-        mDevice->mRenderEncoder =
-                [mDevice->mCurrentCommandBuffer renderCommandEncoderWithDescriptor:passDesc];
-        mDevice->endRenderEncoder();
+        mDevice->endRenderEncoder( false );
     }
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------

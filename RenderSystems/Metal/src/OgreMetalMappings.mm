@@ -27,6 +27,7 @@ Copyright (c) 2000-2016 Torus Knot Software Ltd
 */
 
 #include "OgreMetalMappings.h"
+#include "OgrePixelFormatGpuUtils.h"
 #include "OgreHlmsDatablock.h"
 #include "OgreMetalDevice.h"
 
@@ -210,7 +211,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void MetalMappings::getDepthStencilFormat( MetalDevice *device, PixelFormat pf,
+    void MetalMappings::getDepthStencilFormat( MetalDevice *device, PixelFormatGpu pf,
                                                MTLPixelFormat &outDepth, MTLPixelFormat &outStencil )
     {
         MTLPixelFormat depthFormat = MTLPixelFormatInvalid;
@@ -218,10 +219,8 @@ namespace Ogre
 
         switch( pf )
         {
-        case PF_D24_UNORM_S8_UINT:
-        case PF_D24_UNORM_X8:
-        case PF_X24_S8_UINT:
-        case PF_D24_UNORM:
+        case PFG_D24_UNORM_S8_UINT:
+        case PFG_D24_UNORM:
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
             depthFormat = MTLPixelFormatDepth32Float;
             stencilFormat = MTLPixelFormatStencil8;
@@ -238,14 +237,13 @@ namespace Ogre
             }
 #endif
             break;
-        case PF_D16_UNORM:
+        case PFG_D16_UNORM:
             depthFormat = MTLPixelFormatDepth32Float;
             break;
-        case PF_D32_FLOAT:
-        case PF_D32_FLOAT_X24_X8:
+        case PFG_D32_FLOAT:
             depthFormat = MTLPixelFormatDepth32Float;
             break;
-        case PF_D32_FLOAT_X24_S8_UINT:
+        case PFG_D32_FLOAT_S8X24_UINT:
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
             depthFormat = MTLPixelFormatDepth32Float;
             stencilFormat = MTLPixelFormatStencil8;
@@ -254,12 +252,12 @@ namespace Ogre
             stencilFormat = MTLPixelFormatDepth32Float_Stencil8;
 #endif
             break;
-        case PF_X32_X24_S8_UINT:
-            stencilFormat = MTLPixelFormatStencil8;
-            break;
+//        case PFG_X32_X24_S8_UINT:
+//            stencilFormat = MTLPixelFormatStencil8;
+//            break;
         default:
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "PixelFormat '" + PixelUtil::getFormatName( pf ) +
+                         "PixelFormat '" + String( PixelFormatGpuUtils::toString( pf ) ) +
                          "' is not a valid depth buffer format",
                          "MetalRenderSystem::_createDepthBufferFor" );
         }

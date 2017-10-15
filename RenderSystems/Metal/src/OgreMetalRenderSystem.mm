@@ -42,6 +42,8 @@ Copyright (c) 2000-2016 Torus Knot Software Ltd
 #include "OgreMetalMultiRenderTarget.h"
 #include "OgreMetalTextureGpu.h"
 #include "OgreMetalRenderPassDescriptor.h"
+#include "OgreMetalDescriptorSetTexture.h"
+#include "Vao/OgreMetalTexBufferPacked.h"
 
 #include "OgreMetalHardwareBufferManager.h"
 #include "OgreMetalHardwareIndexBuffer.h"
@@ -93,8 +95,7 @@ namespace Ogre
         mDevice( this ),
         mMainGpuSyncSemaphore( 0 ),
         mMainSemaphoreAlreadyWaited( false ),
-        mBeginFrameOnceStarted( false ),
-        mHasStoreAndMultisampleResolve( false )
+        mBeginFrameOnceStarted( false )
     {
         memset( mHistoricalAutoParamsSize, 0, sizeof(mHistoricalAutoParamsSize) );
         for( size_t i=0; i<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
@@ -268,13 +269,12 @@ namespace Ogre
 #endif
         rsc->setMaximumResolutions( max2DResolution, 2048, max2DResolution );
 
-        mHasStoreAndMultisampleResolve = false;
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-        if( [mActiveDevice->mDevice supportsFeatureSet:iOS_GPUFamily3_v2] )
-            mHasStoreAndMultisampleResolve = true;
+        if( [mActiveDevice->mDevice supportsFeatureSet:MTLFeatureSet_iOS_GPUFamily3_v2] )
+            rsc->setCapability(RSC_STORE_AND_MULTISAMPLE_RESOLVE);
 #else
-        if( [mActiveDevice->mDevice supportsFeatureSet:OSX_GPUFamily1_v2] )
-            mHasStoreAndMultisampleResolve = true;
+        if( [mActiveDevice->mDevice supportsFeatureSet:MTLFeatureSet_OSX_GPUFamily1_v2] )
+            rsc->setCapability(RSC_STORE_AND_MULTISAMPLE_RESOLVE);
 #endif
 
         //TODO: UAVs
@@ -384,6 +384,11 @@ namespace Ogre
     String MetalRenderSystem::getErrorDescription(long errorNumber) const
     {
         return BLANKSTRING;
+    }
+    //-------------------------------------------------------------------------
+    bool MetalRenderSystem::hasStoreAndMultisampleResolve(void) const
+    {
+        return mCurrentCapabilities->hasCapability( RSC_STORE_AND_MULTISAMPLE_RESOLVE );
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_useLights(const LightList& lights, unsigned short limit)
@@ -587,7 +592,70 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture2 *set )
     {
-        TODO;
+        MetalDescriptorSetTexture *metalSet =
+                reinterpret_cast<MetalDescriptorSetTexture*>( set->mRsData );
+
+        //Bind textures
+        {
+            FastArray<MetalTexRegion>::const_iterator itor = metalSet->textures.begin();
+            FastArray<MetalTexRegion>::const_iterator end  = metalSet->textures.end();
+
+            while( itor != end )
+            {
+                NSRange range = itor->range;
+                range.location += slotStart;
+
+                switch( itor->shaderType )
+                {
+                case VertexShader:
+                    [mActiveRenderEncoder setVertexTextures:itor->textures withRange:range];
+                    break;
+                case PixelShader:
+                    [mActiveRenderEncoder setFragmentTextures:itor->textures withRange:range];
+                    break;
+                case GeometryShader:
+                case HullShader:
+                case DomainShader:
+                case NumShaderTypes:
+                    break;
+                }
+
+                ++itor;
+            }
+        }
+
+        //Bind buffers
+        {
+            FastArray<MetalBufferRegion>::const_iterator itor = metalSet->buffers.begin();
+            FastArray<MetalBufferRegion>::const_iterator end  = metalSet->buffers.end();
+
+            while( itor != end )
+            {
+                NSRange range = itor->range;
+                range.location += slotStart + OGRE_METAL_TEX_SLOT_START;
+
+                switch( itor->shaderType )
+                {
+                case VertexShader:
+                    [mActiveRenderEncoder setVertexBuffers:itor->buffers
+                                                   offsets:itor->offsets
+                                                 withRange:range];
+                    break;
+                case PixelShader:
+                    [mActiveRenderEncoder setFragmentBuffers:itor->buffers
+                                                     offsets:itor->offsets
+                                                   withRange:range];
+                    break;
+                case GeometryShader:
+                case HullShader:
+                case DomainShader:
+                case NumShaderTypes:
+                    break;
+                }
+
+                ++itor;
+            }
+        }
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_setSamplers( uint32 slotStart, const DescriptorSetSampler *set )
@@ -657,7 +725,39 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_setTexturesCS( uint32 slotStart, const DescriptorSetTexture2 *set )
     {
-        TODO;
+        MetalDescriptorSetTexture *metalSet =
+                reinterpret_cast<MetalDescriptorSetTexture*>( set->mRsData );
+
+        __unsafe_unretained id<MTLComputeCommandEncoder> computeEncoder =
+                mActiveDevice->getComputeEncoder();
+
+        //Bind textures
+        {
+            FastArray<MetalTexRegion>::const_iterator itor = metalSet->textures.begin();
+            FastArray<MetalTexRegion>::const_iterator end  = metalSet->textures.end();
+
+            while( itor != end )
+            {
+                NSRange range = itor->range;
+                range.location += slotStart;
+                [computeEncoder setTextures:itor->textures withRange:range];
+                ++itor;
+            }
+        }
+
+        //Bind buffers
+        {
+            FastArray<MetalBufferRegion>::const_iterator itor = metalSet->buffers.begin();
+            FastArray<MetalBufferRegion>::const_iterator end  = metalSet->buffers.end();
+
+            while( itor != end )
+            {
+                NSRange range = itor->range;
+                range.location += slotStart + OGRE_METAL_CS_TEX_SLOT_START;
+                [computeEncoder setBuffers:itor->buffers offsets:itor->offsets withRange:range];
+                ++itor;
+            }
+        }
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_setSamplersCS( uint32 slotStart, const DescriptorSetSampler *set )
@@ -690,7 +790,39 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_setUavCS( uint32 slotStart, const DescriptorSetUav *set )
     {
-        TODO;
+        MetalDescriptorSetTexture *metalSet =
+                reinterpret_cast<MetalDescriptorSetTexture*>( set->mRsData );
+
+        __unsafe_unretained id<MTLComputeCommandEncoder> computeEncoder =
+                mActiveDevice->getComputeEncoder();
+
+        //Bind textures
+        {
+            FastArray<MetalTexRegion>::const_iterator itor = metalSet->textures.begin();
+            FastArray<MetalTexRegion>::const_iterator end  = metalSet->textures.end();
+
+            while( itor != end )
+            {
+                NSRange range = itor->range;
+                range.location += slotStart;
+                [computeEncoder setTextures:itor->textures withRange:range];
+                ++itor;
+            }
+        }
+
+        //Bind buffers
+        {
+            FastArray<MetalBufferRegion>::const_iterator itor = metalSet->buffers.begin();
+            FastArray<MetalBufferRegion>::const_iterator end  = metalSet->buffers.end();
+
+            while( itor != end )
+            {
+                NSRange range = itor->range;
+                range.location += slotStart + OGRE_METAL_CS_UAV_SLOT_START;
+                [computeEncoder setBuffers:itor->buffers offsets:itor->offsets withRange:range];
+                ++itor;
+            }
+        }
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_setCurrentDeviceFromTexture( TextureGpu *texture )
@@ -700,7 +832,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     RenderPassDescriptor* MetalRenderSystem::createRenderPassDescriptor(void)
     {
-        RenderPassDescriptor *retVal = OGRE_NEW MetalRenderPassDescriptor( this );
+        RenderPassDescriptor *retVal = OGRE_NEW MetalRenderPassDescriptor( mActiveDevice, this );
         mRenderPassDescs.insert( retVal );
         return retVal;
     }
@@ -1250,8 +1382,10 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::_notifyActiveEncoderEnded(void)
+    void MetalRenderSystem::_notifyActiveEncoderEnded( bool callEndRenderPassDesc )
     {
+        if( callEndRenderPassDesc )
+            endRenderPassDescriptor();
         mActiveViewport = 0;
         mActiveRenderTarget = 0;
         mActiveRenderEncoder = 0;
@@ -1585,6 +1719,268 @@ namespace Ogre
     {
         id <MTLSamplerState> sampler = reinterpret_cast< id <MTLSamplerState> >(
                     CFBridgingRelease( block->mRsData ) );
+    }
+    //-------------------------------------------------------------------------
+    template <typename TDescriptorSetTexture,
+              typename TTexSlot,
+              typename TBufferPacked>
+    void MetalRenderSystem::_descriptorSetTextureCreated( TDescriptorSetTexture *newSet,
+                                                          const FastArray<TTexSlot> &texContainer,
+                                                          uint16 *shaderTypeTexCount )
+    {
+        MetalDescriptorSetTexture *metalSet = new MetalDescriptorSetTexture();
+
+        metalSet->numTextureViews = 0;
+
+        size_t numBuffers = 0;
+        size_t numTextures = 0;
+
+        size_t numBufferRanges = 0;
+        size_t numTextureRanges = 0;
+
+        bool needsNewTexRange = true;
+        bool needsNewBufferRange = true;
+
+        ShaderType shaderType = VertexShader;
+        size_t numProcessedSlots = 0;
+
+        typename FastArray<TTexSlot>::const_iterator itor = texContainer.begin();
+        typename FastArray<TTexSlot>::const_iterator end  = texContainer.end();
+
+        while( itor != end )
+        {
+            if( shaderTypeTexCount )
+            {
+                //We need to break the ranges if we crossed stages
+                while( shaderType <= PixelShader &&
+                       numProcessedSlots >= shaderTypeTexCount[shaderType] )
+                {
+                    numProcessedSlots = 0;
+                    shaderType = static_cast<ShaderType>( shaderType + 1u );
+                    needsNewTexRange = true;
+                    needsNewBufferRange = true;
+                }
+            }
+
+            if( itor->isTexture() )
+            {
+                needsNewBufferRange = true;
+                if( needsNewTexRange )
+                {
+                    ++numTextureRanges;
+                    needsNewTexRange = false;
+                }
+
+                const typename TDescriptorSetTexture::TextureSlot &texSlot = itor->getTexture();
+                if( texSlot.needsDifferentView() )
+                    ++metalSet->numTextureViews;
+                ++numTextures;
+            }
+            else
+            {
+                needsNewTexRange = true;
+                if( needsNewBufferRange )
+                {
+                    ++numBufferRanges;
+                    needsNewBufferRange = false;
+                }
+
+                ++numBuffers;
+            }
+            ++numProcessedSlots;
+            ++itor;
+        }
+
+        //Create two contiguous arrays of texture and buffers, but we'll split
+        //it into regions as a buffer could be in the middle of two textures.
+        __unsafe_unretained id <MTLTexture> *textures = 0;
+        __unsafe_unretained id <MTLBuffer> *buffers = 0;
+        NSUInteger *offsets = 0;
+
+        if( metalSet->numTextureViews > 0 )
+        {
+            //Create a third array to hold the strong reference
+            //to the reinterpreted versions of textures.
+            //Must be init to 0 before ARC sees it.
+            void *textureViews = OGRE_MALLOC_SIMD( sizeof(id<MTLTexture>*) * metalSet->numTextureViews,
+                                                   MEMCATEGORY_RENDERSYS );
+            memset( textureViews, 0, sizeof(id<MTLTexture>*) * metalSet->numTextureViews );
+            metalSet->textureViews = (__strong id <MTLTexture>*)textureViews;
+        }
+        if( numTextures > 0 )
+        {
+            textures = (__unsafe_unretained id <MTLTexture>*)
+                       OGRE_MALLOC_SIMD( sizeof(id<MTLTexture>*) * numTextures, MEMCATEGORY_RENDERSYS );
+        }
+        if( numBuffers > 0 )
+        {
+            buffers = (__unsafe_unretained id <MTLBuffer>*)
+                       OGRE_MALLOC_SIMD( sizeof(id<MTLBuffer>*) * numBuffers, MEMCATEGORY_RENDERSYS );
+            offsets = (NSUInteger*)OGRE_MALLOC_SIMD( sizeof(NSUInteger) * numBuffers,
+                                                     MEMCATEGORY_RENDERSYS );
+        }
+
+        metalSet->textures.reserve( numTextureRanges );
+        metalSet->buffers.reserve( numBufferRanges );
+
+        needsNewTexRange = true;
+        needsNewBufferRange = true;
+
+        shaderType = VertexShader;
+        numProcessedSlots = 0;
+
+        size_t texViewIndex = 0;
+
+        itor = texContainer.begin();
+        end  = texContainer.end();
+
+        while( itor != end )
+        {
+            if( shaderTypeTexCount )
+            {
+                //We need to break the ranges if we crossed stages
+                while( shaderType <= PixelShader &&
+                       numProcessedSlots >= shaderTypeTexCount[shaderType] )
+                {
+                    numProcessedSlots = 0;
+                    shaderType = static_cast<ShaderType>( shaderType + 1u );
+                    needsNewTexRange = true;
+                    needsNewBufferRange = true;
+                }
+            }
+
+            if( itor->isTexture() )
+            {
+                needsNewBufferRange = true;
+                if( needsNewTexRange )
+                {
+                    metalSet->textures.push_back( MetalTexRegion() );
+                    MetalTexRegion &texRegion = metalSet->textures.back();
+                    texRegion.textures = textures;
+                    texRegion.shaderType = shaderType;
+                    texRegion.range.location    = itor - texContainer.begin();
+                    texRegion.range.length      = 0;
+                    needsNewTexRange = false;
+                }
+
+                const typename TDescriptorSetTexture::TextureSlot &texSlot = itor->getTexture();
+
+                assert( dynamic_cast<MetalTextureGpu*>( texSlot.texture ) );
+                MetalTextureGpu *metalTex = static_cast<MetalTextureGpu*>( texSlot.texture );
+                __unsafe_unretained id<MTLTexture> textureHandle = metalTex->getDisplayTextureName();
+
+                if( texSlot.needsDifferentView() )
+                {
+                    metalSet->textureViews[texViewIndex] = metalTex->getView( texSlot );
+                    textureHandle = metalSet->textureViews[texViewIndex];
+                    ++texViewIndex;
+                }
+
+                MetalTexRegion &texRegion = metalSet->textures.back();
+                *textures = textureHandle;
+                ++texRegion.range.length;
+
+                ++textures;
+            }
+            else
+            {
+                needsNewTexRange = true;
+                if( needsNewBufferRange )
+                {
+                    metalSet->buffers.push_back( MetalBufferRegion() );
+                    MetalBufferRegion &bufferRegion = metalSet->buffers.back();
+                    bufferRegion.buffers = buffers;
+                    bufferRegion.offsets = offsets;
+                    bufferRegion.shaderType = shaderType;
+                    bufferRegion.range.location = itor - texContainer.begin();
+                    bufferRegion.range.length   = 0;
+                    needsNewBufferRange = false;
+                }
+
+                const typename TDescriptorSetTexture::BufferSlot &bufferSlot = itor->getBuffer();
+
+                assert( dynamic_cast<TBufferPacked*>( bufferSlot.buffer ) );
+                TBufferPacked *metalBuf = static_cast<TBufferPacked*>( bufferSlot.buffer );
+
+                MetalBufferRegion &bufferRegion = metalSet->buffers.back();
+                metalBuf->bindBufferForDescriptor( buffers, offsets, bufferSlot.offset );
+                ++bufferRegion.range.length;
+
+                ++buffers;
+                ++offsets;
+            }
+            ++numProcessedSlots;
+            ++itor;
+        }
+
+        newSet->mRsData = metalSet;
+    }
+    //-------------------------------------------------------------------------
+    void MetalRenderSystem::destroyMetalDescriptorSetTexture( MetalDescriptorSetTexture *metalSet )
+    {
+        const size_t numTextureViews = metalSet->numTextureViews;
+        for( size_t i=0; i<numTextureViews; ++i )
+            metalSet->textureViews[i] = 0; //Let ARC free these pointers
+
+        if( numTextureViews )
+        {
+            OGRE_FREE_SIMD( metalSet->textureViews, MEMCATEGORY_RENDERSYS );
+            metalSet->textureViews = 0;
+        }
+
+        if( !metalSet->textures.empty() )
+        {
+            MetalTexRegion &texRegion = metalSet->textures.front();
+            OGRE_FREE_SIMD( texRegion.textures, MEMCATEGORY_RENDERSYS );
+        }
+
+        if( !metalSet->buffers.empty() )
+        {
+            MetalBufferRegion &bufferRegion = metalSet->buffers.front();
+            OGRE_FREE_SIMD( bufferRegion.buffers, MEMCATEGORY_RENDERSYS );
+        }
+    }
+    //-------------------------------------------------------------------------
+    void MetalRenderSystem::_descriptorSetTexture2Created( DescriptorSetTexture2 *newSet )
+    {
+        _descriptorSetTextureCreated<
+                DescriptorSetTexture2,
+                DescriptorSetTexture2::Slot,
+                MetalTexBufferPacked>( newSet, newSet->mTextures, newSet->mShaderTypeTexCount );
+    }
+    //-------------------------------------------------------------------------
+    void MetalRenderSystem::_descriptorSetTexture2Destroyed( DescriptorSetTexture2 *set )
+    {
+        assert( set->mRsData );
+
+        MetalDescriptorSetTexture *metalSet =
+                reinterpret_cast<MetalDescriptorSetTexture*>( set->mRsData );
+
+        destroyMetalDescriptorSetTexture( metalSet );
+        delete metalSet;
+
+        set->mRsData = 0;
+    }
+    //-------------------------------------------------------------------------
+    void MetalRenderSystem::_descriptorSetUavCreated( DescriptorSetUav *newSet )
+    {
+        _descriptorSetTextureCreated<
+                DescriptorSetUav,
+                DescriptorSetUav::Slot,
+                MetalUavBufferPacked>( newSet, newSet->mUavs, 0 );
+    }
+    //-------------------------------------------------------------------------
+    void MetalRenderSystem::_descriptorSetUavDestroyed( DescriptorSetUav *set )
+    {
+        assert( set->mRsData );
+
+        MetalDescriptorSetTexture *metalSet =
+                reinterpret_cast<MetalDescriptorSetTexture*>( set->mRsData );
+
+        destroyMetalDescriptorSetTexture( metalSet );
+        delete metalSet;
+
+        set->mRsData = 0;
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_setHlmsSamplerblock( uint8 texUnit, const HlmsSamplerblock *samplerblock )
@@ -2259,36 +2655,11 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::clearFrameBuffer( unsigned int buffers, const ColourValue& colour,
-                                             Real depth, unsigned short stencil )
+    void MetalRenderSystem::clearFrameBuffer( RenderPassDescriptor *renderPassDesc,
+                                              TextureGpu *anyTarget )
     {
-        if( buffers & FBT_COLOUR )
-        {
-            for( size_t i=0; i<mNumMRTs; ++i )
-            {
-                if( mCurrentColourRTs[i] )
-                {
-                    mCurrentColourRTs[i]->mColourAttachmentDesc.loadAction = MTLLoadActionClear;
-                    mCurrentColourRTs[i]->mColourAttachmentDesc.clearColor =
-                            MTLClearColorMake( colour.r, colour.g, colour.b, colour.a );
-                }
-            }
-        }
-
-        if( mCurrentDepthBuffer )
-        {
-            if( buffers & FBT_DEPTH && mCurrentDepthBuffer->mDepthAttachmentDesc )
-            {
-                mCurrentDepthBuffer->mDepthAttachmentDesc.loadAction = MTLLoadActionClear;
-                mCurrentDepthBuffer->mDepthAttachmentDesc.clearDepth = depth;
-            }
-
-            if( buffers & FBT_STENCIL && mCurrentDepthBuffer->mStencilAttachmentDesc )
-            {
-                mCurrentDepthBuffer->mStencilAttachmentDesc.loadAction = MTLLoadActionClear;
-                mCurrentDepthBuffer->mStencilAttachmentDesc.clearStencil = stencil;
-            }
-        }
+        Vector4 fullVp( 0, 0, 1, 1 );
+        beginRenderPassDescriptor( renderPassDesc, anyTarget, fullVp, fullVp, false, false );
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::discardFrameBuffer( unsigned int buffers )
@@ -2421,51 +2792,6 @@ namespace Ogre
             mCurrentDepthBuffer = 0;
         }
 #endif
-    }
-    //-------------------------------------------------------------------------
-    void MetalRenderSystem::_notifyCompositorNodeSwitchedRenderTarget( RenderTarget *previousTarget )
-    {
-        TODO;
-        if( previousTarget )
-        {
-            bool mustClear = false;
-            uint8 numMRTs = 0;
-            MetalRenderTargetCommon *currentColourRTs[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
-            previousTarget->getCustomAttribute( "mNumMRTs", &numMRTs );
-            previousTarget->getCustomAttribute( "MetalRenderTargetCommon", &currentColourRTs[0] );
-
-            for( size_t i=0; i<numMRTs; ++i )
-            {
-                if( currentColourRTs[i] )
-                {
-                    if( currentColourRTs[i]->mColourAttachmentDesc.loadAction == MTLLoadActionClear )
-                        mustClear = true;
-                }
-            }
-
-            MetalDepthBuffer *depthBuffer = static_cast<MetalDepthBuffer*>(
-                        previousTarget->getDepthBuffer() );
-
-            if( depthBuffer )
-            {
-                if( depthBuffer->mDepthAttachmentDesc &&
-                    depthBuffer->mDepthAttachmentDesc.loadAction == MTLLoadActionClear )
-                {
-                    mustClear = true;
-                }
-                if( depthBuffer->mStencilAttachmentDesc &&
-                    depthBuffer->mStencilAttachmentDesc.loadAction == MTLLoadActionClear )
-                {
-                    mustClear = true;
-                }
-            }
-
-            if( mustClear )
-            {
-                _setRenderTarget( previousTarget, true );
-                createRenderEncoder();
-            }
-        }
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::preExtraThreadsStarted()

@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "OgreDescriptorSetTexture.h"
 #include "OgreTextureGpu.h"
 #include "OgrePixelFormatGpuUtils.h"
+#include "Vao/OgreTexBufferPacked.h"
 
 #include "OgreException.h"
 
@@ -52,10 +53,25 @@ namespace Ogre
 #endif
     }
     //-----------------------------------------------------------------------------------
+    bool DescriptorSetTexture2::TextureSlot::formatNeedsReinterpret(void) const
+    {
+        return pixelFormat != PFG_UNKNOWN && pixelFormat != texture->getPixelFormat();
+    }
+    //-----------------------------------------------------------------------------------
+    bool DescriptorSetTexture2::TextureSlot::needsDifferentView(void) const
+    {
+        return formatNeedsReinterpret() ||
+                mipmapLevel != 0 || textureArrayIndex != 0 ||
+                (cubemapsAs2DArrays &&
+                 (texture->getTextureType() == TextureTypes::TypeCube ||
+                  texture->getTextureType() == TextureTypes::TypeCubeArray));
+    }
+    //-----------------------------------------------------------------------------------
     void DescriptorSetTexture2::checkValidity(void) const
     {
         assert( !mTextures.empty() &&
-                "This DescriptorSetTexture2 doesn't use any texture/buffer! Perhaps incorrectly setup?" );
+                "This DescriptorSetTexture2 doesn't use any texture/buffer! "
+                "Perhaps incorrectly setup?" );
 
 #if OGRE_DEBUG_MODE
         size_t totalTexturesUsed = 0u;
@@ -79,11 +95,7 @@ namespace Ogre
             if( slot.isTexture() )
             {
                 const TextureSlot &texSlot = slot.getTexture();
-
-                PixelFormatGpu pixelFormat = texSlot.pixelFormat;
-                if( pixelFormat != PFG_UNKNOWN &&
-                    pixelFormat != texSlot.texture->getPixelFormat() &&
-                    !texSlot.texture->isReinterpretable() )
+                if( texSlot.formatNeedsReinterpret() && !texSlot.texture->isReinterpretable() )
                 {
                     //This warning here is for
                     OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
@@ -92,7 +104,17 @@ namespace Ogre
                                  "(TextureFlags::Reinterpretable) for "
                                  "texture: '" + texSlot.texture->getNameStr() + "' " +
                                  texSlot.texture->getSettingsDesc(),
-                                 "DescriptorSetTexture::checkValidity" );
+                                 "DescriptorSetTexture2::checkValidity" );
+                }
+            }
+            else if( slot.isBuffer() )
+            {
+                const BufferSlot &bufferSlot = slot.getBuffer();
+                if( bufferSlot.buffer->getBufferType() >= BT_DYNAMIC_DEFAULT )
+                {
+                    OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                                 "Dynamic buffers cannot be baked into a static DescriptorSet",
+                                 "DescriptorSetTexture2::checkValidity" );
                 }
             }
 

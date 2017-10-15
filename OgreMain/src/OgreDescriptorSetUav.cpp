@@ -31,11 +31,27 @@ THE SOFTWARE.
 #include "OgreDescriptorSetUav.h"
 #include "OgreTextureGpu.h"
 #include "OgrePixelFormatGpuUtils.h"
+#include "Vao/OgreUavBufferPacked.h"
 
 #include "OgreException.h"
 
 namespace Ogre
 {
+    //-----------------------------------------------------------------------------------
+    bool DescriptorSetUav::TextureSlot::formatNeedsReinterpret(void) const
+    {
+        PixelFormatGpu format = pixelFormat;
+        if( format == PFG_UNKNOWN )
+            format = PixelFormatGpuUtils::getEquivalentLinear( texture->getPixelFormat() );
+
+        return format != texture->getPixelFormat();
+    }
+    //-----------------------------------------------------------------------------------
+    bool DescriptorSetUav::TextureSlot::needsDifferentView(void) const
+    {
+        return formatNeedsReinterpret() || mipmapLevel != 0 || textureArrayIndex != 0;
+    }
+    //-----------------------------------------------------------------------------------
     void DescriptorSetUav::checkValidity(void) const
     {
         assert( !mUavs.empty() &&
@@ -50,16 +66,7 @@ namespace Ogre
             if( slot.isTexture() )
             {
                 const TextureSlot &texSlot = slot.getTexture();
-
-                PixelFormatGpu pixelFormat = texSlot.pixelFormat;
-                if( pixelFormat == PFG_UNKNOWN )
-                {
-                    pixelFormat = PixelFormatGpuUtils::getEquivalentLinear(
-                                      texSlot.texture->getPixelFormat() );
-                }
-
-                if( pixelFormat != texSlot.texture->getPixelFormat() &&
-                    !texSlot.texture->isReinterpretable() )
+                if( texSlot.formatNeedsReinterpret() && !texSlot.texture->isReinterpretable() )
                 {
                     //This warning here is for
                     OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
@@ -68,6 +75,16 @@ namespace Ogre
                                  "(TextureFlags::Reinterpretable) for "
                                  "texture: '" + texSlot.texture->getNameStr() + "' " +
                                  texSlot.texture->getSettingsDesc(),
+                                 "DescriptorSetUav::checkValidity" );
+                }
+            }
+            else if( slot.isBuffer() )
+            {
+                const BufferSlot &bufferSlot = slot.getBuffer();
+                if( bufferSlot.buffer->getBufferType() >= BT_DYNAMIC_DEFAULT )
+                {
+                    OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                                 "Dynamic buffers cannot be baked into a static DescriptorSet",
                                  "DescriptorSetUav::checkValidity" );
                 }
             }

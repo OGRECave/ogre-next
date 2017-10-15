@@ -31,6 +31,7 @@ Copyright (c) 2000-2016 Torus Knot Software Ltd
 
 #include "OgreMetalPrerequisites.h"
 #include "OgreMetalPixelFormatToShaderType.h"
+#include "OgreMetalRenderPassDescriptor.h"
 
 #include "OgreRenderSystem.h"
 #include "OgreMetalDevice.h"
@@ -144,7 +145,8 @@ namespace Ogre
         dispatch_semaphore_t    mMainGpuSyncSemaphore;
         bool                    mMainSemaphoreAlreadyWaited;
         bool                    mBeginFrameOnceStarted;
-        bool                    mHasStoreAndMultisampleResolve;
+
+        FrameBufferDescMap      mFrameBufferDescMap;
 
         void setActiveDevice( MetalDevice *device );
         void createRenderEncoder(void);
@@ -183,7 +185,7 @@ namespace Ogre
 
         virtual String getErrorDescription(long errorNumber) const;
 
-        bool hasStoreAndMultisampleResolve(void) const      { return mHasStoreAndMultisampleResolve; }
+        bool hasStoreAndMultisampleResolve(void) const;
 
         virtual void _useLights(const LightList& lights, unsigned short limit);
         virtual void _setWorldMatrix(const Matrix4 &m);
@@ -223,6 +225,7 @@ namespace Ogre
         virtual void _setUavCS( uint32 slotStart, const DescriptorSetUav *set );
 
         virtual void _setCurrentDeviceFromTexture( TextureGpu *texture );
+        virtual FrameBufferDescMap& _getFrameBufferDescMap(void)        { return mFrameBufferDescMap; }
         virtual RenderPassDescriptor* createRenderPassDescriptor(void);
         virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc,
                                                 TextureGpu *anyTarget,
@@ -262,6 +265,19 @@ namespace Ogre
         virtual void _hlmsPipelineStateObjectDestroyed( HlmsPso *pso );
         virtual void _hlmsSamplerblockCreated( HlmsSamplerblock *newBlock );
         virtual void _hlmsSamplerblockDestroyed( HlmsSamplerblock *block );
+    protected:
+        template <typename TDescriptorSetTexture,
+                  typename TTexSlot,
+                  typename TBufferPacked>
+        void _descriptorSetTextureCreated( TDescriptorSetTexture *newSet,
+                                           const FastArray<TTexSlot> &texContainer,
+                                           uint16 *shaderTypeTexCount );
+        void destroyMetalDescriptorSetTexture( MetalDescriptorSetTexture *metalSet );
+    public:
+        virtual void _descriptorSetTexture2Created( DescriptorSetTexture2 *newSet );
+        virtual void _descriptorSetTexture2Destroyed( DescriptorSetTexture2 *set );
+        virtual void _descriptorSetUavCreated( DescriptorSetUav *newSet );
+        virtual void _descriptorSetUavDestroyed( DescriptorSetUav *set );
 
         virtual void _setHlmsSamplerblock( uint8 texUnit, const HlmsSamplerblock *samplerblock );
         virtual void _setPipelineStateObject( const HlmsPso *pso );
@@ -299,9 +315,7 @@ namespace Ogre
             GpuProgramParametersSharedPtr params, uint16 variabilityMask);
         virtual void bindGpuProgramPassIterationParameters(GpuProgramType gptype);
 
-        virtual void clearFrameBuffer(unsigned int buffers,
-            const ColourValue& colour = ColourValue::Black,
-            Real depth = 1.0f, unsigned short stencil = 0);
+        virtual void clearFrameBuffer( RenderPassDescriptor *renderPassDesc, TextureGpu *anyTarget );
         virtual void discardFrameBuffer( unsigned int buffers );
 
         virtual Real getHorizontalTexelOffset(void);
@@ -339,7 +353,7 @@ namespace Ogre
         MetalDevice* getActiveDevice(void)                      { return mActiveDevice; }
         MetalProgramFactory* getMetalProgramFactory(void)       { return mMetalProgramFactory; }
 
-        void _notifyActiveEncoderEnded(void);
+        void _notifyActiveEncoderEnded( bool callEndRenderPassDesc );
         void _notifyActiveComputeEnded(void);
         void _notifyDeviceStalled(void);
     };

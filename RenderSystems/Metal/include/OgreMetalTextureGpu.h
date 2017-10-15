@@ -31,6 +31,8 @@ THE SOFTWARE.
 
 #include "OgreMetalPrerequisites.h"
 #include "OgreTextureGpu.h"
+#include "OgreDescriptorSetTexture.h"
+#include "OgreDescriptorSetUav.h"
 
 #import <Metal/MTLTexture.h>
 
@@ -89,6 +91,11 @@ namespace Ogre
 
         virtual void _setToDisplayDummyTexture(void);
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
+
+        id<MTLTexture> getView( PixelFormatGpu pixelFormat, uint8 mipLevel, uint16 arraySlice,
+                                bool cubemapsAs2DArrays, bool forUav );
+        id<MTLTexture> getView( DescriptorSetTexture2::TextureSlot texSlot );
+        id<MTLTexture> getView( DescriptorSetUav::TextureSlot uavSlot );
 
         id<MTLTexture> getDisplayTextureName(void) const    { return mDisplayTextureName; }
         id<MTLTexture> getFinalTextureName(void) const      { return mFinalTextureName; }

@@ -54,7 +54,7 @@ namespace Ogre
         void init(void);
 
         void endBlitEncoder(void);
-        void endRenderEncoder(void);
+        void endRenderEncoder( bool endRenderPassDesc=true );
         void endComputeEncoder(void);
 
         void endAllEncoders(void);
