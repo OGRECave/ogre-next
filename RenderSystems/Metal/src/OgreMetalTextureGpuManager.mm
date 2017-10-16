@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "OgreMetalTextureGpu.h"
 #include "OgreMetalStagingTexture.h"
 #include "OgreMetalAsyncTextureTicket.h"
+#include "OgreMetalTextureGpuWindow.h"
 
 #include "Vao/OgreMetalVaoManager.h"
 
@@ -142,6 +143,27 @@ namespace Ogre
 
         for( int i=0; i<=TextureTypes::Type3D; ++i )
             mBlankTexture[i] = 0;
+    }
+    //-----------------------------------------------------------------------------------
+    TextureGpu* MetalTextureGpuManager::createTextureGpuWindow( Window *window )
+    {
+        return OGRE_NEW MetalTextureGpuWindow( GpuPageOutStrategy::Discard, mVaoManager,
+                                               "RenderWindow",
+                                               TextureFlags::NotTexture|
+                                               TextureFlags::RenderToTexture|
+                                               TextureFlags::RenderWindowSpecific|
+                                               TextureFlags::MsaaExplicitResolve,
+                                               TextureTypes::Type2D, this, window );
+    }
+    //-----------------------------------------------------------------------------------
+    TextureGpu* MetalTextureGpuManager::createWindowDepthBuffer(void)
+    {
+        return OGRE_NEW MetalTextureGpuRenderTarget( GpuPageOutStrategy::Discard, mVaoManager,
+                                                     "RenderWindow DepthBuffer",
+                                                     TextureFlags::NotTexture|
+                                                     TextureFlags::RenderToTexture|
+                                                     TextureFlags::RenderWindowSpecific,
+                                                     TextureTypes::Type2D, this );
     }
     //-----------------------------------------------------------------------------------
     id<MTLTexture> MetalTextureGpuManager::getBlankTextureMetalName(

@@ -614,17 +614,11 @@ namespace Ogre
         SAFE_RELEASE( mSwapChain );
         SAFE_RELEASE( mSwapChain1 );
 
-        if( mTexture )
-        {
-            OGRE_DELETE mTexture;
-            mTexture = 0;
-        }
+        OGRE_DELETE mTexture;
+        mTexture = 0;
 
-        if( mDepthBuffer )
-        {
-            OGRE_DELETE mDepthBuffer;
-            mDepthBuffer = 0;
-        }
+        OGRE_DELETE mDepthBuffer;
+        mDepthBuffer = 0;
         mStencilBuffer = 0;
 
         if( !mHwnd )

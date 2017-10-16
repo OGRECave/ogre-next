@@ -42,6 +42,7 @@ namespace Ogre
 {
     class _OgreMetalExport MetalTextureGpu : public TextureGpu
     {
+    protected:
         /// This will not be owned by us if hasAutomaticBatching is true.
         /// It will also not be owned by us if we're not in GpuResidency::Resident
         /// This will always point to:

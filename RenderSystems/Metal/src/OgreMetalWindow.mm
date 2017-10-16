@@ -26,39 +26,43 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#include "OgreMetalRenderWindow.h"
+#include "OgreMetalWindow.h"
 #include "OgreMetalMappings.h"
 #include "OgreMetalRenderSystem.h"
+#include "OgreMetalTextureGpuWindow.h"
+#include "OgreMetalTextureGpuManager.h"
+#include "OgrePixelFormatGpuUtils.h"
+#include "OgreDepthBuffer.h"
 #include "OgreViewport.h"
 
 namespace Ogre
 {
-    MetalRenderWindow::MetalRenderWindow( MetalDevice *ownerDevice, MetalRenderSystem *renderSystem ) :
-        RenderWindow(),
-        MetalRenderTargetCommon( ownerDevice ),
+    MetalWindow::MetalWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode,
+                              MetalDevice *ownerDevice, MetalRenderSystem *renderSystem ) :
+        Window( title, width, height, fullscreenMode ),
+        mClosed( false ),
+        mHwGamma( true ),
+        mMsaa( 1u ),
         mMetalLayer( 0 ),
         mCurrentDrawable( 0 ),
-        mMsaaTex( 0 ),
+        mDevice( ownerDevice ),
         mRenderSystem( renderSystem )
     {
-        mIsFullScreen = false;
-        mActive = false;
-        mClosed = false;
-        mFSAA = 1;
     }
     //-------------------------------------------------------------------------
-    MetalRenderWindow::~MetalRenderWindow()
+    MetalWindow::~MetalWindow()
     {
         destroy();
     }
     //-------------------------------------------------------------------------
-    inline void MetalRenderWindow::checkLayerSizeChanges(void)
+    inline void MetalWindow::checkLayerSizeChanges(void)
     {
         // Handle display changes here
         if( mMetalView.layerSizeDidUpdate )
         {
             // set the metal layer to the drawable size in case orientation or size changes
-            CGSize drawableSize = CGSizeMake(mMetalView.bounds.size.width, mMetalView.bounds.size.height);
+            CGSize drawableSize = CGSizeMake( mMetalView.bounds.size.width,
+                                              mMetalView.bounds.size.height );
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS  
             drawableSize.width  *= mMetalView.layer.contentsScale;
             drawableSize.height *= mMetalView.layer.contentsScale;
@@ -76,75 +80,73 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void MetalRenderWindow::swapBuffers(void)
+    void MetalWindow::setResolutionFromView(void)
     {
-        assert( (mOwnerDevice->mFrameAborted ||
-                mColourAttachmentDesc.loadAction != MTLLoadActionClear) &&
-                "A clear has been asked but no rendering command was "
-                "issued and Ogre didn't catch it." );
+        const uint32 newWidth = static_cast<uint32>( mMetalView.frame.size.width );
+        const uint32 newHeight = static_cast<uint32>( mMetalView.frame.size.height );
 
-        RenderWindow::swapBuffers();
+        if( newWidth > 0 && newHeight > 0 )
+        {
+            mTexture->_transitionTo( GpuResidency::OnStorage, (uint8*)0 );
+            mDepthBuffer->_transitionTo( GpuResidency::OnStorage, (uint8*)0 );
 
-        // Do not retain current drawable's texture beyond the frame.
-        if( mFSAA > 1 )
-            mColourAttachmentDesc.resolveTexture = 0;
-        else
-            mColourAttachmentDesc.texture = 0;
+            assert( dynamic_cast<MetalTextureGpuWindow*>( mTexture ) );
+            MetalTextureGpuWindow *texWindow = static_cast<MetalTextureGpuWindow*>( mTexture );
+            texWindow->_setMsaaBackbuffer( 0 );
 
-        if( !mOwnerDevice->mFrameAborted )
+            if( mMsaa > 1u )
+            {
+                MTLTextureDescriptor* desc = [MTLTextureDescriptor
+                                             texture2DDescriptorWithPixelFormat:
+                                             MetalMappings::get( mTexture->getPixelFormat() )
+                                             width: newWidth height: newHeight mipmapped: NO];
+                desc.textureType = MTLTextureType2DMultisample;
+                desc.sampleCount = mMsaa;
+
+                id<MTLTexture> msaaTex = [mDevice->mDevice newTextureWithDescriptor: desc];
+                texWindow->_setMsaaBackbuffer( msaaTex );
+            }
+
+            setFinalResolution( newWidth, newHeight );
+
+            mTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+            mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+        }
+    }
+    //-------------------------------------------------------------------------
+    void MetalWindow::swapBuffers(void)
+    {
+        if( !mDevice->mFrameAborted )
         {
             // Schedule a present once rendering to the framebuffer is complete
             const CFTimeInterval presentationTime = mMetalView.presentationTime;
 
             if( presentationTime < 0 )
             {
-                [mOwnerDevice->mCurrentCommandBuffer presentDrawable:mCurrentDrawable];
+                [mDevice->mCurrentCommandBuffer presentDrawable:mCurrentDrawable];
             }
             else
             {
-                [mOwnerDevice->mCurrentCommandBuffer presentDrawable:mCurrentDrawable
-                                                              atTime:presentationTime];
+                [mDevice->mCurrentCommandBuffer presentDrawable:mCurrentDrawable
+                                                         atTime:presentationTime];
             }
         }
         mCurrentDrawable = 0;
     }
     //-------------------------------------------------------------------------
-    void MetalRenderWindow::windowMovedOrResized(void)
+    void MetalWindow::windowMovedOrResized(void)
     {
-        if( mWidth != mMetalLayer.drawableSize.width ||
-            mHeight != mMetalLayer.drawableSize.height )
+        if( mRequestedWidth != mMetalLayer.drawableSize.width ||
+            mRequestedHeight != mMetalLayer.drawableSize.height )
         {
-            mWidth  = mMetalLayer.drawableSize.width;
-            mHeight = mMetalLayer.drawableSize.height;
+            mRequestedWidth  = mMetalLayer.drawableSize.width;
+            mRequestedHeight = mMetalLayer.drawableSize.height;
 
-            if( mFSAA > 1 && mWidth > 0 && mHeight > 0 )
-            {
-                mMsaaTex = 0;
-                mColourAttachmentDesc.texture = 0;
-                MTLTextureDescriptor* desc = [MTLTextureDescriptor
-                        texture2DDescriptorWithPixelFormat:
-                        MetalMappings::getPixelFormat( mFormat, mHwGamma )
-                        width: mWidth height: mHeight mipmapped: NO];
-                desc.textureType = MTLTextureType2DMultisample;
-                desc.sampleCount = mFSAA;
-
-                mMsaaTex = [mOwnerDevice->mDevice newTextureWithDescriptor: desc];
-                mColourAttachmentDesc.texture = mMsaaTex;
-            }
-
-            detachDepthBuffer();
-
-            ViewportList::iterator itor = mViewportList.begin();
-            ViewportList::iterator end  = mViewportList.end();
-            while( itor != end )
-            {
-                (*itor)->_updateDimensions();
-                ++itor;
-            }
+            setResolutionFromView();
         }
     }
-
-    bool MetalRenderWindow::nextDrawable(void)
+    //-------------------------------------------------------------------------
+    /*bool MetalWindow::nextDrawable(void)
     {
         bool isSuccess = true;
 
@@ -169,40 +171,34 @@ namespace Ogre
                 }
                 else
                 {
-                    if( mFSAA > 1 )
-                        mColourAttachmentDesc.resolveTexture = mCurrentDrawable.texture;
-                    else
-                        mColourAttachmentDesc.texture = mCurrentDrawable.texture;
+                    assert( dynamic_cast<MetalTextureGpuWindow*>( mTexture ) );
+                    MetalTextureGpuWindow *texWindow = static_cast<MetalTextureGpuWindow*>( mTexture );
+
+                    texWindow->_setBackbuffer( mCurrentDrawable.texture );
                 }
             }
         }
 
         return isSuccess;
-    }
+    }*/
     //-------------------------------------------------------------------------
-    void MetalRenderWindow::create( const String& name, unsigned int width, unsigned int height,
-                                    bool fullScreen, const NameValuePairList *miscParams )
+    void MetalWindow::create( bool fullScreen, const NameValuePairList *miscParams )
     {
-        mWidth  = width;
-        mHeight = height;
+        destroy();
 
-        mName   = name;
-        mIsFullScreen = fullScreen;
-
-        mActive = true;
         mClosed = false;
 
-        mFormat = PF_B8G8R8A8;
-        mHwGamma = true;
+        mMsaa       = 1u;
+        mHwGamma    = true;
 
         if( miscParams )
         {
             NameValuePairList::const_iterator opt;
             NameValuePairList::const_iterator end = miscParams->end();
 
-            opt = miscParams->find("FSAA");
+            opt = miscParams->find("MSAA");
             if( opt != end )
-                mFSAA = std::max( 1u, StringConverter::parseUnsignedInt( opt->second ) );
+                mMsaa = std::max( 1u, StringConverter::parseUnsignedInt( opt->second ) );
 
             opt = miscParams->find("gamma");
             if( opt != end )
@@ -230,8 +226,8 @@ namespace Ogre
 #endif
         frame.origin.x = 0;
         frame.origin.y = 0;
-        frame.size.width = mWidth;
-        frame.size.height = mHeight;
+        frame.size.width = mRequestedWidth;
+        frame.size.height = mRequestedHeight;
         mMetalView = [[OgreMetalView alloc] initWithFrame:frame];
 
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
@@ -239,47 +235,57 @@ namespace Ogre
 #endif
 
         mMetalLayer = (CAMetalLayer*)mMetalView.layer;
-        mMetalLayer.device      = mOwnerDevice->mDevice;
-        mMetalLayer.pixelFormat = MetalMappings::getPixelFormat( mFormat, mHwGamma );
+        mMetalLayer.device      = mDevice->mDevice;
+        mMetalLayer.pixelFormat = MetalMappings::get( mHwGamma ? PFG_RGBA8_UNORM_SRGB :
+                                                                 PFG_RGBA8_UNORM );
 
         //This is the default but if we wanted to perform compute
         //on the final rendering layer we could set this to no
         mMetalLayer.framebufferOnly = YES;
 
-        this->init( nil, nil );
-
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
         checkLayerSizeChanges();
 #endif
-        windowMovedOrResized();
+        setResolutionFromView();
     }
     //-------------------------------------------------------------------------
-    void MetalRenderWindow::destroy()
+    void MetalWindow::destroy()
     {
-        mActive = false;
         mClosed = true;
+
+        OGRE_DELETE mTexture;
+        mTexture = 0;
+
+        OGRE_DELETE mDepthBuffer;
+        mDepthBuffer = 0;
+        mStencilBuffer = 0;
 
         mMetalLayer = 0;
         mCurrentDrawable = 0;
-        mMsaaTex = 0;
         mMetalView = 0;
     }
-    //-------------------------------------------------------------------------
-    void MetalRenderWindow::resize( unsigned int width, unsigned int height )
+    //-----------------------------------------------------------------------------------
+    void MetalWindow::_initialize( TextureGpuManager *textureGpuManager )
     {
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-        CGRect frame = mMetalView.frame;
-#else
-        NSRect frame = mMetalView.frame;
-#endif
-        frame.size.width    = width;
-        frame.size.height   = height;
-        mMetalView.frame = frame;
+        MetalTextureGpuManager *textureManager =
+                static_cast<MetalTextureGpuManager*>( textureGpuManager );
 
-        detachDepthBuffer();
+        mTexture        = textureManager->createTextureGpuWindow( this );
+        mDepthBuffer    = textureManager->createWindowDepthBuffer();
+
+        mTexture->setPixelFormat( mHwGamma ? PFG_RGBA8_UNORM_SRGB : PFG_RGBA8_UNORM );
+        mDepthBuffer->setPixelFormat( DepthBuffer::DefaultDepthBufferFormat );
+
+        if( PixelFormatGpuUtils::isStencil( mDepthBuffer->getPixelFormat() ) )
+            mStencilBuffer = mDepthBuffer;
+
+        mTexture->setMsaa( mMsaa );
+        mDepthBuffer->setMsaa( mMsaa );
+
+        setResolutionFromView();
     }
     //-------------------------------------------------------------------------
-    void MetalRenderWindow::reposition( int left, int top )
+    void MetalWindow::reposition( int32 left, int32 top )
     {
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
         CGRect frame = mMetalView.frame;
@@ -291,26 +297,59 @@ namespace Ogre
         mMetalView.frame = frame;
     }
     //-------------------------------------------------------------------------
-    bool MetalRenderWindow::isClosed(void) const
+    void MetalWindow::requestResolution( uint32 width, uint32 height )
+    {
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+        CGRect frame = mMetalView.frame;
+#else
+        NSRect frame = mMetalView.frame;
+#endif
+        frame.size.width    = width;
+        frame.size.height   = height;
+        mMetalView.frame = frame;
+
+        windowMovedOrResized();
+    }
+    //-------------------------------------------------------------------------
+    bool MetalWindow::isClosed(void) const
     {
         return mClosed;
     }
     //-------------------------------------------------------------------------
-    void MetalRenderWindow::getCustomAttribute( const String& name, void* pData )
+    void MetalWindow::_setVisible( bool visible )
     {
-        if( name == "MetalRenderTargetCommon" )
+    }
+    //-------------------------------------------------------------------------
+    bool MetalWindow::isVisible(void) const
+    {
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
+        return mWindow.isVisible;
+#else
+        return mMetalView && mMetalView.window;
+#endif
+    }
+    //-------------------------------------------------------------------------
+    void MetalWindow::setHidden( bool hidden )
+    {
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
+        [mWindow setIsMiniaturized:hidden];
+#endif
+    }
+    //-------------------------------------------------------------------------
+    bool MetalWindow::isHidden(void) const
+    {
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
+        return mWindow.isMiniaturized;
+#else
+        return false;
+#endif
+    }
+    //-------------------------------------------------------------------------
+    void MetalWindow::getCustomAttribute( IdString name, void* pData )
+    {
+        if( name == "MetalDevice" )
         {
-            if( mMetalView.layerSizeDidUpdate )
-                checkLayerSizeChanges();
-            *static_cast<MetalRenderTargetCommon**>(pData) = this;
-        }
-        else if( name == "mNumMRTs" )
-        {
-            *static_cast<uint8*>(pData) = 1u;
-        }
-        else if( name == "MetalDevice" )
-        {
-            *static_cast<MetalDevice**>(pData) = this->getOwnerDevice();
+            *static_cast<MetalDevice**>(pData) = mDevice;
         }
         else if( name == "UIView" )
         {
@@ -318,7 +357,7 @@ namespace Ogre
         }
         else
         {
-            RenderTarget::getCustomAttribute( name, pData );
+            Window::getCustomAttribute( name, pData );
         }
     }
 }

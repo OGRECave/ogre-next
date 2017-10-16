@@ -442,17 +442,18 @@ namespace Ogre
         if( mInformationOnly )
             return;
 
+        for( size_t i=0; i<mNumColourEntries; ++i )
+            passDesc.colorAttachments[i] = mColourAttachment[i];
+
         if( mNumColourEntries > 0 && mColour[0].texture->isRenderWindowSpecific() )
         {
             //The RenderWindow's MetalDrawable changes every frame. We need a
             //hard copy since the previous descriptor may still be in flight.
-            mColourAttachment[0] = [mColourAttachment[0] copy];
+            //Also ensure we do not retain current drawable's texture beyond the frame.
+            passDesc.colorAttachments[0] = [mColourAttachment[0] copy];
             MetalTextureGpu *textureMetal = static_cast<MetalTextureGpu*>( mColour[0].texture );
-            mColourAttachment[0].texture = textureMetal->getFinalTextureName();
+            passDesc.colorAttachments[0].texture = textureMetal->getFinalTextureName();
         }
-
-        for( size_t i=0; i<mNumColourEntries; ++i )
-            passDesc.colorAttachments[i] = mColourAttachment[i];
 
         passDesc.depthAttachment = mDepthAttachment;
         passDesc.stencilAttachment = mStencilAttachment;

@@ -27,7 +27,7 @@ Copyright (c) 2000-2016 Torus Knot Software Ltd
 */
 
 #include "OgreMetalRenderSystem.h"
-#include "OgreMetalRenderWindow.h"
+#include "OgreMetalWindow.h"
 #include "OgreMetalTextureManager.h"
 #include "Vao/OgreMetalVaoManager.h"
 #include "Vao/OgreMetalBufferInterface.h"
@@ -369,8 +369,8 @@ namespace Ogre
             mInitialized = true;
         }
 
-        RenderWindow *win = OGRE_NEW MetalRenderWindow( &mDevice, this );
-        win->create( name, width, height, fullScreen, miscParams );
+        Window *win = OGRE_NEW MetalWindow( name, width, height, fullScreen, &mDevice, this );
+        win->_initialize( mTextureGpuManager );
         return win;
     }
     //-------------------------------------------------------------------------

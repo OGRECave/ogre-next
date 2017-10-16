@@ -26,9 +26,9 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#include "OgreD3D11TextureGpuWindow.h"
-#include "OgreD3D11Mappings.h"
-#include "OgreD3D11TextureGpuManager.h"
+#include "OgreMetalTextureGpuWindow.h"
+#include "OgreMetalMappings.h"
+#include "OgreMetalTextureGpuManager.h"
 
 #include "OgreTextureGpuListener.h"
 #include "OgreTextureBox.h"
@@ -41,118 +41,84 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    D3D11TextureGpuWindow::D3D11TextureGpuWindow(
+    MetalTextureGpuWindow::MetalTextureGpuWindow(
             GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
             VaoManager *vaoManager, IdString name, uint32 textureFlags,
             TextureTypes::TextureTypes initialType,
-            TextureGpuManager *textureManager,
-            ID3D11Texture2D *backbuffer, Window *window ) :
-        D3D11TextureGpuRenderTarget( pageOutStrategy, vaoManager, name,
+            TextureGpuManager *textureManager, Window *window ) :
+        MetalTextureGpuRenderTarget( pageOutStrategy, vaoManager, name,
                                      textureFlags, initialType, textureManager ),
         mWindow( window )
     {
         mTextureType = TextureTypes::Type2D;
-        mFinalTextureName = backbuffer;
-        mDisplayTextureName = backbuffer;
-        mDefaultDisplaySrv = 0;
+        mFinalTextureName = 0;
+        mDisplayTextureName = 0;
     }
     //-----------------------------------------------------------------------------------
-    D3D11TextureGpuWindow::~D3D11TextureGpuWindow()
+    MetalTextureGpuWindow::~MetalTextureGpuWindow()
     {
         destroyInternalResourcesImpl();
     }
     //-----------------------------------------------------------------------------------
-    void D3D11TextureGpuWindow::createInternalResourcesImpl(void)
+    void MetalTextureGpuWindow::createInternalResourcesImpl(void)
     {
     }
     //-----------------------------------------------------------------------------------
-    void D3D11TextureGpuWindow::destroyInternalResourcesImpl(void)
+    void MetalTextureGpuWindow::destroyInternalResourcesImpl(void)
     {
         _setBackbuffer( 0 );
     }
     //-----------------------------------------------------------------------------------
-    void D3D11TextureGpuWindow::notifyDataIsReady(void)
+    void MetalTextureGpuWindow::notifyDataIsReady(void)
     {
         assert( mResidencyStatus == GpuResidency::Resident );
         notifyAllListenersTextureChanged( TextureGpuListener::ReadyForDisplay );
     }
     //-----------------------------------------------------------------------------------
-    bool D3D11TextureGpuWindow::isDataReady(void) const
+    bool MetalTextureGpuWindow::isDataReady(void) const
     {
         return mResidencyStatus == GpuResidency::Resident;
     }
     //-----------------------------------------------------------------------------------
-    void D3D11TextureGpuWindow::swapBuffers(void)
+    void MetalTextureGpuWindow::swapBuffers(void)
     {
         mWindow->swapBuffers();
+        //Release strong references
+        mFinalTextureName = 0;
+        mDisplayTextureName = 0;
     }
     //-----------------------------------------------------------------------------------
-    void D3D11TextureGpuWindow::getCustomAttribute( IdString name, void *pData )
+    void MetalTextureGpuWindow::getCustomAttribute( IdString name, void *pData )
     {
         if( name == "Window" )
             *static_cast<Window**>(pData) = mWindow;
     }
     //-----------------------------------------------------------------------------------
-    void D3D11TextureGpuWindow::_setToDisplayDummyTexture(void)
+    void MetalTextureGpuWindow::_setToDisplayDummyTexture(void)
     {
     }
     //-----------------------------------------------------------------------------------
-    void D3D11TextureGpuWindow::_notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice )
+    void MetalTextureGpuWindow::_notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice )
     {
         OGRE_EXCEPT( Exception::ERR_INVALID_CALL, "",
-                     "D3D11TextureGpuWindow::_notifyTextureSlotChanged" );
+                     "MetalTextureGpuWindow::_notifyTextureSlotChanged" );
     }
     //-----------------------------------------------------------------------------------
-    void D3D11TextureGpuWindow::_setBackbuffer( ID3D11Texture2D *backbuffer )
+    void MetalTextureGpuWindow::_setBackbuffer( id<MTLTexture> backbuffer )
     {
         mFinalTextureName = backbuffer;
         mDisplayTextureName = backbuffer;
     }
     //-----------------------------------------------------------------------------------
-    void D3D11TextureGpuWindow::setTextureType( TextureTypes::TextureTypes textureType )
+    void MetalTextureGpuWindow::_setMsaaBackbuffer( id<MTLTexture> msaaTex )
+    {
+        mMsaaFramebufferName = msaaTex;
+    }
+    //-----------------------------------------------------------------------------------
+    void MetalTextureGpuWindow::setTextureType( TextureTypes::TextureTypes textureType )
     {
         OGRE_EXCEPT( Exception::ERR_INVALID_CALL,
                      "You cannot call setTextureType if isRenderWindowSpecific is true",
-                     "D3D11TextureGpuWindow::setTextureType" );
-    }
-    //-----------------------------------------------------------------------------------
-    void D3D11TextureGpuWindow::copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
-                                          const TextureBox &srcBox, uint8 srcMipLevel )
-    {
-        OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
-                     "TODO",
-                     "D3D11TextureGpuWindow::copyTo" );
-        TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel );
-
-//        assert( dynamic_cast<D3D11TextureGpu*>( dst ) );
-
-//        D3D11TextureGpuWindow *dstGl = static_cast<D3D11TextureGpuWindow*>( dst );
-//        D3D11TextureGpuWindowManager *textureManagerGl =
-//                static_cast<D3D11TextureGpuWindowManager*>( mTextureManager );
-//        const D3D11Support &support = textureManagerGl->getGlSupport();
-    }
-    //-----------------------------------------------------------------------------------
-    void D3D11TextureGpuWindow::getSubsampleLocations( vector<Vector2>::type locations )
-    {
-        OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "",
-                     "D3D11TextureGpuWindow::getSubsampleLocations" );
-#if TODO_OGRE_2_2
-        locations.reserve( mMsaa );
-        if( mMsaa <= 1u )
-        {
-            locations.push_back( Vector2( 0.0f, 0.0f ) );
-        }
-        else
-        {
-            assert( mMsaaPattern != MsaaPatterns::Undefined );
-
-            float vals[2];
-            for( int i=0; i<mMsaa; ++i )
-            {
-                glGetMultisamplefv( GL_SAMPLE_POSITION, i, vals );
-                locations.push_back( Vector2( vals[0], vals[1] ) * 2.0f - 1.0f );
-            }
-        }
-#endif
+                     "MetalTextureGpuWindow::setTextureType" );
     }
 }
