@@ -308,4 +308,45 @@ namespace Ogre
             //TODO
         }
     }
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    MetalTextureGpuRenderTarget::MetalTextureGpuRenderTarget(
+            GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+            VaoManager *vaoManager, IdString name, uint32 textureFlags,
+            TextureTypes::TextureTypes initialType,
+            TextureGpuManager *textureManager ) :
+        MetalTextureGpu( pageOutStrategy, vaoManager, name,
+                         textureFlags, initialType, textureManager ),
+        mDepthBufferPoolId( 1u ),
+        mPreferDepthTexture( false ),
+        mDesiredDepthBufferFormat( PFG_UNKNOWN )
+    {
+        if( mPixelFormat == PFG_NULL )
+            mDepthBufferPoolId = 0;
+    }
+    //-----------------------------------------------------------------------------------
+    void MetalTextureGpuRenderTarget::_setDepthBufferDefaults(
+            uint16 depthBufferPoolId, bool preferDepthTexture, PixelFormatGpu desiredDepthBufferFormat )
+    {
+        assert( isRenderToTexture() );
+        mDepthBufferPoolId          = depthBufferPoolId;
+        mPreferDepthTexture         = preferDepthTexture;
+        mDesiredDepthBufferFormat   = desiredDepthBufferFormat;
+    }
+    //-----------------------------------------------------------------------------------
+    uint16 MetalTextureGpuRenderTarget::getDepthBufferPoolId(void) const
+    {
+        return mDepthBufferPoolId;
+    }
+    //-----------------------------------------------------------------------------------
+    bool MetalTextureGpuRenderTarget::getPreferDepthTexture(void) const
+    {
+        return mPreferDepthTexture;
+    }
+    //-----------------------------------------------------------------------------------
+    PixelFormatGpu MetalTextureGpuRenderTarget::getDesiredDepthBufferFormat(void) const
+    {
+        return mDesiredDepthBufferFormat;
+    }
 }

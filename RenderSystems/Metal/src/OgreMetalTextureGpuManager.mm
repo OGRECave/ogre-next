@@ -154,8 +154,19 @@ namespace Ogre
             GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
             IdString name, uint32 textureFlags, TextureTypes::TextureTypes initialType )
     {
-        return OGRE_NEW MetalTextureGpu( pageOutStrategy, mVaoManager, name,
-                                         textureFlags, initialType, this );
+        MetalTextureGpu *retVal = 0;
+        if( textureFlags & TextureFlags::RenderToTexture )
+        {
+            retVal = OGRE_NEW MetalTextureGpuRenderTarget( pageOutStrategy, mVaoManager, name,
+                                                           textureFlags, initialType, this );
+        }
+        else
+        {
+            retVal = OGRE_NEW MetalTextureGpu( pageOutStrategy, mVaoManager, name,
+                                               textureFlags, initialType, this );
+        }
+
+        return retVal;
     }
     //-----------------------------------------------------------------------------------
     StagingTexture* MetalTextureGpuManager::createStagingTextureImpl( uint32 width, uint32 height,

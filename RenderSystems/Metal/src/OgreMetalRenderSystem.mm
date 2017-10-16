@@ -994,6 +994,8 @@ namespace Ogre
     DepthBuffer* MetalRenderSystem::_createDepthBufferFor( RenderTarget *renderTarget,
                                                            bool exactMatchFormat )
     {
+        return 0;
+#if TODO_OGRE_2_2
         MTLTextureDescriptor *desc = [MTLTextureDescriptor new];
         desc.sampleCount = renderTarget->getFSAA();
         desc.textureType = renderTarget->getFSAA() > 1u ? MTLTextureType2DMultisample :
@@ -1056,6 +1058,7 @@ namespace Ogre
                                                     mActiveDevice );
 
         return retVal;
+#endif
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_waitForTailFrameToFinish(void)

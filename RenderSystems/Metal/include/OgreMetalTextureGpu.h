@@ -101,6 +101,26 @@ namespace Ogre
         id<MTLTexture> getFinalTextureName(void) const      { return mFinalTextureName; }
         id<MTLTexture> getMsaaFramebufferName(void) const   { return mMsaaFramebufferName; }
     };
+
+    class _OgreMetalExport MetalTextureGpuRenderTarget : public MetalTextureGpu
+    {
+    protected:
+        uint16          mDepthBufferPoolId;
+        bool            mPreferDepthTexture;
+        PixelFormatGpu  mDesiredDepthBufferFormat;
+
+    public:
+        MetalTextureGpuRenderTarget( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+                                     VaoManager *vaoManager, IdString name, uint32 textureFlags,
+                                     TextureTypes::TextureTypes initialType,
+                                     TextureGpuManager *textureManager );
+
+        virtual void _setDepthBufferDefaults( uint16 depthBufferPoolId, bool preferDepthTexture,
+                                              PixelFormatGpu desiredDepthBufferFormat );
+        virtual uint16 getDepthBufferPoolId(void) const;
+        virtual bool getPreferDepthTexture(void) const;
+        virtual PixelFormatGpu getDesiredDepthBufferFormat(void) const;
+    };
 }
 
 #include "OgreHeaderSuffix.h"
