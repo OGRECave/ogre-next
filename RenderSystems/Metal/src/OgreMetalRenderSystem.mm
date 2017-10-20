@@ -369,7 +369,8 @@ namespace Ogre
             mInitialized = true;
         }
 
-        Window *win = OGRE_NEW MetalWindow( name, width, height, fullScreen, &mDevice, this );
+        Window *win = OGRE_NEW MetalWindow( name, width, height, fullScreen,
+                                            miscParams, &mDevice, this );
         win->_initialize( mTextureGpuManager );
         return win;
     }

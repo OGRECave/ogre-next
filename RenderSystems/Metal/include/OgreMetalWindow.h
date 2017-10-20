@@ -59,6 +59,7 @@ namespace Ogre
         void setResolutionFromView(void);
     public:
         MetalWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode,
+                     const NameValuePairList *miscParams,
                      MetalDevice *ownerDevice, MetalRenderSystem *renderSystem );
         virtual ~MetalWindow();
 

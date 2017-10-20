@@ -38,6 +38,7 @@ THE SOFTWARE.
 namespace Ogre
 {
     MetalWindow::MetalWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode,
+                              const NameValuePairList *miscParams,
                               MetalDevice *ownerDevice, MetalRenderSystem *renderSystem ) :
         Window( title, width, height, fullscreenMode ),
         mClosed( false ),
@@ -48,6 +49,7 @@ namespace Ogre
         mDevice( ownerDevice ),
         mRenderSystem( renderSystem )
     {
+        create( fullscreenMode, miscParams );
     }
     //-------------------------------------------------------------------------
     MetalWindow::~MetalWindow()
@@ -85,11 +87,8 @@ namespace Ogre
         const uint32 newWidth = static_cast<uint32>( mMetalView.frame.size.width );
         const uint32 newHeight = static_cast<uint32>( mMetalView.frame.size.height );
 
-        if( newWidth > 0 && newHeight > 0 )
+        if( newWidth > 0 && newHeight > 0 && mTexture )
         {
-            mTexture->_transitionTo( GpuResidency::OnStorage, (uint8*)0 );
-            mDepthBuffer->_transitionTo( GpuResidency::OnStorage, (uint8*)0 );
-
             assert( dynamic_cast<MetalTextureGpuWindow*>( mTexture ) );
             MetalTextureGpuWindow *texWindow = static_cast<MetalTextureGpuWindow*>( mTexture );
             texWindow->_setMsaaBackbuffer( 0 );
@@ -98,7 +97,9 @@ namespace Ogre
             {
                 MTLTextureDescriptor* desc = [MTLTextureDescriptor
                                              texture2DDescriptorWithPixelFormat:
-                                             MetalMappings::get( mTexture->getPixelFormat() )
+//                                             MetalMappings::get( mTexture->getPixelFormat() )
+                                             mHwGamma ? MTLPixelFormatBGRA8Unorm_sRGB :
+                                                        MTLPixelFormatBGRA8Unorm
                                              width: newWidth height: newHeight mipmapped: NO];
                 desc.textureType = MTLTextureType2DMultisample;
                 desc.sampleCount = mMsaa;
@@ -108,9 +109,6 @@ namespace Ogre
             }
 
             setFinalResolution( newWidth, newHeight );
-
-            mTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
-            mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8*)0 );
         }
     }
     //-------------------------------------------------------------------------
@@ -146,7 +144,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    /*bool MetalWindow::nextDrawable(void)
+    bool MetalWindow::nextDrawable(void)
     {
         bool isSuccess = true;
 
@@ -180,7 +178,7 @@ namespace Ogre
         }
 
         return isSuccess;
-    }*/
+    }
     //-------------------------------------------------------------------------
     void MetalWindow::create( bool fullScreen, const NameValuePairList *miscParams )
     {
@@ -236,8 +234,9 @@ namespace Ogre
 
         mMetalLayer = (CAMetalLayer*)mMetalView.layer;
         mMetalLayer.device      = mDevice->mDevice;
-        mMetalLayer.pixelFormat = MetalMappings::get( mHwGamma ? PFG_RGBA8_UNORM_SRGB :
-                                                                 PFG_RGBA8_UNORM );
+//        mMetalLayer.pixelFormat = MetalMappings::get( mHwGamma ? PFG_RGBA8_UNORM_SRGB :
+//                                                                 PFG_RGBA8_UNORM );
+        mMetalLayer.pixelFormat = mHwGamma ? MTLPixelFormatBGRA8Unorm_sRGB : MTLPixelFormatBGRA8Unorm;
 
         //This is the default but if we wanted to perform compute
         //on the final rendering layer we could set this to no
@@ -283,6 +282,8 @@ namespace Ogre
         mDepthBuffer->setMsaa( mMsaa );
 
         setResolutionFromView();
+        mTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+        mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8*)0 );
     }
     //-------------------------------------------------------------------------
     void MetalWindow::reposition( int32 left, int32 top )

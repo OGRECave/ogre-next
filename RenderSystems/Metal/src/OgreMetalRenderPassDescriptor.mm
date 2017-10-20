@@ -207,10 +207,6 @@ namespace Ogre
 
             if( mColour[i].texture->getMsaa() > 1u )
             {
-                assert( dynamic_cast<MetalTextureGpu*>( mColour[i].resolveTexture ) );
-                MetalTextureGpu *resolveTexture =
-                        static_cast<MetalTextureGpu*>( mColour[i].resolveTexture );
-
                 if( !mColour[i].texture->hasMsaaExplicitResolves() )
                 {
                     mColourAttachment[i].texture = textureMetal->getMsaaFramebufferName();
@@ -218,6 +214,9 @@ namespace Ogre
                 }
                 else
                 {
+                    assert( dynamic_cast<MetalTextureGpu*>( mColour[i].resolveTexture ) );
+                    MetalTextureGpu *resolveTexture =
+                            static_cast<MetalTextureGpu*>( mColour[i].resolveTexture );
                     mColourAttachment[i].texture = textureMetal->getFinalTextureName();
                     mColourAttachment[i].resolveTexture = resolveTexture->getFinalTextureName();
                 }
@@ -240,10 +239,13 @@ namespace Ogre
             else
                 mColourAttachment[i].slice = mColour[i].slice;
 
-            if( mColour[i].resolveTexture->getTextureType() == TextureTypes::Type3D )
-                mColourAttachment[i].resolveDepthPlane = mColour[i].resolveSlice;
-            else
-                mColourAttachment[i].resolveSlice = mColour[i].resolveSlice;
+            if( mColour[i].resolveTexture )
+            {
+                if( mColour[i].resolveTexture->getTextureType() == TextureTypes::Type3D )
+                    mColourAttachment[i].resolveDepthPlane = mColour[i].resolveSlice;
+                else
+                    mColourAttachment[i].resolveSlice = mColour[i].resolveSlice;
+            }
 
             mColourAttachment[i].loadAction = MetalRenderPassDescriptor::get( mColour[i].loadAction );
             mColourAttachment[i].storeAction = MetalRenderPassDescriptor::get( mColour[i].storeAction );
@@ -274,9 +276,9 @@ namespace Ogre
     {
         mDepthAttachment = 0;
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
         if( !mDepth.texture )
         {
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
             if( mStencil.texture )
             {
                 OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
@@ -284,10 +286,9 @@ namespace Ogre
                              mStencil.texture->getNameStr() + "'). This is not supported by macOS",
                              "MetalRenderPassDescriptor::updateDepthRtv" );
             }
-
+#endif
             return;
         }
-#endif
 
         if( mDepth.texture->getResidencyStatus() != GpuResidency::Resident )
         {
@@ -310,6 +311,9 @@ namespace Ogre
     void MetalRenderPassDescriptor::updateStencilRtv(void)
     {
         mStencilAttachment = 0;
+
+        if( !mStencil.texture )
+            return;
 
         if( mStencil.texture->getResidencyStatus() != GpuResidency::Resident )
         {
