@@ -1169,10 +1169,12 @@ void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera, Viewp
 
     // Set initial camera state
     mDestRenderSystem->_setProjectionMatrix(mCameraInProgress->getProjectionMatrixRS());
-    
+
     mCachedViewMatrix = mCameraInProgress->getViewMatrix(true);
-    
+
     setViewMatrix(mCachedViewMatrix);
+
+    mDestRenderSystem->executeRenderPassDescriptorDelayedActions();
 
     // Render scene content
     {

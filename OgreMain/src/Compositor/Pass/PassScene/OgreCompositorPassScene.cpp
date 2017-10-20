@@ -158,7 +158,7 @@ namespace Ogre
         }
 
         //Passes belonging to a ShadowNode should not override their parent.
-        CompositorShadowNode* shadowNode = ( mShadowNode && mShadowNode->getEnabled() ) ? mShadowNode : 0;
+        CompositorShadowNode* shadowNode = (mShadowNode && mShadowNode->getEnabled()) ? mShadowNode : 0;
         if( mDefinition->mShadowNodeRecalculation != SHADOW_NODE_CASTER_PASS )
         {
             sceneManager->_setCurrentShadowNode( shadowNode, mDefinition->mShadowNodeRecalculation ==

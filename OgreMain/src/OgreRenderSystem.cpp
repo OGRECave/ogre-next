@@ -550,6 +550,10 @@ namespace Ogre {
         mCurrentRenderViewport.setOverlaysEnabled( overlaysEnabled );
     }
     //---------------------------------------------------------------------
+    void RenderSystem::executeRenderPassDescriptorDelayedActions(void)
+    {
+    }
+    //---------------------------------------------------------------------
     void RenderSystem::endRenderPassDescriptor(void)
     {
         mCurrentRenderPassDescriptor = 0;

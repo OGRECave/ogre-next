@@ -147,6 +147,8 @@ namespace Ogre
         bool                    mBeginFrameOnceStarted;
 
         FrameBufferDescMap      mFrameBufferDescMap;
+        uint32                  mEntriesToFlush;
+        bool                    mVpChanged;
 
         void setActiveDevice( MetalDevice *device );
         void createRenderEncoder(void);
@@ -233,6 +235,7 @@ namespace Ogre
                                                 const Vector4 &scissors,
                                                 bool overlaysEnabled,
                                                 bool warnIfRtvWasFlushed );
+        virtual void executeRenderPassDescriptorDelayedActions(void);
         virtual void endRenderPassDescriptor(void);
 
         virtual void _setTextureCoordCalculation(size_t unit, TexCoordCalcMethod m,

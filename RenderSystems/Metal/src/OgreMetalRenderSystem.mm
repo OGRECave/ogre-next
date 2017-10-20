@@ -95,7 +95,9 @@ namespace Ogre
         mDevice( this ),
         mMainGpuSyncSemaphore( 0 ),
         mMainSemaphoreAlreadyWaited( false ),
-        mBeginFrameOnceStarted( false )
+        mBeginFrameOnceStarted( false ),
+        mEntriesToFlush( 0 ),
+        mVpChanged( false )
     {
         memset( mHistoricalAutoParamsSize, 0, sizeof(mHistoricalAutoParamsSize) );
         for( size_t i=0; i<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
@@ -877,22 +879,33 @@ namespace Ogre
         uint32 entriesToFlush = 0;
         if( currPassDesc )
         {
-            entriesToFlush = currPassDesc->willSwitchTo( newPassDesc, vpChanged, warnIfRtvWasFlushed );
+            mEntriesToFlush = currPassDesc->willSwitchTo( newPassDesc, vpChanged, warnIfRtvWasFlushed );
 
-            if( entriesToFlush != 0 )
+            if( mEntriesToFlush != 0 )
             {
-                currPassDesc->performStoreActions( oldX, oldY, oldWidth, oldHeight, entriesToFlush );
+                currPassDesc->performStoreActions( oldX, oldY, oldWidth, oldHeight, mEntriesToFlush );
             }
         }
         else
         {
-            entriesToFlush = RenderPassDescriptor::All;
+            mEntriesToFlush = RenderPassDescriptor::All;
         }
 
-        if( entriesToFlush )
+        mActiveViewport = &mCurrentRenderViewport;
+
+        mEntriesToFlush = entriesToFlush;
+        mVpChanged      = vpChanged;
+    }
+    //-------------------------------------------------------------------------
+    void MetalRenderSystem::executeRenderPassDescriptorDelayedActions(void)
+    {
+        if( mEntriesToFlush )
         {
             mActiveDevice->endAllEncoders();
             mActiveRenderEncoder = 0;
+
+            MetalRenderPassDescriptor *newPassDesc =
+                    static_cast<MetalRenderPassDescriptor*>( mCurrentRenderPassDescriptor );
 
             MTLRenderPassDescriptor *passDesc = [MTLRenderPassDescriptor renderPassDescriptor];
             newPassDesc->performLoadActions( passDesc );
@@ -901,20 +914,17 @@ namespace Ogre
                     [mActiveDevice->mCurrentCommandBuffer renderCommandEncoderWithDescriptor:passDesc];
             mActiveRenderEncoder = mActiveDevice->mRenderEncoder;
 
-
             static_cast<MetalVaoManager*>( mVaoManager )->bindDrawId();
             [mActiveRenderEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
 
             if (mStencilEnabled)
                 [mActiveRenderEncoder setStencilReferenceValue:mStencilRefValue];
 
-            mActiveViewport = &mCurrentRenderViewport;
-
             flushUAVs();
         }
 
         //If we flushed, viewport and scissor settings got reset.
-        if( !mCurrentRenderViewport.coversEntireTarget() || (vpChanged && !entriesToFlush) )
+        if( !mCurrentRenderViewport.coversEntireTarget() || (mVpChanged && !mEntriesToFlush) )
         {
             MTLViewport mtlVp;
             mtlVp.originX   = mCurrentRenderViewport.getActualLeft();
@@ -926,7 +936,7 @@ namespace Ogre
             [mActiveRenderEncoder setViewport:mtlVp];
         }
 
-        if( !mCurrentRenderViewport.scissorsMatchViewport() || !entriesToFlush )
+        if( !mCurrentRenderViewport.scissorsMatchViewport() || !mEntriesToFlush )
         {
             MTLScissorRect scissorRect;
             scissorRect.x       = mCurrentRenderViewport.getScissorActualLeft();
@@ -935,6 +945,9 @@ namespace Ogre
             scissorRect.height  = mCurrentRenderViewport.getScissorActualHeight();
             [mActiveRenderEncoder setScissorRect:scissorRect];
         }
+
+        mEntriesToFlush = 0;
+        mVpChanged = false;
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::endRenderPassDescriptor(void)

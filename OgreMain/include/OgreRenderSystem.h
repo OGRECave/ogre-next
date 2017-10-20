@@ -777,6 +777,15 @@ namespace Ogre
                                                 const Vector4 &scissors,
                                                 bool overlaysEnabled,
                                                 bool warnIfRtvWasFlushed );
+        /// Metal needs to delay RenderCommand creation to the last minute, because
+        /// we can't issue blit operations (e.g. buffer copies) which a lot of v1
+        /// code relies on otherwise the RenderCommand gets canceled.
+        /// Even if we were to get rid of v1 operations, the user may want to hook
+        /// listeners for _renderPhase02 and perform forbidden operations.
+        /// Therefore it's easier to split the process done in beginRenderPassDescriptor
+        /// in two steps (beginRenderPassDescriptor and executeRenderPassDescriptorDelayedActions)
+        /// for Metal.
+        virtual void executeRenderPassDescriptorDelayedActions(void);
         virtual void endRenderPassDescriptor(void);
 
     protected:
