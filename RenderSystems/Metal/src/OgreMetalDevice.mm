@@ -106,10 +106,10 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void MetalDevice::endAllEncoders(void)
+    void MetalDevice::endAllEncoders( bool endRenderPassDesc )
     {
         endBlitEncoder();
-        endRenderEncoder();
+        endRenderEncoder( endRenderPassDesc );
         endComputeEncoder();
     }
     //-------------------------------------------------------------------------

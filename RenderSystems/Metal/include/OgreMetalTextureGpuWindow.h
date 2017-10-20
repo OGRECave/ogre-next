@@ -37,7 +37,7 @@ namespace Ogre
 {
     class _OgreMetalExport MetalTextureGpuWindow : public MetalTextureGpuRenderTarget
     {
-        Window *mWindow;
+        MetalWindow *mWindow;
 
         virtual void createInternalResourcesImpl(void);
         virtual void destroyInternalResourcesImpl(void);
@@ -47,8 +47,10 @@ namespace Ogre
                                VaoManager *vaoManager, IdString name, uint32 textureFlags,
                                TextureTypes::TextureTypes initialType,
                                TextureGpuManager *textureManager,
-                               Window *window );
+                               MetalWindow *window );
         virtual ~MetalTextureGpuWindow();
+
+        void nextDrawable(void);
 
         void _setBackbuffer( id<MTLTexture> backbuffer );
         void _setMsaaBackbuffer( id<MTLTexture> msaaTex );

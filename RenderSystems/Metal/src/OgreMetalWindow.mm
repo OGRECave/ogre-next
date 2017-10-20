@@ -165,6 +165,7 @@ namespace Ogre
                     //We're unable to render. Skip frame.
                     //dispatch_semaphore_signal( _inflight_semaphore );
     
+                    mDevice->mFrameAborted |= true;
                     isSuccess = false;
                 }
                 else

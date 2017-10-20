@@ -29,11 +29,11 @@ THE SOFTWARE.
 #include "OgreMetalTextureGpuWindow.h"
 #include "OgreMetalMappings.h"
 #include "OgreMetalTextureGpuManager.h"
+#include "OgreMetalWindow.h"
 
 #include "OgreTextureGpuListener.h"
 #include "OgreTextureBox.h"
 #include "OgreVector2.h"
-#include "OgreWindow.h"
 
 #include "Vao/OgreVaoManager.h"
 
@@ -45,7 +45,7 @@ namespace Ogre
             GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
             VaoManager *vaoManager, IdString name, uint32 textureFlags,
             TextureTypes::TextureTypes initialType,
-            TextureGpuManager *textureManager, Window *window ) :
+            TextureGpuManager *textureManager, MetalWindow *window ) :
         MetalTextureGpuRenderTarget( pageOutStrategy, vaoManager, name,
                                      textureFlags, initialType, textureManager ),
         mWindow( window )
@@ -102,6 +102,11 @@ namespace Ogre
     {
         OGRE_EXCEPT( Exception::ERR_INVALID_CALL, "",
                      "MetalTextureGpuWindow::_notifyTextureSlotChanged" );
+    }
+    //-----------------------------------------------------------------------------------
+    void MetalTextureGpuWindow::nextDrawable(void)
+    {
+        mWindow->nextDrawable();
     }
     //-----------------------------------------------------------------------------------
     void MetalTextureGpuWindow::_setBackbuffer( id<MTLTexture> backbuffer )

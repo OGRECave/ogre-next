@@ -76,6 +76,7 @@ namespace Ogre
     class MetalRenderSystem;
     class MetalRenderTargetCommon;
     class MetalVaoManager;
+    class MetalWindow;
 
     namespace v1
     {

@@ -111,9 +111,9 @@ namespace Ogre
         uint32 willSwitchTo( MetalRenderPassDescriptor *newDesc, bool viewportChanged,
                              bool warnIfRtvWasFlushed ) const;
 
-        void performLoadActions( MTLRenderPassDescriptor *passDesc );
+        void performLoadActions( MTLRenderPassDescriptor *passDesc, bool renderingWasInterrupted );
         void performStoreActions( uint32 x, uint32 y, uint32 width, uint32 height,
-                                  uint32 entriesToFlush );
+                                  uint32 entriesToFlush, bool isInterruptingRendering );
     };
 
     /** @} */

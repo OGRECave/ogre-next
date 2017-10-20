@@ -57,7 +57,7 @@ namespace Ogre
         void endRenderEncoder( bool endRenderPassDesc=true );
         void endComputeEncoder(void);
 
-        void endAllEncoders(void);
+        void endAllEncoders( bool endRenderPassDesc=true );
 
         //Ends all encoders, calls commit and grabs a new mMainCommandBuffer
         void commitAndNextCommandBuffer(void);

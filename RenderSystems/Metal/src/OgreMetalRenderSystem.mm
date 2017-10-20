@@ -97,7 +97,8 @@ namespace Ogre
         mMainSemaphoreAlreadyWaited( false ),
         mBeginFrameOnceStarted( false ),
         mEntriesToFlush( 0 ),
-        mVpChanged( false )
+        mVpChanged( false ),
+        mInterruptedRenderCommandEncoder( false )
     {
         memset( mHistoricalAutoParamsSize, 0, sizeof(mHistoricalAutoParamsSize) );
         for( size_t i=0; i<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
@@ -879,36 +880,38 @@ namespace Ogre
         uint32 entriesToFlush = 0;
         if( currPassDesc )
         {
-            mEntriesToFlush = currPassDesc->willSwitchTo( newPassDesc, vpChanged, warnIfRtvWasFlushed );
+            entriesToFlush = currPassDesc->willSwitchTo( newPassDesc, vpChanged, warnIfRtvWasFlushed );
 
-            if( mEntriesToFlush != 0 )
+            if( entriesToFlush != 0 )
             {
-                currPassDesc->performStoreActions( oldX, oldY, oldWidth, oldHeight, mEntriesToFlush );
+                currPassDesc->performStoreActions( oldX, oldY, oldWidth, oldHeight,
+                                                   entriesToFlush, false );
             }
         }
         else
         {
-            mEntriesToFlush = RenderPassDescriptor::All;
+            entriesToFlush = RenderPassDescriptor::All;
         }
 
         mActiveViewport = &mCurrentRenderViewport;
 
         mEntriesToFlush = entriesToFlush;
         mVpChanged      = vpChanged;
+        mInterruptedRenderCommandEncoder = false;
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::executeRenderPassDescriptorDelayedActions(void)
     {
         if( mEntriesToFlush )
         {
-            mActiveDevice->endAllEncoders();
+            mActiveDevice->endAllEncoders( false );
             mActiveRenderEncoder = 0;
 
             MetalRenderPassDescriptor *newPassDesc =
                     static_cast<MetalRenderPassDescriptor*>( mCurrentRenderPassDescriptor );
 
             MTLRenderPassDescriptor *passDesc = [MTLRenderPassDescriptor renderPassDescriptor];
-            newPassDesc->performLoadActions( passDesc );
+            newPassDesc->performLoadActions( passDesc, mInterruptedRenderCommandEncoder );
 
             mActiveDevice->mRenderEncoder =
                     [mActiveDevice->mCurrentCommandBuffer renderCommandEncoderWithDescriptor:passDesc];
@@ -921,6 +924,8 @@ namespace Ogre
                 [mActiveRenderEncoder setStencilReferenceValue:mStencilRefValue];
 
             flushUAVs();
+
+            mInterruptedRenderCommandEncoder = false;
         }
 
         //If we flushed, viewport and scissor settings got reset.
@@ -948,9 +953,10 @@ namespace Ogre
 
         mEntriesToFlush = 0;
         mVpChanged = false;
+        mInterruptedRenderCommandEncoder = false;
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::endRenderPassDescriptor(void)
+    inline void MetalRenderSystem::endRenderPassDescriptor( bool isInterruptingRender )
     {
         if( mCurrentRenderPassDescriptor )
         {
@@ -962,10 +968,23 @@ namespace Ogre
 
             MetalRenderPassDescriptor *passDesc =
                     static_cast<MetalRenderPassDescriptor*>( mCurrentRenderPassDescriptor );
-            passDesc->performStoreActions( x, y, w, h, RenderPassDescriptor::All );
-        }
+            passDesc->performStoreActions( x, y, w, h, RenderPassDescriptor::All, isInterruptingRender );
 
-        RenderSystem::endRenderPassDescriptor();
+            mEntriesToFlush = 0;
+            mVpChanged = false;
+
+            mInterruptedRenderCommandEncoder = isInterruptingRender;
+
+            if( !isInterruptingRender )
+                RenderSystem::endRenderPassDescriptor();
+            else
+                mEntriesToFlush = RenderPassDescriptor::All;
+        }
+    }
+    //-------------------------------------------------------------------------
+    void MetalRenderSystem::endRenderPassDescriptor(void)
+    {
+        endRenderPassDescriptor( false );
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_setTextureCoordCalculation( size_t unit, TexCoordCalcMethod m,
@@ -1401,10 +1420,14 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_notifyActiveEncoderEnded( bool callEndRenderPassDesc )
     {
+        // MetalDevice::endRenderEncoder gets called either because
+        //  * Another encoder was required. Thus we interrupted and callEndRenderPassDesc = true
+        //  * endRenderPassDescriptor called us. Thus callEndRenderPassDesc = false
+        //  * executeRenderPassDescriptorDelayedActions called us. Thus callEndRenderPassDesc = false
+        // In all cases, when callEndRenderPassDesc = true, it also implies rendering was interrupted.
         if( callEndRenderPassDesc )
-            endRenderPassDescriptor();
-        mActiveViewport = 0;
-        mActiveRenderTarget = 0;
+            endRenderPassDescriptor( true );
+
         mActiveRenderEncoder = 0;
         mPso = 0;
     }
@@ -2022,7 +2045,11 @@ namespace Ogre
         MetalHlmsPso *metalPso = reinterpret_cast<MetalHlmsPso*>(pso->rsData);
 
         if( pso && !mActiveRenderEncoder )
-            createRenderEncoder();
+        {
+            assert( mInterruptedRenderCommandEncoder &&
+                    "mActiveRenderEncoder can only be null at this stage if rendering was interrupted" );
+            executeRenderPassDescriptorDelayedActions();
+        }
 
         if( !mPso || mPso->depthStencilState != metalPso->depthStencilState )
             [mActiveRenderEncoder setDepthStencilState:metalPso->depthStencilState];
@@ -2677,6 +2704,7 @@ namespace Ogre
     {
         Vector4 fullVp( 0, 0, 1, 1 );
         beginRenderPassDescriptor( renderPassDesc, anyTarget, fullVp, fullVp, false, false );
+        executeRenderPassDescriptorDelayedActions();
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::discardFrameBuffer( unsigned int buffers )

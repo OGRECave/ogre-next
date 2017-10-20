@@ -29,10 +29,13 @@ THE SOFTWARE.
 #include "OgreMetalRenderPassDescriptor.h"
 
 #include "OgreMetalTextureGpu.h"
+#include "OgreMetalTextureGpuWindow.h"
 #include "OgreMetalRenderSystem.h"
 
 #include "OgreHlmsDatablock.h"
 #include "OgrePixelFormatGpuUtils.h"
+
+#include <execinfo.h> //backtrace
 
 namespace Ogre
 {
@@ -441,7 +444,8 @@ namespace Ogre
         return entriesToFlush;
     }
     //-----------------------------------------------------------------------------------
-    void MetalRenderPassDescriptor::performLoadActions( MTLRenderPassDescriptor *passDesc )
+    void MetalRenderPassDescriptor::performLoadActions( MTLRenderPassDescriptor *passDesc,
+                                                        bool renderingWasInterrupted )
     {
         if( mInformationOnly )
             return;
@@ -455,20 +459,102 @@ namespace Ogre
             //hard copy since the previous descriptor may still be in flight.
             //Also ensure we do not retain current drawable's texture beyond the frame.
             passDesc.colorAttachments[0] = [mColourAttachment[0] copy];
-            MetalTextureGpu *textureMetal = static_cast<MetalTextureGpu*>( mColour[0].texture );
+            MetalTextureGpuWindow *textureMetal =
+                    static_cast<MetalTextureGpuWindow*>( mColour[0].texture );
+            textureMetal->nextDrawable();
             passDesc.colorAttachments[0].texture = textureMetal->getFinalTextureName();
         }
 
         passDesc.depthAttachment = mDepthAttachment;
         passDesc.stencilAttachment = mStencilAttachment;
+
+        if( renderingWasInterrupted )
+        {
+            for( size_t i=0; i<mNumColourEntries; ++i )
+            {
+                passDesc.colorAttachments[i] = [passDesc.colorAttachments[i] copy];
+                passDesc.colorAttachments[i].loadAction = MTLLoadActionLoad;
+            }
+
+            if( passDesc.depthAttachment )
+            {
+                passDesc.depthAttachment = [passDesc.depthAttachment copy];
+                passDesc.depthAttachment.loadAction = MTLLoadActionLoad;
+            }
+
+            if( passDesc.stencilAttachment )
+            {
+                passDesc.stencilAttachment = [passDesc.stencilAttachment copy];
+                passDesc.stencilAttachment.loadAction = MTLLoadActionLoad;
+            }
+        }
     }
     //-----------------------------------------------------------------------------------
     void MetalRenderPassDescriptor::performStoreActions( uint32 x, uint32 y,
                                                          uint32 width, uint32 height,
-                                                         uint32 entriesToFlush )
+                                                         uint32 entriesToFlush,
+                                                         bool isInterruptingRendering )
     {
         if( mInformationOnly )
             return;
+
+        if( isInterruptingRendering )
+        {
+            bool cannotInterrupt = false;
+
+            for( size_t i=0; i<mNumColourEntries; ++i )
+            {
+                if( mColour[i].storeAction != StoreAction::Store &&
+                    mColour[i].storeAction != StoreAction::StoreAndMultisampleResolve )
+                {
+                    cannotInterrupt = true;
+                }
+            }
+
+            cannotInterrupt |= (mDepth.texture &&
+                                mDepth.storeAction != StoreAction::Store &&
+                                mDepth.storeAction != StoreAction::StoreAndMultisampleResolve) ||
+                               (mStencil.texture &&
+                                mStencil.storeAction != StoreAction::Store &&
+                                mStencil.storeAction != StoreAction::StoreAndMultisampleResolve);
+
+            static bool warnedOnce = false;
+            if( !warnedOnce || cannotInterrupt )
+            {
+                LogManager::getSingleton().logMessage(
+                            "WARNING: Rendering was interrupted. Likely because a StagingBuffer "
+                            "was used while inside HlmsPbs::fillBuffersFor; but could be caused "
+                            "by other reasons such as mipmaps being generated in a listener, "
+                            "buffer transfer/copies, manually dispatching a compute shader, etc."
+                            " Performance will be degraded. This message will only appear once.",
+                            LML_CRITICAL );
+
+                LogManager::getSingleton().logMessage( "Dumping callstack: ", LML_CRITICAL );
+
+                void *callstack[32];
+                const size_t numEntries = backtrace( callstack, 32 );
+                char **translatedCS = backtrace_symbols( callstack, numEntries );
+
+                for( size_t i=0; i<numEntries; ++i )
+                    LogManager::getSingleton().logMessage( translatedCS[i], LML_CRITICAL );
+
+                warnedOnce = true;
+            }
+
+            if( cannotInterrupt )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                             "ERROR: We cannot resume rendering because the compositor pass specified "
+                             "'DontCare' or 'MultisampleResolve' as StoreAction for colour, depth "
+                             "or stencil, therefore rendering will be incorrect!!!\n"
+                             "Either remove the buffer manipulation from the rendering hot loop "
+                             "that is causing the interruption, or set the store actions to Store, or"
+                             "StoreAndMultisampleResolve",
+                             "MetalRenderPassDescriptor::performStoreActions" );
+            }
+
+            return;
+        }
 
         if( !(entriesToFlush & Colour) )
             return;
@@ -492,7 +578,7 @@ namespace Ogre
             }
         }
 
-        mDevice->endAllEncoders();
+        mDevice->endAllEncoders( false );
         mDevice->mRenderEncoder =
                 [mDevice->mCurrentCommandBuffer renderCommandEncoderWithDescriptor:passDesc];
 

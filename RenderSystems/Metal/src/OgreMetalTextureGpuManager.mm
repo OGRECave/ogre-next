@@ -145,7 +145,7 @@ namespace Ogre
             mBlankTexture[i] = 0;
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* MetalTextureGpuManager::createTextureGpuWindow( Window *window )
+    TextureGpu* MetalTextureGpuManager::createTextureGpuWindow( MetalWindow *window )
     {
         return OGRE_NEW MetalTextureGpuWindow( GpuPageOutStrategy::Discard, mVaoManager,
                                                "RenderWindow",
