@@ -83,8 +83,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalWindow::setResolutionFromView(void)
     {
-        const uint32 newWidth = static_cast<uint32>( mMetalView.frame.size.width );
-        const uint32 newHeight = static_cast<uint32>( mMetalView.frame.size.height );
+        const uint32 newWidth = static_cast<uint32>( mMetalLayer.drawableSize.width );
+        const uint32 newHeight = static_cast<uint32>( mMetalLayer.drawableSize.height );
 
         if( newWidth > 0 && newHeight > 0 && mTexture )
         {
@@ -105,7 +105,17 @@ namespace Ogre
                 texWindow->_setMsaaBackbuffer( msaaTex );
             }
 
+            bool wasResident = false;
+            if( mDepthBuffer && mDepthBuffer->getResidencyStatus() != GpuResidency::OnStorage )
+            {
+                mDepthBuffer->_transitionTo( GpuResidency::OnStorage, (uint8*)0 );
+                wasResident = true;
+            }
+
             setFinalResolution( newWidth, newHeight );
+
+            if( mDepthBuffer && wasResident )
+                mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8*)0 );
         }
     }
     //-------------------------------------------------------------------------
@@ -239,10 +249,13 @@ namespace Ogre
         //on the final rendering layer we could set this to no
         mMetalLayer.framebufferOnly = YES;
 
-#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
         checkLayerSizeChanges();
-#endif
         setResolutionFromView();
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+        //We'll need to refresh as mMetalView.layer.contentsScale is usually out of date.
+        mMetalView.layerSizeDidUpdate = YES;
+#endif
     }
     //-------------------------------------------------------------------------
     void MetalWindow::destroy()
@@ -316,7 +329,7 @@ namespace Ogre
         frame.size.height   = height;
         mMetalView.frame = frame;
 
-        windowMovedOrResized();
+        checkLayerSizeChanges();
     }
     //-------------------------------------------------------------------------
     bool MetalWindow::isClosed(void) const

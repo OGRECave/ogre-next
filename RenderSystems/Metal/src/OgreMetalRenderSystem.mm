@@ -280,6 +280,11 @@ namespace Ogre
             rsc->setCapability(RSC_STORE_AND_MULTISAMPLE_RESOLVE);
 #endif
 
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+        rsc->setCapability( RSC_IS_TILER );
+        rsc->setCapability( RSC_TILER_CAN_CLEAR_STENCIL_REGION );
+#endif
+
         //TODO: UAVs
         //rsc->setCapability(RSC_UAV);
         //rsc->setCapability(RSC_ATOMIC_COUNTERS);

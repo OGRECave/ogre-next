@@ -111,12 +111,12 @@ namespace Ogre
         mConstBufferAlignment   = 256;
         mTexBufferAlignment     = 256;
 
-        //Keep pools of 128MB for static buffers
-        mDefaultPoolSize[CPU_INACCESSIBLE]  = 128 * 1024 * 1024;
+        //Keep pools of 32MB for static buffers
+        mDefaultPoolSize[CPU_INACCESSIBLE]  = 32 * 1024 * 1024;
 
-        //Keep pools of 32MB each for dynamic buffers
+        //Keep pools of 4MB each for dynamic buffers
         for( size_t i=CPU_ACCESSIBLE_DEFAULT; i<=CPU_ACCESSIBLE_PERSISTENT_COHERENT; ++i )
-            mDefaultPoolSize[i] = 32 * 1024 * 1024;
+            mDefaultPoolSize[i] = 4 * 1024 * 1024;
 
         mSupportsIndirectBuffers    = false; // TODO: the _render() overload is not implemented yet!
 #endif
