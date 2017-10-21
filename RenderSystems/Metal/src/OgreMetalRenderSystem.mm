@@ -2077,7 +2077,8 @@ namespace Ogre
         if( pso && !mActiveRenderEncoder )
         {
             assert( mInterruptedRenderCommandEncoder &&
-                    "mActiveRenderEncoder can only be null at this stage if rendering was interrupted" );
+                    "mActiveRenderEncoder can only be null at this stage if rendering was interrupted."
+                    " Did you call executeRenderPassDescriptorDelayedActions?");
             executeRenderPassDescriptorDelayedActions( false );
         }
 

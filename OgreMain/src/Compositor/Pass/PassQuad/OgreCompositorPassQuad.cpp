@@ -272,6 +272,10 @@ namespace Ogre
             mFsRect->setMaterial( mMaterial ); //Low level material
         else
             mFsRect->setDatablock( mDatablock ); //Hlms material
+
+        RenderSystem *renderSystem = sceneManager->getDestinationRenderSystem();
+        renderSystem->executeRenderPassDescriptorDelayedActions();
+
         sceneManager->_renderSingleObject( mFsRect, mFsRect, false, false );
 
         if( mDefinition->mCameraCubemapReorient )
