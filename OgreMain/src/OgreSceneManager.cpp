@@ -1024,6 +1024,9 @@ void SceneManager::_cullPhase01( Camera* camera, const Camera *lodCamera, Viewpo
                 fireRenderQueueStarted( i, BLANKSTRING );
         }
 
+        if( mIlluminationStage != IRS_RENDER_TO_TEXTURE && mForwardPlusImpl )
+            mForwardPlusImpl->collectLights( camera );
+
         mRenderQueue->renderPassPrepare( mIlluminationStage == IRS_RENDER_TO_TEXTURE, false );
 
         if (mFindVisibleObjects)
@@ -1066,6 +1069,10 @@ void SceneManager::_cullPhase01( Camera* camera, const Camera *lodCamera, Viewpo
             for( uint8 i=firstRq; i<lastRq; ++i )
                 fireRenderQueueStarted( i, BLANKSTRING );
         }
+
+        if( mIlluminationStage != IRS_RENDER_TO_TEXTURE && mForwardPlusImpl )
+            mForwardPlusImpl->collectLights( camera );
+
         mRenderQueue->renderPassPrepare( mIlluminationStage == IRS_RENDER_TO_TEXTURE, false );
     }
 
@@ -1118,16 +1125,6 @@ void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera, Viewp
             {
                 mDestRenderSystem->setClipPlanes(camera->getWindowPlanes());
             }
-        }
-
-        // Prepare render queue for receiving new objects
-        {
-            prepareRenderQueue();
-        }
-
-        if( mIlluminationStage != IRS_RENDER_TO_TEXTURE && mForwardPlusImpl )
-        {
-            mForwardPlusImpl->collectLights( camera );
         }
 
         if (mFindVisibleObjects)
