@@ -676,6 +676,16 @@ namespace Ogre
 
         setFinalResolution( mRequestedWidth, mRequestedHeight );
 
+        if( mDepthBuffer )
+        {
+            mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NON_SHAREABLE,
+                                               false, mDepthBuffer->getPixelFormat() );
+        }
+        else
+        {
+            mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NO_DEPTH, false, PFG_NULL );
+        }
+
         mTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
         if( mDepthBuffer )
             mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8*)0 );

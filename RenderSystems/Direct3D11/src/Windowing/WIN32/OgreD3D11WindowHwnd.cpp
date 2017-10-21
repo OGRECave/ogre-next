@@ -594,6 +594,16 @@ namespace Ogre
         if( PixelFormatGpuUtils::isStencil( mDepthBuffer->getPixelFormat() ) )
             mStencilBuffer = mDepthBuffer;
 
+        if( mDepthBuffer )
+        {
+            mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NON_SHAREABLE,
+                                               false, mDepthBuffer->getPixelFormat() );
+        }
+        else
+        {
+            mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NO_DEPTH, false, PFG_NULL );
+        }
+
         mTexture->setMsaa( mMsaaDesc.Count );
         mDepthBuffer->setMsaa( mMsaaDesc.Count );
 

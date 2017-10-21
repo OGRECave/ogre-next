@@ -96,9 +96,7 @@ namespace Ogre
             {
                 MTLTextureDescriptor* desc = [MTLTextureDescriptor
                                              texture2DDescriptorWithPixelFormat:
-//                                             MetalMappings::get( mTexture->getPixelFormat() )
-                                             mHwGamma ? MTLPixelFormatBGRA8Unorm_sRGB :
-                                                        MTLPixelFormatBGRA8Unorm
+                                             MetalMappings::get( mTexture->getPixelFormat() )
                                              width: newWidth height: newHeight mipmapped: NO];
                 desc.textureType = MTLTextureType2DMultisample;
                 desc.sampleCount = mMsaa;
@@ -234,9 +232,8 @@ namespace Ogre
 
         mMetalLayer = (CAMetalLayer*)mMetalView.layer;
         mMetalLayer.device      = mDevice->mDevice;
-//        mMetalLayer.pixelFormat = MetalMappings::get( mHwGamma ? PFG_RGBA8_UNORM_SRGB :
-//                                                                 PFG_RGBA8_UNORM );
-        mMetalLayer.pixelFormat = mHwGamma ? MTLPixelFormatBGRA8Unorm_sRGB : MTLPixelFormatBGRA8Unorm;
+        mMetalLayer.pixelFormat = MetalMappings::get( mHwGamma ? PFG_BGRA8_UNORM_SRGB :
+                                                                 PFG_BGRA8_UNORM );
 
         //This is the default but if we wanted to perform compute
         //on the final rendering layer we could set this to no
@@ -272,11 +269,21 @@ namespace Ogre
         mTexture        = textureManager->createTextureGpuWindow( this );
         mDepthBuffer    = textureManager->createWindowDepthBuffer();
 
-        mTexture->setPixelFormat( mHwGamma ? PFG_RGBA8_UNORM_SRGB : PFG_RGBA8_UNORM );
+        mTexture->setPixelFormat( mHwGamma ? PFG_BGRA8_UNORM_SRGB : PFG_BGRA8_UNORM );
         mDepthBuffer->setPixelFormat( DepthBuffer::DefaultDepthBufferFormat );
 
         if( PixelFormatGpuUtils::isStencil( mDepthBuffer->getPixelFormat() ) )
             mStencilBuffer = mDepthBuffer;
+
+        if( mDepthBuffer )
+        {
+            mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NON_SHAREABLE,
+                                               false, mDepthBuffer->getPixelFormat() );
+        }
+        else
+        {
+            mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NO_DEPTH, false, PFG_NULL );
+        }
 
         mTexture->setMsaa( mMsaa );
         mDepthBuffer->setMsaa( mMsaa );
