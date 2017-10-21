@@ -240,7 +240,10 @@ namespace Ogre
         virtual void executeRenderPassDescriptorDelayedActions(void);
         inline void endRenderPassDescriptor( bool isInterruptingRender );
         virtual void endRenderPassDescriptor(void);
-
+    protected:
+        virtual TextureGpu* createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
+                                                  PixelFormatGpu depthBufferFormat );
+    public:
         virtual void _setTextureCoordCalculation(size_t unit, TexCoordCalcMethod m,
                                                  const Frustum* frustum = 0);
         virtual void _setTextureBlendMode(size_t unit, const LayerBlendModeEx& bm);

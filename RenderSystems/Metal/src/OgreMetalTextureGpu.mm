@@ -147,6 +147,7 @@ namespace Ogre
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
             case TextureTypes::TypeCubeArray:   return MTLTextureTypeCubeArray;
 #endif
+            case TextureTypes::Type3D:          return MTLTextureType3D;
             default:
                 return (MTLTextureType)999;
         };
