@@ -222,8 +222,10 @@ namespace Ogre
         case PFG_D24_UNORM_S8_UINT:
         case PFG_D24_UNORM:
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-            depthFormat = MTLPixelFormatDepth32Float;
-            stencilFormat = MTLPixelFormatStencil8;
+//            depthFormat = MTLPixelFormatDepth32Float;
+//            stencilFormat = MTLPixelFormatStencil8;
+            depthFormat     = MTLPixelFormatDepth32Float_Stencil8;
+            stencilFormat   = MTLPixelFormatDepth32Float_Stencil8;
 #else
             if( device->mDevice.depth24Stencil8PixelFormatSupported )
             {
@@ -245,8 +247,10 @@ namespace Ogre
             break;
         case PFG_D32_FLOAT_S8X24_UINT:
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-            depthFormat = MTLPixelFormatDepth32Float;
-            stencilFormat = MTLPixelFormatStencil8;
+//            depthFormat = MTLPixelFormatDepth32Float;
+//            stencilFormat = MTLPixelFormatStencil8;
+            depthFormat = MTLPixelFormatDepth32Float_Stencil8;
+            stencilFormat = MTLPixelFormatDepth32Float_Stencil8;
 #else
             depthFormat = MTLPixelFormatDepth32Float_Stencil8;
             stencilFormat = MTLPixelFormatDepth32Float_Stencil8;
