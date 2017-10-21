@@ -81,7 +81,7 @@ namespace Ogre
                                                            ResourceAccessMap &uavsAccess,
                                                            ResourceLayoutMap &resourcesLayout );
 
-        virtual bool notifyRecreated( TextureGpu *channel );
+        virtual bool notifyRecreated( const TextureGpu *channel );
 
     private:
         CompositorPassMipmapDef const *mDefinition;

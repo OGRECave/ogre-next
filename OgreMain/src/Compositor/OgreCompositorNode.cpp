@@ -900,6 +900,14 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorNode::finalTargetResized( const TextureGpu *finalTarget )
     {
+        CompositorPassVec::const_iterator passIt = mPasses.begin();
+        CompositorPassVec::const_iterator passEn = mPasses.end();
+        while( passIt != passEn )
+        {
+            (*passIt)->notifyRecreated( finalTarget );
+            ++passIt;
+        }
+
         TextureDefinitionBase::recreateResizableTextures( mDefinition->mLocalTextureDefs, mLocalTextures,
                                                           finalTarget, mConnectedNodes,
                                                           &mPasses );

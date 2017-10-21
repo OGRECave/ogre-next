@@ -683,7 +683,7 @@ namespace Ogre
         mResourceTransitions.clear();
     }
     //-----------------------------------------------------------------------------------
-    bool CompositorPass::notifyRecreated( TextureGpu *channel )
+    bool CompositorPass::notifyRecreated( const TextureGpu *channel )
     {
         if( !mRenderPassDesc )
             return false;

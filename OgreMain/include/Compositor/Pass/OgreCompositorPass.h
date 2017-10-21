@@ -172,7 +172,7 @@ namespace Ogre
         void _removeAllBarriers(void);
 
         /// @See CompositorNode::notifyRecreated
-        virtual bool notifyRecreated( TextureGpu *channel );
+        virtual bool notifyRecreated( const TextureGpu *channel );
         virtual void notifyRecreated( const UavBufferPacked *oldBuffer, UavBufferPacked *newBuffer );
 
         /// @See CompositorNode::notifyDestroyed

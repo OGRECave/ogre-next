@@ -491,7 +491,7 @@ namespace Ogre
         //CompositorPass::_placeBarriersAndEmulateUavExecution();
     }
     //-----------------------------------------------------------------------------------
-    bool CompositorPassMipmap::notifyRecreated( TextureGpu *channel )
+    bool CompositorPassMipmap::notifyRecreated( const TextureGpu *channel )
     {
         bool usedByUs = CompositorPass::notifyRecreated( channel );
 
