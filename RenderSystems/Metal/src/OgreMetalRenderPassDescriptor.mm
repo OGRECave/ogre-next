@@ -47,7 +47,13 @@ namespace Ogre
         mSharedFboItor( renderSystem->_getFrameBufferDescMap().end() ),
         mDevice( device ),
         mRenderSystem( renderSystem )
+  #if OGRE_DEBUG_MODE
+      , mNumCallstackEntries( 0 )
+  #endif
     {
+#if OGRE_DEBUG_MODE
+        memset( mCallstackBacktrace, 0, sizeof( mCallstackBacktrace ) );
+#endif
     }
     //-----------------------------------------------------------------------------------
     MetalRenderPassDescriptor::~MetalRenderPassDescriptor()
@@ -254,7 +260,7 @@ namespace Ogre
             mColourAttachment[i].storeAction = MetalRenderPassDescriptor::get( mColour[i].storeAction );
 
             if( mColour[i].storeAction == StoreAction::StoreAndMultisampleResolve &&
-                mColour[i].texture->getMsaa() <= 1u )
+                (mColour[i].texture->getMsaa() <= 1u || !mColour[i].resolveTexture) )
             {
                 //Ogre allows non-MSAA textures to use this flag. Metal may complain.
                 mColourAttachment[i].storeAction = MTLStoreActionStore;
@@ -309,6 +315,13 @@ namespace Ogre
 
         mDepthAttachment.loadAction = MetalRenderPassDescriptor::get( mDepth.loadAction );
         mDepthAttachment.storeAction = MetalRenderPassDescriptor::get( mDepth.storeAction );
+
+        if( mDepth.storeAction == StoreAction::StoreAndMultisampleResolve &&
+            (mDepth.texture->getMsaa() <= 1u || !mDepth.resolveTexture) )
+        {
+            //Ogre allows non-MSAA textures to use this flag. Metal may complain.
+            mDepthAttachment.storeAction = MTLStoreActionStore;
+        }
     }
     //-----------------------------------------------------------------------------------
     void MetalRenderPassDescriptor::updateStencilRtv(void)
@@ -334,6 +347,13 @@ namespace Ogre
 
         mStencilAttachment.loadAction = MetalRenderPassDescriptor::get( mStencil.loadAction );
         mStencilAttachment.storeAction = MetalRenderPassDescriptor::get( mStencil.storeAction );
+
+        if( mStencil.storeAction == StoreAction::StoreAndMultisampleResolve &&
+            (mStencil.texture->getMsaa() <= 1u || !mStencil.resolveTexture) )
+        {
+            //Ogre allows non-MSAA textures to use this flag. Metal may complain.
+            mStencilAttachment.storeAction = MTLStoreActionStore;
+        }
     }
     //-----------------------------------------------------------------------------------
     void MetalRenderPassDescriptor::entriesModified( uint32 entryTypes )
@@ -444,6 +464,29 @@ namespace Ogre
         return entriesToFlush;
     }
     //-----------------------------------------------------------------------------------
+    bool MetalRenderPassDescriptor::cannotInterruptRendering(void) const
+    {
+        bool cannotInterrupt = false;
+
+        for( size_t i=0; i<mNumColourEntries && !cannotInterrupt; ++i )
+        {
+            if( mColour[i].storeAction != StoreAction::Store &&
+                mColour[i].storeAction != StoreAction::StoreAndMultisampleResolve )
+            {
+                cannotInterrupt = true;
+            }
+        }
+
+        cannotInterrupt |= (mDepth.texture &&
+                            mDepth.storeAction != StoreAction::Store &&
+                            mDepth.storeAction != StoreAction::StoreAndMultisampleResolve) ||
+                           (mStencil.texture &&
+                            mStencil.storeAction != StoreAction::Store &&
+                            mStencil.storeAction != StoreAction::StoreAndMultisampleResolve);
+
+        return cannotInterrupt;
+    }
+    //-----------------------------------------------------------------------------------
     void MetalRenderPassDescriptor::performLoadActions( MTLRenderPassDescriptor *passDesc,
                                                         bool renderingWasInterrupted )
     {
@@ -487,6 +530,46 @@ namespace Ogre
                 passDesc.stencilAttachment = [passDesc.stencilAttachment copy];
                 passDesc.stencilAttachment.loadAction = MTLLoadActionLoad;
             }
+
+            const bool cannotInterrupt = cannotInterruptRendering();
+
+            static bool warnedOnce = false;
+            if( !warnedOnce || cannotInterrupt )
+            {
+                LogManager::getSingleton().logMessage(
+                            "WARNING: Rendering was interrupted. Likely because a StagingBuffer "
+                            "was used while inside HlmsPbs::fillBuffersFor; but could be caused "
+                            "by other reasons such as mipmaps being generated in a listener, "
+                            "buffer transfer/copies, manually dispatching a compute shader, etc."
+                            " Performance will be degraded. This message will only appear once.",
+                            LML_CRITICAL );
+
+#if OGRE_DEBUG_MODE
+                LogManager::getSingleton().logMessage(
+                            "Dumping callstack at the time rendering was interrupted: ", LML_CRITICAL );
+
+                char **translatedCS = backtrace_symbols( mCallstackBacktrace, mNumCallstackEntries );
+
+                for( size_t i=0; i<mNumCallstackEntries; ++i )
+                    LogManager::getSingleton().logMessage( translatedCS[i], LML_CRITICAL );
+
+                memset( mCallstackBacktrace, 0, sizeof(mCallstackBacktrace) );
+                mNumCallstackEntries = 0;
+#endif
+                warnedOnce = true;
+            }
+
+            if( cannotInterrupt )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                             "ERROR: We cannot resume rendering because the compositor pass specified "
+                             "'DontCare' or 'MultisampleResolve' as StoreAction for colour, depth "
+                             "or stencil, therefore rendering will be incorrect!!!\n"
+                             "Either remove the buffer manipulation from the rendering hot loop "
+                             "that is causing the interruption, or set the store actions to Store, or"
+                             "StoreAndMultisampleResolve",
+                             "MetalRenderPassDescriptor::performLoadActions" );
+            }
         }
     }
     //-----------------------------------------------------------------------------------
@@ -500,61 +583,23 @@ namespace Ogre
 
         if( isInterruptingRendering )
         {
-            bool cannotInterrupt = false;
-
-            for( size_t i=0; i<mNumColourEntries; ++i )
-            {
-                if( mColour[i].storeAction != StoreAction::Store &&
-                    mColour[i].storeAction != StoreAction::StoreAndMultisampleResolve )
-                {
-                    cannotInterrupt = true;
-                }
-            }
-
-            cannotInterrupt |= (mDepth.texture &&
-                                mDepth.storeAction != StoreAction::Store &&
-                                mDepth.storeAction != StoreAction::StoreAndMultisampleResolve) ||
-                               (mStencil.texture &&
-                                mStencil.storeAction != StoreAction::Store &&
-                                mStencil.storeAction != StoreAction::StoreAndMultisampleResolve);
-
+#if OGRE_DEBUG_MODE
+            //Save the backtrace to report it later
+            const bool cannotInterrupt = cannotInterruptRendering();
             static bool warnedOnce = false;
             if( !warnedOnce || cannotInterrupt )
             {
-                LogManager::getSingleton().logMessage(
-                            "WARNING: Rendering was interrupted. Likely because a StagingBuffer "
-                            "was used while inside HlmsPbs::fillBuffersFor; but could be caused "
-                            "by other reasons such as mipmaps being generated in a listener, "
-                            "buffer transfer/copies, manually dispatching a compute shader, etc."
-                            " Performance will be degraded. This message will only appear once.",
-                            LML_CRITICAL );
-
-                LogManager::getSingleton().logMessage( "Dumping callstack: ", LML_CRITICAL );
-
-                void *callstack[32];
-                const size_t numEntries = backtrace( callstack, 32 );
-                char **translatedCS = backtrace_symbols( callstack, numEntries );
-
-                for( size_t i=0; i<numEntries; ++i )
-                    LogManager::getSingleton().logMessage( translatedCS[i], LML_CRITICAL );
-
+                mNumCallstackEntries = backtrace( mCallstackBacktrace, 32 );
                 warnedOnce = true;
             }
-
-            if( cannotInterrupt )
-            {
-                OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
-                             "ERROR: We cannot resume rendering because the compositor pass specified "
-                             "'DontCare' or 'MultisampleResolve' as StoreAction for colour, depth "
-                             "or stencil, therefore rendering will be incorrect!!!\n"
-                             "Either remove the buffer manipulation from the rendering hot loop "
-                             "that is causing the interruption, or set the store actions to Store, or"
-                             "StoreAndMultisampleResolve",
-                             "MetalRenderPassDescriptor::performStoreActions" );
-            }
-
+#endif
             return;
         }
+
+        //End (if exists) the render command encoder tied to this RenderPassDesc.
+        //Another encoder will have to be created, and don't let ours linger
+        //since mCurrentRenderPassDescriptor probably doesn't even point to 'this'
+        mDevice->endAllEncoders( false );
 
         if( !(entriesToFlush & Colour) )
             return;
@@ -578,7 +623,6 @@ namespace Ogre
             }
         }
 
-        mDevice->endAllEncoders( false );
         mDevice->mRenderEncoder =
                 [mDevice->mCurrentCommandBuffer renderCommandEncoderWithDescriptor:passDesc];
 

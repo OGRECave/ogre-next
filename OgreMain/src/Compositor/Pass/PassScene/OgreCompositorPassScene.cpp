@@ -193,6 +193,7 @@ namespace Ogre
             //We need to restore the previous RT's update
         }
 
+        executeResourceTransitions();
         setRenderPassDescToCurrent();
 
         sceneManager->_setForwardPlusEnabledInPass( mDefinition->mEnableForwardPlus );
@@ -200,13 +201,9 @@ namespace Ogre
                                        mPrePassDepthTexture, mSsrTexture );
         sceneManager->_setCurrentCompositorPass( this );
 
-        if( !mDefinition->mReuseCullData )
-        {
-            viewport->_updateCullPhase01( mCullCamera, usedLodCamera,
-                                          mDefinition->mFirstRQ, mDefinition->mLastRQ );
-        }
-
-        executeResourceTransitions();
+        viewport->_updateCullPhase01( mCullCamera, usedLodCamera,
+                                      mDefinition->mFirstRQ, mDefinition->mLastRQ,
+                                      mDefinition->mReuseCullData );
 
 #if TODO_OGRE_2_2
         mTarget->setFsaaResolveDirty();

@@ -372,8 +372,7 @@ namespace Ogre
             mInitialized = true;
         }
 
-        Window *win = OGRE_NEW MetalWindow( name, width, height, fullScreen,
-                                            miscParams, &mDevice, this );
+        Window *win = OGRE_NEW MetalWindow( name, width, height, fullScreen, miscParams, &mDevice );
         win->_initialize( mTextureGpuManager );
         return win;
     }
@@ -887,6 +886,18 @@ namespace Ogre
                 currPassDesc->performStoreActions( oldX, oldY, oldWidth, oldHeight,
                                                    entriesToFlush, false );
             }
+
+            //If rendering was interrupted but we're still rendering to the same
+            //RTT, willSwitchTo will have returned 0 and thus we won't perform
+            //the necessary load actions.
+            //If RTTs were different, we need to have performStoreActions
+            //called by now (i.e. to emulate StoreAndResolve)
+            if( mInterruptedRenderCommandEncoder )
+            {
+                entriesToFlush = RenderPassDescriptor::All;
+                if( warnIfRtvWasFlushed )
+                    newPassDesc->checkWarnIfRtvWasFlushed( entriesToFlush );
+            }
         }
         else
         {
@@ -900,8 +911,11 @@ namespace Ogre
         mInterruptedRenderCommandEncoder = false;
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::executeRenderPassDescriptorDelayedActions(void)
+    void MetalRenderSystem::executeRenderPassDescriptorDelayedActions( bool officialCall )
     {
+        if( officialCall )
+            mInterruptedRenderCommandEncoder = false;
+
         if( mEntriesToFlush )
         {
             mActiveDevice->endAllEncoders( false );
@@ -954,6 +968,11 @@ namespace Ogre
         mEntriesToFlush = 0;
         mVpChanged = false;
         mInterruptedRenderCommandEncoder = false;
+    }
+    //-------------------------------------------------------------------------
+    void MetalRenderSystem::executeRenderPassDescriptorDelayedActions(void)
+    {
+        executeRenderPassDescriptorDelayedActions( true );
     }
     //-------------------------------------------------------------------------
     inline void MetalRenderSystem::endRenderPassDescriptor( bool isInterruptingRender )
@@ -2048,7 +2067,7 @@ namespace Ogre
         {
             assert( mInterruptedRenderCommandEncoder &&
                     "mActiveRenderEncoder can only be null at this stage if rendering was interrupted" );
-            executeRenderPassDescriptorDelayedActions();
+            executeRenderPassDescriptorDelayedActions( false );
         }
 
         if( !mPso || mPso->depthStencilState != metalPso->depthStencilState )

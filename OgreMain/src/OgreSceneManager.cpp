@@ -993,7 +993,7 @@ void SceneManager::prepareRenderQueue(void)
 }
 //-----------------------------------------------------------------------
 void SceneManager::_cullPhase01( Camera* camera, const Camera *lodCamera, Viewport* vp,
-                                 uint8 firstRq, uint8 lastRq )
+                                 uint8 firstRq, uint8 lastRq, bool reuseCullData )
 {
     OgreProfileGroup( "Frustum Culling", OGREPROF_CULLING );
 
@@ -1003,6 +1003,7 @@ void SceneManager::_cullPhase01( Camera* camera, const Camera *lodCamera, Viewpo
     setViewport( vp );
     mCameraInProgress = camera;
 
+    if( !reuseCullData )
     {
         // Lock scene graph mutex, no more changes until we're ready to render
         OGRE_LOCK_MUTEX(sceneGraphMutex);
@@ -1014,6 +1015,16 @@ void SceneManager::_cullPhase01( Camera* camera, const Camera *lodCamera, Viewpo
         }*/
 
         mRenderQueue->clear();
+
+        {
+            //TODO: Remove this hacky listener (mostly needed by OverlayManager)
+            //Overlays REQUIRED THIS to be called before RenderQueue::renderPassPrepare.
+            OgreProfileGroup( "RenderQueue Listeners (i.e. Overlays)", OGREPROF_RENDERING );
+            for( uint8 i=firstRq; i<lastRq; ++i )
+                fireRenderQueueStarted( i, BLANKSTRING );
+        }
+
+        mRenderQueue->renderPassPrepare( mIlluminationStage == IRS_RENDER_TO_TEXTURE, false );
 
         if (mFindVisibleObjects)
         {
@@ -1046,6 +1057,17 @@ void SceneManager::_cullPhase01( Camera* camera, const Camera *lodCamera, Viewpo
             fireCullFrustumThreads( cullRequest );
         }
     } // end lock on scene graph mutex
+    else
+    {
+        {
+            //TODO: Remove this hacky listener (mostly needed by OverlayManager)
+            //Overlays REQUIRED THIS to be called before RenderQueue::renderPassPrepare.
+            OgreProfileGroup( "RenderQueue Listeners (i.e. Overlays)", OGREPROF_RENDERING );
+            for( uint8 i=firstRq; i<lastRq; ++i )
+                fireRenderQueueStarted( i, BLANKSTRING );
+        }
+        mRenderQueue->renderPassPrepare( mIlluminationStage == IRS_RENDER_TO_TEXTURE, false );
+    }
 
     Root::getSingleton()._popCurrentSceneManager(this);
 }
@@ -1155,13 +1177,6 @@ void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera, Viewp
         if (vp->getSkiesEnabled() && mFindVisibleObjects && mIlluminationStage != IRS_RENDER_TO_TEXTURE)
         {
             _queueSkiesForRendering(camera);
-        }
-
-        {
-            //TODO: Remove this hacky listener (mostly needed by OverlayManager)
-            OgreProfileGroup( "RenderQueue Listeners (i.e. Overlays)", OGREPROF_RENDERING );
-            for( uint8 i=firstRq; i<lastRq; ++i )
-                fireRenderQueueStarted( i, BLANKSTRING );
         }
     } // end lock on scene graph mutex
 

@@ -1812,8 +1812,8 @@ namespace Ogre {
             @param firstRq first render queue ID to render (gets clamped if too big)
             @param lastRq last render queue ID to render (gets clamped if too big)
         */
-        virtual void _cullPhase01(Camera* camera, const Camera *lodCamera,
-                                  Viewport* vp, uint8 firstRq, uint8 lastRq );
+        virtual void _cullPhase01( Camera* camera, const Camera *lodCamera, Viewport* vp,
+                                   uint8 firstRq, uint8 lastRq, bool reuseCullData );
 
         /** Prompts the class to send its contents to the renderer.
             @remarks

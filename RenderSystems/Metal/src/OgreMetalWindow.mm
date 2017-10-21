@@ -28,26 +28,25 @@ THE SOFTWARE.
 
 #include "OgreMetalWindow.h"
 #include "OgreMetalMappings.h"
-#include "OgreMetalRenderSystem.h"
 #include "OgreMetalTextureGpuWindow.h"
 #include "OgreMetalTextureGpuManager.h"
+#include "OgreMetalDevice.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreDepthBuffer.h"
 #include "OgreViewport.h"
+#include "OgreStringConverter.h"
 
 namespace Ogre
 {
     MetalWindow::MetalWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode,
-                              const NameValuePairList *miscParams,
-                              MetalDevice *ownerDevice, MetalRenderSystem *renderSystem ) :
+                              const NameValuePairList *miscParams, MetalDevice *ownerDevice ) :
         Window( title, width, height, fullscreenMode ),
         mClosed( false ),
         mHwGamma( true ),
         mMsaa( 1u ),
         mMetalLayer( 0 ),
         mCurrentDrawable( 0 ),
-        mDevice( ownerDevice ),
-        mRenderSystem( renderSystem )
+        mDevice( ownerDevice )
     {
         create( fullscreenMode, miscParams );
     }

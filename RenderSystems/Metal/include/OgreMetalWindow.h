@@ -53,14 +53,11 @@ namespace Ogre
 #endif
         MetalDevice         *mDevice;
 
-        MetalRenderSystem   *mRenderSystem;
-
         inline void checkLayerSizeChanges(void);
         void setResolutionFromView(void);
     public:
         MetalWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode,
-                     const NameValuePairList *miscParams,
-                     MetalDevice *ownerDevice, MetalRenderSystem *renderSystem );
+                     const NameValuePairList *miscParams, MetalDevice *ownerDevice );
         virtual ~MetalWindow();
 
         virtual void swapBuffers(void);

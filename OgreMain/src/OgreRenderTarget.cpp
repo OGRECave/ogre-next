@@ -223,7 +223,7 @@ namespace Ogre {
                                                    const Camera *lodCamera, uint8 firstRq, uint8 lastRq )
     {
         fireViewportPreUpdate(viewport);
-        viewport->_updateCullPhase01( camera, lodCamera, firstRq, lastRq );
+        viewport->_updateCullPhase01( camera, lodCamera, firstRq, lastRq, false );
     }
     //-----------------------------------------------------------------------
     void RenderTarget::_updateViewportRenderPhase02( Viewport* viewport, Camera *camera,

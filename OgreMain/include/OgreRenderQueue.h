@@ -30,6 +30,7 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 #include "OgreSharedPtr.h"
+#include "OgreHlmsCommon.h"
 #include "OgreHeaderPrefix.h"
 #include "OgreIteratorWrappers.h"
 
@@ -156,6 +157,8 @@ namespace Ogre {
         IndirectBufferPackedVec mFreeIndirectBuffers;
         IndirectBufferPackedVec mUsedIndirectBuffers;
 
+        HlmsCache               mPassCache[HLMS_MAX];
+
         /** Returns a new (or an existing) indirect buffer that can hold the requested number of draws.
         @param numDraws
             Number of draws the indirect buffer is expected to hold. It must be an upper limit.
@@ -218,6 +221,8 @@ namespace Ogre {
         */
         void addRenderableV2( size_t threadIdx, uint8 renderQueueId, bool casterPass,
                               Renderable* pRend, const MovableObject *pMovableObject );
+
+        void renderPassPrepare( bool casterPass, bool dualParaboloid );
 
         void render( RenderSystem *rs, uint8 firstRq, uint8 lastRq,
                      bool casterPass, bool dualParaboloid );

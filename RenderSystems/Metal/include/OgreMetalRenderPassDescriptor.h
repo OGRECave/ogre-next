@@ -82,6 +82,11 @@ namespace Ogre
         MetalDevice         *mDevice;
         MetalRenderSystem   *mRenderSystem;
 
+#if OGRE_DEBUG_MODE
+        void *mCallstackBacktrace[32];
+        size_t mNumCallstackEntries;
+#endif
+
         void checkRenderWindowStatus(void);
         void calculateSharedKey(void);
 
@@ -97,6 +102,7 @@ namespace Ogre
         /// If using MRT, each colour is evaluated independently (only the ones marked
         /// as clear will be cleared).
         uint32 checkForClearActions( MetalRenderPassDescriptor *other ) const;
+        bool cannotInterruptRendering(void) const;
 
     public:
         MetalRenderPassDescriptor( MetalDevice *device, MetalRenderSystem *renderSystem );

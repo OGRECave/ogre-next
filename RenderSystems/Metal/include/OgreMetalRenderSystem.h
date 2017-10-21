@@ -236,6 +236,7 @@ namespace Ogre
                                                 const Vector4 &scissors,
                                                 bool overlaysEnabled,
                                                 bool warnIfRtvWasFlushed );
+        void executeRenderPassDescriptorDelayedActions( bool officialCall );
         virtual void executeRenderPassDescriptorDelayedActions(void);
         inline void endRenderPassDescriptor( bool isInterruptingRender );
         virtual void endRenderPassDescriptor(void);

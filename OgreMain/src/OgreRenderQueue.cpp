@@ -293,6 +293,21 @@ namespace Ogre
                     QueuedRenderable( hash, pRend, pMovableObject ) );
     }
     //-----------------------------------------------------------------------
+    void RenderQueue::renderPassPrepare( bool casterPass, bool dualParaboloid )
+    {
+        OgreProfileGroup( "Hlms Pass preparation", OGREPROF_RENDERING );
+
+        for( size_t i=0; i<HLMS_MAX; ++i )
+        {
+            Hlms *hlms = mHlmsManager->getHlms( static_cast<HlmsTypes>( i ) );
+            if( hlms )
+            {
+                mPassCache[i] = hlms->preparePassHash( mSceneManager->getCurrentShadowNode(), casterPass,
+                                                       dualParaboloid, mSceneManager );
+            }
+        }
+    }
+    //-----------------------------------------------------------------------
     void RenderQueue::render( RenderSystem *rs, uint8 firstRq, uint8 lastRq,
                               bool casterPass, bool dualParaboloid )
     {
@@ -321,18 +336,6 @@ namespace Ogre
                     numNeededDraws += itor->q.size();
                     ++itor;
                 }
-            }
-        }
-
-        HlmsCache passCache[HLMS_MAX];
-
-        for( size_t i=0; i<HLMS_MAX; ++i )
-        {
-            Hlms *hlms = mHlmsManager->getHlms( static_cast<HlmsTypes>( i ) );
-            if( hlms )
-            {
-                passCache[i] = hlms->preparePassHash( mSceneManager->getCurrentShadowNode(), casterPass,
-                                                      dualParaboloid, mSceneManager );
             }
         }
 
@@ -420,7 +423,7 @@ namespace Ogre
                     rs->_startLegacyV1Rendering();
                     mLastVaoName = 0;
                 }
-                renderES2( rs, casterPass, dualParaboloid, passCache, mRenderQueues[i] );
+                renderES2( rs, casterPass, dualParaboloid, mPassCache, mRenderQueues[i] );
             }
             else if( mRenderQueues[i].mMode == V1_FAST )
             {
@@ -430,11 +433,11 @@ namespace Ogre
                                                                     v1::CbStartV1LegacyRendering();
                     mLastVaoName = 0;
                 }
-                renderGL3V1( casterPass, dualParaboloid, passCache, mRenderQueues[i] );
+                renderGL3V1( casterPass, dualParaboloid, mPassCache, mRenderQueues[i] );
             }
             else if( numNeededDraws > 0 /*&& mRenderQueues[i].mMode == FAST*/ )
             {
-                indirectDraw = renderGL3( casterPass, dualParaboloid, passCache, mRenderQueues[i],
+                indirectDraw = renderGL3( casterPass, dualParaboloid, mPassCache, mRenderQueues[i],
                                           indirectBuffer, indirectDraw, startIndirectDraw );
             }
         }

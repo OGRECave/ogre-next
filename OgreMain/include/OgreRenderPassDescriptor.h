@@ -187,9 +187,10 @@ namespace Ogre
         /// so we have required information by some passes.
         /// Examples of these are stencil passes.
         public: bool            mInformationOnly;
-    protected:
 
+    public:
         void checkWarnIfRtvWasFlushed( uint32 entriesToFlush );
+    protected:
         void checkRequiresTextureFlipping(void);
         virtual void colourEntriesModified(void);
 
