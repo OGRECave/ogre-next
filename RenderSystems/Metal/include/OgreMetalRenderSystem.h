@@ -189,9 +189,6 @@ namespace Ogre
 
         virtual void _setTexture( size_t unit, TextureGpu *texPtr );
         virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set );
-    protected:
-        void setTextures( uint32 slotStart, const MetalDescriptorSetTexture *metalSet );
-    public:
         virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture2 *set );
         virtual void _setSamplers( uint32 slotStart, const DescriptorSetSampler *set );
         virtual void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set );

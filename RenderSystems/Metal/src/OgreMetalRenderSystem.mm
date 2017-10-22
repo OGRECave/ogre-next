@@ -432,13 +432,47 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalRenderSystem::flushUAVs(void)
     {
-        if( mUavRenderingDirty )
+        if( mUavRenderingDirty && mActiveRenderEncoder )
         {
             if( mUavRenderingDescSet )
             {
                 MetalDescriptorSetTexture *metalSet =
                         reinterpret_cast<MetalDescriptorSetTexture*>( mUavRenderingDescSet->mRsData );
-                setTextures( OGRE_METAL_UAV_SLOT_START /*+ mUavStartingSlot*/, metalSet );
+
+                //Bind textures
+                {
+                    FastArray<MetalTexRegion>::const_iterator itor = metalSet->textures.begin();
+                    FastArray<MetalTexRegion>::const_iterator end  = metalSet->textures.end();
+
+                    while( itor != end )
+                    {
+                        NSRange range = itor->range;
+                        range.location += /*mUavStartingSlot +*/ OGRE_METAL_UAV_SLOT_START;
+                        [mActiveRenderEncoder setVertexTextures:itor->textures withRange:range];
+                        [mActiveRenderEncoder setFragmentTextures:itor->textures withRange:range];
+                        ++itor;
+                    }
+                }
+
+                //Bind buffers
+                {
+                    FastArray<MetalBufferRegion>::const_iterator itor = metalSet->buffers.begin();
+                    FastArray<MetalBufferRegion>::const_iterator end  = metalSet->buffers.end();
+
+                    while( itor != end )
+                    {
+                        NSRange range = itor->range;
+                        range.location += /*mUavStartingSlot +*/ OGRE_METAL_UAV_SLOT_START;
+
+                        [mActiveRenderEncoder setVertexBuffers:itor->buffers
+                                                       offsets:itor->offsets
+                                                     withRange:range];
+                        [mActiveRenderEncoder setFragmentBuffers:itor->buffers
+                                                         offsets:itor->offsets
+                                                       withRange:range];
+                        ++itor;
+                    }
+                }
             }
             mUavRenderingDirty = false;
         }
@@ -495,8 +529,11 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::setTextures( uint32 slotStart, const MetalDescriptorSetTexture *metalSet )
+    void MetalRenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture2 *set )
     {
+        MetalDescriptorSetTexture *metalSet =
+                reinterpret_cast<MetalDescriptorSetTexture*>( set->mRsData );
+
         //Bind textures
         {
             FastArray<MetalTexRegion>::const_iterator itor = metalSet->textures.begin();
@@ -558,13 +595,6 @@ namespace Ogre
                 ++itor;
             }
         }
-    }
-    //-------------------------------------------------------------------------
-    void MetalRenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture2 *set )
-    {
-        MetalDescriptorSetTexture *metalSet =
-                reinterpret_cast<MetalDescriptorSetTexture*>( set->mRsData );
-        setTextures( slotStart, metalSet );
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_setSamplers( uint32 slotStart, const DescriptorSetSampler *set )
@@ -840,10 +870,10 @@ namespace Ogre
             if (mStencilEnabled)
                 [mActiveRenderEncoder setStencilReferenceValue:mStencilRefValue];
 
-            flushUAVs();
-
             mInterruptedRenderCommandEncoder = false;
         }
+
+        flushUAVs();
 
         //If we flushed, viewport and scissor settings got reset.
         if( !mCurrentRenderViewport.coversEntireTarget() || (mVpChanged && !mEntriesToFlush) )
@@ -1362,6 +1392,7 @@ namespace Ogre
         if( callEndRenderPassDesc )
             endRenderPassDescriptor( true );
 
+        mUavRenderingDirty = true;
         mActiveRenderEncoder = 0;
         mPso = 0;
     }
