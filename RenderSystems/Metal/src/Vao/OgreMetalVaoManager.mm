@@ -970,6 +970,8 @@ namespace Ogre
                 ++itor;
             }
         }
+
+        mFrameCount += mDynamicBufferMultiplier;
     }
     //-----------------------------------------------------------------------------------
     uint8 MetalVaoManager::waitForTailFrameToFinish(void)
@@ -990,6 +992,7 @@ namespace Ogre
         else if( mFrameCount - frameCount <= mDynamicBufferMultiplier )
         {
             mDevice->stall();
+            //"mFrameCount += mDynamicBufferMultiplier" is already handled in _notifyDeviceStalled;
         }
         else
         {

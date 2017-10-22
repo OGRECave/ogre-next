@@ -1508,6 +1508,7 @@ namespace Ogre
             waitFor( fence );
             fence->Release();
             fence = 0;
+            mFrameCount += mDynamicBufferMultiplier;
         }
         else if( mFrameCount - frameCount <= mDynamicBufferMultiplier )
         {

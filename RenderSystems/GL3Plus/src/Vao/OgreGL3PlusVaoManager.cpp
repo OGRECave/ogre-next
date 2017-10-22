@@ -1222,6 +1222,8 @@ namespace Ogre
                     OCGE( glDeleteSync( *itor ) );
                 ++itor;
             }
+
+            mFrameCount += mDynamicBufferMultiplier;
         }
         else if( mFrameCount - frameCount <= mDynamicBufferMultiplier )
         {
