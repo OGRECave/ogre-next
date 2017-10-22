@@ -1281,6 +1281,8 @@ namespace Ogre
         if( consumedBytes + requiredSize < mStagingTextureMaxBudgetBytes )
             return 0; //We are OK, below limits
 
+        LogManager::getSingleton().logMessage( "Texture memory budget exceeded. Stalling GPU." );
+
         set<uint32>::type waitedFrames;
 
         //Before freeing memory, check if we can make some of
@@ -1314,6 +1316,8 @@ namespace Ogre
 
         if( bestCandidate == end )
         {
+            LogManager::getSingleton().logMessage( "Stalling was not enough. Freeing memory." );
+
             //Could not find any best candidate even after stalling.
             //Start deleting staging textures until we've freed enough space.
             itor = mAvailableStagingTextures.begin();
@@ -1391,7 +1395,7 @@ namespace Ogre
 
             //They're kept in order.
             while( itor != end &&
-                   (*itor)->getLastFrameUsed() - mVaoManager->getFrameCount() > numFramesThreshold )
+                   mVaoManager->getFrameCount() - (*itor)->getLastFrameUsed() > numFramesThreshold )
             {
                 destroyStagingTextureImpl( *itor );
                 delete *itor;
