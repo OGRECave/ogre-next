@@ -807,7 +807,7 @@ namespace Ogre
             while( itor != end )
             {
                 NSRange range = itor->range;
-                range.location += slotStart;
+                range.location += slotStart + OGRE_METAL_CS_UAV_SLOT_START;
                 [computeEncoder setTextures:itor->textures withRange:range];
                 ++itor;
             }
