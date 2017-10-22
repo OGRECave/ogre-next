@@ -323,11 +323,17 @@ namespace Ogre
         @remarks
             We inform all connected nodes and passes related to us of RenderTargets/Textures
             that may have been recreated (pointers could become danlging otherwise).
+        @par
+            This is divided in two steps: recreateResizableTextures01 & recreateResizableTextures02
+            since in some cases in RenderPassDescriptor, setting up MRT and depth textures
+            requires all textures to be up to date, otherwise validation errors would occur
+            since we'll have partial data (e.g. MRT 0 is 1024x768 while MRT 1 is 800x600)
         @param finalTarget
             The Final Target (i.e. RenderWindow) from which we'll base our local textures'
             resolution.
         */
-        virtual void finalTargetResized( const TextureGpu *finalTarget );
+        virtual void finalTargetResized01( const TextureGpu *finalTarget );
+        virtual void finalTargetResized02( const TextureGpu *finalTarget );
 
         /// @copydoc CompositorWorkspace::resetAllNumPassesLeft
         void resetAllNumPassesLeft(void);

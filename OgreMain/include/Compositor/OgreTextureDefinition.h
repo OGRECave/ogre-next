@@ -404,7 +404,12 @@ namespace Ogre
         static void destroyTextures( CompositorChannelVec &inOutTexContainer, RenderSystem *renderSys );
 
         /** Destroys & recreates only the textures that depend on the main RT
-            (i.e. the RenderWindow) resolution
+            (e.g. the Render Window) resolution.
+        @remarks
+            This is divided in two steps: recreateResizableTextures01 & recreateResizableTextures02
+            since in some cases in RenderPassDescriptor, setting up MRT and depth textures
+            requires all textures to be up to date, otherwise validation errors would occur
+            since we'll have partial data (e.g. MRT 0 is 1024x768 while MRT 1 is 800x600)
         @param textureDefs
             Array of texture definitions, so we know which ones depend on main RT's resolution
         @param inOutTexContainer
@@ -414,17 +419,22 @@ namespace Ogre
             (eg. when using auto width & height, or fsaa settings)
         @param renderSys
             The RenderSystem to use
+        */
+        static void recreateResizableTextures01( const TextureDefinitionVec &textureDefs,
+                                                 CompositorChannelVec &inOutTexContainer,
+                                                 const TextureGpu *finalTarget );
+        /** See recreateResizableTextures01
+            Updates involved RenderPassDescriptors.
         @param connectedNodes
             Array of connected nodes that may be using our textures and need to be notified.
         @param passes
             Array of Compositor Passes which may contain the texture being recreated
             When the pointer is null, we don't iterate through it.
         */
-        static void recreateResizableTextures( const TextureDefinitionVec &textureDefs,
-                                               CompositorChannelVec &inOutTexContainer,
-                                               const TextureGpu *finalTarget,
-                                               const CompositorNodeVec &connectedNodes,
-                                               const CompositorPassVec *passes );
+        static void recreateResizableTextures02( const TextureDefinitionVec &textureDefs,
+                                                 CompositorChannelVec &inOutTexContainer,
+                                                 const CompositorNodeVec &connectedNodes,
+                                                 const CompositorPassVec *passes );
 
 
         /////////////////////////////////////////////////////////////////////////////////

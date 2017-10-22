@@ -227,7 +227,6 @@ compositor_node_shadow ScreenSpaceReflectionsShadowNode
 		pass clear
 		{
 			colour_value 1 1 1 1
-			non_tilers_only yes
 		}
 	}
 
@@ -237,11 +236,6 @@ compositor_node_shadow ScreenSpaceReflectionsShadowNode
 		{
 			pass render_scene
 			{
-				load
-				{
-					all				clear_on_tilers
-					clear_colour	1 1 1 1
-				}
 			}
 		}
 	}

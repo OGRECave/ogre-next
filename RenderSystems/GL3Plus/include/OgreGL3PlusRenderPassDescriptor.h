@@ -110,13 +110,11 @@ namespace Ogre
         virtual void setClearColour( uint8 idx, const ColourValue &clearColour );
         virtual void setClearColour( const ColourValue &clearColour );
 
-        uint32 willSwitchTo( GL3PlusRenderPassDescriptor *newDesc, bool viewportChanged,
-                             bool warnIfRtvWasFlushed ) const;
+        uint32 willSwitchTo( GL3PlusRenderPassDescriptor *newDesc, bool warnIfRtvWasFlushed ) const;
 
         void performLoadActions( uint8 blendChannelMask, bool depthWrite, uint32 stencilWriteMask,
                                  uint32 entriesToFlush );
-        void performStoreActions( bool hasArbInvalidateSubdata, uint32 x, uint32 y,
-                                  uint32 width, uint32 height, uint32 entriesToFlush );
+        void performStoreActions( bool hasArbInvalidateSubdata, uint32 entriesToFlush );
     };
 
     /** @} */

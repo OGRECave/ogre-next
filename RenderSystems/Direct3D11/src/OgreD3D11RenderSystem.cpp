@@ -1659,11 +1659,11 @@ namespace Ogre
         uint32 entriesToFlush = 0;
         if( currPassDesc )
         {
-            entriesToFlush = currPassDesc->willSwitchTo( newPassDesc, vpChanged, warnIfRtvWasFlushed );
+            entriesToFlush = currPassDesc->willSwitchTo( newPassDesc, warnIfRtvWasFlushed );
 
             if( entriesToFlush != 0 )
             {
-                currPassDesc->performStoreActions( oldX, oldY, oldWidth, oldHeight, entriesToFlush );
+                currPassDesc->performStoreActions( entriesToFlush );
 
                 //Set all textures to 0 to prevent the runtime from thinkin we might
                 //be sampling from the render target (common when doing shadow map
@@ -1711,15 +1711,9 @@ namespace Ogre
     {
         if( mCurrentRenderPassDescriptor )
         {
-            uint32 x, y, w, h;
-            w = mCurrentRenderViewport.getActualWidth();
-            h = mCurrentRenderViewport.getActualHeight();
-            x = mCurrentRenderViewport.getActualLeft();
-            y = mCurrentRenderViewport.getActualTop();
-
             D3D11RenderPassDescriptor *passDesc =
                     static_cast<D3D11RenderPassDescriptor*>( mCurrentRenderPassDescriptor );
-            passDesc->performStoreActions( x, y, w, h, RenderPassDescriptor::All );
+            passDesc->performStoreActions( RenderPassDescriptor::All );
         }
 
         ID3D11DeviceContextN *context = mDevice.GetImmediateContext();

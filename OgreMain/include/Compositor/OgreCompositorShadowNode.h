@@ -335,7 +335,7 @@ namespace Ogre
         void setStaticShadowMapDirty( size_t shadowMapIdx, bool includeLinked=true );
 
         /// @copydoc CompositorNode::finalTargetResized
-        virtual void finalTargetResized( const TextureGpu *finalTarget );
+        virtual void finalTargetResized01( const TextureGpu *finalTarget );
     };
 
     /** @} */

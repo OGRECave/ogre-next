@@ -985,9 +985,9 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorShadowNode::finalTargetResized( const TextureGpu *finalTarget )
+    void CompositorShadowNode::finalTargetResized01( const TextureGpu *finalTarget )
     {
-        CompositorNode::finalTargetResized( finalTarget );
+        CompositorNode::finalTargetResized01( finalTarget );
 
         mContiguousShadowMapTex.clear();
 

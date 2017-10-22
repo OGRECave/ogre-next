@@ -948,26 +948,11 @@ namespace Ogre {
 
         flushUAVs();
 
-        const int oldWidth = mCurrentRenderViewport.getActualWidth();
-        const int oldHeight = mCurrentRenderViewport.getActualHeight();
-        const int oldX = mCurrentRenderViewport.getActualLeft();
-        const int oldY = mCurrentRenderViewport.getActualTop();
-
         GL3PlusRenderPassDescriptor *currPassDesc =
                 static_cast<GL3PlusRenderPassDescriptor*>( mCurrentRenderPassDescriptor );
 
         RenderSystem::beginRenderPassDescriptor( desc, anyTarget, viewportSize, scissors,
                                                  overlaysEnabled, warnIfRtvWasFlushed );
-
-        GLsizei x, y, w, h;
-
-        // Calculate the new "lower-left" corner of the viewport to compare with the old one
-        w = mCurrentRenderViewport.getActualWidth();
-        h = mCurrentRenderViewport.getActualHeight();
-        x = mCurrentRenderViewport.getActualLeft();
-        y = mCurrentRenderViewport.getActualTop();
-
-        const bool vpChanged = oldX != x || oldY != y || oldWidth != w || oldHeight != h;
 
         GL3PlusRenderPassDescriptor *newPassDesc =
                 static_cast<GL3PlusRenderPassDescriptor*>( desc );
@@ -978,28 +963,41 @@ namespace Ogre {
         uint32 entriesToFlush = 0;
         if( currPassDesc )
         {
-            entriesToFlush = currPassDesc->willSwitchTo( newPassDesc, vpChanged, warnIfRtvWasFlushed );
+            entriesToFlush = currPassDesc->willSwitchTo( newPassDesc, warnIfRtvWasFlushed );
 
             if( entriesToFlush != 0 )
-            {
-                currPassDesc->performStoreActions( mHasArbInvalidateSubdata, oldX, oldY,
-                                                   oldWidth, oldHeight, entriesToFlush );
-            }
+                currPassDesc->performStoreActions( mHasArbInvalidateSubdata, entriesToFlush );
         }
         else
         {
             entriesToFlush = RenderPassDescriptor::All;
         }
 
-        if( vpChanged )
+        if( entriesToFlush )
         {
-            if( !desc->requiresTextureFlipping() )
-            {
-                // Convert "upper-left" corner to "lower-left"
-                y = anyTarget->getHeight() - h - y;
-            }
-            OCGE( glViewport( x, y, w, h ) );
+            //If we clear, we need the whole viewport
+            const GLsizei w = static_cast<GLsizei>( anyTarget->getWidth() );
+            const GLsizei h = static_cast<GLsizei>( anyTarget->getHeight() );
+            OCGE( glViewport( 0, 0, w, h ) );
+            OCGE( glScissor( 0, 0, w, h ) );
         }
+
+        newPassDesc->performLoadActions( mBlendChannelMask, mDepthWrite,
+                                         mStencilParams.writeMask, entriesToFlush );
+
+        GLsizei x, y, w, h;
+        w = mCurrentRenderViewport.getActualWidth();
+        h = mCurrentRenderViewport.getActualHeight();
+        x = mCurrentRenderViewport.getActualLeft();
+        y = mCurrentRenderViewport.getActualTop();
+
+        if( mCurrentRenderViewport.coversEntireTarget() )
+        if( !desc->requiresTextureFlipping() )
+        {
+            // Convert "upper-left" corner to "lower-left"
+            y = anyTarget->getHeight() - h - y;
+        }
+        OCGE( glViewport( x, y, w, h ) );
 
         w = mCurrentRenderViewport.getScissorActualWidth();
         h = mCurrentRenderViewport.getScissorActualHeight();
@@ -1014,24 +1012,15 @@ namespace Ogre {
 
         // Configure the viewport clipping
         OCGE( glScissor( x, y, w, h ) );
-
-        newPassDesc->performLoadActions( mBlendChannelMask, mDepthWrite,
-                                         mStencilParams.writeMask, entriesToFlush );
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusRenderSystem::endRenderPassDescriptor(void)
     {
         if( mCurrentRenderPassDescriptor )
         {
-            uint32 x, y, w, h;
-            w = mCurrentRenderViewport.getActualWidth();
-            h = mCurrentRenderViewport.getActualHeight();
-            x = mCurrentRenderViewport.getActualLeft();
-            y = mCurrentRenderViewport.getActualTop();
-
             GL3PlusRenderPassDescriptor *passDesc =
                     static_cast<GL3PlusRenderPassDescriptor*>( mCurrentRenderPassDescriptor );
-            passDesc->performStoreActions( mHasArbInvalidateSubdata, x, y, w, h, RenderPassDescriptor::All );
+            passDesc->performStoreActions( mHasArbInvalidateSubdata, RenderPassDescriptor::All );
         }
         OCGE( glBindFramebuffer( GL_FRAMEBUFFER, 0 ) );
 

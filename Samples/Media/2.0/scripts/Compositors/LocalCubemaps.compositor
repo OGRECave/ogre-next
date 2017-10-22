@@ -174,7 +174,6 @@ compositor_node_shadow LocalCubemapsShadowNode
 		pass clear
 		{
 			colour_value 1 1 1 1
-			non_tilers_only yes
 		}
 	}
 
@@ -184,11 +183,6 @@ compositor_node_shadow LocalCubemapsShadowNode
 		{
 			pass render_scene
 			{
-				load
-				{
-					all				clear_on_tilers
-					clear_colour	1 1 1 1
-				}
 			}
 		}
 	}
@@ -199,11 +193,6 @@ compositor_node_shadow LocalCubemapsShadowNode
 		{
 			pass render_scene
 			{
-				load
-				{
-					all				clear_on_tilers
-					clear_colour	1 1 1 1
-				}
 			}
 		}
 	}
@@ -223,7 +212,6 @@ compositor_node_shadow LocalCubemapsShadowNode
 			{
 				pass render_quad
 				{
-					load { all dont_care }
 					material Ogre/DPSM/CubeToDpsm
 					input 0 tmpCubemap
 				}

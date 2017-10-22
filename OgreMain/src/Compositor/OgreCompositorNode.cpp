@@ -898,8 +898,20 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CompositorNode::finalTargetResized( const TextureGpu *finalTarget )
+    void CompositorNode::finalTargetResized01( const TextureGpu *finalTarget )
     {
+        TextureDefinitionBase::recreateResizableTextures01( mDefinition->mLocalTextureDefs,
+                                                            mLocalTextures, finalTarget );
+    }
+    //-----------------------------------------------------------------------------------
+    void CompositorNode::finalTargetResized02( const TextureGpu *finalTarget )
+    {
+        TextureDefinitionBase::recreateResizableTextures02( mDefinition->mLocalTextureDefs,
+                                                            mLocalTextures, mConnectedNodes, &mPasses );
+        TextureDefinitionBase::recreateResizableBuffers( mDefinition->mLocalBufferDefs, mBuffers,
+                                                         finalTarget, mRenderSystem, mConnectedNodes,
+                                                         &mPasses );
+
         CompositorPassVec::const_iterator passIt = mPasses.begin();
         CompositorPassVec::const_iterator passEn = mPasses.end();
         while( passIt != passEn )
@@ -907,13 +919,6 @@ namespace Ogre
             (*passIt)->notifyRecreated( finalTarget );
             ++passIt;
         }
-
-        TextureDefinitionBase::recreateResizableTextures( mDefinition->mLocalTextureDefs, mLocalTextures,
-                                                          finalTarget, mConnectedNodes,
-                                                          &mPasses );
-        TextureDefinitionBase::recreateResizableBuffers( mDefinition->mLocalBufferDefs, mBuffers,
-                                                         finalTarget, mRenderSystem, mConnectedNodes,
-                                                         &mPasses );
     }
     //-----------------------------------------------------------------------------------
     void CompositorNode::resetAllNumPassesLeft(void)

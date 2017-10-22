@@ -396,11 +396,9 @@ namespace Ogre
         inOutTexContainer.clear();
     }
     //-----------------------------------------------------------------------------------
-    void TextureDefinitionBase::recreateResizableTextures( const TextureDefinitionVec &textureDefs,
-                                                           CompositorChannelVec &inOutTexContainer,
-                                                           const TextureGpu *finalTarget,
-                                                           const CompositorNodeVec &connectedNodes,
-                                                           const CompositorPassVec *passes )
+    void TextureDefinitionBase::recreateResizableTextures01( const TextureDefinitionVec &textureDefs,
+                                                             CompositorChannelVec &inOutTexContainer,
+                                                             const TextureGpu *finalTarget )
     {
         TextureDefinitionVec::const_iterator itor = textureDefs.begin();
         TextureDefinitionVec::const_iterator end  = textureDefs.end();
@@ -413,7 +411,26 @@ namespace Ogre
             {
                 (*itorTex)->_transitionTo( GpuResidency::OnStorage, (uint8*)0 );
                 setupTexture( *itorTex, *itor, finalTarget );
+            }
+            ++itorTex;
+            ++itor;
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureDefinitionBase::recreateResizableTextures02( const TextureDefinitionVec &textureDefs,
+                                                             CompositorChannelVec &inOutTexContainer,
+                                                             const CompositorNodeVec &connectedNodes,
+                                                             const CompositorPassVec *passes )
+    {
+        TextureDefinitionVec::const_iterator itor = textureDefs.begin();
+        TextureDefinitionVec::const_iterator end  = textureDefs.end();
 
+        CompositorChannelVec::iterator itorTex = inOutTexContainer.begin();
+
+        while( itor != end )
+        {
+            if( (itor->width == 0 || itor->height == 0) )
+            {
                 if( passes )
                 {
                     CompositorPassVec::const_iterator passIt = passes->begin();

@@ -735,7 +735,15 @@ namespace Ogre
                 while( itor != end )
                 {
                     CompositorNode *node = *itor;
-                    node->finalTargetResized( finalTarget );
+                    node->finalTargetResized01( finalTarget );
+                    ++itor;
+                }
+
+                itor = mNodeSequence.begin();
+                while( itor != end )
+                {
+                    CompositorNode *node = *itor;
+                    node->finalTargetResized02( finalTarget );
                     ++itor;
                 }
             }
@@ -747,7 +755,15 @@ namespace Ogre
                 while( itor != end )
                 {
                     CompositorShadowNode *node = *itor;
-                    node->finalTargetResized( finalTarget );
+                    node->finalTargetResized01( finalTarget );
+                    ++itor;
+                }
+
+                itor = mShadowNodes.begin();
+                while( itor != end )
+                {
+                    CompositorShadowNode *node = *itor;
+                    node->finalTargetResized02( finalTarget );
                     ++itor;
                 }
             }
@@ -756,9 +772,10 @@ namespace Ogre
             allNodes.reserve( mNodeSequence.size() + mShadowNodes.size() );
             allNodes.insert( allNodes.end(), mNodeSequence.begin(), mNodeSequence.end() );
             allNodes.insert( allNodes.end(), mShadowNodes.begin(), mShadowNodes.end() );
-            TextureDefinitionBase::recreateResizableTextures( mDefinition->mLocalTextureDefs,
-                                                              mGlobalTextures, finalTarget,
-                                                              allNodes, 0 );
+            TextureDefinitionBase::recreateResizableTextures01( mDefinition->mLocalTextureDefs,
+                                                                mGlobalTextures, finalTarget );
+            TextureDefinitionBase::recreateResizableTextures02( mDefinition->mLocalTextureDefs,
+                                                                mGlobalTextures, allNodes, 0 );
             TextureDefinitionBase::recreateResizableBuffers( mDefinition->mLocalBufferDefs,
                                                              mGlobalBuffers, finalTarget,
                                                              mRenderSys, allNodes, 0 );

@@ -64,7 +64,6 @@ compositor_node_shadow ShadowMapDebuggingShadowNode
 		pass clear
 		{
 			colour_value 1 1 1 1
-			non_tilers_only yes
 		}
 	}
 
@@ -74,11 +73,6 @@ compositor_node_shadow ShadowMapDebuggingShadowNode
 		{
 			pass render_scene
 			{
-				load
-				{
-					all				clear_on_tilers
-					clear_colour	1 1 1 1
-				}
 			}
 		}
 	}
@@ -89,11 +83,6 @@ compositor_node_shadow ShadowMapDebuggingShadowNode
 		{
 			pass render_scene
 			{
-				load
-				{
-					all				clear_on_tilers
-					clear_colour	1 1 1 1
-				}
 			}
 		}
 	}
@@ -113,7 +102,6 @@ compositor_node_shadow ShadowMapDebuggingShadowNode
 			{
 				pass render_quad
 				{
-					load { all dont_care }
 					material Ogre/DPSM/CubeToDpsm
 					input 0 tmpCubemap
 				}
@@ -199,7 +187,6 @@ abstract compositor_node_shadow ShadowMapDebuggingEsmShadowNodeBase
 		pass clear
 		{
 			colour_value 1 1 1 1
-			non_tilers_only yes
 		}
 	}
 
@@ -209,11 +196,6 @@ abstract compositor_node_shadow ShadowMapDebuggingEsmShadowNodeBase
 		{
 			pass render_scene
 			{
-				load
-				{
-					all				clear_on_tilers
-					clear_colour	1 1 1 1
-				}
 				store
 				{
 					depth	dont_care
@@ -229,11 +211,6 @@ abstract compositor_node_shadow ShadowMapDebuggingEsmShadowNodeBase
 		{
 			pass render_scene
 			{
-				load
-				{
-					all				clear_on_tilers
-					clear_colour	1 1 1 1
-				}
 				store
 				{
 					depth	dont_care
@@ -258,7 +235,11 @@ abstract compositor_node_shadow ShadowMapDebuggingEsmShadowNodeBase
 			{
 				pass render_quad
 				{
-					load { all dont_care }
+					store
+					{
+						depth	dont_care
+						stencil	dont_care
+					}
 					material Ogre/DPSM/CubeToDpsmColour
 					input 0 tmpCubemap
 				}

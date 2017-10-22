@@ -381,12 +381,11 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     uint32 D3D11RenderPassDescriptor::willSwitchTo( D3D11RenderPassDescriptor *newDesc,
-                                                    bool viewportChanged,
                                                     bool warnIfRtvWasFlushed ) const
     {
         uint32 entriesToFlush = 0;
 
-        if( viewportChanged || !newDesc ||
+        if( !newDesc ||
             this->mSharedFboItor != newDesc->mSharedFboItor ||
             this->mInformationOnly || newDesc->mInformationOnly )
         {
@@ -432,20 +431,7 @@ namespace Ogre
                         clearColour[1] = mColour[i].clearColour.g;
                         clearColour[2] = mColour[i].clearColour.b;
                         clearColour[3] = mColour[i].clearColour.a;
-                        if( mColour[i].loadAction == LoadAction::ClearOnTilers )
-                        {
-                            if( context1 )
-                            {
-                                RECT rc;
-                                rc.left     = viewport->getActualLeft();
-                                rc.right    = viewport->getActualLeft() + viewport->getActualWidth();
-                                rc.top      = viewport->getActualTop();
-                                rc.bottom   = viewport->getActualTop() + viewport->getActualHeight();
-                                context1->ClearView( mColourRtv[i], clearColour, &rc, 1u );
-                            }
-                        }
-                        else
-                            context->ClearRenderTargetView( mColourRtv[i], clearColour );
+                        context->ClearRenderTargetView( mColourRtv[i], clearColour );
                     }
                     else if( mColour[i].loadAction == LoadAction::DontCare )
                     {
@@ -459,52 +445,26 @@ namespace Ogre
         if( mDepthStencilRtv &&
             (entriesToFlush & (RenderPassDescriptor::Depth|RenderPassDescriptor::Stencil)) )
         {
-            if( !isTiler || mHasStencilFormat )
+            //Cannot discard depth & stencil if we're being asked to keep stencil around
+            if( mDepth.loadAction == LoadAction::DontCare &&
+                (mStencil.loadAction == LoadAction::DontCare ||
+                 mStencil.loadAction == LoadAction::Clear ||
+                 !mHasStencilFormat) )
             {
-                //We must behave like a non-tiler if this depth buffer has stencil.
-
-                //Cannot discard depth & stencil if we're being asked to keep stencil around
-                if( mDepth.loadAction == LoadAction::DontCare &&
-                    (mStencil.loadAction == LoadAction::DontCare ||
-                     mStencil.loadAction == LoadAction::Clear ||
-                     !mHasStencilFormat) )
-                {
-                    if( context1 )
-                        context1->DiscardView( mDepthStencilRtv );
-                }
-
-                if( mDepth.loadAction == LoadAction::Clear ||
-                    mStencil.loadAction == LoadAction::Clear )
-                {
-                    UINT flags = 0;
-                    if( mDepth.loadAction == LoadAction::Clear )
-                        flags |= D3D11_CLEAR_DEPTH;
-                    if( mStencil.loadAction == LoadAction::Clear )
-                        flags |= D3D11_CLEAR_STENCIL;
-                    context->ClearDepthStencilView( mDepthStencilRtv, flags,
-                                                    mDepth.clearDepth, mStencil.clearStencil );
-                }
+                if( context1 )
+                    context1->DiscardView( mDepthStencilRtv );
             }
-            else if( isTiler && !mHasStencilFormat )
+
+            if( mDepth.loadAction == LoadAction::Clear ||
+                mStencil.loadAction == LoadAction::Clear )
             {
-                if( mDepth.loadAction == LoadAction::Clear ||
-                    mDepth.loadAction == LoadAction::ClearOnTilers )
-                {
-                    FLOAT clearColour[4];
-                    clearColour[0] = mDepth.clearDepth;
-                    clearColour[1] = 0;
-                    clearColour[2] = 0;
-                    clearColour[3] = 0;
-                    if( context1 )
-                    {
-                        RECT rc;
-                        rc.left     = viewport->getActualLeft();
-                        rc.right    = viewport->getActualLeft() + viewport->getActualWidth();
-                        rc.top      = viewport->getActualTop();
-                        rc.bottom   = viewport->getActualTop() + viewport->getActualHeight();
-                        context1->ClearView( mDepthStencilRtv, clearColour, &rc, 1u );
-                    }
-                }
+                UINT flags = 0;
+                if( mDepth.loadAction == LoadAction::Clear )
+                    flags |= D3D11_CLEAR_DEPTH;
+                if( mStencil.loadAction == LoadAction::Clear )
+                    flags |= D3D11_CLEAR_STENCIL;
+                context->ClearDepthStencilView( mDepthStencilRtv, flags,
+                                                mDepth.clearDepth, mStencil.clearStencil );
             }
         }
 
@@ -521,9 +481,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void D3D11RenderPassDescriptor::performStoreActions( uint32 x, uint32 y,
-                                                         uint32 width, uint32 height,
-                                                         uint32 entriesToFlush )
+    void D3D11RenderPassDescriptor::performStoreActions( uint32 entriesToFlush )
     {
         if( mInformationOnly )
             return;

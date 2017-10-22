@@ -884,13 +884,10 @@ namespace Ogre
         uint32 entriesToFlush = 0;
         if( currPassDesc )
         {
-            entriesToFlush = currPassDesc->willSwitchTo( newPassDesc, vpChanged, warnIfRtvWasFlushed );
+            entriesToFlush = currPassDesc->willSwitchTo( newPassDesc, warnIfRtvWasFlushed );
 
             if( entriesToFlush != 0 )
-            {
-                currPassDesc->performStoreActions( oldX, oldY, oldWidth, oldHeight,
-                                                   entriesToFlush, false );
-            }
+                currPassDesc->performStoreActions( entriesToFlush, false );
 
             //If rendering was interrupted but we're still rendering to the same
             //RTT, willSwitchTo will have returned 0 and thus we won't perform
@@ -960,7 +957,8 @@ namespace Ogre
             [mActiveRenderEncoder setViewport:mtlVp];
         }
 
-        if( !mCurrentRenderViewport.scissorsMatchViewport() || !mEntriesToFlush )
+        if( (!mCurrentRenderViewport.coversEntireTarget() ||
+             !mCurrentRenderViewport.scissorsMatchViewport()) || !mEntriesToFlush )
         {
             MTLScissorRect scissorRect;
             scissorRect.x       = mCurrentRenderViewport.getScissorActualLeft();
@@ -992,7 +990,7 @@ namespace Ogre
 
             MetalRenderPassDescriptor *passDesc =
                     static_cast<MetalRenderPassDescriptor*>( mCurrentRenderPassDescriptor );
-            passDesc->performStoreActions( x, y, w, h, RenderPassDescriptor::All, isInterruptingRender );
+            passDesc->performStoreActions( RenderPassDescriptor::All, isInterruptingRender );
 
             mEntriesToFlush = 0;
             mVpChanged = false;

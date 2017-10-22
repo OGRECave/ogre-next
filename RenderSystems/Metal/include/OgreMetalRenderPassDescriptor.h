@@ -114,12 +114,10 @@ namespace Ogre
         virtual void setClearDepth( Real clearDepth );
         virtual void setClearStencil( uint32 clearStencil );
 
-        uint32 willSwitchTo( MetalRenderPassDescriptor *newDesc, bool viewportChanged,
-                             bool warnIfRtvWasFlushed ) const;
+        uint32 willSwitchTo( MetalRenderPassDescriptor *newDesc, bool warnIfRtvWasFlushed ) const;
 
         void performLoadActions( MTLRenderPassDescriptor *passDesc, bool renderingWasInterrupted );
-        void performStoreActions( uint32 x, uint32 y, uint32 width, uint32 height,
-                                  uint32 entriesToFlush, bool isInterruptingRendering );
+        void performStoreActions( uint32 entriesToFlush, bool isInterruptingRendering );
     };
 
     /** @} */

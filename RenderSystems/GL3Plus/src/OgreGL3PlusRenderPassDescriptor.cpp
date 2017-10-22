@@ -436,12 +436,11 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     uint32 GL3PlusRenderPassDescriptor::willSwitchTo( GL3PlusRenderPassDescriptor *newDesc,
-                                                      bool viewportChanged,
                                                       bool warnIfRtvWasFlushed ) const
     {
         uint32 entriesToFlush = 0;
 
-        if( viewportChanged || !newDesc ||
+        if( !newDesc ||
             this->mFboName != newDesc->mFboName ||
             this->mInformationOnly || newDesc->mInformationOnly )
         {
@@ -600,8 +599,6 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusRenderPassDescriptor::performStoreActions( bool hasArbInvalidateSubdata,
-                                                           uint32 x, uint32 y,
-                                                           uint32 width, uint32 height,
                                                            uint32 entriesToFlush )
     {
         if( mInformationOnly )
@@ -649,9 +646,13 @@ namespace Ogre
                                                              mColour[i].resolveMipLevel,
                                                              mColour[i].resolveSlice ) );
                         }
+
+                        const uint32 width  = resolveTexture->getWidth();
+                        const uint32 height = resolveTexture->getHeight();
+
                         OCGE( glReadBuffer( GL_COLOR_ATTACHMENT0 + i ) );
                         OCGE( glDrawBuffer( GL_COLOR_ATTACHMENT0 + 0 ) );
-                        OCGE( glBlitFramebuffer( x, y, width, height, x, y, width, height,
+                        OCGE( glBlitFramebuffer( 0, 0, width, height, 0, 0, width, height,
                                                  GL_COLOR_BUFFER_BIT, GL_NEAREST ) );
 
                         if( mColour[i].storeAction == StoreAction::MultisampleResolve )

@@ -268,7 +268,8 @@ namespace Ogre
 
             //iOS_GPUFamily3_v2, OSX_GPUFamily1_v2
             if( mColour[i].storeAction == StoreAction::StoreAndMultisampleResolve &&
-                !mRenderSystem->hasStoreAndMultisampleResolve() )
+                !mRenderSystem->hasStoreAndMultisampleResolve() &&
+                (mColour[i].texture->getMsaa() > 1u && mColour[i].resolveTexture) )
             {
                 //Must emulate the behavior (slower)
                 mColourAttachment[i].storeAction = MTLStoreActionStore;
@@ -444,12 +445,11 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     uint32 MetalRenderPassDescriptor::willSwitchTo( MetalRenderPassDescriptor *newDesc,
-                                                    bool viewportChanged,
                                                     bool warnIfRtvWasFlushed ) const
     {
         uint32 entriesToFlush = 0;
 
-        if( viewportChanged || !newDesc ||
+        if( !newDesc ||
             this->mSharedFboItor != newDesc->mSharedFboItor ||
             this->mInformationOnly || newDesc->mInformationOnly )
         {
@@ -573,9 +573,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void MetalRenderPassDescriptor::performStoreActions( uint32 x, uint32 y,
-                                                         uint32 width, uint32 height,
-                                                         uint32 entriesToFlush,
+    void MetalRenderPassDescriptor::performStoreActions( uint32 entriesToFlush,
                                                          bool isInterruptingRendering )
     {
         if( mInformationOnly )
@@ -625,16 +623,6 @@ namespace Ogre
 
         mDevice->mRenderEncoder =
                 [mDevice->mCurrentCommandBuffer renderCommandEncoderWithDescriptor:passDesc];
-
-        MTLViewport mtlVp;
-        mtlVp.originX   = x;
-        mtlVp.originY   = y;
-        mtlVp.width     = width;
-        mtlVp.height    = height;
-        mtlVp.znear     = 0;
-        mtlVp.zfar      = 1;
-        [mDevice->mRenderEncoder setViewport:mtlVp];
-
         mDevice->endRenderEncoder( false );
     }
     //-----------------------------------------------------------------------------------
