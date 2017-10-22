@@ -86,8 +86,6 @@ namespace Ogre
         mAutoParamsBufferIdx( 0 ),
         mCurrentAutoParamsBufferPtr( 0 ),
         mCurrentAutoParamsBufferSpaceLeft( 0 ),
-        mMaxModifiedUavPlusOne( 0 ),
-        mUavsDirty( false ),
         mNumMRTs( 0 ),
         mCurrentDepthBuffer( 0 ),
         mActiveDevice( 0 ),
@@ -285,8 +283,9 @@ namespace Ogre
         rsc->setCapability( RSC_TILER_CAN_CLEAR_STENCIL_REGION );
 #endif
 
-        //TODO: UAVs
-        //rsc->setCapability(RSC_UAV);
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
+        rsc->setCapability(RSC_UAV);
+#endif
         //rsc->setCapability(RSC_ATOMIC_COUNTERS);
 
         rsc->addShaderProfile( "metal" );
@@ -431,120 +430,18 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::queueBindUAV( uint32 slot, TexturePtr texture,
-                                          ResourceAccess::ResourceAccess access,
-                                          int32 mipmapLevel, int32 textureArrayIndex,
-                                          PixelFormat pixelFormat )
-    {
-        assert( slot < 64 );
-
-        if( !mUavs[slot].buffer && mUavs[slot].texture.isNull() && texture.isNull() )
-            return;
-
-        mUavs[slot].texture = texture;
-        mUavs[slot].buffer  = 0;
-
-        if( !texture.isNull() )
-        {
-            if( !(texture->getUsage() & TU_UAV) )
-            {
-                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                             "Texture " + texture->getName() +
-                             " must have been created with TU_UAV to be bound as UAV",
-                             "MetalRenderSystem::queueBindUAV" );
-            }
-
-            mUavs[slot].textureName = static_cast<MetalTexture*>( texture.get() )->
-                    getTextureForSampling( this );
-        }
-
-        mMaxModifiedUavPlusOne = std::max( mMaxModifiedUavPlusOne, static_cast<uint8>( slot + 1 ) );
-    }
-    //-------------------------------------------------------------------------
-    void MetalRenderSystem::queueBindUAV( uint32 slot, UavBufferPacked *buffer,
-                                          ResourceAccess::ResourceAccess access,
-                                          size_t offset, size_t sizeBytes )
-    {
-        assert( slot < 64 );
-
-        if( mUavs[slot].texture.isNull() && !mUavs[slot].buffer && !buffer )
-            return;
-
-        mUavs[slot].buffer = buffer;
-        mUavs[slot].texture.setNull();
-
-        if( buffer )
-        {
-            mUavs[slot].offset      = offset;
-            //mUavs[slot].sizeBytes   = sizeBytes;
-        }
-
-        mMaxModifiedUavPlusOne = std::max( mMaxModifiedUavPlusOne, static_cast<uint8>( slot + 1 ) );
-        mUavsDirty = true;
-    }
-    //-------------------------------------------------------------------------
-    void MetalRenderSystem::clearUAVs(void)
-    {
-        for( size_t i=0; i<mMaxModifiedUavPlusOne; ++i )
-        {
-            mUavs[i].texture.setNull();
-            mUavs[i].buffer = 0;
-        }
-        mUavsDirty = mMaxModifiedUavPlusOne != 0;
-        mMaxModifiedUavPlusOne = 0;
-    }
-    //-------------------------------------------------------------------------
     void MetalRenderSystem::flushUAVs(void)
     {
-        for( uint32 i=0; i<mMaxModifiedUavPlusOne; ++i )
+        if( mUavRenderingDirty )
         {
-            if( !mUavs[i].texture.isNull() )
+            if( mUavRenderingDescSet )
             {
-                //TODO: Replace OGRE_METAL_UAV_SLOT_START w/ something
-                //more dynamic, possibly sync with Hlms.
-                [mActiveRenderEncoder setVertexTexture:mUavs[i].textureName
-                                               atIndex:i + OGRE_METAL_UAV_SLOT_START];
-                [mActiveRenderEncoder setFragmentTexture:mUavs[i].textureName
-                                                 atIndex:i + OGRE_METAL_UAV_SLOT_START];
+                MetalDescriptorSetTexture *metalSet =
+                        reinterpret_cast<MetalDescriptorSetTexture*>( mUavRenderingDescSet->mRsData );
+                setTextures( OGRE_METAL_UAV_SLOT_START /*+ mUavStartingSlot*/, metalSet );
             }
-            else if( mUavs[i].buffer )
-            {
-                MetalUavBufferPacked *metalUav = static_cast<MetalUavBufferPacked*>( mUavs[i].buffer );
-                metalUav->bindBufferAllRenderStages( i, mUavs[i].offset );
-            }
-            else
-            {
-                [mActiveRenderEncoder setVertexTexture:0 atIndex:i + OGRE_METAL_UAV_SLOT_START];
-                [mActiveRenderEncoder setFragmentTexture:0 atIndex:i + OGRE_METAL_UAV_SLOT_START];
-                [mActiveRenderEncoder setVertexBuffer:0
-                                               offset:0
-                                              atIndex:i + OGRE_METAL_UAV_SLOT_START];
-                [mActiveRenderEncoder setFragmentBuffer:0
-                                                 offset:0
-                                                atIndex:i + OGRE_METAL_UAV_SLOT_START];
-            }
+            mUavRenderingDirty = false;
         }
-
-        mUavsDirty = 0;
-    }
-    //-------------------------------------------------------------------------
-    void MetalRenderSystem::_bindTextureUavCS( uint32 slot, Texture *texture,
-                                               ResourceAccess::ResourceAccess access,
-                                               int32 mipmapLevel, int32 textureArrayIndex,
-                                               PixelFormat pixelFormat )
-    {
-        __unsafe_unretained id<MTLComputeCommandEncoder> computeEncoder =
-                mActiveDevice->getComputeEncoder();
-
-        __unsafe_unretained id<MTLTexture> metalTexture = 0;
-
-        if( texture )
-        {
-            MetalTexture *metalTex = static_cast<MetalTexture*>( texture );
-            metalTexture = metalTex->getTextureForSampling( this );
-        }
-
-        [computeEncoder setTexture:metalTexture atIndex:slot + OGRE_METAL_CS_UAV_SLOT_START];
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_setTexture( size_t unit, TextureGpu *texPtr )
@@ -598,11 +495,8 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture2 *set )
+    void MetalRenderSystem::setTextures( uint32 slotStart, const MetalDescriptorSetTexture *metalSet )
     {
-        MetalDescriptorSetTexture *metalSet =
-                reinterpret_cast<MetalDescriptorSetTexture*>( set->mRsData );
-
         //Bind textures
         {
             FastArray<MetalTexRegion>::const_iterator itor = metalSet->textures.begin();
@@ -664,6 +558,13 @@ namespace Ogre
                 ++itor;
             }
         }
+    }
+    //-------------------------------------------------------------------------
+    void MetalRenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture2 *set )
+    {
+        MetalDescriptorSetTexture *metalSet =
+                reinterpret_cast<MetalDescriptorSetTexture*>( set->mRsData );
+        setTextures( slotStart, metalSet );
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_setSamplers( uint32 slotStart, const DescriptorSetSampler *set )

@@ -219,12 +219,21 @@ namespace Ogre
             if( PixelFormatGpuUtils::isStencil( preferredFormat ) )
                 stencilFormat = preferredFormat;
         }
-        else if( renderPassDesc->mColour[0].texture )
+        else if( renderPassDesc->mColour[0].texture || renderPassDesc->mDepth.texture )
         {
-            PixelFormatGpu desiredFormat =
-                    renderPassDesc->mColour[0].texture->getDesiredDepthBufferFormat();
-            if( PixelFormatGpuUtils::isStencil( desiredFormat ) )
-                stencilFormat = desiredFormat;
+            if( renderPassDesc->mDepth.texture )
+            {
+                PixelFormatGpu depthFormat = renderPassDesc->mDepth.texture->getPixelFormat();
+                if( PixelFormatGpuUtils::isStencil( depthFormat ) )
+                    stencilFormat = depthFormat;
+            }
+            else if( renderPassDesc->mColour[0].texture )
+            {
+                PixelFormatGpu desiredFormat =
+                        renderPassDesc->mColour[0].texture->getDesiredDepthBufferFormat();
+                if( PixelFormatGpuUtils::isStencil( desiredFormat ) )
+                    stencilFormat = desiredFormat;
+            }
         }
 
         if( stencilFormat != PFG_UNKNOWN )

@@ -117,24 +117,6 @@ namespace Ogre
         size_t                  mCurrentAutoParamsBufferSpaceLeft;
         size_t                  mHistoricalAutoParamsSize[60];
 
-        struct Uav
-        {
-            TexturePtr      texture;
-            id<MTLTexture>  textureName;
-            UavBufferPacked *buffer;
-            size_t          offset;
-            //size_t          sizeBytes;
-
-            Uav() : textureName( 0 ), buffer( 0 ), offset( 0 ) {}
-        };
-
-        Uav             mUavs[64];
-        /// In range [0; 64]; note that a user may use
-        /// mUavs[0] & mUavs[2] leaving mUavs[1] empty.
-        /// and still mMaxUavIndexPlusOne = 3.
-        uint8           mMaxModifiedUavPlusOne;
-        bool            mUavsDirty;
-
         uint8           mNumMRTs;
         MetalRenderTargetCommon     *mCurrentColourRTs[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
         MetalDepthBuffer            *mCurrentDepthBuffer;
@@ -203,23 +185,13 @@ namespace Ogre
         virtual void _setPointParameters(Real size, bool attenuationEnabled,
             Real constant, Real linear, Real quadratic, Real minSize, Real maxSize);
 
-        virtual void queueBindUAV( uint32 slot, TexturePtr texture,
-                                           ResourceAccess::ResourceAccess access = ResourceAccess::ReadWrite,
-                                           int32 mipmapLevel = 0, int32 textureArrayIndex = 0,
-                                           PixelFormat pixelFormat = PF_UNKNOWN );
-        virtual void queueBindUAV( uint32 slot, UavBufferPacked *buffer,
-                                   ResourceAccess::ResourceAccess access = ResourceAccess::ReadWrite,
-                                   size_t offset = 0, size_t sizeBytes = 0 );
-        virtual void clearUAVs(void);
         virtual void flushUAVs(void);
-
-        virtual void _bindTextureUavCS( uint32 slot, Texture *texture,
-                                        ResourceAccess::ResourceAccess access,
-                                        int32 mipmapLevel, int32 textureArrayIndex,
-                                        PixelFormat pixelFormat );
 
         virtual void _setTexture( size_t unit, TextureGpu *texPtr );
         virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set );
+    protected:
+        void setTextures( uint32 slotStart, const MetalDescriptorSetTexture *metalSet );
+    public:
         virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture2 *set );
         virtual void _setSamplers( uint32 slotStart, const DescriptorSetSampler *set );
         virtual void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set );

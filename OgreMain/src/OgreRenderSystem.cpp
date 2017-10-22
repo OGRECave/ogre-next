@@ -594,7 +594,7 @@ namespace Ogre {
                                                  bool preferDepthTexture,
                                                  PixelFormatGpu depthBufferFormat )
     {
-        if( poolId == DepthBuffer::POOL_NO_DEPTH )
+        if( poolId == DepthBuffer::POOL_NO_DEPTH || depthBufferFormat == PFG_NULL )
             return 0; //RenderTarget explicitly requested no depth buffer
 
         if( colourTexture->isRenderWindowSpecific() )
