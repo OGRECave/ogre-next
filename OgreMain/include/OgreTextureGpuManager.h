@@ -241,6 +241,7 @@ namespace Ogre
 
         size_t              mEntriesToProcessPerIteration;
         PoolParameters      mDefaultPoolParameters;
+        size_t              mStagingTextureMaxBudgetBytes;
 
         StagingTextureVec   mUsedStagingTextures;
         StagingTextureVec   mAvailableStagingTextures;
@@ -303,6 +304,21 @@ namespace Ogre
                                         StagingTexture **outStagingTexture );
         static void processQueuedImage( QueuedImage &queuedImage, ThreadData &workerData,
                                         StreamingData &streamingData );
+
+        /// Retrieves, in bytes, the memory consumed by StagingTextures in mAvailableStagingTextures,
+        /// which are textures waiting either to be reused, or to be destroyed.
+        size_t getConsumedMemoryByAvailableStagingTextures(void) const;
+        /** Checks if we've exceeded our memory budget for available staging textures.
+                * If we haven't, it early outs and returns nullptr.
+                * If we have, we'll start stalling the GPU until we find a StagingTexture that
+                  can fit the requirements, and return that pointer.
+                * If we couldn't find a fit, we start removing StagingTextures until we've
+                  freed enough to stay below the budget; and return a nullptr.
+        */
+        StagingTexture* checkStagingTextureLimits( uint32 width, uint32 height,
+                                                   uint32 depth, uint32 slices,
+                                                   PixelFormatGpu pixelFormat,
+                                                   size_t minConsumptionRatioThreshold );
 
     public:
         TextureGpuManager( VaoManager *vaoManager );
@@ -425,6 +441,8 @@ namespace Ogre
                                                       PixelFormatGpu pixelFormatFamily );
         void destroyAsyncTextureTicket( AsyncTextureTicket *ticket );
         void destroyAllAsyncTextureTicket(void);
+
+        void dumpStats(void);
 
         const String* findNameStr( IdString idName ) const;
 

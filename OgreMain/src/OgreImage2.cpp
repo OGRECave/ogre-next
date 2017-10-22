@@ -365,7 +365,7 @@ namespace Ogre {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "No image data loaded",
                          "Image2::save" );
         }
-        if( mipLevel + numMipmaps >= mNumMipmaps )
+        if( mipLevel + numMipmaps > mNumMipmaps )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          "Invalid mipmaps specified",

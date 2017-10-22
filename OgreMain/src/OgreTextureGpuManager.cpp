@@ -120,6 +120,7 @@ namespace Ogre
         mDefaultMipmapGenCubemaps( DefaultMipmapGen::SwMode ),
         mShuttingDown( false ),
         mEntriesToProcessPerIteration( 3u ),
+        mStagingTextureMaxBudgetBytes( 512 * 1024 * 1024 ),
         mVaoManager( vaoManager )
     {
         //64MB default
@@ -401,9 +402,17 @@ namespace Ogre
         }
         else
         {
-            //Couldn't find an existing StagingTexture that could handle our request. Create one.
-            retVal = createStagingTextureImpl( width, height, depth, slices, pixelFormat );
-            mUsedStagingTextures.push_back( retVal );
+            //Couldn't find an existing StagingTexture that could handle our request.
+            //Check that our memory budget isn't exceeded.
+            retVal = checkStagingTextureLimits( width, height, depth, slices, pixelFormat,
+                                                minConsumptionRatioThreshold );
+            if( !retVal )
+            {
+                //We haven't yet exceeded our budget, or we did exceed it and
+                //checkStagingTextureLimits freed some memory. Either way, create a new one.
+                retVal = createStagingTextureImpl( width, height, depth, slices, pixelFormat );
+                mUsedStagingTextures.push_back( retVal );
+            }
         }
 
         return retVal;
@@ -466,6 +475,25 @@ namespace Ogre
         }
 
         mAsyncTextureTickets.clear();
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::dumpStats(void)
+    {
+        char tmpBuffer[512];
+        LwString text( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+
+        LogManager &logMgr = LogManager::getSingleton();
+
+        text.clear();
+        text.a( "Available Staging Textures|", (uint32)mAvailableStagingTextures.size() );
+        logMgr.logMessage( text.c_str() );
+
+        {
+            const size_t totalSizeBytes = getConsumedMemoryByAvailableStagingTextures();
+            text.clear();
+            text.a( "Available Staging Textures Size (MB)|", (uint32)totalSizeBytes / (1024u * 1024u) );
+            logMgr.logMessage( text.c_str() );
+        }
     }
     //-----------------------------------------------------------------------------------
     const String* TextureGpuManager::findNameStr( IdString idName ) const
@@ -1224,6 +1252,89 @@ namespace Ogre
         //Wake up outside mMutex to avoid unnecessary contention.
         if( wakeUpMainThread )
             mRequestToMainThreadEvent.wake();
+    }
+    //-----------------------------------------------------------------------------------
+    size_t TextureGpuManager::getConsumedMemoryByAvailableStagingTextures(void) const
+    {
+        size_t totalSizeBytes = 0;
+        StagingTextureVec::const_iterator itor = mAvailableStagingTextures.begin();
+        StagingTextureVec::const_iterator end  = mAvailableStagingTextures.end();
+        while( itor != end )
+        {
+            totalSizeBytes += (*itor)->_getSizeBytes();
+            ++itor;
+        }
+
+        return totalSizeBytes;
+    }
+    //-----------------------------------------------------------------------------------
+    StagingTexture* TextureGpuManager::checkStagingTextureLimits( uint32 width, uint32 height,
+                                                                  uint32 depth, uint32 slices,
+                                                                  PixelFormatGpu pixelFormat,
+                                                                  size_t minConsumptionRatioThreshold )
+    {
+        const size_t requiredSize = PixelFormatGpuUtils::getSizeBytes( width, height, depth, slices,
+                                                                       pixelFormat, 4u );
+
+        size_t consumedBytes = getConsumedMemoryByAvailableStagingTextures();
+
+        if( consumedBytes + requiredSize < mStagingTextureMaxBudgetBytes )
+            return 0; //We are OK, below limits
+
+        set<uint32>::type waitedFrames;
+
+        //Before freeing memory, check if we can make some of
+        //the existing staging textures available for use.
+        StagingTextureVec::iterator bestCandidate = mAvailableStagingTextures.end();
+        StagingTextureVec::iterator itor = mAvailableStagingTextures.begin();
+        StagingTextureVec::iterator end  = mAvailableStagingTextures.end();
+        while( itor != end && bestCandidate == end )
+        {
+            StagingTexture *stagingTexture = *itor;
+            const uint32 frameUsed = stagingTexture->getLastFrameUsed();
+
+            if( waitedFrames.find( frameUsed ) == waitedFrames.end() )
+            {
+                mVaoManager->waitForSpecificFrameToFinish( frameUsed );
+                waitedFrames.insert( frameUsed );
+            }
+
+            if( stagingTexture->supportsFormat( width, height, depth, slices, pixelFormat ) &&
+                (bestCandidate == end || stagingTexture->isSmallerThan( *bestCandidate )) )
+            {
+                const size_t ratio = (requiredSize * 100u) / (*itor)->_getSizeBytes();
+                if( ratio >= minConsumptionRatioThreshold )
+                    bestCandidate = itor;
+            }
+
+            ++itor;
+        }
+
+        StagingTexture *retVal = 0;
+
+        if( bestCandidate == end )
+        {
+            //Could not find any best candidate even after stalling.
+            //Start deleting staging textures until we've freed enough space.
+            itor = mAvailableStagingTextures.begin();
+            while( itor != end && (consumedBytes + requiredSize > mStagingTextureMaxBudgetBytes) )
+            {
+                consumedBytes -= (*itor)->_getSizeBytes();
+                destroyStagingTextureImpl( *itor );
+                delete *itor;
+                ++itor;
+            }
+
+            mAvailableStagingTextures.erase( mAvailableStagingTextures.begin(), itor );
+        }
+        else
+        {
+            retVal = *bestCandidate;
+            mUsedStagingTextures.push_back( *bestCandidate );
+            mAvailableStagingTextures.erase( bestCandidate );
+        }
+
+        return retVal;
     }
     //-----------------------------------------------------------------------------------
     bool TextureGpuManager::_update( bool syncWithWorkerThread )
