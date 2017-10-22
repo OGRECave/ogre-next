@@ -64,6 +64,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void MetalTextureGpu::createInternalResourcesImpl(void)
     {
+        if( mPixelFormat == PFG_NULL )
+            return; //Nothing to do
+
         MTLTextureDescriptor *desc = [MTLTextureDescriptor new];
         desc.mipmapLevelCount   = mNumMipmaps;
         desc.textureType        = getMetalTextureType();
@@ -156,7 +159,7 @@ namespace Ogre
     void MetalTextureGpu::notifyDataIsReady(void)
     {
         assert( mResidencyStatus == GpuResidency::Resident );
-        assert( mFinalTextureName );
+        assert( mFinalTextureName || mPixelFormat == PFG_NULL );
 
         mDisplayTextureName = mFinalTextureName;
 
