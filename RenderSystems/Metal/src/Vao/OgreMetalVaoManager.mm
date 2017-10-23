@@ -971,6 +971,8 @@ namespace Ogre
             }
         }
 
+        _destroyAllDelayedBuffers();
+
         mFrameCount += mDynamicBufferMultiplier;
     }
     //-----------------------------------------------------------------------------------

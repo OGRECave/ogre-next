@@ -149,6 +149,7 @@ namespace Ogre
             Caller is responsible for hazard checking.
         */
         void destroyDelayedBuffers( uint8 fromDynamicFrame );
+        void _destroyAllDelayedBuffers(void);
 
         inline void callDestroyBufferImpl( BufferPacked *bufferPacked );
 

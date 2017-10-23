@@ -519,6 +519,21 @@ namespace Ogre
         mDelayedDestroyBuffers.erase( mDelayedDestroyBuffers.begin(), itor );
     }
     //-----------------------------------------------------------------------------------
+    void VaoManager::_destroyAllDelayedBuffers(void)
+    {
+        DelayedBufferVec::iterator itor = mDelayedDestroyBuffers.begin();
+        DelayedBufferVec::iterator end  = mDelayedDestroyBuffers.end();
+
+        while( itor != end )
+        {
+            callDestroyBufferImpl( itor->bufferPacked );
+            OGRE_DELETE itor->bufferPacked;
+            ++itor;
+        }
+
+        mDelayedDestroyBuffers.clear();
+    }
+    //-----------------------------------------------------------------------------------
     inline void VaoManager::callDestroyBufferImpl( BufferPacked *bufferPacked )
     {
         switch( bufferPacked->getBufferPackedType() )

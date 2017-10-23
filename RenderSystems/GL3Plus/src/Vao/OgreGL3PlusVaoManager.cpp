@@ -1223,6 +1223,8 @@ namespace Ogre
                 ++itor;
             }
 
+            _destroyAllDelayedBuffers();
+
             mFrameCount += mDynamicBufferMultiplier;
         }
         else if( mFrameCount - frameCount <= mDynamicBufferMultiplier )
