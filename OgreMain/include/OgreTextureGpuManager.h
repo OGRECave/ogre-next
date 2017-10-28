@@ -66,6 +66,7 @@ namespace Ogre
         TextureGpuVec           usedSlots;
 
         bool hasFreeSlot(void) const;
+        bool empty(void) const;
     };
 
     typedef list<TexturePool>::type TexturePoolList;
@@ -305,9 +306,9 @@ namespace Ogre
         static void processQueuedImage( QueuedImage &queuedImage, ThreadData &workerData,
                                         StreamingData &streamingData );
 
-        /// Retrieves, in bytes, the memory consumed by StagingTextures in mAvailableStagingTextures,
-        /// which are textures waiting either to be reused, or to be destroyed.
-        size_t getConsumedMemoryByAvailableStagingTextures(void) const;
+        /// Retrieves, in bytes, the memory consumed by StagingTextures in a container like
+        /// mAvailableStagingTextures, which are textures waiting either to be reused, or to be destroyed.
+        size_t getConsumedMemoryByStagingTextures( const StagingTextureVec &stagingTextures ) const;
         /** Checks if we've exceeded our memory budget for available staging textures.
                 * If we haven't, it early outs and returns nullptr.
                 * If we have, we'll start stalling the GPU until we find a StagingTexture that
@@ -442,7 +443,8 @@ namespace Ogre
         void destroyAsyncTextureTicket( AsyncTextureTicket *ticket );
         void destroyAllAsyncTextureTicket(void);
 
-        void dumpStats(void);
+        void dumpStats(void) const;
+        void dumpMemoryUsage( Log* log ) const;
 
         const String* findNameStr( IdString idName ) const;
 

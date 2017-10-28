@@ -356,6 +356,7 @@ namespace Ogre
         bool prefersLoadingFromFileAsSRGB(void) const;
         bool isRenderWindowSpecific(void) const;
         bool requiresTextureFlipping(void) const;
+        bool _isManualTextureFlagPresent(void) const;
         bool isManualTexture(void) const;
 
         virtual void _setToDisplayDummyTexture(void) = 0;
@@ -380,6 +381,10 @@ namespace Ogre
         size_t _getSysRamCopyBytesPerRow( uint8 mipLevel );
         /// Note: Returns non-zero even if there is no system ram copy.
         size_t _getSysRamCopyBytesPerImage( uint8 mipLevel );
+
+        /// Returns total size in bytes used in GPU by this texture (not by its pool)
+        /// including mipmaps.
+        size_t getSizeBytes(void) const;
 
         /** It is threadsafe to call this function from main thread.
             If this returns true, then the following functions are not threadsafe:

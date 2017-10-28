@@ -534,6 +534,11 @@ namespace Ogre
         return (mTextureFlags & TextureFlags::RequiresTextureFlipping) != 0;
     }
     //-----------------------------------------------------------------------------------
+    bool TextureGpu::_isManualTextureFlagPresent(void) const
+    {
+        return (mTextureFlags & TextureFlags::ManualTexture) != 0;
+    }
+    //-----------------------------------------------------------------------------------
     bool TextureGpu::isManualTexture(void) const
     {
         return ( mTextureFlags & (TextureFlags::NotTexture |
@@ -668,6 +673,12 @@ namespace Ogre
         uint32 width  = std::max( mWidth >> mipLevel, 1u );
         uint32 height = std::max( mHeight >> mipLevel, 1u );
         return PixelFormatGpuUtils::getSizeBytes( width, height, 1u, 1u, mPixelFormat, 4u );
+    }
+    //-----------------------------------------------------------------------------------
+    size_t TextureGpu::getSizeBytes(void) const
+    {
+        return PixelFormatGpuUtils::calculateSizeBytes( mWidth, mHeight, getDepth(), getNumSlices(),
+                                                        mPixelFormat, mNumMipmaps, 4u );
     }
     //-----------------------------------------------------------------------------------
     bool TextureGpu::isMetadataReady(void) const

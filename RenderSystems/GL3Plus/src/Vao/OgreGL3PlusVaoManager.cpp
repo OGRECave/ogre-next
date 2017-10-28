@@ -87,12 +87,13 @@ namespace Ogre
         mMaxVertexAttribs( 30 ),
         mDrawId( 0 )
     {
-        //Keep pools of 128MB each for static meshes
-        mDefaultPoolSize[CPU_INACCESSIBLE]  = 128 * 1024 * 1024;
+        //Keep pools of 64MB each for static meshes
+        mDefaultPoolSize[CPU_INACCESSIBLE]  = 64 * 1024 * 1024;
 
-        //Keep pools of 32MB each for dynamic vertex buffers
+        //Keep pools of 4MB each for most dynamic buffers, 16 for the most common one.
         for( size_t i=CPU_ACCESSIBLE_DEFAULT; i<=CPU_ACCESSIBLE_PERSISTENT_COHERENT; ++i )
-            mDefaultPoolSize[i] = 32 * 1024 * 1024;
+            mDefaultPoolSize[i] = 4 * 1024 * 1024;
+        mDefaultPoolSize[CPU_ACCESSIBLE_PERSISTENT] = 16 * 1024 * 1024;
 
         mFrameSyncVec.resize( mDynamicBufferMultiplier, 0 );
 

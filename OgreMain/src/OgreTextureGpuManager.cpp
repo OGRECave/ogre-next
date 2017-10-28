@@ -477,23 +477,140 @@ namespace Ogre
         mAsyncTextureTickets.clear();
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::dumpStats(void)
+    void TextureGpuManager::dumpStats(void) const
     {
         char tmpBuffer[512];
         LwString text( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
 
         LogManager &logMgr = LogManager::getSingleton();
 
-        text.clear();
-        text.a( "Available Staging Textures|", (uint32)mAvailableStagingTextures.size() );
-        logMgr.logMessage( text.c_str() );
+        const size_t availSizeBytes = getConsumedMemoryByStagingTextures( mAvailableStagingTextures );
+        const size_t usedSizeBytes = getConsumedMemoryByStagingTextures( mUsedStagingTextures );
 
+        text.clear();
+        text.a( "Available Staging Textures\t|", (uint32)mAvailableStagingTextures.size(), "|",
+                (uint32)availSizeBytes  / (1024u * 1024u), " MB" );
+        text.a( "\nIn-use StagingTextures\t|", (uint32)mUsedStagingTextures.size(), "|",
+                (uint32)usedSizeBytes  / (1024u * 1024u), " MB" );
+        logMgr.logMessage( text.c_str() );
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::dumpMemoryUsage( Log* log ) const
+    {
+        Log* logActual = log == NULL ? LogManager::getSingleton().getDefaultLog() : log;
+
+        logActual->logMessage(
+                    "==============================="
+                    "Start dump of TextureGpuManager"
+                    "===============================",
+                    LML_CRITICAL );
+
+        logActual->logMessage( "== Dumping Pools ==" );
+
+        logActual->logMessage(
+                    "||Width|Height|Format|Mipmaps|Size in bytes|"
+                    "Num. active textures|Total texture capacity|Texture Names",
+                    LML_CRITICAL );
+
+        size_t bytesInPoolInclWaste = 0;
+        size_t bytesInPoolExclWaste = 0;
+
+        vector<char>::type tmpBuffer;
+        tmpBuffer.resize( 512 * 1024 ); //512kb per line should be way more than enough
+        LwString text( LwString::FromEmptyPointer( &tmpBuffer[0], tmpBuffer.size() ) );
+
+        TexturePoolList::const_iterator itPool = mTexturePool.begin();
+        TexturePoolList::const_iterator enPool = mTexturePool.end();
+
+        while( itPool != enPool )
         {
-            const size_t totalSizeBytes = getConsumedMemoryByAvailableStagingTextures();
+            const TexturePool &pool = *itPool;
             text.clear();
-            text.a( "Available Staging Textures Size (MB)|", (uint32)totalSizeBytes / (1024u * 1024u) );
-            logMgr.logMessage( text.c_str() );
+            text.a( "||", pool.masterTexture->getWidth(), "|", pool.masterTexture->getHeight(), "|" );
+            text.a( PixelFormatGpuUtils::toString( pool.masterTexture->getPixelFormat() ), "|",
+                    pool.masterTexture->getNumMipmaps(), "|" );
+            const size_t bytesInPool = pool.masterTexture->getSizeBytes();
+            text.a( (uint32)bytesInPool, "|" );
+            text.a( pool.usedMemory, "|", pool.masterTexture->getDepthOrSlices() );
+
+            bytesInPoolInclWaste += bytesInPool;
+
+            TextureGpuVec::const_iterator itTex = pool.usedSlots.begin();
+            TextureGpuVec::const_iterator enTex = pool.usedSlots.end();
+
+            while( itTex != enTex )
+            {
+                TextureGpu *texture = *itTex;
+                text.a( "|", texture->getNameStr().c_str() );
+                bytesInPoolExclWaste += texture->getSizeBytes();
+                ++itTex;
+            }
+
+            logActual->logMessage( text.c_str(), LML_CRITICAL );
+
+            ++itPool;
         }
+
+        size_t bytesOutsidePool = 0;
+
+        logActual->logMessage(
+                    "|Name|Width|Height|Depth|Num Slices|Format|Mipmaps|MSAA|Size in bytes|"
+                    "RTT|UAV|Manual|MSAA Explicit|Reinterpretable|AutomaticBatched",
+                    LML_CRITICAL );
+
+        ResourceEntryMap::const_iterator itEntry = mEntries.begin();
+        ResourceEntryMap::const_iterator enEntry = mEntries.end();
+
+        while( itEntry != enEntry )
+        {
+            const ResourceEntry &entry = itEntry->second;
+            text.clear();
+
+            const size_t bytesTexture = entry.texture->getSizeBytes();
+
+            text.a( "|", entry.texture->getNameStr().c_str() );
+            text.a( "|", entry.texture->getWidth(), "|", entry.texture->getHeight(), "|" );
+            text.a( entry.texture->getDepth(), "|", entry.texture->getNumSlices(), "|" );
+            text.a( PixelFormatGpuUtils::toString( entry.texture->getPixelFormat() ), "|",
+                    entry.texture->getNumMipmaps(), "|" );
+            text.a( entry.texture->getMsaa(), "|",
+                    (uint32)bytesTexture, "|" );
+            text.a( entry.texture->isRenderToTexture(), "|",
+                    entry.texture->isUav(), "|",
+                    entry.texture->hasMsaaExplicitResolves(), "|" );
+            text.a( entry.texture->_isManualTextureFlagPresent(), "|",
+                    entry.texture->isReinterpretable(), "|",
+                    entry.texture->hasAutomaticBatching() );
+
+            if( !entry.texture->hasAutomaticBatching() )
+                bytesOutsidePool += bytesTexture;
+
+            logActual->logMessage( text.c_str(), LML_CRITICAL );
+
+            ++itEntry;
+        }
+
+        float fMBytesInPoolInclWaste = bytesInPoolInclWaste / (1024.0f * 1024.0f);
+        float fMBytesInPoolExclWaste = bytesInPoolExclWaste / (1024.0f * 1024.0f);
+        float fMBytesOutsidePool = bytesOutsidePool  / (1024.0f * 1024.0f);
+
+        text.clear();
+        text.a( "\n|MBs in pools (excluding waste):|", LwString::Float( fMBytesInPoolExclWaste, 2 ),
+                "\n|MBs in pools (including waste):|", LwString::Float( fMBytesInPoolInclWaste, 2 ) );
+        text.a( "\n|MBs outside of pools:|", LwString::Float( fMBytesOutsidePool, 2 ),
+                "\n|Total MBs (excl. waste):|",
+                LwString::Float( fMBytesInPoolExclWaste + fMBytesOutsidePool, 2 ) );
+        text.a( "\n|Total MBs (incl. waste):|",
+                LwString::Float( fMBytesInPoolInclWaste + fMBytesOutsidePool, 2 ) );
+        logActual->logMessage( text.c_str(), LML_CRITICAL );
+
+        dumpStats();
+
+        logActual->logMessage(
+                    "============================="
+                    "End dump of TextureGpuManager"
+                    "=============================",
+                    LML_CRITICAL );
     }
     //-----------------------------------------------------------------------------------
     const String* TextureGpuManager::findNameStr( IdString idName ) const
@@ -689,6 +806,17 @@ namespace Ogre
             --texturePool->usedMemory;
         else
             texturePool->availableSlots.push_back( internalSliceStart );
+
+        if( texturePool->empty() )
+        {
+            //Destroy the pool if it's no longer needed
+            delete texturePool->masterTexture;
+            TexturePoolList::iterator itPool = mTexturePool.begin();
+            TexturePoolList::iterator enPool = mTexturePool.end();
+            while( itPool != enPool && &(*itPool) != texturePool )
+                ++itPool;
+            mTexturePool.erase( itPool );
+        }
 
         texture->_notifyTextureSlotChanged( 0, 0 );
     }
@@ -1254,11 +1382,12 @@ namespace Ogre
             mRequestToMainThreadEvent.wake();
     }
     //-----------------------------------------------------------------------------------
-    size_t TextureGpuManager::getConsumedMemoryByAvailableStagingTextures(void) const
+    size_t TextureGpuManager::getConsumedMemoryByStagingTextures(
+            const StagingTextureVec &stagingTextures ) const
     {
         size_t totalSizeBytes = 0;
-        StagingTextureVec::const_iterator itor = mAvailableStagingTextures.begin();
-        StagingTextureVec::const_iterator end  = mAvailableStagingTextures.end();
+        StagingTextureVec::const_iterator itor = stagingTextures.begin();
+        StagingTextureVec::const_iterator end  = stagingTextures.end();
         while( itor != end )
         {
             totalSizeBytes += (*itor)->_getSizeBytes();
@@ -1276,7 +1405,7 @@ namespace Ogre
         const size_t requiredSize = PixelFormatGpuUtils::getSizeBytes( width, height, depth, slices,
                                                                        pixelFormat, 4u );
 
-        size_t consumedBytes = getConsumedMemoryByAvailableStagingTextures();
+        size_t consumedBytes = getConsumedMemoryByStagingTextures( mAvailableStagingTextures );
 
         if( consumedBytes + requiredSize < mStagingTextureMaxBudgetBytes )
             return 0; //We are OK, below limits
@@ -1423,6 +1552,10 @@ namespace Ogre
 
         mWorkerWaitableEvent.wake();
 
+#if OGRE_DEBUG_MODE && 0
+        dumpStats();
+#endif
+
         return isDone;
     }
     //-----------------------------------------------------------------------------------
@@ -1461,6 +1594,12 @@ namespace Ogre
     bool TexturePool::hasFreeSlot(void) const
     {
         return !availableSlots.empty() || usedMemory < masterTexture->getNumSlices();
+    }
+    //-----------------------------------------------------------------------------------
+    bool TexturePool::empty(void) const
+    {
+        const size_t numSlices = masterTexture->getNumSlices();
+        return (availableSlots.size() + (numSlices - usedMemory)) == numSlices;
     }
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
