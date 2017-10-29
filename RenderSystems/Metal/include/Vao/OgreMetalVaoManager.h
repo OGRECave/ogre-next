@@ -128,12 +128,17 @@ namespace Ogre
         typedef vector<Vbo>::type VboVec;
         typedef vector<Vao>::type VaoVec;
         typedef map<VertexElement2Vec, Vbo>::type VboMap;
+        typedef vector<dispatch_semaphore_t>::type DispatchSemaphoreVec;
+        typedef vector<uint8>::type DispatchSemaphoreAlreadyWaitedVec;
 
         VboVec  mVbos[MAX_VBO_FLAG];
         size_t  mDefaultPoolSize[MAX_VBO_FLAG];
 
         VaoVec  mVaos;
         uint32  mVaoNames;
+
+        DispatchSemaphoreAlreadyWaitedVec mAlreadyWaitedForSemaphore;
+        DispatchSemaphoreVec mFrameSyncVec;
 
         MetalDevice *mDevice;
 

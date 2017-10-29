@@ -489,9 +489,8 @@ namespace Ogre
 
         text.clear();
         text.a( "Available Staging Textures\t|", (uint32)mAvailableStagingTextures.size(), "|",
-                (uint32)availSizeBytes  / (1024u * 1024u), " MB" );
-        text.a( "\nIn-use StagingTextures\t|", (uint32)mUsedStagingTextures.size(), "|",
-                (uint32)usedSizeBytes  / (1024u * 1024u), " MB" );
+                (uint32)availSizeBytes  / (1024u * 1024u), " MB\t\t |In use:\t|",
+                (uint32)usedSizeBytes  / (1024u * 1024u), " MB");
         logMgr.logMessage( text.c_str() );
     }
     //-----------------------------------------------------------------------------------
@@ -1566,7 +1565,13 @@ namespace Ogre
         {
             bDone = _update( true );
             if( !bDone )
+            {
+                mVaoManager->_update();
                 mRequestToMainThreadEvent.wait();
+            }
+//#if OGRE_DEBUG_MODE
+//          dumpStats();
+//#endif
         }
     }
     //-----------------------------------------------------------------------------------
@@ -1584,7 +1589,10 @@ namespace Ogre
                     bDone = true;
 
                 if( !bDone )
+                {
+                    mVaoManager->_update();
                     mRequestToMainThreadEvent.wait();
+                }
             }
         }
     }

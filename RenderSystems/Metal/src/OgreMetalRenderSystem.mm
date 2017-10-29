@@ -1063,26 +1063,9 @@ namespace Ogre
         if( !mMainSemaphoreAlreadyWaited )
         {
             dispatch_semaphore_wait( mMainGpuSyncSemaphore, DISPATCH_TIME_FOREVER );
+            //Semaphore was just grabbed, so ensure we don't grab it twice.
             mMainSemaphoreAlreadyWaited = true;
         }
-    }
-    //-------------------------------------------------------------------------
-    bool MetalRenderSystem::_willTailFrameStall(void)
-    {
-        bool retVal = mMainSemaphoreAlreadyWaited;
-
-        if( !mMainSemaphoreAlreadyWaited )
-        {
-            const long result = dispatch_semaphore_wait( mMainGpuSyncSemaphore, DISPATCH_TIME_NOW );
-            if( result == 0 )
-            {
-                retVal = true;
-                //Semaphore was just grabbed, so ensure we don't grab it twice.
-                mMainSemaphoreAlreadyWaited = true;
-            }
-        }
-
-        return retVal;
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_beginFrameOnce(void)

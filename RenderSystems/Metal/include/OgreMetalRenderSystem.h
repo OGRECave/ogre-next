@@ -230,7 +230,6 @@ namespace Ogre
 
         /// See VaoManager::waitForTailFrameToFinish
         virtual void _waitForTailFrameToFinish(void);
-        virtual bool _willTailFrameStall(void);
 
         virtual void _beginFrameOnce(void);
         virtual void _endFrameOnce(void);

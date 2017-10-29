@@ -941,7 +941,17 @@ namespace Ogre
             destroyDelayedBuffers( mDynamicBufferCurrentFrame );
         }
 
+        //We must call this to raise the semaphore count in case we haven't already
+        waitForTailFrameToFinish();
+
         VaoManager::_update();
+
+        mAlreadyWaitedForSemaphore[mDynamicBufferCurrentFrame] = false;
+        __block dispatch_semaphore_t blockSemaphore = mFrameSyncVec[mDynamicBufferCurrentFrame];
+        [mDevice->mCurrentCommandBuffer addCompletedHandler:^(id<MTLCommandBuffer> buffer)
+        {
+            dispatch_semaphore_signal( blockSemaphore );
+        }];
 
         mDynamicBufferCurrentFrame = (mDynamicBufferCurrentFrame + 1) % mDynamicBufferMultiplier;
     }
@@ -980,21 +990,39 @@ namespace Ogre
     {
         //MetalRenderSystem::_beginFrameOnce does a global waiting for us, but if we're outside
         //the render loop (i.e. user is manually uploading data) we may have to call this earlier.
-        mDevice->mRenderSystem->_waitForTailFrameToFinish();
+        if( !mAlreadyWaitedForSemaphore[mDynamicBufferCurrentFrame] )
+        {
+            dispatch_semaphore_wait( mFrameSyncVec[mDynamicBufferCurrentFrame], DISPATCH_TIME_FOREVER );
+            //Semaphore was just grabbed, so ensure we don't grab it twice.
+            mAlreadyWaitedForSemaphore[mDynamicBufferCurrentFrame] = true;
+        }
+        //mDevice->mRenderSystem->_waitForTailFrameToFinish();
         return mDynamicBufferCurrentFrame;
     }
     //-----------------------------------------------------------------------------------
     void MetalVaoManager::waitForSpecificFrameToFinish( uint32 frameCount )
     {
-        if( mFrameCount - frameCount == mDynamicBufferMultiplier )
+        if( frameCount == mFrameCount )
         {
-            //Used last frame. We may be able to wait just for that frame.
-            waitForTailFrameToFinish();
-        }
-        else if( mFrameCount - frameCount <= mDynamicBufferMultiplier )
-        {
+            //Full stall
             mDevice->stall();
             //"mFrameCount += mDynamicBufferMultiplier" is already handled in _notifyDeviceStalled;
+        }
+        if( mFrameCount - frameCount <= mDynamicBufferMultiplier )
+        {
+            //Let's wait on one of our existing fences...
+            //frameDiff has to be in range [1; mDynamicBufferMultiplier]
+            size_t frameDiff = mFrameCount - frameCount;
+
+            const size_t idx = (mDynamicBufferCurrentFrame +
+                                mDynamicBufferMultiplier - frameDiff) % mDynamicBufferMultiplier;
+
+            if( !mAlreadyWaitedForSemaphore[idx] )
+            {
+                dispatch_semaphore_wait( mFrameSyncVec[idx], DISPATCH_TIME_FOREVER );
+                //Semaphore was just grabbed, so ensure we don't grab it twice.
+                mAlreadyWaitedForSemaphore[idx] = true;
+            }
         }
         else
         {
@@ -1004,10 +1032,37 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool MetalVaoManager::isFrameFinished( uint32 frameCount )
     {
-        if( mFrameCount - frameCount == mDynamicBufferMultiplier )
-            return mDevice->mRenderSystem->_willTailFrameStall();
+        bool retVal = false;
+        if( frameCount == mFrameCount )
+        {
+            //Full stall
+            //retVal = false;
+        }
+        else if( mFrameCount - frameCount <= mDynamicBufferMultiplier )
+        {
+            //frameDiff has to be in range [1; mDynamicBufferMultiplier]
+            size_t frameDiff = mFrameCount - frameCount;
+            const size_t idx = (mDynamicBufferCurrentFrame +
+                                mDynamicBufferMultiplier - frameDiff) % mDynamicBufferMultiplier;
 
-        return mFrameCount - frameCount > mDynamicBufferMultiplier;
+            if( !mAlreadyWaitedForSemaphore[idx] )
+            {
+                const long result = dispatch_semaphore_wait( mFrameSyncVec[idx], DISPATCH_TIME_NOW );
+                if( result == 0 )
+                {
+                    retVal = true;
+                    //Semaphore was just grabbed, so ensure we don't grab it twice.
+                    mAlreadyWaitedForSemaphore[idx] = true;
+                }
+            }
+        }
+        else
+        {
+            //No stall
+            retVal = true;
+        }
+
+        return retVal;
     }
     //-----------------------------------------------------------------------------------
     dispatch_semaphore_t MetalVaoManager::waitFor( dispatch_semaphore_t fenceName, MetalDevice *device )
