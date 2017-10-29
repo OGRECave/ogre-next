@@ -612,6 +612,11 @@ namespace Ogre
                     LML_CRITICAL );
     }
     //-----------------------------------------------------------------------------------
+    void TextureGpuManager::setStagingTextureMaxBudgetBytes( size_t stagingTextureMaxBudgetBytes )
+    {
+        mStagingTextureMaxBudgetBytes = stagingTextureMaxBudgetBytes;
+    }
+    //-----------------------------------------------------------------------------------
     const String* TextureGpuManager::findNameStr( IdString idName ) const
     {
         const String *retVal = 0;

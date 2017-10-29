@@ -446,6 +446,51 @@ namespace Ogre
         void dumpStats(void) const;
         void dumpMemoryUsage( Log* log ) const;
 
+        /** At a high level, texture loading works like this:
+            1. Grab a free StagingTexture from "available" pool in main thread
+            2. Load image from file in secondary thread and fill the StagingTexture
+            3. Copy from StagingTexture to final TextureGpu in main thread
+            4. Release the StagingTexture so it goes back to "available" pool.
+            5. Repeat from step 1 for next batch of images to load.
+        @par
+            All is well except for one little detail in steps 1 and 4:
+            The StagingTexture released at step 4 can't become immediately available
+            as the GPU could still be performing the copy from step 3, so we must wait
+            a few frames until it's safe to map it again.
+        @par
+            That means at step 1, there may be StagingTextures in the "available" pool,
+            yet however none of them are actually ready to grab; so we create a new
+            one instead.
+        @par
+            In other words, if the CPU produces textures faster than the GPU can consume
+            them, we may keep creating more and more StagingTextures until we run out of memory.
+        @par
+            That's where this function comes in. This function limits how much we let
+            the "available" pool grow. If the threshold is exceeded, instead of creating
+            a new StagingTexture at step 1; we'll begin to stall and wait for the GPU
+            to catch up; so we can reuse these StagingTextures again. If no StagingTexture
+            is capable of performing the upload (e.g. they're of incompatible format)
+            we'll start deleting StagingTextures to make room for the one we need.
+            The details are explained in checkStagingTextureLimits.
+        @par
+            This limit is tightly respected by Ogre but not a hard one. For example
+            if you set the limit on 256MB and we require a StagingTexture of 326MB
+            to load a very, very big texture, then Ogre has no other choice but to
+            delete all textures in mAvailableStagingTextures and create one of 326MB
+            that can perform the operation; but Ogre won't error out because 326 > 256MB.
+            (though in such scenario the process may run out of memory and crash)
+        @remarks
+            This limit only counts for textures that are in zero-referenced in
+            mAvailableStagingTextures. For example if you've set the limit in 256MB and
+            you've created 1GB worth of StagingTextures (i.e. via getStagingTexture) and
+            never released them via removeStagingTexture; those textures don't count.
+            We only check the limit against the released textures in mAvailableStagingTextures.
+        @param stagingTextureMaxBudgetBytes
+            Limit in bytes, on how much memory we let in mAvailableStagingTextures before
+            we start stalling the GPU and/or aggressively destroying them.
+        */
+        void setStagingTextureMaxBudgetBytes( size_t stagingTextureMaxBudgetBytes );
+
         const String* findNameStr( IdString idName ) const;
 
     protected:

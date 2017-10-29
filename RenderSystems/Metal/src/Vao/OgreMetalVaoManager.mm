@@ -121,6 +121,11 @@ namespace Ogre
         mSupportsIndirectBuffers    = false; // TODO: the _render() overload is not implemented yet!
 #endif
 
+        mAlreadyWaitedForSemaphore.resize( mDynamicBufferMultiplier, true );
+        mFrameSyncVec.resize( mDynamicBufferMultiplier, 0 );
+        for( size_t i=0; i<mDynamicBufferMultiplier; ++i )
+            mFrameSyncVec[i] = dispatch_semaphore_create( 0 );
+
         mConstBufferMaxSize = 64 * 1024;        //64kb
         mTexBufferMaxSize   = 128 * 1024 * 1024;//128MB
 
