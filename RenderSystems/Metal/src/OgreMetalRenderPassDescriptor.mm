@@ -505,7 +505,10 @@ namespace Ogre
             MetalTextureGpuWindow *textureMetal =
                     static_cast<MetalTextureGpuWindow*>( mColour[0].texture );
             textureMetal->nextDrawable();
-            passDesc.colorAttachments[0].texture = textureMetal->getFinalTextureName();
+            if( textureMetal->getMsaa() > 1u )
+                passDesc.colorAttachments[0].resolveTexture = textureMetal->getFinalTextureName();
+            else
+                passDesc.colorAttachments[0].texture = textureMetal->getFinalTextureName();
         }
 
         passDesc.depthAttachment = mDepthAttachment;

@@ -100,6 +100,8 @@ namespace Ogre
                                              width: newWidth height: newHeight mipmapped: NO];
                 desc.textureType = MTLTextureType2DMultisample;
                 desc.sampleCount = mMsaa;
+                desc.usage       = MTLTextureUsageRenderTarget;
+                desc.storageMode = MTLStorageModePrivate;
 
                 id<MTLTexture> msaaTex = [mDevice->mDevice newTextureWithDescriptor: desc];
                 texWindow->_setMsaaBackbuffer( msaaTex );
