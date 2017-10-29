@@ -216,19 +216,20 @@ namespace Ogre
 
             if( mColour[i].texture->getMsaa() > 1u )
             {
-                if( !mColour[i].texture->hasMsaaExplicitResolves() )
-                {
-                    mColourAttachment[i].texture = textureMetal->getMsaaFramebufferName();
-                    mColourAttachment[i].resolveTexture = textureMetal->getFinalTextureName();
-                }
-                else
+                MetalTextureGpu *resolveTexture = 0;
+                if( mColour[i].resolveTexture )
                 {
                     assert( dynamic_cast<MetalTextureGpu*>( mColour[i].resolveTexture ) );
-                    MetalTextureGpu *resolveTexture =
-                            static_cast<MetalTextureGpu*>( mColour[i].resolveTexture );
-                    mColourAttachment[i].texture = textureMetal->getFinalTextureName();
-                    mColourAttachment[i].resolveTexture = resolveTexture->getFinalTextureName();
+                    resolveTexture = static_cast<MetalTextureGpu*>( mColour[i].resolveTexture );
                 }
+
+                if( !mColour[i].texture->hasMsaaExplicitResolves() )
+                    mColourAttachment[i].texture = textureMetal->getMsaaFramebufferName();
+                else
+                    mColourAttachment[i].texture = textureMetal->getFinalTextureName();
+
+                if( mColour[i].resolveTexture )
+                    mColourAttachment[i].resolveTexture = resolveTexture->getFinalTextureName();
             }
             else
             {

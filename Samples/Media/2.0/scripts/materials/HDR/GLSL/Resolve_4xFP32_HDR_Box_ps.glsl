@@ -39,13 +39,14 @@ vec3 tonemapInvert( float invLum, vec3 c )
 vec4 loadWithToneMapAndWeight( float invLum, sampler2DMS tex, ivec2 iCoord, int subsample )
 {
 	vec4 value = texelFetch( tex, iCoord, subsample ).xyzw;
-	value.xyz = tonemapWithWeight( value.xyz, MSAA_SUBSAMPLE_WEIGHT );
+	value.xyz = tonemapWithWeight( invLum, value.xyz, MSAA_SUBSAMPLE_WEIGHT );
 	value.w *= MSAA_SUBSAMPLE_WEIGHT;
 
 	return value;
 }
 
 uniform sampler2DMS rt0;
+uniform sampler2D oldLumRt;
 
 in block
 {
@@ -60,7 +61,7 @@ void main()
 {
 	ivec2 iFragCoord = ivec2( gl_FragCoord.xy );
 
-	float oldInvLum = texelFetch( oldLumRt, vec2( 0, 0 ), 0 );
+	float oldInvLum = texelFetch( oldLumRt, ivec2( 0, 0 ), 0 ).x;
 
 	vec4 accumValue;
 
