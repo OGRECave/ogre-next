@@ -227,26 +227,30 @@ GLXConfigurator::~GLXConfigurator() {
 void GLXConfigurator::findMonitorIndexFromMouseCursor( ::Window rootWindow, int screen,
                                                        int &outCenterW, int &outCenterH )
 {
-    XRRScreenResources *screenXRR = XRRGetScreenResources( mDisplay, rootWindow );
-
-    ::Window mouseRootWindow;
-    ::Window mouseRootWindowChild;
-    int unused;
-    unsigned int mask;
-    int mouseX, mouseY;
-    Bool result = XQueryPointer( mDisplay, rootWindow, &mouseRootWindow, &mouseRootWindowChild,
-                                 &mouseX, &mouseY, &unused, &unused, &mask );
-    if( result == True )
+    int dummy = 0;
+    if( XQueryExtension( mDisplay, "RANDR", &dummy, &dummy, &dummy ) )
     {
-        for( int i=0; i< screenXRR->ncrtc; ++i )
+        XRRScreenResources *screenXRR = XRRGetScreenResources( mDisplay, rootWindow );
+
+        ::Window mouseRootWindow;
+        ::Window mouseRootWindowChild;
+        int unused;
+        unsigned int mask;
+        int mouseX, mouseY;
+        Bool result = XQueryPointer( mDisplay, rootWindow, &mouseRootWindow, &mouseRootWindowChild,
+                                     &mouseX, &mouseY, &unused, &unused, &mask );
+        if( result == True )
         {
-            XRRCrtcInfo *crtcInfo = XRRGetCrtcInfo( mDisplay, screenXRR, screenXRR->crtcs[i] );
-            if( crtcInfo->x <= mouseX && mouseX < crtcInfo->x + crtcInfo->width &&
-                crtcInfo->y <= mouseY && mouseY < crtcInfo->y + crtcInfo->height )
+            for( int i=0; i< screenXRR->ncrtc; ++i )
             {
-                outCenterW = crtcInfo->x + crtcInfo->width / 2;
-                outCenterH = crtcInfo->y + crtcInfo->height / 2;
-                return;
+                XRRCrtcInfo *crtcInfo = XRRGetCrtcInfo( mDisplay, screenXRR, screenXRR->crtcs[i] );
+                if( crtcInfo->x <= mouseX && mouseX < crtcInfo->x + crtcInfo->width &&
+                    crtcInfo->y <= mouseY && mouseY < crtcInfo->y + crtcInfo->height )
+                {
+                    outCenterW = crtcInfo->x + crtcInfo->width / 2;
+                    outCenterH = crtcInfo->y + crtcInfo->height / 2;
+                    return;
+                }
             }
         }
     }
