@@ -53,6 +53,7 @@ THE SOFTWARE.
 #include <X11/Xaw/MenuButton.h>
 #include <X11/Xaw/SimpleMenu.h>
 #include <X11/Xaw/SmeBSB.h>
+#include <X11/extensions/Xrandr.h>
 
 #include <list>
 
@@ -130,6 +131,9 @@ protected:
      * Called initially, and on expose.
      */
     virtual void Draw();
+
+    void findMonitorIndexFromMouseCursor( ::Window rootWindow, int screen,
+                                          int &outCenterW, int &outCenterH );
 public:
     /* Local */
     bool accept;
@@ -220,6 +224,38 @@ GLXConfigurator::~GLXConfigurator() {
     }
 }
 
+void GLXConfigurator::findMonitorIndexFromMouseCursor( ::Window rootWindow, int screen,
+                                                       int &outCenterW, int &outCenterH )
+{
+    XRRScreenResources *screenXRR = XRRGetScreenResources( mDisplay, rootWindow );
+
+    ::Window mouseRootWindow;
+    ::Window mouseRootWindowChild;
+    int unused;
+    unsigned int mask;
+    int mouseX, mouseY;
+    Bool result = XQueryPointer( mDisplay, rootWindow, &mouseRootWindow, &mouseRootWindowChild,
+                                 &mouseX, &mouseY, &unused, &unused, &mask );
+    if( result == True )
+    {
+        for( int i=0; i< screenXRR->ncrtc; ++i )
+        {
+            XRRCrtcInfo *crtcInfo = XRRGetCrtcInfo( mDisplay, screenXRR, screenXRR->crtcs[i] );
+            if( crtcInfo->x <= mouseX && mouseX < crtcInfo->x + crtcInfo->width &&
+                crtcInfo->y <= mouseY && mouseY < crtcInfo->y + crtcInfo->height )
+            {
+                outCenterW = crtcInfo->x + crtcInfo->width / 2;
+                outCenterH = crtcInfo->y + crtcInfo->height / 2;
+                return;
+            }
+        }
+    }
+
+    //Couldn't find. Probably remote display.
+    outCenterW = DisplayWidth(mDisplay, screen) / 2;
+    outCenterH = DisplayHeight(mDisplay, screen) / 2;
+}
+
 bool GLXConfigurator::CreateWindow() {
 
 
@@ -244,11 +280,11 @@ bool GLXConfigurator::CreateWindow() {
     ::Window rootWindow = RootWindow(mDisplay,screen);
 
     /* Move to center of display */
-    int w = DisplayWidth(mDisplay, screen);
-    int h = DisplayHeight(mDisplay, screen);
+    int centerX = 0, centerY = 0;
+    findMonitorIndexFromMouseCursor( rootWindow, screen, centerX, centerY );
     XtVaSetValues(toplevel,
-            XtNx, w/2-mWidth/2,
-            XtNy, h/2-mHeight/2, 0, NULL);
+            XtNx, centerX - mWidth / 2,
+            XtNy, centerY - mHeight / 2, 0, NULL);
 
     /* Backdrop stuff */
     mBackDrop = CreateBackdrop(rootWindow, DefaultDepth(mDisplay,screen));
