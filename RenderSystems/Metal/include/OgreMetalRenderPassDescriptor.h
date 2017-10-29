@@ -93,6 +93,7 @@ namespace Ogre
         static MTLLoadAction get( LoadAction::LoadAction action );
         static MTLStoreAction get( StoreAction::StoreAction action );
 
+        void sanitizeMsaaResolve( size_t colourIdx );
         virtual void updateColourRtv( uint8 lastNumColourEntries );
         virtual void updateDepthRtv(void);
         virtual void updateStencilRtv(void);

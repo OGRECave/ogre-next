@@ -172,6 +172,31 @@ namespace Ogre
         return MTLStoreActionStore;
     }
     //-----------------------------------------------------------------------------------
+    void MetalRenderPassDescriptor::sanitizeMsaaResolve( size_t colourIdx )
+    {
+        const size_t i = colourIdx;
+
+        //iOS_GPUFamily3_v2, OSX_GPUFamily1_v2
+        if( mColour[i].storeAction == StoreAction::StoreAndMultisampleResolve &&
+            !mRenderSystem->hasStoreAndMultisampleResolve() &&
+            (mColour[i].texture->getMsaa() > 1u && mColour[i].resolveTexture) )
+        {
+            //Must emulate the behavior (slower)
+            mColourAttachment[i].storeAction = MTLStoreActionStore;
+            mColourAttachment[i].resolveTexture = nil;
+            mResolveColourAttachm[i] = [mColourAttachment[i] copy];
+            mResolveColourAttachm[i].loadAction = MTLLoadActionLoad;
+            mResolveColourAttachm[i].storeAction = MTLStoreActionMultisampleResolve;
+
+            mRequiresManualResolve = true;
+        }
+        else if( mColour[i].storeAction == StoreAction::DontCare ||
+                 mColour[i].storeAction == StoreAction::Store )
+        {
+            mColourAttachment[i].resolveTexture = nil;
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void MetalRenderPassDescriptor::updateColourRtv( uint8 lastNumColourEntries )
     {
         mRequiresManualResolve = false;
@@ -211,29 +236,32 @@ namespace Ogre
 
             mColourAttachment[i] = [MTLRenderPassColorAttachmentDescriptor alloc];
 
-            assert( dynamic_cast<MetalTextureGpu*>( mColour[i].texture ) );
-            MetalTextureGpu *textureMetal = static_cast<MetalTextureGpu*>( mColour[i].texture );
-
-            if( mColour[i].texture->getMsaa() > 1u )
+            if( !mColour[i].texture->isRenderWindowSpecific() )
             {
-                MetalTextureGpu *resolveTexture = 0;
-                if( mColour[i].resolveTexture )
+                assert( dynamic_cast<MetalTextureGpu*>( mColour[i].texture ) );
+                MetalTextureGpu *textureMetal = static_cast<MetalTextureGpu*>( mColour[i].texture );
+
+                if( mColour[i].texture->getMsaa() > 1u )
                 {
-                    assert( dynamic_cast<MetalTextureGpu*>( mColour[i].resolveTexture ) );
-                    resolveTexture = static_cast<MetalTextureGpu*>( mColour[i].resolveTexture );
+                    MetalTextureGpu *resolveTexture = 0;
+                    if( mColour[i].resolveTexture )
+                    {
+                        assert( dynamic_cast<MetalTextureGpu*>( mColour[i].resolveTexture ) );
+                        resolveTexture = static_cast<MetalTextureGpu*>( mColour[i].resolveTexture );
+                    }
+
+                    if( !mColour[i].texture->hasMsaaExplicitResolves() )
+                        mColourAttachment[i].texture = textureMetal->getMsaaFramebufferName();
+                    else
+                        mColourAttachment[i].texture = textureMetal->getFinalTextureName();
+
+                    if( mColour[i].resolveTexture )
+                        mColourAttachment[i].resolveTexture = resolveTexture->getFinalTextureName();
                 }
-
-                if( !mColour[i].texture->hasMsaaExplicitResolves() )
-                    mColourAttachment[i].texture = textureMetal->getMsaaFramebufferName();
                 else
+                {
                     mColourAttachment[i].texture = textureMetal->getFinalTextureName();
-
-                if( mColour[i].resolveTexture )
-                    mColourAttachment[i].resolveTexture = resolveTexture->getFinalTextureName();
-            }
-            else
-            {
-                mColourAttachment[i].texture = textureMetal->getFinalTextureName();
+                }
             }
 
             mColourAttachment[i].clearColor = MTLClearColorMake( mColour[i].clearColour.r,
@@ -274,12 +302,15 @@ namespace Ogre
             {
                 //Must emulate the behavior (slower)
                 mColourAttachment[i].storeAction = MTLStoreActionStore;
+                mColourAttachment[i].resolveTexture = nil;
                 mResolveColourAttachm[i] = [mColourAttachment[i] copy];
                 mResolveColourAttachm[i].loadAction = MTLLoadActionLoad;
                 mResolveColourAttachm[i].storeAction = MTLStoreActionMultisampleResolve;
 
                 mRequiresManualResolve = true;
             }
+
+            sanitizeMsaaResolve( i );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -510,6 +541,13 @@ namespace Ogre
             {
                 passDesc.colorAttachments[0].texture = textureMetal->getMsaaFramebufferName();
                 passDesc.colorAttachments[0].resolveTexture = textureMetal->getFinalTextureName();
+                if( mColour[0].storeAction == StoreAction::DontCare ||
+                    mColour[0].storeAction == StoreAction::Store ||
+                    (mColour[0].storeAction == StoreAction::StoreAndMultisampleResolve &&
+                     !mRenderSystem->hasStoreAndMultisampleResolve()) )
+                {
+                    passDesc.colorAttachments[0].resolveTexture = nil;
+                }
             }
             else
             {
@@ -628,6 +666,16 @@ namespace Ogre
                 passDesc.colorAttachments[currentColourIdx] = mResolveColourAttachm[i];
                 ++currentColourIdx;
             }
+        }
+
+        if( mNumColourEntries > 0 && mColour[0].texture->isRenderWindowSpecific() )
+        {
+            //RenderWindows are a special case. Do not retain.
+            passDesc.colorAttachments[0] = [passDesc copy];
+            MetalTextureGpuWindow *textureMetal =
+                    static_cast<MetalTextureGpuWindow*>( mColour[0].texture );
+            passDesc.colorAttachments[0].texture = textureMetal->getMsaaFramebufferName();
+            passDesc.colorAttachments[0].resolveTexture = textureMetal->getFinalTextureName();
         }
 
         mDevice->mRenderEncoder =
