@@ -244,8 +244,8 @@ void GLXConfigurator::findMonitorIndexFromMouseCursor( ::Window rootWindow, int 
             for( int i=0; i< screenXRR->ncrtc; ++i )
             {
                 XRRCrtcInfo *crtcInfo = XRRGetCrtcInfo( mDisplay, screenXRR, screenXRR->crtcs[i] );
-                if( crtcInfo->x <= mouseX && mouseX < crtcInfo->x + crtcInfo->width &&
-                    crtcInfo->y <= mouseY && mouseY < crtcInfo->y + crtcInfo->height )
+                if( crtcInfo->x <= mouseX && mouseX < (int)(crtcInfo->x + crtcInfo->width) &&
+                    crtcInfo->y <= mouseY && mouseY < (int)(crtcInfo->y + crtcInfo->height) )
                 {
                     outCenterW = crtcInfo->x + crtcInfo->width / 2;
                     outCenterH = crtcInfo->y + crtcInfo->height / 2;
