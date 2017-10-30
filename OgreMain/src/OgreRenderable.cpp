@@ -46,6 +46,7 @@ namespace Ogre
         mCustomParameter( 0 ),
         mRenderQueueSubGroup( 0 ),
         mHasSkeletonAnimation( false ),
+        mHasPoseAnimation( false ),
         mCurrentMaterialLod( 0 ),
         mLodMaterial( &MovableObject::c_DefaultLodMesh ),
         mHlmsGlobalIndex( ~0 ),

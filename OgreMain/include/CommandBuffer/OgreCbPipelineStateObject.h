@@ -37,6 +37,12 @@ namespace Ogre
         HlmsPso const *pso;
         CbPipelineStateObject( const HlmsPso *_pso );
     };
+    
+    struct _OgreExport CbBindGpuProgramParameters : CbBase
+    {
+        GpuProgramPtr program;
+        CbBindGpuProgramParameters( const GpuProgramPtr& _program );
+    };
 }
 
 #endif

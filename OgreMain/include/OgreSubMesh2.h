@@ -108,6 +108,8 @@ namespace Ogre {
         /// Limits mBoneAssignments to OGRE_MAX_BLEND_WEIGHTS and
         /// if we need to strip, normalizes all weights to sum 1.
         uint8 rationaliseBoneAssignments(void);
+        
+        bool mHasPoseAnimation;
 
     public:
         SubMesh();
@@ -195,6 +197,8 @@ namespace Ogre {
         void dearrangeToInefficient(void);
 
         void _prepareForShadowMapping( bool forceSameBuffers );
+        
+        bool hasPoseAnimation() { return mHasPoseAnimation; }
 
     protected:
         void importBuffersFromV1( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords, bool qTangents,
@@ -326,5 +330,3 @@ namespace Ogre {
 #include "OgreHeaderSuffix.h"
 
 #endif
-
-

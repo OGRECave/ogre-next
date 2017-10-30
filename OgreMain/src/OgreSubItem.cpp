@@ -52,6 +52,8 @@ namespace Ogre {
             mHasSkeletonAnimation = true;
             mBlendIndexToBoneIndexMap = &subMeshBasis->mBlendIndexToBoneIndexMap;
         }
+        
+        mHasPoseAnimation = subMeshBasis->hasPoseAnimation();
     }
     //-----------------------------------------------------------------------
     SubItem::~SubItem()

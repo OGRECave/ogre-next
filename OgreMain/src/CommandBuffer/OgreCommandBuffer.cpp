@@ -71,6 +71,7 @@ namespace Ogre
         &CommandBuffer::execute_drawV1StripNoBaseInstance,
         &CommandBuffer::execute_drawV1Strip,
         &CommandBuffer::execute_lowLevelMaterial,
+        &CommandBuffer::execute_bindGpuProgramParameters,
         &CommandBuffer::execute_invalidCommand
     };
     //-----------------------------------------------------------------------------------
