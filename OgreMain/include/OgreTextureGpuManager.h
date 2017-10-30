@@ -50,6 +50,7 @@ namespace Ogre
     typedef vector<TextureGpu*>::type TextureGpuVec;
     class ObjCmdBuffer;
     class ResourceLoadingListener;
+    class TextureGpuManagerListener;
 
     namespace TextureFilter
     {
@@ -108,28 +109,6 @@ namespace Ogre
         };
 
         typedef vector<BudgetEntry>::type BudgetEntryVec;
-
-        struct PoolParameters
-        {
-            /// Pool shall grow until maxBytesPerPool is reached.
-            /// Once that's reached, a new pool will be created.
-            /// Otherwise GPU RAM fragmentation may cause out of memory even
-            /// though it could otherwise fulfill our request.
-            /// Includes mipmaps.
-            /// This value may actually be exceeded if a single texture surpasses this limit,
-            /// or if minSlicesPerPool is > 1 (it takes higher priority)
-            size_t maxBytesPerPool;
-            /// Minimum slices per pool, regardless of maxBytesPerPool.
-            /// It's also the starting num of slices. See maxResolutionToApplyMinSlices
-            uint16 minSlicesPerPool[4];
-            /// If texture resolution is <= maxResolutionToApplyMinSlices[i];
-            /// we'll apply minSlicesPerPool[i]. Otherwise, we'll apply minSlicesPerPool[i+1]
-            /// If resolution > maxResolutionToApplyMinSlices[N]; then minSlicesPerPool = 1;
-            uint32 maxResolutionToApplyMinSlices[4];
-
-            /// See BudgetEntry. Must be sorted by size in bytes (biggest entries first).
-            BudgetEntryVec budget;
-        };
 
     protected:
         struct ResourceEntry
@@ -241,8 +220,10 @@ namespace Ogre
         ResourceEntryMap    mEntries;
 
         size_t              mEntriesToProcessPerIteration;
-        PoolParameters      mDefaultPoolParameters;
-        size_t              mStagingTextureMaxBudgetBytes;
+        /// See BudgetEntry. Must be sorted by size in bytes (biggest entries first).
+        BudgetEntryVec              mBudget;
+        TextureGpuManagerListener   *mTextureGpuManagerListener;
+        size_t                      mStagingTextureMaxBudgetBytes;
 
         StagingTextureVec   mUsedStagingTextures;
         StagingTextureVec   mAvailableStagingTextures;
@@ -271,17 +252,18 @@ namespace Ogre
                                                                   TextureTypes::TextureTypes textureType,
                                                                   PixelFormatGpu pixelFormatFamily ) = 0;
 
-        uint16 getNumSlicesFor( TextureGpu *texture ) const;
-
         /// Fills mTmpAvailableStagingTex with new StagingTextures that support formats &
         /// resolutions the worker thread couldn't upload because it lacked a compatible one.
         /// Assumes we're protected by mMutex! Called from main thread.
-        void fulfillUsageStats( ThreadData &workerData );
+        void fulfillUsageStats(void);
         /// Fills mTmpAvailableStagingTex with new StagingTextures if there's not enough
-        /// in there to meet our minimum budget in poolParams.
-        void fulfillMinimumBudget( ThreadData &workerData, const PoolParameters &poolParams );
+        /// in there to meet our minimum budget as set in mBudget.
+        /// Assumes we're protected by mMutex! Called from main thread.
+        void fulfillMinimumBudget(void);
 
-        void fullfillBudget( ThreadData &workerData );
+        /// See fulfillMinimumBudget and fulfillUsageStats
+        /// Assumes we're protected by mMutex! Called from main thread.
+        void fullfillBudget(void);
 
         /// Must be called from worker thread.
         void mergeUsageStatsIntoPrevStats(void);
@@ -445,6 +427,31 @@ namespace Ogre
 
         void dumpStats(void) const;
         void dumpMemoryUsage( Log* log ) const;
+
+        /// Sets a new listener. The old one will be destroyed with OGRE_DELETE
+        /// See TextureGpuManagerListener. Pointer cannot be null.
+        void setTextureGpuManagerListener( TextureGpuManagerListener *listener );
+
+        /** Background streaming works by having a bunch of preallocated StagingTextures so
+            we're ready to start uploading as soon as we see a request to load a texture
+            from file.
+        @par
+            If there is no minimum budget or it is too small for the texture you're trying
+            to load, background threads can't start as soon as possible and has to wait
+            until the next call to _update (or to waitForStreamingCompletion).
+            This controls how much memory we reserve.
+        @remarks
+            Be careful on reserving too much memory, or else Out of Memory situations
+            could arise. The amount of memory you can reserved is limited by the
+            GTT (Graphics Translation Table) and the limit may be much lower than the
+            total System RAM. For example my 16GB RAM system with a 2GB GPU, the GTT
+            limit on Linux is of 3GB (use radeontop to find this information).
+            See https://en.wikipedia.org/wiki/Graphics_address_remapping_table
+        @param budget
+            Array of parameters for the staging textures we'll reserve.
+            The budget can be empty.
+        */
+        void setWorkerThreadMinimumBudget( const BudgetEntryVec &budget );
 
         /** At a high level, texture loading works like this:
             1. Grab a free StagingTexture from "available" pool in main thread

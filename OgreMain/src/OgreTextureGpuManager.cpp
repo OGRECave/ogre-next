@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreTextureGpuManager.h"
+#include "OgreTextureGpuManagerListener.h"
 #include "OgreObjCmdBuffer.h"
 #include "OgreTextureGpu.h"
 #include "OgreAsyncTextureTicket.h"
@@ -120,37 +121,45 @@ namespace Ogre
         mDefaultMipmapGenCubemaps( DefaultMipmapGen::SwMode ),
         mShuttingDown( false ),
         mEntriesToProcessPerIteration( 3u ),
+        mTextureGpuManagerListener( 0 ),
         mStagingTextureMaxBudgetBytes( 512 * 1024 * 1024 ),
         mVaoManager( vaoManager )
     {
-        //64MB default
-        mDefaultPoolParameters.maxBytesPerPool = 64 * 1024 * 1024;
-        mDefaultPoolParameters.minSlicesPerPool[0] = 16;
-        mDefaultPoolParameters.minSlicesPerPool[1] = 8;
-        mDefaultPoolParameters.minSlicesPerPool[2] = 4;
-        mDefaultPoolParameters.minSlicesPerPool[3] = 2;
-        mDefaultPoolParameters.maxResolutionToApplyMinSlices[0] = 256;
-        mDefaultPoolParameters.maxResolutionToApplyMinSlices[1] = 512;
-        mDefaultPoolParameters.maxResolutionToApplyMinSlices[2] = 1024;
-        mDefaultPoolParameters.maxResolutionToApplyMinSlices[3] = 4096;
+        mTextureGpuManagerListener = OGRE_NEW DefaultTextureGpuManagerListener();
 
         PixelFormatGpu format;
-        //64MB for RGBA8, that's one 4096x4096 texture.
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
+    #if OGRE_ARCHITECTURE == OGRE_ARCHITECTURE_32
+        // 32-bit have tighter limited addresse memory. They pay the price
+        // in slower streaming (more round trips between main and worker threads)
+        const uint32 maxResolution = 2048u;
+    #else
+        // 64-bit have plenty of virtual addresss to spare. We can reserve much more.
+        const uint32 maxResolution = 4096u;
+    #endif
+        //4MB / 64MB for RGBA8, that's two 4096x4096 / 2048x2048 texture.
         format = PixelFormatGpuUtils::getFamily( PFG_RGBA8_UNORM );
-        mDefaultPoolParameters.budget.push_back( BudgetEntry( format, 4096u, 1u ) );
-        //16MB for BC1, that's two 4096x4096 texture.
+        mBudget.push_back( BudgetEntry( format, maxResolution, 2u ) );
+        //4MB / 16MB for BC1, that's two 4096x4096 / 2048x2048 texture.
         format = PixelFormatGpuUtils::getFamily( PFG_BC1_UNORM );
-        mDefaultPoolParameters.budget.push_back( BudgetEntry( format, 4096u, 2u ) );
-        //16MB for BC3, that's one 4096x4096 texture.
+        mBudget.push_back( BudgetEntry( format, maxResolution, 2u ) );
+        //4MB / 16MB for BC3, that's one 4096x4096 / 2048x2048 texture.
         format = PixelFormatGpuUtils::getFamily( PFG_BC3_UNORM );
-        mDefaultPoolParameters.budget.push_back( BudgetEntry( format, 4096u, 1u ) );
-        //16MB for BC5, that's one 4096x4096 texture.
+        mBudget.push_back( BudgetEntry( format, maxResolution, 1u ) );
+        //4MB / 16MB for BC5, that's one 4096x4096 / 2048x2048 texture.
         format = PixelFormatGpuUtils::getFamily( PFG_BC5_UNORM );
-        mDefaultPoolParameters.budget.push_back( BudgetEntry( format, 4096u, 1u ) );
+        mBudget.push_back( BudgetEntry( format, maxResolution, 1u ) );
+#elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+        //Mobile platforms don't support compressed formats, and have tight memory constraints
+        //8MB for RGBA8, that's two 2048x2048 texture.
+        format = PixelFormatGpuUtils::getFamily( PFG_RGBA8_UNORM );
+        mBudget.push_back( BudgetEntry( format, 2048u, 2u ) );
+#endif
+
+        mBudget.clear();
 
         //Sort in descending order.
-        std::sort( mDefaultPoolParameters.budget.begin(), mDefaultPoolParameters.budget.end(),
-                   BudgetEntry() );
+        std::sort( mBudget.begin(), mBudget.end(), BudgetEntry() );
 
         for( int i=0; i<2; ++i )
             mThreadData[i].objCmdBuffer = new ObjCmdBuffer();
@@ -178,6 +187,9 @@ namespace Ogre
             delete mThreadData[i].objCmdBuffer;
             mThreadData[i].objCmdBuffer = 0;
         }
+
+        OGRE_DELETE mTextureGpuManagerListener;
+        mTextureGpuManagerListener = 0;
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::destroyAll(void)
@@ -257,25 +269,6 @@ namespace Ogre
         }
 
         mTexturePool.clear();
-    }
-    //-----------------------------------------------------------------------------------
-    uint16 TextureGpuManager::getNumSlicesFor( TextureGpu *texture ) const
-    {
-        const PoolParameters &poolParams = mDefaultPoolParameters;
-
-        uint32 maxResolution = std::max( texture->getWidth(), texture->getHeight() );
-        uint16 minSlicesPerPool = 1u;
-
-        for( int i=0; i<4; ++i )
-        {
-            if( maxResolution <= poolParams.maxResolutionToApplyMinSlices[i] )
-            {
-                minSlicesPerPool = poolParams.minSlicesPerPool[i];
-                break;
-            }
-        }
-
-        return minSlicesPerPool;
     }
     //-----------------------------------------------------------------------------------
     TextureGpu* TextureGpuManager::createTexture( const String &name,
@@ -612,9 +605,23 @@ namespace Ogre
                     LML_CRITICAL );
     }
     //-----------------------------------------------------------------------------------
+    void TextureGpuManager::setTextureGpuManagerListener( TextureGpuManagerListener *listener )
+    {
+        assert( listener );
+        OGRE_DELETE mTextureGpuManagerListener;
+        mTextureGpuManagerListener = listener;
+    }
+    //-----------------------------------------------------------------------------------
     void TextureGpuManager::setStagingTextureMaxBudgetBytes( size_t stagingTextureMaxBudgetBytes )
     {
         mStagingTextureMaxBudgetBytes = stagingTextureMaxBudgetBytes;
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::setWorkerThreadMinimumBudget( const BudgetEntryVec &budget )
+    {
+        mBudget = budget;
+        //Sort in descending order.
+        std::sort( mBudget.begin(), mBudget.end(), BudgetEntry() );
     }
     //-----------------------------------------------------------------------------------
     const String* TextureGpuManager::findNameStr( IdString idName ) const
@@ -765,7 +772,7 @@ namespace Ogre
             newPool.masterTexture = createTextureImpl( GpuPageOutStrategy::Discard,
                                                        texName.c_str(), 0,
                                                        TextureTypes::Type2DArray );
-            const uint16 numSlices = getNumSlicesFor( texture );
+            const uint16 numSlices = mTextureGpuManagerListener->getNumSlicesFor( texture, this );
 
             newPool.usedMemory = 0;
             newPool.usedSlots.reserve( numSlices );
@@ -825,7 +832,7 @@ namespace Ogre
         texture->_notifyTextureSlotChanged( 0, 0 );
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::fulfillUsageStats( ThreadData &workerData )
+    void TextureGpuManager::fulfillUsageStats(void)
     {
         UsageStatsVec::iterator itStats = mStreamingData.prevStats.begin();
         UsageStatsVec::iterator enStats = mStreamingData.prevStats.end();
@@ -890,11 +897,10 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::fulfillMinimumBudget( ThreadData &workerData,
-                                                  const PoolParameters &poolParams )
+    void TextureGpuManager::fulfillMinimumBudget(void)
     {
-        BudgetEntryVec::const_iterator itBudget = poolParams.budget.begin();
-        BudgetEntryVec::const_iterator enBudget = poolParams.budget.end();
+        BudgetEntryVec::const_iterator itBudget = mBudget.begin();
+        BudgetEntryVec::const_iterator enBudget = mBudget.end();
 
         while( itBudget != enBudget )
         {
@@ -961,15 +967,15 @@ namespace Ogre
     {
         return _l->isSmallerThan( _r );
     }
-    void TextureGpuManager::fullfillBudget( ThreadData &workerData )
+    void TextureGpuManager::fullfillBudget(void)
     {
         //Ensure availableStagingTex is sorted in ascending order
         std::sort( mStreamingData.availableStagingTex.begin(),
                    mStreamingData.availableStagingTex.end(),
                    OrderByStagingTexture );
 
-        fulfillUsageStats( workerData );
-        fulfillMinimumBudget( workerData, mDefaultPoolParameters );
+        fulfillUsageStats();
+        fulfillMinimumBudget();
 
         {
             //The textures that are left are wasting memory, thus can be removed.
@@ -1500,7 +1506,7 @@ namespace Ogre
             {
                 std::swap( mainData.objCmdBuffer, workerData.objCmdBuffer );
                 mainData.usedStagingTex.swap( workerData.usedStagingTex );
-                fullfillBudget( workerData );
+                fullfillBudget();
 
                 isDone = mainData.loadRequests.empty() &&
                          workerData.loadRequests.empty() &&
