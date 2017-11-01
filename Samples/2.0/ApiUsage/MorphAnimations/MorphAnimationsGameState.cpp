@@ -36,7 +36,7 @@ namespace Demo
         Ogre::v1::MeshPtr planeMeshV1 = Ogre::v1::MeshManager::getSingleton().createPlane( "Plane v1",
                                             Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
                                             Ogre::Plane( Ogre::Vector3::UNIT_Y, 1.0f ), 5.0f, 5.0f,
-                                            1, 1, true, 1, 4.0f, 4.0f, Ogre::Vector3::UNIT_Z,
+                                            1, 1, true, 1, 1.0f, 1.0f, Ogre::Vector3::UNIT_Z,
                                             Ogre::v1::HardwareBuffer::HBU_STATIC,
                                             Ogre::v1::HardwareBuffer::HBU_STATIC );
  
@@ -89,7 +89,6 @@ namespace Demo
         Ogre::SceneNode *springNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
                 createChildSceneNode( Ogre::SCENE_DYNAMIC );
 
-        //Create the master.
         mSpringItem = sceneManager->createItem( "Spring.mesh",
                                                          Ogre::ResourceGroupManager::
                                                          AUTODETECT_RESOURCE_GROUP_NAME,
@@ -120,15 +119,13 @@ namespace Demo
     {
         if (arg.keysym.sym == SDLK_DOWN) {
             auto subItem = mSpringItem->getSubItem(0);
-            auto datablock = static_cast<Ogre::HlmsPbsDatablock*>(subItem->getDatablock());
-            auto w = std::min(datablock->getPoseWeight() + 0.1f, 1.f);
-            datablock->setPoseWeight(w);
+            auto w = std::min(subItem->getPoseWeight() + 0.1f, 1.f);
+            subItem->setPoseWeight(w);
         }
         else if (arg.keysym.sym == SDLK_UP) {
             auto subItem = mSpringItem->getSubItem(0);
-            auto datablock = static_cast<Ogre::HlmsPbsDatablock*>(subItem->getDatablock());
-            auto w = std::max(datablock->getPoseWeight() - 0.1f, 0.f);
-            datablock->setPoseWeight(w);
+            auto w = std::max(subItem->getPoseWeight() - 0.1f, 0.f);
+            subItem->setPoseWeight(w);
         }
         else {
             TutorialGameState::keyPressed(arg);

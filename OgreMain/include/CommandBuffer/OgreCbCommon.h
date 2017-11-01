@@ -67,7 +67,6 @@ namespace Ogre
         CB_DRAW_V1_STRIP_NO_BASE_INSTANCE,
         CB_DRAW_V1_STRIP,
         CB_LOW_LEVEL_MATERIAL,
-        CB_BIND_GPU_PROGRAM_PARAMETERS,
         MAX_COMMAND_BUFFER
     };
 

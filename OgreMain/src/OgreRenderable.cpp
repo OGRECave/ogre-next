@@ -52,7 +52,8 @@ namespace Ogre
         mHlmsGlobalIndex( ~0 ),
         mPolygonModeOverrideable( true ),
         mUseIdentityProjection( false ),
-        mUseIdentityView( false )
+        mUseIdentityView( false ),
+        mPoseWeight( 0 )
     {
     }
     //-----------------------------------------------------------------------------------

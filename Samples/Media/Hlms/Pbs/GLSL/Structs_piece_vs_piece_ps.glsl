@@ -42,7 +42,6 @@ layout_constbuffer(binding = 0) uniform PassBuffer
 	mat4 view;
 	@property( hlms_num_shadow_map_lights )ShadowReceiverData shadowRcv[@value(hlms_num_shadow_map_lights)];@end
 
-
 	//-------------------------------------------------------------------------
 
 	//Pixel shader

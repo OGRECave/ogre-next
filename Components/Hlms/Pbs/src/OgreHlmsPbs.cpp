@@ -56,7 +56,6 @@ THE SOFTWARE.
 #include "CommandBuffer/OgreCommandBuffer.h"
 #include "CommandBuffer/OgreCbTexture.h"
 #include "CommandBuffer/OgreCbShaderBuffer.h"
-#include "CommandBuffer/OgreCbPipelineStateObject.h"
 
 #include "Animation/OgreSkeletonInstance.h"
 
@@ -1924,6 +1923,11 @@ namespace Ogre
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
         *( currentMappedConstBuffer+3u ) = queuedRenderable.renderable->mCustomParameter & 0x7F;
 #endif
+
+        if (queuedRenderable.renderable->hasPoseAnimation()) {
+            *reinterpret_cast<float * RESTRICT_ALIAS>( currentMappedConstBuffer+3 ) = queuedRenderable.renderable->getPoseWeight();
+        }
+        
         currentMappedConstBuffer += 4;
 
         //---------------------------------------------------------------------------
@@ -1971,13 +1975,6 @@ namespace Ogre
 
         mCurrentMappedConstBuffer   = currentMappedConstBuffer;
         mCurrentMappedTexBuffer     = currentMappedTexBuffer;
-        
-        if( queuedRenderable.renderable->hasPoseAnimation() ) {
-            GpuProgramPtr vertexShader = cache->pso.vertexShader;
-            GpuProgramParametersSharedPtr vsParams = vertexShader->getDefaultParameters();
-            vsParams->setNamedConstant( "poseWeight", datablock->getPoseWeight() );
-            *commandBuffer->addCommand<CbBindGpuProgramParameters>() = CbBindGpuProgramParameters( vertexShader );
-        }
 
         return ((mCurrentMappedConstBuffer - mStartMappedConstBuffer) >> 2) - 1;
     }

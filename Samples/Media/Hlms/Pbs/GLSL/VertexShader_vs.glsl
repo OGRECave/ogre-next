@@ -46,11 +46,10 @@ out block
 
 // START UNIFORM DECLARATION
 @insertpiece( PassDecl )
-@property( hlms_skeleton || hlms_shadowcaster )@insertpiece( InstanceDecl )@end
+@property( hlms_skeleton || hlms_shadowcaster || hlms_pose )@insertpiece( InstanceDecl )@end
 /*layout(binding = 0) */uniform samplerBuffer worldMatBuf;
 @insertpiece( custom_vs_uniformDeclaration )
 @property( !GL_ARB_base_instance )uniform uint baseInstance;@end
-@property( hlms_pose )uniform float poseWeight;@end
 // END UNIFORM DECLARATION
 
 @property( hlms_qtangent )
@@ -157,21 +156,21 @@ void main()
 @property( !hlms_skeleton )
     
     mat3x4 worldMat = UNPACK_MAT3x4( worldMatBuf, drawId @property( !hlms_shadowcaster )<< 1u@end );
-@property( hlms_normal || hlms_qtangent )
+	@property( hlms_normal || hlms_qtangent )
 	mat4 worldView = UNPACK_MAT4( worldMatBuf, (drawId << 1u) + 1u );
 	@end
-    	
-@property( !hlms_pose )
-	vec4 worldPos = vec4( (vertex * worldMat).xyz, 1.0f );@end
-	
-@property( hlms_pose )
-	// when pose animation is enabled the last uv contains the offset
-	@set(pose_uv, hlms_uv_count)
-	@sub(pose_uv, 1)
-	vec4 objPos = vertex + vec4(uv@value( pose_uv ).xyz * poseWeight, 0.0f);
-	vec4 worldPos = vec4( (objPos * worldMat).xyz, 1.0f );
-	@end
-
+    
+	@property( !hlms_pose )
+		vec4 worldPos = vec4( (vertex * worldMat).xyz, 1.0f );@end
+		
+	@property( hlms_pose )
+		// when pose animation is enabled the last uv contains the offset
+		@set(pose_uv, hlms_uv_count)
+		@sub(pose_uv, 1)
+		float poseWeight = uintBitsToFloat( instance.worldMaterialIdx[drawId].w );
+		vec4 objPos = vertex + vec4(uv@value( pose_uv ).xyz * poseWeight, 0.0f);
+		vec4 worldPos = vec4( (objPos * worldMat).xyz, 1.0f );
+		@end
 @end
 
 @property( hlms_qtangent )
@@ -189,25 +188,19 @@ void main()
 	@insertpiece( DoShadowReceiveVS )
 	@insertpiece( DoShadowCasterVS )
 
-	//do not send pose uvs to pixel shader
-	@set(uv_count, hlms_uv_count)
-	
-@property( hlms_pose )
-	@sub(uv_count, 1)@end
-	
 @property( !hlms_shadowcaster || !hlms_shadow_uses_depth_texture || alpha_test || exponential_shadow_maps )
 	/// hlms_uv_count will be 0 on shadow caster passes w/out alpha test
-@foreach( uv_count, n )
+@foreach( hlms_uv_count, n )
 	outVs.uv@n = uv@n;@end
-
+	
 @end
 
 @property( (!hlms_shadowcaster || alpha_test) && !lower_gpu_overhead )
 	outVs.drawId = drawId;@end
 
-@property( hlms_use_prepass_msaa > 1 )
-	outVs.zwDepth.xy = outVs.gl_Position.zw;
-@end
+	@property( hlms_use_prepass_msaa > 1 )
+		outVs.zwDepth.xy = outVs.gl_Position.zw;
+	@end
 
 @property( hlms_global_clip_distances )
 	gl_ClipDistance[0] = dot( float4( worldPos.xyz, 1.0 ), passBuf.clipPlane0.xyzw );

@@ -145,8 +145,10 @@ namespace Ogre {
 
         bool hasSkeletonAnimation(void) const               { return mHasSkeletonAnimation; }
 
-        bool hasPoseAnimation(void) const               { return mHasPoseAnimation; }
-
+        bool hasPoseAnimation(void) const { return mHasPoseAnimation; }
+        float getPoseWeight() const { return mPoseWeight; }
+        void setPoseWeight(float w) { mPoseWeight = w; }
+        
         /** Returns whether the world matrix is an identify matrix.
         @remarks
             It is up to the Hlms implementation whether to honour this request. Take in mind
@@ -447,6 +449,7 @@ namespace Ogre {
         uint8               mRenderQueueSubGroup;
         bool                    mHasSkeletonAnimation;
         bool                    mHasPoseAnimation;
+        float                   mPoseWeight;
         uint8                   mCurrentMaterialLod;
         FastArray<Real> const   *mLodMaterial;
 
