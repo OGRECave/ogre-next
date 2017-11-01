@@ -348,7 +348,7 @@ namespace Ogre
             GpuProgramParametersSharedPtr psParams = retVal->pso.pixelShader->getDefaultParameters();
             
             //Vertex shader consumes 1 slot with its tbuffer, or 2 if it has pose animations
-            int texUnit = queuedRenderable.renderable->hasPoseAnimation() ? 2 : 1; 
+            int texUnit = 1;//queuedRenderable.renderable->hasPoseAnimation() ? 2 : 1; 
 
             //Forward3D consumes 2 more slots.
             if( mGridBuffer )
@@ -1624,7 +1624,7 @@ namespace Ogre
 
             if( !casterPass )
             {
-                size_t texUnit = queuedRenderable.renderable->hasPoseAnimation() ? 2 : 1; 
+                size_t texUnit = 1;//queuedRenderable.renderable->hasPoseAnimation() ? 2 : 1; 
 
                 if( mGridBuffer )
                 {

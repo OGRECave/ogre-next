@@ -596,7 +596,7 @@ namespace Ogre {
             v1::Pose *const pose = poseList[0];
             
             // Create buffer
-            size_t numVertices = pose->getVertexOffsets().size();
+            size_t numVertices = vertexBuffer->getNumElements();
             
             bool normals = pose->getIncludesNormals();
             //if (normals) {

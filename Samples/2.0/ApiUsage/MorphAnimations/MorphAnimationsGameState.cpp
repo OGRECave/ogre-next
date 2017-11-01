@@ -95,7 +95,11 @@ namespace Demo
                                                          Ogre::SCENE_DYNAMIC );
         springNode->attachObject( mSpringItem );
         springNode->setScale(Ogre::Vector3(3));
-
+        /*
+        Ogre::HlmsMacroblock macroblock = *mSpringItem->getSubItem(0)->getDatablock()->getMacroblock();
+        macroblock.mPolygonMode = Ogre::PM_WIREFRAME;
+        mSpringItem->getSubItem(0)->getDatablock()->setMacroblock(macroblock);
+        */
         Ogre::Light *light = sceneManager->createLight();
         Ogre::SceneNode *lightNode = sceneManager->getRootSceneNode()->createChildSceneNode();
         lightNode->attachObject( light );
