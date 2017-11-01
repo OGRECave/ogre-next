@@ -98,6 +98,8 @@ namespace Ogre {
         virtual void getRenderOperation(v1::RenderOperation& op, bool casterPass);
         virtual void getWorldTransforms(Matrix4* xform) const;
         virtual bool getCastsShadows(void) const;
+        
+        virtual TexBufferPacked* getPoseTexBuffer() const; 
     };
     /** @} */
     /** @} */

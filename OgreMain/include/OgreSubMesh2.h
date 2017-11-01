@@ -110,6 +110,7 @@ namespace Ogre {
         uint8 rationaliseBoneAssignments(void);
         
         bool mHasPoseAnimation;
+        TexBufferPacked *mPoseTexBuffer;
 
     public:
         SubMesh();
@@ -199,6 +200,8 @@ namespace Ogre {
         void _prepareForShadowMapping( bool forceSameBuffers );
         
         bool hasPoseAnimation() { return mHasPoseAnimation; }
+        
+        TexBufferPacked* getPoseTexBuffer() { return mPoseTexBuffer; }
 
     protected:
         void importBuffersFromV1( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords, bool qTangents,

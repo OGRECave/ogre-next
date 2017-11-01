@@ -118,4 +118,9 @@ namespace Ogre {
                      "v1::Entity). Do not mix Items and Entities",
                      "SubItem::getCastsShadows" );
     }
+    
+    TexBufferPacked* SubItem::getPoseTexBuffer() const
+    { 
+        return mSubMesh->getPoseTexBuffer();
+    }
 }

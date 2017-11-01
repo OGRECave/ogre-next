@@ -49,7 +49,8 @@ namespace Ogre {
     SubMesh::SubMesh() :
         mParent( 0 ),
         mBoneAssignmentsOutOfDate( false ),
-        mHasPoseAnimation( false )
+        mHasPoseAnimation( false ),
+        mPoseTexBuffer( 0 )
     {
     }
     //-----------------------------------------------------------------------
@@ -57,6 +58,9 @@ namespace Ogre {
     {
         destroyShadowMappingVaos();
         destroyVaos( mVao[VpNormal], mParent->mVaoManager );
+        
+        if( mPoseTexBuffer )
+            mParent->mVaoManager->destroyTexBuffer( mPoseTexBuffer );
     }
     //-----------------------------------------------------------------------
     void SubMesh::addBoneAssignment(const VertexBoneAssignment& vertBoneAssign)
@@ -584,7 +588,54 @@ namespace Ogre {
             ++itor;
         }
         
-        mHasPoseAnimation = !subMesh->parent->getPoseList().empty();
+        // find the index of this submesh - uh cant find the index of a submesh
+        const v1::PoseList& poseList = subMesh->parent->getPoseList();
+        mHasPoseAnimation = !poseList.empty();
+        
+        if( mHasPoseAnimation ) {
+            v1::Pose *const pose = poseList[0];
+            
+            // Create buffer
+            size_t numVertices = pose->getVertexOffsets().size();
+            
+            bool normals = pose->getIncludesNormals();
+            //if (normals) {
+
+            //}
+            
+            size_t bufferSize = numVertices * sizeof( float ) * 4;
+            float *pFloat = reinterpret_cast<float*>( OGRE_MALLOC_SIMD(
+                                                                    bufferSize,
+                                                                    MEMCATEGORY_GEOMETRY ) );                                
+            FreeOnDestructor dataPtrContainer( pFloat );
+            memset(pFloat, 0, bufferSize); 
+
+            // Set each vertex
+            v1::Pose::VertexOffsetMap::const_iterator v = pose->getVertexOffsets().begin();
+            //v1::Pose::NormalsMap::const_iterator n = pose->getNormals().begin();
+            
+            while( v != pose->getVertexOffsets().end() )
+            {
+                size_t idx = v->first;
+                pFloat[4*idx+0] = v->second.x;
+                pFloat[4*idx+1] = v->second.y;
+                pFloat[4*idx+2] = v->second.z;
+                pFloat[4*idx+3] = 0.f;
+                
+                ++v;
+                /*if (normals)
+                {
+                    *pDst++ = n->second.x;
+                    *pDst++ = n->second.y;
+                    *pDst++ = n->second.z;
+                    ++n;
+                }*/
+                
+            }
+            
+            mPoseTexBuffer = mParent->mVaoManager->createTexBuffer( PF_FLOAT32_RGBA, bufferSize,
+                                                                    BT_IMMUTABLE, pFloat, false );
+        }
     }
     //---------------------------------------------------------------------
     IndexBufferPacked* SubMesh::importFromV1( v1::IndexData *indexData )
@@ -793,66 +844,6 @@ namespace Ogre {
 
         v1::VertexData *vertexData = subMesh->vertexData[vaoPassIdx];
         v1::VertexDeclaration* vertexDeclaration = vertexData->vertexDeclaration;
-        
-        // if it has poses add data to uvs 
-        // find the index of this submesh - uh cant find the index of a submesh
-        const v1::PoseList& poseList = subMesh->parent->getPoseList();
-        
-        if (!poseList.empty()) {
-            v1::Pose *const pose = poseList[0];
-            
-            // Create buffer
-            size_t numVertices = pose->getVertexOffsets().size();
-            size_t vertexSize = v1::VertexElement::getTypeSize(VET_FLOAT3);
-            bool normals = pose->getIncludesNormals();
-            if (normals) {
-                vertexSize += v1::VertexElement::getTypeSize(VET_FLOAT3);
-            }
-            
-            // TODO: deallocate this???
-            v1::HardwareVertexBufferSharedPtr poseBuffer = v1::HardwareBufferManager::getSingleton().createVertexBuffer(
-                                                            vertexSize, numVertices, v1::HardwareBuffer::HBU_DYNAMIC);
-                
-            float* pFloat = static_cast<float*>(poseBuffer->lock(v1::HardwareBuffer::HBL_DISCARD));
-            memset(pFloat, 0, poseBuffer->getSizeInBytes()); 
-
-            // Set each vertex
-            v1::Pose::VertexOffsetMap::const_iterator v = pose->getVertexOffsets().begin();
-            v1::Pose::NormalsMap::const_iterator n = pose->getNormals().begin();
-            
-            size_t numFloatsPerVertex = normals ? 6: 3;
-            
-            while(v != pose->getVertexOffsets().end())
-            {
-                // Remember, vertex maps are *sparse* so may have missing entries
-                // This is why we skip
-                float* pDst = pFloat + (numFloatsPerVertex * v->first);
-                *pDst++ = v->second.x;
-                *pDst++ = v->second.y;
-                *pDst++ = v->second.z;
-                ++v;
-                if (normals)
-                {
-                    *pDst++ = n->second.x;
-                    *pDst++ = n->second.y;
-                    *pDst++ = n->second.z;
-                    ++n;
-                }
-                
-            }
-            poseBuffer->unlock();
-            
-            unsigned short bindingIndex = vertexData->vertexBufferBinding->getNextIndex();
-            vertexData->vertexBufferBinding->setBinding(bindingIndex, poseBuffer);
-            
-            int uvIndex = vertexDeclaration->getNextFreeTextureCoordinate(); // position offsets
-            vertexDeclaration->addElement(bindingIndex, 0, VET_FLOAT3, VES_TEXTURE_COORDINATES, uvIndex);
-            
-            if (pose->getIncludesNormals()) {
-                uvIndex = vertexDeclaration->getNextFreeTextureCoordinate(); // normals
-                vertexDeclaration->addElement(bindingIndex, v1::VertexElement::getTypeSize(VET_FLOAT3), VET_FLOAT3, VES_TEXTURE_COORDINATES, uvIndex);
-            }
-        }
         
         {    
             //Get an AZDO-friendly vertex declaration out of the original declaration.

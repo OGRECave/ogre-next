@@ -112,6 +112,8 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void MorphAnimationsGameState::update( float timeSinceLast )
     {        
+        
+        
         TutorialGameState::update( timeSinceLast );
     }
     

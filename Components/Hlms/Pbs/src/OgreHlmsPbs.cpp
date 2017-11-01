@@ -346,8 +346,9 @@ namespace Ogre
         if( !retVal->pso.pixelShader.isNull() )
         {
             GpuProgramParametersSharedPtr psParams = retVal->pso.pixelShader->getDefaultParameters();
-
-            int texUnit = 1; //Vertex shader consumes 1 slot with its tbuffer.
+            
+            //Vertex shader consumes 1 slot with its tbuffer, or 2 if it has pose animations
+            int texUnit = queuedRenderable.renderable->hasPoseAnimation() ? 2 : 1; 
 
             //Forward3D consumes 2 more slots.
             if( mGridBuffer )
@@ -436,6 +437,12 @@ namespace Ogre
         GpuProgramParametersSharedPtr vsParams = retVal->pso.vertexShader->getDefaultParameters();
         vsParams->setNamedConstant( "worldMatBuf", 0 );
 
+        if( queuedRenderable.renderable->hasPoseAnimation() )
+        {
+            vsParams->setNamedConstant( "poseBuf", 1 );
+            //vsParams->setNamedConstant( "numVertices", queuedRenderable.renderable->get );
+        }
+        
         mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache,
                                             mSetProperties, queuedRenderable );
 
@@ -1617,11 +1624,11 @@ namespace Ogre
 
             if( !casterPass )
             {
-                size_t texUnit = 1;
+                size_t texUnit = queuedRenderable.renderable->hasPoseAnimation() ? 2 : 1; 
 
                 if( mGridBuffer )
                 {
-                    texUnit = 3;
+                    texUnit += 2;
                     *commandBuffer->addCommand<CbShaderBuffer>() =
                             CbShaderBuffer( PixelShader, 1, mGridBuffer, 0, 0 );
                     *commandBuffer->addCommand<CbShaderBuffer>() =
@@ -1925,7 +1932,13 @@ namespace Ogre
 #endif
 
         if (queuedRenderable.renderable->hasPoseAnimation()) {
-            *reinterpret_cast<float * RESTRICT_ALIAS>( currentMappedConstBuffer+3 ) = queuedRenderable.renderable->getPoseWeight();
+            *reinterpret_cast<float * RESTRICT_ALIAS>( currentMappedConstBuffer+3u ) = queuedRenderable.renderable->getPoseWeight();
+            
+            TexBufferPacked* poseBuf = queuedRenderable.renderable->getPoseTexBuffer();
+            *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer( VertexShader,
+                                                                           1, poseBuf, 0,
+                                                                           poseBuf->
+                                                                           getTotalSizeBytes() );
         }
         
         currentMappedConstBuffer += 4;

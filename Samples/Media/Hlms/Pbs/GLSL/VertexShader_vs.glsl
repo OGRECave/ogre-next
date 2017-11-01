@@ -50,6 +50,9 @@ out block
 /*layout(binding = 0) */uniform samplerBuffer worldMatBuf;
 @insertpiece( custom_vs_uniformDeclaration )
 @property( !GL_ARB_base_instance )uniform uint baseInstance;@end
+@property( hlms_pose )
+	/*layout(binding = 1) */
+	uniform samplerBuffer poseBuf;@end
 // END UNIFORM DECLARATION
 
 @property( hlms_qtangent )
@@ -164,11 +167,9 @@ void main()
 		vec4 worldPos = vec4( (vertex * worldMat).xyz, 1.0f );@end
 		
 	@property( hlms_pose )
-		// when pose animation is enabled the last uv contains the offset
-		@set(pose_uv, hlms_uv_count)
-		@sub(pose_uv, 1)
 		float poseWeight = uintBitsToFloat( instance.worldMaterialIdx[drawId].w );
-		vec4 objPos = vertex + vec4(uv@value( pose_uv ).xyz * poseWeight, 0.0f);
+		vec4 posePos = bufferFetch( poseBuf, gl_VertexID );
+		vec4 objPos = vertex + posePos * poseWeight;
 		vec4 worldPos = vec4( (objPos * worldMat).xyz, 1.0f );
 		@end
 @end
