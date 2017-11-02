@@ -156,15 +156,13 @@ namespace Ogre
         mBudget.push_back( BudgetEntry( format, 2048u, 2u ) );
 #endif
 
-        mBudget.clear();
-
         //Sort in descending order.
         std::sort( mBudget.begin(), mBudget.end(), BudgetEntry() );
 
         for( int i=0; i<2; ++i )
             mThreadData[i].objCmdBuffer = new ObjCmdBuffer();
 
-#if OGRE_PLATFORM != OGRE_PLATFORM_EMSCRIPTEN
+#if OGRE_PLATFORM != OGRE_PLATFORM_EMSCRIPTEN && !OGRE_FORCE_TEXTURE_STREAMING_ON_MAIN_THREAD
         mWorkerThread = Threads::CreateThread( THREAD_GET( updateStreamingWorkerThread ), 0, this );
 #endif
     }
@@ -172,7 +170,7 @@ namespace Ogre
     TextureGpuManager::~TextureGpuManager()
     {
         mShuttingDown = true;
-#if OGRE_PLATFORM != OGRE_PLATFORM_EMSCRIPTEN
+#if OGRE_PLATFORM != OGRE_PLATFORM_EMSCRIPTEN && !OGRE_FORCE_TEXTURE_STREAMING_ON_MAIN_THREAD
         mWorkerWaitableEvent.wake();
         Threads::WaitForThreads( 1u, &mWorkerThread );
 #endif
@@ -1482,7 +1480,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool TextureGpuManager::_update( bool syncWithWorkerThread )
     {
-#if OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN
+#if OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN || OGRE_FORCE_TEXTURE_STREAMING_ON_MAIN_THREAD
         _updateStreaming();
 #endif
         bool isDone = false;
