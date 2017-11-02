@@ -249,10 +249,16 @@ void GLXConfigurator::findMonitorIndexFromMouseCursor( ::Window rootWindow, int 
                 {
                     outCenterW = crtcInfo->x + crtcInfo->width / 2;
                     outCenterH = crtcInfo->y + crtcInfo->height / 2;
+                    XRRFreeCrtcInfo( crtcInfo );
+                    XRRFreeScreenResources( screenXRR );
                     return;
                 }
+
+                XRRFreeCrtcInfo( crtcInfo );
             }
         }
+
+        XRRFreeScreenResources( screenXRR );
     }
 
     //Couldn't find. Probably remote display.
