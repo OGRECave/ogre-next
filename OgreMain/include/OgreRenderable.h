@@ -145,10 +145,10 @@ namespace Ogre {
 
         bool hasSkeletonAnimation(void) const               { return mHasSkeletonAnimation; }
 
-        bool hasPoseAnimation(void) const { return mHasPoseAnimation; }
+        unsigned short getNumPoseAnimations(void) const { return mNumPoseAnimations; }
         
-        float getPoseWeight() const { return mPoseWeight; }
-        void setPoseWeight(float w) { mPoseWeight = w; }
+        float getPoseWeight(size_t index) const;
+        void setPoseWeight(size_t index, float w);
         
         virtual TexBufferPacked* getPoseTexBuffer() const { return 0; }
         
@@ -451,8 +451,8 @@ namespace Ogre {
     protected:
         uint8               mRenderQueueSubGroup;
         bool                    mHasSkeletonAnimation;
-        bool                    mHasPoseAnimation;
-        float                   mPoseWeight;
+        bool                    mNumPoseAnimations;
+        float                   mPoseWeights[4];
         uint8                   mCurrentMaterialLod;
         FastArray<Real> const   *mLodMaterial;
         

@@ -348,7 +348,7 @@ namespace Ogre
             GpuProgramParametersSharedPtr psParams = retVal->pso.pixelShader->getDefaultParameters();
             
             //Vertex shader consumes 1 slot with its tbuffer, or 2 if it has pose animations
-            int texUnit = 1;//queuedRenderable.renderable->hasPoseAnimation() ? 2 : 1; 
+            int texUnit = 1;//queuedRenderable.renderable->getNumPoseAnimations() > 0 ? 2 : 1; 
 
             //Forward3D consumes 2 more slots.
             if( mGridBuffer )
@@ -437,10 +437,12 @@ namespace Ogre
         GpuProgramParametersSharedPtr vsParams = retVal->pso.vertexShader->getDefaultParameters();
         vsParams->setNamedConstant( "worldMatBuf", 0 );
 
-        if( queuedRenderable.renderable->hasPoseAnimation() )
+        if( queuedRenderable.renderable->getNumPoseAnimations() > 0 )
         {
             vsParams->setNamedConstant( "poseBuf", 1 );
-            //vsParams->setNamedConstant( "numVertices", queuedRenderable.renderable->get );
+            const VertexArrayObjectArray& vao = queuedRenderable.renderable->getVaos(VpNormal);
+            const VertexBufferPacked* vertexBuffer = vao[0]->getVertexBuffers()[0];
+            vsParams->setNamedConstant( "numVertices", (int)vertexBuffer->getNumElements() );
         }
         
         mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache,
@@ -722,7 +724,6 @@ namespace Ogre
     {
         HlmsPbsDatablock *datablock = static_cast<HlmsPbsDatablock*>( renderable->getDatablock() );
         const bool hasAlphaTest = datablock->getAlphaTest() != CMPF_ALWAYS_PASS;
-        const bool hasPoseAnimation = renderable->hasPoseAnimation();
         
         HlmsPropertyVec::iterator itor = mSetProperties.begin();
         HlmsPropertyVec::iterator end  = mSetProperties.end();
@@ -742,15 +743,6 @@ namespace Ogre
                      itor->keyName != HlmsBaseProp::DualParaboloidMapping &&
                      itor->keyName != HlmsBaseProp::AlphaTest &&
                      itor->keyName != HlmsBaseProp::AlphaBlend &&
-                     (itor->keyName != HlmsBaseProp::UvCount  || !hasPoseAnimation) &&
-                     (itor->keyName != HlmsBaseProp::UvCount0 || !hasPoseAnimation) &&
-                     (itor->keyName != HlmsBaseProp::UvCount1 || !hasPoseAnimation) &&
-                     (itor->keyName != HlmsBaseProp::UvCount2 || !hasPoseAnimation) &&
-                     (itor->keyName != HlmsBaseProp::UvCount3 || !hasPoseAnimation) &&
-                     (itor->keyName != HlmsBaseProp::UvCount4 || !hasPoseAnimation) &&
-                     (itor->keyName != HlmsBaseProp::UvCount5 || !hasPoseAnimation) &&
-                     (itor->keyName != HlmsBaseProp::UvCount6 || !hasPoseAnimation) &&
-                     (itor->keyName != HlmsBaseProp::UvCount7 || !hasPoseAnimation) &&
                      (!hasAlphaTest || !requiredPropertyByAlphaTest( itor->keyName )) )
             {
                 itor = mSetProperties.erase( itor );
@@ -1624,7 +1616,7 @@ namespace Ogre
 
             if( !casterPass )
             {
-                size_t texUnit = 1;//queuedRenderable.renderable->hasPoseAnimation() ? 2 : 1; 
+                size_t texUnit = 1;//queuedRenderable.renderable->getNumPoseAnimations() > 0 ? 2 : 1; 
 
                 if( mGridBuffer )
                 {
@@ -1931,8 +1923,16 @@ namespace Ogre
         *( currentMappedConstBuffer+3u ) = queuedRenderable.renderable->mCustomParameter & 0x7F;
 #endif
 
-        if (queuedRenderable.renderable->hasPoseAnimation()) {
-            *reinterpret_cast<float * RESTRICT_ALIAS>( currentMappedConstBuffer+3u ) = queuedRenderable.renderable->getPoseWeight();
+        if( queuedRenderable.renderable->getNumPoseAnimations() > 0 ) {
+            uint32 w0 = queuedRenderable.renderable->getPoseWeight(0) * 255;
+            uint32 w1 = queuedRenderable.renderable->getPoseWeight(1) * 255;
+            uint32 w2 = queuedRenderable.renderable->getPoseWeight(2) * 255;
+            uint32 w3 = queuedRenderable.renderable->getPoseWeight(3) * 255;
+            
+            *( currentMappedConstBuffer+3u ) = ((0xff & w0) << 0) | 
+                                               ((0xff & w1) << 8) | 
+                                               ((0xff & w2) << 16)| 
+                                               ((0xff & w3) << 24);
             
             TexBufferPacked* poseBuf = queuedRenderable.renderable->getPoseTexBuffer();
             *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer( VertexShader,

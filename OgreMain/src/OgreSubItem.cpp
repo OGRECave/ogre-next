@@ -53,7 +53,7 @@ namespace Ogre {
             mBlendIndexToBoneIndexMap = &subMeshBasis->mBlendIndexToBoneIndexMap;
         }
         
-        mHasPoseAnimation = subMeshBasis->hasPoseAnimation();
+        mNumPoseAnimations = subMeshBasis->getNumPoseAnimations();
     }
     //-----------------------------------------------------------------------
     SubItem::~SubItem()

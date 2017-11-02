@@ -1966,7 +1966,7 @@ namespace Ogre
                     gp->setBuildParametersFromReflection( false );
                     gp->setSkeletalAnimationIncluded( getProperty( HlmsBaseProp::Skeleton ) != 0 );
                     gp->setMorphAnimationIncluded( false );
-                    gp->setPoseAnimationIncluded( getProperty( HlmsBaseProp::Pose ) != 0);
+                    gp->setPoseAnimationIncluded( getProperty( HlmsBaseProp::Pose ) );
                     gp->setVertexTextureFetchRequired( false );
 
                     gp->load();
@@ -2133,7 +2133,7 @@ namespace Ogre
         mSetProperties.clear();
 
         setProperty( HlmsBaseProp::Skeleton, renderable->hasSkeletonAnimation() );
-        setProperty( HlmsBaseProp::Pose, renderable->hasPoseAnimation() );
+        setProperty( HlmsBaseProp::Pose, renderable->getNumPoseAnimations() );
 
         uint16 numTexCoords = 0;
         if( renderable->getVaos( VpNormal ).empty() )

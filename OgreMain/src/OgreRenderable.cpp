@@ -46,15 +46,15 @@ namespace Ogre
         mCustomParameter( 0 ),
         mRenderQueueSubGroup( 0 ),
         mHasSkeletonAnimation( false ),
-        mHasPoseAnimation( false ),
+        mNumPoseAnimations( 0 ),
         mCurrentMaterialLod( 0 ),
         mLodMaterial( &MovableObject::c_DefaultLodMesh ),
         mHlmsGlobalIndex( ~0 ),
         mPolygonModeOverrideable( true ),
         mUseIdentityProjection( false ),
-        mUseIdentityView( false ),
-        mPoseWeight( 0 )
+        mUseIdentityView( false )
     {
+        memset(mPoseWeights, 0, 4 * sizeof( float ));
     }
     //-----------------------------------------------------------------------------------
     Renderable::~Renderable()
@@ -193,6 +193,18 @@ namespace Ogre
     MaterialPtr Renderable::getMaterial(void) const
     {
         return mMaterial;
+    }
+    //-----------------------------------------------------------------------------------
+    float Renderable::getPoseWeight(size_t index) const
+    { 
+        //assert(( index < 4 && index < mNumPoseAnimations ) && "Pose weight index out of bounds" );
+        return mPoseWeights[index]; 
+    }
+    //-----------------------------------------------------------------------------------
+    void Renderable::setPoseWeight(size_t index, float w)
+    { 
+        assert(( index < 4 && index < mNumPoseAnimations ) && "Pose weight index out of bounds" );
+        mPoseWeights[index] = Math::Clamp(w, 0.f, 1.f); 
     }
     //-----------------------------------------------------------------------------------
     RenderableAnimated::RenderableAnimated() :

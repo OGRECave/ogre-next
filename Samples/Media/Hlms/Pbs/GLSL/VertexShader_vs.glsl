@@ -52,7 +52,9 @@ out block
 @property( !GL_ARB_base_instance )uniform uint baseInstance;@end
 @property( hlms_pose )
 	/*layout(binding = 1) */
-	uniform samplerBuffer poseBuf;@end
+	uniform samplerBuffer poseBuf;
+	uniform int numVertices;
+@end
 // END UNIFORM DECLARATION
 
 @property( hlms_qtangent )
@@ -167,11 +169,18 @@ void main()
 		vec4 worldPos = vec4( (vertex * worldMat).xyz, 1.0f );@end
 		
 	@property( hlms_pose )
-		float poseWeight = uintBitsToFloat( instance.worldMaterialIdx[drawId].w );
-		vec4 posePos = bufferFetch( poseBuf, gl_VertexID );
-		vec4 objPos = vertex + posePos * poseWeight;
-		vec4 worldPos = vec4( (objPos * worldMat).xyz, 1.0f );
+		// ideally could use unpackUnorm4x8 but it's unavailable in GLSL 330
+		uint poseWeights = instance.worldMaterialIdx[drawId].w;
+		vec4 objPos = vertex;
+		vec4 posePos;
+		float weight;
+		@foreach( hlms_pose, n )
+			posePos = bufferFetch( poseBuf, gl_VertexID + numVertices * @n );
+			weight = ( poseWeights & ( 0xffu << (@nu * 8u) ) ) / 255.f;
+			objPos += posePos * weight;
 		@end
+		vec4 worldPos = vec4( (objPos * worldMat).xyz, 1.0f );
+	@end
 @end
 
 @property( hlms_qtangent )

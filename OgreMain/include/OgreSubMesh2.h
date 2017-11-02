@@ -109,7 +109,7 @@ namespace Ogre {
         /// if we need to strip, normalizes all weights to sum 1.
         uint8 rationaliseBoneAssignments(void);
         
-        bool mHasPoseAnimation;
+        bool mNumPoseAnimations;
         TexBufferPacked *mPoseTexBuffer;
 
     public:
@@ -199,7 +199,7 @@ namespace Ogre {
 
         void _prepareForShadowMapping( bool forceSameBuffers );
         
-        bool hasPoseAnimation() { return mHasPoseAnimation; }
+        unsigned short getNumPoseAnimations() { return mNumPoseAnimations; }
         
         TexBufferPacked* getPoseTexBuffer() { return mPoseTexBuffer; }
 

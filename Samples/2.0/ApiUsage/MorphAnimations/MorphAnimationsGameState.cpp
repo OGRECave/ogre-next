@@ -117,7 +117,6 @@ namespace Demo
     void MorphAnimationsGameState::update( float timeSinceLast )
     {        
         
-        
         TutorialGameState::update( timeSinceLast );
     }
     
@@ -125,13 +124,11 @@ namespace Demo
     {
         if (arg.keysym.sym == SDLK_DOWN) {
             auto subItem = mSpringItem->getSubItem(0);
-            auto w = std::min(subItem->getPoseWeight() + 0.1f, 1.f);
-            subItem->setPoseWeight(w);
+            subItem->setPoseWeight(0, subItem->getPoseWeight(0) + 0.1f);
         }
         else if (arg.keysym.sym == SDLK_UP) {
             auto subItem = mSpringItem->getSubItem(0);
-            auto w = std::max(subItem->getPoseWeight() - 0.1f, 0.f);
-            subItem->setPoseWeight(w);
+            subItem->setPoseWeight(0, subItem->getPoseWeight(0) - 0.1f);
         }
         else {
             TutorialGameState::keyPressed(arg);

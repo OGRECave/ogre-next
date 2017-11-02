@@ -49,7 +49,7 @@ namespace Ogre {
     SubMesh::SubMesh() :
         mParent( 0 ),
         mBoneAssignmentsOutOfDate( false ),
-        mHasPoseAnimation( false ),
+        mNumPoseAnimations( 0 ),
         mPoseTexBuffer( 0 )
     {
     }
@@ -590,51 +590,57 @@ namespace Ogre {
         
         // find the index of this submesh - uh cant find the index of a submesh
         const v1::PoseList& poseList = subMesh->parent->getPoseList();
-        mHasPoseAnimation = !poseList.empty();
+        mNumPoseAnimations = poseList.size();
         
-        if( mHasPoseAnimation ) {
-            v1::Pose *const pose = poseList[0];
-            
-            // Create buffer
+        if( mNumPoseAnimations > 0 ) 
+        {
             size_t numVertices = vertexBuffer->getNumElements();
-            
-            bool normals = pose->getIncludesNormals();
-            //if (normals) {
-
-            //}
-            
-            size_t bufferSize = numVertices * sizeof( float ) * 4;
-            float *pFloat = reinterpret_cast<float*>( OGRE_MALLOC_SIMD(
+            size_t bufferSize = mNumPoseAnimations * numVertices * sizeof( float ) * 4;
+            float *buffer = reinterpret_cast<float*>( OGRE_MALLOC_SIMD(
                                                                     bufferSize,
                                                                     MEMCATEGORY_GEOMETRY ) );                                
-            FreeOnDestructor dataPtrContainer( pFloat );
-            memset(pFloat, 0, bufferSize); 
-
-            // Set each vertex
-            v1::Pose::VertexOffsetMap::const_iterator v = pose->getVertexOffsets().begin();
-            //v1::Pose::NormalsMap::const_iterator n = pose->getNormals().begin();
+            FreeOnDestructor bufferPtrContainer( buffer );
+            memset( buffer, 0, bufferSize );
             
-            while( v != pose->getVertexOffsets().end() )
+            v1::Mesh::PoseIterator poseIt = subMesh->parent->getPoseIterator();
+            float *pFloat = buffer;
+            
+            while( poseIt.hasMoreElements() )
             {
-                size_t idx = v->first;
-                pFloat[4*idx+0] = v->second.x;
-                pFloat[4*idx+1] = v->second.y;
-                pFloat[4*idx+2] = v->second.z;
-                pFloat[4*idx+3] = 0.f;
+                //bool normals = pose->getIncludesNormals();
+                //if (normals) {
+
+                //}
+
+                // Set each vertex
+                v1::Pose* pose = poseIt.getNext();
+                v1::Pose::VertexOffsetMap::const_iterator v = pose->getVertexOffsets().begin();
+                //v1::Pose::NormalsMap::const_iterator n = pose->getNormals().begin();
                 
-                ++v;
-                /*if (normals)
+                while( v != pose->getVertexOffsets().end() )
                 {
-                    *pDst++ = n->second.x;
-                    *pDst++ = n->second.y;
-                    *pDst++ = n->second.z;
-                    ++n;
-                }*/
+                    size_t idx = v->first;
+                    pFloat[4*idx+0] = v->second.x;
+                    pFloat[4*idx+1] = v->second.y;
+                    pFloat[4*idx+2] = v->second.z;
+                    pFloat[4*idx+3] = 0.f;
+                    
+                    ++v;
+                    /*if (normals)
+                    {
+                        *pDst++ = n->second.x;
+                        *pDst++ = n->second.y;
+                        *pDst++ = n->second.z;
+                        ++n;
+                    }*/
+                    
+                }
                 
+                pFloat += numVertices * 4;
             }
             
             mPoseTexBuffer = mParent->mVaoManager->createTexBuffer( PF_FLOAT32_RGBA, bufferSize,
-                                                                    BT_IMMUTABLE, pFloat, false );
+                                                                    BT_IMMUTABLE, buffer, false );
         }
     }
     //---------------------------------------------------------------------
