@@ -333,6 +333,21 @@ namespace Ogre
         return true;
     }
     //-----------------------------------------------------------------------------------
+    bool RenderPassDescriptor::hasAttachment( const TextureGpu *texture ) const
+    {
+        const size_t numColourEntries = mNumColourEntries;
+        for( size_t i=0; i<numColourEntries; ++i )
+        {
+            if( mColour[i].texture == texture )
+                return true;
+        }
+
+        if( mDepth.texture == texture || mStencil.texture == texture )
+            return true;
+
+        return false;
+    }
+    //-----------------------------------------------------------------------------------
     bool RenderPassDescriptor::hasStencilFormat(void) const
     {
         return mStencil.texture || (mDepth.texture &&

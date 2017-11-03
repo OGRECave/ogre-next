@@ -45,9 +45,10 @@ namespace Ogre
     struct _OgreExport CbTextures : public CbBase
     {
         uint16                      texUnit;
-        const DescriptorSetTexture *descSet;
+        uint16                      hazardousTexIdx;
+        const DescriptorSetTexture  *descSet;
 
-        CbTextures( uint16 _texUnit, const DescriptorSetTexture *_descSet );
+        CbTextures( uint16 _texUnit, uint16 _hazardousTexIdx, const DescriptorSetTexture *_descSet );
     };
 
     struct _OgreExport CbSamplers : public CbBase

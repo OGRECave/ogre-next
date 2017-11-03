@@ -496,7 +496,8 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture *set )
+    void MetalRenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture *set,
+                                          uint32 hazardousTexIdx )
     {
         uint32 texUnit = slotStart;
         FastArray<const TextureGpu*>::const_iterator itor = set->mTextures.begin();
@@ -509,6 +510,12 @@ namespace Ogre
             {
                 const MetalTextureGpu *metalTex = static_cast<const MetalTextureGpu*>( *itor );
                 __unsafe_unretained id<MTLTexture> metalTexture = metalTex->getDisplayTextureName();
+
+                if( (texUnit - slotStart) == hazardousTexIdx &&
+                    mCurrentRenderPassDescriptor->hasAttachment( set->mTextures[hazardousTexIdx] ) )
+                {
+                    metalTexture = nil;
+                }
 
                 switch( i )
                 {

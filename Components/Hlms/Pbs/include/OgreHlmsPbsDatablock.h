@@ -211,6 +211,7 @@ namespace Ogre
         bool    mUseAlphaFromTextures;
         uint8	mWorkflow;
         bool    mReceiveShadows;
+        uint8   mCubemapIdxInDescSet;
         TransparencyModes mTransparencyMode;
 
         float	mBgDiffuse[4];
@@ -231,6 +232,7 @@ namespace Ogre
         /// @see PbsBrdf::PbsBrdf
         uint32  mBrdf;
 
+        virtual bool bakeTextures( bool hasSeparateSamplers );
         void scheduleConstBufferUpdate(void);
         virtual void uploadToConstBuffer( char *dstPtr, uint8 dirtyFlags );
         virtual void notifyOptimizationStrategyChanged(void);

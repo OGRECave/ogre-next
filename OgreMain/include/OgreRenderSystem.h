@@ -830,7 +830,15 @@ namespace Ogre
         /// You don't need to call this if you're going to set the render target next.
         virtual void flushUAVs(void) = 0;
 
-        virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set ) = 0;
+        /**
+        @param slotStart
+        @param set
+        @param hazardousTexIdx
+            When hazardousTexIdx < set->mTextures.size(); it means that we need to check
+            if set->mTextures[hazardousTexIdx] is not the same as the currently bound RTT.
+        */
+        virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture *set,
+                                   uint32 hazardousTexIdx ) = 0;
         virtual void _setTextures( uint32 slotStart, const DescriptorSetTexture2 *set ) = 0;
         virtual void _setSamplers( uint32 slotStart, const DescriptorSetSampler *set ) = 0;
         virtual void _setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set ) = 0;

@@ -2237,11 +2237,25 @@ namespace Ogre
         }
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture *set )
+    void D3D11RenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture *set,
+                                          uint32 hazardousTexIdx )
     {
         ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
         ID3D11ShaderResourceView **srvList =
                 reinterpret_cast<ID3D11ShaderResourceView**>( set->mRsData );
+
+        ID3D11ShaderResourceView *hazardousSrv = 0;
+        if( hazardousTexIdx < set->mTextures.size() )
+        {
+            //Is the texture currently bound as RTT?
+            if( mCurrentRenderPassDescriptor->hasAttachment( set->mTextures[hazardousTexIdx] ) )
+            {
+                //Then do not set it!
+                hazardousSrv = srvList[hazardousTexIdx];
+                srvList[hazardousTexIdx] = 0;
+            }
+        }
+
         UINT texIdx = 0;
         for( size_t i=0u; i<NumShaderTypes; ++i )
         {
@@ -2272,6 +2286,10 @@ namespace Ogre
 
             texIdx += numTexturesUsed;
         }
+
+        //Restore the SRV with the hazardous texture.
+        if( hazardousSrv )
+            srvList[hazardousTexIdx] = hazardousSrv;
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture2 *set )

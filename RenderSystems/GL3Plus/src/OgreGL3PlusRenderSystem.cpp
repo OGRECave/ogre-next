@@ -1154,8 +1154,10 @@ namespace Ogre {
         activateGLTextureUnit( 0 );
     }
 
-    void GL3PlusRenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture *set )
+    void GL3PlusRenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture *set,
+                                            uint32 hazardousTexIdx )
     {
+        //Ignore hazardousTexIdx, GL doesn't care. It will happily let us do hazards.
         uint32 texUnit = slotStart;
 
         FastArray<const TextureGpu*>::const_iterator itor = set->mTextures.begin();
@@ -1260,7 +1262,7 @@ namespace Ogre {
 
     void GL3PlusRenderSystem::_setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set )
     {
-        _setTextures( slotStart, set );
+        _setTextures( slotStart, set, std::numeric_limits<uint32>::max() );
     }
 
     void GL3PlusRenderSystem::_setTexturesCS( uint32 slotStart, const DescriptorSetTexture2 *set )

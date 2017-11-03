@@ -900,7 +900,8 @@ namespace Ogre
                 if( datablock->mTexturesDescSet )
                 {
                     *commandBuffer->addCommand<CbTextures>() =
-                            CbTextures( texUnit, datablock->mTexturesDescSet );
+                        CbTextures( texUnit, std::numeric_limits<uint16>::max(),
+                                    datablock->mTexturesDescSet );
 
                     if( !mHasSeparateSamplers )
                     {

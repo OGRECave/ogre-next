@@ -1985,7 +1985,8 @@ namespace Ogre
                     size_t texUnit = mTexUnitSlotStart;
 
                     *commandBuffer->addCommand<CbTextures>() =
-                            CbTextures( texUnit, datablock->mTexturesDescSet );
+                            CbTextures( texUnit, datablock->mCubemapIdxInDescSet,
+                                        datablock->mTexturesDescSet );
 
                     if( !mHasSeparateSamplers )
                     {

@@ -53,9 +53,11 @@ namespace Ogre
             _this->mRenderSystem->_setHlmsSamplerblock( cmd->texUnit, cmd->samplerBlock );
     }
 
-    CbTextures::CbTextures( uint16 _texUnit, const DescriptorSetTexture *_descSet ) :
+    CbTextures::CbTextures( uint16 _texUnit, uint16 _hazardousTexIdx,
+                            const DescriptorSetTexture *_descSet ) :
         CbBase( CB_SET_TEXTURES ),
         texUnit( _texUnit ),
+        hazardousTexIdx( _hazardousTexIdx ),
         descSet( _descSet )
     {
     }
@@ -63,7 +65,7 @@ namespace Ogre
     void CommandBuffer::execute_setTextures( CommandBuffer *_this, const CbBase * RESTRICT_ALIAS _cmd )
     {
         const CbTextures *cmd = static_cast<const CbTextures*>( _cmd );
-        _this->mRenderSystem->_setTextures( cmd->texUnit, cmd->descSet );
+        _this->mRenderSystem->_setTextures( cmd->texUnit, cmd->descSet, cmd->hazardousTexIdx );
     }
 
     CbSamplers::CbSamplers( uint16 _texUnit, const DescriptorSetSampler *_descSet ) :

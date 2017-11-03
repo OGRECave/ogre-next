@@ -221,6 +221,8 @@ namespace Ogre
 
         virtual bool hasSameAttachments( const RenderPassDescriptor *otherPassDesc ) const;
 
+        bool hasAttachment( const TextureGpu *texture ) const;
+
         uint8 getNumColourEntries(void) const       { return mNumColourEntries; }
         bool requiresTextureFlipping(void) const    { return mRequiresTextureFlipping; }
         /// Returns true if either Stencil is set, or if Depth is set with depth-stencil attachment.

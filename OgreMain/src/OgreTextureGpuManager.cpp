@@ -129,7 +129,7 @@ namespace Ogre
 
         PixelFormatGpu format;
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
-    #if OGRE_ARCHITECTURE == OGRE_ARCHITECTURE_32
+    #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
         // 32-bit have tighter limited addresse memory. They pay the price
         // in slower streaming (more round trips between main and worker threads)
         const uint32 maxResolution = 2048u;

@@ -84,7 +84,7 @@ namespace Ogre
         void updateDescriptorSets( bool textureSetDirty, bool samplerSetDirty );
 
         /// Expects caller to call flushRenderables if we return true.
-        bool bakeTextures( bool hasSeparateSamplers );
+        virtual bool bakeTextures( bool hasSeparateSamplers );
         /// Expects caller to call flushRenderables if we return true.
         bool bakeSamplers(void);
 

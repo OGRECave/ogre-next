@@ -77,6 +77,7 @@ namespace Ogre
         mUseAlphaFromTextures( true ),
         mWorkflow( SpecularWorkflow ),
         mReceiveShadows( true ),
+        mCubemapIdxInDescSet( std::numeric_limits<uint8>::max() ),
         mTransparencyMode( None ),
         mkDr( 0.318309886f ), mkDg( 0.318309886f ), mkDb( 0.318309886f ), //Max Diffuse = 1 / PI
         _padding0( 1 ),
@@ -399,6 +400,13 @@ namespace Ogre
             IdString probeHash( mCubemapProbe->getInternalTexture()->getName() );
             static_cast<HlmsPbs*>(mCreator)->requestSlot( probeHash.mHash, this, false );
         }
+    }
+    //-----------------------------------------------------------------------------------
+    bool HlmsPbsDatablock::bakeTextures( bool hasSeparateSamplers )
+    {
+        const bool retVal = HlmsPbsBaseTextureDatablock::bakeTextures( hasSeparateSamplers );
+        mCubemapIdxInDescSet = getIndexToDescriptorTexture( PBSM_REFLECTION );
+        return retVal;
     }
     //-----------------------------------------------------------------------------------
     void HlmsPbsDatablock::scheduleConstBufferUpdate(void)
