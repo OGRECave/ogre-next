@@ -4,7 +4,7 @@
 
 #include "OgreSceneManager.h"
 #include "OgreRoot.h"
-#include "OgreRenderWindow.h"
+#include "OgreWindow.h"
 #include "OgreConfigFile.h"
 #include "Compositor/OgreCompositorManager2.h"
 
@@ -19,8 +19,8 @@ namespace Demo
         virtual Ogre::CompositorWorkspace* setupCompositor()
         {
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
-            return compositorManager->addWorkspace( mSceneManager, mRenderWindow, mCamera,
-                                                    "PbsMaterialsWorkspace", true );
+            return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(),
+                                                    mCamera, "PbsMaterialsWorkspace", true );
         }
 
         virtual void setupResources(void)
