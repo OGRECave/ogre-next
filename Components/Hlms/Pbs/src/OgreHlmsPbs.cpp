@@ -1929,9 +1929,9 @@ namespace Ogre
             uint32 w2 = queuedRenderable.renderable->getPoseWeight(2) * 255;
             uint32 w3 = queuedRenderable.renderable->getPoseWeight(3) * 255;
             
-            *( currentMappedConstBuffer+3u ) = ((0xff & w0) << 0) | 
-                                               ((0xff & w1) << 8) | 
-                                               ((0xff & w2) << 16)| 
+            *( currentMappedConstBuffer+3u ) = ((0xff & w0) << 0) |
+                                               ((0xff & w1) << 8) |
+                                               ((0xff & w2) << 16)|
                                                ((0xff & w3) << 24);
             
             TexBufferPacked* poseBuf = queuedRenderable.renderable->getPoseTexBuffer();

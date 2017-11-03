@@ -118,7 +118,17 @@ namespace Ogre {
                      "v1::Entity). Do not mix Items and Entities",
                      "SubItem::getCastsShadows" );
     }
-    
+    //-----------------------------------------------------------------------------------
+    float SubItem::getPoseWeight(const Ogre::String& poseName) const
+    {
+        return Renderable::getPoseWeight(mSubMesh->getPoseIndex(poseName));
+    }
+    //-----------------------------------------------------------------------------------
+    void SubItem::setPoseWeight(const Ogre::String& poseName, float w)
+    {
+        Renderable::setPoseWeight(mSubMesh->getPoseIndex(poseName), w);
+    }
+    //-----------------------------------------------------------------------------------
     TexBufferPacked* SubItem::getPoseTexBuffer() const
     { 
         return mSubMesh->getPoseTexBuffer();

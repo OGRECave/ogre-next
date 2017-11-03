@@ -176,7 +176,7 @@ void main()
 		float weight;
 		@foreach( hlms_pose, n )
 			posePos = bufferFetch( poseBuf, gl_VertexID + numVertices * @n );
-			weight = ( poseWeights & ( 0xffu << (@nu * 8u) ) ) / 255.f;
+			weight = ( ( poseWeights >> (@nu * 8u) ) & 0xffu ) / 255.f;
 			objPos += posePos * weight;
 		@end
 		vec4 worldPos = vec4( (objPos * worldMat).xyz, 1.0f );

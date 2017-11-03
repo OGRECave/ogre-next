@@ -451,7 +451,7 @@ namespace Ogre {
     protected:
         uint8               mRenderQueueSubGroup;
         bool                    mHasSkeletonAnimation;
-        bool                    mNumPoseAnimations;
+        unsigned short          mNumPoseAnimations;
         float                   mPoseWeights[4];
         uint8                   mCurrentMaterialLod;
         FastArray<Real> const   *mLodMaterial;

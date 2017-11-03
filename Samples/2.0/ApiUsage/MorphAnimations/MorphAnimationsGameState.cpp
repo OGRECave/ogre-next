@@ -78,27 +78,29 @@ namespace Demo
 
         {   // Prepare char_reference mesh
             v1Mesh = Ogre::v1::MeshManager::getSingleton().load(
-                "Spring.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                "Smiley.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
                 Ogre::v1::HardwareBuffer::HBU_STATIC, Ogre::v1::HardwareBuffer::HBU_STATIC);
             v2Mesh = Ogre::MeshManager::getSingleton().createManual(
-                "Spring.mesh", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+                "Smiley.mesh", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
             v2Mesh->importV1(v1Mesh.get(), halfPosition, halfUVs, useQtangents);
             v1Mesh->unload();
         }
 
-        Ogre::SceneNode *springNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
+        Ogre::SceneNode *smileyNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
                 createChildSceneNode( Ogre::SCENE_DYNAMIC );
 
-        mSpringItem = sceneManager->createItem( "Spring.mesh",
-                                                         Ogre::ResourceGroupManager::
-                                                         AUTODETECT_RESOURCE_GROUP_NAME,
-                                                         Ogre::SCENE_DYNAMIC );
-        springNode->attachObject( mSpringItem );
-        springNode->setScale(Ogre::Vector3(3));
+        mSmileyItem = sceneManager->createItem( "Smiley.mesh",
+                                                Ogre::ResourceGroupManager::
+                                                AUTODETECT_RESOURCE_GROUP_NAME,
+                                                Ogre::SCENE_DYNAMIC );
+        smileyNode->attachObject( mSmileyItem );
+        smileyNode->setScale( Ogre::Vector3( 0.5 ) );
+        smileyNode->setPosition( 0, 0.57, 0 );
+        smileyNode->setOrientation( Ogre::Quaternion( Ogre::Radian(1.5), Ogre::Vector3(1,0,0) ) );
         /*
-        Ogre::HlmsMacroblock macroblock = *mSpringItem->getSubItem(0)->getDatablock()->getMacroblock();
+        Ogre::HlmsMacroblock macroblock = *mSmileyItem->getSubItem(0)->getDatablock()->getMacroblock();
         macroblock.mPolygonMode = Ogre::PM_WIREFRAME;
-        mSpringItem->getSubItem(0)->getDatablock()->setMacroblock(macroblock);
+        mSmileyItem->getSubItem(0)->getDatablock()->setMacroblock(macroblock);
         */
         Ogre::Light *light = sceneManager->createLight();
         Ogre::SceneNode *lightNode = sceneManager->getRootSceneNode()->createChildSceneNode();
@@ -123,12 +125,20 @@ namespace Demo
     void MorphAnimationsGameState::keyPressed( const SDL_KeyboardEvent &arg )
     {
         if (arg.keysym.sym == SDLK_DOWN) {
-            auto subItem = mSpringItem->getSubItem(0);
-            subItem->setPoseWeight(0, subItem->getPoseWeight(0) + 0.1f);
+            auto subItem = mSmileyItem->getSubItem(0);
+            subItem->setPoseWeight("Smile", subItem->getPoseWeight("Smile") + 0.1f);
         }
         else if (arg.keysym.sym == SDLK_UP) {
-            auto subItem = mSpringItem->getSubItem(0);
-            subItem->setPoseWeight(0, subItem->getPoseWeight(0) - 0.1f);
+            auto subItem = mSmileyItem->getSubItem(0);
+            subItem->setPoseWeight("Smile", subItem->getPoseWeight("Smile") - 0.1f);
+        }
+        else if (arg.keysym.sym == SDLK_LEFT) {
+            auto subItem = mSmileyItem->getSubItem(0);
+            subItem->setPoseWeight("MouthOpen", subItem->getPoseWeight("MouthOpen") + 0.1f);
+        }
+        else if (arg.keysym.sym == SDLK_RIGHT) {
+            auto subItem = mSmileyItem->getSubItem(0);
+            subItem->setPoseWeight("MouthOpen", subItem->getPoseWeight("MouthOpen") - 0.1f);
         }
         else {
             TutorialGameState::keyPressed(arg);

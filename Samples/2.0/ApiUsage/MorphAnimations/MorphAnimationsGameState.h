@@ -14,7 +14,7 @@ namespace Demo
 {
     class MorphAnimationsGameState : public TutorialGameState
     {
-        Ogre::Item* mSpringItem;
+        Ogre::Item* mSmileyItem;
     public:
         MorphAnimationsGameState(const Ogre::String &helpDescription);
 

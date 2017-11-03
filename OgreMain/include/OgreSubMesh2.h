@@ -109,7 +109,8 @@ namespace Ogre {
         /// if we need to strip, normalizes all weights to sum 1.
         uint8 rationaliseBoneAssignments(void);
         
-        bool mNumPoseAnimations;
+        unsigned short mNumPoseAnimations;
+        std::map<Ogre::String, size_t> mPoseIndexMap;
         TexBufferPacked *mPoseTexBuffer;
 
     public:
@@ -200,6 +201,8 @@ namespace Ogre {
         void _prepareForShadowMapping( bool forceSameBuffers );
         
         unsigned short getNumPoseAnimations() { return mNumPoseAnimations; }
+        
+        size_t getPoseIndex(const Ogre::String& name) { return mPoseIndexMap[name]; }
         
         TexBufferPacked* getPoseTexBuffer() { return mPoseTexBuffer; }
 

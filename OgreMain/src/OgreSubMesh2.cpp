@@ -588,8 +588,21 @@ namespace Ogre {
             ++itor;
         }
         
-        // find the index of this submesh - uh cant find the index of a submesh
-        const v1::PoseList& poseList = subMesh->parent->getPoseList();
+        // Find the index of this subMesh and only process poses which have this
+        // subMesh as their target.
+        v1::Mesh::SubMeshList::const_iterator subMeshBegin = subMesh->parent->getSubMeshIterator().begin();
+        v1::Mesh::SubMeshList::const_iterator subMeshEnd = subMesh->parent->getSubMeshIterator().end();
+        v1::Mesh::SubMeshList::const_iterator subMeshIt = std::find( subMeshBegin, subMeshEnd, subMesh );
+        
+        assert( subMeshIt != subMeshEnd && "Parent mesh does not contain this subMesh.");
+        
+        int subMeshIndex = subMeshIt - subMeshBegin;
+        
+        v1::PoseList poseList = subMesh->parent->getPoseList();
+        poseList.erase(std::remove_if(poseList.begin(), poseList.end(), 
+                                      [=](const v1::Pose* pose) { return pose->getTarget() != subMeshIndex; }),
+                                      poseList.end());
+        
         mNumPoseAnimations = poseList.size();
         
         if( mNumPoseAnimations > 0 ) 
@@ -604,6 +617,7 @@ namespace Ogre {
             
             v1::Mesh::PoseIterator poseIt = subMesh->parent->getPoseIterator();
             float *pFloat = buffer;
+            int index = 0;
             
             while( poseIt.hasMoreElements() )
             {
@@ -637,6 +651,8 @@ namespace Ogre {
                 }
                 
                 pFloat += numVertices * 4;
+                
+                mPoseIndexMap[pose->getName()] = index++;
             }
             
             mPoseTexBuffer = mParent->mVaoManager->createTexBuffer( PF_FLOAT32_RGBA, bufferSize,

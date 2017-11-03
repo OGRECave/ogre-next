@@ -99,6 +99,9 @@ namespace Ogre {
         virtual void getWorldTransforms(Matrix4* xform) const;
         virtual bool getCastsShadows(void) const;
         
+        float getPoseWeight(const Ogre::String& poseName) const;
+        void setPoseWeight(const Ogre::String& poseName, float w);
+        
         virtual TexBufferPacked* getPoseTexBuffer() const; 
     };
     /** @} */
