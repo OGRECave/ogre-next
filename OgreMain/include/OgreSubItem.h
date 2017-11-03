@@ -99,6 +99,11 @@ namespace Ogre {
         virtual void getWorldTransforms(Matrix4* xform) const;
         virtual bool getCastsShadows(void) const;
         
+        // needs this to not hide the base class' methods with same name
+        using Renderable::getPoseWeight;
+        using Renderable::setPoseWeight;
+        using Renderable::addPoseWeight;
+        
         float getPoseWeight(const Ogre::String& poseName) const;
         void setPoseWeight(const Ogre::String& poseName, float w);
         void addPoseWeight(const Ogre::String& poseName, float w);
