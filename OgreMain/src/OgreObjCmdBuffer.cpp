@@ -155,8 +155,7 @@ namespace Ogre
             OGRE_DELETE *itor;
             ++itor;
         }
-        filters.clear();
-        filters.~FastArray(); //Call destructor manually as ~NotifyDataIsReady won't be called.
+        filters.destroy(); //Destroy manually as ~NotifyDataIsReady won't be called.
 
         texture->notifyDataIsReady();
     }
