@@ -213,6 +213,8 @@ namespace Ogre {
         /// Converts a v1 IndexBuffer to a v2 format. Returns nullptr if indexData is also nullptr
         IndexBufferPacked* importFromV1( v1::IndexData *indexData );
 
+        void importPosesFromV1( v1::SubMesh *subMesh, VertexBufferPacked *vertexBuffer );
+
         /** @see arrangeEfficient overload
         @param vao
             The Vao to convert to.

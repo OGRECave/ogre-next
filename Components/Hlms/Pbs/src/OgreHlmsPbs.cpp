@@ -723,7 +723,7 @@ namespace Ogre
     {
         HlmsPbsDatablock *datablock = static_cast<HlmsPbsDatablock*>( renderable->getDatablock() );
         const bool hasAlphaTest = datablock->getAlphaTest() != CMPF_ALWAYS_PASS;
-        
+
         HlmsPropertyVec::iterator itor = mSetProperties.begin();
         HlmsPropertyVec::iterator end  = mSetProperties.end();
 
@@ -1097,7 +1097,7 @@ namespace Ogre
         //vec4 clipPlane0
         if( isCameraReflected )
             mapSize += 4 * 4;
-            
+
         mapSize += mListener->getPassBufferSize( shadowNode, casterPass, dualParaboloid,
                                                  sceneManager );
 
@@ -1599,7 +1599,7 @@ namespace Ogre
         assert( dynamic_cast<const HlmsPbsDatablock*>( queuedRenderable.renderable->getDatablock() ) );
         const HlmsPbsDatablock *datablock = static_cast<const HlmsPbsDatablock*>(
                                                 queuedRenderable.renderable->getDatablock() );
-        
+
         if( OGRE_EXTRACT_HLMS_TYPE_FROM_CACHE_HASH( lastCacheHash ) != mType )
         {
             //layout(binding = 0) uniform PassBuffer {} pass
@@ -1619,7 +1619,7 @@ namespace Ogre
 
                 if( mGridBuffer )
                 {
-                    texUnit += 2;
+                    texUnit = 3;
                     *commandBuffer->addCommand<CbShaderBuffer>() =
                             CbShaderBuffer( PixelShader, 1, mGridBuffer, 0, 0 );
                     *commandBuffer->addCommand<CbShaderBuffer>() =

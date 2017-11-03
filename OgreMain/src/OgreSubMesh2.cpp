@@ -588,6 +588,43 @@ namespace Ogre {
             ++itor;
         }
         
+        importPosesFromV1( subMesh, vertexBuffer );
+    }
+    //---------------------------------------------------------------------
+    IndexBufferPacked* SubMesh::importFromV1( v1::IndexData *indexData )
+    {
+        if( !indexData || indexData->indexBuffer.isNull() )
+            return 0;
+
+        //Create & copy the index buffer
+        const size_t indexSize = indexData->indexBuffer->getIndexSize();
+        bool keepAsShadow = mParent->mIndexBufferShadowBuffer;
+        VaoManager *vaoManager = mParent->mVaoManager;
+        void *indexDataPtr = OGRE_MALLOC_SIMD( indexData->indexCount * indexSize,
+                                               MEMCATEGORY_GEOMETRY );
+        FreeOnDestructor indexDataPtrContainer( indexDataPtr );
+        IndexBufferPacked::IndexType indexType = static_cast<IndexBufferPacked::IndexType>(
+                                                        indexData->indexBuffer->getType() );
+
+        const uint8 *srcIndexDataPtr = reinterpret_cast<uint8*>(
+                    indexData->indexBuffer->lock( v1::HardwareBuffer::HBL_READ_ONLY ) );
+
+        memcpy( indexDataPtr, srcIndexDataPtr + indexData->indexStart * indexSize,
+                indexSize * indexData->indexCount );
+        indexData->indexBuffer->unlock();
+
+        IndexBufferPacked *indexBuffer = vaoManager->createIndexBuffer( indexType, indexData->indexCount,
+                                                                        mParent->mIndexBufferDefaultType,
+                                                                        indexDataPtr, keepAsShadow );
+
+        if( keepAsShadow ) //Don't free the pointer ourselves
+            indexDataPtrContainer.ptr = 0;
+
+        return indexBuffer;
+    }
+    //---------------------------------------------------------------------
+    void SubMesh::importPosesFromV1( v1::SubMesh *subMesh, VertexBufferPacked *vertexBuffer )
+    {
         // Find the index of this subMesh and only process poses which have this
         // subMesh as their target.
         v1::Mesh::SubMeshList::const_iterator subMeshBegin = subMesh->parent->getSubMeshIterator().begin();
@@ -621,15 +658,9 @@ namespace Ogre {
             
             while( poseIt.hasMoreElements() )
             {
-                //bool normals = pose->getIncludesNormals();
-                //if (normals) {
-
-                //}
-
-                // Set each vertex
                 v1::Pose* pose = poseIt.getNext();
                 v1::Pose::VertexOffsetMap::const_iterator v = pose->getVertexOffsets().begin();
-                //v1::Pose::NormalsMap::const_iterator n = pose->getNormals().begin();
+                // TODO: import normals
                 
                 while( v != pose->getVertexOffsets().end() )
                 {
@@ -638,16 +669,7 @@ namespace Ogre {
                     pFloat[4*idx+1] = v->second.y;
                     pFloat[4*idx+2] = v->second.z;
                     pFloat[4*idx+3] = 0.f;
-                    
                     ++v;
-                    /*if (normals)
-                    {
-                        *pDst++ = n->second.x;
-                        *pDst++ = n->second.y;
-                        *pDst++ = n->second.z;
-                        ++n;
-                    }*/
-                    
                 }
                 
                 pFloat += numVertices * 4;
@@ -658,38 +680,6 @@ namespace Ogre {
             mPoseTexBuffer = mParent->mVaoManager->createTexBuffer( PF_FLOAT32_RGBA, bufferSize,
                                                                     BT_IMMUTABLE, buffer, false );
         }
-    }
-    //---------------------------------------------------------------------
-    IndexBufferPacked* SubMesh::importFromV1( v1::IndexData *indexData )
-    {
-        if( !indexData || indexData->indexBuffer.isNull() )
-            return 0;
-
-        //Create & copy the index buffer
-        const size_t indexSize = indexData->indexBuffer->getIndexSize();
-        bool keepAsShadow = mParent->mIndexBufferShadowBuffer;
-        VaoManager *vaoManager = mParent->mVaoManager;
-        void *indexDataPtr = OGRE_MALLOC_SIMD( indexData->indexCount * indexSize,
-                                               MEMCATEGORY_GEOMETRY );
-        FreeOnDestructor indexDataPtrContainer( indexDataPtr );
-        IndexBufferPacked::IndexType indexType = static_cast<IndexBufferPacked::IndexType>(
-                                                        indexData->indexBuffer->getType() );
-
-        const uint8 *srcIndexDataPtr = reinterpret_cast<uint8*>(
-                    indexData->indexBuffer->lock( v1::HardwareBuffer::HBL_READ_ONLY ) );
-
-        memcpy( indexDataPtr, srcIndexDataPtr + indexData->indexStart * indexSize,
-                indexSize * indexData->indexCount );
-        indexData->indexBuffer->unlock();
-
-        IndexBufferPacked *indexBuffer = vaoManager->createIndexBuffer( indexType, indexData->indexCount,
-                                                                        mParent->mIndexBufferDefaultType,
-                                                                        indexDataPtr, keepAsShadow );
-
-        if( keepAsShadow ) //Don't free the pointer ourselves
-            indexDataPtrContainer.ptr = 0;
-
-        return indexBuffer;
     }
     //---------------------------------------------------------------------
     void SubMesh::arrangeEfficient( bool halfPos, bool halfTexCoords, bool qTangents )
@@ -865,11 +855,11 @@ namespace Ogre {
         bool hasTangents = false;
 
         v1::VertexData *vertexData = subMesh->vertexData[vaoPassIdx];
-        v1::VertexDeclaration* vertexDeclaration = vertexData->vertexDeclaration;
         
         {    
             //Get an AZDO-friendly vertex declaration out of the original declaration.
-            const v1::VertexDeclaration::VertexElementList &origElements = vertexDeclaration->getElements();
+            const v1::VertexDeclaration::VertexElementList &origElements = vertexData->
+                                                                vertexDeclaration->getElements();
             srcElements.reserve( origElements.size() );
             v1::VertexDeclaration::VertexElementList::const_iterator itor = origElements.begin();
             v1::VertexDeclaration::VertexElementList::const_iterator end  = origElements.end();

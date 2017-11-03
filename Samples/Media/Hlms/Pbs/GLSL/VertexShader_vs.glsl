@@ -51,7 +51,6 @@ out block
 @insertpiece( custom_vs_uniformDeclaration )
 @property( !GL_ARB_base_instance )uniform uint baseInstance;@end
 @property( hlms_pose )
-	/*layout(binding = 1) */
 	uniform samplerBuffer poseBuf;
 	uniform int numVertices;
 @end
@@ -198,12 +197,9 @@ void main()
 	@insertpiece( DoShadowReceiveVS )
 	@insertpiece( DoShadowCasterVS )
 
-@property( !hlms_shadowcaster || !hlms_shadow_uses_depth_texture || alpha_test || exponential_shadow_maps )
 	/// hlms_uv_count will be 0 on shadow caster passes w/out alpha test
 @foreach( hlms_uv_count, n )
 	outVs.uv@n = uv@n;@end
-	
-@end
 
 @property( (!hlms_shadowcaster || alpha_test) && !lower_gpu_overhead )
 	outVs.drawId = drawId;@end
