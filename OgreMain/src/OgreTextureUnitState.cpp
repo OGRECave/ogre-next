@@ -1043,6 +1043,8 @@ namespace Ogre {
                 try
                 {
                     uint32 textureFlags = 0;
+                    if( mTextureType == TextureTypes::Type2D )
+                        textureFlags |= TextureFlags::AutomaticBatching;
                     if( mHwGamma )
                         textureFlags |= TextureFlags::PrefersLoadingFromFileAsSRGB;
                     TextureGpuManager *textureManager = Root::getSingleton().
@@ -1079,6 +1081,8 @@ namespace Ogre {
                 try
                 {
                     uint32 textureFlags = 0;
+                    if( mTextureType == TextureTypes::Type2D )
+                        textureFlags |= TextureFlags::AutomaticBatching;
                     if( mHwGamma )
                         textureFlags |= TextureFlags::PrefersLoadingFromFileAsSRGB;
                     TextureGpuManager *textureManager = Root::getSingleton().
