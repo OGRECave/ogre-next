@@ -669,11 +669,7 @@ namespace Ogre
         setDetailMapProperties( datablock, inOutPieces );
 
         if( datablock->mSamplersDescSet )
-        {
-            bool envMap = datablock->getTexture( PBSM_REFLECTION ) != 0;
-            setProperty( PbsProperty::NumSamplers,
-                         datablock->mSamplersDescSet->mSamplers.size() - envMap );
-        }
+            setProperty( PbsProperty::NumSamplers, datablock->mSamplersDescSet->mSamplers.size() );
 
         if( datablock->mTexturesDescSet )
         {

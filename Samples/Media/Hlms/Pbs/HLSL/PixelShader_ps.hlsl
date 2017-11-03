@@ -50,8 +50,7 @@ Buffer<float4> f3dLightList : register(t2);@end
 
 @property( !roughness_map )#define ROUGHNESS material.kS.w@end
 @property( num_textures )Texture2DArray textureMaps[@value( num_textures )] : register(t@value(textureRegStart));@end
-@property( use_envprobe_map )TextureCube	texEnvProbeMap : register(t@value(envMapReg));
-SamplerState envMapSamplerState : register(s@value(envMapReg));@end
+@property( use_envprobe_map )TextureCube	texEnvProbeMap : register(t@value(envMapReg));@end
 
 @property( num_samplers )SamplerState samplerStates[@value(num_samplers)] : register(s@value(samplerStateStart));@end
 
@@ -409,9 +408,9 @@ float4 diffuseCol;
 			{
 				float3 reflDirLS = localCorrect( reflDir, posInProbSpace, @insertpiece( pccProbeSource ) );
 				float3 nNormalLS = localCorrect( nNormal, posInProbSpace, @insertpiece( pccProbeSource ) );
-				envColourS = texEnvProbeMap.SampleLevel( envMapSamplerState,
+				envColourS = texEnvProbeMap.SampleLevel( samplerStates[@value(envprobe_map_sampler)],
 														 reflDirLS, ROUGHNESS * 12.0 ).xyz @insertpiece( ApplyEnvMapScale );// * 0.0152587890625;
-				envColourD = texEnvProbeMap.SampleLevel( envMapSamplerState,
+				envColourD = texEnvProbeMap.SampleLevel( samplerStates[@value(envprobe_map_sampler)],
 														 nNormalLS, 11.0 ).xyz @insertpiece( ApplyEnvMapScale );// * 0.0152587890625;
 
 				envColourS = envColourS * saturate( probeFade * 200.0 );
@@ -424,8 +423,8 @@ float4 diffuseCol;
 				envColourD = float3( 0, 0, 0 );
 			}
 		@end @property( !use_parallax_correct_cubemaps )
-			float3 envColourS = texEnvProbeMap.SampleLevel( envMapSamplerState, mul( reflDir, passBuf.invViewMatCubemap ), ROUGHNESS * 12.0 ).xyz @insertpiece( ApplyEnvMapScale );
-			float3 envColourD = texEnvProbeMap.SampleLevel( envMapSamplerState, mul( nNormal, passBuf.invViewMatCubemap ), 11.0 ).xyz @insertpiece( ApplyEnvMapScale );
+			float3 envColourS = texEnvProbeMap.SampleLevel( samplerStates[@value(envprobe_map_sampler)], mul( reflDir, passBuf.invViewMatCubemap ), ROUGHNESS * 12.0 ).xyz @insertpiece( ApplyEnvMapScale );
+			float3 envColourD = texEnvProbeMap.SampleLevel( samplerStates[@value(envprobe_map_sampler)], mul( nNormal, passBuf.invViewMatCubemap ), 11.0 ).xyz @insertpiece( ApplyEnvMapScale );
 		@end
 		@property( !hw_gamma_read )	//Gamma to linear space
 			envColourS = envColourS * envColourS;
@@ -578,7 +577,7 @@ float4 diffuseCol;
 
 	/// Sample detail maps and weight them against the weight map in the next foreach loop.
 @foreach( detail_maps_diffuse, n )@property( detail_map@n )
-	float detailCol@n	= textureMaps[@value(detail_map@n_idx)].Sample( samplerStates[@value(detail_map@n_idx)], float3( inPs.uv@value(uv_detail@n).xy@insertpiece( offsetDetailD@n ), detailMapIdx@n ) ).w;
+	float detailCol@n	= textureMaps[@value(detail_map@n_idx)].Sample( samplerStates[@value(detail_map@n_sampler)], float3( inPs.uv@value(uv_detail@n).xy@insertpiece( offsetDetailD@n ), detailMapIdx@n ) ).w;
 	detailCol@n = detailWeights.@insertpiece(detail_swizzle@n) * detailCol@n;@end
 @end
 

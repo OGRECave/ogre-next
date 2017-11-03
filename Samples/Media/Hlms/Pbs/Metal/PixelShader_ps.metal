@@ -136,8 +136,7 @@ fragment @insertpiece( output_type ) main_metal
 	@foreach( num_textures, n )
 		, texture2d_array<float> textureMaps@n [[texture(@counter(textureRegStart))]]@end
 	@property( use_envprobe_map )
-		, texturecube<float>	texEnvProbeMap [[texture(@value(envMapReg))]]
-		, sampler envMapSamplerState [[sampler(@value(envMapReg))]]@end
+		, texturecube<float>	texEnvProbeMap [[texture(@value(envMapReg))]]@end
 	@foreach( num_samplers, n )
 		, sampler samplerStates@n [[sampler(@counter(samplerStateStart))]]@end
 	@insertpiece( DeclShadowSamplers )
@@ -394,9 +393,9 @@ float4 diffuseCol;
 			{
 				float3 reflDirLS = localCorrect( reflDir, posInProbSpace, @insertpiece( pccProbeSource ) );
 				float3 nNormalLS = localCorrect( nNormal, posInProbSpace, @insertpiece( pccProbeSource ) );
-				envColourS = texEnvProbeMap.sample( envMapSamplerState,
+				envColourS = texEnvProbeMap.sample( samplerStates@value(envprobe_map_sampler),
 													reflDirLS, level( ROUGHNESS * 12.0 ) ).xyz @insertpiece( ApplyEnvMapScale );// * 0.0152587890625;
-				envColourD = texEnvProbeMap.sample( envMapSamplerState,
+				envColourD = texEnvProbeMap.sample( samplerStates@value(envprobe_map_sampler),
 													nNormalLS, level( 11.0 ) ).xyz @insertpiece( ApplyEnvMapScale );// * 0.0152587890625;
 
 				envColourS = envColourS * saturate( probeFade * 200.0 );
@@ -409,8 +408,8 @@ float4 diffuseCol;
 				envColourD = float3( 0, 0, 0 );
 			}
 		@end @property( !use_parallax_correct_cubemaps )
-			float3 envColourS = texEnvProbeMap.sample( envMapSamplerState, reflDir * passBuf.invViewMatCubemap, level( ROUGHNESS * 12.0 ) ).xyz @insertpiece( ApplyEnvMapScale );
-			float3 envColourD = texEnvProbeMap.sample( envMapSamplerState, nNormal * passBuf.invViewMatCubemap, level( 11.0 ) ).xyz @insertpiece( ApplyEnvMapScale );
+			float3 envColourS = texEnvProbeMap.sample( samplerStates@value(envprobe_map_sampler), reflDir * passBuf.invViewMatCubemap, level( ROUGHNESS * 12.0 ) ).xyz @insertpiece( ApplyEnvMapScale );
+			float3 envColourD = texEnvProbeMap.sample( samplerStates@value(envprobe_map_sampler), nNormal * passBuf.invViewMatCubemap, level( 11.0 ) ).xyz @insertpiece( ApplyEnvMapScale );
 		@end
 		@property( !hw_gamma_read )	//Gamma to linear space
 			envColourS = envColourS * envColourS;
