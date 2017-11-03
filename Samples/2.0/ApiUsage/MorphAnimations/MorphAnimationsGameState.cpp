@@ -25,7 +25,8 @@ using namespace Demo;
 namespace Demo
 {
     MorphAnimationsGameState::MorphAnimationsGameState(const Ogre::String &helpDescription) :
-        TutorialGameState(helpDescription)
+        TutorialGameState(helpDescription),
+        mAccumulator(0)
     {
     }
     //-----------------------------------------------------------------------------------
@@ -108,6 +109,10 @@ namespace Demo
         light->setPowerScale( Ogre::Math::PI ); //Since we don't do HDR, counter the PBS' division by PI
         light->setType( Ogre::Light::LT_DIRECTIONAL );
         light->setDirection( Ogre::Vector3(-1, -1, -1).normalisedCopy() );
+        
+        sceneManager->setAmbientLight( Ogre::ColourValue( 0.3f, 0.5f, 0.7f ) * 0.1f * 0.75f,
+                                       Ogre::ColourValue( 0.6f, 0.45f, 0.3f ) * 0.065f * 0.75f,
+                                       -light->getDirection() + Ogre::Vector3::UNIT_Y * 0.2f );
 
         mCameraController = new CameraController( mGraphicsSystem, false );
         Ogre::Camera *camera = mGraphicsSystem->getCamera();
@@ -118,30 +123,14 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void MorphAnimationsGameState::update( float timeSinceLast )
     {        
+        mAccumulator += timeSinceLast;
+        auto subItem = mSmileyItem->getSubItem(0);
+        
+        subItem->setPoseWeight("Smile", (Ogre::Math::Sin(mAccumulator) + 1)/2);
+        subItem->setPoseWeight("MouthOpen", (Ogre::Math::Sin(mAccumulator+1) + 1)/2);
+        subItem->setPoseWeight("Sad", (Ogre::Math::Sin(mAccumulator+2) + 1)/2);
+        subItem->setPoseWeight("EyesClosed", (Ogre::Math::Sin(mAccumulator+3) + 1)/2);
         
         TutorialGameState::update( timeSinceLast );
-    }
-    
-    void MorphAnimationsGameState::keyPressed( const SDL_KeyboardEvent &arg )
-    {
-        if (arg.keysym.sym == SDLK_DOWN) {
-            auto subItem = mSmileyItem->getSubItem(0);
-            subItem->setPoseWeight("Smile", subItem->getPoseWeight("Smile") + 0.1f);
-        }
-        else if (arg.keysym.sym == SDLK_UP) {
-            auto subItem = mSmileyItem->getSubItem(0);
-            subItem->setPoseWeight("Smile", subItem->getPoseWeight("Smile") - 0.1f);
-        }
-        else if (arg.keysym.sym == SDLK_LEFT) {
-            auto subItem = mSmileyItem->getSubItem(0);
-            subItem->setPoseWeight("MouthOpen", subItem->getPoseWeight("MouthOpen") + 0.1f);
-        }
-        else if (arg.keysym.sym == SDLK_RIGHT) {
-            auto subItem = mSmileyItem->getSubItem(0);
-            subItem->setPoseWeight("MouthOpen", subItem->getPoseWeight("MouthOpen") - 0.1f);
-        }
-        else {
-            TutorialGameState::keyPressed(arg);
-        }
     }
 }

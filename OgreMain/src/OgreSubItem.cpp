@@ -129,6 +129,11 @@ namespace Ogre {
         Renderable::setPoseWeight(mSubMesh->getPoseIndex(poseName), w);
     }
     //-----------------------------------------------------------------------------------
+    void SubItem::addPoseWeight(const Ogre::String& poseName, float w)
+    {
+        Renderable::addPoseWeight(mSubMesh->getPoseIndex(poseName), w);
+    }
+    //-----------------------------------------------------------------------------------
     TexBufferPacked* SubItem::getPoseTexBuffer() const
     { 
         return mSubMesh->getPoseTexBuffer();

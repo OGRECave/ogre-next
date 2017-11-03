@@ -341,14 +341,13 @@ namespace Ogre
                                                 mSetProperties, queuedRenderable );
             return retVal; //D3D embeds the texture slots in the shader.
         }
+        
+        int texUnit = 1; //Vertex shader consumes 1 slot with its tbuffer
 
         //Set samplers.
         if( !retVal->pso.pixelShader.isNull() )
         {
             GpuProgramParametersSharedPtr psParams = retVal->pso.pixelShader->getDefaultParameters();
-            
-            //Vertex shader consumes 1 slot with its tbuffer, or 2 if it has pose animations
-            int texUnit = 1;//queuedRenderable.renderable->getNumPoseAnimations() > 0 ? 2 : 1; 
 
             //Forward3D consumes 2 more slots.
             if( mGridBuffer )
@@ -439,7 +438,7 @@ namespace Ogre
 
         if( queuedRenderable.renderable->getNumPoseAnimations() > 0 )
         {
-            vsParams->setNamedConstant( "poseBuf", 1 );
+            vsParams->setNamedConstant( "poseBuf", texUnit++ );
             const VertexArrayObjectArray& vao = queuedRenderable.renderable->getVaos(VpNormal);
             const VertexBufferPacked* vertexBuffer = vao[0]->getVertexBuffers()[0];
             vsParams->setNamedConstant( "numVertices", (int)vertexBuffer->getNumElements() );
@@ -1616,7 +1615,7 @@ namespace Ogre
 
             if( !casterPass )
             {
-                size_t texUnit = 1;//queuedRenderable.renderable->getNumPoseAnimations() > 0 ? 2 : 1; 
+                size_t texUnit = 1;
 
                 if( mGridBuffer )
                 {
@@ -1936,7 +1935,7 @@ namespace Ogre
             
             TexBufferPacked* poseBuf = queuedRenderable.renderable->getPoseTexBuffer();
             *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer( VertexShader,
-                                                                           1, poseBuf, 0,
+                                                                           mTexUnitSlotStart, poseBuf, 0,
                                                                            poseBuf->
                                                                            getTotalSizeBytes() );
         }

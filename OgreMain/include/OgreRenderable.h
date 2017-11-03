@@ -149,6 +149,7 @@ namespace Ogre {
         
         float getPoseWeight(size_t index) const;
         void setPoseWeight(size_t index, float w);
+        void addPoseWeight(size_t index, float w);
         
         virtual TexBufferPacked* getPoseTexBuffer() const { return 0; }
         

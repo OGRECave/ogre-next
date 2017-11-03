@@ -15,13 +15,13 @@ namespace Demo
     class MorphAnimationsGameState : public TutorialGameState
     {
         Ogre::Item* mSmileyItem;
+        float mAccumulator;
+        
     public:
         MorphAnimationsGameState(const Ogre::String &helpDescription);
 
         virtual void createScene01(void);
         virtual void update(float timeSinceLast);
-        
-        void keyPressed( const SDL_KeyboardEvent &arg );
     };
 }
 

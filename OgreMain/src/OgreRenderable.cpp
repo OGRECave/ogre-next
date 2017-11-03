@@ -206,6 +206,11 @@ namespace Ogre
         assert(( index < 4 && index < mNumPoseAnimations ) && "Pose weight index out of bounds" );
         mPoseWeights[index] = Math::Clamp(w, 0.f, 1.f); 
     }
+    void Renderable::addPoseWeight(size_t index, float w)
+    { 
+        assert(( index < 4 && index < mNumPoseAnimations ) && "Pose weight index out of bounds" );
+        mPoseWeights[index] = Math::Clamp(mPoseWeights[index] + w, 0.f, 1.f); 
+    }
     //-----------------------------------------------------------------------------------
     RenderableAnimated::RenderableAnimated() :
         Renderable(),

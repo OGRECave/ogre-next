@@ -101,6 +101,7 @@ namespace Ogre {
         
         float getPoseWeight(const Ogre::String& poseName) const;
         void setPoseWeight(const Ogre::String& poseName, float w);
+        void addPoseWeight(const Ogre::String& poseName, float w);
         
         virtual TexBufferPacked* getPoseTexBuffer() const; 
     };
