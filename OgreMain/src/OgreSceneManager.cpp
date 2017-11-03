@@ -1968,7 +1968,7 @@ void SceneManager::updateAnimationTransforms( BySkeletonDef &bySkeletonDef, size
         for( size_t i=0; i<firstTransforms.size(); ++i )
         {
             size_t numNodes = lastTransforms[i].mOwner - firstTransforms[i].mOwner +
-                                lastTransforms[i].mIndex + firstTransforms[i].mIndex +
+                                lastTransforms[i].mIndex +
                                 depthLevelInfo[i].numBonesInLevel;
             assert( numNodes <= bySkeletonDef.boneMemoryManager.getFirstNode( _hiddenTransform, i ) );
 
@@ -4080,9 +4080,12 @@ void SceneManager::setRelativeOrigin( const Vector3 &relativeOrigin, bool bPerma
             propagateRelativeOrigin( mSceneRoot[i], relativeOrigin );
         }
 
-        propagateRelativeOrigin( mSkyBoxNode, relativeOrigin );
-        propagateRelativeOrigin( mSkyDomeNode, relativeOrigin );
-        propagateRelativeOrigin( mSkyBoxNode, relativeOrigin );
+        if( mSkyPlaneNode )
+            propagateRelativeOrigin( mSkyPlaneNode, relativeOrigin );
+        if( mSkyDomeNode )
+            propagateRelativeOrigin( mSkyDomeNode, relativeOrigin );
+        if( mSkyBoxNode )
+            propagateRelativeOrigin( mSkyBoxNode, relativeOrigin );
     }
 
     notifyStaticDirty( mSceneRoot[SCENE_STATIC] );
