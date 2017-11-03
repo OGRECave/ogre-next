@@ -622,7 +622,10 @@ namespace Ogre
                 continue;
 
             for( size_t j=0; j<numSamplersUsed; ++j )
+            {
                 samplers[j] = (__bridge id<MTLSamplerState>)(*itor)->mRsData;
+                ++itor;
+            }
 
             texUnitRange.length = numSamplersUsed;
 
@@ -726,7 +729,10 @@ namespace Ogre
                 continue;
 
             for( size_t j=0; j<numSamplersUsed; ++j )
+            {
                 samplers[j] = (__bridge id<MTLSamplerState>)(*itor)->mRsData;
+                ++itor;
+            }
 
             texUnitRange.length = numSamplersUsed;
 

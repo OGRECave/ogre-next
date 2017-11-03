@@ -2349,6 +2349,7 @@ namespace Ogre
                 ID3D11SamplerState *samplerState =
                         reinterpret_cast<ID3D11SamplerState*>( (*itor)->mRsData );
                 samplers[j] = samplerState;
+                ++itor;
             }
 
             switch( i )
@@ -2434,6 +2435,7 @@ namespace Ogre
                 ID3D11SamplerState *samplerState =
                         reinterpret_cast<ID3D11SamplerState*>( (*itor)->mRsData );
                 samplers[j] = samplerState;
+                ++itor;
             }
 
             context->CSSetSamplers( samplerIdx, numSamplersUsed, samplers );
