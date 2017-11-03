@@ -72,7 +72,8 @@ namespace Ogre
         mTransparencyValue( 1.0f ),
         mNormalMapWeight( 1.0f ),
         mCubemapProbe( 0 ),
-        mBrdf( PbsBrdf::Default )
+        mBrdf( PbsBrdf::Default ),
+        mPoseWeight( 0 )
     {
         memset( mUvSource, 0, sizeof( mUvSource ) );
         memset( mBlendModes, 0, sizeof( mBlendModes ) );

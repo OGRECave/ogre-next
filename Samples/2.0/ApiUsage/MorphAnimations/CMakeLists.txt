@@ -13,17 +13,13 @@ endmacro()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+include_directories(${CMAKE_SOURCE_DIR}/Components/Hlms/Common/include)
+ogre_add_component_include_dir(Hlms/Pbs)
+
 add_recursive( ./ SOURCE_FILES )
 
-set( TUTORIAL_RESOURCES ${SAMPLE_COMMON_BASIC_RESOURCES} )
-if (OGRE_BUILD_PLATFORM_APPLE_IOS)
-	set( TUTORIAL_RESOURCES ${SAMPLE_COMMON_BASIC_RESOURCES}
-		 ${CMAKE_CURRENT_SOURCE_DIR}/iOS/Tutorial.storyboard )
-	set( SOURCE_FILES ${SOURCE_FILES} ${CMAKE_CURRENT_SOURCE_DIR}/iOS/TutorialViewController.mm )
-endif (OGRE_BUILD_PLATFORM_APPLE_IOS)
-
-set(SAMPLE_NAME Sample_Tutorial01_Initialization)
-ogre_add_executable(${SAMPLE_NAME} WIN32 MACOSX_BUNDLE ${SOURCE_FILES} ${TUTORIAL_RESOURCES} )
+set(SAMPLE_NAME Sample_MorphAnimations)
+ogre_add_executable(${SAMPLE_NAME} WIN32 MACOSX_BUNDLE ${SOURCE_FILES} ${SAMPLE_COMMON_RESOURCES})
 
 target_link_libraries(${SAMPLE_NAME} ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES})
 ogre_config_sample_lib(${SAMPLE_NAME})
@@ -65,7 +61,11 @@ if( APPLE )
 		)
     endforeach(FWK)
 	
-	foreach(RSC ${TUTORIAL_RESOURCES})
+	add_custom_command(TARGET ${SAMPLE_NAME} POST_BUILD
+		COMMAND mkdir -p ${APP_CONTENTS_PATH}/Resources
+	)
+	
+	foreach(RSC ${SAMPLE_COMMON_RESOURCES})
 		add_custom_command(TARGET ${SAMPLE_NAME} POST_BUILD
 			COMMAND cp -r ${RSC} ${APP_CONTENTS_PATH}/Resources/
 		)

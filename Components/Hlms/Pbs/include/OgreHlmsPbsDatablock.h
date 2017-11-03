@@ -256,6 +256,8 @@ namespace Ogre
 
         /// @see PbsBrdf::PbsBrdf
         uint32  mBrdf;
+        
+        float mPoseWeight;
 
         void scheduleConstBufferUpdate(void);
         virtual void uploadToConstBuffer( char *dstPtr );
@@ -731,6 +733,9 @@ namespace Ogre
                                                                 PbsTextureTypes type );
 
         virtual void calculateHash();
+        
+        float getPoseWeight() const { return mPoseWeight; }
+        void setPoseWeight(float w) { mPoseWeight = w; }
 
         static const size_t MaterialSizeInGpu;
         static const size_t MaterialSizeInGpuAligned;

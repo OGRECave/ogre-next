@@ -46,4 +46,16 @@ namespace Ogre
         const CbPipelineStateObject *cmd = static_cast<const CbPipelineStateObject*>( _cmd );
         _this->mRenderSystem->_setPipelineStateObject( cmd->pso );
     }
+    
+    CbBindGpuProgramParameters::CbBindGpuProgramParameters( const GpuProgramPtr& _program ) :
+        CbBase( CB_BIND_GPU_PROGRAM_PARAMETERS ),
+        program( _program )
+    {
+    }
+    
+    void CommandBuffer::execute_bindGpuProgramParameters( CommandBuffer *_this, const CbBase * RESTRICT_ALIAS _cmd )
+    {
+        const CbBindGpuProgramParameters *cmd = static_cast<const CbBindGpuProgramParameters*>( _cmd );
+        _this->mRenderSystem->bindGpuProgramParameters( cmd->program->getType(), cmd->program->getDefaultParameters(), GPV_ALL );
+    }
 }

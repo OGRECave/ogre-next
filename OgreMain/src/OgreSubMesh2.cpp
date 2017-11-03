@@ -48,7 +48,8 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     SubMesh::SubMesh() :
         mParent( 0 ),
-        mBoneAssignmentsOutOfDate( false )
+        mBoneAssignmentsOutOfDate( false ),
+        mHasPoseAnimation( false )
     {
     }
     //-----------------------------------------------------------------------
@@ -582,6 +583,8 @@ namespace Ogre {
             mVao[vaoPassIdx].push_back( vao );
             ++itor;
         }
+        
+        mHasPoseAnimation = !subMesh->parent->getPoseList().empty();
     }
     //---------------------------------------------------------------------
     IndexBufferPacked* SubMesh::importFromV1( v1::IndexData *indexData )
@@ -789,11 +792,71 @@ namespace Ogre {
         bool hasTangents = false;
 
         v1::VertexData *vertexData = subMesh->vertexData[vaoPassIdx];
+        v1::VertexDeclaration* vertexDeclaration = vertexData->vertexDeclaration;
+        
+        // if it has poses add data to uvs 
+        // find the index of this submesh - uh cant find the index of a submesh
+        const v1::PoseList& poseList = subMesh->parent->getPoseList();
+        
+        if (!poseList.empty()) {
+            v1::Pose *const pose = poseList[0];
+            
+            // Create buffer
+            size_t numVertices = pose->getVertexOffsets().size();
+            size_t vertexSize = v1::VertexElement::getTypeSize(VET_FLOAT3);
+            bool normals = pose->getIncludesNormals();
+            if (normals) {
+                vertexSize += v1::VertexElement::getTypeSize(VET_FLOAT3);
+            }
+            
+            // TODO: deallocate this???
+            v1::HardwareVertexBufferSharedPtr poseBuffer = v1::HardwareBufferManager::getSingleton().createVertexBuffer(
+                                                            vertexSize, numVertices, v1::HardwareBuffer::HBU_DYNAMIC);
+                
+            float* pFloat = static_cast<float*>(poseBuffer->lock(v1::HardwareBuffer::HBL_DISCARD));
+            memset(pFloat, 0, poseBuffer->getSizeInBytes()); 
 
-        {
+            // Set each vertex
+            v1::Pose::VertexOffsetMap::const_iterator v = pose->getVertexOffsets().begin();
+            v1::Pose::NormalsMap::const_iterator n = pose->getNormals().begin();
+            
+            size_t numFloatsPerVertex = normals ? 6: 3;
+            
+            while(v != pose->getVertexOffsets().end())
+            {
+                // Remember, vertex maps are *sparse* so may have missing entries
+                // This is why we skip
+                float* pDst = pFloat + (numFloatsPerVertex * v->first);
+                *pDst++ = v->second.x;
+                *pDst++ = v->second.y;
+                *pDst++ = v->second.z;
+                ++v;
+                if (normals)
+                {
+                    *pDst++ = n->second.x;
+                    *pDst++ = n->second.y;
+                    *pDst++ = n->second.z;
+                    ++n;
+                }
+                
+            }
+            poseBuffer->unlock();
+            
+            unsigned short bindingIndex = vertexData->vertexBufferBinding->getNextIndex();
+            vertexData->vertexBufferBinding->setBinding(bindingIndex, poseBuffer);
+            
+            int uvIndex = vertexDeclaration->getNextFreeTextureCoordinate(); // position offsets
+            vertexDeclaration->addElement(bindingIndex, 0, VET_FLOAT3, VES_TEXTURE_COORDINATES, uvIndex);
+            
+            if (pose->getIncludesNormals()) {
+                uvIndex = vertexDeclaration->getNextFreeTextureCoordinate(); // normals
+                vertexDeclaration->addElement(bindingIndex, v1::VertexElement::getTypeSize(VET_FLOAT3), VET_FLOAT3, VES_TEXTURE_COORDINATES, uvIndex);
+            }
+        }
+        
+        {    
             //Get an AZDO-friendly vertex declaration out of the original declaration.
-            const v1::VertexDeclaration::VertexElementList &origElements = vertexData->
-                                                                vertexDeclaration->getElements();
+            const v1::VertexDeclaration::VertexElementList &origElements = vertexDeclaration->getElements();
             srcElements.reserve( origElements.size() );
             v1::VertexDeclaration::VertexElementList::const_iterator itor = origElements.begin();
             v1::VertexDeclaration::VertexElementList::const_iterator end  = origElements.end();

@@ -56,6 +56,7 @@ THE SOFTWARE.
 #include "CommandBuffer/OgreCommandBuffer.h"
 #include "CommandBuffer/OgreCbTexture.h"
 #include "CommandBuffer/OgreCbShaderBuffer.h"
+#include "CommandBuffer/OgreCbPipelineStateObject.h"
 
 #include "Animation/OgreSkeletonInstance.h"
 
@@ -715,7 +716,8 @@ namespace Ogre
     {
         HlmsPbsDatablock *datablock = static_cast<HlmsPbsDatablock*>( renderable->getDatablock() );
         const bool hasAlphaTest = datablock->getAlphaTest() != CMPF_ALWAYS_PASS;
-
+        const bool hasPoseAnimation = renderable->hasPoseAnimation();
+        
         HlmsPropertyVec::iterator itor = mSetProperties.begin();
         HlmsPropertyVec::iterator end  = mSetProperties.end();
 
@@ -729,10 +731,20 @@ namespace Ogre
             else if( itor->keyName != PbsProperty::HwGammaRead &&
                      itor->keyName != PbsProperty::UvDiffuse &&
                      itor->keyName != HlmsBaseProp::Skeleton &&
+                     itor->keyName != HlmsBaseProp::Pose &&
                      itor->keyName != HlmsBaseProp::BonesPerVertex &&
                      itor->keyName != HlmsBaseProp::DualParaboloidMapping &&
                      itor->keyName != HlmsBaseProp::AlphaTest &&
                      itor->keyName != HlmsBaseProp::AlphaBlend &&
+                     (itor->keyName != HlmsBaseProp::UvCount  || !hasPoseAnimation) &&
+                     (itor->keyName != HlmsBaseProp::UvCount0 || !hasPoseAnimation) &&
+                     (itor->keyName != HlmsBaseProp::UvCount1 || !hasPoseAnimation) &&
+                     (itor->keyName != HlmsBaseProp::UvCount2 || !hasPoseAnimation) &&
+                     (itor->keyName != HlmsBaseProp::UvCount3 || !hasPoseAnimation) &&
+                     (itor->keyName != HlmsBaseProp::UvCount4 || !hasPoseAnimation) &&
+                     (itor->keyName != HlmsBaseProp::UvCount5 || !hasPoseAnimation) &&
+                     (itor->keyName != HlmsBaseProp::UvCount6 || !hasPoseAnimation) &&
+                     (itor->keyName != HlmsBaseProp::UvCount7 || !hasPoseAnimation) &&
                      (!hasAlphaTest || !requiredPropertyByAlphaTest( itor->keyName )) )
             {
                 itor = mSetProperties.erase( itor );
@@ -1088,7 +1100,7 @@ namespace Ogre
         //vec4 clipPlane0
         if( isCameraReflected )
             mapSize += 4 * 4;
-
+            
         mapSize += mListener->getPassBufferSize( shadowNode, casterPass, dualParaboloid,
                                                  sceneManager );
 
@@ -1590,7 +1602,7 @@ namespace Ogre
         assert( dynamic_cast<const HlmsPbsDatablock*>( queuedRenderable.renderable->getDatablock() ) );
         const HlmsPbsDatablock *datablock = static_cast<const HlmsPbsDatablock*>(
                                                 queuedRenderable.renderable->getDatablock() );
-
+        
         if( OGRE_EXTRACT_HLMS_TYPE_FROM_CACHE_HASH( lastCacheHash ) != mType )
         {
             //layout(binding = 0) uniform PassBuffer {} pass
@@ -1959,6 +1971,13 @@ namespace Ogre
 
         mCurrentMappedConstBuffer   = currentMappedConstBuffer;
         mCurrentMappedTexBuffer     = currentMappedTexBuffer;
+        
+        if( queuedRenderable.renderable->hasPoseAnimation() ) {
+            GpuProgramPtr vertexShader = cache->pso.vertexShader;
+            GpuProgramParametersSharedPtr vsParams = vertexShader->getDefaultParameters();
+            vsParams->setNamedConstant( "poseWeight", datablock->getPoseWeight() );
+            *commandBuffer->addCommand<CbBindGpuProgramParameters>() = CbBindGpuProgramParameters( vertexShader );
+        }
 
         return ((mCurrentMappedConstBuffer - mStartMappedConstBuffer) >> 2) - 1;
     }
