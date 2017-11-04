@@ -134,7 +134,6 @@ namespace Ogre
         bool                    mInterruptedRenderCommandEncoder;
 
         void setActiveDevice( MetalDevice *device );
-        void createRenderEncoder(void);
 
         id<MTLDepthStencilState> getDepthStencilState( HlmsPso *pso );
         void removeDepthStencilState( HlmsPso *pso );

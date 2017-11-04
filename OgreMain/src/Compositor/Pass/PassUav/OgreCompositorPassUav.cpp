@@ -219,6 +219,9 @@ namespace Ogre
         if( listener )
             listener->passEarlyPreExecute( this );
 
+        if( !mDescriptorSetUav )
+            setupDescriptorSetUav();
+
         //Fire the listener in case it wants to change anything
         if( listener )
             listener->passPreExecute( this );
@@ -344,9 +347,14 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void CompositorPassUav::notifyRecreated( const UavBufferPacked *oldBuffer, UavBufferPacked *newBuffer )
+    {
+        destroyDescriptorSetUav();
+    }
+    //-----------------------------------------------------------------------------------
     void CompositorPassUav::notifyTextureChanged( TextureGpu *texture,
                                                   TextureGpuListener::Reason reason )
     {
-        setupDescriptorSetUav();
+        destroyDescriptorSetUav();
     }
 }
