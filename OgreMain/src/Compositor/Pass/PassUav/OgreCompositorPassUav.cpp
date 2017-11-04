@@ -81,10 +81,11 @@ namespace Ogre
     CompositorPassUav::CompositorPassUav( const CompositorPassUavDef *definition,
                                           CompositorNode *parentNode,
                                           const RenderTargetViewDef *rtv ) :
-                CompositorPass( definition, rtv, parentNode ),
+                CompositorPass( definition, parentNode ),
                 mDefinition( definition ),
                 mDescriptorSetUav( 0 )
     {
+        initialize( rtv );
     }
     //-----------------------------------------------------------------------------------
     CompositorPassUav::~CompositorPassUav()

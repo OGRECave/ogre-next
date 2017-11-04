@@ -58,6 +58,9 @@ namespace Ogre
     protected:
         SceneManager    *mSceneManager;
 
+        virtual bool allowResolveStoreActionsWithoutResolveTexture(void) const;
+        virtual void postRenderPassDescriptorSetup( RenderPassDescriptor *renderPassDesc );
+
     public:
         CompositorPassClear( const CompositorPassClearDef *definition, SceneManager *sceneManager,
                              const RenderTargetViewDef *rtv, CompositorNode *parentNode );

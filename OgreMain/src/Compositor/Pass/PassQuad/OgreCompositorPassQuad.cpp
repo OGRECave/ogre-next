@@ -59,7 +59,7 @@ namespace Ogre
                                             Camera *defaultCamera, CompositorNode *parentNode,
                                             const RenderTargetViewDef *rtv, Real horizonalTexelOffset,
                                             Real verticalTexelOffset ) :
-                CompositorPass( definition, rtv, parentNode ),
+                CompositorPass( definition, parentNode ),
                 mDefinition( definition ),
                 mFsRect( 0 ),
                 mDatablock( 0 ),
@@ -68,6 +68,8 @@ namespace Ogre
                 mHorizonalTexelOffset( horizonalTexelOffset ),
                 mVerticalTexelOffset( verticalTexelOffset )
     {
+        initialize( rtv );
+
         const CompositorWorkspace *workspace = parentNode->getWorkspace();
 
         if( mDefinition->mUseQuad ||
@@ -131,10 +133,7 @@ namespace Ogre
                 ++it;
 
             if( it == en )
-            {
-                mTextureDependencies.push_back( CompositorTexture( itor->textureName,
-                                                                   channel ) );
-            }
+                mTextureDependencies.push_back( CompositorTexture( itor->textureName, channel ) );
 
             ++itor;
         }

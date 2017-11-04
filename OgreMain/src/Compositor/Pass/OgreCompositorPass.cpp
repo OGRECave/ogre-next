@@ -66,9 +66,7 @@ namespace Ogre
     };
 
     CompositorPass::CompositorPass( const CompositorPassDef *definition,
-                                    const RenderTargetViewDef *rtv,
-                                    CompositorNode *parentNode,
-                                    bool supportsNoRtv ) :
+                                    CompositorNode *parentNode ) :
             mDefinition( definition ),
             mRenderPassDesc( 0 ),
             mAnyTargetTexture( 0 ),
@@ -77,7 +75,10 @@ namespace Ogre
             mNumValidResourceTransitions( 0 )
     {
         assert( definition->mNumInitialPasses && "Definition is broken, pass will never execute!" );
-
+    }
+    //-----------------------------------------------------------------------------------
+    void CompositorPass::initialize( const RenderTargetViewDef *rtv, bool supportsNoRtv )
+    {
         if( !supportsNoRtv && !rtv )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
@@ -85,7 +86,7 @@ namespace Ogre
                          "(e.g. you wrote target {} instead of target myTexture {}.\n"
                          "Only a few compositor passes support this (e.g. Compute passes)\n"
                          "Node with error: " +
-                         definition->getParentTargetDef()->getParentNodeDef()->getNameStr() + "\n",
+                         mDefinition->getParentTargetDef()->getParentNodeDef()->getNameStr() + "\n",
                          "CompositorPass::CompositorPass" );
         }
 
@@ -248,6 +249,8 @@ namespace Ogre
                                    rtv->preferDepthTexture, rtv->depthBufferFormat );
         }
 
+        postRenderPassDescriptorSetup( renderPassDesc );
+
         renderPassDesc->entriesModified( RenderPassDescriptor::All );
     }
     //-----------------------------------------------------------------------------------
@@ -308,18 +311,25 @@ namespace Ogre
                     //If we're here, the texture is MSAA _AND_ we'll resolve it.
                     if( rtvEntry.resolveTextureName == IdString() )
                     {
-                        if( renderPassTargetAttachment->texture->hasMsaaExplicitResolves() )
+                        if( !allowResolveStoreActionsWithoutResolveTexture() )
                         {
-                            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                                         "Must specify resolveTextureName for RTV when using explicit "
-                                         "resolves and store action is either "
-                                         "StoreAction::MultisampleResolve, "
-                                         "StoreAction::StoreAndMultisampleResolve. "
-                                         "Texture: " + renderPassTargetAttachment->texture->getNameStr(),
-                                         "CompositorPass::setupRenderPassTarget" );
-                        }
+                            if( renderPassTargetAttachment->texture->hasMsaaExplicitResolves() )
+                            {
+                                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                                             "Must specify resolveTextureName for RTV when using explicit "
+                                             "resolves and store action is either "
+                                             "StoreAction::MultisampleResolve, "
+                                             "StoreAction::StoreAndMultisampleResolve. "
+                                             "Texture: " + renderPassTargetAttachment->texture->getNameStr(),
+                                             "CompositorPass::setupRenderPassTarget" );
+                            }
 
-                        renderPassTargetAttachment->resolveTexture = renderPassTargetAttachment->texture;
+                            renderPassTargetAttachment->resolveTexture = renderPassTargetAttachment->texture;
+                        }
+                        else
+                        {
+                            renderPassTargetAttachment->resolveTexture = 0;
+                        }
                     }
                     else
                     {

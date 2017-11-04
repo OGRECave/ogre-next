@@ -52,11 +52,16 @@ namespace Ogre
                                                   const RenderTargetViewDef *rtv,
                                                   CompositorNode *parentNode,
                                                   RenderSystem *renderSystem ) :
-                CompositorPass( definition, rtv, parentNode ),
+                CompositorPass( definition, parentNode ),
                 mDefinition( definition ),
                 mRenderSystem( renderSystem )
     {
-        mRenderPassDesc->mInformationOnly = true;
+        initialize( rtv );
+    }
+    //-----------------------------------------------------------------------------------
+    void CompositorPassStencil::postRenderPassDescriptorSetup( RenderPassDescriptor *renderPassDesc )
+    {
+        renderPassDesc->mInformationOnly = true;
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassStencil::execute( const Camera *lodCamera )

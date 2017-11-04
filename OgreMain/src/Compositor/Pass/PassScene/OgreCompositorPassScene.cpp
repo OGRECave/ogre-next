@@ -45,7 +45,7 @@ namespace Ogre
     CompositorPassScene::CompositorPassScene( const CompositorPassSceneDef *definition,
                                               Camera *defaultCamera, const RenderTargetViewDef *rtv,
                                               CompositorNode *parentNode ) :
-                CompositorPass( definition, rtv, parentNode ),
+                CompositorPass( definition, parentNode ),
                 mDefinition( definition ),
                 mShadowNode( 0 ),
                 mCamera( 0 ),
@@ -56,6 +56,8 @@ namespace Ogre
                 mPrePassDepthTexture( 0 ),
                 mSsrTexture( 0 )
     {
+        initialize( rtv );
+
         CompositorWorkspace *workspace = parentNode->getWorkspace();
 
         if( mDefinition->mShadowNode != IdString() )

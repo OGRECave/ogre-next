@@ -107,6 +107,9 @@ namespace Ogre
         /// mNumValidResourceTransitions = mResourceTransitions.size()
         uint32                  mNumValidResourceTransitions;
 
+        /// MUST be called by derived class.
+        void initialize( const RenderTargetViewDef *rtv, bool supportsNoRtv=false );
+
         /// Modifies mRenderPassDesc
         void setupRenderPassDesc( const RenderTargetViewDef *rtv );
         /**
@@ -124,6 +127,11 @@ namespace Ogre
                                     bool preferDepthTexture = false,
                                     PixelFormatGpu depthBufferFormat = PFG_UNKNOWN );
 
+        virtual bool allowResolveStoreActionsWithoutResolveTexture(void) const { return false; }
+        /// Called by setupRenderPassDesc right before calling renderPassDesc->entriesModified
+        /// in case derived class wants to make some changes.
+        virtual void postRenderPassDescriptorSetup( RenderPassDescriptor *renderPassDesc ) {}
+
         void setRenderPassDescToCurrent(void);
 
         void populateTextureDependenciesFromExposedTextures(void);
@@ -131,10 +139,7 @@ namespace Ogre
         void executeResourceTransitions(void);
 
     public:
-        CompositorPass( const CompositorPassDef *definition,
-                        const RenderTargetViewDef *rtv,
-                        CompositorNode *parentNode,
-                        bool supportsNoRtv=false );
+        CompositorPass( const CompositorPassDef *definition, CompositorNode *parentNode );
         virtual ~CompositorPass();
 
         void profilingBegin(void);

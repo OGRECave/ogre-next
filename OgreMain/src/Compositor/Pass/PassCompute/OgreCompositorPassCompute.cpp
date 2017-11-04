@@ -94,10 +94,12 @@ namespace Ogre
                                                   Camera *defaultCamera,
                                                   CompositorNode *parentNode,
                                                   const RenderTargetViewDef *rtv ) :
-        CompositorPass( definition, 0, parentNode, true ),
+        CompositorPass( definition, parentNode ),
         mDefinition( definition ),
         mCamera( 0 )
     {
+        initialize( 0, true );
+
         HlmsManager *hlmsManager = Root::getSingleton().getHlmsManager();
         HlmsCompute *hlmsCompute = hlmsManager->getComputeHlms();
 

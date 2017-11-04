@@ -53,9 +53,11 @@ namespace Ogre
     CompositorPassMipmap::CompositorPassMipmap( const CompositorPassMipmapDef *definition,
                                                 const RenderTargetViewDef *rtv,
                                                 CompositorNode *parentNode ) :
-                CompositorPass( definition, rtv, parentNode ),
+                CompositorPass( definition, parentNode ),
                 mDefinition( definition )
     {
+        initialize( rtv );
+
         size_t numColourEntries = mRenderPassDesc->getNumColourEntries();
         for( size_t i=0; i<numColourEntries; ++i )
         {

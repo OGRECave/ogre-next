@@ -65,9 +65,10 @@ namespace Ogre
     CompositorPassDepthCopy::CompositorPassDepthCopy( const CompositorPassDepthCopyDef *definition,
                                                       const RenderTargetViewDef *rtv,
                                                       CompositorNode *parentNode ) :
-                CompositorPass( definition, rtv, parentNode ),
+                CompositorPass( definition, parentNode ),
                 mDefinition( definition )
     {
+        initialize( rtv );
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassDepthCopy::execute( const Camera *lodCamera )

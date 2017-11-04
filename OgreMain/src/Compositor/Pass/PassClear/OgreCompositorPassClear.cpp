@@ -45,36 +45,52 @@ namespace Ogre
                                               SceneManager *sceneManager,
                                               const RenderTargetViewDef *rtv,
                                               CompositorNode *parentNode ) :
-                CompositorPass( definition, rtv, parentNode ),
+                CompositorPass( definition, parentNode ),
                 mSceneManager( sceneManager ),
                 mDefinition( definition )
+    {
+        initialize( rtv );
+    }
+    //-----------------------------------------------------------------------------------
+    bool CompositorPassClear::allowResolveStoreActionsWithoutResolveTexture(void) const
+    {
+        return true;
+    }
+    //-----------------------------------------------------------------------------------
+    void CompositorPassClear::postRenderPassDescriptorSetup( RenderPassDescriptor *renderPassDesc )
     {
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
         const RenderSystemCapabilities *capabilities = renderSystem->getCapabilities();
 
         if( mDefinition->mNonTilersOnly && capabilities->hasCapability( RSC_IS_TILER ) &&
             !capabilities->hasCapability( RSC_TILER_CAN_CLEAR_STENCIL_REGION ) &&
-            (mRenderPassDesc->hasStencilFormat() &&
-             (mRenderPassDesc->mDepth.loadAction == LoadAction::Clear ||
-             mRenderPassDesc->mStencil.loadAction == LoadAction::Clear)) )
+            (renderPassDesc->hasStencilFormat() &&
+             (renderPassDesc->mDepth.loadAction == LoadAction::Clear ||
+             renderPassDesc->mStencil.loadAction == LoadAction::Clear)) )
         {
             //Normally this clear would be a no-op (because we're on a tiler GPU
             //and this is a non-tiler pass). However depth-stencil formats
             //must be cleared like a non-tiler. We must update our RenderPassDesc to
             //avoid clearing the colour (since that will still behave like tiler)
-            uint32 entryTypes = 0;
-            for( size_t i=0; i<mRenderPassDesc->getNumColourEntries(); ++i )
+            for( size_t i=0; i<renderPassDesc->getNumColourEntries(); ++i )
             {
-                if( mRenderPassDesc->mColour[i].loadAction != LoadAction::Load )
-                {
-                    entryTypes |= RenderPassDescriptor::Colour0 << i;
-                    mRenderPassDesc->mColour[i].loadAction = LoadAction::Load;
-                }
+                if( renderPassDesc->mColour[i].loadAction != LoadAction::Load )
+                    renderPassDesc->mColour[i].loadAction = LoadAction::Load;
             }
-
-            if( entryTypes )
-                mRenderPassDesc->entriesModified( entryTypes );
         }
+
+        //Clears default to writing both to MSAA & resolve texture, but this will cause
+        //complaints later on if there is no resolve texture set. Silently set it to Store only.
+        for( size_t i=0; i<renderPassDesc->getNumColourEntries(); ++i )
+        {
+            if( !renderPassDesc->mColour[i].resolveTexture )
+                renderPassDesc->mColour[i].storeAction = StoreAction::Store;
+        }
+
+        if( !renderPassDesc->mDepth.resolveTexture )
+            renderPassDesc->mDepth.storeAction = StoreAction::Store;
+        if( !renderPassDesc->mStencil.resolveTexture )
+            renderPassDesc->mStencil.storeAction = StoreAction::Store;
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassClear::execute( const Camera *lodCamera )
