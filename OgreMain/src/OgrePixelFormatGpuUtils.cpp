@@ -1168,6 +1168,11 @@ namespace Ogre
         return (desc.flags & PFF_PALLETE) != 0;
     }
     //-----------------------------------------------------------------------------------
+    bool PixelFormatGpuUtils::hasSRGBEquivalent( PixelFormatGpu format )
+    {
+        return getEquivalentSRGB( format ) != getEquivalentLinear( format );
+    }
+    //-----------------------------------------------------------------------------------
     PixelFormatGpu PixelFormatGpuUtils::getEquivalentSRGB( PixelFormatGpu format )
     {
         switch( format )

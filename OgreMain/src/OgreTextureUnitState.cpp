@@ -37,6 +37,7 @@ THE SOFTWARE.
 #include "OgreHlmsManager.h"
 #include "OgreHlms.h"
 #include "OgreTextureGpuManager.h"
+#include "OgrePixelFormatGpuUtils.h"
 
 namespace Ogre {
 
@@ -1064,12 +1065,22 @@ namespace Ogre {
                         textureFlags |= TextureFlags::PrefersLoadingFromFileAsSRGB;
                     TextureGpuManager *textureManager = Root::getSingleton().
                                                         getRenderSystem()->getTextureGpuManager();
-                    mFramePtrs[frame] =
-                            textureManager->createOrRetrieveTexture( mFrames[frame], aliasName,
-                                                                     GpuPageOutStrategy::Discard,
-                                                                     textureFlags,
-                                                                     mTextureType,
-                                                                     mParent->getResourceGroup() );
+
+                    //First check if we need the alias: there could be a texture
+                    //with the original name that satisfies our needs
+                    TextureGpu *texture = textureManager->findTextureNoThrow( mFrames[frame] );
+
+                    if( texture && texture->hasAutomaticBatching() == mAutomaticBatching )
+                        mFramePtrs[frame] = texture;
+                    else
+                    {
+                        mFramePtrs[frame] =
+                                textureManager->createOrRetrieveTexture( mFrames[frame], aliasName,
+                                                                         GpuPageOutStrategy::Discard,
+                                                                         textureFlags,
+                                                                         mTextureType,
+                                                                         mParent->getResourceGroup() );
+                    }
                 }
                 catch (Exception &e)
                 {
@@ -1106,12 +1117,22 @@ namespace Ogre {
                         textureFlags |= TextureFlags::PrefersLoadingFromFileAsSRGB;
                     TextureGpuManager *textureManager = Root::getSingleton().
                                                         getRenderSystem()->getTextureGpuManager();
-                    mFramePtrs[frame] =
-                            textureManager->createOrRetrieveTexture( mFrames[frame], aliasName,
-                                                                     GpuPageOutStrategy::Discard,
-                                                                     textureFlags,
-                                                                     mTextureType,
-                                                                     mParent->getResourceGroup() );
+
+                    //First check if we need the alias: there could be a texture
+                    //with the original name that satisfies our needs
+                    TextureGpu *texture = textureManager->findTextureNoThrow( mFrames[frame] );
+
+                    if( texture && texture->hasAutomaticBatching() == mAutomaticBatching )
+                        mFramePtrs[frame] = texture;
+                    else
+                    {
+                        mFramePtrs[frame] =
+                                textureManager->createOrRetrieveTexture( mFrames[frame], aliasName,
+                                                                         GpuPageOutStrategy::Discard,
+                                                                         textureFlags,
+                                                                         mTextureType,
+                                                                         mParent->getResourceGroup() );
+                    }
 
                     if( mFramePtrs[frame]->getNextResidencyStatus() != GpuResidency::Resident )
                     {
