@@ -77,6 +77,9 @@ compositor_node LocalCubemapsRenderingNode
 			}
 			store
 			{
+				//Overlays in the next pass interrupt rendering in Metal/iOS, thus without
+				//"colour store" MSAA won't work properly.
+				colour	store
 				depth	dont_care
 				stencil	dont_care
 			}
@@ -89,11 +92,10 @@ compositor_node LocalCubemapsRenderingNode
 
 			shadows		LocalCubemapsShadowNode
 
+			//RQ 250 is where the helper geometry from PCC lives; therefore we must not render and we avoid it.
+			//We could also use visibility_mask for that.
 			rq_first	0
 			rq_last		250
-			/*overlays	off
-			rq_first	0
-			rq_last		2*/
 		}
 
 		//Render overlays
