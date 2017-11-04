@@ -4,8 +4,8 @@ compositor_node SmaaNode
 	in 0 rt_input
 	in 1 rt_output
 
-	texture edgesTex target_width target_height PFG_RG8_UNORM			depth_pool 8 depth_format PFG_D24_UNORM_S8_UINT
-	texture blendTex target_width target_height PFG_RGBA8_UNORM_SRGB	depth_pool 8 depth_format PFG_D24_UNORM_S8_UINT
+	texture edgesTex target_width target_height PFG_RG8_UNORM	depth_pool 8 depth_format PFG_D24_UNORM_S8_UINT
+	texture blendTex target_width target_height PFG_RGBA8_UNORM	depth_pool 8 depth_format PFG_D24_UNORM_S8_UINT
 
 	target edgesTex
 	{
@@ -31,9 +31,11 @@ compositor_node SmaaNode
 		{
 			load
 			{
-				colour		dont_care
+				colour		clear
 				depth		clear
 				stencil		clear
+
+				clear_colour 0 0 0 0
 			}
 			material SMAA/EdgeDetection
 			input 0 rt_input
@@ -62,7 +64,11 @@ compositor_node SmaaNode
 		}
 		pass render_quad
 		{
-			load { colour clear }
+			load
+			{
+				colour clear
+				clear_colour 0 0 0 0
+			}
 			material SMAA/BlendingWeightCalculation
 			input 0 edgesTex
 		}
