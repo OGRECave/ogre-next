@@ -940,7 +940,7 @@ namespace Ogre
         virtual void _beginFrameOnce(void);
         /// Called once per frame, regardless of how many active workspaces there are.
         /// Gets called AFTER all RenderWindows have been swapped.
-        virtual void _endFrameOnce(void) {}
+        virtual void _endFrameOnce(void);
 
         /**
         * Signifies the beginning of a frame, i.e. the start of rendering on a single viewport. Will occur

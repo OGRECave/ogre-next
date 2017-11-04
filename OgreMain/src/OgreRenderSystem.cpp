@@ -711,6 +711,11 @@ namespace Ogre {
         mVaoManager->_beginFrame();
     }
     //-----------------------------------------------------------------------
+    void RenderSystem::_endFrameOnce(void)
+    {
+        queueBindUAVs( 0 );
+    }
+    //-----------------------------------------------------------------------
     void RenderSystem::setDepthBufferFor( RenderTarget *renderTarget, bool exactMatch )
     {
         uint16 poolId = renderTarget->getDepthBufferPool();

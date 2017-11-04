@@ -1104,6 +1104,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_endFrameOnce(void)
     {
+        RenderSystem::_endFrameOnce();
+
         //TODO: We shouldn't tidy up JUST the active device. But all of them.
 
         cleanAutoParamsBuffers();

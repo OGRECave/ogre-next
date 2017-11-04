@@ -59,6 +59,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorPassClear::postRenderPassDescriptorSetup( RenderPassDescriptor *renderPassDesc )
     {
+        //IMPORTANT: We cannot rely on renderPassDesc->getNumColourEntries()
+        //because it hasn't been calculated yet.
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
         const RenderSystemCapabilities *capabilities = renderSystem->getCapabilities();
 
@@ -72,7 +74,7 @@ namespace Ogre
             //and this is a non-tiler pass). However depth-stencil formats
             //must be cleared like a non-tiler. We must update our RenderPassDesc to
             //avoid clearing the colour (since that will still behave like tiler)
-            for( size_t i=0; i<renderPassDesc->getNumColourEntries(); ++i )
+            for( size_t i=0; i<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
             {
                 if( renderPassDesc->mColour[i].loadAction != LoadAction::Load )
                     renderPassDesc->mColour[i].loadAction = LoadAction::Load;
@@ -81,7 +83,7 @@ namespace Ogre
 
         //Clears default to writing both to MSAA & resolve texture, but this will cause
         //complaints later on if there is no resolve texture set. Silently set it to Store only.
-        for( size_t i=0; i<renderPassDesc->getNumColourEntries(); ++i )
+        for( size_t i=0; i<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
         {
             if( !renderPassDesc->mColour[i].resolveTexture )
                 renderPassDesc->mColour[i].storeAction = StoreAction::Store;
