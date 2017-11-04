@@ -269,19 +269,20 @@ namespace Ogre
         mTexturePool.clear();
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* TextureGpuManager::createTexture( const String &name,
+    TextureGpu* TextureGpuManager::createTexture( const String &name, const String &aliasName,
                                                   GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                                   uint32 textureFlags,
                                                   TextureTypes::TextureTypes initialType,
                                                   const String &resourceGroup,
                                                   uint32 filters )
     {
-        IdString idName( name );
+        IdString idName( aliasName );
 
-        if( mEntries.find( idName ) != mEntries.end() )
+        if( mEntries.find( aliasName ) != mEntries.end() )
         {
             OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM,
-                         "A texture with name '" + name + "' already exists.",
+                         "A texture with name '" + aliasName +
+                         "' already exists. (Real tex name: '" + name + "')",
                          "TextureGpuManager::createTexture" );
         }
 
@@ -295,7 +296,39 @@ namespace Ogre
 
         TextureGpu *retVal = createTextureImpl( pageOutStrategy, idName, textureFlags, initialType );
 
-        mEntries[idName] = ResourceEntry( name, resourceGroup, retVal, filters );
+        mEntries[idName] = ResourceEntry( name, aliasName, resourceGroup, retVal, filters );
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    TextureGpu* TextureGpuManager::createTexture( const String &name,
+                                                  GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+                                                  uint32 textureFlags,
+                                                  TextureTypes::TextureTypes initialType,
+                                                  const String &resourceGroup,
+                                                  uint32 filters )
+    {
+        return createTexture( name, name, pageOutStrategy, textureFlags,
+                              initialType, resourceGroup, filters );
+    }
+    //-----------------------------------------------------------------------------------
+    TextureGpu* TextureGpuManager::createOrRetrieveTexture(
+            const String &name, const String &aliasName,
+            GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+            uint32 textureFlags, TextureTypes::TextureTypes initialType, const String &resourceGroup,
+            uint32 filters )
+    {
+        TextureGpu *retVal = 0;
+
+        IdString idName( aliasName );
+        ResourceEntryMap::const_iterator itor = mEntries.find( idName );
+        if( itor != mEntries.end() )
+            retVal = itor->second.texture;
+        else
+        {
+            retVal = createTexture( name, aliasName, pageOutStrategy, textureFlags,
+                                    initialType, resourceGroup, filters );
+        }
 
         return retVal;
     }
@@ -305,19 +338,8 @@ namespace Ogre
             uint32 textureFlags, TextureTypes::TextureTypes initialType, const String &resourceGroup,
             uint32 filters )
     {
-        TextureGpu *retVal = 0;
-
-        IdString idName( name );
-        ResourceEntryMap::const_iterator itor = mEntries.find( idName );
-        if( itor != mEntries.end() )
-            retVal = itor->second.texture;
-        else
-        {
-            retVal = createTexture( name, pageOutStrategy, textureFlags,
-                                    initialType, resourceGroup, filters );
-        }
-
-        return retVal;
+        return createOrRetrieveTexture( name, name, pageOutStrategy, textureFlags,
+                                        initialType, resourceGroup, filters );
     }
     //-----------------------------------------------------------------------------------
     TextureGpu* TextureGpuManager::findTextureNoThrow( IdString name ) const
@@ -622,7 +644,19 @@ namespace Ogre
         std::sort( mBudget.begin(), mBudget.end(), BudgetEntry() );
     }
     //-----------------------------------------------------------------------------------
-    const String* TextureGpuManager::findNameStr( IdString idName ) const
+    const String* TextureGpuManager::findAliasNameStr( IdString idName ) const
+    {
+        const String *retVal = 0;
+
+        ResourceEntryMap::const_iterator itor = mEntries.find( idName );
+
+        if( itor != mEntries.end() )
+            retVal = &itor->second.alias;
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    const String* TextureGpuManager::findResourceNameStr( IdString idName ) const
     {
         const String *retVal = 0;
 

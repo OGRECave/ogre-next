@@ -175,9 +175,22 @@ namespace Ogre
         HlmsSamplerblock const *samplerblock = 0;
 
         rapidjson::Value::ConstMemberIterator itor = json.FindMember( "texture" );
-        if( itor != json.MemberEnd() && itor->value.IsString() )
+        if( itor != json.MemberEnd() &&
+            (itor->value.IsString() || (itor->value.IsArray() && itor->value.Size() == 2u &&
+                                        itor->value[0].IsString() && itor->value[1].IsString())) )
         {
-            const char *textureName = itor->value.GetString();
+            char const *textureName = 0;
+            char const *aliasName = 0;
+            if( !itor->value.IsArray() )
+            {
+                textureName = itor->value.GetString();
+                aliasName = textureName;
+            }
+            else
+            {
+                textureName = itor->value[0].GetString();
+                aliasName = itor->value[1].GetString();
+            }
 
             uint32 textureFlags = TextureFlags::AutomaticBatching;
 
@@ -194,7 +207,8 @@ namespace Ogre
             uint32 filters = TextureFilter::TypeGenerateDefaultMipmaps;
             filters |= datablock->suggestFiltersForType( textureType );
 
-            texture = mTextureManager->createOrRetrieveTexture( textureName, GpuPageOutStrategy::Discard,
+            texture = mTextureManager->createOrRetrieveTexture( textureName, aliasName,
+                                                                GpuPageOutStrategy::Discard,
                                                                 textureFlags, internalTextureType,
                                                                 resourceGroup, filters );
         }
@@ -639,12 +653,24 @@ namespace Ogre
             TextureGpu *texture = datablock->getTexture( textureType );
             if( texture )
             {
-                const String *texName = mTextureManager->findNameStr( texture->getName() );
-                if( texName )
+                const String *texName = mTextureManager->findResourceNameStr( texture->getName() );
+                const String *aliasName = mTextureManager->findAliasNameStr( texture->getName() );
+                if( texName && aliasName )
                 {
-                    outString += ",\n\t\t\t\t\"texture\" : \"";
-                    outString += *texName;
-                    outString += '"';
+                    if( *texName != *aliasName )
+                    {
+                        outString += ",\n\t\t\t\t\"texture\" : [\"";
+                        outString += *aliasName;
+                        outString += "\", ";
+                        outString += *texName;
+                        outString += "\"]";
+                    }
+                    else
+                    {
+                        outString += ",\n\t\t\t\t\"texture\" : \"";
+                        outString += *texName;
+                        outString += '"';
+                    }
                 }
             }
 

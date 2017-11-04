@@ -83,7 +83,20 @@ namespace Ogre
     String TextureGpu::getNameStr(void) const
     {
         String retVal;
-        const String *nameStr = mTextureManager->findNameStr( mName );
+        const String *nameStr = mTextureManager->findAliasNameStr( mName );
+
+        if( nameStr )
+            retVal = *nameStr;
+        else
+            retVal = mName.getFriendlyText();
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    String TextureGpu::getRealResourceNameStr(void) const
+    {
+        String retVal;
+        const String *nameStr = mTextureManager->findResourceNameStr( mName );
 
         if( nameStr )
             retVal = *nameStr;

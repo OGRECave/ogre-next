@@ -4478,6 +4478,20 @@ namespace Ogre{
                         }
                     }
                     break;
+                case ID_AUTOMATIC_BATCHING:
+                    if(prop->values.size() != 1)
+                    {
+                        compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line);
+                    }
+                    else
+                    {
+                        bool automaticBatching = false;
+                        if( getBoolean( *prop->values.begin(), &automaticBatching ) )
+                            mUnit->setAutomaticBatching( automaticBatching );
+                        else
+                            compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line);
+                    }
+                    break;
                 default:
                     compiler->addError(ScriptCompiler::CE_UNEXPECTEDTOKEN, prop->file, prop->line, 
                         "token \"" + prop->name + "\" is not recognized");

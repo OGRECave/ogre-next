@@ -800,6 +800,7 @@ namespace Ogre
             ID_NAMED,
             ID_SHADOW,
             ID_COMPOSITOR,
+        ID_AUTOMATIC_BATCHING,
         ID_TEXTURE_SOURCE,
         ID_SHARED_PARAMS,
         ID_SHARED_PARAM_NAMED,

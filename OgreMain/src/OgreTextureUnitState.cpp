@@ -45,6 +45,7 @@ namespace Ogre {
         : mCurrentFrame(0)
         , mAnimDuration(0)
         , mCubic(false)
+        , mAutomaticBatching(false)
         , mTextureType(TextureTypes::Type2D)
         , mTextureSrcMipmaps(MIP_DEFAULT)
         , mTextureCoordSetIndex(0)
@@ -258,6 +259,16 @@ namespace Ogre {
     TextureUnitState::BindingType TextureUnitState::getBindingType(void) const
     {
         return mBindingType;
+    }
+    //-----------------------------------------------------------------------
+    void TextureUnitState::setAutomaticBatching( bool automaticBatching )
+    {
+        mAutomaticBatching = automaticBatching;
+    }
+    //-----------------------------------------------------------------------
+    bool TextureUnitState::getAutomaticBatching(void) const
+    {
+        return mAutomaticBatching;
     }
     //-----------------------------------------------------------------------
     void TextureUnitState::setContentType(TextureUnitState::ContentType ct)
@@ -1043,14 +1054,18 @@ namespace Ogre {
                 try
                 {
                     uint32 textureFlags = 0;
-                    if( mTextureType == TextureTypes::Type2D )
+                    String aliasName = mFrames[frame];
+                    if( mTextureType == TextureTypes::Type2D && mAutomaticBatching )
                         textureFlags |= TextureFlags::AutomaticBatching;
+                    else
+                        aliasName += "/V1_Material";
+
                     if( mHwGamma )
                         textureFlags |= TextureFlags::PrefersLoadingFromFileAsSRGB;
                     TextureGpuManager *textureManager = Root::getSingleton().
                                                         getRenderSystem()->getTextureGpuManager();
                     mFramePtrs[frame] =
-                            textureManager->createOrRetrieveTexture( mFrames[frame],
+                            textureManager->createOrRetrieveTexture( mFrames[frame], aliasName,
                                                                      GpuPageOutStrategy::Discard,
                                                                      textureFlags,
                                                                      mTextureType,
@@ -1081,14 +1096,18 @@ namespace Ogre {
                 try
                 {
                     uint32 textureFlags = 0;
-                    if( mTextureType == TextureTypes::Type2D )
+                    String aliasName = mFrames[frame];
+                    if( mTextureType == TextureTypes::Type2D && mAutomaticBatching )
                         textureFlags |= TextureFlags::AutomaticBatching;
+                    else
+                        aliasName += "/V1_Material";
+
                     if( mHwGamma )
                         textureFlags |= TextureFlags::PrefersLoadingFromFileAsSRGB;
                     TextureGpuManager *textureManager = Root::getSingleton().
                                                         getRenderSystem()->getTextureGpuManager();
                     mFramePtrs[frame] =
-                            textureManager->createOrRetrieveTexture( mFrames[frame],
+                            textureManager->createOrRetrieveTexture( mFrames[frame], aliasName,
                                                                      GpuPageOutStrategy::Discard,
                                                                      textureFlags,
                                                                      mTextureType,

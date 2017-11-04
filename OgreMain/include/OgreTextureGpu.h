@@ -215,7 +215,11 @@ namespace Ogre
 
         void _resetTextureManager(void);
 
+        /// Note: This returns the alias name of the texture.
+        /// See TextureGpuManager::createOrRetrieveTexture
         virtual String getNameStr(void) const;
+        /// Returns the real name (e.g. disk in file) of the resource.
+        virtual String getRealResourceNameStr(void) const;
         String getSettingsDesc(void) const;
 
         /** Schedules an async transition in residency. If transitioning from

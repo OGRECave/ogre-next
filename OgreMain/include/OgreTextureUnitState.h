@@ -483,6 +483,23 @@ namespace Ogre {
         */
         BindingType getBindingType(void) const;
 
+        /** When a texture is used by both PBS datablocks and V1 materials it can lead to a few issues:
+            1. V1 materials will often expect a Type2D texture to actually be Type2D.
+            2. PBS datablocks will use TextureFlags::AutomaticBatching to group several textures of same
+               resolution and format into the same Type2DArray, and thus lower CPU overhead. This
+               means the 2D texture is not actually Type2D, but rather Type2DArray, and the slice
+               information is also required.
+        @par
+            The default is to disable this option, which means the texture may be loaded *twice*: one
+            for V1 materials, and another for PBS. If you do not want this, call
+            setAutomaticBatching( true ); before loading the texture.
+            Note that you will have to provide the slice index by hand and make sure the shader
+            you wrote understands this is a 2D Array texture.
+        @param automaticBatching
+        */
+        void setAutomaticBatching( bool automaticBatching );
+        bool getAutomaticBatching(void) const;
+
         /** Set the type of content this TextureUnitState references.
         @remarks
             The default is to reference a standard named texture, but this unit
@@ -1064,6 +1081,7 @@ protected:
         Real mAnimDuration;
         bool mCubic; /// Is this a series of 6 2D textures to make up a cube?
         
+        bool mAutomaticBatching;
         TextureTypes::TextureTypes mTextureType;
         int mTextureSrcMipmaps; /// Request number of mipmaps.
 

@@ -114,14 +114,15 @@ namespace Ogre
         struct ResourceEntry
         {
             String      name;
+            String      alias;
             String      resourceGroup;
             TextureGpu  *texture;
             uint32      filters;
 
             ResourceEntry() : texture( 0 ) {}
-            ResourceEntry( const String &_name, const String &_resourceGroup,
+            ResourceEntry( const String &_name, const String &_alias, const String &_resourceGroup,
                            TextureGpu *_texture, uint32 _filters ) :
-                name( _name ), resourceGroup( _resourceGroup ),
+                name( _name ), alias( _alias ), resourceGroup( _resourceGroup ),
                 texture( _texture ), filters( _filters )
             {
             }
@@ -351,6 +352,15 @@ namespace Ogre
 
         /**
         @param name
+            Name of the resource. For example TreeWood.png
+        @param aliasName
+            Usually aliasName = name. An alias name allows you to load the same texture
+            (e.g. TreeWood.png) with different settings.
+            For example:
+                Alias 0 - "Tree Wood With Mipmaps"
+                Alias 1 - "Tree Wood Without Mipmaps"
+                Alias 2 - "Tree Wood Without TextureFlags::AutomaticBatching"
+            This lets you have 3 copies of the same file in memory.
         @param pageOutStrategy
         @param textureFlags
             See TextureFlags::TextureFlags
@@ -368,10 +378,23 @@ namespace Ogre
         @return
         */
         TextureGpu* createTexture( const String &name,
+                                   const String &aliasName,
                                    GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                    uint32 textureFlags, TextureTypes::TextureTypes initialType,
                                    const String &resourceGroup=BLANKSTRING,
                                    uint32 filters=0 );
+        TextureGpu* createTexture( const String &name,
+                                   GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+                                   uint32 textureFlags, TextureTypes::TextureTypes initialType,
+                                   const String &resourceGroup=BLANKSTRING,
+                                   uint32 filters=0 );
+        TextureGpu* createOrRetrieveTexture( const String &name,
+                                             const String &aliasName,
+                                             GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+                                             uint32 textureFlags,
+                                             TextureTypes::TextureTypes initialType,
+                                             const String &resourceGroup=BLANKSTRING,
+                                             uint32 filters=0 );
         TextureGpu* createOrRetrieveTexture( const String &name,
                                              GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                              uint32 textureFlags,
@@ -498,7 +521,8 @@ namespace Ogre
         */
         void setStagingTextureMaxBudgetBytes( size_t stagingTextureMaxBudgetBytes );
 
-        const String* findNameStr( IdString idName ) const;
+        const String* findAliasNameStr( IdString idName ) const;
+        const String* findResourceNameStr( IdString idName ) const;
 
     protected:
         void scheduleLoadRequest( TextureGpu *texture, GpuResidency::GpuResidency nextResidency,
