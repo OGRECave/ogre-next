@@ -87,6 +87,7 @@ namespace Ogre
 
     MetalVaoManager::MetalVaoManager( uint8 dynamicBufferMultiplier, MetalDevice *device ) :
         mVaoNames( 1 ),
+        mSemaphoreFlushed( true ),
         mDevice( device ),
         mDrawId( 0 )
     {
@@ -939,6 +940,14 @@ namespace Ogre
             }
         }
 
+        if( !mSemaphoreFlushed )
+        {
+            //We could only reach here if _update() was called
+            //twice in a row without completing a full frame.
+            //Without this, waitForTailFrameToFinish will deadlock.
+            mDevice->commitAndNextCommandBuffer();
+        }
+
         if( !mDelayedDestroyBuffers.empty() &&
             mDelayedDestroyBuffers.front().frameNumDynamic == mDynamicBufferCurrentFrame )
         {
@@ -951,6 +960,7 @@ namespace Ogre
 
         VaoManager::_update();
 
+        mSemaphoreFlushed = false;
         mAlreadyWaitedForSemaphore[mDynamicBufferCurrentFrame] = false;
         __block dispatch_semaphore_t blockSemaphore = mFrameSyncVec[mDynamicBufferCurrentFrame];
         [mDevice->mCurrentCommandBuffer addCompletedHandler:^(id<MTLCommandBuffer> buffer)
@@ -961,8 +971,15 @@ namespace Ogre
         mDynamicBufferCurrentFrame = (mDynamicBufferCurrentFrame + 1) % mDynamicBufferMultiplier;
     }
     //-----------------------------------------------------------------------------------
+    void MetalVaoManager::_notifyNewCommandBuffer(void)
+    {
+        mSemaphoreFlushed = true;
+    }
+    //-----------------------------------------------------------------------------------
     void MetalVaoManager::_notifyDeviceStalled(void)
     {
+        mSemaphoreFlushed = true;
+
         for( size_t i=0; i<2u; ++i )
         {
             StagingBufferVec::const_iterator itor = mRefedStagingBuffers[i].begin();

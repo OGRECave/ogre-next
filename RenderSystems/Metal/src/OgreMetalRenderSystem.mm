@@ -1399,6 +1399,12 @@ namespace Ogre
         mComputePso = 0;
     }
     //-------------------------------------------------------------------------
+    void MetalRenderSystem::_notifyNewCommandBuffer(void)
+    {
+        MetalVaoManager *vaoManager = static_cast<MetalVaoManager*>( mVaoManager );
+        vaoManager->_notifyNewCommandBuffer();
+    }
+    //-------------------------------------------------------------------------
     void MetalRenderSystem::_notifyDeviceStalled(void)
     {
         v1::MetalHardwareBufferManager *hwBufferMgr = static_cast<v1::MetalHardwareBufferManager*>(

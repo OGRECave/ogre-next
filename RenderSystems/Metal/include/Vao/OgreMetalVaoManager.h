@@ -137,6 +137,7 @@ namespace Ogre
         VaoVec  mVaos;
         uint32  mVaoNames;
 
+        bool mSemaphoreFlushed;
         DispatchSemaphoreAlreadyWaitedVec mAlreadyWaitedForSemaphore;
         DispatchSemaphoreVec mFrameSyncVec;
 
@@ -266,6 +267,7 @@ namespace Ogre
                                                   size_t elementStart, size_t elementCount );
 
         virtual void _update(void);
+        void _notifyNewCommandBuffer(void);
         void _notifyDeviceStalled(void);
 
         /// @see VaoManager::waitForTailFrameToFinish

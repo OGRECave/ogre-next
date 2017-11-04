@@ -125,6 +125,8 @@ namespace Ogre
             _rmt_BindMetal( mCurrentCommandBuffer );
 #endif
         }
+
+        mRenderSystem->_notifyNewCommandBuffer();
     }
     //-------------------------------------------------------------------------
     id<MTLBlitCommandEncoder> MetalDevice::getBlitEncoder(void)

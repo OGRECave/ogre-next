@@ -333,6 +333,7 @@ namespace Ogre
 
         void _notifyActiveEncoderEnded( bool callEndRenderPassDesc );
         void _notifyActiveComputeEnded(void);
+        void _notifyNewCommandBuffer(void);
         void _notifyDeviceStalled(void);
     };
 }
