@@ -29,7 +29,12 @@ compositor_node SmaaNode
 		}
 		pass render_quad
 		{
-			load { all clear }
+			load
+			{
+				colour		dont_care
+				depth		clear
+				stencil		clear
+			}
 			material SMAA/EdgeDetection
 			input 0 rt_input
 		}
@@ -57,7 +62,7 @@ compositor_node SmaaNode
 		}
 		pass render_quad
 		{
-			load { colour dont_care }
+			load { colour clear }
 			material SMAA/BlendingWeightCalculation
 			input 0 edgesTex
 		}
