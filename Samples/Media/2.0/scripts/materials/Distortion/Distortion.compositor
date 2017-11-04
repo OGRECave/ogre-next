@@ -3,8 +3,8 @@ compositor_node SceneRenderingNode
 	// rt_scene is used to render the scene
 	// rt_distortion is the texture we will be rendering distortion objects. The texture is later used to postprocess the scene
 	
-	texture rt_scene		target_width target_height PFG_RGBA16_FLOAT depth_pool 2 depth_format PFG_D32_FLOAT
-	texture rt_distortion	target_width target_height PFG_RGBA16_FLOAT depth_pool 2 depth_format PFG_D32_FLOAT
+	texture rt_scene		target_width target_height PFG_RGBA16_FLOAT depth_pool 2 depth_format PFG_D32_FLOAT msaa_auto
+	texture rt_distortion	target_width target_height PFG_RGBA16_FLOAT depth_pool 2 depth_format PFG_D32_FLOAT msaa_auto
     
 	target rt_scene
 	{

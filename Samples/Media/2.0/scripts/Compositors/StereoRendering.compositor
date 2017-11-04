@@ -4,7 +4,6 @@ compositor_node StereoRenderingNode
 
 	target rt_renderwindow
 	{
-		
 		pass clear
 		{
 			//Get executed on the first eye

@@ -2,9 +2,9 @@ compositor_node SSAO_RenderNode
 {
 	in 0 rt_renderwindow
 
-	texture RT0 target_width target_height PFG_RGBA8_UNORM_SRGB
+	texture RT0 target_width target_height PFG_RGBA8_UNORM_SRGB msaa_auto
 	
-	texture depthTexture		target_width			target_height				PFG_D32_FLOAT
+	texture depthTexture		target_width			target_height				PFG_D32_FLOAT msaa_auto
 	texture depthTextureCopy	target_width_scaled 0.5	target_height_scaled 0.5	PFG_D32_FLOAT
 	
 	texture ssaoTexture target_width_scaled 0.5 target_height_scaled 0.5 PFG_R16_FLOAT depth_pool 0
