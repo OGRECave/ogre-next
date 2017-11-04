@@ -137,8 +137,11 @@ fragment @insertpiece( output_type ) main_metal
 		, texture2d_array<float> textureMaps@n [[texture(@counter(textureRegStart))]]@end
 	@property( use_envprobe_map )
 		, texturecube<float>	texEnvProbeMap [[texture(@value(envMapReg))]]@end
+		@property( envMapRegSampler < samplerStateStart )
+			, sampler samplerState@value(envMapRegSampler) [[sampler(@value(envMapRegSampler))]];
+		@end
 	@foreach( num_samplers, n )
-		, sampler samplerStates@n [[sampler(@counter(samplerStateStart))]]@end
+		, sampler samplerState@value(samplerStateStart) [[sampler(@counter(samplerStateStart))]]@end
 	@insertpiece( DeclShadowSamplers )
 )
 {
@@ -202,7 +205,7 @@ float4 diffuseCol;
 
 	/// Sample detail maps and weight them against the weight map in the next foreach loop.
 @foreach( detail_maps_diffuse, n )@property( detail_map@n )
-	float4 detailCol@n	= textureMaps@value(detail_map@n_idx).sample( samplerStates@value(detail_map@n_sampler),
+	float4 detailCol@n	= textureMaps@value(detail_map@n_idx).sample( samplerState@value(detail_map@n_sampler),
 																		inPs.uv@value(uv_detail@n).xy@insertpiece( offsetDetailD@n ),
 																		detailMapIdx@n );
 	@property( !hw_gamma_read )//Gamma to linear space
@@ -248,7 +251,7 @@ float4 diffuseCol;
 		float3 vBinormal	= normalize( cross( geomNormal, vTangent )@insertpiece( tbnApplyReflection ) );
 		float3x3 TBN		= float3x3( vTangent, vBinormal, geomNormal );
 
-		@property( normal_map_tex )nNormal = getTSNormal( samplerStates@value( normal_map_tex_sampler ),
+		@property( normal_map_tex )nNormal = getTSNormal( samplerState@value( normal_map_tex_sampler ),
 														  textureMaps@value( normal_map_tex_idx ),
 														  inPs.uv@value(uv_normal).xy, normalIdx );@end
 		@property( normal_weight_tex )
@@ -393,9 +396,9 @@ float4 diffuseCol;
 			{
 				float3 reflDirLS = localCorrect( reflDir, posInProbSpace, @insertpiece( pccProbeSource ) );
 				float3 nNormalLS = localCorrect( nNormal, posInProbSpace, @insertpiece( pccProbeSource ) );
-				envColourS = texEnvProbeMap.sample( samplerStates@value(envprobe_map_sampler),
+				envColourS = texEnvProbeMap.sample( samplerState@value(envMapRegSampler),
 													reflDirLS, level( ROUGHNESS * 12.0 ) ).xyz @insertpiece( ApplyEnvMapScale );// * 0.0152587890625;
-				envColourD = texEnvProbeMap.sample( samplerStates@value(envprobe_map_sampler),
+				envColourD = texEnvProbeMap.sample( samplerState@value(envMapRegSampler),
 													nNormalLS, level( 11.0 ) ).xyz @insertpiece( ApplyEnvMapScale );// * 0.0152587890625;
 
 				envColourS = envColourS * saturate( probeFade * 200.0 );
@@ -408,8 +411,8 @@ float4 diffuseCol;
 				envColourD = float3( 0, 0, 0 );
 			}
 		@end @property( !use_parallax_correct_cubemaps )
-			float3 envColourS = texEnvProbeMap.sample( samplerStates@value(envprobe_map_sampler), reflDir * passBuf.invViewMatCubemap, level( ROUGHNESS * 12.0 ) ).xyz @insertpiece( ApplyEnvMapScale );
-			float3 envColourD = texEnvProbeMap.sample( samplerStates@value(envprobe_map_sampler), nNormal * passBuf.invViewMatCubemap, level( 11.0 ) ).xyz @insertpiece( ApplyEnvMapScale );
+			float3 envColourS = texEnvProbeMap.sample( samplerState@value(envMapRegSampler), reflDir * passBuf.invViewMatCubemap, level( ROUGHNESS * 12.0 ) ).xyz @insertpiece( ApplyEnvMapScale );
+			float3 envColourD = texEnvProbeMap.sample( samplerState@value(envMapRegSampler), nNormal * passBuf.invViewMatCubemap, level( 11.0 ) ).xyz @insertpiece( ApplyEnvMapScale );
 		@end
 		@property( !hw_gamma_read )	//Gamma to linear space
 			envColourS = envColourS * envColourS;
@@ -514,7 +517,7 @@ fragment @insertpiece( output_type ) main_metal
 	@foreach( num_textures, n )
 		, texture2d_array<float> textureMaps@n [[texture(@counter(textureRegStart))]]@end
 	@foreach( num_samplers, n )
-		, sampler samplerStates@n [[sampler(@counter(samplerStateStart))]]@end
+		, sampler samplerState@value(samplerStateStart) [[sampler(@counter(samplerStateStart))]]@end
 )
 {
 @property( !hlms_render_depth_only || exponential_shadow_maps || hlms_shadowcaster_point )
@@ -556,7 +559,7 @@ fragment @insertpiece( output_type ) main_metal
 
 	/// Sample detail maps and weight them against the weight map in the next foreach loop.
 @foreach( detail_maps_diffuse, n )@property( detail_map@n )
-	float detailCol@n	= textureMaps@value(detail_map@n_idx).sample( samplerStates@value(detail_map@n_sampler),
+	float detailCol@n	= textureMaps@value(detail_map@n_idx).sample( samplerState@value(detail_map@n_sampler),
 																		inPs.uv@value(uv_detail@n).xy@insertpiece( offsetDetailD@n ),
 																		detailMapIdx@n ).w;
 	detailCol@n = detailWeights.@insertpiece(detail_swizzle@n) * detailCol@n;@end

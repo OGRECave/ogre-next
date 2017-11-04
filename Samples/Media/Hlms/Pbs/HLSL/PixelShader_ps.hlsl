@@ -50,9 +50,15 @@ Buffer<float4> f3dLightList : register(t2);@end
 
 @property( !roughness_map )#define ROUGHNESS material.kS.w@end
 @property( num_textures )Texture2DArray textureMaps[@value( num_textures )] : register(t@value(textureRegStart));@end
-@property( use_envprobe_map )TextureCube	texEnvProbeMap : register(t@value(envMapReg));@end
+@property( use_envprobe_map )
+	TextureCube	texEnvProbeMap : register(t@value(envMapReg));
+	@property( envMapRegSampler < samplerStateStart )
+		SamplerState samplerState@value(envMapRegSampler) : register(s@value(envMapRegSampler));
+	@end
+@end
 
-@property( num_samplers )SamplerState samplerStates[@value(num_samplers)] : register(s@value(samplerStateStart));@end
+@foreach( num_samplers, n )
+	SamplerState samplerState@value(samplerStateStart) : register(s@counter(samplerStateStart));@end
 
 @property( normal_map )
 @property( hlms_qtangent )
@@ -72,15 +78,15 @@ float3 qmul( float4 q, float3 v )
 	float3 tsNormal;
 @property( normal_sampling_format == normal_rg_snorm )
 	//Normal texture must be in UV8 or BC5 format!
-	tsNormal.xy = textureMaps[@value( normal_map_tex_idx )].Sample( samplerStates[@value( normal_map_tex_sampler )], uv ).xy;
+	tsNormal.xy = textureMaps[@value( normal_map_tex_idx )].Sample( samplerState@value( normal_map_tex_sampler ), uv ).xy;
 @end
 @property( normal_sampling_format == normal_rg_unorm )
 	//Normal texture must be in RG8 or similar format!
-	tsNormal.xy = textureMaps[@value( normal_map_tex_idx )].Sample( samplerStates[@value( normal_map_tex_sampler )], uv ).xy * 2.0 - 1.0;
+	tsNormal.xy = textureMaps[@value( normal_map_tex_idx )].Sample( samplerState@value( normal_map_tex_sampler ), uv ).xy * 2.0 - 1.0;
 @end
 @property( normal_sampling_format == normal_la )
 	//Normal texture must be in LA format!
-	tsNormal.xy = textureMaps[@value( normal_map_tex_idx )].Sample( samplerStates[@value( normal_map_tex_sampler )], uv ).xw * 2.0 - 1.0;
+	tsNormal.xy = textureMaps[@value( normal_map_tex_idx )].Sample( samplerState@value( normal_map_tex_sampler ), uv ).xw * 2.0 - 1.0;
 @end
 	tsNormal.z	= sqrt( max( 0, 1.0 - tsNormal.x * tsNormal.x - tsNormal.y * tsNormal.y ) );
 
@@ -191,7 +197,7 @@ float4 diffuseCol;
 
 	/// Sample detail maps and weight them against the weight map in the next foreach loop.
 @foreach( detail_maps_diffuse, n )@property( detail_map@n )
-	float4 detailCol@n	= textureMaps[@value(detail_map@n_idx)].Sample( samplerStates[@value(detail_map@n_sampler)],
+	float4 detailCol@n	= textureMaps[@value(detail_map@n_idx)].Sample( samplerState@value(detail_map@n_sampler),
 																		float3( inPs.uv@value(uv_detail@n).xy@insertpiece( offsetDetailD@n ),
 																		detailMapIdx@n ) );
 	@property( !hw_gamma_read )//Gamma to linear space
@@ -408,9 +414,9 @@ float4 diffuseCol;
 			{
 				float3 reflDirLS = localCorrect( reflDir, posInProbSpace, @insertpiece( pccProbeSource ) );
 				float3 nNormalLS = localCorrect( nNormal, posInProbSpace, @insertpiece( pccProbeSource ) );
-				envColourS = texEnvProbeMap.SampleLevel( samplerStates[@value(envprobe_map_sampler)],
+				envColourS = texEnvProbeMap.SampleLevel( samplerState@value(envMapRegSampler),
 														 reflDirLS, ROUGHNESS * 12.0 ).xyz @insertpiece( ApplyEnvMapScale );// * 0.0152587890625;
-				envColourD = texEnvProbeMap.SampleLevel( samplerStates[@value(envprobe_map_sampler)],
+				envColourD = texEnvProbeMap.SampleLevel( samplerState@value(envMapRegSampler),
 														 nNormalLS, 11.0 ).xyz @insertpiece( ApplyEnvMapScale );// * 0.0152587890625;
 
 				envColourS = envColourS * saturate( probeFade * 200.0 );
@@ -423,8 +429,8 @@ float4 diffuseCol;
 				envColourD = float3( 0, 0, 0 );
 			}
 		@end @property( !use_parallax_correct_cubemaps )
-			float3 envColourS = texEnvProbeMap.SampleLevel( samplerStates[@value(envprobe_map_sampler)], mul( reflDir, passBuf.invViewMatCubemap ), ROUGHNESS * 12.0 ).xyz @insertpiece( ApplyEnvMapScale );
-			float3 envColourD = texEnvProbeMap.SampleLevel( samplerStates[@value(envprobe_map_sampler)], mul( nNormal, passBuf.invViewMatCubemap ), 11.0 ).xyz @insertpiece( ApplyEnvMapScale );
+			float3 envColourS = texEnvProbeMap.SampleLevel( samplerState@value(envMapRegSampler), mul( reflDir, passBuf.invViewMatCubemap ), ROUGHNESS * 12.0 ).xyz @insertpiece( ApplyEnvMapScale );
+			float3 envColourD = texEnvProbeMap.SampleLevel( samplerState@value(envMapRegSampler), mul( nNormal, passBuf.invViewMatCubemap ), 11.0 ).xyz @insertpiece( ApplyEnvMapScale );
 		@end
 		@property( !hw_gamma_read )	//Gamma to linear space
 			envColourS = envColourS * envColourS;
@@ -527,7 +533,8 @@ float4 diffuseCol;
 @insertpiece( DeclShadowCasterMacros )
 
 @property( num_textures )Texture2DArray textureMaps[@value( num_textures )] : register(t@value(textureRegStart));@end
-@property( num_samplers )SamplerState samplerStates[@value(num_samplers)] : register(s@value(samplerStateStart));@end
+@foreach( num_samplers, n )
+	SamplerState samplerState@n : register(s@counter(samplerStateStart));@end
 
 @property( hlms_shadowcaster_point || exponential_shadow_maps )
 	@insertpiece( PassDecl )
@@ -577,7 +584,7 @@ float4 diffuseCol;
 
 	/// Sample detail maps and weight them against the weight map in the next foreach loop.
 @foreach( detail_maps_diffuse, n )@property( detail_map@n )
-	float detailCol@n	= textureMaps[@value(detail_map@n_idx)].Sample( samplerStates[@value(detail_map@n_sampler)], float3( inPs.uv@value(uv_detail@n).xy@insertpiece( offsetDetailD@n ), detailMapIdx@n ) ).w;
+	float detailCol@n	= textureMaps[@value(detail_map@n_idx)].Sample( samplerState@value(detail_map@n_sampler), float3( inPs.uv@value(uv_detail@n).xy@insertpiece( offsetDetailD@n ), detailMapIdx@n ) ).w;
 	detailCol@n = detailWeights.@insertpiece(detail_swizzle@n) * detailCol@n;@end
 @end
 
