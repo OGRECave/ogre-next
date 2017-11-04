@@ -916,6 +916,13 @@ namespace Ogre
         mEntriesToFlush = 0;
         mVpChanged = false;
         mInterruptedRenderCommandEncoder = false;
+
+        if( mActiveDevice->mFrameAborted )
+        {
+            mActiveDevice->endAllEncoders();
+            mActiveRenderEncoder = 0;
+            return;
+        }
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::executeRenderPassDescriptorDelayedActions(void)
