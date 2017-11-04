@@ -566,7 +566,7 @@ namespace Ogre
         size_t bytesOutsidePool = 0;
 
         logActual->logMessage(
-                    "|Name|Width|Height|Depth|Num Slices|Format|Mipmaps|MSAA|Size in bytes|"
+                    "|Alias|Resource Name|Width|Height|Depth|Num Slices|Format|Mipmaps|MSAA|Size in bytes|"
                     "RTT|UAV|Manual|MSAA Explicit|Reinterpretable|AutomaticBatched",
                     LML_CRITICAL );
 
@@ -581,6 +581,7 @@ namespace Ogre
             const size_t bytesTexture = entry.texture->getSizeBytes();
 
             text.a( "|", entry.texture->getNameStr().c_str() );
+            text.a( "|", entry.texture->getRealResourceNameStr().c_str() );
             text.a( "|", entry.texture->getWidth(), "|", entry.texture->getHeight(), "|" );
             text.a( entry.texture->getDepth(), "|", entry.texture->getNumSlices(), "|" );
             text.a( PixelFormatGpuUtils::toString( entry.texture->getPixelFormat() ), "|",
