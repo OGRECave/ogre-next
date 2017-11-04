@@ -1,6 +1,6 @@
 compositor_node TutorialSMAA_RenderingNode
 {
-	texture rt0 target_width target_height PFG_RGBA8_UNORM_SRGB
+	texture rt0 target_width target_height PFG_RGBA8_UNORM_SRGB msaa_auto
 	texture rt1 target_width target_height PFG_RGBA8_UNORM_SRGB
 
 	target rt0
