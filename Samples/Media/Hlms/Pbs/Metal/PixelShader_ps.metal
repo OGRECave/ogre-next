@@ -138,7 +138,7 @@ fragment @insertpiece( output_type ) main_metal
 	@property( use_envprobe_map )
 		, texturecube<float>	texEnvProbeMap [[texture(@value(envMapReg))]]@end
 		@property( envMapRegSampler < samplerStateStart )
-			, sampler samplerState@value(envMapRegSampler) [[sampler(@value(envMapRegSampler))]];
+			, sampler samplerState@value(envMapRegSampler) [[sampler(@value(envMapRegSampler))]]
 		@end
 	@foreach( num_samplers, n )
 		, sampler samplerState@value(samplerStateStart) [[sampler(@counter(samplerStateStart))]]@end
