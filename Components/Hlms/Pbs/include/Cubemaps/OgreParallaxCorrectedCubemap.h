@@ -149,18 +149,18 @@ namespace Ogre
         void destroyProbe( CubemapProbe *probe );
         void destroyAllProbes(void);
 
-        /// Creates the Proxy Items. Useful if you need to call sceneManager->clearScene();
-        /// See destroyProxyItems.
         void createProxyItems(void);
+        void destroyProxyItems(void);
 
         /// Destroys the Proxy Items. Useful if you need to call sceneManager->clearScene();
         /// The you MUST call this function before. i.e.
-        ///     pcc->destroyProxyItems();
+        ///     pcc->prepareForClearScene();
         ///     sceneManager->clearScene();
-        ///     pcc->createProxyItems();
-        /// Updating ParallaxCorrectedCubemap without calling createProxyItems again will
-        /// result in a crash.
-        void destroyProxyItems(void);
+        ///     pcc->restoreFromClearScene();
+        /// Updating ParallaxCorrectedCubemap without calling prepareForClearScene/restoreFromClearScene
+        /// will result in a crash.
+        void prepareForClearScene(void);
+        void restoreFromClearScene(void);
 
         const CubemapProbeVec& getProbes(void) const        { return mProbes; }
 

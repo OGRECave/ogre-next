@@ -279,6 +279,26 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void ParallaxCorrectedCubemap::prepareForClearScene(void)
+    {
+        destroyProxyItems();
+    }
+    //-----------------------------------------------------------------------------------
+    void ParallaxCorrectedCubemap::restoreFromClearScene(void)
+    {
+        createProxyItems();
+        SceneNode *rootNode = mSceneManager->getRootSceneNode();
+        rootNode->attachObject( mBlendProxyCamera );
+
+        CubemapProbeVec::iterator itor = mProbes.begin();
+        CubemapProbeVec::iterator end  = mProbes.end();
+        while( itor != end )
+        {
+            rootNode->attachObject( (*itor)->mCamera );
+            ++itor;
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemap::setUpdatedTrackedDataFromCamera( Camera *trackedCamera )
     {
         mTrackedPosition = trackedCamera->getDerivedPosition();
