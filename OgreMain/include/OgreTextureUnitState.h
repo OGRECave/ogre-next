@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "OgreTexture.h"
 #include "OgreIdString.h"
 #include "OgreTextureGpu.h"
+#include "OgreTextureGpuListener.h"
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre {
@@ -59,7 +60,7 @@ namespace Ogre {
         where you do not use vertex or fragment programs (shaders). Programmable 
         pipeline means that for this pass you are using vertex or fragment programs.
     */
-    class _OgreExport TextureUnitState : public TextureUnitStateAlloc
+    class _OgreExport TextureUnitState : public TextureUnitStateAlloc, public TextureGpuListener
     {
         friend class RenderSystem;
     public:
@@ -1148,7 +1149,11 @@ protected:
         /** Internal method for ensuring the texture for a given frame is loaded. */
         void ensureLoaded(size_t frame) const;
 
+        void cleanFramePtrs(void);
 
+        /// TextureGpuListener overload
+        virtual void notifyTextureChanged( TextureGpu *texture,
+                                           TextureGpuListener::Reason reason );
     };
 
     /** @} */

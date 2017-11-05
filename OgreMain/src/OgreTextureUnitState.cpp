@@ -151,6 +151,16 @@ namespace Ogre {
         mName    = oth.mName;
         mEffects = oth.mEffects;
 
+        {
+            vector<TextureGpu*>::type::iterator itor = mFramePtrs.begin();
+            vector<TextureGpu*>::type::iterator end  = mFramePtrs.end();
+            while( itor != end )
+            {
+                (*itor)->addListener( this );
+                ++itor;
+            }
+        }
+
         mSamplerblock = oth.mSamplerblock;
         HlmsManager *hlmsManager = oth.mParent->_getDatablock()->getCreator()->getHlmsManager();
         hlmsManager->addReference( mSamplerblock );
@@ -193,6 +203,7 @@ namespace Ogre {
         }
         else
         {
+            cleanFramePtrs();
             mFrames.resize(1);
             mFramePtrs.resize(1);
             mFrames[0] = name;
@@ -234,10 +245,12 @@ namespace Ogre {
         }
         else
         {
+            cleanFramePtrs();
             mFrames.resize(1);
             mFramePtrs.resize(1);
             mFrames[0] = texPtr->getNameStr();
             mFramePtrs[0] = texPtr;
+            texPtr->addListener( this );
             // defer load until used, so don't grab pointer yet
             mCurrentFrame = 0;
             mCubic = false;
@@ -285,6 +298,7 @@ namespace Ogre {
         mContentType = ct;
         if (ct == CONTENT_SHADOW || ct == CONTENT_COMPOSITOR)
         {
+            cleanFramePtrs();
             // Clear out texture frames, not applicable
             mFrames.clear();
             // One reference space, set manually through _setTexturePtr
@@ -335,6 +349,7 @@ namespace Ogre {
     {
         setContentType(CONTENT_NAMED);
         mTextureLoadFailed = false;
+        cleanFramePtrs();
         mFrames.resize(forUVW ? 1 : 6);
         // resize pointers, but don't populate until asked for
         mFramePtrs.resize(forUVW ? 1 : 6);
@@ -354,6 +369,7 @@ namespace Ogre {
     {
         setContentType(CONTENT_NAMED);
         mTextureLoadFailed = false;
+        cleanFramePtrs();
         mFrames.resize(forUVW ? 1 : 6);
         // resize pointers, but don't populate until asked for
         mFramePtrs.resize(forUVW ? 1 : 6);
@@ -366,6 +382,8 @@ namespace Ogre {
         {
             mFrames[i] = texPtrs[i]->getNameStr();
             mFramePtrs[i] = texPtrs[i];
+            if( mFramePtrs[i] )
+                mFramePtrs[i]->addListener( this );
         }
     }
     //-----------------------------------------------------------------------
@@ -389,6 +407,7 @@ namespace Ogre {
         mTextureLoadFailed = false;
         if (frameNumber < mFrames.size())
         {
+            cleanFramePtrs();
             mFrames[frameNumber] = name;
             // reset pointer (don't populate until requested)
             mFramePtrs[frameNumber] = 0;
@@ -427,6 +446,9 @@ namespace Ogre {
         mTextureLoadFailed = false;
         if (frameNumber < mFrames.size())
         {
+            if( mFramePtrs[frameNumber] )
+                mFramePtrs[frameNumber]->removeListener( this );
+
             mFrames.erase(mFrames.begin() + frameNumber);
             mFramePtrs.erase(mFramePtrs.begin() + frameNumber);
 
@@ -455,6 +477,7 @@ namespace Ogre {
         baseName = name.substr(0, pos);
         ext = name.substr(pos);
 
+        cleanFramePtrs();
         mFrames.resize(numFrames);
         // resize pointers, but don't populate until needed
         mFramePtrs.resize(numFrames);
@@ -482,6 +505,7 @@ namespace Ogre {
         setContentType(CONTENT_NAMED);
         mTextureLoadFailed = false;
 
+        cleanFramePtrs();
         mFrames.resize(numFrames);
         // resize pointers, but don't populate until needed
         mFramePtrs.resize(numFrames);
@@ -1081,6 +1105,10 @@ namespace Ogre {
                                                                          mTextureType,
                                                                          mParent->getResourceGroup() );
                     }
+
+                    //You think this is ugly? So do I.
+                    //But I'm not the #@!# who made "ensurePrepared" const
+                    mFramePtrs[frame]->addListener( const_cast<TextureUnitState*>( this ) );
                 }
                 catch (Exception &e)
                 {
@@ -1139,6 +1167,10 @@ namespace Ogre {
                         mFramePtrs[frame]->scheduleTransitionTo( GpuResidency::Resident );
                         mFramePtrs[frame]->waitForData();
                     }
+
+                    //You think this is ugly? So do I.
+                    //But I'm not the #@!# who made "ensurePrepared" const
+                    mFramePtrs[frame]->addListener( const_cast<TextureUnitState*>( this ) );
                 }
                 catch (Exception &e)
                 {
@@ -1275,13 +1307,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     void TextureUnitState::_unprepare(void)
     {
-        // Unreference textures
-        vector<TextureGpu*>::type::iterator ti, tiend;
-        tiend = mFramePtrs.end();
-        for (ti = mFramePtrs.begin(); ti != tiend; ++ti)
-        {
-            *ti = 0;
-        }
+        cleanFramePtrs();
     }
     //-----------------------------------------------------------------------
     void TextureUnitState::_unload(void)
@@ -1303,11 +1329,7 @@ namespace Ogre {
             }
         }
 
-        // Unreference but don't unload textures. may be used elsewhere
-        vector<TextureGpu*>::type::iterator ti, tiend;
-        tiend = mFramePtrs.end();
-        for (ti = mFramePtrs.begin(); ti != tiend; ++ti)
-            *ti = 0;
+        cleanFramePtrs();
     }
     //-----------------------------------------------------------------------------
     bool TextureUnitState::isLoaded(void) const
@@ -1415,6 +1437,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------------
     void TextureUnitState::setCompositorReference( const String& textureName )
     {  
+        cleanFramePtrs();
         mFrames.resize(1);
         mFramePtrs.resize(1);
         mFrames[0] = textureName;
@@ -1432,5 +1455,37 @@ namespace Ogre {
         memSize += mEffects.size() * sizeof(TextureEffect);
 
         return memSize;
+    }
+    //-----------------------------------------------------------------------
+    void TextureUnitState::cleanFramePtrs(void)
+    {
+        vector<TextureGpu*>::type::iterator itor = mFramePtrs.begin();
+        vector<TextureGpu*>::type::iterator end  = mFramePtrs.end();
+        while( itor != end )
+        {
+            if( *itor )
+                (*itor)->removeListener( this );
+            *itor = 0;
+            ++itor;
+        }
+    }
+    //-----------------------------------------------------------------------
+    void TextureUnitState::notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason )
+    {
+        if( reason == TextureGpuListener::Deleted )
+        {
+            vector<TextureGpu*>::type::iterator itor = mFramePtrs.begin();
+            vector<TextureGpu*>::type::iterator end  = mFramePtrs.end();
+
+            while( itor != end )
+            {
+                if( *itor == texture )
+                {
+                    texture->removeListener( this );
+                    *itor = 0;
+                }
+                ++itor;
+            }
+        }
     }
 }

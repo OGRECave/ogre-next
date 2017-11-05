@@ -41,7 +41,7 @@ namespace Ogre
     *  @{
     */
 
-	class _OgreExport TextureGpuListener : public PassAlloc
+    class _OgreExport TextureGpuListener
     {
 	public:
         enum Reason

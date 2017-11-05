@@ -47,7 +47,7 @@ namespace Ogre
     */
 
     //class _OgreExport HlmsComputeJob : public HlmsDatablock
-    class _OgreExport HlmsComputeJob : public TextureGpuListener
+    class _OgreExport HlmsComputeJob : PassAlloc, public TextureGpuListener
     {
         friend class HlmsCompute;
 
