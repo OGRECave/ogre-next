@@ -895,8 +895,8 @@ namespace Ogre
 
         if( forwardPlus )
         {
-            forwardPlus->fillConstBufferData( renderTarget, passBufferPtr );
-            passBufferPtr += forwardPlus->getConstBufferSize() >> 2u;
+            forwardPlus->fillConstBufferData( sceneManager->getCurrentViewport(), renderTarget, mShaderProfile, passBufferPtr );
+            passBufferPtr += forwardPlus->getConstBufferSize() >> 2;
         }
 
         passBufferPtr = mListener->preparePassBuffer( shadowNode, casterPass, dualParaboloid,

@@ -154,7 +154,8 @@ namespace Ogre
         @remarks
             Assumes 'passBufferPtr' is aligned to a vec4/float4 boundary.
         */
-        virtual void fillConstBufferData( TextureGpu *renderTarget,
+        virtual void fillConstBufferData( Viewport *viewport, TextureGpu *renderTarget,
+                                          IdString shaderSyntax,
                                           float * RESTRICT_ALIAS passBufferPtr ) const = 0;
 
         virtual void setHlmsPassProperties( Hlms *hlms );

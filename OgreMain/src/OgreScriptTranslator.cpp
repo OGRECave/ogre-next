@@ -6288,6 +6288,8 @@ namespace Ogre{
                     *pSetFlag = true;
                 }
                 break;
+            case ID_TARGET_FORMAT:
+                break;
             case ID_MSAA:
                 // advance to next to get the MSAA setting
                 it = getNodeAt(prop->values, static_cast<int>(atomIndex++));

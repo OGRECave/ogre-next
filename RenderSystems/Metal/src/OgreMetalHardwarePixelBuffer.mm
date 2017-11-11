@@ -28,9 +28,12 @@ THE SOFTWARE.
 
 #include "OgreMetalHardwarePixelBuffer.h"
 #include "OgreMetalRenderTexture.h"
+#include "OgreMetalRenderSystem.h"
 #include "OgreRoot.h"
 
 #include "OgreMetalMappings.h"
+
+#import <Metal/MTLBlitCommandEncoder.h>
 
 namespace Ogre {
 namespace v1 {
@@ -445,31 +448,56 @@ namespace v1 {
 
         nanosleep(&tim, &tim2);
 
-        NSUInteger alignment = 4;
-        if ((data.getWidth() * PixelUtil::getNumElemBytes(data.format)) & 3)
-        {
-            // Standard alignment of 4 is not right
-            alignment = 1;
-        }
+        NSUInteger bytesPerPixel = PixelUtil::getNumElemBytes(data.format);
 
         // Construct a temp PixelBox
         size_t sizeInBytes = PixelUtil::getMemorySize( data.getWidth(), data.getHeight(),
                                                        data.getDepth(), mFormat );
+
         PixelBox tempBox = PixelBox( data.getWidth(), data.getHeight(), data.getDepth(), mFormat );
         tempBox.data = new uint8[sizeInBytes];
-        [mTexture getBytes:tempBox.data
-               bytesPerRow:alignment * data.getWidth()
-                fromRegion:MTLRegionMake2D(data.left, data.top, data.getWidth(), data.getHeight())
-               mipmapLevel:0];
+
+        if( mTexture.storageMode == MTLStorageModePrivate )
+        {
+            MetalRenderSystem *renderSystem =
+                    static_cast<MetalRenderSystem*>( Root::getSingleton().getRenderSystem() );
+            MetalDevice *device = renderSystem->getActiveDevice();
+
+            MTLResourceOptions resourceOptions = MTLResourceCPUCacheModeDefaultCache|
+                                                 MTLResourceStorageModeShared;
+            id<MTLBuffer> tmpBuffer = [device->mDevice newBufferWithLength:sizeInBytes
+                                                                   options:resourceOptions];
+            __unsafe_unretained id<MTLBlitCommandEncoder> blitEncoder = device->getBlitEncoder();
+
+            [blitEncoder copyFromTexture:mTexture
+                             sourceSlice:0
+                             sourceLevel:0
+                            sourceOrigin:MTLOriginMake( data.left, data.top, data.front )
+                              sourceSize:MTLSizeMake( data.getWidth(), data.getHeight(),
+                                                      data.getDepth() )
+                                toBuffer:tmpBuffer
+                       destinationOffset:0
+                  destinationBytesPerRow:bytesPerPixel * data.getWidth()
+                destinationBytesPerImage:bytesPerPixel * data.getWidth() * data.getHeight()];
+
+            device->stall();
+
+            memcpy( tempBox.data, [tmpBuffer contents], sizeInBytes );
+        }
+        else
+        {
+            [mTexture getBytes:tempBox.data
+                   bytesPerRow:bytesPerPixel * data.getWidth()
+                    fromRegion:MTLRegionMake2D(data.left, data.top, data.getWidth(), data.getHeight())
+                   mipmapLevel:0];
+        }
 
         // Convert to the target pixel format and vertically flip
         PixelUtil::bulkPixelConversion(tempBox, data);
-        PixelUtil::bulkPixelVerticalFlip(data);
 
         delete[] (uint8*) tempBox.data;
         tempBox.data = 0;
     }
-
     //-----------------------------------------------------------------------------------
     void MetalTextureBuffer::bindToFramebuffer(uint32 attachment, size_t zoffset)
     {
