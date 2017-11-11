@@ -264,6 +264,18 @@ namespace Ogre
         void setPixelFormat( PixelFormatGpu pixelFormat );
         PixelFormatGpu getPixelFormat(void) const;
 
+        /** In almost all cases, getPixelFormat will match with getInternalPixelFormat.
+        @par
+            However there are a few exceptions, suchs as D3D11's render window where
+            the internal pixel format will be most likely PFG_RGBA8_UNORM however
+            getPixelFormat will report PFG_RGBA8_UNORM_SRGB if HW gamma correction was asked.
+        @remarks
+            The real internal pixel format only is relevant for operations like _resolveTo
+        @return
+            The real pixel format, and not the one we pretend it is.
+        */
+        virtual PixelFormatGpu getInternalPixelFormat(void) const;
+
         /// Note: Passing 0 will be forced to 1.
         void setMsaa( uint8 msaa );
         uint8 getMsaa(void) const;
@@ -342,6 +354,19 @@ namespace Ogre
         virtual bool getPreferDepthTexture(void) const;
         virtual PixelFormatGpu getDesiredDepthBufferFormat(void) const;
 
+        /** Immediately resolves this texture to the resolveTexture argument.
+            Source must be MSAA texture, destination must be non-MSAA.
+        @remarks
+            This function may be slow on some APIs and should only be used when required,
+            for example, to capture the screen from an explicit MSAA target and save it
+            to disk only on user demand.
+            If you need to call this often (like once per frame or more), then consider setting
+            a Compositor with CompositorNode::mLocalRtvs::resolveTextureName set so that the
+            compositor automatically resolves the texture every frame as efficiently as
+            possible.
+        */
+        void _resolveTo( TextureGpu *resolveTexture );
+
         /// Tells the API to let the HW autogenerate mipmaps. Assumes the
         /// allowsAutoMipmaps() == true and isRenderToTexture() == true
         virtual void _autogenerateMipmaps(void) = 0;
@@ -363,6 +388,11 @@ namespace Ogre
         bool _isManualTextureFlagPresent(void) const;
         bool isManualTexture(void) const;
 
+        /// OpenGL RenderWindows are a bit specific:
+        ///     * Their origins are upside down. Which means we need to flip Y.
+        ///     * They can access resolved contents of MSAA even if hasMsaaExplicitResolves = true
+        virtual bool isOpenGLRenderWindow(void) const;
+
         virtual void _setToDisplayDummyTexture(void) = 0;
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
 
@@ -375,7 +405,8 @@ namespace Ogre
         virtual bool supportsAsDepthBufferFor( TextureGpu *colourTarget ) const;
 
         /// Writes the current contents of the render target to the named file.
-        void writeContentsToFile( const String& filename, uint8 minMip, uint8 maxMip );
+        void writeContentsToFile( const String& filename, uint8 minMip, uint8 maxMip,
+                                  bool automaticResolve=true );
 
         virtual void getCustomAttribute( IdString name, void *pData ) {}
 

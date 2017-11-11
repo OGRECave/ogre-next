@@ -153,7 +153,7 @@ namespace Ogre
             mHardwareBufferManager = new v1::DefaultHardwareBufferManager();
             mTextureManager = new NULLTextureManager();
             mVaoManager = OGRE_NEW NULLVaoManager();
-            mTextureGpuManager = OGRE_NEW NULLTextureGpuManager( mVaoManager );
+            mTextureGpuManager = OGRE_NEW NULLTextureGpuManager( mVaoManager, this );
 
             mInitialized = true;
         }

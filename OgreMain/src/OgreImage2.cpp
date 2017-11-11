@@ -120,7 +120,7 @@ namespace Ogre {
                 {
                     uint8 *src = reinterpret_cast<uint8*>( box.at( 0, y, z ) );
                     uint8 *dst = reinterpret_cast<uint8*>( box.at( box.width - 1u, y, z ) );
-                    for( size_t x=0; x<box.width; ++x )
+                    for( size_t x=0; x<(box.width >> 1u); ++x )
                     {
                         std::swap( src, dst );
                         ++src;
@@ -136,7 +136,7 @@ namespace Ogre {
                 {
                     uint16 *src = reinterpret_cast<uint16*>( box.at( 0, y, z ) );
                     uint16 *dst = reinterpret_cast<uint16*>( box.at( box.width - 1u, y, z ) );
-                    for( size_t x=0; x<box.width; ++x )
+                    for( size_t x=0; x<(box.width >> 1u); ++x )
                     {
                         std::swap( src, dst );
                         ++src;
@@ -152,7 +152,7 @@ namespace Ogre {
                 {
                     uint32 *src = reinterpret_cast<uint32*>( box.at( 0, y, z ) );
                     uint32 *dst = reinterpret_cast<uint32*>( box.at( box.width - 1u, y, z ) );
-                    for( size_t x=0; x<box.width; ++x )
+                    for( size_t x=0; x<(box.width >> 1u); ++x )
                     {
                         std::swap( src, dst );
                         ++src;
@@ -168,7 +168,7 @@ namespace Ogre {
                 {
                     uint8 *src = reinterpret_cast<uint8*>( box.at( 0, y, z ) );
                     uint8 *dst = reinterpret_cast<uint8*>( box.at( box.width - 1u, y, z ) );
-                    for( size_t x=0; x<box.width; ++x )
+                    for( size_t x=0; x<(box.width >> 1u); ++x )
                     {
                         for( size_t i=0; i<box.bytesPerPixel; ++i )
                         {
@@ -210,7 +210,7 @@ namespace Ogre {
 
         for( size_t z=0; z<box.getDepthOrSlices(); ++z )
         {
-            for( size_t y=0; y<box.height; ++y )
+            for( size_t y=0; y<(box.height >> 1u); ++y )
             {
                 void *row0 = box.at( 0, y, z );
                 void *rowN = box.at( 0, box.height - y - 1u, z );
@@ -269,7 +269,8 @@ namespace Ogre {
         mNumMipmaps = std::min( maxMipCount, mNumMipmaps );
     }
     //-----------------------------------------------------------------------------------
-    void Image2::convertFromTexture( TextureGpu *texture, uint8 minMip, uint8 maxMip )
+    void Image2::convertFromTexture( TextureGpu *texture, uint8 minMip, uint8 maxMip,
+                                     bool automaticResolve )
     {
         assert( minMip <= maxMip );
 
@@ -308,6 +309,22 @@ namespace Ogre {
 
         TextureGpuManager *textureManager = texture->getTextureManager();
 
+        TextureGpu *resolvedTexture = texture;
+
+        if( texture->getMsaa() > 1u && texture->hasMsaaExplicitResolves() && automaticResolve &&
+            !texture->isOpenGLRenderWindow() )
+        {
+            resolvedTexture = textureManager->createTexture( texture->getNameStr() + "/Tmp/__ResolveTex",
+                                                             GpuPageOutStrategy::Discard,
+                                                             TextureFlags::RenderToTexture,
+                                                             texture->getTextureType() );
+            resolvedTexture->copyParametersFrom( texture );
+            resolvedTexture->setPixelFormat( texture->getInternalPixelFormat() );
+            resolvedTexture->setMsaa( 1u );
+            resolvedTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+            texture->_resolveTo( resolvedTexture );
+        }
+
         for( uint8 mip=minMip; mip<=maxMip; ++mip )
         {
             const uint32 width  = std::max( 1u, texture->getWidth() >> mip );
@@ -319,7 +336,7 @@ namespace Ogre {
                     textureManager->createAsyncTextureTicket( width, height, depthOrSlices,
                                                               texture->getTextureType(),
                                                               texture->getPixelFormat() );
-            asyncTicket->download( texture, mip, true );
+            asyncTicket->download( resolvedTexture, mip, true );
 
             TextureBox dstBox = this->getData( mip - minMip );
 
@@ -344,6 +361,12 @@ namespace Ogre {
             textureManager->destroyAsyncTextureTicket( asyncTicket );
             asyncTicket = 0;
         }
+
+        if( texture != resolvedTexture )
+            textureManager->destroyTexture( resolvedTexture );
+
+        if( texture->isOpenGLRenderWindow() )
+            flipAroundX();
     }
     //-----------------------------------------------------------------------------------
     void Image2::load( const String& strFileName, const String& group )

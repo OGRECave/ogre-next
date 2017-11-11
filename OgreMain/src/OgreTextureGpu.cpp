@@ -34,6 +34,10 @@ THE SOFTWARE.
 #include "OgreTextureBox.h"
 #include "OgreTextureGpuListener.h"
 
+//Needed by _resolveTo
+#include "OgreRenderPassDescriptor.h"
+#include "OgreRenderSystem.h"
+
 #include "OgreLwString.h"
 #include "OgreException.h"
 
@@ -212,6 +216,11 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     PixelFormatGpu TextureGpu::getPixelFormat(void) const
+    {
+        return mPixelFormat;
+    }
+    //-----------------------------------------------------------------------------------
+    PixelFormatGpu TextureGpu::getInternalPixelFormat(void) const
     {
         return mPixelFormat;
     }
@@ -492,6 +501,65 @@ namespace Ogre
         return PFG_UNKNOWN;
     }
     //-----------------------------------------------------------------------------------
+    void TextureGpu::_resolveTo( TextureGpu *resolveTexture )
+    {
+        if( this->getMsaa() <= 1u )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Source Texture must be MSAA",
+                         "TextureGpu::_resolveTo" );
+        }
+        if( this->isOpenGLRenderWindow() )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "OpenGL MSAA RenderWindows cannot be resolved",
+                         "TextureGpu::_resolveTo" );
+        }
+        if( PixelFormatGpuUtils::isDepth( this->getPixelFormat() ) )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Depth formats cannot be resolved!",
+                         "TextureGpu::_resolveTo" );
+        }
+        if( this->getInternalPixelFormat() != resolveTexture->getInternalPixelFormat() )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "Source Texture and Resolve texture must have the same internal pixel formats!",
+                         "TextureGpu::_resolveTo" );
+        }
+        if( !this->getEmptyBox(0).equalSize( resolveTexture->getEmptyBox(0) ) )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "Source Texture and Resolve texture must have the same dimensions!",
+                         "TextureGpu::_resolveTo" );
+        }
+        if( resolveTexture->getMsaa() > 1u )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Resolve Texture must not be MSAA",
+                         "TextureGpu::_resolveTo" );
+        }
+        if( !resolveTexture->isRenderToTexture() )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "Resolve Texture must be created with TextureFlags::RenderToTexture",
+                         "TextureGpu::_resolveTo" );
+        }
+
+        RenderSystem *renderSystem = mTextureManager->getRenderSystem();
+        RenderPassDescriptor *renderPassDescriptor = renderSystem->createRenderPassDescriptor();
+        renderPassDescriptor->mColour[0].texture = this;
+        renderPassDescriptor->mColour[0].resolveTexture = resolveTexture;
+
+        renderPassDescriptor->mColour[0].loadAction = LoadAction::Load;
+        //Set to both, because we don't want to lose the contents from this RTT.
+        renderPassDescriptor->mColour[0].storeAction = StoreAction::StoreAndMultisampleResolve;
+        renderPassDescriptor->entriesModified( RenderPassDescriptor::All );
+
+        Vector4 fullVp( 0, 0, 1, 1 );
+        renderSystem->beginRenderPassDescriptor( renderPassDescriptor, this,
+                                                 fullVp, fullVp, false, false );
+        renderSystem->executeRenderPassDescriptorDelayedActions();
+        renderSystem->endRenderPassDescriptor();
+        renderSystem->destroyRenderPassDescriptor( renderPassDescriptor );
+    }
+    //-----------------------------------------------------------------------------------
     bool TextureGpu::hasAutomaticBatching(void) const
     {
         return (mTextureFlags & TextureFlags::AutomaticBatching) != 0;
@@ -560,6 +628,11 @@ namespace Ogre
                                   TextureFlags::ManualTexture) ) != 0;
     }
     //-----------------------------------------------------------------------------------
+    bool TextureGpu::isOpenGLRenderWindow(void) const
+    {
+        return false;
+    }
+    //-----------------------------------------------------------------------------------
     void TextureGpu::_notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice )
     {
         mTexturePool = newPool;
@@ -610,10 +683,11 @@ namespace Ogre
         return false;
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpu::writeContentsToFile( const String& filename, uint8 minMip, uint8 maxMip )
+    void TextureGpu::writeContentsToFile( const String& filename, uint8 minMip, uint8 maxMip,
+                                          bool automaticResolve )
     {
         Image2 image;
-        image.convertFromTexture( this, minMip, maxMip );
+        image.convertFromTexture( this, minMip, maxMip, automaticResolve );
         image.save( filename, 0, image.getNumMipmaps() );
     }
     //-----------------------------------------------------------------------------------

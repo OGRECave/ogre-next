@@ -837,7 +837,7 @@ namespace Ogre {
             else
                 DepthBuffer::DefaultDepthBufferFormat = PFG_D24_UNORM_S8_UINT;
 
-            mTextureGpuManager = OGRE_NEW GL3PlusTextureGpuManager( mVaoManager, *mGLSupport );
+            mTextureGpuManager = OGRE_NEW GL3PlusTextureGpuManager( mVaoManager, this, *mGLSupport );
 
             fireEvent("RenderSystemCapabilitiesCreated");
 

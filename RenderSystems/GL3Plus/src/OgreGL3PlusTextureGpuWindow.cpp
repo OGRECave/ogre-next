@@ -95,6 +95,11 @@ namespace Ogre
             *static_cast<Window**>(pData) = mWindow;
     }
     //-----------------------------------------------------------------------------------
+    bool GL3PlusTextureGpuWindow::isOpenGLRenderWindow(void) const
+    {
+        return true;
+    }
+    //-----------------------------------------------------------------------------------
     void GL3PlusTextureGpuWindow::_setToDisplayDummyTexture(void)
     {
     }

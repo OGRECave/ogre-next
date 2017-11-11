@@ -40,8 +40,8 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    NULLTextureGpuManager::NULLTextureGpuManager( VaoManager *vaoManager ) :
-        TextureGpuManager( vaoManager )
+    NULLTextureGpuManager::NULLTextureGpuManager( VaoManager *vaoManager, RenderSystem *renderSystem ) :
+        TextureGpuManager( vaoManager, renderSystem )
     {
     }
     //-----------------------------------------------------------------------------------

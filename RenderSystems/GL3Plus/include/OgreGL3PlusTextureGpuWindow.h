@@ -65,6 +65,8 @@ namespace Ogre
 
         virtual void getCustomAttribute( IdString name, void *pData );
 
+        virtual bool isOpenGLRenderWindow(void) const;
+
         virtual void _setToDisplayDummyTexture(void);
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
     };

@@ -116,14 +116,15 @@ namespace Ogre
     unsigned long updateStreamingWorkerThread( ThreadHandle *threadHandle );
     THREAD_DECLARE( updateStreamingWorkerThread );
 
-    TextureGpuManager::TextureGpuManager( VaoManager *vaoManager ) :
+    TextureGpuManager::TextureGpuManager( VaoManager *vaoManager, RenderSystem *renderSystem ) :
         mDefaultMipmapGen( DefaultMipmapGen::HwMode ),
         mDefaultMipmapGenCubemaps( DefaultMipmapGen::SwMode ),
         mShuttingDown( false ),
         mEntriesToProcessPerIteration( 3u ),
         mTextureGpuManagerListener( 0 ),
         mStagingTextureMaxBudgetBytes( 512 * 1024 * 1024 ),
-        mVaoManager( vaoManager )
+        mVaoManager( vaoManager ),
+        mRenderSystem( renderSystem )
     {
         mTextureGpuManagerListener = OGRE_NEW DefaultTextureGpuManagerListener();
 
@@ -667,6 +668,11 @@ namespace Ogre
             retVal = &itor->second.name;
 
         return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    RenderSystem* TextureGpuManager::getRenderSystem(void) const
+    {
+        return mRenderSystem;
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::scheduleLoadRequest( TextureGpu *texture,

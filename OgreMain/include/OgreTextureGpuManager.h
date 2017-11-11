@@ -235,6 +235,7 @@ namespace Ogre
         AsyncTextureTicketVec   mAsyncTextureTickets;
 
         VaoManager          *mVaoManager;
+        RenderSystem        *mRenderSystem;
 
         void destroyAll(void);
         void destroyAllStagingBuffers(void);
@@ -305,7 +306,7 @@ namespace Ogre
                                                    size_t minConsumptionRatioThreshold );
 
     public:
-        TextureGpuManager( VaoManager *vaoManager );
+        TextureGpuManager( VaoManager *vaoManager, RenderSystem *renderSystem );
         virtual ~TextureGpuManager();
 
         /** Whether to use HW or SW mipmap generation when specifying
@@ -523,6 +524,8 @@ namespace Ogre
 
         const String* findAliasNameStr( IdString idName ) const;
         const String* findResourceNameStr( IdString idName ) const;
+
+        RenderSystem* getRenderSystem(void) const;
 
     protected:
         void scheduleLoadRequest( TextureGpu *texture, GpuResidency::GpuResidency nextResidency,

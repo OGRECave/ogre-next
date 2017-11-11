@@ -66,7 +66,8 @@ namespace Ogre
                                                                   PixelFormatGpu pixelFormatFamily );
 
     public:
-        D3D11TextureGpuManager( VaoManager *vaoManager, D3D11Device &device );
+        D3D11TextureGpuManager( VaoManager *vaoManager, RenderSystem *renderSystem,
+                                D3D11Device &device );
         virtual ~D3D11TextureGpuManager();
 
         /** Creates a special D3D11TextureGpuWindow pointer, to be used by Ogre::Window.

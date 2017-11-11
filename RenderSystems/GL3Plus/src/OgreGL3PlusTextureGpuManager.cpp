@@ -44,8 +44,9 @@ THE SOFTWARE.
 namespace Ogre
 {
     GL3PlusTextureGpuManager::GL3PlusTextureGpuManager( VaoManager *vaoManager,
+                                                        RenderSystem *renderSystem,
                                                         const GL3PlusSupport &support ) :
-        TextureGpuManager( vaoManager ),
+        TextureGpuManager( vaoManager, renderSystem ),
         mSupport( support )
     {
         memset( mBlankTexture, 0, sizeof(mBlankTexture) );

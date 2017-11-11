@@ -66,7 +66,8 @@ namespace Ogre
                                                                   PixelFormatGpu pixelFormatFamily );
 
     public:
-        GL3PlusTextureGpuManager( VaoManager *vaoManager, const GL3PlusSupport &support );
+        GL3PlusTextureGpuManager( VaoManager *vaoManager, RenderSystem *renderSystem,
+                                  const GL3PlusSupport &support );
         virtual ~GL3PlusTextureGpuManager();
 
         /** Creates a special GL3PlusTextureGpuWindow pointer, to be used by Ogre::Window.

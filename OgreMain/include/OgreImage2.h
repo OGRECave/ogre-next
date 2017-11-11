@@ -174,8 +174,12 @@ namespace Ogre {
             First mipmap to download, inclusive.
         @param maxMip
             Last mipmap to download, inclusive.
+        @param automaticResolve
+            When true, we will take care of resolving explicit MSAA textures if necessary,
+            so that the download from GPU works fine.
         */
-        void convertFromTexture( TextureGpu *texture, uint8 minMip, uint8 maxMip );
+        void convertFromTexture( TextureGpu *texture, uint8 minMip, uint8 maxMip,
+                                 bool automaticResolve=true );
 
         /** Loads an image file.
             @remarks

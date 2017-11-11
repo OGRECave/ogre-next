@@ -42,9 +42,9 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    D3D11TextureGpuManager::D3D11TextureGpuManager( VaoManager *vaoManager,
+    D3D11TextureGpuManager::D3D11TextureGpuManager( VaoManager *vaoManager, RenderSystem *renderSystem,
                                                     D3D11Device &device ) :
-        TextureGpuManager( vaoManager ),
+        TextureGpuManager( vaoManager, renderSystem ),
         mDevice( device )
     {
         memset( mBlankTexture, 0, sizeof(mBlankTexture) );

@@ -44,8 +44,9 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    MetalTextureGpuManager::MetalTextureGpuManager( VaoManager *vaoManager, MetalDevice *device ) :
-        TextureGpuManager( vaoManager ),
+    MetalTextureGpuManager::MetalTextureGpuManager( VaoManager *vaoManager, RenderSystem *renderSystem,
+                                                    MetalDevice *device ) :
+        TextureGpuManager( vaoManager, renderSystem ),
         mDevice( device )
     {
         MTLTextureDescriptor *desc = [MTLTextureDescriptor new];

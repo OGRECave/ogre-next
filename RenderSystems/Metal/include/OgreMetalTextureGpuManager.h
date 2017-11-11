@@ -65,7 +65,8 @@ namespace Ogre
                                                                   PixelFormatGpu pixelFormatFamily );
 
     public:
-        MetalTextureGpuManager( VaoManager *vaoManager, MetalDevice *device );
+        MetalTextureGpuManager( VaoManager *vaoManager, RenderSystem *renderSystem,
+                                MetalDevice *device );
         virtual ~MetalTextureGpuManager();
 
         /** Creates a special MetalTextureGpuWindow pointer, to be used by Ogre::Window.

@@ -86,7 +86,9 @@ namespace Ogre
         assert( srcTextureBox.width == mWidth );
         assert( srcTextureBox.height == mHeight );
         assert( srcTextureBox.getDepthOrSlices() == mDepthOrSlices );
-        assert( textureSrc->getMsaa() <= 1u && "Cannot download from an MSAA texture!" );
+        assert( (textureSrc->getMsaa() <= 1u || !textureSrc->hasMsaaExplicitResolves() ||
+                 textureSrc->isOpenGLRenderWindow()) &&
+                "Cannot download from an explicitly resolved MSAA texture!" );
     }
     //-----------------------------------------------------------------------------------
     void AsyncTextureTicket::notifyTextureChanged( TextureGpu *texture,

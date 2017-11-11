@@ -60,7 +60,7 @@ namespace Ogre
                                                                   PixelFormatGpu pixelFormatFamily );
 
     public:
-        NULLTextureGpuManager( VaoManager *vaoManager );
+        NULLTextureGpuManager( VaoManager *vaoManager, RenderSystem *renderSystem );
         virtual ~NULLTextureGpuManager();
 
         TextureGpu* createTextureGpuWindow(void);

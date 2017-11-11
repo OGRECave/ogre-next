@@ -54,6 +54,8 @@ namespace Ogre
 
         virtual void setTextureType( TextureTypes::TextureTypes textureType );
 
+        virtual PixelFormatGpu getInternalPixelFormat(void) const;
+
         virtual void copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
                              const TextureBox &srcBox, uint8 srcMipLevel );
 

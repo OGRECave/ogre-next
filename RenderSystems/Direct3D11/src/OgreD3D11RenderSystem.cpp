@@ -1167,7 +1167,7 @@ namespace Ogre
             assert( !mVaoManager );
             mVaoManager = OGRE_NEW D3D11VaoManager( false, mDevice, this );
 
-            mTextureGpuManager = OGRE_NEW D3D11TextureGpuManager( mVaoManager, mDevice );
+            mTextureGpuManager = OGRE_NEW D3D11TextureGpuManager( mVaoManager, this, mDevice );
 
             mTextureGpuManager->_update( true );
 		}
