@@ -117,22 +117,6 @@ namespace Ogre
                      "GL3PlusTextureGpuWindow::setTextureType" );
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusTextureGpuWindow::copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
-                                          const TextureBox &srcBox, uint8 srcMipLevel )
-    {
-        OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
-                     "TODO",
-                     "GL3PlusTextureGpuWindow::copyTo" );
-        TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel );
-
-//        assert( dynamic_cast<GL3PlusTextureGpu*>( dst ) );
-
-//        GL3PlusTextureGpuWindow *dstGl = static_cast<GL3PlusTextureGpuWindow*>( dst );
-//        GL3PlusTextureGpuWindowManager *textureManagerGl =
-//                static_cast<GL3PlusTextureGpuWindowManager*>( mTextureManager );
-//        const GL3PlusSupport &support = textureManagerGl->getGlSupport();
-    }
-    //-----------------------------------------------------------------------------------
     void GL3PlusTextureGpuWindow::getSubsampleLocations( vector<Vector2>::type locations )
     {
         locations.reserve( mMsaa );

@@ -36,11 +36,11 @@ THE SOFTWARE.
 #include "OgreVector2.h"
 
 #include "Vao/OgreVaoManager.h"
+#include "OgreRenderSystem.h"
 
 #include "OgreException.h"
 
 #define TODO_use_StagingTexture_with_GPU_GPU_visibility 1
-#define TODO_call_renderSystemEnd_if_draw_is_affected 1
 #define TODO_sw_fallback 1
 
 namespace Ogre
@@ -345,26 +345,41 @@ namespace Ogre
                                                 uint8 dstMipLevel, const TextureBox &srcBox,
                                                 uint8 srcMipLevel )
     {
-        TODO_call_renderSystemEnd_if_draw_is_affected;
+        RenderSystem *renderSystem = mTextureManager->getRenderSystem();
+        renderSystem->endRenderPassDescriptor();
+
         GL3PlusTextureGpuManager *textureManagerGl =
                 static_cast<GL3PlusTextureGpuManager*>( mTextureManager );
-
-        OCGE( glBindFramebuffer( GL_READ_FRAMEBUFFER, this->isRenderWindowSpecific() ?
-                                     0 : textureManagerGl->getTemporaryFbo(0) ) );
-        OCGE( glBindFramebuffer( GL_DRAW_FRAMEBUFFER, dst->isRenderWindowSpecific() ?
-                                     0 : textureManagerGl->getTemporaryFbo(1) ) );
-        OCGE( glViewport( 0, 0, dstBox.width, dstBox.height ) );
 
         assert( dynamic_cast<GL3PlusTextureGpu*>( dst ) );
         GL3PlusTextureGpu *dstGl = static_cast<GL3PlusTextureGpu*>( dst );
 
-        const bool srcIsRenderbuffer = this->isRenderbuffer();
-        const bool dstIsRenderbuffer = dstGl->isRenderbuffer();
+        const bool srcIsFboAble = this->isRenderbuffer() || this->isRenderToTexture();
+        const bool dstIsFboAble = dstGl->isRenderbuffer() || dst->isRenderToTexture();
+
+        if( !this->isRenderWindowSpecific() && srcIsFboAble )
+        {
+            OCGE( glBindFramebuffer( GL_READ_FRAMEBUFFER, textureManagerGl->getTemporaryFbo(0) ) );
+        }
+        else
+        {
+            OCGE( glBindFramebuffer( GL_READ_FRAMEBUFFER, 0 ) );
+        }
+
+        if( !dst->isRenderWindowSpecific() && dstIsFboAble )
+        {
+            OCGE( glBindFramebuffer( GL_DRAW_FRAMEBUFFER, textureManagerGl->getTemporaryFbo(1) ) );
+        }
+        else
+        {
+            OCGE( glBindFramebuffer( GL_DRAW_FRAMEBUFFER, 0 ) );
+        }
+        OCGE( glViewport( 0, 0, dstBox.width, dstBox.height ) );
 
         size_t depthOrSlices = srcBox.getDepthOrSlices();
         for( size_t i=0; i<depthOrSlices; ++i )
         {
-            if( srcIsRenderbuffer )
+            if( srcIsFboAble )
             {
                 if( !this->isRenderWindowSpecific() )
                 {
@@ -377,7 +392,7 @@ namespace Ogre
                     OCGE( glReadBuffer( GL_BACK ) );
                 }
             }
-            if( dstIsRenderbuffer )
+            if( dstIsFboAble )
             {
                 if( !dstGl->isRenderWindowSpecific() )
                 {
@@ -391,7 +406,7 @@ namespace Ogre
                 }
             }
 
-            if( srcIsRenderbuffer && !dstIsRenderbuffer )
+            if( srcIsFboAble && !dstIsFboAble )
             {
                 //We can use glCopyTexImageXD
                 //https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glCopyTexImage2D.xhtml
@@ -431,7 +446,7 @@ namespace Ogre
                     break;
                 }
             }
-            else if( srcIsRenderbuffer && dstIsRenderbuffer )
+            else if( srcIsFboAble && dstIsFboAble )
             {
                 GLenum readStatus, drawStatus;
                 OCGE( readStatus = glCheckFramebufferStatus( GL_READ_FRAMEBUFFER ) );
@@ -450,8 +465,37 @@ namespace Ogre
                     if( !bufferBits )
                         bufferBits = GL_COLOR_BUFFER_BIT;
 
-                    OCGE( glBlitFramebuffer( srcBox.x, srcBox.y, srcBox.width, srcBox.height,
-                                             dstBox.x, dstBox.y, dstBox.width, dstBox.height,
+                    GLint srcX0 = srcBox.x;
+                    GLint srcX1 = srcBox.x + srcBox.width;;
+                    GLint srcY0;
+                    GLint srcY1;
+                    if( this->isRenderWindowSpecific() )
+                    {
+                        srcY0 = this->mHeight - srcBox.y;
+                        srcY1 = this->mHeight - srcBox.y - srcBox.height;
+                    }
+                    else
+                    {
+                        srcY0 = srcBox.y;
+                        srcY1 = srcBox.y + srcBox.height;
+                    }
+                    GLint dstX0 = dstBox.x;
+                    GLint dstX1 = dstBox.x + dstBox.width;
+                    GLint dstY0;
+                    GLint dstY1;
+                    if( dst->isRenderWindowSpecific() )
+                    {
+                        dstY0 = dstGl->mHeight - dstBox.y;
+                        dstY1 = dstGl->mHeight - dstBox.y - dstBox.height;
+                    }
+                    else
+                    {
+                        dstY0 = dstBox.y;
+                        dstY1 = dstBox.y + dstBox.height;
+                    }
+
+                    OCGE( glBlitFramebuffer( srcX0, srcY0, srcX1, srcY1,
+                                             dstX0, dstY0, dstX1, dstY1,
                                              bufferBits, GL_NEAREST ) );
                 }
                 else
@@ -466,23 +510,45 @@ namespace Ogre
                         alreadyWarned = true;
                     }
 
+                    OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
+                                 "Unsupported FBO in GL3PlusTextureGpu::copyTo. "
+                                 "Fallback to SW copy not implemented",
+                                 "GL3PlusTextureGpu::copyTo" );
                     TODO_sw_fallback;
                 }
             }
+            else
+            {
+                OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR,
+                             "We should have never reached this path. Contact Ogre3D developers.",
+                             "GL3PlusTextureGpu::copyTo" );
+            }
         }
 
-        if( srcIsRenderbuffer )
+        if( srcIsFboAble )
         {
-            OCGE( glFramebufferRenderbuffer( GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, 0, 0 ) );
-            OCGE( glFramebufferRenderbuffer( GL_READ_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, 0, 0 ) );
-            OCGE( glFramebufferRenderbuffer( GL_READ_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, 0, 0 ) );
+            if( !this->isRenderWindowSpecific() )
+            {
+                OCGE( glFramebufferRenderbuffer( GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                                 GL_RENDERBUFFER, 0 ) );
+                OCGE( glFramebufferRenderbuffer( GL_READ_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+                                                 GL_RENDERBUFFER, 0 ) );
+                OCGE( glFramebufferRenderbuffer( GL_READ_FRAMEBUFFER, GL_STENCIL_ATTACHMENT,
+                                                 GL_RENDERBUFFER, 0 ) );
+            }
             OCGE( glBindFramebuffer( GL_READ_FRAMEBUFFER, 0 ) );
         }
-        if( dstIsRenderbuffer )
+        if( dstIsFboAble )
         {
-            OCGE( glFramebufferRenderbuffer( GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, 0, 0 ) );
-            OCGE( glFramebufferRenderbuffer( GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, 0, 0 ) );
-            OCGE( glFramebufferRenderbuffer( GL_DRAW_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, 0, 0 ) );
+            if( !this->isRenderWindowSpecific() )
+            {
+                OCGE( glFramebufferRenderbuffer( GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                                 GL_RENDERBUFFER, 0 ) );
+                OCGE( glFramebufferRenderbuffer( GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+                                                 GL_RENDERBUFFER, 0 ) );
+                OCGE( glFramebufferRenderbuffer( GL_DRAW_FRAMEBUFFER, GL_STENCIL_ATTACHMENT,
+                                                 GL_RENDERBUFFER, 0 ) );
+            }
             OCGE( glBindFramebuffer( GL_DRAW_FRAMEBUFFER, 0 ) );
         }
     }
@@ -492,13 +558,6 @@ namespace Ogre
     {
         TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel );
 
-        if( dst->isRenderWindowSpecific() )
-        {
-            OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
-                         "TODO: Copying to RenderWindow",
-                         "GL3PlusTextureGpu::copyTo" );
-        }
-
         assert( dynamic_cast<GL3PlusTextureGpu*>( dst ) );
 
         GL3PlusTextureGpu *dstGl = static_cast<GL3PlusTextureGpu*>( dst );
@@ -506,48 +565,55 @@ namespace Ogre
                 static_cast<GL3PlusTextureGpuManager*>( mTextureManager );
         const GL3PlusSupport &support = textureManagerGl->getGlSupport();
 
-        if( support.hasMinGLVersion( 4, 3 ) || support.checkExtension( "GL_ARB_copy_image" ) )
+        if( !this->isRenderWindowSpecific() && !dst->isRenderWindowSpecific() )
         {
-            OCGE( glCopyImageSubData( this->mFinalTextureName, this->mGlTextureTarget,
-                                      srcMipLevel, srcBox.x, srcBox.y, srcBox.z,
-                                      dstGl->mFinalTextureName, dstGl->mGlTextureTarget,
-                                      dstMipLevel, dstBox.x, dstBox.y, dstBox.z,
-                                      srcBox.width, srcBox.height, srcBox.getDepthOrSlices() ) );
+            if( support.hasMinGLVersion( 4, 3 ) || support.checkExtension( "GL_ARB_copy_image" ) )
+            {
+                OCGE( glCopyImageSubData( this->mFinalTextureName, this->mGlTextureTarget,
+                                          srcMipLevel, srcBox.x, srcBox.y, srcBox.z,
+                                          dstGl->mFinalTextureName, dstGl->mGlTextureTarget,
+                                          dstMipLevel, dstBox.x, dstBox.y, dstBox.z,
+                                          srcBox.width, srcBox.height, srcBox.getDepthOrSlices() ) );
+            }
+            /*TODO
+            else if( support.checkExtension( "GL_NV_copy_image" ) )
+            {
+                OCGE( glCopyImageSubDataNV( this->mFinalTextureName, this->mGlTextureTarget,
+                                            srcMipLevel, srcBox.x, srcBox.y, srcBox.z,
+                                            dstGl->mFinalTextureName, dstGl->mGlTextureTarget,
+                                            dstMipLevel, dstBox.x, dstBox.y, dstBox.z,
+                                            srcBox.width, srcBox.height, srcBox.getDepthOrSlices() ) );
+            }*/
+            /*TODO: These are for OpenGL ES 3.0+
+            else if( support.checkExtension( "GL_OES_copy_image" ) )
+            {
+                OCGE( glCopyImageSubDataOES( this->mFinalTextureName, this->mGlTextureTarget,
+                                             srcMipLevel, srcBox.x, srcBox.y, srcBox.z,
+                                             dstGl->mFinalTextureName, dstGl->mGlTextureTarget,
+                                             dstMipLevel, dstBox.x, dstBox.y, dstBox.z,
+                                             srcBox.width, srcBox.height, srcBox.getDepthOrSlices() ) );
+            }
+            else if( support.checkExtension( "GL_EXT_copy_image" ) )
+            {
+                OCGE( glCopyImageSubDataEXT( this->mFinalTextureName, this->mGlTextureTarget,
+                                             srcMipLevel, srcBox.x, srcBox.y, srcBox.z,
+                                             dstGl->mFinalTextureName, dstGl->mGlTextureTarget,
+                                             dstMipLevel, dstBox.x, dstBox.y, dstBox.z,
+                                             srcBox.width, srcBox.height, srcBox.getDepthOrSlices() ) );
+            }*/
+            else
+            {
+    //            GLenum format, type;
+    //            GL3PlusMappings::getFormatAndType( mPixelFormat, format, type );
+    //            glGetTexImage( this->mFinalTextureName, srcMipLevel, format, type,  );
+                //glGetCompressedTexImage
+                TODO_use_StagingTexture_with_GPU_GPU_visibility;
+                OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "", "GL3PlusTextureGpu::copyTo" );
+            }
         }
-        /*TODO
-        else if( support.checkExtension( "GL_NV_copy_image" ) )
-        {
-            OCGE( glCopyImageSubDataNV( this->mFinalTextureName, this->mGlTextureTarget,
-                                        srcMipLevel, srcBox.x, srcBox.y, srcBox.z,
-                                        dstGl->mFinalTextureName, dstGl->mGlTextureTarget,
-                                        dstMipLevel, dstBox.x, dstBox.y, dstBox.z,
-                                        srcBox.width, srcBox.height, srcBox.getDepthOrSlices() ) );
-        }*/
-        /*TODO: These are for OpenGL ES 3.0+
-        else if( support.checkExtension( "GL_OES_copy_image" ) )
-        {
-            OCGE( glCopyImageSubDataOES( this->mFinalTextureName, this->mGlTextureTarget,
-                                         srcMipLevel, srcBox.x, srcBox.y, srcBox.z,
-                                         dstGl->mFinalTextureName, dstGl->mGlTextureTarget,
-                                         dstMipLevel, dstBox.x, dstBox.y, dstBox.z,
-                                         srcBox.width, srcBox.height, srcBox.getDepthOrSlices() ) );
-        }
-        else if( support.checkExtension( "GL_EXT_copy_image" ) )
-        {
-            OCGE( glCopyImageSubDataEXT( this->mFinalTextureName, this->mGlTextureTarget,
-                                         srcMipLevel, srcBox.x, srcBox.y, srcBox.z,
-                                         dstGl->mFinalTextureName, dstGl->mGlTextureTarget,
-                                         dstMipLevel, dstBox.x, dstBox.y, dstBox.z,
-                                         srcBox.width, srcBox.height, srcBox.getDepthOrSlices() ) );
-        }*/
         else
         {
-//            GLenum format, type;
-//            GL3PlusMappings::getFormatAndType( mPixelFormat, format, type );
-//            glGetTexImage( this->mFinalTextureName, srcMipLevel, format, type,  );
-            //glGetCompressedTexImage
-            TODO_use_StagingTexture_with_GPU_GPU_visibility;
-            OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "", "GL3PlusTextureGpu::copyTo" );
+            this->copyViaFramebuffer( dst, dstBox, dstMipLevel, srcBox, srcMipLevel );
         }
     }
     //-----------------------------------------------------------------------------------
