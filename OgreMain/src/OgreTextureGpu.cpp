@@ -610,6 +610,13 @@ namespace Ogre
         return false;
     }
     //-----------------------------------------------------------------------------------
+    void TextureGpu::writeContentsToFile( const String& filename, uint8 minMip, uint8 maxMip )
+    {
+        Image2 image;
+        image.convertFromTexture( this, minMip, maxMip );
+        image.save( filename, 0, image.getNumMipmaps() );
+    }
+    //-----------------------------------------------------------------------------------
     TextureGpuManager* TextureGpu::getTextureManager(void) const
     {
         return mTextureManager;

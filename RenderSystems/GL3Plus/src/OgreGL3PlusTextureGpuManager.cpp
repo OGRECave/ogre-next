@@ -144,6 +144,8 @@ namespace Ogre
     TextureGpu* GL3PlusTextureGpuManager::createTextureGpuWindow( GL3PlusContext *context,
                                                                   Window *window )
     {
+        //GL3+ needs to set MsaaExplicitResolve so that "resolveTexture" in RenderPassDescriptor
+        //can remain empty (because the system will be performing the resolve).
         return OGRE_NEW GL3PlusTextureGpuWindow( GpuPageOutStrategy::Discard, mVaoManager,
                                                  "RenderWindow",
                                                  TextureFlags::NotTexture|

@@ -207,70 +207,80 @@ namespace Ogre
             mSubregion = TextureBox();
         }
 
-        if( fullSrcTextureBox.equalSize( srcTextureBox ) || !mSupportsGetTextureSubImage )
+        if( !textureSrc->isRenderWindowSpecific() )
         {
-            //We can use glGetTexImage & glGetCompressedTexImage (cubemaps need a special path)
-            if( !PixelFormatGpuUtils::isCompressed( pixelFormat ) )
+            if( fullSrcTextureBox.equalSize( srcTextureBox ) || !mSupportsGetTextureSubImage )
             {
-                GLenum format, type;
-                GL3PlusMappings::getFormatAndType( pixelFormat, format, type );
-
-                if( textureType != TextureTypes::TypeCube )
+                //We can use glGetTexImage & glGetCompressedTexImage (cubemaps need a special path)
+                if( !PixelFormatGpuUtils::isCompressed( pixelFormat ) )
                 {
-                    OCGE( glGetTexImage( targetGl, mipLevel, format, type, 0 ) );
+                    GLenum format, type;
+                    GL3PlusMappings::getFormatAndType( pixelFormat, format, type );
+
+                    if( textureType != TextureTypes::TypeCube )
+                    {
+                        OCGE( glGetTexImage( targetGl, mipLevel, format, type, 0 ) );
+                    }
+                    else
+                    {
+                        for( size_t i=0; i<(size_t)depthOrSlices; ++i )
+                        {
+                            const GLenum targetCubeGl =
+                                    static_cast<GLenum>( GL_TEXTURE_CUBE_MAP_POSITIVE_X + i );
+                            OCGE( glGetTexImage( targetCubeGl, mipLevel, format, type,
+                                                 reinterpret_cast<void*>(
+                                                     srcTextureBox.bytesPerImage * i ) ) );
+                        }
+                    }
                 }
                 else
                 {
-                    for( size_t i=0; i<(size_t)depthOrSlices; ++i )
+                    if( textureType != TextureTypes::TypeCube )
                     {
-                        const GLenum targetCubeGl =
-                                static_cast<GLenum>( GL_TEXTURE_CUBE_MAP_POSITIVE_X + i );
-                        OCGE( glGetTexImage( targetCubeGl, mipLevel, format, type,
-                                             reinterpret_cast<void*>(
-                                                 srcTextureBox.bytesPerImage * i ) ) );
+                        OCGE( glGetCompressedTexImage( targetGl, mipLevel, 0 ) );
+                    }
+                    else
+                    {
+                        for( size_t i=0; i<(size_t)depthOrSlices; ++i )
+                        {
+                            const GLenum targetCubeGl =
+                                    static_cast<GLenum>( GL_TEXTURE_CUBE_MAP_POSITIVE_X + i );
+                            OCGE( glGetCompressedTexImage( targetCubeGl, mipLevel,
+                                                           reinterpret_cast<void*>(
+                                                               srcTextureBox.bytesPerImage * i ) ) );
+                        }
                     }
                 }
             }
             else
             {
-                if( textureType != TextureTypes::TypeCube )
+                //We need to use glGetTextureSubImage & glGetCompressedTextureSubImage,
+                //which is only available since GL4.5. Support is here. Yay!
+                if( !PixelFormatGpuUtils::isCompressed( pixelFormat ) )
                 {
-                    OCGE( glGetCompressedTexImage( targetGl, mipLevel, 0 ) );
+                    //Use INT_MAX as buffer size, OpenGL already
+                    //knows the size because the buffer is bound.
+                    GLenum format, type;
+                    GL3PlusMappings::getFormatAndType( pixelFormat, format, type );
+                    OCGE( glGetTextureSubImage( texName, mipLevel, xPos, yPos,
+                                                std::max( zPos, slicePos ),
+                                                width, height, depthOrSlices, format, type,
+                                                std::numeric_limits<int>::max(), 0 ) );
                 }
                 else
                 {
-                    for( size_t i=0; i<(size_t)depthOrSlices; ++i )
-                    {
-                        const GLenum targetCubeGl =
-                                static_cast<GLenum>( GL_TEXTURE_CUBE_MAP_POSITIVE_X + i );
-                        OCGE( glGetCompressedTexImage( targetCubeGl, mipLevel,
-                                                       reinterpret_cast<void*>(
-                                                           srcTextureBox.bytesPerImage * i ) ) );
-                    }
+                    OCGE( glGetCompressedTextureSubImage( texName, mipLevel, xPos, yPos,
+                                                          std::max( zPos, slicePos ),
+                                                          width, height, depthOrSlices,
+                                                          std::numeric_limits<int>::max(), 0 ) );
                 }
             }
         }
         else
         {
-            //We need to use glGetTextureSubImage & glGetCompressedTextureSubImage,
-            //which is only available since GL4.5. Support is here. Yay!
-            if( !PixelFormatGpuUtils::isCompressed( pixelFormat ) )
-            {
-                //Use INT_MAX as buffer size, OpenGL already
-                //knows the size because the buffer is bound.
-                GLenum format, type;
-                GL3PlusMappings::getFormatAndType( pixelFormat, format, type );
-                OCGE( glGetTextureSubImage( texName, mipLevel, xPos, yPos, std::max( zPos, slicePos ),
-                                            width, height, depthOrSlices, format, type,
-                                            std::numeric_limits<int>::max(), 0 ) );
-            }
-            else
-            {
-                OCGE( glGetCompressedTextureSubImage( texName, mipLevel, xPos, yPos,
-                                                      std::max( zPos, slicePos ),
-                                                      width, height, depthOrSlices,
-                                                      std::numeric_limits<int>::max(), 0 ) );
-            }
+            GLenum format, type;
+            GL3PlusMappings::getFormatAndType( pixelFormat, format, type );
+            OCGE( glReadPixels( xPos, yPos, width, height, format, type, 0 ) );
         }
 
         if( accurateTracking )

@@ -374,6 +374,9 @@ namespace Ogre
 
         virtual bool supportsAsDepthBufferFor( TextureGpu *colourTarget ) const;
 
+        /// Writes the current contents of the render target to the named file.
+        void writeContentsToFile( const String& filename, uint8 minMip, uint8 maxMip );
+
         virtual void getCustomAttribute( IdString name, void *pData ) {}
 
         TextureGpuManager* getTextureManager(void) const;

@@ -146,6 +146,8 @@ namespace Ogre
             the returned pointer will return TextureBox::numSlices = 1,
             In this case you will have to use that slice, unmap this
             ticket, and map it again with the next slice.
+        @par
+            See Image2::convertFromTexture for an example of how to use AyncTextureTicket
         @param slice
             First slice to map. Textures below 2048x2048 are guaranteed to
             be able to access [slice; getNumSlices).
@@ -158,6 +160,7 @@ namespace Ogre
         /// Unmaps the pointer mapped with map().
         void unmap(void);
 
+        /// See Image2::convertFromTexture for an example of how to use AyncTextureTicket
         virtual bool canMapMoreThanOneSlice(void) const     { return true; }
 
         uint32 getWidth(void) const;
