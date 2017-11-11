@@ -53,7 +53,7 @@ unsigned long Timer::getMilliseconds()
 {
     struct timeval now;
     gettimeofday(&now, NULL);
-    return (now.tv_sec-start.tv_sec)*1000+(now.tv_usec-start.tv_usec)/1000;
+    return (now.tv_sec-start.tv_sec)*1000ul+(now.tv_usec-start.tv_usec)/1000ul;
 }
 
 //--------------------------------------------------------------------------------//
@@ -61,7 +61,7 @@ unsigned long Timer::getMicroseconds()
 {
     struct timeval now;
     gettimeofday(&now, NULL);
-    return (now.tv_sec-start.tv_sec)*1000000+(now.tv_usec-start.tv_usec);
+    return (now.tv_sec-start.tv_sec)*1000000ul+(now.tv_usec-start.tv_usec);
 }
 
 //-- Common Across All Timers ----------------------------------------------------//
