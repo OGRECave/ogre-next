@@ -31,7 +31,7 @@ THE SOFTWARE.
 
 #import <simd/simd.h>
 
-#include "OgreRenderWindow.h"
+#include "OgreWindow.h"
 
 #include "GraphicsSystem.h"
 #include "LogicSystem.h"
@@ -106,7 +106,7 @@ using namespace Demo;
     }
 
     //Connect the UIView created by Ogre to our UIViewController
-    Ogre::RenderWindow *renderWindow = _graphicsSystem->getRenderWindow();
+    Ogre::Window *renderWindow = _graphicsSystem->getRenderWindow();
     void *uiViewPtr = 0;
     renderWindow->getCustomAttribute( "UIView", &uiViewPtr );
     UIView *uiView = CFBridgingRelease( uiViewPtr );
