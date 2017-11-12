@@ -424,21 +424,58 @@ namespace Ogre
         d3dBox.left     = srcBox.x;
         d3dBox.right    = srcBox.width;
 
+        D3D11_BOX *d3dBoxPtr = &d3dBox;
+
+        if( srcBox.equalSize( this->getEmptyBox( srcMipLevel ) ) )
+            d3dBoxPtr = 0;
+
+        ID3D11Resource *srcTextureName = this->mFinalTextureName;
+        ID3D11Resource *dstTextureName = dstD3d->mFinalTextureName;
+
+        //Source has explicit resolves. If destination doesn't,
+        //we must copy to its internal MSAA surface.
+        if( this->mMsaa > 1u && this->hasMsaaExplicitResolves() )
+        {
+            if( !dstD3d->hasMsaaExplicitResolves() )
+                dstTextureName = dstD3d->mMsaaFramebufferName;
+        }
+        //Destination has explicit resolves. If source doesn't,
+        //we must copy from its internal MSAA surface.
+        if( dstD3d->mMsaa > 1u && dstD3d->hasMsaaExplicitResolves() )
+        {
+            if( !this->hasMsaaExplicitResolves() )
+                srcTextureName = this->mMsaaFramebufferName;
+        }
+
         D3D11TextureGpuManager *textureManagerD3d =
                 static_cast<D3D11TextureGpuManager*>( mTextureManager );
         D3D11Device &device = textureManagerD3d->getDevice();
         ID3D11DeviceContextN *context = device.GetImmediateContext();
 
+        DXGI_FORMAT format = D3D11Mappings::get( dstD3d->getPixelFormat() );
+
         for( size_t i=0; i<srcBox.numSlices; ++i )
         {
-            const UINT srcResourceIndex = D3D11CalcSubresource( srcMipLevel, srcBox.sliceStart + i,
+            const UINT srcResourceIndex = D3D11CalcSubresource( srcMipLevel, srcBox.sliceStart + i +
+                                                                this->getInternalSliceStart(),
                                                                 this->mNumMipmaps );
-            const UINT dstResourceIndex = D3D11CalcSubresource( dstMipLevel, dstBox.sliceStart + i,
+            const UINT dstResourceIndex = D3D11CalcSubresource( dstMipLevel, dstBox.sliceStart + i +
+                                                                dstD3d->getInternalSliceStart(),
                                                                 dstD3d->mNumMipmaps );
-            context->CopySubresourceRegion( dstD3d->mFinalTextureName, dstResourceIndex,
+            context->CopySubresourceRegion( dstTextureName, dstResourceIndex,
                                             dstBox.x, dstBox.y, dstBox.z,
-                                            this->mFinalTextureName, srcResourceIndex,
-                                            &d3dBox );
+                                            srcTextureName, srcResourceIndex,
+                                            d3dBoxPtr );
+
+            if( dstD3d->mMsaa > 1u && !dstD3d->hasMsaaExplicitResolves() )
+            {
+                //Must keep the resolved texture up to date.
+                context->ResolveSubresource( dstD3d->mFinalTextureName,
+                                             dstResourceIndex,
+                                             dstD3d->mMsaaFramebufferName,
+                                             dstResourceIndex,
+                                             format );
+            }
         }
     }
     //-----------------------------------------------------------------------------------

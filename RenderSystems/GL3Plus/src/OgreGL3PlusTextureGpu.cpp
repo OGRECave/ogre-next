@@ -288,6 +288,12 @@ namespace Ogre
     void GL3PlusTextureGpu::bindTextureToFrameBuffer( GLenum target, uint8 mipLevel,
                                                       uint32 depthOrSlice )
     {
+        bindTextureToFrameBuffer( target, mFinalTextureName, mipLevel, depthOrSlice );
+    }
+    //-----------------------------------------------------------------------------------
+    void GL3PlusTextureGpu::bindTextureToFrameBuffer( GLenum target, GLuint textureName,
+                                                      uint8 mipLevel, uint32 depthOrSlice )
+    {
         assert( !isRenderWindowSpecific() );
 
         const bool isDepth = PixelFormatGpuUtils::isDepth( mPixelFormat );
@@ -296,22 +302,20 @@ namespace Ogre
         {
             if( isTexture() )
             {
-                OCGE( glFramebufferTexture( target, GL_DEPTH_ATTACHMENT,
-                                            mFinalTextureName, 0 ) );
+                OCGE( glFramebufferTexture( target, GL_DEPTH_ATTACHMENT, textureName, 0 ) );
                 if( PixelFormatGpuUtils::isStencil( mPixelFormat ) )
                 {
-                    OCGE( glFramebufferTexture( target, GL_STENCIL_ATTACHMENT,
-                                                mFinalTextureName, 0 ) );
+                    OCGE( glFramebufferTexture( target, GL_STENCIL_ATTACHMENT, textureName, 0 ) );
                 }
             }
             else
             {
                 OCGE( glFramebufferRenderbuffer( target, GL_DEPTH_ATTACHMENT,
-                                                 GL_RENDERBUFFER, mFinalTextureName ) );
+                                                 GL_RENDERBUFFER, textureName ) );
                 if( PixelFormatGpuUtils::isStencil( mPixelFormat ) )
                 {
                     OCGE( glFramebufferRenderbuffer( target, GL_STENCIL_ATTACHMENT,
-                                                     GL_RENDERBUFFER, mFinalTextureName ) );
+                                                     GL_RENDERBUFFER, textureName ) );
                 }
             }
         }
@@ -329,13 +333,12 @@ namespace Ogre
                 if( !hasLayers )
                 {
                     OCGE( glFramebufferTexture( target, GL_COLOR_ATTACHMENT0,
-                                                mFinalTextureName,
-                                                mipLevel ) );
+                                                textureName, mipLevel ) );
                 }
                 else
                 {
                     OCGE( glFramebufferTextureLayer( target, GL_COLOR_ATTACHMENT0,
-                                                     mFinalTextureName, mipLevel, depthOrSlice ) );
+                                                     textureName, mipLevel, depthOrSlice ) );
                 }
             }
         }
@@ -567,12 +570,32 @@ namespace Ogre
 
         if( !this->isRenderWindowSpecific() && !dst->isRenderWindowSpecific() )
         {
+            GLuint srcTextureName = this->mFinalTextureName;
+            GLuint dstTextureName = dstGl->mFinalTextureName;
+
+            //Source has explicit resolves. If destination doesn't,
+            //we must copy to its internal MSAA surface.
+            if( this->mMsaa > 1u && this->hasMsaaExplicitResolves() )
+            {
+                if( !dstGl->hasMsaaExplicitResolves() )
+                    dstTextureName = dstGl->mMsaaFramebufferName;
+            }
+            //Destination has explicit resolves. If source doesn't,
+            //we must copy from its internal MSAA surface.
+            if( dstGl->mMsaa > 1u && dstGl->hasMsaaExplicitResolves() )
+            {
+                if( !this->hasMsaaExplicitResolves() )
+                    srcTextureName = this->mMsaaFramebufferName;
+            }
+
             if( support.hasMinGLVersion( 4, 3 ) || support.checkExtension( "GL_ARB_copy_image" ) )
             {
                 OCGE( glCopyImageSubData( this->mFinalTextureName, this->mGlTextureTarget,
-                                          srcMipLevel, srcBox.x, srcBox.y, srcBox.z,
+                                          srcMipLevel, srcBox.x, srcBox.y,
+                                          srcBox.z + this->getInternalSliceStart(),
                                           dstGl->mFinalTextureName, dstGl->mGlTextureTarget,
-                                          dstMipLevel, dstBox.x, dstBox.y, dstBox.z,
+                                          dstMipLevel, dstBox.x, dstBox.y,
+                                          dstBox.z + dstGl->getInternalSliceStart(),
                                           srcBox.width, srcBox.height, srcBox.getDepthOrSlices() ) );
             }
             /*TODO
@@ -603,12 +626,42 @@ namespace Ogre
             }*/
             else
             {
-    //            GLenum format, type;
-    //            GL3PlusMappings::getFormatAndType( mPixelFormat, format, type );
-    //            glGetTexImage( this->mFinalTextureName, srcMipLevel, format, type,  );
+//                GLenum format, type;
+//                GL3PlusMappings::getFormatAndType( mPixelFormat, format, type );
+//                glGetTexImage( this->mFinalTextureName, srcMipLevel, format, type,  );
                 //glGetCompressedTexImage
                 TODO_use_StagingTexture_with_GPU_GPU_visibility;
                 OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "", "GL3PlusTextureGpu::copyTo" );
+            }
+
+            //Must keep the resolved texture up to date.
+            if( dstGl->mMsaa > 1u && !dstGl->hasMsaaExplicitResolves() )
+            {
+                OCGE( glBindFramebuffer( GL_READ_FRAMEBUFFER, textureManagerGl->getTemporaryFbo(0) ) );
+                OCGE( glBindFramebuffer( GL_DRAW_FRAMEBUFFER, textureManagerGl->getTemporaryFbo(1) ) );
+                OCGE( glViewport( 0, 0, srcBox.width, srcBox.height ) );
+
+                OCGE( glReadBuffer( GL_COLOR_ATTACHMENT0 ) );
+                OCGE( glDrawBuffer( GL_COLOR_ATTACHMENT0 ) );
+
+                for( size_t i=0; i<dstBox.numSlices; ++i )
+                {
+                    dstGl->bindTextureToFrameBuffer( GL_READ_FRAMEBUFFER, dstGl->mMsaaFramebufferName,
+                                                     0, dstBox.getZOrSlice() + i );
+                    dstGl->bindTextureToFrameBuffer( GL_DRAW_FRAMEBUFFER, dstGl->mFinalTextureName,
+                                                     dstMipLevel, dstBox.getZOrSlice() + i );
+
+                    OCGE( glBlitFramebuffer( 0, 0, srcBox.width, srcBox.height,
+                                             0, 0, srcBox.width, srcBox.height,
+                                             GL_COLOR_BUFFER_BIT, GL_NEAREST ) );
+                }
+
+                OCGE( glFramebufferRenderbuffer( GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                                 GL_RENDERBUFFER, 0 ) );
+                OCGE( glFramebufferRenderbuffer( GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                                 GL_RENDERBUFFER, 0 ) );
+                OCGE( glBindFramebuffer( GL_READ_FRAMEBUFFER, 0 ) );
+                OCGE( glBindFramebuffer( GL_DRAW_FRAMEBUFFER, 0 ) );
             }
         }
         else

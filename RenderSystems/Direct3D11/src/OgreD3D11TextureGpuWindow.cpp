@@ -121,22 +121,6 @@ namespace Ogre
         return PixelFormatGpuUtils::getEquivalentLinear( mPixelFormat );
     }
     //-----------------------------------------------------------------------------------
-    void D3D11TextureGpuWindow::copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
-                                          const TextureBox &srcBox, uint8 srcMipLevel )
-    {
-        OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
-                     "TODO",
-                     "D3D11TextureGpuWindow::copyTo" );
-        TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel );
-
-//        assert( dynamic_cast<D3D11TextureGpu*>( dst ) );
-
-//        D3D11TextureGpuWindow *dstGl = static_cast<D3D11TextureGpuWindow*>( dst );
-//        D3D11TextureGpuWindowManager *textureManagerGl =
-//                static_cast<D3D11TextureGpuWindowManager*>( mTextureManager );
-//        const D3D11Support &support = textureManagerGl->getGlSupport();
-    }
-    //-----------------------------------------------------------------------------------
     void D3D11TextureGpuWindow::getSubsampleLocations( vector<Vector2>::type locations )
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "",

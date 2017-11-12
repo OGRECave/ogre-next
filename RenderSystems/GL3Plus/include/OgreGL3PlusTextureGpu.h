@@ -71,6 +71,8 @@ namespace Ogre
         bool isRenderbuffer(void) const;
 
         void bindTextureToFrameBuffer( GLenum target, uint8 mipLevel, uint32 depthOrSlice );
+        void bindTextureToFrameBuffer( GLenum target, GLuint textureName,
+                                       uint8 mipLevel, uint32 depthOrSlice );
 
         void copyViaFramebuffer( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
                                  const TextureBox &srcBox, uint8 srcMipLevel );

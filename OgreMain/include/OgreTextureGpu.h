@@ -190,7 +190,6 @@ namespace Ogre
 
         /// See TextureFlags::TextureFlags
         uint32      mTextureFlags;
-        BufferType  mBufferType;
 
         uint8       *mSysRamCopy;
 

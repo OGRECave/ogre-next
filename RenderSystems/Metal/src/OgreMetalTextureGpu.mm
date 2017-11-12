@@ -231,18 +231,62 @@ namespace Ogre
 
         uint32 numSlices = srcBox.numSlices;
 
+        id<MTLTexture> srcTextureName = this->mFinalTextureName;
+        id<MTLTexture> dstTextureName = dstMetal->mFinalTextureName;
+
+        //Source has explicit resolves. If destination doesn't,
+        //we must copy to its internal MSAA surface.
+        if( this->mMsaa > 1u && this->hasMsaaExplicitResolves() )
+        {
+            if( !dstMetal->hasMsaaExplicitResolves() )
+                dstTextureName = dstMetal->mMsaaFramebufferName;
+        }
+        //Destination has explicit resolves. If source doesn't,
+        //we must copy from its internal MSAA surface.
+        if( dstMetal->mMsaa > 1u && dstMetal->hasMsaaExplicitResolves() )
+        {
+            if( !this->hasMsaaExplicitResolves() )
+                srcTextureName = this->mMsaaFramebufferName;
+        }
+
         __unsafe_unretained id<MTLBlitCommandEncoder> blitEncoder = device->getBlitEncoder();
         for( uint32 slice=0; slice<numSlices; ++slice )
         {
-            [blitEncoder copyFromTexture:this->getFinalTextureName()
+            [blitEncoder copyFromTexture:srcTextureName
                              sourceSlice:srcBox.sliceStart + this->getInternalSliceStart() + slice
                              sourceLevel:srcMipLevel
                             sourceOrigin:MTLOriginMake( srcBox.x, srcBox.y, srcBox.z )
                               sourceSize:MTLSizeMake( srcBox.width, srcBox.height, srcBox.depth )
-                               toTexture:dstMetal->getFinalTextureName()
+                               toTexture:dstTextureName
                         destinationSlice:dstBox.sliceStart + dstMetal->getInternalSliceStart() + slice
                         destinationLevel:dstMipLevel
                        destinationOrigin:MTLOriginMake( dstBox.x, dstBox.y, dstBox.z )];
+        }
+
+        //Must keep the resolved texture up to date.
+        if( dstMetal->mMsaa > 1u && !dstMetal->hasMsaaExplicitResolves() )
+        {
+            device->endAllEncoders();
+
+            MTLRenderPassDescriptor *passDesc = [MTLRenderPassDescriptor renderPassDescriptor];
+            passDesc.colorAttachments[0].texture = dstMetal->mMsaaFramebufferName;
+            passDesc.colorAttachments[0].resolveTexture = dstMetal->mFinalTextureName;
+            passDesc.colorAttachments[0].loadAction = MTLLoadActionLoad;
+            passDesc.colorAttachments[0].storeAction = MTLStoreActionMultisampleResolve;
+
+            for( uint32 slice=0; slice<numSlices; ++slice )
+            {
+                passDesc.colorAttachments[0].slice = dstBox.sliceStart +
+                                                     dstMetal->getInternalSliceStart() + slice;
+                passDesc.colorAttachments[0].resolveSlice = dstBox.sliceStart +
+                                                            dstMetal->getInternalSliceStart() + slice;
+                passDesc.colorAttachments[0].level = dstMipLevel;
+                passDesc.colorAttachments[0].resolveLevel = dstMipLevel;
+            }
+
+            device->mRenderEncoder =
+                    [device->mCurrentCommandBuffer renderCommandEncoderWithDescriptor:passDesc];
+            device->endRenderEncoder( false );
         }
     }
     //-----------------------------------------------------------------------------------
