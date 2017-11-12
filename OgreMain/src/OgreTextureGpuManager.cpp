@@ -686,15 +686,16 @@ namespace Ogre
         ResourceLoadingListener *loadingListener = 0;
         if( resourceGroup != BLANKSTRING )
         {
+            bool providedByListener = false;
             ResourceGroupManager &resourceGroupManager = ResourceGroupManager::getSingleton();
             loadingListener = resourceGroupManager.getLoadingListener();
             if( loadingListener )
             {
                 if( !loadingListener->grouplessResourceExists( name ) )
-                    loadingListener = 0;
+                    providedByListener = true;
             }
 
-            if( !loadingListener )
+            if( !providedByListener )
                 archive = resourceGroupManager._getArchiveToResource( name, resourceGroup );
         }
 
@@ -1322,10 +1323,17 @@ namespace Ogre
             }
 
             DataStreamPtr data;
-            if( loadRequest.loadingListener )
+            if( !loadRequest.archive )
                 data = loadRequest.loadingListener->grouplessResourceLoading( loadRequest.name );
             else
+            {
                 data = loadRequest.archive->open( loadRequest.name );
+                if( loadRequest.loadingListener )
+                {
+                    loadRequest.loadingListener->grouplessResourceOpened( loadRequest.name,
+                                                                          loadRequest.archive, data );
+                }
+            }
 
             {
                 //Load the image from file into system RAM

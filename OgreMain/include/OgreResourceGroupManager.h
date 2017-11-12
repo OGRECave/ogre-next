@@ -206,6 +206,12 @@ namespace Ogre {
         /// Gets called when a groupless manager (like TextureGpuManager) loads a resource.
         /// WARNING: This function is likely going to be called from a worker thread.
         virtual DataStreamPtr grouplessResourceLoading( const String &name ) = 0;
+        /// Similar to resourceStreamOpened, gets called when a groupless manager has already
+        /// opened a resource and you may want to modify the stream.
+        /// If grouplessResourceLoading has been called, then this function won't.
+        /// WARNING: This function is likely going to be called from a worker thread.
+        virtual DataStreamPtr grouplessResourceOpened( const String &name, Archive *archive,
+                                                       DataStreamPtr &dataStream ) = 0;
 
         /** This event is called when a resource stream has been opened, but not processed yet. 
         @remarks
