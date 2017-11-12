@@ -563,8 +563,11 @@ namespace Ogre
         }
 
         GLint gammaSupport = 0;
-        mGLSupport->getFBConfigAttrib( fbConfig, GLX_FRAMEBUFFER_SRGB_CAPABLE_EXT,
-                                       &gammaSupport );
+        int result = mGLSupport->getFBConfigAttrib( fbConfig, GLX_FRAMEBUFFER_SRGB_CAPABLE_EXT,
+                                                    &gammaSupport );
+        if( result != Success )
+            gammaSupport = 0;
+
         if( gammaSupport )
             mTexture->setPixelFormat( PFG_RGBA8_UNORM_SRGB );
 
