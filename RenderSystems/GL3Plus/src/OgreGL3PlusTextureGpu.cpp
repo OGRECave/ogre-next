@@ -219,7 +219,7 @@ namespace Ogre
 
         mDisplayTextureName = mFinalTextureName;
 
-        notifyAllListenersTextureChanged( TextureGpuListener::ReadyForDisplay );
+        notifyAllListenersTextureChanged( TextureGpuListener::ReadyForRendering );
     }
     //-----------------------------------------------------------------------------------
     bool GL3PlusTextureGpu::isDataReady(void) const

@@ -94,7 +94,7 @@ namespace Ogre
     void AsyncTextureTicket::notifyTextureChanged( TextureGpu *texture,
                                                    TextureGpuListener::Reason reason )
     {
-        if( reason == ReadyForDisplay )
+        if( reason == ReadyForRendering )
         {
             mDelayedDownload.textureSrc->removeListener( this );
             downloadFromGpu( mDelayedDownload.textureSrc, mDelayedDownload.mipLevel,

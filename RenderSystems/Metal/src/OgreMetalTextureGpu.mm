@@ -163,7 +163,7 @@ namespace Ogre
 
         mDisplayTextureName = mFinalTextureName;
 
-        notifyAllListenersTextureChanged( TextureGpuListener::ReadyForDisplay );
+        notifyAllListenersTextureChanged( TextureGpuListener::ReadyForRendering );
     }
     //-----------------------------------------------------------------------------------
     bool MetalTextureGpu::isDataReady(void) const

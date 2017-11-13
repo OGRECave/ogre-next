@@ -343,7 +343,7 @@ namespace Ogre
             mDefaultDisplaySrv = createSrv( texSlot );
         }
 
-        notifyAllListenersTextureChanged( TextureGpuListener::ReadyForDisplay );
+        notifyAllListenersTextureChanged( TextureGpuListener::ReadyForRendering );
     }
     //-----------------------------------------------------------------------------------
     bool D3D11TextureGpu::isDataReady(void) const

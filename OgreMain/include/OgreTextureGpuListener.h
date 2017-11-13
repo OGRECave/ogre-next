@@ -51,7 +51,12 @@ namespace Ogre
             GainedResidency,
             LostResidency,
             PoolTextureSlotChanged,
-            ReadyForDisplay,
+            /// This Reason is called when TextureGpu::notifyDataIsReady is called.
+            /// This normally means worker thread is done loading texture from file
+            /// and uploading it to GPU; and can now be used for rendering.
+            /// It does NOT mean that Ogre has finished issueing rendering commands to
+            /// a RenderTexture and is now ready to be presented to the monitor.
+            ReadyForRendering,
             Deleted
         };
 

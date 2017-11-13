@@ -675,7 +675,7 @@ namespace Ogre
     void TextureGpuManager::setWorkerThreadMaxPreloadBytes( size_t maxPreloadBytes )
     {
         assert( maxPreloadBytes > 0 && "maxPreloadBytes cannot be 0!" );
-        mMaxPreloadBytes = std::max( 1u, maxPreloadBytes );
+        mMaxPreloadBytes = std::max<size_t>( 1u, maxPreloadBytes );
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::setWorkerThreadMinimumBudget( const BudgetEntryVec &budget )

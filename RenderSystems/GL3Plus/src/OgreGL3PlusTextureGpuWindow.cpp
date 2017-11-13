@@ -74,7 +74,7 @@ namespace Ogre
     void GL3PlusTextureGpuWindow::notifyDataIsReady(void)
     {
         assert( mResidencyStatus == GpuResidency::Resident );
-        notifyAllListenersTextureChanged( TextureGpuListener::ReadyForDisplay );
+        notifyAllListenersTextureChanged( TextureGpuListener::ReadyForRendering );
     }
     //-----------------------------------------------------------------------------------
     bool GL3PlusTextureGpuWindow::isDataReady(void) const

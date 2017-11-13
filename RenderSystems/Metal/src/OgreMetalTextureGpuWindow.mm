@@ -72,7 +72,7 @@ namespace Ogre
     void MetalTextureGpuWindow::notifyDataIsReady(void)
     {
         assert( mResidencyStatus == GpuResidency::Resident );
-        notifyAllListenersTextureChanged( TextureGpuListener::ReadyForDisplay );
+        notifyAllListenersTextureChanged( TextureGpuListener::ReadyForRendering );
     }
     //-----------------------------------------------------------------------------------
     bool MetalTextureGpuWindow::isDataReady(void) const
