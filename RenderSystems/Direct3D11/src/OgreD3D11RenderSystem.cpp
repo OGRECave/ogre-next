@@ -2224,8 +2224,8 @@ namespace Ogre
             ID3D11ShaderResourceView *view = tex->getDefaultDisplaySrv();
             mDevice.GetImmediateContext()->VSSetShaderResources( static_cast<UINT>(stage), 1u, &view );
             mDevice.GetImmediateContext()->PSSetShaderResources( static_cast<UINT>(stage), 1u, &view );
-            mMaxSrvCount[VertexShader]  = std::max( mMaxSrvCount[VertexShader], stage + 1u );
-            mMaxSrvCount[PixelShader]   = std::max( mMaxSrvCount[PixelShader], stage + 1u );
+            mMaxSrvCount[VertexShader]  = std::max<uint32>( mMaxSrvCount[VertexShader], stage + 1u );
+            mMaxSrvCount[PixelShader]   = std::max<uint32>( mMaxSrvCount[PixelShader], stage + 1u );
         }
         else
         {
@@ -2451,7 +2451,7 @@ namespace Ogre
         context->CSSetUnorderedAccessViews( slotStart, static_cast<UINT>( set->mUavs.size() ),
                                             uavList, 0 );
 
-        mMaxBoundUavCS = std::max( mMaxBoundUavCS, slotStart + set->mUavs.size() );
+        mMaxBoundUavCS = std::max<uint32>( mMaxBoundUavCS, slotStart + set->mUavs.size() );
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setBindingType(TextureUnitState::BindingType bindingType)
