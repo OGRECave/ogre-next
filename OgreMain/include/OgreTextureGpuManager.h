@@ -198,10 +198,12 @@ namespace Ogre
         };
         struct StreamingData
         {
-            StagingTextureVec   availableStagingTex;
-            QueuedImageVec      queuedImages;  /// Used by worker thread.
-            UsageStatsVec       usageStats;
-            UsageStatsVec       prevStats;
+            StagingTextureVec   availableStagingTex;    /// Used by both threads. Needs mutex protection.
+            QueuedImageVec      queuedImages;           /// Used by mostly by worker thread. Needs mutex.
+            UsageStatsVec       usageStats; /// Exclusively used by worker thread. No protection needed.
+            UsageStatsVec       prevStats;              /// Used by both threads.
+            /// Number of bytes preloaded by worker thread. Main thread resets this counter.
+            size_t              bytesPreloaded;
         };
 
         DefaultMipmapGen::DefaultMipmapGen mDefaultMipmapGen;
@@ -221,6 +223,7 @@ namespace Ogre
         ResourceEntryMap    mEntries;
 
         size_t              mEntriesToProcessPerIteration;
+        size_t              mMaxPreloadBytes;
         /// See BudgetEntry. Must be sorted by size in bytes (biggest entries first).
         BudgetEntryVec              mBudget;
         TextureGpuManagerListener   *mTextureGpuManagerListener;
@@ -521,6 +524,31 @@ namespace Ogre
             we start stalling the GPU and/or aggressively destroying them.
         */
         void setStagingTextureMaxBudgetBytes( size_t stagingTextureMaxBudgetBytes );
+
+        /** The worker thread first loads the texture from disk to RAM (aka "preload",
+            and then copies from RAM to StagingTexture.
+            Later the main thread will copy from StagingTexture to actual texture.
+        @par
+            This value controls how many bytes are preloaded (i.e. from disk to RAM)
+            by the worker thread until the next _update call from the main thread is issued.
+        @par
+            Higher values allows worker thread to keep loading textures while your main
+            thread loads the rest of the scene. Lower values prevent Out of Memory conditions.
+        @remarks
+            Due to how the code works, this value will also affect how much StagingTexture
+            we ask to the main thread (because preloading becomes a bottleneck).
+        @par
+            Testing shows that very high values (i.e. >256MB) have the potential of uncovering
+            driver bugs (even in 64-bit builds) and thus are not recommended.
+        @par
+            The value is an approximation and not a hard limit. e.g. if loading a 128MB
+            cubemap and the limit is 1 byte; then we'll preload 128MBs. But we won't
+            be loading anything else.
+            Also due to how the code works, there is some broad granularity issues that
+            can cause us to consume a bit more.
+        @param maxPreloadBytes
+        */
+        void setWorkerThreadMaxPreloadBytes( size_t maxPreloadBytes );
 
         const String* findAliasNameStr( IdString idName ) const;
         const String* findResourceNameStr( IdString idName ) const;

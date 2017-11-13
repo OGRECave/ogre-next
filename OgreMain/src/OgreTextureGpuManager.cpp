@@ -61,6 +61,9 @@ THE SOFTWARE.
     #endif
 #endif
 
+//#define OGRE_FORCE_TEXTURE_STREAMING_ON_MAIN_THREAD 1
+//#define OGRE_DEBUG_MEMORY_CONSUMPTION 1
+
 #define TODO_grow_pool 1
 
 namespace Ogre
@@ -121,15 +124,16 @@ namespace Ogre
         mDefaultMipmapGenCubemaps( DefaultMipmapGen::SwMode ),
         mShuttingDown( false ),
         mEntriesToProcessPerIteration( 3u ),
+        mMaxPreloadBytes( 256u * 1024u * 1024u ), //A value of 512MB begins to shake driver bugs.
         mTextureGpuManagerListener( 0 ),
-        mStagingTextureMaxBudgetBytes( 512 * 1024 * 1024 ),
+        mStagingTextureMaxBudgetBytes( 512u * 1024u * 1024u ),
         mVaoManager( vaoManager ),
         mRenderSystem( renderSystem )
     {
         mTextureGpuManagerListener = OGRE_NEW DefaultTextureGpuManagerListener();
 
         PixelFormatGpu format;
-#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS && OGRE_PLATFORM != OGRE_PLATFORM_ANDROID
     #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
         // 32-bit have tighter limited addresse memory. They pay the price
         // in slower streaming (more round trips between main and worker threads)
@@ -150,7 +154,7 @@ namespace Ogre
         //4MB / 16MB for BC5, that's one 4096x4096 / 2048x2048 texture.
         format = PixelFormatGpuUtils::getFamily( PFG_BC5_UNORM );
         mBudget.push_back( BudgetEntry( format, maxResolution, 1u ) );
-#elif OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+#else
         //Mobile platforms don't support compressed formats, and have tight memory constraints
         //8MB for RGBA8, that's two 2048x2048 texture.
         format = PixelFormatGpuUtils::getFamily( PFG_RGBA8_UNORM );
@@ -159,6 +163,21 @@ namespace Ogre
 
         //Sort in descending order.
         std::sort( mBudget.begin(), mBudget.end(), BudgetEntry() );
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS || OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
+        //Mobile platforms are tight on memory. Keep the limits low.
+        mMaxPreloadBytes = 32u * 1024u * 1024u;
+        mMaxBytesPerStreamingStagingTexture = 32u * 1024u * 1024u;
+#else
+        #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
+            //32-bit architectures are more limited.
+            //The default 256MB can cause Out of Memory conditions due to memory fragmentation.
+            mMaxPreloadBytes = 128u * 1024u * 1024u;
+            mMaxBytesPerStreamingStagingTexture = 32u * 1024u * 1024u;
+        #endif
+#endif
+
+        mStreamingData.bytesPreloaded = 0;
 
         for( int i=0; i<2; ++i )
             mThreadData[i].objCmdBuffer = new ObjCmdBuffer();
@@ -378,6 +397,20 @@ namespace Ogre
                                                           size_t minConsumptionRatioThreshold )
     {
         assert( minConsumptionRatioThreshold <= 100u && "Invalid consumptionRatioThreshold value!" );
+
+#if OGRE_DEBUG_MEMORY_CONSUMPTION
+        {
+            char tmpBuffer[512];
+            LwString text( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+            text.a( "TextureGpuManager::getStagingTexture: ", width, "x", height, "x" );
+            text.a( depth, "x", slices, " ", PixelFormatGpuUtils::toString( pixelFormat ) );
+            text.a( " (", (uint32)PixelFormatGpuUtils::getSizeBytes( width, height, depth,
+                                                                     slices, pixelFormat, 4u ) /
+                    1024u / 1024u,
+                    " MB)");
+            LogManager::getSingleton().logMessage( text.c_str() );
+        }
+#endif
 
         StagingTextureVec::iterator bestCandidate = mAvailableStagingTextures.end();
         StagingTextureVec::iterator itor = mAvailableStagingTextures.begin();
@@ -637,6 +670,12 @@ namespace Ogre
     void TextureGpuManager::setStagingTextureMaxBudgetBytes( size_t stagingTextureMaxBudgetBytes )
     {
         mStagingTextureMaxBudgetBytes = stagingTextureMaxBudgetBytes;
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::setWorkerThreadMaxPreloadBytes( size_t maxPreloadBytes )
+    {
+        assert( maxPreloadBytes > 0 && "maxPreloadBytes cannot be 0!" );
+        mMaxPreloadBytes = std::max( 1u, maxPreloadBytes );
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::setWorkerThreadMinimumBudget( const BudgetEntryVec &budget )
@@ -1033,9 +1072,10 @@ namespace Ogre
         }
 
         mStreamingData.availableStagingTex.insert( mStreamingData.availableStagingTex.end(),
-                                                         mTmpAvailableStagingTex.begin(),
-                                                         mTmpAvailableStagingTex.end() );
+                                                   mTmpAvailableStagingTex.begin(),
+                                                   mTmpAvailableStagingTex.end() );
         mTmpAvailableStagingTex.clear();
+        mStreamingData.bytesPreloaded = 0;
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::mergeUsageStatsIntoPrevStats(void)
@@ -1079,6 +1119,10 @@ namespace Ogre
                                                 PixelFormatGpu pixelFormat,
                                                 StagingTexture **outStagingTexture )
     {
+        //No need to check if streamingData.bytesPreloaded >= mMaxPreloadBytes because
+        //our caller's caller already does that. Besides this is a static function.
+        //This gives us slightly broader granularity control over memory consumption
+        //(we may to try to preload all the mipmaps even if mMaxPreloadBytes is exceeded)
         TextureBox retVal;
 
         StagingTextureVec::iterator itor = workerData.usedStagingTex.begin();
@@ -1155,6 +1199,8 @@ namespace Ogre
             itStats->accumSizeBytes += requiredBytes;
         }
 
+        streamingData.bytesPreloaded += requiredBytes;
+
         return retVal;
     }
     //-----------------------------------------------------------------------------------
@@ -1214,6 +1260,12 @@ namespace Ogre
             ObjCmdBuffer::NotifyDataIsReady *cmd =
                     commandBuffer->addCommand<ObjCmdBuffer::NotifyDataIsReady>();
             new (cmd) ObjCmdBuffer::NotifyDataIsReady( texture, queuedImage.filters );
+            //We don't restore bytesPreloaded because it gets reset to 0 by worker thread.
+            //Doing so could increase throughput of data we can preload. However it can
+            //cause a positive feedback effect where limits don't get respected at all
+            //(it keeps preloading more and more)
+            //if( streamingData.bytesPreloaded >= queuedImage.image.getSizeBytes() )
+            //    streamingData.bytesPreloaded -= queuedImage.image.getSizeBytes();
             queuedImage.destroy();
         }
     }
@@ -1291,7 +1343,7 @@ namespace Ogre
         QueuedImageVec::iterator itQueue = mStreamingData.queuedImages.begin();
         QueuedImageVec::iterator enQueue = mStreamingData.queuedImages.end();
 
-        while( itQueue != enQueue )
+        while( itQueue != enQueue && mStreamingData.bytesPreloaded < mMaxPreloadBytes )
         {
             processQueuedImage( *itQueue, workerData, mStreamingData );
             if( itQueue->empty() )
@@ -1311,7 +1363,9 @@ namespace Ogre
         LoadRequestVec::const_iterator itor = workerData.loadRequests.begin();
         LoadRequestVec::const_iterator end  = workerData.loadRequests.end();
 
-        while( itor != end && entriesProcessed < entriesToProcessPerIteration )
+        while( itor != end &&
+               entriesProcessed < entriesToProcessPerIteration &&
+               mStreamingData.bytesPreloaded < mMaxPreloadBytes )
         {
             const LoadRequest &loadRequest = *itor;
 
@@ -1627,9 +1681,9 @@ namespace Ogre
                 mVaoManager->_update();
                 mRequestToMainThreadEvent.wait();
             }
-//#if OGRE_DEBUG_MODE
-//          dumpStats();
-//#endif
+#if OGRE_DEBUG_MEMORY_CONSUMPTION
+          dumpStats();
+#endif
         }
     }
     //-----------------------------------------------------------------------------------

@@ -254,6 +254,8 @@ namespace Ogre {
 
         size_t getBytesPerRow( uint8 mipLevel ) const;
         size_t getBytesPerImage( uint8 mipLevel ) const;
+        /// Returns total size in bytes used in GPU by this texture including mipmaps.
+        size_t getSizeBytes(void) const;
 
         /// Delete all the memory held by this image, if owned by this image (not dynamic)
         void freeMemory();

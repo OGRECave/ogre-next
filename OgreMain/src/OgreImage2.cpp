@@ -607,6 +607,12 @@ namespace Ogre {
         uint32 height = std::max( mHeight >> mipLevel, 1u );
         return PixelFormatGpuUtils::getSizeBytes( width, height, 1u, 1u, mPixelFormat, 4u );
     }
+    //-----------------------------------------------------------------------------------
+    size_t Image2::getSizeBytes(void) const
+    {
+        return PixelFormatGpuUtils::calculateSizeBytes( mWidth, mHeight, getDepth(), getNumSlices(),
+                                                        mPixelFormat, mNumMipmaps, 4u );
+    }
 #if 0
     //-----------------------------------------------------------------------------------
     void Image2::resize( uint32 width, uint32 height, Filter filter )
