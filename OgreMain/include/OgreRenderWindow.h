@@ -88,7 +88,7 @@ namespace Ogre
             to monitor with different DPI. In such situation, window size in view points is usually
             preserved by windowing system, and Ogre should adjust pixel size of RenderWindow.
         */
-        virtual float getViewPointToPixelScale() { return 1.0f; }
+        virtual float getViewPointToPixelScale() const { return 1.0f; }
 
         /** Creates & displays the new window.
             @param
