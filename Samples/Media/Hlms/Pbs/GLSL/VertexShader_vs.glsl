@@ -168,6 +168,8 @@ void main()
 	@end
 		
 	@property( hlms_pose )
+		// number of vertices is stored in the first entry, thus add 1 below
+		// when indexing into poseBuf
 		int numVertices = floatBitsToInt( bufferFetch( poseBuf, 0 ).x );
 		// ideally could use unpackUnorm4x8 but it's unavailable in GLSL 330
 		uint poseWeights = instance.worldMaterialIdx[drawId].w;

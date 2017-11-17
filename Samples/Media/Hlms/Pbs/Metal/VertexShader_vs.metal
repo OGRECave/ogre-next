@@ -177,6 +177,8 @@ vertex PS_INPUT main_metal
 	@end
 		
 	@property( hlms_pose )
+		// number of vertices is stored in the first entry, thus add 1u below
+		// when indexing into poseBuf
 		uint numVertices = as_type<uint>( poseBuf[0].x );
 		float4 poseWeights = unpack_unorm4x8_to_float( worldMaterialIdx[drawId].w );
 		float4 objPos = input.position;

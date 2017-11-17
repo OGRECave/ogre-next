@@ -281,9 +281,11 @@ namespace Ogre
             vMax = vMaxCamFrustumLS;
         }
 
+        vMin.z = Ogre::min( vMin.z, vMinCamFrustumLS.z );
+
         //Some padding
-        vMax += 2.5f;
-        vMin -= 2.5f;
+        vMax += 1.5f;
+        vMin -= 1.5f;
 
         texCam->setProjectionType( PT_ORTHOGRAPHIC );
         Vector3 shadowCameraPos = (vMin + vMax) * 0.5f;

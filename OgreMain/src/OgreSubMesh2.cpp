@@ -645,6 +645,7 @@ namespace Ogre {
         if( mNumPoseAnimations > 0 ) 
         {
             uint32 numVertices = vertexBuffer->getNumElements();
+            // add 1 extra float4 to the size to store the number of vertices on the first entry
             size_t bufferSize = (mNumPoseAnimations * numVertices + 1) * sizeof( float ) * 4;
             float *buffer = reinterpret_cast<float*>( OGRE_MALLOC_SIMD(
                                                                     bufferSize,

@@ -5,11 +5,14 @@ compositor_node SmaaNode
 	in 1 rt_output
 
 	texture edgesTex target_width target_height PF_RG8		depth_pool 8 depth_format PF_D24_UNORM_S8_UINT
-	texture blendTex target_width target_height PF_R8G8B8A8	depth_pool 8 depth_format PF_D24_UNORM_S8_UINT
+	texture blendTex target_width target_height PF_R8G8B8A8	depth_pool 8 depth_format PF_D24_UNORM_S8_UINT no_gamma
 
 	target edgesTex
 	{
-		pass clear {}
+		pass clear
+		{
+			colour_value 0 0 0 0
+		}
 		pass stencil
 		{
 			check true
@@ -57,8 +60,8 @@ compositor_node SmaaNode
 		}
 		pass clear
 		{
-			discard_only yes
 			buffers colour
+			colour_value 0 0 0 0
 		}
 		pass render_quad
 		{
@@ -73,7 +76,6 @@ compositor_node SmaaNode
 
 	target rt_output
 	{
-		pass clear { discard_only yes }
 		pass render_quad
 		{
 			material SMAA/NeighborhoodBlending
