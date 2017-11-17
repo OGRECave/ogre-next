@@ -149,6 +149,11 @@ vertex PS_INPUT main_metal
 	@insertpiece( PassDecl )
 	@insertpiece( InstanceDecl )
 	, device const float4 *worldMatBuf [[buffer(TEX_SLOT_START+0)]]
+	@property( hlms_pose )
+		, device const float4 *poseBuf [[buffer(TEX_SLOT_START+4)]]
+		, uint vertexId [[vertex_id]]
+		, uint baseVertex [[base_vertex]]
+	@end
 	@insertpiece( custom_vs_uniformDeclaration )
 	// END UNIFORM DECLARATION
 )
@@ -167,7 +172,21 @@ vertex PS_INPUT main_metal
 	float4x4 worldView = UNPACK_MAT4( worldMatBuf, (drawId << 1u) + 1u );
 	@end
 
-	float4 worldPos = float4( ( input.position * worldMat ).xyz, 1.0f );
+	@property( !hlms_pose )
+		float4 worldPos = float4( ( input.position * worldMat ).xyz, 1.0f );
+	@end
+		
+	@property( hlms_pose )
+		uint numVertices = as_type<uint>( poseBuf[0].x );
+		float4 poseWeights = unpack_unorm4x8_to_float( worldMaterialIdx[drawId].w );
+		float4 objPos = input.position;
+		float4 posePos;
+		@foreach( hlms_pose, n )
+			posePos = poseBuf[1u + vertexId - baseVertex + numVertices * @n];
+			objPos += posePos * poseWeights[@nu];
+		@end
+		float4 worldPos = float4( (objPos * worldMat).xyz, 1.0f );
+	@end
 @end
 
 @property( hlms_qtangent )

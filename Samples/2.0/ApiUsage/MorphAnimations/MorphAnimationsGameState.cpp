@@ -77,7 +77,7 @@ namespace Demo
         bool halfUVs = true;
         bool useQtangents = false;
 
-        {   // Prepare char_reference mesh
+        {
             v1Mesh = Ogre::v1::MeshManager::getSingleton().load(
                 "Smiley.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
                 Ogre::v1::HardwareBuffer::HBU_STATIC, Ogre::v1::HardwareBuffer::HBU_STATIC);

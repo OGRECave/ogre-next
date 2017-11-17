@@ -438,10 +438,9 @@ namespace Ogre
 
         if( queuedRenderable.renderable->getNumPoseAnimations() > 0 )
         {
-            vsParams->setNamedConstant( "poseBuf", texUnit++ );
+            vsParams->setNamedConstant( "poseBuf", 4 );
             const VertexArrayObjectArray& vao = queuedRenderable.renderable->getVaos(VpNormal);
             const VertexBufferPacked* vertexBuffer = vao[0]->getVertexBuffers()[0];
-            vsParams->setNamedConstant( "numVertices", (int)vertexBuffer->getNumElements() );
         }
         
         mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache,
@@ -1935,7 +1934,7 @@ namespace Ogre
             
             TexBufferPacked* poseBuf = queuedRenderable.renderable->getPoseTexBuffer();
             *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer( VertexShader,
-                                                                           mTexUnitSlotStart, poseBuf, 0,
+                                                                           4, poseBuf, 0,
                                                                            poseBuf->
                                                                            getTotalSizeBytes() );
         }
