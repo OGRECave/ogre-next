@@ -59,6 +59,8 @@ namespace Ogre
                                GL3PlusDynamicBuffer *dynamicBuffer );
         virtual ~GL3PlusStagingTexture();
 
+        void _unmapBuffer(void);
+
         virtual void startMapRegion(void);
         virtual void stopMapRegion(void);
 

@@ -59,6 +59,11 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     GL3PlusStagingTexture::~GL3PlusStagingTexture()
     {
+        assert( mUnmapTicket == std::numeric_limits<size_t>::max() );
+    }
+    //-----------------------------------------------------------------------------------
+    void GL3PlusStagingTexture::_unmapBuffer(void)
+    {
         if( mUnmapTicket != std::numeric_limits<size_t>::max() )
         {
             OCGE( glBindBuffer( GL_COPY_WRITE_BUFFER, mDynamicBuffer->getVboName() ) );

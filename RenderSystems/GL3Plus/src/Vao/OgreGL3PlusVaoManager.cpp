@@ -601,7 +601,7 @@ namespace Ogre
             //to create a rectangle when calling glTexSubImage2D().
             sizeBytes = sizeBytes = alignToNextMultiple( sizeBytes, maxTexSizeBytes );
         }
-        
+
         if( bufferType >= BT_DYNAMIC_DEFAULT )
         {
             //For dynamic buffers, the size will be 3x times larger
@@ -1019,7 +1019,7 @@ namespace Ogre
 
             if( !itor->refCount )
             {
-				GLuint vaoName = glVao->getVaoName();
+                GLuint vaoName = glVao->getVaoName();
                 OCGE( glDeleteVertexArrays( 1, &vaoName ) );
 
                 efficientVectorRemove( mVaos, itor );
@@ -1074,31 +1074,48 @@ namespace Ogre
         size_t vboIdx = 0;
         size_t bufferOffset = 0;
 
+        GLenum error = 0;
+        int trustCounter = 1000;
+        //Reset the error code. Trust counter prevents an infinite loop
+        //just in case we encounter a moronic GL implementation.
+        while( glGetError() && trustCounter-- );
+
+        GLuint bufferName;
+
         if( mArbBufferStorage )
         {
-            const size_t alignment = 4u;
-            //Because it's BT_DYNAMIC_PERSISTENT, allocateVbo will automatically multiply sizeBytes
-            //by mDynamicBufferMultiplier, however this is a special case and we don't want that,
-            //so we divide by mDynamicBufferMultiplier first (rounded up),
-            sizeBytes = alignToNextMultiple( sizeBytes, mDynamicBufferMultiplier );
-            allocateVbo( sizeBytes / mDynamicBufferMultiplier, alignment,
-                         BT_DYNAMIC_PERSISTENT, vboIdx, bufferOffset );
+            OCGE( glGenBuffers( 1, &bufferName ) );
+            OCGE( glBindBuffer( GL_COPY_READ_BUFFER, bufferName ) );
 
-            VboFlag vboFlag = bufferTypeToVboFlag( BT_DYNAMIC_PERSISTENT );
-            Vbo &vbo = mVbos[vboFlag][vboIdx];
-            dynamicBuffer = vbo.dynamicBuffer;
+            GLbitfield flags = GL_MAP_WRITE_BIT | GL_MAP_PERSISTENT_BIT;
+            glBufferStorage( GL_COPY_READ_BUFFER, sizeBytes, 0, flags );
         }
         else
         {
             //Non-persistent buffers cannot share the buffer with other data, because the worker
             //threads may keep the buffer mapped while the main thread wants to do GL operations
             //on it, which will probably work but is illegal as per the OpenGL spec.
-            GLuint bufferName;
             OCGE( glGenBuffers( 1, &bufferName ) );
             OCGE( glBindBuffer( GL_COPY_READ_BUFFER, bufferName ) );
-            OCGE( glBufferData( GL_COPY_READ_BUFFER, sizeBytes, 0, GL_STREAM_DRAW ) );
-            dynamicBuffer = new GL3PlusDynamicBuffer( bufferName, sizeBytes, this, BT_DYNAMIC_DEFAULT );
+            glBufferData( GL_COPY_READ_BUFFER, sizeBytes, 0, GL_STREAM_DRAW );
         }
+
+        error = glGetError();
+
+        //OpenGL can't continue after any GL_OUT_OF_MEMORY has been raised,
+        //thus ignore the trustCounter in that case.
+        if( (error != 0 && trustCounter != 0) || error == GL_OUT_OF_MEMORY )
+        {
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "Out of GPU memory or driver refused.\n"
+                         "glGetError code: " + StringConverter::toString( error ) + ".\n"
+                         "Requested: " + StringConverter::toString( sizeBytes ) + " bytes.",
+                         "GL3PlusVaoManager::allocateVbo" );
+        }
+
+        dynamicBuffer = new GL3PlusDynamicBuffer( bufferName, sizeBytes, this,
+                                                  mArbBufferStorage ? BT_DYNAMIC_PERSISTENT :
+                                                                      BT_DYNAMIC_DEFAULT );
 
         GL3PlusStagingTexture *retVal = OGRE_NEW GL3PlusStagingTexture( this, formatFamily, sizeBytes,
                                                                         bufferOffset, vboIdx,
@@ -1108,21 +1125,12 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void GL3PlusVaoManager::destroyStagingTexture( GL3PlusStagingTexture *stagingTexture )
     {
-        if( mArbBufferStorage )
-        {
-            deallocateVbo( stagingTexture->getVboPoolIndex(),
-                           stagingTexture->_getInternalBufferStart(),
-                           stagingTexture->_getInternalTotalSizeBytes() / mDynamicBufferMultiplier,
-                           BT_DYNAMIC_PERSISTENT );
-        }
-        else
-        {
-            GL3PlusDynamicBuffer *dynamicBuffer = stagingTexture->_getDynamicBuffer();
-            GLuint bufferName = dynamicBuffer->getVboName();
-            OCGE( glDeleteBuffers( 1u, &bufferName ) );
-            delete dynamicBuffer;
-            stagingTexture->_resetDynamicBuffer();
-        }
+        stagingTexture->_unmapBuffer();
+        GL3PlusDynamicBuffer *dynamicBuffer = stagingTexture->_getDynamicBuffer();
+        GLuint bufferName = dynamicBuffer->getVboName();
+        OCGE( glDeleteBuffers( 1u, &bufferName ) );
+        delete dynamicBuffer;
+        stagingTexture->_resetDynamicBuffer();
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusVaoManager::_update(void)
@@ -1145,7 +1153,7 @@ namespace Ogre
                     StagingBuffer *stagingBuffer = *itor;
 
                     mNextStagingBufferTimestampCheckpoint = std::min(
-                        mNextStagingBufferTimestampCheckpoint, 
+                        mNextStagingBufferTimestampCheckpoint,
                         stagingBuffer->getLastUsedTimestamp() + stagingBuffer->getLifetimeThreshold() );
 
                     if( stagingBuffer->getLastUsedTimestamp() + stagingBuffer->getUnfencedTimeThreshold() < currentTimeMs )
