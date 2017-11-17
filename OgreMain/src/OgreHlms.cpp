@@ -292,6 +292,8 @@ namespace Ogre
         setProperty( HlmsBaseProp::LightsDirNonCaster, 1 );
         setProperty( HlmsBaseProp::LightsPoint, 2 );
         setProperty( HlmsBaseProp::LightsSpot, 3 );
+        
+        setProperty( HlmsBaseProp::Pose, 0 );
     }
     //-----------------------------------------------------------------------------------
     void Hlms::enumeratePieceFiles(void)
@@ -2134,6 +2136,7 @@ namespace Ogre
         mSetProperties.clear();
 
         setProperty( HlmsBaseProp::Skeleton, renderable->hasSkeletonAnimation() );
+        setProperty( HlmsBaseProp::Pose, renderable->getNumPoseAnimations() );
 
         uint16 numTexCoords = 0;
         if( renderable->getVaos( VpNormal ).empty() )

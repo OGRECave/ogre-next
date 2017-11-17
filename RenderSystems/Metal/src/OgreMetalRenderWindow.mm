@@ -59,14 +59,8 @@ namespace Ogre
         {
             // set the metal layer to the drawable size in case orientation or size changes
             CGSize drawableSize = CGSizeMake(mMetalView.bounds.size.width, mMetalView.bounds.size.height);
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS  
             drawableSize.width  *= mMetalView.layer.contentsScale;
             drawableSize.height *= mMetalView.layer.contentsScale;
-#else
-            NSScreen* screen = mMetalView.window.screen ?: [NSScreen mainScreen];
-            drawableSize.width *= screen.backingScaleFactor;
-            drawableSize.height *= screen.backingScaleFactor;
-#endif
             mMetalLayer.drawableSize = drawableSize;
 
             // Resize anything if needed
@@ -194,6 +188,20 @@ namespace Ogre
 
         mFormat = PF_B8G8R8A8;
         mHwGamma = true;
+        
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+        CGRect frame;
+#else
+        NSRect frame;
+#endif
+        frame.origin.x = 0;
+        frame.origin.y = 0;
+        frame.size.width = mWidth;
+        frame.size.height = mHeight;
+        mMetalView = [[OgreMetalView alloc] initWithFrame:frame];
+        
+        Real contentScalingFactor = 1.f;
+        bool hasContentScalingFactor = false;
 
         if( miscParams )
         {
@@ -221,18 +229,13 @@ namespace Ogre
                 mWindow = [nsview window];
             }
 #endif
+            opt = miscParams->find("contentScalingFactor");
+            if( opt != end )
+            {
+                hasContentScalingFactor = true;
+                contentScalingFactor = StringConverter::parseReal( opt->second );
+            }
         }
-
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-        CGRect frame;
-#else
-        NSRect frame;
-#endif
-        frame.origin.x = 0;
-        frame.origin.y = 0;
-        frame.size.width = mWidth;
-        frame.size.height = mHeight;
-        mMetalView = [[OgreMetalView alloc] initWithFrame:frame];
 
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
         [mWindow setContentView:mMetalView];
@@ -245,6 +248,9 @@ namespace Ogre
         //This is the default but if we wanted to perform compute
         //on the final rendering layer we could set this to no
         mMetalLayer.framebufferOnly = YES;
+        
+        if( hasContentScalingFactor )
+            mMetalView.layer.contentsScale = contentScalingFactor;
 
         this->init( nil, nil );
 
@@ -320,5 +326,10 @@ namespace Ogre
         {
             RenderTarget::getCustomAttribute( name, pData );
         }
+    }
+    //-------------------------------------------------------------------------
+    float MetalRenderWindow::getViewPointToPixelScale() const
+    {
+        return mMetalView.layer.contentsScale;
     }
 }

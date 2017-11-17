@@ -341,7 +341,7 @@ namespace Ogre
                                                 mSetProperties, queuedRenderable );
             return retVal; //D3D embeds the texture slots in the shader.
         }
-
+        
         //Set samplers.
         if( !retVal->pso.pixelShader.isNull() )
         {
@@ -436,6 +436,13 @@ namespace Ogre
         GpuProgramParametersSharedPtr vsParams = retVal->pso.vertexShader->getDefaultParameters();
         vsParams->setNamedConstant( "worldMatBuf", 0 );
 
+        if( queuedRenderable.renderable->getNumPoseAnimations() > 0 )
+        {
+            vsParams->setNamedConstant( "poseBuf", 4 );
+            const VertexArrayObjectArray& vao = queuedRenderable.renderable->getVaos(VpNormal);
+            const VertexBufferPacked* vertexBuffer = vao[0]->getVertexBuffers()[0];
+        }
+        
         mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache,
                                             mSetProperties, queuedRenderable );
 
@@ -729,6 +736,7 @@ namespace Ogre
             else if( itor->keyName != PbsProperty::HwGammaRead &&
                      itor->keyName != PbsProperty::UvDiffuse &&
                      itor->keyName != HlmsBaseProp::Skeleton &&
+                     itor->keyName != HlmsBaseProp::Pose &&
                      itor->keyName != HlmsBaseProp::BonesPerVertex &&
                      itor->keyName != HlmsBaseProp::DualParaboloidMapping &&
                      itor->keyName != HlmsBaseProp::AlphaTest &&
@@ -1913,6 +1921,25 @@ namespace Ogre
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
         *( currentMappedConstBuffer+3u ) = queuedRenderable.renderable->mCustomParameter & 0x7F;
 #endif
+
+        if( queuedRenderable.renderable->getNumPoseAnimations() > 0 ) {
+            uint32 w0 = queuedRenderable.renderable->getPoseWeight(0) * 255;
+            uint32 w1 = queuedRenderable.renderable->getPoseWeight(1) * 255;
+            uint32 w2 = queuedRenderable.renderable->getPoseWeight(2) * 255;
+            uint32 w3 = queuedRenderable.renderable->getPoseWeight(3) * 255;
+            
+            *( currentMappedConstBuffer+3u ) = ((0xff & w0) << 0) |
+                                               ((0xff & w1) << 8) |
+                                               ((0xff & w2) << 16)|
+                                               ((0xff & w3) << 24);
+            
+            TexBufferPacked* poseBuf = queuedRenderable.renderable->getPoseTexBuffer();
+            *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer( VertexShader,
+                                                                           4, poseBuf, 0,
+                                                                           poseBuf->
+                                                                           getTotalSizeBytes() );
+        }
+        
         currentMappedConstBuffer += 4;
 
         //---------------------------------------------------------------------------

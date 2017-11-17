@@ -46,10 +46,13 @@ out block
 
 // START UNIFORM DECLARATION
 @insertpiece( PassDecl )
-@property( hlms_skeleton || hlms_shadowcaster )@insertpiece( InstanceDecl )@end
+@property( hlms_skeleton || hlms_shadowcaster || hlms_pose )@insertpiece( InstanceDecl )@end
 /*layout(binding = 0) */uniform samplerBuffer worldMatBuf;
 @insertpiece( custom_vs_uniformDeclaration )
 @property( !GL_ARB_base_instance )uniform uint baseInstance;@end
+@property( hlms_pose )
+	uniform samplerBuffer poseBuf;
+@end
 // END UNIFORM DECLARATION
 
 @property( hlms_qtangent )
@@ -160,7 +163,26 @@ void main()
 	mat4 worldView = UNPACK_MAT4( worldMatBuf, (drawId << 1u) + 1u );
 	@end
     
-	vec4 worldPos = vec4( (vertex * worldMat).xyz, 1.0f );
+	@property( !hlms_pose )
+		vec4 worldPos = vec4( (vertex * worldMat).xyz, 1.0f );
+	@end
+		
+	@property( hlms_pose )
+		// number of vertices is stored in the first entry, thus add 1 below
+		// when indexing into poseBuf
+		int numVertices = floatBitsToInt( bufferFetch( poseBuf, 0 ).x );
+		// ideally could use unpackUnorm4x8 but it's unavailable in GLSL 330
+		uint poseWeights = instance.worldMaterialIdx[drawId].w;
+		vec4 objPos = vertex;
+		vec4 posePos;
+		float weight;
+		@foreach( hlms_pose, n )
+			posePos = bufferFetch( poseBuf, 1 + gl_VertexID + numVertices * @n );
+			weight = ( ( poseWeights >> (@nu * 8u) ) & 0xffu ) / 255.f;
+			objPos += posePos * weight;
+		@end
+		vec4 worldPos = vec4( (objPos * worldMat).xyz, 1.0f );
+	@end
 @end
 
 @property( hlms_qtangent )

@@ -108,6 +108,10 @@ namespace Ogre {
         /// Limits mBoneAssignments to OGRE_MAX_BLEND_WEIGHTS and
         /// if we need to strip, normalizes all weights to sum 1.
         uint8 rationaliseBoneAssignments(void);
+        
+        unsigned short mNumPoseAnimations;
+        std::map<Ogre::String, size_t> mPoseIndexMap;
+        TexBufferPacked *mPoseTexBuffer;
 
     public:
         SubMesh();
@@ -195,6 +199,12 @@ namespace Ogre {
         void dearrangeToInefficient(void);
 
         void _prepareForShadowMapping( bool forceSameBuffers );
+        
+        unsigned short getNumPoseAnimations() { return mNumPoseAnimations; }
+        
+        size_t getPoseIndex(const Ogre::String& name) { return mPoseIndexMap[name]; }
+        
+        TexBufferPacked* getPoseTexBuffer() { return mPoseTexBuffer; }
 
     protected:
         void importBuffersFromV1( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords, bool qTangents,
@@ -202,6 +212,8 @@ namespace Ogre {
 
         /// Converts a v1 IndexBuffer to a v2 format. Returns nullptr if indexData is also nullptr
         IndexBufferPacked* importFromV1( v1::IndexData *indexData );
+
+        void importPosesFromV1( v1::SubMesh *subMesh, VertexBufferPacked *vertexBuffer );
 
         /** @see arrangeEfficient overload
         @param vao
@@ -326,5 +338,3 @@ namespace Ogre {
 #include "OgreHeaderSuffix.h"
 
 #endif
-
-

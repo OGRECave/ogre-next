@@ -342,24 +342,19 @@ namespace Ogre {
 
     unsigned int CocoaWindow::getWidth() const
     {
-        NSRect winFrame;
-        if(mContentScalingFactor > 1.0)
-            winFrame = [mWindow convertRectToBacking:[mWindow contentRectForFrameRect:[mView frame]]];
-        else
-            winFrame = [mView frame];
-        return (unsigned int) winFrame.size.width;
+        return mContext->mBackingWidth;
     }
 
     unsigned int CocoaWindow::getHeight() const
     {
-        NSRect winFrame;
-        if(mContentScalingFactor > 1.0)
-            winFrame = [mWindow convertRectToBacking:[mWindow contentRectForFrameRect:[mView frame]]];
-        else
-            winFrame = [mView frame];
-        return (unsigned int) winFrame.size.height;
+        return mContext->mBackingHeight;
     }
 
+    float CocoaWindow::getViewPointToPixelScale() const
+    {
+        return mContentScalingFactor;
+    }
+    
     void CocoaWindow::destroy(void)
     {
         if(!mIsFullScreen)

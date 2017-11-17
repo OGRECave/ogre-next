@@ -52,6 +52,8 @@ namespace Ogre {
             mHasSkeletonAnimation = true;
             mBlendIndexToBoneIndexMap = &subMeshBasis->mBlendIndexToBoneIndexMap;
         }
+        
+        mNumPoseAnimations = subMeshBasis->getNumPoseAnimations();
     }
     //-----------------------------------------------------------------------
     SubItem::~SubItem()
@@ -115,5 +117,25 @@ namespace Ogre {
                      "the wrong RenderQueue ID (which is set to be compatible with "
                      "v1::Entity). Do not mix Items and Entities",
                      "SubItem::getCastsShadows" );
+    }
+    //-----------------------------------------------------------------------------------
+    float SubItem::getPoseWeight(const Ogre::String& poseName) const
+    {
+        return Renderable::getPoseWeight(mSubMesh->getPoseIndex(poseName));
+    }
+    //-----------------------------------------------------------------------------------
+    void SubItem::setPoseWeight(const Ogre::String& poseName, float w)
+    {
+        Renderable::setPoseWeight(mSubMesh->getPoseIndex(poseName), w);
+    }
+    //-----------------------------------------------------------------------------------
+    void SubItem::addPoseWeight(const Ogre::String& poseName, float w)
+    {
+        Renderable::addPoseWeight(mSubMesh->getPoseIndex(poseName), w);
+    }
+    //-----------------------------------------------------------------------------------
+    TexBufferPacked* SubItem::getPoseTexBuffer() const
+    { 
+        return mSubMesh->getPoseTexBuffer();
     }
 }

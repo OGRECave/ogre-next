@@ -48,7 +48,9 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     SubMesh::SubMesh() :
         mParent( 0 ),
-        mBoneAssignmentsOutOfDate( false )
+        mBoneAssignmentsOutOfDate( false ),
+        mNumPoseAnimations( 0 ),
+        mPoseTexBuffer( 0 )
     {
     }
     //-----------------------------------------------------------------------
@@ -56,6 +58,9 @@ namespace Ogre {
     {
         destroyShadowMappingVaos();
         destroyVaos( mVao[VpNormal], mParent->mVaoManager );
+        
+        if( mPoseTexBuffer )
+            mParent->mVaoManager->destroyTexBuffer( mPoseTexBuffer );
     }
     //-----------------------------------------------------------------------
     void SubMesh::addBoneAssignment(const VertexBoneAssignment& vertBoneAssign)
@@ -582,6 +587,8 @@ namespace Ogre {
             mVao[vaoPassIdx].push_back( vao );
             ++itor;
         }
+        
+        importPosesFromV1( subMesh, vertexBuffer );
     }
     //---------------------------------------------------------------------
     IndexBufferPacked* SubMesh::importFromV1( v1::IndexData *indexData )
@@ -614,6 +621,70 @@ namespace Ogre {
             indexDataPtrContainer.ptr = 0;
 
         return indexBuffer;
+    }
+    //---------------------------------------------------------------------
+    void SubMesh::importPosesFromV1( v1::SubMesh *subMesh, VertexBufferPacked *vertexBuffer )
+    {
+        // Find the index of this subMesh and only process poses which have this
+        // subMesh as their target.
+        v1::Mesh::SubMeshList::const_iterator subMeshBegin = subMesh->parent->getSubMeshIterator().begin();
+        v1::Mesh::SubMeshList::const_iterator subMeshEnd = subMesh->parent->getSubMeshIterator().end();
+        v1::Mesh::SubMeshList::const_iterator subMeshIt = std::find( subMeshBegin, subMeshEnd, subMesh );
+        
+        assert( subMeshIt != subMeshEnd && "Parent mesh does not contain this subMesh.");
+        
+        int subMeshIndex = subMeshIt - subMeshBegin;
+        
+        v1::PoseList poseList = subMesh->parent->getPoseList();
+        poseList.erase(std::remove_if(poseList.begin(), poseList.end(), 
+                                      [=](const v1::Pose* pose) { return pose->getTarget() != subMeshIndex; }),
+                                      poseList.end());
+        
+        mNumPoseAnimations = poseList.size();
+        
+        if( mNumPoseAnimations > 0 ) 
+        {
+            uint32 numVertices = vertexBuffer->getNumElements();
+            // add 1 extra float4 to the size to store the number of vertices on the first entry
+            size_t bufferSize = (mNumPoseAnimations * numVertices + 1) * sizeof( float ) * 4;
+            float *buffer = reinterpret_cast<float*>( OGRE_MALLOC_SIMD(
+                                                                    bufferSize,
+                                                                    MEMCATEGORY_GEOMETRY ) );                                
+            FreeOnDestructor bufferPtrContainer( buffer );
+            memset( buffer, 0, bufferSize );
+            
+            v1::Mesh::PoseIterator poseIt = subMesh->parent->getPoseIterator();
+            float *pFloat = buffer;
+            
+            memcpy(pFloat, &numVertices, sizeof(numVertices));
+            pFloat += 4;
+            
+            int index = 0;
+            
+            while( poseIt.hasMoreElements() )
+            {
+                v1::Pose* pose = poseIt.getNext();
+                v1::Pose::VertexOffsetMap::const_iterator v = pose->getVertexOffsets().begin();
+                // TODO: import normals
+                
+                while( v != pose->getVertexOffsets().end() )
+                {
+                    size_t idx = v->first;
+                    pFloat[4*idx+0] = v->second.x;
+                    pFloat[4*idx+1] = v->second.y;
+                    pFloat[4*idx+2] = v->second.z;
+                    pFloat[4*idx+3] = 0.f;
+                    ++v;
+                }
+                
+                pFloat += numVertices * 4;
+                
+                mPoseIndexMap[pose->getName()] = index++;
+            }
+            
+            mPoseTexBuffer = mParent->mVaoManager->createTexBuffer( PF_FLOAT32_RGBA, bufferSize,
+                                                                    BT_IMMUTABLE, buffer, false );
+        }
     }
     //---------------------------------------------------------------------
     void SubMesh::arrangeEfficient( bool halfPos, bool halfTexCoords, bool qTangents )
@@ -789,8 +860,8 @@ namespace Ogre {
         bool hasTangents = false;
 
         v1::VertexData *vertexData = subMesh->vertexData[vaoPassIdx];
-
-        {
+        
+        {    
             //Get an AZDO-friendly vertex declaration out of the original declaration.
             const v1::VertexDeclaration::VertexElementList &origElements = vertexData->
                                                                 vertexDeclaration->getElements();

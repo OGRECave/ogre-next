@@ -145,6 +145,14 @@ namespace Ogre {
 
         bool hasSkeletonAnimation(void) const               { return mHasSkeletonAnimation; }
 
+        unsigned short getNumPoseAnimations(void) const { return mNumPoseAnimations; }
+        
+        float getPoseWeight(size_t index) const;
+        void setPoseWeight(size_t index, float w);
+        void addPoseWeight(size_t index, float w);
+        
+        virtual TexBufferPacked* getPoseTexBuffer() const { return 0; }
+        
         /** Returns whether the world matrix is an identify matrix.
         @remarks
             It is up to the Hlms implementation whether to honour this request. Take in mind
@@ -444,9 +452,11 @@ namespace Ogre {
     protected:
         uint8               mRenderQueueSubGroup;
         bool                    mHasSkeletonAnimation;
+        unsigned short          mNumPoseAnimations;
+        float                   mPoseWeights[4];
         uint8                   mCurrentMaterialLod;
         FastArray<Real> const   *mLodMaterial;
-
+        
         /** Index in the vector holding this Rendrable reference in the HLMS datablock.
             Used for O(1) removals.
         @remarks
