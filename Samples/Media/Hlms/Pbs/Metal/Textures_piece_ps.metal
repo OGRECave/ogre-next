@@ -143,8 +143,11 @@
 @foreach( detail_maps_normal, n )
 	@piece( SampleDetailMapNm@n )getTSNormal( samplerState@value(detail_map_nm@n_sampler),
 												textureMaps@value(detail_map_nm@n_idx),
-												inPs.uv@value(uv_detail_nm@n).xy@insertpiece( offsetDetailN@n ),
-												detailNormMapIdx@n ) * detailWeights.@insertpiece(detail_swizzle@n) @insertpiece( detail@n_nm_weight_mul )@end
+												@insertpiece(custom_ps_pre_detailmap@n)
+												(inPs.uv@value(uv_detail_nm@n).xy@insertpiece( offsetDetailN@n ))
+												@insertpiece(custom_ps_pos_detailmap@n),
+												detailNormMapIdx@n ) * detailWeights.@insertpiece(detail_swizzle@n)
+												@insertpiece( detail@n_nm_weight_mul )@end
 @end
 
 @property( detail_weight_map )

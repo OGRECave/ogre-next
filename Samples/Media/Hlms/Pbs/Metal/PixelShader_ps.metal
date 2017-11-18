@@ -205,9 +205,12 @@ float4 diffuseCol;
 
 	/// Sample detail maps and weight them against the weight map in the next foreach loop.
 @foreach( detail_maps_diffuse, n )@property( detail_map@n )
-	float4 detailCol@n	= textureMaps@value(detail_map@n_idx).sample( samplerState@value(detail_map@n_sampler),
-																		inPs.uv@value(uv_detail@n).xy@insertpiece( offsetDetailD@n ),
-																		detailMapIdx@n );
+	float4 detailCol@n	= textureMaps@value(detail_map@n_idx).sample(
+									samplerState@value(detail_map@n_sampler),
+									@insertpiece(custom_ps_pre_detailmap@n)
+									(inPs.uv@value(uv_detail@n).xy@insertpiece( offsetDetailD@n ))
+									@insertpiece(custom_ps_pos_detailmap@n),
+									detailMapIdx@n );
 	@property( !hw_gamma_read )//Gamma to linear space
 		detailCol@n.xyz = detailCol@n.xyz * detailCol@n.xyz;@end
 	detailWeights.@insertpiece(detail_swizzle@n) *= detailCol@n.w;
@@ -559,9 +562,12 @@ fragment @insertpiece( output_type ) main_metal
 
 	/// Sample detail maps and weight them against the weight map in the next foreach loop.
 @foreach( detail_maps_diffuse, n )@property( detail_map@n )
-	float detailCol@n	= textureMaps@value(detail_map@n_idx).sample( samplerState@value(detail_map@n_sampler),
-																		inPs.uv@value(uv_detail@n).xy@insertpiece( offsetDetailD@n ),
-																		detailMapIdx@n ).w;
+	float detailCol@n	= textureMaps@value(detail_map@n_idx).sample(
+										samplerState@value(detail_map@n_sampler),
+										@insertpiece(custom_ps_pre_detailmap@n)
+										inPs.uv@value(uv_detail@n).xy@insertpiece( offsetDetailD@n )
+										@insertpiece(custom_ps_pos_detailmap@n),
+										detailMapIdx@n ).w;
 	detailCol@n = detailWeights.@insertpiece(detail_swizzle@n) * detailCol@n;@end
 @end
 

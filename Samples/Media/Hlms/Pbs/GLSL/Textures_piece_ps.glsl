@@ -46,7 +46,12 @@ ROUGHNESS = max( ROUGHNESS, 0.001f );@end
 @end
 
 @foreach( detail_maps_normal, n )
-	@piece( SampleDetailMapNm@n )getTSDetailNormal( textureMaps[@value(detail_map_nm@n_idx)], vec3( inPs.uv@value(uv_detail_nm@n).xy@insertpiece( offsetDetailN@n ), detailNormMapIdx@n ) ) * detailWeights.@insertpiece(detail_swizzle@n) @insertpiece( detail@n_nm_weight_mul )@end
+	@piece( SampleDetailMapNm@n )getTSDetailNormal( textureMaps[@value(detail_map_nm@n_idx)],
+								vec3( @insertpiece(custom_ps_pre_detailmap@n)
+									  (inPs.uv@value(uv_detail_nm@n).xy@insertpiece( offsetDetailN@n ))
+									  @insertpiece(custom_ps_pos_detailmap@n),
+									  detailNormMapIdx@n ) ) * detailWeights.@insertpiece(detail_swizzle@n)
+									  @insertpiece( detail@n_nm_weight_mul )@end
 @end
 
 @property( detail_weight_map )
