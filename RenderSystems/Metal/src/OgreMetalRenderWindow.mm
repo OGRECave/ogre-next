@@ -228,6 +228,12 @@ namespace Ogre
                        "Was the 'parentWindowHandle' parameter set correctly in the call to createRenderWindow()?");
                 mWindow = [nsview window];
             }
+#else
+            opt = miscParams->find("externalWindowHandle");
+            if( opt != end )
+            {
+                mWindow = (__bridge UIWindow*)reinterpret_cast<void*>(StringConverter::parseUnsignedLong(opt->second));
+            }
 #endif
             opt = miscParams->find("contentScalingFactor");
             if( opt != end )
@@ -239,6 +245,11 @@ namespace Ogre
 
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
         [mWindow setContentView:mMetalView];
+#else
+        mMetalView.frame = mWindow.rootViewController.view.bounds;
+        mMetalView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+        mMetalView.userInteractionEnabled = NO;
+        [mWindow.rootViewController.view addSubview:mMetalView];
 #endif
 
         mMetalLayer = (CAMetalLayer*)mMetalView.layer;
