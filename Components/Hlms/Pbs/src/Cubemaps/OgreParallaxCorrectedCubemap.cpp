@@ -1177,7 +1177,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     TextureGpu* ParallaxCorrectedCubemap::findTmpRtt( const TextureGpu *baseParams )
     {
-        TextureGpu *retVal;
+        TextureGpu *retVal = 0;
 
         TempRttVec::iterator itor = mTmpRtt.begin();
         TempRttVec::iterator end  = mTmpRtt.end();
