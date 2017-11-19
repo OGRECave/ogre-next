@@ -48,7 +48,7 @@ ROUGHNESS = max( ROUGHNESS, 0.001f );@end
 @foreach( detail_maps_normal, n )
 	@piece( SampleDetailMapNm@n )getTSDetailNormal( textureMaps[@value(detail_map_nm@n_idx)],
 								vec3( @insertpiece(custom_ps_pre_detailmap@n)
-									  (inPs.uv@value(uv_detail_nm@n).xy@insertpiece( offsetDetailN@n ))
+									  (inPs.uv@value(uv_detail_nm@n).xy@insertpiece( offsetDetail@n ))
 									  @insertpiece(custom_ps_pos_detailmap@n),
 									  detailNormMapIdx@n ) ) * detailWeights.@insertpiece(detail_swizzle@n)
 									  @insertpiece( detail@n_nm_weight_mul )@end
@@ -73,5 +73,20 @@ ROUGHNESS = max( ROUGHNESS, 0.001f );@end
 	@end
 	@property( envprobe_map && envprobe_map != target_envprobe_map && use_parallax_correct_cubemaps )
 		@piece( pccProbeSource )manualProbe.probe@end
+	@end
+@end
+
+@property( emissive_map )
+	@piece( SampleEmissiveMap )
+		vec3 emissiveCol = texture( textureMaps[@value( emissive_map_idx )],
+									vec3( inPs.uv@value(uv_emissive).xy, emissiveIdx ) ).xyz;
+		@property( emissive_constant )
+			emissiveCol *= material.emissive.xyz;
+		@end
+	@end
+@end
+@property( !emissive_map && emissive_constant )
+	@piece( SampleEmissiveMap )
+		vec3 emissiveCol = material.emissive.xyz;
 	@end
 @end
