@@ -167,13 +167,11 @@ namespace Ogre
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS || OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
         //Mobile platforms are tight on memory. Keep the limits low.
         mMaxPreloadBytes = 32u * 1024u * 1024u;
-        mMaxBytesPerStreamingStagingTexture = 32u * 1024u * 1024u;
 #else
         #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
             //32-bit architectures are more limited.
             //The default 256MB can cause Out of Memory conditions due to memory fragmentation.
             mMaxPreloadBytes = 128u * 1024u * 1024u;
-            mMaxBytesPerStreamingStagingTexture = 32u * 1024u * 1024u;
         #endif
 #endif
 
