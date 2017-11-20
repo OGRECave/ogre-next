@@ -53,7 +53,8 @@ Buffer<float4> f3dLightList : register(t2);@end
 @property( use_envprobe_map )TextureCube	texEnvProbeMap : register(t@value(envMapReg));
 SamplerState envMapSamplerState : register(s@value(envMapReg));@end
 
-@property( numSamplerStates )SamplerState samplerStates[@value(numSamplerStates)] : register(s@value(samplerStateStart));@end
+@foreach( numSamplerStates, n )
+	SamplerState samplerState@n : register(s@counter(samplerStateStart));@end
 
 @property( normal_map )
 @property( hlms_qtangent )
@@ -73,17 +74,17 @@ float3 qmul( float4 q, float3 v )
 	float3 tsNormal;
 @property( signed_int_textures )
 	//Normal texture must be in U8V8 or BC5 format!
-	tsNormal.xy = textureMaps[@value( normal_map_tex_idx )].Sample( samplerStates[@value( normal_map_tex_idx )], uv ).xy;
+	tsNormal.xy = textureMaps[@value( normal_map_tex_idx )].Sample( samplerState@value( normal_map_tex_idx ), uv ).xy;
 @end @property( !signed_int_textures )
 	//Normal texture must be in LA format!
-	tsNormal.xy = textureMaps[@value( normal_map_tex_idx )].Sample( samplerStates[@value( normal_map_tex_idx )], uv ).xw * 2.0 - 1.0;
+	tsNormal.xy = textureMaps[@value( normal_map_tex_idx )].Sample( samplerState@value( normal_map_tex_idx ), uv ).xw * 2.0 - 1.0;
 @end
 	tsNormal.z	= sqrt( max( 0, 1.0 - tsNormal.x * tsNormal.x - tsNormal.y * tsNormal.y ) );
 
 	return tsNormal;
 }
 @end
-@property( normal_weight_tex )#define normalMapWeight asfloat( material.indices4_7.w )@end
+@property( normal_weight_tex )#define normalMapWeight material.emissive.w@end
 @property( detail_maps_normal )float3 getTSDetailNormal( SamplerState samplerState, Texture2DArray normalMap, float3 uv )
 {
 	float3 tsNormal;
@@ -139,6 +140,7 @@ float3 qmul( float4 q, float3 v )
 	@property( detail_map@n )uint detailMapIdx@n;@end @end
 @foreach( 4, n )
 	@property( detail_map_nm@n )uint detailNormMapIdx@n;@end @end
+@property( emissive_map )	uint emissiveMapIdx;@end
 @property( use_envprobe_map )	uint envMapIdx;@end
 
 float4 diffuseCol;
@@ -159,7 +161,7 @@ float4 diffuseCol;
 @property( normal_map_tex )	normalIdx			= material.indices0_3.x >> 16u;@end
 @property( specular_map )	specularIdx			= material.indices0_3.y & 0x0000FFFFu;@end
 @property( roughness_map )	roughnessIdx		= material.indices0_3.y >> 16u;@end
-@property( detail_weight_map )	weightMapIdx		= material.indices0_3.z & 0x0000FFFFu;@end
+@property( detail_weight_map )	weightMapIdx	= material.indices0_3.z & 0x0000FFFFu;@end
 @property( detail_map0 )	detailMapIdx0		= material.indices0_3.z >> 16u;@end
 @property( detail_map1 )	detailMapIdx1		= material.indices0_3.w & 0x0000FFFFu;@end
 @property( detail_map2 )	detailMapIdx2		= material.indices0_3.w >> 16u;@end
@@ -168,7 +170,8 @@ float4 diffuseCol;
 @property( detail_map_nm1 )	detailNormMapIdx1	= material.indices4_7.y & 0x0000FFFFu;@end
 @property( detail_map_nm2 )	detailNormMapIdx2	= material.indices4_7.y >> 16u;@end
 @property( detail_map_nm3 )	detailNormMapIdx3	= material.indices4_7.z & 0x0000FFFFu;@end
-@property( use_envprobe_map )	envMapIdx			= material.indices4_7.z >> 16u;@end
+@property( emissive_map )	emissiveMapIdx		= material.indices4_7.z >> 16u;@end
+@property( use_envprobe_map )	envMapIdx		= material.indices4_7.w & 0x0000FFFFu;@end
 
 	@insertpiece( DeclareObjLightMask )
 
@@ -187,7 +190,12 @@ float4 diffuseCol;
 
 	/// Sample detail maps and weight them against the weight map in the next foreach loop.
 @foreach( detail_maps_diffuse, n )@property( detail_map@n )
-	float4 detailCol@n	= textureMaps[@value(detail_map@n_idx)].Sample( samplerStates[@value(detail_map@n_idx)], float3( inPs.uv@value(uv_detail@n).xy@insertpiece( offsetDetailD@n ), detailMapIdx@n ) );
+	float4 detailCol@n	= textureMaps[@value(detail_map@n_idx)].Sample(
+								samplerState@value(detail_map@n_idx),
+								float3( @insertpiece(custom_ps_pre_detailmap@n)
+										(inPs.uv@value(uv_detail@n).xy@insertpiece( offsetDetail@n ))
+										@insertpiece(custom_ps_pos_detailmap@n),
+										detailMapIdx@n ) );
 	@property( !hw_gamma_read )//Gamma to linear space
 		detailCol@n.xyz = detailCol@n.xyz * detailCol@n.xyz;@end
 	detailWeights.@insertpiece(detail_swizzle@n) *= detailCol@n.w;
@@ -389,6 +397,11 @@ float4 diffuseCol;
 @insertpiece( forward3dLighting )
 @insertpiece( applyIrradianceVolumes )
 
+@property( emissive_map || emissive_constant )
+	@insertpiece( SampleEmissiveMap )
+	finalColour += emissiveCol.xyz;
+@end
+
 @property( use_envprobe_map || hlms_use_ssr || use_planar_reflections || ambient_hemisphere )
 	float3 reflDir = 2.0 * dot( viewDir, nNormal ) * nNormal - viewDir;
 	
@@ -521,7 +534,8 @@ float4 diffuseCol;
 @insertpiece( DeclShadowCasterMacros )
 
 @property( num_textures )Texture2DArray textureMaps[@value( num_textures )] : register(t@value(textureRegStart));@end
-@property( numSamplerStates )SamplerState samplerStates[@value(numSamplerStates)] : register(s@value(samplerStateStart));@end
+@foreach( numSamplerStates, n )
+	SamplerState samplerState@n : register(s@counter(samplerStateStart));@end
 
 @property( hlms_shadowcaster_point || exponential_shadow_maps )
 	@insertpiece( PassDecl )
@@ -571,7 +585,12 @@ float4 diffuseCol;
 
 	/// Sample detail maps and weight them against the weight map in the next foreach loop.
 @foreach( detail_maps_diffuse, n )@property( detail_map@n )
-	float detailCol@n	= textureMaps[@value(detail_map@n_idx)].Sample( samplerStates[@value(detail_map@n_idx)], float3( inPs.uv@value(uv_detail@n).xy@insertpiece( offsetDetailD@n ), detailMapIdx@n ) ).w;
+	float detailCol@n	= textureMaps[@value(detail_map@n_idx)].Sample(
+									samplerState@value(detail_map@n_idx),
+									float3( @insertpiece(custom_ps_pre_detailmap@n)
+											(inPs.uv@value(uv_detail@n).xy@insertpiece( offsetDetail@n ))
+											@insertpiece(custom_ps_pos_detailmap@n),
+											detailMapIdx@n ) ).w;
 	detailCol@n = detailWeights.@insertpiece(detail_swizzle@n) * detailCol@n;@end
 @end
 
