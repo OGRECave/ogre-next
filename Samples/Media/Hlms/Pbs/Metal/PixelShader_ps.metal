@@ -87,6 +87,8 @@ constexpr sampler shadowSampler = sampler( coord::normalized,
 
 @insertpiece( DeclOutputType )
 
+@insertpiece( custom_ps_functions )
+
 fragment @insertpiece( output_type ) main_metal
 (
 	PS_INPUT inPs [[stage_in]]
