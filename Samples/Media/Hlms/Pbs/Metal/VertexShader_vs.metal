@@ -166,29 +166,26 @@ vertex PS_INPUT main_metal
 
 	PS_INPUT outVs;
 	@insertpiece( custom_vs_preExecution )
+	
+@property( hlms_pose )
+	// number of vertices is stored in the first entry, thus add 1u below
+	// when indexing into poseBuf
+	uint numVertices = as_type<uint>( poseBuf[0].x );
+	float4 poseWeights = unpack_unorm4x8_to_float( worldMaterialIdx[drawId].w );
+	float4 posePos;
+	@foreach( hlms_pose, n )
+		posePos = poseBuf[1u + vertexId - baseVertex + numVertices * @n];
+		input.position += posePos * poseWeights[@nu];
+	@end
+@end
+	
 @property( !hlms_skeleton )
 	float3x4 worldMat = UNPACK_MAT3x4( worldMatBuf, drawId @property( !hlms_shadowcaster )<< 1u@end );
 	@property( hlms_normal || hlms_qtangent )
 	float4x4 worldView = UNPACK_MAT4( worldMatBuf, (drawId << 1u) + 1u );
 	@end
 
-	@property( !hlms_pose )
-		float4 worldPos = float4( ( input.position * worldMat ).xyz, 1.0f );
-	@end
-		
-	@property( hlms_pose )
-		// number of vertices is stored in the first entry, thus add 1u below
-		// when indexing into poseBuf
-		uint numVertices = as_type<uint>( poseBuf[0].x );
-		float4 poseWeights = unpack_unorm4x8_to_float( worldMaterialIdx[drawId].w );
-		float4 objPos = input.position;
-		float4 posePos;
-		@foreach( hlms_pose, n )
-			posePos = poseBuf[1u + vertexId - baseVertex + numVertices * @n];
-			objPos += posePos * poseWeights[@nu];
-		@end
-		float4 worldPos = float4( (objPos * worldMat).xyz, 1.0f );
-	@end
+	float4 worldPos = float4( ( input.position * worldMat ).xyz, 1.0f );
 @end
 
 @property( hlms_qtangent )

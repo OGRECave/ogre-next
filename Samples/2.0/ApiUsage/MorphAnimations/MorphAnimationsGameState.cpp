@@ -98,11 +98,10 @@ namespace Demo
         smileyNode->setScale( Ogre::Vector3( 0.5 ) );
         smileyNode->setPosition( 0, 0.57, 0 );
         smileyNode->setOrientation( Ogre::Quaternion( Ogre::Radian(1.5), Ogre::Vector3(1,0,0) ) );
-        /*
-        Ogre::HlmsMacroblock macroblock = *mSmileyItem->getSubItem(0)->getDatablock()->getMacroblock();
-        macroblock.mPolygonMode = Ogre::PM_WIREFRAME;
-        mSmileyItem->getSubItem(0)->getDatablock()->setMacroblock(macroblock);
-        */
+        
+        auto* bone = mSmileyItem->getSkeletonInstance()->getBone("Bone.001");
+        bone->setOrientation(Ogre::Quaternion(Ogre::Radian(0.4), Ogre::Vector3(0,1,0)));
+        
         Ogre::Light *light = sceneManager->createLight();
         Ogre::SceneNode *lightNode = sceneManager->getRootSceneNode()->createChildSceneNode();
         lightNode->attachObject( light );
