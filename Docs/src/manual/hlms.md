@@ -836,8 +836,7 @@ customized:
 | custom_ps_posMaterialLoad    |  Executed right after loading material data; and before anything else. May not get executed if there is no relevant material data (i.e. doesn't have normals or QTangents for lighting calculation)|
 | custom_ps_preLights          |  Executed right before any light (i.e. to perform your own ambient / global illumination pass). All relevant texture data should be loaded by now.|
 | custom_ps_posExecution       |  Executed after all code from the Pixel Shader has been performed.|
-| custom_ps_pre_detailmapN     |  PBS specific. N is in range [0; 4). Writes code before the UVs of detail maps. Useful if you want to add additional scrolling code or multiply it against a full 4x4 matrix. Applies to both diffuse and normal detail maps.|
-| custom_ps_pos_detailmapN     |  PBS specific. See custom_ps_pre_detailmapN. Applies code at the end of the UVs of detail maps. The shader code ends up like this: `texture.Sample( sampler, @insertpiece( custom_ps_pre_detailmap0 )(uv.xy)@insertpiece( custom_ps_pos_detailmap0 )`.|
+| custom_ps_uv_modifier_macros |  PBS specific. Allows you to override the macros defined in Samples/Media/Hlms/Pbs/Any/UvModifierMacros_piece_ps.any so you can apply custom transformations to each UV. e.g. `#undef UV_DIFFUSE #define UV_DIFFUSE( x ) ((x) * 2.0)` |
 
 # Run-time rendering {#HlmsRuntimeRendering}
 
