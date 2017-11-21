@@ -728,7 +728,7 @@ namespace Ogre
             loadingListener = resourceGroupManager.getLoadingListener();
             if( loadingListener )
             {
-                if( !loadingListener->grouplessResourceExists( name ) )
+                if( loadingListener->grouplessResourceExists( name ) )
                     providedByListener = true;
             }
 
