@@ -1016,6 +1016,12 @@ void SceneManager::_cullPhase01( Camera* camera, const Camera *lodCamera, Viewpo
 
         mRenderQueue->clear();
 
+        // Invert vertex winding?
+        if( camera->isReflected() )
+            mDestRenderSystem->setInvertVertexWinding(true);
+        else
+            mDestRenderSystem->setInvertVertexWinding(false);
+
         {
             //TODO: Remove this hacky listener (mostly needed by OverlayManager)
             //Overlays REQUIRED THIS to be called before RenderQueue::renderPassPrepare.
@@ -1096,16 +1102,6 @@ void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera, Viewp
         OGRE_LOCK_MUTEX(sceneGraphMutex);
 
         mCameraInProgress = camera;
-
-        // Invert vertex winding?
-        if (camera->isReflected())
-        {
-            mDestRenderSystem->setInvertVertexWinding(true);
-        }
-        else
-        {
-            mDestRenderSystem->setInvertVertexWinding(false);
-        }
 
         setViewport( vp );
 
