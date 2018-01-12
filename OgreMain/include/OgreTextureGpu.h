@@ -165,7 +165,24 @@ namespace Ogre
             AutomaticBatching   = 1u << 12u
         };
     }
+    /**
+    @remarks
+        Internal layout of data in memory:
+        Mip0 -> Slice 0, Slice 1, ..., Slice N
+        Mip1 -> Slice 0, Slice 1, ..., Slice N
+        ...
+        MipN -> Slice 0, Slice 1, ..., Slice N
 
+        The layout for 3D volume and array textures is the same. The only thing that changes
+        is that for 3D volumes, the number of slices also decreases with each mip, while
+        for array textures it is kept constant.
+
+        For 1D array textures, the number of slices is stored in mDepthOrSlices, not in Height.
+
+        For code reference, look at _getSysRamCopyAsBox implementation, and TextureBox::at
+        Each row of pixels is aligned to 4 bytes (except for compressed formats that require
+        more strict alignments, such as alignment to the block).
+    */
     class _OgreExport TextureGpu : public GpuTrackedResource, public GpuResource
     {
     protected:
