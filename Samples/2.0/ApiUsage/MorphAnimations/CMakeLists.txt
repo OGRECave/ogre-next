@@ -31,7 +31,7 @@ if( APPLE )
 	set_target_properties(${SAMPLE_NAME} PROPERTIES RESOURCE "${TUTORIAL_RESOURCES}")
 	set_target_properties(${SAMPLE_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${SAMPLES_PLIST})
 	
-	if (CMAKE_GENERATOR STREQUAL "Xcode")
+	if( CMAKE_GENERATOR STREQUAL "Xcode" )
         #if (IOS)
         #    set(APP_CONTENTS_PATH ${CMAKE_CURRENT_BINARY_DIR}/bin/$(CONFIGURATION)/${SAMPLE_NAME}.app)
 	#else ()
@@ -45,29 +45,31 @@ if( APPLE )
         #endif ()
     endif ()
 	
-	set(FRAMEWORKS
-		Ogre
-        RenderSystem_GL3PLUS
-		RenderSystem_Metal
-        OgreHlmsPbs
-        OgreHlmsUnlit
-        OgreOverlay
-		Plugin_ParticleFX
-    )
+	if( !OGRE_BUILD_PLATFORM_APPLE_IOS )
+		set(FRAMEWORKS
+			Ogre
+	        RenderSystem_GL3PLUS
+			RenderSystem_Metal
+	        OgreHlmsPbs
+	        OgreHlmsUnlit
+	        OgreOverlay
+			Plugin_ParticleFX
+	    )
 
-    foreach(FWK ${FRAMEWORKS})
+	    foreach(FWK ${FRAMEWORKS})
+			add_custom_command(TARGET ${SAMPLE_NAME} POST_BUILD
+				COMMAND ditto ${CMAKE_CURRENT_BINARY_DIR}/../../../../lib/macosx/${FWK}.framework ${APP_CONTENTS_PATH}/Frameworks/${FWK}.framework
+			)
+	    endforeach(FWK)
+		
 		add_custom_command(TARGET ${SAMPLE_NAME} POST_BUILD
-			COMMAND ditto ${CMAKE_CURRENT_BINARY_DIR}/../../../../lib/macosx/${FWK}.framework ${APP_CONTENTS_PATH}/Frameworks/${FWK}.framework
+			COMMAND mkdir -p ${APP_CONTENTS_PATH}/Resources
 		)
-    endforeach(FWK)
-	
-	add_custom_command(TARGET ${SAMPLE_NAME} POST_BUILD
-		COMMAND mkdir -p ${APP_CONTENTS_PATH}/Resources
-	)
-	
-	foreach(RSC ${SAMPLE_COMMON_RESOURCES})
-		add_custom_command(TARGET ${SAMPLE_NAME} POST_BUILD
-			COMMAND cp -r ${RSC} ${APP_CONTENTS_PATH}/Resources/
-		)
-    endforeach(FWK)
+		
+		foreach(RSC ${SAMPLE_COMMON_RESOURCES})
+			add_custom_command(TARGET ${SAMPLE_NAME} POST_BUILD
+				COMMAND cp -r ${RSC} ${APP_CONTENTS_PATH}/Resources/
+			)
+	    endforeach(FWK)
+	endif()
 endif()
