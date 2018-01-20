@@ -73,7 +73,7 @@ namespace Ogre
     #define FOURCC(c0, c1, c2, c3) (c0 | (c1 << 8u) | (c2 << 16u) | (c3 << 24u))
 #endif
 
-    static const uint8 c_OITDVersion = 0u;
+    static const uint8 c_OITDVersion = 1u;
     static const uint32 OITD_MAGIC = FOURCC('O', 'I', 'T', 'D');
 
     //---------------------------------------------------------------------
