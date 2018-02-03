@@ -1091,10 +1091,31 @@ namespace Ogre
 
             if( itPrev != enPrev )
             {
+                const uint32 blockWidth =
+                    PixelFormatGpuUtils::getCompressedBlockWidth( itPrev->formatFamily, false );
+                const uint32 blockHeight =
+                    PixelFormatGpuUtils::getCompressedBlockHeight( itPrev->formatFamily, false );
+
                 //Average current stats with the previous one.
                 //But if current one's was bigger, keep current.
-                itPrev->width  = std::max( itor->width, (itPrev->width + itor->width) >> 1u );
-                itPrev->height = std::max( itor->height, (itPrev->height + itor->height) >> 1u );
+                if( blockWidth != 0 )
+                {
+                    itPrev->width  = std::max( itor->width, (itPrev->width + itor->width) >> 1u );
+                    itPrev->width = alignToNextMultiple( itPrev->width, blockWidth );
+                }
+                else
+                {
+                    itPrev->width = itor->width;
+                }
+                if( blockHeight != 0 )
+                {
+                    itPrev->height  = std::max( itor->height, (itPrev->height + itor->height) >> 1u );
+                    itPrev->height = alignToNextMultiple( itPrev->height, blockHeight );
+                }
+                else
+                {
+                    itPrev->height = itor->height;
+                }
                 itPrev->accumSizeBytes = std::max( itor->accumSizeBytes, (itPrev->accumSizeBytes +
                                                                           itor->accumSizeBytes) >> 1u );
                 itPrev->loopCount = 15u;
