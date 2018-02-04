@@ -156,12 +156,15 @@ namespace Ogre
                     {
                         String texName = resourceName;
                         if( listener )
-                            listener->savingChangeTextureNameOitd( texName );
+                            listener->savingChangeTextureNameOitd( texName, texture );
 
-                        Image2 image;
-                        image.convertFromTexture( texture, 0u, texture->getNumMipmaps(), true );
+                        if( texture->getNextResidencyStatus() == GpuResidency::Resident )
+                        {
+                            Image2 image;
+                            image.convertFromTexture( texture, 0u, texture->getNumMipmaps(), true );
 
-                        image.save( folderPath + "/" + texName + ".oitd", 0, image.getNumMipmaps() );
+                            image.save( folderPath + "/" + texName + ".oitd", 0, image.getNumMipmaps() );
+                        }
                     }
 
                     savedTextures.insert( resourceName );

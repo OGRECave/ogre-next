@@ -208,7 +208,7 @@ namespace Ogre
         virtual void savingChangeTextureNameOriginal( const String &aliasName,
                                                       String &inOutResourceName,
                                                       String &inOutFilename ) {}
-        virtual void savingChangeTextureNameOitd( String &inOutFilename ) {}
+        virtual void savingChangeTextureNameOitd( String &inOutFilename, TextureGpu *texture ) {}
     };
 
     /** An hlms datablock contains individual information about a specific material. It consists of:
