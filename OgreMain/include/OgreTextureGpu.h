@@ -236,6 +236,7 @@ namespace Ogre
         virtual String getNameStr(void) const;
         /// Returns the real name (e.g. disk in file) of the resource.
         virtual String getRealResourceNameStr(void) const;
+        virtual String getResourceGroupStr(void) const;
         String getSettingsDesc(void) const;
 
         /** Schedules an async transition in residency. If transitioning from

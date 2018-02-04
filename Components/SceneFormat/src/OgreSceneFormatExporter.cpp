@@ -565,7 +565,7 @@ namespace Ogre
         if( !pcc )
             return;
 
-        TexturePtr pccBlendTex = pcc->getBlendCubemap();
+        TextureGpu *pccBlendTex = pcc->getBlendCubemap();
 
         jsonStr.a( ",\n\t\t\"parallax_corrected_cubemaps\" :"
                    "\n\t\t{" );
@@ -578,7 +578,7 @@ namespace Ogre
             jsonStr.a( ",\n\t\t\t\"max_width\" : ", pccBlendTex->getWidth() );
             jsonStr.a( ",\n\t\t\t\"max_height\" : ", pccBlendTex->getHeight() );
             jsonStr.a( ",\n\t\t\t\"pixel_format\" : \"",
-                       PixelUtil::getFormatName( pccBlendTex->getFormat() ).c_str(), "\"" );
+                       PixelFormatGpuUtils::toString( pccBlendTex->getPixelFormat() ), "\"" );
         }
 
         const CompositorWorkspaceDef *workspaceDef = pcc->getDefaultWorkspaceDef();
@@ -604,17 +604,17 @@ namespace Ogre
 
                 jsonStr.a( "\n\t\t\t\t\t\"static\" : ", toQuotedStr( probe->getStatic() ) );
 
-                TexturePtr probeTex = probe->getInternalTexture();
+                TextureGpu *probeTex = probe->getInternalTexture();
 
                 if( probeTex )
                 {
                     jsonStr.a( ",\n\t\t\t\t\t\"width\" : ", probeTex->getWidth() );
                     jsonStr.a( ",\n\t\t\t\t\t\"height\" : ", probeTex->getHeight() );
-                    jsonStr.a( ",\n\t\t\t\t\t\"msaa\" : ", probeTex->getFSAA() );
+                    jsonStr.a( ",\n\t\t\t\t\t\"msaa\" : ", probeTex->getMsaa() );
                     jsonStr.a( ",\n\t\t\t\t\t\"pixel_format\" : \"",
-                               PixelUtil::getFormatName( probeTex->getFormat() ).c_str(), "\"" );
+                               PixelFormatGpuUtils::toString( probeTex->getPixelFormat() ), "\"" );
                     jsonStr.a( ",\n\t\t\t\t\t\"use_manual\" : ",
-                               toQuotedStr( (probeTex->getUsage() & TU_AUTOMIPMAP) != 0 ) );
+                               toQuotedStr( probeTex->allowsAutoMipmaps() ) );
                 }
 
                 jsonStr.a( ",\n\t\t\t\t\t\"camera_pos\" : " );

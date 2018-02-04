@@ -95,6 +95,10 @@ namespace Ogre
                                       const HlmsParamVec &params );
         virtual ~OGRE_HLMS_TEXTURE_BASE_CLASS();
 
+        virtual void saveTextures( const String &folderPath, set<String>::type &savedTextures,
+                                   bool saveOitd, bool saveOriginal,
+                                   HlmsTextureExportListener *listener );
+
         /** Sets a new texture for rendering. Calling this function may trigger an
             HlmsDatablock::flushRenderables if the texture or the samplerblock changes.
             Might not be called if old and new texture belong to the same TexturePool.

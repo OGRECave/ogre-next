@@ -552,6 +552,7 @@ namespace Ogre
 
         const String* findAliasNameStr( IdString idName ) const;
         const String* findResourceNameStr( IdString idName ) const;
+        const String* findResourceGroupStr( IdString idName ) const;
 
         RenderSystem* getRenderSystem(void) const;
 

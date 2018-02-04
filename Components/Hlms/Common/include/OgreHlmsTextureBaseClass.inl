@@ -53,6 +53,102 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void OGRE_HLMS_TEXTURE_BASE_CLASS::saveTextures( const String &folderPath,
+                                                     set<String>::type &savedTextures,
+                                                     bool saveOitd, bool saveOriginal,
+                                                     HlmsTextureExportListener *listener )
+    {
+        for( size_t i=0; i<OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
+        {
+            TextureGpu *texture = mTextures[i];
+
+            if( texture )
+            {
+                String resourceName = texture->getRealResourceNameStr();
+
+                //Render Targets are... complicated. Let's not, for now.
+                if( savedTextures.find( resourceName ) == savedTextures.end() &&
+                    !texture->isRenderToTexture() )
+                {
+                    DataStreamPtr inFile;
+                    if( saveOriginal )
+                    {
+                        const String aliasName = texture->getNameStr();
+                        String savingFilename = resourceName;
+                        if( listener )
+                        {
+                            listener->savingChangeTextureNameOriginal( aliasName, resourceName,
+                                                                       savingFilename );
+                        }
+
+                        try
+                        {
+                            String resourceGroup = texture->getRealResourceNameStr();
+                            if( resourceGroup.empty() )
+                                resourceGroup = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME;
+
+                            inFile = ResourceGroupManager::getSingleton().openResource(
+                                         resourceName, resourceGroup );
+                        }
+                        catch( FileNotFoundException &e )
+                        {
+                            //Try opening as an absolute path
+                            std::fstream *ifs = OGRE_NEW_T( std::fstream, MEMCATEGORY_GENERAL )(
+                                                    resourceName.c_str(),
+                                                    std::ios::binary|std::ios::in );
+
+                            if( ifs->is_open() )
+                            {
+                                inFile = DataStreamPtr( OGRE_NEW FileStreamDataStream( resourceName,
+                                                                                       ifs, true ) );
+                            }
+                            else
+                            {
+                                LogManager::getSingleton().logMessage(
+                                            "WARNING: Could not find texture file " + aliasName +
+                                            " (" + resourceName + ") for copying to export location. "
+                                            "Error: " + e.getFullDescription() );
+                            }
+                        }
+                        catch( Exception &e )
+                        {
+                            LogManager::getSingleton().logMessage(
+                                        "WARNING: Could not find texture file " + aliasName +
+                                        " (" + resourceName + ") for copying to export location. "
+                                        "Error: " + e.getFullDescription() );
+                        }
+
+                        if( inFile )
+                        {
+                            size_t fileSize = inFile->size();
+                            vector<uint8>::type fileData;
+                            fileData.resize( fileSize );
+                            inFile->read( &fileData[0], fileData.size() );
+                            std::ofstream outFile( (folderPath + "/" + savingFilename).c_str(),
+                                                   std::ios::binary | std::ios::out );
+                            outFile.write( (const char*)&fileData[0], fileData.size() );
+                            outFile.close();
+                        }
+                    }
+
+                    if( saveOitd )
+                    {
+                        String texName = resourceName;
+                        if( listener )
+                            listener->savingChangeTextureNameOitd( texName );
+
+                        Image2 image;
+                        image.convertFromTexture( texture, 0u, texture->getNumMipmaps(), true );
+
+                        image.save( folderPath + "/" + texName + ".oitd", 0, image.getNumMipmaps() );
+                    }
+
+                    savedTextures.insert( resourceName );
+                }
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void OGRE_HLMS_TEXTURE_BASE_CLASS::scheduleConstBufferUpdate( bool updateTextures,
                                                                   bool updateSamplers )
     {

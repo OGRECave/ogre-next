@@ -666,10 +666,6 @@ namespace Ogre
         bool suggestUsingSRGB( PbsTextureTypes type ) const;
         uint32 suggestFiltersForType( PbsTextureTypes type ) const;
 
-        virtual void saveTextures( const String &folderPath, set<String>::type &savedTextures,
-                                   bool saveOitd, bool saveOriginal,
-                                   HlmsTextureExportListener *listener );
-
         virtual void calculateHash();
 
         static const size_t MaterialSizeInGpu;

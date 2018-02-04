@@ -925,7 +925,7 @@ namespace Ogre
                                         reservedRqId, reservedProxyMask );
 
         uint32 maxWidth = 0, maxHeight = 0;
-        PixelFormat blendPixelFormat = PF_UNKNOWN;
+        PixelFormatGpu blendPixelFormat = PFG_UNKNOWN;
         tmpIt = pccValue.FindMember( "max_width" );
         if( tmpIt != pccValue.MemberEnd() && tmpIt->value.IsUint() )
             maxWidth = tmpIt->value.GetUint();
@@ -934,9 +934,9 @@ namespace Ogre
             maxHeight = tmpIt->value.GetUint();
         tmpIt = pccValue.FindMember( "pixel_format" );
         if( tmpIt != pccValue.MemberEnd() && tmpIt->value.IsString() )
-            blendPixelFormat = PixelUtil::getFormatFromName( tmpIt->value.GetString(), false, true );
+            blendPixelFormat = PixelFormatGpuUtils::getFormatFromName( tmpIt->value.GetString() );
 
-        if( maxWidth != 0 && maxHeight != 0 && blendPixelFormat != PF_UNKNOWN )
+        if( maxWidth != 0 && maxHeight != 0 && blendPixelFormat != PFG_UNKNOWN )
             mParallaxCorrectedCubemap->setEnabled( true, maxWidth, maxHeight, blendPixelFormat );
 
         tmpIt = pccValue.FindMember( "paused" );
@@ -963,7 +963,7 @@ namespace Ogre
                 CubemapProbe *probe = mParallaxCorrectedCubemap->createProbe();
 
                 uint32 width = 0, height = 0;
-                PixelFormat pixelFormat = PF_UNKNOWN;
+                PixelFormatGpu pixelFormat = PFG_UNKNOWN;
                 uint8 msaa = 0;
                 bool useManual = true;
                 bool isStatic = false;
@@ -979,7 +979,7 @@ namespace Ogre
                     msaa = static_cast<uint8>( tmpIt->value.GetUint() );
                 tmpIt = jsonProbe.FindMember( "pixel_format" );
                 if( tmpIt != jsonProbe.MemberEnd() && tmpIt->value.IsString() )
-                    pixelFormat = PixelUtil::getFormatFromName( tmpIt->value.GetString(), false, true );
+                    pixelFormat = PixelFormatGpuUtils::getFormatFromName( tmpIt->value.GetString() );
                 tmpIt = jsonProbe.FindMember( "use_manual" );
                 if( tmpIt != jsonProbe.MemberEnd() && tmpIt->value.IsBool() )
                     useManual = tmpIt->value.GetBool();
@@ -987,7 +987,7 @@ namespace Ogre
                 if( tmpIt != jsonProbe.MemberEnd() && tmpIt->value.IsBool() )
                     isStatic = tmpIt->value.GetBool();
 
-                if( width != 0 && height != 0 && pixelFormat != PF_UNKNOWN )
+                if( width != 0 && height != 0 && pixelFormat != PFG_UNKNOWN )
                 {
                     probe->setTextureParams( width, height, useManual, pixelFormat, isStatic, msaa );
                     probe->initWorkspace();

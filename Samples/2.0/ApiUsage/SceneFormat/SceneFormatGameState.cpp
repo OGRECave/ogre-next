@@ -21,6 +21,9 @@
 #include "OgreHlmsTextureManager.h"
 #include "OgreHlmsPbs.h"
 
+#include "OgreTextureGpuManager.h"
+#include "OgreTextureFilters.h"
+
 #include "OgreSceneFormatExporter.h"
 #include "OgreSceneFormatImporter.h"
 #include "OgreForwardPlusBase.h"
@@ -123,7 +126,7 @@ namespace Demo
                     mGraphicsSystem->getSceneManager(),
                     workspaceDef, 250, 1u << 25u );
 
-        mParallaxCorrectedCubemap->setEnabled( true, 1024, 1024, Ogre::PF_R8G8B8A8 );
+        mParallaxCorrectedCubemap->setEnabled( true, 1024, 1024, Ogre::PFG_RGBA8_UNORM_SRGB );
 
         Ogre::CubemapProbe *probe = 0;
         Ogre::Aabb roomShape( Ogre::Vector3( -0.505, 3.400016, 5.066226 ),
@@ -258,6 +261,9 @@ namespace Demo
             const float startX = (numX-1) / 2.0f;
             const float startZ = (numZ-1) / 2.0f;
 
+            Ogre::Root *root = mGraphicsSystem->getRoot();
+            Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
+
             size_t numSpheres = 0;
 
             for( int x=0; x<numX; ++x )
@@ -278,11 +284,16 @@ namespace Demo
                                                                   Ogre::HlmsParamVec() ) );
                     }
 
-                    Ogre::HlmsTextureManager::TextureLocation texLocation = hlmsTextureManager->
-                            createOrRetrieveTexture( "SaintPetersBasilica.dds",
-                                                     Ogre::HlmsTextureManager::TEXTURE_TYPE_ENV_MAP );
+                    Ogre::TextureGpu *texture = textureMgr->createOrRetrieveTexture(
+                                                    "SaintPetersBasilica.dds",
+                                                    Ogre::GpuPageOutStrategy::Discard,
+                                                    Ogre::TextureFlags::PrefersLoadingFromFileAsSRGB,
+                                                    Ogre::TextureTypes::TypeCube,
+                                                    Ogre::ResourceGroupManager::
+                                                    AUTODETECT_RESOURCE_GROUP_NAME,
+                                                    Ogre::TextureFilter::TypeGenerateDefaultMipmaps );
 
-                    datablock->setTexture( Ogre::PBSM_REFLECTION, texLocation.xIdx, texLocation.texture );
+                    datablock->setTexture( Ogre::PBSM_REFLECTION, texture );
                     datablock->setDiffuse( Ogre::Vector3( 0.0f, 1.0f, 0.0f ) );
 
                     datablock->setRoughness( std::max( 0.02f, x / Ogre::max( 1, (float)(numX-1) ) ) );

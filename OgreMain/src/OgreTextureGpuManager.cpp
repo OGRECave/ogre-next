@@ -707,6 +707,18 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
+    const String* TextureGpuManager::findResourceGroupStr( IdString idName ) const
+    {
+        const String *retVal = 0;
+
+        ResourceEntryMap::const_iterator itor = mEntries.find( idName );
+
+        if( itor != mEntries.end() )
+            retVal = &itor->second.resourceGroup;
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
     RenderSystem* TextureGpuManager::getRenderSystem(void) const
     {
         return mRenderSystem;

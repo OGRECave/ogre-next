@@ -110,6 +110,17 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
+    String TextureGpu::getResourceGroupStr(void) const
+    {
+        String retVal;
+        const String *nameStr = mTextureManager->findResourceGroupStr( mName );
+
+        if( nameStr )
+            retVal = *nameStr;
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
     String TextureGpu::getSettingsDesc(void) const
     {
         char tmpBuffer[92];
