@@ -58,9 +58,12 @@ namespace Ogre
         "Fade"
     };
 
-    HlmsJsonPbs::HlmsJsonPbs( HlmsManager *hlmsManager, TextureGpuManager *textureManager ) :
+    HlmsJsonPbs::HlmsJsonPbs( HlmsManager *hlmsManager, TextureGpuManager *textureManager,
+                                                        HlmsJsonListener *listener, const String &additionalExtension ) :
         mHlmsManager( hlmsManager ),
-        mTextureManager( textureManager )
+        mTextureManager( textureManager ),
+        mListener( listener ),
+        mAdditionalExtension( additionalExtension )
     {
     }
     //-----------------------------------------------------------------------------------
@@ -207,7 +210,8 @@ namespace Ogre
             uint32 filters = TextureFilter::TypeGenerateDefaultMipmaps;
             filters |= datablock->suggestFiltersForType( textureType );
 
-            texture = mTextureManager->createOrRetrieveTexture( textureName, aliasName,
+            texture = mTextureManager->createOrRetrieveTexture( textureName + mAdditionalExtension,
+                                                                aliasName,
                                                                 GpuPageOutStrategy::Discard,
                                                                 textureFlags, internalTextureType,
                                                                 resourceGroup, filters );
@@ -627,18 +631,15 @@ namespace Ogre
                 outString += ",\n\t\t\t\t\"mode\" : \"coeff\"";
         }
 
-        if( textureType >= PBSM_DETAIL0 && textureType <= PBSM_DETAIL3_NM )
+        if( textureType >= PBSM_DETAIL0 && textureType <= PBSM_DETAIL3 )
         {
-            if( textureType >= PBSM_DETAIL0 && textureType <= PBSM_DETAIL3 )
-            {
-                PbsBlendModes blendMode = datablock->getDetailMapBlendMode( textureType - PBSM_DETAIL0 );
+            PbsBlendModes blendMode = datablock->getDetailMapBlendMode( textureType - PBSM_DETAIL0 );
 
-                if( blendMode != PBSM_BLEND_NORMAL_NON_PREMUL )
-                {
-                    outString += ",\n\t\t\t\t\"mode\" : \"";
-                    outString += c_pbsBlendModes[blendMode];
-                    outString += '"';
-                }
+            if( blendMode != PBSM_BLEND_NORMAL_NON_PREMUL )
+            {
+                outString += ",\n\t\t\t\t\"mode\" : \"";
+                outString += c_pbsBlendModes[blendMode];
+                outString += '"';
             }
 
             const Vector4 &offsetScale =
@@ -668,18 +669,21 @@ namespace Ogre
                 const String *aliasName = mTextureManager->findAliasNameStr( texture->getName() );
                 if( texName && aliasName )
                 {
-                    if( *texName != *aliasName )
+                    String finalTexName = *texName;
+                    mListener->savingChangeTextureName( finalTexName );
+
+                    if( finalTexName != *aliasName )
                     {
                         outString += ",\n\t\t\t\t\"texture\" : [\"";
                         outString += *aliasName;
                         outString += "\", ";
-                        outString += *texName;
+                        outString += finalTexName;
                         outString += "\"]";
                     }
                     else
                     {
                         outString += ",\n\t\t\t\t\"texture\" : \"";
-                        outString += *texName;
+                        outString += finalTexName;
                         outString += '"';
                     }
                 }
@@ -794,14 +798,9 @@ namespace Ogre
 
         for( int i=0; i<4; ++i )
         {
-            const Vector4 &offsetScale = pbsDatablock->getDetailMapOffsetScale( i );
-            const Vector2 offset( offsetScale.x, offsetScale.y );
-            const Vector2 scale( offsetScale.z, offsetScale.w );
-
             const PbsTextureTypes textureType = static_cast<PbsTextureTypes>(PBSM_DETAIL0_NM + i);
 
-            if( offset != Vector2::ZERO || scale != Vector2::UNIT_SCALE ||
-                pbsDatablock->getDetailNormalWeight( i ) != 1.0f ||
+            if( pbsDatablock->getDetailNormalWeight( i ) != 1.0f ||
                 pbsDatablock->getTexture( textureType ) )
             {
                 char tmpBuffer[64];

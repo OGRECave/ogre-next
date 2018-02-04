@@ -373,12 +373,20 @@ namespace Ogre
             Datablock to fill the values.
         */
         virtual void _loadJson( const rapidjson::Value &jsonValue, const HlmsJson::NamedBlocks &blocks,
-                                HlmsDatablock *datablock, const String &resourceGroup ) const {}
-        virtual void _saveJson( const HlmsDatablock *datablock, String &outString ) const {}
+                                HlmsDatablock *datablock, const String &resourceGroup,
+                                HlmsJsonListener *listener,
+                                const String &additionalTextureExtension ) const {}
+        virtual void _saveJson( const HlmsDatablock *datablock, String &outString,
+                                HlmsJsonListener *listener,
+                                const String &additionalTextureExtension ) const {}
 
         virtual void _collectSamplerblocks( set<const HlmsSamplerblock*>::type &outSamplerblocks,
                                             const HlmsDatablock *datablock ) const {}
 #endif
+
+        void saveAllTexturesFromDatablocks( const String &folderPath, set<String>::type &savedTextures,
+                                            bool saveOitd, bool saveOriginal,
+                                            HlmsTextureExportListener *listener );
 
         /** Destroys all the cached shaders and in the next opportunity will recreate them
             from the new location. This is very useful for fast iteration and real-time

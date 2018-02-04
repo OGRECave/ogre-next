@@ -218,6 +218,7 @@ namespace Ogre {
     class HlmsManager;
     struct HlmsPso;
     struct HlmsSamplerblock;
+    class HlmsTextureExportListener;
     class HlmsTextureManager;
     struct HlmsTexturePack;
     class IndexBufferPacked;

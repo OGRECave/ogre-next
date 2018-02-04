@@ -48,6 +48,8 @@ namespace Ogre
     *  @{
     */
 
+    class HlmsJsonListener;
+
 #define OGRE_HLMS_NUM_MACROBLOCKS 32
 #define OGRE_HLMS_NUM_BLENDBLOCKS 32
 #define OGRE_HLMS_NUM_SAMPLERBLOCKS 64
@@ -112,6 +114,12 @@ namespace Ogre
 
 #if !OGRE_NO_JSON
         StringVector mScriptPatterns;
+
+    public:
+        typedef map<String, String>::type ResourceToTexExtensionMap;
+        ResourceToTexExtensionMap   mAdditionalTextureExtensionsPerGroup;
+        HlmsJsonListener            *mJsonListener;
+    protected:
 #endif
 
         void renderSystemDestroyAllBlocks(void);
@@ -300,11 +308,13 @@ namespace Ogre
                 const char *string = ...;
                 hlmsJson.loadMaterials( "Filename for debug purposes", string );
             To load materials from an arbitrary JSON string.
-            @see HlmsJson::loadMaterials
+            See HlmsJson::loadMaterials
         @param filename
         @param groupName
         */
-        void loadMaterials( const String &filename, const String &groupName );
+        void loadMaterials( const String &filename, const String &groupName,
+                            HlmsJsonListener *listener,
+                            const String &additionalTextureExtension );
 
         /** Saves all materials of the registered Hlms at the given file location.
         @param hlmsType
@@ -312,7 +322,9 @@ namespace Ogre
         @param filename
             Valid file path.
         */
-        void saveMaterials( HlmsTypes hlmsType,const String &filename );
+        void saveMaterials( HlmsTypes hlmsType,const String &filename,
+                            HlmsJsonListener *listener,
+                            const String &additionalTextureExtension );
 
         /** Saves a specific Hlms material at the given file location.
         @param datablock
@@ -320,7 +332,9 @@ namespace Ogre
         @param filename
             Valid file path.
         */
-        void saveMaterial( const HlmsDatablock *datablock, const String &filename );
+        void saveMaterial( const HlmsDatablock *datablock, const String &filename,
+                           HlmsJsonListener *listener,
+                           const String &additionalTextureExtension );
 
         //ScriptLoader overloads
         virtual void parseScript(DataStreamPtr& stream, const String& groupName);

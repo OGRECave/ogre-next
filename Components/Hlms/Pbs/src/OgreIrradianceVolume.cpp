@@ -42,6 +42,10 @@ namespace Ogre
 {
     IrradianceVolume::IrradianceVolume( HlmsManager *hlmsManager ) :
         mHlmsManager( hlmsManager ),
+        mNumBlocksX( 0 ),
+        mNumBlocksY( 0 ),
+        mNumBlocksZ( 0 ),
+        mFadeAttenuationOverDistace( false ),
         mPowerScale( 1.0f ),
         mIrradianceMaxPower( 1 ),
         mIrradianceOrigin( Vector3::ZERO ),
@@ -308,7 +312,9 @@ namespace Ogre
         if( mVolumeData )
         {
             OGRE_FREE( mVolumeData, MEMCATEGORY_GENERAL );
-            OGRE_FREE(mBlurredVolumeData, MEMCATEGORY_GENERAL);
+            OGRE_FREE( mBlurredVolumeData, MEMCATEGORY_GENERAL );
+            mVolumeData = 0;
+            mBlurredVolumeData = 0;
         }
     }
 

@@ -45,6 +45,13 @@ namespace Ogre
     struct DXTInterpolatedAlphaBlock;
 
     /** Codec specialized in loading OITD (Ogre Internal Texture Dump) format.
+    @remarks
+        This format has two versions:
+            Version 0 -> Used by Ogre 2.1
+            Version 1 -> Used by Ogre 2.2
+        The difference between the two are pixel format enums, and that Version 1 has
+        rows aligned to 4 bytes, whereas Version 0 has no alignment restrictions.
+        Version 0 is only used out of necessity, and is not generally recommended.
     */
     class _OgreExport OITDCodec : public ImageCodec2
     {

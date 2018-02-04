@@ -48,6 +48,8 @@ THE SOFTWARE.
 #undef OGRE_HLMS_TEXTURE_BASE_MAX_TEX
 #undef OGRE_HLMS_CREATOR_CLASS
 
+#include "OgreHlmsUnlitDatablock.cpp.inc"
+
 namespace Ogre
 {
     extern const String c_unlitBlendModes[];

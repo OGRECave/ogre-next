@@ -48,6 +48,8 @@ namespace Ogre
     {
         HlmsManager         *mHlmsManager;
         TextureGpuManager   *mTextureManager;
+        HlmsJsonListener *mListener;
+        String mAdditionalExtension;
 
         static HlmsPbsDatablock::Workflows parseWorkflow( const char *value );
         static PbsBrdf::PbsBrdf parseBrdf( const char *value );
@@ -91,7 +93,8 @@ namespace Ogre
                           const HlmsPbsDatablock *datablock, String &outString );
 
     public:
-        HlmsJsonPbs( HlmsManager *hlmsManager, TextureGpuManager *textureManager );
+        HlmsJsonPbs( HlmsManager *hlmsManager, TextureGpuManager *textureManager,
+                     HlmsJsonListener *listener, const String &additionalExtension );
 
         void loadMaterial( const rapidjson::Value &json, const HlmsJson::NamedBlocks &blocks,
                            HlmsDatablock *datablock, const String &resourceGroup );

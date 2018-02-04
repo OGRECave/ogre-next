@@ -131,6 +131,7 @@ namespace Ogre
         */
         void initWorkspace( float cameraNear = 0.5f, float cameraFar = 500.0f,
                             IdString workspaceDefOverride=IdString() );
+        bool isInitialized(void) const;
 
         /** Sets cubemap probe's parameters.
         @param cameraPos
@@ -180,6 +181,7 @@ namespace Ogre
         void _clearCubemap(void);
         void _updateRender(void);
 
+        const Vector3& getProbeCameraPos(void) const        { return mProbeCameraPos; }
         const Aabb& getArea(void) const                     { return mArea; }
         const Vector3& getAreaInnerRegion(void) const       { return mAreaInnerRegion; }
         const Matrix3& getOrientation(void) const           { return mOrientation; }

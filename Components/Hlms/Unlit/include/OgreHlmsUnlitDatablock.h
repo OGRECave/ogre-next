@@ -78,6 +78,8 @@ namespace Ogre
 
         uint8   mTextureSwizzles[NUM_UNLIT_TEXTURE_TYPES];
 
+        virtual void cloneImpl( HlmsDatablock *datablock ) const;
+
         virtual void uploadToConstBuffer( char *dstPtr, uint8 dirtyFlags );
         virtual void uploadToExtraBuffer( char *dstPtr );
 

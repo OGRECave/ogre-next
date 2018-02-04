@@ -267,6 +267,8 @@ namespace Ogre
 
         void setParallaxCorrectedCubemap( ParallaxCorrectedCubemap *pcc )
                                                             { mParallaxCorrectedCubemap = pcc; }
+        ParallaxCorrectedCubemap* getParallaxCorrectedCubemap(void) const
+                                                            { return mParallaxCorrectedCubemap; }
 
         void setIrradianceVolume( IrradianceVolume *irradianceVolume )
                                                     { mIrradianceVolume = irradianceVolume; }
@@ -280,9 +282,12 @@ namespace Ogre
 #if !OGRE_NO_JSON
         /// @copydoc Hlms::_loadJson
         virtual void _loadJson( const rapidjson::Value &jsonValue, const HlmsJson::NamedBlocks &blocks,
-                                HlmsDatablock *datablock, const String &resourceGroup ) const;
+                                HlmsDatablock *datablock, const String &resourceGroup,
+                                HlmsJsonListener *listener, const String &additionalTextureExtension ) const;
         /// @copydoc Hlms::_saveJson
-        virtual void _saveJson( const HlmsDatablock *datablock, String &outString ) const;
+        virtual void _saveJson( const HlmsDatablock *datablock, String &outString,
+                                HlmsJsonListener *listener,
+                                const String &additionalTextureExtension ) const;
 
         /// @copydoc Hlms::_collectSamplerblocks
         virtual void _collectSamplerblocks( set<const HlmsSamplerblock*>::type &outSamplerblocks,

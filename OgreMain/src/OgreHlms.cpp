@@ -1461,6 +1461,22 @@ namespace Ogre
         mHighQuality = highQuality;
     }
     //-----------------------------------------------------------------------------------
+    void Hlms::saveAllTexturesFromDatablocks( const String &folderPath,
+                                              set<String>::type &savedTextures,
+                                              bool saveOitd, bool saveOriginal,
+                                              HlmsTextureExportListener *listener )
+    {
+        HlmsDatablockMap::const_iterator itor = mDatablocks.begin();
+        HlmsDatablockMap::const_iterator end  = mDatablocks.end();
+
+        while( itor != end )
+        {
+            itor->second.datablock->saveTextures( folderPath, savedTextures, saveOitd,
+                                                  saveOriginal, listener );
+            ++itor;
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void Hlms::reloadFrom( Archive *newDataFolder, ArchiveVec *libraryFolders )
     {
         clearShaderCache();

@@ -133,7 +133,7 @@ namespace Ogre
             listener->passEarlyPreExecute( this );
 
         Camera const *usedLodCamera = mLodCamera;
-        if( lodCamera && mCamera == mLodCamera )
+        if( lodCamera && mDefinition->mLodCameraName == IdString() )
             usedLodCamera = lodCamera;
 
 #if TODO_OGRE_2_2

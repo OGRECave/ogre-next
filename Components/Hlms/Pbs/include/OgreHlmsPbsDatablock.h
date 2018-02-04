@@ -234,6 +234,8 @@ namespace Ogre
         /// @see PbsBrdf::PbsBrdf
         uint32  mBrdf;
 
+        virtual void cloneImpl( HlmsDatablock *datablock ) const;
+
         virtual bool bakeTextures( bool hasSeparateSamplers );
         void scheduleConstBufferUpdate(void);
         virtual void uploadToConstBuffer( char *dstPtr, uint8 dirtyFlags );
@@ -663,6 +665,10 @@ namespace Ogre
 //                                                                PbsTextureTypes type );
         bool suggestUsingSRGB( PbsTextureTypes type ) const;
         uint32 suggestFiltersForType( PbsTextureTypes type ) const;
+
+        virtual void saveTextures( const String &folderPath, set<String>::type &savedTextures,
+                                   bool saveOitd, bool saveOriginal,
+                                   HlmsTextureExportListener *listener );
 
         virtual void calculateHash();
 

@@ -182,6 +182,32 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    HlmsDatablock* HlmsDatablock::clone( String name ) const
+    {
+        HlmsDatablock *datablock = mCreator->createDatablock( name, name,
+                                                              HlmsMacroblock(), HlmsBlendblock(),
+                                                              HlmsParamVec() );
+
+        // Directly const cast macroblocks to keep their mRefCount consistent
+        datablock->setMacroblock( const_cast<HlmsMacroblock*>( mMacroblock[0] ), false );
+        datablock->setMacroblock( const_cast<HlmsMacroblock*>( mMacroblock[1] ), true );
+
+        // Directly const cast blendblocks to keep their mRefCount consistent
+        datablock->setBlendblock( const_cast<HlmsBlendblock*>( mBlendblock[0] ), false );
+        datablock->setBlendblock( const_cast<HlmsBlendblock*>( mBlendblock[1] ), true );
+
+        datablock->mAlphaTestCmp = mAlphaTestCmp;
+        datablock->mAlphaTestThreshold = mAlphaTestThreshold;
+
+        datablock->mShadowConstantBias = mShadowConstantBias;
+
+        cloneImpl( datablock );
+
+        datablock->calculateHash();
+
+        return datablock;
+    }
+    //-----------------------------------------------------------------------------------
     void HlmsDatablock::setMacroblock( const HlmsMacroblock &macroblock, bool casterBlock )
     {
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
@@ -427,6 +453,12 @@ namespace Ogre
 
         //Now compare if they're equal
         return *macroblock0 != macroblock1;
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsDatablock::saveTextures( const String &folderPath, set<String>::type &savedTextures,
+                                      bool saveOitd, bool saveOriginal,
+                                      HlmsTextureExportListener *listener )
+    {
     }
     //-----------------------------------------------------------------------------------
     static const char *c_cmpStrings[NUM_COMPARE_FUNCTIONS+1] =
