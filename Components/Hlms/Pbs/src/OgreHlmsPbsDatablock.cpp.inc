@@ -34,6 +34,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsPbsDatablock::cloneImpl( HlmsDatablock *datablock ) const
     {
+        HlmsPbsBaseTextureDatablock::cloneImpl( datablock );
         HlmsPbsDatablock *datablockImpl = static_cast<HlmsPbsDatablock*>( datablock );
 
         datablockImpl->mFresnelTypeSizeBytes = mFresnelTypeSizeBytes;

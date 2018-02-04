@@ -34,6 +34,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsUnlitDatablock::cloneImpl( HlmsDatablock *datablock ) const
     {
+        HlmsUnlitBaseTextureDatablock::cloneImpl( datablock );
         HlmsUnlitDatablock *datablockImpl = static_cast<HlmsUnlitDatablock*>( datablock );
 
         datablockImpl->mNumEnabledAnimationMatrices = mNumEnabledAnimationMatrices;

@@ -88,6 +88,8 @@ namespace Ogre
         /// Expects caller to call flushRenderables if we return true.
         bool bakeSamplers(void);
 
+        virtual void cloneImpl( HlmsDatablock *datablock ) const;
+
     public:
         OGRE_HLMS_TEXTURE_BASE_CLASS( IdString name, Hlms *creator,
                                       const HlmsMacroblock *macroblock,

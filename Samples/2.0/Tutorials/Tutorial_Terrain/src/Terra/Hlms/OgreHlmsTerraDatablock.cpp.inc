@@ -34,6 +34,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsTerraDatablock::cloneImpl( HlmsDatablock *datablock ) const
     {
+        HlmsDatablock::cloneImpl( datablock );
         HlmsTerraDatablock *datablockImpl = static_cast<HlmsTerraDatablock*>( datablock );
 
         datablockImpl->mkDr = mkDr;
