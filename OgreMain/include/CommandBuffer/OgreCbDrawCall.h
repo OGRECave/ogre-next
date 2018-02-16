@@ -32,7 +32,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    struct CbVao : public CbBase
+    struct _OgreExport CbVao : public CbBase
     {
         VertexArrayObject *vao;
         CbVao( VertexArrayObject *_vao );
