@@ -99,8 +99,8 @@ namespace Ogre
         /// Defaults to 0xffffffff
         uint32  mMask;
 
-    protected:
         void destroyWorkspace(void);
+    protected:
         void destroyTexture(void);
 
     public:

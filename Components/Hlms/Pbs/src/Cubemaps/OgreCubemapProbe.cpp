@@ -76,13 +76,6 @@ namespace Ogre
         destroyWorkspace();
         destroyTexture();
 
-        if( mCamera )
-        {
-            SceneManager *sceneManager = mCamera->getSceneManager();
-            sceneManager->destroyCamera( mCamera );
-            mCamera = 0;
-        }
-
         assert( !mNumDatablockUsers &&
                 "There's still datablocks using this probe! Pointers will become dangling!" );
         if( mConstBufferForManualProbes )
@@ -121,6 +114,13 @@ namespace Ogre
 
         if( mTexture && mTexture->getResidencyStatus() != GpuResidency::OnStorage )
             mTexture->_transitionTo( GpuResidency::OnStorage, (uint8*)0 );
+
+        if( mCamera )
+        {
+            SceneManager *sceneManager = mCamera->getSceneManager();
+            sceneManager->destroyCamera( mCamera );
+            mCamera = 0;
+        }
     }
     //-----------------------------------------------------------------------------------
     void CubemapProbe::destroyTexture(void)

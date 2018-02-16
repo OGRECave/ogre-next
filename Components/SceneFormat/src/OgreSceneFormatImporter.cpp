@@ -62,8 +62,11 @@ namespace Ogre
         mInstantRadiosity( 0 ),
         mIrradianceVolume( 0 ),
         mParallaxCorrectedCubemap( 0 ),
+        mSceneComponentTransform( Matrix4::IDENTITY ),
         mDefaultPccWorkspaceName( defaultPccWorkspaceName )
     {
+        memset( mRootNodes, 0, sizeof(mRootNodes) );
+        memset( mParentlessRootNodes, 0, sizeof(mParentlessRootNodes) );
     }
     //-----------------------------------------------------------------------------------
     SceneFormatImporter::~SceneFormatImporter()
@@ -326,9 +329,14 @@ namespace Ogre
                     isRootNode = itTmp->value.GetBool();
 
                 if( isRootNode )
-                    sceneNode = mSceneManager->getRootSceneNode( sceneNodeType );
+                    sceneNode = mRootNodes[sceneNodeType];
                 else
-                    sceneNode = mSceneManager->createSceneNode( sceneNodeType );
+                {
+                    if( mParentlessRootNodes[sceneNodeType] )
+                        sceneNode = mParentlessRootNodes[sceneNodeType]->createChildSceneNode();
+                    else
+                        sceneNode = mSceneManager->createSceneNode( sceneNodeType );
+                }
             }
 
             importNode( nodeValue, sceneNode );
@@ -783,8 +791,9 @@ namespace Ogre
                     aoi[0].IsArray() &&
                     aoi[1].IsUint() )
                 {
-                    const Aabb aabb = decodeAabbArray( aoi[0], Aabb::BOX_ZERO );
+                    Aabb aabb = decodeAabbArray( aoi[0], Aabb::BOX_ZERO );
                     const float sphereRadius = decodeFloat( aoi[1] );
+                    aabb.transformAffine( mSceneComponentTransform );
                     InstantRadiosity::AreaOfInterest areaOfInterest( aabb, sphereRadius );
                     mInstantRadiosity->mAoI.push_back( areaOfInterest );
                 }
@@ -903,8 +912,8 @@ namespace Ogre
             if( !compositorManager->hasWorkspaceDefinition( workspaceName ) )
             {
                 LogManager::getSingleton().logMessage(
-                            "INFO: Parallax Corrected Cubemaps workspace definition not found, "
-                            "using default one." );
+                            "INFO: Parallax Corrected Cubemaps workspace definition '" +
+                            workspaceName + "not found, using default one." );
                 workspaceName = mDefaultPccWorkspaceName;
             }
         }
@@ -946,7 +955,6 @@ namespace Ogre
         tmpIt = pccValue.FindMember( "mask" );
         if( tmpIt != pccValue.MemberEnd() && tmpIt->value.IsUint() )
             mParallaxCorrectedCubemap->mMask = tmpIt->value.GetUint();
-
         tmpIt = pccValue.FindMember( "probes" );
         if( tmpIt != pccValue.MemberEnd() && tmpIt->value.IsArray() )
         {
@@ -1018,6 +1026,12 @@ namespace Ogre
                 if( tmpIt != jsonProbe.MemberEnd() && tmpIt->value.IsArray() )
                     probeShape = decodeAabbArray( tmpIt->value, Aabb::BOX_ZERO );
 
+                cameraPos = mSceneComponentTransform * cameraPos;
+                probeArea.transformAffine( mSceneComponentTransform );
+                areaInnerRegion = mSceneComponentTransform * areaInnerRegion;
+                //orientation = pccTransform3x3 * orientation;
+                probeShape.transformAffine( mSceneComponentTransform );
+
                 probe->set( cameraPos, probeArea, areaInnerRegion, orientation, probeShape );
 
                 tmpIt = jsonProbe.FindMember( "enabled" );
@@ -1077,6 +1091,15 @@ namespace Ogre
         mFilename = filename;
         destroyInstantRadiosity();
         destroyParallaxCorrectedCubemap();
+
+        //Set null pointers to valid root scene nodes. We'll restore the nullptrs at the end.
+        SceneNode *oldRootNodes[NUM_SCENE_MEMORY_MANAGER_TYPES];
+        for( size_t i=0; i<NUM_SCENE_MEMORY_MANAGER_TYPES; ++i )
+        {
+            oldRootNodes[i] = mRootNodes[i];
+            if( !mRootNodes[i] )
+                mRootNodes[i] = mSceneManager->getRootSceneNode( static_cast<SceneMemoryMgrTypes>(i) );
+        }
 
         rapidjson::Value::ConstMemberIterator itor;
 
@@ -1147,6 +1170,27 @@ namespace Ogre
                             mIrradianceVolume->getFadeAttenuationOverDistace() );
             }
         }
+
+        for( size_t i=0; i<NUM_SCENE_MEMORY_MANAGER_TYPES; ++i )
+            mRootNodes[i] = oldRootNodes[i];
+    }
+
+    //-----------------------------------------------------------------------------------
+    void SceneFormatImporter::setRootNodes( SceneNode *dynamicRoot, SceneNode *staticRoot )
+    {
+        mRootNodes[SCENE_DYNAMIC] = dynamicRoot;
+        mRootNodes[SCENE_STATIC] = staticRoot;
+    }
+    //-----------------------------------------------------------------------------------
+    void SceneFormatImporter::setParentlessRootNodes( SceneNode *dynamicRoot, SceneNode *staticRoot )
+    {
+        mParentlessRootNodes[SCENE_DYNAMIC] = dynamicRoot;
+        mParentlessRootNodes[SCENE_STATIC] = staticRoot;
+    }
+    //-----------------------------------------------------------------------------------
+    void SceneFormatImporter::setSceneComponentTransform( const Matrix4 &transform )
+    {
+        mSceneComponentTransform = transform;
     }
     //-----------------------------------------------------------------------------------
     void SceneFormatImporter::importScene( const String &filename, const char *jsonString,
@@ -1169,9 +1213,11 @@ namespace Ogre
     {
         ResourceGroupManager &resourceGroupManager = ResourceGroupManager::getSingleton();
         resourceGroupManager.addResourceLocation( folderPath, "FileSystem", "SceneFormatImporter" );
-        resourceGroupManager.addResourceLocation( folderPath + "/v2",
+        resourceGroupManager.addResourceLocation( folderPath + "/v2/",
                                                   "FileSystem", "SceneFormatImporter" );
-        resourceGroupManager.addResourceLocation( folderPath + "/v1",
+        resourceGroupManager.addResourceLocation( folderPath + "/v1/",
+                                                  "FileSystem", "SceneFormatImporter" );
+        resourceGroupManager.addResourceLocation( folderPath + "/textures/",
                                                   "FileSystem", "SceneFormatImporter" );
 
         DataStreamPtr stream = resourceGroupManager.openResource( "scene.json", "SceneFormatImporter" );
@@ -1208,11 +1254,12 @@ namespace Ogre
             if( useOitd )
                 hlmsManager->mAdditionalTextureExtensionsPerGroup.erase( "SceneFormatImporter" );
 
-            resourceGroupManager.removeResourceLocation( folderPath, "SceneFormatImporter" );
-            resourceGroupManager.removeResourceLocation( folderPath + "/v2", "SceneFormatImporter" );
-            resourceGroupManager.removeResourceLocation( folderPath + "/v1", "SceneFormatImporter" );
-
             importScene( stream->getName(), &fileData[0], importFlags );
+
+            resourceGroupManager.removeResourceLocation( folderPath + "/textures/", "SceneFormatImporter" );
+            resourceGroupManager.removeResourceLocation( folderPath + "/v2/", "SceneFormatImporter" );
+            resourceGroupManager.removeResourceLocation( folderPath + "/v1/", "SceneFormatImporter" );
+            resourceGroupManager.removeResourceLocation( folderPath, "SceneFormatImporter" );
         }
     }
     //-----------------------------------------------------------------------------------
