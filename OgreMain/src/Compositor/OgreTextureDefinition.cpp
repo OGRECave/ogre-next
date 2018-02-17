@@ -677,4 +677,25 @@ namespace Ogre
         colourAttachments.push_back( entry );
         bIsRuntimeAnalyzed = true;
     }
+    //-----------------------------------------------------------------------------------
+    void RenderTargetViewDef::setForTextureDefinition( const String &texName,
+                                                       TextureDefinitionBase::TextureDefinition *texDef )
+    {
+        this->colourAttachments.clear();
+        if( !PixelFormatGpuUtils::isDepth( texDef->format ) )
+        {
+            RenderTargetViewEntry attachment;
+            attachment.textureName = texName;
+            this->colourAttachments.push_back( attachment );
+            this->depthBufferId      = texDef->depthBufferId;
+            this->preferDepthTexture = texDef->preferDepthTexture;
+            this->depthBufferFormat  = texDef->depthBufferFormat;
+        }
+        else
+        {
+            this->depthAttachment.textureName = texName;
+            if( PixelFormatGpuUtils::isStencil( texDef->format ) )
+                this->stencilAttachment.textureName = texName;
+        }
+    }
 }

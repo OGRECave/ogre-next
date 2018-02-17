@@ -48,6 +48,7 @@ THE SOFTWARE.
 #include "OgreViewport.h"
 #include "OgrePass.h"
 #include "OgreDepthBuffer.h"
+#include "OgrePixelFormatGpuUtils.h"
 
 #include "OgreShadowCameraSetupFocused.h"
 #include "OgreShadowCameraSetupPSSM.h"
@@ -1163,24 +1164,29 @@ namespace Ogre
                                 "Currently not using atlasId = " + StringConverter::toString( i ) );
                 }
 
+                String texName = "atlas" + StringConverter::toString(i);
                 TextureDefinitionBase::TextureDefinition *texDef =
-                        shadowNodeDef->addTextureDefinition( "atlas" + StringConverter::toString(i) );
+                        shadowNodeDef->addTextureDefinition( texName );
 
                 texDef->width   = std::max( atlasRes.x, 1u );
                 texDef->height  = std::max( atlasRes.y, 1u );
                 if( !useEsm )
                 {
-                    texDef->formatList.push_back( PF_D32_FLOAT );
+                    texDef->format = PFG_D32_FLOAT;
                     texDef->depthBufferId = DepthBuffer::POOL_NON_SHAREABLE;
                 }
                 else
                 {
-                    texDef->formatList.push_back( PF_L16 );
-                    texDef->uav = supportsCompute;
+                    texDef->format = PFG_R16_UNORM;
+                    if( supportsCompute )
+                        texDef->textureFlags |= TextureFlags::Uav;
                 }
-                texDef->depthBufferFormat = PF_D32_FLOAT;
+                texDef->depthBufferFormat = PFG_D32_FLOAT;
                 texDef->preferDepthTexture = false;
-                texDef->fsaa = false;
+                texDef->msaa = 1u;
+
+                RenderTargetViewDef *rtv = shadowNodeDef->addRenderTextureView( texName );
+                rtv->setForTextureDefinition( texName, texDef );
 
                 //Make all atlases with the same resolution share the same temporary
                 //gaussian filter target (to avoid wasting GPU RAM) and give
@@ -1196,17 +1202,23 @@ namespace Ogre
 
                 while( itEsm != enEsm )
                 {
+                    String texName = "tmpGaussianFilter" + StringConverter::toString(itEsm->second);
                     TextureDefinitionBase::TextureDefinition *texDef =
-                            shadowNodeDef->addTextureDefinition(
-                                "tmpGaussianFilter" + StringConverter::toString(itEsm->second) );
+                            shadowNodeDef->addTextureDefinition( texName );
 
                     texDef->width   = static_cast<uint32>( (itEsm->first >> (uint64)32ul) );
                     texDef->height  = static_cast<uint32>( (itEsm->first & (uint64)0xfffffffful) );
-                    texDef->formatList.push_back( PF_L16 );
+                    texDef->format = PFG_R16_UNORM;
                     texDef->depthBufferId = DepthBuffer::POOL_NO_DEPTH;
                     texDef->preferDepthTexture = false;
-                    texDef->fsaa = false;
-                    texDef->uav = supportsCompute;
+                    texDef->msaa = 1u;
+                    if( supportsCompute )
+                        texDef->textureFlags |= TextureFlags::Uav;
+                    else
+                    {
+                        RenderTargetViewDef *rtv = shadowNodeDef->addRenderTextureView( texName );
+                        rtv->setForTextureDefinition( texName, texDef );
+                    }
 
                     ++itEsm;
                 }
@@ -1215,18 +1227,23 @@ namespace Ogre
             //Define the cubemap needed by point lights
             if( hasPointLights )
             {
+                const String texName = "tmpCubemap";
                 TextureDefinitionBase::TextureDefinition *texDef =
-                        shadowNodeDef->addTextureDefinition( "tmpCubemap" );
+                        shadowNodeDef->addTextureDefinition( texName );
 
                 texDef->width   = pointLightCubemapResolution;
                 texDef->height  = pointLightCubemapResolution;
-                texDef->depth   = 6u;
-                texDef->textureType = TEX_TYPE_CUBE_MAP;
-                texDef->formatList.push_back( PF_FLOAT32_R );
+                texDef->depthOrSlices = 6u;
+                texDef->textureType = TextureTypes::TypeCube;
+                texDef->format = PFG_R32_FLOAT;
                 texDef->depthBufferId = 1u;
-                texDef->depthBufferFormat = PF_D32_FLOAT;
+                texDef->depthBufferFormat = PFG_D32_FLOAT;
                 texDef->preferDepthTexture = false;
-                texDef->fsaa = false;
+                if( supportsCompute )
+                    texDef->textureFlags |= TextureFlags::Uav;
+
+                RenderTargetViewDef *rtv = shadowNodeDef->addRenderTextureView( texName );
+                rtv->setForTextureDefinition( texName, texDef );
             }
         }
 
@@ -1258,7 +1275,7 @@ namespace Ogre
 
                 ShadowTextureDefinition *shadowTexDef =
                         shadowNodeDef->addShadowTextureDefinition( lightIdx, j, texName,
-                                                                   0, uvOffset, uvLength, 0 );
+                                                                   uvOffset, uvLength, 0 );
                 shadowTexDef->shadowMapTechnique = shadowParam.technique;
                 shadowTexDef->pssmLambda = pssmLambda;
                 shadowTexDef->splitPadding = splitPadding;
@@ -1283,8 +1300,8 @@ namespace Ogre
 
                 CompositorPassDef *passDef = targetDef->addPass( PASS_CLEAR );
                 CompositorPassClearDef *passClear = static_cast<CompositorPassClearDef*>( passDef );
-                passClear->mColourValue = ColourValue::White;
-                passClear->mDepthValue = 1.0f;
+                passClear->setAllClearColours( ColourValue::White );
+                passClear->mClearDepth = 1.0f;
             }
 
             //Pass scene for directional and spot lights first
@@ -1334,24 +1351,17 @@ namespace Ogre
                     for( uint32 i=0; i<6u; ++i )
                     {
                         CompositorTargetDef *targetDef = shadowNodeDef->addTargetPass( "tmpCubemap", i );
-                        targetDef->setNumPasses( 2u );
+                        targetDef->setNumPasses( 1u );
                         targetDef->setShadowMapSupportedLightTypes( shadowParam.supportedLightTypes &
                                                                     pointMask );
-                        {
-                            //Clear pass
-                            CompositorPassDef *passDef = targetDef->addPass( PASS_CLEAR );
-                            CompositorPassClearDef *passClear =
-                                    static_cast<CompositorPassClearDef*>( passDef );
-                            passClear->mColourValue = ColourValue::White;
-                            passClear->mDepthValue = 1.0f;
-                            passClear->mShadowMapIdx = shadowMapIdx;
-                        }
-
                         {
                             //Scene pass
                             CompositorPassDef *passDef = targetDef->addPass( PASS_SCENE );
                             CompositorPassSceneDef *passScene =
                                     static_cast<CompositorPassSceneDef*>( passDef );
+                            passScene->setAllLoadActions( LoadAction::Clear );
+                            passScene->setAllClearColours( ColourValue::White );
+                            passScene->mClearDepth = 1.0f;
                             passScene->mCameraCubemapReorient = true;
                             passScene->mShadowMapIdx = shadowMapIdx;
                             passScene->mIncludeOverlays = false;
@@ -1368,7 +1378,7 @@ namespace Ogre
                     CompositorPassQuadDef *passQuad = static_cast<CompositorPassQuadDef*>( passDef );
                     passQuad->mMaterialIsHlms = false;
                     passQuad->mMaterialName = "Ogre/DPSM/CubeToDpsm";
-                    passQuad->addQuadTextureSource( 0, "tmpCubemap", 0 );
+                    passQuad->addQuadTextureSource( 0, "tmpCubemap" );
                     passQuad->mShadowMapIdx = shadowMapIdx;
                 }
                 const size_t numSplits =
@@ -1394,9 +1404,9 @@ namespace Ogre
                         CompositorPassComputeDef *passCompute =
                                 static_cast<CompositorPassComputeDef*>( passDef );
                         passCompute->mJobName = "ESM/GaussianLogFilterH";
-                        passCompute->addTextureSource( 0, texName, 0 );
-                        passCompute->addUavSource( 0, tmpGaussianFilterName, 0, ResourceAccess::Write,
-                                                   0, 0, PF_L16, false );
+                        passCompute->addTextureSource( 0, texName );
+                        passCompute->addUavSource( 0, tmpGaussianFilterName, ResourceAccess::Write,
+                                                   0, 0, PFG_R16_UNORM, false );
                     }
                     {
                         //Compute pass
@@ -1404,9 +1414,9 @@ namespace Ogre
                         CompositorPassComputeDef *passCompute =
                                 static_cast<CompositorPassComputeDef*>( passDef );
                         passCompute->mJobName = "ESM/GaussianLogFilterV";
-                        passCompute->addTextureSource( 0, tmpGaussianFilterName, 0 );
-                        passCompute->addUavSource( 0, texName, 0, ResourceAccess::Write,
-                                                   0, 0, PF_L16, false );
+                        passCompute->addTextureSource( 0, tmpGaussianFilterName );
+                        passCompute->addUavSource( 0, texName,  ResourceAccess::Write,
+                                                   0, 0, PFG_R16_UNORM, false );
                     }
                 }
                 else
@@ -1421,7 +1431,7 @@ namespace Ogre
                         CompositorPassQuadDef *passQuad = static_cast<CompositorPassQuadDef*>( passDef );
                         passQuad->mMaterialIsHlms = false;
                         passQuad->mMaterialName = "ESM/GaussianLogFilterH";
-                        passQuad->addQuadTextureSource( 0, texName, 0 );
+                        passQuad->addQuadTextureSource( 0, texName );
                     }
                     {
                         //Quad  pass
@@ -1432,7 +1442,7 @@ namespace Ogre
                         CompositorPassQuadDef *passQuad = static_cast<CompositorPassQuadDef*>( passDef );
                         passQuad->mMaterialIsHlms = false;
                         passQuad->mMaterialName = "ESM/GaussianLogFilterV";
-                        passQuad->addQuadTextureSource( 0, tmpGaussianFilterName, 0 );
+                        passQuad->addQuadTextureSource( 0, tmpGaussianFilterName );
                     }
                 }
             }

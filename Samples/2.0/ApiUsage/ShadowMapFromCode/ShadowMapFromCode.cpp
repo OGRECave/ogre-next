@@ -5,7 +5,7 @@
 #include "OgreSceneManager.h"
 #include "OgreCamera.h"
 #include "OgreRoot.h"
-#include "OgreRenderWindow.h"
+#include "OgreWindow.h"
 #include "OgreConfigFile.h"
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorNodeDef.h"
@@ -169,17 +169,17 @@ namespace Demo
                 Ogre::CompositorTargetDef *targetDef = nodeDef->getTargetPass( 0 );
                 const Ogre::CompositorPassDefVec &passes = targetDef->getCompositorPasses();
 
-                assert( dynamic_cast<Ogre::CompositorPassSceneDef*>( passes[1] ) );
+                assert( dynamic_cast<Ogre::CompositorPassSceneDef*>( passes[0] ) );
                 Ogre::CompositorPassSceneDef *passSceneDef =
-                        static_cast<Ogre::CompositorPassSceneDef*>( passes[1] );
+                        static_cast<Ogre::CompositorPassSceneDef*>( passes[0] );
                 passSceneDef->mShadowNode = "ShadowMapFromCodeShadowNode";
 
                 createPcfShadowNode();
                 createEsmShadowNodes();
             }
 
-            mWorkspace = compositorManager->addWorkspace( mSceneManager, mRenderWindow, mCamera,
-                                                          "ShadowMapFromCodeWorkspace", true );
+            mWorkspace = compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(),
+                                                          mCamera, "ShadowMapFromCodeWorkspace", true );
             return mWorkspace;
         }
 

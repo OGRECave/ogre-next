@@ -68,51 +68,7 @@ namespace Ogre
     };
 
     typedef vector<RenderTargetViewEntry>::type RenderTargetViewEntryVec;
-
-    struct _OgreExport RenderTargetViewDef
-    {
-        RenderTargetViewEntryVec    colourAttachments;
-        RenderTargetViewEntry       depthAttachment;
-        RenderTargetViewEntry       stencilAttachment;
-
-        /// Depth Buffer's pool ID. Ignored if depthAttachment.textureName or
-        /// stencilAttachment.textureName are explicitly set.
-        uint16          depthBufferId;
-        /** Whether this RTV should be attached to a depth texture (i.e.
-            TextureGpu::isTexture == true) or a regular depth buffer.
-            True to use depth textures. False otherwise (default).
-        @remarks
-            On older GPUs, preferring depth textures may result in certain depth precisions
-            to not be available (or use integer precision instead of floating point, etc).
-        @par
-            Ignored if depthAttachment.texture or stencilAttachment.texture are explicitly set.
-        */
-        bool            preferDepthTexture;
-        PixelFormatGpu  depthBufferFormat;
-
-        bool depthReadOnly;
-        bool stencilReadOnly;
-        protected: bool bIsRuntimeAnalyzed;
-
-    public:
-        RenderTargetViewDef() :
-            depthBufferId( 1u ), preferDepthTexture( false ), depthBufferFormat( PFG_UNKNOWN ),
-            depthReadOnly( false ), stencilReadOnly( false ), bIsRuntimeAnalyzed( false )
-        {}
-
-        /** If the texture comes from an input channel, we don't have yet enough information,
-            as we're missing:
-                * Whether the texture is colour or depth
-                * The default depth settings (prefersDepthTexture, depth format, etc)
-            Use this function to force the given texture to be analyzed at runtime when
-            creating the pass.
-        @remarks
-            Cannot be used for MRT.
-        @param texName
-        */
-        void setRuntimeAnalyzed( IdString texName );
-        bool isRuntimeAnalyzed(void) const                  { return bIsRuntimeAnalyzed; }
-    };
+    struct RenderTargetViewDef;
 
     /** Centralized class for dealing with declarations of textures in Node &
         Workspace definitions. Note that shadow nodes use their own system
@@ -545,6 +501,59 @@ namespace Ogre
                                               RenderSystem *renderSys,
                                               const CompositorNodeVec &connectedNodes,
                                               const CompositorPassVec *passes );
+    };
+
+    struct _OgreExport RenderTargetViewDef
+    {
+        RenderTargetViewEntryVec    colourAttachments;
+        RenderTargetViewEntry       depthAttachment;
+        RenderTargetViewEntry       stencilAttachment;
+
+        /// Depth Buffer's pool ID. Ignored if depthAttachment.textureName or
+        /// stencilAttachment.textureName are explicitly set.
+        uint16          depthBufferId;
+        /** Whether this RTV should be attached to a depth texture (i.e.
+            TextureGpu::isTexture == true) or a regular depth buffer.
+            True to use depth textures. False otherwise (default).
+        @remarks
+            On older GPUs, preferring depth textures may result in certain depth precisions
+            to not be available (or use integer precision instead of floating point, etc).
+        @par
+            Ignored if depthAttachment.texture or stencilAttachment.texture are explicitly set.
+        */
+        bool            preferDepthTexture;
+        PixelFormatGpu  depthBufferFormat;
+
+        bool depthReadOnly;
+        bool stencilReadOnly;
+        protected: bool bIsRuntimeAnalyzed;
+
+    public:
+        RenderTargetViewDef() :
+            depthBufferId( 1u ), preferDepthTexture( false ), depthBufferFormat( PFG_UNKNOWN ),
+            depthReadOnly( false ), stencilReadOnly( false ), bIsRuntimeAnalyzed( false )
+        {}
+
+        /** If the texture comes from an input channel, we don't have yet enough information,
+            as we're missing:
+                * Whether the texture is colour or depth
+                * The default depth settings (prefersDepthTexture, depth format, etc)
+            Use this function to force the given texture to be analyzed at runtime when
+            creating the pass.
+        @remarks
+            Cannot be used for MRT.
+        @param texName
+        */
+        void setRuntimeAnalyzed( IdString texName );
+        bool isRuntimeAnalyzed(void) const                  { return bIsRuntimeAnalyzed; }
+
+        /** Convenience routine to setup an RTV that renders directly to a texture
+            defined by the provided TextureDefinition; which is the most common case.
+        @param texName
+        @param texDef
+        */
+        void setForTextureDefinition( const String &texName,
+                                      TextureDefinitionBase::TextureDefinition *texDef );
     };
 
     /** @} */
