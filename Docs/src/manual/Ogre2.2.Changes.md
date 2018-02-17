@@ -27,10 +27,10 @@ triangles touch that tile; sorts them front to back (unless alpha testing or alp
 blending is used). and then runs the pixel shaders on all the triangles and pixels.
 Then proceeds to the next tile. This has the following advantages:
 
-1. Most pixels filled by opaque triangles will only be shaded by a pixel shader only once.
-1. Early-Z is implicit. This also means a depth-prepass is unnecessary and only a waste of
+-# Most pixels filled by opaque triangles will only be shaded by a pixel shader only once.
+-# Early-Z is implicit. This also means a depth-prepass is unnecessary and only a waste of
 time.
-1. The whole tile stays in an on-chip cache (which has much lower latency, much greater
+-# The whole tile stays in an on-chip cache (which has much lower latency, much greater
 bandwidth, and much lower power consumption). Once the tile is completely done, the cache
 gets flushed into RAM. In contrast, a desktop GPU could be constantly reading back and
 forth from main RAM (they have caches, but data doesn’t necessarily stay always in the
@@ -61,9 +61,9 @@ to basically memset the whole texture to a specific value. And then we render to
 In TBDRs, this is inefficient; as the memset will store a value to RAM, that later needs
 to be read from RAM. TBDRs can:
 
-1. Clear the cache instead, rather than loading it from RAM. (i.e. set the cache to a
+-# Clear the cache instead, rather than loading it from RAM. (i.e. set the cache to a
 specific value each time the GPU begins a new tile)
-1. If you don’t need the results of a particular buffer once you’re done rendering, you
+-# If you don’t need the results of a particular buffer once you’re done rendering, you
 can discard them instead of flushing it to RAM. This saves bandwidth and power.
 For example you may not need to save the depth buffer. Or you may only need the resolved
 result of MSAA render, and discard the contents of the MSAA surface.
@@ -75,23 +75,23 @@ rendering.
 Now in Ogre 2.2 you can explicitly specify what you want to do.
 For load actions you can do:
 
-1. DontCare: The cache is not initialized. This is the fastest option, and only works
+-# DontCare: The cache is not initialized. This is the fastest option, and only works
 glitch-free if you can guarantee you will render to all the pixels in the screen with
 opaque geometry.
-1. Clear: The cache is cleared to a particular value. This is fast.
-1. Load: Load whatever was on RAM. This is the slowest, but also the default as it is the
+-# Clear: The cache is cleared to a particular value. This is fast.
+-# Load: Load whatever was on RAM. This is the slowest, but also the default as it is the
 safest option.
 
 For store actions you also get:
 
-1. DontCare: Discard the contents after we’re done with the current pass. Useful if you
+-# DontCare: Discard the contents after we’re done with the current pass. Useful if you
 only want colour and don’t care what happens with the depth & stencil buffers. Discarding
 contents either improves framerate or battery duration or makes rendering friendlier to
 SLI/Crossfire.
-1. Store: Save results to RAM. This is the default.
-1. MultisampleResolve: Resolve MSAA rendering into resolve texture.
+-# Store: Save results to RAM. This is the default.
+-# MultisampleResolve: Resolve MSAA rendering into resolve texture.
 Contents of MSAA texture are discarded.
-1. StoreAndMultisampleResolve: Resolve MSAA rendering into resolve texture.
+-# StoreAndMultisampleResolve: Resolve MSAA rendering into resolve texture.
 Contents of MSAA texture are kept.
 
 This gives you a lot of power and control over how mobile GPUs control their caches in
@@ -152,8 +152,8 @@ They were instead replaced by the following classes:
 
 There are a few things that need to be clarified first hand:
 
-1. TextureGpu replaces most of these older classes.
-1. You cannot map a TextureGpu directly. You can only update its data via a StagingTexture
+-# TextureGpu replaces most of these older classes.
+-# You cannot map a TextureGpu directly. You can only update its data via a StagingTexture
 and read its contents via an AsyncTextureTicket. This better matches what GPUs actually
 do behind the scenes.
 
@@ -168,19 +168,20 @@ The following table summarizes old and new classes:
 | Download data (GPU → CPU)                         	|           Map HardwarePixelBuffer 	|   AsyncTextureTicket 	|
 | Setup MRT (Multiple Render Target)                	| RenderTexture + MultiRenderTarget 	| RenderPassDescriptor 	|
 | Creating / destroying textures. Loading from file 	|                    TextureManager 	|    TextureGpuManager 	|
+| Dealing with Hlms texture arrays                      |                HlmsTextureManager 	|    TextureGpuManager 	|
 | Managing a window (events, resizing, etc)         	|                      RenderWindow 	|               Window 	|
 | Rendering to a window                             	|                      RenderWindow 	|           TextureGpu 	|
 | Dealing with depth buffers                        	|                       DepthBuffer 	|           TextureGpu 	|
 
 You may have noticed that 'TextureGpu' is now repeated *a lot*. That is because in 2.1 the functionality was mainly fragmented between 3 classes:
 
-1. Texture (owns multiple HardwarePixelBuffer, usually one per cubemap face and one per mipmap,
+-# Texture (owns multiple HardwarePixelBuffer, usually one per cubemap face and one per mipmap,
 but not consistently, e.g. all slices in a 3D volume texture belong to just one
 HardwarePixelBuffer)
-1. HardwarePixelBuffer (owns a RenderTarget, which may be null if the texture cannot be
+-# HardwarePixelBuffer (owns a RenderTarget, which may be null if the texture cannot be
 used as RenderTarget)
-1. RenderTarget (may have a DepthBuffer associated, but doesn't own it)
-1. DepthBuffer
+-# RenderTarget (may have a DepthBuffer associated, but doesn't own it)
+-# DepthBuffer
 
 This was madness because these distinctions were applied inconsistently and often made no
 sense. e.g. a RenderTexture is often drawn to, and then used as a texture source.
@@ -190,7 +191,7 @@ information we needed.
 
 Now in Ogre 2.2, all of that is condensed into one class:
 
-1. TextureGpu
+-# TextureGpu
 
 This doesn't mean that TextureGpu is an overgrown God Class.
 The fragmentation into 3 was a bad idea to begin with.
@@ -235,10 +236,10 @@ texture->waitForMetadata();
 ```
 This will block the calling thread until the metadata has been loaded. Metadata means:
 
-1. Resolution (width, height, depth)
-1. Pixel format
-1. Number of mipmaps
-1. Actual TextureType (e.g. 2D, 3D, 2DArray, Cubemap)
+-# Resolution (width, height, depth)
+-# Pixel format
+-# Number of mipmaps
+-# Actual TextureType (e.g. 2D, 3D, 2DArray, Cubemap)
 
 But the actual texture contents aren't done loaded yet. For that we have:
 
@@ -372,17 +373,17 @@ texture3->notifyDataIsReady();
 
 **Please watch out for three things:**
 
-1. Having many big StagingTextures can cause out of memory conditions. Incredibly big
+-# Having many big StagingTextures can cause out of memory conditions. Incredibly big
 StagingTextures can also reveal unusual driver/kernel bugs. Don't make them
 too big. Don't keep too many of them that are small. Most people just need one
 StagingTexture per texture because uploads won't be frequent.
-1. StagingTextures can run out of space. mapRegion can return a nullptr in
+-# StagingTextures can run out of space. mapRegion can return a nullptr in
 `TextureBox::data` on failure. This space gets restored once stopMapRegion is called.
-1. Use `StagingTexture::supportsFormat` to check if the parameters are compatible with
+-# Use `StagingTexture::supportsFormat` to check if the parameters are compatible with
 the upload you're trying to do. However, mapRegion may still fail if it has run
 out of space. If supportsFormat returns false, it means mapRegion will always fail. If
 supportsFormat returns true, it means mapRegion may or may not succeed.
-1. Due to API restrictions, StagingTextures larger than 2048x2048 can only call mapRegion
+-# Due to API restrictions, StagingTextures larger than 2048x2048 can only call mapRegion
 for one slice at a time. For textures smaller than that, you can map several slices
 contiguously.
 
@@ -638,13 +639,13 @@ renderSystem->destroyRenderPassDescriptor( renderPassDesc );
 
 A few notes:
 
-1. executeRenderPassDescriptorDelayedActions is of particular interest to Metal
+-# executeRenderPassDescriptorDelayedActions is of particular interest to Metal
 RenderSystem. In this API, blitting operations (copying buffers, copying textures,
 uploading to / downloading from textures, generating mipmaps) will break rendering.
 Your "Render()" functions should never contain these operations between
 executeRenderPassDescriptorDelayedActions and endRenderPassDescriptor. Those operations
 must be done either before or afterwards.
-1. Calling beginRenderPassDescriptor implies calling endRenderPassDescriptor. It is
+-# Calling beginRenderPassDescriptor implies calling endRenderPassDescriptor. It is
 encouraged to skip endRenderPassDescriptor and just call the next
 beginRenderPassDescriptor unless this is the last one for this frame,
 so we can perform certain optimizations in certain APIs.
@@ -730,3 +731,205 @@ both materials as only one will be generated.
 
 Additionally, please note that descriptor sets need to be invalidated when a texture
 changes residency, which is why we listen for such changes via notifyTextureChanged.
+
+# Does 2.2 interoperate well with the HLMS texture arrays?
+Yes. Ogre 2.2 got rid of anything that used the "old" Textures. That includes the
+`HlmsTextureManager`.
+
+The new `TextureGpuManager`, which replaces the old `TextureManager`, also replaces
+`HlmsTextureManager`.
+
+The functionality that was provided by `HlmsTextureManager` (pretend "a texture" was
+just one texture when behind the scenes it's actually a slice from a Texture2D Array)
+became first class citizen in 2.2:
+
+When `TextureFlags::AutomaticBatching` is present, the TextureGpu will assumes this is
+a `TextureTypes::Type2D` texture that behinds the scenes is actually a slices to shared
+`TextureTypes::Texture2DArray` texture.
+
+The following routines are relevant when dealing with `AutomaticBatching` textures:
+
+```
+class TextureGpu
+{
+	bool hasAutomaticBatching(void) const;
+	uint32 getInternalSliceStart(void) const;
+	const TexturePool* getTexturePool(void) const;
+};
+```
+
+Most functions completely hide the fact that you're dealing with an array for you.
+
+For example `getTextureType()` will return `Type2D` (which is actually a lie) and
+`TextureGpu::copyTo` will fail if dstBox parameter contains `z` or `sliceStart` > 0,
+because Ogre will internally add the internal slice start offset to whatever you ask.
+
+Same will happen with StagingTextures and AsyncTextureTickets.
+
+If you want to get the *real* thing, you need to grab `TexturePool::masterTexture`
+(which is a `TextureGpu`) and `TextureGpu::getInternalSliceStart` to find the slice.
+
+A lot of functionality from `TextureGpuManager` will result familiar as they came from
+`HlmsTextureManager`. For example:
+
+```
+class TextureGpuManager
+{
+	TextureGpu* createOrRetrieveTexture( const String &name,
+		                             const String &aliasName,
+		                             GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+		                             uint32 textureFlags,
+		                             TextureTypes::TextureTypes initialType,
+		                             const String &resourceGroup=BLANKSTRING,
+		                             uint32 filters=0 );
+};
+```
+
+Just like with the old `HlmsTextureManager`, you can specify the resource filename where
+the texture should be loaded from (via `name` and `resourceGroup`) while also specifying
+an "alias" to reference it with another name.
+
+This allows you for example to load MyNormalMap.png two times, one as a RGBA8_UNORM
+texture to display its contents, and as a RG8_SNORM texture for use as a normal map, as
+long as you assign them two different alias names.
+
+At the time of writing a few restrictions from the past still remain though: Unlit
+will accept both any type of `TextureGpu`, while PBS will only accept `TextureGpu` that
+are `Texture2DArray` or `TextureGpu` with `AutomaticBatching` set (except for the
+reflections which must be `TypeCube`).
+
+Since most TextureGpu textures are loaded as `AutomaticBatching` **by default**, this
+limitation on PBS should be less of an issue than it was on 2.1.
+
+# Things to watch out when porting
+
+**Mipmaps**
+
+In 2.1 getNumMipmaps() = 0 means having just 1 mip (the mip 0). Only the extra mips are
+counted.
+
+In 2.2 getNumMipmaps() cannot return 0, as the 1 mip is counted.
+
+This can cause off by 1 errors. For example old code:
+
+```
+for( size_t i=0; i<=texture->getNumMipmaps(); ++i )
+{
+}
+
+//...or
+for( size_t i=0; i<texture->getNumMipmaps() + 1u; ++i )
+{
+}
+
+//...or
+if( texture->getNumMipmaps() == 0 )
+{
+	//No extra mips
+}
+```
+
+Must now become:
+
+```
+for( size_t i=0; i<texture->getNumMipmaps(); ++i )
+{
+}
+
+//...or
+if( texture->getNumMipmaps() == 1 )
+{
+	//No extra mips
+}
+```
+
+**TexturePtr is default initialized to 0. TextureGpu is not**.
+
+This causes common problems with arrays of textures in C++ i.e.`TexturePtr myTextures[5];`
+If you do not initialize your TextureGpu variable(s), they will contain uninitialized
+values, whereas your old code would be initialized to 0.
+
+**Compositor textures are non-msaa by default**. Use `msaa <number of samples>` to
+explicitly set MSAA on a compositor texture or `msaa_auto` to use the same MSAA setting
+as the final output of the workspace. Previous behavior was as if `msaa_auto` was present
+in all textures unless it was explicitly turned off by you.
+
+**RTV (Render Target Views) in Compositors are required** They're not implicit.
+In Ogre 2.1 this was enough to render to a texture when setting up the compositor
+from C++:
+
+```
+TextureDefinitionBase::TextureDefinition *texDef =
+        shadowNodeDef->addTextureDefinition( "tmpCubemap" );
+
+texDef->width   = width;
+texDef->height  = height;
+texDef->depth   = 6u;
+texDef->textureType = TEX_TYPE_CUBE_MAP;
+texDef->formatList.push_back( PF_FLOAT32_R );
+texDef->depthBufferId = 1u;
+texDef->depthBufferFormat = PF_D32_FLOAT;
+texDef->preferDepthTexture = false;
+texDef->fsaa = false;
+texDef->uav = supportsCompute;
+```
+
+The equivalent code for 2.2 would be the following:
+
+```
+TextureDefinitionBase::TextureDefinition *texDef =
+        nodeDef->addTextureDefinition( "tmpCubemap" );
+
+texDef->width   = width;
+texDef->height  = height;
+texDef->depthOrSlices = 6u;
+texDef->textureType = TextureTypes::TypeCube;
+texDef->format = PFG_R32_FLOAT;
+texDef->depthBufferId = 1u;
+texDef->depthBufferFormat = PFG_D32_FLOAT;
+texDef->preferDepthTexture = false;
+if( supportsCompute )
+    texDef->textureFlags |= TextureFlags::Uav;
+```
+
+However this is not enough. We do not render to tmpCubemap. We render to an RTV,
+which references tmpCubemap. We'll now create this RTV and we will use the convenience
+function `RenderTargetViewDef::setForTextureDefinition` which does all the job for us:
+
+```
+RenderTargetViewDef *rtv = nodeDef->addRenderTextureView( "tmpCubemap" );
+rtv->setForTextureDefinition( "tmpCubemap", texDef );
+```
+
+Please note a few things things:
+
+-# The RTV doesn't necessarily have to be named the same way as the texture. You could
+name it "MyRtv" and your node's passes will have to target "MyRtv" instead of
+"tmpCubemap". We use the same name to avoid user confusion.
+-# setForTextureDefinition did all the heavy lifting because it assumes the RTV will be
+used to render to just one texture (i.e. tmpCubemap). You can just look at what
+Ogre's code is doing. More advanced RTV setup (i.e. not using setForTextureDefinition)
+is for the cases where you need MRT (Multiple Render Target) or want a very specific
+MSAA resolve behavior.
+-# `TextureDefinition` contains a few variables such as `depthBufferId`,
+`depthBufferFormat` and `preferDepthTexture` which are then repeated in
+`RenderTargetViewDef`. The settings that matters are the ones in `RenderTargetViewDef` and
+are often (but not necessarily) just a carbon copy.
+So why `TextureDefinition` has a duplicate? It's because when textures are used as output
+and input for inter-connecting nodes, the RTV settings are lost and the Compositor needs
+to evaluate at connection time what depth buffer settings the texture prefers. For more
+information see `CompositorPass::setupRenderPassDesc` snippet that starts with
+`if( rtv->isRuntimeAnalyzed() )` Also see Ogre::RenderTargetViewDef::setRuntimeAnalyzed
+documentation.
+
+**D3D11's specific:**
+
+You could use `getCustomAttribute` to retrieve several D3D11 internal pointers. These
+have changed:
+
+* "FSAA" -> "MSAA"
+* "FSAAHint" -> "MSAA_quality"
+* "First_ID3D11Texture2D" -> TextureGpu::getCustomAttribute( "ID3D11Resource" )
+* "ID3D11RenderTargetView" ->
+RenderPassDescriptor::getCustomAttribute( "ID3D11RenderTargetView" )
+* "D3DDEVICE", "WINDOW" -> Use Window::getCustomAttribute with the same parameter names
