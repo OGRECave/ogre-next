@@ -53,7 +53,7 @@ unsigned long Timer::getMilliseconds()
 {
     struct timeval now;
     gettimeofday(&now, NULL);
-    return (now.tv_sec-start.tv_sec)*1000ul+(now.tv_usec-start.tv_usec)/1000ul;
+    return (now.tv_sec-start.tv_sec)*1000ul+(unsigned long)((now.tv_usec-start.tv_usec)/1000l);
 }
 
 //--------------------------------------------------------------------------------//
