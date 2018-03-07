@@ -54,6 +54,7 @@ namespace Ogre
                                                 const RenderTargetViewDef *rtv,
                                                 CompositorNode *parentNode ) :
                 CompositorPass( definition, parentNode ),
+                mWarnedNoAutomipmapsAlready( false ),
                 mDefinition( definition )
     {
         initialize( rtv );
@@ -413,8 +414,20 @@ namespace Ogre
 
             while( itor != end )
             {
-                if( (*itor)->getNumMipmaps() > 1u && (*itor)->allowsAutoMipmaps() )
-                    (*itor)->_autogenerateMipmaps();
+                if( (*itor)->getNumMipmaps() > 1u )
+                {
+                    if( (*itor)->allowsAutoMipmaps() )
+                        (*itor)->_autogenerateMipmaps();
+                    else if( !mWarnedNoAutomipmapsAlready )
+                    {
+                        LogManager::getSingleton().logMessage(
+                                    "WARNING: generate_mipmaps called for texture " +
+                                    (*itor)->getNameStr() + " but it was not created with "
+                                    "auto mipmap support! If using scripts, add keyword 'automipmaps'. "
+                                    "If using code, set texture flag 'TextureFlags::AllowAutomipmaps'" );
+                        mWarnedNoAutomipmapsAlready = true;
+                    }
+                }
                 ++itor;
             }
         }
@@ -498,7 +511,10 @@ namespace Ogre
         bool usedByUs = CompositorPass::notifyRecreated( channel );
 
         if( usedByUs )
+        {
+            mWarnedNoAutomipmapsAlready = false;
             setupComputeShaders();
+        }
 
         return usedByUs;
     }

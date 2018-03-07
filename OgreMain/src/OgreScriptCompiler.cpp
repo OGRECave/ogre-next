@@ -1255,7 +1255,7 @@ namespace Ogre
         mIds["cubemap"]             = ID_CUBEMAP;
         mIds["cubemap_array"]       = ID_CUBEMAP_ARRAY;
         mIds["mipmaps"]             = ID_MIPMAPS;
-        mIds["automipmaps"]         = ID_AUTOMIPMAPS;
+        mIds["no_automipmaps"]      = ID_NO_AUTOMIPMAPS;
 
         mIds["target"] = ID_TARGET;
 

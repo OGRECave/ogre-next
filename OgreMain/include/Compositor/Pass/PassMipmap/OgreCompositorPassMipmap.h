@@ -65,6 +65,8 @@ namespace Ogre
         TextureGpuVec                   mTmpTextures;
         vector<JobWithBarrier>::type    mJobs;
 
+        bool mWarnedNoAutomipmapsAlready;
+
         void setupComputeShaders(void);
         void destroyComputeShaders(void);
         void setGaussianFilterParams( HlmsComputeJob *job, uint8 kernelRadius,

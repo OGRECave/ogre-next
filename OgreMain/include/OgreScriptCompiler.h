@@ -861,7 +861,7 @@ namespace Ogre
                 ID_CUBEMAP,
                 ID_CUBEMAP_ARRAY,
                 ID_MIPMAPS,
-                ID_AUTOMIPMAPS,
+                ID_NO_AUTOMIPMAPS,
             ID_TARGET,
         //  ID_PASS,
                 ID_CLEAR,

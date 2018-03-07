@@ -6228,6 +6228,7 @@ namespace Ogre{
         PixelFormatGpu depthBufferFormat = PFG_UNKNOWN;
         bool preferDepthTexture = false;
         uint8 numMipmaps = 1u;
+        bool noAutomipmaps = false;
         PixelFormatGpu format;
 
         while (atomIndex < prop->values.size())
@@ -6376,8 +6377,8 @@ namespace Ogre{
                     numMipmaps = StringConverter::parseInt(atom->value);
                 }
                 break;
-            case ID_AUTOMIPMAPS:
-                textureFlags |= TextureFlags::AllowAutomipmaps;
+            case ID_NO_AUTOMIPMAPS:
+                noAutomipmaps = true;
                 break;
             case ID_2D_ARRAY:       textureType = TextureTypes::Type2DArray; break;
             case ID_3D:             textureType = TextureTypes::Type3D; break;
@@ -6440,6 +6441,9 @@ namespace Ogre{
             depthOrSlices = 1u;
         else if( textureType == TextureTypes::TypeCube )
             depthOrSlices = 6u;
+
+        if( !noAutomipmaps && numMipmaps > 1u )
+            textureFlags |= TextureFlags::AllowAutomipmaps;
 
         // No errors, create
         TextureDefinitionBase::TextureDefinition *td = defBase->addTextureDefinition( atom0->value );
