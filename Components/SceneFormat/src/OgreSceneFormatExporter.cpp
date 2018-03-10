@@ -53,17 +53,39 @@ THE SOFTWARE.
 #include "OgreForward3D.h"
 #include "OgreForwardClustered.h"
 
+#include "math.h"
+
+#define SceneFormatExporterNumFloatBins (sizeof( mFloatBinTmpString ) / sizeof( mFloatBinTmpString[0] ))
+#define SceneFormatExporterFloatBinStrLength sizeof( mFloatBinTmpString[0] )
+#define SceneFormatExporterNumDoubleBins (sizeof( mDoubleBinTmpString ) / sizeof( mDoubleBinTmpString[0] ))
+#define SceneFormatExporterDoubleBinStrLength sizeof( mDoubleBinTmpString[0] )
+
 namespace Ogre
 {
     SceneFormatExporter::SceneFormatExporter( Root *root, SceneManager *sceneManager,
                                               InstantRadiosity *instantRadiosity ) :
         SceneFormatBase( root, sceneManager ),
-        mInstantRadiosity( instantRadiosity )
+        mInstantRadiosity( instantRadiosity ),
+        mUseBinaryFloatingPoint( true ),
+        mCurrentBinFloat( 0 ),
+        mCurrentBinDouble( 0 )
     {
+        memset( mFloatBinTmpString, 0, sizeof( mFloatBinTmpString ) );
+        memset( mDoubleBinTmpString, 0, sizeof( mDoubleBinTmpString ) );
     }
     //-----------------------------------------------------------------------------------
     SceneFormatExporter::~SceneFormatExporter()
     {
+    }
+    //-----------------------------------------------------------------------------------
+    void SceneFormatExporter::setUseBinaryFloatingPoint( bool useBinaryFp )
+    {
+        mUseBinaryFloatingPoint = useBinaryFp;
+    }
+    //-----------------------------------------------------------------------------------
+    bool SceneFormatExporter::getUseBinaryFloatingPoint(void)
+    {
+        return mUseBinaryFloatingPoint;
     }
     //-----------------------------------------------------------------------------------
     const char* SceneFormatExporter::toQuotedStr( bool value )
@@ -76,7 +98,7 @@ namespace Ogre
         jsonStr.a( "\"", c_lightTypes[lightType], "\"" );
     }
     //-----------------------------------------------------------------------------------
-    uint32 SceneFormatExporter::encodeFloat( float value )
+    uint32 SceneFormatExporter::encodeFloatBin( float value )
     {
         union MyUnion
         {
@@ -89,7 +111,7 @@ namespace Ogre
         return myUnion.u32;
     }
     //-----------------------------------------------------------------------------------
-    uint64 SceneFormatExporter::encodeDouble( double value )
+    uint64 SceneFormatExporter::encodeDoubleBin( double value )
     {
         union MyUnion
         {
@@ -102,12 +124,68 @@ namespace Ogre
         return myUnion.u64;
     }
     //-----------------------------------------------------------------------------------
+    const char* SceneFormatExporter::encodeFloat( float value )
+    {
+        LwString strValue( LwString::FromEmptyPointer( mFloatBinTmpString[mCurrentBinFloat],
+                                                       SceneFormatExporterFloatBinStrLength ) );
+        if( mUseBinaryFloatingPoint )
+            strValue.a( encodeFloatBin( value ) );
+        else
+        {
+            if( isfinite( value ) )
+                strValue.a( LwString::Float( value, 9 ) );
+            else
+            {
+                if( isinf( value ) )
+                    strValue.a( value > 0 ? "\"inf\"" : "\"-inf\"" );
+                else
+                    strValue.a( "\"nan\"" );
+            }
+        }
+
+        mCurrentBinFloat = (mCurrentBinFloat + 1u) % SceneFormatExporterNumFloatBins;
+
+        return strValue.c_str();
+    }
+    //-----------------------------------------------------------------------------------
+    const char* SceneFormatExporter::encodeDouble( double value )
+    {
+        LwString strValue( LwString::FromEmptyPointer( mDoubleBinTmpString[mCurrentBinDouble],
+                                                       SceneFormatExporterDoubleBinStrLength ) );
+        if( mUseBinaryFloatingPoint )
+            strValue.a( encodeDoubleBin( value ) );
+        else
+        {
+            if( isfinite( value ) )
+                strValue.a( LwString::Float( value, 18 ) );
+            else
+            {
+                if( isinf( value ) )
+                    strValue.a( value > 0 ? "\"inf\"" : "\"-inf\"" );
+                else
+                    strValue.a( "\"nan\"" );
+            }
+        }
+
+        mCurrentBinDouble = (mCurrentBinDouble + 1u) % SceneFormatExporterNumDoubleBins;
+
+        return strValue.c_str();
+    }
+    //-----------------------------------------------------------------------------------
+    inline void SceneFormatExporter::rewindFloatBinStringPool( uint8 rewindAmount )
+    {
+        //Rewind the pool bin, since we know these bins are not needed anymore
+        mCurrentBinFloat = (mCurrentBinFloat + SceneFormatExporterNumFloatBins - rewindAmount) %
+                      SceneFormatExporterNumFloatBins;
+    }
+    //-----------------------------------------------------------------------------------
     void SceneFormatExporter::encodeVector( LwString &jsonStr, const Vector2 &value )
     {
         jsonStr.a( "[ ",
                    encodeFloat( value.x ), ", ",
                    encodeFloat( value.y ),
                    " ]" );
+        rewindFloatBinStringPool( 2u );
     }
     //-----------------------------------------------------------------------------------
     void SceneFormatExporter::encodeVector( LwString &jsonStr, const Vector3 &value )
@@ -117,6 +195,7 @@ namespace Ogre
                    encodeFloat( value.y ), ", ",
                    encodeFloat( value.z ),
                    " ]" );
+        rewindFloatBinStringPool( 3u );
     }
     //-----------------------------------------------------------------------------------
     void SceneFormatExporter::encodeVector( LwString &jsonStr, const Vector4 &value )
@@ -127,6 +206,7 @@ namespace Ogre
                    encodeFloat( value.z ), ", " );
         jsonStr.a( encodeFloat( value.w ),
                    " ]" );
+        rewindFloatBinStringPool( 4u );
     }
     //-----------------------------------------------------------------------------------
     void SceneFormatExporter::encodeQuaternion( LwString &jsonStr, const Quaternion &value )
@@ -137,6 +217,7 @@ namespace Ogre
                    encodeFloat( value.y ), ", " );
         jsonStr.a( encodeFloat( value.z ),
                    " ]" );
+        rewindFloatBinStringPool( 4u );
     }
     //-----------------------------------------------------------------------------------
     void SceneFormatExporter::encodeColour( LwString &jsonStr, const ColourValue &value )
@@ -147,6 +228,7 @@ namespace Ogre
                    encodeFloat( value.b ), ", " );
         jsonStr.a( encodeFloat( value.a ),
                    " ]" );
+        rewindFloatBinStringPool( 4u );
     }
     //-----------------------------------------------------------------------------------
     void SceneFormatExporter::encodeAabb( LwString &jsonStr, const Aabb &value )
@@ -164,12 +246,15 @@ namespace Ogre
                    encodeFloat( value[0][0] ), ", ",
                    encodeFloat( value[0][1] ), ", ",
                    encodeFloat( value[0][2] ), ", " );
+        rewindFloatBinStringPool( 3u );
         jsonStr.a( encodeFloat( value[1][0] ), ", ",
                    encodeFloat( value[1][1] ), ", ",
                    encodeFloat( value[1][2] ), ", " );
+        rewindFloatBinStringPool( 3u );
         jsonStr.a( encodeFloat( value[2][0] ), ", ",
                    encodeFloat( value[2][1] ), ", ",
                    encodeFloat( value[2][2] ), " ]" );
+        rewindFloatBinStringPool( 3u );
     }
     //-----------------------------------------------------------------------------------
     inline void SceneFormatExporter::flushLwString( LwString &jsonStr, String &outJson )
@@ -193,6 +278,10 @@ namespace Ogre
                    toQuotedStr( node->getInheritOrientation() ) );
         jsonStr.a( ",\n\t\t\t\t\"inherit_scale\" : ", toQuotedStr( node->getInheritScale() ) );
         jsonStr.a( ",\n\t\t\t\t\"is_static\" : ", toQuotedStr( node->isStatic() ) );
+
+        const String &nodeName = node->getName();
+        if( !nodeName.empty() )
+            jsonStr.a( ",\n\t\t\t\t\"name\" : \"", node->getName().c_str(), "\"" );
 
         Node *parentNode = node->getParent();
         if( parentNode )
@@ -569,7 +658,7 @@ namespace Ogre
 
         jsonStr.a( ",\n\t\t\"parallax_corrected_cubemaps\" :"
                    "\n\t\t{" );
-        jsonStr.a( "\n\t\t\t\"paused\" : ", pcc->mPaused );
+        jsonStr.a( "\n\t\t\t\"paused\" : ", toQuotedStr( pcc->mPaused ) );
         jsonStr.a( ",\n\t\t\t\"mask\" : ", pcc->mMask );
         jsonStr.a( ",\n\t\t\t\"reserved_rq_id\" : ", pcc->getProxyReservedRenderQueueId() );
         jsonStr.a( ",\n\t\t\t\"proxy_visibility_mask\" : ", pcc->getProxyReservedVisibilityMask() );
@@ -715,14 +804,21 @@ namespace Ogre
         char tmpBuffer[4096];
         LwString jsonStr( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
 
-        jsonStr.a( "{\n\t\"version\" : ", 0, "" );
+        //Old importers cannot import our scenes if they use float literals
+        if( mUseBinaryFloatingPoint )
+            jsonStr.a( "{\n\t\"version\" : ", (int)VERSION_0, "" );
+        else
+        {
+            jsonStr.a( "{\n\t\"version\" : ", (int)VERSION_1, "" );
+        }
+        jsonStr.a( ",\n\t\"use_binary_floating_point\" : ", toQuotedStr( mUseBinaryFloatingPoint ) );
         jsonStr.a( ",\n\t\"MovableObject_msDefaultVisibilityFlags\" : ",
                    MovableObject::getDefaultVisibilityFlags() );
 
         if( exportFlags & SceneFlags::TexturesOitd )
-            jsonStr.a( ",\n\t\"saved_oitd_textures\" : \"true\"" );
+            jsonStr.a( ",\n\t\"saved_oitd_textures\" : true" );
         if( exportFlags & SceneFlags::TexturesOriginal )
-            jsonStr.a( ",\n\t\"saved_original_textures\" : \"true\"" );
+            jsonStr.a( ",\n\t\"saved_original_textures\" : true" );
 
         flushLwString( jsonStr, outJson );
 
@@ -744,18 +840,27 @@ namespace Ogre
                 exportSceneNode( jsonStr, outJson, rootSceneNode );
                 outJson += "\n\t\t}";
 
-                Node::NodeVecIterator nodeItor = rootSceneNode->getChildIterator();
-                while( nodeItor.hasMoreElements() )
-                {
-                    Node *node = nodeItor.getNext();
-                    SceneNode *sceneNode = dynamic_cast<SceneNode*>( node );
+                std::queue<SceneNode*> nodeQueue;
+                nodeQueue.push(rootSceneNode);
 
-                    if( sceneNode && mListener->exportSceneNode( sceneNode ) )
+                while( !nodeQueue.empty() )
+                {
+                    SceneNode* frontNode = nodeQueue.front();
+                    nodeQueue.pop();
+                    Node::NodeVecIterator nodeItor = frontNode->getChildIterator();
+                    while( nodeItor.hasMoreElements() )
                     {
-                        mNodeToIdxMap[sceneNode] = nodeCount++;
-                        outJson += ",\n\t\t{";
-                        exportSceneNode( jsonStr, outJson, sceneNode );
-                        outJson += "\n\t\t}";
+                        Node *node = nodeItor.getNext();
+                        SceneNode *sceneNode = dynamic_cast<SceneNode*>( node );
+
+                        if( sceneNode && mListener->exportSceneNode( sceneNode ) )
+                        {
+                            mNodeToIdxMap[sceneNode] = nodeCount++;
+                            outJson += ",\n\t\t{";
+                            exportSceneNode( jsonStr, outJson, sceneNode );
+                            outJson += "\n\t\t}";
+                            nodeQueue.push( sceneNode );
+                        }
                     }
                 }
             }

@@ -432,6 +432,7 @@ namespace Demo
         Ogre::SceneFormatExporter exporter( mGraphicsSystem->getRoot(),
                                             mGraphicsSystem->getSceneManager(),
                                             mInstantRadiosity );
+        exporter.setUseBinaryFloatingPoint( true );
         exporter.exportSceneToFile( mFullpathToFile );
     }
     //-----------------------------------------------------------------------------------

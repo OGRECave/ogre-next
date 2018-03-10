@@ -41,6 +41,7 @@ THE SOFTWARE.
 #include "OgreLogManager.h"
 
 #include "rapidjson/document.h"
+#include "rapidjson/error/en.h"
 
 namespace Ogre
 {
@@ -526,7 +527,9 @@ namespace Ogre
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          "HlmsJson::loadMaterials",
-                         "Invalid JSON string in file " + filename );
+                         "Invalid JSON string in file " + filename + " at line " +
+                         StringConverter::toString( d.GetErrorOffset() ) + " Reason: " +
+                         rapidjson::GetParseError_En( d.GetParseError() ) );
         }
 
         NamedBlocks blocks;

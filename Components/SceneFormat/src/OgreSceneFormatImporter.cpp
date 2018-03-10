@@ -53,6 +53,7 @@ THE SOFTWARE.
 #include "OgreLogManager.h"
 
 #include "rapidjson/document.h"
+#include "rapidjson/error/en.h"
 
 namespace Ogre
 {
@@ -63,7 +64,8 @@ namespace Ogre
         mIrradianceVolume( 0 ),
         mParallaxCorrectedCubemap( 0 ),
         mSceneComponentTransform( Matrix4::IDENTITY ),
-        mDefaultPccWorkspaceName( defaultPccWorkspaceName )
+        mDefaultPccWorkspaceName( defaultPccWorkspaceName ),
+        mUseBinaryFloatingPoint( true )
     {
         memset( mRootNodes, 0, sizeof(mRootNodes) );
         memset( mParentlessRootNodes, 0, sizeof(mParentlessRootNodes) );
@@ -115,30 +117,120 @@ namespace Ogre
         return Light::LT_DIRECTIONAL;
     }
     //-----------------------------------------------------------------------------------
+    inline bool SceneFormatImporter::isFloat( const rapidjson::Value &jsonValue ) const
+    {
+        if( mUseBinaryFloatingPoint )
+        {
+            return jsonValue.IsUint();
+        }
+        else
+        {
+            if( jsonValue.IsDouble() )
+                return true;
+            else
+            {
+                if( !strcmp( jsonValue.GetString(), "nan" ) ||
+                    !strcmp( jsonValue.GetString(), "inf" ) ||
+                    !strcmp( jsonValue.GetString(), "-inf" ) )
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    inline bool SceneFormatImporter::isDouble( const rapidjson::Value &jsonValue ) const
+    {
+        if( mUseBinaryFloatingPoint )
+        {
+            return jsonValue.IsUint();
+        }
+        else
+        {
+            if( jsonValue.IsDouble() )
+                return true;
+            else
+            {
+                if( !strcmp( jsonValue.GetString(), "nan" ) ||
+                    !strcmp( jsonValue.GetString(), "inf" ) ||
+                    !strcmp( jsonValue.GetString(), "-inf" ) )
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
+    //-----------------------------------------------------------------------------------
     inline float SceneFormatImporter::decodeFloat( const rapidjson::Value &jsonValue )
     {
-        union MyUnion
+        if( mUseBinaryFloatingPoint )
         {
-            float   f32;
-            uint32  u32;
-        };
+            union MyUnion
+            {
+                float   f32;
+                uint32  u32;
+            };
 
-        MyUnion myUnion;
-        myUnion.u32 = jsonValue.GetUint();
-        return myUnion.f32;
+            MyUnion myUnion;
+            myUnion.u32 = jsonValue.GetUint();
+            return myUnion.f32;
+        }
+        else
+        {
+            if( jsonValue.IsString() )
+            {
+                if( !strcmp( jsonValue.GetString(), "nan" ) )
+                    return std::numeric_limits<float>::quiet_NaN();
+                else if( !strcmp( jsonValue.GetString(), "inf" ) )
+                    return std::numeric_limits<float>::infinity();
+                else if( !strcmp( jsonValue.GetString(), "-inf" ) )
+                    return -std::numeric_limits<float>::infinity();
+            }
+            else if( jsonValue.IsDouble() )
+            {
+                return static_cast<float>( jsonValue.GetDouble() );
+            }
+        }
+
+        return 0;
     }
     //-----------------------------------------------------------------------------------
     inline double SceneFormatImporter::decodeDouble( const rapidjson::Value &jsonValue )
     {
-        union MyUnion
+        if( mUseBinaryFloatingPoint )
         {
-            double  f64;
-            uint64  u64;
-        };
+            union MyUnion
+            {
+                double  f64;
+                uint64  u64;
+            };
 
-        MyUnion myUnion;
-        myUnion.u64 = jsonValue.GetUint64();
-        return myUnion.f64;
+            MyUnion myUnion;
+            myUnion.u64 = jsonValue.GetUint64();
+            return myUnion.f64;
+        }
+        else
+        {
+            if( jsonValue.IsString() )
+            {
+                if( !strcmp( jsonValue.GetString(), "nan" ) )
+                    return std::numeric_limits<double>::quiet_NaN();
+                else if( !strcmp( jsonValue.GetString(), "inf" ) )
+                    return std::numeric_limits<double>::infinity();
+                else if( !strcmp( jsonValue.GetString(), "-inf" ) )
+                    return -std::numeric_limits<double>::infinity();
+            }
+            else if( jsonValue.IsDouble() )
+            {
+                return jsonValue.GetDouble();
+            }
+        }
+
+        return 0;
     }
     //-----------------------------------------------------------------------------------
     inline Vector2 SceneFormatImporter::decodeVector2Array( const rapidjson::Value &jsonArray )
@@ -148,7 +240,7 @@ namespace Ogre
         const rapidjson::SizeType arraySize = std::min( 2u, jsonArray.Size() );
         for( rapidjson::SizeType i=0; i<arraySize; ++i )
         {
-            if( jsonArray[i].IsUint() )
+            if( isFloat( jsonArray[i] ) )
                 retVal[i] = decodeFloat( jsonArray[i] );
         }
 
@@ -162,7 +254,7 @@ namespace Ogre
         const rapidjson::SizeType arraySize = std::min( 3u, jsonArray.Size() );
         for( rapidjson::SizeType i=0; i<arraySize; ++i )
         {
-            if( jsonArray[i].IsUint() )
+            if( isFloat( jsonArray[i] ) )
                 retVal[i] = decodeFloat( jsonArray[i] );
         }
 
@@ -176,7 +268,7 @@ namespace Ogre
         const rapidjson::SizeType arraySize = std::min( 4u, jsonArray.Size() );
         for( rapidjson::SizeType i=0; i<arraySize; ++i )
         {
-            if( jsonArray[i].IsUint() )
+            if( isFloat( jsonArray[i] ) )
                 retVal[i] = decodeFloat( jsonArray[i] );
         }
 
@@ -190,7 +282,7 @@ namespace Ogre
         const rapidjson::SizeType arraySize = std::min( 4u, jsonArray.Size() );
         for( rapidjson::SizeType i=0; i<arraySize; ++i )
         {
-            if( jsonArray[i].IsUint() )
+            if( isFloat( jsonArray[i] ) )
                 retVal[i] = decodeFloat( jsonArray[i] );
         }
 
@@ -204,7 +296,7 @@ namespace Ogre
         const rapidjson::SizeType arraySize = std::min( 4u, jsonArray.Size() );
         for( rapidjson::SizeType i=0; i<arraySize; ++i )
         {
-            if( jsonArray[i].IsUint() )
+            if( isFloat( jsonArray[i] ) )
                 retVal[i] = decodeFloat( jsonArray[i] );
         }
 
@@ -232,7 +324,7 @@ namespace Ogre
         const rapidjson::SizeType arraySize = std::min( 12u, jsonArray.Size() );
         for( rapidjson::SizeType i=0; i<arraySize; ++i )
         {
-            if( jsonArray[i].IsUint() )
+            if( isFloat( jsonArray[i] ) )
                 retVal[0][i] = decodeFloat( jsonArray[i] );
         }
 
@@ -262,6 +354,10 @@ namespace Ogre
         itor = nodeValue.FindMember( "inherit_scale" );
         if( itor != nodeValue.MemberEnd() && itor->value.IsBool() )
             node->setInheritScale( itor->value.GetBool() );
+
+        itor = nodeValue.FindMember( "name" );
+        if( itor != nodeValue.MemberEnd() && itor->value.IsString() )
+            node->setName( itor->value.GetString() );
     }
     //-----------------------------------------------------------------------------------
     SceneNode* SceneFormatImporter::importSceneNode( const rapidjson::Value &sceneNodeValue,
@@ -414,11 +510,11 @@ namespace Ogre
         ObjectData &objData = movableObject->_getObjectData();
 
         tmpIt = movableObjectValue.FindMember( "local_radius" );
-        if( tmpIt != movableObjectValue.MemberEnd() && tmpIt->value.IsUint() )
+        if( tmpIt != movableObjectValue.MemberEnd() && isFloat( tmpIt->value ) )
             objData.mLocalRadius[objData.mIndex] = decodeFloat( tmpIt->value );
 
         tmpIt = movableObjectValue.FindMember( "rendering_distance" );
-        if( tmpIt != movableObjectValue.MemberEnd() && tmpIt->value.IsUint() )
+        if( tmpIt != movableObjectValue.MemberEnd() && isFloat( tmpIt->value ) )
             movableObject->setRenderingDistance( decodeFloat( tmpIt->value ) );
 
         //Decode raw flag values
@@ -670,7 +766,7 @@ namespace Ogre
             light->setSpecularColour( decodeColourValueArray( tmpIt->value ) );
 
         tmpIt = lightValue.FindMember( "power" );
-        if( tmpIt != lightValue.MemberEnd() && tmpIt->value.IsUint() )
+        if( tmpIt != lightValue.MemberEnd() && isFloat( tmpIt->value ) )
             light->setPowerScale( decodeFloat( tmpIt->value ) );
 
         tmpIt = lightValue.FindMember( "type" );
@@ -700,11 +796,11 @@ namespace Ogre
             light->setAffectParentNode( tmpIt->value.GetBool() );
 
         tmpIt = lightValue.FindMember( "shadow_far_dist" );
-        if( tmpIt != lightValue.MemberEnd() && tmpIt->value.IsUint() )
+        if( tmpIt != lightValue.MemberEnd() && isFloat( tmpIt->value ) )
             light->setShadowFarDistance( decodeFloat( tmpIt->value ) );
 
         tmpIt = lightValue.FindMember( "shadow_clip_dist" );
-        if( tmpIt != lightValue.MemberEnd() && tmpIt->value.IsUint() )
+        if( tmpIt != lightValue.MemberEnd() && isFloat( tmpIt->value ) )
         {
             const Vector2 nearFar = decodeVector2Array( tmpIt->value );
             light->setShadowNearClipDistance( nearFar.x );
@@ -759,15 +855,15 @@ namespace Ogre
             mInstantRadiosity->mNumRayBounces = static_cast<size_t>( tmpIt->value.GetUint() );
 
         tmpIt = json.FindMember( "surviving_ray_fraction" );
-        if( tmpIt != json.MemberEnd() && tmpIt->value.IsUint() )
+        if( tmpIt != json.MemberEnd() && isFloat( tmpIt->value ) )
             mInstantRadiosity->mSurvivingRayFraction = decodeFloat( tmpIt->value );
 
         tmpIt = json.FindMember( "cell_size" );
-        if( tmpIt != json.MemberEnd() && tmpIt->value.IsUint() )
+        if( tmpIt != json.MemberEnd() && isFloat( tmpIt->value ) )
             mInstantRadiosity->mCellSize = decodeFloat( tmpIt->value );
 
         tmpIt = json.FindMember( "bias" );
-        if( tmpIt != json.MemberEnd() && tmpIt->value.IsUint() )
+        if( tmpIt != json.MemberEnd() && isFloat( tmpIt->value ) )
             mInstantRadiosity->mBias = decodeFloat( tmpIt->value );
 
         tmpIt = json.FindMember( "num_spread_iterations" );
@@ -775,7 +871,7 @@ namespace Ogre
             mInstantRadiosity->mNumSpreadIterations = static_cast<uint32>( tmpIt->value.GetUint() );
 
         tmpIt = json.FindMember( "spread_threshold" );
-        if( tmpIt != json.MemberEnd() && tmpIt->value.IsUint() )
+        if( tmpIt != json.MemberEnd() && isFloat( tmpIt->value ) )
             mInstantRadiosity->mSpreadThreshold = decodeFloat( tmpIt->value );
 
         tmpIt = json.FindMember( "areas_of_interest" );
@@ -789,7 +885,7 @@ namespace Ogre
 
                 if( aoi.IsArray() && aoi.Size() == 2u &&
                     aoi[0].IsArray() &&
-                    aoi[1].IsUint() )
+                    isFloat( aoi[1] ) )
                 {
                     Aabb aabb = decodeAabbArray( aoi[0], Aabb::BOX_ZERO );
                     const float sphereRadius = decodeFloat( aoi[1] );
@@ -801,27 +897,27 @@ namespace Ogre
         }
 
         tmpIt = json.FindMember( "vpl_max_range" );
-        if( tmpIt != json.MemberEnd() && tmpIt->value.IsUint() )
+        if( tmpIt != json.MemberEnd() && isFloat( tmpIt->value ) )
             mInstantRadiosity->mVplMaxRange = decodeFloat( tmpIt->value );
 
         tmpIt = json.FindMember( "vpl_const_atten" );
-        if( tmpIt != json.MemberEnd() && tmpIt->value.IsUint() )
+        if( tmpIt != json.MemberEnd() && isFloat( tmpIt->value ) )
             mInstantRadiosity->mVplConstAtten = decodeFloat( tmpIt->value );
 
         tmpIt = json.FindMember( "vpl_linear_atten" );
-        if( tmpIt != json.MemberEnd() && tmpIt->value.IsUint() )
+        if( tmpIt != json.MemberEnd() && isFloat( tmpIt->value ) )
             mInstantRadiosity->mVplLinearAtten = decodeFloat( tmpIt->value );
 
         tmpIt = json.FindMember( "vpl_quad_atten" );
-        if( tmpIt != json.MemberEnd() && tmpIt->value.IsUint() )
+        if( tmpIt != json.MemberEnd() && isFloat( tmpIt->value ) )
             mInstantRadiosity->mVplQuadAtten = decodeFloat( tmpIt->value );
 
         tmpIt = json.FindMember( "vpl_threshold" );
-        if( tmpIt != json.MemberEnd() && tmpIt->value.IsUint() )
+        if( tmpIt != json.MemberEnd() && isFloat( tmpIt->value ) )
             mInstantRadiosity->mVplThreshold = decodeFloat( tmpIt->value );
 
         tmpIt = json.FindMember( "vpl_power_boost" );
-        if( tmpIt != json.MemberEnd() && tmpIt->value.IsUint() )
+        if( tmpIt != json.MemberEnd() && isFloat( tmpIt->value ) )
             mInstantRadiosity->mVplPowerBoost = decodeFloat( tmpIt->value );
 
         tmpIt = json.FindMember( "vpl_use_intensity_for_max_range" );
@@ -829,7 +925,7 @@ namespace Ogre
             mInstantRadiosity->mVplUseIntensityForMaxRange = tmpIt->value.GetBool();
 
         tmpIt = json.FindMember( "vpl_intensity_range_multiplier" );
-        if( tmpIt != json.MemberEnd() && tmpIt->value.IsUint64() )
+        if( tmpIt != json.MemberEnd() && isDouble( tmpIt->value ) )
             mInstantRadiosity->mVplIntensityRangeMultiplier = decodeDouble( tmpIt->value );
 
         tmpIt = json.FindMember( "mipmap_bias" );
@@ -863,7 +959,7 @@ namespace Ogre
             }
 
             tmpIt = json.FindMember( "power_scale" );
-            if( tmpIt != json.MemberEnd() && tmpIt->value.IsUint() )
+            if( tmpIt != json.MemberEnd() && isFloat( tmpIt->value ) )
                 mIrradianceVolume->setPowerScale( decodeFloat( tmpIt->value ) );
 
             tmpIt = json.FindMember( "fade_attenuation_over_distance" );
@@ -871,7 +967,7 @@ namespace Ogre
                 mIrradianceVolume->setFadeAttenuationOverDistace( tmpIt->value.GetBool() );
 
             tmpIt = json.FindMember( "irradiance_max_power" );
-            if( tmpIt != json.MemberEnd() && tmpIt->value.IsUint() )
+            if( tmpIt != json.MemberEnd() && isFloat( tmpIt->value ) )
                 mIrradianceVolume->setIrradianceMaxPower( decodeFloat( tmpIt->value ) );
 
             tmpIt = json.FindMember( "irradiance_origin" );
@@ -1061,7 +1157,7 @@ namespace Ogre
             tmpIt->value[0].IsArray() &&
             tmpIt->value[1].IsArray() &&
             tmpIt->value[2].IsArray() &&
-            tmpIt->value[3].IsUint() )
+            isFloat( tmpIt->value[3] ) )
         {
             const ColourValue upperHemisphere = decodeColourValueArray( tmpIt->value[0] );
             const ColourValue lowerHemisphere = decodeColourValueArray( tmpIt->value[1] );
@@ -1088,6 +1184,8 @@ namespace Ogre
     void SceneFormatImporter::importScene( const String &filename, const rapidjson::Document &d,
                                            uint32 importFlags )
     {
+        mUseBinaryFloatingPoint = true; //The default when setting is not present
+
         mFilename = filename;
         destroyInstantRadiosity();
         destroyParallaxCorrectedCubemap();
@@ -1102,6 +1200,36 @@ namespace Ogre
         }
 
         rapidjson::Value::ConstMemberIterator itor;
+
+        itor = d.FindMember( "version" );
+        if( itor == d.MemberEnd() )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "SceneFormatImporter::importScene",
+                         "JSON file " + filename + " does not contain version key. "
+                         "Probably this is not a valid Ogre scene" );
+        }
+        else
+        {
+            if( itor->value.IsUint() )
+            {
+                const uint32 version = itor->value.GetUint();
+                if( version > LATEST_VERSION )
+                {
+                    LogManager::getSingleton().logMessage(
+                                "WARNING: SceneFormatImporter::importScene "
+                                "JSON file " + filename + " is a newer version(" +
+                                StringConverter::toString( version ) +") than what we support (" +
+                                StringConverter::toString( LATEST_VERSION ) + "). "
+                                "Imported scene may not be complete or have graphical corruption. "
+                                "Or crash.", LML_CRITICAL );
+                }
+            }
+        }
+
+        itor = d.FindMember( "use_binary_floating_point" );
+        if( itor != d.MemberEnd() && itor->value.IsBool() )
+            mUseBinaryFloatingPoint = itor->value.GetBool();
 
         if( importFlags & SceneFlags::SceneNodes )
         {
@@ -1203,7 +1331,9 @@ namespace Ogre
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          "SceneFormatImporter::importScene",
-                         "Invalid JSON string in file " + filename );
+                         "Invalid JSON string in file " + filename + " at line " +
+                         StringConverter::toString( d.GetErrorOffset() ) + " Reason: " +
+                         rapidjson::GetParseError_En( d.GetParseError() ) );
         }
 
         importScene( filename, d, importFlags );
@@ -1237,7 +1367,9 @@ namespace Ogre
             {
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                              "SceneFormatImporter::importScene",
-                             "Invalid JSON string in file " + stream->getName() );
+                             "Invalid JSON string in file " + stream->getName() + " at line " +
+                             StringConverter::toString( d.GetErrorOffset() ) + " Reason: " +
+                             rapidjson::GetParseError_En( d.GetParseError() ) );
             }
 
             rapidjson::Value::ConstMemberIterator  itor;

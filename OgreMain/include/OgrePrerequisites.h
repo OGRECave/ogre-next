@@ -730,6 +730,8 @@ namespace Ogre
 
 } // Ogre
 
+#include "OgreAssert.h"
+
 #endif // __OgrePrerequisites_H__
 
 
