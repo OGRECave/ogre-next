@@ -274,7 +274,7 @@ namespace Ogre {
     {
         assert( minMip <= maxMip );
 
-        if( texture->getResidencyStatus() != GpuResidency::Resident ||
+        if( texture->getResidencyStatus() != GpuResidency::Resident &&
             texture->getNextResidencyStatus() != GpuResidency::Resident )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,

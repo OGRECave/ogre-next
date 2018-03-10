@@ -136,6 +136,32 @@ namespace Ogre
         void _setNextResidencyStatus( GpuResidency::GpuResidency nextResidency );
 
         GpuResidency::GpuResidency getResidencyStatus(void) const;
+        /** When getResidencyStatus() != getNextResidencyStatus(), residency changes happen
+            in the main thread, while some preparation may be happening in the background.
+
+            For example when a texture is not resident but getNextResidencyStatus says it will,
+            a background thread is loading the texture file from disk, but the actual transition
+            won't happen until the main thread changes it. You can call texture->waitForData()
+            which will stall, as the main thread will be communicating back and forth with the
+            background to see if it's ready; and when it is, the main thread will perform
+            the transition inside waitForData
+
+            Likewise, if that texture is resident but will soon not be, it is still legal
+            to access its contents as long as you access them from the main thread before
+            that main thread changes the residency. This gives you a strong serialization
+            guarantee, but be careful with async tickets such as AsyncTextureTickets:
+
+            If you call
+                AsyncTextureTicket *asyncTicket = textureManager->createAsyncTextureTicket( ... );
+                assert( texture->getResidencyStatus() == GpuResidency::Resident );
+                ... do something else that calls Ogre functionality ...
+                assert( texture->getResidencyStatus() == GpuResidency::Resident );
+                asyncTicket->download( texture, mip, true );
+            Then the second assert may trigger because that "do something else" ended up
+            calling a function inside Ogre that finalized the transition.
+            Once you've called download and the resource was still Resident, you are
+            safe that your data integrity will be kept.
+        */
         GpuResidency::GpuResidency getNextResidencyStatus(void) const;
         GpuPageOutStrategy::GpuPageOutStrategy getGpuPageOutStrategy(void) const;
 
