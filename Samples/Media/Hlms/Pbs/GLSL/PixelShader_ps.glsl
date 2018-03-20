@@ -4,6 +4,7 @@
 @end
 @property( hlms_amd_trinary_minmax )#extension GL_AMD_shader_trinary_minmax: require@end
 @insertpiece( SetCompatibilityLayer )
+@insertpiece( DeclareUvModifierMacros )
 
 layout(std140) uniform;
 #define FRAG_COLOR		0
@@ -164,6 +165,8 @@ vec3 qmul( vec4 q, vec3 v )
 @insertpiece( DeclShadowSamplers )
 @insertpiece( DeclShadowSamplingFuncs )
 
+@insertpiece( custom_ps_functions )
+
 void main()
 {
     @insertpiece( custom_ps_preExecution )
@@ -208,9 +211,7 @@ void main()
 	/// Sample detail maps and weight them against the weight map in the next foreach loop.
 @foreach( detail_maps_diffuse, n )@property( detail_map@n )
 	vec4 detailCol@n	= texture( textureMaps[@value(detail_map@n_idx)],
-									vec3( @insertpiece(custom_ps_pre_detailmap@n)
-										  (inPs.uv@value(uv_detail@n).xy@insertpiece( offsetDetail@n ))
-										  @insertpiece(custom_ps_pos_detailmap@n),
+									vec3( UV_DETAIL@n( inPs.uv@value(uv_detail@n).xy@insertpiece( offsetDetail@n ) ),
 										  detailMapIdx@n ) );
 	@property( !hw_gamma_read )//Gamma to linear space
 		detailCol@n.xyz = detailCol@n.xyz * detailCol@n.xyz;@end
@@ -256,7 +257,8 @@ void main()
 		vec3 vBinormal	= normalize( cross( geomNormal, vTangent )@insertpiece( tbnApplyReflection ) );
 		mat3 TBN		= mat3( vTangent, vBinormal, geomNormal );
 
-		@property( normal_map_tex )nNormal = getTSNormal( vec3( inPs.uv@value(uv_normal).xy, normalIdx ) );@end
+		@property( normal_map_tex )nNormal = getTSNormal( vec3( UV_NORMAL( inPs.uv@value(uv_normal).xy ),
+																normalIdx ) );@end
 		@property( normal_weight_tex )
 			// Apply the weight to the main normal map
 			nNormal = mix( vec3( 0.0, 0.0, 1.0 ), nNormal, normalMapWeight );
@@ -575,9 +577,7 @@ void main()
 	/// Sample detail maps and weight them against the weight map in the next foreach loop.
 @foreach( detail_maps_diffuse, n )@property( detail_map@n )
 	float detailCol@n	= texture( textureMaps[@value(detail_map@n_idx)],
-									vec3( @insertpiece(custom_ps_pre_detailmap@n)
-										  inPs.uv@value(uv_detail@n).xy@insertpiece( offsetDetail@n )
-										  @insertpiece(custom_ps_pos_detailmap@n),
+									vec3( UV_DETAIL@n( inPs.uv@value(uv_detail@n).xy@insertpiece( offsetDetail@n ) ),
 										  detailMapIdx@n ) ).w;
 	detailCol@n = detailWeights.@insertpiece(detail_swizzle@n) * detailCol@n;@end
 @end

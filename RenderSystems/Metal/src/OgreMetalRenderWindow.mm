@@ -222,11 +222,11 @@ namespace Ogre
             {
                 LogManager::getSingleton().logMessage("Mac Cocoa Window: Rendering on an external plain NSView*");
                 opt = miscParams->find("parentWindowHandle");
-                NSView *nsview = (__bridge NSView*)reinterpret_cast<void*>(StringConverter::parseUnsignedLong(opt->second));
-                assert( nsview &&
+                mView = (__bridge NSView*)reinterpret_cast<void*>(StringConverter::parseUnsignedLong(opt->second));
+                assert( mView &&
                        "Unable to get a pointer to the parent NSView."
                        "Was the 'parentWindowHandle' parameter set correctly in the call to createRenderWindow()?");
-                mWindow = [nsview window];
+                mWindow = [mView window];
             }
 #else
             opt = miscParams->find("externalWindowHandle");
@@ -244,7 +244,9 @@ namespace Ogre
         }
 
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
-        [mWindow setContentView:mMetalView];
+        [mView addSubview:mMetalView];
+        mMetalView.frame = mView.bounds;
+        mMetalView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
 #else
         mMetalView.frame = mWindow.rootViewController.view.bounds;
         mMetalView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;

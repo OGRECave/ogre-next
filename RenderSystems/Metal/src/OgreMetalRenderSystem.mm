@@ -681,7 +681,7 @@ namespace Ogre
     {
         if( !mMainSemaphoreAlreadyWaited )
         {
-            dispatch_semaphore_wait( mMainGpuSyncSemaphore, DISPATCH_TIME_FOREVER );
+            dispatch_semaphore_wait( mMainGpuSyncSemaphore, DISPATCH_TIME_FOREVER );I
             mMainSemaphoreAlreadyWaited = true;
         }
     }

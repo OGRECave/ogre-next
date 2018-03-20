@@ -48,6 +48,7 @@ namespace Ogre
         id<MTLTexture>      mMsaaTex;
         OgreMetalView       *mMetalView;
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
+        NSView              *mView;
         NSWindow            *mWindow;
 #else
         UIWindow            *mWindow;
