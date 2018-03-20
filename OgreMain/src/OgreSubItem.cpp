@@ -53,11 +53,17 @@ namespace Ogre {
             mBlendIndexToBoneIndexMap = &subMeshBasis->mBlendIndexToBoneIndexMap;
         }
         
-        mNumPoseAnimations = subMeshBasis->getNumPoseAnimations();
+        if ( subMeshBasis->getNumPoseAnimations() > 0 ) {
+            mPoseData = new PoseData();
+            mPoseData->numPoses = subMeshBasis->getNumPoseAnimations();
+            mPoseData->buffer = subMeshBasis->getPoseTexBuffer();
+        }
     }
     //-----------------------------------------------------------------------
     SubItem::~SubItem()
     {
+        if ( mPoseData )
+            delete mPoseData;
     }
     //-----------------------------------------------------------------------
     SubMesh* SubItem::getSubMesh(void) const
@@ -132,10 +138,5 @@ namespace Ogre {
     void SubItem::addPoseWeight(const Ogre::String& poseName, float w)
     {
         Renderable::addPoseWeight(mSubMesh->getPoseIndex(poseName), w);
-    }
-    //-----------------------------------------------------------------------------------
-    TexBufferPacked* SubItem::getPoseTexBuffer() const
-    { 
-        return mSubMesh->getPoseTexBuffer();
     }
 }
