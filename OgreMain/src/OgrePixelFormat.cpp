@@ -125,8 +125,8 @@ namespace Ogre {
     {
         if(PixelUtil::isCompressed(format))
         {
-            if(def.left == left && def.top == top && def.front == front &&
-               def.right == right && def.bottom == bottom && def.back == back)
+            if(def.left == left && def.top == top && def.right == right &&
+			   def.bottom == bottom)
             {
                 // Entire buffer is being queried
                 return *this;
@@ -172,6 +172,29 @@ namespace Ogre {
     size_t PixelUtil::getNumElemBytes( PixelFormat format )
     {
         return getDescriptionFor(format).elemBytes;
+    }
+    //-----------------------------------------------------------------------
+    size_t PixelUtil::calculateSizeBytes( uint32 width, uint32 height, uint32 depth,
+                                          uint32 slices, PixelFormat format, uint8 numMipmaps )
+    {
+        size_t totalBytes = 0;
+        while( (width > 1u || height > 1u || depth > 1u) && numMipmaps > 0 )
+        {
+            totalBytes += PixelUtil::getMemorySize( width, height, depth * slices, format );
+            width   = std::max( 1u, width  >> 1u );
+            height  = std::max( 1u, height >> 1u );
+            depth   = std::max( 1u, depth  >> 1u );
+            --numMipmaps;
+        }
+
+        if( width == 1u && height == 1u && depth == 1u && numMipmaps > 0 )
+        {
+            //Add 1x1x1 mip.
+            totalBytes += PixelUtil::getMemorySize( width, height, depth * slices, format );
+            --numMipmaps;
+        }
+
+        return totalBytes;
     }
     //-----------------------------------------------------------------------
     size_t PixelUtil::getMemorySize(uint32 width, uint32 height, uint32 depth, PixelFormat format)
@@ -1043,8 +1066,7 @@ namespace Ogre {
     void PixelUtil::bulkPixelConversion(const PixelBox &src, const PixelBox &dst)
     {
         assert(src.getWidth() == dst.getWidth() &&
-               src.getHeight() == dst.getHeight() &&
-               src.getDepth() == dst.getDepth());
+               src.getHeight() == dst.getHeight());
 
         // Check for compressed formats, we don't support decompression, compression or recoding
         if(PixelUtil::isCompressed(src.format) || PixelUtil::isCompressed(dst.format))

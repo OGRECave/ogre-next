@@ -21,9 +21,9 @@ struct PS_INPUT
 {
 @insertpiece( VStoPS_block )
 	float4 gl_Position [[position]];
-@property( hlms_global_clip_distances )
-	float gl_ClipDistance0 [[clip_distance]];
-@end
+	@foreach( n, hlms_pso_clip_distances )
+		float gl_ClipDistance@n [[clip_distance]];
+	@end
 };
 
 @property( !hlms_identity_world )
@@ -32,7 +32,7 @@ struct PS_INPUT
 	@property( !hlms_identity_viewproj_dynamic )
 		@piece( worldViewProj )passBuf.viewProj[@value(hlms_identity_viewproj)]@end
 	@end @property( hlms_identity_viewproj_dynamic )
-		@piece( worldViewProj )passBuf.viewProj[worldMaterialIdx[drawId].z]@end
+		@piece( worldViewProj )passBuf.viewProj[worldMaterialIdx[finalDrawId].z]@end
 	@end
 @end
 
@@ -63,7 +63,7 @@ vertex PS_INPUT main_metal
 
 	@property( !hlms_identity_world )
 		float4x4 worldViewProj;
-		worldViewProj = worldMatBuf[drawId];
+		worldViewProj = worldMatBuf[finalDrawId];
 	@end
 
 @property( !hlms_dual_paraboloid_mapping )
@@ -87,22 +87,22 @@ vertex PS_INPUT main_metal
 
 @foreach( out_uv_count, n )
 	@property( out_uv@n_texture_matrix )
-		textureMatrix = animationMatrixBuf[(worldMaterialIdx[drawId].x << 4u) + @value( out_uv@n_tex_unit )];
+		textureMatrix = animationMatrixBuf[(worldMaterialIdx[finalDrawId].x << 4u) + @value( out_uv@n_tex_unit )];
 		outVs.uv@value( out_uv@n_out_uv ).@insertpiece( out_uv@n_swizzle ) = (float4( input.uv@value( out_uv@n_source_uv ).xy, 0, 1 ) * textureMatrix).xy;
 	@end @property( !out_uv@n_texture_matrix )
 		outVs.uv@value( out_uv@n_out_uv ).@insertpiece( out_uv@n_swizzle ) = input.uv@value( out_uv@n_source_uv ).xy;
 	@end @end
 
-	outVs.materialId = (ushort)worldMaterialIdx[drawId].x;
+	outVs.materialId = (ushort)worldMaterialIdx[finalDrawId].x;
 
 @end
 
-	@property( hlms_global_clip_distances || (hlms_shadowcaster && (exponential_shadow_maps || hlms_shadowcaster_point)) )
+	@property( hlms_global_clip_planes || (hlms_shadowcaster && (exponential_shadow_maps || hlms_shadowcaster_point)) )
 		float3 worldPos = (outVs.gl_Position * passBuf.invViewProj).xyz;
 	@end
 	@insertpiece( DoShadowCasterVS )
 
-@property( hlms_global_clip_distances )
+@property( hlms_global_clip_planes )
 	outVs.gl_ClipDistance0 = dot( float4( worldPos.xyz, 1.0 ), passBuf.clipPlane0.xyzw );
 @end
 

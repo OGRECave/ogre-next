@@ -4,8 +4,8 @@
 out gl_PerVertex
 {
 	vec4 gl_Position;
-@property( hlms_global_clip_distances )
-	float gl_ClipDistance[1];
+@property( hlms_pso_clip_distances )
+	float gl_ClipDistance[@value(hlms_pso_clip_distances)];
 @end
 };
 
@@ -47,7 +47,7 @@ out block
 	@property( !hlms_identity_viewproj_dynamic )
 		@piece( worldViewProj )passBuf.viewProj[@value(hlms_identity_viewproj)]@end
 	@end @property( hlms_identity_viewproj_dynamic )
-		@piece( worldViewProj )passBuf.viewProj[instance.worldMaterialIdx[drawId].z]@end
+		@piece( worldViewProj )passBuf.viewProj[instance.worldMaterialIdx[finalDrawId].z]@end
 	@end
 @end
 
@@ -60,7 +60,7 @@ void main()
 	@insertpiece( custom_vs_preExecution )
 	@property( !hlms_identity_world )
 		mat4 worldViewProj;
-		worldViewProj = UNPACK_MAT4( worldMatBuf, drawId );
+		worldViewProj = UNPACK_MAT4( worldMatBuf, finalDrawId );
 	@end
 
 @property( !hlms_dual_paraboloid_mapping )
@@ -84,22 +84,22 @@ void main()
 
 @foreach( out_uv_count, n )
 	@property( out_uv@n_texture_matrix )
-		textureMatrix = UNPACK_MAT4( animationMatrixBuf, (instance.worldMaterialIdx[drawId].x << 4u) + @value( out_uv@n_tex_unit )u );
+		textureMatrix = UNPACK_MAT4( animationMatrixBuf, (instance.worldMaterialIdx[finalDrawId].x << 4u) + @value( out_uv@n_tex_unit )u );
  		outVs.uv@value( out_uv@n_out_uv ).@insertpiece( out_uv@n_swizzle ) = (vec4( uv@value( out_uv@n_source_uv ).xy, 0, 1 ) * textureMatrix).xy;
 	@end @property( !out_uv@n_texture_matrix )
 		outVs.uv@value( out_uv@n_out_uv ).@insertpiece( out_uv@n_swizzle ) = uv@value( out_uv@n_source_uv ).xy;
 	@end @end
 
-	outVs.drawId = drawId;
+	outVs.drawId = finalDrawId;
 
 @end
 
-	@property( hlms_global_clip_distances || (hlms_shadowcaster && (exponential_shadow_maps || hlms_shadowcaster_point)) )
+	@property( hlms_global_clip_planes || (hlms_shadowcaster && (exponential_shadow_maps || hlms_shadowcaster_point)) )
 		float3 worldPos = (gl_Position * passBuf.invViewProj).xyz;
 	@end
 	@insertpiece( DoShadowCasterVS )
 
-@property( hlms_global_clip_distances )
+@property( hlms_global_clip_planes )
 	gl_ClipDistance[0] = dot( float4( worldPos.xyz, 1.0 ), passBuf.clipPlane0.xyzw );
 @end
 

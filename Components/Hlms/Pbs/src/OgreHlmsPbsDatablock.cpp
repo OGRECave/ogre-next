@@ -78,7 +78,7 @@ namespace Ogre
     {
         memset( mUvSource, 0, sizeof( mUvSource ) );
         memset( mBlendModes, 0, sizeof( mBlendModes ) );
-        memset( mReserved, 0, sizeof( mReserved ) );
+        memset( mUserValue, 0, sizeof( mUserValue ) );
 
         mBgDiffuse[0] = mBgDiffuse[1] = mBgDiffuse[2] = mBgDiffuse[3] = 1.0f;
 
@@ -717,7 +717,9 @@ namespace Ogre
                                        const TexturePtr &newTexture, const HlmsSamplerblock *refParams )
     {
         //PBS can only use texture arrays.
-        assert( newTexture->getTextureType() == TextureType::TEX_TYPE_2D_ARRAY || texType == PBSM_REFLECTION );
+        assert( newTexture.isNull() ||
+                newTexture->getTextureType() == TEX_TYPE_2D_ARRAY ||
+                texType == PBSM_REFLECTION );
 
         PbsBakedTexture textures[NUM_PBSM_TEXTURE_TYPES];
 
@@ -1054,6 +1056,22 @@ namespace Ogre
     {
         return mReceiveShadows;
     }
+//-----------------------------------------------------------------------------------
+    void HlmsPbsDatablock::setUserValue(uint8 userValueIdx, const Vector4 &value)
+    {
+        assert(userValueIdx < 3);
+        mUserValue[userValueIdx][0] = value.x;
+        mUserValue[userValueIdx][1] = value.y;
+        mUserValue[userValueIdx][2] = value.z;
+        mUserValue[userValueIdx][3] = value.w;
+    }
+    //-----------------------------------------------------------------------------------
+    Vector4 HlmsPbsDatablock::getUserValue(uint8 userValueIdx) const
+    {
+        assert(userValueIdx < 3);
+        return Vector4( mUserValue[userValueIdx][0], mUserValue[userValueIdx][1],
+                        mUserValue[userValueIdx][2], mUserValue[userValueIdx][3] );
+    }
     //-----------------------------------------------------------------------------------
     void HlmsPbsDatablock::setCubemapProbe( CubemapProbe *probe )
     {
@@ -1215,5 +1233,121 @@ namespace Ogre
         }
 
         return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsPbsDatablock::saveTextures( const String &folderPath, set<String>::type &savedTextures,
+                                         bool saveOitd, bool saveOriginal,
+                                         HlmsTextureExportListener *listener )
+    {
+        HlmsManager *hlmsManager = mCreator->getHlmsManager();
+        HlmsTextureManager *hlmsTextureManager = hlmsManager->getTextureManager();
+
+        for( size_t i=0; i<NUM_PBSM_TEXTURE_TYPES; ++i )
+        {
+            if( mTexToBakedTextureIdx[i] < mBakedTextures.size() )
+            {
+                TexturePtr texture = mBakedTextures[mTexToBakedTextureIdx[i]].texture;
+
+                HlmsTextureManager::TextureLocation texLocation;
+                texLocation.texture = texture;
+                texLocation.xIdx    = mTexIndices[i];
+                texLocation.yIdx    = 0;
+                texLocation.divisor = 1;
+                const String *aliasNamePtr = hlmsTextureManager->findAliasName( texLocation );
+
+                const String aliasName = aliasNamePtr ? *aliasNamePtr : texture->getName();
+
+                //Render Targets are... complicated. Let's not, for now.
+                if( savedTextures.find( aliasName ) == savedTextures.end() &&
+                    (aliasNamePtr || i == PBSM_REFLECTION) &&
+                    !(texture->getUsage() & TU_RENDERTARGET) )
+                {
+                    DataStreamPtr inFile;
+                    if( saveOriginal )
+                    {
+                        String resourceName;
+                        if( aliasNamePtr )
+                        {
+                            const String *resNamePtr =
+                                    hlmsTextureManager->findResourceNameFromAlias( aliasName );
+                            if( resNamePtr )
+                                resourceName = *resNamePtr;
+                            else
+                                resourceName = aliasName;
+                        }
+                        else
+                            resourceName = aliasName;
+
+                        String savingFilename = aliasName;
+                        if( listener )
+                        {
+                            listener->savingChangeTextureNameOriginal( aliasName, resourceName,
+                                                                       savingFilename );
+                        }
+
+                        try
+                        {
+                            inFile = ResourceGroupManager::getSingleton().openResource(
+                                         resourceName, texture->getGroup() );
+                        }
+                        catch( FileNotFoundException &e )
+                        {
+                            //Try opening as an absolute path
+                            std::fstream *ifs = OGRE_NEW_T( std::fstream, MEMCATEGORY_GENERAL )(
+                                                    resourceName.c_str(),
+                                                    std::ios::binary|std::ios::in );
+
+                            if( ifs->is_open() )
+                            {
+                                inFile = DataStreamPtr( OGRE_NEW FileStreamDataStream( resourceName,
+                                                                                       ifs, true ) );
+                            }
+                            else
+                            {
+                                LogManager::getSingleton().logMessage(
+                                            "WARNING: Could not find texture file " + aliasName +
+                                            " (" + resourceName + ") for copying to export location. "
+                                            "Error: " + e.getFullDescription() );
+                            }
+                        }
+                        catch( Exception &e )
+                        {
+                            LogManager::getSingleton().logMessage(
+                                        "WARNING: Could not find texture file " + aliasName +
+                                        " (" + resourceName + ") for copying to export location. "
+                                        "Error: " + e.getFullDescription() );
+                        }
+
+                        if( inFile )
+                        {
+                            size_t fileSize = inFile->size();
+                            vector<uint8>::type fileData;
+                            fileData.resize( fileSize );
+                            inFile->read( &fileData[0], fileData.size() );
+                            std::ofstream outFile( (folderPath + "/" + savingFilename).c_str(),
+                                                   std::ios::binary | std::ios::out );
+                            outFile.write( (const char*)&fileData[0], fileData.size() );
+                            outFile.close();
+                        }
+                    }
+
+                    if( saveOitd )
+                    {
+                        String texName = aliasName;
+                        if( listener )
+                            listener->savingChangeTextureNameOitd( aliasName, texName );
+                        const uint32 numSlices = i == PBSM_REFLECTION ? 6u : 1u;
+
+                        Image image;
+                        texture->convertToImage( image, true, 0u, texLocation.xIdx, numSlices );
+
+                        image.save( folderPath + "/" + texName + ".oitd" );
+                    }
+
+                    savedTextures.insert( aliasName );
+                }
+            }
+        }
+
     }
 }

@@ -40,9 +40,12 @@ THE SOFTWARE.
 #include "OgreLogManager.h"
 
 #include "rapidjson/document.h"
+#include "rapidjson/error/en.h"
 
 namespace Ogre
 {
+    static HlmsJsonListener sDefaultHlmsJsonListener;
+
     const char* c_filterOptions[FO_ANISOTROPIC+1] =
     {
         "none",
@@ -111,9 +114,12 @@ namespace Ogre
         "max"
     };
 
-    HlmsJson::HlmsJson( HlmsManager *hlmsManager ) :
-        mHlmsManager( hlmsManager )
+    HlmsJson::HlmsJson( HlmsManager *hlmsManager, HlmsJsonListener *listener ) :
+        mHlmsManager( hlmsManager ),
+        mListener( listener )
     {
+        if( !mListener )
+            mListener = &sDefaultHlmsJsonListener;
     }
     //-----------------------------------------------------------------------------------
     HlmsJson::~HlmsJson()
@@ -473,7 +479,8 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void HlmsJson::loadDatablocks( const rapidjson::Value &json, const NamedBlocks &blocks, Hlms *hlms,
-                                   const String &filename, const String &resourceGroup )
+                                   const String &filename, const String &resourceGroup,
+                                   const String &additionalTextureExtension )
     {
         rapidjson::Value::ConstMemberIterator itor = json.MemberBegin();
         rapidjson::Value::ConstMemberIterator end  = json.MemberEnd();
@@ -491,7 +498,8 @@ namespace Ogre
                                                                       filename, resourceGroup );
                     loadDatablockCommon( itor->value, blocks, datablock );
 
-                    hlms->_loadJson( itor->value, blocks, datablock );
+                    hlms->_loadJson( itor->value, blocks, datablock, mListener,
+                                     additionalTextureExtension );
                 }
                 catch( Exception &e )
                 {
@@ -508,7 +516,8 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void HlmsJson::loadMaterials( const String &filename, const String &resourceGroup,
-                                  const char *jsonString )
+                                  const char *jsonString,
+                                  const String &additionalTextureExtension )
     {
         rapidjson::Document d;
         d.Parse( jsonString );
@@ -517,7 +526,9 @@ namespace Ogre
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          "HlmsJson::loadMaterials",
-                         "Invalid JSON string in file " + filename );
+                         "Invalid JSON string in file " + filename + " at line " +
+                         StringConverter::toString( d.GetErrorOffset() ) + " Reason: " +
+                         rapidjson::GetParseError_En( d.GetParseError() ) );
         }
 
         NamedBlocks blocks;
@@ -604,7 +615,8 @@ namespace Ogre
 
                 if( hlms && typeName == hlms->getTypeName() )
                 {
-                    loadDatablocks( itDatablock->value, blocks, hlms, filename, resourceGroup );
+                    loadDatablocks( itDatablock->value, blocks, hlms, filename, resourceGroup,
+                                    additionalTextureExtension );
                 }
             }
 
@@ -902,7 +914,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void HlmsJson::saveDatablock( const String &fullName, const HlmsDatablock *datablock,
-                                  String &outString )
+                                  String &outString, const String &additionalTextureExtension )
     {
         outString += "\n\n\t\t\"";
         outString += fullName;
@@ -952,12 +964,13 @@ namespace Ogre
         outString += StringConverter::toString( datablock->mShadowConstantBias );
 
         const Hlms *hlms = datablock->getCreator();
-        hlms->_saveJson( datablock, outString );
+        hlms->_saveJson( datablock, outString, mListener, additionalTextureExtension );
 
         outString += "\n\t\t},";
     }
     //-----------------------------------------------------------------------------------
-    void HlmsJson::saveMaterials( const Hlms *hlms, String &outString )
+    void HlmsJson::saveMaterials( const Hlms *hlms, String &outString,
+                                  const String &additionalTextureExtension )
     {
         outString += "{";
 
@@ -1064,7 +1077,7 @@ namespace Ogre
                 const HlmsDatablock *datablock = itor->second.datablock;
 
                 if( datablock != defaultDatablock )
-                    saveDatablock( itor->second.name, datablock, outString );
+                    saveDatablock( itor->second.name, datablock, outString, additionalTextureExtension );
                 ++itor;
             }
 
@@ -1082,7 +1095,8 @@ namespace Ogre
             outString += "{}";
     }
     //-----------------------------------------------------------------------------------
-    void HlmsJson::saveMaterial( const HlmsDatablock *datablock, String &outString )
+    void HlmsJson::saveMaterial( const HlmsDatablock *datablock, String &outString,
+                                 const String &additionalTextureExtension )
     {
         outString += "{";
 
@@ -1173,7 +1187,7 @@ namespace Ogre
                     datablockName = *fullName;
             }
 
-            saveDatablock( datablockName, datablock, outString );
+            saveDatablock( datablockName, datablock, outString, additionalTextureExtension );
 
             outString.erase( outString.size() - 1 ); //Remove an extra comma
             outString += "\n\t},";

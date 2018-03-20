@@ -108,7 +108,8 @@ namespace Ogre
     const IdString HlmsBaseProp::LightsSpotParams   = IdString( "hlms_lights_spotparams" );
 
     //Change per scene pass
-    const IdString HlmsBaseProp::GlobalClipDistances= IdString( "hlms_global_clip_distances" );
+    const IdString HlmsBaseProp::PsoClipDistances	= IdString( "hlms_pso_clip_distances" );
+    const IdString HlmsBaseProp::GlobalClipPlanes	= IdString( "hlms_global_clip_planes" );
     const IdString HlmsBaseProp::DualParaboloidMapping= IdString( "hlms_dual_paraboloid_mapping" );
     const IdString HlmsBaseProp::NumShadowMapLights = IdString( "hlms_num_shadow_map_lights" );
     const IdString HlmsBaseProp::NumShadowMapTextures= IdString("hlms_num_shadow_map_textures" );
@@ -1470,6 +1471,22 @@ namespace Ogre
         mHighQuality = highQuality;
     }
     //-----------------------------------------------------------------------------------
+    void Hlms::saveAllTexturesFromDatablocks( const String &folderPath,
+                                              set<String>::type &savedTextures,
+                                              bool saveOitd, bool saveOriginal,
+                                              HlmsTextureExportListener *listener )
+    {
+        HlmsDatablockMap::const_iterator itor = mDatablocks.begin();
+        HlmsDatablockMap::const_iterator end  = mDatablocks.end();
+
+        while( itor != end )
+        {
+            itor->second.datablock->saveTextures( folderPath, savedTextures, saveOitd,
+                                                  saveOriginal, listener );
+            ++itor;
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void Hlms::reloadFrom( Archive *newDataFolder, ArchiveVec *libraryFolders )
     {
         clearShaderCache();
@@ -1999,7 +2016,7 @@ namespace Ogre
 
         applyStrongMacroblockRules( pso );
 
-        const size_t numGlobalClipDistances = (size_t)getProperty( HlmsBaseProp::GlobalClipDistances );
+        const size_t numGlobalClipDistances = (size_t)getProperty( HlmsBaseProp::PsoClipDistances );
         pso.clipDistances = (1u << numGlobalClipDistances) - 1u;
 
         //TODO: Configurable somehow (likely should be in datablock).
@@ -2512,7 +2529,10 @@ namespace Ogre
 
         Camera *camera = sceneManager->getCameraInProgress();
         if( camera && camera->isReflected() )
-            setProperty( HlmsBaseProp::GlobalClipDistances, 1 );
+        {
+            setProperty( HlmsBaseProp::PsoClipDistances, 1 );
+            setProperty( HlmsBaseProp::GlobalClipPlanes, 1 );
+        }
 
         RenderTarget *renderTarget = sceneManager->getCurrentViewport()->getTarget();
         setProperty( HlmsBaseProp::RenderDepthOnly,

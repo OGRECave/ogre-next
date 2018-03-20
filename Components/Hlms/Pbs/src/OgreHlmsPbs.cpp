@@ -2092,15 +2092,18 @@ namespace Ogre
 #if !OGRE_NO_JSON
     //-----------------------------------------------------------------------------------
     void HlmsPbs::_loadJson( const rapidjson::Value &jsonValue, const HlmsJson::NamedBlocks &blocks,
-                             HlmsDatablock *datablock ) const
+                             HlmsDatablock *datablock, HlmsJsonListener *listener,
+                             const String &additionalTextureExtension ) const
     {
-        HlmsJsonPbs jsonPbs( mHlmsManager );
+        HlmsJsonPbs jsonPbs( mHlmsManager, listener, additionalTextureExtension );
         jsonPbs.loadMaterial( jsonValue, blocks, datablock );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsPbs::_saveJson( const HlmsDatablock *datablock, String &outString ) const
+    void HlmsPbs::_saveJson( const HlmsDatablock *datablock, String &outString,
+                             HlmsJsonListener *listener,
+                             const String &additionalTextureExtension ) const
     {
-        HlmsJsonPbs jsonPbs( mHlmsManager );
+        HlmsJsonPbs jsonPbs( mHlmsManager, listener, additionalTextureExtension );
         jsonPbs.saveMaterial( datablock, outString );
     }
     //-----------------------------------------------------------------------------------

@@ -46,6 +46,9 @@ namespace Ogre
         mShadowMappingUseBackFaces( true ),
         mTextureManager( 0 ),
         mDefaultHlmsType( HLMS_PBS )
+  #if !OGRE_NO_JSON
+    ,   mJsonListener( 0 )
+  #endif
     {
         memset( mRegisteredHlms, 0, sizeof( mRegisteredHlms ) );
         memset( mDeleteRegisteredOnExit, 0, sizeof( mDeleteRegisteredOnExit ) );
@@ -656,7 +659,9 @@ namespace Ogre
     }
 #if !OGRE_NO_JSON
     //-----------------------------------------------------------------------------------
-    void HlmsManager::loadMaterials( const String &filename, const String &groupName )
+    void HlmsManager::loadMaterials( const String &filename, const String &groupName,
+                                     HlmsJsonListener *listener,
+                                     const String &additionalTextureExtension )
     {
         DataStreamPtr stream = ResourceGroupManager::getSingleton().openResource( filename, groupName );
 
@@ -668,19 +673,22 @@ namespace Ogre
 
             //Add null terminator just in case (to prevent bad input)
             fileData.back() = '\0';
-            HlmsJson hlmsJson( this );
-            hlmsJson.loadMaterials( stream->getName(), groupName, &fileData[0] );
+            HlmsJson hlmsJson( this, listener );
+            hlmsJson.loadMaterials( stream->getName(), groupName, &fileData[0],
+                                    additionalTextureExtension );
         }
     }
     //-----------------------------------------------------------------------------------
-    void HlmsManager::saveMaterials( HlmsTypes hlmsType, const String &filename )
+    void HlmsManager::saveMaterials( HlmsTypes hlmsType, const String &filename,
+                                     HlmsJsonListener *listener,
+                                     const String &additionalTextureExtension )
     {
         assert( hlmsType != HLMS_MAX );
         assert( hlmsType != HLMS_LOW_LEVEL );
 
         String jsonString;
-        HlmsJson hlmsJson( this );
-        hlmsJson.saveMaterials( mRegisteredHlms[hlmsType], jsonString );
+        HlmsJson hlmsJson( this, listener );
+        hlmsJson.saveMaterials( mRegisteredHlms[hlmsType], jsonString, additionalTextureExtension );
 
         std::ofstream file( filename.c_str(), std::ios::binary | std::ios::out );
         if( file.is_open() )
@@ -688,11 +696,13 @@ namespace Ogre
         file.close();
     }
     //-----------------------------------------------------------------------------------
-    void HlmsManager::saveMaterial( const HlmsDatablock *datablock, const String &filename )
+    void HlmsManager::saveMaterial( const HlmsDatablock *datablock, const String &filename,
+                                    HlmsJsonListener *listener,
+                                    const String &additionalTextureExtension )
     {
         String jsonString;
-        HlmsJson hlmsJson( this );
-        hlmsJson.saveMaterial( datablock, jsonString );
+        HlmsJson hlmsJson( this, listener );
+        hlmsJson.saveMaterial( datablock, jsonString, additionalTextureExtension );
 
         std::ofstream file( filename.c_str(), std::ios::binary | std::ios::out );
         if( file.is_open() )
@@ -708,10 +718,18 @@ namespace Ogre
         {
             stream->read( &fileData[0], stream->size() );
 
+            String additionalTextureExtension;
+            ResourceToTexExtensionMap::const_iterator itExt =
+                    mAdditionalTextureExtensionsPerGroup.find( groupName );
+
+            if( itExt != mAdditionalTextureExtensionsPerGroup.end() )
+                additionalTextureExtension = itExt->second;
+
             //Add null terminator just in case (to prevent bad input)
             fileData.back() = '\0';
-            HlmsJson hlmsJson( this );
-            hlmsJson.loadMaterials( stream->getName(), groupName, &fileData[0] );
+            HlmsJson hlmsJson( this, mJsonListener );
+            hlmsJson.loadMaterials( stream->getName(), groupName, &fileData[0],
+                                    additionalTextureExtension );
         }
     }
     //-----------------------------------------------------------------------------------

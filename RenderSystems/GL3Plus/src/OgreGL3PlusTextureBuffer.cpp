@@ -360,18 +360,18 @@ namespace v1 {
         GLint offsetInBytes = 0;
         uint32 width = mWidth;
         uint32 height = mHeight;
-        uint32 depth = mDepth;
+//        uint32 depth = mDepth;
 
-        for(GLint i = 0; i < mLevel; i++)
-        {
-            offsetInBytes += PixelUtil::getMemorySize(width, height, depth, data.format);
-            if (width > 1)
-                width >>= 1;
-            if (height > 1)
-                height >>= 1;
-            if (depth > 1)
-                depth >>= 1;
-        }
+//        for(GLint i = 0; i < mLevel; i++)
+//        {
+//            offsetInBytes += PixelUtil::getMemorySize(width, height, depth, data.format);
+//            if (width > 1)
+//                width >>= 1;
+//            if (height > 1)
+//                height >>= 1;
+//            if (depth > 1)
+//                depth >>= 1;
+//        }
 
         offsetInBytes += PixelUtil::getMemorySize( width, height, data.front, mFormat );
         size_t sizeInBytes = PixelUtil::getMemorySize( width, height, data.getDepth(), data.format );
@@ -611,6 +611,8 @@ namespace v1 {
         // Reset source texture to sane state
         OGRE_CHECK_GL_ERROR(glBindTexture(src->mTarget, src->mTextureID));
 
+        OGRE_CHECK_GL_ERROR(glFramebufferRenderbuffer(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                                      GL_RENDERBUFFER, 0));
         OGRE_CHECK_GL_ERROR(glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
                                                       GL_RENDERBUFFER, 0));
 

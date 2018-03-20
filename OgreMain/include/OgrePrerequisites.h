@@ -211,6 +211,7 @@ namespace Ogre {
     class HlmsManager;
     struct HlmsPso;
     struct HlmsSamplerblock;
+    class HlmsTextureExportListener;
     class HlmsTextureManager;
     struct HlmsTexturePack;
     class IndexBufferPacked;
@@ -725,6 +726,8 @@ namespace Ogre
     };
 
 } // Ogre
+
+#include "OgreAssert.h"
 
 #endif // __OgrePrerequisites_H__
 

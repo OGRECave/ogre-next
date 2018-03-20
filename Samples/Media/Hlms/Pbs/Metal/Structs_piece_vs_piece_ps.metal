@@ -30,7 +30,7 @@ struct PassData
 	//Vertex shader (common to both receiver and casters)
 	float4x4 viewProj;
 
-@property( hlms_global_clip_distances )
+@property( hlms_global_clip_planes )
 	float4 clipPlane0;
 @end
 
@@ -132,7 +132,7 @@ struct Material
 	float4 cDetailWeights;
 	float4 detailOffsetScale[4];
 	float4 emissive;		//emissive.w contains mNormalMapWeight.
-	float4 reserved[3];
+	float4 userValue[3];
 
 	//uint4 indices0_3;
 	ushort diffuseIdx;

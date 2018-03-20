@@ -47,6 +47,8 @@ namespace Ogre
     class _OgreHlmsPbsExport HlmsJsonPbs
     {
         HlmsManager *mHlmsManager;
+        HlmsJsonListener *mListener;
+        String mAdditionalExtension;
 
         static HlmsPbsDatablock::Workflows parseWorkflow( const char *value );
         static PbsBrdf::PbsBrdf parseBrdf( const char *value );
@@ -90,7 +92,8 @@ namespace Ogre
                           const HlmsPbsDatablock *datablock, String &outString );
 
     public:
-        HlmsJsonPbs( HlmsManager *hlmsManager );
+        HlmsJsonPbs( HlmsManager *hlmsManager, HlmsJsonListener *listener,
+                     const String &additionalExtension );
 
         void loadMaterial( const rapidjson::Value &json, const HlmsJson::NamedBlocks &blocks,
                            HlmsDatablock *datablock );

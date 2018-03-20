@@ -463,6 +463,16 @@ set(OGRE_CONFIG_ALLOCATOR 1 CACHE STRING
 )
 endif ()
 
+set( OGRE_DEBUG_LEVEL_DEBUG 3 CACHE STRING
+    "Specify debug level for debug builds:
+    0 - None. Disabled. No checks done at all.
+    1 - Low. We perform basic assert checks and other non-performance intensive checks.
+    2 - Medium. We alter classes to add some debug variables for a bit more thorough checking and also perform checks that may cause some performance hit.
+    3 - High. We perform intensive validation without concerns for performance."
+)
+set( OGRE_DEBUG_LEVEL_RELEASE 0 CACHE STRING
+    "Specify debug level for Release, RelWithDebInfo and MinSizeRel builds. See OGRE_MAX_DEBUG_LEVEL_DEBUG" )
+
 cmake_dependent_option(OGRE_CONFIG_CONTAINERS_USE_CUSTOM_ALLOCATOR "STL containers in Ogre use the custom allocator" TRUE "" FALSE)
 option(OGRE_CONFIG_STRING_USE_CUSTOM_ALLOCATOR "Ogre String uses the custom allocator" FALSE)
 option(OGRE_CONFIG_MEMTRACK_DEBUG "Enable Ogre's memory tracker in debug mode" FALSE)
@@ -488,6 +498,9 @@ cmake_dependent_option(OGRE_CONFIG_ENABLE_GLES3_SUPPORT "Enable OpenGL ES 3.x Fe
 option(OGRE_CONFIG_ENABLE_FINE_LIGHT_MASK_GRANULARITY "Forward+ will support setLightMask, for a fine granularity control over which lights affect which objects. Performance impact may vary (may be slower, may be faster if you filter a lot of lights)" FALSE)
 option(OGRE_CONFIG_ENABLE_TBB_SCHEDULER "Enable TBB's scheduler initialisation/shutdown." TRUE)
 cmake_dependent_option(OGRE_USE_BOOST "Use Boost extensions" FALSE "Boost_FOUND" FALSE)
+
+cmake_dependent_option( OGRE_BUILD_COMPONENT_SCENE_FORMAT "Component to export and import scenes (meshes, textures, items, entities)" FALSE "OGRE_CONFIG_ENABLE_JSON" FALSE )
+
 # Customise what to install
 option(OGRE_INSTALL_SAMPLES "Install Ogre demos." TRUE)
 option(OGRE_INSTALL_TOOLS "Install Ogre tools." TRUE)

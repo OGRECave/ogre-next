@@ -29,7 +29,7 @@ layout_constbuffer(binding = 0) uniform PassBuffer
 	//Vertex shader (common to both receiver and casters)
 	mat4 viewProj;
 
-@property( hlms_global_clip_distances )
+@property( hlms_global_clip_planes )
 	vec4 clipPlane0;
 @end
 
@@ -131,7 +131,7 @@ struct Material
 	vec4 cDetailWeights;
 	vec4 detailOffsetScale[4];
 	vec4 emissive;		//emissive.w contains mNormalMapWeight.
-	vec4 reserved[3];
+	vec4 userValue[3];
 
 	uvec4 indices0_3;
 	uvec4 indices4_7;

@@ -121,6 +121,10 @@ namespace Ogre {
     protected:
         /// Depth level in the hierarchy tree (0: Root node, 1: Child of root, etc)
         uint16 mDepthLevel;
+        /// Calling SceneManager::clearScene won't destroy this node nor detach its
+        /// objects (but may still destroy parent and children nodes if they're not
+        /// indestructible)
+        bool mIndestructibleByClearScene;
         /// Pointer to parent node
         Node* mParent;
         /// Collection of pointers to direct children; hashmap for efficiency
@@ -157,7 +161,7 @@ namespace Ogre {
         /** Internal method for creating a new child node - must be overridden per subclass. */
         virtual Node* createChildImpl( SceneMemoryMgrTypes sceneType ) = 0;
 
-#if OGRE_DEBUG_MODE
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         mutable bool mCachedTransformOutOfDate;
 #endif
 
@@ -202,6 +206,19 @@ namespace Ogre {
 
         /** Gets this node's parent (NULL if this is the root). */
         Node* getParent(void) const;
+
+        /** Calling SceneManager::clearScene won't destroy this node nor detach its
+            objects (but may still destroy parent and children nodes if they're not
+            indestructible) when this is true.
+        @remarks
+            This function provides trivial setter/getters rather than making
+            mIndestructibleByClearScene public for two reasons:
+                1. It's rare called
+                2. There's a lot of value in debugging when a node is set to indestructible,
+                   which could happen by accident; and would thus leak.
+        */
+        void setIndestructibleByClearScene( bool indestructible );
+        bool getIndestructibleByClearScene(void) const;
 
         /** Migrates the node and all of its children to the new memory manager,
             at the same depth level.
@@ -740,7 +757,7 @@ namespace Ogre {
 
         virtual NodeMemoryManager* getDefaultNodeMemoryManager( SceneMemoryMgrTypes sceneType ) = 0;
 
-#if OGRE_DEBUG_MODE
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         virtual void _setCachedTransformOutOfDate(void);
         bool isCachedTransformOutOfDate(void) const             { return mCachedTransformOutOfDate; }
 #endif
