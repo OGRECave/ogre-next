@@ -51,8 +51,7 @@ namespace Ogre
         mHlmsGlobalIndex( ~0 ),
         mPolygonModeOverrideable( true ),
         mUseIdentityProjection( false ),
-        mUseIdentityView( false ),
-        mPoseData( 0 )
+        mUseIdentityView( false )
     {
     }
     //-----------------------------------------------------------------------------------
@@ -201,22 +200,25 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     float Renderable::getPoseWeight(size_t index) const
     { 
-        assert(( index < OGRE_MAX_POSES ) && "Pose weight index out of bounds" );
+        assert( (index < OGRE_MAX_POSES) && "Pose weight index out of bounds" );
         return mPoseData ? mPoseData->weights[index] : 0; 
     }
     //-----------------------------------------------------------------------------------
     void Renderable::setPoseWeight(size_t index, float w)
     { 
-        if ( !mPoseData ) 
+        if( !mPoseData ) 
             return;
         
-        assert(( index < OGRE_MAX_POSES && index < mPoseData->numPoses ) && "Pose weight index out of bounds" );
-        mPoseData->weights[index] = Math::Clamp(w, 0.f, 1.f); 
+        assert( (index < OGRE_MAX_POSES && index < mPoseData->numPoses) && "Pose weight index out of bounds" );
+        mPoseData->weights[index] = Math::Clamp( w, 0.f, 1.f ); 
     }
     void Renderable::addPoseWeight(size_t index, float w)
-    { 
-        assert(( index < OGRE_MAX_POSES && index < mPoseData->numPoses ) && "Pose weight index out of bounds" );
-        mPoseData->weights[index] = Math::Clamp(mPoseData->weights[index] + w, 0.f, 1.f); 
+    {
+        if( !mPoseData ) 
+            return;
+
+        assert( (index < OGRE_MAX_POSES && index < mPoseData->numPoses) && "Pose weight index out of bounds" );
+        mPoseData->weights[index] = Math::Clamp( mPoseData->weights[index] + w, 0.f, 1.f ); 
     }
     //-----------------------------------------------------------------------------------
     TexBufferPacked* Renderable::getPoseTexBuffer() const

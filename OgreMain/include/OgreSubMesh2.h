@@ -202,7 +202,7 @@ namespace Ogre {
         
         unsigned short getNumPoseAnimations() { return mNumPoseAnimations; }
         
-        size_t getPoseIndex(const Ogre::String& name) { return mPoseIndexMap[name]; }
+        size_t getPoseIndex(const Ogre::String& name) { return mPoseIndexMap.count(name) ? mPoseIndexMap[name] : SIZE_T_MAX; }
         
         TexBufferPacked* getPoseTexBuffer() { return mPoseTexBuffer; }
 

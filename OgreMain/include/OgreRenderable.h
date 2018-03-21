@@ -477,7 +477,7 @@ namespace Ogre {
             
             PoseData();
         };
-        PoseData *mPoseData;
+        SharedPtr<PoseData> mPoseData;
     };
 
     class _OgreExport RenderableAnimated : public Renderable

@@ -165,18 +165,34 @@ void main()
     @insertpiece( custom_vs_preExecution )
     
 @property( hlms_pose )
-	// number of vertices is stored in the first entry, thus add 1 below
-	// when indexing into poseBuf
-	int numVertices = floatBitsToInt( bufferFetch( poseBuf, 0 ).x );
-	// ideally could use unpackUnorm4x8 but it's unavailable in GLSL 330
-	uint poseWeights = instance.worldMaterialIdx[drawId].w;
 	vec4 inputPos = vertex;
-	vec4 posePos;
-	float weight;
-	@foreach( hlms_pose, n )
-		posePos = bufferFetch( poseBuf, 1 + gl_VertexID + numVertices * @n );
-		weight = ( ( poseWeights >> (@nu * 8u) ) & 0xffu ) / 255.f;
+
+	@property( hlms_pose_1 )
+		float weight = uintBitsToFloat( instance.worldMaterialIdx[drawId].w );
+		vec4 posePos = bufferFetch( poseBuf, 1 + gl_VertexID );
 		inputPos += posePos * weight;
+	@end @property( !hlms_pose_1 )
+		// number of vertices is stored in the first entry, thus add 1 below
+		// when indexing into poseBuf
+		int numVertices = floatBitsToInt( bufferFetch( poseBuf, 0 ).x );
+		// ideally could use unpackUnorm4x8 but it's unavailable in GLSL 330
+		uint poseWeights = instance.worldMaterialIdx[drawId].w;
+		vec4 posePos;
+		float weight;
+		
+		@foreach( hlms_pose, n )
+			posePos = bufferFetch( poseBuf, 1 + gl_VertexID + numVertices * @n );
+			
+			@property( hlms_pose_2 )
+				weight = ( ( poseWeights >> (@nu * 16u) ) & 0xffffu ) / 65535.f;
+			@end @property( hlms_pose_3 )
+				weight = ( ( poseWeights >> (@nu * 10u) ) & 0x3ffu ) / 1023.f;
+			@end @property( hlms_pose_4 )
+				weight = ( ( poseWeights >> (@nu * 8u) ) & 0xffu ) / 255.f;
+			@end
+			
+			inputPos += posePos * weight;
+		@end
 	@end
 @end
 

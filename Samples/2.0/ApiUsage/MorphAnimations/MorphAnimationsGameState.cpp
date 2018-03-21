@@ -123,12 +123,13 @@ namespace Demo
     void MorphAnimationsGameState::update( float timeSinceLast )
     {        
         mAccumulator += timeSinceLast;
-        auto subItem = mSmileyItem->getSubItem(0);
+        auto subItem = mSmileyItem->getSubItem( 0 );
         
-        subItem->setPoseWeight("Smile", (Ogre::Math::Sin(mAccumulator) + 1)/2);
-        subItem->setPoseWeight("MouthOpen", (Ogre::Math::Sin(mAccumulator+1) + 1)/2);
-        subItem->setPoseWeight("Sad", (Ogre::Math::Sin(mAccumulator+2) + 1)/2);
-        subItem->setPoseWeight("EyesClosed", (Ogre::Math::Sin(mAccumulator+3) + 1)/2);
+        subItem->setPoseWeight( "Smile", (Ogre::Math::Sin(mAccumulator) + 1)/2 );
+        subItem->setPoseWeight( "MouthOpen", (Ogre::Math::Sin(mAccumulator+1) + 1)/2 );
+        subItem->setPoseWeight( "Sad", (Ogre::Math::Sin(mAccumulator+2) + 1)/2 );
+        subItem->setPoseWeight( "EyesClosed", (Ogre::Math::Sin(mAccumulator+3) + 1)/2 );
+        
         
         TutorialGameState::update( timeSinceLast );
     }
