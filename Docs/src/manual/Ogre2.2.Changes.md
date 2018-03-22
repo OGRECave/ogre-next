@@ -1,5 +1,7 @@
 # What's new in Ogre 2.2 {#Ogre22Changes}
 
+@tableofcontents
+
 The main change has been a full refactor of textures.
 
 The main reason of 2.2 is a complete overhaul of the Texture system, with a focus on
