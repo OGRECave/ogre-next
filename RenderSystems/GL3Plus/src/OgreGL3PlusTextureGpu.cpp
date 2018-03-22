@@ -83,6 +83,14 @@ namespace Ogre
             OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE ) );
             OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_MAX_LEVEL, mNumMipmaps - 1u ) );
 
+            if( mPixelFormat == PFG_A8_UNORM )
+            {
+                OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_SWIZZLE_R, GL_ZERO ) );
+                OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_SWIZZLE_G, GL_ZERO ) );
+                OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_SWIZZLE_B, GL_ZERO ) );
+                OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_SWIZZLE_A, GL_RED ) );
+            }
+
             switch( mTextureType )
             {
             case TextureTypes::Unknown:
@@ -162,6 +170,14 @@ namespace Ogre
                 OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_BASE_LEVEL, 0 ) );
                 OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_MAX_LEVEL, 0 ) );
                 OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_MAX_LEVEL, mNumMipmaps - 1u ) );
+
+                if( mPixelFormat == PFG_A8_UNORM )
+                {
+                    OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_SWIZZLE_R, GL_ZERO ) );
+                    OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_SWIZZLE_G, GL_ZERO ) );
+                    OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_SWIZZLE_B, GL_ZERO ) );
+                    OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_SWIZZLE_A, GL_RED ) );
+                }
 
                 if( mTextureType == TextureTypes::Type2D )
                 {
