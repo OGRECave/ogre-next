@@ -52,6 +52,8 @@ namespace Ogre
         DO NOT INCLUDE THIS HEADER DIRECTLY.
 
         The way to include this header is by doing:
+
+        @code
         #define _OgreHlmsTextureBaseClassExport _OgreHlmsUnlitExport
         #define OGRE_HLMS_TEXTURE_BASE_CLASS HlmsUnlitBaseTextureDatablock
         #define OGRE_HLMS_TEXTURE_BASE_MAX_TEX NUM_UNLIT_TEXTURE_TYPES
@@ -61,6 +63,7 @@ namespace Ogre
         #undef OGRE_HLMS_TEXTURE_BASE_CLASS
         #undef OGRE_HLMS_TEXTURE_BASE_MAX_TEX
         #undef OGRE_HLMS_CREATOR_CLASS
+        @endcode
 
         Where all the necessary macros are defined prior to including this header,
         and once we're done, we undef these macros.

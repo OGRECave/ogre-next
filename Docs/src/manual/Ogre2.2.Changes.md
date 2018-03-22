@@ -196,6 +196,60 @@ Now in Ogre 2.2, all of that is condensed into one class:
 This doesn't mean that TextureGpu is an overgrown God Class.
 The fragmentation into 3 was a bad idea to begin with.
 
+## PixelFormats
+
+PixelFormat is deprecated and will be removed. You should use PixelFormatGpu instead.
+The way to read the format is the following:
+
+* PFG\_RGBA8\_UNORM: RGBA format, 8 bits per channel (so 32 bit per pixel), in unorm format;
+that means range is [0; 1]
+* PFG\_RGBA32\_FLOAT: RGBA format, 32 bits per channel (so 128 bit per pixel), in raw float
+format
+
+### Common pixel format equivalencies
+
+The boolean "hwGamma" that usually came alongside the pixel format is gone. Now the gamma
+version is part of the format. For example PFG\_RGBA8\_UNORM and PFG\_RGBA8\_UNORM\_SRGB are
+both the same format except one is.
+
+Here's a table with common translations:
+
+| Old                                             | New                                                  |
+|-------------------------------------------------|------------------------------------------------------|
+| PF\_L8                                          | PFG\_R8\_UNORM                                       |
+| PF\_L16                                         | PFG\_R16\_UNORM                                      |
+| PF\_A8B8G8R8<br>PF\_BYTE\_BGR<br>PF\_BYTE\_BGRA | PFG\_RGBA8\_UNORM<br>PFG\_RGBA8\_UNORM\_SRGB         |
+| PF\_A8R8G8B8<br>PF\_BYTE\_RGB<br>PF\_BYTE\_RGBA | PFG\_RGBA8\_UNORM (\*)<br>PFG\_RGBA8\_UNORM\_SRGB(\*)|
+| PF\_DXT1<br>PF\_DXT2                            | PFG\_BC1\_UNORM<br>PFG\_BC1\_UNORM\_SRGB             |
+| PF\_DXT3<br>PF\_DXT4                            | PFG\_BC2\_UNORM<br>PFG\_BC2\_UNORM\_SRGB             |
+| PF\_DXT5                                        | PFG\_BC3\_UNORM<br>PFG\_BC3\_UNORM\_SRGB             |
+
+(\*)The correct format would be PFG\_BGRA8\_UNORM, PFG\_BGRX8\_UNORM, PFG\_BGRA8\_UNORM\_SRGB and
+PFG\_BGRX8\_UNORM\_SRGB.
+However avoid these, because:
+
+-# The \_SRGB variants didn't exist up until D3D11 (i.e. they're not available to D3D10)
+-# These formats are mostly meant for dealing with swapchains (and thus renderwindows)
+rather than as regular textures or even RenderTargets.
+
+**How do I change toggle gamma correction on and off dynamically?**
+
+Create the texture with the flag TextureFlags::Reinterpretable and then use
+DescriptorSetTexture2 to interpret it with a different format (advanced users).
+
+Compute job passes use DescriptorSetTexture2 internally by default and support
+feature format reinterpretation out of the box.
+
+**Where are PF_L8 and PF_L16?**
+
+These no longer exist as they did not exist in D3D11 & Metal and were being emulated in
+GL.
+Use PFG_R8_UNORM & PFG_R16_UNORM instead, which return the data in the red channel,
+as opposed to L8 which in GL returned data in all 3 RGB channels (but in D3D11 & Metal,
+only returned data in the red channel...).
+Use HlmsUnlitDatablock::setTextureSwizzle to control how the channels are routed to your
+liking.
+
 ## Useful code snippets
 
 ### Create a TextureGpu based on a file
@@ -800,6 +854,57 @@ reflections which must be `TypeCube`).
 
 Since most TextureGpu textures are loaded as `AutomaticBatching` **by default**, this
 limitation on PBS should be less of an issue than it was on 2.1.
+
+# Hlms porting
+
+If you've done your own Hlms implementation (i.e. you're an advanced user), then there are
+a few changes you need to be aware:
+
+A lot of texture shared functionality has been moved out of HlmsUnlitDatablock and
+HlmsPbsDatablock into Components/Hlms/Common/include/OgreHlmsTextureBaseClass.h
+
+This header uses macros (not ideal, I know) to alter hardcoded maximum numbers of textures
+supported.
+
+For example HlmsPbsDatablock derives from it by including the header, but previously
+defining a few macros:
+
+```
+#define OGRE_HLMS_TEXTURE_BASE_CLASS HlmsPbsBaseTextureDatablock
+#define OGRE_HLMS_TEXTURE_BASE_MAX_TEX NUM_PBSM_TEXTURE_TYPES
+#define OGRE_HLMS_CREATOR_CLASS HlmsPbs
+	#include "../../Common/include/OgreHlmsTextureBaseClass.h"
+#undef _OgreHlmsTextureBaseClassExport
+#undef OGRE_HLMS_TEXTURE_BASE_CLASS
+#undef OGRE_HLMS_TEXTURE_BASE_MAX_TEX
+#undef OGRE_HLMS_CREATOR_CLASS
+
+// ... later on ...
+
+// Note that we've defined #define OGRE_HLMS_TEXTURE_BASE_CLASS HlmsPbsBaseTextureDatablock
+// So that the header would define a class named 'HlmsPbsBaseTextureDatablock'
+class HlmsPbsDatablock : public HlmsPbsBaseTextureDatablock
+```
+
+What OgreHlmsTextureBaseClass does is to keep track of which textures have been
+assigned to the material at each slot; and register listeners to these textures
+whenever the textures finish loading (or are unloaded) in order to alter the
+DescriptorSetTextures and DescriptorSetSamplers.
+
+Furthermore it is in charge of making sure when using GL3+ that
+DescriptorSetTextures and DescriptorSetSamplers both match 1:1 (see hasSeparateSamplers),
+while when using D3D11 & Metal they're separated in order to improve performance and
+significantly raise the number of textures that can be bound per shader.
+
+OgreHlmsTextureBaseClass also sorts DescriptorSetTextures given a specific criteria to
+allow sharing of descriptors between different materials (and better draw call sorting)
+For example if Material X uses texture A then B and Material Y uses texture B then A,
+OgreHlmsTextureBaseClass sorts the descriptor so that A always comes before B, and thus
+allow reuse.
+
+Because textures and samplers have been separated, diffuse\_map0\_idx indicates the index
+into the texture array, and the new property "diffuse_map0_sampler" indicates the index
+of the sampler to use.
 
 # Things to watch out when porting
 

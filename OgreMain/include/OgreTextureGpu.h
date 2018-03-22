@@ -168,10 +168,12 @@ namespace Ogre
     /**
     @remarks
         Internal layout of data in memory:
-        Mip0 -> Slice 0, Slice 1, ..., Slice N
-        Mip1 -> Slice 0, Slice 1, ..., Slice N
-        ...
-        MipN -> Slice 0, Slice 1, ..., Slice N
+        @verbatim
+            Mip0 -> Slice 0, Slice 1, ..., Slice N
+            Mip1 -> Slice 0, Slice 1, ..., Slice N
+            ...
+            MipN -> Slice 0, Slice 1, ..., Slice N
+        @endverbatim
 
         The layout for 3D volume and array textures is the same. The only thing that changes
         is that for 3D volumes, the number of slices also decreases with each mip, while
