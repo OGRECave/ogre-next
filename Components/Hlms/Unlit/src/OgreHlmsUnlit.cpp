@@ -331,11 +331,11 @@ namespace Ogre
         if( datablock->mSamplersDescSet )
             setProperty( UnlitProperty::NumSamplers, datablock->mSamplersDescSet->mSamplers.size() );
 
-        setProperty( UnlitProperty::DiffuseMap, datablock->mTexturesDescSet != 0 );
-
         bool hasAnimationMatrices = false;
         UvOutputVec uvOutputs;
         bool hasPlanarReflection = false;
+
+        int32 maxUsedTexUnitPlusOne = 0;
 
         char tmpBuffer[64];
         LwString diffuseMapN( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
@@ -371,6 +371,8 @@ namespace Ogre
                     setProperty( diffuseMapNReflection, 1 );
                     hasPlanarReflection = true;
                 }
+
+                maxUsedTexUnitPlusOne = i + 1;
             }
 
             //Set the blend mode
@@ -449,6 +451,9 @@ namespace Ogre
                 inOutPieces[PixelShader][diffuseMapNTexSwizzle] = texSwizzle;
             }
         }
+
+        if( datablock->mTexturesDescSet )
+            setProperty( UnlitProperty::DiffuseMap, maxUsedTexUnitPlusOne );
 
         if( hasAnimationMatrices )
             setProperty( UnlitProperty::TextureMatrix, 1 );
