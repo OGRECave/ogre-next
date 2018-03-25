@@ -552,12 +552,16 @@ namespace Ogre
             }
             else
             {
+                //Make sure a RenderPassDescriptor isn't bound and becomes dangling
+                mRenderSystem->endRenderPassDescriptor();
                 OGRE_DELETE it->workspace;
                 mQueuedWorkspaces.erase( it ); //Preserve the order of workspace execution
             }
         }
         else
         {
+            //Make sure a RenderPassDescriptor isn't bound and becomes dangling
+            mRenderSystem->endRenderPassDescriptor();
             OGRE_DELETE *itor;
             mWorkspaces.erase( itor ); //Preserve the order of workspace execution
         }
