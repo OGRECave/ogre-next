@@ -77,7 +77,8 @@ namespace Ogre
         mLastDescTexture( 0 ),
         mLastDescSampler( 0 ),
         mUsingExponentialShadowMaps( false ),
-        mEsmK( 600u )
+        mEsmK( 600u ),
+        mTexUnitSlotStart( 2 )
     {
         //Override defaults
         mLightGatheringMode = LightGatherNone;
@@ -95,7 +96,8 @@ namespace Ogre
         mLastDescTexture( 0 ),
         mLastDescSampler( 0 ),
         mUsingExponentialShadowMaps( false ),
-        mEsmK( 600u )
+        mEsmK( 600u ),
+        mTexUnitSlotStart( 2u )
     {
         //Override defaults
         mLightGatheringMode = LightGatherNone;
@@ -161,7 +163,7 @@ namespace Ogre
         {
             GpuProgramParametersSharedPtr psParams = retVal->pso.pixelShader->getDefaultParameters();
 
-            int texUnit = 2; //Vertex shader consumes 2 slots with its two tbuffers.
+            int texUnit = mTexUnitSlotStart; //Vertex shader consumes 2 slots with its two tbuffers.
 
             if( !getProperty( HlmsBaseProp::ShadowCaster ) && datablock->mTexturesDescSet )
             {
@@ -290,7 +292,7 @@ namespace Ogre
         setProperty( HlmsBaseProp::Tangent,     0 );
         setProperty( HlmsBaseProp::BonesPerVertex, 0 );
 
-        int texUnit = 2; //Vertex shader consumes 2 slots with its two tbuffers.
+        int texUnit = mTexUnitSlotStart; //Vertex shader consumes 2 slots with its two tbuffers.
         int numTextures = 0;
         int numArrayTextures = 0;
 
@@ -906,7 +908,7 @@ namespace Ogre
             if( datablock->mTexturesDescSet != mLastDescTexture )
             {
                 //Bind textures
-                size_t texUnit = 2;
+                size_t texUnit = mTexUnitSlotStart;
 
                 if( datablock->mTexturesDescSet )
                 {
@@ -931,7 +933,7 @@ namespace Ogre
                 if( datablock->mSamplersDescSet )
                 {
                     //Bind samplers
-                    size_t texUnit = 2;
+                    size_t texUnit = mTexUnitSlotStart;
                     *commandBuffer->addCommand<CbSamplers>() =
                             CbSamplers( texUnit, datablock->mSamplersDescSet );
                     mLastDescSampler = datablock->mSamplersDescSet;
