@@ -83,6 +83,8 @@ namespace Ogre
         TextureGpu              *mTextures[OGRE_HLMS_TEXTURE_BASE_MAX_TEX];
         HlmsSamplerblock const	*mSamplerblocks[OGRE_HLMS_TEXTURE_BASE_MAX_TEX];
 
+        uint8                   mTexLocationInDescSet[OGRE_HLMS_TEXTURE_BASE_MAX_TEX];
+
         void scheduleConstBufferUpdate( bool updateTextures=false, bool updateSamplers=false );
         void updateDescriptorSets( bool textureSetDirty, bool samplerSetDirty );
 

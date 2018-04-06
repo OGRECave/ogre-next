@@ -21,6 +21,9 @@ namespace Ogre
         memset( mTexIndices, 0, sizeof( mTexIndices ) );
         memset( mTextures, 0, sizeof( mTextures ) );
         memset( mSamplerblocks, 0, sizeof( mSamplerblocks ) );
+
+        for( size_t i=0; i<OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
+            mTexLocationInDescSet[i] = OGRE_HLMS_TEXTURE_BASE_MAX_TEX;
     }
     //-----------------------------------------------------------------------------------
     OGRE_HLMS_TEXTURE_BASE_CLASS::~OGRE_HLMS_TEXTURE_BASE_CLASS()
@@ -206,81 +209,43 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    static bool OrderTextureByPoolThenName( const TextureGpu *_a, const TextureGpu *_b )
-    {
-        const TexturePool *poolA = _a->getTexturePool();
-        const TexturePool *poolB = _b->getTexturePool();
-
-        IdString poolNameA = poolA ? poolA->masterTexture->getName() : IdString();
-        IdString poolNameB = poolB ? poolB->masterTexture->getName() : IdString();
-
-        //Invert pool order so that textures without pools end up last
-        //(specially important for cubemaps!!! Cubemaps must go last!)
-        if( poolA != poolB )
-            return !(poolNameA < poolNameB);
-
-        return _a->getName() < _b->getName();
-    }
     bool OGRE_HLMS_TEXTURE_BASE_CLASS::bakeTextures( bool hasSeparateSamplers )
     {
         DescriptorSetTexture baseSet;
         DescriptorSetSampler baseSampler;
 
         for( size_t i=0; i<OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
+            mTexLocationInDescSet[i] = OGRE_HLMS_TEXTURE_BASE_MAX_TEX;
+
+        for( size_t i=0; i<OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
         {
             if( mTextures[i] )
             {
-                //Keep it sorted to maximize sharing of descriptor sets.
-                FastArray<const TextureGpu*>::iterator itor =
-                        std::lower_bound( baseSet.mTextures.begin(),
-                                          baseSet.mTextures.end(),
-                                          mTextures[i], OrderTextureByPoolThenName );
-
-                size_t idx = itor - baseSet.mTextures.begin();
-
                 //May have changed if the TextureGpuManager updated the Texture.
                 mTexIndices[i] = mTextures[i]->getInternalSliceStart();
 
-                if( itor == baseSet.mTextures.end() ||
-                    ((*itor)->getTexturePool() != mTextures[i]->getTexturePool() ||
-                     (!(*itor)->getTexturePool() && (*itor) != mTextures[i])) )
+                //Look if the texture pool has already been added to the desc set so
+                //we can share the same spot. In OpenGL, we cannot share it if the
+                //samplerblocks are different.
+                for( size_t j=0; j<i; ++j )
                 {
-                    baseSet.mTextures.insert( itor, mTextures[i] );
-                    if( !hasSeparateSamplers )
+                    if( mTextures[j] &&
+                        mTextures[j]->getTexturePool() == mTextures[i]->getTexturePool() &&
+                        (mSamplerblocks[i] == mSamplerblocks[j] || hasSeparateSamplers) )
                     {
-                        baseSampler.mSamplers.insert( baseSampler.mSamplers.begin() + idx,
-                                                      mSamplerblocks[i] );
+                        mTexLocationInDescSet[i] = mTexLocationInDescSet[j];
+                        break;
                     }
                 }
-                else if( !hasSeparateSamplers && baseSampler.mSamplers[idx] != mSamplerblocks[i] )
+
+                //It was not. Add it ourself, trying to maintaining
+                //the order of OGRE_HLMS_TEXTURE_BASE_MAX_TEX
+                if( mTexLocationInDescSet[i] == OGRE_HLMS_TEXTURE_BASE_MAX_TEX )
                 {
-                    //Texture/pool is already there, but we have to duplicate
-                    //it because it uses a different samplerblock
-                    assert( (*itor)->getTexturePool() &&
-                            "Textures without a texture pool should *always* be matching the "
-                            "samplerblock when hasSeparateSamplers == false" );
-
-                    ++idx;
-                    ++itor;
-
-                    //First check if the pool hasn't already been repeated with this same samplerblock
-                    FastArray<const TextureGpu*>::iterator end = baseSet.mTextures.end();
-                    while( itor != end &&
-                           (*itor)->getTexturePool() == mTextures[i]->getTexturePool() &&
-                           baseSampler.mSamplers[idx] != mSamplerblocks[i] )
-                    {
-                        ++idx;
-                        ++itor;
-                    }
-
-                    if( itor == end || (*itor)->getTexturePool() != mTextures[i]->getTexturePool() )
-                    {
-                        //We couldn't find another entry with the same texture pool and same samplerblock
-                        assert( idx < baseSampler.mSamplers.size() );
-                        baseSet.mTextures.insert( itor, mTextures[i] );
-                        baseSampler.mSamplers.insert( baseSampler.mSamplers.begin() + idx,
-                                                      mSamplerblocks[i] );
-                    }
+                    mTexLocationInDescSet[i] = baseSet.mTextures.size();
+                    baseSet.mTextures.push_back( mTextures[i] );
+                    if( !hasSeparateSamplers )
+                        baseSampler.mSamplers.push_back( mSamplerblocks[i] );
                 }
             }
         }
@@ -461,7 +426,10 @@ namespace Ogre
         }
 
         if( textureSetDirty || samplerSetDirty )
+        {
+            mTexLocationInDescSet[texType] = OGRE_HLMS_TEXTURE_BASE_MAX_TEX;
             scheduleConstBufferUpdate( textureSetDirty, samplerSetDirty );
+        }
     }
     //-----------------------------------------------------------------------------------
     TextureGpu* OGRE_HLMS_TEXTURE_BASE_CLASS::getTexture( uint8 texType ) const
@@ -503,42 +471,8 @@ namespace Ogre
     uint8 OGRE_HLMS_TEXTURE_BASE_CLASS::getIndexToDescriptorTexture( uint8 texType )
     {
         assert( texType < OGRE_HLMS_TEXTURE_BASE_MAX_TEX );
-        uint8 retVal = OGRE_HLMS_TEXTURE_BASE_MAX_TEX;
-
-        TextureGpu *texture = mTextures[texType];
-        if( texture )
-        {
-            FastArray<const TextureGpu*>::const_iterator itor =
-                    std::lower_bound( mTexturesDescSet->mTextures.begin(),
-                                      mTexturesDescSet->mTextures.end(),
-                                      texture, OrderTextureByPoolThenName );
-            if( itor != mTexturesDescSet->mTextures.end() &&
-                (((*itor)->getTexturePool() && (*itor)->getTexturePool() == texture->getTexturePool()) ||
-                 *itor == texture) )
-            {
-                size_t idx = itor - mTexturesDescSet->mTextures.begin();
-
-                const RenderSystem *renderSystem = mCreator->getRenderSystem();
-                const RenderSystemCapabilities *caps = renderSystem->getCapabilities();
-                const bool hasSeparateSamplers =
-                        caps->hasCapability( RSC_SEPARATE_SAMPLERS_FROM_TEXTURES );
-
-                if( !hasSeparateSamplers )
-                {
-                    //We may have more than one entry for the same texture
-                    //(since they have different samplerblocks).
-                    while( mSamplerblocks[texType] != mSamplersDescSet->mSamplers[idx] )
-                        ++idx;
-                    assert( (texture->getTexturePool() && texture->getTexturePool() ==
-                            mTexturesDescSet->mTextures[idx]->getTexturePool()) ||
-                            texture == mTexturesDescSet->mTextures[idx] );
-                }
-
-                retVal = static_cast<uint8>( idx );
-            }
-        }
-
-        return retVal;
+        assert( (mTexturesDescSet || !mTextures[texType]) && "bakeTextures not yet called!" );
+        return mTexLocationInDescSet[texType];
     }
     //-----------------------------------------------------------------------------------
     uint8 OGRE_HLMS_TEXTURE_BASE_CLASS::getIndexToDescriptorSampler( uint8 texType )
