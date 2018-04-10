@@ -190,6 +190,9 @@ namespace Ogre
     void TextureGpu::setNumMipmaps( uint8 numMipmaps )
     {
         assert( mResidencyStatus == GpuResidency::OnStorage );
+        assert( numMipmaps > 0u &&
+                "A value of 0 is not valid. Did you mean 1? "
+                "Old textures did not count the base mip, but TextureGpu does" );
         mNumMipmaps = numMipmaps;
     }
     //-----------------------------------------------------------------------------------
