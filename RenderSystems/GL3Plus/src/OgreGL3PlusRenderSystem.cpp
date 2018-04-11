@@ -991,7 +991,6 @@ namespace Ogre {
         x = mCurrentRenderViewport.getActualLeft();
         y = mCurrentRenderViewport.getActualTop();
 
-        if( mCurrentRenderViewport.coversEntireTarget() )
         if( !desc->requiresTextureFlipping() )
         {
             // Convert "upper-left" corner to "lower-left"
