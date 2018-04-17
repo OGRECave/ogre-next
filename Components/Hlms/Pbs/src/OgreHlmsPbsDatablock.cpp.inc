@@ -69,7 +69,7 @@ namespace Ogre
         {
             for( size_t j=0; j<4; ++j )
             {
-                datablockImpl->mReserved[i][j] = mReserved[i][j];
+                datablockImpl->mUserValue[i][j] = mUserValue[i][j];
             }
         }
 
