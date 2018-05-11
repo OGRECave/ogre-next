@@ -105,6 +105,8 @@ namespace Ogre
     const IdString HlmsBaseProp::LightsDirNonCaster = IdString( "hlms_lights_directional_non_caster" );
     const IdString HlmsBaseProp::LightsPoint        = IdString( "hlms_lights_point" );
     const IdString HlmsBaseProp::LightsSpot         = IdString( "hlms_lights_spot" );
+    const IdString HlmsBaseProp::LightsAreaApprox   = IdString( "hlms_lights_area_approx" );
+    const IdString HlmsBaseProp::LightsAreaTexMask  = IdString( "hlms_lights_area_tex_mask" );
     const IdString HlmsBaseProp::LightsAttenuation  = IdString( "hlms_lights_attenuation" );
     const IdString HlmsBaseProp::LightsSpotParams   = IdString( "hlms_lights_spotparams" );
 
@@ -217,6 +219,10 @@ namespace Ogre
         mHlmsManager( 0 ),
         mLightGatheringMode( LightGatherForward ),
         mNumLightsLimit( 8 ),
+        mNumAreaLightsLimit( 1u ),
+        mAreaLightsRoundMultiple( 1u ),
+        mAreaLightsGlobalLightListStart( 0u ),
+        mRealNumAreaLights( 0u ),
         mListener( &c_defaultListener ),
         mRenderSystem( 0 ),
         mShaderProfile( "unset!" ),
@@ -1462,6 +1468,14 @@ namespace Ogre
         mHighQuality = highQuality;
     }
     //-----------------------------------------------------------------------------------
+    void Hlms::setAreaLightForwardSettings( uint16 areaLightsLimit, uint8 areaLightsRoundMultiple )
+    {
+        assert( areaLightsRoundMultiple != 0u );
+        assert( areaLightsLimit == 0 || areaLightsRoundMultiple <= areaLightsLimit );
+        mNumAreaLightsLimit = areaLightsLimit;
+        mAreaLightsRoundMultiple = areaLightsRoundMultiple;
+    }
+    //-----------------------------------------------------------------------------------
     void Hlms::saveAllTexturesFromDatablocks( const String &folderPath,
                                               set<String>::type &savedTextures,
                                               bool saveOitd, bool saveOriginal,
@@ -2398,6 +2412,7 @@ namespace Ogre
             }
 
             uint numLightsPerType[Light::NUM_LIGHT_TYPES];
+            int32 numAreaApproxLightsWithMask = 0;
             memset( numLightsPerType, 0, sizeof( numLightsPerType ) );
 
             uint shadowCasterDirectional = 0;
@@ -2422,17 +2437,29 @@ namespace Ogre
                     }
                 }
 
-                //Always gather directional lights.
+                //Always gather directional & area lights.
                 numLightsPerType[Light::LT_DIRECTIONAL] = 0;
+                numLightsPerType[Light::LT_AREA_APPROX] = 0;
                 {
+                    mAreaLightsGlobalLightListStart = std::numeric_limits<uint32>::max();
                     const LightListInfo &globalLightList = sceneManager->getGlobalLightList();
-                    LightArray::const_iterator itor = globalLightList.lights.begin();
+                    LightArray::const_iterator begin= globalLightList.lights.begin();
+                    LightArray::const_iterator itor = begin;
                     LightArray::const_iterator end  = globalLightList.lights.end();
 
                     while( itor != end )
                     {
-                        if( (*itor)->getType() == Light::LT_DIRECTIONAL )
+                        const Light::LightTypes lightType = (*itor)->getType();
+                        if( lightType == Light::LT_DIRECTIONAL )
                             ++numLightsPerType[Light::LT_DIRECTIONAL];
+                        else if( lightType == Light::LT_AREA_APPROX )
+                        {
+                            mAreaLightsGlobalLightListStart =
+                                    std::min<uint32>( mAreaLightsGlobalLightListStart, itor - begin );
+                            ++numLightsPerType[Light::LT_AREA_APPROX];
+                            if( (*itor)->mTextureLightMaskIdx != std::numeric_limits<uint16>::max() )
+                                ++numAreaApproxLightsWithMask;
+                        }
                         ++itor;
                     }
                 }
@@ -2476,11 +2503,24 @@ namespace Ogre
             numLightsPerType[Light::LT_POINT]       += numLightsPerType[Light::LT_DIRECTIONAL];
             numLightsPerType[Light::LT_SPOTLIGHT]   += numLightsPerType[Light::LT_POINT];
 
+            //We need to limit the number of area lights before and after rounding
+            numLightsPerType[Light::LT_AREA_APPROX] =
+                    std::min<uint16>( numLightsPerType[Light::LT_AREA_APPROX], mNumAreaLightsLimit );
+            mRealNumAreaLights = numLightsPerType[Light::LT_AREA_APPROX];
+            numLightsPerType[Light::LT_AREA_APPROX] =
+                    Ogre::alignToNextMultiple( numLightsPerType[Light::LT_AREA_APPROX],
+                                               mAreaLightsRoundMultiple );
+            numLightsPerType[Light::LT_AREA_APPROX] =
+                    std::min<uint16>( numLightsPerType[Light::LT_AREA_APPROX], mNumAreaLightsLimit );
+
             //The value is cummulative for each type (order: Directional, point, spot)
             setProperty( HlmsBaseProp::LightsDirectional, shadowCasterDirectional );
             setProperty( HlmsBaseProp::LightsDirNonCaster,numLightsPerType[Light::LT_DIRECTIONAL] );
             setProperty( HlmsBaseProp::LightsPoint,       numLightsPerType[Light::LT_POINT] );
             setProperty( HlmsBaseProp::LightsSpot,        numLightsPerType[Light::LT_SPOTLIGHT] );
+            setProperty( HlmsBaseProp::LightsAreaApprox,  numLightsPerType[Light::LT_AREA_APPROX] );
+            if( numAreaApproxLightsWithMask > 0 )
+                setProperty( HlmsBaseProp::LightsAreaTexMask, numAreaApproxLightsWithMask );
         }
         else
         {
@@ -2510,6 +2550,7 @@ namespace Ogre
             setProperty( HlmsBaseProp::LightsDirNonCaster,0 );
             setProperty( HlmsBaseProp::LightsPoint,       0 );
             setProperty( HlmsBaseProp::LightsSpot,        0 );
+            setProperty( HlmsBaseProp::LightsAreaApprox,  0 );
 
             const RenderPassDescriptor *renderPassDesc = mRenderSystem->getCurrentPassDescriptor();
 

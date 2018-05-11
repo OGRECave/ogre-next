@@ -51,6 +51,9 @@ namespace Ogre {
           mPowerScale(1.0f),
           mOwnShadowFarDist(false),
           mAffectParentNode(false),
+          mDoubleSided(false),
+          mRectHalfSize(Vector2::UNIT_SCALE),
+          mTextureLightMaskIdx( std::numeric_limits<uint16>::max() ),
           mShadowFarDist(0),
           mShadowFarDistSquared(0),
           mShadowNearClipDist(-1),
@@ -84,6 +87,7 @@ namespace Ogre {
         case LT_POINT:
         case LT_SPOTLIGHT:
         case LT_VPL:
+        case LT_AREA_APPROX:
             resetAabb();
             updateLightBounds();
             break;
@@ -122,6 +126,11 @@ namespace Ogre {
         updateLightBounds();
     }
     //-----------------------------------------------------------------------
+    void Light::setDoubleSided( bool bDoubleSided )
+    {
+        mDoubleSided = bDoubleSided;
+    }
+    //-----------------------------------------------------------------------
     void Light::setSpotlightRange(const Radian& innerAngle, const Radian& outerAngle, Real falloff)
     {
         bool boundsChanged = mSpotOuter != outerAngle;
@@ -148,6 +157,22 @@ namespace Ogre {
         mTanHalfAngle = Math::Tan( mSpotOuter * 0.5f );
         if( boundsChanged && mLightType == LT_SPOTLIGHT )
             updateLightBounds();
+    }
+    //-----------------------------------------------------------------------
+    void Light::setRectHalfSize( Vector2 halfSize )
+    {
+        if( mRectHalfSize != halfSize )
+        {
+            mRectHalfSize = halfSize;
+            if( mLightType == LT_AREA_APPROX )
+                updateLightBounds();
+        }
+    }
+    //-----------------------------------------------------------------------
+    Vector2 Light::getDerivedRectHalfSize(void) const
+    {
+        Vector3 parentScale = mParentNode->_getDerivedScale();
+        return mRectHalfSize * Vector2( parentScale.x, parentScale.y );
     }
     //-----------------------------------------------------------------------
     void Light::setAttenuationBasedOnRadius( Real radius, Real lumThreshold )
@@ -201,6 +226,21 @@ namespace Ogre {
                                                        Vector3( 1.0f, 1.0f, 0.5f ) ),
                                                  mObjectData.mIndex );
         }
+        else if( mLightType == LT_AREA_APPROX )
+        {
+            if( mDoubleSided )
+            {
+                mObjectData.mLocalAabb->setFromAabb( Aabb( Vector3( 0.0f, 0.0f, 0.0f ),
+                                                           Vector3( 0.5f, 0.5f, 1.0f ) ),
+                                                     mObjectData.mIndex );
+            }
+            else
+            {
+                mObjectData.mLocalAabb->setFromAabb( Aabb( Vector3( 0.0f, 0.0f, 0.5f ),
+                                                           Vector3( 0.5f, 0.5f, 0.5f ) ),
+                                                     mObjectData.mIndex );
+            }
+        }
     }
     //-----------------------------------------------------------------------
     void Light::updateLightBounds(void)
@@ -234,6 +274,32 @@ namespace Ogre {
             {
                 Real tanHalfAngleRange = mTanHalfAngle * mRange;
                 mParentNode->setScale( tanHalfAngleRange, tanHalfAngleRange, mRange );
+            }
+        }
+        else if( mLightType == LT_AREA_APPROX )
+        {
+            if( !mAffectParentNode )
+            {
+                if( mDoubleSided )
+                {
+                    mObjectData.mLocalAabb->setFromAabb( Aabb( Vector3( 0.0f, 0.0f, 0.0f ),
+                                                               Vector3( mRange * 0.5f,
+                                                                        mRange * 0.5f,
+                                                                        mRange ) ),
+                                                         mObjectData.mIndex );
+                }
+                else
+                {
+                    mObjectData.mLocalAabb->setFromAabb( Aabb( Vector3( 0.0f, 0.0f, -mRange * 0.5f ),
+                                                               Vector3( mRange,
+                                                                        mRange,
+                                                                        mRange ) * 0.5f ),
+                                                         mObjectData.mIndex );
+                }
+            }
+            else
+            {
+                mParentNode->setScale( Vector3( mRange ) );
             }
         }
     }
@@ -572,6 +638,8 @@ namespace Ogre {
                     light->setType(Light::LT_DIRECTIONAL);
                 else if (ni->second == "spotlight")
                     light->setType(Light::LT_SPOTLIGHT);
+                else if (ni->second == "area_approx")
+                    light->setType(Light::LT_AREA_APPROX);
                 else
                     OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
                         "Invalid light type '" + ni->second + "'.",
