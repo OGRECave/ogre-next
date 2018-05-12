@@ -46,7 +46,7 @@ THE SOFTWARE.
 #include "Cubemaps/OgreParallaxCorrectedCubemap.h"
 #include "Compositor/OgreCompositorManager2.h"
 
-#include "OgreTextureManager.h"
+#include "OgreTextureGpuManager.h"
 
 #include "OgreMeshSerializer.h"
 #include "OgreMesh2Serializer.h"
@@ -1315,8 +1315,12 @@ namespace Ogre
             itor = d.FindMember( "area_light_masks" );
             if( itor != d.MemberEnd() && itor->value.IsBool() && itor->value.GetBool() )
             {
-                TexturePtr areaLightMask = TextureManager::getSingleton().load( "AreaLightMasks.oitd",
-                                                                                "SceneFormatImporter" );
+                TextureGpuManager *textureGpuManager =
+                        mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
+                TextureGpu *areaLightMask = textureGpuManager->createOrRetrieveTexture(
+                                                "AreaLightMasks.oitd", GpuPageOutStrategy::Discard, 0,
+                                                TextureTypes::Type2DArray, "SceneFormatImporter" );
+                areaLightMask->scheduleTransitionTo( GpuResidency::Resident );
                 HlmsPbs *hlmsPbs = getPbs();
                 hlmsPbs->setAreaLightMasks( areaLightMask );
             }

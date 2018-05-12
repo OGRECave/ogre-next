@@ -181,6 +181,19 @@ namespace Ogre {
         void convertFromTexture( TextureGpu *texture, uint8 minMip, uint8 maxMip,
                                  bool automaticResolve=true );
 
+        /** Synchronously uploads the selected mips from this Image into a TextureGpu.
+            This function is for convenience for when going async is not important.
+        @param texture
+            Texture to upload to. Must have the same resolution and
+            same pixel format family as this Image.
+            For simplicity, you can't upload mip 0 of this image into mip 1.
+        @param minMip
+            First mipmap to upload, inclusive.
+        @param maxMip
+            Last mipmap to upload, inclusive.
+        */
+        void uploadTo( TextureGpu *texture, uint8 minMip, uint8 maxMip );
+
         /** Loads an image file.
             @remarks
                 This method loads an image into memory. Any format for which 

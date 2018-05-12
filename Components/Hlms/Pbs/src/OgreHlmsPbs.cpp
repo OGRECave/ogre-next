@@ -235,6 +235,7 @@ namespace Ogre
         mHasPlanarReflections( false ),
         mLastBoundPlanarReflection( 0u ),
 #endif
+        mAreaLightMasks( 0 ),
         mAreaLightMasksSamplerblock( 0 ),
         mUsingAreaLightMasks( false ),
         mLastBoundPool( 0 ),
@@ -1541,8 +1542,8 @@ namespace Ogre
                 //Roughness minimum value is 0.02, so we need to map
                 //[0.02; 1.0] -> [0; 1] in the pixel shader that's why we divide by 0.98.
                 //The 2.0 is just arbitrary (it looks good)
-                areaLightNumMipmaps = mAreaLightMasks->getNumMipmaps() / 0.98f * 2.0f;
-                areaLightDiffuseStartMip = mAreaLightMasks->getNumMipmaps() * 0.8f;
+                areaLightNumMipmaps = (mAreaLightMasks->getNumMipmaps() - 1u) / 0.98f * 2.0f;
+                areaLightDiffuseStartMip = (mAreaLightMasks->getNumMipmaps() - 1u) * 0.8f;
             }
 
             //Send area lights. We need them sorted so textured ones
@@ -1871,8 +1872,8 @@ namespace Ogre
 
                 if( mUsingAreaLightMasks )
                 {
-                    *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit, true,
-                                                                         mAreaLightMasks.get(),
+                    *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit,
+                                                                         mAreaLightMasks,
                                                                          mAreaLightMasksSamplerblock );
                     ++texUnit;
                 }
@@ -2293,7 +2294,7 @@ namespace Ogre
         mAmbientLightMode = mode;
     }
     //-----------------------------------------------------------------------------------
-    void HlmsPbs::setAreaLightMasks( const TexturePtr &areaLightMask )
+    void HlmsPbs::setAreaLightMasks( TextureGpu *areaLightMask )
     {
         mAreaLightMasks = areaLightMask;
     }

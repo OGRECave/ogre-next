@@ -47,6 +47,8 @@ THE SOFTWARE.
 #include "InstantRadiosity/OgreInstantRadiosity.h"
 #include "OgreIrradianceVolume.h"
 
+#include "OgreImage2.h"
+
 #include "Cubemaps/OgreParallaxCorrectedCubemap.h"
 #include "Compositor/OgreCompositorWorkspaceDef.h"
 
@@ -804,10 +806,11 @@ namespace Ogre
             {
                 jsonStr.a( ",\n\t\t\"area_light_masks\" : true" );
 
-                TexturePtr areaLightMask = hlmsPbs->getAreaLightMasks();
-                Image image;
-                areaLightMask->convertToImage( image, true );
-                image.save( mCurrentExportFolder + "/textures/AreaLightMasks.oitd" );
+                TextureGpu *areaLightMask = hlmsPbs->getAreaLightMasks();
+                Image2 image;
+                image.convertFromTexture( areaLightMask, 0, areaLightMask->getNumMipmaps() );
+                image.save( mCurrentExportFolder + "/textures/AreaLightMasks.oitd",
+                            0, areaLightMask->getNumMipmaps() );
             }
         }
 

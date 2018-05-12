@@ -141,7 +141,7 @@ namespace Ogre
         bool                    mHasPlanarReflections;
         uint8                   mLastBoundPlanarReflection;
 #endif
-        TexturePtr              mAreaLightMasks;
+        TextureGpu              *mAreaLightMasks;
         HlmsSamplerblock const  *mAreaLightMasksSamplerblock;
         LightArray				mAreaLights;
         bool                    mUsingAreaLightMasks;
@@ -278,8 +278,8 @@ namespace Ogre
                                                     { mIrradianceVolume = irradianceVolume; }
         IrradianceVolume* getIrradianceVolume(void) const  { return mIrradianceVolume; }
 
-        void setAreaLightMasks( const TexturePtr &areaLightMask );
-        const TexturePtr& getAreaLightMasks(void) const     { return mAreaLightMasks; }
+        void setAreaLightMasks( TextureGpu *areaLightMask );
+        TextureGpu* getAreaLightMasks(void) const           { return mAreaLightMasks; }
 
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
         void setPlanarReflections( PlanarReflections *planarReflections );

@@ -28,8 +28,10 @@
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
 
-#include "OgreTextureManager.h"
-#include "OgreHardwarePixelBuffer.h"
+#include "OgreTextureGpuManager.h"
+#include "OgreTextureFilters.h"
+#include "OgreTextureBox.h"
+#include "OgrePixelFormatGpuUtils.h"
 
 using namespace Demo;
 
@@ -37,31 +39,39 @@ namespace Demo
 {
     AreaApproxLightsGameState::AreaApproxLightsGameState( const Ogre::String &helpDescription ) :
         TutorialGameState( helpDescription ),
-        mAnimateObjects( true )
+        mAnimateObjects( true ),
+        mAreaMaskTex( 0 )
     {
         memset( mSceneNode, 0, sizeof(mSceneNode) );
     }
     //-----------------------------------------------------------------------------------
     void AreaApproxLightsGameState::createAreaMask(void)
     {
-        mAreaMaskTex = Ogre::TextureManager::getSingleton().createManual(
-                           "Area Light Masks", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                           Ogre::TEX_TYPE_2D_ARRAY, 256u, 256u, 5u,
-                           Ogre::PF_L8, Ogre::TU_STATIC_WRITE_ONLY );
+        Ogre::Root *root = mGraphicsSystem->getRoot();
+        Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
+        mAreaMaskTex = textureMgr->createTexture(
+                           "Area Light Masks", Ogre::GpuPageOutStrategy::SaveToSystemRam,
+                           Ogre::TextureFlags::ManualTexture, Ogre::TextureTypes::Type2DArray );
+
+        mAreaMaskTex->setResolution( 256u, 256u, 1u );
+        mAreaMaskTex->setPixelFormat( Ogre::PFG_R8_UNORM );
+        mAreaMaskTex->setNumMipmaps( 5u );
+        mAreaMaskTex->scheduleTransitionTo( Ogre::GpuResidency::Resident );
 
         Ogre::uint32 texWidth = mAreaMaskTex->getWidth();
         Ogre::uint32 texHeight = mAreaMaskTex->getHeight();
-        const Ogre::PixelFormat texFormat = mAreaMaskTex->getFormat();
+        const Ogre::PixelFormatGpu texFormat = mAreaMaskTex->getPixelFormat();
 
         //Fill the texture with a hollow rectangle, 10-pixel thick.
-        size_t sizeBytes = Ogre::PixelUtil::calculateSizeBytes(
+        size_t sizeBytes = Ogre::PixelFormatGpuUtils::calculateSizeBytes(
                                texWidth, texHeight, 1u, 1u,
-                               texFormat, mAreaMaskTex->getNumMipmaps() );
+                               texFormat, mAreaMaskTex->getNumMipmaps(), 4u );
         Ogre::uint8 *data = reinterpret_cast<Ogre::uint8*>(
-                                OGRE_MALLOC( sizeBytes, Ogre::MEMCATEGORY_GENERAL ) );
-        Ogre::Image image;
+                                OGRE_MALLOC_SIMD( sizeBytes, Ogre::MEMCATEGORY_GENERAL ) );
+        Ogre::Image2 image;
         image.loadDynamicImage( data, texWidth, texHeight, 1u,
-                                texFormat, true, 1u, mAreaMaskTex->getNumMipmaps() );
+                                Ogre::TextureTypes::Type2D, texFormat,
+                                true, mAreaMaskTex->getNumMipmaps() );
         for( size_t y=0; y<texHeight; ++y )
         {
             for( size_t x=0; x<texWidth; ++x )
@@ -80,56 +90,36 @@ namespace Demo
         }
 
         //Generate the mipmaps so roughness works
-        image.generateMipmaps( false, Ogre::Image::FILTER_GAUSSIAN );
+        image.generateMipmaps( false, Ogre::Image2::FILTER_GAUSSIAN );
 
         {
             //Ensure the lower mips have black borders. This is done to prevent certain artifacts,
             //Ensure the higher mips have grey borders. This is done to prevent certain artifacts.
-            data = image.getData();
-            for( size_t i=0u; i<mAreaMaskTex->getNumMipmaps() + 1u; ++i )
+            for( size_t i=0u; i<mAreaMaskTex->getNumMipmaps(); ++i )
             {
+                Ogre::TextureBox dataBox = image.getData( static_cast<Ogre::uint8>( i ) );
+
                 const Ogre::uint8 borderColour = i >= 5u ? 127u : 0u;
-                Ogre::uint32 currWidth = std::max( texWidth >> i, 1u );
-                Ogre::uint32 currHeight = std::max( texHeight >> i, 1u );
+                const Ogre::uint32 currWidth = dataBox.width;
+                const Ogre::uint32 currHeight = dataBox.height;
 
-                size_t bytesPerRow = Ogre::PixelUtil::getMemorySize( currWidth, 1u, 1u, texFormat );
+                const size_t bytesPerRow = dataBox.bytesPerRow;
 
-                memset( data, borderColour, bytesPerRow );
-                memset( data + bytesPerRow * (currHeight - 1u), borderColour, bytesPerRow );
+                memset( dataBox.at( 0, 0, 0 ), borderColour, bytesPerRow );
+                memset( dataBox.at( 0, (currHeight - 1u), 0 ), borderColour, bytesPerRow );
 
                 for( size_t y=1; y<currWidth - 1u; ++y )
                 {
-                    data[y*bytesPerRow+0] = borderColour;
-                    data[y*bytesPerRow+bytesPerRow-1u] = borderColour;
+                    *reinterpret_cast<Ogre::uint8*>( dataBox.at( 0, y, 0 ) ) = borderColour;
+                    *reinterpret_cast<Ogre::uint8*>( dataBox.at( currWidth - 1u, y, 0 ) ) = borderColour;
                 }
-
-                data += bytesPerRow * currHeight;
             }
         }
 
         //Upload to GPU
-        Ogre::uint8 const *srcData = image.getData();
-        for( size_t i=0; i<mAreaMaskTex->getNumMipmaps() + 1u; ++i )
-        {
-            Ogre::uint32 currWidth = std::max( texWidth >> i, 1u );
-            Ogre::uint32 currHeight = std::max( texHeight >> i, 1u );
-            Ogre::v1::HardwarePixelBufferSharedPtr pixelBufferBuf = mAreaMaskTex->getBuffer( 0, i );
-            const Ogre::PixelBox &currImage =
-                    pixelBufferBuf->lock( Ogre::Box( 0, 0, 0, currWidth, currHeight, 1 ),
-                                          Ogre::v1::HardwareBuffer::HBL_DISCARD );
-            Ogre::uint8 *dstData = reinterpret_cast<Ogre::uint8*>( currImage.data );
-            for( size_t y=0; y<currHeight; ++y )
-            {
-                memcpy( dstData, srcData,
-                        Ogre::PixelUtil::getMemorySize( currWidth, 1u, 1u, texFormat ) );
-                srcData += Ogre::PixelUtil::getMemorySize( currWidth, 1u, 1u, texFormat );
-                dstData += Ogre::PixelUtil::getMemorySize( currImage.rowPitch, 1u, 1u, texFormat );
-            }
-            pixelBufferBuf->unlock();
-        }
+        image.uploadTo( mAreaMaskTex, 0, mAreaMaskTex->getNumMipmaps() - 1u );
 
         //Set the texture mask to PBS.
-        Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::Hlms *hlms = root->getHlmsManager()->getHlms( Ogre::HLMS_PBS );
         assert( dynamic_cast<Ogre::HlmsPbs*>( hlms ) );
         Ogre::HlmsPbs *pbs = static_cast<Ogre::HlmsPbs*>( hlms );
@@ -182,7 +172,7 @@ namespace Demo
             samplerblock.mMaxAnisotropy = 8.0f;
             samplerblock.setFiltering( Ogre::TFO_ANISOTROPIC );
 
-            datablock->setTexture( 0, light->mTextureLightMaskIdx, mAreaMaskTex, &samplerblock );
+            //datablock->setTexture( 0, light->mTextureLightMaskIdx, mAreaMaskTex, &samplerblock );
             datablock->setTextureSwizzle( 0, Ogre::HlmsUnlitDatablock::R_MASK,
                                           Ogre::HlmsUnlitDatablock::R_MASK,
                                           Ogre::HlmsUnlitDatablock::R_MASK,
@@ -303,6 +293,9 @@ namespace Demo
             const float startX = (numX-1) / 2.0f;
             const float startZ = (numZ-1) / 2.0f;
 
+            Ogre::Root *root = mGraphicsSystem->getRoot();
+            Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
+
             for( int x=0; x<numX; ++x )
             {
                 for( int z=0; z<numZ; ++z )
@@ -315,11 +308,16 @@ namespace Demo
                                                           Ogre::HlmsBlendblock(),
                                                           Ogre::HlmsParamVec() ) );
 
-                    Ogre::HlmsTextureManager::TextureLocation texLocation = hlmsTextureManager->
-                            createOrRetrieveTexture( "SaintPetersBasilica.dds",
-                                                     Ogre::HlmsTextureManager::TEXTURE_TYPE_ENV_MAP );
+                    Ogre::TextureGpu *texture = textureMgr->createOrRetrieveTexture(
+                                                    "SaintPetersBasilica.dds",
+                                                    Ogre::GpuPageOutStrategy::Discard,
+                                                    Ogre::TextureFlags::PrefersLoadingFromFileAsSRGB,
+                                                    Ogre::TextureTypes::TypeCube,
+                                                    Ogre::ResourceGroupManager::
+                                                    AUTODETECT_RESOURCE_GROUP_NAME,
+                                                    Ogre::TextureFilter::TypeGenerateDefaultMipmaps );
 
-                    datablock->setTexture( Ogre::PBSM_REFLECTION, texLocation.xIdx, texLocation.texture );
+                    datablock->setTexture( Ogre::PBSM_REFLECTION, texture );
                     datablock->setDiffuse( Ogre::Vector3( 0.0f, 1.0f, 0.0f ) );
 
                     datablock->setRoughness( std::max( 0.02f, x / Ogre::max( 1, (float)(numX-1) ) ) );
@@ -401,7 +399,9 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void AreaApproxLightsGameState::destroyScene(void)
     {
-        mAreaMaskTex.reset();
+        Ogre::TextureGpuManager *textureMgr = mAreaMaskTex->getTextureManager();
+        textureMgr->destroyTexture( mAreaMaskTex );
+        mAreaMaskTex = 0;
     }
     //-----------------------------------------------------------------------------------
     void AreaApproxLightsGameState::update( float timeSinceLast )

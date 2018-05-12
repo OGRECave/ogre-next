@@ -37,6 +37,7 @@ THE SOFTWARE.
 #include "OgreImageDownsampler.h"
 #include "OgreTextureGpuManager.h"
 #include "OgreAsyncTextureTicket.h"
+#include "OgreStagingTexture.h"
 #include "OgreResourceGroupManager.h"
 
 namespace Ogre {
@@ -367,6 +368,84 @@ namespace Ogre {
 
         if( texture->isOpenGLRenderWindow() )
             flipAroundX();
+    }
+    //-----------------------------------------------------------------------------------
+    void Image2::uploadTo( TextureGpu *texture, uint8 minMip, uint8 maxMip )
+    {
+        assert( minMip <= maxMip );
+
+        if( texture->getWidth() != mWidth ||
+            texture->getHeight() != mHeight ||
+            texture->getDepthOrSlices() != mDepthOrSlices ||
+            PixelFormatGpuUtils::getFamily( texture->getPixelFormat() ) !=
+            PixelFormatGpuUtils::getFamily( mPixelFormat ) ||
+            texture->getNumMipmaps() <= maxMip )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "Texture and Image must have matching resolution and format!",
+                         "Image2::uploadTo" );
+        }
+
+        TextureGpuManager *textureManager = texture->getTextureManager();
+
+        //We could grab 1 StagingTexture per loop. But if the StagingTexture is huge,
+        //we would waste a lot of memory. So instead we try to reuse them for multiple
+        //loop iterations. When we run out, we flush its contents and upload all the
+        //unflushed data to the GPU; then grab a new StagingTexture and repeat
+        TextureBox unsentBoxes[256];
+        uint8 numUnsentBoxes = 0;
+        StagingTexture *stagingTexture = 0;
+
+        for( size_t i=minMip; i<=maxMip; ++i )
+        {
+            TextureBox box = getData( i );
+            TextureBox dstBox;
+            for( size_t tries=0; tries<2 && !dstBox.data; ++tries )
+            {
+                //Grab a staging texture and start mapping it!
+                if( !stagingTexture )
+                {
+                    stagingTexture = textureManager->getStagingTexture( box.width, box.height,
+                                                                        box.depth, box.numSlices,
+                                                                        texture->getPixelFormat() );
+                    stagingTexture->startMapRegion();
+                }
+
+                //This stagingTexture may just have been grabbed,
+                //or it may have already been during a previous mipmap iteration
+                dstBox = stagingTexture->mapRegion( box.width, box.height, box.depth,
+                                                    box.numSlices, texture->getPixelFormat() );
+
+                //Failed to map? Then the staging texture is out of space. Flush it.
+                //This loop will then retry for a 2nd time and grab a new staging texture.
+                if( !dstBox.data )
+                {
+                    stagingTexture->stopMapRegion();
+                    for( size_t j=0; j<numUnsentBoxes; ++j )
+                    {
+                        stagingTexture->upload( unsentBoxes[j], texture,
+                                                static_cast<uint8>( i - numUnsentBoxes + j ) );
+                    }
+                    numUnsentBoxes = 0;
+                    textureManager->removeStagingTexture( stagingTexture );
+                    stagingTexture = 0;
+                }
+            }
+
+            unsentBoxes[numUnsentBoxes++] = dstBox;
+            dstBox.copyFrom( box );
+        }
+
+        //Flush what's left
+        stagingTexture->stopMapRegion();
+        for( size_t j=0; j<numUnsentBoxes; ++j )
+        {
+            stagingTexture->upload( unsentBoxes[j], texture,
+                                    static_cast<uint8>( maxMip + 1u - numUnsentBoxes + j ) );
+        }
+        numUnsentBoxes = 0;
+        textureManager->removeStagingTexture( stagingTexture );
+        stagingTexture = 0;
     }
     //-----------------------------------------------------------------------------------
     void Image2::load( const String& strFileName, const String& group )

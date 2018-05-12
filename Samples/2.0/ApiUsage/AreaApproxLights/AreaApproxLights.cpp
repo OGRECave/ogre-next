@@ -5,7 +5,7 @@
 #include "OgreSceneManager.h"
 #include "OgreCamera.h"
 #include "OgreRoot.h"
-#include "OgreRenderWindow.h"
+#include "OgreWindow.h"
 #include "OgreConfigFile.h"
 #include "Compositor/OgreCompositorManager2.h"
 
@@ -29,8 +29,8 @@ namespace Demo
         virtual Ogre::CompositorWorkspace* setupCompositor()
         {
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
-            mWorkspace = compositorManager->addWorkspace( mSceneManager, mRenderWindow, mCamera,
-                                                          "ShadowMapDebuggingWorkspace", true );
+            mWorkspace = compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(),
+                                                          mCamera, "ShadowMapDebuggingWorkspace", true );
             return mWorkspace;
         }
 
