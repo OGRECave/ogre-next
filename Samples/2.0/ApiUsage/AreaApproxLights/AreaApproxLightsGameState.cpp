@@ -55,7 +55,7 @@ namespace Demo
 
         mAreaMaskTex->setResolution( 256u, 256u, 1u );
         mAreaMaskTex->setPixelFormat( Ogre::PFG_R8_UNORM );
-        mAreaMaskTex->setNumMipmaps( 5u );
+        mAreaMaskTex->setNumMipmaps( 6u );
         mAreaMaskTex->scheduleTransitionTo( Ogre::GpuResidency::Resident );
 
         Ogre::uint32 texWidth = mAreaMaskTex->getWidth();
