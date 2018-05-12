@@ -75,6 +75,9 @@ namespace Ogre
             public HlmsDatablock, public ConstBufferPoolUser, public TextureGpuListener
     {
     protected:
+        /// The last bit in mTexIndices (ManualTexIndexBit) is reserved. When set, it
+        /// indicates that mTexIndices was set manually, rather than being automatically
+        /// set to texture[i]->getInternalSliceStart()
         uint16 mTexIndices[OGRE_HLMS_TEXTURE_BASE_MAX_TEX];
 
         DescriptorSetTexture const *mTexturesDescSet;
@@ -118,8 +121,13 @@ namespace Ogre
             Optional. We'll create (or retrieve an existing) samplerblock based on the input parameters.
             When null, we leave the previously set samplerblock (if a texture is being set, and if no
             samplerblock was set, we'll create a default one)
+        @param sliceIdx
+            Optional. When not set to 0xFFFF, it means you want to explicitly set the texture array
+            index, instead of relying on texture->getInternalSliceStart().
+            Only useful if texture is TextureTypes::Type2DArray. For advanced users.
         */
-        void setTexture( uint8 texType, TextureGpu *texture, const HlmsSamplerblock *refParams=0 );
+        void setTexture( uint8 texType, TextureGpu *texture, const HlmsSamplerblock *refParams=0,
+                         uint16 sliceIdx=std::numeric_limits<uint16>::max() );
         TextureGpu* getTexture( uint8 texType ) const;
 
         /// Same as setTexture, but samplerblockPtr is a raw samplerblock retrieved from HlmsManager,
@@ -128,7 +136,8 @@ namespace Ogre
         /// Mostly for internal use, but can speed up loading if you already manage samplerblocks
         /// manually and have the raw ptr.
         void _setTexture( uint8 texType, TextureGpu *texture,
-                          const HlmsSamplerblock *samplerblockPtr=0 );
+                          const HlmsSamplerblock *samplerblockPtr=0,
+                          uint16 sliceIdx=std::numeric_limits<uint16>::max() );
 
         /** Sets a new sampler block to be associated with the texture
             (i.e. filtering mode, addressing modes, etc). If the samplerblock changes,

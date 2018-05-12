@@ -172,7 +172,7 @@ namespace Demo
             samplerblock.mMaxAnisotropy = 8.0f;
             samplerblock.setFiltering( Ogre::TFO_ANISOTROPIC );
 
-            //datablock->setTexture( 0, light->mTextureLightMaskIdx, mAreaMaskTex, &samplerblock );
+            datablock->setTexture( 0, mAreaMaskTex, &samplerblock, light->mTextureLightMaskIdx );
             datablock->setTextureSwizzle( 0, Ogre::HlmsUnlitDatablock::R_MASK,
                                           Ogre::HlmsUnlitDatablock::R_MASK,
                                           Ogre::HlmsUnlitDatablock::R_MASK,

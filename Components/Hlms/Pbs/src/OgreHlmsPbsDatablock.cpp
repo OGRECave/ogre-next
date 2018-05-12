@@ -396,10 +396,14 @@ namespace Ogre
             mkDb *= mTransparencyValue * mTransparencyValue;
         }
 
+        uint16 texIndices[OGRE_NumTexIndices];
+        for( size_t i=0; i<OGRE_NumTexIndices; ++i )
+            texIndices[i] = mTexIndices[i] & ManualTexIndexBit;
+
         memcpy( dstPtr, &mBgDiffuse[0], MaterialSizeInGpu - sizeof(mTexIndices) );
         dstPtr += MaterialSizeInGpu - sizeof(mTexIndices);
-        memcpy( dstPtr, mTexIndices, sizeof(mTexIndices) );
-        dstPtr += sizeof(mTexIndices);
+        memcpy( dstPtr, texIndices, sizeof(texIndices) );
+        dstPtr += sizeof(texIndices);
 
         mkDr = oldkDr;
         mkDg = oldkDg;

@@ -263,11 +263,15 @@ namespace Ogre
                                   (dirtyFlags & ConstBufferPool::DirtySamplers) != 0 );
         }
 
+        uint16 texIndices[OGRE_NumTexIndices];
+        for( size_t i=0; i<OGRE_NumTexIndices; ++i )
+            texIndices[i] = mTexIndices[i] & ManualTexIndexBit;
+
         memcpy( dstPtr, &mAlphaTestThreshold, sizeof( float ) );
         dstPtr += 4 * sizeof(float);
         memcpy( dstPtr, &mR, MaterialSizeInGpu - 4 * sizeof(float) - sizeof(mTexIndices) );
         dstPtr += MaterialSizeInGpu - 4 * sizeof(float) - sizeof(mTexIndices);
-        memcpy( dstPtr, mTexIndices, sizeof(mTexIndices) );
+        memcpy( dstPtr, texIndices, sizeof(texIndices) );
     }
     //-----------------------------------------------------------------------------------
     void HlmsUnlitDatablock::uploadToExtraBuffer( char *dstPtr )

@@ -9,8 +9,14 @@
     #include "OgreRenderSystem.h"
 #endif
 
+#ifndef OGRE_NumTexIndices
+    #define OGRE_NumTexIndices sizeof(mTexIndices) / sizeof(mTexIndices[0])
+#endif
+
 namespace Ogre
 {
+    static const uint16 ManualTexIndexBit = 0x8000u;
+
     OGRE_HLMS_TEXTURE_BASE_CLASS::OGRE_HLMS_TEXTURE_BASE_CLASS(
             IdString name, Hlms *creator, const HlmsMacroblock *macroblock,
             const HlmsBlendblock *blendblock, const HlmsParamVec &params ) :
@@ -222,7 +228,8 @@ namespace Ogre
             if( mTextures[i] )
             {
                 //May have changed if the TextureGpuManager updated the Texture.
-                mTexIndices[i] = mTextures[i]->getInternalSliceStart();
+                if( !(mTexIndices[i] & ManualTexIndexBit) )
+                    mTexIndices[i] = mTextures[i]->getInternalSliceStart();
 
                 //Look if the texture pool has already been added to the desc set so
                 //we can share the same spot. In OpenGL, we cannot share it if the
@@ -340,7 +347,8 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void OGRE_HLMS_TEXTURE_BASE_CLASS::setTexture( uint8 texType, TextureGpu *texture,
-                                                   const HlmsSamplerblock *refParams )
+                                                   const HlmsSamplerblock *refParams,
+                                                   uint16 sliceIdx )
     {
         assert( texType < OGRE_HLMS_TEXTURE_BASE_MAX_TEX );
 
@@ -369,11 +377,12 @@ namespace Ogre
             }
         }
 
-        _setTexture( texType, texture, samplerblockPtr );
+        _setTexture( texType, texture, samplerblockPtr, sliceIdx );
     }
     //-----------------------------------------------------------------------------------
     void OGRE_HLMS_TEXTURE_BASE_CLASS::_setTexture( uint8 texType, TextureGpu *texture,
-                                                    const HlmsSamplerblock *samplerblockPtr )
+                                                    const HlmsSamplerblock *samplerblockPtr,
+                                                    uint16 sliceIdx )
     {
         assert( texType < OGRE_HLMS_TEXTURE_BASE_MAX_TEX );
 
@@ -400,7 +409,10 @@ namespace Ogre
 
             if( texture )
             {
-                mTexIndices[texType] = texture->getInternalSliceStart();
+                if( sliceIdx == std::numeric_limits<uint16>::max() )
+                    mTexIndices[texType] = texture->getInternalSliceStart();
+                else
+                    mTexIndices[texType] = ManualTexIndexBit | sliceIdx;
 
                 if( prevPool != texture->getTexturePool() )
                     textureSetDirty = true;
