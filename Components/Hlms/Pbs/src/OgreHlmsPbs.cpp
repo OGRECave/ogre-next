@@ -1001,6 +1001,14 @@ namespace Ogre
             if( mIrradianceVolume )
                 setProperty( PbsProperty::IrradianceVolumes, 1 );
 
+            if( mAreaLightMasks )
+            {
+                const size_t numComponents =
+                        PixelFormatGpuUtils::getNumberOfComponents( mAreaLightMasks->getPixelFormat() );
+                if( numComponents > 2u )
+                    setProperty( HlmsBaseProp::LightsAreaTexColour, 1 );
+            }
+
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
             mHasPlanarReflections = false;
             mLastBoundPlanarReflection = 0u;
