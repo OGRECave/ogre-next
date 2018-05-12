@@ -809,7 +809,9 @@ namespace Ogre
                 TextureGpu *areaLightMask = hlmsPbs->getAreaLightMasks();
                 Image2 image;
                 image.convertFromTexture( areaLightMask, 0, areaLightMask->getNumMipmaps() );
-                image.save( mCurrentExportFolder + "/textures/AreaLightMasks.oitd",
+                jsonStr.a( ",\n\t\t\"area_light_masks\" : \"",
+                           areaLightMask->getNameStr().c_str(), "\"" );
+                image.save( mCurrentExportFolder + "/textures/" + areaLightMask->getNameStr() + ".oitd",
                             0, areaLightMask->getNumMipmaps() );
             }
         }
