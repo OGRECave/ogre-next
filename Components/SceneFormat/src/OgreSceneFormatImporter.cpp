@@ -1193,13 +1193,13 @@ namespace Ogre
 
         if( importFlags & SceneFlags::AreaLightMasks )
         {
-            itor = d.FindMember( "area_light_masks" );
-            if( itor != d.MemberEnd() && itor->value.IsString() )
+            tmpIt = json.FindMember( "area_light_masks" );
+            if( tmpIt != json.MemberEnd() && tmpIt->value.IsString() )
             {
                 TextureGpuManager *textureGpuManager =
                         mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
                 TextureGpu *areaLightMask = textureGpuManager->createOrRetrieveTexture(
-                                                String( itor->value.GetString() ) + ".oitd",
+                                                String( tmpIt->value.GetString() ) + ".oitd",
                                                 GpuPageOutStrategy::Discard, 0,
                                                 TextureTypes::Type2DArray, "SceneFormatImporter" );
                 areaLightMask->scheduleTransitionTo( GpuResidency::Resident );
