@@ -1190,6 +1190,23 @@ namespace Ogre
             if( tmpIt != json.MemberEnd() && tmpIt->value.IsObject() )
                 importPcc( tmpIt->value );
         }
+
+        if( importFlags & SceneFlags::AreaLightMasks )
+        {
+            itor = d.FindMember( "area_light_masks" );
+            if( itor != d.MemberEnd() && itor->value.IsString() )
+            {
+                TextureGpuManager *textureGpuManager =
+                        mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
+                TextureGpu *areaLightMask = textureGpuManager->createOrRetrieveTexture(
+                                                String( itor->value.GetString() ) + ".oitd",
+                                                GpuPageOutStrategy::Discard, 0,
+                                                TextureTypes::Type2DArray, "SceneFormatImporter" );
+                areaLightMask->scheduleTransitionTo( GpuResidency::Resident );
+                HlmsPbs *hlmsPbs = getPbs();
+                hlmsPbs->setAreaLightMasks( areaLightMask );
+            }
+        }
     }
     //-----------------------------------------------------------------------------------
     void SceneFormatImporter::importScene( const String &filename, const rapidjson::Document &d,
@@ -1307,23 +1324,6 @@ namespace Ogre
                             mIrradianceVolume->getIrradianceOrigin(),
                             mIrradianceVolume->getIrradianceMaxPower(),
                             mIrradianceVolume->getFadeAttenuationOverDistace() );
-            }
-        }
-
-        if( importFlags & SceneFlags::AreaLightMasks )
-        {
-            itor = d.FindMember( "area_light_masks" );
-            if( itor != d.MemberEnd() && itor->value.IsString() )
-            {
-                TextureGpuManager *textureGpuManager =
-                        mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
-                TextureGpu *areaLightMask = textureGpuManager->createOrRetrieveTexture(
-                                                String( itor->value.GetString() ) + ".oitd",
-                                                GpuPageOutStrategy::Discard, 0,
-                                                TextureTypes::Type2DArray, "SceneFormatImporter" );
-                areaLightMask->scheduleTransitionTo( GpuResidency::Resident );
-                HlmsPbs *hlmsPbs = getPbs();
-                hlmsPbs->setAreaLightMasks( areaLightMask );
             }
         }
 

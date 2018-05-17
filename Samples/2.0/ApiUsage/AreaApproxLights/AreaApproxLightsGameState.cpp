@@ -35,6 +35,8 @@
 
 #include "OgreWireAabb.h"
 
+#include "OgreWireAabb.h"
+
 using namespace Demo;
 
 namespace Demo
