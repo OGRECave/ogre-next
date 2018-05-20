@@ -286,7 +286,7 @@ namespace Ogre {
             FILTER_GAUSSIAN,
             /// Applies gaussian filter over the image, then bilinear downsamples.
             /// This prevents certain artifacts for some images when using FILTER_GAUSSIAN,
-            /// like biasing towards certain direction.
+            /// like biasing towards certain direction. Not supported by cubemaps.
             FILTER_GAUSSIAN_HIGH,
         };
 

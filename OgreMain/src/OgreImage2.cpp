@@ -842,7 +842,8 @@ namespace Ogre {
         }
 
         if( (mDepthOrSlices == 1u && !downsampler2DFunc) ||
-            (mTextureType == TextureTypes::TypeCube && !downsamplerCubeFunc) )
+            (mTextureType == TextureTypes::TypeCube && (!downsamplerCubeFunc ||
+                                                        filter == FILTER_GAUSSIAN_HIGH)) )
         {
             return false;
         }
@@ -958,6 +959,12 @@ namespace Ogre {
                     //The image right now is in both box0 and tmpImage0. We can't touch box0,
                     //So we blur tmpImage0, and use tmpBuffer1 to store intermediate results
                     const FilterSeparableKernel &separableKernel = c_filterSeparableKernels[0];
+                    (*separableBlur2DFunc)( tmpBuffer1,
+                                            reinterpret_cast<uint8*>( tmpImage0.mBuffer ),
+                                            srcWidth, srcHeight, box0.bytesPerRow,
+                                            separableKernel.kernel,
+                                            separableKernel.kernelStart, separableKernel.kernelEnd );
+                    //Filter again...
                     (*separableBlur2DFunc)( tmpBuffer1,
                                             reinterpret_cast<uint8*>( tmpImage0.mBuffer ),
                                             srcWidth, srcHeight, box0.bytesPerRow,
