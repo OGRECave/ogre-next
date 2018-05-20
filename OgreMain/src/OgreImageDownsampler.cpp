@@ -811,6 +811,156 @@ namespace Ogre
             srcPtr += bytesPerRowSkip;
         }
     }
+    //-----------------------------------------------------------------------------------
+    void BLUR_NAME( uint8 *_tmpPtr, uint8 *_srcDstPtr,
+                    int32 width, int32 height,
+                    const uint8 kernel[5],
+                    const int8 kernelStart, const int8 kernelEnd )
+    {
+        OGRE_UINT8 *dstPtr = reinterpret_cast<OGRE_UINT8*>( _tmpPtr );
+        OGRE_UINT8 const *srcPtr = reinterpret_cast<OGRE_UINT8 const *>( _srcDstPtr );
+
+        const size_t bytesPerRow = width * OGRE_TOTAL_SIZE;
+
+        for( int32 y=0; y<height; ++y )
+        {
+            for( int32 x=0; x<width; ++x )
+            {
+    #ifdef OGRE_DOWNSAMPLE_R
+                OGRE_UINT32 accumR = 0;
+    #endif
+    #ifdef OGRE_DOWNSAMPLE_G
+                OGRE_UINT32 accumG = 0;
+    #endif
+    #ifdef OGRE_DOWNSAMPLE_B
+                OGRE_UINT32 accumB = 0;
+    #endif
+    #ifdef OGRE_DOWNSAMPLE_A
+                OGRE_UINT32 accumA = 0;
+    #endif
+
+                uint32 divisor = 0;
+
+                int kStartX = std::max<int>( -x, kernelStart );
+                int kEndX   = std::min<int>( width - 1 - x, kernelEnd );
+
+                for( int k_x=kStartX; k_x<=kEndX; ++k_x )
+                {
+                    uint32 kernelVal = kernel[k_x+2];
+
+    #ifdef OGRE_DOWNSAMPLE_R
+                    OGRE_UINT32 r = srcPtr[k_x * OGRE_TOTAL_SIZE + OGRE_DOWNSAMPLE_R];
+                    accumR += OGRE_GAM_TO_LIN( r ) * kernelVal;
+    #endif
+    #ifdef OGRE_DOWNSAMPLE_G
+                    OGRE_UINT32 g = srcPtr[k_x * OGRE_TOTAL_SIZE + OGRE_DOWNSAMPLE_G];
+                    accumG += OGRE_GAM_TO_LIN( g ) * kernelVal;
+    #endif
+    #ifdef OGRE_DOWNSAMPLE_B
+                    OGRE_UINT32 b = srcPtr[k_x * OGRE_TOTAL_SIZE + OGRE_DOWNSAMPLE_B];
+                    accumB += OGRE_GAM_TO_LIN( b ) * kernelVal;
+    #endif
+    #ifdef OGRE_DOWNSAMPLE_A
+                    OGRE_UINT32 a = srcPtr[k_x * OGRE_TOTAL_SIZE + OGRE_DOWNSAMPLE_A];
+                    accumA += a * kernelVal;
+    #endif
+
+                    divisor += kernelVal;
+                }
+
+    #if defined( OGRE_DOWNSAMPLE_R ) || defined( OGRE_DOWNSAMPLE_G ) || defined( OGRE_DOWNSAMPLE_B )
+                float invDivisor = 1.0f / divisor;
+    #endif
+
+    #ifdef OGRE_DOWNSAMPLE_R
+                dstPtr[OGRE_DOWNSAMPLE_R] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumR * invDivisor ) + 0.5f );
+    #endif
+    #ifdef OGRE_DOWNSAMPLE_G
+                dstPtr[OGRE_DOWNSAMPLE_G] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumG * invDivisor ) + 0.5f );
+    #endif
+    #ifdef OGRE_DOWNSAMPLE_B
+                dstPtr[OGRE_DOWNSAMPLE_B] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumB * invDivisor ) + 0.5f );
+    #endif
+    #ifdef OGRE_DOWNSAMPLE_A
+                dstPtr[OGRE_DOWNSAMPLE_A] = static_cast<OGRE_UINT8>( (accumA + divisor - 1u) / divisor );
+    #endif
+
+                dstPtr += OGRE_TOTAL_SIZE;
+                srcPtr += OGRE_TOTAL_SIZE;
+            }
+        }
+
+        dstPtr = reinterpret_cast<OGRE_UINT8*>( _srcDstPtr );
+        srcPtr = reinterpret_cast<OGRE_UINT8 const *>( _tmpPtr );
+
+        for( int32 y=0; y<height; ++y )
+        {
+            for( int32 x=0; x<width; ++x )
+            {
+    #ifdef OGRE_DOWNSAMPLE_R
+                OGRE_UINT32 accumR = 0;
+    #endif
+    #ifdef OGRE_DOWNSAMPLE_G
+                OGRE_UINT32 accumG = 0;
+    #endif
+    #ifdef OGRE_DOWNSAMPLE_B
+                OGRE_UINT32 accumB = 0;
+    #endif
+    #ifdef OGRE_DOWNSAMPLE_A
+                OGRE_UINT32 accumA = 0;
+    #endif
+
+                uint32 divisor = 0;
+
+                int kStartY = std::max<int>( -y, kernelStart );
+                int kEndY   = std::min<int>( height - y, kernelEnd );
+
+                for( int k_y=kStartY; k_y<=kEndY; ++k_y )
+                {
+                    uint32 kernelVal = kernel[k_y+2];
+
+    #ifdef OGRE_DOWNSAMPLE_R
+                    OGRE_UINT32 r = srcPtr[k_y * bytesPerRow + OGRE_DOWNSAMPLE_R];
+                    accumR += OGRE_GAM_TO_LIN( r ) * kernelVal;
+    #endif
+    #ifdef OGRE_DOWNSAMPLE_G
+                    OGRE_UINT32 g = srcPtr[k_y * bytesPerRow + OGRE_DOWNSAMPLE_G];
+                    accumG += OGRE_GAM_TO_LIN( g ) * kernelVal;
+    #endif
+    #ifdef OGRE_DOWNSAMPLE_B
+                    OGRE_UINT32 b = srcPtr[k_y * bytesPerRow + OGRE_DOWNSAMPLE_B];
+                    accumB += OGRE_GAM_TO_LIN( b ) * kernelVal;
+    #endif
+    #ifdef OGRE_DOWNSAMPLE_A
+                    OGRE_UINT32 a = srcPtr[k_y * bytesPerRow + OGRE_DOWNSAMPLE_A];
+                    accumA += a * kernelVal;
+    #endif
+
+                    divisor += kernelVal;
+                }
+
+    #if defined( OGRE_DOWNSAMPLE_R ) || defined( OGRE_DOWNSAMPLE_G ) || defined( OGRE_DOWNSAMPLE_B )
+                float invDivisor = 1.0f / divisor;
+    #endif
+
+    #ifdef OGRE_DOWNSAMPLE_R
+                dstPtr[OGRE_DOWNSAMPLE_R] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumR * invDivisor ) + 0.5f );
+    #endif
+    #ifdef OGRE_DOWNSAMPLE_G
+                dstPtr[OGRE_DOWNSAMPLE_G] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumG * invDivisor ) + 0.5f );
+    #endif
+    #ifdef OGRE_DOWNSAMPLE_B
+                dstPtr[OGRE_DOWNSAMPLE_B] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumB * invDivisor ) + 0.5f );
+    #endif
+    #ifdef OGRE_DOWNSAMPLE_A
+                dstPtr[OGRE_DOWNSAMPLE_A] = static_cast<OGRE_UINT8>( (accumA + divisor - 1u) / divisor );
+    #endif
+
+                dstPtr += OGRE_TOTAL_SIZE;
+                srcPtr += OGRE_TOTAL_SIZE;
+            }
+        }
+    }
 }
 
     #undef OGRE_DOWNSAMPLE_A
