@@ -733,6 +733,7 @@ namespace Ogre {
 
         ImageDownsampler2D *downsampler2DFunc       = 0;
         ImageDownsamplerCube *downsamplerCubeFunc   = 0;
+        ImageBlur2D *separableBlur2DFunc            = 0;
 
         gammaCorrected |= PixelFormatGpuUtils::isSRgb( mPixelFormat );
 
@@ -744,11 +745,13 @@ namespace Ogre {
             {
                 downsampler2DFunc   = downscale2x_X8;
                 downsamplerCubeFunc = downscale2x_X8_cube;
+                separableBlur2DFunc = separableBlur_X8;
             }
             else
             {
                 downsampler2DFunc   = downscale2x_sRGB_X8;
                 downsamplerCubeFunc = downscale2x_sRGB_X8_cube;
+                separableBlur2DFunc = separableBlur_sRGB_X8;
             }
             break;
         case PFG_A8_UNORM:
@@ -756,11 +759,13 @@ namespace Ogre {
             {
                 downsampler2DFunc   = downscale2x_A8;
                 downsamplerCubeFunc = downscale2x_A8_cube;
+                separableBlur2DFunc = separableBlur_A8;
             }
             else
             {
                 downsampler2DFunc   = downscale2x_sRGB_A8;
                 downsamplerCubeFunc = downscale2x_sRGB_A8_cube;
+                separableBlur2DFunc = separableBlur_sRGB_A8;
             }
             break;
         case PFG_RG8_UNORM:
@@ -769,11 +774,13 @@ namespace Ogre {
             {
                 downsampler2DFunc   = downscale2x_XX88;
                 downsamplerCubeFunc = downscale2x_XX88_cube;
+                separableBlur2DFunc = separableBlur_X8;
             }
             else
             {
                 downsampler2DFunc   = downscale2x_sRGB_XX88;
                 downsamplerCubeFunc = downscale2x_sRGB_XX88_cube;
+                separableBlur2DFunc = separableBlur_sRGB_X8;
             }
             break;
         case PFG_RGBA8_UNORM:
@@ -785,41 +792,50 @@ namespace Ogre {
             {
                 downsampler2DFunc   = downscale2x_XXXA8888;
                 downsamplerCubeFunc = downscale2x_XXXA8888_cube;
+                separableBlur2DFunc = separableBlur_XXXA8888;
             }
             else
             {
                 downsampler2DFunc   = downscale2x_sRGB_XXXA8888;
                 downsamplerCubeFunc = downscale2x_sRGB_XXXA8888_cube;
+                separableBlur2DFunc = separableBlur_sRGB_XXXA8888;
             }
             break;
         case PFG_R8_SNORM:
         case PFG_R8_SINT:
             downsampler2DFunc   = downscale2x_Signed_X8;
             downsamplerCubeFunc = downscale2x_Signed_X8_cube;
+            separableBlur2DFunc = separableBlur_X8;
             break;
         case PFG_RG8_SNORM: case PFG_RG8_SINT:
             downsampler2DFunc   = downscale2x_Signed_XX88;
             downsamplerCubeFunc = downscale2x_Signed_XX88_cube;
+            separableBlur2DFunc = separableBlur_Signed_X8;
             break;
         case PFG_RGBA8_SNORM: case PFG_RGBA8_SINT:
             downsampler2DFunc   = downscale2x_Signed_XXXA8888;
             downsamplerCubeFunc = downscale2x_Signed_XXXA8888_cube;
+            separableBlur2DFunc = separableBlur_Signed_XXXA8888;
             break;
         case PFG_RGBA32_FLOAT:
             downsampler2DFunc   = downscale2x_Float32_XXXA;
             downsamplerCubeFunc = downscale2x_Float32_XXXA_cube;
+            separableBlur2DFunc = separableBlur_Float32_XXXA;
             break;
         case PFG_RGB32_FLOAT:
             downsampler2DFunc   = downscale2x_Float32_XXX;
             downsamplerCubeFunc = downscale2x_Float32_XXX_cube;
+            separableBlur2DFunc = separableBlur_Float32_XXX;
             break;
         case PFG_RG32_FLOAT:
             downsampler2DFunc   = downscale2x_Float32_XX;
             downsamplerCubeFunc = downscale2x_Float32_XX_cube;
+            separableBlur2DFunc = separableBlur_Float32_XX;
             break;
         case PFG_R32_FLOAT:
             downsampler2DFunc   = downscale2x_Float32_X;
             downsamplerCubeFunc = downscale2x_Float32_X_cube;
+            separableBlur2DFunc = separableBlur_Float32_X;
             break;
         default: //Keep compiler happy
             break;
@@ -833,13 +849,14 @@ namespace Ogre {
 
         // Allocate new buffer
         uint8 numMipmapsRequired = PixelFormatGpuUtils::getMaxMipmapCount( mWidth, mHeight, getDepth() );
-        if( numMipmapsRequired != mNumMipmaps )
+        Image2 tmpImage0;
+        uint8 *tmpBuffer1 = 0;
+        if( numMipmapsRequired != mNumMipmaps || filter == FILTER_GAUSSIAN_HIGH )
         {
             // reassign 'this' buffer to temp image, make sure auto-delete is true
             // do not delete[] mBuffer!  temp will destroy it
-            Image2 temp;
-            temp.loadDynamicImage( mBuffer, mWidth, mHeight, mDepthOrSlices,
-                                   mTextureType, mPixelFormat, true, mNumMipmaps );
+            tmpImage0.loadDynamicImage( mBuffer, mWidth, mHeight, mDepthOrSlices,
+                                        mTextureType, mPixelFormat, true, mNumMipmaps );
 
             const uint32 rowAlignment = 4u;
             const size_t totalBytes = PixelFormatGpuUtils::calculateSizeBytes( mWidth, mHeight,
@@ -850,11 +867,21 @@ namespace Ogre {
                                                                                rowAlignment );
             mBuffer = OGRE_MALLOC_SIMD( totalBytes, MEMCATEGORY_RESOURCE );
 
-            TextureBox srcBox = temp.getData( 0 );
+            TextureBox srcBox = tmpImage0.getData( 0 );
             TextureBox dstBox = this->getData( 0 );
             memcpy( dstBox.data, srcBox.data, srcBox.bytesPerImage * srcBox.numSlices );
 
             mNumMipmaps = numMipmapsRequired;
+
+            //Free memory now, it's not needed anymore. If we still
+            //need it, it will be freed when function returns
+            if( filter != FILTER_GAUSSIAN_HIGH )
+                tmpImage0.freeMemory();
+            else
+            {
+                tmpBuffer1 = reinterpret_cast<uint8*>( OGRE_MALLOC_SIMD( getBytesPerImage( 0 ),
+                                                                         MEMCATEGORY_RESOURCE ) );
+            }
         }
 
         uint32 dstWidth  = mWidth;
@@ -871,6 +898,8 @@ namespace Ogre {
             filterIdx = 1; break;
         case FILTER_GAUSSIAN:
             filterIdx = 2; break;
+        case FILTER_GAUSSIAN_HIGH:
+            filterIdx = 1; break;
         default: // Keep compiler happy
             break;
         }
@@ -907,14 +936,50 @@ namespace Ogre {
             }
             else
             {
-                (*downsampler2DFunc)( reinterpret_cast<uint8*>( box1.data ),
-                                      reinterpret_cast<uint8*>( box0.data ),
-                                      dstWidth, dstHeight, box1.bytesPerRow,
-                                      srcWidth, box0.bytesPerRow,
-                                      chosenFilter.kernel,
-                                      chosenFilter.kernelStartX, chosenFilter.kernelEndX,
-                                      chosenFilter.kernelStartY, chosenFilter.kernelEndY );
+                if( filter != FILTER_GAUSSIAN_HIGH )
+                {
+                    (*downsampler2DFunc)( reinterpret_cast<uint8*>( box1.data ),
+                                          reinterpret_cast<uint8*>( box0.data ),
+                                          dstWidth, dstHeight, box1.bytesPerRow,
+                                          srcWidth, box0.bytesPerRow,
+                                          chosenFilter.kernel,
+                                          chosenFilter.kernelStartX, chosenFilter.kernelEndX,
+                                          chosenFilter.kernelStartY, chosenFilter.kernelEndY );
+                }
+                else
+                {
+                    //tmpImage0 should contain one or more mips (from mip 0), and tmpBuffer1 should
+                    //be large enough to contain mip 0. This assert should never trigger.
+                    assert( tmpImage0.getSizeBytes() >= box0.getSizeBytes() );
+
+                    //Copy box0 to tmpImage0
+                    memcpy( tmpImage0.mBuffer, box0.data, box0.getSizeBytes() );
+
+                    //The image right now is in both box0 and tmpImage0. We can't touch box0,
+                    //So we blur tmpImage0, and use tmpBuffer1 to store intermediate results
+                    const FilterSeparableKernel &separableKernel = c_filterSeparableKernels[0];
+                    (*separableBlur2DFunc)( tmpBuffer1,
+                                            reinterpret_cast<uint8*>( tmpImage0.mBuffer ),
+                                            srcWidth, srcHeight, box0.bytesPerRow,
+                                            separableKernel.kernel,
+                                            separableKernel.kernelStart, separableKernel.kernelEnd );
+
+                    //Now that tmpImage0 is blurred, bilinear downsample its contents into box1.
+                    (*downsampler2DFunc)( reinterpret_cast<uint8*>( box1.data ),
+                                          reinterpret_cast<uint8*>( tmpImage0.mBuffer ),
+                                          dstWidth, dstHeight, box1.bytesPerRow,
+                                          srcWidth, box0.bytesPerRow,
+                                          chosenFilter.kernel,
+                                          chosenFilter.kernelStartX, chosenFilter.kernelEndX,
+                                          chosenFilter.kernelStartY, chosenFilter.kernelEndY );
+                }
             }
+        }
+
+        if( tmpBuffer1 )
+        {
+            OGRE_FREE_SIMD( tmpBuffer1, MEMCATEGORY_RESOURCE );
+            tmpBuffer1 = 0;
         }
 
         return true;

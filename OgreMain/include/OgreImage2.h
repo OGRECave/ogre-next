@@ -281,7 +281,13 @@ namespace Ogre {
             FILTER_BOX,
             FILTER_TRIANGLE,
             FILTER_BICUBIC,
-            FILTER_GAUSSIAN
+            /// Applies gaussian filter over the image, then a point sampling reduction
+            /// This is done at the same time (i.e. we don't blur pixels we ignore).
+            FILTER_GAUSSIAN,
+            /// Applies gaussian filter over the image, then bilinear downsamples.
+            /// This prevents certain artifacts for some images when using FILTER_GAUSSIAN,
+            /// like biasing towards certain direction.
+            FILTER_GAUSSIAN_HIGH,
         };
 
 #if 0

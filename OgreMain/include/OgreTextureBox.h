@@ -77,6 +77,8 @@ namespace Ogre
         uint32 getDepthOrSlices(void) const { return std::max( depth, numSlices ); }
         uint32 getZOrSlice(void) const  { return std::max( z, sliceStart ); }
 
+        size_t getSizeBytes(void) const { return bytesPerImage * std::max( depth, numSlices ); }
+
         void setCompressedPixelFormat( PixelFormatGpu pixelFormat )
         {
             assert( PixelFormatGpuUtils::isCompressed( pixelFormat ) );
