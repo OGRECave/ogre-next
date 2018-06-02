@@ -1,5 +1,7 @@
 @piece( SetCrossPlatformSettings )
 #define INLINE
+#define NO_INTERPOLATION_PREFIX nointerpolation
+#define NO_INTERPOLATION_SUFFIX
 
 #define finalDrawId input.drawId
 

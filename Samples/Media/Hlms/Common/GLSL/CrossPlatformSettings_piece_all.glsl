@@ -31,6 +31,8 @@
 #define saturate(x) clamp( (x), 0.0, 1.0 )
 #define lerp mix
 #define INLINE
+#define NO_INTERPOLATION_PREFIX flat
+#define NO_INTERPOLATION_SUFFIX
 
 #define finalDrawId drawId
 

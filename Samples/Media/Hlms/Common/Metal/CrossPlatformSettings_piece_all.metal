@@ -12,6 +12,8 @@ struct float1
 #define mul( x, y ) ((x) * (y))
 #define lerp mix
 #define INLINE inline
+#define NO_INTERPOLATION_PREFIX
+#define NO_INTERPOLATION_SUFFIX [[flat]]
 
 #define finalDrawId drawId
 
