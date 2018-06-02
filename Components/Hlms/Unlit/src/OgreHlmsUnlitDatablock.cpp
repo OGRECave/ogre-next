@@ -128,15 +128,10 @@ namespace Ogre
 
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
 
-        const HlmsSamplerblock *defaultSamplerblock = hlmsManager->getSamplerblock( HlmsSamplerblock() );
-
         for( size_t i=0; i<sizeof( c_diffuseMap ) / sizeof( String ); ++i )
         {
             if( Hlms::findParamInVec( params, c_diffuseMap[i], paramVal ) )
             {
-                mSamplerblocks[i] = defaultSamplerblock;
-                hlmsManager->addReference( mSamplerblocks[i] );
-
                 StringVector vec = StringUtil::split( paramVal );
 
                 StringVector::const_iterator itor = vec.begin();
@@ -174,9 +169,6 @@ namespace Ogre
                 }
             }
         }
-
-        //Remove the reference
-        hlmsManager->destroySamplerblock( defaultSamplerblock );
 
         if( Hlms::findParamInVec( params, "animate", paramVal ) )
         {
