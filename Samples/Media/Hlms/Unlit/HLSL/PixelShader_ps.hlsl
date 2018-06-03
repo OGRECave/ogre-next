@@ -22,7 +22,7 @@ Texture2DArray textureMapsArray@n : register(t@value(array_texture_bind@n));@end
 @foreach( num_textures, n )
 Texture2D textureMaps@n : register(t@value(texture_bind@n));@end
 
-@pset( samplerStateBind, 2 )
+@pset( samplerStateBind, sampler_unit_slot_start )
 
 @foreach( num_samplers, n )
 SamplerState samplerState@n : register(s@counter(samplerStateBind));@end

@@ -16,7 +16,7 @@ struct PS_INPUT
 
 @property( !hlms_shadowcaster )
 
-@pset( samplerStateBind, 2 )
+@pset( samplerStateBind, sampler_unit_slot_start )
 
 @property( diffuse )@piece( MultiplyDiffuseConst )* material.diffuse@end @end
 

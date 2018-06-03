@@ -65,6 +65,7 @@ namespace Ogre
         static const IdString NumArrayTextures;
         static const IdString NumTextures;
         static const IdString NumSamplers;
+        static const IdString SamplerUnitSlotStart;
 
         /// Number of diffuse maps.
         static const IdString DiffuseMap;

@@ -78,7 +78,8 @@ namespace Ogre
         mLastDescSampler( 0 ),
         mUsingExponentialShadowMaps( false ),
         mEsmK( 600u ),
-        mTexUnitSlotStart( 2 )
+        mTexUnitSlotStart( 2u ),
+        mSamplerUnitSlotStart( 2u )
     {
         //Override defaults
         mLightGatheringMode = LightGatherNone;
@@ -97,7 +98,8 @@ namespace Ogre
         mLastDescSampler( 0 ),
         mUsingExponentialShadowMaps( false ),
         mEsmK( 600u ),
-        mTexUnitSlotStart( 2u )
+        mTexUnitSlotStart( 2u ),
+        mSamplerUnitSlotStart( 2u )
     {
         //Override defaults
         mLightGatheringMode = LightGatherNone;
@@ -559,6 +561,8 @@ namespace Ogre
         setProperty( HlmsBaseProp::RenderDepthOnly,
                      (renderPassDesc->getNumColourEntries() > 0) ? 0 : 1 );
 
+        setProperty( UnlitProperty::SamplerUnitSlotStart, (int32)mSamplerUnitSlotStart );
+
         Camera *camera = sceneManager->getCameraInProgress();
         if( camera && camera->isReflected() )
         {
@@ -933,7 +937,7 @@ namespace Ogre
                 if( datablock->mSamplersDescSet )
                 {
                     //Bind samplers
-                    size_t texUnit = mTexUnitSlotStart;
+                    size_t texUnit = mSamplerUnitSlotStart;
                     *commandBuffer->addCommand<CbSamplers>() =
                             CbSamplers( texUnit, datablock->mSamplersDescSet );
                     mLastDescSampler = datablock->mSamplersDescSet;

@@ -76,6 +76,7 @@ namespace Ogre
         bool    mUsingExponentialShadowMaps;
         uint16  mEsmK; /// K parameter for ESM.
         uint32  mTexUnitSlotStart;
+        uint32  mSamplerUnitSlotStart;
 
         virtual const HlmsCache* createShaderCacheEntry( uint32 renderableHash,
                                                          const HlmsCache &passCache,
