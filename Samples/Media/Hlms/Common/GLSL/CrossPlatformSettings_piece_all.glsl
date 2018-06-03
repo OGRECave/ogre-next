@@ -39,6 +39,7 @@
 #define outVs_Position gl_Position
 #define OGRE_SampleLevel( tex, sampler, uv, lod ) textureLod( tex, uv.xy, lod )
 #define OGRE_SampleArray2DLevel( tex, sampler, uv, arrayIdx, lod ) textureLod( tex, vec3( uv, arrayIdx ), lod )
+#define OGRE_BufferFetch1( buffer, intLocation ) texelFetch( buffer, intLocation ).x
 @end
 
 @property( !GL_ARB_texture_buffer_range || !GL_ARB_shading_language_420pack )
