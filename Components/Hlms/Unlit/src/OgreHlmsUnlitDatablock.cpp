@@ -257,7 +257,7 @@ namespace Ogre
 
         uint16 texIndices[OGRE_NumTexIndices];
         for( size_t i=0; i<OGRE_NumTexIndices; ++i )
-            texIndices[i] = mTexIndices[i] & ManualTexIndexBit;
+            texIndices[i] = mTexIndices[i] & ~ManualTexIndexBit;
 
         memcpy( dstPtr, &mAlphaTestThreshold, sizeof( float ) );
         dstPtr += 4 * sizeof(float);

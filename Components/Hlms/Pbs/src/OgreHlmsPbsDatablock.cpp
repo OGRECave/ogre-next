@@ -398,7 +398,7 @@ namespace Ogre
 
         uint16 texIndices[OGRE_NumTexIndices];
         for( size_t i=0; i<OGRE_NumTexIndices; ++i )
-            texIndices[i] = mTexIndices[i] & ManualTexIndexBit;
+            texIndices[i] = mTexIndices[i] & ~ManualTexIndexBit;
 
         memcpy( dstPtr, &mBgDiffuse[0], MaterialSizeInGpu - sizeof(mTexIndices) );
         dstPtr += MaterialSizeInGpu - sizeof(mTexIndices);
