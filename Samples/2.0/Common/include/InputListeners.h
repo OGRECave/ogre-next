@@ -5,6 +5,7 @@
 union SDL_Event;
 struct SDL_MouseButtonEvent;
 
+struct SDL_TextEditingEvent;
 struct SDL_TextInputEvent;
 struct SDL_KeyboardEvent;
 
@@ -26,6 +27,7 @@ namespace Demo
     class KeyboardListener
     {
     public:
+        virtual void textEditing( const SDL_TextEditingEvent& arg ) {}
         virtual void textInput( const SDL_TextInputEvent& arg ) {}
         virtual void keyPressed( const SDL_KeyboardEvent &arg ) {}
         virtual void keyReleased (const SDL_KeyboardEvent &arg ) {}
