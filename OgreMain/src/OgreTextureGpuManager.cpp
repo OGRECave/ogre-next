@@ -622,8 +622,8 @@ namespace Ogre
                     (uint32)bytesTexture, "|" );
             text.a( entry.texture->isRenderToTexture(), "|",
                     entry.texture->isUav(), "|",
-                    entry.texture->hasMsaaExplicitResolves(), "|" );
-            text.a( entry.texture->_isManualTextureFlagPresent(), "|",
+                    entry.texture->_isManualTextureFlagPresent(), "|" );
+            text.a( entry.texture->hasMsaaExplicitResolves(), "|",
                     entry.texture->isReinterpretable(), "|",
                     entry.texture->hasAutomaticBatching() );
 
