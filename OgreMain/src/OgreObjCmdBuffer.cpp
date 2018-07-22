@@ -42,6 +42,7 @@ THE SOFTWARE.
 #include "OgreTextureFilters.h"
 
 #include "OgreException.h"
+#include "OgreProfiler.h"
 
 namespace Ogre
 {
@@ -134,6 +135,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void ObjCmdBuffer::UploadFromStagingTex::execute(void)
     {
+        OgreProfileExhaustive( "ObjCmdBuffer::UploadFromStagingTex::execute" );
         stagingTexture->upload( box, dstTexture, mipLevel, &dstBox );
     }
     //-----------------------------------------------------------------------------------
@@ -146,6 +148,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void ObjCmdBuffer::NotifyDataIsReady::execute(void)
     {
+        OgreProfileExhaustive( "ObjCmdBuffer::NotifyDataIsReady::execute" );
+
         FilterBaseArray::const_iterator itor = filters.begin();
         FilterBaseArray::const_iterator end  = filters.end();
 

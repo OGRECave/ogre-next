@@ -50,6 +50,8 @@ THE SOFTWARE.
 #include "OgreException.h"
 #include "OgreLogManager.h"
 
+#include "OgreProfiler.h"
+
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC
     #include <intrin.h>
     #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
@@ -294,6 +296,8 @@ namespace Ogre
                                                   const String &resourceGroup,
                                                   uint32 filters )
     {
+        OgreProfileExhaustive( "TextureGpuManager::createTexture" );
+
         IdString idName( aliasName );
 
         if( mEntries.find( aliasName ) != mEntries.end() )
@@ -373,6 +377,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::destroyTexture( TextureGpu *texture )
     {
+        OgreProfileExhaustive( "TextureGpuManager::destroyTexture" );
+
         ResourceEntryMap::iterator itor = mEntries.find( texture->getName() );
 
         if( itor == mEntries.end() )
@@ -394,6 +400,7 @@ namespace Ogre
                                                           PixelFormatGpu pixelFormat,
                                                           size_t minConsumptionRatioThreshold )
     {
+        OgreProfileExhaustive( "TextureGpuManager::getStagingTexture" );
         assert( minConsumptionRatioThreshold <= 100u && "Invalid consumptionRatioThreshold value!" );
 
 #if OGRE_DEBUG_MEMORY_CONSUMPTION
@@ -1058,6 +1065,8 @@ namespace Ogre
     }
     void TextureGpuManager::fullfillBudget(void)
     {
+        OgreProfileExhaustive( "TextureGpuManager::fullfillBudget" );
+
         //Ensure availableStagingTex is sorted in ascending order
         std::sort( mStreamingData.availableStagingTex.begin(),
                    mStreamingData.availableStagingTex.end(),
@@ -1238,6 +1247,8 @@ namespace Ogre
     void TextureGpuManager::processQueuedImage( QueuedImage &queuedImage, ThreadData &workerData,
                                                 StreamingData &streamingData )
     {
+        OgreProfileExhaustive( "TextureGpuManager::processQueuedImage" );
+
         Image2 &img = queuedImage.image;
         TextureGpu *texture = queuedImage.dstTexture;
         ObjCmdBuffer *commandBuffer = workerData.objCmdBuffer;
@@ -1321,6 +1332,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::_updateStreaming(void)
     {
+        OgreProfileExhaustive( "TextureGpuManager::_updateStreaming" );
+
         /*
         Thread Input                Thread Output
         ------------------------------------------
@@ -1398,6 +1411,8 @@ namespace Ogre
                entriesProcessed < entriesToProcessPerIteration &&
                mStreamingData.bytesPreloaded < mMaxPreloadBytes )
         {
+            OgreProfileExhaustive( "TextureGpuManager::_updateStreaming LoadRequest for first time" );
+
             const LoadRequest &loadRequest = *itor;
 
             if( !loadRequest.archive && !loadRequest.loadingListener )
@@ -1614,6 +1629,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool TextureGpuManager::_update( bool syncWithWorkerThread )
     {
+        OgreProfileExhaustive( "TextureGpuManager::_update" );
+
 #if OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN || OGRE_FORCE_TEXTURE_STREAMING_ON_MAIN_THREAD
         _updateStreaming();
 #endif
@@ -1659,6 +1676,8 @@ namespace Ogre
         }
 
         {
+            OgreProfileExhaustive( "TextureGpuManager::_update destroy old StagingTextures" );
+
             StagingTextureVec::iterator itor = mAvailableStagingTextures.begin();
             StagingTextureVec::iterator end  = mAvailableStagingTextures.end();
 
@@ -1676,8 +1695,11 @@ namespace Ogre
             mAvailableStagingTextures.erase( mAvailableStagingTextures.begin(), itor );
         }
 
-        mainData.objCmdBuffer->execute();
-        mainData.objCmdBuffer->clear();
+        {
+            OgreProfileExhaustive( "TextureGpuManager::_update cmd buffer execution" );
+            mainData.objCmdBuffer->execute();
+            mainData.objCmdBuffer->clear();
+        }
 
         {
             StagingTextureVec::const_iterator itor = mainData.usedStagingTex.begin();
@@ -1703,6 +1725,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::waitForStreamingCompletion(void)
     {
+        OgreProfileExhaustive( "TextureGpuManager::waitForStreamingCompletion" );
+
         bool bDone = false;
         while( !bDone )
         {

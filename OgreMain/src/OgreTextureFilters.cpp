@@ -34,6 +34,8 @@ THE SOFTWARE.
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreTextureBox.h"
 
+#include "OgreProfiler.h"
+
 namespace Ogre
 {
 namespace TextureFilter
@@ -113,6 +115,8 @@ namespace TextureFilter
     //-----------------------------------------------------------------------------------
     void GenerateHwMipmaps::_executeSerial( TextureGpu *texture )
     {
+        OgreProfileExhaustive( "GenerateHwMipmaps::_executeSerial" );
+
         TextureGpuManager *textureManager = texture->getTextureManager();
         TextureGpu *tempTexture = textureManager->createTexture( "___tempMipmapTexture",
                                                                  GpuPageOutStrategy::Discard,
@@ -138,6 +142,8 @@ namespace TextureFilter
     //-----------------------------------------------------------------------------------
     void PrepareForNormalMapping::_executeStreaming( Image2 &image, TextureGpu *texture )
     {
+        OgreProfileExhaustive( "PrepareForNormalMapping::_executeStreaming" );
+
         const PixelFormatGpu srcFormat = image.getPixelFormat();
 
         //Only automatically convert RGBA8 textures. Any other format we assume
@@ -187,6 +193,8 @@ namespace TextureFilter
     //-----------------------------------------------------------------------------------
     void LeaveChannelR::_executeStreaming( Image2 &image, TextureGpu *texture )
     {
+        OgreProfileExhaustive( "LeaveChannelR::_executeStreaming" );
+
         const PixelFormatGpu srcFormat = image.getPixelFormat();
         size_t numberOfChannels = PixelFormatGpuUtils::getNumberOfComponents( image.getPixelFormat() );
         if( numberOfChannels == 1u )

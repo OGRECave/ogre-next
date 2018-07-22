@@ -39,6 +39,7 @@ THE SOFTWARE.
 #include "OgreAsyncTextureTicket.h"
 #include "OgreStagingTexture.h"
 #include "OgreResourceGroupManager.h"
+#include "OgreProfiler.h"
 
 namespace Ogre {
     ImageCodec2::~ImageCodec2() {
@@ -70,6 +71,8 @@ namespace Ogre {
     //-----------------------------------------------------------------------------------
     void Image2::freeMemory()
     {
+        OgreProfileExhaustive( "Image2::freeMemory" );
+
         //Only delete if this was not a dynamic image (meaning app holds & destroys buffer)
         if( mBuffer && mAutoDelete )
         {
@@ -80,6 +83,8 @@ namespace Ogre {
     //-----------------------------------------------------------------------------------
     Image2& Image2::operator = ( const Image2 &img )
     {
+        OgreProfileExhaustive( "Image2::operator =" );
+
         freeMemory();
         mWidth          = img.mWidth;
         mHeight         = img.mHeight;
@@ -188,6 +193,8 @@ namespace Ogre {
     //-----------------------------------------------------------------------------------
     void Image2::flipAroundY(void)
     {
+        OgreProfileExhaustive( "Image2::flipAroundY" );
+
         if( !mBuffer )
         {
             OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR,
@@ -224,6 +231,8 @@ namespace Ogre {
     //-----------------------------------------------------------------------------------
     void Image2::flipAroundX(void)
     {
+        OgreProfileExhaustive( "Image2::flipAroundX" );
+
         if( !mBuffer )
         {
             OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR,
@@ -249,6 +258,7 @@ namespace Ogre {
                                    TextureTypes::TextureTypes textureType, PixelFormatGpu format,
                                    bool autoDelete, uint8 numMipmaps )
     {
+        OgreProfileExhaustive( "Image2::loadDynamicImage" );
 
         freeMemory();
         assert( numMipmaps > 0 );
@@ -274,6 +284,8 @@ namespace Ogre {
                                      bool automaticResolve )
     {
         assert( minMip <= maxMip );
+
+        OgreProfileExhaustive( "Image2::convertFromTexture" );
 
         if( texture->getResidencyStatus() != GpuResidency::Resident &&
             texture->getNextResidencyStatus() != GpuResidency::Resident )
@@ -374,6 +386,8 @@ namespace Ogre {
     {
         assert( minMip <= maxMip );
 
+        OgreProfileExhaustive( "Image2::uploadTo" );
+
         if( texture->getWidth() != mWidth ||
             texture->getHeight() != mHeight ||
             texture->getDepthOrSlices() != mDepthOrSlices ||
@@ -462,6 +476,8 @@ namespace Ogre {
     //-----------------------------------------------------------------------------------
     void Image2::save( const String& filename, uint8 mipLevel, uint8 numMipmaps )
     {
+        OgreProfileExhaustive( "Image2::save" );
+
         if( !mBuffer )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "No image data loaded",
@@ -510,6 +526,8 @@ namespace Ogre {
     DataStreamPtr Image2::encode( const String& formatextension,
                                   uint8 mipLevel, uint8 numMipmaps )
     {
+        OgreProfileExhaustive( "Image2::encode" );
+
         if( !mBuffer )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "No image data loaded",
@@ -545,6 +563,8 @@ namespace Ogre {
     //-----------------------------------------------------------------------------------
     void Image2::load( DataStreamPtr& stream, const String& type )
     {
+        OgreProfileExhaustive( "Image2::load" );
+
         freeMemory();
 
         Codec *pCodec = 0;
@@ -726,6 +746,8 @@ namespace Ogre {
     //-----------------------------------------------------------------------------------
     bool Image2::generateMipmaps( bool gammaCorrected, Filter filter )
     {
+        OgreProfileExhaustive( "Image2::generateMipmaps" );
+
         // resizing dynamic images is not supported
         assert( mAutoDelete );
         assert( (mTextureType == TextureTypes::Type2D ||

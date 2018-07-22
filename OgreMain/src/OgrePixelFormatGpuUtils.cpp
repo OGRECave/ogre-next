@@ -36,6 +36,8 @@ THE SOFTWARE.
 #include "OgreColourValue.h"
 #include "OgreException.h"
 
+#include "OgreProfiler.h"
+
 namespace Ogre
 {
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC && OGRE_COMP_VER < 1800
@@ -1004,6 +1006,8 @@ namespace Ogre
     {
         assert( src.equalSize( dst ) );
         assert( dstFormat == PFG_RG8_SNORM || dstFormat == PFG_RG8_UNORM );
+
+        OgreProfileExhaustive( "PixelFormatGpuUtils::convertForNormalMapping" );
 
         float multPart = 2.0f;
         float addPart  = 1.0f;
