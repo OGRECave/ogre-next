@@ -1,4 +1,6 @@
 
+#include "OgreStableHeaders.h"
+
 #include "OgreOfflineProfiler.h"
 #include "OgreTimer.h"
 #include "OgreLwString.h"
@@ -9,12 +11,43 @@
 namespace Ogre
 {
     OfflineProfiler::OfflineProfiler() :
+        mTlsHandle( OGRE_TLS_INVALID_HANDLE ),
+        mBytesPerPool( sizeof( ProfileSample ) * 10000 )
+    {
+        Threads::CreateTls( &mTlsHandle );
+    }
+    //-----------------------------------------------------------------------------------
+    OfflineProfiler::~OfflineProfiler()
+    {
+        if( !mThreadData.empty() &&
+            (!mOnShutdownPerFramePath.empty() || !mOnShutdownAccumPath.empty()) )
+        {
+            dumpProfileResults( mOnShutdownPerFramePath, mOnShutdownAccumPath );
+        }
+
+        mMutex.lock();
+        PerThreadDataArray::const_iterator itor = mThreadData.begin();
+        PerThreadDataArray::const_iterator end  = mThreadData.end();
+
+        while( itor != end )
+            delete *itor++;
+        mThreadData.clear();
+        mMutex.unlock();
+
+        Threads::DestroyTls( mTlsHandle );
+        mTlsHandle = OGRE_TLS_INVALID_HANDLE;
+    }
+    //-----------------------------------------------------------------------------------
+    OfflineProfiler::PerThreadData::PerThreadData( bool startPaused, size_t bytesPerPool ) :
+        mPaused( startPaused ),
+        mPauseRequest( startPaused ),
+        mResetRequest( false ),
         mRoot( 0 ),
         mCurrentSample( 0 ),
         mTimer( OGRE_NEW Ogre::Timer() ),
         mTotalAccumTime( 0 ),
         mCurrMemoryPoolOffset( 0 ),
-        mBytesPerPool( sizeof( ProfileSample ) * 10000 )
+        mBytesPerPool( bytesPerPool )
     {
         createNewPool();
         mCurrentSample = allocateSample( 0 );
@@ -26,20 +59,14 @@ namespace Ogre
         mCurrentSample->nameHash = IdString( rootName );
     }
     //-----------------------------------------------------------------------------------
-    OfflineProfiler::~OfflineProfiler()
+    OfflineProfiler::PerThreadData::~PerThreadData()
     {
-        if( !mCurrentSample->children.empty() &&
-            (!mOnShutdownPerFramePath.empty() || !mOnShutdownAccumPath.empty()) )
-        {
-            dumpProfileResults( mOnShutdownPerFramePath, mOnShutdownAccumPath );
-        }
-
         destroyAllPools();
         delete mTimer;
         mTimer = 0;
     }
     //-----------------------------------------------------------------------------------
-    void OfflineProfiler::destroySampleAndChildren( ProfileSample *sample )
+    void OfflineProfiler::PerThreadData::destroySampleAndChildren( ProfileSample *sample )
     {
         FastArray<ProfileSample*>::const_iterator itor = sample->children.begin();
         FastArray<ProfileSample*>::const_iterator end  = sample->children.end();
@@ -54,7 +81,7 @@ namespace Ogre
         sample->children.destroy();
     }
     //-----------------------------------------------------------------------------------
-    void OfflineProfiler::createNewPool(void)
+    void OfflineProfiler::PerThreadData::createNewPool(void)
     {
         uint8 *newPool = reinterpret_cast<uint8*>(
                              OGRE_MALLOC( mBytesPerPool, MEMCATEGORY_GENERAL ) );
@@ -63,7 +90,7 @@ namespace Ogre
         mCurrMemoryPoolOffset = 0;
     }
     //-----------------------------------------------------------------------------------
-    void OfflineProfiler::destroyAllPools(void)
+    void OfflineProfiler::PerThreadData::destroyAllPools(void)
     {
         if( mCurrentSample )
         {
@@ -84,7 +111,8 @@ namespace Ogre
         mCurrMemoryPoolOffset = 0;
     }
     //-----------------------------------------------------------------------------------
-    OfflineProfiler::ProfileSample* OfflineProfiler::allocateSample( ProfileSample *parent )
+    OfflineProfiler::ProfileSample* OfflineProfiler::PerThreadData::allocateSample(
+            ProfileSample *parent )
     {
         const size_t bytesNeeded = sizeof( ProfileSample );
         if( mCurrMemoryPoolOffset + bytesNeeded > mBytesPerPool )
@@ -99,8 +127,35 @@ namespace Ogre
         return newSample;
     }
     //-----------------------------------------------------------------------------------
-    void OfflineProfiler::profileBegin( const char *name )
+    void OfflineProfiler::PerThreadData::setPauseRequest( bool bPause )
     {
+        mPauseRequest = bPause;
+    }
+    //-----------------------------------------------------------------------------------
+    void OfflineProfiler::PerThreadData::requestReset(void)
+    {
+        mResetRequest = true;
+    }
+    //-----------------------------------------------------------------------------------
+    void OfflineProfiler::PerThreadData::profileBegin( const char *name )
+    {
+        if( mPaused != mPauseRequest )
+            mPaused = mPauseRequest;
+
+        if( mResetRequest )
+        {
+            destroyAllPools();
+            createNewPool();
+            mTotalAccumTime = 0;
+            mCurrentSample = allocateSample( 0 );
+            mRoot = mCurrentSample;
+            mResetRequest = false;
+        }
+
+        if( mPaused )
+            return;
+
+        mMutex.lock();
         IdString nameHash( name );
 
         ProfileSample *sample = 0;
@@ -124,11 +179,18 @@ namespace Ogre
         }
 
         mCurrentSample = sample;
+        mMutex.unlock();
     }
     //-----------------------------------------------------------------------------------
-    void OfflineProfiler::profileEnd(void)
+    void OfflineProfiler::PerThreadData::profileEnd(void)
     {
+        if( mPaused )
+            return;
+
+        //Measure before the lock! Other threads will not be using our mTimer anyway
         const uint64 usEnd = mTimer->getMicroseconds();
+
+        mMutex.lock();
         const uint64 usTaken = usEnd - mCurrentSample->usStart;
         mCurrentSample->usTaken = usTaken;
         mCurrentSample = mCurrentSample->parent;
@@ -138,11 +200,25 @@ namespace Ogre
 
         if( !mCurrentSample->parent )
             mTotalAccumTime += usTaken;
+        mMutex.unlock();
     }
     //-----------------------------------------------------------------------------------
-    void OfflineProfiler::dumpSample( ProfileSample *sample, LwString &tmpStr,
-                                      String &outCsvString,
-                                      map<IdString, ProfileSample>::type &accumStats, uint32 stackDepth )
+    OfflineProfiler::PerThreadData* OfflineProfiler::allocatePerThreadData(void)
+    {
+        PerThreadData *perThreadData = new PerThreadData( mPaused, mBytesPerPool );
+
+        mMutex.lock();
+        mThreadData.push_back( perThreadData );
+        mMutex.unlock();
+
+        Threads::SetTls( mTlsHandle, perThreadData );
+
+        return perThreadData;
+    }
+    //-----------------------------------------------------------------------------------
+    void OfflineProfiler::
+    PerThreadData::dumpSample( ProfileSample *sample, LwString &tmpStr, String &outCsvString,
+                               map<IdString, ProfileSample>::type &accumStats, uint32 stackDepth )
     {
         map<IdString, ProfileSample>::type::iterator itAccum = accumStats.find( sample->nameHash );
         if( itAccum == accumStats.end() )
@@ -175,17 +251,10 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void OfflineProfiler::reset(void)
+    void OfflineProfiler::
+    PerThreadData::dumpProfileResultsStr( String &outCsvStringPerFrame, String &outCsvStringAccum )
     {
-        destroyAllPools();
-        createNewPool();
-        mTotalAccumTime = 0;
-        mCurrentSample = allocateSample( 0 );
-        mRoot = mCurrentSample;
-    }
-    //-----------------------------------------------------------------------------------
-    void OfflineProfiler::dumpProfileResultsStr( String &outCsvStringPerFrame, String &outCsvStringAccum )
-    {
+        mMutex.lock();
         String csvString0;
         String csvString1;
 
@@ -230,10 +299,11 @@ namespace Ogre
 
         outCsvStringPerFrame.swap( csvString0 );
         outCsvStringAccum.swap( csvString1 );
+        mMutex.unlock();
     }
     //-----------------------------------------------------------------------------------
-    void OfflineProfiler::dumpProfileResults( const String &fullPathPerFrame,
-                                              const String &fullPathAccum )
+    void OfflineProfiler::PerThreadData::dumpProfileResults( const String &fullPathPerFrame,
+                                                             const String &fullPathAccum )
     {
         String csvStringPerFrame;
         String csvStringAccum;
@@ -252,6 +322,82 @@ namespace Ogre
             outFile.write( (const char*)&csvStringAccum[0], csvStringAccum.size() );
             outFile.close();
         }
+    }
+    //-----------------------------------------------------------------------------------
+    void OfflineProfiler::setPaused( bool bPaused )
+    {
+        if( mPaused == bPaused )
+            return;
+
+        mPaused = bPaused;
+
+        mMutex.lock();
+
+        PerThreadDataArray::const_iterator itor = mThreadData.begin();
+        PerThreadDataArray::const_iterator end  = mThreadData.end();
+
+        while( itor != end )
+        {
+            (*itor)->setPauseRequest( bPaused );
+            ++itor;
+        }
+
+        mMutex.unlock();
+    }
+    //-----------------------------------------------------------------------------------
+    bool OfflineProfiler::isPaused(void) const
+    {
+        return mPaused;
+    }
+    //-----------------------------------------------------------------------------------
+    void OfflineProfiler::profileBegin( const char *name )
+    {
+        PerThreadData *perThreadData = reinterpret_cast<PerThreadData*>( Threads::GetTls( mTlsHandle ) );
+
+        if( !perThreadData )
+            perThreadData = allocatePerThreadData();
+
+        perThreadData->profileBegin( name );
+    }
+    //-----------------------------------------------------------------------------------
+    void OfflineProfiler::profileEnd(void)
+    {
+        PerThreadData *perThreadData = reinterpret_cast<PerThreadData*>( Threads::GetTls( mTlsHandle ) );
+
+        OGRE_ASSERT_HIGH( perThreadData && "Called OfflineProfiler::profileEnd before profileBegin!" );
+
+        perThreadData->profileEnd();
+    }
+    //-----------------------------------------------------------------------------------
+    void OfflineProfiler::dumpProfileResults( const String &fullPathPerFrame,
+                                              const String &fullPathAccum )
+    {
+        mMutex.lock();
+
+        String actualFullPathPerFrame = fullPathPerFrame;
+        String actualFullPathAccum = fullPathAccum;
+
+        size_t idx = 0;
+
+        PerThreadDataArray::const_iterator itor = mThreadData.begin();
+        PerThreadDataArray::const_iterator end  = mThreadData.end();
+
+        while( itor != end )
+        {
+            actualFullPathPerFrame.resize( fullPathPerFrame.size() );
+            actualFullPathAccum.resize( fullPathAccum.size() );
+
+            if( !actualFullPathPerFrame.empty() )
+                actualFullPathPerFrame += StringConverter::toString( idx ) + ".csv";
+            if( !actualFullPathAccum.empty() )
+                actualFullPathAccum += StringConverter::toString( idx ) + ".csv";
+
+            (*itor)->dumpProfileResults( actualFullPathPerFrame, actualFullPathAccum );
+            ++idx;
+            ++itor;
+        }
+
+        mMutex.unlock();
     }
     //-----------------------------------------------------------------------------------
     void OfflineProfiler::setDumpPathsOnShutdown( const String &fullPathPerFrame,
