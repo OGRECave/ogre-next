@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "OgreImageResampler.h"
 #include "OgreImageDownsampler.h"
 #include "OgreResourceGroupManager.h"
+#include "OgreProfiler.h"
 
 namespace Ogre {
     ImageCodec::~ImageCodec() {
@@ -238,6 +239,7 @@ namespace Ogre {
         PixelFormat eFormat, bool autoDelete, 
         size_t numFaces, uint8 numMipMaps)
     {
+        OgreProfileExhaustive( "Image::loadDynamicImage" );
 
         freeMemory();
         // Set image metadata
@@ -275,6 +277,7 @@ namespace Ogre {
         PixelFormat eFormat,
         size_t numFaces, size_t numMipMaps)
     {
+        OgreProfileExhaustive( "Image::loadRawData" );
 
         size_t size = calculateSize(numMipMaps, numFaces, uWidth, uHeight, uDepth, eFormat);
         if (size != stream->size())
@@ -295,6 +298,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------------
     Image & Image::load(const String& strFileName, const String& group)
     {
+        OgreProfileExhaustive( "Image::load( string )" );
 
         String strExt;
 
@@ -311,6 +315,8 @@ namespace Ogre {
     //-----------------------------------------------------------------------------
     void Image::save(const String& filename)
     {
+        OgreProfileExhaustive( "Image::save" );
+
         if( !mBuffer )
         {
             OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, "No image data loaded", 
@@ -353,6 +359,8 @@ namespace Ogre {
     //---------------------------------------------------------------------
     DataStreamPtr Image::encode(const String& formatextension)
     {
+        OgreProfileExhaustive( "Image::encode" );
+
         if( !mBuffer )
         {
             OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, "No image data loaded", 
@@ -381,6 +389,8 @@ namespace Ogre {
     //-----------------------------------------------------------------------------
     Image & Image::load(DataStreamPtr& stream, const String& type )
     {
+        OgreProfileExhaustive( "Image::load" );
+
         freeMemory();
 
         Codec * pCodec = 0;
@@ -560,6 +570,8 @@ namespace Ogre {
     //-----------------------------------------------------------------------------
     void Image::resize(ushort width, ushort height, Filter filter)
     {
+        OgreProfileExhaustive( "Image::resize" );
+
         // resizing dynamic images is not supported
         assert(mAutoDelete);
         assert(mDepth == 1);
@@ -582,6 +594,8 @@ namespace Ogre {
     //-----------------------------------------------------------------------------
     bool Image::generateMipmaps( bool gammaCorrected, Filter filter )
     {
+        OgreProfileExhaustive( "Image::generateMipmaps" );
+
         // resizing dynamic images is not supported
         assert(mAutoDelete);
         assert(mDepth == 1);
@@ -807,6 +821,8 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     void Image::scale(const PixelBox &src, const PixelBox &scaled, Filter filter) 
     {
+        OgreProfileExhaustive( "Image::scale" );
+
         assert(PixelUtil::isAccessible(src.format));
         assert(PixelUtil::isAccessible(scaled.format));
         MemoryDataStreamPtr buf; // For auto-delete
@@ -1014,6 +1030,8 @@ namespace Ogre {
     //---------------------------------------------------------------------
     Image & Image::combineTwoImagesAsRGBA(const Image& rgb, const Image& alpha, PixelFormat fmt)
     {
+        OgreProfileExhaustive( "Image::combineTwoImagesAsRGBA" );
+
         // the images should be the same size, have the same number of mipmaps
         if (rgb.getWidth() != alpha.getWidth() ||
             rgb.getHeight() != alpha.getHeight() ||

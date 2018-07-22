@@ -40,6 +40,7 @@ THE SOFTWARE.
 #include "OgreRenderSystem.h"
 #include "OgreTextureFilters.h"
 #include "Cubemaps/OgreCubemapProbe.h"
+#include "OgreProfiler.h"
 
 #define _OgreHlmsTextureBaseClassExport _OgreHlmsPbsExport
 #define OGRE_HLMS_TEXTURE_BASE_CLASS HlmsPbsBaseTextureDatablock

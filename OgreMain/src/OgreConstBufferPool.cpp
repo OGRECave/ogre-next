@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "Vao/OgreConstBufferPacked.h"
 #include "Vao/OgreTexBufferPacked.h"
 #include "OgreRenderSystem.h"
+#include "OgreProfiler.h"
 
 namespace Ogre
 {
@@ -131,6 +132,8 @@ namespace Ogre
     void ConstBufferPool::uploadDirtyDatablocksImpl(void)
     {
         assert( !mDirtyUsersTmp.empty() );
+
+        OgreProfileExhaustive( "ConstBufferPool::uploadDirtyDatablocks" );
 
         const size_t materialSizeInGpu = mBytesPerSlot;
         const size_t extraBufferSizeInGpu = mExtraBufferParams.bytesPerSlot;

@@ -62,6 +62,9 @@ THE SOFTWARE.
 #include "CommandBuffer/OgreCbTexture.h"
 #include "CommandBuffer/OgreCbShaderBuffer.h"
 
+
+#include "OgreProfiler.h"
+
 namespace Ogre
 {
 
@@ -146,6 +149,8 @@ namespace Ogre
                                                         uint32 finalHash,
                                                         const QueuedRenderable &queuedRenderable )
     {
+        OgreProfileExhaustive( "HlmsUnlit::createShaderCacheEntry" );
+
         const HlmsCache *retVal = Hlms::createShaderCacheEntry( renderableHash, passCache, finalHash,
                                                                 queuedRenderable );
 
@@ -534,6 +539,8 @@ namespace Ogre
     HlmsCache HlmsUnlit::preparePassHash( const CompositorShadowNode *shadowNode, bool casterPass,
                                           bool dualParaboloid, SceneManager *sceneManager )
     {
+        OgreProfileExhaustive( "HlmsUnlit::preparePassHash" );
+
         mSetProperties.clear();
 
         //Set the properties and create/retrieve the cache.
