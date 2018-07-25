@@ -137,20 +137,24 @@ namespace Ogre
         mResetRequest = true;
     }
     //-----------------------------------------------------------------------------------
-    void OfflineProfiler::PerThreadData::profileBegin( const char *name )
+    void OfflineProfiler::PerThreadData::reset(void)
+    {
+        destroyAllPools();
+        createNewPool();
+        mTotalAccumTime = 0;
+        mCurrentSample = allocateSample( 0 );
+        mRoot = mCurrentSample;
+        mResetRequest = false;
+    }
+    //-----------------------------------------------------------------------------------
+    void OfflineProfiler::PerThreadData::profileBegin( const char *name,
+                                                       ProfileSampleFlags::ProfileSampleFlags flags )
     {
         if( mPaused != mPauseRequest )
             mPaused = mPauseRequest;
 
         if( mResetRequest )
-        {
-            destroyAllPools();
-            createNewPool();
-            mTotalAccumTime = 0;
-            mCurrentSample = allocateSample( 0 );
-            mRoot = mCurrentSample;
-            mResetRequest = false;
-        }
+            reset();
 
         if( mPaused )
             return;
@@ -161,7 +165,7 @@ namespace Ogre
         ProfileSample *sample = 0;
 
         //Look if our last sibling has the same name (i.e. similar behavior to RMTSF_Aggregate)
-        if( !mCurrentSample->children.empty() )
+        if( flags == ProfileSampleFlags::Aggregate && !mCurrentSample->children.empty() )
         {
             if( mCurrentSample->children.back()->nameHash == nameHash )
                 sample = mCurrentSample->children.back();
@@ -299,6 +303,8 @@ namespace Ogre
 
         outCsvStringPerFrame.swap( csvString0 );
         outCsvStringAccum.swap( csvString1 );
+
+        reset();
         mMutex.unlock();
     }
     //-----------------------------------------------------------------------------------
@@ -350,14 +356,30 @@ namespace Ogre
         return mPaused;
     }
     //-----------------------------------------------------------------------------------
-    void OfflineProfiler::profileBegin( const char *name )
+    void OfflineProfiler::reset(void)
+    {
+        mMutex.lock();
+
+        PerThreadDataArray::const_iterator itor = mThreadData.begin();
+        PerThreadDataArray::const_iterator end  = mThreadData.end();
+
+        while( itor != end )
+        {
+            (*itor)->requestReset();
+            ++itor;
+        }
+
+        mMutex.unlock();
+    }
+    //-----------------------------------------------------------------------------------
+    void OfflineProfiler::profileBegin( const char *name, ProfileSampleFlags::ProfileSampleFlags flags )
     {
         PerThreadData *perThreadData = reinterpret_cast<PerThreadData*>( Threads::GetTls( mTlsHandle ) );
 
         if( !perThreadData )
             perThreadData = allocatePerThreadData();
 
-        perThreadData->profileBegin( name );
+        perThreadData->profileBegin( name, flags );
     }
     //-----------------------------------------------------------------------------------
     void OfflineProfiler::profileEnd(void)

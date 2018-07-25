@@ -43,6 +43,7 @@ Ogre-dependent is in the visualization/logging routines and the use of the Timer
 
 #include "OgrePrerequisites.h"
 #include "OgreSingleton.h"
+#include "OgreProfilerCommon.h"
 #if OGRE_PROFILING == OGRE_PROFILING_REMOTERY
     #include "Remotery.h"
 #elif OGRE_PROFILING == OGRE_PROFILING_INTERNAL_OFFLINE
@@ -52,19 +53,21 @@ Ogre-dependent is in the visualization/logging routines and the use of the Timer
 
 #if OGRE_PROFILING == OGRE_PROFILING_INTERNAL
 #   define OgreProfilerUseStableMarkers true
-#   define OgreProfileL2( a, line ) Ogre::Profile _OgreProfileInstance##line( (a) )
+#   define OgreProfileL2( a, line ) Ogre::Profile _OgreProfileInstance##line( (a), ProfileSampleFlags::FlagsNone )
 #   define OgreProfileL( a, line ) OgreProfileL2( a, line )
 #   define OgreProfile( a ) OgreProfileL( a, __LINE__ )
 #   if OGRE_PROFILING_EXHAUSTIVE
 #       define OgreProfileExhaustive( a )           OgreProfile( a )
+#       define OgreProfileExhaustiveAggr( a )       OgreProfile( a )
 #   endif
 #   define OgreProfileBegin( a ) Ogre::Profiler::getSingleton().beginProfile( (a) )
 #   define OgreProfileBeginDynamic( a ) OgreProfileBegin( a )
 #   define OgreProfileBeginDynamicHashed( a, hash ) OgreProfileBegin( a )
 #   define OgreProfileEnd( a ) Ogre::Profiler::getSingleton().endProfile( (a) )
-#   define OgreProfileGroupL2( a, g, line ) Ogre::Profile _OgreProfileInstance##line( (a), (g) )
-#   define OgreProfileGroupL( a, g, line ) OgreProfileGroupL2( a, g, line )
-#   define OgreProfileGroup( a, g ) OgreProfileGroupL( a, g, __LINE__ )
+#   define OgreProfileGroupL2( a, g, f, line ) Ogre::Profile _OgreProfileInstance##line( (a), (f), (g) )
+#   define OgreProfileGroupL( a, g, f, line ) OgreProfileGroupL2( a, g, f, line )
+#   define OgreProfileGroup( a, g ) OgreProfileGroupL( a, g, ProfileSampleFlags::FlagsNone, __LINE__ )
+#   define OgreProfileGroupAggregate( a, g ) OgreProfileGroupL( a, g, ProfileSampleFlags::Aggregate, __LINE__ )
 #   define OgreProfileBeginGroup( a, g ) Ogre::Profiler::getSingleton().beginProfile( (a), (g) )
 #   define OgreProfileEndGroup( a, g ) Ogre::Profiler::getSingleton().endProfile( (a), (g) )
 #   define OgreProfileBeginGPUEvent( g ) Ogre::Profiler::getSingleton().beginGPUEvent(g)
@@ -80,11 +83,11 @@ namespace Ogre
     class RemoteryProfile;
 }
 #   define OgreProfilerUseStableMarkers Ogre::Profiler::getSingleton().getUseStableMarkers()
-#   define OgreProfileL2( a, line )                                                 \
+#   define OgreProfileL2( a, f, line )                                                 \
     static rmtU32 ogre_rmt_sample_hash_##line = 0;                                  \
-    Ogre::RemoteryProfile _OgreRemoteryProfileInstance##line( (a), ogre_rmt_sample_hash_##line );
-#   define OgreProfileL( a, line ) OgreProfileL2( a, line )
-#   define OgreProfile( a ) OgreProfileL( a, __LINE__ )
+    Ogre::RemoteryProfile _OgreRemoteryProfileInstance##line( (a), ogre_rmt_sample_hash_##line, (f) );
+#   define OgreProfileL( a, f, line ) OgreProfileL2( a, f, line )
+#   define OgreProfile( a ) OgreProfileL( a, ProfileSampleFlags::FlagsNone, __LINE__ )
 #   define Ogre_rmt_BeginCPUSampleL2( name, flags, line )                           \
     RMT_OPTIONAL(RMT_ENABLED, {                                                     \
         static rmtU32 rmt_sample_hash_##line = 0;                                   \
@@ -92,6 +95,7 @@ namespace Ogre
     })
 #   if OGRE_PROFILING_EXHAUSTIVE
 #       define OgreProfileExhaustive( a )           OgreProfile( a )
+#       define OgreProfileExhaustiveAggr( a )       OgreProfileL( a, ProfileSampleFlags::Aggregate, __LINE__ )
 #   endif
 #   define Ogre_rmt_BeginCPUSampleL( name, flags, line ) Ogre_rmt_BeginCPUSampleL2( name, flags, line )
 #   define OgreProfileBegin( name ) Ogre_rmt_BeginCPUSampleL( name, RMTSF_Aggregate, __LINE__ )
@@ -102,6 +106,7 @@ namespace Ogre
 #   define OgreProfileEnd( a ) RMT_OPTIONAL(RMT_ENABLED, _rmt_EndCPUSample())
 
 #   define OgreProfileGroup( a, g ) OgreProfile( a )
+#   define OgreProfileGroupAggregate( a, g )    OgreProfileL( a, ProfileSampleFlags::Aggregate, __LINE__ )
 #   define OgreProfileBeginGroup( a, g ) OgreProfileBegin( a )
 #   define OgreProfileEndGroup( a, g ) OgreProfileEnd( a )
 #   define OgreProfileBeginGPUEvent( g ) Ogre::Profiler::getSingleton().beginGPUEvent(g)
@@ -124,9 +129,9 @@ namespace Ogre
     class RemoteryProfile
     {
     public:
-        RemoteryProfile( const char *name, rmtU32 &hash )
+        RemoteryProfile( const char *name, rmtU32 &hash, ProfileSampleFlags::ProfileSampleFlags flags )
         {
-            _rmt_BeginCPUSample( name, RMTSF_Aggregate, &hash );
+            _rmt_BeginCPUSample( name, (rmtSampleFlags)flags, &hash );
         }
         ~RemoteryProfile()
         {
@@ -136,17 +141,19 @@ namespace Ogre
 }
 #elif OGRE_PROFILING == OGRE_PROFILING_INTERNAL_OFFLINE
 #   define OgreProfilerUseStableMarkers         Ogre::Profiler::getSingleton().getUseStableMarkers()
-#   define OgreProfileL2( a, line )             Ogre::Profile _OgreProfileInstance##line( (a) )
-#   define OgreProfileL( a, line )              OgreProfileL2( a, line )
-#   define OgreProfile( a )                     OgreProfileL( a, __LINE__ )
+#   define OgreProfileL2( a, f, line )          Ogre::Profile _OgreProfileInstance##line( (a), (f) )
+#   define OgreProfileL( a, f, line )           OgreProfileL2( a, f, line )
+#   define OgreProfile( a )                     OgreProfileL( a, ProfileSampleFlags::FlagsNone, __LINE__ )
 #   if OGRE_PROFILING_EXHAUSTIVE
-#       define OgreProfileExhaustive( a )           OgreProfile( a )
+#       define OgreProfileExhaustive( a )       OgreProfile( a )
+#       define OgreProfileExhaustiveAggr( a )   OgreProfileL( a, ProfileSampleFlags::Aggregate, __LINE__ )
 #   endif
 #   define OgreProfileBegin( a )                Ogre::Profiler::getSingleton().beginProfile( (a) )
 #   define OgreProfileBeginDynamic( a )         OgreProfileBegin( a )
 #   define OgreProfileBeginDynamicHashed( a, hash ) OgreProfileBegin( a )
 #   define OgreProfileEnd( a )                  Ogre::Profiler::getSingleton().endProfile( (a) )
 #   define OgreProfileGroup( a, g )             OgreProfile( a )
+#   define OgreProfileGroupAggregate( a, g )    OgreProfileL( a, ProfileSampleFlags::Aggregate, __LINE__ )
 #   define OgreProfileBeginGroup( a, g )        OgreProfileBegin( a )
 #   define OgreProfileEndGroup( a, g )          OgreProfileEnd( a )
 #   define OgreProfileBeginGPUEvent( e )
@@ -159,12 +166,14 @@ namespace Ogre
 #else
 #   define OgreProfilerUseStableMarkers true
 #   define OgreProfileExhaustive( a )
+#   define OgreProfileExhaustiveAggr( a )
 #   define OgreProfile( a )
 #   define OgreProfileBegin( a )
 #   define OgreProfileBeginDynamic( a )
 #   define OgreProfileBeginDynamicHashed( a, hash )
 #   define OgreProfileEnd( a )
 #   define OgreProfileGroup( a, g ) 
+#   define OgreProfileGroupAggregate( a, g )
 #   define OgreProfileBeginGroup( a, g ) 
 #   define OgreProfileEndGroup( a, g ) 
 #   define OgreProfileBeginGPUEvent( e )
@@ -178,6 +187,7 @@ namespace Ogre
 
 #if OGRE_PROFILING && !OGRE_PROFILING_EXHAUSTIVE
 #   define OgreProfileExhaustive( a )
+#   define OgreProfileExhaustiveAggr( a )
 #endif
 
 namespace Ogre {
@@ -218,7 +228,8 @@ namespace Ogre {
     {
 
         public:
-            Profile(const String& profileName, uint32 groupID = (uint32)OGREPROF_USER_DEFAULT);
+            Profile( const String& profileName, ProfileSampleFlags::ProfileSampleFlags flags,
+                     uint32 groupID = (uint32)OGREPROF_USER_DEFAULT );
             ~Profile();
 
         protected:
@@ -419,7 +430,9 @@ namespace Ogre {
             @param profileName Must be unique and must not be an empty string
             @param groupID A profile group identifier, which can allow you to mask profiles
             */
-            void beginProfile(const String& profileName, uint32 groupID = (uint32)OGREPROF_USER_DEFAULT);
+            void beginProfile( const String& profileName, uint32 groupID = (uint32)OGREPROF_USER_DEFAULT,
+                               ProfileSampleFlags::ProfileSampleFlags flags=ProfileSampleFlags::
+                                                                            FlagsNone );
 
             /** Ends a profile
             @remarks 
