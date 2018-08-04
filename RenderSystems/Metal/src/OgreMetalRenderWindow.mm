@@ -105,8 +105,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalRenderWindow::windowMovedOrResized(void)
     {
-        if( mWidth != mMetalLayer.drawableSize.width ||
-            mHeight != mMetalLayer.drawableSize.height )
+        if( (mMetalLayer.drawableSize.width > 0 && mWidth != mMetalLayer.drawableSize.width) ||
+            (mMetalLayer.drawableSize.height > 0 && mHeight != mMetalLayer.drawableSize.height) )
         {
             mWidth  = mMetalLayer.drawableSize.width;
             mHeight = mMetalLayer.drawableSize.height;
@@ -121,6 +121,7 @@ namespace Ogre
                         width: mWidth height: mHeight mipmapped: NO];
                 desc.textureType = MTLTextureType2DMultisample;
                 desc.sampleCount = mFSAA;
+                desc.usage = MTLTextureUsageRenderTarget;
 
                 mMsaaTex = [mOwnerDevice->mDevice newTextureWithDescriptor: desc];
                 mColourAttachmentDesc.texture = mMsaaTex;
