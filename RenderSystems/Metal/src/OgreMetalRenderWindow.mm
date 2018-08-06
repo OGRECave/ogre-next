@@ -59,8 +59,14 @@ namespace Ogre
         {
             // set the metal layer to the drawable size in case orientation or size changes
             CGSize drawableSize = CGSizeMake(mMetalView.bounds.size.width, mMetalView.bounds.size.height);
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS  
             drawableSize.width  *= mMetalView.layer.contentsScale;
             drawableSize.height *= mMetalView.layer.contentsScale;
+#else
+            NSScreen* screen = mMetalView.window.screen ?: [NSScreen mainScreen];
+            drawableSize.width *= screen.backingScaleFactor;
+            drawableSize.height *= screen.backingScaleFactor;
+#endif
             mMetalLayer.drawableSize = drawableSize;
 
             // Resize anything if needed
@@ -344,6 +350,6 @@ namespace Ogre
     //-------------------------------------------------------------------------
     float MetalRenderWindow::getViewPointToPixelScale() const
     {
-        return mMetalView.layer.contentsScale;
+        return 1.0;
     }
 }

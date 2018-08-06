@@ -36,6 +36,7 @@ THE SOFTWARE.
 #include "OgreLogManager.h"
 
 #include "OgrePass.h"
+#include "OgreProfiler.h"
 
 namespace Ogre
 {
@@ -101,6 +102,7 @@ namespace Ogre
         mName( name ),
         mTextureHash( 0 ),
         mType( creator->getType() ),
+        mIgnoreFlushRenderables( false ),
         mAlphaTestCmp( CMPF_ALWAYS_PASS ),
         mAlphaTestThreshold( 0.5f ),
         mShadowConstantBias( 0.01f )
@@ -184,6 +186,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     HlmsDatablock* HlmsDatablock::clone( String name ) const
     {
+        OgreProfileExhaustive( "HlmsDatablock::clone" );
+
         HlmsDatablock *datablock = mCreator->createDatablock( name, name,
                                                               HlmsMacroblock(), HlmsBlendblock(),
                                                               HlmsParamVec() );
@@ -210,6 +214,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsDatablock::setMacroblock( const HlmsMacroblock &macroblock, bool casterBlock )
     {
+        OgreProfileExhaustive( "HlmsDatablock::setMacroblockRef" );
+
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
 
         const HlmsMacroblock *oldBlock = mMacroblock[casterBlock];
@@ -221,6 +227,7 @@ namespace Ogre
 
         if( !casterBlock )
         {
+            mIgnoreFlushRenderables = true;
             bool useBackFaces = mCreator->getHlmsManager()->getShadowMappingUseBackFaces();
 
             if( useBackFaces && macroblock.mCullMode != CULL_NONE )
@@ -234,17 +241,23 @@ namespace Ogre
             {
                 setMacroblock( mMacroblock[0], true );
             }
+            mIgnoreFlushRenderables = false;
         }
 
-        //Force the flush. It's tricky to check if we need this because the new block may
-        //be different but be assigned a different ID (old one's API construct was already
-        //destroyed) or be equal but have a different ID. It's not random or chaotic and
-        //there are guarantees, but it's tricky to get it right and not worth it.
-        flushRenderables();
+        if( !mIgnoreFlushRenderables )
+        {
+            //Force the flush. It's tricky to check if we need this because the new block may
+            //be different but be assigned a different ID (old one's API construct was already
+            //destroyed) or be equal but have a different ID. It's not random or chaotic and
+            //there are guarantees, but it's tricky to get it right and not worth it.
+            flushRenderables();
+        }
     }
     //-----------------------------------------------------------------------------------
     void HlmsDatablock::setMacroblock( const HlmsMacroblock *macroblock, bool casterBlock )
     {
+        OgreProfileExhaustive( "HlmsDatablock::setMacroblockPtr" );
+
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
 
         hlmsManager->addReference( macroblock );
@@ -256,6 +269,7 @@ namespace Ogre
 
         if( !casterBlock )
         {
+            mIgnoreFlushRenderables = true;
             bool useBackFaces = mCreator->getHlmsManager()->getShadowMappingUseBackFaces();
 
             if( useBackFaces && macroblock->mCullMode != CULL_NONE )
@@ -269,17 +283,23 @@ namespace Ogre
             {
                 setMacroblock( mMacroblock[0], true );
             }
+            mIgnoreFlushRenderables = false;
         }
 
-        //Force the flush. It's tricky to check if we need this because the new block may
-        //be different but be assigned a different ID (old one's API construct was already
-        //destroyed) or be equal but have a different ID. It's not random or chaotic and
-        //there are guarantees, but it's tricky to get it right and not worth it.
-        flushRenderables();
+        if( !mIgnoreFlushRenderables )
+        {
+            //Force the flush. It's tricky to check if we need this because the new block may
+            //be different but be assigned a different ID (old one's API construct was already
+            //destroyed) or be equal but have a different ID. It's not random or chaotic and
+            //there are guarantees, but it's tricky to get it right and not worth it.
+            flushRenderables();
+        }
     }
     //-----------------------------------------------------------------------------------
     void HlmsDatablock::setBlendblock( const HlmsBlendblock &blendblock, bool casterBlock )
     {
+        OgreProfileExhaustive( "HlmsDatablock::setBlendblockRef" );
+
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
 
         const HlmsBlendblock *oldBlock = mBlendblock[casterBlock];
@@ -290,17 +310,26 @@ namespace Ogre
         updateMacroblockHash( casterBlock );
 
         if( !casterBlock )
+        {
+            mIgnoreFlushRenderables = true;
             setBlendblock( mBlendblock[0], true );
+            mIgnoreFlushRenderables = false;
+        }
 
-        //Force the flush. It's tricky to check if we need this because the new block may
-        //be different but be assigned a different ID (old one's API construct was already
-        //destroyed) or be equal but have a different ID. It's not random or chaotic and
-        //there are guarantees, but it's tricky to get it right and not worth it.
-        flushRenderables();
+        if( !mIgnoreFlushRenderables )
+        {
+            //Force the flush. It's tricky to check if we need this because the new block may
+            //be different but be assigned a different ID (old one's API construct was already
+            //destroyed) or be equal but have a different ID. It's not random or chaotic and
+            //there are guarantees, but it's tricky to get it right and not worth it.
+            flushRenderables();
+        }
     }
     //-----------------------------------------------------------------------------------
     void HlmsDatablock::setBlendblock( const HlmsBlendblock *blendblock, bool casterBlock )
     {
+        OgreProfileExhaustive( "HlmsDatablock::setBlendblockPtr" );
+
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
 
         hlmsManager->addReference( blendblock );
@@ -310,13 +339,20 @@ namespace Ogre
         updateMacroblockHash( casterBlock );
 
         if( !casterBlock )
+        {
+            mIgnoreFlushRenderables = true;
             setBlendblock( mBlendblock[0], true );
+            mIgnoreFlushRenderables = false;
+        }
 
-        //Force the flush. It's tricky to check if we need this because the new block may
-        //be different but be assigned a different ID (old one's API construct was already
-        //destroyed) or be equal but have a different ID. It's not random or chaotic and
-        //there are guarantees, but it's tricky to get it right and not worth it.
-        flushRenderables();
+        if( !mIgnoreFlushRenderables )
+        {
+            //Force the flush. It's tricky to check if we need this because the new block may
+            //be different but be assigned a different ID (old one's API construct was already
+            //destroyed) or be equal but have a different ID. It's not random or chaotic and
+            //there are guarantees, but it's tricky to get it right and not worth it.
+            flushRenderables();
+        }
     }
     //-----------------------------------------------------------------------------------
     void HlmsDatablock::setAlphaTest( CompareFunction compareFunction )
@@ -393,6 +429,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsDatablock::flushRenderables(void)
     {
+        OgreProfileExhaustiveAggr( "HlmsDatablock::flushRenderables" );
+
         vector<Renderable*>::type::const_iterator itor = mLinkedRenderables.begin();
         vector<Renderable*>::type::const_iterator end  = mLinkedRenderables.end();
 
