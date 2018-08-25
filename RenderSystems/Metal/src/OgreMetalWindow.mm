@@ -232,14 +232,23 @@ namespace Ogre
 #else
         NSRect frame;
 #endif
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
         frame.origin.x = 0;
         frame.origin.y = 0;
         frame.size.width = mRequestedWidth;
         frame.size.height = mRequestedHeight;
+#else
+        frame = [mWindow.contentView bounds];
+#endif
         mMetalView = [[OgreMetalView alloc] initWithFrame:frame];
 
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
-        [mWindow setContentView:mMetalView];
+        NSView *view = mWindow.contentView;
+        [view addSubview:mMetalView];
+        mResizeObserver = [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidResizeNotification object:mWindow queue:nil usingBlock:^(NSNotification *){
+          mMetalView.frame = [mWindow.contentView bounds];
+        }];
 #endif
 
         mMetalLayer = (CAMetalLayer*)mMetalView.layer;
@@ -262,6 +271,9 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalWindow::destroy()
     {
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
+        [[NSNotificationCenter defaultCenter] removeObserver:mResizeObserver];
+#endif
         mClosed = true;
 
         OGRE_DELETE mTexture;
@@ -312,21 +324,18 @@ namespace Ogre
     {
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
         CGRect frame = mMetalView.frame;
-#else
-        NSRect frame = mMetalView.frame;
-#endif
         frame.origin.x = left;
         frame.origin.y = top;
         mMetalView.frame = frame;
+#else
+        mMetalView.frame = [mWindow.contentView bounds];
+#endif
     }
     //-------------------------------------------------------------------------
     void MetalWindow::requestResolution( uint32 width, uint32 height )
     {
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
         CGRect frame = mMetalView.frame;
-#else
-        NSRect frame = mMetalView.frame;
-#endif
         frame.size.width    = width;
         frame.size.height   = height;
         mMetalView.frame = frame;
@@ -384,3 +393,4 @@ namespace Ogre
         }
     }
 }
+

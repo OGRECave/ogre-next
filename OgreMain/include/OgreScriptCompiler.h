@@ -853,6 +853,7 @@ namespace Ogre
                 ID_MSAA,
                 ID_MSAA_AUTO,
                 ID_EXPLICIT_RESOLVE,
+                ID_RESOLVE,
                 ID_DEPTH_POOL,
                 ID_DEPTH_TEXTURE,
                 ID_DEPTH_FORMAT,
