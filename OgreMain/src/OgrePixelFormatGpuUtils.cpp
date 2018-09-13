@@ -94,6 +94,7 @@ namespace Ogre
             case PFG_EAC_R11_UNORM:
             case PFG_EAC_R11_SNORM:
             case PFG_ETC1_RGB8_UNORM:
+            case PFG_ETC2_RGB8_UNORM:
             case PFG_ETC2_RGB8_UNORM_SRGB:
             case PFG_ETC2_RGB8A1_UNORM:
             case PFG_ETC2_RGB8A1_UNORM_SRGB:
@@ -249,7 +250,8 @@ namespace Ogre
         case PFG_BC1_UNORM: case PFG_BC1_UNORM_SRGB:
         case PFG_BC4_UNORM: case PFG_BC4_SNORM:
         case PFG_EAC_R11_UNORM:     case PFG_EAC_R11_SNORM:
-        case PFG_ETC1_RGB8_UNORM:   case PFG_ETC2_RGB8_UNORM_SRGB:
+        case PFG_ETC1_RGB8_UNORM:
+        case PFG_ETC2_RGB8_UNORM:   case PFG_ETC2_RGB8_UNORM_SRGB:
         case PFG_ETC2_RGB8A1_UNORM: case PFG_ETC2_RGB8A1_UNORM_SRGB:
         case PFG_ATC_RGB:
             return 8u;
