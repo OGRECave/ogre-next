@@ -31,6 +31,7 @@ THE SOFTWARE.
 
 #include "OgreCamera.h"
 #include "OgreMeshManager.h"
+#include "OgreDecal.h"
 #include "OgreEntity.h"
 #include "OgreSubEntity.h"
 #include "OgreItem.h"
@@ -90,6 +91,7 @@ uint32 SceneManager::QUERY_LIGHT_DEFAULT_MASK          = 0x10000000;
 uint32 SceneManager::QUERY_FRUSTUM_DEFAULT_MASK        = 0x08000000;
 //-----------------------------------------------------------------------
 SceneManager::SceneManager( const String& name, size_t numWorkerThreads ) :
+mNumDecals( 0 ),
 mStaticMinDepthLevelDirty( 0 ),
 mStaticEntitiesDirty( true ),
 mPrePassMode( PrePassNone ),
@@ -98,6 +100,9 @@ mName(name),
 mRenderQueue( 0 ),
 mForwardPlusSystem( 0 ),
 mForwardPlusImpl( 0 ),
+mDecalsDiffuseTex( TexturePtr() ),
+mDecalsNormalsTex( TexturePtr() ),
+mDecalsEmissiveTex( TexturePtr() ),
 mCameraInProgress(0),
 mCurrentViewport(0),
 mCurrentPass(0),
@@ -162,6 +167,8 @@ mGpuParamsDirty((uint16)GPV_ALL)
     mNodeMemoryManager[SCENE_DYNAMIC]._setTwin( SCENE_DYNAMIC, &mNodeMemoryManager[SCENE_STATIC] );
     mEntityMemoryManager[SCENE_STATIC]._setTwin( SCENE_STATIC, &mEntityMemoryManager[SCENE_DYNAMIC] );
     mEntityMemoryManager[SCENE_DYNAMIC]._setTwin( SCENE_DYNAMIC, &mEntityMemoryManager[SCENE_STATIC] );
+    mForwardPlusMemoryManager[SCENE_STATIC]._setTwin( SCENE_STATIC, &mForwardPlusMemoryManager[SCENE_DYNAMIC] );
+    mForwardPlusMemoryManager[SCENE_DYNAMIC]._setTwin( SCENE_DYNAMIC, &mForwardPlusMemoryManager[SCENE_STATIC] );
 
     // init sky
     for (size_t i = 0; i < 5; ++i)
@@ -510,6 +517,26 @@ void SceneManager::_removeWireAabb( WireAabb *wireAabb )
                                             mTrackingWireAabbs.end(), wireAabb );
     assert( itor != mTrackingWireAabbs.end() );
     efficientVectorRemove( mTrackingWireAabbs, itor );
+}
+//-----------------------------------------------------------------------
+Decal* SceneManager::createDecal( SceneMemoryMgrTypes sceneType )
+{
+    ++mNumDecals;
+    return static_cast<Decal*>( createMovableObject( DecalFactory::FACTORY_TYPE_NAME,
+                                                     &mForwardPlusMemoryManager[sceneType], 0 ) );
+
+}
+//-----------------------------------------------------------------------
+void SceneManager::destroyDecal( Decal *i )
+{
+    --mNumDecals;
+    destroyMovableObject( i );
+}
+//-----------------------------------------------------------------------
+void SceneManager::destroyAllDecals(void)
+{
+    mNumDecals = 0;
+    destroyAllMovableObjectsByType( DecalFactory::FACTORY_TYPE_NAME );
 }
 //-----------------------------------------------------------------------
 v1::Entity* SceneManager::createEntity( PrefabType ptype, SceneMemoryMgrTypes sceneType )
@@ -932,7 +959,8 @@ void SceneManager::setForward3D( bool bEnable, uint32 width, uint32 height, uint
 }
 //-----------------------------------------------------------------------
 void SceneManager::setForwardClustered( bool bEnable, uint32 width, uint32 height, uint32 numSlices,
-                                        uint32 lightsPerCell, float minDistance, float maxDistance )
+                                        uint32 lightsPerCell, uint32 decalsPerCell,
+                                        float minDistance, float maxDistance )
 {
     OGRE_DELETE mForwardPlusSystem;
     mForwardPlusSystem = 0;
@@ -941,7 +969,7 @@ void SceneManager::setForwardClustered( bool bEnable, uint32 width, uint32 heigh
     if( bEnable )
     {
         mForwardPlusSystem = OGRE_NEW ForwardClustered( width, height, numSlices, lightsPerCell,
-                                                        minDistance, maxDistance, this );
+                                                        decalsPerCell, minDistance, maxDistance, this );
 
         if( mDestRenderSystem )
             mForwardPlusSystem->_changeRenderSystem( mDestRenderSystem );
@@ -1023,6 +1051,27 @@ void SceneManager::prepareRenderQueue(void)
         mLastRenderQueueInvocationCustom = false;
     }*/
 
+}
+//-----------------------------------------------------------------------
+bool SceneManager::_collectForwardPlusObjects( const Camera *camera )
+{
+    bool retVal = false;
+    if( mNumDecals > 0 )
+    {
+        OgreProfile( "Forward+ Decal collect" );
+
+        assert( !mForwardPlusMemoryManagerCullList.empty() );
+        mVisibleObjects.swap( mTmpVisibleObjects );
+        CullFrustumRequest cullRequest( 0, 255,
+                                        mIlluminationStage == IRS_RENDER_TO_TEXTURE, false, false,
+                                        &mForwardPlusMemoryManagerCullList, camera, camera );
+        fireCullFrustumThreads( cullRequest );
+        mVisibleObjects.swap( mTmpVisibleObjects );
+
+        retVal = true;
+    }
+
+    return retVal;
 }
 //-----------------------------------------------------------------------
 void SceneManager::_cullPhase01( Camera* camera, const Camera *lodCamera, Viewport* vp,
@@ -2642,6 +2691,7 @@ void SceneManager::highLevelCull()
     mEntitiesMemoryManagerCulledList.clear();
     mEntitiesMemoryManagerUpdateList.clear();
     mLightsMemoryManagerCulledList.clear();
+    mForwardPlusMemoryManagerCullList.clear();
     mSkeletonAnimManagerCulledList.clear();
     mTagPointNodeMemoryManagerUpdateList.clear();
 
@@ -2649,7 +2699,10 @@ void SceneManager::highLevelCull()
     mEntitiesMemoryManagerCulledList.push_back( &mEntityMemoryManager[SCENE_DYNAMIC] );
     mEntitiesMemoryManagerCulledList.push_back( &mEntityMemoryManager[SCENE_STATIC] );
     mEntitiesMemoryManagerUpdateList.push_back( &mEntityMemoryManager[SCENE_DYNAMIC] );
+    mEntitiesMemoryManagerUpdateList.push_back( &mForwardPlusMemoryManager[SCENE_DYNAMIC] );
     mLightsMemoryManagerCulledList.push_back( &mLightMemoryManager );
+    mForwardPlusMemoryManagerCullList.push_back( &mForwardPlusMemoryManager[SCENE_DYNAMIC] );
+    mForwardPlusMemoryManagerCullList.push_back( &mForwardPlusMemoryManager[SCENE_STATIC] );
     mSkeletonAnimManagerCulledList.push_back( &mSkeletonAnimationManager );
     mTagPointNodeMemoryManagerUpdateList.push_back( &mTagPointNodeMemoryManager );
 
@@ -2657,6 +2710,7 @@ void SceneManager::highLevelCull()
     {
         //Entities have changed
         mEntitiesMemoryManagerUpdateList.push_back( &mEntityMemoryManager[SCENE_STATIC] );
+        mEntitiesMemoryManagerUpdateList.push_back( &mForwardPlusMemoryManager[SCENE_STATIC] );
     }
 
     if( mStaticMinDepthLevelDirty < mNodeMemoryManager[SCENE_STATIC].getNumDepths() )

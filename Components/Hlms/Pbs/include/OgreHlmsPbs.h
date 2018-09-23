@@ -146,6 +146,12 @@ namespace Ogre
         LightArray				mAreaLights;
         bool                    mUsingAreaLightMasks;
 
+        bool                    mUsingLtcMatrix;
+        TexturePtr              mLtcMatrixTexture;
+
+        TexturePtr              mDecalsTextures[3];
+        HlmsSamplerblock const  *mDecalsSamplerblock;
+
         ConstBufferPool::BufferPool const *mLastBoundPool;
 
         bool mHasSeparateSamplers;
@@ -179,6 +185,8 @@ namespace Ogre
         virtual void calculateHashFor( Renderable *renderable, uint32 &outHash, uint32 &outCasterHash );
         virtual void calculateHashForPreCreate( Renderable *renderable, PiecesMap *inOutPieces );
         virtual void calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces );
+
+        virtual void notifyPropertiesMergedPreGenerationStep(void);
 
         static bool requiredPropertyByAlphaTest( IdString propertyName );
 
@@ -214,6 +222,8 @@ namespace Ogre
 
         virtual void postCommandBufferExecution( CommandBuffer *commandBuffer );
         virtual void frameEnded(void);
+
+        void loadLtcMatrix(void);
 
         /** Fill the provided string and string vector with all the sub-folder needed to instantiate
             an HlmsPbs object with the default distribution of the HlmsResources.
