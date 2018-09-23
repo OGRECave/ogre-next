@@ -61,6 +61,7 @@ THE SOFTWARE.
 
 #include "OgreTextureGpu.h"
 #include "OgrePixelFormatGpuUtils.h"
+#include "OgreTextureGpuManager.h"
 
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
     #include "OgrePlanarReflections.h"
@@ -240,6 +241,7 @@ namespace Ogre
         mAreaLightMasksSamplerblock( 0 ),
         mUsingAreaLightMasks( false ),
         mUsingLtcMatrix( false ),
+        mLtcMatrixTexture( 0 ),
         mDecalsSamplerblock( 0 ),
         mLastBoundPool( 0 ),
         mHasSeparateSamplers( 0 ),
@@ -253,6 +255,8 @@ namespace Ogre
         mEsmK( 600u ),
         mAmbientLightMode( AmbientAuto )
     {
+        memset( mDecalsTextures, 0, sizeof( mDecalsTextures ) );
+
         //Override defaults
         mLightGatheringMode = LightGatherForwardPlus;
     }
@@ -1121,9 +1125,9 @@ namespace Ogre
         mGridBuffer             = 0;
         mGlobalLightListBuffer  = 0;
 
-        mDecalsTextures[0].setNull();
-        mDecalsTextures[1].setNull();
-        mDecalsTextures[2].setNull();
+        mDecalsTextures[0] = 0;
+        mDecalsTextures[1] = 0;
+        mDecalsTextures[2] = 0;
 
         if( !casterPass )
         {
@@ -1629,7 +1633,7 @@ namespace Ogre
             size_t areaLightNumber = 0;
             for( size_t idx = mAreaLightsGlobalLightListStart;
                  idx<globalLightList.lights.size() && areaLightNumber < realNumAreaApproxLights; ++idx )
-            {                
+            {
                 if( globalLightList.lights[idx]->getType() == Light::LT_AREA_APPROX )
                 {
                     mAreaLights.push_back( globalLightList.lights[idx] );
@@ -2060,8 +2064,8 @@ namespace Ogre
 
                 if( mUsingLtcMatrix )
                 {
-                    *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit, true,
-                                                                         mLtcMatrixTexture.get(),
+                    *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit,
+                                                                         mLtcMatrixTexture,
                                                                          mAreaLightMasksSamplerblock );
                     ++texUnit;
                 }
@@ -2071,8 +2075,8 @@ namespace Ogre
                     if( mDecalsTextures[i] &&
                         (i != 2u || mDecalsTextures[2] != mDecalsTextures[0]) )
                     {
-                        *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit, true,
-                                                                             mDecalsTextures[i].get(),
+                        *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit,
+                                                                             mDecalsTextures[i],
                                                                              mDecalsSamplerblock );
                         ++texUnit;
                     }
@@ -2446,28 +2450,34 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsPbs::loadLtcMatrix(void)
     {
-        HlmsTextureManager *hlmsTextureManager = mHlmsManager->getTextureManager();
-
         const uint32 poolId = 992044u;
 
-        if( !hlmsTextureManager->hasPoolId( poolId, HlmsTextureManager::TEXTURE_TYPE_NON_COLOR_DATA ) )
-        {
-            hlmsTextureManager->reservePoolId( poolId, HlmsTextureManager::TEXTURE_TYPE_NON_COLOR_DATA,
-                                               64u, 64u, 2u, 0u, PF_FLOAT16_RGBA, false, false );
-        }
-        HlmsTextureManager::TextureLocation texLocation0, texLocation1;
-        texLocation0 = hlmsTextureManager->createOrRetrieveTexture(
-                           "ltcMatrix0.dds", "ltcMatrix0.dds",
-                           HlmsTextureManager::TEXTURE_TYPE_NON_COLOR_DATA, poolId );
-        texLocation1 = hlmsTextureManager->createOrRetrieveTexture(
-                           "ltcMatrix1.dds", "ltcMatrix1.dds",
-                           HlmsTextureManager::TEXTURE_TYPE_NON_COLOR_DATA, poolId );
+        TextureGpuManager *textureGpuManager = mRenderSystem->getTextureGpuManager();
+        if( !textureGpuManager->hasPoolId( poolId, 64u, 64u, 1u, PFG_RGBA16_FLOAT ) )
+            textureGpuManager->reservePoolId( poolId, 64u, 64u, 2u, 1u, PFG_RGBA16_FLOAT );
 
-        OGRE_ASSERT_LOW( texLocation0.texture == texLocation1.texture );
-        OGRE_ASSERT_LOW( texLocation0.xIdx == 0u );
-        OGRE_ASSERT_LOW( texLocation1.xIdx == 1u );
+        TextureGpu *ltcMat0 = textureGpuManager->createOrRetrieveTexture(
+                                  "ltcMatrix0.dds", GpuPageOutStrategy::Discard,
+                                  TextureFlags::AutomaticBatching,
+                                  TextureTypes::Type2D,
+                                  ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME, 0, poolId );
+        TextureGpu *ltcMat1 = textureGpuManager->createOrRetrieveTexture(
+                                  "ltcMatrix1.dds", GpuPageOutStrategy::Discard,
+                                  TextureFlags::AutomaticBatching,
+                                  TextureTypes::Type2D,
+                                  ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME, 0, poolId );
 
-        mLtcMatrixTexture = texLocation0.texture;
+        ltcMat0->scheduleTransitionTo( GpuResidency::Resident );
+        ltcMat1->scheduleTransitionTo( GpuResidency::Resident );
+
+        ltcMat0->waitForMetadata();
+        ltcMat1->waitForMetadata();
+
+        OGRE_ASSERT_LOW( ltcMat0->getTexturePool() == ltcMat1->getTexturePool() );
+        OGRE_ASSERT_LOW( ltcMat0->getInternalSliceStart() == 0u );
+        OGRE_ASSERT_LOW( ltcMat1->getInternalSliceStart() == 1u );
+
+        mLtcMatrixTexture = ltcMat0->getTexturePool()->masterTexture;
     }
     //-----------------------------------------------------------------------------------
     void HlmsPbs::getDefaultPaths( String &outDataFolderPath, StringVector &outLibraryFoldersPaths )

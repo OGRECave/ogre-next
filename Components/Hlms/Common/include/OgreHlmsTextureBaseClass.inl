@@ -543,7 +543,7 @@ namespace Ogre
     {
         for( int i=0; i<OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
         {
-            if( mTextures[i] && mTextures[i]->getNextResidencyStatus() != GpuResidency::Resident )
+            if( mTextures[i] )
                 mTextures[i]->scheduleTransitionTo( GpuResidency::Resident );
         }
     }

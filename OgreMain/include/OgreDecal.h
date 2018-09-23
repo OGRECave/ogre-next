@@ -31,6 +31,7 @@ THE SOFTWARE.
 
 #include "OgreMovableObject.h"
 #include "OgreRenderable.h"
+#include "OgreTextureGpuListener.h"
 
 namespace Ogre
 {
@@ -75,12 +76,12 @@ namespace Ogre
         will be overwritten instead, and the metalness value of the decal will
         act as a fresnel value, overwriting the original fresnel.
     */
-    class _OgreExport Decal : public MovableObject
+    class _OgreExport Decal : public MovableObject, public TextureGpuListener
     {
     protected:
-        TexturePtr  mDiffuseTexture;
-        TexturePtr  mNormalTexture;
-        TexturePtr  mEmissiveTexture;
+        TextureGpu  *mDiffuseTexture;
+        TextureGpu  *mNormalTexture;
+        TextureGpu  *mEmissiveTexture;
 
     public:
         uint16 mDiffuseIdx;
@@ -94,13 +95,13 @@ namespace Ogre
         Decal( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager* manager );
         virtual ~Decal();
 
-        void setDiffuseTexture( const TexturePtr &diffuseTex, uint16 diffuseIdx );
-        void setNormalTexture( const TexturePtr &normalTex, uint16 normalIdx );
-        void setEmissiveTexture( const TexturePtr &emissiveTex, uint16 emissiveIdx );
+        void setDiffuseTexture( TextureGpu *diffuseTex );
+        void setNormalTexture( TextureGpu *normalTex );
+        void setEmissiveTexture( TextureGpu *emissiveTex );
 
-        const TexturePtr& getDiffuseTexture(void) const;
-        const TexturePtr& getNormalTexture(void) const;
-        const TexturePtr& getEmissiveTexture(void) const;
+        TextureGpu* getDiffuseTexture(void) const;
+        TextureGpu* getNormalTexture(void) const;
+        TextureGpu* getEmissiveTexture(void) const;
 
         /** When diffuse textures are used (globally), the alpha component of the diffuse texture
             will be used to mask all the other textures (e.g. normal & emissive maps).
@@ -126,6 +127,7 @@ namespace Ogre
 
         /// Decals only allow ForwardPlusBase::MinDecalRq <= queueID < ForwardPlusBase::MaxDecalRq
         virtual void setRenderQueueGroup(uint8 queueID);
+        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason );
     };
 
     class _OgreExport DecalFactory : public MovableObjectFactory

@@ -1164,7 +1164,7 @@ namespace Ogre {
 
                     if( mFramePtrs[frame]->getNextResidencyStatus() != GpuResidency::Resident )
                     {
-                        mFramePtrs[frame]->scheduleTransitionTo( GpuResidency::Resident );
+                        mFramePtrs[frame]->unsafeScheduleTransitionTo( GpuResidency::Resident );
                         mFramePtrs[frame]->waitForData();
                     }
 
@@ -1188,7 +1188,7 @@ namespace Ogre {
                 // Just ensure existing pointer is loaded
                 if( mFramePtrs[frame]->getNextResidencyStatus() != GpuResidency::Resident )
                 {
-                    mFramePtrs[frame]->scheduleTransitionTo( GpuResidency::Resident );
+                    mFramePtrs[frame]->unsafeScheduleTransitionTo( GpuResidency::Resident );
                     mFramePtrs[frame]->waitForData();
                 }
             }

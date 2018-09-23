@@ -40,6 +40,9 @@ namespace Ogre
 {
     Decal::Decal( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager ) :
         MovableObject( id, objectMemoryManager, manager, 0 ),
+        mDiffuseTexture( 0 ),
+        mNormalTexture( 0 ),
+        mEmissiveTexture( 0 ),
         mDiffuseIdx( 0 ),
         mNormalMapIdx( 0 ),
         mEmissiveIdx( 0 ),
@@ -60,37 +63,90 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     Decal::~Decal()
     {
+        if( mDiffuseTexture )
+        {
+            mDiffuseTexture->removeListener( this );
+            mDiffuseTexture = 0;
+        }
+
+        if( mNormalTexture )
+        {
+            mNormalTexture->removeListener( this );
+            mNormalTexture= 0;
+        }
+
+        if( mEmissiveTexture )
+        {
+            mEmissiveTexture->removeListener( this );
+            mEmissiveTexture= 0;
+        }
     }
     //-----------------------------------------------------------------------------------
-    void Decal::setDiffuseTexture( const TexturePtr &diffuseTex, uint16 diffuseIdx )
+    void Decal::setDiffuseTexture( TextureGpu *diffuseTex )
     {
-        mDiffuseTexture = diffuseTex;
-        mDiffuseIdx = diffuseIdx;
+        if( mDiffuseTexture )
+            mDiffuseTexture->removeListener( this );
+        if( diffuseTex )
+        {
+            diffuseTex->addListener( this );
+            diffuseTex->scheduleTransitionTo( GpuResidency::Resident );
+            mDiffuseTexture = diffuseTex;
+            mDiffuseIdx = diffuseTex->getInternalSliceStart();
+        }
+        else
+        {
+            mDiffuseTexture = 0;
+            mDiffuseIdx = 0;
+        }
     }
     //-----------------------------------------------------------------------------------
-    const TexturePtr& Decal::getDiffuseTexture(void) const
+    TextureGpu* Decal::getDiffuseTexture(void) const
     {
         return mDiffuseTexture;
     }
     //-----------------------------------------------------------------------------------
-    void Decal::setNormalTexture( const TexturePtr &normalTex, uint16 normalIdx )
+    void Decal::setNormalTexture( TextureGpu *normalTex )
     {
-        mNormalTexture = normalTex;
-        mNormalMapIdx = normalIdx;
+        if( mNormalTexture )
+            mNormalTexture->removeListener( this );
+        if( normalTex )
+        {
+            normalTex->addListener( this );
+            normalTex->scheduleTransitionTo( GpuResidency::Resident );
+            mNormalTexture = normalTex;
+            mNormalMapIdx = normalTex->getInternalSliceStart();
+        }
+        else
+        {
+            mNormalTexture = 0;
+            mNormalMapIdx = 0;
+        }
     }
     //-----------------------------------------------------------------------------------
-    const TexturePtr& Decal::getNormalTexture(void) const
+    TextureGpu* Decal::getNormalTexture(void) const
     {
         return mNormalTexture;
     }
     //-----------------------------------------------------------------------------------
-    void Decal::setEmissiveTexture( const TexturePtr &emissiveTex, uint16 emissiveIdx )
+    void Decal::setEmissiveTexture( TextureGpu *emissiveTex )
     {
-        mEmissiveTexture = emissiveTex;
-        mEmissiveIdx = emissiveIdx;
+        if( mEmissiveTexture )
+            mEmissiveTexture->removeListener( this );
+        if( emissiveTex )
+        {
+            emissiveTex->addListener( this );
+            emissiveTex->scheduleTransitionTo( GpuResidency::Resident );
+            mEmissiveTexture = emissiveTex;
+            mEmissiveIdx = emissiveTex->getInternalSliceStart();
+        }
+        else
+        {
+            mEmissiveTexture = 0;
+            mEmissiveIdx = 0;
+        }
     }
     //-----------------------------------------------------------------------------------
-    const TexturePtr& Decal::getEmissiveTexture(void) const
+    TextureGpu* Decal::getEmissiveTexture(void) const
     {
         return mEmissiveTexture;
     }
@@ -125,6 +181,40 @@ namespace Ogre
         assert( queueID >= ForwardPlusBase::MinDecalRq && queueID <= ForwardPlusBase::MaxDecalRq &&
                 "RenderQueue IDs > 128 are reserved for other Forward+ objects" );
         MovableObject::setRenderQueueGroup( queueID );
+    }
+    //-----------------------------------------------------------------------------------
+    void Decal::notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason )
+    {
+        if( reason == TextureGpuListener::GainedResidency )
+        {
+            if( texture == mDiffuseTexture )
+                mDiffuseIdx = mDiffuseTexture->getInternalTextureType();
+            if( texture == mNormalTexture )
+                mNormalMapIdx = mNormalTexture->getInternalTextureType();
+            if( texture == mEmissiveTexture )
+                mEmissiveIdx = mEmissiveTexture->getInternalTextureType();
+        }
+        else if( reason == TextureGpuListener::Deleted )
+        {
+            if( texture == mDiffuseTexture )
+            {
+                mDiffuseIdx = 0;
+                mDiffuseTexture->removeListener( this );
+                mDiffuseTexture = 0;
+            }
+            if( texture == mNormalTexture )
+            {
+                mNormalMapIdx = 0;
+                mNormalTexture->removeListener( this );
+                mNormalTexture = 0;
+            }
+            if( texture == mEmissiveTexture )
+            {
+                mEmissiveIdx = 0;
+                mEmissiveTexture->removeListener( this );
+                mEmissiveTexture = 0;
+            }
+        }
     }
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------

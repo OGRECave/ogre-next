@@ -147,9 +147,9 @@ namespace Ogre
         bool                    mUsingAreaLightMasks;
 
         bool                    mUsingLtcMatrix;
-        TexturePtr              mLtcMatrixTexture;
+        TextureGpu              *mLtcMatrixTexture;
 
-        TexturePtr              mDecalsTextures[3];
+        TextureGpu              *mDecalsTextures[3];
         HlmsSamplerblock const  *mDecalsSamplerblock;
 
         ConstBufferPool::BufferPool const *mLastBoundPool;

@@ -87,6 +87,18 @@ namespace Ogre
         };
     }
 
+    namespace CommonTextureTypes
+    {
+        enum CommonTextureTypes
+        {
+            Diffuse,
+            NormalMap,
+            Monochrome,
+            EnvMap,
+            NonColourData
+        };
+    }
+
     class _OgreExport TextureGpuManager : public ResourceAlloc
     {
     public:
@@ -354,6 +366,13 @@ namespace Ogre
         /// Do not use directly. See TextureGpu::waitForMetadata & TextureGpu::waitForDataReady
         void _waitFor( TextureGpu *texture, bool metadataOnly );
 
+        /// Reserves and preallocates a pool with the given parameters
+        void reservePoolId( uint32 poolId, uint32 width, uint32 height,
+                            uint32 numSlices, uint8 numMipmaps, PixelFormatGpu pixelFormat );
+
+        bool hasPoolId( uint32 poolId, uint32 width, uint32 height,
+                        uint8 numMipmaps, PixelFormatGpu pixelFormat ) const;
+
         /**
         @param name
             Name of the resource. For example TreeWood.png
@@ -379,6 +398,12 @@ namespace Ogre
         @param resourceGroup
             Optional, but required if you want to load files from disk
             (or anything provided by the ResourceGroupManager)
+        @param poolId
+            Optional. See TextureGpu::setTexturePoolId
+            This parameter informs which pool ID you wish the texture to be assigned for.
+            Note however, if you're using createOrRetrieveTexture and the texture has already been
+            created (i.e. it's being retrieved) then the pool ID parameter will be ignored,
+            as the texture was already created with a pool ID.
         @return
         */
         TextureGpu* createTexture( const String &name,
@@ -386,25 +411,34 @@ namespace Ogre
                                    GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                    uint32 textureFlags, TextureTypes::TextureTypes initialType,
                                    const String &resourceGroup=BLANKSTRING,
-                                   uint32 filters=0 );
+                                   uint32 filters=0,
+                                   uint32 poolId=0 );
         TextureGpu* createTexture( const String &name,
                                    GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                    uint32 textureFlags, TextureTypes::TextureTypes initialType,
                                    const String &resourceGroup=BLANKSTRING,
-                                   uint32 filters=0 );
+                                   uint32 filters=0, uint32 poolId=0 );
         TextureGpu* createOrRetrieveTexture( const String &name,
                                              const String &aliasName,
                                              GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                              uint32 textureFlags,
                                              TextureTypes::TextureTypes initialType,
                                              const String &resourceGroup=BLANKSTRING,
-                                             uint32 filters=0 );
+                                             uint32 filters=0,
+                                             uint32 poolId=0 );
         TextureGpu* createOrRetrieveTexture( const String &name,
                                              GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                              uint32 textureFlags,
                                              TextureTypes::TextureTypes initialType,
                                              const String &resourceGroup=BLANKSTRING,
-                                             uint32 filters=0 );
+                                             uint32 filters=0, uint32 poolId=0 );
+        /// Helper function to call createOrRetrieveTexture with common
+        /// parameters used for 2D diffuse textures loaded from file.
+        TextureGpu* createOrRetrieveTexture( const String &name,
+                                             GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+                                             CommonTextureTypes::CommonTextureTypes type,
+                                             const String &resourceGroup=BLANKSTRING,
+                                             uint32 poolId=0 );
         TextureGpu* findTextureNoThrow( IdString name ) const;
         void destroyTexture( TextureGpu *texture );
 

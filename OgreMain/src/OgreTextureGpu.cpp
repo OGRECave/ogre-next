@@ -60,6 +60,7 @@ namespace Ogre
         mTextureType( initialType ),
         mPixelFormat( PFG_UNKNOWN ),
         mTextureFlags( textureFlags ),
+        mPoolId( 0 ),
         mSysRamCopy( 0 ),
         mTextureManager( textureManager ),
         mTexturePool( 0 )
@@ -132,7 +133,7 @@ namespace Ogre
         return String( desc.c_str() );
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpu::scheduleTransitionTo( GpuResidency::GpuResidency nextResidency )
+    void TextureGpu::unsafeScheduleTransitionTo( GpuResidency::GpuResidency nextResidency )
     {
         mNextResidencyStatus = nextResidency;
         if( isManualTexture() )
@@ -145,6 +146,12 @@ namespace Ogre
             //Schedule transition, we'll be loading from a worker thread.
             mTextureManager->_scheduleTransitionTo( this, nextResidency );
         }
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpu::scheduleTransitionTo( GpuResidency::GpuResidency nextResidency )
+    {
+        if( mNextResidencyStatus != nextResidency )
+            unsafeScheduleTransitionTo( nextResidency );
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::setResolution( uint32 width, uint32 height, uint32 depthOrSlices )
@@ -651,6 +658,12 @@ namespace Ogre
     {
         mTexturePool = newPool;
         mInternalSliceStart = slice;
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpu::setTexturePoolId( uint32 poolId )
+    {
+        OGRE_ASSERT_LOW( mNextResidencyStatus != GpuResidency::Resident );
+        mPoolId = poolId;
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::addListener( TextureGpuListener *listener )

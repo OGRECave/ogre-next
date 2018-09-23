@@ -100,9 +100,9 @@ mName(name),
 mRenderQueue( 0 ),
 mForwardPlusSystem( 0 ),
 mForwardPlusImpl( 0 ),
-mDecalsDiffuseTex( TexturePtr() ),
-mDecalsNormalsTex( TexturePtr() ),
-mDecalsEmissiveTex( TexturePtr() ),
+mDecalsDiffuseTex( 0 ),
+mDecalsNormalsTex( 0 ),
+mDecalsEmissiveTex( 0 ),
 mCameraInProgress(0),
 mCurrentViewport(0),
 mCurrentPass(0),
@@ -992,6 +992,27 @@ void SceneManager::_setPrePassMode( PrePassMode mode, const TextureGpuVec &prepa
     mPrePassTextures = prepassTextures;
     mPrePassDepthTexture = prepassDepthTexture;
     mSsrTexture = ssrTexture;
+}
+//-----------------------------------------------------------------------
+void SceneManager::setDecalsDiffuse( TextureGpu *tex )
+{
+    if( tex )
+        tex->scheduleTransitionTo( GpuResidency::Resident );
+    mDecalsDiffuseTex = tex;
+}
+//-----------------------------------------------------------------------
+void SceneManager::setDecalsNormals( TextureGpu *tex )
+{
+    if( tex )
+        tex->scheduleTransitionTo( GpuResidency::Resident );
+    mDecalsNormalsTex = tex;
+}
+//-----------------------------------------------------------------------
+void SceneManager::setDecalsEmissive( TextureGpu *tex )
+{
+    if( tex )
+        tex->scheduleTransitionTo( GpuResidency::Resident );
+    mDecalsEmissiveTex = tex;
 }
 //-----------------------------------------------------------------------
 void SceneManager::prepareRenderQueue(void)

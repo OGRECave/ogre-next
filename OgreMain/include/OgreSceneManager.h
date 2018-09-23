@@ -416,9 +416,9 @@ namespace Ogre {
         ForwardPlusBase *mForwardPlusSystem;
         ForwardPlusBase *mForwardPlusImpl;
 
-        TexturePtr mDecalsDiffuseTex;
-        TexturePtr mDecalsNormalsTex;
-        TexturePtr mDecalsEmissiveTex;
+        TextureGpu *mDecalsDiffuseTex;
+        TextureGpu *mDecalsNormalsTex;
+        TextureGpu *mDecalsEmissiveTex;
 
         /// Updated every frame, has enough memory to hold all lights.
         /// The order is not deterministic, it depends on the number
@@ -1250,21 +1250,21 @@ namespace Ogre {
         @param tex
             Null pointer to disable diffuse texture for all decals, globablly.
         */
-        void setDecalsDiffuse( const TexturePtr &tex )              { mDecalsDiffuseTex = tex; }
+        void setDecalsDiffuse( TextureGpu *tex );
         /** Sets the decal texture normal maps. Should be RG8_SNORM or BC5_SNORM.
 
             @see    SceneManager::setDecalsDiffuse
         @param tex
             Null pointer to disable normal map textures for all decals, globally.
         */
-        void setDecalsNormals( const TexturePtr &tex )              { mDecalsNormalsTex = tex; }
+        void setDecalsNormals( TextureGpu *tex );
         /// See SceneManager::setDecalsDiffuse. Setting this texture to the same as diffuse
         /// incurs in a performance optimization.
-        void setDecalsEmissive( const TexturePtr &tex )             { mDecalsEmissiveTex = tex; }
+        void setDecalsEmissive( TextureGpu *tex );
 
-        const TexturePtr& getDecalsDiffuse(void) const              { return mDecalsDiffuseTex; }
-        const TexturePtr& getDecalsNormals(void) const              { return mDecalsNormalsTex; }
-        const TexturePtr& getDecalsEmissive(void) const             { return mDecalsEmissiveTex; }
+        TextureGpu* getDecalsDiffuse(void) const                    { return mDecalsDiffuseTex; }
+        TextureGpu* getDecalsNormals(void) const                    { return mDecalsNormalsTex; }
+        TextureGpu* getDecalsEmissive(void) const                   { return mDecalsEmissiveTex; }
 
         /// For internal use.
         /// @see CompositorPassSceneDef::mEnableForwardPlus

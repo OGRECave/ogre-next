@@ -101,7 +101,10 @@ namespace Ogre
             RenderToTexture     = 1u << 1u,
             /// Texture can be used as an UAV
             Uav                 = 1u << 2u,
-            /// Texture can use mipmap autogeneration
+            /// Texture can use mipmap autogeneration. This flag is NOT necessary
+            /// for TextureFilter::TypeGenerateHwMipmaps, as this filter will
+            /// create a temporary resource.
+            /// AllowAutomipmaps is thought for RenderToTexture textures.
             AllowAutomipmaps    = 1u << 3u,
             /// Texture will auto generate mipmaps every time it's dirty, automatically.
             /// Requires AllowAutomipmaps.
@@ -209,6 +212,8 @@ namespace Ogre
 
         /// See TextureFlags::TextureFlags
         uint32      mTextureFlags;
+        /// Used if hasAutomaticBatching() == true
+        uint32		mPoolId;
 
         uint8       *mSysRamCopy;
 
@@ -250,9 +255,16 @@ namespace Ogre
             call _transitionTo & _setNextResidencyStatus directly.
             Once you've called scheduleTransitionTo at least once, calling _transitionTo
             is very dangerous, as there are race conditions.
+
+            scheduleTransitionTo
         @param nextResidency
             The residency to change to.
         */
+        void unsafeScheduleTransitionTo( GpuResidency::GpuResidency nextResidency );
+
+        /// Same as unsafeScheduleTransitionTo, but first checks if we're already
+        /// in the residency state we want to go to, or if it has already
+        /// been scheduled; thus it can be called multiple times
         void scheduleTransitionTo( GpuResidency::GpuResidency nextResidency );
 
         // See isMetadataReady for threadsafety on these functions.
@@ -415,6 +427,28 @@ namespace Ogre
         virtual void _setToDisplayDummyTexture(void) = 0;
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
 
+        /** 2D Texture with automatic batching will be merged with other textures into the
+            same pool as one big 2D Array texture behind the scenes.
+
+            For two textures to be placed in the same pool (assuming it's not full)
+            the following must match:
+                Width, Height, PixelFormat, number of mipmaps, poolID
+
+            Pool ID is an arbitrary value with no actual meaning. This is ID
+            allows you to prevent certain textures from being group together.
+            For example, you may want all textures from Level 0 to be grouped
+            together while Level 1 gets grouped together in a different pool
+
+            @see	TextureFlags::AutomaticBatching
+            @see	TextureGpuManager::reservePoolId
+        @remarks
+            This value cannot be changed while the texture is resident (i.e. because
+            it has already been assigned to a pool)
+        @param poolId
+            Arbitrary value. Default value is 0.
+        */
+        void setTexturePoolId( uint32 poolId );
+        uint32 getTexturePoolId(void) const						{ return mPoolId; }
         const TexturePool* getTexturePool(void) const           { return mTexturePool; }
 
         void addListener( TextureGpuListener *listener );
@@ -444,14 +478,15 @@ namespace Ogre
         size_t getSizeBytes(void) const;
 
         /** It is threadsafe to call this function from main thread.
-            If this returns true, then the following functions are not threadsafe:
+            If this returns false, then the following functions are not threadsafe:
             Setters must not be called, and getters may change from a worker thread:
                 * setResolution
                 * getWidth, getHeight, getDepth, getDepthOrSlices, getNumSlices
                 * set/getPixelFormat
                 * set/getNumMipmaps
                 * set/getTextureType
-            Note that this function may return false but the worker thread
+                * getTexturePool
+            Note that this function may return true but the worker thread
             may still be uploading to this texture. Use isDataReady to
             see if the worker thread is fully done with this texture.
 

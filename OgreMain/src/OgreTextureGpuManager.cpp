@@ -289,12 +289,62 @@ namespace Ogre
         mTexturePool.clear();
     }
     //-----------------------------------------------------------------------------------
+    void TextureGpuManager::reservePoolId( uint32 poolId, uint32 width, uint32 height,
+                                           uint32 numSlices, uint8 numMipmaps,
+                                           PixelFormatGpu pixelFormat )
+    {
+        IdType newId = Id::generateNewId<TextureGpuManager>();
+        char tmpBuffer[64];
+        LwString texName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+        texName.a( "_ReservedTex", newId );
+
+        TexturePool newPool;
+        newPool.masterTexture = createTextureImpl( GpuPageOutStrategy::Discard,
+                                                   texName.c_str(), 0,
+                                                   TextureTypes::Type2DArray );
+        newPool.usedMemory = 0;
+        newPool.usedSlots.reserve( numSlices );
+
+        newPool.masterTexture->setResolution( width, height, numSlices );
+        newPool.masterTexture->setPixelFormat( pixelFormat );
+        newPool.masterTexture->setNumMipmaps( numMipmaps );
+        newPool.masterTexture->setTexturePoolId( poolId );
+
+        mTexturePool.push_back( newPool );
+    }
+    //-----------------------------------------------------------------------------------
+    bool TextureGpuManager::hasPoolId( uint32 poolId, uint32 width, uint32 height,
+                                       uint8 numMipmaps, PixelFormatGpu pixelFormat ) const
+    {
+        bool retVal = false;
+
+        TexturePoolList::const_iterator itPool = mTexturePool.begin();
+        TexturePoolList::const_iterator enPool = mTexturePool.end();
+
+        while( itPool != enPool && !retVal )
+        {
+            const TexturePool &pool = *itPool;
+            if( pool.masterTexture->getWidth() == width &&
+                pool.masterTexture->getHeight() == height &&
+                pool.masterTexture->getPixelFormat() == pixelFormat &&
+                pool.masterTexture->getNumMipmaps() == numMipmaps &&
+                pool.masterTexture->getTexturePoolId() == poolId )
+            {
+                retVal = true;
+            }
+
+            ++itPool;
+        }
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
     TextureGpu* TextureGpuManager::createTexture( const String &name, const String &aliasName,
                                                   GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                                   uint32 textureFlags,
                                                   TextureTypes::TextureTypes initialType,
                                                   const String &resourceGroup,
-                                                  uint32 filters )
+                                                  uint32 filters, uint32 poolId )
     {
         OgreProfileExhaustive( "TextureGpuManager::createTexture" );
 
@@ -317,6 +367,7 @@ namespace Ogre
         }
 
         TextureGpu *retVal = createTextureImpl( pageOutStrategy, idName, textureFlags, initialType );
+        retVal->setTexturePoolId( poolId );
 
         mEntries[idName] = ResourceEntry( name, aliasName, resourceGroup, retVal, filters );
 
@@ -328,17 +379,16 @@ namespace Ogre
                                                   uint32 textureFlags,
                                                   TextureTypes::TextureTypes initialType,
                                                   const String &resourceGroup,
-                                                  uint32 filters )
+                                                  uint32 filters, uint32 poolId )
     {
         return createTexture( name, name, pageOutStrategy, textureFlags,
-                              initialType, resourceGroup, filters );
+                              initialType, resourceGroup, filters, poolId );
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* TextureGpuManager::createOrRetrieveTexture(
-            const String &name, const String &aliasName,
+    TextureGpu* TextureGpuManager::createOrRetrieveTexture( const String &name, const String &aliasName,
             GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
             uint32 textureFlags, TextureTypes::TextureTypes initialType, const String &resourceGroup,
-            uint32 filters )
+            uint32 filters, uint32 poolId )
     {
         TextureGpu *retVal = 0;
 
@@ -349,7 +399,7 @@ namespace Ogre
         else
         {
             retVal = createTexture( name, aliasName, pageOutStrategy, textureFlags,
-                                    initialType, resourceGroup, filters );
+                                    initialType, resourceGroup, filters, poolId );
         }
 
         return retVal;
@@ -358,10 +408,33 @@ namespace Ogre
     TextureGpu* TextureGpuManager::createOrRetrieveTexture(
             const String &name, GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
             uint32 textureFlags, TextureTypes::TextureTypes initialType, const String &resourceGroup,
-            uint32 filters )
+            uint32 filters, uint32 poolId )
     {
         return createOrRetrieveTexture( name, name, pageOutStrategy, textureFlags,
-                                        initialType, resourceGroup, filters );
+                                        initialType, resourceGroup, filters, poolId );
+    }
+    //-----------------------------------------------------------------------------------
+    TextureGpu* TextureGpuManager::createOrRetrieveTexture(
+            const String &name, GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+            CommonTextureTypes::CommonTextureTypes type, const String &resourceGroup, uint32 poolId )
+    {
+        uint32 textureFlags = TextureFlags::AutomaticBatching;
+        uint32 filters = TextureFilter::TypeGenerateDefaultMipmaps;
+        TextureTypes::TextureTypes texType = TextureTypes::Type2D;
+        if( type == CommonTextureTypes::Diffuse || type == CommonTextureTypes::EnvMap )
+            textureFlags |= TextureFlags::PrefersLoadingFromFileAsSRGB;
+        if( type == CommonTextureTypes::NormalMap )
+            filters |= TextureFilter::TypePrepareForNormalMapping;
+        if( type == CommonTextureTypes::Monochrome )
+            filters |= TextureFilter::TypeLeaveChannelR;
+        if( type == CommonTextureTypes::EnvMap )
+            texType = TextureTypes::TypeCube;
+
+        return createOrRetrieveTexture( name, pageOutStrategy,
+                                        TextureFlags::AutomaticBatching |
+                                        TextureFlags::PrefersLoadingFromFileAsSRGB,
+                                        texType, resourceGroup,
+                                        filters, poolId );
     }
     //-----------------------------------------------------------------------------------
     TextureGpu* TextureGpuManager::findTextureNoThrow( IdString name ) const
@@ -560,7 +633,7 @@ namespace Ogre
 
         logActual->logMessage(
                     "||Width|Height|Format|Mipmaps|Size in bytes|"
-                    "Num. active textures|Total texture capacity|Texture Names",
+                    "Num. active textures|Total texture capacity|Pool ID|Texture Names",
                     LML_CRITICAL );
 
         size_t bytesInPoolInclWaste = 0;
@@ -583,6 +656,7 @@ namespace Ogre
             const size_t bytesInPool = pool.masterTexture->getSizeBytes();
             text.a( (uint32)bytesInPool, "|" );
             text.a( pool.usedMemory, "|", pool.masterTexture->getDepthOrSlices() );
+            text.a( "|", pool.masterTexture->getTexturePoolId() );
 
             bytesInPoolInclWaste += bytesInPool;
 
@@ -849,7 +923,8 @@ namespace Ogre
                     pool.masterTexture->getWidth() == texture->getWidth() &&
                     pool.masterTexture->getHeight() == texture->getHeight() &&
                     pool.masterTexture->getPixelFormat() == texture->getPixelFormat() &&
-                    pool.masterTexture->getNumMipmaps() == texture->getNumMipmaps();
+                    pool.masterTexture->getNumMipmaps() == texture->getNumMipmaps() &&
+                    pool.masterTexture->getTexturePoolId() == texture->getTexturePoolId();
 
             TODO_grow_pool;
 
@@ -876,6 +951,7 @@ namespace Ogre
             newPool.masterTexture->setResolution( texture->getWidth(), texture->getHeight(), numSlices );
             newPool.masterTexture->setPixelFormat( texture->getPixelFormat() );
             newPool.masterTexture->setNumMipmaps( texture->getNumMipmaps() );
+            newPool.masterTexture->setTexturePoolId( texture->getTexturePoolId() );
 
             mTexturePool.push_back( newPool );
             itor = --mTexturePool.end();

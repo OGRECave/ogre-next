@@ -124,7 +124,7 @@ namespace TextureFilter
                                                                  TextureFlags::AllowAutomipmaps,
                                                                  texture->getTextureType() );
         tempTexture->copyParametersFrom( texture );
-        tempTexture->scheduleTransitionTo( GpuResidency::Resident );
+        tempTexture->unsafeScheduleTransitionTo( GpuResidency::Resident );
         TextureBox box = texture->getEmptyBox( 0 );
         texture->copyTo( tempTexture, box, 0, box, 0 );
         tempTexture->_autogenerateMipmaps();
