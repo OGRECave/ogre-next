@@ -250,8 +250,6 @@ namespace Demo
         {
             mNumSpheres = 0;
             Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
-            Ogre::HlmsTextureManager *hlmsTextureManager = hlmsManager->getTextureManager();
-
             assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
 
             Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
