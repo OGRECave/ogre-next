@@ -311,6 +311,8 @@ namespace Ogre
         newPool.masterTexture->setTexturePoolId( poolId );
 
         mTexturePool.push_back( newPool );
+
+        newPool.masterTexture->_transitionTo( GpuResidency::Resident, 0 );
     }
     //-----------------------------------------------------------------------------------
     bool TextureGpuManager::hasPoolId( uint32 poolId, uint32 width, uint32 height,

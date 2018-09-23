@@ -2477,7 +2477,7 @@ namespace Ogre
         OGRE_ASSERT_LOW( ltcMat0->getInternalSliceStart() == 0u );
         OGRE_ASSERT_LOW( ltcMat1->getInternalSliceStart() == 1u );
 
-        mLtcMatrixTexture = ltcMat0->getTexturePool()->masterTexture;
+        mLtcMatrixTexture = ltcMat0;
     }
     //-----------------------------------------------------------------------------------
     void HlmsPbs::getDefaultPaths( String &outDataFolderPath, StringVector &outLibraryFoldersPaths )
