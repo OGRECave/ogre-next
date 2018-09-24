@@ -165,7 +165,14 @@ namespace Ogre
                 }
 
                 glxContext = glXGetCurrentContext();
-                glxDrawable = glXGetCurrentDrawable();
+                // Trying to reuse the drawable here will actually
+                // cause the context sharing to break so it is hidden
+                // behind this extra option
+                if( (opt = miscParams->find( "currentGLDrawable" )) != end &&
+                    StringConverter::parseBool( opt->second ) )
+                {
+                    glxDrawable = glXGetCurrentDrawable();
+                }
             }
 
             // Note: Some platforms support AA inside ordinary windows
