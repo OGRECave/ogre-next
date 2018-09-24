@@ -91,7 +91,7 @@ namespace Ogre
             diffuseTex->addListener( this );
             diffuseTex->scheduleTransitionTo( GpuResidency::Resident );
             mDiffuseTexture = diffuseTex;
-            mDiffuseIdx = diffuseTex->getInternalSliceStart();
+            mDiffuseIdx = static_cast<uint16>( diffuseTex->getInternalSliceStart() );
         }
         else
         {
@@ -114,7 +114,7 @@ namespace Ogre
             normalTex->addListener( this );
             normalTex->scheduleTransitionTo( GpuResidency::Resident );
             mNormalTexture = normalTex;
-            mNormalMapIdx = normalTex->getInternalSliceStart();
+            mNormalMapIdx = static_cast<uint16>( normalTex->getInternalSliceStart() );
         }
         else
         {
@@ -137,7 +137,7 @@ namespace Ogre
             emissiveTex->addListener( this );
             emissiveTex->scheduleTransitionTo( GpuResidency::Resident );
             mEmissiveTexture = emissiveTex;
-            mEmissiveIdx = emissiveTex->getInternalSliceStart();
+            mEmissiveIdx = static_cast<uint16>( emissiveTex->getInternalSliceStart() );
         }
         else
         {
@@ -188,11 +188,11 @@ namespace Ogre
         if( reason == TextureGpuListener::GainedResidency )
         {
             if( texture == mDiffuseTexture )
-                mDiffuseIdx = mDiffuseTexture->getInternalTextureType();
+                mDiffuseIdx = static_cast<uint16>( mDiffuseTexture->getInternalSliceStart() );
             if( texture == mNormalTexture )
-                mNormalMapIdx = mNormalTexture->getInternalTextureType();
+                mNormalMapIdx = static_cast<uint16>( mNormalTexture->getInternalSliceStart() );
             if( texture == mEmissiveTexture )
-                mEmissiveIdx = mEmissiveTexture->getInternalTextureType();
+                mEmissiveIdx = static_cast<uint16>( mEmissiveTexture->getInternalSliceStart() );
         }
         else if( reason == TextureGpuListener::Deleted )
         {

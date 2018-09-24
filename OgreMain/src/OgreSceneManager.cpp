@@ -1015,6 +1015,19 @@ void SceneManager::setDecalsEmissive( TextureGpu *tex )
     mDecalsEmissiveTex = tex;
 }
 //-----------------------------------------------------------------------
+bool SceneManager::isDecalsDiffuseEmissiveMerged(void) const
+{
+    bool retVal = false;
+    if( mDecalsDiffuseTex && mDecalsEmissiveTex &&
+        (mDecalsDiffuseTex == mDecalsEmissiveTex ||
+         (mDecalsDiffuseTex->hasAutomaticBatching() &&
+          mDecalsDiffuseTex->getTexturePool() == mDecalsEmissiveTex->getTexturePool())) )
+    {
+        retVal = true;
+    }
+    return retVal;
+}
+//-----------------------------------------------------------------------
 void SceneManager::prepareRenderQueue(void)
 {
     /* TODO: RENDER QUEUE

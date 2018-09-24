@@ -123,7 +123,8 @@ namespace Demo
         {
             const Ogre::uint32 decalDiffuseId = 1;
             const Ogre::uint32 decalNormalId = 1;
-            Ogre::TextureGpuManager *textureManager = 0;
+            Ogre::Root *root = mGraphicsSystem->getRoot();
+            Ogre::TextureGpuManager *textureManager = root->getRenderSystem()->getTextureGpuManager();
 
             Ogre::WireAabb *wireAabb = sceneManager->createWireAabb();
 
@@ -136,25 +137,29 @@ namespace Demo
             sceneNode->setScale( Ogre::Vector3( 10.0f ) );
             wireAabb->track( decal );
 
-            Ogre::TextureGpu *texture = 0;
-            texture = textureManager->createOrRetrieveTexture(
-                          "floor_diffuse.PNG", Ogre::GpuPageOutStrategy::Discard,
-                          Ogre::CommonTextureTypes::Diffuse,
-                          Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
-                          decalDiffuseId );
-            texture = textureManager->createOrRetrieveTexture(
-                          "floor_bump.PNG", Ogre::GpuPageOutStrategy::Discard,
-                          Ogre::CommonTextureTypes::NormalMap,
-                          Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
-                          decalNormalId );
+            //Create them and load them together to encourage loading them in burst in
+            //background thread. Hopefully the information may already be fully available
+            //by the time we call decal->setXXXTexture
+            Ogre::TextureGpu *textureDiff, *textureNorm = 0;
+            textureDiff = textureManager->createOrRetrieveTexture(
+                              "floor_diffuse.PNG", Ogre::GpuPageOutStrategy::Discard,
+                              Ogre::CommonTextureTypes::Diffuse,
+                              Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                              decalDiffuseId );
+            textureNorm = textureManager->createOrRetrieveTexture(
+                              "floor_bump.PNG", Ogre::GpuPageOutStrategy::Discard,
+                              Ogre::CommonTextureTypes::NormalMap,
+                              Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                              decalNormalId );
 
-            texture->scheduleTransitionTo( Ogre::GpuResidency::Resident );
-            texture->scheduleTransitionTo( Ogre::GpuResidency::Resident );
+            textureDiff->scheduleTransitionTo( Ogre::GpuResidency::Resident );
+            textureNorm->scheduleTransitionTo( Ogre::GpuResidency::Resident );
 
-            decal->setDiffuseTexture( texture );
-            sceneManager->setDecalsDiffuse( texture );
-            decal->setNormalTexture( texture );
-            sceneManager->setDecalsNormals( texture );
+            decal->setDiffuseTexture( textureDiff );
+            decal->setNormalTexture( textureNorm );
+            //For the SceneManager, any of the textures belonging to the same pool will do!
+            sceneManager->setDecalsDiffuse( textureDiff );
+            sceneManager->setDecalsNormals( textureNorm );
 
             g_decalNode = sceneNode;
             /*Ogre::Light *light = sceneManager->createLight();

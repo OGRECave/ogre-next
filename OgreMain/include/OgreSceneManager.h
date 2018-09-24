@@ -1265,6 +1265,7 @@ namespace Ogre {
         TextureGpu* getDecalsDiffuse(void) const                    { return mDecalsDiffuseTex; }
         TextureGpu* getDecalsNormals(void) const                    { return mDecalsNormalsTex; }
         TextureGpu* getDecalsEmissive(void) const                   { return mDecalsEmissiveTex; }
+        bool isDecalsDiffuseEmissiveMerged(void) const;
 
         /// For internal use.
         /// @see CompositorPassSceneDef::mEnableForwardPlus

@@ -430,13 +430,13 @@ namespace Ogre
         if( type == CommonTextureTypes::Monochrome )
             filters |= TextureFilter::TypeLeaveChannelR;
         if( type == CommonTextureTypes::EnvMap )
+        {
+            textureFlags &= ~static_cast<uint32>( TextureFlags::AutomaticBatching );
             texType = TextureTypes::TypeCube;
+        }
 
-        return createOrRetrieveTexture( name, pageOutStrategy,
-                                        TextureFlags::AutomaticBatching |
-                                        TextureFlags::PrefersLoadingFromFileAsSRGB,
-                                        texType, resourceGroup,
-                                        filters, poolId );
+        return createOrRetrieveTexture( name, pageOutStrategy, textureFlags,
+                                        texType, resourceGroup, filters, poolId );
     }
     //-----------------------------------------------------------------------------------
     TextureGpu* TextureGpuManager::findTextureNoThrow( IdString name ) const

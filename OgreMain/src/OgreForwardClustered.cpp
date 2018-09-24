@@ -890,12 +890,13 @@ namespace Ogre
             }
             if( mSceneManager->getDecalsNormals() && prePassMode != PrePassUse )
             {
-                hlms->_setProperty( HlmsBaseProp::DecalsNormals,    1 );
+                hlms->_setProperty( HlmsBaseProp::DecalsNormals,    2 );
                 ++numDecalsTex;
             }
             if( mSceneManager->getDecalsEmissive() && prePassMode != PrePassCreate )
             {
-                hlms->_setProperty( HlmsBaseProp::DecalsEmissive,   1 );
+                hlms->_setProperty( HlmsBaseProp::DecalsEmissive,
+                                    mSceneManager->isDecalsDiffuseEmissiveMerged() ? 1 : 3 );
                 ++numDecalsTex;
             }
 

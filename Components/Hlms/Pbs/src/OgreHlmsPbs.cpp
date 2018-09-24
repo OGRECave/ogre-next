@@ -242,6 +242,7 @@ namespace Ogre
         mUsingAreaLightMasks( false ),
         mUsingLtcMatrix( false ),
         mLtcMatrixTexture( 0 ),
+        mDecalsDiffuseMergedEmissive( false ),
         mDecalsSamplerblock( 0 ),
         mLastBoundPool( 0 ),
         mHasSeparateSamplers( 0 ),
@@ -428,7 +429,7 @@ namespace Ogre
                     psParams->setNamedConstant( "decalsDiffuseTex", texUnit++ );
                 if( mDecalsTextures[1] )
                     psParams->setNamedConstant( "decalsNormalsTex", texUnit++ );
-                if( mDecalsTextures[2] && mDecalsTextures[0] != mDecalsTextures[2] )
+                if( mDecalsTextures[2] && !mDecalsDiffuseMergedEmissive )
                     psParams->setNamedConstant( "decalsEmissiveTex", texUnit++ );
             }
 
@@ -1128,6 +1129,7 @@ namespace Ogre
         mDecalsTextures[0] = 0;
         mDecalsTextures[1] = 0;
         mDecalsTextures[2] = 0;
+        mDecalsDiffuseMergedEmissive = true;
 
         if( !casterPass )
         {
@@ -1147,6 +1149,7 @@ namespace Ogre
                         mDecalsTextures[1] = sceneManager->getDecalsNormals();
                     if( prePassMode != PrePassCreate )
                         mDecalsTextures[2] = sceneManager->getDecalsEmissive();
+                    mDecalsDiffuseMergedEmissive = sceneManager->isDecalsDiffuseEmissiveMerged();
                 }
             }
 
@@ -1950,7 +1953,7 @@ namespace Ogre
         for( size_t i=0; i<3u; ++i )
         {
             if( mDecalsTextures[i] &&
-                (i != 2u || mDecalsTextures[2] != mDecalsTextures[0]) )
+                (i != 2u || !mDecalsDiffuseMergedEmissive) )
             {
                 ++mTexUnitSlotStart;
             }
@@ -2073,7 +2076,7 @@ namespace Ogre
                 for( size_t i=0; i<3u; ++i )
                 {
                     if( mDecalsTextures[i] &&
-                        (i != 2u || mDecalsTextures[2] != mDecalsTextures[0]) )
+                        (i != 2u || !mDecalsDiffuseMergedEmissive) )
                     {
                         *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit,
                                                                              mDecalsTextures[i],

@@ -149,6 +149,7 @@ namespace Ogre
         bool                    mUsingLtcMatrix;
         TextureGpu              *mLtcMatrixTexture;
 
+        bool                    mDecalsDiffuseMergedEmissive;
         TextureGpu              *mDecalsTextures[3];
         HlmsSamplerblock const  *mDecalsSamplerblock;
 

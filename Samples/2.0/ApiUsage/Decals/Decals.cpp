@@ -121,7 +121,7 @@ namespace Demo
             decalTexture->setNumMipmaps( blackImage.getNumMipmaps() );
             decalTexture->setPixelFormat( blackImage.getPixelFormat() );
             decalTexture->scheduleTransitionTo( Ogre::GpuResidency::Resident );
-            blackImage.uploadTo( decalTexture, 0, decalTexture->getNumMipmaps() );
+            blackImage.uploadTo( decalTexture, 0, decalTexture->getNumMipmaps() - 1u );
 
             blackImage.freeMemory();
             blackBuffer = reinterpret_cast<Ogre::uint8*>(
@@ -140,11 +140,7 @@ namespace Demo
             decalTexture->setNumMipmaps( blackImage.getNumMipmaps() );
             decalTexture->setPixelFormat( blackImage.getPixelFormat() );
             decalTexture->scheduleTransitionTo( Ogre::GpuResidency::Resident );
-            decalTexture->setResolution( blackImage.getWidth(), blackImage.getHeight() );
-            decalTexture->setNumMipmaps( blackImage.getNumMipmaps() );
-            decalTexture->setPixelFormat( blackImage.getPixelFormat() );
-            decalTexture->scheduleTransitionTo( Ogre::GpuResidency::Resident );
-            blackImage.uploadTo( decalTexture, 0, decalTexture->getNumMipmaps() );
+            blackImage.uploadTo( decalTexture, 0, decalTexture->getNumMipmaps() - 1u );
 
             /*
                 Now actually create the decals into the array with the pool ID we desire.
