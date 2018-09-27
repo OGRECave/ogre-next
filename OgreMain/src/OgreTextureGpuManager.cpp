@@ -1839,8 +1839,8 @@ namespace Ogre
                 img->load( data );
         }
 
-        if( loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max() ||
-            loadRequest.sliceOrDepth == 0 &&
+        if( (loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max() ||
+             loadRequest.sliceOrDepth == 0) &&
             loadRequest.texture->isMetadataReady() )
         {
             //Check the metadata cache was not out of date
