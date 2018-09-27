@@ -37,7 +37,9 @@ THE SOFTWARE.
 #include "OgreItem.h"
 #include "OgreMesh2.h"
 #include "OgreEntity.h"
+#include "OgreDecal.h"
 #include "OgreHlms.h"
+#include "OgreHlmsTextureManager.h"
 
 #include "OgreHlmsPbs.h"
 #include "InstantRadiosity/OgreInstantRadiosity.h"
@@ -54,7 +56,6 @@ THE SOFTWARE.
 
 #include "OgreLogManager.h"
 
-
 #include "rapidjson/document.h"
 #include "rapidjson/error/en.h"
 
@@ -68,7 +69,8 @@ namespace Ogre
         mParallaxCorrectedCubemap( 0 ),
         mSceneComponentTransform( Matrix4::IDENTITY ),
         mDefaultPccWorkspaceName( defaultPccWorkspaceName ),
-        mUseBinaryFloatingPoint( true )
+        mUseBinaryFloatingPoint( true ),
+        mUsingOitd( false )
     {
         memset( mRootNodes, 0, sizeof(mRootNodes) );
         memset( mParentlessRootNodes, 0, sizeof(mParentlessRootNodes) );
@@ -995,6 +997,99 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void SceneFormatImporter::importDecal( const rapidjson::Value &decalValue )
+    {
+        rapidjson::Value::ConstMemberIterator tmpIt;
+
+        Decal *decal = mSceneManager->createDecal();
+
+        tmpIt = decalValue.FindMember( "movable_object" );
+        if( tmpIt != decalValue.MemberEnd() && tmpIt->value.IsObject() )
+        {
+            const rapidjson::Value &movableObjectValue = tmpIt->value;
+            importMovableObject( movableObjectValue, decal );
+        }
+
+        String additionalExtension;
+        if( mUsingOitd )
+            additionalExtension = ".oitd";
+
+        DecalTex decalTex[3] =
+        {
+            DecalTex( TexturePtr(), 0, "diffuse" ),
+            DecalTex( TexturePtr(), 0, "normal" ),
+            DecalTex( TexturePtr(), 0, "emissive" ),
+        };
+
+        char tmpBuffer[32];
+        LwString texName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+        HlmsManager *hlmsManager = mRoot->getHlmsManager();
+        HlmsTextureManager *hlmsTextureManager = hlmsManager->getTextureManager();
+
+        for( int i=0; i<3; ++i )
+        {
+            texName.clear();
+            texName.a( decalTex[i].texTypeName, "_managed" );
+            tmpIt = decalValue.FindMember( texName.c_str() );
+            if( tmpIt != decalValue.MemberEnd() && tmpIt->value.IsArray() &&
+                tmpIt->value.Size() == 3u &&
+                tmpIt->value[0].IsString() && tmpIt->value[1].IsString() && tmpIt->value[2].IsUint() )
+            {
+                const char *aliasName = tmpIt->value[0].GetString();
+                //Real texture name is lost in 2.1. Needs 2.2
+                //const char *textureName = tmpIt->value[1].GetString();
+                const uint32 poolId = tmpIt->value[2].GetUint();
+
+                HlmsTextureManager::TextureLocation texLocation =
+                        hlmsTextureManager->createOrRetrieveTexture(
+                            //aliasName, textureName + additionalExtension,
+                            aliasName, aliasName + additionalExtension,
+                            i != 1 ? HlmsTextureManager::TEXTURE_TYPE_DIFFUSE :
+                                     HlmsTextureManager::TEXTURE_TYPE_NORMALS, poolId );
+                decalTex[i].texture = texLocation.texture;
+                decalTex[i].xIdx    = texLocation.xIdx;
+            }
+
+            texName.clear();
+            texName.a( decalTex[i].texTypeName, "_raw" );
+            tmpIt = decalValue.FindMember( texName.c_str() );
+            if( tmpIt != decalValue.MemberEnd() && tmpIt->value.IsArray() &&
+                tmpIt->value.Size() == 2u &&
+                tmpIt->value[0].IsString() && tmpIt->value[1].IsUint() )
+            {
+                const char *textureName = tmpIt->value[0].GetString();
+                const uint32 arrayIdx = tmpIt->value[1].GetUint();
+
+                TexturePtr texture =
+                        TextureManager::getSingleton().load( textureName, "SceneFormatImporter",
+                                                             TEX_TYPE_2D_ARRAY );
+                decalTex[i].texture = texture;
+                decalTex[i].xIdx    = arrayIdx;
+            }
+        }
+
+        if( decalTex[0].texture )
+            decal->setDiffuseTexture( decalTex[0].texture, decalTex[0].xIdx );
+        if( decalTex[1].texture )
+            decal->setNormalTexture( decalTex[1].texture, decalTex[1].xIdx );
+        if( decalTex[2].texture )
+            decal->setEmissiveTexture( decalTex[2].texture, decalTex[2].xIdx );
+    }
+    //-----------------------------------------------------------------------------------
+    void SceneFormatImporter::importDecals( const rapidjson::Value &json )
+    {
+        rapidjson::Value::ConstValueIterator itor = json.Begin();
+        rapidjson::Value::ConstValueIterator end  = json.End();
+
+        while( itor != end )
+        {
+            if( itor->IsObject() )
+                importDecal( *itor );
+
+            ++itor;
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void SceneFormatImporter::importPcc( const rapidjson::Value &pccValue )
     {
         uint8 reservedRqId = 250;
@@ -1207,6 +1302,46 @@ namespace Ogre
                 hlmsPbs->setAreaLightMasks( areaLightMask );
             }
         }
+
+        if( importFlags & SceneFlags::Decals )
+        {
+            HlmsManager *hlmsManager = mRoot->getHlmsManager();
+            HlmsTextureManager *hlmsTextureManager = hlmsManager->getTextureManager();
+
+            char tmpBuffer[32];
+            LwString keyName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+            const char *texTypes[3] = { "diffuse", "normals", "emissive" };
+            TexturePtr textures[3];
+
+            for( int i=0; i<3; ++i )
+            {
+                keyName.clear();
+                keyName.a( "decals_", texTypes[i],"_managed" );
+                tmpIt = json.FindMember( keyName.c_str() );
+                if( tmpIt != json.MemberEnd() && tmpIt->value.IsString() )
+                {
+                    //TextureType shouldn't matter because that alias should've been loaded by now
+                    HlmsTextureManager::TextureLocation texLocation =
+                            hlmsTextureManager->createOrRetrieveTexture(
+                                tmpIt->value.GetString(), HlmsTextureManager::TEXTURE_TYPE_DIFFUSE );
+                    textures[i] = texLocation.texture;
+                }
+
+                keyName.clear();
+                keyName.a( "decals_", texTypes[i],"_raw" );
+                tmpIt = json.FindMember( keyName.c_str() );
+                if( tmpIt != json.MemberEnd() && tmpIt->value.IsString() )
+                {
+                    textures[i] = TextureManager::getSingleton().load(
+                                      tmpIt->value.GetString(),
+                                      "SceneFormatImporter", TEX_TYPE_2D_ARRAY );
+                }
+            }
+
+            mSceneManager->setDecalsDiffuse( textures[0] );
+            mSceneManager->setDecalsNormals( textures[1] );
+            mSceneManager->setDecalsEmissive( textures[2] );
+        }
     }
     //-----------------------------------------------------------------------------------
     void SceneFormatImporter::importScene( const String &filename, const rapidjson::Document &d,
@@ -1285,6 +1420,13 @@ namespace Ogre
             itor = d.FindMember( "lights" );
             if( itor != d.MemberEnd() && itor->value.IsArray() )
                 importLights( itor->value );
+        }
+
+        if( importFlags & SceneFlags::Decals )
+        {
+            itor = d.FindMember( "decals" );
+            if( itor != d.MemberEnd() && itor->value.IsArray() )
+                importDecals( itor->value );
         }
 
         itor = d.FindMember( "scene" );
@@ -1378,6 +1520,23 @@ namespace Ogre
         resourceGroupManager.addResourceLocation( folderPath + "/textures/",
                                                   "FileSystem", "SceneFormatImporter" );
 
+        {
+            DataStreamPtr stream = resourceGroupManager.openResource( "textureMetadataCache.json",
+                                                                      "SceneFormatImporter" );
+            vector<char>::type fileData;
+            fileData.resize( stream->size() + 1 );
+            if( !fileData.empty() )
+            {
+                stream->read( &fileData[0], stream->size() );
+                //Add null terminator just in case (to prevent bad input)
+                fileData.back() = '\0';
+
+                HlmsManager *hlmsManager = mRoot->getHlmsManager();
+                HlmsTextureManager *hlmsTextureManager = hlmsManager->getTextureManager();
+                hlmsTextureManager->importTextureMetadataCache( stream->getName(), &fileData[0] );
+            }
+        }
+
         DataStreamPtr stream = resourceGroupManager.openResource( "scene.json", "SceneFormatImporter" );
         vector<char>::type fileData;
         fileData.resize( stream->size() + 1 );
@@ -1402,19 +1561,19 @@ namespace Ogre
 
             rapidjson::Value::ConstMemberIterator  itor;
 
-            bool useOitd = false;
+            mUsingOitd = false;
             itor = d.FindMember( "saved_oitd_textures" );
             if( itor != d.MemberEnd() && itor->value.IsBool() )
-                useOitd = itor->value.GetBool();
+                mUsingOitd = itor->value.GetBool();
 
             HlmsManager *hlmsManager = mRoot->getHlmsManager();
-            if( useOitd )
+            if( mUsingOitd )
                 hlmsManager->mAdditionalTextureExtensionsPerGroup["SceneFormatImporter"] = ".oitd";
             resourceGroupManager.initialiseResourceGroup( "SceneFormatImporter", true );
-            if( useOitd )
+            if( mUsingOitd )
                 hlmsManager->mAdditionalTextureExtensionsPerGroup.erase( "SceneFormatImporter" );
 
-            importScene( stream->getName(), &fileData[0], importFlags );
+            importScene( stream->getName(), d, importFlags );
 
             resourceGroupManager.removeResourceLocation( folderPath + "/textures/", "SceneFormatImporter" );
             resourceGroupManager.removeResourceLocation( folderPath + "/v2/", "SceneFormatImporter" );

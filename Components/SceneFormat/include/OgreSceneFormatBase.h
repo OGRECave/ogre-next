@@ -73,6 +73,7 @@ namespace Ogre
             LightsVpl               = 1u << 14u,
             ParallaxCorrectedCubemap= 1u << 15u,
             AreaLightMasks          = 1u << 16u,
+            Decals                  = 1u << 17u,
         };
     }
 
@@ -92,6 +93,15 @@ namespace Ogre
             LATEST_VERSION = VERSION_1
         };
     protected:
+        struct DecalTex
+        {
+            TexturePtr  texture;
+            uint16      xIdx;
+            const char  *texTypeName;
+            DecalTex( const TexturePtr &_texture, uint16 _xIdx, const char *_texTypeName ) :
+                texture( _texture ), xIdx( _xIdx ), texTypeName( _texTypeName ) {}
+        };
+
         Root                    *mRoot;
         SceneManager            *mSceneManager;
         SceneFormatListener     *mListener;
@@ -124,6 +134,7 @@ namespace Ogre
         virtual bool exportItem( const Item *item )                 { return true; }
         virtual bool exportEntity( const v1::Entity *entity )       { return true; }
         virtual bool exportLight( const Light *light )              { return true; }
+        virtual bool exportDecal( const Decal *decal )              { return true; }
     };
 
     /** Default implementation that prevents a SceneNode from being exported if

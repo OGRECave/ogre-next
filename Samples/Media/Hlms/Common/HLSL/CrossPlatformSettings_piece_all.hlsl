@@ -2,6 +2,7 @@
 #define ushort uint
 
 #define toFloat3x3( x ) ((float3x3)(x))
+#define buildFloat3x3( row0, row1, row2 ) transpose( float3x3( row0, row1, row2 ) )
 
 #define INLINE
 #define NO_INTERPOLATION_PREFIX nointerpolation
@@ -26,4 +27,5 @@
 
 #define bufferFetch( buffer, idx ) buffer.Load( idx )
 #define bufferFetch1( buffer, idx ) buffer.Load( idx ).x
+
 @end

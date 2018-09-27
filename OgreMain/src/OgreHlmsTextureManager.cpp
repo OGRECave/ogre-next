@@ -35,8 +35,14 @@ THE SOFTWARE.
 #include "OgreRenderSystem.h"
 #include "OgreBitwise.h"
 #include "OgreLogManager.h"
+#include "OgreHlmsDatablock.h"
 #include "OgreLwString.h"
 #include "OgreProfiler.h"
+
+#if !OGRE_NO_JSON
+    #include "rapidjson/document.h"
+    #include "rapidjson/error/en.h"
+#endif
 
 namespace Ogre
 {
@@ -153,7 +159,7 @@ namespace Ogre
                                             bool isNormalMap, bool hwGammaCorrection )
     {
         TextureArray textureArray( 1u, numSlices, true,
-                                   isNormalMap, uniqueSpecialId );
+                                   isNormalMap, true, uniqueSpecialId );
 
         textureArray.texture = TextureManager::getSingleton().createManual(
                                     "ReservedPoolHlmsTexture/" +
@@ -397,6 +403,13 @@ namespace Ogre
                                                                         Image *imgSource )
     {
         OgreProfileExhaustive( "HlmsTextureManager::createOrRetrieveTexture" );
+
+        MetadataCacheMap::const_iterator itor = mMetadataCache.find( aliasName );
+        if( itor != mMetadataCache.end() )
+        {
+            mapType = itor->second.mapType;
+            uniqueSpecialId = itor->second.poolId;
+        }
 
         TextureEntry searchName( aliasName );
         TextureEntryVec::iterator it = std::lower_bound( mEntries.begin(), mEntries.end(), searchName );
@@ -668,7 +681,7 @@ namespace Ogre
 
                 TextureArray textureArray( limit, limitSquared, true,
                                            mDefaultTextureParameters[mapType].isNormalMap,
-                                           uniqueSpecialId );
+                                           false, uniqueSpecialId );
 
                 textureArray.texture = TextureManager::getSingleton().createManual(
                                             "HlmsTextureManager/" +
@@ -837,6 +850,13 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     const String* HlmsTextureManager::findResourceNameFromAlias( IdString aliasName ) const
     {
+        uint32 poolId = 0;
+        return findResourceNameFromAlias( aliasName, poolId );
+    }
+    //-----------------------------------------------------------------------------------
+    const String* HlmsTextureManager::findResourceNameFromAlias( IdString aliasName,
+                                                                 uint32 &outPoolId ) const
+    {
         const String *retVal = 0;
 
         TextureEntry searchName( aliasName );
@@ -847,6 +867,7 @@ namespace Ogre
         {
             const TextureArray &texArray = mTextureArrays[it->mapType][it->arrayIdx];
             retVal = &texArray.entries[it->entryIdx].resourceName;
+            outPoolId = texArray.uniqueSpecialId;
         }
 
         return retVal;
@@ -979,7 +1000,7 @@ namespace Ogre
                         PixelUtil::bulkPixelConversion( image.getPixelBox( 0 ), cubeMap.getPixelBox( i ) );
                     }
 
-                    TextureArray textureArray( 1, 1, false, false, 0 );
+                    TextureArray textureArray( 1, 1, false, false, false, 0 );
 
                     textureArray.texture = TextureManager::getSingleton().createManual(
                                                 "HlmsTextureManager/" +
@@ -1033,6 +1054,309 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void HlmsTextureManager::saveTexture( const HlmsTextureManager::TextureLocation &texLocation,
+                                          const String &folderPath, set<String>::type &savedTextures,
+                                          bool saveOitd, bool saveOriginal,
+                                          uint32 slice, uint32 numSlices,
+                                          HlmsTextureExportListener *listener )
+    {
+        //Render Targets are... complicated. Let's not, for now.
+        if( texLocation.texture->getUsage() & TU_RENDERTARGET )
+            return;
+
+        const String *aliasNamePtr = findAliasName( texLocation );
+        const String aliasName = aliasNamePtr ? *aliasNamePtr : texLocation.texture->getName();
+
+        if( savedTextures.find( aliasName ) != savedTextures.end() )
+            return; //Texture already saved
+
+        DataStreamPtr inFile;
+        if( saveOriginal )
+        {
+            String resourceName;
+            if( aliasNamePtr )
+            {
+                const String *resNamePtr = findResourceNameFromAlias( aliasName );
+                if( resNamePtr )
+                    resourceName = *resNamePtr;
+                else
+                    resourceName = aliasName;
+            }
+            else
+                resourceName = aliasName;
+
+            String savingFilename = aliasName;
+            if( listener )
+                listener->savingChangeTextureNameOriginal( aliasName, resourceName, savingFilename );
+            try
+            {
+                inFile = ResourceGroupManager::getSingleton().openResource(
+                             resourceName, texLocation.texture->getGroup() );
+            }
+            catch( FileNotFoundException &e )
+            {
+                //Try opening as an absolute path
+                std::fstream *ifs = OGRE_NEW_T( std::fstream, MEMCATEGORY_GENERAL )(
+                                        resourceName.c_str(),
+                                        std::ios::binary|std::ios::in );
+
+                if( ifs->is_open() )
+                {
+                    inFile = DataStreamPtr( OGRE_NEW FileStreamDataStream( resourceName, ifs, true ) );
+                }
+                else
+                {
+                    LogManager::getSingleton().logMessage(
+                                "WARNING: Could not find texture file " + aliasName +
+                                " (" + resourceName + ") for copying to export location. "
+                                "Error: " + e.getFullDescription() );
+                }
+            }
+            catch( Exception &e )
+            {
+                LogManager::getSingleton().logMessage(
+                            "WARNING: Could not find texture file " + aliasName +
+                            " (" + resourceName + ") for copying to export location. "
+                            "Error: " + e.getFullDescription() );
+            }
+
+            if( inFile )
+            {
+                size_t fileSize = inFile->size();
+                vector<uint8>::type fileData;
+                fileData.resize( fileSize );
+                inFile->read( &fileData[0], fileData.size() );
+                std::ofstream outFile( (folderPath + "/" + savingFilename).c_str(),
+                                       std::ios::binary | std::ios::out );
+                outFile.write( (const char*)&fileData[0], fileData.size() );
+                outFile.close();
+            }
+        }
+
+        if( saveOitd )
+        {
+            String texName = aliasName;
+            if( listener )
+                listener->savingChangeTextureNameOitd( aliasName, texName );
+
+            Image image;
+            texLocation.texture->convertToImage( image, true, 0u, slice, numSlices );
+
+            image.save( folderPath + "/" + texName + ".oitd" );
+        }
+
+        savedTextures.insert( aliasName );
+    }
+    //-----------------------------------------------------------------------------------
+    HlmsTextureManager::MetadataCacheEntry::MetadataCacheEntry() :
+        mapType( TEXTURE_TYPE_DIFFUSE ),
+        poolId( 0 )
+    {
+    }
+    //-----------------------------------------------------------------------------------
+    const HlmsTextureManager::MetadataCacheEntry* HlmsTextureManager::getMetadataCacheEntry(
+            IdString aliasName ) const
+    {
+        MetadataCacheEntry const *retVal = 0;
+        MetadataCacheMap::const_iterator itor = mMetadataCache.find( aliasName );
+        if( itor != mMetadataCache.end() )
+            retVal = &itor->second;
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsTextureManager::importTextureMetadataCache( const String &filename, const char *jsonString )
+    {
+#if !OGRE_NO_JSON
+        rapidjson::Document d;
+        d.Parse( jsonString );
+
+        if( d.HasParseError() )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "HlmsTextureManager::importTextureMetadataCache",
+                         "Invalid JSON string in file " + filename + " at line " +
+                         StringConverter::toString( d.GetErrorOffset() ) + " Reason: " +
+                         rapidjson::GetParseError_En( d.GetParseError() ) );
+        }
+
+        rapidjson::Value::ConstMemberIterator itor;
+        itor = d.FindMember( "reserved_pool_ids" );
+
+        if( itor != d.MemberEnd() && itor->value.IsArray() )
+        {
+            const rapidjson::Value &jsonVal = itor->value;
+            const rapidjson::SizeType arraySize = jsonVal.Size();
+            for( rapidjson::SizeType i=0; i<arraySize; ++i )
+            {
+                if( jsonVal[i].IsObject() )
+                {
+                    uint32 poolId = 0;
+                    itor = jsonVal[i].FindMember( "poolId" );
+                    if( itor != jsonVal[i].MemberEnd() && itor->value.IsUint() )
+                        poolId = itor->value.GetUint();
+
+                    TextureMapType mapType = TEXTURE_TYPE_DIFFUSE;
+                    itor = jsonVal[i].FindMember( "mapType" );
+                    if( itor != jsonVal[i].MemberEnd() && itor->value.IsUint() )
+                    {
+                        mapType = static_cast<TextureMapType>(
+                                      Math::Clamp<uint32>( itor->value.GetUint(),
+                                                           0u, NUM_TEXTURE_TYPES ) );
+                    }
+
+                    uint32 width = 0, height = 0;
+                    uint16 numSlices = 0;
+                    itor = jsonVal[i].FindMember( "resolution" );
+                    if( itor != jsonVal[i].MemberEnd() &&
+                        itor->value.IsArray() && itor->value.Size() >= 3u &&
+                        itor->value[0].IsUint() && itor->value[1].IsUint() && itor->value[2].IsUint() )
+                    {
+                        width = itor->value[0].GetUint();
+                        height = itor->value[1].GetUint();
+                        numSlices = static_cast<uint16>( itor->value[2].GetUint() );
+                    }
+
+                    uint8 mipmaps = 0;
+                    itor = jsonVal[i].FindMember( "mipmaps" );
+                    if( itor != jsonVal[i].MemberEnd() && itor->value.IsUint() )
+                        mipmaps = static_cast<uint8>( itor->value.GetUint() - 1u );
+
+                    PixelFormat pixelFormat = PF_UNKNOWN;
+                    itor = jsonVal[i].FindMember( "format" );
+                    if( itor != jsonVal[i].MemberEnd() && itor->value.IsString() )
+                        pixelFormat = PixelUtil::getFormatFromName( itor->value.GetString() );
+
+                    bool isNormalMap = false;
+                    itor = jsonVal[i].FindMember( "normal_map" );
+                    if( itor != jsonVal[i].MemberEnd() && itor->value.IsBool() )
+                        isNormalMap = itor->value.GetBool();
+
+                    bool hwGamma = false;
+                    itor = jsonVal[i].FindMember( "sRGB" );
+                    if( itor != jsonVal[i].MemberEnd() && itor->value.IsBool() )
+                        hwGamma = itor->value.GetBool();
+
+                    if( width > 0u && height > 0u && numSlices > 0u && pixelFormat != PF_UNKNOWN &&
+                        !hasPoolId( poolId, mapType ) )
+                    {
+                        reservePoolId( poolId, mapType, width, height, numSlices,
+                                       mipmaps, pixelFormat, isNormalMap, hwGamma );
+                    }
+                }
+            }
+        }
+
+        itor = d.FindMember( "textures" );
+        if( itor != d.MemberEnd() && itor->value.IsObject() )
+        {
+            rapidjson::Value::ConstMemberIterator itTex = itor->value.MemberBegin();
+            rapidjson::Value::ConstMemberIterator enTex = itor->value.MemberEnd();
+
+            while( itTex != enTex )
+            {
+                if( itTex->value.IsObject() )
+                {
+                    MetadataCacheEntry cacheEntry;
+                    IdString aliasName = itTex->name.GetString();
+
+                    itor = itTex->value.FindMember( "type" );
+                    if( itor != itTex->value.MemberEnd() && itor->value.IsUint() )
+                    {
+                        cacheEntry.mapType = static_cast<TextureMapType>(
+                                                 Math::Clamp<uint32>( itor->value.GetUint(),
+                                                                      0u, NUM_TEXTURE_TYPES ) );
+                    }
+
+                    itor = itTex->value.FindMember( "poolId" );
+                    if( itor != itTex->value.MemberEnd() && itor->value.IsUint() )
+                        cacheEntry.poolId = itor->value.GetUint();
+
+                    mMetadataCache[aliasName] = cacheEntry;
+                }
+
+                ++itTex;
+            }
+        }
+#else
+        OGRE_EXCEPT( Exception::ERR_INVALID_CALL,
+                     "Ogre must be built with JSON support to call this function!",
+                     "HlmsTextureManager::importTextureMetadataCache" );
+#endif
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsTextureManager::exportTextureMetadataCache( String &outJson )
+    {
+        char tmpBuffer[4096];
+        LwString jsonStr( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+
+        jsonStr.a( "{" );
+        jsonStr.a( "\n\t\"reserved_pool_ids\" :\n\t[" );
+
+        bool firstIteration = true;
+        for( int i=0; i<NUM_TEXTURE_TYPES; ++i )
+        {
+            TextureArrayVec::const_iterator itor = mTextureArrays[i].begin();
+            TextureArrayVec::const_iterator end  = mTextureArrays[i].end();
+
+            while( itor != end )
+            {
+                const TextureArray &texArray = *itor;
+                if( texArray.manuallyReserved )
+                {
+                    if( !firstIteration )
+                        jsonStr.a( "," );
+                    jsonStr.a( "\n\t\t{\n\t\t\t\"poolId\" : ", texArray.uniqueSpecialId );
+                    jsonStr.a( ",\n\t\t\t\"mapType\" : ", i );
+                    jsonStr.a( ",\n\t\t\t\"resolution\" : [",
+                               texArray.texture->getWidth(), ", ",
+                               texArray.texture->getHeight(), ", ",
+                               texArray.texture->getDepth(), "]" );
+                    jsonStr.a( ",\n\t\t\t\"mipmaps\" : ", texArray.texture->getNumMipmaps() + 1u );
+                    jsonStr.a( ",\n\t\t\t\"format\" : \"",
+                               PixelUtil::getFormatName( texArray.texture->getFormat() ).c_str(), "\"" );
+                    if( texArray.isNormalMap )
+                        jsonStr.a( ",\n\t\t\t\"normal_map\" : true" );
+                    if( texArray.texture->isHardwareGammaEnabled() )
+                        jsonStr.a( ",\n\t\t\t\"sRGB\" : true" );
+
+                    jsonStr.a( "\n\t\t}" );
+                    firstIteration = false;
+
+                    outJson += jsonStr.c_str();
+                    jsonStr.clear();
+                }
+                ++itor;
+            }
+        }
+
+        jsonStr.a( "\n\t],\n\t\"textures\" :\n\t{" );
+        firstIteration = true;
+        TextureEntryVec::const_iterator itor = mEntries.begin();
+        TextureEntryVec::const_iterator end  = mEntries.end();
+
+        while( itor != end )
+        {
+            const TextureArray & texArray = mTextureArrays[itor->mapType][itor->arrayIdx];
+            if( !firstIteration )
+                jsonStr.a( "," );
+
+            jsonStr.a( "\n\t\t\"", texArray.entries[itor->entryIdx].aliasName.c_str(), "\" : \n\t\t{" );
+            jsonStr.a( "\n\t\t\t\"type\" : ", itor->mapType );
+            jsonStr.a( ",\n\t\t\t\"poolId\" : ", texArray.uniqueSpecialId );
+            jsonStr.a( "\n\t\t}" );
+
+            outJson += jsonStr.c_str();
+            jsonStr.clear();
+
+            firstIteration = false;
+
+            ++itor;
+        }
+        jsonStr.a( "\n\t}\n}" );
+        outJson += jsonStr.c_str();
+        jsonStr.clear();
+    }
+    //-----------------------------------------------------------------------------------
     HlmsTextureManager::TextureLocation HlmsTextureManager::getBlankTexture(void) const
     {
         TextureLocation retVal;
@@ -1042,6 +1366,11 @@ namespace Ogre
         retVal.divisor  = 1;
 
         return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsTextureManager::clearTextureMetadataCache(void)
+    {
+        mMetadataCache.clear();
     }
     //-----------------------------------------------------------------------------------
     void HlmsTextureManager::dumpMemoryUsage( Log* log ) const

@@ -37,7 +37,9 @@ THE SOFTWARE.
 #include "OgreItem.h"
 #include "OgreMesh2.h"
 #include "OgreEntity.h"
+#include "OgreDecal.h"
 #include "OgreHlms.h"
+#include "OgreHlmsTextureManager.h"
 
 #include "OgreMeshSerializer.h"
 #include "OgreMesh2Serializer.h"
@@ -74,6 +76,13 @@ namespace Ogre
     {
         memset( mFloatBinTmpString, 0, sizeof( mFloatBinTmpString ) );
         memset( mDoubleBinTmpString, 0, sizeof( mDoubleBinTmpString ) );
+
+        for( int i=0; i<3; ++i )
+        {
+            mDecalsTexNames[i].clear();
+            mDecalsTex[i].reset();
+            mDecalsTexManaged[i] = false;
+        }
     }
     //-----------------------------------------------------------------------------------
     SceneFormatExporter::~SceneFormatExporter()
@@ -549,6 +558,87 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void SceneFormatExporter::exportDecalTex( LwString &jsonStr, String &outJson,
+                                              const DecalTex &decalTex,
+                                              set<String>::type &savedTextures,
+                                              uint32 exportFlags, int texTypeIndex )
+    {
+        if( !decalTex.texture )
+            return;
+
+        HlmsManager *hlmsManager = mRoot->getHlmsManager();
+        HlmsTextureManager *hlmsTextureManager = hlmsManager->getTextureManager();
+
+        HlmsTextureManager::TextureLocation texLocation;
+        texLocation.texture = decalTex.texture;
+        texLocation.xIdx = decalTex.xIdx;
+        texLocation.yIdx = 0;
+        texLocation.divisor = 1;
+        const String *aliasName = hlmsTextureManager->findAliasName( texLocation );
+        if( aliasName )
+        {
+            if( decalTex.texture == mDecalsTex[texTypeIndex] && mDecalsTexNames[texTypeIndex].empty() )
+            {
+                mDecalsTexNames[texTypeIndex] = *aliasName;
+                mDecalsTexManaged[texTypeIndex] = true;
+            }
+            uint32 poolId = 0;
+            const String *resName = hlmsTextureManager->findResourceNameFromAlias( *aliasName, poolId );
+            jsonStr.a( "\n\t\t\t\"", decalTex.texTypeName ,"_managed\" : [ \"", aliasName->c_str(),
+                       "\", \"", resName->c_str(), "\", " );
+            jsonStr.a( poolId, " ]," );
+
+            if( exportFlags & (SceneFlags::TexturesOitd|SceneFlags::TexturesOriginal) )
+            {
+                hlmsTextureManager->saveTexture( texLocation, mCurrentExportFolder + "/textures/",
+                                                 savedTextures, exportFlags & SceneFlags::TexturesOitd,
+                                                 exportFlags & SceneFlags::TexturesOriginal,
+                                                 texLocation.xIdx, 1u, mListener );
+            }
+        }
+        else
+        {
+            if( decalTex.texture == mDecalsTex[texTypeIndex] && mDecalsTexNames[texTypeIndex].empty() )
+            {
+                mDecalsTexNames[texTypeIndex] = decalTex.texture->getName() + ".oitd";
+                mDecalsTexManaged[texTypeIndex] = false;
+            }
+
+            //Texture not managed by HlmsTextureManager
+            jsonStr.a( "\n\t\t\t\"", decalTex.texTypeName, "_raw\" : [ \"",
+                       decalTex.texture->getName().c_str(), ".oitd\", " );
+            jsonStr.a( decalTex.xIdx, " ]," );
+
+            if( exportFlags & SceneFlags::TexturesOitd )
+            {
+                hlmsTextureManager->saveTexture( texLocation, mCurrentExportFolder + "/textures/",
+                                                 savedTextures, true, false,
+                                                 0, decalTex.texture->getDepth(), mListener );
+            }
+        }
+
+        flushLwString( jsonStr, outJson );
+    }
+    //-----------------------------------------------------------------------------------
+    void SceneFormatExporter::exportDecal( LwString &jsonStr, String &outJson, Decal *decal,
+                                           set<String>::type &savedTextures,
+                                           uint32 exportFlags )
+    {
+        DecalTex decalTex( decal->getDiffuseTexture(),
+                           static_cast<uint16>( decal->mDiffuseIdx ), "diffuse" );
+        exportDecalTex( jsonStr, outJson, decalTex, savedTextures, exportFlags, 0 );
+        decalTex = DecalTex( decal->getNormalTexture(),
+                             static_cast<uint16>( decal->mNormalMapIdx ), "normal" );
+        exportDecalTex( jsonStr, outJson, decalTex, savedTextures, exportFlags, 1 );
+        decalTex = DecalTex( decal->getEmissiveTexture(),
+                             static_cast<uint16>( decal->mEmissiveIdx ), "emissive" );
+        exportDecalTex( jsonStr, outJson, decalTex, savedTextures, exportFlags, 2 );
+
+        jsonStr.a( "\n" );
+        flushLwString( jsonStr, outJson );
+        exportMovableObject( jsonStr, outJson, decal );
+    }
+    //-----------------------------------------------------------------------------------
     void SceneFormatExporter::exportInstantRadiosity( LwString &jsonStr, String &outJson )
     {
         if( !mInstantRadiosity )
@@ -784,6 +874,7 @@ namespace Ogre
                            forwardImpl->getNumSlices(), ", ", forwardImpl->getLightsPerCell() );
                 jsonStr.a( ", ", encodeFloat( forwardImpl->getMinDistance() ), ", ",
                            encodeFloat( forwardImpl->getMaxDistance() ), "]" );
+                jsonStr.a( ",\n\t\t\t\"decals_per_cell\" : ", forwardImpl->getDecalsPerCell() );
             }
 
             jsonStr.a( "\n\t\t}" );
@@ -816,16 +907,48 @@ namespace Ogre
             }
         }
 
+        if( exportFlags & SceneFlags::Decals )
+        {
+            //When the texture is managed type:
+            //  "decals_diffuse_managed" : "alias_name_of_any_texture_using_it"
+            //which we gathered in exportDecal()
+            //When it's not managed, type instead:
+            //  "decals_diffuse_raw" : "tex_name.oitd"
+            //which was also filled in exportDecal()
+            const char *texTypes[3] = { "diffuse", "normals", "emissive" };
+            for( int i=0; i<3; ++i )
+            {
+                if( !mDecalsTexNames[i].empty() )
+                {
+                    const char *texMode = mDecalsTexManaged[i] ? "_managed" : "_raw";
+                    jsonStr.a( ",\n\t\t\"decals_", texTypes[i], texMode,"\" : \"",
+                               mDecalsTexNames[i].c_str(), "\"" );
+                }
+            }
+        }
+
         jsonStr.a( "\n\t}" );
 
         flushLwString( jsonStr, outJson );
     }
     //-----------------------------------------------------------------------------------
-    void SceneFormatExporter::_exportScene( String &outJson, uint32 exportFlags )
+    void SceneFormatExporter::_exportScene( String &outJson, set<String>::type &savedTextures,
+                                            uint32 exportFlags )
     {
         mNodeToIdxMap.clear();
         mExportedMeshes.clear();
         mExportedMeshesV1.clear();
+
+        for( int i=0; i<3; ++i )
+        {
+            mDecalsTexNames[i].clear();
+            mDecalsTex[i].reset();
+            mDecalsTexManaged[i] = false;
+        }
+
+        mDecalsTex[0] = mSceneManager->getDecalsDiffuse();
+        mDecalsTex[1] = mSceneManager->getDecalsNormals();
+        mDecalsTex[2] = mSceneManager->getDecalsEmissive();
 
         mListener->setSceneFlags( exportFlags, this );
 
@@ -994,6 +1117,39 @@ namespace Ogre
             }
         }
 
+        if( exportFlags & SceneFlags::Decals )
+        {
+            SceneManager::MovableObjectIterator movableObjects =
+                    mSceneManager->getMovableObjectIterator( DecalFactory::FACTORY_TYPE_NAME );
+
+            if( movableObjects.hasMoreElements() )
+            {
+                outJson += ",\n\t\"decals\" :\n\t[\n";
+
+                bool firstObject = true;
+
+                while( movableObjects.hasMoreElements() )
+                {
+                    MovableObject *mo = movableObjects.getNext();
+                    Decal *decal = static_cast<Decal*>( mo );
+                    if( mListener->exportDecal( decal ) )
+                    {
+                        if( firstObject )
+                        {
+                            outJson += "\n\t\t{";
+                            firstObject = false;
+                        }
+                        else
+                            outJson += ",\n\t\t{";
+                        exportDecal( jsonStr, outJson, decal, savedTextures, exportFlags );
+                        outJson += "\n\t\t}";
+                    }
+                }
+
+                outJson += "\n\t]";
+            }
+        }
+
         if( exportFlags & SceneFlags::SceneSettings )
             exportSceneSettings( jsonStr, outJson , exportFlags );
 
@@ -1005,17 +1161,23 @@ namespace Ogre
     void SceneFormatExporter::exportScene( String &outJson, uint32 exportFlags )
     {
         mCurrentExportFolder.clear();
-        _exportScene( outJson, exportFlags & ~(SceneFlags::Meshes | SceneFlags::MeshesV1) );
+        set<String>::type savedTextures;
+        _exportScene( outJson, savedTextures,
+                      exportFlags & ~(SceneFlags::Meshes | SceneFlags::MeshesV1) );
     }
     //-----------------------------------------------------------------------------------
     void SceneFormatExporter::exportSceneToFile( const String &folderPath, uint32 exportFlags )
     {
         mCurrentExportFolder = folderPath;
+        const String textureFolder = folderPath + "/textures/";
         FileSystemLayer::createDirectory( mCurrentExportFolder );
+        if( exportFlags & (SceneFlags::TexturesOitd|SceneFlags::TexturesOriginal)  )
+            FileSystemLayer::createDirectory( textureFolder );
 
+        set<String>::type savedTextures;
         {
             String jsonString;
-            _exportScene( jsonString, exportFlags );
+            _exportScene( jsonString, savedTextures, exportFlags );
 
             const String scenePath = folderPath + "/scene.json";
             std::ofstream file( scenePath.c_str(), std::ios::binary | std::ios::out );
@@ -1041,11 +1203,19 @@ namespace Ogre
 
         if( exportFlags & (SceneFlags::TexturesOitd|SceneFlags::TexturesOriginal)  )
         {
-            const String textureFolder = folderPath + "/textures/";
-            FileSystemLayer::createDirectory( textureFolder );
-
-            set<String>::type savedTextures;
             HlmsManager *hlmsManager = mRoot->getHlmsManager();
+            {
+                String jsonString;
+                HlmsTextureManager *hlmsTextureManager = hlmsManager->getTextureManager();
+                hlmsTextureManager->exportTextureMetadataCache( jsonString );
+
+                const String scenePath = folderPath + "/textureMetadataCache.json";
+                std::ofstream file( scenePath.c_str(), std::ios::binary | std::ios::out );
+                if( file.is_open() )
+                    file.write( jsonString.c_str(), jsonString.size() );
+                file.close();
+            }
+
             for( size_t i=HLMS_LOW_LEVEL + 1u; i<HLMS_MAX; ++i )
             {
                 Hlms *hlms = hlmsManager->getHlms( static_cast<HlmsTypes>( i ) );
