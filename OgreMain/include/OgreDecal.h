@@ -95,9 +95,18 @@ namespace Ogre
         Decal( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager* manager );
         virtual ~Decal();
 
+        /// Call this family of functions if the input texture is automatically batched
+        /// We will listen for residency changes and change the internal slice accordingly
         void setDiffuseTexture( TextureGpu *diffuseTex );
         void setNormalTexture( TextureGpu *normalTex );
         void setEmissiveTexture( TextureGpu *emissiveTex );
+
+        /// Call this family of functions if the input texture is managed by hand by you.
+        /// We will not listen to residency changes. It's your responsibility to ensure
+        /// the texture resident by the time it needs to be displayed.
+        void setDiffuseTextureRaw( TextureGpu *diffuseTex, uint32 sliceIdx );
+        void setNormalTextureRaw( TextureGpu *normalTex, uint32 sliceIdx );
+        void setEmissiveTextureRaw( TextureGpu *emissiveTex, uint32 sliceIdx );
 
         TextureGpu* getDiffuseTexture(void) const;
         TextureGpu* getNormalTexture(void) const;

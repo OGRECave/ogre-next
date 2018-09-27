@@ -95,10 +95,10 @@ namespace Ogre
     protected:
         struct DecalTex
         {
-            TexturePtr  texture;
+            TextureGpu  *texture;
             uint16      xIdx;
             const char  *texTypeName;
-            DecalTex( const TexturePtr &_texture, uint16 _xIdx, const char *_texTypeName ) :
+            DecalTex( TextureGpu *_texture, uint16 _xIdx, const char *_texTypeName ) :
                 texture( _texture ), xIdx( _xIdx ), texTypeName( _texTypeName ) {}
         };
 

@@ -377,19 +377,6 @@ namespace Ogre
 
             fbConfig = mGLSupport->selectFBConfig( minAttribs, maxAttribs );
         }
-        else
-        {
-            if (gamma != 0)
-            {
-                int result;
-                result = mGLSupport->getFBConfigAttrib( fbConfig, GLX_FRAMEBUFFER_SRGB_CAPABLE_EXT,
-                    &gamma );
-                if( result != Success )
-                    gamma = 0;
-            }
-
-            mHwGamma = (gamma != 0);
-        }
 
         if( !fbConfig )
         {

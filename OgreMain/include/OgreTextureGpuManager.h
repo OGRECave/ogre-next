@@ -486,6 +486,11 @@ namespace Ogre
         void destroyAsyncTextureTicket( AsyncTextureTicket *ticket );
         void destroyAllAsyncTextureTicket(void);
 
+        void saveTexture( TextureGpu *texture,
+                          const String &folderPath, set<String>::type &savedTextures,
+                          bool saveOitd, bool saveOriginal,
+                          HlmsTextureExportListener *listener );
+
         void dumpStats(void) const;
         void dumpMemoryUsage( Log* log ) const;
 

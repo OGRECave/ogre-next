@@ -39,7 +39,6 @@ THE SOFTWARE.
 #include "OgreEntity.h"
 #include "OgreDecal.h"
 #include "OgreHlms.h"
-#include "OgreHlmsTextureManager.h"
 
 #include "OgreHlmsPbs.h"
 #include "InstantRadiosity/OgreInstantRadiosity.h"
@@ -48,6 +47,7 @@ THE SOFTWARE.
 #include "Cubemaps/OgreParallaxCorrectedCubemap.h"
 #include "Compositor/OgreCompositorManager2.h"
 
+#include "OgreTextureFilters.h"
 #include "OgreTextureGpuManager.h"
 
 #include "OgreMeshSerializer.h"
@@ -1016,15 +1016,15 @@ namespace Ogre
 
         DecalTex decalTex[3] =
         {
-            DecalTex( TexturePtr(), 0, "diffuse" ),
-            DecalTex( TexturePtr(), 0, "normal" ),
-            DecalTex( TexturePtr(), 0, "emissive" ),
+            DecalTex( 0, 0, "diffuse" ),
+            DecalTex( 0, 0, "normal" ),
+            DecalTex( 0, 0, "emissive" ),
         };
 
         char tmpBuffer[32];
         LwString texName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
-        HlmsManager *hlmsManager = mRoot->getHlmsManager();
-        HlmsTextureManager *hlmsTextureManager = hlmsManager->getTextureManager();
+        TextureGpuManager *textureManager =
+                mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
 
         for( int i=0; i<3; ++i )
         {
@@ -1036,18 +1036,21 @@ namespace Ogre
                 tmpIt->value[0].IsString() && tmpIt->value[1].IsString() && tmpIt->value[2].IsUint() )
             {
                 const char *aliasName = tmpIt->value[0].GetString();
-                //Real texture name is lost in 2.1. Needs 2.2
-                //const char *textureName = tmpIt->value[1].GetString();
+                const char *textureName = tmpIt->value[1].GetString();
                 const uint32 poolId = tmpIt->value[2].GetUint();
 
-                HlmsTextureManager::TextureLocation texLocation =
-                        hlmsTextureManager->createOrRetrieveTexture(
-                            //aliasName, textureName + additionalExtension,
-                            aliasName, aliasName + additionalExtension,
-                            i != 1 ? HlmsTextureManager::TEXTURE_TYPE_DIFFUSE :
-                                     HlmsTextureManager::TEXTURE_TYPE_NORMALS, poolId );
-                decalTex[i].texture = texLocation.texture;
-                decalTex[i].xIdx    = texLocation.xIdx;
+                uint32 textureFlags = TextureFlags::AutomaticBatching;
+                uint32 filters = TextureFilter::TypeGenerateDefaultMipmaps;
+                if( i != 1 )
+                    textureFlags |= TextureFlags::PrefersLoadingFromFileAsSRGB;
+                else
+                    filters |= TextureFilter::TypePrepareForNormalMapping;
+
+                decalTex[i].texture = textureManager->createOrRetrieveTexture(
+                                          textureName + additionalExtension, aliasName,
+                                          GpuPageOutStrategy::Discard, textureFlags,
+                                          TextureTypes::Type2D, "SceneFormatImporter", filters, poolId );
+                decalTex[i].xIdx    = decalTex[i].texture->getInternalSliceStart();
             }
 
             texName.clear();
@@ -1060,20 +1063,35 @@ namespace Ogre
                 const char *textureName = tmpIt->value[0].GetString();
                 const uint32 arrayIdx = tmpIt->value[1].GetUint();
 
-                TexturePtr texture =
-                        TextureManager::getSingleton().load( textureName, "SceneFormatImporter",
-                                                             TEX_TYPE_2D_ARRAY );
-                decalTex[i].texture = texture;
+                //Open OITD directly
+                decalTex[i].texture = textureManager->createOrRetrieveTexture(
+                                          textureName, GpuPageOutStrategy::Discard,
+                                          0, TextureTypes::Type2DArray, "SceneFormatImporter", 0, 0 );
                 decalTex[i].xIdx    = arrayIdx;
             }
         }
 
         if( decalTex[0].texture )
-            decal->setDiffuseTexture( decalTex[0].texture, decalTex[0].xIdx );
+        {
+            if( decalTex[0].texture->hasAutomaticBatching() )
+                decal->setDiffuseTexture( decalTex[0].texture );
+            else
+                decal->setDiffuseTextureRaw( decalTex[0].texture, decalTex[0].xIdx );
+        }
         if( decalTex[1].texture )
-            decal->setNormalTexture( decalTex[1].texture, decalTex[1].xIdx );
+        {
+            if( decalTex[1].texture->hasAutomaticBatching() )
+                decal->setNormalTexture( decalTex[1].texture );
+            else
+                decal->setNormalTextureRaw( decalTex[1].texture, decalTex[1].xIdx );
+        }
         if( decalTex[2].texture )
-            decal->setEmissiveTexture( decalTex[2].texture, decalTex[2].xIdx );
+        {
+            if( decalTex[2].texture->hasAutomaticBatching() )
+                decal->setEmissiveTexture( decalTex[2].texture );
+            else
+                decal->setEmissiveTextureRaw( decalTex[2].texture, decalTex[2].xIdx );
+        }
     }
     //-----------------------------------------------------------------------------------
     void SceneFormatImporter::importDecals( const rapidjson::Value &json )
@@ -1305,13 +1323,13 @@ namespace Ogre
 
         if( importFlags & SceneFlags::Decals )
         {
-            HlmsManager *hlmsManager = mRoot->getHlmsManager();
-            HlmsTextureManager *hlmsTextureManager = hlmsManager->getTextureManager();
+            TextureGpuManager *textureManager =
+                    mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
 
             char tmpBuffer[32];
             LwString keyName( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
             const char *texTypes[3] = { "diffuse", "normals", "emissive" };
-            TexturePtr textures[3];
+            TextureGpu *textures[3] = { 0, 0, 0 };
 
             for( int i=0; i<3; ++i )
             {
@@ -1320,11 +1338,10 @@ namespace Ogre
                 tmpIt = json.FindMember( keyName.c_str() );
                 if( tmpIt != json.MemberEnd() && tmpIt->value.IsString() )
                 {
-                    //TextureType shouldn't matter because that alias should've been loaded by now
-                    HlmsTextureManager::TextureLocation texLocation =
-                            hlmsTextureManager->createOrRetrieveTexture(
-                                tmpIt->value.GetString(), HlmsTextureManager::TEXTURE_TYPE_DIFFUSE );
-                    textures[i] = texLocation.texture;
+                    //Most settings shouldn't matter because that alias should've been loaded by now
+                    textures[i] = textureManager->createOrRetrieveTexture(
+                                      tmpIt->value.GetString(), GpuPageOutStrategy::Discard,
+                                      CommonTextureTypes::Diffuse, "SceneFormatImporter" );
                 }
 
                 keyName.clear();
@@ -1332,9 +1349,9 @@ namespace Ogre
                 tmpIt = json.FindMember( keyName.c_str() );
                 if( tmpIt != json.MemberEnd() && tmpIt->value.IsString() )
                 {
-                    textures[i] = TextureManager::getSingleton().load(
-                                      tmpIt->value.GetString(),
-                                      "SceneFormatImporter", TEX_TYPE_2D_ARRAY );
+                    textures[i] = textureManager->createOrRetrieveTexture(
+                                      tmpIt->value.GetString(), GpuPageOutStrategy::Discard,
+                                      0, TextureTypes::Type2DArray, "SceneFormatImporter", 0, 0 );
                 }
             }
 
@@ -1533,7 +1550,7 @@ namespace Ogre
 
                 HlmsManager *hlmsManager = mRoot->getHlmsManager();
                 HlmsTextureManager *hlmsTextureManager = hlmsManager->getTextureManager();
-                hlmsTextureManager->importTextureMetadataCache( stream->getName(), &fileData[0] );
+                //hlmsTextureManager->importTextureMetadataCache( stream->getName(), &fileData[0] );
             }
         }
 

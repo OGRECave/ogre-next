@@ -45,6 +45,8 @@ THE SOFTWARE.
 #include "OgreImage2.h"
 #include "OgreTextureFilters.h"
 
+#include "OgreHlmsDatablock.h"
+
 #include "Threading/OgreThreads.h"
 
 #include "OgreException.h"
@@ -602,6 +604,95 @@ namespace Ogre
         }
 
         mAsyncTextureTickets.clear();
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::saveTexture( TextureGpu *texture, const String &folderPath,
+                                         set<String>::type &savedTextures, bool saveOitd,
+                                         bool saveOriginal, HlmsTextureExportListener *listener )
+    {
+        String resourceName = texture->getRealResourceNameStr();
+
+        //Render Targets are... complicated. Let's not, for now.
+        if( savedTextures.find( resourceName ) != savedTextures.end() || texture->isRenderToTexture() )
+            return;
+
+        DataStreamPtr inFile;
+        if( saveOriginal )
+        {
+            const String aliasName = texture->getNameStr();
+            String savingFilename = resourceName;
+            if( listener )
+            {
+                listener->savingChangeTextureNameOriginal( aliasName, resourceName,
+                                                           savingFilename );
+            }
+
+            try
+            {
+                String resourceGroup = texture->getRealResourceNameStr();
+                if( resourceGroup.empty() )
+                    resourceGroup = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME;
+
+                inFile = ResourceGroupManager::getSingleton().openResource(
+                             resourceName, resourceGroup );
+            }
+            catch( FileNotFoundException &e )
+            {
+                //Try opening as an absolute path
+                std::fstream *ifs = OGRE_NEW_T( std::fstream, MEMCATEGORY_GENERAL )(
+                                        resourceName.c_str(),
+                                        std::ios::binary|std::ios::in );
+
+                if( ifs->is_open() )
+                {
+                    inFile = DataStreamPtr( OGRE_NEW FileStreamDataStream( resourceName,
+                                                                           ifs, true ) );
+                }
+                else
+                {
+                    LogManager::getSingleton().logMessage(
+                                "WARNING: Could not find texture file " + aliasName +
+                                " (" + resourceName + ") for copying to export location. "
+                                "Error: " + e.getFullDescription() );
+                }
+            }
+            catch( Exception &e )
+            {
+                LogManager::getSingleton().logMessage(
+                            "WARNING: Could not find texture file " + aliasName +
+                            " (" + resourceName + ") for copying to export location. "
+                            "Error: " + e.getFullDescription() );
+            }
+
+            if( inFile )
+            {
+                size_t fileSize = inFile->size();
+                vector<uint8>::type fileData;
+                fileData.resize( fileSize );
+                inFile->read( &fileData[0], fileData.size() );
+                std::ofstream outFile( (folderPath + "/" + savingFilename).c_str(),
+                                       std::ios::binary | std::ios::out );
+                outFile.write( (const char*)&fileData[0], fileData.size() );
+                outFile.close();
+            }
+        }
+
+        if( saveOitd )
+        {
+            String texName = resourceName;
+            if( listener )
+                listener->savingChangeTextureNameOitd( texName, texture );
+
+            if( texture->getNextResidencyStatus() == GpuResidency::Resident )
+            {
+                Image2 image;
+                image.convertFromTexture( texture, 0u, texture->getNumMipmaps(), true );
+
+                image.save( folderPath + "/" + texName + ".oitd", 0, image.getNumMipmaps() );
+            }
+        }
+
+        savedTextures.insert( resourceName );
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::dumpStats(void) const

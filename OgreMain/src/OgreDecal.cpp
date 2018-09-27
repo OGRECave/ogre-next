@@ -66,19 +66,19 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     Decal::~Decal()
     {
-        if( mDiffuseTexture )
+        if( mDiffuseTexture && mDiffuseTexture->hasAutomaticBatching() )
         {
             mDiffuseTexture->removeListener( this );
             mDiffuseTexture = 0;
         }
 
-        if( mNormalTexture )
+        if( mNormalTexture && mNormalTexture->hasAutomaticBatching() )
         {
             mNormalTexture->removeListener( this );
             mNormalTexture= 0;
         }
 
-        if( mEmissiveTexture )
+        if( mEmissiveTexture && mEmissiveTexture->hasAutomaticBatching() )
         {
             mEmissiveTexture->removeListener( this );
             mEmissiveTexture= 0;
@@ -87,10 +87,12 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void Decal::setDiffuseTexture( TextureGpu *diffuseTex )
     {
-        if( mDiffuseTexture )
+        if( mDiffuseTexture && mDiffuseTexture->hasAutomaticBatching() )
             mDiffuseTexture->removeListener( this );
         if( diffuseTex )
         {
+            OGRE_ASSERT_LOW( diffuseTex->hasAutomaticBatching() &&
+                             "If the texture does is not AutomaticBatching, the use Raw calls!" );
             diffuseTex->addListener( this );
             diffuseTex->scheduleTransitionTo( GpuResidency::Resident );
             mDiffuseTexture = diffuseTex;
@@ -110,10 +112,12 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void Decal::setNormalTexture( TextureGpu *normalTex )
     {
-        if( mNormalTexture )
+        if( mNormalTexture && mNormalTexture->hasAutomaticBatching() )
             mNormalTexture->removeListener( this );
         if( normalTex )
         {
+            OGRE_ASSERT_LOW( normalTex->hasAutomaticBatching() &&
+                             "If the texture does is not AutomaticBatching, the use Raw calls!" );
             normalTex->addListener( this );
             normalTex->scheduleTransitionTo( GpuResidency::Resident );
             mNormalTexture = normalTex;
@@ -133,10 +137,12 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void Decal::setEmissiveTexture( TextureGpu *emissiveTex )
     {
-        if( mEmissiveTexture )
+        if( mEmissiveTexture && mEmissiveTexture->hasAutomaticBatching() )
             mEmissiveTexture->removeListener( this );
         if( emissiveTex )
         {
+            OGRE_ASSERT_LOW( emissiveTex->hasAutomaticBatching() &&
+                             "If the texture does is not AutomaticBatching, the use Raw calls!" );
             emissiveTex->addListener( this );
             emissiveTex->scheduleTransitionTo( GpuResidency::Resident );
             mEmissiveTexture = emissiveTex;
@@ -147,6 +153,36 @@ namespace Ogre
             mEmissiveTexture = 0;
             mEmissiveIdx = 0;
         }
+    }
+    //-----------------------------------------------------------------------------------
+    void Decal::setDiffuseTextureRaw( TextureGpu *diffuseTex, uint32 sliceIdx )
+    {
+        if( mDiffuseTexture && mDiffuseTexture->hasAutomaticBatching() )
+            mDiffuseTexture->removeListener( this );
+        OGRE_ASSERT_LOW( (!diffuseTex || !diffuseTex->hasAutomaticBatching()) &&
+                         "Only use Raw call if texture is not AutomaticBatching!" );
+        mDiffuseTexture = diffuseTex;
+        mDiffuseIdx = sliceIdx;
+    }
+    //-----------------------------------------------------------------------------------
+    void Decal::setNormalTextureRaw( TextureGpu *normalTex, uint32 sliceIdx )
+    {
+        if( mNormalTexture && mNormalTexture->hasAutomaticBatching() )
+            mNormalTexture->removeListener( this );
+        OGRE_ASSERT_LOW( (!normalTex || !normalTex->hasAutomaticBatching()) &&
+                         "Only use Raw call if texture is not AutomaticBatching!" );
+        mNormalTexture = normalTex;
+        mNormalMapIdx = sliceIdx;
+    }
+    //-----------------------------------------------------------------------------------
+    void Decal::setEmissiveTextureRaw( TextureGpu *emissiveTex, uint32 sliceIdx )
+    {
+        if( mEmissiveTexture && mEmissiveTexture->hasAutomaticBatching() )
+            mEmissiveTexture->removeListener( this );
+        OGRE_ASSERT_LOW( (!emissiveTex || !emissiveTex->hasAutomaticBatching()) &&
+                         "Only use Raw call if texture is not AutomaticBatching!" );
+        mEmissiveTexture = emissiveTex;
+        mEmissiveIdx = sliceIdx;
     }
     //-----------------------------------------------------------------------------------
     TextureGpu* Decal::getEmissiveTexture(void) const

@@ -66,7 +66,7 @@ namespace Ogre
         char mDoubleBinTmpString[4][384];
 
         String      mDecalsTexNames[3];
-        TexturePtr  mDecalsTex[3];
+        TextureGpu  *mDecalsTex[3];
         bool        mDecalsTexManaged[3];
 
         static const char* toQuotedStr( bool value );

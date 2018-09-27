@@ -39,7 +39,7 @@ THE SOFTWARE.
 #include "OgreEntity.h"
 #include "OgreDecal.h"
 #include "OgreHlms.h"
-#include "OgreHlmsTextureManager.h"
+#include "OgreTextureGpuManager.h"
 
 #include "OgreMeshSerializer.h"
 #include "OgreMesh2Serializer.h"
@@ -80,7 +80,7 @@ namespace Ogre
         for( int i=0; i<3; ++i )
         {
             mDecalsTexNames[i].clear();
-            mDecalsTex[i].reset();
+            mDecalsTex[i] = 0;
             mDecalsTexManaged[i] = false;
         }
     }
@@ -566,54 +566,49 @@ namespace Ogre
         if( !decalTex.texture )
             return;
 
-        HlmsManager *hlmsManager = mRoot->getHlmsManager();
-        HlmsTextureManager *hlmsTextureManager = hlmsManager->getTextureManager();
+        TextureGpuManager *textureManager = decalTex.texture->getTextureManager();
 
-        HlmsTextureManager::TextureLocation texLocation;
-        texLocation.texture = decalTex.texture;
-        texLocation.xIdx = decalTex.xIdx;
-        texLocation.yIdx = 0;
-        texLocation.divisor = 1;
-        const String *aliasName = hlmsTextureManager->findAliasName( texLocation );
-        if( aliasName )
+        const String *resName = textureManager->findResourceNameStr( decalTex.texture->getName() );
+
+        if( decalTex.texture->hasAutomaticBatching() && resName )
         {
+            const String aliasName = decalTex.texture->getNameStr();
             if( decalTex.texture == mDecalsTex[texTypeIndex] && mDecalsTexNames[texTypeIndex].empty() )
             {
-                mDecalsTexNames[texTypeIndex] = *aliasName;
+                mDecalsTexNames[texTypeIndex] = aliasName;
                 mDecalsTexManaged[texTypeIndex] = true;
             }
-            uint32 poolId = 0;
-            const String *resName = hlmsTextureManager->findResourceNameFromAlias( *aliasName, poolId );
-            jsonStr.a( "\n\t\t\t\"", decalTex.texTypeName ,"_managed\" : [ \"", aliasName->c_str(),
+            uint32 poolId = decalTex.texture->getTexturePoolId();
+            jsonStr.a( "\n\t\t\t\"", decalTex.texTypeName ,"_managed\" : [ \"", aliasName.c_str(),
                        "\", \"", resName->c_str(), "\", " );
             jsonStr.a( poolId, " ]," );
 
             if( exportFlags & (SceneFlags::TexturesOitd|SceneFlags::TexturesOriginal) )
             {
-                hlmsTextureManager->saveTexture( texLocation, mCurrentExportFolder + "/textures/",
-                                                 savedTextures, exportFlags & SceneFlags::TexturesOitd,
-                                                 exportFlags & SceneFlags::TexturesOriginal,
-                                                 texLocation.xIdx, 1u, mListener );
+                textureManager->saveTexture( decalTex.texture, mCurrentExportFolder + "/textures/",
+                                             savedTextures, exportFlags & SceneFlags::TexturesOitd,
+                                             exportFlags & SceneFlags::TexturesOriginal,
+                                             mListener );
             }
         }
         else
         {
             if( decalTex.texture == mDecalsTex[texTypeIndex] && mDecalsTexNames[texTypeIndex].empty() )
             {
-                mDecalsTexNames[texTypeIndex] = decalTex.texture->getName() + ".oitd";
+                mDecalsTexNames[texTypeIndex] = decalTex.texture->getNameStr() + ".oitd";
                 mDecalsTexManaged[texTypeIndex] = false;
             }
 
             //Texture not managed by HlmsTextureManager
             jsonStr.a( "\n\t\t\t\"", decalTex.texTypeName, "_raw\" : [ \"",
-                       decalTex.texture->getName().c_str(), ".oitd\", " );
+                       decalTex.texture->getNameStr().c_str(), ".oitd\", " );
             jsonStr.a( decalTex.xIdx, " ]," );
 
             if( exportFlags & SceneFlags::TexturesOitd )
             {
-                hlmsTextureManager->saveTexture( texLocation, mCurrentExportFolder + "/textures/",
-                                                 savedTextures, true, false,
-                                                 0, decalTex.texture->getDepth(), mListener );
+                textureManager->saveTexture( decalTex.texture, mCurrentExportFolder + "/textures/",
+                                             savedTextures, true, false,
+                                             mListener );
             }
         }
 
@@ -942,7 +937,7 @@ namespace Ogre
         for( int i=0; i<3; ++i )
         {
             mDecalsTexNames[i].clear();
-            mDecalsTex[i].reset();
+            mDecalsTex[i] = 0;
             mDecalsTexManaged[i] = false;
         }
 
@@ -1207,7 +1202,7 @@ namespace Ogre
             {
                 String jsonString;
                 HlmsTextureManager *hlmsTextureManager = hlmsManager->getTextureManager();
-                hlmsTextureManager->exportTextureMetadataCache( jsonString );
+                //hlmsTextureManager->exportTextureMetadataCache( jsonString );
 
                 const String scenePath = folderPath + "/textureMetadataCache.json";
                 std::ofstream file( scenePath.c_str(), std::ios::binary | std::ios::out );

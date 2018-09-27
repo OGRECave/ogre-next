@@ -1060,6 +1060,7 @@ namespace Ogre
                                           uint32 slice, uint32 numSlices,
                                           HlmsTextureExportListener *listener )
     {
+#if 0
         //Render Targets are... complicated. Let's not, for now.
         if( texLocation.texture->getUsage() & TU_RENDERTARGET )
             return;
@@ -1146,6 +1147,7 @@ namespace Ogre
         }
 
         savedTextures.insert( aliasName );
+#endif
     }
     //-----------------------------------------------------------------------------------
     HlmsTextureManager::MetadataCacheEntry::MetadataCacheEntry() :
