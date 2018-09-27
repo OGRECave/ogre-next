@@ -1548,9 +1548,9 @@ namespace Ogre
                 //Add null terminator just in case (to prevent bad input)
                 fileData.back() = '\0';
 
-                HlmsManager *hlmsManager = mRoot->getHlmsManager();
-                HlmsTextureManager *hlmsTextureManager = hlmsManager->getTextureManager();
-                //hlmsTextureManager->importTextureMetadataCache( stream->getName(), &fileData[0] );
+                TextureGpuManager *textureManager =
+                        mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
+                textureManager->importTextureMetadataCache( stream->getName(), &fileData[0], true );
             }
         }
 

@@ -187,6 +187,19 @@ namespace Ogre
         For code reference, look at _getSysRamCopyAsBox implementation, and TextureBox::at
         Each row of pixels is aligned to 4 bytes (except for compressed formats that require
         more strict alignments, such as alignment to the block).
+
+        A TextureGpu loaded from file has the following life cycle, usually:
+            1. At creation it's mResidencyStatus = GpuResidency::OnStorage
+            2. Loading is scheduled via scheduleTransitionTo.
+               mNextResidencyStatus = GpuResidency::Resident
+            3. Texture transitions to resident. mResidencyStatus = GpuResidency::Resident
+               isMetadataReady returns true. How fast this happens depends on whether
+               there was a metadata cache or not.
+            4. If there is a metadata cache, and the cache turned out to be wrong (e.g. it
+               lied or was out of date), the texture will transition
+               back to OnStorage and the whole process repeats from step 1.
+            5. Texture finishes loading. notifyDataIsReady gets called and now
+               isDataReady returns true.
     */
     class _OgreExport TextureGpu : public GpuTrackedResource, public GpuResource
     {
@@ -259,13 +272,23 @@ namespace Ogre
             scheduleTransitionTo
         @param nextResidency
             The residency to change to.
+        @param image
+            Pointer to image if you want to load the texture from memory instead of loading
+            it from file or a listener.
+            Pointer must be null if this is a manual texture.
+        @param autoDeleteImage
+            Whether we should call "delete image" once we're done using the image.
+            Otherwise you must listen for TextureGpuListener::ReadyForRendering
+            message to know when we're done using the image.
         */
-        void unsafeScheduleTransitionTo( GpuResidency::GpuResidency nextResidency );
+        void unsafeScheduleTransitionTo( GpuResidency::GpuResidency nextResidency,
+                                         Image2 *image=0, bool autoDeleteImage=true );
 
         /// Same as unsafeScheduleTransitionTo, but first checks if we're already
         /// in the residency state we want to go to, or if it has already
         /// been scheduled; thus it can be called multiple times
-        void scheduleTransitionTo( GpuResidency::GpuResidency nextResidency );
+        void scheduleTransitionTo( GpuResidency::GpuResidency nextResidency,
+                                   Image2 *image=0, bool autoDeleteImage=true );
 
         // See isMetadataReady for threadsafety on these functions.
         void setResolution( uint32 width, uint32 height, uint32 depthOrSlices=1u );

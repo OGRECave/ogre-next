@@ -54,6 +54,12 @@ THE SOFTWARE.
 
 #include "OgreProfiler.h"
 
+#if !OGRE_NO_JSON
+    #include "rapidjson/document.h"
+    #include "rapidjson/error/en.h"
+    #include "OgreStringConverter.h"
+#endif
+
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC
     #include <intrin.h>
     #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
@@ -304,6 +310,7 @@ namespace Ogre
         newPool.masterTexture = createTextureImpl( GpuPageOutStrategy::Discard,
                                                    texName.c_str(), 0,
                                                    TextureTypes::Type2DArray );
+        newPool.manuallyReserved = true;
         newPool.usedMemory = 0;
         newPool.usedSlots.reserve( numSlices );
 
@@ -695,6 +702,271 @@ namespace Ogre
         savedTextures.insert( resourceName );
     }
     //-----------------------------------------------------------------------------------
+    bool TextureGpuManager::applyMetadataCacheTo( TextureGpu *texture )
+    {
+        bool retVal = false;
+        MetadataCacheMap::const_iterator itor = mMetadataCache.find( texture->getName() );
+        if( itor != mMetadataCache.end() )
+        {
+            MetadataCacheEntry cacheEntry = itor->second;
+            texture->setResolution( cacheEntry.width, cacheEntry.height, cacheEntry.depthOrSlices );
+            texture->setNumMipmaps( cacheEntry.numMipmaps );
+            texture->setTextureType( cacheEntry.textureType );
+            texture->setPixelFormat( cacheEntry.pixelFormat );
+            texture->setTexturePoolId( cacheEntry.poolId );
+            retVal = true;
+        }
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::_updateMetadataCache( TextureGpu *texture )
+    {
+        MetadataCacheEntry entry;
+        entry.width = texture->getWidth();
+        entry.height = texture->getHeight();
+        entry.depthOrSlices = texture->getDepthOrSlices();
+        entry.pixelFormat = texture->getPixelFormat();
+        entry.poolId = texture->getTexturePoolId();
+        entry.textureType = texture->getTextureType();
+        entry.numMipmaps = texture->getNumMipmaps();
+
+        mMetadataCache[texture->getName()] = entry;
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::_removeMetadataCacheEntry( TextureGpu *texture )
+    {
+        mMetadataCache.erase( texture->getName() );
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::importTextureMetadataCache( const String &filename, const char *jsonString,
+                                                        bool bCreateReservedPools )
+    {
+#if !OGRE_NO_JSON
+        rapidjson::Document d;
+        d.Parse( jsonString );
+
+        if( d.HasParseError() )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "TextureGpuManager::importTextureMetadataCache",
+                         "Invalid JSON string in file " + filename + " at line " +
+                         StringConverter::toString( d.GetErrorOffset() ) + " Reason: " +
+                         rapidjson::GetParseError_En( d.GetParseError() ) );
+        }
+
+        rapidjson::Value::ConstMemberIterator itor;
+        itor = d.FindMember( "reserved_pool_ids" );
+
+        if( itor != d.MemberEnd() && itor->value.IsArray() && bCreateReservedPools )
+        {
+            const rapidjson::Value &jsonVal = itor->value;
+            const rapidjson::SizeType arraySize = jsonVal.Size();
+            for( rapidjson::SizeType i=0; i<arraySize; ++i )
+            {
+                if( jsonVal[i].IsObject() )
+                {
+                    MetadataCacheEntry entry;
+                    memset( &entry, 0, sizeof( entry ) );
+
+                    itor = jsonVal[i].FindMember( "poolId" );
+                    if( itor != jsonVal[i].MemberEnd() && itor->value.IsUint() )
+                        entry.poolId = itor->value.GetUint();
+
+                    itor = jsonVal[i].FindMember( "resolution" );
+                    if( itor != jsonVal[i].MemberEnd() &&
+                        itor->value.IsArray() && itor->value.Size() >= 3u &&
+                        itor->value[0].IsUint() && itor->value[1].IsUint() && itor->value[2].IsUint() )
+                    {
+                        entry.width = itor->value[0].GetUint();
+                        entry.height = itor->value[1].GetUint();
+                        entry.depthOrSlices = itor->value[2].GetUint();
+                    }
+
+                    entry.numMipmaps = 1u;
+                    itor = jsonVal[i].FindMember( "mipmaps" );
+                    if( itor != jsonVal[i].MemberEnd() && itor->value.IsUint() )
+                        entry.numMipmaps = static_cast<uint8>( itor->value.GetUint() );
+
+                    itor = jsonVal[i].FindMember( "format" );
+                    if( itor != jsonVal[i].MemberEnd() && itor->value.IsString() )
+                    {
+                        entry.pixelFormat =
+                                PixelFormatGpuUtils::getFormatFromName( itor->value.GetString() );
+                    }
+
+                    if( entry.width > 0u && entry.height > 0u && entry.depthOrSlices > 0u &&
+                        entry.pixelFormat != PFG_UNKNOWN &&
+                        !hasPoolId( entry.poolId, entry.width, entry.height,
+                                    entry.numMipmaps, entry.pixelFormat ) )
+                    {
+                        reservePoolId( entry.poolId, entry.width, entry.height,
+                                       entry.depthOrSlices, entry.numMipmaps, entry.pixelFormat );
+                    }
+                }
+            }
+        }
+
+        itor = d.FindMember( "textures" );
+        if( itor != d.MemberEnd() && itor->value.IsObject() )
+        {
+            rapidjson::Value::ConstMemberIterator itTex = itor->value.MemberBegin();
+            rapidjson::Value::ConstMemberIterator enTex = itor->value.MemberEnd();
+
+            while( itTex != enTex )
+            {
+                if( itTex->value.IsObject() )
+                {
+                    IdString aliasName = itTex->name.GetString();
+                    MetadataCacheEntry entry;
+                    memset( &entry, 0, sizeof( entry ) );
+
+                    itor = itTex->value.FindMember( "poolId" );
+                    if( itor != itTex->value.MemberEnd() && itor->value.IsUint() )
+                        entry.poolId = itor->value.GetUint();
+
+                    itor = itTex->value.FindMember( "texture_type" );
+                    if( itor != itTex->value.MemberEnd() && itor->value.IsUint() )
+                    {
+                        entry.textureType = static_cast<TextureTypes::TextureTypes>(
+                                                Math::Clamp<uint32>( itor->value.GetUint(),
+                                                                     0u, TextureTypes::Type3D ) );
+                    }
+
+                    itor = itTex->value.FindMember( "resolution" );
+                    if( itor != itTex->value.MemberEnd() &&
+                        itor->value.IsArray() && itor->value.Size() >= 3u &&
+                        itor->value[0].IsUint() && itor->value[1].IsUint() && itor->value[2].IsUint() )
+                    {
+                        entry.width = itor->value[0].GetUint();
+                        entry.height = itor->value[1].GetUint();
+                        entry.depthOrSlices = itor->value[2].GetUint();
+                    }
+
+                    entry.numMipmaps = 1u;
+                    itor = itTex->value.FindMember( "mipmaps" );
+                    if( itor != itTex->value.MemberEnd() && itor->value.IsUint() )
+                        entry.numMipmaps = static_cast<uint8>( itor->value.GetUint() );
+
+                    itor = itTex->value.FindMember( "format" );
+                    if( itor != itTex->value.MemberEnd() && itor->value.IsString() )
+                    {
+                        entry.pixelFormat =
+                                PixelFormatGpuUtils::getFormatFromName( itor->value.GetString() );
+                    }
+
+                    mMetadataCache[aliasName] = entry;
+                }
+
+                ++itTex;
+            }
+        }
+#else
+        OGRE_EXCEPT( Exception::ERR_INVALID_CALL,
+                     "Ogre must be built with JSON support to call this function!",
+                     "TextureGpuManager::importTextureMetadataCache" );
+#endif
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::exportTextureMetadataCache( String &outJson )
+    {
+        char tmpBuffer[4096];
+        LwString jsonStr( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+
+        jsonStr.a( "{" );
+        jsonStr.a( "\n\t\"reserved_pool_ids\" :\n\t[" );
+
+        bool firstIteration = true;
+        {
+            TexturePoolList::const_iterator itor = mTexturePool.begin();
+            TexturePoolList::const_iterator end  = mTexturePool.end();
+
+            while( itor != end )
+            {
+                const TexturePool &pool = *itor;
+                if( pool.manuallyReserved )
+                {
+                    if( !firstIteration )
+                        jsonStr.a( "," );
+                    jsonStr.a( "\n\t\t{\n\t\t\t\"poolId\" : ", pool.masterTexture->getTexturePoolId() );
+                    jsonStr.a( ",\n\t\t\t\"resolution\" : [",
+                               pool.masterTexture->getWidth(), ", ",
+                               pool.masterTexture->getHeight(), ", ",
+                               pool.masterTexture->getDepthOrSlices(), "]" );
+                    jsonStr.a( ",\n\t\t\t\"mipmaps\" : ", pool.masterTexture->getNumMipmaps() );
+                    jsonStr.a( ",\n\t\t\t\"format\" : \"",
+                               PixelFormatGpuUtils::toString( pool.masterTexture->getPixelFormat() ),
+                               "\"" );
+                    jsonStr.a( "\n\t\t}" );
+                    firstIteration = false;
+
+                    outJson += jsonStr.c_str();
+                    jsonStr.clear();
+                }
+                ++itor;
+            }
+        }
+
+        jsonStr.a( "\n\t],\n\t\"textures\" :\n\t{" );
+        firstIteration = true;
+        ResourceEntryMap::const_iterator itor = mEntries.begin();
+        ResourceEntryMap::const_iterator end  = mEntries.end();
+
+        while( itor != end )
+        {
+            const ResourceEntry &entry = itor->second;
+
+            if( entry.texture && !entry.texture->isManualTexture() &&
+                (entry.texture->isMetadataReady() ||
+                 mMetadataCache.find( entry.texture->getName() ) != mMetadataCache.end()) )
+            {
+                if( !firstIteration )
+                    jsonStr.a( "," );
+
+                jsonStr.a( "\n\t\t\"", entry.alias.c_str(), "\" : \n\t\t{" );
+                jsonStr.a( "\n\t\t\t\"resource\" : \"", entry.name.c_str(), "\"" );
+                if( entry.texture->isMetadataReady() )
+                {
+                    jsonStr.a( ",\n\t\t\t\"resolution\" : [",
+                               entry.texture->getWidth(), ", ",
+                               entry.texture->getHeight(), ", ",
+                               entry.texture->getDepthOrSlices(), "]" );
+                    jsonStr.a( ",\n\t\t\t\"mipmaps\" : ", entry.texture->getNumMipmaps() );
+                    jsonStr.a( ",\n\t\t\t\"format\" : \"",
+                               PixelFormatGpuUtils::toString( entry.texture->getPixelFormat() ), "\"" );
+                    jsonStr.a( ",\n\t\t\t\"texture_type\" : \"",
+                               (int)entry.texture->getTextureType(), "\"" );
+                    jsonStr.a( ",\n\t\t\t\"poolId\" : ", entry.texture->getTexturePoolId() );
+                }
+                else
+                {
+                    MetadataCacheMap::const_iterator itCacheEntry =
+                            mMetadataCache.find( entry.texture->getName() );
+                    jsonStr.a( ",\n\t\t\t\"resolution\" : [",
+                               itCacheEntry->second.width, ", ",
+                               itCacheEntry->second.height, ", ",
+                               itCacheEntry->second.depthOrSlices, "]" );
+                    jsonStr.a( ",\n\t\t\t\"mipmaps\" : ", itCacheEntry->second.numMipmaps );
+                    jsonStr.a( ",\n\t\t\t\"format\" : \"",
+                               PixelFormatGpuUtils::toString( itCacheEntry->second.pixelFormat ), "\"" );
+                    jsonStr.a( ",\n\t\t\t\"texture_type\" : \"",
+                               (int)itCacheEntry->second.textureType, "\"" );
+                    jsonStr.a( ",\n\t\t\t\"poolId\" : ", itCacheEntry->second.poolId );
+                }
+                jsonStr.a( "\n\t\t}" );
+
+                outJson += jsonStr.c_str();
+                jsonStr.clear();
+
+                firstIteration = false;
+            }
+
+            ++itor;
+        }
+        jsonStr.a( "\n\t}\n}" );
+        outJson += jsonStr.c_str();
+        jsonStr.clear();
+    }
+    //-----------------------------------------------------------------------------------
     void TextureGpuManager::dumpStats(void) const
     {
         char tmpBuffer[512];
@@ -899,10 +1171,11 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::scheduleLoadRequest( TextureGpu *texture,
-                                                 GpuResidency::GpuResidency nextResidency,
                                                  const String &name,
                                                  const String &resourceGroup,
                                                  uint32 filters,
+                                                 Image2 *image,
+                                                 bool autoDeleteImage,
                                                  uint32 sliceOrDepth )
     {
         Archive *archive = 0;
@@ -922,16 +1195,20 @@ namespace Ogre
                 archive = resourceGroupManager._getArchiveToResource( name, resourceGroup );
         }
 
+        bool metadataSuccess = applyMetadataCacheTo( texture );
+        if( metadataSuccess )
+            texture->_transitionTo( GpuResidency::Resident, 0 );
+
         ThreadData &mainData = mThreadData[c_mainThread];
         mLoadRequestsMutex.lock();
-            mainData.loadRequests.push_back( LoadRequest( name, archive, loadingListener, texture,
-                                                          nextResidency, sliceOrDepth, filters ) );
+            mainData.loadRequests.push_back( LoadRequest( name, archive, loadingListener, image, texture,
+                                                          sliceOrDepth, filters, autoDeleteImage ) );
         mLoadRequestsMutex.unlock();
         mWorkerWaitableEvent.wake();
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::_scheduleTransitionTo( TextureGpu *texture,
-                                                   GpuResidency::GpuResidency nextResidency )
+                                                   Image2 *image, bool autoDeleteImage )
     {
         String name, resourceGroup;
         uint32 filters = 0;
@@ -944,7 +1221,7 @@ namespace Ogre
         }
 
         if( texture->getTextureType() != TextureTypes::TypeCube )
-            scheduleLoadRequest( texture, nextResidency, name, resourceGroup, filters );
+            scheduleLoadRequest( texture, name, resourceGroup, filters, image, autoDeleteImage );
         else
         {
             String baseName;
@@ -967,7 +1244,7 @@ namespace Ogre
             {
                 // XX HACK there should be a better way to specify whether
                 // all faces are in the same file or not
-                scheduleLoadRequest( texture, nextResidency, name, resourceGroup, filters );
+                scheduleLoadRequest( texture, name, resourceGroup, filters, image, autoDeleteImage );
             }
             else
             {
@@ -975,8 +1252,8 @@ namespace Ogre
 
                 for( int i=0; i<6; ++i )
                 {
-                    scheduleLoadRequest( texture, nextResidency, baseName + suffixes[i] + ext,
-                                         resourceGroup, filters, i );
+                    scheduleLoadRequest( texture, baseName + suffixes[i] + ext,
+                                         resourceGroup, filters, image, autoDeleteImage, i );
                 }
             }
         }
@@ -1038,6 +1315,7 @@ namespace Ogre
                                                        TextureTypes::Type2DArray );
             const uint16 numSlices = mTextureGpuManagerListener->getNumSlicesFor( texture, this );
 
+            newPool.manuallyReserved = false;
             newPool.usedMemory = 0;
             newPool.usedSlots.reserve( numSlices );
 
@@ -1499,6 +1777,175 @@ namespace Ogre
         return 0;
     }
     //-----------------------------------------------------------------------------------
+    void TextureGpuManager::processLoadRequest( ObjCmdBuffer *commandBuffer, ThreadData &workerData,
+                                                const LoadRequest &loadRequest )
+    {
+        OgreProfileExhaustive( "TextureGpuManager::processLoadRequest LoadRequest for first time" );
+
+        bool wasRescheduled = false;
+
+        //WARNING: loadRequest.texture->isMetadataReady is NOT thread safe
+        //if it's in mStreamingData.rescheduledTextures and
+        //loadRequest.sliceOrDepth != 0 or uint32::max
+        set<TextureGpu*>::type::iterator itReschedule =
+                mStreamingData.rescheduledTextures.find( loadRequest.texture );
+        if( itReschedule != mStreamingData.rescheduledTextures.end() )
+        {
+            if( (loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max() ||
+                 loadRequest.sliceOrDepth == 0) )
+            {
+                //This is the original first load request that is making it's
+                //roundtrip back to us: Worker -> Main -> Worker
+                //because the metadata cache lied the last time we parsed it
+                mStreamingData.rescheduledTextures.erase( itReschedule );
+            }
+            else
+            {
+                //The first slice was already rescheduled. We cannot process this request
+                //further until the first slice comes back to us (which will also request
+                //all the slices again). Drop the whole thing, do not load anything.
+                wasRescheduled = true;
+            }
+        }
+
+        if( !loadRequest.archive && !loadRequest.loadingListener && !loadRequest.image )
+        {
+            LogManager::getSingleton().logMessage(
+                        "ERROR: Did you call createTexture with a valid resourceGroup? "
+                        "Texture: " + loadRequest.name, LML_CRITICAL );
+        }
+
+        DataStreamPtr data;
+        if( !loadRequest.archive && !loadRequest.image )
+            data = loadRequest.loadingListener->grouplessResourceLoading( loadRequest.name );
+        else if( !loadRequest.image )
+        {
+            data = loadRequest.archive->open( loadRequest.name );
+            if( loadRequest.loadingListener )
+            {
+                loadRequest.loadingListener->grouplessResourceOpened( loadRequest.name,
+                                                                      loadRequest.archive, data );
+            }
+        }
+
+        //Load the image from file into system RAM
+        Image2 imgStack;
+        Image2 *img = loadRequest.image;
+
+        if( !img )
+        {
+            img = &imgStack;
+            if( !wasRescheduled )
+                img->load( data );
+        }
+
+        if( loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max() ||
+            loadRequest.sliceOrDepth == 0 &&
+            loadRequest.texture->isMetadataReady() )
+        {
+            //Check the metadata cache was not out of date
+            if( loadRequest.texture->getWidth() != img->getWidth() ||
+                loadRequest.texture->getHeight() != img->getHeight() ||
+                loadRequest.texture->getDepthOrSlices() != img->getDepthOrSlices() ||
+                loadRequest.texture->getPixelFormat() != img->getPixelFormat() ||
+                loadRequest.texture->getNumMipmaps() != img->getNumMipmaps() ||
+                (loadRequest.texture->getTextureType() != img->getTextureType() &&
+                 loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max() &&
+                 (img->getHeight() != 1u ||
+                  loadRequest.texture->getTextureType() != TextureTypes::Type1D) ) )
+            {
+                //It's out of date. Send it back to the main thread to remove residency,
+                //and they can send it back to us. A ping pong.
+                ObjCmdBuffer::OutOfDateCache *transitionCmd = commandBuffer->addCommand<
+                                                              ObjCmdBuffer::OutOfDateCache>();
+                new (transitionCmd) ObjCmdBuffer::OutOfDateCache( loadRequest.texture, *img );
+                mStreamingData.rescheduledTextures.insert( loadRequest.texture );
+                wasRescheduled = true;
+            }
+        }
+
+        if( !wasRescheduled )
+        {
+            FilterBaseArray filters;
+            TextureFilter::FilterBase::createFilters( loadRequest.filters, filters,
+                                                      loadRequest.texture );
+
+            if( (loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max() ||
+                 loadRequest.sliceOrDepth == 0) &&
+                !loadRequest.texture->isMetadataReady() )
+            {
+                loadRequest.texture->setResolution( img->getWidth(), img->getHeight(),
+                                                    img->getDepthOrSlices() );
+                if( loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max() )
+                {
+                    //If the texture had already been set it to 1D
+                    //and it is viable, then keep the 1D setting.
+                    if( img->getHeight() != 1u ||
+                        loadRequest.texture->getTextureType() != TextureTypes::Type1D )
+                    {
+                        loadRequest.texture->setTextureType( img->getTextureType() );
+                    }
+                }
+                loadRequest.texture->setPixelFormat( img->getPixelFormat() );
+                loadRequest.texture->setNumMipmaps( img->getNumMipmaps() );
+
+                FilterBaseArray::const_iterator itFilters = filters.begin();
+                FilterBaseArray::const_iterator enFilters = filters.end();
+                while( itFilters != enFilters )
+                {
+                    (*itFilters)->_executeStreaming( *img, loadRequest.texture );
+                    ++itFilters;
+                }
+
+                void *sysRamCopy = 0;
+                if( loadRequest.texture->getGpuPageOutStrategy() ==
+                    GpuPageOutStrategy::AlwaysKeepSystemRamCopy )
+                {
+                    assert( img->getTextureType() == loadRequest.texture->getTextureType() &&
+                            "Cannot load cubemaps partially file by file into each face"
+                            "when using GpuPageOutStrategy::AlwaysKeepSystemRamCopy" );
+                    sysRamCopy = img->getData(0).data;
+                }
+
+                //We have enough to transition the texture to Resident.
+                ObjCmdBuffer::TransitionToResident *transitionCmd =
+                        commandBuffer->addCommand<ObjCmdBuffer::TransitionToResident>();
+                new (transitionCmd) ObjCmdBuffer::TransitionToResident( loadRequest.texture,
+                                                                        sysRamCopy );
+            }
+            else
+            {
+                FilterBaseArray::const_iterator itFilters = filters.begin();
+                FilterBaseArray::const_iterator enFilters = filters.end();
+                while( itFilters != enFilters )
+                {
+                    (*itFilters)->_executeStreaming( *img, loadRequest.texture );
+                    ++itFilters;
+                }
+            }
+
+            //Queue the image for upload to GPU.
+            mStreamingData.queuedImages.push_back( QueuedImage( *img, img->getNumMipmaps(),
+                                                                img->getDepthOrSlices(),
+                                                                loadRequest.texture,
+                                                                loadRequest.sliceOrDepth,
+                                                                filters ) );
+            if( loadRequest.autoDeleteImage )
+                delete loadRequest.image;
+
+            //Try to upload the queued image right now (all of its mipmaps).
+            processQueuedImage( mStreamingData.queuedImages.back(), workerData, mStreamingData );
+
+            if( mStreamingData.queuedImages.back().empty() )
+                mStreamingData.queuedImages.pop_back();
+        }
+        else
+        {
+            if( loadRequest.autoDeleteImage )
+                delete loadRequest.image;
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void TextureGpuManager::_updateStreaming(void)
     {
         OgreProfileExhaustive( "TextureGpuManager::_updateStreaming" );
@@ -1580,106 +2027,7 @@ namespace Ogre
                entriesProcessed < entriesToProcessPerIteration &&
                mStreamingData.bytesPreloaded < mMaxPreloadBytes )
         {
-            OgreProfileExhaustive( "TextureGpuManager::_updateStreaming LoadRequest for first time" );
-
-            const LoadRequest &loadRequest = *itor;
-
-            if( !loadRequest.archive && !loadRequest.loadingListener )
-            {
-                LogManager::getSingleton().logMessage(
-                            "ERROR: Did you call createTexture with a valid resourceGroup? "
-                            "Texture: " + loadRequest.name, LML_CRITICAL );
-            }
-
-            DataStreamPtr data;
-            if( !loadRequest.archive )
-                data = loadRequest.loadingListener->grouplessResourceLoading( loadRequest.name );
-            else
-            {
-                data = loadRequest.archive->open( loadRequest.name );
-                if( loadRequest.loadingListener )
-                {
-                    loadRequest.loadingListener->grouplessResourceOpened( loadRequest.name,
-                                                                          loadRequest.archive, data );
-                }
-            }
-
-            {
-                //Load the image from file into system RAM
-                Image2 img;
-                img.load( data );
-
-                FilterBaseArray filters;
-                TextureFilter::FilterBase::createFilters( loadRequest.filters, filters,
-                                                          loadRequest.texture );
-
-                if( loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max() ||
-                    loadRequest.sliceOrDepth == 0 )
-                {
-                    loadRequest.texture->setResolution( img.getWidth(), img.getHeight(),
-                                                        img.getDepthOrSlices() );
-                    if( loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max() )
-                    {
-                        //If the texture had already been set it to 1D
-                        //and it is viable, then keep the 1D setting.
-                        if( img.getHeight() != 1u ||
-                            loadRequest.texture->getTextureType() != TextureTypes::Type1D )
-                        {
-                            loadRequest.texture->setTextureType( img.getTextureType() );
-                        }
-                    }
-                    loadRequest.texture->setPixelFormat( img.getPixelFormat() );
-                    loadRequest.texture->setNumMipmaps( img.getNumMipmaps() );
-
-                    FilterBaseArray::const_iterator itFilters = filters.begin();
-                    FilterBaseArray::const_iterator enFilters = filters.end();
-                    while( itFilters != enFilters )
-                    {
-                        (*itFilters)->_executeStreaming( img, loadRequest.texture );
-                        ++itFilters;
-                    }
-
-                    void *sysRamCopy = 0;
-                    if( loadRequest.texture->getGpuPageOutStrategy() ==
-                            GpuPageOutStrategy::AlwaysKeepSystemRamCopy )
-                    {
-                        assert( img.getTextureType() == loadRequest.texture->getTextureType() &&
-                                "Cannot load cubemaps partially file by file into each face"
-                                "when using GpuPageOutStrategy::AlwaysKeepSystemRamCopy" );
-                        sysRamCopy = img.getData(0).data;
-                    }
-
-                    //We have enough to transition the texture to Resident.
-                    ObjCmdBuffer::TransitionToResident *transitionCmd = commandBuffer->addCommand<
-                            ObjCmdBuffer::TransitionToResident>();
-                    new (transitionCmd) ObjCmdBuffer::TransitionToResident( loadRequest.texture,
-                                                                            sysRamCopy );
-                }
-                else
-                {
-                    FilterBaseArray::const_iterator itFilters = filters.begin();
-                    FilterBaseArray::const_iterator enFilters = filters.end();
-                    while( itFilters != enFilters )
-                    {
-                        (*itFilters)->_executeStreaming( img, loadRequest.texture );
-                        ++itFilters;
-                    }
-                }
-
-                //Queue the image for upload to GPU.
-                mStreamingData.queuedImages.push_back( QueuedImage( img, img.getNumMipmaps(),
-                                                                    img.getDepthOrSlices(),
-                                                                    loadRequest.texture,
-                                                                    loadRequest.sliceOrDepth,
-                                                                    filters ) );
-            }
-
-            //Try to upload the queued image right now (all of its mipmaps).
-            processQueuedImage( mStreamingData.queuedImages.back(), workerData, mStreamingData );
-
-            if( mStreamingData.queuedImages.back().empty() )
-                mStreamingData.queuedImages.pop_back();
-
+            processLoadRequest( commandBuffer, workerData, *itor );
             ++entriesProcessed;
             ++itor;
         }

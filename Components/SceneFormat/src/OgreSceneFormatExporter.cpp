@@ -1198,11 +1198,11 @@ namespace Ogre
 
         if( exportFlags & (SceneFlags::TexturesOitd|SceneFlags::TexturesOriginal)  )
         {
-            HlmsManager *hlmsManager = mRoot->getHlmsManager();
             {
                 String jsonString;
-                HlmsTextureManager *hlmsTextureManager = hlmsManager->getTextureManager();
-                //hlmsTextureManager->exportTextureMetadataCache( jsonString );
+                TextureGpuManager *textureManager =
+                        mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
+                textureManager->exportTextureMetadataCache( jsonString );
 
                 const String scenePath = folderPath + "/textureMetadataCache.json";
                 std::ofstream file( scenePath.c_str(), std::ios::binary | std::ios::out );
@@ -1211,6 +1211,7 @@ namespace Ogre
                 file.close();
             }
 
+            HlmsManager *hlmsManager = mRoot->getHlmsManager();
             for( size_t i=HLMS_LOW_LEVEL + 1u; i<HLMS_MAX; ++i )
             {
                 Hlms *hlms = hlmsManager->getHlms( static_cast<HlmsTypes>( i ) );

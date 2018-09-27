@@ -62,6 +62,7 @@ namespace Ogre
     struct _OgreExport TexturePool
     {
         TextureGpu  *masterTexture;
+        bool                    manuallyReserved;
         uint16                  usedMemory;
         vector<uint16>::type    availableSlots;
         TextureGpuVec           usedSlots;
@@ -122,6 +123,19 @@ namespace Ogre
 
         typedef vector<BudgetEntry>::type BudgetEntryVec;
 
+        struct MetadataCacheEntry
+        {
+            uint32  width;
+            uint32  height;
+            uint32  depthOrSlices;
+            PixelFormatGpu pixelFormat;
+            uint32  poolId;
+            TextureTypes::TextureTypes textureType;
+            uint8   numMipmaps;
+        };
+
+        typedef map<IdString, MetadataCacheEntry>::type MetadataCacheMap;
+
     protected:
         struct ResourceEntry
         {
@@ -146,20 +160,25 @@ namespace Ogre
             String                      name;
             Archive                     *archive;
             ResourceLoadingListener     *loadingListener;
+            Image2                      *image;
             TextureGpu                  *texture;
-            GpuResidency::GpuResidency  nextResidency;
             /// Slice to upload this image to (in case we're uploading a 2D image into an cubemap)
             /// std::numeric_limits<uint32>::max() to disable it.
             uint32                      sliceOrDepth;
             uint32                      filters;
+            /// Whether we should call "delete this->image" once we're done using the image.
+            /// Otherwise you should listen for TextureGpuListener::ReadyForRendering
+            /// message to know when we're done using the image.
+            bool                        autoDeleteImage;
 
             LoadRequest( const String &_name, Archive *_archive,
                          ResourceLoadingListener *_loadingListener,
-                         TextureGpu *_texture, GpuResidency::GpuResidency _nextResidency,
-                         uint32 _sliceOrDepth, uint32 _filters ) :
+                         Image2 *_image, TextureGpu *_texture,
+                         uint32 _sliceOrDepth, uint32 _filters, bool _autoDeleteImage ) :
                 name( _name ), archive( _archive ), loadingListener( _loadingListener ),
-                texture( _texture ), nextResidency( _nextResidency ),
-                sliceOrDepth( _sliceOrDepth ), filters( _filters ) {}
+                image( _image ), texture( _texture ),
+                sliceOrDepth( _sliceOrDepth ), filters( _filters ),
+                autoDeleteImage( _autoDeleteImage ) {}
         };
 
         typedef vector<LoadRequest>::type LoadRequestVec;
@@ -216,6 +235,8 @@ namespace Ogre
             UsageStatsVec       prevStats;              /// Used by both threads.
             /// Number of bytes preloaded by worker thread. Main thread resets this counter.
             size_t              bytesPreloaded;
+
+            set<TextureGpu*>::type  rescheduledTextures;/// Used by worker thread. No protection needed.
         };
 
         DefaultMipmapGen::DefaultMipmapGen mDefaultMipmapGen;
@@ -245,6 +266,8 @@ namespace Ogre
         StagingTextureVec   mAvailableStagingTextures;
 
         StagingTextureVec   mTmpAvailableStagingTex;
+
+        MetadataCacheMap    mMetadataCache;
 
         typedef vector<AsyncTextureTicket*>::type AsyncTextureTicketVec;
         AsyncTextureTicketVec   mAsyncTextureTickets;
@@ -343,6 +366,16 @@ namespace Ogre
         void _releaseSlotFromTexture( TextureGpu *texture );
 
         unsigned long _updateStreamingWorkerThread( ThreadHandle *threadHandle );
+    protected:
+        /// This function processes a load request coming from main thread. It basically
+        /// gets called once per Image to load. Usually that means once per texture,
+        /// but in the case of Cubemaps being made up from multiple separate images,
+        /// it may be called once per face.
+        /// Must be called from worker thread.
+        /// workerData is needed to pass it on to processQueuedImage
+        void processLoadRequest( ObjCmdBuffer *commandBuffer, ThreadData &workerData,
+                                 const LoadRequest &loadRequest );
+    public:
         void _updateStreaming(void);
 
         /** Returns true if there is no more streaming work to be done yet
@@ -491,6 +524,16 @@ namespace Ogre
                           bool saveOitd, bool saveOriginal,
                           HlmsTextureExportListener *listener );
 
+    protected:
+        /// Returns false if the entry was not found in the cache
+        bool applyMetadataCacheTo( TextureGpu *texture );
+    public:
+        void _updateMetadataCache( TextureGpu *texture );
+        void _removeMetadataCacheEntry( TextureGpu *texture );
+        void importTextureMetadataCache( const String &filename, const char *jsonString,
+                                         bool bCreateReservedPools );
+        void exportTextureMetadataCache( String &outJson );
+
         void dumpStats(void) const;
         void dumpMemoryUsage( Log* log ) const;
 
@@ -596,12 +639,13 @@ namespace Ogre
         RenderSystem* getRenderSystem(void) const;
 
     protected:
-        void scheduleLoadRequest( TextureGpu *texture, GpuResidency::GpuResidency nextResidency,
+        void scheduleLoadRequest( TextureGpu *texture,
                                   const String &name, const String &resourceGroup,
-                                  uint32 filters,
+                                  uint32 filters, Image2 *image, bool autoDeleteImage,
                                   uint32 sliceOrDepth=std::numeric_limits<uint32>::max() );
     public:
-        void _scheduleTransitionTo( TextureGpu *texture, GpuResidency::GpuResidency nextResidency );
+        void _scheduleTransitionTo( TextureGpu *texture,
+                                    Image2 *image, bool autoDeleteImage );
     };
 
     /** @} */

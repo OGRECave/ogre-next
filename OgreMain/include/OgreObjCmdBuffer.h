@@ -31,6 +31,7 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 #include "OgreTextureBox.h"
+#include "OgreImage2.h"
 
 #include "OgreHeaderPrefix.h"
 
@@ -87,6 +88,16 @@ namespace Ogre
 
         public:
             TransitionToResident( TextureGpu *_texture, void *_sysRamCopy );
+            virtual void execute(void);
+        };
+
+        class OutOfDateCache : public Cmd
+        {
+            TextureGpu  *texture;
+            Image2      loadedImage;
+
+        public:
+            OutOfDateCache( TextureGpu *_texture, Image2 &image );
             virtual void execute(void);
         };
 

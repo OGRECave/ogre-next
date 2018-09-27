@@ -133,25 +133,28 @@ namespace Ogre
         return String( desc.c_str() );
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpu::unsafeScheduleTransitionTo( GpuResidency::GpuResidency nextResidency )
+    void TextureGpu::unsafeScheduleTransitionTo( GpuResidency::GpuResidency nextResidency,
+                                                 Image2 *image, bool autoDeleteImage )
     {
         mNextResidencyStatus = nextResidency;
         if( isManualTexture() )
         {
+            OGRE_ASSERT_LOW( !image && "Image pointer must null for manual textures!" );
             //Transition immediately. There's nothing from file or listener to load.
             this->_transitionTo( nextResidency, (uint8*)0 );
         }
         else
         {
             //Schedule transition, we'll be loading from a worker thread.
-            mTextureManager->_scheduleTransitionTo( this, nextResidency );
+            mTextureManager->_scheduleTransitionTo( this, image, autoDeleteImage );
         }
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpu::scheduleTransitionTo( GpuResidency::GpuResidency nextResidency )
+    void TextureGpu::scheduleTransitionTo( GpuResidency::GpuResidency nextResidency,
+                                           Image2 *image, bool autoDeleteImage )
     {
         if( mNextResidencyStatus != nextResidency )
-            unsafeScheduleTransitionTo( nextResidency );
+            unsafeScheduleTransitionTo( nextResidency, image, autoDeleteImage );
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::setResolution( uint32 width, uint32 height, uint32 depthOrSlices )

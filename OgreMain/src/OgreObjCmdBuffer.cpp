@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "OgreObjCmdBuffer.h"
 #include "OgreTextureGpu.h"
 #include "OgreStagingTexture.h"
+#include "OgreTextureGpuManager.h"
 
 #include "OgreId.h"
 #include "OgreLwString.h"
@@ -119,6 +120,27 @@ namespace Ogre
     void ObjCmdBuffer::TransitionToResident::execute(void)
     {
         texture->_transitionTo( GpuResidency::Resident, reinterpret_cast<uint8*>( sysRamCopy ) );
+        texture->getTextureManager()->_updateMetadataCache( texture );
+    }
+    //-----------------------------------------------------------------------------------
+    ObjCmdBuffer::
+    OutOfDateCache::OutOfDateCache( TextureGpu *_texture, Image2 &image ) :
+        texture( _texture ),
+        loadedImage()
+    {
+        image._setAutoDelete( false );
+        loadedImage = image;
+        loadedImage._setAutoDelete( true );
+    }
+    //-----------------------------------------------------------------------------------
+    void ObjCmdBuffer::OutOfDateCache::execute(void)
+    {
+        texture->_transitionTo( GpuResidency::OnStorage, 0 );
+        texture->getTextureManager()->_removeMetadataCacheEntry( texture );
+        loadedImage._setAutoDelete( false );
+        Image2 *image = new Image2( loadedImage );
+        image->_setAutoDelete( true );
+        texture->scheduleTransitionTo( GpuResidency::Resident, image, true );
     }
     //-----------------------------------------------------------------------------------
     ObjCmdBuffer::
