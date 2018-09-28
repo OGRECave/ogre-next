@@ -642,6 +642,7 @@ namespace Ogre
         void scheduleLoadRequest( TextureGpu *texture,
                                   const String &name, const String &resourceGroup,
                                   uint32 filters, Image2 *image, bool autoDeleteImage,
+                                  bool skipMetadataCache=false,
                                   uint32 sliceOrDepth=std::numeric_limits<uint32>::max() );
     public:
         void _scheduleTransitionTo( TextureGpu *texture,

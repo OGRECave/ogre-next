@@ -1176,6 +1176,7 @@ namespace Ogre
                                                  uint32 filters,
                                                  Image2 *image,
                                                  bool autoDeleteImage,
+                                                 bool skipMetadataCache,
                                                  uint32 sliceOrDepth )
     {
         Archive *archive = 0;
@@ -1195,9 +1196,12 @@ namespace Ogre
                 archive = resourceGroupManager._getArchiveToResource( name, resourceGroup );
         }
 
-        bool metadataSuccess = applyMetadataCacheTo( texture );
-        if( metadataSuccess )
-            texture->_transitionTo( GpuResidency::Resident, 0 );
+        if( !skipMetadataCache )
+        {
+            bool metadataSuccess = applyMetadataCacheTo( texture );
+            if( metadataSuccess )
+                texture->_transitionTo( GpuResidency::Resident, 0 );
+        }
 
         ThreadData &mainData = mThreadData[c_mainThread];
         mLoadRequestsMutex.lock();
@@ -1252,8 +1256,10 @@ namespace Ogre
 
                 for( int i=0; i<6; ++i )
                 {
+                    const bool skipMetadataCache = i != 0;
                     scheduleLoadRequest( texture, baseName + suffixes[i] + ext,
-                                         resourceGroup, filters, image, autoDeleteImage, i );
+                                         resourceGroup, filters, i == 0 ? image : 0,
+                                         autoDeleteImage, skipMetadataCache, i );
                 }
             }
         }
@@ -1854,7 +1860,8 @@ namespace Ogre
             //Check the metadata cache was not out of date
             if( loadRequest.texture->getWidth() != img->getWidth() ||
                 loadRequest.texture->getHeight() != img->getHeight() ||
-                loadRequest.texture->getDepthOrSlices() != img->getDepthOrSlices() ||
+                (loadRequest.texture->getDepthOrSlices() != img->getDepthOrSlices() &&
+                 loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max()) ||
                 loadRequest.texture->getPixelFormat() != pixelFormat ||
                 loadRequest.texture->getNumMipmaps() != numMipmaps ||
                 (loadRequest.texture->getTextureType() != img->getTextureType() &&
