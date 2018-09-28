@@ -665,7 +665,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpu::setTexturePoolId( uint32 poolId )
     {
-        OGRE_ASSERT_LOW( mNextResidencyStatus != GpuResidency::Resident );
+        OGRE_ASSERT_LOW( mResidencyStatus != GpuResidency::Resident );
         mPoolId = poolId;
     }
     //-----------------------------------------------------------------------------------

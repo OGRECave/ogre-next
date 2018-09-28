@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define _OgreTextureGpuFilter_H_
 
 #include "OgrePrerequisites.h"
+#include "OgrePixelFormatGpu.h"
 
 #include "OgreHeaderPrefix.h"
 
@@ -77,6 +78,11 @@ namespace TextureFilter
 
         static void createFilters( uint32 filters, FilterBaseArray &outFilters,
                                    const TextureGpu *texture );
+
+        /// Simulates as if the given filters were applied, producing
+        /// the resulting number mipmaps & PixelFormat
+        static void simulateFilters( uint32 filters, const Image2 &image,
+                                     uint8 &inOutNumMipmaps, PixelFormatGpu &inOutPixelFormat );
     };
     //-----------------------------------------------------------------------------------
     class _OgreExport GenerateSwMipmaps : public FilterBase
@@ -97,12 +103,14 @@ namespace TextureFilter
     class _OgreExport PrepareForNormalMapping : public FilterBase
     {
     public:
+        static PixelFormatGpu getDestinationFormat( PixelFormatGpu srcFormat );
         virtual void _executeStreaming( Image2 &image, TextureGpu *texture );
     };
     //-----------------------------------------------------------------------------------
     class _OgreExport LeaveChannelR : public FilterBase
     {
     public:
+        static PixelFormatGpu getDestinationFormat( PixelFormatGpu srcFormat );
         virtual void _executeStreaming( Image2 &image, TextureGpu *texture );
     };
 }

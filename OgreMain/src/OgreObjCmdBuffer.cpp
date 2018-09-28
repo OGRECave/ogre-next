@@ -136,6 +136,7 @@ namespace Ogre
     void ObjCmdBuffer::OutOfDateCache::execute(void)
     {
         texture->_transitionTo( GpuResidency::OnStorage, 0 );
+        texture->_setNextResidencyStatus( GpuResidency::OnStorage );
         texture->getTextureManager()->_removeMetadataCacheEntry( texture );
         loadedImage._setAutoDelete( false );
         Image2 *image = new Image2( loadedImage );

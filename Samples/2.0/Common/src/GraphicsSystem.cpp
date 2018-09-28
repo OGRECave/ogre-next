@@ -24,6 +24,8 @@
 #include "OgreOverlaySystem.h"
 #include "OgreOverlayManager.h"
 
+#include "OgreTextureGpuManager.h"
+
 #include "OgreWindowEventUtilities.h"
 #include "OgreWindow.h"
 
@@ -294,6 +296,8 @@ namespace Demo
     {
         BaseSystem::deinitialize();
 
+        saveTextureCache();
+
         if( mSceneManager )
             mSceneManager->removeRenderQueueListener( mOverlaySystem );
 
@@ -457,6 +461,56 @@ namespace Demo
 #endif
     }
     //-----------------------------------------------------------------------------------
+    void GraphicsSystem::loadTextureCache(void)
+    {
+        Ogre::ResourceGroupManager &resourceGroupManager = Ogre::ResourceGroupManager::getSingleton();
+        resourceGroupManager.addResourceLocation( mWriteAccessFolder, "FileSystem", "Cache Folder" );
+        try
+        {
+            Ogre::DataStreamPtr stream = resourceGroupManager.openResource(
+                                             "textureMetadataCache.json", "Cache Folder" );
+            std::vector<char> fileData;
+            fileData.resize( stream->size() + 1 );
+            if( !fileData.empty() )
+            {
+                stream->read( &fileData[0], stream->size() );
+                //Add null terminator just in case (to prevent bad input)
+                fileData.back() = '\0';
+                Ogre::TextureGpuManager *textureManager = mRoot->getRenderSystem()->getTextureGpuManager();
+                    textureManager->importTextureMetadataCache( stream->getName(), &fileData[0], false );
+            }
+        }
+        catch( Ogre::FileNotFoundException & )
+        {
+            Ogre::LogManager::getSingleton().logMessage(
+                        "[INFO] Texture cache not found at " + mWriteAccessFolder +
+                        "/textureMetadataCache.json" );
+        }
+        catch( Ogre::Exception &e )
+        {
+            Ogre::LogManager::getSingleton().logMessage( e.getFullDescription() );
+        }
+        resourceGroupManager.removeResourceLocation( mWriteAccessFolder, "Cache Folder" );
+    }
+    //-----------------------------------------------------------------------------------
+    void GraphicsSystem::saveTextureCache(void)
+    {
+        if( mRoot->getRenderSystem() )
+        {
+            Ogre::TextureGpuManager *textureManager = mRoot->getRenderSystem()->getTextureGpuManager();
+            if( textureManager )
+            {
+                Ogre::String jsonString;
+                textureManager->exportTextureMetadataCache( jsonString );
+                const Ogre::String path = mWriteAccessFolder + "/textureMetadataCache.json";
+                std::ofstream file( path.c_str(), std::ios::binary | std::ios::out );
+                if( file.is_open() )
+                    file.write( jsonString.c_str(), static_cast<std::streamsize>( jsonString.size() ) );
+                file.close();
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void GraphicsSystem::setupResources(void)
     {
         // Load resource paths from config file
@@ -583,6 +637,8 @@ namespace Demo
     void GraphicsSystem::loadResources(void)
     {
         registerHlms();
+
+        loadTextureCache();
 
         // Initialise, parse scripts etc
         Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups( true );

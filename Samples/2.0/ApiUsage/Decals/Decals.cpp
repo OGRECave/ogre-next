@@ -161,6 +161,8 @@ namespace Demo
         {
             registerHlms();
 
+            loadTextureCache();
+
             reserveDecalTextures();
 
             // Initialise, parse scripts etc

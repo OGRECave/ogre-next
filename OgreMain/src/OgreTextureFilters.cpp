@@ -85,6 +85,26 @@ namespace TextureFilter
         filtersVec.swap( outFilters );
     }
     //-----------------------------------------------------------------------------------
+    void FilterBase::simulateFilters( uint32 filters, const Image2 &image,
+                                      uint8 &inOutNumMipmaps, PixelFormatGpu &inOutPixelFormat )
+    {
+        if( filters & TextureFilter::TypePrepareForNormalMapping )
+            inOutPixelFormat = PrepareForNormalMapping::getDestinationFormat( inOutPixelFormat );
+        if( filters & TextureFilter::TypeLeaveChannelR )
+            inOutPixelFormat = LeaveChannelR::getDestinationFormat( inOutPixelFormat );
+
+        //Add mipmap generation as one of the last steps
+        if( filters & TextureFilter::TypeGenerateDefaultMipmaps )
+        {
+            if( inOutNumMipmaps <= 1u )
+            {
+                inOutNumMipmaps = PixelFormatGpuUtils::getMaxMipmapCount( image.getWidth(),
+                                                                          image.getHeight(),
+                                                                          image.getDepth() );
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void GenerateSwMipmaps::_executeStreaming( Image2 &image, TextureGpu *texture )
     {
         if( image.getNumMipmaps() > 1u )
@@ -96,7 +116,8 @@ namespace TextureFilter
 
         const bool isSRgb = PixelFormatGpuUtils::isSRgb( texture->getPixelFormat() );
         image.generateMipmaps( isSRgb, filter );
-        texture->setNumMipmaps( image.getNumMipmaps() );
+        if( texture->getNumMipmaps() != image.getNumMipmaps() )
+            texture->setNumMipmaps( image.getNumMipmaps() );
     }
     //-----------------------------------------------------------------------------------
     void GenerateHwMipmaps::_executeStreaming( Image2 &image, TextureGpu *texture )
@@ -138,6 +159,14 @@ namespace TextureFilter
 
         textureManager->destroyTexture( tempTexture );
         tempTexture = 0;
+    }
+    //-----------------------------------------------------------------------------------
+    PixelFormatGpu PrepareForNormalMapping::getDestinationFormat( PixelFormatGpu srcFormat )
+    {
+        if( srcFormat != PFG_RGBA8_UNORM && srcFormat != PFG_RGBA8_UNORM_SRGB )
+            return srcFormat;
+
+        return PFG_RG8_SNORM;
     }
     //-----------------------------------------------------------------------------------
     void PrepareForNormalMapping::_executeStreaming( Image2 &image, TextureGpu *texture )
@@ -188,17 +217,17 @@ namespace TextureFilter
         assert( image.getAutoDelete() && "This should be impossible. Memory will leak." );
         image.loadDynamicImage( data, image.getWidth(), image.getHeight(), image.getDepthOrSlices(),
                                 image.getTextureType(), dstFormat, true, numMipmaps );
-        texture->setPixelFormat( dstFormat );
+        if( texture->getPixelFormat() != dstFormat )
+            texture->setPixelFormat( dstFormat );
     }
     //-----------------------------------------------------------------------------------
-    void LeaveChannelR::_executeStreaming( Image2 &image, TextureGpu *texture )
+    PixelFormatGpu LeaveChannelR::getDestinationFormat( PixelFormatGpu srcFormat )
     {
-        OgreProfileExhaustive( "LeaveChannelR::_executeStreaming" );
+        PixelFormatGpu dstFormat = srcFormat;
 
-        const PixelFormatGpu srcFormat = image.getPixelFormat();
-        size_t numberOfChannels = PixelFormatGpuUtils::getNumberOfComponents( image.getPixelFormat() );
+        const size_t numberOfChannels = PixelFormatGpuUtils::getNumberOfComponents( srcFormat );
         if( numberOfChannels == 1u )
-            return; //Already single channel
+            return dstFormat; //Already single channel
 
         const uint32 formatFlags = PixelFormatGpuUtils::getFlags( srcFormat );
         if( formatFlags & (PixelFormatGpuUtils::PFF_FLOAT_RARE  |
@@ -208,14 +237,9 @@ namespace TextureFilter
                            PixelFormatGpuUtils::PFF_PALLETE )   ||
             formatFlags == 0 )
         {
-            return;
+            return dstFormat;
         }
 
-        //TODO: This routine is not Endianess-aware. But could be made
-        //so by adding an offset for src[i+offset] in this switch. Or
-        //just a call to the slower PixelFormatGpuUtils::bulkPixelConversion
-
-        PixelFormatGpu dstFormat;
         switch( PixelFormatGpuUtils::getEquivalentLinear( srcFormat ) )
         {
         case PFG_RGBA32_FLOAT:
@@ -270,8 +294,26 @@ namespace TextureFilter
             dstFormat = PFG_R8_SNORM;
             break;
         default:
-            return; //Not supported
+            //Not supported
+            break;
         }
+
+        return dstFormat;
+    }
+    //-----------------------------------------------------------------------------------
+    void LeaveChannelR::_executeStreaming( Image2 &image, TextureGpu *texture )
+    {
+        OgreProfileExhaustive( "LeaveChannelR::_executeStreaming" );
+
+        const PixelFormatGpu srcFormat = image.getPixelFormat();
+        const PixelFormatGpu dstFormat = getDestinationFormat( srcFormat );
+
+        if( dstFormat == srcFormat )
+            return;
+
+        //TODO: This routine is not Endianess-aware. But could be made
+        //so by adding an offset for src[i+offset] in this switch. Or
+        //just a call to the slower PixelFormatGpuUtils::bulkPixelConversion
 
         uint32 origWidth    = image.getWidth();
         uint32 origHeight   = image.getHeight();
@@ -286,6 +328,7 @@ namespace TextureFilter
 
         void *data = OGRE_MALLOC_SIMD( dstSizeBytes, MEMCATEGORY_RESOURCE );
 
+        const size_t numberOfChannels = PixelFormatGpuUtils::getNumberOfComponents( srcFormat );
         const size_t srcBytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( srcFormat );
         const size_t dstBytesPerPixel = srcBytesPerPixel / numberOfChannels;
 
@@ -327,7 +370,8 @@ namespace TextureFilter
         assert( image.getAutoDelete() && "This should be impossible. Memory will leak." );
         image.loadDynamicImage( data, origWidth, origHeight, image.getDepthOrSlices(),
                                 image.getTextureType(), dstFormat, true, numMipmaps );
-        texture->setPixelFormat( dstFormat );
+        if( texture->getPixelFormat() != dstFormat )
+            texture->setPixelFormat( dstFormat );
     }
 }
 }

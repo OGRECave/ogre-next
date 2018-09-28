@@ -933,8 +933,8 @@ namespace Ogre
                     jsonStr.a( ",\n\t\t\t\"mipmaps\" : ", entry.texture->getNumMipmaps() );
                     jsonStr.a( ",\n\t\t\t\"format\" : \"",
                                PixelFormatGpuUtils::toString( entry.texture->getPixelFormat() ), "\"" );
-                    jsonStr.a( ",\n\t\t\t\"texture_type\" : \"",
-                               (int)entry.texture->getTextureType(), "\"" );
+                    jsonStr.a( ",\n\t\t\t\"texture_type\" : ",
+                               (int)entry.texture->getTextureType() );
                     jsonStr.a( ",\n\t\t\t\"poolId\" : ", entry.texture->getTexturePoolId() );
                 }
                 else
@@ -1784,7 +1784,8 @@ namespace Ogre
 
         bool wasRescheduled = false;
 
-        //WARNING: loadRequest.texture->isMetadataReady is NOT thread safe
+        //WARNING: loadRequest.texture->isMetadataReady and
+        //loadRequest.texture->getResidencyStatus are NOT thread safe
         //if it's in mStreamingData.rescheduledTextures and
         //loadRequest.sliceOrDepth != 0 or uint32::max
         set<TextureGpu*>::type::iterator itReschedule =
@@ -1841,14 +1842,21 @@ namespace Ogre
 
         if( (loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max() ||
              loadRequest.sliceOrDepth == 0) &&
-            loadRequest.texture->isMetadataReady() )
+            loadRequest.texture->getResidencyStatus() != GpuResidency::OnStorage )
         {
+            uint8 numMipmaps = img->getNumMipmaps();
+            PixelFormatGpu pixelFormat = img->getPixelFormat();
+            if( loadRequest.texture->prefersLoadingFromFileAsSRGB() )
+                pixelFormat = PixelFormatGpuUtils::getEquivalentSRGB( pixelFormat );
+            TextureFilter::FilterBase::simulateFilters( loadRequest.filters, *img,
+                                                        numMipmaps, pixelFormat );
+
             //Check the metadata cache was not out of date
             if( loadRequest.texture->getWidth() != img->getWidth() ||
                 loadRequest.texture->getHeight() != img->getHeight() ||
                 loadRequest.texture->getDepthOrSlices() != img->getDepthOrSlices() ||
-                loadRequest.texture->getPixelFormat() != img->getPixelFormat() ||
-                loadRequest.texture->getNumMipmaps() != img->getNumMipmaps() ||
+                loadRequest.texture->getPixelFormat() != pixelFormat ||
+                loadRequest.texture->getNumMipmaps() != numMipmaps ||
                 (loadRequest.texture->getTextureType() != img->getTextureType() &&
                  loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max() &&
                  (img->getHeight() != 1u ||
@@ -1861,6 +1869,9 @@ namespace Ogre
                 new (transitionCmd) ObjCmdBuffer::OutOfDateCache( loadRequest.texture, *img );
                 mStreamingData.rescheduledTextures.insert( loadRequest.texture );
                 wasRescheduled = true;
+
+                LogManager::getSingleton().logMessage( "[INFO] Texture Metadata cache out of date for " +
+                                                       loadRequest.name );
             }
         }
 
@@ -1870,24 +1881,26 @@ namespace Ogre
             TextureFilter::FilterBase::createFilters( loadRequest.filters, filters,
                                                       loadRequest.texture );
 
-            if( (loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max() ||
-                 loadRequest.sliceOrDepth == 0) &&
-                !loadRequest.texture->isMetadataReady() )
+            if( loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max() ||
+                loadRequest.sliceOrDepth == 0 )
             {
-                loadRequest.texture->setResolution( img->getWidth(), img->getHeight(),
-                                                    img->getDepthOrSlices() );
-                if( loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max() )
+                if( loadRequest.texture->getResidencyStatus() == GpuResidency::OnStorage )
                 {
-                    //If the texture had already been set it to 1D
-                    //and it is viable, then keep the 1D setting.
-                    if( img->getHeight() != 1u ||
-                        loadRequest.texture->getTextureType() != TextureTypes::Type1D )
+                    loadRequest.texture->setResolution( img->getWidth(), img->getHeight(),
+                                                        img->getDepthOrSlices() );
+                    if( loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max() )
                     {
-                        loadRequest.texture->setTextureType( img->getTextureType() );
+                        //If the texture had already been set it to 1D
+                        //and it is viable, then keep the 1D setting.
+                        if( img->getHeight() != 1u ||
+                            loadRequest.texture->getTextureType() != TextureTypes::Type1D )
+                        {
+                            loadRequest.texture->setTextureType( img->getTextureType() );
+                        }
                     }
+                    loadRequest.texture->setPixelFormat( img->getPixelFormat() );
+                    loadRequest.texture->setNumMipmaps( img->getNumMipmaps() );
                 }
-                loadRequest.texture->setPixelFormat( img->getPixelFormat() );
-                loadRequest.texture->setNumMipmaps( img->getNumMipmaps() );
 
                 FilterBaseArray::const_iterator itFilters = filters.begin();
                 FilterBaseArray::const_iterator enFilters = filters.end();
@@ -1907,11 +1920,14 @@ namespace Ogre
                     sysRamCopy = img->getData(0).data;
                 }
 
-                //We have enough to transition the texture to Resident.
-                ObjCmdBuffer::TransitionToResident *transitionCmd =
-                        commandBuffer->addCommand<ObjCmdBuffer::TransitionToResident>();
-                new (transitionCmd) ObjCmdBuffer::TransitionToResident( loadRequest.texture,
-                                                                        sysRamCopy );
+                if( loadRequest.texture->getResidencyStatus() == GpuResidency::OnStorage )
+                {
+                    //We have enough to transition the texture to Resident.
+                    ObjCmdBuffer::TransitionToResident *transitionCmd =
+                            commandBuffer->addCommand<ObjCmdBuffer::TransitionToResident>();
+                    new (transitionCmd) ObjCmdBuffer::TransitionToResident( loadRequest.texture,
+                                                                            sysRamCopy );
+                }
             }
             else
             {
