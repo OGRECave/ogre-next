@@ -463,6 +463,7 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void GraphicsSystem::loadTextureCache(void)
     {
+#if !OGRE_NO_JSON
         Ogre::ResourceGroupManager &resourceGroupManager = Ogre::ResourceGroupManager::getSingleton();
         resourceGroupManager.addResourceLocation( mWriteAccessFolder, "FileSystem", "Cache Folder" );
         try
@@ -491,6 +492,7 @@ namespace Demo
             Ogre::LogManager::getSingleton().logMessage( e.getFullDescription() );
         }
         resourceGroupManager.removeResourceLocation( mWriteAccessFolder, "Cache Folder" );
+#endif
     }
     //-----------------------------------------------------------------------------------
     void GraphicsSystem::saveTextureCache(void)
