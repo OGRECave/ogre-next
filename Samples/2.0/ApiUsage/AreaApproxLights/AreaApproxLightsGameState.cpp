@@ -486,7 +486,7 @@ namespace Demo
                     Ogre::HlmsUnlitDatablock *datablock = mAreaLightPlaneDatablocks[i];
                     if( mAreaLights[i]->getType() == Ogre::Light::LT_AREA_APPROX )
                     {
-                        datablock->setTexture( 0, mAreaMaskTex, 0,
+                        datablock->setTexture( 0, mAreaLights[i]->getTexture(), 0,
                                                mAreaLights[i]->mTextureLightMaskIdx );
                     }
                     else
