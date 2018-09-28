@@ -164,8 +164,7 @@ namespace Ogre
         GLint xPos          = static_cast<GLint>( srcTextureBox.x );
         GLint yPos          = static_cast<GLint>( srcTextureBox.y );
         GLint zPos          = static_cast<GLint>( srcTextureBox.z );
-        GLint slicePos      = static_cast<GLint>( srcTextureBox.sliceStart +
-                                              textureSrc->getInternalSliceStart() );
+        GLint slicePos      = static_cast<GLint>( srcTextureBox.sliceStart );
         GLsizei width       = static_cast<GLsizei>( srcTextureBox.width );
         GLsizei height      = static_cast<GLsizei>( srcTextureBox.height );
         GLsizei depthOrSlices= static_cast<GLsizei>( srcTextureBox.getDepthOrSlices() );
