@@ -402,8 +402,9 @@ namespace Ogre
         void _waitFor( TextureGpu *texture, bool metadataOnly );
 
         /// Reserves and preallocates a pool with the given parameters
-        void reservePoolId( uint32 poolId, uint32 width, uint32 height,
-                            uint32 numSlices, uint8 numMipmaps, PixelFormatGpu pixelFormat );
+        /// Returns the master texture that owns the pool
+        TextureGpu* reservePoolId( uint32 poolId, uint32 width, uint32 height,
+                                   uint32 numSlices, uint8 numMipmaps, PixelFormatGpu pixelFormat );
 
         bool hasPoolId( uint32 poolId, uint32 width, uint32 height,
                         uint8 numMipmaps, PixelFormatGpu pixelFormat ) const;

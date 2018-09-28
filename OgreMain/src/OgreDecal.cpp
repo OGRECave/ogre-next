@@ -93,6 +93,7 @@ namespace Ogre
         {
             OGRE_ASSERT_LOW( diffuseTex->hasAutomaticBatching() &&
                              "If the texture does is not AutomaticBatching, the use Raw calls!" );
+            OGRE_ASSERT_LOW( diffuseTex->getTextureType() == TextureTypes::Type2D );
             diffuseTex->addListener( this );
             diffuseTex->scheduleTransitionTo( GpuResidency::Resident );
             mDiffuseTexture = diffuseTex;
@@ -118,6 +119,7 @@ namespace Ogre
         {
             OGRE_ASSERT_LOW( normalTex->hasAutomaticBatching() &&
                              "If the texture does is not AutomaticBatching, the use Raw calls!" );
+            OGRE_ASSERT_LOW( normalTex->getTextureType() == TextureTypes::Type2D );
             normalTex->addListener( this );
             normalTex->scheduleTransitionTo( GpuResidency::Resident );
             mNormalTexture = normalTex;
@@ -143,6 +145,7 @@ namespace Ogre
         {
             OGRE_ASSERT_LOW( emissiveTex->hasAutomaticBatching() &&
                              "If the texture does is not AutomaticBatching, the use Raw calls!" );
+            OGRE_ASSERT_LOW( emissiveTex->getTextureType() == TextureTypes::Type2D );
             emissiveTex->addListener( this );
             emissiveTex->scheduleTransitionTo( GpuResidency::Resident );
             mEmissiveTexture = emissiveTex;
@@ -161,6 +164,7 @@ namespace Ogre
             mDiffuseTexture->removeListener( this );
         OGRE_ASSERT_LOW( (!diffuseTex || !diffuseTex->hasAutomaticBatching()) &&
                          "Only use Raw call if texture is not AutomaticBatching!" );
+        OGRE_ASSERT_LOW( diffuseTex->getTextureType() == TextureTypes::Type2DArray );
         mDiffuseTexture = diffuseTex;
         mDiffuseIdx = sliceIdx;
     }
@@ -171,6 +175,7 @@ namespace Ogre
             mNormalTexture->removeListener( this );
         OGRE_ASSERT_LOW( (!normalTex || !normalTex->hasAutomaticBatching()) &&
                          "Only use Raw call if texture is not AutomaticBatching!" );
+        OGRE_ASSERT_LOW( normalTex->getTextureType() == TextureTypes::Type2DArray );
         mNormalTexture = normalTex;
         mNormalMapIdx = sliceIdx;
     }
@@ -181,6 +186,7 @@ namespace Ogre
             mEmissiveTexture->removeListener( this );
         OGRE_ASSERT_LOW( (!emissiveTex || !emissiveTex->hasAutomaticBatching()) &&
                          "Only use Raw call if texture is not AutomaticBatching!" );
+        OGRE_ASSERT_LOW( emissiveTex->getTextureType() == TextureTypes::Type2DArray );
         mEmissiveTexture = emissiveTex;
         mEmissiveIdx = sliceIdx;
     }
@@ -210,6 +216,12 @@ namespace Ogre
         mMetalness = value;
     }
     //-----------------------------------------------------------------------------------
+    void Decal::setRectSize( Vector2 planeDimensions, Real depth )
+    {
+        if( mParentNode )
+            mParentNode->setScale( planeDimensions.x, depth, planeDimensions.y );
+    }
+    //-----------------------------------------------------------------------------------
     const String& Decal::getMovableType(void) const
     {
         return DecalFactory::FACTORY_TYPE_NAME;
@@ -224,7 +236,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void Decal::notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason )
     {
-        if( reason == TextureGpuListener::GainedResidency )
+        if( reason == TextureGpuListener::PoolTextureSlotChanged )
         {
             if( texture == mDiffuseTexture )
                 mDiffuseIdx = static_cast<uint16>( mDiffuseTexture->getInternalSliceStart() );

@@ -297,9 +297,9 @@ namespace Ogre
         mTexturePool.clear();
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::reservePoolId( uint32 poolId, uint32 width, uint32 height,
-                                           uint32 numSlices, uint8 numMipmaps,
-                                           PixelFormatGpu pixelFormat )
+    TextureGpu* TextureGpuManager::reservePoolId( uint32 poolId, uint32 width, uint32 height,
+                                                  uint32 numSlices, uint8 numMipmaps,
+                                                  PixelFormatGpu pixelFormat )
     {
         IdType newId = Id::generateNewId<TextureGpuManager>();
         char tmpBuffer[64];
@@ -322,6 +322,9 @@ namespace Ogre
         mTexturePool.push_back( newPool );
 
         newPool.masterTexture->_transitionTo( GpuResidency::Resident, 0 );
+        newPool.masterTexture->notifyDataIsReady();
+
+        return newPool.masterTexture;
     }
     //-----------------------------------------------------------------------------------
     bool TextureGpuManager::hasPoolId( uint32 poolId, uint32 width, uint32 height,
@@ -1329,6 +1332,7 @@ namespace Ogre
             itor = --mTexturePool.end();
 
             itor->masterTexture->_transitionTo( GpuResidency::Resident, 0 );
+            itor->masterTexture->notifyDataIsReady();
         }
 
         uint16 sliceIdx = 0;

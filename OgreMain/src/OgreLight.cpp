@@ -53,6 +53,7 @@ namespace Ogre {
           mAffectParentNode(false),
           mDoubleSided(false),
           mRectSize(Vector2::UNIT_SCALE),
+          mTexture( 0 ),
           mTextureLightMaskIdx( std::numeric_limits<uint16>::max() ),
           mTexLightMaskDiffuseMipStart( (uint16)(0.95f * 65535) ),
           mShadowFarDist(0),
@@ -71,6 +72,11 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     Light::~Light()
     {
+        if( mTexture && mTexture->hasAutomaticBatching() )
+        {
+            mTexture->removeListener( this );
+            mTexture = 0;
+        }
     }
     //-----------------------------------------------------------------------
     void Light::setType(LightTypes type)
@@ -607,6 +613,59 @@ namespace Ogre {
         {
             params->_writeRawConstant(constantEntry.physicalIndex, i->second, 
                 constantEntry.elementCount);
+        }
+    }
+    //-----------------------------------------------------------------------
+    void Light::setTexture( TextureGpu *texture )
+    {
+        if( mTexture && mTexture->hasAutomaticBatching() )
+            mTexture->removeListener( this );
+        if( texture )
+        {
+            OGRE_ASSERT_LOW( texture->hasAutomaticBatching() &&
+                             "If the texture does is not AutomaticBatching, the use Raw calls!" );
+            OGRE_ASSERT_LOW( texture->getTextureType() == TextureTypes::Type2D );
+            texture->addListener( this );
+            texture->scheduleTransitionTo( GpuResidency::Resident );
+            mTexture = texture;
+            mTextureLightMaskIdx = static_cast<uint16>( texture->getInternalSliceStart() );
+        }
+        else
+        {
+            mTexture = 0;
+            mTextureLightMaskIdx = std::numeric_limits<Ogre::uint16>::max();
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void Light::setTextureRaw( TextureGpu *texture, uint32 sliceIdx )
+    {
+        if( mTexture && mTexture->hasAutomaticBatching() )
+            mTexture->removeListener( this );
+        OGRE_ASSERT_LOW( (!texture || !texture->hasAutomaticBatching()) &&
+                         "Only use Raw call if texture is not AutomaticBatching!" );
+        OGRE_ASSERT_LOW( texture->getTextureType() == TextureTypes::Type2DArray );
+        mTexture = texture;
+        if( texture )
+            mTextureLightMaskIdx = static_cast<uint16>( sliceIdx );
+        else
+            mTextureLightMaskIdx = std::numeric_limits<Ogre::uint16>::max();
+    }
+    //-----------------------------------------------------------------------------------
+    void Light::notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason )
+    {
+        if( reason == TextureGpuListener::PoolTextureSlotChanged )
+        {
+            if( texture == mTexture )
+                mTextureLightMaskIdx = static_cast<uint16>( mTexture->getInternalSliceStart() );
+        }
+        else if( reason == TextureGpuListener::Deleted )
+        {
+            if( texture == mTexture )
+            {
+                mTextureLightMaskIdx = std::numeric_limits<Ogre::uint16>::max();
+                mTexture->removeListener( this );
+                mTexture = 0;
+            }
         }
     }
     //-----------------------------------------------------------------------

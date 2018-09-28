@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "OgreVector4.h"
 #include "OgreMovableObject.h"
 #include "OgrePlaneBoundedVolume.h"
+#include "OgreTextureGpuListener.h"
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre {
@@ -67,7 +68,7 @@ namespace Ogre {
         extended for certain scene types so an alternative to the standard dynamic lighting may be used, such
             as dynamic lightmaps.
     */
-    class _OgreExport Light : public MovableObject
+    class _OgreExport Light : public MovableObject, public TextureGpuListener
     {
 		void resetAabb(void);
 		void updateLightBounds(void);
@@ -537,6 +538,27 @@ namespace Ogre {
             false-positives (The function should not return any false-negatives).
         */
         bool isInLightRange(const Ogre::AxisAlignedBox& container) const;
+
+        /** Sets a textured for types of light that support it. At the time of
+            writing only LT_AREA_APPROX supports it.
+        @remarks
+            Note that HlmsPbs only supports one 2D Array texture active at a time.
+            i.e. you must call hlmsPbs->setAreaLightMasks( texture );
+            and if that texture belongs to a different pool as the one you're
+            inputting here, the wrong texture will be displayed!
+        @param texture
+            Texture. Can be monochrome or coloured.
+            For Raw version must be a 2D Array texture.
+            For non-Raw version, must be a 2D texture.
+        @param sliceIdx
+            Slice to the texture.
+        */
+        void setTexture( TextureGpu *texture );
+        void setTextureRaw( TextureGpu *texture, uint32 sliceIdx );
+
+        TextureGpu* getTexture(void) const          { return mTexture; }
+
+        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason );
     
     protected:
 
@@ -560,6 +582,7 @@ namespace Ogre {
         bool mDoubleSided;
     protected:
         Vector2 mRectSize;
+        TextureGpu *mTexture;
     public:
         uint16 mTextureLightMaskIdx;
         /// Control the start of mip level for diffuse component for area lights

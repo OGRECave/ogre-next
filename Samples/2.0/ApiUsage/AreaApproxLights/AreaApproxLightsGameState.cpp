@@ -41,6 +41,8 @@ using namespace Demo;
 
 namespace Demo
 {
+    const Ogre::uint32 c_areaLightsPoolId = 759384;
+
     AreaApproxLightsGameState::AreaApproxLightsGameState( const Ogre::String &helpDescription ) :
         TutorialGameState( helpDescription ),
         mAnimateObjects( true ),
@@ -51,31 +53,22 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void AreaApproxLightsGameState::createAreaMask(void)
     {
-        Ogre::Root *root = mGraphicsSystem->getRoot();
-        Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
-        mAreaMaskTex = textureMgr->createTexture(
-                           "Area Light Masks", Ogre::GpuPageOutStrategy::SaveToSystemRam,
-                           Ogre::TextureFlags::ManualTexture, Ogre::TextureTypes::Type2DArray );
-
-        mAreaMaskTex->setResolution( 256u, 256u, 1u );
-        mAreaMaskTex->setPixelFormat( Ogre::PFG_R8_UNORM );
-        mAreaMaskTex->setNumMipmaps( 6u );
-        mAreaMaskTex->scheduleTransitionTo( Ogre::GpuResidency::Resident );
-
-        Ogre::uint32 texWidth = mAreaMaskTex->getWidth();
-        Ogre::uint32 texHeight = mAreaMaskTex->getHeight();
-        const Ogre::PixelFormatGpu texFormat = mAreaMaskTex->getPixelFormat();
+        //Please note the texture CAN be coloured. The sample uses a monochrome texture,
+        //but you coloured textures are supported too. However they will burn a little
+        //more GPU performance.
+        const Ogre::uint32 texWidth = 256u;
+        const Ogre::uint32 texHeight = 256u;
+        const Ogre::PixelFormatGpu texFormat = Ogre::PFG_R8_UNORM;
 
         //Fill the texture with a hollow rectangle, 10-pixel thick.
         size_t sizeBytes = Ogre::PixelFormatGpuUtils::calculateSizeBytes(
-                               texWidth, texHeight, 1u, 1u,
-                               texFormat, mAreaMaskTex->getNumMipmaps(), 4u );
+                               texWidth, texHeight, 1u, 1u, texFormat, 1u, 4u );
         Ogre::uint8 *data = reinterpret_cast<Ogre::uint8*>(
                                 OGRE_MALLOC_SIMD( sizeBytes, Ogre::MEMCATEGORY_GENERAL ) );
         Ogre::Image2 image;
         image.loadDynamicImage( data, texWidth, texHeight, 1u,
                                 Ogre::TextureTypes::Type2D, texFormat,
-                                true, mAreaMaskTex->getNumMipmaps() );
+                                true, 1u );
         for( size_t y=0; y<texHeight; ++y )
         {
             for( size_t x=0; x<texWidth; ++x )
@@ -99,7 +92,7 @@ namespace Demo
         {
             //Ensure the lower mips have black borders. This is done to prevent certain artifacts,
             //Ensure the higher mips have grey borders. This is done to prevent certain artifacts.
-            for( size_t i=0u; i<mAreaMaskTex->getNumMipmaps(); ++i )
+            for( size_t i=0u; i<image.getNumMipmaps(); ++i )
             {
                 Ogre::TextureBox dataBox = image.getData( static_cast<Ogre::uint8>( i ) );
 
@@ -120,8 +113,28 @@ namespace Demo
             }
         }
 
-        //Upload to GPU
-        image.uploadTo( mAreaMaskTex, 0, mAreaMaskTex->getNumMipmaps() - 1u );
+        Ogre::Root *root = mGraphicsSystem->getRoot();
+        Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
+        mAreaMaskTex = textureMgr->reservePoolId( c_areaLightsPoolId,
+                                                  image.getWidth(), image.getHeight(), 8u,
+                                                  image.getNumMipmaps(), image.getPixelFormat() );
+
+        //Create the texture now, from the Image
+        Ogre::TextureGpu *areaLightTex =
+                textureMgr->createOrRetrieveTexture(
+                    "AreaLightMask0", Ogre::GpuPageOutStrategy::SaveToSystemRam,
+                    Ogre::TextureFlags::AutomaticBatching,
+                    Ogre::TextureTypes::Type2D, Ogre::BLANKSTRING, 0, c_areaLightsPoolId );
+
+        //Tweak via _setAutoDelete so the internal data is copied as a pointer
+        //instead of performing a deep copy of the data; while leaving the responsability
+        //of freeing memory to imagePtr instead.
+        image._setAutoDelete( false );
+        Ogre::Image2 *imagePtr = new Ogre::Image2( image );
+        imagePtr->_setAutoDelete( true );
+        //Ogre will call "delete imagePtr" when done, because we're passing
+        //true to autoDeleteImage argument in scheduleTransitionTo
+        areaLightTex->scheduleTransitionTo( Ogre::GpuResidency::Resident, imagePtr, true );
 
         //Set the texture mask to PBS.
         Ogre::Hlms *hlms = root->getHlmsManager()->getHlms( Ogre::HLMS_PBS );
@@ -176,7 +189,7 @@ namespace Demo
             samplerblock.mMaxAnisotropy = 8.0f;
             samplerblock.setFiltering( Ogre::TFO_ANISOTROPIC );
 
-            datablock->setTexture( 0, mAreaMaskTex, &samplerblock, light->mTextureLightMaskIdx );
+            datablock->setTexture( 0, light->getTexture(), &samplerblock, light->mTextureLightMaskIdx );
             datablock->setTextureSwizzle( 0, Ogre::HlmsUnlitDatablock::R_MASK,
                                           Ogre::HlmsUnlitDatablock::R_MASK,
                                           Ogre::HlmsUnlitDatablock::R_MASK,
@@ -290,8 +303,6 @@ namespace Demo
         {
             size_t numSpheres = 0;
             Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
-            Ogre::HlmsTextureManager *hlmsTextureManager = hlmsManager->getTextureManager();
-
             assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
 
             Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
@@ -364,6 +375,9 @@ namespace Demo
 
         mLightNodes[0] = lightNode;
 
+        Ogre::Root *root = mGraphicsSystem->getRoot();
+        Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
+
         light = sceneManager->createLight();
         lightNode = rootNode->createChildSceneNode();
         lightNode->attachObject( light );
@@ -379,8 +393,14 @@ namespace Demo
         light->setDirection( Ogre::Vector3( 1, -1, -1 ).normalisedCopy() );
         //light->setDirection( Ogre::Vector3( 0, -1, 0 ).normalisedCopy() );
         light->setAttenuationBasedOnRadius( 10.0f, 0.01f );
-        //Set the array index of the light mask in mAreaMaskTex
-        light->mTextureLightMaskIdx = 0u;
+        //Set the texture for this area light. The parameters to createOrRetrieveTexture
+        //do not matter much, as the texture has already been created.
+        Ogre::TextureGpu *areaTex =
+                textureMgr->createOrRetrieveTexture(
+                    "AreaLightMask0", Ogre::GpuPageOutStrategy::AlwaysKeepSystemRamCopy,
+                    Ogre::TextureFlags::AutomaticBatching,
+                    Ogre::TextureTypes::Type2D, Ogre::BLANKSTRING, 0u, c_areaLightsPoolId );
+        light->setTexture( areaTex );
         //Control the diffuse mip (this is the default value)
         light->mTexLightMaskDiffuseMipStart = (Ogre::uint16)(0.95f * 65535);
 
@@ -400,7 +420,7 @@ namespace Demo
         lightNode->setPosition( 5.0f, 4.0f, -5.0f );
         light->setDirection( Ogre::Vector3( -1, -1, 1 ).normalisedCopy() );
         light->setAttenuationBasedOnRadius( 10.0f, 0.01f );
-        //When the array index is 0xFFFF, the light won't use a texture.
+        //When the array index is 0xFFFF, the light won't use a texture (default value).
         light->mTextureLightMaskIdx = std::numeric_limits<Ogre::uint16>::max();
 
         mAreaLightPlaneDatablocks[1] = createPlaneForAreaLight( light );
@@ -415,8 +435,6 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void AreaApproxLightsGameState::destroyScene(void)
     {
-        Ogre::TextureGpuManager *textureMgr = mAreaMaskTex->getTextureManager();
-        textureMgr->destroyTexture( mAreaMaskTex );
         mAreaMaskTex = 0;
     }
     //-----------------------------------------------------------------------------------
