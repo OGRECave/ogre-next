@@ -125,6 +125,7 @@ namespace Ogre
 
         struct MetadataCacheEntry
         {
+            String  aliasName;
             uint32  width;
             uint32  height;
             uint32  depthOrSlices;
@@ -132,6 +133,7 @@ namespace Ogre
             uint32  poolId;
             TextureTypes::TextureTypes textureType;
             uint8   numMipmaps;
+            MetadataCacheEntry();
         };
 
         typedef map<IdString, MetadataCacheEntry>::type MetadataCacheMap;

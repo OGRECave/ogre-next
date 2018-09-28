@@ -702,6 +702,17 @@ namespace Ogre
         savedTextures.insert( resourceName );
     }
     //-----------------------------------------------------------------------------------
+    TextureGpuManager::MetadataCacheEntry::MetadataCacheEntry() :
+        width( 0 ),
+        height( 0 ),
+        depthOrSlices( 0 ),
+        pixelFormat( PFG_UNKNOWN ),
+        poolId( 0 ),
+        textureType( TextureTypes::Unknown ),
+        numMipmaps( 0 )
+    {
+    }
+    //-----------------------------------------------------------------------------------
     bool TextureGpuManager::applyMetadataCacheTo( TextureGpu *texture )
     {
         bool retVal = false;
@@ -721,16 +732,23 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::_updateMetadataCache( TextureGpu *texture )
     {
-        MetadataCacheEntry entry;
-        entry.width = texture->getWidth();
-        entry.height = texture->getHeight();
-        entry.depthOrSlices = texture->getDepthOrSlices();
-        entry.pixelFormat = texture->getPixelFormat();
-        entry.poolId = texture->getTexturePoolId();
-        entry.textureType = texture->getTextureType();
-        entry.numMipmaps = texture->getNumMipmaps();
+        ResourceEntryMap::const_iterator itor = mEntries.find( texture->getName() );
 
-        mMetadataCache[texture->getName()] = entry;
+        if( itor != mEntries.end() )
+        {
+            MetadataCacheEntry entry;
+            entry.aliasName = itor->second.alias;
+            //entry.resourceName = itor->second.name;
+            entry.width = texture->getWidth();
+            entry.height = texture->getHeight();
+            entry.depthOrSlices = texture->getDepthOrSlices();
+            entry.pixelFormat = texture->getPixelFormat();
+            entry.poolId = texture->getTexturePoolId();
+            entry.textureType = texture->getTextureType();
+            entry.numMipmaps = texture->getNumMipmaps();
+
+            mMetadataCache[texture->getName()] = entry;
+        }
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::_removeMetadataCacheEntry( TextureGpu *texture )
@@ -766,7 +784,6 @@ namespace Ogre
                 if( jsonVal[i].IsObject() )
                 {
                     MetadataCacheEntry entry;
-                    memset( &entry, 0, sizeof( entry ) );
 
                     itor = jsonVal[i].FindMember( "poolId" );
                     if( itor != jsonVal[i].MemberEnd() && itor->value.IsUint() )
@@ -818,12 +835,14 @@ namespace Ogre
                 {
                     IdString aliasName = itTex->name.GetString();
                     MetadataCacheEntry entry;
-                    memset( &entry, 0, sizeof( entry ) );
+
+                    entry.aliasName = itTex->name.GetString();
 
                     itor = itTex->value.FindMember( "poolId" );
                     if( itor != itTex->value.MemberEnd() && itor->value.IsUint() )
                         entry.poolId = itor->value.GetUint();
 
+                    entry.textureType = TextureTypes::Type2D;
                     itor = itTex->value.FindMember( "texture_type" );
                     if( itor != itTex->value.MemberEnd() && itor->value.IsUint() )
                     {
@@ -908,57 +927,33 @@ namespace Ogre
 
         jsonStr.a( "\n\t],\n\t\"textures\" :\n\t{" );
         firstIteration = true;
-        ResourceEntryMap::const_iterator itor = mEntries.begin();
-        ResourceEntryMap::const_iterator end  = mEntries.end();
+        MetadataCacheMap::const_iterator itor = mMetadataCache.begin();
+        MetadataCacheMap::const_iterator end  = mMetadataCache.end();
 
         while( itor != end )
         {
-            const ResourceEntry &entry = itor->second;
+            const MetadataCacheEntry &entry = itor->second;
 
-            if( entry.texture && !entry.texture->isManualTexture() &&
-                (entry.texture->isMetadataReady() ||
-                 mMetadataCache.find( entry.texture->getName() ) != mMetadataCache.end()) )
-            {
-                if( !firstIteration )
-                    jsonStr.a( "," );
+            if( !firstIteration )
+                jsonStr.a( "," );
 
-                jsonStr.a( "\n\t\t\"", entry.alias.c_str(), "\" : \n\t\t{" );
-                jsonStr.a( "\n\t\t\t\"resource\" : \"", entry.name.c_str(), "\"" );
-                if( entry.texture->isMetadataReady() )
-                {
-                    jsonStr.a( ",\n\t\t\t\"resolution\" : [",
-                               entry.texture->getWidth(), ", ",
-                               entry.texture->getHeight(), ", ",
-                               entry.texture->getDepthOrSlices(), "]" );
-                    jsonStr.a( ",\n\t\t\t\"mipmaps\" : ", entry.texture->getNumMipmaps() );
-                    jsonStr.a( ",\n\t\t\t\"format\" : \"",
-                               PixelFormatGpuUtils::toString( entry.texture->getPixelFormat() ), "\"" );
-                    jsonStr.a( ",\n\t\t\t\"texture_type\" : ",
-                               (int)entry.texture->getTextureType() );
-                    jsonStr.a( ",\n\t\t\t\"poolId\" : ", entry.texture->getTexturePoolId() );
-                }
-                else
-                {
-                    MetadataCacheMap::const_iterator itCacheEntry =
-                            mMetadataCache.find( entry.texture->getName() );
-                    jsonStr.a( ",\n\t\t\t\"resolution\" : [",
-                               itCacheEntry->second.width, ", ",
-                               itCacheEntry->second.height, ", ",
-                               itCacheEntry->second.depthOrSlices, "]" );
-                    jsonStr.a( ",\n\t\t\t\"mipmaps\" : ", itCacheEntry->second.numMipmaps );
-                    jsonStr.a( ",\n\t\t\t\"format\" : \"",
-                               PixelFormatGpuUtils::toString( itCacheEntry->second.pixelFormat ), "\"" );
-                    jsonStr.a( ",\n\t\t\t\"texture_type\" : \"",
-                               (int)itCacheEntry->second.textureType, "\"" );
-                    jsonStr.a( ",\n\t\t\t\"poolId\" : ", itCacheEntry->second.poolId );
-                }
-                jsonStr.a( "\n\t\t}" );
+            jsonStr.a( "\n\t\t\"", entry.aliasName.c_str(), "\" : \n\t\t{" );
+            //jsonStr.a( "\n\t\t\t\"resource\" : \"", entry.resourceName.c_str(), "\"" );
+            jsonStr.a( "\n\t\t\t\"resolution\" : [",
+                       entry.width, ", ",
+                       entry.height, ", ",
+                       entry.depthOrSlices, "]" );
+            jsonStr.a( ",\n\t\t\t\"mipmaps\" : ", entry.numMipmaps );
+            jsonStr.a( ",\n\t\t\t\"format\" : \"",
+                       PixelFormatGpuUtils::toString( entry.pixelFormat ), "\"" );
+            jsonStr.a( ",\n\t\t\t\"texture_type\" : ", (int)entry.textureType );
+            jsonStr.a( ",\n\t\t\t\"poolId\" : ", entry.poolId );
+            jsonStr.a( "\n\t\t}" );
 
-                outJson += jsonStr.c_str();
-                jsonStr.clear();
+            outJson += jsonStr.c_str();
+            jsonStr.clear();
 
-                firstIteration = false;
-            }
+            firstIteration = false;
 
             ++itor;
         }

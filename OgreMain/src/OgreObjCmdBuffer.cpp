@@ -120,6 +120,7 @@ namespace Ogre
     void ObjCmdBuffer::TransitionToResident::execute(void)
     {
         texture->_transitionTo( GpuResidency::Resident, reinterpret_cast<uint8*>( sysRamCopy ) );
+        OGRE_ASSERT_MEDIUM( !texture->isManualTexture() );
         texture->getTextureManager()->_updateMetadataCache( texture );
     }
     //-----------------------------------------------------------------------------------
