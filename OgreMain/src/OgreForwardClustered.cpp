@@ -156,7 +156,8 @@ namespace Ogre
                                                   size_t minRq, size_t maxRq,
                                                   size_t currObjsPerCell,
                                                   size_t cellOffsetStart,
-                                                  ObjTypes objType )
+                                                  ObjTypes objType,
+                                                  uint16 numFloat4PerObj )
     {
         uint16 numObjs = initialNumObjs;
 
@@ -282,7 +283,7 @@ namespace Ogre
                             {
                                 uint16 * RESTRICT_ALIAS cellElem = mGridBuffer + idx * mObjsPerCell +
                                                                    cellOffsetStart;
-                                *cellElem = numObjs * 4u;
+                                *cellElem = numObjs * numFloat4PerObj;
                                 ++numLightsInCell->objCount[objType];
                             }
                         }
@@ -628,15 +629,15 @@ namespace Ogre
         numDecals = collectObjsForSlice( numPackedFrustumsPerSlice, frustumStartIdx,
                                          numDecals, MinDecalRq, actualMaxDecalRq,
                                          mDecalsPerCell, mLightsPerCell + c_reservedLightSlotsPerCell +
-                                         c_reservedDecalsSlotsPerCell, ObjType_Decal );
+                                         c_reservedDecalsSlotsPerCell, ObjType_Decal, 4u );
 
-        uint16 numProbes = static_cast<uint16>( alignToNextMultiple( numDecals * 4u, 6u ) >> 2u );
+        uint16 numProbes = static_cast<uint16>( alignToNextMultiple( numDecals * 4u, 5u ) >> 2u );
         const size_t actualMaxCubemapProbeRq = std::min( MaxCubemapProbeRq, objsPerRqInThread0.size() );
         numProbes = collectObjsForSlice( numPackedFrustumsPerSlice, frustumStartIdx,
                                          numProbes, MinCubemapProbeRq, actualMaxCubemapProbeRq,
                                          mCubemapProbesPerCell, mLightsPerCell +
                                          c_reservedLightSlotsPerCell + c_reservedDecalsSlotsPerCell +
-                                         c_reservedCubemapProbeSlotsPerCell, ObjType_CubemapProbe );
+                                         c_reservedCubemapProbeSlotsPerCell, ObjType_CubemapProbe, 5u );
 
         {
             //Now write all the light counts

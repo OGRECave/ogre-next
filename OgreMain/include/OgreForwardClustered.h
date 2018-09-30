@@ -97,7 +97,8 @@ namespace Ogre
 
         uint16 collectObjsForSlice( const size_t numPackedFrustumsPerSlice, const size_t frustumStartIdx,
                                     uint16 initialNumObjs, size_t minRq, size_t maxRq,
-                                    size_t currObjsPerCell, size_t cellOffsetStart, ObjTypes objType );
+                                    size_t currObjsPerCell, size_t cellOffsetStart, ObjTypes objType,
+                                    uint16 numFloat4PerObj );
         void collectLightForSlice( size_t slice, size_t threadId );
 
         void collectObjs( const Camera *camera, size_t &outNumDecals );

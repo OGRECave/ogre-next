@@ -61,6 +61,7 @@ namespace Ogre
         Aabb    mProbeShape;
 
         TextureGpu  *mTexture;
+        uint32      mCubemapArrayIdx;
         uint8       mMsaa;
 
         IdString            mWorkspaceDefName;
@@ -69,6 +70,8 @@ namespace Ogre
         Camera              *mCamera;
 
         ParallaxCorrectedCubemap *mCreator;
+
+        InternalCubemapProbe    *mInternalProbe;
 
         ConstBufferPacked   *mConstBufferForManualProbes;
         uint32              mNumDatablockUsers;
@@ -102,6 +105,11 @@ namespace Ogre
         void destroyWorkspace(void);
     protected:
         void destroyTexture(void);
+
+        void createInternalProbe(void);
+        void destroyInternalProbe(void);
+        void switchInternalProbeStaticValue(void);
+        void syncInternalProbe(void);
 
     public:
         CubemapProbe( ParallaxCorrectedCubemap *creator );

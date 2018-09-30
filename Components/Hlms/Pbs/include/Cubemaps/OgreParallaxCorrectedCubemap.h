@@ -60,6 +60,7 @@ namespace Ogre
         size_t          mLastPassNumViewMatrices;
         Matrix4         mCachedLastViewMatrix;
 
+        bool            mAutomaticMode;
         bool            mBlendedProbeNeedsUpdate;
 
         public: bool                    mPaused;
@@ -194,6 +195,15 @@ namespace Ogre
         */
         void setEnabled( bool bEnabled, uint32 maxWidth, uint32 maxHeight, PixelFormatGpu pixelFormat );
         bool getEnabled(void) const;
+
+        /** When true, this PCC will rely on Forward Clustered and cubemap arrays in order
+            to dynamically assign reflections in the pixel shader
+
+            Forward Clustered must be active and have support for cubemap probes.
+        @param automaticMode
+        */
+        void setAutomaticMode( bool automaticMode );
+        bool getAutomaticMode(void) const;
 
         /// By default the probes will be constructed when the user enters its vecinity.
         /// This can cause noticeable stalls. Use this function to regenerate them all

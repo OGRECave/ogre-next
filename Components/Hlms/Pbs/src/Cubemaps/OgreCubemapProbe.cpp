@@ -41,6 +41,8 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "OgreSceneManager.h"
 
+#include "OgreInternalCubemapProbe.h"
+
 #include "Vao/OgreConstBufferPacked.h"
 
 //Disable as OpenGL version of copyToTexture is super slow (makes a GPU->CPU->GPU roundtrip)
@@ -56,11 +58,13 @@ namespace Ogre
         mInvOrientation( Matrix3::IDENTITY ),
         mProbeShape( Aabb::BOX_NULL ),
         mTexture( 0 ),
+        mCubemapArrayIdx( 0u ),
         mMsaa( 1u ),
         mClearWorkspace( 0 ),
         mWorkspace( 0 ),
         mCamera( 0 ),
         mCreator( creator ),
+        mInternalProbe( 0 ),
         mConstBufferForManualProbes( 0 ),
         mNumDatablockUsers( 0 ),
         mStatic( true ),
@@ -134,6 +138,63 @@ namespace Ogre
             textureManager->destroyTexture( mTexture );
             mTexture = 0;
         }
+    }
+    //-----------------------------------------------------------------------------------
+    void CubemapProbe::createInternalProbe(void)
+    {
+        destroyInternalProbe();
+        if( !mCreator->getAutomaticMode() )
+            return;
+
+        SceneManager *sceneManager = mCreator->getSceneManager();
+        const SceneMemoryMgrTypes sceneType = mStatic ? SCENE_STATIC : SCENE_DYNAMIC;
+        mInternalProbe = sceneManager->_createCubemapProbe( sceneType );
+
+        SceneNode *sceneNode =
+                sceneManager->getRootSceneNode( sceneType )->createChildSceneNode( sceneType );
+        sceneNode->attachObject( mInternalProbe );
+    }
+    //-----------------------------------------------------------------------------------
+    void CubemapProbe::destroyInternalProbe(void)
+    {
+        if( !mInternalProbe )
+            return;
+
+        SceneNode *sceneNode = mInternalProbe->getParentSceneNode();
+        sceneNode->getParentSceneNode()->removeAndDestroyChild( sceneNode );
+        mCreator->getSceneManager()->_destroyCubemapProbe( mInternalProbe );
+        mInternalProbe = 0;
+    }
+    //-----------------------------------------------------------------------------------
+    void CubemapProbe::switchInternalProbeStaticValue(void)
+    {
+        if( mInternalProbe && mInternalProbe->isStatic() != mStatic )
+        {
+            SceneNode *sceneNode = mInternalProbe->getParentSceneNode();
+            sceneNode->getParent()->removeChild( sceneNode );
+
+            sceneNode->setStatic( mStatic );
+
+            SceneManager *sceneManager = mCreator->getSceneManager();
+            SceneNode *rootNode = sceneManager->getRootSceneNode( mStatic ? SCENE_STATIC :
+                                                                            SCENE_DYNAMIC );
+            rootNode->addChild( sceneNode );
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void CubemapProbe::syncInternalProbe(void)
+    {
+        if( !mInternalProbe )
+            return;
+        Quaternion qRot( mOrientation );
+        SceneNode *sceneNode = mInternalProbe->getParentSceneNode();
+        sceneNode->setPosition( mArea.mCenter );
+        sceneNode->setScale( mArea.mHalfSize );
+        sceneNode->setOrientation( qRot );
+
+        mCreator->fillConstBufferData( *this, Matrix4::IDENTITY, Matrix3::IDENTITY,
+                                       reinterpret_cast<float*>( mInternalProbe->mGpuData ) );
+        mInternalProbe->mGpuData[3][3] = static_cast<float>( mCubemapArrayIdx );
     }
     //-----------------------------------------------------------------------------------
     void CubemapProbe::setTextureParams( uint32 width, uint32 height, bool useManual,

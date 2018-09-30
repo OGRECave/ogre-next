@@ -46,7 +46,7 @@ namespace Ogre
     class _OgreExport InternalCubemapProbe : public MovableObject
     {
     public:
-        float mGpuData[6][4];
+        float mGpuData[5][4];
 
     public:
         InternalCubemapProbe( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager* manager );

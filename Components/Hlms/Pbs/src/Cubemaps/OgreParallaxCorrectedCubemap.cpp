@@ -76,6 +76,7 @@ namespace Ogre
         mStagingBuffer( 0 ),
         mLastPassNumViewMatrices( 1 ),
         mCachedLastViewMatrix( Matrix4::ZERO ),
+        mAutomaticMode( false ),
         mBlendedProbeNeedsUpdate( true ),
         mPaused( false ),
         mTrackedPosition( Vector3::ZERO ),
@@ -352,6 +353,11 @@ namespace Ogre
     bool ParallaxCorrectedCubemap::getEnabled(void) const
     {
         return mBlendWorkspace != 0;
+    }
+    //-----------------------------------------------------------------------------------
+    bool ParallaxCorrectedCubemap::getAutomaticMode(void) const
+    {
+        return mAutomaticMode;
     }
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemap::createProxyGeometry(void)

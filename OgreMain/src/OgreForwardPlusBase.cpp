@@ -290,13 +290,14 @@ namespace Ogre
             }
         }
 
-        if( numDecals > 0u )
-        {
-            //Align to the start of cubemap probes
-            //We don't align in the case of numDecals == 0 & numLights > 0
-            //because lights and cubemap probes happen to match in alignment
-            lightData += 2u * 4u;
-        }
+        //Align to the start of cubemap probes
+        if( numLights > 0u && numDecals == 0u )
+            lightData += 4u * 4u;
+        else if( numDecals > 0u )
+            lightData += 1u * 4u;
+
+        viewMatrix = camera->getViewMatrix();
+        Matrix3 invViewMatrix3 = viewMatrix3.Inverse();
 
         for( size_t rqId=MinCubemapProbeRq; rqId<=actualMaxCubemapProbeRq; ++rqId )
         {
@@ -308,8 +309,45 @@ namespace Ogre
                 OGRE_ASSERT_HIGH( dynamic_cast<InternalCubemapProbe*>( *itor ) );
                 InternalCubemapProbe *probe = static_cast<InternalCubemapProbe*>( *itor );
 
-                memcpy( lightData, probe->mGpuData, sizeof( probe->mGpuData ) >> 2u );
-                lightData += sizeof( probe->mGpuData ) >> 2u;
+                //See ParallaxCorrectedCubemap::fillConstBufferData for reference
+                Matrix3 probeInvOrientation(
+                            probe->mGpuData[0][0], probe->mGpuData[0][1], probe->mGpuData[0][2],
+                            probe->mGpuData[1][0], probe->mGpuData[1][1], probe->mGpuData[1][2],
+                            probe->mGpuData[2][0], probe->mGpuData[2][1], probe->mGpuData[2][2] );
+                const Matrix3 viewSpaceToProbeLocal = probeInvOrientation * invViewMatrix3;
+                const Vector3 probeShapeCenter( probe->mGpuData[0][3],
+                                                probe->mGpuData[1][3], probe->mGpuData[2][3] );
+                Vector3 probeShapeCenterVS = viewMatrix * probeShapeCenter;
+
+                //float4 row0_centerX;
+                *lightData++ = viewSpaceToProbeLocal[0][0];
+                *lightData++ = viewSpaceToProbeLocal[0][1];
+                *lightData++ = viewSpaceToProbeLocal[0][2];
+                *lightData++ = probeShapeCenterVS.x;
+
+                //float4 row1_centerY;
+                *lightData++ = viewSpaceToProbeLocal[0][3];
+                *lightData++ = viewSpaceToProbeLocal[0][4];
+                *lightData++ = viewSpaceToProbeLocal[0][5];
+                *lightData++ = probeShapeCenterVS.y;
+
+                //float4 row2_centerZ;
+                *lightData++ = viewSpaceToProbeLocal[0][6];
+                *lightData++ = viewSpaceToProbeLocal[0][7];
+                *lightData++ = viewSpaceToProbeLocal[0][8];
+                *lightData++ = probeShapeCenterVS.z;
+
+                //float4 halfSize;
+                *lightData++ = probe->mGpuData[3][0];
+                *lightData++ = probe->mGpuData[3][1];
+                *lightData++ = probe->mGpuData[3][2];
+                *lightData++ = probe->mGpuData[3][3];
+
+                //float4 cubemapPosLS;
+                *lightData++ = probe->mGpuData[4][0];
+                *lightData++ = probe->mGpuData[4][1];
+                *lightData++ = probe->mGpuData[4][2];
+                *lightData++ = probe->mGpuData[4][3];
 
                 ++itor;
             }
