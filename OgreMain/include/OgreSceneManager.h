@@ -388,6 +388,7 @@ namespace Ogre {
         SkeletonAnimManagerVec  mSkeletonAnimManagerCulledList;
 
         uint32                  mNumDecals;
+        uint32                  mNumCubemapProbes;
 
         /** Minimum depth level at which mNodeMemoryManager[SCENE_STATIC] is dirty.
         @remarks
@@ -1233,8 +1234,8 @@ namespace Ogre {
                            uint32 lightsPerCell, float minDistance, float maxDistance );
 
         void setForwardClustered( bool bEnable, uint32 width, uint32 height, uint32 numSlices,
-                                  uint32 lightsPerCell, uint32 decalsPerCell, float minDistance,
-                                  float maxDistance );
+                                  uint32 lightsPerCell, uint32 decalsPerCell, uint32 cubemapProbesPerCel,
+                                  float minDistance, float maxDistance );
 
         ForwardPlusBase* getForwardPlus(void)                       { return mForwardPlusSystem; }
         ForwardPlusBase* _getActivePassForwardPlus(void)            { return mForwardPlusImpl; }
@@ -1387,6 +1388,10 @@ namespace Ogre {
         virtual Decal* createDecal( SceneMemoryMgrTypes sceneType = SCENE_DYNAMIC );
         virtual void destroyDecal( Decal *decal );
         virtual void destroyAllDecals(void);
+
+        virtual InternalCubemapProbe* _createCubemapProbe( SceneMemoryMgrTypes sceneType );
+        virtual void _destroyCubemapProbe( InternalCubemapProbe *probe );
+        virtual void _destroyAllCubemapProbes(void);
 
         /** Creates a 2D rectangle that can be displayed for screen space effects or
             showing a basic GUI.

@@ -39,22 +39,27 @@ THE SOFTWARE.
 #include "OgreHlms.h"
 
 #include "OgreDecal.h"
+#include "OgreInternalCubemapProbe.h"
 
 namespace Ogre
 {
     //Six variables * 4 (padded vec3) * 4 (bytes) * numLights
     const size_t ForwardPlusBase::MinDecalRq = 0u;
     const size_t ForwardPlusBase::MaxDecalRq = 4u;
+    const size_t ForwardPlusBase::MinCubemapProbeRq = 5u;
+    const size_t ForwardPlusBase::MaxCubemapProbeRq = 8u;
     const size_t ForwardPlusBase::NumBytesPerLight = 6 * 4 * 4;
     const size_t ForwardPlusBase::NumBytesPerDecal = 4 * 4 * 4;
 
-    ForwardPlusBase::ForwardPlusBase( SceneManager *sceneManager, bool decalsEnabled ) :
+    ForwardPlusBase::ForwardPlusBase( SceneManager *sceneManager, bool decalsEnabled,
+                                      bool cubemapProbesEnabled ) :
         mVaoManager( 0 ),
         mSceneManager( sceneManager ),
         mDebugMode( false ),
         mFadeAttenuationRange( true ),
         mEnableVpls( false ),
-        mDecalsEnabled( decalsEnabled )
+        mDecalsEnabled( decalsEnabled ),
+        mCubemapProbesEnabled( cubemapProbesEnabled )
   #if !OGRE_NO_FINE_LIGHT_MASK_GRANULARITY
     ,   mFineLightMaskGranularity( true )
   #endif
@@ -158,11 +163,18 @@ namespace Ogre
 
         size_t numDecals = 0;
         size_t actualMaxDecalRq = 0;
+        size_t actualMaxCubemapProbeRq = 0;
         const VisibleObjectsPerRq &objsPerRqInThread0 = mSceneManager->_getTmpVisibleObjectsList()[0];
         if( mDecalsEnabled )
         {
             actualMaxDecalRq = std::min( MaxDecalRq, objsPerRqInThread0.size() );
             for( size_t rqId=MinDecalRq; rqId<=actualMaxDecalRq; ++rqId )
+                numDecals += objsPerRqInThread0[rqId].size();
+        }
+        if( mCubemapProbesEnabled )
+        {
+            actualMaxCubemapProbeRq = std::min( MaxCubemapProbeRq, objsPerRqInThread0.size() );
+            for( size_t rqId=MinCubemapProbeRq; rqId<=actualMaxCubemapProbeRq; ++rqId )
                 numDecals += objsPerRqInThread0[rqId].size();
         }
 
@@ -273,6 +285,31 @@ namespace Ogre
 #endif
                 memcpy( lightData, &decal->mDiffuseIdx, sizeof(uint32) * 4u );
                 lightData += 4u;
+
+                ++itor;
+            }
+        }
+
+        if( numDecals > 0u )
+        {
+            //Align to the start of cubemap probes
+            //We don't align in the case of numDecals == 0 & numLights > 0
+            //because lights and cubemap probes happen to match in alignment
+            lightData += 2u * 4u;
+        }
+
+        for( size_t rqId=MinCubemapProbeRq; rqId<=actualMaxCubemapProbeRq; ++rqId )
+        {
+            MovableObject::MovableObjectArray::const_iterator itor = objsPerRqInThread0[rqId].begin();
+            MovableObject::MovableObjectArray::const_iterator end  = objsPerRqInThread0[rqId].end();
+
+            while( itor != end )
+            {
+                OGRE_ASSERT_HIGH( dynamic_cast<InternalCubemapProbe*>( *itor ) );
+                InternalCubemapProbe *probe = static_cast<InternalCubemapProbe*>( *itor );
+
+                memcpy( lightData, probe->mGpuData, sizeof( probe->mGpuData ) >> 2u );
+                lightData += sizeof( probe->mGpuData ) >> 2u;
 
                 ++itor;
             }

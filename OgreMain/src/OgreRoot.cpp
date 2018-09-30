@@ -52,6 +52,7 @@ THE SOFTWARE.
 #include "OgreFileSystem.h"
 #include "OgreResourceBackgroundQueue.h"
 #include "OgreDecal.h"
+#include "OgreInternalCubemapProbe.h"
 #include "OgreEntity.h"
 #include "OgreItem.h"
 #include "OgreBillboardSet.h"
@@ -284,6 +285,8 @@ namespace Ogre {
         // instantiate and register base movable factories
         mDecalFactory = OGRE_NEW DecalFactory();
         addMovableObjectFactory(mDecalFactory);
+        mCubemapProbeFactory = OGRE_NEW InternalCubemapProbeFactory();
+        addMovableObjectFactory(mCubemapProbeFactory);
         mEntityFactory = OGRE_NEW v1::EntityFactory();
         addMovableObjectFactory(mEntityFactory);
         mItemFactory = OGRE_NEW ItemFactory();
@@ -392,6 +395,7 @@ namespace Ogre {
         OGRE_DELETE mResourceGroupManager;
 
         OGRE_DELETE mDecalFactory;
+        OGRE_DELETE mCubemapProbeFactory;
         OGRE_DELETE mEntityFactory;
         OGRE_DELETE mItemFactory;
         OGRE_DELETE mLightFactory;

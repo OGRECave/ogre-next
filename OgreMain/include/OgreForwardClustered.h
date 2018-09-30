@@ -65,6 +65,7 @@ namespace Ogre
         size_t  mObjsPerCell;
         size_t  mLightsPerCell;
         size_t  mDecalsPerCell;
+        size_t  mCubemapProbesPerCell;
 
         RawSimdUniquePtr<FrustumRegion, MEMCATEGORY_SCENE_CONTROL> mFrustumRegions;
 
@@ -94,13 +95,17 @@ namespace Ogre
         */
         inline uint32 getSliceAtDepth( Real depth ) const;
 
+        uint16 collectObjsForSlice( const size_t numPackedFrustumsPerSlice, const size_t frustumStartIdx,
+                                    uint16 initialNumObjs, size_t minRq, size_t maxRq,
+                                    size_t currObjsPerCell, size_t cellOffsetStart, ObjTypes objType );
         void collectLightForSlice( size_t slice, size_t threadId );
 
         void collectObjs( const Camera *camera, size_t &outNumDecals );
 
     public:
         ForwardClustered( uint32 width, uint32 height, uint32 numSlices, uint32 lightsPerCell,
-                          uint32 decalsPerCell, float minDistance, float maxDistance,
+                          uint32 decalsPerCell, uint32 cubemapProbesPerCell,
+                          float minDistance, float maxDistance,
                           SceneManager *sceneManager );
         virtual ~ForwardClustered();
 

@@ -49,7 +49,7 @@ namespace Ogre
                           uint32 numSlices, uint32 lightsPerCell,
                           float minDistance, float maxDistance,
                           SceneManager *sceneManager ) :
-        ForwardPlusBase( sceneManager, false ),
+        ForwardPlusBase( sceneManager, false, false ),
         mWidth( width ),
         mHeight( height ),
         mNumSlices( numSlices ),

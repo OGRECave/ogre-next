@@ -117,7 +117,7 @@ namespace Demo
 
         createDecalDebugData();
 
-        sceneManager->setForwardClustered( true, 16, 8, 24, 96, 4, 2, 50 );
+        sceneManager->setForwardClustered( true, 16, 8, 24, 96, 4, 0, 2, 50 );
         //sceneManager->setForwardClustered( true, 128, 64, 8, 96, 4, 2, 50 );
 
         {
