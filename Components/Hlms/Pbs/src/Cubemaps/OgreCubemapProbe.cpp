@@ -29,10 +29,12 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "Cubemaps/OgreCubemapProbe.h"
+#include "Cubemaps/OgreParallaxCorrectedCubemapBase.h"
 #include "Cubemaps/OgreParallaxCorrectedCubemap.h"
 
 #include "OgreTextureGpuManager.h"
 #include "OgrePixelFormatGpuUtils.h"
+#include "OgreTextureBox.h"
 #include "OgreLogManager.h"
 #include "OgreLwString.h"
 #include "OgreId.h"
@@ -50,7 +52,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    CubemapProbe::CubemapProbe( ParallaxCorrectedCubemap *creator ) :
+    CubemapProbe::CubemapProbe( ParallaxCorrectedCubemapBase *creator ) :
         mProbeCameraPos( Vector3::ZERO ),
         mArea( Aabb::BOX_NULL ),
         mAreaInnerRegion( Vector3::ZERO ),
@@ -58,7 +60,7 @@ namespace Ogre
         mInvOrientation( Matrix3::IDENTITY ),
         mProbeShape( Aabb::BOX_NULL ),
         mTexture( 0 ),
-        mCubemapArrayIdx( 0u ),
+        mCubemapArrayIdx( std::numeric_limits<uint32>::max() ),
         mMsaa( 1u ),
         mClearWorkspace( 0 ),
         mWorkspace( 0 ),
@@ -116,8 +118,11 @@ namespace Ogre
             mClearWorkspace = 0;
         }
 
-        if( mTexture && mTexture->getResidencyStatus() != GpuResidency::OnStorage )
+        if( mTexture && mTexture->getResidencyStatus() != GpuResidency::OnStorage &&
+            !mCreator->getAutomaticMode() )
+        {
             mTexture->_transitionTo( GpuResidency::OnStorage, (uint8*)0 );
+        }
 
         if( mCamera )
         {
@@ -125,6 +130,8 @@ namespace Ogre
             sceneManager->destroyCamera( mCamera );
             mCamera = 0;
         }
+
+        destroyInternalProbe();
     }
     //-----------------------------------------------------------------------------------
     void CubemapProbe::destroyTexture(void)
@@ -132,11 +139,35 @@ namespace Ogre
         assert( !mWorkspace );
         if( mTexture )
         {
-            SceneManager *sceneManager = mCreator->getSceneManager();
-            TextureGpuManager *textureManager =
-                    sceneManager->getDestinationRenderSystem()->getTextureGpuManager();
-            textureManager->destroyTexture( mTexture );
+            if( !mCreator->getAutomaticMode() )
+            {
+                SceneManager *sceneManager = mCreator->getSceneManager();
+                TextureGpuManager *textureManager =
+                        sceneManager->getDestinationRenderSystem()->getTextureGpuManager();
+                textureManager->destroyTexture( mTexture );
+            }
             mTexture = 0;
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void CubemapProbe::acquireTextureAuto(void)
+    {
+        if( !mCreator->getAutomaticMode() )
+            return;
+
+        releaseTextureAuto();
+        mTexture = mCreator->_acquireTextureSlot( mCubemapArrayIdx );
+    }
+    //-----------------------------------------------------------------------------------
+    void CubemapProbe::releaseTextureAuto(void)
+    {
+        if( !mCreator->getAutomaticMode() )
+            return;
+
+        if( mCubemapArrayIdx != std::numeric_limits<uint32>::max() )
+        {
+            mCreator->_releaseTextureSlot( mTexture, mCubemapArrayIdx );
+            mCubemapArrayIdx = std::numeric_limits<uint32>::max();
         }
     }
     //-----------------------------------------------------------------------------------
@@ -153,6 +184,7 @@ namespace Ogre
         SceneNode *sceneNode =
                 sceneManager->getRootSceneNode( sceneType )->createChildSceneNode( sceneType );
         sceneNode->attachObject( mInternalProbe );
+        sceneNode->setIndestructibleByClearScene( true );
     }
     //-----------------------------------------------------------------------------------
     void CubemapProbe::destroyInternalProbe(void)
@@ -197,6 +229,19 @@ namespace Ogre
         mInternalProbe->mGpuData[3][3] = static_cast<float>( mCubemapArrayIdx );
     }
     //-----------------------------------------------------------------------------------
+    void CubemapProbe::restoreFromClearScene( SceneNode *rootNode )
+    {
+        if( mCamera )
+            rootNode->attachObject( mCamera );
+
+        if( mInternalProbe )
+        {
+            SceneManager *sceneManager = mCreator->getSceneManager();
+            const SceneMemoryMgrTypes sceneType = mStatic ? SCENE_STATIC : SCENE_DYNAMIC;
+            sceneManager->getRootSceneNode( sceneType )->addChild( mInternalProbe->getParentNode() );
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void CubemapProbe::setTextureParams( uint32 width, uint32 height, bool useManual,
                                          PixelFormatGpu pf, bool isStatic, uint8 msaa )
     {
@@ -213,53 +258,57 @@ namespace Ogre
         destroyWorkspace();
         destroyTexture();
 
-        char tmpBuffer[64];
-        LwString texName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
-        texName.a( "CubemapProbe_", Id::generateNewId<CubemapProbe>() );
+        if( !mCreator->getAutomaticMode() )
+        {
+            char tmpBuffer[64];
+            LwString texName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+            texName.a( "CubemapProbe_", Id::generateNewId<CubemapProbe>() );
 
 #if !USE_RTT_DIRECTLY
-        const uint32 flags = isStatic ? TU_STATIC_WRITE_ONLY : (TU_RENDERTARGET|TU_AUTOMIPMAP);
+            const uint32 flags = isStatic ? TU_STATIC_WRITE_ONLY : (TU_RENDERTARGET|TU_AUTOMIPMAP);
 #else
     #if GENERATE_MIPMAPS_ON_BLEND
-        uint32 flags = TextureFlags::RenderToTexture;
+            uint32 flags = TextureFlags::RenderToTexture;
     #else
-        const uint32 flags = TextureFlags::RenderToTexture|TextureFlags::AllowAutomipmaps;
+            const uint32 flags = TextureFlags::RenderToTexture|TextureFlags::AllowAutomipmaps;
     #endif
 #endif
 
 #if GENERATE_MIPMAPS_ON_BLEND
-        uint numMips = 1u;
-        if( useManual )
-        {
-            numMips = PixelFormatGpuUtils::getMaxMipmapCount( width, height );
-            flags |= TextureFlags::AllowAutomipmaps;
-        }
+            uint numMips = 1u;
+            if( useManual )
+            {
+                numMips = PixelFormatGpuUtils::getMaxMipmapCount( width, height );
+                flags |= TextureFlags::AllowAutomipmaps;
+            }
 #else
-        const uint numMips = PixelUtil::getMaxMipmapCount( width, height, 1 );
+            const uint numMips = PixelUtil::getMaxMipmapCount( width, height, 1 );
 #endif
 
-        mMsaa = msaa;
-        msaa = isStatic ? 0 : msaa;
+            mMsaa = msaa;
+            msaa = isStatic ? 0 : msaa;
 
-        SceneManager *sceneManager = mCreator->getSceneManager();
-        TextureGpuManager *textureManager =
-                sceneManager->getDestinationRenderSystem()->getTextureGpuManager();
-        mTexture = textureManager->createTexture(texName.c_str(), GpuPageOutStrategy::Discard,
-                                                flags, TextureTypes::TypeCube );
-        mTexture->setResolution( width, height );
-        mTexture->setPixelFormat( pf );
-        mTexture->setNumMipmaps( numMips );
-        mTexture->setMsaa( msaa );
+            SceneManager *sceneManager = mCreator->getSceneManager();
+            TextureGpuManager *textureManager =
+                    sceneManager->getDestinationRenderSystem()->getTextureGpuManager();
+            mTexture = textureManager->createTexture( texName.c_str(), GpuPageOutStrategy::Discard,
+                                                      flags, TextureTypes::TypeCube );
+            mTexture->setResolution( width, height );
+            mTexture->setPixelFormat( pf );
+            mTexture->setNumMipmaps( numMips );
+            mTexture->setMsaa( msaa );
+        }
+
         mStatic = isStatic;
         mDirty = true;
 
-        if( reinitWorkspace )
+        if( reinitWorkspace && !mCreator->getAutomaticMode() )
             initWorkspace( cameraNear, cameraFar, mWorkspaceDefName );
     }
     //-----------------------------------------------------------------------------------
     void CubemapProbe::initWorkspace( float cameraNear, float cameraFar, IdString workspaceDefOverride )
     {
-        assert( mTexture != 0 && "Call setTextureParams first!" );
+        assert( (mTexture != 0 || mCreator->getAutomaticMode()) && "Call setTextureParams first!" );
 
         destroyWorkspace();
 
@@ -429,10 +478,30 @@ namespace Ogre
 
             mCamera->setLightCullingVisibility( false, false );
         }
+
+        if( mCreator->getAutomaticMode() )
+        {
+            TextureGpu *renderTarget = mWorkspace->getExternalRenderTargets()[0];
+            const uint8 numMipmaps = renderTarget->getNumMipmaps();
+            for( uint8 mip=0; mip<numMipmaps; ++mip )
+            {
+                TextureBox srcBox = renderTarget->getEmptyBox( mip );
+                TextureBox dstBox = srcBox;
+
+                for( size_t face=0; face<6u; ++face )
+                {
+                    srcBox.sliceStart = face;
+                    dstBox.sliceStart = mCubemapArrayIdx + face;
+                    renderTarget->copyTo( mTexture, dstBox, mip, srcBox, mip );
+                }
+            }
+        }
     }
     //-----------------------------------------------------------------------------------
     void CubemapProbe::_addReference(void)
     {
+        OGRE_ASSERT_LOW( !mCreator->getAutomaticMode() );
+
         ++mNumDatablockUsers;
 
         if( !mConstBufferForManualProbes )
@@ -448,6 +517,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CubemapProbe::_removeReference(void)
     {
+        OGRE_ASSERT_LOW( !mCreator->getAutomaticMode() );
+
         --mNumDatablockUsers;
         if( !mNumDatablockUsers )
         {

@@ -98,6 +98,8 @@ namespace Ogre
     class HlmsPbs;
     class IrradianceVolume;
     class ParallaxCorrectedCubemap;
+    class ParallaxCorrectedCubemapAuto;
+    class ParallaxCorrectedCubemapBase;
 }
 
 #endif

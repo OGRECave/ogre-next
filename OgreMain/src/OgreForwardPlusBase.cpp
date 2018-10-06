@@ -309,7 +309,7 @@ namespace Ogre
                 OGRE_ASSERT_HIGH( dynamic_cast<InternalCubemapProbe*>( *itor ) );
                 InternalCubemapProbe *probe = static_cast<InternalCubemapProbe*>( *itor );
 
-                //See ParallaxCorrectedCubemap::fillConstBufferData for reference
+                //See ParallaxCorrectedCubemapBase::fillConstBufferData for reference
                 Matrix3 probeInvOrientation(
                             probe->mGpuData[0][0], probe->mGpuData[0][1], probe->mGpuData[0][2],
                             probe->mGpuData[1][0], probe->mGpuData[1][1], probe->mGpuData[1][2],

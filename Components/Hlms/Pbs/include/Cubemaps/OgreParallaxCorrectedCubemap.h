@@ -29,9 +29,7 @@ THE SOFTWARE.
 #define _OgreParallaxCorrectedCubemap_H_
 
 #include "OgreHlmsPbsPrerequisites.h"
-#include "Cubemaps/OgreCubemapProbe.h"
-#include "OgreIdString.h"
-#include "OgreId.h"
+#include "Cubemaps/OgreParallaxCorrectedCubemapBase.h"
 #include "OgreFrameListener.h"
 #include "OgreGpuProgramParams.h"
 #include "Compositor/OgreCompositorWorkspaceListener.h"
@@ -40,16 +38,14 @@ THE SOFTWARE.
 namespace Ogre
 {
 #define OGRE_MAX_CUBE_PROBES 4u
-    typedef vector<CubemapProbe*>::type CubemapProbeVec;
 
     /**
     @see HlmsPbsDatablock::setCubemapProbe
     */
-    class _OgreHlmsPbsExport ParallaxCorrectedCubemap : public IdObject,
+    class _OgreHlmsPbsExport ParallaxCorrectedCubemap : public ParallaxCorrectedCubemapBase,
                                                         public CompositorWorkspaceListener,
                                                         public FrameListener
     {
-        CubemapProbeVec mProbes;
         CubemapProbe    *mCollectedProbes[OGRE_MAX_CUBE_PROBES];
         uint32          mNumCollectedProbes;
         Real            mProbeNDFs[OGRE_MAX_CUBE_PROBES];
@@ -60,10 +56,8 @@ namespace Ogre
         size_t          mLastPassNumViewMatrices;
         Matrix4         mCachedLastViewMatrix;
 
-        bool            mAutomaticMode;
         bool            mBlendedProbeNeedsUpdate;
 
-        public: bool                    mPaused;
         /// This variable should be updated every frame and often represents the camera position,
         /// but it can also be used set to other things like the player's character position.
         public: Vector3                 mTrackedPosition;
@@ -92,10 +86,6 @@ namespace Ogre
         MeshPtr                         mProxyMesh;
         Item                            *mProxyItems[OGRE_MAX_CUBE_PROBES];
         SceneNode                       *mProxyNodes[OGRE_MAX_CUBE_PROBES];
-
-        Root                            *mRoot;
-        SceneManager                    *mSceneManager;
-        CompositorWorkspaceDef const    *mDefaultWorkspaceDef;
 
         struct TempRtt
         {
@@ -145,25 +135,14 @@ namespace Ogre
                                   uint8 reservedRqId, uint32 proxyVisibilityMask );
         ~ParallaxCorrectedCubemap();
 
-        /// Adds a cubemap probe.
-        CubemapProbe* createProbe(void);
-        void destroyProbe( CubemapProbe *probe );
-        void destroyAllProbes(void);
+        virtual void destroyAllProbes(void);
 
         void createProxyItems(void);
         void destroyProxyItems(void);
 
-        /// Destroys the Proxy Items. Useful if you need to call sceneManager->clearScene();
-        /// The you MUST call this function before. i.e.
-        ///     pcc->prepareForClearScene();
-        ///     sceneManager->clearScene();
-        ///     pcc->restoreFromClearScene();
-        /// Updating ParallaxCorrectedCubemap without calling prepareForClearScene/restoreFromClearScene
-        /// will result in a crash.
-        void prepareForClearScene(void);
-        void restoreFromClearScene(void);
-
-        const CubemapProbeVec& getProbes(void) const        { return mProbes; }
+        /// @copydoc ParallaxCorrectedCubemapBase::prepareForClearScene
+        virtual void prepareForClearScene(void);
+        virtual void restoreFromClearScene(void);
 
         /** Will update both mTrackedPosition & mTrackedViewProjMatrix with appropiate settings
             every time it's called. Must be called every time the camera changes.
@@ -196,15 +175,6 @@ namespace Ogre
         void setEnabled( bool bEnabled, uint32 maxWidth, uint32 maxHeight, PixelFormatGpu pixelFormat );
         bool getEnabled(void) const;
 
-        /** When true, this PCC will rely on Forward Clustered and cubemap arrays in order
-            to dynamically assign reflections in the pixel shader
-
-            Forward Clustered must be active and have support for cubemap probes.
-        @param automaticMode
-        */
-        void setAutomaticMode( bool automaticMode );
-        bool getAutomaticMode(void) const;
-
         /// By default the probes will be constructed when the user enters its vecinity.
         /// This can cause noticeable stalls. Use this function to regenerate them all
         /// at once (i.e. at loading time)
@@ -215,21 +185,14 @@ namespace Ogre
         static size_t getConstBufferSize(void);
         void fillConstBufferData( const Matrix4 &viewMatrix,
                                   float * RESTRICT_ALIAS passBufferPtr ) const;
-        void fillConstBufferData( const CubemapProbe &probe,
-                                  const Matrix4 &viewMatrix,
-                                  const Matrix3 &invViewMat3,
-                                  float * RESTRICT_ALIAS passBufferPtr ) const;
 
         /// See mTmpRtt. Finds an RTT that is compatible to copy to baseParams.
         /// Creates one if none found.
-        TextureGpu* findTmpRtt( const TextureGpu *baseParams );
-        void releaseTmpRtt( const TextureGpu *tmpRtt );
+        virtual TextureGpu* findTmpRtt( const TextureGpu *baseParams );
+        virtual void releaseTmpRtt( const TextureGpu *tmpRtt );
 
-        void _addManuallyActiveProbe( CubemapProbe *probe );
-        void _removeManuallyActiveProbe( CubemapProbe *probe );
-
-        SceneManager* getSceneManager(void) const;
-        const CompositorWorkspaceDef* getDefaultWorkspaceDef(void) const;
+        virtual void _addManuallyActiveProbe( CubemapProbe *probe );
+        virtual void _removeManuallyActiveProbe( CubemapProbe *probe );
 
         TextureGpu* getBlendCubemap(void) const         { return mBlendCubemap; }
         const HlmsSamplerblock* getBlendCubemapTrilinearSamplerblock(void)

@@ -71,14 +71,12 @@ namespace Ogre
                                                         SceneManager *sceneManager,
                                                         const CompositorWorkspaceDef *probeWorkspcDef,
                                                         uint8 reservedRqId, uint32 proxyVisibilityMask ) :
-        IdObject( id ),
+        ParallaxCorrectedCubemapBase( id, root, sceneManager, probeWorkspcDef, false ),
         mNumCollectedProbes( 0 ),
         mStagingBuffer( 0 ),
         mLastPassNumViewMatrices( 1 ),
         mCachedLastViewMatrix( Matrix4::ZERO ),
-        mAutomaticMode( false ),
         mBlendedProbeNeedsUpdate( true ),
-        mPaused( false ),
         mTrackedPosition( Vector3::ZERO ),
         mTrackedViewProjMatrix( Matrix4::IDENTITY ),
         mMask( 0xffffffff ),
@@ -90,10 +88,7 @@ namespace Ogre
         mSamplerblockTrilinear( 0 ),
         mCurrentMip( 0 ),
         mProxyVisibilityMask( proxyVisibilityMask ),
-        mReservedRqId( reservedRqId ),
-        mRoot( root ),
-        mSceneManager( sceneManager ),
-        mDefaultWorkspaceDef( probeWorkspcDef )
+        mReservedRqId( reservedRqId )
     {
         memset( mProbeNDFs, 0, sizeof(mProbeNDFs) );
         memset( mProbeBlendFactors, 0, sizeof(mProbeBlendFactors) );
@@ -188,27 +183,6 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    CubemapProbe* ParallaxCorrectedCubemap::createProbe(void)
-    {
-        CubemapProbe *probe = OGRE_NEW CubemapProbe( this );
-        mProbes.push_back( probe );
-        return probe;
-    }
-    //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemap::destroyProbe( CubemapProbe *probe )
-    {
-        CubemapProbeVec::iterator itor = std::find( mProbes.begin(), mProbes.end(), probe );
-        if( itor == mProbes.end() )
-        {
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "Probe to delete does not belong to us, or was already freed",
-                         "ParallaxCorrectedCubemap::destroyProbe" );
-        }
-
-        OGRE_DELETE *itor;
-        efficientVectorRemove( mProbes, itor );
-    }
-    //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemap::destroyAllProbes(void)
     {
         {
@@ -224,18 +198,7 @@ namespace Ogre
             mTmpRtt.clear();
         }
 
-        {
-            CubemapProbeVec::iterator itor = mProbes.begin();
-            CubemapProbeVec::iterator end  = mProbes.end();
-
-            while( itor != end )
-            {
-                OGRE_DELETE *itor;
-                ++itor;
-            }
-
-            mProbes.clear();
-        }
+        ParallaxCorrectedCubemapBase::destroyAllProbes();
     }
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemap::createProxyItems(void)
@@ -283,6 +246,7 @@ namespace Ogre
     void ParallaxCorrectedCubemap::prepareForClearScene(void)
     {
         destroyProxyItems();
+        ParallaxCorrectedCubemapBase::prepareForClearScene();
     }
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemap::restoreFromClearScene(void)
@@ -291,13 +255,7 @@ namespace Ogre
         SceneNode *rootNode = mSceneManager->getRootSceneNode();
         rootNode->attachObject( mBlendProxyCamera );
 
-        CubemapProbeVec::iterator itor = mProbes.begin();
-        CubemapProbeVec::iterator end  = mProbes.end();
-        while( itor != end )
-        {
-            rootNode->attachObject( (*itor)->mCamera );
-            ++itor;
-        }
+        ParallaxCorrectedCubemapBase::restoreFromClearScene();
     }
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemap::setUpdatedTrackedDataFromCamera( Camera *trackedCamera )
@@ -353,11 +311,6 @@ namespace Ogre
     bool ParallaxCorrectedCubemap::getEnabled(void) const
     {
         return mBlendWorkspace != 0;
-    }
-    //-----------------------------------------------------------------------------------
-    bool ParallaxCorrectedCubemap::getAutomaticMode(void) const
-    {
-        return mAutomaticMode;
     }
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemap::createProxyGeometry(void)
@@ -1110,7 +1063,8 @@ namespace Ogre
                                                                     0, srcOffset,
                                                                     getConstBufferSize() ) );
 
-                fillConstBufferData( **itor, viewMatrix, invViewMat3, probeData );
+                ParallaxCorrectedCubemapBase::
+                        fillConstBufferData( **itor, viewMatrix, invViewMat3, probeData );
                 probeData += getConstBufferSize() >> 2u;
                 srcOffset += getConstBufferSize();
 
@@ -1135,50 +1089,8 @@ namespace Ogre
         Matrix3 invViewMat3;
         viewMatrix.extract3x3Matrix( invViewMat3 );
         invViewMat3 = invViewMat3.Inverse();
-        fillConstBufferData( mFinalProbe, viewMatrix, invViewMat3, passBufferPtr );
-    }
-    //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemap::fillConstBufferData( const CubemapProbe &probe,
-                                                        const Matrix4 &viewMatrix,
-                                                        const Matrix3 &invViewMat3,
-                                                        float * RESTRICT_ALIAS passBufferPtr ) const
-    {
-        const Matrix3 viewSpaceToProbeLocal = probe.mInvOrientation * invViewMat3;
-
-        const Aabb &probeShape = probe.getProbeShape();
-        Vector3 probeShapeCenterVS = viewMatrix * probeShape.mCenter; //View-space
-
-        //float4 row0_centerX;
-        *passBufferPtr++ = viewSpaceToProbeLocal[0][0];
-        *passBufferPtr++ = viewSpaceToProbeLocal[0][1];
-        *passBufferPtr++ = viewSpaceToProbeLocal[0][2];
-        *passBufferPtr++ = probeShapeCenterVS.x;
-
-        //float4 row1_centerY;
-        *passBufferPtr++ = viewSpaceToProbeLocal[0][3];
-        *passBufferPtr++ = viewSpaceToProbeLocal[0][4];
-        *passBufferPtr++ = viewSpaceToProbeLocal[0][5];
-        *passBufferPtr++ = probeShapeCenterVS.y;
-
-        //float4 row2_centerZ;
-        *passBufferPtr++ = viewSpaceToProbeLocal[0][6];
-        *passBufferPtr++ = viewSpaceToProbeLocal[0][7];
-        *passBufferPtr++ = viewSpaceToProbeLocal[0][8];
-        *passBufferPtr++ = probeShapeCenterVS.z;
-
-        //float4 halfSize;
-        *passBufferPtr++ = probeShape.mHalfSize.x;
-        *passBufferPtr++ = probeShape.mHalfSize.y;
-        *passBufferPtr++ = probeShape.mHalfSize.z;
-        *passBufferPtr++ = 1.0f;
-
-        //float4 cubemapPosLS;
-        Vector3 cubemapPosLS = probe.mProbeCameraPos - probeShape.mCenter;
-        cubemapPosLS = probe.mInvOrientation * cubemapPosLS;
-        *passBufferPtr++ = cubemapPosLS.x;
-        *passBufferPtr++ = cubemapPosLS.y;
-        *passBufferPtr++ = cubemapPosLS.z;
-        *passBufferPtr++ = 1.0f;
+        ParallaxCorrectedCubemapBase::
+                fillConstBufferData( mFinalProbe, viewMatrix, invViewMat3, passBufferPtr );
     }
     //-----------------------------------------------------------------------------------
     TextureGpu* ParallaxCorrectedCubemap::findTmpRtt( const TextureGpu *baseParams )
@@ -1266,16 +1178,6 @@ namespace Ogre
             mStagingBuffer->removeReferenceCount();
             mStagingBuffer = 0;
         }
-    }
-    //-----------------------------------------------------------------------------------
-    SceneManager* ParallaxCorrectedCubemap::getSceneManager(void) const
-    {
-        return mSceneManager;
-    }
-    //-----------------------------------------------------------------------------------
-    const CompositorWorkspaceDef* ParallaxCorrectedCubemap::getDefaultWorkspaceDef(void) const
-    {
-        return mDefaultWorkspaceDef;
     }
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemap::passPreExecute( CompositorPass *pass )

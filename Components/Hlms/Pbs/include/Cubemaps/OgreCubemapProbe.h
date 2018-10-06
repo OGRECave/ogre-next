@@ -41,12 +41,11 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    class ParallaxCorrectedCubemap;
-    class CompositorWorkspaceDef;
-
     class _OgreHlmsPbsExport CubemapProbe : public UtilityAlloc
     {
+        friend class ParallaxCorrectedCubemapBase;
         friend class ParallaxCorrectedCubemap;
+        friend class ParallaxCorrectedCubemapAuto;
 
         /// Where to position the camera while constructing the probe.
         Vector3 mProbeCameraPos;
@@ -69,7 +68,7 @@ namespace Ogre
         CompositorWorkspace *mWorkspace;
         Camera              *mCamera;
 
-        ParallaxCorrectedCubemap *mCreator;
+        ParallaxCorrectedCubemapBase *mCreator;
 
         InternalCubemapProbe    *mInternalProbe;
 
@@ -106,16 +105,24 @@ namespace Ogre
     protected:
         void destroyTexture(void);
 
+        void acquireTextureAuto(void);
+        void releaseTextureAuto(void);
         void createInternalProbe(void);
         void destroyInternalProbe(void);
         void switchInternalProbeStaticValue(void);
         void syncInternalProbe(void);
 
+        void restoreFromClearScene( SceneNode *rootNode );
+
     public:
-        CubemapProbe( ParallaxCorrectedCubemap *creator );
+        CubemapProbe( ParallaxCorrectedCubemapBase *creator );
         ~CubemapProbe();
 
         /**
+        @remarks
+            When this CubemapProbe belongs to ParallaxCorrectedCubemapAuto,
+            all parameters except isStatic are ignored!
+            This call is still required.
         @param width
         @param height
         @param pf
@@ -198,6 +205,8 @@ namespace Ogre
         TextureGpu* getInternalTexture(void) const          { return mTexture; }
         void _addReference(void);
         void _removeReference(void);
+
+        uint32 getInternalSliceToArrayTexture(void) const   { return mCubemapArrayIdx; }
 
         ConstBufferPacked* getConstBufferForManualProbes(void)  { return mConstBufferForManualProbes; }
     };
