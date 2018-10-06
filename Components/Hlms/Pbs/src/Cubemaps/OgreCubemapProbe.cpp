@@ -194,6 +194,8 @@ namespace Ogre
                 sceneManager->getRootSceneNode( sceneType )->createChildSceneNode( sceneType );
         sceneNode->attachObject( mInternalProbe );
         sceneNode->setIndestructibleByClearScene( true );
+
+        syncInternalProbe();
     }
     //-----------------------------------------------------------------------------------
     void CubemapProbe::destroyInternalProbe(void)
@@ -415,6 +417,8 @@ namespace Ogre
             vMax.makeFloor( mProbeShape.getMaximum() );
             mArea.setExtents( vMin, vMax );
         }
+
+        syncInternalProbe();
 
         mDirty = true;
     }

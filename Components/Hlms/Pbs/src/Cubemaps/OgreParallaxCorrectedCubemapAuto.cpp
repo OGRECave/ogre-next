@@ -174,15 +174,15 @@ namespace Ogre
             CompositorManager2 *compositorManager = mDefaultWorkspaceDef->getCompositorManager();
             compositorManager->addListener( this );
 
-            CubemapProbeVec::const_iterator itor = mProbes.begin();
-            CubemapProbeVec::const_iterator end  = mProbes.end();
+//            CubemapProbeVec::const_iterator itor = mProbes.begin();
+//            CubemapProbeVec::const_iterator end  = mProbes.end();
 
-            while( itor != end )
-            {
-                if( (*itor)->isInitialized() )
-                    (*itor)->initWorkspace();
-                ++itor;
-            }
+//            while( itor != end )
+//            {
+//                if( (*itor)->isInitialized() )
+//                    (*itor)->initWorkspace();
+//                ++itor;
+//            }
         }
         else
         {

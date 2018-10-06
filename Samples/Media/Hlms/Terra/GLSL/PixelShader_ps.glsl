@@ -283,7 +283,9 @@ void main()
 @insertpiece( forward3dLighting )
 
 @property( envprobe_map || ambient_hemisphere )
-	vec3 reflDir = 2.0 * dot( viewDir, nNormal ) * nNormal - viewDir;
+	@property( hlms_enable_cubemaps_auto )
+		vec3 reflDir = 2.0 * dot( viewDir, nNormal ) * nNormal - viewDir;
+	@end
 
 	@property( envprobe_map )
 		vec3 envColourS = textureLod( texEnvProbeMap, reflDir * passBuf.invViewMatCubemap, ROUGHNESS * 12.0 ).xyz @insertpiece( ApplyEnvMapScale );// * 0.0152587890625;

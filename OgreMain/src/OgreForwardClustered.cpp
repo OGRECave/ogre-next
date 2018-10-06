@@ -938,6 +938,15 @@ namespace Ogre
 
             hlms->_setProperty( HlmsBaseProp::EnableDecals, numDecalsTex );
         }
+
+        if( mCubemapProbesEnabled )
+        {
+            const size_t cubemapOffsetStart = mLightsPerCell + c_reservedLightSlotsPerCell +
+                                              (mDecalsEnabled ? c_reservedDecalsSlotsPerCell : 0u);
+            hlms->_setProperty( HlmsBaseProp::FwdPlusCubemapSlotOffset,
+                                static_cast<int32>( cubemapOffsetStart ) );
+            hlms->_setProperty( HlmsBaseProp::EnableCubemapsAuto, 1 );
+        }
     }
     //-----------------------------------------------------------------------------------
     void ForwardClustered::setDebugFrustum( bool bEnableDebugFrustumWireAabb )

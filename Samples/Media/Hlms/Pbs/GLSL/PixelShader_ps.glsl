@@ -447,7 +447,9 @@ void main()
 @end
 
 @property( use_envprobe_map || hlms_use_ssr || use_planar_reflections || ambient_hemisphere )
-	vec3 reflDir = 2.0 * dot( viewDir, nNormal ) * nNormal - viewDir;
+	@property( hlms_enable_cubemaps_auto )
+		vec3 reflDir = 2.0 * dot( viewDir, nNormal ) * nNormal - viewDir;
+	@end
 
 	@property( use_envprobe_map )
 		@property( use_parallax_correct_cubemaps )

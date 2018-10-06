@@ -128,4 +128,53 @@
 	@end
 @end /// hlms_enable_decals
 
+@property( hlms_enable_cubemaps_auto )
+@piece( forwardPlusDoCubemaps )
+	numLightsInGrid = bufferFetch1( f3dGrid, int(sampleOffset + @value(hlms_forwardplus_cubemap_slot_offset)u) );
+
+	@property( hlms_forwardplus_debug )totalNumLightsInGrid += numLightsInGrid;@end
+
+	float3 reflDir = 2.0 * dot( viewDir, nNormal ) * nNormal - viewDir;
+	float3 envColourS = float3( 0, 0, 0 );
+	float3 envColourD = float3( 0, 0, 0 );
+	float cubemapAccumWeight = 0;
+
+	for( uint i=0u; i<numLightsInGrid; ++i )
+	{
+		//Get the probe index
+		uint idx = bufferFetch1( f3dGrid, int(sampleOffset + i + @value(hlms_forwardplus_cubemap_slot_offset)u + 1u) );
+
+		CubemapProbe probe;
+
+		probe.row0_centerX	= bufferFetch( f3dLightList, int(idx) ).xyzw;
+		probe.row1_centerY	= bufferFetch( f3dLightList, int(idx + 1u) ).xyzw;
+		probe.row2_centerZ	= bufferFetch( f3dLightList, int(idx + 2u) ).xyzw;
+		probe.halfSize		= bufferFetch( f3dLightList, int(idx + 3u) ).xyzw;
+		probe.cubemapPosLS	= bufferFetch( f3dLightList, int(idx + 4u) ).xyzw;
+
+		float3 posInProbSpace = toProbeLocalSpace( inPs.pos, probe );
+		float probeFade = getProbeFade( posInProbSpace, probe );
+
+		if( probeFade > 0 )
+		{
+			float3 reflDirLS = localCorrect( reflDir, posInProbSpace, probe );
+			float3 nNormalLS = localCorrect( nNormal, posInProbSpace, probe );
+
+			probeFade = saturate( probeFade * 200.0 );
+			envColourS += OGRE_SampleArrayCubeLevel(
+				texEnvProbeMap, reflDirLS, probe.halfSize.w, ROUGHNESS * 12.0 ).xyz
+				@insertpiece( ApplyEnvMapScale ) * probeFade;
+			envColourD += OGRE_SampleArrayCubeLevel(
+				texEnvProbeMap, nNormalLS, probe.halfSize.w, 11.0 ).xyz
+				@insertpiece( ApplyEnvMapScale ) * probeFade;
+
+			cubemapAccumWeight += probeFade;
+		}
+
+		envColourD.xyz *= cubemapAccumWeight == 0.0f ? 1.0f : (1.0f / cubemapAccumWeight);
+		envColourS.xyz *= cubemapAccumWeight == 0.0f ? 1.0f : (1.0f / cubemapAccumWeight);
+	}
+@end
+@end /// hlms_enable_cubemaps_auto
+
 @end

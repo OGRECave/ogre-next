@@ -284,7 +284,9 @@ float3 qmul( float4 q, float3 v )
 @insertpiece( forward3dLighting )
 
 @property( envprobe_map || ambient_hemisphere )
-	float3 reflDir = 2.0 * dot( viewDir, nNormal ) * nNormal - viewDir;
+	@property( hlms_enable_cubemaps_auto )
+		float3 reflDir = 2.0 * dot( viewDir, nNormal ) * nNormal - viewDir;
+	@end
 	
 	@property( envprobe_map )
 		float3 envColourS = texEnvProbeMap.SampleLevel( envMapSamplerState, mul( reflDir, passBuf.invViewMatCubemap ), ROUGHNESS * 12.0 ).xyz @insertpiece( ApplyEnvMapScale );
