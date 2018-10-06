@@ -105,6 +105,11 @@ namespace Ogre
                 mCreator->releaseTmpRtt( channel.textures[0] );
             }
 #endif
+            if( mCreator->getAutomaticMode() )
+            {
+                TextureGpu *channel = mWorkspace->getExternalRenderTargets()[0];
+                mCreator->releaseTmpRtt( channel );
+            }
 
             CompositorManager2 *compositorManager = mWorkspace->getCompositorManager();
             compositorManager->removeWorkspace( mWorkspace );
@@ -131,7 +136,7 @@ namespace Ogre
             mCamera = 0;
         }
 
-        destroyInternalProbe();
+        releaseTextureAuto();
     }
     //-----------------------------------------------------------------------------------
     void CubemapProbe::destroyTexture(void)
@@ -157,6 +162,9 @@ namespace Ogre
 
         releaseTextureAuto();
         mTexture = mCreator->_acquireTextureSlot( mCubemapArrayIdx );
+
+        if( mTexture )
+            createInternalProbe();
     }
     //-----------------------------------------------------------------------------------
     void CubemapProbe::releaseTextureAuto(void)
@@ -164,8 +172,9 @@ namespace Ogre
         if( !mCreator->getAutomaticMode() )
             return;
 
-        if( mCubemapArrayIdx != std::numeric_limits<uint32>::max() )
+        if( mTexture )
         {
+            destroyInternalProbe();
             mCreator->_releaseTextureSlot( mTexture, mCubemapArrayIdx );
             mCubemapArrayIdx = std::numeric_limits<uint32>::max();
         }
@@ -245,21 +254,21 @@ namespace Ogre
     void CubemapProbe::setTextureParams( uint32 width, uint32 height, bool useManual,
                                          PixelFormatGpu pf, bool isStatic, uint8 msaa )
     {
-        float cameraNear = 0.5;
-        float cameraFar = 1000;
-
-        if( mCamera )
-        {
-            cameraNear = mCamera->getNearClipDistance();
-            cameraFar = mCamera->getFarClipDistance();
-        }
-
-        const bool reinitWorkspace = isInitialized();
-        destroyWorkspace();
-        destroyTexture();
-
         if( !mCreator->getAutomaticMode() )
         {
+            float cameraNear = 0.5;
+            float cameraFar = 1000;
+
+            if( mCamera )
+            {
+                cameraNear = mCamera->getNearClipDistance();
+                cameraFar = mCamera->getFarClipDistance();
+            }
+
+            const bool reinitWorkspace = isInitialized();
+            destroyWorkspace();
+            destroyTexture();
+
             char tmpBuffer[64];
             LwString texName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
             texName.a( "CubemapProbe_", Id::generateNewId<CubemapProbe>() );
@@ -297,13 +306,20 @@ namespace Ogre
             mTexture->setPixelFormat( pf );
             mTexture->setNumMipmaps( numMips );
             mTexture->setMsaa( msaa );
+
+            mStatic = isStatic;
+            mDirty = true;
+
+            if( reinitWorkspace && !mCreator->getAutomaticMode() )
+                initWorkspace( cameraNear, cameraFar, mWorkspaceDefName );
         }
+        else
+        {
+            mStatic = isStatic;
+            mDirty = true;
 
-        mStatic = isStatic;
-        mDirty = true;
-
-        if( reinitWorkspace && !mCreator->getAutomaticMode() )
-            initWorkspace( cameraNear, cameraFar, mWorkspaceDefName );
+            switchInternalProbeStaticValue();
+        }
     }
     //-----------------------------------------------------------------------------------
     void CubemapProbe::initWorkspace( float cameraNear, float cameraFar, IdString workspaceDefOverride )
@@ -311,6 +327,7 @@ namespace Ogre
         assert( (mTexture != 0 || mCreator->getAutomaticMode()) && "Call setTextureParams first!" );
 
         destroyWorkspace();
+        acquireTextureAuto();
 
         CompositorWorkspaceDef const *workspaceDef = mCreator->getDefaultWorkspaceDef();
         CompositorManager2 *compositorManager = workspaceDef->getCompositorManager();
@@ -328,6 +345,9 @@ namespace Ogre
         mCamera->setFarClipDistance( cameraFar );
 
         TextureGpu *rtt = mTexture;
+
+        if( mCreator->getAutomaticMode() )
+            rtt = mCreator->findTmpRtt( mTexture );
         if( mStatic )
         {
 #if !USE_RTT_DIRECTLY
@@ -342,7 +362,8 @@ namespace Ogre
             mCamera->setLightCullingVisibility( true, true );
         }
 
-        mTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+        if( !mCreator->getAutomaticMode() )
+            mTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
 
         CompositorChannelVec channels( 1, rtt );
         mWorkspace = compositorManager->addWorkspace( sceneManager, channels, mCamera,

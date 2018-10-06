@@ -121,6 +121,16 @@ namespace Ogre
         mReservedSlotBitset[idx] |= texSlot;
     }
     //-----------------------------------------------------------------------------------
+    TextureGpu* ParallaxCorrectedCubemapAuto::findTmpRtt( const TextureGpu *baseParams )
+    {
+        OGRE_ASSERT_LOW( mRenderTarget && "Must call ParallaxCorrectedCubemapAuto::setEnabled first!" );
+        return mRenderTarget;
+    }
+    //-----------------------------------------------------------------------------------
+    void ParallaxCorrectedCubemapAuto::releaseTmpRtt( const TextureGpu *tmpRtt )
+    {
+    }
+    //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemapAuto::setEnabled( bool bEnabled, uint32 width,
                                                    uint32 height, uint32 maxNumProbes,
                                                    PixelFormatGpu pixelFormat )

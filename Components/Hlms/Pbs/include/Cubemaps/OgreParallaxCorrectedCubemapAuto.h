@@ -75,6 +75,9 @@ namespace Ogre
         virtual TextureGpu* _acquireTextureSlot( uint32 &outTexSlot );
         virtual void _releaseTextureSlot( TextureGpu *texture, uint32 texSlot );
 
+        virtual TextureGpu* findTmpRtt( const TextureGpu *baseParams );
+        virtual void releaseTmpRtt( const TextureGpu *tmpRtt );
+
         /** Will update both mTrackedPosition with appropiate settings
             every time it's called. Must be called every time the camera changes.
 
