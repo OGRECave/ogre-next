@@ -233,7 +233,7 @@ namespace Ogre
         Quaternion qRot( mOrientation );
         SceneNode *sceneNode = mInternalProbe->getParentSceneNode();
         sceneNode->setPosition( mArea.mCenter );
-        sceneNode->setScale( mArea.mHalfSize );
+        sceneNode->setScale( mArea.mHalfSize * 2.0f );
         sceneNode->setOrientation( qRot );
 
         mCreator->fillConstBufferData( *this, Matrix4::IDENTITY, Matrix3::IDENTITY,

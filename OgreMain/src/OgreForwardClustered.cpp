@@ -282,7 +282,8 @@ namespace Ogre
                             if( numLightsInCell->objCount[objType] < currObjsPerCell )
                             {
                                 uint16 * RESTRICT_ALIAS cellElem = mGridBuffer + idx * mObjsPerCell +
-                                                                   cellOffsetStart;
+                                                                   cellOffsetStart +
+                                                                   numLightsInCell->objCount[objType];
                                 *cellElem = numObjs * numFloat4PerObj;
                                 ++numLightsInCell->objCount[objType];
                             }
