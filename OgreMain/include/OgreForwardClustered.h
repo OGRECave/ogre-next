@@ -101,7 +101,7 @@ namespace Ogre
                                     uint16 numFloat4PerObj );
         void collectLightForSlice( size_t slice, size_t threadId );
 
-        void collectObjs( const Camera *camera, size_t &outNumDecals );
+        void collectObjs( const Camera *camera, size_t &outNumDecals, size_t &outNumCubemapProbes );
 
     public:
         ForwardClustered( uint32 width, uint32 height, uint32 numSlices, uint32 lightsPerCell,

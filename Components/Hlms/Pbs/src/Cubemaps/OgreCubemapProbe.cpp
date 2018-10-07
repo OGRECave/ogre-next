@@ -239,6 +239,11 @@ namespace Ogre
         mCreator->fillConstBufferData( *this, Matrix4::IDENTITY, Matrix3::IDENTITY,
                                        reinterpret_cast<float*>( mInternalProbe->mGpuData ) );
         mInternalProbe->mGpuData[3][3] = static_cast<float>( mCubemapArrayIdx );
+        if( mStatic )
+        {
+            SceneManager *sceneManager = mCreator->getSceneManager();
+            sceneManager->notifyStaticDirty( sceneNode );
+        }
     }
     //-----------------------------------------------------------------------------------
     void CubemapProbe::restoreFromClearScene( SceneNode *rootNode )

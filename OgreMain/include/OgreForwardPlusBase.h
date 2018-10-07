@@ -73,6 +73,7 @@ namespace Ogre
     protected:
         static const size_t NumBytesPerLight;
         static const size_t NumBytesPerDecal;
+        static const size_t NumBytesPerCubemapProbe;
 
         struct CachedGrid
         {
@@ -127,7 +128,7 @@ namespace Ogre
         bool    mFineLightMaskGranularity;
 #endif
 
-        static size_t calculateBytesNeeded( size_t numLights, size_t numDecals );
+        static size_t calculateBytesNeeded( size_t numLights, size_t numDecals, size_t numCubemapProbes );
 
         void fillGlobalLightListBuffer( Camera *camera, TexBufferPacked *globalLightListBuffer );
 

@@ -193,7 +193,8 @@ namespace Ogre
                                                                    BT_DYNAMIC_PERSISTENT, 0, false );
         }
 
-        const size_t bufferBytesNeeded = calculateBytesNeeded( std::max<size_t>( numLights, 96u ), 0u );
+        const size_t bufferBytesNeeded = calculateBytesNeeded( std::max<size_t>( numLights, 96u ),
+                                                               0u, 0u );
 
         if( !gridBuffers.globalLightListBuffer ||
             gridBuffers.globalLightListBuffer->getNumElements() < bufferBytesNeeded )

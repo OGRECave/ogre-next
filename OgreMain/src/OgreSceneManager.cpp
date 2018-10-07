@@ -1115,7 +1115,7 @@ void SceneManager::prepareRenderQueue(void)
 bool SceneManager::_collectForwardPlusObjects( const Camera *camera )
 {
     bool retVal = false;
-    if( mNumDecals > 0 )
+    if( mNumDecals > 0 || mNumCubemapProbes > 0 )
     {
         OgreProfile( "Forward+ Decal collect" );
 

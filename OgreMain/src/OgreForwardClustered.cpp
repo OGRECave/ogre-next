@@ -689,9 +689,11 @@ namespace Ogre
         return left->getCachedDistanceToCameraAsReal() < right->getCachedDistanceToCameraAsReal();
     }
 
-    void ForwardClustered::collectObjs( const Camera *camera, size_t &outNumDecals )
+    void ForwardClustered::collectObjs( const Camera *camera, size_t &outNumDecals,
+                                        size_t &outNumCubemapProbes )
     {
         size_t numDecals = 0;
+        size_t numCubemapProbes = 0;
 
         const bool didCollect = mSceneManager->_collectForwardPlusObjects( camera );
 
@@ -726,10 +728,13 @@ namespace Ogre
             for( size_t rqId=0; rqId<numRqs; ++rqId )
             {
                 if( MinDecalRq >= rqId && rqId <= MaxDecalRq )
+                {
                     numDecals += objsPerRqInThread0[rqId].size();
-
-                std::sort( objsPerRqInThread0[rqId].begin(), objsPerRqInThread0[rqId].end(),
-                           OrderObjsByDistanceToCamera );
+                    std::sort( objsPerRqInThread0[rqId].begin(), objsPerRqInThread0[rqId].end(),
+                               OrderObjsByDistanceToCamera );
+                }
+                if( MinCubemapProbeRq >= rqId && rqId <= MaxCubemapProbeRq )
+                    numCubemapProbes += objsPerRqInThread0[rqId].size();
             }
         }
         else
@@ -740,6 +745,7 @@ namespace Ogre
         }
 
         outNumDecals = numDecals;
+        outNumCubemapProbes = numCubemapProbes;
     }
     //-----------------------------------------------------------------------------------
     inline bool OrderLightByDistanceToCamera( const Light *left, const Light *right )
@@ -796,8 +802,8 @@ namespace Ogre
                                        Light::MAX_FORWARD_PLUS_LIGHTS, mCurrentLightList );
         }
 
-        size_t numDecals;
-        collectObjs( camera, numDecals );
+        size_t numDecals, numCubemapProbes;
+        collectObjs( camera, numDecals, numCubemapProbes );
 
         const size_t numLights = mCurrentLightList.size();
 
@@ -815,7 +821,8 @@ namespace Ogre
         }
 
         const size_t bufferBytesNeeded = calculateBytesNeeded( std::max<size_t>( numLights, 96u ),
-                                                               std::max<size_t>( numDecals, 16u ) );
+                                                               std::max<size_t>( numDecals, 16u ),
+                                                               std::max<size_t>( numCubemapProbes, 4u) );
         if( !gridBuffers.globalLightListBuffer ||
             gridBuffers.globalLightListBuffer->getNumElements() < bufferBytesNeeded )
         {

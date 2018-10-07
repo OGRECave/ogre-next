@@ -50,6 +50,7 @@ namespace Ogre
     const size_t ForwardPlusBase::MaxCubemapProbeRq = 8u;
     const size_t ForwardPlusBase::NumBytesPerLight = 6 * 4 * 4;
     const size_t ForwardPlusBase::NumBytesPerDecal = 4 * 4 * 4;
+    const size_t ForwardPlusBase::NumBytesPerCubemapProbe = 5 * 4 * 4;
 
     ForwardPlusBase::ForwardPlusBase( SceneManager *sceneManager, bool decalsEnabled,
                                       bool cubemapProbesEnabled ) :
@@ -143,13 +144,19 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    size_t ForwardPlusBase::calculateBytesNeeded( size_t numLights, size_t numDecals )
+    size_t ForwardPlusBase::calculateBytesNeeded( size_t numLights, size_t numDecals,
+                                                  size_t numCubemapProbes )
     {
         size_t totalBytes = numLights * NumBytesPerLight;
         if( numDecals > 0u )
         {
             totalBytes = alignToNextMultiple( totalBytes, NumBytesPerDecal );
             totalBytes += numDecals * NumBytesPerDecal;
+        }
+        if( numCubemapProbes > 0u )
+        {
+            totalBytes = alignToNextMultiple( totalBytes, NumBytesPerCubemapProbe );
+            totalBytes += numCubemapProbes * NumBytesPerCubemapProbe;
         }
 
         return totalBytes;
@@ -162,6 +169,7 @@ namespace Ogre
         const size_t numLights = mCurrentLightList.size();
 
         size_t numDecals = 0;
+        size_t numCubemapProbes = 0;
         size_t actualMaxDecalRq = 0;
         size_t actualMaxCubemapProbeRq = 0;
         const VisibleObjectsPerRq &objsPerRqInThread0 = mSceneManager->_getTmpVisibleObjectsList()[0];
@@ -175,10 +183,10 @@ namespace Ogre
         {
             actualMaxCubemapProbeRq = std::min( MaxCubemapProbeRq, objsPerRqInThread0.size() );
             for( size_t rqId=MinCubemapProbeRq; rqId<=actualMaxCubemapProbeRq; ++rqId )
-                numDecals += objsPerRqInThread0[rqId].size();
+                numCubemapProbes += objsPerRqInThread0[rqId].size();
         }
 
-        if( !numLights && !numDecals )
+        if( !numLights && !numDecals && !numCubemapProbes )
             return;
 
         Matrix4 viewMatrix = camera->getViewMatrix();
@@ -186,7 +194,9 @@ namespace Ogre
         viewMatrix.extract3x3Matrix( viewMatrix3 );
 
         float * RESTRICT_ALIAS lightData = reinterpret_cast<float * RESTRICT_ALIAS>(
-                    globalLightListBuffer->map( 0, calculateBytesNeeded( numLights, numDecals ) ) );
+                    globalLightListBuffer->map( 0, calculateBytesNeeded( numLights,
+                                                                         numDecals,
+                                                                         numCubemapProbes ) ) );
         LightArray::const_iterator itLights = mCurrentLightList.begin();
         LightArray::const_iterator enLights = mCurrentLightList.end();
 
