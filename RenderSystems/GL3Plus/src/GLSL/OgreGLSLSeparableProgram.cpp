@@ -568,6 +568,7 @@ namespace Ogre
                     case GCT_SAMPLER3D:
                     case GCT_SAMPLERCUBE:
                     case GCT_SAMPLERRECT:
+                    case GCT_SAMPLERCUBE_ARRAY:
                         // Samplers handled like 1-element ints
                         OGRE_CHECK_GL_ERROR(glProgramUniform1iv(progID, currentUniform->mLocation, glArraySize,
                                                                 params->getIntPointer(def->physicalIndex)));

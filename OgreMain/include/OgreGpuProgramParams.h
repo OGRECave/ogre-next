@@ -117,6 +117,7 @@ namespace Ogre {
         GCT_SAMPLER_WRAPPER3D = 50,
         GCT_SAMPLER_WRAPPERCUBE = 51,
         GCT_SAMPLER_STATE = 52, //only for hlsl 4.0
+        GCT_SAMPLERCUBE_ARRAY = 53,
         GCT_UNKNOWN = 99
     };
 
@@ -294,6 +295,7 @@ namespace Ogre {
             case GCT_SAMPLERCUBE:
             case GCT_SAMPLER1DSHADOW:
             case GCT_SAMPLER2DSHADOW:
+            case GCT_SAMPLERCUBE_ARRAY:
                 return true;
             default:
                 return false;
@@ -351,6 +353,7 @@ namespace Ogre {
                 case GCT_SAMPLERCUBE:
                 case GCT_SAMPLER1DSHADOW:
                 case GCT_SAMPLER2DSHADOW:
+                case GCT_SAMPLERCUBE_ARRAY:
                 case GCT_FLOAT2:
                 case GCT_INT2:
                 case GCT_UINT2:
@@ -411,6 +414,7 @@ namespace Ogre {
                 case GCT_SAMPLERCUBE:
                 case GCT_SAMPLER1DSHADOW:
                 case GCT_SAMPLER2DSHADOW:
+                case GCT_SAMPLERCUBE_ARRAY:
                     return 1;
                 case GCT_FLOAT2:
                 case GCT_INT2:
