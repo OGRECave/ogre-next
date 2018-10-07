@@ -1048,7 +1048,11 @@ namespace Ogre
             }
 
             if( mParallaxCorrectedCubemap )
+            {
                 setProperty( PbsProperty::ParallaxCorrectCubemaps, 1 );
+                if( mParallaxCorrectedCubemap->getAutomaticMode() )
+                    setProperty( HlmsBaseProp::EnableCubemapsAuto, 1 );
+            }
 
             if( mIrradianceVolume )
                 setProperty( PbsProperty::IrradianceVolumes, 1 );

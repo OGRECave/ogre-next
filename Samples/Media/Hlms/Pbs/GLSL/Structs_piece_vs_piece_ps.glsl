@@ -140,7 +140,7 @@ layout_constbuffer(binding = 0) uniform PassBuffer
 
 	@insertpiece( DeclPlanarReflUniforms )
 
-@property( parallax_correct_cubemaps )
+@property( parallax_correct_cubemaps && !hlms_enable_cubemaps_auto )
 	CubemapProbe autoProbe;
 @end
 
@@ -201,7 +201,7 @@ layout_constbuffer(binding = 2) uniform InstanceBuffer
 } instance;
 @end
 
-@property( envprobe_map && envprobe_map != target_envprobe_map && use_parallax_correct_cubemaps )
+@property( envprobe_map && envprobe_map != target_envprobe_map && use_parallax_correct_cubemaps && !hlms_enable_cubemaps_auto )
 @piece( PccManualProbeDecl )
 layout_constbuffer(binding = 3) uniform ManualProbe
 {

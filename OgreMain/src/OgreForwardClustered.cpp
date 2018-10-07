@@ -623,21 +623,28 @@ namespace Ogre
             ++itLight;
         }
 
+        const bool hasDecals = mDecalsEnabled;
+        const bool hasCubemaps = mCubemapProbesEnabled;
+        const size_t decalOffsetStart = mLightsPerCell + c_reservedLightSlotsPerCell;
+        const size_t cubemapOffsetStart = mLightsPerCell + c_reservedLightSlotsPerCell +
+                                          (hasDecals ? c_reservedDecalsSlotsPerCell : 0u);
+
         uint16 numDecals = static_cast<uint16>( alignToNextMultiple( numLights * 6u, 4u ) >> 2u );
         const VisibleObjectsPerRq &objsPerRqInThread0 = mSceneManager->_getTmpVisibleObjectsList()[0];
         const size_t actualMaxDecalRq = std::min( MaxDecalRq, objsPerRqInThread0.size() );
         numDecals = collectObjsForSlice( numPackedFrustumsPerSlice, frustumStartIdx,
                                          numDecals, MinDecalRq, actualMaxDecalRq,
-                                         mDecalsPerCell, mLightsPerCell + c_reservedLightSlotsPerCell +
-                                         c_reservedDecalsSlotsPerCell, ObjType_Decal, 4u );
+                                         mDecalsPerCell,
+                                         decalOffsetStart + c_reservedDecalsSlotsPerCell,
+                                         ObjType_Decal, 4u );
 
         uint16 numProbes = static_cast<uint16>( alignToNextMultiple( numDecals * 4u, 5u ) >> 2u );
         const size_t actualMaxCubemapProbeRq = std::min( MaxCubemapProbeRq, objsPerRqInThread0.size() );
         numProbes = collectObjsForSlice( numPackedFrustumsPerSlice, frustumStartIdx,
                                          numProbes, MinCubemapProbeRq, actualMaxCubemapProbeRq,
-                                         mCubemapProbesPerCell, mLightsPerCell +
-                                         c_reservedLightSlotsPerCell + c_reservedDecalsSlotsPerCell +
-                                         c_reservedCubemapProbeSlotsPerCell, ObjType_CubemapProbe, 5u );
+                                         mCubemapProbesPerCell,
+                                         cubemapOffsetStart + c_reservedCubemapProbeSlotsPerCell,
+                                         ObjType_CubemapProbe, 5u );
 
         {
             //Now write all the light counts
@@ -648,8 +655,6 @@ namespace Ogre
 
             const size_t cellSize = mObjsPerCell;
             const bool hasLights = mLightsPerCell > 0u;
-            const bool hasDecals = mDecalsEnabled;
-            const size_t decalOffsetStart = mLightsPerCell + c_reservedLightSlotsPerCell;
             size_t gridIdx = frustumStartIdx * ARRAY_PACKED_REALS * cellSize;
 
             while( itor != end )
@@ -667,6 +672,11 @@ namespace Ogre
                 {
                     mGridBuffer[gridIdx+decalOffsetStart+0u] =
                             static_cast<uint16>( itor->objCount[ObjType_Decal] );
+                }
+                if( hasCubemaps )
+                {
+                    mGridBuffer[gridIdx+cubemapOffsetStart+0u] =
+                            static_cast<uint16>( itor->objCount[ObjType_CubemapProbe] );
                 }
                 gridIdx += cellSize;
                 ++itor;

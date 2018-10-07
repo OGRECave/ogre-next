@@ -162,10 +162,10 @@
 
 			probeFade = saturate( probeFade * 200.0 );
 			envColourS += OGRE_SampleArrayCubeLevel(
-				texEnvProbeMap, reflDirLS, probe.halfSize.w, ROUGHNESS * 12.0 ).xyz
+				texEnvProbeMap, samplerState@value(envMapRegSampler), reflDirLS, probe.halfSize.w, ROUGHNESS * 12.0 ).xyz
 				@insertpiece( ApplyEnvMapScale ) * probeFade;
 			envColourD += OGRE_SampleArrayCubeLevel(
-				texEnvProbeMap, nNormalLS, probe.halfSize.w, 11.0 ).xyz
+				texEnvProbeMap, samplerState@value(envMapRegSampler), nNormalLS, probe.halfSize.w, 11.0 ).xyz
 				@insertpiece( ApplyEnvMapScale ) * probeFade;
 
 			cubemapAccumWeight += probeFade;
