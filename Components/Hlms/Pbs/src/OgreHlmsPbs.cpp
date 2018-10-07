@@ -2098,9 +2098,9 @@ namespace Ogre
 
                 if( mParallaxCorrectedCubemap )
                 {
-                    TextureGpu *pccTexture = mParallaxCorrectedCubemap->getBlendCubemap();
+                    TextureGpu *pccTexture = mParallaxCorrectedCubemap->getBindTexture();
                     const HlmsSamplerblock *samplerblock =
-                            mParallaxCorrectedCubemap->getBlendCubemapTrilinearSamplerblock();
+                            mParallaxCorrectedCubemap->getBindTrilinearSamplerblock();
                     *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit, pccTexture,
                                                                          samplerblock );
                     ++texUnit;

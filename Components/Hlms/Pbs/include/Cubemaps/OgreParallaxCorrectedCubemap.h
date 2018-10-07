@@ -77,9 +77,7 @@ namespace Ogre
         Camera                          *mBlendProxyCamera;
         CompositorWorkspace             *mBlendWorkspace;
         CompositorWorkspace             *mCopyWorkspace;
-        TextureGpu                      *mBlendCubemap;
         HlmsSamplerblock const          *mSamplerblockPoint;
-        HlmsSamplerblock const          *mSamplerblockTrilinear;
         float                           mCurrentMip;
         uint32                          mProxyVisibilityMask;
         uint8                           mReservedRqId;
@@ -180,11 +178,11 @@ namespace Ogre
         /// at once (i.e. at loading time)
         void updateAllDirtyProbes(void);
 
-        void _notifyPreparePassHash( const Matrix4 &viewMatrix );
-
-        static size_t getConstBufferSize(void);
-        void fillConstBufferData( const Matrix4 &viewMatrix,
-                                  float * RESTRICT_ALIAS passBufferPtr ) const;
+        virtual void _notifyPreparePassHash( const Matrix4 &viewMatrix );
+        virtual size_t getConstBufferSize(void);
+        static size_t getConstBufferSizeStatic(void);
+        virtual void fillConstBufferData( const Matrix4 &viewMatrix,
+                                          float * RESTRICT_ALIAS passBufferPtr ) const;
 
         /// See mTmpRtt. Finds an RTT that is compatible to copy to baseParams.
         /// Creates one if none found.
@@ -193,10 +191,6 @@ namespace Ogre
 
         virtual void _addManuallyActiveProbe( CubemapProbe *probe );
         virtual void _removeManuallyActiveProbe( CubemapProbe *probe );
-
-        TextureGpu* getBlendCubemap(void) const         { return mBlendCubemap; }
-        const HlmsSamplerblock* getBlendCubemapTrilinearSamplerblock(void)
-                                                        { return mSamplerblockTrilinear; }
 
         /// Returns the RenderQueue ID you told us you reserved for storing our internal objects.
         /// Do not attempt to render the objects that match in that Rq ID & visibility mask.

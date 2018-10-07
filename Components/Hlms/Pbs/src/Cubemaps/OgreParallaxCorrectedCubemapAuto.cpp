@@ -67,8 +67,7 @@ namespace Ogre
             const CompositorWorkspaceDef *probeWorkspcDef ) :
         ParallaxCorrectedCubemapBase( id, root, sceneManager, probeWorkspcDef, true ),
         mTrackedPosition( Vector3::ZERO ),
-        mRenderTarget( 0 ),
-        mTextureArray( 0 )
+        mRenderTarget( 0 )
     {
     }
     //-----------------------------------------------------------------------------------
@@ -85,7 +84,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     TextureGpu* ParallaxCorrectedCubemapAuto::_acquireTextureSlot( uint32 &outTexSlot )
     {
-        OGRE_ASSERT_LOW( mTextureArray && "Must call ParallaxCorrectedCubemapAuto::setEnabled first!" );
+        OGRE_ASSERT_LOW( mBindTexture && "Must call ParallaxCorrectedCubemapAuto::setEnabled first!" );
 
         vector<uint64>::type::iterator itor = mReservedSlotBitset.begin();
         vector<uint64>::type::iterator end  = mReservedSlotBitset.end();
@@ -99,7 +98,7 @@ namespace Ogre
             {
                 uint32 idx = static_cast<uint32>( itor - mReservedSlotBitset.begin() );
                 outTexSlot = firstBitSet + 64u * idx;
-                retVal = mTextureArray;
+                retVal = mBindTexture;
                 *itor &= ~(((uint64)1ul) << firstBitSet);
             }
             ++itor;
@@ -110,7 +109,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemapAuto::_releaseTextureSlot( TextureGpu *texture, uint32 texSlot )
     {
-        OGRE_ASSERT_LOW( texture == mTextureArray );
+        OGRE_ASSERT_LOW( texture == mBindTexture );
 
         size_t idx  = texSlot / 64u;
         uint64 mask = texSlot % 64u;
@@ -155,17 +154,17 @@ namespace Ogre
             mRenderTarget->setNumMipmaps( PixelFormatGpuUtils::getMaxMipmapCount( width, height ) );
             mRenderTarget->_transitionTo( GpuResidency::Resident, (uint8*)0 );
 
-            mTextureArray =
+            mBindTexture =
                     textureGpuManager->createTexture(
                         "ParallaxCorrectedCubemapAuto Array " +
                         StringConverter::toString( getId() ),
                         GpuPageOutStrategy::Discard,
                         TextureFlags::ManualTexture,
                         TextureTypes::TypeCubeArray );
-            mTextureArray->setResolution( width, height, maxNumProbes );
-            mTextureArray->setPixelFormat( pixelFormat );
-            mTextureArray->setNumMipmaps( PixelFormatGpuUtils::getMaxMipmapCount( width, height ) );
-            mTextureArray->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+            mBindTexture->setResolution( width, height, maxNumProbes );
+            mBindTexture->setPixelFormat( pixelFormat );
+            mBindTexture->setNumMipmaps( PixelFormatGpuUtils::getMaxMipmapCount( width, height ) );
+            mBindTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
 
             mReservedSlotBitset.resize( alignToNextMultiple( maxNumProbes, 64u ) >> 6u,
                                         0xffffffffffffffff );
@@ -207,10 +206,10 @@ namespace Ogre
                 textureGpuManager->destroyTexture( mRenderTarget );
                 mRenderTarget = 0;
             }
-            if( mTextureArray )
+            if( mBindTexture )
             {
-                textureGpuManager->destroyTexture( mTextureArray );
-                mTextureArray = 0;
+                textureGpuManager->destroyTexture( mBindTexture );
+                mBindTexture = 0;
             }
         }
     }

@@ -79,6 +79,7 @@ namespace Ogre
 
     class SceneFormatListener;
     class ParallaxCorrectedCubemap;
+    class ParallaxCorrectedCubemapAuto;
     class HlmsPbs;
 
     /**
@@ -144,7 +145,8 @@ namespace Ogre
     {
         uint32 mSceneFlags;
 
-        ParallaxCorrectedCubemap    *mParallaxCorrectedCubemap;
+        ParallaxCorrectedCubemap    *mParallaxCorrectedCubemapManual;
+        ParallaxCorrectedCubemapAuto*mParallaxCorrectedCubemapAuto;
 
         bool hasNoAttachedObjectsOfType( const SceneNode *sceneNode );
 

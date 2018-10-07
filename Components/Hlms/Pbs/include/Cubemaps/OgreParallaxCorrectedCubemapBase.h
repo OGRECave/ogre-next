@@ -45,6 +45,9 @@ namespace Ogre
     class _OgreHlmsPbsExport ParallaxCorrectedCubemapBase : public IdObject
     {
     protected:
+        TextureGpu                      *mBindTexture;
+        HlmsSamplerblock const          *mSamplerblockTrilinear;
+
         CubemapProbeVec mProbes;
         bool            mAutomaticMode;
 
@@ -79,6 +82,14 @@ namespace Ogre
 
         bool getAutomaticMode(void) const;
 
+        TextureGpu* getBindTexture(void) const          { return mBindTexture; }
+        const HlmsSamplerblock* getBindTrilinearSamplerblock(void)
+                                                        { return mSamplerblockTrilinear; }
+
+        virtual void _notifyPreparePassHash( const Matrix4 &viewMatrix );
+        virtual size_t getConstBufferSize(void);
+        virtual void fillConstBufferData( const Matrix4 &viewMatrix,
+                                          float * RESTRICT_ALIAS passBufferPtr ) const;
         static void fillConstBufferData( const CubemapProbe &probe,
                                          const Matrix4 &viewMatrix,
                                          const Matrix3 &invViewMat3,

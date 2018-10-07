@@ -85,7 +85,6 @@ namespace Ogre
         mBlendProxyCamera( 0 ),
         mBlendWorkspace( 0 ),
         mSamplerblockPoint( 0 ),
-        mSamplerblockTrilinear( 0 ),
         mCurrentMip( 0 ),
         mProxyVisibilityMask( proxyVisibilityMask ),
         mReservedRqId( reservedRqId )
@@ -148,8 +147,6 @@ namespace Ogre
 
         HlmsManager *hlmsManager = mRoot->getHlmsManager();
         HlmsSamplerblock samplerblock;
-        samplerblock.mMipFilter = FO_LINEAR;
-        mSamplerblockTrilinear = hlmsManager->getSamplerblock( samplerblock );
         samplerblock.mMipFilter = FO_NONE;
         mSamplerblockPoint = hlmsManager->getSamplerblock( samplerblock );
     }
@@ -162,17 +159,15 @@ namespace Ogre
 
         destroyProxyGeometry();
 
-        if( mBlendCubemap )
+        if( mBindTexture )
         {
             TextureGpuManager *textureGpuManager =
                     mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
-            textureGpuManager->destroyTexture( mBlendCubemap );
-            mBlendCubemap = 0;
+            textureGpuManager->destroyTexture( mBindTexture );
+            mBindTexture = 0;
         }
 
         HlmsManager *hlmsManager = mRoot->getHlmsManager();
-        hlmsManager->destroySamplerblock( mSamplerblockTrilinear );
-        mSamplerblockTrilinear = 0;
         hlmsManager->destroySamplerblock( mSamplerblockPoint );
         mSamplerblockPoint = 0;
 
@@ -274,22 +269,22 @@ namespace Ogre
         {
             TextureGpuManager *textureGpuManager =
                     mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
-            mBlendCubemap = textureGpuManager->createTexture(
-                                "ParallaxCorrectedCubemap Blend Result " +
-                                StringConverter::toString( getId() ),
-                                GpuPageOutStrategy::Discard,
+            mBindTexture = textureGpuManager->createTexture(
+                               "ParallaxCorrectedCubemap Blend Result " +
+                               StringConverter::toString( getId() ),
+                               GpuPageOutStrategy::Discard,
                     #if GENERATE_MIPMAPS_ON_BLEND
-                                TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps,
+                               TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps,
                     #else
-                                TextureFlags::RenderToTexture,
+                               TextureFlags::RenderToTexture,
                     #endif
-                                TextureTypes::TypeCube );
-            mBlendCubemap->setResolution( maxWidth, maxHeight );
-            mBlendCubemap->setPixelFormat( pixelFormat );
-            mBlendCubemap->setNumMipmaps( PixelFormatGpuUtils::getMaxMipmapCount( maxWidth,
-                                                                                  maxHeight ) );
-            mBlendCubemap->_setDepthBufferDefaults( DepthBuffer::POOL_NO_DEPTH, false, PFG_UNKNOWN );
-            mBlendCubemap->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+                               TextureTypes::TypeCube );
+            mBindTexture->setResolution( maxWidth, maxHeight );
+            mBindTexture->setPixelFormat( pixelFormat );
+            mBindTexture->setNumMipmaps( PixelFormatGpuUtils::getMaxMipmapCount( maxWidth,
+                                                                                 maxHeight ) );
+            mBindTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NO_DEPTH, false, PFG_UNKNOWN );
+            mBindTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
 
             createCubemapBlendWorkspace();
 
@@ -510,7 +505,7 @@ namespace Ogre
         mBlendProxyCamera->setNearClipDistance( 0.01 );
         mBlendProxyCamera->setFarClipDistance( 0.0 );
 
-        CompositorChannelVec channels( 1, mBlendCubemap );
+        CompositorChannelVec channels( 1, mBindTexture );
 
         IdString workspaceName( "AutoGen_ParallaxCorrectedCubemapBlending_Workspace" );
 
@@ -623,7 +618,7 @@ namespace Ogre
         mFinalProbe.mProbeShape = mCollectedProbes[probeIdx]->mProbeShape;
 
         const bool requiresTrilinear = mCollectedProbes[probeIdx]->mTexture->getNumMipmaps() !=
-                                                             mBlendCubemap->getNumMipmaps();
+                                                             mBindTexture->getNumMipmaps();
         for( size_t i=0; i<6; ++i )
         {
             mCopyCubemapTUs[i]->setTexture( mCollectedProbes[probeIdx]->mTexture );
@@ -854,7 +849,7 @@ namespace Ogre
             mBlendCubemapParams[i]->setNamedConstant( "weight", mProbeBlendFactors[i] );
 
             const bool requiresTrilinear = mCollectedProbes[i]->mTexture->getNumMipmaps() !=
-                                                              mBlendCubemap->getNumMipmaps();
+                                                              mBindTexture->getNumMipmaps();
             mBlendCubemapTUs[i]->setTexture( mCollectedProbes[i]->mTexture );
             mBlendCubemapTUs[i]->_setSamplerblock( requiresTrilinear ? mSamplerblockTrilinear :
                                                                        mSamplerblockPoint );
@@ -1080,6 +1075,11 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     size_t ParallaxCorrectedCubemap::getConstBufferSize(void)
     {
+        return getConstBufferSizeStatic();
+    }
+    //-----------------------------------------------------------------------------------
+    size_t ParallaxCorrectedCubemap::getConstBufferSizeStatic(void)
+    {
         return 5 * 4 * sizeof(float); //CubemapProbe localProbe;
     }
     //-----------------------------------------------------------------------------------
@@ -1187,7 +1187,7 @@ namespace Ogre
             for( size_t i=0; i<OGRE_MAX_CUBE_PROBES; ++i )
             {
                 const float mipLevel = ( mCurrentMip * mCollectedProbes[i]->mTexture->getNumMipmaps() ) /
-                                       mBlendCubemap->getNumMipmaps();
+                                       mBindTexture->getNumMipmaps();
                 mBlendCubemapParams[i]->setNamedConstant( "lodLevel", mipLevel );
             }
             ++mCurrentMip;
@@ -1195,7 +1195,7 @@ namespace Ogre
         else if( pass->getType() == PASS_QUAD && pass->getDefinition()->mIdentifier == 0 )
         {
             const float mipLevel = ( mCurrentMip * mCollectedProbes[0]->mTexture->getNumMipmaps() ) /
-                                    mBlendCubemap->getNumMipmaps();
+                                    mBindTexture->getNumMipmaps();
             for( size_t i=0; i<6; ++i )
                 mCopyCubemapParams[i]->setNamedConstant( "lodLevel", mipLevel );
             ++mCurrentMip;

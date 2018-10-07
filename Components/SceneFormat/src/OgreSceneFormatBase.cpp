@@ -37,6 +37,7 @@ THE SOFTWARE.
 
 #include "OgreHlmsPbs.h"
 #include "Cubemaps/OgreParallaxCorrectedCubemap.h"
+#include "Cubemaps/OgreParallaxCorrectedCubemapAuto.h"
 
 namespace Ogre
 {
@@ -83,7 +84,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     DefaultSceneFormatListener::DefaultSceneFormatListener() :
         mSceneFlags( 0 ),
-        mParallaxCorrectedCubemap( 0 )
+        mParallaxCorrectedCubemapManual( 0 ),
+        mParallaxCorrectedCubemapAuto( 0 )
     {
     }
     //-----------------------------------------------------------------------------------
@@ -93,7 +95,19 @@ namespace Ogre
 
         HlmsPbs *hlmsPbs = parent->getPbs();
         if( hlmsPbs )
-            mParallaxCorrectedCubemap = hlmsPbs->getParallaxCorrectedCubemap();
+        {
+            ParallaxCorrectedCubemapBase *pccBase = hlmsPbs->getParallaxCorrectedCubemap();
+            if( pccBase && !pccBase->getAutomaticMode() )
+            {
+                OGRE_ASSERT_HIGH( dynamic_cast<ParallaxCorrectedCubemap*>( pccBase ) );
+                mParallaxCorrectedCubemapManual = static_cast<ParallaxCorrectedCubemap*>( pccBase );
+            }
+            else if( pccBase && pccBase->getAutomaticMode() )
+            {
+                OGRE_ASSERT_HIGH( dynamic_cast<ParallaxCorrectedCubemapAuto*>( pccBase ) );
+                mParallaxCorrectedCubemapAuto = static_cast<ParallaxCorrectedCubemapAuto*>( pccBase );
+            }
+        }
     }
     //-----------------------------------------------------------------------------------
     bool DefaultSceneFormatListener::hasNoAttachedObjectsOfType( const SceneNode *sceneNode )
@@ -148,9 +162,9 @@ namespace Ogre
         if( !(mSceneFlags & allObjsMask) )
             return false; //Nothing is being exported, this node has no need (early out)
 
-        if( mParallaxCorrectedCubemap )
+        if( mParallaxCorrectedCubemapManual )
         {
-            SceneNode * const *proxySceneNodes = mParallaxCorrectedCubemap->getProxySceneNodes();
+            SceneNode * const *proxySceneNodes = mParallaxCorrectedCubemapManual->getProxySceneNodes();
             if( proxySceneNodes )
             {
                 for( size_t i=0; i<OGRE_MAX_CUBE_PROBES; ++i )
@@ -158,6 +172,19 @@ namespace Ogre
                     if( proxySceneNodes[i] == sceneNode )
                         return false;
                 }
+            }
+        }
+        if( mParallaxCorrectedCubemapAuto )
+        {
+            const CubemapProbeVec &probes = mParallaxCorrectedCubemapAuto->getProbes();
+            CubemapProbeVec::const_iterator itor = probes.begin();
+            CubemapProbeVec::const_iterator end  = probes.end();
+
+            while( itor != end )
+            {
+                if( sceneNode == (*itor)->getInternalCubemapProbeSceneNode() )
+                    return false;
+                ++itor;
             }
         }
 
@@ -169,9 +196,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool DefaultSceneFormatListener::exportItem( const Item *item )
     {
-        if( mParallaxCorrectedCubemap )
+        if( mParallaxCorrectedCubemapManual )
         {
-            Item * const *proxyItems = mParallaxCorrectedCubemap->getProxyItems();
+            Item * const *proxyItems = mParallaxCorrectedCubemapManual->getProxyItems();
             if( proxyItems )
             {
                 for( size_t i=0; i<OGRE_MAX_CUBE_PROBES; ++i )

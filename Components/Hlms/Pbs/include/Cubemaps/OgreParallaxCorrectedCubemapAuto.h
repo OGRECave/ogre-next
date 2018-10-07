@@ -51,7 +51,6 @@ namespace Ogre
         public: Vector3                 mTrackedPosition;
     private:
         TextureGpu                      *mRenderTarget;
-        TextureGpu                      *mTextureArray;
 
         vector<uint64>::type            mReservedSlotBitset;
 

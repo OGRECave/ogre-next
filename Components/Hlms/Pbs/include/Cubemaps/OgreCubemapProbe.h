@@ -206,6 +206,8 @@ namespace Ogre
         void _addReference(void);
         void _removeReference(void);
 
+        const SceneNode* getInternalCubemapProbeSceneNode(void) const;
+
         uint32 getInternalSliceToArrayTexture(void) const   { return mCubemapArrayIdx; }
 
         ConstBufferPacked* getConstBufferForManualProbes(void)  { return mConstBufferForManualProbes; }

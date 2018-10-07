@@ -64,17 +64,27 @@ namespace Ogre
             IdType id, Root *root, SceneManager *sceneManager,
             const CompositorWorkspaceDef *probeWorkspcDef, bool automaticMode ) :
         IdObject( id ),
+        mBindTexture( 0 ),
+        mSamplerblockTrilinear( 0 ),
         mAutomaticMode( automaticMode ),
         mPaused( false ),
         mRoot( root ),
         mSceneManager( sceneManager ),
         mDefaultWorkspaceDef( probeWorkspcDef )
     {
+        HlmsManager *hlmsManager = mRoot->getHlmsManager();
+        HlmsSamplerblock samplerblock;
+        samplerblock.mMipFilter = FO_LINEAR;
+        mSamplerblockTrilinear = hlmsManager->getSamplerblock( samplerblock );
     }
     //-----------------------------------------------------------------------------------
     ParallaxCorrectedCubemapBase::~ParallaxCorrectedCubemapBase()
     {
         destroyAllProbes();
+
+        HlmsManager *hlmsManager = mRoot->getHlmsManager();
+        hlmsManager->destroySamplerblock( mSamplerblockTrilinear );
+        mSamplerblockTrilinear = 0;
     }
     //-----------------------------------------------------------------------------------
     CubemapProbe* ParallaxCorrectedCubemapBase::createProbe(void)
@@ -131,6 +141,20 @@ namespace Ogre
     bool ParallaxCorrectedCubemapBase::getAutomaticMode(void) const
     {
         return mAutomaticMode;
+    }
+    //-----------------------------------------------------------------------------------
+    void ParallaxCorrectedCubemapBase::_notifyPreparePassHash( const Matrix4 &viewMatrix )
+    {
+    }
+    //-----------------------------------------------------------------------------------
+    size_t ParallaxCorrectedCubemapBase::getConstBufferSize(void)
+    {
+        return 0;
+    }
+    //-----------------------------------------------------------------------------------
+    void ParallaxCorrectedCubemapBase::fillConstBufferData( const Matrix4 &viewMatrix,
+                                                            float * RESTRICT_ALIAS passBufferPtr ) const
+    {
     }
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemapBase::fillConstBufferData( const CubemapProbe &probe,

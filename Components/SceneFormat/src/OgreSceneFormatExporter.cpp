@@ -741,19 +741,24 @@ namespace Ogre
         if( !hlmsPbs )
             return;
 
-        ParallaxCorrectedCubemap *pcc = hlmsPbs->getParallaxCorrectedCubemap();
+        ParallaxCorrectedCubemapBase *pccBase = hlmsPbs->getParallaxCorrectedCubemap();
 
-        if( !pcc )
+        if( !pccBase )
             return;
 
-        TextureGpu *pccBlendTex = pcc->getBlendCubemap();
+        TextureGpu *pccBlendTex = pccBase->getBindTexture();
 
         jsonStr.a( ",\n\t\t\"parallax_corrected_cubemaps\" :"
                    "\n\t\t{" );
-        jsonStr.a( "\n\t\t\t\"paused\" : ", toQuotedStr( pcc->mPaused ) );
-        jsonStr.a( ",\n\t\t\t\"mask\" : ", pcc->mMask );
-        jsonStr.a( ",\n\t\t\t\"reserved_rq_id\" : ", pcc->getProxyReservedRenderQueueId() );
-        jsonStr.a( ",\n\t\t\t\"proxy_visibility_mask\" : ", pcc->getProxyReservedVisibilityMask() );
+        jsonStr.a( "\n\t\t\t\"paused\" : ", toQuotedStr( pccBase->mPaused ) );
+        if( !pccBase->getAutomaticMode() )
+        {
+            OGRE_ASSERT_HIGH( dynamic_cast<ParallaxCorrectedCubemap*>( pccBase ) );
+            ParallaxCorrectedCubemap *pcc = static_cast<ParallaxCorrectedCubemap*>( pccBase );
+            jsonStr.a( ",\n\t\t\t\"mask\" : ", pcc->mMask );
+            jsonStr.a( ",\n\t\t\t\"reserved_rq_id\" : ", pcc->getProxyReservedRenderQueueId() );
+            jsonStr.a( ",\n\t\t\t\"proxy_visibility_mask\" : ", pcc->getProxyReservedVisibilityMask() );
+        }
         if( pccBlendTex )
         {
             jsonStr.a( ",\n\t\t\t\"max_width\" : ", pccBlendTex->getWidth() );
@@ -762,10 +767,10 @@ namespace Ogre
                        PixelFormatGpuUtils::toString( pccBlendTex->getPixelFormat() ), "\"" );
         }
 
-        const CompositorWorkspaceDef *workspaceDef = pcc->getDefaultWorkspaceDef();
+        const CompositorWorkspaceDef *workspaceDef = pccBase->getDefaultWorkspaceDef();
         jsonStr.a( ",\n\t\t\t\"workspace\" : \"", workspaceDef->getNameStr().c_str(), "\"" );
 
-        const CubemapProbeVec& probes = pcc->getProbes();
+        const CubemapProbeVec& probes = pccBase->getProbes();
 
         if( !probes.empty() )
         {

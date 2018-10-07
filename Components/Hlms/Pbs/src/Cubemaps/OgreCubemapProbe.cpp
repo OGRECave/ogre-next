@@ -534,7 +534,7 @@ namespace Ogre
             SceneManager *sceneManager = mCreator->getSceneManager();
             VaoManager *vaoManager = sceneManager->getDestinationRenderSystem()->getVaoManager();
             mConstBufferForManualProbes = vaoManager->createConstBuffer(
-                        ParallaxCorrectedCubemap::getConstBufferSize(),
+                        ParallaxCorrectedCubemap::getConstBufferSizeStatic(),
                         BT_DEFAULT, 0, false );
             mCreator->_addManuallyActiveProbe( this );
         }
@@ -557,5 +557,13 @@ namespace Ogre
                 mCreator->_removeManuallyActiveProbe( this );
             }
         }
+    }
+    //-----------------------------------------------------------------------------------
+    const SceneNode* CubemapProbe::getInternalCubemapProbeSceneNode(void) const
+    {
+        SceneNode const *retVal = 0;
+        if( mInternalProbe )
+            retVal = mInternalProbe->getParentSceneNode();
+        return retVal;
     }
 }
