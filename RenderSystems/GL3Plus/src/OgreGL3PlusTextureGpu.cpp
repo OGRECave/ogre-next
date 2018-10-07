@@ -608,10 +608,10 @@ namespace Ogre
             {
                 OCGE( glCopyImageSubData( this->mFinalTextureName, this->mGlTextureTarget,
                                           srcMipLevel, srcBox.x, srcBox.y,
-                                          srcBox.z + this->getInternalSliceStart(),
+                                          srcBox.getZOrSlice() + this->getInternalSliceStart(),
                                           dstGl->mFinalTextureName, dstGl->mGlTextureTarget,
                                           dstMipLevel, dstBox.x, dstBox.y,
-                                          dstBox.z + dstGl->getInternalSliceStart(),
+                                          dstBox.getZOrSlice() + dstGl->getInternalSliceStart(),
                                           srcBox.width, srcBox.height, srcBox.getDepthOrSlices() ) );
             }
             /*TODO

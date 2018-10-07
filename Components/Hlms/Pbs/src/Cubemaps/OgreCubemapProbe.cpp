@@ -513,15 +513,12 @@ namespace Ogre
             const uint8 numMipmaps = renderTarget->getNumMipmaps();
             for( uint8 mip=0; mip<numMipmaps; ++mip )
             {
+                //srcBox.numSlices = 6, thus we ask the RenderSystem to copy all 6 slices in one call
                 TextureBox srcBox = renderTarget->getEmptyBox( mip );
                 TextureBox dstBox = srcBox;
-
-                for( size_t face=0; face<6u; ++face )
-                {
-                    srcBox.sliceStart = face;
-                    dstBox.sliceStart = mCubemapArrayIdx + face;
-                    renderTarget->copyTo( mTexture, dstBox, mip, srcBox, mip );
-                }
+                srcBox.sliceStart = 0;
+                dstBox.sliceStart = mCubemapArrayIdx * 6u;
+                renderTarget->copyTo( mTexture, dstBox, mip, srcBox, mip );
             }
         }
     }
