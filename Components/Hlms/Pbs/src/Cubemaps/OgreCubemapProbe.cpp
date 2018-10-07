@@ -176,6 +176,7 @@ namespace Ogre
         {
             destroyInternalProbe();
             mCreator->_releaseTextureSlot( mTexture, mCubemapArrayIdx );
+            mTexture = 0;
             mCubemapArrayIdx = std::numeric_limits<uint32>::max();
         }
     }

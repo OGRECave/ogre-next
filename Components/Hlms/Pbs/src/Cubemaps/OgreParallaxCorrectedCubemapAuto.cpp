@@ -113,7 +113,7 @@ namespace Ogre
 
         size_t idx  = texSlot / 64u;
         uint64 mask = texSlot % 64u;
-        mask = ~(((uint64)1ul) << mask);
+        mask = ((uint64)1ul) << mask;
 
         OGRE_ASSERT_LOW( idx < mReservedSlotBitset.size() && "Slot is invalid. Out of bounds!" );
         OGRE_ASSERT_LOW( !(mReservedSlotBitset[idx] & mask) && "Slot was already released!" );
