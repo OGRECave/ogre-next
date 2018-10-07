@@ -339,7 +339,9 @@ namespace Ogre
 
         mWorkspaceDefName = workspaceDef->getName();
         SceneManager *sceneManager = mCreator->getSceneManager();
-        mCamera = sceneManager->createCamera( mTexture->getNameStr(), true, true );
+        mCamera = sceneManager->createCamera( mTexture->getNameStr() +
+                                              StringConverter::toString( mCubemapArrayIdx ),
+                                              true, true );
         mCamera->setFOVy( Degree(90) );
         mCamera->setAspectRatio( 1 );
         mCamera->setFixedYawAxis(false);

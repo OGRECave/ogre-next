@@ -284,7 +284,7 @@ float3 qmul( float4 q, float3 v )
 @insertpiece( forward3dLighting )
 
 @property( envprobe_map || ambient_hemisphere )
-	@property( hlms_enable_cubemaps_auto )
+	@property( !hlms_enable_cubemaps_auto )
 		float3 reflDir = 2.0 * dot( viewDir, nNormal ) * nNormal - viewDir;
 	@end
 	

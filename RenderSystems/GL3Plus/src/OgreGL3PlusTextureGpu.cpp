@@ -120,7 +120,7 @@ namespace Ogre
                 break;
             case TextureTypes::TypeCubeArray:
                 OCGE( glTexStorage3D( GL_TEXTURE_CUBE_MAP_ARRAY, GLsizei(mNumMipmaps), format,
-                                      GLsizei(mWidth), GLsizei(mHeight), GLsizei(mDepthOrSlices) ) );
+                                      GLsizei(mWidth), GLsizei(mHeight), GLsizei(mDepthOrSlices * 6u) ) );
                 break;
             case TextureTypes::Type3D:
                 OCGE( glTexStorage3D( GL_TEXTURE_3D, GLsizei(mNumMipmaps), format,

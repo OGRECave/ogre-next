@@ -430,7 +430,7 @@ float4 diffuseCol;
 @end
 
 @property( use_envprobe_map || hlms_use_ssr || use_planar_reflections || ambient_hemisphere )
-	@property( hlms_enable_cubemaps_auto )
+	@property( !hlms_enable_cubemaps_auto )
 		float3 reflDir = 2.0 * dot( viewDir, nNormal ) * nNormal - viewDir;
 	@end
 

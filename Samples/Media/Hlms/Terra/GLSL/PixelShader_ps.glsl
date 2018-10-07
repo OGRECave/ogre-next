@@ -283,7 +283,7 @@ void main()
 @insertpiece( forward3dLighting )
 
 @property( envprobe_map || ambient_hemisphere )
-	@property( hlms_enable_cubemaps_auto )
+	@property( !hlms_enable_cubemaps_auto )
 		vec3 reflDir = 2.0 * dot( viewDir, nNormal ) * nNormal - viewDir;
 	@end
 
