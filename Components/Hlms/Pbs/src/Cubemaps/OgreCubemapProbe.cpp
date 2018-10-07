@@ -499,7 +499,16 @@ namespace Ogre
     void CubemapProbe::_updateRender(void)
     {
         assert( mDirty || !mStatic );
+
+        const bool automaticMode = mCreator->getAutomaticMode();
+
+        if( automaticMode )
+            mCreator->_setIsRendering( true );
+
         mWorkspace->_update();
+
+        if( automaticMode )
+            mCreator->_setIsRendering( false );
 
         if( mStatic )
         {
@@ -512,7 +521,7 @@ namespace Ogre
             mCamera->setLightCullingVisibility( false, false );
         }
 
-        if( mCreator->getAutomaticMode() )
+        if( automaticMode )
         {
             TextureGpu *renderTarget = mWorkspace->getExternalRenderTargets()[0];
             const uint8 numMipmaps = renderTarget->getNumMipmaps();

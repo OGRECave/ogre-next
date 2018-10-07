@@ -51,6 +51,7 @@ namespace Ogre
         CubemapProbeVec mProbes;
         bool            mAutomaticMode;
 
+        bool            mIsRendering;
         public: bool                    mPaused;
     protected:
         Root                            *mRoot;
@@ -111,6 +112,12 @@ namespace Ogre
 
         virtual void _addManuallyActiveProbe( CubemapProbe *probe );
         virtual void _removeManuallyActiveProbe( CubemapProbe *probe );
+
+        void _setIsRendering( bool bIsRendering )       { mIsRendering = bIsRendering; }
+        /// Inform whether we're currently updating a probe. Some Hlms / PCC combinations
+        /// should not perform PCC while rendering, either because the RenderTarget is the same
+        /// as the cubemap texture, or because other glitches may occur
+        bool isRendering(void) const                    { return mIsRendering; }
 
         SceneManager* getSceneManager(void) const;
         const CompositorWorkspaceDef* getDefaultWorkspaceDef(void) const;

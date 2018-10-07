@@ -161,6 +161,7 @@ namespace Ogre
     const IdString PbsProperty::TargetEnvprobeMap = IdString( "target_envprobe_map" );
     const IdString PbsProperty::ParallaxCorrectCubemaps = IdString( "parallax_correct_cubemaps" );
     const IdString PbsProperty::UseParallaxCorrectCubemaps= IdString( "use_parallax_correct_cubemaps" );
+    const IdString PbsProperty::EnableCubemapsAuto      = IdString( "hlms_enable_cubemaps_auto" );
     const IdString PbsProperty::IrradianceVolumes = IdString( "irradiance_volumes" );
 
     const IdString PbsProperty::BrdfDefault       = IdString( "BRDF_Default" );
@@ -1047,11 +1048,11 @@ namespace Ogre
                 }
             }
 
-            if( mParallaxCorrectedCubemap )
+            if( mParallaxCorrectedCubemap && !mParallaxCorrectedCubemap->isRendering() )
             {
                 setProperty( PbsProperty::ParallaxCorrectCubemaps, 1 );
                 if( mParallaxCorrectedCubemap->getAutomaticMode() )
-                    setProperty( HlmsBaseProp::EnableCubemapsAuto, 1 );
+                    setProperty( PbsProperty::EnableCubemapsAuto, 1 );
             }
 
             if( mIrradianceVolume )
@@ -1157,7 +1158,7 @@ namespace Ogre
                 }
             }
 
-            if( mParallaxCorrectedCubemap )
+            if( mParallaxCorrectedCubemap && !mParallaxCorrectedCubemap->isRendering() )
             {
                 mParallaxCorrectedCubemap->_notifyPreparePassHash( viewMatrix );
                 mapSize += mParallaxCorrectedCubemap->getConstBufferSize();
@@ -1863,7 +1864,7 @@ namespace Ogre
                 passBufferPtr += mPlanarReflections->getConstBufferSize() >> 2u;
             }
 #endif
-            if( mParallaxCorrectedCubemap )
+            if( mParallaxCorrectedCubemap && !mParallaxCorrectedCubemap->isRendering() )
             {
                 mParallaxCorrectedCubemap->fillConstBufferData( viewMatrix, passBufferPtr );
                 passBufferPtr += mParallaxCorrectedCubemap->getConstBufferSize() >> 2u;
@@ -1922,7 +1923,7 @@ namespace Ogre
             mTexUnitSlotStart += 2;
         if( mIrradianceVolume )
             mTexUnitSlotStart += 1;
-        if( mParallaxCorrectedCubemap )
+        if( mParallaxCorrectedCubemap && !mParallaxCorrectedCubemap->isRendering() )
             mTexUnitSlotStart += 1;
         if( !mPrePassTextures->empty() )
             mTexUnitSlotStart += 2;
@@ -2100,7 +2101,7 @@ namespace Ogre
                     ++itor;
                 }
 
-                if( mParallaxCorrectedCubemap )
+                if( mParallaxCorrectedCubemap && !mParallaxCorrectedCubemap->isRendering() )
                 {
                     TextureGpu *pccTexture = mParallaxCorrectedCubemap->getBindTexture();
                     const HlmsSamplerblock *samplerblock =

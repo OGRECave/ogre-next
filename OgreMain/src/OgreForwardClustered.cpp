@@ -963,7 +963,6 @@ namespace Ogre
                                               (mDecalsEnabled ? c_reservedDecalsSlotsPerCell : 0u);
             hlms->_setProperty( HlmsBaseProp::FwdPlusCubemapSlotOffset,
                                 static_cast<int32>( cubemapOffsetStart ) );
-            hlms->_setProperty( HlmsBaseProp::EnableCubemapsAuto, 1 );
         }
     }
     //-----------------------------------------------------------------------------------
