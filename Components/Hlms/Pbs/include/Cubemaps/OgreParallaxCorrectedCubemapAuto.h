@@ -38,7 +38,20 @@ THE SOFTWARE.
 namespace Ogre
 {
     /**
-    @see HlmsPbsDatablock::setCubemapProbe
+    @class ParallaxCorrectedCubemapAuto
+        Per-Pixel reflection probes.
+
+        Per-Pixel reflection probes are much easier to handle, they're more flexible and powerful.
+        However they require a modern GPU with Cubemap Arrays.
+        Forward Clustered also must be active.
+
+        ParallaxCorrectedCubemapAuto supports having more CubemapProbes than the maximum number
+        of probes you pass to ParallaxCorrectedCubemapAuto::setEnabled.
+        However only 'maxNumProbes' probes can be active at the same time.
+        This is all done thanks to _acquireTextureSlot & _releaseTextureSlot.
+
+        To activate a probe, call CubemapProbe::initWorkspace.
+        To deactivate it, call CubemapProbe::destroyWorkspace.
     */
     class _OgreHlmsPbsExport ParallaxCorrectedCubemapAuto : public ParallaxCorrectedCubemapBase,
                                                             public CompositorWorkspaceListener,
