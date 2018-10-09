@@ -83,7 +83,7 @@ in block
 @property( num_textures )uniform sampler2DArray textureMaps[@value( num_textures )];@end
 
 @property( !hlms_enable_cubemaps_auto )
-	@property( use_envprobe_map )uniform samplerCubeArray	texEnvProbeMap;@end
+	@property( use_envprobe_map )uniform samplerCube		texEnvProbeMap;@end
 @end
 @property( hlms_enable_cubemaps_auto )
 	@property( use_envprobe_map )uniform samplerCubeArray	texEnvProbeMap;@end
