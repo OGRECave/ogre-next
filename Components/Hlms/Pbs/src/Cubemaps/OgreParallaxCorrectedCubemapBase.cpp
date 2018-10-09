@@ -67,6 +67,7 @@ namespace Ogre
         mBindTexture( 0 ),
         mSamplerblockTrilinear( 0 ),
         mAutomaticMode( automaticMode ),
+        mIsRendering( false ),
         mPaused( false ),
         mRoot( root ),
         mSceneManager( sceneManager ),
