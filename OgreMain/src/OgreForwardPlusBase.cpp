@@ -50,7 +50,7 @@ namespace Ogre
     const size_t ForwardPlusBase::MaxCubemapProbeRq = 8u;
     const size_t ForwardPlusBase::NumBytesPerLight = 6 * 4 * 4;
     const size_t ForwardPlusBase::NumBytesPerDecal = 4 * 4 * 4;
-    const size_t ForwardPlusBase::NumBytesPerCubemapProbe = 5 * 4 * 4;
+    const size_t ForwardPlusBase::NumBytesPerCubemapProbe = 7 * 4 * 4;
 
     ForwardPlusBase::ForwardPlusBase( SceneManager *sceneManager, bool decalsEnabled,
                                       bool cubemapProbesEnabled ) :
@@ -302,9 +302,9 @@ namespace Ogre
 
         //Align to the start of cubemap probes
         if( numLights > 0u && numDecals == 0u )
-            lightData += 4u * 4u;
+            lightData += (7u - 6u) * 4u;
         else if( numDecals > 0u )
-            lightData += 1u * 4u;
+            lightData += (7u - 4u) * 4u;
 
         viewMatrix = camera->getViewMatrix();
         Matrix3 invViewMatrix3 = viewMatrix3.Inverse();
@@ -358,6 +358,18 @@ namespace Ogre
                 *lightData++ = probe->mGpuData[4][1];
                 *lightData++ = probe->mGpuData[4][2];
                 *lightData++ = probe->mGpuData[4][3];
+
+                //float4 probeInnerRange;
+                *lightData++ = probe->mGpuData[5][0];
+                *lightData++ = probe->mGpuData[5][1];
+                *lightData++ = probe->mGpuData[5][2];
+                *lightData++ = probe->mGpuData[5][3];
+
+                //float4 probeOuterRange;
+                *lightData++ = probe->mGpuData[6][0];
+                *lightData++ = probe->mGpuData[6][1];
+                *lightData++ = probe->mGpuData[6][2];
+                *lightData++ = probe->mGpuData[6][3];
 
                 ++itor;
             }

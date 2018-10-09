@@ -639,13 +639,13 @@ namespace Ogre
                                          decalOffsetStart + c_reservedDecalsSlotsPerCell,
                                          ObjType_Decal, 4u );
 
-        uint16 numProbes = static_cast<uint16>( alignToNextMultiple( numDecals * 4u, 5u ) >> 2u );
+        uint16 numProbes = static_cast<uint16>( alignToNextMultiple( numDecals * 4u, 7u ) >> 2u );
         const size_t actualMaxCubemapProbeRq = std::min( MaxCubemapProbeRq, objsPerRqInThread0.size() );
         numProbes = collectObjsForSlice( numPackedFrustumsPerSlice, frustumStartIdx,
                                          numProbes, MinCubemapProbeRq, actualMaxCubemapProbeRq,
                                          mCubemapProbesPerCell,
                                          cubemapOffsetStart + c_reservedCubemapProbeSlotsPerCell,
-                                         ObjType_CubemapProbe, 5u );
+                                         ObjType_CubemapProbe, 7u );
 
         {
             //Now write all the light counts

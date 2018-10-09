@@ -239,6 +239,20 @@ namespace Ogre
         mCreator->fillConstBufferData( *this, Matrix4::IDENTITY, Matrix3::IDENTITY,
                                        reinterpret_cast<float*>( mInternalProbe->mGpuData ) );
         mInternalProbe->mGpuData[3][3] = static_cast<float>( mCubemapArrayIdx );
+
+        Vector3 probeToAreaCenterOffsetLS = mInvOrientation * (mArea.mCenter - mProbeShape.mCenter);
+        mInternalProbe->mGpuData[4][3] = probeToAreaCenterOffsetLS.x;
+        mInternalProbe->mGpuData[5][3] = probeToAreaCenterOffsetLS.y;
+        mInternalProbe->mGpuData[6][3] = probeToAreaCenterOffsetLS.z;
+
+        mInternalProbe->mGpuData[5][0] = mArea.mHalfSize.x * mAreaInnerRegion.x;
+        mInternalProbe->mGpuData[5][1] = mArea.mHalfSize.y * mAreaInnerRegion.y;
+        mInternalProbe->mGpuData[5][2] = mArea.mHalfSize.z * mAreaInnerRegion.z;
+
+        mInternalProbe->mGpuData[6][0] = mArea.mHalfSize.x;
+        mInternalProbe->mGpuData[6][1] = mArea.mHalfSize.y;
+        mInternalProbe->mGpuData[6][2] = mArea.mHalfSize.z;
+
         if( mStatic )
         {
             SceneManager *sceneManager = mCreator->getSceneManager();

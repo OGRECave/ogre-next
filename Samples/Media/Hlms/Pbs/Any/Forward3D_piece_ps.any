@@ -1,3 +1,5 @@
+//#include "SyntaxHighlightingMisc.h"
+
 @property( hlms_forwardplus )
 
 @property( hlms_enable_decals )
@@ -151,16 +153,25 @@
 		probe.row2_centerZ	= bufferFetch( f3dLightList, int(idx + 2u) ).xyzw;
 		probe.halfSize		= bufferFetch( f3dLightList, int(idx + 3u) ).xyzw;
 		probe.cubemapPosLS	= bufferFetch( f3dLightList, int(idx + 4u) ).xyzw;
+		float4 probeInnerRange = bufferFetch( f3dLightList, int(idx + 5u) ).xyzw;
+		float4 probeOuterRange = bufferFetch( f3dLightList, int(idx + 6u) ).xyzw;
 
 		float3 posInProbSpace = toProbeLocalSpace( inPs.pos, probe );
 		float probeFade = getProbeFade( posInProbSpace, probe );
 
 		if( probeFade > 0 )
 		{
+			float3 probeToAreaCenterOffsetLS = float3( probe.cubemapPosLS.w,
+													   probeInnerRange.w,
+													   probeOuterRange.w );
+			float ndf = getProbeNDF( posInProbSpace.xyz, probeToAreaCenterOffsetLS.xyz,
+									 probeInnerRange.xyz, probeOuterRange.xyz );
+			ndf = saturate( ndf );
+			probeFade = ndf <= 0 ? 10000.0f : (1.0 - ndf);
+
 			float3 reflDirLS = localCorrect( reflDir, posInProbSpace, probe );
 			float3 nNormalLS = localCorrect( nNormal, posInProbSpace, probe );
 
-			probeFade = saturate( probeFade * 200.0 );
 			envColourS += OGRE_SampleArrayCubeLevel(
 				texEnvProbeMap, samplerState@value(envMapRegSampler), reflDirLS, probe.halfSize.w, ROUGHNESS * 12.0 ).xyz
 				@insertpiece( ApplyEnvMapScale ) * probeFade;
@@ -170,10 +181,10 @@
 
 			cubemapAccumWeight += probeFade;
 		}
-
-		envColourD.xyz *= cubemapAccumWeight == 0.0f ? 1.0f : (1.0f / cubemapAccumWeight);
-		envColourS.xyz *= cubemapAccumWeight == 0.0f ? 1.0f : (1.0f / cubemapAccumWeight);
 	}
+
+	envColourD.xyz *= cubemapAccumWeight == 0.0f ? 1.0f : (1.0f / cubemapAccumWeight);
+	envColourS.xyz *= cubemapAccumWeight == 0.0f ? 1.0f : (1.0f / cubemapAccumWeight);
 @end
 @end /// hlms_enable_cubemaps_auto
 
