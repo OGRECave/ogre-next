@@ -655,7 +655,8 @@ namespace Ogre
                     (frustumStartIdx + numPackedFrustumsPerSlice) * ARRAY_PACKED_REALS;
 
             const size_t cellSize = mObjsPerCell;
-            const bool hasLights = mLightsPerCell > 0u;
+            //const bool hasLights = mLightsPerCell > 0u;
+            const bool hasLights = true;
             size_t gridIdx = frustumStartIdx * ARRAY_PACKED_REALS * cellSize;
 
             while( itor != end )
