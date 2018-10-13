@@ -352,7 +352,7 @@ namespace Demo
         outText += "\nPress F6 to toggle number of probes. Num probes: ";
         outText += mUseMultipleProbes ? "3" : "1";
         outText += "\nPress F7 to toggle per pixel reflections. ";
-        outText += mPerPixelReflections ? "[Per Pixel]" : "[Global]";
+        outText += mPerPixelReflections ? "[Per Pixel]" : "[Unified]";
         if( mParallaxCorrectedCubemapOrig )
         {
             outText += "\nProbes blending: ";
