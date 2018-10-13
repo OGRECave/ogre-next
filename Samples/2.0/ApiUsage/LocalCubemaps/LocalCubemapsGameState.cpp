@@ -75,6 +75,7 @@ namespace Demo
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
         if( !mPerPixelReflections )
         {
+            //Disable Forward Clustered since it's not required anymore
             sceneManager->setForwardClustered( false, 0, 0, 0, 0, 0, 0, 0, 0 );
 
             mParallaxCorrectedCubemapOrig =
@@ -88,6 +89,7 @@ namespace Demo
         }
         else
         {
+            //Per pixel reflections REQUIRE Forward Clustered
             sceneManager->setForwardClustered( true, 16, 8, 24, 4, 0, 2, 2, 50 );
 
             mParallaxCorrectedCubemapAuto =
