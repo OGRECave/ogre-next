@@ -130,7 +130,7 @@ struct PassData
 
 	@insertpiece( DeclPlanarReflUniforms )
 
-@property( parallax_correct_cubemaps )
+@property( parallax_correct_cubemaps && !hlms_enable_cubemaps_auto && !hlms_enable_cubemaps_auto )
 	CubemapProbe autoProbe;
 @end
 

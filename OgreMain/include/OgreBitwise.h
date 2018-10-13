@@ -457,12 +457,13 @@ namespace Ogre {
         #if OGRE_COMPILER == OGRE_COMPILER_MSVC
             unsigned long trailingZero = 0;
             #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
-                //Scan the high 32 bits.
-                if( _BitScanForward( &trailingZero, static_cast<uint32>(value >> 32u) ) )
-                    return (trailingZero + 32u);
-
                 //Scan the low 32 bits.
-                _BitScanForward( &trailingZero, static_cast<uint32>(value) );
+                if( _BitScanForward( &trailingZero, static_cast<uint32>(value) ) )
+                    return trailingZero;
+
+                //Scan the high 32 bits.
+                _BitScanForward( &trailingZero, static_cast<uint32>(value >> 32u) );
+                trailingZero += 32u;
             #else
                 _BitScanForward64( &trailingZero, value );
             #endif

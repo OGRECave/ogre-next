@@ -159,7 +159,11 @@ namespace Ogre
             desc.BindFlags |= D3D11_BIND_UNORDERED_ACCESS;
 
         if( mTextureType == TextureTypes::TypeCube || mTextureType == TextureTypes::TypeCubeArray )
+        {
             desc.MiscFlags |= D3D11_RESOURCE_MISC_TEXTURECUBE;
+            if( mTextureType == TextureTypes::TypeCubeArray )
+                desc.ArraySize *= 6u;
+        }
         if( allowsAutoMipmaps() )
             desc.MiscFlags |= D3D11_RESOURCE_MISC_GENERATE_MIPS;
 
@@ -476,6 +480,15 @@ namespace Ogre
                                              dstResourceIndex,
                                              format );
             }
+        }
+
+        if( device.isError() )
+        {
+            String errorDescription = device.getErrorDescription();
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "Texture '" + getNameStr() + "': "
+                         "Error copying and/or resolving texture\nError Description:" +
+                         errorDescription, "D3D11TextureGpu::copyTo" );
         }
     }
     //-----------------------------------------------------------------------------------

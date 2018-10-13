@@ -143,7 +143,12 @@ fragment @insertpiece( output_type ) main_metal
 	@foreach( num_textures, n )
 		, texture2d_array<float> textureMaps@n [[texture(@counter(textureRegStart))]]@end
 	@property( use_envprobe_map )
-		, texturecube<float>	texEnvProbeMap [[texture(@value(envMapReg))]]@end
+		@property( !hlms_enable_cubemaps_auto )
+			, texturecube<float>	texEnvProbeMap [[texture(@value(envMapReg))]]@end
+		@end
+		@property( hlms_enable_cubemaps_auto )
+			, texturecube_array<float>	texEnvProbeMap [[texture(@value(envMapReg))]]@end
+		@end
 		@property( envMapRegSampler < samplerStateStart )
 			, sampler samplerState@value(envMapRegSampler) [[sampler(@value(envMapRegSampler))]]
 		@end
@@ -403,6 +408,7 @@ float4 diffuseCol;
 	@insertpiece( DoAreaLtcLights )
 
 @insertpiece( forward3dLighting )
+@insertpiece( forwardPlusDoCubemaps )
 @insertpiece( applyIrradianceVolumes )
 
 @property( emissive_map || emissive_constant )
@@ -416,7 +422,7 @@ float4 diffuseCol;
 	@end
 
 	@property( use_envprobe_map )
-		@property( use_parallax_correct_cubemaps )
+		@property( use_parallax_correct_cubemaps && !hlms_enable_cubemaps_auto )
 			float3 envColourS;
 			float3 envColourD;
 			float3 posInProbSpace = toProbeLocalSpace( inPs.pos, @insertpiece( pccProbeSource ) );
