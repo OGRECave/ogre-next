@@ -2,7 +2,6 @@
 @property( !GL430 )
 @property( hlms_tex_gather )#extension GL_ARB_texture_gather: require@end
 @end
-@property( hlms_amd_trinary_minmax )#extension GL_AMD_shader_trinary_minmax: require@end
 @insertpiece( SetCompatibilityLayer )
 @insertpiece( DeclareUvModifierMacros )
 

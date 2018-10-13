@@ -11,6 +11,11 @@
 @property( GL_ARB_texture_buffer_range )
 	#define bufferFetch texelFetch
 @end
+@property( hlms_amd_trinary_minmax )#extension GL_AMD_shader_trinary_minmax: require@end
+@property( !hlms_amd_trinary_minmax )
+	#define min3( a, b, c ) min( a, min( b, c ) )
+	#define max3( a, b, c ) max( a, max( b, c ) )
+@end
 
 #define float2 vec2
 #define float3 vec3

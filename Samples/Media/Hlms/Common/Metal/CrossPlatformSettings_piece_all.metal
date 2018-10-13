@@ -12,6 +12,9 @@ struct float1
 #define toFloat3x3( x ) toMat3x3( x )
 #define buildFloat3x3( row0, row1, row2 ) float3x3( row0, row1, row2 )
 
+#define min3( a, b, c ) min( a, min( b, c ) )
+#define max3( a, b, c ) max( a, max( b, c ) )
+
 #define mul( x, y ) ((x) * (y))
 #define lerp mix
 #define INLINE inline

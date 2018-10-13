@@ -4,6 +4,9 @@
 #define toFloat3x3( x ) ((float3x3)(x))
 #define buildFloat3x3( row0, row1, row2 ) transpose( float3x3( row0, row1, row2 ) )
 
+#define min3( a, b, c ) min( a, min( b, c ) )
+#define max3( a, b, c ) max( a, max( b, c ) )
+
 #define INLINE
 #define NO_INTERPOLATION_PREFIX nointerpolation
 #define NO_INTERPOLATION_SUFFIX
