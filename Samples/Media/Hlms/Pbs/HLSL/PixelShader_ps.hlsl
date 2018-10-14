@@ -57,7 +57,13 @@ Buffer<float4> f3dLightList : register(t2);@end
 		TextureCube	texEnvProbeMap : register(t@value(envMapReg));
 	@end
 	@property( hlms_enable_cubemaps_auto )
-		TextureCubeArray	texEnvProbeMap : register(t@value(envMapReg));
+		@property( !hlms_cubemaps_use_dpm )
+			TextureCubeArray	texEnvProbeMap : register(t@value(envMapReg));
+		@end
+		@property( hlms_cubemaps_use_dpm )
+			@property( use_envprobe_map )Texture2DArray	texEnvProbeMap : register(t@value(envMapReg));@end
+			@insertpiece( DeclDualParaboloidFunc )
+		@end
 	@end
 	@property( envMapRegSampler < samplerStateStart )
 		SamplerState samplerState@value(envMapRegSampler) : register(s@value(envMapRegSampler));

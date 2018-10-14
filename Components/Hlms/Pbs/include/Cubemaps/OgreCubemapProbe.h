@@ -140,6 +140,17 @@ namespace Ogre
 
         /** Initializes the workspace so we can actually render to the cubemap.
             You must call setTextureParams first.
+        @param mipmapsExecutionMask
+            When ParallaxCorrectedCubemapAuto needs to use DPM via 2D Array (see
+            ParallaxCorrectedCubemapAuto::setUseDpm2DArray), you will most likely *NOT* want
+            to execute the mipmap pass in the workspace you provide, as the system will
+            automatically generate mipmaps for you in the 2D Array instead.
+            We will be using this value to skip that pass.
+            We'll be calling:
+            @code
+                compositorManager->addWorkspace( ..., executionMask = ~mipmapsExecutionMask);
+            @endcode
+            But only when ParallaxCorrectedCubemapAuto::getUseDpm2DArray is true.
         @param workspaceDefOverride
             Pass a null IdString() to use the default workspace definition passed to
             ParallaxCorrectedCubemap.
