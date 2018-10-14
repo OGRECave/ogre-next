@@ -83,6 +83,10 @@ inline float3 getTSNormal( sampler samplerState, texture2d_array<float> normalMa
 
 @insertpiece( DeclAreaLtcLightFuncs )
 
+@property( hlms_enable_cubemaps_auto && hlms_cubemaps_use_dpm )
+	@insertpiece( DeclDualParaboloidFunc )
+@end
+
 constexpr sampler shadowSampler = sampler( coord::normalized,
 										   address::clamp_to_edge,
 										   filter::linear,
@@ -147,7 +151,12 @@ fragment @insertpiece( output_type ) main_metal
 			, texturecube<float>	texEnvProbeMap [[texture(@value(envMapReg))]]@end
 		@end
 		@property( hlms_enable_cubemaps_auto )
-			, texturecube_array<float>	texEnvProbeMap [[texture(@value(envMapReg))]]@end
+			@property( !hlms_cubemaps_use_dpm )
+				, texturecube_array<float>	texEnvProbeMap [[texture(@value(envMapReg))]]@end
+			@end
+			@property( hlms_cubemaps_use_dpm )
+				, texture2d_array<float>	texEnvProbeMap [[texture(@value(envMapReg))]]@end
+			@end
 		@end
 		@property( envMapRegSampler < samplerStateStart )
 			, sampler samplerState@value(envMapRegSampler) [[sampler(@value(envMapRegSampler))]]
