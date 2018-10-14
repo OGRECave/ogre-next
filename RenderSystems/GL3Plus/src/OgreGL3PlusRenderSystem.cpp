@@ -937,7 +937,7 @@ namespace Ogre {
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusRenderSystem::beginRenderPassDescriptor( RenderPassDescriptor *desc,
-                                                         TextureGpu *anyTarget,
+                                                         TextureGpu *anyTarget, uint8 mipLevel,
                                                          const Vector4 &viewportSize,
                                                          const Vector4 &scissors,
                                                          bool overlaysEnabled,
@@ -951,7 +951,7 @@ namespace Ogre {
         GL3PlusRenderPassDescriptor *currPassDesc =
                 static_cast<GL3PlusRenderPassDescriptor*>( mCurrentRenderPassDescriptor );
 
-        RenderSystem::beginRenderPassDescriptor( desc, anyTarget, viewportSize, scissors,
+        RenderSystem::beginRenderPassDescriptor( desc, anyTarget, mipLevel, viewportSize, scissors,
                                                  overlaysEnabled, warnIfRtvWasFlushed );
 
         GL3PlusRenderPassDescriptor *newPassDesc =
@@ -3184,10 +3184,10 @@ namespace Ogre {
     }
 
     void GL3PlusRenderSystem::clearFrameBuffer( RenderPassDescriptor *desc,
-                                                TextureGpu *anyTarget )
+                                                TextureGpu *anyTarget, uint8 mipLevel )
     {
         Vector4 fullVp( 0, 0, 1, 1 );
-        beginRenderPassDescriptor( desc, anyTarget, fullVp, fullVp, false, false );
+        beginRenderPassDescriptor( desc, anyTarget, mipLevel, fullVp, fullVp, false, false );
     }
 
     void GL3PlusRenderSystem::discardFrameBuffer( unsigned int buffers )

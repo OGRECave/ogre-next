@@ -127,7 +127,7 @@ namespace Ogre
               (mRenderPassDesc->mDepth.loadAction == LoadAction::Clear ||
               mRenderPassDesc->mStencil.loadAction == LoadAction::Clear))) )
         {
-            renderSystem->clearFrameBuffer( mRenderPassDesc, mAnyTargetTexture );
+            renderSystem->clearFrameBuffer( mRenderPassDesc, mAnyTargetTexture, mAnyMipLevel );
         }
 
         if( listener )

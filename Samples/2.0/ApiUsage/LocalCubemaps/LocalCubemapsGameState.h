@@ -28,6 +28,7 @@ namespace Demo
         bool                            mUseMultipleProbes;
         bool                            mRegenerateProbes;
         bool                            mPerPixelReflections;
+        bool                            mUseDpm2DArray;
         bool                            mRoughnessDirty;
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );

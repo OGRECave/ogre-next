@@ -172,12 +172,26 @@
 			float3 reflDirLS = localCorrect( reflDir, posInProbSpace, probe );
 			float3 nNormalLS = localCorrect( nNormal, posInProbSpace, probe );
 
-			envColourS += OGRE_SampleArrayCubeLevel(
-				texEnvProbeMap, samplerState@value(envMapRegSampler), reflDirLS, probe.halfSize.w, ROUGHNESS * 12.0 ).xyz
-				@insertpiece( ApplyEnvMapScale ) * probeFade;
-			envColourD += OGRE_SampleArrayCubeLevel(
-				texEnvProbeMap, samplerState@value(envMapRegSampler), nNormalLS, probe.halfSize.w, 11.0 ).xyz
-				@insertpiece( ApplyEnvMapScale ) * probeFade;
+			@property( !hlms_cubemaps_use_dpm )
+				envColourS += OGRE_SampleArrayCubeLevel(
+					texEnvProbeMap, samplerState@value(envMapRegSampler), reflDirLS,
+					probe.halfSize.w, ROUGHNESS * 12.0 ).xyz
+					@insertpiece( ApplyEnvMapScale ) * probeFade;
+				envColourD += OGRE_SampleArrayCubeLevel(
+					texEnvProbeMap, samplerState@value(envMapRegSampler), nNormalLS,
+					probe.halfSize.w, 11.0 ).xyz
+					@insertpiece( ApplyEnvMapScale ) * probeFade;
+			@end
+			@property( hlms_cubemaps_use_dpm )
+				envColourS += OGRE_SampleArray2DLevel(
+					texEnvProbeMap, samplerState@value(envMapRegSampler), mapCubemapToDpm( reflDirLS ),
+					probe.halfSize.w, ROUGHNESS * 12.0 ).xyz
+					@insertpiece( ApplyEnvMapScale ) * probeFade;
+				envColourD += OGRE_SampleArray2DLevel(
+					texEnvProbeMap, samplerState@value(envMapRegSampler), mapCubemapToDpm( nNormalLS ),
+					probe.halfSize.w, 11.0 ).xyz
+					@insertpiece( ApplyEnvMapScale ) * probeFade;
+			@end
 
 			cubemapAccumWeight += probeFade;
 		}

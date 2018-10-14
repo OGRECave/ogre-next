@@ -67,6 +67,7 @@ namespace Ogre
         mBindTexture( 0 ),
         mSamplerblockTrilinear( 0 ),
         mAutomaticMode( automaticMode ),
+        mUseDpm2DArray( false ),
         mIsRendering( false ),
         mPaused( false ),
         mRoot( root ),
@@ -139,11 +140,6 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    bool ParallaxCorrectedCubemapBase::getAutomaticMode(void) const
-    {
-        return mAutomaticMode;
-    }
-    //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemapBase::_notifyPreparePassHash( const Matrix4 &viewMatrix )
     {
     }
@@ -210,6 +206,10 @@ namespace Ogre
     void ParallaxCorrectedCubemapBase::releaseTmpRtt( const TextureGpu *tmpRtt )
     {
         OGRE_EXCEPT( Exception::ERR_INVALID_CALL, "", "" );
+    }
+    //-----------------------------------------------------------------------------------
+    void ParallaxCorrectedCubemapBase::_copyRenderTargetToCubemap( uint32 cubemapArrayIdx )
+    {
     }
     //-----------------------------------------------------------------------------------
     TextureGpu* ParallaxCorrectedCubemapBase::_acquireTextureSlot( uint32 &outTexSlot )

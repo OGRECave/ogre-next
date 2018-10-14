@@ -50,6 +50,7 @@ namespace Ogre {
         , mActWidth(0)
         , mActHeight(0)
         , mCurrentTarget( 0 )
+        , mCurrentMip( 0 )
         , mScissorRelLeft(left)
         , mScissorRelTop(top)
         , mScissorRelWidth(width)
@@ -110,8 +111,8 @@ namespace Ogre {
             mCoversEntireTarget = true;
             return;
         }
-        Real height = (Real) mCurrentTarget->getHeight();
-        Real width = (Real) mCurrentTarget->getWidth();
+        Real height = (Real) (mCurrentTarget->getHeight() >> mCurrentMip);
+        Real width = (Real) (mCurrentTarget->getWidth() >> mCurrentMip);
 
         assert( mScissorRelLeft >= mRelLeft     &&
                 mScissorRelTop >= mRelTop       &&
@@ -191,9 +192,10 @@ namespace Ogre {
     }
     //---------------------------------------------------------------------
     void Viewport::setDimensions( TextureGpu *newTarget, const Vector4 &relativeVp,
-                                  const Vector4 &scissors )
+                                  const Vector4 &scissors, uint8 mipLevel )
     {
         mCurrentTarget = newTarget;
+        mCurrentMip = mipLevel;
 
         mRelLeft    = relativeVp.x;
         mRelTop     = relativeVp.y;

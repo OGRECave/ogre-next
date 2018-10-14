@@ -85,7 +85,13 @@ in block
 	@property( use_envprobe_map )uniform samplerCube		texEnvProbeMap;@end
 @end
 @property( hlms_enable_cubemaps_auto )
-	@property( use_envprobe_map )uniform samplerCubeArray	texEnvProbeMap;@end
+	@property( !hlms_cubemaps_use_dpm )
+		@property( use_envprobe_map )uniform samplerCubeArray	texEnvProbeMap;@end
+	@end
+	@property( hlms_cubemaps_use_dpm )
+		@property( use_envprobe_map )uniform sampler2DArray	texEnvProbeMap;@end
+		@insertpiece( DeclDualParaboloidFunc )
+	@end
 @end
 
 @property( diffuse_map )	uint diffuseIdx;@end

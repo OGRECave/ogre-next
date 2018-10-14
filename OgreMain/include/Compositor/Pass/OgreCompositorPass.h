@@ -91,6 +91,7 @@ namespace Ogre
         /// Contains the first valid texture in mRenderPassDesc, to be used for reference
         /// (e.g. width, height, etc). Could be colour, depth, stencil, or nullptr.
         TextureGpu              *mAnyTargetTexture;
+        uint8                   mAnyMipLevel;
 
         uint32          mNumPassesLeft;
 

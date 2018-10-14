@@ -168,7 +168,7 @@ namespace Ogre {
             between 0 and 1. i.e. the full target area is 0, 0, 1, 1.
         */
         void setDimensions( TextureGpu *newTarget, const Vector4 &relativeVp,
-                            const Vector4 &scissors );
+                            const Vector4 &scissors, uint8 mipLevel );
 
         TextureGpu* getCurrentTarget(void) const        { return mCurrentTarget; }
 
@@ -301,6 +301,7 @@ namespace Ogre {
         int mActLeft, mActTop, mActWidth, mActHeight;
 
         TextureGpu *mCurrentTarget;
+        uint8       mCurrentMip;
 
         /// Relative dimensions, irrespective of target dimensions (0..1), scissor rect
         float mScissorRelLeft, mScissorRelTop, mScissorRelWidth, mScissorRelHeight;

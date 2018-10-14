@@ -64,8 +64,17 @@ namespace Ogre
         public: Vector3                 mTrackedPosition;
     private:
         TextureGpu                      *mRenderTarget;
+        TextureGpu                      *mDpmRenderTarget;
+        Camera                          *mDpmCamera;
 
         vector<uint64>::type            mReservedSlotBitset;
+
+        CompositorWorkspace             *mCubeToDpmWorkspace;
+
+        static void createCubemapToDpmWorkspaceDef( CompositorManager2 *compositorManager,
+                                                    TextureGpu *cubeTexture );
+        static void destroyCubemapToDpmWorkspaceDef( CompositorManager2 *compositorManager,
+                                                     TextureGpu *cubeTexture );
 
         void updateSceneGraph(void);
         /// Probes with a large number of iterations will blow up our memory consumption
@@ -89,6 +98,8 @@ namespace Ogre
 
         virtual TextureGpu* findTmpRtt( const TextureGpu *baseParams );
         virtual void releaseTmpRtt( const TextureGpu *tmpRtt );
+
+        virtual void _copyRenderTargetToCubemap( uint32 cubemapArrayIdx );
 
         /** Will update both mTrackedPosition with appropiate settings
             every time it's called. Must be called every time the camera changes.
@@ -124,6 +135,23 @@ namespace Ogre
                          PixelFormatGpu pixelFormat );
         bool getEnabled(void) const;
 
+        /** Whether we should use Dual Paraboloid Mapping with 2D Array instead of Cubemap Arrays
+        @remarks
+            DPM is lower quality than cubemap arrays. However not all GPUs support cubemap arrays,
+            most notably iOS GPUs before A11 chips and DX10 level HW.
+
+            When cubemap arrays are not supported, this setting is always forced on.<br/>
+            When cubemap arrays are supported, it's up to you. The most likely reason you want to
+            use DPM overy cubemap arrays is to see how it looks like on unsupported platforms.
+
+            You cannot toggle this setting after enabling the system. You must call
+            ParallaxCorrectedCubemapAuto::setEnabled( false, ... ); to switch this.
+        @param useDpm2DArray
+            True to use DPM, cubemap arrays otherwise. Default: False unless GPU does not support
+            cubemap arrays
+        */
+        void setUseDpm2DArray( bool useDpm2DArray );
+
         /// By default the probes will be constructed when the user enters the vecinity
         /// of non-static probes, and whenever a static probe is dirty.
         /// This can cause noticeable stalls. Use this function to regenerate them all
@@ -134,6 +162,8 @@ namespace Ogre
         //CompositorWorkspaceListener overloads
         virtual void allWorkspacesBeforeBeginUpdate(void);
         virtual void allWorkspacesBeginUpdate(void);
+
+        virtual void passPreExecute( CompositorPass *pass );
 
         //FrameListener overloads
         virtual bool frameStarted( const FrameEvent& evt );

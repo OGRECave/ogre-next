@@ -200,7 +200,7 @@ namespace Ogre
         virtual FrameBufferDescMap& _getFrameBufferDescMap(void)        { return mFrameBufferDescMap; }
         virtual RenderPassDescriptor* createRenderPassDescriptor(void);
         virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc,
-                                                TextureGpu *anyTarget,
+                                                TextureGpu *anyTarget, uint8 mipLevel,
                                                 const Vector4 &viewportSize,
                                                 const Vector4 &scissors,
                                                 bool overlaysEnabled,
@@ -292,7 +292,8 @@ namespace Ogre
             GpuProgramParametersSharedPtr params, uint16 variabilityMask);
         virtual void bindGpuProgramPassIterationParameters(GpuProgramType gptype);
 
-        virtual void clearFrameBuffer( RenderPassDescriptor *renderPassDesc, TextureGpu *anyTarget );
+        virtual void clearFrameBuffer( RenderPassDescriptor *renderPassDesc, TextureGpu *anyTarget,
+                                       uint8 mipLevel );
         virtual void discardFrameBuffer( unsigned int buffers );
 
         virtual Real getHorizontalTexelOffset(void);

@@ -791,7 +791,7 @@ namespace Ogre
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::beginRenderPassDescriptor( RenderPassDescriptor *desc,
-                                                       TextureGpu *anyTarget,
+                                                       TextureGpu *anyTarget, uint8 mipLevel,
                                                        const Vector4 &viewportSize,
                                                        const Vector4 &scissors,
                                                        bool overlaysEnabled,
@@ -808,7 +808,7 @@ namespace Ogre
         MetalRenderPassDescriptor *currPassDesc =
                 static_cast<MetalRenderPassDescriptor*>( mCurrentRenderPassDescriptor );
 
-        RenderSystem::beginRenderPassDescriptor( desc, anyTarget, viewportSize, scissors,
+        RenderSystem::beginRenderPassDescriptor( desc, anyTarget, mipLevel, viewportSize, scissors,
                                                  overlaysEnabled, warnIfRtvWasFlushed );
 
 
@@ -2591,10 +2591,10 @@ namespace Ogre
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::clearFrameBuffer( RenderPassDescriptor *renderPassDesc,
-                                              TextureGpu *anyTarget )
+                                              TextureGpu *anyTarget, uint8 mipLevel )
     {
         Vector4 fullVp( 0, 0, 1, 1 );
-        beginRenderPassDescriptor( renderPassDesc, anyTarget, fullVp, fullVp, false, false );
+        beginRenderPassDescriptor( renderPassDesc, anyTarget, mipLevel, fullVp, fullVp, false, false );
         executeRenderPassDescriptorDelayedActions();
     }
     //-------------------------------------------------------------------------

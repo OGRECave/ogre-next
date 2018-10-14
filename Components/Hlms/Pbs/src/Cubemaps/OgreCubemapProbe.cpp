@@ -34,7 +34,6 @@ THE SOFTWARE.
 
 #include "OgreTextureGpuManager.h"
 #include "OgrePixelFormatGpuUtils.h"
-#include "OgreTextureBox.h"
 #include "OgreLogManager.h"
 #include "OgreLwString.h"
 #include "OgreId.h"
@@ -62,6 +61,7 @@ namespace Ogre
         mTexture( 0 ),
         mCubemapArrayIdx( std::numeric_limits<uint32>::max() ),
         mMsaa( 1u ),
+        mWorkspaceMipmapsExecMask( 0x01 ),
         mClearWorkspace( 0 ),
         mWorkspace( 0 ),
         mCamera( 0 ),
@@ -306,7 +306,7 @@ namespace Ogre
 #endif
 
 #if GENERATE_MIPMAPS_ON_BLEND
-            uint numMips = 1u;
+            uint8 numMips = 1u;
             if( useManual )
             {
                 numMips = PixelFormatGpuUtils::getMaxMipmapCount( width, height );
@@ -333,7 +333,7 @@ namespace Ogre
             mDirty = true;
 
             if( reinitWorkspace && !mCreator->getAutomaticMode() )
-                initWorkspace( cameraNear, cameraFar, mWorkspaceDefName );
+                initWorkspace( cameraNear, cameraFar, mWorkspaceMipmapsExecMask, mWorkspaceDefName );
         }
         else
         {
@@ -344,7 +344,9 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CubemapProbe::initWorkspace( float cameraNear, float cameraFar, IdString workspaceDefOverride )
+    void CubemapProbe::initWorkspace( float cameraNear, float cameraFar,
+                                      uint8 mipmapsExecutionMask,
+                                      IdString workspaceDefOverride )
     {
         assert( (mTexture != 0 || mCreator->getAutomaticMode()) && "Call setTextureParams first!" );
 
@@ -386,12 +388,26 @@ namespace Ogre
             mCamera->setLightCullingVisibility( true, true );
         }
 
+        mWorkspaceMipmapsExecMask = mipmapsExecutionMask;
+
         if( !mCreator->getAutomaticMode() )
             mTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+        else
+        {
+            if( mCreator->getUseDpm2DArray() )
+                mipmapsExecutionMask = ~mipmapsExecutionMask;
+            else
+                mipmapsExecutionMask = 0xff;
+        }
 
         CompositorChannelVec channels( 1, rtt );
         mWorkspace = compositorManager->addWorkspace( sceneManager, channels, mCamera,
-                                                      mWorkspaceDefName, false );
+                                                      mWorkspaceDefName, false, -1,
+                                                      (UavBufferPackedVec*)0,
+                                                      (const ResourceLayoutMap*)0,
+                                                      (const ResourceAccessMap*)0,
+                                                      Vector4::ZERO,
+                                                      0x00, mipmapsExecutionMask );
 
         if( !mStatic )
         {
@@ -535,20 +551,7 @@ namespace Ogre
             mCamera->setLightCullingVisibility( false, false );
         }
 
-        if( automaticMode )
-        {
-            TextureGpu *renderTarget = mWorkspace->getExternalRenderTargets()[0];
-            const uint8 numMipmaps = renderTarget->getNumMipmaps();
-            for( uint8 mip=0; mip<numMipmaps; ++mip )
-            {
-                //srcBox.numSlices = 6, thus we ask the RenderSystem to copy all 6 slices in one call
-                TextureBox srcBox = renderTarget->getEmptyBox( mip );
-                TextureBox dstBox = srcBox;
-                srcBox.sliceStart = 0;
-                dstBox.sliceStart = mCubemapArrayIdx * 6u;
-                renderTarget->copyTo( mTexture, dstBox, mip, srcBox, mip );
-            }
-        }
+        mCreator->_copyRenderTargetToCubemap( mCubemapArrayIdx );
     }
     //-----------------------------------------------------------------------------------
     void CubemapProbe::_addReference(void)

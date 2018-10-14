@@ -50,6 +50,7 @@ namespace Ogre
 
         CubemapProbeVec mProbes;
         bool            mAutomaticMode;
+        bool            mUseDpm2DArray;
 
         bool            mIsRendering;
         public: bool                    mPaused;
@@ -81,7 +82,8 @@ namespace Ogre
 
         const CubemapProbeVec& getProbes(void) const        { return mProbes; }
 
-        bool getAutomaticMode(void) const;
+        bool getAutomaticMode(void) const               { return mAutomaticMode; }
+        bool getUseDpm2DArray(void) const               { return mUseDpm2DArray; }
 
         TextureGpu* getBindTexture(void) const          { return mBindTexture; }
         const HlmsSamplerblock* getBindTrilinearSamplerblock(void)
@@ -100,6 +102,8 @@ namespace Ogre
         /// Creates one if none found.
         virtual TextureGpu* findTmpRtt( const TextureGpu *baseParams );
         virtual void releaseTmpRtt( const TextureGpu *tmpRtt );
+
+        virtual void _copyRenderTargetToCubemap( uint32 cubemapArrayIdx );
 
         /** Acquires a texture with a given slot.
         @param outTexSlot [out]

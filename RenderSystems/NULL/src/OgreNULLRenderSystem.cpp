@@ -351,7 +351,7 @@ namespace Ogre
     }
     //-------------------------------------------------------------------------
     void NULLRenderSystem::clearFrameBuffer( RenderPassDescriptor *renderPassDesc,
-                                             TextureGpu *anyTarget )
+                                             TextureGpu *anyTarget, uint8 mipLevel )
     {
     }
     //-------------------------------------------------------------------------

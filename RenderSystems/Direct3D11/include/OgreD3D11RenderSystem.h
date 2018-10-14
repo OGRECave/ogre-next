@@ -236,7 +236,7 @@ namespace Ogre
         virtual FrameBufferDescMap& _getFrameBufferDescMap(void)        { return mFrameBufferDescMap; }
         virtual RenderPassDescriptor* createRenderPassDescriptor(void);
         virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc,
-                                                TextureGpu *anyTarget,
+                                                TextureGpu *anyTarget, uint8 mipLevel,
                                                 const Vector4 &viewportSize,
                                                 const Vector4 &scissors,
                                                 bool overlaysEnabled,
@@ -366,7 +366,7 @@ namespace Ogre
         void bindGpuProgramPassIterationParameters(GpuProgramType gptype);
 
         virtual void clearFrameBuffer( RenderPassDescriptor *renderPassDesc,
-                                       TextureGpu *anyTarget );
+                                       TextureGpu *anyTarget, uint8 mipLevel );
         void discardFrameBuffer( unsigned int buffers );
         void setClipPlane (ushort index, Real A, Real B, Real C, Real D);
         void enableClipPlane (ushort index, bool enable);

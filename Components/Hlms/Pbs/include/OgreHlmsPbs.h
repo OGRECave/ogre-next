@@ -407,6 +407,7 @@ namespace Ogre
         static const IdString ParallaxCorrectCubemaps;
         static const IdString UseParallaxCorrectCubemaps;
         static const IdString EnableCubemapsAuto;
+        static const IdString CubemapsUseDpm;
         static const IdString IrradianceVolumes;
 
         static const IdString BrdfDefault;

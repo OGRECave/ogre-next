@@ -538,6 +538,7 @@ namespace Ogre {
     //---------------------------------------------------------------------
     void RenderSystem::beginRenderPassDescriptor( RenderPassDescriptor *desc,
                                                   TextureGpu *anyTarget,
+                                                  uint8 mipLevel,
                                                   const Vector4 &viewportSize,
                                                   const Vector4 &scissors,
                                                   bool overlaysEnabled,
@@ -546,7 +547,7 @@ namespace Ogre {
         assert( anyTarget );
 
         mCurrentRenderPassDescriptor = desc;
-        mCurrentRenderViewport.setDimensions( anyTarget, viewportSize, scissors );
+        mCurrentRenderViewport.setDimensions( anyTarget, viewportSize, scissors, mipLevel );
         mCurrentRenderViewport.setOverlaysEnabled( overlaysEnabled );
     }
     //---------------------------------------------------------------------
@@ -557,7 +558,7 @@ namespace Ogre {
     void RenderSystem::endRenderPassDescriptor(void)
     {
         mCurrentRenderPassDescriptor = 0;
-        mCurrentRenderViewport.setDimensions( 0, Vector4::ZERO, Vector4::ZERO );
+        mCurrentRenderViewport.setDimensions( 0, Vector4::ZERO, Vector4::ZERO, 0u );
 
         //Where graphics ends, compute may start, or a new frame.
         //Very likely we'll have to flush the UAVs again, so assume we need.

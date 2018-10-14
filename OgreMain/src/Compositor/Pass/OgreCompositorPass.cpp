@@ -70,6 +70,7 @@ namespace Ogre
             mDefinition( definition ),
             mRenderPassDesc( 0 ),
             mAnyTargetTexture( 0 ),
+            mAnyMipLevel( 0u ),
             mNumPassesLeft( definition->mNumInitialPasses ),
             mParentNode( parentNode ),
             mNumValidResourceTransitions( 0 )
@@ -97,11 +98,20 @@ namespace Ogre
             setupRenderPassDesc( rtv );
 
             for( int i=0; i<mRenderPassDesc->getNumColourEntries() && !mAnyTargetTexture; ++i )
+            {
                 mAnyTargetTexture = mRenderPassDesc->mColour[i].texture;
+                mAnyMipLevel = mRenderPassDesc->mColour[i].mipLevel;
+            }
             if( !mAnyTargetTexture )
+            {
                 mAnyTargetTexture = mRenderPassDesc->mDepth.texture;
+                mAnyMipLevel = mRenderPassDesc->mDepth.mipLevel;
+            }
             if( !mAnyTargetTexture )
+            {
                 mAnyTargetTexture = mRenderPassDesc->mStencil.texture;
+                mAnyMipLevel = mRenderPassDesc->mStencil.mipLevel;
+            }
         }
 
         populateTextureDependenciesFromExposedTextures();
@@ -129,8 +139,8 @@ namespace Ogre
         Vector4 scissors( scLeft, scTop, scWidth, scHeight );
 
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
-        renderSystem->beginRenderPassDescriptor( mRenderPassDesc, mAnyTargetTexture, vpSize,
-                                                 scissors, mDefinition->mIncludeOverlays,
+        renderSystem->beginRenderPassDescriptor( mRenderPassDesc, mAnyTargetTexture, mAnyMipLevel,
+                                                 vpSize, scissors, mDefinition->mIncludeOverlays,
                                                  mDefinition->mWarnIfRtvWasFlushed );
     }
     //-----------------------------------------------------------------------------------
@@ -801,7 +811,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     Vector2 CompositorPass::getActualDimensions(void) const
     {
-        return Vector2( floorf( mAnyTargetTexture->getWidth() * mDefinition->mVpWidth ),
-                        floorf( mAnyTargetTexture->getHeight() * mDefinition->mVpHeight ) );
+        return Vector2( floorf( (mAnyTargetTexture->getWidth() >> mAnyMipLevel) *
+                                mDefinition->mVpWidth ),
+                        floorf( (mAnyTargetTexture->getHeight() >> mAnyMipLevel) *
+                                mDefinition->mVpHeight ) );
     }
 }

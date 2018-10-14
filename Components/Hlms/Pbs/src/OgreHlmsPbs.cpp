@@ -162,6 +162,7 @@ namespace Ogre
     const IdString PbsProperty::ParallaxCorrectCubemaps = IdString( "parallax_correct_cubemaps" );
     const IdString PbsProperty::UseParallaxCorrectCubemaps= IdString( "use_parallax_correct_cubemaps" );
     const IdString PbsProperty::EnableCubemapsAuto      = IdString( "hlms_enable_cubemaps_auto" );
+    const IdString PbsProperty::CubemapsUseDpm    = IdString( "hlms_cubemaps_use_dpm" );
     const IdString PbsProperty::IrradianceVolumes = IdString( "irradiance_volumes" );
 
     const IdString PbsProperty::BrdfDefault       = IdString( "BRDF_Default" );
@@ -1052,7 +1053,11 @@ namespace Ogre
             {
                 setProperty( PbsProperty::ParallaxCorrectCubemaps, 1 );
                 if( mParallaxCorrectedCubemap->getAutomaticMode() )
+                {
                     setProperty( PbsProperty::EnableCubemapsAuto, 1 );
+                    if( mParallaxCorrectedCubemap->getUseDpm2DArray() )
+                        setProperty( PbsProperty::CubemapsUseDpm, 1 );
+                }
             }
 
             if( mIrradianceVolume )

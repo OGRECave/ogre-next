@@ -45,7 +45,8 @@ namespace Demo
         mParallaxCorrectedCubemapOrig( 0 ),
         mUseMultipleProbes( true ),
         mRegenerateProbes( true ),
-        mPerPixelReflections( false ),
+        mPerPixelReflections( true ),
+        mUseDpm2DArray( false ),
         mRoughnessDirty( false )
     {
         memset( mMaterials, 0, sizeof(mMaterials) );
@@ -98,6 +99,8 @@ namespace Demo
                         mGraphicsSystem->getRoot(),
                         mGraphicsSystem->getSceneManager(),
                         workspaceDef );
+            mParallaxCorrectedCubemapAuto->setUseDpm2DArray( mUseDpm2DArray );
+            mUseDpm2DArray = mParallaxCorrectedCubemapAuto->getUseDpm2DArray();//Setting may be overriden
             mParallaxCorrectedCubemapAuto->setEnabled( true, 1024, 1024, 3, Ogre::PFG_RGBA8_UNORM_SRGB );
             mParallaxCorrectedCubemap = mParallaxCorrectedCubemapAuto;
         }
@@ -313,7 +316,6 @@ namespace Demo
         mParallaxCorrectedCubemap = 0;
         mParallaxCorrectedCubemapAuto = 0;
         mParallaxCorrectedCubemapOrig = 0;
-
     }
     //-----------------------------------------------------------------------------------
     void LocalCubemapsGameState::update( float timeSinceLast )
@@ -353,6 +355,11 @@ namespace Demo
         outText += mUseMultipleProbes ? "3" : "1";
         outText += "\nPress F7 to toggle per pixel reflections. ";
         outText += mPerPixelReflections ? "[Per Pixel]" : "[Unified]";
+        if( mPerPixelReflections )
+        {
+            outText += "\nPress F8 to switch between Cubemap Arrays & DPM ";
+            outText += mUseDpm2DArray ? "[Dual Paraboloid Mapping 2D]" : "[Cubemap Arrays]";
+        }
         if( mParallaxCorrectedCubemapOrig )
         {
             outText += "\nProbes blending: ";
@@ -413,6 +420,15 @@ namespace Demo
         else if( arg.keysym.sym == SDLK_F7 )
         {
             mPerPixelReflections = !mPerPixelReflections;
+            setupParallaxCorrectCubemaps();
+            if( mParallaxCorrectedCubemapAuto )
+                mParallaxCorrectedCubemapAuto->updateAllDirtyProbes();
+            if( mParallaxCorrectedCubemapOrig )
+                mParallaxCorrectedCubemapOrig->updateAllDirtyProbes();
+        }
+        else if( arg.keysym.sym == SDLK_F8 && mPerPixelReflections )
+        {
+            mUseDpm2DArray = !mUseDpm2DArray;
             setupParallaxCorrectCubemaps();
             if( mParallaxCorrectedCubemapAuto )
                 mParallaxCorrectedCubemapAuto->updateAllDirtyProbes();
