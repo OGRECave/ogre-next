@@ -148,19 +148,20 @@ fragment @insertpiece( output_type ) main_metal
 		, texture2d_array<float> textureMaps@n [[texture(@counter(textureRegStart))]]@end
 	@property( use_envprobe_map )
 		@property( !hlms_enable_cubemaps_auto )
-			, texturecube<float>	texEnvProbeMap [[texture(@value(envMapReg))]]@end
+			, texturecube<float>	texEnvProbeMap [[texture(@value(envMapReg))]]
 		@end
 		@property( hlms_enable_cubemaps_auto )
 			@property( !hlms_cubemaps_use_dpm )
-				, texturecube_array<float>	texEnvProbeMap [[texture(@value(envMapReg))]]@end
+				, texturecube_array<float>	texEnvProbeMap [[texture(@value(envMapReg))]]
 			@end
 			@property( hlms_cubemaps_use_dpm )
-				, texture2d_array<float>	texEnvProbeMap [[texture(@value(envMapReg))]]@end
+				, texture2d_array<float>	texEnvProbeMap [[texture(@value(envMapReg))]]
 			@end
 		@end
 		@property( envMapRegSampler < samplerStateStart )
 			, sampler samplerState@value(envMapRegSampler) [[sampler(@value(envMapRegSampler))]]
 		@end
+	@end
 	@foreach( num_samplers, n )
 		, sampler samplerState@value(samplerStateStart) [[sampler(@counter(samplerStateStart))]]@end
 	@insertpiece( DeclDecalsSamplers )
