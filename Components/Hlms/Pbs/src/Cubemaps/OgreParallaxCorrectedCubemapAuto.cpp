@@ -365,7 +365,7 @@ namespace Ogre
         const RenderSystemCapabilities *caps =
                 mSceneManager->getDestinationRenderSystem()->getCapabilities();
         if( !caps->hasCapability( RSC_TEXTURE_CUBE_MAP_ARRAY ) )
-            mUseDpm2DArray = false;
+            mUseDpm2DArray = true;
     }
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemapAuto::updateSceneGraph(void)

@@ -147,7 +147,7 @@ namespace Ogre
             case TextureTypes::Type2D:          return MTLTextureType2D;
             case TextureTypes::Type2DArray:     return MTLTextureType2DArray;
             case TextureTypes::TypeCube:        return MTLTextureTypeCube;
-#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS || __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_11_0
             case TextureTypes::TypeCubeArray:   return MTLTextureTypeCubeArray;
 #endif
             case TextureTypes::Type3D:          return MTLTextureType3D;
