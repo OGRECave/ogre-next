@@ -781,6 +781,7 @@ namespace Ogre
         static const IdString DecalsDiffuse;
         static const IdString DecalsNormals;
         static const IdString DecalsEmissive;
+        static const IdString FwdPlusCubemapSlotOffset;
 
         static const IdString Forward3D;
         static const IdString ForwardClustered;

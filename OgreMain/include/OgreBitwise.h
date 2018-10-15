@@ -37,6 +37,17 @@ THE SOFTWARE.
     #define __has_builtin(x) 0
 #endif
 
+#if OGRE_COMPILER == OGRE_COMPILER_MSVC
+    #include <intrin.h>
+    #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
+        #pragma intrinsic(_BitScanForward)
+        #pragma intrinsic(_BitScanReverse)
+    #else
+        #pragma intrinsic(_BitScanForward64)
+        #pragma intrinsic(_BitScanReverse64)
+    #endif
+#endif
+
 namespace Ogre {
     /** \addtogroup Core
     *  @{
@@ -438,6 +449,52 @@ namespace Ogre {
             return Ogre::max( v / 127.0f, -1.0f );
         }
 
+        static inline uint32 ctz64( uint64 value )
+        {
+            if( value == 0 )
+                return 64u;
+
+        #if OGRE_COMPILER == OGRE_COMPILER_MSVC
+            unsigned long trailingZero = 0;
+            #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
+                //Scan the low 32 bits.
+                if( _BitScanForward( &trailingZero, static_cast<uint32>(value) ) )
+                    return trailingZero;
+
+                //Scan the high 32 bits.
+                _BitScanForward( &trailingZero, static_cast<uint32>(value >> 32u) );
+                trailingZero += 32u;
+            #else
+                _BitScanForward64( &trailingZero, value );
+            #endif
+            return trailingZero;
+        #else
+            return __builtin_ctzl( value );
+        #endif
+        }
+
+        static inline uint32 clz64( uint64 value )
+        {
+            if( value == 0 )
+                return 64u;
+
+        #if OGRE_COMPILER == OGRE_COMPILER_MSVC
+            unsigned long lastBitSet = 0;
+            #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
+                //Scan the high 32 bits.
+                if( _BitScanReverse( &lastBitSet, static_cast<uint32>(value >> 32u) ) )
+                    return 63u - (lastBitSet + 32u);
+
+                //Scan the low 32 bits.
+                _BitScanReverse( &lastBitSet, static_cast<uint32>(value) );
+            #else
+                _BitScanReverse64( &lastBitSet, value );
+            #endif
+            return 63u - lastBitSet;
+        #else
+            return __builtin_clzl( value );
+        #endif
+        }
     };
     /** @} */
     /** @} */

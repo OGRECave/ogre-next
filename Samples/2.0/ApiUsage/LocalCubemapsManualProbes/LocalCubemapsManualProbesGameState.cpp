@@ -30,6 +30,7 @@
 #include "OgreLwString.h"
 
 #include "Cubemaps/OgreParallaxCorrectedCubemap.h"
+#include "Cubemaps/OgreParallaxCorrectedCubemapAuto.h"
 
 #include "LocalCubemapsManualProbesScene.h"
 
@@ -46,7 +47,11 @@ namespace Demo
     LocalCubemapsManualProbesGameState::LocalCubemapsManualProbesGameState(
             const Ogre::String &helpDescription ) :
         TutorialGameState( helpDescription ),
-        mParallaxCorrectedCubemap( 0 )
+        mParallaxCorrectedCubemap( 0 ),
+        mParallaxCorrectedCubemapAuto( 0 ),
+        mParallaxCorrectedCubemapOrig( 0 ),
+        mPerPixelReflections( false ),
+        mWasManualProbe( true )
     {
         memset( mMaterials, 0, sizeof(mMaterials) );
     }
@@ -63,6 +68,8 @@ namespace Demo
 
             delete mParallaxCorrectedCubemap;
             mParallaxCorrectedCubemap = 0;
+            mParallaxCorrectedCubemapAuto = 0;
+            mParallaxCorrectedCubemapOrig = 0;
         }
 
         Ogre::Root *root = mGraphicsSystem->getRoot();
@@ -70,13 +77,35 @@ namespace Demo
         Ogre::CompositorWorkspaceDef *workspaceDef = compositorManager->getWorkspaceDefinition(
                     "LocalCubemapsProbeWorkspace" );
 
-        mParallaxCorrectedCubemap = new Ogre::ParallaxCorrectedCubemap(
-                    Ogre::Id::generateNewId<Ogre::ParallaxCorrectedCubemap>(),
-                    mGraphicsSystem->getRoot(),
-                    mGraphicsSystem->getSceneManager(),
-                    workspaceDef, 250, 1u << 25u );
+        Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
+        if( !mPerPixelReflections )
+        {
+            //Disable Forward Clustered since it's not required anymore
+            sceneManager->setForwardClustered( false, 0, 0, 0, 0, 0, 0, 0, 0 );
 
-        mParallaxCorrectedCubemap->setEnabled( true, 1024, 1024, Ogre::PFG_RGBA8_UNORM_SRGB );
+            mParallaxCorrectedCubemapOrig =
+                    new Ogre::ParallaxCorrectedCubemap(
+                        Ogre::Id::generateNewId<Ogre::ParallaxCorrectedCubemap>(),
+                        mGraphicsSystem->getRoot(),
+                        mGraphicsSystem->getSceneManager(),
+                        workspaceDef, 250, 1u << 25u );
+            mParallaxCorrectedCubemapOrig->setEnabled( true, 1024, 1024, Ogre::PFG_RGBA8_UNORM_SRGB );
+            mParallaxCorrectedCubemap = mParallaxCorrectedCubemapOrig;
+        }
+        else
+        {
+            //Per pixel reflections REQUIRE Forward Clustered
+            sceneManager->setForwardClustered( true, 16, 8, 24, 4, 0, 2, 2, 50 );
+
+            mParallaxCorrectedCubemapAuto =
+                    new Ogre::ParallaxCorrectedCubemapAuto(
+                        Ogre::Id::generateNewId<Ogre::ParallaxCorrectedCubemapAuto>(),
+                        mGraphicsSystem->getRoot(),
+                        mGraphicsSystem->getSceneManager(),
+                        workspaceDef );
+            mParallaxCorrectedCubemapAuto->setEnabled( true, 1024, 1024, 4, Ogre::PFG_RGBA8_UNORM_SRGB );
+            mParallaxCorrectedCubemap = mParallaxCorrectedCubemapAuto;
+        }
 
         Ogre::CubemapProbe *probe = 0;
         Ogre::Vector3 probeCenter;
@@ -151,6 +180,8 @@ namespace Demo
         //Setup a scene similar to that of PBS sample, except
         //we apply the cubemap to everything via C++ code
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
+
+        sceneManager->setForwardClustered( true, 16, 8, 24, 96, 0, 3, 2, 50 );
 
         const float armsLength = 2.5f;
 
@@ -263,11 +294,17 @@ namespace Demo
         Ogre::Camera *camera = mGraphicsSystem->getCamera();
         camera->setPosition( Ogre::Vector3( 3.767576, 1.799997, 20.84387 ) );
         camera->lookAt( camera->getPosition() + Ogre::Vector3( -1, 0, 0 ) );
-        mParallaxCorrectedCubemap->setUpdatedTrackedDataFromCamera( camera );
+        if( mParallaxCorrectedCubemapAuto )
+            mParallaxCorrectedCubemapAuto->setUpdatedTrackedDataFromCamera( camera );
+        if( mParallaxCorrectedCubemapOrig )
+            mParallaxCorrectedCubemapOrig->setUpdatedTrackedDataFromCamera( camera );
 
         TutorialGameState::createScene01();
 
-        mParallaxCorrectedCubemap->updateAllDirtyProbes();
+        if( mParallaxCorrectedCubemapAuto )
+            mParallaxCorrectedCubemapAuto->updateAllDirtyProbes();
+        if( mParallaxCorrectedCubemapOrig )
+            mParallaxCorrectedCubemapOrig->updateAllDirtyProbes();
 
         //Updates the probe after assigning the manual ones, as results will be different.
         //Whether they look better or worse depends on how good you've subdivided the
@@ -289,6 +326,8 @@ namespace Demo
 
         delete mParallaxCorrectedCubemap;
         mParallaxCorrectedCubemap = 0;
+        mParallaxCorrectedCubemapAuto = 0;
+        mParallaxCorrectedCubemapOrig = 0;
     }
     //-----------------------------------------------------------------------------------
     void LocalCubemapsManualProbesGameState::update( float timeSinceLast )
@@ -301,7 +340,10 @@ namespace Demo
 
         //Have the parallax corrected cubemap system keep track of the camera.
         Ogre::Camera *camera = mGraphicsSystem->getCamera();
-        mParallaxCorrectedCubemap->setUpdatedTrackedDataFromCamera( camera );
+        if( mParallaxCorrectedCubemapAuto )
+            mParallaxCorrectedCubemapAuto->setUpdatedTrackedDataFromCamera( camera );
+        if( mParallaxCorrectedCubemapOrig )
+            mParallaxCorrectedCubemapOrig->setUpdatedTrackedDataFromCamera( camera );
 
         //camera->setPosition( Ogre::Vector3( -0.505, 3.400016, 5.423867 ) );
         //camera->setPosition( -1.03587, 2.50012, 3.62891 );
@@ -319,10 +361,19 @@ namespace Demo
         TutorialGameState::generateDebugText( timeSinceLast, outText );
         outText += "\nPress F2/F3 to adjust material roughness: ";
         outText += roughnessStr.c_str();
-        outText += "\nPress F4 to toggle mode. ";
-        outText += mMaterials[0]->getCubemapProbe() == 0 ? "[Auto]" : "[Manual]";
-        outText += "\nProbes blending: ";
-        outText += Ogre::StringConverter::toString( mParallaxCorrectedCubemap->getNumCollectedProbes() );
+        if( !mPerPixelReflections )
+        {
+            outText += "\nPress F4 to toggle mode. ";
+            outText += mMaterials[0]->getCubemapProbe() == 0 ? "[Auto]" : "[Manual]";
+        }
+        outText += "\nPress F5 to toggle per pixel reflections. ";
+        outText += mPerPixelReflections ? "[Per Pixel]" : "[Unified]";
+        if( mParallaxCorrectedCubemapOrig )
+        {
+            outText += "\nProbes blending: ";
+            outText += Ogre::StringConverter::toString(
+                           mParallaxCorrectedCubemapOrig->getNumCollectedProbes() );
+        }
 
         Ogre::Camera *camera = mGraphicsSystem->getCamera();
         outText += "\nCamera: ";
@@ -353,12 +404,46 @@ namespace Demo
         }
         else if( arg.keysym.sym == SDLK_F4 )
         {
-            const Ogre::CubemapProbeVec &probes = mParallaxCorrectedCubemap->getProbes();
-            for( int i=0; i<4*4; ++i )
+            if( !mPerPixelReflections )
             {
-                if( mMaterials[i]->getCubemapProbe() )
-                    mMaterials[i]->setCubemapProbe( 0 );
-                else
+                const Ogre::CubemapProbeVec &probes = mParallaxCorrectedCubemap->getProbes();
+                for( int i=0; i<4*4; ++i )
+                {
+                    if( mMaterials[i]->getCubemapProbe() )
+                        mMaterials[i]->setCubemapProbe( 0 );
+                    else
+                        mMaterials[i]->setCubemapProbe( probes[i%4] );
+                }
+            }
+        }
+        else if( arg.keysym.sym == SDLK_F5 )
+        {
+            mPerPixelReflections = !mPerPixelReflections;
+
+            if( mPerPixelReflections )
+            {
+                //Save current setting in case we're toggled back again
+                mWasManualProbe = mMaterials[0]->getCubemapProbe() != 0;
+
+                //Ensure manual probes are not in use!!!
+                for( int i=0; i<4*4; ++i )
+                {
+                    if( mMaterials[i]->getCubemapProbe() )
+                        mMaterials[i]->setCubemapProbe( 0 );
+                }
+            }
+
+            setupParallaxCorrectCubemaps();
+            if( mParallaxCorrectedCubemapAuto )
+                mParallaxCorrectedCubemapAuto->updateAllDirtyProbes();
+            if( mParallaxCorrectedCubemapOrig )
+                mParallaxCorrectedCubemapOrig->updateAllDirtyProbes();
+
+            if( !mPerPixelReflections && mWasManualProbe )
+            {
+                //Restore manual probes
+                const Ogre::CubemapProbeVec &probes = mParallaxCorrectedCubemap->getProbes();
+                for( int i=0; i<4*4; ++i )
                     mMaterials[i]->setCubemapProbe( probes[i%4] );
             }
         }

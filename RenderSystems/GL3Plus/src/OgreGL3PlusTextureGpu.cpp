@@ -120,7 +120,7 @@ namespace Ogre
                 break;
             case TextureTypes::TypeCubeArray:
                 OCGE( glTexStorage3D( GL_TEXTURE_CUBE_MAP_ARRAY, GLsizei(mNumMipmaps), format,
-                                      GLsizei(mWidth), GLsizei(mHeight), GLsizei(mDepthOrSlices) ) );
+                                      GLsizei(mWidth), GLsizei(mHeight), GLsizei(mDepthOrSlices * 6u) ) );
                 break;
             case TextureTypes::Type3D:
                 OCGE( glTexStorage3D( GL_TEXTURE_3D, GLsizei(mNumMipmaps), format,
@@ -608,10 +608,10 @@ namespace Ogre
             {
                 OCGE( glCopyImageSubData( this->mFinalTextureName, this->mGlTextureTarget,
                                           srcMipLevel, srcBox.x, srcBox.y,
-                                          srcBox.z + this->getInternalSliceStart(),
+                                          srcBox.getZOrSlice() + this->getInternalSliceStart(),
                                           dstGl->mFinalTextureName, dstGl->mGlTextureTarget,
                                           dstMipLevel, dstBox.x, dstBox.y,
-                                          dstBox.z + dstGl->getInternalSliceStart(),
+                                          dstBox.getZOrSlice() + dstGl->getInternalSliceStart(),
                                           srcBox.width, srcBox.height, srcBox.getDepthOrSlices() ) );
             }
             /*TODO

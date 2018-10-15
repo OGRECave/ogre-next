@@ -100,10 +100,18 @@ struct CubemapProbe
 	float3 vDiff = ( probe.halfSize.xyz - abs( posLS.xyz ) ) / probe.halfSize.xyz;
 	return min( min( vDiff.x, vDiff.y ), vDiff.z );
 }
-@end
 
-//float3 main( float3 reflDir : TEXCOORD0, float3 pos : TEXCOORD1 ) : SV_Target0
-//{
-//	return localCorrect( reflDir, pos, probe );
-//}
-@end
+INLINE float getProbeNDF( float3 posLS, float3 probeToAreaCenterOffsetLS,
+						  float3 innerRange, float3 outerRange )
+{
+	float3 areaPosLS = posLS.xyz - probeToAreaCenterOffsetLS.xyz;
+	//float3 areaPosLS = posLS.xyz - float3( 0, 0, -5 );
+	float3 dist = abs( areaPosLS.xyz );
+	//1e-6f avoids division by zero.
+	float3 ndf = (dist - innerRange) / (outerRange - innerRange + 1e-6f);
+
+	return max3( ndf.x, ndf.y, ndf.z );
+}
+
+@end /// DeclParallaxLocalCorrect
+@end /// parallax_correct_cubemaps

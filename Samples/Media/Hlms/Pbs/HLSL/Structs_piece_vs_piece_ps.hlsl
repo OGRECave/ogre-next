@@ -133,7 +133,7 @@ cbuffer PassBuffer : register(b0)
 
 	@insertpiece( DeclPlanarReflUniforms )
 
-@property( parallax_correct_cubemaps )
+@property( parallax_correct_cubemaps && !hlms_enable_cubemaps_auto )
 	CubemapProbe autoProbe;
 @end
 
@@ -197,7 +197,7 @@ cbuffer InstanceBuffer : register(b2)
 };
 @end
 
-@property( envprobe_map && envprobe_map != target_envprobe_map && use_parallax_correct_cubemaps )
+@property( envprobe_map && envprobe_map != target_envprobe_map && use_parallax_correct_cubemaps && !hlms_enable_cubemaps_auto )
 @piece( PccManualProbeDecl )
 cbuffer ManualProbe : register(b3)
 {

@@ -67,9 +67,13 @@ namespace Ogre
         static const size_t MinDecalRq;     // Inclusive
         static const size_t MaxDecalRq;     // Inclusive
 
+        static const size_t MinCubemapProbeRq;  // Inclusive
+        static const size_t MaxCubemapProbeRq;  // Inclusive
+
     protected:
         static const size_t NumBytesPerLight;
         static const size_t NumBytesPerDecal;
+        static const size_t NumBytesPerCubemapProbe;
 
         struct CachedGrid
         {
@@ -90,11 +94,18 @@ namespace Ogre
             CachedGridBufferVec     gridBuffers;
         };
 
+        enum ObjTypes
+        {
+            ObjType_Decal = 0,
+            ObjType_CubemapProbe,
+            NumObjTypes
+        };
+
         struct LightCount
         {
             //We use LT_DIRECTIONAL (index = 0) to contain the total light count.
             uint32  lightCount[Light::MAX_FORWARD_PLUS_LIGHTS];
-            uint32  decalCount;
+            uint32  objCount[NumObjTypes];
             LightCount() { memset( lightCount, 0, sizeof(lightCount) ); }
         };
 
@@ -112,11 +123,12 @@ namespace Ogre
         /// VPLs = Virtual Point Lights. Used by InstantRadiosity.
         bool    mEnableVpls;
         bool    mDecalsEnabled;
+        bool    mCubemapProbesEnabled;
 #if !OGRE_NO_FINE_LIGHT_MASK_GRANULARITY
         bool    mFineLightMaskGranularity;
 #endif
 
-        static size_t calculateBytesNeeded( size_t numLights, size_t numDecals );
+        static size_t calculateBytesNeeded( size_t numLights, size_t numDecals, size_t numCubemapProbes );
 
         void fillGlobalLightListBuffer( Camera *camera, TexBufferPacked *globalLightListBuffer );
 
@@ -140,7 +152,7 @@ namespace Ogre
         void deleteOldGridBuffers(void);
 
     public:
-        ForwardPlusBase( SceneManager *sceneManager, bool decalsEnabled );
+        ForwardPlusBase( SceneManager *sceneManager, bool decalsEnabled, bool cubemapProbesEnabled );
         virtual ~ForwardPlusBase();
 
         virtual ForwardPlusMethods getForwardPlusMethod(void) const = 0;

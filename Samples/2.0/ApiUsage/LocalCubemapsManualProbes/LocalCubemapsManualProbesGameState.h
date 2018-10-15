@@ -10,6 +10,8 @@
 namespace Ogre
 {
     class ParallaxCorrectedCubemap;
+    class ParallaxCorrectedCubemapAuto;
+    class ParallaxCorrectedCubemapBase;
     class HlmsPbsDatablock;
 }
 
@@ -19,8 +21,13 @@ namespace Demo
     {
         Ogre::SceneNode     *mLightNodes[3];
 
-        Ogre::ParallaxCorrectedCubemap  *mParallaxCorrectedCubemap;
+        Ogre::ParallaxCorrectedCubemapBase  *mParallaxCorrectedCubemap;
+        Ogre::ParallaxCorrectedCubemapAuto  *mParallaxCorrectedCubemapAuto;
+        Ogre::ParallaxCorrectedCubemap      *mParallaxCorrectedCubemapOrig;
         Ogre::HlmsPbsDatablock          *mMaterials[4*4];
+        bool                            mPerPixelReflections;
+        /// True if we were using manual probes before mPerPixelReflections became true
+        bool                            mWasManualProbe;
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 

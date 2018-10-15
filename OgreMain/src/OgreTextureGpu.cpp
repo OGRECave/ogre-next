@@ -577,7 +577,7 @@ namespace Ogre
         renderPassDescriptor->entriesModified( RenderPassDescriptor::All );
 
         Vector4 fullVp( 0, 0, 1, 1 );
-        renderSystem->beginRenderPassDescriptor( renderPassDescriptor, this,
+        renderSystem->beginRenderPassDescriptor( renderPassDescriptor, this, 0,
                                                  fullVp, fullVp, false, false );
         renderSystem->executeRenderPassDescriptorDelayedActions();
         renderSystem->endRenderPassDescriptor();

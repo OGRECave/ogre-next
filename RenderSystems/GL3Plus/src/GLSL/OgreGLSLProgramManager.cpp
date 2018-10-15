@@ -254,6 +254,12 @@ namespace Ogre {
         case GL_UNSIGNED_INT_SAMPLER_CUBE:
             defToUpdate.constType = GCT_SAMPLERCUBE;
             break;
+        case GL_SAMPLER_CUBE_MAP_ARRAY:
+        case GL_SAMPLER_CUBE_MAP_ARRAY_SHADOW:
+        case GL_INT_SAMPLER_CUBE_MAP_ARRAY:
+        case GL_UNSIGNED_INT_SAMPLER_CUBE_MAP_ARRAY:
+            defToUpdate.constType = GCT_SAMPLERCUBE_ARRAY;
+            break;
         case GL_SAMPLER_1D_SHADOW:
         case GL_SAMPLER_1D_ARRAY_SHADOW:
             defToUpdate.constType = GCT_SAMPLER1DSHADOW;

@@ -49,7 +49,7 @@ namespace Ogre
                           uint32 numSlices, uint32 lightsPerCell,
                           float minDistance, float maxDistance,
                           SceneManager *sceneManager ) :
-        ForwardPlusBase( sceneManager, false ),
+        ForwardPlusBase( sceneManager, false, false ),
         mWidth( width ),
         mHeight( height ),
         mNumSlices( numSlices ),
@@ -193,7 +193,8 @@ namespace Ogre
                                                                    BT_DYNAMIC_PERSISTENT, 0, false );
         }
 
-        const size_t bufferBytesNeeded = calculateBytesNeeded( std::max<size_t>( numLights, 96u ), 0u );
+        const size_t bufferBytesNeeded = calculateBytesNeeded( std::max<size_t>( numLights, 96u ),
+                                                               0u, 0u );
 
         if( !gridBuffers.globalLightListBuffer ||
             gridBuffers.globalLightListBuffer->getNumElements() < bufferBytesNeeded )

@@ -83,6 +83,10 @@ inline float3 getTSNormal( sampler samplerState, texture2d_array<float> normalMa
 
 @insertpiece( DeclAreaLtcLightFuncs )
 
+@property( hlms_enable_cubemaps_auto && hlms_cubemaps_use_dpm )
+	@insertpiece( DeclDualParaboloidFunc )
+@end
+
 constexpr sampler shadowSampler = sampler( coord::normalized,
 										   address::clamp_to_edge,
 										   filter::linear,
@@ -143,10 +147,21 @@ fragment @insertpiece( output_type ) main_metal
 	@foreach( num_textures, n )
 		, texture2d_array<float> textureMaps@n [[texture(@counter(textureRegStart))]]@end
 	@property( use_envprobe_map )
-		, texturecube<float>	texEnvProbeMap [[texture(@value(envMapReg))]]@end
+		@property( !hlms_enable_cubemaps_auto )
+			, texturecube<float>	texEnvProbeMap [[texture(@value(envMapReg))]]
+		@end
+		@property( hlms_enable_cubemaps_auto )
+			@property( !hlms_cubemaps_use_dpm )
+				, texturecube_array<float>	texEnvProbeMap [[texture(@value(envMapReg))]]
+			@end
+			@property( hlms_cubemaps_use_dpm )
+				, texture2d_array<float>	texEnvProbeMap [[texture(@value(envMapReg))]]
+			@end
+		@end
 		@property( envMapRegSampler < samplerStateStart )
 			, sampler samplerState@value(envMapRegSampler) [[sampler(@value(envMapRegSampler))]]
 		@end
+	@end
 	@foreach( num_samplers, n )
 		, sampler samplerState@value(samplerStateStart) [[sampler(@counter(samplerStateStart))]]@end
 	@insertpiece( DeclDecalsSamplers )
@@ -403,6 +418,7 @@ float4 diffuseCol;
 	@insertpiece( DoAreaLtcLights )
 
 @insertpiece( forward3dLighting )
+@insertpiece( forwardPlusDoCubemaps )
 @insertpiece( applyIrradianceVolumes )
 
 @property( emissive_map || emissive_constant )
@@ -411,10 +427,12 @@ float4 diffuseCol;
 @end
 
 @property( use_envprobe_map || hlms_use_ssr || use_planar_reflections || ambient_hemisphere )
-	float3 reflDir = 2.0 * dot( viewDir, nNormal ) * nNormal - viewDir;
+	@property( !hlms_enable_cubemaps_auto )
+		float3 reflDir = 2.0 * dot( viewDir, nNormal ) * nNormal - viewDir;
+	@end
 
 	@property( use_envprobe_map )
-		@property( use_parallax_correct_cubemaps )
+		@property( use_parallax_correct_cubemaps && !hlms_enable_cubemaps_auto )
 			float3 envColourS;
 			float3 envColourD;
 			float3 posInProbSpace = toProbeLocalSpace( inPs.pos, @insertpiece( pccProbeSource ) );

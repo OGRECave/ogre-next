@@ -167,7 +167,7 @@ namespace Ogre
         virtual void bindGpuProgramPassIterationParameters(GpuProgramType gptype);
 
         virtual void clearFrameBuffer( RenderPassDescriptor *renderPassDesc,
-                                       TextureGpu *anyTarget );
+                                       TextureGpu *anyTarget, uint8 mipLevel );
         virtual void discardFrameBuffer( unsigned int buffers );
 
         virtual Real getHorizontalTexelOffset(void);

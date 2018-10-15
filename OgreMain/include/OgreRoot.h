@@ -137,6 +137,7 @@ namespace Ogre
         uint32 mNextMovableObjectTypeFlag;
         // stock movable factories
         MovableObjectFactory* mDecalFactory;
+        MovableObjectFactory* mCubemapProbeFactory;
         MovableObjectFactory* mEntityFactory;
         MovableObjectFactory* mItemFactory;
         MovableObjectFactory* mLightFactory;

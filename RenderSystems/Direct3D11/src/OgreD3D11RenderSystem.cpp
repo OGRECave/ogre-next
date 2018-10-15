@@ -1242,13 +1242,13 @@ namespace Ogre
         rsc->setCapability(RSC_TEXTURE_2D_ARRAY);
 
         if( mFeatureLevel >= D3D_FEATURE_LEVEL_11_0 )
-        {
-            rsc->setCapability(RSC_TEXTURE_CUBE_MAP_ARRAY);
             rsc->setCapability(RSC_MSAA_2D_ARRAY);
-        }
 
         if( mFeatureLevel >= D3D_FEATURE_LEVEL_10_1 )
+        {
+            rsc->setCapability(RSC_TEXTURE_CUBE_MAP_ARRAY);
             rsc->setCapability(RSC_TEXTURE_GATHER);
+        }
 
         if( mFeatureLevel >= D3D_FEATURE_LEVEL_11_0 )
         {
@@ -1618,7 +1618,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void D3D11RenderSystem::beginRenderPassDescriptor( RenderPassDescriptor *desc,
-                                                       TextureGpu *anyTarget,
+                                                       TextureGpu *anyTarget, uint8 mipLevel,
                                                        const Vector4 &viewportSize,
                                                        const Vector4 &scissors,
                                                        bool overlaysEnabled,
@@ -1635,7 +1635,7 @@ namespace Ogre
         D3D11RenderPassDescriptor *currPassDesc =
                 static_cast<D3D11RenderPassDescriptor*>( mCurrentRenderPassDescriptor );
 
-        RenderSystem::beginRenderPassDescriptor( desc, anyTarget, viewportSize, scissors,
+        RenderSystem::beginRenderPassDescriptor( desc, anyTarget, mipLevel, viewportSize, scissors,
                                                  overlaysEnabled, warnIfRtvWasFlushed );
 
         int x, y, w, h;
@@ -4324,7 +4324,7 @@ namespace Ogre
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::clearFrameBuffer( RenderPassDescriptor *renderPassDesc,
-                                              TextureGpu *anyTarget )
+                                              TextureGpu *anyTarget, uint8 mipLevel )
     {
         D3D11RenderPassDescriptor *renderPassDescD3d =
                 static_cast<D3D11RenderPassDescriptor*>( renderPassDesc );

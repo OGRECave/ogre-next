@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "OgreCamera.h"
 #include "OgreMeshManager.h"
 #include "OgreDecal.h"
+#include "OgreInternalCubemapProbe.h"
 #include "OgreEntity.h"
 #include "OgreSubEntity.h"
 #include "OgreItem.h"
@@ -92,6 +93,7 @@ uint32 SceneManager::QUERY_FRUSTUM_DEFAULT_MASK        = 0x08000000;
 //-----------------------------------------------------------------------
 SceneManager::SceneManager( const String& name, size_t numWorkerThreads ) :
 mNumDecals( 0 ),
+mNumCubemapProbes( 0 ),
 mStaticMinDepthLevelDirty( 0 ),
 mStaticEntitiesDirty( true ),
 mPrePassMode( PrePassNone ),
@@ -539,6 +541,27 @@ void SceneManager::destroyAllDecals(void)
     destroyAllMovableObjectsByType( DecalFactory::FACTORY_TYPE_NAME );
 }
 //-----------------------------------------------------------------------
+InternalCubemapProbe* SceneManager::_createCubemapProbe( SceneMemoryMgrTypes sceneType )
+{
+    ++mNumCubemapProbes;
+    return static_cast<InternalCubemapProbe*>( createMovableObject(
+                                                   InternalCubemapProbeFactory::FACTORY_TYPE_NAME,
+                                                   &mForwardPlusMemoryManager[sceneType], 0 ) );
+
+}
+//-----------------------------------------------------------------------
+void SceneManager::_destroyCubemapProbe( InternalCubemapProbe *i )
+{
+    --mNumCubemapProbes;
+    destroyMovableObject( i );
+}
+//-----------------------------------------------------------------------
+void SceneManager::_destroyAllCubemapProbes(void)
+{
+    mNumCubemapProbes = 0;
+    destroyAllMovableObjectsByType( InternalCubemapProbeFactory::FACTORY_TYPE_NAME );
+}
+//-----------------------------------------------------------------------
 v1::Entity* SceneManager::createEntity( PrefabType ptype, SceneMemoryMgrTypes sceneType )
 {
     switch (ptype)
@@ -960,6 +983,7 @@ void SceneManager::setForward3D( bool bEnable, uint32 width, uint32 height, uint
 //-----------------------------------------------------------------------
 void SceneManager::setForwardClustered( bool bEnable, uint32 width, uint32 height, uint32 numSlices,
                                         uint32 lightsPerCell, uint32 decalsPerCell,
+                                        uint32 cubemapProbesPerCel,
                                         float minDistance, float maxDistance )
 {
     OGRE_DELETE mForwardPlusSystem;
@@ -969,7 +993,8 @@ void SceneManager::setForwardClustered( bool bEnable, uint32 width, uint32 heigh
     if( bEnable )
     {
         mForwardPlusSystem = OGRE_NEW ForwardClustered( width, height, numSlices, lightsPerCell,
-                                                        decalsPerCell, minDistance, maxDistance, this );
+                                                        decalsPerCell, cubemapProbesPerCel,
+                                                        minDistance, maxDistance, this );
 
         if( mDestRenderSystem )
             mForwardPlusSystem->_changeRenderSystem( mDestRenderSystem );
@@ -1090,7 +1115,7 @@ void SceneManager::prepareRenderQueue(void)
 bool SceneManager::_collectForwardPlusObjects( const Camera *camera )
 {
     bool retVal = false;
-    if( mNumDecals > 0 )
+    if( mNumDecals > 0 || mNumCubemapProbes > 0 )
     {
         OgreProfile( "Forward+ Decal collect" );
 

@@ -2,7 +2,6 @@
 @property( !GL430 )
 @property( hlms_tex_gather )#extension GL_ARB_texture_gather: require@end
 @end
-@property( hlms_amd_trinary_minmax )#extension GL_AMD_shader_trinary_minmax: require@end
 @insertpiece( SetCompatibilityLayer )
 @insertpiece( DeclareUvModifierMacros )
 
@@ -81,7 +80,19 @@ in block
 
 @property( !roughness_map && !hlms_decals_diffuse )#define ROUGHNESS material.kS.w@end
 @property( num_textures )uniform sampler2DArray textureMaps[@value( num_textures )];@end
-@property( use_envprobe_map )uniform samplerCube	texEnvProbeMap;@end
+
+@property( !hlms_enable_cubemaps_auto )
+	@property( use_envprobe_map )uniform samplerCube		texEnvProbeMap;@end
+@end
+@property( hlms_enable_cubemaps_auto )
+	@property( !hlms_cubemaps_use_dpm )
+		@property( use_envprobe_map )uniform samplerCubeArray	texEnvProbeMap;@end
+	@end
+	@property( hlms_cubemaps_use_dpm )
+		@property( use_envprobe_map )uniform sampler2DArray	texEnvProbeMap;@end
+		@insertpiece( DeclDualParaboloidFunc )
+	@end
+@end
 
 @property( diffuse_map )	uint diffuseIdx;@end
 @property( normal_map_tex )	uint normalIdx;@end
@@ -439,6 +450,7 @@ void main()
 	@insertpiece( DoAreaLtcLights )
 
 @insertpiece( forward3dLighting )
+@insertpiece( forwardPlusDoCubemaps )
 @insertpiece( applyIrradianceVolumes )
 
 @property( emissive_map || emissive_constant )
@@ -447,9 +459,11 @@ void main()
 @end
 
 @property( use_envprobe_map || hlms_use_ssr || use_planar_reflections || ambient_hemisphere )
-	vec3 reflDir = 2.0 * dot( viewDir, nNormal ) * nNormal - viewDir;
+	@property( !hlms_enable_cubemaps_auto )
+		vec3 reflDir = 2.0 * dot( viewDir, nNormal ) * nNormal - viewDir;
+	@end
 
-	@property( use_envprobe_map )
+	@property( use_envprobe_map && !hlms_enable_cubemaps_auto )
 		@property( use_parallax_correct_cubemaps )
 			vec3 envColourS;
 			vec3 envColourD;

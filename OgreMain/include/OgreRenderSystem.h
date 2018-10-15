@@ -767,12 +767,14 @@ namespace Ogre
         @param anyTarget
             Contains the first valid texture in mRenderPassDesc, to be used for reference
             (e.g. width, height, etc). Could be colour, depth, stencil, or nullptr.
+        @param mipLevel
+            Mip at which anyTarget is bound
         @param viewportSize
         @param warnIfRtvWasFlushed
             See CompositorPassDef::mWarnIfRtvWasFlushed
         */
         virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc,
-                                                TextureGpu *anyTarget,
+                                                TextureGpu *anyTarget, uint8 mipLevel,
                                                 const Vector4 &viewportSize,
                                                 const Vector4 &scissors,
                                                 bool overlaysEnabled,
@@ -1237,7 +1239,7 @@ namespace Ogre
             set to Store.
         */
         virtual void clearFrameBuffer( RenderPassDescriptor *renderPassDesc,
-                                       TextureGpu *anyTarget ) = 0;
+                                       TextureGpu *anyTarget, uint8 mipLevel ) = 0;
 
         /// @copydoc Viewport::discard
         virtual void discardFrameBuffer( unsigned int buffers ) = 0;

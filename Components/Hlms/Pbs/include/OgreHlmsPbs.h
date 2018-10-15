@@ -118,7 +118,7 @@ namespace Ogre
         HlmsSamplerblock const  *mShadowmapCmpSamplerblock; /// For depth textures & D3D11
         HlmsSamplerblock const  *mShadowmapEsmSamplerblock; /// For ESM.
         HlmsSamplerblock const  *mCurrentShadowmapSamplerblock;
-        ParallaxCorrectedCubemap    *mParallaxCorrectedCubemap;
+        ParallaxCorrectedCubemapBase *mParallaxCorrectedCubemap;
 
         uint32                  mCurrentPassBuffer;     /// Resets to zero every new frame.
 
@@ -280,9 +280,9 @@ namespace Ogre
         void setAmbientLightMode( AmbientLightMode mode );
         AmbientLightMode getAmbientLightMode(void) const    { return mAmbientLightMode; }
 
-        void setParallaxCorrectedCubemap( ParallaxCorrectedCubemap *pcc )
+        void setParallaxCorrectedCubemap( ParallaxCorrectedCubemapBase *pcc )
                                                             { mParallaxCorrectedCubemap = pcc; }
-        ParallaxCorrectedCubemap* getParallaxCorrectedCubemap(void) const
+        ParallaxCorrectedCubemapBase* getParallaxCorrectedCubemap(void) const
                                                             { return mParallaxCorrectedCubemap; }
 
         void setIrradianceVolume( IrradianceVolume *irradianceVolume )
@@ -406,6 +406,8 @@ namespace Ogre
         static const IdString TargetEnvprobeMap;
         static const IdString ParallaxCorrectCubemaps;
         static const IdString UseParallaxCorrectCubemaps;
+        static const IdString EnableCubemapsAuto;
+        static const IdString CubemapsUseDpm;
         static const IdString IrradianceVolumes;
 
         static const IdString BrdfDefault;

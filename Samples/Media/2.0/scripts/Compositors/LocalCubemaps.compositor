@@ -57,6 +57,7 @@ compositor_node LocalCubemapProbeRendererNode
 	{
 		pass generate_mipmaps
 		{
+			execution_mask		0x01
 		}
 	}
 }

@@ -39,6 +39,7 @@ THE SOFTWARE.
 #include "OgreId.h"
 #include "OgreLwString.h"
 #include "OgreCommon.h"
+#include "OgreBitwise.h"
 
 #include "Vao/OgreVaoManager.h"
 #include "OgreResourceGroupManager.h"
@@ -60,17 +61,6 @@ THE SOFTWARE.
     #include "OgreStringConverter.h"
 #endif
 
-#if OGRE_COMPILER == OGRE_COMPILER_MSVC
-    #include <intrin.h>
-    #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
-        #pragma intrinsic(_BitScanForward)
-        #pragma intrinsic(_BitScanReverse)
-    #else
-        #pragma intrinsic(_BitScanForward64)
-        #pragma intrinsic(_BitScanReverse64)
-    #endif
-#endif
-
 //#define OGRE_FORCE_TEXTURE_STREAMING_ON_MAIN_THREAD 1
 //#define OGRE_DEBUG_MEMORY_CONSUMPTION 1
 
@@ -78,51 +68,6 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    inline uint32 ctz64( uint64 value )
-    {
-        if( value == 0 )
-            return 64u;
-
-    #if OGRE_COMPILER == OGRE_COMPILER_MSVC
-        unsigned long trailingZero = 0;
-        #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
-            //Scan the high 32 bits.
-            if( _BitScanForward( &trailingZero, static_cast<uint32>(value >> 32u) ) )
-                return (trailingZero + 32u);
-
-            //Scan the low 32 bits.
-            _BitScanForward( &trailingZero, static_cast<uint32>(value) );
-        #else
-            _BitScanForward64( &trailingZero, value );
-        #endif
-        return trailingZero;
-    #else
-        return __builtin_ctzl( value );
-    #endif
-    }
-    inline uint32 clz64( uint64 value )
-    {
-        if( value == 0 )
-            return 64u;
-
-    #if OGRE_COMPILER == OGRE_COMPILER_MSVC
-        unsigned long lastBitSet = 0;
-        #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
-            //Scan the high 32 bits.
-            if( _BitScanReverse( &lastBitSet, static_cast<uint32>(value >> 32u) ) )
-                return 63u - (lastBitSet + 32u);
-
-            //Scan the low 32 bits.
-            _BitScanReverse( &lastBitSet, static_cast<uint32>(value) );
-        #else
-            _BitScanReverse64( &lastBitSet, value );
-        #endif
-        return 63u - lastBitSet;
-    #else
-        return __builtin_clzl( value );
-    #endif
-    }
-
     static const int c_mainThread = 0;
     static const int c_workerThread = 1;
 
@@ -2410,7 +2355,7 @@ namespace Ogre
         {
             if( mipLevelBitSet[i] != 0u )
             {
-                uint8 firstBitSet = static_cast<uint8>( ctz64( mipLevelBitSet[i] ) );
+                uint8 firstBitSet = static_cast<uint8>( Bitwise::ctz64( mipLevelBitSet[i] ) );
                 return (firstBitSet + 64u * i) / numSlices;
             }
         }
@@ -2424,7 +2369,8 @@ namespace Ogre
         {
             if( mipLevelBitSet[i] != 0u )
             {
-                uint8 lastBitSet = static_cast<uint8>( 64u - clz64( mipLevelBitSet[i] ) + 64u * i );
+                uint8 lastBitSet =
+                        static_cast<uint8>( 64u - Bitwise::clz64( mipLevelBitSet[i] ) + 64u * i );
                 return (lastBitSet + numSlices - 1u) / numSlices;
             }
         }

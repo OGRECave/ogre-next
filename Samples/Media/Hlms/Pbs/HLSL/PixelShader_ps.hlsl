@@ -53,7 +53,18 @@ Buffer<float4> f3dLightList : register(t2);@end
 @property( !roughness_map && !hlms_decals_diffuse )#define ROUGHNESS material.kS.w@end
 @property( num_textures )Texture2DArray textureMaps[@value( num_textures )] : register(t@value(textureRegStart));@end
 @property( use_envprobe_map )
-	TextureCube	texEnvProbeMap : register(t@value(envMapReg));
+	@property( !hlms_enable_cubemaps_auto )
+		TextureCube	texEnvProbeMap : register(t@value(envMapReg));
+	@end
+	@property( hlms_enable_cubemaps_auto )
+		@property( !hlms_cubemaps_use_dpm )
+			TextureCubeArray	texEnvProbeMap : register(t@value(envMapReg));
+		@end
+		@property( hlms_cubemaps_use_dpm )
+			@property( use_envprobe_map )Texture2DArray	texEnvProbeMap : register(t@value(envMapReg));@end
+			@insertpiece( DeclDualParaboloidFunc )
+		@end
+	@end
 	@property( envMapRegSampler < samplerStateStart )
 		SamplerState samplerState@value(envMapRegSampler) : register(s@value(envMapRegSampler));
 	@end
@@ -422,6 +433,7 @@ float4 diffuseCol;
 	@insertpiece( DoAreaLtcLights )
 
 @insertpiece( forward3dLighting )
+@insertpiece( forwardPlusDoCubemaps )
 @insertpiece( applyIrradianceVolumes )
 
 @property( emissive_map || emissive_constant )
@@ -430,9 +442,11 @@ float4 diffuseCol;
 @end
 
 @property( use_envprobe_map || hlms_use_ssr || use_planar_reflections || ambient_hemisphere )
-	float3 reflDir = 2.0 * dot( viewDir, nNormal ) * nNormal - viewDir;
+	@property( !hlms_enable_cubemaps_auto )
+		float3 reflDir = 2.0 * dot( viewDir, nNormal ) * nNormal - viewDir;
+	@end
 
-	@property( use_envprobe_map )
+	@property( use_envprobe_map && !hlms_enable_cubemaps_auto )
 		@property( use_parallax_correct_cubemaps )
 			float3 envColourS;
 			float3 envColourD;

@@ -224,6 +224,7 @@ namespace Ogre {
     struct HlmsTexturePack;
     class IndexBufferPacked;
     class IndirectBufferPacked;
+    class InternalCubemapProbe;
     class IntersectionSceneQuery;
     class IntersectionSceneQueryListener;
     class Image;

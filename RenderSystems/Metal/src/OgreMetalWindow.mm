@@ -329,6 +329,7 @@ namespace Ogre
         mMetalView.frame = frame;
 #else
         mMetalView.frame = [mWindow.contentView bounds];
+        checkLayerSizeChanges();
 #endif
     }
     //-------------------------------------------------------------------------
@@ -339,7 +340,9 @@ namespace Ogre
         frame.size.width    = width;
         frame.size.height   = height;
         mMetalView.frame = frame;
-
+#else
+        mMetalView.frame = [mWindow.contentView bounds];
+#endif
         checkLayerSizeChanges();
     }
     //-------------------------------------------------------------------------

@@ -11,6 +11,11 @@
 @property( GL_ARB_texture_buffer_range )
 	#define bufferFetch texelFetch
 @end
+@property( hlms_amd_trinary_minmax )#extension GL_AMD_shader_trinary_minmax: require@end
+@property( !hlms_amd_trinary_minmax )
+	#define min3( a, b, c ) min( a, min( b, c ) )
+	#define max3( a, b, c ) max( a, max( b, c ) )
+@end
 
 #define float2 vec2
 #define float3 vec3
@@ -50,6 +55,7 @@
 #define OGRE_SampleLevel( tex, sampler, uv, lod ) textureLod( tex, uv.xy, lod )
 #define OGRE_SampleArray2D( tex, sampler, uv, arrayIdx ) texture( tex, vec3( uv, arrayIdx ) )
 #define OGRE_SampleArray2DLevel( tex, sampler, uv, arrayIdx, lod ) textureLod( tex, vec3( uv, arrayIdx ), lod )
+#define OGRE_SampleArrayCubeLevel( tex, sampler, uv, arrayIdx, lod ) textureLod( tex, vec4( uv, arrayIdx ), lod )
 #define OGRE_SampleGrad( tex, sampler, uv, ddx, ddy ) textureGrad( tex, uv, ddx, ddy )
 #define OGRE_SampleArray2DGrad( tex, sampler, uv, arrayIdx, ddx, ddy ) textureGrad( tex, vec3( uv, arrayIdx ), ddx, ddy )
 #define OGRE_ddx( val ) dFdx( val )

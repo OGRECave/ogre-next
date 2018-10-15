@@ -39,22 +39,28 @@ THE SOFTWARE.
 #include "OgreHlms.h"
 
 #include "OgreDecal.h"
+#include "OgreInternalCubemapProbe.h"
 
 namespace Ogre
 {
     //Six variables * 4 (padded vec3) * 4 (bytes) * numLights
     const size_t ForwardPlusBase::MinDecalRq = 0u;
     const size_t ForwardPlusBase::MaxDecalRq = 4u;
+    const size_t ForwardPlusBase::MinCubemapProbeRq = 5u;
+    const size_t ForwardPlusBase::MaxCubemapProbeRq = 8u;
     const size_t ForwardPlusBase::NumBytesPerLight = 6 * 4 * 4;
     const size_t ForwardPlusBase::NumBytesPerDecal = 4 * 4 * 4;
+    const size_t ForwardPlusBase::NumBytesPerCubemapProbe = 7 * 4 * 4;
 
-    ForwardPlusBase::ForwardPlusBase( SceneManager *sceneManager, bool decalsEnabled ) :
+    ForwardPlusBase::ForwardPlusBase( SceneManager *sceneManager, bool decalsEnabled,
+                                      bool cubemapProbesEnabled ) :
         mVaoManager( 0 ),
         mSceneManager( sceneManager ),
         mDebugMode( false ),
         mFadeAttenuationRange( true ),
         mEnableVpls( false ),
-        mDecalsEnabled( decalsEnabled )
+        mDecalsEnabled( decalsEnabled ),
+        mCubemapProbesEnabled( cubemapProbesEnabled )
   #if !OGRE_NO_FINE_LIGHT_MASK_GRANULARITY
     ,   mFineLightMaskGranularity( true )
   #endif
@@ -138,13 +144,19 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    size_t ForwardPlusBase::calculateBytesNeeded( size_t numLights, size_t numDecals )
+    size_t ForwardPlusBase::calculateBytesNeeded( size_t numLights, size_t numDecals,
+                                                  size_t numCubemapProbes )
     {
         size_t totalBytes = numLights * NumBytesPerLight;
         if( numDecals > 0u )
         {
             totalBytes = alignToNextMultiple( totalBytes, NumBytesPerDecal );
             totalBytes += numDecals * NumBytesPerDecal;
+        }
+        if( numCubemapProbes > 0u )
+        {
+            totalBytes = alignToNextMultiple( totalBytes, NumBytesPerCubemapProbe );
+            totalBytes += numCubemapProbes * NumBytesPerCubemapProbe;
         }
 
         return totalBytes;
@@ -157,7 +169,9 @@ namespace Ogre
         const size_t numLights = mCurrentLightList.size();
 
         size_t numDecals = 0;
+        size_t numCubemapProbes = 0;
         size_t actualMaxDecalRq = 0;
+        size_t actualMaxCubemapProbeRq = 0;
         const VisibleObjectsPerRq &objsPerRqInThread0 = mSceneManager->_getTmpVisibleObjectsList()[0];
         if( mDecalsEnabled )
         {
@@ -165,8 +179,14 @@ namespace Ogre
             for( size_t rqId=MinDecalRq; rqId<=actualMaxDecalRq; ++rqId )
                 numDecals += objsPerRqInThread0[rqId].size();
         }
+        if( mCubemapProbesEnabled )
+        {
+            actualMaxCubemapProbeRq = std::min( MaxCubemapProbeRq, objsPerRqInThread0.size() );
+            for( size_t rqId=MinCubemapProbeRq; rqId<=actualMaxCubemapProbeRq; ++rqId )
+                numCubemapProbes += objsPerRqInThread0[rqId].size();
+        }
 
-        if( !numLights && !numDecals )
+        if( !numLights && !numDecals && !numCubemapProbes )
             return;
 
         Matrix4 viewMatrix = camera->getViewMatrix();
@@ -174,7 +194,9 @@ namespace Ogre
         viewMatrix.extract3x3Matrix( viewMatrix3 );
 
         float * RESTRICT_ALIAS lightData = reinterpret_cast<float * RESTRICT_ALIAS>(
-                    globalLightListBuffer->map( 0, calculateBytesNeeded( numLights, numDecals ) ) );
+                    globalLightListBuffer->map( 0, calculateBytesNeeded( numLights,
+                                                                         numDecals,
+                                                                         numCubemapProbes ) ) );
         LightArray::const_iterator itLights = mCurrentLightList.begin();
         LightArray::const_iterator enLights = mCurrentLightList.end();
 
@@ -273,6 +295,81 @@ namespace Ogre
 #endif
                 memcpy( lightData, &decal->mDiffuseIdx, sizeof(uint32) * 4u );
                 lightData += 4u;
+
+                ++itor;
+            }
+        }
+
+        //Align to the start of cubemap probes
+        if( numLights > 0u && numDecals == 0u )
+            lightData += (7u - 6u) * 4u;
+        else if( numDecals > 0u )
+            lightData += (7u - 4u) * 4u;
+
+        viewMatrix = camera->getViewMatrix();
+        Matrix3 invViewMatrix3 = viewMatrix3.Inverse();
+
+        for( size_t rqId=MinCubemapProbeRq; rqId<=actualMaxCubemapProbeRq; ++rqId )
+        {
+            MovableObject::MovableObjectArray::const_iterator itor = objsPerRqInThread0[rqId].begin();
+            MovableObject::MovableObjectArray::const_iterator end  = objsPerRqInThread0[rqId].end();
+
+            while( itor != end )
+            {
+                OGRE_ASSERT_HIGH( dynamic_cast<InternalCubemapProbe*>( *itor ) );
+                InternalCubemapProbe *probe = static_cast<InternalCubemapProbe*>( *itor );
+
+                //See ParallaxCorrectedCubemapBase::fillConstBufferData for reference
+                Matrix3 probeInvOrientation(
+                            probe->mGpuData[0][0], probe->mGpuData[0][1], probe->mGpuData[0][2],
+                            probe->mGpuData[1][0], probe->mGpuData[1][1], probe->mGpuData[1][2],
+                            probe->mGpuData[2][0], probe->mGpuData[2][1], probe->mGpuData[2][2] );
+                const Matrix3 viewSpaceToProbeLocal = probeInvOrientation * invViewMatrix3;
+                const Vector3 probeShapeCenter( probe->mGpuData[0][3],
+                                                probe->mGpuData[1][3], probe->mGpuData[2][3] );
+                Vector3 probeShapeCenterVS = viewMatrix * probeShapeCenter;
+
+                //float4 row0_centerX;
+                *lightData++ = viewSpaceToProbeLocal[0][0];
+                *lightData++ = viewSpaceToProbeLocal[0][1];
+                *lightData++ = viewSpaceToProbeLocal[0][2];
+                *lightData++ = probeShapeCenterVS.x;
+
+                //float4 row1_centerY;
+                *lightData++ = viewSpaceToProbeLocal[0][3];
+                *lightData++ = viewSpaceToProbeLocal[0][4];
+                *lightData++ = viewSpaceToProbeLocal[0][5];
+                *lightData++ = probeShapeCenterVS.y;
+
+                //float4 row2_centerZ;
+                *lightData++ = viewSpaceToProbeLocal[0][6];
+                *lightData++ = viewSpaceToProbeLocal[0][7];
+                *lightData++ = viewSpaceToProbeLocal[0][8];
+                *lightData++ = probeShapeCenterVS.z;
+
+                //float4 halfSize;
+                *lightData++ = probe->mGpuData[3][0];
+                *lightData++ = probe->mGpuData[3][1];
+                *lightData++ = probe->mGpuData[3][2];
+                *lightData++ = probe->mGpuData[3][3];
+
+                //float4 cubemapPosLS;
+                *lightData++ = probe->mGpuData[4][0];
+                *lightData++ = probe->mGpuData[4][1];
+                *lightData++ = probe->mGpuData[4][2];
+                *lightData++ = probe->mGpuData[4][3];
+
+                //float4 probeInnerRange;
+                *lightData++ = probe->mGpuData[5][0];
+                *lightData++ = probe->mGpuData[5][1];
+                *lightData++ = probe->mGpuData[5][2];
+                *lightData++ = probe->mGpuData[5][3];
+
+                //float4 probeOuterRange;
+                *lightData++ = probe->mGpuData[6][0];
+                *lightData++ = probe->mGpuData[6][1];
+                *lightData++ = probe->mGpuData[6][2];
+                *lightData++ = probe->mGpuData[6][3];
 
                 ++itor;
             }

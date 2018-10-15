@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "OgreMetalPrerequisites.h"
 #include "OgreAsyncTextureTicket.h"
 #include "OgreTextureBox.h"
+#include <dispatch/dispatch.h>
 
 namespace Ogre
 {

@@ -39,7 +39,7 @@ THE SOFTWARE.
 namespace Ogre
 {
     Decal::Decal( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager ) :
-        MovableObject( id, objectMemoryManager, manager, 0 ),
+        MovableObject( id, objectMemoryManager, manager, ForwardPlusBase::MinDecalRq ),
         mDiffuseTexture( 0 ),
         mNormalTexture( 0 ),
         mEmissiveTexture( 0 ),

@@ -1,0 +1,59 @@
+//DPM stands for Dual Parabolloid Mapping.
+
+fragment_program Ogre/DPM/CubeToDpm_4xFP16_ps_GLSL glsl
+{
+	source CubeToDpm_4xFP16_ps.glsl
+	default_params
+	{
+		param_named cubeTexture int 0
+	}
+}
+
+fragment_program Ogre/DPM/CubeToDpm_4xFP16_ps_HLSL hlsl
+{
+	source CubeToDpm_4xFP16_ps.hlsl
+	entry_point main
+	target ps_5_0 ps_4_0 ps_4_0_level_9_1 ps_4_0_level_9_3
+}
+
+fragment_program Ogre/DPM/CubeToDpm_4xFP16_ps_Metal metal
+{
+	source CubeToDpm_4xFP16_ps.metal
+	shader_reflection_pair_hint Ogre/Compositor/Quad_vs
+}
+
+fragment_program Ogre/DPM/CubeToDpm_4xFP16_ps unified
+{
+	delegate Ogre/DPM/CubeToDpm_4xFP16_ps_GLSL
+	delegate Ogre/DPM/CubeToDpm_4xFP16_ps_HLSL
+	delegate Ogre/DPM/CubeToDpm_4xFP16_ps_Metal
+}
+
+// Converts a cubemap to DPM in the pixel shader.
+material Ogre/DPM/CubeToDpm
+{
+	technique
+	{
+		pass
+		{
+			depth_check off
+			depth_func always_pass
+
+			cull_hardware none
+
+			vertex_program_ref Ogre/Compositor/Quad_vs
+			{
+			}
+
+			fragment_program_ref Ogre/DPM/CubeToDpm_4xFP16_ps
+			{
+			}
+
+			texture_unit depthTexture
+			{
+				filtering			bilinear
+				tex_address_mode	clamp
+			}
+		}
+	}
+}
