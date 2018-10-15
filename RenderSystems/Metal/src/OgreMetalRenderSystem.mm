@@ -195,6 +195,9 @@ namespace Ogre
         {
             rsc->setCapability(RSC_TEXTURE_COMPRESSION_ASTC);
         }
+
+        if( [mActiveDevice->mDevice supportsFeatureSet:MTLFeatureSet_iOS_GPUFamily4_v1] )
+            rsc->setCapability(RSC_TEXTURE_CUBE_MAP_ARRAY);
 #endif
         rsc->setCapability(RSC_VBO);
         rsc->setCapability(RSC_32BIT_INDEX);
@@ -286,6 +289,7 @@ namespace Ogre
 
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
         rsc->setCapability(RSC_UAV);
+        rsc->setCapability(RSC_TEXTURE_CUBE_MAP_ARRAY);
 #endif
         //rsc->setCapability(RSC_ATOMIC_COUNTERS);
 
@@ -310,6 +314,11 @@ namespace Ogre
             { MTLFeatureSet_iOS_GPUFamily1_v2, "iOS_GPUFamily1_v2", 1, 2 },
             { MTLFeatureSet_iOS_GPUFamily2_v2, "iOS_GPUFamily2_v2", 2, 2 },
             { MTLFeatureSet_iOS_GPUFamily3_v1, "iOS_GPUFamily3_v2", 3, 2 },
+
+            { MTLFeatureSet_iOS_GPUFamily4_v1, "iOS_GPUFamily4_v1", 4, 1 },
+
+            { MTLFeatureSet_iOS_GPUFamily4_v2, "iOS_GPUFamily4_v2", 4, 2 },
+            { MTLFeatureSet_iOS_GPUFamily5_v1, "iOS_GPUFamily5_v1", 5, 1 },
 #else
             { MTLFeatureSet_OSX_GPUFamily1_v1, "OSX_GPUFamily1_v1", 1, 1 },
 #endif
