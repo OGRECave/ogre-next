@@ -269,7 +269,7 @@ namespace Ogre
             Once you've called scheduleTransitionTo at least once, calling _transitionTo
             is very dangerous, as there are race conditions.
 
-            scheduleTransitionTo
+            @see    TextureGpu::scheduleTransitionTo
         @param nextResidency
             The residency to change to.
         @param image
