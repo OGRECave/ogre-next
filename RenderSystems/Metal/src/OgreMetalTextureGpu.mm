@@ -78,7 +78,7 @@ namespace Ogre
         desc.sampleCount        = 1u;
         desc.storageMode        = MTLStorageModePrivate;
 
-        if( mTextureType == TextureTypes::TypeCube || mTextureType == TextureTypes::TypeCubeArray )
+        if( mTextureType == TextureTypes::TypeCube )
             desc.arrayLength /= 6u;
 
         if( mMsaa > 1u && hasMsaaExplicitResolves() )
