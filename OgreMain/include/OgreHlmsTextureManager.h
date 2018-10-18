@@ -141,6 +141,15 @@ namespace Ogre
             NUM_TEXTURE_TYPES
         };
 
+        struct MetadataCacheEntry
+        {
+            TextureMapType mapType;
+            uint32 poolId;
+            MetadataCacheEntry();
+        };
+
+        typedef map<IdString, MetadataCacheEntry>::type MetadataCacheMap;
+
     protected:
         struct TextureArray
         {
@@ -161,13 +170,19 @@ namespace Ogre
             uint16      maxTextures;
             bool        automatic;
             bool        isNormalMap;
+            bool        manuallyReserved;
 
             uint16      activeEntries;
             NamePairVec entries;
 
-            TextureArray( uint16 _sqrtMaxTextures, uint16 _maxTextures, bool _automatic, bool _isNormalMap ) :
+            uint32      uniqueSpecialId;
+
+            TextureArray( uint16 _sqrtMaxTextures, uint16 _maxTextures, bool _automatic, bool _isNormalMap,
+                          bool _manuallyReserved, uint32 _uniqueSpecialId ) :
                 sqrtMaxTextures( _sqrtMaxTextures ), maxTextures( _maxTextures ),
-                automatic( _automatic ), isNormalMap( _isNormalMap ), activeEntries( 0 )
+                automatic( _automatic ), isNormalMap( _isNormalMap ),
+                manuallyReserved( _manuallyReserved ), activeEntries( 0 ),
+                uniqueSpecialId( _uniqueSpecialId )
             {
                 entries.resize( maxTextures );
             }
@@ -202,6 +217,7 @@ namespace Ogre
 
         TextureEntryVec     mEntries;
         TextureArrayVec     mTextureArrays[NUM_TEXTURE_TYPES];
+        MetadataCacheMap    mMetadataCache;
 
         DefaultTextureParameters    mDefaultTextureParameters[NUM_TEXTURE_TYPES];
         size_t              mTextureId;
@@ -216,9 +232,11 @@ namespace Ogre
         static void copy3DTexture( const Image &srcImage, TexturePtr dst,
                                    uint16 sliceStart, uint16 sliceEnd, uint8 srcBaseMip );
 
+        /// The parameter textureName is for logging purposes
         TextureArrayVec::iterator findSuitableArray( TextureMapType mapType, uint32 width, uint32 height,
                                                      uint32 depth, uint32 faces, PixelFormat format,
-                                                     uint8 numMipmaps );
+                                                     uint8 numMipmaps, uint32 uniqueSpecialId,
+                                                     const String &textureName );
 
         /// Looks for the first image it can successfully load from the pack, and extracts its parameters.
         /// Returns false if failed to retrieve parameters.
@@ -236,6 +254,26 @@ namespace Ogre
             Some settings in mDefaultTextureParameters will be reset
         */
         void _changeRenderSystem( RenderSystem *newRs );
+
+        /** Reserves a specific pool ID with the given parameters and immediately creates
+            that texture.
+        @param uniqueSpecialId
+        @param mapType
+        @param width
+        @param height
+        @param numSlices
+        @param numMipmaps
+        @param pixelFormat
+        @param isNormalMap
+        @param hwGammaCorrection
+        @return
+            Created texture for the pool.
+        */
+        TexturePtr reservePoolId( uint32 uniqueSpecialId, TextureMapType mapType,
+                                  uint32 width, uint32 height,
+                                  uint16 numSlices, uint8 numMipmaps, PixelFormat pixelFormat,
+                                  bool isNormalMap, bool hwGammaCorrection );
+        bool hasPoolId( uint32 uniqueSpecialId, TextureMapType mapType ) const;
 
         struct TextureLocation
         {
@@ -270,6 +308,14 @@ namespace Ogre
             call with aliasName as "Tree Wood", and the next calls to
             createOrRetrieveTexture( "Tree Wood", mapType ) will refer to this texture
             NOTE: aliasName cannot be blank/empty.
+        @param uniqueSpecialId
+            Textures loaded with a value uniqueSpecialId != 0 will tried to be pooled together
+            inside the same pool that has the same uniqueSpecialId.
+            If we have to create more than one pool, you will get log warnings.
+            This pool ID is intended for Decals and Area Lights as Ogre implementations only allow
+            one global texture per pass; thus all decal/area light texture must have the same
+            resolution, pixel format and live in the same array texture.
+            See HlmsTextureManager::reservePoolId
         @param imgSource
             When null, texture is loaded from texName as a file. When not null, texture is
             loaded from imgSource and texName is ignored (still used in logging messages though).
@@ -279,6 +325,7 @@ namespace Ogre
         TextureLocation createOrRetrieveTexture( const String &aliasName,
                                                  const String &texName,
                                                  TextureMapType mapType,
+                                                 uint32 uniqueSpecialId = 0,
                                                  Image *imgSource = 0 );
 
         /// Destroys a texture. If the array has multiple entries, the entry for this texture is
@@ -292,9 +339,55 @@ namespace Ogre
         /// Note the returned pointer may be invalidated if new calls are made to
         /// createOrRetrieveTexture or destroyTexture
         const String* findAliasName( const TextureLocation &textureLocation ) const;
-        const String* findResourceNameFromAlias( IdString alias ) const;
+        const String* findResourceNameFromAlias( IdString aliasName ) const;
+        /// Output outPoolId is left untouched if returned pointer is null
+        const String* findResourceNameFromAlias( IdString aliasName, uint32 &outPoolId ) const;
 
         void createFromTexturePack( const HlmsTexturePack &pack );
+
+        /** Saves a texture to the given folder. Even if the texture was not created
+            by HlmsTextureManager.
+
+            We will not save RenderTargets.
+
+            If the texture is managed by HlmsTextureManager, further information to
+            obtain the original filename (even if it's aliased) will be used.
+        @param texLocation
+        @param folderPath
+            Folder where to dump the textures.
+        @param savedTextures [in/out]
+            Set of texture names. Textures whose name is already in the set won't be saved again.
+            Textures that were saved will be inserted into the set.
+        @param saveOitd
+            When true, we will download the texture from GPU and save it in OITD format.
+            OITD is faster to load as it's stored in Ogre's native format it understands,
+            but it cannot be opened by traditional image editors; also OITD is not backwards
+            compatible with older versions of Ogre.
+        @param saveOriginal
+            When true, we will attempt to read the raw filestream of the original texture
+            and save it (i.e. copy the original png/dds/etc file).
+        @param listener
+        */
+        void saveTexture( const HlmsTextureManager::TextureLocation &texLocation,
+                          const String &folderPath, set<String>::type &savedTextures,
+                          bool saveOitd, bool saveOriginal,
+                          uint32 slice, uint32 numSlices,
+                          HlmsTextureExportListener *listener );
+
+        /** Retrieves an entry in the metadata cache that was loaded via
+            HlmsTextureManager::importTextureMetadataCache.
+
+            Note that this texture may not even have been ever loaded yet.
+        @param aliasName
+            Alias of the resource.
+        @return
+            Null if not found. The cache entry otherwise.
+        */
+        const HlmsTextureManager::MetadataCacheEntry* getMetadataCacheEntry( IdString aliasName ) const;
+        void importTextureMetadataCache( const String &filename, const char *jsonString );
+        void exportTextureMetadataCache( String &outJson );
+        void clearTextureMetadataCache(void);
+        HlmsTextureManager::MetadataCacheMap& getTextureMetadataCache(void) { return mMetadataCache; }
 
         /// Returns the precreated blank texture
         TextureLocation getBlankTexture(void) const;

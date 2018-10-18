@@ -37,6 +37,8 @@ using namespace Demo;
 
 namespace Demo
 {
+    const Ogre::uint32 c_areaLightsPoolId = 759384;
+
     AreaApproxLightsGameState::AreaApproxLightsGameState( const Ogre::String &helpDescription ) :
         TutorialGameState( helpDescription ),
         mAnimateObjects( true )
@@ -46,24 +48,17 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void AreaApproxLightsGameState::createAreaMask(void)
     {
-        mAreaMaskTex = Ogre::TextureManager::getSingleton().createManual(
-                           "Area Light Masks", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                           Ogre::TEX_TYPE_2D_ARRAY, 256u, 256u, 5u,
-                           Ogre::PF_L8, Ogre::TU_STATIC_WRITE_ONLY );
-
-        Ogre::uint32 texWidth = mAreaMaskTex->getWidth();
-        Ogre::uint32 texHeight = mAreaMaskTex->getHeight();
-        const Ogre::PixelFormat texFormat = mAreaMaskTex->getFormat();
+        const Ogre::uint32 texWidth = 256u;
+        const Ogre::uint32 texHeight = 256u;
+        const Ogre::PixelFormat texFormat = Ogre::PF_L8;
 
         //Fill the texture with a hollow rectangle, 10-pixel thick.
         size_t sizeBytes = Ogre::PixelUtil::calculateSizeBytes(
-                               texWidth, texHeight, 1u, 1u,
-                               texFormat, mAreaMaskTex->getNumMipmaps() );
+                               texWidth, texHeight, 1u, 1u, texFormat, 1u );
         Ogre::uint8 *data = reinterpret_cast<Ogre::uint8*>(
                                 OGRE_MALLOC( sizeBytes, Ogre::MEMCATEGORY_GENERAL ) );
         Ogre::Image image;
-        image.loadDynamicImage( data, texWidth, texHeight, 1u,
-                                texFormat, true, 1u, mAreaMaskTex->getNumMipmaps() );
+        image.loadDynamicImage( data, texWidth, texHeight, 1u, texFormat, true, 1u, 0u );
         for( size_t y=0; y<texHeight; ++y )
         {
             for( size_t x=0; x<texWidth; ++x )
@@ -88,7 +83,7 @@ namespace Demo
             //Ensure the lower mips have black borders. This is done to prevent certain artifacts,
             //Ensure the higher mips have grey borders. This is done to prevent certain artifacts.
             data = image.getData();
-            for( size_t i=0u; i<mAreaMaskTex->getNumMipmaps() + 1u; ++i )
+            for( size_t i=0u; i<image.getNumMipmaps() + 1u; ++i )
             {
                 const Ogre::uint8 borderColour = i >= 5u ? 127u : 0u;
                 Ogre::uint32 currWidth = std::max( texWidth >> i, 1u );
@@ -109,26 +104,21 @@ namespace Demo
             }
         }
 
-        //Upload to GPU
-        Ogre::uint8 const *srcData = image.getData();
-        for( size_t i=0; i<mAreaMaskTex->getNumMipmaps() + 1u; ++i )
-        {
-            Ogre::uint32 currWidth = std::max( texWidth >> i, 1u );
-            Ogre::uint32 currHeight = std::max( texHeight >> i, 1u );
-            Ogre::v1::HardwarePixelBufferSharedPtr pixelBufferBuf = mAreaMaskTex->getBuffer( 0, i );
-            const Ogre::PixelBox &currImage =
-                    pixelBufferBuf->lock( Ogre::Box( 0, 0, 0, currWidth, currHeight, 1 ),
-                                          Ogre::v1::HardwareBuffer::HBL_DISCARD );
-            Ogre::uint8 *dstData = reinterpret_cast<Ogre::uint8*>( currImage.data );
-            for( size_t y=0; y<currHeight; ++y )
-            {
-                memcpy( dstData, srcData,
-                        Ogre::PixelUtil::getMemorySize( currWidth, 1u, 1u, texFormat ) );
-                srcData += Ogre::PixelUtil::getMemorySize( currWidth, 1u, 1u, texFormat );
-                dstData += Ogre::PixelUtil::getMemorySize( currImage.rowPitch, 1u, 1u, texFormat );
-            }
-            pixelBufferBuf->unlock();
-        }
+        //Please note the texture CAN be coloured. The sample uses a monochrome texture,
+        //but you coloured textures are supported too. However they will burn a little
+        //more GPU performance.
+        Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
+        Ogre::HlmsTextureManager *hlmsTextureManager = hlmsManager->getTextureManager();
+        mAreaMaskTex = hlmsTextureManager->reservePoolId(
+                           c_areaLightsPoolId, Ogre::HlmsTextureManager::TEXTURE_TYPE_MONOCHROME,
+                           image.getWidth(), image.getHeight(), 8u,
+                           image.getNumMipmaps(), image.getFormat(),
+                           false, false );
+
+        //Create the texture now, from the Image
+        hlmsTextureManager->createOrRetrieveTexture(
+                    "AreaLightMask0", "AreaLightMask0",
+                    Ogre::HlmsTextureManager::TEXTURE_TYPE_MONOCHROME, c_areaLightsPoolId, &image );
 
         //Set the texture mask to PBS.
         Ogre::Root *root = mGraphicsSystem->getRoot();
@@ -145,7 +135,7 @@ namespace Demo
         Ogre::v1::MeshPtr lightPlaneMeshV1 =
                 Ogre::v1::MeshManager::getSingleton().createPlane( "LightPlane v1",
                                             Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-                                            Ogre::Plane( Ogre::Vector3::UNIT_Z, 0.0f ), 0.5f, 0.5f,
+                                            Ogre::Plane( Ogre::Vector3::UNIT_Z, 0.0f ), 1.0f, 1.0f,
                                             1, 1, true, 1, 1.0f, 1.0f, Ogre::Vector3::UNIT_Y,
                                             Ogre::v1::HardwareBuffer::HBU_STATIC,
                                             Ogre::v1::HardwareBuffer::HBU_STATIC );
@@ -156,7 +146,7 @@ namespace Demo
         Ogre::v1::MeshManager::getSingleton().remove( lightPlaneMeshV1 );
     }
     //-----------------------------------------------------------------------------------
-    void AreaApproxLightsGameState::createPlaneForAreaLight( Ogre::Light *light )
+    Ogre::HlmsUnlitDatablock* AreaApproxLightsGameState::createPlaneForAreaLight( Ogre::Light *light )
     {
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::Hlms *hlmsUnlit = root->getHlmsManager()->getHlms( Ogre::HLMS_UNLIT );
@@ -212,6 +202,8 @@ namespace Demo
         /* For debugging ranges & AABBs
         Ogre::WireAabb *wireAabb = sceneManager->createWireAabb();
         wireAabb->track( light );*/
+
+        return datablock;
     }
     //-----------------------------------------------------------------------------------
     void AreaApproxLightsGameState::createScene01(void)
@@ -362,6 +354,9 @@ namespace Demo
 
         mLightNodes[0] = lightNode;
 
+        Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
+        Ogre::HlmsTextureManager *hlmsTextureManager = hlmsManager->getTextureManager();
+
         light = sceneManager->createLight();
         lightNode = rootNode->createChildSceneNode();
         lightNode->attachObject( light );
@@ -369,7 +364,7 @@ namespace Demo
         light->setSpecularColour( 0.8f, 0.4f, 0.2f );
         //Increase the strength 10x to showcase this light. Area approx lights are not
         //physically based so the value is more arbitrary than the other light types
-        light->setPowerScale( Ogre::Math::PI * 4 );
+        light->setPowerScale( Ogre::Math::PI );
         light->setType( Ogre::Light::LT_AREA_APPROX );
         light->setRectSize( Ogre::Vector2( 15.0f, 15.0f ) );
         lightNode->setPosition( -10.0f, 6.0f, 10.0f );
@@ -377,13 +372,19 @@ namespace Demo
         light->setDirection( Ogre::Vector3( 1, -1, -1 ).normalisedCopy() );
         //light->setDirection( Ogre::Vector3( 0, -1, 0 ).normalisedCopy() );
         light->setAttenuationBasedOnRadius( 10.0f, 0.01f );
-        //Set the array index of the light mask in mAreaMaskTex
-        light->mTextureLightMaskIdx = 0u;
+        //Set the texture for this area light. The parameters to createOrRetrieveTexture
+        //do not matter much, as the texture has already been created.
+        Ogre::HlmsTextureManager::TextureLocation texLocation =
+                hlmsTextureManager->createOrRetrieveTexture(
+                    "AreaLightMask0", "AreaLightMask0",
+                    Ogre::HlmsTextureManager::TEXTURE_TYPE_MONOCHROME, c_areaLightsPoolId );
+        light->setTexture( texLocation.texture, texLocation.xIdx );
         //Control the diffuse mip (this is the default value)
         light->mTexLightMaskDiffuseMipStart = (Ogre::uint16)(0.95f * 65535);
 
-        createPlaneForAreaLight( light );
+        mAreaLightPlaneDatablocks[0] = createPlaneForAreaLight( light );
 
+        mAreaLights[0] = light;
         mLightNodes[1] = lightNode;
 
         light = sceneManager->createLight();
@@ -397,11 +398,12 @@ namespace Demo
         lightNode->setPosition( 5.0f, 4.0f, -5.0f );
         light->setDirection( Ogre::Vector3( -1, -1, 1 ).normalisedCopy() );
         light->setAttenuationBasedOnRadius( 10.0f, 0.01f );
-        //When the array index is 0xFFFF, the light won't use a texture.
+        //When the array index is 0xFFFF, the light won't use a texture (default value).
         light->mTextureLightMaskIdx = std::numeric_limits<Ogre::uint16>::max();
 
-        createPlaneForAreaLight( light );
+        mAreaLightPlaneDatablocks[1] = createPlaneForAreaLight( light );
 
+        mAreaLights[1] = light;
         mLightNodes[2] = lightNode;
 
         mCameraController = new CameraController( mGraphicsSystem, false );
@@ -433,6 +435,9 @@ namespace Demo
         TutorialGameState::generateDebugText( timeSinceLast, outText );
         outText += "\nPress F2 to toggle animation. ";
         outText += mAnimateObjects ? "[On]" : "[Off]";
+        outText += "\nPress F3 to toggle PBR LTC. ";
+        outText += mAreaLights[0]->getType() == Ogre::Light::LT_AREA_APPROX ?
+                    "[Approximation (Textured)]" : "[LTC (No texture)]";
     }
     //-----------------------------------------------------------------------------------
     void AreaApproxLightsGameState::keyReleased( const SDL_KeyboardEvent &arg )
@@ -446,6 +451,23 @@ namespace Demo
         if( arg.keysym.sym == SDLK_F2 )
         {
             mAnimateObjects = !mAnimateObjects;
+        }
+        else if( arg.keysym.sym == SDLK_F3 )
+        {
+            for( int i=0; i<2; ++i )
+            {
+                mAreaLights[i]->setType( mAreaLights[i]->getType() == Ogre::Light::LT_AREA_APPROX ?
+                                             Ogre::Light::LT_AREA_LTC : Ogre::Light::LT_AREA_APPROX );
+
+                if( mAreaLights[i]->mTextureLightMaskIdx != std::numeric_limits<Ogre::uint16>::max() )
+                {
+                    Ogre::HlmsUnlitDatablock *datablock = mAreaLightPlaneDatablocks[i];
+                    if( mAreaLights[i]->getType() == Ogre::Light::LT_AREA_APPROX )
+                        datablock->setTexture( 0, mAreaLights[i]->mTextureLightMaskIdx, mAreaMaskTex );
+                    else
+                        datablock->setTexture( 0, 0, Ogre::TexturePtr() );
+                }
+            }
         }
         else
         {

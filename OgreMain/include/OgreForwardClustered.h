@@ -61,7 +61,10 @@ namespace Ogre
         uint32  mWidth;
         uint32  mHeight;
         uint32  mNumSlices;
-        uint32  mLightsPerCell;
+        size_t  mReservedSlotsPerCell;
+        size_t  mObjsPerCell;
+        size_t  mLightsPerCell;
+        size_t  mDecalsPerCell;
 
         RawSimdUniquePtr<FrustumRegion, MEMCATEGORY_SCENE_CONTROL> mFrustumRegions;
 
@@ -93,9 +96,12 @@ namespace Ogre
 
         void collectLightForSlice( size_t slice, size_t threadId );
 
+        void collectObjs( const Camera *camera, size_t &outNumDecals );
+
     public:
         ForwardClustered( uint32 width, uint32 height, uint32 numSlices, uint32 lightsPerCell,
-                   float minDistance, float maxDistance, SceneManager *sceneManager );
+                          uint32 decalsPerCell, float minDistance, float maxDistance,
+                          SceneManager *sceneManager );
         virtual ~ForwardClustered();
 
         virtual ForwardPlusMethods getForwardPlusMethod(void) const { return MethodForwardClustered; }
@@ -113,7 +119,8 @@ namespace Ogre
         uint32 getWidth(void) const                                     { return mWidth; }
         uint32 getHeight(void) const                                    { return mHeight; }
         uint32 getNumSlices(void) const                                 { return mNumSlices; }
-        uint32 getLightsPerCell(void) const                             { return mLightsPerCell; }
+        uint32 getLightsPerCell(void) const             { return static_cast<uint32>( mLightsPerCell ); }
+        uint32 getDecalsPerCell(void) const             { return static_cast<uint32>( mDecalsPerCell ); }
         float getMinDistance(void) const                                { return mMinDistance; }
         float getMaxDistance(void) const                                { return mMaxDistance; }
 
