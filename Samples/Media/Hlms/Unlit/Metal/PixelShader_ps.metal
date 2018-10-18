@@ -81,7 +81,7 @@ fragment @insertpiece( output_type ) main_metal
 
 @property( alpha_test )
 	if( material.alpha_test_threshold.x @insertpiece( alpha_test_cmp_func ) outPs.colour0.a )
-		discard;@end
+		discard_fragment();@end
 
 	@insertpiece( custom_ps_posExecution )
 
