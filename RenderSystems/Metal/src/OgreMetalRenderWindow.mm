@@ -350,6 +350,6 @@ namespace Ogre
     //-------------------------------------------------------------------------
     float MetalRenderWindow::getViewPointToPixelScale() const
     {
-        return 1.0;
+        return mMetalView.layer.contentsScale;//1.0;
     }
 }
