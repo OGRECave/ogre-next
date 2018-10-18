@@ -35,7 +35,7 @@ THE SOFTWARE.
 #define OGRE_HLMS_TEXTURE_BASE_CLASS HlmsPbsBaseTextureDatablock
 #define OGRE_HLMS_TEXTURE_BASE_MAX_TEX NUM_PBSM_TEXTURE_TYPES
 #define OGRE_HLMS_CREATOR_CLASS HlmsPbs
-    #include "../../Common/include/OgreHlmsTextureBaseClass.h"
+    #include "OgreHlmsTextureBaseClass.h"
 #undef _OgreHlmsTextureBaseClassExport
 #undef OGRE_HLMS_TEXTURE_BASE_CLASS
 #undef OGRE_HLMS_TEXTURE_BASE_MAX_TEX

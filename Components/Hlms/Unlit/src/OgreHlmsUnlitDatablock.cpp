@@ -42,7 +42,7 @@ THE SOFTWARE.
 #define OGRE_HLMS_TEXTURE_BASE_CLASS HlmsUnlitBaseTextureDatablock
 #define OGRE_HLMS_TEXTURE_BASE_MAX_TEX NUM_UNLIT_TEXTURE_TYPES
 #define OGRE_HLMS_CREATOR_CLASS HlmsUnlit
-    #include "../../Common/include/OgreHlmsTextureBaseClass.inl"
+    #include "OgreHlmsTextureBaseClass.inl"
 #undef _OgreHlmsTextureBaseClassExport
 #undef OGRE_HLMS_TEXTURE_BASE_CLASS
 #undef OGRE_HLMS_TEXTURE_BASE_MAX_TEX

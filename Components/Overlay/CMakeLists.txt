@@ -26,6 +26,7 @@ include_directories(${OGRE_SOURCE_DIR}/OgreMain/include)
 
 ogre_add_component_include_dir(Hlms/Unlit)
 #ogre_add_component_include_dir(Hlms/UnlitMobile)
+ogre_add_component_include_dir(Hlms/Common)
 
 # setup target
 ogre_add_library(OgreOverlay ${OGRE_COMP_LIB_TYPE} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADER_FILES} ${PLATFORM_SOURCE_FILES})
