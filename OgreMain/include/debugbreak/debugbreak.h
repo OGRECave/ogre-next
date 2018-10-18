@@ -125,7 +125,8 @@ __attribute__((gnu_inline, always_inline))
 __inline__ static void debug_break(void)
 {
 	if (HAVE_TRAP_INSTRUCTION) {
-		trap_instruction();
+		//trap_instruction();
+		__builtin_trap();
 	} else if (DEBUG_BREAK_PREFER_BUILTIN_TRAP_TO_SIGTRAP) {
 		 /* raises SIGILL on Linux x86{,-64}, to continue in gdb:
 		  * (gdb) handle SIGILL stop nopass
