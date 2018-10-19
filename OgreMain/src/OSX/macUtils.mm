@@ -99,7 +99,7 @@ namespace Ogre {
         String fullPath;
         if (name[0] != '/') { // just framework name, like "OgreTerrain"
             // path/OgreTerrain.framework/OgreTerrain
-            fullPath = macFrameworksPath() + "/" + name + ".framework/" + name;
+            fullPath = macFrameworksPath() + name + ".framework/" + name;
         }
         else { // absolute path, like "/Library/Frameworks/OgreTerrain.framework"
             size_t lastSlashPos = name.find_last_of('/');
