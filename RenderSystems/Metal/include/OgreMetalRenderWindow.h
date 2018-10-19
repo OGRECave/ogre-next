@@ -48,8 +48,10 @@ namespace Ogre
         id<MTLTexture>      mMsaaTex;
         OgreMetalView       *mMetalView;
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
+        NSView              *mView;
         NSWindow            *mWindow;
-        id                  mResizeObserver;
+#else
+        UIWindow            *mWindow;
 #endif
 
         MetalRenderSystem   *mRenderSystem;
@@ -78,8 +80,9 @@ namespace Ogre
         virtual bool requiresTextureFlipping() const { return false; }
 
         virtual void getCustomAttribute( const String& name, void* pData );
+        
+        virtual float getViewPointToPixelScale() const;
     };
 }
 
 #endif
-

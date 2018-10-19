@@ -159,6 +159,8 @@ namespace Ogre {
         void addTagPoint( TagPoint *tagPoint );
 
         void removeTagPoint( TagPoint *tagPoint );
+        
+        const TagPointVec& getTagPointChildren(void)                { return mTagPointChildren; }
 
         /** Sets a regular Node to be parent of this Bone.
             DO NOT USE THIS FUNCTION IF YOU DON'T KNOW WHAT YOU'RE DOING. If you want

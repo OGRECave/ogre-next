@@ -225,6 +225,9 @@ float4 diffuseCol;
 	/// 'insertpiece( SampleDiffuseMap )' must've written to diffuseCol. However if there are no
 	/// diffuse maps, we must initialize it to some value.
 	@property( !diffuse_map )diffuseCol = material.bgDiffuse;@end
+	
+	@property( hlms_colour )
+		diffuseCol *= inPs.colour;@end
 
 	/// Blend the detail diffuse maps with the main diffuse.
 	@foreach( detail_maps_diffuse, n )
@@ -239,7 +242,7 @@ float4 diffuseCol;
 
 	@property( alpha_test && !alpha_test_shadow_caster_only )
 		if( material.kD.w @insertpiece( alpha_test_cmp_func ) diffuseCol.a )
-			discard;
+			discard_fragment();
 	@end
 @end
 
@@ -599,7 +602,7 @@ fragment @insertpiece( output_type ) main_metal
 	/// Apply the material's diffuse over the textures
 @property( TODO_REFACTOR_ACCOUNT_MATERIAL_ALPHA )	diffuseCol.xyz *= material.kD.xyz;@end
 	if( material.kD.w @insertpiece( alpha_test_cmp_func ) diffuseCol )
-		discard;
+		discard_fragment();
 @end /// !alpha_test
 
 	@insertpiece( DoShadowCastPS )

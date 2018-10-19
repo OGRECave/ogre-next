@@ -193,9 +193,49 @@ namespace Ogre
         return mMaterial;
     }
     //-----------------------------------------------------------------------------------
+    unsigned short Renderable::getNumPoseAnimations(void) const
+    {
+        return mPoseData ? mPoseData->numPoses : 0;
+    }
+    //-----------------------------------------------------------------------------------
+    float Renderable::getPoseWeight(size_t index) const
+    { 
+        assert( (index < OGRE_MAX_POSES) && "Pose weight index out of bounds" );
+        return mPoseData ? mPoseData->weights[index] : 0; 
+    }
+    //-----------------------------------------------------------------------------------
+    void Renderable::setPoseWeight(size_t index, float w)
+    { 
+        if( !mPoseData ) 
+            return;
+        
+        assert( (index < OGRE_MAX_POSES && index < mPoseData->numPoses) && "Pose weight index out of bounds" );
+        mPoseData->weights[index] = Math::Clamp( w, 0.f, 1.f ); 
+    }
+    void Renderable::addPoseWeight(size_t index, float w)
+    {
+        if( !mPoseData ) 
+            return;
+
+        assert( (index < OGRE_MAX_POSES && index < mPoseData->numPoses) && "Pose weight index out of bounds" );
+        mPoseData->weights[index] = Math::Clamp( mPoseData->weights[index] + w, 0.f, 1.f ); 
+    }
+    //-----------------------------------------------------------------------------------
+    TexBufferPacked* Renderable::getPoseTexBuffer() const
+    {
+        return mPoseData ? mPoseData->buffer : 0;
+    }
+    //-----------------------------------------------------------------------------------
     RenderableAnimated::RenderableAnimated() :
         Renderable(),
         mBlendIndexToBoneIndexMap( 0 )
     {
+    }
+    //-----------------------------------------------------------------------------------
+    Renderable::PoseData::PoseData():
+    numPoses( 0 ),
+    buffer( 0 )
+    {
+        memset(weights, 0, OGRE_MAX_POSES * sizeof(float));
     }
 }

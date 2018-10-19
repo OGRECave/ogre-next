@@ -13,17 +13,13 @@ endmacro()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+include_directories(${CMAKE_SOURCE_DIR}/Components/Hlms/Common/include)
+ogre_add_component_include_dir(Hlms/Pbs)
+
 add_recursive( ./ SOURCE_FILES )
 
-set( TUTORIAL_RESOURCES ${SAMPLE_COMMON_BASIC_RESOURCES} )
-if (OGRE_BUILD_PLATFORM_APPLE_IOS)
-	set( TUTORIAL_RESOURCES ${SAMPLE_COMMON_BASIC_RESOURCES}
-		 ${CMAKE_CURRENT_SOURCE_DIR}/iOS/Tutorial.storyboard )
-	set( SOURCE_FILES ${SOURCE_FILES} ${CMAKE_CURRENT_SOURCE_DIR}/iOS/TutorialViewController.mm )
-endif (OGRE_BUILD_PLATFORM_APPLE_IOS)
-
-set(SAMPLE_NAME Sample_Tutorial01_Initialization)
-ogre_add_executable(${SAMPLE_NAME} WIN32 MACOSX_BUNDLE ${SOURCE_FILES} ${TUTORIAL_RESOURCES} )
+set(SAMPLE_NAME Sample_MorphAnimations)
+ogre_add_executable(${SAMPLE_NAME} WIN32 MACOSX_BUNDLE ${SOURCE_FILES} ${SAMPLE_COMMON_RESOURCES})
 
 target_link_libraries(${SAMPLE_NAME} ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES})
 ogre_config_sample_lib(${SAMPLE_NAME})
@@ -33,9 +29,11 @@ if( APPLE )
     set(MACOSX_BUNDLE_BUNDLE_NAME "${SAMPLE_NAME}")
 	set(MACOSX_BUNDLE_EXECUTABLE "${SAMPLE_NAME}")
 	set_target_properties(${SAMPLE_NAME} PROPERTIES RESOURCE "${TUTORIAL_RESOURCES}")
+	set_target_properties(${SAMPLE_NAME} PROPERTIES RESOURCE "${SAMPLE_COMMON_RESOURCES}" )
 	set_target_properties(${SAMPLE_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${SAMPLES_PLIST})
-	
-	if (CMAKE_GENERATOR STREQUAL "Xcode")
+
+
+	if( CMAKE_GENERATOR STREQUAL "Xcode" )
         #if (IOS)
         #    set(APP_CONTENTS_PATH ${CMAKE_CURRENT_BINARY_DIR}/bin/$(CONFIGURATION)/${SAMPLE_NAME}.app)
 	#else ()
@@ -49,25 +47,31 @@ if( APPLE )
         #endif ()
     endif ()
 	
-	set(FRAMEWORKS
-		Ogre
-        RenderSystem_GL3PLUS
-		RenderSystem_Metal
-        OgreHlmsPbs
-        OgreHlmsUnlit
-        OgreOverlay
-		Plugin_ParticleFX
-    )
-
-    foreach(FWK ${FRAMEWORKS})
+	if( NOT OGRE_BUILD_PLATFORM_APPLE_IOS )
+		set(FRAMEWORKS
+			Ogre
+	        RenderSystem_GL3PLUS
+			RenderSystem_Metal
+	        OgreHlmsPbs
+	        OgreHlmsUnlit
+	        OgreOverlay
+			Plugin_ParticleFX
+	    )
+		
+	    foreach(FWK ${FRAMEWORKS})
+			add_custom_command(TARGET ${SAMPLE_NAME} POST_BUILD
+				COMMAND ditto ${CMAKE_CURRENT_BINARY_DIR}/../../../../lib/macosx/${FWK}.framework ${APP_CONTENTS_PATH}/Frameworks/${FWK}.framework
+			)
+	    endforeach(FWK)
+		
 		add_custom_command(TARGET ${SAMPLE_NAME} POST_BUILD
-			COMMAND ditto ${CMAKE_CURRENT_BINARY_DIR}/../../../../lib/macosx/${FWK}.framework ${APP_CONTENTS_PATH}/Frameworks/${FWK}.framework
+			COMMAND mkdir -p ${APP_CONTENTS_PATH}/Resources
 		)
-    endforeach(FWK)
-	
-	foreach(RSC ${TUTORIAL_RESOURCES})
-		add_custom_command(TARGET ${SAMPLE_NAME} POST_BUILD
-			COMMAND cp -r ${RSC} ${APP_CONTENTS_PATH}/Resources/
-		)
-    endforeach(FWK)
+		
+		foreach(RSC ${SAMPLE_COMMON_RESOURCES})
+			add_custom_command(TARGET ${SAMPLE_NAME} POST_BUILD
+				COMMAND cp -r ${RSC} ${APP_CONTENTS_PATH}/Resources/
+			)
+	    endforeach(FWK)
+	endif()
 endif()

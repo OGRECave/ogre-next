@@ -111,8 +111,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalRenderWindow::windowMovedOrResized(void)
     {
-        if( mWidth != mMetalLayer.drawableSize.width ||
-            mHeight != mMetalLayer.drawableSize.height )
+        if( (mMetalLayer.drawableSize.width > 0 && mWidth != mMetalLayer.drawableSize.width) ||
+            (mMetalLayer.drawableSize.height > 0 && mHeight != mMetalLayer.drawableSize.height) )
         {
             mWidth  = mMetalLayer.drawableSize.width;
             mHeight = mMetalLayer.drawableSize.height;
@@ -195,6 +195,20 @@ namespace Ogre
 
         mFormat = PF_B8G8R8A8;
         mHwGamma = true;
+        
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+        CGRect frame;
+#else
+        NSRect frame;
+#endif
+        frame.origin.x = 0;
+        frame.origin.y = 0;
+        frame.size.width = mWidth;
+        frame.size.height = mHeight;
+        mMetalView = [[OgreMetalView alloc] initWithFrame:frame];
+        
+        Real contentScalingFactor = 1.f;
+        bool hasContentScalingFactor = false;
 
         if( miscParams )
         {
@@ -215,37 +229,36 @@ namespace Ogre
             {
                 LogManager::getSingleton().logMessage("Mac Cocoa Window: Rendering on an external plain NSView*");
                 opt = miscParams->find("parentWindowHandle");
-                NSView *nsview = (__bridge NSView*)reinterpret_cast<void*>(StringConverter::parseUnsignedLong(opt->second));
-                assert( nsview &&
+                mView = (__bridge NSView*)reinterpret_cast<void*>(StringConverter::parseUnsignedLong(opt->second));
+                assert( mView &&
                        "Unable to get a pointer to the parent NSView."
                        "Was the 'parentWindowHandle' parameter set correctly in the call to createRenderWindow()?");
-                mWindow = [nsview window];
+                mWindow = [mView window];
+            }
+#else
+            opt = miscParams->find("externalWindowHandle");
+            if( opt != end )
+            {
+                mWindow = (__bridge UIWindow*)reinterpret_cast<void*>(StringConverter::parseUnsignedLong(opt->second));
             }
 #endif
+            opt = miscParams->find("contentScalingFactor");
+            if( opt != end )
+            {
+                hasContentScalingFactor = true;
+                contentScalingFactor = StringConverter::parseReal( opt->second );
+            }
         }
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-        CGRect frame;
-#else
-        NSRect frame;
-#endif
-
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-        frame.origin.x = 0;
-        frame.origin.y = 0;
-        frame.size.width = mWidth;
-        frame.size.height = mHeight;
-#else
-        frame = [mWindow.contentView bounds];
-#endif
-        mMetalView = [[OgreMetalView alloc] initWithFrame:frame];
-
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
-        NSView *view = mWindow.contentView;
-        [view addSubview:mMetalView];
-        mResizeObserver = [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidResizeNotification object:mWindow queue:nil usingBlock:^(NSNotification *){
-          mMetalView.frame = [mWindow.contentView bounds];
-        }];
+        [mView addSubview:mMetalView];
+        mMetalView.frame = mView.bounds;
+        mMetalView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
+#else
+        mMetalView.frame = mWindow.rootViewController.view.bounds;
+        mMetalView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+        mMetalView.userInteractionEnabled = NO;
+        [mWindow.rootViewController.view addSubview:mMetalView];
 #endif
 
         mMetalLayer = (CAMetalLayer*)mMetalView.layer;
@@ -255,6 +268,9 @@ namespace Ogre
         //This is the default but if we wanted to perform compute
         //on the final rendering layer we could set this to no
         mMetalLayer.framebufferOnly = YES;
+        
+        if( hasContentScalingFactor )
+            mMetalView.layer.contentsScale = contentScalingFactor;
 
         this->init( nil, nil );
 
@@ -266,9 +282,6 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalRenderWindow::destroy()
     {
-#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
-        [[NSNotificationCenter defaultCenter] removeObserver:mResizeObserver];
-#endif
         mActive = false;
         mClosed = true;
 
@@ -282,12 +295,13 @@ namespace Ogre
     {
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
         CGRect frame = mMetalView.frame;
+#else
+        NSRect frame = mMetalView.frame;
+#endif
         frame.size.width    = width;
         frame.size.height   = height;
         mMetalView.frame = frame;
-#else
-        mMetalView.frame = [mWindow.contentView bounds];
-#endif
+
         detachDepthBuffer();
     }
     //-------------------------------------------------------------------------
@@ -295,12 +309,12 @@ namespace Ogre
     {
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
         CGRect frame = mMetalView.frame;
+#else
+        NSRect frame = mMetalView.frame;
+#endif
         frame.origin.x = left;
         frame.origin.y = top;
         mMetalView.frame = frame;
-#else
-        mMetalView.frame = [mWindow.contentView bounds];
-#endif
     }
     //-------------------------------------------------------------------------
     bool MetalRenderWindow::isClosed(void) const
@@ -333,5 +347,9 @@ namespace Ogre
             RenderTarget::getCustomAttribute( name, pData );
         }
     }
+    //-------------------------------------------------------------------------
+    float MetalRenderWindow::getViewPointToPixelScale() const
+    {
+        return mMetalView.layer.contentsScale;//1.0;
+    }
 }
-

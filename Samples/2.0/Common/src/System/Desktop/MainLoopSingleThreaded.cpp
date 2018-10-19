@@ -41,6 +41,8 @@ THE SOFTWARE.
 
 #include "Threading/OgreThreads.h"
 
+#include <iostream>
+
 using namespace Demo;
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
@@ -128,6 +130,7 @@ int Demo::MainEntryPoints::mainAppSingleThreaded( int argc, const char *argv[] )
 
             unsigned long endTime = timer.getMicroseconds();
             timeSinceLast = (endTime - startTime) / 1000000.0;
+            std::cout << "dt " << std::fixed << timeSinceLast << std::endl;
             timeSinceLast = std::min( 1.0, timeSinceLast ); //Prevent from going haywire.
             accumulator += timeSinceLast;
             startTime = endTime;

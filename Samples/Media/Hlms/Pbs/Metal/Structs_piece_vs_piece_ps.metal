@@ -213,10 +213,10 @@ struct Material
 @pset( texcoord, 0 )
 
 @piece( VStoPS_block )
+	@property( (!hlms_shadowcaster || alpha_test) && !lower_gpu_overhead )
+		ushort materialId [[flat]];
+   	@end
 	@property( !hlms_shadowcaster )
-		@property( !lower_gpu_overhead )
-			ushort materialId [[flat]];
-		@end
 		@property( hlms_fine_light_mask || hlms_forwardplus_fine_light_mask )
 			uint objLightMask [[flat]];
 		@end
@@ -238,6 +238,10 @@ struct Material
 				float4 posL@n;@end @end
 
 		@property( hlms_pssm_splits )float depth;@end
+		
+		@property( hlms_colour )
+			float4 colour;
+		@end
 	@end
 
 	@property( hlms_shadowcaster )

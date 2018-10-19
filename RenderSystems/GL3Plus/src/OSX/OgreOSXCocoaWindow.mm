@@ -355,6 +355,11 @@ namespace Ogre {
             winFrame = [mView frame];
         return (unsigned int) winFrame.size.height;
     }
+    
+    float CocoaWindow::getViewPointToPixelScale() const
+    {
+        return mContentScalingFactor;
+    }
 
     void CocoaWindow::destroy(void)
     {

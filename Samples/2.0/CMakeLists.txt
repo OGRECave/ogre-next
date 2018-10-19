@@ -29,10 +29,10 @@ if( OGRE_BUILD_SAMPLES2_SKIP )
 endif()
 
 if( APPLE )
-        if( OGRE_BUILD_PLATFORM_APPLE_IOS )
-            # This needs to be first in the list in order show up in the Copy Bundle Resources build phase.
-            set( SAMPLE_COMMON_STORYBOARD_RESOURCE ${CMAKE_CURRENT_SOURCE_DIR}/Common/src/System/iOS/Resources/Main.storyboard )
-        endif()
+    if( OGRE_BUILD_PLATFORM_APPLE_IOS )
+        # This needs to be first in the list in order show up in the Copy Bundle Resources build phase.
+        set( SAMPLE_COMMON_STORYBOARD_RESOURCE ${CMAKE_CURRENT_SOURCE_DIR}/Common/src/System/iOS/Resources/Main.storyboard )
+    endif()
 
 	set( SAMPLE_COMMON_BASIC_RESOURCES ${SAMPLE_COMMON_BASIC_RESOURCES}
                  ${SAMPLE_COMMON_STORYBOARD_RESOURCE}
@@ -46,11 +46,11 @@ if( APPLE )
 		 ${CMAKE_SOURCE_DIR}/Samples/Media/models
 		 ${CMAKE_SOURCE_DIR}/Samples/Media/materials/textures )
 
-        if( OGRE_BUILD_PLATFORM_APPLE_IOS )
-            set( SAMPLES_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Common/src/System/iOS/Resources/Info.plist )
-        else()
-            set( SAMPLES_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Common/src/System/OSX/Resources/Info.plist )
-        endif()
+    if( OGRE_BUILD_PLATFORM_APPLE_IOS )
+        set( SAMPLES_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Common/src/System/iOS/Resources/Info.plist )
+    else()
+        set( SAMPLES_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Common/src/System/OSX/Resources/Info.plist )
+    endif()
 endif()
 
 if( OGRE_BUILD_SAMPLES2 AND NOT OGRE_BUILD_SAMPLES2_SKIP )
@@ -81,6 +81,7 @@ if( OGRE_BUILD_SAMPLES2 AND NOT OGRE_BUILD_SAMPLES2_SKIP )
 	add_subdirectory(ApiUsage/InstantRadiosity)
 	add_subdirectory(ApiUsage/LocalCubemaps)
 	add_subdirectory(ApiUsage/LocalCubemapsManualProbes)
+	add_subdirectory(ApiUsage/MorphAnimations)
 	add_subdirectory(ApiUsage/V1Interfaces)
 	add_subdirectory(ApiUsage/V2Mesh)
 	add_subdirectory(ApiUsage/V2ManualObject)

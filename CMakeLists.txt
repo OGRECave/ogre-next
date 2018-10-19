@@ -46,6 +46,7 @@ if (APPLE AND NOT ANDROID)
   set(CMAKE_XCODE_ATTRIBUTE_GCC_VERSION "com.apple.compilers.llvm.clang.1_0")
   set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++11")
   set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
+  set(CMAKE_CXX_STANDARD 11)
 endif ()
 
 
@@ -650,4 +651,3 @@ include(Packaging)
 
 # Show feature summary
 include(FeatureSummary)
-

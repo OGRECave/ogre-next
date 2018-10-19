@@ -367,7 +367,7 @@ namespace Ogre
                                                 mSetProperties, queuedRenderable );
             return retVal; //D3D embeds the texture slots in the shader.
         }
-
+        
         //Set samplers.
         if( !retVal->pso.pixelShader.isNull() )
         {
@@ -478,6 +478,11 @@ namespace Ogre
         GpuProgramParametersSharedPtr vsParams = retVal->pso.vertexShader->getDefaultParameters();
         vsParams->setNamedConstant( "worldMatBuf", 0 );
 
+        if( queuedRenderable.renderable->getNumPoseAnimations() > 0 )
+        {
+            vsParams->setNamedConstant( "poseBuf", 4 );
+        }
+        
         mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache,
                                             mSetProperties, queuedRenderable );
 
@@ -776,6 +781,11 @@ namespace Ogre
             else if( itor->keyName != PbsProperty::HwGammaRead &&
                      itor->keyName != PbsProperty::UvDiffuse &&
                      itor->keyName != HlmsBaseProp::Skeleton &&
+                     itor->keyName != HlmsBaseProp::Pose &&
+                     itor->keyName != HlmsBaseProp::Pose1 &&
+                     itor->keyName != HlmsBaseProp::Pose2 &&
+                     itor->keyName != HlmsBaseProp::Pose3 &&
+                     itor->keyName != HlmsBaseProp::Pose4 &&
                      itor->keyName != HlmsBaseProp::BonesPerVertex &&
                      itor->keyName != HlmsBaseProp::DualParaboloidMapping &&
                      itor->keyName != HlmsBaseProp::AlphaTest &&
@@ -2294,6 +2304,56 @@ namespace Ogre
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
         *( currentMappedConstBuffer+3u ) = queuedRenderable.renderable->mCustomParameter & 0x7F;
 #endif
+
+        unsigned short numPoseAnimations = queuedRenderable.renderable->getNumPoseAnimations();
+        if( numPoseAnimations > 0 ) 
+        {
+            if( numPoseAnimations == 1 ) 
+            {
+                float w0 = queuedRenderable.renderable->getPoseWeight(0);
+                memcpy( currentMappedConstBuffer+3u, &w0, sizeof( float ) );
+            }
+            else if( numPoseAnimations == 2 ) 
+            {
+                uint32 wMax = (1 << 16) - 1;
+                uint32 w0 = queuedRenderable.renderable->getPoseWeight(0) * wMax;
+                uint32 w1 = queuedRenderable.renderable->getPoseWeight(1) * wMax;
+                
+                *( currentMappedConstBuffer+3u ) = ((0xffff & w0) << 0) |
+                                                   ((0xffff & w1) << 16);
+            }
+            else if( numPoseAnimations == 3 ) 
+            {
+                uint32 wMax = (1 << 10) - 1;
+                uint32 w0 = queuedRenderable.renderable->getPoseWeight(0) * wMax;
+                uint32 w1 = queuedRenderable.renderable->getPoseWeight(1) * wMax;
+                uint32 w2 = queuedRenderable.renderable->getPoseWeight(2) * wMax;
+                
+                *( currentMappedConstBuffer+3u ) = ((0x3ff & w0) << 0 )|
+                                                   ((0x3ff & w1) << 10)|
+                                                   ((0x3ff & w2) << 20);
+            }
+            else if( numPoseAnimations == 4 ) 
+            {
+                uint32 wMax = (1 << 8) - 1;
+                uint32 w0 = queuedRenderable.renderable->getPoseWeight(0) * wMax;
+                uint32 w1 = queuedRenderable.renderable->getPoseWeight(1) * wMax;
+                uint32 w2 = queuedRenderable.renderable->getPoseWeight(2) * wMax;
+                uint32 w3 = queuedRenderable.renderable->getPoseWeight(3) * wMax;
+                
+                *( currentMappedConstBuffer+3u ) = ((0xff & w0) << 0 )|
+                                                   ((0xff & w1) << 8 )|
+                                                   ((0xff & w2) << 16)|
+                                                   ((0xff & w3) << 24);
+            }
+            
+            TexBufferPacked* poseBuf = queuedRenderable.renderable->getPoseTexBuffer();
+            *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer( VertexShader,
+                                                                           4, poseBuf, 0,
+                                                                           poseBuf->
+                                                                           getTotalSizeBytes() );
+        }
+        
         currentMappedConstBuffer += 4;
 
         //---------------------------------------------------------------------------

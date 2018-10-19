@@ -1085,4 +1085,3 @@ namespace Ogre {
         OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, "Attribute not found.", "RenderSystem::getCustomAttribute");
     }
 }
-

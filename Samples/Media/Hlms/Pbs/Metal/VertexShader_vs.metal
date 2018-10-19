@@ -10,6 +10,7 @@
 struct VS_INPUT
 {
 	float4 position [[attribute(VES_POSITION)]];
+@property( hlms_colour )	float4 colour [[attribute(VES_DIFFUSE)]];@end
 @property( hlms_normal )	float3 normal [[attribute(VES_NORMAL)]];@end
 @property( hlms_qtangent )	float4 qtangent [[attribute(VES_NORMAL)]];@end
 
@@ -150,6 +151,11 @@ vertex PS_INPUT main_metal
 	@insertpiece( PassDecl )
 	@insertpiece( InstanceDecl )
 	, device const float4 *worldMatBuf [[buffer(TEX_SLOT_START+0)]]
+	@property( hlms_pose )
+		, device const float4 *poseBuf [[buffer(TEX_SLOT_START+4)]]
+		, uint vertexId [[vertex_id]]
+		, uint baseVertex [[base_vertex]]
+	@end
 	@insertpiece( custom_vs_uniformDeclaration )
 	// END UNIFORM DECLARATION
 )
@@ -162,6 +168,33 @@ vertex PS_INPUT main_metal
 
 	PS_INPUT outVs;
 	@insertpiece( custom_vs_preExecution )
+	
+@property( hlms_pose )
+	@property( hlms_pose_1 )
+		float poseWeight = as_type<float>( worldMaterialIdx[drawId].w );
+		float4 posePos = poseBuf[1u + vertexId - baseVertex];
+		input.position += posePos * poseWeight;
+	@end @property( !hlms_pose_1 )
+		// number of vertices is stored in the first entry, thus add 1u below
+		// when indexing into poseBuf
+		uint numVertices = as_type<uint>( poseBuf[0].x );
+	
+		@property( hlms_pose_2 )
+			float2 poseWeights = unpack_unorm2x16_to_float( worldMaterialIdx[drawId].w );
+		@end @property( hlms_pose_3 )
+			float4 poseWeights = unpack_unorm10a2_to_float( worldMaterialIdx[drawId].w );
+		@end @property( hlms_pose_4 )
+			float4 poseWeights = unpack_unorm4x8_to_float( worldMaterialIdx[drawId].w );
+		@end
+		
+		float4 posePos;
+		@foreach( hlms_pose, n )
+			posePos = poseBuf[1u + vertexId - baseVertex + numVertices * @n];
+			input.position += posePos * poseWeights[@nu];
+		@end
+	@end
+@end
+	
 @property( !hlms_skeleton )
 	float3x4 worldMat = UNPACK_MAT3x4( worldMatBuf, drawId @property( !hlms_shadowcaster )<< 1u@end );
 	@property( hlms_normal || hlms_qtangent )
@@ -188,6 +221,9 @@ vertex PS_INPUT main_metal
 
 	@insertpiece( DoShadowReceiveVS )
 	@insertpiece( DoShadowCasterVS )
+	
+@property( hlms_colour )	
+	outVs.colour = input.colour;@end
 
 	/// hlms_uv_count will be 0 on shadow caster passes w/out alpha test
 @foreach( hlms_uv_count, n )

@@ -211,7 +211,7 @@ namespace Ogre
         D3D11RenderWindowCoreWindow(D3D11Device& device, IDXGIFactoryN* pDXGIFactory);
         ~D3D11RenderWindowCoreWindow()                          { destroy(); }
 
-        virtual float getViewPointToPixelScale();
+        virtual float getViewPointToPixelScale() const;
         virtual void create(const String& name, unsigned widthPt, unsigned heightPt, bool fullScreen, const NameValuePairList *miscParams);
         virtual void destroy(void);
 
