@@ -1050,7 +1050,7 @@ namespace Ogre
                                           textureName + additionalExtension, aliasName,
                                           GpuPageOutStrategy::Discard, textureFlags,
                                           TextureTypes::Type2D, "SceneFormatImporter", filters, poolId );
-                decalTex[i].xIdx    = decalTex[i].texture->getInternalSliceStart();
+                decalTex[i].xIdx    = static_cast<uint16>(decalTex[i].texture->getInternalSliceStart());
             }
 
             texName.clear();

@@ -1187,7 +1187,7 @@ namespace Ogre
             String lowercaseExt = ext;
             StringUtil::toLowerCase( lowercaseExt );
 
-            if( lowercaseExt == "dds" )
+            if( lowercaseExt == "dds" ||lowercaseExt == "oitd" )
             {
                 // XX HACK there should be a better way to specify whether
                 // all faces are in the same file or not
