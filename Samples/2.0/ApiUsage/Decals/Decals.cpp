@@ -135,7 +135,7 @@ namespace Demo
                                Ogre::GpuPageOutStrategy::Discard,
                                Ogre::TextureFlags::AutomaticBatching |
                                Ogre::TextureFlags::ManualTexture,
-                               Ogre::TextureTypes::Type2D, Ogre::BLANKSTRING, 0, decalDiffuseId );
+                               Ogre::TextureTypes::Type2D, Ogre::BLANKSTRING, 0, decalNormalId );
             decalTexture->setResolution( blackImage.getWidth(), blackImage.getHeight() );
             decalTexture->setNumMipmaps( blackImage.getNumMipmaps() );
             decalTexture->setPixelFormat( blackImage.getPixelFormat() );

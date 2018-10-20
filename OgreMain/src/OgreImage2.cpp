@@ -382,15 +382,21 @@ namespace Ogre {
             flipAroundX();
     }
     //-----------------------------------------------------------------------------------
-    void Image2::uploadTo( TextureGpu *texture, uint8 minMip, uint8 maxMip )
+    void Image2::uploadTo( TextureGpu *texture, uint8 minMip, uint8 maxMip,
+                           uint32 dstZorSliceStart, uint32 srcDepthOrSlices )
     {
         assert( minMip <= maxMip );
+        assert( srcDepthOrSlices <= mDepthOrSlices );
 
         OgreProfileExhaustive( "Image2::uploadTo" );
 
+        if( srcDepthOrSlices == 0u )
+            srcDepthOrSlices = mDepthOrSlices;
+
         if( texture->getWidth() != mWidth ||
             texture->getHeight() != mHeight ||
-            texture->getDepthOrSlices() != mDepthOrSlices ||
+            srcDepthOrSlices > texture->getDepthOrSlices() ||
+            dstZorSliceStart + srcDepthOrSlices > texture->getDepthOrSlices() ||
             PixelFormatGpuUtils::getFamily( texture->getPixelFormat() ) !=
             PixelFormatGpuUtils::getFamily( mPixelFormat ) ||
             texture->getNumMipmaps() <= maxMip )
@@ -412,7 +418,9 @@ namespace Ogre {
 
         for( size_t i=minMip; i<=maxMip; ++i )
         {
-            TextureBox box = getData( i );
+            TextureBox box = getData( static_cast<uint8>( i ) );
+            box.depth       = mTextureType == TextureTypes::Type3D ? srcDepthOrSlices : box.numSlices;
+            box.numSlices   = mTextureType != TextureTypes::Type3D ? srcDepthOrSlices : box.numSlices;
             TextureBox dstBox;
             for( size_t tries=0; tries<2 && !dstBox.data; ++tries )
             {
@@ -437,8 +445,16 @@ namespace Ogre {
                     stagingTexture->stopMapRegion();
                     for( size_t j=0; j<numUnsentBoxes; ++j )
                     {
+                        TextureBox texBox =
+                                texture->getEmptyBox( static_cast<uint8>( i - numUnsentBoxes + j ) );
+                        texBox.z            = mTextureType == TextureTypes::Type3D ? dstZorSliceStart :
+                                                                                     texBox.z;
+                        texBox.sliceStart   = mTextureType != TextureTypes::Type3D ? dstZorSliceStart :
+                                                                                     texBox.sliceStart;
+                        texBox.depth        = unsentBoxes[j].depth;
+                        texBox.numSlices    = unsentBoxes[j].numSlices;
                         stagingTexture->upload( unsentBoxes[j], texture,
-                                                static_cast<uint8>( i - numUnsentBoxes + j ) );
+                                                static_cast<uint8>( i - numUnsentBoxes + j ), &texBox );
                     }
                     numUnsentBoxes = 0;
                     textureManager->removeStagingTexture( stagingTexture );
@@ -454,8 +470,16 @@ namespace Ogre {
         stagingTexture->stopMapRegion();
         for( size_t j=0; j<numUnsentBoxes; ++j )
         {
+            TextureBox texBox =
+                    texture->getEmptyBox( static_cast<uint8>( maxMip + 1u - numUnsentBoxes + j ) );
+            texBox.z            = mTextureType == TextureTypes::Type3D ? dstZorSliceStart :
+                                                                         texBox.z;
+            texBox.sliceStart   = mTextureType != TextureTypes::Type3D ? dstZorSliceStart :
+                                                                         texBox.sliceStart;
+            texBox.depth        = unsentBoxes[j].depth;
+            texBox.numSlices    = unsentBoxes[j].numSlices;
             stagingTexture->upload( unsentBoxes[j], texture,
-                                    static_cast<uint8>( maxMip + 1u - numUnsentBoxes + j ) );
+                                    static_cast<uint8>( maxMip + 1u - numUnsentBoxes + j ), &texBox );
         }
         numUnsentBoxes = 0;
         textureManager->removeStagingTexture( stagingTexture );

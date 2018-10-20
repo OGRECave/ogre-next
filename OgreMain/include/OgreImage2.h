@@ -191,8 +191,14 @@ namespace Ogre {
             First mipmap to upload, inclusive.
         @param maxMip
             Last mipmap to upload, inclusive.
+        @param dstZorSliceStart
+            Destination offset in the texture
+            (e.g. when dstZorSliceStart = 5, it uploads N slices between [5; 5+N) )
+        @param srcDepthOrSlices
+            How many slices from this Image2 to upload. Zero to upload all of them.
         */
-        void uploadTo( TextureGpu *texture, uint8 minMip, uint8 maxMip );
+        void uploadTo( TextureGpu *texture, uint8 minMip, uint8 maxMip,
+                       uint32 dstZorSliceStart=0u, uint32 srcDepthOrSlices=0u );
 
         /** Loads an image file.
             @remarks

@@ -183,7 +183,7 @@ namespace Ogre
                 {
                     //Copy row by row, uncompressed.
                     const uint32 finalHeight        = this->height;
-                    const uint32 finalBytesPerRow   = std::min( this->bytesPerRow, src.bytesPerRow );
+                    const size_t finalBytesPerRow   = std::min( this->bytesPerRow, src.bytesPerRow );
                     for( size_t _z=0; _z<finalDepthOrSlices; ++_z )
                     {
                         for( size_t _y=0; _y<finalHeight; ++_y )
@@ -201,7 +201,7 @@ namespace Ogre
                     const uint32 blockHeight= PixelFormatGpuUtils::getCompressedBlockHeight( pixelFormat,
                                                                                              false );
                     const uint32 finalHeight        = this->height;
-                    const uint32 finalBytesPerRow   = std::min( this->bytesPerRow, src.bytesPerRow );
+                    const size_t finalBytesPerRow   = std::min( this->bytesPerRow, src.bytesPerRow );
                     for( size_t _z=0; _z<finalDepthOrSlices; ++_z )
                     {
                         for( size_t _y=0; _y<finalHeight; _y += blockHeight )

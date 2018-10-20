@@ -276,6 +276,10 @@ namespace Ogre
             Pointer to image if you want to load the texture from memory instead of loading
             it from file or a listener.
             Pointer must be null if this is a manual texture.
+            Pointer must NOT be a stack variable nor be deleted immediately.
+            The actual loading is postponed until the request reaches the worker thread.
+            That means the image pointer is safe to delete once you receive the
+            TextureGpuListener::Reason::ReadyForRendering message.
         @param autoDeleteImage
             Whether we should call "delete image" once we're done using the image.
             Otherwise you must listen for TextureGpuListener::ReadyForRendering
