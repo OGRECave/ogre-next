@@ -106,7 +106,11 @@ namespace Ogre
             //We use LT_DIRECTIONAL (index = 0) to contain the total light count.
             uint32  lightCount[Light::MAX_FORWARD_PLUS_LIGHTS];
             uint32  objCount[NumObjTypes];
-            LightCount() { memset( lightCount, 0, sizeof(lightCount) ); }
+            LightCount()
+            {
+                memset( lightCount, 0, sizeof(lightCount) );
+                memset( objCount, 0, sizeof(objCount) );
+            }
         };
 
         typedef vector<CachedGrid>::type CachedGridVec;

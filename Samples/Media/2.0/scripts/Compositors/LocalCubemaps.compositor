@@ -107,6 +107,9 @@ compositor_node LocalCubemapsRenderingNode
 				depth	dont_care
 				stencil	dont_care
 			}
+			//Set a shadow node so Forward+ can reuse the cache from
+			//the previous render_scene pass
+			shadows		LocalCubemapsShadowNode reuse
 			rq_first	251
 		}
 

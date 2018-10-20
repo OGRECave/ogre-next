@@ -1067,7 +1067,7 @@ namespace Ogre
                 decalTex[i].texture = textureManager->createOrRetrieveTexture(
                                           textureName, GpuPageOutStrategy::Discard,
                                           0, TextureTypes::Type2DArray, "SceneFormatImporter", 0, 0 );
-                decalTex[i].xIdx    = arrayIdx;
+                decalTex[i].xIdx    = static_cast<uint16>( arrayIdx );
             }
         }
 
