@@ -50,7 +50,8 @@ namespace Ogre
     const size_t ForwardPlusBase::MaxCubemapProbeRq = 8u;
     const size_t ForwardPlusBase::NumBytesPerLight = c_ForwardPlusNumFloat4PerLight * 4u * 4u;
     const size_t ForwardPlusBase::NumBytesPerDecal = c_ForwardPlusNumFloat4PerDecal * 4u * 4u;
-    const size_t ForwardPlusBase::NumBytesPerCubemapProbe = 7 * 4 * 4;
+    const size_t ForwardPlusBase::NumBytesPerCubemapProbe = c_ForwardPlusNumFloat4PerCubemapProbe *
+                                                            4u * 4u;
 
     ForwardPlusBase::ForwardPlusBase( SceneManager *sceneManager, bool decalsEnabled,
                                       bool cubemapProbesEnabled ) :
@@ -60,7 +61,9 @@ namespace Ogre
         mFadeAttenuationRange( true ),
         mEnableVpls( false ),
         mDecalsEnabled( decalsEnabled ),
-        mCubemapProbesEnabled( cubemapProbesEnabled )
+        mCubemapProbesEnabled( cubemapProbesEnabled ),
+        mDecalFloat4Offset( 0u ),
+        mCubemapProbeFloat4Offset( 0u )
   #if !OGRE_NO_FINE_LIGHT_MASK_GRANULARITY
     ,   mFineLightMaskGranularity( true )
   #endif
@@ -189,6 +192,16 @@ namespace Ogre
         if( !numLights && !numDecals && !numCubemapProbes )
             return;
 
+        {
+            size_t accumOffset = numLights * c_ForwardPlusNumFloat4PerLight;
+            if( numDecals > 0u )
+                accumOffset = alignToNextMultiple( accumOffset, c_ForwardPlusNumFloat4PerDecal );
+            mDecalFloat4Offset = static_cast<uint16>( accumOffset );
+            if( numCubemapProbes > 0u )
+                accumOffset = alignToNextMultiple( accumOffset, c_ForwardPlusNumFloat4PerCubemapProbe );
+            mCubemapProbeFloat4Offset = static_cast<uint16>( accumOffset );
+        }
+
         Matrix4 viewMatrix = camera->getViewMatrix();
         Matrix3 viewMatrix3;
         viewMatrix.extract3x3Matrix( viewMatrix3 );
@@ -259,14 +272,9 @@ namespace Ogre
             ++itLights;
         }
 
-        if( numLights > 0u )
-        {
-            //Align to the start of decals
-            size_t decalsStart = alignToNextMultiple( numLights * c_ForwardPlusNumFloat4PerLight,
-                                                      c_ForwardPlusNumFloat4PerDecal );
-            //Alignment happens in increments of float4, hence the "<< 2u"
-            lightData += (decalsStart - numLights * c_ForwardPlusNumFloat4PerLight) << 2u;
-        }
+        //Align to the start of decals
+        //Alignment happens in increments of float4, hence the "<< 2u"
+        lightData += (mDecalFloat4Offset - numLights * c_ForwardPlusNumFloat4PerLight) << 2u;
 
         const Matrix4 viewMat = camera->getViewMatrix();
 
@@ -304,10 +312,8 @@ namespace Ogre
         }
 
         //Align to the start of cubemap probes
-        if( numLights > 0u && numDecals == 0u )
-            lightData += (7u - 6u) * 4u;
-        else if( numDecals > 0u )
-            lightData += (7u - 4u) * 4u;
+        //Alignment happens in increments of float4, hence the "<< 2u"
+        lightData += (mCubemapProbeFloat4Offset - mDecalFloat4Offset) << 2u;
 
         viewMatrix = camera->getViewMatrix();
         Matrix3 invViewMatrix3 = viewMatrix3.Inverse();
