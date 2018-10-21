@@ -472,7 +472,7 @@ namespace Ogre
                                 uint16 * RESTRICT_ALIAS cellElem = mGridBuffer + idx * mObjsPerCell +
                                                                    (numLightsInCell->lightCount[0] +
                                                                    c_reservedLightSlotsPerCell);
-                                *cellElem = i * 6;
+                                *cellElem = static_cast<uint16>( i * c_ForwardPlusNumFloat4PerLight );
                                 ++numLightsInCell->lightCount[0];
                                 ++numLightsInCell->lightCount[lightType];
                             }
@@ -612,7 +612,7 @@ namespace Ogre
                                 uint16 * RESTRICT_ALIAS cellElem = mGridBuffer + idx * mObjsPerCell +
                                                                    (numLightsInCell->lightCount[0] +
                                                                    c_reservedLightSlotsPerCell);
-                                *cellElem = i * 6;
+                                *cellElem = static_cast<uint16_t>( i * c_ForwardPlusNumFloat4PerLight );
                                 ++numLightsInCell->lightCount[0];
                                 ++numLightsInCell->lightCount[lightType];
                             }
@@ -630,14 +630,16 @@ namespace Ogre
         const size_t cubemapOffsetStart = mLightsPerCell + c_reservedLightSlotsPerCell +
                                           (hasDecals ? c_reservedDecalsSlotsPerCell : 0u);
 
-        uint16 numDecals = static_cast<uint16>( alignToNextMultiple( numLights * 6u, 4u ) >> 2u );
+        uint16 numDecals = static_cast<uint16>(
+                               alignToNextMultiple( numLights * c_ForwardPlusNumFloat4PerLight,
+                                                    c_ForwardPlusNumFloat4PerDecal ) >> 2u );
         const VisibleObjectsPerRq &objsPerRqInThread0 = mSceneManager->_getTmpVisibleObjectsList()[0];
         const size_t actualMaxDecalRq = std::min( MaxDecalRq, objsPerRqInThread0.size() );
         numDecals = collectObjsForSlice( numPackedFrustumsPerSlice, frustumStartIdx,
                                          numDecals, MinDecalRq, actualMaxDecalRq,
                                          mDecalsPerCell,
                                          decalOffsetStart + c_reservedDecalsSlotsPerCell,
-                                         ObjType_Decal, 4u );
+                                         ObjType_Decal, (uint16)c_ForwardPlusNumFloat4PerDecal );
 
         uint16 numProbes = static_cast<uint16>( alignToNextMultiple( numDecals * 4u, 7u ) >> 2u );
         const size_t actualMaxCubemapProbeRq = std::min( MaxCubemapProbeRq, objsPerRqInThread0.size() );
