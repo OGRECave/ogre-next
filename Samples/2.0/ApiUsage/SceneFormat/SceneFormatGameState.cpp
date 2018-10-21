@@ -200,7 +200,8 @@ namespace Demo
                     "RawDecalTextureTest", Ogre::GpuPageOutStrategy::SaveToSystemRam,
                     Ogre::TextureFlags::ManualTexture, Ogre::TextureTypes::Type2DArray );
         rawTex->setResolution( origImage.getWidth(), origImage.getHeight(), 8u );
-        rawTex->setPixelFormat( origImage.getPixelFormat() );
+        rawTex->setPixelFormat( Ogre::PixelFormatGpuUtils::
+                                getEquivalentSRGB( origImage.getPixelFormat() ) );
         rawTex->setNumMipmaps( origImage.getNumMipmaps() );
         rawTex->scheduleTransitionTo( Ogre::GpuResidency::Resident );
 
