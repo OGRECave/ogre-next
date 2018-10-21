@@ -62,11 +62,11 @@ namespace Ogre
         mEnableVpls( false ),
         mDecalsEnabled( decalsEnabled ),
         mCubemapProbesEnabled( cubemapProbesEnabled ),
+  #if !OGRE_NO_FINE_LIGHT_MASK_GRANULARITY
+        mFineLightMaskGranularity( true ),
+  #endif
         mDecalFloat4Offset( 0u ),
         mCubemapProbeFloat4Offset( 0u )
-  #if !OGRE_NO_FINE_LIGHT_MASK_GRANULARITY
-    ,   mFineLightMaskGranularity( true )
-  #endif
     {
     }
     //-----------------------------------------------------------------------------------
