@@ -427,10 +427,26 @@ namespace Ogre
                 renderSystem->_endFrameOnce();
 
                 probe->mDirty = false;
-            }
 
-            ++itor;
+                if( iterationThreshold > 0u )
+                {
+                    //We have to remove only those that are no longer dirty
+                    itor = efficientVectorRemove( mDirtyProbes, itor );
+                    end  = mDirtyProbes.end();
+                }
+                else
+                    ++itor;
+            }
+            else
+            {
+                ++itor;
+            }
         }
+
+        //When iterationThreshold == 0; we're updating every probe,
+        //thus just clear them all at once
+        if( iterationThreshold == 0u )
+            mDirtyProbes.clear();
 
         mSceneManager->setVisibilityMask( oldVisibilityMask );
     }
@@ -450,6 +466,8 @@ namespace Ogre
             probe->mDirty = false;
             ++itor;
         }
+
+        mDirtyProbes.clear();
 
         mSceneManager->setVisibilityMask( oldVisibilityMask );
     }
