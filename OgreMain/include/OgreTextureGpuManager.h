@@ -100,6 +100,101 @@ namespace Ogre
         };
     }
 
+    /**
+    @class TextureGpuManager
+        This class manages all textures (i.e. TextureGpu) since Ogre 2.2
+
+        Explanation of the streaming model:
+
+        TextureGpuManager uses a worker thread to load textures in the background.
+        There are several restrictions the implementation needs to account for:
+            * D3D11 does not support persistent mapping. This means we must call unmap
+              on a StagingTexture before we can copy it to the final texture.
+            * Calling map/unmap from multiple threads is nearly impossible in OpenGL.
+              This means map/unmap calls must happen in the main thread.
+            * ResourceGroupManager is not thread-friendly (building with thread
+              support fills ResourceGroupManager with huge fat mutexes)
+            * Most APIs allow using a simple buffer to store all sorts of staging
+              data (regardless of format and resolution), but D3D11 is very inflexible
+              about this, requiring StagingTextures to have a 2D resolution (rather
+              than being a 1D buffer with just bytes), and must match the same
+              format.
+
+        Because of these restrictions, TextureGpuManager::scheduleLoadRequest will
+        grab the Archive to load from file from ResourceGroupManager and then
+        create a request for the worker thread.
+
+        The worker thread (_updateStreamingWorkerThread) runs an infinite loop
+        waiting for new requests.
+
+        The worker thread will process incoming LoadRequest: it will open the file
+        and retrieve the important information first aka the metadata (such as
+        resolution, pixel format, number of mipmaps, etc). It is most likely
+        the worker thread will load the whole image from disk, and not just
+        the metadata (at least the first slice + first mip).
+
+        The image is at the moment in RAM, but two things need to happen:
+            1. The image must be copied to a StagingTexture so that it can
+               be later be copied to the final texture.
+            2. The texture must become Resident so that our API commands
+               can actually work (like copying from StagingTexture to the
+               final texture object)
+
+        The worker thread will now push an entry to mStreamingData.queuedImages
+        for all the slices & mips that are pending to copy from RAM to a
+        StagingTexture. That includes slice 0 mip 0.
+
+        It will also emit a command the main thread will eventually see to
+        make the texture Resident (via ObjCmdBuffer::TransitionToResident)
+
+        The worker thread will call TextureGpuManager::getStreaming to grab an
+        available StagingTexture that has been pre-mapped in the main thread that
+        can hold the data we want to upload.
+
+        If no such Texture is available, we cannot upload the texture yet and this
+        failure is recorded; and we do not remove the entry from mStreamingData.queuedImages
+        Until mStreamingData.queuedImages[i].empty() returns true, the worker thread,
+        with each new iteration, will try again to grab a StagingTexture to finish the jobs.
+
+        From the main thread, with each TextureGpuManager::_update; fullfillBudget will
+        check the recorded failures in getStreaming from the worker thread and create & map
+        more StagingTextures to satisfy the worker thread.
+
+        The main thread will also execute the transition to resident commands sent from
+        the worker thread.
+
+        This means that in worst case scenario, uploading a texture may require multiple
+        ping pongs between the worker & main thread, which is why
+        TextureGpuManager::waitForStreamingCompletion keeps calling _update in a loop
+        until the texture is fully loaded.
+
+        To put things into perspective: if getStreaming always failed to grab a
+        StagingTexture (i.e. due to a bug), then waitForStreamingCompletion would
+        be stuck in an infinite loop.
+
+        Note that this behavior applies to both multithreaded and singlethreaded versions
+        (i.e. when OGRE_FORCE_TEXTURE_STREAMING_ON_MAIN_THREAD is defined).
+
+        When everything's done, queuedImage.empty() returns true, a
+        ObjCmdBuffer::NotifyDataIsReady command to the main thread is issued,
+        and the entry is removed from mStreamingData.queuedImages
+
+        Of course, the main thread tries to predict how much StagingTexture will
+        be needed by tracking past usage and by trying to fullfill mBudget
+        (see TextureGpuManager::setWorkerThreadMinimumBudget), so under best case
+        scenario the ping pong between worker & main thread is kept to a minimum.
+
+        TextureGpuManager::mMaxPreloadBytes puts an upper limit to this prediction
+        to prevent memory from sky-rocketing (or reaching out of memory conditions)
+        during spikes. There's only so much GART/GTT memory available in a system.
+
+        The metadata cache helps with performance by being able to know in the
+        main thread before creating the LoadRequest what texture pool to reserve.
+        But performance will be degraded if the metadata cache lied, as we must
+        then perform multiple ping pongs between the threads to correct the error.
+
+        @see    TextureGpu
+    */
     class _OgreExport TextureGpuManager : public ResourceAlloc
     {
     public:
