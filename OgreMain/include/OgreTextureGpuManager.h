@@ -188,12 +188,33 @@ namespace Ogre
         to prevent memory from sky-rocketing (or reaching out of memory conditions)
         during spikes. There's only so much GART/GTT memory available in a system.
 
+        The variable mEntriesToProcessPerIteration controls how many entries in
+        LoadRequests are processed per iteration in the worker thread.
+        High values cause the worker thread to appear "stuck" loading lots of
+        images without flushing our internal command buffer, which means
+        the main thread won't see what's happening and thus unable to
+        fullfull budget failure requests, predict accurately, and unable
+        to perform transition to resident requests. I.e. the main thread
+        will sit idle, until it suddenly sees a lot of work coming from
+        the worker thread.
+        Very low values can cause more threading contention due to excessive
+        flushing.
+
         The metadata cache helps with performance by being able to know in the
         main thread before creating the LoadRequest what texture pool to reserve.
         But performance will be degraded if the metadata cache lied, as we must
         then perform multiple ping pongs between the threads to correct the error.
 
         @see    TextureGpu
+
+    @remarks
+        Even if you use waitForStreamingCompletion to have all of your frames
+        rendering "perfectly" (i.e. prefer stalling rendering instead of showing
+        a replacement texture until the real one is loaded), multithreaded
+        streaming can still reduce your loading times because Ogre will
+        immediately start loading the texture from disk while the main
+        thread can keep executing your code (like moving on to the next Item
+        or Datablock you're instantiating)
     */
     class _OgreExport TextureGpuManager : public ResourceAlloc
     {
