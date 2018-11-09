@@ -1100,8 +1100,6 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_beginFrameOnce(void)
     {
-        mHardwareBufferManager->_updateDirtyInputLayouts();
-
         assert( !mBeginFrameOnceStarted &&
                 "Calling MetalRenderSystem::_beginFrameOnce more than once "
                 "without matching call to _endFrameOnce!!!" );

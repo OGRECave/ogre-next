@@ -364,8 +364,6 @@ namespace Ogre
             startIndirectDraw = indirectDraw;
         }
 
-        v1::HardwareBufferManager::getSingleton()._updateDirtyInputLayouts();
-
         for( size_t i=firstRq; i<lastRq; ++i )
         {
             QueuedRenderableArray &queuedRenderables = mRenderQueues[i].mQueuedRenderables;
@@ -510,9 +508,7 @@ namespace Ogre
             lastHlmsCacheHash = lastHlmsCache->hash;
             const HlmsCache *hlmsCache = hlms->getMaterial( lastHlmsCache,
                                                             passCache[datablock->mType],
-                                                            queuedRenderable,
-                                                            op.vertexData->vertexDeclaration->
-                                                            getInputLayoutId(), casterPass );
+                                                            queuedRenderable, casterPass );
             if( lastHlmsCacheHash != hlmsCache->hash )
             {
                 rs->_setPipelineStateObject( &hlmsCache->pso );
@@ -578,7 +574,6 @@ namespace Ogre
             const HlmsCache *hlmsCache = hlms->getMaterial( lastHlmsCache,
                                                             passCache[datablock->mType],
                                                             queuedRenderable,
-                                                            vao->getInputLayoutId(),
                                                             casterPass );
             if( lastHlmsCacheHash != hlmsCache->hash )
             {
@@ -715,9 +710,7 @@ namespace Ogre
             lastHlmsCacheHash = lastHlmsCache->hash;
             const HlmsCache *hlmsCache = hlms->getMaterial( lastHlmsCache,
                                                             passCache[datablock->mType],
-                                                            queuedRenderable,
-                                                            renderOp.vertexData->vertexDeclaration->
-                                                            getInputLayoutId(), casterPass );
+                                                            queuedRenderable, casterPass );
             if( lastHlmsCache != hlmsCache )
             {
                 CbPipelineStateObject *psoCmd = mCommandBuffer->addCommand<CbPipelineStateObject>();
@@ -805,8 +798,6 @@ namespace Ogre
     void RenderQueue::renderSingleObject( Renderable* pRend, const MovableObject *pMovableObject,
                                           RenderSystem *rs, bool casterPass, bool dualParaboloid )
     {
-        v1::HardwareBufferManager::getSingleton()._updateDirtyInputLayouts();
-
         if( mLastVaoName )
         {
             rs->_startLegacyV1Rendering();
@@ -842,9 +833,7 @@ namespace Ogre
         }
 
         const HlmsCache *hlmsCache = hlms->getMaterial( &c_dummyCache, passCache,
-                                                        queuedRenderable,
-                                                        mLastVertexData->vertexDeclaration->
-                                                        getInputLayoutId(), casterPass );
+                                                        queuedRenderable, casterPass );
         rs->_setPipelineStateObject( &hlmsCache->pso );
 
         mLastTextureHash = hlms->fillBuffersFor( hlmsCache, queuedRenderable, casterPass,

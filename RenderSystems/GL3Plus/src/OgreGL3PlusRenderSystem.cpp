@@ -2298,7 +2298,6 @@ namespace Ogre {
 
     void GL3PlusRenderSystem::_beginFrame(void)
     {
-        mHardwareBufferManager->_updateDirtyInputLayouts();
     }
 
     void GL3PlusRenderSystem::_endFrame(void)
