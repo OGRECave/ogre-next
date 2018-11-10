@@ -58,7 +58,7 @@ endif()
 project(OGRE-Next)
 
 # Include necessary submodules
-set(CMAKE_MODULE_PATH
+list(APPEND CMAKE_MODULE_PATH
   "${PROJECT_SOURCE_DIR}/CMake"
   "${PROJECT_SOURCE_DIR}/CMake/Utils"
   "${PROJECT_SOURCE_DIR}/CMake/Packages"
