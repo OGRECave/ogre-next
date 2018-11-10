@@ -8,7 +8,6 @@
 #-------------------------------------------------------------------
 
 
-PROJECT(${OGRE_NEXT}PlanarReflections)
 
 file(
 	GLOB HEADER_FILES
