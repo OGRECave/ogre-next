@@ -138,9 +138,8 @@
 
 	@property( hlms_forwardplus_debug )totalNumLightsInGrid += numLightsInGrid;@end
 
-	float3 reflDir = 2.0 * dot( pixelData.viewDir, pixelData.normal ) * pixelData.normal - pixelData.viewDir;
-	float3 envColourS = float3( 0, 0, 0 );
-	float3 envColourD = float3( 0, 0, 0 );
+	pixelData.envColourS = float3( 0, 0, 0 );
+	pixelData.envColourD = float3( 0, 0, 0 );
 	float cubemapAccumWeight = 0;
 
 	for( uint i=0u; i<numLightsInGrid; ++i )
@@ -171,25 +170,25 @@
 			ndf = saturate( ndf );
 			probeFade = ndf <= 0 ? 10000.0f : (1.0 - ndf);
 
-			float3 reflDirLS = localCorrect( reflDir, posInProbSpace, probe );
+			float3 reflDirLS = localCorrect( pixelData.reflDir, posInProbSpace, probe );
 			float3 normalLS = localCorrect( pixelData.normal, posInProbSpace, probe );
 
 			@property( !hlms_cubemaps_use_dpm )
-				envColourS += OGRE_SampleArrayCubeLevel(
+				pixelData.envColourS += OGRE_SampleArrayCubeLevel(
 					texEnvProbeMap, samplerState@value(envMapRegSampler), reflDirLS,
 					probe.halfSize.w, ROUGHNESS * 12.0 ).xyz
 					@insertpiece( ApplyEnvMapScale ) * probeFade;
-				envColourD += OGRE_SampleArrayCubeLevel(
+				pixelData.envColourD += OGRE_SampleArrayCubeLevel(
 					texEnvProbeMap, samplerState@value(envMapRegSampler), normalLS,
 					probe.halfSize.w, 11.0 ).xyz
 					@insertpiece( ApplyEnvMapScale ) * probeFade;
 			@end
 			@property( hlms_cubemaps_use_dpm )
-				envColourS += OGRE_SampleArray2DLevel(
+				pixelData.envColourS += OGRE_SampleArray2DLevel(
 					texEnvProbeMap, samplerState@value(envMapRegSampler), mapCubemapToDpm( reflDirLS ),
 					probe.halfSize.w, ROUGHNESS * 12.0 ).xyz
 					@insertpiece( ApplyEnvMapScale ) * probeFade;
-				envColourD += OGRE_SampleArray2DLevel(
+				pixelData.envColourD += OGRE_SampleArray2DLevel(
 					texEnvProbeMap, samplerState@value(envMapRegSampler), mapCubemapToDpm( normalLS ),
 					probe.halfSize.w, 11.0 ).xyz
 					@insertpiece( ApplyEnvMapScale ) * probeFade;
@@ -199,8 +198,8 @@
 		}
 	}
 
-	envColourD.xyz *= cubemapAccumWeight == 0.0f ? 1.0f : (1.0f / cubemapAccumWeight);
-	envColourS.xyz *= cubemapAccumWeight == 0.0f ? 1.0f : (1.0f / cubemapAccumWeight);
+	pixelData.envColourD.xyz *= cubemapAccumWeight == 0.0f ? 1.0f : (1.0f / cubemapAccumWeight);
+	pixelData.envColourS.xyz *= cubemapAccumWeight == 0.0f ? 1.0f : (1.0f / cubemapAccumWeight);
 @end
 @end /// hlms_enable_cubemaps_auto
 
