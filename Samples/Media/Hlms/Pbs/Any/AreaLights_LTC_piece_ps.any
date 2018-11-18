@@ -287,7 +287,7 @@ INLINE float LTC_Evaluate( float3 N, float3 V, float3 P, float3x3 Minv,
 	fDistance = length( lightDir );
 	if( fDistance <= passBuf.areaLtcLights[@n].diffuse.w @insertpiece( andObjAreaLtcLightMaskCmp ) )
 	{
-		float2 ltcUV = float2( ROUGHNESS, sqrt(1.0 - NdotV) );
+		float2 ltcUV = float2( pixelData.roughness, sqrt(1.0 - pixelData.NdotV) );
 		ltcUV = ltcUV * LUT_SCALE + LUT_BIAS;
 
 		float4 ltc0 = OGRE_SampleArray2DLevel( ltcMatrix, ltcSampler, ltcUV, 0, 0 );
@@ -302,26 +302,25 @@ INLINE float LTC_Evaluate( float3 N, float3 V, float3 P, float3x3 Minv,
 		bool doubleSidedLtc = passBuf.areaLtcLights[@n].specular.w != 0.0f;
 
 		@property( !fresnel_scalar )
-			float ltcSpecular = LTC_Evaluate( nNormal.xyz, viewDir.xyz, inPs.pos.xyz, Minv,
+			float ltcSpecular = LTC_Evaluate( pixelData.normal.xyz, pixelData.viewDir.xyz, inPs.pos.xyz, Minv,
 											  passBuf.areaLtcLights[@n].points, doubleSidedLtc );
 			// BRDF shadowing and Fresnel
-			ltcSpecular *= @insertpiece( F0 ).x * ltc1.x + (1.0 - @insertpiece( F0 ).x) * ltc1.y;
-		@end
-		@property( fresnel_scalar )
+			ltcSpecular *= pixelData.F0 * ltc1.x + (1.0 - pixelData.F0) * ltc1.y;
+		@else
 			float3 ltcSpecular;
-			ltcSpecular.x = LTC_Evaluate( nNormal.xyz, viewDir.xyz, inPs.pos.xyz, Minv,
+			ltcSpecular.x = LTC_Evaluate( pixelData.normal.xyz, pixelData.viewDir.xyz, inPs.pos.xyz, Minv,
 										  passBuf.areaLtcLights[@n].points, doubleSidedLtc );
 			ltcSpecular.yz = ltcSpecular.xx;
 			// BRDF shadowing and Fresnel
-			ltcSpecular.xyz *= @insertpiece( F0 ).xyz * ltc1.x + (1.0 - @insertpiece( F0 ).xyz) * ltc1.y;
+			ltcSpecular.xyz *= pixelData.F0.xyz * ltc1.x + (1.0 - pixelData.F0.xyz) * ltc1.y;
 		@end
 
-		float ltcDiffuse = LTC_Evaluate( nNormal.xyz, viewDir.xyz, inPs.pos.xyz,
+		float ltcDiffuse = LTC_Evaluate( pixelData.normal.xyz, pixelData.viewDir.xyz, inPs.pos.xyz,
 										 buildFloat3x3( float3( 1, 0, 0 ), float3( 0, 1, 0 ), float3( 0, 0, 1 ) ),
 										 passBuf.areaLtcLights[@n].points, doubleSidedLtc );
 
-		finalColour += passBuf.areaLtcLights[@n].diffuse.xyz * ltcDiffuse * @insertpiece( kD ).xyz;
-		finalColour += passBuf.areaLtcLights[@n].specular.xyz * ltcSpecular * @insertpiece( kS ).xyz;
+		finalColour += passBuf.areaLtcLights[@n].diffuse.xyz * ltcDiffuse * pixelData.diffuse.xyz;
+		finalColour += passBuf.areaLtcLights[@n].specular.xyz * ltcSpecular * pixelData.specular.xyz;
 	}
 @end
 @end
