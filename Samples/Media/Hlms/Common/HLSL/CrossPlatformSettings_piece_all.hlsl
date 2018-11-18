@@ -16,11 +16,12 @@
 #define floatBitsToUint(x) asuint(x)
 #define uintBitsToFloat(x) asfloat(x)
 #define fract frac
+#define lessThan( a, b ) (a < b)
 
 #define finalDrawId input.drawId
 #define outVs_Position outVs.gl_Position
 #define OGRE_Sample( tex, sampler, uv ) tex.Sample( sampler, uv )
-#define OGRE_SampleLevel( tex, sampler, uv, lod ) tex.SampleLevel( sampler, uv.xy, lod )
+#define OGRE_SampleLevel( tex, sampler, uv, lod ) tex.SampleLevel( sampler, uv, lod )
 #define OGRE_SampleArray2D( tex, sampler, uv, arrayIdx ) tex.Sample( sampler, float3( uv, arrayIdx ) )
 #define OGRE_SampleArray2DLevel( tex, sampler, uv, arrayIdx, lod ) tex.SampleLevel( sampler, float3( uv, arrayIdx ), lod )
 #define OGRE_SampleArrayCubeLevel( tex, sampler, uv, arrayIdx, lod ) tex.SampleLevel( sampler, float4( uv, arrayIdx ), lod )
@@ -32,4 +33,10 @@
 #define bufferFetch( buffer, idx ) buffer.Load( idx )
 #define bufferFetch1( buffer, idx ) buffer.Load( idx ).x
 
+#define CONST_BUFFER( bufferName, bindingPoint ) cbuffer bufferName : register(b##bindingPoint)
+#define CONST_BUFFER_STRUCT_BEGIN( structName, bindingPoint ) cbuffer structName : register(b##bindingPoint) { _##structName
+#define CONST_BUFFER_STRUCT_END( variableName ) variableName; }
+
+#define FLAT_INTERPOLANT( decl, bindingPoint ) nointerpolation decl : TEXCOORD##bindingPoint
+#define INTERPOLANT( decl, bindingPoint ) decl : TEXCOORD##bindingPoint
 @end

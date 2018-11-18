@@ -173,6 +173,10 @@ namespace Ogre
     const IdString PbsProperty::LegacyMathBrdf          = IdString( "legacy_math_brdf" );
     const IdString PbsProperty::RoughnessIsShininess    = IdString( "roughness_is_shininess" );
 
+    const IdString PbsProperty::UseEnvProbeMap    = IdString( "use_envprobe_map" );
+    const IdString PbsProperty::NeedsViewDir      = IdString( "needs_view_dir" );
+    const IdString PbsProperty::NeedsReflDir      = IdString( "needs_refl_dir" );
+
     const IdString *PbsProperty::UvSourcePtrs[NUM_PBSM_SOURCES] =
     {
         &PbsProperty::UvDiffuse,
@@ -480,7 +484,7 @@ namespace Ogre
             int numTextures = getProperty( PbsProperty::NumTextures );
             for( int i=0; i<numTextures; ++i )
             {
-                psParams->setNamedConstant( "textureMaps[" + StringConverter::toString( i ) + "]",
+                psParams->setNamedConstant( "textureMaps" + StringConverter::toString( i ) + "",
                                             texUnit++ );
             }
 
@@ -901,6 +905,35 @@ namespace Ogre
                                             getProperty( HlmsBaseProp::QTangent );
 
             setProperty( PbsProperty::NormalMap, normalMapCanBeSupported );
+        }
+
+        //If the pass does not have planar reflections, then the object cannot use it
+        if( getProperty( PbsProperty::HasPlanarReflections ) )
+            getProperty( PbsProperty::UsePlanarReflections );
+
+        if( getProperty( PbsProperty::EnvProbeMap ) != getProperty( PbsProperty::TargetEnvprobeMap ) ||
+            getProperty( PbsProperty::ParallaxCorrectCubemaps ) )
+        {
+            setProperty( PbsProperty::UseEnvProbeMap, 1 );
+        }
+
+        if( getProperty( HlmsBaseProp::LightsSpot ) ||
+            getProperty( HlmsBaseProp::UseSsr ) ||
+            getProperty( HlmsBaseProp::ForwardPlus ) ||
+            getProperty( PbsProperty::UseEnvProbeMap ) ||
+            getProperty( PbsProperty::UsePlanarReflections ) ||
+            getProperty( PbsProperty::AmbientHemisphere ) )
+        {
+            setProperty( PbsProperty::NeedsViewDir, 1 );
+        }
+
+        if( getProperty( HlmsBaseProp::UseSsr ) ||
+            getProperty( PbsProperty::UseEnvProbeMap ) ||
+            getProperty( PbsProperty::UsePlanarReflections ) ||
+            getProperty( PbsProperty::AmbientHemisphere ) ||
+            getProperty( PbsProperty::EnableCubemapsAuto ) )
+        {
+            setProperty( PbsProperty::NeedsReflDir, 1 );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -2510,6 +2543,7 @@ namespace Ogre
         outLibraryFoldersPaths.push_back( "Hlms/Common/" + shaderSyntax );
         outLibraryFoldersPaths.push_back( "Hlms/Common/Any" );
         outLibraryFoldersPaths.push_back( "Hlms/Pbs/Any" );
+        outLibraryFoldersPaths.push_back( "Hlms/Pbs/Any/Main" );
 
         //Fill the data folder path
         outDataFolderPath = "Hlms/Pbs/" + shaderSyntax;

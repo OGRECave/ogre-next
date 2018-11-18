@@ -4,9 +4,9 @@
 // START UNIFORM DECLARATION
 @property( !hlms_shadowcaster || alpha_test )
 	@property( !hlms_shadowcaster )
-		@insertpiece( PassDecl )
+		@insertpiece( PassStructDecl )
 	@end
-	@insertpiece( MaterialDecl )
+	@insertpiece( MaterialStructDecl )
 	@insertpiece( InstanceDecl )
 	@insertpiece( PccManualProbeDecl )
 @end
@@ -579,7 +579,7 @@ float4 diffuseCol;
 	SamplerState samplerState@n : register(s@counter(samplerStateStart));@end
 
 @property( hlms_shadowcaster_point || exponential_shadow_maps )
-	@insertpiece( PassDecl )
+	@insertpiece( PassStructDecl )
 @end
 
 @insertpiece( DeclOutputType )

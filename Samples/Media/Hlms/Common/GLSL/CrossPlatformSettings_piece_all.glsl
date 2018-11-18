@@ -32,6 +32,7 @@
 #define float2x2 mat2
 #define float3x3 mat3
 #define float4x4 mat4
+#define float4x3 mat3x4
 
 #define ushort uint
 
@@ -50,9 +51,16 @@
 #define PARAMS_ARG_DECL
 #define PARAMS_ARG
 
+#define inVs_vertex vertex
+#define inVs_blendWeights blendWeights
+#define inVs_blendIndices blendIndices
+
 #define outVs_Position gl_Position
+#define outVs_clipDistance0 gl_ClipDistance[0]
+
+#define outPs_colour0 outColour
 #define OGRE_Sample( tex, sampler, uv ) texture( tex, uv )
-#define OGRE_SampleLevel( tex, sampler, uv, lod ) textureLod( tex, uv.xy, lod )
+#define OGRE_SampleLevel( tex, sampler, uv, lod ) textureLod( tex, uv, lod )
 #define OGRE_SampleArray2D( tex, sampler, uv, arrayIdx ) texture( tex, vec3( uv, arrayIdx ) )
 #define OGRE_SampleArray2DLevel( tex, sampler, uv, arrayIdx, lod ) textureLod( tex, vec3( uv, arrayIdx ), lod )
 #define OGRE_SampleArrayCubeLevel( tex, sampler, uv, arrayIdx, lod ) textureLod( tex, vec4( uv, arrayIdx ), lod )
@@ -62,6 +70,13 @@
 #define OGRE_ddy( val ) dFdy( val )
 
 #define bufferFetch1( buffer, idx ) texelFetch( buffer, idx ).x
+
+#define CONST_BUFFER( bufferName, bindingPoint ) layout_constbuffer(binding = bindingPoint) uniform bufferName
+#define CONST_BUFFER_STRUCT_BEGIN( structName, bindingPoint ) layout_constbuffer(binding = bindingPoint) uniform structName
+#define CONST_BUFFER_STRUCT_END( variableName, v ) variableName
+
+#define FLAT_INTERPOLANT( decl, bindingPoint ) flat decl
+#define INTERPOLANT( decl, bindingPoint ) decl
 @end
 
 @property( !GL_ARB_texture_buffer_range || !GL_ARB_shading_language_420pack )

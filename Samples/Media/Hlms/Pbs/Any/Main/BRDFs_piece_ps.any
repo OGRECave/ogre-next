@@ -1,0 +1,238 @@
+
+//#include "SyntaxHighlightingMisc.h"
+
+//For mortals:
+//	getSpecularFresnel	= F0 + pow( 1.0 - VdotH, 5.0 ) * (1.0 - F0)
+//	getDiffuseFresnel	= 1.0 - F0 + pow( 1.0 - NdotL, 5.0 ) * F0
+//	getSpecularFresnelWithRoughness = F0 + pow( 1.0 - VdotH, 5.0 ) * (max(roughness, (1.0 - F0)) - F0)
+//	getDiffuseFresnelWithRoughness = max(roughness, (1.0 - F0) - F0 + pow( 1.0 - NdotL, 5.0 ) * F0
+@piece( getSpecularFresnel )pixelData.F0 + pow( 1.0 - VdotH, 5.0 ) * (1.0 - pixelData.F0)@end
+@piece( getDiffuseFresnel )1.0 - pixelData.F0 + pow( 1.0 - NdotL, 5.0 ) * pixelData.F0@end
+@piece( getSpecularFresnelWithRoughness )pixelData.F0 + pow( 1.0 - VdotH, 5.0 ) * (max( 1.0 - pixelData.roughness, pixelData.F0 ) - pixelData.F0)@end
+@piece( getDiffuseFresnelWithRoughness )max( 1.0 - pixelData.roughness, pixelData.F0 ) - pixelData.F0 + pow( 1.0 - NdotL, 5.0 ) * pixelData.F0@end
+
+@property( !fresnel_scalar )
+	@piece( getMaxFresnelS )fresnelS@end
+@else
+    @piece( getMaxFresnelS )max3( fresnelS.x, fresnelS.y, fresnelS.z )@end
+@end
+
+@property( BRDF_BlinnPhong )
+@piece( DeclareBRDF )
+//Blinn-Phong
+INLINE float3 BRDF( float3 lightDir, float3 lightDiffuse, float3 lightSpecular, PixelData pixelData )
+{
+    float3 halfWay = normalize( lightDir + pixelData.viewDir );
+    float NdotL = saturate( dot( pixelData.normal, lightDir ) );			//Diffuse (Lambert)
+    float NdotH = clamp( dot( pixelData.normal, halfWay ), 0.001, 1.0 );	//Specular
+	@property( !legacy_math_brdf )
+        float VdotH = clamp( dot( pixelData.viewDir, halfWay ), 0.001, 1.0 ); //Fresnel
+
+		//Fresnel term (Schlick's approximation)
+        float_fresnel fresnelS = @insertpiece( getSpecularFresnel );
+		@property( fresnel_separate_diffuse )
+            float_fresnel fresnelD = @insertpiece( getDiffuseFresnel );
+        @else
+			float fresnelD = 1.0f - @insertpiece( getMaxFresnelS );
+		@end
+	@end
+
+	@property( !roughness_is_shininess )
+        float shininess = exp2( 10.0 * (1.0 - pixelData.roughness) + 1.0 ) * 0.25;
+    @else
+        float shininess = pixelData.roughness;
+	@end
+	float blinnPhong = pow( NdotH, shininess );
+
+	@property( !legacy_math_brdf )
+		//Normalize Blinn-Phong using (n + 8) / (8 * pi)
+		//Note this factor is an approximation. The real normalization is
+		//*much* more expensive. See:
+		//http://www.rorydriscoll.com/2009/01/25/energy-conservation-in-games/
+		blinnPhong *= (shininess + 8.0) / (8.0 * 3.141592654);
+
+		//Avoid very small denominators, they go to NaN or cause aliasing artifacts
+		//Note: For blinn-phong we use larger denominators otherwise specular blows out of proportion
+        float_fresnel Rs = ( fresnelS * blinnPhong ) / max( 4.0 * pixelData.NdotV * NdotL, 0.75 );
+		//Make diffuse look closer to Default.
+        fresnelD *= lerp( 1.0, 1.0 / 1.51, pixelData.roughness );
+    @else
+		float Rs = blinnPhong;
+		float fresnelD = 1.0;
+	@end
+
+    return NdotL * (pixelData.specular.xyz * lightSpecular * Rs +
+                    pixelData.diffuse.xyz * lightDiffuse * fresnelD);
+}
+@end
+@end
+
+@property( BRDF_CookTorrance )
+@piece( DeclareBRDF )
+//Cook-Torrance
+INLINE float3 BRDF( float3 lightDir, float3 lightDiffuse, float3 lightSpecular, PixelData pixelData )
+{
+    float3 halfWay = normalize( lightDir + pixelData.viewDir );
+    float NdotL = saturate( dot( pixelData.normal, lightDir ) );
+    float NdotH = clamp( dot( pixelData.normal, halfWay ), 0.001, 1.0 );
+    float VdotH = clamp( dot( pixelData.viewDir, halfWay ), 0.001, 1.0 );
+
+    float sqR = pixelData.roughness * pixelData.roughness;
+
+	//Roughness/Distribution/NDF term (Beckmann distribution)
+	//Formula:
+	//	Where alpha = NdotH and m = roughness
+	//	R = [ 1 / (m^2 x cos(alpha)^4 ] x [ e^( -tan(alpha)^2 / m^2 ) ]
+	//	R = [ 1 / (m^2 x cos(alpha)^4 ] x [ e^( ( cos(alpha)^2 - 1 )  /  (m^2 cos(alpha)^2 ) ]
+	float NdotH_sq = NdotH * NdotH;
+	float roughness_a = 1.0 / ( 3.141592654 * sqR * NdotH_sq * NdotH_sq );//( 1 / (m^2 x cos(alpha)^4 )
+	float roughness_b = NdotH_sq - 1.0;	//( cos(alpha)^2 - 1 )
+	float roughness_c = sqR * NdotH_sq;		//( m^2 cos(alpha)^2 )
+
+	//Avoid Inf * 0 = NaN; we need Inf * 0 = 0
+	float R = min( roughness_a, 65504.0 ) * exp( roughness_b / roughness_c );
+
+	//Geometric/Visibility term (Cook Torrance)
+	float shared_geo = 2.0 * NdotH / VdotH;
+    float geo_b	= shared_geo * pixelData.NdotV;
+	float geo_c	= shared_geo * NdotL;
+	float G	 	= min( 1.0, min( geo_b, geo_c ) );
+
+	//Fresnel term (Schlick's approximation)
+	//Formula:
+	//	fresnelS = lerp( (1 - V*H)^5, 1, F0 )
+	//	fresnelD = lerp( (1 - N*L)^5, 1, 1 - F0 ) [See s2010_course_note_practical_implementation_at_triace.pdf]
+    float_fresnel fresnelS = @insertpiece( getSpecularFresnel );
+    @property( fresnel_separate_diffuse )
+        float_fresnel fresnelD = @insertpiece( getDiffuseFresnel );
+    @else
+        float fresnelD = 1.0f - @insertpiece( getMaxFresnelS );
+    @end
+
+	//Avoid very small denominators, they go to NaN or cause aliasing artifacts
+    float_fresnel Rs = ( fresnelS * (R * G)  ) / max( 4.0 * pixelData.NdotV * NdotL, 0.01 );
+
+    return NdotL * (pixelData.specular.xyz * lightSpecular * Rs +
+                    pixelData.diffuse.xyz * lightDiffuse * fresnelD);
+}
+@end
+@end
+
+@property( BRDF_Default )
+@piece( DeclareBRDF )
+//Default BRDF
+INLINE float3 BRDF( float3 lightDir, float3 lightDiffuse, float3 lightSpecular, PixelData pixelData )
+{
+    float3 halfWay = normalize( lightDir + pixelData.viewDir );
+    float NdotL = saturate( dot( pixelData.normal, lightDir ) );
+    float NdotH = saturate( dot( pixelData.normal, halfWay ) );
+    float VdotH = saturate( dot( pixelData.viewDir, halfWay ) );
+
+    float sqR = pixelData.roughness * pixelData.roughness;
+
+	//Roughness/Distribution/NDF term (GGX)
+	//Formula:
+	//	Where alpha = roughness
+	//	R = alpha^2 / [ PI * [ ( NdotH^2 * (alpha^2 - 1) ) + 1 ]^2 ]
+	float f = ( NdotH * sqR - NdotH ) * NdotH + 1.0;
+	float R = sqR / (f * f + 1e-6f);
+
+	//Geometric/Visibility term (Smith GGX Height-Correlated)
+@property( GGX_height_correlated )
+    float Lambda_GGXV = NdotL * sqrt( (-pixelData.NdotV * sqR + pixelData.NdotV) * pixelData.NdotV + sqR );
+    float Lambda_GGXL = pixelData.NdotV * sqrt( (-NdotL * sqR + NdotL) * NdotL + sqR );
+
+	float G = 0.5 / (( Lambda_GGXV + Lambda_GGXL + 1e-6f ) * 3.141592654);
+@else
+	float gL = NdotL * (1-sqR) + sqR;
+    float gV = pixelData.NdotV * (1-sqR) + sqR;
+	float G = 1.0 / (( gL * gV + 1e-4f ) * 4 * 3.141592654);
+@end
+
+	//Formula:
+	//	fresnelS = lerp( (1 - V*H)^5, 1, F0 )
+    float_fresnel fresnelS = @insertpiece( getSpecularFresnel );
+
+	//We should divide Rs by PI, but it was done inside G for performance
+    float3 Rs = ( fresnelS * (R * G) ) * pixelData.specular.xyz * lightSpecular;
+
+	//Diffuse BRDF (*Normalized* Disney, see course_notes_moving_frostbite_to_pbr.pdf
+	//"Moving Frostbite to Physically Based Rendering" Sebastien Lagarde & Charles de Rousiers)
+    float energyBias	= pixelData.roughness * 0.5;
+    float energyFactor	= lerp( 1.0, 1.0 / 1.51, pixelData.roughness );
+    float fd90			= energyBias + 2.0 * VdotH * VdotH * pixelData.roughness;
+	float lightScatter	= 1.0 + (fd90 - 1.0) * pow( 1.0 - NdotL, 5.0 );
+    float viewScatter	= 1.0 + (fd90 - 1.0) * pow( 1.0 - pixelData.NdotV, 5.0 );
+
+    @property( fresnel_separate_diffuse )
+        float_fresnel fresnelD = @insertpiece( getDiffuseFresnel );
+    @else
+        float fresnelD = 1.0f - @insertpiece( getMaxFresnelS );
+    @end
+
+	//We should divide Rd by PI, but it is already included in kD
+    float3 Rd = (lightScatter * viewScatter * energyFactor * fresnelD) * pixelData.diffuse.xyz * lightDiffuse;
+
+	return NdotL * (Rs + Rd);
+}
+@end
+@end
+
+@property( hlms_enable_vpls )
+@piece( DeclareBRDF_InstantRadiosity )
+//Simplified cheap BRDF for Instant Radiosity.
+float3 BRDF_IR( float3 lightDir, float3 lightDiffuse, PixelData pixelData )
+{
+    float NdotL = clamp( dot( pixelData.normal, lightDir ), 0.0, 1.0 );
+    float_fresnel fresnelD = @insertpiece( getDiffuseFresnel );
+
+	//We should divide Rd by PI, but it is already included in kD
+    return NdotL * fresnelD * pixelData.diffuse.xyz * lightDiffuse;
+}
+@end
+@end
+
+/// Applying Fresnel term to prefiltered cubemap has a bad effect of always showing high specular
+/// color at edge, even for rough surface. See https://seblagarde.wordpress.com/2011/08/17/hello-world/
+/// and see http://www.ogre3d.org/forums/viewtopic.php?f=25&p=523550#p523544
+/// "The same Fresnel term which is appropriate for unfiltered environment maps (i.e. perfectly smooth
+/// mirror surfaces) is not appropriate for filtered environment maps since there you are averaging
+/// incoming light colors from many directions, but using a single Fresnel value computed for the
+///	reflection direction. The correct function has similar values as the regular Fresnel expression
+/// at v=n, but at glancing angle it behaves differently. In particular, the lerp(from base specular
+/// to white) does not go all the way to white at glancing angles in the case of rough surfaces."
+/// So we use getSpecularFresnelWithRoughness instead.
+@piece( BRDF_EnvMap )
+    float NdotL = saturate( dot( pixelData.normal, pixelData.reflDir ) );
+    float VdotH = saturate( dot( pixelData.viewDir, normalize( pixelData.reflDir + pixelData.viewDir ) ) );
+    float_fresnel fresnelS = @insertpiece( getSpecularFresnelWithRoughness );
+
+	@property( fresnel_separate_diffuse )
+        float_fresnel fresnelD = @insertpiece( getDiffuseFresnelWithRoughness );
+    @else
+        float fresnelD = 1.0f - @insertpiece( getMaxFresnelS );
+    @end
+
+    finalColour += pixelData.envColourD * pixelData.diffuse.xyz * fresnelD +
+                   pixelData.envColourS * pixelData.specular.xyz * fresnelS;
+@end
+
+@property( hlms_fine_light_mask || hlms_forwardplus_fine_light_mask )
+    @property( syntax == metal )
+        @piece( DeclareObjLightMask )uint objLightMask = inPs.objLightMask;@end
+    @else
+        @piece( DeclareObjLightMask )uint objLightMask = worldMaterialIdx[inPs.drawId].z;@end
+    @end
+@end
+
+@property( hlms_fine_light_mask )
+    @property( syntax == metal )
+        @piece( DeclareObjLightMask )uint objLightMask = inPs.objLightMask;@end
+    @else
+        @piece( DeclareObjLightMask )uint objLightMask = worldMaterialIdx[inPs.drawId].z;@end
+    @end
+    @piece( ObjLightMaskCmp )if( (objLightMask & floatBitsToUint( passBuf.lights[@counter(fineMaskLightIdx)].position.w )) != 0u )@end
+    @piece( andObjLightMaskCmp )&& ((objLightMask & floatBitsToUint( passBuf.lights[@counter(fineMaskLightIdx)].position.w )) != 0u)@end
+    @piece( andObjAreaApproxLightMaskCmp )&& ((objLightMask & floatBitsToUint( passBuf.areaApproxLights[@counter(fineMaskAreaApproxLightIdx)].position.w )) != 0u)@end
+    @piece( andObjAreaLtcLightMaskCmp )&& ((objLightMask & floatBitsToUint( passBuf.areaLtcLights[@counter(fineMaskAreaLtcLightIdx)].position.w )) != 0u)@end
+@end

@@ -25,10 +25,11 @@ struct float1
 
 #define floatBitsToUint(x) as_type<uint>(x)
 #define uintBitsToFloat(x) as_type<float>(x)
+#define lessThan( a, b ) (a < b)
 
 #define outVs_Position outVs.gl_Position
 #define OGRE_Sample( tex, sampler, uv ) tex.sample( sampler, uv )
-#define OGRE_SampleLevel( tex, sampler, uv, lod ) tex.sample( sampler, float2( uv ), level( lod ) )
+#define OGRE_SampleLevel( tex, sampler, uv, lod ) tex.sample( sampler, uv, level( lod ) )
 #define OGRE_SampleArray2D( tex, sampler, uv, arrayIdx ) tex.sample( sampler, float2( uv ), arrayIdx )
 #define OGRE_SampleArray2DLevel( tex, sampler, uv, arrayIdx, lod ) tex.sample( sampler, float2( uv ), ushort( arrayIdx ), level( lod ) )
 #define OGRE_SampleArrayCubeLevel( tex, sampler, uv, arrayIdx, lod ) tex.sample( sampler, float3( uv ), ushort( arrayIdx ), level( lod ) )
@@ -39,4 +40,10 @@ struct float1
 
 #define bufferFetch( buffer, idx ) buffer[idx]
 #define bufferFetch1( buffer, idx ) buffer[idx]
+
+#define CONST_BUFFER_STRUCT_BEGIN( structName, bindingPoint ) struct structName
+#define CONST_BUFFER_STRUCT_END( variableName )
+
+#define FLAT_INTERPOLANT( decl, bindingPoint ) decl [[flat]]
+#define INTERPOLANT( decl, bindingPoint ) decl
 @end
