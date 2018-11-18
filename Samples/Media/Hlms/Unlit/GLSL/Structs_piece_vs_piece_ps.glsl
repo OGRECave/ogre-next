@@ -41,7 +41,7 @@ layout_constbuffer(binding = 2) uniform InstanceBuffer
 	//Contains 0 or 1 to index into passBuf.viewProj[]. Only used
 	//if hlms_identity_viewproj_dynamic is set.
 	uvec4 worldMaterialIdx[4096];
-} instance;
+};
 @end
 
 @piece( VStoPS_block )

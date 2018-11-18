@@ -47,7 +47,7 @@ out block
 	@property( !hlms_identity_viewproj_dynamic )
 		@piece( worldViewProj )passBuf.viewProj[@value(hlms_identity_viewproj)]@end
 	@end @property( hlms_identity_viewproj_dynamic )
-		@piece( worldViewProj )passBuf.viewProj[instance.worldMaterialIdx[finalDrawId].z]@end
+		@piece( worldViewProj )passBuf.viewProj[worldMaterialIdx[finalDrawId].z]@end
 	@end
 @end
 
@@ -84,7 +84,7 @@ void main()
 
 @foreach( out_uv_count, n )
 	@property( out_uv@n_texture_matrix )
-		textureMatrix = UNPACK_MAT4( animationMatrixBuf, (instance.worldMaterialIdx[finalDrawId].x << 4u) + @value( out_uv@n_tex_unit )u );
+		textureMatrix = UNPACK_MAT4( animationMatrixBuf, (worldMaterialIdx[finalDrawId].x << 4u) + @value( out_uv@n_tex_unit )u );
  		outVs.uv@value( out_uv@n_out_uv ).@insertpiece( out_uv@n_swizzle ) = (vec4( uv@value( out_uv@n_source_uv ).xy, 0, 1 ) * textureMatrix).xy;
 	@end @property( !out_uv@n_texture_matrix )
 		outVs.uv@value( out_uv@n_out_uv ).@insertpiece( out_uv@n_swizzle ) = uv@value( out_uv@n_source_uv ).xy;
