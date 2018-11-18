@@ -453,6 +453,21 @@ namespace Ogre {
                 cur->Expand (nargs, args, MacroList);
             t.AppendNL (Line - old_line);
 
+            //Handle edge case where the macro argument was passed exactly/unmodified to th
+            //expanded string, thus we have to prevent freeing a string that is still in use.
+            //This edge case can be triggered with the following:
+            //	#define float3 vec3
+            //	#define INTERPOLANT( decl, bindingPoint ) decl
+            //	INTERPOLANT( float3 pos, 1 );
+            for( int i=0; i<nargs && !t.Allocated; ++i )
+            {
+                if( t.Buffer == args[i].Buffer )
+                {
+                    t.Allocated = args[i].Allocated;
+                    args[i].Allocated = 0;
+                }
+            }
+
             delete [] args;
 
             return t;
