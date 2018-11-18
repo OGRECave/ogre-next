@@ -111,17 +111,28 @@
 	@end
 @end
 
-@piece( UnpackTextureIndices )
+@piece( UnpackTextureIndices0 )
 	@property( syntax == metal )
 		@property( diffuse_map )		ushort texIndex_diffuseIdx			= material.diffuseIdx;@end
-		@property( normal_map_tex )		ushort texIndex_normalIdx			= material.normalIdx;@end
-		@property( specular_map )		ushort texIndex_specularIdx			= material.specularIdx;@end
-		@property( roughness_map )		ushort texIndex_roughnessIdx		= material.roughnessIdx;@end
 		@property( detail_weight_map )	ushort texIndex_weightMapIdx		= material.weightMapIdx;@end
 		@property( detail_map0 )		ushort texIndex_detailMapIdx0		= material.detailMapIdx0;@end
 		@property( detail_map1 )		ushort texIndex_detailMapIdx1		= material.detailMapIdx1;@end
 		@property( detail_map2 )		ushort texIndex_detailMapIdx2		= material.detailMapIdx2;@end
 		@property( detail_map3 )		ushort texIndex_detailMapIdx3		= material.detailMapIdx3;@end
+	@else
+		@property( diffuse_map )		ushort texIndex_diffuseIdx			= material.indices0_3.x & 0x0000FFFFu;@end
+		@property( detail_weight_map )	ushort texIndex_weightMapIdx		= material.indices0_3.z & 0x0000FFFFu;@end
+		@property( detail_map0 )		ushort texIndex_detailMapIdx0		= material.indices0_3.z >> 16u;@end
+		@property( detail_map1 )		ushort texIndex_detailMapIdx1		= material.indices0_3.w & 0x0000FFFFu;@end
+		@property( detail_map2 )		ushort texIndex_detailMapIdx2		= material.indices0_3.w >> 16u;;@end
+		@property( detail_map3 )		ushort texIndex_detailMapIdx3		= material.indices4_7.x & 0x0000FFFFu;@end
+	@end
+@end
+@piece( UnpackTextureIndices1 )
+	@property( syntax == metal )
+		@property( normal_map_tex )		ushort texIndex_normalIdx			= material.normalIdx;@end
+		@property( specular_map )		ushort texIndex_specularIdx			= material.specularIdx;@end
+		@property( roughness_map )		ushort texIndex_roughnessIdx		= material.roughnessIdx;@end
 		@property( detail_map_nm0 )		ushort texIndex_detailNormMapIdx0	= material.detailNormMapIdx0;@end
 		@property( detail_map_nm1 )		ushort texIndex_detailNormMapIdx1	= material.detailNormMapIdx1;@end
 		@property( detail_map_nm2 )		ushort texIndex_detailNormMapIdx2	= material.detailNormMapIdx2;@end
@@ -129,15 +140,9 @@
 		@property( emissive_map )		ushort texIndex_emissiveMapIdx		= material.emissiveMapIdx;@end
 		@property( use_envprobe_map )	ushort texIndex_envMapIdx			= material.envMapIdx;@end
 	@else
-		@property( diffuse_map )		ushort texIndex_diffuseIdx			= material.indices0_3.x & 0x0000FFFFu;@end
 		@property( normal_map_tex )		ushort texIndex_normalIdx			= material.indices0_3.x >> 16u;@end
 		@property( specular_map )		ushort texIndex_specularIdx			= material.indices0_3.y & 0x0000FFFFu;@end
 		@property( roughness_map )		ushort texIndex_roughnessIdx		= material.indices0_3.y >> 16u;@end
-		@property( detail_weight_map )	ushort texIndex_weightMapIdx		= material.indices0_3.z & 0x0000FFFFu;@end
-		@property( detail_map0 )		ushort texIndex_detailMapIdx0		= material.indices0_3.z >> 16u;@end
-		@property( detail_map1 )		ushort texIndex_detailMapIdx1		= material.indices0_3.w & 0x0000FFFFu;@end
-		@property( detail_map2 )		ushort texIndex_detailMapIdx2		= material.indices0_3.w >> 16u;;@end
-		@property( detail_map3 )		ushort texIndex_detailMapIdx3		= material.indices4_7.x & 0x0000FFFFu;@end
 		@property( detail_map_nm0 )		ushort texIndex_detailNormMapIdx0	= material.indices4_7.x >> 16u;@end
 		@property( detail_map_nm1 )		ushort texIndex_detailNormMapIdx1	= material.indices4_7.y & 0x0000FFFFu;@end
 		@property( detail_map_nm2 )		ushort texIndex_detailNormMapIdx2	= material.indices4_7.y >> 16u;@end
@@ -202,7 +207,7 @@
 		pixelData.diffuse.xyz *= (pixelData.diffuse.w * pixelData.diffuse.w);
 	@end
 
-	@property( alpha_test && !alpha_test_shadow_caster_only )
+	@property( alpha_test && (!alpha_test_shadow_caster_only || hlms_shadowcaster) )
 		if( material.kD.w @insertpiece( alpha_test_cmp_func ) pixelData.diffuse.w )
 			discard;
 	@end
@@ -463,12 +468,14 @@
 										   11.0 ).xyz @insertpiece( ApplyEnvMapScale );
 @end
 
+@property( !hlms_shadowcaster )
 @piece( DefaultBodyPS )
 	@property( hlms_normal || hlms_qtangent )
 		PixelData pixelData;
 
 		@insertpiece( LoadMaterial )
-		@insertpiece( UnpackTextureIndices )
+		@insertpiece( UnpackTextureIndices0 )
+		@insertpiece( UnpackTextureIndices1 )
 		@insertpiece( custom_ps_posMaterialLoad )
 		@insertpiece( DeclareObjLightMask )
 		@insertpiece( custom_ps_posMaterialLoad )
@@ -650,3 +657,17 @@
 		@end
 	@end
 @end ///DefaultBodyPS
+@else ///!hlms_shadowcaster
+
+@piece( DefaultBodyPS )
+	@property( alpha_test )
+		@insertpiece( LoadMaterial )
+		@insertpiece( UnpackTextureIndices0 )
+		@insertpiece( LoadDetailWeights )
+		@insertpiece( SampleDetailMaps )
+		@insertpiece( SampleDiffuseMap )
+	@end
+	@insertpiece( DoShadowCastPS )
+@end
+
+@end
