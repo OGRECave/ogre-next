@@ -616,29 +616,29 @@
 
 	@property( !hlms_render_depth_only )
 		@property( !hlms_prepass )
-			@property( !hw_gamma_write )
-				//Linear to Gamma space
-				outPs_colour0.xyz	= sqrt( finalColour );
-			@else
-				outPs_colour0.xyz	= finalColour;
-			@end
-
-			@property( hlms_alphablend )
-				@property( use_texture_alpha )
-					outPs_colour0.w	= material.F0.w * pixelData.diffuse.w;
+			@property( hlms_normal || hlms_qtangent )
+				@property( !hw_gamma_write )
+					//Linear to Gamma space
+					outPs_colour0.xyz	= sqrt( finalColour );
 				@else
-					outPs_colour0.w	= material.F0.w;
+					outPs_colour0.xyz	= finalColour;
+				@end
+
+				@property( hlms_alphablend )
+					@property( use_texture_alpha )
+						outPs_colour0.w	= material.F0.w * pixelData.diffuse.w;
+					@else
+						outPs_colour0.w	= material.F0.w;
+					@end
+				@else
+					outPs_colour0.w		= 1.0;
+				@end
+
+				@property( debug_pssm_splits )
+					outPs_colour0.xyz = mix( outPs_colour0.xyz, debugPssmSplit.xyz, 0.2f );
 				@end
 			@else
-				outPs_colour0.w		= 1.0;
-			@end
-
-			@property( !hlms_normal && !hlms_qtangent )
 				outPs_colour0 = float4( 1.0, 1.0, 1.0, 1.0 );
-			@end
-
-			@property( debug_pssm_splits )
-				outPs_colour0.xyz = mix( outPs_colour0.xyz, debugPssmSplit.xyz, 0.2f );
 			@end
 		@else
 			outPs_normals			= float4( pixelData.normal * 0.5 + 0.5, 1.0 );
