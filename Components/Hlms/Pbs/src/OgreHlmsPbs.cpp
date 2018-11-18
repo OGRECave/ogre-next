@@ -911,7 +911,8 @@ namespace Ogre
         if( getProperty( PbsProperty::HasPlanarReflections ) )
             getProperty( PbsProperty::UsePlanarReflections );
 
-        if( getProperty( PbsProperty::EnvProbeMap ) != getProperty( PbsProperty::TargetEnvprobeMap ) ||
+        int32 envProbeMapVal = getProperty( PbsProperty::EnvProbeMap );
+        if( (envProbeMapVal && envProbeMapVal != getProperty( PbsProperty::TargetEnvprobeMap )) ||
             getProperty( PbsProperty::ParallaxCorrectCubemaps ) )
         {
             setProperty( PbsProperty::UseEnvProbeMap, 1 );
