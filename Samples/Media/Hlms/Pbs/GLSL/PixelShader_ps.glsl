@@ -15,6 +15,8 @@ layout(std140) uniform;
 		@property( !hlms_prepass )
 			layout(location = FRAG_COLOR, index = 0) out vec4 outColour;
 		@end @property( hlms_prepass )
+			#define outPs_normals outNormals
+			#define outPs_shadowRoughness outShadowRoughness
 			layout(location = 0) out vec4 outNormals;
 			layout(location = 1) out vec2 outShadowRoughness;
 		@end

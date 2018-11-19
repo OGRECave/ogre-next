@@ -30,12 +30,12 @@
 
 	float4 planarReflection = passBuf.planarReflections[planarReflectionIdx];
 	float distanceToPlanarReflPlane = dot( planarReflection.xyz, inPs.pos.xyz ) + planarReflection.w;
-	float3 pointInPlane = inPs.pos.xyz - nNormal * distanceToPlanarReflPlane;
+	float3 pointInPlane = inPs.pos.xyz - pixelData.normal * distanceToPlanarReflPlane;
 	float3 projPointInPlane = mul( float4( pointInPlane.xyz, 1.0 ), passBuf.planarReflProjectionMat ).xyw;
 	float2 planarReflUVs = projPointInPlane.xy / projPointInPlane.z;
 
 	float3 planarReflectionS = OGRE_SampleLevel( planarReflectionTex, planarReflectionSampler,
-												 planarReflUVs.xy, ROUGHNESS * 12.0 ).xyz;
+												 planarReflUVs.xy, pixelData.roughness * 12.0 ).xyz;
 
 	//Fade out as our surface gets away from the reflection plane (planarWeight = 0 means fully faded out)
 	float planarWeight = max( 1.0 - abs( distanceToPlanarReflPlane ) * passBuf.invMaxDistanceToPlanarRefl.x, 0.0 );
@@ -51,12 +51,12 @@
 	//	(x - cos20) / (1-cos20);
 	//	x/(1-cos20) - cos20/(1-cos20);
 	//	x * 16.581718739 - 15.581718739;
-	planarWeight *= saturate( dot( planarReflection.xyz, nNormal.xyz ) * 16.581718739 - 15.581718739 );
+	planarWeight *= saturate( dot( planarReflection.xyz, pixelData.normal.xyz ) * 16.581718739 - 15.581718739 );
 	@property( hlms_use_ssr || ((envprobe_map && envprobe_map != target_envprobe_map) || parallax_correct_cubemaps) )
-		envColourS = lerp( envColourS, planarReflectionS, planarWeight );
+		pixelData.envColourS = lerp( pixelData.envColourS, planarReflectionS, planarWeight );
 	@end @property( !hlms_use_ssr && !((envprobe_map && envprobe_map != target_envprobe_map) || parallax_correct_cubemaps) )
-		float3 envColourS = planarReflectionS * planarWeight;
-		float3 envColourD = float3( 0, 0, 0 );
+		pixelData.envColourS = planarReflectionS * planarWeight;
+		pixelData.envColourD = float3( 0, 0, 0 );
 	@end
 @end
 

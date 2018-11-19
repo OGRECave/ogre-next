@@ -908,8 +908,8 @@ namespace Ogre
         }
 
         //If the pass does not have planar reflections, then the object cannot use it
-        if( getProperty( PbsProperty::HasPlanarReflections ) )
-            getProperty( PbsProperty::UsePlanarReflections );
+        if( !getProperty( PbsProperty::HasPlanarReflections ) )
+            setProperty( PbsProperty::UsePlanarReflections, 0 );
 
         int32 envProbeMapVal = getProperty( PbsProperty::EnvProbeMap );
         if( (envProbeMapVal && envProbeMapVal != getProperty( PbsProperty::TargetEnvprobeMap )) ||

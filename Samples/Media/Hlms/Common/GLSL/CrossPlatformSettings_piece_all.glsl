@@ -68,6 +68,8 @@
 #define OGRE_SampleArray2DGrad( tex, sampler, uv, arrayIdx, ddx, ddy ) textureGrad( tex, vec3( uv, arrayIdx ), ddx, ddy )
 #define OGRE_ddx( val ) dFdx( val )
 #define OGRE_ddy( val ) dFdy( val )
+#define OGRE_Load2D( tex, iuv, lod ) texelFetch( tex, iuv, lod )
+#define OGRE_Load2DMS( tex, iuv, subsample ) texelFetch( tex, iuv, subsample )
 
 #define bufferFetch1( buffer, idx ) texelFetch( buffer, idx ).x
 
