@@ -280,8 +280,8 @@ namespace Demo
             const Ogre::uint32 normalTexWidth = textureNorm->getWidth();
             const Ogre::uint32 normalTexHeight = textureNorm->getHeight();
             Ogre::uint8 *blackBuffer = reinterpret_cast<Ogre::uint8*>(
-                                           OGRE_MALLOC( normalTexWidth * normalTexHeight * 2u,
-                                                        Ogre::MEMCATEGORY_RESOURCE ) );
+                                           OGRE_MALLOC_SIMD( normalTexWidth * normalTexHeight * 2u,
+                                                             Ogre::MEMCATEGORY_RESOURCE ) );
             memset( blackBuffer, 0, normalTexWidth * normalTexHeight * 2u );
             blackImage.loadDynamicImage( blackBuffer, normalTexWidth, normalTexHeight, 1u,
                                          Ogre::TextureTypes::Type2D, Ogre::PFG_RG8_SNORM, true );
