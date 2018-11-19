@@ -469,6 +469,9 @@ namespace Ogre
                 ++itLowerCase;
                 ++itor;
             }
+
+            //Enumeration order depends on OS and filesystem. Ensure deterministic alphabetical order.
+            std::sort( pieceFiles[i].begin(), pieceFiles[i].end() );
         }
 
         return retVal;
