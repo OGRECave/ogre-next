@@ -75,7 +75,6 @@ in block
 	uniform sampler3D irradianceVolume;
 @end
 
-@property( !roughness_map && !hlms_decals_diffuse )#define ROUGHNESS material.kS.w@end
 @foreach( num_textures, n )
 	uniform sampler2DArray textureMaps@n;@end
 

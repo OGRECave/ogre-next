@@ -565,7 +565,7 @@
 			float fShadow = shadowRoughness.x;
 
 			@property( roughness_map )
-				ROUGHNESS = shadowRoughness.y * 0.98 + 0.02; /// ROUGHNESS is a constant otherwise
+				pixelData.roughness = shadowRoughness.y * 0.98 + 0.02;
 			@end
 		@end
 
