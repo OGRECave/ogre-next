@@ -4,6 +4,8 @@
 @insertpiece( SetCrossPlatformSettings )
 @insertpiece( DeclareUvModifierMacros )
 
+@insertpiece( DefaultHeaderPS )
+
 // START UNIFORM DECLARATION
 @property( !hlms_shadowcaster || alpha_test )
 	@property( !hlms_shadowcaster )
@@ -71,7 +73,9 @@ Buffer<float4> f3dLightList : register(t2);@end
 @foreach( num_samplers, n )
 	SamplerState samplerState@value(samplerStateStart) : register(s@counter(samplerStateStart));@end
 
-@insertpiece( DefaultHeaderPS )
+@property( use_parallax_correct_cubemaps )
+	@insertpiece( DeclParallaxLocalCorrect )
+@end
 
 @insertpiece( DeclDecalsSamplers )
 

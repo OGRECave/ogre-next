@@ -89,6 +89,10 @@ in block
 	@end
 @end
 
+@property( use_parallax_correct_cubemaps )
+	@insertpiece( DeclParallaxLocalCorrect )
+@end
+
 @insertpiece( DeclDecalsSamplers )
 
 @insertpiece( DeclShadowMapMacros )

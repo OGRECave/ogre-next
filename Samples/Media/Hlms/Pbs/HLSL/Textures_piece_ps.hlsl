@@ -78,6 +78,14 @@
 
 @set( envMapReg, texUnit )
 
+@property( use_envprobe_map )
+	@property( !envprobe_map || envprobe_map == target_envprobe_map )
+		/// Auto cubemap textures are set at the beginning. Manual cubemaps are the end.
+		@set( envMapReg, globaPccTexUnit )
+		@set( envMapRegSampler, globaPccTexUnit )
+	@end
+@end
+
 @property( !hlms_render_depth_only && !hlms_shadowcaster && hlms_prepass )
 	@undefpiece( DeclOutputType )
 	@piece( DeclOutputType )

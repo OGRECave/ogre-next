@@ -52,6 +52,8 @@ struct AreaLtcLight
 	float3 points[4];
 };
 
+@insertpiece( DeclCubemapProbeStruct )
+
 //Uniforms that change per pass
 CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
 {
