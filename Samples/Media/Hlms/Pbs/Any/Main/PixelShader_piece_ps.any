@@ -98,6 +98,7 @@
 		@insertpiece( DeclareBRDF_AreaLightApprox )
 	@end
 
+	@insertpiece( DeclCubemapProbeStruct )
 	@property( use_parallax_correct_cubemaps )
 		@insertpiece( DeclParallaxLocalCorrect )
 	@end
