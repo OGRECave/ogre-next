@@ -29,7 +29,7 @@ layout(std140) uniform;
 	@property( !hlms_use_prepass_msaa )
 		uniform sampler2D gBuf_normals;
 		uniform sampler2D gBuf_shadowRoughness;
-	@end @property( hlms_use_prepass_msaa )
+	@else
 		uniform sampler2DMS gBuf_normals;
 		uniform sampler2DMS gBuf_shadowRoughness;
 		uniform sampler2DMS gBuf_depthTexture;
@@ -81,25 +81,13 @@ in block
 
 @property( !hlms_enable_cubemaps_auto )
 	@property( use_envprobe_map )uniform samplerCube		texEnvProbeMap;@end
-@end
-@property( hlms_enable_cubemaps_auto )
+@else
 	@property( !hlms_cubemaps_use_dpm )
 		@property( use_envprobe_map )uniform samplerCubeArray	texEnvProbeMap;@end
-	@end
-	@property( hlms_cubemaps_use_dpm )
+	@else
 		@property( use_envprobe_map )uniform sampler2DArray	texEnvProbeMap;@end
 		@insertpiece( DeclDualParaboloidFunc )
 	@end
-@end
-
-@property( (hlms_normal || hlms_qtangent) && !hlms_prepass && needs_view_dir )
-	@insertpiece( DeclareBRDF )
-	@insertpiece( DeclareBRDF_InstantRadiosity )
-	@insertpiece( DeclareBRDF_AreaLightApprox )
-@end
-
-@property( use_parallax_correct_cubemaps )
-	@insertpiece( DeclParallaxLocalCorrect )
 @end
 
 @insertpiece( DeclDecalsSamplers )

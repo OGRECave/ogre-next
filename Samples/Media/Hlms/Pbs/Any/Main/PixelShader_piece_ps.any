@@ -79,17 +79,27 @@
 		}
 
 		@property( normal_sampling_format == normal_rg_snorm )
-			//Normal texture must be in UV8 or BC5 format!
+			//Normal texture must be in UV8/RG8_SNORM or BC5S format!
 			#define getTSNormal( normalMap, samplerState, uv, normalIdx ) reconstructZfromTSNormal( OGRE_SampleArray2D( normalMap, samplerState, uv, normalIdx ).xy )
 		@end
 		@property( normal_sampling_format == normal_rg_unorm )
-			//Normal texture must be in RG8 or similar format!
+			//Normal texture must be in RG8_UNORM or similar format!
 			#define getTSNormal( normalMap, samplerState, uv, normalIdx ) reconstructZfromTSNormal( OGRE_SampleArray2D( normalMap, samplerState, uv, normalIdx ).xy * 2.0 + 1.0 )
 		@end
-		@property( normal_sampling_format == normal_rg_unorm )
+		@property( normal_sampling_format == normal_la )
 			//Normal texture must be in LA format!
 			#define getTSNormal( normalMap, samplerState, uv, normalIdx ) reconstructZfromTSNormal( OGRE_SampleArray2D( normalMap, samplerState, uv, normalIdx ).xw * 2.0 + 1.0 )
 		@end
+	@end
+
+	@property( (hlms_normal || hlms_qtangent) && !hlms_prepass && needs_view_dir )
+		@insertpiece( DeclareBRDF )
+		@insertpiece( DeclareBRDF_InstantRadiosity )
+		@insertpiece( DeclareBRDF_AreaLightApprox )
+	@end
+
+	@property( use_parallax_correct_cubemaps )
+		@insertpiece( DeclParallaxLocalCorrect )
 	@end
 @end
 

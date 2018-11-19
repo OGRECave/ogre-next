@@ -32,7 +32,7 @@
 #define float2x2 mat2
 #define float3x3 mat3
 #define float4x4 mat4
-#define float4x3 mat3x4
+#define ogre_float4x3 mat3x4
 
 #define ushort uint
 
@@ -54,6 +54,10 @@
 #define inVs_vertex vertex
 #define inVs_blendWeights blendWeights
 #define inVs_blendIndices blendIndices
+#define inVs_qtangent qtangent
+#define inVs_drawId drawId
+@foreach( hlms_uv_count, n )
+	#define inVs_uv@n uv@n@end
 
 #define outVs_Position gl_Position
 #define outVs_clipDistance0 gl_ClipDistance[0]

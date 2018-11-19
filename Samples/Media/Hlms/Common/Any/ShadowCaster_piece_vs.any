@@ -3,9 +3,7 @@
 
 @property( hlms_shadowcaster )
 	@piece( DoShadowCasterVS )
-		@property( syntax == glsl )
-			float shadowConstantBias = uintBitsToFloat( worldMaterialIdx[drawId].y );
-		@end
+		float shadowConstantBias = uintBitsToFloat( worldMaterialIdx[inVs_drawId].y );
 
 		@property( !hlms_shadow_uses_depth_texture && !hlms_shadowcaster_point && !exponential_shadow_maps )
 			//Linear depth

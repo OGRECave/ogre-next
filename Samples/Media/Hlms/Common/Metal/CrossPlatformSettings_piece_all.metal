@@ -9,6 +9,8 @@ struct float1
 	float1( float _x ) : x( _x ) {}
 };
 
+#define ogre_float4x3 float3x4
+
 #define toFloat3x3( x ) toMat3x3( x )
 #define buildFloat3x3( row0, row1, row2 ) float3x3( row0, row1, row2 )
 

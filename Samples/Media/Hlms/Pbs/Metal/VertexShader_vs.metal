@@ -1,7 +1,7 @@
 @insertpiece( SetCrossPlatformSettings )
 
 @insertpiece( Common_Matrix_DeclUnpackMatrix4x4 )
-@insertpiece( Common_Matrix_DeclUnpackMatrix3x4 )
+@insertpiece( Common_Matrix_DeclUnpackMatrix4x3 )
 
 @property( hlms_normal || hlms_qtangent || normal_map )
 	@insertpiece( Common_Matrix_Conversions )
