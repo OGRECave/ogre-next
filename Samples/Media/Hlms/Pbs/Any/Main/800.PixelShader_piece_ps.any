@@ -515,7 +515,7 @@
 
 		@end @property( hlms_use_prepass )
 			int2 iFragCoord = int2( gl_FragCoord.x,
-									@property( !hlms_forwardplus_flipY )passBuf.windowHeight.x - @end
+									@property( !hlms_forwardplus_flipY && syntax == glsl )passBuf.windowHeight.x - @end
 									gl_FragCoord.y );
 
 			@property( hlms_use_prepass_msaa )
@@ -555,8 +555,8 @@
 				int gBufSubsample = 0;
 			@end
 
-			pixelData.normal = normalize( texelFetch( gBuf_normals, iFragCoord, gBufSubsample ).xyz * 2.0 - 1.0 );
-			float2 shadowRoughness = texelFetch( gBuf_shadowRoughness, iFragCoord, gBufSubsample ).xy;
+			pixelData.normal = normalize( OGRE_Load2D( gBuf_normals, iFragCoord, gBufSubsample ).xyz * 2.0 - 1.0 );
+			float2 shadowRoughness = OGRE_Load2D( gBuf_shadowRoughness, iFragCoord, gBufSubsample ).xy;
 
 			float fShadow = shadowRoughness.x;
 

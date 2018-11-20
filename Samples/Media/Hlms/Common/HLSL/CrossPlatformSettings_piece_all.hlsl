@@ -42,6 +42,8 @@
 #define OGRE_SampleArray2DGrad( tex, sampler, uv, arrayIdx, ddx, ddy ) tex.SampleGrad( sampler, float3( uv, arrayIdx ), ddx, ddy )
 #define OGRE_ddx( val ) ddx( val )
 #define OGRE_ddy( val ) ddy( val )
+#define OGRE_Load2D( tex, iuv, lod ) tex.Load( int3( iuv, lod ) )
+#define OGRE_Load2DMS( tex, iuv, subsample ) tex.Load( iuv, subsample )
 
 #define bufferFetch( buffer, idx ) buffer.Load( idx )
 #define bufferFetch1( buffer, idx ) buffer.Load( idx ).x

@@ -24,6 +24,11 @@ struct PS_INPUT
 
 @property( !hlms_shadowcaster )
 
+@property( !hlms_render_depth_only && !hlms_shadowcaster && hlms_prepass )
+	#define outPs_normals outPs.normals
+	#define outPs_shadowRoughness outPs.shadowRoughness
+@end
+
 @property( hlms_use_prepass )
 	@property( !hlms_use_prepass_msaa )
 		Texture2D<unorm float4> gBuf_normals			: register(t@value(gBuf_normals));
