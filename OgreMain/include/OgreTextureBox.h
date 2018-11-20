@@ -224,10 +224,10 @@ namespace Ogre
         }
 
         /// Get colour value from a certain location in the image.
-        ColourValue getColourAt( size_t x, size_t y, size_t z, PixelFormatGpu pixelFormat ) const;
+        ColourValue getColourAt( size_t _x, size_t _y, size_t _z, PixelFormatGpu pixelFormat ) const;
 
         /// Set colour value at a certain location in the image.
-        void setColourAt( const ColourValue &cv, size_t x, size_t y, size_t z,
+        void setColourAt( const ColourValue &cv, size_t _x, size_t _y, size_t _z,
                           PixelFormatGpu pixelFormat );
     };
 }

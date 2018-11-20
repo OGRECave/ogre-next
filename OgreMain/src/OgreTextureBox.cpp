@@ -31,7 +31,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    ColourValue TextureBox::getColourAt( size_t x, size_t y, size_t z,
+    ColourValue TextureBox::getColourAt( size_t _x, size_t _y, size_t _z,
                                          PixelFormatGpu pixelFormat ) const
     {
         OGRE_ASSERT_HIGH( (!isCompressed() &&
@@ -39,19 +39,19 @@ namespace Ogre
                           (isCompressed() && getCompressedPixelFormat() == pixelFormat) );
 
         ColourValue retVal;
-        const void *data = atFromOffsettedOrigin( x, y, z );
-        PixelFormatGpuUtils::unpackColour( &retVal, pixelFormat, data );
+        const void *srcPtr = atFromOffsettedOrigin( _x, _y, _z );
+        PixelFormatGpuUtils::unpackColour( &retVal, pixelFormat, srcPtr );
         return retVal;
     }
     //-------------------------------------------------------------------------
-    void TextureBox::setColourAt( const ColourValue &cv, size_t x, size_t y, size_t z,
+    void TextureBox::setColourAt( const ColourValue &cv, size_t _x, size_t _y, size_t _z,
                                   PixelFormatGpu pixelFormat )
     {
         OGRE_ASSERT_HIGH( (!isCompressed() &&
                            PixelFormatGpuUtils::getBytesPerPixel( pixelFormat ) == bytesPerPixel) ||
                           (isCompressed() && getCompressedPixelFormat() == pixelFormat) );
 
-        void *data = atFromOffsettedOrigin( x, y, z );
-        PixelFormatGpuUtils::packColour( cv, pixelFormat, data );
+        void *dstPtr = atFromOffsettedOrigin( _x, _y, _z );
+        PixelFormatGpuUtils::packColour( cv, pixelFormat, dstPtr );
     }
 }
