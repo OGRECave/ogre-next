@@ -242,8 +242,8 @@ namespace Ogre
             equalNonPod( _r ) &&
             //POD datatypes
             memcmp( &this->operationType, &_r.operationType,
-                    (const uint8*)&this->operationType -
-                    (const uint8*)&this->sampleMask ) == 0;
+                    (const uint8*)&this->sampleMask -
+                    (const uint8*)&this->operationType ) == 0;
         }
         /// Compares if this <= _r. See equalExcludePassData
         bool lessThanExcludePassData( const HlmsPso &_r ) const
@@ -255,8 +255,8 @@ namespace Ogre
 
             //POD datatypes
             return memcmp( &this->operationType, &_r.operationType,
-                           (const uint8*)&this->operationType -
-                           (const uint8*)&this->sampleMask ) < 0;
+                           (const uint8*)&this->sampleMask -
+                           (const uint8*)&this->operationType ) < 0;
         }
 
         /* Disabled because it's not used.
@@ -270,8 +270,8 @@ namespace Ogre
 
             //POD datatypes
             return memcmp( &this->operationType, &_r.operationType,
-                           (uint8*)&this->operationType -
-                           (uint8*)&this->rsData ) < 0;
+                           (uint8*)&this->rsData -
+                           (uint8*)&this->operationType ) < 0;
         }
         /// IMPORTANT: rsData is not considered.
         bool operator == ( const HlmsPso &_r ) const
@@ -281,8 +281,8 @@ namespace Ogre
             equalNonPod( _r ) &&
             //POD datatypes
             memcmp( &this->operationType, &_r.operationType,
-                    (uint8*)&this->operationType -
-                    (uint8*)&this->rsData ) == 0;
+                    (uint8*)&this->rsData -
+                    (uint8*)&this->operationType ) == 0;
         }
         /// IMPORTANT: rsData is not considered.
         bool operator != ( const HlmsPso &_r ) const

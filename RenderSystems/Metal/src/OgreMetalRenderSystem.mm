@@ -317,8 +317,10 @@ namespace Ogre
 
             { MTLFeatureSet_iOS_GPUFamily4_v1, "iOS_GPUFamily4_v1", 4, 1 },
 
+    #ifdef __IPHONE_12_0
             { MTLFeatureSet_iOS_GPUFamily4_v2, "iOS_GPUFamily4_v2", 4, 2 },
             { MTLFeatureSet_iOS_GPUFamily5_v1, "iOS_GPUFamily5_v1", 5, 1 },
+    #endif
 #else
             { MTLFeatureSet_OSX_GPUFamily1_v1, "OSX_GPUFamily1_v1", 1, 1 },
 #endif
