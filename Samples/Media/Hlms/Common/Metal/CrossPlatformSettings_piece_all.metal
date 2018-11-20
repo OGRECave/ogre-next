@@ -29,6 +29,7 @@ struct float1
 #define uintBitsToFloat(x) as_type<float>(x)
 #define floatBitsToInt(x) as_type<int>(x)
 #define lessThan( a, b ) (a < b)
+#define discard discard_fragment()
 
 #define outVs_Position outVs.gl_Position
 
