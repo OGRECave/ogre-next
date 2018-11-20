@@ -18,6 +18,7 @@
 
 #define floatBitsToUint(x) asuint(x)
 #define uintBitsToFloat(x) asfloat(x)
+#define floatBitsToInt(x) asint(x)
 #define fract frac
 #define lessThan( a, b ) (a < b)
 
@@ -31,6 +32,10 @@
 
 #define outVs_Position outVs.gl_Position
 #define outVs_clipDistance0 outVs.gl_ClipDistance0
+
+#define gl_SampleMaskIn0 gl_SampleMask
+#define interpolateAtSample( interp, subsample ) EvaluateAttributeAtSample( interp, subsample )
+#define findLSB firstbitlow
 
 #define outPs_colour0 outPs.colour0
 #define OGRE_Sample( tex, sampler, uv ) tex.Sample( sampler, uv )

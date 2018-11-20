@@ -62,6 +62,8 @@
 #define outVs_Position gl_Position
 #define outVs_clipDistance0 gl_ClipDistance[0]
 
+#define gl_SampleMaskIn0 gl_SampleMaskIn[0]
+
 #define outPs_colour0 outColour
 #define OGRE_Sample( tex, sampler, uv ) texture( tex, uv )
 #define OGRE_SampleLevel( tex, sampler, uv, lod ) textureLod( tex, uv, lod )

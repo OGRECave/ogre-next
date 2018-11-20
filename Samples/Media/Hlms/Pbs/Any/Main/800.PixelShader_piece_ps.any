@@ -522,7 +522,7 @@
 				//SV_Coverage/gl_SampleMaskIn is always before depth & stencil tests,
 				//so we need to perform the test ourselves
 				//See http://www.yosoygames.com.ar/wp/2017/02/beware-of-sv_coverage/
-				uint sampleMask = uint( gl_SampleMaskIn[0] );
+				uint sampleMask = uint( gl_SampleMaskIn0 );
 				float msaaDepth;
 				uint subsampleDepthMask;
 				float pixelDepthZ;
@@ -539,7 +539,7 @@
 					pixelDepthZ = pixelDepthZW.x;
 					pixelDepthW = pixelDepthZW.y;
 					pixelDepth = pixelDepthZ / pixelDepthW;
-					msaaDepth = texelFetch( gBuf_depthTexture, iFragCoord.xy, @n ).x;
+					msaaDepth = OGRE_Load2DMS( gBuf_depthTexture, iFragCoord.xy, @n ).x;
 					intPixelDepth = floatBitsToInt( pixelDepth );
 					intMsaaDepth = floatBitsToInt( msaaDepth );
 					subsampleDepthMask = (abs( intPixelDepth - intMsaaDepth ) <= ulpError) ? 0xffffffffu : ~(1u << @nu);
@@ -550,13 +550,13 @@
 				sampleMask = sampleMask == 0u ? 1u : sampleMask;
 
 				int gBufSubsample = int( findLSB( sampleMask ) );
-			@end @property( !hlms_use_prepass_msaa )
-				//On non-msaa RTTs gBufSubsample is the LOD level.
-				int gBufSubsample = 0;
-			@end
 
-			pixelData.normal = normalize( OGRE_Load2D( gBuf_normals, iFragCoord, gBufSubsample ).xyz * 2.0 - 1.0 );
-			float2 shadowRoughness = OGRE_Load2D( gBuf_shadowRoughness, iFragCoord, gBufSubsample ).xy;
+				pixelData.normal = normalize( OGRE_Load2DMS( gBuf_normals, iFragCoord, gBufSubsample ).xyz * 2.0 - 1.0 );
+				float2 shadowRoughness = OGRE_Load2DMS( gBuf_shadowRoughness, iFragCoord, gBufSubsample ).xy;
+			@else
+				pixelData.normal = normalize( OGRE_Load2D( gBuf_normals, iFragCoord, 0 ).xyz * 2.0 - 1.0 );
+				float2 shadowRoughness = OGRE_Load2D( gBuf_shadowRoughness, iFragCoord, 0 ).xy;
+			@end
 
 			float fShadow = shadowRoughness.x;
 

@@ -27,9 +27,15 @@ struct float1
 
 #define floatBitsToUint(x) as_type<uint>(x)
 #define uintBitsToFloat(x) as_type<float>(x)
+#define floatBitsToInt(x) as_type<int>(x)
 #define lessThan( a, b ) (a < b)
 
 #define outVs_Position outVs.gl_Position
+
+#define gl_SampleMaskIn0 gl_SampleMask
+//#define interpolateAtSample( interp, subsample ) interpolateAtSample( interp, subsample )
+#define findLSB ctz
+
 #define OGRE_Sample( tex, sampler, uv ) tex.sample( sampler, uv )
 #define OGRE_SampleLevel( tex, sampler, uv, lod ) tex.sample( sampler, uv, level( lod ) )
 #define OGRE_SampleArray2D( tex, sampler, uv, arrayIdx ) tex.sample( sampler, float2( uv ), arrayIdx )
