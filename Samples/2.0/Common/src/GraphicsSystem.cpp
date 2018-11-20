@@ -72,8 +72,8 @@ namespace Demo
         mThreadWeight( 0 ),
         mQuit( false ),
         mAlwaysAskForConfig( true ),
-		mUseHlmsDiskCache( false ),
-		mUseMicrocodeCache( false ),
+        mUseHlmsDiskCache( true ),
+        mUseMicrocodeCache( true ),
         mBackgroundColour( backgroundColour )
     {
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
