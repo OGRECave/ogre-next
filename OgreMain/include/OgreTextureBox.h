@@ -31,6 +31,7 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 #include "OgrePixelFormatGpuUtils.h"
+#include "OgreColourValue.h"
 
 #include "OgreHeaderPrefix.h"
 
@@ -221,6 +222,13 @@ namespace Ogre
             box.data = srcData;
             copyFrom( box );
         }
+
+        /// Get colour value from a certain location in the image.
+        ColourValue getColourAt( size_t x, size_t y, size_t z, PixelFormatGpu pixelFormat ) const;
+
+        /// Set colour value at a certain location in the image.
+        void setColourAt( const ColourValue &cv, size_t x, size_t y, size_t z,
+                          PixelFormatGpu pixelFormat );
     };
 }
 

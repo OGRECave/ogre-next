@@ -652,6 +652,18 @@ namespace Ogre {
             return BLANKSTRING;
     }
     //-----------------------------------------------------------------------------------
+    ColourValue Image2::getColourAt( size_t x, size_t y, size_t z, uint8 mipLevel ) const
+    {
+        TextureBox textureBox = getData( mipLevel );
+        return textureBox.getColourAt( x, y, z, mPixelFormat );
+    }
+    //-----------------------------------------------------------------------------------
+    void Image2::setColourAt( const ColourValue &cv, size_t x, size_t y, size_t z, uint8 mipLevel )
+    {
+        TextureBox textureBox = getData( mipLevel );
+        textureBox.setColourAt( cv, x, y, z, mPixelFormat );
+    }
+    //-----------------------------------------------------------------------------------
     TextureBox Image2::getData( uint8 mipLevel ) const
     {
         assert( mipLevel < mNumMipmaps );

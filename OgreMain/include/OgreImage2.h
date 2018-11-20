@@ -256,6 +256,22 @@ namespace Ogre {
         */
         DataStreamPtr encode( const String& formatextension, uint8 mipLevel, uint8 numMipmaps );
 
+        /** Get colour value from a certain location in the image.
+        @remarks
+            This function is slow as we need to calculate the mipmap offset every time.
+            If you need to call it often, prefer using Image2::getData and then call
+            TextureBox::getColourAt instead.
+        */
+        ColourValue getColourAt( size_t x, size_t y, size_t z, uint8 mipLevel=0 ) const;
+
+        /** Set colour value at a certain location in the image.
+        @remarks
+            This function is slow as we need to calculate the mipmap offset every time.
+            If you need to call it often, prefer using Image2::getData and then call
+            TextureBox::setColourAt instead.
+        */
+        void setColourAt( const ColourValue &cv, size_t x, size_t y, size_t z, uint8 mipLevel=0 );
+
         /// Returns a pointer to the internal image buffer.
         TextureBox getData( uint8 mipLevel ) const;
 
