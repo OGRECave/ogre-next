@@ -579,7 +579,8 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void GraphicsSystem::saveHlmsDiskCache(void)
     {
-        if( mRoot->getRenderSystem() && (mUseMicrocodeCache || mUseHlmsDiskCache) )
+        if( mRoot->getRenderSystem() && Ogre::GpuProgramManager::getSingletonPtr() &&
+            (mUseMicrocodeCache || mUseHlmsDiskCache) )
         {
             Ogre::HlmsManager *hlmsManager = mRoot->getHlmsManager();
             Ogre::HlmsDiskCache diskCache( hlmsManager );
