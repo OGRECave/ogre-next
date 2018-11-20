@@ -285,7 +285,7 @@
 
 		//Get the TBN matrix
 		float3 vBinormal	= normalize( cross( pixelData.geomNormal, vTangent )@insertpiece( tbnApplyReflection ) );
-		float3x3 TBN		= float3x3( vTangent, vBinormal, pixelData.geomNormal );
+		float3x3 TBN		= buildFloat3x3( vTangent, vBinormal, pixelData.geomNormal );
 
 		@property( normal_map_tex )
 			pixelData.normal = getTSNormal( textureMaps@value( normal_map_tex_idx ),
