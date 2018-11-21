@@ -1,0 +1,29 @@
+
+//Set the sampler starts. Note that 'padd' get calculated before _any_ 'add'
+//This piece file is parsed during the vertex shader stage because
+//several other pieces may evaluate the variables too early
+//We need to set this vars as soon as possible
+
+@add( diffuse_map_sampler,		samplerStateStart )
+@add( normal_map_tex_sampler,	samplerStateStart )
+@add( specular_map_sampler,		samplerStateStart )
+@add( roughness_map_sampler,	samplerStateStart )
+@add( envprobe_map_sampler,		samplerStateStart )
+@add( detail_weight_map_sampler,samplerStateStart )
+@add( detail_map0_sampler,		samplerStateStart )
+@add( detail_map0_nm_sampler,	samplerStateStart )
+@add( detail_map1_sampler,		samplerStateStart )
+@add( detail_map1_nm_sampler,	samplerStateStart )
+@add( detail_map2_sampler,		samplerStateStart )
+@add( detail_map2_nm_sampler,	samplerStateStart )
+@add( detail_map3_sampler,		samplerStateStart )
+@add( detail_map3_nm_sampler,	samplerStateStart )
+
+@set( envMapRegSampler, envprobe_map_sampler )
+
+@property( use_envprobe_map )
+	@property( !envprobe_map || envprobe_map == target_envprobe_map )
+		/// Auto cubemap textures are set at the beginning. Manual cubemaps are the end.
+		@set( envMapRegSampler, texEnvProbeMap )
+	@end
+@end

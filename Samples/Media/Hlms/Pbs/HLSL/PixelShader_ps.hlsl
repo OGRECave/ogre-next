@@ -48,25 +48,25 @@ struct PS_INPUT
 @insertpiece( DeclAreaApproxTextures )
 
 @property( hlms_forwardplus )
-Buffer<uint> f3dGrid : register(t1);
-Buffer<float4> f3dLightList : register(t2);@end
+Buffer<uint> f3dGrid : register(t@value(f3dGrid));
+Buffer<float4> f3dLightList : register(t@value(f3dLightList));@end
 
 @property( irradiance_volumes )
-	Texture3D<float4>	irradianceVolume		: register(t@value(irradianceVolumeTexUnit));
-	SamplerState		irradianceVolumeSampler	: register(s@value(irradianceVolumeTexUnit));
+	Texture3D<float4>	irradianceVolume		: register(t@value(irradianceVolume));
+	SamplerState		irradianceVolumeSampler	: register(s@value(irradianceVolume));
 @end
 
 @foreach( num_textures, n )
-	Texture2DArray textureMaps@n : register(t@counter(textureRegStart));@end
+	Texture2DArray textureMaps@n : register(t@value(textureMaps@n));@end
 
 @property( use_envprobe_map )
 	@property( !hlms_enable_cubemaps_auto )
-		TextureCube	texEnvProbeMap : register(t@value(envMapReg));
+		TextureCube	texEnvProbeMap : register(t@value(texEnvProbeMap));
 	@else
 		@property( !hlms_cubemaps_use_dpm )
-			TextureCubeArray	texEnvProbeMap : register(t@value(envMapReg));
+			TextureCubeArray	texEnvProbeMap : register(t@value(texEnvProbeMap));
 		@else
-			@property( use_envprobe_map )Texture2DArray	texEnvProbeMap : register(t@value(envMapReg));@end
+			@property( use_envprobe_map )Texture2DArray	texEnvProbeMap : register(t@value(texEnvProbeMap));@end
 			@insertpiece( DeclDualParaboloidFunc )
 		@end
 	@end
@@ -139,9 +139,9 @@ Buffer<float4> f3dLightList : register(t2);@end
 @insertpiece( DeclShadowCasterMacros )
 
 @foreach( num_textures, n )
-	Texture2DArray textureMaps@n : register(t@counter(textureRegStart));@end
+	Texture2DArray textureMaps@n : register(t@value(textureMaps@n));@end
 @foreach( num_samplers, n )
-	SamplerState samplerState@n : register(s@counter(samplerStateStart));@end
+	SamplerState samplerState@value(samplerStateStart) : register(s@counter(samplerStateStart));@end
 
 @property( hlms_shadowcaster_point || exponential_shadow_maps )
 	@insertpiece( PassStructDecl )

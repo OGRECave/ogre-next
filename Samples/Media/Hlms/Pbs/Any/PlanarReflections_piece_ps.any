@@ -10,14 +10,14 @@
 @end
 @property( syntax == hlsl )
 	@piece( DeclPlanarReflTextures )
-		Texture2D<float4> planarReflectionTex	: register(t@value(planarReflectionTexUnit));
-		SamplerState planarReflectionSampler	: register(s@value(planarReflectionTexUnit));
+		Texture2D<float4> planarReflectionTex	: register(t@value(planarReflectionTex));
+		SamplerState planarReflectionSampler	: register(s@value(planarReflectionTex));
 	@end
 @end
 @property( syntax == metal )
 	@piece( DeclPlanarReflTextures )
-		, texture2d<float> planarReflectionTex	[[texture(@value(planarReflectionTexUnit))]]
-		, sampler planarReflectionSampler		[[sampler(@value(planarReflectionTexUnit))]]
+		, texture2d<float> planarReflectionTex	[[texture(@value(planarReflectionTex))]]
+		, sampler planarReflectionSampler		[[sampler(@value(planarReflectionTex))]]
 	@end
 @end
 

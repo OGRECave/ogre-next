@@ -161,6 +161,16 @@ namespace Ogre
             }
         };
 
+        struct TextureRegs
+        {
+            uint32  strNameIdxStart;
+            int32   texUnit;
+            TextureRegs( uint32 _strNameIdxStart, int32 _texUnit ) :
+                strNameIdxStart( _strNameIdxStart ), texUnit( _texUnit ) {}
+        };
+        typedef vector<char>::type TextureNameStrings;
+        typedef vector<TextureRegs>::type TextureRegsVec;
+
         typedef vector<PassCache>::type PassCacheVec;
         typedef vector<RenderableCache>::type RenderableCacheVec;
         typedef vector<ShaderCodeCache>::type ShaderCodeCacheVec;
@@ -169,6 +179,9 @@ namespace Ogre
         RenderableCacheVec  mRenderableCache;
         ShaderCodeCacheVec  mShaderCodeCache;
         HlmsCacheVec        mShaderCache;
+
+        TextureNameStrings  mTextureNameStrings;
+        TextureRegsVec      mTextureRegs[NumShaderTypes];
 
         HlmsPropertyVec mSetProperties;
         PiecesMap       mPieces;
@@ -408,6 +421,23 @@ namespace Ogre
                                        SceneManager *sceneManager );
 
         HlmsPassPso getPassPsoForScene( SceneManager *sceneManager );
+
+        /// OpenGL sets texture binding slots from C++
+        /// All other APIs set the slots from shader.
+        /// However managing the slots in the template can be troublesome. It's best
+        /// managed in C++
+        ///
+        /// This function will set a property with name 'texName' to the value 'texUnit'
+        /// so that the template can use it (e.g. D3D11, Metal).
+        ///
+        /// In OpenGL, applyTextureRegisters will later be called so the params are set
+        void setTextureReg( ShaderType shaderType, const char *texName, int32 texUnit );
+
+        /// See Hlms::setTextureReg
+        ///
+        /// This function does NOT call RenderSystem::bindGpuProgramParameters to
+        /// make the changes effective.
+        void applyTextureRegisters( const HlmsCache *psoEntry );
 
     public:
         /**

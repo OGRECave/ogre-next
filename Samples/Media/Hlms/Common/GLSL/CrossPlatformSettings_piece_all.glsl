@@ -7,6 +7,8 @@
 @property( GL_ARB_shading_language_420pack )
     #extension GL_ARB_shading_language_420pack: require
     #define layout_constbuffer(x) layout( std140, x )
+@else
+	#define layout_constbuffer(x) layout( std140 )
 @end
 @property( GL_ARB_texture_buffer_range )
 	#define bufferFetch texelFetch
@@ -108,9 +110,6 @@
             ivec2 pos = ivec2( mod( pixelIdx, 2048 ), int( uint(pixelIdx) >> 11u ) );
             return texelFetch( sampl, pos, 0 );
         }
-    @end
-    @property( !GL_ARB_shading_language_420pack )
-        #define layout_constbuffer(x) layout( std140 )
-    @end
+	@end
 @end
 @end
