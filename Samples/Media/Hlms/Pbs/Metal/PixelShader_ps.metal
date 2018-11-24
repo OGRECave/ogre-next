@@ -54,7 +54,7 @@ fragment @insertpiece( output_type ) main_metal
 (
 	PS_INPUT inPs [[stage_in]]
 	@property( hlms_vpos )
-		float4 gl_FragCoord [[position]];
+		, float4 gl_FragCoord [[position]]
 	@end
 	@property( two_sided_lighting )
 		, bool gl_FrontFacing [[front_facing]]

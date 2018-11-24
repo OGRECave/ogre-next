@@ -203,7 +203,7 @@ float3 BRDF_IR( float3 lightDir, float3 lightDiffuse, PixelData pixelData )
 /// to white) does not go all the way to white at glancing angles in the case of rough surfaces."
 /// So we use getSpecularFresnelWithRoughness instead.
 @piece( BRDF_EnvMap )
-    float NdotL = saturate( dot( pixelData.normal, pixelData.reflDir ) );
+	//float NdotL = saturate( dot( pixelData.normal, pixelData.reflDir ) );
     float VdotH = saturate( dot( pixelData.viewDir, normalize( pixelData.reflDir + pixelData.viewDir ) ) );
     float_fresnel fresnelS = @insertpiece( getSpecularFresnelWithRoughness );
 
