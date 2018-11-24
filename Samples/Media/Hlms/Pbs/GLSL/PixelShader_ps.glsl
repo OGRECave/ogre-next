@@ -53,7 +53,7 @@ in vec4 gl_FragCoord;
 		@insertpiece( PassStructDecl )
 	@end
 	@insertpiece( MaterialStructDecl )
-	@insertpiece( InstanceDecl )
+	@insertpiece( InstanceStructDecl )
 	@insertpiece( PccManualProbeDecl )
 @end
 @insertpiece( custom_ps_uniformDeclaration )
