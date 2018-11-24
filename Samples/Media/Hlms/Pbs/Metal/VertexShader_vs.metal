@@ -3,7 +3,7 @@
 
 @insertpiece( SetCrossPlatformSettings )
 
-@insertpiece( DefaultHeaderPS )
+@insertpiece( DefaultHeaderVS )
 
 struct VS_INPUT
 {
@@ -38,8 +38,6 @@ struct PS_INPUT
 };
 
 // START UNIFORM METAL STRUCT DECLARATION
-@insertpiece( PassStructDecl )
-@insertpiece( custom_vs_uniformStructDeclaration )
 // END UNIFORM METAL  STRUCT DECLARATION
 
 

@@ -1,7 +1,7 @@
 
 #include "/media/matias/Datos/SyntaxHighlightingMisc.h"
 
-@piece( DefaultHeaderPS )
+@piece( DefaultHeaderVS )
 	@property( hlms_skeleton )
 		#define worldViewMat passBuf.view
 	@else
@@ -13,7 +13,7 @@
 
 	// START UNIFORM DECLARATION
 	@insertpiece( PassStructDecl )
-	@property( hlms_skeleton || hlms_shadowcaster )@insertpiece( InstanceDecl )@end
+	@property( hlms_skeleton || hlms_shadowcaster )@insertpiece( InstanceStructDecl )@end
 	@insertpiece( custom_vs_uniformDeclaration )
 	// END UNIFORM DECLARATION
 

@@ -3,7 +3,8 @@
 
 @insertpiece( SetCrossPlatformSettings )
 
-@insertpiece( DefaultHeaderPS )
+@insertpiece( DefaultHeaderVS )
+@insertpiece( custom_vs_uniformStructDeclaration )
 
 struct VS_INPUT
 {

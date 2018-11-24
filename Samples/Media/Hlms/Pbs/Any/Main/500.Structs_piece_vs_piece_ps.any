@@ -208,15 +208,17 @@ struct Material
 		{
 			Material materialArray[@value( materials_per_buffer )];
 		};
-	@else
-		@piece( MaterialDecl )
-			, constant Material *materialArray [[buffer(CONST_SLOT_START+1)]]
-		@end
 	@end
 @end
 
-@piece( InstanceDecl )
-	@property( syntax != metal )
+@property( syntax == metal )
+	@piece( MaterialDecl )
+		, constant Material *materialArray [[buffer(CONST_SLOT_START+1)]]
+	@end
+@end
+
+@property( syntax != metal )
+	@piece( InstanceStructDecl )
 		//Uniforms that change per Item/Entity
 		CONST_BUFFER( InstanceBuffer, 2 )
 		{
@@ -237,7 +239,9 @@ struct Material
 				uint4 worldMaterialIdx[4096];
 			@end
 		};
-	@else
+	@end
+@else
+	@piece( InstanceDecl )
 		, constant uint4 *worldMaterialIdx [[buffer(CONST_SLOT_START+2)]]
 	@end
 @end

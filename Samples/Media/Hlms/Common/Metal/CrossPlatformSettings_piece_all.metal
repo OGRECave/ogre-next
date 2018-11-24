@@ -9,6 +9,11 @@ struct float1
 	float1( float _x ) : x( _x ) {}
 };
 
+inline float3x3 toMat3x3( float4x4 m )
+{
+    return float3x3( m[0].xyz, m[1].xyz, m[2].xyz );
+}
+
 #define ogre_float4x3 float3x4
 
 #define toFloat3x3( x ) toMat3x3( x )
@@ -36,9 +41,9 @@ struct float1
 #define inVs_blendIndices input.blendIndices
 #define inVs_qtangent input.qtangent
 @property( iOS )
-    #define inVs_drawId input.drawId
-@else
     #define inVs_drawId (baseInstance + instanceId)
+@else
+    #define inVs_drawId input.drawId
 @end
 @foreach( hlms_uv_count, n )
     #define inVs_uv@n input.uv@n@end
@@ -50,6 +55,7 @@ struct float1
 //#define interpolateAtSample( interp, subsample ) interpolateAtSample( interp, subsample )
 #define findLSB ctz
 
+#define outPs_colour0 outPs.colour0
 #define OGRE_Sample( tex, sampler, uv ) tex.sample( sampler, uv )
 #define OGRE_SampleLevel( tex, sampler, uv, lod ) tex.sample( sampler, uv, level( lod ) )
 #define OGRE_SampleArray2D( tex, sampler, uv, arrayIdx ) tex.sample( sampler, float2( uv ), arrayIdx )

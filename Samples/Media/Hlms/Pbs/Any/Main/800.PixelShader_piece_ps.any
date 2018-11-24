@@ -57,10 +57,6 @@
         #define SampleEnvProbe( tex, sampler, uv, lod ) OGRE_SampleLevel( tex, sampler, uv, lod )
 	@end
 
-	@property( irradiance_volumes )
-		@insertpiece( Common_Matrix_Conversions )
-	@end
-
 	@property( hlms_lights_spot_textured )
 		@insertpiece( DeclQuat_zAxis )
 		INLINE float3 qmul( float4 q, float3 v )

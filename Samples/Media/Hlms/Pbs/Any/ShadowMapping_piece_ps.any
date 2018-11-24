@@ -38,7 +38,7 @@
 	#define OGRE_SAMPLE_SHADOW( tex, sampler, uv, depth ) (depth >= 1.0f ? 1.0 : tex.sample_compare( sampler, float2( uv.xy ), depth ))
 	#define OGRE_SAMPLE_SHADOW_ESM( tex, sampler, uv ) tex.sample( sampler, float2( uv.xy ), level(0) ).x
 
-	#define PASSBUF_ARG_DECL , constant PassData &passBuf
+	#define PASSBUF_ARG_DECL , constant PassBuffer &passBuf
 	#define PASSBUF_ARG , passBuf
 @end
 @end
