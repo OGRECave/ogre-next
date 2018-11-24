@@ -31,7 +31,20 @@ struct float1
 #define lessThan( a, b ) (a < b)
 #define discard discard_fragment()
 
+#define inVs_vertex input.position
+#define inVs_blendWeights input.blendWeights
+#define inVs_blendIndices input.blendIndices
+#define inVs_qtangent input.qtangent
+@property( iOS )
+    #define inVs_drawId input.drawId
+@else
+    #define inVs_drawId (baseInstance + instanceId)
+@end
+@foreach( hlms_uv_count, n )
+    #define inVs_uv@n input.uv@n@end
+
 #define outVs_Position outVs.gl_Position
+#define outVs_clipDistance0 outVs.gl_ClipDistance0
 
 #define gl_SampleMaskIn0 gl_SampleMask
 //#define interpolateAtSample( interp, subsample ) interpolateAtSample( interp, subsample )
@@ -46,6 +59,8 @@ struct float1
 #define OGRE_SampleArray2DGrad( tex, sampler, uv, arrayIdx, ddx, ddy ) tex.sample( sampler, uv, ushort( arrayIdx ), gradient2d( ddx, ddy ) )
 #define OGRE_ddx( val ) dfdx( val )
 #define OGRE_ddy( val ) dfdy( val )
+#define OGRE_Load2D( tex, iuv, lod ) tex.read( iuv, lod )
+#define OGRE_Load2DMS( tex, iuv, subsample ) tex.read( iuv, subsample )
 
 #define bufferFetch( buffer, idx ) buffer[idx]
 #define bufferFetch1( buffer, idx ) buffer[idx]

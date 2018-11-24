@@ -128,8 +128,6 @@ Buffer<float4> f3dLightList : register(t@value(f3dLightList));@end
 		outPs.colour0.w = 1;*/
 	@end
 
-	@insertpiece( custom_ps_posExecution )
-
 @property( !hlms_render_depth_only )
 	return outPs;
 @end
