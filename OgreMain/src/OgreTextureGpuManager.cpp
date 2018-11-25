@@ -78,6 +78,8 @@ namespace Ogre
         mDefaultMipmapGen( DefaultMipmapGen::HwMode ),
         mDefaultMipmapGenCubemaps( DefaultMipmapGen::SwMode ),
         mShuttingDown( false ),
+        mTryLockMutexFailureCount( 0u ),
+        mTryLockMutexFailureLimit( 1200u ),
         mEntriesToProcessPerIteration( 3u ),
         mMaxPreloadBytes( 256u * 1024u * 1024u ), //A value of 512MB begins to shake driver bugs.
         mTextureGpuManagerListener( 0 ),
@@ -1070,6 +1072,11 @@ namespace Ogre
         mBudget = budget;
         //Sort in descending order.
         std::sort( mBudget.begin(), mBudget.end(), BudgetEntry() );
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::setTrylockMutexFailureLimit( uint32 tryLockFailureLimit )
+    {
+        mTryLockMutexFailureLimit = tryLockFailureLimit;
     }
     //-----------------------------------------------------------------------------------
     const String* TextureGpuManager::findAliasNameStr( IdString idName ) const
@@ -2125,6 +2132,20 @@ namespace Ogre
             ThreadData &workerData = mThreadData[c_workerThread];
             bool lockSucceeded = false;
 
+            if( mTryLockMutexFailureCount >= mTryLockMutexFailureLimit &&
+                mTryLockMutexFailureLimit != std::numeric_limits<uint32>::max() )
+            {
+                syncWithWorkerThread = true;
+                LogManager::getSingleton().logMessage(
+                            "WARNING: We failed " +
+                            StringConverter::toString( mTryLockMutexFailureCount ) +
+                            " times to acquire lock from texture background streaming thread. "
+                            "Stalling. If you see this message more than once, something is going "
+                            "terribly wrong, or disk loading is incredibly slow. "
+                            "See TextureGpuManager::setTrylockMutexFailureLimit documentation",
+                            LML_CRITICAL );
+            }
+
             if( !syncWithWorkerThread )
             {
                 lockSucceeded = mMutex.tryLock();
@@ -2137,6 +2158,7 @@ namespace Ogre
 
             if( lockSucceeded )
             {
+                mTryLockMutexFailureCount = 0;
                 std::swap( mainData.objCmdBuffer, workerData.objCmdBuffer );
                 mainData.usedStagingTex.swap( workerData.usedStagingTex );
                 fullfillBudget();
@@ -2145,6 +2167,10 @@ namespace Ogre
                          workerData.loadRequests.empty() &&
                          mStreamingData.queuedImages.empty();
                 mMutex.unlock();
+            }
+            else
+            {
+                ++mTryLockMutexFailureCount;
             }
         }
 

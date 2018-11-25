@@ -367,6 +367,9 @@ namespace Ogre
         WaitableEvent       mRequestToMainThreadEvent;
         LightweightMutex    mLoadRequestsMutex;
         LightweightMutex    mMutex;
+        //Counts how many times mMutex.tryLock returned false in a row
+        uint32              mTryLockMutexFailureCount;
+        uint32              mTryLockMutexFailureLimit;
         ThreadData          mThreadData[2];
         StreamingData       mStreamingData;
 
@@ -750,6 +753,36 @@ namespace Ogre
         @param maxPreloadBytes
         */
         void setWorkerThreadMaxPreloadBytes( size_t maxPreloadBytes );
+
+        /** The main thread tries to acquire a lock from the background thread,
+            do something very quick, and release it.
+
+            If the lock failed to acquire, we try again next time _update is called.
+            However if this happens too often in a row, we should stall and wait indefinitely
+            for the background thread.
+
+            This function allows you to specify how many failures we have to let pass before
+            we stall.
+        @remarks
+            This is a failsafe mechanism for edge case behaviors that should never happen.
+            It is rare for the tryLock() to fail more than twice in a row.
+
+            However if loading a several big files (e.g. large cubemaps) or loading from a slow medium
+            (e.g. from the internet directly) many tryLock() failures could be common.
+
+            If failure to acquire the lock is common and expected, small limit values could cause a
+            lot of stutter, because e.g. a value of 3 could cause fps lag spikes every 3 frames.
+
+            A sensible value such as 1200 means that a stall would only happen after 20 seconds of
+            repeated failure if running at constant 60 fps.
+        @param tryLockFailureLimit
+            How many failures we have to wait for a stall, expressed in calls
+            TextureGpuManager::_update. Usually there's one call to _update per frame, but there
+            can be more.
+            Use 0 to always stall
+            Use std::numeric_limits<uint32>::max() for no failure limits (i.e. never stall)
+        */
+        void setTrylockMutexFailureLimit( uint32 tryLockFailureLimit );
 
         const String* findAliasNameStr( IdString idName ) const;
         const String* findResourceNameStr( IdString idName ) const;
