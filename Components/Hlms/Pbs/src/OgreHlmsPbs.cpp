@@ -611,7 +611,8 @@ namespace Ogre
 
         setProperty( PbsProperty::NormalWeight, numNormalWeights );
 
-        setDetailMapProperties( datablock, inOutPieces );
+        if( datablock->mTexturesDescSet )
+            setDetailMapProperties( datablock, inOutPieces );
 
         if( datablock->mSamplersDescSet )
             setProperty( PbsProperty::NumSamplers, datablock->mSamplersDescSet->mSamplers.size() );

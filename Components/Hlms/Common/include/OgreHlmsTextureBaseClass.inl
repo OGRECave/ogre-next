@@ -157,6 +157,8 @@ namespace Ogre
                 for( size_t j=0; j<i; ++j )
                 {
                     if( mTextures[j] &&
+                        mTextures[j]->getInternalTextureType() ==
+                        mTextures[i]->getInternalTextureType() &&
                         mTextures[j]->getTexturePool() == mTextures[i]->getTexturePool() &&
                         (mSamplerblocks[i] == mSamplerblocks[j] || hasSeparateSamplers) )
                     {
