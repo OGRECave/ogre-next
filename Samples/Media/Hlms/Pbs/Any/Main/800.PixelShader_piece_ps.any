@@ -510,9 +510,9 @@
 			@insertpiece( DoDirectionalShadowMaps )
 
 		@end @property( hlms_use_prepass )
-			int2 iFragCoord = int2( gl_FragCoord.x,
-									@property( !hlms_forwardplus_flipY && syntax == glsl )passBuf.windowHeight.x - @end
-									gl_FragCoord.y );
+			rshort2 iFragCoord = rshort2( gl_FragCoord.x,
+										  @property( !hlms_forwardplus_flipY && syntax == glsl )passBuf.windowHeight.x - @end
+										  gl_FragCoord.y );
 
 			@property( hlms_use_prepass_msaa )
 				//SV_Coverage/gl_SampleMaskIn is always before depth & stencil tests,
