@@ -3,15 +3,7 @@
 
 @property( hlms_shadowcaster )
 	@piece( DoShadowCasterVS )
-		@property( syntax == glsl )
-			float shadowConstantBias = uintBitsToFloat( instance.worldMaterialIdx[drawId].y );
-		@end
-		@property( syntax == hlsl )
-			float shadowConstantBias = asfloat( worldMaterialIdx[input.drawId].y );
-		@end
-		@property( syntax == metal )
-			float shadowConstantBias = as_type<float>( worldMaterialIdx[drawId].y );
-		@end
+		float shadowConstantBias = uintBitsToFloat( worldMaterialIdx[inVs_drawId].y );
 
 		@property( !hlms_shadow_uses_depth_texture && !hlms_shadowcaster_point && !exponential_shadow_maps )
 			//Linear depth

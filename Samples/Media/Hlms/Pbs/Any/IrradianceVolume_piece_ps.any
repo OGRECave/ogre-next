@@ -1,6 +1,9 @@
+
+#include "/media/matias/Datos/SyntaxHighlightingMisc.h"
+
 @property( irradiance_volumes )
 @piece( applyIrradianceVolumes )
-	float3 worldNormal = mul( nNormal.xyz, (float3x3)passBuf.invView );
+	float3 worldNormal = mul( pixelData.normal.xyz, toFloat3x3(passBuf.invView) );
 	float3 worldPos = mul( float4( inPs.pos.xyz, 1.0 ), passBuf.invView ).xyz;
 
 	float3 irradiancePos = worldPos.xyz * passBuf.irradianceSize.xyz - passBuf.irradianceOrigin.xyz;
@@ -12,7 +15,7 @@
 	origYPos += 0.5f;	//Make sure we sample at center (so HW doesn't do linear
 						//filtering on the Y axis. We'll do that manually)
 
-	float3 isNegative = float3( worldNormal.xyz < float3( 0, 0, 0 ) );
+	float3 isNegative = float3( lessThan( worldNormal.xyz, float3( 0, 0, 0 ) ) );
 
 	float3 tmpAmbientSample;
 
@@ -34,34 +37,43 @@
 
 	float irradianceTexInvHeight = passBuf.irradianceSize.w;
 
-	irradiancePos.y		= (origYPos + isNegative.x) * irradianceTexInvHeight;
-	float3 xAmbientSample	= irradianceVolume.Sample( irradianceVolumeSampler, irradiancePos ).xyz;
-	irradiancePos.y		+= 6.0f * irradianceTexInvHeight;
-	tmpAmbientSample	= irradianceVolume.Sample( irradianceVolumeSampler, irradiancePos ).xyz;
+	irradiancePos.y			= (origYPos + isNegative.x) * irradianceTexInvHeight;
+	float3 xAmbientSample	= OGRE_Sample( irradianceVolume, irradianceVolumeSampler, irradiancePos ).xyz;
+	irradiancePos.y			+= 6.0f * irradianceTexInvHeight;
+	tmpAmbientSample		= OGRE_Sample( irradianceVolume, irradianceVolumeSampler, irradiancePos ).xyz;
 
 	xAmbientSample = lerp( xAmbientSample, tmpAmbientSample, fIrradianceYWeight );
 
-	irradiancePos.y		= (origYPos + (2.0f + isNegative.y)) * irradianceTexInvHeight;
-	float3 yAmbientSample	= irradianceVolume.Sample( irradianceVolumeSampler, irradiancePos ).xyz;
-	irradiancePos.y		+= 6.0f * irradianceTexInvHeight;
-	tmpAmbientSample	= irradianceVolume.Sample( irradianceVolumeSampler, irradiancePos ).xyz;
+	irradiancePos.y			= (origYPos + (2.0f + isNegative.y)) * irradianceTexInvHeight;
+	float3 yAmbientSample	= OGRE_Sample( irradianceVolume, irradianceVolumeSampler, irradiancePos ).xyz;
+	irradiancePos.y			+= 6.0f * irradianceTexInvHeight;
+	tmpAmbientSample		= OGRE_Sample( irradianceVolume, irradianceVolumeSampler, irradiancePos ).xyz;
 
 	yAmbientSample = lerp( yAmbientSample, tmpAmbientSample, fIrradianceYWeight );
 
-	irradiancePos.y		= (origYPos + (4.0f + isNegative.z)) * irradianceTexInvHeight;
-	float3 zAmbientSample = irradianceVolume.Sample( irradianceVolumeSampler, irradiancePos ).xyz;
-	irradiancePos.y		+= 6.0f * irradianceTexInvHeight;
-	tmpAmbientSample	= irradianceVolume.Sample( irradianceVolumeSampler, irradiancePos ).xyz;
+	irradiancePos.y			= (origYPos + (4.0f + isNegative.z)) * irradianceTexInvHeight;
+	float3 zAmbientSample	= OGRE_Sample( irradianceVolume, irradianceVolumeSampler, irradiancePos ).xyz;
+	irradiancePos.y			+= 6.0f * irradianceTexInvHeight;
+	tmpAmbientSample		= OGRE_Sample( irradianceVolume, irradianceVolumeSampler, irradiancePos ).xyz;
 
 	zAmbientSample = lerp( zAmbientSample, tmpAmbientSample, fIrradianceYWeight );
 
-
 	float3 worldNormalSq = worldNormal.xyz * worldNormal.xyz;
 	float3 ambientTerm =	worldNormalSq.x * xAmbientSample.xyz +
-							worldNormalSq.y * yAmbientSample.xyz +
-							worldNormalSq.z * zAmbientSample.xyz;
+						worldNormalSq.y * yAmbientSample.xyz +
+						worldNormalSq.z * zAmbientSample.xyz;
 	ambientTerm *= passBuf.irradianceOrigin.w; //irradianceOrigin.w = irradianceMaxPower
 
-	finalColour.xyz += ambientTerm.xyz * @insertpiece( kD ).xyz;
+	@property( syntax == metal )
+		if( irradiancePos.x < 0 || irradiancePos.x > 1 ||
+			irradiancePos.z < 0 || irradiancePos.z > 1 ||
+			irradiancePos.y <= (6.0f * irradianceTexInvHeight) || irradiancePos.y >= 1 )
+		{
+			//Metal does not support border colour addressing mode.
+			ambientTerm = float3( 0 );
+		}
+	@end
+
+	finalColour.xyz += ambientTerm.xyz * pixelData.diffuse.xyz;
 @end
 @end

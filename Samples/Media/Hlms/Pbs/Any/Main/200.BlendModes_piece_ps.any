@@ -1,0 +1,108 @@
+
+//#include "SyntaxHighlightingMisc.h"
+
+//Reset t to 0 just in case (values are preserved from previous stages)
+@pset( t, 0 )
+
+@property( !hlms_shadowcaster )
+@piece( NormalNonPremul )
+	//Normal Non Premultiplied @value(t)
+	pixelData.diffuse.xyz = lerp( pixelData.diffuse.xyz, detailCol@value(t).xyz, detailCol@value(t).a );
+	pixelData.diffuse.w = lerp( pixelData.diffuse.w, 1.0, detailCol@value(t).w );
+@end
+
+@piece( NormalPremul )
+	//Normal Premultiplied @value(t)
+	pixelData.diffuse.xyz = (1.0 - detailCol@value(t).a) * pixelData.diffuse.xyz + detailCol@value(t).xyz;
+	pixelData.diffuse.w = lerp( pixelData.diffuse.w, 1.0, detailCol@value(t).w );
+@end
+
+@piece( Add )
+	//Add @value(t)
+	pixelData.diffuse.xyz = lerp( pixelData.diffuse.xyz,
+						  min( pixelData.diffuse.xyz + detailCol@value(t).xyz, float3(1.0, 1.0, 1.0) ),
+						  detailCol@value(t).a );
+@end
+
+@piece( Subtract )
+	//Subtract @value(t)
+	pixelData.diffuse.xyz = lerp( pixelData.diffuse.xyz,
+						  max( pixelData.diffuse.xyz - detailCol@value(t).xyz, float3(0.0, 0.0, 0.0) ),
+						  detailCol@value(t).a );
+@end
+
+@piece( Multiply )
+	//Multiply @value(t)
+	pixelData.diffuse.xyz = lerp( pixelData.diffuse.xyz,
+						  pixelData.diffuse.xyz * detailCol@value(t).xyz,
+						  detailCol@value(t).a );
+@end
+
+@piece( Multiply2x )
+	//Multiply2x @value(t)
+	pixelData.diffuse.xyz = lerp( pixelData.diffuse.xyz,
+						  min( pixelData.diffuse.xyz * detailCol@value(t).xyz * 2.0, float3(1.0, 1.0, 1.0) ),
+						  detailCol@value(t).a );
+@end
+
+@piece( Screen )
+	//Screen @value(t)
+	pixelData.diffuse.xyz = lerp( pixelData.diffuse.xyz,
+						  1.0 - (1.0 - pixelData.diffuse.xyz) * (1.0 - detailCol@value(t).xyz),
+						  detailCol@value(t).a );
+@end
+
+@piece( Overlay )
+	//Overlay @value(t)
+	pixelData.diffuse.xyz = lerp( pixelData.diffuse.xyz,
+						  pixelData.diffuse.xyz * ( pixelData.diffuse.xyz + 2.0 * detailCol@value(t).xyz * (1.0 - pixelData.diffuse.xyz) ),
+						  detailCol@value(t).a );
+@end
+
+@piece( Lighten )
+	//Lighten @value(t)
+	pixelData.diffuse.xyz = lerp( pixelData.diffuse.xyz,
+						  max( pixelData.diffuse.xyz, detailCol@value(t).xyz ),
+						  detailCol@value(t).a );
+@end
+
+@piece( Darken )
+	//Darken @value(t)
+	pixelData.diffuse.xyz = lerp( pixelData.diffuse.xyz,
+						  min( pixelData.diffuse.xyz, detailCol@value(t).xyz ),
+						  detailCol@value(t).a );
+@end
+
+@piece( GrainExtract )
+	//GrainExtract @value(t)
+	pixelData.diffuse.xyz = lerp( pixelData.diffuse.xyz,
+						  (pixelData.diffuse.xyz - detailCol@value(t).xyz) + 0.5f,
+						  detailCol@value(t).a );
+@end
+
+@piece( GrainMerge )
+	//GrainMerge @value(t)
+	pixelData.diffuse.xyz = lerp( pixelData.diffuse.xyz,
+						  (pixelData.diffuse.xyz + detailCol@value(t).xyz) - 0.5f,
+						  detailCol@value(t).a );
+@end
+
+@piece( Difference )
+	//Difference @value(t)
+	pixelData.diffuse.xyz = lerp( pixelData.diffuse.xyz,
+						  abs(pixelData.diffuse.xyz - detailCol@value(t).xyz),
+						  detailCol@value(t).a );
+@end
+@else
+
+@piece( NormalNonPremul )
+	//Normal Non Premultiplied @value(t)
+	pixelData.diffuse = lerp( pixelData.diffuse, 1.0, detailCol@value(t) );
+@end
+
+@piece( NormalPremul )
+	//Normal Premultiplied @value(t)
+	pixelData.diffuse = lerp( pixelData.diffuse, 1.0, detailCol@value(t) );
+@end
+
+@end

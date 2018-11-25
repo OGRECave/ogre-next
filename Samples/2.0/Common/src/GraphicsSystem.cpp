@@ -470,34 +470,40 @@ namespace Demo
     void GraphicsSystem::loadTextureCache(void)
     {
 #if !OGRE_NO_JSON
-        Ogre::ResourceGroupManager &resourceGroupManager = Ogre::ResourceGroupManager::getSingleton();
-        resourceGroupManager.addResourceLocation( mWriteAccessFolder, "FileSystem", "Cache Folder" );
+        Ogre::ArchiveManager &archiveManager = Ogre::ArchiveManager::getSingleton();
+        Ogre::Archive *rwAccessFolderArchive = archiveManager.load( mWriteAccessFolder,
+                                                                    "FileSystem", true );
         try
         {
-            Ogre::DataStreamPtr stream = resourceGroupManager.openResource(
-                                             "textureMetadataCache.json", "Cache Folder" );
-            std::vector<char> fileData;
-            fileData.resize( stream->size() + 1 );
-            if( !fileData.empty() )
+            const Ogre::String filename = "textureMetadataCache.json";
+            if( rwAccessFolderArchive->exists( filename ) )
             {
-                stream->read( &fileData[0], stream->size() );
-                //Add null terminator just in case (to prevent bad input)
-                fileData.back() = '\0';
-                Ogre::TextureGpuManager *textureManager = mRoot->getRenderSystem()->getTextureGpuManager();
+                Ogre::DataStreamPtr stream = rwAccessFolderArchive->open( filename );
+                std::vector<char> fileData;
+                fileData.resize( stream->size() + 1 );
+                if( !fileData.empty() )
+                {
+                    stream->read( &fileData[0], stream->size() );
+                    //Add null terminator just in case (to prevent bad input)
+                    fileData.back() = '\0';
+                    Ogre::TextureGpuManager *textureManager =
+                            mRoot->getRenderSystem()->getTextureGpuManager();
                     textureManager->importTextureMetadataCache( stream->getName(), &fileData[0], false );
+                }
             }
-        }
-        catch( Ogre::FileNotFoundException & )
-        {
-            Ogre::LogManager::getSingleton().logMessage(
-                        "[INFO] Texture cache not found at " + mWriteAccessFolder +
-                        "/textureMetadataCache.json" );
+            else
+            {
+                Ogre::LogManager::getSingleton().logMessage(
+                            "[INFO] Texture cache not found at " + mWriteAccessFolder +
+                            "/textureMetadataCache.json" );
+            }
         }
         catch( Ogre::Exception &e )
         {
             Ogre::LogManager::getSingleton().logMessage( e.getFullDescription() );
         }
-        resourceGroupManager.removeResourceLocation( mWriteAccessFolder, "Cache Folder" );
+
+        archiveManager.unload( rwAccessFolderArchive );
 #endif
     }
     //-----------------------------------------------------------------------------------

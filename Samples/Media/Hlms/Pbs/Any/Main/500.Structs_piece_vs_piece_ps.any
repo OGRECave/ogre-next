@@ -17,8 +17,11 @@ struct Light
 	float3 specular;
 @property( hlms_num_shadow_map_lights )
 	float3 attenuation;
-	float3 spotDirection;
-	float3 spotParams;
+	//Spotlights:
+	//  spotDirection.xyz is direction
+	//  spotParams.xyz contains falloff params
+	float4 spotDirection;
+	float4 spotParams;
 @end
 };
 
@@ -52,7 +55,7 @@ struct AreaLtcLight
 @insertpiece( DeclCubemapProbeStruct )
 
 //Uniforms that change per pass
-struct PassData
+CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
 {
 	//Vertex shader (common to both receiver and casters)
 	float4x4 viewProj;
@@ -74,6 +77,9 @@ struct PassData
 
 	//Pixel shader
 	float3x3 invViewMatCubemap;
+@property( syntax == hlsl )
+	float padding; //Compatibility with GLSL
+@end
 
 @property( hlms_use_prepass )
 	float4 windowHeight;
@@ -86,11 +92,13 @@ struct PassData
 	float4 ambientLowerHemi;
 	float4 ambientHemisphereDir;
 @end
+
 @property( irradiance_volumes )
 	float4 irradianceOrigin;	//.w = maxPower
 	float4 irradianceSize;		//.w = 1.0f / irradianceTexture->getHeight()
 	float4x4 invView;
 @end
+
 @property( hlms_pssm_splits )@psub( hlms_pssm_splits_minus_one, hlms_pssm_splits, 1 )@foreach( hlms_pssm_splits, n )
 	float pssmSplitPoints@n;@end @end
 @property( hlms_pssm_blend )@foreach( hlms_pssm_splits_minus_one, n )
@@ -130,19 +138,26 @@ struct PassData
 
 	@insertpiece( DeclPlanarReflUniforms )
 
-@property( parallax_correct_cubemaps && !hlms_enable_cubemaps_auto && !hlms_enable_cubemaps_auto )
+@property( parallax_correct_cubemaps && !hlms_enable_cubemaps_auto )
 	CubemapProbe autoProbe;
 @end
 
 	@insertpiece( custom_passBuffer )
-};@end
-
-@piece( PassDecl )
-, constant PassData &passBuf [[buffer(CONST_SLOT_START+0)]]
+}
+CONST_BUFFER_STRUCT_END( passBuf );
 @end
 
-@property( fresnel_scalar )@piece( FresnelType )float3@end @piece( FresnelSwizzle )xyz@end @end
-@property( !fresnel_scalar )@piece( FresnelType )float@end @piece( FresnelSwizzle )x@end @end
+@property( syntax == metal )
+	@piece( PassDecl )
+	, constant PassBuffer &passBuf [[buffer(CONST_SLOT_START+0)]]
+	@end
+@end
+
+@property( fresnel_scalar )
+	@piece( FresnelSwizzle )xyz@end
+@else
+	@piece( FresnelSwizzle )x@end
+@end
 
 @piece( MaterialStructDecl )
 //Uniforms that change per Item/Entity, but change very infrequently
@@ -163,49 +178,84 @@ struct Material
 	float4 emissive;		//emissive.w contains mNormalMapWeight.
 	float4 userValue[3];
 
-	//uint4 indices0_3;
-	ushort diffuseIdx;
-	ushort normalIdx;
-	ushort specularIdx;
-	ushort roughnessIdx;
-	ushort weightMapIdx;
-	ushort detailMapIdx0;
-	ushort detailMapIdx1;
-	ushort detailMapIdx2;
+	@property( syntax != metal )
+		uint4 indices0_3;
+		uint4 indices4_7;
+	@else
+		ushort diffuseIdx;
+		ushort normalIdx;
+		ushort specularIdx;
+		ushort roughnessIdx;
+		ushort weightMapIdx;
+		ushort detailMapIdx0;
+		ushort detailMapIdx1;
+		ushort detailMapIdx2;
 
-	//uint4 indices4_7;
-	ushort detailMapIdx3;
-	ushort detailNormMapIdx0;
-	ushort detailNormMapIdx1;
-	ushort detailNormMapIdx2;
-	ushort detailNormMapIdx3;
-	ushort emissiveMapIdx;
-	ushort envMapIdx;
+		ushort detailMapIdx3;
+		ushort detailNormMapIdx0;
+		ushort detailNormMapIdx1;
+		ushort detailNormMapIdx2;
+		ushort detailNormMapIdx3;
+		ushort emissiveMapIdx;
+		ushort envMapIdx;
+	@end
 
 	@insertpiece( custom_materialBuffer )
-};@end
+};
 
-@piece( MaterialDecl )
-, constant Material *materialArray [[buffer(CONST_SLOT_START+1)]]
+	@property( syntax != metal )
+		CONST_BUFFER( MaterialBuf, 1 )
+		{
+			Material materialArray[@value( materials_per_buffer )];
+		};
+	@end
 @end
 
-
-@piece( InstanceDecl )
-//Uniforms that change per Item/Entity
-//.x =
-//The lower 9 bits contain the material's start index.
-//The higher 23 bits contain the world matrix start index.
-//
-//.y =
-//shadowConstantBias. Send the bias directly to avoid an
-//unnecessary indirection during the shadow mapping pass.
-//Must be loaded with uintBitsToFloat
-, constant uint4 *worldMaterialIdx [[buffer(CONST_SLOT_START+2)]]
+@property( syntax == metal )
+	@piece( MaterialDecl )
+		, constant Material *materialArray [[buffer(CONST_SLOT_START+1)]]
+	@end
 @end
 
-@property( envprobe_map && envprobe_map != target_envprobe_map && use_parallax_correct_cubemaps )
+@property( syntax != metal )
+	@piece( InstanceStructDecl )
+		//Uniforms that change per Item/Entity
+		CONST_BUFFER( InstanceBuffer, 2 )
+		{
+			//.x =
+			//The lower 9 bits contain the material's start index.
+			//The higher 23 bits contain the world matrix start index.
+			//
+			//.y =
+			//shadowConstantBias. Send the bias directly to avoid an
+			//unnecessary indirection during the shadow mapping pass.
+			//Must be loaded with uintBitsToFloat
+			//
+			//.z =
+			//lightMask. Ogre must have been compiled with OGRE_NO_FINE_LIGHT_MASK_GRANULARITY
+			@property( fast_shader_build_hack )
+				uint4 worldMaterialIdx[2];
+			@else
+				uint4 worldMaterialIdx[4096];
+			@end
+		};
+	@end
+@else
+	@piece( InstanceDecl )
+		, constant uint4 *worldMaterialIdx [[buffer(CONST_SLOT_START+2)]]
+	@end
+@end
+
+@property( envprobe_map && envprobe_map != target_envprobe_map && use_parallax_correct_cubemaps && !hlms_enable_cubemaps_auto )
 @piece( PccManualProbeDecl )
-, constant CubemapProbe &manualProbe [[buffer(CONST_SLOT_START+3)]]
+	@property( syntax != metal )
+		CONST_BUFFER( ManualProbe, 3 )
+		{
+			CubemapProbe manualProbe;
+		};
+	@else
+		, constant CubemapProbe &manualProbe [[buffer(CONST_SLOT_START+3)]]
+	@end
 @end
 @end
 
@@ -214,48 +264,55 @@ struct Material
 
 @piece( VStoPS_block )
 	@property( !hlms_shadowcaster )
-		@property( !lower_gpu_overhead )
-			ushort materialId [[flat]];
+		@property( syntax == metal )
+			@property( !lower_gpu_overhead )
+				ushort materialId [[flat]];
+			@end
+			@property( hlms_fine_light_mask || hlms_forwardplus_fine_light_mask )
+				uint objLightMask [[flat]];
+			@end
+			@property( use_planar_reflections )
+				ushort planarReflectionIdx [[flat]];
+			@end
+		@else
+			@property( !lower_gpu_overhead )
+				FLAT_INTERPOLANT( ushort drawId, @counter(texcoord) );
+			@end
 		@end
-		@property( hlms_fine_light_mask || hlms_forwardplus_fine_light_mask )
-			uint objLightMask [[flat]];
-		@end
-		@property( use_planar_reflections )
-			ushort planarReflectionIdx [[flat]];
-		@end
+
 		@property( hlms_normal || hlms_qtangent )
-			float3 pos;
-			float3 normal;
-			@property( normal_map )float3 tangent;
-				@property( hlms_qtangent )float biNormalReflection [[flat]];@end
+			INTERPOLANT( float3 pos, @counter(texcoord) );
+			INTERPOLANT( float3 normal, @counter(texcoord) );
+			@property( normal_map )
+				INTERPOLANT( float3 tangent, @counter(texcoord) );
+				@property( hlms_qtangent )FLAT_INTERPOLANT( float biNormalReflection, @counter(texcoord) );@end
 			@end
 		@end
 		@foreach( hlms_uv_count, n )
-			float@value( hlms_uv_count@n ) uv@n;@end
+			INTERPOLANT( float@value( hlms_uv_count@n ) uv@n, @counter(texcoord) );@end
 
 		@foreach( hlms_num_shadow_map_lights, n )
 			@property( !hlms_shadowmap@n_is_point_light )
-				float4 posL@n;@end @end
-
-		@property( hlms_pssm_splits )float depth;@end
-	@end
-
-	@property( hlms_shadowcaster )
+				INTERPOLANT( float4 posL@n, @counter(texcoord) );@end @end
+		@property( hlms_pssm_splits )INTERPOLANT( float depth, @counter(texcoord) );@end
+		@property( hlms_use_prepass_msaa > 1 )
+			INTERPOLANT( float2 zwDepth, @counter(texcoord) );
+		@end
+	@else
 		@property( alpha_test )
-			ushort drawId [[flat]];
+			FLAT_INTERPOLANT( ushort drawId, @counter(texcoord) );
 			@foreach( hlms_uv_count, n )
-				float@value( hlms_uv_count@n ) uv@n;@end
+				INTERPOLANT( float@value( hlms_uv_count@n ) uv@n, @counter(texcoord) );@end
 		@end
 		@property( (!hlms_shadow_uses_depth_texture || exponential_shadow_maps) && !hlms_shadowcaster_point )
-			float depth;
+			INTERPOLANT( float depth, @counter(texcoord) );
 		@end
 		@property( hlms_shadowcaster_point )
-			float3 toCameraWS;
+			INTERPOLANT( float3 toCameraWS, @counter(texcoord) );
 			@property( !exponential_shadow_maps )
-				float constBias [[flat]];
+				FLAT_INTERPOLANT( float constBias, @counter(texcoord) );
 			@end
 		@end
 	@end
-
 	@insertpiece( custom_VStoPS )
 @end

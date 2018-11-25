@@ -38,7 +38,7 @@
 	#define OGRE_SAMPLE_SHADOW( tex, sampler, uv, depth ) (depth >= 1.0f ? 1.0 : tex.sample_compare( sampler, float2( uv.xy ), depth ))
 	#define OGRE_SAMPLE_SHADOW_ESM( tex, sampler, uv ) tex.sample( sampler, float2( uv.xy ), level(0) ).x
 
-	#define PASSBUF_ARG_DECL , constant PassData &passBuf
+	#define PASSBUF_ARG_DECL , constant PassBuffer &passBuf
 	#define PASSBUF_ARG , passBuf
 @end
 @end
@@ -115,9 +115,9 @@
 	@end
 	@piece( SamplerShadow )@insertpiece( SAMPLERSTATESHADOW ) shadowSampler, @end
 	@piece( DeclShadowSamplers )
-		@insertpiece( SAMPLERSTATESHADOW ) shadowSampler: register(s@value(textureRegShadowMapStart));
+		@insertpiece( SAMPLERSTATESHADOW ) shadowSampler: register(s@value(texShadowMap0));
 		@foreach( hlms_num_shadow_map_textures, n )
-			Texture2D<float> texShadowMap@n				: register(t@counter(textureRegShadowMapStart));@end
+			Texture2D<float> texShadowMap@n				: register(t@value(texShadowMap@n));@end
 	@end
 @end
 @property( syntax == metal )
@@ -131,7 +131,7 @@
 	/// sampler shadowSampler is declared as constexpr in PixelShader_ps.metal
 	@piece( DeclShadowSamplers )
 		@foreach( hlms_num_shadow_map_textures, n )
-			, @insertpiece( TEXTURE2DSHADOW ) texShadowMap@n [[texture(@counter(textureRegShadowMapStart))]]@end
+			, @insertpiece( TEXTURE2DSHADOW ) texShadowMap@n [[texture(@value(texShadowMap@n))]]@end
 	@end
 @end
 

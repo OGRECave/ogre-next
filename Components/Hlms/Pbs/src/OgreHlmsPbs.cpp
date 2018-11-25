@@ -173,6 +173,10 @@ namespace Ogre
     const IdString PbsProperty::LegacyMathBrdf          = IdString( "legacy_math_brdf" );
     const IdString PbsProperty::RoughnessIsShininess    = IdString( "roughness_is_shininess" );
 
+    const IdString PbsProperty::UseEnvProbeMap    = IdString( "use_envprobe_map" );
+    const IdString PbsProperty::NeedsViewDir      = IdString( "needs_view_dir" );
+    const IdString PbsProperty::NeedsReflDir      = IdString( "needs_refl_dir" );
+
     const IdString *PbsProperty::UvSourcePtrs[NUM_PBSM_SOURCES] =
     {
         &PbsProperty::UvDiffuse,
@@ -387,113 +391,6 @@ namespace Ogre
             mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache,
                                                 mSetProperties, queuedRenderable );
             return retVal; //D3D embeds the texture slots in the shader.
-        }
-
-        //Set samplers.
-        if( !retVal->pso.pixelShader.isNull() )
-        {
-            GpuProgramParametersSharedPtr psParams = retVal->pso.pixelShader->getDefaultParameters();
-
-            int texUnit = 1; //Vertex shader consumes 1 slot with its tbuffer.
-
-            //Forward3D consumes 2 more slots.
-            if( mGridBuffer )
-            {
-                psParams->setNamedConstant( "f3dGrid",      1 );
-                psParams->setNamedConstant( "f3dLightList", 2 );
-                texUnit += 2;
-            }
-
-            if( !mPrePassTextures->empty() )
-            {
-                psParams->setNamedConstant( "gBuf_normals",         texUnit++ );
-                psParams->setNamedConstant( "gBuf_shadowRoughness", texUnit++ );
-
-                if( mPrePassMsaaDepthTexture )
-                    psParams->setNamedConstant( "gBuf_depthTexture", texUnit++ );
-
-                if( mSsrTexture )
-                    psParams->setNamedConstant( "ssrTexture", texUnit++ );
-            }
-
-            if( mIrradianceVolume && getProperty( HlmsBaseProp::ShadowCaster ) == 0 )
-                psParams->setNamedConstant( "irradianceVolume", texUnit++ );
-
-            if( mAreaLightMasks && getProperty( HlmsBaseProp::LightsAreaTexMask ) > 0 )
-                psParams->setNamedConstant( "areaLightMasks", texUnit++ );
-
-            if( mLtcMatrixTexture && getProperty( HlmsBaseProp::LightsAreaLtc ) > 0 )
-                psParams->setNamedConstant( "ltcMatrix", texUnit++ );
-
-            if( mGridBuffer && getProperty( HlmsBaseProp::EnableDecals ) )
-            {
-                if( mDecalsTextures[0] )
-                    psParams->setNamedConstant( "decalsDiffuseTex", texUnit++ );
-                if( mDecalsTextures[1] )
-                    psParams->setNamedConstant( "decalsNormalsTex", texUnit++ );
-                if( mDecalsTextures[2] && !mDecalsDiffuseMergedEmissive )
-                    psParams->setNamedConstant( "decalsEmissiveTex", texUnit++ );
-            }
-
-            if( !mPreparedPass.shadowMaps.empty() )
-            {
-                if( getProperty( HlmsBaseProp::NumShadowMapLights ) != 0 )
-                {
-                    char tmpData[32];
-                    LwString texName = LwString::FromEmptyPointer( tmpData, sizeof(tmpData) );
-                    texName = "texShadowMap";
-                    const size_t baseTexSize = texName.size();
-
-                    for( size_t i=0; i<mPreparedPass.shadowMaps.size(); ++i )
-                    {
-                        texName.resize( baseTexSize );
-                        texName.a( (uint32)i );   //texShadowMap0
-                        psParams->setNamedConstant( texName.c_str(), &texUnit, 1, 1 );
-                        ++texUnit;
-                    }
-                }
-                else
-                {
-                    //No visible lights casting shadow maps.
-                    texUnit += mPreparedPass.shadowMaps.size();
-                }
-            }
-
-            int cubemapTexUnit = 0;
-            const int32 parallaxCorrectCubemaps = getProperty( PbsProperty::ParallaxCorrectCubemaps );
-            if( parallaxCorrectCubemaps )
-                cubemapTexUnit = texUnit++;
-
-#ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
-            if( mHasPlanarReflections )
-            {
-                const bool usesPlanarReflections = getProperty( PbsProperty::UsePlanarReflections ) != 0;
-                if( usesPlanarReflections )
-                    psParams->setNamedConstant( "planarReflectionTex", texUnit );
-                ++texUnit;
-            }
-#endif
-            assert( dynamic_cast<const HlmsPbsDatablock*>( queuedRenderable.renderable->getDatablock() ) );
-            const HlmsPbsDatablock *datablock = static_cast<const HlmsPbsDatablock*>(
-                                                        queuedRenderable.renderable->getDatablock() );
-
-            int numTextures = getProperty( PbsProperty::NumTextures );
-            for( int i=0; i<numTextures; ++i )
-            {
-                psParams->setNamedConstant( "textureMaps[" + StringConverter::toString( i ) + "]",
-                                            texUnit++ );
-            }
-
-            const int32 envProbeMap         = getProperty( PbsProperty::EnvProbeMap );
-            const int32 targetEnvProbeMap   = getProperty( PbsProperty::TargetEnvprobeMap );
-            if( (envProbeMap && envProbeMap != targetEnvProbeMap) || parallaxCorrectCubemaps )
-            {
-                assert( datablock->getTexture( PBSM_REFLECTION ) || parallaxCorrectCubemaps );
-                if( !envProbeMap || envProbeMap == targetEnvProbeMap )
-                    psParams->setNamedConstant( "texEnvProbeMap", cubemapTexUnit );
-                else
-                    psParams->setNamedConstant( "texEnvProbeMap", texUnit++ );
-            }
         }
 
         GpuProgramParametersSharedPtr vsParams = retVal->pso.vertexShader->getDefaultParameters();
@@ -714,7 +611,8 @@ namespace Ogre
 
         setProperty( PbsProperty::NormalWeight, numNormalWeights );
 
-        setDetailMapProperties( datablock, inOutPieces );
+        if( datablock->mTexturesDescSet )
+            setDetailMapProperties( datablock, inOutPieces );
 
         if( datablock->mSamplersDescSet )
             setProperty( PbsProperty::NumSamplers, datablock->mSamplersDescSet->mSamplers.size() );
@@ -902,6 +800,148 @@ namespace Ogre
 
             setProperty( PbsProperty::NormalMap, normalMapCanBeSupported );
         }
+
+        //If the pass does not have planar reflections, then the object cannot use it
+        if( !getProperty( PbsProperty::HasPlanarReflections ) )
+            setProperty( PbsProperty::UsePlanarReflections, 0 );
+
+        int32 envProbeMapVal = getProperty( PbsProperty::EnvProbeMap );
+        if( (envProbeMapVal && envProbeMapVal != getProperty( PbsProperty::TargetEnvprobeMap )) ||
+            getProperty( PbsProperty::ParallaxCorrectCubemaps ) )
+        {
+            setProperty( PbsProperty::UseEnvProbeMap, 1 );
+        }
+
+        if( getProperty( HlmsBaseProp::LightsSpot ) ||
+            getProperty( HlmsBaseProp::UseSsr ) ||
+            getProperty( HlmsBaseProp::ForwardPlus ) ||
+            getProperty( PbsProperty::UseEnvProbeMap ) ||
+            getProperty( PbsProperty::UsePlanarReflections ) ||
+            getProperty( PbsProperty::AmbientHemisphere ) )
+        {
+            setProperty( PbsProperty::NeedsViewDir, 1 );
+        }
+
+        if( getProperty( HlmsBaseProp::UseSsr ) ||
+            getProperty( PbsProperty::UseEnvProbeMap ) ||
+            getProperty( PbsProperty::UsePlanarReflections ) ||
+            getProperty( PbsProperty::AmbientHemisphere ) ||
+            getProperty( PbsProperty::EnableCubemapsAuto ) )
+        {
+            setProperty( PbsProperty::NeedsReflDir, 1 );
+        }
+
+        int32 texUnit = 1; //Vertex shader consumes 1 slot with its tbuffer.
+        if( getProperty( HlmsBaseProp::ForwardPlus ) )
+        {
+            setTextureReg( PixelShader, "f3dGrid", 1 );
+            setTextureReg( PixelShader, "f3dLightList", 2 );
+            texUnit += 2;
+        }
+
+        if( getProperty( HlmsBaseProp::UsePrePass ) )
+        {
+            setTextureReg( PixelShader, "gBuf_normals",         texUnit++ );
+            setTextureReg( PixelShader, "gBuf_shadowRoughness", texUnit++ );
+
+            if( getProperty( HlmsBaseProp::UsePrePassMsaa ) )
+                setTextureReg( PixelShader, "gBuf_depthTexture", texUnit++ );
+
+            if( getProperty( HlmsBaseProp::UseSsr ) )
+                setTextureReg( PixelShader, "ssrTexture", texUnit++ );
+        }
+
+        if( getProperty( PbsProperty::IrradianceVolumes ) &&
+            getProperty( HlmsBaseProp::ShadowCaster ) == 0 )
+        {
+            setTextureReg( PixelShader, "irradianceVolume", texUnit++ );
+        }
+
+        if( getProperty( HlmsBaseProp::LightsAreaTexMask ) > 0 )
+            setTextureReg( PixelShader, "areaLightMasks", texUnit++ );
+
+        if( getProperty( HlmsBaseProp::LightsAreaLtc ) > 0 )
+            setTextureReg( PixelShader, "ltcMatrix", texUnit++ );
+
+        if( getProperty( HlmsBaseProp::EnableDecals ) )
+        {
+            const int32 decalsDiffuseProp = getProperty( HlmsBaseProp::DecalsDiffuse );
+            if( decalsDiffuseProp )
+                setTextureReg( PixelShader, "decalsDiffuseTex", texUnit++ );
+            if( getProperty( HlmsBaseProp::DecalsNormals ) )
+                setTextureReg( PixelShader, "decalsNormalsTex", texUnit++ );
+            const int32 decalsEmissiveProp = getProperty( HlmsBaseProp::DecalsEmissive );
+            if( decalsEmissiveProp && decalsEmissiveProp != decalsDiffuseProp )
+                setTextureReg( PixelShader, "decalsEmissiveTex", texUnit++ );
+        }
+
+        const int32 numShadowMaps = getProperty( HlmsBaseProp::NumShadowMapTextures );
+        if( numShadowMaps )
+        {
+            if( getProperty( HlmsBaseProp::NumShadowMapLights ) != 0 )
+            {
+                char tmpData[32];
+                LwString texName = LwString::FromEmptyPointer( tmpData, sizeof(tmpData) );
+                texName = "texShadowMap";
+                const size_t baseTexSize = texName.size();
+
+                for( int32 i=0; i<numShadowMaps; ++i )
+                {
+                    texName.resize( baseTexSize );
+                    texName.a( i );   //texShadowMap0
+                    setTextureReg( PixelShader, texName.c_str(), texUnit++ );
+                }
+            }
+            else
+            {
+                //No visible lights casting shadow maps.
+                texUnit += numShadowMaps;
+            }
+        }
+
+        int cubemapTexUnit = 0;
+        const int32 parallaxCorrectCubemaps = getProperty( PbsProperty::ParallaxCorrectCubemaps );
+        if( parallaxCorrectCubemaps )
+            cubemapTexUnit = texUnit++;
+
+        const int32 hasPlanarReflections = getProperty( PbsProperty::HasPlanarReflections );
+        if( hasPlanarReflections )
+        {
+            const bool usesPlanarReflections = getProperty( PbsProperty::UsePlanarReflections ) != 0;
+            if( usesPlanarReflections )
+                setTextureReg( PixelShader, "planarReflectionTex", texUnit );
+            ++texUnit;
+        }
+
+        const int32 samplerStateStart = texUnit;
+        {
+            char tmpData[32];
+            LwString texName = LwString::FromEmptyPointer( tmpData, sizeof(tmpData) );
+            texName = "textureMaps";
+            const size_t baseTexSize = texName.size();
+
+            int32 numTextures = getProperty( PbsProperty::NumTextures );
+
+            for( int32 i=0; i<numTextures; ++i )
+            {
+                texName.resize( baseTexSize );
+                texName.a( i );   //textureMaps0
+                setTextureReg( PixelShader, texName.c_str(), texUnit++ );
+            }
+        }
+
+        const int32 envProbeMap         = getProperty( PbsProperty::EnvProbeMap );
+        const int32 targetEnvProbeMap   = getProperty( PbsProperty::TargetEnvprobeMap );
+        if( (envProbeMap && envProbeMap != targetEnvProbeMap) || parallaxCorrectCubemaps )
+        {
+            if( !envProbeMap || envProbeMap == targetEnvProbeMap )
+                setTextureReg( PixelShader, "texEnvProbeMap", cubemapTexUnit );
+            else
+                setTextureReg( PixelShader, "texEnvProbeMap", texUnit++ );
+        }
+
+        //This is a regular property!
+        setProperty( "samplerStateStart", samplerStateStart );
     }
     //-----------------------------------------------------------------------------------
     bool HlmsPbs::requiredPropertyByAlphaTest( IdString keyName )
@@ -2510,6 +2550,7 @@ namespace Ogre
         outLibraryFoldersPaths.push_back( "Hlms/Common/" + shaderSyntax );
         outLibraryFoldersPaths.push_back( "Hlms/Common/Any" );
         outLibraryFoldersPaths.push_back( "Hlms/Pbs/Any" );
+        outLibraryFoldersPaths.push_back( "Hlms/Pbs/Any/Main" );
 
         //Fill the data folder path
         outDataFolderPath = "Hlms/Pbs/" + shaderSyntax;

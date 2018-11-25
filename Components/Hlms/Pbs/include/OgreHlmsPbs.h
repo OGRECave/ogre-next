@@ -418,6 +418,10 @@ namespace Ogre
         static const IdString LegacyMathBrdf;
         static const IdString RoughnessIsShininess;
 
+        static const IdString UseEnvProbeMap;
+        static const IdString NeedsViewDir;
+        static const IdString NeedsReflDir;
+
         static const IdString *UvSourcePtrs[NUM_PBSM_SOURCES];
         static const IdString *BlendModes[4];
         static const IdString *DetailNormalWeights[4];

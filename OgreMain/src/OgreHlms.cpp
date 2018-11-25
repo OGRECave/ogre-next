@@ -469,6 +469,9 @@ namespace Ogre
                 ++itLowerCase;
                 ++itor;
             }
+
+            //Enumeration order depends on OS and filesystem. Ensure deterministic alphabetical order.
+            std::sort( pieceFiles[i].begin(), pieceFiles[i].end() );
         }
 
         return retVal;
@@ -2245,6 +2248,10 @@ namespace Ogre
             }
         }
 
+        mTextureNameStrings.clear();
+        for( size_t i=0; i<NumShaderTypes; ++i )
+            mTextureRegs[i].clear();
+
         notifyPropertiesMergedPreGenerationStep();
         mListener->propertiesMergedPreGenerationStep( mShaderProfile, passCache,
                                                       renderableCache.setProperties,
@@ -2319,6 +2326,9 @@ namespace Ogre
         mRenderSystem->_hlmsPipelineStateObjectCreated( &pso );
 
         const HlmsCache* retVal = addShaderCache( finalHash, pso );
+
+        applyTextureRegisters( retVal );
+
         return retVal;
     }
     //-----------------------------------------------------------------------------------
@@ -2955,6 +2965,51 @@ namespace Ogre
         }
 
         return passPso;
+    }
+    //-----------------------------------------------------------------------------------
+    void Hlms::setTextureReg( ShaderType shaderType, const char *texName, int32 texUnit )
+    {
+        const uint32 startIdx = static_cast<uint32>( mTextureNameStrings.size() );
+        char const *copyName = texName;
+        while( *copyName != '\0' )
+            mTextureNameStrings.push_back( *copyName++ );
+        mTextureNameStrings.push_back( '\0' );
+        mTextureRegs[shaderType].push_back( TextureRegs( startIdx, texUnit ) );
+
+        setProperty( texName, texUnit );
+    }
+    //-----------------------------------------------------------------------------------
+    void Hlms::applyTextureRegisters( const HlmsCache *psoEntry )
+    {
+        if( mShaderProfile == "hlsl" || mShaderProfile == "metal" )
+            return; //D3D embeds the texture slots in the shader.
+
+        GpuProgramPtr shaders[NumShaderTypes];
+        shaders[VertexShader]   = psoEntry->pso.vertexShader;
+        shaders[PixelShader]    = psoEntry->pso.pixelShader;
+        shaders[GeometryShader] = psoEntry->pso.geometryShader;
+        shaders[HullShader]     = psoEntry->pso.tesselationHullShader;
+        shaders[DomainShader]   = psoEntry->pso.tesselationDomainShader;
+
+        String paramName;
+        for( size_t i=0; i<NumShaderTypes; ++i )
+        {
+            if( shaders[i] )
+            {
+                GpuProgramParametersSharedPtr params = shaders[i]->getDefaultParameters();
+
+                TextureRegsVec::const_iterator itor = mTextureRegs[i].begin();
+                TextureRegsVec::const_iterator end  = mTextureRegs[i].end();
+
+                while( itor != end )
+                {
+                    const char *paramNameC = &mTextureNameStrings[itor->strNameIdxStart];
+                    paramName = paramNameC;
+                    params->setNamedConstant( paramName, static_cast<int>( itor->texUnit ) );
+                    ++itor;
+                }
+            }
+        }
     }
     //-----------------------------------------------------------------------------------
     const HlmsCache* Hlms::getMaterial( HlmsCache const *lastReturnedValue,

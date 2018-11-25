@@ -43,7 +43,7 @@ void main()
 {
 	@insertpiece( custom_ps_preExecution )
 @property( diffuse_map || alpha_test || diffuse )
-	uint materialId	= instance.worldMaterialIdx[inPs.drawId].x;
+	uint materialId	= worldMaterialIdx[inPs.drawId].x;
 	material = materialArray.m[materialId];
 @end
 	@insertpiece( custom_ps_posMaterialLoad )

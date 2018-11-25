@@ -10,8 +10,8 @@ mat4 UNPACK_MAT4( samplerBuffer matrixBuf, uint pixelIdx )
 }
 @end
 
-@piece( Common_Matrix_DeclUnpackMatrix3x4 )
-mat3x4 UNPACK_MAT3x4( samplerBuffer matrixBuf, uint pixelIdx )
+@piece( Common_Matrix_DeclUnpackMatrix4x3 )
+mat3x4 UNPACK_MAT4x3( samplerBuffer matrixBuf, uint pixelIdx )
 {
 	vec4 row0 = texelFetch( matrixBuf, int((pixelIdx) << 2u) );
 	vec4 row1 = texelFetch( matrixBuf, int(((pixelIdx) << 2u) + 1u) );
@@ -37,8 +37,8 @@ mat4 UNPACK_MAT4( in sampler2D matrixBuf, in uint pixelIdx )
 }
 @end
 
-@piece( Common_Matrix_DeclUnpackMatrix3x4 )
-mat3x4 UNPACK_MAT3x4( in sampler2D matrixBuf, in uint pixelIdx )
+@piece( Common_Matrix_DeclUnpackMatrix4x3 )
+mat3x4 UNPACK_MAT4x3( in sampler2D matrixBuf, in uint pixelIdx )
 {
     ivec2 pos0 = ivec2(int(((pixelIdx) << 2u) & 2047u), int(((pixelIdx) << 2u) >> 11u));
     ivec2 pos1 = ivec2(int((((pixelIdx) << 2u) + 1u) & 2047u), int((((pixelIdx) << 2u) + 1u) >> 11u));

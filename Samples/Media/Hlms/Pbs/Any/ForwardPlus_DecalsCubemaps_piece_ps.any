@@ -85,16 +85,15 @@
 			float3 decalF0 = lerp( float3( 0.03f, 0.03f, 0.03f ), decalDiffuse.xyz, decalMetalness );
 			decalDiffuse.xyz = decalDiffuse.xyz - decalDiffuse.xyz * decalMetalness;
 
-			diffuseCol.xyz  = lerp( diffuseCol.xyz, decalDiffuse.xyz * 0.318309886f, decalMask );
-			ROUGHNESS		= lerp( ROUGHNESS, texIndices.w, decalMask );
+			pixelData.diffuse.xyz	= lerp( pixelData.diffuse.xyz, decalDiffuse.xyz * 0.318309886f, decalMask );
+			pixelData.roughness		= lerp( pixelData.roughness, texIndices.w, decalMask );
 
 			@property( !metallic_workflow && !fresnel_workflow && !fresnel_scalar )
-				specularCol	= lerp( specularCol.xyz, decalF0, decalMask );
-				F0			= lerp( F0, decalMetalness, decalMask );
-			@end
-			@property( metallic_workflow || fresnel_workflow || fresnel_scalar )
-				specularCol	= lerp( specularCol.xyz, float3( 1.0f, 1.0f, 1.0f ), decalMask );
-				F0.xyz		= lerp( F0.xyz, decalF0.xyz, decalMask );
+				pixelData.specular	= lerp( pixelData.specular.xyz, decalF0, decalMask );
+				pixelData.F0		= lerp( pixelData.F0, decalMetalness, decalMask );
+			@else
+				pixelData.specular	= lerp( pixelData.specular.xyz, float3( 1.0f, 1.0f, 1.0f ), decalMask );
+				pixelData.F0.xyz	= lerp( pixelData.F0.xyz, decalF0.xyz, decalMask );
 			@end
 		@end
 		@property( hlms_decals_normals || hlms_decals_emissive )
@@ -122,13 +121,13 @@
 		@piece( forwardPlusApplyDecalsNormal )
 			finalDecalTsNormal.xyz = normalize( finalDecalTsNormal.xyz );
 			@property( normal_map_tex || detail_maps_normal )
-				nNormal.xy	+= finalDecalTsNormal.xy;
-				nNormal.z	*= finalDecalTsNormal.z;
+				pixelData.normal.xy	+= finalDecalTsNormal.xy;
+				pixelData.normal.z	*= finalDecalTsNormal.z;
 			@end
 			@property( !normal_map_tex && !detail_maps_normal )
-				nNormal.xyz = finalDecalTsNormal.xyz;
+				pixelData.normal.xyz = finalDecalTsNormal.xyz;
 			@end
-			//Do not normalize as later normalize( TBN * nNormal ) will take care of it
+			//Do not normalize as later normalize( TBN * pixelData.normal ) will take care of it
 		@end
 	@end
 @end /// hlms_enable_decals
@@ -139,9 +138,8 @@
 
 	@property( hlms_forwardplus_debug )totalNumLightsInGrid += numLightsInGrid;@end
 
-	float3 reflDir = 2.0 * dot( viewDir, nNormal ) * nNormal - viewDir;
-	float3 envColourS = float3( 0, 0, 0 );
-	float3 envColourD = float3( 0, 0, 0 );
+	pixelData.envColourS = float3( 0, 0, 0 );
+	pixelData.envColourD = float3( 0, 0, 0 );
 	float cubemapAccumWeight = 0;
 
 	for( uint i=0u; i<numLightsInGrid; ++i )
@@ -172,26 +170,26 @@
 			ndf = saturate( ndf );
 			probeFade = ndf <= 0 ? 10000.0f : (1.0 - ndf);
 
-			float3 reflDirLS = localCorrect( reflDir, posInProbSpace, probe );
-			float3 nNormalLS = localCorrect( nNormal, posInProbSpace, probe );
+			float3 reflDirLS = localCorrect( pixelData.reflDir, posInProbSpace, probe );
+			float3 normalLS = localCorrect( pixelData.normal, posInProbSpace, probe );
 
 			@property( !hlms_cubemaps_use_dpm )
-				envColourS += OGRE_SampleArrayCubeLevel(
+				pixelData.envColourS += OGRE_SampleArrayCubeLevel(
 					texEnvProbeMap, samplerState@value(envMapRegSampler), reflDirLS,
-					probe.halfSize.w, ROUGHNESS * 12.0 ).xyz
+					probe.halfSize.w, pixelData.roughness * 12.0 ).xyz
 					@insertpiece( ApplyEnvMapScale ) * probeFade;
-				envColourD += OGRE_SampleArrayCubeLevel(
-					texEnvProbeMap, samplerState@value(envMapRegSampler), nNormalLS,
+				pixelData.envColourD += OGRE_SampleArrayCubeLevel(
+					texEnvProbeMap, samplerState@value(envMapRegSampler), normalLS,
 					probe.halfSize.w, 11.0 ).xyz
 					@insertpiece( ApplyEnvMapScale ) * probeFade;
 			@end
 			@property( hlms_cubemaps_use_dpm )
-				envColourS += OGRE_SampleArray2DLevel(
+				pixelData.envColourS += OGRE_SampleArray2DLevel(
 					texEnvProbeMap, samplerState@value(envMapRegSampler), mapCubemapToDpm( reflDirLS ),
-					probe.halfSize.w, ROUGHNESS * 12.0 ).xyz
+					probe.halfSize.w, pixelData.roughness * 12.0 ).xyz
 					@insertpiece( ApplyEnvMapScale ) * probeFade;
-				envColourD += OGRE_SampleArray2DLevel(
-					texEnvProbeMap, samplerState@value(envMapRegSampler), mapCubemapToDpm( nNormalLS ),
+				pixelData.envColourD += OGRE_SampleArray2DLevel(
+					texEnvProbeMap, samplerState@value(envMapRegSampler), mapCubemapToDpm( normalLS ),
 					probe.halfSize.w, 11.0 ).xyz
 					@insertpiece( ApplyEnvMapScale ) * probeFade;
 			@end
@@ -200,8 +198,8 @@
 		}
 	}
 
-	envColourD.xyz *= cubemapAccumWeight == 0.0f ? 1.0f : (1.0f / cubemapAccumWeight);
-	envColourS.xyz *= cubemapAccumWeight == 0.0f ? 1.0f : (1.0f / cubemapAccumWeight);
+	pixelData.envColourD.xyz *= cubemapAccumWeight == 0.0f ? 1.0f : (1.0f / cubemapAccumWeight);
+	pixelData.envColourS.xyz *= cubemapAccumWeight == 0.0f ? 1.0f : (1.0f / cubemapAccumWeight);
 @end
 @end /// hlms_enable_cubemaps_auto
 
