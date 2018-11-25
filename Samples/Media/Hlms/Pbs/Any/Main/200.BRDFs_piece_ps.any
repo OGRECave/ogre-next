@@ -226,11 +226,6 @@ float3 BRDF_IR( float3 lightDir, float3 lightDiffuse, PixelData pixelData )
 @end
 
 @property( hlms_fine_light_mask )
-    @property( syntax == metal )
-        @piece( DeclareObjLightMask )uint objLightMask = inPs.objLightMask;@end
-    @else
-        @piece( DeclareObjLightMask )uint objLightMask = worldMaterialIdx[inPs.drawId].z;@end
-    @end
     @piece( ObjLightMaskCmp )if( (objLightMask & floatBitsToUint( passBuf.lights[@counter(fineMaskLightIdx)].position.w )) != 0u )@end
     @piece( andObjLightMaskCmp )&& ((objLightMask & floatBitsToUint( passBuf.lights[@counter(fineMaskLightIdx)].position.w )) != 0u)@end
     @piece( andObjAreaApproxLightMaskCmp )&& ((objLightMask & floatBitsToUint( passBuf.areaApproxLights[@counter(fineMaskAreaApproxLightIdx)].position.w )) != 0u)@end
