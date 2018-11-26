@@ -3286,13 +3286,14 @@ void SceneManager::renderSingleObject(Renderable* rend, const Pass* pass,
 void SceneManager::setAmbientLight( const ColourValue &upperHemisphere,
                                     const ColourValue &lowerHemisphere,
                                     const Vector3 &hemisphereDir,
-                                    Real envmapScale )
+                                    Real envmapScale, uint32 envFeatures )
 {
     mAmbientLight[0] = upperHemisphere;
     mAmbientLight[1] = lowerHemisphere;
     mAmbientLightHemisphereDir = hemisphereDir;
     mAmbientLightHemisphereDir.normalise();
     mAmbientLight[0].a = envmapScale;
+    mEnvFeatures = envFeatures;
 }
 //-----------------------------------------------------------------------
 ViewPoint SceneManager::getSuggestedViewpoint(bool random)

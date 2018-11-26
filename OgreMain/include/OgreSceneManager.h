@@ -353,6 +353,16 @@ namespace Ogre {
                         { (void)source; }
         };
 
+        enum EnvFeatures
+        {
+            /// Normally environmental cubemap probes are used for specular reflection
+            /// When this flag is present, the higest mip is used as an approximation
+            /// for diffuse indirect illumination.
+            /// Do not set this flag if you don't want this behavior (i.e. because
+            /// the diffuse GI is already gathered from another source of information)
+            EnvFeatures_DiffuseGiFromReflectionProbe = 1u << 0u,
+        };
+
     protected:
         /// Subclasses can override this to ensure their specialised SceneNode is used.
         virtual SceneNode* createSceneNodeImpl( SceneNode *parent,
@@ -433,6 +443,7 @@ namespace Ogre {
         /// Current ambient light.
         ColourValue mAmbientLight[2];
         Vector3     mAmbientLightHemisphereDir;
+        uint32      mEnvFeatures;
 
         /// The rendering system to send the scene to
         RenderSystem *mDestRenderSystem;
@@ -1597,15 +1608,19 @@ namespace Ogre {
             Global scale to apply to all environment maps (for relevant Hlms implementations,
             like PBS). The value will be stored in upperHemisphere.a
             Use 1.0 to disable.
+        @param envFeatures
+            Bitmask. See SceneManager::EnvFeatures
         */
         void setAmbientLight( const ColourValue& upperHemisphere, const ColourValue& lowerHemisphere,
-                              const Vector3 &hemisphereDir, Real envmapScale = 1.0f );
+                              const Vector3 &hemisphereDir, Real envmapScale = 1.0f,
+                              uint32 envFeatures=0xffffffff );
 
         /** Returns the ambient light level to be used for the scene.
         */
         const ColourValue& getAmbientLightUpperHemisphere(void) const   { return mAmbientLight[0]; }
         const ColourValue& getAmbientLightLowerHemisphere(void) const   { return mAmbientLight[1]; }
         const Vector3& getAmbientLightHemisphereDir(void) const { return mAmbientLightHemisphereDir; }
+        uint32 getEnvFeatures(void) const                       { return mEnvFeatures; }
 
         /** Sets the source of the 'world' geometry, i.e. the large, mainly static geometry
             making up the world e.g. rooms, landscape etc.

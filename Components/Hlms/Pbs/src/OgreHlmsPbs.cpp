@@ -163,6 +163,7 @@ namespace Ogre
     const IdString PbsProperty::UseParallaxCorrectCubemaps= IdString( "use_parallax_correct_cubemaps" );
     const IdString PbsProperty::EnableCubemapsAuto      = IdString( "hlms_enable_cubemaps_auto" );
     const IdString PbsProperty::CubemapsUseDpm    = IdString( "hlms_cubemaps_use_dpm" );
+    const IdString PbsProperty::CubemapsAsDiffuseGi=IdString( "cubemaps_as_diffuse_gi" );
     const IdString PbsProperty::IrradianceVolumes = IdString( "irradiance_volumes" );
 
     const IdString PbsProperty::BrdfDefault       = IdString( "BRDF_Default" );
@@ -1077,6 +1078,11 @@ namespace Ogre
 
             if( envMapScale != 1.0f )
                 setProperty( PbsProperty::EnvMapScale, 1 );
+
+            const uint32 envFeatures = sceneManager->getEnvFeatures();
+
+            if( envFeatures & SceneManager::EnvFeatures_DiffuseGiFromReflectionProbe )
+                setProperty( PbsProperty::CubemapsAsDiffuseGi, 1 );
 
             //Save cubemap's name so that we never try to render & sample to/from it at the same time
             RenderPassDescriptor *renderPassDescriptor = mRenderSystem->getCurrentPassDescriptor();

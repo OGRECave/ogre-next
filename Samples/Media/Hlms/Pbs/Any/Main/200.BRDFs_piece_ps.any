@@ -213,7 +213,7 @@ float3 BRDF_IR( float3 lightDir, float3 lightDiffuse, PixelData pixelData )
         float fresnelD = 1.0f - @insertpiece( getMaxFresnelS );
     @end
 
-    finalColour += pixelData.envColourD * pixelData.diffuse.xyz * fresnelD +
+	finalColour += pixelData.envColourD * pixelData.diffuse.xyz * fresnelD +
                    pixelData.envColourS * pixelData.specular.xyz * fresnelS;
 @end
 
