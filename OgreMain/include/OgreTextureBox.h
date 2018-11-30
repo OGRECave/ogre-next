@@ -39,7 +39,7 @@ namespace Ogre
 {
     /// For cubemaps, the face is in sliceStart, (see CubemapSide::CubemapSide)
     /// For cubemap arrays, the cubemaps are addressed as sliceStart * 6.
-    struct TextureBox
+    struct _OgreExport TextureBox
     {
         uint32 x, y, z, sliceStart;
         uint32 width, height, depth, numSlices;
