@@ -12,8 +12,8 @@ struct ShadowReceiverData
 
 struct Light
 {
-	float4 position; //.w contains the objLightMask
-	float3 diffuse;
+	float4 position;	//.w contains the objLightMask
+	float4 diffuse;		//.w contains numNonCasterDirectionalLights
 	float3 specular;
 @property( hlms_num_shadow_map_lights )
 	float3 attenuation;
@@ -24,6 +24,8 @@ struct Light
 	float4 spotParams;
 @end
 };
+
+#define numNonCasterDirectionalLights lights[0].diffuse.w
 
 #define areaLightDiffuseMipmapStart areaApproxLights[0].diffuse.w
 #define areaLightNumMipmapsSpecFactor areaApproxLights[0].specular.w

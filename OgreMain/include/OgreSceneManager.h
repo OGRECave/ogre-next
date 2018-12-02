@@ -789,6 +789,8 @@ namespace Ogre {
         
     public:
 
+        AutoParamDataSource *_getAutoParamDataSource(void) const    { return mAutoParamDataSource; }
+
         //A render context, used to store internal data for pausing/resuming rendering
         struct RenderContext
         {

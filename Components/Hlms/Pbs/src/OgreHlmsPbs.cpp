@@ -1171,6 +1171,7 @@ namespace Ogre
         int32 numPssmSplits         = getProperty( HlmsBaseProp::PssmSplits );
         int32 numAreaApproxLights   = getProperty( HlmsBaseProp::LightsAreaApprox );
         int32 numAreaLtcLights      = getProperty( HlmsBaseProp::LightsAreaLtc );
+        const uint32 realNumDirectionalLights = mRealNumDirectionalLights;
         const uint32 realNumAreaApproxLightsWithMask = mRealNumAreaApproxLightsWithMask;
         const uint32 realNumAreaApproxLights = mRealNumAreaApproxLights;
         const uint32 realNumAreaLtcLights = mRealNumAreaLtcLights;
@@ -1549,12 +1550,21 @@ namespace Ogre
 
                     if( i >= shadowCastingDirLights && i < numDirectionalLights )
                     {
-                        while( affectedLights[nonShadowLightIdx] )
-                            ++nonShadowLightIdx;
+                        if( i < realNumDirectionalLights )
+                        {
+                            while( affectedLights[nonShadowLightIdx] )
+                                ++nonShadowLightIdx;
 
-                        light = globalLightList.lights[nonShadowLightIdx++];
+                            light = globalLightList.lights[nonShadowLightIdx++];
 
-                        assert( light->getType() == Light::LT_DIRECTIONAL );
+                            assert( light->getType() == Light::LT_DIRECTIONAL );
+                        }
+                        else
+                        {
+                            AutoParamDataSource *autoParamDataSource =
+                                    sceneManager->_getAutoParamDataSource();
+                            light = &autoParamDataSource->_getBlankLight();
+                        }
                     }
                     else
                     {
@@ -1588,6 +1598,8 @@ namespace Ogre
                     *passBufferPtr++ = colour.r;
                     *passBufferPtr++ = colour.g;
                     *passBufferPtr++ = colour.b;
+                    *reinterpret_cast<uint32 * RESTRICT_ALIAS>( passBufferPtr ) =
+                            realNumDirectionalLights - shadowCastingDirLights;
                     ++passBufferPtr;
 
                     //vec3 lights[numLights].specular
@@ -1642,7 +1654,7 @@ namespace Ogre
                 //No shadow maps, only send directional lights
                 const LightListInfo &globalLightList = sceneManager->getGlobalLightList();
 
-                for( int32 i=0; i<numDirectionalLights; ++i )
+                for( int32 i=0; i<realNumDirectionalLights; ++i )
                 {
                     assert( globalLightList.lights[i]->getType() == Light::LT_DIRECTIONAL );
 
@@ -1665,6 +1677,8 @@ namespace Ogre
                     *passBufferPtr++ = colour.r;
                     *passBufferPtr++ = colour.g;
                     *passBufferPtr++ = colour.b;
+                    *reinterpret_cast<uint32 * RESTRICT_ALIAS>( passBufferPtr ) =
+                            realNumDirectionalLights;
                     ++passBufferPtr;
 
                     //vec3 lights[numLights].specular
@@ -1674,6 +1688,10 @@ namespace Ogre
                     *passBufferPtr++ = colour.b;
                     ++passBufferPtr;
                 }
+
+                memset( passBufferPtr, 0,
+                        (numDirectionalLights - realNumDirectionalLights) * sizeof(float) * 4u * 3u );
+                passBufferPtr += (numDirectionalLights - realNumDirectionalLights) * 4u * 3u;
             }
 
             float areaLightNumMipmaps = 0.0f;
@@ -1885,8 +1903,8 @@ namespace Ogre
                     *passBufferPtr++ = rectPoints[j].x;
                     *passBufferPtr++ = rectPoints[j].y;
                     *passBufferPtr++ = rectPoints[j].z;
-					*reinterpret_cast<uint32 * RESTRICT_ALIAS>(passBufferPtr) = realNumAreaLtcLights;
-					++passBufferPtr;
+                    *reinterpret_cast<uint32 * RESTRICT_ALIAS>(passBufferPtr) = realNumAreaLtcLights;
+                    ++passBufferPtr;
                 }
             }
 

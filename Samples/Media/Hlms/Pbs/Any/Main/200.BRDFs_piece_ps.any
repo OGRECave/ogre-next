@@ -227,6 +227,10 @@ float3 BRDF_IR( float3 lightDir, float3 lightDiffuse, PixelData pixelData )
 
 @property( hlms_fine_light_mask )
 	@piece( ObjLightMaskCmp )if( (objLightMask & floatBitsToUint( passBuf.lights[@counter(fineMaskLightIdx)].position.w )) != 0u )@end
+	@property( hlms_static_branch_lights )
+		@piece( ObjLightMaskCmpNonCasterLoop )if( (objLightMask & floatBitsToUint( passBuf.lights[@value(fineMaskLightIdx) + i].position.w )) != 0u )@end
+		@piece( ObjLightMaskCmpNonCasterLoopEnd )@add( fineMaskLightIdx, hlms_lights_directional_non_caster )@end
+	@end
 	@piece( andObjLightMaskCmp )&& ((objLightMask & floatBitsToUint( passBuf.lights[@counter(fineMaskLightIdx)].position.w )) != 0u)@end
 	@piece( andObjAreaApproxLightMaskCmp )&& ((objLightMask & floatBitsToUint( passBuf.areaApproxLights[i].position.w )) != 0u)@end
 	@piece( andObjAreaLtcLightMaskCmp )&& ((objLightMask & floatBitsToUint( passBuf.areaLtcLights[i].position.w )) != 0u)@end

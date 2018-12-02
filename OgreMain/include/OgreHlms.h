@@ -205,6 +205,7 @@ namespace Ogre
         uint16              mNumAreaApproxLightsLimit;
         uint16              mNumAreaLtcLightsLimit;
         uint32              mAreaLightsGlobalLightListStart;
+        uint32              mRealNumDirectionalLights;
         uint32              mRealNumAreaApproxLightsWithMask;
         uint32              mRealNumAreaApproxLights;
         uint32              mRealNumAreaLtcLights;
@@ -476,11 +477,47 @@ namespace Ogre
         void setHighQuality( bool highQuality );
         bool getHighQuality(void) const                     { return mHighQuality; }
 
+        /** Non-caster directional lights are hardcoded into shaders. This means that if you
+            have 6 directional lights and then you add a 7th one, a whole new set of shaders
+            will be created.
+
+            This setting allows you to tremendously reduce the amount of shader permutations
+            by forcing Ogre to switching to static branching with an upper limit to the max
+            number of non-shadow-casting directional lights.
+
+            There is no such switch for shadow-casting directional/point/spot lights because
+            of technical limitations at the GPU level (cannot index shadow map textures in DX11,
+            nor samplers in any known GPU).
+
+            @see    setAreaLightForwardSettings
+        @param maxLights
+            Maximum number of non-caster directional lights. 0 to allow unlimited number of lights,
+            at the cost of shader recompilations when directional lights are added or removed.
+
+            Default value is 0.
+
+            Note: There is little to no performance impact for setting this value higher than you need.
+            e.g. If you set maxLights = 4, but you only have 2 non-caster dir. lights on scene,
+            you'll pay the price of 2 lights (but the RAM price of 4).
+
+            Beware of setting this value too high (e.g. 65535) as the amount of memory space is limited
+            (we cannot exceed 64kb, including unrelated data to lighting, but required to the pass)
+         */
+        void setMaxNonCasterDirectionalLights( uint16 maxLights );
+        uint16 getMaxNonCasterDirectionalLights(void) const     { return mNumLightsLimit; }
+
         /** Area lights use regular Forward.
         @param areaLightsApproxLimit
             Maximum number of area approx lights that will be considered by the shader.
             Default value is 1.
             Use 0 to disable area lights.
+
+            Note: There is little to no performance impact for setting this value higher than you need.
+            e.g. If you set areaLightsApproxLimit = 4, but you only have 2 area lights on scene,
+            you'll pay the price of 2 area lights (but the RAM price of 4).
+
+            Beware of setting this value too high (e.g. 65535) as the amount of memory space is limited
+            (we cannot exceed 64kb, including unrelated data to lighting, but required to the pass)
         @param areaLightsLtcLimit
             Same as areaLightsApproxLimit, but for LTC lights
         */
@@ -817,6 +854,7 @@ namespace Ogre
         static const IdString PsoClipDistances;
         static const IdString GlobalClipPlanes;
         static const IdString DualParaboloidMapping;
+        static const IdString StaticBranchLights;
         static const IdString NumShadowMapLights;
         static const IdString NumShadowMapTextures;
         static const IdString PssmSplits;

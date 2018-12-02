@@ -124,6 +124,7 @@ namespace Ogre
     const IdString HlmsBaseProp::PsoClipDistances	= IdString( "hlms_pso_clip_distances" );
     const IdString HlmsBaseProp::GlobalClipPlanes	= IdString( "hlms_global_clip_planes" );
     const IdString HlmsBaseProp::DualParaboloidMapping= IdString( "hlms_dual_paraboloid_mapping" );
+    const IdString HlmsBaseProp::StaticBranchLights = IdString( "hlms_static_branch_lights" );
     const IdString HlmsBaseProp::NumShadowMapLights = IdString( "hlms_num_shadow_map_lights" );
     const IdString HlmsBaseProp::NumShadowMapTextures= IdString("hlms_num_shadow_map_textures" );
     const IdString HlmsBaseProp::PssmSplits         = IdString( "hlms_pssm_splits" );
@@ -235,7 +236,7 @@ namespace Ogre
         mDataFolder( dataFolder ),
         mHlmsManager( 0 ),
         mLightGatheringMode( LightGatherForward ),
-        mNumLightsLimit( 8 ),
+        mNumLightsLimit( 0u ),
         mNumAreaApproxLightsLimit( 1u ),
         mNumAreaLtcLightsLimit( 1u ),
         mAreaLightsGlobalLightListStart( 0u ),
@@ -1645,6 +1646,11 @@ namespace Ogre
         mHighQuality = highQuality;
     }
     //-----------------------------------------------------------------------------------
+    void Hlms::setMaxNonCasterDirectionalLights( uint16 maxLights )
+    {
+        mNumLightsLimit = maxLights;
+    }
+    //-----------------------------------------------------------------------------------
     void Hlms::setAreaLightForwardSettings( uint16 areaLightsApproxLimit, uint16 areaLightsLtcLimit )
     {
         mNumAreaApproxLightsLimit   = areaLightsApproxLimit;
@@ -2755,6 +2761,16 @@ namespace Ogre
                         }
                         ++itor;
                     }
+                }
+
+                mRealNumDirectionalLights = numLightsPerType[Light::LT_DIRECTIONAL];
+
+                if( mNumLightsLimit > 0 &&
+                    numLightsPerType[Light::LT_DIRECTIONAL] > shadowCasterDirectional )
+                {
+                    numLightsPerType[Light::LT_DIRECTIONAL] = shadowCasterDirectional + mNumLightsLimit;
+
+                    setProperty( HlmsBaseProp::StaticBranchLights, 1 );
                 }
             }
             else if( mLightGatheringMode == LightGatherForward )
