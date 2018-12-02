@@ -614,6 +614,8 @@ namespace Ogre
 
         if( datablock->mTexturesDescSet )
             setDetailMapProperties( datablock, inOutPieces );
+        else
+            setProperty( PbsProperty::FirstValidDetailMapNm, 4 );
 
         if( datablock->mSamplersDescSet )
             setProperty( PbsProperty::NumSamplers, datablock->mSamplersDescSet->mSamplers.size() );
@@ -1169,8 +1171,9 @@ namespace Ogre
         int32 numPssmSplits         = getProperty( HlmsBaseProp::PssmSplits );
         int32 numAreaApproxLights   = getProperty( HlmsBaseProp::LightsAreaApprox );
         int32 numAreaLtcLights      = getProperty( HlmsBaseProp::LightsAreaLtc );
-        const size_t realNumAreaApproxLights = mRealNumAreaApproxLights;
-        const size_t realNumAreaLtcLights = mRealNumAreaLtcLights;
+        const uint32 realNumAreaApproxLightsWithMask = mRealNumAreaApproxLightsWithMask;
+        const uint32 realNumAreaApproxLights = mRealNumAreaApproxLights;
+        const uint32 realNumAreaLtcLights = mRealNumAreaLtcLights;
 
         bool isPssmBlend = getProperty( HlmsBaseProp::PssmBlend ) != 0;
         bool isPssmFade = getProperty( HlmsBaseProp::PssmFade ) != 0;
@@ -1763,12 +1766,16 @@ namespace Ogre
 
                 //vec4 doubleSided;
                 *passBufferPtr++ = light->getDoubleSided() ? 1.0f : 0.0f;
-                *passBufferPtr++ = 0.0f;
-                *passBufferPtr++ = 0.0f;
+                *reinterpret_cast<uint32 * RESTRICT_ALIAS>( passBufferPtr ) =
+                        realNumAreaApproxLights;
+                ++passBufferPtr;
+                *reinterpret_cast<uint32 * RESTRICT_ALIAS>( passBufferPtr ) =
+                        realNumAreaApproxLightsWithMask;
+                ++passBufferPtr;
                 *passBufferPtr++ = 0.0f;
             }
 
-            for( int32 i=realNumAreaApproxLights; i<numAreaApproxLights; ++i )
+            for( int32 i=static_cast<int32>( realNumAreaApproxLights ); i<numAreaApproxLights; ++i )
             {
                 //vec3 areaApproxLights[numLights].position
                 *passBufferPtr++ = 0;
@@ -1878,7 +1885,8 @@ namespace Ogre
                     *passBufferPtr++ = rectPoints[j].x;
                     *passBufferPtr++ = rectPoints[j].y;
                     *passBufferPtr++ = rectPoints[j].z;
-                    *passBufferPtr++ = 1.0f;
+					*reinterpret_cast<uint32 * RESTRICT_ALIAS>(passBufferPtr) = realNumAreaLtcLights;
+					++passBufferPtr;
                 }
             }
 

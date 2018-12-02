@@ -28,6 +28,11 @@ struct Light
 #define areaLightDiffuseMipmapStart areaApproxLights[0].diffuse.w
 #define areaLightNumMipmapsSpecFactor areaApproxLights[0].specular.w
 
+#define numAreaApproxLights areaApproxLights[0].doubleSided.y
+#define numAreaApproxLightsWithMask areaApproxLights[0].doubleSided.z
+
+#define numAreaLtcLights areaLtcLights[0].points[0].w
+
 struct AreaLight
 {
 	float4 position;	//.w contains the objLightMask
@@ -41,7 +46,8 @@ struct AreaLight
 	//  tangent.w invHalfRectSize.y
 	float4 direction;
 	float4 tangent;
-	float4 doubleSided;
+	float4 doubleSided;	//.y contains numAreaApproxLights
+						//.z contains numAreaApproxLightsWithMask
 };
 
 struct AreaLtcLight
@@ -49,7 +55,7 @@ struct AreaLtcLight
 	float4 position;		//.w contains the objLightMask
 	float4 diffuse;			//.w contains attenuation range
 	float4 specular;		//.w contains doubleSided
-	float3 points[4];
+	float4 points[4];		//.w contains numAreaLtcLights
 };
 
 @insertpiece( DeclCubemapProbeStruct )

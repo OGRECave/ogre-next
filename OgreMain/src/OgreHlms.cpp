@@ -236,9 +236,10 @@ namespace Ogre
         mHlmsManager( 0 ),
         mLightGatheringMode( LightGatherForward ),
         mNumLightsLimit( 8 ),
-        mNumAreaLightsLimit( 1u ),
-        mAreaLightsRoundMultiple( 1u ),
+        mNumAreaApproxLightsLimit( 1u ),
+        mNumAreaLtcLightsLimit( 1u ),
         mAreaLightsGlobalLightListStart( 0u ),
+        mRealNumAreaApproxLightsWithMask( 0u ),
         mRealNumAreaApproxLights( 0u ),
         mRealNumAreaLtcLights( 0u ),
         mListener( &c_defaultListener ),
@@ -1644,12 +1645,10 @@ namespace Ogre
         mHighQuality = highQuality;
     }
     //-----------------------------------------------------------------------------------
-    void Hlms::setAreaLightForwardSettings( uint16 areaLightsLimit, uint8 areaLightsRoundMultiple )
+    void Hlms::setAreaLightForwardSettings( uint16 areaLightsApproxLimit, uint16 areaLightsLtcLimit )
     {
-        assert( areaLightsRoundMultiple != 0u );
-        assert( areaLightsLimit == 0 || areaLightsRoundMultiple <= areaLightsLimit );
-        mNumAreaLightsLimit = areaLightsLimit;
-        mAreaLightsRoundMultiple = areaLightsRoundMultiple;
+        mNumAreaApproxLightsLimit   = areaLightsApproxLimit;
+        mNumAreaLtcLightsLimit      = areaLightsLtcLimit;
     }
     //-----------------------------------------------------------------------------------
     void Hlms::saveAllTexturesFromDatablocks( const String &folderPath,
@@ -2801,24 +2800,21 @@ namespace Ogre
             {
                 //Approx area lights
                 numLightsPerType[Light::LT_AREA_APPROX] =
-                        std::min<uint16>( numLightsPerType[Light::LT_AREA_APPROX], mNumAreaLightsLimit );
+                        std::min<uint16>( numLightsPerType[Light::LT_AREA_APPROX],
+                                          mNumAreaApproxLightsLimit );
                 mRealNumAreaApproxLights = numLightsPerType[Light::LT_AREA_APPROX];
+                mRealNumAreaApproxLightsWithMask = numAreaApproxLightsWithMask;
                 numLightsPerType[Light::LT_AREA_APPROX] =
-                        Ogre::alignToNextMultiple( numLightsPerType[Light::LT_AREA_APPROX],
-                        mAreaLightsRoundMultiple );
-                numLightsPerType[Light::LT_AREA_APPROX] =
-                        std::min<uint16>( numLightsPerType[Light::LT_AREA_APPROX], mNumAreaLightsLimit );
+                        std::min<uint16>( numLightsPerType[Light::LT_AREA_APPROX],
+                                          mNumAreaApproxLightsLimit );
             }
             {
                 //LTC area lights
                 numLightsPerType[Light::LT_AREA_LTC] =
-                        std::min<uint16>( numLightsPerType[Light::LT_AREA_LTC], mNumAreaLightsLimit );
+                        std::min<uint16>( numLightsPerType[Light::LT_AREA_LTC], mNumAreaLtcLightsLimit );
                 mRealNumAreaLtcLights = numLightsPerType[Light::LT_AREA_LTC];
                 numLightsPerType[Light::LT_AREA_LTC] =
-                        Ogre::alignToNextMultiple( numLightsPerType[Light::LT_AREA_LTC],
-                        mAreaLightsRoundMultiple );
-                numLightsPerType[Light::LT_AREA_LTC] =
-                        std::min<uint16>( numLightsPerType[Light::LT_AREA_LTC], mNumAreaLightsLimit );
+                        std::min<uint16>( numLightsPerType[Light::LT_AREA_LTC], mNumAreaLtcLightsLimit );
             }
 
             //The value is cummulative for each type (order: Directional, point, spot)
@@ -2826,10 +2822,12 @@ namespace Ogre
             setProperty( HlmsBaseProp::LightsDirNonCaster,numLightsPerType[Light::LT_DIRECTIONAL] );
             setProperty( HlmsBaseProp::LightsPoint,       numLightsPerType[Light::LT_POINT] );
             setProperty( HlmsBaseProp::LightsSpot,        numLightsPerType[Light::LT_SPOTLIGHT] );
-            setProperty( HlmsBaseProp::LightsAreaApprox,  numLightsPerType[Light::LT_AREA_APPROX] );
-            setProperty( HlmsBaseProp::LightsAreaLtc,     numLightsPerType[Light::LT_AREA_LTC] );
+            if( numLightsPerType[Light::LT_AREA_APPROX] > 0 )
+                setProperty( HlmsBaseProp::LightsAreaApprox, mNumAreaApproxLightsLimit );
+            if( numLightsPerType[Light::LT_AREA_LTC] > 0 )
+                setProperty( HlmsBaseProp::LightsAreaLtc, mNumAreaLtcLightsLimit );
             if( numAreaApproxLightsWithMask > 0 )
-                setProperty( HlmsBaseProp::LightsAreaTexMask, numAreaApproxLightsWithMask );
+                setProperty( HlmsBaseProp::LightsAreaTexMask, 1 );
         }
         else
         {

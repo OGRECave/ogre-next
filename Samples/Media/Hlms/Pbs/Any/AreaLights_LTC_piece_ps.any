@@ -195,7 +195,7 @@ INLINE void ClipQuadToHorizon( inout float3 L[5], out int n )
 }
 
 INLINE float LTC_Evaluate( float3 N, float3 V, float3 P, float3x3 Minv,
-							@property( syntax == metal )constant@end  float3 points[4],
+							@property( syntax == metal )constant@end  float4 points[4],
 							bool twoSided )
 {
 	// construct orthonormal basis around N
@@ -208,17 +208,17 @@ INLINE float LTC_Evaluate( float3 N, float3 V, float3 P, float3x3 Minv,
 
 	// polygon (allocate 5 vertices for clipping)
 	float3 L[5];
-	L[0] = mul( Minv, points[0] - P );
-	L[1] = mul( Minv, points[1] - P );
-	L[2] = mul( Minv, points[2] - P );
-	L[3] = mul( Minv, points[3] - P );
+	L[0] = mul( Minv, points[0].xyz - P );
+	L[1] = mul( Minv, points[1].xyz - P );
+	L[2] = mul( Minv, points[2].xyz - P );
+	L[3] = mul( Minv, points[3].xyz - P );
 
 	// integrate
 	float sum = 0.0;
 
 	@property( hlms_lights_ltc_clipless )
 		float3 dir = points[0].xyz - P;
-		float3 lightNormal = cross( points[1] - points[0], points[3] - points[0] );
+		float3 lightNormal = cross( points[1].xyz - points[0].xyz, points[3].xyz - points[0].xyz );
 		bool behind = (dot(dir, lightNormal) < 0.0);
 
 		L[0] = normalize(L[0]);
@@ -282,10 +282,11 @@ INLINE float LTC_Evaluate( float3 N, float3 V, float3 P, float3x3 Minv,
 
 @property( hlms_lights_area_ltc )
 @piece( DoAreaLtcLights )
-@foreach( hlms_lights_area_ltc, n )
-	lightDir = passBuf.areaLtcLights[@n].position.xyz - inPs.pos;
+for( int i=0; i<floatBitsToInt( passBuf.numAreaLtcLights ); ++i )
+{
+	lightDir = passBuf.areaLtcLights[i].position.xyz - inPs.pos;
 	fDistance = length( lightDir );
-	if( fDistance <= passBuf.areaLtcLights[@n].diffuse.w @insertpiece( andObjAreaLtcLightMaskCmp ) )
+	if( fDistance <= passBuf.areaLtcLights[i].diffuse.w @insertpiece( andObjAreaLtcLightMaskCmp ) )
 	{
 		float2 ltcUV = float2( pixelData.roughness, sqrt(1.0 - pixelData.NdotV) );
 		ltcUV = ltcUV * LUT_SCALE + LUT_BIAS;
@@ -299,17 +300,17 @@ INLINE float LTC_Evaluate( float3 N, float3 V, float3 P, float3x3 Minv,
 			float3(ltc0.z, 0, ltc0.w)
 		);
 
-		bool doubleSidedLtc = passBuf.areaLtcLights[@n].specular.w != 0.0f;
+		bool doubleSidedLtc = passBuf.areaLtcLights[i].specular.w != 0.0f;
 
 		@property( !fresnel_scalar )
 			float ltcSpecular = LTC_Evaluate( pixelData.normal.xyz, pixelData.viewDir.xyz, inPs.pos.xyz, Minv,
-											  passBuf.areaLtcLights[@n].points, doubleSidedLtc );
+											  passBuf.areaLtcLights[i].points, doubleSidedLtc );
 			// BRDF shadowing and Fresnel
 			ltcSpecular *= pixelData.F0 * ltc1.x + (1.0 - pixelData.F0) * ltc1.y;
 		@else
 			float3 ltcSpecular;
 			ltcSpecular.x = LTC_Evaluate( pixelData.normal.xyz, pixelData.viewDir.xyz, inPs.pos.xyz, Minv,
-										  passBuf.areaLtcLights[@n].points, doubleSidedLtc );
+										  passBuf.areaLtcLights[i].points, doubleSidedLtc );
 			ltcSpecular.yz = ltcSpecular.xx;
 			// BRDF shadowing and Fresnel
 			ltcSpecular.xyz *= pixelData.F0.xyz * ltc1.x + (1.0 - pixelData.F0.xyz) * ltc1.y;
@@ -317,11 +318,11 @@ INLINE float LTC_Evaluate( float3 N, float3 V, float3 P, float3x3 Minv,
 
 		float ltcDiffuse = LTC_Evaluate( pixelData.normal.xyz, pixelData.viewDir.xyz, inPs.pos.xyz,
 										 buildFloat3x3( float3( 1, 0, 0 ), float3( 0, 1, 0 ), float3( 0, 0, 1 ) ),
-										 passBuf.areaLtcLights[@n].points, doubleSidedLtc );
+										 passBuf.areaLtcLights[i].points, doubleSidedLtc );
 
-		finalColour += passBuf.areaLtcLights[@n].diffuse.xyz * ltcDiffuse * pixelData.diffuse.xyz;
-		finalColour += passBuf.areaLtcLights[@n].specular.xyz * ltcSpecular * pixelData.specular.xyz;
+		finalColour += passBuf.areaLtcLights[i].diffuse.xyz * ltcDiffuse * pixelData.diffuse.xyz;
+		finalColour += passBuf.areaLtcLights[i].specular.xyz * ltcSpecular * pixelData.specular.xyz;
 	}
-@end
+}
 @end
 @end
