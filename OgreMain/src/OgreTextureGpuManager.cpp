@@ -409,7 +409,7 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::destroyTexture( TextureGpu *texture )
+    void TextureGpuManager::destroyTextureImmediate( TextureGpu *texture )
     {
         OgreProfileExhaustive( "TextureGpuManager::destroyTexture" );
 
@@ -427,6 +427,35 @@ namespace Ogre
 
         delete texture;
         mEntries.erase( itor );
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::destroyTexture( TextureGpu *texture )
+    {
+        ScheduledTasks task;
+        task.tasksType = TaskTypeDestroyTexture;
+
+        ScheduledTasksMap::iterator itor = mScheduledTasks.find( texture );
+
+        if( itor == mScheduledTasks.end() )
+        {
+            if( texture->isDataReady() )
+            {
+                //There are no pending tasks. We can execute it right now
+                executeTask( texture, TextureGpuListener::ReadyForRendering, task );
+            }
+            else
+            {
+                //No pending tasks, but the texture is being loaded. Delay execution
+                mScheduledTasks[texture].push_back( task );
+            }
+        }
+        else
+        {
+            OGRE_ASSERT_MEDIUM( !itor->second.empty() &&
+                                "TextureGpuManager::notifyTextureChanged should've removed "
+                                "this entry to mScheduledTasks" );
+            itor->second.push_back( task );
+        }
     }
     //-----------------------------------------------------------------------------------
     StagingTexture* TextureGpuManager::getStagingTexture( uint32 width, uint32 height,
@@ -1115,6 +1144,64 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
+    void TextureGpuManager::executeTask( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                         const ScheduledTasks &task )
+    {
+        switch( reason )
+        {
+        case TextureGpuListener::FromStorageToSysRam:
+        case TextureGpuListener::LostResidency:
+            //Execute a Load texture task
+            OGRE_ASSERT_MEDIUM( task.tasksType == TaskTypeResidencyTransition );
+            if( task.tasksType == TaskTypeResidencyTransition )
+            {
+                const GpuResidency::GpuResidency targetResidency =
+                        task.residencyTransitionTask.targetResidency;
+                OGRE_ASSERT_MEDIUM( targetResidency == GpuResidency::Resident );
+                scheduleLoadRequest( texture,
+                                     task.residencyTransitionTask.image,
+                                     task.residencyTransitionTask.autoDeleteImage );
+            }
+            break;
+        case TextureGpuListener::ReadyForRendering:
+            //Texture just fully finished loading, we can unload it
+            OGRE_ASSERT_MEDIUM( task.tasksType == TaskTypeResidencyTransition ||
+                                task.tasksType == TaskTypeDestroyTexture );
+            if( task.tasksType == TaskTypeResidencyTransition )
+            {
+                const GpuResidency::GpuResidency targetResidency =
+                        task.residencyTransitionTask.targetResidency;
+                OGRE_ASSERT_MEDIUM( targetResidency == GpuResidency::OnStorage ||
+                                    targetResidency == GpuResidency::OnSystemRam );
+
+                texture->_transitionTo( targetResidency, (uint8*)0 );
+                texture->_setNextResidencyStatus( targetResidency );
+            }
+            else if( task.tasksType == TaskTypeDestroyTexture )
+            {
+                destroyTextureImmediate( texture );
+            }
+            break;
+        default:
+            break;
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::notifyTextureChanged( TextureGpu *texture,
+                                                  TextureGpuListener::Reason reason )
+    {
+        ScheduledTasksMap::iterator itor = mScheduledTasks.find( texture );
+
+        if( itor != mScheduledTasks.end() )
+        {
+            ScheduledTasksVec::iterator itTask = itor->second.begin();
+            executeTask( texture, reason, *itTask );
+            itor->second.erase( itTask );
+            if( itor->second.empty() )
+                mScheduledTasks.erase( itor );
+        }
+    }
+    //-----------------------------------------------------------------------------------
     RenderSystem* TextureGpuManager::getRenderSystem(void) const
     {
         return mRenderSystem;
@@ -1161,8 +1248,8 @@ namespace Ogre
         mWorkerWaitableEvent.wake();
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::_scheduleTransitionTo( TextureGpu *texture,
-                                                   Image2 *image, bool autoDeleteImage )
+    void TextureGpuManager::scheduleLoadRequest( TextureGpu *texture, Image2 *image,
+                                                 bool autoDeleteImage )
     {
         String name, resourceGroup;
         uint32 filters = 0;
@@ -1212,6 +1299,46 @@ namespace Ogre
                                          autoDeleteImage, skipMetadataCache, i );
                 }
             }
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::_scheduleTransitionTo( TextureGpu *texture,
+                                                   GpuResidency::GpuResidency residency,
+                                                   Image2 *image, bool autoDeleteImage )
+    {
+        ScheduledTasks task;
+        task.tasksType = TaskTypeResidencyTransition;
+        task.residencyTransitionTask.init( residency, image, autoDeleteImage );
+
+        ScheduledTasksMap::iterator itor = mScheduledTasks.find( texture );
+
+        if( itor == mScheduledTasks.end() )
+        {
+            if( residency != GpuResidency::Resident )
+            {
+                if( texture->isDataReady() )
+                {
+                    //There are no pending tasks. We can execute it right now
+                    executeTask( texture, TextureGpuListener::ReadyForRendering, task );
+                }
+                else
+                {
+                    //No pending tasks, but the texture is being loaded. Delay execution
+                    mScheduledTasks[texture].push_back( task );
+                }
+            }
+            else
+            {
+                //There are no pending tasks. Start loading
+                executeTask( texture, TextureGpuListener::LostResidency, task );
+            }
+        }
+        else
+        {
+            OGRE_ASSERT_MEDIUM( !itor->second.empty() &&
+                                "TextureGpuManager::notifyTextureChanged should've removed "
+                                "this entry to mScheduledTasks" );
+            itor->second.push_back( task );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -2415,5 +2542,12 @@ namespace Ogre
         const size_t rSize = PixelFormatGpuUtils::getSizeBytes( _r.minResolution, _r.minResolution, 1u,
                                                                 _r.minNumSlices, _r.formatFamily, 4u );
         return lSize > rSize;
+    }
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    TextureGpuManager::ScheduledTasks::ScheduledTasks()
+    {
+        memset( this, 0, sizeof( ScheduledTasks ) );
     }
 }

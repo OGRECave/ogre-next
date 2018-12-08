@@ -146,7 +146,7 @@ namespace Ogre
         else
         {
             //Schedule transition, we'll be loading from a worker thread.
-            mTextureManager->_scheduleTransitionTo( this, image, autoDeleteImage );
+            mTextureManager->_scheduleTransitionTo( this, nextResidency, image, autoDeleteImage );
         }
     }
     //-----------------------------------------------------------------------------------

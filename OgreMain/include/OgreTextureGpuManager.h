@@ -31,6 +31,7 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 #include "OgreTextureGpu.h"
+#include "OgreTextureGpuListener.h"
 #include "OgreImage2.h"
 #include "Threading/OgreLightweightMutex.h"
 #include "Threading/OgreWaitableEvent.h"
@@ -216,7 +217,7 @@ namespace Ogre
         thread can keep executing your code (like moving on to the next Item
         or Datablock you're instantiating)
     */
-    class _OgreExport TextureGpuManager : public ResourceAlloc
+    class _OgreExport TextureGpuManager : public ResourceAlloc, public TextureGpuListener
     {
     public:
         /// Specifies the minimum squared resolution & number of slices to keep around
@@ -357,6 +358,41 @@ namespace Ogre
             set<TextureGpu*>::type  rescheduledTextures;/// Used by worker thread. No protection needed.
         };
 
+        enum TasksType
+        {
+            TaskTypeResidencyTransition,
+            TaskTypeDestroyTexture
+        };
+
+        struct ResidencyTransitionTask
+        {
+            GpuResidency::GpuResidency  targetResidency;
+            Image2                      *image;
+            bool                        autoDeleteImage;
+
+            void init( GpuResidency::GpuResidency _targetResidency,
+                       Image2 *_image, bool _autoDeleteImage )
+            {
+                targetResidency = _targetResidency;
+                image           = _image;
+                autoDeleteImage = _autoDeleteImage;
+            }
+        };
+
+        struct ScheduledTasks
+        {
+            TasksType   tasksType;
+            union
+            {
+                ResidencyTransitionTask residencyTransitionTask;
+            };
+
+            ScheduledTasks();
+        };
+
+        typedef vector<ScheduledTasks>::type ScheduledTasksVec;
+        typedef map<TextureGpu*, ScheduledTasksVec>::type ScheduledTasksMap;
+
         DefaultMipmapGen::DefaultMipmapGen mDefaultMipmapGen;
         DefaultMipmapGen::DefaultMipmapGen mDefaultMipmapGenCubemaps;
         bool                mShuttingDown;
@@ -392,6 +428,8 @@ namespace Ogre
 
         typedef vector<AsyncTextureTicket*>::type AsyncTextureTicketVec;
         AsyncTextureTicketVec   mAsyncTextureTickets;
+
+        ScheduledTasksMap   mScheduledTasks;
 
         VaoManager          *mVaoManager;
         RenderSystem        *mRenderSystem;
@@ -595,6 +633,9 @@ namespace Ogre
                                              const String &resourceGroup=BLANKSTRING,
                                              uint32 poolId=0 );
         TextureGpu* findTextureNoThrow( IdString name ) const;
+    protected:
+        void destroyTextureImmediate( TextureGpu *texture );
+    public:
         void destroyTexture( TextureGpu *texture );
 
         /** Creates a StagingTexture which is required to upload data CPU -> GPU into
@@ -788,16 +829,24 @@ namespace Ogre
         const String* findResourceNameStr( IdString idName ) const;
         const String* findResourceGroupStr( IdString idName ) const;
 
+        void executeTask( TextureGpu *texture, TextureGpuListener::Reason reason,
+                          const ScheduledTasks &task );
+
+        /// @see    TextureGpuListener::notifyTextureChanged
+        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason );
+
         RenderSystem* getRenderSystem(void) const;
 
     protected:
+        void scheduleLoadRequest( TextureGpu *texture, Image2 *image, bool autoDeleteImage );
+
         void scheduleLoadRequest( TextureGpu *texture,
                                   const String &name, const String &resourceGroup,
                                   uint32 filters, Image2 *image, bool autoDeleteImage,
                                   bool skipMetadataCache=false,
                                   uint32 sliceOrDepth=std::numeric_limits<uint32>::max() );
     public:
-        void _scheduleTransitionTo( TextureGpu *texture,
+        void _scheduleTransitionTo( TextureGpu *texture, GpuResidency::GpuResidency residency,
                                     Image2 *image, bool autoDeleteImage );
     };
 
