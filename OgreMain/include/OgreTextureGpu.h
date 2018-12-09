@@ -228,6 +228,8 @@ namespace Ogre
         /// Used if hasAutomaticBatching() == true
         uint32		mPoolId;
 
+        /// If this pointer is nullptr and mResidencyStatus == GpuResidency::OnSystemRam
+        /// then that means the data is being loaded to SystemRAM
         uint8       *mSysRamCopy;
 
         TextureGpuManager   *mTextureManager;
@@ -372,11 +374,20 @@ namespace Ogre
             We will deallocate it.
             MUST respect _getSysRamCopyBytesPerRow & _getSysRamCopyBytesPerImage.
             If in doubt, use PixelFormatGpuUtils::getSizeBytes with rowAlignment = 4u;
+        @param autoDeleteSysRamCopyOnResident
+            When true, we free mSysRamCopy when transitioning to Resident and page out strategy
+            is not AlwaysKeepSystemRamCopy.
+            When false, caller is responsible for deleting this pointer else it will leak!
         */
-        void _transitionTo( GpuResidency::GpuResidency newResidency, uint8 *sysRamCopy );
+        void _transitionTo( GpuResidency::GpuResidency newResidency, uint8 *sysRamCopy,
+                            bool autoDeleteSysRamCopyOnResident = true );
 
         /// Notifies it is safe to use the real data. Everything has been uploaded.
         virtual void notifyDataIsReady(void) = 0;
+
+        /// Do not call directly. Will change mResidencyStatus from GpuResidency::Resident to
+        /// GpuResidency::OnSystemRam
+        void _notifySysRamDownloadIsReady( uint8 *sysRamPtr );
 
         virtual void copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
                              const TextureBox &srcBox, uint8 srcMipLevel );

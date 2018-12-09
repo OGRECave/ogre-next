@@ -429,7 +429,17 @@ namespace Ogre
         typedef vector<AsyncTextureTicket*>::type AsyncTextureTicketVec;
         AsyncTextureTicketVec   mAsyncTextureTickets;
 
-        ScheduledTasksMap   mScheduledTasks;
+        struct DownloadToRamEntry
+        {
+            TextureGpu              *texture;
+            /// One per mip. Entries with nullptr means the ticket has already been copied and destroyed
+            AsyncTextureTicketVec   asyncTickets;
+            uint8                   *sysRamPtr;
+        };
+        typedef vector<DownloadToRamEntry>::type DownloadToRamEntryVec;
+
+        ScheduledTasksMap       mScheduledTasks;
+        DownloadToRamEntryVec   mDownloadToRamQueue;
 
         VaoManager          *mVaoManager;
         RenderSystem        *mRenderSystem;
@@ -501,6 +511,17 @@ namespace Ogre
                                                    uint32 depth, uint32 slices,
                                                    PixelFormatGpu pixelFormat,
                                                    size_t minConsumptionRatioThreshold );
+
+        /// Called from main thread. Processes mDownloadToRamQueue, which handles transitions from
+        /// GpuResidency::Resident to GpuResidency::OnSystemRam when strategy is not
+        /// GpuPageOutStrategy::AlwaysKeepSystemRamCopy; thus we need to download what was in GPU
+        /// back to RAM.
+        ///
+        /// This function checks if the async tickets are done and performs the copy.
+        /// It's an async download.
+        ///
+        /// @see    TextureGpuManager::_queueDownloadToRam
+        void processDownloadToRamQueue(void);
 
     public:
         TextureGpuManager( VaoManager *vaoManager, RenderSystem *renderSystem );
@@ -829,7 +850,7 @@ namespace Ogre
         const String* findResourceNameStr( IdString idName ) const;
         const String* findResourceGroupStr( IdString idName ) const;
 
-        void executeTask( TextureGpu *texture, TextureGpuListener::Reason reason,
+        bool executeTask( TextureGpu *texture, TextureGpuListener::Reason reason,
                           const ScheduledTasks &task );
 
         /// @see    TextureGpuListener::notifyTextureChanged
@@ -840,14 +861,22 @@ namespace Ogre
     protected:
         void scheduleLoadRequest( TextureGpu *texture, Image2 *image, bool autoDeleteImage );
 
+        /// Transitions a texture from OnSystemRam to Resident; and asks the worker thread
+        /// to transfer the data in the background.
+        /// Because the Texture is already loaded (but on RAM), the texture's contents are
+        /// authoritative, i.e. we bypass the metadata cache and ignore changes to the file on
+        /// disk and loading listeners.
+        void scheduleLoadFromRam( TextureGpu *texture );
+
         void scheduleLoadRequest( TextureGpu *texture,
                                   const String &name, const String &resourceGroup,
                                   uint32 filters, Image2 *image, bool autoDeleteImage,
                                   bool skipMetadataCache=false,
                                   uint32 sliceOrDepth=std::numeric_limits<uint32>::max() );
     public:
-        void _scheduleTransitionTo( TextureGpu *texture, GpuResidency::GpuResidency residency,
+        void _scheduleTransitionTo( TextureGpu *texture, GpuResidency::GpuResidency targetResidency,
                                     Image2 *image, bool autoDeleteImage );
+        void _queueDownloadToRam( TextureGpu *texture );
     };
 
     /** @} */

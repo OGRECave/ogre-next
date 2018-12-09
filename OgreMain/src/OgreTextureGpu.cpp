@@ -41,7 +41,7 @@ THE SOFTWARE.
 #include "OgreLwString.h"
 #include "OgreException.h"
 
-#define TODO_Create_download_ticket 1
+#define TODO_write_isSysRamReady
 
 namespace Ogre
 {
@@ -148,6 +148,8 @@ namespace Ogre
             //Schedule transition, we'll be loading from a worker thread.
             mTextureManager->_scheduleTransitionTo( this, nextResidency, image, autoDeleteImage );
         }
+
+        TODO_write_isSysRamReady;
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::scheduleTransitionTo( GpuResidency::GpuResidency nextResidency,
@@ -414,9 +416,12 @@ namespace Ogre
         //Delegate to the manager (thread) for loading.
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpu::_transitionTo( GpuResidency::GpuResidency newResidency, uint8 *sysRamCopy )
+    void TextureGpu::_transitionTo( GpuResidency::GpuResidency newResidency, uint8 *sysRamCopy,
+                                    bool autoDeleteSysRamCopyOnResident )
     {
         assert( newResidency != mResidencyStatus );
+
+        bool allowResidencyChange = true;
 
         if( newResidency == GpuResidency::Resident )
         {
@@ -424,7 +429,8 @@ namespace Ogre
             {
                 if( mSysRamCopy )
                 {
-                    OGRE_FREE_SIMD( mSysRamCopy, MEMCATEGORY_RESOURCE );
+                    if( autoDeleteSysRamCopyOnResident )
+                        OGRE_FREE_SIMD( mSysRamCopy, MEMCATEGORY_RESOURCE );
                     mSysRamCopy = 0;
                 }
             }
@@ -457,9 +463,15 @@ namespace Ogre
                         " we shouldn't have a SysRAM copy if we weren't in that strategy." );
 
                 if( !mSysRamCopy )
-                    TODO_Create_download_ticket;
-
-                notifyAllListenersTextureChanged( TextureGpuListener::LostResidency );
+                {
+                    mTextureManager->_queueDownloadToRam( this );
+                    allowResidencyChange = false;
+                }
+                else
+                {
+                    destroyInternalResourcesImpl();
+                    notifyAllListenersTextureChanged( TextureGpuListener::LostResidency );
+                }
             }
         }
         else
@@ -475,7 +487,8 @@ namespace Ogre
             notifyAllListenersTextureChanged( TextureGpuListener::LostResidency );
         }
 
-        mResidencyStatus = newResidency;
+        if( allowResidencyChange )
+            mResidencyStatus = newResidency;
 
         if( isManualTexture() )
         {
@@ -483,6 +496,23 @@ namespace Ogre
             if( mResidencyStatus == GpuResidency::Resident )
                 this->notifyDataIsReady();
         }
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpu::_notifySysRamDownloadIsReady( uint8 *sysRamPtr )
+    {
+        OGRE_ASSERT_LOW( mResidencyStatus == GpuResidency::Resident &&
+                         "GPU should be resident so the copy could've been made "
+                         "and so we can perform the transition!" );
+        OGRE_ASSERT_LOW( mPageOutStrategy != GpuPageOutStrategy::AlwaysKeepSystemRamCopy &&
+                         "This path should've never been hit as always have the RAM copy!" );
+        OGRE_ASSERT_LOW( mSysRamCopy == (uint8*)0 );
+
+        destroyInternalResourcesImpl();
+
+        mSysRamCopy         = sysRamPtr;
+        mResidencyStatus    = GpuResidency::OnSystemRam;
+
+        notifyAllListenersTextureChanged( TextureGpuListener::LostResidency );
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
@@ -682,8 +712,10 @@ namespace Ogre
         efficientVectorRemove( mListeners, itor );
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpu::notifyAllListenersTextureChanged( uint32 reason )
+    void TextureGpu::notifyAllListenersTextureChanged( uint32 _reason )
     {
+        TextureGpuListener::Reason reason = static_cast<TextureGpuListener::Reason>( _reason );
+
         //Iterate through a copy in case one of the listeners decides to remove itself.
         vector<TextureGpuListener*>::type listenersVec = mListeners;
         vector<TextureGpuListener*>::type::iterator itor = listenersVec.begin();
@@ -691,9 +723,12 @@ namespace Ogre
 
         while( itor != end )
         {
-            (*itor)->notifyTextureChanged( this, static_cast<TextureGpuListener::Reason>( reason ) );
+            (*itor)->notifyTextureChanged( this, reason );
             ++itor;
         }
+
+        if( mTextureManager )
+            mTextureManager->notifyTextureChanged( this, reason );
     }
     //-----------------------------------------------------------------------------------
     bool TextureGpu::supportsAsDepthBufferFor( TextureGpu *colourTarget ) const

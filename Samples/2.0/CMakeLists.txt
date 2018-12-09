@@ -131,4 +131,5 @@ endif()
 
 if( OGRE_BUILD_TESTS )
 	add_subdirectory(Tests/Restart)
+	add_subdirectory(Tests/TextureResidency)
 endif()
