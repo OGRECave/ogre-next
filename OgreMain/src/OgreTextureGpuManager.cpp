@@ -84,6 +84,7 @@ namespace Ogre
         mMaxPreloadBytes( 256u * 1024u * 1024u ), //A value of 512MB begins to shake driver bugs.
         mTextureGpuManagerListener( 0 ),
         mStagingTextureMaxBudgetBytes( 512u * 1024u * 1024u ),
+        mDelayListenerCalls( false ),
         mVaoManager( vaoManager ),
         mRenderSystem( renderSystem )
     {
@@ -1182,7 +1183,7 @@ namespace Ogre
                 OGRE_ASSERT_MEDIUM( targetResidency == GpuResidency::OnStorage ||
                                     targetResidency == GpuResidency::OnSystemRam );
 
-                texture->_transitionTo( targetResidency, (uint8*)0 );
+                texture->_transitionTo( targetResidency, texture->_getSysRamCopy( 0 ) );
                 texture->_setNextResidencyStatus( targetResidency );
             }
             else if( task.tasksType == TaskTypeDestroyTexture )
@@ -1201,17 +1202,48 @@ namespace Ogre
     void TextureGpuManager::notifyTextureChanged( TextureGpu *texture,
                                                   TextureGpuListener::Reason reason )
     {
-        ScheduledTasksMap::iterator itor = mScheduledTasks.find( texture );
-
-        if( itor != mScheduledTasks.end() )
+        notifyTextureChanged( texture, reason, false );
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::notifyTextureChanged( TextureGpu *texture,
+                                                  TextureGpuListener::Reason reason,
+                                                  bool ignoreDelay )
+    {
+        if( mDelayListenerCalls && !ignoreDelay )
         {
-            ScheduledTasksVec::iterator itTask = itor->second.begin();
-            bool taskExecuted = executeTask( texture, reason, *itTask );
-            if( taskExecuted )
+            //Nested notifyTextureChanged calls is a problem. We will execute them later
+            mMissedListenerCalls.push_back( MissedListenerCall( texture, reason ) );
+        }
+        else
+        {
+            ScheduledTasksMap::iterator itor = mScheduledTasks.find( texture );
+
+            if( itor != mScheduledTasks.end() )
             {
-                itor->second.erase( itTask );
-                if( itor->second.empty() )
-                    mScheduledTasks.erase( itor );
+                mDelayListenerCalls = true;
+                ScheduledTasksVec::iterator itTask = itor->second.begin();
+                bool taskExecuted = executeTask( texture, reason, *itTask );
+                if( taskExecuted )
+                {
+                    itor->second.erase( itTask );
+                    if( itor->second.empty() )
+                        mScheduledTasks.erase( itor );
+
+                    mMissedListenerCallsTmp.swap( mMissedListenerCalls );
+                    while( !mMissedListenerCallsTmp.empty() )
+                    {
+                        const MissedListenerCall &missed = mMissedListenerCallsTmp.front();
+                        this->notifyTextureChanged( missed.texture, missed.reason, true );
+                        mMissedListenerCallsTmp.pop_front();
+                        //This iteration may have added more entries to mMissedListenerCalls
+                        //We need to execute them right after this entry.
+                        mMissedListenerCallsTmp.insert( mMissedListenerCallsTmp.begin(),
+                                                        mMissedListenerCalls.begin(),
+                                                        mMissedListenerCalls.end() );
+                        mMissedListenerCalls.clear();
+                    }
+                }
+                mDelayListenerCalls = false;
             }
         }
     }

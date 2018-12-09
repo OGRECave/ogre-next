@@ -41,8 +41,6 @@ THE SOFTWARE.
 #include "OgreLwString.h"
 #include "OgreException.h"
 
-#define TODO_write_isSysRamReady
-
 namespace Ogre
 {
     TextureGpu::TextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
@@ -150,8 +148,6 @@ namespace Ogre
             //Schedule transition, we'll be loading from a worker thread.
             mTextureManager->_scheduleTransitionTo( this, nextResidency, image, autoDeleteImage );
         }
-
-        TODO_write_isSysRamReady;
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::scheduleTransitionTo( GpuResidency::GpuResidency nextResidency,
@@ -424,6 +420,7 @@ namespace Ogre
         assert( newResidency != mResidencyStatus );
 
         bool allowResidencyChange = true;
+        TextureGpuListener::Reason listenerReason = TextureGpuListener::Unknown;
 
         if( newResidency == GpuResidency::Resident )
         {
@@ -443,7 +440,7 @@ namespace Ogre
             }
 
             transitionToResident();
-            notifyAllListenersTextureChanged( TextureGpuListener::GainedResidency );
+            listenerReason = TextureGpuListener::GainedResidency;
         }
         else if( newResidency == GpuResidency::OnSystemRam )
         {
@@ -456,13 +453,18 @@ namespace Ogre
                         "Must provide a SysRAM copy when transitioning from OnStorage to OnSystemRam!" );
                 mSysRamCopy = sysRamCopy;
 
-                notifyAllListenersTextureChanged( TextureGpuListener::FromStorageToSysRam );
+                listenerReason = TextureGpuListener::FromStorageToSysRam;
             }
             else
             {
                 assert( (mSysRamCopy || mPageOutStrategy != GpuPageOutStrategy::AlwaysKeepSystemRamCopy)
                         && "We should already have a SysRAM copy if we were AlwaysKeepSystemRamCopy; or"
                         " we shouldn't have a SysRAM copy if we weren't in that strategy." );
+
+                OGRE_ASSERT_LOW( mPageOutStrategy == GpuPageOutStrategy::AlwaysKeepSystemRamCopy ||
+                                 !sysRamCopy || mSysRamCopy == sysRamCopy &&
+                                 "sysRamCopy must be nullptr or equal to mSysRamCopy when "
+                                 "mPageOutStrategy != GpuPageOutStrategy::AlwaysKeepSystemRamCopy" );
 
                 if( !mSysRamCopy )
                 {
@@ -472,7 +474,7 @@ namespace Ogre
                 else
                 {
                     destroyInternalResourcesImpl();
-                    notifyAllListenersTextureChanged( TextureGpuListener::LostResidency );
+                    listenerReason = TextureGpuListener::LostResidency;
                 }
             }
         }
@@ -486,7 +488,7 @@ namespace Ogre
 
             destroyInternalResourcesImpl();
 
-            notifyAllListenersTextureChanged( TextureGpuListener::LostResidency );
+            listenerReason = TextureGpuListener::LostResidency;
         }
 
         if( allowResidencyChange )
@@ -494,6 +496,7 @@ namespace Ogre
             mResidencyStatus = newResidency;
             //Decrement mPendingResidencyChanges and prevent underflow
             mPendingResidencyChanges = std::max( mPendingResidencyChanges, 1u ) - 1u;
+            notifyAllListenersTextureChanged( listenerReason );
         }
 
         if( isManualTexture() )

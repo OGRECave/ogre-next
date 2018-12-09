@@ -361,10 +361,10 @@ namespace Ogre
         @remarks
             Do NOT call this function yourself if you've created this function with
             AutomaticBatching as Ogre will call this, from a worker thread!
-        @par
+
             Make sure you're done using mSysRamCopy before calling this function,
-            as we may free that pointer.
-        @par
+            as we may free that pointer (unless autoDeleteSysRamCopyOnResident = false).
+
             If you're calling _transitionTo yourself (i.e. you're not using scheduleTransitionTo)
             then you'll need to call _setNextResidencyStatus too, so that both getResidencyStatus
             and getNextResidencyStatus agree.
@@ -374,6 +374,10 @@ namespace Ogre
             We will deallocate it.
             MUST respect _getSysRamCopyBytesPerRow & _getSysRamCopyBytesPerImage.
             If in doubt, use PixelFormatGpuUtils::getSizeBytes with rowAlignment = 4u;
+
+            This param must be nullptr or equal to get_getSysRamCopy when going from
+            Resident to OnSystemRam and strategy is not AlwaysKeepSystemRamCopy; as we
+            will async download the content from the GPU.
         @param autoDeleteSysRamCopyOnResident
             When true, we free mSysRamCopy when transitioning to Resident and page out strategy
             is not AlwaysKeepSystemRamCopy.

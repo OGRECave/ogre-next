@@ -438,8 +438,20 @@ namespace Ogre
         };
         typedef vector<DownloadToRamEntry>::type DownloadToRamEntryVec;
 
+        struct MissedListenerCall
+        {
+            TextureGpu *texture;
+            TextureGpuListener::Reason reason;
+            MissedListenerCall( TextureGpu *_texture, TextureGpuListener::Reason _reason ) :
+                texture( _texture ), reason( _reason ) {}
+        };
+        typedef list<MissedListenerCall>::type MissedListenerCallList;
+
         ScheduledTasksMap       mScheduledTasks;
         DownloadToRamEntryVec   mDownloadToRamQueue;
+        MissedListenerCallList  mMissedListenerCalls;
+        MissedListenerCallList  mMissedListenerCallsTmp;
+        bool                    mDelayListenerCalls;
 
         VaoManager          *mVaoManager;
         RenderSystem        *mRenderSystem;
@@ -853,6 +865,10 @@ namespace Ogre
         bool executeTask( TextureGpu *texture, TextureGpuListener::Reason reason,
                           const ScheduledTasks &task );
 
+    protected:
+        void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                   bool ignoreDelay );
+    public:
         /// @see    TextureGpuListener::notifyTextureChanged
         virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason );
 
