@@ -352,7 +352,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool D3D11TextureGpu::isDataReady(void) const
     {
-        return mDisplayTextureName == mFinalTextureName;
+        return (mDisplayTextureName == mFinalTextureName &&
+                mResidencyStatus != GpuResidency::OnSystemRam) || isSysRamReady();
     }
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpu::_setToDisplayDummyTexture(void)

@@ -168,7 +168,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool MetalTextureGpu::isDataReady(void) const
     {
-        return mDisplayTextureName == mFinalTextureName;
+        return (mDisplayTextureName == mFinalTextureName &&
+                mResidencyStatus != GpuResidency::OnSystemRam) || isSysRamReady();
     }
     //-----------------------------------------------------------------------------------
     void MetalTextureGpu::_setToDisplayDummyTexture(void)

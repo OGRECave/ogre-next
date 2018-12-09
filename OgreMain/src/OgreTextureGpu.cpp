@@ -849,6 +849,11 @@ namespace Ogre
                                                         mPixelFormat, mNumMipmaps, 4u );
     }
     //-----------------------------------------------------------------------------------
+    bool TextureGpu::isSysRamReady(void) const
+    {
+        return mResidencyStatus == GpuResidency::OnSystemRam && mSysRamCopy;
+    }
+    //-----------------------------------------------------------------------------------
     bool TextureGpu::isMetadataReady(void) const
     {
         return mResidencyStatus == GpuResidency::Resident &&

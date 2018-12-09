@@ -240,7 +240,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool GL3PlusTextureGpu::isDataReady(void) const
     {
-        return mDisplayTextureName == mFinalTextureName;
+        return (mDisplayTextureName == mFinalTextureName &&
+                mResidencyStatus != GpuResidency::OnSystemRam) || isSysRamReady();
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusTextureGpu::_setToDisplayDummyTexture(void)

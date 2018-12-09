@@ -536,6 +536,12 @@ namespace Ogre
         */
         bool isMetadataReady(void) const;
 
+    protected:
+        /// Returns true if mResidencyStatus == GpuResidency::OnSystemRam and we're also ready
+        /// Otherwise returns false
+        bool isSysRamReady(void) const;
+
+    public:
         /// True if this texture is fully ready to be used for displaying.
         /// If this is true, then isMetadataReady is also true.
         /// See isMetadataReady.
