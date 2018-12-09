@@ -101,10 +101,13 @@ namespace Ogre
         /// the last residency we'll be transitioning to. For example, it's possible
         /// Ogre has scheduled OnStorage -> Resident -> OnSystemRam; and none has been
         /// executed yet, in which case mNextResidencyStatus will be OnSystemRam
+        ///
+        /// @see    GpuResource::mPendingResidencyChanges
         GpuResidency::GpuResidency              mNextResidencyStatus;
         /// Developer notes: Strategy cannot be changed immediately,
         /// it has to be queued (due to multithreading safety).
         GpuPageOutStrategy::GpuPageOutStrategy  mPageOutStrategy;
+        uint32  mPendingResidencyChanges;
 
         /// User tells us priorities via a "rank" system.
         /// Must be loaded first. Must be kept always resident. Rank = 0
@@ -161,9 +164,22 @@ namespace Ogre
             calling a function inside Ogre that finalized the transition.
             Once you've called download and the resource was still Resident, you are
             safe that your data integrity will be kept.
+        @remarks
+            Beware of the ABA problem. If the following transitions are scheduled:
+                OnStorage -> Resident -> OnStorage
+            Then both getResidencyStatus & getNextResidencyStatus will return OnStorage.
+            Use GpuResource::getPendingResidencyChanges to fix the ABA problem.
         */
         GpuResidency::GpuResidency getNextResidencyStatus(void) const;
         GpuPageOutStrategy::GpuPageOutStrategy getGpuPageOutStrategy(void) const;
+
+        /** Returns the number of pending residency changes.
+            Residency changes may not be immediate and thus be delayed (e.g. see
+            TextureGpu::scheduleTransitionTo).
+
+            When this value is 0 it implies that mResidencyStatus == mNextResidencyStatus
+        */
+        uint32 getPendingResidencyChanges(void) const;
 
         IdString getName(void) const;
         /// Retrieves a user-friendly name. May involve a look up.

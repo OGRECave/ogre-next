@@ -37,6 +37,7 @@ namespace Ogre
         mResidencyStatus( GpuResidency::OnStorage ),
         mNextResidencyStatus( GpuResidency::OnStorage ),
         mPageOutStrategy( pageOutStrategy ),
+        mPendingResidencyChanges( 0 ),
         mRank( 1 ),
         mLastFrameUsed( vaoManager->getFrameCount() ),
         mLowestDistanceToCamera( 0 ),
@@ -67,6 +68,11 @@ namespace Ogre
     GpuPageOutStrategy::GpuPageOutStrategy GpuResource::getGpuPageOutStrategy(void) const
     {
         return mPageOutStrategy;
+    }
+    //-----------------------------------------------------------------------------------
+    uint32 GpuResource::getPendingResidencyChanges(void) const
+    {
+        return mPendingResidencyChanges;
     }
     //-----------------------------------------------------------------------------------
     IdString GpuResource::getName(void) const

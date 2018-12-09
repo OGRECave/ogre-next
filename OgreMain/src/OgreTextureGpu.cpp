@@ -137,6 +137,8 @@ namespace Ogre
                                                  Image2 *image, bool autoDeleteImage )
     {
         mNextResidencyStatus = nextResidency;
+        ++mPendingResidencyChanges;
+
         if( isManualTexture() )
         {
             OGRE_ASSERT_LOW( !image && "Image pointer must null for manual textures!" );
@@ -464,6 +466,7 @@ namespace Ogre
 
                 if( !mSysRamCopy )
                 {
+                    ++mPendingResidencyChanges;
                     mTextureManager->_queueDownloadToRam( this );
                     allowResidencyChange = false;
                 }
@@ -488,7 +491,11 @@ namespace Ogre
         }
 
         if( allowResidencyChange )
+        {
             mResidencyStatus = newResidency;
+            //Decrement mPendingResidencyChanges and prevent underflow
+            mPendingResidencyChanges = std::max( mPendingResidencyChanges, 1u ) - 1u;
+        }
 
         if( isManualTexture() )
         {
@@ -843,7 +850,8 @@ namespace Ogre
     bool TextureGpu::isMetadataReady(void) const
     {
         return mResidencyStatus == GpuResidency::Resident &&
-               mNextResidencyStatus == GpuResidency::Resident;
+               mNextResidencyStatus == GpuResidency::Resident &&
+               mPendingResidencyChanges == 0;
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::waitForMetadata(void)

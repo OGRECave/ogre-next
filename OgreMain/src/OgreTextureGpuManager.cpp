@@ -1348,20 +1348,15 @@ namespace Ogre
         task.tasksType = TaskTypeResidencyTransition;
         task.residencyTransitionTask.init( targetResidency, image, autoDeleteImage );
 
-        ScheduledTasksMap::iterator itor = mScheduledTasks.find( texture );
+        /**/
 
-        DownloadToRamEntryVec::const_iterator itDownRamQueue = mDownloadToRamQueue.begin();
-        DownloadToRamEntryVec::const_iterator enDownRamQueue = mDownloadToRamQueue.end();
-
-        while( itDownRamQueue != enDownRamQueue && itDownRamQueue->texture != texture )
-            ++itDownRamQueue;
-
-        if( itor == mScheduledTasks.end() && itDownRamQueue == enDownRamQueue )
+        //if( itor == mScheduledTasks.end() && itDownRamQueue == enDownRamQueue )
+        if( texture->getPendingResidencyChanges() == 0 )
         {
             //If we're here, there are no pending tasks that will perform further work
             //on the texture (with one exception: if isDataReady does not return true; which
-            //means the texture is in the worker thread and will later become resident
-            //and/or get loaded with the actual data)
+            //means the texture is still in the worker thread and will later get stuffed with
+            //the actual data)
             if( targetResidency != GpuResidency::Resident )
             {
                 if( texture->isDataReady() )
@@ -1377,20 +1372,40 @@ namespace Ogre
             }
             else
             {
-                //There are no pending tasks. Start loading
+                //If we're going to Resident, then we're currently not. Start loading
                 executeTask( texture, TextureGpuListener::LostResidency, task );
             }
         }
         else
         {
+            ScheduledTasksMap::iterator itor = mScheduledTasks.find( texture );
+
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
+            //Consistency check. If we have nothing in mDownloadToRamQueue & mScheduledTasks,
+            //then something went wrong.
+            DownloadToRamEntryVec::const_iterator itDownRamQueue = mDownloadToRamQueue.begin();
+            DownloadToRamEntryVec::const_iterator enDownRamQueue = mDownloadToRamQueue.end();
+
+            while( itDownRamQueue != enDownRamQueue && itDownRamQueue->texture != texture )
+                ++itDownRamQueue;
+
+            if( itDownRamQueue == enDownRamQueue )
+            {
+                OGRE_ASSERT_MEDIUM( itor != mScheduledTasks.end() && !itor->second.empty() &&
+                                    "There should be a non-empty entry in "
+                                    "mScheduledTasks for this texture! "
+                                    "Has TextureGpu::_transitionTo been called explicitly "
+                                    "outside Ogre? Is there a missing incr/decr. to "
+                                    "mPendingResidencyChanges?" );
+            }
+#endif
+
             if( itor == mScheduledTasks.end() )
             {
                 mScheduledTasks[texture] = ScheduledTasksVec();
                 itor = mScheduledTasks.find( texture );
             }
-            OGRE_ASSERT_MEDIUM( (!itor->second.empty() || itDownRamQueue != enDownRamQueue) &&
-                                "TextureGpuManager::notifyTextureChanged should've removed "
-                                "this entry to mScheduledTasks" );
+
             itor->second.push_back( task );
         }
     }
