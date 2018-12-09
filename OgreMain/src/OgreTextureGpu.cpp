@@ -466,7 +466,6 @@ namespace Ogre
 
                 if( !mSysRamCopy )
                 {
-                    ++mPendingResidencyChanges;
                     mTextureManager->_queueDownloadToRam( this );
                     allowResidencyChange = false;
                 }
@@ -518,6 +517,9 @@ namespace Ogre
 
         mSysRamCopy         = sysRamPtr;
         mResidencyStatus    = GpuResidency::OnSystemRam;
+
+        //Decrement mPendingResidencyChanges and prevent underflow
+        mPendingResidencyChanges = std::max( mPendingResidencyChanges, 1u ) - 1u;
 
         notifyAllListenersTextureChanged( TextureGpuListener::LostResidency );
     }

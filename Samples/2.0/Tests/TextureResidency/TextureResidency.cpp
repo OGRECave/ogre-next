@@ -68,6 +68,6 @@ namespace Demo
 
     const char* MainEntryPoints::getWindowTitle(void)
     {
-        return "Shadow map debugging";
+        return "Texture Residency";
     }
 }

@@ -1348,10 +1348,10 @@ namespace Ogre
         task.tasksType = TaskTypeResidencyTransition;
         task.residencyTransitionTask.init( targetResidency, image, autoDeleteImage );
 
-        /**/
+        //getPendingResidencyChanges should be > 1 because it gets incremented by caller
+        OGRE_ASSERT_MEDIUM( texture->getPendingResidencyChanges() != 0u );
 
-        //if( itor == mScheduledTasks.end() && itDownRamQueue == enDownRamQueue )
-        if( texture->getPendingResidencyChanges() == 0 )
+        if( texture->getPendingResidencyChanges() == 1u )
         {
             //If we're here, there are no pending tasks that will perform further work
             //on the texture (with one exception: if isDataReady does not return true; which
