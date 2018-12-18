@@ -90,8 +90,6 @@ namespace Ogre
                 else
                 {
                     vNormalBuf = data->vertexBufferBinding->getBuffer(elemNormal->getSource());
-                    assert(vNormalBuf->getSizeInBytes() == vbuf->getSizeInBytes());
-                    assert(vNormalBuf->getVertexSize() == vbuf->getVertexSize());
                     vNormal = static_cast<unsigned char*>(vNormalBuf->lock(v1::HardwareBuffer::HBL_READ_ONLY));
                 }
                 vNormalSize = vNormalBuf->getVertexSize();
