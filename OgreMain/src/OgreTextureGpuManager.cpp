@@ -2806,6 +2806,9 @@ namespace Ogre
 
         processDownloadToRamQueue();
 
+        if( !mDownloadToRamQueue.empty() )
+            isDone = false;
+
         mWorkerWaitableEvent.wake();
 
 #if OGRE_DEBUG_MODE && 0
