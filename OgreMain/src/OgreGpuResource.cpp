@@ -70,6 +70,11 @@ namespace Ogre
         return mPageOutStrategy;
     }
     //-----------------------------------------------------------------------------------
+    void GpuResource::_addPendingResidencyChanges( uint32 value )
+    {
+        mPendingResidencyChanges += value;
+    }
+    //-----------------------------------------------------------------------------------
     uint32 GpuResource::getPendingResidencyChanges(void) const
     {
         return mPendingResidencyChanges;

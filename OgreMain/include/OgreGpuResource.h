@@ -173,6 +173,8 @@ namespace Ogre
         GpuResidency::GpuResidency getNextResidencyStatus(void) const;
         GpuPageOutStrategy::GpuPageOutStrategy getGpuPageOutStrategy(void) const;
 
+        void _addPendingResidencyChanges( uint32 value );
+
         /** Returns the number of pending residency changes.
             Residency changes may not be immediate and thus be delayed (e.g. see
             TextureGpu::scheduleTransitionTo).

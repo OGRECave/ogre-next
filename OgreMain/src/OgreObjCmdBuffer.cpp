@@ -148,8 +148,8 @@ namespace Ogre
         TextureGpuManager *textureManager = texture->getTextureManager();
         textureManager->_setIgnoreScheduledTasks( true );
         texture->notifyAllListenersTextureChanged( TextureGpuListener::MetadataCacheOutOfDate );
+        texture->_addPendingResidencyChanges( 1u );
         texture->_transitionTo( GpuResidency::OnStorage, 0 );
-        texture->_setNextResidencyStatus( GpuResidency::OnStorage );
         texture->getTextureManager()->_removeMetadataCacheEntry( texture );
         loadedImage._setAutoDelete( false );
         Image2 *image = new Image2( loadedImage );

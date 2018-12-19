@@ -80,6 +80,7 @@ namespace Ogre
         mShuttingDown( false ),
         mTryLockMutexFailureCount( 0u ),
         mTryLockMutexFailureLimit( 1200u ),
+        mAddedNewLoadRequests( false ),
         mEntriesToProcessPerIteration( 3u ),
         mMaxPreloadBytes( 256u * 1024u * 1024u ), //A value of 512MB begins to shake driver bugs.
         mTextureGpuManagerListener( 0 ),
@@ -1383,6 +1384,7 @@ namespace Ogre
                 filters &= ~(TextureFilter::TypeGenerateSwMipmaps | TextureFilter::TypeGenerateHwMipmaps);
         }
 
+        mAddedNewLoadRequests = true;
         ThreadData &mainData = mThreadData[c_mainThread];
         mLoadRequestsMutex.lock();
             mainData.loadRequests.push_back( LoadRequest( name, archive, loadingListener, image,
@@ -1484,6 +1486,10 @@ namespace Ogre
             {
                 const bool oldValue = mIgnoreScheduledTasks;
                 mIgnoreScheduledTasks = true;
+                //These _transitionTo calls are unscheduled and will decrease mPendingResidencyChanges
+                //to wrong values that would cause _scheduleTransitionTo to think the TextureGpu
+                //is done, thus we need to counter that.
+                texture->_addPendingResidencyChanges( 2u );
                 texture->_transitionTo( GpuResidency::OnStorage, rawBuffer, false );
                 texture->setNumMipmaps( numMipmaps );
                 texture->_transitionTo( GpuResidency::OnSystemRam, rawBuffer, false );
@@ -1493,6 +1499,7 @@ namespace Ogre
 
         texture->_transitionTo( GpuResidency::Resident, texture->_getSysRamCopy( 0 ), false );
 
+        mAddedNewLoadRequests = true;
         ThreadData &mainData = mThreadData[c_mainThread];
         mLoadRequestsMutex.lock();
             mainData.loadRequests.push_back( LoadRequest( name, 0, 0, image, texture,
@@ -2731,6 +2738,8 @@ namespace Ogre
     {
         OgreProfileExhaustive( "TextureGpuManager::_update" );
 
+        mAddedNewLoadRequests = false;
+
 #if OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN || OGRE_FORCE_TEXTURE_STREAMING_ON_MAIN_THREAD
         _updateStreaming();
 #endif
@@ -2834,6 +2843,14 @@ namespace Ogre
         }
 
         processDownloadToRamQueue();
+
+        //After we've checked mainData.loadRequests.empty() inside the lock;
+        //we may have added more entries to it due to pending ScheduledTasks that got
+        //flushed either by mainData.objCmdBuffer or processDownloadToRamQueue,
+        //thus the worker thread now has more work to do and we can't return
+        //isDone = true.
+        if( mAddedNewLoadRequests )
+            isDone = false;
 
         mWorkerWaitableEvent.wake();
 

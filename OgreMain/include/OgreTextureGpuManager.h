@@ -481,6 +481,7 @@ namespace Ogre
         //Counts how many times mMutex.tryLock returned false in a row
         uint32              mTryLockMutexFailureCount;
         uint32              mTryLockMutexFailureLimit;
+        bool                mAddedNewLoadRequests;
         ThreadData          mThreadData[2];
         StreamingData       mStreamingData;
 
