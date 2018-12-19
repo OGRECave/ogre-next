@@ -2851,18 +2851,19 @@ namespace Ogre
         bool bDone = false;
         while( !bDone )
         {
-            bDone = _update( true );
-            if( !bDone || !mDownloadToRamQueue.empty() )
+            bool workerThreadDone = _update( true );
+            bDone = workerThreadDone && mDownloadToRamQueue.empty() && mScheduledTasks.empty();
+            if( !bDone )
             {
                 mVaoManager->_update();
-                if( !bDone )
+                if( !workerThreadDone )
                 {
                     //We're waiting for worker thread to finish loading from disk/ram into GPU
                     mRequestToMainThreadEvent.wait();
                 }
                 else
                 {
-                    //We're waiting for GPU -> CPU transfers
+                    //We're waiting for GPU -> CPU transfers or for the next task to be executed
                     Threads::Sleep( 1 );
                 }
             }
@@ -2877,18 +2878,25 @@ namespace Ogre
         bool bDone = false;
         while( !bDone )
         {
-            bDone = _update( true );
+            bool workerThreadDone = _update( true );
+            bDone = workerThreadDone && mDownloadToRamQueue.empty() && mScheduledTasks.empty();
             if( !bDone )
             {
-                if( texture->isDataReady() )
-                    bDone = true;
-                else if( metadataOnly && texture->isMetadataReady() )
-                    bDone = true;
+                if( texture->getPendingResidencyChanges() == 0u )
+                {
+                    if( texture->isDataReady() )
+                        bDone = true;
+                    else if( metadataOnly && texture->isMetadataReady() )
+                        bDone = true;
+                }
 
                 if( !bDone )
                 {
                     mVaoManager->_update();
-                    mRequestToMainThreadEvent.wait();
+                    if( !workerThreadDone )
+                        mRequestToMainThreadEvent.wait();
+                    else
+                        Threads::Sleep( 1 );
                 }
             }
         }
