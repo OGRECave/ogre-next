@@ -74,9 +74,9 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    bool NULLTextureGpu::isDataReady(void) const
+    bool NULLTextureGpu::_isDataReadyImpl(void) const
     {
-        return mResidencyStatus != GpuResidency::OnSystemRam || isSysRamReady();
+        return true;
     }
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------

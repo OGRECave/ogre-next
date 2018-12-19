@@ -85,6 +85,20 @@ namespace TextureFilter
         filtersVec.swap( outFilters );
     }
     //-----------------------------------------------------------------------------------
+    void FilterBase::destroyFilters( FilterBaseArray &inOutFilters )
+    {
+        FilterBaseArray::const_iterator itor = inOutFilters.begin();
+        FilterBaseArray::const_iterator end  = inOutFilters.end();
+
+        while( itor != end )
+        {
+            delete *itor;
+            ++itor;
+        }
+
+        inOutFilters.clear();
+    }
+    //-----------------------------------------------------------------------------------
     void FilterBase::simulateFilters( uint32 filters, const Image2 &image,
                                       uint8 &inOutNumMipmaps, PixelFormatGpu &inOutPixelFormat )
     {

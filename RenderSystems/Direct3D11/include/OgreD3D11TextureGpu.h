@@ -89,7 +89,7 @@ namespace Ogre
         virtual ~D3D11TextureGpu();
 
         virtual void notifyDataIsReady(void);
-        virtual bool isDataReady(void) const;
+        virtual bool _isDataReadyImpl(void) const;
 
         virtual void setTextureType( TextureTypes::TextureTypes textureType );
 

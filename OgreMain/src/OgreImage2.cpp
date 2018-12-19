@@ -280,6 +280,13 @@ namespace Ogre {
         mNumMipmaps = std::min( maxMipCount, mNumMipmaps );
     }
     //-----------------------------------------------------------------------------------
+    void Image2::loadDynamicImage( void *pData, bool autoDelete, TextureGpu *texture )
+    {
+        loadDynamicImage( pData, texture->getWidth(), texture->getHeight(),
+                          texture->getDepthOrSlices(), texture->getTextureType(),
+                          texture->getPixelFormat(), autoDelete, texture->getNumMipmaps() );
+    }
+    //-----------------------------------------------------------------------------------
     void Image2::convertFromTexture( TextureGpu *texture, uint8 minMip, uint8 maxMip,
                                      bool automaticResolve )
     {

@@ -289,15 +289,18 @@ namespace Ogre
             /// Otherwise you should listen for TextureGpuListener::ReadyForRendering
             /// message to know when we're done using the image.
             bool                        autoDeleteImage;
+            /// Indicates we're going to GpuResidency::OnSystemRam instead of Resident
+            bool                        toSysRam;
 
             LoadRequest( const String &_name, Archive *_archive,
                          ResourceLoadingListener *_loadingListener,
                          Image2 *_image, TextureGpu *_texture,
-                         uint32 _sliceOrDepth, uint32 _filters, bool _autoDeleteImage ) :
+                         uint32 _sliceOrDepth, uint32 _filters, bool _autoDeleteImage,
+                         bool _toSysRam ) :
                 name( _name ), archive( _archive ), loadingListener( _loadingListener ),
                 image( _image ), texture( _texture ),
                 sliceOrDepth( _sliceOrDepth ), filters( _filters ),
-                autoDeleteImage( _autoDeleteImage ) {}
+                autoDeleteImage( _autoDeleteImage ), toSysRam( _toSysRam ) {}
         };
 
         typedef vector<LoadRequest>::type LoadRequestVec;
@@ -318,6 +321,47 @@ namespace Ogre
         };
         typedef vector<UsageStats>::type UsageStatsVec;
 
+        /**
+        @class QueuedImage
+            When loading a texture (i.e. TextureGpuManager::scheduleLoadRequest or
+            TextureGpuManager::scheduleLoadFromRam were called) the following will happen:
+
+                1. Find if the texture has any pending transition or finishing loading
+                    1a. If so place a task in mScheduledTasks
+                    1b. Otherwise execute the task immediately
+                2. The texture is placed from main thread in mThreadData[].loadRequests
+                3. Worker thread parses that request. Assuming all goes smoothly (e.g. Image loaded
+                   successfully, metadata cache was not out of date, etc) the Image is fully
+                   loaded from disk into memory as an Image2.
+                4. The texture is transitioned to Resident* since all metadata is available now,
+                   but not yet ready for rendering. This step cannot happen if we must maintain a
+                   SystemRam copy (i.e. strategy is AlwaysKeepSystemRamCopy; or we were asked
+                   to load to OnSystemRam, instead of Resident)
+                6. A QueuedImage is created.
+                7. The LoadRequest is destroyed.
+                8. Worker thread loops again, processing QueuedImages and LoadRequests
+
+            QueuedImage will proceed to transfer from system RAM (step 3) to StagingTextures, and
+            will remain alive until all of its data has been transfered. It will also be
+            responsible for requesting more StagingTextures if needed.
+
+            Once the QueuedImage is done, it will signal a ObjCmdBuffer::NotifyDataIsReady.
+
+            If step 4 could not happen, then the QueuedImage will also perform the transition
+            to resident* when we're done.
+
+            (*) Transitions happen in main thread, however they're requested from worker thread
+            via ObjCmdBuffer::TransitionToLoaded. See TextureGpuManager::addTransitionToLoadedCmd code
+
+        @remarks
+            QueuedImage class is used when is NEVER used when transitioning from OnStorage -> OnSystemRam
+
+            There's a case in which the texture must be loaded in parts and thus more than one
+            QueuedImage will be needed. See TextureGpuManager::PartialImage.
+
+            In this case, then NotifyDataIsReady (and TransitionToLoaded if step 4 could not run)
+            can only happen after all pending QueuedImage are over.
+        */
         struct QueuedImage
         {
             Image2      image;
@@ -340,6 +384,25 @@ namespace Ogre
 
         typedef vector<QueuedImage>::type QueuedImageVec;
 
+        /**
+        @class PartialImage
+            In certain cases, more than one QueuedImage is needed because the texture is being
+            loaded from multiple textures (i.e. cubemaps made from 6 different textures)
+
+            This structure tracks how many faces have been loaded, so we know when it's done.
+        */
+        struct PartialImage
+        {
+            void    *sysRamPtr;
+            uint32  numProcessedDepthOrSlices;
+            bool    toSysRam;
+
+            PartialImage();
+            PartialImage( void *_sysRamPtr, uint32 _numProcessedDepthOrSlices, bool _toSysRam );
+        };
+
+        typedef map<TextureGpu*, PartialImage>::type PartialImageMap;
+
         struct ThreadData
         {
             LoadRequestVec  loadRequests;
@@ -355,7 +418,19 @@ namespace Ogre
             /// Number of bytes preloaded by worker thread. Main thread resets this counter.
             size_t              bytesPreloaded;
 
-            set<TextureGpu*>::type  rescheduledTextures;/// Used by worker thread. No protection needed.
+            /// Resheduled textures are textures which were transitioned to Resident
+            /// preemptively using the metadata cache, but it turned out to be wrong
+            /// (out of date), so we need to do some ping pong first
+            ///
+            /// Used by worker thread. No protection needed.
+            set<TextureGpu*>::type  rescheduledTextures;
+
+            /// Only used for textures that need more than one Image to load
+            ///
+            /// Used by worker thread. No protection needed.
+            ///
+            /// @see    TextureGpuManager::PartialImage
+            PartialImageMap     partialImages;
         };
 
         enum TasksType
@@ -452,6 +527,7 @@ namespace Ogre
         MissedListenerCallList  mMissedListenerCalls;
         MissedListenerCallList  mMissedListenerCallsTmp;
         bool                    mDelayListenerCalls;
+        bool                    mIgnoreScheduledTasks;
 
         VaoManager          *mVaoManager;
         RenderSystem        *mRenderSystem;
@@ -508,6 +584,9 @@ namespace Ogre
                                         StagingTexture **outStagingTexture );
         static void processQueuedImage( QueuedImage &queuedImage, ThreadData &workerData,
                                         StreamingData &streamingData );
+
+        static void addTransitionToLoadedCmd( ObjCmdBuffer *commandBuffer, TextureGpu *texture,
+                                              void *sysRamCopy, bool toSysRam );
 
         /// Retrieves, in bytes, the memory consumed by StagingTextures in a container like
         /// mAvailableStagingTextures, which are textures waiting either to be reused, or to be destroyed.
@@ -862,6 +941,18 @@ namespace Ogre
         const String* findResourceNameStr( IdString idName ) const;
         const String* findResourceGroupStr( IdString idName ) const;
 
+        /// Implements TaskTypeResidencyTransition when doing any of the following transitions:
+        ///     OnStorage   -> Resident
+        ///     OnStorage   -> OnSystemRam
+        ///     OnSystemRam -> Resident
+        void taskLoadToSysRamOrResident( TextureGpu *texture, const ScheduledTasks &task );
+        /// Implements TaskTypeResidencyTransition when doing any of the following transitions:
+        ///     Resident    -> OnStorage
+        ///     Resident    -> OnSystemRam
+        ///     OnSystemRam -> OnStorage
+        ///
+        /// Also implements TaskTypeDestroyTexture
+        void taskToUnloadOrDestroy( TextureGpu *texture, const ScheduledTasks &task );
         bool executeTask( TextureGpu *texture, TextureGpuListener::Reason reason,
                           const ScheduledTasks &task );
 
@@ -875,7 +966,8 @@ namespace Ogre
         RenderSystem* getRenderSystem(void) const;
 
     protected:
-        void scheduleLoadRequest( TextureGpu *texture, Image2 *image, bool autoDeleteImage );
+        void scheduleLoadRequest( TextureGpu *texture, Image2 *image,
+                                  bool autoDeleteImage, bool toSysRam );
 
         /// Transitions a texture from OnSystemRam to Resident; and asks the worker thread
         /// to transfer the data in the background.
@@ -886,13 +978,21 @@ namespace Ogre
 
         void scheduleLoadRequest( TextureGpu *texture,
                                   const String &name, const String &resourceGroup,
-                                  uint32 filters, Image2 *image, bool autoDeleteImage,
+                                  uint32 filters, Image2 *image, bool autoDeleteImage, bool toSysRam,
                                   bool skipMetadataCache=false,
                                   uint32 sliceOrDepth=std::numeric_limits<uint32>::max() );
     public:
         void _scheduleTransitionTo( TextureGpu *texture, GpuResidency::GpuResidency targetResidency,
                                     Image2 *image, bool autoDeleteImage );
         void _queueDownloadToRam( TextureGpu *texture );
+        /// When true we will ignore all tasks in mScheduledTasks and execute transitions immediately
+        /// Caller is responsible for ensuring this is safe to do.
+        ///
+        /// The main reason for this function is that when the metadata cache is proven to be out of
+        /// date and comes back to the main thread, we need to perform a
+        /// Resident -> OnStorage -> Resident transition that bypasses pending operations,
+        /// and pretend the texture has been in Resident all along.
+        void _setIgnoreScheduledTasks( bool ignoreSchedTasks );
     };
 
     /** @} */

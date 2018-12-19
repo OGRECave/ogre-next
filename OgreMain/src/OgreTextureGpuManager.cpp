@@ -85,6 +85,7 @@ namespace Ogre
         mTextureGpuManagerListener( 0 ),
         mStagingTextureMaxBudgetBytes( 512u * 1024u * 1024u ),
         mDelayListenerCalls( false ),
+        mIgnoreScheduledTasks( false ),
         mVaoManager( vaoManager ),
         mRenderSystem( renderSystem )
     {
@@ -439,7 +440,7 @@ namespace Ogre
 
         if( itor == mScheduledTasks.end() )
         {
-            if( texture->isDataReady() )
+            if( texture->_isDataReadyImpl() )
             {
                 //There are no pending tasks. We can execute it right now
                 executeTask( texture, TextureGpuListener::ReadyForRendering, task );
@@ -1145,52 +1146,126 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
+    void TextureGpuManager::taskLoadToSysRamOrResident( TextureGpu *texture,
+                                                        const ScheduledTasks &task )
+    {
+        OGRE_ASSERT_MEDIUM( task.tasksType == TaskTypeResidencyTransition );
+
+        const GpuResidency::GpuResidency targetResidency = task.residencyTransitionTask.targetResidency;
+
+        if( texture->getResidencyStatus() == GpuResidency::OnStorage )
+        {
+            OGRE_ASSERT_MEDIUM( targetResidency == GpuResidency::Resident ||
+                                targetResidency == GpuResidency::OnSystemRam );
+
+            scheduleLoadRequest( texture,
+                                 task.residencyTransitionTask.image,
+                                 task.residencyTransitionTask.autoDeleteImage,
+                                 targetResidency == GpuResidency::OnSystemRam );
+        }
+        else
+        {
+            OGRE_ASSERT_MEDIUM( targetResidency == GpuResidency::Resident );
+            scheduleLoadFromRam( texture );
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::taskToUnloadOrDestroy( TextureGpu *texture,
+                                                   const ScheduledTasks &task )
+    {
+        OGRE_ASSERT_MEDIUM( task.tasksType == TaskTypeResidencyTransition ||
+                            task.tasksType == TaskTypeDestroyTexture );
+        if( task.tasksType == TaskTypeResidencyTransition )
+        {
+            const GpuResidency::GpuResidency targetResidency =
+                    task.residencyTransitionTask.targetResidency;
+            OGRE_ASSERT_MEDIUM( targetResidency == GpuResidency::OnStorage ||
+                                (texture->getResidencyStatus() == GpuResidency::Resident &&
+                                 targetResidency == GpuResidency::OnSystemRam) );
+
+            texture->_transitionTo( targetResidency, texture->_getSysRamCopy( 0 ) );
+            texture->_setNextResidencyStatus( targetResidency );
+        }
+        else if( task.tasksType == TaskTypeDestroyTexture )
+        {
+            destroyTextureImmediate( texture );
+        }
+    }
+    //-----------------------------------------------------------------------------------
     bool TextureGpuManager::executeTask( TextureGpu *texture, TextureGpuListener::Reason reason,
                                          const ScheduledTasks &task )
     {
+        OGRE_ASSERT_MEDIUM( task.tasksType == TaskTypeResidencyTransition ||
+                            task.tasksType == TaskTypeDestroyTexture );
+
         bool taskExecuted = true;
         switch( reason )
         {
         case TextureGpuListener::FromStorageToSysRam:
-        case TextureGpuListener::LostResidency:
-            //Execute a Load texture task
-            OGRE_ASSERT_MEDIUM( task.tasksType == TaskTypeResidencyTransition );
-            if( task.tasksType == TaskTypeResidencyTransition )
-            {
-                const GpuResidency::GpuResidency targetResidency =
-                        task.residencyTransitionTask.targetResidency;
-                OGRE_ASSERT_MEDIUM( targetResidency == GpuResidency::Resident );
-                if( texture->getResidencyStatus() == GpuResidency::OnStorage )
-                {
-                    scheduleLoadRequest( texture,
-                                         task.residencyTransitionTask.image,
-                                         task.residencyTransitionTask.autoDeleteImage );
-                }
-                else
-                {
-                    scheduleLoadFromRam( texture );
-                }
-            }
-            break;
-        case TextureGpuListener::ReadyForRendering:
-            //Texture just fully finished loading, we can unload it
-            OGRE_ASSERT_MEDIUM( task.tasksType == TaskTypeResidencyTransition ||
-                                task.tasksType == TaskTypeDestroyTexture );
-            if( task.tasksType == TaskTypeResidencyTransition )
-            {
-                const GpuResidency::GpuResidency targetResidency =
-                        task.residencyTransitionTask.targetResidency;
-                OGRE_ASSERT_MEDIUM( targetResidency == GpuResidency::OnStorage ||
-                                    targetResidency == GpuResidency::OnSystemRam );
+            //Possible transitions we can do from here:
+            //OnSystemRam   -> OnStorage
+            //OnSystemRam   -> Resident
 
-                texture->_transitionTo( targetResidency, texture->_getSysRamCopy( 0 ) );
-                texture->_setNextResidencyStatus( targetResidency );
+            if( task.tasksType == TaskTypeResidencyTransition )
+            {
+                OGRE_ASSERT_MEDIUM( task.residencyTransitionTask.targetResidency !=
+                                    GpuResidency::OnSystemRam );
+                if( task.residencyTransitionTask.targetResidency == GpuResidency::Resident )
+                    taskLoadToSysRamOrResident( texture, task );
+                else
+                    taskToUnloadOrDestroy( texture, task );
             }
             else if( task.tasksType == TaskTypeDestroyTexture )
+                taskToUnloadOrDestroy( texture, task );
+            break;
+
+        case FromSysRamToStorage:
+            //Possible transitions we can do from here:
+            //OnStorage     -> OnSystemRam
+            //OnStorage     -> Resident
+            if( task.tasksType == TaskTypeResidencyTransition )
             {
-                destroyTextureImmediate( texture );
+                if( task.residencyTransitionTask.targetResidency == GpuResidency::Resident ||
+                    task.residencyTransitionTask.targetResidency == GpuResidency::OnSystemRam )
+                {
+                    taskLoadToSysRamOrResident( texture, task );
+                }
+            }
+            else if( task.tasksType == TaskTypeDestroyTexture )
+                taskToUnloadOrDestroy( texture, task );
+            break;
+
+        case TextureGpuListener::LostResidency:
+            //Possible transitions we can do from here:
+            //OnStorage     -> OnSystemRam
+            //OnStorage     -> Resident
+            //OnSystemRam   -> OnStorage
+            //OnSystemRam   -> Resident
+            if( task.tasksType == TaskTypeResidencyTransition )
+            {
+                if( task.residencyTransitionTask.targetResidency == GpuResidency::Resident ||
+                    task.residencyTransitionTask.targetResidency == GpuResidency::OnSystemRam )
+                {
+                    taskLoadToSysRamOrResident( texture, task );
+                }
+                else
+                    taskToUnloadOrDestroy( texture, task );
+            }
+            else if( task.tasksType == TaskTypeDestroyTexture )
+                taskToUnloadOrDestroy( texture, task );
+            break;
+
+        case TextureGpuListener::ReadyForRendering:
+            //Possible transitions we can do from here:
+            //Resident      -> OnSystemRam
+            //Resident      -> OnStorage
+            if( task.tasksType == TaskTypeResidencyTransition ||
+                task.tasksType == TaskTypeDestroyTexture )
+            {
+                taskToUnloadOrDestroy( texture, task );
             }
             break;
+
         default:
             taskExecuted = false;
             break;
@@ -1209,6 +1284,9 @@ namespace Ogre
                                                   TextureGpuListener::Reason reason,
                                                   bool ignoreDelay )
     {
+        if( mIgnoreScheduledTasks )
+            return;
+
         if( mDelayListenerCalls && !ignoreDelay )
         {
             //Nested notifyTextureChanged calls is a problem. We will execute them later
@@ -1259,6 +1337,7 @@ namespace Ogre
                                                  uint32 filters,
                                                  Image2 *image,
                                                  bool autoDeleteImage,
+                                                 bool toSysRam,
                                                  bool skipMetadataCache,
                                                  uint32 sliceOrDepth )
     {
@@ -1279,7 +1358,7 @@ namespace Ogre
                 archive = resourceGroupManager._getArchiveToResource( name, resourceGroup );
         }
 
-        if( !skipMetadataCache )
+        if( !skipMetadataCache && !toSysRam )
         {
             bool metadataSuccess = applyMetadataCacheTo( texture );
             if( metadataSuccess )
@@ -1288,14 +1367,15 @@ namespace Ogre
 
         ThreadData &mainData = mThreadData[c_mainThread];
         mLoadRequestsMutex.lock();
-            mainData.loadRequests.push_back( LoadRequest( name, archive, loadingListener, image, texture,
-                                                          sliceOrDepth, filters, autoDeleteImage ) );
+            mainData.loadRequests.push_back( LoadRequest( name, archive, loadingListener, image,
+                                                          texture, sliceOrDepth, filters,
+                                                          autoDeleteImage, toSysRam ) );
         mLoadRequestsMutex.unlock();
         mWorkerWaitableEvent.wake();
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::scheduleLoadRequest( TextureGpu *texture, Image2 *image,
-                                                 bool autoDeleteImage )
+                                                 bool autoDeleteImage, bool toSysRam )
     {
         OGRE_ASSERT_LOW( texture->getResidencyStatus() == GpuResidency::OnStorage );
 
@@ -1310,7 +1390,10 @@ namespace Ogre
         }
 
         if( texture->getTextureType() != TextureTypes::TypeCube )
-            scheduleLoadRequest( texture, name, resourceGroup, filters, image, autoDeleteImage );
+        {
+            scheduleLoadRequest( texture, name, resourceGroup, filters,
+                                 image, autoDeleteImage, toSysRam );
+        }
         else
         {
             String baseName;
@@ -1333,18 +1416,19 @@ namespace Ogre
             {
                 // XX HACK there should be a better way to specify whether
                 // all faces are in the same file or not
-                scheduleLoadRequest( texture, name, resourceGroup, filters, image, autoDeleteImage );
+                scheduleLoadRequest( texture, name, resourceGroup, filters,
+                                     image, autoDeleteImage, toSysRam );
             }
             else
             {
                 static const String suffixes[6] = { "_rt.", "_lf.", "_up.", "_dn.", "_fr.", "_bk." };
 
-                for( int i=0; i<6; ++i )
+                for( uint32 i=0; i<6u; ++i )
                 {
                     const bool skipMetadataCache = i != 0;
                     scheduleLoadRequest( texture, baseName + suffixes[i] + ext,
                                          resourceGroup, filters, i == 0 ? image : 0,
-                                         autoDeleteImage, skipMetadataCache, i );
+                                         autoDeleteImage, toSysRam, skipMetadataCache, i );
                 }
             }
         }
@@ -1355,19 +1439,15 @@ namespace Ogre
         OGRE_ASSERT_LOW( texture->getResidencyStatus() == GpuResidency::OnSystemRam );
 
         Image2 *image = new Image2();
-        image->_setAutoDelete( true );
         const bool autoDeleteInternalPtr =
                 texture->getGpuPageOutStrategy() != GpuPageOutStrategy::AlwaysKeepSystemRamCopy;
-        image->loadDynamicImage( texture->_getSysRamCopy( 0 ), texture->getWidth(), texture->getHeight(),
-                                 texture->getDepthOrSlices(), texture->getTextureType(),
-                                 texture->getPixelFormat(), autoDeleteInternalPtr,
-                                 texture->getNumMipmaps() );
+        image->loadDynamicImage( texture->_getSysRamCopy( 0 ), autoDeleteInternalPtr, texture );
         texture->_transitionTo( GpuResidency::Resident, texture->_getSysRamCopy( 0 ), false );
 
         ThreadData &mainData = mThreadData[c_mainThread];
         mLoadRequestsMutex.lock();
             mainData.loadRequests.push_back( LoadRequest( texture->getNameStr(), 0, 0, image,
-                                                          texture, 0, 0, true ) );
+                                                          texture, 0, 0, true, false ) );
         mLoadRequestsMutex.unlock();
         mWorkerWaitableEvent.wake();
     }
@@ -1383,29 +1463,60 @@ namespace Ogre
         //getPendingResidencyChanges should be > 1 because it gets incremented by caller
         OGRE_ASSERT_MEDIUM( texture->getPendingResidencyChanges() != 0u );
 
-        if( texture->getPendingResidencyChanges() == 1u )
+        if( texture->getPendingResidencyChanges() == 1u || mIgnoreScheduledTasks )
         {
             //If we're here, there are no pending tasks that will perform further work
-            //on the texture (with one exception: if isDataReady does not return true; which
+            //on the texture (with one exception: if _isDataReadyImpl does not return true; which
             //means the texture is still in the worker thread and will later get stuffed with
             //the actual data)
-            if( targetResidency != GpuResidency::Resident )
+
+            if( targetResidency == GpuResidency::Resident )
             {
-                if( texture->isDataReady() )
-                {
-                    //There are no pending tasks. We can execute it right now
-                    executeTask( texture, TextureGpuListener::ReadyForRendering, task );
-                }
-                else
-                {
-                    //No pending tasks, but the texture is being loaded. Delay execution
-                    mScheduledTasks[texture].push_back( task );
-                }
-            }
-            else
-            {
+                //If we're here then we're doing one of the following transitions:
+                //OnStorage     -> Resident
+                //OnSystemRam   -> Resident
                 //If we're going to Resident, then we're currently not. Start loading
                 executeTask( texture, TextureGpuListener::LostResidency, task );
+            }
+            else if( targetResidency == GpuResidency::OnSystemRam )
+            {
+                const GpuResidency::GpuResidency currentResidency = texture->getResidencyStatus();
+                if( currentResidency == GpuResidency::OnStorage )
+                {
+                    //OnStorage     -> OnSystemRam
+                    executeTask( texture, TextureGpuListener::FromSysRamToStorage, task );
+                }
+                else if( currentResidency == GpuResidency::Resident )
+                {
+                    //Resident      -> OnSystemRam
+                    if( texture->_isDataReadyImpl() || mIgnoreScheduledTasks )
+                        executeTask( texture, TextureGpuListener::ReadyForRendering, task );
+                    else
+                    {
+                        //No pending tasks, but the texture is being loaded. Delay execution
+                        mScheduledTasks[texture].push_back( task );
+                    }
+                }
+            }
+            else //if( targetResidency == GpuResidency::OnStorage )
+            {
+                const GpuResidency::GpuResidency currentResidency = texture->getResidencyStatus();
+                if( currentResidency == GpuResidency::OnSystemRam )
+                {
+                    //OnSystemRam   -> OnStorage
+                    executeTask( texture, TextureGpuListener::FromStorageToSysRam, task );
+                }
+                else if( currentResidency == GpuResidency::Resident )
+                {
+                    //Resident      -> OnStorage
+                    if( texture->_isDataReadyImpl() || mIgnoreScheduledTasks )
+                        executeTask( texture, TextureGpuListener::ReadyForRendering, task );
+                    else
+                    {
+                        //No pending tasks, but the texture is being loaded. Delay execution
+                        mScheduledTasks[texture].push_back( task );
+                    }
+                }
             }
         }
         else
@@ -1448,11 +1559,7 @@ namespace Ogre
 
         entry.texture   = texture;
 
-        const size_t sizeBytes =
-                PixelFormatGpuUtils::calculateSizeBytes( texture->getWidth(), texture->getHeight(),
-                                                         texture->getDepth(), texture->getNumSlices(),
-                                                         texture->getPixelFormat(),
-                                                         texture->getNumMipmaps(), 4u );
+        const size_t sizeBytes = texture->getSizeBytes();
         entry.sysRamPtr = reinterpret_cast<uint8*>(OGRE_MALLOC_SIMD( sizeBytes, MEMCATEGORY_RESOURCE ));
 
         const uint8 numMips = texture->getNumMipmaps();
@@ -1472,6 +1579,11 @@ namespace Ogre
         }
 
         mDownloadToRamQueue.push_back( entry );
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::_setIgnoreScheduledTasks( bool ignoreSchedTasks )
+    {
+        mIgnoreScheduledTasks = ignoreSchedTasks;
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::setDefaultMipmapGeneration(
@@ -1962,9 +2074,39 @@ namespace Ogre
 
         if( queuedImage.empty() )
         {
-            ObjCmdBuffer::NotifyDataIsReady *cmd =
-                    commandBuffer->addCommand<ObjCmdBuffer::NotifyDataIsReady>();
-            new (cmd) ObjCmdBuffer::NotifyDataIsReady( texture, queuedImage.filters );
+            //We're done uploading this image. Time to run NotifyDataIsReady,
+            //unless there's more QueuedImage like us because the Texture is
+            //being loaded from multiple files.
+            PartialImageMap::iterator itor = streamingData.partialImages.find( texture );
+            PartialImageMap::iterator end  = streamingData.partialImages.end();
+
+            if( itor != end )
+                itor->second.numProcessedDepthOrSlices += img.getDepthOrSlices();
+
+            if( itor == end ||
+                itor->second.numProcessedDepthOrSlices == texture->getDepthOrSlices() )
+            {
+                if( itor != end )
+                {
+                    if( itor->second.sysRamPtr )
+                    {
+                        //We couldn't transition earlier, so we have to do it now that we're done
+                        addTransitionToLoadedCmd( commandBuffer, texture,
+                                                  itor->second.sysRamPtr, itor->second.toSysRam );
+                    }
+                    streamingData.partialImages.erase( itor );
+                }
+
+                //Filters will be destroyed by NotifyDataIsReady in main thread
+                ObjCmdBuffer::NotifyDataIsReady *cmd =
+                        commandBuffer->addCommand<ObjCmdBuffer::NotifyDataIsReady>();
+                new (cmd) ObjCmdBuffer::NotifyDataIsReady( texture, queuedImage.filters );
+            }
+            else
+            {
+                TextureFilter::FilterBase::destroyFilters( queuedImage.filters );
+            }
+
             //We don't restore bytesPreloaded because it gets reset to 0 by worker thread.
             //Doing so could increase throughput of data we can preload. However it can
             //cause a positive feedback effect where limits don't get respected at all
@@ -1973,6 +2115,16 @@ namespace Ogre
             //    streamingData.bytesPreloaded -= queuedImage.image.getSizeBytes();
             queuedImage.destroy();
         }
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::addTransitionToLoadedCmd( ObjCmdBuffer *commandBuffer, TextureGpu *texture,
+                                                      void *sysRamCopy, bool toSysRam )
+    {
+        ObjCmdBuffer::TransitionToLoaded *transitionCmd =
+                commandBuffer->addCommand<ObjCmdBuffer::TransitionToLoaded>();
+        const GpuResidency::GpuResidency targetResidency = toSysRam ? GpuResidency::OnSystemRam :
+                                                                      GpuResidency::Resident;
+        new (transitionCmd) ObjCmdBuffer::TransitionToLoaded( texture, sysRamCopy, targetResidency );
     }
     //-----------------------------------------------------------------------------------
     unsigned long updateStreamingWorkerThread( ThreadHandle *threadHandle )
@@ -2127,23 +2279,63 @@ namespace Ogre
                     ++itFilters;
                 }
 
+                const bool needsMultipleImages =
+                        img->getTextureType() != loadRequest.texture->getTextureType();
+                const bool mustKeepSysRamPtr = loadRequest.toSysRam ||
+                                               loadRequest.texture->getGpuPageOutStrategy() ==
+                                               GpuPageOutStrategy::AlwaysKeepSystemRamCopy;
+
+                OGRE_ASSERT_MEDIUM( !needsMultipleImages || (needsMultipleImages &&
+                                    loadRequest.sliceOrDepth != std::numeric_limits<uint32>::max()) );
+
                 void *sysRamCopy = 0;
-                if( loadRequest.texture->getGpuPageOutStrategy() ==
-                    GpuPageOutStrategy::AlwaysKeepSystemRamCopy )
+                if( mustKeepSysRamPtr )
                 {
-                    assert( img->getTextureType() == loadRequest.texture->getTextureType() &&
-                            "Cannot load cubemaps partially file by file into each face"
-                            "when using GpuPageOutStrategy::AlwaysKeepSystemRamCopy" );
-                    sysRamCopy = img->getData(0).data;
+                    if( !needsMultipleImages )
+                    {
+                        //Pass the raw pointer and transfer ownership to TextureGpu
+                        sysRamCopy = img->getData(0).data;
+                        img->_setAutoDelete( false );
+                    }
+                    else
+                    {
+                        //We're loading this texture in parts, i.e. loading each cubemap face
+                        //from multiple files. Thus the pointer in img is not big enough to hold
+                        //all faces.
+                        const size_t sizeBytes = loadRequest.texture->getSizeBytes();
+                        sysRamCopy = reinterpret_cast<uint8*>(
+                                         OGRE_MALLOC_SIMD( sizeBytes, MEMCATEGORY_RESOURCE ) );
+
+                        Image2 imgDst;
+                        imgDst.loadDynamicImage( sysRamCopy, false, loadRequest.texture );
+
+                        const uint8 numMips = img->getNumMipmaps();
+
+                        for( uint8 mip=0; mip<numMips; ++mip )
+                        {
+                            TextureBox srcBox = img->getData( mip );
+                            TextureBox dstBox = imgDst.getData( mip );
+                            dstBox.copyFrom( srcBox );
+                        }
+                    }
                 }
 
-                if( loadRequest.texture->getResidencyStatus() == GpuResidency::OnStorage )
+                if( needsMultipleImages )
                 {
-                    //We have enough to transition the texture to Resident.
-                    ObjCmdBuffer::TransitionToResident *transitionCmd =
-                            commandBuffer->addCommand<ObjCmdBuffer::TransitionToResident>();
-                    new (transitionCmd) ObjCmdBuffer::TransitionToResident( loadRequest.texture,
-                                                                            sysRamCopy );
+                    //We'll need more than one Image to load this texture, so track progress
+                    mStreamingData.partialImages[loadRequest.texture] =
+                            PartialImage( sysRamCopy, loadRequest.texture->getDepthOrSlices(),
+                                          loadRequest.toSysRam );
+                }
+
+                //Note cannot transition yet if this is loaded using multiple images
+                //and we must keep the SysRamPtr from the worker thread
+                if( loadRequest.texture->getResidencyStatus() == GpuResidency::OnStorage &&
+                    (!needsMultipleImages || !mustKeepSysRamPtr) )
+                {
+                    //We have enough to transition the texture to OnSystemRam / Resident.
+                    addTransitionToLoadedCmd( commandBuffer, loadRequest.texture,
+                                              sysRamCopy, loadRequest.toSysRam );
                 }
             }
             else
@@ -2155,22 +2347,80 @@ namespace Ogre
                     (*itFilters)->_executeStreaming( *img, loadRequest.texture );
                     ++itFilters;
                 }
+
+                if( loadRequest.toSysRam ||
+                    loadRequest.texture->getGpuPageOutStrategy() ==
+                    GpuPageOutStrategy::AlwaysKeepSystemRamCopy )
+                {
+                    PartialImageMap::iterator itPartImg =
+                            mStreamingData.partialImages.find( loadRequest.texture );
+
+                    OGRE_ASSERT_LOW( itPartImg != mStreamingData.partialImages.end() );
+                    OGRE_ASSERT_LOW( itPartImg->second.sysRamPtr );
+
+                    Image2 imgDst;
+                    imgDst.loadDynamicImage( itPartImg->second.sysRamPtr, false, loadRequest.texture );
+
+                    const uint8 numMips = img->getNumMipmaps();
+
+                    for( uint8 mip=0; mip<numMips; ++mip )
+                    {
+                        TextureBox srcBox = img->getData( mip );
+                        TextureBox dstBox = imgDst.getData( mip );
+                        if( img->getTextureType() != TextureTypes::Type3D )
+                            dstBox.sliceStart = loadRequest.sliceOrDepth;
+                        else
+                            dstBox.z = loadRequest.sliceOrDepth;
+                        dstBox.copyFrom( srcBox );
+                    }
+
+                    if( loadRequest.toSysRam )
+                    {
+                        itPartImg->second.numProcessedDepthOrSlices += img->getDepthOrSlices();
+
+                        if( itPartImg->second.numProcessedDepthOrSlices ==
+                            loadRequest.texture->getDepthOrSlices() )
+                        {
+                            //We couldn't transition earlier, so we have to do it now that we're done
+                            addTransitionToLoadedCmd( commandBuffer, loadRequest.texture,
+                                                      itPartImg->second.sysRamPtr, true );
+                            mStreamingData.partialImages.erase( itPartImg );
+
+                            //Filters will be destroyed by NotifyDataIsReady in main thread
+                            ObjCmdBuffer::NotifyDataIsReady *cmd =
+                                    commandBuffer->addCommand<ObjCmdBuffer::NotifyDataIsReady>();
+                            new (cmd) ObjCmdBuffer::NotifyDataIsReady( loadRequest.texture, filters );
+                        }
+                        else
+                        {
+                            TextureFilter::FilterBase::destroyFilters( filters );
+                        }
+                    }
+                }
             }
 
-            //Queue the image for upload to GPU.
-            mStreamingData.queuedImages.push_back( QueuedImage( *img, img->getNumMipmaps(),
-                                                                img->getDepthOrSlices(),
-                                                                loadRequest.texture,
-                                                                loadRequest.sliceOrDepth,
-                                                                filters ) );
-            if( loadRequest.autoDeleteImage )
-                delete loadRequest.image;
+            if( !loadRequest.toSysRam )
+            {
+                //Queue the image for upload to GPU.
+                mStreamingData.queuedImages.push_back( QueuedImage( *img, img->getNumMipmaps(),
+                                                                    img->getDepthOrSlices(),
+                                                                    loadRequest.texture,
+                                                                    loadRequest.sliceOrDepth,
+                                                                    filters ) );
+                if( loadRequest.autoDeleteImage )
+                    delete loadRequest.image;
 
-            //Try to upload the queued image right now (all of its mipmaps).
-            processQueuedImage( mStreamingData.queuedImages.back(), workerData, mStreamingData );
+                //Try to upload the queued image right now (all of its mipmaps).
+                processQueuedImage( mStreamingData.queuedImages.back(), workerData, mStreamingData );
 
-            if( mStreamingData.queuedImages.back().empty() )
-                mStreamingData.queuedImages.pop_back();
+                if( mStreamingData.queuedImages.back().empty() )
+                    mStreamingData.queuedImages.pop_back();
+            }
+            else
+            {
+                if( loadRequest.autoDeleteImage )
+                    delete loadRequest.image;
+            }
         }
         else
         {
@@ -2385,10 +2635,7 @@ namespace Ogre
         while( itor != end )
         {
             Image2 image; //Use an Image2 as helper for calculating offsets
-            image.loadDynamicImage( itor->sysRamPtr, itor->texture->getWidth(),
-                                    itor->texture->getHeight(), itor->texture->getDepthOrSlices(),
-                                    itor->texture->getTextureType(), itor->texture->getPixelFormat(),
-                                    false, itor->texture->getNumMipmaps() );
+            image.loadDynamicImage( itor->sysRamPtr, false, itor->texture );
 
             bool hasPendingTransfers = false;
             AsyncTextureTicketVec::iterator itTicket = itor->asyncTickets.begin();
@@ -2738,6 +2985,16 @@ namespace Ogre
 
         return 0u;
     }
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    TextureGpuManager::PartialImage::PartialImage() :
+        sysRamPtr( 0 ), numProcessedDepthOrSlices( 0 ), toSysRam( false ) {}
+    //-----------------------------------------------------------------------------------
+    TextureGpuManager::PartialImage::PartialImage( void *_sysRamPtr, uint32 _numProcessedDepthOrSlices,
+                                                   bool _toSysRam ) :
+        sysRamPtr( _sysRamPtr ), numProcessedDepthOrSlices( _numProcessedDepthOrSlices ),
+        toSysRam( _toSysRam ) {}
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------

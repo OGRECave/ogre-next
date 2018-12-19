@@ -78,6 +78,7 @@ namespace TextureFilter
 
         static void createFilters( uint32 filters, FilterBaseArray &outFilters,
                                    const TextureGpu *texture );
+        static void destroyFilters( FilterBaseArray &inOutFilters );
 
         /// Simulates as if the given filters were applied, producing
         /// the resulting number mipmaps & PixelFormat

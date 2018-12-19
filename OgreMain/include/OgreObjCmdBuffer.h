@@ -81,13 +81,15 @@ namespace Ogre
         void commit(void);
         void swapCommitted( ObjCmdBuffer *workerThread );
 
-        class TransitionToResident : public Cmd
+        class TransitionToLoaded : public Cmd
         {
             TextureGpu  *texture;
             void        *sysRamCopy;
+            GpuResidency::GpuResidency targetResidency;
 
         public:
-            TransitionToResident( TextureGpu *_texture, void *_sysRamCopy );
+            TransitionToLoaded( TextureGpu *_texture, void *_sysRamCopy,
+                                GpuResidency::GpuResidency _targetResidency );
             virtual void execute(void);
         };
 

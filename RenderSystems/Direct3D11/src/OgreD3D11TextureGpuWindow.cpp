@@ -77,7 +77,7 @@ namespace Ogre
         notifyAllListenersTextureChanged( TextureGpuListener::ReadyForRendering );
     }
     //-----------------------------------------------------------------------------------
-    bool D3D11TextureGpuWindow::isDataReady(void) const
+    bool D3D11TextureGpuWindow::_isDataReadyImpl(void) const
     {
         return mResidencyStatus == GpuResidency::Resident;
     }

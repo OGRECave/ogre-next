@@ -111,15 +111,18 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     ObjCmdBuffer::
-    TransitionToResident::TransitionToResident( TextureGpu *_texture, void *_sysRamCopy ) :
+    TransitionToLoaded::TransitionToLoaded( TextureGpu *_texture, void *_sysRamCopy,
+                                            GpuResidency::GpuResidency _targetResidency ) :
         texture( _texture ),
-        sysRamCopy( _sysRamCopy )
+        sysRamCopy( _sysRamCopy ),
+        targetResidency( _targetResidency )
     {
+        OGRE_ASSERT_MEDIUM( targetResidency != GpuResidency::OnStorage );
     }
     //-----------------------------------------------------------------------------------
-    void ObjCmdBuffer::TransitionToResident::execute(void)
+    void ObjCmdBuffer::TransitionToLoaded::execute(void)
     {
-        texture->_transitionTo( GpuResidency::Resident, reinterpret_cast<uint8*>( sysRamCopy ) );
+        texture->_transitionTo( targetResidency, reinterpret_cast<uint8*>( sysRamCopy ) );
         OGRE_ASSERT_MEDIUM( !texture->isManualTexture() );
         texture->getTextureManager()->_updateMetadataCache( texture );
     }
@@ -136,6 +139,11 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void ObjCmdBuffer::OutOfDateCache::execute(void)
     {
+        OGRE_ASSERT_MEDIUM( texture->getResidencyStatus() == GpuResidency::Resident );
+
+        TextureGpuManager *textureManager = texture->getTextureManager();
+        textureManager->_setIgnoreScheduledTasks( true );
+        texture->notifyAllListenersTextureChanged( TextureGpuListener::MetadataCacheOutOfDate );
         texture->_transitionTo( GpuResidency::OnStorage, 0 );
         texture->_setNextResidencyStatus( GpuResidency::OnStorage );
         texture->getTextureManager()->_removeMetadataCacheEntry( texture );
@@ -143,6 +151,7 @@ namespace Ogre
         Image2 *image = new Image2( loadedImage );
         image->_setAutoDelete( true );
         texture->scheduleTransitionTo( GpuResidency::Resident, image, true );
+        textureManager->_setIgnoreScheduledTasks( false );
     }
     //-----------------------------------------------------------------------------------
     ObjCmdBuffer::

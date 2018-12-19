@@ -47,10 +47,27 @@ namespace Ogre
         enum Reason
         {
             Unknown,
+            /// OnStorage   -> OnSystemRam
             FromStorageToSysRam,
+            /// OnSystemRam -> OnStorage
+            FromSysRamToStorage,
+            /// OnStorage   -> Resident
+            /// OnSystemRam -> Resident
+            /// See ReadyForRendering
             GainedResidency,
+            /// Resident    -> OnStorage
+            /// Resident    -> OnSystemRam
             LostResidency,
             PoolTextureSlotChanged,
+            /// The Metadata cache was out of date and we had to do a ping-pong.
+            /// Expect this to be followed by at least LostResidency and GainedResidency calls
+            ///
+            /// This is very important, because if you were expecting certain sequence of calls
+            /// (e.g. you were expecting a LostResidency soon to arrive), expect that to be
+            /// changed.
+            ///
+            /// See TextureGpuManager for details about the metadata cache.
+            MetadataCacheOutOfDate,
             /// This Reason is called when TextureGpu::notifyDataIsReady is called.
             /// This normally means worker thread is done loading texture from file
             /// and uploading it to GPU; and can now be used for rendering.

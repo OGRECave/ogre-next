@@ -540,16 +540,23 @@ namespace Ogre
         */
         bool isMetadataReady(void) const;
 
-    protected:
-        /// Returns true if mResidencyStatus == GpuResidency::OnSystemRam and we're also ready
-        /// Otherwise returns false
-        bool isSysRamReady(void) const;
+        /// For internal use. Do not call directly.
+        ///
+        /// This function is the same isDataReady except it ignores pending residency changes,
+        /// which is important when TextureGpuManager needs to know this information but the
+        /// TextureGpu is transitioning (thus mPendingResidencyChanges is in an inconsistent state)
+        virtual bool _isDataReadyImpl(void) const = 0;
 
-    public:
         /// True if this texture is fully ready to be used for displaying.
+        ///
+        /// IMPORTANT: Always returns true if getResidencyStatus != GpuResidency::Resident
+        /// and there are no pending residency transitions.
+        ///
+        /// Returns false while there are pending residency status
+        ///
         /// If this is true, then isMetadataReady is also true.
         /// See isMetadataReady.
-        virtual bool isDataReady(void) const = 0;
+        bool isDataReady(void);
 
         /// Blocks main thread until metadata is ready. Afterwards isMetadataReady
         /// should return true. If it doesn't, then there was a problem loading

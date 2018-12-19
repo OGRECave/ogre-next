@@ -446,20 +446,26 @@ namespace Ogre
         {
             if( mResidencyStatus == GpuResidency::OnStorage )
             {
-                assert( mSysRamCopy && "It should be impossible to have SysRAM copy in this stage!" );
+                OGRE_ASSERT_LOW( !mSysRamCopy &&
+                                 "It should be impossible to have SysRAM copy in this stage!" );
                 checkValidSettings();
 
-                assert( sysRamCopy &&
-                        "Must provide a SysRAM copy when transitioning from OnStorage to OnSystemRam!" );
+                OGRE_ASSERT_LOW( sysRamCopy &&
+                                 "Must provide a SysRAM copy when transitioning "
+                                 "from OnStorage to OnSystemRam!" );
                 mSysRamCopy = sysRamCopy;
 
                 listenerReason = TextureGpuListener::FromStorageToSysRam;
             }
             else
             {
-                assert( (mSysRamCopy || mPageOutStrategy != GpuPageOutStrategy::AlwaysKeepSystemRamCopy)
-                        && "We should already have a SysRAM copy if we were AlwaysKeepSystemRamCopy; or"
-                        " we shouldn't have a SysRAM copy if we weren't in that strategy." );
+                OGRE_ASSERT_LOW( ( (mSysRamCopy &&
+                                    mPageOutStrategy == GpuPageOutStrategy::AlwaysKeepSystemRamCopy) ||
+                                   (!mSysRamCopy &&
+                                    mPageOutStrategy != GpuPageOutStrategy::AlwaysKeepSystemRamCopy) ) &&
+                                 "We should already have a SysRAM copy if we were "
+                                 "AlwaysKeepSystemRamCopy; or we shouldn't have a"
+                                 "SysRAM copy if we weren't in that strategy." );
 
                 OGRE_ASSERT_LOW( mPageOutStrategy == GpuPageOutStrategy::AlwaysKeepSystemRamCopy ||
                                  !sysRamCopy || mSysRamCopy == sysRamCopy &&
@@ -488,7 +494,10 @@ namespace Ogre
 
             destroyInternalResourcesImpl();
 
-            listenerReason = TextureGpuListener::LostResidency;
+            if( mResidencyStatus == GpuResidency::Resident )
+                listenerReason = TextureGpuListener::LostResidency;
+            else
+                listenerReason = TextureGpuListener::FromSysRamToStorage;
         }
 
         if( allowResidencyChange )
@@ -852,16 +861,18 @@ namespace Ogre
                                                         mPixelFormat, mNumMipmaps, 4u );
     }
     //-----------------------------------------------------------------------------------
-    bool TextureGpu::isSysRamReady(void) const
-    {
-        return mResidencyStatus == GpuResidency::OnSystemRam && mSysRamCopy;
-    }
-    //-----------------------------------------------------------------------------------
     bool TextureGpu::isMetadataReady(void) const
     {
-        return mResidencyStatus == GpuResidency::Resident &&
-               mNextResidencyStatus == GpuResidency::Resident &&
-               mPendingResidencyChanges == 0;
+        return ( (mResidencyStatus == GpuResidency::Resident &&
+                  mNextResidencyStatus == GpuResidency::Resident) ||
+                 (mResidencyStatus == GpuResidency::OnSystemRam &&
+                  mNextResidencyStatus != GpuResidency::OnStorage) ) &&
+                mPendingResidencyChanges == 0;
+    }
+    //-----------------------------------------------------------------------------------
+    bool TextureGpu::isDataReady(void)
+    {
+        return _isDataReadyImpl() && mPendingResidencyChanges == 0u;
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::waitForMetadata(void)

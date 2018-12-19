@@ -168,6 +168,10 @@ namespace Ogre {
                                TextureTypes::TextureTypes textureType, PixelFormatGpu format,
                                bool autoDelete, uint8 numMipmaps=1u );
 
+        /// Convenience function. Same as Image2::loadDynamicImage, but retrieves
+        /// all metadata parameters from the input texture
+        void loadDynamicImage( void *pData, bool autoDelete, TextureGpu *texture );
+
         /** Synchronously downloads the selected mips from a TextureGpu into this Image.
             This function is for convenience for when going async is not important.
         @param minMip

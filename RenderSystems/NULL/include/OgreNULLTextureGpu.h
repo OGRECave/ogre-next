@@ -62,7 +62,7 @@ namespace Ogre
         virtual void _autogenerateMipmaps(void);
         virtual void _setToDisplayDummyTexture(void);
 
-        virtual bool isDataReady(void) const;
+        virtual bool _isDataReadyImpl(void) const;
     };
 
     class _OgreNULLExport NULLTextureGpuRenderTarget : public NULLTextureGpu
