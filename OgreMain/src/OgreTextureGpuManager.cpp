@@ -1454,13 +1454,44 @@ namespace Ogre
         Image2 *image = new Image2();
         const bool autoDeleteInternalPtr =
                 texture->getGpuPageOutStrategy() != GpuPageOutStrategy::AlwaysKeepSystemRamCopy;
-        image->loadDynamicImage( texture->_getSysRamCopy( 0 ), autoDeleteInternalPtr, texture );
+        uint8 *rawBuffer = texture->_getSysRamCopy( 0 );
+        image->loadDynamicImage( rawBuffer, autoDeleteInternalPtr, texture );
+
+        String name;
+        uint32 filters = 0;
+        ResourceEntryMap::const_iterator itor = mEntries.find( texture->getName() );
+        if( itor != mEntries.end() )
+        {
+            name = itor->second.name;
+            filters = itor->second.filters;
+        }
+
+        //Only allow applying mipmap generation again, since it's the only filter
+        //that may have been skipped when loading from OnStorage -> OnSystemRam
+        filters &= TextureFilter::TypeGenerateDefaultMipmaps;
+        if( filters & TextureFilter::TypeGenerateDefaultMipmaps )
+        {
+            uint8 numMipmaps = texture->getNumMipmaps();
+            PixelFormatGpu pixelFormat = texture->getPixelFormat();
+            TextureFilter::FilterBase::simulateFilters( filters, *image,
+                                                        numMipmaps, pixelFormat );
+            if( texture->getNumMipmaps() != numMipmaps )
+            {
+                const bool oldValue = mIgnoreScheduledTasks;
+                mIgnoreScheduledTasks = true;
+                texture->_transitionTo( GpuResidency::OnStorage, rawBuffer, false );
+                texture->setNumMipmaps( numMipmaps );
+                texture->_transitionTo( GpuResidency::OnSystemRam, rawBuffer, false );
+                mIgnoreScheduledTasks = oldValue;
+            }
+        }
+
         texture->_transitionTo( GpuResidency::Resident, texture->_getSysRamCopy( 0 ), false );
 
         ThreadData &mainData = mThreadData[c_mainThread];
         mLoadRequestsMutex.lock();
-            mainData.loadRequests.push_back( LoadRequest( texture->getNameStr(), 0, 0, image,
-                                                          texture, 0, 0, true, false ) );
+            mainData.loadRequests.push_back( LoadRequest( name, 0, 0, image, texture,
+                                                          0, filters, true, false ) );
         mLoadRequestsMutex.unlock();
         mWorkerWaitableEvent.wake();
     }

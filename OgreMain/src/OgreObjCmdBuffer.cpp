@@ -124,7 +124,11 @@ namespace Ogre
     {
         texture->_transitionTo( targetResidency, reinterpret_cast<uint8*>( sysRamCopy ) );
         OGRE_ASSERT_MEDIUM( !texture->isManualTexture() );
-        texture->getTextureManager()->_updateMetadataCache( texture );
+
+        //Do not update metadata cache when loading from OnStorage to OnSystemRam as
+        //it may have tainted (incomplete, mostly mipmaps) data. Only when going Resident.
+        if( targetResidency == GpuResidency::Resident )
+            texture->getTextureManager()->_updateMetadataCache( texture );
     }
     //-----------------------------------------------------------------------------------
     ObjCmdBuffer::

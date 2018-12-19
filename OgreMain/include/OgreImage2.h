@@ -277,6 +277,8 @@ namespace Ogre {
         */
         void setColourAt( const ColourValue &cv, size_t x, size_t y, size_t z, uint8 mipLevel=0 );
 
+        void* getRawBuffer(void)    { return mBuffer; }
+
         /// Returns a pointer to the internal image buffer.
         TextureBox getData( uint8 mipLevel ) const;
 

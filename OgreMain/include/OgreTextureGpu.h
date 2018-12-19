@@ -378,13 +378,12 @@ namespace Ogre
             This param must be nullptr or equal to get_getSysRamCopy when going from
             Resident to OnSystemRam and strategy is not AlwaysKeepSystemRamCopy; as we
             will async download the content from the GPU.
-        @param autoDeleteSysRamCopyOnResident
-            When true, we free mSysRamCopy when transitioning to Resident and page out strategy
-            is not AlwaysKeepSystemRamCopy.
+        @param autoDeleteSysRamCopy
+            When true, we free mSysRamCopy as we should.
             When false, caller is responsible for deleting this pointer else it will leak!
         */
         void _transitionTo( GpuResidency::GpuResidency newResidency, uint8 *sysRamCopy,
-                            bool autoDeleteSysRamCopyOnResident = true );
+                            bool autoDeleteSysRamCopy = true );
 
         /// Notifies it is safe to use the real data. Everything has been uploaded.
         virtual void notifyDataIsReady(void) = 0;

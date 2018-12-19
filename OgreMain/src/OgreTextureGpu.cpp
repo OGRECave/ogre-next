@@ -415,7 +415,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::_transitionTo( GpuResidency::GpuResidency newResidency, uint8 *sysRamCopy,
-                                    bool autoDeleteSysRamCopyOnResident )
+                                    bool autoDeleteSysRamCopy )
     {
         assert( newResidency != mResidencyStatus );
 
@@ -428,7 +428,7 @@ namespace Ogre
             {
                 if( mSysRamCopy )
                 {
-                    if( autoDeleteSysRamCopyOnResident )
+                    if( autoDeleteSysRamCopy )
                         OGRE_FREE_SIMD( mSysRamCopy, MEMCATEGORY_RESOURCE );
                     mSysRamCopy = 0;
                 }
@@ -488,7 +488,8 @@ namespace Ogre
         {
             if( mSysRamCopy )
             {
-                OGRE_FREE_SIMD( mSysRamCopy, MEMCATEGORY_RESOURCE );
+                if( autoDeleteSysRamCopy )
+                    OGRE_FREE_SIMD( mSysRamCopy, MEMCATEGORY_RESOURCE );
                 mSysRamCopy = 0;
             }
 
