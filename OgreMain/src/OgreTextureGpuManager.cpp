@@ -1365,6 +1365,19 @@ namespace Ogre
                 texture->_transitionTo( GpuResidency::Resident, 0 );
         }
 
+        if( toSysRam )
+        {
+            //When loading from OnStorage to OnSystemRam and we would normally
+            //use HW mipmap filter, then skip mipmap generation entirely, as
+            //HW mipmap generation will happen when going to Resident
+            //If the user wants mipmaps when loading to OnSystemRam, then he
+            //should either specify SW generation, or load the texture to
+            //Resident first, and then to OnSystemRam.
+            uint8 mipmapGen = TextureFilter::FilterBase::selectMipmapGen( filters, texture );
+            if( mipmapGen == DefaultMipmapGen::HwMode )
+                filters &= ~(TextureFilter::TypeGenerateSwMipmaps | TextureFilter::TypeGenerateHwMipmaps);
+        }
+
         ThreadData &mainData = mThreadData[c_mainThread];
         mLoadRequestsMutex.lock();
             mainData.loadRequests.push_back( LoadRequest( name, archive, loadingListener, image,
@@ -2302,12 +2315,12 @@ namespace Ogre
                         //We're loading this texture in parts, i.e. loading each cubemap face
                         //from multiple files. Thus the pointer in img is not big enough to hold
                         //all faces.
-                        const size_t sizeBytes = loadRequest.texture->getSizeBytes();
+                        const size_t sizeBytes = img->getSizeBytes();
                         sysRamCopy = reinterpret_cast<uint8*>(
                                          OGRE_MALLOC_SIMD( sizeBytes, MEMCATEGORY_RESOURCE ) );
 
                         Image2 imgDst;
-                        imgDst.loadDynamicImage( sysRamCopy, false, loadRequest.texture );
+                        imgDst.loadDynamicImage( sysRamCopy, false, img );
 
                         const uint8 numMips = img->getNumMipmaps();
 
@@ -2359,7 +2372,7 @@ namespace Ogre
                     OGRE_ASSERT_LOW( itPartImg->second.sysRamPtr );
 
                     Image2 imgDst;
-                    imgDst.loadDynamicImage( itPartImg->second.sysRamPtr, false, loadRequest.texture );
+                    imgDst.loadDynamicImage( itPartImg->second.sysRamPtr, false, img );
 
                     const uint8 numMips = img->getNumMipmaps();
 
@@ -2806,9 +2819,6 @@ namespace Ogre
 
         processDownloadToRamQueue();
 
-        if( !mDownloadToRamQueue.empty() )
-            isDone = false;
-
         mWorkerWaitableEvent.wake();
 
 #if OGRE_DEBUG_MODE && 0
@@ -2826,10 +2836,19 @@ namespace Ogre
         while( !bDone )
         {
             bDone = _update( true );
-            if( !bDone )
+            if( !bDone || !mDownloadToRamQueue.empty() )
             {
                 mVaoManager->_update();
-                mRequestToMainThreadEvent.wait();
+                if( !bDone )
+                {
+                    //We're waiting for worker thread to finish loading from disk/ram into GPU
+                    mRequestToMainThreadEvent.wait();
+                }
+                else
+                {
+                    //We're waiting for GPU -> CPU transfers
+                    Threads::Sleep( 1 );
+                }
             }
 #if OGRE_DEBUG_MEMORY_CONSUMPTION
           dumpStats();

@@ -76,6 +76,12 @@ namespace TextureFilter
         /// (except for the steps this filter is supposed to do)
         virtual void _executeSerial( TextureGpu *texture ) {}
 
+        /**
+        @param filters
+        @return
+            See DefaultMipmapGen::DefaultMipmapGen
+        */
+        static uint8 selectMipmapGen( uint32 filters, const TextureGpu *texture );
         static void createFilters( uint32 filters, FilterBaseArray &outFilters,
                                    const TextureGpu *texture );
         static void destroyFilters( FilterBaseArray &inOutFilters );

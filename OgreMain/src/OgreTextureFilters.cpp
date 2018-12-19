@@ -44,15 +44,39 @@ namespace TextureFilter
     {
     }
     //-----------------------------------------------------------------------------------
+    uint8 FilterBase::selectMipmapGen( uint32 filters, const TextureGpu *texture )
+    {
+        DefaultMipmapGen::DefaultMipmapGen retVal = DefaultMipmapGen::NoMipmaps;
+
+        if( filters & TextureFilter::TypeGenerateDefaultMipmaps )
+        {
+            if( (filters & TextureFilter::TypeGenerateDefaultMipmaps) ==
+                TextureFilter::TypeGenerateDefaultMipmaps )
+            {
+                const TextureGpuManager *textureManager = texture->getTextureManager();
+                const DefaultMipmapGen::DefaultMipmapGen defaultMipmapGeneration =
+                        textureManager->getDefaultMipmapGeneration();
+                const DefaultMipmapGen::DefaultMipmapGen defaultMipmapGenerationCubemaps =
+                        textureManager->getDefaultMipmapGenerationCubemaps();
+
+                const DefaultMipmapGen::DefaultMipmapGen mipmapGen =
+                        texture->getTextureType() != TextureTypes::TypeCube ?
+                                                         defaultMipmapGeneration :
+                                                         defaultMipmapGenerationCubemaps;
+                retVal = mipmapGen;
+            }
+            else if( filters & TextureFilter::TypeGenerateHwMipmaps )
+                retVal = DefaultMipmapGen::HwMode;
+            else
+                retVal = DefaultMipmapGen::SwMode;
+        }
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
     void FilterBase::createFilters( uint32 filters, FilterBaseArray &outFilters,
                                     const TextureGpu *texture )
     {
-        const TextureGpuManager *textureManager = texture->getTextureManager();
-        const DefaultMipmapGen::DefaultMipmapGen defaultMipmapGeneration =
-                textureManager->getDefaultMipmapGeneration();
-        const DefaultMipmapGen::DefaultMipmapGen defaultMipmapGenerationCubemaps =
-                textureManager->getDefaultMipmapGenerationCubemaps();
-
         FilterBaseArray filtersVec;
         filtersVec.swap( outFilters );
 
@@ -64,21 +88,10 @@ namespace TextureFilter
         //Add mipmap generation as one of the last steps
         if( filters & TextureFilter::TypeGenerateDefaultMipmaps )
         {
-            if( (filters & TextureFilter::TypeGenerateDefaultMipmaps) ==
-                TextureFilter::TypeGenerateDefaultMipmaps )
-            {
-                const DefaultMipmapGen::DefaultMipmapGen mipmapGen =
-                        texture->getTextureType() != TextureTypes::TypeCube ?
-                                                         defaultMipmapGeneration :
-                                                         defaultMipmapGenerationCubemaps;
-                if( mipmapGen == DefaultMipmapGen::HwMode )
-                    filtersVec.push_back( OGRE_NEW TextureFilter::GenerateHwMipmaps() );
-                else if( mipmapGen == DefaultMipmapGen::SwMode )
-                    filtersVec.push_back( OGRE_NEW TextureFilter::GenerateSwMipmaps() );
-            }
-            else if( filters & TextureFilter::TypeGenerateHwMipmaps )
+            const uint8 mipmapGen = selectMipmapGen( filters, texture );
+            if( mipmapGen == DefaultMipmapGen::HwMode )
                 filtersVec.push_back( OGRE_NEW TextureFilter::GenerateHwMipmaps() );
-            else
+            else if( mipmapGen == DefaultMipmapGen::SwMode )
                 filtersVec.push_back( OGRE_NEW TextureFilter::GenerateSwMipmaps() );
         }
 
@@ -150,6 +163,9 @@ namespace TextureFilter
     //-----------------------------------------------------------------------------------
     void GenerateHwMipmaps::_executeSerial( TextureGpu *texture )
     {
+        if( !mNeedsMipmaps )
+            return;
+
         OgreProfileExhaustive( "GenerateHwMipmaps::_executeSerial" );
 
         TextureGpuManager *textureManager = texture->getTextureManager();

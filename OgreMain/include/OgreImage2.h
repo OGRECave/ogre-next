@@ -170,7 +170,8 @@ namespace Ogre {
 
         /// Convenience function. Same as Image2::loadDynamicImage, but retrieves
         /// all metadata parameters from the input texture
-        void loadDynamicImage( void *pData, bool autoDelete, TextureGpu *texture );
+        void loadDynamicImage( void *pData, bool autoDelete, const TextureGpu *texture );
+        void loadDynamicImage( void *pData, bool autoDelete, const Image2 *image );
 
         /** Synchronously downloads the selected mips from a TextureGpu into this Image.
             This function is for convenience for when going async is not important.
