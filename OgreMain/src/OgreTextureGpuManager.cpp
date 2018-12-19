@@ -1184,7 +1184,6 @@ namespace Ogre
                                  targetResidency == GpuResidency::OnSystemRam) );
 
             texture->_transitionTo( targetResidency, texture->_getSysRamCopy( 0 ) );
-            texture->_setNextResidencyStatus( targetResidency );
         }
         else if( task.tasksType == TaskTypeDestroyTexture )
         {
@@ -1307,18 +1306,24 @@ namespace Ogre
                     if( itor->second.empty() )
                         mScheduledTasks.erase( itor );
 
-                    mMissedListenerCallsTmp.swap( mMissedListenerCalls );
-                    while( !mMissedListenerCallsTmp.empty() )
+                    //If ignoreDelay == true, then our caller is already executing this loop.
+                    //Leave the task of executing those delayed calls to our caller. If we
+                    //do it, we'll corrupt mMissedListenerCallsTmp/mMissedListenerCalls
+                    if( !ignoreDelay )
                     {
-                        const MissedListenerCall &missed = mMissedListenerCallsTmp.front();
-                        this->notifyTextureChanged( missed.texture, missed.reason, true );
-                        mMissedListenerCallsTmp.pop_front();
-                        //This iteration may have added more entries to mMissedListenerCalls
-                        //We need to execute them right after this entry.
-                        mMissedListenerCallsTmp.insert( mMissedListenerCallsTmp.begin(),
-                                                        mMissedListenerCalls.begin(),
-                                                        mMissedListenerCalls.end() );
-                        mMissedListenerCalls.clear();
+                        mMissedListenerCallsTmp.swap( mMissedListenerCalls );
+                        while( !mMissedListenerCallsTmp.empty() )
+                        {
+                            const MissedListenerCall &missed = mMissedListenerCallsTmp.front();
+                            this->notifyTextureChanged( missed.texture, missed.reason, true );
+                            mMissedListenerCallsTmp.pop_front();
+                            //This iteration may have added more entries to mMissedListenerCalls
+                            //We need to execute them right after this entry.
+                            mMissedListenerCallsTmp.insert( mMissedListenerCallsTmp.begin(),
+                                                            mMissedListenerCalls.begin(),
+                                                            mMissedListenerCalls.end() );
+                            mMissedListenerCalls.clear();
+                        }
                     }
                 }
                 mDelayListenerCalls = false;
@@ -1566,26 +1571,6 @@ namespace Ogre
         else
         {
             ScheduledTasksMap::iterator itor = mScheduledTasks.find( texture );
-
-#if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
-            //Consistency check. If we have nothing in mDownloadToRamQueue & mScheduledTasks,
-            //then something went wrong.
-            DownloadToRamEntryVec::const_iterator itDownRamQueue = mDownloadToRamQueue.begin();
-            DownloadToRamEntryVec::const_iterator enDownRamQueue = mDownloadToRamQueue.end();
-
-            while( itDownRamQueue != enDownRamQueue && itDownRamQueue->texture != texture )
-                ++itDownRamQueue;
-
-            if( itDownRamQueue == enDownRamQueue )
-            {
-                OGRE_ASSERT_MEDIUM( itor != mScheduledTasks.end() && !itor->second.empty() &&
-                                    "There should be a non-empty entry in "
-                                    "mScheduledTasks for this texture! "
-                                    "Has TextureGpu::_transitionTo been called explicitly "
-                                    "outside Ogre? Is there a missing incr/decr. to "
-                                    "mPendingResidencyChanges?" );
-            }
-#endif
 
             if( itor == mScheduledTasks.end() )
             {
