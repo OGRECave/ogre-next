@@ -88,6 +88,13 @@ namespace Ogre
             /// Always keep a copy on system RAM, even when resident.
             /// This makes for fast reading from CPU.
             /// Not all resources allow this option (e.g. RTT & UAV textures)
+            ///
+            /// Warning: This flag has a few drawbacks for Textures.
+            /// The metadata won't be ready earlier (i.e. it won't be available until the data
+            /// is available).
+            /// The metadata cache can't be used.
+            /// Some calls such as TextureGpu::copyTo require syncing back from GPU to CPU.
+            /// This is made async, but if you queue more than one copyTo call, it can stall.
             AlwaysKeepSystemRamCopy
         };
     }

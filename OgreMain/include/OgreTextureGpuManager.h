@@ -511,6 +511,7 @@ namespace Ogre
             /// One per mip. Entries with nullptr means the ticket has already been copied and destroyed
             AsyncTextureTicketVec   asyncTickets;
             uint8                   *sysRamPtr;
+            bool                    resyncOnly;
         };
         typedef vector<DownloadToRamEntry>::type DownloadToRamEntryVec;
 
@@ -670,6 +671,9 @@ namespace Ogre
 
         /// Do not use directly. See TextureGpu::waitForMetadata & TextureGpu::waitForDataReady
         void _waitFor( TextureGpu *texture, bool metadataOnly );
+
+        /// Do not use directly. See TextureGpu::waitForPendingSyncs
+        void _waitForPendingGpuToCpuSyncs( TextureGpu *texture );
 
         /// Reserves and preallocates a pool with the given parameters
         /// Returns the master texture that owns the pool
@@ -985,7 +989,7 @@ namespace Ogre
     public:
         void _scheduleTransitionTo( TextureGpu *texture, GpuResidency::GpuResidency targetResidency,
                                     Image2 *image, bool autoDeleteImage );
-        void _queueDownloadToRam( TextureGpu *texture );
+        void _queueDownloadToRam( TextureGpu *texture, bool resyncOnly );
         /// When true we will ignore all tasks in mScheduledTasks and execute transitions immediately
         /// Caller is responsible for ensuring this is safe to do.
         ///

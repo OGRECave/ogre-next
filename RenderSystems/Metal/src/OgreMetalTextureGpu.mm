@@ -288,6 +288,14 @@ namespace Ogre
                     [device->mCurrentCommandBuffer renderCommandEncoderWithDescriptor:passDesc];
             device->endRenderEncoder( false );
         }
+
+        //Do not perform the sync if notifyDataIsReady hasn't been called yet (i.e. we're
+        //still building the HW mipmaps, and the texture will never be ready)
+        if( dst->_isDataReadyImpl() &&
+            dst->getGpuPageOutStrategy() == GpuPageOutStrategy::AlwaysKeepSystemRamCopy )
+        {
+            dst->_syncGpuResidentToSystemRam();
+        }
     }
     //-----------------------------------------------------------------------------------
     void MetalTextureGpu::_autogenerateMipmaps(void)

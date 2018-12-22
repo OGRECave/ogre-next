@@ -41,6 +41,8 @@ THE SOFTWARE.
 #include "OgreLwString.h"
 #include "OgreException.h"
 
+#include "OgreLogManager.h"
+
 namespace Ogre
 {
     TextureGpu::TextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
@@ -474,7 +476,7 @@ namespace Ogre
 
                 if( !mSysRamCopy )
                 {
-                    mTextureManager->_queueDownloadToRam( this );
+                    mTextureManager->_queueDownloadToRam( this, false );
                     allowResidencyChange = false;
                 }
                 else
@@ -517,19 +519,58 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpu::_notifySysRamDownloadIsReady( uint8 *sysRamPtr )
+    void TextureGpu::_syncGpuResidentToSystemRam(void)
+    {
+        if( !isDataReady() )
+        {
+            LogManager::getSingleton().logMessage(
+                        "WARNING: TextureGpu::_syncGpuResidentToSystemRam will stall. "
+                        "If you see this often, then probably you're performing too many copyTo "
+                        "calls to an AlwaysKeepSystemRamCopy texture" );
+        }
+        waitForData();
+        OGRE_ASSERT_LOW( mResidencyStatus == GpuResidency::Resident );
+        ++mPendingResidencyChanges;
+        mTextureManager->_queueDownloadToRam( this, true );
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpu::waitForPendingSyncs()
+    {
+        if( isDataReady() )
+            return;
+
+        mTextureManager->_waitForPendingGpuToCpuSyncs( this );
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpu::_notifySysRamDownloadIsReady( uint8 *sysRamPtr, bool resyncOnly )
     {
         OGRE_ASSERT_LOW( mResidencyStatus == GpuResidency::Resident &&
                          "GPU should be resident so the copy could've been made "
                          "and so we can perform the transition!" );
-        OGRE_ASSERT_LOW( mPageOutStrategy != GpuPageOutStrategy::AlwaysKeepSystemRamCopy &&
-                         "This path should've never been hit as always have the RAM copy!" );
-        OGRE_ASSERT_LOW( mSysRamCopy == (uint8*)0 );
 
-        destroyInternalResourcesImpl();
+        TextureGpuListener::Reason listenerReason = TextureGpuListener::Unknown;
 
-        mSysRamCopy         = sysRamPtr;
-        mResidencyStatus    = GpuResidency::OnSystemRam;
+        if( !resyncOnly )
+        {
+            OGRE_ASSERT_LOW( mPageOutStrategy != GpuPageOutStrategy::AlwaysKeepSystemRamCopy &&
+                             "This path should've never been hit as always have the RAM copy!" );
+            OGRE_ASSERT_LOW( mSysRamCopy == (uint8*)0 );
+
+            destroyInternalResourcesImpl();
+
+            mSysRamCopy         = sysRamPtr;
+            mResidencyStatus    = GpuResidency::OnSystemRam;
+
+            listenerReason = TextureGpuListener::LostResidency;
+        }
+        else
+        {
+            OGRE_ASSERT_LOW( mPageOutStrategy == GpuPageOutStrategy::AlwaysKeepSystemRamCopy &&
+                             "This path should only hit if we always have the RAM copy!" );
+            OGRE_ASSERT_LOW( mSysRamCopy != (uint8*)0 );
+
+            listenerReason = TextureGpuListener::ResidentToSysRamSync;
+        }
 
         //Decrement mPendingResidencyChanges and prevent underflow
         mPendingResidencyChanges = std::max( mPendingResidencyChanges, 1u ) - 1u;
@@ -805,6 +846,8 @@ namespace Ogre
 
         assert( mipLevel < mNumMipmaps );
 
+        waitForPendingSyncs();
+
         uint32 width            = mWidth;
         uint32 height           = mHeight;
         uint32 depth            = getDepth();
@@ -831,6 +874,8 @@ namespace Ogre
             return 0;
 
         assert( mipLevel < mNumMipmaps );
+
+        waitForPendingSyncs();
 
         uint32 width            = mWidth;
         uint32 height           = mHeight;

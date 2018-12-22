@@ -684,6 +684,14 @@ namespace Ogre
         {
             this->copyViaFramebuffer( dst, dstBox, dstMipLevel, srcBox, srcMipLevel );
         }
+
+        //Do not perform the sync if notifyDataIsReady hasn't been called yet (i.e. we're
+        //still building the HW mipmaps, and the texture will never be ready)
+        if( dst->_isDataReadyImpl() &&
+            dst->getGpuPageOutStrategy() == GpuPageOutStrategy::AlwaysKeepSystemRamCopy )
+        {
+            dst->_syncGpuResidentToSystemRam();
+        }
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusTextureGpu::_autogenerateMipmaps(void)

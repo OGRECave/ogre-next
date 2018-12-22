@@ -388,9 +388,21 @@ namespace Ogre
         /// Notifies it is safe to use the real data. Everything has been uploaded.
         virtual void notifyDataIsReady(void) = 0;
 
+        /// Forces downloading data from GPU to CPU, usually because the data on GPU changed
+        /// and we're in strategy AlwaysKeepSystemRamCopy. May stall.
+        void _syncGpuResidentToSystemRam(void);
+
+    protected:
+        /// Stalls until GPU -> CPU transfers (i.e. _syncGpuResidentToSystemRam) are done
+        /// waitForData implicitly does this. This function exists because there are times
+        /// where Ogre needs to know this info, and calling waitForData would never return
+        /// true because the texture is in an inconsistent state.
+        void waitForPendingSyncs();
+
+    public:
         /// Do not call directly. Will change mResidencyStatus from GpuResidency::Resident to
         /// GpuResidency::OnSystemRam
-        void _notifySysRamDownloadIsReady( uint8 *sysRamPtr );
+        void _notifySysRamDownloadIsReady( uint8 *sysRamPtr, bool resyncOnly );
 
         virtual void copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
                              const TextureBox &srcBox, uint8 srcMipLevel );

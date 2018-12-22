@@ -1219,7 +1219,7 @@ namespace Ogre
                 taskToUnloadOrDestroy( texture, task );
             break;
 
-        case FromSysRamToStorage:
+        case TextureGpuListener::FromSysRamToStorage:
             //Possible transitions we can do from here:
             //OnStorage     -> OnSystemRam
             //OnStorage     -> Resident
@@ -1255,6 +1255,7 @@ namespace Ogre
                 taskToUnloadOrDestroy( texture, task );
             break;
 
+        case TextureGpuListener::ResidentToSysRamSync:
         case TextureGpuListener::ReadyForRendering:
             //Possible transitions we can do from here:
             //Resident      -> OnSystemRam
@@ -1364,7 +1365,8 @@ namespace Ogre
                 archive = resourceGroupManager._getArchiveToResource( name, resourceGroup );
         }
 
-        if( !skipMetadataCache && !toSysRam )
+        if( !skipMetadataCache && !toSysRam &&
+            texture->getGpuPageOutStrategy() != GpuPageOutStrategy::AlwaysKeepSystemRamCopy )
         {
             bool metadataSuccess = applyMetadataCacheTo( texture );
             if( metadataSuccess )
@@ -1589,14 +1591,21 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::_queueDownloadToRam( TextureGpu *texture )
+    void TextureGpuManager::_queueDownloadToRam( TextureGpu *texture, bool resyncOnly )
     {
         DownloadToRamEntry entry;
 
         entry.texture   = texture;
 
         const size_t sizeBytes = texture->getSizeBytes();
-        entry.sysRamPtr = reinterpret_cast<uint8*>(OGRE_MALLOC_SIMD( sizeBytes, MEMCATEGORY_RESOURCE ));
+        if( !resyncOnly )
+        {
+            entry.sysRamPtr = reinterpret_cast<uint8*>( OGRE_MALLOC_SIMD( sizeBytes,
+                                                                          MEMCATEGORY_RESOURCE ) );
+        }
+        else
+            entry.sysRamPtr = texture->_getSysRamCopy( 0 );
+        entry.resyncOnly = resyncOnly;
 
         const uint8 numMips = texture->getNumMipmaps();
 
@@ -2327,7 +2336,8 @@ namespace Ogre
                 void *sysRamCopy = 0;
                 if( mustKeepSysRamPtr )
                 {
-                    if( !needsMultipleImages )
+                    if( !needsMultipleImages &&
+                        img->getNumMipmaps() == loadRequest.texture->getNumMipmaps() )
                     {
                         //Pass the raw pointer and transfer ownership to TextureGpu
                         sysRamCopy = img->getData(0).data;
@@ -2335,10 +2345,20 @@ namespace Ogre
                     }
                     else
                     {
-                        //We're loading this texture in parts, i.e. loading each cubemap face
-                        //from multiple files. Thus the pointer in img is not big enough to hold
-                        //all faces.
-                        const size_t sizeBytes = img->getSizeBytes();
+                        //Posibility 1:
+                        //  We're loading this texture in parts, i.e. loading each cubemap face
+                        //  from multiple files. Thus the pointer in img is not big enough to hold
+                        //  all faces.
+                        //
+                        //Posibility 2:
+                        //  The texture will use a HW mipmap filter. We need to reallocate sysRamCopy
+                        //  into something much bigger that can hold all mips.
+                        //  img & imgDst will still think they can hold just 1 mipmap, but the
+                        //  internal pointer from sysRamCopy has room for when it gets passed
+                        //  to the TextureGpu
+                        //
+                        //Both possibilities can happen at the same time
+                        const size_t sizeBytes = loadRequest.texture->getSizeBytes();
                         sysRamCopy = reinterpret_cast<uint8*>(
                                          OGRE_MALLOC_SIMD( sizeBytes, MEMCATEGORY_RESOURCE ) );
 
@@ -2723,8 +2743,8 @@ namespace Ogre
 
             if( !hasPendingTransfers )
             {
-                itor->texture->_notifySysRamDownloadIsReady( itor->sysRamPtr );
-                itor = efficientVectorRemove( mDownloadToRamQueue, itor );
+                itor->texture->_notifySysRamDownloadIsReady( itor->sysRamPtr, itor->resyncOnly );
+                itor = mDownloadToRamQueue.erase( itor );
                 end  = mDownloadToRamQueue.end();
             }
             else
@@ -2915,6 +2935,28 @@ namespace Ogre
                     else
                         Threads::Sleep( 1 );
                 }
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::_waitForPendingGpuToCpuSyncs( TextureGpu *texture )
+    {
+        bool bDone = false;
+        while( !bDone )
+        {
+            DownloadToRamEntryVec::iterator itor = mDownloadToRamQueue.begin();
+            DownloadToRamEntryVec::iterator end  = mDownloadToRamQueue.end();
+
+            while( itor != end && itor->texture != texture )
+                ++itor;
+
+            if( itor == end )
+                bDone = true;
+            else
+            {
+                _update( true );
+                mVaoManager->_update();
+                Threads::Sleep( 1 );
             }
         }
     }

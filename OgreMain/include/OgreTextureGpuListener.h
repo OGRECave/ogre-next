@@ -59,6 +59,12 @@ namespace Ogre
             /// Resident    -> OnSystemRam
             LostResidency,
             PoolTextureSlotChanged,
+            /// Only called while TextureGpu is still Resident, and strategy is
+            /// AlwaysKeepSystemRamCopy. This listener happens when something was
+            /// done to the TextureGpu that modifies its contents in the GPU, and
+            /// were thus forced to sync those values back to SystemRam.
+            /// This listener calls tells that sync is over.
+            ResidentToSysRamSync,
             /// The Metadata cache was out of date and we had to do a ping-pong.
             /// Expect this to be followed by at least LostResidency and GainedResidency calls
             ///

@@ -490,6 +490,14 @@ namespace Ogre
                          "Error copying and/or resolving texture\nError Description:" +
                          errorDescription, "D3D11TextureGpu::copyTo" );
         }
+
+        //Do not perform the sync if notifyDataIsReady hasn't been called yet (i.e. we're
+        //still building the HW mipmaps, and the texture will never be ready)
+        if( dst->_isDataReadyImpl() &&
+            dst->getGpuPageOutStrategy() == GpuPageOutStrategy::AlwaysKeepSystemRamCopy )
+        {
+            dst->_syncGpuResidentToSystemRam();
+        }
     }
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpu::_autogenerateMipmaps(void)
