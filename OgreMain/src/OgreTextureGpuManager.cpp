@@ -2685,6 +2685,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::processDownloadToRamQueue(void)
     {
+        DownloadToRamEntryVec readyTextures;
+
         DownloadToRamEntryVec::iterator itor = mDownloadToRamQueue.begin();
         DownloadToRamEntryVec::iterator end  = mDownloadToRamQueue.end();
 
@@ -2743,7 +2745,8 @@ namespace Ogre
 
             if( !hasPendingTransfers )
             {
-                itor->texture->_notifySysRamDownloadIsReady( itor->sysRamPtr, itor->resyncOnly );
+                itor->asyncTickets.clear();
+                readyTextures.push_back( *itor );
                 itor = mDownloadToRamQueue.erase( itor );
                 end  = mDownloadToRamQueue.end();
             }
@@ -2751,6 +2754,15 @@ namespace Ogre
             {
                 ++itor;
             }
+        }
+
+        itor = readyTextures.begin();
+        end  = readyTextures.end();
+
+        while( itor != end )
+        {
+            itor->texture->_notifySysRamDownloadIsReady( itor->sysRamPtr, itor->resyncOnly );
+            ++itor;
         }
     }
     //-----------------------------------------------------------------------------------
@@ -2947,7 +2959,7 @@ namespace Ogre
             DownloadToRamEntryVec::iterator itor = mDownloadToRamQueue.begin();
             DownloadToRamEntryVec::iterator end  = mDownloadToRamQueue.end();
 
-            while( itor != end && itor->texture != texture )
+            while( itor != end && itor->texture != texture && itor->resyncOnly )
                 ++itor;
 
             if( itor == end )
