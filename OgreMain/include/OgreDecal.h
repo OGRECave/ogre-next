@@ -154,7 +154,8 @@ namespace Ogre
 
         /// Decals only allow ForwardPlusBase::MinDecalRq <= queueID < ForwardPlusBase::MaxDecalRq
         virtual void setRenderQueueGroup(uint8 queueID);
-        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason );
+        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                           void *extraData );
     };
 
     class _OgreExport DecalFactory : public MovableObjectFactory

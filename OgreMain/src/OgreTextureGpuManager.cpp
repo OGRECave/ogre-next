@@ -92,6 +92,8 @@ namespace Ogre
     {
         mTextureGpuManagerListener = OGRE_NEW DefaultTextureGpuManagerListener();
 
+        memset( mErrorFallbackTexData, 0, sizeof( mErrorFallbackTexData ) );
+
         PixelFormatGpu format;
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS && OGRE_PLATFORM != OGRE_PLATFORM_ANDROID
     #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
@@ -1303,7 +1305,8 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::notifyTextureChanged( TextureGpu *texture,
-                                                  TextureGpuListener::Reason reason )
+                                                  TextureGpuListener::Reason reason,
+                                                  void *extraData )
     {
         notifyTextureChanged( texture, reason, false );
     }
@@ -2277,7 +2280,25 @@ namespace Ogre
         {
             img = &imgStack;
             if( !wasRescheduled )
-                img->load( data );
+            {
+                try
+                {
+                    img->load( data );
+                }
+                catch( Exception &e )
+                {
+                    //Log the exception
+                    LogManager::getSingleton().logMessage( e.getFullDescription() );
+                    //Tell the main thread this happened
+                    ObjCmdBuffer::ExceptionThrown *exceptionCmd = commandBuffer->addCommand<
+                                                                  ObjCmdBuffer::ExceptionThrown>();
+                    new (exceptionCmd) ObjCmdBuffer::ExceptionThrown( loadRequest.texture, e );
+                    //Continue loading using a fallback
+                    img->loadDynamicImage( mErrorFallbackTexData, 2u, 2u, 1u,
+                                           loadRequest.texture->getTextureType(),
+                                           PFG_RGBA8_UNORM_SRGB, false, 1u );
+                }
+            }
         }
 
         if( (loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max() ||

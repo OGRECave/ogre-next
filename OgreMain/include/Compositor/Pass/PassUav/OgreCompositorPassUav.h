@@ -80,7 +80,8 @@ namespace Ogre
 
         virtual void notifyRecreated( const UavBufferPacked *oldBuffer, UavBufferPacked *newBuffer );
         // TextureGpuListener overloads
-        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason );
+        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                           void *extraData );
     };
 
     /** @} */

@@ -92,7 +92,8 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void AsyncTextureTicket::notifyTextureChanged( TextureGpu *texture,
-                                                   TextureGpuListener::Reason reason )
+                                                   TextureGpuListener::Reason reason,
+                                                   void *extraData )
     {
         if( reason == ReadyForRendering )
         {

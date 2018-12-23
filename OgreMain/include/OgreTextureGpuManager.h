@@ -538,6 +538,10 @@ namespace Ogre
         VaoManager          *mVaoManager;
         RenderSystem        *mRenderSystem;
 
+        //Be able to hold up to a 2x2 cubemap RGBA8 for when a
+        //image raises an exception in the worker thread
+        uint8 mErrorFallbackTexData[2u*2u*6u*4u];
+
         void destroyAll(void);
         void destroyAllStagingBuffers(void);
         void destroyAllTextures(void);
@@ -970,7 +974,8 @@ namespace Ogre
                                    bool ignoreDelay );
     public:
         /// @see    TextureGpuListener::notifyTextureChanged
-        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason );
+        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                           void *extraData );
 
         RenderSystem* getRenderSystem(void) const;
 

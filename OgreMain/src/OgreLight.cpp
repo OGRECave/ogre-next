@@ -651,7 +651,8 @@ namespace Ogre {
             mTextureLightMaskIdx = std::numeric_limits<Ogre::uint16>::max();
     }
     //-----------------------------------------------------------------------------------
-    void Light::notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason )
+    void Light::notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                      void *extraData )
     {
         if( reason == TextureGpuListener::PoolTextureSlotChanged )
         {

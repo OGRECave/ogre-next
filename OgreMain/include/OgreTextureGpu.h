@@ -506,7 +506,7 @@ namespace Ogre
 
         void addListener( TextureGpuListener *listener );
         void removeListener( TextureGpuListener *listener );
-        void notifyAllListenersTextureChanged( uint32 reason );
+        void notifyAllListenersTextureChanged( uint32 reason, void *extraData=0 );
 
         virtual bool supportsAsDepthBufferFor( TextureGpu *colourTarget ) const;
 

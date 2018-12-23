@@ -159,6 +159,18 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     ObjCmdBuffer::
+    ExceptionThrown::ExceptionThrown( TextureGpu *_texture, const Exception &_exception ) :
+        texture( _texture ),
+        exception( _exception )
+    {
+    }
+    //-----------------------------------------------------------------------------------
+    void ObjCmdBuffer::ExceptionThrown::execute(void)
+    {
+        texture->notifyAllListenersTextureChanged( TextureGpuListener::ExceptionThrown, &exception );
+    }
+    //-----------------------------------------------------------------------------------
+    ObjCmdBuffer::
     UploadFromStagingTex::UploadFromStagingTex( StagingTexture *_stagingTexture, const TextureBox &_box,
                                                 TextureGpu *_dstTexture, const TextureBox &_dstBox,
                                                 uint8 _mipLevel ) :

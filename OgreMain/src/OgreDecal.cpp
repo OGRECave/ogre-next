@@ -234,7 +234,8 @@ namespace Ogre
         MovableObject::setRenderQueueGroup( queueID );
     }
     //-----------------------------------------------------------------------------------
-    void Decal::notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason )
+    void Decal::notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                      void *extraData )
     {
         if( reason == TextureGpuListener::PoolTextureSlotChanged )
         {

@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "OgrePrerequisites.h"
 #include "OgreTextureBox.h"
 #include "OgreImage2.h"
+#include "OgreException.h"
 
 #include "OgreHeaderPrefix.h"
 
@@ -100,6 +101,16 @@ namespace Ogre
 
         public:
             OutOfDateCache( TextureGpu *_texture, Image2 &image );
+            virtual void execute(void);
+        };
+
+        class ExceptionThrown : public Cmd
+        {
+            TextureGpu  *texture;
+            Exception   exception;
+
+        public:
+            ExceptionThrown( TextureGpu *_texture, const Exception &_exception );
             virtual void execute(void);
         };
 

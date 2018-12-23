@@ -775,7 +775,7 @@ namespace Ogre
         efficientVectorRemove( mListeners, itor );
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpu::notifyAllListenersTextureChanged( uint32 _reason )
+    void TextureGpu::notifyAllListenersTextureChanged( uint32 _reason, void *extraData )
     {
         TextureGpuListener::Reason reason = static_cast<TextureGpuListener::Reason>( _reason );
 
@@ -786,12 +786,12 @@ namespace Ogre
 
         while( itor != end )
         {
-            (*itor)->notifyTextureChanged( this, reason );
+            (*itor)->notifyTextureChanged( this, reason, extraData );
             ++itor;
         }
 
         if( mTextureManager )
-            mTextureManager->notifyTextureChanged( this, reason );
+            mTextureManager->notifyTextureChanged( this, reason, extraData );
     }
     //-----------------------------------------------------------------------------------
     bool TextureGpu::supportsAsDepthBufferFor( TextureGpu *colourTarget ) const

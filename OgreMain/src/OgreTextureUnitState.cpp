@@ -1470,7 +1470,8 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
-    void TextureUnitState::notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason )
+    void TextureUnitState::notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                                 void *extraData )
     {
         if( reason == TextureGpuListener::Deleted )
         {

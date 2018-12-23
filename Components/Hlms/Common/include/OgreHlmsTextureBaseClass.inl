@@ -435,7 +435,8 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void OGRE_HLMS_TEXTURE_BASE_CLASS::notifyTextureChanged( TextureGpu *texture,
-                                                             TextureGpuListener::Reason reason )
+                                                             TextureGpuListener::Reason reason,
+                                                             void *extraData )
     {
         if( reason == TextureGpuListener::FromStorageToSysRam )
             return; //Does not affect us at all.

@@ -74,6 +74,17 @@ namespace Ogre
             ///
             /// See TextureGpuManager for details about the metadata cache.
             MetadataCacheOutOfDate,
+            /// Called when the worker thread caught an exception. This exception has already
+            /// been logged, and the texture resumed loading normally with a white 2x2 RGBA8 fallback.
+            ///
+            /// This listener will get called from the main thread.
+            ///
+            /// The texture may still have pending residency transitions (e.g. it may still be
+            /// loading the 2x2 fallback)
+            ///
+            /// Cast Exception *e = reinterpret_cast<Exception*>( extraData );
+            /// to know more info
+            ExceptionThrown,
             /// This Reason is called when TextureGpu::notifyDataIsReady is called.
             /// This normally means worker thread is done loading texture from file
             /// and uploading it to GPU; and can now be used for rendering.
@@ -87,7 +98,8 @@ namespace Ogre
 		///		1. TextureGpu::notifyDataIsReady got called (texture is ready to be displayed)
 		///		2. Texture changed residency status.
         ///     3. Texture is being deleted. It won't be a valid pointer after this call.
-        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason ) = 0;
+        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                           void *extraData ) = 0;
     };
 
     /** @} */

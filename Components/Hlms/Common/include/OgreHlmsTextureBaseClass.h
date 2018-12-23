@@ -162,7 +162,8 @@ namespace Ogre
         /// instead. Same complexity as getIndexToDescriptorTexture
         uint8 getIndexToDescriptorSampler( uint8 texType );
 
-        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason );
+        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                           void *extraData );
 
         void loadAllTextures(void);
     };

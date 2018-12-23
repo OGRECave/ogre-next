@@ -910,7 +910,8 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void HlmsComputeJob::notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason )
+    void HlmsComputeJob::notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                               void *extraData )
     {
         if( texture->isTexture() )
             destroyDescriptorTextures();

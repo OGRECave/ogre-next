@@ -406,7 +406,8 @@ namespace Ogre
         void cloneTo( HlmsComputeJob *dstJob );
 
         // TextureGpuListener overloads
-        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason );
+        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                           void *extraData );
     };
 
     /** @} */

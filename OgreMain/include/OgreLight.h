@@ -558,7 +558,8 @@ namespace Ogre {
 
         TextureGpu* getTexture(void) const          { return mTexture; }
 
-        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason );
+        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                           void *extraData );
     
     protected:
 

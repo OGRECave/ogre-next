@@ -1153,7 +1153,8 @@ protected:
 
         /// TextureGpuListener overload
         virtual void notifyTextureChanged( TextureGpu *texture,
-                                           TextureGpuListener::Reason reason );
+                                           TextureGpuListener::Reason reason,
+                                           void *extraData );
     };
 
     /** @} */
