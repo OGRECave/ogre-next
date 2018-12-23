@@ -5,6 +5,7 @@
 #include "OgrePrerequisites.h"
 #include "OgreOverlayPrerequisites.h"
 #include "OgreOverlay.h"
+#include "OgreGpuResource.h"
 #include "TutorialGameState.h"
 
 
@@ -13,11 +14,16 @@ namespace Demo
     class TextureResidencyGameState : public TutorialGameState
     {
         std::vector<Ogre::TextureGpu*>		mTextures;
+        std::vector<Ogre::GpuResidency::GpuResidency>   mChangeLog;
         bool                                mWaitForStreamingCompletion;
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
         void switchTextureResidency( int targetResidency );
+
+        void testSequence(void);
+        void testRandom(void);
+        void testRamStress(void);
 
     public:
         TextureResidencyGameState( const Ogre::String &helpDescription );

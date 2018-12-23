@@ -44,6 +44,8 @@ namespace Demo
         if( mTextures.front()->getNextResidencyStatus() == targetResidency )
             return;
 
+        mChangeLog.push_back( targetResidency );
+
         std::vector<Ogre::TextureGpu*>::const_iterator itor = mTextures.begin();
         std::vector<Ogre::TextureGpu*>::const_iterator end  = mTextures.end();
 
@@ -62,6 +64,68 @@ namespace Demo
         }
     }
     //-----------------------------------------------------------------------------------
+    void TextureResidencyGameState::testSequence(void)
+    {
+        const bool oldSetting = mWaitForStreamingCompletion;
+        mWaitForStreamingCompletion = false;
+
+        for( int j=0; j<3; ++j )
+        {
+            for( size_t i=0; i<200; ++i )
+                switchTextureResidency( (Ogre::GpuResidency::GpuResidency)(i % 3) );
+            //switchTextureResidency( (i % 2) ? Ogre::GpuResidency::OnStorage : Ogre::GpuResidency::Resident );
+
+            Ogre::Root *root = mGraphicsSystem->getRoot();
+            Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
+            textureMgr->waitForStreamingCompletion();
+
+            Ogre::TextureGpu *texture = mTextures.front();
+            if( texture->getResidencyStatus() != texture->getNextResidencyStatus() )
+                throw;
+        }
+
+        mWaitForStreamingCompletion = oldSetting;
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureResidencyGameState::testRandom(void)
+    {
+        const bool oldSetting = mWaitForStreamingCompletion;
+        mWaitForStreamingCompletion = false;
+
+        srand( 101 );
+        for( size_t i=0; i<100; ++i )
+            switchTextureResidency( (Ogre::GpuResidency::GpuResidency)(rand() % 3) );
+
+        Ogre::Root *root = mGraphicsSystem->getRoot();
+        Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
+        textureMgr->waitForStreamingCompletion();
+
+        mWaitForStreamingCompletion = oldSetting;
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureResidencyGameState::testRamStress(void)
+    {
+        const bool oldSetting = mWaitForStreamingCompletion;
+        mWaitForStreamingCompletion = false;
+
+        for( int j=0; j<3; ++j )
+        {
+            for( size_t i=0; i<2000; ++i )
+                switchTextureResidency( (i % 2) ? Ogre::GpuResidency::OnStorage :
+                                                  Ogre::GpuResidency::Resident );
+
+            Ogre::Root *root = mGraphicsSystem->getRoot();
+            Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
+            textureMgr->waitForStreamingCompletion();
+
+            Ogre::TextureGpu *texture = mTextures.front();
+            if( texture->getResidencyStatus() != texture->getNextResidencyStatus() )
+                throw;
+        }
+
+        mWaitForStreamingCompletion = oldSetting;
+    }
+    //-----------------------------------------------------------------------------------
     void TextureResidencyGameState::createScene01(void)
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
@@ -73,7 +137,7 @@ namespace Demo
         Ogre::TextureGpu *texture = 0;
 
         texture = textureMgr->createOrRetrieveTexture(
-                      "MRAMOR6X6.jpg", Ogre::GpuPageOutStrategy::Discard,
+                      "MRAMOR6X6.jpg", Ogre::GpuPageOutStrategy::Discard/*AlwaysKeepSystemRamCopy*/,
                       Ogre::CommonTextureTypes::Diffuse,
                       Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
 
@@ -128,11 +192,16 @@ namespace Demo
         };
 
         outText += "\nCurrent Texture State: " + residencyNames[mTextures.front()->getResidencyStatus()];
+        if( !mChangeLog.empty() )
+            outText += "\nLast Supposed State: " + residencyNames[mChangeLog.back()];
         outText += "\nPress F2 to switch to OnStorage";
         outText += "\nPress F3 to switch to OnSystemRam";
         outText += "\nPress F4 to switch to Resident";
         outText += "\nPress F5 to wait for streaming completion ";
         outText += mWaitForStreamingCompletion ? "[On]" : "[Off]";
+        outText += "\nPress F6 to run sequential test";
+        outText += "\nPress F7 to run random test";
+        outText += "\nPress F8 to run ram stress test";
     }
     //-----------------------------------------------------------------------------------
     void TextureResidencyGameState::keyReleased( const SDL_KeyboardEvent &arg )
@@ -158,6 +227,18 @@ namespace Demo
         else if( arg.keysym.sym == SDLK_F5 )
         {
             mWaitForStreamingCompletion = !mWaitForStreamingCompletion;
+        }
+        else if( arg.keysym.sym == SDLK_F6 )
+        {
+            testSequence();
+        }
+        else if( arg.keysym.sym == SDLK_F7 )
+        {
+            testRandom();
+        }
+        else if( arg.keysym.sym == SDLK_F8 )
+        {
+            testRamStress();
         }
         else
         {
