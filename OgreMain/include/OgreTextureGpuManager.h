@@ -263,12 +263,13 @@ namespace Ogre
             String      resourceGroup;
             TextureGpu  *texture;
             uint32      filters;
+            bool        destroyRequested;
 
             ResourceEntry() : texture( 0 ) {}
             ResourceEntry( const String &_name, const String &_alias, const String &_resourceGroup,
                            TextureGpu *_texture, uint32 _filters ) :
                 name( _name ), alias( _alias ), resourceGroup( _resourceGroup ),
-                texture( _texture ), filters( _filters )
+                texture( _texture ), filters( _filters ), destroyRequested( false )
             {
             }
         };
@@ -368,6 +369,7 @@ namespace Ogre
             uint64      mipLevelBitSet[4];
             TextureGpu  *dstTexture;
             uint8       numSlices;
+            bool        autoDeleteImage;
             /// See LoadRequest::sliceOrDepth
             uint32      dstSliceOrDepth;
             FilterBaseArray filters;

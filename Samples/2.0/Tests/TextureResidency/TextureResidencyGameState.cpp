@@ -32,6 +32,7 @@ namespace Demo
 {
     TextureResidencyGameState::TextureResidencyGameState( const Ogre::String &helpDescription ) :
         TutorialGameState( helpDescription ),
+        mNumInitialTextures( 0 ),
         mWaitForStreamingCompletion( true )
     {
     }
@@ -62,6 +63,54 @@ namespace Demo
             Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
             textureMgr->waitForStreamingCompletion();
         }
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureResidencyGameState::enableHeavyRamMode(void)
+    {
+        const Ogre::String textureNames[3] =
+        {
+            "snow_1024.jpg",    //1024x1024
+            "MRAMOR6X6.jpg",    //600x600
+            "KAMEN320x240.jpg", //640x477
+        };
+
+        Ogre::Root *root = mGraphicsSystem->getRoot();
+        Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
+
+        for( size_t i=0; i<sizeof( textureNames ) / sizeof( textureNames[0] ); ++i )
+        {
+            for( size_t j=0; j<128; ++j )
+            {
+                Ogre::TextureGpu *texture = 0;
+                texture = textureMgr->createOrRetrieveTexture(
+                              textureNames[i],
+                              "TestTex" + Ogre::StringConverter::toString( mTextures.size() ),
+                              Ogre::GpuPageOutStrategy::Discard/*AlwaysKeepSystemRamCopy*/,
+                              Ogre::TextureFlags::PrefersLoadingFromFileAsSRGB,
+                              Ogre::TextureTypes::Type2D,
+                              Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
+                texture->scheduleTransitionTo( Ogre::GpuResidency::Resident );
+
+                mTextures.push_back( texture );
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureResidencyGameState::disableHeavyRamMode(void)
+    {
+        Ogre::Root *root = mGraphicsSystem->getRoot();
+        Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
+
+        const size_t numTextures = mTextures.size();
+        for( size_t i=mNumInitialTextures; i<numTextures; ++i )
+            textureMgr->destroyTexture( mTextures[i] );
+
+        mTextures.erase( mTextures.begin() + mNumInitialTextures, mTextures.end() );
+    }
+    //-----------------------------------------------------------------------------------
+    bool TextureResidencyGameState::isInHeavyRamMode(void)
+    {
+        return mTextures.size() > mNumInitialTextures;
     }
     //-----------------------------------------------------------------------------------
     void TextureResidencyGameState::testSequence(void)
@@ -152,6 +201,8 @@ namespace Demo
 
         mTextures.push_back( texture );
 
+        mNumInitialTextures = mTextures.size();
+
         std::vector<Ogre::TextureGpu*>::const_iterator itor = mTextures.begin();
         std::vector<Ogre::TextureGpu*>::const_iterator end  = mTextures.end();
 
@@ -202,6 +253,8 @@ namespace Demo
         outText += "\nPress F6 to run sequential test";
         outText += "\nPress F7 to run random test";
         outText += "\nPress F8 to run ram stress test";
+        outText += "\nPress F9 for heavy RAM mode ";
+        outText += isInHeavyRamMode() ? "[On]" : "[Off]";
     }
     //-----------------------------------------------------------------------------------
     void TextureResidencyGameState::keyReleased( const SDL_KeyboardEvent &arg )
@@ -239,6 +292,13 @@ namespace Demo
         else if( arg.keysym.sym == SDLK_F8 )
         {
             testRamStress();
+        }
+        else if( arg.keysym.sym == SDLK_F9 )
+        {
+            if( !isInHeavyRamMode() )
+                enableHeavyRamMode();
+            else
+                disableHeavyRamMode();
         }
         else
         {

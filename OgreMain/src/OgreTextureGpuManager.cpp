@@ -358,10 +358,20 @@ namespace Ogre
 
         IdString idName( aliasName );
         ResourceEntryMap::const_iterator itor = mEntries.find( idName );
-        if( itor != mEntries.end() )
+        if( itor != mEntries.end() && !itor->second.destroyRequested )
+        {
             retVal = itor->second.texture;
+        }
         else
         {
+            if( itor != mEntries.end() )
+            {
+                //The use requested to destroy the texture. It will soon become a dangling pointer
+                //and invalidate the iterator. Wait for that to happen.
+                TextureGpu *texture = itor->second.texture;
+                texture->waitForData();
+            }
+
             retVal = createTexture( name, aliasName, pageOutStrategy, textureFlags,
                                     initialType, resourceGroup, filters, poolId );
         }
@@ -406,7 +416,7 @@ namespace Ogre
         TextureGpu *retVal = 0;
         ResourceEntryMap::const_iterator itor = mEntries.find( name );
 
-        if( itor != mEntries.end() )
+        if( itor != mEntries.end() && !itor->second.destroyRequested )
             retVal = itor->second.texture;
 
         return retVal;
@@ -423,7 +433,7 @@ namespace Ogre
             OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
                          "Texture with name '" + texture->getName().getFriendlyText() +
                          "' not found. Perhaps already destroyed?",
-                         "TextureGpuManager::destroyTexture" );
+                         "TextureGpuManager::destroyTextureImmediate" );
         }
 
         texture->notifyAllListenersTextureChanged( TextureGpuListener::Deleted );
@@ -434,12 +444,30 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::destroyTexture( TextureGpu *texture )
     {
+        ResourceEntryMap::iterator itor = mEntries.find( texture->getName() );
+
+        if( itor == mEntries.end() )
+        {
+            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                         "Texture with name '" + texture->getName().getFriendlyText() +
+                         "' not found. Perhaps already destroyed?",
+                         "TextureGpuManager::destroyTexture" );
+        }
+
+        if( itor->second.destroyRequested )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                         "Texture with name '" + texture->getName().getFriendlyText() +
+                         "' has already been scheduled for destruction!",
+                         "TextureGpuManager::destroyTexture" );
+        }
+
+        itor->second.destroyRequested = true;
+
         ScheduledTasks task;
         task.tasksType = TaskTypeDestroyTexture;
 
-        ScheduledTasksMap::iterator itor = mScheduledTasks.find( texture );
-
-        if( itor == mScheduledTasks.end() )
+        if( texture->getPendingResidencyChanges() == 0 )
         {
             if( texture->_isDataReadyImpl() )
             {
@@ -449,15 +477,14 @@ namespace Ogre
             else
             {
                 //No pending tasks, but the texture is being loaded. Delay execution
+                texture->_addPendingResidencyChanges( 1u );
                 mScheduledTasks[texture].push_back( task );
             }
         }
         else
         {
-            OGRE_ASSERT_MEDIUM( !itor->second.empty() &&
-                                "TextureGpuManager::notifyTextureChanged should've removed "
-                                "this entry to mScheduledTasks" );
-            itor->second.push_back( task );
+            texture->_addPendingResidencyChanges( 1u );
+            mScheduledTasks[texture].push_back( task );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -3009,6 +3036,7 @@ namespace Ogre
                                                  FilterBaseArray &inOutFilters ) :
         dstTexture( _dstTexture ),
         numSlices( _numSlices ),
+        autoDeleteImage( srcImage.getAutoDelete() ),
         dstSliceOrDepth( _dstSliceOrDepth )
     {
         assert( numSlices >= 1u );
@@ -3041,7 +3069,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::QueuedImage::destroy(void)
     {
-        if( dstTexture->getGpuPageOutStrategy() != GpuPageOutStrategy::AlwaysKeepSystemRamCopy )
+        if( autoDeleteImage &&
+            dstTexture->getGpuPageOutStrategy() != GpuPageOutStrategy::AlwaysKeepSystemRamCopy )
         {
             //Do not delete the internal pointer if the TextureGpu will be owning it.
             image._setAutoDelete( true );

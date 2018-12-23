@@ -15,11 +15,16 @@ namespace Demo
     {
         std::vector<Ogre::TextureGpu*>		mTextures;
         std::vector<Ogre::GpuResidency::GpuResidency>   mChangeLog;
+        size_t                              mNumInitialTextures;
         bool                                mWaitForStreamingCompletion;
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
         void switchTextureResidency( int targetResidency );
+
+        void enableHeavyRamMode(void);
+        void disableHeavyRamMode(void);
+        bool isInHeavyRamMode(void);
 
         void testSequence(void);
         void testRandom(void);

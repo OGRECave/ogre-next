@@ -31,7 +31,7 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 #include "OgreCommon.h"
-#include "Threading/OgreThreadHeaders.h"
+#include "Threading/OgreLightweightMutex.h"
 #include "OgreHeaderPrefix.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_NACL
@@ -116,7 +116,8 @@ namespace Ogre {
 
         class Stream;
 
-        OGRE_AUTO_MUTEX; // public to allow external locking
+        LightweightMutex mMutex; // public to allow external locking
+
         /**
         @remarks
             Usual constructor - called by LogManager.
