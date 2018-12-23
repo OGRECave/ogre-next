@@ -2959,7 +2959,10 @@ namespace Ogre
             DownloadToRamEntryVec::iterator itor = mDownloadToRamQueue.begin();
             DownloadToRamEntryVec::iterator end  = mDownloadToRamQueue.end();
 
-            while( itor != end && itor->texture != texture && itor->resyncOnly )
+            //Only stall for the texture we're looking for, where resyncOnly == true;
+            //since those are from textures currently Resident that will remain Resident.
+            //The cases where resyncOnly == false are handled by the residency transition
+            while( itor != end && itor->texture != texture && !itor->resyncOnly )
                 ++itor;
 
             if( itor == end )

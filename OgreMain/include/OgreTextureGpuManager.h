@@ -511,6 +511,8 @@ namespace Ogre
             /// One per mip. Entries with nullptr means the ticket has already been copied and destroyed
             AsyncTextureTicketVec   asyncTickets;
             uint8                   *sysRamPtr;
+            ///When resyncOnly == true, the download is from textures currently Resident that
+            ///will remain Resident. Otherwise a Resident -> OnSystemRam transition will occur
             bool                    resyncOnly;
         };
         typedef vector<DownloadToRamEntry>::type DownloadToRamEntryVec;
