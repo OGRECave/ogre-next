@@ -1649,7 +1649,7 @@ namespace Ogre
             AsyncTextureTicket* asyncTicket = createAsyncTextureTicket( width, height, depthOrSlices,
                                                                         texture->getTextureType(),
                                                                         texture->getPixelFormat() );
-            asyncTicket->download( texture, mip, false );
+            asyncTicket->download( texture, mip, false, 0, true );
             entry.asyncTickets.push_back( asyncTicket );
         }
 

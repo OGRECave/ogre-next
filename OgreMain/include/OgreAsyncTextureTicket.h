@@ -131,9 +131,14 @@ namespace Ogre
             When not nullptr, we'll download the region within the texture.
             This region must resolution must match exactly that of this ticket (e.g.
             bytesPerRow may be much bigger than you expect!)
+        @param bImmediate
+            When bImmediate is true, we will download from the GPU if texture is currently
+            resident and ready; even if there are pending residency changes.
+            If it's not ready, we'll listen for when it is.
         */
         void download( TextureGpu *textureSrc, uint8 mipLevel,
-                       bool accurateTracking, TextureBox *srcBox=0 );
+                       bool accurateTracking, TextureBox *srcBox=0,
+                       bool bImmediate=false );
 
         /** Maps the buffer for CPU access. Will stall if transfer from GPU memory to
             staging area hasn't finished yet. See queryIsTransferDone.

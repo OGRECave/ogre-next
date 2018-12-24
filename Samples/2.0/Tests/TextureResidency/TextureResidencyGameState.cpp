@@ -141,6 +141,11 @@ namespace Demo
         const bool oldSetting = mWaitForStreamingCompletion;
         mWaitForStreamingCompletion = false;
 
+        //Make sure these 3 are included in the test coverage
+        switchTextureResidency( Ogre::GpuResidency::Resident );
+        switchTextureResidency( Ogre::GpuResidency::OnSystemRam );
+        switchTextureResidency( Ogre::GpuResidency::Resident );
+
         srand( 101 );
         for( size_t i=0; i<100; ++i )
             switchTextureResidency( (Ogre::GpuResidency::GpuResidency)(rand() % 3) );

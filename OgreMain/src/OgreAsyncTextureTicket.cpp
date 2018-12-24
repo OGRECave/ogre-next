@@ -116,7 +116,8 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void AsyncTextureTicket::download( TextureGpu *textureSrc, uint8 mipLevel,
-                                       bool accurateTracking, TextureBox *srcBox )
+                                       bool accurateTracking, TextureBox *srcBox,
+                                       bool bImmediate )
     {
         if( mDelayedDownload.textureSrc )
         {
@@ -131,10 +132,13 @@ namespace Ogre
                          "AsyncTextureTicket::download" );
         }
 
-        if( !textureSrc->isDataReady() &&
-            textureSrc->getNextResidencyStatus() == GpuResidency::Resident )
+        if( (bImmediate && (!textureSrc->_isDataReadyImpl() &&
+            textureSrc->getResidencyStatus() == GpuResidency::Resident)) ||
+            (!textureSrc->isDataReady() &&
+            textureSrc->getNextResidencyStatus() == GpuResidency::Resident &&
+            textureSrc->getPendingResidencyChanges() <= 1u) )
         {
-            //Texture is not resident but will be, or is resident but not yet ready.
+            //Texture is not resident but soon will be, or is resident but not yet ready.
             //Register ourselves to listen for when that happens, we'll download then.
             textureSrc->addListener( this );
             mDelayedDownload = DelayedDownload( textureSrc, mipLevel, accurateTracking, srcBox );
