@@ -73,6 +73,12 @@ namespace Ogre
             desc.CPUAccessFlags     = D3D11_CPU_ACCESS_READ;
             desc.MiscFlags          = 0;
 
+            if( PixelFormatGpuUtils::isCompressed( mPixelFormatFamily ) )
+            {
+                desc.Width  = std::max( desc.Width, 4u );
+                desc.Height = std::max( desc.Height, 4u );
+            }
+
             ID3D11Texture3D *texture = 0;
             hr = device->CreateTexture3D( &desc, 0, &texture );
             mStagingTexture = texture;
@@ -92,6 +98,12 @@ namespace Ogre
             desc.BindFlags          = 0;
             desc.CPUAccessFlags     = D3D11_CPU_ACCESS_READ;
             desc.MiscFlags          = 0;
+
+            if( PixelFormatGpuUtils::isCompressed( mPixelFormatFamily ) )
+            {
+                desc.Width  = std::max( desc.Width, 4u );
+                desc.Height = std::max( desc.Height, 4u );
+            }
 
             ID3D11Texture2D *texture = 0;
             hr = device->CreateTexture2D( &desc, 0, &texture );
