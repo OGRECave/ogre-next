@@ -170,6 +170,17 @@ namespace Ogre
         srcBoxD3d.right = srcTextureBox.x + srcTextureBox.width;
         srcBoxD3d.bottom= srcTextureBox.y + srcTextureBox.height;
         srcBoxD3d.back  = srcTextureBox.z + srcTextureBox.depth;
+
+        if( PixelFormatGpuUtils::isCompressed( mPixelFormatFamily ) )
+        {
+            uint32 blockWidth =
+                    PixelFormatGpuUtils::getCompressedBlockWidth( mPixelFormatFamily, false );
+            uint32 blockHeight=
+                    PixelFormatGpuUtils::getCompressedBlockHeight( mPixelFormatFamily, false );
+            srcBoxD3d.right     = alignToNextMultiple( srcBoxD3d.right, blockWidth );
+            srcBoxD3d.bottom    = alignToNextMultiple( srcBoxD3d.bottom, blockHeight );
+        }
+
         UINT srcSlicePos = srcTextureBox.sliceStart;
 
         //These are the possibilities:
@@ -215,6 +226,15 @@ namespace Ogre
                 ++zPos;
             else
                 ++dstSlicePos;
+        }
+
+        if( device.isError() )
+        {
+            String errorDescription = device.getErrorDescription();
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "Error after calling CopySubresourceRegion\n"
+                         "Error Description:" + errorDescription,
+                         "D3D11StagingTexture::upload" );
         }
 
         if( accurateTracking )

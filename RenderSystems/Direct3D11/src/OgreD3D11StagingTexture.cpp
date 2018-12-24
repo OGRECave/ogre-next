@@ -219,11 +219,15 @@ namespace Ogre
     void D3D11StagingTexture::shrinkRecords( size_t slice, StagingBoxVec::iterator record,
                                              TextureBox consumedBox )
     {
-        if( PixelFormatGpuUtils::isCompressed( mFormatFamily ) )
+        const bool isCompressed = PixelFormatGpuUtils::isCompressed( mFormatFamily );
+        uint32 blockWidth = 1u;
+        uint32 blockHeight= 1u;
+
+        if( isCompressed )
         {
             //Always consume the whole block for compressed formats.
-            uint32 blockWidth = PixelFormatGpuUtils::getCompressedBlockWidth( mFormatFamily, false );
-            uint32 blockHeight= PixelFormatGpuUtils::getCompressedBlockHeight( mFormatFamily, false );
+            blockWidth = PixelFormatGpuUtils::getCompressedBlockWidth( mFormatFamily, false );
+            blockHeight= PixelFormatGpuUtils::getCompressedBlockHeight( mFormatFamily, false );
             consumedBox.width   = alignToNextMultiple( consumedBox.width, blockWidth );
             consumedBox.height  = alignToNextMultiple( consumedBox.height, blockHeight );
         }
@@ -236,7 +240,11 @@ namespace Ogre
         }
 
         if( consumedBox.width <= record->width >> 1u &&
-            consumedBox.height <= record->height >> 1u )
+            consumedBox.height <= record->height >> 1u &&
+            (!isCompressed ||
+             (isCompressed &&
+              (record->width >> 1u) % blockWidth == 0u &&
+              (record->height >> 1u) % blockHeight == 0u) ) )
         {
             //If what was consumed is too small, partition the records in 4 fragments,
             //which should maximize our free space (assuming most textures are powers of 2).
