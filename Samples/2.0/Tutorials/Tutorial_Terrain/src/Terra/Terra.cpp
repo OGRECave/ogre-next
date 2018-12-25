@@ -14,6 +14,9 @@
 #include "OgreTextureGpuManager.h"
 #include "OgreStagingTexture.h"
 #include "OgrePixelFormatGpuUtils.h"
+#include "OgreDescriptorSetTexture.h"
+#include "OgreHlmsManager.h"
+#include "OgreRoot.h"
 
 namespace Ogre
 {
@@ -34,6 +37,9 @@ namespace Ogre
         m_terrainOrigin( Vector3::ZERO ),
         m_basePixelDimension( 256u ),
         m_currentCell( 0u ),
+        m_descriptorSet( 0 ),
+        m_heightMapTex( 0 ),
+        m_normalMapTex( 0 ),
         m_prevLightDir( Vector3::ZERO ),
         m_shadowMapper( 0 ),
         m_compositorManager( compositorManager ),
@@ -43,6 +49,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     Terra::~Terra()
     {
+        destroyDescriptorSet();
         if( m_shadowMapper )
         {
             m_shadowMapper->destroyShadowMap();
@@ -54,10 +61,40 @@ namespace Ogre
         m_terrainCells.clear();
     }
     //-----------------------------------------------------------------------------------
+    void Terra::createDescriptorSet(void)
+    {
+        destroyDescriptorSet();
+
+        OGRE_ASSERT_LOW( m_heightMapTex );
+        OGRE_ASSERT_LOW( m_normalMapTex );
+        OGRE_ASSERT_LOW( m_shadowMapper && m_shadowMapper->getShadowMapTex() );
+
+        DescriptorSetTexture descSet;
+        descSet.mTextures.push_back( m_heightMapTex );
+        descSet.mTextures.push_back( m_normalMapTex );
+        descSet.mTextures.push_back( m_shadowMapper->getShadowMapTex() );
+        descSet.mShaderTypeTexCount[VertexShader]   = 1u;
+        descSet.mShaderTypeTexCount[PixelShader]    = 2u;
+
+        HlmsManager *hlmsManager = Root::getSingleton().getHlmsManager();
+        m_descriptorSet = hlmsManager->getDescriptorSetTexture( descSet );
+    }
+    //-----------------------------------------------------------------------------------
+    void Terra::destroyDescriptorSet(void)
+    {
+        if( m_descriptorSet )
+        {
+            HlmsManager *hlmsManager = Root::getSingleton().getHlmsManager();
+            hlmsManager->destroyDescriptorSetTexture( m_descriptorSet );
+            m_descriptorSet = 0;
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void Terra::destroyHeightmapTexture(void)
     {
         if( m_heightMapTex )
         {
+            destroyDescriptorSet();
             TextureGpuManager *textureManager =
                     mManager->getDestinationRenderSystem()->getTextureGpuManager();
             textureManager->destroyTexture( m_heightMapTex );
@@ -171,6 +208,8 @@ namespace Ogre
         m_shadowMapper = new ShadowMapper( mManager, m_compositorManager );
         m_shadowMapper->createShadowMap( getId(), m_heightMapTex );
 
+        createDescriptorSet();
+
         calculateOptimumSkirtSize();
     }
     //-----------------------------------------------------------------------------------
@@ -228,6 +267,7 @@ namespace Ogre
     {
         if( m_normalMapTex )
         {
+            destroyDescriptorSet();
             TextureGpuManager *textureManager =
                     mManager->getDestinationRenderSystem()->getTextureGpuManager();
             textureManager->destroyTexture( m_normalMapTex );

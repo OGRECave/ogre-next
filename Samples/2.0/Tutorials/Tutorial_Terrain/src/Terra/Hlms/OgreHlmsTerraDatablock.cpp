@@ -29,12 +29,25 @@ THE SOFTWARE.
 #include "Terra/Hlms/OgreHlmsTerraDatablock.h"
 #include "Terra/Hlms/OgreHlmsTerra.h"
 #include "OgreHlmsManager.h"
-#include "OgreHlmsTextureManager.h"
-#include "OgreTexture.h"
-#include "OgreTextureManager.h"
+#include "OgreTextureGpu.h"
+#include "OgreTextureGpuManager.h"
+#include "OgreRenderSystem.h"
+#include "OgreTextureFilters.h"
 #include "OgreLogManager.h"
 
+#define _OgreHlmsTextureBaseClassExport
+#define OGRE_HLMS_TEXTURE_BASE_CLASS HlmsTerraBaseTextureDatablock
+#define OGRE_HLMS_TEXTURE_BASE_MAX_TEX NUM_TERRA_TEXTURE_TYPES
+#define OGRE_HLMS_CREATOR_CLASS HlmsTerra
+    #include "OgreHlmsTextureBaseClass.inl"
+#undef _OgreHlmsTextureBaseClassExport
+#undef OGRE_HLMS_TEXTURE_BASE_CLASS
+#undef OGRE_HLMS_TEXTURE_BASE_MAX_TEX
+#undef OGRE_HLMS_CREATOR_CLASS
+
 #include "OgreHlmsTerraDatablock.cpp.inc"
+
+#define TODO_port_these_two
 
 namespace Ogre
 {
@@ -48,7 +61,7 @@ namespace Ogre
                                         const HlmsMacroblock *macroblock,
                                         const HlmsBlendblock *blendblock,
                                         const HlmsParamVec &params ) :
-        HlmsDatablock( name, creator, macroblock, blendblock, params ),
+        HlmsTerraBaseTextureDatablock( name, creator, macroblock, blendblock, params ),
         mkDr( 0.318309886f ), mkDg( 0.318309886f ), mkDb( 0.318309886f ), //Max Diffuse = 1 / PI
         _padding0( 1 ),
         mBrdf( TerraBrdf::Default )
@@ -60,12 +73,6 @@ namespace Ogre
 
         for( size_t i=0; i<4; ++i )
             mDetailsOffsetScale[i] = Vector4( 0, 0, 1, 1 );
-
-        memset( mTexIndices, 0, sizeof( mTexIndices ) );
-        memset( mSamplerblocks, 0, sizeof( mSamplerblocks ) );
-
-        for( size_t i=0; i<NUM_TERRA_TEXTURE_TYPES; ++i )
-            mTexToBakedTextureIdx[i] = NUM_TERRA_TEXTURE_TYPES;
 
         calculateHash();
 
@@ -92,21 +99,38 @@ namespace Ogre
     {
         IdString hash;
 
-        TerraBakedTextureArray::const_iterator itor = mBakedTextures.begin();
-        TerraBakedTextureArray::const_iterator end  = mBakedTextures.end();
-
-        while( itor != end )
+        if( mTexturesDescSet )
         {
-            hash += IdString( itor->texture->getName() );
-            hash += IdString( itor->samplerBlock->mId );
-
-            ++itor;
+            FastArray<const TextureGpu*>::const_iterator itor = mTexturesDescSet->mTextures.begin();
+            FastArray<const TextureGpu*>::const_iterator end  = mTexturesDescSet->mTextures.end();
+            while( itor != end )
+            {
+                hash += (*itor)->getName();
+                ++itor;
+            }
+        }
+        if( mSamplersDescSet )
+        {
+            FastArray<const HlmsSamplerblock*>::const_iterator itor= mSamplersDescSet->mSamplers.begin();
+            FastArray<const HlmsSamplerblock*>::const_iterator end = mSamplersDescSet->mSamplers.end();
+            while( itor != end )
+            {
+                hash += IdString( (*itor)->mId );
+                ++itor;
+            }
         }
 
-        if( mTextureHash != hash.mHash )
+        if( static_cast<HlmsTerra*>(mCreator)->getOptimizationStrategy() == HlmsTerra::LowerGpuOverhead )
         {
-            mTextureHash = hash.mHash;
-            static_cast<HlmsTerra*>(mCreator)->requestSlot( /*mTextureHash*/0, this, false );
+            const size_t poolIdx = static_cast<HlmsTerra*>(mCreator)->getPoolIndex( this );
+            const uint32 finalHash = (hash.mHash & 0xFFFFFE00) | (poolIdx & 0x000001FF);
+            mTextureHash = finalHash;
+        }
+        else
+        {
+            const size_t poolIdx = static_cast<HlmsTerra*>(mCreator)->getPoolIndex( this );
+            const uint32 finalHash = (hash.mHash & 0xFFFFFFF0) | (poolIdx & 0x0000000F);
+            mTextureHash = finalHash;
         }
     }
     //-----------------------------------------------------------------------------------
@@ -115,113 +139,26 @@ namespace Ogre
         static_cast<HlmsTerra*>(mCreator)->scheduleForUpdate( this );
     }
     //-----------------------------------------------------------------------------------
-    void HlmsTerraDatablock::uploadToConstBuffer( char *dstPtr )
+    void HlmsTerraDatablock::uploadToConstBuffer( char *dstPtr, uint8 dirtyFlags )
     {
         memcpy( dstPtr, &mkDr, MaterialSizeInGpu );
-    }
-    //-----------------------------------------------------------------------------------
-    void HlmsTerraDatablock::decompileBakedTextures( TerraBakedTexture outTextures[NUM_TERRA_TEXTURE_TYPES] )
-    {
-        //Decompile the baked textures to know which texture is assigned to each type.
-        for( size_t i=0; i<NUM_TERRA_TEXTURE_TYPES; ++i )
+
+        if( dirtyFlags & (ConstBufferPool::DirtyTextures|ConstBufferPool::DirtySamplers) )
         {
-            uint8 idx = mTexToBakedTextureIdx[i];
-
-            if( idx < NUM_TERRA_TEXTURE_TYPES )
-            {
-                outTextures[i] = TerraBakedTexture( mBakedTextures[idx].texture, mSamplerblocks[i] );
-            }
-            else
-            {
-                //The texture may be null, but the samplerblock information may still be there.
-                outTextures[i] = TerraBakedTexture( TexturePtr(), mSamplerblocks[i] );
-            }
-        }
-    }
-    //-----------------------------------------------------------------------------------
-    void HlmsTerraDatablock::bakeTextures( const TerraBakedTexture textures[NUM_TERRA_TEXTURE_TYPES] )
-    {
-        //The shader might need to be recompiled (mTexToBakedTextureIdx changed).
-        //We'll need to flush.
-        //Most likely mTexIndices also changed, so we need to update the const buffers as well
-        mBakedTextures.clear();
-
-        for( size_t i=0; i<NUM_TERRA_TEXTURE_TYPES; ++i )
-        {
-            if( !textures[i].texture.isNull() )
-            {
-                TerraBakedTextureArray::const_iterator itor = std::find( mBakedTextures.begin(),
-                                                                         mBakedTextures.end(),
-                                                                         textures[i] );
-
-                if( itor == mBakedTextures.end() )
-                {
-                    mTexToBakedTextureIdx[i] = mBakedTextures.size();
-                    mBakedTextures.push_back( textures[i] );
-                }
-                else
-                {
-                    mTexToBakedTextureIdx[i] = itor - mBakedTextures.begin();
-                }
-            }
-            else
-            {
-                mTexToBakedTextureIdx[i] = NUM_TERRA_TEXTURE_TYPES;
-            }
+            //Must be called first so mTexIndices[i] gets updated before uploading to GPU.
+            updateDescriptorSets( (dirtyFlags & ConstBufferPool::DirtyTextures) != 0,
+                                  (dirtyFlags & ConstBufferPool::DirtySamplers) != 0 );
         }
 
-        calculateHash();
-        flushRenderables();
-        scheduleConstBufferUpdate();
+        uint16 texIndices[OGRE_NumTexIndices];
+        for( size_t i=0; i<OGRE_NumTexIndices; ++i )
+            texIndices[i] = mTexIndices[i] & ~ManualTexIndexBit;
+
+        memcpy( dstPtr, &mkDr, MaterialSizeInGpu - sizeof(mTexIndices) );
+        dstPtr += MaterialSizeInGpu - sizeof(mTexIndices);
+        memcpy( dstPtr, texIndices, sizeof(texIndices) );
+        dstPtr += sizeof(texIndices);
     }
-    //-----------------------------------------------------------------------------------
-//    TexturePtr HlmsTerraDatablock::setTexture( const String &name,
-//                                             TerraTextureTypes textureType )
-//    {
-//        const HlmsTextureManager::TextureMapType texMapTypes[NUM_TERRA_TEXTURE_TYPES] =
-//        {
-//            HlmsTextureManager::TEXTURE_TYPE_DIFFUSE,
-//            HlmsTextureManager::TEXTURE_TYPE_NORMALS,
-//            HlmsTextureManager::TEXTURE_TYPE_DIFFUSE,
-//            HlmsTextureManager::TEXTURE_TYPE_MONOCHROME,
-//            HlmsTextureManager::TEXTURE_TYPE_DETAIL,
-//            HlmsTextureManager::TEXTURE_TYPE_DETAIL,
-//            HlmsTextureManager::TEXTURE_TYPE_DETAIL,
-//            HlmsTextureManager::TEXTURE_TYPE_DETAIL,
-//            HlmsTextureManager::TEXTURE_TYPE_DETAIL,
-//            HlmsTextureManager::TEXTURE_TYPE_DETAIL_NORMAL_MAP,
-//            HlmsTextureManager::TEXTURE_TYPE_DETAIL_NORMAL_MAP,
-//            HlmsTextureManager::TEXTURE_TYPE_DETAIL_NORMAL_MAP,
-//            HlmsTextureManager::TEXTURE_TYPE_DETAIL_NORMAL_MAP,
-//            HlmsTextureManager::TEXTURE_TYPE_ENV_MAP
-//        };
-
-//        HlmsManager *hlmsManager = mCreator->getHlmsManager();
-//        HlmsTextureManager *hlmsTextureManager = hlmsManager->getTextureManager();
-//        HlmsTextureManager::TextureLocation texLocation = hlmsTextureManager->
-//                                                    createOrRetrieveTexture( name,
-//                                                                             texMapTypes[textureType] );
-
-//        assert( texLocation.texture->isTextureTypeArray() || textureType == TERRA_REFLECTION );
-
-//        //If HLMS texture manager failed to find a reflection texture, have look int standard texture manager
-//        //NB we only do this for reflection textures as all other textures must be texture arrays for performance reasons
-//        if (textureType == TERRA_REFLECTION && texLocation.texture == hlmsTextureManager->getBlankTexture().texture)
-//        {
-//            Ogre::TexturePtr tex = Ogre::TextureManager::getSingleton().getByName(name);
-//            if (tex.isNull() == false)
-//            {
-//                texLocation.texture = tex;
-//                texLocation.xIdx = 0;
-//                texLocation.yIdx = 0;
-//                texLocation.divisor = 1;
-//            }
-//        }
-
-//        mTexIndices[textureType] = texLocation.xIdx;
-
-//        return texLocation.texture;
-//    }
     //-----------------------------------------------------------------------------------
     void HlmsTerraDatablock::setDiffuse( const Vector3 &diffuseColour )
     {
@@ -265,129 +202,6 @@ namespace Ogre
         return mMetalness[detailMapIdx];
     }
     //-----------------------------------------------------------------------------------
-    void HlmsTerraDatablock::_setTextures( const TerraPackedTexture packedTextures[NUM_TERRA_TEXTURE_TYPES] )
-    {
-        TerraBakedTexture textures[NUM_TERRA_TEXTURE_TYPES];
-
-        HlmsManager *hlmsManager = mCreator->getHlmsManager();
-
-        for( int i=0; i<NUM_TERRA_TEXTURE_TYPES; ++i )
-        {
-            if( mSamplerblocks[i] )
-                hlmsManager->destroySamplerblock( mSamplerblocks[i] );
-
-            mTexIndices[i] = packedTextures[i].xIdx;
-            textures[i] = TerraBakedTexture( packedTextures[i].texture, packedTextures[i].samplerblock );
-
-            if( !textures[i].texture.isNull() && !textures[i].samplerBlock )
-            {
-                HlmsSamplerblock samplerBlockRef;
-                if( i >= TERRA_DETAIL0 && i <= TERRA_DETAIL_METALNESS3 )
-                {
-                    //Detail maps default to wrap mode.
-                    samplerBlockRef.mU = TAM_WRAP;
-                    samplerBlockRef.mV = TAM_WRAP;
-                    samplerBlockRef.mW = TAM_WRAP;
-                }
-
-                textures[i].samplerBlock = hlmsManager->getSamplerblock( samplerBlockRef );
-            }
-
-            mSamplerblocks[i] = textures[i].samplerBlock;
-        }
-
-        bakeTextures( textures );
-    }
-    //-----------------------------------------------------------------------------------
-    void HlmsTerraDatablock::setTexture( TerraTextureTypes texType, uint16 arrayIndex,
-                                       const TexturePtr &newTexture, const HlmsSamplerblock *refParams )
-    {
-        TerraBakedTexture textures[NUM_TERRA_TEXTURE_TYPES];
-
-        //Decompile the baked textures to know which texture is assigned to each type.
-        decompileBakedTextures( textures );
-
-        //Set the new samplerblock
-        if( refParams )
-        {
-            HlmsManager *hlmsManager = mCreator->getHlmsManager();
-            const HlmsSamplerblock *oldSamplerblock = mSamplerblocks[texType];
-            mSamplerblocks[texType] = hlmsManager->getSamplerblock( *refParams );
-
-            if( oldSamplerblock )
-                hlmsManager->destroySamplerblock( oldSamplerblock );
-        }
-        else if( !newTexture.isNull() && !mSamplerblocks[texType] )
-        {
-            //Adding a texture, but the samplerblock doesn't exist. Create a default one.
-            HlmsSamplerblock samplerBlockRef;
-            if( texType >= TERRA_DETAIL0 && texType <= TERRA_DETAIL_METALNESS3 )
-            {
-                //Detail maps default to wrap mode.
-                samplerBlockRef.mU = TAM_WRAP;
-                samplerBlockRef.mV = TAM_WRAP;
-                samplerBlockRef.mW = TAM_WRAP;
-            }
-
-            HlmsManager *hlmsManager = mCreator->getHlmsManager();
-            mSamplerblocks[texType] = hlmsManager->getSamplerblock( samplerBlockRef );
-        }
-
-        TerraBakedTexture oldTex = textures[texType];
-
-        //Set the texture and make the samplerblock changes to take effect
-        textures[texType].texture = newTexture;
-        textures[texType].samplerBlock = mSamplerblocks[texType];
-        mTexIndices[texType] = arrayIndex;
-
-        if( oldTex == textures[texType] )
-        {
-            //Only the array index changed. Just update our constant buffer.
-            scheduleConstBufferUpdate();
-        }
-        else
-        {
-            bakeTextures( textures );
-        }
-    }
-    //-----------------------------------------------------------------------------------
-    TexturePtr HlmsTerraDatablock::getTexture( TerraTextureTypes texType ) const
-    {
-        TexturePtr retVal;
-
-        if( mTexToBakedTextureIdx[texType] < mBakedTextures.size() )
-            retVal = mBakedTextures[mTexToBakedTextureIdx[texType]].texture;
-
-        return retVal;
-    }
-    //-----------------------------------------------------------------------------------
-    TexturePtr HlmsTerraDatablock::getTexture( size_t texType ) const
-    {
-        return getTexture( static_cast<TerraTextureTypes>( texType ) );
-    }
-    //-----------------------------------------------------------------------------------
-    void HlmsTerraDatablock::setSamplerblock( TerraTextureTypes texType, const HlmsSamplerblock &params )
-    {
-        const HlmsSamplerblock *oldSamplerblock = mSamplerblocks[texType];
-        HlmsManager *hlmsManager = mCreator->getHlmsManager();
-        mSamplerblocks[texType] = hlmsManager->getSamplerblock( params );
-
-        if( oldSamplerblock )
-            hlmsManager->destroySamplerblock( oldSamplerblock );
-
-        if( oldSamplerblock != mSamplerblocks[texType] )
-        {
-            TerraBakedTexture textures[NUM_TERRA_TEXTURE_TYPES];
-            decompileBakedTextures( textures );
-            bakeTextures( textures );
-        }
-    }
-    //-----------------------------------------------------------------------------------
-    const HlmsSamplerblock* HlmsTerraDatablock::getSamplerblock( TerraTextureTypes texType ) const
-    {
-        return mSamplerblocks[texType];
-    }
-    //-----------------------------------------------------------------------------------
     void HlmsTerraDatablock::setDetailMapOffsetScale( uint8 detailMap, const Vector4 &offsetScale )
     {
         assert( detailMap < 8 );
@@ -407,16 +221,6 @@ namespace Ogre
     {
         assert( detailMap < 8 );
         return mDetailsOffsetScale[detailMap];
-    }
-    //-----------------------------------------------------------------------------------
-    uint8 HlmsTerraDatablock::getBakedTextureIdx( TerraTextureTypes texType ) const
-    {
-        return mTexToBakedTextureIdx[texType];
-    }
-    //-----------------------------------------------------------------------------------
-    uint16 HlmsTerraDatablock::_getTextureSliceArrayIndex( TerraTextureTypes texType ) const
-    {
-        return mTexIndices[texType];
     }
     //-----------------------------------------------------------------------------------
     void HlmsTerraDatablock::setAlphaTestThreshold( float threshold )
@@ -443,7 +247,46 @@ namespace Ogre
         return mBrdf;
     }
     //-----------------------------------------------------------------------------------
-    HlmsTextureManager::TextureMapType HlmsTerraDatablock::suggestMapTypeBasedOnTextureType(
+    TODO_port_these_two;
+    bool HlmsTerraDatablock::suggestUsingSRGB( TerraTextureTypes type ) const
+    {
+        if( type == TERRA_DETAIL_WEIGHT ||
+            (type >= TERRA_DETAIL_METALNESS0 && type <= TERRA_DETAIL_METALNESS3) ||
+            (type >= TERRA_DETAIL_ROUGHNESS0 && type <= TERRA_DETAIL_ROUGHNESS3) ||
+            (type >= TERRA_DETAIL0_NM && type <= TERRA_DETAIL3_NM) )
+        {
+            return false;
+        }
+
+        return true;
+    }
+    //-----------------------------------------------------------------------------------
+    uint32 HlmsTerraDatablock::suggestFiltersForType( TerraTextureTypes type ) const
+    {
+        switch( type )
+        {
+        case TERRA_DETAIL0_NM:
+        case TERRA_DETAIL1_NM:
+        case TERRA_DETAIL2_NM:
+        case TERRA_DETAIL3_NM:
+            return TextureFilter::TypePrepareForNormalMapping;
+        case TERRA_DETAIL_ROUGHNESS0:
+        case TERRA_DETAIL_ROUGHNESS1:
+        case TERRA_DETAIL_ROUGHNESS2:
+        case TERRA_DETAIL_ROUGHNESS3:
+        case TERRA_DETAIL_METALNESS0:
+        case TERRA_DETAIL_METALNESS1:
+        case TERRA_DETAIL_METALNESS2:
+        case TERRA_DETAIL_METALNESS3:
+            return TextureFilter::TypeLeaveChannelR;
+        default:
+            return 0;
+        }
+
+        return 0;
+    }
+    //-----------------------------------------------------------------------------------
+    /*HlmsTextureManager::TextureMapType HlmsTerraDatablock::suggestMapTypeBasedOnTextureType(
                                                                         TerraTextureTypes type )
     {
         HlmsTextureManager::TextureMapType retVal;
@@ -495,5 +338,5 @@ namespace Ogre
         }
 
         return retVal;
-    }
+    }*/
 }

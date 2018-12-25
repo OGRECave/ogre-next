@@ -41,6 +41,8 @@ THE SOFTWARE.
 #include "OgreHighLevelGpuProgramManager.h"
 #include "OgreHighLevelGpuProgram.h"
 #include "OgreForward3D.h"
+#include "Cubemaps/OgreParallaxCorrectedCubemap.h"
+#include "OgreIrradianceVolume.h"
 #include "OgreCamera.h"
 
 #include "OgreSceneManager.h"
@@ -52,19 +54,16 @@ THE SOFTWARE.
 #include "CommandBuffer/OgreCbTexture.h"
 #include "CommandBuffer/OgreCbShaderBuffer.h"
 
+#ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
+    #include "OgrePlanarReflections.h"
+#endif
+
 #include "Terra/Terra.h"
 
 namespace Ogre
 {
-    const IdString TerraProperty::HwGammaRead       = IdString( "hw_gamma_read" );
-    const IdString TerraProperty::HwGammaWrite      = IdString( "hw_gamma_write" );
-    const IdString TerraProperty::SignedIntTex      = IdString( "signed_int_textures" );
-    const IdString TerraProperty::MaterialsPerBuffer= IdString( "materials_per_buffer" );
-    const IdString TerraProperty::DebugPssmSplits   = IdString( "debug_pssm_splits" );
-
     const IdString TerraProperty::UseSkirts         = IdString( "use_skirts" );
 
-    const IdString TerraProperty::NumTextures       = IdString( "num_textures" );
     const char *TerraProperty::DiffuseMap           = "diffuse_map";
     const char *TerraProperty::EnvProbeMap          = "envprobe_map";
     const char *TerraProperty::DetailWeightMap      = "detail_weight_map";
@@ -73,59 +72,21 @@ namespace Ogre
     const char *TerraProperty::RoughnessMap         = "roughness_map";
     const char *TerraProperty::MetalnessMap         = "metalness_map";
 
-    const IdString TerraProperty::FresnelScalar     = IdString( "fresnel_scalar" );
-    const IdString TerraProperty::MetallicWorkflow  = IdString( "metallic_workflow" );
-    const IdString TerraProperty::ReceiveShadows    = IdString( "receive_shadows" );
-
-    const IdString TerraProperty::DetailOffsets0   = IdString( "detail_offsets0" );
-    const IdString TerraProperty::DetailOffsets1   = IdString( "detail_offsets1" );
-    const IdString TerraProperty::DetailOffsets2   = IdString( "detail_offsets2" );
-    const IdString TerraProperty::DetailOffsets3   = IdString( "detail_offsets3" );
-
-    const IdString TerraProperty::DetailMapsDiffuse = IdString( "detail_maps_diffuse" );
-    const IdString TerraProperty::DetailMapsNormal  = IdString( "detail_maps_normal" );
-    const IdString TerraProperty::FirstValidDetailMapNm= IdString( "first_valid_detail_map_nm" );
-
-    const IdString TerraProperty::Pcf3x3            = IdString( "pcf_3x3" );
-    const IdString TerraProperty::Pcf4x4            = IdString( "pcf_4x4" );
-    const IdString TerraProperty::PcfIterations     = IdString( "pcf_iterations" );
-
-    const IdString TerraProperty::EnvMapScale       = IdString( "envmap_scale" );
-    const IdString TerraProperty::AmbientFixed      = IdString( "ambient_fixed" );
-    const IdString TerraProperty::AmbientHemisphere = IdString( "ambient_hemisphere" );
-
-    const IdString TerraProperty::BrdfDefault       = IdString( "BRDF_Default" );
-    const IdString TerraProperty::BrdfCookTorrance  = IdString( "BRDF_CookTorrance" );
-    const IdString TerraProperty::BrdfBlinnPhong    = IdString( "BRDF_BlinnPhong" );
-    const IdString TerraProperty::FresnelSeparateDiffuse  = IdString( "fresnel_separate_diffuse" );
-    const IdString TerraProperty::GgxHeightCorrelated     = IdString( "GGX_height_correlated" );
-
-    const IdString *TerraProperty::DetailOffsetsPtrs[4] =
-    {
-        &TerraProperty::DetailOffsets0,
-        &TerraProperty::DetailOffsets1,
-        &TerraProperty::DetailOffsets2,
-        &TerraProperty::DetailOffsets3
-    };
-
     HlmsTerra::HlmsTerra( Archive *dataFolder, ArchiveVec *libraryFolders ) :
-        HlmsBufferManager( HLMS_USER3, "Terra", dataFolder, libraryFolders ),
-        ConstBufferPool( HlmsTerraDatablock::MaterialSizeInGpuAligned,
-                         ConstBufferPool::ExtraBufferParams() ),
-        mShadowmapSamplerblock( 0 ),
-        mShadowmapCmpSamplerblock( 0 ),
-        mCurrentShadowmapSamplerblock( 0 ),
-        mTerraSamplerblock( 0 ),
-        mCurrentPassBuffer( 0 ),
-        mLastBoundPool( 0 ),
-        mLastTextureHash( 0 ),
-        mLastMovableObject( 0 ),
-        mDebugPssmSplits( false ),
-        mShadowFilter( PCF_3x3 ),
-        mAmbientLightMode( AmbientAuto )
+        HlmsPbs( dataFolder, libraryFolders ),
+        mLastMovableObject( 0 )
     {
         //Override defaults
-        mLightGatheringMode = LightGatherForwardPlus;
+        mType = HLMS_USER3;
+        mTypeName = "Terra";
+        mTypeNameStr = "Terra";
+
+        mBytesPerSlot = HlmsTerraDatablock::MaterialSizeInGpuAligned;
+        mOptimizationStrategy = LowerGpuOverhead;
+        mSetupWorldMatBuf = false;
+
+        //heightMap, terrainNormals & terrainShadows
+        mReservedTexSlots = 3u;
     }
     //-----------------------------------------------------------------------------------
     HlmsTerra::~HlmsTerra()
@@ -135,13 +96,12 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsTerra::_changeRenderSystem( RenderSystem *newRs )
     {
-        ConstBufferPool::_changeRenderSystem( newRs );
-
-        //Force the pool to contain only 1 entry.
-        mSlotsPerPool   = 1u;
-        mBufferSize     = mBytesPerSlot;
-
-        HlmsBufferManager::_changeRenderSystem( newRs );
+        //Hide the datablocks from our base class since it will
+        //try to downcast HlmsDatablock to HlmsPbsDatablock
+        HlmsDatablockMap datablockCopy;
+        datablockCopy.swap( mDatablocks );
+        HlmsPbs::_changeRenderSystem( newRs );
+        datablockCopy.swap( mDatablocks );
 
         if( newRs )
         {
@@ -151,138 +111,31 @@ namespace Ogre
             while( itor != end )
             {
                 assert( dynamic_cast<HlmsTerraDatablock*>( itor->second.datablock ) );
-                HlmsTerraDatablock *datablock = static_cast<HlmsTerraDatablock*>( itor->second.datablock );
+                HlmsTerraDatablock *datablock =
+                        static_cast<HlmsTerraDatablock*>( itor->second.datablock );
 
                 requestSlot( datablock->mTextureHash, datablock, false );
                 ++itor;
             }
 
-            HlmsSamplerblock samplerblock;
-            samplerblock.mU             = TAM_BORDER;
-            samplerblock.mV             = TAM_BORDER;
-            samplerblock.mW             = TAM_CLAMP;
-            samplerblock.mBorderColour  = ColourValue( std::numeric_limits<float>::max(),
-                                                       std::numeric_limits<float>::max(),
-                                                       std::numeric_limits<float>::max(),
-                                                       std::numeric_limits<float>::max() );
-
-            if( mShaderProfile != "hlsl" )
+            if( !mTerraDescSetSampler )
             {
-                samplerblock.mMinFilter = FO_POINT;
-                samplerblock.mMagFilter = FO_POINT;
-                samplerblock.mMipFilter = FO_NONE;
-
-                if( !mShadowmapSamplerblock )
-                    mShadowmapSamplerblock = mHlmsManager->getSamplerblock( samplerblock );
-            }
-
-            samplerblock.mMinFilter     = FO_LINEAR;
-            samplerblock.mMagFilter     = FO_LINEAR;
-            samplerblock.mMipFilter     = FO_NONE;
-            samplerblock.mCompareFunction   = CMPF_LESS_EQUAL;
-
-            if( !mShadowmapCmpSamplerblock )
-                mShadowmapCmpSamplerblock = mHlmsManager->getSamplerblock( samplerblock );
-
-            if( !mTerraSamplerblock )
-                mTerraSamplerblock = mHlmsManager->getSamplerblock( HlmsSamplerblock() );
-        }
-    }
-    //-----------------------------------------------------------------------------------
-    const HlmsCache* HlmsTerra::createShaderCacheEntry( uint32 renderableHash,
-                                                            const HlmsCache &passCache,
-                                                            uint32 finalHash,
-                                                            const QueuedRenderable &queuedRenderable )
-    {
-        const HlmsCache *retVal = Hlms::createShaderCacheEntry( renderableHash, passCache, finalHash,
-                                                                queuedRenderable );
-
-        if( mShaderProfile == "hlsl" )
-        {
-            mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache,
-                                                mSetProperties, queuedRenderable );
-            return retVal; //D3D embeds the texture slots in the shader.
-        }
-
-        //Set samplers.
-        if( !retVal->pso.pixelShader.isNull() )
-        {
-            GpuProgramParametersSharedPtr psParams = retVal->pso.pixelShader->getDefaultParameters();
-
-            int texUnit = 3; //Vertex shader consumes 1 slot with its heightmap,
-                             //PS consumes 2 slot with its normalmap & shadow texture.
-
-            psParams->setNamedConstant( "terrainNormals", 1 );
-            psParams->setNamedConstant( "terrainShadows", 2 );
-
-            //Forward3D consumes 2 more slots.
-            if( mGridBuffer )
-            {
-                psParams->setNamedConstant( "f3dGrid",      3 );
-                psParams->setNamedConstant( "f3dLightList", 4 );
-                texUnit += 2;
-            }
-
-            if( !mPreparedPass.shadowMaps.empty() )
-            {
-                char tmpData[32];
-                LwString texName = LwString::FromEmptyPointer( tmpData, sizeof(tmpData) );
-                texName = "texShadowMap";
-                const size_t baseTexSize = texName.size();
-
-                vector<int>::type shadowMaps;
-                shadowMaps.reserve( mPreparedPass.shadowMaps.size() );
-                for( size_t i=0; i<mPreparedPass.shadowMaps.size(); ++i )
-                {
-                    texName.resize( baseTexSize );
-                    texName.a( (uint32)i );   //texShadowMap0
-                    psParams->setNamedConstant( texName.c_str(), &texUnit, 1, 1 );
-                    shadowMaps.push_back( texUnit++ );
-                }
-            }
-
-            assert( dynamic_cast<const HlmsTerraDatablock*>( queuedRenderable.renderable->getDatablock() ) );
-            const HlmsTerraDatablock *datablock = static_cast<const HlmsTerraDatablock*>(
-                                                        queuedRenderable.renderable->getDatablock() );
-
-            int numTextures = getProperty( TerraProperty::NumTextures );
-            for( int i=0; i<numTextures; ++i )
-            {
-                psParams->setNamedConstant( "textureMaps[" + StringConverter::toString( i ) + "]",
-                                            texUnit++ );
-            }
-
-            if( getProperty( TerraProperty::EnvProbeMap ) )
-            {
-                assert( !datablock->getTexture( TERRA_REFLECTION ).isNull() );
-                psParams->setNamedConstant( "texEnvProbeMap", texUnit++ );
+                //We need one for terrainNormals & terrainShadows. Reuse an existing samplerblock
+                DescriptorSetSampler baseSet;
+                baseSet.mSamplers.push_back( mAreaLightMasksSamplerblock );
+                if( !mHasSeparateSamplers )
+                    baseSet.mSamplers.push_back( mAreaLightMasksSamplerblock );
+                mTerraDescSetSampler = mHlmsManager->getDescriptorSetSampler( baseSet );
             }
         }
-
-        GpuProgramParametersSharedPtr vsParams = retVal->pso.vertexShader->getDefaultParameters();
-        vsParams->setNamedConstant( "heightMap", 0 );
-
-        mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache,
-                                            mSetProperties, queuedRenderable );
-
-        mRenderSystem->_setPipelineStateObject( &retVal->pso );
-
-        mRenderSystem->bindGpuProgramParameters( GPT_VERTEX_PROGRAM, vsParams, GPV_ALL );
-        if( !retVal->pso.pixelShader.isNull() )
-        {
-            GpuProgramParametersSharedPtr psParams = retVal->pso.pixelShader->getDefaultParameters();
-            mRenderSystem->bindGpuProgramParameters( GPT_FRAGMENT_PROGRAM, psParams, GPV_ALL );
-        }
-
-        return retVal;
     }
     //-----------------------------------------------------------------------------------
     void HlmsTerra::setDetailMapProperties( HlmsTerraDatablock *datablock, PiecesMap *inOutPieces )
     {
-        uint32 minNormalMap = 4;
+        int32 minNormalMap = 4;
         bool hasDiffuseMaps = false;
         bool hasNormalMaps = false;
-        for( size_t i=0; i<4; ++i )
+        for( uint8 i=0; i<4u; ++i )
         {
             setDetailTextureProperty( TerraProperty::DetailMapN,   datablock,
                                       TERRA_DETAIL0, i );
@@ -293,34 +146,32 @@ namespace Ogre
             setDetailTextureProperty( TerraProperty::MetalnessMap, datablock,
                                       TERRA_DETAIL_METALNESS0, i );
 
-            if( !datablock->getTexture( TERRA_DETAIL0 + i ).isNull() )
-            {
+            if( datablock->getTexture( TERRA_DETAIL0 + i ) )
                 hasDiffuseMaps = true;
-            }
 
-            if( !datablock->getTexture( TERRA_DETAIL0_NM + i ).isNull() )
+            if( datablock->getTexture( TERRA_DETAIL0_NM + i ) )
             {
-                minNormalMap = std::min<uint32>( minNormalMap, i );
+                minNormalMap = std::min<int32>( minNormalMap, i );
                 hasNormalMaps = true;
             }
 
             if( datablock->mDetailsOffsetScale[i] != Vector4( 0, 0, 1, 1 ) )
-                setProperty( *TerraProperty::DetailOffsetsPtrs[i], 1 );
+                setProperty( *PbsProperty::DetailOffsetsPtrs[i], 1 );
         }
 
         if( hasDiffuseMaps )
-            setProperty( TerraProperty::DetailMapsDiffuse, 4 );
+            setProperty( PbsProperty::DetailMapsDiffuse, 4 );
 
         if( hasNormalMaps )
-            setProperty( TerraProperty::DetailMapsNormal, 4 );
+            setProperty( PbsProperty::DetailMapsNormal, 4 );
 
-        setProperty( TerraProperty::FirstValidDetailMapNm, minNormalMap );
+        setProperty( PbsProperty::FirstValidDetailMapNm, minNormalMap );
     }
     //-----------------------------------------------------------------------------------
     void HlmsTerra::setTextureProperty( const char *propertyName, HlmsTerraDatablock *datablock,
                                         TerraTextureTypes texType )
     {
-        const uint8 idx = datablock->getBakedTextureIdx( texType );
+        uint8 idx = datablock->getIndexToDescriptorTexture( texType );
         if( idx != NUM_TERRA_TEXTURE_TYPES )
         {
             char tmpData[64];
@@ -328,16 +179,24 @@ namespace Ogre
 
             propName = propertyName; //diffuse_map
 
+            const size_t basePropSize = propName.size(); // diffuse_map
+
             //In the template the we subtract the "+1" for the index.
             //We need to increment it now otherwise @property( diffuse_map )
             //can translate to @property( 0 ) which is not what we want.
             setProperty( propertyName, idx + 1 );
 
+            propName.resize( basePropSize );
             propName.a( "_idx" ); //diffuse_map_idx
             setProperty( propName.c_str(), idx );
 
-            propName.a( "_slice" ); //diffuse_map_idx_slice
-            setProperty( propName.c_str(), datablock->_getTextureSliceArrayIndex( texType ) );
+            if( mHasSeparateSamplers )
+            {
+                const uint8 samplerIdx = datablock->getIndexToDescriptorSampler( texType );
+                propName.resize( basePropSize );
+                propName.a( "_sampler" );           //diffuse_map_sampler
+                setProperty( propName.c_str(), samplerIdx );
+            }
         }
     }
     //-----------------------------------------------------------------------------------
@@ -345,7 +204,7 @@ namespace Ogre
                                               TerraTextureTypes baseTexType, uint8 detailIdx )
     {
         const TerraTextureTypes texType = static_cast<TerraTextureTypes>( baseTexType + detailIdx );
-        const uint8 idx = datablock->getBakedTextureIdx( texType );
+        const uint8 idx = datablock->getIndexToDescriptorTexture( texType );
         if( idx != NUM_TERRA_TEXTURE_TYPES )
         {
             char tmpData[64];
@@ -353,16 +212,24 @@ namespace Ogre
 
             propName.a( propertyName, detailIdx ); //detail_map0
 
+            const size_t basePropSize = propName.size(); // diffuse_map
+
             //In the template the we subtract the "+1" for the index.
             //We need to increment it now otherwise @property( diffuse_map )
             //can translate to @property( 0 ) which is not what we want.
             setProperty( propName.c_str(), idx + 1 );
 
+            propName.resize( basePropSize );
             propName.a( "_idx" ); //detail_map0_idx
             setProperty( propName.c_str(), idx );
 
-            propName.a( "_slice" ); //detail_map0_idx_slice
-            setProperty( propName.c_str(), datablock->_getTextureSliceArrayIndex( texType ) );
+            if( mHasSeparateSamplers )
+            {
+                const uint8 samplerIdx = datablock->getIndexToDescriptorSampler( texType );
+                propName.resize( basePropSize );
+                propName.a( "_sampler" );           //detail_map0_sampler
+                setProperty( propName.c_str(), samplerIdx );
+            }
         }
     }
     //-----------------------------------------------------------------------------------
@@ -375,561 +242,121 @@ namespace Ogre
         setProperty( TerraProperty::UseSkirts, terrainCell->getUseSkirts() );
 
         assert( dynamic_cast<HlmsTerraDatablock*>( renderable->getDatablock() ) );
-        HlmsTerraDatablock *datablock = static_cast<HlmsTerraDatablock*>(
-                                                        renderable->getDatablock() );
+        HlmsTerraDatablock *datablock = static_cast<HlmsTerraDatablock*>( renderable->getDatablock() );
 
-        setProperty( TerraProperty::ReceiveShadows, 1 );
+        setProperty( PbsProperty::FresnelScalar, 1 );
+        setProperty( PbsProperty::FresnelWorkflow, 0 );
+        setProperty( PbsProperty::MetallicWorkflow, 1 );
+
+        setProperty( PbsProperty::ReceiveShadows, 1 );
 
         uint32 brdf = datablock->getBrdf();
         if( (brdf & TerraBrdf::BRDF_MASK) == TerraBrdf::Default )
         {
-            setProperty( TerraProperty::BrdfDefault, 1 );
+            setProperty( PbsProperty::BrdfDefault, 1 );
 
             if( !(brdf & TerraBrdf::FLAG_UNCORRELATED) )
-                setProperty( TerraProperty::GgxHeightCorrelated, 1 );
+                setProperty( PbsProperty::GgxHeightCorrelated, 1 );
         }
         else if( (brdf & TerraBrdf::BRDF_MASK) == TerraBrdf::CookTorrance )
-            setProperty( TerraProperty::BrdfCookTorrance, 1 );
+            setProperty( PbsProperty::BrdfCookTorrance, 1 );
         else if( (brdf & TerraBrdf::BRDF_MASK) == TerraBrdf::BlinnPhong )
-            setProperty( TerraProperty::BrdfBlinnPhong, 1 );
+            setProperty( PbsProperty::BrdfBlinnPhong, 1 );
 
         if( brdf & TerraBrdf::FLAG_SPERATE_DIFFUSE_FRESNEL )
-            setProperty( TerraProperty::FresnelSeparateDiffuse, 1 );
+            setProperty( PbsProperty::FresnelSeparateDiffuse, 1 );
 
+        if( brdf & TerraBrdf::FLAG_LEGACY_MATH )
+            setProperty( PbsProperty::LegacyMathBrdf, 1 );
+        if( brdf & TerraBrdf::FLAG_FULL_LEGACY )
+            setProperty( PbsProperty::RoughnessIsShininess, 1 );
+
+        if( datablock->mTexturesDescSet )
+            setDetailMapProperties( datablock, inOutPieces );
+        else
+            setProperty( PbsProperty::FirstValidDetailMapNm, 4 );
+
+        if( datablock->mSamplersDescSet )
+            setProperty( PbsProperty::NumSamplers, datablock->mSamplersDescSet->mSamplers.size() );
+
+        if( datablock->mTexturesDescSet )
         {
-            size_t validDetailMaps = 0;
-            for( size_t i=0; i<4; ++i )
+            bool envMap = datablock->getTexture( PBSM_REFLECTION ) != 0;
+            setProperty( PbsProperty::NumTextures,
+                         datablock->mTexturesDescSet->mTextures.size() - envMap );
+
+            setTextureProperty( PbsProperty::DiffuseMap,    datablock,  TERRA_DIFFUSE );
+            setTextureProperty( PbsProperty::EnvProbeMap,   datablock,  TERRA_REFLECTION );
+            setTextureProperty( PbsProperty::DetailWeightMap,datablock, TERRA_DETAIL_WEIGHT );
+
+            //Save the name of the cubemap for hazard prevention
+            //(don't sample the cubemap and render to it at the same time).
+            const TextureGpu *reflectionTexture = datablock->getTexture( PBSM_REFLECTION );
+            if( reflectionTexture )
             {
-                if( !datablock->getTexture( TERRA_DETAIL0_NM + i ).isNull() )
-                    ++validDetailMaps;
+                //Manual reflection texture
+//                if( datablock->getCubemapProbe() )
+//                    setProperty( PbsProperty::UseParallaxCorrectCubemaps, 1 );
+                setProperty( PbsProperty::EnvProbeMap,
+                             static_cast<int32>( reflectionTexture->getName().mHash ) );
             }
         }
 
-        setDetailMapProperties( datablock, inOutPieces );
+        bool usesNormalMap = false;
+        for( uint8 i=TERRA_DETAIL0_NM; i<=TERRA_DETAIL3_NM; ++i )
+            usesNormalMap |= datablock->getTexture( i ) != 0;
+        setProperty( PbsProperty::NormalMap, usesNormalMap );
 
-        bool envMap = datablock->getBakedTextureIdx( TERRA_REFLECTION ) != NUM_TERRA_TEXTURE_TYPES;
+        if( usesNormalMap )
+        {
+//            TextureGpu *normalMapTex = datablock->getTexture( PBSM_DETAIL0_NM );
+//            if( PixelFormatGpuUtils::isSigned( normalMapTex->getPixelFormat() ) )
+            {
+                setProperty( PbsProperty::NormalSamplingFormat, PbsProperty::NormalRgSnorm.mHash );
+                setProperty( PbsProperty::NormalRgSnorm, PbsProperty::NormalRgSnorm.mHash );
+            }
+//            else
+//            {
+//                setProperty( PbsProperty::NormalSamplingFormat, PbsProperty::NormalRgUnorm.mHash );
+//                setProperty( PbsProperty::NormalRgUnorm, PbsProperty::NormalRgUnorm.mHash );
+//            }
+            //Reserved for supporting LA textures in GLES2.
+//            else
+//            {
+//                setProperty( PbsProperty::NormalSamplingFormat, PbsProperty::NormalLa.mHash );
+//                setProperty( PbsProperty::NormalLa, PbsProperty::NormalLa.mHash );
+//            }
+        }
 
-        setProperty( TerraProperty::NumTextures, datablock->mBakedTextures.size() - envMap );
-
-        setTextureProperty( TerraProperty::DiffuseMap,      datablock, TERRA_DIFFUSE );
-        setTextureProperty( TerraProperty::EnvProbeMap,     datablock, TERRA_REFLECTION );
-        setTextureProperty( TerraProperty::DetailWeightMap, datablock, TERRA_DETAIL_WEIGHT );
+#ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
+        if( mPlanarReflections && mPlanarReflections->hasPlanarReflections( renderable ) )
+        {
+            if( !mPlanarReflections->_isUpdatingRenderablesHlms() )
+                mPlanarReflections->_notifyRenderableFlushedHlmsDatablock( renderable );
+            else
+                setProperty( PbsProperty::UsePlanarReflections, 1 );
+        }
+#endif
     }
     //-----------------------------------------------------------------------------------
-    HlmsCache HlmsTerra::preparePassHash( const CompositorShadowNode *shadowNode, bool casterPass,
-                                          bool dualParaboloid, SceneManager *sceneManager )
+    void HlmsTerra::calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces )
     {
+        //Override, since shadow casting is not supported
         mSetProperties.clear();
-
-        if( casterPass )
-        {
-            HlmsCache retVal = Hlms::preparePassHashBase( shadowNode, casterPass,
-                                                          dualParaboloid, sceneManager );
-            return retVal;
-        }
-
-        //The properties need to be set before preparePassHash so that
-        //they are considered when building the HlmsCache's hash.
-        if( shadowNode && !casterPass )
-        {
-            //Shadow receiving can be improved in performance by using gather sampling.
-            //(it's the only feature so far that uses gather)
-            const RenderSystemCapabilities *capabilities = mRenderSystem->getCapabilities();
-            if( capabilities->hasCapability( RSC_TEXTURE_GATHER ) )
-                setProperty( HlmsBaseProp::TexGather, 1 );
-
-            if( mShadowFilter == PCF_3x3 )
-            {
-                setProperty( TerraProperty::Pcf3x3, 1 );
-                setProperty( TerraProperty::PcfIterations, 4 );
-            }
-            else if( mShadowFilter == PCF_4x4 )
-            {
-                setProperty( TerraProperty::Pcf4x4, 1 );
-                setProperty( TerraProperty::PcfIterations, 9 );
-            }
-            else
-            {
-                setProperty( TerraProperty::PcfIterations, 1 );
-            }
-
-            if( mDebugPssmSplits )
-            {
-                int32 numPssmSplits = 0;
-                const vector<Real>::type *pssmSplits = shadowNode->getPssmSplits( 0 );
-                if( pssmSplits )
-                {
-                    numPssmSplits = static_cast<int32>( pssmSplits->size() - 1 );
-                    if( numPssmSplits > 0 )
-                        setProperty( TerraProperty::DebugPssmSplits, 1 );
-                }
-            }
-        }
-
-        AmbientLightMode ambientMode = mAmbientLightMode;
-        ColourValue upperHemisphere = sceneManager->getAmbientLightUpperHemisphere();
-        ColourValue lowerHemisphere = sceneManager->getAmbientLightLowerHemisphere();
-
-        const float envMapScale = upperHemisphere.a;
-        //Ignore alpha channel
-        upperHemisphere.a = lowerHemisphere.a = 1.0;
-
-        if( !casterPass )
-        {
-            if( mAmbientLightMode == AmbientAuto )
-            {
-                if( upperHemisphere == lowerHemisphere )
-                {
-                    if( upperHemisphere == ColourValue::Black )
-                        ambientMode = AmbientNone;
-                    else
-                        ambientMode = AmbientFixed;
-                }
-                else
-                {
-                    ambientMode = AmbientHemisphere;
-                }
-            }
-
-            if( ambientMode == AmbientFixed )
-                setProperty( TerraProperty::AmbientFixed, 1 );
-            if( ambientMode == AmbientHemisphere )
-                setProperty( TerraProperty::AmbientHemisphere, 1 );
-
-            if( envMapScale != 1.0f )
-                setProperty( TerraProperty::EnvMapScale, 1 );
-        }
-
-        setProperty( TerraProperty::FresnelScalar, 1 );
-        setProperty( TerraProperty::MetallicWorkflow, 1 );
-
-        HlmsCache retVal = Hlms::preparePassHashBase( shadowNode, casterPass,
-                                                      dualParaboloid, sceneManager );
-
-        if( getProperty( HlmsBaseProp::LightsDirNonCaster ) > 0 )
-        {
-            //First directional light always cast shadows thanks to our terrain shadows.
-            int32 shadowCasterDirectional = getProperty( HlmsBaseProp::LightsDirectional );
-            shadowCasterDirectional = std::max( shadowCasterDirectional, 1 );
-            setProperty( HlmsBaseProp::LightsDirectional, shadowCasterDirectional );
-        }
-
-        const RenderSystemCapabilities *capabilities = mRenderSystem->getCapabilities();
-        setProperty( TerraProperty::HwGammaRead, capabilities->hasCapability( RSC_HW_GAMMA ) );
-//        setProperty( TerraProperty::HwGammaWrite, capabilities->hasCapability( RSC_HW_GAMMA ) &&
-//                                                        renderTarget->isHardwareGammaEnabled() );
-        setProperty( TerraProperty::HwGammaWrite, 1 );
-//        setProperty( TerraProperty::SignedIntTex, capabilities->hasCapability(
-//                                                            RSC_TEXTURE_SIGNED_INT ) );
-        retVal.setProperties = mSetProperties;
-
-        Camera *camera = sceneManager->getCameraInProgress();
-        Matrix4 viewMatrix = camera->getViewMatrix(true);
-
-        Matrix4 projectionMatrix = camera->getProjectionMatrixWithRSDepth();
-        RenderPassDescriptor *renderPassDesc = mRenderSystem->getCurrentPassDescriptor();
-
-        if( renderPassDesc->requiresTextureFlipping() )
-        {
-            projectionMatrix[1][0] = -projectionMatrix[1][0];
-            projectionMatrix[1][1] = -projectionMatrix[1][1];
-            projectionMatrix[1][2] = -projectionMatrix[1][2];
-            projectionMatrix[1][3] = -projectionMatrix[1][3];
-        }
-
-        int32 numLights             = getProperty( HlmsBaseProp::LightsSpot );
-        int32 numDirectionalLights  = getProperty( HlmsBaseProp::LightsDirNonCaster );
-        int32 numShadowMapLights    = getProperty( HlmsBaseProp::NumShadowMapLights );
-        int32 numPssmSplits         = getProperty( HlmsBaseProp::PssmSplits );
-
-        bool isPssmBlend = getProperty( HlmsBaseProp::PssmBlend ) != 0;
-        bool isPssmFade = getProperty( HlmsBaseProp::PssmFade ) != 0;
-
-        //mat4 viewProj + mat4 view;
-        size_t mapSize = (16 + 16) * 4;
-
-        mGridBuffer             = 0;
-        mGlobalLightListBuffer  = 0;
-
-        ForwardPlusBase *forwardPlus = sceneManager->_getActivePassForwardPlus();
-        if( forwardPlus )
-        {
-            mapSize += forwardPlus->getConstBufferSize();
-            mGridBuffer             = forwardPlus->getGridBuffer( camera );
-            mGlobalLightListBuffer  = forwardPlus->getGlobalLightListBuffer( camera );
-        }
-
-        //mat4 shadowRcv[numShadowMapLights].texViewProj +
-        //              vec2 shadowRcv[numShadowMapLights].shadowDepthRange +
-        //              vec2 padding +
-        //              vec4 shadowRcv[numShadowMapLights].invShadowMapSize +
-        //mat3 invViewMatCubemap (upgraded to three vec4)
-        mapSize += ( (16 + 2 + 2 + 4) * numShadowMapLights + 4 * 3 ) * 4;
-
-        //vec3 ambientUpperHemi + float envMapScale
-        if( ambientMode == AmbientFixed || ambientMode == AmbientHemisphere || envMapScale != 1.0f )
-            mapSize += 4 * 4;
-
-        //vec3 ambientLowerHemi + padding + vec3 ambientHemisphereDir + padding
-        if( ambientMode == AmbientHemisphere )
-            mapSize += 8 * 4;
-
-        //float pssmSplitPoints N times.
-        mapSize += numPssmSplits * 4;
-
-        if( isPssmBlend )
-        {
-            //float pssmBlendPoints N-1 times.
-            mapSize += ( numPssmSplits - 1 ) * 4;
-        }
-        if( isPssmFade )
-        {
-            //float pssmFadePoint.
-            mapSize += 4;
-        }
-
-        mapSize = alignToNextMultiple( mapSize, 16 );
-
-        if( numShadowMapLights > 0 )
-        {
-            //Six variables * 4 (padded vec3) * 4 (bytes) * numLights
-            mapSize += ( 6 * 4 * 4 ) * numLights;
-        }
-        else
-        {
-            //Three variables * 4 (padded vec3) * 4 (bytes) * numDirectionalLights
-            mapSize += ( 3 * 4 * 4 ) * numDirectionalLights;
-        }
-
-        mapSize += mListener->getPassBufferSize( shadowNode, casterPass, dualParaboloid,
-                                                 sceneManager );
-
-        //Arbitrary 8kb, should be enough.
-        const size_t maxBufferSize = 8 * 1024;
-
-        assert( mapSize <= maxBufferSize );
-
-        if( mCurrentPassBuffer >= mPassBuffers.size() )
-        {
-            mPassBuffers.push_back( mVaoManager->createConstBuffer( maxBufferSize, BT_DYNAMIC_PERSISTENT,
-                                                                    0, false ) );
-        }
-
-        ConstBufferPacked *passBuffer = mPassBuffers[mCurrentPassBuffer++];
-        float *passBufferPtr = reinterpret_cast<float*>( passBuffer->map( 0, mapSize ) );
-
-#ifndef NDEBUG
-        const float *startupPtr = passBufferPtr;
-#endif
-
-        //---------------------------------------------------------------------------
-        //                          ---- VERTEX SHADER ----
-        //---------------------------------------------------------------------------
-
-        //mat4 viewProj;
-        Matrix4 viewProjMatrix = projectionMatrix * viewMatrix;
-        for( size_t i=0; i<16; ++i )
-            *passBufferPtr++ = (float)viewProjMatrix[0][i];
-
-        mPreparedPass.viewMatrix        = viewMatrix;
-
-        mPreparedPass.shadowMaps.clear();
-
-        TextureGpu *renderTarget = mRenderSystem->_getViewport()->getCurrentTarget();
-
-        //mat4 view;
-        for( size_t i=0; i<16; ++i )
-            *passBufferPtr++ = (float)viewMatrix[0][i];
-
-        size_t shadowMapTexIdx = 0;
-        const TextureGpuVec &contiguousShadowMapTex = shadowNode->getContiguousShadowMapTex();
-
-        for( int32 i=0; i<numShadowMapLights; ++i )
-        {
-            //Skip inactive lights (e.g. no directional lights are available
-            //and there's a shadow map that only accepts dir lights)
-            while( !shadowNode->isShadowMapIdxActive( shadowMapTexIdx ) )
-                ++shadowMapTexIdx;
-
-            //mat4 shadowRcv[numShadowMapLights].texViewProj
-            Matrix4 viewProjTex = shadowNode->getViewProjectionMatrix( shadowMapTexIdx );
-            for( size_t j=0; j<16; ++j )
-                *passBufferPtr++ = (float)viewProjTex[0][j];
-
-            //vec2 shadowRcv[numShadowMapLights].shadowDepthRange
-            Real fNear, fFar;
-            shadowNode->getMinMaxDepthRange( shadowMapTexIdx, fNear, fFar );
-            const Real depthRange = fFar - fNear;
-            *passBufferPtr++ = fNear;
-            *passBufferPtr++ = 1.0f / depthRange;
-            ++passBufferPtr; //Padding
-            ++passBufferPtr; //Padding
-
-
-            //vec2 shadowRcv[numShadowMapLights].invShadowMapSize
-            size_t shadowMapTexContigIdx =
-                    shadowNode->getIndexToContiguousShadowMapTex( (size_t)shadowMapTexIdx );
-            uint32 texWidth  = contiguousShadowMapTex[shadowMapTexContigIdx]->getWidth();
-            uint32 texHeight = contiguousShadowMapTex[shadowMapTexContigIdx]->getHeight();
-            *passBufferPtr++ = 1.0f / texWidth;
-            *passBufferPtr++ = 1.0f / texHeight;
-            *passBufferPtr++ = static_cast<float>( texWidth );
-            *passBufferPtr++ = static_cast<float>( texHeight );
-
-            ++shadowMapTexIdx;
-        }
-
-        //---------------------------------------------------------------------------
-        //                          ---- PIXEL SHADER ----
-        //---------------------------------------------------------------------------
-
-        Matrix3 viewMatrix3, invViewMatrixCubemap;
-        viewMatrix.extract3x3Matrix( viewMatrix3 );
-        //Cubemaps are left-handed.
-        invViewMatrixCubemap = viewMatrix3;
-        invViewMatrixCubemap[0][2] = -invViewMatrixCubemap[0][2];
-        invViewMatrixCubemap[1][2] = -invViewMatrixCubemap[1][2];
-        invViewMatrixCubemap[2][2] = -invViewMatrixCubemap[2][2];
-        invViewMatrixCubemap = invViewMatrixCubemap.Inverse();
-
-        //mat3 invViewMatCubemap
-        for( size_t i=0; i<9; ++i )
-        {
-#ifdef OGRE_GLES2_WORKAROUND_2
-            Matrix3 xRot( 1.0f, 0.0f, 0.0f,
-                          0.0f, 0.0f, -1.0f,
-                          0.0f, 1.0f, 0.0f );
-            xRot = xRot * invViewMatrixCubemap;
-            *passBufferPtr++ = (float)xRot[0][i];
-#else
-            *passBufferPtr++ = (float)invViewMatrixCubemap[0][i];
-#endif
-
-            //Alignment: each row/column is one vec4, despite being 3x3
-            if( !( (i+1) % 3 ) )
-                ++passBufferPtr;
-        }
-
-        //vec3 ambientUpperHemi + padding
-        if( ambientMode == AmbientFixed || ambientMode == AmbientHemisphere || envMapScale != 1.0f )
-        {
-            *passBufferPtr++ = static_cast<float>( upperHemisphere.r );
-            *passBufferPtr++ = static_cast<float>( upperHemisphere.g );
-            *passBufferPtr++ = static_cast<float>( upperHemisphere.b );
-            *passBufferPtr++ = envMapScale;
-        }
-
-        //vec3 ambientLowerHemi + padding + vec3 ambientHemisphereDir + padding
-        if( ambientMode == AmbientHemisphere )
-        {
-            *passBufferPtr++ = static_cast<float>( lowerHemisphere.r );
-            *passBufferPtr++ = static_cast<float>( lowerHemisphere.g );
-            *passBufferPtr++ = static_cast<float>( lowerHemisphere.b );
-            *passBufferPtr++ = 1.0f;
-
-            Vector3 hemisphereDir = viewMatrix3 * sceneManager->getAmbientLightHemisphereDir();
-            hemisphereDir.normalise();
-            *passBufferPtr++ = static_cast<float>( hemisphereDir.x );
-            *passBufferPtr++ = static_cast<float>( hemisphereDir.y );
-            *passBufferPtr++ = static_cast<float>( hemisphereDir.z );
-            *passBufferPtr++ = 1.0f;
-        }
-
-        //float pssmSplitPoints
-        for( int32 i=0; i<numPssmSplits; ++i )
-            *passBufferPtr++ = (*shadowNode->getPssmSplits(0))[i+1];
-
-        int32 numPssmBlendsAndFade = 0;
-        if( isPssmBlend )
-        {
-            numPssmBlendsAndFade += numPssmSplits - 1;
-
-            //float pssmBlendPoints
-            for( int32 i=0; i<numPssmSplits-1; ++i )
-                *passBufferPtr++ = (*shadowNode->getPssmBlends(0))[i];
-        }
-        if( isPssmFade )
-        {
-            numPssmBlendsAndFade += 1;
-
-            //float pssmFadePoint
-            *passBufferPtr++ = *shadowNode->getPssmFade(0);
-        }
-
-        passBufferPtr += alignToNextMultiple( numPssmSplits + numPssmBlendsAndFade, 4 ) - ( numPssmSplits + numPssmBlendsAndFade );
-
-        if( numShadowMapLights > 0 )
-        {
-            //All directional lights (caster and non-caster) are sent.
-            //Then non-directional shadow-casting shadow lights are sent.
-            size_t shadowLightIdx = 0;
-            size_t nonShadowLightIdx = 0;
-            const LightListInfo &globalLightList = sceneManager->getGlobalLightList();
-            const LightClosestArray &lights = shadowNode->getShadowCastingLights();
-
-            const CompositorShadowNode::LightsBitSet &affectedLights =
-                    shadowNode->getAffectedLightsBitSet();
-
-            int32 shadowCastingDirLights = getProperty( HlmsBaseProp::LightsDirectional );
-
-            for( int32 i=0; i<numLights; ++i )
-            {
-                Light const *light = 0;
-
-                if( i >= shadowCastingDirLights && i < numDirectionalLights )
-                {
-                    while( affectedLights[nonShadowLightIdx] )
-                        ++nonShadowLightIdx;
-
-                    light = globalLightList.lights[nonShadowLightIdx++];
-
-                    assert( light->getType() == Light::LT_DIRECTIONAL );
-                }
-                else
-                {
-                    //Skip inactive lights (e.g. no directional lights are available
-                    //and there's a shadow map that only accepts dir lights)
-                    while( !lights[shadowLightIdx].light )
-                        ++shadowLightIdx;
-                    light = lights[shadowLightIdx++].light;
-                }
-
-                Vector4 lightPos4 = light->getAs4DVector();
-                Vector3 lightPos;
-
-                if( light->getType() == Light::LT_DIRECTIONAL )
-                    lightPos = viewMatrix3 * Vector3( lightPos4.x, lightPos4.y, lightPos4.z );
-                else
-                    lightPos = viewMatrix * Vector3( lightPos4.x, lightPos4.y, lightPos4.z );
-
-                //vec3 lights[numLights].position
-                *passBufferPtr++ = lightPos.x;
-                *passBufferPtr++ = lightPos.y;
-                *passBufferPtr++ = lightPos.z;
-                ++passBufferPtr;
-
-                //vec3 lights[numLights].diffuse
-                ColourValue colour = light->getDiffuseColour() *
-                                     light->getPowerScale();
-                *passBufferPtr++ = colour.r;
-                *passBufferPtr++ = colour.g;
-                *passBufferPtr++ = colour.b;
-                ++passBufferPtr;
-
-                //vec3 lights[numLights].specular
-                colour = light->getSpecularColour() * light->getPowerScale();
-                *passBufferPtr++ = colour.r;
-                *passBufferPtr++ = colour.g;
-                *passBufferPtr++ = colour.b;
-                ++passBufferPtr;
-
-                //vec3 lights[numLights].attenuation;
-                Real attenRange     = light->getAttenuationRange();
-                Real attenLinear    = light->getAttenuationLinear();
-                Real attenQuadratic = light->getAttenuationQuadric();
-                *passBufferPtr++ = attenRange;
-                *passBufferPtr++ = attenLinear;
-                *passBufferPtr++ = attenQuadratic;
-                ++passBufferPtr;
-
-                //vec3 lights[numLights].spotDirection;
-                Vector3 spotDir = viewMatrix3 * light->getDerivedDirection();
-                *passBufferPtr++ = spotDir.x;
-                *passBufferPtr++ = spotDir.y;
-                *passBufferPtr++ = spotDir.z;
-                ++passBufferPtr;
-
-                //vec3 lights[numLights].spotParams;
-                Radian innerAngle = light->getSpotlightInnerAngle();
-                Radian outerAngle = light->getSpotlightOuterAngle();
-                *passBufferPtr++ = 1.0f / ( cosf( innerAngle.valueRadians() * 0.5f ) -
-                                         cosf( outerAngle.valueRadians() * 0.5f ) );
-                *passBufferPtr++ = cosf( outerAngle.valueRadians() * 0.5f );
-                *passBufferPtr++ = light->getSpotlightFalloff();
-                ++passBufferPtr;
-            }
-        }
-        else
-        {
-            //No shadow maps, only send directional lights
-            const LightListInfo &globalLightList = sceneManager->getGlobalLightList();
-
-            for( int32 i=0; i<numDirectionalLights; ++i )
-            {
-                assert( globalLightList.lights[i]->getType() == Light::LT_DIRECTIONAL );
-
-                Vector4 lightPos4 = globalLightList.lights[i]->getAs4DVector();
-                Vector3 lightPos = viewMatrix3 * Vector3( lightPos4.x, lightPos4.y, lightPos4.z );
-
-                //vec3 lights[numLights].position
-                *passBufferPtr++ = lightPos.x;
-                *passBufferPtr++ = lightPos.y;
-                *passBufferPtr++ = lightPos.z;
-                ++passBufferPtr;
-
-                //vec3 lights[numLights].diffuse
-                ColourValue colour = globalLightList.lights[i]->getDiffuseColour() *
-                                     globalLightList.lights[i]->getPowerScale();
-                *passBufferPtr++ = colour.r;
-                *passBufferPtr++ = colour.g;
-                *passBufferPtr++ = colour.b;
-                ++passBufferPtr;
-
-                //vec3 lights[numLights].specular
-                colour = globalLightList.lights[i]->getSpecularColour() * globalLightList.lights[i]->getPowerScale();
-                *passBufferPtr++ = colour.r;
-                *passBufferPtr++ = colour.g;
-                *passBufferPtr++ = colour.b;
-                ++passBufferPtr;
-            }
-        }
-
-        if( shadowNode )
-        {
-            mPreparedPass.shadowMaps.reserve( contiguousShadowMapTex.size() );
-
-            TextureGpuVec::const_iterator itShadowMap = contiguousShadowMapTex.begin();
-            TextureGpuVec::const_iterator enShadowMap = contiguousShadowMapTex.end();
-
-            while( itShadowMap != enShadowMap )
-            {
-                mPreparedPass.shadowMaps.push_back( *itShadowMap );
-                ++itShadowMap;
-            }
-        }
-
-        if( forwardPlus )
-        {
-			forwardPlus->fillConstBufferData( sceneManager->getCurrentViewport(), renderTarget,
-											  mShaderSyntax, passBufferPtr );
-            passBufferPtr += forwardPlus->getConstBufferSize() >> 2;
-        }
-
-        passBufferPtr = mListener->preparePassBuffer( shadowNode, casterPass, dualParaboloid,
-                                                      sceneManager, passBufferPtr );
-
-        assert( (size_t)(passBufferPtr - startupPtr) * 4u == mapSize );
-
-        passBuffer->unmap( UO_KEEP_PERSISTENT );
-
-        mLastTextureHash = 0;
-        mLastMovableObject = 0;
-
-        mLastBoundPool = 0;
-
-        if( mShadowmapSamplerblock && !getProperty( HlmsBaseProp::ShadowUsesDepthTexture ) )
-            mCurrentShadowmapSamplerblock = mShadowmapSamplerblock;
-        else
-            mCurrentShadowmapSamplerblock = mShadowmapCmpSamplerblock;
-
-        uploadDirtyDatablocks();
-
-        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsTerra::notifyPropertiesMergedPreGenerationStep(void)
+    {
+        HlmsPbs::notifyPropertiesMergedPreGenerationStep();
+
+        setTextureReg( VertexShader, "heightMap", 0 );
+        setTextureReg( PixelShader, "terrainNormals", 1 );
+        setTextureReg( PixelShader, "terrainShadows", 2 );
     }
     //-----------------------------------------------------------------------------------
     uint32 HlmsTerra::fillBuffersFor( const HlmsCache *cache, const QueuedRenderable &queuedRenderable,
-                                    bool casterPass, uint32 lastCacheHash,
-                                    uint32 lastTextureHash )
+                                      bool casterPass, uint32 lastCacheHash,
+                                      uint32 lastTextureHash )
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
                      "Trying to use slow-path on a desktop implementation. "
@@ -938,26 +365,26 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     uint32 HlmsTerra::fillBuffersForV1( const HlmsCache *cache,
-                                      const QueuedRenderable &queuedRenderable,
-                                      bool casterPass, uint32 lastCacheHash,
-                                      CommandBuffer *commandBuffer )
+                                        const QueuedRenderable &queuedRenderable,
+                                        bool casterPass, uint32 lastCacheHash,
+                                        CommandBuffer *commandBuffer )
     {
         return fillBuffersFor( cache, queuedRenderable, casterPass,
                                lastCacheHash, commandBuffer, true );
     }
     //-----------------------------------------------------------------------------------
     uint32 HlmsTerra::fillBuffersForV2( const HlmsCache *cache,
-                                      const QueuedRenderable &queuedRenderable,
-                                      bool casterPass, uint32 lastCacheHash,
-                                      CommandBuffer *commandBuffer )
+                                        const QueuedRenderable &queuedRenderable,
+                                        bool casterPass, uint32 lastCacheHash,
+                                        CommandBuffer *commandBuffer )
     {
         return fillBuffersFor( cache, queuedRenderable, casterPass,
                                lastCacheHash, commandBuffer, false );
     }
     //-----------------------------------------------------------------------------------
     uint32 HlmsTerra::fillBuffersFor( const HlmsCache *cache, const QueuedRenderable &queuedRenderable,
-                                    bool casterPass, uint32 lastCacheHash,
-                                    CommandBuffer *commandBuffer, bool isV1 )
+                                      bool casterPass, uint32 lastCacheHash,
+                                      CommandBuffer *commandBuffer, bool isV1 )
     {
         assert( dynamic_cast<const HlmsTerraDatablock*>( queuedRenderable.renderable->getDatablock() ) );
         const HlmsTerraDatablock *datablock = static_cast<const HlmsTerraDatablock*>(
@@ -976,35 +403,110 @@ namespace Ogre
                                                                            passBuffer->
                                                                            getTotalSizeBytes() );
 
-            size_t texUnit = 3;
-
-            if( mGridBuffer )
+            if( !casterPass )
             {
-                texUnit = 5;
-                *commandBuffer->addCommand<CbShaderBuffer>() =
-                        CbShaderBuffer( PixelShader, 3, mGridBuffer, 0, 0 );
-                *commandBuffer->addCommand<CbShaderBuffer>() =
-                        CbShaderBuffer( PixelShader, 4, mGlobalLightListBuffer, 0, 0 );
+                size_t texUnit = mReservedTexSlots;
+
+                *commandBuffer->addCommand<CbSamplers>() =
+                        CbSamplers( 1, mTerraDescSetSampler );
+
+                if( mGridBuffer )
+                {
+                    *commandBuffer->addCommand<CbShaderBuffer>() =
+                            CbShaderBuffer( PixelShader, texUnit++, mGridBuffer, 0, 0 );
+                    *commandBuffer->addCommand<CbShaderBuffer>() =
+                            CbShaderBuffer( PixelShader, texUnit++, mGlobalLightListBuffer, 0, 0 );
+                }
+
+                if( !mPrePassTextures->empty() )
+                {
+                    *commandBuffer->addCommand<CbTexture>() =
+                            CbTexture( texUnit++, (*mPrePassTextures)[0], 0 );
+                    *commandBuffer->addCommand<CbTexture>() =
+                            CbTexture( texUnit++, (*mPrePassTextures)[1], 0 );
+                }
+
+                if( mPrePassMsaaDepthTexture )
+                {
+                    *commandBuffer->addCommand<CbTexture>() =
+                            CbTexture( texUnit++, mPrePassMsaaDepthTexture, 0 );
+                }
+
+                if( mSsrTexture )
+                {
+                    *commandBuffer->addCommand<CbTexture>() =
+                            CbTexture( texUnit++, mSsrTexture, 0 );
+                }
+
+                if( mIrradianceVolume )
+                {
+                    TextureGpu *irradianceTex = mIrradianceVolume->getIrradianceVolumeTexture();
+                    const HlmsSamplerblock *samplerblock = mIrradianceVolume->getIrradSamplerblock();
+
+                    *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit,
+                                                                         irradianceTex,
+                                                                         samplerblock );
+                    ++texUnit;
+                }
+
+                if( mUsingAreaLightMasks )
+                {
+                    *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit,
+                                                                         mAreaLightMasks,
+                                                                         mAreaLightMasksSamplerblock );
+                    ++texUnit;
+                }
+
+                if( mUsingLtcMatrix )
+                {
+                    *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit,
+                                                                         mLtcMatrixTexture,
+                                                                         mAreaLightMasksSamplerblock );
+                    ++texUnit;
+                }
+
+                for( size_t i=0; i<3u; ++i )
+                {
+                    if( mDecalsTextures[i] &&
+                        (i != 2u || !mDecalsDiffuseMergedEmissive) )
+                    {
+                        *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit,
+                                                                             mDecalsTextures[i],
+                                                                             mDecalsSamplerblock );
+                        ++texUnit;
+                    }
+                }
+
+                //We changed HlmsType, rebind the shared textures.
+                FastArray<TextureGpu*>::const_iterator itor = mPreparedPass.shadowMaps.begin();
+                FastArray<TextureGpu*>::const_iterator end  = mPreparedPass.shadowMaps.end();
+                while( itor != end )
+                {
+                    *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit, *itor,
+                                                                         mCurrentShadowmapSamplerblock );
+                    ++texUnit;
+                    ++itor;
+                }
+
+                if( mParallaxCorrectedCubemap && !mParallaxCorrectedCubemap->isRendering() )
+                {
+                    TextureGpu *pccTexture = mParallaxCorrectedCubemap->getBindTexture();
+                    const HlmsSamplerblock *samplerblock =
+                            mParallaxCorrectedCubemap->getBindTrilinearSamplerblock();
+                    *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit, pccTexture,
+                                                                         samplerblock );
+                    ++texUnit;
+                }
             }
 
-            //We changed HlmsType, rebind the shared textures.
-            FastArray<TextureGpu*>::const_iterator itor = mPreparedPass.shadowMaps.begin();
-            FastArray<TextureGpu*>::const_iterator end  = mPreparedPass.shadowMaps.end();
-            while( itor != end )
-            {
-                *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit, *itor,
-                                                                     mCurrentShadowmapSamplerblock );
-                ++texUnit;
-                ++itor;
-            }
-
-            mLastTextureHash = 0;
+            mLastDescTexture = 0;
+            mLastDescSampler = 0;
             mLastMovableObject = 0;
             mLastBoundPool = 0;
 
             //layout(binding = 2) uniform InstanceBuffer {} instance
             if( mCurrentConstBuffer < mConstBuffers.size() &&
-                (size_t)((mCurrentMappedConstBuffer - mStartMappedConstBuffer) + 16) <=
+                (size_t)((mCurrentMappedConstBuffer - mStartMappedConstBuffer) + 4) <=
                     mCurrentConstBufferSize )
             {
                 *commandBuffer->addCommand<CbShaderBuffer>() =
@@ -1013,6 +515,11 @@ namespace Ogre
                         CbShaderBuffer( PixelShader, 2, mConstBuffers[mCurrentConstBuffer], 0, 0 );
             }
 
+            rebindTexBuffer( commandBuffer );
+
+#ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
+            mLastBoundPlanarReflection = 0u;
+#endif
             mListener->hlmsTypeChanged( casterPass, commandBuffer, datablock );
         }
 
@@ -1034,13 +541,9 @@ namespace Ogre
         {
             //Different Terra? Must change textures then.
             const Terra *terraObj = static_cast<const Terra*>( queuedRenderable.movableObject );
-            *commandBuffer->addCommand<CbTexture>() =
-                    CbTexture( 0, terraObj->getHeightMapTex() );
-            *commandBuffer->addCommand<CbTexture>() =
-                    CbTexture( 1, terraObj->getNormalMapTex(), mTerraSamplerblock );
-            *commandBuffer->addCommand<CbTexture>() =
-                    CbTexture( 2, terraObj->_getShadowMapTex(), mTerraSamplerblock );
-
+            *commandBuffer->addCommand<CbTextures>() =
+                    CbTextures( 0, std::numeric_limits<uint16>::max(),
+                                terraObj->getDescriptorSetTexture() );
 #if OGRE_DEBUG_MODE
 //          Commented: Hack to get a barrier without dealing with the Compositor while debugging.
 //            ResourceTransition resourceTransition;
@@ -1092,22 +595,51 @@ namespace Ogre
 
         if( !casterPass || datablock->getAlphaTest() != CMPF_ALWAYS_PASS )
         {
-            if( datablock->mTextureHash != mLastTextureHash )
+#ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
+            if( mHasPlanarReflections &&
+                (queuedRenderable.renderable->mCustomParameter & 0x80) &&
+                mLastBoundPlanarReflection != queuedRenderable.renderable->mCustomParameter )
             {
-                //Rebind textures
-                size_t texUnit = mPreparedPass.shadowMaps.size() + (!mGridBuffer ? 3 : 5);
-
-                TerraBakedTextureArray::const_iterator itor = datablock->mBakedTextures.begin();
-                TerraBakedTextureArray::const_iterator end  = datablock->mBakedTextures.end();
-
-                while( itor != end )
+                const uint8 activeActorIdx = queuedRenderable.renderable->mCustomParameter & 0x7F;
+                TextureGpu *planarReflTex = mPlanarReflections->getTexture( activeActorIdx );
+                *commandBuffer->addCommand<CbTexture>() =
+                        CbTexture( mTexUnitSlotStart - 1u, planarReflTex,
+                                   mPlanarReflectionsSamplerblock );
+                mLastBoundPlanarReflection = queuedRenderable.renderable->mCustomParameter;
+            }
+#endif
+            if( datablock->mTexturesDescSet != mLastDescTexture )
+            {
+                if( datablock->mTexturesDescSet )
                 {
-                    *commandBuffer->addCommand<CbTexture>() =
-                            CbTexture( texUnit++, true, itor->texture.get(), itor->samplerBlock );
-                    ++itor;
+                    //Rebind textures
+                    size_t texUnit = mTexUnitSlotStart;
+
+                    *commandBuffer->addCommand<CbTextures>() =
+                            CbTextures( texUnit, std::numeric_limits<uint16>::max(),
+                                        datablock->mTexturesDescSet );
+
+                    if( !mHasSeparateSamplers )
+                    {
+                        *commandBuffer->addCommand<CbSamplers>() =
+                                CbSamplers( texUnit, datablock->mSamplersDescSet );
+                    }
+                    //texUnit += datablock->mTexturesDescSet->mTextures.size();
                 }
 
-                mLastTextureHash = datablock->mTextureHash;
+                mLastDescTexture = datablock->mTexturesDescSet;
+            }
+
+            if( datablock->mSamplersDescSet != mLastDescSampler && mHasSeparateSamplers )
+            {
+                if( datablock->mSamplersDescSet )
+                {
+                    //Bind samplers
+                    size_t texUnit = mTexUnitSlotStart;
+                    *commandBuffer->addCommand<CbSamplers>() =
+                            CbSamplers( texUnit, datablock->mSamplersDescSet );
+                    mLastDescSampler = datablock->mSamplersDescSet;
+                }
             }
         }
 
@@ -1115,65 +647,23 @@ namespace Ogre
 
         return ((mCurrentMappedConstBuffer - mStartMappedConstBuffer) >> 4) - 1;
     }
-    //-----------------------------------------------------------------------------------
-    void HlmsTerra::destroyAllBuffers(void)
-    {
-        HlmsBufferManager::destroyAllBuffers();
-
-        mCurrentPassBuffer  = 0;
-
-        {
-            ConstBufferPackedVec::const_iterator itor = mPassBuffers.begin();
-            ConstBufferPackedVec::const_iterator end  = mPassBuffers.end();
-
-            while( itor != end )
-            {
-                if( (*itor)->getMappingState() != MS_UNMAPPED )
-                    (*itor)->unmap( UO_UNMAP_ALL );
-                mVaoManager->destroyConstBuffer( *itor );
-                ++itor;
-            }
-
-            mPassBuffers.clear();
-        }
-    }
-    //-----------------------------------------------------------------------------------
-    void HlmsTerra::frameEnded(void)
-    {
-        HlmsBufferManager::frameEnded();
-        mCurrentPassBuffer  = 0;
-    }
-    //-----------------------------------------------------------------------------------
-    void HlmsTerra::setDebugPssmSplits( bool bDebug )
-    {
-        mDebugPssmSplits = bDebug;
-    }
-    //-----------------------------------------------------------------------------------
-    void HlmsTerra::setShadowSettings( ShadowFilter filter )
-    {
-        mShadowFilter = filter;
-    }
-    //-----------------------------------------------------------------------------------
-    void HlmsTerra::setAmbientLightMode( AmbientLightMode mode )
-    {
-        mAmbientLightMode = mode;
-    }
 #if !OGRE_NO_JSON
     //-----------------------------------------------------------------------------------
     void HlmsTerra::_loadJson( const rapidjson::Value &jsonValue, const HlmsJson::NamedBlocks &blocks,
-                               HlmsDatablock *datablock, HlmsJsonListener *listener,
+                               HlmsDatablock *datablock, const String &resourceGroup,
+                               HlmsJsonListener *listener,
                                const String &additionalTextureExtension ) const
     {
-        HlmsJsonTerra JsonTerra( mHlmsManager );
-        JsonTerra.loadMaterial( jsonValue, blocks, datablock );
+        HlmsJsonTerra jsonTerra( mHlmsManager, mRenderSystem->getTextureGpuManager() );
+        jsonTerra.loadMaterial( jsonValue, blocks, datablock, resourceGroup );
     }
     //-----------------------------------------------------------------------------------
     void HlmsTerra::_saveJson( const HlmsDatablock *datablock, String &outString,
                                HlmsJsonListener *listener,
                                const String &additionalTextureExtension ) const
     {
-//        HlmsJsonTerra JsonTerra( mHlmsManager );
-//        JsonTerra.saveMaterial( datablock, outString );
+//        HlmsJsonTerra jsonTerra( mHlmsManager );
+//        jsonTerra.saveMaterial( datablock, outString );
     }
     //-----------------------------------------------------------------------------------
     void HlmsTerra::_collectSamplerblocks( set<const HlmsSamplerblock*>::type &outSamplerblocks,
@@ -1184,9 +674,9 @@ namespace Ogre
 #endif
     //-----------------------------------------------------------------------------------
     HlmsDatablock* HlmsTerra::createDatablockImpl( IdString datablockName,
-                                                       const HlmsMacroblock *macroblock,
-                                                       const HlmsBlendblock *blendblock,
-                                                       const HlmsParamVec &paramVec )
+                                                   const HlmsMacroblock *macroblock,
+                                                   const HlmsBlendblock *blendblock,
+                                                   const HlmsParamVec &paramVec )
     {
         return OGRE_NEW HlmsTerraDatablock( datablockName, this, macroblock, blendblock, paramVec );
     }

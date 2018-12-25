@@ -20,10 +20,17 @@ set( SOURCE_FILES ${SOURCE_FILES} ${HEADER_FILES} )
 include_directories( ./include )
 include_directories( ./include/Hlms )
 ogre_add_component_include_dir(Hlms/Common)
+ogre_add_component_include_dir(Hlms/Pbs)
+if( OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS )
+    ogre_add_component_include_dir( PlanarReflections )
+endif()
 
 ogre_add_executable(Sample_Tutorial_Terrain WIN32 MACOSX_BUNDLE ${SOURCE_FILES} ${SAMPLE_COMMON_RESOURCES})
 
-target_link_libraries(Sample_Tutorial_Terrain ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES})
+target_link_libraries(Sample_Tutorial_Terrain ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES} OgreHlmsPbs)
+if( OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS )
+    target_link_libraries( Sample_Tutorial_Terrain OgrePlanarReflections )
+endif()
 ogre_config_sample_lib(Sample_Tutorial_Terrain)
 
 if( APPLE )

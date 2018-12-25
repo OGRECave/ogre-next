@@ -255,9 +255,11 @@ namespace Ogre
         mHasSeparateSamplers( 0 ),
         mLastDescTexture( 0 ),
         mLastDescSampler( 0 ),
+        mReservedTexSlots( 1u ), //Vertex shader consumes 1 slot with its tbuffer.
 #if !OGRE_NO_FINE_LIGHT_MASK_GRANULARITY
         mFineLightMaskGranularity( true ),
 #endif
+        mSetupWorldMatBuf( true ),
         mDebugPssmSplits( false ),
         mShadowFilter( PCF_3x3 ),
         mEsmK( 600u ),
@@ -395,7 +397,8 @@ namespace Ogre
         }
 
         GpuProgramParametersSharedPtr vsParams = retVal->pso.vertexShader->getDefaultParameters();
-        vsParams->setNamedConstant( "worldMatBuf", 0 );
+        if( mSetupWorldMatBuf )
+            vsParams->setNamedConstant( "worldMatBuf", 0 );
 
         mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache,
                                             mSetProperties, queuedRenderable );
@@ -834,12 +837,11 @@ namespace Ogre
             setProperty( PbsProperty::NeedsReflDir, 1 );
         }
 
-        int32 texUnit = 1; //Vertex shader consumes 1 slot with its tbuffer.
+        int32 texUnit = mReservedTexSlots;
         if( getProperty( HlmsBaseProp::ForwardPlus ) )
         {
-            setTextureReg( PixelShader, "f3dGrid", 1 );
-            setTextureReg( PixelShader, "f3dLightList", 2 );
-            texUnit += 2;
+            setTextureReg( PixelShader, "f3dGrid", texUnit++ );
+            setTextureReg( PixelShader, "f3dLightList", texUnit++ );
         }
 
         if( getProperty( HlmsBaseProp::UsePrePass ) )
@@ -1996,7 +1998,7 @@ namespace Ogre
         else
             mCurrentShadowmapSamplerblock = mShadowmapCmpSamplerblock;
 
-        mTexUnitSlotStart = mPreparedPass.shadowMaps.size() + 1;
+        mTexUnitSlotStart = mPreparedPass.shadowMaps.size() + mReservedTexSlots;
         if( mGridBuffer )
             mTexUnitSlotStart += 2;
         if( mIrradianceVolume )
@@ -2098,15 +2100,14 @@ namespace Ogre
 
             if( !casterPass )
             {
-                size_t texUnit = 1;
+                size_t texUnit = mReservedTexSlots;
 
                 if( mGridBuffer )
                 {
-                    texUnit = 3;
                     *commandBuffer->addCommand<CbShaderBuffer>() =
-                            CbShaderBuffer( PixelShader, 1, mGridBuffer, 0, 0 );
+                            CbShaderBuffer( PixelShader, texUnit++, mGridBuffer, 0, 0 );
                     *commandBuffer->addCommand<CbShaderBuffer>() =
-                            CbShaderBuffer( PixelShader, 2, mGlobalLightListBuffer, 0, 0 );
+                            CbShaderBuffer( PixelShader, texUnit++, mGlobalLightListBuffer, 0, 0 );
                 }
 
                 if( !mPrePassTextures->empty() )
@@ -2520,7 +2521,7 @@ namespace Ogre
         if( mPrePassMsaaDepthTexture )
         {
             //We need to unbind the depth texture, it may be used as a depth buffer later.
-            size_t texUnit = mGridBuffer ? 3 : 1;
+            size_t texUnit = mGridBuffer ? (mReservedTexSlots + 2u) : mReservedTexSlots;
             if( !mPrePassTextures->empty() )
                 texUnit += 2;
 

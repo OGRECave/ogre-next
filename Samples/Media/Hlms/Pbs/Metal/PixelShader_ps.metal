@@ -73,8 +73,8 @@ fragment @insertpiece( output_type ) main_metal
 	@insertpiece( custom_ps_uniformDeclaration )
 	// END UNIFORM DECLARATION
 	@property( hlms_forwardplus )
-		, device const ushort *f3dGrid [[buffer(TEX_SLOT_START+1)]]
-		, device const float4 *f3dLightList [[buffer(TEX_SLOT_START+2)]]
+        , device const ushort *f3dGrid [[buffer(TEX_SLOT_START+@value(f3dGrid))]]
+        , device const float4 *f3dLightList [[buffer(TEX_SLOT_START+@value(f3dLightList))]]
 	@end
 
 	@property( hlms_use_prepass )

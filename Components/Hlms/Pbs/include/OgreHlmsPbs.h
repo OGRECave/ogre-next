@@ -158,9 +158,11 @@ namespace Ogre
         bool mHasSeparateSamplers;
         DescriptorSetTexture const *mLastDescTexture;
         DescriptorSetSampler const *mLastDescSampler;
+        uint8 mReservedTexSlots;
 #if !OGRE_NO_FINE_LIGHT_MASK_GRANULARITY
         bool mFineLightMaskGranularity;
 #endif
+        bool mSetupWorldMatBuf;
         bool mDebugPssmSplits;
 
         ShadowFilter    mShadowFilter;

@@ -34,7 +34,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsTerraDatablock::cloneImpl( HlmsDatablock *datablock ) const
     {
-        HlmsDatablock::cloneImpl( datablock );
+        HlmsTerraBaseTextureDatablock::cloneImpl( datablock );
         HlmsTerraDatablock *datablockImpl = static_cast<HlmsTerraDatablock*>( datablock );
 
         datablockImpl->mkDr = mkDr;
@@ -42,11 +42,6 @@ namespace Ogre
         datablockImpl->mkDb = mkDb;
         datablockImpl->_padding0 = _padding0;
         datablockImpl->mBrdf = mBrdf;
-
-        for( size_t i=0; i<mBakedTextures.size(); ++i )
-        {
-            datablockImpl->mBakedTextures.push_back( mBakedTextures[i] );
-        }
 
         for( size_t i=0; i<4; ++i )
         {
@@ -61,23 +56,6 @@ namespace Ogre
         for( size_t i=0; i<4; ++i )
         {
             datablockImpl->mDetailsOffsetScale[i] = mDetailsOffsetScale[i];
-        }
-
-        for( size_t i=0; i<19; ++i )
-        {
-            datablockImpl->mTexIndices[i] = mTexIndices[i];
-        }
-
-        for( size_t i=0; i<19; ++i )
-        {
-            datablockImpl->mTexToBakedTextureIdx[i] = mTexToBakedTextureIdx[i];
-        }
-
-        for( size_t i=0; i<19; ++i )
-        {
-            datablockImpl->mSamplerblocks[i] = mSamplerblocks[i];
-            if( datablockImpl->mSamplerblocks[i] )
-                mCreator->getHlmsManager()->addReference( datablockImpl->mSamplerblocks[i] );
         }
     }
 }

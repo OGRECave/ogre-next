@@ -33,6 +33,17 @@ THE SOFTWARE.
 #include "OgreHlmsTextureManager.h"
 #include "OgreConstBufferPool.h"
 #include "OgreVector4.h"
+
+#define _OgreHlmsTextureBaseClassExport
+#define OGRE_HLMS_TEXTURE_BASE_CLASS HlmsTerraBaseTextureDatablock
+#define OGRE_HLMS_TEXTURE_BASE_MAX_TEX NUM_TERRA_TEXTURE_TYPES
+#define OGRE_HLMS_CREATOR_CLASS HlmsTerra
+    #include "OgreHlmsTextureBaseClass.h"
+#undef _OgreHlmsTextureBaseClassExport
+#undef OGRE_HLMS_TEXTURE_BASE_CLASS
+#undef OGRE_HLMS_TEXTURE_BASE_MAX_TEX
+#undef OGRE_HLMS_CREATOR_CLASS
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
@@ -43,38 +54,14 @@ namespace Ogre
     /** \addtogroup Resources
     *  @{
     */
-
-    /// Used by JSON serialization, but can also be used outside of it.
-    /// @see HlmsTerraDatablock::_setTextures
-    struct TerraPackedTexture
-    {
-        TexturePtr  texture;
-        uint16      xIdx;
-        HlmsSamplerblock const * samplerblock;
-        TerraPackedTexture() : xIdx( NUM_TERRA_TEXTURE_TYPES ), samplerblock( 0 ) {}
-    };
-
-    struct TerraBakedTexture
-    {
-        TexturePtr              texture;
-        HlmsSamplerblock const *samplerBlock;
-
-        TerraBakedTexture() : samplerBlock( 0 ) {}
-        TerraBakedTexture( const TexturePtr tex, const HlmsSamplerblock *_samplerBlock ) :
-            texture( tex ), samplerBlock( _samplerBlock ) {}
-
-        bool operator == ( const TerraBakedTexture &_r ) const
-        {
-            return texture == _r.texture && samplerBlock == _r.samplerBlock;
-        }
-    };
-
     namespace TerraBrdf
     {
     enum TerraBrdf
     {
         FLAG_UNCORRELATED                           = 0x80000000,
         FLAG_SPERATE_DIFFUSE_FRESNEL                = 0x40000000,
+        FLAG_LEGACY_MATH                            = 0x20000000,
+        FLAG_FULL_LEGACY                            = 0x08000000,
         BRDF_MASK                                   = 0x00000FFF,
 
         /// Most physically accurate BRDF we have. Good for representing
@@ -98,7 +85,9 @@ namespace Ogre
 
         /// Implements Normalized Blinn Phong using a normalization
         /// factor of (n + 8) / (8 * pi)
-        /// The main reason to use this BRDF is performance. It's cheap.
+        /// The main reason to use this BRDF is performance. It's cheaper,
+        /// while still looking somewhat similar to Default.
+        /// If you still need more performance, see BlinnPhongLegacy
         BlinnPhong      = 0x00000002,
 
         /// Same as Default, but the geometry term is not height-correlated
@@ -134,15 +123,51 @@ namespace Ogre
         /// silk, synthetic fabric.
         CookTorranceSeparateDiffuseFresnel  = CookTorrance|FLAG_SPERATE_DIFFUSE_FRESNEL,
 
+        /// Like DefaultSeparateDiffuseFresnel, but uses BlinnPhong as base.
         BlinnPhongSeparateDiffuseFresnel    = BlinnPhong|FLAG_SPERATE_DIFFUSE_FRESNEL,
+
+        /// Implements traditional / the original non-PBR blinn phong:
+        ///     * Looks more like a 2000-2005's game
+        ///     * Ignores fresnel completely.
+        ///     * Works with Roughness in range (0; 1]. We automatically convert
+        ///       this parameter for you to shininess.
+        ///     * Assumes your Light power is set to PI (or a multiple) like with
+        ///       most other Brdfs.
+        ///     * Diffuse & Specular will automatically be
+        ///       multiplied/divided by PI for you (assuming you
+        ///       set your Light power to PI).
+        /// The main scenario to use this BRDF is:
+        ///     * Performance. This is the fastest BRDF.
+        ///     * You were using Default, but are ok with how this one looks,
+        ///       so you switch to this one instead.
+        BlinnPhongLegacyMath                = BlinnPhong|FLAG_LEGACY_MATH,
+
+        /// Implements traditional / the original non-PBR blinn phong:
+        ///     * Looks more like a 2000-2005's game
+        ///     * Ignores fresnel completely.
+        ///     * Roughness is actually the shininess parameter; which is in range (0; inf)
+        ///       although most used ranges are in (0; 500].
+        ///     * Assumes your Light power is set to 1.0.
+        ///     * Diffuse & Specular is unmodified.
+        /// There are two possible reasons to use this BRDF:
+        ///     * Performance. This is the fastest BRDF.
+        ///     * You're porting your app from Ogre 1.x and want to maintain that
+        ///       Fixed-Function look for some odd reason, and your materials
+        ///       already dealt in shininess, and your lights are already calibrated.
+        ///
+        /// Important: If switching from Default to BlinnPhongFullLegacy, you'll probably see
+        /// that your scene is too bright. This is probably because Default divides diffuse
+        /// by PI and you usually set your lights' power to a multiple of PI to compensate.
+        /// If your scene is too bright, kist divide your lights by PI.
+        /// BlinnPhongLegacyMath performs that conversion for you automatically at
+        /// material level instead of doing it at light level.
+        BlinnPhongFullLegacy                = BlinnPhongLegacyMath|FLAG_FULL_LEGACY,
     };
     }
 
-    typedef FastArray<TerraBakedTexture> TerraBakedTextureArray;
-
     /** Contains information needed by TERRA (Physically Based Shading) for OpenGL 3+ & D3D11+
     */
-    class HlmsTerraDatablock : public HlmsDatablock, public ConstBufferPoolUser
+    class HlmsTerraDatablock : public HlmsTerraBaseTextureDatablock
     {
         friend class HlmsTerra;
 
@@ -152,15 +177,7 @@ namespace Ogre
         float   mRoughness[4];
         float   mMetalness[4];
         Vector4 mDetailsOffsetScale[4];
-        uint16  mTexIndices[NUM_TERRA_TEXTURE_TYPES];
-
-        TerraBakedTextureArray mBakedTextures;
-        /// The way to read this variable is i.e. get diffuse texture,
-        /// mBakedTextures[mTexToBakedTextureIdx[TERRA_DIFFUSE]]
-        /// Then read mTexIndices[TERRA_DIFFUSE] to know which slice of the texture array.
-        uint8   mTexToBakedTextureIdx[NUM_TERRA_TEXTURE_TYPES];
-
-        HlmsSamplerblock const  *mSamplerblocks[NUM_TERRA_TEXTURE_TYPES];
+        //uint16  mTexIndices[NUM_TERRA_TEXTURE_TYPES];
 
         /// @see TerraBrdf::TerraBrdf
         uint32  mBrdf;
@@ -168,13 +185,7 @@ namespace Ogre
         virtual void cloneImpl( HlmsDatablock *datablock ) const;
 
         void scheduleConstBufferUpdate(void);
-        virtual void uploadToConstBuffer( char *dstPtr );
-
-        /// Sets the appropiate mTexIndices[textureType], and returns the texture pointer
-        TexturePtr setTexture( const String &name, TerraTextureTypes textureType );
-
-        void decompileBakedTextures( TerraBakedTexture outTextures[NUM_TERRA_TEXTURE_TYPES] );
-        void bakeTextures( const TerraBakedTexture textures[NUM_TERRA_TEXTURE_TYPES] );
+        virtual void uploadToConstBuffer( char *dstPtr, uint8 dirtyFlags );
 
     public:
         HlmsTerraDatablock( IdString name, HlmsTerra *creator,
@@ -201,15 +212,6 @@ namespace Ogre
         void setMetalness( uint8 detailMapIdx, float metalness );
         float getMetalness( uint8 detailMapIdx ) const;
 
-        /** Advanced function for setting all textures at once,
-            instead of one by one, for performance reasons.
-        @param packedTextures
-            The reference count in packedTextures[i].samplerblock is assumed to have already been
-            increased prior to calling this function. We will not increase.
-            If null, a default samplerblock will be assigned
-        */
-        void _setTextures( const TerraPackedTexture packedTextures[] );
-
         /** Sets a new texture for rendering. Calling this function may trigger an
             HlmsDatablock::flushRenderables if the texture or the samplerblock changes.
             Won't be called if only the arrayIndex changes
@@ -228,25 +230,6 @@ namespace Ogre
         void setTexture( TerraTextureTypes texType, uint16 arrayIndex, const TexturePtr &newTexture,
                          const HlmsSamplerblock *refParams=0 );
 
-        TexturePtr getTexture( TerraTextureTypes texType ) const;
-        TexturePtr getTexture( size_t texType ) const;
-
-        /// Returns the internal index to the array in a texture array.
-        /// Note: If there is no texture assigned to the given texType, returned value is undefined
-        uint16 _getTextureIdx( TerraTextureTypes texType ) const          { return mTexIndices[texType]; }
-
-        /** Sets a new sampler block to be associated with the texture
-            (i.e. filtering mode, addressing modes, etc). If the samplerblock changes,
-            this function will always trigger a HlmsDatablock::flushRenderables
-        @param texType
-            Type of texture.
-        @param params
-            The sampler block to use as reference.
-        */
-        void setSamplerblock( TerraTextureTypes texType, const HlmsSamplerblock &params );
-
-        const HlmsSamplerblock* getSamplerblock( TerraTextureTypes texType ) const;
-
         /** Sets the scale and offset of the detail map.
         @remarks
             A value of Vector4( 0, 0, 1, 1 ) will cause a flushRenderables as we
@@ -262,15 +245,6 @@ namespace Ogre
         */
         void setDetailMapOffsetScale( uint8 detailMap, const Vector4 &offsetScale );
         const Vector4& getDetailMapOffsetScale( uint8 detailMap ) const;
-
-        /// Returns the index to mBakedTextures. Returns NUM_TERRA_TEXTURE_TYPES if
-        /// there is no texture assigned to texType
-        uint8 getBakedTextureIdx( TerraTextureTypes texType ) const;
-
-        /// Returns the index to the slice in the texture array. i.e. the shader will
-        /// perform texture( textureArray, vec3( uv.xy, getTextureSliceArrayIndex() ) );
-        /// If there is no texture, return value is undefined.
-        uint16 _getTextureSliceArrayIndex( TerraTextureTypes texType ) const;
 
         /// Overloaded to tell it's unsupported
         virtual void setAlphaTestThreshold( float threshold );
@@ -288,8 +262,10 @@ namespace Ogre
             You could create an alias however, and thus have two copies of the same texture with
             different loading parameters.
         */
-        static HlmsTextureManager::TextureMapType suggestMapTypeBasedOnTextureType(
-                                                                TerraTextureTypes type );
+//        static HlmsTextureManager::TextureMapType suggestMapTypeBasedOnTextureType(
+//                                                                TerraTextureTypes type );
+        bool suggestUsingSRGB( TerraTextureTypes type ) const;
+        uint32 suggestFiltersForType( TerraTextureTypes type ) const;
 
         virtual void calculateHash();
 

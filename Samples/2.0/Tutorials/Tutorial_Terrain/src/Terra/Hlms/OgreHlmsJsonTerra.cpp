@@ -32,8 +32,7 @@ THE SOFTWARE.
 
 #include "Terra/Hlms/OgreHlmsJsonTerra.h"
 #include "OgreHlmsManager.h"
-#include "OgreHlmsTextureManager.h"
-#include "OgreTextureManager.h"
+#include "OgreTextureGpuManager.h"
 
 #include "OgreLwString.h"
 #include "OgreStringConverter.h"
@@ -42,8 +41,9 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    HlmsJsonTerra::HlmsJsonTerra( HlmsManager *hlmsManager ) :
-        mHlmsManager( hlmsManager )
+    HlmsJsonTerra::HlmsJsonTerra( HlmsManager *hlmsManager, TextureGpuManager *textureManager ) :
+        mHlmsManager( hlmsManager ),
+        mTextureManager( textureManager )
     {
     }
     //-----------------------------------------------------------------------------------
@@ -89,129 +89,90 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsJsonTerra::loadTexture( const rapidjson::Value &json, const char *keyName,
                                      TerraTextureTypes textureType, HlmsTerraDatablock *datablock,
-                                     TerraPackedTexture textures[NUM_TERRA_TEXTURE_TYPES] )
+                                     const String &resourceGroup )
     {
         assert( textureType != TERRA_REFLECTION );
 
-        const HlmsTextureManager::TextureMapType texMapTypes[NUM_TERRA_TEXTURE_TYPES] =
+        TextureGpu *texture = 0;
+
+        const CommonTextureTypes::CommonTextureTypes texMapTypes[NUM_TERRA_TEXTURE_TYPES] =
         {
-            HlmsTextureManager::TEXTURE_TYPE_DIFFUSE,
-            HlmsTextureManager::TEXTURE_TYPE_NON_COLOR_DATA,
-#ifdef OGRE_TEXTURE_ATLAS
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL,
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL,
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL,
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL,
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL_NORMAL_MAP,
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL_NORMAL_MAP,
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL_NORMAL_MAP,
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL_NORMAL_MAP,
-#else
-            HlmsTextureManager::TEXTURE_TYPE_DIFFUSE,
-            HlmsTextureManager::TEXTURE_TYPE_DIFFUSE,
-            HlmsTextureManager::TEXTURE_TYPE_DIFFUSE,
-            HlmsTextureManager::TEXTURE_TYPE_DIFFUSE,
-            HlmsTextureManager::TEXTURE_TYPE_NORMALS,
-            HlmsTextureManager::TEXTURE_TYPE_NORMALS,
-            HlmsTextureManager::TEXTURE_TYPE_NORMALS,
-            HlmsTextureManager::TEXTURE_TYPE_NORMALS,
-#endif
-            HlmsTextureManager::TEXTURE_TYPE_MONOCHROME,
-            HlmsTextureManager::TEXTURE_TYPE_MONOCHROME,
-            HlmsTextureManager::TEXTURE_TYPE_MONOCHROME,
-            HlmsTextureManager::TEXTURE_TYPE_MONOCHROME,
-            HlmsTextureManager::TEXTURE_TYPE_MONOCHROME,
-            HlmsTextureManager::TEXTURE_TYPE_MONOCHROME,
-            HlmsTextureManager::TEXTURE_TYPE_MONOCHROME,
-            HlmsTextureManager::TEXTURE_TYPE_MONOCHROME,
-            HlmsTextureManager::TEXTURE_TYPE_ENV_MAP
+            CommonTextureTypes::Diffuse,
+            CommonTextureTypes::NonColourData,
+
+            CommonTextureTypes::Diffuse,
+            CommonTextureTypes::Diffuse,
+            CommonTextureTypes::Diffuse,
+            CommonTextureTypes::Diffuse,
+            CommonTextureTypes::NormalMap,
+            CommonTextureTypes::NormalMap,
+            CommonTextureTypes::NormalMap,
+            CommonTextureTypes::NormalMap,
+
+            CommonTextureTypes::Monochrome,
+            CommonTextureTypes::Monochrome,
+            CommonTextureTypes::Monochrome,
+            CommonTextureTypes::Monochrome,
+            CommonTextureTypes::Monochrome,
+            CommonTextureTypes::Monochrome,
+            CommonTextureTypes::Monochrome,
+            CommonTextureTypes::Monochrome,
+            CommonTextureTypes::EnvMap
         };
 
         rapidjson::Value::ConstMemberIterator itor = json.FindMember( keyName );
         if( itor != json.MemberEnd() && itor->value.IsString() )
         {
             const char *textureName = itor->value.GetString();
-
-            HlmsTextureManager *hlmsTextureManager = mHlmsManager->getTextureManager();
-            HlmsTextureManager::TextureLocation texLocation = hlmsTextureManager->
-                createOrRetrieveTexture(textureName,
-                texMapTypes[textureType]);
-
-            assert(texLocation.texture->isTextureTypeArray() || textureType == TERRA_REFLECTION);
-
-            textures[textureType].texture = texLocation.texture;
-            textures[textureType].xIdx = texLocation.xIdx;
+            texture = mTextureManager->createOrRetrieveTexture( textureName,
+                                                                GpuPageOutStrategy::Discard,
+                                                                texMapTypes[textureType],
+                                                                resourceGroup );
         }
+
+        datablock->_setTexture( textureType, texture );
     }
     //-----------------------------------------------------------------------------------
     void HlmsJsonTerra::loadTexture( const rapidjson::Value &json, const HlmsJson::NamedBlocks &blocks,
                                      TerraTextureTypes textureType, HlmsTerraDatablock *datablock,
-                                     TerraPackedTexture textures[] )
+                                     const String &resourceGroup )
     {
-        const HlmsTextureManager::TextureMapType texMapTypes[NUM_TERRA_TEXTURE_TYPES] =
+        TextureGpu *texture = 0;
+        HlmsSamplerblock const *samplerblock = 0;
+
+        const CommonTextureTypes::CommonTextureTypes texMapTypes[NUM_TERRA_TEXTURE_TYPES] =
         {
-            HlmsTextureManager::TEXTURE_TYPE_DIFFUSE,
-            HlmsTextureManager::TEXTURE_TYPE_NON_COLOR_DATA,
-#ifdef OGRE_TEXTURE_ATLAS
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL,
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL,
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL,
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL,
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL_NORMAL_MAP,
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL_NORMAL_MAP,
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL_NORMAL_MAP,
-            HlmsTextureManager::TEXTURE_TYPE_DETAIL_NORMAL_MAP,
-#else
-            HlmsTextureManager::TEXTURE_TYPE_DIFFUSE,
-            HlmsTextureManager::TEXTURE_TYPE_DIFFUSE,
-            HlmsTextureManager::TEXTURE_TYPE_DIFFUSE,
-            HlmsTextureManager::TEXTURE_TYPE_DIFFUSE,
-            HlmsTextureManager::TEXTURE_TYPE_NORMALS,
-            HlmsTextureManager::TEXTURE_TYPE_NORMALS,
-            HlmsTextureManager::TEXTURE_TYPE_NORMALS,
-            HlmsTextureManager::TEXTURE_TYPE_NORMALS,
-#endif
-            HlmsTextureManager::TEXTURE_TYPE_MONOCHROME,
-            HlmsTextureManager::TEXTURE_TYPE_MONOCHROME,
-            HlmsTextureManager::TEXTURE_TYPE_MONOCHROME,
-            HlmsTextureManager::TEXTURE_TYPE_MONOCHROME,
-            HlmsTextureManager::TEXTURE_TYPE_MONOCHROME,
-            HlmsTextureManager::TEXTURE_TYPE_MONOCHROME,
-            HlmsTextureManager::TEXTURE_TYPE_MONOCHROME,
-            HlmsTextureManager::TEXTURE_TYPE_MONOCHROME,
-            HlmsTextureManager::TEXTURE_TYPE_ENV_MAP
+            CommonTextureTypes::Diffuse,
+            CommonTextureTypes::NonColourData,
+
+            CommonTextureTypes::Diffuse,
+            CommonTextureTypes::Diffuse,
+            CommonTextureTypes::Diffuse,
+            CommonTextureTypes::Diffuse,
+            CommonTextureTypes::NormalMap,
+            CommonTextureTypes::NormalMap,
+            CommonTextureTypes::NormalMap,
+            CommonTextureTypes::NormalMap,
+
+            CommonTextureTypes::Monochrome,
+            CommonTextureTypes::Monochrome,
+            CommonTextureTypes::Monochrome,
+            CommonTextureTypes::Monochrome,
+            CommonTextureTypes::Monochrome,
+            CommonTextureTypes::Monochrome,
+            CommonTextureTypes::Monochrome,
+            CommonTextureTypes::Monochrome,
+            CommonTextureTypes::EnvMap
         };
 
-        rapidjson::Value::ConstMemberIterator itor = json.FindMember("texture");
+        rapidjson::Value::ConstMemberIterator itor = json.FindMember( "texture" );
         if( itor != json.MemberEnd() && itor->value.IsString() )
         {
             const char *textureName = itor->value.GetString();
-
-            HlmsTextureManager *hlmsTextureManager = mHlmsManager->getTextureManager();
-            HlmsTextureManager::TextureLocation texLocation = hlmsTextureManager->
-                createOrRetrieveTexture(textureName,
-                texMapTypes[textureType]);
-
-            assert(texLocation.texture->isTextureTypeArray() || textureType == TERRA_REFLECTION);
-
-            //If HLMS texture manager failed to find a reflection
-            //texture, have look in standard texture manager.
-            //NB we only do this for reflection textures as all other
-            //textures must be texture arrays for performance reasons
-            if (textureType == TERRA_REFLECTION && texLocation.texture == hlmsTextureManager->getBlankTexture().texture)
-            {
-                Ogre::TexturePtr tex = Ogre::TextureManager::getSingleton().getByName(textureName);
-                if (tex.isNull() == false)
-                {
-                    texLocation.texture = tex;
-                    texLocation.xIdx = 0;
-                    texLocation.yIdx = 0;
-                    texLocation.divisor = 1;
-                }
-            }
-
-            textures[textureType].texture = texLocation.texture;
-            textures[textureType].xIdx = texLocation.xIdx;
+            texture = mTextureManager->createOrRetrieveTexture( textureName,
+                                                                GpuPageOutStrategy::Discard,
+                                                                texMapTypes[textureType],
+                                                                resourceGroup );
         }
 
         itor = json.FindMember("sampler");
@@ -221,10 +182,15 @@ namespace Ogre
                     blocks.samplerblocks.find( LwConstString::FromUnsafeCStr(itor->value.GetString()) );
             if( it != blocks.samplerblocks.end() )
             {
-                textures[textureType].samplerblock = it->second;
-                mHlmsManager->addReference( textures[textureType].samplerblock );
+                samplerblock = it->second;
+                mHlmsManager->addReference( samplerblock );
             }
         }
+
+        if( texture )
+            datablock->_setTexture( textureType, texture, samplerblock );
+        else if( samplerblock )
+            datablock->_setSamplerblock( textureType, samplerblock );
     }
     //-----------------------------------------------------------------------------------
     inline Vector3 HlmsJsonTerra::parseVector3Array( const rapidjson::Value &jsonArray )
@@ -242,7 +208,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void HlmsJsonTerra::loadMaterial( const rapidjson::Value &json, const HlmsJson::NamedBlocks &blocks,
-                                    HlmsDatablock *datablock )
+                                      HlmsDatablock *datablock, const String &resourceGroup )
     {
         assert( dynamic_cast<HlmsTerraDatablock*>(datablock) );
         HlmsTerraDatablock *terraDatablock = static_cast<HlmsTerraDatablock*>(datablock);
@@ -251,13 +217,11 @@ namespace Ogre
         if (itor != json.MemberEnd() && itor->value.IsString())
             terraDatablock->setBrdf(parseBrdf(itor->value.GetString()));
 
-        TerraPackedTexture packedTextures[NUM_TERRA_TEXTURE_TYPES];
-
         itor = json.FindMember("diffuse");
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &subobj = itor->value;
-            loadTexture( subobj, blocks, TERRA_DIFFUSE, terraDatablock, packedTextures );
+            loadTexture( subobj, blocks, TERRA_DIFFUSE, terraDatablock, resourceGroup );
 
             itor = subobj.FindMember( "value" );
             if( itor != subobj.MemberEnd() && itor->value.IsArray() )
@@ -268,7 +232,7 @@ namespace Ogre
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &subobj = itor->value;
-            loadTexture( subobj, blocks, TERRA_DETAIL_WEIGHT, terraDatablock, packedTextures );
+            loadTexture( subobj, blocks, TERRA_DETAIL_WEIGHT, terraDatablock, resourceGroup );
         }
 
         for( int i=0; i<4; ++i )
@@ -281,7 +245,7 @@ namespace Ogre
             {
                 const rapidjson::Value &subobj = itor->value;
                 loadTexture( subobj, blocks, static_cast<TerraTextureTypes>(TERRA_DETAIL0 + i),
-                             terraDatablock, packedTextures );
+                             terraDatablock, resourceGroup );
 
                 itor = subobj.FindMember( "roughness" );
                 if( itor != subobj.MemberEnd() && itor->value.IsNumber() )
@@ -305,16 +269,16 @@ namespace Ogre
 
                 loadTexture( subobj, "diffuse_map",
                              static_cast<TerraTextureTypes>( TERRA_DETAIL0 + i ),
-                             terraDatablock, packedTextures );
+                             terraDatablock, resourceGroup );
                 loadTexture( subobj, "normal_map",
                              static_cast<TerraTextureTypes>( TERRA_DETAIL0_NM + i ),
-                             terraDatablock, packedTextures );
+                             terraDatablock, resourceGroup );
                 loadTexture( subobj, "roughness_map",
                              static_cast<TerraTextureTypes>( TERRA_DETAIL_ROUGHNESS0 + i ),
-                             terraDatablock, packedTextures );
+                             terraDatablock, resourceGroup );
                 loadTexture( subobj, "metalness_map",
                              static_cast<TerraTextureTypes>( TERRA_DETAIL_METALNESS0 + i ),
-                             terraDatablock, packedTextures );
+                             terraDatablock, resourceGroup );
 
 //                itor = subobjec.FindMember("sampler");
 //                if( itor != subobjec.MemberEnd() && itor->value.IsString() )
@@ -339,10 +303,8 @@ namespace Ogre
         if( itor != json.MemberEnd() && itor->value.IsObject() )
         {
             const rapidjson::Value &subobj = itor->value;
-            loadTexture( subobj, blocks, TERRA_REFLECTION, terraDatablock, packedTextures );
+            loadTexture( subobj, blocks, TERRA_REFLECTION, terraDatablock, resourceGroup );
         }
-
-        terraDatablock->_setTextures( packedTextures );
     }
     //-----------------------------------------------------------------------------------
     void HlmsJsonTerra::saveTexture( const char *blockName,
@@ -400,7 +362,7 @@ namespace Ogre
             }
         }
 
-        if( writeTexture )
+        /*if( writeTexture )
         {
             HlmsTextureManager::TextureLocation texLocation;
             texLocation.texture = datablock->getTexture( textureType );
@@ -426,7 +388,7 @@ namespace Ogre
                 outString += ",\n\t\t\t\t\"sampler\" : ";
                 outString += HlmsJson::getName( samplerblock );
             }
-        }
+        }*/
 
         if( !writeValue && outString.size() != currentOffset )
         {

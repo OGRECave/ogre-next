@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "OgreHlmsBufferManager.h"
 #include "OgreConstBufferPool.h"
 #include "OgreMatrix4.h"
+#include "OgreHlmsPbs.h"
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
@@ -51,81 +52,10 @@ namespace Ogre
     /** Physically based shading implementation specfically designed for
         OpenGL 3+, D3D11 and other RenderSystems which support uniform buffers.
     */
-    class HlmsTerra : public HlmsBufferManager, public ConstBufferPool
+    class HlmsTerra : public HlmsPbs
     {
-    public:
-        enum ShadowFilter
-        {
-            /// Standard quality. Very fast.
-            PCF_2x2,
-
-            /// Good quality. Still quite fast on most modern hardware.
-            PCF_3x3,
-
-            /// High quality. Very slow in old hardware (i.e. DX10 level hw and below)
-            /// Use RSC_TEXTURE_GATHER to check whether it will be slow or not.
-            PCF_4x4,
-
-            NumShadowFilter
-        };
-
-        enum AmbientLightMode
-        {
-            /// Use fixed-colour ambient lighting when upper hemisphere = lower hemisphere,
-            /// use hemisphere lighting when they don't match.
-            /// Disables ambient lighting if the colours are black.
-            AmbientAuto,
-
-            /// Force fixed-colour ambient light. Only uses the upper hemisphere paramter.
-            AmbientFixed,
-
-            /// Force hemisphere ambient light. Useful if you plan on adjusting the colours
-            /// dynamically very often and this might cause swapping shaders.
-            AmbientHemisphere,
-
-            /// Disable ambient lighting.
-            AmbientNone
-        };
-
-    protected:
-        typedef vector<ConstBufferPacked*>::type ConstBufferPackedVec;
-        typedef vector<HlmsDatablock*>::type HlmsDatablockVec;
-
-        struct PassData
-        {
-            FastArray<TextureGpu*>  shadowMaps;
-            FastArray<float>        vertexShaderSharedBuffer;
-            FastArray<float>        pixelShaderSharedBuffer;
-
-            Matrix4 viewMatrix;
-        };
-
-        PassData                mPreparedPass;
-        ConstBufferPackedVec    mPassBuffers;
-        HlmsSamplerblock const  *mShadowmapSamplerblock;    /// GL3+ only when not using depth textures
-        HlmsSamplerblock const  *mShadowmapCmpSamplerblock; /// For depth textures & D3D11
-        HlmsSamplerblock const  *mCurrentShadowmapSamplerblock;
-        HlmsSamplerblock const  *mTerraSamplerblock;
-
-        uint32                  mCurrentPassBuffer;     /// Resets every to zero every new frame.
-
-        TexBufferPacked         *mGridBuffer;
-        TexBufferPacked         *mGlobalLightListBuffer;
-
-        ConstBufferPool::BufferPool const *mLastBoundPool;
-
-        uint32 mLastTextureHash;
         MovableObject const *mLastMovableObject;
-
-        bool mDebugPssmSplits;
-
-        ShadowFilter mShadowFilter;
-        AmbientLightMode mAmbientLightMode;
-
-        virtual const HlmsCache* createShaderCacheEntry( uint32 renderableHash,
-                                                         const HlmsCache &passCache,
-                                                         uint32 finalHash,
-                                                         const QueuedRenderable &queuedRenderable );
+        DescriptorSetSampler const *mTerraDescSetSampler;
 
         virtual HlmsDatablock* createDatablockImpl( IdString datablockName,
                                                     const HlmsMacroblock *macroblock,
@@ -139,8 +69,9 @@ namespace Ogre
                                        TerraTextureTypes baseTexType, uint8 detailIdx );
 
         virtual void calculateHashForPreCreate( Renderable *renderable, PiecesMap *inOutPieces );
+        virtual void calculateHashForPreCaster( Renderable *renderable, PiecesMap *inOutPieces );
 
-        virtual void destroyAllBuffers(void);
+        virtual void notifyPropertiesMergedPreGenerationStep(void);
 
         FORCEINLINE uint32 fillBuffersFor( const HlmsCache *cache,
                                            const QueuedRenderable &queuedRenderable,
@@ -152,13 +83,6 @@ namespace Ogre
         virtual ~HlmsTerra();
 
         virtual void _changeRenderSystem( RenderSystem *newRs );
-
-        /// Not supported
-        virtual void setOptimizationStrategy( OptimizationStrategy optimizationStrategy ) {}
-
-        virtual HlmsCache preparePassHash( const Ogre::CompositorShadowNode *shadowNode,
-                                           bool casterPass, bool dualParaboloid,
-                                           SceneManager *sceneManager );
 
         virtual uint32 fillBuffersFor( const HlmsCache *cache, const QueuedRenderable &queuedRenderable,
                                        bool casterPass, uint32 lastCacheHash,
@@ -173,21 +97,11 @@ namespace Ogre
                                          bool casterPass, uint32 lastCacheHash,
                                          CommandBuffer *commandBuffer );
 
-        virtual void frameEnded(void);
-
-        void setDebugPssmSplits( bool bDebug );
-        bool getDebugPssmSplits(void) const                 { return mDebugPssmSplits; }
-
-        void setShadowSettings( ShadowFilter filter );
-        ShadowFilter getShadowFilter(void) const            { return mShadowFilter; }
-
-        void setAmbientLightMode( AmbientLightMode mode );
-        AmbientLightMode getAmbientLightMode(void) const    { return mAmbientLightMode; }
-
 #if !OGRE_NO_JSON
         /// @copydoc Hlms::_loadJson
         virtual void _loadJson( const rapidjson::Value &jsonValue, const HlmsJson::NamedBlocks &blocks,
-                                HlmsDatablock *datablock, HlmsJsonListener *listener,
+                                HlmsDatablock *datablock, const String &resourceGroup,
+                                HlmsJsonListener *listener,
                                 const String &additionalTextureExtension ) const;
         /// @copydoc Hlms::_saveJson
         virtual void _saveJson( const HlmsDatablock *datablock, String &outString,
@@ -202,12 +116,6 @@ namespace Ogre
 
     struct TerraProperty
     {
-        static const IdString HwGammaRead;
-        static const IdString HwGammaWrite;
-        static const IdString SignedIntTex;
-        static const IdString MaterialsPerBuffer;
-        static const IdString DebugPssmSplits;
-
         static const IdString UseSkirts;
 
         static const IdString NumTextures;
@@ -218,35 +126,6 @@ namespace Ogre
         static const char *DetailMapNmN;
         static const char *RoughnessMap;
         static const char *MetalnessMap;
-
-        static const IdString FresnelScalar;
-        static const IdString MetallicWorkflow;
-        static const IdString ReceiveShadows;
-
-        static const IdString DetailOffsets0;
-        static const IdString DetailOffsets1;
-        static const IdString DetailOffsets2;
-        static const IdString DetailOffsets3;
-
-        static const IdString DetailMapsDiffuse;
-        static const IdString DetailMapsNormal;
-        static const IdString FirstValidDetailMapNm;
-
-        static const IdString Pcf3x3;
-        static const IdString Pcf4x4;
-        static const IdString PcfIterations;
-
-        static const IdString EnvMapScale;
-        static const IdString AmbientFixed;
-        static const IdString AmbientHemisphere;
-
-        static const IdString BrdfDefault;
-        static const IdString BrdfCookTorrance;
-        static const IdString BrdfBlinnPhong;
-        static const IdString FresnelSeparateDiffuse;
-        static const IdString GgxHeightCorrelated;
-
-        static const IdString *DetailOffsetsPtrs[4];
     };
 
     /** @} */
