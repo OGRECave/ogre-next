@@ -97,14 +97,14 @@ namespace Demo
         }
         else
         {
-            //The texture is not available. Create a dummy dud using PFG_NULL.
+            //The texture is not available. Create a dummy dud.
             TextureGpuManager *textureManager = root->getRenderSystem()->getTextureGpuManager();
-            TextureGpu *nullTex = textureManager->createTexture( "DummyNull",
-                                                                 GpuPageOutStrategy::Discard,
-                                                                 TextureFlags::ManualTexture,
-                                                                 TextureTypes::Type2D );
+            TextureGpu *nullTex = textureManager->createOrRetrieveTexture( "DummyNull",
+                                                                           GpuPageOutStrategy::Discard,
+                                                                           TextureFlags::ManualTexture,
+                                                                           TextureTypes::Type2D );
             nullTex->setResolution( 1u, 1u );
-            nullTex->setPixelFormat( PFG_NULL );
+            nullTex->setPixelFormat( PFG_R10G10B10A2_UNORM );
             nullTex->scheduleTransitionTo( GpuResidency::Resident );
             externalChannels[1] = nullTex;
         }
