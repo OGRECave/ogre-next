@@ -6290,6 +6290,7 @@ namespace Ogre{
                 }
                 break;
             case ID_TARGET_FORMAT:
+                format = PFG_UNKNOWN;
                 break;
             case ID_MSAA:
                 // advance to next to get the MSAA setting
@@ -6462,7 +6463,7 @@ namespace Ogre{
         td->depthBufferFormat   = depthBufferFormat;
 
         RenderTargetViewDef *rtv = defBase->addRenderTextureView( atom0->value );
-        if( !PixelFormatGpuUtils::isDepth( format ) )
+        if( format == PFG_UNKNOWN || !PixelFormatGpuUtils::isDepth( format ) )
         {
             RenderTargetViewEntry attachment;
             attachment.textureName = atom0->value;

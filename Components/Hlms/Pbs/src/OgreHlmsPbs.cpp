@@ -247,6 +247,7 @@ namespace Ogre
         mAreaLightMasks( 0 ),
         mAreaLightMasksSamplerblock( 0 ),
         mUsingAreaLightMasks( false ),
+        mSkipRequestSlotInChangeRS( false ),
         mUsingLtcMatrix( false ),
         mLtcMatrixTexture( 0 ),
         mDecalsDiffuseMergedEmissive( false ),
@@ -283,16 +284,19 @@ namespace Ogre
 
         if( newRs )
         {
-            HlmsDatablockMap::const_iterator itor = mDatablocks.begin();
-            HlmsDatablockMap::const_iterator end  = mDatablocks.end();
-
-            while( itor != end )
+            if( !mSkipRequestSlotInChangeRS )
             {
-                assert( dynamic_cast<HlmsPbsDatablock*>( itor->second.datablock ) );
-                HlmsPbsDatablock *datablock = static_cast<HlmsPbsDatablock*>( itor->second.datablock );
+                HlmsDatablockMap::const_iterator itor = mDatablocks.begin();
+                HlmsDatablockMap::const_iterator end  = mDatablocks.end();
 
-                requestSlot( datablock->mTextureHash, datablock, false );
-                ++itor;
+                while( itor != end )
+                {
+                    assert( dynamic_cast<HlmsPbsDatablock*>( itor->second.datablock ) );
+                    HlmsPbsDatablock *datablock = static_cast<HlmsPbsDatablock*>(itor->second.datablock);
+
+                    requestSlot( datablock->mTextureHash, datablock, false );
+                    ++itor;
+                }
             }
 
             HlmsSamplerblock samplerblock;

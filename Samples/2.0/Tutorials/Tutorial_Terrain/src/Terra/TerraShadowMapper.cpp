@@ -22,6 +22,7 @@ namespace Ogre
         m_shadowStarts( 0 ),
         m_shadowPerGroupData( 0 ),
         m_shadowWorkspace( 0 ),
+        m_shadowMapTex( 0 ),
         m_shadowJob( 0 ),
         m_jobParamDelta( 0 ),
         m_jobParamXYStep( 0 ),

@@ -74,9 +74,8 @@ namespace Ogre
         for( size_t i=0; i<4; ++i )
             mDetailsOffsetScale[i] = Vector4( 0, 0, 1, 1 );
 
-        calculateHash();
-
         creator->requestSlot( /*mTextureHash*/0, this, false );
+        calculateHash();
     }
     //-----------------------------------------------------------------------------------
     HlmsTerraDatablock::~HlmsTerraDatablock()

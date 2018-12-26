@@ -87,6 +87,8 @@ namespace Ogre
 
         //heightMap, terrainNormals & terrainShadows
         mReservedTexSlots = 3u;
+
+        mSkipRequestSlotInChangeRS = true;
     }
     //-----------------------------------------------------------------------------------
     HlmsTerra::~HlmsTerra()
@@ -96,12 +98,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsTerra::_changeRenderSystem( RenderSystem *newRs )
     {
-        //Hide the datablocks from our base class since it will
-        //try to downcast HlmsDatablock to HlmsPbsDatablock
-        HlmsDatablockMap datablockCopy;
-        datablockCopy.swap( mDatablocks );
         HlmsPbs::_changeRenderSystem( newRs );
-        datablockCopy.swap( mDatablocks );
 
         if( newRs )
         {
@@ -125,6 +122,7 @@ namespace Ogre
                 baseSet.mSamplers.push_back( mAreaLightMasksSamplerblock );
                 if( !mHasSeparateSamplers )
                     baseSet.mSamplers.push_back( mAreaLightMasksSamplerblock );
+                baseSet.mShaderTypeSamplerCount[PixelShader] = baseSet.mSamplers.size();
                 mTerraDescSetSampler = mHlmsManager->getDescriptorSetSampler( baseSet );
             }
         }
@@ -231,6 +229,24 @@ namespace Ogre
                 setProperty( propName.c_str(), samplerIdx );
             }
         }
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsTerra::calculateHashFor( Renderable *renderable, uint32 &outHash, uint32 &outCasterHash )
+    {
+        assert( dynamic_cast<HlmsTerraDatablock*>( renderable->getDatablock() ) );
+        HlmsTerraDatablock *datablock = static_cast<HlmsTerraDatablock*>( renderable->getDatablock() );
+        if( datablock->getDirtyFlags() & (DirtyTextures|DirtySamplers) )
+        {
+            //Delay hash generation for later, when we have the final (or temporary) descriptor sets.
+            outHash = 0;
+            outCasterHash = 0;
+        }
+        else
+        {
+            Hlms::calculateHashFor( renderable, outHash, outCasterHash );
+        }
+
+        datablock->loadAllTextures();
     }
     //-----------------------------------------------------------------------------------
     void HlmsTerra::calculateHashForPreCreate( Renderable *renderable, PiecesMap *inOutPieces )

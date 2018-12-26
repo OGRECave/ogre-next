@@ -12,6 +12,18 @@ compositor_node Tutorial_TerrainRenderingNode
 
 		pass render_scene
 		{
+			load
+			{
+				all				clear
+				clear_colour	0.2 0.4 0.6 1
+			}
+			store
+			{
+				colour	store_or_resolve
+				depth	dont_care
+				stencil	dont_care
+			}
+
 			expose TerraShadowTexture
 
 			overlays	on
@@ -24,7 +36,7 @@ compositor_node_shadow Tutorial_TerrainShadowNode
 {
 	technique pssm
 
-	texture atlas 3072 2048 PF_D32_FLOAT no_fsaa
+	texture atlas 3072 2048 PFG_D32_FLOAT
 
 	num_splits		3
 	pssm_lambda		0.95

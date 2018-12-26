@@ -146,6 +146,8 @@ namespace Ogre
         LightArray				mAreaLights;
         bool                    mUsingAreaLightMasks;
 
+        bool                    mSkipRequestSlotInChangeRS;
+
         bool                    mUsingLtcMatrix;
         TextureGpu              *mLtcMatrixTexture;
 

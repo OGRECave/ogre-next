@@ -212,24 +212,6 @@ namespace Ogre
         void setMetalness( uint8 detailMapIdx, float metalness );
         float getMetalness( uint8 detailMapIdx ) const;
 
-        /** Sets a new texture for rendering. Calling this function may trigger an
-            HlmsDatablock::flushRenderables if the texture or the samplerblock changes.
-            Won't be called if only the arrayIndex changes
-        @param texType
-            Type of the texture.
-        @param arrayIndex
-            The index in the array texture.
-        @param newTexture
-            Texture to change to. If it is null and previously wasn't (or viceversa), will
-            trigger HlmsDatablock::flushRenderables.
-        @param params
-            Optional. We'll create (or retrieve an existing) samplerblock based on the input parameters.
-            When null, we leave the previously set samplerblock (if a texture is being set, and if no
-            samplerblock was set, we'll create a default one)
-        */
-        void setTexture( TerraTextureTypes texType, uint16 arrayIndex, const TexturePtr &newTexture,
-                         const HlmsSamplerblock *refParams=0 );
-
         /** Sets the scale and offset of the detail map.
         @remarks
             A value of Vector4( 0, 0, 1, 1 ) will cause a flushRenderables as we

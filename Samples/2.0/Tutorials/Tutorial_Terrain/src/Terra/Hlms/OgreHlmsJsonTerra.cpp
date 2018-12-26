@@ -130,7 +130,7 @@ namespace Ogre
                                                                 resourceGroup );
         }
 
-        datablock->_setTexture( textureType, texture );
+        datablock->setTexture( textureType, texture );
     }
     //-----------------------------------------------------------------------------------
     void HlmsJsonTerra::loadTexture( const rapidjson::Value &json, const HlmsJson::NamedBlocks &blocks,
@@ -188,7 +188,11 @@ namespace Ogre
         }
 
         if( texture )
+        {
+            if( !samplerblock )
+                samplerblock = mHlmsManager->getSamplerblock( HlmsSamplerblock() );
             datablock->_setTexture( textureType, texture, samplerblock );
+        }
         else if( samplerblock )
             datablock->_setSamplerblock( textureType, samplerblock );
     }

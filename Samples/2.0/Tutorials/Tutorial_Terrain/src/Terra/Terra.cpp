@@ -126,6 +126,7 @@ namespace Ogre
                              TextureTypes::Type2D );
         m_heightMapTex->setResolution( image.getWidth(), image.getHeight() );
         m_heightMapTex->setPixelFormat( image.getPixelFormat() );
+        m_heightMapTex->scheduleTransitionTo( GpuResidency::Resident );
 
         StagingTexture *stagingTexture = textureManager->getStagingTexture( image.getWidth(),
                                                                             image.getHeight(),
@@ -142,7 +143,7 @@ namespace Ogre
         textureManager->removeStagingTexture( stagingTexture );
         stagingTexture = 0;
 
-        m_heightMapTex->scheduleTransitionTo( GpuResidency::Resident );
+        m_heightMapTex->notifyDataIsReady();
     }
     //-----------------------------------------------------------------------------------
     void Terra::createHeightmap( Image2 &image, const String &imageName )
@@ -219,16 +220,16 @@ namespace Ogre
 
         TextureGpuManager *textureManager =
                 mManager->getDestinationRenderSystem()->getTextureGpuManager();
-        m_heightMapTex = textureManager->createTexture(
+        m_normalMapTex = textureManager->createTexture(
                              "NormalMapTex_" + StringConverter::toString( getId() ),
                              GpuPageOutStrategy::SaveToSystemRam,
                              TextureFlags::RenderToTexture|TextureFlags::AllowAutomipmaps,
                              TextureTypes::Type2D );
-        m_heightMapTex->setResolution( m_heightMapTex->getWidth(), m_heightMapTex->getHeight() );
-        m_heightMapTex->setNumMipmaps(
-                    PixelFormatGpuUtils::getMaxMipmapCount( m_heightMapTex->getWidth(),
-                                                            m_heightMapTex->getHeight() ) );
-        m_heightMapTex->setPixelFormat( PFG_R10G10B10A2_UNORM );
+        m_normalMapTex->setResolution( m_heightMapTex->getWidth(), m_heightMapTex->getHeight() );
+        m_normalMapTex->setNumMipmaps(
+                    PixelFormatGpuUtils::getMaxMipmapCount( m_normalMapTex->getWidth(),
+                                                            m_normalMapTex->getHeight() ) );
+        m_normalMapTex->setPixelFormat( PFG_R10G10B10A2_UNORM );
 
         MaterialPtr normalMapperMat = MaterialManager::getSingleton().load(
                     "Terra/GpuNormalMapper",
@@ -236,7 +237,7 @@ namespace Ogre
                 staticCast<Material>();
         Pass *pass = normalMapperMat->getTechnique(0)->getPass(0);
         TextureUnitState *texUnit = pass->getTextureUnitState(0);
-        texUnit->setTexture( m_heightMapTex );
+        texUnit->setTexture( m_normalMapTex );
 
         //Normalize vScale for better precision in the shader math
         const Vector3 vScale = Vector3( m_xzRelativeSize.x, m_height, m_xzRelativeSize.y ).normalisedCopy();
