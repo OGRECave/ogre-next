@@ -1458,6 +1458,8 @@ namespace Ogre
 
         VaoManager::_update();
 
+        waitForTailFrameToFinish();
+
         if( mFrameSyncVec[mDynamicBufferCurrentFrame] )
         {
             mFrameSyncVec[mDynamicBufferCurrentFrame]->Release();
@@ -1650,8 +1652,11 @@ namespace Ogre
                 return fenceName;
             }
 
-            //Give HyperThreading threads a breath on this spinlock.
-            YieldProcessor();
+            if( hr == S_FALSE )
+            {
+                //Give HyperThreading threads a breath on this spinlock.
+                YieldProcessor();
+            }
         } // spin until event is finished
 
         return fenceName;

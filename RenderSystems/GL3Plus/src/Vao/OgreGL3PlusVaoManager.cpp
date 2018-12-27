@@ -1195,6 +1195,8 @@ namespace Ogre
 
         VaoManager::_update();
 
+        waitForTailFrameToFinish();
+
         if( mFrameSyncVec[mDynamicBufferCurrentFrame] )
         {
             OCGE( glDeleteSync( mFrameSyncVec[mDynamicBufferCurrentFrame] ) );
