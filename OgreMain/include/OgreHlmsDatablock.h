@@ -277,6 +277,10 @@ namespace Ogre
         HlmsMacroblock const *mMacroblock[2];
         HlmsBlendblock const *mBlendblock[2];
 
+    public:
+        /// When false, we won't try to have Textures become resident
+        bool    mAllowTextureResidencyChange;
+    protected:
         bool    mIgnoreFlushRenderables;
         uint8   mAlphaTestCmp;  /// @see CompareFunction
         bool    mAlphaTestShadowCasterOnly;

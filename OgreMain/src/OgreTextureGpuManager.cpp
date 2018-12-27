@@ -370,8 +370,9 @@ namespace Ogre
             {
                 //The use requested to destroy the texture. It will soon become a dangling pointer
                 //and invalidate the iterator. Wait for that to happen.
-                TextureGpu *texture = itor->second.texture;
-                texture->waitForData();
+                //We can't use TextureGpu::waitForData because 'this' will become dangling while
+                //inside that function
+                waitForStreamingCompletion();
             }
 
             retVal = createTexture( name, aliasName, pageOutStrategy, textureFlags,

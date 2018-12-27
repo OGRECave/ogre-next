@@ -464,6 +464,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void OGRE_HLMS_TEXTURE_BASE_CLASS::loadAllTextures(void)
     {
+        if( !mAllowTextureResidencyChange )
+            return;
+
         for( int i=0; i<OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
         {
             if( mTextures[i] )

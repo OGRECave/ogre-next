@@ -226,6 +226,7 @@ namespace Demo
                                                   Ogre::HlmsMacroblock(),
                                                   Ogre::HlmsBlendblock(),
                                                   Ogre::HlmsParamVec() ) );
+            datablock->mAllowTextureResidencyChange = false;
             if( mTextures[i]->getTextureType() != Ogre::TextureTypes::TypeCube )
                 datablock->setTexture( Ogre::PBSM_EMISSIVE, mTextures[i] );
             else

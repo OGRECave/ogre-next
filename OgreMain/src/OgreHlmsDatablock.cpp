@@ -102,6 +102,7 @@ namespace Ogre
         mName( name ),
         mTextureHash( 0 ),
         mType( creator->getType() ),
+        mAllowTextureResidencyChange( true ),
         mIgnoreFlushRenderables( false ),
         mAlphaTestCmp( CMPF_ALWAYS_PASS ),
         mAlphaTestShadowCasterOnly( false ),
