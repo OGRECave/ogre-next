@@ -18,17 +18,30 @@ namespace Demo
         size_t                              mNumInitialTextures;
         bool                                mWaitForStreamingCompletion;
 
+        struct VisibleItem
+        {
+            Ogre::Item          *item;
+            Ogre::HlmsDatablock *datablock;
+        };
+
+        typedef std::vector<VisibleItem> VisibleItemVec;
+        VisibleItemVec  mVisibleItems;
+
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
         void switchTextureResidency( int targetResidency );
 
         void enableHeavyRamMode(void);
         void disableHeavyRamMode(void);
-        bool isInHeavyRamMode(void);
+        bool isInHeavyRamMode(void) const;
 
         void testSequence(void);
         void testRandom(void);
         void testRamStress(void);
+
+        void showTexturesOnScreen(void);
+        void hideTexturesFromScreen(void);
+        bool isShowingTextureOnScreen(void) const;
 
     public:
         TextureResidencyGameState( const Ogre::String &helpDescription );

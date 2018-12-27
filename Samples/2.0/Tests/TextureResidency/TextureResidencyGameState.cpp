@@ -13,9 +13,6 @@
 #include "OgreCamera.h"
 #include "OgreRenderWindow.h"
 
-#include "OgreHlmsUnlitDatablock.h"
-#include "OgreHlmsSamplerblock.h"
-
 #include "OgreRoot.h"
 #include "OgreHlmsManager.h"
 #include "OgreHlms.h"
@@ -25,6 +22,9 @@
 
 #include "OgreTextureGpuManager.h"
 #include "OgreTextureFilters.h"
+
+#include "OgreHlmsPbsDatablock.h"
+#include "OgreHlmsPbs.h"
 
 using namespace Demo;
 
@@ -86,6 +86,7 @@ namespace Demo
                               textureNames[i],
                               "TestTex" + Ogre::StringConverter::toString( mTextures.size() ),
                               Ogre::GpuPageOutStrategy::Discard/*AlwaysKeepSystemRamCopy*/,
+                              Ogre::TextureFlags::AutomaticBatching |
                               Ogre::TextureFlags::PrefersLoadingFromFileAsSRGB,
                               Ogre::TextureTypes::Type2D,
                               Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME );
@@ -94,10 +95,19 @@ namespace Demo
                 mTextures.push_back( texture );
             }
         }
+
+        //Ensure all the new textures are shown
+        if( isShowingTextureOnScreen() )
+            showTexturesOnScreen();
     }
     //-----------------------------------------------------------------------------------
     void TextureResidencyGameState::disableHeavyRamMode(void)
     {
+        //Ensure we don't try to show dangling pointers on screen
+        const bool wasShowingTexturesOnScreen = isShowingTextureOnScreen();
+        if( wasShowingTexturesOnScreen )
+            hideTexturesFromScreen();
+
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
 
@@ -106,9 +116,12 @@ namespace Demo
             textureMgr->destroyTexture( mTextures[i] );
 
         mTextures.erase( mTextures.begin() + mNumInitialTextures, mTextures.end() );
+
+        if( wasShowingTexturesOnScreen )
+            showTexturesOnScreen();
     }
     //-----------------------------------------------------------------------------------
-    bool TextureResidencyGameState::isInHeavyRamMode(void)
+    bool TextureResidencyGameState::isInHeavyRamMode(void) const
     {
         return mTextures.size() > mNumInitialTextures;
     }
@@ -180,10 +193,82 @@ namespace Demo
         mWaitForStreamingCompletion = oldSetting;
     }
     //-----------------------------------------------------------------------------------
-    void TextureResidencyGameState::createScene01(void)
+    void TextureResidencyGameState::showTexturesOnScreen(void)
+    {
+        hideTexturesFromScreen();
+
+        Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
+        Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
+        assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
+        Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
+
+        Ogre::SceneNode *staticRootNode = sceneManager->getRootSceneNode( Ogre::SCENE_STATIC );
+
+        const size_t numTextures = mTextures.size();
+
+        for( size_t i=0; i<numTextures; ++i )
+        {
+            VisibleItem visibleItem;
+            visibleItem.item = sceneManager->createItem(
+                                   "Cube_d.mesh",
+                                   Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                                   Ogre::SCENE_STATIC );
+
+            Ogre::SceneNode *sceneNode = staticRootNode->createChildSceneNode( Ogre::SCENE_STATIC );
+            sceneNode->setPosition( (i % 5u) * 2.5f - 5.0f,
+                                    (i % 4u) * 2.5f - 3.75f, 0.0f );
+            sceneNode->attachObject( visibleItem.item );
+
+            Ogre::String datablockName = "Test" + Ogre::StringConverter::toString( i );
+            Ogre::HlmsPbsDatablock *datablock = static_cast<Ogre::HlmsPbsDatablock*>(
+                        hlmsPbs->createDatablock( datablockName,
+                                                  datablockName,
+                                                  Ogre::HlmsMacroblock(),
+                                                  Ogre::HlmsBlendblock(),
+                                                  Ogre::HlmsParamVec() ) );
+            if( mTextures[i]->getTextureType() != Ogre::TextureTypes::TypeCube )
+                datablock->setTexture( Ogre::PBSM_EMISSIVE, mTextures[i] );
+            else
+                datablock->setTexture( Ogre::PBSM_REFLECTION, mTextures[i] );
+            visibleItem.item->setDatablock( datablock );
+            visibleItem.datablock = datablock;
+            mVisibleItems.push_back( visibleItem );
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureResidencyGameState::hideTexturesFromScreen(void)
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
+        Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
+        assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
+        Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
+
+        //LIFO order removal is better for Ogre
+        VisibleItemVec::const_reverse_iterator itor = mVisibleItems.rbegin();
+        VisibleItemVec::const_reverse_iterator end  = mVisibleItems.rend();
+
+        while( itor != end )
+        {
+            Ogre::SceneNode *sceneNode = itor->item->getParentSceneNode();
+            sceneNode->getParentSceneNode()->removeAndDestroyChild( sceneNode );
+
+            sceneManager->destroyItem( itor->item );
+            hlmsPbs->destroyDatablock( itor->datablock->getName() );
+
+            ++itor;
+        }
+
+        mVisibleItems.clear();
+    }
+    //-----------------------------------------------------------------------------------
+    bool TextureResidencyGameState::isShowingTextureOnScreen(void) const
+    {
+        return !mVisibleItems.empty();
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureResidencyGameState::createScene01(void)
+    {
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
 
@@ -260,6 +345,8 @@ namespace Demo
         outText += "\nPress F8 to run ram stress test";
         outText += "\nPress F9 for heavy RAM mode ";
         outText += isInHeavyRamMode() ? "[On]" : "[Off]";
+        outText += "\nPress F10 to show textures on screen ";
+        outText += isShowingTextureOnScreen() ? "[On]" : "[Off]";
     }
     //-----------------------------------------------------------------------------------
     void TextureResidencyGameState::keyReleased( const SDL_KeyboardEvent &arg )
@@ -304,6 +391,13 @@ namespace Demo
                 enableHeavyRamMode();
             else
                 disableHeavyRamMode();
+        }
+        else if( arg.keysym.sym == SDLK_F10 )
+        {
+            if( !isShowingTextureOnScreen() )
+                showTexturesOnScreen();
+            else
+                hideTexturesFromScreen();
         }
         else
         {
