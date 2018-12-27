@@ -1519,6 +1519,21 @@ namespace Ogre
             waitFor( fence );
             fence->Release();
             fence = 0;
+
+            //All of the other per-frame fences are not needed anymore.
+            D3D11SyncVec::iterator itor = mFrameSyncVec.begin();
+            D3D11SyncVec::iterator end  = mFrameSyncVec.end();
+
+            while( itor != end )
+            {
+                if( *itor )
+                {
+                    (*itor)->Release();
+                    *itor = 0;
+                }
+                ++itor;
+            }
+
             _destroyAllDelayedBuffers();
             mFrameCount += mDynamicBufferMultiplier;
         }

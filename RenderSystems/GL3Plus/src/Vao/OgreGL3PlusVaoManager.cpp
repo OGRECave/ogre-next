@@ -1221,14 +1221,17 @@ namespace Ogre
             //Full stall
             glFinish();
 
-            //All of the other per-fences are not needed anymore.
-            GLSyncVec::const_iterator itor = mFrameSyncVec.begin();
-            GLSyncVec::const_iterator end  = mFrameSyncVec.end();
+            //All of the other per-frame fences are not needed anymore.
+            GLSyncVec::iterator itor = mFrameSyncVec.begin();
+            GLSyncVec::iterator end  = mFrameSyncVec.end();
 
             while( itor != end )
             {
                 if( *itor )
+                {
                     OCGE( glDeleteSync( *itor ) );
+                    *itor = 0;
+                }
                 ++itor;
             }
 
