@@ -154,7 +154,7 @@ namespace Ogre
         loadedImage._setAutoDelete( false );
         Image2 *image = new Image2( loadedImage );
         image->_setAutoDelete( true );
-        texture->scheduleTransitionTo( GpuResidency::Resident, image, true );
+        texture->unsafeScheduleTransitionTo( GpuResidency::Resident, image, true );
         textureManager->_setIgnoreScheduledTasks( false );
     }
     //-----------------------------------------------------------------------------------
