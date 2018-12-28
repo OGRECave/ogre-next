@@ -419,6 +419,12 @@ namespace Ogre
             UsageStatsVec       prevStats;              /// Used by both threads.
             /// Number of bytes preloaded by worker thread. Main thread resets this counter.
             size_t              bytesPreloaded;
+            /// See setWorkerThreadMinimumBudget
+            /// Read by worker thread. Occasionally written by main thread. Not protected.
+            size_t              maxSplitResolution;
+            /// See setWorkerThreadMaxPerStagingTextureRequestBytes
+            /// Read by worker thread. Occasionally written by main thread. Not protected.
+            size_t              maxPerStagingTextureRequestBytes;
 
             /// Resheduled textures are textures which were transitioned to Resident
             /// preemptively using the metadata cache, but it turned out to be wrong
@@ -847,8 +853,26 @@ namespace Ogre
         @param budget
             Array of parameters for the staging textures we'll reserve.
             The budget can be empty.
+        @param maxSplitResolution
+            Textures bigger than this resolution in any axis will be taken
+            as "exceptions" or "spikes" that won't last long. e.g. if maxSplitResolution = 2048
+            then a 2048x16, 67x2048, 2048x2048, and a 4096x4096 texture will all be considered abnormal.
+
+            This can significantly affect how much memory we consume while streaming.
+            A value of 0 means to keep current value.
+
+            If an entry in the budget contains minNumSlices > 1 and minResolution >= maxSplitResolution
+            then a lot of memory waste could end up being caused; thus we will warn to the Ogre.log
+            if you set such setting.
+
+            The default value in 32-bit systems and mobile is 2048
+            The default value in 64-bit Desktop systems is 4096
+
+            This setting is closely related to setWorkerThreadMaxPerStagingTextureRequestBytes,
+            because a texture whose resolution is >= maxSplitResolution will force us to use
+            multiple StagingTextures, thus relieving the pressure on memory and memory fragmentation.
         */
-        void setWorkerThreadMinimumBudget( const BudgetEntryVec &budget );
+        void setWorkerThreadMinimumBudget( const BudgetEntryVec &budget, size_t maxSplitResolution=0 );
 
         /** At a high level, texture loading works like this:
             1. Grab a free StagingTexture from "available" pool in main thread
@@ -919,6 +943,22 @@ namespace Ogre
         @param maxPreloadBytes
         */
         void setWorkerThreadMaxPreloadBytes( size_t maxPreloadBytes );
+
+        /** The worker thread tracks how many data it is loading so the Main thread can request
+            additional StagingTextures if necessary.
+
+            One big StagingTexture reduces the amount of time we map memory so we can upload.
+
+            However one big StagingTexture also means that if we've used 1 byte out of 200MB available,
+            we have to wait until that byte has finished transferring (that usually means the
+            StagingTexture becomes available 3 frames later); which can result in three big
+            StagingTextures (one for each frame) which can be overkill.
+
+            This function allows you to specify when we decide to break these
+            requests in smaller pieces, which by default is set at 64MB
+        @param maxPerStagingTextureRequestBytes
+        */
+        void setWorkerThreadMaxPerStagingTextureRequestBytes( size_t maxPerStagingTextureRequestBytes );
 
         /** The main thread tries to acquire a lock from the background thread,
             do something very quick, and release it.

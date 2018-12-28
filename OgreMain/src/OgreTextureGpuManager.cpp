@@ -99,12 +99,13 @@ namespace Ogre
     #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
         // 32-bit have tighter limited addresse memory. They pay the price
         // in slower streaming (more round trips between main and worker threads)
-        const uint32 maxResolution = 2048u;
+        mStreamingData.maxSplitResolution = 2048u;
     #else
         // 64-bit have plenty of virtual addresss to spare. We can reserve much more.
-        const uint32 maxResolution = 4096u;
+        mStreamingData.maxSplitResolution = 4096u;
     #endif
-        //4MB / 64MB for RGBA8, that's two 4096x4096 / 2048x2048 texture.
+        const uint32 maxResolution = mStreamingData.maxSplitResolution;
+        //32MB / 128MB for RGBA8, that's two 4096x4096 / 2048x2048 texture.
         format = PixelFormatGpuUtils::getFamily( PFG_RGBA8_UNORM );
         mBudget.push_back( BudgetEntry( format, maxResolution, 2u ) );
         //4MB / 16MB for BC1, that's two 4096x4096 / 2048x2048 texture.
@@ -117,6 +118,7 @@ namespace Ogre
         format = PixelFormatGpuUtils::getFamily( PFG_BC5_UNORM );
         mBudget.push_back( BudgetEntry( format, maxResolution, 1u ) );
 #else
+        mStreamingData.maxSplitResolution = 2048u;
         //Mobile platforms don't support compressed formats, and have tight memory constraints
         //8MB for RGBA8, that's two 2048x2048 texture.
         format = PixelFormatGpuUtils::getFamily( PFG_RGBA8_UNORM );
@@ -138,6 +140,7 @@ namespace Ogre
 #endif
 
         mStreamingData.bytesPreloaded = 0;
+        mStreamingData.maxPerStagingTextureRequestBytes = 64u * 1024u * 1024u;
 
         for( int i=0; i<2; ++i )
             mThreadData[i].objCmdBuffer = new ObjCmdBuffer();
@@ -1129,8 +1132,39 @@ namespace Ogre
         mMaxPreloadBytes = std::max<size_t>( 1u, maxPreloadBytes );
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpuManager::setWorkerThreadMinimumBudget( const BudgetEntryVec &budget )
+    void TextureGpuManager::setWorkerThreadMaxPerStagingTextureRequestBytes(
+            size_t maxPerStagingTextureRequestBytes )
     {
+        assert( maxPerStagingTextureRequestBytes > 0 && "Value cannot be 0!" );
+        mStreamingData.maxPerStagingTextureRequestBytes =
+                std::max<size_t>( 1u, maxPerStagingTextureRequestBytes );
+    }
+    //-----------------------------------------------------------------------------------
+    void TextureGpuManager::setWorkerThreadMinimumBudget( const BudgetEntryVec &budget,
+                                                          size_t maxSplitResolution )
+    {
+        if( maxSplitResolution == 0 )
+            maxSplitResolution = mStreamingData.maxSplitResolution;
+
+        BudgetEntryVec::const_iterator itor = budget.begin();
+        BudgetEntryVec::const_iterator end  = budget.end();
+
+        while( itor != end )
+        {
+            if( itor->minNumSlices > 1u && itor->minResolution >= maxSplitResolution )
+            {
+                LogManager::getSingleton().logMessage(
+                            "[WARNING] setWorkerThreadMinimumBudget called with minNumSlices = " +
+                            StringConverter::toString( itor->minNumSlices ) + " and minResolution = " +
+                            StringConverter::toString( itor->minResolution ) + " which can be very "
+                            "suboptimal given that maxSplitResolution = " +
+                            StringConverter::toString( maxSplitResolution ), LML_CRITICAL );
+            }
+            ++itor;
+        }
+
+        mStreamingData.maxSplitResolution = maxSplitResolution;
+
         mBudget = budget;
         //Sort in descending order.
         std::sort( mBudget.begin(), mBudget.end(), BudgetEntry() );
@@ -1950,6 +1984,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::mergeUsageStatsIntoPrevStats(void)
     {
+        uint32 c_loopResetValue = 15u;
+
         UsageStatsVec::const_iterator itor = mStreamingData.usageStats.begin();
         UsageStatsVec::const_iterator end  = mStreamingData.usageStats.end();
 
@@ -1958,8 +1994,11 @@ namespace Ogre
             UsageStatsVec::iterator itPrev = mStreamingData.prevStats.begin();
             UsageStatsVec::iterator enPrev = mStreamingData.prevStats.end();
 
-            while( itPrev != enPrev && itPrev->formatFamily != itor->formatFamily )
+            while( itPrev != enPrev && itPrev->formatFamily != itor->formatFamily &&
+                   itPrev->loopCount <= 2u )
+            {
                 ++itPrev;
+            }
 
             if( itPrev != enPrev )
             {
@@ -1990,12 +2029,20 @@ namespace Ogre
                 }
                 itPrev->accumSizeBytes = std::max( itor->accumSizeBytes, (itPrev->accumSizeBytes +
                                                                           itor->accumSizeBytes) >> 1u );
-                itPrev->loopCount = 15u;
+                itPrev->loopCount = c_loopResetValue;
             }
             else
             {
                 mStreamingData.prevStats.push_back( *itor );
-                mStreamingData.prevStats.back().loopCount = 15u;
+                if( itor->width <= mStreamingData.maxSplitResolution ||
+                    itor->height <= mStreamingData.maxSplitResolution )
+                {
+                    mStreamingData.prevStats.back().loopCount = c_loopResetValue;
+                }
+                else
+                {
+                    mStreamingData.prevStats.back().loopCount = 2u;
+                }
             }
 
             ++itor;
@@ -2068,8 +2115,18 @@ namespace Ogre
         UsageStatsVec::iterator itStats = streamingData.usageStats.begin();
         UsageStatsVec::iterator enStats = streamingData.usageStats.end();
 
-        while( itStats != enStats && itStats->formatFamily != formatFamily )
+        //Always split tracking of textures that are bigger than c_maxSplitResolution in any dimension
+        if( box.width >= streamingData.maxSplitResolution ||
+            box.height >= streamingData.maxSplitResolution )
+        {
+            itStats = enStats;
+        }
+
+        while( itStats != enStats && itStats->formatFamily != formatFamily &&
+               itStats->accumSizeBytes < streamingData.maxPerStagingTextureRequestBytes )
+        {
             ++itStats;
+        }
 
         const uint32 rowAlignment = 4u;
         const size_t requiredBytes = PixelFormatGpuUtils::getSizeBytes( box.width, box.height,
