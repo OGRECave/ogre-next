@@ -1984,6 +1984,19 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::mergeUsageStatsIntoPrevStats(void)
     {
+        //The sole purpose of this function is to perform a moving average
+        //(https://en.wikipedia.org/wiki/Moving_average) between past records
+        //of requests and new ones, where the newest request is given full
+        //weight if it needs more memory than past records.
+        //This allows us to accomodate to spikes of RAM demand (i.e. we suddenly
+        //have a lot of textures to load), while slowly dying off the memory
+        //we reserve over time if no more new requests are seen.
+        //
+        //There may be more than one entry with the same formatFamily (due to
+        //mStreamingData.maxSplitResolution & maxPerStagingTextureRequestBytes)
+        //but we only perform moving average on one of the entries, while
+        //letting all the other entries to die off quickly (by setting a very
+        //low loopCount)
         uint32 c_loopResetValue = 15u;
 
         UsageStatsVec::const_iterator itor = mStreamingData.usageStats.begin();
@@ -1994,8 +2007,13 @@ namespace Ogre
             UsageStatsVec::iterator itPrev = mStreamingData.prevStats.begin();
             UsageStatsVec::iterator enPrev = mStreamingData.prevStats.end();
 
-            while( itPrev != enPrev && itPrev->formatFamily != itor->formatFamily &&
-                   itPrev->loopCount <= 2u )
+            //Look for an older entry that is the same pixel format as itor,
+            //and that isn't about to be destroyed (if loopCount <= 2 then
+            //this entry is very old and should be abandoned, OR it
+            //was a special case due to maxSplitResolution; in any case, skip)
+            while( itPrev != enPrev &&
+                   (itPrev->formatFamily != itor->formatFamily ||
+                    itPrev->loopCount <= 2u) )
             {
                 ++itPrev;
             }
