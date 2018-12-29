@@ -80,11 +80,11 @@
 		@end
 		@property( normal_sampling_format == normal_rg_unorm )
 			//Normal texture must be in RG8_UNORM or similar format!
-			#define getTSNormal( normalMap, samplerState, uv, normalIdx ) reconstructZfromTSNormal( OGRE_SampleArray2D( normalMap, samplerState, uv, normalIdx ).xy * 2.0 + 1.0 )
+			#define getTSNormal( normalMap, samplerState, uv, normalIdx ) reconstructZfromTSNormal( OGRE_SampleArray2D( normalMap, samplerState, uv, normalIdx ).xy * 2.0 - 1.0 )
 		@end
 		@property( normal_sampling_format == normal_la )
 			//Normal texture must be in LA format!
-			#define getTSNormal( normalMap, samplerState, uv, normalIdx ) reconstructZfromTSNormal( OGRE_SampleArray2D( normalMap, samplerState, uv, normalIdx ).xw * 2.0 + 1.0 )
+			#define getTSNormal( normalMap, samplerState, uv, normalIdx ) reconstructZfromTSNormal( OGRE_SampleArray2D( normalMap, samplerState, uv, normalIdx ).xw * 2.0 - 1.0 )
 		@end
 	@end
 
