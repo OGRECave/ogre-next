@@ -67,9 +67,10 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void TextureResidencyGameState::enableHeavyRamMode(void)
     {
-        const Ogre::String textureNames[3] =
+        const Ogre::String textureNames[] =
         {
             "snow_1024.jpg",    //1024x1024
+            "AreaTexDX10.dds",
             "MRAMOR6X6.jpg",    //600x600
             "KAMEN320x240.jpg", //640x477
         };
