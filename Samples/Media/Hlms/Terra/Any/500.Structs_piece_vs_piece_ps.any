@@ -10,6 +10,32 @@ struct Material
 	float4 metalness;
 	float4 detailOffsetScale[4];
 
+	@property( syntax != metal )
+		uint4 indices0_7;
+		uint4 indices8_15;
+		uint4 indices16_24;
+	@else
+		ushort diffuseIdx;
+		ushort weightMapIdx;
+		ushort detailMapIdx0;
+		ushort detailMapIdx1;
+		ushort detailMapIdx2;
+		ushort detailMapIdx3;
+		ushort detailNormMapIdx0;
+		ushort detailNormMapIdx1;
+		ushort detailNormMapIdx2;
+		ushort detailNormMapIdx3;
+		ushort detailRoughnessIdx0;
+		ushort detailRoughnessIdx1;
+		ushort detailRoughnessIdx2;
+		ushort detailRoughnessIdx3;
+		ushort detailMetalnessIdx0;
+		ushort detailMetalnessIdx1;
+		ushort detailMetalnessIdx2;
+		ushort detailMetalnessIdx3;
+		ushort envMapIdx;
+	@end
+
 	@insertpiece( custom_materialBuffer )
 };
 
@@ -61,4 +87,13 @@ struct CellData
 	INTERPOLANT( float3 pos, @counter(texcoord) );
 	INTERPOLANT( float2 uv0, @counter(texcoord) );
 	@insertpiece( VStoPS_block )
+@end
+
+@undefpiece( DeclareObjLightMask )
+@property( hlms_fine_light_mask || hlms_forwardplus_fine_light_mask )
+	@property( syntax == metal )
+		@piece( DeclareObjLightMask )uint objLightMask = 0xFFFFFFFFu;@end
+	@else
+		@piece( DeclareObjLightMask )uint objLightMask = 0xFFFFFFFFu;@end
+	@end
 @end

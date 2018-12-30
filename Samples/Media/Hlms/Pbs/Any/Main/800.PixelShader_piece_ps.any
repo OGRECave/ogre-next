@@ -4,8 +4,10 @@
 @piece( DefaultHeaderPS )
 	@property( !fresnel_scalar )
 		#define float_fresnel float
+		#define make_float_fresnel( x ) x
 	@else
 		#define float_fresnel float3
+		#define make_float_fresnel( x ) float3( x, x, x )
 	@end
 
 	struct PixelData

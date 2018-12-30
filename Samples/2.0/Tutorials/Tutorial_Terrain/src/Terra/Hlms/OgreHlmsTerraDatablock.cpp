@@ -47,11 +47,9 @@ THE SOFTWARE.
 
 #include "OgreHlmsTerraDatablock.cpp.inc"
 
-#define TODO_port_these_two
-
 namespace Ogre
 {
-    const size_t HlmsTerraDatablock::MaterialSizeInGpu          = 4 * 7 * 4;
+	const size_t HlmsTerraDatablock::MaterialSizeInGpu          = 4 * 10 * 4;
     const size_t HlmsTerraDatablock::MaterialSizeInGpuAligned   = alignToNextMultiple(
                                                                     HlmsTerraDatablock::MaterialSizeInGpu,
                                                                     4 * 4 );
@@ -245,8 +243,7 @@ namespace Ogre
     {
         return mBrdf;
     }
-    //-----------------------------------------------------------------------------------
-    TODO_port_these_two;
+	//-----------------------------------------------------------------------------------
     bool HlmsTerraDatablock::suggestUsingSRGB( TerraTextureTypes type ) const
     {
         if( type == TERRA_DETAIL_WEIGHT ||

@@ -29,7 +29,7 @@ void main()
 layout(std140) uniform;
 #define FRAG_COLOR		0
 
-@insertpiece( DefaultHeaderPS )
+@insertpiece( DefaultTerraHeaderPS )
 
 @property( !hlms_render_depth_only )
 	@property( !hlms_prepass )
@@ -118,7 +118,7 @@ uniform sampler2D terrainShadows;
 void main()
 {
 	@insertpiece( custom_ps_preExecution )
-	@insertpiece( DefaultBodyPS )
+	@insertpiece( DefaultTerraBodyPS )
 	@insertpiece( custom_ps_posExecution )
 }
 @end

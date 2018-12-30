@@ -1,53 +1,84 @@
 
 #include "/media/matias/Datos/SyntaxHighlightingMisc.h"
 
+@piece( DefaultTerraHeaderPS )
+	@insertpiece( DefaultHeaderPS )
+	@property( !hlms_prepass && needs_view_dir )
+		@insertpiece( DeclareBRDF )
+		@insertpiece( DeclareBRDF_InstantRadiosity )
+		@insertpiece( DeclareBRDF_AreaLightApprox )
+	@end
+
+	#define SampleMetalness0( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2D( tex, sampler, uv, arrayIdx )
+	#define SampleMetalness1( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2D( tex, sampler, uv, arrayIdx )
+	#define SampleMetalness2( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2D( tex, sampler, uv, arrayIdx )
+	#define SampleMetalness3( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2D( tex, sampler, uv, arrayIdx )
+
+	#define SampleRoughness0( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2D( tex, sampler, uv, arrayIdx )
+	#define SampleRoughness1( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2D( tex, sampler, uv, arrayIdx )
+	#define SampleRoughness2( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2D( tex, sampler, uv, arrayIdx )
+	#define SampleRoughness3( tex, sampler, uv, arrayIdx ) OGRE_SampleArray2D( tex, sampler, uv, arrayIdx )
+
+	#define OGRE_UNPACK_X_2x16( packedInt ) ((packedInt) & 0x0000FFFFu)
+	#define OGRE_UNPACK_Y_2x16( packedInt ) ((packedInt) >> 16u)
+@end
 
 //-----------------------------------------------------------------------------
 //		BODY CODE
 //-----------------------------------------------------------------------------
 
 @undefpiece( UnpackTextureIndices0 )
+
 @piece( UnpackTextureIndices0 )
 	@property( syntax == metal )
 		@property( diffuse_map )		ushort texIndex_diffuseIdx			= material.diffuseIdx;@end
 		@property( detail_weight_map )	ushort texIndex_weightMapIdx		= material.weightMapIdx;@end
+
 		@property( detail_map0 )		ushort texIndex_detailMapIdx0		= material.detailMapIdx0;@end
 		@property( detail_map1 )		ushort texIndex_detailMapIdx1		= material.detailMapIdx1;@end
 		@property( detail_map2 )		ushort texIndex_detailMapIdx2		= material.detailMapIdx2;@end
 		@property( detail_map3 )		ushort texIndex_detailMapIdx3		= material.detailMapIdx3;@end
-	@else
-		@property( diffuse_map )		ushort texIndex_diffuseIdx			= material.indices0_3.x & 0x0000FFFFu;@end
-		@property( detail_weight_map )	ushort texIndex_weightMapIdx		= material.indices0_3.z & 0x0000FFFFu;@end
-		@property( detail_map0 )		ushort texIndex_detailMapIdx0		= material.indices0_3.z >> 16u;@end
-		@property( detail_map1 )		ushort texIndex_detailMapIdx1		= material.indices0_3.w & 0x0000FFFFu;@end
-		@property( detail_map2 )		ushort texIndex_detailMapIdx2		= material.indices0_3.w >> 16u;;@end
-		@property( detail_map3 )		ushort texIndex_detailMapIdx3		= material.indices4_7.x & 0x0000FFFFu;@end
-	@end
-@end
-@undefpiece( UnpackTextureIndices1 )
-@piece( UnpackTextureIndices1 )
-	@property( syntax == metal )
-		@property( normal_map_tex )		ushort texIndex_normalIdx			= material.normalIdx;@end
-		@property( specular_map )		ushort texIndex_specularIdx			= material.specularIdx;@end
-		@property( roughness_map )		ushort texIndex_roughnessIdx		= material.roughnessIdx;@end
+
 		@property( detail_map_nm0 )		ushort texIndex_detailNormMapIdx0	= material.detailNormMapIdx0;@end
 		@property( detail_map_nm1 )		ushort texIndex_detailNormMapIdx1	= material.detailNormMapIdx1;@end
 		@property( detail_map_nm2 )		ushort texIndex_detailNormMapIdx2	= material.detailNormMapIdx2;@end
 		@property( detail_map_nm3 )		ushort texIndex_detailNormMapIdx3	= material.detailNormMapIdx3;@end
-		@property( emissive_map )		ushort texIndex_emissiveMapIdx		= material.emissiveMapIdx;@end
-		@property( use_envprobe_map )	ushort texIndex_envMapIdx			= material.envMapIdx;@end
+
+		@property( roughness_map0 )		ushort texIndex_detailRoughnessIdx0	= material.detailRoughnessIdx0;@end
+		@property( roughness_map1 )		ushort texIndex_detailRoughnessIdx1	= material.detailRoughnessIdx1;@end
+		@property( roughness_map2 )		ushort texIndex_detailRoughnessIdx2	= material.detailRoughnessIdx2;@end
+		@property( roughness_map3 )		ushort texIndex_detailRoughnessIdx3	= material.detailRoughnessIdx3;@end
+
+		@property( metalness_map0 )		ushort texIndex_detailMetalnessIdx0	= material.detailMetalnessIdx0;@end
+		@property( metalness_map1 )		ushort texIndex_detailMetalnessIdx1	= material.detailMetalnessIdx1;@end
+		@property( metalness_map2 )		ushort texIndex_detailMetalnessIdx2	= material.detailMetalnessIdx2;@end
+		@property( metalness_map3 )		ushort texIndex_detailMetalnessIdx3	= material.detailMetalnessIdx3;@end
 	@else
-		@property( normal_map_tex )		ushort texIndex_normalIdx			= material.indices0_3.x >> 16u;@end
-		@property( specular_map )		ushort texIndex_specularIdx			= material.indices0_3.y & 0x0000FFFFu;@end
-		@property( roughness_map )		ushort texIndex_roughnessIdx		= material.indices0_3.y >> 16u;@end
-		@property( detail_map_nm0 )		ushort texIndex_detailNormMapIdx0	= material.indices4_7.x >> 16u;@end
-		@property( detail_map_nm1 )		ushort texIndex_detailNormMapIdx1	= material.indices4_7.y & 0x0000FFFFu;@end
-		@property( detail_map_nm2 )		ushort texIndex_detailNormMapIdx2	= material.indices4_7.y >> 16u;@end
-		@property( detail_map_nm3 )		ushort texIndex_detailNormMapIdx3	= material.indices4_7.z & 0x0000FFFFu;@end
-		@property( emissive_map )		ushort texIndex_emissiveMapIdx		= material.indices4_7.z >> 16u;@end
-		@property( use_envprobe_map )	ushort texIndex_envMapIdx			= material.indices4_7.w & 0x0000FFFFu;@end
+		@property( diffuse_map )		ushort texIndex_diffuseIdx			= OGRE_UNPACK_X_2x16( material.indices0_7.x );@end
+		@property( detail_weight_map )	ushort texIndex_weightMapIdx		= OGRE_UNPACK_Y_2x16( material.indices0_7.x );@end
+
+		@property( detail_map0 )		ushort texIndex_detailMapIdx0		= OGRE_UNPACK_X_2x16( material.indices0_7.y );@end
+		@property( detail_map1 )		ushort texIndex_detailMapIdx1		= OGRE_UNPACK_Y_2x16( material.indices0_7.y );@end
+		@property( detail_map2 )		ushort texIndex_detailMapIdx2		= OGRE_UNPACK_X_2x16( material.indices0_7.z );@end
+		@property( detail_map3 )		ushort texIndex_detailMapIdx3		= OGRE_UNPACK_Y_2x16( material.indices0_7.z );@end
+
+		@property( detail_map_nm0 )		ushort texIndex_detailNormMapIdx0	= OGRE_UNPACK_X_2x16( material.indices0_7.w );@end
+		@property( detail_map_nm1 )		ushort texIndex_detailNormMapIdx1	= OGRE_UNPACK_Y_2x16( material.indices0_7.w );@end
+		@property( detail_map_nm2 )		ushort texIndex_detailNormMapIdx2	= OGRE_UNPACK_X_2x16( material.indices8_15.x );@end
+		@property( detail_map_nm3 )		ushort texIndex_detailNormMapIdx3	= OGRE_UNPACK_Y_2x16( material.indices8_15.x );@end
+
+		@property( roughness_map0 )		ushort texIndex_detailRoughnessIdx0	= OGRE_UNPACK_X_2x16( material.indices8_15.y );@end
+		@property( roughness_map1 )		ushort texIndex_detailRoughnessIdx1	= OGRE_UNPACK_Y_2x16( material.indices8_15.y );@end
+		@property( roughness_map2 )		ushort texIndex_detailRoughnessIdx2	= OGRE_UNPACK_X_2x16( material.indices8_15.z );@end
+		@property( roughness_map3 )		ushort texIndex_detailRoughnessIdx3	= OGRE_UNPACK_Y_2x16( material.indices8_15.z );@end
+
+		@property( metalness_map0 )		ushort texIndex_detailMetalnessIdx0	= OGRE_UNPACK_X_2x16( material.indices8_15.w );@end
+		@property( metalness_map1 )		ushort texIndex_detailMetalnessIdx1	= OGRE_UNPACK_Y_2x16( material.indices8_15.w );@end
+		@property( metalness_map2 )		ushort texIndex_detailMetalnessIdx2	= OGRE_UNPACK_X_2x16( material.indices16_24.x );@end
+		@property( metalness_map3 )		ushort texIndex_detailMetalnessIdx3	= OGRE_UNPACK_Y_2x16( material.indices16_24.x );@end
 	@end
 @end
+@undefpiece( UnpackTextureIndices1 )
 
 @undefpiece( SampleDiffuseMap )
 @piece( SampleDiffuseMap )
@@ -62,8 +93,12 @@
 		pixelData.diffuse.xyzw = float4( 1, 1, 1, 1 );
 	@end
 
-	pixelData.diffuse.xyz *= (detailCol0 * detailWeights.x + detailCol1 * detailWeights.y) +
-							 (detailCol2 * detailWeights.z + detailCol3 * detailWeights.w);
+	@foreach( detail_maps_diffuse, n )
+		@property( !detail_map@n )float3 detailCol@n = float3( 0.0f, 0.0f, 0.0f );@end
+	@end
+
+	pixelData.diffuse.xyz *= (detailCol0.xyz * detailWeights.x + detailCol1.xyz * detailWeights.y) +
+							 (detailCol2.xyz * detailWeights.z + detailCol3.xyz * detailWeights.w);
 
 	/// Apply the material's diffuse over the textures
 	pixelData.diffuse.xyz *= material.kD.xyz;
@@ -75,22 +110,22 @@
 	@foreach( 4, n )
 		@property( metalness_map@n )
 			float metalness@n = SampleMetalness@n( textureMaps@value( metalness_map@n_idx ),
-												   samplerState@value(metalness_map@_sampler),
+												   samplerState@value(metalness_map@n_sampler),
 												   inPs.uv0.xy * material.detailOffsetScale[@n].zw +
 												   material.detailOffsetScale[@n].xy,
-												   texIndex_metalness@nIdx).x;
+												   texIndex_detailMetalnessIdx@n ).x;
 		@else
 			float metalness@n = 0;
 		@end
 	@end
 
-	pixelData.specular.xyz = material.kS.xyz;
+	pixelData.specular.xyz = float3( 1.0f, 1.0f, 1.0f );
 	float metalness =	(metalness0 * detailWeights.x * material.metalness.x +
 						 metalness1 * detailWeights.y * material.metalness.y) +
 						(metalness2 * detailWeights.z * material.metalness.z +
 						 metalness3 * detailWeights.w * material.metalness.w);
 
-	pixelData.F0 = lerp( 0.03f, pixelData.diffuse.xyz * 3.14159f, metalness );
+	pixelData.F0 = lerp( float3( 0.03f, 0.03f, 0.03f ), pixelData.diffuse.xyz * 3.14159f, metalness );
 	pixelData.diffuse.xyz = pixelData.diffuse.xyz - pixelData.diffuse.xyz * metalness;
 @end
 
@@ -100,10 +135,10 @@
 	@foreach( 4, n )
 		@property( roughness_map@n )
 			float roughness@n = SampleRoughness@n( textureMaps@value( roughness_map@n_idx ),
-												   samplerState@value(roughness_map@_sampler),
+												   samplerState@value(roughness_map@n_sampler),
 												   inPs.uv0.xy * material.detailOffsetScale[@n].zw +
 												   material.detailOffsetScale[@n].xy,
-												   texIndex_roughness@nIdx ).x;
+												   texIndex_detailRoughnessIdx@n ).x;
 		@else
 			float roughness@n = 0;
 		@end
@@ -119,7 +154,7 @@
 @undefpiece( LoadNormalData )
 @piece( LoadNormalData )
 	// Geometric normal
-	pixelData.geomNormal = OGRE_Sample( terrainNormals, inPs.uv0.xy ).xyz * 2.0 - 1.0;
+	pixelData.geomNormal = OGRE_Sample( terrainNormals, samplerStateTerra, inPs.uv0.xy ).xyz * 2.0 - 1.0;
 	pixelData.geomNormal = mul( pixelData.normal, toFloat3x3( passBuf.view ) );
 	@property( normal_map )
 		//Get the TBN matrix
@@ -225,7 +260,7 @@
 		@insertpiece( custom_ps_preLights )
 
 		@property( !custom_disable_directional_lights )
-			float fTerrainShadow = OGRE_Sample( terrainShadows, inPs.uv0.xy ).x;
+			float fTerrainShadow = OGRE_Sample( terrainShadows, samplerStateTerra, inPs.uv0.xy ).x;
 			@property( !(hlms_pssm_splits || (!hlms_pssm_splits && hlms_num_shadow_map_lights && hlms_lights_directional)) )
 				float fShadow = 1.0f;
 			@end
@@ -287,29 +322,25 @@
 
 	@property( !hlms_render_depth_only )
 		@property( !hlms_prepass )
-			@property( hlms_normal || hlms_qtangent )
-				@property( !hw_gamma_write )
-					//Linear to Gamma space
-					outPs_colour0.xyz	= sqrt( finalColour );
-				@else
-					outPs_colour0.xyz	= finalColour;
-				@end
+			@property( !hw_gamma_write )
+				//Linear to Gamma space
+				outPs_colour0.xyz	= sqrt( finalColour );
+			@else
+				outPs_colour0.xyz	= finalColour;
+			@end
 
-				@property( hlms_alphablend )
-					@property( use_texture_alpha )
-						outPs_colour0.w	= material.F0.w * pixelData.diffuse.w;
-					@else
-						outPs_colour0.w	= material.F0.w;
-					@end
+			@property( hlms_alphablend )
+				@property( use_texture_alpha )
+					outPs_colour0.w	= material.F0.w * pixelData.diffuse.w;
 				@else
-					outPs_colour0.w		= 1.0;
-				@end
-
-				@property( debug_pssm_splits )
-					outPs_colour0.xyz = mix( outPs_colour0.xyz, debugPssmSplit.xyz, 0.2f );
+					outPs_colour0.w	= material.F0.w;
 				@end
 			@else
-				outPs_colour0 = float4( 1.0, 1.0, 1.0, 1.0 );
+				outPs_colour0.w		= 1.0;
+			@end
+
+			@property( debug_pssm_splits )
+				outPs_colour0.xyz = mix( outPs_colour0.xyz, debugPssmSplit.xyz, 0.2f );
 			@end
 		@else
 			outPs_normals			= float4( pixelData.normal * 0.5 + 0.5, 1.0 );

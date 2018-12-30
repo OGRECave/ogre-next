@@ -297,7 +297,7 @@ namespace Ogre
 
         if( datablock->mTexturesDescSet )
         {
-            bool envMap = datablock->getTexture( PBSM_REFLECTION ) != 0;
+            bool envMap = datablock->getTexture( TERRA_REFLECTION ) != 0;
             setProperty( PbsProperty::NumTextures,
                          datablock->mTexturesDescSet->mTextures.size() - envMap );
 
@@ -307,7 +307,7 @@ namespace Ogre
 
             //Save the name of the cubemap for hazard prevention
             //(don't sample the cubemap and render to it at the same time).
-            const TextureGpu *reflectionTexture = datablock->getTexture( PBSM_REFLECTION );
+            const TextureGpu *reflectionTexture = datablock->getTexture( TERRA_REFLECTION );
             if( reflectionTexture )
             {
                 //Manual reflection texture
@@ -325,7 +325,7 @@ namespace Ogre
 
         if( usesNormalMap )
         {
-//            TextureGpu *normalMapTex = datablock->getTexture( PBSM_DETAIL0_NM );
+//            TextureGpu *normalMapTex = datablock->getTexture( TERRA_DETAIL0_NM );
 //            if( PixelFormatGpuUtils::isSigned( normalMapTex->getPixelFormat() ) )
             {
                 setProperty( PbsProperty::NormalSamplingFormat, PbsProperty::NormalRgSnorm.mHash );
