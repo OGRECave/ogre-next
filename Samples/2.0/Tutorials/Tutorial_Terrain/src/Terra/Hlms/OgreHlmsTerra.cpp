@@ -532,7 +532,7 @@ namespace Ogre
                         CbShaderBuffer( PixelShader, 2, mConstBuffers[mCurrentConstBuffer], 0, 0 );
             }
 
-            rebindTexBuffer( commandBuffer );
+            //rebindTexBuffer( commandBuffer );
 
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
             mLastBoundPlanarReflection = 0u;

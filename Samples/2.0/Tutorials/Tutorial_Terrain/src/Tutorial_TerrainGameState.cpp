@@ -225,11 +225,16 @@ namespace Demo
                                  Ogre::Vector3( cosf( mTimeOfDay ), -sinf( mTimeOfDay ), 0.0 ).normalisedCopy() );
         //mSunLight->setDirection( -Ogre::Vector3::UNIT_Y );
 
-        //Force update the shadow map every frame to avoid the feeling we're "cheating" the
-        //user in this sample with higher framerates than what he may encounter in many of
-        //his possible uses.
-        const float lightEpsilon = 0.0f;
-        mTerra->update( mSunLight->getDerivedDirectionUpdated(), lightEpsilon );
+        //Do not call update() while invisible, as it will cause an assert because the frames
+        //are not advancing, but we're still mapping the same GPU region over and over.
+        if( mGraphicsSystem->getRenderWindow()->isVisible() )
+        {
+            //Force update the shadow map every frame to avoid the feeling we're "cheating" the
+            //user in this sample with higher framerates than what he may encounter in many of
+            //his possible uses.
+            const float lightEpsilon = 0.0f;
+            mTerra->update( mSunLight->getDerivedDirectionUpdated(), lightEpsilon );
+        }
 
         TutorialGameState::update( timeSinceLast );
 
