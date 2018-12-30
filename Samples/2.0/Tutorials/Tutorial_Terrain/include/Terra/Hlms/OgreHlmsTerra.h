@@ -98,6 +98,8 @@ namespace Ogre
                                          bool casterPass, uint32 lastCacheHash,
                                          CommandBuffer *commandBuffer );
 
+        static void getDefaultPaths( String& outDataFolderPath, StringVector& outLibraryFoldersPaths );
+
 #if !OGRE_NO_JSON
         /// @copydoc Hlms::_loadJson
         virtual void _loadJson( const rapidjson::Value &jsonValue, const HlmsJson::NamedBlocks &blocks,

@@ -1,0 +1,64 @@
+@piece( TerraMaterialStructDecl )
+//Uniforms that change per Item/Entity, but change very infrequently
+struct Material
+{
+	/* kD is already divided by PI to make it energy conserving.
+	  (formula is finalDiffuse = NdotL * surfaceDiffuse / PI)
+	*/
+	float4 kD; //kD.w is padding
+	float4 roughness;
+	float4 metalness;
+	float4 detailOffsetScale[4];
+
+	@insertpiece( custom_materialBuffer )
+};
+
+	@property( syntax != metal )
+		CONST_BUFFER( MaterialBuf, 1 )
+		{
+			Material materialArray[1];
+		};
+	@end
+@end
+
+@property( syntax == metal )
+	@piece( TerraMaterialDecl )
+		, constant Material *materialArray [[buffer(CONST_SLOT_START+1)]]
+	@end
+@end
+
+@piece( TerraInstanceStructDecl )
+struct CellData
+{
+	//.x = numVertsPerLine
+	//.y = lodLevel
+	//.z = vao->getPrimitiveCount() / m_verticesPerLine - 2u
+	//.w = skirtY (float)
+	uint4 numVertsPerLine;
+	int4  xzTexPosBounds;		//XZXZ
+	float4 pos;		//.w contains 1.0 / xzTexPosBounds.z
+	float4 scale;	//.w contains 1.0 / xzTexPosBounds.w
+};
+	@property( syntax != metal )
+		//Uniforms that change per Item/Entity
+		CONST_BUFFER( InstanceBuffer, 2 )
+		{
+			CellData cellDataArray[256];
+		};
+	@end
+@end
+
+@property( syntax == metal )
+	@piece( TerraInstanceDecl )
+		, constant CellData *cellDataArray [[buffer(CONST_SLOT_START+2)]]
+	@end
+@end
+
+//Reset texcoord to 0 for every shader stage (since values are preserved).
+@pset( texcoord, 0 )
+
+@piece( Terra_VStoPS_block )
+	INTERPOLANT( float3 pos, @counter(texcoord) );
+	INTERPOLANT( float2 uv0, @counter(texcoord) );
+	@insertpiece( VStoPS_block )
+@end

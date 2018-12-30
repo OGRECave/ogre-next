@@ -663,6 +663,29 @@ namespace Ogre
 
         return ((mCurrentMappedConstBuffer - mStartMappedConstBuffer) >> 4) - 1;
     }
+    //-----------------------------------------------------------------------------------
+    void HlmsTerra::getDefaultPaths( String &outDataFolderPath, StringVector &outLibraryFoldersPaths )
+    {
+        //We need to know what RenderSystem is currently in use, as the
+        //name of the compatible shading language is part of the path
+        Ogre::RenderSystem *renderSystem = Ogre::Root::getSingleton().getRenderSystem();
+        Ogre::String shaderSyntax = "GLSL";
+        if (renderSystem->getName() == "Direct3D11 Rendering Subsystem")
+            shaderSyntax = "HLSL";
+        else if (renderSystem->getName() == "Metal Rendering Subsystem")
+            shaderSyntax = "Metal";
+
+        //Fill the library folder paths with the relevant folders
+        outLibraryFoldersPaths.clear();
+        outLibraryFoldersPaths.push_back( "Hlms/Common/" + shaderSyntax );
+        outLibraryFoldersPaths.push_back( "Hlms/Common/Any" );
+        outLibraryFoldersPaths.push_back( "Hlms/Pbs/Any" );
+        outLibraryFoldersPaths.push_back( "Hlms/Pbs/Any/Main" );
+        outLibraryFoldersPaths.push_back( "Hlms/Terra/Any" );
+
+        //Fill the data folder path
+        outDataFolderPath = "Hlms/Terra/" + shaderSyntax;
+    }
 #if !OGRE_NO_JSON
     //-----------------------------------------------------------------------------------
     void HlmsTerra::_loadJson( const rapidjson::Value &jsonValue, const HlmsJson::NamedBlocks &blocks,

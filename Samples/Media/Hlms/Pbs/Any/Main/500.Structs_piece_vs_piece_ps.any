@@ -308,7 +308,9 @@ struct Material
 		@end
 	@else
 		@property( alpha_test )
-			FLAT_INTERPOLANT( ushort drawId, @counter(texcoord) );
+			@property( !lower_gpu_overhead )
+				FLAT_INTERPOLANT( ushort drawId, @counter(texcoord) );
+			@end
 			@foreach( hlms_uv_count, n )
 				INTERPOLANT( float@value( hlms_uv_count@n ) uv@n, @counter(texcoord) );@end
 		@end
