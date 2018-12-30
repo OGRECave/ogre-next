@@ -74,7 +74,8 @@ namespace Ogre
 
     HlmsTerra::HlmsTerra( Archive *dataFolder, ArchiveVec *libraryFolders ) :
         HlmsPbs( dataFolder, libraryFolders ),
-        mLastMovableObject( 0 )
+        mLastMovableObject( 0 ),
+        mTerraDescSetSampler( 0 )
     {
         //Override defaults
         mType = HLMS_USER3;
