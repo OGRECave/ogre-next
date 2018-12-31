@@ -16,6 +16,15 @@
 #include "MainEntryPointHelper.h"
 #include "System/MainEntryPoints.h"
 
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+    #include "OSX/macUtils.h"
+    #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+        #include "System/iOS/iOSUtils.h"
+    #else
+        #include "System/OSX/OSXUtils.h"
+    #endif
+#endif
+
 namespace Demo
 {
     class Tutorial_TerrainGraphicsSystem : public GraphicsSystem
@@ -42,15 +51,16 @@ namespace Demo
             else if( *(originalDataFolder.end() - 1) != '/' )
                 originalDataFolder += "/";
 
-            const char *c_locations[4] =
+            const char *c_locations[5] =
             {
                 "2.0/scripts/materials/Tutorial_Terrain",
                 "2.0/scripts/materials/Tutorial_Terrain/GLSL",
                 "2.0/scripts/materials/Tutorial_Terrain/HLSL",
+                "2.0/scripts/materials/Tutorial_Terrain/Metal",
                 "2.0/scripts/materials/Postprocessing/SceneAssets"
             };
 
-            for( size_t i=0; i<4; ++i )
+            for( size_t i=0; i<5; ++i )
             {
                 Ogre::String dataFolder = originalDataFolder + c_locations[i];
                 addResourceLocation( dataFolder, "FileSystem", "General" );
@@ -64,8 +74,13 @@ namespace Demo
             Ogre::ConfigFile cf;
             cf.load(mResourcePath + "resources2.cfg");
 
-            Ogre::String rootHlmsFolder = cf.getSetting( "DoNotUseAsResource", "Hlms", "" );
-
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+            Ogre::String rootHlmsFolder = Ogre::macBundlePath() + '/' +
+                                          cf.getSetting( "DoNotUseAsResource", "Hlms", "" );
+#else
+            Ogre::String rootHlmsFolder = mResourcePath +
+                                          cf.getSetting( "DoNotUseAsResource", "Hlms", "" );
+#endif
             if( rootHlmsFolder.empty() )
                 rootHlmsFolder = "./";
             else if( *(rootHlmsFolder.end() - 1) != '/' )
@@ -76,6 +91,8 @@ namespace Demo
             Ogre::String shaderSyntax = "GLSL";
             if( renderSystem->getName() == "Direct3D11 Rendering Subsystem" )
                 shaderSyntax = "HLSL";
+            else if( renderSystem->getName() == "Metal Rendering Subsystem" )
+                shaderSyntax = "Metal";
 
             Ogre::String mainFolderPath;
             Ogre::StringVector libraryFoldersPaths;

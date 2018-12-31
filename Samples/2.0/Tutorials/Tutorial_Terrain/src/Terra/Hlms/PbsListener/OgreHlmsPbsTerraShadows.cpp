@@ -76,6 +76,7 @@ namespace Ogre
                                                        const QueuedRenderable &queuedRenderable )
     {
         if( shaderProfile != "hlsl" &&
+            shaderProfile != "metal" &&
             Hlms::getProperty( passCache.setProperties, HlmsBaseProp::ShadowCaster ) == 0 )
         {
             if( !hlmsCacheEntry->pso.vertexShader.isNull() )

@@ -54,8 +54,8 @@
 
 	@property( use_skirts )
 		//Apply skirt.
-		bool isSkirt =( pointInLine.x <= 1u ||
-						pointInLine.x >= (cellData.numVertsPerLine.x - 4u) ||
+		bool isSkirt =( pointInLine <= 1u ||
+						pointInLine >= (cellData.numVertsPerLine.x - 4u) ||
 						uVertexPos.y == 0u ||
 						uVertexPos.y == (cellData.numVertsPerLine.z + 2u) );
 
@@ -79,11 +79,11 @@
 						   int2( 0, 0 ), cellData.xzTexPosBounds.zw ) );
 
 	float3 worldPos;
-	worldPos.y = OGRE_Load2D( heightMap, int2( uVertexPos.xy ), 0 ).x;
+	worldPos.y = OGRE_Load2D( heightMap, rshort2( uVertexPos.xy ), 0 ).x;
 @property( use_skirts )
 	worldPos.y = isSkirt ? uintBitsToFloat(cellData.numVertsPerLine.w) : worldPos.y;
 @end
-	worldPos.xz = uVertexPos.xy;
+	worldPos.xz = float2( uVertexPos.xy );
 	worldPos.xyz = worldPos.xyz * cellData.scale.xyz + cellData.pos.xyz;
 
 	@insertpiece( VertexTerraTransform )

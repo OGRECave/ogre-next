@@ -15,10 +15,17 @@ fragment_program Terra/GpuNormalMapper_ps_HLSL hlsl
 	entry_point main
 }
 
+fragment_program Terra/GpuNormalMapper_ps_Metal metal
+{
+	source GpuNormalMapper_ps.metal
+	shader_reflection_pair_hint Ogre/Compositor/Quad_vs
+}
+
 fragment_program Terra/GpuNormalMapper_ps unified
 {
 	delegate Terra/GpuNormalMapper_ps_GLSL
 	delegate Terra/GpuNormalMapper_ps_HLSL
+	delegate Terra/GpuNormalMapper_ps_Metal
 
 	default_params
 	{

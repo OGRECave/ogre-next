@@ -41,7 +41,6 @@ inline float3x3 toMat3x3( float4x4 m )
 #define lessThan( a, b ) (a < b)
 #define discard discard_fragment()
 
-#define inVs_vertexId input.vertexId
 #define inVs_vertex input.position
 #define inVs_blendWeights input.blendWeights
 #define inVs_blendIndices input.blendIndices
