@@ -130,7 +130,15 @@ namespace Ogre
                                                                 resourceGroup );
         }
 
-        datablock->setTexture( textureType, texture );
+        HlmsSamplerblock samplerBlockRef;
+        if( textureType >= TERRA_DETAIL0 && textureType <= TERRA_DETAIL_METALNESS3 )
+        {
+            //Detail maps default to wrap mode.
+            samplerBlockRef.mU = TAM_WRAP;
+            samplerBlockRef.mV = TAM_WRAP;
+            samplerBlockRef.mW = TAM_WRAP;
+        }
+        datablock->setTexture( textureType, texture, &samplerBlockRef );
     }
     //-----------------------------------------------------------------------------------
     void HlmsJsonTerra::loadTexture( const rapidjson::Value &json, const HlmsJson::NamedBlocks &blocks,
