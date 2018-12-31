@@ -27,6 +27,7 @@
 #define fract frac
 #define lessThan( a, b ) (a < b)
 
+#define inVs_vertexId input.vertexId
 #define inVs_vertex input.vertex
 #define inVs_blendWeights input.blendWeights
 #define inVs_blendIndices input.blendIndices

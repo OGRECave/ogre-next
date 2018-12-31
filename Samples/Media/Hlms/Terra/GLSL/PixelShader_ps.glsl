@@ -31,6 +31,17 @@ layout(std140) uniform;
 
 @insertpiece( DefaultTerraHeaderPS )
 
+// START UNIFORM DECLARATION
+@insertpiece( PassStructDecl )
+@insertpiece( TerraMaterialStructDecl )
+@insertpiece( TerraInstanceStructDecl )
+@insertpiece( custom_ps_uniformDeclaration )
+// END UNIFORM DECLARATION
+in block
+{
+	@insertpiece( Terra_VStoPS_block )
+} inPs;
+
 @property( !hlms_render_depth_only )
 	@property( !hlms_prepass )
 		layout(location = FRAG_COLOR, index = 0) out vec4 outColour;
@@ -63,17 +74,6 @@ layout(std140) uniform;
 @property( hlms_vpos )
 in vec4 gl_FragCoord;
 @end
-
-// START UNIFORM DECLARATION
-@insertpiece( PassStructDecl )
-@insertpiece( TerraMaterialStructDecl )
-@insertpiece( TerraInstanceStructDecl )
-@insertpiece( custom_ps_uniformDeclaration )
-// END UNIFORM DECLARATION
-in block
-{
-	@insertpiece( Terra_VStoPS_block )
-} inPs;
 
 uniform sampler2D terrainNormals;
 uniform sampler2D terrainShadows;

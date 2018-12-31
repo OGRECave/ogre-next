@@ -10,7 +10,7 @@
 //You'll need 10 vertices per line.
 //If we include degenerate vertices, you'll need 12 per line
 //So you'll need a total of 24 vertices.
-//in int gl_VertexID;
+//in int inVs_vertexId;
 
 @piece( DefaultTerraHeaderVS )
 	// START UNIFORM DECLARATION
@@ -41,7 +41,7 @@
 
 	//Map pointInLine from range [0; 12) to range [0; 9] so that it reads:
 	// 0 0 1 2 3 4 5 6 7 8 9 9
-	uint pointInLine = uint(gl_VertexID) % (cellData.numVertsPerLine.x); //cellData.numVertsPerLine.x = 12
+	uint pointInLine = uint(inVs_vertexId) % (cellData.numVertsPerLine.x); //cellData.numVertsPerLine.x = 12
 	pointInLine = uint(clamp( int(pointInLine) - 1, 0, int(cellData.numVertsPerLine.x - 3u) ));
 
 	uint2 uVertexPos;
@@ -49,8 +49,8 @@
 	uVertexPos.x = pointInLine >> 1u;
 	//Even numbers are the next line, odd numbers are current line.
 	uVertexPos.y = (pointInLine & 0x01u) == 0u ? 1u : 0u;
-	uVertexPos.y += uint(gl_VertexID) / cellData.numVertsPerLine.x;
-	//uVertexPos.y += floor( (float)gl_VertexID / (float)cellData.numVertsPerLine ); Could be faster on GCN.
+	uVertexPos.y += uint(inVs_vertexId) / cellData.numVertsPerLine.x;
+	//uVertexPos.y += floor( (float)inVs_vertexId / (float)cellData.numVertsPerLine ); Could be faster on GCN.
 
 	@property( use_skirts )
 		//Apply skirt.

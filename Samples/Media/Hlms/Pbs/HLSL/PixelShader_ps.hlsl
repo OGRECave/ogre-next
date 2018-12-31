@@ -48,8 +48,9 @@ struct PS_INPUT
 @insertpiece( DeclAreaApproxTextures )
 
 @property( hlms_forwardplus )
-Buffer<uint> f3dGrid : register(t@value(f3dGrid));
-Buffer<float4> f3dLightList : register(t@value(f3dLightList));@end
+    Buffer<uint> f3dGrid : register(t@value(f3dGrid));
+    Buffer<float4> f3dLightList : register(t@value(f3dLightList));
+@end
 
 @property( irradiance_volumes )
 	Texture3D<float4>	irradianceVolume		: register(t@value(irradianceVolume));

@@ -77,6 +77,12 @@ namespace Ogre
                     return true;
             }
 
+            for( size_t i=0; i<NumShaderTypes; ++i )
+            {
+                if( this->mShaderTypeSamplerCount[i] != other.mShaderTypeSamplerCount[i] )
+                    return true;
+            }
+
             return false;
         }
 
@@ -90,6 +96,12 @@ namespace Ogre
             {
                 if( this->mSamplers[i] != other.mSamplers[i] )
                     return this->mSamplers[i] < other.mSamplers[i];
+            }
+
+            for( size_t i=0; i<NumShaderTypes; ++i )
+            {
+                if( this->mShaderTypeSamplerCount[i] != other.mShaderTypeSamplerCount[i] )
+                    return this->mShaderTypeSamplerCount[i] < other.mShaderTypeSamplerCount[i];
             }
 
             return false;

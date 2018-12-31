@@ -58,6 +58,7 @@
 #define PARAMS_ARG_DECL
 #define PARAMS_ARG
 
+#define inVs_vertexId gl_VertexID
 #define inVs_vertex vertex
 #define inVs_blendWeights blendWeights
 #define inVs_blendIndices blendIndices
