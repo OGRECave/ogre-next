@@ -22,7 +22,6 @@ struct PS_INPUT
 };
 
 @insertpiece( DefaultTerraHeaderVS )
-@insertpiece( custom_vs_uniformStructDeclaration )
 
 vertex PS_INPUT main_metal
 (

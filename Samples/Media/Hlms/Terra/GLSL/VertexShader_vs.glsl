@@ -12,7 +12,7 @@ out gl_PerVertex
 layout(std140) uniform;
 
 @insertpiece( DefaultTerraHeaderVS )
-@insertpiece( custom_vs_uniformStructDeclaration )
+@insertpiece( custom_vs_uniformDeclaration )
 
 @property( GL_ARB_base_instance )
 	in uint drawId;

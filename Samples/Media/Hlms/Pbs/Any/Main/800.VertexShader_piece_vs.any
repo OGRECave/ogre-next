@@ -14,7 +14,7 @@
 	// START UNIFORM DECLARATION
 	@insertpiece( PassStructDecl )
 	@property( hlms_skeleton || hlms_shadowcaster )@insertpiece( InstanceStructDecl )@end
-	@insertpiece( custom_vs_uniformDeclaration )
+	@insertpiece( custom_vs_uniformStructDeclaration )
 	// END UNIFORM DECLARATION
 
 	@property( hlms_qtangent )

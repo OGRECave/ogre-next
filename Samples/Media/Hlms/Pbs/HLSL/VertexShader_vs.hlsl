@@ -4,7 +4,7 @@
 @insertpiece( SetCrossPlatformSettings )
 
 @insertpiece( DefaultHeaderVS )
-@insertpiece( custom_vs_uniformStructDeclaration )
+@insertpiece( custom_vs_uniformDeclaration )
 
 struct VS_INPUT
 {

@@ -27,7 +27,7 @@ struct PS_INPUT
 };
 
 @insertpiece( DefaultTerraHeaderVS )
-@insertpiece( custom_vs_uniformStructDeclaration )
+@insertpiece( custom_vs_uniformDeclaration )
 
 // START UNIFORM DECLARATION
 Texture2D<float> heightMap: register(t0);

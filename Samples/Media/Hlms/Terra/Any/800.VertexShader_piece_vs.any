@@ -16,7 +16,7 @@
 	// START UNIFORM DECLARATION
 	@insertpiece( PassStructDecl )
 	@insertpiece( TerraInstanceStructDecl )
-	@insertpiece( custom_vs_uniformDeclaration )
+	@insertpiece( custom_vs_uniformStructDeclaration )
 	// END UNIFORM DECLARATION
 @end
 

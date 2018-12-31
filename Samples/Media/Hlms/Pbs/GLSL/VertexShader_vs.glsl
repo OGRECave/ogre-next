@@ -12,7 +12,7 @@ out gl_PerVertex
 layout(std140) uniform;
 
 @insertpiece( DefaultHeaderVS )
-@insertpiece( custom_vs_uniformStructDeclaration )
+@insertpiece( custom_vs_uniformDeclaration )
 
 in vec4 vertex;
 
