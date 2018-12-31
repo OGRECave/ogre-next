@@ -230,6 +230,8 @@ namespace Ogre
                     PixelFormatGpuUtils::getMaxMipmapCount( m_normalMapTex->getWidth(),
                                                             m_normalMapTex->getHeight() ) );
         m_normalMapTex->setPixelFormat( PFG_R10G10B10A2_UNORM );
+        m_normalMapTex->scheduleTransitionTo( GpuResidency::Resident );
+        m_normalMapTex->notifyDataIsReady();
 
         MaterialPtr normalMapperMat = MaterialManager::getSingleton().load(
                     "Terra/GpuNormalMapper",
@@ -237,7 +239,7 @@ namespace Ogre
                 staticCast<Material>();
         Pass *pass = normalMapperMat->getTechnique(0)->getPass(0);
         TextureUnitState *texUnit = pass->getTextureUnitState(0);
-        texUnit->setTexture( m_normalMapTex );
+        texUnit->setTexture( m_heightMapTex );
 
         //Normalize vScale for better precision in the shader math
         const Vector3 vScale = Vector3( m_xzRelativeSize.x, m_height, m_xzRelativeSize.y ).normalisedCopy();
