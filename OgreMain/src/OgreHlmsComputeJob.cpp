@@ -913,6 +913,43 @@ namespace Ogre
     void HlmsComputeJob::notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
                                                void *extraData )
     {
+        if( reason == TextureGpuListener::Deleted )
+        {
+            if( texture->isTexture() )
+            {
+                DescriptorSetTexSlotArray::const_iterator itor = mTexSlots.begin();
+                DescriptorSetTexSlotArray::const_iterator end  = mTexSlots.end();
+
+                while( itor != end )
+                {
+                    if( itor->isTexture() && itor->getTexture().texture == texture )
+                    {
+                        DescriptorSetTexture2::TextureSlot emptySlot = itor->getTexture();
+                        emptySlot.texture = 0;
+                        setTexture( itor - mTexSlots.begin(), emptySlot );
+                    }
+                    ++itor;
+                }
+            }
+
+            if( texture->isUav() )
+            {
+                DescriptorSetUavSlotArray::const_iterator itor = mUavSlots.begin();
+                DescriptorSetUavSlotArray::const_iterator end  = mUavSlots.end();
+
+                while( itor != end )
+                {
+                    if( itor->isTexture() && itor->getTexture().texture == texture )
+                    {
+                        DescriptorSetUav::TextureSlot emptySlot = itor->getTexture();
+                        emptySlot.texture = 0;
+                        _setUavTexture( itor - mUavSlots.begin(), emptySlot );
+                    }
+                    ++itor;
+                }
+            }
+        }
+
         if( texture->isTexture() )
             destroyDescriptorTextures();
         if( texture->isUav() )
