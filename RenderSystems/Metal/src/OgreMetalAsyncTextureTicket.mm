@@ -59,12 +59,8 @@ namespace Ogre
                                                                     1u, mPixelFormatFamily,
                                                                     rowAlignment );
 
-        MTLResourceOptions resourceOptions = MTLResourceCPUCacheModeDefaultCache;
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-        resourceOptions |= MTLResourceStorageModeShared;
-#else
-        resourceOptions |= MTLResourceStorageModeManaged;
-#endif
+        MTLResourceOptions resourceOptions = MTLResourceCPUCacheModeDefaultCache |
+                                             MTLResourceStorageModeShared;
         mVboName = [mDevice->mDevice newBufferWithLength:sizeBytes options:resourceOptions];
     }
     //-----------------------------------------------------------------------------------
@@ -101,8 +97,8 @@ namespace Ogre
 
         if( textureSrc->hasAutomaticBatching() )
         {
-            fullSrcTextureBox.sliceStart= textureSrc->getInternalSliceStart();
-            fullSrcTextureBox.numSlices = textureSrc->getTexturePool()->masterTexture->getNumSlices();
+//            fullSrcTextureBox.sliceStart= textureSrc->getInternalSliceStart();
+//            fullSrcTextureBox.numSlices = textureSrc->getTexturePool()->masterTexture->getNumSlices();
 
             srcTextureBox.sliceStart += textureSrc->getInternalSliceStart();
         }
@@ -126,7 +122,7 @@ namespace Ogre
             bytesPerImage = 0;
         }
 
-        MTLOrigin mtlOrigin = MTLOriginMake( srcTextureBox.x, srcTextureBox.y, srcTextureBox.y );
+        MTLOrigin mtlOrigin = MTLOriginMake( srcTextureBox.x, srcTextureBox.y, srcTextureBox.z );
         MTLSize mtlSize     = MTLSizeMake( srcTextureBox.width, srcTextureBox.height,
                                            srcTextureBox.depth );
 
@@ -142,6 +138,10 @@ namespace Ogre
                   destinationBytesPerRow:bytesPerRow
                 destinationBytesPerImage:bytesPerImage];
         }
+
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
+        [blitEncoder synchronizeResource:mVboName];
+#endif
 
         if( accurateTracking )
         {

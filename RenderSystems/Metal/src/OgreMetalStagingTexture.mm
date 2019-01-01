@@ -41,12 +41,8 @@ namespace Ogre
         mMappedPtr( 0 ),
         mDevice( device )
     {
-        MTLResourceOptions resourceOptions = MTLResourceCPUCacheModeWriteCombined;
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-        resourceOptions |= MTLResourceStorageModeShared;
-#else
-        resourceOptions |= MTLResourceStorageModeManaged;
-#endif
+        MTLResourceOptions resourceOptions = MTLResourceCPUCacheModeWriteCombined |
+                                             MTLResourceStorageModeShared;
         mVboName = [mDevice->mDevice newBufferWithLength:sizeBytes options:resourceOptions];
         mMappedPtr = [mVboName contents];
     }

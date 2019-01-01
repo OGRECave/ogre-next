@@ -18,6 +18,7 @@
 @add( detail_map2_nm_sampler,	samplerStateStart )
 @add( detail_map3_sampler,		samplerStateStart )
 @add( detail_map3_nm_sampler,	samplerStateStart )
+@add( emissive_map_sampler,		samplerStateStart )
 
 @set( envMapRegSampler, envprobe_map_sampler )
 
