@@ -401,14 +401,19 @@ namespace Ogre
         @param instanceName Optional name to given the new instance that is
             created. If you leave this blank, an auto name will be assigned.
         @param numWorkerThreads
-            Number of worker threads. Must be greater than 0; you should not
-            oversubscribe the system. I.e. if the system has 4 cores
+            Number of worker threads.
+            You should not oversubscribe the system. I.e. if the system has 4 cores
             and you intend to run your logic 100% in one of the cores,
             set this value to 3. If you intend to fully use 2 cores for your own stuff,
             set this value to 2.
+
+            A value of 0 means there will be no worker threads, and all tasks will
+            run in the main thread. Use this value on platforms that do not support it
+            (i.e. Emscripten) or to troubleshoot very specific issues (e.g. some
+            Debuggers don't work correctly when threads are involved)
         */
-        SceneManager* createSceneManager(const String& typeName, size_t numWorkerThreads,
-                                        const String& instanceName = BLANKSTRING);
+        SceneManager* createSceneManager( const String& typeName, size_t numWorkerThreads,
+                                          const String& instanceName = BLANKSTRING );
 
         /** Create a SceneManager instance based on scene type support.
         @remarks
