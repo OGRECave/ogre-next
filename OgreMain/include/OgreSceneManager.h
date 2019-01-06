@@ -922,7 +922,8 @@ namespace Ogre {
             NUM_REQUESTS
         };
 
-        size_t mNumWorkerThreads;
+        size_t  mNumWorkerThreads;
+        bool    mForceMainThread;
 
         CullFrustumRequest              mCurrentCullFrustumRequest;
         UpdateLodRequest                mUpdateLodRequest;
@@ -3219,6 +3220,8 @@ namespace Ogre {
             requests when a sync is performed
         */
         unsigned long _updateWorkerThread( ThreadHandle *threadHandle );
+    protected:
+        inline bool updateWorkerThreadImpl( size_t threadIdx );
     };
 
     /** Default implementation of IntersectionSceneQuery. */
