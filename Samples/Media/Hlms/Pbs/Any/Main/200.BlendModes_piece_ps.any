@@ -97,12 +97,12 @@
 
 @piece( NormalNonPremul )
 	//Normal Non Premultiplied @value(t)
-	pixelData.diffuse = lerp( pixelData.diffuse, 1.0, detailCol@value(t) );
+	pixelData.diffuse = lerp( pixelData.diffuse, float4( 1.0, 1.0, 1.0,1.0 ), detailCol@value(t) );
 @end
 
 @piece( NormalPremul )
 	//Normal Premultiplied @value(t)
-	pixelData.diffuse = lerp( pixelData.diffuse, 1.0, detailCol@value(t) );
+	pixelData.diffuse = lerp( pixelData.diffuse, float4( 1.0, 1.0, 1.0,1.0 ), detailCol@value(t) );
 @end
 
 @end

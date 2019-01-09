@@ -35,7 +35,7 @@
 				float3 envColourD;
 			@end
 		@else
-			float diffuse; //Alpha
+			float4 diffuse; //We only use the .w component, Alpha
 		@end
 	};
 
@@ -687,6 +687,7 @@
 
 @piece( DefaultBodyPS )
 	@property( alpha_test )
+		PixelData pixelData;
 		@insertpiece( LoadMaterial )
 		@insertpiece( UnpackTextureIndices0 )
 		@insertpiece( LoadDetailWeights )

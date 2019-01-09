@@ -766,19 +766,21 @@ namespace Ogre
         {
             //Keep GLSL happy by not declaring more textures than we'll actually need.
             uint8 numTextures = 0;
-            for( int i=0; i<4; ++i )
+            if( datablock->mTexturesDescSet )
             {
-                uint8 idxToDescTex = datablock->getIndexToDescriptorTexture( PBSM_DETAIL0+i );
-                if( idxToDescTex < datablock->mTexturesDescSet->mTextures.size() )
-                    numTextures = std::max<uint8>( numTextures, idxToDescTex + 1u );
-            }
+                for( int i=0; i<4; ++i )
+                {
+                    uint8 idxToDescTex = datablock->getIndexToDescriptorTexture( PBSM_DETAIL0+i );
+                    if( idxToDescTex < datablock->mTexturesDescSet->mTextures.size() )
+                        numTextures = std::max<uint8>( numTextures, idxToDescTex + 1u );
+                }
 
-            {
-                uint8 idxToDescTex = datablock->getIndexToDescriptorTexture( PBSM_DIFFUSE );
-                if( idxToDescTex < datablock->mTexturesDescSet->mTextures.size() )
-                    numTextures = std::max<uint8>( numTextures, idxToDescTex + 1u );
+                {
+                    uint8 idxToDescTex = datablock->getIndexToDescriptorTexture( PBSM_DIFFUSE );
+                    if( idxToDescTex < datablock->mTexturesDescSet->mTextures.size() )
+                        numTextures = std::max<uint8>( numTextures, idxToDescTex + 1u );
+                }
             }
-
             setProperty( PbsProperty::NumTextures, numTextures );
 
             //Set the blending mode as a piece again
