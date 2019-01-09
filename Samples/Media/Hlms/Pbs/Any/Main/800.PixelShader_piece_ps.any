@@ -240,9 +240,9 @@
 			metalness *= SampleSpecular( textureMaps@value( specular_map_idx ),
 										 samplerState@value(specular_map_sampler),
 										 UV_SPECULAR( inPs.uv@value(uv_specular).xy ),
-										 texIndex_specularIdx ).@insertpiece( FresnelSwizzle );
+										 texIndex_specularIdx ).x;
 		@end
-		pixelData.F0 = lerp( 0.03f, pixelData.diffuse.xyz * 3.14159f, metalness );
+		pixelData.F0 = lerp( make_float_fresnel( 0.03f ), pixelData.diffuse.xyz * 3.14159f, metalness );
 		pixelData.diffuse.xyz = pixelData.diffuse.xyz - pixelData.diffuse.xyz * metalness;
 		@property( hlms_alphablend )pixelData.F0 *= material.F0.w;@end ///Should this be done for non-metallic as well???
 	@end
