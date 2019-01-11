@@ -171,7 +171,6 @@
 	@insertpiece( LoadMaterial )
 	@insertpiece( UnpackTextureIndices0 )
 	@insertpiece( UnpackTextureIndices1 )
-	@insertpiece( custom_ps_posMaterialLoad )
 	@insertpiece( DeclareObjLightMask )
 	@insertpiece( custom_ps_posMaterialLoad )
 
