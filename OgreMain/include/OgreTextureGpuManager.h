@@ -400,7 +400,7 @@ namespace Ogre
             bool    toSysRam;
 
             PartialImage();
-            PartialImage( void *_sysRamPtr, uint32 _numProcessedDepthOrSlices, bool _toSysRam );
+            PartialImage( void *_sysRamPtr, bool _toSysRam );
         };
 
         typedef map<TextureGpu*, PartialImage>::type PartialImageMap;
