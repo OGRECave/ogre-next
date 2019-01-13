@@ -1421,6 +1421,7 @@ namespace Ogre
                 Real fNear, fFar;
                 shadowNode->getMinMaxDepthRange( shadowMapTexIdx, fNear, fFar );
                 const Real depthRange = fFar - fNear;
+#if !OGRE_NO_REVERSE_DEPTH
                 if( shadowLight &&
                     shadowLight->getType() == Light::LT_POINT &&
                     mShadowFilter != ExponentialShadowMaps )
@@ -1428,6 +1429,7 @@ namespace Ogre
                     *passBufferPtr++ = fFar;
                 }
                 else
+#endif
                 {
                     *passBufferPtr++ = fNear;
                 }

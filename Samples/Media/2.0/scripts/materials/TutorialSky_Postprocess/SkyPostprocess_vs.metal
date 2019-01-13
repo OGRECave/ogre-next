@@ -23,7 +23,12 @@ vertex PS_INPUT main_metal
 {
 	PS_INPUT outVs;
 
+#if OGRE_NO_REVERSE_DEPTH
 	outVs.gl_Position	= ( worldViewProj * input.position ).xyww;
+#else
+	outVs.gl_Position.xyw	= ( worldViewProj * input.position ).xyw;
+	outVs.gl_Position.z		= 0.0f;
+#endif
 	outVs.cameraDir		= input.normal;
 
 	return outVs;

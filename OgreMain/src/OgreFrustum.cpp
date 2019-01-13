@@ -106,7 +106,24 @@ namespace Ogre {
         return mFOVy;
     }
 
+    //-----------------------------------------------------------------------
+    Vector2 Frustum::getProjectionParamsAB(void) const
+    {
+        Real nearPlane = getNearClipDistance();
+        Real farPlane = getFarClipDistance();
 
+        Vector2 retVal;
+
+#if OGRE_NO_REVERSE_DEPTH
+        retVal.x = farPlane / (farPlane - nearPlane);                   //projectionA
+        retVal.y = (-farPlane * nearPlane) / (farPlane - nearPlane);    //projectionB
+#else
+        retVal.x = -nearPlane / (farPlane - nearPlane);                 //projectionA
+        retVal.y = (farPlane * nearPlane) / (farPlane - nearPlane);     //projectionB
+#endif
+
+        return retVal;
+    }
     //-----------------------------------------------------------------------
     void Frustum::setFarClipDistance(Real farPlane)
     {

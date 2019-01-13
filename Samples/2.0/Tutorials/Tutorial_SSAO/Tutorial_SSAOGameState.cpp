@@ -307,13 +307,10 @@ namespace Demo
 		//We need to set the parameters based on camera to the
 		//shader so that the un-projection works as expected
 		Ogre::Camera *camera = mGraphicsSystem->getCamera();
-		Ogre::Real projectionA = camera->getFarClipDistance() /
-			(camera->getFarClipDistance() - camera->getNearClipDistance());
-		Ogre::Real projectionB = (-camera->getFarClipDistance() * camera->getNearClipDistance()) /
-			(camera->getFarClipDistance() - camera->getNearClipDistance());
+        Ogre::Vector2 projectionAB = camera->getProjectionParamsAB();
 		//The division will keep "linearDepth" in the shader in the [0; 1] range.
-		projectionB /= camera->getFarClipDistance();
-		psParams->setNamedConstant("projectionParams", Ogre::Vector2(projectionA, projectionB));
+        projectionAB.y /= camera->getFarClipDistance();
+        psParams->setNamedConstant("projectionParams", projectionAB);
 
 		//Set other uniforms
         psParams->setNamedConstant( "kernelRadius", mKernelRadius );
@@ -331,7 +328,7 @@ namespace Demo
 
 		Ogre::Pass *passBlurH = materialBlurH->getTechnique(0)->getPass(0);
         Ogre::GpuProgramParametersSharedPtr psParamsBlurH = passBlurH->getFragmentProgramParameters();
-        psParamsBlurH->setNamedConstant( "projectionParams", Ogre::Vector2(projectionA, projectionB) );
+        psParamsBlurH->setNamedConstant( "projectionParams", projectionAB );
 
 		Ogre::MaterialPtr materialBlurV = Ogre::MaterialManager::getSingleton().load(
 			"SSAO/BlurV",
@@ -340,7 +337,7 @@ namespace Demo
 
 		Ogre::Pass *passBlurV = materialBlurV->getTechnique(0)->getPass(0);
         Ogre::GpuProgramParametersSharedPtr psParamsBlurV = passBlurV->getFragmentProgramParameters();
-        psParamsBlurV->setNamedConstant( "projectionParams", Ogre::Vector2(projectionA, projectionB) );
+        psParamsBlurV->setNamedConstant( "projectionParams", projectionAB );
 
 		//Set apply shader uniforms
 		Ogre::MaterialPtr materialApply = Ogre::MaterialManager::getSingleton().load(

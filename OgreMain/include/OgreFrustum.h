@@ -224,6 +224,11 @@ namespace Ogre
         */
         virtual const Radian& getFOVy(void) const;
 
+        /// Returns the terms projectionA and projectionB in .x and .y respectively, which can
+        /// be used to reconstruct linear depth from a Z buffer with the following formula:
+        ///     linearDepth = projectionParams.y / (fDepth - projectionParams.x);
+        Vector2 getProjectionParamsAB(void) const;
+
         /** Sets the position of the near clipping plane.
         @remarks
             The position of the near clipping plane is the distance from the frustums position to the screen
