@@ -2449,7 +2449,8 @@ namespace Ogre
                 }
 
                 const bool needsMultipleImages =
-                        img->getTextureType() != loadRequest.texture->getTextureType();
+                        img->getTextureType() != loadRequest.texture->getTextureType() &&
+                        loadRequest.texture->getTextureType() != TextureTypes::Type1D;
                 const bool mustKeepSysRamPtr = loadRequest.toSysRam ||
                                                loadRequest.texture->getGpuPageOutStrategy() ==
                                                GpuPageOutStrategy::AlwaysKeepSystemRamCopy;
