@@ -348,7 +348,7 @@ namespace Ogre {
             {
                 // Use identity projection matrix, still need to take RS depth into account.
                 RenderSystem* rs = Root::getSingleton().getRenderSystem();
-                rs->_convertProjectionMatrix(Matrix4::IDENTITY, mProjectionMatrix, true);
+                rs->_convertProjectionMatrix(Matrix4::IDENTITY, mProjectionMatrix);
             }
             else
             {

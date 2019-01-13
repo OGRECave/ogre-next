@@ -606,8 +606,7 @@ namespace Ogre
         Matrix4 projectionMatrix = camera->getProjectionMatrixWithRSDepth();
         Matrix4 identityProjMat;
 
-        mRenderSystem->_convertProjectionMatrix( Matrix4::IDENTITY,
-                                                 identityProjMat, true );
+        mRenderSystem->_convertProjectionMatrix( Matrix4::IDENTITY, identityProjMat );
 
         if( renderPassDesc->requiresTextureFlipping() )
         {

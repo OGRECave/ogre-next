@@ -169,6 +169,9 @@ namespace Ogre
     const IdString HlmsBaseProp::AlphaTestShadowCasterOnly = IdString( "alpha_test_shadow_caster_only" );
     const IdString HlmsBaseProp::AlphaBlend     = IdString( "hlms_alphablend" );
 
+    const IdString HlmsBaseProp::DepthRange2    = IdString( "hlms_depth_range2" );
+    const IdString HlmsBaseProp::NoReverseDepth = IdString( "hlms_no_reverse_depth" );
+
     const IdString HlmsBaseProp::Syntax         = IdString( "syntax" );
     const IdString HlmsBaseProp::Hlsl           = IdString( "hlsl" );
     const IdString HlmsBaseProp::Glsl           = IdString( "glsl" );
@@ -2514,6 +2517,11 @@ namespace Ogre
     HlmsCache Hlms::preparePassHashBase( const CompositorShadowNode *shadowNode, bool casterPass,
                                          bool dualParaboloid, SceneManager *sceneManager )
     {
+        if( mRenderSystem->getRSDepthRange() > 1.0f )
+            setProperty( HlmsBaseProp::DepthRange2, 1 );
+#if OGRE_NO_REVERSE_DEPTH
+        setProperty( HlmsBaseProp::NoReverseDepth, 1 );
+#endif
         if( !casterPass )
         {
             if( shadowNode )

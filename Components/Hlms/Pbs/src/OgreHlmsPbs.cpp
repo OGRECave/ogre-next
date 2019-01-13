@@ -303,10 +303,14 @@ namespace Ogre
             samplerblock.mU             = TAM_BORDER;
             samplerblock.mV             = TAM_BORDER;
             samplerblock.mW             = TAM_CLAMP;
+#if OGRE_NO_REVERSE_DEPTH
             samplerblock.mBorderColour  = ColourValue( std::numeric_limits<float>::max(),
                                                        std::numeric_limits<float>::max(),
                                                        std::numeric_limits<float>::max(),
                                                        std::numeric_limits<float>::max() );
+#else
+            samplerblock.mBorderColour  = ColourValue( 0, 0, 0, 0 );
+#endif
 
             if( mShaderProfile != "hlsl" )
             {
@@ -330,7 +334,11 @@ namespace Ogre
             samplerblock.mMinFilter     = FO_LINEAR;
             samplerblock.mMagFilter     = FO_LINEAR;
             samplerblock.mMipFilter     = FO_NONE;
-            samplerblock.mCompareFunction   = CMPF_LESS_EQUAL;
+            samplerblock.mCompareFunction = CMPF_LESS_EQUAL;
+#if !OGRE_NO_REVERSE_DEPTH
+            samplerblock.mCompareFunction =
+                    RenderSystem::reverseCompareFunction( samplerblock.mCompareFunction );
+#endif
 
             if( !mShadowmapCmpSamplerblock )
                 mShadowmapCmpSamplerblock = mHlmsManager->getSamplerblock( samplerblock );

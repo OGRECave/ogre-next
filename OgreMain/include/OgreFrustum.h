@@ -119,8 +119,6 @@ namespace Ogre
         mutable Quaternion mLastParentOrientation;
         mutable Vector3 mLastParentPosition;
 
-        /// Pre-calced projection matrix for the specific render system
-        mutable Matrix4 mProjMatrixRS;
         /// Pre-calced standard projection matrix but with render system depth range
         mutable Matrix4 mProjMatrixRSDepth;
         /// Pre-calced standard projection matrix
@@ -354,16 +352,6 @@ namespace Ogre
         virtual void getFrustumExtents(Real& outleft, Real& outright, Real& outtop, Real& outbottom,
                                        FrustrumExtentsType frustrumExtentsType = FET_PROJ_PLANE_POS) const;
 
-
-        /** Gets the projection matrix for this frustum adjusted for the current
-            rendersystem specifics (may be right or left-handed, depth range
-            may vary).
-        @remarks
-            This method retrieves the rendering-API dependent version of the projection
-            matrix. If you want a 'typical' projection matrix then use 
-            getProjectionMatrix.
-        */
-        virtual const Matrix4& getProjectionMatrixRS(void) const;
         /** Gets the depth-adjusted projection matrix for the current rendersystem,
             but one which still conforms to right-hand rules.
         @remarks

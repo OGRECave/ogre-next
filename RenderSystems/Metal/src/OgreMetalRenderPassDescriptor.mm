@@ -344,7 +344,11 @@ namespace Ogre
 
         mDepthAttachment = [MTLRenderPassDepthAttachmentDescriptor alloc];
         mDepthAttachment.texture = textureMetal->getFinalTextureName();
+#if OGRE_NO_REVERSE_DEPTH
         mDepthAttachment.clearDepth = mDepth.clearDepth;
+#else
+        mDepthAttachment.clearDepth = Real( 1.0f ) - mDepth.clearDepth;
+#endif
 
         mDepthAttachment.loadAction = MetalRenderPassDescriptor::get( mDepth.loadAction );
         mDepthAttachment.storeAction = MetalRenderPassDescriptor::get( mDepth.storeAction );
@@ -425,7 +429,11 @@ namespace Ogre
         if( mDepthAttachment )
         {
             mDepthAttachment = [mDepthAttachment copy];
+#if OGRE_NO_REVERSE_DEPTH
             mDepthAttachment.clearDepth = clearDepth;
+#else
+            mDepthAttachment.clearDepth = Real( 1.0f ) - clearDepth;
+#endif
         }
     }
     //-----------------------------------------------------------------------------------
