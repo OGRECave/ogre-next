@@ -8494,6 +8494,7 @@ namespace Ogre{
                     break;
                 case ID_CLEAR_COLOUR:
                 case ID_COLOUR_VALUE:
+                case ID_CLEAR_COLOUR_REVERSE_DEPTH_AWARE:
                 {
                     if(prop->values.size() != 4u && prop->values.size() != 5u)
                     {
@@ -8507,6 +8508,10 @@ namespace Ogre{
                         ColourValue clearColour;
                         if( getColour( prop->values.begin(), prop->values.end(), &clearColour ) )
                         {
+#if !OGRE_NO_REVERSE_DEPTH
+                            if( prop->id == ID_CLEAR_COLOUR_REVERSE_DEPTH_AWARE )
+                                clearColour = ColourValue::White - clearColour;
+#endif
                             for( int j=0; j<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++j )
                                 mPassDef->mClearColour[j] = clearColour;
                         }
@@ -8525,7 +8530,17 @@ namespace Ogre{
                             getColour( it1, prop->values.end(), &clearColour ) )
                         {
                             if( colourIdx < OGRE_MAX_MULTIPLE_RENDER_TARGETS )
+                            {
                                 mPassDef->mClearColour[colourIdx] = clearColour;
+
+#if !OGRE_NO_REVERSE_DEPTH
+                                if( prop->id == ID_CLEAR_COLOUR_REVERSE_DEPTH_AWARE )
+                                {
+                                    mPassDef->mClearColour[colourIdx] =
+                                            ColourValue::White - mPassDef->mClearColour[colourIdx];
+                                }
+#endif
+                            }
                             else
                             {
                                 compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
@@ -8834,6 +8849,7 @@ namespace Ogre{
                     }
                     break;
                 case ID_COLOUR_VALUE:
+                case ID_CLEAR_COLOUR_REVERSE_DEPTH_AWARE:
                     {
                         if(prop->values.empty())
                         {
@@ -8843,6 +8859,10 @@ namespace Ogre{
                         ColourValue clearColour;
                         if( getColour(prop->values.begin(), prop->values.end(), &clearColour) )
                         {
+#if !OGRE_NO_REVERSE_DEPTH
+                            if( prop->id == ID_CLEAR_COLOUR_REVERSE_DEPTH_AWARE )
+                                clearColour = ColourValue::White - clearColour;
+#endif
                             passClear->setAllClearColours( clearColour );
                         }
                         else

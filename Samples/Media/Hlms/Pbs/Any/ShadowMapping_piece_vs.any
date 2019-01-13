@@ -17,7 +17,7 @@
 			@end
 		@end
 
-		@property( hlms_pssm_splits )outVs.depth = outVs_Position.z;@end
+		@property( hlms_pssm_splits )outVs.depth = outVs_Position.w;@end
 	@end
 	@end
 	@property( exponential_shadow_maps )
@@ -35,7 +35,7 @@
 			@end
 		@end
 
-		@property( hlms_pssm_splits )outVs.depth = outVs_Position.z;@end
+		@property( hlms_pssm_splits )outVs.depth = outVs_Position.w;@end
 	@end
 	@end
 @end

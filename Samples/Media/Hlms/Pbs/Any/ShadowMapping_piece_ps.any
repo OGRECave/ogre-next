@@ -158,15 +158,27 @@
 	{
 	@property( @m < 2 )
 		//Spot and directional lights
-		float fDepth = psPosLN.z;
+		@property( !exponential_shadow_maps && !hlms_no_reverse_depth )
+			float fDepth = psPosLN.z / psPosLN.w;
+		@else
+			//Exponential shadows maps normally use R16_UNORM colour buffer to store linear depth
+			//Its depth buffer may still have been reverse Z, but the colour rtt is what we're sampling
+			//Also when no reverse Z is used, we use "pseudo linear" for regular PCF, which means
+			//we shouldn't divide by .w either
+			float fDepth = psPosLN.z;
+		@end
 		float2 uv = float2( psPosLN.xy / psPosLN.w );
-	@end @property( @m >= 2 )
+	@else
 		//Point lights
 		float3 cubemapDir = posVS.xyz - lightPos.xyz;
 		float fDepth = length( cubemapDir );
 		cubemapDir *= 1.0 / fDepth;
 		cubemapDir = mul( cubemapDir.xyz, passBuf.invViewMatCubemap );
-		fDepth = (fDepth - invDepthRange.x) * invDepthRange.y;
+		@property( hlms_no_reverse_depth )
+			fDepth = (fDepth - invDepthRange.x) * invDepthRange.y;
+		@else
+			fDepth = (invDepthRange.x - fDepth) * invDepthRange.y;
+		@end
 
 		float2 uv;
 		uv.x = (cubemapDir.x / (1.0 + abs( cubemapDir.z ))) * 0.25 +

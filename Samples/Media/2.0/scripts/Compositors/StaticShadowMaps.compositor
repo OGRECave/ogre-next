@@ -29,8 +29,8 @@ abstract target cubemap_target_shadow
 	{
 		load
 		{
-			all				clear
-			clear_colour	1 1 1 1
+			all                                 clear
+			clear_colour_reverse_depth_aware	1 1 1 1
 		}
 		store
 		{
@@ -64,7 +64,7 @@ compositor_node_shadow StaticShadowMapsShadowNode
 	{
 		pass clear
 		{
-			colour_value 1 1 1 1
+			clear_colour_reverse_depth_aware	1 1 1 1
 		}
 	}
 
@@ -86,7 +86,7 @@ compositor_node_shadow StaticShadowMapsShadowNode
 		{
 			pass clear
 			{
-				colour_value 1 1 1 1
+				clear_colour_reverse_depth_aware	1 1 1 1
 				shadow_map_full_viewport yes
 			}
 		}
@@ -156,8 +156,8 @@ compositor_node_shadow StaticShadowMapsShadowNode2
 			{
 				load
 				{
-					all				clear
-					clear_colour	1 1 1 1
+					all									clear
+					clear_colour_reverse_depth_aware	1 1 1 1
 				}
 			}
 		}
@@ -171,8 +171,8 @@ compositor_node_shadow StaticShadowMapsShadowNode2
 			{
 				load
 				{
-					all				clear
-					clear_colour	1 1 1 1
+					all									clear
+					clear_colour_reverse_depth_aware	1 1 1 1
 				}
 			}
 		}
