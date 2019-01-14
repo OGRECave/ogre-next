@@ -67,8 +67,8 @@ namespace Ogre
     void MetalStagingTexture::stopMapRegion(void)
     {
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
-        NSRange range = NSMakeRange( 0, mCurrentOffset );
-        [mVboName didModifyRange:range];
+//        NSRange range = NSMakeRange( 0, mCurrentOffset );
+//        [mVboName didModifyRange:range];
 #endif
         StagingTextureBufferImpl::stopMapRegion();
     }
