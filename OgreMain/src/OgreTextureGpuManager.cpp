@@ -475,7 +475,15 @@ namespace Ogre
 
         if( texture->getPendingResidencyChanges() == 0 )
         {
-            if( texture->_isDataReadyImpl() )
+            //If the TextureGpu is in the worker thread, the following may be true:
+            //  1. Texture is not yet Resident. Thus getPendingResidencyChanges cannot be 0
+            //  2. Texture is Resident, but being loaded. Thus getPendingResidencyChanges will be 0
+            //     but _isDataReadyImpl returns false
+            //  3. Texture will become OnSystemRam, after it finishes loading. Thus
+            //     getPendingResidencyChanges cannot be 0
+            //
+            //Thus we know for sure the TextureGpu is not in the worker thread with this if statement
+            if( texture->_isDataReadyImpl() || texture->getResidencyStatus() != GpuResidency::Resident )
             {
                 //There are no pending tasks. We can execute it right now
                 executeTask( texture, TextureGpuListener::ReadyForRendering, task );
