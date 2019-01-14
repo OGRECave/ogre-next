@@ -51,7 +51,11 @@ namespace Ogre {
 
         OGRE_CHECK_GL_ERROR(glStencilMask(mStencilMask));
 
+#if OGRE_NO_REVERSE_DEPTH
         OGRE_CHECK_GL_ERROR(glClearDepthf(mClearDepth));
+#else
+        OGRE_CHECK_GL_ERROR(glClearDepthf(1.0f - mClearDepth));
+#endif
 
         OGRE_CHECK_GL_ERROR(glBindTexture(GL_TEXTURE_2D, 0));
 
@@ -349,7 +353,11 @@ namespace Ogre {
         {
             mClearDepth = depth;
             
+#if OGRE_NO_REVERSE_DEPTH
             OGRE_CHECK_GL_ERROR(glClearDepthf(depth));
+#else
+            OGRE_CHECK_GL_ERROR( glClearDepthf( 1.0f - depth ) );
+#endif
         }
     }
     

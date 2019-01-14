@@ -2449,7 +2449,8 @@ namespace Ogre
                 }
 
                 const bool needsMultipleImages =
-                        img->getTextureType() != loadRequest.texture->getTextureType();
+                        img->getTextureType() != loadRequest.texture->getTextureType() &&
+                        loadRequest.texture->getTextureType() != TextureTypes::Type1D;
                 const bool mustKeepSysRamPtr = loadRequest.toSysRam ||
                                                loadRequest.texture->getGpuPageOutStrategy() ==
                                                GpuPageOutStrategy::AlwaysKeepSystemRamCopy;
@@ -2504,8 +2505,7 @@ namespace Ogre
                 {
                     //We'll need more than one Image to load this texture, so track progress
                     mStreamingData.partialImages[loadRequest.texture] =
-                            PartialImage( sysRamCopy, loadRequest.texture->getDepthOrSlices(),
-                                          loadRequest.toSysRam );
+                            PartialImage( sysRamCopy, loadRequest.toSysRam );
                 }
 
                 //Note cannot transition yet if this is loaded using multiple images
@@ -3237,10 +3237,8 @@ namespace Ogre
     TextureGpuManager::PartialImage::PartialImage() :
         sysRamPtr( 0 ), numProcessedDepthOrSlices( 0 ), toSysRam( false ) {}
     //-----------------------------------------------------------------------------------
-    TextureGpuManager::PartialImage::PartialImage( void *_sysRamPtr, uint32 _numProcessedDepthOrSlices,
-                                                   bool _toSysRam ) :
-        sysRamPtr( _sysRamPtr ), numProcessedDepthOrSlices( _numProcessedDepthOrSlices ),
-        toSysRam( _toSysRam ) {}
+    TextureGpuManager::PartialImage::PartialImage( void *_sysRamPtr, bool _toSysRam ) :
+        sysRamPtr( _sysRamPtr ), numProcessedDepthOrSlices( 0 ), toSysRam( _toSysRam ) {}
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------

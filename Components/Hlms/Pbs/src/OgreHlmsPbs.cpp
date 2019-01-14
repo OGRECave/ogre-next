@@ -299,14 +299,20 @@ namespace Ogre
                 }
             }
 
+            const ColourValue maxValBorder = ColourValue( std::numeric_limits<float>::max(),
+                                                          std::numeric_limits<float>::max(),
+                                                          std::numeric_limits<float>::max(),
+                                                          std::numeric_limits<float>::max() );
+            const ColourValue pitchBlackBorder = ColourValue( 0, 0, 0, 0 );
+
             HlmsSamplerblock samplerblock;
             samplerblock.mU             = TAM_BORDER;
             samplerblock.mV             = TAM_BORDER;
             samplerblock.mW             = TAM_CLAMP;
-            samplerblock.mBorderColour  = ColourValue( std::numeric_limits<float>::max(),
-                                                       std::numeric_limits<float>::max(),
-                                                       std::numeric_limits<float>::max(),
-                                                       std::numeric_limits<float>::max() );
+            if( !mRenderSystem->isReverseDepth() )
+                samplerblock.mBorderColour  = maxValBorder;
+            else
+                samplerblock.mBorderColour  = pitchBlackBorder;
 
             if( mShaderProfile != "hlsl" )
             {
@@ -324,13 +330,25 @@ namespace Ogre
                 samplerblock.mMagFilter     = FO_LINEAR;
                 samplerblock.mMipFilter     = FO_NONE;
 
+                //ESM uses standard linear Z in range [0; 1], thus we need a different border colour
+                const ColourValue oldValue = samplerblock.mBorderColour;
+                samplerblock.mBorderColour = maxValBorder;
+
                 mShadowmapEsmSamplerblock = mHlmsManager->getSamplerblock( samplerblock );
+
+                //Restore border colour
+                samplerblock.mBorderColour = oldValue;
             }
 
             samplerblock.mMinFilter     = FO_LINEAR;
             samplerblock.mMagFilter     = FO_LINEAR;
             samplerblock.mMipFilter     = FO_NONE;
-            samplerblock.mCompareFunction   = CMPF_LESS_EQUAL;
+            samplerblock.mCompareFunction = CMPF_LESS_EQUAL;
+            if( mRenderSystem->isReverseDepth() )
+            {
+                samplerblock.mCompareFunction =
+                        RenderSystem::reverseCompareFunction( samplerblock.mCompareFunction );
+            }
 
             if( !mShadowmapCmpSamplerblock )
                 mShadowmapCmpSamplerblock = mHlmsManager->getSamplerblock( samplerblock );
@@ -1395,14 +1413,26 @@ namespace Ogre
                     *passBufferPtr++ = viewTex[2][3];
                 }
 
+                const Light *shadowLight = shadowNode->getLightAssociatedWith( shadowMapTexIdx );
+
                 //vec2 shadowRcv[numShadowMapLights].shadowDepthRange
                 Real fNear, fFar;
                 shadowNode->getMinMaxDepthRange( shadowMapTexIdx, fNear, fFar );
                 const Real depthRange = fFar - fNear;
-                *passBufferPtr++ = fNear;
+                if( shadowLight &&
+                    shadowLight->getType() == Light::LT_POINT &&
+                    mShadowFilter != ExponentialShadowMaps &&
+                    mRenderSystem->isReverseDepth() )
+                {
+                    *passBufferPtr++ = fFar;
+                }
+                else
+                {
+                    *passBufferPtr++ = fNear;
+                }
                 *passBufferPtr++ = 1.0f / depthRange;
-                ++passBufferPtr; //Padding
-                ++passBufferPtr; //Padding
+                *passBufferPtr++ = 0.0f;
+                *passBufferPtr++ = 0.0f; //Padding
 
 
                 //vec2 shadowRcv[numShadowMapLights].invShadowMapSize

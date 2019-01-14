@@ -21,21 +21,21 @@
 @end
 
 @property( syntax == glsl )
-	#define OGRE_SAMPLE_SHADOW( tex, sampler, uv, depth ) (depth >= 1.0 ? 1.0 : texture( tex, vec3( uv, depth ) ))
+	#define OGRE_SAMPLE_SHADOW( tex, sampler, uv, depth ) (OGRE_DEPTH_CMP_GE( depth, OGRE_DEPTH_DEFAULT_CLEAR ) ? 1.0 : texture( tex, vec3( uv, depth ) ))
 	#define OGRE_SAMPLE_SHADOW_ESM( tex, sampler, uv ) textureLod( tex, uv, 0 ).x
 	#define PASSBUF_ARG_DECL
 	#define PASSBUF_ARG
 @end
 
 @property( syntax == hlsl )
-	#define OGRE_SAMPLE_SHADOW( tex, sampler, uv, depth ) (depth >= 1.0f ? 1.0 : tex.SampleCmpLevelZero( sampler, uv.xy, depth ).x)
+	#define OGRE_SAMPLE_SHADOW( tex, sampler, uv, depth ) (OGRE_DEPTH_CMP_GE( depth, OGRE_DEPTH_DEFAULT_CLEAR ) ? 1.0 : tex.SampleCmpLevelZero( sampler, uv.xy, depth ).x)
 	#define OGRE_SAMPLE_SHADOW_ESM( tex, sampler, uv ) tex.SampleLevel( sampler, uv, 0 ).x
 	#define PASSBUF_ARG_DECL
 	#define PASSBUF_ARG
 @end
 
 @property( syntax == metal )
-	#define OGRE_SAMPLE_SHADOW( tex, sampler, uv, depth ) (depth >= 1.0f ? 1.0 : tex.sample_compare( sampler, float2( uv.xy ), depth ))
+	#define OGRE_SAMPLE_SHADOW( tex, sampler, uv, depth ) (OGRE_DEPTH_CMP_GE( depth, OGRE_DEPTH_DEFAULT_CLEAR ) ? 1.0 : tex.sample_compare( sampler, float2( uv.xy ), depth ))
 	#define OGRE_SAMPLE_SHADOW_ESM( tex, sampler, uv ) tex.sample( sampler, float2( uv.xy ), level(0) ).x
 
 	#define PASSBUF_ARG_DECL , constant PassBuffer &passBuf
@@ -158,15 +158,27 @@
 	{
 	@property( @m < 2 )
 		//Spot and directional lights
-		float fDepth = psPosLN.z;
+		@property( !exponential_shadow_maps && !hlms_no_reverse_depth )
+			float fDepth = psPosLN.z / psPosLN.w;
+		@else
+			//Exponential shadows maps normally use R16_UNORM colour buffer to store linear depth
+			//Its depth buffer may still have been reverse Z, but the colour rtt is what we're sampling
+			//Also when no reverse Z is used, we use "pseudo linear" for regular PCF, which means
+			//we shouldn't divide by .w either
+			float fDepth = psPosLN.z;
+		@end
 		float2 uv = float2( psPosLN.xy / psPosLN.w );
-	@end @property( @m >= 2 )
+	@else
 		//Point lights
 		float3 cubemapDir = posVS.xyz - lightPos.xyz;
 		float fDepth = length( cubemapDir );
 		cubemapDir *= 1.0 / fDepth;
 		cubemapDir = mul( cubemapDir.xyz, passBuf.invViewMatCubemap );
-		fDepth = (fDepth - invDepthRange.x) * invDepthRange.y;
+		@property( hlms_no_reverse_depth )
+			fDepth = (fDepth - invDepthRange.x) * invDepthRange.y;
+		@else
+			fDepth = (invDepthRange.x - fDepth) * invDepthRange.y;
+		@end
 
 		float2 uv;
 		uv.x = (cubemapDir.x / (1.0 + abs( cubemapDir.z ))) * 0.25 +

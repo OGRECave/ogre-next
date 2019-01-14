@@ -33,8 +33,12 @@
 		float distanceToCamera = length( inPs.toCameraWS );
 		@property( !exponential_shadow_maps )
 			outDepth = (distanceToCamera - passBuf.depthRange.x) * passBuf.depthRange.y + inPs.constBias;
-		@end @property( exponential_shadow_maps )
+		@else
 			outDepth = (distanceToCamera - passBuf.depthRange.x) * passBuf.depthRange.y;
+		@end
+
+		@property( !hlms_no_reverse_depth )
+			outDepth = 1.0 - outDepth;
 		@end
 	@end
 @end

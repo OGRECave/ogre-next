@@ -1,0 +1,10 @@
+
+@piece( DeclReverseDepthMacros )
+	@property( hlms_no_reverse_depth )
+		#define OGRE_DEPTH_CMP_GE( a, b ) (a) >= (b)
+		#define OGRE_DEPTH_DEFAULT_CLEAR 1.0
+	@else
+		#define OGRE_DEPTH_CMP_GE( a, b ) (a) <= (b)
+		#define OGRE_DEPTH_DEFAULT_CLEAR 0.0
+	@end
+@end

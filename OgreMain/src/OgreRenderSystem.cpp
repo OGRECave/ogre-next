@@ -99,6 +99,7 @@ namespace Ogre {
         , mNativeShadingLanguageVersion(0)
         , mTexProjRelative(false)
         , mTexProjRelativeOrigin(Vector3::ZERO)
+        , mReverseDepth(true)
     {
         mEventNames.push_back("RenderSystemCapabilitiesCreated");
     }
@@ -921,6 +922,124 @@ namespace Ogre {
     void RenderSystem::convertColourValue(const ColourValue& colour, uint32* pDest)
     {
         *pDest = v1::VertexElement::convertColourValue(colour, getColourVertexElementType());
+    }
+    //-----------------------------------------------------------------------
+    CompareFunction RenderSystem::reverseCompareFunction( CompareFunction depthFunc )
+    {
+        switch( depthFunc )
+        {
+        case CMPF_LESS:         return CMPF_GREATER;
+        case CMPF_LESS_EQUAL:   return CMPF_GREATER_EQUAL;
+        case CMPF_GREATER_EQUAL:return CMPF_LESS_EQUAL;
+        case CMPF_GREATER:      return CMPF_LESS;
+        default:                return depthFunc;
+        }
+
+        return depthFunc;
+    }
+    //-----------------------------------------------------------------------
+    void RenderSystem::_makeRsProjectionMatrix( const Matrix4& matrix,
+                                                Matrix4& dest, Real nearPlane,
+                                                Real farPlane, ProjectionType projectionType )
+    {
+        dest = matrix;
+
+        if( mReverseDepth )
+        {
+            Real inv_d = 1 / (farPlane - nearPlane);
+            Real q, qn;
+
+            if( projectionType == PT_PERSPECTIVE )
+            {
+                if( farPlane == 0 )
+                {
+                    // Infinite far plane
+                    //  q   = limit( near / (far - near), far, inf );
+                    //  qn  = limit( (far * near) / (far - near), far, inf );
+                    q   = 0;
+                    qn  = nearPlane;
+                }
+                else
+                {
+                    //Standard Z for range [-1; 1]
+                    //  q = - (far + near) / (far - near)
+                    //  qn = - 2 * (far * near) / (far - near)
+                    //
+                    //Standard Z for range [0; 1]
+                    //  q = - far / (far - near)
+                    //  qn = - (far * near) / (far - near)
+                    //
+                    //Reverse Z for range [1; 0]:
+                    // [ 1   0    0  0  ]   [ A   0   C   0  ]
+                    // [ 0   1    0  0  ] X [ 0   B   D   0  ]
+                    // [ 0   0   -1  1  ]   [ 0   0   q   qn ]
+                    // [ 0   0    0  1  ]   [ 0   0   -1  0  ]
+                    //
+                    // [ A   0   C      0  ]
+                    // [ 0   B   D      0  ]
+                    // [ 0   0   -q-1  -qn ]
+                    // [ 0   0   -1     0  ]
+                    //
+                    //  q' = -q - 1
+                    //     =  far / (far - near) - 1
+                    //     = ( far - (far - near) ) / (far - near)
+                    //  q' = near / (far - near)
+                    //  qn'= -qn
+                    q   = nearPlane * inv_d;
+                    qn  = (farPlane * nearPlane) * inv_d;
+                }
+            }
+            else
+            {
+                if( farPlane == 0 )
+                {
+                    // Can not do infinite far plane here, avoid divided zero only
+                    q = Frustum::INFINITE_FAR_PLANE_ADJUST / nearPlane;
+                    qn = Frustum::INFINITE_FAR_PLANE_ADJUST + 1;
+                }
+                else
+                {
+                    //Standard Z for range [-1; 1]
+                    //  q = - 2 / (far - near)
+                    //  qn = -(far + near) / (far - near)
+                    //
+                    //Standard Z for range [0; 1]
+                    //  q = - 1 / (far - near)
+                    //  qn = - near / (far - near)
+                    //
+                    //Reverse Z for range [1; 0]:
+                    //  q' = 1 / (far - near)
+                    //  qn'= far / (far - near)
+                    q   = inv_d;
+                    qn  = farPlane * inv_d;
+                }
+            }
+
+            dest[2][2] = q;
+            dest[2][3] = qn;
+        }
+    }
+    //-----------------------------------------------------------------------
+    void RenderSystem::_convertProjectionMatrix( const Matrix4& matrix, Matrix4& dest )
+    {
+        dest = matrix;
+
+        if( !mReverseDepth )
+        {
+            // Convert depth range from [-1,+1] to [0,1]
+            dest[2][0] = (dest[2][0] + dest[3][0]) / 2;
+            dest[2][1] = (dest[2][1] + dest[3][1]) / 2;
+            dest[2][2] = (dest[2][2] + dest[3][2]) / 2;
+            dest[2][3] = (dest[2][3] + dest[3][3]) / 2;
+        }
+        else
+        {
+            // Convert depth range from [-1,+1] to [1,0]
+            dest[2][0] = (-dest[2][0] + dest[3][0]) / 2;
+            dest[2][1] = (-dest[2][1] + dest[3][1]) / 2;
+            dest[2][2] = (-dest[2][2] + dest[3][2]) / 2;
+            dest[2][3] = (-dest[2][3] + dest[3][3]) / 2;
+        }
     }
     //-----------------------------------------------------------------------
     void RenderSystem::_setWorldMatrices(const Matrix4* m, unsigned short count)

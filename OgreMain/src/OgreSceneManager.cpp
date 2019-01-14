@@ -1320,7 +1320,7 @@ void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera, Viewp
     mDestRenderSystem->_beginGeometryCount();
 
     // Set initial camera state
-    mDestRenderSystem->_setProjectionMatrix(mCameraInProgress->getProjectionMatrixRS());
+    mDestRenderSystem->_setProjectionMatrix( Matrix4::IDENTITY );
 
     mCachedViewMatrix = mCameraInProgress->getViewMatrix(true);
 
@@ -3562,7 +3562,7 @@ void SceneManager::resetViewProjMode(bool fixedFunction)
     {
         // Coming back from flat projection
         if (fixedFunction)
-            mDestRenderSystem->_setProjectionMatrix(mCameraInProgress->getProjectionMatrixRS());
+            mDestRenderSystem->_setProjectionMatrix( Matrix4::IDENTITY );
         mGpuParamsDirty |= (uint16)GPV_GLOBAL;
 
         mResetIdentityProj = false;
@@ -4489,7 +4489,7 @@ void SceneManager::_resumeRendering(SceneManager::RenderContext* context)
     mDestRenderSystem->_resumeFrame(context->rsContext);
 
     // Set initial camera state
-    mDestRenderSystem->_setProjectionMatrix(mCameraInProgress->getProjectionMatrixRS());
+    mDestRenderSystem->_setProjectionMatrix( Matrix4::IDENTITY );
     
     mCachedViewMatrix = mCameraInProgress->getViewMatrix(true);
 

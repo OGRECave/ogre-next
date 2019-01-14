@@ -117,8 +117,8 @@ abstract target cubemap_target_shadow
 	{
 		load
 		{
-			all				clear
-			clear_colour	1 1 1 1
+			all									clear
+			clear_colour_reverse_depth_aware	1 1 1 1
 		}
 		store
 		{

@@ -137,17 +137,7 @@ namespace Ogre
         virtual void _setComputePso( const HlmsComputePso *pso );
 
         virtual VertexElementType getColourVertexElementType(void) const;
-        virtual void _convertProjectionMatrix(const Matrix4& matrix,
-            Matrix4& dest, bool forGpuProgram = false) {}
-        virtual void _makeProjectionMatrix(const Radian& fovy, Real aspect, Real nearPlane, Real farPlane,
-            Matrix4& dest, bool forGpuProgram = false) {}
-
-        virtual void _makeProjectionMatrix(Real left, Real right, Real bottom, Real top,
-            Real nearPlane, Real farPlane, Matrix4& dest, bool forGpuProgram = false) {}
-        virtual void _makeOrthoMatrix(const Radian& fovy, Real aspect, Real nearPlane, Real farPlane,
-            Matrix4& dest, bool forGpuProgram = false) {}
-        virtual void _applyObliqueDepthProjection(Matrix4& matrix, const Plane& plane,
-            bool forGpuProgram) {}
+        virtual void _convertProjectionMatrix(const Matrix4& matrix, Matrix4& dest) {}
 
         virtual void _dispatch( const HlmsComputePso &pso );
 

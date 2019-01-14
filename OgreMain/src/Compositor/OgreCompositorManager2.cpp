@@ -836,4 +836,9 @@ namespace Ogre
         if( itor != mListeners.end() )
             mListeners.erase( itor );
     }
+    //-----------------------------------------------------------------------------------
+    RenderSystem* CompositorManager2::getRenderSystem(void) const
+    {
+        return mRenderSystem;
+    }
 }

@@ -10,6 +10,8 @@
 		#define make_float_fresnel( x ) float3( x, x, x )
 	@end
 
+	@insertpiece( DeclReverseDepthMacros )
+
 	struct PixelData
 	{
 		@property( !hlms_shadowcaster )

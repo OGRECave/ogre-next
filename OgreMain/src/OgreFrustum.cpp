@@ -106,7 +106,28 @@ namespace Ogre {
         return mFOVy;
     }
 
+    //-----------------------------------------------------------------------
+    Vector2 Frustum::getProjectionParamsAB(void) const
+    {
+        Real nearPlane = getNearClipDistance();
+        Real farPlane = getFarClipDistance();
 
+        Vector2 retVal;
+
+        const RenderSystem *renderSystem = Root::getSingleton().getRenderSystem();
+        if( !renderSystem->isReverseDepth() )
+        {
+            retVal.x = farPlane / (farPlane - nearPlane);                   //projectionA
+            retVal.y = (-farPlane * nearPlane) / (farPlane - nearPlane);    //projectionB
+        }
+        else
+        {
+            retVal.x = -nearPlane / (farPlane - nearPlane);                 //projectionA
+            retVal.y = (farPlane * nearPlane) / (farPlane - nearPlane);     //projectionB
+        }
+
+        return retVal;
+    }
     //-----------------------------------------------------------------------
     void Frustum::setFarClipDistance(Real farPlane)
     {
@@ -185,14 +206,6 @@ namespace Ogre {
         updateFrustum();
 
         return mProjMatrixRSDepth;
-    }
-    //-----------------------------------------------------------------------
-    const Matrix4& Frustum::getProjectionMatrixRS(void) const
-    {
-
-        updateFrustum();
-
-        return mProjMatrixRS;
     }
     //-----------------------------------------------------------------------
     const Matrix4& Frustum::getViewMatrix(void) const
@@ -441,6 +454,7 @@ namespace Ogre {
 
                 // NB: This creates 'uniform' perspective projection matrix,
                 // which depth range [-1,1], right-handed rules
+                // note: this comment assumes standard Z math in range [-1;1]
                 //
                 // [ A   0   C   0  ]
                 // [ 0   B   D   0  ]
@@ -500,7 +514,7 @@ namespace Ogre {
                     mProjMatrix[2][0] = c.x;
                     mProjMatrix[2][1] = c.y;
                     mProjMatrix[2][2] = c.z + 1;
-                    mProjMatrix[2][3] = c.w; 
+                    mProjMatrix[2][3] = c.w;
                 }
             } // perspective
             else if (mProjType == PT_ORTHOGRAPHIC)
@@ -513,13 +527,13 @@ namespace Ogre {
                 if (mFarDist == 0)
                 {
                     // Can not do infinite far plane here, avoid divided zero only
-                    q = - Frustum::INFINITE_FAR_PLANE_ADJUST / mNearDist;
-                    qn = - Frustum::INFINITE_FAR_PLANE_ADJUST - 1;
+                    q   = - Frustum::INFINITE_FAR_PLANE_ADJUST / mNearDist;
+                    qn  = - Frustum::INFINITE_FAR_PLANE_ADJUST - 1;
                 }
                 else
                 {
-                    q = - 2 * inv_d;
-                    qn = - (mFarDist + mNearDist)  * inv_d;
+                    q   = - 2 * inv_d;
+                    qn  = - (mFarDist + mNearDist)  * inv_d;
                 }
 
                 // NB: This creates 'uniform' orthographic projection matrix,
@@ -554,10 +568,16 @@ namespace Ogre {
 #endif
 
         RenderSystem* renderSystem = Root::getSingleton().getRenderSystem();
-        // API specific
-        renderSystem->_convertProjectionMatrix(mProjMatrix, mProjMatrixRS);
         // API specific for Gpu Programs
-        renderSystem->_convertProjectionMatrix(mProjMatrix, mProjMatrixRSDepth, true);
+        if( !mObliqueDepthProjection )
+        {
+            renderSystem->_makeRsProjectionMatrix( mProjMatrix, mProjMatrixRSDepth,
+                                                   mNearDist, mFarDist, mProjType );
+        }
+        else
+        {
+            renderSystem->_convertProjectionMatrix( mProjMatrix, mProjMatrixRSDepth );
+        }
 
 
         // Calculate bounding box (local)

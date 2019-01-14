@@ -21,7 +21,12 @@ PS_INPUT main
 {
 	PS_INPUT outVs;
 
+#if OGRE_NO_REVERSE_DEPTH
 	outVs.gl_Position	= mul( worldViewProj, input.vertex ).xyww;
+#else
+	outVs.gl_Position.xyw	= mul( worldViewProj, input.vertex ).xyw;
+	outVs.gl_Position.z		= 0.0f;
+#endif
 	outVs.cameraDir		= input.normal;
 
 	return outVs;

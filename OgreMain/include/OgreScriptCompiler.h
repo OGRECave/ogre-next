@@ -876,6 +876,7 @@ namespace Ogre
                         //ID_DEPTH,
                         //ID_STENCIL,
                         ID_CLEAR_COLOUR,
+                        ID_CLEAR_COLOUR_REVERSE_DEPTH_AWARE,
                         ID_CLEAR_DEPTH,
                         ID_CLEAR_STENCIL,
                         ID_WARN_IF_RTV_WAS_FLUSHED,

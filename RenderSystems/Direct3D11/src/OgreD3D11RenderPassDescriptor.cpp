@@ -463,8 +463,14 @@ namespace Ogre
                     flags |= D3D11_CLEAR_DEPTH;
                 if( mStencil.loadAction == LoadAction::Clear )
                     flags |= D3D11_CLEAR_STENCIL;
+
+                float clearDepthValue;
+                if( !mRenderSystem->isReverseDepth() )
+                    clearDepthValue = mDepth.clearDepth;
+                else
+                    clearDepthValue = 1.0f - mDepth.clearDepth;
                 context->ClearDepthStencilView( mDepthStencilRtv, flags,
-                                                mDepth.clearDepth, mStencil.clearStencil );
+                                                clearDepthValue, mStencil.clearStencil );
             }
         }
 

@@ -414,28 +414,8 @@ namespace Ogre {
         /** See
             RenderSystem
         */
-        void _convertProjectionMatrix(const Matrix4& matrix,
-                                      Matrix4& dest, bool forGpuProgram = false);
-        /** See
-            RenderSystem
-        */
-        void _makeProjectionMatrix(const Radian& fovy, Real aspect, Real nearPlane, Real farPlane,
-                                   Matrix4& dest, bool forGpuProgram = false);
-        /** See
-            RenderSystem
-        */
-        void _makeProjectionMatrix(Real left, Real right, Real bottom, Real top,
-                                   Real nearPlane, Real farPlane, Matrix4& dest, bool forGpuProgram = false);
-        /** See
-            RenderSystem
-        */
-        void _makeOrthoMatrix(const Radian& fovy, Real aspect, Real nearPlane, Real farPlane,
-                              Matrix4& dest, bool forGpuProgram = false);
-        /** See
-            RenderSystem
-        */
-        void _applyObliqueDepthProjection(Matrix4& matrix, const Plane& plane,
-                                          bool forGpuProgram);
+        virtual void _convertProjectionMatrix(const Matrix4& matrix, Matrix4& dest);
+        virtual Real getRSDepthRange(void) const;
         /** See
             RenderSystem
         */
@@ -476,8 +456,8 @@ namespace Ogre {
         HardwareOcclusionQuery* createHardwareOcclusionQuery(void);
         Real getHorizontalTexelOffset(void) { return 0.0; }               // No offset in GL
         Real getVerticalTexelOffset(void) { return 0.0; }                 // No offset in GL
-        Real getMinimumDepthInputValue(void) { return -1.0f; }            // Range [-1.0f, 1.0f]
-        Real getMaximumDepthInputValue(void) { return 1.0f; }             // Range [-1.0f, 1.0f]
+        Real getMinimumDepthInputValue(void);
+        Real getMaximumDepthInputValue(void);
         OGRE_MUTEX(mThreadInitMutex);
         void registerThread();
         void unregisterThread();

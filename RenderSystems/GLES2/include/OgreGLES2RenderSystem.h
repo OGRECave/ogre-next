@@ -343,28 +343,7 @@ namespace Ogre {
             /** See
              RenderSystem
              */
-            void _convertProjectionMatrix(const Matrix4& matrix,
-                    Matrix4& dest, bool forGpuProgram = false);
-            /** See
-             RenderSystem
-             */
-            void _makeProjectionMatrix(const Radian& fovy, Real aspect, Real nearPlane, Real farPlane,
-                    Matrix4& dest, bool forGpuProgram = false);
-            /** See
-             RenderSystem
-             */
-            void _makeProjectionMatrix(Real left, Real right, Real bottom, Real top, 
-                    Real nearPlane, Real farPlane, Matrix4& dest, bool forGpuProgram = false);
-            /** See
-             RenderSystem
-             */
-            void _makeOrthoMatrix(const Radian& fovy, Real aspect, Real nearPlane, Real farPlane,
-                    Matrix4& dest, bool forGpuProgram = false);
-            /** See
-             RenderSystem
-             */
-            void _applyObliqueDepthProjection(Matrix4& matrix, const Plane& plane, 
-                    bool forGpuProgram);
+            void _convertProjectionMatrix(const Matrix4& matrix, Matrix4& dest);
             /** See
              RenderSystem
              */

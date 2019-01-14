@@ -147,6 +147,13 @@ namespace Ogre
 
         if( !mInitialized )
         {
+            if( miscParams )
+            {
+                NameValuePairList::const_iterator itOption = miscParams->find( "reverse_depth" );
+                if( itOption != miscParams->end() )
+                    mReverseDepth = StringConverter::parseBool( itOption->second, true );
+            }
+
             mRealCapabilities = createRenderSystemCapabilities();
             mCurrentCapabilities = mRealCapabilities;
 

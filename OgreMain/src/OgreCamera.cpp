@@ -72,7 +72,6 @@ namespace Ogre {
 
         // Init matrices
         mViewMatrix = Matrix4::ZERO;
-        mProjMatrixRS = Matrix4::ZERO;
 
         mParentNode = 0;
 

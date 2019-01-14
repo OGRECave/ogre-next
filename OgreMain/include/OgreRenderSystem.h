@@ -1028,63 +1028,42 @@ namespace Ogre
         */
         virtual VertexElementType getColourVertexElementType(void) const = 0;
 
+        /** Reverts the compare order e.g. greater_equal becomes less_equal
+            Used by reverse depth
+        @param depthFunc
+        @return
+        */
+        static CompareFunction reverseCompareFunction( CompareFunction depthFunc );
+
+        /** Takes a regular source projection matrix in range [-1; 1] and converts it to a projection
+            matrix in 'dest' with reverse Z range [1; 0]
+
+            _convertProjectionMatrix does the same thing but is more generic. This version
+            assumes a standard projection matrix (i.e. not oblique) to maximize precision
+        @param matrix
+        @param dest
+        @param nearPlane
+        @param farPlane
+        @param projectionType
+        */
+        void _makeRsProjectionMatrix( const Matrix4& matrix,
+                                      Matrix4& dest, Real nearPlane,
+                                      Real farPlane, ProjectionType projectionType );
+
         /** Converts a uniform projection matrix to suitable for this render system.
         @remarks
         Because different APIs have different requirements (some incompatible) for the
         projection matrix, this method allows each to implement their own correctly and pass
         back a generic OGRE matrix for storage in the engine.
         */
-        virtual void _convertProjectionMatrix(const Matrix4& matrix,
-            Matrix4& dest, bool forGpuProgram = false) = 0;
+        virtual void _convertProjectionMatrix( const Matrix4& matrix, Matrix4& dest );
 
         /// OpenGL depth is in range [-1;1] so it returns 2.0f;
         /// D3D11 & Metal are in range [0;1] so it returns 1.0f;
-        virtual Real getRSDepthRange(void) const { return 2.0f; }
-
-        /** Builds a perspective projection matrix suitable for this render system.
-        @remarks
-        Because different APIs have different requirements (some incompatible) for the
-        projection matrix, this method allows each to implement their own correctly and pass
-        back a generic OGRE matrix for storage in the engine.
-        */
-        virtual void _makeProjectionMatrix(const Radian& fovy, Real aspect, Real nearPlane, Real farPlane, 
-            Matrix4& dest, bool forGpuProgram = false) = 0;
-
-        /** Builds a perspective projection matrix for the case when frustum is
-        not centered around camera.
-        @remarks
-        Viewport coordinates are in camera coordinate frame, i.e. camera is 
-        at the origin.
-        */
-        virtual void _makeProjectionMatrix(Real left, Real right, Real bottom, Real top, 
-            Real nearPlane, Real farPlane, Matrix4& dest, bool forGpuProgram = false) = 0;
-        /** Builds an orthographic projection matrix suitable for this render system.
-        @remarks
-        Because different APIs have different requirements (some incompatible) for the
-        projection matrix, this method allows each to implement their own correctly and pass
-        back a generic OGRE matrix for storage in the engine.
-        */
-        virtual void _makeOrthoMatrix(const Radian& fovy, Real aspect, Real nearPlane, Real farPlane, 
-            Matrix4& dest, bool forGpuProgram = false) = 0;
-
-        /** Update a perspective projection matrix to use 'oblique depth projection'.
-        @remarks
-        This method can be used to change the nature of a perspective 
-        transform in order to make the near plane not perpendicular to the 
-        camera view direction, but to be at some different orientation. 
-        This can be useful for performing arbitrary clipping (e.g. to a 
-        reflection plane) which could otherwise only be done using user
-        clip planes, which are more expensive, and not necessarily supported
-        on all cards.
-        @param matrix The existing projection matrix. Note that this must be a
-        perspective transform (not orthographic), and must not have already
-        been altered by this method. The matrix will be altered in-place.
-        @param plane The plane which is to be used as the clipping plane. This
-        plane must be in CAMERA (view) space.
-        @param forGpuProgram Is this for use with a Gpu program or fixed-function
-        */
-        virtual void _applyObliqueDepthProjection(Matrix4& matrix, const Plane& plane, 
-            bool forGpuProgram) = 0;
+        ///
+        /// Note OpenGL may behave like D3D11, and thus we'll return 1.0f too.
+        /// This is decided at runtime, not at compile time.
+        virtual Real getRSDepthRange(void) const { return 1.0f; }
 
         /** This method allows you to set all the stencil buffer parameters in one call.
         @remarks
@@ -1468,6 +1447,8 @@ namespace Ogre
         void setDebugShaders( bool bDebugShaders );
         bool getDebugShaders(void) const                        { return mDebugShaders; }
 
+        bool isReverseDepth(void) const                         { return mReverseDepth; }
+
         virtual const PixelFormatToShaderType* getPixelFormatToShaderType(void) const = 0;
    
     protected:
@@ -1598,7 +1579,7 @@ namespace Ogre
         bool mTexProjRelative;
         Vector3 mTexProjRelativeOrigin;
 
-
+        bool mReverseDepth;
 
     };
     /** @} */

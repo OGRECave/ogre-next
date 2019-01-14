@@ -1061,6 +1061,14 @@ namespace Ogre
         size_t numTargetPasses = 0;
         ResolutionVec atlasResolutions;
 
+        const RenderSystem *renderSystem = compositorManager->getRenderSystem();
+
+        ColourValue clearColour;
+        if( renderSystem->isReverseDepth() || useEsm )
+            clearColour = ColourValue::White;
+        else
+            clearColour = ColourValue( 0.0f, 0.0f, 0.0f, 0.0f );
+
         //Validation and data gathering
         bool hasPointLights = false;
 
@@ -1298,7 +1306,7 @@ namespace Ogre
 
                 CompositorPassDef *passDef = targetDef->addPass( PASS_CLEAR );
                 CompositorPassClearDef *passClear = static_cast<CompositorPassClearDef*>( passDef );
-                passClear->setAllClearColours( ColourValue::White );
+                passClear->setAllClearColours( clearColour );
                 passClear->mClearDepth = 1.0f;
             }
 
@@ -1358,7 +1366,7 @@ namespace Ogre
                             CompositorPassSceneDef *passScene =
                                     static_cast<CompositorPassSceneDef*>( passDef );
                             passScene->setAllLoadActions( LoadAction::Clear );
-                            passScene->setAllClearColours( ColourValue::White );
+                            passScene->setAllClearColours( clearColour );
                             passScene->mClearDepth = 1.0f;
                             passScene->mCameraCubemapReorient = true;
                             passScene->mShadowMapIdx = shadowMapIdx;

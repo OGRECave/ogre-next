@@ -45,16 +45,13 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void ScreenSpaceReflections::update( Ogre::Camera *camera )
     {
-        Ogre::Real projectionA = camera->getFarClipDistance() /
-                                    (camera->getFarClipDistance() - camera->getNearClipDistance());
-        Ogre::Real projectionB = (-camera->getFarClipDistance() * camera->getNearClipDistance()) /
-                                    (camera->getFarClipDistance() - camera->getNearClipDistance());
+        Ogre::Vector2 projectionAB = camera->getProjectionParamsAB();
         for( int i=0; i<2; ++i )
         {
             //The division will keep "linearDepth" in the shader in the [0; 1] range.
-            //projectionB /= camera->getFarClipDistance();
+            //projectionAB.y /= camera->getFarClipDistance();
             mPsParams[0]->setNamedConstant( "projectionParams",
-                                            Ogre::Vector4( projectionA, projectionB, 0, 0 ) );
+                                            Ogre::Vector4( projectionAB.x, projectionAB.y, 0, 0 ) );
         }
 
         Ogre::Matrix4 viewToTextureSpaceMatrix = camera->getProjectionMatrix();
