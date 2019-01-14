@@ -2614,7 +2614,10 @@ namespace Ogre
         depthStencilDesc.DepthWriteMask     =
                 block->macroblock->mDepthWrite ? D3D11_DEPTH_WRITE_MASK_ALL :
                                                   D3D11_DEPTH_WRITE_MASK_ZERO;
-        depthStencilDesc.DepthFunc          = D3D11Mappings::get( block->macroblock->mDepthFunc );
+        CompareFunction depthFunc = block->macroblock->mDepthFunc;
+        if( mReverseDepth )
+            depthFunc = reverseCompareFunction( depthFunc );
+        depthStencilDesc.DepthFunc          = D3D11Mappings::get( depthFunc );
         depthStencilDesc.StencilEnable      = block->pass.stencilParams.enabled;
         depthStencilDesc.StencilReadMask    = block->pass.stencilParams.readMask;
         depthStencilDesc.StencilWriteMask   = block->pass.stencilParams.writeMask;

@@ -49,7 +49,11 @@ struct PS_INPUT
 constexpr sampler shadowSampler = sampler( coord::normalized,
 										   address::clamp_to_edge,
 										   filter::linear,
+										@property( hlms_no_reverse_depth )
 										   compare_func::less_equal );
+										@else
+											compare_func::greater_equal );
+										@end
 
 @insertpiece( DeclOutputType )
 

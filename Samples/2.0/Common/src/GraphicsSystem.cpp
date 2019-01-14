@@ -265,7 +265,7 @@ namespace Demo
         params.insert( std::make_pair("gamma", "true") );
         params.insert( std::make_pair("MSAA", cfgOpts["MSAA"].currentValue) );
         params.insert( std::make_pair("vsync", cfgOpts["VSync"].currentValue) );
-        params.insert( std::make_pair("reverse_depth", "No" ) );
+        params.insert( std::make_pair("reverse_depth", "Yes" ) );
 
         mRenderWindow = Ogre::Root::getSingleton().createRenderWindow( windowTitle, width, height,
                                                                        fullscreen, &params );

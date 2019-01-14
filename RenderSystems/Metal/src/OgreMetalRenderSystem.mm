@@ -1358,6 +1358,8 @@ namespace Ogre
         if( pso->macroblock->mDepthCheck )
         {
             depthState.depthFunc    = pso->macroblock->mDepthFunc;
+            if( mReverseDepth )
+                depthState.depthFunc = reverseCompareFunction( depthState.depthFunc );
             depthState.depthWrite   = pso->macroblock->mDepthWrite;
         }
         else
@@ -1434,6 +1436,8 @@ namespace Ogre
         if( pso->macroblock->mDepthCheck )
         {
             depthState.depthFunc    = pso->macroblock->mDepthFunc;
+            if( mReverseDepth )
+                depthState.depthFunc = reverseCompareFunction( depthState.depthFunc );
             depthState.depthWrite   = pso->macroblock->mDepthWrite;
         }
         else
