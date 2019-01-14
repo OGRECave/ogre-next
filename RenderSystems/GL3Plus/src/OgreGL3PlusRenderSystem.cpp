@@ -2341,6 +2341,21 @@ namespace Ogre {
         }
     }
 
+    void GL3PlusRenderSystem::_makeRsProjectionMatrix( const Matrix4& matrix,
+                                                       Matrix4& dest, Real nearPlane,
+                                                       Real farPlane, ProjectionType projectionType )
+    {
+        if( !mReverseDepth )
+        {
+            // no any conversion request for OpenGL
+            dest = matrix;
+        }
+        else
+        {
+            RenderSystem::_makeRsProjectionMatrix( matrix, dest, nearPlane, farPlane, projectionType );
+        }
+    }
+
     void GL3PlusRenderSystem::_convertProjectionMatrix( const Matrix4& matrix, Matrix4& dest )
     {
         if( !mReverseDepth )

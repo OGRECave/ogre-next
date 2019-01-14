@@ -944,11 +944,11 @@ namespace Ogre {
     {
         dest = matrix;
 
+        Real inv_d = 1 / (farPlane - nearPlane);
+        Real q, qn;
+
         if( mReverseDepth )
         {
-            Real inv_d = 1 / (farPlane - nearPlane);
-            Real q, qn;
-
             if( projectionType == PT_PERSPECTIVE )
             {
                 if( farPlane == 0 )
@@ -1014,10 +1014,41 @@ namespace Ogre {
                     qn  = farPlane * inv_d;
                 }
             }
-
-            dest[2][2] = q;
-            dest[2][3] = qn;
         }
+        else
+        {
+            if( projectionType == PT_PERSPECTIVE )
+            {
+                if( farPlane == 0 )
+                {
+                    // Infinite far plane
+                    q   = Frustum::INFINITE_FAR_PLANE_ADJUST - 1;
+                    qn  = nearPlane * (Frustum::INFINITE_FAR_PLANE_ADJUST - 1);
+                }
+                else
+                {
+                    q   = -farPlane * inv_d;
+                    qn  = -(farPlane * nearPlane) * inv_d;
+                }
+            }
+            else
+            {
+                if( farPlane == 0 )
+                {
+                    // Can not do infinite far plane here, avoid divided zero only
+                    q   = -Frustum::INFINITE_FAR_PLANE_ADJUST / nearPlane;
+                    qn  = -Frustum::INFINITE_FAR_PLANE_ADJUST;
+                }
+                else
+                {
+                    q   = -inv_d;
+                    qn  = -nearPlane * inv_d;
+                }
+            }
+        }
+
+        dest[2][2] = q;
+        dest[2][3] = qn;
     }
     //-----------------------------------------------------------------------
     void RenderSystem::_convertProjectionMatrix( const Matrix4& matrix, Matrix4& dest )
