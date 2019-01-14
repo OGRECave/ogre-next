@@ -8508,10 +8508,12 @@ namespace Ogre{
                         ColourValue clearColour;
                         if( getColour( prop->values.begin(), prop->values.end(), &clearColour ) )
                         {
-#if !OGRE_NO_REVERSE_DEPTH
-                            if( prop->id == ID_CLEAR_COLOUR_REVERSE_DEPTH_AWARE )
-                                clearColour = ColourValue::White - clearColour;
-#endif
+                            const RenderSystem *renderSystem = Root::getSingleton().getRenderSystem();
+                            if( renderSystem->isReverseDepth() )
+                            {
+                                if( prop->id == ID_CLEAR_COLOUR_REVERSE_DEPTH_AWARE )
+                                    clearColour = ColourValue::White - clearColour;
+                            }
                             for( int j=0; j<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++j )
                                 mPassDef->mClearColour[j] = clearColour;
                         }
@@ -8533,13 +8535,16 @@ namespace Ogre{
                             {
                                 mPassDef->mClearColour[colourIdx] = clearColour;
 
-#if !OGRE_NO_REVERSE_DEPTH
-                                if( prop->id == ID_CLEAR_COLOUR_REVERSE_DEPTH_AWARE )
+                                const RenderSystem *renderSystem =
+                                        Root::getSingleton().getRenderSystem();
+                                if( renderSystem->isReverseDepth() )
                                 {
-                                    mPassDef->mClearColour[colourIdx] =
-                                            ColourValue::White - mPassDef->mClearColour[colourIdx];
+                                    if( prop->id == ID_CLEAR_COLOUR_REVERSE_DEPTH_AWARE )
+                                    {
+                                        mPassDef->mClearColour[colourIdx] =
+                                                ColourValue::White - mPassDef->mClearColour[colourIdx];
+                                    }
                                 }
-#endif
                             }
                             else
                             {
@@ -8859,10 +8864,12 @@ namespace Ogre{
                         ColourValue clearColour;
                         if( getColour(prop->values.begin(), prop->values.end(), &clearColour) )
                         {
-#if !OGRE_NO_REVERSE_DEPTH
-                            if( prop->id == ID_CLEAR_COLOUR_REVERSE_DEPTH_AWARE )
-                                clearColour = ColourValue::White - clearColour;
-#endif
+                            const RenderSystem *renderSystem = Root::getSingleton().getRenderSystem();
+                            if( renderSystem->isReverseDepth() )
+                            {
+                                if( prop->id == ID_CLEAR_COLOUR_REVERSE_DEPTH_AWARE )
+                                    clearColour = ColourValue::White - clearColour;
+                            }
                             passClear->setAllClearColours( clearColour );
                         }
                         else

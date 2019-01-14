@@ -114,13 +114,17 @@ namespace Ogre {
 
         Vector2 retVal;
 
-#if OGRE_NO_REVERSE_DEPTH
-        retVal.x = farPlane / (farPlane - nearPlane);                   //projectionA
-        retVal.y = (-farPlane * nearPlane) / (farPlane - nearPlane);    //projectionB
-#else
-        retVal.x = -nearPlane / (farPlane - nearPlane);                 //projectionA
-        retVal.y = (farPlane * nearPlane) / (farPlane - nearPlane);     //projectionB
-#endif
+        const RenderSystem *renderSystem = Root::getSingleton().getRenderSystem();
+        if( !renderSystem->isReverseDepth() )
+        {
+            retVal.x = farPlane / (farPlane - nearPlane);                   //projectionA
+            retVal.y = (-farPlane * nearPlane) / (farPlane - nearPlane);    //projectionB
+        }
+        else
+        {
+            retVal.x = -nearPlane / (farPlane - nearPlane);                 //projectionA
+            retVal.y = (farPlane * nearPlane) / (farPlane - nearPlane);     //projectionB
+        }
 
         return retVal;
     }

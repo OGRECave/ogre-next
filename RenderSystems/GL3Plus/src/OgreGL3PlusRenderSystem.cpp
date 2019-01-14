@@ -167,7 +167,6 @@ namespace Ogre {
         : mBlendChannelMask( HlmsBlendblock::BlendChannelAll ),
           mDepthWrite(true),
           mScissorsEnabled(false),
-          mHasArbClipControl(false),
           mGlobalVao( 0 ),
           mCurrentVertexBuffer( 0 ),
           mCurrentIndexBuffer( 0 ),
@@ -781,6 +780,13 @@ namespace Ogre {
 
         if( !mGLInitialised )
         {
+            if( miscParams )
+            {
+                NameValuePairList::const_iterator itOption = miscParams->find( "reverse_depth" );
+                if( itOption != miscParams->end() )
+                    mReverseDepth = StringConverter::parseBool( itOption->second, true );
+            }
+
             initialiseContext(win);
 
             mDriverVersion = mGLSupport->getGLVersion();
@@ -1739,9 +1745,8 @@ namespace Ogre {
         //
         pso->depthWrite = newBlock->macroblock->mDepthWrite ? GL_TRUE : GL_FALSE;
         CompareFunction depthFunc = newBlock->macroblock->mDepthFunc;
-#if !OGRE_NO_REVERSE_DEPTH
-        depthFunc = reverseCompareFunction( depthFunc );
-#endif
+        if( mReverseDepth )
+            depthFunc = reverseCompareFunction( depthFunc );
         pso->depthFunc  = convertCompareFunction( depthFunc );
 
         switch( newBlock->macroblock->mCullMode )
@@ -2342,7 +2347,7 @@ namespace Ogre {
     {
         RenderSystem::_makeRsProjectionMatrix( matrix, dest, nearPlane, farPlane, projectionType );
 
-        if( !mHasArbClipControl )
+        if( !mReverseDepth )
         {
             //If we're here, GL failed to change the depth clip control,
             //which means GL expects a depth in range [1; -1], but matrix
@@ -2356,31 +2361,20 @@ namespace Ogre {
 
     void GL3PlusRenderSystem::_convertProjectionMatrix( const Matrix4& matrix, Matrix4& dest )
     {
-#if OGRE_NO_REVERSE_DEPTH
-        // no any conversion request for OpenGL
-        dest = matrix;
-#else
-        if( mHasArbClipControl )
+        if( !mReverseDepth )
         {
-            RenderSystem::_convertProjectionMatrix( matrix, dest );
+            // no any conversion request for OpenGL
+            dest = matrix;
         }
         else
         {
-            dest = matrix;
-            //If we're here, GL failed to change the depth clip control,
-            //which means GL expects a depth in range [1; -1], but matrix
-            //is in range [-1; 1]
-            dest[2][0] = -dest[2][0];
-            dest[2][1] = -dest[2][1];
-            dest[2][2] = -dest[2][2];
-            dest[2][3] = -dest[2][3];
+            RenderSystem::_convertProjectionMatrix( matrix, dest );
         }
-#endif
     }
 
     Real GL3PlusRenderSystem::getRSDepthRange(void) const
     {
-        return mHasArbClipControl ? 1.0f : 2.0f;
+        return mReverseDepth ? 1.0f : 2.0f;
     }
 
     HardwareOcclusionQuery* GL3PlusRenderSystem::createHardwareOcclusionQuery(void)
@@ -2393,7 +2387,7 @@ namespace Ogre {
     Real GL3PlusRenderSystem::getMinimumDepthInputValue(void)
     {
         // Range [-1.0f, 1.0f] or range [0.0f; 1.0f]
-        return mHasArbClipControl ? -1.0f : 0.0f;
+        return mReverseDepth ? 0.0f : -1.0f;
     }
 
     Real GL3PlusRenderSystem::getMaximumDepthInputValue(void)
@@ -3274,13 +3268,14 @@ namespace Ogre {
     {
         OGRE_CHECK_GL_ERROR(glDisable(GL_DITHER));
 
-#if !OGRE_NO_REVERSE_DEPTH
         if( mGLSupport->hasMinGLVersion(4, 5) || mGLSupport->checkExtension( "GL_ARB_clip_control" ) )
         {
             OCGE( glClipControl( GL_LOWER_LEFT, GL_ZERO_TO_ONE ) );
-            mHasArbClipControl = true;
         }
-#endif
+        else
+        {
+            mReverseDepth = false;
+        }
 
         // Check for FSAA
         // Enable the extension if it was enabled by the GL3PlusSupport

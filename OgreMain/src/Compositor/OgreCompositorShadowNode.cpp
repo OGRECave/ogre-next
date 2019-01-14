@@ -1061,15 +1061,13 @@ namespace Ogre
         size_t numTargetPasses = 0;
         ResolutionVec atlasResolutions;
 
+        const RenderSystem *renderSystem = compositorManager->getRenderSystem();
+
         ColourValue clearColour;
-#if OGRE_NO_REVERSE_DEPTH
-        clearColour = ColourValue::White;
-#else
-        if( useEsm )
+        if( renderSystem->isReverseDepth() || useEsm )
             clearColour = ColourValue::White;
         else
             clearColour = ColourValue( 0.0f, 0.0f, 0.0f, 0.0f );
-#endif
 
         //Validation and data gathering
         bool hasPointLights = false;

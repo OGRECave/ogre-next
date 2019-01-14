@@ -97,8 +97,6 @@ namespace Ogre {
         /// Store last scissor enable state
         bool mScissorsEnabled;
 
-        bool mHasArbClipControl;
-
         GLfloat mAutoTextureMatrix[16];
 
         bool mUseAutoTextureMatrix;

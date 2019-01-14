@@ -1447,6 +1447,8 @@ namespace Ogre
         void setDebugShaders( bool bDebugShaders );
         bool getDebugShaders(void) const                        { return mDebugShaders; }
 
+        bool isReverseDepth(void) const                         { return mReverseDepth; }
+
         virtual const PixelFormatToShaderType* getPixelFormatToShaderType(void) const = 0;
    
     protected:
@@ -1577,7 +1579,7 @@ namespace Ogre
         bool mTexProjRelative;
         Vector3 mTexProjRelativeOrigin;
 
-
+        bool mReverseDepth;
 
     };
     /** @} */

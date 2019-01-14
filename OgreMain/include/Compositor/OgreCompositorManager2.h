@@ -409,6 +409,8 @@ namespace Ogre
 
         void addListener( CompositorWorkspaceListener *listener );
         void removeListener( CompositorWorkspaceListener *listener );
+
+        RenderSystem* getRenderSystem(void) const;
     };
 
     /** @} */

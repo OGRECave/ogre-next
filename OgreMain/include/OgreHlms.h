@@ -897,8 +897,6 @@ namespace Ogre
         static const IdString AlphaTestShadowCasterOnly;
         static const IdString AlphaBlend;
 
-        //Depth range is 2.0f instead of 1.0f
-        static const IdString DepthRange2;
         //Standard depth range is being used instead of reverse Z.
         static const IdString NoReverseDepth;
 

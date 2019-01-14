@@ -1142,6 +1142,13 @@ namespace Ogre
 			mPrimaryWindow = win;
             //win->getCustomAttribute("D3DDEVICE", &mDevice);
 
+            if( miscParams )
+            {
+                NameValuePairList::const_iterator itOption = miscParams->find( "reverse_depth" );
+                if( itOption != miscParams->end() )
+                    mReverseDepth = StringConverter::parseBool( itOption->second, true );
+            }
+
 			// Create the texture manager for use by others
 			mTextureManager = new D3D11TextureManager(mDevice);
 			// Also create hardware buffer manager

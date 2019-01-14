@@ -1546,20 +1546,15 @@ namespace Ogre {
 
     void GLES2RenderSystem::_convertProjectionMatrix(const Matrix4& matrix, Matrix4& dest)
     {
-#if OGRE_NO_REVERSE_DEPTH
-        // no any conversion request for OpenGL
-        dest = matrix;
-#else
-        dest = matrix;
-        //if( !mHasArbClipControl )
+        if( !mReverseDepth )
         {
-            //If we're here, GL failed to change the depth clip control,
-            //which means GL expects a depth in range [1; -1], but matrix
-            //is in range [1; 0]
-            dest[2][2] = dest[2][2] * 2 - dest[3][2];
-            dest[2][3] = dest[2][3] * 2 - dest[3][3];
+            // no any conversion request for OpenGL
+            dest = matrix;
         }
-#endif
+        else
+        {
+            RenderSystem::_convertProjectionMatrix( matrix, dest );
+        }
     }
 
     //---------------------------------------------------------------------

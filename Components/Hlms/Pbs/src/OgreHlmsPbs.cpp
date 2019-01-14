@@ -309,11 +309,10 @@ namespace Ogre
             samplerblock.mU             = TAM_BORDER;
             samplerblock.mV             = TAM_BORDER;
             samplerblock.mW             = TAM_CLAMP;
-#if OGRE_NO_REVERSE_DEPTH
-            samplerblock.mBorderColour  = maxValBorder;
-#else
-            samplerblock.mBorderColour  = pitchBlackBorder;
-#endif
+            if( !mRenderSystem->isReverseDepth() )
+                samplerblock.mBorderColour  = maxValBorder;
+            else
+                samplerblock.mBorderColour  = pitchBlackBorder;
 
             if( mShaderProfile != "hlsl" )
             {
@@ -331,26 +330,25 @@ namespace Ogre
                 samplerblock.mMagFilter     = FO_LINEAR;
                 samplerblock.mMipFilter     = FO_NONE;
 
-#if !OGRE_NO_REVERSE_DEPTH
                 //ESM uses standard linear Z in range [0; 1], thus we need a different border colour
                 const ColourValue oldValue = samplerblock.mBorderColour;
                 samplerblock.mBorderColour = maxValBorder;
-#endif
+
                 mShadowmapEsmSamplerblock = mHlmsManager->getSamplerblock( samplerblock );
-#if !OGRE_NO_REVERSE_DEPTH
+
                 //Restore border colour
                 samplerblock.mBorderColour = oldValue;
-#endif
             }
 
             samplerblock.mMinFilter     = FO_LINEAR;
             samplerblock.mMagFilter     = FO_LINEAR;
             samplerblock.mMipFilter     = FO_NONE;
             samplerblock.mCompareFunction = CMPF_LESS_EQUAL;
-#if !OGRE_NO_REVERSE_DEPTH
-            samplerblock.mCompareFunction =
-                    RenderSystem::reverseCompareFunction( samplerblock.mCompareFunction );
-#endif
+            if( mRenderSystem->isReverseDepth() )
+            {
+                samplerblock.mCompareFunction =
+                        RenderSystem::reverseCompareFunction( samplerblock.mCompareFunction );
+            }
 
             if( !mShadowmapCmpSamplerblock )
                 mShadowmapCmpSamplerblock = mHlmsManager->getSamplerblock( samplerblock );
@@ -1421,15 +1419,14 @@ namespace Ogre
                 Real fNear, fFar;
                 shadowNode->getMinMaxDepthRange( shadowMapTexIdx, fNear, fFar );
                 const Real depthRange = fFar - fNear;
-#if !OGRE_NO_REVERSE_DEPTH
                 if( shadowLight &&
                     shadowLight->getType() == Light::LT_POINT &&
-                    mShadowFilter != ExponentialShadowMaps )
+                    mShadowFilter != ExponentialShadowMaps &&
+                    mRenderSystem->isReverseDepth() )
                 {
                     *passBufferPtr++ = fFar;
                 }
                 else
-#endif
                 {
                     *passBufferPtr++ = fNear;
                 }

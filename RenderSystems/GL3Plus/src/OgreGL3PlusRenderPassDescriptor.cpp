@@ -552,11 +552,15 @@ namespace Ogre
                 //Enable buffer for writing if it isn't
                 OCGE( glDepthMask( GL_TRUE ) );
             }
-#if OGRE_NO_REVERSE_DEPTH
-            OCGE( glClearDepth( mDepth.clearDepth ) );
-#else
-            OCGE( glClearDepth( Real(1.0f) - mDepth.clearDepth ) );
-#endif
+
+            if( !mRenderSystem->isReverseDepth() )
+            {
+                OCGE( glClearDepth( mDepth.clearDepth ) );
+            }
+            else
+            {
+                OCGE( glClearDepth( Real(1.0f) - mDepth.clearDepth ) );
+            }
         }
 
         if( (entriesToFlush & RenderPassDescriptor::Stencil) &&
