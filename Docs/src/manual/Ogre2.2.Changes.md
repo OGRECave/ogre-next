@@ -705,7 +705,7 @@ must be done either before or afterwards.
 encouraged to skip endRenderPassDescriptor and just call the next
 beginRenderPassDescriptor unless this is the last one for this frame,
 so we can perform certain optimizations in certain APIs.
-Ideally you should only call endRenderPassDescriptor at the end of thoe whole frame.
+Ideally you should only call endRenderPassDescriptor at the end of the whole frame.
 
 Note RenderPassDescriptors have more parameters. For example, you can set which mipmap
 you want to render to, or which slice in an array. You can also render to a 1024x1024 MSAA
