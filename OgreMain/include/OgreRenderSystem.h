@@ -1046,9 +1046,9 @@ namespace Ogre
         @param farPlane
         @param projectionType
         */
-        virtual void _makeRsProjectionMatrix( const Matrix4& matrix,
-                                              Matrix4& dest, Real nearPlane,
-                                              Real farPlane, ProjectionType projectionType );
+        void _makeRsProjectionMatrix( const Matrix4& matrix,
+                                      Matrix4& dest, Real nearPlane,
+                                      Real farPlane, ProjectionType projectionType );
 
         /** Converts a uniform projection matrix to suitable for this render system.
         @remarks

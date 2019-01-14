@@ -411,9 +411,6 @@ namespace Ogre {
             RenderSystem
         */
         void _setDepthBias(float constantBias, float slopeScaleBias);
-        virtual void _makeRsProjectionMatrix( const Matrix4& matrix,
-                                              Matrix4& dest, Real nearPlane,
-                                              Real farPlane, ProjectionType projectionType );
         /** See
             RenderSystem
         */

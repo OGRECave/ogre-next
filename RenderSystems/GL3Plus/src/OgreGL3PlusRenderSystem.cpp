@@ -2341,24 +2341,6 @@ namespace Ogre {
         }
     }
 
-    void GL3PlusRenderSystem::_makeRsProjectionMatrix( const Matrix4& matrix,
-                                                       Matrix4& dest, Real nearPlane,
-                                                       Real farPlane, ProjectionType projectionType )
-    {
-        RenderSystem::_makeRsProjectionMatrix( matrix, dest, nearPlane, farPlane, projectionType );
-
-        if( !mReverseDepth )
-        {
-            //If we're here, GL failed to change the depth clip control,
-            //which means GL expects a depth in range [1; -1], but matrix
-            //is in range [1; 0]
-            dest[2][0] = dest[2][0] * 2 - dest[3][0];
-            dest[2][1] = dest[2][1] * 2 - dest[3][1];
-            dest[2][2] = dest[2][2] * 2 - dest[3][2];
-            dest[2][3] = dest[2][3] * 2 - dest[3][3];
-        }
-    }
-
     void GL3PlusRenderSystem::_convertProjectionMatrix( const Matrix4& matrix, Matrix4& dest )
     {
         if( !mReverseDepth )
@@ -3268,7 +3250,8 @@ namespace Ogre {
     {
         OGRE_CHECK_GL_ERROR(glDisable(GL_DITHER));
 
-        if( mGLSupport->hasMinGLVersion(4, 5) || mGLSupport->checkExtension( "GL_ARB_clip_control" ) )
+        if( mReverseDepth &&
+            (mGLSupport->hasMinGLVersion(4, 5) || mGLSupport->checkExtension( "GL_ARB_clip_control" )) )
         {
             OCGE( glClipControl( GL_LOWER_LEFT, GL_ZERO_TO_ONE ) );
         }
