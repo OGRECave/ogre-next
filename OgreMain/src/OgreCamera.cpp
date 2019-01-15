@@ -371,7 +371,8 @@ namespace Ogre {
         mSceneMgr->_setLightCullingVisibility( this, collectLights, isCubemap );
     }
     //-----------------------------------------------------------------------
-    void Camera::_cullScenePhase01( const Camera *lodCamera, Viewport *vp, uint8 firstRq, uint8 lastRq,
+    void Camera::_cullScenePhase01( Camera *renderCamera, const Camera *lodCamera,
+                                    Viewport *vp, uint8 firstRq, uint8 lastRq,
                                     bool reuseCullData )
     {
         OgreProfileBeginGPUEvent("Camera: " + getName());
@@ -394,7 +395,7 @@ namespace Ogre {
         }
 
         //render scene
-        mSceneMgr->_cullPhase01( this, lodCamera, vp, firstRq, lastRq, reuseCullData );
+        mSceneMgr->_cullPhase01( this, renderCamera, lodCamera, vp, firstRq, lastRq, reuseCullData );
     }
     //-----------------------------------------------------------------------
     void Camera::_renderScenePhase02(const Camera *lodCamera, Viewport *vp,

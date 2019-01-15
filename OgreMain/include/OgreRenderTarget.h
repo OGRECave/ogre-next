@@ -386,8 +386,9 @@ namespace Ogre {
         */
         virtual void _beginUpdate();
 
-        void _updateViewportCullPhase01(Viewport* viewport, Camera *camera, const Camera *lodCamera,
-                                        uint8 firstRq, uint8 lastRq );
+        void _updateViewportCullPhase01( Viewport* viewport, Camera *renderCamera,
+                                         Camera *cullCamera, const Camera *lodCamera,
+                                         uint8 firstRq, uint8 lastRq );
 
         /** Method for manual management of rendering - renders the given viewport (even if it is not autoupdated)
         @remarks

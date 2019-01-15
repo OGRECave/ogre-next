@@ -1132,7 +1132,8 @@ bool SceneManager::_collectForwardPlusObjects( const Camera *camera )
     return retVal;
 }
 //-----------------------------------------------------------------------
-void SceneManager::_cullPhase01( Camera* camera, const Camera *lodCamera, Viewport* vp,
+void SceneManager::_cullPhase01( Camera *cullCamera, Camera *renderCamera,
+                                 const Camera *lodCamera, Viewport* vp,
                                  uint8 firstRq, uint8 lastRq, bool reuseCullData )
 {
     OgreProfileGroup( "Frustum Culling", OGREPROF_CULLING );
@@ -1141,7 +1142,7 @@ void SceneManager::_cullPhase01( Camera* camera, const Camera *lodCamera, Viewpo
     mAutoParamDataSource->setCurrentSceneManager(this);
 
     setViewport( vp );
-    mCameraInProgress = camera;
+    mCameraInProgress = renderCamera;
 
     if( !reuseCullData )
     {
@@ -1157,7 +1158,7 @@ void SceneManager::_cullPhase01( Camera* camera, const Camera *lodCamera, Viewpo
         mRenderQueue->clear();
 
         // Invert vertex winding?
-        if( camera->isReflected() )
+        if( cullCamera->isReflected() )
             mDestRenderSystem->setInvertVertexWinding(true);
         else
             mDestRenderSystem->setInvertVertexWinding(false);
@@ -1171,7 +1172,7 @@ void SceneManager::_cullPhase01( Camera* camera, const Camera *lodCamera, Viewpo
         }
 
         if( mIlluminationStage != IRS_RENDER_TO_TEXTURE && mForwardPlusImpl )
-            mForwardPlusImpl->collectLights( camera );
+            mForwardPlusImpl->collectLights( cullCamera );
 
         mRenderQueue->renderPassPrepare( mIlluminationStage == IRS_RENDER_TO_TEXTURE, false );
 
@@ -1198,11 +1199,11 @@ void SceneManager::_cullPhase01( Camera* camera, const Camera *lodCamera, Viewpo
                 realLastRq = std::min(realLastRq, std::max(realFirstRq, lastRq));
             }
 
-            camera->_setRenderedRqs( realFirstRq, realLastRq );
+            cullCamera->_setRenderedRqs( realFirstRq, realLastRq );
 
             CullFrustumRequest cullRequest( realFirstRq, realLastRq,
                                             mIlluminationStage == IRS_RENDER_TO_TEXTURE, true, false,
-                                            &mEntitiesMemoryManagerCulledList, camera, lodCamera );
+                                            &mEntitiesMemoryManagerCulledList, cullCamera, lodCamera );
             fireCullFrustumThreads( cullRequest );
         }
     } // end lock on scene graph mutex
@@ -1217,7 +1218,7 @@ void SceneManager::_cullPhase01( Camera* camera, const Camera *lodCamera, Viewpo
         }
 
         if( mIlluminationStage != IRS_RENDER_TO_TEXTURE && mForwardPlusImpl )
-            mForwardPlusImpl->collectLights( camera );
+            mForwardPlusImpl->collectLights( cullCamera );
 
         mRenderQueue->renderPassPrepare( mIlluminationStage == IRS_RENDER_TO_TEXTURE, false );
     }

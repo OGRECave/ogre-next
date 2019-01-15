@@ -203,7 +203,7 @@ namespace Ogre
                                        mPrePassDepthTexture, mSsrTexture );
         sceneManager->_setCurrentCompositorPass( this );
 
-        viewport->_updateCullPhase01( mCullCamera, usedLodCamera,
+        viewport->_updateCullPhase01( mCamera, mCullCamera, usedLodCamera,
                                       mDefinition->mFirstRQ, mDefinition->mLastRQ,
                                       mDefinition->mReuseCullData );
 
