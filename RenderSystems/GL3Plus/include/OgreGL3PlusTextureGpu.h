@@ -99,9 +99,29 @@ namespace Ogre
         virtual void _setToDisplayDummyTexture(void);
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
 
+        /// Returns the GLuid of the texture that is being displayed. While the texture is
+        /// being loaded (i.e. data is not ready), we will display a dummy white texture.
+        /// Once notifyDataIsReady, getDisplayTextureName should be the same as
+        /// getFinalTextureName. In other words, getDisplayTextureName may change its
+        /// returned value based on the texture's status
         GLuint getDisplayTextureName(void) const    { return mDisplayTextureName; }
+
+        /// Always returns the internal handle that belongs to this texture.
+        /// Note that for TextureFlags::AutomaticBatching textures, this will be the
+        /// handle of a 2D Array texture pool.
+        ///
+        /// If the texture has MSAA enabled, this returns the handle to the resolve
+        /// texture, not the MSAA one.
+        ///
+        /// If TextureFlags::MsaaExplicitResolve is set, it returns the handle
+        /// to the MSAA texture, since there is no resolve texture.
         GLuint getFinalTextureName(void) const      { return mFinalTextureName; }
 
+        /// If MSAA > 1u and TextureFlags::MsaaExplicitResolve is not set, this
+        /// returns the handle to the temporary MSAA renderbuffer used for rendering,
+        /// which will later be resolved into the resolve texture.
+        ///
+        /// Otherwise it returns null.
         GLuint getMsaaFramebufferName(void) const   { return mMsaaFramebufferName; }
 
         /// Returns GL_TEXTURE_2D / GL_TEXTURE_2D_ARRAY / etc
