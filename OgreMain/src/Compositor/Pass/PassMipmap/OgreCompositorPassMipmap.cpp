@@ -202,6 +202,8 @@ namespace Ogre
                 tmpTex->setResolution( texture->getWidth() >> 1u, texture->getHeight(),
                                        texture->getDepth() );
                 tmpTex->setPixelFormat( texture->getPixelFormat() );
+                tmpTex->setNumMipmaps( texture->getNumMipmaps() );
+
                 tmpTex->_transitionTo( GpuResidency::Resident, (uint8*)0 );
 
                 const uint8 numMips = texture->getNumMipmaps();
