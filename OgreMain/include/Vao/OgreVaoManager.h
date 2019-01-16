@@ -184,6 +184,9 @@ namespace Ogre
             fragmented.
 
             The actual output may vary depending on the RenderSystem.
+        @remarks
+            Worst case scenario this function has O(N^2) complexity where N
+            is the number of free blocks.
         @param outStats
             Detailed information about each entry.
         @param outCapacityBytes
