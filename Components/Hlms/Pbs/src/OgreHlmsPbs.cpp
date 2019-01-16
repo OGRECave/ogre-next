@@ -1150,7 +1150,7 @@ namespace Ogre
             mHasPlanarReflections = false;
             mLastBoundPlanarReflection = 0u;
             if( mPlanarReflections &&
-                mPlanarReflections->cameraMatches( sceneManager->getCameraInProgress() ) )
+                mPlanarReflections->cameraMatches( sceneManager->getCamerasInProgress().renderingCamera ) )
             {
                 mHasPlanarReflections = true;
                 setProperty( PbsProperty::HasPlanarReflections,
@@ -1975,7 +1975,7 @@ namespace Ogre
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
             if( mHasPlanarReflections )
             {
-                mPlanarReflections->fillConstBufferData( renderTarget, camera,
+                mPlanarReflections->fillConstBufferData( renderTarget, cameras.renderingCamera,
                                                          projectionMatrix, passBufferPtr );
                 passBufferPtr += mPlanarReflections->getConstBufferSize() >> 2u;
             }
