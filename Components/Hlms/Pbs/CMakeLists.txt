@@ -45,6 +45,13 @@ endif()
 ogre_config_framework(OgreHlmsPbs)
 ogre_config_component(OgreHlmsPbs)
 
-install(FILES ${HEADER_FILES}
-  DESTINATION include/OGRE/Hlms/Pbs
-)
+install (DIRECTORY include/
+        DESTINATION include/OGRE/Hlms/Pbs
+        FILES_MATCHING PATTERN "*.h"
+        )
+
+# also install HLMS Common folder
+install (DIRECTORY ../Common/include/
+        DESTINATION include/OGRE/Hlms/Common
+        FILES_MATCHING PATTERN "*.h"
+        )
