@@ -2886,7 +2886,7 @@ namespace Ogre
                          (renderPassDesc->getNumColourEntries() > 0) ? 0 : 1 );
         }
 
-        Camera *camera = sceneManager->getCameraInProgress();
+        const Camera *camera = sceneManager->getCamerasInProgress().renderingCamera;
         if( camera && camera->isReflected() )
         {
             setProperty( HlmsBaseProp::PsoClipDistances, 1 );

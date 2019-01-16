@@ -175,9 +175,9 @@ namespace Ogre
         bool isCacheDirty( const Camera *camera ) const;
 
         /// Cache the return value as internally we perform an O(N) search
-        TexBufferPacked* getGridBuffer( Camera *camera ) const;
+        TexBufferPacked* getGridBuffer( const Camera *camera ) const;
         /// Cache the return value as internally we perform an O(N) search
-        TexBufferPacked* getGlobalLightListBuffer( Camera *camera ) const;
+        TexBufferPacked* getGlobalLightListBuffer( const Camera *camera ) const;
 
         /// Returns the amount of bytes that fillConstBufferData is going to fill.
         virtual size_t getConstBufferSize(void) const = 0;

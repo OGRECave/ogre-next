@@ -105,7 +105,7 @@ mForwardPlusImpl( 0 ),
 mDecalsDiffuseTex( 0 ),
 mDecalsNormalsTex( 0 ),
 mDecalsEmissiveTex( 0 ),
-mCameraInProgress(0),
+mCamerasInProgress(0),
 mCurrentViewport(0),
 mCurrentPass(0),
 mCurrentShadowNode(0),
@@ -1142,7 +1142,7 @@ void SceneManager::_cullPhase01( Camera *cullCamera, Camera *renderCamera,
     mAutoParamDataSource->setCurrentSceneManager(this);
 
     setViewport( vp );
-    mCameraInProgress = renderCamera;
+    mCamerasInProgress = CamerasInProgress(renderCamera,cullCamera, lodCamera);
 
     if( !reuseCullData )
     {
@@ -1242,7 +1242,8 @@ void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera, Viewp
         // Lock scene graph mutex, no more changes until we're ready to render
         OGRE_LOCK_MUTEX(sceneGraphMutex);
 
-        mCameraInProgress = camera;
+        mCamerasInProgress.renderingCamera = camera;
+        mCamerasInProgress.lodCamera = lodCamera;
 
         setViewport( vp );
 
@@ -1323,7 +1324,7 @@ void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera, Viewp
     // Set initial camera state
     mDestRenderSystem->_setProjectionMatrix( Matrix4::IDENTITY );
 
-    mCachedViewMatrix = mCameraInProgress->getViewMatrix(true);
+    mCachedViewMatrix = mCamerasInProgress.renderingCamera->getViewMatrix(true);
 
     setViewMatrix(mCachedViewMatrix);
 
@@ -3130,7 +3131,7 @@ void SceneManager::renderSingleObject(Renderable* rend, const Pass* pass,
                         continue;
 
                     if (pass->getLightScissoringEnabled())
-                        scissored = buildAndSetScissor(*pLightListToUse, mCameraInProgress);
+                        scissored = buildAndSetScissor(*pLightListToUse, mCamerasInProgress.renderingCamera);
                 
                     if (pass->getLightClipPlanesEnabled())
                         clipped = buildAndSetLightClip(*pLightListToUse);
@@ -3226,7 +3227,7 @@ void SceneManager::renderSingleObject(Renderable* rend, const Pass* pass,
                 ClipResult clipped = CLIPPED_NONE;
                 if (lightScissoringClipping && pass->getLightScissoringEnabled())
                 {
-                    scissored = buildAndSetScissor( *lightList, mCameraInProgress );
+                    scissored = buildAndSetScissor( *lightList, mCamerasInProgress.renderingCamera );
                 }
                 if (lightScissoringClipping && pass->getLightClipPlanesEnabled())
                 {
@@ -4452,7 +4453,7 @@ SceneManager::RenderContext* SceneManager::_pauseRendering()
     RenderContext* context = new RenderContext;
     context->renderQueue = mRenderQueue;
     context->viewport = mCurrentViewport;
-    context->camera = mCameraInProgress;
+    context->camerasInProgress = mCamerasInProgress;
 
     context->rsContext = mDestRenderSystem->_pauseFrame();
     mRenderQueue = 0;
@@ -4464,7 +4465,7 @@ void SceneManager::_resumeRendering(SceneManager::RenderContext* context)
     delete mRenderQueue;
     mRenderQueue = context->renderQueue;
     Ogre::Viewport* vp = context->viewport;
-    Ogre::Camera* camera = context->camera;
+    const Ogre::Camera* camera = context->camerasInProgress.renderingCamera;
 
     // Tell params about viewport
     setViewport(vp);
@@ -4486,13 +4487,13 @@ void SceneManager::_resumeRendering(SceneManager::RenderContext* context)
             mDestRenderSystem->setClipPlanes(camera->getWindowPlanes());
         }
     }
-    mCameraInProgress = context->camera;
+    mCamerasInProgress = context->camerasInProgress;
     mDestRenderSystem->_resumeFrame(context->rsContext);
 
     // Set initial camera state
     mDestRenderSystem->_setProjectionMatrix( Matrix4::IDENTITY );
     
-    mCachedViewMatrix = mCameraInProgress->getViewMatrix(true);
+    mCachedViewMatrix = mCamerasInProgress.renderingCamera->getViewMatrix(true);
 
     setViewMatrix(mCachedViewMatrix);
     delete context;

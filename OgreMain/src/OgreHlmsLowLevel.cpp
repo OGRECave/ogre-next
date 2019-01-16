@@ -191,7 +191,7 @@ namespace Ogre
         retVal.hash += 1;
 
         //TODO: Update auto params here
-        Camera *camera = sceneManager->getCameraInProgress();
+        const Camera *camera = sceneManager->getCamerasInProgress().renderingCamera;
         mAutoParamDataSource->setCurrentCamera( camera );
         mAutoParamDataSource->setCurrentSceneManager( sceneManager );
         mAutoParamDataSource->setCurrentShadowNode( shadowNode );

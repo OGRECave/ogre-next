@@ -740,11 +740,14 @@ namespace v1 {
     {
         // Retrieve the current viewport from the scene manager.
         // The viewport is only valid during a viewport update.
-        Camera *cameraInProgress = sm->getCameraInProgress();
+        const Camera *cameraInProgress = sm->getCamerasInProgress().renderingCamera;
         if( !cameraInProgress )
             return false;
 
-        updateVertexBuffer( cameraInProgress );
+        // Used const cast here as function takes non-const camera but probably should take a const version
+        // however this is a virtual function on legacy code, so changing the signature in a subtle way may
+        // cause a lot of grief for someone
+        updateVertexBuffer( const_cast<Camera*>(cameraInProgress) );
         return true;
     }
     //-----------------------------------------------------------------------
