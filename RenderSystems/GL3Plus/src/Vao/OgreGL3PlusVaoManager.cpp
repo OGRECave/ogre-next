@@ -47,7 +47,7 @@ THE SOFTWARE.
 
 #include "OgreTimer.h"
 #include "OgreStringConverter.h"
-
+#include "OgreLwString.h"
 
 namespace Ogre
 {
@@ -213,6 +213,72 @@ namespace Ogre
             OCGE( glDeleteSync( *itor ) );
             ++itor;
         }
+    }
+    //-----------------------------------------------------------------------------------
+    void GL3PlusVaoManager::getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
+                                            size_t &outFreeBytes, Log *log ) const
+    {
+        size_t capacityBytes = 0;
+        size_t freeBytes = 0;
+        MemoryStatsEntryVec statsVec;
+        statsVec.swap( outStats );
+
+        vector<char>::type tmpBuffer;
+        tmpBuffer.resize( 512 * 1024 ); //512kb per line should be way more than enough
+        LwString text( LwString::FromEmptyPointer( &tmpBuffer[0], tmpBuffer.size() ) );
+
+        if( log )
+            log->logMessage( "Pool Type;Pool Idx;Offset;Bytes;Pool Capacity", LML_CRITICAL );
+
+        static const char *vboTypes[] =
+        {
+            "CPU_INACCESSIBLE",
+            "CPU_ACCESSIBLE_DEFAULT",
+            "CPU_ACCESSIBLE_PERSISTENT",
+            "CPU_ACCESSIBLE_PERSISTENT_COHERENT",
+        };
+
+        for( int vboIdx=0; vboIdx<MAX_VBO_FLAG; ++vboIdx )
+        {
+            VboVec::const_iterator itor = mVbos[vboIdx].begin();
+            VboVec::const_iterator end  = mVbos[vboIdx].end();
+
+            while( itor != end )
+            {
+                const Vbo &vbo = *itor;
+                capacityBytes += vbo.sizeBytes;
+
+                BlockVec::const_iterator itBlock = vbo.freeBlocks.begin();
+                BlockVec::const_iterator enBlock = vbo.freeBlocks.end();
+
+                while( itBlock != enBlock )
+                {
+                    const size_t poolIdx = itBlock - vbo.freeBlocks.begin();
+                    if( log )
+                    {
+                        text.clear();
+                        text.a( vboTypes[vboIdx], ";", (uint64)poolIdx, ";" );
+                        text.a( (uint64)itBlock->offset, ";",
+                                (uint64)itBlock->size, ";",
+                                (uint64)vbo.sizeBytes );
+                        log->logMessage( text.c_str(), LML_CRITICAL );
+                    }
+
+                    MemoryStatsEntry entry( (uint32)vboIdx, (uint32)poolIdx,
+                                            itBlock->offset, itBlock->size, vbo.sizeBytes );
+                    statsVec.push_back( entry );
+
+                    freeBytes += itBlock->size;
+                    ++itBlock;
+                }
+
+                ++itor;
+            }
+        }
+
+        outCapacityBytes = capacityBytes;
+        outFreeBytes = freeBytes;
+        statsVec.swap( outStats );
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusVaoManager::allocateVbo( size_t sizeBytes, size_t alignment, BufferType bufferType,

@@ -74,6 +74,13 @@ namespace Ogre
         deleteAllBuffers();
     }
     //-----------------------------------------------------------------------------------
+    void NULLVaoManager::getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
+                                         size_t &outFreeBytes, Log *log ) const
+    {
+        outCapacityBytes = 0;
+        outFreeBytes = 0;
+    }
+    //-----------------------------------------------------------------------------------
     VertexBufferPacked* NULLVaoManager::createVertexBufferImpl( size_t numElements,
                                                                    uint32 bytesPerElement,
                                                                    BufferType bufferType,

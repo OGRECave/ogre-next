@@ -50,6 +50,7 @@ THE SOFTWARE.
 
 #include "OgreTimer.h"
 #include "OgreStringConverter.h"
+#include "OgreLwString.h"
 #include "OgreLogManager.h"
 #include "OgreProfiler.h"
 
@@ -163,6 +164,88 @@ namespace Ogre
                 (*itor)->Release();
             ++itor;
         }
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11VaoManager::getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
+                                          size_t &outFreeBytes, Log *log ) const
+    {
+        size_t capacityBytes = 0;
+        size_t freeBytes = 0;
+        MemoryStatsEntryVec statsVec;
+        statsVec.swap( outStats );
+
+        vector<char>::type tmpBuffer;
+        tmpBuffer.resize( 512 * 1024 ); //512kb per line should be way more than enough
+        LwString text( LwString::FromEmptyPointer( &tmpBuffer[0], tmpBuffer.size() ) );
+
+        if( log )
+            log->logMessage( "Pool Type;Pool Idx0;Pool Idx1;Offset;Bytes;Pool Capacity", LML_CRITICAL );
+
+        static const char *vboTypes[][] =
+        {
+            {
+                "VERTEX IMMUTABLE",
+                "VERTEX DEFAULT",
+                "VERTEX DYNAMIC",
+            },
+            {
+                "INDEX IMMUTABLE",
+                "INDEX DEFAULT",
+                "INDEX DYNAMIC",
+            },
+            {
+                "SHADER IMMUTABLE",
+                "SHADER DEFAULT",
+                "SHADER DYNAMIC",
+            }
+        };
+
+        for( uint32 idx0=0; idx0<NumInternalBufferTypes; ++idx0 )
+        {
+            for( uint32 idx1=0; idx1<BT_DYNAMIC_DEFAULT+1; ++idx1 )
+            {
+                const uint32 vboIdx = (idx0 << 16u) | (idx1 & 0xFFFF);
+
+                VboVec::const_iterator itor = mVbos[idx0][idx1].begin();
+                VboVec::const_iterator end  = mVbos[idx0][idx1].end();
+
+                while( itor != end )
+                {
+                    const Vbo &vbo = *itor;
+                    capacityBytes += vbo.sizeBytes;
+
+                    BlockVec::const_iterator itBlock = vbo.freeBlocks.begin();
+                    BlockVec::const_iterator enBlock = vbo.freeBlocks.end();
+
+                    while( itBlock != enBlock )
+                    {
+                        const size_t poolIdx = itBlock - vbo.freeBlocks.begin();
+                        if( log )
+                        {
+                            text.clear();
+                            text.a( vboTypes[idx0][idx1], ";", idx0, ";", idx1, ";" );
+                            text.a( (uint64)itBlock->offset, ";",
+                                    (uint64)itBlock->size, ";",
+                                    (uint64)vbo.sizeBytes );
+                            log->logMessage( text.c_str(), LML_CRITICAL );
+                        }
+
+                        MemoryStatsEntry entry( (uint8)vboIdx, (uint32)poolIdx,
+                                                itBlock->offset, itBlock->size, vbo.sizeBytes );
+                        statsVec.push_back( entry );
+
+                        freeBytes += itBlock->size;
+                        ++itBlock;
+                    }
+
+                    ++itor;
+                }
+            }
+        }
+
+        outCapacityBytes = capacityBytes;
+        outFreeBytes = freeBytes;
+        statsVec.swap( outStats );
     }
     //-----------------------------------------------------------------------------------
     void D3D11VaoManager::allocateVbo( size_t sizeBytes, size_t alignment, BufferType bufferType,

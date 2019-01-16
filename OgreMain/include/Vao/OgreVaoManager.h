@@ -157,6 +157,35 @@ namespace Ogre
         VaoManager();
         virtual ~VaoManager();
 
+        struct _OgreExport MemoryStatsEntry
+        {
+            uint32 poolType;
+            uint32 poolIdx;
+            size_t offset;
+            size_t sizeBytes;
+            size_t poolCapacity; /// This value is the same for all entries with same poolType & poolIdx
+
+            MemoryStatsEntry( uint32 _poolType, uint32 _poolIdx, size_t _offset,
+                              size_t _sizeBytes, size_t _poolCapacity ) :
+                poolType( _poolType ), poolIdx( _poolIdx ), offset( _offset ),
+                sizeBytes( _sizeBytes ), poolCapacity( _poolCapacity ) {}
+        };
+
+        typedef vector<MemoryStatsEntry>::type MemoryStatsEntryVec;
+
+        /** Retrieves memory stats about our GPU pools being managed.
+        @param outStats
+            Detailed information about each entry.
+        @param outCapacityBytes
+            Total capacity i.e. total used VRAM in GPU.
+        @param outFreeBytes
+            Total free memory available for consumption.
+        @param log
+            Optional to dump all information to a CSV file. Nullptr to avoid dumping.
+        */
+        virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
+                                     size_t &outFreeBytes, Log *log ) const = 0;
+
         /// Returns the size of a single vertex buffer source with the given declaration, in bytes
         static uint32 calculateVertexSize( const VertexElement2Vec &vertexElements );
 

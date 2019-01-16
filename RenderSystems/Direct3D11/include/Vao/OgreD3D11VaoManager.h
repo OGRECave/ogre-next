@@ -269,6 +269,9 @@ namespace Ogre
                          D3D11RenderSystem *renderSystem );
         virtual ~D3D11VaoManager();
 
+        virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
+                                     size_t &outFreeBytes, Log *log ) const;
+
         D3D11RenderSystem* getD3D11RenderSystem(void) const             { return mD3D11RenderSystem; }
         D3D11Device& getDevice(void) const                              { return mDevice; }
 

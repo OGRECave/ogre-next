@@ -251,6 +251,9 @@ namespace Ogre
                            bool supportsSsbo );
         virtual ~GL3PlusVaoManager();
 
+        virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
+                                     size_t &outFreeBytes, Log *log ) const;
+
         /// Binds the Draw ID to the currently bound vertex array object.
         void bindDrawId(void);
 

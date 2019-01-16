@@ -182,6 +182,9 @@ namespace Ogre
         NULLVaoManager();
         virtual ~NULLVaoManager();
 
+        virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
+                                     size_t &outFreeBytes, Log *log ) const;
+
         bool supportsArbBufferStorage(void) const       { return false; }
 
         /** Creates a new staging buffer and adds it to the pool. @see getStagingBuffer.
