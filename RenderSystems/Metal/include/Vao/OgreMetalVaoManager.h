@@ -249,9 +249,16 @@ namespace Ogre
 
         static VboFlag bufferTypeToVboFlag( BufferType bufferType );
 
+        inline void getMemoryStats( const Block &block,
+                                    size_t vboIdx, size_t poolCapacity, LwString &text,
+                                    MemoryStatsEntryVec &outStats, Log *log ) const;
+
     public:
         MetalVaoManager( uint8 dynamicBufferMultiplier, MetalDevice *device );
         virtual ~MetalVaoManager();
+
+        virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
+                                     size_t &outFreeBytes, Log *log ) const;
 
         /// Binds the Draw ID to the current RenderEncoder. (Assumed to be active!)
         void bindDrawId(void);

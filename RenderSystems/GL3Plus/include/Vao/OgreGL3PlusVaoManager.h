@@ -245,11 +245,18 @@ namespace Ogre
 
         static VboFlag bufferTypeToVboFlag( BufferType bufferType );
 
+        inline void getMemoryStats( const Block &block,
+                                    size_t vboIdx, size_t poolCapacity, LwString &text,
+                                    MemoryStatsEntryVec &outStats, Log *log ) const;
+
     public:
         GL3PlusVaoManager( bool supportsArbBufferStorage, bool emulateTexBuffers,
                            bool supportsIndirectBuffers, bool _supportsBaseInstance,
                            bool supportsSsbo );
         virtual ~GL3PlusVaoManager();
+
+        virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
+                                     size_t &outFreeBytes, Log *log ) const;
 
         /// Binds the Draw ID to the currently bound vertex array object.
         void bindDrawId(void);

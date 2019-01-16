@@ -1573,6 +1573,7 @@ namespace Ogre
         if (mFeatureLevel >= D3D_FEATURE_LEVEL_11_0)
         {
             rsc->addShaderProfile("cs_5_0");
+            rsc->setCapability(RSC_COMPUTE_PROGRAM);
         }
 
         // TODO: constant buffers have no limits but lower models do

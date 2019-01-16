@@ -47,7 +47,7 @@ THE SOFTWARE.
 
 #include "OgreTimer.h"
 #include "OgreStringConverter.h"
-
+#include "OgreLwString.h"
 
 namespace Ogre
 {
@@ -213,6 +213,105 @@ namespace Ogre
             OCGE( glDeleteSync( *itor ) );
             ++itor;
         }
+    }
+    //-----------------------------------------------------------------------------------
+    void GL3PlusVaoManager::getMemoryStats( const Block &block, size_t vboIdx, size_t poolCapacity,
+                                            LwString &text, MemoryStatsEntryVec &outStats,
+                                            Log *log ) const
+    {
+        if( log )
+        {
+            static const char *vboTypes[] =
+            {
+                "CPU_INACCESSIBLE",
+                "CPU_ACCESSIBLE_DEFAULT",
+                "CPU_ACCESSIBLE_PERSISTENT",
+                "CPU_ACCESSIBLE_PERSISTENT_COHERENT",
+            };
+
+            text.clear();
+            text.a( vboTypes[vboIdx], ";",
+                    (uint64)block.offset, ";",
+                    (uint64)block.size, ";",
+                    (uint64)poolCapacity );
+            log->logMessage( text.c_str(), LML_CRITICAL );
+        }
+
+        MemoryStatsEntry entry( (uint32)vboIdx, block.offset, block.size, poolCapacity );
+        outStats.push_back( entry );
+    }
+    //-----------------------------------------------------------------------------------
+    void GL3PlusVaoManager::getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
+                                            size_t &outFreeBytes, Log *log ) const
+    {
+        size_t capacityBytes = 0;
+        size_t freeBytes = 0;
+        MemoryStatsEntryVec statsVec;
+        statsVec.swap( outStats );
+
+        vector<char>::type tmpBuffer;
+        tmpBuffer.resize( 512 * 1024 ); //512kb per line should be way more than enough
+        LwString text( LwString::FromEmptyPointer( &tmpBuffer[0], tmpBuffer.size() ) );
+
+        if( log )
+            log->logMessage( "Pool Type;Offset;Size Bytes;Pool Capacity", LML_CRITICAL );
+
+        for( int vboIdx=0; vboIdx<MAX_VBO_FLAG; ++vboIdx )
+        {
+            VboVec::const_iterator itor = mVbos[vboIdx].begin();
+            VboVec::const_iterator end  = mVbos[vboIdx].end();
+
+            while( itor != end )
+            {
+                const Vbo &vbo = *itor;
+                capacityBytes += vbo.sizeBytes;
+
+                Block usedBlock( 0, 0 );
+
+                BlockVec freeBlocks = vbo.freeBlocks;
+                while( !freeBlocks.empty() )
+                {
+                    //Find the free block that comes next
+                    BlockVec::iterator nextBlock;
+                    {
+                        BlockVec::iterator itBlock = freeBlocks.begin();
+                        BlockVec::iterator enBlock = freeBlocks.end();
+
+                        nextBlock = itBlock;
+
+                        while( itBlock != enBlock )
+                        {
+                            if( nextBlock->offset < itBlock->offset )
+                                nextBlock = itBlock;
+                            ++itBlock;
+                        }
+                    }
+
+                    freeBytes += nextBlock->size;
+                    usedBlock.size = nextBlock->offset;
+
+                    //usedBlock.size could be 0 if:
+                    //  1. All of memory is free
+                    //  2. There's two contiguous free blocks, which should not happen
+                    //     due to mergeContiguousBlocks
+                    if( usedBlock.size > 0u )
+                        getMemoryStats( usedBlock, vboIdx, vbo.sizeBytes, text, statsVec, log );
+
+                    usedBlock.offset += usedBlock.size;
+                    usedBlock.size = 0;
+                    efficientVectorRemove( freeBlocks, nextBlock );
+                }
+
+                if( usedBlock.size > 0u || (usedBlock.offset == 0 && usedBlock.size == 0) )
+                    getMemoryStats( usedBlock, vboIdx, vbo.sizeBytes, text, statsVec, log );
+
+                ++itor;
+            }
+        }
+
+        outCapacityBytes = capacityBytes;
+        outFreeBytes = freeBytes;
+        statsVec.swap( outStats );
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusVaoManager::allocateVbo( size_t sizeBytes, size_t alignment, BufferType bufferType,
