@@ -249,6 +249,10 @@ namespace Ogre
 
         static VboFlag bufferTypeToVboFlag( BufferType bufferType );
 
+        inline void getMemoryStats( const Block &block,
+                                    size_t vboIdx, size_t poolCapacity, LwString &text,
+                                    MemoryStatsEntryVec &outStats, Log *log ) const;
+
     public:
         MetalVaoManager( uint8 dynamicBufferMultiplier, MetalDevice *device );
         virtual ~MetalVaoManager();

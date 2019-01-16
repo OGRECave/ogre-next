@@ -166,6 +166,45 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void D3D11VaoManager::getMemoryStats( const Block &block, uint32 vboIdx0, uint32 vboIdx1,
+                                          size_t poolCapacity, LwString &text,
+                                          MemoryStatsEntryVec &outStats,
+                                          Log *log ) const
+    {
+        if( log )
+        {
+            static const char *vboTypes[3][3] =
+            {
+                {
+                    "VERTEX IMMUTABLE",
+                    "VERTEX DEFAULT",
+                    "VERTEX DYNAMIC",
+                },
+                {
+                    "INDEX IMMUTABLE",
+                    "INDEX DEFAULT",
+                    "INDEX DYNAMIC",
+                },
+                {
+                    "SHADER IMMUTABLE",
+                    "SHADER DEFAULT",
+                    "SHADER DYNAMIC",
+                }
+            };
+
+            text.clear();
+            text.a( vboTypes[vboIdx0][vboIdx1], ";",
+                    (uint64)block.offset, ";",
+                    (uint64)block.size, ";",
+                    (uint64)poolCapacity );
+            log->logMessage( text.c_str(), LML_CRITICAL );
+        }
+
+        const uint32 vboIdx = (vboIdx0 << 16u) | (vboIdx1 & 0xFFFF);
+        MemoryStatsEntry entry( vboIdx, block.offset, block.size, poolCapacity );
+        outStats.push_back( entry );
+    }
+    //-----------------------------------------------------------------------------------
     void D3D11VaoManager::getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
                                           size_t &outFreeBytes, Log *log ) const
     {
@@ -179,33 +218,12 @@ namespace Ogre
         LwString text( LwString::FromEmptyPointer( &tmpBuffer[0], tmpBuffer.size() ) );
 
         if( log )
-            log->logMessage( "Pool Type;Pool Idx0;Pool Idx1;Offset;Bytes;Pool Capacity", LML_CRITICAL );
-
-        static const char *vboTypes[][] =
-        {
-            {
-                "VERTEX IMMUTABLE",
-                "VERTEX DEFAULT",
-                "VERTEX DYNAMIC",
-            },
-            {
-                "INDEX IMMUTABLE",
-                "INDEX DEFAULT",
-                "INDEX DYNAMIC",
-            },
-            {
-                "SHADER IMMUTABLE",
-                "SHADER DEFAULT",
-                "SHADER DYNAMIC",
-            }
-        };
+            log->logMessage( "Pool Type;Offset;Bytes;Pool Capacity", LML_CRITICAL );
 
         for( uint32 idx0=0; idx0<NumInternalBufferTypes; ++idx0 )
         {
             for( uint32 idx1=0; idx1<BT_DYNAMIC_DEFAULT+1; ++idx1 )
             {
-                const uint32 vboIdx = (idx0 << 16u) | (idx1 & 0xFFFF);
-
                 VboVec::const_iterator itor = mVbos[idx0][idx1].begin();
                 VboVec::const_iterator end  = mVbos[idx0][idx1].end();
 
@@ -214,29 +232,44 @@ namespace Ogre
                     const Vbo &vbo = *itor;
                     capacityBytes += vbo.sizeBytes;
 
-                    BlockVec::const_iterator itBlock = vbo.freeBlocks.begin();
-                    BlockVec::const_iterator enBlock = vbo.freeBlocks.end();
+                    Block usedBlock( 0, 0 );
 
-                    while( itBlock != enBlock )
+                    BlockVec freeBlocks = vbo.freeBlocks;
+                    while( !freeBlocks.empty() )
                     {
-                        const size_t poolIdx = itBlock - vbo.freeBlocks.begin();
-                        if( log )
+                        //Find the free block that comes next
+                        BlockVec::iterator nextBlock;
                         {
-                            text.clear();
-                            text.a( vboTypes[idx0][idx1], ";", idx0, ";", idx1, ";" );
-                            text.a( (uint64)itBlock->offset, ";",
-                                    (uint64)itBlock->size, ";",
-                                    (uint64)vbo.sizeBytes );
-                            log->logMessage( text.c_str(), LML_CRITICAL );
+                            BlockVec::iterator itBlock = freeBlocks.begin();
+                            BlockVec::iterator enBlock = freeBlocks.end();
+
+                            nextBlock = itBlock;
+
+                            while( itBlock != enBlock )
+                            {
+                                if( nextBlock->offset < itBlock->offset )
+                                    nextBlock = itBlock;
+                                ++itBlock;
+                            }
                         }
 
-                        MemoryStatsEntry entry( (uint8)vboIdx, (uint32)poolIdx,
-                                                itBlock->offset, itBlock->size, vbo.sizeBytes );
-                        statsVec.push_back( entry );
+                        freeBytes += nextBlock->size;
+                        usedBlock.size = nextBlock->offset;
 
-                        freeBytes += itBlock->size;
-                        ++itBlock;
+                        //usedBlock.size could be 0 if:
+                        //  1. All of memory is free
+                        //  2. There's two contiguous free blocks, which should not happen
+                        //     due to mergeContiguousBlocks
+                        if( usedBlock.size > 0u )
+                            getMemoryStats( usedBlock, idx0, idx1, vbo.sizeBytes, text, statsVec, log );
+
+                        usedBlock.offset += usedBlock.size;
+                        usedBlock.size = 0;
+                        efficientVectorRemove( freeBlocks, nextBlock );
                     }
+
+                    if( usedBlock.size > 0u || (usedBlock.offset == 0 && usedBlock.size == 0) )
+                        getMemoryStats( usedBlock, idx0, idx1, vbo.sizeBytes, text, statsVec, log );
 
                     ++itor;
                 }

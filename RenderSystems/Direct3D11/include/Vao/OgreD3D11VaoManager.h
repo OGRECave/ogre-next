@@ -264,6 +264,11 @@ namespace Ogre
                                                                  void *initialData,
                                                                  uint32 structureByteStride = 0 );
 
+        inline void getMemoryStats( const Block &block, uint32 vboIdx0, uint32 vboIdx1,
+                                    size_t poolCapacity, LwString &text,
+                                    MemoryStatsEntryVec &outStats,
+                                    Log *log ) const;
+
     public:
         D3D11VaoManager( bool supportsIndirectBuffers, D3D11Device &device,
                          D3D11RenderSystem *renderSystem );

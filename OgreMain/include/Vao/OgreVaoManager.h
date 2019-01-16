@@ -160,20 +160,30 @@ namespace Ogre
         struct _OgreExport MemoryStatsEntry
         {
             uint32 poolType;
-            uint32 poolIdx;
             size_t offset;
             size_t sizeBytes;
             size_t poolCapacity; /// This value is the same for all entries with same poolType & poolIdx
 
-            MemoryStatsEntry( uint32 _poolType, uint32 _poolIdx, size_t _offset,
+            MemoryStatsEntry( uint32 _poolType, size_t _offset,
                               size_t _sizeBytes, size_t _poolCapacity ) :
-                poolType( _poolType ), poolIdx( _poolIdx ), offset( _offset ),
+                poolType( _poolType ), offset( _offset ),
                 sizeBytes( _sizeBytes ), poolCapacity( _poolCapacity ) {}
         };
 
         typedef vector<MemoryStatsEntry>::type MemoryStatsEntryVec;
 
         /** Retrieves memory stats about our GPU pools being managed.
+            The output in the Log will be csv data that resembles the following:
+                Pool Type                   Offset	Bytes       Pool Capacity
+                CPU_INACCESSIBLE            0       148128      67108864
+                CPU_INACCESSIBLE            200000  1024        67108864
+                CPU_ACCESSIBLE_PERSISTENT   0       1152        16777216
+
+            These are the chunks of memory currently in use. If there are multiple
+            entries belonging to the same pool, that means the memory has been
+            fragmented.
+
+            The actual output may vary depending on the RenderSystem.
         @param outStats
             Detailed information about each entry.
         @param outCapacityBytes
