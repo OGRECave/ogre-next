@@ -340,13 +340,13 @@ namespace Ogre {
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
 #   define OGRE_ASSERT_MEDIUM OGRE_ASSERT
 #else
-#   define OGRE_ASSERT_MEDIUM ((void)0)
+#   define OGRE_ASSERT_MEDIUM(condition) ((void)0)
 #endif
 
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
 #   define OGRE_ASSERT_HIGH OGRE_ASSERT
 #else
-#   define OGRE_ASSERT_HIGH ((void)0)
+#   define OGRE_ASSERT_HIGH(condition) ((void)0)
 #endif
 
 
