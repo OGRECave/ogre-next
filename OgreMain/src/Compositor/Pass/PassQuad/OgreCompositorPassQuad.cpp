@@ -263,7 +263,7 @@ namespace Ogre
 #endif
 
         SceneManager *sceneManager = mCamera->getSceneManager();
-        sceneManager->_setCameraInProgress( mCamera );
+        sceneManager->_setCamerasInProgress( CamerasInProgress(mCamera) );
         sceneManager->_setCurrentCompositorPass( this );
 
         //sceneManager->_injectRenderWithPass( mPass, mFsRect, mCamera, false, false );

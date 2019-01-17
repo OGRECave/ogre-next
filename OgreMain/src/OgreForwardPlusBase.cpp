@@ -547,7 +547,7 @@ namespace Ogre
         return getCachedGridFor( camera, &outCachedGrid );
     }
     //-----------------------------------------------------------------------------------
-    TexBufferPacked* ForwardPlusBase::getGridBuffer( Camera *camera ) const
+    TexBufferPacked* ForwardPlusBase::getGridBuffer( const Camera *camera ) const
     {
         CachedGrid const *cachedGrid = 0;
 
@@ -561,7 +561,7 @@ namespace Ogre
         return cachedGrid->gridBuffers[cachedGrid->currentBufIdx].gridBuffer;
     }
     //-----------------------------------------------------------------------------------
-    TexBufferPacked* ForwardPlusBase::getGlobalLightListBuffer( Camera *camera ) const
+    TexBufferPacked* ForwardPlusBase::getGlobalLightListBuffer( const Camera *camera ) const
     {
         CachedGrid const *cachedGrid = 0;
 

@@ -33,6 +33,13 @@ target_link_libraries(OgreHlmsUnlit OgreMain)
 ogre_config_framework(OgreHlmsUnlit)
 ogre_config_component(OgreHlmsUnlit)
 
-install(FILES ${HEADER_FILES}
-  DESTINATION include/OGRE/Hlms/Unlit
-)
+install (DIRECTORY include/
+        DESTINATION include/OGRE/Hlms/Unlit
+        FILES_MATCHING PATTERN "*.h"
+        )
+
+# also install HLMS Common folder
+install (DIRECTORY ../Common/include/
+        DESTINATION include/OGRE/Hlms/Common
+        FILES_MATCHING PATTERN "*.h"
+        )

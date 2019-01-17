@@ -1150,7 +1150,7 @@ namespace Ogre
             mHasPlanarReflections = false;
             mLastBoundPlanarReflection = 0u;
             if( mPlanarReflections &&
-                mPlanarReflections->cameraMatches( sceneManager->getCameraInProgress() ) )
+                mPlanarReflections->cameraMatches( sceneManager->getCamerasInProgress().renderingCamera ) )
             {
                 mHasPlanarReflections = true;
                 setProperty( PbsProperty::HasPlanarReflections,
@@ -1177,10 +1177,10 @@ namespace Ogre
         setProperty( PbsProperty::HwGammaWrite, 1 );
         retVal.setProperties = mSetProperties;
 
-        Camera *camera = sceneManager->getCameraInProgress();
-        Matrix4 viewMatrix = camera->getViewMatrix(true);
+        CamerasInProgress cameras = sceneManager->getCamerasInProgress();
+        Matrix4 viewMatrix = cameras.renderingCamera->getViewMatrix(true);
 
-        Matrix4 projectionMatrix = camera->getProjectionMatrixWithRSDepth();
+        Matrix4 projectionMatrix = cameras.renderingCamera->getProjectionMatrixWithRSDepth();
         RenderPassDescriptor *renderPassDesc = mRenderSystem->getCurrentPassDescriptor();
 
         if( renderPassDesc->requiresTextureFlipping() )
@@ -1224,8 +1224,8 @@ namespace Ogre
             if( forwardPlus )
             {
                 mapSize += forwardPlus->getConstBufferSize();
-                mGridBuffer             = forwardPlus->getGridBuffer( camera );
-                mGlobalLightListBuffer  = forwardPlus->getGlobalLightListBuffer( camera );
+                mGridBuffer             = forwardPlus->getGridBuffer( cameras.cullingCamera );
+                mGlobalLightListBuffer = forwardPlus->getGlobalLightListBuffer( cameras.cullingCamera );
 
                 if( forwardPlus->getDecalsEnabled() )
                 {
@@ -1321,7 +1321,7 @@ namespace Ogre
             mapSize += (2 + 2) * 4;
         }
 
-        const bool isCameraReflected = camera->isReflected();
+        const bool isCameraReflected = cameras.renderingCamera->isReflected();
         //vec4 clipPlane0
         if( isCameraReflected )
             mapSize += 4 * 4;
@@ -1359,7 +1359,7 @@ namespace Ogre
         //vec4 clipPlane0
         if( isCameraReflected )
         {
-            const Plane &reflPlane = camera->getReflectionPlane();
+            const Plane &reflPlane = cameras.renderingCamera->getReflectionPlane();
             *passBufferPtr++ = (float)reflPlane.normal.x;
             *passBufferPtr++ = (float)reflPlane.normal.y;
             *passBufferPtr++ = (float)reflPlane.normal.z;
@@ -1369,7 +1369,7 @@ namespace Ogre
         //vec4 cameraPosWS;
         if( isShadowCastingPointLight )
         {
-            const Vector3 &camPos = camera->getDerivedPosition();
+            const Vector3 &camPos = cameras.renderingCamera->getDerivedPosition();
             *passBufferPtr++ = (float)camPos.x;
             *passBufferPtr++ = (float)camPos.y;
             *passBufferPtr++ = (float)camPos.z;
@@ -1975,7 +1975,7 @@ namespace Ogre
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
             if( mHasPlanarReflections )
             {
-                mPlanarReflections->fillConstBufferData( renderTarget, camera,
+                mPlanarReflections->fillConstBufferData( renderTarget, cameras.renderingCamera,
                                                          projectionMatrix, passBufferPtr );
                 passBufferPtr += mPlanarReflections->getConstBufferSize() >> 2u;
             }
@@ -1999,7 +1999,7 @@ namespace Ogre
 
             //vec2 depthRange;
             Real fNear, fFar;
-            shadowNode->getMinMaxDepthRange( camera, fNear, fFar );
+            shadowNode->getMinMaxDepthRange( cameras.renderingCamera, fNear, fFar );
             const Real depthRange = fFar - fNear;
             *passBufferPtr++ = fNear;
             *passBufferPtr++ = 1.0f / depthRange;

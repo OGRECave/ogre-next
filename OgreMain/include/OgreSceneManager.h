@@ -175,6 +175,22 @@ namespace Ogre {
         }
     };
 
+    /** Struct that holds a number of cameras used in the current rendering pass
+     */
+    struct CamerasInProgress
+    {
+        const Camera* renderingCamera;
+        const Camera* cullingCamera;
+        const Camera* lodCamera;
+
+        CamerasInProgress():
+            renderingCamera(nullptr), cullingCamera(nullptr), lodCamera(nullptr) {}
+        CamerasInProgress(const Camera* camera) :
+            renderingCamera(camera), cullingCamera(camera), lodCamera(camera) {}
+        CamerasInProgress(const Camera* renderingCamera, const Camera* cullingCamera, const Camera* lodCamera) :
+            renderingCamera(renderingCamera), cullingCamera(cullingCamera), lodCamera(lodCamera) {}
+    };
+
     /** Manages the organisation and rendering of a 'scene' i.e. a collection 
         of objects and potentially world geometry.
     @remarks
@@ -473,8 +489,8 @@ namespace Ogre {
         SceneNodeList   mSceneNodes;
         SceneNodeList   mSceneNodesWithListeners;
 
-        /// Camera in progress
-        Camera* mCameraInProgress;
+        /// Cameras in progress
+        CamerasInProgress mCamerasInProgress;
         /// Current Viewport
         Viewport* mCurrentViewport;
 
@@ -796,7 +812,7 @@ namespace Ogre {
         {
             RenderQueue* renderQueue;   
             Viewport* viewport;
-            Camera* camera;
+            CamerasInProgress camerasInProgress;
             RenderSystem::RenderSystemContext* rsContext;
         };
 
@@ -1946,7 +1962,7 @@ namespace Ogre {
         virtual void _setDestinationRenderSystem(RenderSystem* sys);
 
         void _setViewport( Viewport *vp )                               { setViewport( vp ); }
-        void _setCameraInProgress( Camera *camera )                     { mCameraInProgress = camera; }
+        void _setCamerasInProgress(const CamerasInProgress& cameras)    { mCamerasInProgress = cameras; }
 
         /** Enables / disables a 'sky plane' i.e. a plane at constant
             distance from the camera representing the sky.
@@ -2922,7 +2938,7 @@ namespace Ogre {
 
         /** Gets the current camera being rendered (advanced use only, only 
             valid during viewport update. */
-        Camera* getCameraInProgress(void) const     { return mCameraInProgress; }
+        CamerasInProgress getCamerasInProgress(void) const     { return mCamerasInProgress; }
 
         AxisAlignedBox _calculateCurrentCastersBox( uint32 viewportVisibilityMask,
                                                     uint8 firstRq, uint8 lastRq ) const;

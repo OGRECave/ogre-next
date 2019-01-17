@@ -571,8 +571,8 @@ namespace Ogre
 
         setProperty( UnlitProperty::SamplerUnitSlotStart, (int32)mSamplerUnitSlotStart );
 
-        Camera *camera = sceneManager->getCameraInProgress();
-        if( camera && camera->isReflected() )
+        CamerasInProgress cameras = sceneManager->getCamerasInProgress();
+        if( cameras.renderingCamera && cameras.renderingCamera->isReflected() )
         {
             int32 numClipDist = std::max( getProperty( HlmsBaseProp::PsoClipDistances ), 1 );
             setProperty( HlmsBaseProp::PsoClipDistances, numClipDist );
@@ -601,9 +601,9 @@ namespace Ogre
         retVal.setProperties = mSetProperties;
         retVal.pso.pass = passCache.passPso;
 
-        Matrix4 viewMatrix = camera->getViewMatrix(true);
+        Matrix4 viewMatrix = cameras.renderingCamera->getViewMatrix(true);
 
-        Matrix4 projectionMatrix = camera->getProjectionMatrixWithRSDepth();
+        Matrix4 projectionMatrix = cameras.renderingCamera->getProjectionMatrixWithRSDepth();
         Matrix4 identityProjMat;
 
         mRenderSystem->_convertProjectionMatrix( Matrix4::IDENTITY, identityProjMat );
@@ -631,7 +631,7 @@ namespace Ogre
         //mat4 viewProj[2] + vec4 invWindowSize;
         size_t mapSize = (16 + 16 + 4) * 4;
 
-        const bool isCameraReflected = camera->isReflected();
+        const bool isCameraReflected = cameras.renderingCamera->isReflected();
         //mat4 invViewProj
         if( isCameraReflected || (casterPass && (mUsingExponentialShadowMaps || isShadowCastingPointLight)) )
             mapSize += 16 * 4;
@@ -688,7 +688,7 @@ namespace Ogre
         //vec4 clipPlane0
         if( isCameraReflected )
         {
-            const Plane &reflPlane = camera->getReflectionPlane();
+            const Plane &reflPlane = cameras.renderingCamera->getReflectionPlane();
             *passBufferPtr++ = (float)reflPlane.normal.x;
             *passBufferPtr++ = (float)reflPlane.normal.y;
             *passBufferPtr++ = (float)reflPlane.normal.z;
@@ -717,7 +717,7 @@ namespace Ogre
 
             //vec2 depthRange;
             Real fNear, fFar;
-            shadowNode->getMinMaxDepthRange( camera, fNear, fFar );
+            shadowNode->getMinMaxDepthRange( cameras.renderingCamera, fNear, fFar );
             const Real depthRange = fFar - fNear;
             *passBufferPtr++ = fNear;
             *passBufferPtr++ = 1.0f / depthRange;
@@ -726,7 +726,7 @@ namespace Ogre
             //vec4 cameraPosWS;
             if( isShadowCastingPointLight )
             {
-                const Vector3 &camPos = camera->getDerivedPosition();
+                const Vector3 &camPos = cameras.renderingCamera->getDerivedPosition();
                 *passBufferPtr++ = (float)camPos.x;
                 *passBufferPtr++ = (float)camPos.y;
                 *passBufferPtr++ = (float)camPos.z;

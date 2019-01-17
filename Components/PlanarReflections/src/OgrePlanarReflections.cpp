@@ -836,7 +836,7 @@ namespace Ogre
         return (4u * mMaxActiveActors + 4u * 4u + 4u) * sizeof(float);
     }
     //-----------------------------------------------------------------------------------
-    void PlanarReflections::fillConstBufferData( TextureGpu *renderTarget, Camera *camera,
+    void PlanarReflections::fillConstBufferData( TextureGpu *renderTarget, const Camera *camera,
                                                  const Matrix4 &projectionMatrix,
                                                  float * RESTRICT_ALIAS passBufferPtr ) const
     {

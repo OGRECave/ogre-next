@@ -251,7 +251,7 @@ namespace Ogre
         @remarks
             Assumes 'passBufferPtr' is aligned to a vec4/float4 boundary.
         */
-        void fillConstBufferData( TextureGpu *renderTarget, Camera *camera,
+        void fillConstBufferData( TextureGpu *renderTarget, const Camera *camera,
                                   const Matrix4 &projectionMatrix,
                                   float * RESTRICT_ALIAS passBufferPtr ) const;
         TextureGpu* getTexture( uint8 actorIdx ) const;

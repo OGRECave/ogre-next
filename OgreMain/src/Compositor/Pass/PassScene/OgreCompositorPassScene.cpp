@@ -182,15 +182,17 @@ namespace Ogre
             const uint32 oldVisibilityMask = viewport->getVisibilityMask();
             const uint32 oldLightVisibilityMask = viewport->getLightVisibilityMask();
 
-            mCamera->_notifyViewport( viewport );
+            // use culling camera for shadows, so if shadows are re used for slightly different camera (ie VR)
+            // shadows are not 'over culled'
+            mCullCamera->_notifyViewport(viewport);
 
-            shadowNode->_update( mCamera, usedLodCamera, sceneManager );
+            shadowNode->_update(mCullCamera, usedLodCamera, sceneManager);
 
             //ShadowNode passes may've overriden these settings.
             sceneManager->_setCurrentShadowNode( shadowNode, mDefinition->mShadowNodeRecalculation ==
                                                                                     SHADOW_NODE_REUSE );
             viewport->_setVisibilityMask( oldVisibilityMask, oldLightVisibilityMask );
-            mCamera->_notifyViewport( viewport );
+            mCullCamera->_notifyViewport(viewport);
 
             //We need to restore the previous RT's update
         }
