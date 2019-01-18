@@ -199,6 +199,9 @@ namespace Ogre
         virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
                                      size_t &outFreeBytes, Log *log ) const = 0;
 
+        /// Frees GPU memory if there are empty, unused pools
+        virtual void cleanupEmptyPools(void) = 0;
+
         /// Returns the size of a single vertex buffer source with the given declaration, in bytes
         static uint32 calculateVertexSize( const VertexElement2Vec &vertexElements );
 

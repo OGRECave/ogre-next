@@ -314,6 +314,42 @@ namespace Ogre
         statsVec.swap( outStats );
     }
     //-----------------------------------------------------------------------------------
+    void GL3PlusVaoManager::cleanupEmptyPools(void)
+    {
+        FastArray<GLuint> bufferNames;
+
+        for( int vboIdx=0; vboIdx<MAX_VBO_FLAG; ++vboIdx )
+        {
+            VboVec::iterator itor = mVbos[vboIdx].begin();
+            VboVec::iterator end  = mVbos[vboIdx].end();
+
+            while( itor != end )
+            {
+                Vbo &vbo = *itor;
+                if( vbo.freeBlocks.size() == 1u &&
+                    vbo.sizeBytes == vbo.freeBlocks.back().size )
+                {
+                    bufferNames.push_back( vbo.vboName );
+                    delete vbo.dynamicBuffer;
+                    vbo.dynamicBuffer = 0;
+
+                    itor = efficientVectorRemove( mVbos[vboIdx], itor );
+                    end  = mVbos[vboIdx].end();
+                }
+                else
+                {
+                    ++itor;
+                }
+            }
+        }
+
+        if( !bufferNames.empty() )
+        {
+            OCGE( glDeleteBuffers( bufferNames.size(), &bufferNames[0] ) );
+            bufferNames.clear();
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void GL3PlusVaoManager::allocateVbo( size_t sizeBytes, size_t alignment, BufferType bufferType,
                                          size_t &outVboIdx, size_t &outBufferOffset )
     {

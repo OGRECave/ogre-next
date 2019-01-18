@@ -281,6 +281,38 @@ namespace Ogre
         statsVec.swap( outStats );
     }
     //-----------------------------------------------------------------------------------
+    void D3D11VaoManager::cleanupEmptyPools(void)
+    {
+        for( uint32 idx0=0; idx0<NumInternalBufferTypes; ++idx0 )
+        {
+            for( uint32 idx1=0; idx1<BT_DYNAMIC_DEFAULT+1; ++idx1 )
+            {
+                VboVec::iterator itor = mVbos[idx0][idx1].begin();
+                VboVec::iterator end  = mVbos[idx0][idx1].end();
+
+                while( itor != end )
+                {
+                    Vbo &vbo = *itor;
+                    if( vbo.freeBlocks.size() == 1u &&
+                        vbo.sizeBytes == vbo.freeBlocks.back().size )
+                    {
+                        if( vbo.vboName )
+                            vbo.vboName->Release();
+                        delete vbo.dynamicBuffer;
+                        vbo.dynamicBuffer = 0;
+
+                        itor = efficientVectorRemove( mVbos[idx0][idx1], itor );
+                        end  = mVbos[idx0][idx1].end();
+                    }
+                    else
+                    {
+                        ++itor;
+                    }
+                }
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void D3D11VaoManager::allocateVbo( size_t sizeBytes, size_t alignment, BufferType bufferType,
                                        InternalBufferType internalType,
                                        size_t &outVboIdx, size_t &outBufferOffset )

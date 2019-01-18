@@ -158,6 +158,20 @@ namespace Ogre
     {
         destroyAllVertexArrayObjects();
         deleteAllBuffers();
+
+        for( size_t i=0; i<MAX_VBO_FLAG; ++i )
+        {
+            VboVec::iterator itor = mVbos[i].begin();
+            VboVec::iterator end  = mVbos[i].end();
+
+            while( itor != end )
+            {
+                itor->vboName = 0;
+                delete itor->dynamicBuffer;
+                itor->dynamicBuffer = 0;
+                ++itor;
+            }
+        }
     }
     //-----------------------------------------------------------------------------------
     void MetalVaoManager::getMemoryStats( const Block &block, size_t vboIdx, size_t poolCapacity,
@@ -257,6 +271,34 @@ namespace Ogre
         outCapacityBytes = capacityBytes;
         outFreeBytes = freeBytes;
         statsVec.swap( outStats );
+    }
+    //-----------------------------------------------------------------------------------
+    void MetalVaoManager::cleanupEmptyPools(void)
+    {
+        for( int vboIdx=0; vboIdx<MAX_VBO_FLAG; ++vboIdx )
+        {
+            VboVec::iterator itor = mVbos[vboIdx].begin();
+            VboVec::iterator end  = mVbos[vboIdx].end();
+
+            while( itor != end )
+            {
+                Vbo &vbo = *itor;
+                if( vbo.freeBlocks.size() == 1u &&
+                    vbo.sizeBytes == vbo.freeBlocks.back().size )
+                {
+                    vbo.vboName = 0;
+                    delete vbo.dynamicBuffer;
+                    vbo.dynamicBuffer = 0;
+
+                    itor = efficientVectorRemove( mVbos[vboIdx], itor );
+                    end  = mVbos[vboIdx].end();
+                }
+                else
+                {
+                    ++itor;
+                }
+            }
+        }
     }
     //-----------------------------------------------------------------------------------
     void MetalVaoManager::allocateVbo( size_t sizeBytes, size_t alignment, BufferType bufferType,

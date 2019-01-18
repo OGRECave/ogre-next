@@ -81,6 +81,10 @@ namespace Ogre
         outFreeBytes = 0;
     }
     //-----------------------------------------------------------------------------------
+    void NULLVaoManager::cleanupEmptyPools(void)
+    {
+    }
+    //-----------------------------------------------------------------------------------
     VertexBufferPacked* NULLVaoManager::createVertexBufferImpl( size_t numElements,
                                                                    uint32 bytesPerElement,
                                                                    BufferType bufferType,

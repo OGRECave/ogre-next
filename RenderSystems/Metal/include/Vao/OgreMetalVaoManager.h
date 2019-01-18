@@ -260,6 +260,8 @@ namespace Ogre
         virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
                                      size_t &outFreeBytes, Log *log ) const;
 
+        virtual void cleanupEmptyPools(void);
+
         /// Binds the Draw ID to the current RenderEncoder. (Assumed to be active!)
         void bindDrawId(void);
 

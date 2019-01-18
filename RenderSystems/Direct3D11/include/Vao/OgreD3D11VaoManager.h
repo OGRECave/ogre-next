@@ -277,6 +277,8 @@ namespace Ogre
         virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
                                      size_t &outFreeBytes, Log *log ) const;
 
+        virtual void cleanupEmptyPools(void);
+
         D3D11RenderSystem* getD3D11RenderSystem(void) const             { return mD3D11RenderSystem; }
         D3D11Device& getDevice(void) const                              { return mDevice; }
 
