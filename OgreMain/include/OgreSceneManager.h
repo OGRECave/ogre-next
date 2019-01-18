@@ -179,17 +179,17 @@ namespace Ogre {
      */
     struct CamerasInProgress
     {
-        const Camera* renderingCamera;
-        const Camera* cullingCamera;
-        const Camera* lodCamera;
+        const Camera *renderingCamera;
+        const Camera *cullingCamera;
+        const Camera *lodCamera;
 
         CamerasInProgress():
             renderingCamera(0), cullingCamera(0), lodCamera(0) {}
         CamerasInProgress( const Camera* camera ) :
             renderingCamera(camera), cullingCamera(camera), lodCamera(camera) {}
-        CamerasInProgress( const Camera* renderingCamera, const Camera* cullingCamera,
-                           const Camera* lodCamera ) :
-            renderingCamera(renderingCamera), cullingCamera(cullingCamera), lodCamera(lodCamera) {}
+        CamerasInProgress( const Camera *_renderingCamera, const Camera *_cullingCamera,
+                           const Camera *_lodCamera ) :
+            renderingCamera(_renderingCamera), cullingCamera(_cullingCamera), lodCamera(_lodCamera) {}
     };
 
     /** Manages the organisation and rendering of a 'scene' i.e. a collection 
