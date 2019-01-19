@@ -171,6 +171,30 @@ namespace Ogre
         inOutObjectData = tmp;
     }
     //-----------------------------------------------------------------------------------
+    void ObjectMemoryManager::defragment(void)
+    {
+        ArrayMemoryManagerVec::iterator itor = mMemoryManagers.begin();
+        ArrayMemoryManagerVec::iterator end  = mMemoryManagers.end();
+
+        while( itor != end )
+        {
+            itor->defragment();
+            ++itor;
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void ObjectMemoryManager::shrinkToFit(void)
+    {
+        ArrayMemoryManagerVec::iterator itor = mMemoryManagers.begin();
+        ArrayMemoryManagerVec::iterator end  = mMemoryManagers.end();
+
+        while( itor != end )
+        {
+            itor->shrinkToFit();
+            ++itor;
+        }
+    }
+    //-----------------------------------------------------------------------------------
     size_t ObjectMemoryManager::getNumRenderQueues() const
     {
         size_t retVal = -1;

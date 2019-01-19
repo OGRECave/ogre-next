@@ -188,6 +188,12 @@ namespace Ogre
         void migrateToAndDetach( Transform &inOutTransform, size_t depth,
                                  NodeMemoryManager *dstNodeMemoryManager );
 
+        /// @copydoc ArrayMemoryManager::defragment
+        void defragment(void);
+
+        /// @copydoc ArrayMemoryManager::shrinkToFit
+        void shrinkToFit(void);
+
         /** Retrieves the number of depth levels that have been created.
         @remarks
             The return value is equal or below mMemoryManagers.size(), you should cache

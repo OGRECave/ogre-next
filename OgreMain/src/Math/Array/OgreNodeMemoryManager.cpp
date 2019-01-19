@@ -172,6 +172,30 @@ namespace Ogre
         inOutTransform = tmp;
     }
     //-----------------------------------------------------------------------------------
+    void NodeMemoryManager::defragment(void)
+    {
+        ArrayMemoryManagerVec::iterator itor = mMemoryManagers.begin();
+        ArrayMemoryManagerVec::iterator end  = mMemoryManagers.end();
+
+        while( itor != end )
+        {
+            itor->defragment();
+            ++itor;
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void NodeMemoryManager::shrinkToFit(void)
+    {
+        ArrayMemoryManagerVec::iterator itor = mMemoryManagers.begin();
+        ArrayMemoryManagerVec::iterator end  = mMemoryManagers.end();
+
+        while( itor != end )
+        {
+            itor->shrinkToFit();
+            ++itor;
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void NodeMemoryManager::migrateTo( Transform &inOutTransform, size_t depth,
                                         NodeMemoryManager *dstNodeMemoryManager )
     {

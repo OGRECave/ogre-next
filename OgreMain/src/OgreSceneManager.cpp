@@ -462,6 +462,36 @@ void SceneManager::destroyAllLights(void)
     destroyAllMovableObjectsByType(LightFactory::FACTORY_TYPE_NAME);
 }
 //-----------------------------------------------------------------------
+void SceneManager::defragmentMemoryPools(void)
+{
+    for( size_t i=0; i<NUM_SCENE_MEMORY_MANAGER_TYPES; ++i )
+    {
+        mNodeMemoryManager[i].defragment();
+        mEntityMemoryManager[i].defragment();
+        mForwardPlusMemoryManager[i].defragment();
+    }
+
+    mLightMemoryManager.defragment();
+    //Skeletons are more complex because the new slot count must be multiple bonesPerDepth
+    //mSkeletonAnimationManager.defragment();
+    mTagPointNodeMemoryManager.defragment();
+}
+//-----------------------------------------------------------------------
+void SceneManager::shrinkToFitMemoryPools(void)
+{
+    for( size_t i=0; i<NUM_SCENE_MEMORY_MANAGER_TYPES; ++i )
+    {
+        mNodeMemoryManager[i].shrinkToFit();
+        mEntityMemoryManager[i].shrinkToFit();
+        mForwardPlusMemoryManager[i].shrinkToFit();
+    }
+
+    mLightMemoryManager.shrinkToFit();
+    //Skeletons are more complex because the new slot count must be multiple bonesPerDepth
+    //mSkeletonAnimationManager.shrinkToFit();
+    mTagPointNodeMemoryManager.shrinkToFit();
+}
+//-----------------------------------------------------------------------
 Item* SceneManager::createItem( const String& meshName,
                                 const String& groupName, /* = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME */
                                 SceneMemoryMgrTypes sceneType /*= SCENE_DYNAMIC */ )

@@ -1327,6 +1327,12 @@ namespace Ogre {
         ObjectMemoryManager& _getLightMemoryManager(void)
                                                             { return mLightMemoryManager; }
 
+        /// @copydoc ArrayMemoryManager::defragment
+        void defragmentMemoryPools(void);
+
+        /// @copydoc ArrayMemoryManager::shrinkToFit
+        void shrinkToFitMemoryPools(void);
+
         /** Create an Item (instance of a discrete mesh).
             @param
                 meshName The name of the Mesh it is to be based on (e.g. 'knot.oof'). The

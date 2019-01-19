@@ -132,6 +132,12 @@ namespace Ogre
         void migrateTo( ObjectData &inOutTransform, size_t renderQueue,
                         ObjectMemoryManager *dstObjectMemoryManager );
 
+        /// @copydoc ArrayMemoryManager::defragment
+        void defragment(void);
+
+        /// @copydoc ArrayMemoryManager::shrinkToFit
+        void shrinkToFit(void);
+
         /** Retrieves the number of render queues that have been created.
         @remarks
             The return value is equal or below mMemoryManagers.size(), you should cache

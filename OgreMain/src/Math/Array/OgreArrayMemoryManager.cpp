@@ -244,57 +244,108 @@ namespace Ogre
             //The pool is getting to big? Do some cleanup (depending
             //on fragmentation, may take a performance hit)
             if( mAvailableSlots.size() > mCleanupThreshold )
-            {
-                //Sort, last values first. This may improve performance in some
-                //scenarios by reducing the amount of data to be shifted
-                std::sort( mAvailableSlots.begin(), mAvailableSlots.end(), std::greater<size_t>() );
-                SlotsVec::const_iterator itor = mAvailableSlots.begin();
-                SlotsVec::const_iterator end  = mAvailableSlots.end();
-
-                while( itor != end )
-                {
-                    //First see if we have a continuous range of unused slots
-                    size_t lastRange = 1;
-                    SlotsVec::const_iterator it = itor + 1;
-                    while( it != end && (*itor - lastRange) == *it )
-                    {
-                        ++lastRange;
-                        ++it;
-                    }
-
-                    size_t i=0;
-                    const size_t newEnd = *itor + 1;
-                    MemoryPoolVec::iterator itPools = mMemoryPools.begin();
-                    MemoryPoolVec::iterator enPools = mMemoryPools.end();
-
-                    //Shift everything N slots (N = lastRange)
-                    while( itPools != enPools )
-                    {
-                        char *dstPtr    = *itPools + ( newEnd - lastRange ) * mElementsMemSizes[i];
-                        size_t indexDst = ( newEnd - lastRange ) % ARRAY_PACKED_REALS;
-                        char *srcPtr    = *itPools + newEnd * mElementsMemSizes[i];
-                        size_t indexSrc = newEnd % ARRAY_PACKED_REALS;
-                        size_t numSlots = ( mUsedMemory - newEnd );
-                        size_t numFreeSlots = lastRange;
-                        mCleanupRoutines[i]( dstPtr, indexDst, srcPtr, indexSrc,
-                                             numSlots, numFreeSlots, mElementsMemSizes[i] );
-                        ++i;
-                        ++itPools;
-                    }
-
-                    mUsedMemory -= lastRange;
-                    initializeEmptySlots( mUsedMemory );
-
-                    mRebaseListener->performCleanup( mLevel, mMemoryPools,
-                                                     mElementsMemSizes, (newEnd - lastRange),
-                                                     lastRange );
-                    
-                    itor += lastRange;
-                }
-
-                mAvailableSlots.clear();
-            }
+                defragment();
         }
+    }
+    //-----------------------------------------------------------------------------------
+    void ArrayMemoryManager::defragment(void)
+    {
+        //Sort, last values first. This may improve performance in some
+        //scenarios by reducing the amount of data to be shifted
+        std::sort( mAvailableSlots.begin(), mAvailableSlots.end(), std::greater<size_t>() );
+        SlotsVec::const_iterator itor = mAvailableSlots.begin();
+        SlotsVec::const_iterator end  = mAvailableSlots.end();
+
+        while( itor != end )
+        {
+            //First see if we have a continuous range of unused slots
+            size_t lastRange = 1;
+            SlotsVec::const_iterator it = itor + 1;
+            while( it != end && (*itor - lastRange) == *it )
+            {
+                ++lastRange;
+                ++it;
+            }
+
+            size_t i=0;
+            const size_t newEnd = *itor + 1;
+            MemoryPoolVec::iterator itPools = mMemoryPools.begin();
+            MemoryPoolVec::iterator enPools = mMemoryPools.end();
+
+            //Shift everything N slots (N = lastRange)
+            while( itPools != enPools )
+            {
+                char *dstPtr    = *itPools + ( newEnd - lastRange ) * mElementsMemSizes[i];
+                size_t indexDst = ( newEnd - lastRange ) % ARRAY_PACKED_REALS;
+                char *srcPtr    = *itPools + newEnd * mElementsMemSizes[i];
+                size_t indexSrc = newEnd % ARRAY_PACKED_REALS;
+                size_t numSlots = ( mUsedMemory - newEnd );
+                size_t numFreeSlots = lastRange;
+                mCleanupRoutines[i]( dstPtr, indexDst, srcPtr, indexSrc,
+                                     numSlots, numFreeSlots, mElementsMemSizes[i] );
+                ++i;
+                ++itPools;
+            }
+
+            mUsedMemory -= lastRange;
+            initializeEmptySlots( mUsedMemory );
+
+            mRebaseListener->performCleanup( mLevel, mMemoryPools,
+                                             mElementsMemSizes, (newEnd - lastRange),
+                                             lastRange );
+
+            itor += lastRange;
+        }
+
+        mAvailableSlots.clear();
+    }
+    //-----------------------------------------------------------------------------------
+    void ArrayMemoryManager::shrinkToFit(void)
+    {
+        if( !mAvailableSlots.empty() )
+            defragment();
+
+        //Build the diff list for rebase later.
+        PtrdiffVec diffsList;
+        diffsList.reserve( mUsedMemory );
+        mRebaseListener->buildDiffList( mLevel, mMemoryPools, diffsList );
+
+        //Ensure mMaxMemory will be aligned and is never 0.
+        size_t newMemory = alignToNextMultiple( std::max<size_t>( mUsedMemory, ARRAY_PACKED_REALS ),
+                                                ARRAY_PACKED_REALS );
+
+        size_t i=0;
+        MemoryPoolVec::iterator itor = mMemoryPools.begin();
+        MemoryPoolVec::iterator end  = mMemoryPools.end();
+
+        while( itor != end )
+        {
+            //Reallocate
+            char *tmp = (char*)OGRE_MALLOC_SIMD( newMemory * mElementsMemSizes[i],
+                                                 MEMCATEGORY_SCENE_OBJECTS );
+            memcpy( tmp, *itor, mUsedMemory * mElementsMemSizes[i] );
+            if( mInitRoutines && mInitRoutines[i] )
+            {
+                mInitRoutines[i]( tmp + mUsedMemory * mElementsMemSizes[i], 0, 0, 0, 0,
+                                  newMemory - mUsedMemory, mElementsMemSizes[i] );
+            }
+            else
+            {
+                memset( tmp + mUsedMemory * mElementsMemSizes[i], 0,
+                        (newMemory - mUsedMemory) * mElementsMemSizes[i] );
+            }
+            OGRE_FREE_SIMD( *itor, MEMCATEGORY_SCENE_OBJECTS );
+            *itor = tmp;
+            ++i;
+            ++itor;
+        }
+
+        const size_t prevNumSlots = mUsedMemory;
+        mMaxMemory = newMemory;
+        initializeEmptySlots( prevNumSlots );
+
+        //Rebase all ptrs
+        mRebaseListener->applyRebase( mLevel, mMemoryPools, diffsList );
     }
     //-----------------------------------------------------------------------------------
     void cleanerFlat( char *dstPtr, size_t indexDst, char *srcPtr, size_t indexSrc,
