@@ -23,6 +23,7 @@ namespace Demo
         VisibleItemVec  mVisibleItems;
 
         bool mReleaseMemoryOnCleanup;
+        bool mReleaseGpuMemory;
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 

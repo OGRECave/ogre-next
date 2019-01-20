@@ -34,23 +34,24 @@ namespace Demo
             return mWorkspace;
         }
 
-        virtual void setupResources(void)
+        virtual void initMiscParamsListener( Ogre::NameValuePairList &params )
         {
-            GraphicsSystem::setupResources();
+            //Used by GL3+ & Metal
+            params["VaoManager::CPU_INACCESSIBLE"] = "0";
+            params["VaoManager::CPU_ACCESSIBLE_DEFAULT"] = "0";
+            params["VaoManager::CPU_ACCESSIBLE_PERSISTENT"] = "0";
+            params["VaoManager::CPU_ACCESSIBLE_PERSISTENT_COHERENT"] = "0";
 
-            Ogre::ConfigFile cf;
-            cf.load(mResourcePath + "resources2.cfg");
-
-            Ogre::String dataFolder = cf.getSetting( "DoNotUseAsResource", "Hlms", "" );
-
-            if( dataFolder.empty() )
-                dataFolder = "./";
-            else if( *(dataFolder.end() - 1) != '/' )
-                dataFolder += "/";
-
-            dataFolder += "2.0/scripts/materials/Tutorial_SMAA";
-
-            addResourceLocation( dataFolder, "FileSystem", "General" );
+            //Used by D3D11
+            params["VaoManager::VERTEX_IMMUTABLE"] = "0";
+            params["VaoManager::VERTEX_DEFAULT"] = "0";
+            params["VaoManager::VERTEX_DYNAMIC"] = "0";
+            params["VaoManager::INDEX_IMMUTABLE"] = "0";
+            params["VaoManager::INDEX_DEFAULT"] = "0";
+            params["VaoManager::INDEX_DYNAMIC"] = "0";
+            params["VaoManager::SHADER_IMMUTABLE"] = "0";
+            params["VaoManager::SHADER_DEFAULT"] = "0";
+            params["VaoManager::SHADER_DYNAMIC"] = "0";
         }
 
     public:

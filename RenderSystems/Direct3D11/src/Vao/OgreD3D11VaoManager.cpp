@@ -56,9 +56,28 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    static const char *c_vboTypes[3][3] =
+    {
+        {
+            "VERTEX_IMMUTABLE",
+            "VERTEX_DEFAULT",
+            "VERTEX_DYNAMIC",
+        },
+        {
+            "INDEX_IMMUTABLE",
+            "INDEX_DEFAULT",
+            "INDEX_DYNAMIC",
+        },
+        {
+            "SHADER_IMMUTABLE",
+            "SHADER_DEFAULT",
+            "SHADER_DYNAMIC",
+        }
+    };
 
     D3D11VaoManager::D3D11VaoManager( bool _supportsIndirectBuffers, D3D11Device &device,
-                                      D3D11RenderSystem *renderSystem ) :
+                                      D3D11RenderSystem *renderSystem,
+                                      const NameValuePairList *params ) :
         mVaoNames( 1 ),
         mDevice( device ),
         mDrawId( 0 ),
@@ -75,6 +94,23 @@ namespace Ogre
         mDefaultPoolSize[VERTEX_BUFFER][BT_DYNAMIC_DEFAULT] = 16 * 1024 * 1024;
         mDefaultPoolSize[INDEX_BUFFER][BT_DYNAMIC_DEFAULT]  = 16 * 1024 * 1024;
         mDefaultPoolSize[SHADER_BUFFER][BT_DYNAMIC_DEFAULT] = 16 * 1024 * 1024;
+
+        if( params )
+        {
+            for( size_t i=0; i<NumInternalBufferTypes; ++i )
+            {
+                for( size_t j=BT_IMMUTABLE; j<=BT_DYNAMIC_DEFAULT; ++j )
+                {
+                    NameValuePairList::const_iterator itor =
+                            params->find( String( "VaoManager::" ) + c_vboTypes[i] );
+                    if( itor != params->end() )
+                    {
+                        mDefaultPoolSize[i][j] =
+                                StringConverter::parseUnsignedInt( itor->second, mDefaultPoolSize[i] );
+                    }
+                }
+            }
+        }
 
         mFrameSyncVec.resize( mDynamicBufferMultiplier, 0 );
 
@@ -173,27 +209,8 @@ namespace Ogre
     {
         if( log )
         {
-            static const char *vboTypes[3][3] =
-            {
-                {
-                    "VERTEX IMMUTABLE",
-                    "VERTEX DEFAULT",
-                    "VERTEX DYNAMIC",
-                },
-                {
-                    "INDEX IMMUTABLE",
-                    "INDEX DEFAULT",
-                    "INDEX DYNAMIC",
-                },
-                {
-                    "SHADER IMMUTABLE",
-                    "SHADER DEFAULT",
-                    "SHADER DYNAMIC",
-                }
-            };
-
             text.clear();
-            text.a( vboTypes[vboIdx0][vboIdx1], ";",
+            text.a( c_vboTypes[vboIdx0][vboIdx1], ";",
                     (uint64)block.offset, ";",
                     (uint64)block.size, ";",
                     (uint64)poolCapacity );

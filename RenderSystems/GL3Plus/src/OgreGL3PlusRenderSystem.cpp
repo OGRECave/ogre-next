@@ -811,7 +811,7 @@ namespace Ogre {
                     mGLSupport->checkExtension("GL_ARB_shader_storage_buffer_object");
             mVaoManager = OGRE_NEW GL3PlusVaoManager( supportsArbBufferStorage, emulateTexBuffers,
                                                       supportsIndirectBuffers, supportsBaseInstance,
-                                                      supportsSsbo );
+                                                      supportsSsbo, miscParams );
 
             //Bind the Draw ID
             OCGE( glGenVertexArrays( 1, &mGlobalVao ) );

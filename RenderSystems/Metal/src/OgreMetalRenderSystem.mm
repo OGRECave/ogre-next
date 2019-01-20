@@ -388,7 +388,7 @@ namespace Ogre
             initialiseFromRenderSystemCapabilities( mCurrentCapabilities, 0 );
 
             mTextureManager = new MetalTextureManager( &mDevice );
-            mVaoManager = OGRE_NEW MetalVaoManager( c_inFlightCommandBuffers, &mDevice );
+            mVaoManager = OGRE_NEW MetalVaoManager( c_inFlightCommandBuffers, &mDevice, miscParams );
             mHardwareBufferManager = new v1::MetalHardwareBufferManager( &mDevice, mVaoManager );
             mTextureGpuManager = OGRE_NEW MetalTextureGpuManager( mVaoManager, this, &mDevice );
 

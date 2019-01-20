@@ -86,6 +86,9 @@ namespace Demo
         /// aware @mBackgroundColour will be ignored
         virtual Ogre::CompositorWorkspace* setupCompositor(void);
 
+        /// Called right before initializing Ogre's first window, so the params can be customized
+        virtual void initMiscParamsListener( Ogre::NameValuePairList &params );
+
         /// Optional override method where you can create resource listeners (e.g. for loading screens)
         virtual void createResourceListener(void) {}
 

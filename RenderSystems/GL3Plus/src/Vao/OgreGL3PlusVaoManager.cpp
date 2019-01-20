@@ -77,11 +77,20 @@ namespace Ogre
         14, // VES_BLEND_INDICES2 - 1
     };
 
+    static const char *c_vboTypes[] =
+    {
+        "CPU_INACCESSIBLE",
+        "CPU_ACCESSIBLE_DEFAULT",
+        "CPU_ACCESSIBLE_PERSISTENT",
+        "CPU_ACCESSIBLE_PERSISTENT_COHERENT",
+    };
+
     GL3PlusVaoManager::GL3PlusVaoManager( bool _supportsArbBufferStorage,
                                           bool emulateTexBuffers,
                                           bool _supportsIndirectBuffers,
                                           bool _supportsBaseInstance,
-                                          bool _supportsSsbo ) :
+                                          bool _supportsSsbo,
+                                          const NameValuePairList *params ) :
         mArbBufferStorage( _supportsArbBufferStorage ),
         mEmulateTexBuffers( emulateTexBuffers ),
         mMaxVertexAttribs( 30 ),
@@ -94,6 +103,20 @@ namespace Ogre
         for( size_t i=CPU_ACCESSIBLE_DEFAULT; i<=CPU_ACCESSIBLE_PERSISTENT_COHERENT; ++i )
             mDefaultPoolSize[i] = 4 * 1024 * 1024;
         mDefaultPoolSize[CPU_ACCESSIBLE_PERSISTENT] = 16 * 1024 * 1024;
+
+        if( params )
+        {
+            for( size_t i=0; i<MAX_VBO_FLAG; ++i )
+            {
+                NameValuePairList::const_iterator itor =
+                        params->find( String( "VaoManager::" ) + c_vboTypes[i] );
+                if( itor != params->end() )
+                {
+                    mDefaultPoolSize[i] = StringConverter::parseUnsignedInt( itor->second,
+                                                                             mDefaultPoolSize[i] );
+                }
+            }
+        }
 
         mFrameSyncVec.resize( mDynamicBufferMultiplier, 0 );
 
@@ -221,16 +244,8 @@ namespace Ogre
     {
         if( log )
         {
-            static const char *vboTypes[] =
-            {
-                "CPU_INACCESSIBLE",
-                "CPU_ACCESSIBLE_DEFAULT",
-                "CPU_ACCESSIBLE_PERSISTENT",
-                "CPU_ACCESSIBLE_PERSISTENT_COHERENT",
-            };
-
             text.clear();
-            text.a( vboTypes[vboIdx], ";",
+            text.a( c_vboTypes[vboIdx], ";",
                     (uint64)block.offset, ";",
                     (uint64)block.size, ";",
                     (uint64)poolCapacity );
@@ -329,6 +344,31 @@ namespace Ogre
                 if( vbo.freeBlocks.size() == 1u &&
                     vbo.sizeBytes == vbo.freeBlocks.back().size )
                 {
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_LOW
+                    VaoVec::const_iterator itVao = mVaos.begin();
+                    VaoVec::const_iterator enVao = mVaos.end();
+
+                    while( itVao != enVao )
+                    {
+                        Vao::VertexBindingVec::const_iterator itBuf = itVao->vertexBuffers.begin();
+                        Vao::VertexBindingVec::const_iterator enBuf = itVao->vertexBuffers.end();
+
+                        while( itBuf != enBuf )
+                        {
+                            OGRE_ASSERT_LOW( itBuf->vertexBufferVbo == vbo.vboName &&
+                                             "A VertexArrayObject still references "
+                                             "a deleted vertex buffer!" );
+                            ++itBuf;
+                        }
+
+                        OGRE_ASSERT_LOW( itVao->indexBufferVbo == vbo.vboName &&
+                                         "A VertexArrayObject still references "
+                                         "a deleted index buffer!" );
+
+                        ++itVao;
+                    }
+#endif
+
                     bufferNames.push_back( vbo.vboName );
                     delete vbo.dynamicBuffer;
                     vbo.dynamicBuffer = 0;

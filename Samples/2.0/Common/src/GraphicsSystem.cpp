@@ -267,6 +267,8 @@ namespace Demo
         params.insert( std::make_pair("vsync", cfgOpts["VSync"].currentValue) );
         params.insert( std::make_pair("reverse_depth", "Yes" ) );
 
+        initMiscParamsListener( params );
+
         mRenderWindow = Ogre::Root::getSingleton().createRenderWindow( windowTitle, width, height,
                                                                        fullscreen, &params );
 
@@ -810,6 +812,10 @@ namespace Demo
 
         return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(), mCamera,
                                                 workspaceName, true );
+    }
+    //-----------------------------------------------------------------------------------
+    void GraphicsSystem::initMiscParamsListener( Ogre::NameValuePairList &params )
+    {
     }
     //-----------------------------------------------------------------------------------
     void GraphicsSystem::stopCompositor(void)

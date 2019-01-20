@@ -271,7 +271,7 @@ namespace Ogre
 
     public:
         D3D11VaoManager( bool supportsIndirectBuffers, D3D11Device &device,
-                         D3D11RenderSystem *renderSystem );
+                         D3D11RenderSystem *renderSystem, const NameValuePairList *params );
         virtual ~D3D11VaoManager();
 
         virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,

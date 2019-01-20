@@ -22,7 +22,8 @@ namespace Demo
 {
     MemoryCleanupGameState::MemoryCleanupGameState( const Ogre::String &helpDescription ) :
         TutorialGameState( helpDescription ),
-        mReleaseMemoryOnCleanup( true )
+        mReleaseMemoryOnCleanup( true ),
+        mReleaseGpuMemory( true )
     {
     }
     //-----------------------------------------------------------------------------------
@@ -83,6 +84,21 @@ namespace Demo
 
         if( mReleaseMemoryOnCleanup )
             sceneManager->shrinkToFitMemoryPools();
+
+        if( mReleaseGpuMemory )
+        {
+            const char *meshNames[2] = { "Cube_d.mesh", "Sphere1000.mesh" };
+            for( size_t i=0; i<2u; ++i )
+            {
+                Ogre::MeshPtr mesh = Ogre::MeshManager::getSingleton().getByName( meshNames[i] );
+                if( mesh )
+                    mesh->unload();
+            }
+
+            Ogre::RenderSystem *renderSystem = sceneManager->getDestinationRenderSystem();
+            Ogre::VaoManager *vaoManager = renderSystem->getVaoManager();
+            vaoManager->cleanupEmptyPools();
+        }
     }
     //-----------------------------------------------------------------------------------
     bool MemoryCleanupGameState::isSceneLoaded(void) const

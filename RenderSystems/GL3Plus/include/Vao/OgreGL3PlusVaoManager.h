@@ -252,7 +252,8 @@ namespace Ogre
     public:
         GL3PlusVaoManager( bool supportsArbBufferStorage, bool emulateTexBuffers,
                            bool supportsIndirectBuffers, bool _supportsBaseInstance,
-                           bool supportsSsbo );
+                           bool supportsSsbo,
+                           const NameValuePairList *params );
         virtual ~GL3PlusVaoManager();
 
         virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,

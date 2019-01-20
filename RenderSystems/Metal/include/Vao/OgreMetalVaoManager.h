@@ -122,7 +122,7 @@ namespace Ogre
             VertexBindingVec    vertexBuffers;
             __unsafe_unretained id<MTLBuffer> indexBufferVbo;
             IndexBufferPacked::IndexType indexType;
-            //uint32              refCount;
+            uint32              refCount;
         };
 
         typedef vector<Vbo>::type VboVec;
@@ -254,7 +254,8 @@ namespace Ogre
                                     MemoryStatsEntryVec &outStats, Log *log ) const;
 
     public:
-        MetalVaoManager( uint8 dynamicBufferMultiplier, MetalDevice *device );
+        MetalVaoManager( uint8 dynamicBufferMultiplier, MetalDevice *device,
+                         const NameValuePairList *params );
         virtual ~MetalVaoManager();
 
         virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,

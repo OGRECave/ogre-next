@@ -86,7 +86,16 @@ namespace Ogre
 #endif
     const uint32 c_indexBufferAlignment = 4u;
 
-    MetalVaoManager::MetalVaoManager( uint8 dynamicBufferMultiplier, MetalDevice *device ) :
+    static const char *c_vboTypes[] =
+    {
+        "CPU_INACCESSIBLE",
+        "CPU_ACCESSIBLE_DEFAULT",
+        "CPU_ACCESSIBLE_PERSISTENT",
+        "CPU_ACCESSIBLE_PERSISTENT_COHERENT",
+    };
+
+    MetalVaoManager::MetalVaoManager( uint8 dynamicBufferMultiplier, MetalDevice *device,
+                                      const NameValuePairList *params ) :
         mVaoNames( 1 ),
         mSemaphoreFlushed( true ),
         mDevice( device ),
@@ -122,6 +131,19 @@ namespace Ogre
 
         mSupportsIndirectBuffers    = false; // TODO: the _render() overload is not implemented yet!
 #endif
+        if( params )
+        {
+            for( size_t i=0; i<MAX_VBO_FLAG; ++i )
+            {
+                NameValuePairList::const_iterator itor =
+                        params->find( String( "VaoManager::" ) + c_vboTypes[i] );
+                if( itor != params->end() )
+                {
+                    mDefaultPoolSize[i] = StringConverter::parseUnsignedInt( itor->second,
+                                                                             mDefaultPoolSize[i] );
+                }
+            }
+        }
 
         mAlreadyWaitedForSemaphore.resize( mDynamicBufferMultiplier, true );
         mFrameSyncVec.resize( mDynamicBufferMultiplier, 0 );
@@ -180,16 +202,8 @@ namespace Ogre
     {
         if( log )
         {
-            static const char *vboTypes[] =
-            {
-                "CPU_INACCESSIBLE",
-                "CPU_ACCESSIBLE_DEFAULT",
-                "CPU_ACCESSIBLE_PERSISTENT",
-                "CPU_ACCESSIBLE_PERSISTENT_COHERENT",
-            };
-
             text.clear();
-            text.a( vboTypes[vboIdx], ";",
+            text.a( c_vboTypes[vboIdx], ";",
                     (uint64)block.offset, ";",
                     (uint64)block.size, ";",
                     (uint64)poolCapacity );
@@ -286,6 +300,29 @@ namespace Ogre
                 if( vbo.freeBlocks.size() == 1u &&
                     vbo.sizeBytes == vbo.freeBlocks.back().size )
                 {
+                    VaoVec::iterator itVao = mVaos.begin();
+                    VaoVec::iterator enVao = mVaos.end();
+
+                    while( itVao != enVao )
+                    {
+                        bool usesBuffer = false;
+                        Vao::VertexBindingVec::const_iterator itBuf = itVao->vertexBuffers.begin();
+                        Vao::VertexBindingVec::const_iterator enBuf = itVao->vertexBuffers.end();
+
+                        while( itBuf != enBuf && !usesBuffer )
+                        {
+                            OGRE_ASSERT_LOW( itBuf->vertexBufferVbo == vbo.vboName &&
+                                             "A VertexArrayObject still references "
+                                             "a deleted vertex buffer!" );
+                            ++itBuf;
+                        }
+
+                        OGRE_ASSERT_LOW( itVao->indexBufferVbo == vbo.vboName &&
+                                         "A VertexArrayObject still references "
+                                         "a deleted index buffer!" );
+                        ++itVao;
+                    }
+
                     vbo.vboName = 0;
                     delete vbo.dynamicBuffer;
                     vbo.dynamicBuffer = 0;
@@ -876,6 +913,21 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void MetalVaoManager::destroyVertexArrayObjectImpl( VertexArrayObject *vao )
     {
+        VaoVec::iterator itor = mVaos.begin();
+        VaoVec::iterator end  = mVaos.end();
+
+        while( itor != end && itor->vaoName != vao->getVaoName() )
+            ++itor;
+
+        if( itor != end )
+        {
+            --itor->refCount;
+
+            if( !itor->refCount )
+                efficientVectorRemove( mVaos, itor );
+        }
+
+        //We delete it here because this class has no virtual destructor on purpose
         OGRE_DELETE vao;
     }
     //-----------------------------------------------------------------------------------
@@ -914,7 +966,7 @@ namespace Ogre
             }
         }
 
-        //vao.refCount = 0;
+        vao.refCount = 0;
 
         if( indexBuffer )
         {
@@ -954,7 +1006,7 @@ namespace Ogre
             itor = mVaos.begin() + mVaos.size() - 1;
         }
 
-        //++itor->refCount;
+        ++itor->refCount;
 
         return itor;
     }
