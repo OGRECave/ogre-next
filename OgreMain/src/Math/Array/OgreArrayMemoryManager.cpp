@@ -156,18 +156,19 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     size_t ArrayMemoryManager::createNewSlot()
     {
-        size_t nextSlot = mUsedMemory;
-        ++mUsedMemory;
+        size_t usedMemory = mUsedMemory;
+        size_t nextSlot = usedMemory;
+        ++usedMemory;
 
         //See if we can reuse a slot that was previously acquired and released
         if( !mAvailableSlots.empty() )
         {
             nextSlot = mAvailableSlots.back();
             mAvailableSlots.pop_back();
-            --mUsedMemory;
+            --usedMemory;
         }
 
-        if( mUsedMemory > mMaxMemory - OGRE_PREFETCH_SLOT_DISTANCE )
+        if( usedMemory > mMaxMemory - OGRE_PREFETCH_SLOT_DISTANCE )
         {
             if( mMaxMemory >= mMaxHardLimit )
             {
@@ -178,11 +179,12 @@ namespace Ogre
 
             //Build the diff list for rebase later.
             PtrdiffVec diffsList;
-            diffsList.reserve( mUsedMemory );
+            diffsList.reserve( usedMemory );
             mRebaseListener->buildDiffList( mLevel, mMemoryPools, diffsList );
 
             //Reallocate, grow by 50% increments, rounding up to next multiple of ARRAY_PACKED_REALS
-            size_t newMemory = std::min( mMaxMemory + (mMaxMemory >> 1), mMaxHardLimit );
+            size_t newMemory = std::min( std::max( mMaxMemory + (mMaxMemory >> 1), usedMemory ),
+                                         mMaxHardLimit );
             newMemory+= (ARRAY_PACKED_REALS - newMemory % ARRAY_PACKED_REALS) % ARRAY_PACKED_REALS;
             newMemory = std::min( newMemory, mMaxHardLimit );
 
@@ -219,6 +221,8 @@ namespace Ogre
             //Rebase all ptrs
             mRebaseListener->applyRebase( mLevel, mMemoryPools, diffsList );
         }
+
+        mUsedMemory = usedMemory;
 
         return nextSlot;
     }
@@ -311,7 +315,8 @@ namespace Ogre
         mRebaseListener->buildDiffList( mLevel, mMemoryPools, diffsList );
 
         //Ensure mMaxMemory will be aligned and is never 0.
-        size_t newMemory = alignToNextMultiple( std::max<size_t>( mUsedMemory, ARRAY_PACKED_REALS ),
+        size_t newMemory = alignToNextMultiple( std::max<size_t>( mUsedMemory,
+                                                                  OGRE_PREFETCH_SLOT_DISTANCE ),
                                                 ARRAY_PACKED_REALS );
 
         size_t i=0;
