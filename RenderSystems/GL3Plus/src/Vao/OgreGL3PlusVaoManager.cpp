@@ -329,6 +329,18 @@ namespace Ogre
         statsVec.swap( outStats );
     }
     //-----------------------------------------------------------------------------------
+    void GL3PlusVaoManager::switchVboPoolIndexImpl( size_t oldPoolIdx, size_t newPoolIdx,
+                                                    BufferPacked *buffer )
+    {
+        if( mSupportsIndirectBuffers || buffer->getBufferPackedType() != BP_TYPE_INDIRECT )
+        {
+            GL3PlusBufferInterface *bufferInterface = static_cast<GL3PlusBufferInterface*>(
+                                                          buffer->getBufferInterface() );
+            if( bufferInterface->getVboPoolIndex() == oldPoolIdx )
+                bufferInterface->_setVboPoolIndex( newPoolIdx );
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void GL3PlusVaoManager::cleanupEmptyPools(void)
     {
         FastArray<GLuint> bufferNames;
@@ -355,13 +367,13 @@ namespace Ogre
 
                         while( itBuf != enBuf )
                         {
-                            OGRE_ASSERT_LOW( itBuf->vertexBufferVbo == vbo.vboName &&
+                            OGRE_ASSERT_LOW( itBuf->vertexBufferVbo != vbo.vboName &&
                                              "A VertexArrayObject still references "
                                              "a deleted vertex buffer!" );
                             ++itBuf;
                         }
 
-                        OGRE_ASSERT_LOW( itVao->indexBufferVbo == vbo.vboName &&
+                        OGRE_ASSERT_LOW( itVao->indexBufferVbo != vbo.vboName &&
                                          "A VertexArrayObject still references "
                                          "a deleted index buffer!" );
 
@@ -372,6 +384,11 @@ namespace Ogre
                     bufferNames.push_back( vbo.vboName );
                     delete vbo.dynamicBuffer;
                     vbo.dynamicBuffer = 0;
+
+                    //There's (unrelated) live buffers whose vboIdx will now point out of bounds.
+                    //We need to update them so they don't crash deallocateVbo later.
+                    switchVboPoolIndex( (size_t)(mVbos[vboIdx].size() - 1u),
+                                        (size_t)(itor - mVbos[vboIdx].begin()) );
 
                     itor = efficientVectorRemove( mVbos[vboIdx], itor );
                     end  = mVbos[vboIdx].end();

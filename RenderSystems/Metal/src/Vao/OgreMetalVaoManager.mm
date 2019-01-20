@@ -287,6 +287,18 @@ namespace Ogre
         statsVec.swap( outStats );
     }
     //-----------------------------------------------------------------------------------
+    void MetalVaoManager::switchVboPoolIndexImpl( size_t oldPoolIdx, size_t newPoolIdx,
+                                                  BufferPacked *buffer )
+    {
+        if( mSupportsIndirectBuffers || buffer->getBufferPackedType() != BP_TYPE_INDIRECT )
+        {
+            MetalBufferInterface *bufferInterface = static_cast<MetalBufferInterface*>(
+                                                        buffer->getBufferInterface() );
+            if( bufferInterface->getVboPoolIndex() == oldPoolIdx )
+                bufferInterface->_setVboPoolIndex( newPoolIdx );
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void MetalVaoManager::cleanupEmptyPools(void)
     {
         for( int vboIdx=0; vboIdx<MAX_VBO_FLAG; ++vboIdx )
@@ -306,18 +318,19 @@ namespace Ogre
                     while( itVao != enVao )
                     {
                         bool usesBuffer = false;
+                        TODO;
                         Vao::VertexBindingVec::const_iterator itBuf = itVao->vertexBuffers.begin();
                         Vao::VertexBindingVec::const_iterator enBuf = itVao->vertexBuffers.end();
 
                         while( itBuf != enBuf && !usesBuffer )
                         {
-                            OGRE_ASSERT_LOW( itBuf->vertexBufferVbo == vbo.vboName &&
+                            OGRE_ASSERT_LOW( itBuf->vertexBufferVbo != vbo.vboName &&
                                              "A VertexArrayObject still references "
                                              "a deleted vertex buffer!" );
                             ++itBuf;
                         }
 
-                        OGRE_ASSERT_LOW( itVao->indexBufferVbo == vbo.vboName &&
+                        OGRE_ASSERT_LOW( itVao->indexBufferVbo != vbo.vboName &&
                                          "A VertexArrayObject still references "
                                          "a deleted index buffer!" );
                         ++itVao;
@@ -326,6 +339,11 @@ namespace Ogre
                     vbo.vboName = 0;
                     delete vbo.dynamicBuffer;
                     vbo.dynamicBuffer = 0;
+
+                    //There's (unrelated) live buffers whose vboIdx will now point out of bounds.
+                    //We need to update them so they don't crash deallocateVbo later.
+                    switchVboPoolIndex( (size_t)(mVbos[vboIdx].size() - 1u),
+                                        (size_t)(itor - mVbos[vboIdx].begin()) );
 
                     itor = efficientVectorRemove( mVbos[vboIdx], itor );
                     end  = mVbos[vboIdx].end();

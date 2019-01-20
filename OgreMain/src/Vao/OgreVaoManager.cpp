@@ -565,6 +565,32 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void VaoManager::switchVboPoolIndex( size_t oldPoolIdx, size_t newPoolIdx )
+    {
+        for( int i=0; i<NUM_BUFFER_PACKED_TYPES; ++i )
+        {
+            BufferPackedSet::const_iterator itor = mBuffers[i].begin();
+            BufferPackedSet::const_iterator end  = mBuffers[i].end();
+
+            while( itor != end )
+            {
+                switchVboPoolIndexImpl( oldPoolIdx, newPoolIdx, *itor );
+                ++itor;
+            }
+        }
+
+        {
+            DelayedBufferVec::const_iterator itor = mDelayedDestroyBuffers.begin();
+            DelayedBufferVec::const_iterator end  = mDelayedDestroyBuffers.end();
+
+            while( itor != end )
+            {
+                switchVboPoolIndexImpl( oldPoolIdx, newPoolIdx, itor->bufferPacked );
+                ++itor;
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void VaoManager::_update(void)
     {
         ++mFrameCount;

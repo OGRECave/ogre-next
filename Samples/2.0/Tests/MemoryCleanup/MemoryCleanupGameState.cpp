@@ -91,7 +91,9 @@ namespace Demo
             for( size_t i=0; i<2u; ++i )
             {
                 Ogre::MeshPtr mesh = Ogre::MeshManager::getSingleton().getByName( meshNames[i] );
-                if( mesh )
+                //Do not unload the first one, to test cleanupEmptyPools
+                //can deal with this correctly
+                if( i != 0 && mesh )
                     mesh->unload();
             }
 

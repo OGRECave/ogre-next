@@ -253,6 +253,9 @@ namespace Ogre
                                     size_t vboIdx, size_t poolCapacity, LwString &text,
                                     MemoryStatsEntryVec &outStats, Log *log ) const;
 
+        virtual void switchVboPoolIndexImpl( size_t oldPoolIdx, size_t newPoolIdx,
+                                             BufferPacked *buffer );
+
     public:
         MetalVaoManager( uint8 dynamicBufferMultiplier, MetalDevice *device,
                          const NameValuePairList *params );

@@ -402,5 +402,10 @@ namespace Ogre
         return static_cast<VboFlag>( std::max( 0, (bufferType - BT_DYNAMIC_DEFAULT) +
                                                     CPU_ACCESSIBLE_DEFAULT ) );
     }
+    //-----------------------------------------------------------------------------------
+    void NULLVaoManager::switchVboPoolIndexImpl( size_t oldPoolIdx, size_t newPoolIdx,
+                                                 BufferPacked *buffer )
+    {
+    }
 }
 

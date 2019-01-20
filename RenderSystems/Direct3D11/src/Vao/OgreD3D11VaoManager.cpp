@@ -299,6 +299,27 @@ namespace Ogre
         statsVec.swap( outStats );
     }
     //-----------------------------------------------------------------------------------
+    void D3D11VaoManager::switchVboPoolIndexImpl( size_t oldPoolIdx, size_t newPoolIdx,
+                                                  BufferPacked *buffer )
+    {
+        const BufferPackedTypes bufferPackedType = buffer->getBufferPackedType();
+        if( (mSupportsIndirectBuffers || bufferPackedType != BP_TYPE_INDIRECT) &&
+            (mD3D11RenderSystem->_getFeatureLevel() > D3D_FEATURE_LEVEL_11_0 ||
+             bufferPackedType != BP_TYPE_TEX) &&
+            bufferPackedType != BP_TYPE_CONST &&
+            bufferPackedType != BP_TYPE_UAV )
+        {
+            OGRE_ASSERT_HIGH( dynamic_cast<D3D11BufferInterface*>( buffer->getBufferInterface() ) );
+            D3D11BufferInterface *bufferInterface = static_cast<D3D11BufferInterface*>(
+                                                        buffer->getBufferInterface() );
+            if( bufferInterface->_getInitialData() == 0 )
+            {
+                if( bufferInterface->getVboPoolIndex() == oldPoolIdx )
+                    bufferInterface->_setVboPoolIndex( newPoolIdx );
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void D3D11VaoManager::cleanupEmptyPools(void)
     {
         for( uint32 idx0=0; idx0<NumInternalBufferTypes; ++idx0 )
@@ -318,6 +339,11 @@ namespace Ogre
                             vbo.vboName->Release();
                         delete vbo.dynamicBuffer;
                         vbo.dynamicBuffer = 0;
+
+                        //There's (unrelated) live buffers whose vboIdx will now point out of bounds.
+                        //We need to update them so they don't crash deallocateVbo later.
+                        switchVboPoolIndex( (size_t)(mVbos[idx0][idx1].size() - 1u),
+                                            (size_t)(itor - mVbos[idx0][idx1].begin()) );
 
                         itor = efficientVectorRemove( mVbos[idx0][idx1], itor );
                         end  = mVbos[idx0][idx1].end();
@@ -500,6 +526,7 @@ namespace Ogre
             //Immutable buffer is empty. It can't be filled again. Release the GPU memory.
             //The vbo is not removed from mVbos since that would alter the index of other
             //buffers (except if this is the last one).
+            //We can call switchVboPoolIndex, but that has unknown run time
             vbo.vboName->Release();
             vbo.vboName = 0;
 
@@ -1542,7 +1569,10 @@ namespace Ogre
         {
             bool delayedBuffersPending = false;
             for( size_t i=0; i<NumInternalBufferTypes; ++i )
-                delayedBuffersPending |= !mDelayedBuffers[i].empty();
+            {
+                delayedBuffersPending |= !mDelayedBuffers[i].empty() &&
+                                         mDefaultPoolSize[i][BT_IMMUTABLE] > 0u;
+            }
 
             if( delayedBuffersPending )
             {

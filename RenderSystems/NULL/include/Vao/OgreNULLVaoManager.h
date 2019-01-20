@@ -178,6 +178,9 @@ namespace Ogre
 
         static VboFlag bufferTypeToVboFlag( BufferType bufferType );
 
+        virtual void switchVboPoolIndexImpl( size_t oldPoolIdx, size_t newPoolIdx,
+                                             BufferPacked *buffer );
+
     public:
         NULLVaoManager();
         virtual ~NULLVaoManager();

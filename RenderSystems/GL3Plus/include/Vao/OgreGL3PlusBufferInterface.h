@@ -67,6 +67,8 @@ namespace Ogre
         size_t getVboPoolIndex(void)                { return mVboPoolIdx; }
         GLuint getVboName(void) const               { return mVboName; }
 
+        void _setVboPoolIndex( size_t newVboPool )  { mVboPoolIdx = newVboPool; }
+
         /// Only use this function for the first upload
         void _firstUpload( void *data, size_t elementStart, size_t elementCount );
 

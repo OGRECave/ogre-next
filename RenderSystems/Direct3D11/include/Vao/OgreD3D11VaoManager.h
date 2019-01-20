@@ -269,6 +269,9 @@ namespace Ogre
                                     MemoryStatsEntryVec &outStats,
                                     Log *log ) const;
 
+        virtual void switchVboPoolIndexImpl( size_t oldPoolIdx, size_t newPoolIdx,
+                                             BufferPacked *buffer );
+
     public:
         D3D11VaoManager( bool supportsIndirectBuffers, D3D11Device &device,
                          D3D11RenderSystem *renderSystem, const NameValuePairList *params );

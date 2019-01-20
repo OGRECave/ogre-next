@@ -153,6 +153,10 @@ namespace Ogre
 
         inline void callDestroyBufferImpl( BufferPacked *bufferPacked );
 
+        void switchVboPoolIndex( size_t oldPoolIdx, size_t newPoolIdx );
+        virtual void switchVboPoolIndexImpl( size_t oldPoolIdx, size_t newPoolIdx,
+                                             BufferPacked *buffer ) = 0;
+
     public:
         VaoManager();
         virtual ~VaoManager();
