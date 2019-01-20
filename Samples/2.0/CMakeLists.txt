@@ -130,6 +130,7 @@ if( OGRE_BUILD_SAMPLES2 AND NOT OGRE_BUILD_SAMPLES2_SKIP )
 endif()
 
 if( OGRE_BUILD_TESTS )
+	add_subdirectory(Tests/MemoryCleanup)
 	add_subdirectory(Tests/Restart)
 	add_subdirectory(Tests/TextureResidency)
 endif()
