@@ -314,9 +314,9 @@ namespace Ogre
         diffsList.reserve( mUsedMemory );
         mRebaseListener->buildDiffList( mLevel, mMemoryPools, diffsList );
 
-        //Ensure mMaxMemory will be aligned and is never 0.
-        size_t newMemory = alignToNextMultiple( std::max<size_t>( mUsedMemory,
-                                                                  OGRE_PREFETCH_SLOT_DISTANCE ),
+        //Ensure mMaxMemory will be rounded up to ARRAY_PACKED_REALS and is never 0.
+        size_t newMemory = alignToNextMultiple( std::max<size_t>( mUsedMemory, ARRAY_PACKED_REALS ) +
+                                                OGRE_PREFETCH_SLOT_DISTANCE,
                                                 ARRAY_PACKED_REALS );
 
         size_t i=0;
@@ -328,16 +328,25 @@ namespace Ogre
             //Reallocate
             char *tmp = (char*)OGRE_MALLOC_SIMD( newMemory * mElementsMemSizes[i],
                                                  MEMCATEGORY_SCENE_OBJECTS );
-            memcpy( tmp, *itor, mUsedMemory * mElementsMemSizes[i] );
+
+            //The memory in range [mUsedMemory; newMemory] to nearest multiple of ARRAY_PACKED_REALS
+            //This allows us to use raw memcpy, and then use memset for most pointers, with
+            //a few of them using mInitRoutines to default-initialize whatever leftover.
+            //Otherwise instead of memcpy & memset, we would have to use mCleanupRoutines instead
+            //
+            //Rounding up is safe to do because the slots between [mUsedMemory; usedMemRoundUp)
+            //have already been default-initialized, and mMaxMemory is always rounded up too.
+            const size_t usedMemRoundUp = alignToNextMultiple( mUsedMemory, ARRAY_PACKED_REALS );
+            memcpy( tmp, *itor, usedMemRoundUp * mElementsMemSizes[i] );
             if( mInitRoutines && mInitRoutines[i] )
             {
-                mInitRoutines[i]( tmp + mUsedMemory * mElementsMemSizes[i], 0, 0, 0, 0,
-                                  newMemory - mUsedMemory, mElementsMemSizes[i] );
+                mInitRoutines[i]( tmp + usedMemRoundUp * mElementsMemSizes[i], 0, 0, 0, 0,
+                                  newMemory - usedMemRoundUp, mElementsMemSizes[i] );
             }
             else
             {
-                memset( tmp + mUsedMemory * mElementsMemSizes[i], 0,
-                        (newMemory - mUsedMemory) * mElementsMemSizes[i] );
+                memset( tmp + usedMemRoundUp * mElementsMemSizes[i], 0,
+                        (newMemory - usedMemRoundUp) * mElementsMemSizes[i] );
             }
             OGRE_FREE_SIMD( *itor, MEMCATEGORY_SCENE_OBJECTS );
             *itor = tmp;
