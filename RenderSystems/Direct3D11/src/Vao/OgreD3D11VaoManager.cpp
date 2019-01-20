@@ -102,11 +102,12 @@ namespace Ogre
                 for( size_t j=BT_IMMUTABLE; j<=BT_DYNAMIC_DEFAULT; ++j )
                 {
                     NameValuePairList::const_iterator itor =
-                            params->find( String( "VaoManager::" ) + c_vboTypes[i] );
+                            params->find( String( "VaoManager::" ) + c_vboTypes[i][j] );
                     if( itor != params->end() )
                     {
                         mDefaultPoolSize[i][j] =
-                                StringConverter::parseUnsignedInt( itor->second, mDefaultPoolSize[i] );
+                                StringConverter::parseUnsignedLong( itor->second,
+                                                                    mDefaultPoolSize[i][j] );
                     }
                 }
             }

@@ -1172,7 +1172,7 @@ namespace Ogre
 			initialiseFromRenderSystemCapabilities(mCurrentCapabilities, mPrimaryWindow);
 
             assert( !mVaoManager );
-            mVaoManager = OGRE_NEW D3D11VaoManager( false, mDevice, this );
+            mVaoManager = OGRE_NEW D3D11VaoManager( false, mDevice, this, miscParams );
 
             mTextureGpuManager = OGRE_NEW D3D11TextureGpuManager( mVaoManager, this, mDevice );
 
