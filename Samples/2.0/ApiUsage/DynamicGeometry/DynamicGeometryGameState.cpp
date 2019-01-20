@@ -80,6 +80,9 @@ namespace Demo
             // However if for some weird reason there is an exception raised, the memory will
             // not be freed, so it is up to us to do so.
             // The reasons for exceptions are very rare. But we're doing this for correctness.
+            // Important: Please note that we passed keepAsShadow = true to createIndexBuffer,
+            // thus Ogre will free the pointer. However had we passed keepAsShadow = false,
+            // it would be YOUR responsability to free the pointer, not Ogre's
             OGRE_FREE_SIMD( indexBuffer, Ogre::MEMCATEGORY_GEOMETRY );
             indexBuffer = 0;
             throw e;
@@ -125,6 +128,9 @@ namespace Demo
         }
         catch( Ogre::Exception &e )
         {
+            // Important: Please note that we passed keepAsShadow = true to createVertexBuffer,
+            // thus Ogre will free the pointer. However had we passed keepAsShadow = false,
+            // it would be YOUR responsability to free the pointer, not Ogre's
             OGRE_FREE_SIMD( vertexBuffer, Ogre::MEMCATEGORY_GEOMETRY );
             vertexBuffer = 0;
             throw e;
