@@ -318,7 +318,6 @@ namespace Ogre
                     while( itVao != enVao )
                     {
                         bool usesBuffer = false;
-                        TODO;
                         Vao::VertexBindingVec::const_iterator itBuf = itVao->vertexBuffers.begin();
                         Vao::VertexBindingVec::const_iterator enBuf = itVao->vertexBuffers.end();
 
