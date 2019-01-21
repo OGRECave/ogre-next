@@ -1449,6 +1449,13 @@ namespace Ogre
 
         bool isReverseDepth(void) const                         { return mReverseDepth; }
 
+        /// On D3D11 calls ClearState followed by Flush().
+        /// On GL3+ it calls glFlush
+        ///
+        /// Do not call this function while inside rendering internals, as it will clear
+        /// the device state, thus leaving it inconsistent with what we think it is set to.
+        virtual void _clearStateAndFlushCommandBuffer(void);
+
         virtual const PixelFormatToShaderType* getPixelFormatToShaderType(void) const = 0;
    
     protected:

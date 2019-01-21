@@ -420,7 +420,7 @@ namespace Ogre
         /// @copydoc RenderSystem::getPixelFormatToShaderType
         virtual const PixelFormatToShaderType* getPixelFormatToShaderType(void) const;
 
-        void _clearStateAndFlushCommandBuffer(void);
+        virtual void _clearStateAndFlushCommandBuffer(void);
     };
 }
 #endif

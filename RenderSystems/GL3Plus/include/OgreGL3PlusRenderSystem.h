@@ -164,6 +164,8 @@ namespace Ogre {
         /// @copydoc RenderSystem::getPixelFormatToShaderType
         virtual const PixelFormatToShaderType* getPixelFormatToShaderType(void) const;
 
+        virtual void _clearStateAndFlushCommandBuffer(void);
+
         unsigned char *mSwIndirectBufferPtr;
 
         uint8   mFirstUavBoundSlot;

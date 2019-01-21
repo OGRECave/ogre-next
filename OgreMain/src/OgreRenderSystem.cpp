@@ -1417,5 +1417,9 @@ namespace Ogre {
     {
         mDebugShaders = bDebugShaders;
     }
+    //---------------------------------------------------------------------
+    void RenderSystem::_clearStateAndFlushCommandBuffer(void)
+    {
+    }
 }
 

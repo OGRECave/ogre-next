@@ -3912,4 +3912,9 @@ namespace Ogre {
     {
         return &mPixelFormatToShaderType;
     }
+    //---------------------------------------------------------------------
+    void GL3PlusRenderSystem::_clearStateAndFlushCommandBuffer(void)
+    {
+        OCGE( glFlush() );
+    }
 }

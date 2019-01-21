@@ -50,6 +50,7 @@ THE SOFTWARE.
 
 #include "Threading/OgreThreads.h"
 
+#include "OgreRenderSystem.h"
 #include "OgreException.h"
 #include "OgreLogManager.h"
 
@@ -84,7 +85,13 @@ namespace Ogre
         mEntriesToProcessPerIteration( 3u ),
         mMaxPreloadBytes( 256u * 1024u * 1024u ), //A value of 512MB begins to shake driver bugs.
         mTextureGpuManagerListener( 0 ),
-        mStagingTextureMaxBudgetBytes( 512u * 1024u * 1024u ),
+    #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS && \
+        OGRE_PLATFORM != OGRE_PLATFORM_ANDROID && \
+        OGRE_ARCH_TYPE != OGRE_ARCHITECTURE_32
+            mStagingTextureMaxBudgetBytes( 256u * 1024u * 1024u ),
+    #else
+            mStagingTextureMaxBudgetBytes( 128u * 1024u * 1024u ),
+    #endif
         mDelayListenerCalls( false ),
         mIgnoreScheduledTasks( false ),
         mVaoManager( vaoManager ),
@@ -2757,6 +2764,13 @@ namespace Ogre
 
         LogManager::getSingleton().logMessage( "Texture memory budget exceeded. Stalling GPU." );
 
+        //NVIDIA driver can let the staging textures accumulate and skyrocket the
+        //memory consumption until the process runs out of memory and crashes
+        //(if it has a lot of textures to load).
+        //Worst part this only repros in some machines, not driver specific.
+        //Flushing here fixes it.
+        mRenderSystem->_clearStateAndFlushCommandBuffer();
+
         set<uint32>::type waitedFrames;
 
         //Before freeing memory, check if we can make some of
@@ -2804,6 +2818,8 @@ namespace Ogre
             }
 
             mAvailableStagingTextures.erase( mAvailableStagingTextures.begin(), itor );
+
+            mRenderSystem->_clearStateAndFlushCommandBuffer();
         }
         else
         {
