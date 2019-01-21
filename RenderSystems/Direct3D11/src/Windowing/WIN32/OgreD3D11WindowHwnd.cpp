@@ -48,6 +48,8 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    bool D3D11WindowHwnd::mClassRegistered = false;
+
     typedef vector<HMONITOR>::type DisplayMonitorList;
 
     D3D11WindowHwnd::D3D11WindowHwnd( const String &title, uint32 width, uint32 height,
@@ -527,11 +529,15 @@ namespace Ogre
             if( enableDoubleClick )
                 wcex.style |= CS_DBLCLKS;
 
-            if( !RegisterClassEx( &wcex ) )
+            if (!mClassRegistered)
             {
-                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
-                             "RegisterClassEx failed! Cannot create window",
-                             "D3D11WindowHwnd::create" );
+                if (!RegisterClassEx(&wcex))
+                {
+                    OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
+                        "RegisterClassEx failed! Cannot create window",
+                        "D3D11WindowHwnd::create");
+                }
+                mClassRegistered = true;
             }
 
             mHwnd = CreateWindowEx( dwStyleEx, OGRE_D3D11_WIN_CLASS_NAME, mTitle.c_str(),

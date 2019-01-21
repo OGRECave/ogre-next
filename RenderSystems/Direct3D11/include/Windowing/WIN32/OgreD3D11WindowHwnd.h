@@ -42,6 +42,8 @@ namespace Ogre
         // the last value of the switching fullscreen counter when we switched
         int     mLastSwitchingFullscreenCounter;
 
+        static bool mClassRegistered;
+
         DWORD getWindowStyle( bool fullScreen ) const;
 
         static bool isWindows8OrGreater(void);
