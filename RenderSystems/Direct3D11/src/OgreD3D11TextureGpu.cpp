@@ -327,6 +327,9 @@ namespace Ogre
                 //setting mTexturePool & mInternalSliceStart to 0
                 mTextureManager->_releaseSlotFromTexture( this );
             }
+
+            mFinalTextureName = 0;
+            mMsaaFramebufferName = 0;
         }
 
         _setToDisplayDummyTexture();

@@ -118,12 +118,12 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void MetalTextureGpu::destroyInternalResourcesImpl(void)
     {
+        if( mFinalTextureName )
+            mFinalTextureName = 0;
+        if( mMsaaFramebufferName )
+            mMsaaFramebufferName = 0;
+
         if( !hasAutomaticBatching() )
-        {
-            if( mFinalTextureName )
-                mFinalTextureName = 0;
-        }
-        else
         {
             if( mTexturePool )
             {
@@ -135,7 +135,6 @@ namespace Ogre
 
         _setToDisplayDummyTexture();
     }
-
     //-----------------------------------------------------------------------------------
     MTLTextureType MetalTextureGpu::getMetalTextureType(void) const
     {
