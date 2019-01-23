@@ -1216,7 +1216,7 @@ namespace Ogre
         //the render loop (i.e. user is manually uploading data) we may have to call this earlier.
         if( !mAlreadyWaitedForSemaphore[mDynamicBufferCurrentFrame] )
         {
-            dispatch_semaphore_wait( mFrameSyncVec[mDynamicBufferCurrentFrame], DISPATCH_TIME_FOREVER );
+            waitFor( mFrameSyncVec[mDynamicBufferCurrentFrame], mDevice );
             //Semaphore was just grabbed, so ensure we don't grab it twice.
             mAlreadyWaitedForSemaphore[mDynamicBufferCurrentFrame] = true;
         }
@@ -1243,7 +1243,7 @@ namespace Ogre
 
             if( !mAlreadyWaitedForSemaphore[idx] )
             {
-                dispatch_semaphore_wait( mFrameSyncVec[idx], DISPATCH_TIME_FOREVER );
+                waitFor( mFrameSyncVec[idx], mDevice );
                 //Semaphore was just grabbed, so ensure we don't grab it twice.
                 mAlreadyWaitedForSemaphore[idx] = true;
             }

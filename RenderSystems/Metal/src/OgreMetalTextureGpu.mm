@@ -123,7 +123,7 @@ namespace Ogre
         if( mMsaaFramebufferName )
             mMsaaFramebufferName = 0;
 
-        if( !hasAutomaticBatching() )
+        if( hasAutomaticBatching() )
         {
             if( mTexturePool )
             {
