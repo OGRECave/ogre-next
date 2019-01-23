@@ -794,6 +794,11 @@ namespace Ogre
             mTextureManager->notifyTextureChanged( this, reason, extraData );
     }
     //-----------------------------------------------------------------------------------
+    const vector<TextureGpuListener*>::type& TextureGpu::getListeners(void) const
+    {
+        return mListeners;
+    }
+    //-----------------------------------------------------------------------------------
     bool TextureGpu::supportsAsDepthBufferFor( TextureGpu *colourTarget ) const
     {
         assert( PixelFormatGpuUtils::isDepth( this->mPixelFormat ) );

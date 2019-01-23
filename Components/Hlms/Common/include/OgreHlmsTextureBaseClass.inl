@@ -462,6 +462,11 @@ namespace Ogre
         scheduleConstBufferUpdate( true, false );
     }
     //-----------------------------------------------------------------------------------
+    bool OGRE_HLMS_TEXTURE_BASE_CLASS::shouldStayLoaded( TextureGpu *texture )
+    {
+        return !mLinkedRenderables.empty();
+    }
+    //-----------------------------------------------------------------------------------
     void OGRE_HLMS_TEXTURE_BASE_CLASS::loadAllTextures(void)
     {
         if( !mAllowTextureResidencyChange )

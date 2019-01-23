@@ -100,6 +100,12 @@ namespace Ogre
         ///     3. Texture is being deleted. It won't be a valid pointer after this call.
         virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
                                            void *extraData ) = 0;
+
+        /// Return true if this TextureGpu should likely stay loaded or else
+        /// graphical changes could occur.
+        ///
+        /// Return false if it is certainly safe to unload.
+        virtual bool shouldStayLoaded( TextureGpu *texture )        { return true; }
     };
 
     /** @} */

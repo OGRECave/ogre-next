@@ -508,6 +508,8 @@ namespace Ogre
         void removeListener( TextureGpuListener *listener );
         void notifyAllListenersTextureChanged( uint32 reason, void *extraData=0 );
 
+        const vector<TextureGpuListener*>::type& getListeners(void) const;
+
         virtual bool supportsAsDepthBufferFor( TextureGpu *colourTarget ) const;
 
         /// Writes the current contents of the render target to the named file.

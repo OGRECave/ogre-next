@@ -164,6 +164,7 @@ namespace Ogre
 
         virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
                                            void *extraData );
+        virtual bool shouldStayLoaded( TextureGpu *texture );
 
         void loadAllTextures(void);
     };

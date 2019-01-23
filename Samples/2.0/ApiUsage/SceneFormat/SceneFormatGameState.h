@@ -23,6 +23,7 @@ namespace Demo
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
+    public:
         void resetScene(void);
         void setupParallaxCorrectCubemaps(void);
         void destroyInstantRadiosity(void);

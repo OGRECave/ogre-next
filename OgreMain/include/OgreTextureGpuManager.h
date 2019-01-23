@@ -255,7 +255,6 @@ namespace Ogre
 
         typedef map<IdString, MetadataCacheEntry>::type MetadataCacheMap;
 
-    protected:
         struct ResourceEntry
         {
             String      name;
@@ -275,6 +274,7 @@ namespace Ogre
         };
         typedef map<IdString, ResourceEntry>::type ResourceEntryMap;
 
+    protected:
         struct LoadRequest
         {
             String                      name;
@@ -647,6 +647,8 @@ namespace Ogre
         DefaultMipmapGen::DefaultMipmapGen getDefaultMipmapGeneration(void) const;
         DefaultMipmapGen::DefaultMipmapGen getDefaultMipmapGenerationCubemaps(void) const;
 
+        const ResourceEntryMap& getEntries(void) const              { return mEntries; }
+
         /// Must be called from main thread.
         void _reserveSlotForTexture( TextureGpu *texture );
         /// Must be called from main thread.
@@ -828,6 +830,10 @@ namespace Ogre
                                          bool bCreateReservedPools );
         void exportTextureMetadataCache( String &outJson );
 
+        void getMemoryStats( size_t &outTextureBytesCpu, size_t &outTextureBytesGpu,
+                             size_t &outUsedStagingTextureBytes,
+                             size_t &outAvailableStagingTextureBytes );
+
         void dumpStats(void) const;
         void dumpMemoryUsage( Log* log ) const;
 
@@ -873,6 +879,8 @@ namespace Ogre
             multiple StagingTextures, thus relieving the pressure on memory and memory fragmentation.
         */
         void setWorkerThreadMinimumBudget( const BudgetEntryVec &budget, size_t maxSplitResolution=0 );
+
+        const BudgetEntryVec& getBudget(void) const;
 
         /** At a high level, texture loading works like this:
             1. Grab a free StagingTexture from "available" pool in main thread

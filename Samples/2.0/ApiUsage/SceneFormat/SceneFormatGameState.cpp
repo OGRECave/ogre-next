@@ -103,6 +103,16 @@ namespace Demo
         destroyInstantRadiosity();
         destroyParallaxCorrectCubemaps();
         sceneManager->clearScene( false );
+
+        Ogre::Root *root = mGraphicsSystem->getRoot();
+        Ogre::TextureGpuManager *textureManager = root->getRenderSystem()->getTextureGpuManager();
+        Ogre::TextureGpu *texture = 0;
+        texture = textureManager->findTextureNoThrow( "decals_disabled_normals" );
+        if( texture )
+            texture->scheduleTransitionTo( Ogre::GpuResidency::OnStorage );
+        texture = textureManager->findTextureNoThrow( "RawDecalTextureTest" );
+        if( texture )
+            texture->scheduleTransitionTo( Ogre::GpuResidency::OnStorage );
     }
     //-----------------------------------------------------------------------------------
     void SceneFormatGameState::setupParallaxCorrectCubemaps(void)
@@ -196,7 +206,7 @@ namespace Demo
 
         //Create raw texture
         Ogre::TextureGpu *rawTex =
-                textureMgr->createTexture(
+                textureMgr->createOrRetrieveTexture(
                     "RawDecalTextureTest", Ogre::GpuPageOutStrategy::SaveToSystemRam,
                     Ogre::TextureFlags::ManualTexture, Ogre::TextureTypes::Type2DArray );
         rawTex->setResolution( origImage.getWidth(), origImage.getHeight(), 8u );

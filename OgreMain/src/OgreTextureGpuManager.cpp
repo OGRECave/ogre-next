@@ -72,6 +72,8 @@ namespace Ogre
     static const int c_mainThread = 0;
     static const int c_workerThread = 1;
 
+    static DefaultTextureGpuManagerListener sDefaultTextureGpuManagerListener;
+
     unsigned long updateStreamingWorkerThread( ThreadHandle *threadHandle );
     THREAD_DECLARE( updateStreamingWorkerThread );
 
@@ -84,7 +86,7 @@ namespace Ogre
         mAddedNewLoadRequests( false ),
         mEntriesToProcessPerIteration( 3u ),
         mMaxPreloadBytes( 256u * 1024u * 1024u ), //A value of 512MB begins to shake driver bugs.
-        mTextureGpuManagerListener( 0 ),
+        mTextureGpuManagerListener( &sDefaultTextureGpuManagerListener ),
     #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS && \
         OGRE_PLATFORM != OGRE_PLATFORM_ANDROID && \
         OGRE_ARCH_TYPE != OGRE_ARCHITECTURE_32
@@ -97,8 +99,6 @@ namespace Ogre
         mVaoManager( vaoManager ),
         mRenderSystem( renderSystem )
     {
-        mTextureGpuManagerListener = OGRE_NEW DefaultTextureGpuManagerListener();
-
         memset( mErrorFallbackTexData, 0, sizeof( mErrorFallbackTexData ) );
 
         PixelFormatGpu format;
@@ -176,7 +176,6 @@ namespace Ogre
             mThreadData[i].objCmdBuffer = 0;
         }
 
-        OGRE_DELETE mTextureGpuManagerListener;
         mTextureGpuManagerListener = 0;
     }
     //-----------------------------------------------------------------------------------
@@ -992,6 +991,44 @@ namespace Ogre
         jsonStr.clear();
     }
     //-----------------------------------------------------------------------------------
+    void TextureGpuManager::getMemoryStats( size_t &outTextureBytesCpu, size_t &outTextureBytesGpu,
+                                            size_t &outUsedStagingTextureBytes,
+                                            size_t &outAvailableStagingTextureBytes )
+    {
+        outUsedStagingTextureBytes = getConsumedMemoryByStagingTextures( mAvailableStagingTextures );
+        outAvailableStagingTextureBytes = getConsumedMemoryByStagingTextures( mUsedStagingTextures );
+
+        size_t textureBytesCpu = 0;
+        size_t textureBytesGpu = 0;
+
+        ResourceEntryMap::const_iterator itor = mEntries.begin();
+        ResourceEntryMap::const_iterator end  = mEntries.end();
+
+        while( itor != end )
+        {
+            const ResourceEntry &entry = itor->second;
+            GpuResidency::GpuResidency residency = entry.texture->getResidencyStatus();
+            if( residency != GpuResidency::OnStorage )
+            {
+                const size_t sizeBytes = entry.texture->getSizeBytes();
+                if( residency == GpuResidency::Resident )
+                    textureBytesGpu += sizeBytes;
+
+                if( residency == GpuResidency::OnSystemRam ||
+                    entry.texture->getGpuPageOutStrategy() ==
+                    GpuPageOutStrategy::AlwaysKeepSystemRamCopy )
+                {
+                    textureBytesCpu += sizeBytes;
+                }
+            }
+
+            ++itor;
+        }
+
+        outTextureBytesCpu = textureBytesCpu;
+        outTextureBytesGpu = textureBytesGpu;
+    }
+    //-----------------------------------------------------------------------------------
     void TextureGpuManager::dumpStats(void) const
     {
         char tmpBuffer[512];
@@ -1131,9 +1168,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::setTextureGpuManagerListener( TextureGpuManagerListener *listener )
     {
-        assert( listener );
-        OGRE_DELETE mTextureGpuManagerListener;
         mTextureGpuManagerListener = listener;
+        if( !listener )
+            mTextureGpuManagerListener = &sDefaultTextureGpuManagerListener;
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::setStagingTextureMaxBudgetBytes( size_t stagingTextureMaxBudgetBytes )
@@ -1183,6 +1220,11 @@ namespace Ogre
         mBudget = budget;
         //Sort in descending order.
         std::sort( mBudget.begin(), mBudget.end(), BudgetEntry() );
+    }
+    //-----------------------------------------------------------------------------------
+    const TextureGpuManager::BudgetEntryVec& TextureGpuManager::getBudget(void) const
+    {
+        return mBudget;
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::setTrylockMutexFailureLimit( uint32 tryLockFailureLimit )
