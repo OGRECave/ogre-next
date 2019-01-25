@@ -110,6 +110,12 @@ namespace Ogre
 
             desc.textureType = textureTypes[i];
             mBlankTexture[i] = [device->mDevice newTextureWithDescriptor:desc];
+            if( !mBlankTexture[i] )
+            {
+                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                             "Out of GPU memory or driver refused.",
+                             "MetalTextureGpuManager::MetalTextureGpuManager" );
+            }
             mBlankTexture[i].label = [NSString stringWithUTF8String:dummyNames[i]];
 
             if( i == TextureTypes::TypeCube || i == TextureTypes::TypeCubeArray )

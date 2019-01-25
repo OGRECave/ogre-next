@@ -467,6 +467,13 @@ namespace v1 {
                                                  MTLResourceStorageModeShared;
             id<MTLBuffer> tmpBuffer = [device->mDevice newBufferWithLength:sizeInBytes
                                                                    options:resourceOptions];
+            if( !tmpBuffer )
+            {
+                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                             "Out of GPU memory or driver refused.\n"
+                             "Requested: " + StringConverter::toString( sizeInBytes ) + " bytes.",
+                             "MetalTextureBuffer::download" );
+            }
             __unsafe_unretained id<MTLBlitCommandEncoder> blitEncoder = device->getBlitEncoder();
 
             [blitEncoder copyFromTexture:mTexture

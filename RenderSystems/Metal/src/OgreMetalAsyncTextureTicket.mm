@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "Vao/OgreMetalVaoManager.h"
 
 #include "OgreMetalDevice.h"
+#include "OgreStringConverter.h"
 
 #include "OgreTextureBox.h"
 #include "OgreTextureGpuManager.h"
@@ -62,6 +63,13 @@ namespace Ogre
         MTLResourceOptions resourceOptions = MTLResourceCPUCacheModeDefaultCache |
                                              MTLResourceStorageModeShared;
         mVboName = [mDevice->mDevice newBufferWithLength:sizeBytes options:resourceOptions];
+        if( !mVboName )
+        {
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "Out of GPU memory or driver refused.\n"
+                         "Requested: " + StringConverter::toString( sizeBytes ) + " bytes.",
+                         "MetalAsyncTextureTicket::MetalAsyncTextureTicket" );
+        }
     }
     //-----------------------------------------------------------------------------------
     MetalAsyncTextureTicket::~MetalAsyncTextureTicket()

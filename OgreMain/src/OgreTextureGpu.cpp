@@ -908,8 +908,18 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     size_t TextureGpu::getSizeBytes(void) const
     {
-        return PixelFormatGpuUtils::calculateSizeBytes( mWidth, mHeight, getDepth(), getNumSlices(),
-                                                        mPixelFormat, mNumMipmaps, 4u );
+        size_t sizeBytes = PixelFormatGpuUtils::calculateSizeBytes( mWidth, mHeight, getDepth(),
+                                                                    getNumSlices(),
+                                                                    mPixelFormat, mNumMipmaps, 4u );
+        if( mMsaa > 1u )
+        {
+            if( hasMsaaExplicitResolves() )
+                sizeBytes *= mMsaa;
+            else
+                sizeBytes *= (mMsaa + 1u);
+        }
+
+        return sizeBytes;
     }
     //-----------------------------------------------------------------------------------
     bool TextureGpu::isMetadataReady(void) const

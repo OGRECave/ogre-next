@@ -30,6 +30,7 @@ THE SOFTWARE.
 #include "OgreMetalDevice.h"
 #include "OgreMetalDiscardBufferManager.h"
 #include "Vao/OgreMetalStagingBuffer.h"
+#include "OgreStringConverter.h"
 
 #import <Metal/MTLDevice.h>
 #import <Metal/MTLBlitCommandEncoder.h>
@@ -68,8 +69,16 @@ namespace v1
 
         if( !(usage & HardwareBuffer::HBU_DISCARDABLE) )
         {
-            mBuffer = [mDevice->mDevice newBufferWithLength:alignToNextMultiple( sizeBytes, 4u )
+            const size_t sizeBytes = alignToNextMultiple( sizeBytes, 4u );
+            mBuffer = [mDevice->mDevice newBufferWithLength:sizeBytes
                                                     options:resourceOptions];
+            if( !mBuffer )
+            {
+                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                             "Out of GPU memory or driver refused.\n"
+                             "Requested: " + StringConverter::toString( sizeBytes ) + " bytes.",
+                             "MetalHardwareBufferCommon::MetalHardwareBufferCommon" );
+            }
         }
         else
         {

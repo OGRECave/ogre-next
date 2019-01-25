@@ -147,6 +147,12 @@ namespace Ogre
             desc.storageMode = MTLStorageModePrivate;
 
         mTexture = [mDevice->mDevice newTextureWithDescriptor:desc];
+        if( !mTexture )
+        {
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "Out of GPU memory or driver refused.",
+                         "MetalTexture::createMetalTexResource" );
+        }
         mTexture.label = [NSString stringWithUTF8String:mName.c_str()];
 
         if( mFSAA > 1u )
@@ -156,6 +162,12 @@ namespace Ogre
             desc.arrayLength    = 1u;
             desc.sampleCount    = mFSAA;
             mMsaaTexture = [mDevice->mDevice newTextureWithDescriptor:desc];
+            if( !mMsaaTexture )
+            {
+                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                             "Out of GPU memory or driver refused.",
+                             "MetalTexture::createMetalTexResource" );
+            }
             mMsaaTexture.label = [NSString stringWithUTF8String:(mName + "_MSAA").c_str()];
         }
     }

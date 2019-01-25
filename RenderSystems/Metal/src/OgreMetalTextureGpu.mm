@@ -37,7 +37,7 @@ THE SOFTWARE.
 #include "Vao/OgreVaoManager.h"
 
 #include "OgreMetalDevice.h"
-
+#include "OgreStringConverter.h"
 #include "OgreException.h"
 
 #import "Metal/MTLBlitCommandEncoder.h"
@@ -102,6 +102,18 @@ namespace Ogre
         MetalDevice *device = textureManagerMetal->getDevice();
 
         mFinalTextureName = [device->mDevice newTextureWithDescriptor:desc];
+        if( !mFinalTextureName )
+        {
+            size_t sizeBytes = PixelFormatGpuUtils::calculateSizeBytes( mWidth, mHeight, getDepth(),
+                                                                        getNumSlices(),
+                                                                        mPixelFormat, mNumMipmaps, 4u );
+            if( mMsaa > 1u && hasMsaaExplicitResolves() )
+                sizeBytes *= mMsaa;
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "Out of GPU memory or driver refused.\n"
+                         "Requested: " + StringConverter::toString( sizeBytes ) + " bytes.",
+                         "MetalTextureGpu::createInternalResourcesImpl" );
+        }
         mFinalTextureName.label = [NSString stringWithUTF8String:textureName.c_str()];
 
         if( mMsaa > 1u && !hasMsaaExplicitResolves() )
@@ -112,6 +124,17 @@ namespace Ogre
             desc.sampleCount    = mMsaa;
             desc.usage          = MTLTextureUsageRenderTarget;
             mMsaaFramebufferName = [device->mDevice newTextureWithDescriptor:desc];
+            if( !mMsaaFramebufferName )
+            {
+                size_t sizeBytes = PixelFormatGpuUtils::calculateSizeBytes( mWidth, mHeight, getDepth(),
+                                                                            getNumSlices(),
+                                                                            mPixelFormat, mNumMipmaps, 4u );
+                sizeBytes *= mMsaa;
+                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                             "Out of GPU memory or driver refused (MSAA surface).\n"
+                             "Requested: " + StringConverter::toString( sizeBytes ) + " bytes.",
+                             "MetalTextureGpu::createInternalResourcesImpl" );
+            }
             mMsaaFramebufferName.label = [NSString stringWithUTF8String:(textureName + "_MSAA").c_str()];
         }
     }

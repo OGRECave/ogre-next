@@ -30,6 +30,7 @@ THE SOFTWARE.
 #include "OgreMetalTextureGpu.h"
 
 #include "OgreMetalDevice.h"
+#include "OgreStringConverter.h"
 
 #import "Metal/MTLBlitCommandEncoder.h"
 
@@ -44,6 +45,13 @@ namespace Ogre
         MTLResourceOptions resourceOptions = MTLResourceCPUCacheModeWriteCombined |
                                              MTLResourceStorageModeShared;
         mVboName = [mDevice->mDevice newBufferWithLength:sizeBytes options:resourceOptions];
+        if( !mVboName )
+        {
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "Out of GPU memory or driver refused.\n"
+                         "Requested: " + StringConverter::toString( sizeBytes ) + " bytes.",
+                         "MetalStagingTexture::MetalStagingTexture" );
+        }
         mMappedPtr = [mVboName contents];
     }
     //-----------------------------------------------------------------------------------

@@ -104,6 +104,12 @@ namespace Ogre
                 desc.storageMode = MTLStorageModePrivate;
 
                 id<MTLTexture> msaaTex = [mDevice->mDevice newTextureWithDescriptor: desc];
+                if( !msaaTex )
+                {
+                    OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                                 "Out of GPU memory or driver refused.",
+                                 "MetalWindow::setResolutionFromView" );
+                }
                 texWindow->_setMsaaBackbuffer( msaaTex );
             }
 

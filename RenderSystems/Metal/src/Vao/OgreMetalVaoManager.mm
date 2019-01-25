@@ -1080,7 +1080,14 @@ namespace Ogre
             resourceOptions |= MTLResourceCPUCacheModeDefaultCache;
 
         id<MTLBuffer> bufferName = [mDevice->mDevice newBufferWithLength:sizeBytes
-                                                                         options:resourceOptions];
+                                                                 options:resourceOptions];
+        if( !bufferName )
+        {
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "Out of GPU memory or driver refused.\n"
+                         "Requested: " + StringConverter::toString( sizeBytes ) + " bytes.",
+                         "MetalVaoManager::createStagingBuffer" );
+        }
 
         MetalStagingBuffer *stagingBuffer = OGRE_NEW MetalStagingBuffer( 0, sizeBytes, this, forUpload,
                                                                          bufferName, mDevice );

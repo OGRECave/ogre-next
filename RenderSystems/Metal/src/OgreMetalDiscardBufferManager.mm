@@ -48,6 +48,13 @@ namespace Ogre
                                              MTLResourceStorageModeShared;
 
         mBuffer = [mDevice->mDevice newBufferWithLength:defaultCapacity options:resourceOptions];
+        if( !mBuffer )
+        {
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "Out of GPU memory or driver refused.\n"
+                         "Requested: " + StringConverter::toString( defaultCapacity ) + " bytes.",
+                         "MetalDiscardBufferManager::MetalDiscardBufferManager" );
+        }
         mBuffer.label = @"Discardable Buffer";
         mFreeBlocks.push_back( MetalVaoManager::Block( 0, defaultCapacity ) );
     }
@@ -76,6 +83,13 @@ namespace Ogre
                                              MTLResourceStorageModeShared;
         id<MTLBuffer> oldBuffer = mBuffer;
         mBuffer = [mDevice->mDevice newBufferWithLength:newCapacity options:resourceOptions];
+        if( !mBuffer )
+        {
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "Out of GPU memory or driver refused.\n"
+                         "Requested: " + StringConverter::toString( newCapacity ) + " bytes.",
+                         "MetalDiscardBufferManager::growToFit" );
+        }
         mBuffer.label = @"Discardable Buffer";
 
         //TODO DEBUG: We need to check if we need to retain oldBuffer or Metal does that.
