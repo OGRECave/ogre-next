@@ -69,14 +69,14 @@ namespace v1
 
         if( !(usage & HardwareBuffer::HBU_DISCARDABLE) )
         {
-            const size_t sizeBytes = alignToNextMultiple( sizeBytes, 4u );
-            mBuffer = [mDevice->mDevice newBufferWithLength:sizeBytes
+            const size_t sizeBytesAligned = alignToNextMultiple( sizeBytes, 4u );
+            mBuffer = [mDevice->mDevice newBufferWithLength:sizeBytesAligned
                                                     options:resourceOptions];
             if( !mBuffer )
             {
                 OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
                              "Out of GPU memory or driver refused.\n"
-                             "Requested: " + StringConverter::toString( sizeBytes ) + " bytes.",
+                             "Requested: " + StringConverter::toString( sizeBytesAligned ) + " bytes.",
                              "MetalHardwareBufferCommon::MetalHardwareBufferCommon" );
             }
         }
