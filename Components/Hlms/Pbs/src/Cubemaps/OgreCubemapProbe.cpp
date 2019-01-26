@@ -160,11 +160,23 @@ namespace Ogre
         if( !mCreator->getAutomaticMode() )
             return;
 
+        const bool oldEnabled = mEnabled;
+
         releaseTextureAuto();
         mTexture = mCreator->_acquireTextureSlot( mCubemapArrayIdx );
 
         if( mTexture )
+        {
+            mEnabled = oldEnabled;
             createInternalProbe();
+        }
+        else
+        {
+            mEnabled = false;
+            LogManager::getSingleton().logMessage( "Warning: CubemapProbe::acquireTextureAuto failed. "
+                                                   "You ran out of slots in the cubemap array. "
+                                                   "Disabling this probe" );
+        }
     }
     //-----------------------------------------------------------------------------------
     void CubemapProbe::releaseTextureAuto(void)
@@ -178,6 +190,7 @@ namespace Ogre
             mCreator->_releaseTextureSlot( mTexture, mCubemapArrayIdx );
             mTexture = 0;
             mCubemapArrayIdx = std::numeric_limits<uint32>::max();
+            mEnabled = false;
         }
     }
     //-----------------------------------------------------------------------------------
@@ -353,6 +366,9 @@ namespace Ogre
         destroyWorkspace();
         acquireTextureAuto();
 
+        if( !mTexture )
+            return; //acquireTextureAuto failed. There are no available slots
+
         CompositorWorkspaceDef const *workspaceDef = mCreator->getDefaultWorkspaceDef();
         CompositorManager2 *compositorManager = workspaceDef->getCompositorManager();
 
@@ -494,10 +510,13 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CubemapProbe::_prepareForRendering(void)
     {
-        mCamera->setPosition( mProbeCameraPos );
-        mCamera->setOrientation( Quaternion( mOrientation ) );
-        if( mStatic )
-            mCamera->setLightCullingVisibility( true, true );
+        if( mCamera )
+        {
+            mCamera->setPosition( mProbeCameraPos );
+            mCamera->setOrientation( Quaternion( mOrientation ) );
+            if( mStatic )
+                mCamera->setLightCullingVisibility( true, true );
+        }
     }
     //-----------------------------------------------------------------------------------
     void CubemapProbe::_clearCubemap(void)

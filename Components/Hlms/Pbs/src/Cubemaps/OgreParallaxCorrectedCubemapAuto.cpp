@@ -269,8 +269,11 @@ namespace Ogre
                                              mBindTexture->getWidth(), mBindTexture->getHeight() ) );
             mBindTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
 
+            const uint64 remainder = maxNumProbes % 64u;
             mReservedSlotBitset.resize( alignToNextMultiple( maxNumProbes, 64u ) >> 6u,
                                         0xffffffffffffffff );
+            if( remainder != 0u )
+                mReservedSlotBitset.back() = (1u << remainder) - 1u;
 
             mRoot->addFrameListener( this );
             CompositorManager2 *compositorManager = mDefaultWorkspaceDef->getCompositorManager();
