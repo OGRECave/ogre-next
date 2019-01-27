@@ -70,6 +70,7 @@ namespace Ogre
         mUseDpm2DArray( false ),
         mIsRendering( false ),
         mPaused( false ),
+        mMask( 0xffffffff ),
         mRoot( root ),
         mSceneManager( sceneManager ),
         mDefaultWorkspaceDef( probeWorkspcDef )

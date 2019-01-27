@@ -65,7 +65,6 @@ namespace Ogre
         /// to select the closest probe based on which one has approximately the largest volume
         /// shown on camera. See setUpdatedTrackedDataFromCamera if you don't know how to set this
         public: Matrix4                 mTrackedViewProjMatrix;
-        public: uint32                  mMask; /// @see CubemapProbe::mMask
     private:
         GpuProgramParametersSharedPtr   mBlendCubemapParamsVs[OGRE_MAX_CUBE_PROBES];
         GpuProgramParametersSharedPtr   mBlendCubemapParams[OGRE_MAX_CUBE_PROBES];

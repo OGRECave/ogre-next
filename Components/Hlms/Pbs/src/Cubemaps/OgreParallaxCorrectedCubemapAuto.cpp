@@ -56,6 +56,7 @@ THE SOFTWARE.
 #include "OgreMesh2.h"
 #include "OgreSubMesh2.h"
 #include "OgreItem.h"
+#include "OgreInternalCubemapProbe.h"
 
 #include "Vao/OgreConstBufferPacked.h"
 #include "Vao/OgreStagingBuffer.h"
@@ -375,6 +376,8 @@ namespace Ogre
     {
         mDirtyProbes.clear();
 
+        const uint32 systemMask = mMask;
+
         CubemapProbeVec::iterator itor = mProbes.begin();
         CubemapProbeVec::iterator end  = mProbes.end();
 
@@ -384,8 +387,19 @@ namespace Ogre
 
             const Vector3 posLS = probe->mInvOrientation * (mTrackedPosition - probe->mArea.mCenter);
             const Aabb areaLS = probe->getAreaLS();
-            if( ((areaLS.contains( posLS ) && !probe->mStatic) || probe->mDirty) && probe->mEnabled )
+            if( ((areaLS.contains( posLS ) && !probe->mStatic) || probe->mDirty) &&
+                probe->mEnabled &&
+                (probe->mMask & systemMask) )
+            {
                 mDirtyProbes.push_back( probe );
+            }
+
+            if( probe->mInternalProbe )
+            {
+                probe->mInternalProbe->setVisible( probe->mEnabled &&
+                                                   (probe->mMask & systemMask) != 0u );
+            }
+
             ++itor;
         }
 

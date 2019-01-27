@@ -54,6 +54,7 @@ namespace Ogre
 
         bool            mIsRendering;
         public: bool                    mPaused;
+        public: uint32                  mMask; /// @see CubemapProbe::mMask
     protected:
         Root                            *mRoot;
         SceneManager                    *mSceneManager;

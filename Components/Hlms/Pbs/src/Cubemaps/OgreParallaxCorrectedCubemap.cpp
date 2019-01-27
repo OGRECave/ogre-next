@@ -79,7 +79,6 @@ namespace Ogre
         mBlendedProbeNeedsUpdate( true ),
         mTrackedPosition( Vector3::ZERO ),
         mTrackedViewProjMatrix( Matrix4::IDENTITY ),
-        mMask( 0xffffffff ),
         mBlankProbe( this ),
         mFinalProbe( this ),
         mBlendProxyCamera( 0 ),
