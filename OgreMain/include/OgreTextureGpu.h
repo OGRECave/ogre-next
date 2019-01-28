@@ -165,7 +165,11 @@ namespace Ogre
             /// compute the texture hashes.
             /// All of that (except updating slices to the GPU) can be done in a
             /// worker thread, then all the values swapped w/ the Datablock’s.
-            AutomaticBatching   = 1u << 12u
+            AutomaticBatching   = 1u << 12u,
+            /// For internal use. Indicates whether this texture is the owner
+            /// of a TextureGpuManager::TexturePool, which are used
+            /// to hold regular textures using AutomaticBatching
+            PoolOwner           = 1u << 13u
         };
     }
     /**
@@ -471,6 +475,7 @@ namespace Ogre
         bool requiresTextureFlipping(void) const;
         bool _isManualTextureFlagPresent(void) const;
         bool isManualTexture(void) const;
+        bool isPoolOwner(void) const;
 
         /// OpenGL RenderWindows are a bit specific:
         ///     * Their origins are upside down. Which means we need to flip Y.

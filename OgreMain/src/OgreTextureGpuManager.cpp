@@ -269,7 +269,8 @@ namespace Ogre
 
         TexturePool newPool;
         newPool.masterTexture = createTextureImpl( GpuPageOutStrategy::Discard,
-                                                   texName.c_str(), 0,
+                                                   texName.c_str(),
+                                                   TextureFlags::PoolOwner,
                                                    TextureTypes::Type2DArray );
         newPool.manuallyReserved = true;
         newPool.usedMemory = 0;
@@ -456,55 +457,97 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::destroyTexture( TextureGpu *texture )
     {
-        ResourceEntryMap::iterator itor = mEntries.find( texture->getName() );
-
-        if( itor == mEntries.end() )
+        if( !texture->isPoolOwner() )
         {
-            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
-                         "Texture with name '" + texture->getName().getFriendlyText() +
-                         "' not found. Perhaps already destroyed?",
-                         "TextureGpuManager::destroyTexture" );
-        }
+            //Almost all textures
+            ResourceEntryMap::iterator itor = mEntries.find( texture->getName() );
 
-        if( itor->second.destroyRequested )
-        {
-            OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
-                         "Texture with name '" + texture->getName().getFriendlyText() +
-                         "' has already been scheduled for destruction!",
-                         "TextureGpuManager::destroyTexture" );
-        }
-
-        itor->second.destroyRequested = true;
-
-        ScheduledTasks task;
-        task.tasksType = TaskTypeDestroyTexture;
-
-        if( texture->getPendingResidencyChanges() == 0 )
-        {
-            //If the TextureGpu is in the worker thread, the following may be true:
-            //  1. Texture is not yet Resident. Thus getPendingResidencyChanges cannot be 0
-            //  2. Texture is Resident, but being loaded. Thus getPendingResidencyChanges will be 0
-            //     but _isDataReadyImpl returns false
-            //  3. Texture will become OnSystemRam, after it finishes loading. Thus
-            //     getPendingResidencyChanges cannot be 0
-            //
-            //Thus we know for sure the TextureGpu is not in the worker thread with this if statement
-            if( texture->_isDataReadyImpl() || texture->getResidencyStatus() != GpuResidency::Resident )
+            if( itor == mEntries.end() )
             {
-                //There are no pending tasks. We can execute it right now
-                executeTask( texture, TextureGpuListener::ReadyForRendering, task );
+                OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                             "Texture with name '" + texture->getName().getFriendlyText() +
+                             "' not found. Perhaps already destroyed?",
+                             "TextureGpuManager::destroyTexture" );
+            }
+
+            if( itor->second.destroyRequested )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                             "Texture with name '" + texture->getName().getFriendlyText() +
+                             "' has already been scheduled for destruction!",
+                             "TextureGpuManager::destroyTexture" );
+            }
+
+            itor->second.destroyRequested = true;
+
+            ScheduledTasks task;
+            task.tasksType = TaskTypeDestroyTexture;
+
+            if( texture->getPendingResidencyChanges() == 0 )
+            {
+                //If the TextureGpu is in the worker thread, the following may be true:
+                //  1. Texture is not yet Resident. Thus getPendingResidencyChanges cannot be 0
+                //  2. Texture is Resident, but being loaded. Thus getPendingResidencyChanges will be 0
+                //     but _isDataReadyImpl returns false
+                //  3. Texture will become OnSystemRam, after it finishes loading. Thus
+                //     getPendingResidencyChanges cannot be 0
+                //
+                //Thus we know for sure the TextureGpu is not in the worker thread with this if statement
+                if( texture->_isDataReadyImpl() ||
+                    texture->getResidencyStatus() != GpuResidency::Resident )
+                {
+                    //There are no pending tasks. We can execute it right now
+                    executeTask( texture, TextureGpuListener::ReadyForRendering, task );
+                }
+                else
+                {
+                    //No pending tasks, but the texture is being loaded. Delay execution
+                    texture->_addPendingResidencyChanges( 1u );
+                    mScheduledTasks[texture].push_back( task );
+                }
             }
             else
             {
-                //No pending tasks, but the texture is being loaded. Delay execution
                 texture->_addPendingResidencyChanges( 1u );
                 mScheduledTasks[texture].push_back( task );
             }
         }
         else
         {
-            texture->_addPendingResidencyChanges( 1u );
-            mScheduledTasks[texture].push_back( task );
+            //Textures that are owners of a pool that were created
+            //with reservePoolId. Texture pool owners that weren't
+            //created with that function (i.e. automatically / on demand)
+            //are released automatically in _releaseSlotFromTexture
+            TexturePoolList::iterator itor = mTexturePool.begin();
+            TexturePoolList::iterator end  = mTexturePool.end();
+
+            while( itor != end && itor->masterTexture != texture )
+                ++itor;
+
+            if( itor == mTexturePool.end() )
+            {
+                OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                             "Texture with name '" + texture->getName().getFriendlyText() +
+                             "' owner of a TexturePool not found. Perhaps already destroyed?",
+                             "TextureGpuManager::destroyTexture" );
+            }
+
+            OGRE_ASSERT_LOW( itor->manuallyReserved && "Pools that were created automatically "
+                             "should not be destroyed manually via TextureGpuManager::destroyTexture."
+                             " These pools will be destroyed automatically once they're empty" );
+
+            if( !itor->empty() )
+            {
+                OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                             "Texture with name '" + texture->getName().getFriendlyText() +
+                             "' cannot be deleted! It's a TexturePool and it still has "
+                             "live textures using it! You must release those first by "
+                             "removing them from being Resident",
+                             "TextureGpuManager::destroyTexture" );
+            }
+
+            delete itor->masterTexture;
+            mTexturePool.erase( itor );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -1805,7 +1848,8 @@ namespace Ogre
 
             TexturePool newPool;
             newPool.masterTexture = createTextureImpl( GpuPageOutStrategy::Discard,
-                                                       texName.c_str(), 0,
+                                                       texName.c_str(),
+                                                       TextureFlags::PoolOwner,
                                                        TextureTypes::Type2DArray );
             const uint16 numSlices = mTextureGpuManagerListener->getNumSlicesFor( texture, this );
 
@@ -1856,7 +1900,7 @@ namespace Ogre
         else
             texturePool->availableSlots.push_back( internalSliceStart );
 
-        if( texturePool->empty() )
+        if( texturePool->empty() && !texturePool->manuallyReserved )
         {
             //Destroy the pool if it's no longer needed
             delete texturePool->masterTexture;

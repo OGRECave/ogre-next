@@ -745,6 +745,11 @@ namespace Ogre
                                   TextureFlags::ManualTexture) ) != 0;
     }
     //-----------------------------------------------------------------------------------
+    bool TextureGpu::isPoolOwner(void) const
+    {
+        return (mTextureFlags & TextureFlags::PoolOwner) != 0;
+    }
+    //-----------------------------------------------------------------------------------
     bool TextureGpu::isOpenGLRenderWindow(void) const
     {
         return false;

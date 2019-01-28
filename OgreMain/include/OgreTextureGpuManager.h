@@ -693,6 +693,8 @@ namespace Ogre
 
         /// Reserves and preallocates a pool with the given parameters
         /// Returns the master texture that owns the pool
+        ///
+        /// Destroy this pool with TextureGpuManager::destroyTexture
         TextureGpu* reservePoolId( uint32 poolId, uint32 width, uint32 height,
                                    uint32 numSlices, uint8 numMipmaps, PixelFormatGpu pixelFormat );
 
