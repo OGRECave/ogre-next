@@ -351,9 +351,12 @@ namespace Demo
 
         setupDatablockTextureForLight( mAreaLights[idx], idx );
 
-        //If we don't wait, textures will flicker during async upload.
-        //If you don't care about the glitch, avoid this call
-        textureMgr->waitForStreamingCompletion();
+        if( !mUseSynchronousMethod )
+        {
+            //If we don't wait, textures will flicker during async upload.
+            //If you don't care about the glitch, avoid this call
+            textureMgr->waitForStreamingCompletion();
+        }
     }
     //-----------------------------------------------------------------------------------
     void UpdatingDecalsAndAreaLightTexGameState::createScene01(void)
