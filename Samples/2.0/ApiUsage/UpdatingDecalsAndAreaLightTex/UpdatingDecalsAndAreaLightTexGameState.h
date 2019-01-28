@@ -21,6 +21,7 @@ namespace Demo
         float               mLightTexRadius[c_numAreaLights];
 
         Ogre::TextureGpu    *mAreaMaskTex;
+        bool                mUseSynchronousMethod;
 
         void createAreaMask( float radius, Ogre::Image2 &outImage );
         void createAreaPlaneMesh(void);

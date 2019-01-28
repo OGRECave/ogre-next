@@ -68,9 +68,11 @@ namespace Demo
     UpdatingDecalsAndAreaLightTexGameState::UpdatingDecalsAndAreaLightTexGameState(
             const Ogre::String &helpDescription ) :
         TutorialGameState( helpDescription ),
-        mAreaMaskTex( 0 )
+        mAreaMaskTex( 0 ),
+        mUseSynchronousMethod( false )
     {
-        OGRE_STATIC_ASSERT( sizeof(c_lightRadiusKeys) / sizeof(c_lightRadiusKeys[0]) >= c_numAreaLights );
+        OGRE_STATIC_ASSERT( sizeof(c_lightRadiusKeys) /
+                            sizeof(c_lightRadiusKeys[0]) >= c_numAreaLights );
 
         memset( mUseTextureFromFile, 0, sizeof( mUseTextureFromFile ) );
 
@@ -291,25 +293,43 @@ namespace Demo
             Ogre::Image2 image;
             createAreaMask( mLightTexRadius[idx], image );
 
-//            image.uploadTo(  );
+            bool canUseSynchronousUpload = areaTex->getNextResidencyStatus() ==
+                                           Ogre::GpuResidency::Resident &&
+                                           areaTex->isDataReady();
+            if( mUseSynchronousMethod && canUseSynchronousUpload )
+            {
+                //If canUseSynchronousUpload is false, you can use areaTex->waitForData()
+                //to still use sync method (assuming the texture is resident)
+                image.uploadTo( areaTex, 0, areaTex->getNumMipmaps() - 1u );
+            }
+            else
+            {
+                //Asynchronous is preferred due to being done in the background. But the switch
+                //Resident -> OnStorage -> Resident may cause undesired effects, so we
+                //show how to do it synchronously
 
-            //Tweak via _setAutoDelete so the internal data is copied as a pointer
-            //instead of performing a deep copy of the data; while leaving the responsability
-            //of freeing memory to imagePtr instead.
-            image._setAutoDelete( false );
-            Ogre::Image2 *imagePtr = new Ogre::Image2( image );
-            imagePtr->_setAutoDelete( true );
+                //Tweak via _setAutoDelete so the internal data is copied as a pointer
+                //instead of performing a deep copy of the data; while leaving the responsability
+                //of freeing memory to imagePtr instead.
+                image._setAutoDelete( false );
+                Ogre::Image2 *imagePtr = new Ogre::Image2( image );
+                imagePtr->_setAutoDelete( true );
 
-            if( areaTex->getNextResidencyStatus() == Ogre::GpuResidency::Resident )
-                areaTex->scheduleTransitionTo( Ogre::GpuResidency::OnStorage );
-            //Ogre will call "delete imagePtr" when done, because we're passing
-            //true to autoDeleteImage argument in scheduleTransitionTo
-            areaTex->scheduleTransitionTo( Ogre::GpuResidency::Resident, imagePtr, true );
+                if( areaTex->getNextResidencyStatus() == Ogre::GpuResidency::Resident )
+                    areaTex->scheduleTransitionTo( Ogre::GpuResidency::OnStorage );
+                //Ogre will call "delete imagePtr" when done, because we're passing
+                //true to autoDeleteImage argument in scheduleTransitionTo
+                areaTex->scheduleTransitionTo( Ogre::GpuResidency::Resident, imagePtr, true );
 
-            mAreaLights[idx]->setTexture( areaTex );
+                mAreaLights[idx]->setTexture( areaTex );
+            }
         }
 
         setupDatablockTextureForLight( mAreaLights[idx], idx );
+
+        //If we don't wait, textures will flicker during async upload.
+        //If you don't care about the glitch, avoid this call
+        textureMgr->waitForStreamingCompletion();
     }
     //-----------------------------------------------------------------------------------
     void UpdatingDecalsAndAreaLightTexGameState::createScene01(void)
@@ -407,6 +427,8 @@ namespace Demo
                                                                     Ogre::String &outText )
     {
         TutorialGameState::generateDebugText( timeSinceLast, outText );
+        outText += "\nPress F2 to test sync/async methods ";
+        outText += mUseSynchronousMethod ? "[Sync]" : "[Async]";
         outText += "\nHold [Shift] to change value in opposite direction";
         for( size_t i=0; i<c_numAreaLights; ++i )
         {
@@ -418,10 +440,15 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void UpdatingDecalsAndAreaLightTexGameState::keyReleased( const SDL_KeyboardEvent &arg )
     {
-        if( (arg.keysym.mod & ~(KMOD_NUM|KMOD_CAPS)) != 0 )
+        if( (arg.keysym.mod & ~(KMOD_NUM|KMOD_CAPS|KMOD_LSHIFT|KMOD_RSHIFT)) != 0 )
         {
             TutorialGameState::keyReleased( arg );
             return;
+        }
+
+        if( arg.keysym.sym == SDLK_F2 )
+        {
+            mUseSynchronousMethod = !mUseSynchronousMethod;
         }
 
         bool keyHit = false;
@@ -435,6 +462,7 @@ namespace Demo
                     mLightTexRadius[i] -= 0.01f;
                 else
                     mLightTexRadius[i] += 0.01f;
+                mLightTexRadius[i] = Ogre::Math::Clamp( mLightTexRadius[i], 0.0f, 1.0f );
                 setupLightTexture( i );
                 keyHit = true;
             }
