@@ -91,6 +91,8 @@ namespace Demo
             const Ogre::uint32 decalDiffuseId = 1;
             const Ogre::uint32 decalNormalId = 1;
 
+            //TODO: These pools should be destroyed manually or else they will live
+            //forever until Ogre shutdowns
             textureManager->reservePoolId( decalDiffuseId, 512u, 512u, 8u, 10u,
                                            Ogre::PFG_RGBA8_UNORM_SRGB );
             textureManager->reservePoolId( decalNormalId, 512u, 512u, 8u, 10u,

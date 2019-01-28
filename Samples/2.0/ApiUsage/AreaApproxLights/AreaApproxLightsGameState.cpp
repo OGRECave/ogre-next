@@ -435,7 +435,21 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void AreaApproxLightsGameState::destroyScene(void)
     {
-        mAreaMaskTex = 0;
+        Ogre::Root *root = mGraphicsSystem->getRoot();
+        Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
+
+        for( size_t i=0; i<sizeof(mAreaLights) / sizeof(mAreaLights[0]); ++i )
+        {
+            if( mAreaLights[i] && mAreaLights[i]->getTexture() )
+                textureMgr->destroyTexture( mAreaLights[i]->getTexture() );
+        }
+
+        //Don't forget to destroy mAreaMaskTex, otherwise this pool will leak!!!
+        if( mAreaMaskTex )
+        {
+            textureMgr->destroyTexture( mAreaMaskTex );
+            mAreaMaskTex = 0;
+        }
     }
     //-----------------------------------------------------------------------------------
     void AreaApproxLightsGameState::update( float timeSinceLast )
