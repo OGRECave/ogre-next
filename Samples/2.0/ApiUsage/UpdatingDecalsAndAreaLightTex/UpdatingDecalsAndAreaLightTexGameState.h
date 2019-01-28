@@ -23,12 +23,25 @@ namespace Demo
         Ogre::TextureGpu    *mAreaMaskTex;
         bool                mUseSynchronousMethod;
 
+        /** Creates an Image of a hollow rectangle on the GPU
+        @param radius
+            Radius of the hollow rectangle (i.e. width of the "lines")
+        @param outImage
+            Image containing the texture to upload to GPU
+        */
         void createAreaMask( float radius, Ogre::Image2 &outImage );
+        /// Creates the Mesh for the floor
         void createAreaPlaneMesh(void);
+        /// Setups a datablock (material) for the billboard showing where the light is
+        /// emitting so that it can use the same texture the light is using.
+        ///
+        /// Must be called again whenever the texture changes (i.e. setupLightTexture was called)
         Ogre::HlmsDatablock* setupDatablockTextureForLight( Ogre::Light *light, size_t idx );
+        /// Creates a billboard showing where the given light is emitting
         void createPlaneForAreaLight( Ogre::Light *light, size_t idx );
 
         void createLight( const Ogre::Vector3 &position, size_t idx );
+        /// Calls createAreaMask and uploads it to the GPU texture.
         void setupLightTexture( size_t idx );
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
