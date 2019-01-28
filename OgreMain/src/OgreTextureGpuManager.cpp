@@ -402,7 +402,8 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     TextureGpu* TextureGpuManager::createOrRetrieveTexture(
-            const String &name, GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+            const String &name, const String &aliasName,
+            GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
             CommonTextureTypes::CommonTextureTypes type, const String &resourceGroup, uint32 poolId )
     {
         uint32 textureFlags = TextureFlags::AutomaticBatching;
@@ -420,8 +421,15 @@ namespace Ogre
             texType = TextureTypes::TypeCube;
         }
 
-        return createOrRetrieveTexture( name, pageOutStrategy, textureFlags,
+        return createOrRetrieveTexture( name, aliasName, pageOutStrategy, textureFlags,
                                         texType, resourceGroup, filters, poolId );
+    }
+    //-----------------------------------------------------------------------------------
+    TextureGpu* TextureGpuManager::createOrRetrieveTexture(
+            const String &name, GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+            CommonTextureTypes::CommonTextureTypes type, const String &resourceGroup, uint32 poolId )
+    {
+        return createOrRetrieveTexture( name, name, pageOutStrategy, type, resourceGroup, poolId );
     }
     //-----------------------------------------------------------------------------------
     TextureGpu* TextureGpuManager::findTextureNoThrow( IdString name ) const

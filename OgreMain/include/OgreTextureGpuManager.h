@@ -763,6 +763,12 @@ namespace Ogre
         /// Helper function to call createOrRetrieveTexture with common
         /// parameters used for 2D diffuse textures loaded from file.
         TextureGpu* createOrRetrieveTexture( const String &name,
+                                             const String &aliasName,
+                                             GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
+                                             CommonTextureTypes::CommonTextureTypes type,
+                                             const String &resourceGroup=BLANKSTRING,
+                                             uint32 poolId=0 );
+        TextureGpu* createOrRetrieveTexture( const String &name,
                                              GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                              CommonTextureTypes::CommonTextureTypes type,
                                              const String &resourceGroup=BLANKSTRING,

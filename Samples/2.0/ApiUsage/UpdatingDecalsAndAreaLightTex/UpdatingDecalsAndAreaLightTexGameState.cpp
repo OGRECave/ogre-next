@@ -48,7 +48,8 @@ namespace Demo
     static const Ogre::uint32 c_defaultNumMipmaps =
             Ogre::PixelFormatGpuUtils::getMaxMipmapCount( c_defaultWidth, c_defaultHeight );
 
-    static const char c_lightRadiusKeys[4] = { 'U', 'I', 'O', 'P' };
+    static const char c_lightRadiusKeys[4]  = { 'Y', 'U', 'I', 'O' };
+    static const char c_lightFileKeys[4]    = { 'H', 'J', 'K', 'L' };
 
     inline float sdBox( const Ogre::Vector2 &point, const Ogre::Vector2 &center,
                         const Ogre::Vector2 &halfSize )
@@ -73,6 +74,8 @@ namespace Demo
     {
         OGRE_STATIC_ASSERT( sizeof(c_lightRadiusKeys) /
                             sizeof(c_lightRadiusKeys[0]) >= c_numAreaLights );
+        OGRE_STATIC_ASSERT( sizeof(c_lightFileKeys) /
+                            sizeof(c_lightFileKeys[0]) >= c_numAreaLights );
 
         memset( mUseTextureFromFile, 0, sizeof( mUseTextureFromFile ) );
 
@@ -256,8 +259,8 @@ namespace Demo
         Ogre::Light *light = sceneManager->createLight();
         Ogre::SceneNode *lightNode = rootNode->createChildSceneNode();
         lightNode->attachObject( light );
-        light->setDiffuseColour( 0.8f, 0.4f, 0.2f ); //Warm
-        light->setSpecularColour( 0.8f, 0.4f, 0.2f );
+        light->setDiffuseColour( 1.0f, 1.0f, 1.0f );
+        light->setSpecularColour( 1.0f, 1.0f, 1.0f );
         //Increase the strength 10x to showcase this light. Area approx lights are not
         //physically based so the value is more arbitrary than the other light types
         light->setPowerScale( Ogre::Math::PI );
@@ -323,6 +326,27 @@ namespace Demo
 
                 mAreaLights[idx]->setTexture( areaTex );
             }
+        }
+        else
+        {
+            const Ogre::String aliasName = "AreaLightMask" + Ogre::StringConverter::toString( idx );
+            Ogre::TextureGpu *areaTex = textureMgr->findTextureNoThrow( aliasName );
+            if( areaTex )
+                textureMgr->destroyTexture( areaTex );
+
+            //We know beforehand that floor_bump.PNG & co are 512x512. This is important!!!
+            //(because it must match the resolution of the texture created via reservePoolId)
+            const char *textureNames[4] = { "floor_bump.PNG", "grassWalpha.tga",
+                                            "MtlPlat2.jpg", "Panels_Normal_Obj.png" };
+
+            areaTex = textureMgr->createOrRetrieveTexture(
+                          textureNames[idx % 4u],
+                          "AreaLightMask" + Ogre::StringConverter::toString( idx ),
+                          Ogre::GpuPageOutStrategy::Discard,
+                          Ogre::CommonTextureTypes::Diffuse,
+                          Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+                          c_areaLightsPoolId );
+            mAreaLights[idx]->setTexture( areaTex );
         }
 
         setupDatablockTextureForLight( mAreaLights[idx], idx );
@@ -396,6 +420,9 @@ namespace Demo
 
         mCameraController = new CameraController( mGraphicsSystem, false );
 
+        Ogre::Camera *camera = mGraphicsSystem->getCamera();
+        camera->setPosition( Ogre::Vector3( 0, 10, 25 ) );
+
         TutorialGameState::createScene01();
     }
     //-----------------------------------------------------------------------------------
@@ -436,6 +463,7 @@ namespace Demo
                        c_lightRadiusKeys[i] + "]: ";
             outText += Ogre::StringConverter::toString( mLightTexRadius[i] );
         }
+        outText += "\nPress J/K/L/O to switch to a texture from file";
     }
     //-----------------------------------------------------------------------------------
     void UpdatingDecalsAndAreaLightTexGameState::keyReleased( const SDL_KeyboardEvent &arg )
@@ -463,6 +491,14 @@ namespace Demo
                 else
                     mLightTexRadius[i] += 0.01f;
                 mLightTexRadius[i] = Ogre::Math::Clamp( mLightTexRadius[i], 0.0f, 1.0f );
+                setupLightTexture( i );
+                keyHit = true;
+            }
+
+            keyCode = SDLK_a + c_lightFileKeys[i] - 'A';
+            if( arg.keysym.sym == keyCode )
+            {
+                mUseTextureFromFile[i] = !mUseTextureFromFile[i];
                 setupLightTexture( i );
                 keyHit = true;
             }
