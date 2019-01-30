@@ -123,7 +123,7 @@ namespace TextureFilter
         //Add mipmap generation as one of the last steps
         if( filters & TextureFilter::TypeGenerateDefaultMipmaps )
         {
-            if( inOutNumMipmaps <= 1u )
+            if ( !PixelFormatGpuUtils::isCompressed( image.getPixelFormat() ) && inOutNumMipmaps <= 1u)
             {
                 inOutNumMipmaps = PixelFormatGpuUtils::getMaxMipmapCount( image.getWidth(),
                                                                           image.getHeight(),
@@ -151,7 +151,7 @@ namespace TextureFilter
     {
         //Cubemaps may be loaded as 6 separate images.
         //If one of them needs HW generation, then all faces need it.
-        mNeedsMipmaps |= image.getNumMipmaps() <= 1u;
+        mNeedsMipmaps |= !PixelFormatGpuUtils::isCompressed( image.getPixelFormat() ) && image.getNumMipmaps() <= 1u;
 
         if( mNeedsMipmaps && texture->getNumMipmaps() <= 1u )
         {
