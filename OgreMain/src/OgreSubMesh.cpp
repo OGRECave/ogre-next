@@ -490,11 +490,11 @@ namespace v1 {
         // This is a bit like a copy constructor, but with the additional aspect of registering the clone with
         //  the MeshManager
 
-        SubMesh* newSub;
-        if(!parentMesh)
-            newSub = parent->createSubMesh(newName);
-        else
-            newSub = parentMesh->createSubMesh(newName);
+        if (parentMesh == NULL)
+            parentMesh = parent;
+
+        HardwareBufferManagerBase* bufferManager = parentMesh->getHardwareBufferManager();
+        SubMesh* newSub = parentMesh->createSubMesh(newName);
 
         newSub->mMaterialName = this->mMaterialName;
         newSub->mMatInitialised = this->mMatInitialised;
@@ -505,12 +505,12 @@ namespace v1 {
         if (!this->useSharedVertices)
         {
             // Copy unique vertex data
-            newSub->vertexData[VpNormal] = this->vertexData[VpNormal]->clone();
+            newSub->vertexData[VpNormal] = this->vertexData[VpNormal]->clone(true, bufferManager);
 
             if( this->vertexData[VpNormal] == this->vertexData[VpShadow] )
                 newSub->vertexData[VpShadow] = newSub->vertexData[VpNormal];
             else
-                newSub->vertexData[VpShadow] = this->vertexData[VpShadow]->clone();
+                newSub->vertexData[VpShadow] = this->vertexData[VpShadow]->clone(true, bufferManager);
 
             // Copy unique index map
             newSub->blendIndexToBoneIndexMap = this->blendIndexToBoneIndexMap;
@@ -521,12 +521,12 @@ namespace v1 {
             newSub->indexData[VpShadow] = 0;
         OGRE_DELETE newSub->indexData[VpNormal];
         OGRE_DELETE newSub->indexData[VpShadow];
-        newSub->indexData[VpNormal] = this->indexData[VpNormal]->clone();
+        newSub->indexData[VpNormal] = this->indexData[VpNormal]->clone(true, bufferManager);
 
         if( this->indexData[VpNormal] == this->indexData[VpShadow] )
             newSub->indexData[VpShadow] = newSub->indexData[VpNormal];
         else
-            newSub->indexData[VpShadow] = this->indexData[VpShadow]->clone();
+            newSub->indexData[VpShadow] = this->indexData[VpShadow]->clone(true, bufferManager);
 
         // Copy any bone assignments
         newSub->mBoneAssignments = this->mBoneAssignments;
@@ -542,7 +542,7 @@ namespace v1 {
 
         for( size_t i=0; i<this->mLodFaceList[VpNormal].size(); ++i )
         {
-            IndexData* newIndexData = this->mLodFaceList[VpNormal][i]->clone();
+            IndexData* newIndexData = this->mLodFaceList[VpNormal][i]->clone(true, bufferManager);
             newSub->mLodFaceList[VpNormal].push_back( newIndexData );
 
             if( this->mLodFaceList[VpNormal][i] == this->mLodFaceList[VpShadow][i] )
@@ -551,7 +551,7 @@ namespace v1 {
             }
             else
             {
-                newIndexData = this->mLodFaceList[VpShadow][i]->clone();
+                newIndexData = this->mLodFaceList[VpShadow][i]->clone(true, bufferManager);
                 newSub->mLodFaceList[VpShadow].push_back( newIndexData );
             }
         }
