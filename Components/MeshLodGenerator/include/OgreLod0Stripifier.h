@@ -86,6 +86,10 @@ namespace Ogre
         {
             return usedCount == indexMap.size();
         }
+        v1::HardwareIndexBuffer::IndexType minimalIndexType() const
+        {
+            return usedCount < 0xFFFF ? v1::HardwareIndexBuffer::IT_16BIT : v1::HardwareIndexBuffer::IT_32BIT;
+        }
 
     public:
         enum { UnusedIdx = (unsigned)-1 };
@@ -142,9 +146,10 @@ namespace Ogre
 
         size_t indexCount = indexData->indexCount;
         v1::HardwareIndexBuffer::IndexType indexType = indexData->indexBuffer->getType();
+        v1::HardwareIndexBuffer::IndexType newIndexType = remapInfo.minimalIndexType();
         v1::HardwareIndexBufferSharedPtr newIndexBuffer =
             v1::HardwareBufferManager::getSingleton().createIndexBuffer(
-                indexType, indexCount, indexData->indexBuffer->getUsage(), indexData->indexBuffer->hasShadowBuffer());
+                newIndexType, indexCount, indexData->indexBuffer->getUsage(), indexData->indexBuffer->hasShadowBuffer());
 
         void* pSrc = indexData->indexBuffer->lock(
                          indexData->indexStart * indexData->indexBuffer->getIndexSize(),
@@ -152,17 +157,29 @@ namespace Ogre
                          v1::HardwareBuffer::HBL_READ_ONLY);
         void* pDst = newIndexBuffer->lock(v1::HardwareBuffer::HBL_DISCARD);
 
-        if(indexType == v1::HardwareIndexBuffer::IT_32BIT)
+        if(indexType == v1::HardwareIndexBuffer::IT_32BIT && newIndexType == v1::HardwareIndexBuffer::IT_32BIT)
         {
             uint32 *pSrc32 = (uint32*)pSrc, *pDst32 = (uint32*)pDst;
             for(size_t i = 0; i < indexCount; ++i)
                 pDst32[i] = remapInfo.indexMap[pSrc32[i]];
         }
-        else
+        else if(indexType == v1::HardwareIndexBuffer::IT_32BIT && newIndexType == v1::HardwareIndexBuffer::IT_16BIT)
+        {
+            uint32 *pSrc32 = (uint32*)pSrc; uint16 *pDst16 = (uint16*)pDst;
+            for(size_t i = 0; i < indexCount; ++i)
+                pDst16[i] = (uint16)remapInfo.indexMap[pSrc32[i]];
+        }
+        else if(indexType == v1::HardwareIndexBuffer::IT_16BIT && newIndexType == v1::HardwareIndexBuffer::IT_32BIT)
+        {
+            uint16 *pSrc16 = (uint16*)pSrc; uint32 *pDst32 = (uint32*)pDst;
+            for(size_t i = 0; i < indexCount; ++i)
+                pDst32[i] = remapInfo.indexMap[pSrc16[i]];
+        }
+        else // indexType == v1::HardwareIndexBuffer::IT_16BIT && newIndexType == v1::HardwareIndexBuffer::IT_16BIT
         {
             uint16 *pSrc16 = (uint16*)pSrc, *pDst16 = (uint16*)pDst;
             for(size_t i = 0; i < indexCount; ++i)
-                pDst16[i] = remapInfo.indexMap[pSrc16[i]];
+                pDst16[i] = (uint16)remapInfo.indexMap[pSrc16[i]];
         }
 
         indexData->indexBuffer->unlock();
