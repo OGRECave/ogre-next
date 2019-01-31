@@ -47,12 +47,12 @@ namespace Ogre
     private:
         struct RemapInfo;
         void generateRemapInfo(const v1::MeshPtr& mesh, bool stableVertexOrder);
-        static void performIndexDataRemap(v1::IndexData* indexData, const RemapInfo& remapInfo);
-        static void performVertexDataRemap(v1::VertexData* vertexData, const RemapInfo& remapInfo);
-        static v1::HardwareVertexBufferSharedPtr getRemappedVertexBuffer(v1::HardwareVertexBufferSharedPtr vb, size_t srcStart, size_t srcCount, const RemapInfo& remapInfo);
+        static void performIndexDataRemap(v1::HardwareBufferManagerBase* pHWBufferManager, v1::IndexData* indexData, const RemapInfo& remapInfo);
+        static void performVertexDataRemap(v1::HardwareBufferManagerBase* pHWBufferManager, v1::VertexData* vertexData, const RemapInfo& remapInfo);
+        static v1::HardwareVertexBufferSharedPtr getRemappedVertexBuffer(v1::HardwareBufferManagerBase* pHWBufferManager, v1::HardwareVertexBufferSharedPtr vb, size_t srcStart, size_t srcCount, const RemapInfo& remapInfo);
         template<class MeshOrSubmesh> static void performBoneAssignmentRemap(MeshOrSubmesh* m, const RemapInfo& remapInfo);
         static void performPoseRemap(v1::Pose* pose, const RemapInfo& remapInfo);
-        static void performAnimationTrackRemap(v1::VertexAnimationTrack* track, const RemapInfo& remapInfo);
+        static void performAnimationTrackRemap(v1::HardwareBufferManagerBase* pHWBufferManager, v1::VertexAnimationTrack* track, const RemapInfo& remapInfo);
 
     private:
         vector<RemapInfo>::type		remapInfos;	// 0 for shared geometry, 1+ for submesh index + 1
@@ -139,7 +139,7 @@ namespace Ogre
             remapInfos[0].renumerate();
     }
 
-    inline void Lod0Stripifier::performIndexDataRemap(v1::IndexData* indexData, const RemapInfo& remapInfo)
+    inline void Lod0Stripifier::performIndexDataRemap(v1::HardwareBufferManagerBase* pHWBufferManager, v1::IndexData* indexData, const RemapInfo& remapInfo)
     {
         if(remapInfo.nothingToStrip())
             return;
@@ -148,7 +148,7 @@ namespace Ogre
         v1::HardwareIndexBuffer::IndexType indexType = indexData->indexBuffer->getType();
         v1::HardwareIndexBuffer::IndexType newIndexType = remapInfo.minimalIndexType();
         v1::HardwareIndexBufferSharedPtr newIndexBuffer =
-            v1::HardwareBufferManager::getSingleton().createIndexBuffer(
+            pHWBufferManager->createIndexBuffer(
                 newIndexType, indexCount, indexData->indexBuffer->getUsage(), indexData->indexBuffer->hasShadowBuffer());
 
         void* pSrc = indexData->indexBuffer->lock(
@@ -189,7 +189,7 @@ namespace Ogre
         indexData->indexStart = 0;
     }
 
-    inline void Lod0Stripifier::performVertexDataRemap(v1::VertexData* vertexData, const RemapInfo& remapInfo)
+    inline void Lod0Stripifier::performVertexDataRemap(v1::HardwareBufferManagerBase* pHWBufferManager, v1::VertexData* vertexData, const RemapInfo& remapInfo)
     {
         if(remapInfo.nothingToStrip())
             return;
@@ -209,7 +209,7 @@ namespace Ogre
                 continue;
             }
 
-            v1::HardwareVertexBufferSharedPtr dstbuf = getRemappedVertexBuffer(srcbuf, vertexData->vertexStart, vertexData->vertexCount, remapInfo);
+            v1::HardwareVertexBufferSharedPtr dstbuf = getRemappedVertexBuffer(pHWBufferManager, srcbuf, vertexData->vertexStart, vertexData->vertexCount, remapInfo);
             vertexData->vertexBufferBinding->setBinding(vbi->first, dstbuf);
             alreadyProcessed[srcbuf] = dstbuf;
         }
@@ -222,14 +222,14 @@ namespace Ogre
         vertexData->hwAnimDataItemsUsed = 0; // TODO: check this
     }
 
-    inline v1::HardwareVertexBufferSharedPtr Lod0Stripifier::getRemappedVertexBuffer(
+    inline v1::HardwareVertexBufferSharedPtr Lod0Stripifier::getRemappedVertexBuffer(v1::HardwareBufferManagerBase* pHWBufferManager,
         v1::HardwareVertexBufferSharedPtr srcbuf, size_t srcStart, size_t srcCount, const RemapInfo& remapInfo)
     {
         assert(!remapInfo.nothingToStrip());
 
         size_t vertexSize = srcbuf->getVertexSize();
         v1::HardwareVertexBufferSharedPtr dstbuf =
-            v1::HardwareBufferManager::getSingleton().createVertexBuffer(
+            pHWBufferManager->createVertexBuffer(
                 vertexSize, remapInfo.usedCount, srcbuf->getUsage(), srcbuf->hasShadowBuffer());
 
         char* pSrc = (char*)srcbuf->lock(srcStart * vertexSize, srcCount * vertexSize, v1::HardwareBuffer::HBL_READ_ONLY);
@@ -288,7 +288,7 @@ namespace Ogre
         }
     }
 
-    inline void Lod0Stripifier::performAnimationTrackRemap(v1::VertexAnimationTrack* track, const RemapInfo& remapInfo)
+    inline void Lod0Stripifier::performAnimationTrackRemap(v1::HardwareBufferManagerBase* pHWBufferManager, v1::VertexAnimationTrack* track, const RemapInfo& remapInfo)
     {
         if(remapInfo.nothingToStrip())
             return;
@@ -299,7 +299,7 @@ namespace Ogre
             {
                 v1::VertexMorphKeyFrame* kf = track->getVertexMorphKeyFrame(i);
                 v1::HardwareVertexBufferSharedPtr VB = kf->getVertexBuffer();
-                kf->setVertexBuffer(getRemappedVertexBuffer(VB, 0, VB->getNumVertices(), remapInfo));
+                kf->setVertexBuffer(getRemappedVertexBuffer(pHWBufferManager, VB, 0, VB->getNumVertices(), remapInfo));
             }
         }
     }
@@ -317,7 +317,7 @@ namespace Ogre
         generateRemapInfo(mesh, stableVertexOrder);
 
         if(mesh->sharedVertexData[VpNormal])
-            performVertexDataRemap(mesh->sharedVertexData[VpNormal], remapInfos[0]);
+            performVertexDataRemap(mesh->getHardwareBufferManager(), mesh->sharedVertexData[VpNormal], remapInfos[0]);
         performBoneAssignmentRemap(mesh.get(), remapInfos[0]);
 
         ushort submeshCount = mesh->getNumSubMeshes();
@@ -327,13 +327,13 @@ namespace Ogre
             const RemapInfo& remapInfo = remapInfos[submesh->useSharedVertices ? 0 : 1 + i];
 
             if(!submesh->useSharedVertices)
-                performVertexDataRemap(submesh->vertexData[VpNormal], remapInfo);
+                performVertexDataRemap(mesh->getHardwareBufferManager(), submesh->vertexData[VpNormal], remapInfo);
             performBoneAssignmentRemap(submesh, remapInfo);
 
             for(ushort lod = numLods - 1; lod != 0; --lod) // intentionally skip lod0
             {
                 v1::IndexData *lodIndexData = submesh->mLodFaceList[VpNormal][lod - 1]; // lod0 is stored separately
-                performIndexDataRemap(lodIndexData, remapInfo);
+                performIndexDataRemap(mesh->getHardwareBufferManager(), lodIndexData, remapInfo);
             }
 
             OGRE_DELETE submesh->indexData[VpNormal];
@@ -360,7 +360,7 @@ namespace Ogre
             while(trackIt.hasMoreElements())
             {
                 v1::VertexAnimationTrack* track = trackIt.getNext();
-                performAnimationTrackRemap(track, remapInfos[track->getHandle()]);
+                performAnimationTrackRemap(mesh->getHardwareBufferManager(), track, remapInfos[track->getHandle()]);
             }
         }
 
