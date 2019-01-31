@@ -253,11 +253,11 @@ namespace Ogre
         if(remapInfo.nothingToStrip() || m->getBoneAssignments().empty())
             return;
 
-        Mesh::VertexBoneAssignmentList tmp = m->getBoneAssignments();
+        v1::Mesh::VertexBoneAssignmentList tmp = m->getBoneAssignments();
         m->clearBoneAssignments();
-        for(Mesh::VertexBoneAssignmentList::const_iterator it = tmp.begin(), it_end = tmp.end(); it != it_end; ++it)
+        for(v1::Mesh::VertexBoneAssignmentList::const_iterator it = tmp.begin(), it_end = tmp.end(); it != it_end; ++it)
         {
-            VertexBoneAssignment vba = it->second;
+            v1::VertexBoneAssignment vba = it->second;
             unsigned newIdx = remapInfo.indexMap[vba.vertexIndex];
             if(newIdx != RemapInfo::UnusedIdx)
             {
