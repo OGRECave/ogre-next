@@ -622,6 +622,35 @@ namespace Ogre
         case PFG_ATC_RGB:                       return MTLPixelFormatInvalid;   //Not supported
         case PFG_ATC_RGBA_EXPLICIT_ALPHA:       return MTLPixelFormatInvalid;   //Not supported
         case PFG_ATC_RGBA_INTERPOLATED_ALPHA:   return MTLPixelFormatInvalid;   //Not supported
+
+        case PFG_ASTC_RGBA_UNORM_4X4_LDR:       return MTLPixelFormatASTC_4x4_LDR;
+        case PFG_ASTC_RGBA_UNORM_5X4_LDR:       return MTLPixelFormatASTC_5x4_LDR;
+        case PFG_ASTC_RGBA_UNORM_5X5_LDR:       return MTLPixelFormatASTC_5x5_LDR;
+        case PFG_ASTC_RGBA_UNORM_6X5_LDR:       return MTLPixelFormatASTC_6x5_LDR;
+        case PFG_ASTC_RGBA_UNORM_6X6_LDR:       return MTLPixelFormatASTC_6x6_LDR;
+        case PFG_ASTC_RGBA_UNORM_8X5_LDR:       return MTLPixelFormatASTC_8x5_LDR;
+        case PFG_ASTC_RGBA_UNORM_8X6_LDR:       return MTLPixelFormatASTC_8x6_LDR;
+        case PFG_ASTC_RGBA_UNORM_8X8_LDR:       return MTLPixelFormatASTC_8x8_LDR;
+        case PFG_ASTC_RGBA_UNORM_10X5_LDR:      return MTLPixelFormatASTC_10x5_LDR;
+        case PFG_ASTC_RGBA_UNORM_10X6_LDR:      return MTLPixelFormatASTC_10x6_LDR;
+        case PFG_ASTC_RGBA_UNORM_10X8_LDR:      return MTLPixelFormatASTC_10x8_LDR;
+        case PFG_ASTC_RGBA_UNORM_10X10_LDR:     return MTLPixelFormatASTC_10x10_LDR;
+        case PFG_ASTC_RGBA_UNORM_12X10_LDR:     return MTLPixelFormatASTC_12x10_LDR;
+        case PFG_ASTC_RGBA_UNORM_12X12_LDR:     return MTLPixelFormatASTC_12x12_LDR;
+        case PFG_ASTC_RGBA_UNORM_4X4_sRGB:      return MTLPixelFormatASTC_4x4_sRGB;
+        case PFG_ASTC_RGBA_UNORM_5X4_sRGB:      return MTLPixelFormatASTC_5x4_sRGB;
+        case PFG_ASTC_RGBA_UNORM_5X5_sRGB:      return MTLPixelFormatASTC_5x5_sRGB;
+        case PFG_ASTC_RGBA_UNORM_6X5_sRGB:      return MTLPixelFormatASTC_6x5_sRGB;
+        case PFG_ASTC_RGBA_UNORM_6X6_sRGB:      return MTLPixelFormatASTC_6x6_sRGB;
+        case PFG_ASTC_RGBA_UNORM_8X5_sRGB:      return MTLPixelFormatASTC_8x5_sRGB;
+        case PFG_ASTC_RGBA_UNORM_8X6_sRGB:      return MTLPixelFormatASTC_8x6_sRGB;
+        case PFG_ASTC_RGBA_UNORM_8X8_sRGB:      return MTLPixelFormatASTC_8x8_sRGB;
+        case PFG_ASTC_RGBA_UNORM_10X5_sRGB:     return MTLPixelFormatASTC_10x5_sRGB;
+        case PFG_ASTC_RGBA_UNORM_10X6_sRGB:     return MTLPixelFormatASTC_10x6_sRGB;
+        case PFG_ASTC_RGBA_UNORM_10X8_sRGB:     return MTLPixelFormatASTC_10x8_sRGB;
+        case PFG_ASTC_RGBA_UNORM_10X10_sRGB:    return MTLPixelFormatASTC_10x10_sRGB;
+        case PFG_ASTC_RGBA_UNORM_12X10_sRGB:    return MTLPixelFormatASTC_12x10_sRGB;
+        case PFG_ASTC_RGBA_UNORM_12X12_sRGB:    return MTLPixelFormatASTC_12x12_sRGB;
 #endif
 
         case PFG_AYUV:

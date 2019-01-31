@@ -130,6 +130,26 @@ namespace Ogre
             case PFG_PVRTC2_4BPP:   case PFG_PVRTC2_4BPP_SRGB:
                 return (std::max<uint32>( width, 8u ) * std::max<uint32>( height, 8u ) * 4u + 7u) / 8u
                         * depth * slices;
+            case PFG_ASTC_RGBA_UNORM_4X4_LDR:   case PFG_ASTC_RGBA_UNORM_4X4_sRGB:
+            case PFG_ASTC_RGBA_UNORM_5X4_LDR:   case PFG_ASTC_RGBA_UNORM_5X4_sRGB:
+            case PFG_ASTC_RGBA_UNORM_5X5_LDR:   case PFG_ASTC_RGBA_UNORM_5X5_sRGB:
+            case PFG_ASTC_RGBA_UNORM_6X5_LDR:   case PFG_ASTC_RGBA_UNORM_6X5_sRGB:
+            case PFG_ASTC_RGBA_UNORM_6X6_LDR:   case PFG_ASTC_RGBA_UNORM_6X6_sRGB:
+            case PFG_ASTC_RGBA_UNORM_8X5_LDR:   case PFG_ASTC_RGBA_UNORM_8X5_sRGB:
+            case PFG_ASTC_RGBA_UNORM_8X6_LDR:   case PFG_ASTC_RGBA_UNORM_8X6_sRGB:
+            case PFG_ASTC_RGBA_UNORM_8X8_LDR:   case PFG_ASTC_RGBA_UNORM_8X8_sRGB:
+            case PFG_ASTC_RGBA_UNORM_10X5_LDR:  case PFG_ASTC_RGBA_UNORM_10X5_sRGB:
+            case PFG_ASTC_RGBA_UNORM_10X6_LDR:  case PFG_ASTC_RGBA_UNORM_10X6_sRGB:
+            case PFG_ASTC_RGBA_UNORM_10X8_LDR:  case PFG_ASTC_RGBA_UNORM_10X8_sRGB:
+            case PFG_ASTC_RGBA_UNORM_10X10_LDR: case PFG_ASTC_RGBA_UNORM_10X10_sRGB:
+            case PFG_ASTC_RGBA_UNORM_12X10_LDR: case PFG_ASTC_RGBA_UNORM_12X10_sRGB:
+            case PFG_ASTC_RGBA_UNORM_12X12_LDR: case PFG_ASTC_RGBA_UNORM_12X12_sRGB:
+            {
+                uint32 blockWidth = getCompressedBlockWidth( format );
+                uint32 blockHeight = getCompressedBlockHeight( format );
+                return  (alignToNextMultiple( width, blockWidth ) / blockWidth) *
+                        (alignToNextMultiple( height, blockHeight ) / blockHeight) * depth * 16u;
+            }
             default:
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                              "Invalid compressed pixel format",
@@ -232,6 +252,41 @@ namespace Ogre
             case PFG_PVRTC2_4BPP:   case PFG_PVRTC2_4BPP_SRGB:
                 return 0u;
 
+        case PFG_ASTC_RGBA_UNORM_4X4_LDR:
+        case PFG_ASTC_RGBA_UNORM_4X4_sRGB:
+            return 4u;
+        case PFG_ASTC_RGBA_UNORM_5X4_LDR:
+        case PFG_ASTC_RGBA_UNORM_5X4_sRGB:
+        case PFG_ASTC_RGBA_UNORM_5X5_LDR:
+        case PFG_ASTC_RGBA_UNORM_5X5_sRGB:
+            return 5u;
+        case PFG_ASTC_RGBA_UNORM_6X5_LDR:
+        case PFG_ASTC_RGBA_UNORM_6X5_sRGB:
+        case PFG_ASTC_RGBA_UNORM_6X6_LDR:
+        case PFG_ASTC_RGBA_UNORM_6X6_sRGB:
+            return 6u;
+        case PFG_ASTC_RGBA_UNORM_8X5_LDR:
+        case PFG_ASTC_RGBA_UNORM_8X5_sRGB:
+        case PFG_ASTC_RGBA_UNORM_8X6_LDR:
+        case PFG_ASTC_RGBA_UNORM_8X6_sRGB:
+        case PFG_ASTC_RGBA_UNORM_8X8_LDR:
+        case PFG_ASTC_RGBA_UNORM_8X8_sRGB:
+            return 8u;
+        case PFG_ASTC_RGBA_UNORM_10X5_LDR:
+        case PFG_ASTC_RGBA_UNORM_10X5_sRGB:
+        case PFG_ASTC_RGBA_UNORM_10X6_LDR:
+        case PFG_ASTC_RGBA_UNORM_10X6_sRGB:
+        case PFG_ASTC_RGBA_UNORM_10X8_LDR:
+        case PFG_ASTC_RGBA_UNORM_10X8_sRGB:
+        case PFG_ASTC_RGBA_UNORM_10X10_LDR:
+        case PFG_ASTC_RGBA_UNORM_10X10_sRGB:
+            return 10u;
+        case PFG_ASTC_RGBA_UNORM_12X10_LDR:
+        case PFG_ASTC_RGBA_UNORM_12X10_sRGB:
+        case PFG_ASTC_RGBA_UNORM_12X12_LDR:
+        case PFG_ASTC_RGBA_UNORM_12X12_sRGB:
+            return 12u;
+
             default:
                 assert( !isCompressed( format ) );
                 return 1u;
@@ -240,6 +295,47 @@ namespace Ogre
     //-----------------------------------------------------------------------
     uint32 PixelFormatGpuUtils::getCompressedBlockHeight( PixelFormatGpu format, bool apiStrict )
     {
+        switch( format )
+        {
+        case PFG_ASTC_RGBA_UNORM_4X4_LDR:
+        case PFG_ASTC_RGBA_UNORM_4X4_sRGB:
+        case PFG_ASTC_RGBA_UNORM_5X4_LDR:
+        case PFG_ASTC_RGBA_UNORM_5X4_sRGB:
+            return 4u;
+        case PFG_ASTC_RGBA_UNORM_5X5_LDR:
+        case PFG_ASTC_RGBA_UNORM_5X5_sRGB:
+        case PFG_ASTC_RGBA_UNORM_6X5_LDR:
+        case PFG_ASTC_RGBA_UNORM_6X5_sRGB:
+        case PFG_ASTC_RGBA_UNORM_8X5_LDR:
+        case PFG_ASTC_RGBA_UNORM_8X5_sRGB:
+        case PFG_ASTC_RGBA_UNORM_10X5_LDR:
+        case PFG_ASTC_RGBA_UNORM_10X5_sRGB:
+            return 5u;
+        case PFG_ASTC_RGBA_UNORM_6X6_LDR:
+        case PFG_ASTC_RGBA_UNORM_6X6_sRGB:
+        case PFG_ASTC_RGBA_UNORM_8X6_LDR:
+        case PFG_ASTC_RGBA_UNORM_8X6_sRGB:
+        case PFG_ASTC_RGBA_UNORM_10X6_LDR:
+        case PFG_ASTC_RGBA_UNORM_10X6_sRGB:
+            return 6u;
+        case PFG_ASTC_RGBA_UNORM_8X8_LDR:
+        case PFG_ASTC_RGBA_UNORM_8X8_sRGB:
+        case PFG_ASTC_RGBA_UNORM_10X8_LDR:
+        case PFG_ASTC_RGBA_UNORM_10X8_sRGB:
+            return 8u;
+        case PFG_ASTC_RGBA_UNORM_10X10_LDR:
+        case PFG_ASTC_RGBA_UNORM_10X10_sRGB:
+        case PFG_ASTC_RGBA_UNORM_12X10_LDR:
+        case PFG_ASTC_RGBA_UNORM_12X10_sRGB:
+            return 10u;
+        case PFG_ASTC_RGBA_UNORM_12X12_LDR:
+        case PFG_ASTC_RGBA_UNORM_12X12_sRGB:
+            return 12u;
+
+        default:
+            return getCompressedBlockWidth( format, apiStrict );
+        }
+
         return getCompressedBlockWidth( format, apiStrict );
     }
     //-----------------------------------------------------------------------------------
@@ -281,6 +377,22 @@ namespace Ogre
         case PFG_PVRTC2_2BPP:   case PFG_PVRTC2_2BPP_SRGB:
         case PFG_PVRTC2_4BPP:   case PFG_PVRTC2_4BPP_SRGB:
                 return 32u;
+
+        case PFG_ASTC_RGBA_UNORM_4X4_LDR:   case PFG_ASTC_RGBA_UNORM_4X4_sRGB:
+        case PFG_ASTC_RGBA_UNORM_5X4_LDR:   case PFG_ASTC_RGBA_UNORM_5X4_sRGB:
+        case PFG_ASTC_RGBA_UNORM_5X5_LDR:   case PFG_ASTC_RGBA_UNORM_5X5_sRGB:
+        case PFG_ASTC_RGBA_UNORM_6X5_LDR:   case PFG_ASTC_RGBA_UNORM_6X5_sRGB:
+        case PFG_ASTC_RGBA_UNORM_6X6_LDR:   case PFG_ASTC_RGBA_UNORM_6X6_sRGB:
+        case PFG_ASTC_RGBA_UNORM_8X5_LDR:   case PFG_ASTC_RGBA_UNORM_8X5_sRGB:
+        case PFG_ASTC_RGBA_UNORM_8X6_LDR:   case PFG_ASTC_RGBA_UNORM_8X6_sRGB:
+        case PFG_ASTC_RGBA_UNORM_8X8_LDR:   case PFG_ASTC_RGBA_UNORM_8X8_sRGB:
+        case PFG_ASTC_RGBA_UNORM_10X5_LDR:  case PFG_ASTC_RGBA_UNORM_10X5_sRGB:
+        case PFG_ASTC_RGBA_UNORM_10X6_LDR:  case PFG_ASTC_RGBA_UNORM_10X6_sRGB:
+        case PFG_ASTC_RGBA_UNORM_10X8_LDR:  case PFG_ASTC_RGBA_UNORM_10X8_sRGB:
+        case PFG_ASTC_RGBA_UNORM_10X10_LDR: case PFG_ASTC_RGBA_UNORM_10X10_sRGB:
+        case PFG_ASTC_RGBA_UNORM_12X10_LDR: case PFG_ASTC_RGBA_UNORM_12X10_sRGB:
+        case PFG_ASTC_RGBA_UNORM_12X12_LDR: case PFG_ASTC_RGBA_UNORM_12X12_sRGB:
+            return 16u;
 
         default:
             assert( !isCompressed( format ) );
@@ -697,6 +809,20 @@ namespace Ogre
         case PFG_ATC_RGB:
         case PFG_ATC_RGBA_EXPLICIT_ALPHA:
         case PFG_ATC_RGBA_INTERPOLATED_ALPHA:
+        case PFG_ASTC_RGBA_UNORM_4X4_LDR:   case PFG_ASTC_RGBA_UNORM_4X4_sRGB:
+        case PFG_ASTC_RGBA_UNORM_5X4_LDR:   case PFG_ASTC_RGBA_UNORM_5X4_sRGB:
+        case PFG_ASTC_RGBA_UNORM_5X5_LDR:   case PFG_ASTC_RGBA_UNORM_5X5_sRGB:
+        case PFG_ASTC_RGBA_UNORM_6X5_LDR:   case PFG_ASTC_RGBA_UNORM_6X5_sRGB:
+        case PFG_ASTC_RGBA_UNORM_6X6_LDR:   case PFG_ASTC_RGBA_UNORM_6X6_sRGB:
+        case PFG_ASTC_RGBA_UNORM_8X5_LDR:   case PFG_ASTC_RGBA_UNORM_8X5_sRGB:
+        case PFG_ASTC_RGBA_UNORM_8X6_LDR:   case PFG_ASTC_RGBA_UNORM_8X6_sRGB:
+        case PFG_ASTC_RGBA_UNORM_8X8_LDR:   case PFG_ASTC_RGBA_UNORM_8X8_sRGB:
+        case PFG_ASTC_RGBA_UNORM_10X5_LDR:  case PFG_ASTC_RGBA_UNORM_10X5_sRGB:
+        case PFG_ASTC_RGBA_UNORM_10X6_LDR:  case PFG_ASTC_RGBA_UNORM_10X6_sRGB:
+        case PFG_ASTC_RGBA_UNORM_10X8_LDR:  case PFG_ASTC_RGBA_UNORM_10X8_sRGB:
+        case PFG_ASTC_RGBA_UNORM_10X10_LDR: case PFG_ASTC_RGBA_UNORM_10X10_sRGB:
+        case PFG_ASTC_RGBA_UNORM_12X10_LDR: case PFG_ASTC_RGBA_UNORM_12X10_sRGB:
+        case PFG_ASTC_RGBA_UNORM_12X12_LDR: case PFG_ASTC_RGBA_UNORM_12X12_sRGB:
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Compressed formats not supported!",
                          "PixelFormatGpuUtils::packColour" );
             break;
@@ -969,6 +1095,20 @@ namespace Ogre
         case PFG_ATC_RGB:
         case PFG_ATC_RGBA_EXPLICIT_ALPHA:
         case PFG_ATC_RGBA_INTERPOLATED_ALPHA:
+        case PFG_ASTC_RGBA_UNORM_4X4_LDR:   case PFG_ASTC_RGBA_UNORM_4X4_sRGB:
+        case PFG_ASTC_RGBA_UNORM_5X4_LDR:   case PFG_ASTC_RGBA_UNORM_5X4_sRGB:
+        case PFG_ASTC_RGBA_UNORM_5X5_LDR:   case PFG_ASTC_RGBA_UNORM_5X5_sRGB:
+        case PFG_ASTC_RGBA_UNORM_6X5_LDR:   case PFG_ASTC_RGBA_UNORM_6X5_sRGB:
+        case PFG_ASTC_RGBA_UNORM_6X6_LDR:   case PFG_ASTC_RGBA_UNORM_6X6_sRGB:
+        case PFG_ASTC_RGBA_UNORM_8X5_LDR:   case PFG_ASTC_RGBA_UNORM_8X5_sRGB:
+        case PFG_ASTC_RGBA_UNORM_8X6_LDR:   case PFG_ASTC_RGBA_UNORM_8X6_sRGB:
+        case PFG_ASTC_RGBA_UNORM_8X8_LDR:   case PFG_ASTC_RGBA_UNORM_8X8_sRGB:
+        case PFG_ASTC_RGBA_UNORM_10X5_LDR:  case PFG_ASTC_RGBA_UNORM_10X5_sRGB:
+        case PFG_ASTC_RGBA_UNORM_10X6_LDR:  case PFG_ASTC_RGBA_UNORM_10X6_sRGB:
+        case PFG_ASTC_RGBA_UNORM_10X8_LDR:  case PFG_ASTC_RGBA_UNORM_10X8_sRGB:
+        case PFG_ASTC_RGBA_UNORM_10X10_LDR: case PFG_ASTC_RGBA_UNORM_10X10_sRGB:
+        case PFG_ASTC_RGBA_UNORM_12X10_LDR: case PFG_ASTC_RGBA_UNORM_12X10_sRGB:
+        case PFG_ASTC_RGBA_UNORM_12X12_LDR: case PFG_ASTC_RGBA_UNORM_12X12_sRGB:
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Compressed formats not supported!",
                          "PixelFormatGpuUtils::unpackColour" );
             break;
@@ -1492,6 +1632,36 @@ namespace Ogre
         {"PFG_ATC_RGB",				3u, 0,						PFF_COMPRESSED_COMMON },
         {"PFG_ATC_RGBA_EXPLICIT_ALPHA",			4u, 0,			PFF_COMPRESSED_COMMON },
         {"PFG_ATC_RGBA_INTERPOLATED_ALPHA",		4u, 0,			PFF_COMPRESSED_COMMON },
+
+        {"PFG_ASTC_RGBA_UNORM_4X4_LDR",			4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
+        {"PFG_ASTC_RGBA_UNORM_5X4_LDR",			4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
+        {"PFG_ASTC_RGBA_UNORM_5X5_LDR",			4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
+        {"PFG_ASTC_RGBA_UNORM_6X5_LDR",  		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
+        {"PFG_ASTC_RGBA_UNORM_6X6_LDR",			4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
+        {"PFG_ASTC_RGBA_UNORM_8X5_LDR",			4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
+        {"PFG_ASTC_RGBA_UNORM_8X6_LDR",			4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
+        {"PFG_ASTC_RGBA_UNORM_6X5_LDR",  		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
+        {"PFG_ASTC_RGBA_UNORM_10X5_LDR",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
+        {"PFG_ASTC_RGBA_UNORM_10X6_LDR",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
+        {"PFG_ASTC_RGBA_UNORM_10X8_LDR",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
+        {"PFG_ASTC_RGBA_UNORM_10X10_LDR",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
+        {"PFG_ASTC_RGBA_UNORM_12X10_LDR",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
+        {"PFG_ASTC_RGBA_UNORM_12X12_LDR",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED },
+
+        {"PFG_ASTC_RGBA_UNORM_4X4_sRGB",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_ASTC_RGBA_UNORM_5X4_sRGB",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_ASTC_RGBA_UNORM_5X5_sRGB",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_ASTC_RGBA_UNORM_6X5_sRGB",  		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_ASTC_RGBA_UNORM_6X6_sRGB",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_ASTC_RGBA_UNORM_8X5_sRGB",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_ASTC_RGBA_UNORM_8X6_sRGB",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_ASTC_RGBA_UNORM_6X5_sRGB",  		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_ASTC_RGBA_UNORM_10X5_sRGB",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_ASTC_RGBA_UNORM_10X6_sRGB",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_ASTC_RGBA_UNORM_10X8_sRGB",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_ASTC_RGBA_UNORM_10X10_sRGB",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_ASTC_RGBA_UNORM_12X10_sRGB",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_ASTC_RGBA_UNORM_12X12_sRGB",		4u, 0,			PFF_COMPRESSED_COMMON|PFF_NORMALIZED|PFF_SRGB },
 
         {"PFG_COUNT", 1u, 0, 0 },
     };
