@@ -28,7 +28,7 @@ THE SOFTWARE.
 #ifndef __OgreASTCCodec_H__
 #define __OgreASTCCodec_H__
 
-#include "OgreImageCodec.h"
+#include "OgreImageCodec2.h"
 
 namespace Ogre {
 	/** \addtogroup Core
@@ -43,7 +43,7 @@ namespace Ogre {
 		We implement our own codec here since we need to be able to keep ASTC
 		data compressed if the card supports it.
     */
-    class _OgreExport ASTCCodec : public ImageCodec
+    class _OgreExport ASTCCodec : public ImageCodec2
     {
     protected:
         String mType;
@@ -73,12 +73,13 @@ namespace Ogre {
 		static void startup(void);
 		/// Static method to shutdown and unregister the ASTC codec
 		static void shutdown(void);
-        static size_t getMemorySize(uint32 width, uint32 height, uint32 depth, int32 xdim, int32 ydim, PixelFormat fmt);
+        static size_t getMemorySize( uint32 width, uint32 height, uint32 depth,
+                                     int32 xdim, int32 ydim, PixelFormatGpu fmt );
 
     private:
         void getClosestBlockDim2d(float targetBitrate, int *x, int *y) const;
         static void getClosestBlockDim3d(float targetBitrate, int *x, int *y, int *z);
-        static float getBitrateForPixelFormat(PixelFormat fmt);
+        static float getBitrateForPixelFormat(PixelFormatGpu fmt);
 
     };
 	/** @} */

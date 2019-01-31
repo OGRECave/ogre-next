@@ -52,37 +52,37 @@ namespace Ogre {
         uint8 zsize[3];			// block count is inferred
     } ASTCHeader;
 
-    float ASTCCodec::getBitrateForPixelFormat(PixelFormat fmt)
+    float ASTCCodec::getBitrateForPixelFormat(PixelFormatGpu fmt)
     {
         switch (fmt)
         {
-        case PF_ASTC_RGBA_4X4_LDR:
+        case PFG_ASTC_RGBA_UNORM_4X4_LDR:
             return 8.00;
-        case PF_ASTC_RGBA_5X4_LDR:
+        case PFG_ASTC_RGBA_UNORM_5X4_LDR:
             return 6.40;
-        case PF_ASTC_RGBA_5X5_LDR:
+        case PFG_ASTC_RGBA_UNORM_5X5_LDR:
             return 5.12;
-        case PF_ASTC_RGBA_6X5_LDR:
+        case PFG_ASTC_RGBA_UNORM_6X5_LDR:
             return 4.27;
-        case PF_ASTC_RGBA_6X6_LDR:
+        case PFG_ASTC_RGBA_UNORM_6X6_LDR:
             return 3.56;
-        case PF_ASTC_RGBA_8X5_LDR:
+        case PFG_ASTC_RGBA_UNORM_8X5_LDR:
             return 3.20;
-        case PF_ASTC_RGBA_8X6_LDR:
+        case PFG_ASTC_RGBA_UNORM_8X6_LDR:
             return 2.67;
-        case PF_ASTC_RGBA_8X8_LDR:
+        case PFG_ASTC_RGBA_UNORM_8X8_LDR:
             return 2.00;
-        case PF_ASTC_RGBA_10X5_LDR:
+        case PFG_ASTC_RGBA_UNORM_10X5_LDR:
             return 2.56;
-        case PF_ASTC_RGBA_10X6_LDR:
+        case PFG_ASTC_RGBA_UNORM_10X6_LDR:
             return 2.13;
-        case PF_ASTC_RGBA_10X8_LDR:
+        case PFG_ASTC_RGBA_UNORM_10X8_LDR:
             return 1.60;
-        case PF_ASTC_RGBA_10X10_LDR:
+        case PFG_ASTC_RGBA_UNORM_10X10_LDR:
             return 1.28;
-        case PF_ASTC_RGBA_12X10_LDR:
+        case PFG_ASTC_RGBA_UNORM_12X10_LDR:
             return 1.07;
-        case PF_ASTC_RGBA_12X12_LDR:
+        case PFG_ASTC_RGBA_UNORM_12X12_LDR:
             return 0.89;
 
         default:
@@ -165,7 +165,7 @@ namespace Ogre {
     }
 
     size_t ASTCCodec::getMemorySize( uint32 width, uint32 height, uint32 depth,
-                                     int32 xdim, int32 ydim, PixelFormat fmt )
+                                     int32 xdim, int32 ydim, PixelFormatGpu fmt )
     {
         float bitrate = getBitrateForPixelFormat(fmt);
         int32 zdim = 1;
@@ -227,15 +227,16 @@ namespace Ogre {
     //---------------------------------------------------------------------
     Codec::DecodeResult ASTCCodec::decode(DataStreamPtr& stream) const
     {
-        DecodeResult ret;
         ASTCHeader header;
 
         // Read the ASTC header
         stream->read(&header, sizeof(ASTCHeader));
 
-		if (memcmp(&ASTC_MAGIC, &header.magic, sizeof(uint32)) != 0 )
+        if( memcmp( &ASTC_MAGIC, &header.magic, sizeof(uint32) ) != 0 )
+        {
             OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
                         "This is not a valid ASTC file!", "ASTCCodec::decode");
+        }
 
         int xdim = header.blockdim_x;
         int ydim = header.blockdim_y;
@@ -245,11 +246,16 @@ namespace Ogre {
         int ysize = header.ysize[0] + 256 * header.ysize[1] + 65536 * header.ysize[2];
         int zsize = header.zsize[0] + 256 * header.zsize[1] + 65536 * header.zsize[2];
 
-        ImageData *imgData = OGRE_NEW ImageData();
-        imgData->width = xsize;
-        imgData->height = ysize;
-        imgData->depth = zsize;
-		imgData->num_mipmaps = 0; // Always 1 mip level per file
+        ImageData2 *imgData = OGRE_NEW ImageData2();
+        imgData->box.width  = xsize;
+        imgData->box.height = ysize;
+        imgData->box.depth  = zsize;
+        imgData->box.numSlices = 1u; //Always one face, cubemaps are not currently supported
+        imgData->numMipmaps = 1u; // Always 1 mip level per file
+        if( zsize > 1 )
+            imgData->textureType = TextureTypes::Type2D;
+        else
+            imgData->textureType = TextureTypes::Type3D;
 
         // For 3D we calculate the bitrate then find the nearest 2D block size.
         if(zdim > 1)
@@ -260,67 +266,79 @@ namespace Ogre {
 
         if(xdim == 4)
         {
-            imgData->format = PF_ASTC_RGBA_4X4_LDR;
+            imgData->format = PFG_ASTC_RGBA_UNORM_4X4_LDR;
         }
         else if(xdim == 5)
         {
             if(ydim == 4)
-                imgData->format = PF_ASTC_RGBA_5X4_LDR;
+                imgData->format = PFG_ASTC_RGBA_UNORM_5X4_LDR;
             else if(ydim == 5)
-                imgData->format = PF_ASTC_RGBA_5X5_LDR;
+                imgData->format = PFG_ASTC_RGBA_UNORM_5X5_LDR;
         }
         else if(xdim == 6)
         {
             if(ydim == 5)
-                imgData->format = PF_ASTC_RGBA_6X5_LDR;
+                imgData->format = PFG_ASTC_RGBA_UNORM_6X5_LDR;
             else if(ydim == 6)
-                imgData->format = PF_ASTC_RGBA_6X6_LDR;
+                imgData->format = PFG_ASTC_RGBA_UNORM_6X6_LDR;
         }
         else if(xdim == 8)
         {
             if(ydim == 5)
-                imgData->format = PF_ASTC_RGBA_8X5_LDR;
+                imgData->format = PFG_ASTC_RGBA_UNORM_8X5_LDR;
             else if(ydim == 6)
-                imgData->format = PF_ASTC_RGBA_8X6_LDR;
+                imgData->format = PFG_ASTC_RGBA_UNORM_8X6_LDR;
             else if(ydim == 8)
-                imgData->format = PF_ASTC_RGBA_8X8_LDR;
+                imgData->format = PFG_ASTC_RGBA_UNORM_8X8_LDR;
         }
         else if(xdim == 10)
         {
             if(ydim == 5)
-                imgData->format = PF_ASTC_RGBA_10X5_LDR;
+                imgData->format = PFG_ASTC_RGBA_UNORM_10X5_LDR;
             else if(ydim == 6)
-                imgData->format = PF_ASTC_RGBA_10X6_LDR;
+                imgData->format = PFG_ASTC_RGBA_UNORM_10X6_LDR;
             else if(ydim == 8)
-                imgData->format = PF_ASTC_RGBA_10X8_LDR;
+                imgData->format = PFG_ASTC_RGBA_UNORM_10X8_LDR;
             else if(ydim == 10)
-                imgData->format = PF_ASTC_RGBA_10X10_LDR;
+                imgData->format = PFG_ASTC_RGBA_UNORM_10X10_LDR;
         }
         else if(xdim == 12)
         {
             if(ydim == 10)
-                imgData->format = PF_ASTC_RGBA_12X10_LDR;
+                imgData->format = PFG_ASTC_RGBA_UNORM_12X10_LDR;
             else if(ydim == 12)
-                imgData->format = PF_ASTC_RGBA_12X12_LDR;
+                imgData->format = PFG_ASTC_RGBA_UNORM_12X12_LDR;
         }
 
-        imgData->flags = IF_COMPRESSED;
+        const uint32 rowAlignment = 4u;
+//        imgData->box.bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( imgData->format );
+        imgData->box.setCompressedPixelFormat( imgData->format );
+        imgData->box.bytesPerRow = PixelFormatGpuUtils::getSizeBytes( imgData->box.width,
+                                                                      1u, 1u, 1u,
+                                                                      imgData->format,
+                                                                      rowAlignment );
+        imgData->box.bytesPerImage = PixelFormatGpuUtils::getSizeBytes( imgData->box.width,
+                                                                        imgData->box.height,
+                                                                        1u, 1u,
+                                                                        imgData->format,
+                                                                        rowAlignment );
 
-		size_t numFaces = 1; // Always one face, cubemaps are not currently supported
-                             // Calculate total size from number of mipmaps, faces and size
-		imgData->size = Image::calculateSize(imgData->num_mipmaps, numFaces,
-                                             imgData->width, imgData->height, imgData->depth, imgData->format);
+        const size_t requiredBytes = PixelFormatGpuUtils::calculateSizeBytes( imgData->box.width,
+                                                                              imgData->box.height,
+                                                                              imgData->box.depth,
+                                                                              imgData->box.numSlices,
+                                                                              imgData->format,
+                                                                              imgData->numMipmaps,
+                                                                              rowAlignment );
+        // Bind output buffer
+        imgData->box.data = OGRE_MALLOC_SIMD( requiredBytes, MEMCATEGORY_RESOURCE );
 
-		// Bind output buffer
-		MemoryDataStreamPtr output;
-		output.bind(OGRE_NEW MemoryDataStream(imgData->size));
+        // Now deal with the data
+        stream->read( imgData->box.data, requiredBytes );
 
-		// Now deal with the data
-		uchar* destPtr = output->getPtr();
-        stream->read(destPtr, imgData->size);
-
-		ret.first = output;
-		ret.second = CodecDataPtr(imgData);
+        DecodeResult ret;
+        ret.first.reset();
+        ret.second = CodecDataPtr( imgData );
         
 		return ret;
     }
