@@ -304,6 +304,25 @@ namespace Ogre
                     new (&mData[i]) T( value );
                 }
             }
+            else
+            {
+                for( size_t i=newSize; i<mSize; ++i )
+                    mData[i].~T();
+            }
+
+            mSize = newSize;
+        }
+
+        void resizePOD( size_t newSize, const T &value=T() )
+        {
+            if( newSize > mSize )
+            {
+                growToFit( newSize - mSize );
+                for( size_t i=mSize; i<newSize; ++i )
+                {
+                    new (&mData[i]) T( value );
+                }
+            }
 
             mSize = newSize;
         }
