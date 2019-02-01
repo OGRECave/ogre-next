@@ -252,7 +252,7 @@ namespace Ogre {
         imgData->box.depth  = zsize;
         imgData->box.numSlices = 1u; //Always one face, cubemaps are not currently supported
         imgData->numMipmaps = 1u; // Always 1 mip level per file
-        if( zsize > 1 )
+        if( zsize <= 1 )
             imgData->textureType = TextureTypes::Type2D;
         else
             imgData->textureType = TextureTypes::Type3D;
