@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreETCCodec.h"
-#include "OgreImage.h"
+#include "OgreImage2.h"
 #include "OgreException.h"
 #include "OgreDataStream.h"
 
@@ -39,6 +39,11 @@ THE SOFTWARE.
 #define FOURCC(c0, c1, c2, c3) (c0 | (c1 << 8) | (c2 << 16) | (c3 << 24))
 #define KTX_ENDIAN_REF      (0x04030201)
 #define KTX_ENDIAN_REF_REV  (0x01020304)
+
+#define OGRE_GL_COMPRESSED_RGBA_ASTC_4x4_KHR                         0x93B0
+#define OGRE_GL_COMPRESSED_RGBA_ASTC_12x12_KHR                       0x93BD
+#define OGRE_GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR                 0x93D0
+#define OGRE_GL_COMPRESSED_SRGB8_ALPHA8_ASTC_12x12_KHR               0x93DD
 
 // In a PKM-file, the codecs are stored using the following identifiers
 //
@@ -161,7 +166,7 @@ namespace Ogre {
             return ret;
 
         OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                    "This is not a valid ETC file!", "ETCCodec::decode");
+                    "This is not a valid ETC (PKM or KTX) file!", "ETCCodec::decode");
     }
     //---------------------------------------------------------------------    
     String ETCCodec::getType() const 
@@ -217,65 +222,74 @@ namespace Ogre {
         uint16 paddedHeight = (header.iPaddedHeightMSB << 8) | header.iPaddedHeightLSB;
         uint16 type = (header.iTextureTypeMSB << 8) | header.iTextureTypeLSB;
 
-        ImageData *imgData = OGRE_NEW ImageData();
-        imgData->depth = 1;
-        imgData->width = width;
-        imgData->height = height;
+        ImageData2 *imgData = OGRE_NEW ImageData2();
+        imgData->box.width      = width;
+        imgData->box.height     = height;
+        imgData->box.depth      = 1u;
+        imgData->box.numSlices  = 1u;
 
         // File version 2.0 supports ETC2 in addition to ETC1
         if(header.version[0] == '2' && header.version[1] == '0')
         {
             switch (type) {
                 case 0:
-                    imgData->format = PF_ETC1_RGB8;
+                    imgData->format = PFG_ETC1_RGB8_UNORM;
                     break;
 
                     // GL_COMPRESSED_RGB8_ETC2
                 case 1:
-                    imgData->format = PF_ETC2_RGB8;
+                    imgData->format = PFG_ETC2_RGB8_UNORM;
                     break;
 
                     // GL_COMPRESSED_RGBA8_ETC2_EAC
                 case 3:
-                    imgData->format = PF_ETC2_RGBA8;
+                    imgData->format = PFG_ETC2_RGBA8_UNORM;
                     break;
 
                     // GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2
                 case 4:
-                    imgData->format = PF_ETC2_RGB8A1;
+                    imgData->format = PFG_ETC2_RGB8A1_UNORM;
                     break;
 
                     // Default case is ETC1
                 default:
-                    imgData->format = PF_ETC1_RGB8;
+                    imgData->format = PFG_ETC1_RGB8_UNORM;
                     break;
             }
         }
         else
-            imgData->format = PF_ETC1_RGB8;
+            imgData->format = PFG_ETC1_RGB8_UNORM;
 
         // ETC has no support for mipmaps - malideveloper.com has a example
         // where the load mipmap levels from different external files
-        imgData->num_mipmaps = 0;
+        imgData->numMipmaps = 1u;
 
         // ETC is a compressed format
-        imgData->flags |= IF_COMPRESSED;
+        imgData->box.setCompressedPixelFormat( imgData->format );
+        imgData->textureType = TextureTypes::Type2D;
+
+        const uint32 rowAlignment = 4u;
+        imgData->box.bytesPerRow = PixelFormatGpuUtils::getSizeBytes( imgData->box.width,
+                                                                      1u, 1u, 1u,
+                                                                      imgData->format,
+                                                                      rowAlignment );
+        imgData->box.bytesPerImage = PixelFormatGpuUtils::getSizeBytes( imgData->box.width,
+                                                                        imgData->box.height,
+                                                                        1u, 1u,
+                                                                        imgData->format,
+                                                                        rowAlignment );
 
         // Calculate total size from number of mipmaps, faces and size
-        imgData->size = (paddedWidth * paddedHeight) >> 1;
+        const size_t requiredBytes = (paddedWidth * paddedHeight) >> 1;
 
         // Bind output buffer
-        MemoryDataStreamPtr output;
-        output.bind(OGRE_NEW MemoryDataStream(imgData->size));
+        imgData->box.data = OGRE_MALLOC_SIMD( requiredBytes, MEMCATEGORY_RESOURCE );
 
         // Now deal with the data
-        void *destPtr = output->getPtr();
-        stream->read(destPtr, imgData->size);
-        destPtr = static_cast<void*>(static_cast<uchar*>(destPtr));
-        
-        DecodeResult ret;
-        ret.first = output;
-        ret.second = CodecDataPtr(imgData);
+        stream->read( imgData->box.data, requiredBytes );
+
+        result.first.reset();
+        result.second = CodecDataPtr( imgData );
 
         return true;
     }
@@ -286,100 +300,163 @@ namespace Ogre {
         // Read the ETC1 header
         stream->read(&header, sizeof(KTXHeader));
 
-        const uint8 KTXFileIdentifier[12] = { 0xAB, 0x4B, 0x54, 0x58, 0x20, 0x31, 0x31, 0xBB, 0x0D, 0x0A, 0x1A, 0x0A };
+        const uint8 KTXFileIdentifier[12] = { 0xAB, 0x4B, 0x54, 0x58, 0x20, 0x31,
+                                              0x31, 0xBB, 0x0D, 0x0A, 0x1A, 0x0A };
         if (memcmp(KTXFileIdentifier, &header.identifier, sizeof(KTXFileIdentifier)) != 0 )
             return false;
 
         if (header.endianness == KTX_ENDIAN_REF_REV)
 			flipEndian(&header.glType, sizeof(uint32));
 
-        ImageData *imgData = OGRE_NEW ImageData();
-        imgData->depth = 1;
-        imgData->width = header.pixelWidth;
-        imgData->height = header.pixelHeight;
-        imgData->num_mipmaps = static_cast<uint8>(header.numberOfMipmapLevels - 1);
+        ImageData2 *imgData = OGRE_NEW ImageData2();
+
+        if( imgData->box.depth >= 1u &&
+            (header.numberOfFaces > 1u || header.numberOfArrayElements >= 1u) )
+        {
+            OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
+                         "Unsupported KTX format. 3D cubemaps and 3D arrays are not supported by Ogre",
+                         "ETCCodec::decodeKTX" );
+        }
+
+        imgData->box.width  = header.pixelWidth;
+        imgData->box.height = header.pixelHeight;
+        imgData->box.depth  = std::max( header.pixelDepth, 1u );
+        imgData->box.numSlices = (header.numberOfFaces == 6u ? 6u : 1u) *
+                                 std::max( header.numberOfArrayElements, 1u );
+        imgData->numMipmaps = static_cast<uint8>( header.numberOfMipmapLevels );
+
+        if( header.pixelDepth >= 1u )
+            imgData->textureType = TextureTypes::Type3D;
+        else if( header.numberOfFaces == 6u )
+        {
+            if( header.numberOfArrayElements >= 1u )
+                imgData->textureType = TextureTypes::TypeCubeArray;
+            else
+                imgData->textureType = TextureTypes::TypeCube;
+        }
+        else if( header.numberOfArrayElements >= 1u )
+            imgData->textureType = TextureTypes::Type2DArray;
+        else
+            imgData->textureType = TextureTypes::Type2D;
 
         switch(header.glInternalFormat)
         {
         case 37492: // GL_COMPRESSED_RGB8_ETC2
-            imgData->format = PF_ETC2_RGB8;
+            imgData->format = PFG_ETC2_RGB8_UNORM;
             break;
         case 37496:// GL_COMPRESSED_RGBA8_ETC2_EAC
-            imgData->format = PF_ETC2_RGBA8;
+            imgData->format = PFG_ETC2_RGBA8_UNORM;
             break;
         case 37494: // GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2
-            imgData->format = PF_ETC2_RGB8A1;
+            imgData->format = PFG_ETC2_RGB8A1_UNORM;
             break;
         case 35986: // ATC_RGB
-            imgData->format = PF_ATC_RGB;
+            imgData->format = PFG_ATC_RGB;
             break;
         case 35987: // ATC_RGB_Explicit
-            imgData->format = PF_ATC_RGBA_EXPLICIT_ALPHA;
+            imgData->format = PFG_ATC_RGBA_EXPLICIT_ALPHA;
             break;
         case 34798: // ATC_RGB_Interpolated
-            imgData->format = PF_ATC_RGBA_INTERPOLATED_ALPHA;
+            imgData->format = PFG_ATC_RGBA_INTERPOLATED_ALPHA;
             break;
         case 33777: // DXT 1
-            imgData->format = PF_DXT1;
+            imgData->format = PFG_BC1_UNORM;
             break;
         case 33778: // DXT 3
-            imgData->format = PF_DXT3;
+            imgData->format = PFG_BC2_UNORM;
             break;
         case 33779: // DXT 5
-            imgData->format = PF_DXT5;
+            imgData->format = PFG_BC3_UNORM;
             break;
          case 0x8c00: // COMPRESSED_RGB_PVRTC_4BPPV1_IMG
-            imgData->format = PF_PVRTC_RGB4;
+            imgData->format = PFG_PVRTC_RGB4;
             break;
         case 0x8c01: // COMPRESSED_RGB_PVRTC_2BPPV1_IMG
-            imgData->format = PF_PVRTC_RGB2;
+            imgData->format = PFG_PVRTC_RGB2;
             break;
         case 0x8c02: // COMPRESSED_RGBA_PVRTC_4BPPV1_IMG
-            imgData->format = PF_PVRTC_RGBA4;
+            imgData->format = PFG_PVRTC_RGBA4;
             break;
         case 0x8c03: // COMPRESSED_RGBA_PVRTC_2BPPV1_IMG
-            imgData->format = PF_PVRTC_RGBA2;
+            imgData->format = PFG_PVRTC_RGBA2;
             break;
-        default:        
-            imgData->format = PF_ETC1_RGB8;
+        default:
+            if( header.glInternalFormat >= OGRE_GL_COMPRESSED_RGBA_ASTC_4x4_KHR &&
+                header.glInternalFormat <= OGRE_GL_COMPRESSED_RGBA_ASTC_12x12_KHR )
+            {
+                imgData->format = static_cast<PixelFormatGpu>(
+                                      PFG_ASTC_RGBA_UNORM_4X4_LDR +
+                                      (header.glInternalFormat -
+                                       OGRE_GL_COMPRESSED_RGBA_ASTC_4x4_KHR) );
+            }
+            else if( header.glInternalFormat >= OGRE_GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR &&
+                     header.glInternalFormat <= OGRE_GL_COMPRESSED_SRGB8_ALPHA8_ASTC_12x12_KHR )
+            {
+                imgData->format = static_cast<PixelFormatGpu>(
+                                      PFG_ASTC_RGBA_UNORM_4X4_sRGB +
+                                      (header.glInternalFormat -
+                                       OGRE_GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR) );
+            }
+            else
+            {
+                imgData->format = PFG_ETC1_RGB8_UNORM;
+            }
             break;
         }
-        
-        imgData->flags = 0;
-        if (header.glType == 0 || header.glFormat == 0)
-            imgData->flags |= IF_COMPRESSED;
 
-		size_t numFaces = header.numberOfFaces;
-		if (numFaces > 1)
-			imgData->flags |= IF_CUBEMAP;
-        // Calculate total size from number of mipmaps, faces and size
-        imgData->size = Image::calculateSize(imgData->num_mipmaps, numFaces,
-                                             imgData->width, imgData->height, imgData->depth, imgData->format);
+        if( header.glType == 0 || header.glFormat == 0 )
+            imgData->box.setCompressedPixelFormat( imgData->format );
+        else
+            imgData->box.bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( imgData->format );
+        const uint32 rowAlignment = 4u;
+        imgData->box.bytesPerRow = PixelFormatGpuUtils::getSizeBytes( imgData->box.width,
+                                                                      1u, 1u, 1u,
+                                                                      imgData->format,
+                                                                      rowAlignment );
+        imgData->box.bytesPerImage = PixelFormatGpuUtils::getSizeBytes( imgData->box.width,
+                                                                        imgData->box.height,
+                                                                        1u, 1u,
+                                                                        imgData->format,
+                                                                        rowAlignment );
 
+        const size_t requiredBytes = PixelFormatGpuUtils::calculateSizeBytes( imgData->box.width,
+                                                                              imgData->box.height,
+                                                                              imgData->box.depth,
+                                                                              imgData->box.numSlices,
+                                                                              imgData->format,
+                                                                              imgData->numMipmaps,
+                                                                              rowAlignment );
         stream->skip(header.bytesOfKeyValueData);
 
         // Bind output buffer
-        MemoryDataStreamPtr output;
-        output.bind(OGRE_NEW MemoryDataStream(imgData->size));
+        imgData->box.data = OGRE_MALLOC_SIMD( requiredBytes, MEMCATEGORY_RESOURCE );
+
+        Image2 image;
+        image.loadDynamicImage( imgData->box.data, imgData->box.width, imgData->box.height,
+                                imgData->box.getDepthOrSlices(), imgData->textureType,
+                                imgData->format, false, imgData->numMipmaps );
 
         // Now deal with the data
-        uchar* destPtr = output->getPtr();
-        uint32 mipOffset = 0;
-        for (uint32 level = 0; level < header.numberOfMipmapLevels; ++level)
+        for( uint32 level = 0; level < header.numberOfMipmapLevels; ++level )
         {
             uint32 imageSize = 0;
-            stream->read(&imageSize, sizeof(uint32));
+            stream->read( &imageSize, sizeof(uint32) );
 
-            for(uint32 face = 0; face < numFaces; ++face)
+            const size_t padding = Ogre::alignToNextMultiple( imageSize, rowAlignment ) - imageSize;
+
+            TextureBox dstBox = image.getData( static_cast<uint8>( level ) );
+
+            for( uint32 face = 0; face < header.numberOfFaces; ++face )
             {
-                uchar* placePtr = destPtr + ((imgData->size)/numFaces)*face + mipOffset; // shuffle mip and face
-                stream->read(placePtr, imageSize);
+                void *dstPtr = dstBox.at( 0, 0, face );
+                stream->read( dstPtr, imageSize );
+                if( padding > 0u )
+                    stream->skip( padding );
             }
-            mipOffset += imageSize;
         }
 
-        result.first = output;
-        result.second = CodecDataPtr(imgData);
+        result.first.reset();
+        result.second = CodecDataPtr( imgData );
         
         return true;
     }
