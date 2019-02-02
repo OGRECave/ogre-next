@@ -8,7 +8,11 @@
 			uniform sampler2DArray areaLightMasks;
 		@end
 		@property( syntax == hlsl )
-			Texture2DArray<float> areaLightMasks	: register(t@value(areaLightsApproxTexUnit));
+			@property( !hlms_lights_area_tex_colour )
+				Texture2DArray<float> areaLightMasks	: register(t@value(areaLightsApproxTexUnit));
+			@else
+				Texture2DArray<float3> areaLightMasks	: register(t@value(areaLightsApproxTexUnit));
+			@end
 			SamplerState areaLightMasksSampler		: register(s@value(areaLightsApproxTexUnit));
 		@end
 		@property( syntax == metal )
