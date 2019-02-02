@@ -59,6 +59,18 @@ THE SOFTWARE.
 
 #include "math.h"
 
+#if OGRE_COMPILER == OGRE_COMPILER_MSVC && OGRE_COMP_VER < 1800
+    inline float isfinite( float x )
+    {
+        return _finite( x ) == 0;
+    }
+    inline float isinf( float x )
+    {
+        return  x == std::numeric_limits<float>::infinity() ||
+                x == -std::numeric_limits<float>::infinity();
+    }
+#endif
+
 #define SceneFormatExporterNumFloatBins (sizeof( mFloatBinTmpString ) / sizeof( mFloatBinTmpString[0] ))
 #define SceneFormatExporterFloatBinStrLength sizeof( mFloatBinTmpString[0] )
 #define SceneFormatExporterNumDoubleBins (sizeof( mDoubleBinTmpString ) / sizeof( mDoubleBinTmpString[0] ))
