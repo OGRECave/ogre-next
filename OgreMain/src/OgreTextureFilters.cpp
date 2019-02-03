@@ -44,7 +44,8 @@ namespace TextureFilter
     {
     }
     //-----------------------------------------------------------------------------------
-    uint8 FilterBase::selectMipmapGen( uint32 filters, const TextureGpu *texture )
+    uint8 FilterBase::selectMipmapGen( uint32 filters, const Image2 &image,
+                                       const TextureGpuManager *textureManager )
     {
         DefaultMipmapGen::DefaultMipmapGen retVal = DefaultMipmapGen::NoMipmaps;
 
@@ -53,17 +54,20 @@ namespace TextureFilter
             if( (filters & TextureFilter::TypeGenerateDefaultMipmaps) ==
                 TextureFilter::TypeGenerateDefaultMipmaps )
             {
-                const TextureGpuManager *textureManager = texture->getTextureManager();
                 const DefaultMipmapGen::DefaultMipmapGen defaultMipmapGeneration =
                         textureManager->getDefaultMipmapGeneration();
                 const DefaultMipmapGen::DefaultMipmapGen defaultMipmapGenerationCubemaps =
                         textureManager->getDefaultMipmapGenerationCubemaps();
 
                 const DefaultMipmapGen::DefaultMipmapGen mipmapGen =
-                        texture->getTextureType() != TextureTypes::TypeCube ?
-                                                         defaultMipmapGeneration :
-                                                         defaultMipmapGenerationCubemaps;
-                retVal = mipmapGen;
+                        image.getTextureType() != TextureTypes::TypeCube ?
+                                                      defaultMipmapGeneration :
+                                                      defaultMipmapGenerationCubemaps;
+
+                if( PixelFormatGpuUtils::supportsHwMipmaps( image.getPixelFormat() ) )
+                    retVal = mipmapGen;
+                else
+                    retVal = DefaultMipmapGen::SwMode;
             }
             else if( filters & TextureFilter::TypeGenerateHwMipmaps )
                 retVal = DefaultMipmapGen::HwMode;
@@ -75,7 +79,7 @@ namespace TextureFilter
     }
     //-----------------------------------------------------------------------------------
     void FilterBase::createFilters( uint32 filters, FilterBaseArray &outFilters,
-                                    const TextureGpu *texture )
+                                    const TextureGpu *texture, const Image2 &image, bool toSysRam )
     {
         FilterBaseArray filtersVec;
         filtersVec.swap( outFilters );
@@ -88,8 +92,11 @@ namespace TextureFilter
         //Add mipmap generation as one of the last steps
         if( filters & TextureFilter::TypeGenerateDefaultMipmaps )
         {
-            const uint8 mipmapGen = selectMipmapGen( filters, texture );
-            if( mipmapGen == DefaultMipmapGen::HwMode )
+            const uint8 mipmapGen = selectMipmapGen( filters, image, texture->getTextureManager() );
+            //If the user wants Mipmaps when loading OnStorage -> OnSystemRam
+            //then he should either explicitly ask only for SW filters, or
+            //load the texture to Resident first, then download to OnSystemRam.
+            if( mipmapGen == DefaultMipmapGen::HwMode && !toSysRam )
                 filtersVec.push_back( OGRE_NEW TextureFilter::GenerateHwMipmaps() );
             else if( mipmapGen == DefaultMipmapGen::SwMode )
                 filtersVec.push_back( OGRE_NEW TextureFilter::GenerateSwMipmaps() );
@@ -112,8 +119,10 @@ namespace TextureFilter
         inOutFilters.clear();
     }
     //-----------------------------------------------------------------------------------
-    void FilterBase::simulateFilters( uint32 filters, const Image2 &image,
-                                      uint8 &inOutNumMipmaps, PixelFormatGpu &inOutPixelFormat )
+    void FilterBase::simulateFiltersForCacheConsistency( uint32 filters, const Image2 &image,
+                                                         const TextureGpuManager *textureGpuManager,
+                                                         uint8 &inOutNumMipmaps,
+                                                         PixelFormatGpu &inOutPixelFormat )
     {
         if( filters & TextureFilter::TypePrepareForNormalMapping )
             inOutPixelFormat = PrepareForNormalMapping::getDestinationFormat( inOutPixelFormat );
@@ -123,7 +132,18 @@ namespace TextureFilter
         //Add mipmap generation as one of the last steps
         if( filters & TextureFilter::TypeGenerateDefaultMipmaps )
         {
-            if ( !PixelFormatGpuUtils::isCompressed( image.getPixelFormat() ) && inOutNumMipmaps <= 1u)
+            const uint8 mipmapGen = selectMipmapGen( filters, image, textureGpuManager );
+
+            const bool canDoMipmaps =
+                    (mipmapGen == DefaultMipmapGen::HwMode &&
+                     PixelFormatGpuUtils::supportsHwMipmaps( image.getPixelFormat() )) ||
+                    (mipmapGen == DefaultMipmapGen::SwMode &&
+                     Image2::supportsSwMipmaps( image.getPixelFormat(), image.getDepthOrSlices(),
+                                                image.getTextureType(),
+                                                static_cast<Image2::Filter>(
+                                                    GenerateSwMipmaps::getFilter( image ) ) ) );
+
+            if( canDoMipmaps && inOutNumMipmaps <= 1u)
             {
                 inOutNumMipmaps = PixelFormatGpuUtils::getMaxMipmapCount( image.getWidth(),
                                                                           image.getHeight(),
@@ -132,14 +152,20 @@ namespace TextureFilter
         }
     }
     //-----------------------------------------------------------------------------------
+    uint32 GenerateSwMipmaps::getFilter( const Image2 &image )
+    {
+        Image2::Filter filter = Image2::FILTER_BILINEAR;
+        if( image.getTextureType() == TextureTypes::TypeCube )
+            filter = Image2::FILTER_GAUSSIAN;
+        return filter;
+    }
+    //-----------------------------------------------------------------------------------
     void GenerateSwMipmaps::_executeStreaming( Image2 &image, TextureGpu *texture )
     {
         if( image.getNumMipmaps() > 1u )
             return; //Already has mipmaps
 
-        Image2::Filter filter = Image2::FILTER_BILINEAR;
-        if( image.getTextureType() == TextureTypes::TypeCube )
-            filter = Image2::FILTER_GAUSSIAN;
+        const Image2::Filter filter = static_cast<Image2::Filter>( getFilter( image ) );
 
         const bool isSRgb = PixelFormatGpuUtils::isSRgb( texture->getPixelFormat() );
         image.generateMipmaps( isSRgb, filter );
@@ -151,7 +177,8 @@ namespace TextureFilter
     {
         //Cubemaps may be loaded as 6 separate images.
         //If one of them needs HW generation, then all faces need it.
-        mNeedsMipmaps |= !PixelFormatGpuUtils::isCompressed( image.getPixelFormat() ) && image.getNumMipmaps() <= 1u;
+        mNeedsMipmaps |= image.getNumMipmaps() <= 1u;
+        mNeedsMipmaps &= PixelFormatGpuUtils::supportsHwMipmaps( image.getPixelFormat() );
 
         if( mNeedsMipmaps && texture->getNumMipmaps() <= 1u )
         {

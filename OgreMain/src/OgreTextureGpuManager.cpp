@@ -1546,19 +1546,6 @@ namespace Ogre
                 texture->_transitionTo( GpuResidency::Resident, 0 );
         }
 
-        if( toSysRam )
-        {
-            //When loading from OnStorage to OnSystemRam and we would normally
-            //use HW mipmap filter, then skip mipmap generation entirely, as
-            //HW mipmap generation will happen when going to Resident
-            //If the user wants mipmaps when loading to OnSystemRam, then he
-            //should either specify SW generation, or load the texture to
-            //Resident first, and then to OnSystemRam.
-            uint8 mipmapGen = TextureFilter::FilterBase::selectMipmapGen( filters, texture );
-            if( mipmapGen == DefaultMipmapGen::HwMode )
-                filters &= ~(TextureFilter::TypeGenerateSwMipmaps | TextureFilter::TypeGenerateHwMipmaps);
-        }
-
         mAddedNewLoadRequests = true;
         ThreadData &mainData = mThreadData[c_mainThread];
         mLoadRequestsMutex.lock();
@@ -1648,15 +1635,17 @@ namespace Ogre
             filters = itor->second.filters;
         }
 
-        //Only allow applying mipmap generation again, since it's the only filter
+        //Only allow applying mipmap generation filter, since it's the only filter
         //that may have been skipped when loading from OnStorage -> OnSystemRam
         filters &= TextureFilter::TypeGenerateDefaultMipmaps;
         if( filters & TextureFilter::TypeGenerateDefaultMipmaps )
         {
+            //We will transition to Resident, we must ensure the number of mipmaps is set
+            //as the HW mipmap filter cannot change it from the background thread.
             uint8 numMipmaps = texture->getNumMipmaps();
             PixelFormatGpu pixelFormat = texture->getPixelFormat();
-            TextureFilter::FilterBase::simulateFilters( filters, *image,
-                                                        numMipmaps, pixelFormat );
+            TextureFilter::FilterBase::simulateFiltersForCacheConsistency( filters, *image, this,
+                                                                           numMipmaps, pixelFormat );
             if( texture->getNumMipmaps() != numMipmaps )
             {
                 const bool oldValue = mIgnoreScheduledTasks;
@@ -2494,8 +2483,9 @@ namespace Ogre
             PixelFormatGpu pixelFormat = img->getPixelFormat();
             if( loadRequest.texture->prefersLoadingFromFileAsSRGB() )
                 pixelFormat = PixelFormatGpuUtils::getEquivalentSRGB( pixelFormat );
-            TextureFilter::FilterBase::simulateFilters( loadRequest.filters, *img,
-                                                        numMipmaps, pixelFormat );
+            TextureFilter::FilterBase::simulateFiltersForCacheConsistency( loadRequest.filters, *img,
+                                                                           this, numMipmaps,
+                                                                           pixelFormat );
 
             //Check the metadata cache was not out of date
             if( loadRequest.texture->getWidth() != img->getWidth() ||
@@ -2526,7 +2516,8 @@ namespace Ogre
         {
             FilterBaseArray filters;
             TextureFilter::FilterBase::createFilters( loadRequest.filters, filters,
-                                                      loadRequest.texture );
+                                                      loadRequest.texture, *img,
+                                                      loadRequest.toSysRam );
 
             if( loadRequest.sliceOrDepth == std::numeric_limits<uint32>::max() ||
                 loadRequest.sliceOrDepth == 0 )

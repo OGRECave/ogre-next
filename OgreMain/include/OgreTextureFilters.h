@@ -76,25 +76,50 @@ namespace TextureFilter
         /// (except for the steps this filter is supposed to do)
         virtual void _executeSerial( TextureGpu *texture ) {}
 
+    protected:
         /**
         @param filters
         @return
             See DefaultMipmapGen::DefaultMipmapGen
         */
-        static uint8 selectMipmapGen( uint32 filters, const TextureGpu *texture );
+        static uint8 selectMipmapGen( uint32 filters, const Image2 &image,
+                                      const TextureGpuManager *textureManager );
+    public:
         static void createFilters( uint32 filters, FilterBaseArray &outFilters,
-                                   const TextureGpu *texture );
+                                   const TextureGpu *texture, const Image2 &image,
+                                   bool toSysRam );
         static void destroyFilters( FilterBaseArray &inOutFilters );
 
         /// Simulates as if the given filters were applied, producing
         /// the resulting number mipmaps & PixelFormat
-        static void simulateFilters( uint32 filters, const Image2 &image,
-                                     uint8 &inOutNumMipmaps, PixelFormatGpu &inOutPixelFormat );
+        ///
+        /// When a TextureGpu transitions OnStorage -> Resident, we use the metadata
+        /// cache and later compare if the cache was up to date.
+        /// To check if it's up to date, we need to know the final number of mipmaps
+        /// and final pixel format. Thus this function is needed in this case.
+        ///
+        /// However then transitioning OnStorage -> OnSystemRam, the cache is not
+        /// used, because A. the metadata is not needed (it cannot optimize the
+        /// shader) and B. the number of mipmaps may not match.
+        /// This can happen because the HW mipmap filter won't be run.
+        /// This function is not needed in such case.
+        ///
+        /// When transitioning OnSystemRam -> Resident, we already have all the
+        /// metadata except for the mipmaps, as the HW mipmap filter will be run.
+        /// Thus we need this function so we can set the number of mipmaps
+        /// to the final value, immediately transition to Resident, and start
+        /// loading the image on the background thread without ping-pong.
+        static void simulateFiltersForCacheConsistency( uint32 filters, const Image2 &image,
+                                                        const TextureGpuManager *textureGpuManager,
+                                                        uint8 &inOutNumMipmaps,
+                                                        PixelFormatGpu &inOutPixelFormat );
     };
     //-----------------------------------------------------------------------------------
     class _OgreExport GenerateSwMipmaps : public FilterBase
     {
     public:
+        /// See Image2::Filter
+        static uint32 getFilter( const Image2 &image );
         virtual void _executeStreaming( Image2 &image, TextureGpu *texture );
     };
     //-----------------------------------------------------------------------------------
