@@ -794,22 +794,45 @@ namespace Ogre {
     }
 #endif
     //-----------------------------------------------------------------------------------
-    bool Image2::generateMipmaps( bool gammaCorrected, Filter filter )
+    bool Image2::supportsSwMipmaps( PixelFormatGpu format, uint32 depthOrSlices,
+                                    TextureTypes::TextureTypes textureType,
+                                    Filter filter )
     {
-        OgreProfileExhaustive( "Image2::generateMipmaps" );
+        ImageDownsampler2D *downsampler2DFunc       = 0;
+        ImageDownsamplerCube *downsamplerCubeFunc   = 0;
+        ImageBlur2D *separableBlur2DFunc            = 0;
 
-        // resizing dynamic images is not supported
-        assert( mAutoDelete );
-        assert( (mTextureType == TextureTypes::Type2D ||
-                mTextureType == TextureTypes::TypeCube) && "Texture type not supported" );
+        bool gammaCorrected = PixelFormatGpuUtils::isSRgb( format );
+
+        bool canGenerateMipmaps = getDownsamplerFunctions( format,
+                                                           (void**)&downsampler2DFunc,
+                                                           (void**)&downsamplerCubeFunc,
+                                                           (void**)&separableBlur2DFunc,
+                                                           gammaCorrected,
+                                                           depthOrSlices,
+                                                           textureType,
+                                                           filter );
+        return canGenerateMipmaps;
+    }
+    //-----------------------------------------------------------------------------------
+    bool Image2::getDownsamplerFunctions( PixelFormatGpu format,
+                                          void **imageDownsampler2D,
+                                          void **imageDownsamplerCube,
+                                          void **imageBlur2D,
+                                          bool gammaCorrected,
+                                          uint32 depthOrSlices,
+                                          TextureTypes::TextureTypes textureType,
+                                          Filter filter )
+    {
+        bool retVal = true;
 
         ImageDownsampler2D *downsampler2DFunc       = 0;
         ImageDownsamplerCube *downsamplerCubeFunc   = 0;
         ImageBlur2D *separableBlur2DFunc            = 0;
 
-        gammaCorrected |= PixelFormatGpuUtils::isSRgb( mPixelFormat );
+        gammaCorrected |= PixelFormatGpuUtils::isSRgb( format );
 
-        switch( mPixelFormat )
+        switch( format )
         {
         case PFG_R8_UNORM:
         case PFG_R8_UINT:
@@ -913,12 +936,48 @@ namespace Ogre {
             break;
         }
 
-        if( (mDepthOrSlices == 1u && !downsampler2DFunc) ||
-            (mTextureType == TextureTypes::TypeCube && (!downsamplerCubeFunc ||
-                                                        filter == FILTER_GAUSSIAN_HIGH)) )
+        *imageDownsampler2D     = (void*)downsampler2DFunc;
+        *imageDownsamplerCube   = (void*)downsamplerCubeFunc;
+        *imageBlur2D            = (void*)separableBlur2DFunc;
+
+        if( (depthOrSlices == 1u && !downsampler2DFunc) ||
+            (textureType == TextureTypes::TypeCube && (!downsamplerCubeFunc ||
+                                                       filter == FILTER_GAUSSIAN_HIGH)) ||
+            textureType == TextureTypes::TypeCubeArray ||
+            textureType == TextureTypes::Type3D )
         {
-            return false;
+            retVal = false;
         }
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    bool Image2::generateMipmaps( bool gammaCorrected, Filter filter )
+    {
+        OgreProfileExhaustive( "Image2::generateMipmaps" );
+
+        // resizing dynamic images is not supported
+        assert( mAutoDelete );
+        assert( (mTextureType == TextureTypes::Type2D ||
+                mTextureType == TextureTypes::TypeCube) && "Texture type not supported" );
+
+        ImageDownsampler2D *downsampler2DFunc       = 0;
+        ImageDownsamplerCube *downsamplerCubeFunc   = 0;
+        ImageBlur2D *separableBlur2DFunc            = 0;
+
+        gammaCorrected |= PixelFormatGpuUtils::isSRgb( mPixelFormat );
+
+        bool canGenerateMipmaps = getDownsamplerFunctions( mPixelFormat,
+                                                           (void**)&downsampler2DFunc,
+                                                           (void**)&downsamplerCubeFunc,
+                                                           (void**)&separableBlur2DFunc,
+                                                           gammaCorrected,
+                                                           mDepthOrSlices,
+                                                           mTextureType,
+                                                           filter );
+
+        if( !canGenerateMipmaps )
+            return false;
 
         // Allocate new buffer
         uint8 numMipmapsRequired = PixelFormatGpuUtils::getMaxMipmapCount( mWidth, mHeight, getDepth() );

@@ -209,6 +209,48 @@ namespace Ogre
         return getMaxMipmapCount( std::max( std::max( width, height ), depth ) );
     }
     //-----------------------------------------------------------------------
+    bool PixelFormatGpuUtils::supportsHwMipmaps( PixelFormatGpu format )
+    {
+        switch( format )
+        {
+        case PFG_RGBA8_UNORM:
+        case PFG_RGBA8_UNORM_SRGB:
+        case PFG_B5G6R5_UNORM:
+        case PFG_BGRA8_UNORM:
+        case PFG_BGRA8_UNORM_SRGB:
+        case PFG_BGRX8_UNORM:
+        case PFG_BGRX8_UNORM_SRGB:
+        case PFG_RGBA16_FLOAT:
+        case PFG_RGBA16_UNORM:
+        case PFG_RG16_FLOAT:
+        case PFG_RG16_UNORM:
+        case PFG_R32_FLOAT:
+        case PFG_RGBA32_FLOAT:
+        case PFG_B4G4R4A4_UNORM:
+        //case PFG_RGB32_FLOAT: (optional). This is a weird format. Fallback to SW
+        case PFG_RGBA16_SNORM:
+        case PFG_RG32_FLOAT:
+        case PFG_R10G10B10A2_UNORM:
+        case PFG_R11G11B10_FLOAT:
+        case PFG_RGBA8_SNORM:
+        case PFG_RG16_SNORM:
+        case PFG_RG8_UNORM:
+        case PFG_RG8_SNORM:
+        case PFG_R16_FLOAT:
+        case PFG_R16_UNORM:
+        case PFG_R16_SNORM:
+        case PFG_R8_UNORM:
+        case PFG_R8_SNORM:
+        case PFG_A8_UNORM:
+        //case PFG_B5G5R5A1_UNORM: (optional)
+            return true;
+        default:
+            return false;
+        }
+
+        return false;
+    }
+    //-----------------------------------------------------------------------
     uint32 PixelFormatGpuUtils::getCompressedBlockWidth( PixelFormatGpu format, bool apiStrict )
     {
         switch( format )

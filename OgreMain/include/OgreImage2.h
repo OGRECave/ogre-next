@@ -333,6 +333,36 @@ namespace Ogre {
         void resize( uint32 width, uint32 height, Filter filter = FILTER_BILINEAR );
 #endif
 
+        /** Sets the proper downsampler functions to generate mipmaps
+        @param format
+        @param imageDownsampler2D [out]
+        @param imageDownsamplerCube [out]
+        @param imageBlur2D [out]
+        @param gammaCorrected
+            When true, force gamma correction on.
+            If this value is false but format is of the sRGB family,
+            gamma correction will still be used.
+        @param depthOrSlices
+            Required to properly calculate the return value
+        @param textureType
+            Required to properly calculate the return value
+        @param filter
+        @return
+            True if mipmaps can be generated.
+            False if mipmaps cannot be generated.
+        */
+        static bool getDownsamplerFunctions( PixelFormatGpu format,
+                                             void **imageDownsampler2D,
+                                             void **imageDownsamplerCube,
+                                             void **imageBlur2D, bool gammaCorrected,
+                                             uint32 depthOrSlices,
+                                             TextureTypes::TextureTypes textureType,
+                                             Filter filter );
+
+        static bool supportsSwMipmaps( PixelFormatGpu format, uint32 depthOrSlices,
+                                       TextureTypes::TextureTypes textureType,
+                                       Filter filter );
+
         /** Generates the mipmaps for this image. For Cubemaps, the filtering is seamless; and a
             gaussian filter is recommended although it's slow.
         @remarks

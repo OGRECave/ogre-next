@@ -118,6 +118,9 @@ namespace Ogre {
         static uint8 getMaxMipmapCount( uint32 width, uint32 height );
         static uint8 getMaxMipmapCount( uint32 width, uint32 height, uint32 depth );
 
+        /// For SW mipmaps, see Image2::supportsSwMipmaps
+        static bool supportsHwMipmaps( PixelFormatGpu format );
+
         /** Returns the minimum width for block compressed schemes. ie. DXT1 compresses in blocks
             of 4x4 pixels. A texture with a width of 2 is just padded to 4.
             When building UV atlases composed of already compressed data being stitched together,
