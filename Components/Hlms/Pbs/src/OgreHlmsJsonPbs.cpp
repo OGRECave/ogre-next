@@ -229,10 +229,14 @@ namespace Ogre
             }
         }
 
-        if( texture )
-            datablock->_setTexture( textureType, texture, samplerblock );
-        else if( samplerblock )
-            datablock->_setSamplerblock( textureType, samplerblock );
+        if (texture)
+        {
+            if (!samplerblock)
+                samplerblock = mHlmsManager->getSamplerblock(HlmsSamplerblock());
+            datablock->_setTexture(textureType, texture, samplerblock);
+        }
+        else if (samplerblock)
+            datablock->_setSamplerblock(textureType, samplerblock);
 
         itor = json.FindMember( "uv" );
         if( itor != json.MemberEnd() && itor->value.IsUint() )

@@ -540,6 +540,7 @@ namespace Ogre
     {
         assert( dynamic_cast<HlmsPbsDatablock*>( renderable->getDatablock() ) );
         HlmsPbsDatablock *datablock = static_cast<HlmsPbsDatablock*>( renderable->getDatablock() );
+
         if( datablock->getDirtyFlags() & (DirtyTextures|DirtySamplers) )
         {
             //Delay hash generation for later, when we have the final (or temporary) descriptor sets.
@@ -678,10 +679,37 @@ namespace Ogre
                 setProperty( PbsProperty::EmissiveConstant, 1 );
         }
 
-        bool usesNormalMap = datablock->getTexture( PBSM_NORMAL ) != 0;
+        // normal maps used in this datablock
+        std::vector<TextureGpu*> datablockNormalMaps;
+
+        // normal maps that are being used and have also been loaded
+        // NB We could just use the loadedNormalMaps for the logic below
+        // however other parts of the code may make assumptions based on
+        // the fact a normal map texture is registered with datablock but not loaded.
+        std::vector<TextureGpu*> loadedNormalMaps; 
+        TextureGpu* tempTex;
+        if ( ( tempTex = datablock->getTexture( PBSM_NORMAL ) ) != 0 )
+        {
+            datablockNormalMaps.push_back(tempTex);
+            if (tempTex->isMetadataReady())
+            {
+                loadedNormalMaps.push_back(tempTex);
+            }
+        }
+
         for( size_t i=PBSM_DETAIL0_NM; i<=PBSM_DETAIL3_NM; ++i )
-            usesNormalMap |= datablock->getTexture( i ) != 0;
-        setProperty( PbsProperty::NormalMap, usesNormalMap );
+        {
+            if ( ( tempTex = datablock->getTexture( i ) ) != 0)
+            {
+                datablockNormalMaps.push_back(tempTex);
+                if (tempTex->isMetadataReady())
+                {
+                    loadedNormalMaps.push_back(tempTex);
+                }
+            }
+        }
+
+        setProperty( PbsProperty::NormalMap, !datablockNormalMaps.empty() );
 
         /*setProperty( HlmsBaseProp::, !datablock->getTexture( PBSM_DETAIL0 ).isNull() );
         setProperty( HlmsBaseProp::DiffuseMap, !datablock->getTexture( PBSM_DETAIL1 ).isNull() );*/
@@ -689,7 +717,7 @@ namespace Ogre
                                         getProperty( HlmsBaseProp::Tangent )) ||
                                         getProperty( HlmsBaseProp::QTangent );
 
-        if( !normalMapCanBeSupported && usesNormalMap )
+        if ( !normalMapCanBeSupported && !datablockNormalMaps.empty() )
         {
             OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
                          "Renderable can't use normal maps but datablock wants normal maps. "
@@ -697,10 +725,13 @@ namespace Ogre
                          "datablock without normal maps.", "HlmsPbs::calculateHashForPreCreate" );
         }
 
-        if( usesNormalMap )
+        if ( !datablockNormalMaps.empty() )
         {
-            TextureGpu *normalMapTex = datablock->getTexture( PBSM_NORMAL );
-            if( PixelFormatGpuUtils::isSigned( normalMapTex->getPixelFormat() ) )
+            // NB if texture has not loaded yet, getPixelFormat will return PFG_UNKNOWN and so
+            // isSigned may be incorrect. However calculateHasFor will be called again when it 
+            // has loaded, so just assume default for now.
+            const bool isSigned = PixelFormatGpuUtils::isSigned( datablockNormalMaps[0]->getPixelFormat() );
+            if (isSigned)
             {
                 setProperty( PbsProperty::NormalSamplingFormat, PbsProperty::NormalRgSnorm.mHash );
                 setProperty( PbsProperty::NormalRgSnorm, PbsProperty::NormalRgSnorm.mHash );
@@ -716,6 +747,25 @@ namespace Ogre
 //                setProperty( PbsProperty::NormalSamplingFormat, PbsProperty::NormalLa.mHash );
 //                setProperty( PbsProperty::NormalLa, PbsProperty::NormalLa.mHash );
 //            }
+        }
+
+        // check and ensure all normal maps use the same signed convention
+        if ( !loadedNormalMaps.empty() )
+        {
+            const bool isSigned = PixelFormatGpuUtils::isSigned( loadedNormalMaps[0]->getPixelFormat() );
+
+            // check normal maps all use the same one convention
+            for (size_t i = 1; i < loadedNormalMaps.size(); ++i)
+            {
+                const bool isSignedOther = PixelFormatGpuUtils::isSigned( loadedNormalMaps[i]->getPixelFormat() );
+                if (isSignedOther != isSigned)
+                {
+                    OGRE_EXCEPT(Exception::ERR_INVALID_STATE,
+                        "Renderable can't use normal maps and detailed normal maps which have "
+                        "different signed conventions in the same datablock. EG SNORM vs UNORM "
+                        , "HlmsPbs::calculateHashForPreCreate");
+                }
+            }
         }
 
         if( datablock->mUseAlphaFromTextures && datablock->mBlendblock[0]->mIsTransparent &&

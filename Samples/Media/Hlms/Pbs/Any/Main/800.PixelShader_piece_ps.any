@@ -311,7 +311,6 @@
 		@piece( detail_nm_op_mul )=@end
 	@end
 
-	@property( normal_weight_tex )#define normalMapWeight material.emissive.w@end
 	@property( detail_maps_normal )
 	   @foreach( 4, n )
 		   @property( normal_weight_detail@n )
@@ -324,7 +323,7 @@
 		@piece( SampleDetailMapNm@n )getTSNormal( textureMaps@value(detail_map_nm@n_idx),
 												  samplerState@value(detail_map_nm@n_sampler),
 												  UV_DETAIL_NM@n( inPs.uv@value(uv_detail_nm@n).xy@insertpiece( offsetDetail@n ) ),
-												  detailNormMapIdx@n ) * detailWeights.@insertpiece(detail_swizzle@n) @insertpiece( detail@n_nm_weight_mul )@end
+												  texIndex_detailNormMapIdx@n ) * detailWeights.@insertpiece(detail_swizzle@n) @insertpiece( detail@n_nm_weight_mul )@end
 	@end
 
 	/// Blend the detail normal maps with the main normal.

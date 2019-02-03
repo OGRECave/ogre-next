@@ -143,10 +143,14 @@ namespace Ogre
 			datablock->setAnimationMatrix( textureType, mat );
 		}
 
-        if( texture )
-            datablock->_setTexture( textureType, texture, samplerblock );
-        else if( samplerblock )
-            datablock->_setSamplerblock( textureType, samplerblock );
+        if (texture)
+        {
+            if (!samplerblock)
+                samplerblock = mHlmsManager->getSamplerblock(HlmsSamplerblock());
+            datablock->_setTexture(textureType, texture, samplerblock);
+        }
+        else if (samplerblock)
+            datablock->_setSamplerblock(textureType, samplerblock);
 	}
 	//-----------------------------------------------------------------------------------
     void HlmsJsonUnlit::loadMaterial( const rapidjson::Value &json, const HlmsJson::NamedBlocks &blocks,
