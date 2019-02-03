@@ -365,6 +365,9 @@ namespace Ogre {
             rsc->setCapability(RSC_TEXTURE_COMPRESSION_ETC2);
         }
 
+        if( mGLSupport->checkExtension( "GL_KHR_texture_compression_astc_ldr" ) )
+            rsc->setCapability(RSC_TEXTURE_COMPRESSION_ASTC);
+
         // Check for vtc compression
         if (mGLSupport->checkExtension("GL_NV_texture_compression_vtc"))
         {

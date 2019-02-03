@@ -59,11 +59,15 @@ namespace Ogre {
         glGetIntegerv(GL_MAJOR_VERSION, &mVersion.major);
         glGetIntegerv(GL_MINOR_VERSION, &mVersion.minor);
 
-        LogManager::getSingleton().logMessage("GL_VERSION = " + mVersion.toString());
+        LogManager::getSingleton().logMessage("GL Version = " + mVersion.toString());
+
+        const GLubyte* pcVersion = glGetString(GL_VERSION);
+        String tmpStr = (const char*)pcVersion;
+        LogManager::getSingleton().logMessage("GL_VERSION = " + tmpStr);
 
         // Get vendor
         const GLubyte* pcVendor = glGetString(GL_VENDOR);
-        String tmpStr = (const char*)pcVendor;
+        tmpStr = (const char*)pcVendor;
         LogManager::getSingleton().logMessage("GL_VENDOR = " + tmpStr);
         mVendor = tmpStr.substr(0, tmpStr.find(" "));
 
