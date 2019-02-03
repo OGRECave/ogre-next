@@ -495,6 +495,8 @@ namespace Ogre
 
         TexturePoolList     mTexturePool;
         ResourceEntryMap    mEntries;
+        /// Protects mEntries
+        mutable LightweightMutex mEntriesMutex;
 
         size_t              mEntriesToProcessPerIteration;
         size_t              mMaxPreloadBytes;
@@ -1006,8 +1008,11 @@ namespace Ogre
         */
         void setTrylockMutexFailureLimit( uint32 tryLockFailureLimit );
 
+        /// This function CAN be called from any thread
         const String* findAliasNameStr( IdString idName ) const;
+        /// This function CAN be called from any thread
         const String* findResourceNameStr( IdString idName ) const;
+        /// This function CAN be called from any thread
         const String* findResourceGroupStr( IdString idName ) const;
 
         /// Implements TaskTypeResidencyTransition when doing any of the following transitions:

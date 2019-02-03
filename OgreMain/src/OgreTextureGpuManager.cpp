@@ -345,7 +345,9 @@ namespace Ogre
         TextureGpu *retVal = createTextureImpl( pageOutStrategy, idName, textureFlags, initialType );
         retVal->setTexturePoolId( poolId );
 
+        mEntriesMutex.lock();
         mEntries[idName] = ResourceEntry( name, aliasName, resourceGroup, retVal, filters );
+        mEntriesMutex.unlock();
 
         return retVal;
     }
@@ -460,7 +462,9 @@ namespace Ogre
         texture->notifyAllListenersTextureChanged( TextureGpuListener::Deleted );
 
         delete texture;
+        mEntriesMutex.lock();
         mEntries.erase( itor );
+        mEntriesMutex.unlock();
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::destroyTexture( TextureGpu *texture )
@@ -1287,10 +1291,12 @@ namespace Ogre
     {
         const String *retVal = 0;
 
+        mEntriesMutex.lock();
         ResourceEntryMap::const_iterator itor = mEntries.find( idName );
 
         if( itor != mEntries.end() )
             retVal = &itor->second.alias;
+        mEntriesMutex.unlock();
 
         return retVal;
     }
@@ -1299,10 +1305,12 @@ namespace Ogre
     {
         const String *retVal = 0;
 
+        mEntriesMutex.lock();
         ResourceEntryMap::const_iterator itor = mEntries.find( idName );
 
         if( itor != mEntries.end() )
             retVal = &itor->second.name;
+        mEntriesMutex.unlock();
 
         return retVal;
     }
@@ -1311,10 +1319,12 @@ namespace Ogre
     {
         const String *retVal = 0;
 
+        mEntriesMutex.lock();
         ResourceEntryMap::const_iterator itor = mEntries.find( idName );
 
         if( itor != mEntries.end() )
             retVal = &itor->second.resourceGroup;
+        mEntriesMutex.unlock();
 
         return retVal;
     }
@@ -2508,7 +2518,8 @@ namespace Ogre
                 wasRescheduled = true;
 
                 LogManager::getSingleton().logMessage( "[INFO] Texture Metadata cache out of date for " +
-                                                       loadRequest.name );
+                                                       loadRequest.name + " (Alias: " +
+                                                       loadRequest.texture->getNameStr() + ")" );
             }
         }
 
