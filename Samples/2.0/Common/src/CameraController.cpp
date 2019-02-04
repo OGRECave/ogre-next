@@ -27,7 +27,7 @@ namespace Demo
     {
         Ogre::Camera *camera = mGraphicsSystem->getCamera();
 
-        if( mCameraYaw || mCameraPitch )
+        if( mCameraYaw != 0.0f || mCameraPitch != 0.0f )
         {
             if( mUseSceneNode )
             {
