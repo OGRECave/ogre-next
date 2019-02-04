@@ -78,6 +78,12 @@ namespace Ogre
                 "notifyAllListenersTextureChanged( TextureGpuListener::Deleted ) wasn't called!"
                 "This could leave dangling pointers. Ensure you've cleaned up correctly. "
                 "Most likely there are Materials/Datablocks still using this texture" );
+
+        if( mSysRamCopy )
+        {
+            OGRE_FREE_SIMD( mSysRamCopy, MEMCATEGORY_RESOURCE );
+            mSysRamCopy = 0;
+        }
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::_resetTextureManager(void)
