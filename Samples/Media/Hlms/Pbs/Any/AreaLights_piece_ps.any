@@ -63,14 +63,12 @@
 	//		booster = 1.0f + booster * 2.25f;
 			float booster = lerp( 1.0f, 4.0f, pixelData.roughness );
 
-		@property( !hlms_lights_area_tex_colour )
+		@property( !hlms_lights_area_tex_colour || !hlms_lights_area_tex_mask )
 			float diffuseMask = 1.0f;
+		@else
+			float3 diffuseMask = float3( 1.0f, 1.0f, 1.0f );
 		@end
 		@property( hlms_lights_area_tex_mask )
-			@property( hlms_lights_area_tex_colour )
-				float3 diffuseMask = float3( 1.0f, 1.0f, 1.0f );
-			@end
-
 			if( i < floatBitsToInt( passBuf.numAreaApproxLightsWithMask ) )
 			{
 				// 1 / (1 - 0.02) = 1.020408163

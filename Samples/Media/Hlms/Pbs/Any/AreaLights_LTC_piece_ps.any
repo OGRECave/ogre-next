@@ -212,6 +212,10 @@ INLINE float LTC_Evaluate( float3 N, float3 V, float3 P, float3x3 Minv,
 	L[1] = mul( Minv, points[1].xyz - P );
 	L[2] = mul( Minv, points[2].xyz - P );
 	L[3] = mul( Minv, points[3].xyz - P );
+	//Initialize L[4]. Some HLSL compiler versions complains this is uninitialized even though
+	//it shouldn't complain.
+	//See https://forums.ogre3d.org/viewtopic.php?f=25&t=94804#p544184
+	L[4] = float3( 0, 1, 0 );
 
 	// integrate
 	float sum = 0.0;
