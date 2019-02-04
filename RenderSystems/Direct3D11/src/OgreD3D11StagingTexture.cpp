@@ -596,9 +596,10 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void D3D11StagingTexture::upload( const TextureBox &srcBox, TextureGpu *dstTexture,
-                                      uint8 mipLevel, const TextureBox *dstBox, bool skipSysRamCopy )
+                                      uint8 mipLevel, const TextureBox *cpuSrcBox,
+                                      const TextureBox *dstBox, bool skipSysRamCopy )
     {
-        StagingTexture::upload( srcBox, dstTexture, mipLevel, dstBox, skipSysRamCopy );
+        StagingTexture::upload( srcBox, dstTexture, mipLevel, cpuSrcBox, dstBox, skipSysRamCopy );
 
         D3D11_BOX srcBoxD3d;
 

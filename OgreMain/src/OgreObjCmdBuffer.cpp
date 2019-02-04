@@ -185,7 +185,7 @@ namespace Ogre
     void ObjCmdBuffer::UploadFromStagingTex::execute(void)
     {
         OgreProfileExhaustive( "ObjCmdBuffer::UploadFromStagingTex::execute" );
-        stagingTexture->upload( box, dstTexture, mipLevel, &dstBox );
+        stagingTexture->upload( box, dstTexture, mipLevel, &dstBox, &dstBox );
     }
     //-----------------------------------------------------------------------------------
     ObjCmdBuffer::

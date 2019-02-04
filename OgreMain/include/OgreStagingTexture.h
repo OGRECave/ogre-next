@@ -162,6 +162,11 @@ namespace Ogre
         @param dstTexture
             The destination texture. If dstBox is a null pointer, srcBox must match the
             texture dimensions exactly (x,y,z = 0; same resolution)
+        @param cpuSrcBox
+            A CPU-based copy that we can copy CPU -> CPU to our System RAM copy.
+            This parameters must be present if skipSysRamCopy is false and
+            the dstTexture strategy is GpuPageOutStrategy::AlwaysKeepSystemRamCopy
+            or it is in OnSystemRam state.
         @param mipLevel
             Destination mipmap.
         @param dstBox
@@ -176,7 +181,8 @@ namespace Ogre
             the data in GPU, and possibly other bugs too.
         */
         virtual void upload( const TextureBox &srcBox, TextureGpu *dstTexture,
-                             uint8 mipLevel, const TextureBox *dstBox=0,
+                             uint8 mipLevel, const TextureBox *cpuSrcBox=0,
+                             const TextureBox *dstBox=0,
                              bool skipSysRamCopy=false );
 
         uint32 getLastFrameUsed(void) const             { return mLastFrameUsed; }

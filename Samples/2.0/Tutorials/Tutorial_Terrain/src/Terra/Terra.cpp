@@ -139,7 +139,7 @@ namespace Ogre
         //for( uint8 mip=0; mip<numMipmaps; ++mip )
         texBox.copyFrom( image.getData( 0 ) );
         stagingTexture->stopMapRegion();
-        stagingTexture->upload( texBox, m_heightMapTex, 0, 0 );
+        stagingTexture->upload( texBox, m_heightMapTex, 0, 0, 0 );
         textureManager->removeStagingTexture( stagingTexture );
         stagingTexture = 0;
 

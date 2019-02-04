@@ -427,6 +427,7 @@ namespace Ogre {
         //loop iterations. When we run out, we flush its contents and upload all the
         //unflushed data to the GPU; then grab a new StagingTexture and repeat
         TextureBox unsentBoxes[256];
+        TextureBox unsentBoxesCpu[256];
         uint8 numUnsentBoxes = 0;
         StagingTexture *stagingTexture = 0;
 
@@ -468,7 +469,8 @@ namespace Ogre {
                         texBox.depth        = unsentBoxes[j].depth;
                         texBox.numSlices    = unsentBoxes[j].numSlices;
                         stagingTexture->upload( unsentBoxes[j], texture,
-                                                static_cast<uint8>( i - numUnsentBoxes + j ), &texBox );
+                                                static_cast<uint8>( i - numUnsentBoxes + j ),
+                                                &unsentBoxesCpu[j], &texBox );
                     }
                     numUnsentBoxes = 0;
                     textureManager->removeStagingTexture( stagingTexture );
@@ -476,6 +478,7 @@ namespace Ogre {
                 }
             }
 
+            unsentBoxesCpu[numUnsentBoxes] = box;
             unsentBoxes[numUnsentBoxes++] = dstBox;
             dstBox.copyFrom( box );
         }
@@ -484,16 +487,15 @@ namespace Ogre {
         stagingTexture->stopMapRegion();
         for( size_t j=0; j<numUnsentBoxes; ++j )
         {
-            TextureBox texBox =
-                    texture->getEmptyBox( static_cast<uint8>( maxMip + 1u - numUnsentBoxes + j ) );
+            const uint8 mipLevel = static_cast<uint8>( maxMip + 1u - numUnsentBoxes + j );
+            TextureBox texBox = texture->getEmptyBox( mipLevel );
             texBox.z            = mTextureType == TextureTypes::Type3D ? dstZorSliceStart :
                                                                          texBox.z;
             texBox.sliceStart   = mTextureType != TextureTypes::Type3D ? dstZorSliceStart :
                                                                          texBox.sliceStart;
             texBox.depth        = unsentBoxes[j].depth;
             texBox.numSlices    = unsentBoxes[j].numSlices;
-            stagingTexture->upload( unsentBoxes[j], texture,
-                                    static_cast<uint8>( maxMip + 1u - numUnsentBoxes + j ), &texBox );
+            stagingTexture->upload( unsentBoxes[j], texture, mipLevel, &unsentBoxesCpu[j], &texBox );
         }
         numUnsentBoxes = 0;
         textureManager->removeStagingTexture( stagingTexture );

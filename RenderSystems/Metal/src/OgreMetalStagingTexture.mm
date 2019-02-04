@@ -82,9 +82,11 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void MetalStagingTexture::upload( const TextureBox &srcBox, TextureGpu *dstTexture,
-                                      uint8 mipLevel, const TextureBox *dstBox, bool skipSysRamCopy )
+                                      uint8 mipLevel, const TextureBox *cpuSrcBox,
+                                      const TextureBox *dstBox, bool skipSysRamCopy )
     {
-        StagingTextureBufferImpl::upload( srcBox, dstTexture, mipLevel, dstBox, skipSysRamCopy );
+        StagingTextureBufferImpl::upload( srcBox, dstTexture, mipLevel,
+                                          cpuSrcBox, dstBox, skipSysRamCopy );
 
         __unsafe_unretained id<MTLBlitCommandEncoder> blitEncoder = mDevice->getBlitEncoder();
 

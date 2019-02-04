@@ -621,7 +621,7 @@ namespace Ogre
         PixelFormatGpuUtils::packColour( ColourValue::White, format, texBox.data );
 
         stagingTexture->stopMapRegion();
-        stagingTexture->upload( texBox, shadowTex, 0, 0, true );
+        stagingTexture->upload( texBox, shadowTex, 0, 0, 0, true );
         textureManager->removeStagingTexture( stagingTexture );
         stagingTexture = 0;
 

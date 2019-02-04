@@ -147,9 +147,11 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusStagingTexture::upload( const TextureBox &srcBox, TextureGpu *dstTexture,
-                                        uint8 mipLevel, const TextureBox *dstBox, bool skipSysRamCopy )
+                                        uint8 mipLevel, const TextureBox *cpuSrcBox,
+                                        const TextureBox *dstBox, bool skipSysRamCopy )
     {
-        StagingTextureBufferImpl::upload( srcBox, dstTexture, mipLevel, dstBox, skipSysRamCopy );
+        StagingTextureBufferImpl::upload( srcBox, dstTexture, mipLevel,
+                                          cpuSrcBox, dstBox, skipSysRamCopy );
 
         size_t bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( dstTexture->getPixelFormat() );
 

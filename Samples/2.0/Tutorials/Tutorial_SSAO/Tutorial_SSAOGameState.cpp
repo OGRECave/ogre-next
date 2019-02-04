@@ -282,7 +282,7 @@ namespace Demo
         }
 
         stagingTexture->stopMapRegion();
-        stagingTexture->upload( texBox, noiseTexture, 0, 0 );
+        stagingTexture->upload( texBox, noiseTexture, 0, 0, 0 );
         textureManager->removeStagingTexture( stagingTexture );
         stagingTexture = 0;
         noiseTexture->notifyDataIsReady();

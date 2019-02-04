@@ -110,8 +110,8 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void StagingTexture::upload( const TextureBox &srcBox, TextureGpu *dstTexture,
-                                 uint8 mipLevel, const TextureBox *dstBox,
-                                 bool skipSysRamCopy )
+                                 uint8 mipLevel, const TextureBox *cpuSrcBox,
+                                 const TextureBox *dstBox, bool skipSysRamCopy )
     {
         assert( !mMapRegionStarted && "You must call stopMapRegion before you can upload!" );
 #if OGRE_DEBUG_MODE
@@ -134,6 +134,7 @@ namespace Ogre
         assert( belongsToUs( srcBox ) &&
                 "This srcBox does not belong to us! Was it created with mapRegion? "
                 "Did you modify it? Did it get corrupted?" );
+        assert( !cpuSrcBox || srcBox.equalSize( *cpuSrcBox ) && "Src & cpuSrcBox must be equal" );
 
         if( dstTexture->getMsaa() > 1u )
         {
@@ -149,6 +150,18 @@ namespace Ogre
                          "Cannot upload to texture '" + dstTexture->getNameStr() +
                          "' which is in GpuResidency::OnStorage mode",
                          "StagingTexture::upload" );
+        }
+
+        if( !cpuSrcBox && !skipSysRamCopy )
+        {
+            if( dstTexture->getResidencyStatus() == GpuResidency::OnSystemRam ||
+                dstTexture->getGpuPageOutStrategy() == GpuPageOutStrategy::AlwaysKeepSystemRamCopy )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALID_STATE,
+                             "Cannot upload to texture '" + dstTexture->getNameStr() +
+                             "'. The parameter cpuSrcBox must not be null",
+                             "StagingTexture::upload" );
+            }
         }
 
         uint8 *sysRamCopyBase = dstTexture->_getSysRamCopy( mipLevel );
@@ -168,7 +181,7 @@ namespace Ogre
                 dstSysRamBox.bytesPerImage = dstTexture->_getSysRamCopyBytesPerImage( mipLevel );
             }
 
-            dstSysRamBox.copyFrom( srcBox );
+            dstSysRamBox.copyFrom( *cpuSrcBox );
         }
 
         mLastFrameUsed = mVaoManager->getFrameCount();

@@ -107,7 +107,7 @@ namespace Demo
             }
 
             stagingTexture->stopMapRegion();
-            stagingTexture->upload( texBox, tex, 0, 0, true );
+            stagingTexture->upload( texBox, tex, 0, 0, 0, true );
             tex->notifyDataIsReady();
 
             textureManager->removeStagingTexture( stagingTexture );
@@ -146,7 +146,7 @@ namespace Demo
             }
 
             stagingTexture->stopMapRegion();
-            stagingTexture->upload( texBox, tex, 0, 0, true );
+            stagingTexture->upload( texBox, tex, 0, 0, 0, true );
             tex->notifyDataIsReady();
 
             textureManager->removeStagingTexture( stagingTexture );

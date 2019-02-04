@@ -65,8 +65,8 @@ namespace Ogre
         virtual void stopMapRegion(void);
 
         virtual void upload( const TextureBox &srcBox, TextureGpu *dstTexture,
-                             uint8 mipLevel, const TextureBox *dstBox=0,
-                             bool skipSysRamCopy=false );
+                             uint8 mipLevel, const TextureBox *cpuSrcBox=0,
+                             const TextureBox *dstBox=0, bool skipSysRamCopy=false );
 
         GL3PlusDynamicBuffer* _getDynamicBuffer(void)           { return mDynamicBuffer; }
         void _resetDynamicBuffer(void)                          { mDynamicBuffer = 0; }
