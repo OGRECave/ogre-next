@@ -455,7 +455,7 @@ namespace Ogre
             for( int32 x=0; x<dstWidth; ++x )
             {
                 int kStartY = std::max<int>( -y, kernelStartY );
-                int kEndY   = std::min<int>( dstHeight - y, kernelEndY );
+                int kEndY   = std::min<int>( dstHeight - y - 1, kernelEndY );
 
     #ifdef OGRE_DOWNSAMPLE_R
                 OGRE_UINT32 accumR = 0;
@@ -760,7 +760,7 @@ namespace Ogre
                 uint32 divisor = 0;
 
                 int kStartY = std::max<int>( -y, kernelStart );
-                int kEndY   = std::min<int>( height - y, kernelEnd );
+                int kEndY   = std::min<int>( height - y - 1, kernelEnd );
 
                 for( int k_y=kStartY; k_y<=kEndY; ++k_y )
                 {
@@ -913,7 +913,7 @@ namespace Ogre
                 uint32 divisor = 0;
 
                 int kStartY = std::max<int>( -y, kernelStart );
-                int kEndY   = std::min<int>( height - y, kernelEnd );
+                int kEndY   = std::min<int>( height - y - 1, kernelEnd );
 
                 for( int k_y=kStartY; k_y<=kEndY; ++k_y )
                 {
