@@ -302,7 +302,7 @@ namespace Ogre
 
         uint64 hashResult[2];
         memset( hashResult, 0, sizeof(hashResult) );
-        inFile->read( fileContents.begin() + 8u, fileContents.size() );
+        inFile->read( fileContents.begin() + sizeof(uint64) * 2u, fileSize );
         OGRE_HASH128_FUNC( fileContents.begin(), fileContents.size(), IdString::Seed, hashResult );
         memcpy( fileContents.begin(), hashResult, sizeof(uint64) * 2u );
     }
