@@ -80,7 +80,7 @@ namespace Ogre
         {
             if( mSize + newElements > mCapacity )
             {
-                mCapacity = std::max( mSize + newElements, mCapacity + (mCapacity >> 1) + 1 );
+                mCapacity = std::max<size_t>( mSize + newElements, mCapacity + (mCapacity >> 1u) + 1u );
                 T *data = (T*)::operator new( mCapacity * sizeof(T) );
                 if( mData )
                 {
