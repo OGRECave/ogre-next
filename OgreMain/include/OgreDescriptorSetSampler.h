@@ -67,7 +67,7 @@ namespace Ogre
 
         bool operator != ( const DescriptorSetSampler &other ) const
         {
-            const size_t thisNumSamplers = other.mSamplers.size();
+            const size_t thisNumSamplers = mSamplers.size();
             if( thisNumSamplers != other.mSamplers.size() )
                 return true;
 
