@@ -83,6 +83,14 @@ namespace Ogre
         const size_t sizeBytes = PixelFormatGpuUtils::getSizeBytes( width, height, depth, slices,
                                                                     pixelFormat, rowAlignment );
 
+        if( PixelFormatGpuUtils::isCompressed( pixelFormat ) )
+        {
+            //Ensure the offset is always aligned to the block size for compressed formats
+            const size_t blockSizeBytes = PixelFormatGpuUtils::getCompressedBlockSize( pixelFormat );
+            mCurrentOffset = alignToNextMultiple( mCurrentOffset, blockSizeBytes );
+            mCurrentOffset = std::min( mCurrentOffset, mSize );
+        }
+
         TextureBox retVal;
 
         const size_t availableSize = mSize - mCurrentOffset;
