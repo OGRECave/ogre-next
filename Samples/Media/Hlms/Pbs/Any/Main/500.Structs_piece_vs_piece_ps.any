@@ -12,7 +12,12 @@ struct ShadowReceiverData
 
 struct Light
 {
-	float4 position;	//.w contains the objLightMask
+	@property( syntax == glsl )
+		float4 position;	//.w contains the objLightMask
+	@else
+		packed_float3 position;
+		uint lightMask;
+	@end
 	float4 diffuse;		//.w contains numNonCasterDirectionalLights
 	float3 specular;
 @property( hlms_num_shadow_map_lights )
