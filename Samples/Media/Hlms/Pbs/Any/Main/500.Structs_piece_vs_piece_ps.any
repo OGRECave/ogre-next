@@ -37,7 +37,12 @@ struct Light
 
 struct AreaLight
 {
-	float4 position;	//.w contains the objLightMask
+	@property( syntax == glsl )
+		float4 position;	//.w contains the objLightMask
+	@else
+		packed_float3 position;
+		uint lightMask;
+	@end
 	float4 diffuse;		//[0].w contains diffuse mipmap start
 	float4 specular;	//[0].w contains mipmap scale
 	float4 attenuation;	//.w contains texture array idx
@@ -54,7 +59,12 @@ struct AreaLight
 
 struct AreaLtcLight
 {
-	float4 position;		//.w contains the objLightMask
+	@property( syntax == glsl )
+		float4 position;	//.w contains the objLightMask
+	@else
+		packed_float3 position;
+		uint lightMask;
+	@end
 	float4 diffuse;			//.w contains attenuation range
 	float4 specular;		//.w contains doubleSided
 	float4 points[4];		//.w contains numAreaLtcLights
