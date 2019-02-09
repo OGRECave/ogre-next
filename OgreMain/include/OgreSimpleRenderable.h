@@ -67,6 +67,7 @@ namespace v1 {
         SimpleRenderable( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager );
 
         virtual void setMaterial( const String& matName );
+        virtual void setMaterial(const MaterialPtr& mat);
         virtual const MaterialPtr& getMaterial(void) const;
 
         virtual void setRenderOperation( const RenderOperation& rend );

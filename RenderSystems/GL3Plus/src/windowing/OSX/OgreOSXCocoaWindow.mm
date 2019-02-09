@@ -113,7 +113,7 @@ namespace Ogre {
             bool hidden = false;
             NSString *windowTitle = [NSString stringWithCString:name.c_str() encoding:NSUTF8StringEncoding];
             int winx = 0, winy = 0;
-            int depth = 32;
+            int colourDepth = 32;
             NameValuePairList::const_iterator opt;
             
             mIsFullScreen = fullScreen;
@@ -154,7 +154,7 @@ namespace Ogre {
                 
                 opt = miscParams->find("colourDepth");
                 if(opt != miscParams->end())
-                    depth = StringConverter::parseUnsignedInt(opt->second);
+                    colourDepth = StringConverter::parseUnsignedInt(opt->second);
                 
                 opt = miscParams->find("Full Screen");
                 if(opt != miscParams->end())
@@ -198,7 +198,7 @@ namespace Ogre {
                 attribs[i++] = NSOpenGLPFADoubleBuffer;
                 
                 attribs[i++] = NSOpenGLPFAColorSize;
-                attribs[i++] = (NSOpenGLPixelFormatAttribute) depth;
+                attribs[i++] = (NSOpenGLPixelFormatAttribute) colourDepth;
                 
                 attribs[i++] = NSOpenGLPFAAlphaSize;
                 attribs[i++] = (NSOpenGLPixelFormatAttribute) 8;
@@ -207,7 +207,7 @@ namespace Ogre {
                 attribs[i++] = (NSOpenGLPixelFormatAttribute) 8;
                 
                 attribs[i++] = NSOpenGLPFADepthSize;
-                attribs[i++] = (NSOpenGLPixelFormatAttribute) depth;
+                attribs[i++] = (NSOpenGLPixelFormatAttribute) (hasDepthBuffer? 16 : 0);
                 
                 if(fsaa_samples > 0)
                 {

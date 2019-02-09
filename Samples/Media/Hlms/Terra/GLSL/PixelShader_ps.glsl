@@ -20,8 +20,8 @@ void main()
 
 @else
 @insertpiece( SetCrossPlatformSettings )
-@property( !GL430 )
-@property( hlms_tex_gather )#extension GL_ARB_texture_gather: require@end
+@property( GL3+ < 430 )
+	@property( hlms_tex_gather )#extension GL_ARB_texture_gather: require@end
 @end
 @insertpiece( SetCompatibilityLayer )
 @insertpiece( DeclareUvModifierMacros )

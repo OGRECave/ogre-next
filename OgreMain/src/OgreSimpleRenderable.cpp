@@ -55,6 +55,14 @@ namespace v1 {
         mMaterial->load();
     }
 
+    void SimpleRenderable::setMaterial( const MaterialPtr& mat )
+    {
+        mMatName = mat->getName();
+        mMaterial = mat;
+        // Won't load twice anyway
+        mMaterial->load();
+    }
+
     const MaterialPtr& SimpleRenderable::getMaterial(void) const
     {
         return mMaterial;

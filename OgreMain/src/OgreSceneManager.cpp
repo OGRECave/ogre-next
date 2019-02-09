@@ -102,6 +102,7 @@ mName(name),
 mRenderQueue( 0 ),
 mForwardPlusSystem( 0 ),
 mForwardPlusImpl( 0 ),
+mBuildLegacyLightList( false ),
 mDecalsDiffuseTex( 0 ),
 mDecalsNormalsTex( 0 ),
 mDecalsEmissiveTex( 0 ),
@@ -1036,6 +1037,11 @@ void SceneManager::_setForwardPlusEnabledInPass( bool bEnable )
         mForwardPlusImpl = mForwardPlusSystem;
     else
         mForwardPlusImpl = 0;
+}
+//-----------------------------------------------------------------------
+void SceneManager::setBuildLegacyLightList( bool bEnable )
+{
+    mBuildLegacyLightList = bEnable;
 }
 //-----------------------------------------------------------------------
 void SceneManager::_setPrePassMode( PrePassMode mode, const TextureGpuVec &prepassTextures,
@@ -2610,7 +2616,7 @@ void SceneManager::buildLightList()
         accumStartLightIdx += totalObjsInThread;
     }
 
-    if( accumStartLightIdx == mGlobalLightList.lights.size() )
+    if( accumStartLightIdx == mGlobalLightList.lights.size() && !mBuildLegacyLightList )
     {
         //All of the lights were directional. We're done. Avoid the sync point with worker threads.
         return;
@@ -2674,19 +2680,17 @@ void SceneManager::buildLightList()
         dstOffset += numCollectedLights;
     }
 
-    //Now fire the threads again, to build the per-MovableObject lists
-
-    if( mForwardPlusSystem )
-        return; //Don't do this on non-forward passes.
-    return;
-
-    mRequestType = BUILD_LIGHT_LIST02;
-    if( mForceMainThread )
-        updateWorkerThreadImpl( 0 );
-    else
+    if( mBuildLegacyLightList )
     {
-        mWorkerThreadsBarrier->sync(); //Fire threads
-        mWorkerThreadsBarrier->sync(); //Wait them to complete
+        //Now fire the threads again, to build the per-MovableObject lists
+        mRequestType = BUILD_LIGHT_LIST02;
+        if( mForceMainThread )
+            updateWorkerThreadImpl( 0 );
+        else
+        {
+            mWorkerThreadsBarrier->sync(); //Fire threads
+            mWorkerThreadsBarrier->sync(); //Wait them to complete
+        }
     }
 }
 //-----------------------------------------------------------------------

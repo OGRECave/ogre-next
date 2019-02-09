@@ -1,7 +1,8 @@
 @piece( SetCrossPlatformSettings )
-@property( GL3+ >= 430 )#version 430 core
-@end @property( GL3+ < 430 )
-#version 330 core
+@property( GL3+ >= 430 )
+    #version 430 core
+@else
+    #version 330 core
 @end
 
 @property( GL_ARB_shading_language_420pack )
@@ -10,11 +11,14 @@
 @else
 	#define layout_constbuffer(x) layout( std140 )
 @end
+
 @property( GL_ARB_texture_buffer_range )
 	#define bufferFetch texelFetch
 @end
-@property( hlms_amd_trinary_minmax )#extension GL_AMD_shader_trinary_minmax: require@end
-@property( !hlms_amd_trinary_minmax )
+
+@property( hlms_amd_trinary_minmax )
+	#extension GL_AMD_shader_trinary_minmax: require@end
+@else
 	#define min3( a, b, c ) min( a, min( b, c ) )
 	#define max3( a, b, c ) max( a, max( b, c ) )
 @end

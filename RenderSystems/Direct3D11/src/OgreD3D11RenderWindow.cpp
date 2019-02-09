@@ -1524,14 +1524,6 @@ namespace Ogre
         mBrush->ImageSource = mImageSource;
     }
     //---------------------------------------------------------------------
-    void D3D11RenderWindowImageSource::update(bool swapBuffers)
-    {
-        if(mImageSourceNative == NULL)
-            return;
-
-        D3D11RenderWindowBase::update(swapBuffers);
-    }
-    //---------------------------------------------------------------------
     void D3D11RenderWindowImageSource::swapBuffers()
     {
         if(mImageSourceNative == NULL)

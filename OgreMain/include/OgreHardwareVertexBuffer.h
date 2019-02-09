@@ -96,7 +96,7 @@ namespace v1 {
     };
 
     /** Locking helper. */    
-    typedef HardwareBufferLockGuard<HardwareVertexBufferSharedPtr> HardwareVertexBufferLockGuard;
+    typedef HardwareBufferLockGuard HardwareVertexBufferLockGuard; // deprecated, use HardwareBufferLockGuard directly
 }
 
 namespace v1 {

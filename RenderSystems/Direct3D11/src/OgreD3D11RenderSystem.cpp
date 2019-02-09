@@ -2074,6 +2074,7 @@ namespace Ogre
         }
     }
     //---------------------------------------------------------------------
+#if OGRE_PLATFORM != OGRE_PLATFORM_WINRT
     bool D3D11RenderSystem::isWindows8OrGreater()
     {
         DWORD version = GetVersion();
@@ -2081,6 +2082,7 @@ namespace Ogre
         DWORD minor = (DWORD)(HIBYTE(LOWORD(version)));
         return (major > 6) || ((major == 6) && (minor >= 2));
     }
+#endif
     //---------------------------------------------------------------------
     VertexElementType D3D11RenderSystem::getColourVertexElementType(void) const
     {
@@ -4257,14 +4259,11 @@ namespace Ogre
 
             if (buffers & FBT_COLOUR)
             {
-                float ClearColor[4];
-                D3D11Mappings::get(colour, ClearColor);
-
                 // Clear all views
                 uint numberOfViews;
                 mActiveRenderTarget->getCustomAttribute( "numberOfViews", &numberOfViews );
                 for( uint i = 0; i < numberOfViews; ++i )
-                    mDevice.GetImmediateContext()->DiscardView( pRTView[i], ClearColor );
+                    mDevice.GetImmediateContext()->DiscardView( pRTView[i] );
             }
 
             if( buffers & (FBT_DEPTH|FBT_STENCIL) )
@@ -4272,7 +4271,7 @@ namespace Ogre
                 D3D11DepthBuffer *depthBuffer = static_cast<D3D11DepthBuffer*>(
                                                     mActiveRenderTarget-> getDepthBuffer() );
                 if( depthBuffer )
-                    mDevice.GetImmediateContext()->DiscardView( depthBuffer->getDepthStencilView() );
+                    mDevice.GetImmediateContext()->DiscardView( depthBuffer->getDepthStencilView(0) );
             }
         }
 #endif

@@ -164,6 +164,7 @@ namespace Demo
             registerHlms();
 
             loadTextureCache();
+            loadHlmsDiskCache();
 
             reserveDecalTextures();
 
