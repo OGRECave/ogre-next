@@ -12,10 +12,10 @@ struct ShadowReceiverData
 
 struct Light
 {
-	@property( syntax == glsl )
+	@property( syntax != hlsl )
 		float4 position;	//.w contains the objLightMask
 	@else
-		packed_float3 position;
+		float3 position;
 		uint lightMask;
 	@end
 	float4 diffuse;		//.w contains numNonCasterDirectionalLights
@@ -42,10 +42,10 @@ struct Light
 
 struct AreaLight
 {
-	@property( syntax == glsl )
+	@property( syntax != hlsl )
 		float4 position;	//.w contains the objLightMask
 	@else
-		packed_float3 position;
+		float3 position;
 		uint lightMask;
 	@end
 	float4 diffuse;		//[0].w contains diffuse mipmap start

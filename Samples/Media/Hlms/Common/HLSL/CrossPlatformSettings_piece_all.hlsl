@@ -1,7 +1,6 @@
 @piece( SetCrossPlatformSettings )
 #define ushort uint
 #define ogre_float4x3 float4x3
-#define packed_float3 float3
 
 //Short used for read operations. It's an int in GLSL & HLSL. An ushort in Metal
 #define rshort2 int2
