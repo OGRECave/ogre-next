@@ -17,7 +17,7 @@
 @end
 
 @property( hlms_amd_trinary_minmax )
-	#extension GL_AMD_shader_trinary_minmax: require@end
+	#extension GL_AMD_shader_trinary_minmax: require
 @else
 	#define min3( a, b, c ) min( a, min( b, c ) )
 	#define max3( a, b, c ) max( a, max( b, c ) )
