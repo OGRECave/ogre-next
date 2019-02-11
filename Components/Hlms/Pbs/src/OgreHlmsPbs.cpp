@@ -831,6 +831,9 @@ namespace Ogre
 
         if( hasAlphaTest )
         {
+            if (datablock->mSamplersDescSet)
+                setProperty(PbsProperty::NumSamplers, datablock->mSamplersDescSet->mSamplers.size());
+
             //Keep GLSL happy by not declaring more textures than we'll actually need.
             uint8 numTextures = 0;
             if( datablock->mTexturesDescSet )
