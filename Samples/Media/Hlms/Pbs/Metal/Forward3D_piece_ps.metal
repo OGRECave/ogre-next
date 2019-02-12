@@ -2,7 +2,7 @@
 
 @property( hlms_enable_decals )
 	@piece( DeclDecalsSamplers )
-		, sampler decalsSampler	[[sampler(@value(decalsTexUnit))]]
+		, sampler decalsSampler	[[sampler(@value(decalsSampler))]]
 		@property( hlms_decals_diffuse ), texture2d_array<float> decalsDiffuseTex	[[texture(@value(decalsDiffuseTex))]]@end
 		@property( hlms_decals_normals ), texture2d_array<float> decalsNormalsTex	[[texture(@value(decalsNormalsTex))]]@end
 		@property( hlms_decals_diffuse == hlms_decals_emissive )

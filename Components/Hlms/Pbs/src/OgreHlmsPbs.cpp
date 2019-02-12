@@ -947,6 +947,9 @@ namespace Ogre
         if( getProperty( HlmsBaseProp::EnableDecals ) )
         {
             const int32 decalsDiffuseProp = getProperty( HlmsBaseProp::DecalsDiffuse );
+            //This is a regular property!
+            setProperty( "decalsSampler", texUnit );
+
             if( decalsDiffuseProp )
                 setTextureReg( PixelShader, "decalsDiffuseTex", texUnit++ );
             if( getProperty( HlmsBaseProp::DecalsNormals ) )

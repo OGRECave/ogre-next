@@ -2,7 +2,7 @@
 
 @property( hlms_enable_decals )
 	@piece( DeclDecalsSamplers )
-		SamplerState decalsSampler : register(s@value(decalsDiffuseTex));
+		SamplerState decalsSampler : register(s@value(decalsSampler));
 		@property( hlms_decals_diffuse )Texture2DArray decalsDiffuseTex : register(t@value(decalsDiffuseTex));@end
 		@property( hlms_decals_normals )Texture2DArray<float2> decalsNormalsTex : register(t@value(decalsNormalsTex));@end
 		@property( hlms_decals_diffuse == hlms_decals_emissive )
