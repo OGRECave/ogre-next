@@ -90,7 +90,13 @@ namespace Ogre
     void D3D11TextureGpuWindow::getCustomAttribute( IdString name, void *pData )
     {
         if( name == "Window" )
+        {
             *static_cast<Window**>(pData) = mWindow;
+        }
+        else
+        {
+            D3D11TextureGpu::getCustomAttribute( name, pData );
+        }
     }
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpuWindow::_setToDisplayDummyTexture(void)
