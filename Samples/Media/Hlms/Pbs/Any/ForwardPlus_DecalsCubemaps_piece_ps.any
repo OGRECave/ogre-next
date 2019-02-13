@@ -110,7 +110,8 @@
 		@end
 		@property( hlms_decals_emissive )
 			finalDecalEmissive	+= (absLocalPos.x > 0.5f || absLocalPos.y > 0.5f ||
-									absLocalPos.z > 0.5f) ? 0.0f : (decalEmissive.xyz * decalMask);
+									absLocalPos.z > 0.5f) ? float3( 0.0f, 0.0f, 0.0f ) :
+															(decalEmissive.xyz * decalMask);
 		@end
 
 	}
