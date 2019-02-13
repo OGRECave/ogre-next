@@ -84,6 +84,9 @@ namespace Ogre
         bool                    mDebugWireAabbFrozen;
         vector<WireAabb*>::type mDebugWireAabb;
 
+        inline size_t getDecalsOffsetStart() const;
+        inline size_t getCubemapProbesOffsetStart() const;
+
         /// Performs the reverse of getSliceAtDepth. @see getSliceAtDepth.
         inline float getDepthAtSlice( uint32 slice ) const;
 

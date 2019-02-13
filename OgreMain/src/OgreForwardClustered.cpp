@@ -150,6 +150,18 @@ namespace Ogre
             collectLightForSlice( threadId + numThreads * slicesPerThread, threadId );
     }
     //-----------------------------------------------------------------------------------
+    inline size_t ForwardClustered::getDecalsOffsetStart() const
+    {
+        return mLightsPerCell + c_reservedLightSlotsPerCell;
+    }
+    //-----------------------------------------------------------------------------------
+    inline size_t ForwardClustered::getCubemapProbesOffsetStart() const
+    {
+        const bool hasDecals = mDecalsEnabled;
+        return mLightsPerCell + c_reservedLightSlotsPerCell +
+                (hasDecals ? (c_reservedDecalsSlotsPerCell + mDecalsPerCell) : 0u);
+    }
+    //-----------------------------------------------------------------------------------
     void ForwardClustered::collectObjsForSlice( const size_t numPackedFrustumsPerSlice,
                                                 const size_t frustumStartIdx,
                                                 uint16 offsetStart,
@@ -622,9 +634,8 @@ namespace Ogre
 
         const bool hasDecals = mDecalsEnabled;
         const bool hasCubemaps = mCubemapProbesEnabled;
-        const size_t decalOffsetStart = mLightsPerCell + c_reservedLightSlotsPerCell;
-        const size_t cubemapOffsetStart = mLightsPerCell + c_reservedLightSlotsPerCell +
-                                          (hasDecals ? c_reservedDecalsSlotsPerCell : 0u);
+        const size_t decalOffsetStart = getDecalsOffsetStart();
+        const size_t cubemapOffsetStart = getCubemapProbesOffsetStart();
 
         const VisibleObjectsPerRq &objsPerRqInThread0 = mSceneManager->_getTmpVisibleObjectsList()[0];
         const size_t actualMaxDecalRq = std::min( MaxDecalRq, objsPerRqInThread0.size() );
@@ -946,7 +957,7 @@ namespace Ogre
                 ++numDecalsTex;
             }
 
-            const size_t decalOffsetStart = mLightsPerCell + c_reservedLightSlotsPerCell;
+            const size_t decalOffsetStart = getDecalsOffsetStart();
             hlms->_setProperty( HlmsBaseProp::FwdPlusDecalsSlotOffset,
                                 static_cast<int32>( decalOffsetStart ) );
 
@@ -955,8 +966,7 @@ namespace Ogre
 
         if( mCubemapProbesEnabled )
         {
-            const size_t cubemapOffsetStart = mLightsPerCell + c_reservedLightSlotsPerCell +
-                                              (mDecalsEnabled ? c_reservedDecalsSlotsPerCell : 0u);
+            const size_t cubemapOffsetStart = getCubemapProbesOffsetStart();
             hlms->_setProperty( HlmsBaseProp::FwdPlusCubemapSlotOffset,
                                 static_cast<int32>( cubemapOffsetStart ) );
         }

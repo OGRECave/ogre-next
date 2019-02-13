@@ -197,6 +197,7 @@ namespace Ogre
             if( numDecals > 0u )
                 accumOffset = alignToNextMultiple( accumOffset, c_ForwardPlusNumFloat4PerDecal );
             mDecalFloat4Offset = static_cast<uint16>( accumOffset );
+            accumOffset += numDecals * c_ForwardPlusNumFloat4PerDecal;
             if( numCubemapProbes > 0u )
                 accumOffset = alignToNextMultiple( accumOffset, c_ForwardPlusNumFloat4PerCubemapProbe );
             mCubemapProbeFloat4Offset = static_cast<uint16>( accumOffset );
@@ -313,7 +314,8 @@ namespace Ogre
 
         //Align to the start of cubemap probes
         //Alignment happens in increments of float4, hence the "<< 2u"
-        lightData += (mCubemapProbeFloat4Offset - mDecalFloat4Offset) << 2u;
+        lightData += (mCubemapProbeFloat4Offset - mDecalFloat4Offset -
+                      numDecals * c_ForwardPlusNumFloat4PerDecal) << 2u;
 
         viewMatrix = camera->getViewMatrix();
         Matrix3 invViewMatrix3 = viewMatrix3.Inverse();
