@@ -30,7 +30,6 @@ THE SOFTWARE.
 #include "OgreD3D11VideoMode.h"
 #include "OgreD3D11Device.h"
 #include "OgreString.h"
-#include "OgreStringConverter.h"
 namespace Ogre
 {
     //---------------------------------------------------------------------
@@ -93,7 +92,7 @@ namespace Ogre
         delete [] str;
         StringUtil::trim(driverDescription);
 
-        return  driverDescription+= "_" + Ogre::StringConverter::toString(mAdapterNumber);
+        return  driverDescription;
     }
     //---------------------------------------------------------------------
     D3D11VideoModeList* D3D11Driver::getVideoModeList()
