@@ -74,13 +74,18 @@
 		//geomNormal is not available because it gets decalred after decals run
 		//We assume invWorldView is orthogonal, thus the transpose = inverse, hance invWorldView1.xyz
 		//works as the decal's direction
-		float3 decalDir = float3( invWorldView1.xyz );
-		isOutsideDecal = dot( decalDir.xyz, inPs.normal.xyz ) <= 0.0 ? true : isOutsideDecal;
+		//
+		//Use a smooth fade to avoid flickering due to floating point precision when the normal
+		//and the decal are perpendicular to each other. (tolerance set to 0.0002)
+		float3 decalDir = normalize( float3( invWorldView1.xyz ) );
+		//isOutsideDecal = dot( decalDir.xyz, inPs.normal.xyz ) <= 0.0 ? true : isOutsideDecal;
+		float normalAway = saturate( (dot( decalDir.xyz, inPs.normal.xyz ) + 0.0002) / 0.0002 );
+		normalAway = isOutsideDecal ? 0.0f : normalAway;
 
-		float decalMask;
+		float decalMask = normalAway;
 
 		@property( hlms_decals_diffuse )
-			decalMask = isOutsideDecal ? 0.0f : decalDiffuse.w;
+			decalMask *= decalDiffuse.w;
 			float decalMetalness = texIndices.z;
 			float3 decalF0 = lerp( float3( 0.03f, 0.03f, 0.03f ), decalDiffuse.xyz, decalMetalness );
 			decalDiffuse.xyz = decalDiffuse.xyz - decalDiffuse.xyz * decalMetalness;
@@ -95,14 +100,10 @@
 				pixelData.specular	= lerp( pixelData.specular.xyz, float3( 1.0f, 1.0f, 1.0f ), decalMask );
 				pixelData.F0.xyz	= lerp( pixelData.F0.xyz, decalF0.xyz, decalMask );
 			@end
-		@end
-		@property( hlms_decals_normals || hlms_decals_emissive )
-			@property( hlms_decals_diffuse )
-				decalMask = ignoreAlphaDiffuse ? 1.0f : decalMask;
-				decalMask = isOutsideDecal ? 0.0f : decalMask;
-			@end
-			@property( !hlms_decals_diffuse )
-				decalMask = isOutsideDecal ? 0.0f : 1.0f;
+
+			@property( hlms_decals_normals || hlms_decals_emissive )
+				//Reset the mask for the rest of the decal types to ignore our alpha
+				decalMask = ignoreAlphaDiffuse ? normalAway : decalMask;
 			@end
 		@end
 		@property( hlms_decals_normals && normal_map )
