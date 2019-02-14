@@ -153,8 +153,7 @@ namespace Ogre
           mNumberOfViews( 0 ),
           mDepthStencilView( 0 ),
           mMaxModifiedUavPlusOne( 0 ),
-          mUavsDirty( false ),
-          mDSTResView(0)
+          mUavsDirty( false )
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
 		 ,mStereoDriver(NULL)
 #endif	
@@ -925,8 +924,6 @@ namespace Ogre
         RenderSystem::shutdown();
 
         mRenderSystemWasInited = false;
-
-        SAFE_RELEASE(mDSTResView);
 
         mPrimaryWindow = NULL; // primary window deleted by base class.
         freeDevice();
@@ -3678,6 +3675,7 @@ namespace Ogre
 
                 //Retrieve depth buffer
                 D3D11DepthBuffer *depthBuffer = static_cast<D3D11DepthBuffer*>(target->getDepthBuffer());
+                ID3D11ShaderResourceView *depthTextureView = depthBuffer ? depthBuffer->getDepthTextureView() : NULL;
 
                 // now switch to the new render target
                 mDevice.GetImmediateContext()->OMSetRenderTargets(
@@ -3685,7 +3683,7 @@ namespace Ogre
                     pRTView,
                     NULL);
 
-                mDevice.GetImmediateContext()->PSSetShaderResources(static_cast<UINT>(StartSlot), static_cast<UINT>(numberOfViews), &mDSTResView);
+                mDevice.GetImmediateContext()->PSSetShaderResources(static_cast<UINT>(StartSlot), 1, &depthTextureView);
                 if (mDevice.isError())
                 {
                     String errorDescription = mDevice.getErrorDescription();
@@ -3698,17 +3696,14 @@ namespace Ogre
             break;
         case 3:
             //
-            // We need to unbind mDSTResView from the given variable because this buffer
+            // We need to unbind depthTextureView from the given variable because this buffer
             // will be used later as the typical depth buffer, again
             // must call Apply(0) here : to flush SetResource(NULL)
             //
             
             if (target)
             {
-                uint numberOfViews;
-                target->getCustomAttribute( "numberOfViews", &numberOfViews );
-
-                mDevice.GetImmediateContext()->PSSetShaderResources(static_cast<UINT>(StartSlot), static_cast<UINT>(numberOfViews), NULL);
+                mDevice.GetImmediateContext()->PSSetShaderResources(static_cast<UINT>(StartSlot), 1, NULL);
                     if (mDevice.isError())
                     {
                         String errorDescription = mDevice.getErrorDescription();

@@ -127,8 +127,6 @@ namespace Ogre
 
         TextureUnitState::BindingType mBindingType;
 
-        ID3D11ShaderResourceView* mDSTResView;
-
         UINT                        mStencilRef;
 
         ID3D11ShaderResourceView * mBoundTextures[OGRE_MAX_TEXTURE_LAYERS];
