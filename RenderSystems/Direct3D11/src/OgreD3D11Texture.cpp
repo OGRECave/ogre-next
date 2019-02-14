@@ -91,8 +91,8 @@ namespace Ogre
         // get the target
         other = static_cast< D3D11Texture * >( target.get() );
 
-        if( mpResolveTexture && !other->mpResolveTexture )
-            mDevice.GetImmediateContext()->CopyResource( other->getTextureResource(), mpResolveTexture.Get() );
+        if( mpResolved2DTex && !other->mpResolved2DTex )
+            mDevice.GetImmediateContext()->CopyResource( other->getTextureResource(), mpResolved2DTex.Get() );
         else
             mDevice.GetImmediateContext()->CopyResource( other->getTextureResource(), mpTex.Get() );
         if (mDevice.isError())
@@ -118,7 +118,7 @@ namespace Ogre
 
         ID3D11ShaderResourceView *retVal = mpShaderResourceView.Get();
 
-        if( mpResolveTexture )
+        if( mpResolved2DTex )
         {
             //Has MSAA
             RenderTarget *renderTarget = mSurfaceList[0]->getRenderTarget();
@@ -270,7 +270,7 @@ namespace Ogre
     {
         mSurfaceList.clear();        
         mpTex.Reset();
-        mpResolveTexture.Reset();
+        mpResolved2DTex.Reset();
         mpShaderResourceView.Reset();
         mpShaderResourceViewMsaa.Reset();
         mp1DTex.Reset();
@@ -688,14 +688,12 @@ namespace Ogre
 
         if( desc.SampleDesc.Count > 1 )
         {
-            ID3D11Texture2D *resolveTexture = 0;
-
             desc.SampleDesc.Count = 1;
             desc.SampleDesc.Quality = 0;
             hr = mDevice->CreateTexture2D(
                 &desc,
                 NULL,// data pointer
-                &resolveTexture);
+                mpResolved2DTex.ReleaseAndGetAddressOf());
             // check result and except if failed
             if (FAILED(hr) || mDevice.isError())
             {
@@ -705,8 +703,6 @@ namespace Ogre
                     "Error creating resolve texture for MSAA\nError Description:" + errorDescription,
                     "D3D11Texture::_create2DTex" );
             }
-
-            mpResolveTexture = resolveTexture;
         }
 
         //set the base texture we'll use in the render system
@@ -805,8 +801,7 @@ namespace Ogre
                     break;
                 }
 
-                ID3D11Texture2D *resolveTexture = static_cast<ID3D11Texture2D*>( mpResolveTexture.Get() );
-                hr = mDevice->CreateShaderResourceView( resolveTexture, &srvDesc, mpShaderResourceView.ReleaseAndGetAddressOf() );
+                hr = mDevice->CreateShaderResourceView( mpResolved2DTex.Get(), &srvDesc, mpShaderResourceView.ReleaseAndGetAddressOf() );
 
                 if (FAILED(hr) || mDevice.isError())
                 {
@@ -1380,7 +1375,7 @@ namespace Ogre
             v1::D3D11HardwarePixelBuffer *buffer = static_cast<v1::D3D11HardwarePixelBuffer*>( mBuffer );
 
             D3D11Texture *texture = buffer->getParentTexture();
-            mDevice.GetImmediateContext()->ResolveSubresource( texture->getResolveTextureResource(),
+            mDevice.GetImmediateContext()->ResolveSubresource( texture->getResolvedTexture2D(),
                                                                buffer->getSubresourceIndex(),
                                                                texture->getTextureResource(),
                                                                buffer->getSubresourceIndex(),

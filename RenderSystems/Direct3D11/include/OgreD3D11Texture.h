@@ -69,9 +69,6 @@ namespace Ogre {
         v1::HardwarePixelBufferSharedPtr getBuffer(size_t face, size_t mipmap);
 
 		ID3D11Resource *getTextureResource() { assert(mpTex); return mpTex.Get(); }
-        ID3D11Resource *getResolveTextureResource()
-                                            { assert(mpResolveTexture); return mpResolveTexture.Get(); }
-        bool hasResolveTextureResource() const  { return mpResolveTexture.Get() != 0; }
 		/// retrieves a pointer to the actual texture
         ID3D11ShaderResourceView *getTexture();
 
@@ -81,6 +78,9 @@ namespace Ogre {
 		ID3D11Texture1D * GetTex1D() { return mp1DTex.Get(); };
 		ID3D11Texture2D * GetTex2D() { return mp2DTex.Get(); };
 		ID3D11Texture3D	* GetTex3D() { return mp3DTex.Get(); };
+
+		ID3D11Texture2D *getResolvedTexture2D() { assert(mpResolved2DTex); return mpResolved2DTex.Get(); }
+		bool hasResolvedTexture2D() const { return mpResolved2DTex.Get() != 0; }
 
 		bool HasAutoMipMapGenerationEnabled() const { return mAutoMipMapGeneration; }
 
@@ -106,7 +106,7 @@ namespace Ogre {
         /// actual texture pointer
         ComPtr<ID3D11Resource> mpTex;
         /// Used by MSAA only.
-        ComPtr<ID3D11Resource> mpResolveTexture;
+        ComPtr<ID3D11Texture2D> mpResolved2DTex;
 
         ComPtr<ID3D11ShaderResourceView> mpShaderResourceView;
         ComPtr<ID3D11ShaderResourceView> mpShaderResourceViewMsaa;
