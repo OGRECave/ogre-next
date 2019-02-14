@@ -1273,17 +1273,6 @@ namespace Ogre {
         for( size_t i=0; i<NumDefaultBufferTypes; ++i )
             mDefaultBuffers[i] = BufferInfo();
 
-        InputLayoutVaoBindVec::const_iterator itor = mInputLayoutVaoBind.begin();
-        InputLayoutVaoBindVec::const_iterator end  = mInputLayoutVaoBind.end();
-
-        while( itor != end )
-        {
-            itor->inputLayout->Release();
-            ++itor;
-        }
-
-        mInputLayoutVaoBind.end();
-
         mVertexShader.Reset();
         mPixelShader.Reset();
         mGeometryShader.Reset();

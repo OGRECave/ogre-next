@@ -126,9 +126,6 @@ namespace Ogre {
 		
 		void getDefines(String& stringBuffer, vector<D3D_SHADER_MACRO>::type& defines, const String& definesString);
 
-        typedef FastArray<InputLayoutVaoBind> InputLayoutVaoBindVec;
-        InputLayoutVaoBindVec mInputLayoutVaoBind;
-		
         String mTarget;
         String mEntryPoint;
         String mPreprocessorDefines;
