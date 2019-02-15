@@ -212,7 +212,7 @@ namespace Ogre {
     class _OgreD3D11Export D3D11RenderTexture : public RenderTexture
     {
         D3D11Device & mDevice;
-        ID3D11RenderTargetView * mRenderTargetView;
+        ComPtr<ID3D11RenderTargetView> mRenderTargetView;
         bool mHasFsaaResource;
     public:
         D3D11RenderTexture( const String &name, v1::D3D11HardwarePixelBuffer *buffer,
