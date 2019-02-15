@@ -1509,7 +1509,7 @@ namespace Ogre
         }
 
         // Create depth stencil texture
-        ID3D11Texture2D* pDepthStencil = NULL;
+        ComPtr<ID3D11Texture2D> pDepthStencil;
         D3D11_TEXTURE2D_DESC descDepth;
 
         descDepth.Width     = renderTarget->getWidth();
@@ -1608,7 +1608,7 @@ namespace Ogre
         }
 
 
-        HRESULT hr = mDevice->CreateTexture2D( &descDepth, NULL, &pDepthStencil );
+        HRESULT hr = mDevice->CreateTexture2D( &descDepth, NULL, pDepthStencil.ReleaseAndGetAddressOf() );
         if( FAILED(hr) || mDevice.isError())
         {
             String errorDescription = mDevice.getErrorDescription(hr);
@@ -1621,7 +1621,7 @@ namespace Ogre
         // Create the View of the texture
         // If MSAA is used, we cannot do this
         //
-        ID3D11ShaderResourceView *depthTextureView = 0;
+        ComPtr<ID3D11ShaderResourceView> depthTextureView;
         if( bDepthTexture && (mFeatureLevel >= D3D_FEATURE_LEVEL_10_1 || BBDesc.SampleDesc.Count == 1) )
         {
             D3D11_SHADER_RESOURCE_VIEW_DESC viewDesc;
@@ -1667,10 +1667,9 @@ namespace Ogre
                                                                    D3D11_SRV_DIMENSION_TEXTURE2D;
             viewDesc.Texture2D.MostDetailedMip = 0;
             viewDesc.Texture2D.MipLevels = 1;
-            HRESULT hr = mDevice->CreateShaderResourceView( pDepthStencil, &viewDesc, &depthTextureView);
+            HRESULT hr = mDevice->CreateShaderResourceView( pDepthStencil.Get(), &viewDesc, depthTextureView.ReleaseAndGetAddressOf());
             if( FAILED(hr) || mDevice.isError())
             {
-                SAFE_RELEASE( pDepthStencil );
                 String errorDescription = mDevice.getErrorDescription(hr);
                 OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr,
                     "Unable to create the view of the depth texture \nError Description:" + errorDescription,
@@ -1679,7 +1678,7 @@ namespace Ogre
         }
 
         // Create the depth stencil view
-        ID3D11DepthStencilView      *depthStencilView;
+        ComPtr<ID3D11DepthStencilView> depthStencilView;
         D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
         ZeroMemory( &descDSV, sizeof(D3D11_DEPTH_STENCIL_VIEW_DESC) );
 
@@ -1717,11 +1716,9 @@ namespace Ogre
         descDSV.Flags = 0 /* D3D11_DSV_READ_ONLY_DEPTH | D3D11_DSV_READ_ONLY_STENCIL */;    // TODO: Allows bind depth buffer as depth view AND texture simultaneously.
                                                                                             // TODO: Decide how to expose this feature
         descDSV.Texture2D.MipSlice = 0;
-        hr = mDevice->CreateDepthStencilView( pDepthStencil, &descDSV, &depthStencilView );
+        hr = mDevice->CreateDepthStencilView( pDepthStencil.Get(), &descDSV, depthStencilView.ReleaseAndGetAddressOf() );
         if( FAILED(hr) )
         {
-            SAFE_RELEASE( depthTextureView );
-            SAFE_RELEASE( pDepthStencil );
 			String errorDescription = mDevice.getErrorDescription(hr);
 			OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr,
                 "Unable to create depth stencil view\nError Description:" + errorDescription,
@@ -1730,9 +1727,9 @@ namespace Ogre
 
         //Create the abstract container
         D3D11DepthBuffer *newDepthBuffer = new D3D11DepthBuffer( DepthBuffer::POOL_DEFAULT, this,
-                                                                 pDepthStencil,
-                                                                 depthStencilView,
-                                                                 depthTextureView,
+                                                                 pDepthStencil.Get(),
+                                                                 depthStencilView.Get(),
+                                                                 depthTextureView.Get(),
                                                                  descDepth.Width, descDepth.Height,
                                                                  descDepth.SampleDesc.Count,
                                                                  descDepth.SampleDesc.Quality,
