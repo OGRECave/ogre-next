@@ -477,6 +477,7 @@ namespace Ogre
     void D3D11RenderWindowSwapChainBased::_resizeSwapChainBuffers(unsigned width, unsigned height)
     {
         D3D11RenderSystem* rsys = static_cast<D3D11RenderSystem*>(Root::getSingleton().getRenderSystem());
+        rsys->validateDevice();
         rsys->fireDeviceEvent(&mDevice,"RenderWindowBeforeResize",this);
 
         _destroySizeDependedD3DResources();
@@ -1194,7 +1195,6 @@ namespace Ogre
 			mWidth  = rc.right - rc.left;
 			mHeight = rc.bottom - rc.top;
 			_resizeSwapChainBuffers(mWidth, mHeight);
-			_updateViewportsDimensions();		
 		}	
 	}
 	void D3D11RenderWindowHwnd::_beginUpdate()
@@ -1547,6 +1547,9 @@ namespace Ogre
     //---------------------------------------------------------------------
     void D3D11RenderWindowImageSource::resize(unsigned width, unsigned height)
     {
+        D3D11RenderSystem* rsys = static_cast<D3D11RenderSystem*>(Root::getSingleton().getRenderSystem());
+        rsys->validateDevice();
+
         _destroySizeDependedD3DResources();
 
         mWidth = width;
