@@ -135,7 +135,6 @@ mDisplayNodes(false),
 mShowBoundingBoxes(false),
 mLateMaterialResolving(false),
 mShadowColour(ColourValue(0.25, 0.25, 0.25)),
-mShadowIndexBufferUsedSize(0),
 mFullScreenQuad(0),
 mShadowDirLightExtrudeDist(10000),
 mIlluminationStage(IRS_NONE),
@@ -1356,9 +1355,6 @@ void SceneManager::_setDestinationRenderSystem(RenderSystem* sys)
 //-----------------------------------------------------------------------
 void SceneManager::_releaseManualHardwareResources()
 {
-    // release stencil shadows index buffer
-    mShadowIndexBuffer.setNull();
-
     // release hardware resources inside all billboard sets - would be recreated automatically
     SceneManager::MovableObjectIterator it = getMovableObjectIterator(v1::BillboardSetFactory::FACTORY_TYPE_NAME);
     while(it.hasMoreElements())
@@ -1378,17 +1374,6 @@ void SceneManager::_releaseManualHardwareResources()
 //-----------------------------------------------------------------------
 void SceneManager::_restoreManualHardwareResources()
 {
-#if 0
-    // restore stencil shadows index buffer
-    if(isShadowTechniqueStencilBased())
-    {
-        mShadowIndexBuffer = HardwareBufferManager::getSingleton().
-            createIndexBuffer(HardwareIndexBuffer::IT_16BIT,
-                mShadowIndexBufferSize,
-                HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE,
-                false);
-    }
-#endif
 }
 //-----------------------------------------------------------------------
 void SceneManager::prepareWorldGeometry(const String& filename)

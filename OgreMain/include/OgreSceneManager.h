@@ -796,8 +796,6 @@ namespace Ogre {
         bool mLateMaterialResolving;
 
         ColourValue mShadowColour;
-        v1::HardwareIndexBufferSharedPtr mShadowIndexBuffer;
-        size_t mShadowIndexBufferUsedSize;
         v1::Rectangle2D* mFullScreenQuad;
         Real mShadowDirLightExtrudeDist;
         IlluminationRenderStage mIlluminationStage;
