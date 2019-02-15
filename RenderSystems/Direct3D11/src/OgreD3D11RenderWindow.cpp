@@ -508,7 +508,7 @@ namespace Ogre
             return;
         }
         else if(FAILED(hr))
-            OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr, "Error resizing surfaces", "D3D11RenderWindowSwapChainBased::_resizeSwapChainBuffers");
+            OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr, "Unable to resize swap chain", "D3D11RenderWindowSwapChainBased::_resizeSwapChainBuffers");
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
         mpSwapChain->GetDesc(&mSwapChainDesc);
