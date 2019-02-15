@@ -4286,7 +4286,7 @@ namespace Ogre
     {
         unsigned int monitorCount = 0;
         HRESULT hr;
-        IDXGIOutput *pOutput;
+        ComPtr<IDXGIOutput> pOutput;
 
         if (!mDriverList)
         {
@@ -4297,7 +4297,7 @@ namespace Ogre
         {
             for (size_t m = 0;; ++m)
             {
-                hr = mDriverList->item(i)->getDeviceAdapter()->EnumOutputs(m, &pOutput);
+                hr = mDriverList->item(i)->getDeviceAdapter()->EnumOutputs(m, pOutput.ReleaseAndGetAddressOf());
                 if (DXGI_ERROR_NOT_FOUND == hr)
                 {
                     break;
@@ -4308,7 +4308,6 @@ namespace Ogre
                 }
                 else
                 {
-                    SAFE_RELEASE(pOutput);
                     ++monitorCount;
                 }
             }
