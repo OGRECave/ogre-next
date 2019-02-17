@@ -1,5 +1,4 @@
-
-#include "/media/matias/Datos/SyntaxHighlightingMisc.h"
+@piece( envSpecularRoughness ) pixelData.roughness * 12.0 @end
 
 @piece( DefaultHeaderPS )
 	@property( !fresnel_scalar )
@@ -461,7 +460,7 @@
 		float3 reflDirLS = localCorrect( pixelData.reflDir, posInProbSpace, @insertpiece( pccProbeSource ) );
 		float3 nNormalLS = localCorrect( pixelData.normal, posInProbSpace, @insertpiece( pccProbeSource ) );
 		pixelData.envColourS = SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
-											   reflDirLS, pixelData.roughness * 12.0 ).xyz @insertpiece( ApplyEnvMapScale );// * 0.0152587890625;
+											   reflDirLS, @insertpiece( envSpecularRoughness ) ).xyz @insertpiece( ApplyEnvMapScale );// * 0.0152587890625;
 		@property( cubemaps_as_diffuse_gi )
 			pixelData.envColourD = SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
 												   nNormalLS, 11.0 ).xyz @insertpiece( ApplyEnvMapScale );// * 0.0152587890625;
@@ -485,7 +484,7 @@
 @piece( CubemapGlobal )
 	pixelData.envColourS = SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
 										   mul( pixelData.reflDir, passBuf.invViewMatCubemap ),
-										   pixelData.roughness * 12.0 ).xyz @insertpiece( ApplyEnvMapScale );
+										   @insertpiece( envSpecularRoughness ) ).xyz @insertpiece( ApplyEnvMapScale );
 	@property( cubemaps_as_diffuse_gi )
 		pixelData.envColourD = SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
 											   mul( pixelData.normal, passBuf.invViewMatCubemap ),

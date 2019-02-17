@@ -2090,48 +2090,51 @@ namespace Ogre
             mCurrentShadowmapSamplerblock = mShadowmapCmpSamplerblock;
 
         mTexUnitSlotStart = mPreparedPass.shadowMaps.size() + mReservedTexSlots;
-        if( mGridBuffer )
-            mTexUnitSlotStart += 2;
-        if( mIrradianceVolume )
-            mTexUnitSlotStart += 1;
-        if( mParallaxCorrectedCubemap && !mParallaxCorrectedCubemap->isRendering() )
-            mTexUnitSlotStart += 1;
-        if( !mPrePassTextures->empty() )
-            mTexUnitSlotStart += 2;
-        if( mPrePassMsaaDepthTexture )
-            mTexUnitSlotStart += 1;
-        if( mSsrTexture )
-            mTexUnitSlotStart += 1;
+        if( !casterPass )
+        {
+            if( mGridBuffer )
+                mTexUnitSlotStart += 2;
+            if( mIrradianceVolume )
+                mTexUnitSlotStart += 1;
+            if( mParallaxCorrectedCubemap && !mParallaxCorrectedCubemap->isRendering() )
+                mTexUnitSlotStart += 1;
+            if( !mPrePassTextures->empty() )
+                mTexUnitSlotStart += 2;
+            if( mPrePassMsaaDepthTexture )
+                mTexUnitSlotStart += 1;
+            if( mSsrTexture )
+                mTexUnitSlotStart += 1;
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
-        if( mHasPlanarReflections )
-            mTexUnitSlotStart += 1;
+            if( mHasPlanarReflections )
+                mTexUnitSlotStart += 1;
 #endif
-        if( mAreaLightMasks && getProperty( HlmsBaseProp::LightsAreaTexMask ) > 0 )
-        {
-            mTexUnitSlotStart += 1;
-            mUsingAreaLightMasks = true;
-        }
-        else
-        {
-            mUsingAreaLightMasks = false;
-        }
-
-        if( mLtcMatrixTexture && getProperty( HlmsBaseProp::LightsAreaLtc ) > 0 )
-        {
-            mTexUnitSlotStart += 1;
-            mUsingLtcMatrix = true;
-        }
-        else
-        {
-            mUsingLtcMatrix = false;
-        }
-
-        for( size_t i=0; i<3u; ++i )
-        {
-            if( mDecalsTextures[i] &&
-                (i != 2u || !mDecalsDiffuseMergedEmissive) )
+            if( mAreaLightMasks && getProperty(HlmsBaseProp::LightsAreaTexMask) > 0 )
             {
-                ++mTexUnitSlotStart;
+                mTexUnitSlotStart += 1;
+                mUsingAreaLightMasks = true;
+            }
+            else
+            {
+                mUsingAreaLightMasks = false;
+            }
+
+            if( mLtcMatrixTexture && getProperty(HlmsBaseProp::LightsAreaLtc) > 0 )
+            {
+                mTexUnitSlotStart += 1;
+                mUsingLtcMatrix = true;
+            }
+            else
+            {
+                mUsingLtcMatrix = false;
+            }
+
+            for( size_t i = 0; i < 3u; ++i )
+            {
+                if( mDecalsTextures[i] &&
+                    (i != 2u || !mDecalsDiffuseMergedEmissive) )
+                {
+                    ++mTexUnitSlotStart;
+                }
             }
         }
 
