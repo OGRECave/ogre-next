@@ -702,6 +702,11 @@ namespace Ogre
                     actorData->reflectionCamera->setFOVy( fov );
                     actorData->reflectionCamera->enableReflection( actor->mPlane );
 
+                    Ogre::Vector4 frustumExtents;
+                    camera->getFrustumExtents( frustumExtents.x, frustumExtents.y, frustumExtents.z, frustumExtents.w );
+                    actorData->reflectionCamera->setFrustumExtents( frustumExtents.x, frustumExtents.y, frustumExtents.z,
+                                                                    frustumExtents.w, Ogre::FET_PROJ_PLANE_POS );
+
                     ++itor;
                 }
                 else

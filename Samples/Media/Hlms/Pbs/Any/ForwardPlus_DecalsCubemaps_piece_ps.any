@@ -178,7 +178,7 @@
 			@property( !hlms_cubemaps_use_dpm )
 				pixelData.envColourS += OGRE_SampleArrayCubeLevel(
 					texEnvProbeMap, samplerState@value(envMapRegSampler), reflDirLS,
-					probe.halfSize.w, pixelData.roughness * 12.0 ).xyz
+					probe.halfSize.w, @insertpiece( envSpecularRoughness ) ).xyz
 					@insertpiece( ApplyEnvMapScale ) * probeFade;
 				@property( cubemaps_as_diffuse_gi )
 					pixelData.envColourD += OGRE_SampleArrayCubeLevel(
@@ -190,7 +190,7 @@
 			@property( hlms_cubemaps_use_dpm )
 				pixelData.envColourS += OGRE_SampleArray2DLevel(
 					texEnvProbeMap, samplerState@value(envMapRegSampler), mapCubemapToDpm( reflDirLS ),
-					probe.halfSize.w, pixelData.roughness * 12.0 ).xyz
+					probe.halfSize.w, @insertpiece( envSpecularRoughness ) ).xyz
 					@insertpiece( ApplyEnvMapScale ) * probeFade;
 				@property( cubemaps_as_diffuse_gi )
 					pixelData.envColourD += OGRE_SampleArray2DLevel(
