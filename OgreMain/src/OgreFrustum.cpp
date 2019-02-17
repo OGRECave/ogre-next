@@ -1372,6 +1372,11 @@ namespace Ogre {
         invalidateFrustum();
     }
     //---------------------------------------------------------------------
+    bool Frustum::getFrustumExtentsManuallySet(void) const
+    {
+        return mFrustumExtentsManuallySet;
+    }
+    //---------------------------------------------------------------------
     void Frustum::resetFrustumExtents()
     {
         mFrustumExtentsManuallySet = false;

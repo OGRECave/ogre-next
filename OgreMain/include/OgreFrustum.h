@@ -344,6 +344,8 @@ namespace Ogre
         virtual void setFrustumExtents( Real left, Real right, Real top, Real bottom,
                                         FrustrumExtentsType frustrumExtentsType = FET_PROJ_PLANE_POS);
 
+        bool getFrustumExtentsManuallySet(void) const;
+
         /** Reset the frustum extents to be automatically derived from other params. */
         virtual void resetFrustumExtents(); 
 
