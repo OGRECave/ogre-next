@@ -41,8 +41,8 @@
 		/*&& dot( -lightDir, passBuf.areaApproxLights[i].direction.xyz ) > 0*/ @insertpiece( andObjAreaApproxLightMaskCmp ) )
 		{
 			projectedPosInPlane.xyz -= passBuf.areaApproxLights[i].position.xyz;
-			float3 areaLightBitangent = cross( passBuf.areaApproxLights[i].tangent.xyz,
-											   passBuf.areaApproxLights[i].direction.xyz );
+			float3 areaLightBitangent = cross( passBuf.areaApproxLights[i].direction.xyz,
+											   passBuf.areaApproxLights[i].tangent.xyz );
 			float2 invHalfRectSize = float2( passBuf.areaApproxLights[i].direction.w,
 											 passBuf.areaApproxLights[i].tangent.w );
 			//lightUV is in light space, in range [-0.5; 0.5]
