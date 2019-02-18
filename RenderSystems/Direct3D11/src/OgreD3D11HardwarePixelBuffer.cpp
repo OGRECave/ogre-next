@@ -281,38 +281,8 @@ namespace v1 {
     //-----------------------------------------------------------------------------
     void D3D11HardwarePixelBuffer::_unmap(ID3D11Resource *res)
     {
-        UINT mipLevel = 0;
-        UINT numMips = 0;
-
-        if( res != mStagingBuffer.Get() )
-        {
-            mipLevel    = mMipLevel;
-            numMips     = mParentTexture->getNumMipmaps() + 1;
-        }
-
-        switch(mParentTexture->getTextureType()) {
-        case TEX_TYPE_1D:
-            {
-                mDevice.GetImmediateContext()->Unmap(res, mipLevel);
-            }
-            break;
-        case TEX_TYPE_CUBE_MAP:
-        case TEX_TYPE_2D:
-            {                             
-                mDevice.GetImmediateContext()->Unmap(res, D3D11CalcSubresource(mipLevel, mFace, numMips));
-            }
-            break;
-        case TEX_TYPE_2D_ARRAY:
-            {
-                mDevice.GetImmediateContext()->Unmap(res, D3D11CalcSubresource(mipLevel, mLockBox.front, numMips));
-            }
-            break;
-        case TEX_TYPE_3D:
-            {
-                mDevice.GetImmediateContext()->Unmap(res, mipLevel);
-            }
-            break;
-        }
+        UINT subresource = (res == mStagingBuffer.Get()) ? 0 : getSubresourceIndex(mLockBox.front);
+        mDevice.GetImmediateContext()->Unmap(res, subresource);
 
         if (mDevice.isError())
         {
