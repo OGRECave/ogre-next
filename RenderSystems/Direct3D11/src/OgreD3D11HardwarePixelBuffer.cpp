@@ -48,17 +48,17 @@ namespace v1 {
 
     D3D11HardwarePixelBuffer::D3D11HardwarePixelBuffer( D3D11Texture *parentTexture,
                                                         D3D11Device &device,
-                                                        size_t subresourceIndex,
+                                                        UINT mipLevel,
                                                         size_t width, size_t height, size_t depth,
-                                                        size_t face, PixelFormat format,
+                                                        UINT face, PixelFormat format,
                                                         uint fsaa, const String &fsaaHint,
                                                         HardwareBuffer::Usage usage ) :
         HardwarePixelBuffer( width, height, depth, format,
                              parentTexture->isHardwareGammaEnabled(), usage, false, false ),
         mParentTexture(parentTexture),
         mDevice(device),
-        mSubresourceIndex(subresourceIndex),
-        mFace(face)
+        mFace(face),
+        mMipLevel(mipLevel)
     {
         if(mUsage & TU_RENDERTARGET)
         {
@@ -68,7 +68,7 @@ namespace v1 {
             {
                 String name;
                 name = "rtt/"+StringConverter::toString((size_t)mParentTexture) + "/" +
-                        StringConverter::toString(mSubresourceIndex) + "/" +
+                        StringConverter::toString(mMipLevel) + "/" +
                         StringConverter::toString(mFace) + "/" +
                         StringConverter::toString(zoffset) + "/" + parentTexture->getName();
 
@@ -96,12 +96,12 @@ namespace v1 {
     //-----------------------------------------------------------------------------  
     void D3D11HardwarePixelBuffer::_map(ID3D11Resource *res, D3D11_MAP flags, PixelBox & box)
     {
-        UINT subresource = 0;
+        UINT mipLevel = 0;
         UINT numMips = 0;
 
         if( res != mStagingBuffer.Get() )
         {
-            subresource = mSubresourceIndex;
+            mipLevel    = mMipLevel;
             numMips     = mParentTexture->getNumMipmaps() + 1;
         }
 
@@ -112,7 +112,7 @@ namespace v1 {
         {
         case TEX_TYPE_1D:
             {  
-                HRESULT hr = mDevice.GetImmediateContext()->Map(res, subresource, flags, 0, &pMappedResource);
+                HRESULT hr = mDevice.GetImmediateContext()->Map(res, mipLevel, flags, 0, &pMappedResource);
                 if (mDevice.isError())
                 {
 					String errorDescription = mDevice.getErrorDescription(hr);
@@ -125,7 +125,7 @@ namespace v1 {
         case TEX_TYPE_CUBE_MAP:
         case TEX_TYPE_2D:
             {
-                HRESULT hr = mDevice.GetImmediateContext()->Map(res, D3D11CalcSubresource(subresource, mFace, numMips),
+                HRESULT hr = mDevice.GetImmediateContext()->Map(res, D3D11CalcSubresource(mipLevel, mFace, numMips),
                     flags, 0, &pMappedResource);
                 if (mDevice.isError())
                 {
@@ -138,7 +138,7 @@ namespace v1 {
             break;
         case TEX_TYPE_2D_ARRAY:
             {
-                HRESULT hr = mDevice.GetImmediateContext()->Map(res, D3D11CalcSubresource(subresource, mLockBox.front, numMips),
+                HRESULT hr = mDevice.GetImmediateContext()->Map(res, D3D11CalcSubresource(mipLevel, mLockBox.front, numMips),
                     flags, 0, &pMappedResource);
                 if (mDevice.isError())
                 {
@@ -151,7 +151,7 @@ namespace v1 {
             break;
         case TEX_TYPE_3D:
             {
-                HRESULT hr = mDevice.GetImmediateContext()->Map(res, subresource, flags, 0, &pMappedResource);
+                HRESULT hr = mDevice.GetImmediateContext()->Map(res, mipLevel, flags, 0, &pMappedResource);
 
                 if (mDevice.isError())
                 {
@@ -199,7 +199,7 @@ namespace v1 {
                 srcBoxDx11.bottom   = std::max( srcBoxDx11.top + blockHeight, srcBoxDx11.bottom );
             }
 
-            unsigned int subresource = D3D11CalcSubresource( mSubresourceIndex,
+            unsigned int subresource = D3D11CalcSubresource( mMipLevel,
                                                              mLockBox.front,
                                                              mParentTexture->getNumMipmaps()+1 );
             mDevice.GetImmediateContext()->CopySubresourceRegion(
@@ -281,35 +281,35 @@ namespace v1 {
     //-----------------------------------------------------------------------------
     void D3D11HardwarePixelBuffer::_unmap(ID3D11Resource *res)
     {
-        UINT subresource = 0;
+        UINT mipLevel = 0;
         UINT numMips = 0;
 
         if( res != mStagingBuffer.Get() )
         {
-            subresource = mSubresourceIndex;
+            mipLevel    = mMipLevel;
             numMips     = mParentTexture->getNumMipmaps() + 1;
         }
 
         switch(mParentTexture->getTextureType()) {
         case TEX_TYPE_1D:
             {
-                mDevice.GetImmediateContext()->Unmap(res, subresource);
+                mDevice.GetImmediateContext()->Unmap(res, mipLevel);
             }
             break;
         case TEX_TYPE_CUBE_MAP:
         case TEX_TYPE_2D:
             {                             
-                mDevice.GetImmediateContext()->Unmap(res, D3D11CalcSubresource(subresource, mFace, numMips));
+                mDevice.GetImmediateContext()->Unmap(res, D3D11CalcSubresource(mipLevel, mFace, numMips));
             }
             break;
         case TEX_TYPE_2D_ARRAY:
             {
-                mDevice.GetImmediateContext()->Unmap(res, D3D11CalcSubresource(subresource, mLockBox.front, numMips));
+                mDevice.GetImmediateContext()->Unmap(res, D3D11CalcSubresource(mipLevel, mLockBox.front, numMips));
             }
             break;
         case TEX_TYPE_3D:
             {
-                mDevice.GetImmediateContext()->Unmap(res, subresource);
+                mDevice.GetImmediateContext()->Unmap(res, mipLevel);
             }
             break;
         }
@@ -345,7 +345,7 @@ namespace v1 {
             {
 
                 mDevice.GetImmediateContext()->UpdateSubresource(mParentTexture->GetTex1D(), 
-                    static_cast<UINT>(mSubresourceIndex), &dstBoxDx11, 
+                    mMipLevel, &dstBoxDx11, 
                     mDataForStaticUsageLock.data(), rowWidth, 0);
                 if (mDevice.isError())
                 {
@@ -360,7 +360,7 @@ namespace v1 {
         case TEX_TYPE_2D:
             {
                 mDevice.GetImmediateContext()->UpdateSubresource(mParentTexture->GetTex2D(), 
-                    D3D11CalcSubresource(static_cast<UINT>(mSubresourceIndex), mFace, mParentTexture->getNumMipmaps()+1),
+                    D3D11CalcSubresource(mMipLevel, mFace, mParentTexture->getNumMipmaps()+1),
                     &dstBoxDx11, 
                     mDataForStaticUsageLock.data(), rowWidth, 0);
 
@@ -376,7 +376,7 @@ namespace v1 {
         case TEX_TYPE_2D_ARRAY:
             {
                 mDevice.GetImmediateContext()->UpdateSubresource(mParentTexture->GetTex2D(), 
-                    D3D11CalcSubresource(static_cast<UINT>(mSubresourceIndex), mLockBox.front, mParentTexture->getNumMipmaps()+1),
+                    D3D11CalcSubresource(mMipLevel, mLockBox.front, mParentTexture->getNumMipmaps()+1),
                     &dstBoxDx11, mDataForStaticUsageLock.data(), rowWidth, 0);
 
                 if (mDevice.isError())
@@ -392,7 +392,7 @@ namespace v1 {
             {
                 size_t sliceWidth = PixelUtil::getMemorySize(mCurrentLock.getWidth(), mCurrentLock.getHeight(), 1, mFormat);
 
-                mDevice.GetImmediateContext()->UpdateSubresource(mParentTexture->GetTex3D(), static_cast<UINT>(mSubresourceIndex), 
+                mDevice.GetImmediateContext()->UpdateSubresource(mParentTexture->GetTex3D(), mMipLevel,
                     &dstBoxDx11, mDataForStaticUsageLock.data(), rowWidth, sliceWidth);
                 if (mDevice.isError())
                 {
@@ -427,7 +427,7 @@ namespace v1 {
                 srcBoxDx11.bottom   = std::max( srcBoxDx11.top + blockHeight, srcBoxDx11.bottom );
             }
 
-            unsigned int dstSubresource = D3D11CalcSubresource( mSubresourceIndex, mLockBox.front + mFace,
+            unsigned int dstSubresource = D3D11CalcSubresource( mMipLevel, mLockBox.front + mFace,
                                                                 mParentTexture->getNumMipmaps()+1 );
             mDevice.GetImmediateContext()->CopySubresourceRegion(
                         mParentTexture->getTextureResource(),
@@ -515,12 +515,12 @@ namespace v1 {
 
                 mDevice.GetImmediateContext()->CopySubresourceRegion(
                     mParentTexture->GetTex1D(), 
-                    static_cast<UINT>(mSubresourceIndex),
+                    mMipLevel,
                     static_cast<UINT>(dstBox.left),
                     0,
                     0,
                     rsrcDx11->mParentTexture->GetTex1D(),
-                    D3D11CalcSubresource( static_cast<UINT>(rsrcDx11->mSubresourceIndex),
+                    D3D11CalcSubresource( rsrcDx11->mMipLevel,
                                           rsrcDx11->mFace,
                                           rsrcDx11->mParentTexture->getNumMipmaps() + 1u ),
                     &srcBoxDx11);
@@ -538,12 +538,12 @@ namespace v1 {
             {
                 mDevice.GetImmediateContext()->CopySubresourceRegion(
                     mParentTexture->GetTex2D(), 
-                    D3D11CalcSubresource(static_cast<UINT>(mSubresourceIndex), mFace, mParentTexture->getNumMipmaps()+1),
+                    D3D11CalcSubresource(mMipLevel, mFace, mParentTexture->getNumMipmaps()+1),
                     static_cast<UINT>(dstBox.left),
                     static_cast<UINT>(dstBox.top),
                     0,
                     rsrcDx11->mParentTexture->GetTex2D(),
-                    D3D11CalcSubresource( static_cast<UINT>(rsrcDx11->mSubresourceIndex),
+                    D3D11CalcSubresource( rsrcDx11->mMipLevel,
                                           rsrcDx11->mFace,
                                           rsrcDx11->mParentTexture->getNumMipmaps() + 1u ),
                     &srcBoxDx11);
@@ -560,12 +560,12 @@ namespace v1 {
             {
                 mDevice.GetImmediateContext()->CopySubresourceRegion(
                     mParentTexture->GetTex2D(), 
-                    D3D11CalcSubresource(static_cast<UINT>(mSubresourceIndex), srcBox.front, mParentTexture->getNumMipmaps()+1),
+                    D3D11CalcSubresource(mMipLevel, srcBox.front, mParentTexture->getNumMipmaps()+1),
                     static_cast<UINT>(dstBox.left),
                     static_cast<UINT>(dstBox.top),
                     srcBox.front,
                     rsrcDx11->mParentTexture->GetTex2D(),
-                    D3D11CalcSubresource( static_cast<UINT>(rsrcDx11->mSubresourceIndex),
+                    D3D11CalcSubresource( rsrcDx11->mMipLevel,
                                           rsrcDx11->mFace,
                                           rsrcDx11->mParentTexture->getNumMipmaps() + 1u ),
                     &srcBoxDx11);
@@ -582,12 +582,12 @@ namespace v1 {
             {
                 mDevice.GetImmediateContext()->CopySubresourceRegion(
                     mParentTexture->GetTex3D(), 
-                    static_cast<UINT>(mSubresourceIndex),
+                    mMipLevel,
                     static_cast<UINT>(dstBox.left),
                     static_cast<UINT>(dstBox.top),
                     static_cast<UINT>(dstBox.front),
                     rsrcDx11->mParentTexture->GetTex3D(),
-                    static_cast<UINT>(rsrcDx11->mSubresourceIndex),
+                    rsrcDx11->mMipLevel,
                     &srcBoxDx11);
                 if (mDevice.isError())
                 {
@@ -715,7 +715,7 @@ namespace v1 {
                 {
                     mDevice.GetImmediateContext()->UpdateSubresource( 
                         mParentTexture->GetTex2D(), 
-                        D3D11CalcSubresource(static_cast<UINT>(mSubresourceIndex), mFace, mParentTexture->getNumMipmaps()+1),
+                        D3D11CalcSubresource(mMipLevel, mFace, mParentTexture->getNumMipmaps()+1),
                         &dstBoxDx11,
                         converted.data,
                         rowWidth,
@@ -733,7 +733,7 @@ namespace v1 {
                 {
                     mDevice.GetImmediateContext()->UpdateSubresource( 
                         mParentTexture->GetTex2D(), 
-                        D3D11CalcSubresource(static_cast<UINT>(mSubresourceIndex), src.front, mParentTexture->getNumMipmaps()+1),
+                        D3D11CalcSubresource(mMipLevel, src.front, mParentTexture->getNumMipmaps()+1),
                         &dstBoxDx11,
                         converted.data,
                         rowWidth,
@@ -754,7 +754,7 @@ namespace v1 {
  
                     mDevice.GetImmediateContext()->UpdateSubresource( 
                         mParentTexture->GetTex3D(), 
-                        static_cast<UINT>(mSubresourceIndex),
+                        mMipLevel,
                         &dstBoxDx11,
                         converted.data,
                         rowWidth,
@@ -824,7 +824,7 @@ namespace v1 {
         mDevice.GetImmediateContext()->CopyResource( pStagingTexture, textureResource );
         //Create a mapped resource and map the staging texture to the resource
         D3D11_MAPPED_SUBRESOURCE mapped = {0};
-        mDevice.GetImmediateContext()->Map( pStagingTexture, mSubresourceIndex,
+        mDevice.GetImmediateContext()->Map( pStagingTexture, mMipLevel,
                                             D3D11_MAP_READ, 0, &mapped );
         
         // read the data out of the texture.
@@ -875,12 +875,17 @@ namespace v1 {
         return mParentTexture;
     }
     //-----------------------------------------------------------------------------    
-    size_t D3D11HardwarePixelBuffer::getSubresourceIndex() const
+    UINT D3D11HardwarePixelBuffer::getSubresourceIndex(size_t box_front) const
     {
-        return mSubresourceIndex;
+        switch(mParentTexture->getTextureType())
+        {
+        case TEX_TYPE_CUBE_MAP: return D3D11CalcSubresource(mMipLevel, mFace, mParentTexture->getNumMipmaps() + 1);
+        case TEX_TYPE_2D_ARRAY: return D3D11CalcSubresource(mMipLevel, box_front, mParentTexture->getNumMipmaps() + 1);
+        }
+        return mMipLevel;
     }
     //-----------------------------------------------------------------------------    
-    size_t D3D11HardwarePixelBuffer::getFace() const
+    UINT D3D11HardwarePixelBuffer::getFace() const
     {
         return mFace;
     }

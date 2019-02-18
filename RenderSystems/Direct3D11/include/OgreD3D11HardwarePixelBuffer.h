@@ -49,12 +49,11 @@ namespace v1 {
         D3D11Device & mDevice;
 
         D3D11Texture * mParentTexture;
-        size_t mSubresourceIndex;
+        const UINT mFace;
+        const UINT mMipLevel;
 
         // if the usage is static - alloc at lock then use device UpdateSubresource when unlock and free memory
         vector<int8>::type mDataForStaticUsageLock; 
-
-        size_t mFace;
 
         Image::Box mLockBox;
         PixelBox mCurrentLock;
@@ -77,8 +76,8 @@ namespace v1 {
         void _unmapstaticbuffer();
     public:
         D3D11HardwarePixelBuffer( D3D11Texture *parentTexture, D3D11Device &device,
-                                  size_t subresourceIndex, size_t width, size_t height,
-                                  size_t depth, size_t face, PixelFormat format,
+                                  UINT mipLevel, size_t width, size_t height,
+                                  size_t depth, UINT face, PixelFormat format,
                                   uint fsaa, const String &fsaaHint,
                                   HardwareBuffer::Usage usage );
 
@@ -110,8 +109,9 @@ namespace v1 {
         }
 
         D3D11Texture * getParentTexture() const;
-        size_t getSubresourceIndex() const;
-        size_t getFace() const;
+
+        UINT getFace() const;
+        UINT getSubresourceIndex(size_t box_front) const;
     };
 }
 };

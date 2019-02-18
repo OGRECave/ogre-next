@@ -1400,9 +1400,9 @@ namespace Ogre
 
             D3D11Texture *texture = buffer->getParentTexture();
             mDevice.GetImmediateContext()->ResolveSubresource( texture->getResolvedTexture2D(),
-                                                               buffer->getSubresourceIndex(),
+                                                               buffer->getSubresourceIndex(mZOffset),
                                                                texture->getTextureResource(),
-                                                               buffer->getSubresourceIndex(),
+                                                               buffer->getSubresourceIndex(mZOffset),
                                                                texture->getD3dFormat() );
         }
         RenderTexture::swapBuffers();
