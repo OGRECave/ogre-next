@@ -72,7 +72,7 @@ namespace v1 {
                         StringConverter::toString(mFace) + "/" +
                         StringConverter::toString(zoffset) + "/" + parentTexture->getName();
 
-                RenderTexture *trt = new D3D11RenderTexture(name, this, mHwGamma, fsaa, fsaaHint, mDevice);
+                RenderTexture *trt = new D3D11RenderTexture(name, this, zoffset, mHwGamma, fsaa, fsaaHint, mDevice);
                 mSliceTRT.push_back(trt);
                 Root::getSingleton().getRenderSystem()->attachRenderTarget(*trt);
             }
