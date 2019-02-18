@@ -179,13 +179,6 @@ namespace v1 {
         }
     }
     //-----------------------------------------------------------------------------  
-    void *D3D11HardwarePixelBuffer::_mapstaticbuffer(PixelBox lock)
-    {
-        // for static usage just alloc
-        mDataForStaticUsageLock.resize(lock.getConsecutiveSize());
-        return mDataForStaticUsageLock.data();
-    }
-    //-----------------------------------------------------------------------------  
     void D3D11HardwarePixelBuffer::_mapstagingbuffer(D3D11_MAP flags, PixelBox &box)
     {
         if(!mStagingBuffer)
