@@ -148,26 +148,21 @@ namespace v1 {
 
         if(flags == D3D11_MAP_READ_WRITE || flags == D3D11_MAP_READ || flags == D3D11_MAP_WRITE)  
         {
-            D3D11_BOX srcBoxDx11 = OgreImageBoxToDx11Box(mLockBox);
-            srcBoxDx11.front = 0;
-            srcBoxDx11.back = mLockBox.getDepth();
+            D3D11_BOX boxDx11 = getSubresourceBox(mLockBox); // both src and dest
+            UINT subresource = getSubresourceIndex(mLockBox.front);
 
             if( PixelUtil::isCompressed( mFormat ) )
             {
                 const uint32 blockWidth     = PixelUtil::getCompressedBlockWidth( mFormat, true );
                 const uint32 blockHeight    = PixelUtil::getCompressedBlockHeight( mFormat, true );
 
-                srcBoxDx11.right    = std::max( srcBoxDx11.left + blockWidth, srcBoxDx11.right );
-                srcBoxDx11.bottom   = std::max( srcBoxDx11.top + blockHeight, srcBoxDx11.bottom );
+                boxDx11.right    = std::max( boxDx11.left + blockWidth, boxDx11.right );
+                boxDx11.bottom   = std::max( boxDx11.top + blockHeight, boxDx11.bottom );
             }
 
-            unsigned int subresource = D3D11CalcSubresource( mMipLevel,
-                                                             mLockBox.front,
-                                                             mParentTexture->getNumMipmaps()+1 );
             mDevice.GetImmediateContext()->CopySubresourceRegion(
-                        mStagingBuffer.Get(), 0,
-                        mLockBox.left, mLockBox.top, 0,
-                        mParentTexture->getTextureResource(), subresource, &srcBoxDx11 );
+                mStagingBuffer.Get(), 0, boxDx11.left, boxDx11.top, boxDx11.front,
+                mParentTexture->getTextureResource(), subresource, &boxDx11);
         }
         else if(flags == D3D11_MAP_WRITE_DISCARD)
             flags = D3D11_MAP_WRITE; // stagingbuffer doesn't support discarding
@@ -346,26 +341,21 @@ namespace v1 {
 
         if(copyback)
         {
-            D3D11_BOX srcBoxDx11 = OgreImageBoxToDx11Box(mLockBox);
-            srcBoxDx11.front = 0;
-            srcBoxDx11.back = mLockBox.getDepth();
+            D3D11_BOX boxDx11 = getSubresourceBox(mLockBox); // both src and dest
+            UINT subresource = getSubresourceIndex(mLockBox.front);
 
             if( PixelUtil::isCompressed( mFormat ) )
             {
                 const uint32 blockWidth     = PixelUtil::getCompressedBlockWidth( mFormat, true );
                 const uint32 blockHeight    = PixelUtil::getCompressedBlockHeight( mFormat, true );
 
-                srcBoxDx11.right    = std::max( srcBoxDx11.left + blockWidth, srcBoxDx11.right );
-                srcBoxDx11.bottom   = std::max( srcBoxDx11.top + blockHeight, srcBoxDx11.bottom );
+                boxDx11.right    = std::max( boxDx11.left + blockWidth, boxDx11.right );
+                boxDx11.bottom   = std::max( boxDx11.top + blockHeight, boxDx11.bottom );
             }
 
-            unsigned int dstSubresource = D3D11CalcSubresource( mMipLevel, mLockBox.front + mFace,
-                                                                mParentTexture->getNumMipmaps()+1 );
             mDevice.GetImmediateContext()->CopySubresourceRegion(
-                        mParentTexture->getTextureResource(),
-                        dstSubresource,
-                        mLockBox.left, mLockBox.top, 0, //TODO: Support 3D array textures
-                        mStagingBuffer.Get(), 0, &srcBoxDx11 );
+                mParentTexture->getTextureResource(), subresource, boxDx11.left, boxDx11.top, boxDx11.front,
+                mStagingBuffer.Get(), 0, &boxDx11);
 
             mStagingBuffer.Reset();
         }
@@ -815,6 +805,22 @@ namespace v1 {
         case TEX_TYPE_2D_ARRAY: return D3D11CalcSubresource(mMipLevel, box_front, mParentTexture->getNumMipmaps() + 1);
         }
         return mMipLevel;
+    }
+    //-----------------------------------------------------------------------------    
+    D3D11_BOX D3D11HardwarePixelBuffer::getSubresourceBox(const Box &inBox) const
+    {
+        // Ogre index Tex2DArray using Z component of the box, but Direct3D expect 
+        // this index to be in subresource, and Z component should be sanitized
+        bool is2DArray = (mParentTexture->getTextureType() == TEX_TYPE_2D_ARRAY);
+
+        D3D11_BOX res;
+        res.left    = static_cast<UINT>(inBox.left);
+        res.top     = static_cast<UINT>(inBox.top);
+        res.front   = is2DArray ? 0 : static_cast<UINT>(inBox.front);
+        res.right   = static_cast<UINT>(inBox.right);
+        res.bottom  = static_cast<UINT>(inBox.bottom);
+        res.back    = is2DArray ? 1 : static_cast<UINT>(inBox.back);
+        return res;
     }
     //-----------------------------------------------------------------------------    
     UINT D3D11HardwarePixelBuffer::getFace() const

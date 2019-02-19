@@ -112,6 +112,7 @@ namespace v1 {
 
         UINT getFace() const;
         UINT getSubresourceIndex(size_t box_front) const;
+        D3D11_BOX getSubresourceBox(const Box &box) const;
     };
 }
 };
