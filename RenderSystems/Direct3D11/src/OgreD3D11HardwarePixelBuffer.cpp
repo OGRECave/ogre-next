@@ -126,19 +126,7 @@ namespace v1 {
             OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr, errorDescription, "D3D11HardwarePixelBuffer::_map");
         }
 
-        box.data = pMappedResource.pData;
-
-        if( !PixelUtil::isCompressed( mFormat ) )
-        {
-            const size_t bytePerPixel = PixelUtil::getNumElemBytes( mFormat );
-            box.rowPitch    = pMappedResource.RowPitch / bytePerPixel;
-            box.slicePitch  = pMappedResource.DepthPitch / bytePerPixel;
-        }
-        else
-        {
-            box.rowPitch    = pMappedResource.RowPitch;
-            box.slicePitch  = pMappedResource.DepthPitch;
-        }
+        D3D11Mappings::setPixelBoxMapping(box, pMappedResource);
     }
     //-----------------------------------------------------------------------------  
     void D3D11HardwarePixelBuffer::_mapstagingbuffer(D3D11_MAP flags, PixelBox &box)
@@ -316,6 +304,7 @@ namespace v1 {
             if(mCurrentLockOptions == HBL_READ_ONLY || mCurrentLockOptions == HBL_NORMAL || mCurrentLockOptions == HBL_WRITE_ONLY)
             {
                 PixelBox box;
+                box.format = mFormat;
                 _map(mParentTexture->getTextureResource(), D3D11_MAP_WRITE_DISCARD, box);
                 void *data = box.data; 
 				memcpy(data, mCurrentLock.data, mSizeInBytes);
