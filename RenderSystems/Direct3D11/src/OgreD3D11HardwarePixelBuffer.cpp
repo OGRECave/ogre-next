@@ -378,100 +378,22 @@ namespace v1 {
         }
 
         // Do real work without extra checking - debug layer will catch erroneous parameters.
-        D3D11_BOX srcBoxDx11 = OgreImageBoxToDx11Box(srcBox);
+        D3D11_BOX srcBoxDx11 = srcDx11->getSubresourceBox(srcBox);
+        UINT srcSubresource = srcDx11->getSubresourceIndex(srcBox.front);
+        D3D11_BOX dstBoxDx11 = getSubresourceBox(dstBox);
+        UINT dstSubresource = getSubresourceIndex(dstBox.front);
 
+        mDevice.GetImmediateContext()->CopySubresourceRegion(
+            mParentTexture->getTextureResource(), dstSubresource, dstBoxDx11.left, dstBoxDx11.top, dstBoxDx11.front,
+            srcDx11->mParentTexture->getTextureResource(), srcSubresource, &srcBoxDx11);
 
-        D3D11HardwarePixelBuffer * rsrcDx11 = static_cast<D3D11HardwarePixelBuffer *>(src.get());
-
-        switch(mParentTexture->getTextureType()) {
-        case TEX_TYPE_1D:
-            {
-
-                mDevice.GetImmediateContext()->CopySubresourceRegion(
-                    mParentTexture->GetTex1D(), 
-                    mMipLevel,
-                    static_cast<UINT>(dstBox.left),
-                    0,
-                    0,
-                    rsrcDx11->mParentTexture->GetTex1D(),
-                    D3D11CalcSubresource( rsrcDx11->mMipLevel,
-                                          rsrcDx11->mFace,
-                                          rsrcDx11->mParentTexture->getNumMipmaps() + 1u ),
-                    &srcBoxDx11);
-                if (mDevice.isError())
-                {
-                    String errorDescription = mDevice.getErrorDescription();
-                    OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
-                        "D3D11 device cannot copy 1d subresource Region\nError Description:" + errorDescription,
-                        "D3D11HardwarePixelBuffer::blit");
-                }           
-            }
-            break;
-        case TEX_TYPE_CUBE_MAP:
-        case TEX_TYPE_2D:
-            {
-                mDevice.GetImmediateContext()->CopySubresourceRegion(
-                    mParentTexture->GetTex2D(), 
-                    D3D11CalcSubresource(mMipLevel, mFace, mParentTexture->getNumMipmaps()+1),
-                    static_cast<UINT>(dstBox.left),
-                    static_cast<UINT>(dstBox.top),
-                    0,
-                    rsrcDx11->mParentTexture->GetTex2D(),
-                    D3D11CalcSubresource( rsrcDx11->mMipLevel,
-                                          rsrcDx11->mFace,
-                                          rsrcDx11->mParentTexture->getNumMipmaps() + 1u ),
-                    &srcBoxDx11);
-                if (mDevice.isError())
-                {
-                    String errorDescription = mDevice.getErrorDescription();
-                    OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
-                        "D3D11 device cannot copy 2d subresource Region\nError Description:" + errorDescription,
-                        "D3D11HardwarePixelBuffer::blit");
-                }
-            }
-            break;
-        case TEX_TYPE_2D_ARRAY:
-            {
-                mDevice.GetImmediateContext()->CopySubresourceRegion(
-                    mParentTexture->GetTex2D(), 
-                    D3D11CalcSubresource(mMipLevel, srcBox.front, mParentTexture->getNumMipmaps()+1),
-                    static_cast<UINT>(dstBox.left),
-                    static_cast<UINT>(dstBox.top),
-                    srcBox.front,
-                    rsrcDx11->mParentTexture->GetTex2D(),
-                    D3D11CalcSubresource( rsrcDx11->mMipLevel,
-                                          rsrcDx11->mFace,
-                                          rsrcDx11->mParentTexture->getNumMipmaps() + 1u ),
-                    &srcBoxDx11);
-                if (mDevice.isError())
-                {
-                    String errorDescription = mDevice.getErrorDescription();
-                    OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
-                        "D3D11 device cannot copy 2d subresource Region\nError Description:" + errorDescription,
-                        "D3D11HardwarePixelBuffer::blit");
-                }
-            }
-            break;
-        case TEX_TYPE_3D:
-            {
-                mDevice.GetImmediateContext()->CopySubresourceRegion(
-                    mParentTexture->GetTex3D(), 
-                    mMipLevel,
-                    static_cast<UINT>(dstBox.left),
-                    static_cast<UINT>(dstBox.top),
-                    static_cast<UINT>(dstBox.front),
-                    rsrcDx11->mParentTexture->GetTex3D(),
-                    rsrcDx11->mMipLevel,
-                    &srcBoxDx11);
-                if (mDevice.isError())
-                {
-                    String errorDescription = mDevice.getErrorDescription();
-                    OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
-                        "D3D11 device cannot copy 3d subresource Region\nError Description:" + errorDescription,
-                        "D3D11HardwarePixelBuffer::blit");
-                }
-            }
-            break;
+        if(mDevice.isError())
+        {
+            String errorDescription; errorDescription
+                .append("D3D11 device cannot copy to ").append(toString(mParentTexture->getTextureType()))
+                .append(" subresource region from ").append(toString(srcDx11->mParentTexture->getTextureType()))
+                .append("\nError Description:").append(mDevice.getErrorDescription());
+            OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, errorDescription, "D3D11HardwarePixelBuffer::blit");
         }
 
         _genMipmaps();
