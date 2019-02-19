@@ -1083,8 +1083,16 @@ namespace Ogre {
         {
             if(src.format == dst.format)
             {
-                if( src.getConsecutiveSize() && dst.isConsecutive() )
-                    memcpy(dst.data, src.data, src.getConsecutiveSize());
+                if(src.isConsecutive() && dst.isConsecutive())
+                {
+                    // we can copy with slice granularity, useful for Tex2DArray handling
+                    size_t bytesPerSlice = getMemorySize(src.getWidth(), src.getHeight(), 1, src.format);
+                    memcpy(
+                        (uint8*)dst.data + bytesPerSlice * dst.front,
+                        (uint8*)src.data + bytesPerSlice * src.front,
+                        bytesPerSlice * src.getDepth());
+                    return;
+                }
                 else
                 {
                     const size_t rowSize = PixelUtil::getMemorySize( src.getWidth(), 1, 1, src.format );
