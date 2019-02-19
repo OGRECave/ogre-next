@@ -348,23 +348,40 @@ namespace v1 {
 
     //-----------------------------------------------------------------------------  
 
-    void D3D11HardwarePixelBuffer::blit(const HardwarePixelBufferSharedPtr &rsrc, const Image::Box &srcBox, const Image::Box &dstBox)
+    void D3D11HardwarePixelBuffer::blit(const HardwarePixelBufferSharedPtr &src, const Image::Box &srcBox, const Image::Box &dstBox)
     {
-        if (
-            (srcBox.getWidth() != dstBox.getWidth())
-            || (srcBox.getHeight() != dstBox.getHeight())
-            || (srcBox.getDepth() != dstBox.getDepth())
-            )
+        if (srcBox.getWidth() != dstBox.getWidth()
+            || srcBox.getHeight() != dstBox.getHeight()
+            || srcBox.getDepth() != dstBox.getDepth())
         {
             OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
                 "D3D11 device cannot copy a subresource - source and dest size are not the same and they have to be the same in DX11.",
                 "D3D11HardwarePixelBuffer::blit");
         }
 
+        D3D11HardwarePixelBuffer * srcDx11 = static_cast<D3D11HardwarePixelBuffer *>(src.get());
+
+        // We should blit TEX_TYPE_2D_ARRAY with depth > 1 by iterating over subresources.
+        if (srcBox.getDepth() > 1 &&
+            (mParentTexture->getTextureType() == TEX_TYPE_2D_ARRAY || srcDx11->mParentTexture->getTextureType() == TEX_TYPE_2D_ARRAY))
+        {
+            Image::Box srcSlice = srcBox, dstSlice = dstBox;
+            srcSlice.back = srcSlice.front + 1;
+            dstSlice.back = dstSlice.front + 1;
+            for(uint32 slice = srcBox.front; slice < srcBox.back; ++slice)
+            {
+                blit(src, srcSlice, dstSlice); // recursive call
+                ++srcSlice.front; ++srcSlice.back;
+                ++dstSlice.front; ++dstSlice.back;
+            }
+            return;
+        }
+
+        // Do real work without extra checking - debug layer will catch erroneous parameters.
         D3D11_BOX srcBoxDx11 = OgreImageBoxToDx11Box(srcBox);
 
 
-        D3D11HardwarePixelBuffer * rsrcDx11 = static_cast<D3D11HardwarePixelBuffer *>(rsrc.get());
+        D3D11HardwarePixelBuffer * rsrcDx11 = static_cast<D3D11HardwarePixelBuffer *>(src.get());
 
         switch(mParentTexture->getTextureType()) {
         case TEX_TYPE_1D:
