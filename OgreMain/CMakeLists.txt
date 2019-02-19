@@ -133,6 +133,7 @@ elseif (WIN32)
   if (WINDOWS_STORE OR WINDOWS_PHONE)
     include_directories("include/WIN32")
     set(PLATFORM_HEADERS
+      include/WIN32/OgreComPtr.h
       include/WIN32/OgreConfigDialogImpWinRT.h
       include/WIN32/OgreErrorDialogImpWinRT.h
       include/WIN32/OgreTimerImp.h
