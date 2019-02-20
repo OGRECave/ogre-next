@@ -60,7 +60,7 @@ namespace v1 {
 		}
 	}
 
-    //-----------------------------------------------------------------------------  
+	//-----------------------------------------------------------------------------
 
     D3D11HardwarePixelBuffer::D3D11HardwarePixelBuffer( D3D11Texture *parentTexture,
                                                         D3D11Device &device,
@@ -93,14 +93,14 @@ namespace v1 {
                 Root::getSingleton().getRenderSystem()->attachRenderTarget(*trt);
             }
         }
-		
-		mSizeInBytes = PixelUtil::getMemorySize(mWidth, mHeight, mDepth, mFormat);
-		
+
+        mSizeInBytes = PixelUtil::getMemorySize(mWidth, mHeight, mDepth, mFormat);
+
     }
     D3D11HardwarePixelBuffer::~D3D11HardwarePixelBuffer()
     {
         if(!mSliceTRT.empty())
-        {   
+        {
             // Delete all render targets that are not yet deleted via _clearSliceRTT
             for(size_t zoffset=0; zoffset<mDepth; ++zoffset)
             {
@@ -109,7 +109,7 @@ namespace v1 {
             }
         }
     }
-    //-----------------------------------------------------------------------------  
+    //-----------------------------------------------------------------------------
     void D3D11HardwarePixelBuffer::_map(ID3D11Resource *res, D3D11_MAP flags, PixelBox & box)
     {
         assert(mLockBox.getDepth() == 1 || mParentTexture->getTextureType() == TEX_TYPE_3D);
@@ -128,13 +128,13 @@ namespace v1 {
 
         D3D11Mappings::setPixelBoxMapping(box, pMappedResource);
     }
-    //-----------------------------------------------------------------------------  
+    //-----------------------------------------------------------------------------
     void D3D11HardwarePixelBuffer::_mapstagingbuffer(D3D11_MAP flags, PixelBox &box)
     {
         if(!mStagingBuffer)
             createStagingBuffer();
 
-        if(flags == D3D11_MAP_READ_WRITE || flags == D3D11_MAP_READ || flags == D3D11_MAP_WRITE)  
+        if(flags == D3D11_MAP_READ_WRITE || flags == D3D11_MAP_READ || flags == D3D11_MAP_WRITE)
         {
             D3D11_BOX boxDx11 = getSubresourceBox(mLockBox); // both src and dest
             UINT subresource = getSubresourceIndex(mLockBox.front);
@@ -157,13 +157,13 @@ namespace v1 {
 
         _map(mStagingBuffer.Get(), flags, box);
     }
-    //-----------------------------------------------------------------------------  
+    //-----------------------------------------------------------------------------
     PixelBox D3D11HardwarePixelBuffer::lockImpl(const Image::Box &lockBox, LockOptions options)
     {
         // Check for misuse
         if(mUsage & TU_RENDERTARGET)
             OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, "DirectX does not allow locking of or directly writing to RenderTargets. Use blitFromMemory if you need the contents.",
-            "D3D11HardwarePixelBuffer::lockImpl");  
+            "D3D11HardwarePixelBuffer::lockImpl");
 
         mLockBox = lockBox;
 
@@ -190,7 +190,7 @@ namespace v1 {
         case HBL_WRITE_ONLY:
             flags = D3D11_MAP_WRITE;
             break;
-        default: 
+        default:
             break;
         };
 
@@ -204,7 +204,7 @@ namespace v1 {
         else
         {
             mDataForStaticUsageLock.resize(rval.getConsecutiveSize());
-            rval.data = mDataForStaticUsageLock.data();
+            rval.data = mDataForStaticUsageLock.empty() ? 0 : &mDataForStaticUsageLock[0];
         }
         // save without offset
         mCurrentLock = rval;
@@ -221,12 +221,12 @@ namespace v1 {
         if (mDevice.isError())
         {
             String errorDescription = mDevice.getErrorDescription();
-            OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
+            OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
                 "D3D11 device unmap resource\nError Description:" + errorDescription,
                 "D3D11HardwarePixelBuffer::_unmap");
         }
     }
-    //-----------------------------------------------------------------------------  
+    //-----------------------------------------------------------------------------
     void D3D11HardwarePixelBuffer::_unmapstaticbuffer()
     {
         D3D11_BOX dstBoxDx11 = getSubresourceBox(mLockBox);
@@ -245,8 +245,9 @@ namespace v1 {
         UINT srcDepthPitch = PixelUtil::getMemorySize(mCurrentLock.getWidth(), mCurrentLock.getHeight(), 1, mFormat); // H * rowPitch is invalid for compressed formats
 
         mDevice.GetImmediateContext()->UpdateSubresource(
-            mParentTexture->getTextureResource(), subresource, &dstBoxDx11, 
-            mDataForStaticUsageLock.data(), srcRowPitch, srcDepthPitch);
+                    mParentTexture->getTextureResource(), subresource, &dstBoxDx11,
+                    mDataForStaticUsageLock.empty() ? 0 : &mDataForStaticUsageLock[0],
+                    srcRowPitch, srcDepthPitch );
         if (mDevice.isError())
         {
             String errorDescription; errorDescription
@@ -257,7 +258,7 @@ namespace v1 {
 
         mDataForStaticUsageLock.swap(vector<int8>::type()); // i.e. shrink_to_fit
     }
-    //-----------------------------------------------------------------------------  
+    //-----------------------------------------------------------------------------
     void D3D11HardwarePixelBuffer::_unmapstagingbuffer(bool copyback)
     {
         _unmap(mStagingBuffer.Get());
@@ -283,7 +284,7 @@ namespace v1 {
             mStagingBuffer.Reset();
         }
     }
-    //-----------------------------------------------------------------------------  
+    //-----------------------------------------------------------------------------
     void D3D11HardwarePixelBuffer::unlockImpl(void)
     {
         if(mUsage == HBU_STATIC)
@@ -295,8 +296,8 @@ namespace v1 {
                 PixelBox box;
                 box.format = mFormat;
                 _map(mParentTexture->getTextureResource(), D3D11_MAP_WRITE_DISCARD, box);
-                void *data = box.data; 
-				memcpy(data, mCurrentLock.data, mSizeInBytes);
+                void *data = box.data;
+                memcpy(data, mCurrentLock.data, mSizeInBytes);
                 // unmap the texture and the staging buffer
                 _unmap(mParentTexture->getTextureResource());
                 _unmapstagingbuffer(false);
@@ -321,14 +322,14 @@ namespace v1 {
             renderSystem->_clearStateAndFlushCommandBuffer();
         }
     }
-    //-----------------------------------------------------------------------------  
+    //-----------------------------------------------------------------------------
     void D3D11HardwarePixelBuffer::blit(const HardwarePixelBufferSharedPtr &src, const Image::Box &srcBox, const Image::Box &dstBox)
     {
         if (srcBox.getWidth() != dstBox.getWidth()
             || srcBox.getHeight() != dstBox.getHeight()
             || srcBox.getDepth() != dstBox.getDepth())
         {
-            OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
+            OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
                 "D3D11 device cannot copy a subresource - source and dest size are not the same and they have to be the same in DX11.",
                 "D3D11HardwarePixelBuffer::blit");
         }
@@ -372,14 +373,14 @@ namespace v1 {
 
         _genMipmaps();
     }
-    //-----------------------------------------------------------------------------  
+    //-----------------------------------------------------------------------------
     void D3D11HardwarePixelBuffer::blitFromMemory(const PixelBox &src, const Image::Box &dst)
     {
         if (src.getWidth() != dst.getWidth()
             || src.getHeight() != dst.getHeight()
             || src.getDepth() != dst.getDepth())
         {
-            OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
+            OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
                 "D3D11 device cannot copy a subresource - source and dest size are not the same and they have to be the same in DX11.",
                 "D3D11HardwarePixelBuffer::blitFromMemory");
         }
@@ -388,8 +389,10 @@ namespace v1 {
         if(src.format != mFormat)
         {
             vector<uint8>::type buffer;
-            buffer.resize(PixelUtil::getMemorySize(src.getWidth(), src.getHeight(), src.getDepth(), mFormat));
-            PixelBox converted = PixelBox(src.getWidth(), src.getHeight(), src.getDepth(), mFormat, buffer.data());
+            buffer.resize( PixelUtil::getMemorySize( src.getWidth(), src.getHeight(),
+                                                     src.getDepth(), mFormat ) );
+            PixelBox converted = PixelBox( src.getWidth(), src.getHeight(), src.getDepth(), mFormat,
+                                           buffer.empty() ? 0 : &buffer[0] );
             PixelUtil::bulkPixelConversion(src, converted);
             blitFromMemory(converted, dst); // recursive call
             return;
@@ -425,7 +428,7 @@ namespace v1 {
             UINT srcRowPitch = PixelUtil::getMemorySize(src.getWidth(), 1, 1, src.format);
             UINT srcDepthPitch = PixelUtil::getMemorySize(src.getWidth(), src.getHeight(), 1, src.format); // H * rowPitch is invalid for compressed formats
 
-            mDevice.GetImmediateContext()->UpdateSubresource( 
+            mDevice.GetImmediateContext()->UpdateSubresource(
                 mParentTexture->getTextureResource(), dstSubresource, &dstBox,
                 src.getTopLeftFrontPixelPtr(), srcRowPitch, srcDepthPitch);
         }
@@ -440,7 +443,7 @@ namespace v1 {
 
         _genMipmaps();
     }
-    //-----------------------------------------------------------------------------  
+    //-----------------------------------------------------------------------------
     void D3D11HardwarePixelBuffer::blitToMemory(const Image::Box &srcBox, const PixelBox &dst)
     {
         assert(srcBox.getDepth() == 1 && dst.getDepth() == 1);
@@ -508,7 +511,7 @@ namespace v1 {
         D3D11_MAPPED_SUBRESOURCE mapped = {0};
         hr = mDevice.GetImmediateContext()->Map(stagingTexture.Get(), srcSubresource, D3D11_MAP_READ, 0, &mapped);
         mDevice.throwIfFailed(hr, "Error while mapping staging texture", "D3D11HardwarePixelBuffer::blitToMemory");
-        
+
         // Read the data out of the texture.
         PixelBox locked = D3D11Mappings::getPixelBoxWithMapping(srcBoxDx11, desc.Format, mapped);
         PixelUtil::bulkPixelConversion(locked, dst);
@@ -516,7 +519,7 @@ namespace v1 {
         // Release the staging texture
         mDevice.GetImmediateContext()->Unmap(stagingTexture.Get(), srcSubresource);
     }
-    //-----------------------------------------------------------------------------  
+    //-----------------------------------------------------------------------------
     void D3D11HardwarePixelBuffer::_genMipmaps()
     {
         if(mParentTexture->HasAutoMipMapGenerationEnabled())
@@ -527,26 +530,26 @@ namespace v1 {
             if (mDevice.isError())
             {
                 String errorDescription = mDevice.getErrorDescription();
-                OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
+                OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
                     "D3D11 device cannot generate mips\nError Description:" + errorDescription,
                     "D3D11HardwarePixelBuffer::_genMipmaps");
-            }   
+            }
         }
 
     }
-    //-----------------------------------------------------------------------------    
+    //-----------------------------------------------------------------------------
     RenderTexture *D3D11HardwarePixelBuffer::getRenderTarget(size_t zoffset)
     {
         assert(mUsage & TU_RENDERTARGET);
         assert(zoffset < mDepth);
         return mSliceTRT[zoffset];
     }
-    //-----------------------------------------------------------------------------    
+    //-----------------------------------------------------------------------------
     D3D11Texture * D3D11HardwarePixelBuffer::getParentTexture() const
     {
         return mParentTexture;
     }
-    //-----------------------------------------------------------------------------    
+    //-----------------------------------------------------------------------------
     UINT D3D11HardwarePixelBuffer::getSubresourceIndex(size_t box_front) const
     {
         switch(mParentTexture->getTextureType())
@@ -556,10 +559,10 @@ namespace v1 {
         }
         return mMipLevel;
     }
-    //-----------------------------------------------------------------------------    
+    //-----------------------------------------------------------------------------
     D3D11_BOX D3D11HardwarePixelBuffer::getSubresourceBox(const Box &inBox) const
     {
-        // Ogre index Tex2DArray using Z component of the box, but Direct3D expect 
+        // Ogre index Tex2DArray using Z component of the box, but Direct3D expect
         // this index to be in subresource, and Z component should be sanitized
         bool is2DArray = (mParentTexture->getTextureType() == TEX_TYPE_2D_ARRAY);
 
@@ -572,12 +575,12 @@ namespace v1 {
         res.back    = is2DArray ? 1 : static_cast<UINT>(inBox.back);
         return res;
     }
-    //-----------------------------------------------------------------------------    
+    //-----------------------------------------------------------------------------
     UINT D3D11HardwarePixelBuffer::getFace() const
     {
         return mFace;
     }
-    //-----------------------------------------------------------------------------    
+    //-----------------------------------------------------------------------------
     void D3D11HardwarePixelBuffer::createStagingBuffer()
     {
         D3D11Texture *tex = static_cast<D3D11Texture*>(mParentTexture);
@@ -605,7 +608,7 @@ namespace v1 {
                 desc.Usage = D3D11_USAGE_STAGING;
 
                 mDevice->CreateTexture1D(&desc, NULL, (ID3D11Texture1D**)mStagingBuffer.ReleaseAndGetAddressOf());
-            }                   
+            }
             break;
         case TEX_TYPE_2D:
         case TEX_TYPE_CUBE_MAP:

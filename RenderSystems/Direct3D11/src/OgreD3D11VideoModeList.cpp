@@ -86,7 +86,7 @@ namespace Ogre
 						hr = pOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM,
 							0,
 							&NumModes,
-							modes.data());
+                            modes.empty() ? 0 : &modes[0]);
 
 						for (UINT m = 0; m < NumModes; m++)
 						{
