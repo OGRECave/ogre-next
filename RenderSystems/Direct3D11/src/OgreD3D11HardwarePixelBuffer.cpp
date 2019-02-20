@@ -322,21 +322,6 @@ namespace v1 {
         }
     }
     //-----------------------------------------------------------------------------  
-    D3D11_BOX D3D11HardwarePixelBuffer::OgreImageBoxToDx11Box(const Image::Box &inBox) const
-    {
-        D3D11_BOX res;
-        res.left    = static_cast<UINT>(inBox.left);
-        res.top     = static_cast<UINT>(inBox.top);
-        res.front   = static_cast<UINT>(inBox.front);
-        res.right   = static_cast<UINT>(inBox.right);
-        res.bottom  = static_cast<UINT>(inBox.bottom);
-        res.back    = static_cast<UINT>(inBox.back);
-
-        return res;
-    }
-
-    //-----------------------------------------------------------------------------  
-
     void D3D11HardwarePixelBuffer::blit(const HardwarePixelBufferSharedPtr &src, const Image::Box &srcBox, const Image::Box &dstBox)
     {
         if (srcBox.getWidth() != dstBox.getWidth()
