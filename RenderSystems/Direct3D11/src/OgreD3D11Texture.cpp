@@ -849,7 +849,7 @@ namespace Ogre
             }
         }
 
-        this->_setFinalAttributes( desc.Width, desc.Height, desc.ArraySize,
+        this->_setFinalAttributes( desc.Width, desc.Height, desc.ArraySize / getNumFaces(),
                                    D3D11Mappings::_getPF(desc.Format), desc.MiscFlags );
     }
     //---------------------------------------------------------------------
