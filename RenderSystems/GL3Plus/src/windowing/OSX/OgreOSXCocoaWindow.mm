@@ -421,15 +421,12 @@ namespace Ogre {
         return mVSync;
 	}
 
-    void CocoaWindow::copyContentsToMemory(const PixelBox &dst, FrameBuffer buffer)
+    void CocoaWindow::copyContentsToMemory(const Box& src, const PixelBox &dst, FrameBuffer buffer)
     {
-        if (dst.getWidth() > mWidth ||
-            dst.getHeight() > mHeight ||
-            dst.front != 0 || dst.back != 1)
+        if(src.right > mWidth || src.bottom > mHeight || src.front != 0 || src.back != 1
+        || dst.getWidth() != src.getWidth() || dst.getHeight() != src.getHeight() || dst.getDepth() != 1)
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                        "Invalid box.",
-                        "CocoaWindow::copyContentsToMemory" );
+            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, "Invalid box.", "CocoaWindow::copyContentsToMemory");
         }
         
         if (buffer == FB_AUTO)
@@ -437,14 +434,12 @@ namespace Ogre {
             buffer = mIsFullScreen? FB_FRONT : FB_BACK;
         }
         
-        GLenum format = Ogre::GL3PlusPixelUtil::getGLOriginFormat(dst.format);
-        GLenum type = Ogre::GL3PlusPixelUtil::getGLOriginDataType(dst.format);
+        GLenum format = GL3PlusPixelUtil::getGLOriginFormat(dst.format);
+        GLenum type = GL3PlusPixelUtil::getGLOriginDataType(dst.format);
         
         if ((format == GL_NONE) || (type == 0))
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                        "Unsupported format.",
-                        "CocoaWindow::copyContentsToMemory" );
+            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, "Unsupported format.", "CocoaWindow::copyContentsToMemory");
         }
         
         if(dst.getWidth() != dst.rowPitch)
@@ -458,8 +453,8 @@ namespace Ogre {
         }
         
         OGRE_CHECK_GL_ERROR(glReadBuffer((buffer == FB_FRONT)? GL_FRONT : GL_BACK));
-        OGRE_CHECK_GL_ERROR(glReadPixels((GLint)0, (GLint)(mHeight - dst.getHeight()),
-                     (GLsizei)dst.getWidth(), (GLsizei)dst.getHeight(),
+        OGRE_CHECK_GL_ERROR(glReadPixels((GLint)src.left, (GLint)(mHeight - src.bottom),
+                     (GLsizei)src.getWidth(), (GLsizei)src.getHeight(),
                      format, type, dst.getTopLeftFrontPixelPtr()));
         
         OGRE_CHECK_GL_ERROR(glPixelStorei(GL_PACK_ALIGNMENT, 4));

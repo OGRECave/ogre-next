@@ -48,7 +48,7 @@ namespace Ogre
         mBuffer->_clearSliceRTT(0);
     }
 
-    void RenderTexture::copyContentsToMemory(const PixelBox &dst, FrameBuffer buffer)
+    void RenderTexture::copyContentsToMemory(const Box& src, const PixelBox &dst, FrameBuffer buffer)
     {
         if (buffer == FB_AUTO) buffer = FB_FRONT;
         if (buffer != FB_FRONT)
@@ -58,7 +58,7 @@ namespace Ogre
                         "RenderTexture::copyContentsToMemory" );
         }
 
-        mBuffer->blitToMemory(dst);
+        mBuffer->blitToMemory(src, dst);
     }
     //---------------------------------------------------------------------
     PixelFormat RenderTexture::suggestPixelFormat() const
@@ -74,7 +74,7 @@ namespace Ogre
         mWidth = mHeight = 0;
     }
     //-----------------------------------------------------------------------------
-    void MultiRenderTarget::copyContentsToMemory(const PixelBox &dst, FrameBuffer buffer)
+    void MultiRenderTarget::copyContentsToMemory(const Box& src, const PixelBox &dst, FrameBuffer buffer)
     {
         OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, 
                     "Cannot get MultiRenderTargets pixels",
