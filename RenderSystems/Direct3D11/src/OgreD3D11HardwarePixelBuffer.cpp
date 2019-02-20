@@ -388,64 +388,54 @@ namespace v1 {
         _genMipmaps();
     }
     //-----------------------------------------------------------------------------  
-    void D3D11HardwarePixelBuffer::blitFromMemory(const PixelBox &src, const Image::Box &dstBox)
+    void D3D11HardwarePixelBuffer::blitFromMemory(const PixelBox &src, const Image::Box &dst)
     {
-        bool isDds = false;
-        switch(mFormat)
+        if (src.getWidth() != dst.getWidth()
+            || src.getHeight() != dst.getHeight()
+            || src.getDepth() != dst.getDepth())
         {
-        case PF_DXT1:
-        case PF_DXT2:
-        case PF_DXT3:
-        case PF_DXT4:
-        case PF_DXT5:
-        case PF_BC4_UNORM:
-        case PF_BC4_SNORM:
-        case PF_BC5_UNORM:
-        case PF_BC5_SNORM:
-        case PF_BC6H_UF16:
-        case PF_BC6H_SF16:
-        case PF_BC7_UNORM:
-        case PF_BC7_UNORM_SRGB:
-            isDds = true;
-            break;
-        default:
-
-            break;
+            OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
+                "D3D11 device cannot copy a subresource - source and dest size are not the same and they have to be the same in DX11.",
+                "D3D11HardwarePixelBuffer::blitFromMemory");
         }
 
-        // for scoped deletion of conversion buffer
-        MemoryDataStreamPtr buf;
+        // convert to pixelbuffer's native format if necessary
+        if(src.format != mFormat)
+        {
+            vector<uint8>::type buffer;
+            buffer.resize(PixelUtil::getMemorySize(src.getWidth(), src.getHeight(), src.getDepth(), mFormat));
+            PixelBox converted = PixelBox(src.getWidth(), src.getHeight(), src.getDepth(), mFormat, buffer.data());
+            PixelUtil::bulkPixelConversion(src, converted);
+            blitFromMemory(converted, dst); // recursive call
+            return;
+        }
+
+        // We should blit TEX_TYPE_2D_ARRAY with depth > 1 by iterating over subresources.
+        if (src.getDepth() > 1 && mParentTexture->getTextureType() == TEX_TYPE_2D_ARRAY)
+        {
+            PixelBox srcSlice = src;
+            Box dstSlice = dst;
+            srcSlice.back = srcSlice.front + 1;
+            dstSlice.back = dstSlice.front + 1;
+            for(uint32 slice = src.front; slice < src.back; ++slice)
+            {
+                blitFromMemory(srcSlice, dstSlice); // recursive call
+                ++srcSlice.front; ++srcSlice.back;
+                ++dstSlice.front; ++dstSlice.back;
+            }
+            return;
+        }
+
+        // Do the real work
         PixelBox converted = src;
 
-        D3D11_BOX dstBoxDx11 = OgreImageBoxToDx11Box(dstBox);
-		if (isDds)
-		{
-			if(dstBox.getWidth() % 4 > 0)
-			{
-				dstBoxDx11.right += 4 - dstBox.getWidth() % 4 ;
-			}
-			if(dstBox.getHeight() % 4 > 0)
-			{
-				dstBoxDx11.bottom += 4 - dstBox.getHeight() % 4 ;
-			}
-		}
-
+        D3D11_BOX dstBoxDx11 = OgreImageBoxToDx11Box(dst);
         dstBoxDx11.front = 0;
         dstBoxDx11.back = converted.getDepth();
 
-        // convert to pixelbuffer's native format if necessary
-        if (src.format != mFormat)
-        {
-            buf.bind(new MemoryDataStream(
-                PixelUtil::getMemorySize(src.getWidth(), src.getHeight(), src.getDepth(),
-                mFormat)));
-            converted = PixelBox(src.getWidth(), src.getHeight(), src.getDepth(), mFormat, buf->getPtr());
-            PixelUtil::bulkPixelConversion(src, converted);
-        }
-
         if (mUsage & HBU_DYNAMIC)
         {
-            const Ogre::PixelBox &locked = lock( dstBox, HBL_DISCARD );
+            const Ogre::PixelBox &locked = lock( dst, HBL_DISCARD );
 
             int srcRowPitch = converted.rowPitchAlwaysBytes();
             int destRowPitch = locked.rowPitchAlwaysBytes();
@@ -556,10 +546,7 @@ namespace v1 {
                 break;
             }
  
-            if (!isDds)
-            {
-                _genMipmaps();
-            }
+            _genMipmaps();
         }   
 
     }
