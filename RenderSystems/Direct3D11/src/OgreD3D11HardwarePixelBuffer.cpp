@@ -427,128 +427,33 @@ namespace v1 {
         }
 
         // Do the real work
-        PixelBox converted = src;
-
-        D3D11_BOX dstBoxDx11 = OgreImageBoxToDx11Box(dst);
-        dstBoxDx11.front = 0;
-        dstBoxDx11.back = converted.getDepth();
-
-        if (mUsage & HBU_DYNAMIC)
+        if (mUsage & HBU_DYNAMIC) // i.e. UpdateSubresource can not be used
         {
-            const Ogre::PixelBox &locked = lock( dst, HBL_DISCARD );
-
-            int srcRowPitch = converted.rowPitchAlwaysBytes();
-            int destRowPitch = locked.rowPitchAlwaysBytes();
-
-            byte *src = (byte*)converted.data + converted.front * converted.slicePitchAlwaysBytes();
-            byte *dst = (byte*)locked.data;
-
-            for( size_t z=0; z<converted.getDepth(); ++z )
-            {
-                for (unsigned int row = 0 ; row < converted.getHeight() ; row ++)
-                {
-                    memcpy((void*)dst, (void*)src, srcRowPitch);
-                    src += srcRowPitch;
-                    dst += destRowPitch;
-                }
-
-                src += converted.getSliceSkipAlwaysBytes();
-                dst += locked.getSliceSkipAlwaysBytes();
-            }
-
+            Ogre::PixelBox locked = lock(dst, HBL_DISCARD);
+            PixelUtil::bulkPixelConversion(src, locked); // compressed formats are handled using per slice granularity, pitches are honoured
             unlock();
         }
         else
         {
-            size_t rowWidth = converted.rowPitchAlwaysBytes();
+            D3D11_BOX dstBox = getSubresourceBox(dst);
+            UINT dstSubresource = getSubresourceIndex(dst.front);
+            UINT srcRowPitch = PixelUtil::getMemorySize(src.getWidth(), 1, 1, src.format);
+            UINT srcDepthPitch = PixelUtil::getMemorySize(src.getWidth(), src.getHeight(), 1, src.format); // H * rowPitch is invalid for compressed formats
 
-            switch(mParentTexture->getTextureType()) {
-            case TEX_TYPE_1D:
-                {
-                    D3D11RenderSystem* rsys = static_cast<D3D11RenderSystem*>(Root::getSingleton().getRenderSystem());
-                    if (rsys->_getFeatureLevel() >= D3D_FEATURE_LEVEL_10_0)
-                    {
-                        mDevice.GetImmediateContext()->UpdateSubresource( 
-                            mParentTexture->GetTex1D(), 
-                            0,
-                            &dstBoxDx11,
-                            converted.data,
-                            rowWidth,
-                            0 );
-                        if (mDevice.isError())
-                        {
-                            String errorDescription = mDevice.getErrorDescription();
-                            OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
-                                "D3D11 device cannot update 1d subresource\nError Description:" + errorDescription,
-                                "D3D11HardwarePixelBuffer::blitFromMemory");
-                        }
-                        break; // For Feature levels that do not support 1D textures, revert to creating a 2D texture.
-                    }
-                }
-            case TEX_TYPE_CUBE_MAP:
-            case TEX_TYPE_2D:
-                {
-                    mDevice.GetImmediateContext()->UpdateSubresource( 
-                        mParentTexture->GetTex2D(), 
-                        D3D11CalcSubresource(mMipLevel, mFace, mParentTexture->getNumMipmaps()+1),
-                        &dstBoxDx11,
-                        converted.data,
-                        rowWidth,
-                        0 );
-                    if (mDevice.isError())
-                    {
-                        String errorDescription = mDevice.getErrorDescription();
-                        OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
-                            "D3D11 device cannot update 2d subresource\nError Description:" + errorDescription,
-                            "D3D11HardwarePixelBuffer::blitFromMemory");
-                    }
-                }
-                break;
-            case TEX_TYPE_2D_ARRAY:
-                {
-                    mDevice.GetImmediateContext()->UpdateSubresource( 
-                        mParentTexture->GetTex2D(), 
-                        D3D11CalcSubresource(mMipLevel, src.front, mParentTexture->getNumMipmaps()+1),
-                        &dstBoxDx11,
-                        converted.data,
-                        rowWidth,
-                        0 );
-                    if (mDevice.isError())
-                    {
-                        String errorDescription = mDevice.getErrorDescription();
-                        OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
-                            "D3D11 device cannot update 2d array subresource\nError Description:" + errorDescription,
-                            "D3D11HardwarePixelBuffer::blitFromMemory");
-                }
-                }
-                break;
-            case TEX_TYPE_3D:
-                {
-                    // copied from dx9
-                    size_t sliceWidth = converted.slicePitchAlwaysBytes();
- 
-                    mDevice.GetImmediateContext()->UpdateSubresource( 
-                        mParentTexture->GetTex3D(), 
-                        mMipLevel,
-                        &dstBoxDx11,
-                        converted.data,
-                        rowWidth,
-                        sliceWidth
-                        );
-                    if (mDevice.isError())
-                    {
-                        String errorDescription = mDevice.getErrorDescription();
-                        OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
-                            "D3D11 device cannot update 3d subresource\nError Description:" + errorDescription,
-                            "D3D11HardwarePixelBuffer::blitFromMemory");
-                    }
-                }
-                break;
-            }
- 
-            _genMipmaps();
-        }   
+            mDevice.GetImmediateContext()->UpdateSubresource( 
+                mParentTexture->getTextureResource(), dstSubresource, &dstBox,
+                src.getTopLeftFrontPixelPtr(), srcRowPitch, srcDepthPitch);
+        }
 
+        if (mDevice.isError())
+        {
+            String errorDescription; errorDescription
+                .append("D3D11 device cannot update ").append(toString(mParentTexture->getTextureType()))
+                .append("\nError Description:").append(mDevice.getErrorDescription());
+            OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, errorDescription, "D3D11HardwarePixelBuffer::blitFromMemory");
+        }
+
+        _genMipmaps();
     }
     //-----------------------------------------------------------------------------  
     void D3D11HardwarePixelBuffer::blitToMemory(const Image::Box &srcBox, const PixelBox &dst)
