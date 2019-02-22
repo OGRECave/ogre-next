@@ -91,9 +91,18 @@ namespace Ogre
                     "D3D11DriverList::refresh");
             }
 
-            unsigned sameNameIndex = sameNameCounter[std::wstring(desc1.Description)]++;
+            std::wstring wstrDesc = desc1.Description;
+            map<std::wstring, unsigned>::type::iterator nameCounterIt = sameNameCounter.find( wstrDesc );
+            if( nameCounterIt == sameNameCounter.end() )
+            {
+                sameNameCounter[wstrDesc] = 0;
+                nameCounterIt = sameNameCounter.find( wstrDesc );
+            }
+            unsigned sameNameIndex = nameCounterIt->second++;
 
-            SharedPtr<D3D11Driver> driver(OGRE_NEW_T(D3D11Driver, MEMCATEGORY_GENERAL)(pDXGIAdapter.Get(), desc1, sameNameIndex), SPFM_DELETE_T);
+            SharedPtr<D3D11Driver> driver(
+                        OGRE_NEW_T( D3D11Driver, MEMCATEGORY_GENERAL )(
+                            pDXGIAdapter.Get(), desc1, sameNameIndex ), SPFM_DELETE_T );
 
             LogManager::getSingleton().logMessage("D3D11: \"" + driver->DriverDescription() + "\"");
 

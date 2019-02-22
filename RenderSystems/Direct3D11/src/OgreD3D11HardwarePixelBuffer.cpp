@@ -256,7 +256,8 @@ namespace v1 {
             OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, errorDescription, "D3D11HardwarePixelBuffer::_unmapstaticbuffer");
         }
 
-        mDataForStaticUsageLock.swap(vector<int8>::type()); // i.e. shrink_to_fit
+        vector<int8>::type emptyVector;
+        mDataForStaticUsageLock.swap( emptyVector ); // i.e. shrink_to_fit
     }
     //-----------------------------------------------------------------------------
     void D3D11HardwarePixelBuffer::_unmapstagingbuffer(bool copyback)
