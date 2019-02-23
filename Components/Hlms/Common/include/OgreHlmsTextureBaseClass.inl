@@ -336,7 +336,7 @@ namespace Ogre
                 else
                     mTexIndices[texType] = ManualTexIndexBit | sliceIdx;
 
-                if( prevPool != texture->getTexturePool() )
+                if( prevPool != texture->getTexturePool() || !prevPool )
                     textureSetDirty = true;
 
                 texture->addListener( this );
