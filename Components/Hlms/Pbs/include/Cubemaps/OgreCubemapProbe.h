@@ -215,6 +215,8 @@ namespace Ogre
         const Matrix3& getOrientation(void) const           { return mOrientation; }
         const Aabb& getProbeShape(void) const               { return mProbeShape; }
 
+        CompositorWorkspace *getWorkspace(void) const       { return mWorkspace; }
+
         TextureGpu* getInternalTexture(void) const          { return mTexture; }
         void _addReference(void);
         void _removeReference(void);

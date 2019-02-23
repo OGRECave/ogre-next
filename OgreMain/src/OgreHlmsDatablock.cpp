@@ -444,7 +444,7 @@ namespace Ogre
         mMacroblockHash[casterPass] = ((macroId & 0x1F) << 5) | (blendId & 0x1F);
     }
     //-----------------------------------------------------------------------------------
-    void HlmsDatablock::flushRenderables(void)
+    void HlmsDatablock::flushRenderables( bool onlyNullHashes )
     {
         OgreProfileExhaustiveAggr( "HlmsDatablock::flushRenderables" );
 
@@ -456,8 +456,11 @@ namespace Ogre
             try
             {
                 uint32 hash, casterHash;
-                mCreator->calculateHashFor( *itor, hash, casterHash );
-                (*itor)->_setHlmsHashes( hash, casterHash );
+                if( !onlyNullHashes || !(*itor)->getHlmsHash() || !(*itor)->getHlmsCasterHash() )
+                {
+                    mCreator->calculateHashFor( *itor, hash, casterHash );
+                    (*itor)->_setHlmsHashes( hash, casterHash );
+                }
                 ++itor;
             }
             catch( Exception &e )

@@ -97,7 +97,8 @@ namespace Ogre
             NormalMap,
             Monochrome,
             EnvMap,
-            NonColourData
+            NonColourData,
+            NumCommonTextureTypes
         };
     }
 

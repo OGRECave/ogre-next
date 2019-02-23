@@ -264,8 +264,16 @@ namespace Ogre
             The operation itself isn't expensive, but the need to call this function indicates
             that another shader will be created (unless already cached too). If so, doing that
             will be slow.
+        @param onlyNullHashes
+            When true, we will only flush those that had null Hlms hash, which means
+            calculateHashFor was never called on this Datablock, or more likely calculateHashFor
+            delayed the calculation for later.
+
+            This can happen if an object was delayed for later due to the textures not being
+            ready, but when they are, turns out nothing needs to be changed, yet the hashes
+            are null and thus those renderables need to be flushed.
         */
-        void flushRenderables(void);
+        void flushRenderables( bool onlyNullHashes=false );
 
         void updateMacroblockHash( bool casterPass );
 

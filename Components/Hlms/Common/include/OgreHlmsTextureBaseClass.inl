@@ -129,10 +129,14 @@ namespace Ogre
             needsRecalculateHash |= bakeSamplers();
 
         if( needsRecalculateHash )
-        {
             calculateHash();
-            flushRenderables();
-        }
+
+        //When needsRecalculateHash = false, nothing significant has changed. However
+        //this datablock may have been attached to new Items that skipped calculation
+        //due to the datablock being dirty, so we have to flush those renderables
+        //(the ones that have a null Hlms hash)
+        const bool onlyNullHashes = needsRecalculateHash == false;
+        flushRenderables( onlyNullHashes );
     }
     //-----------------------------------------------------------------------------------
     bool OGRE_HLMS_TEXTURE_BASE_CLASS::bakeTextures( bool hasSeparateSamplers )
