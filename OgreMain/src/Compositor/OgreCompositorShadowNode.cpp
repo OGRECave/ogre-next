@@ -1064,7 +1064,7 @@ namespace Ogre
         const RenderSystem *renderSystem = compositorManager->getRenderSystem();
 
         ColourValue clearColour;
-        if( renderSystem->isReverseDepth() || useEsm )
+        if( !renderSystem->isReverseDepth() || useEsm )
             clearColour = ColourValue::White;
         else
             clearColour = ColourValue( 0.0f, 0.0f, 0.0f, 0.0f );
