@@ -276,9 +276,7 @@ namespace v1 {
             Array filled with the semantic.
         */
         void lockMultipleElements( ReadRequestsArray &requests,
-                                   HardwareBuffer::LockOptions lockOptions,
-                                   HardwareBuffer::UploadOptions uploadOptions =
-                                                        HardwareBuffer::HBU_DEFAULT );
+                                   HardwareBuffer::LockOptions lockOptions );
         void unlockMultipleElements( ReadRequestsArray &requests );
 
 

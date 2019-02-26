@@ -141,29 +141,12 @@ namespace v1 {
                 
             };
 
-            /// Device load options
-            /// The following enum is used to controls how data is loaded to devices in a multi device environment
-            /// This enum only works with the Direct3D 9 render system (5/2013).
-            enum UploadOptions 
-            {
-                /* Normal mode, 
-                    Data is automatically updated in all devices 
-                */
-                HBU_DEFAULT    = 0x0000,
-                /* Lazy load,
-                    Data is updated in the currently active device. Any other device will only be updated once 
-                    buffer is requested for rendering.
-                */
-                HBU_ON_DEMAND = 0x0001
-            };
-
         protected:
             size_t mSizeInBytes;
             Usage mUsage;
             bool mIsLocked;
             size_t mLockStart;
             size_t mLockSize;
-            UploadOptions mLockUploadOption;
             bool mSystemMemory;
             bool mUseShadowBuffer;
             HardwareBuffer* mShadowBuffer;
@@ -199,7 +182,7 @@ namespace v1 {
             @param options Locking options
             @return Pointer to the locked memory
             */
-            virtual void* lock(size_t offset, size_t length, LockOptions options, UploadOptions uploadOpt = HBU_DEFAULT)
+            virtual void* lock(size_t offset, size_t length, LockOptions options)
             {
                 assert(!isLocked() && "Cannot lock this buffer, it is already locked!");
 
@@ -219,7 +202,7 @@ namespace v1 {
                         mShadowUpdated = true;
                     }
 
-                    ret = mShadowBuffer->lock(offset, length, options, uploadOpt);
+                    ret = mShadowBuffer->lock(offset, length, options);
                 }
                 else
                 {
@@ -229,7 +212,6 @@ namespace v1 {
                 }
                 mLockStart = offset;
                 mLockSize = length;
-                mLockUploadOption = uploadOpt;
                 return ret;
             }
 
@@ -237,9 +219,9 @@ namespace v1 {
             @param options Locking options
             @return Pointer to the locked memory
             */
-            void* lock(LockOptions options, UploadOptions uploadOpt = HBU_DEFAULT)
+            void* lock(LockOptions options)
             {
-                return this->lock(0, mSizeInBytes, options, uploadOpt);
+                return this->lock(0, mSizeInBytes, options);
             }
             /** Releases the lock on this buffer. 
             @remarks 

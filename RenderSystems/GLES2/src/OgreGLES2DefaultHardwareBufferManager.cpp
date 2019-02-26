@@ -67,7 +67,7 @@ namespace v1 {
         // Nothing to do
     }
 
-    void* GLES2DefaultHardwareVertexBuffer::lock(size_t offset, size_t length, LockOptions options, UploadOptions uploadOpt)
+    void* GLES2DefaultHardwareVertexBuffer::lock(size_t offset, size_t length, LockOptions options)
     {
         mIsLocked = true;
         return mData + offset;
@@ -131,7 +131,7 @@ namespace v1 {
         // Nothing to do
     }
 
-    void* GLES2DefaultHardwareIndexBuffer::lock(size_t offset, size_t length, LockOptions options, UploadOptions uploadOpt)
+    void* GLES2DefaultHardwareIndexBuffer::lock(size_t offset, size_t length, LockOptions options)
     {
         mIsLocked = true;
         return mData + offset;
@@ -191,7 +191,7 @@ namespace v1 {
         // Nothing to do
     }
 
-    void* GLES2DefaultHardwareUniformBuffer::lock(size_t offset, size_t length, LockOptions options, UploadOptions uploadOpt)
+    void* GLES2DefaultHardwareUniformBuffer::lock(size_t offset, size_t length, LockOptions options)
     {
         mIsLocked = true;
         return mData + offset;

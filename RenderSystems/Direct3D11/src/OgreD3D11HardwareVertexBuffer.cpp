@@ -51,7 +51,7 @@ namespace v1 {
         SAFE_DELETE(mBufferImpl);
     }
     //---------------------------------------------------------------------
-    void* D3D11HardwareVertexBuffer::lock(size_t offset, size_t length, LockOptions options, UploadOptions uploadOpt)
+    void* D3D11HardwareVertexBuffer::lock(size_t offset, size_t length, LockOptions options)
     {
         return mBufferImpl->lock(offset, length, options);
     }

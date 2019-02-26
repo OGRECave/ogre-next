@@ -698,8 +698,7 @@ namespace v1 {
     }
     //-----------------------------------------------------------------------
     void VertexData::lockMultipleElements( ReadRequestsArray &requests,
-                                           HardwareBuffer::LockOptions lockOptions,
-                                           HardwareBuffer::UploadOptions uploadOptions )
+                                           HardwareBuffer::LockOptions lockOptions )
     {
         map<HardwareVertexBuffer*, char*>::type seenBuffers;
 
@@ -732,7 +731,7 @@ namespace v1 {
                     seenBuffers.find( vertexBuffer.get() );
             if( itSeenBuffer == seenBuffers.end() )
             {
-                itor->data = reinterpret_cast<char*>( vertexBuffer->lock( lockOptions, uploadOptions ) );
+                itor->data = reinterpret_cast<char*>( vertexBuffer->lock( lockOptions ) );
                 seenBuffers[vertexBuffer.get()] = itor->data;
                 itor->data += itor->offset;
             }

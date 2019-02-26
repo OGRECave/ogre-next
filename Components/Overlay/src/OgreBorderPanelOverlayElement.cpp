@@ -564,8 +564,7 @@ namespace v1 {
         // Lock the whole position buffer in discard mode
         HardwareVertexBufferSharedPtr vbuf = 
             mRenderOp2.vertexData->vertexBufferBinding->getBuffer(POSITION_BINDING);
-        float* pPos = static_cast<float*>(
-            vbuf->lock(HardwareBuffer::HBL_DISCARD, Root::getSingleton().getFreqUpdatedBuffersUploadOption()) );
+        float* pPos = static_cast<float*>(vbuf->lock(HardwareBuffer::HBL_DISCARD));
         // Use the furthest away depth value, since materials should have depth-check off
         // This initialised the depth buffer for any 3D objects in front
         Real zValue = Root::getSingleton().getRenderSystem()->getMaximumDepthInputValue();
@@ -600,8 +599,7 @@ namespace v1 {
         // Also update center geometry
         // NB don't use superclass because we need to make it smaller because of border
         vbuf = mRenderOp.vertexData->vertexBufferBinding->getBuffer(POSITION_BINDING);
-        pPos = static_cast<float*>(
-            vbuf->lock(HardwareBuffer::HBL_DISCARD, Root::getSingleton().getFreqUpdatedBuffersUploadOption()) );
+        pPos = static_cast<float*>(vbuf->lock(HardwareBuffer::HBL_DISCARD));
         // Use cell 1 and 3 to determine positions
         *pPos++ = left[1];
         *pPos++ = top[3];
