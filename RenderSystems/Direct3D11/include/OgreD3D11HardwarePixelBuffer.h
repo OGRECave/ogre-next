@@ -56,7 +56,6 @@ namespace v1 {
         vector<int8>::type mDataForStaticUsageLock; 
 
         Box mLockBox;
-        PixelBox mCurrentLock;
         LockOptions mCurrentLockOptions;
 
         /// Render targets
