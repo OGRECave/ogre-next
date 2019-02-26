@@ -112,10 +112,10 @@ namespace v1 {
     //-----------------------------------------------------------------------------
     void D3D11HardwarePixelBuffer::_map(ID3D11Resource *res, D3D11_MAP flags, PixelBox & box)
     {
-        assert(mLockBox.getDepth() == 1 || mParentTexture->getTextureType() == TEX_TYPE_3D);
+        assert(mLockedBox.getDepth() == 1 || mParentTexture->getTextureType() == TEX_TYPE_3D);
 
         D3D11_MAPPED_SUBRESOURCE pMappedResource = { 0 };
-        UINT subresource = (res == mStagingBuffer.Get()) ? 0 : getSubresourceIndex(mLockBox.front);
+        UINT subresource = (res == mStagingBuffer.Get()) ? 0 : getSubresourceIndex(mLockedBox.front);
         HRESULT hr = mDevice.GetImmediateContext()->Map(res, subresource, flags, 0, &pMappedResource);
 
         if(FAILED(hr) || mDevice.isError())
@@ -136,8 +136,8 @@ namespace v1 {
 
         if(flags == D3D11_MAP_READ_WRITE || flags == D3D11_MAP_READ || flags == D3D11_MAP_WRITE)
         {
-            D3D11_BOX boxDx11 = getSubresourceBox(mLockBox); // both src and dest
-            UINT subresource = getSubresourceIndex(mLockBox.front);
+            D3D11_BOX boxDx11 = getSubresourceBox(mLockedBox); // both src and dest
+            UINT subresource = getSubresourceIndex(mLockedBox.front);
 
             if( PixelUtil::isCompressed( mFormat ) )
             {
@@ -165,7 +165,7 @@ namespace v1 {
             OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, "DirectX does not allow locking of or directly writing to RenderTargets. Use blitFromMemory if you need the contents.",
             "D3D11HardwarePixelBuffer::lockImpl");
 
-        mLockBox = lockBox;
+        mLockedBox = lockBox;
 
         // Set extents and format
         // Note that we do not carry over the left/top/front here, since the returned
@@ -215,7 +215,7 @@ namespace v1 {
     //-----------------------------------------------------------------------------
     void D3D11HardwarePixelBuffer::_unmap(ID3D11Resource *res)
     {
-        UINT subresource = (res == mStagingBuffer.Get()) ? 0 : getSubresourceIndex(mLockBox.front);
+        UINT subresource = (res == mStagingBuffer.Get()) ? 0 : getSubresourceIndex(mLockedBox.front);
         mDevice.GetImmediateContext()->Unmap(res, subresource);
 
         if (mDevice.isError())
@@ -229,7 +229,7 @@ namespace v1 {
     //-----------------------------------------------------------------------------
     void D3D11HardwarePixelBuffer::_unmapstaticbuffer()
     {
-        D3D11_BOX dstBoxDx11 = getSubresourceBox(mLockBox);
+        D3D11_BOX dstBoxDx11 = getSubresourceBox(mLockedBox);
 
         if( PixelUtil::isCompressed( mFormat ) )
         {
@@ -240,7 +240,7 @@ namespace v1 {
             dstBoxDx11.bottom   = std::max( dstBoxDx11.top + blockHeight, dstBoxDx11.bottom );
         }
 
-        UINT subresource = getSubresourceIndex(mLockBox.front);
+        UINT subresource = getSubresourceIndex(mLockedBox.front);
         UINT srcRowPitch = PixelUtil::getMemorySize(mCurrentLock.getWidth(), 1, 1, mFormat);
         UINT srcDepthPitch = PixelUtil::getMemorySize(mCurrentLock.getWidth(), mCurrentLock.getHeight(), 1, mFormat); // H * rowPitch is invalid for compressed formats
 
@@ -266,8 +266,8 @@ namespace v1 {
 
         if(copyback)
         {
-            D3D11_BOX boxDx11 = getSubresourceBox(mLockBox); // both src and dest
-            UINT subresource = getSubresourceIndex(mLockBox.front);
+            D3D11_BOX boxDx11 = getSubresourceBox(mLockedBox); // both src and dest
+            UINT subresource = getSubresourceIndex(mLockedBox.front);
 
             if( PixelUtil::isCompressed( mFormat ) )
             {

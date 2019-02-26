@@ -55,7 +55,6 @@ namespace v1 {
         // if the usage is static - alloc at lock then use device UpdateSubresource when unlock and free memory
         vector<int8>::type mDataForStaticUsageLock; 
 
-        Box mLockBox;
         LockOptions mCurrentLockOptions;
 
         /// Render targets
