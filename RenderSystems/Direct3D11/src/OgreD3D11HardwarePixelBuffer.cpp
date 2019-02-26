@@ -586,12 +586,12 @@ namespace v1 {
     {
         D3D11Texture *tex = static_cast<D3D11Texture*>(mParentTexture);
 
-        uint32 minWidth     = 0;
-        uint32 minHeight    = 0;
+        uint32 blockWidth   = 1;
+        uint32 blockHeight  = 1;
         if( PixelUtil::isCompressed( mFormat ) )
         {
-            minWidth    = PixelUtil::getCompressedBlockWidth( mFormat, true );
-            minHeight   = PixelUtil::getCompressedBlockHeight( mFormat, true );
+            blockWidth  = PixelUtil::getCompressedBlockWidth( mFormat, true );
+            blockHeight = PixelUtil::getCompressedBlockHeight( mFormat, true );
         }
 
         switch (mParentTexture->getTextureType())
@@ -601,7 +601,7 @@ namespace v1 {
                 D3D11_TEXTURE1D_DESC desc;
                 tex->GetTex1D()->GetDesc(&desc);
 
-                desc.Width     = std::max<uint32>( minWidth, mWidth );
+                desc.Width     = alignToNextMultiple(mWidth, blockWidth);
                 desc.MipLevels = 0;
                 desc.BindFlags = 0;
                 desc.MiscFlags = 0;
@@ -618,8 +618,8 @@ namespace v1 {
                 D3D11_TEXTURE2D_DESC desc;
                 tex->GetTex2D()->GetDesc(&desc);
 
-                desc.Width     = std::max<uint32>( minWidth, mWidth );
-                desc.Height    = std::max<uint32>( minHeight, mHeight );
+                desc.Width     = alignToNextMultiple(mWidth, blockWidth);
+                desc.Height    = alignToNextMultiple(mHeight, blockHeight);
                 desc.MipLevels = 0;
                 desc.BindFlags = 0;
                 desc.MiscFlags = 0;
@@ -634,8 +634,8 @@ namespace v1 {
                 D3D11_TEXTURE3D_DESC desc;
                 tex->GetTex3D()->GetDesc(&desc);
 
-                desc.Width     = std::max<uint32>( minWidth, mWidth );
-                desc.Height    = std::max<uint32>( minHeight, mHeight );
+                desc.Width     = alignToNextMultiple(mWidth, blockWidth);
+                desc.Height    = alignToNextMultiple(mHeight, blockHeight);
                 desc.Depth     = mDepth;
                 desc.MipLevels = 0;
                 desc.BindFlags = 0;
