@@ -139,7 +139,7 @@ namespace v1 {
     }
 
 
-    void GL3PlusTextureBuffer::upload(const PixelBox &data, const Image::Box &dest)
+    void GL3PlusTextureBuffer::upload(const PixelBox &data, const Box &dest)
     {
         OGRE_CHECK_GL_ERROR(glPixelStorei(GL_UNPACK_ALIGNMENT, 1));
         OGRE_CHECK_GL_ERROR(glBindTexture(mTarget, mTextureID));
@@ -479,7 +479,7 @@ namespace v1 {
     }
 
 
-    void GL3PlusTextureBuffer::blit(const HardwarePixelBufferSharedPtr &src, const Image::Box &srcBox, const Image::Box &dstBox)
+    void GL3PlusTextureBuffer::blit(const HardwarePixelBufferSharedPtr &src, const Box &srcBox, const Box &dstBox)
     {
         GL3PlusTextureBuffer *srct = static_cast<GL3PlusTextureBuffer *>(src.getPointer());
         // Check for FBO support first
@@ -508,7 +508,7 @@ namespace v1 {
     // Supports compressed formats as both source and destination format, it will use the hardware DXT compressor
     // if available.
     // @author W.J. van der Laan
-    void GL3PlusTextureBuffer::blitFromTexture(GL3PlusTextureBuffer *src, const Image::Box &srcBox, const Image::Box &dstBox)
+    void GL3PlusTextureBuffer::blitFromTexture(GL3PlusTextureBuffer *src, const Box &srcBox, const Box &dstBox)
     {
         //        std::cerr << "GL3PlusTextureBuffer::blitFromTexture " <<
         //        src->mTextureID << ":" << srcBox.left << "," << srcBox.top << "," << srcBox.right << "," << srcBox.bottom << " " <<
@@ -655,7 +655,7 @@ namespace v1 {
 
 
     // blitFromMemory doing hardware trilinear scaling
-    void GL3PlusTextureBuffer::blitFromMemory(const PixelBox &src_orig, const Image::Box &dstBox)
+    void GL3PlusTextureBuffer::blitFromMemory(const PixelBox &src_orig, const Box &dstBox)
     {
         // Fall back to normal GLHardwarePixelBuffer::blitFromMemory in case
         // - FBO is not supported
@@ -737,7 +737,7 @@ namespace v1 {
         GL3PlusTextureBuffer tex(BLANKSTRING, target, id, 0, 0, (Usage)(TU_AUTOMIPMAP|HBU_STATIC_WRITE_ONLY), false, 0);
 
         // Upload data to 0,0,0 in temporary texture
-        Image::Box tempTarget(0, 0, 0, src.getWidth(), src.getHeight(), src.getDepth());
+        Box tempTarget(0, 0, 0, src.getWidth(), src.getHeight(), src.getDepth());
         tex.upload(src, tempTarget);
 
         // Blit

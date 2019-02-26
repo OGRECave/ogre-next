@@ -141,7 +141,7 @@ namespace v1
             Root::getSingleton().getRenderSystem()->destroyRenderTarget( mDummyRenderTexture->getName() );
     }
     //-----------------------------------------------------------------------------------
-    PixelBox MetalNullPixelBuffer::lockImpl( const Image::Box &lockBox, LockOptions options )
+    PixelBox MetalNullPixelBuffer::lockImpl( const Box &lockBox, LockOptions options )
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "", "MetalNullPixelBuffer::lockImpl" );
     }
@@ -156,12 +156,12 @@ namespace v1
         mDummyRenderTexture = 0;
     }
     //-----------------------------------------------------------------------------------
-    void MetalNullPixelBuffer::blitFromMemory( const PixelBox &src, const Image::Box &dstBox )
+    void MetalNullPixelBuffer::blitFromMemory( const PixelBox &src, const Box &dstBox )
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "", "MetalNullPixelBuffer::blitFromMemory" );
     }
     //-----------------------------------------------------------------------------------
-    void MetalNullPixelBuffer::blitToMemory( const Image::Box &srcBox, const PixelBox &dst )
+    void MetalNullPixelBuffer::blitToMemory( const Box &srcBox, const PixelBox &dst )
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "", "MetalNullPixelBuffer::blitToMemory" );
     }

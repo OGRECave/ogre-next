@@ -36,7 +36,7 @@ namespace v1 {
     class NULLHardwarePixelBuffer : public HardwarePixelBuffer
     {
     protected:
-        virtual PixelBox lockImpl( const Image::Box &lockBox,  LockOptions options );
+        virtual PixelBox lockImpl( const Box &lockBox,  LockOptions options );
         virtual void unlockImpl(void);
 
         // Internal buffer; either on-card or in system memory, freed/allocated on demand
@@ -48,7 +48,7 @@ namespace v1 {
         void allocateBuffer( size_t bytes );
         void freeBuffer(void);
         // Upload a box of pixels to this buffer on the card
-        virtual void upload(const PixelBox &data, const Image::Box &dest);
+        virtual void upload(const PixelBox &data, const Box &dest);
         // Download a box of pixels from the card
         virtual void download(const PixelBox &data);
 
@@ -58,8 +58,8 @@ namespace v1 {
                                  HardwareBuffer::Usage usage );
         virtual ~NULLHardwarePixelBuffer();
 
-        virtual void blitFromMemory(const PixelBox &src, const Image::Box &dstBox);
-        virtual void blitToMemory(const Image::Box &srcBox, const PixelBox &dst);
+        virtual void blitFromMemory(const PixelBox &src, const Box &dstBox);
+        virtual void blitToMemory(const Box &srcBox, const PixelBox &dst);
 
         /// Get rendertarget for z slice
         virtual RenderTexture *getRenderTarget(size_t zoffset);

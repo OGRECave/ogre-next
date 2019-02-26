@@ -59,13 +59,13 @@ namespace v1
         assert(!isLocked() && "Cannot lock this buffer, it is already locked!");
         assert(offset == 0 && length == mSizeInBytes && "Cannot lock memory region, most lock box or entire buffer");
         
-        Image::Box myBox(0, 0, 0, mWidth, mHeight, mDepth);
+        Box myBox(0, 0, 0, mWidth, mHeight, mDepth);
         const PixelBox &rv = lock(myBox, options);
         return rv.data;
     }
     
     //-----------------------------------------------------------------------------    
-    const PixelBox& HardwarePixelBuffer::lock(const Image::Box& lockBox, LockOptions options)
+    const PixelBox& HardwarePixelBuffer::lock(const Box& lockBox, LockOptions options)
     {
         if (mUseShadowBuffer)
         {
@@ -106,7 +106,7 @@ namespace v1
 
     //-----------------------------------------------------------------------------    
 
-    void HardwarePixelBuffer::blit(const HardwarePixelBufferSharedPtr &src, const Image::Box &srcBox, const Image::Box &dstBox)
+    void HardwarePixelBuffer::blit(const HardwarePixelBufferSharedPtr &src, const Box &srcBox, const Box &dstBox)
     {
         if(isLocked() || src->isLocked())
         {

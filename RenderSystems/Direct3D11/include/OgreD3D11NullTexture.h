@@ -80,7 +80,7 @@ namespace v1
     protected:
         RenderTexture   *mDummyRenderTexture;
 
-        virtual PixelBox lockImpl( const Image::Box &lockBox, LockOptions options );
+        virtual PixelBox lockImpl( const Box &lockBox, LockOptions options );
         virtual void unlockImpl(void);
 
         /// Notify HardwarePixelBuffer of destruction of render target.
@@ -91,8 +91,8 @@ namespace v1
                                uint32 width, uint32 height, uint32 Null, PixelFormat format );
         virtual ~D3D11NullPixelBuffer();
 
-        virtual void blitFromMemory( const PixelBox &src, const Image::Box &dstBox );
-        virtual void blitToMemory( const Image::Box &srcBox, const PixelBox &dst );
+        virtual void blitFromMemory( const PixelBox &src, const Box &dstBox );
+        virtual void blitToMemory( const Box &srcBox, const PixelBox &dst );
         virtual RenderTexture* getRenderTarget( size_t slice=0 );
     };
 }

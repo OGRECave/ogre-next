@@ -143,7 +143,7 @@ namespace v1
             Root::getSingleton().getRenderSystem()->destroyRenderTarget( mDummyRenderTexture->getName() );
     }
     //-----------------------------------------------------------------------------------
-    PixelBox D3D11NullPixelBuffer::lockImpl( const Image::Box &lockBox, LockOptions options )
+    PixelBox D3D11NullPixelBuffer::lockImpl( const Box &lockBox, LockOptions options )
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "", "D3D11NullPixelBuffer::lockImpl" );
     }
@@ -158,12 +158,12 @@ namespace v1
         mDummyRenderTexture = 0;
     }
     //-----------------------------------------------------------------------------------
-    void D3D11NullPixelBuffer::blitFromMemory( const PixelBox &src, const Image::Box &dstBox )
+    void D3D11NullPixelBuffer::blitFromMemory( const PixelBox &src, const Box &dstBox )
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "", "D3D11NullPixelBuffer::blitFromMemory" );
     }
     //-----------------------------------------------------------------------------------
-    void D3D11NullPixelBuffer::blitToMemory( const Image::Box &srcBox, const PixelBox &dst )
+    void D3D11NullPixelBuffer::blitToMemory( const Box &srcBox, const PixelBox &dst )
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "", "D3D11NullPixelBuffer::blitToMemory" );
     }

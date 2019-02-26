@@ -158,7 +158,7 @@ namespace v1 {
         _map(mStagingBuffer.Get(), flags, box);
     }
     //-----------------------------------------------------------------------------
-    PixelBox D3D11HardwarePixelBuffer::lockImpl(const Image::Box &lockBox, LockOptions options)
+    PixelBox D3D11HardwarePixelBuffer::lockImpl(const Box &lockBox, LockOptions options)
     {
         // Check for misuse
         if(mUsage & TU_RENDERTARGET)
@@ -324,7 +324,7 @@ namespace v1 {
         }
     }
     //-----------------------------------------------------------------------------
-    void D3D11HardwarePixelBuffer::blit(const HardwarePixelBufferSharedPtr &src, const Image::Box &srcBox, const Image::Box &dstBox)
+    void D3D11HardwarePixelBuffer::blit(const HardwarePixelBufferSharedPtr &src, const Box &srcBox, const Box &dstBox)
     {
         if (srcBox.getWidth() != dstBox.getWidth()
             || srcBox.getHeight() != dstBox.getHeight()
@@ -341,7 +341,7 @@ namespace v1 {
         if (srcBox.getDepth() > 1 &&
             (mParentTexture->getTextureType() == TEX_TYPE_2D_ARRAY || srcDx11->mParentTexture->getTextureType() == TEX_TYPE_2D_ARRAY))
         {
-            Image::Box srcSlice = srcBox, dstSlice = dstBox;
+            Box srcSlice = srcBox, dstSlice = dstBox;
             srcSlice.back = srcSlice.front + 1;
             dstSlice.back = dstSlice.front + 1;
             for(uint32 slice = srcBox.front; slice < srcBox.back; ++slice)
@@ -375,7 +375,7 @@ namespace v1 {
         _genMipmaps();
     }
     //-----------------------------------------------------------------------------
-    void D3D11HardwarePixelBuffer::blitFromMemory(const PixelBox &src, const Image::Box &dst)
+    void D3D11HardwarePixelBuffer::blitFromMemory(const PixelBox &src, const Box &dst)
     {
         if (src.getWidth() != dst.getWidth()
             || src.getHeight() != dst.getHeight()
@@ -445,7 +445,7 @@ namespace v1 {
         _genMipmaps();
     }
     //-----------------------------------------------------------------------------
-    void D3D11HardwarePixelBuffer::blitToMemory(const Image::Box &srcBox, const PixelBox &dst)
+    void D3D11HardwarePixelBuffer::blitToMemory(const Box &srcBox, const PixelBox &dst)
     {
         assert(srcBox.getDepth() == 1 && dst.getDepth() == 1);
 

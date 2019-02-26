@@ -70,7 +70,7 @@ namespace v1 {
         }
     }
 
-    PixelBox MetalHardwarePixelBuffer::lockImpl(const Image::Box &lockBox,  LockOptions options)
+    PixelBox MetalHardwarePixelBuffer::lockImpl(const Box &lockBox,  LockOptions options)
     {
         allocateBuffer();
         if (options != HardwareBuffer::HBL_DISCARD)
@@ -93,7 +93,7 @@ namespace v1 {
         freeBuffer();
     }
 
-    void MetalHardwarePixelBuffer::blitFromMemory(const PixelBox &src, const Image::Box &dstBox)
+    void MetalHardwarePixelBuffer::blitFromMemory(const PixelBox &src, const Box &dstBox)
     {
         if (!mBuffer.contains(dstBox))
         {
@@ -154,7 +154,7 @@ namespace v1 {
         }
     }
 
-    void MetalHardwarePixelBuffer::blitToMemory(const Image::Box &srcBox, const PixelBox &dst)
+    void MetalHardwarePixelBuffer::blitToMemory(const Box &srcBox, const PixelBox &dst)
     {
         if (!mBuffer.contains(srcBox))
         {
@@ -196,7 +196,7 @@ namespace v1 {
         }
     }
 
-    void MetalHardwarePixelBuffer::upload(const PixelBox &data, const Image::Box &dest)
+    void MetalHardwarePixelBuffer::upload(const PixelBox &data, const Box &dest)
     {
         OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
                     "Upload not possible for this pixelbuffer type",
@@ -304,7 +304,7 @@ namespace v1 {
         }
     }
     
-    void MetalTextureBuffer::upload(const PixelBox &data, const Image::Box &dest)
+    void MetalTextureBuffer::upload(const PixelBox &data, const Box &dest)
     {
         if(PixelUtil::isCompressed(data.format) && (NSUInteger)mLevel == mTexture.mipmapLevelCount)
             return;
@@ -509,7 +509,7 @@ namespace v1 {
     }
     //-----------------------------------------------------------------------------------
     void MetalTextureBuffer::blit( const v1::HardwarePixelBufferSharedPtr &src,
-                                   const Image::Box &srcBox, const Image::Box &dstBox )
+                                   const Box &srcBox, const Box &dstBox )
     {
         MetalTextureBuffer *srct = static_cast<MetalTextureBuffer *>(src.getPointer());
         // Destination texture must be 2D or Cube
@@ -532,13 +532,13 @@ namespace v1 {
     // Supports compressed formats as both source and destination format, it will use the hardware DXT compressor
     // if available.
     // @author W.J. van der Laan
-    void MetalTextureBuffer::blitFromTexture(MetalTextureBuffer *src, const Image::Box &srcBox, const Image::Box &dstBox)
+    void MetalTextureBuffer::blitFromTexture(MetalTextureBuffer *src, const Box &srcBox, const Box &dstBox)
     {
         // Implement?
     }
     //-----------------------------------------------------------------------------------
     // blitFromMemory doing hardware trilinear scaling
-    void MetalTextureBuffer::blitFromMemory(const PixelBox &src_orig, const Image::Box &dstBox)
+    void MetalTextureBuffer::blitFromMemory(const PixelBox &src_orig, const Box &dstBox)
     {
         // Fall back to normal MetalHardwarePixelBuffer::blitFromMemory in case 
         // - Either source or target is luminance due doesn't looks like supported by hardware
@@ -573,7 +573,7 @@ namespace v1 {
                                 src.format == mFormat ? mHwGamma : false, 0 );
 
         // Upload data to 0,0,0 in temporary texture
-        Image::Box tempTarget(0, 0, 0, src.getWidth(), src.getHeight(), src.getDepth());
+        Box tempTarget(0, 0, 0, src.getWidth(), src.getHeight(), src.getDepth());
         tex.upload(src, tempTarget);
         
         // Blit
