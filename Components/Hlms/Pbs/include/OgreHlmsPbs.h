@@ -167,6 +167,11 @@ namespace Ogre
         bool mSetupWorldMatBuf;
         bool mDebugPssmSplits;
 
+#if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
+        bool mUseObbRestraintAreaApprox;
+        bool mUseObbRestraintAreaLtc;
+#endif
+
         ShadowFilter    mShadowFilter;
         uint16          mEsmK; /// K parameter for ESM.
         AmbientLightMode mAmbientLightMode;

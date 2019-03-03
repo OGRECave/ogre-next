@@ -290,7 +290,15 @@ for( int i=0; i<floatBitsToInt( passBuf.numAreaLtcLights ); ++i )
 {
 	lightDir = passBuf.areaLtcLights[i].position.xyz - inPs.pos;
 	fDistance = length( lightDir );
-	if( fDistance <= passBuf.areaLtcLights[i].diffuse.w @insertpiece( andObjAreaLtcLightMaskCmp ) )
+
+	@property( obb_restraint_approx )
+		bool isInsideObbRestraint = testObbRestraint( passBuf.areaLtcLights[i].obbRestraint, inPs.pos );
+		@piece( obbRestraintTestLtc )&& isInsideObbRestraint@end
+	@end
+
+	if( fDistance <= passBuf.areaLtcLights[i].diffuse.w
+		@insertpiece( obbRestraintTestLtc )
+		@insertpiece( andObjAreaLtcLightMaskCmp ) )
 	{
 		float2 ltcUV = float2( pixelData.roughness, sqrt(1.0 - pixelData.NdotV) );
 		ltcUV = ltcUV * LUT_SCALE + LUT_BIAS;

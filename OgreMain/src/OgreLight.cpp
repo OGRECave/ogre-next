@@ -60,6 +60,9 @@ namespace Ogre {
           mShadowFarDistSquared(0),
           mShadowNearClipDist(-1),
           mShadowFarClipDist(-1)
+    #if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
+        , mObbRestraint( 0 )
+    #endif
     {
         //mMinPixelSize should always be zero for lights otherwise lights will disapear
         mMinPixelSize = 0;
@@ -585,6 +588,13 @@ namespace Ogre {
                 return mRange;
         }
     }
+    //-----------------------------------------------------------------------
+#if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
+    void Light::setObbRestraint( Node *node )
+    {
+        mObbRestraint = node;
+    }
+#endif
     //-----------------------------------------------------------------------
     void Light::setCustomParameter(uint16 index, const Ogre::Vector4 &value)
     {

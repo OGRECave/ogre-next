@@ -166,6 +166,8 @@ namespace Ogre
     const IdString PbsProperty::CubemapsUseDpm    = IdString( "hlms_cubemaps_use_dpm" );
     const IdString PbsProperty::CubemapsAsDiffuseGi=IdString( "cubemaps_as_diffuse_gi" );
     const IdString PbsProperty::IrradianceVolumes = IdString( "irradiance_volumes" );
+    const IdString PbsProperty::ObbRestraintApprox= IdString( "obb_restraint_approx" );
+    const IdString PbsProperty::ObbRestraintLtc   = IdString( "obb_restraint_ltc" );
 
     const IdString PbsProperty::BrdfDefault       = IdString( "BRDF_Default" );
     const IdString PbsProperty::BrdfCookTorrance  = IdString( "BRDF_CookTorrance" );
@@ -263,6 +265,10 @@ namespace Ogre
 #endif
         mSetupWorldMatBuf( true ),
         mDebugPssmSplits( false ),
+#if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
+        mUseObbRestraintAreaApprox( true ),
+        mUseObbRestraintAreaLtc( true ),
+#endif
         mShadowFilter( PCF_3x3 ),
         mEsmK( 600u ),
         mAmbientLightMode( AmbientAuto )
@@ -1058,6 +1064,34 @@ namespace Ogre
         return _a->mTextureLightMaskIdx < _b->mTextureLightMaskIdx;
     }
     //-----------------------------------------------------------------------------------
+#if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
+    inline float* fillObbRestraint( const Light *light, const Matrix4 &viewMatrix, float *passBufferPtr )
+    {
+        //float4x3 obbRestraint;
+        Node *obbRestraint = light->getObbRestraint();
+        if( obbRestraint )
+        {
+            Matrix4 obbMat = obbRestraint->_getFullTransform();
+            obbMat = viewMatrix * obbMat;
+            obbMat = obbMat.inverseAffine();
+#if !OGRE_DOUBLE_PRECISION
+            memcpy( passBufferPtr, &obbMat, sizeof( float ) * 12u );
+            passBufferPtr += 12u;
+#else
+            for( size_t i=0u; i<12u; ++i )
+                *passBufferPtr++ = static_cast<float>( obbMat[0][i] );
+#endif
+        }
+        else
+        {
+            memset( passBufferPtr, 0, sizeof( float ) * 12u );
+            passBufferPtr += 12u;
+        }
+
+        return passBufferPtr;
+#endif
+    }
+    //-----------------------------------------------------------------------------------
     HlmsCache HlmsPbs::preparePassHash( const CompositorShadowNode *shadowNode, bool casterPass,
                                         bool dualParaboloid, SceneManager *sceneManager )
     {
@@ -1201,6 +1235,13 @@ namespace Ogre
                     setProperty( HlmsBaseProp::LightsAreaTexColour, 1 );
             }
 
+#if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
+            if( mUseObbRestraintAreaApprox )
+                setProperty( PbsProperty::ObbRestraintApprox, 1 );
+            if( mUseObbRestraintAreaLtc )
+                setProperty( PbsProperty::ObbRestraintLtc, 1 );
+#endif
+
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
             mHasPlanarReflections = false;
             mLastBoundPlanarReflection = 0u;
@@ -1256,6 +1297,13 @@ namespace Ogre
         const uint32 realNumAreaApproxLightsWithMask = mRealNumAreaApproxLightsWithMask;
         const uint32 realNumAreaApproxLights = mRealNumAreaApproxLights;
         const uint32 realNumAreaLtcLights = mRealNumAreaLtcLights;
+#if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
+        const size_t numAreaApproxFloat4Vars = 7u + (mUseObbRestraintAreaApprox ? 3u : 0u);
+        const size_t numAreaLtcFloat4Vars = 7u + (mUseObbRestraintAreaLtc ? 3u : 0u);
+#else
+        const size_t numAreaApproxFloat4Vars = 7u;
+        const size_t numAreaLtcFloat4Vars = 7u;
+#endif
 
         bool isPssmBlend = getProperty( HlmsBaseProp::PssmBlend ) != 0;
         bool isPssmFade = getProperty( HlmsBaseProp::PssmFade ) != 0;
@@ -1360,8 +1408,8 @@ namespace Ogre
                 mapSize += ( 3 * 4 * 4 ) * numDirectionalLights;
             }
 
-            mapSize += ( 7 * 4 * 4 ) * numAreaApproxLights;
-            mapSize += ( 7 * 4 * 4 ) * numAreaLtcLights;
+            mapSize += ( numAreaApproxFloat4Vars * 4 * 4 ) * numAreaApproxLights;
+            mapSize += ( numAreaLtcFloat4Vars * 4 * 4 ) * numAreaLtcLights;
         }
         else
         {
@@ -1884,52 +1932,20 @@ namespace Ogre
                         realNumAreaApproxLightsWithMask;
                 ++passBufferPtr;
                 *passBufferPtr++ = 0.0f;
+
+#if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
+                if( mUseObbRestraintAreaApprox )
+                {
+                    //float4x3 obbRestraint;
+                    passBufferPtr = fillObbRestraint( light, viewMatrix, passBufferPtr );
+                }
+#endif
             }
 
-            for( int32 i=static_cast<int32>( realNumAreaApproxLights ); i<numAreaApproxLights; ++i )
-            {
-                //vec3 areaApproxLights[numLights].position
-                *passBufferPtr++ = 0;
-                *passBufferPtr++ = 0;
-                *passBufferPtr++ = 0;
-                *passBufferPtr++ = 0;
-
-                //vec3 areaApproxLights[numLights].diffuse
-                *passBufferPtr++ = 0;
-                *passBufferPtr++ = 0;
-                *passBufferPtr++ = 0;
-                *passBufferPtr++ = 1000.0f;
-
-                //vec3 areaApproxLights[numLights].specular
-                *passBufferPtr++ = 0;
-                *passBufferPtr++ = 0;
-                *passBufferPtr++ = 0;
-                *passBufferPtr++ = 1000.0f;
-
-                //vec4 areaApproxLights[numLights].attenuation;
-                *passBufferPtr++ = 0;
-                *passBufferPtr++ = 1;
-                *passBufferPtr++ = 1;
-                *passBufferPtr++ = 0;
-
-                //vec4 areaApproxLights[numLights].direction;
-                *passBufferPtr++ = 0;
-                *passBufferPtr++ = 0;
-                *passBufferPtr++ = 0;
-                *passBufferPtr++ = 1.0f;
-
-                //vec4 areaApproxLights[numLights].tangent;
-                *passBufferPtr++ = 0;
-                *passBufferPtr++ = 0;
-                *passBufferPtr++ = 0;
-                *passBufferPtr++ = 1.0f;
-
-                //vec4 doubleSided;
-                *passBufferPtr++ = 0.0f;
-                *passBufferPtr++ = 0.0f;
-                *passBufferPtr++ = 0.0f;
-                *passBufferPtr++ = 0.0f;
-            }
+            memset( passBufferPtr, 0, (numAreaApproxLights - realNumAreaApproxLights) *
+                    sizeof(float) * 4u * numAreaApproxFloat4Vars );
+            passBufferPtr += (numAreaApproxLights - realNumAreaApproxLights) *
+                             4u * numAreaApproxFloat4Vars;
 
             mAreaLights.reserve( numAreaLtcLights );
             mAreaLights.clear();
@@ -1999,11 +2015,19 @@ namespace Ogre
                     *reinterpret_cast<uint32 * RESTRICT_ALIAS>(passBufferPtr) = realNumAreaLtcLights;
                     ++passBufferPtr;
                 }
+
+#if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
+                if( mUseObbRestraintAreaLtc )
+                {
+                    //float4x3 obbRestraint;
+                    passBufferPtr = fillObbRestraint( light, viewMatrix, passBufferPtr );
+                }
+#endif
             }
 
-            memset( passBufferPtr, 0,
-                    (numAreaLtcLights - realNumAreaLtcLights) * sizeof(float) * 4u * 7u );
-            passBufferPtr += (numAreaLtcLights - realNumAreaLtcLights) * 4u * 7u;
+            memset( passBufferPtr, 0, (numAreaLtcLights - realNumAreaLtcLights) *
+                    sizeof(float) * 4u * numAreaLtcFloat4Vars );
+            passBufferPtr += (numAreaLtcLights - realNumAreaLtcLights) * 4u * numAreaLtcFloat4Vars;
 
             if( shadowNode )
             {

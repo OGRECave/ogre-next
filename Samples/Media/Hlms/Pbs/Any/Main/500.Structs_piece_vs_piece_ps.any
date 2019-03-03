@@ -60,6 +60,9 @@ struct AreaLight
 	float4 tangent;
 	float4 doubleSided;	//.y contains numAreaApproxLights
 						//.z contains numAreaApproxLightsWithMask
+	@property( obb_restraint_approx )
+		float4 obbRestraint[3];
+	@end
 };
 
 struct AreaLtcLight
@@ -73,6 +76,9 @@ struct AreaLtcLight
 	float4 diffuse;			//.w contains attenuation range
 	float4 specular;		//.w contains doubleSided
 	float4 points[4];		//.w contains numAreaLtcLights
+	@property( obb_restraint_ltc )
+		float4 obbRestraint[3];
+	@end
 };
 
 @insertpiece( DeclCubemapProbeStruct )

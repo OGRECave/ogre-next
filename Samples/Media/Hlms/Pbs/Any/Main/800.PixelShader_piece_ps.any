@@ -91,6 +91,21 @@
 		@end
 	@end
 
+	@property( obb_restraint_approx || obb_restraint_ltc )
+		bool testObbRestraint( @property( syntax == metal )constant@end float4 obbRestraint[3],
+							   float3 pos )
+		{
+			float3 obbTest;
+			obbTest.x = dot( obbRestraint[0].xyzw, float4( pos.xyz, 1.0 ) );
+			obbTest.y = dot( obbRestraint[1].xyzw, float4( pos.xyz, 1.0 ) );
+			obbTest.z = dot( obbRestraint[2].xyzw, float4( pos.xyz, 1.0 ) );
+			bool isInsideObbRestraint = abs( obbTest.x ) <= 1.0 &&
+										abs( obbTest.y ) <= 1.0 &&
+										abs( obbTest.z ) <= 1.0;
+			return isInsideObbRestraint;
+		}
+	@end
+
 	@property( (hlms_normal || hlms_qtangent) && !hlms_prepass && needs_view_dir )
 		@insertpiece( DeclareBRDF )
 		@insertpiece( DeclareBRDF_InstantRadiosity )

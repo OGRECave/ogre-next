@@ -37,7 +37,14 @@
 		projectedPosInPlane.xyz = inPs.pos - dot( -lightDir.xyz, passBuf.areaApproxLights[i].direction.xyz ) *
 											 passBuf.areaApproxLights[i].direction.xyz;
 		fDistance = length( lightDir );
+
+		@property( obb_restraint_approx )
+			bool isInsideObbRestraint = testObbRestraint( passBuf.areaApproxLights[i].obbRestraint, inPs.pos );
+			@piece( obbRestraintTestApprox )&& isInsideObbRestraint@end
+		@end
+
 		if( fDistance <= passBuf.areaApproxLights[i].attenuation.x
+			@insertpiece( obbRestraintTestApprox )
 		/*&& dot( -lightDir, passBuf.areaApproxLights[i].direction.xyz ) > 0*/ @insertpiece( andObjAreaApproxLightMaskCmp ) )
 		{
 			projectedPosInPlane.xyz -= passBuf.areaApproxLights[i].position.xyz;

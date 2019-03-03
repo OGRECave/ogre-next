@@ -471,6 +471,26 @@ namespace Ogre {
         */
         Real _deriveShadowFarClipDistance(const Camera* maincam) const;
 
+#if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
+        /** Sets an OBB (Oriented Bounding Box) to restraint where the light affects objects
+
+            The derived transform of the node is in world space and can be independent of the
+            light's transform or its scene node (but you can attach the OBB node to the light's
+            node to inherit its transform)
+
+            The scale of the node determines the half size of the OBB.
+
+            This is most useful for Area lights. Because they do not support shadows, area
+            lights can leak and light things very far away even if they are behind a wall.
+            OBB restraints allows you contain the lighting to a particular location, like a room.
+        @param node
+            A node containing position, rotation & scale. Scale is the half size of the OBB.
+            Null to disable.
+        */
+        void setObbRestraint( Node *node );
+        Node* getObbRestraint(void) const       { return mObbRestraint; }
+#endif
+
         /** Sets a custom parameter for this Light, which may be used to 
             drive calculations for this specific Renderable, like GPU program parameters.
         @remarks
@@ -596,6 +616,10 @@ namespace Ogre {
 
         Real mShadowNearClipDist;
         Real mShadowFarClipDist;
+
+#if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
+        Node *mObbRestraint;
+#endif
 
         /// Shared class-level name for Movable type.
         static String msMovableType;
