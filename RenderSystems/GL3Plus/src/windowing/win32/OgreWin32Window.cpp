@@ -51,6 +51,7 @@ THE SOFTWARE.
 namespace Ogre
 {
     #define _MAX_CLASS_NAME_ 128
+    bool Win32Window::mClassRegistered = false;
 
     Win32Window::Win32Window( const String &title, uint32 width, uint32 height, bool fullscreenMode,
                               PixelFormatGpu depthStencilFormat, const NameValuePairList *miscParams,
@@ -445,11 +446,15 @@ namespace Ogre
             if( enableDoubleClick )
                 wcex.style |= CS_DBLCLKS;
 
-            if( !RegisterClassEx( &wcex ) )
+            if( !mClassRegistered )
             {
-                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
-                             "RegisterClassEx failed! Cannot create window",
-                             "Win32Window::create" );
+                if( !RegisterClassEx( &wcex ) )
+                {
+                    OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                                 "RegisterClassEx failed! Cannot create window",
+                                 "Win32Window::create" );
+                }
+                mClassRegistered = true;
             }
 
             if( mRequestedFullscreenMode )

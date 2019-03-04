@@ -55,6 +55,8 @@ namespace Ogre {
         DWORD   mWindowedWinStyle;      // Windowed mode window style flags.
         DWORD   mFullscreenWinStyle;    // Fullscreen mode window style flags.
 
+        static bool mClassRegistered;
+
         void create( PixelFormatGpu depthStencilFormat, const NameValuePairList *miscParams );
 
         void updateWindowRect(void);
