@@ -306,6 +306,12 @@ namespace Ogre
         PlanarReflections* getPlanarReflections(void) const;
 #endif
 
+#if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
+        void setUseObbRestraints( bool areaApprox, bool areaLtc );
+        bool getUseObbRestraintsAreaApprox(void) const      { return mUseObbRestraintAreaApprox; }
+        bool getUseObbRestraintsAreaLtc(void) const         { return mUseObbRestraintAreaLtc; }
+#endif
+
 #if !OGRE_NO_JSON
         /// @copydoc Hlms::_loadJson
         virtual void _loadJson( const rapidjson::Value &jsonValue, const HlmsJson::NamedBlocks &blocks,
@@ -419,6 +425,8 @@ namespace Ogre
         static const IdString CubemapsUseDpm;
         static const IdString CubemapsAsDiffuseGi;
         static const IdString IrradianceVolumes;
+        static const IdString ObbRestraintApprox;
+        static const IdString ObbRestraintLtc;
 
         static const IdString BrdfDefault;
         static const IdString BrdfCookTorrance;

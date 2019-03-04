@@ -266,8 +266,8 @@ namespace Ogre
         mSetupWorldMatBuf( true ),
         mDebugPssmSplits( false ),
 #if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
-        mUseObbRestraintAreaApprox( true ),
-        mUseObbRestraintAreaLtc( true ),
+        mUseObbRestraintAreaApprox( false ),
+        mUseObbRestraintAreaLtc( false ),
 #endif
         mShadowFilter( PCF_3x3 ),
         mEsmK( 600u ),
@@ -2750,6 +2750,14 @@ namespace Ogre
     PlanarReflections* HlmsPbs::getPlanarReflections(void) const
     {
         return mPlanarReflections;
+    }
+#endif
+#if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
+    //-----------------------------------------------------------------------------------
+    void HlmsPbs::setUseObbRestraints( bool areaApprox, bool areaLtc )
+    {
+        mUseObbRestraintAreaApprox = areaApprox;
+        mUseObbRestraintAreaLtc = areaLtc;
     }
 #endif
 #if !OGRE_NO_JSON
