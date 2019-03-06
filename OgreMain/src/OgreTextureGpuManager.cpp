@@ -720,7 +720,7 @@ namespace Ogre
 
             try
             {
-                String resourceGroup = texture->getRealResourceNameStr();
+                String resourceGroup = texture->getResourceGroupStr();
                 if( resourceGroup.empty() )
                     resourceGroup = ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME;
 
