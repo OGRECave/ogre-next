@@ -139,15 +139,6 @@ namespace v1 {
             D3D11_BOX boxDx11 = getSubresourceBox(mLockedBox); // both src and dest
             UINT subresource = getSubresourceIndex(mLockedBox.front);
 
-            if( PixelUtil::isCompressed( mFormat ) )
-            {
-                const uint32 blockWidth     = PixelUtil::getCompressedBlockWidth( mFormat, true );
-                const uint32 blockHeight    = PixelUtil::getCompressedBlockHeight( mFormat, true );
-
-                boxDx11.right    = std::max( boxDx11.left + blockWidth, boxDx11.right );
-                boxDx11.bottom   = std::max( boxDx11.top + blockHeight, boxDx11.bottom );
-            }
-
             mDevice.GetImmediateContext()->CopySubresourceRegion(
                 mStagingBuffer.Get(), 0, boxDx11.left, boxDx11.top, boxDx11.front,
                 mParentTexture->getTextureResource(), subresource, &boxDx11);
@@ -230,16 +221,6 @@ namespace v1 {
     void D3D11HardwarePixelBuffer::_unmapstaticbuffer()
     {
         D3D11_BOX dstBoxDx11 = getSubresourceBox(mLockedBox);
-
-        if( PixelUtil::isCompressed( mFormat ) )
-        {
-            const uint32 blockWidth     = PixelUtil::getCompressedBlockWidth( mFormat, true );
-            const uint32 blockHeight    = PixelUtil::getCompressedBlockHeight( mFormat, true );
-
-            dstBoxDx11.right    = std::max( dstBoxDx11.left + blockWidth, dstBoxDx11.right );
-            dstBoxDx11.bottom   = std::max( dstBoxDx11.top + blockHeight, dstBoxDx11.bottom );
-        }
-
         UINT subresource = getSubresourceIndex(mLockedBox.front);
         UINT srcRowPitch = PixelUtil::getMemorySize(mCurrentLock.getWidth(), 1, 1, mFormat);
         UINT srcDepthPitch = PixelUtil::getMemorySize(mCurrentLock.getWidth(), mCurrentLock.getHeight(), 1, mFormat); // H * rowPitch is invalid for compressed formats
@@ -268,15 +249,6 @@ namespace v1 {
         {
             D3D11_BOX boxDx11 = getSubresourceBox(mLockedBox); // both src and dest
             UINT subresource = getSubresourceIndex(mLockedBox.front);
-
-            if( PixelUtil::isCompressed( mFormat ) )
-            {
-                const uint32 blockWidth     = PixelUtil::getCompressedBlockWidth( mFormat, true );
-                const uint32 blockHeight    = PixelUtil::getCompressedBlockHeight( mFormat, true );
-
-                boxDx11.right    = std::max( boxDx11.left + blockWidth, boxDx11.right );
-                boxDx11.bottom   = std::max( boxDx11.top + blockHeight, boxDx11.bottom );
-            }
 
             mDevice.GetImmediateContext()->CopySubresourceRegion(
                 mParentTexture->getTextureResource(), subresource, boxDx11.left, boxDx11.top, boxDx11.front,
@@ -574,6 +546,17 @@ namespace v1 {
         res.right   = static_cast<UINT>(inBox.right);
         res.bottom  = static_cast<UINT>(inBox.bottom);
         res.back    = is2DArray ? 1 : static_cast<UINT>(inBox.back);
+
+        // Align requested box to block boundary, but only if that will not cause data corruption
+        if(PixelUtil::isCompressed(mFormat) && inBox.right == mWidth && inBox.bottom == mHeight)
+        {
+            const uint32 blockWidth     = PixelUtil::getCompressedBlockWidth(mFormat, true);
+            const uint32 blockHeight    = PixelUtil::getCompressedBlockHeight(mFormat, true);
+
+            res.right    = alignToNextMultiple(res.right, blockWidth);
+            res.bottom   = alignToNextMultiple(res.bottom, blockHeight);
+        }
+
         return res;
     }
     //-----------------------------------------------------------------------------
