@@ -194,7 +194,7 @@ namespace Ogre
                     //During exceptions we become responsible for freeing it.
                     OGRE_FREE_SIMD( finalVertexData, MEMCATEGORY_GEOMETRY );
                     finalVertexData = 0;
-                    throw e;
+                    throw;
                 }
             }
 
@@ -244,7 +244,7 @@ namespace Ogre
                     //During exceptions we become responsible for freeing it.
                     OGRE_FREE_SIMD( shadowIndexData, MEMCATEGORY_GEOMETRY );
                     shadowIndexData = 0;
-                    throw e;
+                    throw;
                 }
 
                 ticket->unmap();

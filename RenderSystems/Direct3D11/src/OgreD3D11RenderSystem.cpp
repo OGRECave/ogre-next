@@ -2736,7 +2736,7 @@ namespace Ogre
             {
                 delete pso;
                 pso = 0;
-                throw e;
+                throw;
             }
         }
 

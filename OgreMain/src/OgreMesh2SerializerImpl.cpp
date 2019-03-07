@@ -852,7 +852,7 @@ namespace Ogre {
 
             //TODO: Delete created mVaos. Don't erase the data from those vaos?
 
-            throw e;
+            throw;
         }
 
         popInnerChunk(stream);
@@ -2272,7 +2272,7 @@ namespace Ogre {
 
             //TODO: Delete created mVaos. Don't erase the data from those vaos?
 
-            throw e;
+            throw;
         }
 
         popInnerChunk(stream);

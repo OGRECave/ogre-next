@@ -295,7 +295,7 @@ namespace Ogre
         catch( RenderingAPIException &e )
         {
             dumpSourceIfHasIncludeEnabled();
-            throw e;
+            throw;
         }
 
         dumpSourceIfHasIncludeEnabled();
