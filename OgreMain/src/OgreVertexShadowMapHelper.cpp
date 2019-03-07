@@ -189,7 +189,7 @@ namespace Ogre
                                                                          origBufferType, finalVertexData,
                                                                          keepAsShadow );
                 }
-                catch( Exception &e )
+                catch( Exception& )
                 {
                     //During exceptions we become responsible for freeing it.
                     OGRE_FREE_SIMD( finalVertexData, MEMCATEGORY_GEOMETRY );
@@ -239,7 +239,7 @@ namespace Ogre
                                                                  origBufferType,
                                                                  shadowIndexData, keepAsShadow );
                 }
-                catch( Exception &e )
+                catch( Exception& )
                 {
                     //During exceptions we become responsible for freeing it.
                     OGRE_FREE_SIMD( shadowIndexData, MEMCATEGORY_GEOMETRY );

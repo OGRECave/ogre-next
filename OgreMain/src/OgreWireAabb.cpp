@@ -160,7 +160,7 @@ namespace Ogre
                                                          Ogre::BT_IMMUTABLE,
                                                          cubeIndices, true );
         }
-        catch( Ogre::Exception &e )
+        catch( Ogre::Exception& )
         {
             // When keepAsShadow = true, the memory will be freed when the index buffer is destroyed.
             // However if for some weird reason there is an exception raised, the memory will
@@ -191,7 +191,7 @@ namespace Ogre
                                                            BT_IMMUTABLE,
                                                            cubeVertices, true );
         }
-        catch( Ogre::Exception &e )
+        catch( Ogre::Exception& )
         {
             OGRE_FREE_SIMD( vertexBuffer, Ogre::MEMCATEGORY_GEOMETRY );
             vertexBuffer = 0;

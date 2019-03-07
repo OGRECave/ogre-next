@@ -2732,7 +2732,7 @@ namespace Ogre
             {
                 pso->inputLayout = pso->vertexShader->getLayoutForPso( block->vertexElements );
             }
-            catch( Exception &e )
+            catch( Exception& )
             {
                 delete pso;
                 pso = 0;
