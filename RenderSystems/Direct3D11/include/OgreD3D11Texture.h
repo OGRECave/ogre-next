@@ -86,7 +86,7 @@ namespace Ogre {
 
 		bool HasAutoMipMapGenerationEnabled() const { return mAutoMipMapGeneration; }
 
-        DXGI_FORMAT getD3dFormat(void) const                        { return mD3dFormat; }
+        DXGI_FORMAT getD3dFormat(void) const                        { return mD3DFormat; }
         D3D11_SRV_DIMENSION getD3dViewDimension(void) const         { return mD3dViewDimension; }
 
 	protected:
@@ -129,9 +129,6 @@ namespace Ogre {
         void _create2DTex();
         /// internal method, create a blank cube texture
         void _create3DTex();
-
-        /// internal method, return a D3D pixel format for texture creation
-        DXGI_FORMAT _chooseD3DFormat();
 
         /// @copydoc Texture::createInternalResources
         void createInternalResources(void);
@@ -176,7 +173,7 @@ namespace Ogre {
     protected:
         D3D11Device&	mDevice;
 
-        DXGI_FORMAT mD3dFormat;
+        DXGI_FORMAT mD3DFormat;         // Effective pixel format, already gamma corrected if requested
         D3D11_SRV_DIMENSION mD3dViewDimension;
 
         // device depended resources
