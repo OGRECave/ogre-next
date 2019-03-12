@@ -28,6 +28,7 @@ THE SOFTWARE.
 #include "OgreD3D11DepthTexture.h"
 #include "OgreD3D11RenderSystem.h"
 #include "OgreD3D11DepthBuffer.h"
+#include "OgreRoot.h"
 
 namespace Ogre 
 {

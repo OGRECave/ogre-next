@@ -26,7 +26,9 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreD3D11Mappings.h"
+#include "OgreD3D11RenderSystem.h"
 #include "OgrePixelBox.h"
+#include "OgreRoot.h"
 
 namespace Ogre 
 {
@@ -592,6 +594,24 @@ namespace Ogre
         case PF_UNKNOWN:
         default:                return DXGI_FORMAT_UNKNOWN;
         }
+    }
+    //---------------------------------------------------------------------
+    DXGI_FORMAT D3D11Mappings::_getGammaFormat(DXGI_FORMAT format, bool appendSRGB)
+    {
+        if(appendSRGB)
+        {
+            switch(format)
+            {
+            case DXGI_FORMAT_R8G8B8A8_UNORM:       return DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+            case DXGI_FORMAT_B8G8R8A8_UNORM:       return DXGI_FORMAT_B8G8R8A8_UNORM_SRGB;
+            case DXGI_FORMAT_B8G8R8X8_UNORM:       return DXGI_FORMAT_B8G8R8X8_UNORM_SRGB;
+            case DXGI_FORMAT_BC1_UNORM:            return DXGI_FORMAT_BC1_UNORM_SRGB;
+            case DXGI_FORMAT_BC2_UNORM:            return DXGI_FORMAT_BC2_UNORM_SRGB;
+            case DXGI_FORMAT_BC3_UNORM:            return DXGI_FORMAT_BC3_UNORM_SRGB;
+            case DXGI_FORMAT_BC7_UNORM:            return DXGI_FORMAT_BC7_UNORM_SRGB;
+            }
+        }
+        return format;
     }
     //---------------------------------------------------------------------
     PixelFormat D3D11Mappings::_getClosestSupportedPF(PixelFormat ogrePF)

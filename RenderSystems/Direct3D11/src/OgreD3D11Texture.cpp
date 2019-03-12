@@ -1027,22 +1027,7 @@ namespace Ogre
         }
 
         // Choose closest supported D3D format as a D3D format
-        DXGI_FORMAT dxFmt = D3D11Mappings::_getPF( D3D11Mappings::_getClosestSupportedPF( mFormat ) );
-        if ( isHardwareGammaEnabled() )
-        {
-            switch ( dxFmt )
-            {
-                case DXGI_FORMAT_R8G8B8A8_UNORM:  dxFmt = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; break;
-                case DXGI_FORMAT_B8G8R8A8_UNORM:  dxFmt = DXGI_FORMAT_B8G8R8A8_UNORM_SRGB; break;
-                case DXGI_FORMAT_B8G8R8X8_UNORM:  dxFmt = DXGI_FORMAT_B8G8R8X8_UNORM_SRGB; break;
-                case DXGI_FORMAT_BC1_UNORM:       dxFmt = DXGI_FORMAT_BC1_UNORM_SRGB; break;
-                case DXGI_FORMAT_BC2_UNORM:       dxFmt = DXGI_FORMAT_BC2_UNORM_SRGB; break;
-                case DXGI_FORMAT_BC3_UNORM:       dxFmt = DXGI_FORMAT_BC3_UNORM_SRGB; break;
-                case DXGI_FORMAT_BC7_UNORM:       dxFmt = DXGI_FORMAT_BC7_UNORM_SRGB; break;
-            }
-        }
-        return dxFmt;
-
+        return D3D11Mappings::_getGammaFormat(D3D11Mappings::_getPF(D3D11Mappings::_getClosestSupportedPF(mFormat)), isHardwareGammaEnabled());
     }
     //---------------------------------------------------------------------
     void D3D11Texture::_autogenerateMipmaps(void)

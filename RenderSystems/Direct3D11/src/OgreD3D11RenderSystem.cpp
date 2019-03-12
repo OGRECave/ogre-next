@@ -37,6 +37,7 @@ THE SOFTWARE.
 #include "OgreViewport.h"
 #include "OgreLogManager.h"
 #include "OgreMeshManager.h"
+#include "OgreSceneManagerEnumerator.h"
 #include "OgreD3D11HardwareBufferManager.h"
 #include "OgreD3D11HardwareIndexBuffer.h"
 #include "OgreD3D11HardwareVertexBuffer.h"
