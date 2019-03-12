@@ -51,10 +51,10 @@ namespace Ogre
         ManualResourceLoader* loader, D3D11Device & device)
         :Texture(creator, name, handle, group, isManual, loader),
         mDevice(device),
-        mCurrentCacheCursor( 0 ),
-        mAutoMipMapGeneration(false),
         mD3dFormat( DXGI_FORMAT_UNKNOWN ),
-        mD3dViewDimension( D3D11_SRV_DIMENSION_UNKNOWN )
+        mD3dViewDimension( D3D11_SRV_DIMENSION_UNKNOWN ),
+        mCurrentCacheCursor( 0 ),
+        mAutoMipMapGeneration(false)
     {
         memset( mCachedUavViews, 0, sizeof( mCachedUavViews ) );
     }

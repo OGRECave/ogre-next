@@ -96,27 +96,6 @@ namespace Ogre {
         // needed to store data between prepareImpl and loadImpl
         typedef SharedPtr<vector<MemoryDataStreamPtr>::type > LoadedStreams;
 
-        /// D3DDevice pointer
-		D3D11Device	&	mDevice;
-
-        // 1D texture pointer
-        ComPtr<ID3D11Texture1D> mp1DTex;
-        // 2D texture pointer
-        ComPtr<ID3D11Texture2D> mp2DTex;
-        /// cubic texture pointer
-        ComPtr<ID3D11Texture3D> mp3DTex;
-        /// actual texture pointer
-        ComPtr<ID3D11Resource> mpTex;
-        /// Used by MSAA only.
-        ComPtr<ID3D11Texture2D> mpResolved2DTex;
-
-        ComPtr<ID3D11ShaderResourceView> mpShaderResourceView;
-        ComPtr<ID3D11ShaderResourceView> mpShaderResourceViewMsaa;
-        CachedUavView  mCachedUavViews[4];
-        uint8          mCurrentCacheCursor;
-
-        bool mAutoMipMapGeneration;
-
         template<typename fromtype, typename totype>
         void _queryInterface(const ComPtr<fromtype>& from, ComPtr<totype> *to)
         {
@@ -140,16 +119,6 @@ namespace Ogre {
         ID3D11UnorderedAccessView* createUavView( int cacheIdx, int32 mipmapLevel,
                                                   int32 textureArrayIndex,
                                                   PixelFormat pixelFormat );
-
-        // is dynamic
-        bool mIsDynamic; 
-
-        /// Vector of pointers to subsurfaces
-        typedef vector<v1::HardwarePixelBufferSharedPtr>::type SurfaceList;
-        SurfaceList                     mSurfaceList;
-
-        DXGI_FORMAT                     mD3dFormat;
-        D3D11_SRV_DIMENSION             mD3dViewDimension;
 
         /// internal method, load a normal texture
         void _loadTex(LoadedStreams & loadedStreams);
@@ -203,6 +172,31 @@ namespace Ogre {
         LoadedStreams _prepareNormTex();
         LoadedStreams _prepareVolumeTex();
         LoadedStreams _prepareCubeTex();
+
+    protected:
+        D3D11Device&	mDevice;
+
+        DXGI_FORMAT mD3dFormat;
+        D3D11_SRV_DIMENSION mD3dViewDimension;
+
+        // device depended resources
+        ComPtr<ID3D11Resource> mpTex;   // actual texture
+        ComPtr<ID3D11Texture1D> mp1DTex;
+        ComPtr<ID3D11Texture2D> mp2DTex;
+        ComPtr<ID3D11Texture3D> mp3DTex;
+        ComPtr<ID3D11Texture2D> mpResolved2DTex; /// Used by MSAA only.
+
+        ComPtr<ID3D11ShaderResourceView> mpShaderResourceView;
+        ComPtr<ID3D11ShaderResourceView> mpShaderResourceViewMsaa;
+        CachedUavView  mCachedUavViews[4];
+        uint8          mCurrentCacheCursor;
+
+        bool mAutoMipMapGeneration;
+        bool mIsDynamic; 
+
+        /// Vector of pointers to subsurfaces
+        typedef vector<v1::HardwarePixelBufferSharedPtr>::type SurfaceList;
+        SurfaceList                     mSurfaceList;
     };
 
     /// RenderTexture implementation for D3D11
