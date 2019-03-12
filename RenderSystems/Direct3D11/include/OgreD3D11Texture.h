@@ -192,7 +192,6 @@ namespace Ogre {
         uint8          mCurrentCacheCursor;
 
         bool mAutoMipMapGeneration;
-        bool mIsDynamic; 
 
         /// Vector of pointers to subsurfaces
         typedef vector<v1::HardwarePixelBufferSharedPtr>::type SurfaceList;

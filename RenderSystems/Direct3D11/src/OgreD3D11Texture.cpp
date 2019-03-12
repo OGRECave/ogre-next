@@ -491,18 +491,6 @@ namespace Ogre
             mSrcHeight = mHeight;
         }
 
-        // Determine D3D pool to use
-        // Use managed unless we're a render target or user has asked for 
-        // a dynamic texture
-        if (//(mUsage & TU_RENDERTARGET) ||
-            (mUsage & TU_DYNAMIC))
-        {
-            mIsDynamic = true;
-        }
-        else
-        {
-            mIsDynamic = false;
-        }
         // load based on tex.type
         switch (this->getTextureType())
         {
@@ -657,7 +645,7 @@ namespace Ogre
         desc.CPUAccessFlags = D3D11Mappings::_getAccessFlags(_getTextureUsage());
         desc.MiscFlags      = D3D11Mappings::_getTextureMiscFlags(desc.BindFlags, getTextureType(), _getTextureUsage());
 
-        if (mIsDynamic)
+        if (mUsage & TU_DYNAMIC)
         {
                 desc.SampleDesc.Count = 1;
                 desc.SampleDesc.Quality = 0;
@@ -878,11 +866,6 @@ namespace Ogre
 
 		desc.CPUAccessFlags = D3D11Mappings::_getAccessFlags(_getTextureUsage());
         desc.MiscFlags      = 0;
-        if (mIsDynamic)
-        {
-            desc.Usage          = D3D11_USAGE_DYNAMIC;
-            desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-        }
 
         // create the texture
         hr = mDevice->CreateTexture3D(  
