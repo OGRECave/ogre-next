@@ -130,7 +130,6 @@ namespace Ogre {
                     "D3D11Texture::_queryInterface" );
             }
         }
-        unsigned int mEffectIndex;
 #ifdef USE_D3DX11_LIBRARY       
         void _loadDDS(DataStreamPtr &dstream);
 #endif
@@ -145,10 +144,6 @@ namespace Ogre {
         // is dynamic
         bool mIsDynamic; 
 
-        /// cube texture individual face names
-        String                          mCubeFaceNames[6];
-        // Dynamic textures?
-        bool                            mDynamicTextures;
         /// Vector of pointers to subsurfaces
         typedef vector<v1::HardwarePixelBufferSharedPtr>::type SurfaceList;
         SurfaceList                     mSurfaceList;
@@ -181,9 +176,6 @@ namespace Ogre {
         void _setSrcAttributes(unsigned long width, unsigned long height, unsigned long depth, PixelFormat format);
         /// internal method, set Texture class final texture protected attributes
         void _setFinalAttributes(unsigned long width, unsigned long height, unsigned long depth, PixelFormat format, UINT miscflags);
-
-        /// internal method, the cube map face name for the spec. face index
-		String _getCubeFaceName(unsigned char face) const { assert(face < 6); return mCubeFaceNames[face]; }
 
         virtual void _autogenerateMipmaps(void);
 
