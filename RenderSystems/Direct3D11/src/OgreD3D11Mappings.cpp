@@ -729,9 +729,9 @@ namespace Ogre
         return retVal;
 	}
 
-    UINT D3D11Mappings::_getTextureMiscFlags(UINT bindflags, TextureType textype, bool isdynamic, int usage)
+    UINT D3D11Mappings::_getTextureMiscFlags(UINT bindflags, TextureType textype, TextureUsage usage)
     {
-        if(isdynamic)
+        if(_isDynamic(usage))
             return 0;
 
         UINT flags = 0;
