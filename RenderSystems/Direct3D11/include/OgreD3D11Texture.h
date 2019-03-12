@@ -174,6 +174,7 @@ namespace Ogre {
         D3D11Device&	mDevice;
 
         DXGI_FORMAT mD3DFormat;         // Effective pixel format, already gamma corrected if requested
+        DXGI_SAMPLE_DESC mFSAAType;     // Effective FSAA mode, limited by hardware capabilities
         D3D11_SRV_DIMENSION mD3dViewDimension;
 
         // device depended resources

@@ -56,6 +56,8 @@ namespace Ogre
         mCurrentCacheCursor( 0 ),
         mAutoMipMapGeneration(false)
     {
+        mFSAAType.Count = 1;
+        mFSAAType.Quality = 0;
         memset( mCachedUavViews, 0, sizeof( mCachedUavViews ) );
     }
     //---------------------------------------------------------------------
@@ -337,7 +339,7 @@ namespace Ogre
 
                 images[i].load(stream, ext);
 
-                size_t imageMips = images[i].getNumMipmaps();
+                uint32 imageMips = images[i].getNumMipmaps();
 
                 if(imageMips < mNumMipmaps) {
                     mNumMipmaps = imageMips;
@@ -503,6 +505,18 @@ namespace Ogre
         // Choose closest supported D3D format
         mD3DFormat = D3D11Mappings::_getGammaFormat(D3D11Mappings::_getPF(D3D11Mappings::_getClosestSupportedPF(mFormat)), isHardwareGammaEnabled());
 
+        mFSAAType.Count = 1;
+        mFSAAType.Quality = 0;
+        if((mUsage & TU_RENDERTARGET) != 0 && (mUsage & TU_DYNAMIC) == 0)
+        {
+            D3D11RenderSystem* rsys = static_cast<D3D11RenderSystem*>(Root::getSingleton().getRenderSystem());
+            // http://msdn.microsoft.com/en-us/library/windows/desktop/ff476150%28v=vs.85%29.aspx#ID3D11Device_CreateTexture2D
+            // 10Level9, When using D3D11_BIND_SHADER_RESOURCE, SampleDesc.Count must be 1.
+            if(rsys->_getFeatureLevel() >= D3D_FEATURE_LEVEL_10_0 || (mUsage & TU_NOT_TEXTURE))
+                rsys->determineFSAASettings(mFSAA, mFSAAHint, mD3DFormat, &mFSAAType);
+        }
+
+
         // load based on tex.type
         switch (this->getTextureType())
         {
@@ -609,19 +623,6 @@ namespace Ogre
         // we must have those defined here
         assert(mSrcWidth > 0 || mSrcHeight > 0);
 
-        DXGI_FORMAT d3dPF = mD3DFormat; // would be removed by next commit
-        bool isBinaryCompressedFormat = 
-            d3dPF == DXGI_FORMAT_BC1_TYPELESS || d3dPF == DXGI_FORMAT_BC1_UNORM || d3dPF == DXGI_FORMAT_BC1_UNORM_SRGB ||
-            d3dPF == DXGI_FORMAT_BC2_TYPELESS || d3dPF == DXGI_FORMAT_BC2_UNORM || d3dPF == DXGI_FORMAT_BC2_UNORM_SRGB ||
-            d3dPF == DXGI_FORMAT_BC3_TYPELESS || d3dPF == DXGI_FORMAT_BC3_UNORM || d3dPF == DXGI_FORMAT_BC3_UNORM_SRGB ||
-            d3dPF == DXGI_FORMAT_BC4_TYPELESS || d3dPF == DXGI_FORMAT_BC4_UNORM || d3dPF == DXGI_FORMAT_BC4_SNORM ||
-            d3dPF == DXGI_FORMAT_BC5_TYPELESS || d3dPF == DXGI_FORMAT_BC5_UNORM || d3dPF == DXGI_FORMAT_BC5_SNORM ||
-#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-            d3dPF == DXGI_FORMAT_BC6H_TYPELESS || d3dPF == DXGI_FORMAT_BC6H_UF16 || d3dPF == DXGI_FORMAT_BC6H_SF16 || 
-            d3dPF == DXGI_FORMAT_BC7_TYPELESS || d3dPF == DXGI_FORMAT_BC7_UNORM || d3dPF == DXGI_FORMAT_BC7_UNORM_SRGB ||
-#endif
-            0;
-
         // determine total number of mipmaps including main one (d3d11 convention)
         UINT numMips = (mNumRequestedMipmaps == MIP_UNLIMITED || (1U << mNumRequestedMipmaps) > std::max(mSrcWidth, mSrcHeight)) ? 0 : mNumRequestedMipmaps + 1;
 
@@ -631,39 +632,15 @@ namespace Ogre
         desc.MipLevels      = numMips;
         desc.ArraySize      = mDepth == 0 ? 1 : mDepth;
         desc.Format         = mD3DFormat;
-
-        // Handle multisampled render target
-        if (mUsage & TU_RENDERTARGET && (mFSAA > 1 || atoi(mFSAAHint.c_str()) > 0))
-        {
-                desc.SampleDesc.Count = mFSAA;
-                desc.SampleDesc.Quality = atoi(mFSAAHint.c_str());
-        }
-        else
-        {
-                desc.SampleDesc.Count = 1;
-                desc.SampleDesc.Quality = 0;
-        }
-
+        desc.SampleDesc     = mFSAAType;
         desc.Usage          = D3D11Mappings::_getUsage(_getTextureUsage());
         desc.BindFlags      = D3D11Mappings::_getTextureBindFlags(mD3DFormat, _getTextureUsage());
         desc.CPUAccessFlags = D3D11Mappings::_getAccessFlags(_getTextureUsage());
         desc.MiscFlags      = D3D11Mappings::_getTextureMiscFlags(desc.BindFlags, getTextureType(), _getTextureUsage());
 
-        if (mUsage & TU_DYNAMIC)
-        {
-                desc.SampleDesc.Count = 1;
-                desc.SampleDesc.Quality = 0;
-        }
-
         if (this->getTextureType() == TEX_TYPE_CUBE_MAP)
         {
                 desc.ArraySize          = 6;
-        }
-
-        if( isBinaryCompressedFormat )
-        {
-                desc.SampleDesc.Count = 1;
-                desc.SampleDesc.Quality = 0;
         }
 
         D3D11RenderSystem* rs = (D3D11RenderSystem*)Root::getSingleton().getRenderSystem();
@@ -748,7 +725,7 @@ namespace Ogre
                 break;
 
             case TEX_TYPE_2D_ARRAY:
-                if (mUsage & TU_RENDERTARGET && (mFSAA > 1 || atoi(mFSAAHint.c_str()) > 0))
+                if (mFSAAType.Count > 1)
                 {
                     srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DMSARRAY;
                     srvDesc.Texture2DMSArray.FirstArraySlice = 0;
@@ -765,9 +742,8 @@ namespace Ogre
                 break;
 
             case TEX_TYPE_2D:
-            case TEX_TYPE_1D:   // For Feature levels that do not support 1D textures,
-                                // revert to creating a 2D texture.
-                if (mUsage & TU_RENDERTARGET && (mFSAA > 1 || atoi(mFSAAHint.c_str()) > 0))
+            case TEX_TYPE_1D:   // For Feature levels that do not support 1D textures, revert to creating a 2D texture.
+                if (mFSAAType.Count > 1)
                 {
                     srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DMS;
                 }
@@ -782,7 +758,7 @@ namespace Ogre
 
             mD3dViewDimension = srvDesc.ViewDimension;
 
-            if( mFSAA > 1 || atoi(mFSAAHint.c_str()) > 0 )
+            if(mFSAAType.Count > 1)
             {
                 hr = mDevice->CreateShaderResourceView( mp2DTex.Get(), &srvDesc, mpShaderResourceViewMsaa.ReleaseAndGetAddressOf() );
                 if (FAILED(hr) || mDevice.isError())
@@ -837,8 +813,7 @@ namespace Ogre
             }
         }
 
-        this->_setFinalAttributes( desc.Width, desc.Height, desc.ArraySize / getNumFaces(),
-                                   D3D11Mappings::_getPF(desc.Format), desc.MiscFlags );
+        this->_setFinalAttributes( desc.Width, desc.Height, desc.ArraySize / getNumFaces(), D3D11Mappings::_getPF(desc.Format), desc.MiscFlags );
     }
     //---------------------------------------------------------------------
     void D3D11Texture::_create3DTex()
@@ -915,8 +890,7 @@ namespace Ogre
             }
         }
 
-        this->_setFinalAttributes( desc.Width, desc.Height, desc.Depth,
-                                   D3D11Mappings::_getPF(desc.Format), desc.MiscFlags );
+        this->_setFinalAttributes( desc.Width, desc.Height, desc.Depth, D3D11Mappings::_getPF(desc.Format), desc.MiscFlags );
     }
     //-------------------------------------------------------------------------------
     void D3D11Texture::_setFinalAttributes(unsigned long width, unsigned long height, 
