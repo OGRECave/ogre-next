@@ -1089,8 +1089,8 @@ namespace Ogre
         }
 
         return passBufferPtr;
-#endif
     }
+#endif
     //-----------------------------------------------------------------------------------
     HlmsCache HlmsPbs::preparePassHash( const CompositorShadowNode *shadowNode, bool casterPass,
                                         bool dualParaboloid, SceneManager *sceneManager )
