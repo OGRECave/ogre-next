@@ -162,7 +162,7 @@ namespace Ogre
 
             if( texture->getNumMipmaps() > 0 )
             {
-                if( !(texture->getUsage() & TU_UAV) || (texture->getUsage() & TU_NOT_TEXTURE) )
+                if( !(texture->getUsage() & TU_UAV) || (texture->getUsage() & TU_NOT_SRV) )
                 {
                     OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Texture '" + texture->getName() +
                                  "' must be flagged as UAV texture in order to be able to generate "

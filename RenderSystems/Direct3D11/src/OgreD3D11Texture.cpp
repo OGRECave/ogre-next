@@ -512,7 +512,7 @@ namespace Ogre
             D3D11RenderSystem* rsys = static_cast<D3D11RenderSystem*>(Root::getSingleton().getRenderSystem());
             // http://msdn.microsoft.com/en-us/library/windows/desktop/ff476150%28v=vs.85%29.aspx#ID3D11Device_CreateTexture2D
             // 10Level9, When using D3D11_BIND_SHADER_RESOURCE, SampleDesc.Count must be 1.
-            if(rsys->_getFeatureLevel() >= D3D_FEATURE_LEVEL_10_0 || (mUsage & TU_NOT_TEXTURE))
+            if(rsys->_getFeatureLevel() >= D3D_FEATURE_LEVEL_10_0 || (mUsage & TU_NOT_SRV))
                 rsys->determineFSAASettings(mFSAA, mFSAAHint, mD3DFormat, &mFSAAType);
         }
 
@@ -595,7 +595,7 @@ namespace Ogre
         D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
         ZeroMemory( &srvDesc, sizeof(srvDesc) );
 
-        if( !(mUsage & TU_NOT_TEXTURE) )
+        if( !(mUsage & TU_NOT_SRV) )
         {
             srvDesc.Format = desc.Format;
             srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE1D;
@@ -712,7 +712,7 @@ namespace Ogre
         D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
         ZeroMemory( &srvDesc, sizeof(srvDesc) );
 
-        if( !(mUsage & TU_NOT_TEXTURE) )
+        if( !(mUsage & TU_NOT_SRV) )
         {
             srvDesc.Format = desc.Format;
 
@@ -872,7 +872,7 @@ namespace Ogre
         D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
         ZeroMemory( &srvDesc, sizeof(srvDesc) );
 
-        if( !(mUsage & TU_NOT_TEXTURE) )
+        if( !(mUsage & TU_NOT_SRV) )
         {
             srvDesc.Format = desc.Format;
             srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE3D;
@@ -975,7 +975,7 @@ namespace Ogre
     //---------------------------------------------------------------------
     void D3D11Texture::_createSurfaceList(void)
     {
-        if( mUsage & TU_NOT_TEXTURE )
+        if( mUsage & TU_NOT_SRV && !(mUsage & TU_RENDERTARGET) )
             return;
 
         unsigned int bufusage;
