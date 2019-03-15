@@ -52,7 +52,6 @@ namespace Ogre
         :Texture(creator, name, handle, group, isManual, loader),
         mDevice(device),
         mD3DFormat( DXGI_FORMAT_UNKNOWN ),
-        mD3dViewDimension( D3D11_SRV_DIMENSION_UNKNOWN ),
         mCurrentCacheCursor( 0 ),
         mAutoMipMapGeneration(false)
     {
@@ -600,7 +599,6 @@ namespace Ogre
             srvDesc.Format = desc.Format;
             srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE1D;
             srvDesc.Texture1D.MipLevels = desc.MipLevels;
-            mD3dViewDimension = srvDesc.ViewDimension;
 
             hr = mDevice->CreateShaderResourceView( mp1DTex.Get(), &srvDesc, mpShaderResourceView.ReleaseAndGetAddressOf() );
             if (FAILED(hr) || mDevice.isError())
@@ -756,8 +754,6 @@ namespace Ogre
                 break;
             }
 
-            mD3dViewDimension = srvDesc.ViewDimension;
-
             if(mFSAAType.Count > 1)
             {
                 hr = mDevice->CreateShaderResourceView( mp2DTex.Get(), &srvDesc, mpShaderResourceViewMsaa.ReleaseAndGetAddressOf() );
@@ -878,7 +874,6 @@ namespace Ogre
             srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE3D;
             srvDesc.Texture3D.MostDetailedMip = 0;
             srvDesc.Texture3D.MipLevels = desc.MipLevels;
-            mD3dViewDimension = srvDesc.ViewDimension;
             hr = mDevice->CreateShaderResourceView( mp3DTex.Get(), &srvDesc, mpShaderResourceView.ReleaseAndGetAddressOf() );
             if (FAILED(hr) || mDevice.isError())
             {
@@ -1182,39 +1177,33 @@ namespace Ogre
         ZeroMemory( &RTVDesc, sizeof(RTVDesc) );
 
         RTVDesc.Format = buffer->getParentTexture()->getD3dFormat();
-        switch(buffer->getParentTexture()->getD3dViewDimension())
+        switch(buffer->getParentTexture()->getTextureType())
         {
-        case D3D11_SRV_DIMENSION_BUFFER:
-            RTVDesc.ViewDimension = D3D11_RTV_DIMENSION_BUFFER;
+        case TEX_TYPE_1D:
+            {
+                D3D11RenderSystem* rs = (D3D11RenderSystem*)Root::getSingleton().getRenderSystem();
+                if(rs->_getFeatureLevel() >= D3D_FEATURE_LEVEL_10_0)
+                {
+                    RTVDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE1D;
+                    break; // For Feature levels that do not support 1D textures, revert to creating a 2D texture.
+                }
+            }
+        case TEX_TYPE_2D:
+            RTVDesc.ViewDimension = (buffer->getParentTexture()->getD3dSampleDesc().Count > 1) ?
+                D3D11_RTV_DIMENSION_TEXTURE2DMS : D3D11_RTV_DIMENSION_TEXTURE2D;
             break;
-        case D3D11_SRV_DIMENSION_TEXTURE1D:
-            RTVDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE1D;
+        case TEX_TYPE_2D_ARRAY:
+            RTVDesc.ViewDimension = (buffer->getParentTexture()->getD3dSampleDesc().Count > 1) ?
+                D3D11_RTV_DIMENSION_TEXTURE2DMSARRAY : D3D11_RTV_DIMENSION_TEXTURE2DARRAY;
+            RTVDesc.Texture2DArray.FirstArraySlice = mZOffset;
+            RTVDesc.Texture2DArray.ArraySize = 1;
             break;
-        case D3D11_SRV_DIMENSION_TEXTURE1DARRAY:
-            RTVDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE1DARRAY;
-            break;
-        case D3D11_SRV_DIMENSION_TEXTURECUBE:
+        case TEX_TYPE_CUBE_MAP:
             RTVDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DARRAY;
             RTVDesc.Texture2DArray.FirstArraySlice = buffer->getFace();
             RTVDesc.Texture2DArray.ArraySize = 1;
             break;
-        case D3D11_SRV_DIMENSION_TEXTURE2D:
-            RTVDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-            break;
-        case D3D11_SRV_DIMENSION_TEXTURE2DARRAY:
-            RTVDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DARRAY;
-            RTVDesc.Texture2DArray.FirstArraySlice = mZOffset;
-            RTVDesc.Texture2DArray.ArraySize = 1;
-            break;
-        case D3D11_SRV_DIMENSION_TEXTURE2DMS:
-            RTVDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DMS;
-            break;
-        case D3D11_SRV_DIMENSION_TEXTURE2DMSARRAY:
-            RTVDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DMSARRAY;
-            RTVDesc.Texture2DArray.FirstArraySlice = mZOffset;
-            RTVDesc.Texture2DArray.ArraySize = 1;
-            break;
-        case D3D11_SRV_DIMENSION_TEXTURE3D:
+        case TEX_TYPE_3D:
             RTVDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE3D;
             break;
         default:

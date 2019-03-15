@@ -87,7 +87,7 @@ namespace Ogre {
 		bool HasAutoMipMapGenerationEnabled() const { return mAutoMipMapGeneration; }
 
         DXGI_FORMAT getD3dFormat(void) const                        { return mD3DFormat; }
-        D3D11_SRV_DIMENSION getD3dViewDimension(void) const         { return mD3dViewDimension; }
+        DXGI_SAMPLE_DESC getD3dSampleDesc(void) const               { return mFSAAType; }
 
 	protected:
 		TextureUsage _getTextureUsage() { return static_cast<TextureUsage>(mUsage); }
@@ -175,7 +175,6 @@ namespace Ogre {
 
         DXGI_FORMAT mD3DFormat;         // Effective pixel format, already gamma corrected if requested
         DXGI_SAMPLE_DESC mFSAAType;     // Effective FSAA mode, limited by hardware capabilities
-        D3D11_SRV_DIMENSION mD3dViewDimension;
 
         // device depended resources
         ComPtr<ID3D11Resource> mpTex;   // actual texture
