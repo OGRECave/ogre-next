@@ -29,6 +29,7 @@ namespace Demo
 
         Ogre::TextureGpu            *mBakedResult;
         Ogre::CompositorWorkspace   *mBakedWorkspace;
+        Ogre::CompositorWorkspace   *mShowBakedTexWorkspace;
 
         Ogre::Item      *mFloorRender;
         Ogre::Item      *mFloorBaked;

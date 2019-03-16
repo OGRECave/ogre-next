@@ -32,6 +32,7 @@
 #include "OgreTextureFilters.h"
 #include "OgreTextureBox.h"
 #include "OgrePixelFormatGpuUtils.h"
+#include "OgreWindow.h"
 
 #include "OgreWireAabb.h"
 
@@ -59,6 +60,7 @@ namespace Demo
         mAreaMaskTex( 0 ),
         mBakedResult( 0 ),
         mBakedWorkspace( 0 ),
+        mShowBakedTexWorkspace( 0 ),
         mFloorRender( 0 ),
         mFloorBaked( 0 ),
         mRenderingMode( RenderingMode::ShowRenderScene )
@@ -245,6 +247,13 @@ namespace Demo
                                               Ogre::HlmsBlendblock(),
                                               Ogre::HlmsParamVec() ) );
         datablock->setTexture( Ogre::PBSM_EMISSIVE, mBakedResult );
+
+        Ogre::CompositorChannelVec externalRenderTargets;
+        externalRenderTargets.push_back( mGraphicsSystem->getRenderWindow()->getTexture() );
+        externalRenderTargets.push_back( mBakedResult );
+        mShowBakedTexWorkspace = compositorManager->addWorkspace( sceneManager, externalRenderTargets,
+                                                                  mGraphicsSystem->getCamera(),
+                                                                  "ShowBakingTextureWorkspace", false );
     }
     //-----------------------------------------------------------------------------------
     void Tutorial_TextureBakingGameState::updateBakingTexture(void)
@@ -376,13 +385,20 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void Tutorial_TextureBakingGameState::update( float timeSinceLast )
     {
-        updateBakingTexture();
+        //updateBakingTexture();
         TutorialGameState::update( timeSinceLast );
     }
     //-----------------------------------------------------------------------------------
     void Tutorial_TextureBakingGameState::updateRenderingMode(void)
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
+
+        if( mRenderingMode != RenderingMode::ShowBakedTexture )
+        {
+            mShowBakedTexWorkspace->setEnabled( false );
+            mGraphicsSystem->getCompositorWorkspace()->setEnabled( true );
+        }
+
         if( mRenderingMode == RenderingMode::ShowRenderScene )
         {
             sceneManager->setVisibilityMask( c_renderObjVisibilityFlags | c_lightPlanesVisibilityFlag );
@@ -399,6 +415,8 @@ namespace Demo
         }
         else
         {
+            mShowBakedTexWorkspace->setEnabled( true );
+            mGraphicsSystem->getCompositorWorkspace()->setEnabled( false );
         }
     }
     //-----------------------------------------------------------------------------------
