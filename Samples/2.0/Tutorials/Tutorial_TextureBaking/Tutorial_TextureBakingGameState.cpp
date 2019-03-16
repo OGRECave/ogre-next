@@ -261,6 +261,7 @@ namespace Demo
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
         const Ogre::uint32 oldMask = sceneManager->getVisibilityMask();
+        const Ogre::uint32 oldLightMask = sceneManager->getLightMask();
         const Ogre::ColourValue upperHemi = sceneManager->getAmbientLightUpperHemisphere();
         const Ogre::ColourValue lowerHemi = sceneManager->getAmbientLightLowerHemisphere();
         const Ogre::Vector3 hemiDir = sceneManager->getAmbientLightHemisphereDir();
@@ -268,6 +269,7 @@ namespace Demo
         const Ogre::uint32 envFeatures = sceneManager->getEnvFeatures();
 
         sceneManager->setVisibilityMask( c_renderObjVisibilityFlags );
+        sceneManager->setLightMask( 0xFFFFFFFFu );
         sceneManager->setAmbientLight( Ogre::ColourValue::Black, Ogre::ColourValue::Black,
                                        Ogre::Vector3::UNIT_Y, envmapScale );
 
@@ -280,6 +282,7 @@ namespace Demo
         sceneManager->clearFrameData();
 
         sceneManager->setVisibilityMask( oldMask );
+        sceneManager->setLightMask( oldLightMask );
         sceneManager->setAmbientLight( upperHemi, lowerHemi, hemiDir, envmapScale, envFeatures );
     }
     //-----------------------------------------------------------------------------------
@@ -394,6 +397,8 @@ namespace Demo
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
+        sceneManager->setLightMask( 0xffffffff );
+
         if( mRenderingMode != RenderingMode::ShowBakedTexture )
         {
             mShowBakedTexWorkspace->setEnabled( false );
@@ -407,6 +412,9 @@ namespace Demo
         else if( mRenderingMode == RenderingMode::ShowSceneWithBakedTexture )
         {
             sceneManager->setVisibilityMask( c_bakedObjVisibilityFlags | c_lightPlanesVisibilityFlag );
+#if OGRE_NO_FINE_LIGHT_MASK_GRANULARITY
+            sceneManager->setLightMask( 0 );
+#endif
         }
         else
         {

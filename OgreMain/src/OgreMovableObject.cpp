@@ -574,7 +574,7 @@ namespace Ogre {
         culledObjects.swap( outCulledObjects );
     }
     //-----------------------------------------------------------------------
-    void MovableObject::cullLights( const size_t numNodes, ObjectData objData,
+    void MovableObject::cullLights( const size_t numNodes, ObjectData objData, uint32 sceneLightMask,
                                     LightListInfo &outGlobalLightList, const FrustumVec &frustums,
                                     const FrustumVec &cubemapFrustums )
     {
@@ -629,6 +629,8 @@ namespace Ogre {
             ++aabbsIt;
             ++itor;
         }
+
+        ArrayInt lightMask = Mathlib::SetAll( sceneLightMask );
 
         //Implementation detail: Ogre 1.9 treated spotlights as a point (Sphere vs Plane collision test)
         //for simplicity (and presumably performance). We use aabbs for all lights in Ogre 2.0, which
@@ -712,8 +714,10 @@ namespace Ogre {
                                                 (objData.mLightMask) );
 
             //isVisible = isVisible() //Check if the light is disabled.
+            //isVisible = isVisible && (lightMask & visibilityFlags)
             ArrayMaskI isVisible = Mathlib::TestFlags4( *visibilityFlags,
                                                         Mathlib::SetAll( LAYER_VISIBILITY ) );
+            isVisible = Mathlib::TestFlags4( isVisible, Mathlib::And( *visibilityFlags, lightMask ) );
 
             mask = Mathlib::And( mask, isVisible );
 

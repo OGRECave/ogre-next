@@ -272,8 +272,9 @@ namespace Ogre {
             An array of all frustums that are used at least once as cubemaps
             (@See SceneManager::createCamera)
         */
-        static void cullLights( const size_t numNodes, ObjectData t, LightListInfo &outGlobalLightList,
-                                const FrustumVec &frustums , const FrustumVec &cubemapFrustums );
+        static void cullLights( const size_t numNodes, ObjectData t, uint32 sceneLightMask,
+                                LightListInfo &outGlobalLightList,
+                                const FrustumVec &frustums, const FrustumVec &cubemapFrustums );
 
         /** @See SceneManager::buildLightList
         @remarks

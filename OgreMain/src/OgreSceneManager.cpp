@@ -146,6 +146,7 @@ mShadowTextureFadeStart(0.7),
 mShadowTextureFadeEnd(0.9),
 mShadowTextureCustomCasterPass(0),
 mVisibilityMask(0xFFFFFFFF & VisibilityFlags::RESERVED_VISIBILITY_FLAGS),
+mLightMask(0xFFFFFFFF),
 mFindVisibleObjects(true),
 mNumWorkerThreads( std::max<size_t>( numWorkerThreads, 1u ) ),
 mForceMainThread( numWorkerThreads == 0u ? true : false ),
@@ -2404,7 +2405,7 @@ void SceneManager::cullFrustum( const CullFrustumRequest &request, size_t thread
     const Camera *lodCamera = request.lodCamera;
 
     const uint32 visibilityMask = request.cullingLights ?
-                camera->getLastViewport()->getLightVisibilityMask() :
+                (camera->getLastViewport()->getLightVisibilityMask() & mLightMask) :
                 ((camera->getLastViewport()->getVisibilityMask() & this->getVisibilityMask()) |
                  (camera->getLastViewport()->getVisibilityMask() &
                                     ~VisibilityFlags::RESERVED_VISIBILITY_FLAGS));
@@ -2529,6 +2530,8 @@ void SceneManager::buildLightList()
         ObjectMemoryManagerVec::const_iterator it = mLightsMemoryManagerCulledList.begin();
         ObjectMemoryManagerVec::const_iterator en = mLightsMemoryManagerCulledList.end();
 
+        const uint32 visibilityMask = mLightMask;
+
         size_t idx = 0;
 
         while( it != en )
@@ -2550,7 +2553,7 @@ void SceneManager::buildLightList()
                     {
                         const bool isVisible = (objData.mVisibilityFlags[j] &
                                                 VisibilityFlags::LAYER_VISIBILITY) != 0;
-                        if( isVisible )
+                        if( isVisible && objData.mVisibilityFlags[j] & visibilityMask )
                         {
                             mGlobalLightList.visibilityMask[idx] = objData.mVisibilityFlags[j];
                             mGlobalLightList.boundingSphere[idx] = Sphere(
@@ -2734,7 +2737,7 @@ void SceneManager::buildLightListThread01( const BuildLightListRequest &buildLig
             numObjs = std::min( numObjs, totalObjs - toAdvance );
             objData.advancePack( toAdvance / ARRAY_PACKED_REALS );
 
-            Light::cullLights( numObjs, objData, threadLocalLightList,
+            Light::cullLights( numObjs, objData, mLightMask, threadLocalLightList,
                                mVisibleCameras, mCubeMapCameras );
         }
 

@@ -907,7 +907,9 @@ namespace Ogre
             getProperty( HlmsBaseProp::ForwardPlus ) ||
             getProperty( PbsProperty::UseEnvProbeMap ) ||
             getProperty( PbsProperty::UsePlanarReflections ) ||
-            getProperty( PbsProperty::AmbientHemisphere ) )
+            getProperty( PbsProperty::AmbientHemisphere ) ||
+            getProperty( HlmsBaseProp::LightsAreaApprox ) ||
+            getProperty( HlmsBaseProp::LightsAreaLtc ) )
         {
             setProperty( PbsProperty::NeedsViewDir, 1 );
         }
