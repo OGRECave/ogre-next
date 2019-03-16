@@ -1,0 +1,106 @@
+fragment_program Ogre/TextureBaking/DilationDownsample_ps_GLSL glsl
+{
+	source TextureBakingDilationDownsample_ps.glsl
+	default_params
+	{
+		param_named srcTex int 0
+	}
+}
+
+fragment_program Ogre/TextureBaking/DilationDownsample_ps_HLSL hlsl
+{
+	source TextureBakingDilationDownsample_ps.hlsl
+	entry_point main
+	target ps_5_0 ps_4_0 ps_4_0_level_9_1 ps_4_0_level_9_3
+}
+
+fragment_program Ogre/TextureBaking/DilationDownsample_ps_Metal metal
+{
+	source TextureBakingDilationDownsample_ps.metal
+	shader_reflection_pair_hint Ogre/Compositor/Quad_vs
+}
+
+fragment_program Ogre/TextureBaking/DilationDownsample_ps unified
+{
+	delegate Ogre/TextureBaking/DilationDownsample_ps_GLSL
+	delegate Ogre/TextureBaking/DilationDownsample_ps_HLSL
+	delegate Ogre/TextureBaking/DilationDownsample_ps_Metal
+}
+
+material Ogre/TextureBaking/DilationDownsample
+{
+	technique
+	{
+		pass
+		{
+			depth_check off
+			depth_write off
+
+			cull_hardware none
+
+			vertex_program_ref Ogre/Compositor/Quad_vs
+			{
+			}
+
+			fragment_program_ref Ogre/TextureBaking/DilationDownsample_ps
+			{
+			}
+
+			texture_unit srcTex
+			{
+				filtering			none
+				tex_address_mode	clamp
+			}
+		}
+	}
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+fragment_program Ogre/TextureBaking/Dilation_ps_GLSL glsl
+{
+	source TextureBakingDilation_ps.glsl
+	default_params
+	{
+		param_named srcTex int 0
+	}
+}
+
+fragment_program Ogre/TextureBaking/Dilation_ps_HLSL hlsl
+{
+	source TextureBakingDilation_ps.hlsl
+	entry_point main
+	target ps_5_0 ps_4_0 ps_4_0_level_9_1 ps_4_0_level_9_3
+}
+
+fragment_program Ogre/TextureBaking/Dilation_ps_Metal metal
+{
+	source TextureBakingDilation_ps.metal
+	shader_reflection_pair_hint Ogre/Compositor/Quad_vs
+}
+
+fragment_program Ogre/TextureBaking/Dilation_ps unified
+{
+	delegate Ogre/TextureBaking/Dilation_ps_GLSL
+	delegate Ogre/TextureBaking/Dilation_ps_HLSL
+	delegate Ogre/TextureBaking/Dilation_ps_Metal
+}
+
+material Ogre/TextureBaking/Dilation : Ogre/TextureBaking/DilationDownsample
+{
+	technique
+	{
+		pass
+		{
+			vertex_program_ref Ogre/Compositor/Quad_vs
+			{
+			}
+
+			fragment_program_ref Ogre/TextureBaking/Dilation_ps
+			{
+			}
+		}
+	}
+}

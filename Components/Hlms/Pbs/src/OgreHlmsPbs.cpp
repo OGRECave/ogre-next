@@ -59,6 +59,8 @@ THE SOFTWARE.
 
 #include "Animation/OgreSkeletonInstance.h"
 
+#include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
+
 #include "OgreTextureGpu.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreTextureGpuManager.h"
@@ -1310,6 +1312,15 @@ namespace Ogre
 
         bool isShadowCastingPointLight = false;
 
+        const CompositorPass *pass = sceneManager->getCurrentCompositorPass();
+        CompositorPassSceneDef const *passSceneDef = 0;
+
+        if( pass && pass->getType() == PASS_SCENE )
+        {
+            OGRE_ASSERT_HIGH( dynamic_cast<const CompositorPassSceneDef*>( pass->getDefinition() ) );
+            passSceneDef = static_cast<const CompositorPassSceneDef*>( pass->getDefinition() );
+        }
+
         //mat4 viewProj;
         size_t mapSize = 16 * 4;
 
@@ -1359,6 +1370,10 @@ namespace Ogre
             //vec4 shadowRcv[numShadowMapLights].texViewZRow
             if( mShadowFilter == ExponentialShadowMaps )
                 mapSize += (4 * 4) * numShadowMapLights;
+
+            //vec4 pixelOffset2x
+            if( passSceneDef && passSceneDef->mUvBakingSet != 0xFF )
+                mapSize += 4u * 4u;
 
             //float windowHeight + padding
             if( !mPrePassTextures->empty() )
@@ -1551,6 +1566,16 @@ namespace Ogre
                 ++shadowMapTexIdx;
             }
 
+            //vec4 pixelOffset2x
+            if( passSceneDef && passSceneDef->mUvBakingSet != 0xFF )
+            {
+                *passBufferPtr++ = static_cast<float>( passSceneDef->mUvBakingOffset.x * Real(2.0) /
+                                                       renderTarget->getWidth() );
+                *passBufferPtr++ = static_cast<float>( passSceneDef->mUvBakingOffset.y * Real(2.0) /
+                                                       renderTarget->getHeight() );
+                *passBufferPtr++ = 0.0f;
+                *passBufferPtr++ = 0.0f;
+            }
             //---------------------------------------------------------------------------
             //                          ---- PIXEL SHADER ----
             //---------------------------------------------------------------------------

@@ -911,6 +911,8 @@ namespace Ogre
                     ID_ENABLE_FORWARDPLUS,
                     ID_IS_PREPASS,
                     ID_USE_PREPASS,
+                    ID_UV_BAKING,
+                    ID_UV_BAKING_OFFSET,
 
                     //Used by PASS_QUAD
                     ID_USE_QUAD,

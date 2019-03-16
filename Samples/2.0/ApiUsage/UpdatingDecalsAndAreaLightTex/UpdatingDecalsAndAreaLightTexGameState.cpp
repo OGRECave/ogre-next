@@ -45,7 +45,7 @@ namespace Demo
     static const Ogre::uint32 c_defaultWidth = 512u;
     static const Ogre::uint32 c_defaultHeight = 512u;
     static const Ogre::PixelFormatGpu c_defaultFormat = Ogre::PFG_RGBA8_UNORM_SRGB;
-    static const Ogre::uint32 c_defaultNumMipmaps =
+    static const Ogre::uint8 c_defaultNumMipmaps =
             Ogre::PixelFormatGpuUtils::getMaxMipmapCount( c_defaultWidth, c_defaultHeight );
 
     static const char c_lightRadiusKeys[4]  = { 'Y', 'U', 'I', 'O' };
@@ -77,6 +77,8 @@ namespace Demo
         OGRE_STATIC_ASSERT( sizeof(c_lightFileKeys) /
                             sizeof(c_lightFileKeys[0]) >= c_numAreaLights );
 
+        memset( mAreaLights, 0, sizeof( mLightNodes ) );
+        memset( mAreaLights, 0, sizeof( mAreaLights ) );
         memset( mUseTextureFromFile, 0, sizeof( mUseTextureFromFile ) );
 
         for( size_t i=0; i<c_numAreaLights; ++i )

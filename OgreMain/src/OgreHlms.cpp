@@ -37,6 +37,7 @@ THE SOFTWARE.
 #include "Vao/OgreVertexArrayObject.h"
 
 #include "Compositor/OgreCompositorShadowNode.h"
+#include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
 
 #include "OgreLight.h"
 #include "OgreSceneManager.h"
@@ -136,6 +137,8 @@ namespace Ogre
     const IdString HlmsBaseProp::ShadowUsesDepthTexture= IdString( "hlms_shadow_uses_depth_texture" );
     const IdString HlmsBaseProp::RenderDepthOnly    = IdString( "hlms_render_depth_only" );
     const IdString HlmsBaseProp::FineLightMask      = IdString( "hlms_fine_light_mask" );
+    const IdString HlmsBaseProp::UseUvBaking        = IdString( "hlms_use_uv_baking" );
+    const IdString HlmsBaseProp::UvBaking           = IdString( "hlms_uv_baking" );
     const IdString HlmsBaseProp::PrePass            = IdString( "hlms_prepass" );
     const IdString HlmsBaseProp::UsePrePass         = IdString( "hlms_use_prepass" );
     const IdString HlmsBaseProp::UsePrePassMsaa     = IdString( "hlms_use_prepass_msaa" );
@@ -2849,6 +2852,20 @@ namespace Ogre
                 setProperty( HlmsBaseProp::LightsAreaLtc, mNumAreaLtcLightsLimit );
             if( numAreaApproxLightsWithMask > 0 )
                 setProperty( HlmsBaseProp::LightsAreaTexMask, 1 );
+
+            const CompositorPass *pass = sceneManager->getCurrentCompositorPass();
+
+            if( pass && pass->getType() == PASS_SCENE )
+            {
+                OGRE_ASSERT_HIGH( dynamic_cast<const CompositorPassSceneDef*>( pass->getDefinition() ) );
+                const CompositorPassSceneDef *passSceneDef =
+                        static_cast<const CompositorPassSceneDef*>( pass->getDefinition() );
+                if( passSceneDef->mUvBakingSet != 0xFF )
+                {
+                    setProperty( HlmsBaseProp::UseUvBaking, 1 );
+                    setProperty( HlmsBaseProp::UvBaking, passSceneDef->mUvBakingSet );
+                }
+            }
         }
         else
         {

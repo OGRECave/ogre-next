@@ -1,6 +1,6 @@
 
-#ifndef _Demo_UpdatingDecalsAndAreaLightTexGameState_H_
-#define _Demo_UpdatingDecalsAndAreaLightTexGameState_H_
+#ifndef _Demo_Tutorial_TextureBakingGameState_H_
+#define _Demo_Tutorial_TextureBakingGameState_H_
 
 #include "OgrePrerequisites.h"
 #include "OgreOverlayPrerequisites.h"
@@ -12,24 +12,29 @@ namespace Demo
 {
     static const Ogre::uint32 c_numAreaLights = 4u;
 
-    class UpdatingDecalsAndAreaLightTexGameState : public TutorialGameState
+    namespace RenderingMode
     {
-        Ogre::SceneNode     *mLightNodes[c_numAreaLights];
+        enum RenderingMode
+        {
+            ShowRenderScene,
+            ShowSceneWithBakedTexture,
+            ShowBakedTexture,
+        };
+    }
+
+    class Tutorial_TextureBakingGameState : public TutorialGameState
+    {
         Ogre::Light         *mAreaLights[c_numAreaLights];
-
-        bool                mUseTextureFromFile[c_numAreaLights];
-        float               mLightTexRadius[c_numAreaLights];
-
         Ogre::TextureGpu    *mAreaMaskTex;
-        bool                mUseSynchronousMethod;
 
-        /** Creates an Image of a hollow rectangle on the GPU
-        @param radius
-            Radius of the hollow rectangle (i.e. width of the "lines")
-        @param outImage
-            Image containing the texture to upload to GPU
-        */
-        void createAreaMask( float radius, Ogre::Image2 &outImage );
+        Ogre::TextureGpu            *mBakedResult;
+        Ogre::CompositorWorkspace   *mBakedWorkspace;
+
+        Ogre::Item      *mFloorRender;
+        Ogre::Item      *mFloorBaked;
+
+        RenderingMode::RenderingMode    mRenderingMode;
+
         /// Creates the Mesh for the billboards
         void createAreaPlaneMesh(void);
         /// Setups a datablock (material) for the billboard showing where the light is
@@ -44,10 +49,15 @@ namespace Demo
         /// Calls createAreaMask and uploads it to the GPU texture.
         void setupLightTexture( size_t idx );
 
+        void createBakingTexture(void);
+        void updateBakingTexture(void);
+
+        void updateRenderingMode(void);
+
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
     public:
-        UpdatingDecalsAndAreaLightTexGameState( const Ogre::String &helpDescription );
+        Tutorial_TextureBakingGameState( const Ogre::String &helpDescription );
 
         virtual void createScene01(void);
         virtual void destroyScene(void);

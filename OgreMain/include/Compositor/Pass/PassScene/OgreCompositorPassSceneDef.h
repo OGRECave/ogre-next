@@ -124,18 +124,43 @@ namespace Ogre
 
         /** Multiplier to the Lod value. What it means depends on the technique.
             You'll probably want to avoid setting it directly and rather use
-            @LodStrategy::transformBias
+            LodStrategy::transformBias
+
+            @see    LodStrategy::transformBias
         */
         Real            mLodBias;
 
-        /** When true, the frustum culling is skipped in this pass. To cull objects, data from
-            the most recent frustum culling execution are used.
-        */
+        /// When true, the frustum culling is skipped in this pass. To cull objects, data from
+        /// the most recent frustum culling execution are used.
         bool            mReuseCullData;
 
-        /** The material scheme used for this pass. If no material scheme is set then
-            it will use the default scheme
-        */
+        /// Used for baking lightmaps and similar stuff.
+        /// When set to 0xFF it is disabled.
+        /// Otherwise, the selected UV set will be used to bake the texture with the render results.
+        /// If the mesh doesn't have such UV, then the max UV will be used.
+        /// If the mesh doesn't have UVs, it is up to the Hlms implementation
+        /// what to do (probably raise an exception)
+        uint8           mUvBakingSet;
+
+        /// When mUvBakingSet is enabled, this defines the UV offset (in pixels).
+        /// Without conservative rasterization, the baking won't render on pixels that
+        /// are being partially touched by the triangle.
+        ///
+        /// This causes severe artifacts when the baked result is used
+        /// (background colour of the texture leaks into the triangle).
+        ///
+        /// Without conservative rasterization, a sound solution is to render multiple times
+        /// with pixel (or subpixel) offsets in order to add some padding around the borders
+        /// of each triangle in the lightmap.
+        ///
+        /// MSAA can also be used instead, but certain types of baking (e.g. GBuffer baking)
+        /// don't work well because the MSAA sample locations are not in the center.
+        ///
+        /// See https://ndotl.wordpress.com/2018/08/29/baking-artifact-free-lightmaps/
+        Vector2         mUvBakingOffset;
+
+        /// The material scheme used for this pass. If no material scheme is set then
+        /// it will use the default scheme
         String          mMaterialScheme;
 
         CompositorPassSceneDef( CompositorTargetDef *parentTargetDef ) :
@@ -151,6 +176,8 @@ namespace Ogre
             mUpdateLodLists( true ),
             mLodBias( 1.0f ),
             mReuseCullData( false ),
+            mUvBakingSet( 0xFF ),
+            mUvBakingOffset( Vector2::ZERO ),
             mMaterialScheme(MaterialManager::DEFAULT_SCHEME_NAME)
         {
             //Change base defaults

@@ -9509,6 +9509,47 @@ namespace Ogre{
                         }
                     }
                     break;
+                case ID_UV_BAKING:
+                    if(prop->values.size() != 1)
+                    {
+                        compiler->addError(ScriptCompiler::CE_FEWERPARAMETERSEXPECTED, prop->file, prop->line,
+                                           "uv_baking requires exactly one parameter (number)");
+                    }
+                    else
+                    {
+                        AbstractNodeList::const_iterator it0 = prop->values.begin();
+
+                        uint32 uvSet = 0;
+                        if( !getUInt( *it0, &uvSet ) )
+                        {
+                            compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
+                                "uv_baking must be an integer");
+                        }
+                        else
+                        {
+                            passScene->mUvBakingSet = static_cast<uint32>( uvSet );
+                        }
+                    }
+                    break;
+                case ID_UV_BAKING_OFFSET:
+                    if(prop->values.size() != 2)
+                    {
+                        compiler->addError(ScriptCompiler::CE_FEWERPARAMETERSEXPECTED, prop->file, prop->line,
+                                           "uv_baking_offset requires exactly 2 floats");
+                    }
+                    else
+                    {
+                        AbstractNodeList::const_iterator it1 = prop->values.begin();
+                        AbstractNodeList::const_iterator it0 = it1++;
+
+                        if( !getReal( *it0, &passScene->mUvBakingOffset.x ) ||
+                            !getReal( *it1, &passScene->mUvBakingOffset.y ) )
+                        {
+                            compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
+                                "uv_baking_offset requires exactly 2 floats");
+                        }
+                    }
+                    break;
                 case ID_MATERIAL_SCHEME:
                     {
                         if (prop->values.empty())

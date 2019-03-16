@@ -1,0 +1,70 @@
+abstract pass baking_scene
+{
+	load
+	{
+		all				clear
+		clear_colour	0 0 0 0
+	}
+	store
+	{
+		//We only care about the contents of the colour target
+		depth			dont_care
+		stencil			dont_care
+	}
+
+	overlays			off
+
+	uv_baking			0
+	uv_baking_offset	0 0
+
+	shadows				ShadowMapDebuggingShadowNode
+}
+
+compositor_node BakingNode
+{
+	in 0 rt_result
+
+	texture lightBake	target_width_scaled 2 target_height_scaled 2 target_format
+
+	/*target rt_result
+	{
+		pass clear
+		{
+			colour_value 0 0 0 0
+		}
+	}*/
+
+	target lightBake
+	{
+		pass render_scene : baking_scene
+		{
+		}
+	}
+
+	target rt_result
+	{
+		pass render_quad
+		{
+			load
+			{
+				all				dont_care
+				//all				clear
+				//clear_colour	1 1 0 1
+			}
+			store
+			{
+				//We only care about the contents of the colour target
+				depth			dont_care
+				stencil			dont_care
+			}
+
+			material	Ogre/TextureBaking/DilationDownsample
+			input		0	lightBake
+		}
+	}
+}
+
+workspace UvBakingWorkspace
+{
+	connect_output BakingNode 0
+}

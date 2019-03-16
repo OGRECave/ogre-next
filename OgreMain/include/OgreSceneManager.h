@@ -435,6 +435,10 @@ namespace Ogre {
         TextureGpu      *mPrePassDepthTexture;
         TextureGpu      *mSsrTexture;
 
+        /// See CompositorPassSceneDef::mUvBakingSet
+        uint8       mUvBakingSet;
+        Vector2     mUvBakingOffset;
+
         /// Instance name
         String mName;
 
@@ -1320,6 +1324,8 @@ namespace Ogre {
         const TextureGpuVec& getCurrentPrePassTextures(void) const  { return mPrePassTextures; }
         TextureGpu* getCurrentPrePassDepthTexture(void) const       { return mPrePassDepthTexture; }
         TextureGpu* getCurrentSsrTexture(void) const                { return mSsrTexture; }
+
+
 
         NodeMemoryManager& _getNodeMemoryManager(SceneMemoryMgrTypes sceneType)
                                                                 { return mNodeMemoryManager[sceneType]; }

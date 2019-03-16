@@ -104,9 +104,13 @@
 	@property( hlms_normal || hlms_qtangent )	outVs.normal	= mul( @insertpiece(local_normal), toFloat3x3( worldViewMat ) );@end
 	@property( normal_map )						outVs.tangent	= mul( @insertpiece(local_tangent), toFloat3x3( worldViewMat ) );@end
 	@property( !hlms_dual_paraboloid_mapping )
-		outVs_Position = mul( worldPos, passBuf.viewProj );
-	@end
-	@property( hlms_dual_paraboloid_mapping )
+        @property( !hlms_use_uv_baking )
+			outVs_Position = mul( worldPos, passBuf.viewProj );
+		@else
+			outVs_Position.xy = inVs_uv@value( hlms_uv_baking ).xy * 2.0f - 1.0f + passBuf.pixelOffset2x.xy;
+			outVs_Position.zw = float2( 0.0f, 1.0f );
+		@end
+	@else
 		//Dual Paraboloid Mapping
 		outVs_Position.w	= 1.0f;
 		@property( hlms_normal || hlms_qtangent )outVs_Position.xyz	= outVs.pos;@end
