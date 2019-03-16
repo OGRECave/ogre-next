@@ -333,6 +333,7 @@ namespace Demo
             mFloorBaked->setDatablock( "BakeResultMaterial" );
             mFloorRender->getParentSceneNode()->attachObject( mFloorBaked );
             mFloorBaked->setVisibilityFlags( c_bakedObjVisibilityFlags );
+            mFloorBaked->setLightMask( 0 );
         }
 
         //Create the mesh template for all the lights (i.e. the billboard-like plane)
@@ -402,16 +403,10 @@ namespace Demo
         if( mRenderingMode == RenderingMode::ShowRenderScene )
         {
             sceneManager->setVisibilityMask( c_renderObjVisibilityFlags | c_lightPlanesVisibilityFlag );
-//            sceneManager->setLightMask( 0 );
-            for( size_t i=0; i<c_numAreaLights; ++i )
-                mAreaLights[i]->setVisible( true );
         }
         else if( mRenderingMode == RenderingMode::ShowSceneWithBakedTexture )
         {
             sceneManager->setVisibilityMask( c_bakedObjVisibilityFlags | c_lightPlanesVisibilityFlag );
-//            sceneManager->setLightMask( 0 );
-            for( size_t i=0; i<c_numAreaLights; ++i )
-                mAreaLights[i]->setVisible( false );
         }
         else
         {
