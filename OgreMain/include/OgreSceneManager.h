@@ -435,6 +435,10 @@ namespace Ogre {
         TextureGpu      *mPrePassDepthTexture;
         TextureGpu      *mSsrTexture;
 
+        /// See CompositorPassSceneDef::mUvBakingSet
+        uint8       mUvBakingSet;
+        Vector2     mUvBakingOffset;
+
         /// Instance name
         String mName;
 
@@ -843,6 +847,7 @@ namespace Ogre {
 
         /// Visibility mask used to show / hide objects
         uint32 mVisibilityMask;
+        uint32 mLightMask;
         bool mFindVisibleObjects;
 
         enum RequestType
@@ -1320,6 +1325,8 @@ namespace Ogre {
         const TextureGpuVec& getCurrentPrePassTextures(void) const  { return mPrePassTextures; }
         TextureGpu* getCurrentPrePassDepthTexture(void) const       { return mPrePassDepthTexture; }
         TextureGpu* getCurrentSsrTexture(void) const                { return mSsrTexture; }
+
+
 
         NodeMemoryManager& _getNodeMemoryManager(SceneMemoryMgrTypes sceneType)
                                                                 { return mNodeMemoryManager[sceneType]; }
@@ -2876,6 +2883,22 @@ namespace Ogre {
             mask and the per-viewport visibility mask.
         */
         uint32 _getCombinedVisibilityMask(void) const;
+
+        /** Sets a mask which is bitwise 'and'ed with lights' own light masks
+            to determine if the light should be casting light.
+        @remarks
+            Note that this is combined with any per-pass light mask
+            through an 'and' operation.
+
+            @see    CompositorPassSceneDef::mLightVisibilityMask
+            @see    Viewport::getLightVisibilityMask
+        */
+        virtual_l2 void setLightMask(uint32 mask)   { mLightMask = mask; }
+
+        /** Gets a mask which is bitwise 'and'ed with lights' own light masks
+            to determine if the light should be casting light.
+        */
+        virtual_l2 uint32 getLightMask(void) const  { return mLightMask; }
 
         /** Sets whether the SceneManager should search for visible objects, or
             whether they are being manually handled.

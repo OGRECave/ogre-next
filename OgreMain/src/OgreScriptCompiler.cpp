@@ -1304,6 +1304,8 @@ namespace Ogre
         mIds["enable_forwardplus"]= ID_ENABLE_FORWARDPLUS;
         mIds["is_prepass"]      = ID_IS_PREPASS;
         mIds["use_prepass"]     = ID_USE_PREPASS;
+        mIds["uv_baking"]       = ID_UV_BAKING;
+        mIds["uv_baking_offset"]= ID_UV_BAKING_OFFSET;
 
         mIds["use_quad"]        = ID_USE_QUAD;
         mIds["quad_normals"]    = ID_QUAD_NORMALS;

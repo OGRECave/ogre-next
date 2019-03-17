@@ -102,6 +102,10 @@ CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
 	float4x4 view;
 	@property( hlms_num_shadow_map_lights )ShadowReceiverData shadowRcv[@value(hlms_num_shadow_map_lights)];@end
 
+	@property( hlms_use_uv_baking )
+		float4 pixelOffset2x; //.zw are unused.
+	@end
+
 	//-------------------------------------------------------------------------
 
 	//Pixel shader

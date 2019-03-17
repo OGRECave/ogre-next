@@ -6231,6 +6231,9 @@ namespace Ogre{
         bool noAutomipmaps = false;
         PixelFormatGpu format;
 
+        bool hasWidthScaleSet = false;
+        bool hasHeightScaleSet = false;
+
         while (atomIndex < prop->values.size())
         {
             it = getNodeAt(prop->values, static_cast<int>(atomIndex++));
@@ -6263,12 +6266,14 @@ namespace Ogre{
                         pSetFlag = &widthSet;
                         pSize = &width;
                         pFactor = &widthFactor;
+                        hasWidthScaleSet = true;
                     }
                     else
                     {
                         pSetFlag = &heightSet;
                         pSize = &height;
                         pFactor = &heightFactor;
+                        hasHeightScaleSet = true;
                     }
                     // advance to next to get scaling
                     it = getNodeAt(prop->values, static_cast<int>(atomIndex++));
@@ -6398,7 +6403,9 @@ namespace Ogre{
                         height = StringConverter::parseInt(atom->value);
                         heightSet = true;
                     }
-                    else if (atomIndex == 4)
+                    else if (atomIndex == 4 ||
+                             (atomIndex == 5 && hasWidthScaleSet != hasHeightScaleSet) ||
+                             (atomIndex == 6 && hasWidthScaleSet && hasWidthScaleSet == hasHeightScaleSet))
                     {
                         depthOrSlices = StringConverter::parseInt(atom->value);
                     }
@@ -9506,6 +9513,47 @@ namespace Ogre{
                         else
                         {
                             passScene->setUseDepthPrePass( gbuffer, gbufDepthTexture, ssr );
+                        }
+                    }
+                    break;
+                case ID_UV_BAKING:
+                    if(prop->values.size() != 1)
+                    {
+                        compiler->addError(ScriptCompiler::CE_FEWERPARAMETERSEXPECTED, prop->file, prop->line,
+                                           "uv_baking requires exactly one parameter (number)");
+                    }
+                    else
+                    {
+                        AbstractNodeList::const_iterator it0 = prop->values.begin();
+
+                        uint32 uvSet = 0;
+                        if( !getUInt( *it0, &uvSet ) )
+                        {
+                            compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
+                                "uv_baking must be an integer");
+                        }
+                        else
+                        {
+                            passScene->mUvBakingSet = static_cast<uint32>( uvSet );
+                        }
+                    }
+                    break;
+                case ID_UV_BAKING_OFFSET:
+                    if(prop->values.size() != 2)
+                    {
+                        compiler->addError(ScriptCompiler::CE_FEWERPARAMETERSEXPECTED, prop->file, prop->line,
+                                           "uv_baking_offset requires exactly 2 floats");
+                    }
+                    else
+                    {
+                        AbstractNodeList::const_iterator it1 = prop->values.begin();
+                        AbstractNodeList::const_iterator it0 = it1++;
+
+                        if( !getReal( *it0, &passScene->mUvBakingOffset.x ) ||
+                            !getReal( *it1, &passScene->mUvBakingOffset.y ) )
+                        {
+                            compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
+                                "uv_baking_offset requires exactly 2 floats");
                         }
                     }
                     break;

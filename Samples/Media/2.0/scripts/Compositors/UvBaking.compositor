@@ -1,0 +1,130 @@
+abstract pass baking_scene
+{
+	load
+	{
+		all				clear
+		clear_colour	0 0 0 0
+	}
+	store
+	{
+		//We only care about the contents of the colour target
+		depth			dont_care
+		stencil			dont_care
+	}
+
+	overlays			off
+
+	uv_baking			0
+	uv_baking_offset	0 0
+
+	shadows				ShadowMapDebuggingShadowNode
+}
+
+compositor_node BakingNode
+{
+	in 0 rt_result
+
+	//Use 2d_array because we assume 'rt_result' is 2D Array already, and our shaders are written for that case
+	texture lightBake			target_width_scaled 2 target_height_scaled 2 1 2d_array target_format depth_pool 0
+	texture downsampledDilation	target_width target_height 1 2d_array target_format depth_pool 0
+
+	//Bake the scene
+	target lightBake
+	{
+		pass render_scene : baking_scene
+		{
+		}
+	}
+
+	//Downsample and dilate (i.e. bloom filter that filters out subsamples with 0 alpha)
+	//Dilation is required due to not using conservative rasterization + due to other
+	//issues while sampling between pixels (the black background leaks into the bake)
+	target downsampledDilation
+	{
+		pass render_quad
+		{
+			load
+			{
+				all				dont_care
+			}
+			store
+			{
+				//We only care about the contents of the colour target
+				depth			dont_care
+				stencil			dont_care
+			}
+
+			material	Ogre/TextureBaking/DilationDownsample
+			input		0	lightBake
+		}
+	}
+
+	//Dilate again, and output into the final target
+	target rt_result
+	{
+		pass render_quad
+		{
+			load
+			{
+				all				dont_care
+			}
+			store
+			{
+				//We only care about the contents of the colour target
+				depth			dont_care
+				stencil			dont_care
+			}
+
+			material	Ogre/TextureBaking/Dilation
+			input		0	downsampledDilation
+		}
+	}
+}
+
+workspace UvBakingWorkspace
+{
+	connect_output BakingNode 0
+}
+
+compositor_node ShowBakingTextureNode
+{
+	in 0 rt_result
+	in 1 lightBake
+
+	target rt_result
+	{
+		pass render_quad
+		{
+			load
+			{
+				all				dont_care
+			}
+			store
+			{
+				//We only care about the contents of the colour target
+				depth			dont_care
+				stencil			dont_care
+			}
+
+			material	Ogre/Copy/4xFP32_2DArray
+			input		0	lightBake
+		}
+
+		pass render_scene
+		{
+			store
+			{
+				depth	dont_care
+				stencil	dont_care
+			}
+			overlays	on
+			rq_first	250
+		}
+	}
+}
+
+workspace ShowBakingTextureWorkspace
+{
+	connect_external 0 ShowBakingTextureNode 0
+	connect_external 1 ShowBakingTextureNode 1
+}

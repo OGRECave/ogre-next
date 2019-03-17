@@ -866,6 +866,8 @@ namespace Ogre
         static const IdString ShadowUsesDepthTexture;
         static const IdString RenderDepthOnly;
         static const IdString FineLightMask;
+        static const IdString UseUvBaking;
+        static const IdString UvBaking;
         static const IdString PrePass;
         static const IdString UsePrePass;
         static const IdString UsePrePassMsaa;
