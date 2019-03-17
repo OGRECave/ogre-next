@@ -434,7 +434,7 @@ namespace Ogre {
         for( size_t i=minMip; i<=maxMip; ++i )
         {
             TextureBox box = getData( static_cast<uint8>( i ) );
-            box.depth       = mTextureType == TextureTypes::Type3D ? srcDepthOrSlices : box.numSlices;
+            box.depth       = mTextureType == TextureTypes::Type3D ? srcDepthOrSlices : box.depth;
             box.numSlices   = mTextureType != TextureTypes::Type3D ? srcDepthOrSlices : box.numSlices;
             TextureBox dstBox;
             for( size_t tries=0; tries<2 && !dstBox.data; ++tries )
