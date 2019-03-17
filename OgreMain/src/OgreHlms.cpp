@@ -1995,6 +1995,11 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void Hlms::applyStrongMacroblockRules( HlmsPso &pso )
     {
+        if( !pso.macroblock->mDepthCheck )
+        {
+            //Depth check is already off, we don't need to hold a strong reference.
+            pso.pass.strongMacroblockBits &= ~HlmsPassPso::NoDepthBuffer;
+        }
         if( !pso.macroblock->mDepthWrite )
         {
             //Depth writes is already off, we don't need to hold a strong reference.
@@ -2010,6 +2015,9 @@ namespace Ogre
         {
             HlmsMacroblock prepassMacroblock = *pso.macroblock;
 
+            //This pass has no depth buffer, disable check and keep a hard copy (strong ref.)
+            if( pso.pass.strongMacroblockBits & HlmsPassPso::NoDepthBuffer )
+                prepassMacroblock.mDepthCheck = false;
             //This is a depth prepass, disable depth writes and keep a hard copy (strong ref.)
             if( pso.pass.strongMacroblockBits & HlmsPassPso::ForceDisableDepthWrites )
                 prepassMacroblock.mDepthWrite = false;
@@ -2985,6 +2993,10 @@ namespace Ogre
             passPso.depthFormat     = renderPassDesc->mDepth.texture->getPixelFormat();
             passPso.multisampleCount= renderPassDesc->mDepth.texture->getMsaa();
             passPso.multisampleQuality = renderPassDesc->mDepth.texture->getMsaaPattern();
+        }
+        else
+        {
+            passPso.strongMacroblockBits |= HlmsPassPso::NoDepthBuffer;
         }
 
         passPso.adapterId = 1; //TODO: Ask RenderSystem current adapter ID.
