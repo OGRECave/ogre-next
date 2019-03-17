@@ -89,12 +89,19 @@ namespace Demo
                                          LogicSystem **outLogicSystem )
     {
         Tutorial_TextureBakingGameState *gfxGameState = new Tutorial_TextureBakingGameState(
-        "Shows how to create area light textures dynamically and individually.\n"
-        "This method can also be used for the textures Decals use.\n"
+        "Shows how to bake the render result of Ogre into a texture (e.g. for lightmaps).\n"
+        "You can either bake all lights, or bake just the most expensive lights to\n"
+        "later combine it with more dynamic (non-baked) lights while using light masks\n"
+        "to filter lights.\n"
+        "This can be a simple yet very effective way to increase performance with a high\n"
+        "number of lights.\n"
+        "Note that specular lighting is dependent on camera location; thus camera position when \n"
+        "baking IS important. We left specular on to show this effect, which you can experiment\n"
+        "by pressing F4, then F5, then moving the camera.\n"
+        "Also note that if the baked plane goes out of camera, it will get culled!!!.\n"
         "This sample depends on the media files:\n"
-        "   * Samples/Media/2.0/scripts/Compositors/ShadowMapDebugging.compositor\n"
-        "   * Samples/Media/2.0/materials/PbsMaterials/*\n"
-        "   * Samples/Media/2.0/materials/Tutorial_TextureBakingGameState/*\n"
+        "   * Samples/Media/2.0/scripts/Compositors/UvBaking.compositor\n"
+        "   * Samples/Media/2.0/materials/Tutorial_TextureBaking/*\n"
         "\n" );
 
         GraphicsSystem *graphicsSystem = new Tutorial_TextureBakingGraphicsSystem( gfxGameState );

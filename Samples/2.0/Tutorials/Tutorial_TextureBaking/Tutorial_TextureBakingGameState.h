@@ -35,6 +35,7 @@ namespace Demo
         Ogre::Item      *mFloorBaked;
 
         RenderingMode::RenderingMode    mRenderingMode;
+        bool            mBakeEveryFrame;
 
         /// Creates the Mesh for the billboards
         void createAreaPlaneMesh(void);

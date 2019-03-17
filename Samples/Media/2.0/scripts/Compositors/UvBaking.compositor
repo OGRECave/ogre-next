@@ -69,7 +69,6 @@ workspace UvBakingWorkspace
 	connect_output BakingNode 0
 }
 
-
 compositor_node ShowBakingTextureNode
 {
 	in 0 rt_result
@@ -92,6 +91,17 @@ compositor_node ShowBakingTextureNode
 
 			material	Ogre/Copy/4xFP32_2DArray
 			input		0	lightBake
+		}
+
+		pass render_scene
+		{
+			store
+			{
+				depth	dont_care
+				stencil	dont_care
+			}
+			overlays	on
+			rq_first	250
 		}
 	}
 }

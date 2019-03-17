@@ -63,7 +63,8 @@ namespace Demo
         mShowBakedTexWorkspace( 0 ),
         mFloorRender( 0 ),
         mFloorBaked( 0 ),
-        mRenderingMode( RenderingMode::ShowRenderScene )
+        mRenderingMode( RenderingMode::ShowRenderScene ),
+        mBakeEveryFrame( false )
     {
         memset( mAreaLights, 0, sizeof( mAreaLights ) );
     }
@@ -389,7 +390,8 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void Tutorial_TextureBakingGameState::update( float timeSinceLast )
     {
-        //updateBakingTexture();
+        if( mBakeEveryFrame && mRenderingMode != RenderingMode::ShowRenderScene )
+            updateBakingTexture();
         TutorialGameState::update( timeSinceLast );
     }
     //-----------------------------------------------------------------------------------
@@ -436,6 +438,12 @@ namespace Demo
         outText += "\nPress F4 to show baked texture";
         if( mRenderingMode == RenderingMode::ShowBakedTexture )
             outText += " [Active]";
+
+        if( mRenderingMode != RenderingMode::ShowRenderScene )
+        {
+            outText += "\nPress F5 to update baking results every frame ";
+            outText += mBakeEveryFrame ? "[On]" : "[Off]";
+        }
     }
     //-----------------------------------------------------------------------------------
     void Tutorial_TextureBakingGameState::keyReleased( const SDL_KeyboardEvent &arg )
@@ -462,6 +470,10 @@ namespace Demo
             mRenderingMode = RenderingMode::ShowBakedTexture;
             updateBakingTexture();
             updateRenderingMode();
+        }
+        else if( arg.keysym.sym == SDLK_F5 )
+        {
+            mBakeEveryFrame = !mBakeEveryFrame;
         }
         else
         {
