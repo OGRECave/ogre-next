@@ -6,7 +6,7 @@ using namespace metal;
 
 struct PS_INPUT
 {
-	float2 uv0			: TEXCOORD0;
+	float2 uv0;
 };
 
 void addSample( thread float4 &accumVal, float4 newSample, thread float &counter )

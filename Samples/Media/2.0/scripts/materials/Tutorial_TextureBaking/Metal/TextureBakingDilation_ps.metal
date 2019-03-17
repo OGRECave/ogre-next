@@ -6,7 +6,7 @@ using namespace metal;
 
 struct PS_INPUT
 {
-	float2 uv0			: TEXCOORD0;
+	float2 uv0;
 };
 
 fragment float4 main_metal
@@ -22,15 +22,15 @@ fragment float4 main_metal
 
 	if( c.a == 0 )
 	{
-		c = c.a > 0 ? c : srcTex.read( iFragCoord.xy + short2(  1,  0 ), 0u );
-		c = c.a > 0 ? c : srcTex.read( iFragCoord.xy + short2(  0,  1 ), 0u );
-		c = c.a > 0 ? c : srcTex.read( iFragCoord.xy + short2( -1,  0 ), 0u );
-		c = c.a > 0 ? c : srcTex.read( iFragCoord.xy + short2(  0, -1 ), 0u );
+		c = c.a > 0 ? c : srcTex.read( rshort2( iFragCoord.xy + short2(  1,  0 ) ), 0u );
+		c = c.a > 0 ? c : srcTex.read( rshort2( iFragCoord.xy + short2(  0,  1 ) ), 0u );
+		c = c.a > 0 ? c : srcTex.read( rshort2( iFragCoord.xy + short2( -1,  0 ) ), 0u );
+		c = c.a > 0 ? c : srcTex.read( rshort2( iFragCoord.xy + short2(  0, -1 ) ), 0u );
 
-		c = c.a > 0 ? c : srcTex.read( iFragCoord.xy + short2(  1,  1 ), 0u );
-		c = c.a > 0 ? c : srcTex.read( iFragCoord.xy + short2( -1,  1 ), 0u );
-		c = c.a > 0 ? c : srcTex.read( iFragCoord.xy + short2(  1, -1 ), 0u );
-		c = c.a > 0 ? c : srcTex.read( iFragCoord.xy + short2(  1, -1 ), 0u );
+		c = c.a > 0 ? c : srcTex.read( rshort2( iFragCoord.xy + short2(  1,  1 ) ), 0u );
+		c = c.a > 0 ? c : srcTex.read( rshort2( iFragCoord.xy + short2( -1,  1 ) ), 0u );
+		c = c.a > 0 ? c : srcTex.read( rshort2( iFragCoord.xy + short2(  1, -1 ) ), 0u );
+		c = c.a > 0 ? c : srcTex.read( rshort2( iFragCoord.xy + short2(  1, -1 ) ), 0u );
 	}
 
 	return c.xyzw;
