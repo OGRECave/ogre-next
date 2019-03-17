@@ -5,7 +5,12 @@
 
 Texture2D srcTex;
 
-float4 main( float4 gl_FragCoord : SV_Position ) : SV_Target
+struct PS_INPUT
+{
+	float2 uv0			: TEXCOORD0;
+};
+
+float4 main( PS_INPUT inPs, float4 gl_FragCoord : SV_Position ) : SV_Target
 {
 	rshort2 iFragCoord = rshort2( gl_FragCoord.x * 2.0, gl_FragCoord.y * 2.0 );
 

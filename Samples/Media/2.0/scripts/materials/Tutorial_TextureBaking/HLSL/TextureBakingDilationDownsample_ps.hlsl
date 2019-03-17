@@ -5,6 +5,11 @@
 
 Texture2D srcTex;
 
+struct PS_INPUT
+{
+	float2 uv0			: TEXCOORD0;
+};
+
 void addSample( inout float4 accumVal, float4 newSample, inout float counter )
 {
 	if( newSample.a > 0 )
@@ -14,7 +19,7 @@ void addSample( inout float4 accumVal, float4 newSample, inout float counter )
 	}
 }
 
-float4 main( float4 gl_FragCoord : SV_Position ) : SV_Target
+float4 main( PS_INPUT inPs, float4 gl_FragCoord : SV_Position ) : SV_Target
 {
 	rshort2 iFragCoord = rshort2( gl_FragCoord.x * 2.0, gl_FragCoord.y * 2.0 );
 
