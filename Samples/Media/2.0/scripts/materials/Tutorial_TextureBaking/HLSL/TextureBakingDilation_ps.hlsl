@@ -12,7 +12,7 @@ struct PS_INPUT
 
 float4 main( PS_INPUT inPs, float4 gl_FragCoord : SV_Position ) : SV_Target
 {
-	rshort2 iFragCoord = rshort2( gl_FragCoord.x * 2.0, gl_FragCoord.y * 2.0 );
+	rshort2 iFragCoord = rshort2( gl_FragCoord.xy );
 
 	float4 c = srcTex.Load( rshort3( iFragCoord.xy, 0 ) );
 

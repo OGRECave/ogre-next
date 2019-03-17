@@ -13,7 +13,7 @@ in vec4 gl_FragCoord;
 
 void main()
 {
-	rshort2 iFragCoord = rshort2( gl_FragCoord.x * 2.0, gl_FragCoord.y * 2.0 );
+	rshort2 iFragCoord = rshort2( gl_FragCoord.xy );
 
 	float4 c = texelFetch( srcTex, iFragCoord.xy, 0 );
 
