@@ -13,24 +13,24 @@ fragment float4 main_metal
 (
 	PS_INPUT inPs [[stage_in]],
 	float4				gl_FragCoord	[[position]],
-	texture2d<float>	srcTex			[[texture(0)]]
+	texture2d_array<float>	srcTex			[[texture(0)]]
 )
 {
-	rshort2 iFragCoord = rshort2( gl_FragCoord.xy );
+	short2 iFragCoord = short2( gl_FragCoord.xy );
 
-	float4 c = srcTex.read( iFragCoord.xy, 0u );
+	float4 c = srcTex.read( rshort2( iFragCoord.xy ), 0u, 0u );
 
 	if( c.a == 0 )
 	{
-		c = c.a > 0 ? c : srcTex.read( rshort2( iFragCoord.xy + short2(  1,  0 ) ), 0u );
-		c = c.a > 0 ? c : srcTex.read( rshort2( iFragCoord.xy + short2(  0,  1 ) ), 0u );
-		c = c.a > 0 ? c : srcTex.read( rshort2( iFragCoord.xy + short2( -1,  0 ) ), 0u );
-		c = c.a > 0 ? c : srcTex.read( rshort2( iFragCoord.xy + short2(  0, -1 ) ), 0u );
+		c = c.a > 0 ? c : srcTex.read( rshort2( iFragCoord.xy + short2(  1,  0 ) ), 0u, 0u );
+		c = c.a > 0 ? c : srcTex.read( rshort2( iFragCoord.xy + short2(  0,  1 ) ), 0u, 0u );
+		c = c.a > 0 ? c : srcTex.read( rshort2( iFragCoord.xy + short2( -1,  0 ) ), 0u, 0u );
+		c = c.a > 0 ? c : srcTex.read( rshort2( iFragCoord.xy + short2(  0, -1 ) ), 0u, 0u );
 
-		c = c.a > 0 ? c : srcTex.read( rshort2( iFragCoord.xy + short2(  1,  1 ) ), 0u );
-		c = c.a > 0 ? c : srcTex.read( rshort2( iFragCoord.xy + short2( -1,  1 ) ), 0u );
-		c = c.a > 0 ? c : srcTex.read( rshort2( iFragCoord.xy + short2(  1, -1 ) ), 0u );
-		c = c.a > 0 ? c : srcTex.read( rshort2( iFragCoord.xy + short2(  1, -1 ) ), 0u );
+		c = c.a > 0 ? c : srcTex.read( rshort2( iFragCoord.xy + short2(  1,  1 ) ), 0u, 0u );
+		c = c.a > 0 ? c : srcTex.read( rshort2( iFragCoord.xy + short2( -1,  1 ) ), 0u, 0u );
+		c = c.a > 0 ? c : srcTex.read( rshort2( iFragCoord.xy + short2(  1, -1 ) ), 0u, 0u );
+		c = c.a > 0 ? c : srcTex.read( rshort2( iFragCoord.xy + short2(  1, -1 ) ), 0u, 0u );
 	}
 
 	return c.xyzw;

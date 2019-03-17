@@ -21,8 +21,8 @@ void addSample( thread float4 &accumVal, float4 newSample, thread float &counter
 fragment float4 main_metal
 (
 	PS_INPUT inPs [[stage_in]],
-	float4				gl_FragCoord	[[position]],
-	texture2d<float>	srcTex			[[texture(0)]]
+	float4              	gl_FragCoord	[[position]],
+	texture2d_array<float>	srcTex			[[texture(0)]]
 )
 {
 	rshort2 iFragCoord = rshort2( gl_FragCoord.x * 2.0, gl_FragCoord.y * 2.0 );
@@ -31,16 +31,16 @@ fragment float4 main_metal
 	float counter = 0;
 	float4 newSample;
 
-	newSample = srcTex.read( iFragCoord.xy, 0 );
+	newSample = srcTex.read( iFragCoord.xy, 0u, 0u );
 	addSample( accumVal, newSample, counter );
 
-	newSample = srcTex.read( iFragCoord.xy + rshort2( 1, 0 ), 0 );
+	newSample = srcTex.read( iFragCoord.xy + rshort2( 1, 0 ), 0u, 0u );
 	addSample( accumVal, newSample, counter );
 
-	newSample = srcTex.read( iFragCoord.xy + rshort2( 0, 1 ), 0 );
+	newSample = srcTex.read( iFragCoord.xy + rshort2( 0, 1 ), 0u, 0u );
 	addSample( accumVal, newSample, counter );
 
-	newSample = srcTex.read( iFragCoord.xy + rshort2( 1, 1 ), 0 );
+	newSample = srcTex.read( iFragCoord.xy + rshort2( 1, 1 ), 0u, 0u );
 	addSample( accumVal, newSample, counter );
 
 	if( counter > 0 )

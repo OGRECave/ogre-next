@@ -2,11 +2,12 @@
 
 //Short used for read operations. It's an int in GLSL & HLSL. An ushort in Metal
 #define rshort2 ivec2
+#define rshort3 ivec3
 #define short2 ivec2
 
 #define float4 vec4
 
-uniform sampler2D srcTex;
+uniform sampler2DArray srcTex;
 
 out float4 fragColour;
 in vec4 gl_FragCoord;
@@ -28,16 +29,16 @@ void main()
 	float counter = 0;
 	float4 newSample;
 
-	newSample = texelFetch( srcTex, iFragCoord.xy, 0 );
+	newSample = texelFetch( srcTex, rshort3( iFragCoord.xy, 0 ), 0 );
 	addSample( accumVal, newSample, counter );
 
-	newSample = texelFetch( srcTex, iFragCoord.xy + rshort2( 1, 0 ), 0 );
+	newSample = texelFetch( srcTex, rshort3( iFragCoord.xy + rshort2( 1, 0 ), 0 ), 0 );
 	addSample( accumVal, newSample, counter );
 
-	newSample = texelFetch( srcTex, iFragCoord.xy + rshort2( 0, 1 ), 0 );
+	newSample = texelFetch( srcTex, rshort3( iFragCoord.xy + rshort2( 0, 1 ), 0 ), 0 );
 	addSample( accumVal, newSample, counter );
 
-	newSample = texelFetch( srcTex, iFragCoord.xy + rshort2( 1, 1 ), 0 );
+	newSample = texelFetch( srcTex, rshort3( iFragCoord.xy + rshort2( 1, 1 ), 0 ), 0 );
 	addSample( accumVal, newSample, counter );
 
 	if( counter > 0 )

@@ -6231,6 +6231,9 @@ namespace Ogre{
         bool noAutomipmaps = false;
         PixelFormatGpu format;
 
+        bool hasWidthScaleSet = false;
+        bool hasHeightScaleSet = false;
+
         while (atomIndex < prop->values.size())
         {
             it = getNodeAt(prop->values, static_cast<int>(atomIndex++));
@@ -6263,12 +6266,14 @@ namespace Ogre{
                         pSetFlag = &widthSet;
                         pSize = &width;
                         pFactor = &widthFactor;
+                        hasWidthScaleSet = true;
                     }
                     else
                     {
                         pSetFlag = &heightSet;
                         pSize = &height;
                         pFactor = &heightFactor;
+                        hasHeightScaleSet = true;
                     }
                     // advance to next to get scaling
                     it = getNodeAt(prop->values, static_cast<int>(atomIndex++));
@@ -6398,7 +6403,9 @@ namespace Ogre{
                         height = StringConverter::parseInt(atom->value);
                         heightSet = true;
                     }
-                    else if (atomIndex == 4)
+                    else if (atomIndex == 4 ||
+                             (atomIndex == 5 && hasWidthScaleSet != hasHeightScaleSet) ||
+                             (atomIndex == 6 && hasWidthScaleSet && hasWidthScaleSet == hasHeightScaleSet))
                     {
                         depthOrSlices = StringConverter::parseInt(atom->value);
                     }
