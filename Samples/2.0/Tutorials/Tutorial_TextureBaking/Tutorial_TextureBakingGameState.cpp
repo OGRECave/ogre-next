@@ -324,8 +324,23 @@ namespace Demo
         createBakingTexture();
 
         {
+            {
+                //Create FloorMaterial, but use "none" as culling mode so all the faces
+                //can be baked correctly, while leaving the caster's culling mode intact;
+                //otherwise there is a lot of shadow acne.
+                Ogre::HlmsDatablock *defaultMaterial = pbs->getDefaultDatablock();
+                Ogre::HlmsDatablock *floorMat = defaultMaterial->clone( "FloorMaterial" );
+
+                Ogre::HlmsMacroblock macroblock = *floorMat->getMacroblock();
+                Ogre::HlmsMacroblock casterMacroblock = *floorMat->getMacroblock( true );
+
+                macroblock.mCullMode = Ogre::CULL_NONE;
+                floorMat->setMacroblock( macroblock, false );
+                floorMat->setMacroblock( casterMacroblock, true );
+            }
+
             mFloorRender = sceneManager->createItem( planeMesh, Ogre::SCENE_DYNAMIC );
-            mFloorRender->setDatablock( "MirrorLike" );
+            mFloorRender->setDatablock( "FloorMaterial" );
             Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
                                                     createChildSceneNode( Ogre::SCENE_DYNAMIC );
             sceneNode->setPosition( 0, -1, 0 );

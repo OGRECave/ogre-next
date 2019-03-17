@@ -74,14 +74,17 @@ namespace Ogre
         {
             datablockImpl->mTexIndices[i] = mTexIndices[i];
             datablockImpl->mTextures[i] = mTextures[i];
-            datablockImpl->mTextures[i]->addListener( datablockImpl );
+            if( datablockImpl->mTextures[i] )
+                datablockImpl->mTextures[i]->addListener( datablockImpl );
             datablockImpl->mSamplerblocks[i] = mSamplerblocks[i];
             if( datablockImpl->mSamplerblocks[i] )
                 hlmsManager->addReference( datablockImpl->mSamplerblocks[i] );
         }
 
-        datablockImpl->mTexturesDescSet = hlmsManager->getDescriptorSetTexture( *mTexturesDescSet );
-        datablockImpl->mSamplersDescSet = hlmsManager->getDescriptorSetSampler( *mSamplersDescSet );
+        if( mTexturesDescSet )
+            datablockImpl->mTexturesDescSet = hlmsManager->getDescriptorSetTexture( *mTexturesDescSet );
+        if( mSamplersDescSet )
+            datablockImpl->mSamplersDescSet = hlmsManager->getDescriptorSetSampler( *mSamplersDescSet );
     }
     //-----------------------------------------------------------------------------------
     void OGRE_HLMS_TEXTURE_BASE_CLASS::saveTextures( const String &folderPath,
