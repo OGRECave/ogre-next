@@ -72,7 +72,7 @@ namespace Ogre {
 
 		ID3D11Resource *getTextureResource() { assert(mpTex); return mpTex.Get(); }
 		/// retrieves a pointer to the actual texture
-        ID3D11ShaderResourceView *getTexture();
+        ID3D11ShaderResourceView *getSrvView();
 
         ID3D11UnorderedAccessView* getUavView( int32 mipmapLevel, int32 textureArrayIndex,
                                                PixelFormat pixelFormat );

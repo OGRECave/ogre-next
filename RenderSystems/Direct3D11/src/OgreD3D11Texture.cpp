@@ -135,7 +135,7 @@ namespace Ogre
         _loadImages( imagePtrs );
     }
     //---------------------------------------------------------------------
-    ID3D11ShaderResourceView* D3D11Texture::getTexture()
+    ID3D11ShaderResourceView* D3D11Texture::getSrvView()
     {
         assert(mpShaderResourceView);
 

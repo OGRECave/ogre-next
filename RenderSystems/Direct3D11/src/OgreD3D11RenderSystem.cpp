@@ -2063,7 +2063,7 @@ namespace Ogre
         {
             // note used
             dt->touch();
-            ID3D11ShaderResourceView * pTex = dt->getTexture();
+            ID3D11ShaderResourceView * pTex = dt->getSrvView();
             mTexStageDesc[stage].pTex = pTex;
             mTexStageDesc[stage].used = true;
             mTexStageDesc[stage].type = dt->getTextureType();
@@ -2559,7 +2559,7 @@ namespace Ogre
         {
             // note used
             dt->touch();
-            ID3D11ShaderResourceView * pTex = dt->getTexture();
+            ID3D11ShaderResourceView * pTex = dt->getSrvView();
 
             mDevice.GetImmediateContext()->CSSetShaderResources(static_cast<UINT>(slot), static_cast<UINT>(1), &pTex);
         }

@@ -441,7 +441,7 @@ namespace v1 {
         }
         else if( mParentTexture->hasResolvedTexture2D() )
         {
-            mParentTexture->getTexture(); //Trigger a resolve in case it's needed.
+            mParentTexture->getSrvView(); //Trigger a resolve in case it's needed.
             textureNoMSAA = mParentTexture->getResolvedTexture2D();
             textureNoMSAA->GetDesc( &desc );
         }
@@ -497,7 +497,7 @@ namespace v1 {
     {
         if(mParentTexture->HasAutoMipMapGenerationEnabled())
         {
-            ID3D11ShaderResourceView *pShaderResourceView = mParentTexture->getTexture();
+            ID3D11ShaderResourceView *pShaderResourceView = mParentTexture->getSrvView();
             ID3D11DeviceContextN * context =  mDevice.GetImmediateContext();
             context->GenerateMips(pShaderResourceView);
             if (mDevice.isError())
