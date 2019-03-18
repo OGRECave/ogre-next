@@ -439,7 +439,7 @@ namespace v1 {
         {
             textureNoMSAA = texture;
         }
-        else if( mParentTexture->hasResolvedTexture2D() )
+        else if(mParentTexture->hasResolvedTexture2D() && !(mParentTexture->getUsage() & TU_NOT_SRV))
         {
             mParentTexture->getSrvView(); //Trigger a resolve in case it's needed.
             textureNoMSAA = mParentTexture->getResolvedTexture2D();

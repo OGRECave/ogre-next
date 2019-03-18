@@ -673,7 +673,7 @@ namespace Ogre
                 "D3D11Texture::_create2DTex" );
         }
 
-        if( desc.SampleDesc.Count > 1 )
+        if( desc.SampleDesc.Count > 1 && !(mUsage & TU_NOT_SRV))
         {
             desc.SampleDesc.Count = 1;
             desc.SampleDesc.Quality = 0;
