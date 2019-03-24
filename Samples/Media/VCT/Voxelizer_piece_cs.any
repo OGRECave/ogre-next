@@ -379,7 +379,7 @@ uniform float3 voxelCellSize;
 		float4 origAlbedo	= imageRead( voxelAlbedoTex, voxelCelUvw );
 		float3 origNormal	= imageRead( voxelNormalTex, voxelCelUvw ).xyz * 2.0f - 1.0f;
 		float4 origEmissive = imageRead( voxelEmissiveTex, voxelCelUvw );
-		float origAccumTris = imageRead( voxelAccumVal, voxelCelUvw ).x;
+		float origAccumTris = (float)imageRead( voxelAccumVal, voxelCelUvw ).x;
 	@end
 
 	if( accumTris + origAccumTris > 0 )
@@ -396,6 +396,7 @@ uniform float3 voxelCellSize;
 			imageStore( voxelAlbedoTex, voxelCelUvw, voxelAlbedo );
 			imageStore( voxelNormalTex, voxelCelUvw, float4( voxelNormal, 1.0f ) );
 			imageStore( voxelEmissiveTex, voxelCelUvw, voxelEmissive );
+			imageStore( voxelAccumVal, voxelCelUvw, uint4( accumTris + origAccumTris, 0, 0, 0 ) );
 		@end
 	}
 @end
