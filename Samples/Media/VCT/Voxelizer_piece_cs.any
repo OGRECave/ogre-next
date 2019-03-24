@@ -387,15 +387,15 @@ uniform float3 voxelCellSize;
 		voxelAlbedo			= mixAverage4( voxelAlbedo, accumTris, origAlbedo, origAccumTris );
 		voxelNormal			= mixAverage3( voxelNormal, accumTris, origNormal, origAccumTris );
 		voxelEmissive.xyz	= mixAverage3( voxelEmissive.xyz, accumTris, origEmissive.xyz, origAccumTris );
+
+		voxelEmissive.a	= doubleSided ? 1.0f : 0.0f;
+		voxelEmissive.a = max( voxelEmissive.a, origEmissive.a );
+		voxelNormal		= voxelNormal * 0.5 + 0.5f;
+
+		@property( syntax == glsl )
+			imageStore( voxelAlbedoTex, voxelCelUvw, voxelAlbedo );
+			imageStore( voxelNormalTex, voxelCelUvw, float4( voxelNormal, 1.0f ) );
+			imageStore( voxelEmissiveTex, voxelCelUvw, voxelEmissive );
+		@end
 	}
-
-	voxelEmissive.a	= doubleSided ? 1.0f : 0.0f;
-	voxelEmissive.a = max( voxelEmissive.a, origEmissive.a );
-	voxelNormal		= voxelNormal * 0.5 + 0.5f;
-
-	@property( syntax == glsl )
-		imageStore( voxelAlbedoTex, voxelCelUvw, voxelAlbedo );
-		imageStore( voxelNormalTex, voxelCelUvw, float4( voxelNormal, 1.0f ) );
-		imageStore( voxelEmissiveTex, voxelCelUvw, voxelEmissive );
-	@end
 @end
