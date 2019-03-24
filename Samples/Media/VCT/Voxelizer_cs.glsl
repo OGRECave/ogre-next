@@ -49,9 +49,10 @@ layout(std430, binding = 1) buffer indexBufferLayout
 	uint indexBuffer[];
 };
 
-layout (@insertpiece(uav2_pf_type)) uniform restrict writeonly image3D voxelAlbedoTex;
-layout (@insertpiece(uav3_pf_type)) uniform restrict writeonly image3D voxelNormalTex;
-layout (@insertpiece(uav4_pf_type)) uniform restrict writeonly image3D voxelEmissiveTex;
+layout (@insertpiece(uav2_pf_type)) uniform restrict image3D voxelAlbedoTex;
+layout (@insertpiece(uav3_pf_type)) uniform restrict image3D voxelNormalTex;
+layout (@insertpiece(uav4_pf_type)) uniform restrict image3D voxelEmissiveTex;
+layout (r16) uniform restrict image3D voxelAccumVal;
 
 layout( local_size_x = @value( threads_per_group_x ),
 		local_size_y = @value( threads_per_group_y ),

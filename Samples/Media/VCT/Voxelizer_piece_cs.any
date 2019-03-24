@@ -281,6 +281,17 @@
 		float3 uvw = tri_barycentric( p, tri );
 		return tri.uv[0] * uvw.x + tri.uv[1] * uvw.y + tri.uv[2] * uvw.z;
 	}
+
+	float3 mixAverage3( float3 newAccumValues, float numTris, float3 oldAveragedValue, float oldNumTris )
+	{
+		return newAccumValues / (numTris + oldNumTris) +
+			   oldAveragedValue * (numTris / (numTris + oldNumTris));
+	}
+	float4 mixAverage4( float4 newAccumValues, float numTris, float4 oldAveragedValue, float oldNumTris )
+	{
+		return newAccumValues / (numTris + oldNumTris) +
+			   oldAveragedValue * (numTris / (numTris + oldNumTris));
+	}
 @end
 
 uniform uint numInstances;
@@ -362,19 +373,29 @@ uniform float3 voxelCellSize;
 		}
 	}
 
-	if( accumTris > 0 )
+	int3 voxelCelUvw = int3( gl_GlobalInvocationID.xyz )
+
+	@property( syntax == glsl )
+		float4 origAlbedo	= imageRead( voxelAlbedoTex, voxelCelUvw );
+		float3 origNormal	= imageRead( voxelNormalTex, voxelCelUvw ).xyz * 2.0f - 1.0f;
+		float4 origEmissive = imageRead( voxelEmissiveTex, voxelCelUvw );
+		float origAccumTris = imageRead( voxelAccumVal, voxelCelUvw ).x;
+	@end
+
+	if( accumTris + origAccumTris > 0 )
 	{
-		voxelAlbedo		/= accumTris;
-		voxelEmissive	/= accumTris;
-		voxelNormal = normalize( voxelNormal );
+		voxelAlbedo			= mixAverage4( voxelAlbedo, accumTris, origAlbedo, origAccumTris );
+		voxelNormal			= mixAverage3( voxelNormal, accumTris, origNormal, origAccumTris );
+		voxelEmissive.xyz	= mixAverage3( voxelEmissive.xyz, accumTris, origEmissive.xyz, origAccumTris );
 	}
 
 	voxelEmissive.a	= doubleSided ? 1.0f : 0.0f;
+	voxelEmissive.a = max( voxelEmissive.a, origEmissive.a );
 	voxelNormal		= voxelNormal * 0.5 + 0.5f;
 
 	@property( syntax == glsl )
-		imageStore( voxelAlbedoTex, int3( gl_GlobalInvocationID.xyz ), voxelAlbedo );
-		imageStore( voxelNormalTex, int3( gl_GlobalInvocationID.xyz ), float4( voxelNormal, 1.0f ) );
-		imageStore( voxelEmissiveTex, int3( gl_GlobalInvocationID.xyz ), voxelEmissive );
+		imageStore( voxelAlbedoTex, voxelCelUvw, voxelAlbedo );
+		imageStore( voxelNormalTex, voxelCelUvw, float4( voxelNormal, 1.0f ) );
+		imageStore( voxelEmissiveTex, voxelCelUvw, voxelEmissive );
 	@end
 @end
