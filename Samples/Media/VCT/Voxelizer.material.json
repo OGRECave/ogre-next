@@ -1,0 +1,39 @@
+{
+	"compute" :
+	{
+        "VCT/Voxelizer" :
+		{
+            "threads_per_group" : [4, 4, 4],
+
+            "source" : "Voxelizer_cs",
+            "pieces" : ["CrossPlatformSettings_piece_all", "Voxelizer_piece_cs"],
+
+            "uav_units" : 5,
+			
+			"params" :
+            [
+			],
+			
+			"params_glsl" :
+			[
+                ["diffuseTex",              [0], "int"],
+                ["emissiveTex",             [1], "int"],
+
+                ["vertexBufferLayout",		[0], "int"],
+                ["indexBufferLayout",		[1], "int"],
+                ["voxelAlbedoTex",      	[2], "int"],
+                ["voxelNormalTex",  		[3], "int"],
+                ["voxelEmissiveTex",		[4], "int"]
+			],
+
+			"properties" :
+			{
+                "has_diffuse_tex" : 0,
+                "has_emissive_tex" : 0,
+                "emissive_is_diffuse_tex" : 0,
+                "index_32bit" : 0,
+                "compressed_vertex_format" : 0
+			}
+        }
+	}
+}

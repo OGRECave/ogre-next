@@ -38,11 +38,7 @@
 
 #define CONST_BUFFER( bufferName, bindingPoint ) layout( std140, binding = bindingPoint) uniform bufferName
 
-struct Vertex
-{
-	float3 pos;
-	float3 normal;
-};
+@insertpiece( PreBindingsHeaderCS )
 
 layout(std430, binding = 0) buffer vertexBufferLayout
 {

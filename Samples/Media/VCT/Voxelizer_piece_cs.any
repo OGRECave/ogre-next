@@ -9,13 +9,23 @@
 // Adapted for Ogre and for use for Voxel Cone Tracing by
 // Matias N. Goldberg Copyright (c) 2019
 
-@piece( HeaderCS )
-//	struct Vertex
-//	{
-//		float3 pos;
-//		float3 normal;
-//	};
+@piece( PreBindingsHeaderCS )
+	@property( !compressed_vertex_format )
+		struct Vertex
+		{
+			float3 pos;
+			float3 normal;
+			float2 uv;
+		};
+	@else
+		struct Vertex
+		{
+			uint4 pos_normal_uv;
+		};
+	@end
+@end
 
+@piece( HeaderCS )
 	struct Material
 	{
 		float4 diffuse;
@@ -100,8 +110,12 @@
 
 	uint getIndexBufferIndex( uint index )
 	{
+	@property( !index_32bit )
 		uint retVal = indexBuffer[index >> 1u];
 		retVal = ((index & 0x01u) != 0u) ? (retVal >> 16u) : (retVal & 0xFFFFu);
+	@else
+		uint retVal = indexBuffer[index];
+	@end
 		return retVal;
 	}
 
@@ -112,8 +126,22 @@
 		for( uint i=0u; i<3u; ++i )
 		{
 			uint idx = getIndexBufferIndex( mesh.indexBufferStart + triIdx * 3u + 0u );
-			retVal.v[i] = vertexBuffer[idx + mesh.vertexBufferStart].pos;
-			retVal.n[i] = vertexBuffer[idx + mesh.vertexBufferStart].normal;
+			@property( !compressed_vertex_format )
+				retVal.v[i] = vertexBuffer[idx + mesh.vertexBufferStart].pos;
+				retVal.n[i] = vertexBuffer[idx + mesh.vertexBufferStart].normal;
+				retVal.uv[i] = vertexBuffer[idx + mesh.vertexBufferStart].uv;
+			@else
+				uint4 pos_normal_uv = vertexBuffer[idx + mesh.vertexBufferStart].pos_normal_uv;
+				retVal.v[i].xy = unpackSnorm2x16( pos_normal_uv.x );
+
+				float2 tmp = unpackSnorm2x16( pos_normal_uv.y );
+				retVal.v[i].z	= tmp.x;
+
+				retVal.n[i].x	= tmp.y;
+				retVal.n[i].xy	= unpackSnorm2x16( pos_normal_uv.z );
+
+				retVal.uv[i].xy = unpackHalf2x16( pos_normal_uv.w );
+			@end
 		}
 
 		return retVal;
