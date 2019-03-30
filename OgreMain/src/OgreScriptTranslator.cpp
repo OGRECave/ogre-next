@@ -9534,7 +9534,7 @@ namespace Ogre{
                         }
                         else
                         {
-                            passScene->mUvBakingSet = static_cast<uint32>( uvSet );
+                            passScene->mUvBakingSet = static_cast<uint8>( uvSet );
                         }
                     }
                     break;
@@ -9554,6 +9554,23 @@ namespace Ogre{
                         {
                             compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
                                 "uv_baking_offset requires exactly 2 floats");
+                        }
+                    }
+                    break;
+                case ID_BAKE_LIGHTING_ONLY:
+                    if(prop->values.size() != 1)
+                    {
+                        compiler->addError(ScriptCompiler::CE_FEWERPARAMETERSEXPECTED, prop->file, prop->line,
+                                           "bake_lighting_only requires exactly one parameter (boolean)");
+                    }
+                    else
+                    {
+                        AbstractNodeList::const_iterator it0 = prop->values.begin();
+
+                        if( !getBoolean( *it0, &passScene->mBakeLightingOnly ) )
+                        {
+                            compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
+                                "bake_lighting_only must be a boolean");
                         }
                     }
                     break;

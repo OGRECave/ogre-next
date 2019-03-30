@@ -81,6 +81,7 @@ namespace Ogre
         mWorkflow( SpecularWorkflow ),
         mReceiveShadows( true ),
         mCubemapIdxInDescSet( std::numeric_limits<uint8>::max() ),
+        mUseEmissiveAsLightmap( false ),
         mTransparencyMode( None ),
         mkDr( 0.318309886f ), mkDg( 0.318309886f ), mkDb( 0.318309886f ), //Max Diffuse = 1 / PI
         _padding0( 1 ),
@@ -842,11 +843,25 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void HlmsPbsDatablock::setUseEmissiveAsLightmap( bool bUseEmissiveAsLightmap )
+    {
+        if( mUseEmissiveAsLightmap != bUseEmissiveAsLightmap )
+        {
+            mUseEmissiveAsLightmap = bUseEmissiveAsLightmap;
+            flushRenderables();
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    bool HlmsPbsDatablock::getUseEmissiveAsLightmap(void) const
+    {
+        return mUseEmissiveAsLightmap;
+    }
+    //-----------------------------------------------------------------------------------
     bool HlmsPbsDatablock::getReceiveShadows(void) const
     {
         return mReceiveShadows;
     }
-//-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
     void HlmsPbsDatablock::setUserValue(uint8 userValueIdx, const Vector4 &value)
     {
         assert(userValueIdx < 3);

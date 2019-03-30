@@ -142,6 +142,14 @@ namespace Ogre
         /// what to do (probably raise an exception)
         uint8           mUvBakingSet;
 
+        /// When mUvBakingSet is set, tells whether we should bake the whole render
+        /// result or just the lighting intensity, in order to create a lightmap.
+        ///
+        /// Typically, when baking with this setting, it's because you're going
+        /// to use this texture with HlmsPbsDatablock as an emissive map and calling
+        /// HlmsPbsDatablock::setUseEmissiveAsLightmap with true.
+        bool            mBakeLightingOnly;
+
         /// When mUvBakingSet is enabled, this defines the UV offset (in pixels).
         /// Without conservative rasterization, the baking won't render on pixels that
         /// are being partially touched by the triangle.
@@ -177,6 +185,7 @@ namespace Ogre
             mLodBias( 1.0f ),
             mReuseCullData( false ),
             mUvBakingSet( 0xFF ),
+            mBakeLightingOnly( false ),
             mUvBakingOffset( Vector2::ZERO ),
             mMaterialScheme(MaterialManager::DEFAULT_SCHEME_NAME)
         {

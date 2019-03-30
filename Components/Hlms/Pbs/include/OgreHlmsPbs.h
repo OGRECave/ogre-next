@@ -401,6 +401,7 @@ namespace Ogre
 
         static const IdString UvEmissive;
         static const IdString EmissiveConstant;
+        static const IdString EmissiveAsLightmap;
         static const IdString DetailMapsDiffuse;
         static const IdString DetailMapsNormal;
         static const IdString FirstValidDetailMapNm;
