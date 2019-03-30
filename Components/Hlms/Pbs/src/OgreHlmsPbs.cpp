@@ -688,8 +688,11 @@ namespace Ogre
             if( datablock->getEmissive() != Vector3::ZERO )
                 setProperty( PbsProperty::EmissiveConstant, 1 );
 
-            if( datablock->getUseEmissiveAsLightmap() )
-                setProperty( PbsProperty::EmissiveAsLightmap, 1 );
+            if( datablock->getTexture( PBSM_EMISSIVE ) )
+            {
+                if( datablock->getUseEmissiveAsLightmap() )
+                    setProperty( PbsProperty::EmissiveAsLightmap, 1 );
+            }
         }
 
         // normal maps used in this datablock
