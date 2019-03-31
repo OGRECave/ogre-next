@@ -75,6 +75,9 @@ namespace Ogre
                             size_t flushStartElem = 0, size_t flushSizeElem = 0 );
         virtual void advanceFrame(void);
         virtual void regressFrame(void);
+
+        virtual void copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes,
+                             size_t srcOffsetBytes, size_t sizeBytes );
     };
 }
 

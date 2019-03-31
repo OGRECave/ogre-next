@@ -279,6 +279,8 @@ namespace Ogre
         virtual AsyncTicketPtr createAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
                                                   size_t elementStart, size_t elementCount );
 
+        MetalDevice* getDevice(void)        { return mDevice; }
+
         virtual void _update(void);
         void _notifyNewCommandBuffer(void);
         void _notifyDeviceStalled(void);

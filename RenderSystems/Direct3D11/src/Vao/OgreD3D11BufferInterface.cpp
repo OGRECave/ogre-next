@@ -31,6 +31,9 @@ THE SOFTWARE.
 #include "Vao/OgreD3D11StagingBuffer.h"
 #include "Vao/OgreD3D11DynamicBuffer.h"
 
+#include "Vao/OgreD3D11CompatBufferInterface.h"
+#include "OgreD3D11Device.h"
+
 namespace Ogre
 {
     D3D11BufferInterface::D3D11BufferInterface( size_t vboPoolIdx, ID3D11Buffer *d3dBuffer,
@@ -172,5 +175,36 @@ namespace Ogre
 
         mBuffer->mFinalBufferStart = mBuffer->mInternalBufferStart +
                                         dynamicCurrentFrame * mBuffer->mNumElements;
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11BufferInterface::copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes,
+                                       size_t srcOffsetBytes, size_t sizeBytes )
+    {
+        D3D11VaoManager *vaoManager = static_cast<D3D11VaoManager*>( mBuffer->mVaoManager );
+        ID3D11DeviceContextN *context = vaoManager->getDevice().GetImmediateContext();
+
+        ID3D11Buffer *dstRes = 0;
+        if( dstBuffer->getBufferPacked()->getBufferPackedType() != BP_TYPE_CONST )
+        {
+            OGRE_ASSERT_HIGH( dynamic_cast<D3D11BufferInterface*>( dstBuffer ) );
+            D3D11BufferInterface *dstBufferInterface = static_cast<D3D11BufferInterface*>( dstBuffer );
+            dstRes = dstBufferInterface->getVboName();
+        }
+        else
+        {
+            OGRE_ASSERT_HIGH( dynamic_cast<D3D11CompatBufferInterface*>( dstBuffer ) );
+            D3D11CompatBufferInterface *dstBufferInterface =
+                    static_cast<D3D11CompatBufferInterface*>( dstBuffer );
+            dstRes = dstBufferInterface->getVboName();
+        }
+
+        D3D11_BOX srcBox;
+        srcBox.left     = static_cast<UINT>( srcOffsetBytes );
+        srcBox.right    = static_cast<UINT>( srcOffsetBytes + sizeBytes );
+        srcBox.top      = 0u;
+        srcBox.bottom   = 1u;
+        srcBox.front    = 0u;
+        srcBox.back     = 1u;
+        context->CopySubresourceRegion( dstRes, 0, dstOffsetBytes, 0, 0, this->mVboName, 0, &srcBox );
     }
 }

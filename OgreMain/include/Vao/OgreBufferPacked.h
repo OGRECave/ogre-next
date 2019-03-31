@@ -269,6 +269,30 @@ namespace Ogre
         /// advanceFrame.
         void regressFrame(void);
 
+        /** Copies the contents of this buffer to another, using GPU -> GPU transfers.
+
+            In simple terms it is similar to doing:
+                memcpy( dstBuffer + dstElemStart, this + srcElemStart, srcNumElems );
+        @remarks
+            When both src and dst have different values for BufferPacked::getBytesPerElement()
+            then srcNumElems * this->getBytesPerElement() must be divisible
+            by dstBuffer->getBytesPerElement()
+
+            If dst has a shadow buffer, then src must have it too.
+        @param dstBuffer
+            Buffer to copy to. Must be of type BT_DEFAULT
+        @param dstElemStart
+            The offset for dstBuffer. It must be in the unit of measure of dstBuffer.
+            e.g. actual offset in bytes is dstElemStart * dstBuffer->getBytesPerElement()
+        @param srcElemStart
+            The offset of this buffer to start from
+        @param srcNumElems
+            The number of elements to copy, in units of measure of srcBuffer.
+            See remarks.
+        */
+        void copyTo( BufferPacked *dstBuffer, size_t dstElemStart=0,
+                     size_t srcElemStart=0, size_t srcNumElems=0 );
+
         /// Returns the mapping state. Note that if you call map with MS_PERSISTENT_INCOHERENT or
         /// MS_PERSISTENT_COHERENT, then call unmap( UO_KEEP_PERSISTENT ); the returned value will
         /// still be MS_PERSISTENT_INCOHERENT/_COHERENT when persistent mapping is supported.

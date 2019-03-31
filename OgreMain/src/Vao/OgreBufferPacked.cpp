@@ -271,6 +271,43 @@ namespace Ogre
         return mBufferInterface->regressFrame();
     }
     //-----------------------------------------------------------------------------------
+    void BufferPacked::copyTo( BufferPacked *dstBuffer, size_t dstElemStart,
+                               size_t srcElemStart, size_t srcNumElems )
+    {
+        assert( dstBuffer->getBufferType() == BT_DEFAULT );
+
+        if( srcNumElems * this->getBytesPerElement() % dstBuffer->getBytesPerElement() != 0u )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "srcNumElems * this->getBytesPerElement() must be multiple of"
+                         " dstBuffer->getBytesPerElement()",
+                         "BufferPacked::copyTo" );
+        }
+
+        if( dstBuffer->mShadowCopy )
+        {
+            if( !this->mShadowCopy )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                             "dstBuffer has a shadow copy. We can only perform this "
+                             "copy if src also has a shadow copy", "BufferPacked::copyTo" );
+            }
+            else
+            {
+                memcpy( (char*)dstBuffer->mShadowCopy + dstElemStart * dstBuffer->mBytesPerElement,
+                        (char*)this->mShadowCopy + srcElemStart * this->mBytesPerElement,
+                        srcNumElems * this->mBytesPerElement );
+            }
+        }
+
+        mBufferInterface->copyTo( dstBuffer->getBufferInterface(),
+                                  dstBuffer->mFinalBufferStart +
+                                  dstElemStart * dstBuffer->getBytesPerElement(),
+                                  this->mFinalBufferStart +
+                                  srcElemStart * this->getBytesPerElement(),
+                                  srcNumElems * this->getBytesPerElement() );
+    }
+    //-----------------------------------------------------------------------------------
     bool BufferPacked::isCurrentlyMapped(void) const
     {
         if( mMappingState == MS_UNMAPPED )
