@@ -288,10 +288,11 @@ namespace Ogre
             The offset of this buffer to start from
         @param srcNumElems
             The number of elements to copy, in units of measure of srcBuffer.
+            When this value is out of bounds, it gets clamped.
             See remarks.
         */
         void copyTo( BufferPacked *dstBuffer, size_t dstElemStart=0,
-                     size_t srcElemStart=0, size_t srcNumElems=0 );
+                     size_t srcElemStart=0, size_t srcNumElems=std::numeric_limits<size_t>::max() );
 
         /// Returns the mapping state. Note that if you call map with MS_PERSISTENT_INCOHERENT or
         /// MS_PERSISTENT_COHERENT, then call unmap( UO_KEEP_PERSISTENT ); the returned value will

@@ -274,7 +274,16 @@ namespace Ogre
     void BufferPacked::copyTo( BufferPacked *dstBuffer, size_t dstElemStart,
                                size_t srcElemStart, size_t srcNumElems )
     {
-        assert( dstBuffer->getBufferType() == BT_DEFAULT );
+        if( srcNumElems >= mNumElements || srcElemStart + srcNumElems >= mNumElements )
+            srcNumElems = mNumElements - srcElemStart;
+
+        OGRE_ASSERT_LOW( dstBuffer->getBufferType() == BT_DEFAULT );
+
+        OGRE_ASSERT_LOW( srcElemStart <= this->mNumElements );
+        OGRE_ASSERT_LOW( dstElemStart <= dstBuffer->mNumElements );
+        OGRE_ASSERT_LOW( dstElemStart * dstBuffer->getBytesPerElement() +
+                         srcNumElems * this->getBytesPerElement() <=
+                         dstBuffer->mNumElements * dstBuffer->getBytesPerElement() );
 
         if( srcNumElems * this->getBytesPerElement() % dstBuffer->getBytesPerElement() != 0u )
         {

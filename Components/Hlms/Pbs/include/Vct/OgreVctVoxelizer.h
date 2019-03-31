@@ -89,6 +89,8 @@ namespace Ogre
         void convertMeshUncompressed( const MeshPtr &mesh, QueuedMesh &queuedMesh,
                                       MappedBuffers &mappedBuffers );
 
+        void freeBuffers();
+
     public:
         /**
         @param item

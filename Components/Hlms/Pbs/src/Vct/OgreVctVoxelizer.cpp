@@ -10,6 +10,10 @@
 #include "Vao/OgreIndexBufferPacked.h"
 #include "Vao/OgreUavBufferPacked.h"
 
+#include "Vao/OgreVaoManager.h"
+
+#include "Vao/OgreStagingBuffer.h"
+
 namespace Ogre
 {
     void VctVoxelizer::countBuffersSize( const MeshPtr &mesh, QueuedMesh &queuedMesh )
@@ -183,6 +187,33 @@ namespace Ogre
         mItems.push_back( item );
     }
     //-------------------------------------------------------------------------
+    void VctVoxelizer::freeBuffers()
+    {
+        VaoManager *vaoManager = 0;
+        if( mIndexBuffer16 && mIndexBuffer16->getNumElements() != mNumIndices16 )
+        {
+            vaoManager->destroyUavBuffer( mIndexBuffer16 );
+            mIndexBuffer16 = 0;
+        }
+        if( mIndexBuffer32 && mIndexBuffer32->getNumElements() != mNumIndices32 )
+        {
+            vaoManager->destroyUavBuffer( mIndexBuffer32 );
+            mIndexBuffer32 = 0;
+        }
+
+        if( mVertexBufferCompressed )
+        {
+            vaoManager->destroyUavBuffer( mVertexBufferCompressed );
+            mVertexBufferCompressed = 0;
+        }
+
+        if( mVertexBufferUncompressed )
+        {
+            vaoManager->destroyUavBuffer( mVertexBufferUncompressed );
+            mVertexBufferUncompressed = 0;
+        }
+    }
+    //-------------------------------------------------------------------------
     void VctVoxelizer::build()
     {
         mNumVerticesCompressed      = 0;
@@ -199,7 +230,22 @@ namespace Ogre
             ++itor;
         }
 
+        VaoManager *vaoManager = 0;
+        freeBuffers();
+
+        if( mNumIndices16 )
+            mIndexBuffer16 = vaoManager->createUavBuffer( mNumIndices16, sizeof(uint16), 0, 0, false );
+        if( mNumIndices32 )
+            mIndexBuffer32 = vaoManager->createUavBuffer( mNumIndices32, sizeof(uint32), 0, 0, false );
+
+        StagingBuffer *vbUncomprStagingBuffer =
+                vaoManager->getStagingBuffer( mNumVerticesUncompressed * sizeof(float) * 8u, true );
+
         MappedBuffers mappedBuffers;
+        mappedBuffers.uncompressedVertexBuffer =
+                reinterpret_cast<float*>( vbUncomprStagingBuffer->map( mNumVerticesUncompressed *
+                                                                       sizeof(float) * 8u ) );
+
         FreeOnDestructor uncompressedVb( OGRE_MALLOC_SIMD( mNumVerticesUncompressed * sizeof(float) * 8u,
                                                            MEMCATEGORY_GEOMETRY ) );
         mappedBuffers.uncompressedVertexBuffer = reinterpret_cast<float*>( uncompressedVb.ptr );
@@ -214,5 +260,14 @@ namespace Ogre
             convertMeshUncompressed( itor->first, itor->second, mappedBuffers );
             ++itor;
         }
+
+        mVertexBufferUncompressed = vaoManager->createUavBuffer( mNumVerticesUncompressed,
+                                                                 sizeof(float) * 8u,
+                                                                 0, 0, false );
+        vbUncomprStagingBuffer->unmap( StagingBuffer::Destination(
+                                           mVertexBufferUncompressed, 0u, 0u,
+                                           mVertexBufferUncompressed->getTotalSizeBytes() ) );
+
+        vbUncomprStagingBuffer->removeReferenceCount();
     }
 }
