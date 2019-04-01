@@ -38,6 +38,7 @@ THE SOFTWARE.
 #include "Vao/OgreVertexArrayObject.h"
 
 #include "Vao/OgreIndexBufferPacked.h"
+#include "Vao/OgreTexBufferPacked.h"
 #include "Vao/OgreUavBufferPacked.h"
 
 #include "Vao/OgreVaoManager.h"
@@ -86,6 +87,15 @@ namespace Ogre
     VctVoxelizer::VctVoxelizer( IdType id, VaoManager *vaoManager, HlmsManager *hlmsManager,
                                 TextureGpuManager *textureGpuManager ) :
         IdObject( id ),
+        mInstanceBuffer( 0 ),
+        mVertexBufferCompressed( 0 ),
+        mVertexBufferUncompressed( 0 ),
+        mIndexBuffer16( 0 ),
+        mIndexBuffer32( 0 ),
+        mNumVerticesCompressed( 0 ),
+        mNumVerticesUncompressed( 0 ),
+        mNumIndices16( 0 ),
+        mNumIndices32( 0 ),
         mAlbedoVox( 0 ),
         mEmissiveVox( 0 ),
         mNormalVox( 0 ),
@@ -100,12 +110,14 @@ namespace Ogre
         mRegionToVoxelize( Aabb::BOX_ZERO ),
         mMaxRegion( Aabb::BOX_INFINITE )
     {
+        memset( mComputeJobs, 0, sizeof(mComputeJobs) );
     }
     //-------------------------------------------------------------------------
     VctVoxelizer::~VctVoxelizer()
     {
         destroyVoxelTextures();
         freeBuffers();
+        destroyInstanceBuffers();
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::createComputeJobs()
@@ -578,9 +590,35 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
+    void VctVoxelizer::createInstanceBuffers(void)
+    {
+        const size_t instanceCount = mItems.size();
+        const size_t bytesNeeded = instanceCount * mOctants.size() * sizeof(float) * 4u * 6u;
+
+        if( !mInstanceBuffer || bytesNeeded > mInstanceBuffer->getTotalSizeBytes() )
+        {
+            destroyInstanceBuffers();
+            mInstanceBuffer = mVaoManager->createTexBuffer( PF_FLOAT32_RGBA, bytesNeeded,
+                                                            BT_DYNAMIC_DEFAULT, 0, false );
+        }
+    }
+    //-------------------------------------------------------------------------
+    void VctVoxelizer::destroyInstanceBuffers(void)
+    {
+        if( mInstanceBuffer )
+        {
+            mVaoManager->destroyTexBuffer( mInstanceBuffer );
+            mInstanceBuffer = 0;
+        }
+    }
+    //-------------------------------------------------------------------------
     void VctVoxelizer::fillInstanceBuffers(void)
     {
-        float * RESTRICT_ALIAS instanceBuffer = 0; TODO;
+        createInstanceBuffers();
+
+        float * RESTRICT_ALIAS instanceBuffer =
+                reinterpret_cast<float*>( mInstanceBuffer->map( 0, mInstanceBuffer->getNumElements() ) );
+        const float *instanceBufferStart = instanceBuffer;
         FastArray<Octant>::const_iterator itor = mOctants.begin();
         FastArray<Octant>::const_iterator end  = mOctants.end();
 
@@ -635,6 +673,9 @@ namespace Ogre
 
             ++itor;
         }
+
+        OGRE_ASSERT_LOW( (size_t)(instanceBuffer - instanceBufferStart) * sizeof(float) <=
+                         mInstanceBuffer->getTotalSizeBytes() );
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::build(void)
@@ -677,6 +718,7 @@ namespace Ogre
         }
 
         placeItemsInBuckets();
+        fillInstanceBuffers();
 
         //This texture is no longer needed, it's not used for the injection phase. Save memory.
         mAccumValVox->scheduleTransitionTo( GpuResidency::OnStorage );

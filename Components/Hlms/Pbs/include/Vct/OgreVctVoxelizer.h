@@ -141,6 +141,7 @@ namespace Ogre
         /// all variants as long as the number of variants is manageable.
         HlmsComputeJob  *mComputeJobs[1u<<5u];
 
+        TexBufferPacked *mInstanceBuffer;
         UavBufferPacked *mVertexBufferCompressed;
         UavBufferPacked *mVertexBufferUncompressed;
         UavBufferPacked *mIndexBuffer16;
@@ -207,6 +208,8 @@ namespace Ogre
         void calculateRegion(void);
 
         void placeItemsInBuckets(void);
+        void createInstanceBuffers(void);
+        void destroyInstanceBuffers(void);
         void fillInstanceBuffers(void);
 
     public:
