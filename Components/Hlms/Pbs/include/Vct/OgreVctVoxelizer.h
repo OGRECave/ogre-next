@@ -58,9 +58,49 @@ namespace Ogre
         UavBufferPacked     *indexBuffer;
         TextureGpu          *diffuseTex;
         TextureGpu          *emissiveTex;
-        //TexBufferPacked     *instanceBuffer;
+
+        bool operator < ( const VoxelizerBucket &other ) const
+        {
+            if( this->job != other.job )
+                return this->job < other.job;
+            if( this->materialBuffer != other.materialBuffer )
+                return this->materialBuffer < other.materialBuffer;
+            if( this->vertexBuffer != other.vertexBuffer )
+                return this->vertexBuffer < other.vertexBuffer;
+            if( this->indexBuffer != other.indexBuffer )
+                return this->indexBuffer < other.indexBuffer;
+            if( this->diffuseTex != other.diffuseTex )
+                return this->diffuseTex < other.diffuseTex;
+
+            return this->emissiveTex < other.emissiveTex;
+        }
     };
 
+    /**
+    @class VctVoxelizer
+        The voxelizer consists in several stages. The main ones that requre explanation are:
+
+        1. Download the vertex buffers to CPU, then upload it again to GPU in an homogeneous
+           format our compute shader understands. We do the same with the index buffer, except
+           we perform GPU -> GPU copies. We can't use the buffers directly because in many
+           APIs we can't bind the index buffer as an UAV easily.
+           This step is handled by VctVoxelizer::buildMeshBuffers.
+           Not implemented yet: when rebuilding the voxelized scene, this step can be skipped
+           if no meshes were added since the last change (and the buffers weren't freed
+           to save memory)
+
+        2. Iterate through every Item and convert the datablocks to the simplified version
+           our compute shader uses. VctMaterial handles this; done in
+           VctVoxelizer::placeItemsInBuckets.
+
+        3. During step 2, we also group the items into buckets. Each bucket can be batched
+           together to dispatch a single compute shader execution; because they share all
+           the same settings (and we haven't run out of material buffer space)
+
+        4. The items grouped in buckets may be split into 8 instance buffers; in order to
+           cull each octant of the voxel; thus avoiding having all voxels try to check
+           for all instances (performance optimization).
+    */
     class _OgreHlmsPbsExport VctVoxelizer : public IdObject
     {
         struct MappedBuffers
@@ -117,6 +157,17 @@ namespace Ogre
         VaoManager  *mVaoManager;
         HlmsManager *mHlmsManager;
         TextureGpuManager *mTextureGpuManager;
+
+        struct QueuedInstance
+        {
+            MovableObject   *movableObject;
+            uint32          vertexBufferStart;
+            uint32          indexBufferStart;
+            uint32          numIndices;
+            uint32          materialIdx;
+        };
+        typedef map< VoxelizerBucket, FastArray<QueuedInstance> >::type VoxelizerBucketMap;
+        VoxelizerBucketMap mBuckets;
 
         VctMaterial *mVctMaterial;
 

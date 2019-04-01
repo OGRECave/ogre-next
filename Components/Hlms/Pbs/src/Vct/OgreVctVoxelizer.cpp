@@ -512,17 +512,17 @@ namespace Ogre
 
         while( itor != end )
         {
-            uint32 variant = 0;
-
             Item *item = *itor;
-
             MeshPtrMap::const_iterator itMesh = mMeshesV2.find( item->getMesh() );
-            if( itMesh->second.bCompressed )
-                variant |= VoxelizerJobSetting::CompressedVertexFormat;
 
             const size_t numSubItems = item->getNumSubItems();
             for( size_t i=0; i<numSubItems; ++i )
             {
+                VoxelizerBucket bucket;
+                uint32 variant = 0;
+                if( itMesh->second.bCompressed )
+                    variant |= VoxelizerJobSetting::CompressedVertexFormat;
+
                 SubItem *subItem = item->getSubItem( i );
 
                 VertexArrayObject *vao = subItem->getSubMesh()->mVao[VpNormal].front();
@@ -539,6 +539,29 @@ namespace Ogre
                 HlmsDatablock *datablock = subItem->getDatablock();
                 VctMaterial::DatablockConversionResult convResult =
                         mVctMaterial->addDatablock( datablock );
+
+                if( convResult.diffuseTex )
+                    variant |= VoxelizerJobSetting::HasDiffuseTex;
+                if( convResult.emissiveTex )
+                    variant |= VoxelizerJobSetting::HasEmissiveTex;
+                if( convResult.diffuseTex && convResult.diffuseTex == convResult.emissiveTex )
+                    variant |= VoxelizerJobSetting::EmissiveIsDiffuseTex;
+
+                bucket.job              = mComputeJobs[variant];
+                bucket.materialBuffer   = convResult.constBuffer;
+                bucket.diffuseTex       = convResult.diffuseTex;
+                bucket.emissiveTex      = convResult.emissiveTex;
+                bucket.vertexBuffer     = itMesh->second.bCompressed ? mVertexBufferCompressed :
+                                                                       mVertexBufferUncompressed;
+                bucket.indexBuffer      = (variant & VoxelizerJobSetting::Index32bit) ? mIndexBuffer32 :
+                                                                                        mIndexBuffer16;
+
+                QueuedInstance queuedInstance;
+                queuedInstance.movableObject = item;
+                queuedInstance.vertexBufferStart = itMesh->second.submeshes[i].;
+                queuedInstance.indexBufferStart  = itMesh->second.submeshes[i].;
+                queuedInstance.materialIdx       = convResult.slotIdx;
+                mBuckets[bucket].push_back( queuedInstance );
             }
 
             ++itor;

@@ -77,7 +77,7 @@
 	struct Instance
 	{
 		ogre_float4x3 worldTransform;
-		uint meshIdx;
+		//uint meshIdx;
 		uint materialIdx;
 		Aabb bounds;
 
@@ -97,7 +97,7 @@
 		retVal.bounds.center	= aabb0.xyz;
 		retVal.bounds.halfSize	= aabb1.xyz;
 
-		retVal.meshIdx		= floatBitsToUint( aabb0.w );
+		//retVal.meshIdx		= floatBitsToUint( aabb0.w );
 		retVal.materialIdx	= floatBitsToUint( aabb1.w );
 
 		uint3 meshData = floatBitsToUint( bufferFetch( instanceBuffer, int( instanceIdx * 6u + 5u ) ).xyz );
