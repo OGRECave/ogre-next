@@ -34,6 +34,18 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    namespace VoxelizerJobSetting
+    {
+        enum VoxelizerJobSetting
+        {
+            HasDiffuseTex           = 1u << 0u,
+            HasEmissiveTex          = 1u << 1u,
+            EmissiveIsDiffuseTex    = 1u << 2u,
+            Index32bit              = 1u << 3u,
+            CompressedVertexFormat  = 1u << 4u,
+        };
+    }
+
     struct VoxelizerBucket
     {
         HlmsComputeJob      *job;
@@ -75,6 +87,13 @@ namespace Ogre
 
         ItemArray       mItems;
 
+        /// HlmsComputeJob have internal caches, thus we could dynamically change properties
+        /// and let the internal cache handle whether a compute job needs to be compiled.
+        ///
+        /// However the way we will be using may abuse the cache too much, thus we pre-set
+        /// all variants as long as the number of variants is manageable.
+        HlmsComputeJob  *mComputeJobs[1u<<5u];
+
         UavBufferPacked *mVertexBufferCompressed;
         UavBufferPacked *mVertexBufferUncompressed;
         UavBufferPacked *mIndexBuffer16;
@@ -85,13 +104,22 @@ namespace Ogre
         uint32 mNumIndices16;
         uint32 mNumIndices32;
 
+        VaoManager  *mVaoManager;
+        HlmsManager *mHlmsManager;
+
+        void createComputeJobs();
+
         void countBuffersSize( const MeshPtr &mesh, QueuedMesh &queuedMesh );
         void convertMeshUncompressed( const MeshPtr &mesh, QueuedMesh &queuedMesh,
                                       MappedBuffers &mappedBuffers );
 
-        void freeBuffers();
+        void freeBuffers(void);
+
+        void buildMeshBuffers(void);
 
     public:
+        VctVoxelizer( VaoManager *vaoManager, HlmsManager *hlmsManager );
+
         /**
         @param item
         @param bCompressed
@@ -105,7 +133,7 @@ namespace Ogre
         */
         void addItem( Item *item, bool bCompressed );
 
-        void build();
+        void build(void);
     };
 }
 

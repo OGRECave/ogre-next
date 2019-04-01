@@ -14,8 +14,93 @@
 
 #include "Vao/OgreStagingBuffer.h"
 
+#include "OgreHlmsCompute.h"
+#include "OgreHlmsComputeJob.h"
+#include "OgreLwString.h"
+
 namespace Ogre
 {
+    static const size_t c_numVctProperties = 5u;
+
+    struct VctVoxelizerProp
+    {
+        static const IdString HasDiffuseTex;
+        static const IdString HasEmissiveTex;
+        static const IdString EmissiveIsDiffuseTex;
+        static const IdString Index32bit;
+        static const IdString CompressedVertexFormat;
+
+        static const IdString* AllProps[c_numVctProperties];
+    };
+
+    const IdString VctVoxelizerProp::HasDiffuseTex          = IdString( "has_diffuse_tex" );
+    const IdString VctVoxelizerProp::HasEmissiveTex         = IdString( "has_emissive_tex" );
+    const IdString VctVoxelizerProp::EmissiveIsDiffuseTex   = IdString( "emissive_is_diffuse_tex" );
+    const IdString VctVoxelizerProp::Index32bit             = IdString( "index_32bit" );
+    const IdString VctVoxelizerProp::CompressedVertexFormat = IdString( "compressed_vertex_format" );
+
+    const IdString* VctVoxelizerProp::AllProps[c_numVctProperties] =
+    {
+        &VctVoxelizerProp::HasDiffuseTex,
+        &VctVoxelizerProp::HasEmissiveTex,
+        &VctVoxelizerProp::EmissiveIsDiffuseTex,
+        &VctVoxelizerProp::Index32bit,
+        &VctVoxelizerProp::CompressedVertexFormat,
+    };
+    //-------------------------------------------------------------------------
+    VctVoxelizer::VctVoxelizer( VaoManager *vaoManager, HlmsManager *hlmsManager ) :
+        mVaoManager( vaoManager ),
+        mHlmsManager( hlmsManager )
+    {
+    }
+    //-------------------------------------------------------------------------
+    void VctVoxelizer::createComputeJobs()
+    {
+        HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
+
+        HlmsComputeJob *voxelizerJob = hlmsCompute->findComputeJobNoThrow( "VCT/Voxelizer" );
+
+#if OGRE_NO_JSON
+        OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                     "To use VctVoxelizer, Ogre must be build with JSON support "
+                     "and you must include the resources bundled at "
+                     "Samples/Media/VCT",
+                     "VctVoxelizer::createComputeJobs" );
+#endif
+        if( !voxelizerJob )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "To use VctVoxelizer, you must include the resources bundled at "
+                         "Samples/Media/VCT\n"
+                         "Could not find VCT/Voxelizer",
+                         "VctVoxelizer::createComputeJobs" );
+        }
+
+        const size_t numVariants = 1u << c_numVctProperties;
+
+        char tmpBuffer[128];
+        LwString jobName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+
+        for( size_t variant=0u; variant<numVariants; ++variant )
+        {
+            jobName.clear();
+            jobName.a( "VCT/Voxelizer/", static_cast<uint32>( variant ) );
+
+            mComputeJobs[variant] = hlmsCompute->findComputeJobNoThrow( jobName.c_str() );
+
+            if( !mComputeJobs[variant] )
+            {
+                mComputeJobs[variant] = voxelizerJob->clone( jobName.c_str() );
+
+                for( size_t property=0; property<c_numVctProperties; ++property )
+                {
+                    const int32 propValue = variant & (1u << property) ? 1 : 0;
+                    voxelizerJob->setProperty( *VctVoxelizerProp::AllProps[property], propValue );
+                }
+            }
+        }
+    }
+    //-------------------------------------------------------------------------
     void VctVoxelizer::countBuffersSize( const MeshPtr &mesh, QueuedMesh &queuedMesh )
     {
         const uint16 numSubmeshes = mesh->getNumSubMeshes();
@@ -187,34 +272,33 @@ namespace Ogre
         mItems.push_back( item );
     }
     //-------------------------------------------------------------------------
-    void VctVoxelizer::freeBuffers()
+    void VctVoxelizer::freeBuffers(void)
     {
-        VaoManager *vaoManager = 0;
         if( mIndexBuffer16 && mIndexBuffer16->getNumElements() != mNumIndices16 )
         {
-            vaoManager->destroyUavBuffer( mIndexBuffer16 );
+            mVaoManager->destroyUavBuffer( mIndexBuffer16 );
             mIndexBuffer16 = 0;
         }
         if( mIndexBuffer32 && mIndexBuffer32->getNumElements() != mNumIndices32 )
         {
-            vaoManager->destroyUavBuffer( mIndexBuffer32 );
+            mVaoManager->destroyUavBuffer( mIndexBuffer32 );
             mIndexBuffer32 = 0;
         }
 
         if( mVertexBufferCompressed )
         {
-            vaoManager->destroyUavBuffer( mVertexBufferCompressed );
+            mVaoManager->destroyUavBuffer( mVertexBufferCompressed );
             mVertexBufferCompressed = 0;
         }
 
         if( mVertexBufferUncompressed )
         {
-            vaoManager->destroyUavBuffer( mVertexBufferUncompressed );
+            mVaoManager->destroyUavBuffer( mVertexBufferUncompressed );
             mVertexBufferUncompressed = 0;
         }
     }
     //-------------------------------------------------------------------------
-    void VctVoxelizer::build()
+    void VctVoxelizer::buildMeshBuffers(void)
     {
         mNumVerticesCompressed      = 0;
         mNumVerticesUncompressed    = 0;
@@ -230,16 +314,15 @@ namespace Ogre
             ++itor;
         }
 
-        VaoManager *vaoManager = 0;
         freeBuffers();
 
         if( mNumIndices16 )
-            mIndexBuffer16 = vaoManager->createUavBuffer( mNumIndices16, sizeof(uint16), 0, 0, false );
+            mIndexBuffer16 = mVaoManager->createUavBuffer( mNumIndices16, sizeof(uint16), 0, 0, false );
         if( mNumIndices32 )
-            mIndexBuffer32 = vaoManager->createUavBuffer( mNumIndices32, sizeof(uint32), 0, 0, false );
+            mIndexBuffer32 = mVaoManager->createUavBuffer( mNumIndices32, sizeof(uint32), 0, 0, false );
 
         StagingBuffer *vbUncomprStagingBuffer =
-                vaoManager->getStagingBuffer( mNumVerticesUncompressed * sizeof(float) * 8u, true );
+                mVaoManager->getStagingBuffer( mNumVerticesUncompressed * sizeof(float) * 8u, true );
 
         MappedBuffers mappedBuffers;
         mappedBuffers.uncompressedVertexBuffer =
@@ -261,13 +344,18 @@ namespace Ogre
             ++itor;
         }
 
-        mVertexBufferUncompressed = vaoManager->createUavBuffer( mNumVerticesUncompressed,
-                                                                 sizeof(float) * 8u,
-                                                                 0, 0, false );
+        mVertexBufferUncompressed = mVaoManager->createUavBuffer( mNumVerticesUncompressed,
+                                                                  sizeof(float) * 8u,
+                                                                  0, 0, false );
         vbUncomprStagingBuffer->unmap( StagingBuffer::Destination(
                                            mVertexBufferUncompressed, 0u, 0u,
                                            mVertexBufferUncompressed->getTotalSizeBytes() ) );
 
         vbUncomprStagingBuffer->removeReferenceCount();
+    }
+    //-------------------------------------------------------------------------
+    void VctVoxelizer::build(void)
+    {
+        buildMeshBuffers();
     }
 }
