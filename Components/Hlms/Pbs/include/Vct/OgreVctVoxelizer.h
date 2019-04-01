@@ -183,6 +183,15 @@ namespace Ogre
         /// Limit to mRegionToVoxelize in case mAutoRegion is true
         Aabb    mMaxRegion;
 
+        struct Octant
+        {
+            uint32 x, y, z;
+            uint32 width, height, depth;
+            Aabb region;
+        };
+
+        FastArray<Octant> mOctants;
+
         void createComputeJobs();
 
         void countBuffersSize( const MeshPtr &mesh, QueuedMesh &queuedMesh );
@@ -195,9 +204,10 @@ namespace Ogre
         void createVoxelTextures(void);
         void destroyVoxelTextures(void);
 
-        void calculateRegion();
+        void calculateRegion(void);
 
-        void placeItemsInBuckets();
+        void placeItemsInBuckets(void);
+        void fillInstanceBuffers(void);
 
     public:
         VctVoxelizer( IdType id, VaoManager *vaoManager, HlmsManager *hlmsManager,

@@ -578,6 +578,65 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
+    void VctVoxelizer::fillInstanceBuffers(void)
+    {
+        float * RESTRICT_ALIAS instanceBuffer = 0; TODO;
+        FastArray<Octant>::const_iterator itor = mOctants.begin();
+        FastArray<Octant>::const_iterator end  = mOctants.end();
+
+        while( itor != end )
+        {
+            const Aabb octantAabb = itor->region;
+            VoxelizerBucketMap::const_iterator itBucket = mBuckets.begin();
+            VoxelizerBucketMap::const_iterator enBucket = mBuckets.end();
+
+            while( itBucket != enBucket )
+            {
+                FastArray<QueuedInstance>::const_iterator itQueuedInst = itBucket->second.begin();
+                FastArray<QueuedInstance>::const_iterator enQueuedInst = itBucket->second.end();
+
+                while( itQueuedInst != enQueuedInst )
+                {
+                    const QueuedInstance &instance = *itQueuedInst;
+                    Aabb worldAabb = instance.movableObject->getWorldAabb();
+
+                    //Perform culling against this octant.
+                    if( octantAabb.contains( worldAabb ) )
+                    {
+                        const Matrix4 &fullTransform = instance.movableObject->_getParentNodeFullTransform();
+                        for( size_t i=0; i<12u; ++i )
+                            *instanceBuffer++ = static_cast<float>( fullTransform[0][i] );
+
+                        *instanceBuffer++ = worldAabb.mCenter.x;
+                        *instanceBuffer++ = worldAabb.mCenter.y;
+                        *instanceBuffer++ = worldAabb.mCenter.z;
+                        *instanceBuffer++ = 0.0f;
+
+                        #define AS_U32PTR( x ) reinterpret_cast<uint32*RESTRICT_ALIAS>(x)
+
+                        *instanceBuffer++ = worldAabb.mHalfSize.x;
+                        *instanceBuffer++ = worldAabb.mHalfSize.y;
+                        *instanceBuffer++ = worldAabb.mHalfSize.z;
+                        *AS_U32PTR( instanceBuffer ) = instance.materialIdx;        ++instanceBuffer;
+
+                        *AS_U32PTR( instanceBuffer ) = instance.vertexBufferStart;  ++instanceBuffer;
+                        *AS_U32PTR( instanceBuffer ) = instance.indexBufferStart;   ++instanceBuffer;
+                        *AS_U32PTR( instanceBuffer ) = instance.numIndices;         ++instanceBuffer;
+                        *instanceBuffer++ = 0.0f;
+
+                        #undef AS_U32PTR
+                    }
+
+                    ++itQueuedInst;
+                }
+
+                ++itBucket;
+            }
+
+            ++itor;
+        }
+    }
+    //-------------------------------------------------------------------------
     void VctVoxelizer::build(void)
     {
         buildMeshBuffers();
@@ -616,6 +675,8 @@ namespace Ogre
             uavSlot.pixelFormat = mAccumValVox->getPixelFormat();
             mComputeJobs[i]->_setUavTexture( 5, uavSlot );
         }
+
+        placeItemsInBuckets();
 
         //This texture is no longer needed, it's not used for the injection phase. Save memory.
         mAccumValVox->scheduleTransitionTo( GpuResidency::OnStorage );
