@@ -113,6 +113,8 @@ namespace Ogre
         struct QueuedSubMesh
         {
             VertexBufferDownloadHelper downloadHelper;
+            uint32  vbOffset;
+            uint32  ibOffset;
         };
 
         typedef FastArray<QueuedSubMesh> QueuedSubMeshArray;

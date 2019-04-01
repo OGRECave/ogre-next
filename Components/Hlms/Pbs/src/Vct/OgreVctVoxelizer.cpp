@@ -172,11 +172,16 @@ namespace Ogre
             size_t vertexStart = 0u;
             size_t numVertices = vao->getBaseVertexBuffer()->getNumElements();
 
+            bool uses32bitIndices = false;
+
             IndexBufferPacked *indexBuffer = vao->getIndexBuffer();
             if( indexBuffer )
             {
                 if( indexBuffer->getIndexType() == IndexBufferPacked::IT_16BIT )
+                {
+                    uses32bitIndices = false;
                     numIndices16 += vao->getPrimitiveCount();
+                }
                 else
                     numIndices32 += vao->getPrimitiveCount();
 
@@ -191,6 +196,11 @@ namespace Ogre
             }
 
             TODO_deal_no_index_buffer;
+
+            queuedMesh.submeshes[subMeshIdx].vbOffset = totalNumVertices +
+                    (queuedMesh.bCompressed ? mNumVerticesCompressed : mNumVerticesUncompressed);
+            queuedMesh.submeshes[subMeshIdx].ibOffset =
+                    uses32bitIndices ? (mNumIndices32 + numIndices32) : (mNumIndices16 + numIndices16);
 
             //Request to download the vertex buffer(s) to CPU (it will be mapped soon)
             VertexElementSemanticFullArray semanticsToDownload;
@@ -558,8 +568,8 @@ namespace Ogre
 
                 QueuedInstance queuedInstance;
                 queuedInstance.movableObject = item;
-                queuedInstance.vertexBufferStart = itMesh->second.submeshes[i].;
-                queuedInstance.indexBufferStart  = itMesh->second.submeshes[i].;
+                queuedInstance.vertexBufferStart = itMesh->second.submeshes[i].vbOffset;
+                queuedInstance.indexBufferStart  = itMesh->second.submeshes[i].ibOffset;
                 queuedInstance.materialIdx       = convResult.slotIdx;
                 mBuckets[bucket].push_back( queuedInstance );
             }
