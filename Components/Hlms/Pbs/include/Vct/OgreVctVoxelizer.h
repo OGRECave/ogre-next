@@ -29,11 +29,15 @@ THE SOFTWARE.
 #define _OgreVctVoxelizer_H_
 
 #include "OgreHlmsPbsPrerequisites.h"
+#include "OgreId.h"
+#include "Math/Simple/OgreAabb.h"
 #include "Vao/OgreVertexBufferDownloadHelper.h"
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
+    class VctMaterial;
+
     namespace VoxelizerJobSetting
     {
         enum VoxelizerJobSetting
@@ -54,9 +58,10 @@ namespace Ogre
         UavBufferPacked     *indexBuffer;
         TextureGpu          *diffuseTex;
         TextureGpu          *emissiveTex;
+        //TexBufferPacked     *instanceBuffer;
     };
 
-    class _OgreHlmsPbsExport VctVoxelizer
+    class _OgreHlmsPbsExport VctVoxelizer : public IdObject
     {
         struct MappedBuffers
         {
@@ -104,8 +109,26 @@ namespace Ogre
         uint32 mNumIndices16;
         uint32 mNumIndices32;
 
+        TextureGpu  *mAlbedoVox;
+        TextureGpu  *mEmissiveVox;
+        TextureGpu  *mNormalVox;
+        TextureGpu  *mAccumValVox;
+
         VaoManager  *mVaoManager;
         HlmsManager *mHlmsManager;
+        TextureGpuManager *mTextureGpuManager;
+
+        VctMaterial *mVctMaterial;
+
+        uint32  mWidth;
+        uint32  mHeight;
+        uint32  mDepth;
+
+        /// Whether mRegionToVoxelize is manually set or autocalculated
+        bool    mAutoRegion;
+        Aabb    mRegionToVoxelize;
+        /// Limit to mRegionToVoxelize in case mAutoRegion is true
+        Aabb    mMaxRegion;
 
         void createComputeJobs();
 
@@ -116,9 +139,17 @@ namespace Ogre
         void freeBuffers(void);
 
         void buildMeshBuffers(void);
+        void createVoxelTextures(void);
+        void destroyVoxelTextures(void);
+
+        void calculateRegion();
+
+        void placeItemsInBuckets();
 
     public:
-        VctVoxelizer( VaoManager *vaoManager, HlmsManager *hlmsManager );
+        VctVoxelizer( IdType id, VaoManager *vaoManager, HlmsManager *hlmsManager,
+                      TextureGpuManager *textureGpuManager );
+        ~VctVoxelizer();
 
         /**
         @param item

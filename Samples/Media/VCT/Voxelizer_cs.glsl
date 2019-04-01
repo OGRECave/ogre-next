@@ -52,7 +52,7 @@ layout(std430, binding = 1) buffer indexBufferLayout
 layout (@insertpiece(uav2_pf_type)) uniform restrict image3D voxelAlbedoTex;
 layout (@insertpiece(uav3_pf_type)) uniform restrict image3D voxelNormalTex;
 layout (@insertpiece(uav4_pf_type)) uniform restrict image3D voxelEmissiveTex;
-layout (r16ui) uniform restrict uimage3D voxelAccumVal;
+layout (@insertpiece(uav5_pf_type)) uniform restrict uimage3D voxelAccumVal;
 
 layout( local_size_x = @value( threads_per_group_x ),
 		local_size_y = @value( threads_per_group_y ),

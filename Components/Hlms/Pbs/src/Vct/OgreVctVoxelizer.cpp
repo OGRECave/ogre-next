@@ -1,5 +1,35 @@
+/*
+-----------------------------------------------------------------------------
+This source file is part of OGRE
+    (Object-oriented Graphics Rendering Engine)
+For the latest info, see http://www.ogre3d.org/
+
+Copyright (c) 2000-present Torus Knot Software Ltd
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-----------------------------------------------------------------------------
+*/
+
+#include "OgreStableHeaders.h"
 
 #include "Vct/OgreVctVoxelizer.h"
+#include "Vct/OgreVctMaterial.h"
 
 #include "OgreItem.h"
 #include "OgreMesh2.h"
@@ -17,6 +47,11 @@
 #include "OgreHlmsCompute.h"
 #include "OgreHlmsComputeJob.h"
 #include "OgreLwString.h"
+
+#include "OgreTextureGpuManager.h"
+#include "OgreStringConverter.h"
+
+#define TODO_deal_no_index_buffer
 
 namespace Ogre
 {
@@ -48,10 +83,29 @@ namespace Ogre
         &VctVoxelizerProp::CompressedVertexFormat,
     };
     //-------------------------------------------------------------------------
-    VctVoxelizer::VctVoxelizer( VaoManager *vaoManager, HlmsManager *hlmsManager ) :
+    VctVoxelizer::VctVoxelizer( IdType id, VaoManager *vaoManager, HlmsManager *hlmsManager,
+                                TextureGpuManager *textureGpuManager ) :
+        IdObject( id ),
+        mAlbedoVox( 0 ),
+        mEmissiveVox( 0 ),
+        mNormalVox( 0 ),
+        mAccumValVox( 0 ),
         mVaoManager( vaoManager ),
-        mHlmsManager( hlmsManager )
+        mHlmsManager( hlmsManager ),
+        mTextureGpuManager( textureGpuManager ),
+        mWidth( 128u ),
+        mHeight( 128u ),
+        mDepth( 128u ),
+        mAutoRegion( true ),
+        mRegionToVoxelize( Aabb::BOX_ZERO ),
+        mMaxRegion( Aabb::BOX_INFINITE )
     {
+    }
+    //-------------------------------------------------------------------------
+    VctVoxelizer::~VctVoxelizer()
+    {
+        destroyVoxelTextures();
+        freeBuffers();
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::createComputeJobs()
@@ -135,6 +189,8 @@ namespace Ogre
 
                 totalNumVertices += vao->getPrimitiveCount();
             }
+
+            TODO_deal_no_index_buffer;
 
             //Request to download the vertex buffer(s) to CPU (it will be mapped soon)
             VertexElementSemanticFullArray semanticsToDownload;
@@ -354,8 +410,181 @@ namespace Ogre
         vbUncomprStagingBuffer->removeReferenceCount();
     }
     //-------------------------------------------------------------------------
+    void VctVoxelizer::createVoxelTextures(void)
+    {
+        if( mAlbedoVox &&
+            mAlbedoVox->getWidth() == mWidth &&
+            mAlbedoVox->getHeight() == mHeight &&
+            mAlbedoVox->getDepth() == mDepth )
+        {
+            mAccumValVox->scheduleTransitionTo( GpuResidency::Resident );
+            return;
+        }
+
+        if( !mAlbedoVox )
+        {
+            mAlbedoVox = mTextureGpuManager->createTexture( "VctVoxelizer" +
+                                                            StringConverter::toString( getId() ) +
+                                                            "/Albedo",
+                                                            GpuPageOutStrategy::Discard,
+                                                            TextureFlags::Uav, TextureTypes::Type3D );
+            mEmissiveVox = mTextureGpuManager->createTexture( "VctVoxelizer" +
+                                                              StringConverter::toString( getId() ) +
+                                                              "/Emissive",
+                                                              GpuPageOutStrategy::Discard,
+                                                              TextureFlags::Uav, TextureTypes::Type3D );
+            mNormalVox = mTextureGpuManager->createTexture( "VctVoxelizer" +
+                                                            StringConverter::toString( getId() ) +
+                                                            "/Normal",
+                                                            GpuPageOutStrategy::Discard,
+                                                            TextureFlags::Uav, TextureTypes::Type3D );
+            mAccumValVox = mTextureGpuManager->createTexture( "VctVoxelizer" +
+                                                              StringConverter::toString( getId() ) +
+                                                              "/AccumVal",
+                                                              GpuPageOutStrategy::Discard,
+                                                              TextureFlags::NotTexture|TextureFlags::Uav,
+                                                              TextureTypes::Type3D );
+        }
+
+        TextureGpu *textures[4] = { mAlbedoVox, mEmissiveVox, mNormalVox, mAccumValVox };
+        for( size_t i=0; i<sizeof(textures) / sizeof(textures[0]); ++i )
+            textures[i]->scheduleTransitionTo( GpuResidency::OnStorage );
+
+        mAlbedoVox->setPixelFormat( PFG_RGBA8_UNORM_SRGB );
+        mEmissiveVox->setPixelFormat( PFG_RGBA8_UNORM_SRGB );
+        mNormalVox->setPixelFormat( PFG_R10G10B10A2_UNORM );
+        mAccumValVox->setPixelFormat( PFG_R16_UINT );
+
+        for( size_t i=0; i<sizeof(textures) / sizeof(textures[0]); ++i )
+        {
+            textures[i]->setResolution( mWidth, mHeight, mDepth );
+            textures[i]->setNumMipmaps( 1u );
+            textures[i]->scheduleTransitionTo( GpuResidency::Resident );
+        }
+    }
+    //-------------------------------------------------------------------------
+    void VctVoxelizer::destroyVoxelTextures(void)
+    {
+        if( mAlbedoVox )
+        {
+            mTextureGpuManager->destroyTexture( mAlbedoVox );
+            mTextureGpuManager->destroyTexture( mEmissiveVox );
+            mTextureGpuManager->destroyTexture( mNormalVox );
+            mTextureGpuManager->destroyTexture( mAccumValVox );
+
+            mAlbedoVox = 0;
+            mEmissiveVox = 0;
+            mNormalVox = 0;
+            mAccumValVox = 0;
+        }
+    }
+    //-------------------------------------------------------------------------
+    void VctVoxelizer::calculateRegion()
+    {
+        if( !mAutoRegion )
+            return;
+
+        mRegionToVoxelize = Aabb::BOX_NULL;
+
+        ItemArray::const_iterator itor = mItems.begin();
+        ItemArray::const_iterator end  = mItems.end();
+
+        while( itor != end )
+        {
+            Item *item = *itor;
+            mRegionToVoxelize.merge( item->getWorldAabb() );
+            ++itor;
+        }
+
+        Vector3 minAabb = mRegionToVoxelize.getMinimum();
+        Vector3 maxAabb = mRegionToVoxelize.getMaximum();
+
+        minAabb.makeCeil( mMaxRegion.getMinimum() );
+        maxAabb.makeFloor( mMaxRegion.getMaximum() );
+
+        mRegionToVoxelize.setExtents( minAabb, maxAabb );
+    }
+    //-------------------------------------------------------------------------
+    void VctVoxelizer::placeItemsInBuckets()
+    {
+        ItemArray::const_iterator itor = mItems.begin();
+        ItemArray::const_iterator end  = mItems.end();
+
+        while( itor != end )
+        {
+            uint32 variant = 0;
+
+            Item *item = *itor;
+
+            MeshPtrMap::const_iterator itMesh = mMeshesV2.find( item->getMesh() );
+            if( itMesh->second.bCompressed )
+                variant |= VoxelizerJobSetting::CompressedVertexFormat;
+
+            const size_t numSubItems = item->getNumSubItems();
+            for( size_t i=0; i<numSubItems; ++i )
+            {
+                SubItem *subItem = item->getSubItem( i );
+
+                VertexArrayObject *vao = subItem->getSubMesh()->mVao[VpNormal].front();
+                if( vao->getIndexBuffer() )
+                {
+                    if( vao->getIndexBuffer()->getIndexType() == IndexBufferPacked::IT_32BIT )
+                        variant |= VoxelizerJobSetting::Index32bit;
+                }
+                else
+                {
+                    TODO_deal_no_index_buffer;
+                }
+
+                HlmsDatablock *datablock = subItem->getDatablock();
+                VctMaterial::DatablockConversionResult convResult =
+                        mVctMaterial->addDatablock( datablock );
+            }
+
+            ++itor;
+        }
+    }
+    //-------------------------------------------------------------------------
     void VctVoxelizer::build(void)
     {
         buildMeshBuffers();
+
+        createVoxelTextures();
+
+        calculateRegion();
+
+        for( size_t i=0; i<sizeof(mComputeJobs) / sizeof(mComputeJobs[0]); ++i )
+        {
+            const bool compressedVf = (i & VoxelizerJobSetting::CompressedVertexFormat) != 0;
+            const bool hasIndices32 = (i & VoxelizerJobSetting::Index32bit) != 0;
+
+            DescriptorSetUav::BufferSlot bufferSlot( DescriptorSetUav::BufferSlot::makeEmpty() );
+            bufferSlot.buffer = compressedVf ? mVertexBufferCompressed : mVertexBufferUncompressed;
+            mComputeJobs[i]->_setUavBuffer( 0, bufferSlot );
+            bufferSlot.buffer = hasIndices32 ? mIndexBuffer32 : mIndexBuffer16;
+            mComputeJobs[i]->_setUavBuffer( 1, bufferSlot );
+
+            DescriptorSetUav::TextureSlot uavSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
+            uavSlot.access = ResourceAccess::ReadWrite;
+
+            uavSlot.texture     = mAlbedoVox;
+            uavSlot.pixelFormat = mAlbedoVox->getPixelFormat();
+            mComputeJobs[i]->_setUavTexture( 2, uavSlot );
+
+            uavSlot.texture     = mNormalVox;
+            uavSlot.pixelFormat = mNormalVox->getPixelFormat();
+            mComputeJobs[i]->_setUavTexture( 3, uavSlot );
+
+            uavSlot.texture     = mEmissiveVox;
+            uavSlot.pixelFormat = mEmissiveVox->getPixelFormat();
+            mComputeJobs[i]->_setUavTexture( 4, uavSlot );
+
+            uavSlot.texture     = mAccumValVox;
+            uavSlot.pixelFormat = mAccumValVox->getPixelFormat();
+            mComputeJobs[i]->_setUavTexture( 5, uavSlot );
+        }
+
+        //This texture is no longer needed, it's not used for the injection phase. Save memory.
+        mAccumValVox->scheduleTransitionTo( GpuResidency::OnStorage );
     }
 }
