@@ -294,14 +294,6 @@
 	}
 @end
 
-uniform uint numInstances;
-uniform float3 voxelOrigin;
-uniform float3 voxelCellSize;
-
-#define p_numInstances numInstances
-#define p_voxelOrigin voxelOrigin
-#define p_voxelCellSize voxelCellSize
-
 //in uvec3 gl_NumWorkGroups;
 //in uvec3 gl_WorkGroupID;
 //in uvec3 gl_LocalInvocationID;
@@ -319,7 +311,7 @@ uniform float3 voxelCellSize;
 	float3 voxelNormal		= float3( 0, 0, 0 );
 	float4 voxelEmissive	= float3( 0, 0, 0 );
 
-	for( uint i=0u; i<p_numInstances; ++i )
+	for( uint i=p_instanceStart; i<p_instanceEnd; ++i )
 	{
 		Instance instance = getInstance( i );
 		//Broadphase culling

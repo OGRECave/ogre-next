@@ -56,7 +56,7 @@ namespace Ogre
 
         ShaderVctMaterial shaderMaterial;
         memset( &shaderMaterial, 0, sizeof(shaderMaterial) );
-        TODO;
+        TODO_convert_datablock;
 
         bucket.buffer->upload( &shaderMaterial, usedSlots * sizeof( ShaderVctMaterial ),
                                sizeof( ShaderVctMaterial ) );

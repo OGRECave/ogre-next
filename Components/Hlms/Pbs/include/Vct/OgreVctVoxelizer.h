@@ -157,6 +157,7 @@ namespace Ogre
         TextureGpu  *mNormalVox;
         TextureGpu  *mAccumValVox;
 
+        RenderSystem*mRenderSystem;
         VaoManager  *mVaoManager;
         HlmsManager *mHlmsManager;
         TextureGpuManager *mTextureGpuManager;
@@ -213,8 +214,7 @@ namespace Ogre
         void fillInstanceBuffers(void);
 
     public:
-        VctVoxelizer( IdType id, VaoManager *vaoManager, HlmsManager *hlmsManager,
-                      TextureGpuManager *textureGpuManager );
+        VctVoxelizer( IdType id, RenderSystem *renderSystem, HlmsManager *hlmsManager );
         ~VctVoxelizer();
 
         /**

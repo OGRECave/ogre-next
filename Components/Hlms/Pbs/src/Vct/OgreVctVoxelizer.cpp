@@ -31,6 +31,8 @@ THE SOFTWARE.
 #include "Vct/OgreVctVoxelizer.h"
 #include "Vct/OgreVctMaterial.h"
 
+#include "OgreRenderSystem.h"
+
 #include "OgreItem.h"
 #include "OgreMesh2.h"
 #include "OgreSubMesh2.h"
@@ -84,8 +86,7 @@ namespace Ogre
         &VctVoxelizerProp::CompressedVertexFormat,
     };
     //-------------------------------------------------------------------------
-    VctVoxelizer::VctVoxelizer( IdType id, VaoManager *vaoManager, HlmsManager *hlmsManager,
-                                TextureGpuManager *textureGpuManager ) :
+    VctVoxelizer::VctVoxelizer( IdType id, RenderSystem *renderSystem, HlmsManager *hlmsManager ) :
         IdObject( id ),
         mInstanceBuffer( 0 ),
         mVertexBufferCompressed( 0 ),
@@ -100,9 +101,10 @@ namespace Ogre
         mEmissiveVox( 0 ),
         mNormalVox( 0 ),
         mAccumValVox( 0 ),
-        mVaoManager( vaoManager ),
+        mRenderSystem( renderSystem ),
+        mVaoManager( renderSystem->getVaoManager() ),
         mHlmsManager( hlmsManager ),
-        mTextureGpuManager( textureGpuManager ),
+        mTextureGpuManager( renderSystem->getTextureGpuManager() ),
         mWidth( 128u ),
         mHeight( 128u ),
         mDepth( 128u ),
@@ -686,6 +688,9 @@ namespace Ogre
 
         calculateRegion();
 
+        placeItemsInBuckets();
+        fillInstanceBuffers();
+
         for( size_t i=0; i<sizeof(mComputeJobs) / sizeof(mComputeJobs[0]); ++i )
         {
             const bool compressedVf = (i & VoxelizerJobSetting::CompressedVertexFormat) != 0;
@@ -715,10 +720,76 @@ namespace Ogre
             uavSlot.texture     = mAccumValVox;
             uavSlot.pixelFormat = mAccumValVox->getPixelFormat();
             mComputeJobs[i]->_setUavTexture( 5, uavSlot );
+
+            DescriptorSetTexture2::BufferSlot texBufSlot(DescriptorSetTexture2::BufferSlot::makeEmpty());
+            texBufSlot.buffer = mInstanceBuffer;
+            mComputeJobs[i]->setTexBuffer( 0, texBufSlot );
         }
 
-        placeItemsInBuckets();
-        fillInstanceBuffers();
+        mRenderSystem->endRenderPassDescriptor();
+
+        HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
+
+        const uint32 *threadsPerGroup = mComputeJobs[0]->getThreadsPerGroup();
+
+        Vector3 voxelOrigin = mRegionToVoxelize.getMinimum();
+
+        ShaderParams::Param paramInstanceRange;
+        ShaderParams::Param paramVoxelOrigin;
+        ShaderParams::Param paramVoxelCellSize;
+
+        paramInstanceRange.name	= "instanceStart_instanceEnd";
+        paramVoxelOrigin.name	= "voxelOrigin";
+        paramVoxelCellSize.name	= "voxelCellSize";
+
+        paramVoxelCellSize.setManualValue( mRegionToVoxelize.getSize() /
+                                           Vector3( mWidth, mHeight, mDepth ) );
+
+        uint32 instanceStart = 0;
+
+        FastArray<Octant>::const_iterator itor = mOctants.begin();
+        FastArray<Octant>::const_iterator end  = mOctants.end();
+
+        while( itor != end )
+        {
+            const Octant &octant = *itor;
+            VoxelizerBucketMap::const_iterator itBucket = mBuckets.begin();
+            VoxelizerBucketMap::const_iterator enBucket = mBuckets.end();
+
+            while( itBucket != enBucket )
+            {
+                const VoxelizerBucket &bucket = itBucket->first;
+                bucket.job->setNumThreadGroups( octant.width / threadsPerGroup[0],
+                                                octant.height / threadsPerGroup[1],
+                                                octant.depth / threadsPerGroup[2] );
+
+                DescriptorSetTexture2::TextureSlot
+                        texSlot( DescriptorSetTexture2::TextureSlot::makeEmpty() );
+                texSlot.texture = bucket.diffuseTex;
+                bucket.job->setTexture( 1, texSlot );
+                texSlot.texture = bucket.emissiveTex;
+                bucket.job->setTexture( 2, texSlot );
+
+                uint32 numInstancesInBucket = static_cast<uint32 >( itBucket->second.size() );
+                uint32 instanceRange[2] = { instanceStart, instanceStart + numInstancesInBucket };
+
+                paramInstanceRange.setManualValue( instanceRange, 2u );
+                paramVoxelOrigin.setManualValue( voxelOrigin );
+
+                ShaderParams &shaderParams = bucket.job->getShaderParams( "default" );
+                shaderParams.mParams.clear();
+                shaderParams.mParams.push_back( paramInstanceRange );
+                shaderParams.mParams.push_back( paramVoxelOrigin );
+                shaderParams.mParams.push_back( paramVoxelCellSize );
+                shaderParams.setDirty();
+
+                hlmsCompute->dispatch( bucket.job, 0, 0 );
+
+                instanceStart += numInstancesInBucket;
+            }
+
+            ++itor;
+        }
 
         //This texture is no longer needed, it's not used for the injection phase. Save memory.
         mAccumValVox->scheduleTransitionTo( GpuResidency::OnStorage );

@@ -16,8 +16,9 @@
 			
 			"params_glsl" :
 			[
-                ["diffuseTex",              [0], "int"],
-                ["emissiveTex",             [1], "int"],
+                ["instanceBuffer",          [0], "int"],
+                ["diffuseTex",              [1], "int"],
+                ["emissiveTex",             [2], "int"],
 
                 ["vertexBufferLayout",		[0], "int"],
                 ["indexBufferLayout",		[1], "int"],

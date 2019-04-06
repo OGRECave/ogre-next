@@ -78,10 +78,12 @@ uniform samplerBuffer instanceBuffer;
 
 @insertpiece( HeaderCS )
 
-uniform uint numInstances;
+uniform uint2 instanceStart_instanceEnd;
 uniform float3 voxelOrigin;
 uniform float3 voxelCellSize;
 
+#define p_instanceStart instanceStart_instanceEnd.x
+#define p_instanceEnd instanceStart_instanceEnd.y
 #define p_numInstances numInstances
 #define p_voxelOrigin voxelOrigin
 #define p_voxelCellSize voxelCellSize
