@@ -141,7 +141,7 @@ namespace  Ogre
                 const size_t typeCount = v1::VertexElement::getTypeCount( vertexElement.mType );
 
                 for( size_t j=0; j<typeCount; ++j )
-                    retVal[j] = Bitwise::halfToFloatI( hfData[j] );
+                    retVal[j] = Bitwise::halfToFloat( hfData[j] );
             }
             else
             {

@@ -55,6 +55,7 @@ THE SOFTWARE.
 #include "OgreStringConverter.h"
 
 #define TODO_deal_no_index_buffer
+#define TODO_clear_voxels
 
 namespace Ogre
 {
@@ -105,6 +106,7 @@ namespace Ogre
         mVaoManager( renderSystem->getVaoManager() ),
         mHlmsManager( hlmsManager ),
         mTextureGpuManager( renderSystem->getTextureGpuManager() ),
+        mVctMaterial( new VctMaterial( renderSystem->getVaoManager() ) ),
         mWidth( 128u ),
         mHeight( 128u ),
         mDepth( 128u ),
@@ -120,6 +122,9 @@ namespace Ogre
         destroyVoxelTextures();
         freeBuffers();
         destroyInstanceBuffers();
+
+        delete mVctMaterial;
+        mVctMaterial = 0;
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::createComputeJobs()
@@ -173,9 +178,9 @@ namespace Ogre
     {
         const uint16 numSubmeshes = mesh->getNumSubMeshes();
 
-        size_t totalNumVertices = 0u;
-        size_t numIndices16 = 0u;
-        size_t numIndices32 = 0u;
+        uint32 totalNumVertices = 0u;
+        uint32 totalNumIndices16 = 0u;
+        uint32 totalNumIndices32 = 0u;
 
         for( uint16 subMeshIdx=0; subMeshIdx<numSubmeshes; ++subMeshIdx )
         {
@@ -186,18 +191,28 @@ namespace Ogre
             size_t vertexStart = 0u;
             size_t numVertices = vao->getBaseVertexBuffer()->getNumElements();
 
+            uint32 vbOffset = totalNumVertices + (queuedMesh.bCompressed ? mNumVerticesCompressed :
+                                                                           mNumVerticesUncompressed);
+            uint32 ibOffset = 0;
+            uint32 numIndices = 0;
+
             bool uses32bitIndices = false;
 
             IndexBufferPacked *indexBuffer = vao->getIndexBuffer();
             if( indexBuffer )
             {
+                numIndices = vao->getPrimitiveCount();
                 if( indexBuffer->getIndexType() == IndexBufferPacked::IT_16BIT )
                 {
                     uses32bitIndices = false;
-                    numIndices16 += vao->getPrimitiveCount();
+                    ibOffset = mNumIndices16 + totalNumIndices16;
+                    totalNumIndices16 += numIndices;
                 }
                 else
-                    numIndices32 += vao->getPrimitiveCount();
+                {
+                    ibOffset = mNumIndices32 + totalNumIndices32;
+                    totalNumIndices32 += numIndices;
+                }
 
                 totalNumVertices += vao->getBaseVertexBuffer()->getNumElements();
             }
@@ -205,16 +220,16 @@ namespace Ogre
             {
                 vertexStart = vao->getPrimitiveStart();
                 numVertices = vao->getPrimitiveCount();
+                numIndices = 0; TODO_deal_no_index_buffer;
 
                 totalNumVertices += vao->getPrimitiveCount();
             }
 
             TODO_deal_no_index_buffer;
 
-            queuedMesh.submeshes[subMeshIdx].vbOffset = totalNumVertices +
-                    (queuedMesh.bCompressed ? mNumVerticesCompressed : mNumVerticesUncompressed);
-            queuedMesh.submeshes[subMeshIdx].ibOffset =
-                    uses32bitIndices ? (mNumIndices32 + numIndices32) : (mNumIndices16 + numIndices16);
+            queuedMesh.submeshes[subMeshIdx].vbOffset = vbOffset;
+            queuedMesh.submeshes[subMeshIdx].ibOffset = ibOffset;
+            queuedMesh.submeshes[subMeshIdx].numIndices = numIndices;
 
             //Request to download the vertex buffer(s) to CPU (it will be mapped soon)
             VertexElementSemanticFullArray semanticsToDownload;
@@ -226,12 +241,12 @@ namespace Ogre
         }
 
         if( queuedMesh.bCompressed )
-            mNumVerticesCompressed += static_cast<uint32>( totalNumVertices );
+            mNumVerticesCompressed += totalNumVertices;
         else
-            mNumVerticesUncompressed += static_cast<uint32>( totalNumVertices );
+            mNumVerticesUncompressed += totalNumVertices;
 
-        mNumIndices16 += static_cast<uint32>( numIndices16 );
-        mNumIndices32 += static_cast<uint32>( numIndices32 );
+        mNumIndices16 += totalNumIndices16;
+        mNumIndices32 += totalNumIndices32;
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::convertMeshUncompressed( const MeshPtr &mesh, QueuedMesh &queuedMesh,
@@ -408,12 +423,12 @@ namespace Ogre
         mappedBuffers.uncompressedVertexBuffer =
                 reinterpret_cast<float*>( vbUncomprStagingBuffer->map( mNumVerticesUncompressed *
                                                                        sizeof(float) * 8u ) );
-
-        FreeOnDestructor uncompressedVb( OGRE_MALLOC_SIMD( mNumVerticesUncompressed * sizeof(float) * 8u,
-                                                           MEMCATEGORY_GEOMETRY ) );
-        mappedBuffers.uncompressedVertexBuffer = reinterpret_cast<float*>( uncompressedVb.ptr );
         mappedBuffers.index16BufferOffset = 0u;
         mappedBuffers.index32BufferOffset = 0u;
+
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_LOW
+        const float *uncompressedVertexBufferStart = mappedBuffers.uncompressedVertexBuffer;
+#endif
 
         itor = mMeshesV2.begin();
         end  = mMeshesV2.end();
@@ -423,6 +438,10 @@ namespace Ogre
             convertMeshUncompressed( itor->first, itor->second, mappedBuffers );
             ++itor;
         }
+
+        OGRE_ASSERT_LOW( (size_t)(mappedBuffers.uncompressedVertexBuffer -
+                                  uncompressedVertexBufferStart) <=
+                         mNumVerticesUncompressed * sizeof(float) * 8u );
 
         mVertexBufferUncompressed = mVaoManager->createUavBuffer( mNumVerticesUncompressed,
                                                                   sizeof(float) * 8u,
@@ -503,7 +522,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void VctVoxelizer::calculateRegion()
+    void VctVoxelizer::autoCalculateRegion()
     {
         if( !mAutoRegion )
             return;
@@ -582,9 +601,10 @@ namespace Ogre
 
                 QueuedInstance queuedInstance;
                 queuedInstance.movableObject = item;
-                queuedInstance.vertexBufferStart = itMesh->second.submeshes[i].vbOffset;
-                queuedInstance.indexBufferStart  = itMesh->second.submeshes[i].ibOffset;
-                queuedInstance.materialIdx       = convResult.slotIdx;
+                queuedInstance.vertexBufferStart    = itMesh->second.submeshes[i].vbOffset;
+                queuedInstance.indexBufferStart     = itMesh->second.submeshes[i].ibOffset;
+                queuedInstance.numIndices           = itMesh->second.submeshes[i].numIndices;
+                queuedInstance.materialIdx          = convResult.slotIdx;
                 mBuckets[bucket].push_back( queuedInstance );
             }
 
@@ -641,9 +661,10 @@ namespace Ogre
                     Aabb worldAabb = instance.movableObject->getWorldAabb();
 
                     //Perform culling against this octant.
-                    if( octantAabb.contains( worldAabb ) )
+                    if( octantAabb.intersects( worldAabb ) )
                     {
-                        const Matrix4 &fullTransform = instance.movableObject->_getParentNodeFullTransform();
+                        const Matrix4 &fullTransform =
+                                instance.movableObject->_getParentNodeFullTransform();
                         for( size_t i=0; i<12u; ++i )
                             *instanceBuffer++ = static_cast<float>( fullTransform[0][i] );
 
@@ -680,15 +701,58 @@ namespace Ogre
                          mInstanceBuffer->getTotalSizeBytes() );
     }
     //-------------------------------------------------------------------------
+    void VctVoxelizer::dividideOctants( uint32 numOctantsX, uint32 numOctantsY, uint32 numOctantsZ )
+    {
+        mOctants.clear();
+        mOctants.reserve( numOctantsX * numOctantsY * numOctantsZ );
+
+        OGRE_ASSERT_LOW( mWidth % numOctantsX == 0 );
+        OGRE_ASSERT_LOW( mHeight % numOctantsY == 0 );
+        OGRE_ASSERT_LOW( mDepth % numOctantsZ == 0 );
+
+        Octant octant;
+        octant.width    = mWidth / numOctantsX;
+        octant.height   = mHeight / numOctantsY;
+        octant.depth    = mDepth / numOctantsZ;
+
+        const Vector3 voxelOrigin = mRegionToVoxelize.getMinimum();
+        const Vector3 voxelCellSize = mRegionToVoxelize.getSize() /
+                                      Vector3( numOctantsX, numOctantsY, numOctantsZ );
+
+        for( uint32 x=0u; x<numOctantsX; ++x )
+        {
+            octant.x = x * octant.width;
+            for( uint32 y=0u; y<numOctantsY; ++y )
+            {
+                octant.y = y * octant.height;
+                for( uint32 z=0u; z<numOctantsZ; ++z )
+                {
+                    octant.z = z * octant.depth;
+
+                    Vector3 octantOrigin = Vector3( octant.x, octant.y, octant.z ) * voxelCellSize;
+                    octantOrigin += voxelOrigin;
+                    octant.region.setExtents( octantOrigin, octantOrigin + voxelCellSize );
+                    mOctants.push_back( octant );
+                }
+            }
+        }
+    }
+    //-------------------------------------------------------------------------
     void VctVoxelizer::build(void)
     {
+        OGRE_ASSERT_LOW( !mOctants.empty() );
+
+        if( mItems.empty() )
+        {
+            TODO_clear_voxels;
+        }
+
         buildMeshBuffers();
 
         createVoxelTextures();
 
-        calculateRegion();
-
         placeItemsInBuckets();
+
         fillInstanceBuffers();
 
         for( size_t i=0; i<sizeof(mComputeJobs) / sizeof(mComputeJobs[0]); ++i )
@@ -732,7 +796,7 @@ namespace Ogre
 
         const uint32 *threadsPerGroup = mComputeJobs[0]->getThreadsPerGroup();
 
-        Vector3 voxelOrigin = mRegionToVoxelize.getMinimum();
+        const Vector3 voxelOrigin = mRegionToVoxelize.getMinimum();
 
         ShaderParams::Param paramInstanceRange;
         ShaderParams::Param paramVoxelOrigin;

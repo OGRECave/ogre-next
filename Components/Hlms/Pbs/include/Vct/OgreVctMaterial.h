@@ -69,6 +69,7 @@ namespace Ogre
                                                         MaterialBucket &bucket );
 
     public:
+        VctMaterial( VaoManager *vaoManager );
         ~VctMaterial();
 
         DatablockConversionResult addDatablock( HlmsDatablock *datablock );

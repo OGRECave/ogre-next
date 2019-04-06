@@ -115,6 +115,7 @@ namespace Ogre
             VertexBufferDownloadHelper downloadHelper;
             uint32  vbOffset;
             uint32  ibOffset;
+            uint32  numIndices;
         };
 
         typedef FastArray<QueuedSubMesh> QueuedSubMeshArray;
@@ -206,8 +207,6 @@ namespace Ogre
         void createVoxelTextures(void);
         void destroyVoxelTextures(void);
 
-        void calculateRegion(void);
-
         void placeItemsInBuckets(void);
         void createInstanceBuffers(void);
         void destroyInstanceBuffers(void);
@@ -229,6 +228,10 @@ namespace Ogre
             to not use compression, then not using compression takes precedence.
         */
         void addItem( Item *item, bool bCompressed );
+
+        void autoCalculateRegion(void);
+
+        void dividideOctants( uint32 numOctantsX, uint32 numOctantsY, uint32 numOctantsZ );
 
         void build(void);
     };

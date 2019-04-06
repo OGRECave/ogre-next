@@ -33,6 +33,9 @@ THE SOFTWARE.
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreConstBufferPacked.h"
 
+#define TODO_convert_datablock
+#define TODO_free_buffers
+
 namespace Ogre
 {
     static const size_t c_numDatablocksPerConstBuffer = 1024u;
@@ -46,6 +49,16 @@ namespace Ogre
         uint32 padding01[2];
         uint32 padding2[4];
     };
+    //-------------------------------------------------------------------------
+    VctMaterial::VctMaterial( VaoManager *vaoManager ) :
+        mVaoManager( vaoManager )
+    {
+    }
+    //-------------------------------------------------------------------------
+    VctMaterial::~VctMaterial()
+    {
+        TODO_free_buffers;
+    }
     //-------------------------------------------------------------------------
     VctMaterial::DatablockConversionResult VctMaterial::addDatablockToBucket( HlmsDatablock *datablock,
                                                                               MaterialBucket &bucket )
