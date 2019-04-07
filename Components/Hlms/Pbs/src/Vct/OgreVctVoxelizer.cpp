@@ -582,6 +582,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VctVoxelizer::placeItemsInBuckets()
     {
+        mBuckets.clear();
+
         ItemArray::const_iterator itor = mItems.begin();
         ItemArray::const_iterator end  = mItems.end();
 

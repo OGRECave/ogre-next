@@ -1332,6 +1332,8 @@ namespace Ogre {
             const TextureTypes::TextureTypes textureType = texSlot.texture->getTextureType();
             if( textureType == TextureTypes::Type1DArray ||
                 textureType == TextureTypes::Type2DArray ||
+                textureType == TextureTypes::Type3D ||
+                textureType == TextureTypes::TypeCube ||
                 textureType == TextureTypes::TypeCubeArray )
             {
                 isArrayTexture = GL_TRUE;
