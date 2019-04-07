@@ -2,6 +2,9 @@
 #include "GraphicsSystem.h"
 #include "VoxelizerGameState.h"
 
+#include "OgreRoot.h"
+#include "OgreConfigFile.h"
+
 //Declares WinMain / main
 #include "MainEntryPointHelper.h"
 #include "System/MainEntryPoints.h"
@@ -17,6 +20,44 @@ int mainApp( int argc, const char *argv[] )
 
 namespace Demo
 {
+    class VoxelizerGraphicsSystem : public GraphicsSystem
+    {
+        virtual void setupResources(void)
+        {
+            GraphicsSystem::setupResources();
+
+            Ogre::ConfigFile cf;
+            cf.load(mResourcePath + "resources2.cfg");
+
+            Ogre::String originalDataFolder = cf.getSetting( "DoNotUseAsResource", "Hlms", "" );
+
+            if( originalDataFolder.empty() )
+                originalDataFolder = "./";
+            else if( *(originalDataFolder.end() - 1) != '/' )
+                originalDataFolder += "/";
+
+            const char *c_locations[4] =
+            {
+                "VCT",
+                "Hlms/Common/GLSL",
+                "Hlms/Common/HLSL",
+                "Hlms/Common/Metal"
+            };
+
+            for( size_t i=0; i<sizeof(c_locations) / sizeof(c_locations[0]); ++i )
+            {
+                Ogre::String dataFolder = originalDataFolder + c_locations[i];
+                addResourceLocation( dataFolder, "FileSystem", "General" );
+            }
+        }
+
+    public:
+        VoxelizerGraphicsSystem( GameState *gameState ) :
+            GraphicsSystem( gameState )
+        {
+        }
+    };
+
     void MainEntryPoints::createSystems( GameState **outGraphicsGameState,
                                          GraphicsSystem **outGraphicsSystem,
                                          GameState **outLogicGameState,
@@ -25,7 +66,7 @@ namespace Demo
         VoxelizerGameState *gfxGameState = new VoxelizerGameState(
         "" );
 
-        GraphicsSystem *graphicsSystem = new GraphicsSystem( gfxGameState );
+        VoxelizerGraphicsSystem *graphicsSystem = new VoxelizerGraphicsSystem( gfxGameState );
 
         gfxGameState->_notifyGraphicsSystem( graphicsSystem );
 

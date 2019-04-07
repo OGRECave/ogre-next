@@ -24,7 +24,9 @@
 
 #define int3 ivec3
 
+#define uint2 uvec2
 #define uint3 uvec3
+#define uint4 uvec4
 
 #define ogre_float4x3 mat3x4
 

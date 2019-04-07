@@ -142,6 +142,7 @@ namespace Ogre
         /// all variants as long as the number of variants is manageable.
         HlmsComputeJob  *mComputeJobs[1u<<5u];
 
+        float           *mCpuInstanceBuffer;
         TexBufferPacked *mInstanceBuffer;
         UavBufferPacked *mVertexBufferCompressed;
         UavBufferPacked *mVertexBufferUncompressed;

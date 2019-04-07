@@ -89,11 +89,12 @@ namespace Demo
         sceneManager->updateSceneGraph();
 
         Ogre::Root *root = mGraphicsSystem->getRoot();
-        Ogre::VctVoxelizer voxelizer( Ogre::Id::generateNewId<Ogre::VctVoxelizer>(),
-                                      root->getRenderSystem(), root->getHlmsManager() );
-        voxelizer.addItem( item, false );
-        voxelizer.autoCalculateRegion();
-        voxelizer.dividideOctants( 1u, 1u, 1u );
-        voxelizer.build();
+        Ogre::VctVoxelizer *voxelizer =
+                new Ogre::VctVoxelizer( Ogre::Id::generateNewId<Ogre::VctVoxelizer>(),
+                                        root->getRenderSystem(), root->getHlmsManager() );
+        voxelizer->addItem( item, false );
+        voxelizer->autoCalculateRegion();
+        voxelizer->dividideOctants( 1u, 1u, 1u );
+        voxelizer->build();
     }
 }

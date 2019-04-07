@@ -6,9 +6,10 @@
             "threads_per_group" : [4, 4, 4],
 
             "source" : "Voxelizer_cs",
-            "pieces" : ["CrossPlatformSettings_piece_all", "Voxelizer_piece_cs"],
+            "pieces" : ["CrossPlatformSettings_piece_all", "Voxelizer_piece_cs.any"],
+            "inform_shader_of_texture_data_change" : true,
 
-            "uav_units" : 5,
+            "uav_units" : 6,
 			
 			"params" :
             [
@@ -17,11 +18,7 @@
 			"params_glsl" :
 			[
                 ["instanceBuffer",          [0], "int"],
-                ["diffuseTex",              [1], "int"],
-                ["emissiveTex",             [2], "int"],
 
-                ["vertexBufferLayout",		[0], "int"],
-                ["indexBufferLayout",		[1], "int"],
                 ["voxelAlbedoTex",      	[2], "int"],
                 ["voxelNormalTex",  		[3], "int"],
                 ["voxelEmissiveTex",		[4], "int"]

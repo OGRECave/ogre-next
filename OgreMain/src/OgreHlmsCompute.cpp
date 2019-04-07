@@ -131,6 +131,7 @@ namespace Ogre
             String::size_type pos = filename.find_last_of( '.' );
             if( pos == String::npos ||
                 (filename.compare( pos + 1, String::npos, mShaderFileExt ) != 0 &&
+                 filename.compare( pos + 1, String::npos, "any" ) != 0 &&
                  filename.compare( pos + 1, String::npos, "metal" ) != 0 &&
                  filename.compare( pos + 1, String::npos, "glsl" ) != 0 &&
                  filename.compare( pos + 1, String::npos, "glsles" ) != 0 &&

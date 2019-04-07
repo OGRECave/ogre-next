@@ -89,6 +89,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     VctVoxelizer::VctVoxelizer( IdType id, RenderSystem *renderSystem, HlmsManager *hlmsManager ) :
         IdObject( id ),
+        mCpuInstanceBuffer( 0 ),
         mInstanceBuffer( 0 ),
         mVertexBufferCompressed( 0 ),
         mVertexBufferUncompressed( 0 ),
@@ -115,6 +116,7 @@ namespace Ogre
         mMaxRegion( Aabb::BOX_INFINITE )
     {
         memset( mComputeJobs, 0, sizeof(mComputeJobs) );
+        createComputeJobs();
     }
     //-------------------------------------------------------------------------
     VctVoxelizer::~VctVoxelizer()
@@ -164,6 +166,27 @@ namespace Ogre
             if( !mComputeJobs[variant] )
             {
                 mComputeJobs[variant] = voxelizerJob->clone( jobName.c_str() );
+
+                ShaderParams &glslShaderParams = mComputeJobs[variant]->getShaderParams( "glsl" );
+
+                uint8 numTexUnits = 1u;
+                if( variant & VoxelizerJobSetting::HasDiffuseTex )
+                {
+                    ShaderParams::Param param;
+                    param.name = "diffuseTex";
+                    param.setManualValue( static_cast<int32>( numTexUnits ) );
+                    glslShaderParams.mParams.push_back( param );
+                    ++numTexUnits;
+                }
+                if( variant & VoxelizerJobSetting::HasEmissiveTex )
+                {
+                    ShaderParams::Param param;
+                    param.name = "emissiveTex";
+                    param.setManualValue( static_cast<int32>( numTexUnits ) );
+                    glslShaderParams.mParams.push_back( param );
+                    ++numTexUnits;
+                }
+                mComputeJobs[variant]->setNumTexUnits( numTexUnits );
 
                 for( size_t property=0; property<c_numVctProperties; ++property )
                 {
@@ -493,8 +516,8 @@ namespace Ogre
         for( size_t i=0; i<sizeof(textures) / sizeof(textures[0]); ++i )
             textures[i]->scheduleTransitionTo( GpuResidency::OnStorage );
 
-        mAlbedoVox->setPixelFormat( PFG_RGBA8_UNORM_SRGB );
-        mEmissiveVox->setPixelFormat( PFG_RGBA8_UNORM_SRGB );
+        mAlbedoVox->setPixelFormat( PFG_RGBA8_UNORM );
+        mEmissiveVox->setPixelFormat( PFG_RGBA8_UNORM );
         mNormalVox->setPixelFormat( PFG_R10G10B10A2_UNORM );
         mAccumValVox->setPixelFormat( PFG_R16_UINT );
 
@@ -621,7 +644,10 @@ namespace Ogre
         {
             destroyInstanceBuffers();
             mInstanceBuffer = mVaoManager->createTexBuffer( PF_FLOAT32_RGBA, bytesNeeded,
-                                                            BT_DYNAMIC_DEFAULT, 0, false );
+                                                            BT_DEFAULT
+                                                            /*BT_DYNAMIC_DEFAULT*/, 0, false );
+            mCpuInstanceBuffer = reinterpret_cast<float*>( OGRE_MALLOC_SIMD( bytesNeeded,
+                                                                             MEMCATEGORY_GENERAL ) );
         }
     }
     //-------------------------------------------------------------------------
@@ -631,6 +657,9 @@ namespace Ogre
         {
             mVaoManager->destroyTexBuffer( mInstanceBuffer );
             mInstanceBuffer = 0;
+
+            OGRE_FREE_SIMD( mCpuInstanceBuffer, MEMCATEGORY_GENERAL );
+            mCpuInstanceBuffer = 0;
         }
     }
     //-------------------------------------------------------------------------
@@ -638,8 +667,9 @@ namespace Ogre
     {
         createInstanceBuffers();
 
-        float * RESTRICT_ALIAS instanceBuffer =
-                reinterpret_cast<float*>( mInstanceBuffer->map( 0, mInstanceBuffer->getNumElements() ) );
+//        float * RESTRICT_ALIAS instanceBuffer =
+//                reinterpret_cast<float*>( mInstanceBuffer->map( 0, mInstanceBuffer->getNumElements() ) );
+        float * RESTRICT_ALIAS instanceBuffer = reinterpret_cast<float*>( mCpuInstanceBuffer );
         const float *instanceBufferStart = instanceBuffer;
         FastArray<Octant>::const_iterator itor = mOctants.begin();
         FastArray<Octant>::const_iterator end  = mOctants.end();
@@ -699,6 +729,8 @@ namespace Ogre
 
         OGRE_ASSERT_LOW( (size_t)(instanceBuffer - instanceBufferStart) * sizeof(float) <=
                          mInstanceBuffer->getTotalSizeBytes() );
+//        mInstanceBuffer->unmap( UO_UNMAP_ALL );
+        mInstanceBuffer->upload( mCpuInstanceBuffer, 0u, mInstanceBuffer->getNumElements() );
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::dividideOctants( uint32 numOctantsX, uint32 numOctantsY, uint32 numOctantsZ )
@@ -827,12 +859,22 @@ namespace Ogre
                                                 octant.height / threadsPerGroup[1],
                                                 octant.depth / threadsPerGroup[2] );
 
+                uint32 texUnit = 1u;
+
                 DescriptorSetTexture2::TextureSlot
                         texSlot( DescriptorSetTexture2::TextureSlot::makeEmpty() );
-                texSlot.texture = bucket.diffuseTex;
-                bucket.job->setTexture( 1, texSlot );
-                texSlot.texture = bucket.emissiveTex;
-                bucket.job->setTexture( 2, texSlot );
+                if( bucket.diffuseTex )
+                {
+                    texSlot.texture = bucket.diffuseTex;
+                    bucket.job->setTexture( texUnit, texSlot );
+                    ++texUnit;
+                }
+                if( bucket.emissiveTex )
+                {
+                    texSlot.texture = bucket.emissiveTex;
+                    bucket.job->setTexture( texUnit, texSlot );
+                    ++texUnit;
+                }
 
                 uint32 numInstancesInBucket = static_cast<uint32 >( itBucket->second.size() );
                 uint32 instanceRange[2] = { instanceStart, instanceStart + numInstancesInBucket };
@@ -850,6 +892,8 @@ namespace Ogre
                 hlmsCompute->dispatch( bucket.job, 0, 0 );
 
                 instanceStart += numInstancesInBucket;
+
+                ++itBucket;
             }
 
             ++itor;
