@@ -61,9 +61,10 @@ namespace Ogre
                          "ComputeTools::clearUav" );
         }
 
-        DescriptorSetTexture2::TextureSlot texSlot( DescriptorSetTexture2::TextureSlot::makeEmpty() );
-        texSlot.texture = texture;
-        job->setTexture( 0, texSlot );
+        DescriptorSetUav::TextureSlot uavSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
+        uavSlot.texture = texture;
+        uavSlot.access = ResourceAccess::Write;
+        job->_setUavTexture( 0, uavSlot );
 
         ShaderParams &shaderParams = job->getShaderParams( "default" );
         shaderParams.mParams.clear();

@@ -1564,9 +1564,9 @@ namespace Ogre
         {"PFG_RGB32_INT",			3u, 3u * sizeof(uint32),	PFF_INTEGER|PFF_SIGNED },
 
         {"PFG_RGBA16_FLOAT",		4u, 4u * sizeof(uint16),	PFF_HALF },
-        {"PFG_RGBA16_UNORM",		4u, 4u * sizeof(uint16),	PFF_INTEGER|PFF_NORMALIZED },
+        {"PFG_RGBA16_UNORM",		4u, 4u * sizeof(uint16),	PFF_NORMALIZED },
         {"PFG_RGBA16_UINT",			4u, 4u * sizeof(uint16),	PFF_INTEGER },
-        {"PFG_RGBA16_SNORM",		4u, 4u * sizeof(uint16),	PFF_INTEGER|PFF_SIGNED|PFF_NORMALIZED },
+        {"PFG_RGBA16_SNORM",		4u, 4u * sizeof(uint16),	PFF_NORMALIZED|PFF_SIGNED },
         {"PFG_RGBA16_SINT",			4u, 4u * sizeof(uint16),	PFF_INTEGER|PFF_SIGNED },
 
         {"PFG_RG32_FLOAT",			2u, 2u * sizeof(uint32),	PFF_FLOAT },
@@ -1575,20 +1575,20 @@ namespace Ogre
 
         {"PFG_D32_FLOAT_S8X24_UINT",2u, 2u * sizeof(uint32),	PFF_FLOAT|PFF_DEPTH|PFF_STENCIL },
 
-        {"PFG_R10G10B10A2_UNORM",	4u, 1u * sizeof(uint32),	PFF_INTEGER|PFF_NORMALIZED },
+        {"PFG_R10G10B10A2_UNORM",	4u, 1u * sizeof(uint32),	PFF_NORMALIZED },
         {"PFG_R10G10B10A2_UINT",	4u, 1u * sizeof(uint32),	PFF_INTEGER },
         {"PFG_R11G11B10_FLOAT",		3u, 1u * sizeof(uint32),	PFF_FLOAT_RARE },
 
-        {"PFG_RGBA8_UNORM",			4u, 4u * sizeof(uint8),		PFF_INTEGER|PFF_NORMALIZED },
-        {"PFG_RGBA8_UNORM_SRGB",	4u, 4u * sizeof(uint8),		PFF_INTEGER|PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_RGBA8_UNORM",			4u, 4u * sizeof(uint8),		PFF_NORMALIZED },
+        {"PFG_RGBA8_UNORM_SRGB",	4u, 4u * sizeof(uint8),		PFF_NORMALIZED|PFF_SRGB },
         {"PFG_RGBA8_UINT",			4u, 4u * sizeof(uint8),		PFF_INTEGER },
-        {"PFG_RGBA8_SNORM",			4u, 4u * sizeof(uint8),		PFF_INTEGER|PFF_SIGNED|PFF_NORMALIZED },
+        {"PFG_RGBA8_SNORM",			4u, 4u * sizeof(uint8),		PFF_NORMALIZED|PFF_SIGNED },
         {"PFG_RGBA8_SINT",			4u, 4u * sizeof(uint8),		PFF_INTEGER|PFF_SIGNED },
 
         {"PFG_RG16_FLOAT",			2u, 2u * sizeof(uint16),	PFF_HALF },
-        {"PFG_RG16_UNORM",			2u, 2u * sizeof(uint16),	PFF_INTEGER|PFF_NORMALIZED },
+        {"PFG_RG16_UNORM",			2u, 2u * sizeof(uint16),	PFF_NORMALIZED },
         {"PFG_RG16_UINT",			2u, 2u * sizeof(uint16),	PFF_INTEGER },
-        {"PFG_RG16_SNORM",			2u, 2u * sizeof(uint16),	PFF_INTEGER|PFF_SIGNED|PFF_NORMALIZED },
+        {"PFG_RG16_SNORM",			2u, 2u * sizeof(uint16),	PFF_NORMALIZED|PFF_SIGNED },
         {"PFG_RG16_SINT",			2u, 2u * sizeof(uint16),	PFF_INTEGER|PFF_SIGNED },
 
         {"PFG_D32_FLOAT",			1u, 1u * sizeof(uint32),	PFF_FLOAT|PFF_DEPTH },
@@ -1596,33 +1596,33 @@ namespace Ogre
         {"PFG_R32_UINT",			1u, 1u * sizeof(uint32),	PFF_INTEGER },
         {"PFG_R32_SINT",			1u, 1u * sizeof(uint32),	PFF_INTEGER|PFF_SIGNED },
 
-        {"PFG_D24_UNORM",			1u, 1u * sizeof(uint32),	PFF_INTEGER|PFF_NORMALIZED|PFF_DEPTH },
-        {"PFG_D24_UNORM_S8_UINT",	1u, 1u * sizeof(uint32),	PFF_INTEGER|PFF_NORMALIZED|
+        {"PFG_D24_UNORM",			1u, 1u * sizeof(uint32),	PFF_NORMALIZED|PFF_DEPTH },
+        {"PFG_D24_UNORM_S8_UINT",	1u, 1u * sizeof(uint32),	PFF_NORMALIZED|
                                                                 PFF_DEPTH|PFF_STENCIL },
 
-        {"PFG_RG8_UNORM",			2u, 2u * sizeof(uint8),		PFF_INTEGER|PFF_NORMALIZED },
+        {"PFG_RG8_UNORM",			2u, 2u * sizeof(uint8),		PFF_NORMALIZED },
         {"PFG_RG8_UINT",			2u, 2u * sizeof(uint8),		PFF_INTEGER },
-        {"PFG_RG8_SNORM",			2u, 2u * sizeof(uint8),		PFF_INTEGER|PFF_SIGNED|PFF_NORMALIZED },
+        {"PFG_RG8_SNORM",			2u, 2u * sizeof(uint8),		PFF_NORMALIZED|PFF_SIGNED },
         {"PFG_RG8_SINT",			2u, 2u * sizeof(uint8),		PFF_INTEGER|PFF_SIGNED },
 
         {"PFG_R16_FLOAT",			1u, 1u * sizeof(uint16),	PFF_HALF },
-        {"PFG_D16_UNORM",			1u, 1u * sizeof(uint16),	PFF_INTEGER|PFF_NORMALIZED|PFF_DEPTH },
-        {"PFG_R16_UNORM",			1u, 1u * sizeof(uint16),	PFF_INTEGER|PFF_NORMALIZED },
+        {"PFG_D16_UNORM",			1u, 1u * sizeof(uint16),	PFF_NORMALIZED|PFF_DEPTH },
+        {"PFG_R16_UNORM",			1u, 1u * sizeof(uint16),	PFF_NORMALIZED },
         {"PFG_R16_UINT",			1u, 1u * sizeof(uint16),	PFF_INTEGER },
-        {"PFG_R16_SNORM",			1u, 1u * sizeof(uint16),	PFF_INTEGER|PFF_SIGNED|PFF_NORMALIZED },
+        {"PFG_R16_SNORM",			1u, 1u * sizeof(uint16),	PFF_NORMALIZED|PFF_SIGNED },
         {"PFG_R16_SINT",			1u, 1u * sizeof(uint16),	PFF_INTEGER|PFF_SIGNED },
 
-        {"PFG_R8_UNORM",			1u, 1u * sizeof(uint8),		PFF_INTEGER|PFF_NORMALIZED },
+        {"PFG_R8_UNORM",			1u, 1u * sizeof(uint8),		PFF_NORMALIZED },
         {"PFG_R8_UINT",				1u, 1u * sizeof(uint8),		PFF_INTEGER },
-        {"PFG_R8_SNORM",			1u, 1u * sizeof(uint8),		PFF_INTEGER|PFF_SIGNED|PFF_NORMALIZED },
+        {"PFG_R8_SNORM",			1u, 1u * sizeof(uint8),		PFF_NORMALIZED|PFF_SIGNED },
         {"PFG_R8_SINT",				1u, 1u * sizeof(uint8),		PFF_INTEGER|PFF_SIGNED },
-        {"PFG_A8_UNORM",			1u, 1u * sizeof(uint8),		PFF_INTEGER|PFF_NORMALIZED },
+        {"PFG_A8_UNORM",			1u, 1u * sizeof(uint8),		PFF_NORMALIZED },
         {"PFG_R1_UNORM",			1u, 0,						0 }, // ???
 
         {"PFG_R9G9B9E5_SHAREDEXP",	1u, 1u * sizeof(uint32),	PFF_FLOAT_RARE },
 
-        {"PFG_R8G8_B8G8_UNORM",		4u, 4u * sizeof(uint8),		PFF_INTEGER|PFF_NORMALIZED },
-        {"PFG_G8R8_G8B8_UNORM",		4u, 4u * sizeof(uint8),		PFF_INTEGER|PFF_SIGNED|PFF_NORMALIZED },
+        {"PFG_R8G8_B8G8_UNORM",		4u, 4u * sizeof(uint8),		PFF_NORMALIZED },
+        {"PFG_G8R8_G8B8_UNORM",		4u, 4u * sizeof(uint8),		PFF_NORMALIZED|PFF_SIGNED },
 
         {"PFG_BC1_UNORM",			4u, 0,						PFF_COMPRESSED_COMMON },
         {"PFG_BC1_UNORM_SRGB",		4u, 0,						PFF_COMPRESSED_COMMON|PFF_SRGB },
@@ -1639,14 +1639,14 @@ namespace Ogre
         {"PFG_BC5_UNORM",			2u, 0,						PFF_COMPRESSED_COMMON },
         {"PFG_BC5_SNORM",			2u, 0,						PFF_COMPRESSED_COMMON|PFF_SIGNED },
 
-        {"PFG_B5G6R5_UNORM",		3u, 1u * sizeof(uint16),	PFF_INTEGER|PFF_NORMALIZED },
-        {"PFG_B5G5R5A1_UNORM",		3u, 1u * sizeof(uint16),	PFF_INTEGER|PFF_NORMALIZED },
-        {"PFG_BGRA8_UNORM",			4u, 4u * sizeof(uint8),		PFF_INTEGER|PFF_NORMALIZED },
-        {"PFG_BGRX8_UNORM",			4u, 4u * sizeof(uint8),		PFF_INTEGER|PFF_NORMALIZED },
+        {"PFG_B5G6R5_UNORM",		3u, 1u * sizeof(uint16),	PFF_NORMALIZED },
+        {"PFG_B5G5R5A1_UNORM",		3u, 1u * sizeof(uint16),	PFF_NORMALIZED },
+        {"PFG_BGRA8_UNORM",			4u, 4u * sizeof(uint8),		PFF_NORMALIZED },
+        {"PFG_BGRX8_UNORM",			4u, 4u * sizeof(uint8),		PFF_NORMALIZED },
         {"PFG_R10G10B10_XR_BIAS_A2_UNORM",4u, 1u * sizeof(uint32),PFF_FLOAT_RARE },
 
-        {"PFG_BGRA8_UNORM_SRGB",	4u, 4u * sizeof(uint8),		PFF_INTEGER|PFF_NORMALIZED|PFF_SRGB },
-        {"PFG_BGRX8_UNORM_SRGB",	3u, 4u * sizeof(uint8),		PFF_INTEGER|PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_BGRA8_UNORM_SRGB",	4u, 4u * sizeof(uint8),		PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_BGRX8_UNORM_SRGB",	3u, 4u * sizeof(uint8),		PFF_NORMALIZED|PFF_SRGB },
 
         {"PFG_BC6H_UF16",			3u, 0,						PFF_COMPRESSED|PFF_FLOAT_RARE },
         {"PFG_BC6H_SF16",			3u, 0,						PFF_COMPRESSED|PFF_FLOAT_RARE|PFF_SIGNED },
@@ -1669,7 +1669,7 @@ namespace Ogre
         {"PFG_IA44",				3u, 0,						0 },
         {"PFG_P8",					1u, 1u * sizeof(uint8),		PFF_PALLETE },
         {"PFG_A8P8",				1u, 2u * sizeof(uint8),		PFF_PALLETE },
-        {"PFG_B4G4R4A4_UNORM",		4u, 1u * sizeof(uint16),	PFF_INTEGER|PFF_NORMALIZED },
+        {"PFG_B4G4R4A4_UNORM",		4u, 1u * sizeof(uint16),	PFF_NORMALIZED },
         {"PFG_P208",				3u, 0,						0 },
         {"PFG_V208",				3u, 0,						0 },
         {"PFG_V408",				3u, 0,						0 },
