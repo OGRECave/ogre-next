@@ -300,7 +300,7 @@
 //in uvec3 gl_GlobalInvocationID;
 //in uint  gl_LocalInvocationIndex;
 
-@property( BodyCS )
+@piece( BodyCS )
 	Aabb voxelAabb;
 	voxelAabb.center	= p_voxelOrigin + p_voxelCellSize * (float3( gl_GlobalInvocationID.xyz ) + 0.5f);
 	voxelAabb.halfSize	= p_voxelCellSize * 0.5f;
@@ -309,7 +309,7 @@
 	float accumTris = 0;
 	float4 voxelAlbedo		= float4( 0, 0, 0, 0 );
 	float3 voxelNormal		= float3( 0, 0, 0 );
-	float4 voxelEmissive	= float3( 0, 0, 0 );
+	float4 voxelEmissive	= float4( 0, 0, 0, 0 );
 
 	for( uint i=p_instanceStart; i<p_instanceEnd; ++i )
 	{
@@ -365,13 +365,13 @@
 		}
 	}
 
-	int3 voxelCelUvw = int3( gl_GlobalInvocationID.xyz )
+	int3 voxelCelUvw = int3( gl_GlobalInvocationID.xyz );
 
 	@property( syntax == glsl )
-		float4 origAlbedo	= imageRead( voxelAlbedoTex, voxelCelUvw );
-		float3 origNormal	= imageRead( voxelNormalTex, voxelCelUvw ).xyz * 2.0f - 1.0f;
-		float4 origEmissive = imageRead( voxelEmissiveTex, voxelCelUvw );
-		float origAccumTris = (float)imageRead( voxelAccumVal, voxelCelUvw ).x;
+		float4 origAlbedo	= imageLoad( voxelAlbedoTex, voxelCelUvw );
+		float3 origNormal	= imageLoad( voxelNormalTex, voxelCelUvw ).xyz * 2.0f - 1.0f;
+		float4 origEmissive = imageLoad( voxelEmissiveTex, voxelCelUvw );
+		float origAccumTris = imageLoad( voxelAccumVal, voxelCelUvw ).x;
 	@end
 
 	if( accumTris + origAccumTris > 0 )

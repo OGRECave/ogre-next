@@ -191,9 +191,27 @@ namespace Ogre
         DataStreamPtr inFile = resourceGroupMgr.openResource( sourceFilename );
 
         if( mShaderProfile == "glsl" ) //TODO: String comparision
-            setProperty( HlmsBaseProp::GL3Plus, 330 );
+        {
+            setProperty( HlmsBaseProp::GL3Plus,
+                         mRenderSystem->getNativeShadingLanguageVersion() );
+        }
 
+        setProperty( HlmsBaseProp::Syntax,  mShaderSyntax.mHash );
+        setProperty( HlmsBaseProp::Hlsl,    HlmsBaseProp::Hlsl.mHash );
+        setProperty( HlmsBaseProp::Glsl,    HlmsBaseProp::Glsl.mHash );
+        setProperty( HlmsBaseProp::Glsles,  HlmsBaseProp::Glsles.mHash );
+        setProperty( HlmsBaseProp::Metal,   HlmsBaseProp::Metal.mHash );
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+        setProperty( HlmsBaseProp::iOS, 1 );
+#endif
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+        setProperty( HlmsBaseProp::macOS, 1 );
+#endif
         setProperty( HlmsBaseProp::HighQuality, mHighQuality );
+
+        if( mFastShaderBuildHack )
+            setProperty( HlmsBaseProp::FastShaderBuildHack, 1 );
 
         //Piece files
         processPieces( job->mIncludedPieceFiles );
