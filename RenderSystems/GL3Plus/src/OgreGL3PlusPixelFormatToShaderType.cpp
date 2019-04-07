@@ -28,6 +28,9 @@ Copyright (c) 2000-2016 Torus Knot Software Ltd
 
 #include "OgreGL3PlusPixelFormatToShaderType.h"
 
+#include "OgrePixelFormatGpuUtils.h"
+#include "OgreTextureGpu.h"
+
 namespace Ogre
 {
     const char* GL3PlusPixelFormatToShaderType::getPixelFormatType( PixelFormatGpu pixelFormat ) const
@@ -132,6 +135,83 @@ namespace Ogre
             return "rgba32f";
         default:
             return 0;
+        }
+
+        return 0;
+    }
+    //-------------------------------------------------------------------------
+    const char* GL3PlusPixelFormatToShaderType::getDataType( PixelFormatGpu pixelFormat,
+                                                             uint32 _textureType, bool isMsaa ) const
+    {
+        const bool bIsInteger = PixelFormatGpuUtils::isInteger( pixelFormat );
+        TextureTypes::TextureTypes textureType = static_cast<TextureTypes::TextureTypes>( _textureType );
+
+        if( !bIsInteger )
+        {
+            switch( textureType )
+            {
+            case TextureTypes::Type1D:
+                return "image1D";
+            case TextureTypes::Type1DArray:
+                return "image1DArray";
+            case TextureTypes::Type2D:
+            case TextureTypes::Unknown:
+                return isMsaa ? "image2DMS" : "image2D";
+            case TextureTypes::Type2DArray:
+                return isMsaa ? "image2DMSArray" : "image2DArray";
+            case TextureTypes::TypeCube:
+                return "imageCube";
+            case TextureTypes::TypeCubeArray:
+                return "imageCubeArray";
+            case TextureTypes::Type3D:
+                return "image3D";
+            }
+        }
+        else
+        {
+            const bool bIsSigned = PixelFormatGpuUtils::isSigned( pixelFormat );
+            if( !bIsSigned )
+            {
+                switch( textureType )
+                {
+                case TextureTypes::Type1D:
+                    return "uimage1D";
+                case TextureTypes::Type1DArray:
+                    return "uimage1DArray";
+                case TextureTypes::Type2D:
+                case TextureTypes::Unknown:
+                    return isMsaa ? "uimage2DMS" : "uimage2D";
+                case TextureTypes::Type2DArray:
+                    return isMsaa ? "uimage2DMSArray" : "uimage2DArray";
+                case TextureTypes::TypeCube:
+                    return "uimageCube";
+                case TextureTypes::TypeCubeArray:
+                    return "uimageCubeArray";
+                case TextureTypes::Type3D:
+                    return "uimage3D";
+                }
+            }
+            else
+            {
+                switch( textureType )
+                {
+                case TextureTypes::Type1D:
+                    return "iimage1D";
+                case TextureTypes::Type1DArray:
+                    return "iimage1DArray";
+                case TextureTypes::Type2D:
+                case TextureTypes::Unknown:
+                    return isMsaa ? "iimage2DMS" : "iimage2D";
+                case TextureTypes::Type2DArray:
+                    return isMsaa ? "iimage2DMSArray" : "iimage2DArray";
+                case TextureTypes::TypeCube:
+                    return "iimageCube";
+                case TextureTypes::TypeCubeArray:
+                    return "iimageCubeArray";
+                case TextureTypes::Type3D:
+                    return "iimage3D";
+                }
+            }
         }
 
         return 0;

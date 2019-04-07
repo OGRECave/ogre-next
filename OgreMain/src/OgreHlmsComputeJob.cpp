@@ -38,6 +38,7 @@ THE SOFTWARE.
 #include "Vao/OgreUavBufferPacked.h"
 
 #include "OgreTextureGpu.h"
+#include "OgrePixelFormatGpuUtils.h"
 #include "OgreLwString.h"
 
 #include "OgreLogManager.h"
@@ -187,6 +188,27 @@ namespace Ogre
         if( typeName )
             setPiece( propName.c_str(), typeName );
         propName.resize( texturePropSize );
+
+        propName.a( "_data_type" );             //uav0_data_type
+        const char *dataType = toShaderType->getDataType( texture->getPixelFormat(),
+                                                          texture->getTextureType(),
+                                                          texture->getMsaa() > 1u );
+        if( typeName )
+            setPiece( propName.c_str(), dataType );
+        propName.resize( texturePropSize );
+
+        if( PixelFormatGpuUtils::isInteger( texture->getPixelFormat() ) )
+        {
+            propName.a( "_is_integer" );        //uav0_is_integer
+            setProperty( propName.c_str(), 1 );
+            propName.resize( texturePropSize );
+        }
+        if( PixelFormatGpuUtils::isSigned( texture->getPixelFormat() ) )
+        {
+            propName.a( "_is_signed" );         //uav0_is_signed
+            setProperty( propName.c_str(), 1 );
+            propName.resize( texturePropSize );
+        }
     }
     //-----------------------------------------------------------------------------------
     void HlmsComputeJob::clearAutoProperties( const char *propTexture, uint8 maxTexUnitReached )

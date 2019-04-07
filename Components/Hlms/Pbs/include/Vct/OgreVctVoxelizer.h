@@ -164,6 +164,8 @@ namespace Ogre
         HlmsManager *mHlmsManager;
         TextureGpuManager *mTextureGpuManager;
 
+        ComputeTools *mComputeTools;
+
         struct QueuedInstance
         {
             MovableObject   *movableObject;

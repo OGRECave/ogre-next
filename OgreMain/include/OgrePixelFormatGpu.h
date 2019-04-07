@@ -271,6 +271,19 @@ namespace Ogre {
             loaded.
         */
         virtual const char* getPixelFormatType( PixelFormatGpu pixelFormat ) const = 0;
+
+        /**
+        @param pixelFormat
+        @param textureType
+            See TextureTypes::TextureTypes
+        @param isMsaa
+        @return
+            String for the shader to use "as is". Returned pointer may be null.
+            The validity of the pointer lasts as long as the RenderSystem remains
+            loaded.
+        */
+        virtual const char* getDataType( PixelFormatGpu pixelFormat, uint32 textureType,
+                                         bool isMsaa ) const = 0;
     };
 
     /** @} */

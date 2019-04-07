@@ -36,8 +36,12 @@ namespace Demo
             else if( *(originalDataFolder.end() - 1) != '/' )
                 originalDataFolder += "/";
 
-            const char *c_locations[4] =
+            const char *c_locations[] =
             {
+                "Compute/Tools",
+                "Compute/Tools/GLSL",
+                "Compute/Tools/HLSL",
+                "Compute/Tools/Metal",
                 "VCT",
                 "Hlms/Common/GLSL",
                 "Hlms/Common/HLSL",

@@ -47,6 +47,8 @@ THE SOFTWARE.
 
 #include "Vao/OgreStagingBuffer.h"
 
+#include "Compute/OgreComputeTools.h"
+
 #include "OgreHlmsCompute.h"
 #include "OgreHlmsComputeJob.h"
 #include "OgreLwString.h"
@@ -56,6 +58,7 @@ THE SOFTWARE.
 
 #define TODO_deal_no_index_buffer
 #define TODO_clear_voxels
+#define TODO_add_barrier
 
 namespace Ogre
 {
@@ -107,6 +110,7 @@ namespace Ogre
         mVaoManager( renderSystem->getVaoManager() ),
         mHlmsManager( hlmsManager ),
         mTextureGpuManager( renderSystem->getTextureGpuManager() ),
+        mComputeTools( new ComputeTools( hlmsManager->getComputeHlms() ) ),
         mVctMaterial( new VctMaterial( renderSystem->getVaoManager() ) ),
         mWidth( 128u ),
         mHeight( 128u ),
@@ -127,6 +131,9 @@ namespace Ogre
 
         delete mVctMaterial;
         mVctMaterial = 0;
+
+        delete mComputeTools;
+        mComputeTools = 0;
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::createComputeJobs()
@@ -176,6 +183,7 @@ namespace Ogre
                     param.name = "diffuseTex";
                     param.setManualValue( static_cast<int32>( numTexUnits ) );
                     glslShaderParams.mParams.push_back( param );
+                    glslShaderParams.setDirty();
                     ++numTexUnits;
                 }
                 if( variant & VoxelizerJobSetting::HasEmissiveTex )
@@ -184,6 +192,7 @@ namespace Ogre
                     param.name = "emissiveTex";
                     param.setManualValue( static_cast<int32>( numTexUnits ) );
                     glslShaderParams.mParams.push_back( param );
+                    glslShaderParams.setDirty();
                     ++numTexUnits;
                 }
                 mComputeJobs[variant]->setNumTexUnits( numTexUnits );
@@ -825,6 +834,17 @@ namespace Ogre
         mRenderSystem->endRenderPassDescriptor();
 
         HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
+
+        float fClearValue[4];
+        uint32 uClearValue[4];
+        memset( fClearValue, 0, sizeof(fClearValue) );
+        memset( uClearValue, 0, sizeof(uClearValue) );
+        mComputeTools->clearUavFloat( mAlbedoVox, fClearValue );
+        mComputeTools->clearUavFloat( mEmissiveVox, fClearValue );
+        mComputeTools->clearUavFloat( mNormalVox, fClearValue );
+        mComputeTools->clearUavUint( mAccumValVox, uClearValue );
+
+        TODO_add_barrier;
 
         const uint32 *threadsPerGroup = mComputeJobs[0]->getThreadsPerGroup();
 
