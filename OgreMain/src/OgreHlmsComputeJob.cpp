@@ -273,6 +273,18 @@ namespace Ogre
                 propName.a( "_height_with_lod" );   //uav0_height_with_lod
                 removeProperty( propName.c_str() );
                 propName.resize( texturePropSize );
+
+                propName.a( "_is_integer" );        //uav0_is_integer
+                removeProperty( propName.c_str() );
+                propName.resize( texturePropSize );
+
+                propName.a( "_is_signed" );         //uav0_is_signed
+                removeProperty( propName.c_str() );
+                propName.resize( texturePropSize );
+
+                propName.a( "_data_type" );         //uav0_data_type
+                removePiece( propName.c_str() );
+                propName.resize( texturePropSize );
             }
         }
     }
