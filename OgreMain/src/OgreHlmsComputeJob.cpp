@@ -216,6 +216,7 @@ namespace Ogre
         assert( propTexture == ComputeProperty::Texture || propTexture == ComputeProperty::Uav );
         char tmpData[64];
         LwString propName = LwString::FromEmptyPointer( tmpData, sizeof(tmpData) );
+        propName = propTexture; //It's either ComputeProperty::Texture or ComputeProperty::Uav
 
         const size_t texturePropNameSize = propName.size();
 

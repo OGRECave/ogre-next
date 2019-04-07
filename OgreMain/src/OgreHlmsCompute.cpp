@@ -240,6 +240,8 @@ namespace Ogre
                                     job->mSourceFilename + mShaderFileExt;
             std::ofstream outFile( debugFilenameOutput.c_str(),
                                    std::ios::out | std::ios::binary );
+            if( mDebugOutputProperties )
+                dumpProperties( outFile );
             outFile.write( &outString[0], outString.size() );
         }
 
