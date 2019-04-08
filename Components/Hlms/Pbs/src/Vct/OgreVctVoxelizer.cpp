@@ -299,13 +299,13 @@ namespace Ogre
             {
                 if( indexBuffer->getIndexType() == IndexBufferPacked::IT_16BIT )
                 {
-                    indexBuffer->copyTo( mIndexBuffer16, vao->getPrimitiveStart(),
+                    indexBuffer->copyTo( mIndexBuffer16, 0u, vao->getPrimitiveStart(),
                                          vao->getPrimitiveCount() );
                     mappedBuffers.index16BufferOffset += vao->getPrimitiveCount();
                 }
                 else
                 {
-                    indexBuffer->copyTo( mIndexBuffer32, vao->getPrimitiveStart(),
+                    indexBuffer->copyTo( mIndexBuffer32, 0u, vao->getPrimitiveStart(),
                                          vao->getPrimitiveCount() );
                     mappedBuffers.index32BufferOffset += vao->getPrimitiveCount();
                 }

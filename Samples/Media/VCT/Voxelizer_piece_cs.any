@@ -13,9 +13,8 @@
 	@property( !compressed_vertex_format )
 		struct Vertex
 		{
-			float3 pos;
-			float3 normal;
-			float2 uv;
+			float4 pos_normX;
+			float4 normYZ_uv;
 		};
 	@else
 		struct Vertex
@@ -125,11 +124,12 @@
 
 		for( uint i=0u; i<3u; ++i )
 		{
-			uint idx = getIndexBufferIndex( mesh.indexBufferStart + triIdx * 3u + 0u );
+			uint idx = getIndexBufferIndex( mesh.indexBufferStart + triIdx * 3u + i );
 			@property( !compressed_vertex_format )
-				retVal.v[i] = vertexBuffer[idx + mesh.vertexBufferStart].pos;
-				retVal.n[i] = vertexBuffer[idx + mesh.vertexBufferStart].normal;
-				retVal.uv[i] = vertexBuffer[idx + mesh.vertexBufferStart].uv;
+				retVal.v[i] = vertexBuffer[idx + mesh.vertexBufferStart].pos_normX.xyz;
+				retVal.n[i] = float3( vertexBuffer[idx + mesh.vertexBufferStart].pos_normX.w,
+									  vertexBuffer[idx + mesh.vertexBufferStart].normYZ_uv.xy );
+				retVal.uv[i] = vertexBuffer[idx + mesh.vertexBufferStart].normYZ_uv.zw;
 			@else
 				uint4 pos_normal_uv = vertexBuffer[idx + mesh.vertexBufferStart].pos_normal_uv;
 				retVal.v[i].xy = unpackSnorm2x16( pos_normal_uv.x );
@@ -314,10 +314,16 @@
 	for( uint i=p_instanceStart; i<p_instanceEnd; ++i )
 	{
 		Instance instance = getInstance( i );
+
 		//Broadphase culling
 		if( intersects( voxelAabb, instance.bounds ) )
 		{
-			Material material = materials[instance.materialIdx];
+			//Material material = materials[instance.materialIdx];
+			Material material;
+			material.diffuse = float4( 1, 1, 1, 1 );
+			material.emissive = float4( 1, 1, 1, 1 );
+			material.diffuseTexIdx = 0;
+			material.emissiveTexIdx = 0;
 
 			uint numTris = instance.mesh.numIndices / 3u;
 

@@ -21,7 +21,8 @@
 
                 ["voxelAlbedoTex",      	[2], "int"],
                 ["voxelNormalTex",  		[3], "int"],
-                ["voxelEmissiveTex",		[4], "int"]
+                ["voxelEmissiveTex",		[4], "int"],
+                ["voxelAccumVal",			[5], "int"]
 			],
 
 			"properties" :

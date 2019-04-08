@@ -13,6 +13,7 @@ namespace Demo
         VoxelizerGameState( const Ogre::String &helpDescription );
 
         virtual void createScene01(void);
+        virtual void update( float timeSinceLast );
     };
 }
 

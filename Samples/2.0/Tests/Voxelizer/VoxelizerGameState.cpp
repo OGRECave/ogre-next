@@ -23,6 +23,7 @@ using namespace Demo;
 
 namespace Demo
 {
+    Ogre::VctVoxelizer *voxelizer = 0;
     VoxelizerGameState::VoxelizerGameState( const Ogre::String &helpDescription ) :
         TutorialGameState( helpDescription )
     {
@@ -89,12 +90,17 @@ namespace Demo
         sceneManager->updateSceneGraph();
 
         Ogre::Root *root = mGraphicsSystem->getRoot();
-        Ogre::VctVoxelizer *voxelizer =
+        voxelizer =
                 new Ogre::VctVoxelizer( Ogre::Id::generateNewId<Ogre::VctVoxelizer>(),
                                         root->getRenderSystem(), root->getHlmsManager() );
         voxelizer->addItem( item, false );
         voxelizer->autoCalculateRegion();
         voxelizer->dividideOctants( 1u, 1u, 1u );
         voxelizer->build();
+    }
+    //-----------------------------------------------------------------------------------
+    void VoxelizerGameState::update( float timeSinceLast )
+    {
+        //voxelizer->build();
     }
 }

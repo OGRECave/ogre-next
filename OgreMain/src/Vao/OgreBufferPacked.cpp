@@ -310,10 +310,10 @@ namespace Ogre
         }
 
         mBufferInterface->copyTo( dstBuffer->getBufferInterface(),
-                                  dstBuffer->mFinalBufferStart +
-                                  dstElemStart * dstBuffer->getBytesPerElement(),
-                                  this->mFinalBufferStart +
-                                  srcElemStart * this->getBytesPerElement(),
+                                  (dstBuffer->mFinalBufferStart + dstElemStart) *
+                                  dstBuffer->mBytesPerElement,
+                                  (this->mFinalBufferStart + srcElemStart) *
+                                  this->mBytesPerElement,
                                   srcNumElems * this->getBytesPerElement() );
     }
     //-----------------------------------------------------------------------------------
