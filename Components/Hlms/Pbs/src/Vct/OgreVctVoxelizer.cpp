@@ -881,6 +881,8 @@ namespace Ogre
                                                 octant.height / threadsPerGroup[1],
                                                 octant.depth / threadsPerGroup[2] );
 
+                bucket.job->setConstBuffer( 0, bucket.materialBuffer );
+
                 uint32 texUnit = 1u;
 
                 DescriptorSetTexture2::TextureSlot

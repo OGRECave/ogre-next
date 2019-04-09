@@ -27,13 +27,13 @@
 @piece( HeaderCS )
 	struct Material
 	{
+		float4 bgDiffuse;
 		float4 diffuse;
 		float4 emissive;
 		uint diffuseTexIdx;
 		uint emissiveTexIdx;
 		uint padding0;
 		uint padding1;
-		uint4 padding2;
 	};
 
 	@property( syntax != metal )
@@ -143,6 +143,43 @@
 				retVal.uv[i].xy = unpackHalf2x16( pos_normal_uv.w );
 			@end
 		}
+
+		return retVal;
+	}
+
+	Aabb getTriangleAabb( uint triIdx, Mesh mesh, ogre_float4x3 worldTransform )
+	{
+		uint idx = getIndexBufferIndex( mesh.indexBufferStart + triIdx * 3u + 0 );
+	@property( !compressed_vertex_format )
+		float3 vertexPos = vertexBuffer[idx + mesh.vertexBufferStart].pos_normX.xyz;
+	@else
+		uint4 pos_normal_uv = vertexBuffer[idx + mesh.vertexBufferStart].pos_normal_uv;
+		float3 vertexPos;
+		vertexPos.xy	= unpackSnorm2x16( pos_normal_uv.x );
+		vertexPos.z		= unpackSnorm2x16( pos_normal_uv.y ).x;
+	@end
+		vertexPos = mul( float4( vertexPos, 1.0f ), worldTransform );
+		float3 minValue = vertexPos;
+		float3 maxValue = vertexPos;
+		for( uint i=1u; i<3u; ++i )
+		{
+			idx = getIndexBufferIndex( mesh.indexBufferStart + triIdx * 3u + i );
+
+			@property( !compressed_vertex_format )
+				vertexPos = vertexBuffer[idx + mesh.vertexBufferStart].pos_normX.xyz;
+			@else
+				pos_normal_uv = vertexBuffer[idx + mesh.vertexBufferStart].pos_normal_uv;
+				vertexPos.xy	= unpackSnorm2x16( pos_normal_uv.x );
+				vertexPos.z		= unpackSnorm2x16( pos_normal_uv.y ).x;
+			@end
+				vertexPos = mul( float4( vertexPos, 1.0f ), worldTransform );
+				minValue = min( minValue, vertexPos );
+				maxValue = max( maxValue, vertexPos );
+		}
+
+		Aabb retVal;
+		retVal.center	= (minValue + maxValue) * 0.5f;
+		retVal.halfSize	= (maxValue - minValue) * 0.5f;
 
 		return retVal;
 	}
@@ -305,6 +342,11 @@
 	voxelAabb.center	= p_voxelOrigin + p_voxelCellSize * (float3( gl_GlobalInvocationID.xyz ) + 0.5f);
 	voxelAabb.halfSize	= p_voxelCellSize * 0.5f;
 
+	Aabb groupVoxelAabb;
+	groupVoxelAabb.center	= p_voxelOrigin +
+							  4.0f * p_voxelCellSize * (float3( gl_WorkGroupID.xyz ) + 0.5f);
+	groupVoxelAabb.halfSize	= 4.0f * p_voxelCellSize * 0.5f;
+
 	bool doubleSided = false;
 	float accumTris = 0;
 	float4 voxelAlbedo		= float4( 0, 0, 0, 0 );
@@ -318,54 +360,66 @@
 		//Broadphase culling
 		if( intersects( voxelAabb, instance.bounds ) )
 		{
-			//Material material = materials[instance.materialIdx];
-			Material material;
-			material.diffuse = float4( 1, 1, 1, 1 );
-			material.emissive = float4( 1, 1, 1, 1 );
-			material.diffuseTexIdx = 0;
-			material.emissiveTexIdx = 0;
+			Material material = materials[instance.materialIdx];
 
 			uint numTris = instance.mesh.numIndices / 3u;
 
-			for( uint triIdx=0u; triIdx<numTris; ++triIdx )
+			for( uint triIdxBase=0u; triIdxBase<numTris; triIdxBase += 64u )
 			{
-				Triangle tri = getTriangle( triIdx, instance.mesh );
+				//First make the 64 threads check if any of the triangles checks
+				//against the combined AABB of the 4x4x4 block. If none do, we can skip
+				//64 triangles in one go (actual performance improvement is around 32x).
+				uint tmpTriIdx = min( triIdxBase + gl_LocalInvocationIndex, numTris - 1u );
+				Aabb tmpTriAabb = getTriangleAabb( tmpTriIdx, instance.mesh, instance.worldTransform );
 
-				for( uint i=0; i<3u; ++i )
+				bool groupTriInters = intersects( tmpTriAabb, groupVoxelAabb );
+
+				if( anyInvocationARB( groupTriInters ) )
 				{
-					tri.v[i] = mul( float4( tri.v[i], 1.0f ), instance.worldTransform );
-					tri.n[i] = mul( tri.n[i], toFloat3x3( instance.worldTransform ) );
-				}
+					for( uint subTri=0u; subTri<64u; ++subTri )
+					{
+						uint triIdx = min( triIdxBase + subTri, numTris - 1u );
+						Triangle tri = getTriangle( triIdx, instance.mesh );
 
-				if( intersects_tri_aabb( tri, voxelAabb ) )
-				{
-					float4 finalDiffuse		= material.diffuse.xyzw;
-					float3 finalEmissive	= material.emissive.xyz;
-				@property( has_diffuse_tex )
-					finalDiffuse *= OGRE_SampleArray2D( diffuseTex, diffuseSampler, uv,
-														material.diffuseTexIdx );
-				@end
-				@property( has_emissive_tex )
-					finalEmissive *= OGRE_SampleArray2D( emissiveTex, emissiveSampler, uv,
-														 material.emissiveTexIdx ).xyz;
-				@end
+						for( uint i=0; i<3u; ++i )
+						{
+							tri.v[i] = mul( float4( tri.v[i], 1.0f ), instance.worldTransform );
+							tri.n[i] = mul( tri.n[i], toFloat3x3( instance.worldTransform ) );
+						}
 
-					voxelAlbedo			+= finalDiffuse;
-					voxelEmissive.xyz	+= finalEmissive;
+						if( intersects_tri_aabb( tri, voxelAabb ) )
+						{
+							float4 finalDiffuse		= material.diffuse.xyzw;
+							float3 finalEmissive	= material.emissive.xyz;
+						@property( has_diffuse_tex )
+							finalDiffuse *= OGRE_SampleArray2D( diffuseTex, diffuseSampler, uv,
+																material.diffuseTexIdx );
+						@end
+						@property( has_emissive_tex )
+							finalEmissive *= OGRE_SampleArray2D( emissiveTex, emissiveSampler, uv,
+																 material.emissiveTexIdx ).xyz;
+						@end
 
-					float3 triNormal = tri_barycentric_normal( voxelAabb.center, tri );
-					triNormal = normalize( triNormal );
+							finalDiffuse += material.bgDiffuse.xyzw;
 
-					float2 uv = tri_barycentric_uv( voxelAabb.center, tri );
+							voxelAlbedo			+= finalDiffuse;
+							voxelEmissive.xyz	+= finalEmissive;
 
-					float cosAngle = dot( voxelNormal, triNormal );
-					float cos120 = -0.5f;
-					if( cosAngle <= cos120 )
-						doubleSided = true;
-					else
-						voxelNormal += triNormal;
+							float3 triNormal = tri_barycentric_normal( voxelAabb.center, tri );
+							triNormal = normalize( triNormal );
 
-					++accumTris;
+							float2 uv = tri_barycentric_uv( voxelAabb.center, tri );
+
+							float cosAngle = dot( voxelNormal, triNormal );
+							float cos120 = -0.5f;
+							if( cosAngle <= cos120 )
+								doubleSided = true;
+							else
+								voxelNormal += triNormal;
+
+							++accumTris;
+						}
+					}
 				}
 			}
 		}

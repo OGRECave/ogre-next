@@ -18,6 +18,8 @@
 	#define max3( a, b, c ) max( a, max( b, c ) )
 @end
 
+#extension GL_ARB_shader_group_vote: require
+
 #define float2 vec2
 #define float3 vec3
 #define float4 vec4
