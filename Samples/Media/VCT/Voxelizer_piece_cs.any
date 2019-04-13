@@ -428,10 +428,10 @@
 	int3 voxelCelUvw = int3( gl_GlobalInvocationID.xyz );
 
 	@property( syntax == glsl )
-		float4 origAlbedo	= imageLoad( voxelAlbedoTex, voxelCelUvw );
-		float3 origNormal	= imageLoad( voxelNormalTex, voxelCelUvw ).xyz * 2.0f - 1.0f;
-		float4 origEmissive = imageLoad( voxelEmissiveTex, voxelCelUvw );
-		float origAccumTris = imageLoad( voxelAccumVal, voxelCelUvw ).x;
+		float4 origAlbedo	= OGRE_imageLoad3D( voxelAlbedoTex, voxelCelUvw );
+		float3 origNormal	= OGRE_imageLoad3D( voxelNormalTex, voxelCelUvw ).xyz * 2.0f - 1.0f;
+		float4 origEmissive = OGRE_imageLoad3D( voxelEmissiveTex, voxelCelUvw );
+		float origAccumTris = OGRE_imageLoad3D( voxelAccumVal, voxelCelUvw ).x;
 	@end
 
 	if( accumTris + origAccumTris > 0 )
@@ -445,10 +445,11 @@
 		voxelNormal		= voxelNormal * 0.5 + 0.5f;
 
 		@property( syntax == glsl )
-			imageStore( voxelAlbedoTex, voxelCelUvw, voxelAlbedo );
-			imageStore( voxelNormalTex, voxelCelUvw, float4( voxelNormal, 1.0f ) );
-			imageStore( voxelEmissiveTex, voxelCelUvw, voxelEmissive );
-			imageStore( voxelAccumVal, voxelCelUvw, uint4( accumTris + origAccumTris, 0, 0, 0 ) );
+			OGRE_imageWrite3D4( voxelAlbedoTex, voxelCelUvw, voxelAlbedo );
+			OGRE_imageWrite3D4( voxelNormalTex, voxelCelUvw, float4( voxelNormal, 1.0f ) );
+			OGRE_imageWrite3D4( voxelEmissiveTex, voxelCelUvw, voxelEmissive );
+			OGRE_imageWrite3D1( voxelAccumVal, voxelCelUvw,
+								uint4( accumTris + origAccumTris, 0, 0, 0 ) );
 		@end
 	}
 @end

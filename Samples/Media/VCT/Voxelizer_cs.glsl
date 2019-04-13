@@ -42,6 +42,10 @@
 
 #define CONST_BUFFER( bufferName, bindingPoint ) layout( std140, binding = bindingPoint) uniform bufferName
 
+#define OGRE_imageLoad3D( inImage, iuv ) imageLoad.Load( int3( iuv ) )
+#define OGRE_imageWrite3D1( outImage, iuv, value ) imageStore( outImage, int3( iuv ), value )
+#define OGRE_imageWrite3D4( outImage, iuv, value ) imageStore( outImage, int3( iuv ), value )
+
 @insertpiece( PreBindingsHeaderCS )
 
 layout(std430, binding = 0) buffer vertexBufferLayout
