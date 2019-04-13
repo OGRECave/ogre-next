@@ -460,6 +460,9 @@
 			@property( emissive_constant )
 				emissiveCol *= material.emissive.xyz;
 			@end
+			@property( emissive_as_lightmap )
+				emissiveCol *= pixelData.diffuse.xyz;
+			@end
 			finalColour += emissiveCol;
 		@else
 			finalColour += material.emissive.xyz;
@@ -530,6 +533,11 @@
 
 		@insertpiece( SampleSpecularMap )
 		@insertpiece( SampleRoughnessMap )
+
+@property( hlms_bake_lighting_only )
+		pixelData.diffuse.xyz	= float3( 1.0f, 1.0f, 1.0f );
+		pixelData.specular.xyz	= float3( 0.0f, 0.0f, 0.0f );
+@end
 
 		@insertpiece( forwardPlusDoDecals )
 

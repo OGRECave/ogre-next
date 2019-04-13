@@ -139,6 +139,7 @@ namespace Ogre
     const IdString HlmsBaseProp::FineLightMask      = IdString( "hlms_fine_light_mask" );
     const IdString HlmsBaseProp::UseUvBaking        = IdString( "hlms_use_uv_baking" );
     const IdString HlmsBaseProp::UvBaking           = IdString( "hlms_uv_baking" );
+    const IdString HlmsBaseProp::BakeLightingOnly   = IdString( "hlms_bake_lighting_only" );
     const IdString HlmsBaseProp::PrePass            = IdString( "hlms_prepass" );
     const IdString HlmsBaseProp::UsePrePass         = IdString( "hlms_use_prepass" );
     const IdString HlmsBaseProp::UsePrePassMsaa     = IdString( "hlms_use_prepass_msaa" );
@@ -2872,6 +2873,8 @@ namespace Ogre
                 {
                     setProperty( HlmsBaseProp::UseUvBaking, 1 );
                     setProperty( HlmsBaseProp::UvBaking, passSceneDef->mUvBakingSet );
+                    if( passSceneDef->mBakeLightingOnly )
+                        setProperty( HlmsBaseProp::BakeLightingOnly, 1 );
                 }
             }
         }

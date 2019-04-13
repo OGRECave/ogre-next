@@ -212,6 +212,7 @@ namespace Ogre
         uint8	mWorkflow;
         bool    mReceiveShadows;
         uint8   mCubemapIdxInDescSet;
+        bool    mUseEmissiveAsLightmap;
         TransparencyModes mTransparencyMode;
 
         float	mBgDiffuse[4];
@@ -587,6 +588,15 @@ namespace Ogre
         */
         void setUserValue( uint8 userValueIdx, const Vector4 &value );
         Vector4 getUserValue( uint8 userValueIdx ) const;
+
+        /** When set, it treats the emissive map as a lightmap; which means it will
+            be multiplied against the diffuse component.
+        @remarks
+            Note that HlmsPbsDatablock::setEmissive still applies,
+            thus set it to 1 to avoid surprises.
+        */
+        void setUseEmissiveAsLightmap( bool bUseEmissiveAsLightmap );
+        bool getUseEmissiveAsLightmap(void) const;
 
         /** Manually set a probe to affect this particular material.
         @remarks

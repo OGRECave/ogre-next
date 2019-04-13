@@ -81,8 +81,8 @@ namespace Ogre
         {
             const Destination &dst = destinations[i];
 
-            D3D11BufferInterface *bufferInterface = static_cast<D3D11BufferInterface*>(
-                                                        dst.destination->getBufferInterface() );
+            D3D11BufferInterfaceBase *bufferInterface = static_cast<D3D11BufferInterfaceBase*>(
+                                                            dst.destination->getBufferInterface() );
 
             assert( dst.destination->getBufferType() == BT_DEFAULT );
 
@@ -147,8 +147,8 @@ namespace Ogre
         assert( dynamic_cast<D3D11BufferInterface*>( source->getBufferInterface() ) );
         assert( (srcOffset + srcLength) <= source->getTotalSizeBytes() );
 
-        D3D11BufferInterface *bufferInterface = static_cast<D3D11BufferInterface*>(
-                                                            source->getBufferInterface() );
+        D3D11BufferInterfaceBase *bufferInterface = static_cast<D3D11BufferInterfaceBase*>(
+                                                        source->getBufferInterface() );
 
         D3D11_BOX srcBox;
         ZeroMemory( &srcBox, sizeof(D3D11_BOX) );

@@ -152,6 +152,7 @@ namespace Ogre
     const IdString PbsProperty::DetailMapsNormal  = IdString( "detail_maps_normal" );
     const IdString PbsProperty::FirstValidDetailMapNm= IdString( "first_valid_detail_map_nm" );
     const IdString PbsProperty::EmissiveConstant  = IdString( "emissive_constant" );
+    const IdString PbsProperty::EmissiveAsLightmap= IdString( "emissive_as_lightmap" );
 
     const IdString PbsProperty::Pcf3x3            = IdString( "pcf_3x3" );
     const IdString PbsProperty::Pcf4x4            = IdString( "pcf_4x4" );
@@ -686,6 +687,12 @@ namespace Ogre
         {
             if( datablock->getEmissive() != Vector3::ZERO )
                 setProperty( PbsProperty::EmissiveConstant, 1 );
+
+            if( datablock->getTexture( PBSM_EMISSIVE ) )
+            {
+                if( datablock->getUseEmissiveAsLightmap() )
+                    setProperty( PbsProperty::EmissiveAsLightmap, 1 );
+            }
         }
 
         // normal maps used in this datablock

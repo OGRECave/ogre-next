@@ -115,7 +115,17 @@ namespace Ogre
                                            findElementBySemantic(VES_POSITION);
 
         // Only float supported.
-        OgreAssert(elemPos->getSize() == 12, "");
+        OgreAssert( elemPos->getBaseType( elemPos->getType() ) == VET_FLOAT1 &&
+                    elemPos->getTypeCount( elemPos->getType() ) >= 3u,
+                    "Position must be VET_FLOAT3 or VET_FLOAT4" );
+
+        if( elemPos->getTypeCount( elemPos->getType() ) == 4u )
+        {
+            LogManager::getSingleton().logMessage(
+                        "LodInputProviderMesh::addVertexData: Position is VET_FLOAT4. "
+                        "The 4th component will be ignored. This warning is safe to "
+                        "ignore if it is just filled with 1.0" );
+        }
 
         v1::HardwareVertexBufferSharedPtr vbuf = vertexData->vertexBufferBinding->getBuffer(
                     elemPos->getSource() );
