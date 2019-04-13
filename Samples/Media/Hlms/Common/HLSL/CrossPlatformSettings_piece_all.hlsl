@@ -6,6 +6,7 @@
 #define rshort2 int2
 //Short used for write operations. It's an int in GLSL. An ushort in HLSL & Metal
 #define wshort2 uint2
+#define wshort3 uint3
 
 #define toFloat3x3( x ) ((float3x3)(x))
 #define buildFloat3x3( row0, row1, row2 ) transpose( float3x3( row0, row1, row2 ) )

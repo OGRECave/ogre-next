@@ -150,25 +150,11 @@ namespace Ogre
         srvDesc.Format               = mInternalFormat;
         srvDesc.ViewDimension        = D3D11_SRV_DIMENSION_BUFFER;
         srvDesc.Buffer.FirstElement  = (mFinalBufferStart + bufferSlot.offset) / formatSize;
-        srvDesc.Buffer.NumElements   = sizeBytes / mBytesPerElement;
+        srvDesc.Buffer.NumElements   = sizeBytes / formatSize/*mBytesPerElement*/;
 
-        D3D11RenderSystem *rs = static_cast<D3D11VaoManager*>(mVaoManager)->getD3D11RenderSystem();
-        ID3D11Buffer *vboName = 0;
-
-        if( rs->_getFeatureLevel() > D3D_FEATURE_LEVEL_11_0 )
-        {
-            assert( dynamic_cast<D3D11BufferInterface*>( mBufferInterface ) );
-            D3D11BufferInterface *bufferInterface = static_cast<D3D11BufferInterface*>(
-                        mBufferInterface );
-            vboName = bufferInterface->getVboName();
-        }
-        else
-        {
-            assert( dynamic_cast<D3D11CompatBufferInterface*>( mBufferInterface ) );
-            D3D11CompatBufferInterface *bufferInterface = static_cast<D3D11CompatBufferInterface*>(
-                        mBufferInterface );
-            vboName = bufferInterface->getVboName();
-        }
+        D3D11BufferInterfaceBase *bufferInterface = static_cast<D3D11BufferInterfaceBase*>(
+                                                        mBufferInterface );
+        ID3D11Buffer *vboName = bufferInterface->getVboName();
 
         ID3D11ShaderResourceView *retVal = 0;
         HRESULT hr = mDevice->CreateShaderResourceView( vboName, &srvDesc, &retVal );
@@ -179,7 +165,7 @@ namespace Ogre
             OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
                             "Failed to create SRV view on buffer."
                             "\nError Description: " + errorDescription,
-                            "D3D11TexBufferPacked::createUav" );
+                            "D3D11TexBufferPacked::createSrv" );
         }
 
         return retVal;

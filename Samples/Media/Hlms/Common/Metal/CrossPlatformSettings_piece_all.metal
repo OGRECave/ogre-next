@@ -20,6 +20,7 @@ inline float3x3 toMat3x3( float4x4 m )
 #define rshort2 ushort2
 //Short used for write operations. It's an int in GLSL. An ushort in HLSL & Metal
 #define wshort2 ushort2
+#define wshort3 ushort3
 
 #define toFloat3x3( x ) toMat3x3( x )
 #define buildFloat3x3( row0, row1, row2 ) float3x3( row0, row1, row2 )

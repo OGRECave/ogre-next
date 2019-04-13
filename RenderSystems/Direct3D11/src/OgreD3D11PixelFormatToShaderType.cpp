@@ -200,6 +200,10 @@ namespace Ogre
             else if( textureType == TextureTypes::Type2DArray )
                 textureType = 8u;
         }
+        else
+        {
+            --textureType;
+        }
 
         PixelFormatDataTypes::PixelFormatDataTypes pfDataType = getPixelFormatDataType( pixelFormat );
         if( pfDataType == PixelFormatDataTypes::NumPixelFormatDataTypes )

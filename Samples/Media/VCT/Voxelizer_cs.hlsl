@@ -11,9 +11,9 @@
 
 @insertpiece( SetCrossPlatformSettings )
 
-#define OGRE_imageLoad3D( inImage, iuv ) inImage.Load( int3( iuv ) )
-#define OGRE_imageWrite3D1( outImage, iuv, value ) outImage[int3( iuv )] = value.x
-#define OGRE_imageWrite3D4( outImage, iuv, value ) outImage[int3( iuv )] = value
+#define OGRE_imageLoad3D( inImage, iuv ) inImage[uint3( iuv )]
+#define OGRE_imageWrite3D1( outImage, iuv, value ) outImage[uint3( iuv )] = value.x
+#define OGRE_imageWrite3D4( outImage, iuv, value ) outImage[uint3( iuv )] = value
 
 @property( vendor_shader_extension == Intel )
 	#define anyInvocationARB( value ) IntelExt_WaveActiveAnyTrue( value )
@@ -28,13 +28,13 @@
 @property( !vendor_shader_extension )
 	groupshared bool g_emulatedGroupVote[64];
 
-	bool emualtedAnyInvocationARB( bool value )
+	bool emualtedAnyInvocationARB( bool value, uint gl_LocalInvocationIndex )
 	{
 		g_emulatedGroupVote[gl_LocalInvocationIndex] = value;
 		GroupMemoryBarrierWithGroupSync();
 		bool anyTrue = false;
 		for( int i=0; i<64; ++i )
-			anyTrue |= g_emulatedGroupVote[i];
+			anyTrue = anyTrue || g_emulatedGroupVote[i];
 		return anyTrue;
 	}
 
