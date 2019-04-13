@@ -31,20 +31,16 @@ THE SOFTWARE.
 
 #include "OgreD3D11Prerequisites.h"
 
-#include "Vao/OgreBufferInterface.h"
+#include "Vao/OgreD3D11BufferInterfaceBase.h"
 
 namespace Ogre
 {
     /** For D3D11, most (if not all) buffers, can be treated with the same code.
         Hence most equivalent functionality is encapsulated here.
     */
-    class _OgreD3D11Export D3D11BufferInterface : public BufferInterface
+    class _OgreD3D11Export D3D11BufferInterface : public D3D11BufferInterfaceBase
     {
     protected:
-        size_t          mVboPoolIdx;
-        ID3D11Buffer    *mVboName;
-        void            *mMappedPtr;
-
         size_t              mUnmapTicket;
         D3D11DynamicBuffer  *mDynamicBuffer;
 
@@ -59,8 +55,6 @@ namespace Ogre
                               D3D11DynamicBuffer *dynamicBuffer );
         ~D3D11BufferInterface();
 
-        size_t getVboPoolIndex(void)                { return mVboPoolIdx; }
-        ID3D11Buffer* getVboName(void) const        { return mVboName; }
         D3D11DynamicBuffer* getDynamicBuffer(void) const    { return mDynamicBuffer; }
 
         void _setVboPoolIndex( size_t newVboPool )  { mVboPoolIdx = newVboPool; }

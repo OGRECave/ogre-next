@@ -3209,8 +3209,8 @@ namespace Ogre
         {
             if( mBoundIndirectBuffer )
             {
-                D3D11BufferInterface *bufferInterface = static_cast<D3D11BufferInterface*>(
-                                                        indirectBuffer->getBufferInterface() );
+                D3D11BufferInterfaceBase *bufferInterface = static_cast<D3D11BufferInterfaceBase*>(
+                                                                indirectBuffer->getBufferInterface() );
                 mBoundIndirectBuffer = bufferInterface->getVboName();
             }
             else
