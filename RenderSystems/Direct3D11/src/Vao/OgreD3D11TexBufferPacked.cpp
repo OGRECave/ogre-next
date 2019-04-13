@@ -87,20 +87,9 @@ namespace Ogre
         D3D11RenderSystem *rs = static_cast<D3D11VaoManager*>(mVaoManager)->getD3D11RenderSystem();
         ID3D11Buffer *vboName = 0;
 
-        if( rs->_getFeatureLevel() > D3D_FEATURE_LEVEL_11_0 )
-        {
-            assert( dynamic_cast<D3D11BufferInterface*>( mBufferInterface ) );
-            D3D11BufferInterface *bufferInterface = static_cast<D3D11BufferInterface*>(
-                        mBufferInterface );
-            vboName = bufferInterface->getVboName();
-        }
-        else
-        {
-            assert( dynamic_cast<D3D11CompatBufferInterface*>( mBufferInterface ) );
-            D3D11CompatBufferInterface *bufferInterface = static_cast<D3D11CompatBufferInterface*>(
-                        mBufferInterface );
-            vboName = bufferInterface->getVboName();
-        }
+        D3D11BufferInterfaceBase *bufferInterface = static_cast<D3D11BufferInterfaceBase*>(
+                                                        mBufferInterface );
+        vboName = bufferInterface->getVboName();
 
         mDevice.get()->CreateShaderResourceView( vboName, &srDesc,
                                                  &mCachedResourceViews[cacheIdx].mResourceView );

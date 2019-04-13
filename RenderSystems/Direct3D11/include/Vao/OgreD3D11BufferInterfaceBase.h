@@ -26,51 +26,31 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#ifndef _Ogre_D3D11BufferInterface_H_
-#define _Ogre_D3D11BufferInterface_H_
+#ifndef _Ogre_D3D11BufferInterfaceBase_H_
+#define _Ogre_D3D11BufferInterfaceBase_H_
 
 #include "OgreD3D11Prerequisites.h"
 
-#include "Vao/OgreD3D11BufferInterfaceBase.h"
+#include "Vao/OgreBufferInterface.h"
 
 namespace Ogre
 {
     /** For D3D11, most (if not all) buffers, can be treated with the same code.
         Hence most equivalent functionality is encapsulated here.
     */
-    class _OgreD3D11Export D3D11BufferInterface : public D3D11BufferInterfaceBase
+    class _OgreD3D11Export D3D11BufferInterfaceBase : public BufferInterface
     {
     protected:
-        size_t              mUnmapTicket;
-        D3D11DynamicBuffer  *mDynamicBuffer;
-
-        /// Used to store initial data of BT_IMMUTABLE buffers and delay their
-        /// creation as much as possible (so that we can batch them together)
-        void *mInitialData;
-
-        size_t advanceFrame( bool bAdvanceFrame );
+        size_t          mVboPoolIdx;
+        ID3D11Buffer    *mVboName;
+        void            *mMappedPtr;
 
     public:
-        D3D11BufferInterface( size_t vboPoolIdx, ID3D11Buffer *d3dBuffer,
-                              D3D11DynamicBuffer *dynamicBuffer );
-        ~D3D11BufferInterface();
+        D3D11BufferInterfaceBase( size_t vboPoolIdx, ID3D11Buffer *d3dBuffer );
+        ~D3D11BufferInterfaceBase();
 
-        D3D11DynamicBuffer* getDynamicBuffer(void) const    { return mDynamicBuffer; }
-
-        /// Only use this function for the first upload
-        void _firstUpload( void *data );
-
-        const void* _getInitialData(void) const     { return mInitialData; }
-        void _deleteInitialData(void);
-        void _setVboName( size_t vboPoolIdx, ID3D11Buffer *vboName, size_t internalBufferStartBytes );
-
-        virtual void* RESTRICT_ALIAS_RETURN map( size_t elementStart, size_t elementCount,
-                                                 MappingState prevMappingState,
-                                                 bool advanceFrame = true );
-        virtual void unmap( UnmapOptions unmapOption,
-                            size_t flushStartElem = 0, size_t flushSizeElem = 0 );
-        virtual void advanceFrame(void);
-        virtual void regressFrame(void);
+        size_t getVboPoolIndex(void)                { return mVboPoolIdx; }
+        ID3D11Buffer* getVboName(void) const        { return mVboName; }
     };
 }
 

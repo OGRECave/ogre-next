@@ -31,7 +31,7 @@ THE SOFTWARE.
 
 #include "OgreD3D11Prerequisites.h"
 
-#include "Vao/OgreBufferInterface.h"
+#include "Vao/OgreD3D11BufferInterfaceBase.h"
 
 namespace Ogre
 {
@@ -52,21 +52,14 @@ namespace Ogre
     @par
         This buffer interface is for compatibility with these systems.
     */
-    class _OgreD3D11Export D3D11CompatBufferInterface : public BufferInterface
+    class _OgreD3D11Export D3D11CompatBufferInterface : public D3D11BufferInterfaceBase
     {
     protected:
-        size_t          mVboPoolIdx;
-        ID3D11Buffer    *mVboName;
-        void            *mMappedPtr;
-
         D3D11Device     &mDevice;
 
     public:
         D3D11CompatBufferInterface( size_t vboPoolIdx, ID3D11Buffer *d3dBuffer, D3D11Device &device );
         ~D3D11CompatBufferInterface();
-
-        size_t getVboPoolIndex(void)                { return mVboPoolIdx; }
-        ID3D11Buffer* getVboName(void) const        { return mVboName; }
 
         virtual void* RESTRICT_ALIAS_RETURN map( size_t elementStart, size_t elementCount,
                                                  MappingState prevMappingState,
