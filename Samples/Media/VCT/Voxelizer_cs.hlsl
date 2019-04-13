@@ -25,6 +25,22 @@
 	#define anyInvocationARB( value ) AmdDxExtShaderIntrinsics_BallotAny( value )
 @end
 
+@property( !vendor_shader_extension )
+	groupshared bool g_emulatedGroupVote[64];
+
+	bool emualtedAnyInvocationARB( bool value )
+	{
+		g_emulatedGroupVote[gl_LocalInvocationIndex] = value;
+		GroupMemoryBarrierWithGroupSync();
+		bool anyTrue = false;
+		for( int i=0; i<64; ++i )
+			anyTrue |= g_emulatedGroupVote[i];
+		return anyTrue;
+	}
+
+	#define anyInvocationARB( value ) emualtedAnyInvocationARB( value, gl_LocalInvocationIndex )
+@end
+
 @insertpiece( PreBindingsHeaderCS )
 
 StructuredBuffer<Vertex> vertexBuffer	: register(u0);

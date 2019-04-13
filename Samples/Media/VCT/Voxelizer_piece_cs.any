@@ -366,7 +366,7 @@
 
 			for( uint triIdxBase=0u; triIdxBase<numTris; triIdxBase += 64u )
 			{
-				//First make the 64 threads check if any of the triangles checks
+				//First make the 64 threads check if any of the triangles intersects
 				//against the combined AABB of the 4x4x4 block. If none do, we can skip
 				//64 triangles in one go (actual performance improvement is around 32x).
 				uint tmpTriIdx = min( triIdxBase + gl_LocalInvocationIndex, numTris - 1u );
