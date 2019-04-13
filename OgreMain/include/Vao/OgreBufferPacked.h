@@ -134,6 +134,7 @@ namespace Ogre
     class _OgreExport BufferPacked : public GpuResource, public BufferPackedAlloc
     {
         friend class BufferInterface;
+        friend class D3D11BufferInterfaceBase;
         friend class D3D11BufferInterface;
         friend class D3D11CompatBufferInterface;
         friend class GL3PlusBufferInterface;
