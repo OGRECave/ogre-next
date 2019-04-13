@@ -401,7 +401,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VctVoxelizer::freeBuffers(void)
     {
-        if( mIndexBuffer16 && mIndexBuffer16->getNumElements() != mNumIndices16 )
+        if( mIndexBuffer16 && mIndexBuffer16->getNumElements() != (mNumIndices16 + 1u) >> 1u )
         {
             mVaoManager->destroyUavBuffer( mIndexBuffer16 );
             mIndexBuffer16 = 0;
@@ -444,7 +444,12 @@ namespace Ogre
         freeBuffers();
 
         if( mNumIndices16 )
-            mIndexBuffer16 = mVaoManager->createUavBuffer( mNumIndices16, sizeof(uint16), 0, 0, false );
+        {
+            //D3D11 does not support 2-byte strides, so we create 4-byte buffers
+            //and halve the number of indices (rounding up)
+            mIndexBuffer16 = mVaoManager->createUavBuffer( (mNumIndices16 + 1u) >> 1u,
+                                                           sizeof(uint32), 0, 0, false );
+        }
         if( mNumIndices32 )
             mIndexBuffer32 = mVaoManager->createUavBuffer( mNumIndices32, sizeof(uint32), 0, 0, false );
 

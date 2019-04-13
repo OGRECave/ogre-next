@@ -27,6 +27,8 @@ THE SOFTWARE.
 */
 
 #include "Vao/OgreD3D11BufferInterfaceBase.h"
+#include "Vao/OgreD3D11VaoManager.h"
+#include "OgreD3D11Device.h"
 
 namespace Ogre
 {
@@ -39,5 +41,25 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     D3D11BufferInterfaceBase::~D3D11BufferInterfaceBase()
     {
+    }
+    //-----------------------------------------------------------------------------------
+    void D3D11BufferInterfaceBase::copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes,
+                                           size_t srcOffsetBytes, size_t sizeBytes )
+    {
+        D3D11VaoManager *vaoManager = static_cast<D3D11VaoManager*>( mBuffer->mVaoManager );
+        ID3D11DeviceContextN *context = vaoManager->getDevice().GetImmediateContext();
+
+        OGRE_ASSERT_HIGH( dynamic_cast<D3D11BufferInterfaceBase*>( dstBuffer ) );
+        D3D11BufferInterfaceBase *dstBufferD3d = static_cast<D3D11BufferInterfaceBase*>( dstBuffer );
+
+        D3D11_BOX srcBox;
+        srcBox.left     = static_cast<UINT>( srcOffsetBytes );
+        srcBox.right    = static_cast<UINT>( srcOffsetBytes + sizeBytes );
+        srcBox.top      = 0u;
+        srcBox.bottom   = 1u;
+        srcBox.front    = 0u;
+        srcBox.back     = 1u;
+        context->CopySubresourceRegion( dstBufferD3d->mVboName, 0, dstOffsetBytes, 0, 0,
+                                        this->mVboName, 0, &srcBox );
     }
 }

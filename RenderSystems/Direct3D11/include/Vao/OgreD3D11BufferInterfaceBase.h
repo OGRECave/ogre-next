@@ -51,6 +51,9 @@ namespace Ogre
 
         size_t getVboPoolIndex(void)                { return mVboPoolIdx; }
         ID3D11Buffer* getVboName(void) const        { return mVboName; }
+
+        virtual void copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes,
+                             size_t srcOffsetBytes, size_t sizeBytes );
     };
 }
 

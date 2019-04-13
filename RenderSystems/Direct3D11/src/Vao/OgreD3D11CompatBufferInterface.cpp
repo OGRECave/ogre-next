@@ -104,35 +104,4 @@ namespace Ogre
     void D3D11CompatBufferInterface::regressFrame(void)
     {
     }
-    //-----------------------------------------------------------------------------------
-    void D3D11CompatBufferInterface::copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes,
-                                             size_t srcOffsetBytes, size_t sizeBytes )
-    {
-        D3D11VaoManager *vaoManager = static_cast<D3D11VaoManager*>( mBuffer->mVaoManager );
-        ID3D11DeviceContextN *context = vaoManager->getDevice().GetImmediateContext();
-
-        ID3D11Buffer *dstRes = 0;
-        if( dstBuffer->getBufferPacked()->getBufferPackedType() != BP_TYPE_CONST )
-        {
-            OGRE_ASSERT_HIGH( dynamic_cast<D3D11BufferInterface*>( dstBuffer ) );
-            D3D11BufferInterface *dstBufferInterface = static_cast<D3D11BufferInterface*>( dstBuffer );
-            dstRes = dstBufferInterface->getVboName();
-        }
-        else
-        {
-            OGRE_ASSERT_HIGH( dynamic_cast<D3D11CompatBufferInterface*>( dstBuffer ) );
-            D3D11CompatBufferInterface *dstBufferInterface =
-                    static_cast<D3D11CompatBufferInterface*>( dstBuffer );
-            dstRes = dstBufferInterface->getVboName();
-        }
-
-        D3D11_BOX srcBox;
-        srcBox.left     = static_cast<UINT>( srcOffsetBytes );
-        srcBox.right    = static_cast<UINT>( srcOffsetBytes + sizeBytes );
-        srcBox.top      = 0u;
-        srcBox.bottom   = 1u;
-        srcBox.front    = 0u;
-        srcBox.back     = 1u;
-        context->CopySubresourceRegion( dstRes, 0, dstOffsetBytes, 0, 0, this->mVboName, 0, &srcBox );
-    }
 }
