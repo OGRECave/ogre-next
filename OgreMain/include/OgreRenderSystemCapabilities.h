@@ -228,6 +228,15 @@ namespace Ogre
         // ***** DirectX specific caps *****
         /// Is DirectX feature "per stage constants" supported
         RSC_PERSTAGECONSTANT = OGRE_CAPS_VALUE(CAPS_CATEGORY_D3D9, 0),
+        /// DX11 has this annoying requirement that "typed UAV loads" are not allowed.
+        /// Meaning you can only read from UAVs if it's in format PGF_R32_UINT.
+        ///
+        /// You can workaround this issue by creating the UAV as TextureFlags::Reinterpretable
+        /// and performing bitpacking by hand in the shader.
+        ///
+        /// See
+        /// https://docs.microsoft.com/en-us/windows/desktop/direct3dhlsl/
+        /// dx-graphics-hlsl-unpacking-packing-dxgi-format
         RSC_TYPED_UAV_LOADS = OGRE_CAPS_VALUE(CAPS_CATEGORY_D3D9, 1),
 
         // ***** GL Specific Caps *****
