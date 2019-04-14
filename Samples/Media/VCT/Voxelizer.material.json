@@ -6,7 +6,7 @@
             "threads_per_group" : [4, 4, 4],
 
             "source" : "Voxelizer_cs",
-            "pieces" : ["CrossPlatformSettings_piece_all", "Voxelizer_piece_cs.any"],
+            "pieces" : ["CrossPlatformSettings_piece_all", "Matrix_piece_all", "Voxelizer_piece_cs.any"],
             "inform_shader_of_texture_data_change" : true,
 
             "uav_units" : 6,

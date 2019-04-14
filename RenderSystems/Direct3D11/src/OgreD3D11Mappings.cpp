@@ -662,6 +662,8 @@ namespace Ogre
         case TextureTypes::TypeCubeArray:
             return cubemapsAs2DArrays ? D3D11_SRV_DIMENSION_TEXTURE2DARRAY :
                                         D3D11_SRV_DIMENSION_TEXTURECUBEARRAY;
+        case TextureTypes::Type3D:
+            return D3D11_SRV_DIMENSION_TEXTURE3D;
         }
 
         return D3D11_SRV_DIMENSION_UNKNOWN;

@@ -25,10 +25,11 @@
 	#define anyInvocationARB( value ) AmdDxExtShaderIntrinsics_BallotAny( value )
 @end
 
+	groupshared uint g_voxelAccumValue[32];
 @property( !vendor_shader_extension )
 	groupshared bool g_emulatedGroupVote[64];
 
-	bool emualtedAnyInvocationARB( bool value, uint gl_LocalInvocationIndex )
+	bool emulatedAnyInvocationARB( bool value, uint gl_LocalInvocationIndex )
 	{
 		g_emulatedGroupVote[gl_LocalInvocationIndex] = value;
 		GroupMemoryBarrierWithGroupSync();
@@ -38,8 +39,45 @@
 		return anyTrue;
 	}
 
-	#define anyInvocationARB( value ) emualtedAnyInvocationARB( value, gl_LocalInvocationIndex )
+	//#define anyInvocationARB( value ) emulatedAnyInvocationARB( value, gl_LocalInvocationIndex )
+	#define anyInvocationARB( value ) true
 @end
+
+float4 unpackUnorm4x8( uint v )
+{
+	return float4(	(v & 0xFF) / 255.0f,
+					((v >> 8u) & 0xFF) / 255.0f,
+					((v >> 16u) & 0xFF) / 255.0f,
+					(v >> 24u) / 255.0f );
+}
+uint packUnorm4x8( float4 v )
+{
+	uint retVal;
+	retVal  = uint( round( saturate( v.x * 255.0f ) ) );
+	retVal |= uint( round( saturate( v.y * 255.0f ) ) ) << 8u;
+	retVal |= uint( round( saturate( v.z * 255.0f ) ) ) << 16u;
+	retVal |= uint( round( saturate( v.w * 255.0f ) ) ) << 24u;
+
+	return retVal;
+}
+
+float4 unpackUnormRGB10A2( uint v )
+{
+	return float4(	(v & 0x000003FF) / 1024.0f,
+					((v >> 10u) & 0x000003FF) / 1024.0f,
+					((v >> 20u) & 0x000003FF) / 1024.0f,
+					(v >> 30u) / 2.0f );
+}
+uint packUnormRGB10A2( float4 v )
+{
+	uint retVal;
+	retVal  = uint( round( saturate( v.x * 1024.0f ) ) );
+	retVal |= uint( round( saturate( v.y * 1024.0f ) ) ) << 10u;
+	retVal |= uint( round( saturate( v.z * 1024.0f ) ) ) << 20u;
+	retVal |= uint( round( saturate( v.w * 2.0f ) ) ) << 30u;
+
+	return retVal;
+}
 
 @insertpiece( PreBindingsHeaderCS )
 

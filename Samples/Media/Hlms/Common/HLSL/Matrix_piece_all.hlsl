@@ -20,3 +20,14 @@ float4x3 UNPACK_MAT4x3( Buffer<float4> matrixBuf, uint pixelIdx )
 	return transpose( float3x4( row1, row2, row3 ) );
 }
 @end
+
+@piece( Common_Matrix_DeclLoadOgreFloat4x3 )
+ogre_float4x3 loadOgreFloat4x3( Buffer<float4> matrixBuf, uint offsetIdx )
+{
+	float4 row1 = matrixBuf.Load( int(offsetIdx) );
+	float4 row2 = matrixBuf.Load( int(offsetIdx) + 1u );
+	float4 row3 = matrixBuf.Load( int(offsetIdx) + 2u );
+
+	return transpose( float3x4( row1, row2, row3 ) );
+}
+@end

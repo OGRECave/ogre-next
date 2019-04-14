@@ -501,28 +501,34 @@ namespace Ogre
             return;
         }
 
+        const bool hasTypedUavs = mRenderSystem->getCapabilities()->hasCapability( RSC_TYPED_UAV_LOADS );
+
         if( !mAlbedoVox )
         {
+            uint32 texFlags = TextureFlags::Uav;
+            if( !hasTypedUavs )
+                texFlags |= TextureFlags::Reinterpretable;
+
             mAlbedoVox = mTextureGpuManager->createTexture( "VctVoxelizer" +
                                                             StringConverter::toString( getId() ) +
                                                             "/Albedo",
                                                             GpuPageOutStrategy::Discard,
-                                                            TextureFlags::Uav, TextureTypes::Type3D );
+                                                            texFlags, TextureTypes::Type3D );
             mEmissiveVox = mTextureGpuManager->createTexture( "VctVoxelizer" +
                                                               StringConverter::toString( getId() ) +
                                                               "/Emissive",
                                                               GpuPageOutStrategy::Discard,
-                                                              TextureFlags::Uav, TextureTypes::Type3D );
+                                                              texFlags, TextureTypes::Type3D );
             mNormalVox = mTextureGpuManager->createTexture( "VctVoxelizer" +
                                                             StringConverter::toString( getId() ) +
                                                             "/Normal",
                                                             GpuPageOutStrategy::Discard,
-                                                            TextureFlags::Uav, TextureTypes::Type3D );
+                                                            texFlags, TextureTypes::Type3D );
             mAccumValVox = mTextureGpuManager->createTexture( "VctVoxelizer" +
                                                               StringConverter::toString( getId() ) +
                                                               "/AccumVal",
                                                               GpuPageOutStrategy::Discard,
-                                                              TextureFlags::NotTexture|TextureFlags::Uav,
+                                                              TextureFlags::NotTexture|texFlags,
                                                               TextureTypes::Type3D );
         }
 
@@ -533,11 +539,17 @@ namespace Ogre
         mAlbedoVox->setPixelFormat( PFG_RGBA8_UNORM );
         mEmissiveVox->setPixelFormat( PFG_RGBA8_UNORM );
         mNormalVox->setPixelFormat( PFG_R10G10B10A2_UNORM );
-        mAccumValVox->setPixelFormat( PFG_R16_UINT );
+        if( hasTypedUavs )
+            mAccumValVox->setPixelFormat( PFG_R16_UINT );
+        else
+            mAccumValVox->setPixelFormat( PFG_R32_UINT );
 
         for( size_t i=0; i<sizeof(textures) / sizeof(textures[0]); ++i )
         {
-            textures[i]->setResolution( mWidth, mHeight, mDepth );
+            if( textures[i] != mAccumValVox || hasTypedUavs )
+                textures[i]->setResolution( mWidth, mHeight, mDepth );
+            else
+                textures[i]->setResolution( mWidth >> 1u, mHeight, mDepth );
             textures[i]->setNumMipmaps( 1u );
             textures[i]->scheduleTransitionTo( GpuResidency::Resident );
         }
@@ -803,6 +815,8 @@ namespace Ogre
 
         fillInstanceBuffers();
 
+        const bool hasTypedUavs = mRenderSystem->getCapabilities()->hasCapability( RSC_TYPED_UAV_LOADS );
+
         for( size_t i=0; i<sizeof(mComputeJobs) / sizeof(mComputeJobs[0]); ++i )
         {
             const bool compressedVf = (i & VoxelizerJobSetting::CompressedVertexFormat) != 0;
@@ -818,15 +832,24 @@ namespace Ogre
             uavSlot.access = ResourceAccess::ReadWrite;
 
             uavSlot.texture     = mAlbedoVox;
-            uavSlot.pixelFormat = mAlbedoVox->getPixelFormat();
+            if( hasTypedUavs )
+                uavSlot.pixelFormat = mAlbedoVox->getPixelFormat();
+            else
+                uavSlot.pixelFormat = PFG_R32_UINT;
             mComputeJobs[i]->_setUavTexture( 2, uavSlot );
 
             uavSlot.texture     = mNormalVox;
-            uavSlot.pixelFormat = mNormalVox->getPixelFormat();
+            if( hasTypedUavs )
+                uavSlot.pixelFormat = mNormalVox->getPixelFormat();
+            else
+                uavSlot.pixelFormat = PFG_R32_UINT;
             mComputeJobs[i]->_setUavTexture( 3, uavSlot );
 
             uavSlot.texture     = mEmissiveVox;
-            uavSlot.pixelFormat = mEmissiveVox->getPixelFormat();
+            if( hasTypedUavs )
+                uavSlot.pixelFormat = mEmissiveVox->getPixelFormat();
+            else
+                uavSlot.pixelFormat = PFG_R32_UINT;
             mComputeJobs[i]->_setUavTexture( 4, uavSlot );
 
             uavSlot.texture     = mAccumValVox;

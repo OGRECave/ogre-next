@@ -149,9 +149,13 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void HlmsComputeJob::setTextureProperties( const TextureGpu *texture, LwString &propName,
+    void HlmsComputeJob::setTextureProperties( const TextureGpu *texture, PixelFormatGpu pixelFormat,
+                                               LwString &propName,
                                                const PixelFormatToShaderType *toShaderType )
     {
+        if( pixelFormat == PFG_UNKNOWN )
+            pixelFormat = texture->getPixelFormat();
+
         const size_t texturePropSize = propName.size();
 
         propName.a( "_width" );                 //texture0_width
@@ -184,26 +188,26 @@ namespace Ogre
         propName.resize( texturePropSize );
 
         propName.a( "_pf_type" );               //uav0_pf_type
-        const char *typeName = toShaderType->getPixelFormatType( texture->getPixelFormat() );
+        const char *typeName = toShaderType->getPixelFormatType( pixelFormat );
         if( typeName )
             setPiece( propName.c_str(), typeName );
         propName.resize( texturePropSize );
 
         propName.a( "_data_type" );             //uav0_data_type
-        const char *dataType = toShaderType->getDataType( texture->getPixelFormat(),
+        const char *dataType = toShaderType->getDataType( pixelFormat,
                                                           texture->getTextureType(),
                                                           texture->getMsaa() > 1u );
         if( typeName )
             setPiece( propName.c_str(), dataType );
         propName.resize( texturePropSize );
 
-        if( PixelFormatGpuUtils::isInteger( texture->getPixelFormat() ) )
+        if( PixelFormatGpuUtils::isInteger( pixelFormat ) )
         {
             propName.a( "_is_integer" );        //uav0_is_integer
             setProperty( propName.c_str(), 1 );
             propName.resize( texturePropSize );
         }
-        if( PixelFormatGpuUtils::isSigned( texture->getPixelFormat() ) )
+        if( PixelFormatGpuUtils::isSigned( pixelFormat ) )
         {
             propName.a( "_is_signed" );         //uav0_is_signed
             setProperty( propName.c_str(), 1 );
@@ -350,7 +354,9 @@ namespace Ogre
 
                         if( itor->isTexture() )
                         {
-                            setTextureProperties( itor->getTexture().texture, propName, toShaderType );
+                            setTextureProperties( itor->getTexture().texture,
+                                                  itor->getTexture().pixelFormat,
+                                                  propName, toShaderType );
                         }
                         else if( itor->isBuffer() )
                         {
@@ -392,7 +398,8 @@ namespace Ogre
                     if( itor->isTexture() && itor->getTexture().texture )
                     {
                         const DescriptorSetUav::TextureSlot &texSlot = itor->getTexture();
-                        setTextureProperties( texSlot.texture, propName, toShaderType );
+                        setTextureProperties( texSlot.texture, texSlot.pixelFormat,
+                                              propName, toShaderType );
 
                         const TextureGpu *texture = texSlot.texture;
 

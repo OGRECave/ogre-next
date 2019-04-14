@@ -399,6 +399,7 @@ namespace Ogre {
                          mGLSupport->checkExtension("GL_ARB_shader_storage_buffer_object")) )
         {
             rsc->setCapability(RSC_UAV);
+            rsc->setCapability(RSC_TYPED_UAV_LOADS);
         }
 
         rsc->setCapability(RSC_FBO);
@@ -2756,6 +2757,8 @@ namespace Ogre {
     void GL3PlusRenderSystem::_dispatch( const HlmsComputePso &pso )
     {
         glDispatchCompute( pso.mNumThreadGroups[0], pso.mNumThreadGroups[1], pso.mNumThreadGroups[2] );
+        //RenderDoc is impossible with GL_CLIENT_MAPPED_BUFFER_BARRIER_BIT
+        glMemoryBarrier( GL_ALL_BARRIER_BITS & ~GL_CLIENT_MAPPED_BUFFER_BARRIER_BIT );
     }
 
     void GL3PlusRenderSystem::_setVertexArrayObject( const VertexArrayObject *_vao )

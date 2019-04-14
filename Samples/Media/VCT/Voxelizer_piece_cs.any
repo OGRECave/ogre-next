@@ -25,6 +25,8 @@
 @end
 
 @piece( HeaderCS )
+	@insertpiece( Common_Matrix_DeclLoadOgreFloat4x3 )
+
 	struct Material
 	{
 		float4 bgDiffuse;
@@ -86,9 +88,7 @@
 	Instance getInstance( uint instanceIdx )
 	{
 		Instance retVal;
-		retVal.worldTransform[0] = bufferFetch( instanceBuffer, int( instanceIdx * 6u + 0u ) );
-		retVal.worldTransform[1] = bufferFetch( instanceBuffer, int( instanceIdx * 6u + 1u ) );
-		retVal.worldTransform[2] = bufferFetch( instanceBuffer, int( instanceIdx * 6u + 2u ) );
+		retVal.worldTransform = loadOgreFloat4x3( instanceBuffer, instanceIdx * 6u );
 
 		float4 aabb0 = bufferFetch( instanceBuffer, int( instanceIdx * 6u + 3u ) );
 		float4 aabb1 = bufferFetch( instanceBuffer, int( instanceIdx * 6u + 4u ) );
@@ -427,10 +427,21 @@
 
 	wshort3 voxelCelUvw = wshort3( gl_GlobalInvocationID.xyz );
 
-	float4 origAlbedo	= OGRE_imageLoad3D( voxelAlbedoTex, voxelCelUvw );
-	float3 origNormal	= OGRE_imageLoad3D( voxelNormalTex, voxelCelUvw ).xyz * 2.0f - 1.0f;
-	float4 origEmissive = OGRE_imageLoad3D( voxelEmissiveTex, voxelCelUvw );
-	float origAccumTris = OGRE_imageLoad3D( voxelAccumVal, voxelCelUvw ).x;
+	@property( syntax != hlsl )
+		float4 origAlbedo	= OGRE_imageLoad3D( voxelAlbedoTex, voxelCelUvw );
+		float3 origNormal	= OGRE_imageLoad3D( voxelNormalTex, voxelCelUvw ).xyz * 2.0f - 1.0f;
+		float4 origEmissive = OGRE_imageLoad3D( voxelEmissiveTex, voxelCelUvw );
+		float origAccumTris = OGRE_imageLoad3D( voxelAccumVal, voxelCelUvw ).x;
+	@else
+		float4 origAlbedo	= unpackUnorm4x8( OGRE_imageLoad3D( voxelAlbedoTex, voxelCelUvw ) );
+		float3 origNormal	= unpackUnormRGB10A2( OGRE_imageLoad3D( voxelNormalTex,
+																	voxelCelUvw ) ).xyz * 2.0f - 1.0f;
+		float4 origEmissive = unpackUnorm4x8( OGRE_imageLoad3D( voxelEmissiveTex, voxelCelUvw ) );
+		uint origAccumTrisVal = OGRE_imageLoad3D( voxelAccumVal,
+												  wshort3( voxelCelUvw.x >> 1u, voxelCelUvw.yz ) ).x;
+		float origAccumTris = (gl_LocalInvocationIndex & 0x1u) ? (origAccumTrisVal >> 16u) :
+																 (origAccumTrisVal & 0xFFFFu);
+	@end
 
 	if( accumTris + origAccumTris > 0 )
 	{
@@ -442,10 +453,33 @@
 		voxelEmissive.a = max( voxelEmissive.a, origEmissive.a );
 		voxelNormal		= voxelNormal * 0.5 + 0.5f;
 
-		OGRE_imageWrite3D4( voxelAlbedoTex, voxelCelUvw, voxelAlbedo );
-		OGRE_imageWrite3D4( voxelNormalTex, voxelCelUvw, float4( voxelNormal, 1.0f ) );
-		OGRE_imageWrite3D4( voxelEmissiveTex, voxelCelUvw, voxelEmissive );
-		OGRE_imageWrite3D1( voxelAccumVal, voxelCelUvw,
-							uint4( accumTris + origAccumTris, 0, 0, 0 ) );
+		@property( syntax != hlsl )
+			OGRE_imageWrite3D4( voxelAlbedoTex, voxelCelUvw, voxelAlbedo );
+			OGRE_imageWrite3D4( voxelNormalTex, voxelCelUvw, float4( voxelNormal, 1.0f ) );
+			OGRE_imageWrite3D4( voxelEmissiveTex, voxelCelUvw, voxelEmissive );
+			OGRE_imageWrite3D1( voxelAccumVal, voxelCelUvw,
+								uint4( accumTris + origAccumTris, 0, 0, 0 ) );
+		@else
+			OGRE_imageWrite3D4( voxelAlbedoTex, voxelCelUvw, packUnorm4x8( voxelAlbedo ) );
+			OGRE_imageWrite3D4( voxelNormalTex, voxelCelUvw, packUnormRGB10A2( float4( voxelNormal,
+																					   1.0f ) ) );
+			OGRE_imageWrite3D4( voxelEmissiveTex, voxelCelUvw, packUnorm4x8( voxelEmissive ) );
+		@end
 	}
+
+	@property( syntax == hlsl )
+		if( gl_LocalInvocationIndex & 0x1u )
+			g_voxelAccumValue[gl_LocalInvocationIndex >> 1u] = 0;
+		GroupMemoryBarrier();
+
+		origAccumTrisVal = uint( accumTris + origAccumTris );
+		origAccumTrisVal = (gl_LocalInvocationIndex & 0x1u) ? (origAccumTrisVal << 16u) :
+															  origAccumTrisVal;
+		InterlockedOr( g_voxelAccumValue[gl_LocalInvocationIndex >> 1u], origAccumTrisVal );
+		if( gl_LocalInvocationIndex & 0x1u )
+		{
+			OGRE_imageWrite3D1( voxelAccumVal, wshort3( voxelCelUvw.x >> 1u, voxelCelUvw.yz ),
+								uint4( g_voxelAccumValue[gl_LocalInvocationIndex >> 1u], 0, 0, 0 ) );
+		}
+	@end
 @end

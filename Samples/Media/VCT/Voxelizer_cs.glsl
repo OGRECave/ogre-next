@@ -30,6 +30,8 @@
 #define uint3 uvec3
 #define uint4 uvec4
 
+#define wshort3 int3
+
 #define ogre_float4x3 mat3x4
 
 #define mul( x, y ) ((x) * (y))
@@ -42,7 +44,7 @@
 
 #define CONST_BUFFER( bufferName, bindingPoint ) layout( std140, binding = bindingPoint) uniform bufferName
 
-#define OGRE_imageLoad3D( inImage, iuv ) imageLoad.Load( int3( iuv ) )
+#define OGRE_imageLoad3D( inImage, iuv ) imageLoad( inImage, int3( iuv ) )
 #define OGRE_imageWrite3D1( outImage, iuv, value ) imageStore( outImage, int3( iuv ), value )
 #define OGRE_imageWrite3D4( outImage, iuv, value ) imageStore( outImage, int3( iuv ), value )
 

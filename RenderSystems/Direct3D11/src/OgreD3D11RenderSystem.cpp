@@ -2259,9 +2259,16 @@ namespace Ogre
 
             for( size_t j=0; j<numSamplersUsed; ++j )
             {
-                ID3D11SamplerState *samplerState =
-                        reinterpret_cast<ID3D11SamplerState*>( (*itor)->mRsData );
-                samplers[j] = samplerState;
+                if( *itor )
+                {
+                    ID3D11SamplerState *samplerState =
+                            reinterpret_cast<ID3D11SamplerState*>( (*itor)->mRsData );
+                    samplers[j] = samplerState;
+                }
+                else
+                {
+                    samplers[j] = 0;
+                }
                 ++itor;
             }
 
@@ -2345,9 +2352,16 @@ namespace Ogre
 
             for( size_t j=0; j<numSamplersUsed; ++j )
             {
-                ID3D11SamplerState *samplerState =
-                        reinterpret_cast<ID3D11SamplerState*>( (*itor)->mRsData );
-                samplers[j] = samplerState;
+                if( *itor )
+                {
+                    ID3D11SamplerState *samplerState =
+                            reinterpret_cast<ID3D11SamplerState*>( (*itor)->mRsData );
+                    samplers[j] = samplerState;
+                }
+                else
+                {
+                    samplers[j] = 0;
+                }
                 ++itor;
             }
 
@@ -2969,8 +2983,15 @@ namespace Ogre
             const size_t numTexturesUsed = newSet->mShaderTypeTexCount[i];
             for( size_t j=0u; j<numTexturesUsed; ++j )
             {
-                const D3D11TextureGpu *texture = static_cast<const D3D11TextureGpu*>( *itor );
-                srvList[texIdx] = texture->createSrv();
+                if( *itor )
+                {
+                    const D3D11TextureGpu *texture = static_cast<const D3D11TextureGpu*>( *itor );
+                    srvList[texIdx] = texture->createSrv();
+                }
+                else
+                {
+                    srvList[texIdx] = 0;
+                }
 
                 ++texIdx;
                 ++itor;
@@ -2984,7 +3005,10 @@ namespace Ogre
         ID3D11ShaderResourceView **srvList =
                 reinterpret_cast<ID3D11ShaderResourceView**>( set->mRsData );
         for( size_t i=0; i<numElements; ++i )
-            srvList[i]->Release();
+        {
+            if( srvList[i] )
+                srvList[i]->Release();
+        }
 
         delete [] srvList;
         set->mRsData = 0;
