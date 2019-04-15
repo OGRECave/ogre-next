@@ -278,16 +278,15 @@ namespace Ogre
 
         const size_t maxPixelsPerLine = std::min( mMatrixTexture->getWidth(), static_cast<uint32>(mMaxFloatsPerLine >> 2) );
 
-        Vector2 *thisVec = static_cast<Vector2*>(
+        float *thisVec = static_cast<float*>(
                                 mInstanceVertexBuffer->lock( HardwareBuffer::HBL_DISCARD ) );
 
         //Calculate UV offsets, which change per instance
         for( size_t i=0; i<mInstancesPerBatch; ++i )
         {
             size_t instanceIdx = i * mMatricesPerInstance * mRowLength;
-            thisVec->x = (instanceIdx % maxPixelsPerLine) / texWidth - (float)(texelOffsets.x);
-            thisVec->y = (instanceIdx / maxPixelsPerLine) / texHeight - (float)(texelOffsets.x);
-            ++thisVec;
+            *thisVec++ = (instanceIdx % maxPixelsPerLine) / texWidth - (float)(texelOffsets.x);
+            *thisVec++ = (instanceIdx / maxPixelsPerLine) / texHeight - (float)(texelOffsets.x);
         }
 
         mInstanceVertexBuffer->unlock();
