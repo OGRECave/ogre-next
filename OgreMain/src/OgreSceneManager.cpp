@@ -5460,6 +5460,9 @@ unsigned long SceneManager::_updateWorkerThread( ThreadHandle *threadHandle )
         case CULL_FRUSTUM:
             cullFrustum( mCurrentCullFrustumRequest, threadIdx );
             break;
+        case CULL_FRUSTUM_INSTANCEDENTS:
+            instanceBatchCullFrustumThread(mInstanceBatchCullRequest, threadIdx);
+            break;
         case UPDATE_ALL_ANIMATIONS:
             updateAllAnimationsThread( threadIdx );
             break;
