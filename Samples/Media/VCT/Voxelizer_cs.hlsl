@@ -25,7 +25,9 @@
 	#define anyInvocationARB( value ) AmdDxExtShaderIntrinsics_BallotAny( value )
 @end
 
+@property( !typed_uav_load )
 	groupshared uint g_voxelAccumValue[32];
+@end
 @property( !vendor_shader_extension )
 	groupshared bool g_emulatedGroupVote[64];
 
@@ -81,8 +83,8 @@ uint packUnormRGB10A2( float4 v )
 
 @insertpiece( PreBindingsHeaderCS )
 
-StructuredBuffer<Vertex> vertexBuffer	: register(u0);
-StructuredBuffer<uint> indexBuffer		: register(u1);
+RWStructuredBuffer<Vertex> vertexBuffer	: register(u0);
+RWStructuredBuffer<uint> indexBuffer	: register(u1);
 
 RWTexture3D<@insertpiece(uav2_pf_type)> voxelAlbedoTex		: register(u2);
 RWTexture3D<@insertpiece(uav3_pf_type)> voxelNormalTex		: register(u3);

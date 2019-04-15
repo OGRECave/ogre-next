@@ -303,6 +303,10 @@ namespace Ogre
         setProperty( ComputeProperty::NumThreadGroupsY, mNumThreadGroups[1] );
         setProperty( ComputeProperty::NumThreadGroupsZ, mNumThreadGroups[2] );
 
+        RenderSystem *renderSystem = mCreator->getRenderSystem();
+        const bool typedUavs = renderSystem->getCapabilities()->hasCapability( RSC_TYPED_UAV_LOADS );
+        setProperty( ComputeProperty::TypedUavLoad, typedUavs ? 1 : 0 );
+
         removeProperty( ComputeProperty::NumTextureSlots );
         removeProperty( ComputeProperty::MaxTextureSlot );
         removeProperty( ComputeProperty::NumUavSlots );
@@ -322,7 +326,6 @@ namespace Ogre
             for( size_t i=0; i<sizeof(c_textureTypesProps) / sizeof(c_textureTypesProps[0]); ++i )
                 setProperty( c_textureTypesProps[i], c_textureTypesProps[i].mHash );
 
-            RenderSystem *renderSystem = mCreator->getRenderSystem();
             const PixelFormatToShaderType *toShaderType = renderSystem->getPixelFormatToShaderType();
 
             char tmpData[64];

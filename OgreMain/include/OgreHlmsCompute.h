@@ -199,6 +199,8 @@ namespace Ogre
         static const IdString NumThreadGroupsY;
         static const IdString NumThreadGroupsZ;
 
+        static const IdString TypedUavLoad;
+
         static const IdString NumTextureSlots;
         static const IdString MaxTextureSlot;
         static const char *Texture;

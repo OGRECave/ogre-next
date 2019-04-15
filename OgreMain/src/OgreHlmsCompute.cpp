@@ -62,6 +62,8 @@ namespace Ogre
     const IdString ComputeProperty::NumThreadGroupsY    = IdString( "num_thread_groups_y" );
     const IdString ComputeProperty::NumThreadGroupsZ    = IdString( "num_thread_groups_z" );
 
+    const IdString ComputeProperty::TypedUavLoad        = IdString( "typed_uav_load" );
+
     const IdString ComputeProperty::NumTextureSlots     = IdString( "num_texture_slots" );
     const IdString ComputeProperty::MaxTextureSlot      = IdString( "max_texture_slot" );
     const char *ComputeProperty::Texture                = "texture";

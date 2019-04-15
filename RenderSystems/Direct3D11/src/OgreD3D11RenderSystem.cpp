@@ -72,6 +72,10 @@ THE SOFTWARE.
 
 #include "OgreProfiler.h"
 
+#ifdef _WIN32_WINNT_WIN10
+    #include <d3d11_3.h>
+#endif
+
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
 #include "OgreD3D11StereoDriverBridge.h"
 #endif
@@ -1210,6 +1214,18 @@ namespace Ogre
 
         rsc->setCapability(RSC_HW_GAMMA);
         rsc->setCapability(RSC_TEXTURE_SIGNED_INT);
+
+#ifdef _WIN32_WINNT_WIN10
+        //Check if D3D11.3 is installed. If so, typed UAV loads are supported
+        ID3D11Device3 *d3dDeviceVersion113 = 0;
+        HRESULT hr = mDevice->QueryInterface( __uuidof(ID3D11Device3),
+                                              reinterpret_cast<void**>( &d3dDeviceVersion113 ) );
+        if( SUCCEEDED( hr ) && d3dDeviceVersion113 )
+        {
+            rsc->setCapability(RSC_TYPED_UAV_LOADS);
+            d3dDeviceVersion113->Release();
+        }
+#endif
 
         rsc->setCapability(RSC_VBO);
         UINT formatSupport;

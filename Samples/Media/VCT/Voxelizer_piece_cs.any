@@ -427,7 +427,7 @@
 
 	wshort3 voxelCelUvw = wshort3( gl_GlobalInvocationID.xyz );
 
-	@property( syntax != hlsl )
+	@property( syntax != hlsl || typed_uav_load )
 		float4 origAlbedo	= OGRE_imageLoad3D( voxelAlbedoTex, voxelCelUvw );
 		float3 origNormal	= OGRE_imageLoad3D( voxelNormalTex, voxelCelUvw ).xyz * 2.0f - 1.0f;
 		float4 origEmissive = OGRE_imageLoad3D( voxelEmissiveTex, voxelCelUvw );
@@ -453,7 +453,7 @@
 		voxelEmissive.a = max( voxelEmissive.a, origEmissive.a );
 		voxelNormal		= voxelNormal * 0.5 + 0.5f;
 
-		@property( syntax != hlsl )
+		@property( syntax != hlsl || typed_uav_load )
 			OGRE_imageWrite3D4( voxelAlbedoTex, voxelCelUvw, voxelAlbedo );
 			OGRE_imageWrite3D4( voxelNormalTex, voxelCelUvw, float4( voxelNormal, 1.0f ) );
 			OGRE_imageWrite3D4( voxelEmissiveTex, voxelCelUvw, voxelEmissive );
@@ -467,7 +467,7 @@
 		@end
 	}
 
-	@property( syntax == hlsl )
+	@property( syntax == hlsl && !typed_uav_load )
 		if( gl_LocalInvocationIndex & 0x1u )
 			g_voxelAccumValue[gl_LocalInvocationIndex >> 1u] = 0;
 		GroupMemoryBarrier();
