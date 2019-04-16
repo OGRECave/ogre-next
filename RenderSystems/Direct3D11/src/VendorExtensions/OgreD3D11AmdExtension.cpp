@@ -243,6 +243,7 @@ namespace Ogre
             mReturnedParams.push_back( returnedParams );
 
             *outDevice = returnedParams.pDevice;
+            *outFeatureLevel = returnedParams.FeatureLevel;
 
             char tmpBuffer[256];
             LwString infoText( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
