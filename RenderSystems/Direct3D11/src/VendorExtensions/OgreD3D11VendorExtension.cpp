@@ -40,6 +40,10 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
+    D3D11VendorExtension::~D3D11VendorExtension()
+    {
+    }
+    //-------------------------------------------------------------------------
     D3D11VendorExtension* D3D11VendorExtension::initializeExtension( GPUVendor preferredVendor,
                                                                      IDXGIAdapter *adapter )
     {

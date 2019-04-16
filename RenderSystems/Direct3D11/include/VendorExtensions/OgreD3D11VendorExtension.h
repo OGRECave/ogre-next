@@ -35,7 +35,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    struct _OgreD3D11Export D3D11VendorExtension
+    class _OgreD3D11Export D3D11VendorExtension
     {
     protected:
         virtual HRESULT createDeviceImpl( const String &appName,

@@ -158,6 +158,9 @@ namespace Ogre
         else
             logManager.logMessage( "AMD AGS extensions: Not recommended" );
 
+        LogManager::getSingleton().logMessage( "Deinitializing AMD AGS extensions" );
+        agsDeInit( agsContext );
+
         return recommended;
     }
     //-------------------------------------------------------------------------

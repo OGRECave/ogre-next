@@ -39,7 +39,7 @@ THE SOFTWARE.
 namespace Ogre
 {
 #if !OGRE_NO_AMD_AGS
-    struct _OgreD3D11Export D3D11AmdExtension : public D3D11VendorExtension
+    class _OgreD3D11Export D3D11AmdExtension : public D3D11VendorExtension
     {
     protected:
         AGSContext  *mAgsContext;
