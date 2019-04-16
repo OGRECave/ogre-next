@@ -47,6 +47,8 @@ THE SOFTWARE.
 #include "OgreD3D11RenderPassDescriptor.h"
 #include "OgrePixelFormatGpuUtils.h"
 
+#include "VendorExtensions/OgreD3D11VendorExtension.h"
+
 #include "OgreD3D11HardwareOcclusionQuery.h"
 #include "OgreFrustum.h"
 #include "OgreD3D11MultiRenderTarget.h"
@@ -98,6 +100,7 @@ namespace Ogre
     //---------------------------------------------------------------------
     D3D11RenderSystem::D3D11RenderSystem()
         : mDevice(),
+          mVendorExtension( 0 ),
           mBoundIndirectBuffer( 0 ),
           mSwIndirectBufferPtr( 0 ),
           mPso( 0 ),
@@ -172,7 +175,10 @@ namespace Ogre
         return mDriverList;
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::createD3D11Device( D3D11Driver* d3dDriver, OGRE_D3D11_DRIVER_TYPE ogreDriverType,
+    void D3D11RenderSystem::createD3D11Device( D3D11VendorExtension *vendorExtension,
+                                               const String &appName,
+                                               D3D11Driver* d3dDriver,
+                                               OGRE_D3D11_DRIVER_TYPE ogreDriverType,
                                                D3D_FEATURE_LEVEL minFL, D3D_FEATURE_LEVEL maxFL,
                                                D3D_FEATURE_LEVEL* pFeatureLevel,
                                                ID3D11DeviceN **outDevice, ID3D11Device1 **outDevice1 )
@@ -245,66 +251,9 @@ namespace Ogre
                          "D3D11RenderSystem::initialise" );
 		}
 
-		// create device
-        ID3D11Device *device = NULL;
-        HRESULT hr = D3D11CreateDevice( pAdapter, driverType, NULL, deviceFlags, pFirstFL,
-                                        pLastFL - pFirstFL + 1u, D3D11_SDK_VERSION,
-                                        &device, pFeatureLevel, NULL );
-
-#if defined( _WIN32_WINNT_WIN8 )
-        if ( hr == E_INVALIDARG && *pFirstFL == D3D_FEATURE_LEVEL_11_1 )
-        {
-            StringStream error;
-            error << "Failed to create Direct3D 11.1 device(" << hr <<
-                     ")\nRetrying asking for 11.0 device";
-            Ogre::LogManager::getSingleton().logMessage( error.str() );
-
-            pFirstFL= pFirstFL + 1u;
-            pLastFL = pLastFL - 1u;
-            if( pFirstFL > pLastFL )
-            {
-                OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
-                             "Direct3D 11.1 not supported. If you're on Windows Vista or Windows 7, "
-                             "try installing the KB2670838 update",
-                             "D3D11RenderSystem::initialise" );
-            }
-
-            // DirectX 11.0 platforms will not recognize D3D_FEATURE_LEVEL_11_1
-            // so we need to retry without it
-            hr = D3D11CreateDevice( pAdapter, driverType, NULL, deviceFlags, pFirstFL,
-                                    pLastFL - pFirstFL + 1u, D3D11_SDK_VERSION,
-                                    &device, pFeatureLevel, NULL );
-        }
-#endif
-
-        if( FAILED(hr) && 0 != (deviceFlags & D3D11_CREATE_DEVICE_DEBUG) )
-		{
-			StringStream error;
-            error << "Failed to create Direct3D11 device with debug layer (" << hr <<
-                     ")\nRetrying without debug layer.";
-            Ogre::LogManager::getSingleton().logMessage( error.str() );
-
-			// create device - second attempt, without debug layer
-			deviceFlags &= ~D3D11_CREATE_DEVICE_DEBUG;
-            hr = D3D11CreateDevice( pAdapter, driverType, NULL, deviceFlags, pFirstFL,
-                                    pLastFL - pFirstFL + 1u, D3D11_SDK_VERSION,
-                                    &device, pFeatureLevel, NULL );
-		}
-
-        if( FAILED(hr) )
-		{
-            OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
-                            "Failed to create Direct3D11 device",
-                            "D3D11RenderSystem::D3D11RenderSystem" );
-		}
-
-        *outDevice = device;
-        *outDevice1 = 0;
-
-#if defined(_WIN32_WINNT_WIN8)
-        hr = device->QueryInterface( __uuidof(ID3D11Device1),
-                                     reinterpret_cast<void**>(outDevice1) );
-#endif
+        vendorExtension->createDevice( appName, pAdapter, driverType, deviceFlags, pFirstFL,
+                                       static_cast<UINT>( pLastFL - pFirstFL + 1u ),
+                                       pFeatureLevel, outDevice, outDevice1 );
 	}
     //---------------------------------------------------------------------
     void D3D11RenderSystem::initConfigOptions()
@@ -326,6 +275,7 @@ namespace Ogre
         ConfigOption optMaxFeatureLevels;
         ConfigOption optExceptionsErrorLevel;
         ConfigOption optDriverType;
+        ConfigOption optVendorExt;
         ConfigOption optFastShaderBuildHack;
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
 		ConfigOption optStereoMode;
@@ -481,6 +431,14 @@ namespace Ogre
         optDriverType.currentValue = "Hardware";
         optDriverType.immutable = false;
 
+        optVendorExt.name = "Vendor Extensions";
+        optVendorExt.possibleValues.push_back("Auto");
+        optVendorExt.possibleValues.push_back("NVIDIA");
+        optVendorExt.possibleValues.push_back("AMD");
+        optVendorExt.possibleValues.push_back("Disabled");
+        optVendorExt.currentValue = "Auto";
+        optVendorExt.immutable = false;
+
         //This option improves shader compilation times by massive amounts
         //(requires Hlms to be aware of it), making shader compile times comparable
         //to GL (which is measured in milliseconds per shader, instead of seconds).
@@ -523,6 +481,7 @@ namespace Ogre
         mOptions[optMaxFeatureLevels.name] = optMaxFeatureLevels;
         mOptions[optExceptionsErrorLevel.name] = optExceptionsErrorLevel;
         mOptions[optDriverType.name] = optDriverType;
+        mOptions[optVendorExt.name] = optVendorExt;
         mOptions[optFastShaderBuildHack.name] = optFastShaderBuildHack;
 
 		mOptions[optBackBufferCount.name] = optBackBufferCount;
@@ -687,7 +646,7 @@ namespace Ogre
             it = mOptions.find("Video Mode");
             ID3D11DeviceN *device = 0;
             ID3D11Device1 *device1 = 0;
-            createD3D11Device( driver, mDriverType,
+            createD3D11Device( mVendorExtension, "", driver, mDriverType,
                                mMinRequestedFeatureLevel, mMaxRequestedFeatureLevel,
                                NULL, &device, &device1 );
             D3D11VideoMode* videoMode = driver->getVideoModeList()->item(it->second.currentValue); // Could be NULL if working over RDP/Simulator
@@ -872,9 +831,29 @@ namespace Ogre
             if(D3D11Driver* d3dDriverOverride = (mDriverType == DT_HARDWARE && mUseNVPerfHUD) ? getDirect3DDrivers()->item("NVIDIA PerfHUD") : NULL)
                 d3dDriver = d3dDriverOverride;
 
+            GPUVendor vendorExtensionPreference = GPU_VENDOR_COUNT;
+            opt = mOptions.find( "Vendor Extensions" );
+            if( opt != mOptions.end() )
+            {
+                if( opt->second.currentValue == "Auto" )
+                    vendorExtensionPreference = GPU_UNKNOWN;
+                else if( opt->second.currentValue == "NVIDIA" )
+                    vendorExtensionPreference = GPU_NVIDIA;
+                else if( opt->second.currentValue == "AMD" )
+                    vendorExtensionPreference = GPU_AMD;
+                else
+                    vendorExtensionPreference = GPU_VENDOR_COUNT; //Disabled
+            }
+
+            delete mVendorExtension;
+            IDXGIAdapterN* pAdapter = (d3dDriver && mDriverType == DT_HARDWARE) ?
+                                          d3dDriver->getDeviceAdapter() : NULL;
+            mVendorExtension = D3D11VendorExtension::initializeExtension( vendorExtensionPreference,
+                                                                          pAdapter );
+
             ID3D11DeviceN *device = 0;
             ID3D11Device1 *device1 = 0;
-            createD3D11Device( d3dDriver, mDriverType,
+            createD3D11Device( mVendorExtension, windowTitle, d3dDriver, mDriverType,
                                mMinRequestedFeatureLevel, mMaxRequestedFeatureLevel,
                                &mFeatureLevel, &device, &device1 );
 
@@ -4531,9 +4510,11 @@ namespace Ogre
         ZeroMemory(mTexStageDesc, OGRE_MAX_TEXTURE_LAYERS * sizeof(sD3DTextureStageDesc));
         mReadBackAsTexture = false;
 
+        mVendorExtension = D3D11VendorExtension::initializeExtension( GPU_VENDOR_COUNT, 0 );
+
         ID3D11DeviceN *device = 0;
         ID3D11Device1 *device1 = 0;
-        createD3D11Device( NULL, DT_HARDWARE,
+        createD3D11Device( mVendorExtension, "", NULL, DT_HARDWARE,
                            mMinRequestedFeatureLevel, mMaxRequestedFeatureLevel, 0,
                            &device, &device1 );
         mDevice.TransferOwnership( device, device1 );

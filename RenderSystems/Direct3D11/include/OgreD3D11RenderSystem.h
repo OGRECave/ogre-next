@@ -67,6 +67,8 @@ namespace Ogre
 
         /// Direct3D rendering device
         D3D11Device     mDevice;
+
+        D3D11VendorExtension *mVendorExtension;
         
         // Stored options
         ConfigOptionMap mOptions;
@@ -79,7 +81,9 @@ namespace Ogre
         bool mUseNVPerfHUD;
 		int mSwitchingFullscreenCounter;	// Are we switching from windowed to fullscreen 
 
-        static void createD3D11Device( D3D11Driver* d3dDriver, OGRE_D3D11_DRIVER_TYPE driverType,
+        static void createD3D11Device( D3D11VendorExtension *vendorExtension,
+                                       const String &appName,
+                                       D3D11Driver* d3dDriver, OGRE_D3D11_DRIVER_TYPE driverType,
                                        D3D_FEATURE_LEVEL minFL, D3D_FEATURE_LEVEL maxFL,
                                        D3D_FEATURE_LEVEL* pFeatureLevel,
                                        ID3D11DeviceN **outDevice, ID3D11Device1 **outDevice1 );
