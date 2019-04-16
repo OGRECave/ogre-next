@@ -229,6 +229,18 @@
 		float3 v1 = tri.v[1] - aabb.center;
 		float3 v2 = tri.v[2] - aabb.center;
 
+		// Test x axis
+		if( max3( v0.x, v1.x, v2.x ) < -aabb.halfSize.x || min3( v0.x, v1.x, v2.x ) > aabb.halfSize.x )
+			return false;
+
+		// Test y axis
+		if( max3( v0.y, v1.y, v2.y ) < -aabb.halfSize.y || min3( v0.y, v1.y, v2.y ) > aabb.halfSize.y )
+			return false;
+
+		// Test z axis
+		if( max3( v0.z, v1.z, v2.z ) < -aabb.halfSize.z || min3( v0.z, v1.z, v2.z ) > aabb.halfSize.z )
+			return false;
+
 		// compute the edge vectors of the triangle
 		// get the lines between the points as vectors
 		float3 f0 = v1 - v0;
@@ -264,18 +276,6 @@
 		{
 			return false;
 		}
-
-		// Test x axis
-		if( max3( v0.x, v1.x, v2.x ) < -aabb.halfSize.x || min3( v0.x, v1.x, v2.x ) > aabb.halfSize.x )
-			return false;
-
-		// Test y axis
-		if( max3( v0.y, v1.y, v2.y ) < -aabb.halfSize.y || min3( v0.y, v1.y, v2.y ) > aabb.halfSize.y )
-			return false;
-
-		// Test z axis
-		if( max3( v0.z, v1.z, v2.z ) < -aabb.halfSize.z || min3( v0.z, v1.z, v2.z ) > aabb.halfSize.z )
-			return false;
 
 		// Test triangle normal
 		Plane pl;
@@ -357,8 +357,16 @@
 	{
 		Instance instance = getInstance( i );
 
-		//Broadphase culling
+		//Broadphase culling.
+	@property( syntax == hlsl && !vendor_shader_extension )
+		//Cull against groupVoxelAabb so that emulatedAnyInvocationARB can work (all lanes
+		//must be active for GroupMemoryBarrierWithGroupSync to work)
+		if( intersects( groupVoxelAabb, instance.bounds ) )
+	@else
+		//Cull against voxelAabb since that gives us finer granularity and
+		//native anyInvocationARB can filter out inactive lanes
 		if( intersects( voxelAabb, instance.bounds ) )
+	@end
 		{
 			Material material = materials[instance.materialIdx];
 

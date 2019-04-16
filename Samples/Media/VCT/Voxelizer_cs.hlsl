@@ -34,15 +34,24 @@
 	bool emulatedAnyInvocationARB( bool value, uint gl_LocalInvocationIndex )
 	{
 		g_emulatedGroupVote[gl_LocalInvocationIndex] = value;
+
+		for( uint i=0u; i<6u; ++i )
+		{
+			GroupMemoryBarrierWithGroupSync();
+			uint nextIdx = gl_LocalInvocationIndex + (1u << i);
+			uint mask = (1u << (i+1u)) - 1u;
+			if( !(gl_LocalInvocationIndex & mask) )
+			{
+				g_emulatedGroupVote[gl_LocalInvocationIndex] =
+					g_emulatedGroupVote[gl_LocalInvocationIndex] || g_emulatedGroupVote[nextIdx];
+			}
+		}
+
 		GroupMemoryBarrierWithGroupSync();
-		bool anyTrue = false;
-		for( int i=0; i<64; ++i )
-			anyTrue = anyTrue || g_emulatedGroupVote[i];
-		return anyTrue;
+		return g_emulatedGroupVote[0];
 	}
 
-	//#define anyInvocationARB( value ) emulatedAnyInvocationARB( value, gl_LocalInvocationIndex )
-	#define anyInvocationARB( value ) true
+	#define anyInvocationARB( value ) emulatedAnyInvocationARB( value, gl_LocalInvocationIndex )
 @end
 
 float4 unpackUnorm4x8( uint v )
