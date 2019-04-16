@@ -249,6 +249,8 @@ namespace Ogre
             infoText.a( "D3D11 AMD AGS device created. Extensions supported: ",
                         returnedParams.extensionsSupported );
             LogManager::getSingleton().logMessage( infoText.c_str() );
+
+            hr = S_OK;
         }
 
         return hr;
