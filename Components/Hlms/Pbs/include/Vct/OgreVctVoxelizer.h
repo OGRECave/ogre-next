@@ -237,6 +237,13 @@ namespace Ogre
         void dividideOctants( uint32 numOctantsX, uint32 numOctantsY, uint32 numOctantsZ );
 
         void build(void);
+
+        TextureGpu* getAlbedoVox(void)          { return mAlbedoVox; }
+        TextureGpu* getEmissiveVox(void)        { return mEmissiveVox; }
+        TextureGpu* getNormalVox(void)          { return mNormalVox; }
+
+        TextureGpuManager* getTextureGpuManager(void);
+        RenderSystem* getRenderSystem(void);
     };
 }
 

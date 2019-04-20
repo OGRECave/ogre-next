@@ -1,0 +1,98 @@
+
+//#include "SyntaxHighlightingMisc.h"
+
+
+
+struct Light
+{
+	//Pre-mul by PI? -No because we lose a ton of precision
+	//.w contains lightDistThreshold
+	float4 diffuse;
+	//For directional lights, pos.xyz contains -dir.xyz and pos.w = 0;
+	//For the rest of lights, pos.xyz contains pos.xyz and pos.w = 1;
+	float4 pos;
+	float4 uvwPos;
+//	float4 dir;
+};
+
+#define lightDistThreshold diffuse.w
+#define c_invPI 3.14159265359f
+
+//in uvec3 gl_NumWorkGroups;
+//in uvec3 gl_WorkGroupID;
+//in uvec3 gl_LocalInvocationID;
+//in uvec3 gl_GlobalInvocationID;
+//in uint  gl_LocalInvocationIndex;
+
+@piece( BodyCS )
+//	Aabb voxelAabb;
+//	voxelAabb.center	= p_voxelOrigin + p_voxelCellSize * (float3( gl_GlobalInvocationID.xyz ) + 0.5f);
+//	voxelAabb.halfSize	= p_voxelCellSize * 0.5f;
+
+//	float3 voxelUvwPos = ;
+
+	float4 albedoVal = OGRE_Load2D( voxelAlbedoTex, gl_GlobalInvocationID.xyz, 0 );
+	float3 normalVal = OGRE_Load2D( voxelNormalTex, gl_GlobalInvocationID.xyz, 0 ).xyz * 2.0f - 1.0f;
+	float4 emissiveVal = OGRE_Load2D( voxelEmissiveTex, gl_GlobalInvocationID.xyz, 0 );
+
+	normalVal = normalize( normalVal );
+
+	float3 blockColour = emissiveVal.xyz;
+
+	if( anyInvocationARB( albedoVal.a > 0 ) )
+	{
+		for( uint lightIdx=0u; lightIdx<p_numLights; ++lightIdx )
+		{
+			Light light = lights[lightIdx];
+
+			float3 lightDir = light.pos.xyz - voxelAabb.center * light.pos.w;
+			lightDir = normalize( lightDir );
+
+			float NdotL = dot( normalVal, lightDir );
+			if( emissiveVal.a > 0 )
+				NdotL = abs( NdotL );
+			else
+				NdotL = saturate( NdotL );
+
+			float alpha = albedoVal.w;
+			bool reachedDst = false;
+			float3 currUvwPos = voxelUvwPos + lightDir * p_rayMarchStepSize;
+
+			while( alpha > 0 && !reachedDst )
+			{
+				float4 albedoAtIt = OGRE_SampleLevel( voxelAlbedoTex, voxelAlbedoSampler,
+													  currUvwPos.xyz, 0 );
+				alpha *= (1.0f - albedoAtIt.w);
+
+				float3 oldCross = cross( light.uvwPos.xyz - currUvwPos );
+				currUvwPos += lightDir * p_rayMarchStepSize;
+				reachedDst = currUvwPos.x <= 0.0f ||
+							 currUvwPos.x >= 1.0f ||
+							 currUvwPos.y <= 0.0f ||
+							 currUvwPos.y >= 1.0f ||
+							 currUvwPos.z <= 0.0f ||
+							 currUvwPos.z >= 1.0f;
+
+				//For non-directional lights, check if we've reached the light emitter
+				if( light.uvwPos.w != 0 )
+				{
+					float3 posToLight = light.uvwPos.xyz - currUvwPos.xyz;
+					float sqDist = dot( posToLight.xyz, posToLight.xyz );
+					if( sqDist <= light.lightDistThreshold )
+						reachedDst = true;
+
+					//If p_rayMarchStepSize is too big, we may have gone through/past
+					//the emitter (and from now on we'd be stepping further away)
+					float3 newCross = cross( light.uvwPos.xyz - currUvwPos );
+					if( dot( oldCross, newCross ) <= 0 )
+						reachedDst = true;
+				}
+			}
+
+			blockColour += NdotL * light.diffuse.xyz * alpha;
+		}
+	}
+
+	wshort3 voxelCelUvw = wshort3( gl_GlobalInvocationID.xyz );
+	OGRE_imageWrite3D4( lightVoxel, voxelCelUvw, blockColour );
+@end

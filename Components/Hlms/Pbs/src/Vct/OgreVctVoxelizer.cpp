@@ -954,4 +954,14 @@ namespace Ogre
         //This texture is no longer needed, it's not used for the injection phase. Save memory.
         mAccumValVox->scheduleTransitionTo( GpuResidency::OnStorage );
     }
+    //-------------------------------------------------------------------------
+    TextureGpuManager* VctVoxelizer::getTextureGpuManager(void)
+    {
+        return mTextureGpuManager;
+    }
+    //-------------------------------------------------------------------------
+    RenderSystem* VctVoxelizer::getRenderSystem(void)
+    {
+        return mRenderSystem;
+    }
 }

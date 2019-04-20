@@ -33,6 +33,26 @@
                 "index_32bit" : 0,
                 "compressed_vertex_format" : 0
 			}
+        },
+
+        "VCT/LightInjection" :
+        {
+            "threads_per_group" : [4, 4, 4],
+
+            "source" : "LightInjection_cs",
+            "pieces" : ["CrossPlatformSettings_piece_all", "LightInjection_piece_cs.any"],
+            "inform_shader_of_texture_data_change" : true,
+
+            "uav_units" : 1,
+
+            "params_glsl" :
+            [
+                ["voxelAlbedoTex",          [0], "int"],
+                ["voxelNormalTex",          [1], "int"],
+                ["voxelEmissiveTex",        [2], "int"],
+
+                ["lightVoxel",              [0], "int"]
+            ],
         }
 	}
 }
