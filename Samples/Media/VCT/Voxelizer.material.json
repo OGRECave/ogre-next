@@ -43,7 +43,15 @@
             "pieces" : ["CrossPlatformSettings_piece_all", "LightInjection_piece_cs.any"],
             "inform_shader_of_texture_data_change" : true,
 
+            "thread_groups_based_on_uav" : 0,
+
             "uav_units" : 1,
+
+            "params" :
+            [
+                ["numLights",               [0],        "uint"],
+                ["rayMarchStepSize",        [1,1,1],    "float"]
+            ],
 
             "params_glsl" :
             [

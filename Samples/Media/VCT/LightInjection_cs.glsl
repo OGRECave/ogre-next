@@ -57,12 +57,14 @@ layout( local_size_x = @value( threads_per_group_x ),
 @insertpiece( HeaderCS )
 
 uniform uint numLights;
-uniform float3 voxelOrigin;
-uniform float3 voxelCellSize;
+uniform float3 rayMarchStepSize;
+//uniform float3 voxelOrigin;
+//uniform float3 voxelCellSize;
 
 #define p_numLights numLights
-#define p_voxelOrigin voxelOrigin
-#define p_voxelCellSize voxelCellSize
+#define p_rayMarchStepSize rayMarchStepSize
+//#define p_voxelOrigin voxelOrigin
+//#define p_voxelCellSize voxelCellSize
 
 //in uvec3 gl_NumWorkGroups;
 //in uvec3 gl_WorkGroupID;

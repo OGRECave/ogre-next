@@ -30,24 +30,52 @@ THE SOFTWARE.
 
 #include "OgreHlmsPbsPrerequisites.h"
 #include "OgreId.h"
+#include "OgreShaderParams.h"
 
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     class VctVoxelizer;
+    struct ShaderVctLight;
 
     class _OgreHlmsPbsExport VctLighting : public IdObject
     {
+    public:
+        static const uint16 msDistanceThresholdCustomParam;
     protected:
         TextureGpu      *mLightVoxel[6];
         VctVoxelizer    *mVoxelizer;
+
+        HlmsComputeJob      *mLightInjectionJob;
+        ConstBufferPacked   *mLightsConstBuffer;
+
+        float mDefaultLightDistThreshold;
+
+        ShaderParams::Param *mNumLights;
+        ShaderParams::Param *mRayMarchStepSize;
+        ShaderParams        *mShaderParams;
+
+        void addLight( ShaderVctLight * RESTRICT_ALIAS vctLight, Light *light,
+                       const Vector3 &voxelOrigin, const Vector3 &invVoxelSize );
 
     public:
         VctLighting( IdType id, VctVoxelizer *voxelizer );
         ~VctLighting();
 
-        void update( uint32 lightMask=0xffffffff );
+        /**
+        @param sceneManager
+        @param rayMarchStepScale
+            Scale for the ray march step size. A value < 1.0f makes little sense
+            and will trigger an assert.
+
+            Bigger values means the shadow raymarching during light injection
+            pass is faster, but may cause glitches if too high (areas that
+            are supposed to be shadowed won't be shadowed)
+        @param lightMask
+        */
+        void update( SceneManager *sceneManager, float rayMarchStepScale=1.0f,
+                     uint32 lightMask=0xffffffff );
     };
 }
 

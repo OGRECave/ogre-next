@@ -238,12 +238,17 @@ namespace Ogre
 
         void build(void);
 
+        Vector3 getVoxelOrigin(void) const;
+        Vector3 getVoxelCellSize(void) const;
+        Vector3 getVoxelSize(void) const;
+
         TextureGpu* getAlbedoVox(void)          { return mAlbedoVox; }
-        TextureGpu* getEmissiveVox(void)        { return mEmissiveVox; }
         TextureGpu* getNormalVox(void)          { return mNormalVox; }
+        TextureGpu* getEmissiveVox(void)        { return mEmissiveVox; }
 
         TextureGpuManager* getTextureGpuManager(void);
         RenderSystem* getRenderSystem(void);
+        HlmsManager* getHlmsManager(void);
     };
 }
 

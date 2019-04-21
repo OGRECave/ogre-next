@@ -878,7 +878,7 @@ namespace Ogre
 
         const uint32 *threadsPerGroup = mComputeJobs[0]->getThreadsPerGroup();
 
-        const Vector3 voxelOrigin = mRegionToVoxelize.getMinimum();
+        const Vector3 voxelOrigin = getVoxelOrigin();
 
         ShaderParams::Param paramInstanceRange;
         ShaderParams::Param paramVoxelOrigin;
@@ -888,8 +888,7 @@ namespace Ogre
         paramVoxelOrigin.name	= "voxelOrigin";
         paramVoxelCellSize.name	= "voxelCellSize";
 
-        paramVoxelCellSize.setManualValue( mRegionToVoxelize.getSize() /
-                                           Vector3( mWidth, mHeight, mDepth ) );
+        paramVoxelCellSize.setManualValue( getVoxelCellSize() );
 
         uint32 instanceStart = 0;
 
@@ -955,6 +954,21 @@ namespace Ogre
         mAccumValVox->scheduleTransitionTo( GpuResidency::OnStorage );
     }
     //-------------------------------------------------------------------------
+    Vector3 VctVoxelizer::getVoxelOrigin(void) const
+    {
+        return mRegionToVoxelize.getMinimum();
+    }
+    //-------------------------------------------------------------------------
+    Vector3 VctVoxelizer::getVoxelCellSize(void) const
+    {
+        return mRegionToVoxelize.getSize() / Vector3( mWidth, mHeight, mDepth );
+    }
+    //-------------------------------------------------------------------------
+    Vector3 VctVoxelizer::getVoxelSize(void) const
+    {
+        return mRegionToVoxelize.getSize();
+    }
+    //-------------------------------------------------------------------------
     TextureGpuManager* VctVoxelizer::getTextureGpuManager(void)
     {
         return mTextureGpuManager;
@@ -963,5 +977,10 @@ namespace Ogre
     RenderSystem* VctVoxelizer::getRenderSystem(void)
     {
         return mRenderSystem;
+    }
+    //-------------------------------------------------------------------------
+    HlmsManager* VctVoxelizer::getHlmsManager(void)
+    {
+        return mHlmsManager;
     }
 }

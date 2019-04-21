@@ -515,8 +515,9 @@ namespace Ogre {
         @see setCustomParameter for full details.
         */
         const Vector4& getCustomParameter(uint16 index) const;
+        const Vector4* getCustomParameterNoThrow( uint16 index ) const;
 
-        /** Update a custom GpuProgramParameters constant which is derived from 
+        /** Update a custom GpuProgramParameters constant which is derived from
             information only this Light knows.
         @remarks
             This method allows a Light to map in a custom GPU program parameter

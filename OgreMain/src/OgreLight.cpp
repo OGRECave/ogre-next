@@ -616,6 +616,15 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
+    const Vector4* Light::getCustomParameterNoThrow( uint16 index ) const
+    {
+        const Vector4 *retVal = 0;
+        CustomParameterMap::const_iterator i = mCustomParameters.find(index);
+        if( i != mCustomParameters.end() )
+            retVal = &i->second;
+        return retVal;
+    }
+    //-----------------------------------------------------------------------
     void Light::_updateCustomGpuParameter(uint16 paramIndex, const GpuProgramParameters::AutoConstantEntry& constantEntry, GpuProgramParameters *params) const
     {
         CustomParameterMap::const_iterator i = mCustomParameters.find(paramIndex);

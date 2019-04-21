@@ -31,17 +31,43 @@ THE SOFTWARE.
 #include "Vct/OgreVctLighting.h"
 #include "Vct/OgreVctVoxelizer.h"
 
+#include "OgreHlmsManager.h"
+#include "OgreHlmsCompute.h"
+#include "OgreHlmsComputeJob.h"
+
 #include "OgreTextureGpuManager.h"
 #include "OgreStringConverter.h"
 
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreRenderSystem.h"
+#include "OgreSceneManager.h"
+
+#include "OgreLight.h"
+#include "Vao/OgreConstBufferPacked.h"
 
 namespace Ogre
 {
+    struct ShaderVctLight
+    {
+        //Pre-mul by PI? -No because we lose a ton of precision
+        //.w contains lightDistThreshold
+        float diffuse[4];
+        //For directional lights, pos.xyz contains -dir.xyz and pos.w = 0;
+        //For the rest of lights, pos.xyz contains pos.xyz and pos.w = 1;
+        float pos[4];
+        float uvwPos[4];
+    //	float4 dir;
+    };
+
     VctLighting::VctLighting( IdType id, VctVoxelizer *voxelizer ) :
         IdObject( id ),
-        mVoxelizer( voxelizer )
+        mVoxelizer( voxelizer ),
+        mLightInjectionJob( 0 ),
+        mLightsConstBuffer( 0 ),
+        mDefaultLightDistThreshold( 0.5f ),
+        mNumLights( 0 ),
+        mRayMarchStepSize( 0 ),
+        mShaderParams( 0 )
     {
         TextureGpuManager *textureManager = voxelizer->getTextureGpuManager();
 
@@ -85,14 +111,132 @@ namespace Ogre
             texture->scheduleTransitionTo( GpuResidency::Resident );
             mLightVoxel[i] = texture;
         }
+
+        //VctVoxelizer should've already been initialized, thus no need
+        //to check if JSON has been built or if the assets were added
+        HlmsCompute *hlmsCompute = mVoxelizer->getHlmsManager()->getComputeHlms();
+        mLightInjectionJob = hlmsCompute->findComputeJob( "VCT/LightInjection" );
+
+        mShaderParams = &mLightInjectionJob->getShaderParams( "default" );
+        mNumLights = mShaderParams->findParameter( "numLights" );
+        mRayMarchStepSize = mShaderParams->findParameter( "rayMarchStepSize" );
+
+        VaoManager *vaoManager = renderSystem->getVaoManager();
+        mLightsConstBuffer = vaoManager->createConstBuffer( sizeof(ShaderVctLight) * 16u,
+                                                            BT_DYNAMIC_PERSISTENT, 0, false );
     }
     //-------------------------------------------------------------------------
     VctLighting::~VctLighting()
     {
+        RenderSystem *renderSystem = mVoxelizer->getRenderSystem();
+        VaoManager *vaoManager = renderSystem->getVaoManager();
+
+        if( mLightsConstBuffer )
+        {
+            if( mLightsConstBuffer->getMappingState() != MS_UNMAPPED )
+                mLightsConstBuffer->unmap( UO_UNMAP_ALL );
+            vaoManager->destroyConstBuffer( mLightsConstBuffer );
+            mLightsConstBuffer = 0;
+        }
     }
     //-------------------------------------------------------------------------
-    void VctLighting::update( uint32 lightMask )
+    void VctLighting::addLight( ShaderVctLight * RESTRICT_ALIAS vctLight, Light *light,
+                                const Vector3 &voxelOrigin, const Vector3 &invVoxelSize )
     {
+        const ColourValue diffuseColour = light->getDiffuseColour() * light->getPowerScale();
+        for( size_t i=0; i<3u; ++i )
+            vctLight->diffuse[i] = static_cast<float>( diffuseColour[i] );
 
+        const Vector4 *lightDistThreshold =
+                light->getCustomParameterNoThrow( msDistanceThresholdCustomParam );
+        vctLight->diffuse[3] = lightDistThreshold ? lightDistThreshold->x : mDefaultLightDistThreshold;
+
+        Vector4 light4dVec = light->getAs4DVector();
+        if( light->getType() != Light::LT_DIRECTIONAL )
+            light4dVec -= Vector4( voxelOrigin, 0.0f );
+
+        for( size_t i=0; i<4u; ++i )
+            vctLight->pos[i] = static_cast<float>( light4dVec[i] );
+
+        Vector3 uvwPos = light->getParentNode()->_getDerivedPosition();
+        uvwPos = (uvwPos - voxelOrigin) * invVoxelSize;
+        for( size_t i=0; i<3u; ++i )
+            vctLight->uvwPos[i] = static_cast<float>( uvwPos[i] );
+        vctLight->uvwPos[3] = 0;
+    }
+    //-------------------------------------------------------------------------
+    void VctLighting::update( SceneManager *sceneManager, float rayMarchStepScale, uint32 _lightMask )
+    {
+        OGRE_ASSERT_LOW( rayMarchStepScale >= 1.0f );
+
+        mLightInjectionJob->setConstBuffer( 0, mLightsConstBuffer );
+
+        DescriptorSetTexture2::TextureSlot texSlot( DescriptorSetTexture2::TextureSlot::makeEmpty() );
+        texSlot.texture = mVoxelizer->getAlbedoVox();
+        mLightInjectionJob->setTexture( 0, texSlot );
+        texSlot.texture = mVoxelizer->getNormalVox();
+        mLightInjectionJob->setTexture( 1, texSlot );
+        texSlot.texture = mVoxelizer->getEmissiveVox();
+        mLightInjectionJob->setTexture( 2, texSlot );
+
+        DescriptorSetUav::TextureSlot uavSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
+        uavSlot.access = ResourceAccess::Write;
+        uavSlot.texture = mLightVoxel[0];
+        mLightInjectionJob->_setUavTexture( 0, uavSlot );
+
+        const Vector3 voxelOrigin	= mVoxelizer->getVoxelOrigin();
+        const Vector3 invVoxelSize	= 1.0f / mVoxelizer->getVoxelSize();
+
+        ShaderVctLight * RESTRICT_ALIAS vctLight =
+                reinterpret_cast<ShaderVctLight*>(
+                    mLightsConstBuffer->map( 0, mLightsConstBuffer->getNumElements() ) );
+        uint32 numCollectedLights = 0;
+        const uint32 maxNumLights = mLightsConstBuffer->getNumElements() / sizeof(ShaderVctLight);
+
+        const uint32 lightMask = _lightMask & VisibilityFlags::RESERVED_VISIBILITY_FLAGS;
+
+        ObjectMemoryManager &memoryManager = sceneManager->_getLightMemoryManager();
+        const size_t numRenderQueues = memoryManager.getNumRenderQueues();
+
+        for( size_t i=0; i<numRenderQueues; ++i )
+        {
+            ObjectData objData;
+            const size_t totalObjs = memoryManager.getFirstObjectData( objData, i );
+
+            for( size_t j=0; j<totalObjs && numCollectedLights < maxNumLights; j += ARRAY_PACKED_REALS )
+            {
+                for( size_t k=0; k<ARRAY_PACKED_REALS && numCollectedLights < maxNumLights; ++k )
+                {
+                    uint32 * RESTRICT_ALIAS visibilityFlags = objData.mVisibilityFlags;
+
+                    if( visibilityFlags[k] & VisibilityFlags::LAYER_VISIBILITY &&
+                        visibilityFlags[k] & lightMask )
+                    {
+                        Light *light = static_cast<Light*>( objData.mOwner[k] );
+                        if( light->getType() == Light::LT_DIRECTIONAL ||
+                            light->getType() == Light::LT_POINT )
+                        {
+                            addLight( vctLight, light, voxelOrigin, invVoxelSize );
+                            ++vctLight;
+                            ++numCollectedLights;
+                        }
+                    }
+                }
+
+                objData.advancePack();
+            }
+        }
+
+        mLightsConstBuffer->unmap( UO_KEEP_PERSISTENT );
+
+        const Vector3 voxelRes( mLightVoxel[0]->getWidth(), mLightVoxel[0]->getHeight(),
+                                mLightVoxel[0]->getDepth() );
+
+        mNumLights->setManualValue( numCollectedLights );
+        mRayMarchStepSize->setManualValue( 1.0f / voxelRes );
+        mShaderParams->setDirty();
+
+        HlmsCompute *hlmsCompute = mVoxelizer->getHlmsManager()->getComputeHlms();
+        hlmsCompute->dispatch( mLightInjectionJob, 0, 0 );
     }
 }

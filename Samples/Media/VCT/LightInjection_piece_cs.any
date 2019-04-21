@@ -1,8 +1,6 @@
 
 //#include "SyntaxHighlightingMisc.h"
 
-
-
 struct Light
 {
 	//Pre-mul by PI? -No because we lose a ton of precision
@@ -15,6 +13,13 @@ struct Light
 //	float4 dir;
 };
 
+@property( syntax != metal )
+	CONST_BUFFER( LightBuf, 1 )
+	{
+		Light lights[16];
+	};
+@end
+
 #define lightDistThreshold diffuse.w
 #define c_invPI 3.14159265359f
 
@@ -26,10 +31,15 @@ struct Light
 
 @piece( BodyCS )
 //	Aabb voxelAabb;
-//	voxelAabb.center	= p_voxelOrigin + p_voxelCellSize * (float3( gl_GlobalInvocationID.xyz ) + 0.5f);
+//	voxelAabbCenter	= p_voxelOrigin + p_voxelCellSize * (float3( gl_GlobalInvocationID.xyz ) + 0.5f);
 //	voxelAabb.halfSize	= p_voxelCellSize * 0.5f;
 
 //	float3 voxelUvwPos = ;
+
+	//All lights are offsetted by p_voxelOrigin so that we don't
+	//have to do this calculation per cell
+	float3 voxelAabbCenter = /*p_voxelOrigin +*/
+							 p_voxelCellSize * (float3( gl_GlobalInvocationID.xyz ) + 0.5f);
 
 	float4 albedoVal = OGRE_Load2D( voxelAlbedoTex, gl_GlobalInvocationID.xyz, 0 );
 	float3 normalVal = OGRE_Load2D( voxelNormalTex, gl_GlobalInvocationID.xyz, 0 ).xyz * 2.0f - 1.0f;
@@ -45,7 +55,7 @@ struct Light
 		{
 			Light light = lights[lightIdx];
 
-			float3 lightDir = light.pos.xyz - voxelAabb.center * light.pos.w;
+			float3 lightDir = light.pos.xyz - voxelAabbCenter * light.pos.w;
 			lightDir = normalize( lightDir );
 
 			float NdotL = dot( normalVal, lightDir );
@@ -74,7 +84,7 @@ struct Light
 							 currUvwPos.z >= 1.0f;
 
 				//For non-directional lights, check if we've reached the light emitter
-				if( light.uvwPos.w != 0 )
+				if( light.pos.w != 0 )
 				{
 					float3 posToLight = light.uvwPos.xyz - currUvwPos.xyz;
 					float sqDist = dot( posToLight.xyz, posToLight.xyz );
