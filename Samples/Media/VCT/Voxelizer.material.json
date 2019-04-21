@@ -60,7 +60,7 @@
                 ["voxelEmissiveTex",        [2], "int"],
 
                 ["lightVoxel",              [0], "int"]
-            ],
+            ]
         }
 	}
 }

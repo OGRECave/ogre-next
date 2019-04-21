@@ -59,6 +59,8 @@ namespace Ogre
     //	float4 dir;
     };
 
+    const uint16 VctLighting::msDistanceThresholdCustomParam = 3876u;
+
     VctLighting::VctLighting( IdType id, VctVoxelizer *voxelizer ) :
         IdObject( id ),
         mVoxelizer( voxelizer ),
@@ -88,9 +90,9 @@ namespace Ogre
         const uint32 heightAniso    = std::max( 1u, height >> 1u );
         const uint32 depthAniso     = std::max( 1u, depth >> 1u );
 
-        const uint32 numMipsMain  = PixelFormatGpuUtils::getMaxMipmapCount( width, height, depth );
-        const uint32 numMipsAniso = PixelFormatGpuUtils::getMaxMipmapCount( widthAniso, heightAniso,
-                                                                            depthAniso );
+        const uint8 numMipsMain  = PixelFormatGpuUtils::getMaxMipmapCount( width, height, depth );
+        const uint8 numMipsAniso = PixelFormatGpuUtils::getMaxMipmapCount( widthAniso, heightAniso,
+                                                                           depthAniso );
 
         for( size_t i=0; i<6u; ++i )
         {
@@ -108,6 +110,7 @@ namespace Ogre
                 texture->setResolution( widthAniso, heightAniso, depthAniso );
                 texture->setNumMipmaps( numMipsAniso );
             }
+            texture->setPixelFormat( PFG_RGBA8_UNORM );
             texture->scheduleTransitionTo( GpuResidency::Resident );
             mLightVoxel[i] = texture;
         }
