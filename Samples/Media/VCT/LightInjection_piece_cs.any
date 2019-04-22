@@ -1,27 +1,29 @@
 
 //#include "SyntaxHighlightingMisc.h"
 
-struct Light
-{
-	//Pre-mul by PI? -No because we lose a ton of precision
-	//.w contains lightDistThreshold
-	float4 diffuse;
-	//For directional lights, pos.xyz contains -dir.xyz and pos.w = 0;
-	//For the rest of lights, pos.xyz contains pos.xyz and pos.w = 1;
-	float4 pos;
-	float4 uvwPos;
-//	float4 dir;
-};
+@piece( HeaderCS )
+    struct Light
+    {
+        //Pre-mul by PI? -No because we lose a ton of precision
+        //.w contains lightDistThreshold
+        float4 diffuse;
+        //For directional lights, pos.xyz contains -dir.xyz and pos.w = 0;
+        //For the rest of lights, pos.xyz contains pos.xyz and pos.w = 1;
+        float4 pos;
+        float4 uvwPos;
+    //	float4 dir;
+    };
 
-@property( syntax != metal )
-	CONST_BUFFER( LightBuf, 1 )
-	{
-		Light lights[16];
-	};
+    @property( syntax != metal )
+        CONST_BUFFER( LightBuf, 1 )
+        {
+            Light lights[16];
+        };
+    @end
+
+    #define lightDistThreshold diffuse.w
+    #define c_invPI 3.14159265359f
 @end
-
-#define lightDistThreshold diffuse.w
-#define c_invPI 3.14159265359f
 
 //in uvec3 gl_NumWorkGroups;
 //in uvec3 gl_WorkGroupID;
@@ -40,10 +42,11 @@ struct Light
 	//have to do this calculation per cell
 	float3 voxelAabbCenter = /*p_voxelOrigin +*/
 							 p_voxelCellSize * (float3( gl_GlobalInvocationID.xyz ) + 0.5f);
+    float3 voxelUvwPos = p_invVoxelResolution * (float3( gl_GlobalInvocationID.xyz ) + 0.5f);
 
-	float4 albedoVal = OGRE_Load2D( voxelAlbedoTex, gl_GlobalInvocationID.xyz, 0 );
-	float3 normalVal = OGRE_Load2D( voxelNormalTex, gl_GlobalInvocationID.xyz, 0 ).xyz * 2.0f - 1.0f;
-	float4 emissiveVal = OGRE_Load2D( voxelEmissiveTex, gl_GlobalInvocationID.xyz, 0 );
+    float4 albedoVal = OGRE_Load3D( voxelAlbedoTex, gl_GlobalInvocationID.xyz, 0 );
+    float3 normalVal = OGRE_Load3D( voxelNormalTex, gl_GlobalInvocationID.xyz, 0 ).xyz * 2.0f - 1.0f;
+    float4 emissiveVal = OGRE_Load3D( voxelEmissiveTex, gl_GlobalInvocationID.xyz, 0 );
 
 	normalVal = normalize( normalVal );
 
@@ -74,7 +77,7 @@ struct Light
 													  currUvwPos.xyz, 0 );
 				alpha *= (1.0f - albedoAtIt.w);
 
-				float3 oldCross = cross( light.uvwPos.xyz - currUvwPos );
+                float3 oldCross = cross( light.uvwPos.xyz, currUvwPos );
 				currUvwPos += lightDir * p_rayMarchStepSize;
 				reachedDst = currUvwPos.x <= 0.0f ||
 							 currUvwPos.x >= 1.0f ||
@@ -93,7 +96,7 @@ struct Light
 
 					//If p_rayMarchStepSize is too big, we may have gone through/past
 					//the emitter (and from now on we'd be stepping further away)
-					float3 newCross = cross( light.uvwPos.xyz - currUvwPos );
+                    float3 newCross = cross( light.uvwPos.xyz, currUvwPos );
 					if( dot( oldCross, newCross ) <= 0 )
 						reachedDst = true;
 				}
@@ -104,5 +107,5 @@ struct Light
 	}
 
 	wshort3 voxelCelUvw = wshort3( gl_GlobalInvocationID.xyz );
-	OGRE_imageWrite3D4( lightVoxel, voxelCelUvw, blockColour );
+    OGRE_imageWrite3D4( lightVoxel, voxelCelUvw, float4( blockColour, 1.0f ) );
 @end

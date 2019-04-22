@@ -1,37 +1,5 @@
-#version 430
-
-@property( hlms_amd_trinary_minmax )
-	#extension GL_AMD_shader_trinary_minmax: require
-@else
-	#define min3( a, b, c ) min( a, min( b, c ) )
-	#define max3( a, b, c ) max( a, max( b, c ) )
-@end
-
+@insertpiece( SetCrossPlatformSettings )
 #extension GL_ARB_shader_group_vote: require
-
-#define float2 vec2
-#define float3 vec3
-#define float4 vec4
-
-#define int3 ivec3
-
-#define uint2 uvec2
-#define uint3 uvec3
-#define uint4 uvec4
-
-#define wshort3 int3
-
-#define ogre_float4x3 mat3x4
-
-#define mul( x, y ) ((x) * (y))
-
-#define toFloat3x3( x ) mat3( x )
-
-#define bufferFetch texelFetch
-
-#define OGRE_SampleArray2D( tex, sampler, uv, arrayIdx ) texture( tex, vec3( uv, arrayIdx ) )
-
-#define CONST_BUFFER( bufferName, bindingPoint ) layout( std140, binding = bindingPoint) uniform bufferName
 
 #define OGRE_imageLoad3D( inImage, iuv ) imageLoad( inImage, int3( iuv ) )
 #define OGRE_imageWrite3D1( outImage, iuv, value ) imageStore( outImage, int3( iuv ), value )
@@ -59,12 +27,14 @@ layout( local_size_x = @value( threads_per_group_x ),
 uniform uint numLights;
 uniform float3 rayMarchStepSize;
 //uniform float3 voxelOrigin;
-//uniform float3 voxelCellSize;
+uniform float3 voxelCellSize;
+uniform float3 invVoxelResolution;
 
 #define p_numLights numLights
 #define p_rayMarchStepSize rayMarchStepSize
 //#define p_voxelOrigin voxelOrigin
-//#define p_voxelCellSize voxelCellSize
+#define p_voxelCellSize voxelCellSize
+#define p_invVoxelResolution invVoxelResolution
 
 //in uvec3 gl_NumWorkGroups;
 //in uvec3 gl_WorkGroupID;

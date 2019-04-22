@@ -47,10 +47,19 @@
 
             "uav_units" : 1,
 
+            "textures" :
+            [
+                {},
+                {},
+                {}
+            ],
+
             "params" :
             [
                 ["numLights",               [0],        "uint"],
-                ["rayMarchStepSize",        [1,1,1],    "float"]
+                ["rayMarchStepSize",        [1,1,1],    "float"],
+                ["voxelCellSize",           [1,1,1],    "float"],
+                ["invVoxelResolution",      [1,1,1],    "float"]
             ],
 
             "params_glsl" :

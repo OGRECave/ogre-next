@@ -54,10 +54,12 @@ namespace Ogre
 
         ShaderParams::Param *mNumLights;
         ShaderParams::Param *mRayMarchStepSize;
+        ShaderParams::Param *mVoxelCellSize;
+        ShaderParams::Param *mInvVoxelResolution;
         ShaderParams        *mShaderParams;
 
         void addLight( ShaderVctLight * RESTRICT_ALIAS vctLight, Light *light,
-                       const Vector3 &voxelOrigin, const Vector3 &invVoxelSize );
+                       const Vector3 &voxelOrigin, const Vector3 &invVoxelRes );
 
     public:
         VctLighting( IdType id, VctVoxelizer *voxelizer );

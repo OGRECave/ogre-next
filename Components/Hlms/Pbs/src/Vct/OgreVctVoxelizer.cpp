@@ -961,12 +961,17 @@ namespace Ogre
     //-------------------------------------------------------------------------
     Vector3 VctVoxelizer::getVoxelCellSize(void) const
     {
-        return mRegionToVoxelize.getSize() / Vector3( mWidth, mHeight, mDepth );
+        return mRegionToVoxelize.getSize() / getVoxelResolution();
     }
     //-------------------------------------------------------------------------
     Vector3 VctVoxelizer::getVoxelSize(void) const
     {
         return mRegionToVoxelize.getSize();
+    }
+    //-------------------------------------------------------------------------
+    Vector3 VctVoxelizer::getVoxelResolution(void) const
+    {
+        return Vector3( mWidth, mHeight, mDepth );
     }
     //-------------------------------------------------------------------------
     TextureGpuManager* VctVoxelizer::getTextureGpuManager(void)

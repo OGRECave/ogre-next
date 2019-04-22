@@ -241,6 +241,7 @@ namespace Ogre
         Vector3 getVoxelOrigin(void) const;
         Vector3 getVoxelCellSize(void) const;
         Vector3 getVoxelSize(void) const;
+        Vector3 getVoxelResolution(void) const;
 
         TextureGpu* getAlbedoVox(void)          { return mAlbedoVox; }
         TextureGpu* getNormalVox(void)          { return mNormalVox; }

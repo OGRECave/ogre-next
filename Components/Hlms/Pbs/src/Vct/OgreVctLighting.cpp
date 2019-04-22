@@ -69,6 +69,8 @@ namespace Ogre
         mDefaultLightDistThreshold( 0.5f ),
         mNumLights( 0 ),
         mRayMarchStepSize( 0 ),
+        mVoxelCellSize( 0 ),
+        mInvVoxelResolution( 0 ),
         mShaderParams( 0 )
     {
         TextureGpuManager *textureManager = voxelizer->getTextureGpuManager();
@@ -94,9 +96,10 @@ namespace Ogre
         const uint8 numMipsAniso = PixelFormatGpuUtils::getMaxMipmapCount( widthAniso, heightAniso,
                                                                            depthAniso );
 
-        for( size_t i=0; i<6u; ++i )
+        for( size_t i=0; i<1u; ++i )
         {
             TextureGpu *texture = textureManager->createTexture( "VctLighting" +
+                                                                 StringConverter::toString( i ) + "/" +
                                                                  StringConverter::toString( getId() ),
                                                                  GpuPageOutStrategy::Discard,
                                                                  texFlags, TextureTypes::Type3D );
@@ -123,6 +126,8 @@ namespace Ogre
         mShaderParams = &mLightInjectionJob->getShaderParams( "default" );
         mNumLights = mShaderParams->findParameter( "numLights" );
         mRayMarchStepSize = mShaderParams->findParameter( "rayMarchStepSize" );
+        mVoxelCellSize = mShaderParams->findParameter( "voxelCellSize" );
+        mInvVoxelResolution = mShaderParams->findParameter( "invVoxelResolution" );
 
         VaoManager *vaoManager = renderSystem->getVaoManager();
         mLightsConstBuffer = vaoManager->createConstBuffer( sizeof(ShaderVctLight) * 16u,
@@ -144,7 +149,7 @@ namespace Ogre
     }
     //-------------------------------------------------------------------------
     void VctLighting::addLight( ShaderVctLight * RESTRICT_ALIAS vctLight, Light *light,
-                                const Vector3 &voxelOrigin, const Vector3 &invVoxelSize )
+                                const Vector3 &voxelOrigin, const Vector3 &invVoxelRes )
     {
         const ColourValue diffuseColour = light->getDiffuseColour() * light->getPowerScale();
         for( size_t i=0; i<3u; ++i )
@@ -162,7 +167,7 @@ namespace Ogre
             vctLight->pos[i] = static_cast<float>( light4dVec[i] );
 
         Vector3 uvwPos = light->getParentNode()->_getDerivedPosition();
-        uvwPos = (uvwPos - voxelOrigin) * invVoxelSize;
+        uvwPos = (uvwPos - voxelOrigin) * invVoxelRes;
         for( size_t i=0; i<3u; ++i )
             vctLight->uvwPos[i] = static_cast<float>( uvwPos[i] );
         vctLight->uvwPos[3] = 0;
@@ -187,8 +192,8 @@ namespace Ogre
         uavSlot.texture = mLightVoxel[0];
         mLightInjectionJob->_setUavTexture( 0, uavSlot );
 
-        const Vector3 voxelOrigin	= mVoxelizer->getVoxelOrigin();
-        const Vector3 invVoxelSize	= 1.0f / mVoxelizer->getVoxelSize();
+        const Vector3 voxelOrigin   = mVoxelizer->getVoxelOrigin();
+        const Vector3 invVoxelRes   = 1.0f / mVoxelizer->getVoxelResolution();
 
         ShaderVctLight * RESTRICT_ALIAS vctLight =
                 reinterpret_cast<ShaderVctLight*>(
@@ -219,7 +224,7 @@ namespace Ogre
                         if( light->getType() == Light::LT_DIRECTIONAL ||
                             light->getType() == Light::LT_POINT )
                         {
-                            addLight( vctLight, light, voxelOrigin, invVoxelSize );
+                            addLight( vctLight, light, voxelOrigin, invVoxelRes );
                             ++vctLight;
                             ++numCollectedLights;
                         }
@@ -237,6 +242,8 @@ namespace Ogre
 
         mNumLights->setManualValue( numCollectedLights );
         mRayMarchStepSize->setManualValue( 1.0f / voxelRes );
+        mVoxelCellSize->setManualValue( mVoxelizer->getVoxelSize() );
+        mInvVoxelResolution->setManualValue( invVoxelRes );
         mShaderParams->setDirty();
 
         HlmsCompute *hlmsCompute = mVoxelizer->getHlmsManager()->getComputeHlms();

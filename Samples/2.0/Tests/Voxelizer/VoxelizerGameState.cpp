@@ -16,6 +16,7 @@
 
 #include "OgreRoot.h"
 #include "Vct/OgreVctVoxelizer.h"
+#include "Vct/OgreVctLighting.h"
 
 using namespace Demo;
 
@@ -24,6 +25,8 @@ using namespace Demo;
 namespace Demo
 {
     Ogre::VctVoxelizer *voxelizer = 0;
+    Ogre::VctLighting *vctLighting = 0;
+
     VoxelizerGameState::VoxelizerGameState( const Ogre::String &helpDescription ) :
         TutorialGameState( helpDescription )
     {
@@ -97,6 +100,10 @@ namespace Demo
         voxelizer->autoCalculateRegion();
         voxelizer->dividideOctants( 1u, 1u, 1u );
         voxelizer->build();
+
+        vctLighting = new Ogre::VctLighting( Ogre::Id::generateNewId<Ogre::VctLighting>(),
+                                             voxelizer );
+        vctLighting->update( sceneManager );
     }
     //-----------------------------------------------------------------------------------
     void VoxelizerGameState::update( float timeSinceLast )
