@@ -322,12 +322,12 @@
 	float3 mixAverage3( float3 newAccumValues, float numTris, float3 oldAveragedValue, float oldNumTris )
 	{
 		return newAccumValues / (numTris + oldNumTris) +
-			   oldAveragedValue * (numTris / (numTris + oldNumTris));
+			   oldAveragedValue * (oldNumTris / (numTris + oldNumTris));
 	}
 	float4 mixAverage4( float4 newAccumValues, float numTris, float4 oldAveragedValue, float oldNumTris )
 	{
 		return newAccumValues / (numTris + oldNumTris) +
-			   oldAveragedValue * (numTris / (numTris + oldNumTris));
+			   oldAveragedValue * (oldNumTris / (numTris + oldNumTris));
 	}
 @end
 

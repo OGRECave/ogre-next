@@ -157,7 +157,9 @@ namespace Ogre
 
         const Vector4 *lightDistThreshold =
                 light->getCustomParameterNoThrow( msDistanceThresholdCustomParam );
-        vctLight->diffuse[3] = lightDistThreshold ? lightDistThreshold->x : mDefaultLightDistThreshold;
+        vctLight->diffuse[3] = lightDistThreshold ?
+                                   (lightDistThreshold->x * lightDistThreshold->x) :
+                                   (mDefaultLightDistThreshold * mDefaultLightDistThreshold);
 
         Vector4 light4dVec = light->getAs4DVector();
         if( light->getType() != Light::LT_DIRECTIONAL )
