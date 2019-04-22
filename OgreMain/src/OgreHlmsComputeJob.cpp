@@ -726,7 +726,7 @@ namespace Ogre
     {
         destroyDescriptorUavs();
 
-        if( numSlots < mSamplerSlots.size() )
+        if( numSlots < mUavSlots.size() )
             removeListenerFromTextures( mUavSlots, numSlots, mUavSlots.size() );
 
         mUavSlots.resize( numSlots );
