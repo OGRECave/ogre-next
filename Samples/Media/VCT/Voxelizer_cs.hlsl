@@ -64,10 +64,10 @@ float4 unpackUnorm4x8( uint v )
 uint packUnorm4x8( float4 v )
 {
 	uint retVal;
-	retVal  = uint( round( saturate( v.x * 255.0f ) ) );
-	retVal |= uint( round( saturate( v.y * 255.0f ) ) ) << 8u;
-	retVal |= uint( round( saturate( v.z * 255.0f ) ) ) << 16u;
-	retVal |= uint( round( saturate( v.w * 255.0f ) ) ) << 24u;
+	retVal  = uint( round( saturate( v.x ) * 255.0f ) );
+	retVal |= uint( round( saturate( v.y ) * 255.0f ) ) << 8u;
+	retVal |= uint( round( saturate( v.z ) * 255.0f ) ) << 16u;
+	retVal |= uint( round( saturate( v.w ) * 255.0f ) ) << 24u;
 
 	return retVal;
 }
@@ -82,10 +82,10 @@ float4 unpackUnormRGB10A2( uint v )
 uint packUnormRGB10A2( float4 v )
 {
 	uint retVal;
-	retVal  = uint( round( saturate( v.x * 1024.0f ) ) );
-	retVal |= uint( round( saturate( v.y * 1024.0f ) ) ) << 10u;
-	retVal |= uint( round( saturate( v.z * 1024.0f ) ) ) << 20u;
-	retVal |= uint( round( saturate( v.w * 2.0f ) ) ) << 30u;
+	retVal  = uint( round( saturate( v.x ) * 1024.0f ) );
+	retVal |= uint( round( saturate( v.y ) * 1024.0f ) ) << 10u;
+	retVal |= uint( round( saturate( v.z ) * 1024.0f ) ) << 20u;
+	retVal |= uint( round( saturate( v.w ) * 2.0f ) ) << 30u;
 
 	return retVal;
 }
