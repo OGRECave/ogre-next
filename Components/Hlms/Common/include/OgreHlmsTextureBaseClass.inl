@@ -163,10 +163,12 @@ namespace Ogre
                 //samplerblocks are different.
                 for( size_t j=0; j<i; ++j )
                 {
-                    if( mTextures[j] &&
-                        mTextures[j]->getInternalTextureType() ==
-                        mTextures[i]->getInternalTextureType() &&
-                        mTextures[j]->getTexturePool() == mTextures[i]->getTexturePool() &&
+                    if( (mTextures[j] == mTextures[i] ||
+                         (mTextures[j] &&
+                          mTextures[j]->getInternalTextureType() ==
+                          mTextures[i]->getInternalTextureType() &&
+                          mTextures[j]->getTexturePool() &&
+                          mTextures[j]->getTexturePool() == mTextures[i]->getTexturePool())) &&
                         (mSamplerblocks[i] == mSamplerblocks[j] || hasSeparateSamplers) )
                     {
                         mTexLocationInDescSet[i] = mTexLocationInDescSet[j];
