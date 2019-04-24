@@ -342,8 +342,7 @@ namespace Ogre
         }
 
         if( applyTransparency )
-            setTransparency( transparency, transparencyMode,
-                transparencyAlphaFromTextures );
+            setTransparency( transparency, transparencyMode, transparencyAlphaFromTextures );
 
         creator->requestSlot( /*mTextureHash*/0, this, false );
 
