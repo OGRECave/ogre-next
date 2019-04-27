@@ -49,7 +49,7 @@ void Timer::reset()
 }
 
 //--------------------------------------------------------------------------------//
-unsigned long Timer::getMilliseconds()
+unsigned long long Timer::getMilliseconds()
 {
     struct timeval now;
     gettimeofday(&now, NULL);
@@ -57,7 +57,7 @@ unsigned long Timer::getMilliseconds()
 }
 
 //--------------------------------------------------------------------------------//
-unsigned long Timer::getMicroseconds()
+unsigned long long Timer::getMicroseconds()
 {
     struct timeval now;
     gettimeofday(&now, NULL);
@@ -65,15 +65,15 @@ unsigned long Timer::getMicroseconds()
 }
 
 //-- Common Across All Timers ----------------------------------------------------//
-unsigned long Timer::getMillisecondsCPU()
+unsigned long long Timer::getMillisecondsCPU()
 {
     clock_t newClock = clock();
-    return (unsigned long)((float)(newClock-zeroClock) / ((float)CLOCKS_PER_SEC/1000.0)) ;
+    return (unsigned long long)((float)(newClock-zeroClock) / ((float)CLOCKS_PER_SEC/1000.0)) ;
 }
 
 //-- Common Across All Timers ----------------------------------------------------//
-unsigned long Timer::getMicrosecondsCPU()
+unsigned long long Timer::getMicrosecondsCPU()
 {
     clock_t newClock = clock();
-    return (unsigned long)((float)(newClock-zeroClock) / ((float)CLOCKS_PER_SEC/1000000.0)) ;
+    return (unsigned long long)((float)(newClock-zeroClock) / ((float)CLOCKS_PER_SEC/1000000.0)) ;
 }

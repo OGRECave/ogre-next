@@ -63,16 +63,16 @@ namespace Ogre
         void reset();
 
         /** Returns milliseconds since initialisation or last reset */
-        unsigned long getMilliseconds();
+        unsigned long long getMilliseconds();
 
         /** Returns microseconds since initialisation or last reset */
-        unsigned long getMicroseconds();
+        unsigned long long getMicroseconds();
 
         /** Returns milliseconds since initialisation or last reset, only CPU time measured */  
-        unsigned long getMillisecondsCPU();
+        unsigned long long getMillisecondsCPU();
 
         /** Returns microseconds since initialisation or last reset, only CPU time measured */  
-        unsigned long getMicrosecondsCPU();
+        unsigned long long getMicrosecondsCPU();
     };
 }
 #endif
