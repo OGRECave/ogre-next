@@ -57,6 +57,8 @@
 #define OGRE_Load2D( tex, iuv, lod ) tex.Load( int3( iuv, lod ) )
 #define OGRE_Load2DMS( tex, iuv, subsample ) tex.Load( iuv, subsample )
 
+#define OGRE_Load3D( tex, iuv, lod ) tex.Load( int4( iuv, lod ) )
+
 #define bufferFetch( buffer, idx ) buffer.Load( idx )
 #define bufferFetch1( buffer, idx ) buffer.Load( idx ).x
 
