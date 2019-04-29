@@ -16,9 +16,9 @@ namespace Demo
         {
         }
 
-        unsigned long yield( double frameTime, unsigned long startTime )
+        unsigned long long yield( double frameTime, unsigned long long startTime )
         {
-            unsigned long endTime = mExternalTimer->getMicroseconds();
+            unsigned long long endTime = mExternalTimer->getMicroseconds();
 
             while( frameTime * 1000000.0 > (endTime - startTime) )
             {
