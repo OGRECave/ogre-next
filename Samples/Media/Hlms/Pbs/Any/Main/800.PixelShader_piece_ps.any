@@ -628,7 +628,7 @@
 			@insertpiece( forwardPlusDoCubemaps )
 			@insertpiece( applyIrradianceVolumes )
 
-			@insertpiece( ApplyVoxelConeTracing )
+			@insertpiece( applyVoxelConeTracing )
 
 			@insertpiece( DoEmissiveLight )
 

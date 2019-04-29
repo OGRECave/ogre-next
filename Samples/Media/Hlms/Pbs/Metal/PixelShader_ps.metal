@@ -127,6 +127,7 @@ fragment @insertpiece( output_type ) main_metal
 	@insertpiece( DeclDecalsSamplers )
 	@insertpiece( DeclShadowSamplers )
 	@insertpiece( DeclAreaLtcTextures )
+	@insertpiece( DeclVctTextures )
 )
 {
 	PS_OUTPUT outPs;

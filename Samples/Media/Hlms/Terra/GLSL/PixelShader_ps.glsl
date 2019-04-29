@@ -113,6 +113,8 @@ uniform sampler2D terrainShadows;
 @insertpiece( DeclAreaLtcTextures )
 @insertpiece( DeclAreaLtcLightFuncs )
 
+@insertpiece( DeclVctTextures )
+
 @insertpiece( custom_ps_functions )
 
 void main()

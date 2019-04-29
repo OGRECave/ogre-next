@@ -92,6 +92,8 @@ struct PS_INPUT
 @insertpiece( DeclAreaLtcTextures )
 @insertpiece( DeclAreaLtcLightFuncs )
 
+@insertpiece( DeclVctTextures )
+
 @insertpiece( DeclOutputType )
 
 @insertpiece( custom_ps_functions )

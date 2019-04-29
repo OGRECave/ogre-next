@@ -1,6 +1,19 @@
 
 @property( vct_num_probes )
-uniform sampler3D vctProbe;
+
+@piece( DeclVctTextures )
+	@property( syntax == glsl )
+		uniform sampler3D vctProbe;
+	@end
+	@property( syntax == hlsl )
+		Texture3D vctProbe				: register(t@value(vctProbe));
+		SamplerState vctProbeSampler	: register(s@value(vctProbe));
+	@end
+	@property( syntax == metal )
+		, texture3d<float> vctProbe		[[texture(@value(vctProbe))]]
+		, sampler vctProbeSampler		[[sampler(@value(vctProbe))]]
+	@end
+@end
 
 @piece( DeclVctStruct )
 	struct VctProbeParams

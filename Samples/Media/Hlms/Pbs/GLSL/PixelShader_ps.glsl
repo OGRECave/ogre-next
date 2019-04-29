@@ -102,6 +102,8 @@ in block
 @insertpiece( DeclAreaLtcTextures )
 @insertpiece( DeclAreaLtcLightFuncs )
 
+@insertpiece( DeclVctTextures )
+
 @insertpiece( custom_ps_functions )
 
 void main()
