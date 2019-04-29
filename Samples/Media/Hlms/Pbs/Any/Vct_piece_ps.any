@@ -1,0 +1,181 @@
+
+@property( vct_num_probes )
+uniform sampler3D vctProbe;
+
+@piece( DeclVctStruct )
+	struct VctProbeParams
+	{
+		float4 voxelCellSize_maxDistance;
+		float4 normalBias_startBias_blendAmbient_blendFade;
+
+		float4 xform_row0;
+		float4 xform_row1;
+		float4 xform_row2;
+	};
+
+	#define vctCellSize voxelCellSize_maxDistance.xyz
+	#define vctMaxDistance voxelCellSize_maxDistance.w
+	#define vctNormalBias normalBias_startBias_blendAmbient_blendFade.x
+	#define vctStartBias normalBias_startBias_blendAmbient_blendFade.y
+	#define vctBlendAmbient normalBias_startBias_blendAmbient_blendFade.z
+	#define vctBlendFade normalBias_startBias_blendAmbient_blendFade.w
+@end
+@piece( DeclVctUniform )
+	VctProbeParams vctProbeParams;
+@end
+
+@piece( DeclVctFuncs )
+	/// Generates a TBN matrix when no tangent information is present using
+	/// DDX information.
+	/// Should only we used as a fallback as the result isn't fully stable due to how DDX works
+	/// and due to floating point precision. It is possible for the TBN to change as you zoom-in
+	/// to the triangle.
+	float3x3 generateTbn( float3 geomNormal, float3 pos )
+	{
+		float3 tangentX = OGRE_ddx( pos.xyz ).xyz;
+		tangentX = normalize( tangentX );
+
+		float3 binormal = cross( normal, tangentX ) ;
+		float3x3 TBN = buildFloat3x3( tangentX, binormal, geomNormal );
+		return TBN;
+	}
+
+	float3 voxelConeTrace( VctProbeParams probeParams, float3 pos, float3 ambient,
+						   float3 direction, float tanHalfAngle,
+						   sampler3D probe
+						   OGRE_SAMPLER_ARG_DECL( probeSampler ) )
+	{
+		float dist = probeParams.vctStartBias;
+		float alpha = 0.0;
+		float3 color = float3( 0.0, 0.0, 0.0 );
+
+		while( dist < probeParams.vctMaxDistance && alpha < 0.95 )
+		{
+			float diameter = max( 1.0, 2.0 * tanHalfAngle * dist );
+			float4 scolor = OGRE_SampleLevel( probe, probeSampler,
+											  (pos + dist * direction) * probeParams.voxelCellSize,
+											  log2(diameter) );
+			float a = (1.0f - alpha);
+			color += scolor.xyz * a;
+			alpha += a * scolor.w;
+			dist += diameter * 0.5f;
+		}
+
+		if( probeParams.vctBlendAmbient != 0 )
+			color.xyz = lerp( ambient, color.xyz, min(1.0, alpha / 0.95) );
+
+		return color;
+	}
+
+	float3 toVctProbeSpacePos( float3 pos, VctProbeParams probeParams )
+	{
+		float3 posLS;
+		posLS.x = dot( probeParams.xform_row0.xyzw, float4( pos, 1.0 ) ).xyz;
+		posLS.y = dot( probeParams.xform_row1.xyzw, float4( pos, 1.0 ) ).xyz;
+		posLS.z = dot( probeParams.xform_row2.xyzw, float4( pos, 1.0 ) ).xyz;
+		return posLS;
+	}
+
+	float3 toVctProbeSpaceDir( float3 dir, VctProbeParams probeParams )
+	{
+		float3 dirLS;
+		dirLS.x = dot( probeParams.xform_row0.xyz, dir ).xyz;
+		dirLS.y = dot( probeParams.xform_row1.xyz, dir ).xyz;
+		dirLS.z = dot( probeParams.xform_row2.xyz, dir ).xyz;
+		return dirLS;
+	}
+
+	void computeVctProbe
+	(
+		OGRE_OUT_REF( float3, outDiffuse ), OGRE_OUT_REF( float4, outSpecular ),
+		PixelData pixelData, float3 pos, float3x3 TBN, VctProbeParams probeParams,
+		sampler3D probe OGRE_SAMPLER_ARG_DECL( probeSampler )
+	)
+	{
+		float3 posLS = toVctProbeSpacePos( pos + pixelData.geomNormal.xyz * probeParams.vctNormalBias,
+										   probeParams );
+		float3 reflVecLS = toVctProbeSpaceDir( reflDir, probeParams );
+
+		if( posLS.x < 0.0 || posLS.x > 1.0 ||
+			posLS.y < 0.0 || posLS.y > 1.0 ||
+			posLS.z < 0.0 || posLS.z > 1.0 )
+		{
+			outDiffuse = float4( 0, 0, 0, 0 );
+			outSpecular = float4( 0, 0, 0, 0 );
+			return;
+		}
+
+		@property( vct_num_probes > 1 )
+			float3 blendv = abs( posLS * 2.0f - 1.0f );
+			float blend = saturate( 1.0f - max3( blendv.x, blendv.y, blendv.z ) );
+		@else
+			float blend = 0.0f;
+		@end
+
+		@property( vct_cone_dirs == 6 )
+			float3 cone_dirs[6] =
+				FLOAT3_ARRAY_START
+					float3( 0.0, 0.0, 1.0 ),
+					float3( 0.866025, 0.0, 0.5 ),
+					float3( 0.267617, 0.823639, 0.5 ),
+					float3( -0.700629, 0.509037, 0.5 ),
+					float3( -0.700629, -0.509037, 0.5 ),
+					float3( 0.267617, -0.823639, 0.5 )
+				OGRE_ARRAY_END;
+
+			float coneWeights[6] = FLOAT_ARRAY_START 0.25, 0.15, 0.15, 0.15, 0.15, 0.15 OGRE_ARRAY_END;
+			float coneAngleTan = 0.577;
+			float minRefTan = 0.0;
+		@else
+			float3 cone_dirs[4] = float3[](
+				FLOAT3_ARRAY_START
+					float3( 0.707107, 0.0, 0.707107 ),
+					float3( 0.0, 0.707107, 0.707107 ),
+					float3( -0.707107, 0.0, 0.707107 ),
+					float3( 0.0, -0.707107, 0.707107 )
+				OGRE_ARRAY_END;
+
+			float coneWeights[4] = FLOAT_ARRAY_START 0.25, 0.25, 0.25, 0.25 OGRE_ARRAY_END;
+			float coneAngleTan = 0.98269;
+			//max_distance *= 0.5;
+			float minRefTan = 0.2;
+		@end
+
+		//Radiance / diffuse
+		float3 light = float3( 0.0f, 0.0f, 0.0f );
+		for( int i=0; i<MAX_CONE_DIRS; ++i )
+		{
+			float3 dir = toVctProbeSpaceDir( mul( TBN, cone_dirs[i] ), probeParams );
+			dir = normalize( dir );
+			light += coneWeights[i] * voxelConeTrace( probeParams, posLS, ambient, dir, coneAngleTan,
+													  probe OGRE_SAMPLER_ARG( probeSampler ) );
+		}
+
+		outDiffuse += light * (probeParams.vctBlendFade * blend);
+
+		//Irradiance / specular
+		float3 irrLight = toVctProbeSpaceDir( probeParams, posLS, environment, reflVecLS,
+											   max( minRefTan, tan( pixelData.roughness * 0.5f *
+																	 M_PI * 0.99f ) ),
+											   probe, probeSampler );
+		outSpecular += float4( irrLight * (probeParams.vctBlendFade * blend), blend );
+	}
+@end
+
+@piece( applyVoxelConeTracing )
+	@property( !normal_map )
+		float3x3 TBN = generateTbn( pixelData.geomNormal, inPs.pos );
+	@end
+
+	float4 vctDiffuse;
+	float4 vctSpecular;
+	computeVctProbe( vctDiffuse, vctSpecular, pixelData, inPs.pos, float3x3 TBN,
+					 passBuf.vctProbeParams, vctProbe OGRE_SAMPLER_ARG( vctProbeSampler ) );
+
+	finalColour.xyz += pixelData.diffuse.xyz * vctDiffuse.xyz;
+	finalColour.xyz += pixelData.specular.xyz * vctSpecular.xyz;
+
+	TODO_set_needs_refl_dir;
+@end
+
+@end

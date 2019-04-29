@@ -111,6 +111,8 @@
 		@insertpiece( DeclareBRDF_InstantRadiosity )
 		@insertpiece( DeclareBRDF_AreaLightApprox )
 	@end
+
+	@insertpiece( DeclVctFuncs )
 @end
 
 
@@ -625,6 +627,8 @@
 			@insertpiece( forward3dLighting )
 			@insertpiece( forwardPlusDoCubemaps )
 			@insertpiece( applyIrradianceVolumes )
+
+			@insertpiece( ApplyVoxelConeTracing )
 
 			@insertpiece( DoEmissiveLight )
 

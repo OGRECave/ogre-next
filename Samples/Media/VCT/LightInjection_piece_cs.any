@@ -107,5 +107,5 @@
 	}
 
 	wshort3 voxelCelUvw = wshort3( gl_GlobalInvocationID.xyz );
-	OGRE_imageWrite3D4( lightVoxel, voxelCelUvw, float4( blockColour, 1.0f ) );
+	OGRE_imageWrite3D4( lightVoxel, voxelCelUvw, float4( blockColour, albedoVal.w ) );
 @end

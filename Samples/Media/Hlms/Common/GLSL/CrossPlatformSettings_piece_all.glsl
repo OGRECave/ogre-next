@@ -94,12 +94,22 @@
 
 #define bufferFetch1( buffer, idx ) texelFetch( buffer, idx ).x
 
+#define OGRE_SAMPLER_ARG_DECL( samplerName )
+#define OGRE_SAMPLER_ARG( samplerName )
+
 #define CONST_BUFFER( bufferName, bindingPoint ) layout_constbuffer(binding = bindingPoint) uniform bufferName
 #define CONST_BUFFER_STRUCT_BEGIN( structName, bindingPoint ) layout_constbuffer(binding = bindingPoint) uniform structName
 #define CONST_BUFFER_STRUCT_END( variableName, v ) variableName
 
 #define FLAT_INTERPOLANT( decl, bindingPoint ) flat decl
 #define INTERPOLANT( decl, bindingPoint ) decl
+
+#define OGRE_OUT_REF( declType, variableName ) out declType variableName
+#define OGRE_INOUT_REF( declType, variableName ) inout declType variableName
+
+#define FLOAT3_ARRAY_START float3[](
+#define FLOAT_ARRAY_START float[](
+#define OGRE_ARRAY_END )
 @end
 
 @property( !GL_ARB_texture_buffer_range || !GL_ARB_shading_language_420pack )

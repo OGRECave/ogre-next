@@ -77,9 +77,19 @@ inline float3x3 toMat3x3( float4x4 m )
 #define bufferFetch( buffer, idx ) buffer[idx]
 #define bufferFetch1( buffer, idx ) buffer[idx]
 
+#define OGRE_SAMPLER_ARG_DECL( samplerName ) , sampler samplerName
+#define OGRE_SAMPLER_ARG( samplerName ) , samplerName
+
 #define CONST_BUFFER_STRUCT_BEGIN( structName, bindingPoint ) struct structName
 #define CONST_BUFFER_STRUCT_END( variableName )
 
 #define FLAT_INTERPOLANT( decl, bindingPoint ) decl [[flat]]
 #define INTERPOLANT( decl, bindingPoint ) decl
+
+#define OGRE_OUT_REF( declType, variableName ) thread declType &variableName
+#define OGRE_INOUT_REF( declType, variableName ) thread declType &variableName
+
+#define FLOAT3_ARRAY_START {
+#define FLOAT_ARRAY_START {
+#define OGRE_ARRAY_END }
 @end

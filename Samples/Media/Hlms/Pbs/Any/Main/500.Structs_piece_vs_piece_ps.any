@@ -82,6 +82,7 @@ struct AreaLtcLight
 };
 
 @insertpiece( DeclCubemapProbeStruct )
+@insertpiece( DeclVctStruct )
 
 //Uniforms that change per pass
 CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
@@ -174,6 +175,8 @@ CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
 @property( parallax_correct_cubemaps && !hlms_enable_cubemaps_auto )
 	CubemapProbe autoProbe;
 @end
+
+	@insertpiece( DeclVctUniform )
 
 	@insertpiece( custom_passBuffer )
 }

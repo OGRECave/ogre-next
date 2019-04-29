@@ -62,10 +62,20 @@
 #define bufferFetch( buffer, idx ) buffer.Load( idx )
 #define bufferFetch1( buffer, idx ) buffer.Load( idx ).x
 
+#define OGRE_SAMPLER_ARG_DECL( samplerName ) , SamplerState samplerName
+#define OGRE_SAMPLER_ARG( samplerName ) , samplerName
+
 #define CONST_BUFFER( bufferName, bindingPoint ) cbuffer bufferName : register(b##bindingPoint)
 #define CONST_BUFFER_STRUCT_BEGIN( structName, bindingPoint ) cbuffer structName : register(b##bindingPoint) { struct _##structName
 #define CONST_BUFFER_STRUCT_END( variableName ) variableName; }
 
 #define FLAT_INTERPOLANT( decl, bindingPoint ) nointerpolation decl : TEXCOORD##bindingPoint
 #define INTERPOLANT( decl, bindingPoint ) decl : TEXCOORD##bindingPoint
+
+#define OGRE_OUT_REF( declType, variableName ) out declType variableName
+#define OGRE_INOUT_REF( declType, variableName ) inout declType variableName
+
+#define FLOAT3_ARRAY_START {
+#define FLOAT_ARRAY_START {
+#define OGRE_ARRAY_END }
 @end
