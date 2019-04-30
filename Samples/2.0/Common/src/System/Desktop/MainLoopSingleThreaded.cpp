@@ -95,7 +95,7 @@ int Demo::MainEntryPoints::mainAppSingleThreaded( int argc, const char *argv[] )
     #endif
 
         Ogre::Timer timer;
-        unsigned long long startTime = timer.getMicroseconds();
+        Ogre::uint64 startTime = timer.getMicroseconds();
         double accumulator = MainEntryPoints::Frametime;
 
         double timeSinceLast = 1.0 / 60.0;
@@ -126,7 +126,7 @@ int Demo::MainEntryPoints::mainAppSingleThreaded( int argc, const char *argv[] )
                 Ogre::Threads::Sleep( 500 );
             }
 
-            unsigned long long endTime = timer.getMicroseconds();
+            Ogre::uint64 endTime = timer.getMicroseconds();
             timeSinceLast = (endTime - startTime) / 1000000.0;
             timeSinceLast = std::min( 1.0, timeSinceLast ); //Prevent from going haywire.
             accumulator += timeSinceLast;

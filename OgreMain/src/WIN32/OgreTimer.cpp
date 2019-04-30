@@ -121,7 +121,7 @@ void Timer::reset()
 }
 
 //-------------------------------------------------------------------------
-unsigned long long Timer::getMilliseconds()
+uint64 Timer::getMilliseconds()
 {
     LARGE_INTEGER curTime;
 
@@ -167,7 +167,7 @@ unsigned long long Timer::getMilliseconds()
 }
 
 //-------------------------------------------------------------------------
-unsigned long long Timer::getMicroseconds()
+uint64 Timer::getMicroseconds()
 {
     LARGE_INTEGER curTime;
 
@@ -207,21 +207,21 @@ unsigned long long Timer::getMicroseconds()
     mLastTime = newTime;
 
     // scale by 1000000 for microseconds
-    unsigned long long newMicro = (unsigned long long) (1000000 * newTime / mFrequency.QuadPart);
+    uint64 newMicro = (uint64) (1000000 * newTime / mFrequency.QuadPart);
 
     return newMicro;
 }
 
 //-------------------------------------------------------------------------
-unsigned long long Timer::getMillisecondsCPU()
+uint64 Timer::getMillisecondsCPU()
 {
     clock_t newClock = clock();
-    return (unsigned long long)( (float)( newClock - mZeroClock ) / ( (float)CLOCKS_PER_SEC / 1000.0 ) ) ;
+    return (uint64)( (float)( newClock - mZeroClock ) / ( (float)CLOCKS_PER_SEC / 1000.0 ) ) ;
 }
 
 //-------------------------------------------------------------------------
-unsigned long long Timer::getMicrosecondsCPU()
+uint64 Timer::getMicrosecondsCPU()
 {
     clock_t newClock = clock();
-    return (unsigned long long)( (float)( newClock - mZeroClock ) / ( (float)CLOCKS_PER_SEC / 1000000.0 ) ) ;
+    return (uint64)( (float)( newClock - mZeroClock ) / ( (float)CLOCKS_PER_SEC / 1000000.0 ) ) ;
 }

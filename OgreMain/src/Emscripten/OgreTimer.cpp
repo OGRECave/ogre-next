@@ -50,27 +50,27 @@ void Timer::reset()
 }
 
 //--------------------------------------------------------------------------------//
-unsigned long long Timer::getMilliseconds()
+uint64 Timer::getMilliseconds()
 {
     return emscripten_get_now() - start;
 }
 
 //--------------------------------------------------------------------------------//
-unsigned long long Timer::getMicroseconds()
+uint64 Timer::getMicroseconds()
 {
     return (emscripten_get_now() - start) * 1000.0;
 }
 
 //-- Common Across All Timers ----------------------------------------------------//
-unsigned long long Timer::getMillisecondsCPU()
+uint64 Timer::getMillisecondsCPU()
 {
     clock_t newClock = clock();
-    return (unsigned long long)((float)(newClock-zeroClock) / ((float)CLOCKS_PER_SEC/1000.0)) ;
+    return (uint64)((float)(newClock-zeroClock) / ((float)CLOCKS_PER_SEC/1000.0)) ;
 }
 
 //-- Common Across All Timers ----------------------------------------------------//
-unsigned long long Timer::getMicrosecondsCPU()
+uint64 Timer::getMicrosecondsCPU()
 {
     clock_t newClock = clock();
-    return (unsigned long long)((float)(newClock-zeroClock) / ((float)CLOCKS_PER_SEC/1000000.0)) ;
+    return (uint64)((float)(newClock-zeroClock) / ((float)CLOCKS_PER_SEC/1000000.0)) ;
 }

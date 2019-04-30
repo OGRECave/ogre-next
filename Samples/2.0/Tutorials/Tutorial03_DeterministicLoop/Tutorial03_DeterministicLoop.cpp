@@ -112,7 +112,7 @@ int mainApp( int argc, const char *argv[] )
     Ogre::Timer timer;
     YieldTimer yieldTimer( &timer );
 
-    unsigned long long startTime = timer.getMicroseconds();
+    Ogre::uint64 startTime = timer.getMicroseconds();
 
     while( !graphicsSystem.getQuit() )
     {
