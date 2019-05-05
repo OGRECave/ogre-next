@@ -14,6 +14,8 @@
 #include "OgreCamera.h"
 #include "OgreRenderWindow.h"
 
+#include "OgreHlmsPbs.h"
+
 #include "OgreRoot.h"
 #include "Vct/OgreVctVoxelizer.h"
 #include "Vct/OgreVctLighting.h"
@@ -104,6 +106,14 @@ namespace Demo
         vctLighting = new Ogre::VctLighting( Ogre::Id::generateNewId<Ogre::VctLighting>(),
                                              voxelizer );
         vctLighting->update( sceneManager );
+
+        {
+            Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
+
+            assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
+            Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
+            hlmsPbs->setVctLighting( vctLighting );
+        }
     }
     //-----------------------------------------------------------------------------------
     void VoxelizerGameState::update( float timeSinceLast )

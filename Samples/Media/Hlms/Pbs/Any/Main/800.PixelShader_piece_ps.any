@@ -112,6 +112,7 @@
 		@insertpiece( DeclareBRDF_AreaLightApprox )
 	@end
 
+	@insertpiece( DeclVctStruct )
 	@insertpiece( DeclVctFuncs )
 @end
 

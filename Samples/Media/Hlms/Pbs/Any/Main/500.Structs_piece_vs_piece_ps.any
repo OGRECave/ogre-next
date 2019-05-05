@@ -82,7 +82,6 @@ struct AreaLtcLight
 };
 
 @insertpiece( DeclCubemapProbeStruct )
-@insertpiece( DeclVctStruct )
 
 //Uniforms that change per pass
 CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )

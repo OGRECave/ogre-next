@@ -44,7 +44,8 @@ namespace Ogre
     public:
         static const uint16 msDistanceThresholdCustomParam;
     protected:
-        TextureGpu      *mLightVoxel[6];
+        TextureGpu              *mLightVoxel[6];
+        HlmsSamplerblock const  *mSamplerblockTrilinear;
         VctVoxelizer    *mVoxelizer;
 
         HlmsComputeJob      *mLightInjectionJob;
@@ -78,6 +79,15 @@ namespace Ogre
         */
         void update( SceneManager *sceneManager, float rayMarchStepScale=1.0f,
                      uint32 lightMask=0xffffffff );
+
+        size_t getConstBufferSize(void) const;
+
+        void fillConstBufferData( const Matrix4 &viewMatrix,
+                                  float * RESTRICT_ALIAS passBufferPtr ) const;
+
+        TextureGpu** getLightVoxelTextures(void)            { return mLightVoxel; }
+        const HlmsSamplerblock* getBindTrilinearSamplerblock(void)
+                                                            { return mSamplerblockTrilinear; }
     };
 }
 

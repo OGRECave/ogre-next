@@ -63,6 +63,7 @@ namespace Ogre
 
     VctLighting::VctLighting( IdType id, VctVoxelizer *voxelizer ) :
         IdObject( id ),
+        mSamplerblockTrilinear( 0 ),
         mVoxelizer( voxelizer ),
         mLightInjectionJob( 0 ),
         mLightsConstBuffer( 0 ),
@@ -132,6 +133,11 @@ namespace Ogre
         VaoManager *vaoManager = renderSystem->getVaoManager();
         mLightsConstBuffer = vaoManager->createConstBuffer( sizeof(ShaderVctLight) * 16u,
                                                             BT_DYNAMIC_PERSISTENT, 0, false );
+
+        HlmsManager *hlmsManager = mVoxelizer->getHlmsManager();
+        HlmsSamplerblock samplerblock;
+        samplerblock.mMipFilter = FO_LINEAR;
+        mSamplerblockTrilinear = hlmsManager->getSamplerblock( samplerblock );
     }
     //-------------------------------------------------------------------------
     VctLighting::~VctLighting()
@@ -146,6 +152,10 @@ namespace Ogre
             vaoManager->destroyConstBuffer( mLightsConstBuffer );
             mLightsConstBuffer = 0;
         }
+
+        HlmsManager *hlmsManager = mVoxelizer->getHlmsManager();
+        hlmsManager->destroySamplerblock( mSamplerblockTrilinear );
+        mSamplerblockTrilinear = 0;
     }
     //-------------------------------------------------------------------------
     void VctLighting::addLight( ShaderVctLight * RESTRICT_ALIAS vctLight, Light *light,
@@ -250,5 +260,39 @@ namespace Ogre
 
         HlmsCompute *hlmsCompute = mVoxelizer->getHlmsManager()->getComputeHlms();
         hlmsCompute->dispatch( mLightInjectionJob, 0, 0 );
+    }
+    //-------------------------------------------------------------------------
+    size_t VctLighting::getConstBufferSize(void) const
+    {
+        return 5u * 4u * sizeof(float);
+    }
+    //-------------------------------------------------------------------------
+    void VctLighting::fillConstBufferData( const Matrix4 &viewMatrix,
+                                           float * RESTRICT_ALIAS passBufferPtr ) const
+    {
+        //float4 voxelCellSize_maxDistance;
+        *passBufferPtr++ = 1.0f;
+        *passBufferPtr++ = 1.0f;
+        *passBufferPtr++ = 1.0f;
+        *passBufferPtr++ = 1.414213562f;
+
+        //float4 normalBias_startBias_blendAmbient_blendFade;
+        *passBufferPtr++ = 0.01f;
+        *passBufferPtr++ = 0.01f;
+        *passBufferPtr++ = 0.0f;
+        *passBufferPtr++ = 0.0f;
+
+        Matrix4 xform;
+        xform.makeTransform( -mVoxelizer->getVoxelOrigin(),
+                             1.0f / mVoxelizer->getVoxelSize(),
+                             Quaternion::IDENTITY );
+        //xform = xform * viewMatrix.inverse();
+        xform.concatenateAffine( viewMatrix.inverseAffine() );
+
+        //float4 xform_row0;
+        //float4 xform_row1;
+        //float4 xform_row2;
+        for( size_t i=0; i<12u; ++i )
+            *passBufferPtr++ = static_cast<float>( xform[0][i] );
     }
 }

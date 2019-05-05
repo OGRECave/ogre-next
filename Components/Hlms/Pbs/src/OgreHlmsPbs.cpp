@@ -46,6 +46,7 @@ THE SOFTWARE.
 #include "OgreForward3D.h"
 #include "Cubemaps/OgreParallaxCorrectedCubemap.h"
 #include "OgreIrradianceVolume.h"
+#include "Vct/OgreVctLighting.h"
 
 #include "OgreSceneManager.h"
 #include "Compositor/OgreCompositorShadowNode.h"
@@ -169,6 +170,8 @@ namespace Ogre
     const IdString PbsProperty::CubemapsUseDpm    = IdString( "hlms_cubemaps_use_dpm" );
     const IdString PbsProperty::CubemapsAsDiffuseGi=IdString( "cubemaps_as_diffuse_gi" );
     const IdString PbsProperty::IrradianceVolumes = IdString( "irradiance_volumes" );
+    const IdString PbsProperty::VctNumProbes      = IdString( "vct_num_probes" );
+    const IdString PbsProperty::VctConeDirs       = IdString( "vct_cone_dirs" );
     const IdString PbsProperty::ObbRestraintApprox= IdString( "obb_restraint_approx" );
     const IdString PbsProperty::ObbRestraintLtc   = IdString( "obb_restraint_ltc" );
 
@@ -244,6 +247,7 @@ namespace Ogre
         mPrePassTextures( 0 ),
         mSsrTexture( 0 ),
         mIrradianceVolume( 0 ),
+        mVctLighting( 0 ),
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
         mPlanarReflections( 0 ),
         mPlanarReflectionsSamplerblock( 0 ),
@@ -268,6 +272,7 @@ namespace Ogre
 #endif
         mSetupWorldMatBuf( true ),
         mDebugPssmSplits( false ),
+        mVctFullConeCount( false ),
 #if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
         mUseObbRestraintAreaApprox( false ),
         mUseObbRestraintAreaLtc( false ),
@@ -888,9 +893,11 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsPbs::notifyPropertiesMergedPreGenerationStep(void)
     {
-        if( getProperty( HlmsBaseProp::DecalsNormals ) )
+        const bool hasVct = getProperty( PbsProperty::VctNumProbes ) > 0;
+        if( getProperty( HlmsBaseProp::DecalsNormals ) ||
+            hasVct )
         {
-            //If decals normals are enabled, we need to generate the TBN matrix.
+            //If decals normals are enabled or VCT is used, we need to generate the TBN matrix.
             bool normalMapCanBeSupported = (getProperty( HlmsBaseProp::Normal ) &&
                                             getProperty( HlmsBaseProp::Tangent )) ||
                                             getProperty( HlmsBaseProp::QTangent );
@@ -916,7 +923,8 @@ namespace Ogre
             getProperty( PbsProperty::UsePlanarReflections ) ||
             getProperty( PbsProperty::AmbientHemisphere ) ||
             getProperty( HlmsBaseProp::LightsAreaApprox ) ||
-            getProperty( HlmsBaseProp::LightsAreaLtc ) )
+            getProperty( HlmsBaseProp::LightsAreaLtc ) ||
+            hasVct )
         {
             setProperty( PbsProperty::NeedsViewDir, 1 );
         }
@@ -925,7 +933,8 @@ namespace Ogre
             getProperty( PbsProperty::UseEnvProbeMap ) ||
             getProperty( PbsProperty::UsePlanarReflections ) ||
             getProperty( PbsProperty::AmbientHemisphere ) ||
-            getProperty( PbsProperty::EnableCubemapsAuto ) )
+            getProperty( PbsProperty::EnableCubemapsAuto ) ||
+            hasVct )
         {
             setProperty( PbsProperty::NeedsReflDir, 1 );
         }
@@ -954,6 +963,9 @@ namespace Ogre
         {
             setTextureReg( PixelShader, "irradianceVolume", texUnit++ );
         }
+
+        if( getProperty( PbsProperty::VctNumProbes ) > 0 )
+            setTextureReg( PixelShader, "vctProbe", texUnit++ );
 
         if( getProperty( HlmsBaseProp::LightsAreaTexMask ) > 0 )
             setTextureReg( PixelShader, "areaLightMasks", texUnit++ );
@@ -1235,6 +1247,12 @@ namespace Ogre
                 }
             }
 
+            if( mVctLighting )
+            {
+                setProperty( PbsProperty::VctNumProbes, 1 );
+                setProperty( PbsProperty::VctConeDirs, mVctFullConeCount ? 6 : 4 );
+            }
+
             if( mIrradianceVolume )
                 setProperty( PbsProperty::IrradianceVolumes, 1 );
 
@@ -1368,6 +1386,9 @@ namespace Ogre
                 mParallaxCorrectedCubemap->_notifyPreparePassHash( viewMatrix );
                 mapSize += mParallaxCorrectedCubemap->getConstBufferSize();
             }
+
+            if( mVctLighting )
+                mapSize += mVctLighting->getConstBufferSize();
 
             //mat4 view + mat4 shadowRcv[numShadowMapLights].texViewProj +
             //              vec2 shadowRcv[numShadowMapLights].shadowDepthRange +
@@ -2098,6 +2119,12 @@ namespace Ogre
                 mParallaxCorrectedCubemap->fillConstBufferData( viewMatrix, passBufferPtr );
                 passBufferPtr += mParallaxCorrectedCubemap->getConstBufferSize() >> 2u;
             }
+
+            if( mVctLighting )
+            {
+                mVctLighting->fillConstBufferData( viewMatrix, passBufferPtr );
+                passBufferPtr += mVctLighting->getConstBufferSize() >> 2u;
+            }
         }
         else
         {
@@ -2157,6 +2184,8 @@ namespace Ogre
             if( mGridBuffer )
                 mTexUnitSlotStart += 2;
             if( mIrradianceVolume )
+                mTexUnitSlotStart += 1;
+            if( mVctLighting )
                 mTexUnitSlotStart += 1;
             if( mParallaxCorrectedCubemap && !mParallaxCorrectedCubemap->isRendering() )
                 mTexUnitSlotStart += 1;
@@ -2289,6 +2318,16 @@ namespace Ogre
 
                     *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit,
                                                                          irradianceTex,
+                                                                         samplerblock );
+                    ++texUnit;
+                }
+
+                if( mVctLighting )
+                {
+                    TextureGpu **lightVoxelTexs = mVctLighting->getLightVoxelTextures();
+                    const HlmsSamplerblock *samplerblock =
+                            mVctLighting->getBindTrilinearSamplerblock();
+                    *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit, lightVoxelTexs[0],
                                                                          samplerblock );
                     ++texUnit;
                 }

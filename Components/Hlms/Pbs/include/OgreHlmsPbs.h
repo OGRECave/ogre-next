@@ -131,6 +131,7 @@ namespace Ogre
         TextureGpu              *mPrePassMsaaDepthTexture;
         TextureGpu              *mSsrTexture;
         IrradianceVolume        *mIrradianceVolume;
+        VctLighting             *mVctLighting;
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
         //TODO: After texture refactor it should be possible to abstract this,
         //so we don't have to be aware of PlanarReflections class.
@@ -166,6 +167,8 @@ namespace Ogre
 #endif
         bool mSetupWorldMatBuf;
         bool mDebugPssmSplits;
+
+        bool mVctFullConeCount;
 
 #if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
         bool mUseObbRestraintAreaApprox;
@@ -298,6 +301,9 @@ namespace Ogre
                                                     { mIrradianceVolume = irradianceVolume; }
         IrradianceVolume* getIrradianceVolume(void) const  { return mIrradianceVolume; }
 
+        void setVctLighting( VctLighting *vctLighting )     { mVctLighting = vctLighting; }
+        VctLighting* getVctLighting(void)                   { return mVctLighting; }
+
         void setAreaLightMasks( TextureGpu *areaLightMask );
         TextureGpu* getAreaLightMasks(void) const           { return mAreaLightMasks; }
 
@@ -426,6 +432,8 @@ namespace Ogre
         static const IdString CubemapsUseDpm;
         static const IdString CubemapsAsDiffuseGi;
         static const IdString IrradianceVolumes;
+        static const IdString VctNumProbes;
+        static const IdString VctConeDirs;
         static const IdString ObbRestraintApprox;
         static const IdString ObbRestraintLtc;
 
