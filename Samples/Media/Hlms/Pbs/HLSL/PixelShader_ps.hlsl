@@ -4,8 +4,6 @@
 @insertpiece( SetCrossPlatformSettings )
 @insertpiece( DeclareUvModifierMacros )
 
-@insertpiece( DefaultHeaderPS )
-
 // START UNIFORM DECLARATION
 @property( !hlms_shadowcaster || alpha_test )
 	@property( !hlms_shadowcaster )
@@ -17,6 +15,9 @@
 @end
 @insertpiece( custom_ps_uniformDeclaration )
 // END UNIFORM DECLARATION
+
+@insertpiece( DefaultHeaderPS )
+
 struct PS_INPUT
 {
 @insertpiece( VStoPS_block )

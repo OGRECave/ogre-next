@@ -8,8 +8,6 @@
 layout(std140) uniform;
 #define FRAG_COLOR		0
 
-@insertpiece( DefaultHeaderPS )
-
 @property( !hlms_render_depth_only )
 	@property( !hlms_shadowcaster )
 		@property( !hlms_prepass )
@@ -58,6 +56,9 @@ in vec4 gl_FragCoord;
 @end
 @insertpiece( custom_ps_uniformDeclaration )
 // END UNIFORM DECLARATION
+
+@insertpiece( DefaultHeaderPS )
+
 @property( !hlms_shadowcaster || !hlms_shadow_uses_depth_texture || alpha_test || exponential_shadow_maps )
 in block
 {

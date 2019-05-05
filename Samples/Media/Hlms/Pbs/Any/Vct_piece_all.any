@@ -1,0 +1,26 @@
+
+@property( vct_num_probes )
+
+@piece( DeclVctStruct )
+	struct VctProbeParams
+	{
+		float4 voxelCellSize_maxDistance;
+		float4 normalBias_startBias_blendAmbient_blendFade;
+
+		float4 xform_row0;
+		float4 xform_row1;
+		float4 xform_row2;
+	};
+
+	#define vctCellSize voxelCellSize_maxDistance.xyz
+	#define vctMaxDistance voxelCellSize_maxDistance.w
+	#define vctNormalBias normalBias_startBias_blendAmbient_blendFade.x
+	#define vctStartBias normalBias_startBias_blendAmbient_blendFade.y
+	#define vctBlendAmbient normalBias_startBias_blendAmbient_blendFade.z
+	#define vctBlendFade normalBias_startBias_blendAmbient_blendFade.w
+@end
+@piece( DeclVctUniform )
+	VctProbeParams vctProbeParams;
+@end
+
+@end
