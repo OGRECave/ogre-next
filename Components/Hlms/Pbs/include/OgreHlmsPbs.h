@@ -448,6 +448,7 @@ namespace Ogre
         static const IdString UseEnvProbeMap;
         static const IdString NeedsViewDir;
         static const IdString NeedsReflDir;
+        static const IdString NeedsEnvBrdf;
 
         static const IdString *UvSourcePtrs[NUM_PBSM_SOURCES];
         static const IdString *BlendModes[4];

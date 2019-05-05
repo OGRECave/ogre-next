@@ -32,8 +32,10 @@
 
 			@property( needs_refl_dir )
 				float3 reflDir;
-				float3 envColourS;
-				float3 envColourD;
+				@property( needs_env_brdf )
+					float3 envColourS;
+					float3 envColourD;
+				@end
 			@end
 		@else
 			float4 diffuse; //We only use the .w component, Alpha
@@ -308,6 +310,8 @@
 											samplerState@value( normal_map_tex_sampler ),
 											UV_NORMAL( inPs.uv@value(uv_normal).xy ),
 											texIndex_normalIdx );
+		@else
+			pixelData.normal = float3( 0.0, 0.0, 1.0 );
 		@end
 		@property( normal_weight_tex )
 			// Apply the weight to the main normal map
@@ -666,7 +670,7 @@
 				@end
 			@end
 
-            @property( needs_refl_dir )
+			@property( needs_env_brdf )
 				@insertpiece( BRDF_EnvMap )
 			@end
 		@end ///!hlms_prepass

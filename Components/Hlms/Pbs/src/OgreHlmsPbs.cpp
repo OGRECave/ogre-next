@@ -186,6 +186,7 @@ namespace Ogre
     const IdString PbsProperty::UseEnvProbeMap    = IdString( "use_envprobe_map" );
     const IdString PbsProperty::NeedsViewDir      = IdString( "needs_view_dir" );
     const IdString PbsProperty::NeedsReflDir      = IdString( "needs_refl_dir" );
+    const IdString PbsProperty::NeedsEnvBrdf      = IdString( "needs_env_brdf" );
 
     const IdString *PbsProperty::UvSourcePtrs[NUM_PBSM_SOURCES] =
     {
@@ -929,14 +930,17 @@ namespace Ogre
             setProperty( PbsProperty::NeedsViewDir, 1 );
         }
 
+        if( hasVct )
+            setProperty( PbsProperty::NeedsReflDir, 1 );
+
         if( getProperty( HlmsBaseProp::UseSsr ) ||
             getProperty( PbsProperty::UseEnvProbeMap ) ||
             getProperty( PbsProperty::UsePlanarReflections ) ||
             getProperty( PbsProperty::AmbientHemisphere ) ||
-            getProperty( PbsProperty::EnableCubemapsAuto ) ||
-            hasVct )
+            getProperty( PbsProperty::EnableCubemapsAuto ) )
         {
             setProperty( PbsProperty::NeedsReflDir, 1 );
+            setProperty( PbsProperty::NeedsEnvBrdf, 1 );
         }
 
         int32 texUnit = mReservedTexSlots;
