@@ -103,7 +103,8 @@
 	void computeVctProbe
 	(
 		OGRE_OUT_REF( float3, outDiffuse ), OGRE_OUT_REF( float4, outSpecular ),
-		PixelData pixelData, float3 pos, float3x3 TBN, VctProbeParams probeParams,
+		PixelData pixelData, float3 pos, float3x3 TBN, float3 ambientUpperHemi,
+		VctProbeParams probeParams,
 		sampler3D probe OGRE_SAMPLER_ARG_DECL( probeSampler )
 	)
 	{
@@ -115,7 +116,7 @@
 			posLS.y < 0.0 || posLS.y > 1.0 ||
 			posLS.z < 0.0 || posLS.z > 1.0 )
 		{
-			outDiffuse = float4( 0, 0, 0, 0 );
+			outDiffuse = float3( 0, 0, 0 );
 			outSpecular = float4( 0, 0, 0, 0 );
 			return;
 		}
@@ -162,17 +163,22 @@
 		{
 			float3 dir = toVctProbeSpaceDir( mul( TBN, cone_dirs[i] ), probeParams );
 			dir = normalize( dir );
-			light += coneWeights[i] * voxelConeTrace( probeParams, posLS, ambient, dir, coneAngleTan,
+			//TODO: There are better values than passBuf.ambientUpperHemi. When VCT probe can be used
+			//then we should not apply BRDF_EnvMap and use the values in pixelData.envColourD
+			light += coneWeights[i] * voxelConeTrace( probeParams, posLS, ambientUpperHemi, dir,
+													  coneAngleTan,
 													  probe OGRE_SAMPLER_ARG( probeSampler ) );
 		}
 
 		outDiffuse += light * (probeParams.vctBlendFade * blend);
 
 		//Irradiance / specular
-		float3 irrLight = toVctProbeSpaceDir( probeParams, posLS, environment, reflVecLS,
-											   max( minRefTan, tan( pixelData.roughness * 0.5f *
-																	M_PI * 0.99f ) ),
-											   probe, probeSampler );
+		//TODO: There are better values than passBuf.ambientUpperHemi. When VCT probe can be used
+		//then we should not apply BRDF_EnvMap and use the values in pixelData.envColourS
+		float3 irrLight = voxelConeTrace( probeParams, posLS, ambientUpperHemi, reflVecLS,
+										  max( minRefTan, tan( pixelData.roughness * 0.5f *
+															   M_PI * 0.99f ) ),
+										  probe OGRE_SAMPLER_ARG( probeSampler ) );
 		outSpecular += float4( irrLight * (probeParams.vctBlendFade * blend), blend );
 	}
 @end
@@ -182,10 +188,17 @@
 		float3x3 TBN = generateTbn( pixelData.geomNormal, inPs.pos );
 	@end
 
-	float4 vctDiffuse;
+	@property( ambient_hemisphere || ambient_fixed || envmap_scale )
+		float3 vctAmbient = passBuf.ambientUpperHemi;
+	@else
+		float3 vctAmbient = float3( 0, 0, 0 );
+	@end
+
+	float3 vctDiffuse;
 	float4 vctSpecular;
 	computeVctProbe( vctDiffuse, vctSpecular, pixelData, inPs.pos, TBN,
-					 passBuf.vctProbeParams, vctProbe OGRE_SAMPLER_ARG( vctProbeSampler ) );
+					 vctAmbient, passBuf.vctProbeParams,
+					 vctProbe OGRE_SAMPLER_ARG( vctProbeSampler ) );
 
 	finalColour.xyz += pixelData.diffuse.xyz * vctDiffuse.xyz;
 	finalColour.xyz += pixelData.specular.xyz * vctSpecular.xyz;
