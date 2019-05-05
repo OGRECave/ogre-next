@@ -20,6 +20,8 @@
 #include "Vct/OgreVctVoxelizer.h"
 #include "Vct/OgreVctLighting.h"
 
+#include "OgreWindow.h"
+
 using namespace Demo;
 
 #define TODO_do_this_in_voxelizer
@@ -67,6 +69,14 @@ namespace Demo
         //Leave it loaded if you want to use athene with v1 Entity.
         v1Mesh->unload();
 
+        Ogre::Item *cornellItem = sceneManager->createItem( "CornellBox.mesh",
+                                                            Ogre::ResourceGroupManager::
+                                                            AUTODETECT_RESOURCE_GROUP_NAME,
+                                                            Ogre::SCENE_DYNAMIC );
+        Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
+                                     createChildSceneNode( Ogre::SCENE_DYNAMIC );
+        sceneNode->attachObject( cornellItem );
+
         //Create an Item with the model we just imported.
         //Notice we use the name of the imported model. We could also use the overload
         //with the mesh pointer:
@@ -75,10 +85,11 @@ namespace Demo
                                                      Ogre::ResourceGroupManager::
                                                      AUTODETECT_RESOURCE_GROUP_NAME,
                                                      Ogre::SCENE_DYNAMIC );
-        Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
-                createChildSceneNode( Ogre::SCENE_DYNAMIC );
+        sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
+                    createChildSceneNode( Ogre::SCENE_DYNAMIC );
         sceneNode->attachObject( item );
-        sceneNode->scale( 0.1f, 0.1f, 0.1f );
+        sceneNode->setScale( Ogre::Vector3( 0.01f ) );
+        sceneNode->setPosition( 0, item->getWorldAabbUpdated().mHalfSize.y, 0 );
 
         Ogre::Light *light = sceneManager->createLight();
         Ogre::SceneNode *lightNode = sceneManager->getRootSceneNode()->createChildSceneNode();
@@ -98,6 +109,7 @@ namespace Demo
         voxelizer =
                 new Ogre::VctVoxelizer( Ogre::Id::generateNewId<Ogre::VctVoxelizer>(),
                                         root->getRenderSystem(), root->getHlmsManager() );
+        voxelizer->addItem( cornellItem, false );
         voxelizer->addItem( item, false );
         voxelizer->autoCalculateRegion();
         voxelizer->dividideOctants( 1u, 1u, 1u );
@@ -118,6 +130,15 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void VoxelizerGameState::update( float timeSinceLast )
     {
-        //voxelizer->build();
+//        if( mGraphicsSystem->getRenderWindow()->isVisible() )
+//        {
+//            static int frame = 0;
+//            if( frame > 1 )
+//                voxelizer->build();
+//            ++frame;
+//            Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
+//            vctLighting->update( sceneManager );
+//        }
+        TutorialGameState::update( timeSinceLast );
     }
 }

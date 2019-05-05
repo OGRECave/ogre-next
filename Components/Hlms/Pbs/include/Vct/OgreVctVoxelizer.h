@@ -204,7 +204,7 @@ namespace Ogre
         void convertMeshUncompressed( const MeshPtr &mesh, QueuedMesh &queuedMesh,
                                       MappedBuffers &mappedBuffers );
 
-        void freeBuffers(void);
+        void freeBuffers( bool bForceFree );
 
         void buildMeshBuffers(void);
         void createVoxelTextures(void);

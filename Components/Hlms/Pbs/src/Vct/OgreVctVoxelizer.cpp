@@ -126,7 +126,7 @@ namespace Ogre
     VctVoxelizer::~VctVoxelizer()
     {
         destroyVoxelTextures();
-        freeBuffers();
+        freeBuffers( true );
         destroyInstanceBuffers();
 
         delete mVctMaterial;
@@ -237,6 +237,10 @@ namespace Ogre
                 if( indexBuffer->getIndexType() == IndexBufferPacked::IT_16BIT )
                 {
                     uses32bitIndices = false;
+                    //totalNumIndices16 must always be even since the UAV buffer
+                    //is internally packed uint32 and BufferPacked::copyTo doesn't
+                    //like copying with odd-starting offsets in some APIs.
+                    totalNumIndices16 = alignToNextMultiple( totalNumIndices16, 2u );
                     ibOffset = mNumIndices16 + totalNumIndices16;
                     totalNumIndices16 += numIndices;
                 }
@@ -299,13 +303,18 @@ namespace Ogre
             {
                 if( indexBuffer->getIndexType() == IndexBufferPacked::IT_16BIT )
                 {
-                    indexBuffer->copyTo( mIndexBuffer16, 0u, vao->getPrimitiveStart(),
+                    indexBuffer->copyTo( mIndexBuffer16,
+                                         mappedBuffers.index16BufferOffset >> 1u,
+                                         vao->getPrimitiveStart(),
                                          vao->getPrimitiveCount() );
-                    mappedBuffers.index16BufferOffset += vao->getPrimitiveCount();
+                    mappedBuffers.index16BufferOffset += alignToNextMultiple( vao->getPrimitiveCount(),
+                                                                              2u );
                 }
                 else
                 {
-                    indexBuffer->copyTo( mIndexBuffer32, 0u, vao->getPrimitiveStart(),
+                    indexBuffer->copyTo( mIndexBuffer32,
+                                         mappedBuffers.index32BufferOffset,
+                                         vao->getPrimitiveStart(),
                                          vao->getPrimitiveCount() );
                     mappedBuffers.index32BufferOffset += vao->getPrimitiveCount();
                 }
@@ -368,6 +377,8 @@ namespace Ogre
                 srcData[2] += downloadData[2].srcBytesPerVertex;
             }
 
+            mappedBuffers.uncompressedVertexBuffer = uncVertexBuffer;
+
             downloadHelper.unmap();
         }
     }
@@ -399,26 +410,30 @@ namespace Ogre
         mItems.push_back( item );
     }
     //-------------------------------------------------------------------------
-    void VctVoxelizer::freeBuffers(void)
+    void VctVoxelizer::freeBuffers( bool bForceFree )
     {
-        if( mIndexBuffer16 && mIndexBuffer16->getNumElements() != (mNumIndices16 + 1u) >> 1u )
+        if( mIndexBuffer16 &&
+            (bForceFree || mIndexBuffer16->getNumElements() != (mNumIndices16 + 1u) >> 1u) )
         {
             mVaoManager->destroyUavBuffer( mIndexBuffer16 );
             mIndexBuffer16 = 0;
         }
-        if( mIndexBuffer32 && mIndexBuffer32->getNumElements() != mNumIndices32 )
+        if( mIndexBuffer32 &&
+            (bForceFree || mIndexBuffer32->getNumElements() != mNumIndices32) )
         {
             mVaoManager->destroyUavBuffer( mIndexBuffer32 );
             mIndexBuffer32 = 0;
         }
 
-        if( mVertexBufferCompressed )
+        if( mVertexBufferCompressed &&
+            (bForceFree || mVertexBufferCompressed->getNumElements() != mNumVerticesCompressed) )
         {
             mVaoManager->destroyUavBuffer( mVertexBufferCompressed );
             mVertexBufferCompressed = 0;
         }
 
-        if( mVertexBufferUncompressed )
+        if( mVertexBufferUncompressed &&
+            (bForceFree || mVertexBufferUncompressed->getNumElements() != mNumVerticesUncompressed) )
         {
             mVaoManager->destroyUavBuffer( mVertexBufferUncompressed );
             mVertexBufferUncompressed = 0;
@@ -441,16 +456,16 @@ namespace Ogre
             ++itor;
         }
 
-        freeBuffers();
+        freeBuffers( false );
 
-        if( mNumIndices16 )
+        if( mNumIndices16 && !mIndexBuffer16 )
         {
             //D3D11 does not support 2-byte strides, so we create 4-byte buffers
             //and halve the number of indices (rounding up)
             mIndexBuffer16 = mVaoManager->createUavBuffer( (mNumIndices16 + 1u) >> 1u,
                                                            sizeof(uint32), 0, 0, false );
         }
-        if( mNumIndices32 )
+        if( mNumIndices32 && !mIndexBuffer32 )
             mIndexBuffer32 = mVaoManager->createUavBuffer( mNumIndices32, sizeof(uint32), 0, 0, false );
 
         StagingBuffer *vbUncomprStagingBuffer =
@@ -480,9 +495,12 @@ namespace Ogre
                                   uncompressedVertexBufferStart) <=
                          mNumVerticesUncompressed * sizeof(float) * 8u );
 
-        mVertexBufferUncompressed = mVaoManager->createUavBuffer( mNumVerticesUncompressed,
-                                                                  sizeof(float) * 8u,
-                                                                  0, 0, false );
+        if( mNumVerticesUncompressed && !mVertexBufferUncompressed )
+        {
+            mVertexBufferUncompressed = mVaoManager->createUavBuffer( mNumVerticesUncompressed,
+                                                                      sizeof(float) * 8u,
+                                                                      0, 0, false );
+        }
         vbUncomprStagingBuffer->unmap( StagingBuffer::Destination(
                                            mVertexBufferUncompressed, 0u, 0u,
                                            mVertexBufferUncompressed->getTotalSizeBytes() ) );
@@ -665,7 +683,16 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VctVoxelizer::createInstanceBuffers(void)
     {
-        const size_t instanceCount = mItems.size();
+        size_t instanceCount = 0;
+        ItemArray::const_iterator itor = mItems.begin();
+        ItemArray::const_iterator end  = mItems.end();
+
+        while( itor != end )
+        {
+            instanceCount += (*itor)->getNumSubItems();
+            ++itor;
+        }
+
         const size_t bytesNeeded = instanceCount * mOctants.size() * sizeof(float) * 4u * 6u;
 
         if( !mInstanceBuffer || bytesNeeded > mInstanceBuffer->getTotalSizeBytes() )
