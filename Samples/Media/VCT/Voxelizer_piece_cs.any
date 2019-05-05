@@ -402,13 +402,14 @@
 						@property( has_diffuse_tex )
 							finalDiffuse *= OGRE_SampleArray2D( diffuseTex, diffuseSampler, uv,
 																material.diffuseTexIdx );
+						@else
+							finalDiffuse *= material.bgDiffuse.xyzw;
 						@end
+
 						@property( has_emissive_tex )
 							finalEmissive *= OGRE_SampleArray2D( emissiveTex, emissiveSampler, uv,
 																 material.emissiveTexIdx ).xyz;
 						@end
-
-							finalDiffuse += material.bgDiffuse.xyzw;
 
 							voxelAlbedo			+= finalDiffuse;
 							voxelEmissive.xyz	+= finalEmissive;
