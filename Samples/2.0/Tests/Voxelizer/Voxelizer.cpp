@@ -4,6 +4,8 @@
 
 #include "OgreRoot.h"
 #include "OgreConfigFile.h"
+#include "OgreWindow.h"
+#include "Compositor/OgreCompositorManager2.h"
 
 //Declares WinMain / main
 #include "MainEntryPointHelper.h"
@@ -22,6 +24,13 @@ namespace Demo
 {
     class VoxelizerGraphicsSystem : public GraphicsSystem
     {
+        virtual Ogre::CompositorWorkspace* setupCompositor()
+        {
+            Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
+            return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(), mCamera,
+                                                    "PbsMaterialsWorkspace", true );
+        }
+
         virtual void setupResources(void)
         {
             GraphicsSystem::setupResources();
