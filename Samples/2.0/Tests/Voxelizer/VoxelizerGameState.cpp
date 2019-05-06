@@ -126,6 +126,8 @@ namespace Demo
             Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
             hlmsPbs->setVctLighting( vctLighting );
         }
+
+        mGraphicsSystem->getCamera()->setPosition( Ogre::Vector3( 0, 1.8, 2.5 ) );
     }
     //-----------------------------------------------------------------------------------
     void VoxelizerGameState::update( float timeSinceLast )

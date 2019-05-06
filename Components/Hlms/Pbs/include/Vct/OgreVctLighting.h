@@ -59,6 +59,19 @@ namespace Ogre
         ShaderParams::Param *mInvVoxelResolution;
         ShaderParams        *mShaderParams;
 
+    public:
+        /** Bias/distance in units (i.e. if your engine is in meters, then this value
+            is in meters) along the geometric normal at which to start cone tracing.
+
+            If this value is 0, then VCT results may resemble direct lighting rather
+            than indirect lighting due to self-illumination.
+
+            @remark	 PUBLIC VARIABLE. This variable can be altered directly.
+                     Changes are reflected immediately.
+        */
+        float   mNormalBias;
+
+    protected:
         void addLight( ShaderVctLight * RESTRICT_ALIAS vctLight, Light *light,
                        const Vector3 &voxelOrigin, const Vector3 &invVoxelRes );
 

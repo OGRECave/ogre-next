@@ -61,6 +61,8 @@
 			float3 lightDir = light.pos.xyz - voxelAabbCenter * light.pos.w;
 			lightDir = normalize( lightDir );
 
+			lightDir /= max3( lightDir.x, lightDir.y, lightDir.z );
+
 			float NdotL = dot( normalVal, lightDir );
 			if( emissiveVal.a > 0 )
 				NdotL = abs( NdotL );

@@ -32,7 +32,7 @@
 	}
 
 	float3 voxelConeTrace( VctProbeParams probeParams, float3 posLS, float3 ambient,
-						   float3 dirLS, float tanHalfAngle,
+						   float3 dirLS, float tanHalfAngle, float lodLevelStart,
 						   sampler3D probe
 						   OGRE_SAMPLER_ARG_DECL( probeSampler ) )
 	{
@@ -40,12 +40,19 @@
 		float alpha = 0.0;
 		float3 color = float3( 0.0, 0.0, 0.0 );
 
+		//Originally we calculated lodLevel here. However we provide it as argument
+		//because this value is known at compile time for diffuse cones, yet some
+		//drivers' constant folding & propagation seems to be broken because
+		//it takes a 0.88ms hit at 1600x900 on a Radeon RX 560 (Mesa 18.3.3).
+		//So we hardcode the lodLevelStart ourselves and pass it to the function
+		//float lodLevel = log2( 2.0 * tanHalfAngle );
+		float lodLevel = lodLevelStart;
 		while( dist < probeParams.vctMaxDistance && alpha < 0.95 )
 		{
-			float diameter = max( 1.0, 2.0 * tanHalfAngle * dist );
+			float diameter = 2.0 * tanHalfAngle * dist;
 			float4 scolor = OGRE_SampleLevel( probe, probeSampler,
-											  (posLS + dist * dirLS) * probeParams.vctCellSize,
-											  log2(diameter) );
+											  posLS + dist * dirLS,
+											  lodLevel++ );
 			float a = (1.0f - alpha);
 			color += scolor.xyz * a;
 			alpha += a * scolor.w;
@@ -80,7 +87,7 @@
 
 	void computeVctProbe
 	(
-		OGRE_OUT_REF( float3, outDiffuse ), OGRE_OUT_REF( float4, outSpecular ),
+		OGRE_INOUT_REF( float3, outDiffuse ), OGRE_INOUT_REF( float4, outSpecular ),
 		PixelData pixelData, float3 pos, float3x3 TBN, float3 ambientUpperHemi,
 		VctProbeParams probeParams,
 		sampler3D probe OGRE_SAMPLER_ARG_DECL( probeSampler )
@@ -88,14 +95,11 @@
 	{
 		float3 posLS = toVctProbeSpacePos( pos + pixelData.geomNormal.xyz * probeParams.vctNormalBias,
 										   probeParams );
-		float3 reflVecLS = toVctProbeSpaceDir( pixelData.reflDir, probeParams );
 
 		if( posLS.x < 0.0 || posLS.x > 1.0 ||
 			posLS.y < 0.0 || posLS.y > 1.0 ||
 			posLS.z < 0.0 || posLS.z > 1.0 )
 		{
-			outDiffuse = float3( 0, 0, 0 );
-			outSpecular = float4( 0, 0, 0, 0 );
 			return;
 		}
 
@@ -103,7 +107,7 @@
 			float3 blendv = abs( posLS * 2.0f - 1.0f );
 			float blend = saturate( 1.0f - max3( blendv.x, blendv.y, blendv.z ) );
 		@else
-			float blend = 0.0f;
+			float blend = 1.0f;
 		@end
 
 		@property( vct_cone_dirs == 6 )
@@ -119,6 +123,7 @@
 
 			float coneWeights[6] = FLOAT_ARRAY_START 0.25, 0.15, 0.15, 0.15, 0.15, 0.15 OGRE_ARRAY_END;
 			float coneAngleTan = 0.577;
+			float diffLodLevelStart = 0; // log2( 2.0 * tanHalfAngle );
 			float minRefTan = 0.0;
 		@else
 			float3 cone_dirs[4] =
@@ -131,8 +136,10 @@
 
 			float coneWeights[4] = FLOAT_ARRAY_START 0.25, 0.25, 0.25, 0.25 OGRE_ARRAY_END;
 			float coneAngleTan = 0.98269;
+			float diffLodLevelStart = 1; // log2( 2.0 * tanHalfAngle );
 			//max_distance *= 0.5;
-			float minRefTan = 0.2;
+			//float minRefTan = 0.2;
+			float minRefTan = 0.0;
 		@end
 
 		//Radiance / diffuse
@@ -144,18 +151,20 @@
 			//TODO: There are better values than passBuf.ambientUpperHemi. When VCT probe can be used
 			//then we should not apply BRDF_EnvMap and use the values in pixelData.envColourD
 			light += coneWeights[i] * voxelConeTrace( probeParams, posLS, ambientUpperHemi, dir,
-													  coneAngleTan,
+													  coneAngleTan, diffLodLevelStart,
 													  probe OGRE_SAMPLER_ARG( probeSampler ) );
 		}
 
 		outDiffuse += light * (probeParams.vctBlendFade * blend);
 
 		//Irradiance / specular
+		float3 reflVecLS = toVctProbeSpaceDir( pixelData.reflDir, probeParams );
+		float specConeAngleTan = max( minRefTan, tan( pixelData.roughness * 0.5f * M_PI * 0.99f ) );
+		float specLodLevelStart = log2( 2.0 * specConeAngleTan );
 		//TODO: There are better values than passBuf.ambientUpperHemi. When VCT probe can be used
 		//then we should not apply BRDF_EnvMap and use the values in pixelData.envColourS
 		float3 irrLight = voxelConeTrace( probeParams, posLS, ambientUpperHemi, reflVecLS,
-										  max( minRefTan, tan( pixelData.roughness * 0.5f *
-															   M_PI * 0.99f ) ),
+										  specConeAngleTan, specLodLevelStart,
 										  probe OGRE_SAMPLER_ARG( probeSampler ) );
 		outSpecular += float4( irrLight * (probeParams.vctBlendFade * blend), blend );
 	}
@@ -172,11 +181,22 @@
 		float3 vctAmbient = float3( 0, 0, 0 );
 	@end
 
-	float3 vctDiffuse;
-	float4 vctSpecular;
+	float3 vctDiffuse = float3( 0, 0, 0 );
+	float4 vctSpecular = float4( 0, 0, 0, 0 );
 	computeVctProbe( vctDiffuse, vctSpecular, pixelData, inPs.pos, TBN,
 					 vctAmbient, passBuf.vctProbeParams,
 					 vctProbe OGRE_SAMPLER_ARG( vctProbeSampler ) );
+
+	@property( vct_num_probes > 1 )
+		//We've added multiple probes together that are overlapping. Average them
+		//based on their influnce (i.e. proximity to probe's center)
+		if( vctSpecular.w > 0 )
+		{
+			float accumProbeInfluenceBorderBlend = 1.0f / vctSpecular.w;
+			vctDiffuse.xyz *= accumProbeInfluenceBorderBlend;
+			vctSpecular.xyz *= accumProbeInfluenceBorderBlend;
+		}
+	@end
 
 	finalColour.xyz += pixelData.diffuse.xyz * vctDiffuse.xyz;
 	finalColour.xyz += pixelData.specular.xyz * vctSpecular.xyz;

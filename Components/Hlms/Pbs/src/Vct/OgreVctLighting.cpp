@@ -72,7 +72,8 @@ namespace Ogre
         mRayMarchStepSize( 0 ),
         mVoxelCellSize( 0 ),
         mInvVoxelResolution( 0 ),
-        mShaderParams( 0 )
+        mShaderParams( 0 ),
+        mNormalBias( 0.25f )
     {
         TextureGpuManager *textureManager = voxelizer->getTextureGpuManager();
 
@@ -82,6 +83,8 @@ namespace Ogre
         uint32 texFlags = TextureFlags::Uav;
         if( !hasTypedUavs )
             texFlags |= TextureFlags::Reinterpretable;
+
+        texFlags |= TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps;
 
         const TextureGpu *albedoVox = voxelizer->getAlbedoVox();
 
@@ -260,6 +263,8 @@ namespace Ogre
 
         HlmsCompute *hlmsCompute = mVoxelizer->getHlmsManager()->getComputeHlms();
         hlmsCompute->dispatch( mLightInjectionJob, 0, 0 );
+
+        mLightVoxel[0]->_autogenerateMipmaps();
     }
     //-------------------------------------------------------------------------
     size_t VctLighting::getConstBufferSize(void) const
@@ -270,24 +275,31 @@ namespace Ogre
     void VctLighting::fillConstBufferData( const Matrix4 &viewMatrix,
                                            float * RESTRICT_ALIAS passBufferPtr ) const
     {
-        //float4 voxelCellSize_maxDistance;
-        *passBufferPtr++ = 1.0f;
-        *passBufferPtr++ = 1.0f;
-        *passBufferPtr++ = 1.0f;
-        *passBufferPtr++ = 1.414213562f;
+        const uint32 width  = mLightVoxel[0]->getWidth();
+        const uint32 height = mLightVoxel[0]->getHeight();
+        const uint32 depth  = mLightVoxel[0]->getDepth();
 
-        //float4 normalBias_startBias_blendAmbient_blendFade;
-        *passBufferPtr++ = 0.01f;
-        *passBufferPtr++ = 0.01f;
+        const float smallestRes = static_cast<float>( std::min( std::min( width, height ), depth ) );
+        const float invSmallestRes = 1.0f / smallestRes;
+
+        //float4 startBias_invStartBias_maxDistance_blendAmbient;
+        *passBufferPtr++ = invSmallestRes;
+        *passBufferPtr++ = smallestRes;
+        *passBufferPtr++ = 1.414213562f;
+        *passBufferPtr++ = 0.0f;
+
+        //float4 normalBias_blendFade_unused2;
+        *passBufferPtr++ = mNormalBias;
+        *passBufferPtr++ = 1.0f;
         *passBufferPtr++ = 0.0f;
         *passBufferPtr++ = 0.0f;
 
         Matrix4 xform;
-        xform.makeTransform( -mVoxelizer->getVoxelOrigin(),
+        xform.makeTransform( -mVoxelizer->getVoxelOrigin() / mVoxelizer->getVoxelSize(),
                              1.0f / mVoxelizer->getVoxelSize(),
                              Quaternion::IDENTITY );
         //xform = xform * viewMatrix.inverse();
-        xform.concatenateAffine( viewMatrix.inverseAffine() );
+        xform = xform.concatenateAffine( viewMatrix.inverseAffine() );
 
         //float4 xform_row0;
         //float4 xform_row1;
