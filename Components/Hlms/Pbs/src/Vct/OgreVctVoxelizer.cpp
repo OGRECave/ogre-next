@@ -251,13 +251,18 @@ namespace Ogre
                 {
                     uses32bitIndices = false;
                     uint32 indexStart = vao->getPrimitiveStart();
-                    const bool indexStartDecremented = adjustIndexOffsets16( indexStart, numIndices );
+                    const bool indexStartWasDecremented = adjustIndexOffsets16( indexStart, numIndices );
                     ibOffset = mNumIndices16 + totalNumIndices16;
-                    //BufferPacked::copyTo needs to be multiple of 2, but our compute shader
-                    //must start reading from the correct offset (which can be odd)
-                    if( indexStartDecremented )
-                        ++ibOffset;
                     totalNumIndices16 += numIndices;
+
+                    //BufferPacked::copyTo needs to be multiple of 2, but our compute shader
+                    //must start reading from the correct offset and the right number
+                    //of indices are processed (both of which can be odd)
+                    if( indexStartWasDecremented )
+                    {
+                        ++ibOffset;
+                        --numIndices;
+                    }
                 }
                 else
                 {
