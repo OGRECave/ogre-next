@@ -39,7 +39,7 @@
 		@end
 			( VctProbeParams probeParams, float3 posLS, float3 ambient,
 			  float3 dirLS, float tanHalfAngle,
-			  sampler3D probe
+			  OGRE_Texture3D_float4 probe
 			  OGRE_SAMPLER_ARG_DECL( probeSampler ) )
 		{
 			float dist = probeParams.vctStartBias;
@@ -108,7 +108,7 @@
 		OGRE_INOUT_REF( float3, outDiffuse ), OGRE_INOUT_REF( float4, outSpecular ),
 		PixelData pixelData, float3 pos, float3x3 TBN, float3 ambientUpperHemi,
 		VctProbeParams probeParams,
-		sampler3D probe OGRE_SAMPLER_ARG_DECL( probeSampler )
+		OGRE_Texture3D_float4 probe OGRE_SAMPLER_ARG_DECL( probeSampler )
 	)
 	{
 		float3 posLS = toVctProbeSpacePos( pos + pixelData.geomNormal.xyz * probeParams.vctNormalBias,

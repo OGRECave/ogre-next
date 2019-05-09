@@ -97,6 +97,8 @@
 #define OGRE_SAMPLER_ARG_DECL( samplerName )
 #define OGRE_SAMPLER_ARG( samplerName )
 
+#define OGRE_Texture3D_float4 sampler3D
+
 #define CONST_BUFFER( bufferName, bindingPoint ) layout_constbuffer(binding = bindingPoint) uniform bufferName
 #define CONST_BUFFER_STRUCT_BEGIN( structName, bindingPoint ) layout_constbuffer(binding = bindingPoint) uniform structName
 #define CONST_BUFFER_STRUCT_END( variableName, v ) variableName

@@ -62,6 +62,8 @@
 #define bufferFetch( buffer, idx ) buffer.Load( idx )
 #define bufferFetch1( buffer, idx ) buffer.Load( idx ).x
 
+#define OGRE_Texture3D_float4 Texture3D
+
 #define OGRE_SAMPLER_ARG_DECL( samplerName ) , SamplerState samplerName
 #define OGRE_SAMPLER_ARG( samplerName ) , samplerName
 
