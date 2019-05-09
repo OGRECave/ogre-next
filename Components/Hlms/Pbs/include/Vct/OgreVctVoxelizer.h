@@ -204,7 +204,7 @@ namespace Ogre
         @returns
             True if indexStart was decremented
         */
-        static bool adjustIndexOffsets16( size_t &indexStart, size_t &numIndices );
+        static bool adjustIndexOffsets16( uint32 &indexStart, uint32 &numIndices );
 
         void createComputeJobs();
 

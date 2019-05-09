@@ -136,7 +136,7 @@ namespace Ogre
         mComputeTools = 0;
     }
     //-------------------------------------------------------------------------
-    bool VctVoxelizer::adjustIndexOffsets16( size_t &indexStart, size_t &numIndices )
+    bool VctVoxelizer::adjustIndexOffsets16( uint32 &indexStart, uint32 &numIndices )
     {
         bool adjustedIndexStart = false;
         if( indexStart & 0x01 )
@@ -323,8 +323,8 @@ namespace Ogre
             {
                 if( indexBuffer->getIndexType() == IndexBufferPacked::IT_16BIT )
                 {
-                    size_t indexStart = vao->getPrimitiveStart();
-                    size_t numIndices = vao->getPrimitiveCount();
+                    uint32 indexStart = vao->getPrimitiveStart();
+                    uint32 numIndices = vao->getPrimitiveCount();
                     adjustIndexOffsets16( indexStart, numIndices );
                     indexBuffer->copyTo( mIndexBuffer16,
                                          mappedBuffers.index16BufferOffset >> 1u,
