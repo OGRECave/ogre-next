@@ -136,6 +136,19 @@ namespace Ogre
         mComputeTools = 0;
     }
     //-------------------------------------------------------------------------
+    bool VctVoxelizer::adjustIndexOffsets16( size_t &indexStart, size_t &numIndices )
+    {
+        bool adjustedIndexStart = false;
+        if( indexStart & 0x01 )
+        {
+            adjustedIndexStart = true;
+            indexStart -= 1u;
+            ++numIndices;
+        }
+        numIndices = alignToNextMultiple( numIndices, 2u );
+        return adjustedIndexStart;
+    }
+    //-------------------------------------------------------------------------
     void VctVoxelizer::createComputeJobs()
     {
         HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
@@ -237,11 +250,13 @@ namespace Ogre
                 if( indexBuffer->getIndexType() == IndexBufferPacked::IT_16BIT )
                 {
                     uses32bitIndices = false;
-                    //totalNumIndices16 must always be even since the UAV buffer
-                    //is internally packed uint32 and BufferPacked::copyTo doesn't
-                    //like copying with odd-starting offsets in some APIs.
-                    totalNumIndices16 = alignToNextMultiple( totalNumIndices16, 2u );
+                    uint32 indexStart = vao->getPrimitiveStart();
+                    const bool indexStartDecremented = adjustIndexOffsets16( indexStart, numIndices );
                     ibOffset = mNumIndices16 + totalNumIndices16;
+                    //BufferPacked::copyTo needs to be multiple of 2, but our compute shader
+                    //must start reading from the correct offset (which can be odd)
+                    if( indexStartDecremented )
+                        ++ibOffset;
                     totalNumIndices16 += numIndices;
                 }
                 else
@@ -303,12 +318,13 @@ namespace Ogre
             {
                 if( indexBuffer->getIndexType() == IndexBufferPacked::IT_16BIT )
                 {
+                    size_t indexStart = vao->getPrimitiveStart();
+                    size_t numIndices = vao->getPrimitiveCount();
+                    adjustIndexOffsets16( indexStart, numIndices );
                     indexBuffer->copyTo( mIndexBuffer16,
                                          mappedBuffers.index16BufferOffset >> 1u,
-                                         vao->getPrimitiveStart(),
-                                         vao->getPrimitiveCount() );
-                    mappedBuffers.index16BufferOffset += alignToNextMultiple( vao->getPrimitiveCount(),
-                                                                              2u );
+                                         indexStart, numIndices );
+                    mappedBuffers.index16BufferOffset += numIndices;
                 }
                 else
                 {

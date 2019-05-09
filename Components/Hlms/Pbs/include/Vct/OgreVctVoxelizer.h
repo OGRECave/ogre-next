@@ -198,6 +198,14 @@ namespace Ogre
 
         FastArray<Octant> mOctants;
 
+        /** 16-bit buffer values must always be even since the UAV buffer
+            is internally packed uint32 and BufferPacked::copyTo doesn't
+            like copying with odd-starting offsets in some APIs.
+        @returns
+            True if indexStart was decremented
+        */
+        static bool adjustIndexOffsets16( size_t &indexStart, size_t &numIndices );
+
         void createComputeJobs();
 
         void countBuffersSize( const MeshPtr &mesh, QueuedMesh &queuedMesh );
