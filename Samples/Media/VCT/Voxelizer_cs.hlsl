@@ -107,17 +107,17 @@ Buffer<float4> instanceBuffer : register(t0);
 
 @property( has_diffuse_tex || emissive_is_diffuse_tex )
 	@property( has_diffuse_tex || !emissive_sampler_separate )
-		SamplerState	diffuseSampler	: register(@counter(samplerRegister));
+		SamplerState	diffuseSampler	: register(s@counter(samplerRegister));
 	@end
-	Texture2DArray		diffuseTex		: register(@counter(texRegister));
+	Texture2DArray		diffuseTex		: register(t@counter(texRegister));
 @end
 @property( has_emissive_tex )
 	@property( !emissive_sampler_separate )
 		#define emissiveSampler diffuseSampler
 	@else
-		SamplerState	emissiveSampler	: register(@counter(samplerRegister));
+		SamplerState	emissiveSampler	: register(s@counter(samplerRegister));
 	@end
-	Texture2DArray		emissiveTex		: register(@counter(texRegister));
+	Texture2DArray		emissiveTex		: register(t@counter(texRegister));
 @end
 
 @insertpiece( HeaderCS )
