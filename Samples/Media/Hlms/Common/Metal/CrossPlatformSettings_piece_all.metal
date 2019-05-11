@@ -91,8 +91,6 @@ inline float3x3 toMat3x3( float4x4 m )
 #define OGRE_OUT_REF( declType, variableName ) thread declType &variableName
 #define OGRE_INOUT_REF( declType, variableName ) thread declType &variableName
 
-#define FLOAT3_ARRAY_START {
-#define FLOAT_ARRAY_START {
 #define OGRE_ARRAY_START( type ) {
 #define OGRE_ARRAY_END }
 @end

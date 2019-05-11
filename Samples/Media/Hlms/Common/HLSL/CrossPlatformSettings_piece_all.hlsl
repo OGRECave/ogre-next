@@ -77,8 +77,6 @@
 #define OGRE_OUT_REF( declType, variableName ) out declType variableName
 #define OGRE_INOUT_REF( declType, variableName ) inout declType variableName
 
-#define FLOAT3_ARRAY_START {
-#define FLOAT_ARRAY_START {
 #define OGRE_ARRAY_START( type ) {
 #define OGRE_ARRAY_END }
 @end

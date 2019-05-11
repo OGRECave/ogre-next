@@ -130,7 +130,7 @@
 
 		@property( vct_cone_dirs == 6 )
 			float3 cone_dirs[6] =
-				FLOAT3_ARRAY_START
+				OGRE_ARRAY_START( float3 )
 					float3( 0.0, 0.0, 1.0 ),
 					float3( 0.866025, 0.0, 0.5 ),
 					float3( 0.267617, 0.823639, 0.5 ),
@@ -139,19 +139,19 @@
 					float3( 0.267617, -0.823639, 0.5 )
 				OGRE_ARRAY_END;
 
-			float coneWeights[6] = FLOAT_ARRAY_START 0.25, 0.15, 0.15, 0.15, 0.15, 0.15 OGRE_ARRAY_END;
+			float coneWeights[6] = OGRE_ARRAY_START( float ) 0.25, 0.15, 0.15, 0.15, 0.15, 0.15 OGRE_ARRAY_END;
 			float coneAngleTan = 0.577;
 			float minRefTan = 0.0;
 		@else
 			float3 cone_dirs[4] =
-				FLOAT3_ARRAY_START
+				OGRE_ARRAY_START( float3 )
 					float3( 0.707107, 0.0, 0.707107 ),
 					float3( 0.0, 0.707107, 0.707107 ),
 					float3( -0.707107, 0.0, 0.707107 ),
 					float3( 0.0, -0.707107, 0.707107 )
 				OGRE_ARRAY_END;
 
-			float coneWeights[4] = FLOAT_ARRAY_START 0.25, 0.25, 0.25, 0.25 OGRE_ARRAY_END;
+			float coneWeights[4] = OGRE_ARRAY_START( float ) 0.25, 0.25, 0.25, 0.25 OGRE_ARRAY_END;
 			float coneAngleTan = 0.98269;
 			float minRefTan = 0.1;
 		@end
