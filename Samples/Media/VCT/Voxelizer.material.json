@@ -97,7 +97,7 @@
             "params_glsl" :
             [
                 ["inLightLowerMip",         [0], "int"],
-                ["outLightHigherMip",       [0], "int"]
+                ["outLightHigherMip",       [0, 1, 2], "int"]
             ]
         },
 
@@ -127,8 +127,8 @@
 
             "params_glsl" :
             [
-                ["inLightLowerMip",         [0], "int"],
-                ["outLightHigherMip",       [0], "int"]
+                ["inLightLowerMip",         [0, 1, 2], "int"],
+                ["outLightHigherMip",       [0, 1, 2], "int"]
             ]
         }
 	}
