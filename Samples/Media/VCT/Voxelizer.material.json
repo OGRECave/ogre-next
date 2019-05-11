@@ -70,6 +70,66 @@
 
                 ["lightVoxel",              [0], "int"]
             ]
+        },
+
+        "VCT/AnisotropicMipStep0" :
+        {
+            "threads_per_group" : [4, 4, 4],
+
+            "source" : "AnisotropicMipVctStep0_cs",
+            "pieces" : ["CrossPlatformSettings_piece_all", "AnisotropicMipVctStep0_piece_cs.any"],
+            "inform_shader_of_texture_data_change" : true,
+
+            "thread_groups_based_on_uav" : { "slot" : 0, "divisor" : [2, 1, 1] },
+
+            "uav_units" : 3,
+
+            "textures" :
+            [
+                {}
+            ],
+
+            "params" :
+            [
+                ["lowerMipResolution_higherMipHalfWidth",   [1,1,1,1],    "int"]
+            ],
+
+            "params_glsl" :
+            [
+                ["inLightLowerMip",         [0], "int"],
+                ["outLightHigherMip",       [0], "int"]
+            ]
+        },
+
+        "VCT/AnisotropicMipStep1" :
+        {
+            "threads_per_group" : [4, 4, 4],
+
+            "source" : "AnisotropicMipVctStep1_cs",
+            "pieces" : ["CrossPlatformSettings_piece_all", "AnisotropicMipVctStep1_piece_cs.any"],
+            "inform_shader_of_texture_data_change" : true,
+
+            "thread_groups_based_on_uav" : 0,
+
+            "uav_units" : 3,
+
+            "textures" :
+            [
+                {},
+                {},
+                {}
+            ],
+
+            "params" :
+            [
+                ["lowerMipFirstHalfResolution",   [1,1,1],    "int"]
+            ],
+
+            "params_glsl" :
+            [
+                ["inLightLowerMip",         [0], "int"],
+                ["outLightHigherMip",       [0], "int"]
+            ]
         }
 	}
 }

@@ -45,6 +45,10 @@ THE SOFTWARE.
 #include "OgreLight.h"
 #include "Vao/OgreConstBufferPacked.h"
 
+#include "OgreLwString.h"
+
+#define TODO_memory_barrier
+
 namespace Ogre
 {
     struct ShaderVctLight
@@ -67,7 +71,9 @@ namespace Ogre
         mVoxelizer( voxelizer ),
         mLightInjectionJob( 0 ),
         mLightsConstBuffer( 0 ),
+        mAnisoGeneratorStep0( 0 ),
         mDefaultLightDistThreshold( 0.5f ),
+        mAnisotropic( false ),
         mNumLights( 0 ),
         mRayMarchStepSize( 0 ),
         mVoxelCellSize( 0 ),
@@ -75,52 +81,9 @@ namespace Ogre
         mShaderParams( 0 ),
         mNormalBias( 0.25f )
     {
-        TextureGpuManager *textureManager = voxelizer->getTextureGpuManager();
+        memset( mLightVoxel, 0, sizeof(mLightVoxel) );
 
-        RenderSystem *renderSystem = voxelizer->getRenderSystem();
-        const bool hasTypedUavs = renderSystem->getCapabilities()->hasCapability( RSC_TYPED_UAV_LOADS );
-
-        uint32 texFlags = TextureFlags::Uav;
-        if( !hasTypedUavs )
-            texFlags |= TextureFlags::Reinterpretable;
-
-        texFlags |= TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps;
-
-        const TextureGpu *albedoVox = voxelizer->getAlbedoVox();
-
-        const uint32 width  = albedoVox->getWidth();
-        const uint32 height = albedoVox->getHeight();
-        const uint32 depth  = albedoVox->getDepth();
-
-        const uint32 widthAniso     = std::max( 1u, width >> 1u );
-        const uint32 heightAniso    = std::max( 1u, height >> 1u );
-        const uint32 depthAniso     = std::max( 1u, depth >> 1u );
-
-        const uint8 numMipsMain  = PixelFormatGpuUtils::getMaxMipmapCount( width, height, depth );
-        const uint8 numMipsAniso = PixelFormatGpuUtils::getMaxMipmapCount( widthAniso, heightAniso,
-                                                                           depthAniso );
-
-        for( size_t i=0; i<1u; ++i )
-        {
-            TextureGpu *texture = textureManager->createTexture( "VctLighting" +
-                                                                 StringConverter::toString( i ) + "/" +
-                                                                 StringConverter::toString( getId() ),
-                                                                 GpuPageOutStrategy::Discard,
-                                                                 texFlags, TextureTypes::Type3D );
-            if( i == 0u )
-            {
-                texture->setResolution( width, height, depth );
-                texture->setNumMipmaps( numMipsMain );
-            }
-            else
-            {
-                texture->setResolution( widthAniso, heightAniso, depthAniso );
-                texture->setNumMipmaps( numMipsAniso );
-            }
-            texture->setPixelFormat( PFG_RGBA8_UNORM );
-            texture->scheduleTransitionTo( GpuResidency::Resident );
-            mLightVoxel[i] = texture;
-        }
+        createTextures();
 
         //VctVoxelizer should've already been initialized, thus no need
         //to check if JSON has been built or if the assets were added
@@ -133,6 +96,7 @@ namespace Ogre
         mVoxelCellSize = mShaderParams->findParameter( "voxelCellSize" );
         mInvVoxelResolution = mShaderParams->findParameter( "invVoxelResolution" );
 
+        RenderSystem *renderSystem = mVoxelizer->getRenderSystem();
         VaoManager *vaoManager = renderSystem->getVaoManager();
         mLightsConstBuffer = vaoManager->createConstBuffer( sizeof(ShaderVctLight) * 16u,
                                                             BT_DYNAMIC_PERSISTENT, 0, false );
@@ -159,6 +123,8 @@ namespace Ogre
         HlmsManager *hlmsManager = mVoxelizer->getHlmsManager();
         hlmsManager->destroySamplerblock( mSamplerblockTrilinear );
         mSamplerblockTrilinear = 0;
+
+        destroyTextures();
     }
     //-------------------------------------------------------------------------
     void VctLighting::addLight( ShaderVctLight * RESTRICT_ALIAS vctLight, Light *light,
@@ -188,6 +154,197 @@ namespace Ogre
         vctLight->uvwPos[3] = 0;
     }
     //-------------------------------------------------------------------------
+    void VctLighting::createTextures()
+    {
+        destroyTextures();
+
+        TextureGpuManager *textureManager = mVoxelizer->getTextureGpuManager();
+
+        RenderSystem *renderSystem = mVoxelizer->getRenderSystem();
+        const bool hasTypedUavs = renderSystem->getCapabilities()->hasCapability( RSC_TYPED_UAV_LOADS );
+
+        uint32 texFlags = TextureFlags::Uav;
+        if( !hasTypedUavs )
+            texFlags |= TextureFlags::Reinterpretable;
+
+        if( !mAnisotropic )
+            texFlags |= TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps;
+
+        const TextureGpu *albedoVox = mVoxelizer->getAlbedoVox();
+
+        const uint32 width  = albedoVox->getWidth();
+        const uint32 height = albedoVox->getHeight();
+        const uint32 depth  = albedoVox->getDepth();
+
+        const uint32 widthAniso     = std::max( 1u, width );
+        const uint32 heightAniso    = std::max( 1u, height >> 1u );
+        const uint32 depthAniso     = std::max( 1u, depth >> 1u );
+
+        const uint8 numMipsMain  =
+                mAnisotropic ? 1u : PixelFormatGpuUtils::getMaxMipmapCount( width, height, depth );
+        //numMipsAniso needs one less mip; because the last mip must be 2x1x1, not 1x1x1
+        const uint8 numMipsAniso =
+                PixelFormatGpuUtils::getMaxMipmapCount( widthAniso, heightAniso, depthAniso ) - 1u;
+
+        const size_t numTextures = mAnisotropic ? 4u : 1u;
+
+        const char *names[] =
+        {
+            "Main",
+            "X_axis",
+            "Y_axis",
+            "Z_axis"
+        };
+
+        for( size_t i=0; i<numTextures; ++i )
+        {
+            char tmpBuffer[128];
+            LwString texName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+            texName.a( "VctLighting_", names[i], "/Id", getId() );
+            TextureGpu *texture = textureManager->createTexture( texName.c_str(),
+                                                                 GpuPageOutStrategy::Discard,
+                                                                 texFlags, TextureTypes::Type3D );
+            if( i == 0u )
+            {
+                texture->setResolution( width, height, depth );
+                texture->setNumMipmaps( numMipsMain );
+            }
+            else
+            {
+                texture->setResolution( widthAniso, heightAniso, depthAniso );
+                texture->setNumMipmaps( numMipsAniso );
+            }
+            texture->setPixelFormat( PFG_RGBA8_UNORM );
+            texture->scheduleTransitionTo( GpuResidency::Resident );
+            mLightVoxel[i] = texture;
+        }
+
+        if( mAnisotropic )
+        {
+            //Setup the compute shaders for VctLighting::generateAnisotropicMips()
+            HlmsCompute *hlmsCompute = mVoxelizer->getHlmsManager()->getComputeHlms();
+            mAnisoGeneratorStep0 = hlmsCompute->findComputeJob( "VCT/AnisotropicMipStep0" );
+
+            char tmpBuffer[128];
+            LwString jobName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+
+            //Step 0
+            jobName.clear();
+            jobName.a( "VCT/AnisotropicMipStep0/Id", getId() );
+            mAnisoGeneratorStep0 = mAnisoGeneratorStep0->clone( jobName.c_str() );
+
+            for( uint8 i=0; i<3u; ++i )
+            {
+                DescriptorSetUav::TextureSlot uavSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
+                uavSlot.access = ResourceAccess::Write;
+                uavSlot.texture = mLightVoxel[i+1u];
+                mAnisoGeneratorStep0->_setUavTexture( i, uavSlot );
+            }
+
+            DescriptorSetTexture2::TextureSlot texSlot( DescriptorSetTexture2::
+                                                        TextureSlot::makeEmpty() );
+            texSlot.texture = mLightVoxel[0];
+            mAnisoGeneratorStep0->setTexture( 0, texSlot );
+
+            ShaderParams *shaderParams = &mAnisoGeneratorStep0->getShaderParams( "default" );
+            //lowerMipResolution_higherMipHalfWidth
+            ShaderParams::Param *lowerMipResolutionParam = &shaderParams->mParams.back();
+            int32 resolution[4] = { static_cast<int32>( mLightVoxel[0]->getWidth() ),
+                                    static_cast<int32>( mLightVoxel[0]->getHeight() ),
+                                    static_cast<int32>( mLightVoxel[0]->getDepth() ),
+                                    static_cast<int32>( mLightVoxel[1]->getWidth() >> 1u ) };
+            lowerMipResolutionParam->setManualValue( resolution, 4u );
+            shaderParams->setDirty();
+
+            //Now setup step 1
+            //numMipsOnStep1 is subtracted one because mip 0 got processed by step 0
+            const uint8 numMipsOnStep1 = mLightVoxel[1]->getNumMipmaps() - 1u;
+            mAnisoGeneratorStep1.resize( numMipsOnStep1 );
+
+            HlmsComputeJob *baseJob = hlmsCompute->findComputeJob( "VCT/AnisotropicMipStep1" );
+
+            for( uint8 i=0; i<numMipsOnStep1; ++i )
+            {
+                jobName.clear();
+                jobName.a( "VCT/AnisotropicMipStep1/Id", getId(), "/Mip", i + 1u );
+                HlmsComputeJob *mipJob = baseJob->clone( jobName.c_str() );
+
+                for( uint8 axis=0; axis<3u; ++axis )
+                {
+                    texSlot.texture = mLightVoxel[axis+1u];
+                    texSlot.mipmapLevel = i;
+                    mipJob->setTexture( axis, texSlot );
+
+                    DescriptorSetUav::TextureSlot uavSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
+                    uavSlot.access = ResourceAccess::Write;
+                    uavSlot.texture = mLightVoxel[axis+1u];
+                    uavSlot.mipmapLevel = i + 1u;
+                    mipJob->_setUavTexture( axis, uavSlot );
+                }
+
+                shaderParams = &mipJob->getShaderParams( "default" );
+                lowerMipResolutionParam = &shaderParams->mParams.back();
+                resolution[0] = static_cast<int32>( std::max( 1u,
+                                                              mLightVoxel[1]->getWidth() >> (i + 1u) ) );
+                resolution[1] = static_cast<int32>( std::max( 1u, mLightVoxel[1]->getHeight() >> i ) );
+                resolution[2] = static_cast<int32>( std::max( 1u, mLightVoxel[1]->getDepth() >> i ) );
+                lowerMipResolutionParam->setManualValue( resolution, 3u );
+                shaderParams->setDirty();
+
+                mAnisoGeneratorStep1[i] = mipJob;
+            }
+        }
+    }
+    //-------------------------------------------------------------------------
+    void VctLighting::destroyTextures()
+    {
+        TextureGpuManager *textureManager = mVoxelizer->getTextureGpuManager();
+        for( size_t i=0; i<sizeof(mLightVoxel) / sizeof(mLightVoxel[0]); ++i )
+        {
+            if( mLightVoxel[i] )
+            {
+                textureManager->destroyTexture( mLightVoxel[i] );
+                mLightVoxel[i] = 0;
+            }
+        }
+
+        HlmsCompute *hlmsCompute = mVoxelizer->getHlmsManager()->getComputeHlms();
+
+        if( mAnisoGeneratorStep0 )
+        {
+            hlmsCompute->destroyComputeJob( mAnisoGeneratorStep0->getName() );
+            mAnisoGeneratorStep0 = 0;
+        }
+
+        FastArray<HlmsComputeJob*>::const_iterator itor = mAnisoGeneratorStep1.begin();
+        FastArray<HlmsComputeJob*>::const_iterator end  = mAnisoGeneratorStep1.end();
+
+        while( itor != end )
+        {
+            hlmsCompute->destroyComputeJob( (*itor)->getName() );
+            ++itor;
+        }
+
+        mAnisoGeneratorStep1.clear();
+    }
+    //-------------------------------------------------------------------------
+    void VctLighting::generateAnisotropicMips()
+    {
+        HlmsCompute *hlmsCompute = mVoxelizer->getHlmsManager()->getComputeHlms();
+        hlmsCompute->dispatch( mAnisoGeneratorStep0, 0, 0 );
+
+        TODO_memory_barrier;
+
+        FastArray<HlmsComputeJob*>::const_iterator itor = mAnisoGeneratorStep1.begin();
+        FastArray<HlmsComputeJob*>::const_iterator end  = mAnisoGeneratorStep1.end();
+
+        while( itor != end )
+        {
+            hlmsCompute->dispatch( *itor, 0, 0 );
+            ++itor;
+        }
+    }
+    //-------------------------------------------------------------------------
     void VctLighting::update( SceneManager *sceneManager, float rayMarchStepScale, uint32 _lightMask )
     {
         OGRE_ASSERT_LOW( rayMarchStepScale >= 1.0f );
@@ -214,7 +371,8 @@ namespace Ogre
                 reinterpret_cast<ShaderVctLight*>(
                     mLightsConstBuffer->map( 0, mLightsConstBuffer->getNumElements() ) );
         uint32 numCollectedLights = 0;
-        const uint32 maxNumLights = mLightsConstBuffer->getNumElements() / sizeof(ShaderVctLight);
+        const uint32 maxNumLights = static_cast<uint32>( mLightsConstBuffer->getNumElements() /
+                                                         sizeof(ShaderVctLight) );
 
         const uint32 lightMask = _lightMask & VisibilityFlags::RESERVED_VISIBILITY_FLAGS;
 
@@ -264,7 +422,10 @@ namespace Ogre
         HlmsCompute *hlmsCompute = mVoxelizer->getHlmsManager()->getComputeHlms();
         hlmsCompute->dispatch( mLightInjectionJob, 0, 0 );
 
-        mLightVoxel[0]->_autogenerateMipmaps();
+        if( mAnisotropic )
+            generateAnisotropicMips();
+        else
+            mLightVoxel[0]->_autogenerateMipmaps();
     }
     //-------------------------------------------------------------------------
     size_t VctLighting::getConstBufferSize(void) const

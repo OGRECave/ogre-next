@@ -79,5 +79,6 @@
 
 #define FLOAT3_ARRAY_START {
 #define FLOAT_ARRAY_START {
+#define OGRE_ARRAY_START( type ) {
 #define OGRE_ARRAY_END }
 @end

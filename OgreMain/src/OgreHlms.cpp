@@ -1167,12 +1167,12 @@ namespace Ogre
                 size_t lineCount = calculateLineCount( subString );
                 if( keyword <= 1 )
                 {
-                    printf( "Syntax Error at line %lu: @%s expects one parameter",
+                    printf( "Syntax Error at line %lu: @%s expects one parameter\n",
                             lineCount, c_operations[keyword].opName );
                 }
                 else
                 {
-                    printf( "Syntax Error at line %lu: @%s expects two or three parameters",
+                    printf( "Syntax Error at line %lu: @%s expects two or three parameters\n",
                             lineCount, c_operations[keyword].opName );
                 }
             }
@@ -1570,12 +1570,12 @@ namespace Ogre
                 size_t lineCount = calculateLineCount( subString );
                 if( keyword <= 1 )
                 {
-                    printf( "Syntax Error at line %lu: @%s expects one parameter",
+                    printf( "Syntax Error at line %lu: @%s expects one parameter\n",
                             lineCount, c_counterOperations[keyword].opName );
                 }
                 else
                 {
-                    printf( "Syntax Error at line %lu: @%s expects two or three parameters",
+                    printf( "Syntax Error at line %lu: @%s expects two or three parameters\n",
                             lineCount, c_counterOperations[keyword].opName );
                 }
             }

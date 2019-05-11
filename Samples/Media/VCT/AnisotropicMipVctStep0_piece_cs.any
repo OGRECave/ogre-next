@@ -1,0 +1,125 @@
+
+//#include "SyntaxHighlightingMisc.h"
+
+//in uvec3 gl_NumWorkGroups;
+//in uvec3 gl_WorkGroupID;
+//in uvec3 gl_LocalInvocationID;
+//in uvec3 gl_GlobalInvocationID;
+//in uint  gl_LocalInvocationIndex;
+
+@piece( BodyCS )
+	int3 offsets[6][9] =
+	OGRE_ARRAY_START( int3[6] )
+		//+X
+		OGRE_ARRAY_START( int3 )
+			int3(  1, -1, -1 ),
+			int3(  1,  0, -1 ),
+			int3(  1,  1, -1 ),
+
+			int3(  1, -1,  0 ),
+			int3(  1,  0,  0 ),
+			int3(  1,  1,  0 ),
+
+			int3(  1, -1,  1 ),
+			int3(  1,  0,  1 ),
+			int3(  1,  1,  1 )
+		OGRE_ARRAY_END,
+		//-X
+		OGRE_ARRAY_START( int3 )
+			int3( -1, -1, -1 ),
+			int3( -1,  0, -1 ),
+			int3( -1,  1, -1 ),
+
+			int3( -1, -1,  0 ),
+			int3( -1,  0,  0 ),
+			int3( -1,  1,  0 ),
+
+			int3( -1, -1,  1 ),
+			int3( -1,  0,  1 ),
+			int3( -1,  1,  1 )
+		OGRE_ARRAY_END,
+		//+Y
+		OGRE_ARRAY_START( int3 )
+			int3( -1,  1, -1 ),
+			int3(  0,  1, -1 ),
+			int3(  1,  1, -1 ),
+
+			int3( -1,  1,  0 ),
+			int3(  0,  1,  0 ),
+			int3(  1,  1,  0 ),
+
+			int3( -1,  1,  1 ),
+			int3(  0,  1,  1 ),
+			int3(  1,  1,  1 )
+		OGRE_ARRAY_END,
+		//-Y
+		OGRE_ARRAY_START( int3 )
+			int3( -1, -1, -1 ),
+			int3(  0, -1, -1 ),
+			int3(  1, -1, -1 ),
+
+			int3( -1, -1,  0 ),
+			int3(  0, -1,  0 ),
+			int3(  1, -1,  0 ),
+
+			int3( -1, -1,  1 ),
+			int3(  0, -1,  1 ),
+			int3(  1, -1,  1 )
+		OGRE_ARRAY_END,
+		//+Z
+		OGRE_ARRAY_START( int3 )
+			int3( -1, -1,  1 ),
+			int3(  0, -1,  1 ),
+			int3(  1, -1,  1 ),
+
+			int3( -1,  0,  1 ),
+			int3(  0,  0,  1 ),
+			int3(  1,  0,  1 ),
+
+			int3( -1,  1,  1 ),
+			int3(  0,  1,  1 ),
+			int3(  1,  1,  1 )
+		OGRE_ARRAY_END,
+		//-Z
+		OGRE_ARRAY_START( int3 )
+			int3( -1, -1, -1 ),
+			int3(  0, -1, -1 ),
+			int3(  1, -1, -1 ),
+
+			int3( -1,  0, -1 ),
+			int3(  0,  0, -1 ),
+			int3(  1,  0, -1 ),
+
+			int3( -1,  1, -1 ),
+			int3(  0,  1, -1 ),
+			int3(  1,  1, -1 )
+		OGRE_ARRAY_END
+	OGRE_ARRAY_END;
+
+	int3 iSourceUvw = int3( gl_GlobalInvocationID.xyz << 1u );
+	float4 centerVal = OGRE_Load3D( inLightLowerMip, iSourceUvw.xyz, 0 );
+
+	int3 iUvw;
+	float4 accumVal;
+	wshort3 outIUvw;
+
+	@foreach( 6, dir )
+		accumVal = centerVal;
+		@foreach( 9, n )
+			iUvw = iSourceUvw.xyz + offsets[@dir][@n];
+			iUvw = max( int3( 0, 0, 0 ), iUvw );
+			iUvw = min( p_lowerMipResolution, iUvw );
+			accumVal += OGRE_Load3D( inLightLowerMip, iUvw.xyz, 0 );
+		@end
+
+		accumVal /= 10u;
+
+		outIUvw.xyz = wshort3( gl_GlobalInvocationID.xyz );
+
+		@div( axis, @dir, 2 )
+		@property( @dir == 1 || @dir == 3 || @dir == 5 )
+			outIUvw.x += p_higherMipHalfWidth;
+		@end
+		OGRE_imageWrite3D4( outLightHigherMip[@value(axis)], outIUvw, accumVal.xyzw );
+	@end
+@end

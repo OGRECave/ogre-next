@@ -93,5 +93,6 @@ inline float3x3 toMat3x3( float4x4 m )
 
 #define FLOAT3_ARRAY_START {
 #define FLOAT_ARRAY_START {
+#define OGRE_ARRAY_START( type ) {
 #define OGRE_ARRAY_END }
 @end

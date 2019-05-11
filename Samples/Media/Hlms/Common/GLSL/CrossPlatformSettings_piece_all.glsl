@@ -111,6 +111,7 @@
 
 #define FLOAT3_ARRAY_START float3[](
 #define FLOAT_ARRAY_START float[](
+#define OGRE_ARRAY_START( type ) type[](
 #define OGRE_ARRAY_END )
 @end
 

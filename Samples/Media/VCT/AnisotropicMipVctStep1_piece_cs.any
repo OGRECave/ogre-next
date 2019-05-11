@@ -1,0 +1,86 @@
+
+//#include "SyntaxHighlightingMisc.h"
+
+//in uvec3 gl_NumWorkGroups;
+//in uvec3 gl_WorkGroupID;
+//in uvec3 gl_LocalInvocationID;
+//in uvec3 gl_GlobalInvocationID;
+//in uint  gl_LocalInvocationIndex;
+
+@piece( BodyCS )
+	int xMinU = gl_GlobalInvocationID.x >= p_lowerMipFirstHalfResolution.x ?
+					p_lowerMipFirstHalfResolution.x : 0;
+	int xMaxU = gl_GlobalInvocationID.x >= p_lowerMipFirstHalfResolution.x ?
+					(p_lowerMipFirstHalfResolution.x << 1u) : p_lowerMipFirstHalfResolution.x;
+
+	float4 accumVal;
+	int3 iUvw;
+	int3 iSourceUvw = int3( gl_GlobalInvocationID.xyz << 1u );
+	@foreach( 3, axis )
+		int3 offsets@axis[9] =
+		@property( axis == 0 )
+			//+X
+			OGRE_ARRAY_START( int3 )
+				int3(  1, -1, -1 ),
+				int3(  1,  0, -1 ),
+				int3(  1,  1, -1 ),
+
+				int3(  1, -1,  0 ),
+				int3(  1,  0,  0 ),
+				int3(  1,  1,  0 ),
+
+				int3(  1, -1,  1 ),
+				int3(  1,  0,  1 ),
+				int3(  1,  1,  1 )
+			OGRE_ARRAY_END
+		@end
+		@property( axis == 1 )
+			//+Y
+			OGRE_ARRAY_START( int3 )
+				int3( -1,  1, -1 ),
+				int3(  0,  1, -1 ),
+				int3(  1,  1, -1 ),
+
+				int3( -1,  1,  0 ),
+				int3(  0,  1,  0 ),
+				int3(  1,  1,  0 ),
+
+				int3( -1,  1,  1 ),
+				int3(  0,  1,  1 ),
+				int3(  1,  1,  1 )
+			OGRE_ARRAY_END
+		@end
+		@property( axis == 2 )
+			//+Z
+			OGRE_ARRAY_START( int3 )
+				int3( -1, -1,  1 ),
+				int3(  0, -1,  1 ),
+				int3(  1, -1,  1 ),
+
+				int3( -1,  0,  1 ),
+				int3(  0,  0,  1 ),
+				int3(  1,  0,  1 ),
+
+				int3( -1,  1,  1 ),
+				int3(  0,  1,  1 ),
+				int3(  1,  1,  1 )
+			OGRE_ARRAY_END
+		@end
+		;
+
+		offsets@axis[@axis] *= gl_GlobalInvocationID.x >= p_lowerMipFirstHalfResolution.x ? 1 : -1;
+
+		accumVal = OGRE_Load3D( inLightLowerMip[@axis], iSourceUvw.xyz, 0 );
+		@foreach( 9, n )
+			iUvw = iSourceUvw + offsets@axis[@n];
+			iUvw = max( int3( xMinU, 0, 0 ), iUvw );
+			iUvw = min( int3( xMaxU, p_lowerMipFirstHalfResolution.yz ), iUvw );
+			accumVal += OGRE_Load3D( inLightLowerMip[@axis], iUvw.xyz, 0 );
+		@end
+
+		accumVal /= 10u;
+
+		OGRE_imageWrite3D4( outLightHigherMip[@axis],
+							wshort3( gl_GlobalInvocationID.xyz ), accumVal.xyzw );
+	@end
+@end

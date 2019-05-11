@@ -44,14 +44,47 @@ namespace Ogre
     public:
         static const uint16 msDistanceThresholdCustomParam;
     protected:
-        TextureGpu              *mLightVoxel[6];
+        /// When mAnisotropic == false, mLightVoxel[0] contains all the mips.
+        ///
+        /// When mAnisotropic == true, mLightVoxel[0] contains mip 0.
+        ///  * mLightVoxel[1] contains mipmaps in -X and +X
+        ///  * mLightVoxel[2] contains mipmaps in -Y and +Y
+        ///  * mLightVoxel[3] contains mipmaps in -Z and +Z
+        ///
+        /// The negative axis is in
+        ///     [0; mLightVoxel[1]->getWidth() / 2)
+        /// and the positive axis is in
+        ///     [mLightVoxel[1]->getWidth() / 2; mLightVoxel[1]->getWidth())
+        ///
+        /// We don't put all mips in the same texture (i.e. making mLightVoxel[2]) because we
+        /// would need mLightVoxel[1] to be of resolution:
+        ///     mLightVoxel[1].width  = mLightVoxel[0].width
+        ///     mLightVoxel[1].height = mLightVoxel[0].height / 2
+        ///     mLightVoxel[1].depth  = mLightVoxel[0].depth * 1.5
+        ///
+        /// Since most GPUs out there only support up to 2048 resolution in any axis,
+        /// we wouldn't be able to support anisotropic mips for high resolution voxels.
+        /// But more importantly, we would waste 1/4th of memory (actually 1/2 of memory
+        /// because GPUs like GCN round memory consumption to the next power of 2).
+        TextureGpu              *mLightVoxel[4];
         HlmsSamplerblock const  *mSamplerblockTrilinear;
         VctVoxelizer    *mVoxelizer;
 
         HlmsComputeJob      *mLightInjectionJob;
         ConstBufferPacked   *mLightsConstBuffer;
 
+        /// Anisotropic mipmap generation consists of 2 main steps:
+        ///
+        /// Step 1 takes mLightVoxel[0] and computes
+        /// mLightVoxel[1].mip[0], mLightVoxel[2].mip[0] & mLightVoxel[3].mip[0]
+        ///
+        /// Step 2 takes mLightVoxel[i].mip[n] and computes mLightVoxel[i].mip[n+1]
+        /// where i is in range [1; 3] and n is the number of mipmaps in those textures.
+        HlmsComputeJob              *mAnisoGeneratorStep0;
+        FastArray<HlmsComputeJob*>  mAnisoGeneratorStep1;
+
         float mDefaultLightDistThreshold;
+        bool    mAnisotropic;
 
         ShaderParams::Param *mNumLights;
         ShaderParams::Param *mRayMarchStepSize;
@@ -74,6 +107,11 @@ namespace Ogre
     protected:
         void addLight( ShaderVctLight * RESTRICT_ALIAS vctLight, Light *light,
                        const Vector3 &voxelOrigin, const Vector3 &invVoxelRes );
+
+        void createTextures();
+        void destroyTextures();
+
+        void generateAnisotropicMips(void);
 
     public:
         VctLighting( IdType id, VctVoxelizer *voxelizer );
