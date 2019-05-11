@@ -486,20 +486,27 @@ namespace Ogre
             const size_t maxSlots = mThreadGroupsBasedOnTexture == ThreadGroupsBasedOnTexture ?
                                         mTexSlots.size() : mUavSlots.size();
             TextureGpu const *tex = 0;
+            uint8 mipLevel = 0;
             if( mThreadGroupsBasedOnTexSlot < maxSlots )
             {
                 if( mThreadGroupsBasedOnTexture == ThreadGroupsBasedOnTexture )
+                {
                     tex = mTexSlots[mThreadGroupsBasedOnTexSlot].getTexture().texture;
+                    mipLevel = mTexSlots[mThreadGroupsBasedOnTexSlot].getTexture().mipmapLevel;
+                }
                 else if( mUavSlots[mThreadGroupsBasedOnTexSlot].isTexture() )
+                {
                     tex = mUavSlots[mThreadGroupsBasedOnTexSlot].getTexture().texture;
+                    mipLevel = mUavSlots[mThreadGroupsBasedOnTexSlot].getTexture().mipmapLevel;
+                }
             }
 
             if( tex )
             {
                 uint32 resolution[3];
-                resolution[0] = tex->getWidth();
-                resolution[1] = tex->getHeight();
-                resolution[2] = tex->getDepthOrSlices();
+                resolution[0] = tex->getWidth() >> mipLevel;
+                resolution[1] = tex->getHeight() >> mipLevel;
+                resolution[2] = tex->getDepthOrSlices() >> mipLevel;
 
                 for( int i=0; i<3; ++i )
                 {
