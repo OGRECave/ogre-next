@@ -14,9 +14,10 @@ layout( local_size_x = @value( threads_per_group_x ),
 //		local_size_y = 4,
 //		local_size_z = 4 ) in;
 
-uniform int3 lowerMipFirstHalfResolution;
+uniform int4 lowerMipFirstHalfResolution_higherMipHalfWidth;
 
-#define p_lowerMipFirstHalfResolution lowerMipFirstHalfResolution
+#define p_lowerMipFirstHalfResolution lowerMipFirstHalfResolution_higherMipHalfWidth.xyz
+#define p_higherMipHalfWidth lowerMipFirstHalfResolution_higherMipHalfWidth.w
 
 //in uvec3 gl_NumWorkGroups;
 //in uvec3 gl_WorkGroupID;

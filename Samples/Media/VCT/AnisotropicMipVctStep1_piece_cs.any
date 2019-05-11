@@ -54,11 +54,18 @@
 		OGRE_ARRAY_END
 	OGRE_ARRAY_END;
 
-	int xMinU = gl_GlobalInvocationID.x >= p_lowerMipFirstHalfResolution.x ?
-					p_lowerMipFirstHalfResolution.x : 0;
-	int xMaxU = gl_GlobalInvocationID.x >= p_lowerMipFirstHalfResolution.x ?
+	//If
+	//	mip 1 = 64x64x64 (which means it's internally 128x64x64)
+	//and thus
+	//	mip 2 = 32x32x32 (which means it's internally 64x32x32)
+	//then:
+	//	int xMinU = gl_GlobalInvocationID.x >= 32 ? 64 : 0;
+	//	int xMaxU = gl_GlobalInvocationID.x >= 32 ? 128 : 64;
+	//	int axisDirectionValue = gl_GlobalInvocationID.x >= 32 ? 1 : -1;
+	int xMinU = gl_GlobalInvocationID.x >= p_higherMipHalfWidth ? p_lowerMipFirstHalfResolution.x : 0;
+	int xMaxU = gl_GlobalInvocationID.x >= p_higherMipHalfWidth ?
 					(p_lowerMipFirstHalfResolution.x << 1u) : p_lowerMipFirstHalfResolution.x;
-	int axisDirectionValue = gl_GlobalInvocationID.x >= p_lowerMipFirstHalfResolution.x ? 1 : -1;
+	int axisDirectionValue = gl_GlobalInvocationID.x >= p_higherMipHalfWidth ? 1 : -1;
 
 	float4 accumVal;
 	int3 iUvw;

@@ -283,12 +283,15 @@ namespace Ogre
                 }
 
                 shaderParams = &mipJob->getShaderParams( "default" );
+                //lowerMipFirstHalfResolution_higherMipHalfWidth
                 lowerMipResolutionParam = &shaderParams->mParams.back();
-                resolution[0] = static_cast<int32>( std::max( 1u,
-                                                              mLightVoxel[1]->getWidth() >> (i + 1u) ) );
-                resolution[1] = static_cast<int32>( std::max( 1u, mLightVoxel[1]->getHeight() >> i ) );
-                resolution[2] = static_cast<int32>( std::max( 1u, mLightVoxel[1]->getDepth() >> i ) );
-                lowerMipResolutionParam->setManualValue( resolution, 3u );
+                resolution[0] = static_cast<int32>( mLightVoxel[1]->getWidth() >> (i + 1u) );
+                resolution[1] = static_cast<int32>( mLightVoxel[1]->getHeight()>> i );
+                resolution[2] = static_cast<int32>( mLightVoxel[1]->getDepth() >> i );
+                resolution[3] = static_cast<int32>( mLightVoxel[1]->getWidth() >> (i + 2u) );
+                for( size_t i=0; i<4u; ++i )
+                    resolution[i] = std::max( 1, resolution[i] );
+                lowerMipResolutionParam->setManualValue( resolution, 4u );
                 shaderParams->setDirty();
 
                 mAnisoGeneratorStep1[i] = mipJob;
