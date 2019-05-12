@@ -245,15 +245,15 @@ namespace Ogre
                                                         TextureSlot::makeEmpty() );
             texSlot.texture = mLightVoxel[0];
             mAnisoGeneratorStep0->setTexture( 0, texSlot );
+            texSlot.texture = mVoxelizer->getNormalVox();
+            mAnisoGeneratorStep0->setTexture( 1, texSlot );
 
             ShaderParams *shaderParams = &mAnisoGeneratorStep0->getShaderParams( "default" );
-            //lowerMipResolution_higherMipHalfWidth
+            //higherMipHalfWidth
             ShaderParams::Param *lowerMipResolutionParam = &shaderParams->mParams.back();
-            int32 resolution[4] = { static_cast<int32>( mLightVoxel[0]->getWidth() ),
-                                    static_cast<int32>( mLightVoxel[0]->getHeight() ),
-                                    static_cast<int32>( mLightVoxel[0]->getDepth() ),
-                                    static_cast<int32>( mLightVoxel[1]->getWidth() >> 1u ) };
-            lowerMipResolutionParam->setManualValue( resolution, 4u );
+            //int32 resolution[4] = { static_cast<int32>( mLightVoxel[1]->getWidth() >> 1u ) };
+            lowerMipResolutionParam->setManualValue( static_cast<int32>(
+                                                         mLightVoxel[1]->getWidth() >> 1u ) );
             shaderParams->setDirty();
 
             //Now setup step 1
@@ -283,15 +283,18 @@ namespace Ogre
                 }
 
                 shaderParams = &mipJob->getShaderParams( "default" );
-                //lowerMipFirstHalfResolution_higherMipHalfWidth
+                //higherMipHalfRes_lowerMipHalfWidth
                 lowerMipResolutionParam = &shaderParams->mParams.back();
-                resolution[0] = static_cast<int32>( mLightVoxel[1]->getWidth() >> (i + 1u) );
-                resolution[1] = static_cast<int32>( mLightVoxel[1]->getHeight()>> i );
-                resolution[2] = static_cast<int32>( mLightVoxel[1]->getDepth() >> i );
-                resolution[3] = static_cast<int32>( mLightVoxel[1]->getWidth() >> (i + 2u) );
-                for( size_t i=0; i<4u; ++i )
-                    resolution[i] = std::max( 1, resolution[i] );
-                lowerMipResolutionParam->setManualValue( resolution, 4u );
+                int32 resolutions[4] =
+                {
+                    static_cast<int32>( mLightVoxel[1]->getWidth() >> (i + 2u) ),
+                    static_cast<int32>( mLightVoxel[1]->getHeight()>> (i + 1u) ),
+                    static_cast<int32>( mLightVoxel[1]->getDepth() >> (i + 1u) ),
+                    static_cast<int32>( mLightVoxel[1]->getWidth() >> (i + 1u) )
+                };
+                for( size_t j=0; j<4u; ++j )
+                    resolutions[j] = std::max( 1, resolutions[j] );
+                lowerMipResolutionParam->setManualValue( resolutions, 4u );
                 shaderParams->setDirty();
 
                 mAnisoGeneratorStep1[i] = mipJob;

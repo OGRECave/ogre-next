@@ -4,6 +4,7 @@
 #define OGRE_imageWrite3D4( outImage, iuv, value ) imageStore( outImage, int3( iuv ), value )
 
 uniform sampler3D inLightLowerMip;
+uniform sampler3D inVoxelNormalTex;
 layout (@insertpiece(uav0_pf_type)) uniform restrict writeonly image3D outLightHigherMip[3];
 
 layout( local_size_x = @value( threads_per_group_x ),
@@ -14,10 +15,11 @@ layout( local_size_x = @value( threads_per_group_x ),
 //		local_size_y = 4,
 //		local_size_z = 4 ) in;
 
-uniform int4 lowerMipResolution_higherMipHalfWidth;
+@insertpiece( HeaderCS )
 
-#define p_lowerMipResolution lowerMipResolution_higherMipHalfWidth.xyz
-#define p_higherMipHalfWidth lowerMipResolution_higherMipHalfWidth.w
+uniform int higherMipHalfWidth;
+
+#define p_higherMipHalfWidth higherMipHalfWidth.x
 
 //in uvec3 gl_NumWorkGroups;
 //in uvec3 gl_WorkGroupID;

@@ -45,10 +45,11 @@
 	float3 voxelUvwPos = p_invVoxelResolution * (float3( gl_GlobalInvocationID.xyz ) + 0.5f);
 
 	float4 albedoVal = OGRE_Load3D( voxelAlbedoTex, gl_GlobalInvocationID.xyz, 0 );
-	float3 normalVal = OGRE_Load3D( voxelNormalTex, gl_GlobalInvocationID.xyz, 0 ).xyz * 2.0f - 1.0f;
+	float4 normalVal = OGRE_Load3D( voxelNormalTex, gl_GlobalInvocationID.xyz, 0 );
 	float4 emissiveVal = OGRE_Load3D( voxelEmissiveTex, gl_GlobalInvocationID.xyz, 0 );
 
-	normalVal = normalize( normalVal );
+	normalVal.xyz = normalVal.xyz * 2.0f - 1.0f;
+	normalVal.xyz = normalize( normalVal.xyz );
 
 	float3 blockColour = emissiveVal.xyz;
 
@@ -63,7 +64,7 @@
 
 			lightDir /= max3( lightDir.x, lightDir.y, lightDir.z );
 
-			float NdotL = dot( normalVal, lightDir );
+			float NdotL = dot( normalVal.xyz, lightDir );
 			if( emissiveVal.a > 0 )
 				NdotL = abs( NdotL );
 			else

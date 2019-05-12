@@ -8,81 +8,99 @@
 //in uint  gl_LocalInvocationIndex;
 
 @piece( BodyCS )
-	int3 offsets[3][9] =
-	OGRE_ARRAY_START( int3[3] )
-		//+X
-		OGRE_ARRAY_START( int3 )
-			int3(  1, -1, -1 ),
-			int3(  1,  0, -1 ),
-			int3(  1,  1, -1 ),
+	if( gl_GlobalInvocationID.x >= p_higherMipHalfRes.x ||
+		gl_GlobalInvocationID.y >= p_higherMipHalfRes.y ||
+		gl_GlobalInvocationID.z >= p_higherMipHalfRes.z )
+	{
+		return;
+	}
 
-			int3(  1, -1,  0 ),
-			int3(  1,  0,  0 ),
-			int3(  1,  1,  0 ),
-
-			int3(  1, -1,  1 ),
-			int3(  1,  0,  1 ),
-			int3(  1,  1,  1 )
-		OGRE_ARRAY_END,
-		//+Y
-		OGRE_ARRAY_START( int3 )
-			int3( -1,  1, -1 ),
-			int3(  0,  1, -1 ),
-			int3(  1,  1, -1 ),
-
-			int3( -1,  1,  0 ),
-			int3(  0,  1,  0 ),
-			int3(  1,  1,  0 ),
-
-			int3( -1,  1,  1 ),
-			int3(  0,  1,  1 ),
-			int3(  1,  1,  1 )
-		OGRE_ARRAY_END,
-		//+Z
-		OGRE_ARRAY_START( int3 )
-			int3( -1, -1,  1 ),
-			int3(  0, -1,  1 ),
-			int3(  1, -1,  1 ),
-
-			int3( -1,  0,  1 ),
-			int3(  0,  0,  1 ),
-			int3(  1,  0,  1 ),
-
-			int3( -1,  1,  1 ),
-			int3(  0,  1,  1 ),
-			int3(  1,  1,  1 )
-		OGRE_ARRAY_END
+	int3 offsets[8] =
+	OGRE_ARRAY_START( int3 )
+		int3( 1, 1, 1 ),
+		int3( 1, 1, 0 ),
+		int3( 1, 0, 1 ),
+		int3( 1, 0, 0 ),
+		int3( 0, 1, 1 ),
+		int3( 0, 1, 0 ),
+		int3( 0, 0, 1 ),
+		int3( 0, 0, 0 )
 	OGRE_ARRAY_END;
 
-	//If
-	//	mip 1 = 64x64x64 (which means it's internally 128x64x64)
-	//and thus
-	//	mip 2 = 32x32x32 (which means it's internally 64x32x32)
-	//then:
-	//	int xMinU = gl_GlobalInvocationID.x >= 32 ? 64 : 0;
-	//	int xMaxU = gl_GlobalInvocationID.x >= 32 ? 128 : 64;
-	//	int axisDirectionValue = gl_GlobalInvocationID.x >= 32 ? 1 : -1;
-	int xMinU = gl_GlobalInvocationID.x >= p_higherMipHalfWidth ? p_lowerMipFirstHalfResolution.x : 0;
-	int xMaxU = gl_GlobalInvocationID.x >= p_higherMipHalfWidth ?
-					(p_lowerMipFirstHalfResolution.x << 1u) : p_lowerMipFirstHalfResolution.x;
-	int axisDirectionValue = gl_GlobalInvocationID.x >= p_higherMipHalfWidth ? 1 : -1;
+	float4 samples[8];
+	float4 finalValue;
 
-	float4 accumVal;
-	int3 iUvw;
-	int3 iSourceUvw = int3( gl_GlobalInvocationID.xyz << 1u );
-	@foreach( 3, axis )
-		accumVal = OGRE_Load3D( inLightLowerMip[@axis], iSourceUvw.xyz, 0 );
-		@foreach( 9, n )
-			offsets[@axis][@n][@axis] = axisDirectionValue;
-			iUvw = iSourceUvw + offsets[@axis][@n];
-			iUvw = max( int3( xMinU, 0, 0 ), iUvw );
-			iUvw = min( int3( xMaxU, p_lowerMipFirstHalfResolution.yz ), iUvw );
-			accumVal += OGRE_Load3D( inLightLowerMip[@axis], iUvw.xyz, 0 );
-		@end
+	wshort3 negAxisDstIUvw = wshort3( gl_GlobalInvocationID.xyz );
+	wshort3 posAxisDstIUvw = negAxisDstIUvw;
+	posAxisDstIUvw.x += p_higherMipHalfRes.x;
 
-		accumVal /= 10u;
+	int3 negISourceUvw = int3( gl_GlobalInvocationID.xyz << 1u );
+	int3 posISourceUvw = negISourceUvw;
+	posISourceUvw.x += p_lowerMipHalfWidth;
 
-		OGRE_imageWrite3D4( outLightHigherMip[@axis],
-							wshort3( gl_GlobalInvocationID.xyz ), accumVal.xyzw );
-	@end
+	//-X
+	@foreach( 8, n )
+		samples[@n] = OGRE_Load3D( inLightLowerMip[0], negISourceUvw.xyz + offsets[@n], 0 );@end
+
+	finalValue =
+			( samples[4] + samples[0] * (1.0f - samples[4].a) +
+			  samples[5] + samples[1] * (1.0f - samples[5].a) +
+			  samples[6] + samples[2] * (1.0f - samples[6].a) +
+			  samples[7] + samples[3] * (1.0f - samples[7].a) ) * 0.25f;
+	OGRE_imageWrite3D4( outLightHigherMip[0], negAxisDstIUvw, finalValue.xyzw );
+
+	//+X
+	@foreach( 8, n )
+		samples[@n] = OGRE_Load3D( inLightLowerMip[0], posISourceUvw.xyz + offsets[@n], 0 );@end
+
+	finalValue =
+			( samples[0] + samples[4] * (1.0f - samples[0].a) +
+			  samples[1] + samples[5] * (1.0f - samples[1].a) +
+			  samples[2] + samples[6] * (1.0f - samples[2].a) +
+			  samples[3] + samples[7] * (1.0f - samples[3].a) ) * 0.25f;
+	OGRE_imageWrite3D4( outLightHigherMip[0], posAxisDstIUvw, finalValue.xyzw );
+
+	//-Y
+	@foreach( 8, n )
+		samples[@n] = OGRE_Load3D( inLightLowerMip[1], negISourceUvw.xyz + offsets[@n], 0 );@end
+
+	finalValue =
+			( samples[2] + samples[0] * (1.0f - samples[2].a) +
+			  samples[3] + samples[1] * (1.0f - samples[3].a) +
+			  samples[7] + samples[5] * (1.0f - samples[7].a) +
+			  samples[6] + samples[4] * (1.0f - samples[6].a) ) * 0.25f;
+	OGRE_imageWrite3D4( outLightHigherMip[1], negAxisDstIUvw, finalValue.xyzw );
+
+	//+Y
+	@foreach( 8, n )
+		samples[@n] = OGRE_Load3D( inLightLowerMip[1], posISourceUvw.xyz + offsets[@n], 0 );@end
+
+	finalValue =
+			( samples[0] + samples[2] * (1.0f - samples[0].a) +
+			  samples[1] + samples[3] * (1.0f - samples[1].a) +
+			  samples[5] + samples[7] * (1.0f - samples[5].a) +
+			  samples[4] + samples[6] * (1.0f - samples[4].a) ) * 0.25f;
+	OGRE_imageWrite3D4( outLightHigherMip[1], posAxisDstIUvw, finalValue.xyzw );
+
+	//-Z
+	@foreach( 8, n )
+		samples[@n] = OGRE_Load3D( inLightLowerMip[2], negISourceUvw.xyz + offsets[@n], 0 );@end
+
+	finalValue =
+			( samples[1] + samples[0] * (1.0f - samples[1].a) +
+			  samples[3] + samples[2] * (1.0f - samples[3].a) +
+			  samples[5] + samples[4] * (1.0f - samples[5].a) +
+			  samples[7] + samples[6] * (1.0f - samples[7].a) ) * 0.25f;
+	OGRE_imageWrite3D4( outLightHigherMip[2], negAxisDstIUvw, finalValue.xyzw );
+
+	//+Z
+	@foreach( 8, n )
+		samples[@n] = OGRE_Load3D( inLightLowerMip[2], posISourceUvw.xyz + offsets[@n], 0 );@end
+
+	finalValue =
+			( samples[0] + samples[1] * (1.0f - samples[0].a) +
+			  samples[2] + samples[3] * (1.0f - samples[2].a) +
+			  samples[4] + samples[5] * (1.0f - samples[4].a) +
+			  samples[6] + samples[7] * (1.0f - samples[6].a) ) * 0.25f;
+	OGRE_imageWrite3D4( outLightHigherMip[2], posAxisDstIUvw, finalValue.xyzw );
 @end

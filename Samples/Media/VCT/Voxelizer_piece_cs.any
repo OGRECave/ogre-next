@@ -350,7 +350,7 @@
 	bool doubleSided = false;
 	float accumTris = 0;
 	float4 voxelAlbedo		= float4( 0, 0, 0, 0 );
-	float3 voxelNormal		= float3( 0, 0, 0 );
+	float4 voxelNormal		= float4( 0, 0, 0, 0 );
 	float4 voxelEmissive	= float4( 0, 0, 0, 0 );
 
 	for( uint i=p_instanceStart; i<p_instanceEnd; ++i )
@@ -419,12 +419,12 @@
 
 							float2 uv = tri_barycentric_uv( voxelAabb.center, tri );
 
-							float cosAngle = dot( voxelNormal, triNormal );
+							float cosAngle = dot( voxelNormal.xyz, triNormal );
 							float cos120 = -0.5f;
 							if( cosAngle <= cos120 )
 								doubleSided = true;
 							else
-								voxelNormal += triNormal;
+								voxelNormal.xyz += triNormal;
 
 							++accumTris;
 						}
@@ -438,13 +438,12 @@
 
 	@property( syntax != hlsl || typed_uav_load )
 		float4 origAlbedo	= OGRE_imageLoad3D( voxelAlbedoTex, voxelCelUvw );
-		float3 origNormal	= OGRE_imageLoad3D( voxelNormalTex, voxelCelUvw ).xyz * 2.0f - 1.0f;
+		float4 origNormal	= OGRE_imageLoad3D( voxelNormalTex, voxelCelUvw );
 		float4 origEmissive = OGRE_imageLoad3D( voxelEmissiveTex, voxelCelUvw );
 		float origAccumTris = OGRE_imageLoad3D( voxelAccumVal, voxelCelUvw ).x;
 	@else
 		float4 origAlbedo	= unpackUnorm4x8( OGRE_imageLoad3D( voxelAlbedoTex, voxelCelUvw ) );
-		float3 origNormal	= unpackUnormRGB10A2( OGRE_imageLoad3D( voxelNormalTex,
-																	voxelCelUvw ) ).xyz * 2.0f - 1.0f;
+		float4 origNormal	= unpackUnormRGB10A2( OGRE_imageLoad3D( voxelNormalTex, voxelCelUvw ) );
 		float4 origEmissive = unpackUnorm4x8( OGRE_imageLoad3D( voxelEmissiveTex, voxelCelUvw ) );
 		uint origAccumTrisVal = OGRE_imageLoad3D( voxelAccumVal,
 												  wshort3( voxelCelUvw.x >> 1u, voxelCelUvw.yz ) ).x;
@@ -452,26 +451,27 @@
 																 (origAccumTrisVal & 0xFFFFu);
 	@end
 
+	origNormal.xyz = origNormal.xyz * 2.0f - 1.0f;
+
 	if( accumTris + origAccumTris > 0 )
 	{
 		voxelAlbedo			= mixAverage4( voxelAlbedo, accumTris, origAlbedo, origAccumTris );
-		voxelNormal			= mixAverage3( voxelNormal, accumTris, origNormal, origAccumTris );
+		voxelNormal.xyz		= mixAverage3( voxelNormal.xyz, accumTris, origNormal.xyz, origAccumTris );
 		voxelEmissive.xyz	= mixAverage3( voxelEmissive.xyz, accumTris, origEmissive.xyz, origAccumTris );
 
-		voxelEmissive.a	= doubleSided ? 1.0f : 0.0f;
-		voxelEmissive.a = max( voxelEmissive.a, origEmissive.a );
-		voxelNormal		= voxelNormal * 0.5 + 0.5f;
+		voxelNormal.a	= doubleSided ? 1.0f : 0.0f;
+		voxelNormal.a	= max( voxelNormal.a, voxelNormal.a );
+		voxelNormal.xyz	= voxelNormal.xyz * 0.5 + 0.5f;
 
 		@property( syntax != hlsl || typed_uav_load )
 			OGRE_imageWrite3D4( voxelAlbedoTex, voxelCelUvw, voxelAlbedo );
-			OGRE_imageWrite3D4( voxelNormalTex, voxelCelUvw, float4( voxelNormal, 1.0f ) );
+			OGRE_imageWrite3D4( voxelNormalTex, voxelCelUvw, voxelNormal );
 			OGRE_imageWrite3D4( voxelEmissiveTex, voxelCelUvw, voxelEmissive );
 			OGRE_imageWrite3D1( voxelAccumVal, voxelCelUvw,
 								uint4( accumTris + origAccumTris, 0, 0, 0 ) );
 		@else
 			OGRE_imageWrite3D4( voxelAlbedoTex, voxelCelUvw, packUnorm4x8( voxelAlbedo ) );
-			OGRE_imageWrite3D4( voxelNormalTex, voxelCelUvw, packUnormRGB10A2( float4( voxelNormal,
-																					   1.0f ) ) );
+			OGRE_imageWrite3D4( voxelNormalTex, voxelCelUvw, packUnormRGB10A2( voxelNormal ) );
 			OGRE_imageWrite3D4( voxelEmissiveTex, voxelCelUvw, packUnorm4x8( voxelEmissive ) );
 		@end
 	}

@@ -86,17 +86,19 @@
 
             "textures" :
             [
+                {},
                 {}
             ],
 
             "params" :
             [
-                ["lowerMipResolution_higherMipHalfWidth",   [1,1,1,1],    "int"]
+                ["higherMipHalfWidth",      [1],    "int"]
             ],
 
             "params_glsl" :
             [
                 ["inLightLowerMip",         [0], "int"],
+                ["inVoxelNormalTex",        [1], "int"],
                 ["outLightHigherMip",       [0, 1, 2], "int"]
             ]
         },
@@ -109,7 +111,7 @@
             "pieces" : ["CrossPlatformSettings_piece_all", "AnisotropicMipVctStep1_piece_cs.any"],
             "inform_shader_of_texture_data_change" : true,
 
-            "thread_groups_based_on_uav" : 0,
+            "thread_groups_based_on_uav" : { "slot" : 0, "divisor" : [2, 1, 1] },
 
             "uav_units" : 3,
 
@@ -122,7 +124,7 @@
 
             "params" :
             [
-                ["lowerMipFirstHalfResolution_higherMipHalfWidth",  [1,1,1,1],    "int"]
+                ["higherMipHalfRes_lowerMipHalfWidth",  [1, 1, 1, 1],   "int"]
             ],
 
             "params_glsl" :
