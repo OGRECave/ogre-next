@@ -1,6 +1,5 @@
 @insertpiece( SetCrossPlatformSettings )
 
-#define OGRE_imageLoad3D( inImage, iuv ) imageLoad( inImage, int3( iuv ) )
 #define OGRE_imageWrite3D4( outImage, iuv, value ) imageStore( outImage, int3( iuv ), value )
 
 uniform sampler3D inLightLowerMip;
@@ -19,7 +18,7 @@ layout( local_size_x = @value( threads_per_group_x ),
 
 uniform int higherMipHalfWidth;
 
-#define p_higherMipHalfWidth higherMipHalfWidth.x
+#define p_higherMipHalfWidth higherMipHalfWidth
 
 //in uvec3 gl_NumWorkGroups;
 //in uvec3 gl_WorkGroupID;

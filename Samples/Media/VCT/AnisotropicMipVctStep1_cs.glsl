@@ -1,6 +1,5 @@
 @insertpiece( SetCrossPlatformSettings )
 
-#define OGRE_imageLoad3D( inImage, iuv ) imageLoad( inImage, int3( iuv ) )
 #define OGRE_imageWrite3D4( outImage, iuv, value ) imageStore( outImage, int3( iuv ), value )
 
 uniform sampler3D inLightLowerMip[3];

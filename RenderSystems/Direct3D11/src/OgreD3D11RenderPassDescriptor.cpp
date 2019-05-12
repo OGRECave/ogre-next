@@ -233,7 +233,8 @@ namespace Ogre
                     if( mColour[i].allLayers )
                     {
                         viewDesc.Texture3D.FirstWSlice  = 0;
-                        viewDesc.Texture3D.WSize        = mColour[i].texture->getNumSlices();
+                        viewDesc.Texture3D.WSize        = mColour[i].texture->getDepth() >>
+                                                          mColour[i].mipLevel;
                     }
                     else
                     {

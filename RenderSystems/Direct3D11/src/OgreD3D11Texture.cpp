@@ -194,7 +194,7 @@ namespace Ogre
             descUAV.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE3D;
             descUAV.Texture3D.MipSlice      = static_cast<UINT>( mipmapLevel );
             descUAV.Texture3D.FirstWSlice   = 0;
-            descUAV.Texture3D.WSize         = static_cast<UINT>( this->getDepth() );
+            descUAV.Texture3D.WSize         = static_cast<UINT>( this->getDepth() >> mipmapLevel );
             break;
         default:
             break;

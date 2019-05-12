@@ -648,7 +648,7 @@ namespace Ogre
             uavDesc.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE3D;
             uavDesc.Texture3D.MipSlice      = static_cast<UINT>( texSlot.mipmapLevel );
             uavDesc.Texture3D.FirstWSlice   = 0;
-            uavDesc.Texture3D.WSize         = static_cast<UINT>( getDepth() );
+            uavDesc.Texture3D.WSize         = static_cast<UINT>( getDepth() >> texSlot.mipmapLevel );
             break;
         default:
             break;
