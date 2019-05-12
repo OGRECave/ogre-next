@@ -136,7 +136,7 @@ namespace Ogre
             SlotTypeBuffer,
             SlotTypeTexture
         };
-        struct BufferSlot
+        struct _OgreExport BufferSlot
         {
             /// Texture buffer to bind
             TexBufferPacked *buffer;
@@ -175,7 +175,7 @@ namespace Ogre
                 return retVal;
             }
         };
-        struct TextureSlot
+        struct _OgreExport TextureSlot
         {
             TextureGpu      *texture;
             bool            cubemapsAs2DArrays;
@@ -216,7 +216,7 @@ namespace Ogre
                 return retVal;
             }
         };
-        struct Slot
+        struct _OgreExport Slot
         {
             SlotType        slotType;
         protected:
