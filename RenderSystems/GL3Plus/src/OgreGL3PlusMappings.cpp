@@ -33,7 +33,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    GLenum GL3PlusMappings::get( TextureTypes::TextureTypes textureType )
+    GLenum GL3PlusMappings::get( TextureTypes::TextureTypes textureType, bool cubemapsAs2DArrays )
     {
         switch( textureType )
         {
@@ -48,9 +48,9 @@ namespace Ogre
         case TextureTypes::Type2DArray:
             return GL_TEXTURE_2D_ARRAY;
         case TextureTypes::TypeCube:
-            return GL_TEXTURE_CUBE_MAP;
+            return cubemapsAs2DArrays ? GL_TEXTURE_2D_ARRAY : GL_TEXTURE_CUBE_MAP;
         case TextureTypes::TypeCubeArray:
-            return GL_TEXTURE_CUBE_MAP_ARRAY;
+            return cubemapsAs2DArrays ? GL_TEXTURE_2D_ARRAY : GL_TEXTURE_CUBE_MAP_ARRAY;
         case TextureTypes::Type3D:
             return GL_TEXTURE_3D;
         }

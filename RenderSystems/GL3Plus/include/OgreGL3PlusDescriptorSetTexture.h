@@ -26,24 +26,30 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#ifndef _OgreGL3PlusMappings_H_
-#define _OgreGL3PlusMappings_H_
+#ifndef _OgreGL3PlusDescriptorSetTexture_H_
+#define _OgreGL3PlusDescriptorSetTexture_H_
 
 #include "OgreGL3PlusPrerequisites.h"
-
-#include "OgreTextureGpu.h"
 
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
-    class _OgreGL3PlusExport GL3PlusMappings
+    /** \addtogroup Core
+    *  @{
+    */
+    /** \addtogroup Resources
+    *  @{
+    */
+
+    struct GL3PlusDescriptorSetTexture2
     {
-    public:
-        static GLenum get( TextureTypes::TextureTypes textureType, bool cubemapsAs2DArrays );
-        static GLenum get( PixelFormatGpu pf );
-        static void getFormatAndType( PixelFormatGpu pf, GLenum &format, GLenum &type );
+        GLenum target;
+        GLuint texName;
     };
+
+    /** @} */
+    /** @} */
 }
 
 #include "OgreHeaderSuffix.h"

@@ -44,6 +44,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreGLSLShaderManager.h"
 #include "OgreException.h"
 #include "OgreGLSLExtSupport.h"
+#include "OgreGL3PlusDescriptorSetTexture.h"
 #include "OgreGL3PlusHardwareOcclusionQuery.h"
 #include "OgreGL3PlusDepthBuffer.h"
 #include "OgreGL3PlusHardwarePixelBuffer.h"
@@ -1201,6 +1202,8 @@ namespace Ogre {
     {
         uint32 texUnit = slotStart;
 
+        GL3PlusDescriptorSetTexture2 *srvList =
+                reinterpret_cast<GL3PlusDescriptorSetTexture2*>( set->mRsData );
         FastArray<DescriptorSetTexture2::Slot>::const_iterator itor = set->mTextures.begin();
         FastArray<DescriptorSetTexture2::Slot>::const_iterator end  = set->mTextures.end();
 
@@ -1208,7 +1211,7 @@ namespace Ogre {
         {
             OCGE( glActiveTexture( static_cast<uint32>( GL_TEXTURE0 + texUnit ) ) );
 
-            if( itor->slotType == DescriptorSetUav::SlotTypeBuffer )
+            if( itor->isBuffer() )
             {
                 //Bind buffer
                 const DescriptorSetTexture2::BufferSlot &bufferSlot = itor->getBuffer();
@@ -1221,12 +1224,9 @@ namespace Ogre {
                 const DescriptorSetTexture2::TextureSlot &texSlot = itor->getTexture();
                 if( texSlot.texture )
                 {
-                    const GL3PlusTextureGpu *textureGpu =
-                            static_cast<const GL3PlusTextureGpu*>( texSlot.texture );
-                    const GLenum texTarget  = textureGpu->getGlTextureTarget();
-                    const GLuint texName    = textureGpu->getDisplayTextureName();
-                    OCGE( glBindTexture( texTarget, texName ) );
-                    mTextureTypes[texUnit] = texTarget;
+                    const size_t idx = texUnit - slotStart;
+                    mTextureTypes[texUnit] = srvList[idx].target;
+                    OCGE( glBindTexture( srvList[idx].target, srvList[idx].texName ) );
                 }
                 else
                 {
@@ -1365,7 +1365,7 @@ namespace Ogre {
 
         while( itor != end )
         {
-            if( itor->slotType == DescriptorSetUav::SlotTypeBuffer )
+            if( itor->isBuffer() )
                 setBufferUavCS( slotStart, itor->getBuffer() );
             else
                 setTextureUavCS( slotStart, itor->getTexture() );
@@ -2008,6 +2008,75 @@ namespace Ogre {
     {
         GLuint samplerName = static_cast<GLuint>( reinterpret_cast<intptr_t>( block->mRsData ) );
         glDeleteSamplers( 1, &samplerName );
+    }
+
+    void GL3PlusRenderSystem::_descriptorSetTexture2Created( DescriptorSetTexture2 *newSet )
+    {
+        const size_t numElements = newSet->mTextures.size();
+        GL3PlusDescriptorSetTexture2 *srvList = new GL3PlusDescriptorSetTexture2[numElements];
+        newSet->mRsData = srvList;
+
+        FastArray<DescriptorSetTexture2::Slot>::const_iterator itor = newSet->mTextures.begin();
+
+        for( size_t i=0u; i<numElements; ++i )
+        {
+            srvList[i].target = 0;
+            srvList[i].texName = 0;
+            if( itor->isTexture() && itor->getTexture().texture )
+            {
+                const DescriptorSetTexture2::TextureSlot &texSlot = itor->getTexture();
+                const GL3PlusTextureGpu *textureGpu =
+                        static_cast<const GL3PlusTextureGpu*>( itor->getTexture().texture );
+                GLuint displayTex = textureGpu->getDisplayTextureName();
+
+                if( texSlot.needsDifferentView() )
+                {
+                    glGenTextures( 1u, &srvList[i].texName );
+
+                    PixelFormatGpu pixelFormat = texSlot.pixelFormat;
+                    if( pixelFormat == PFG_UNKNOWN )
+                        pixelFormat = textureGpu->getPixelFormat();
+
+                    const GLenum format = GL3PlusMappings::get( pixelFormat );
+                    srvList[i].target = GL3PlusMappings::get( textureGpu->getTextureType(),
+                                                              texSlot.cubemapsAs2DArrays );
+                    glTextureView( srvList[i].texName, srvList[i].target, displayTex, format,
+                                   texSlot.mipmapLevel, 1u,
+                                   texSlot.textureArrayIndex,
+                                   textureGpu->getNumSlices() - texSlot.textureArrayIndex );
+                }
+                else
+                {
+                    srvList[i].texName = displayTex;
+                    srvList[i].target = textureGpu->getGlTextureTarget();
+                }
+            }
+
+            ++itor;
+        }
+    }
+
+    void GL3PlusRenderSystem::_descriptorSetTexture2Destroyed( DescriptorSetTexture2 *set )
+    {
+        assert( set->mRsData );
+        GL3PlusDescriptorSetTexture2 *srvList =
+                reinterpret_cast<GL3PlusDescriptorSetTexture2*>( set->mRsData );
+
+        const size_t numElements = set->mTextures.size();
+        FastArray<DescriptorSetTexture2::Slot>::const_iterator itor = set->mTextures.begin();
+
+        for( size_t i=0u; i<numElements; ++i )
+        {
+            if( itor->isTexture() && itor->getTexture().texture )
+            {
+                const DescriptorSetTexture2::TextureSlot &texSlot = itor->getTexture();
+                if( texSlot.needsDifferentView() )
+                    glDeleteTextures( 1u, &srvList[i].texName );
+            }
+        }
+
+        delete [] srvList;
+        set->mRsData = 0;
     }
 
     void GL3PlusRenderSystem::_setHlmsMacroblock( const HlmsMacroblock *macroblock,
