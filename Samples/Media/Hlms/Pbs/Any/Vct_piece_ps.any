@@ -83,7 +83,11 @@
 			@end
 
 			@property( !vct_anisotropic )
-			while( dist < probeParams.vctMaxDistance && alpha < 0.95 )
+				#define VCT_ANISOTROPIC_EARLY_OUT
+			@else
+				#define VCT_ANISOTROPIC_EARLY_OUT && lodLevel <= 0.5
+			@end
+			while( dist < probeParams.vctMaxDistance && alpha < 0.95 VCT_ANISOTROPIC_EARLY_OUT )
 			{
 				float4 scolor = OGRE_SampleLevel( probe, probeSampler,
 												  posLS + dist * dirLS,
@@ -100,7 +104,7 @@
 				@end
 			}
 
-			@else
+			@property( vct_anisotropic )
 				float3 isNegative;
 				isNegative.x = dirLS.x < 0 ? 0.5f : 0.0f;
 				isNegative.y = dirLS.y < 0 ? 0.5f : 0.0f;
@@ -175,7 +179,7 @@
 		OGRE_VCT_ANISO_PROBE_ARG_DECL
 	)
 	{
-		float3 posLS = toVctProbeSpacePos( pos + pixelData.geomNormal.xyz /** probeParams.vctNormalBias*/*0.05,
+		float3 posLS = toVctProbeSpacePos( pos + pixelData.geomNormal.xyz * probeParams.vctNormalBias,
 										   probeParams );
 
 		if( posLS.x < 0.0 || posLS.x > 1.0 ||
