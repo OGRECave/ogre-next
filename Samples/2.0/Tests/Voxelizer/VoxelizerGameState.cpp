@@ -116,7 +116,7 @@ namespace Demo
         voxelizer->build();
 
         vctLighting = new Ogre::VctLighting( Ogre::Id::generateNewId<Ogre::VctLighting>(),
-                                             voxelizer );
+                                             voxelizer, true );
         vctLighting->update( sceneManager );
 
         {

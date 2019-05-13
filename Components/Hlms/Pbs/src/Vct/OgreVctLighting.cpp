@@ -65,7 +65,7 @@ namespace Ogre
 
     const uint16 VctLighting::msDistanceThresholdCustomParam = 3876u;
 
-    VctLighting::VctLighting( IdType id, VctVoxelizer *voxelizer ) :
+    VctLighting::VctLighting( IdType id, VctVoxelizer *voxelizer, bool bAnisotropic ) :
         IdObject( id ),
         mSamplerblockTrilinear( 0 ),
         mVoxelizer( voxelizer ),
@@ -73,7 +73,7 @@ namespace Ogre
         mLightsConstBuffer( 0 ),
         mAnisoGeneratorStep0( 0 ),
         mDefaultLightDistThreshold( 0.5f ),
-        mAnisotropic( false ),
+        mAnisotropic( bAnisotropic ),
         mNumLights( 0 ),
         mRayMarchStepSize( 0 ),
         mVoxelCellSize( 0 ),
@@ -473,5 +473,14 @@ namespace Ogre
         //float4 xform_row2;
         for( size_t i=0; i<12u; ++i )
             *passBufferPtr++ = static_cast<float>( xform[0][i] );
+    }
+    //-------------------------------------------------------------------------
+    void VctLighting::setAnisotropic( bool bAnisotropic )
+    {
+        if( mAnisotropic != bAnisotropic )
+        {
+            mAnisotropic = bAnisotropic;
+            createTextures();
+        }
     }
 }

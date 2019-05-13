@@ -114,7 +114,7 @@ namespace Ogre
         void generateAnisotropicMips(void);
 
     public:
-        VctLighting( IdType id, VctVoxelizer *voxelizer );
+        VctLighting( IdType id, VctVoxelizer *voxelizer, bool bAnisotropic );
         ~VctLighting();
 
         /**
@@ -136,6 +136,22 @@ namespace Ogre
         void fillConstBufferData( const Matrix4 &viewMatrix,
                                   float * RESTRICT_ALIAS passBufferPtr ) const;
 
+        /** Toggles anisotropic mips.
+
+            Anisotropic mips provide much higher quality and generally lower light leaking.
+            However it costs a bit more performance, and increases memory consumption.
+
+            Normally regular mipmaps of 3D textures increase memory consumption by 1/7
+            Anisotropic mipmaps of 3D textures increase memory consumption by 6/7
+
+             * Isotropic 256x256x256 RGBA8_UNORM = 256x256x256x4 * (1+1/7) = 64 MB * 1.143 =  73.14MB
+             * Anisotrop 256x256x256 RGBA8_UNORM = 256x256x256x4 * (1+6/7) = 64 MB * 1.857 = 118.85MB
+
+        @remarks
+            After changing this setting, VctLighting::update
+            *must* be called again to repopulate the light data.
+        */
+        void setAnisotropic( bool bAnisotropic );
         bool isAnisotropic(void) const                      { return mAnisotropic; }
 
         TextureGpu** getLightVoxelTextures(void)            { return mLightVoxel; }
