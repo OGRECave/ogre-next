@@ -172,6 +172,7 @@ namespace Ogre
     const IdString PbsProperty::IrradianceVolumes = IdString( "irradiance_volumes" );
     const IdString PbsProperty::VctNumProbes      = IdString( "vct_num_probes" );
     const IdString PbsProperty::VctConeDirs       = IdString( "vct_cone_dirs" );
+    const IdString PbsProperty::VctAnisotropic    = IdString( "vct_anisotropic" );
     const IdString PbsProperty::ObbRestraintApprox= IdString( "obb_restraint_approx" );
     const IdString PbsProperty::ObbRestraintLtc   = IdString( "obb_restraint_ltc" );
 
@@ -969,7 +970,15 @@ namespace Ogre
         }
 
         if( getProperty( PbsProperty::VctNumProbes ) > 0 )
+        {
             setTextureReg( PixelShader, "vctProbe", texUnit++ );
+            if( getProperty( PbsProperty::VctAnisotropic ) )
+            {
+                setTextureReg( PixelShader, "vctProbeX", texUnit++ );
+                setTextureReg( PixelShader, "vctProbeY", texUnit++ );
+                setTextureReg( PixelShader, "vctProbeZ", texUnit++ );
+            }
+        }
 
         if( getProperty( HlmsBaseProp::LightsAreaTexMask ) > 0 )
             setTextureReg( PixelShader, "areaLightMasks", texUnit++ );
@@ -1255,6 +1264,7 @@ namespace Ogre
             {
                 setProperty( PbsProperty::VctNumProbes, 1 );
                 setProperty( PbsProperty::VctConeDirs, mVctFullConeCount ? 6 : 4 );
+                setProperty( PbsProperty::VctAnisotropic, mVctLighting->isAnisotropic() );
             }
 
             if( mIrradianceVolume )
@@ -2190,7 +2200,7 @@ namespace Ogre
             if( mIrradianceVolume )
                 mTexUnitSlotStart += 1;
             if( mVctLighting )
-                mTexUnitSlotStart += 1;
+                mTexUnitSlotStart += mVctLighting->getNumVoxelTextures();
             if( mParallaxCorrectedCubemap && !mParallaxCorrectedCubemap->isRendering() )
                 mTexUnitSlotStart += 1;
             if( !mPrePassTextures->empty() )
@@ -2329,11 +2339,15 @@ namespace Ogre
                 if( mVctLighting )
                 {
                     TextureGpu **lightVoxelTexs = mVctLighting->getLightVoxelTextures();
+                    const size_t numVctTextures = mVctLighting->getNumVoxelTextures();
                     const HlmsSamplerblock *samplerblock =
                             mVctLighting->getBindTrilinearSamplerblock();
-                    *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit, lightVoxelTexs[0],
-                                                                         samplerblock );
-                    ++texUnit;
+                    for( size_t i=0; i<numVctTextures; ++i )
+                    {
+                        *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit, lightVoxelTexs[i],
+                                                                             samplerblock );
+                        ++texUnit;
+                    }
                 }
 
                 if( mUsingAreaLightMasks )

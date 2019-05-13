@@ -434,6 +434,7 @@ namespace Ogre
         static const IdString IrradianceVolumes;
         static const IdString VctNumProbes;
         static const IdString VctConeDirs;
+        static const IdString VctAnisotropic;
         static const IdString ObbRestraintApprox;
         static const IdString ObbRestraintLtc;
 

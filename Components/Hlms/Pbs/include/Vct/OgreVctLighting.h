@@ -136,7 +136,10 @@ namespace Ogre
         void fillConstBufferData( const Matrix4 &viewMatrix,
                                   float * RESTRICT_ALIAS passBufferPtr ) const;
 
+        bool isAnisotropic(void) const                      { return mAnisotropic; }
+
         TextureGpu** getLightVoxelTextures(void)            { return mLightVoxel; }
+        uint32 getNumVoxelTextures(void) const              { return mAnisotropic ? 4u : 1u; }
         const HlmsSamplerblock* getBindTrilinearSamplerblock(void)
                                                             { return mSamplerblockTrilinear; }
     };

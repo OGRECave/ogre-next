@@ -4,18 +4,39 @@
 @piece( DeclVctTextures )
 	@property( syntax == glsl )
 		uniform sampler3D vctProbe;
+		@property( vct_anisotropic )
+			uniform sampler3D vctProbeX;
+			uniform sampler3D vctProbeY;
+			uniform sampler3D vctProbeZ;
+		@end
 	@end
 	@property( syntax == hlsl )
 		Texture3D vctProbe				: register(t@value(vctProbe));
 		SamplerState vctProbeSampler	: register(s@value(vctProbe));
+		@property( vct_anisotropic )
+			Texture3D vctProbeX				: register(t@value(vctProbeX));
+			Texture3D vctProbeY				: register(t@value(vctProbeY));
+			Texture3D vctProbeZ				: register(t@value(vctProbeZ));
+		@end
 	@end
 	@property( syntax == metal )
 		, texture3d<float> vctProbe		[[texture(@value(vctProbe))]]
 		, sampler vctProbeSampler		[[sampler(@value(vctProbe))]]
+		@property( vct_anisotropic )
+			, texture3d<float> vctProbeX	[[texture(@value(vctProbeX))]]
+			, texture3d<float> vctProbeY	[[texture(@value(vctProbeY))]]
+			, texture3d<float> vctProbeZ	[[texture(@value(vctProbeZ))]]
+		@end
 	@end
 @end
 
 @piece( DeclVctFuncs )
+	@property( vct_anisotropic )
+		#define OGRE_VCT_ANISO_PROBE_ARG_DECL , OGRE_Texture3D_float4 probeX, OGRE_Texture3D_float4 probeY, OGRE_Texture3D_float4 probeZ
+		#define OGRE_VCT_ANISO_PROBE_ARG , probeX, probeY, probeZ
+		#define OGRE_VCT_ANISO_ROOT_PROBE_ARG , vctProbeX, vctProbeY, vctProbeZ
+	@end
+
 	/// Generates a TBN matrix when no tangent information is present using
 	/// DDX information.
 	/// Should only we used as a fallback as the result isn't fully stable due to how DDX works
@@ -40,7 +61,8 @@
 			( VctProbeParams probeParams, float3 posLS, float3 ambient,
 			  float3 dirLS, float tanHalfAngle,
 			  OGRE_Texture3D_float4 probe
-			  OGRE_SAMPLER_ARG_DECL( probeSampler ) )
+			  OGRE_SAMPLER_ARG_DECL( probeSampler )
+			  OGRE_VCT_ANISO_PROBE_ARG_DECL )
 		{
 			float dist = probeParams.vctStartBias;
 			float alpha = 0.0;
@@ -59,6 +81,8 @@
 			@else
 				float lodLevel = log2( diameter * probeParams.vctInvStartBias );
 			@end
+
+			@property( !vct_anisotropic )
 			while( dist < probeParams.vctMaxDistance && alpha < 0.95 )
 			{
 				float4 scolor = OGRE_SampleLevel( probe, probeSampler,
@@ -75,6 +99,45 @@
 					lodLevel = log2( diameter * probeParams.vctInvStartBias );
 				@end
 			}
+
+			@else
+				float3 isNegative;
+				isNegative.x = dirLS.x < 0 ? 0.5f : 0.0f;
+				isNegative.y = dirLS.y < 0 ? 0.5f : 0.0f;
+				isNegative.z = dirLS.z < 0 ? 0.5f : 0.0f;
+
+				float3 dirLSSquared = dirLS.xyz * dirLS.xyz;
+
+				while( dist < probeParams.vctMaxDistance && alpha < 0.95 )
+				{
+					float3 sampleUVW = posLS + dist * dirLS;
+					sampleUVW.x = saturate( sampleUVW.x ) * 0.5;
+
+					float4 xColor = OGRE_SampleLevel( probeX, probeSampler,
+													  sampleUVW + float3( isNegative.x, 0, 0 ),
+													  lodLevel );
+					float4 yColor = OGRE_SampleLevel( probeY, probeSampler,
+													  sampleUVW + float3( isNegative.y, 0, 0 ),
+													  lodLevel );
+					float4 zColor = OGRE_SampleLevel( probeZ, probeSampler,
+													  sampleUVW + float3( isNegative.z, 0, 0 ),
+													  lodLevel );
+
+					float4 scolor = dirLSSquared.x * xColor +
+									dirLSSquared.y * yColor +
+									dirLSSquared.z * zColor;
+					float a = (1.0f - alpha);
+					color += scolor.xyz * a;
+					alpha += a * scolor.w;
+					dist += diameter * 0.5f;
+					diameter = 2.0 * tanHalfAngle * dist;
+					@property( @n == 0 && vct_cone_dirs == 4 )
+						lodLevel += lodStep;
+					@else
+						lodLevel = log2( diameter * probeParams.vctInvStartBias );
+					@end
+				}
+			@end
 
 			if( probeParams.vctBlendAmbient != 0 )
 				color.xyz = lerp( ambient, color.xyz, min(1.0, alpha / 0.95) );
@@ -109,9 +172,10 @@
 		PixelData pixelData, float3 pos, float3x3 TBN, float3 ambientUpperHemi,
 		VctProbeParams probeParams,
 		OGRE_Texture3D_float4 probe OGRE_SAMPLER_ARG_DECL( probeSampler )
+		OGRE_VCT_ANISO_PROBE_ARG_DECL
 	)
 	{
-		float3 posLS = toVctProbeSpacePos( pos + pixelData.geomNormal.xyz * probeParams.vctNormalBias,
+		float3 posLS = toVctProbeSpacePos( pos + pixelData.geomNormal.xyz /** probeParams.vctNormalBias*/*0.05,
 										   probeParams );
 
 		if( posLS.x < 0.0 || posLS.x > 1.0 ||
@@ -166,7 +230,8 @@
 			//then we should not apply BRDF_EnvMap and use the values in pixelData.envColourD
 			light += coneWeights[i] * voxelConeTraceDiff( probeParams, posLS, ambientUpperHemi, dir,
 														  coneAngleTan,
-														  probe OGRE_SAMPLER_ARG( probeSampler ) );
+														  probe OGRE_SAMPLER_ARG( probeSampler )
+														  OGRE_VCT_ANISO_PROBE_ARG );
 		}
 
 		outDiffuse += light * (probeParams.vctBlendFade * blend);
@@ -178,7 +243,8 @@
 		//then we should not apply BRDF_EnvMap and use the values in pixelData.envColourS
 		float3 irrLight = voxelConeTraceSpec( probeParams, posLS, ambientUpperHemi, reflVecLS,
 											  specConeAngleTan,
-											  probe OGRE_SAMPLER_ARG( probeSampler ) );
+											  probe OGRE_SAMPLER_ARG( probeSampler )
+											  OGRE_VCT_ANISO_PROBE_ARG );
 		outSpecular += float4( irrLight * (probeParams.vctBlendFade * blend), blend );
 	}
 @end
@@ -198,7 +264,8 @@
 	float4 vctSpecular = float4( 0, 0, 0, 0 );
 	computeVctProbe( vctDiffuse, vctSpecular, pixelData, inPs.pos, TBN,
 					 vctAmbient, passBuf.vctProbeParams,
-					 vctProbe OGRE_SAMPLER_ARG( vctProbeSampler ) );
+					 vctProbe OGRE_SAMPLER_ARG( vctProbeSampler )
+					 OGRE_VCT_ANISO_ROOT_PROBE_ARG );
 
 	@property( vct_num_probes > 1 )
 		//We've added multiple probes together that are overlapping. Average them
