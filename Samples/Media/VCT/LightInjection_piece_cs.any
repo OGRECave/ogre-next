@@ -65,7 +65,7 @@
 			lightDir /= max3( lightDir.x, lightDir.y, lightDir.z );
 
 			float NdotL = dot( normalVal.xyz, lightDir );
-			if( emissiveVal.a > 0 )
+			if( normalVal.a > 0 )
 				NdotL = abs( NdotL );
 			else
 				NdotL = saturate( NdotL );
@@ -105,7 +105,7 @@
 				}
 			}
 
-			blockColour += NdotL * light.diffuse.xyz * alpha;
+			blockColour += NdotL * light.diffuse.xyz * alpha * albedoVal.xyz;
 		}
 	}
 
