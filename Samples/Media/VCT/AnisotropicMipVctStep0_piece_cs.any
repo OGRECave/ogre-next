@@ -44,6 +44,7 @@
 		samples[@n] = OGRE_Load3D( inLightLowerMip, iSourceUvw.xyz + offsets[@n], 0 );
 		vNormals[@n] = OGRE_Load3D( inVoxelNormalTex, iSourceUvw.xyz + offsets[@n], 0 );
 		vNormals[@n].xyz = vNormals[@n].xyz * 2.0f - 1.0f;
+		vNormals[@n].xyz = normalize( vNormals[@n].xyz );
 	@end
 
 	float3 axisNormal[6] =

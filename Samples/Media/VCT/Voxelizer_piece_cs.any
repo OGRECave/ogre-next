@@ -419,7 +419,9 @@
 
 							float2 uv = tri_barycentric_uv( voxelAabb.center, tri );
 
-							float cosAngle = dot( voxelNormal.xyz, triNormal );
+							//voxelNormal is not normalized for properly blend-averaging in multiple
+							//passes. But we need it normalized for this check to work
+							float cosAngle = dot( normalize( voxelNormal.xyz ), triNormal );
 							float cos120 = -0.5f;
 							if( cosAngle <= cos120 )
 								doubleSided = true;
