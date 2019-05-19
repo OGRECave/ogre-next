@@ -255,8 +255,9 @@ namespace Ogre
         }
         else if(PixelUtil::isCompressed(box.format))
         {
-            box.rowPitch = box.getWidth();
-            box.slicePitch = box.getWidth() * box.getHeight();
+            // Ogre2.1 stores pitch in bytes for compressed formats, diff with Ogre 1.x is intentional
+            box.rowPitch = mapping.RowPitch;
+            box.slicePitch = mapping.DepthPitch;
         }
         else
         {
