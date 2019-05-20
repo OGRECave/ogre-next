@@ -105,6 +105,8 @@ namespace Ogre
         const VertexBufferPackedVec& getVertexBuffers(void) const       { return mVertexBuffers; }
         IndexBufferPacked* getIndexBuffer(void) const                   { return mIndexBuffer; }
 
+        VertexBufferPacked* getBaseVertexBuffer(void) const { return mBaseVertexBuffer; }
+
         OperationType getOperationType(void) const { return mOperationType; }
 
         uint32 getPrimitiveStart(void) const                            { return mPrimStart; }

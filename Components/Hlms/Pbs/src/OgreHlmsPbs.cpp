@@ -2125,13 +2125,15 @@ namespace Ogre
         {
             //We need to correct currentMappedConstBuffer to point to the right texture buffer's
             //offset, which may not be in sync if the previous draw had skeletal animation.
+            unsigned short numPoseAnimations = queuedRenderable.renderable->getNumPoseAnimations();
+            bool poseAnimations = numPoseAnimations > 0;
             const size_t currentConstOffset = (currentMappedTexBuffer - mStartMappedTexBuffer) >>
-                                                (2 + !casterPass);
+                                                (2 + !casterPass + poseAnimations);
             currentMappedConstBuffer =  currentConstOffset + mStartMappedConstBuffer;
             bool exceedsConstBuffer = (size_t)((currentMappedConstBuffer - mStartMappedConstBuffer) + 4)
                                         > mCurrentConstBufferSize;
 
-            const size_t minimumTexBufferSize = 16 * (1 + !casterPass);
+            const size_t minimumTexBufferSize = 16 * (1 + !casterPass + poseAnimations);
             bool exceedsTexBuffer = (currentMappedTexBuffer - mStartMappedTexBuffer) +
                                          minimumTexBufferSize >= mCurrentTexBufferSize;
 
@@ -2185,6 +2187,33 @@ namespace Ogre
                 }
             }
 #endif
+            if( numPoseAnimations > 0 )
+            {
+                uint8 meshLod = queuedRenderable.movableObject->getCurrentMeshLod();
+                const VertexArrayObjectArray &vaos = queuedRenderable.renderable->getVaos(
+                            static_cast<VertexPass>(casterPass) );
+                VertexArrayObject *vao = vaos[meshLod];
+                int32 baseVertex = vao->getBaseVertexBuffer()->_getFinalBufferStart();
+                memcpy( currentMappedTexBuffer, &baseVertex, sizeof( int32 ) );
+                int32 numVertices = vao->getBaseVertexBuffer()->getNumElements();
+                memcpy( currentMappedTexBuffer + 1, &numVertices, sizeof( int32 ) );
+                
+
+                Vector4 poseWeights( Real( 0 ) );
+                for( int i = 0; i < numPoseAnimations; ++i )
+                {
+                    poseWeights[i] = queuedRenderable.renderable->getPoseWeight(i);
+                }
+                memcpy( currentMappedTexBuffer + 4, &poseWeights, 4 * sizeof( float ) );
+
+                currentMappedTexBuffer += 16;
+
+                TexBufferPacked* poseBuf = queuedRenderable.renderable->getPoseTexBuffer();
+                *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer( VertexShader,
+                                                                               4, poseBuf, 0,
+                                                                               poseBuf->
+                                                                               getTotalSizeBytes() );
+            }
         }
         else
         {
@@ -2304,57 +2333,6 @@ namespace Ogre
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
         *( currentMappedConstBuffer+3u ) = queuedRenderable.renderable->mCustomParameter & 0x7F;
 #endif
-
-        unsigned short numPoseAnimations = queuedRenderable.renderable->getNumPoseAnimations();
-        if( numPoseAnimations > 0 ) 
-        {
-            if( numPoseAnimations == 1 ) 
-            {
-                float w0 = queuedRenderable.renderable->getPoseWeight(0);
-                memcpy( currentMappedConstBuffer+3u, &w0, sizeof( float ) );
-            }
-            else if( numPoseAnimations == 2 ) 
-            {
-                uint32 wMax = (1 << 16) - 1;
-                uint32 w0 = queuedRenderable.renderable->getPoseWeight(0) * wMax;
-                uint32 w1 = queuedRenderable.renderable->getPoseWeight(1) * wMax;
-                
-                *( currentMappedConstBuffer+3u ) = ((0xffff & w0) << 0) |
-                                                   ((0xffff & w1) << 16);
-            }
-            else if( numPoseAnimations == 3 ) 
-            {
-                uint32 wMax = (1 << 10) - 1;
-                uint32 w0 = queuedRenderable.renderable->getPoseWeight(0) * wMax;
-                uint32 w1 = queuedRenderable.renderable->getPoseWeight(1) * wMax;
-                uint32 w2 = queuedRenderable.renderable->getPoseWeight(2) * wMax;
-                
-                *( currentMappedConstBuffer+3u ) = ((0x3ff & w0) << 0 )|
-                                                   ((0x3ff & w1) << 10)|
-                                                   ((0x3ff & w2) << 20);
-            }
-            else if( numPoseAnimations == 4 ) 
-            {
-                uint32 wMax = (1 << 8) - 1;
-                uint32 w0 = queuedRenderable.renderable->getPoseWeight(0) * wMax;
-                uint32 w1 = queuedRenderable.renderable->getPoseWeight(1) * wMax;
-                uint32 w2 = queuedRenderable.renderable->getPoseWeight(2) * wMax;
-                uint32 w3 = queuedRenderable.renderable->getPoseWeight(3) * wMax;
-                
-                *( currentMappedConstBuffer+3u ) = ((0xff & w0) << 0 )|
-                                                   ((0xff & w1) << 8 )|
-                                                   ((0xff & w2) << 16)|
-                                                   ((0xff & w3) << 24);
-            }
-            
-            TexBufferPacked* poseBuf = queuedRenderable.renderable->getPoseTexBuffer();
-            *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer( VertexShader,
-                                                                           4, poseBuf, 0,
-                                                                           poseBuf->
-                                                                           getTotalSizeBytes() );
-        }
-        
-        currentMappedConstBuffer += 4;
 
         //---------------------------------------------------------------------------
         //                          ---- PIXEL SHADER ----

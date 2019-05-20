@@ -167,40 +167,29 @@ void main()
 @property( hlms_pose )
 	vec4 inputPos = vertex;
 
+	vec4 poseData = bufferFetch( worldMatBuf, int(( @property( !hlms_shadowcaster )(drawId << 1u) + drawId@end @property( hlms_shadowcaster )drawId << 1u@end ) << 2u) + 8 );
+	int baseVertexID = floatBitsToInt( poseData.x );
+	int vertexID = gl_VertexID - baseVertexID;
+	vec4 poseWeights = bufferFetch( worldMatBuf, int(( @property( !hlms_shadowcaster )(drawId << 1u) + drawId@end @property( hlms_shadowcaster )drawId << 1u@end ) << 2u) + 9 );
+
 	@property( hlms_pose_1 )
-		float weight = uintBitsToFloat( instance.worldMaterialIdx[drawId].w );
-		vec4 posePos = bufferFetch( poseBuf, 1 + gl_VertexID );
-		inputPos += posePos * weight;
+		vec4 posePos = bufferFetch( poseBuf, vertexID );
+		inputPos += posePos * poseWeights.x;
 	@end @property( !hlms_pose_1 )
-		// number of vertices is stored in the first entry, thus add 1 below
-		// when indexing into poseBuf
-		int numVertices = floatBitsToInt( bufferFetch( poseBuf, 0 ).x );
-		// ideally could use unpackUnorm4x8 but it's unavailable in GLSL 330
-		uint poseWeights = instance.worldMaterialIdx[drawId].w;
+		int numVertices = floatBitsToInt( poseData.y );
 		vec4 posePos;
-		float weight;
-		
 		@foreach( hlms_pose, n )
-			posePos = bufferFetch( poseBuf, 1 + gl_VertexID + numVertices * @n );
-			
-			@property( hlms_pose_2 )
-				weight = ( ( poseWeights >> (@nu * 16u) ) & 0xffffu ) / 65535.f;
-			@end @property( hlms_pose_3 )
-				weight = ( ( poseWeights >> (@nu * 10u) ) & 0x3ffu ) / 1023.f;
-			@end @property( hlms_pose_4 )
-				weight = ( ( poseWeights >> (@nu * 8u) ) & 0xffu ) / 255.f;
-			@end
-			
-			inputPos += posePos * weight;
+			posePos = bufferFetch( poseBuf, vertexID + numVertices * @n );
+			inputPos += posePos * poseWeights[@n];
 		@end
 	@end
 @end
 
 @property( !hlms_skeleton )
 
-    mat3x4 worldMat = UNPACK_MAT3x4( worldMatBuf, drawId @property( !hlms_shadowcaster )<< 1u@end );
+    mat3x4 worldMat = UNPACK_MAT3x4( worldMatBuf,  @property( !hlms_shadowcaster )(drawId << 1u) + drawId@end @property( hlms_shadowcaster )drawId << 1u@end );
 	@property( hlms_normal || hlms_qtangent )
-	mat4 worldView = UNPACK_MAT4( worldMatBuf, (drawId << 1u) + 1u );
+	mat4 worldView = UNPACK_MAT4( worldMatBuf, ((drawId << 1u) + drawId) + 1u );
 	@end
     
 	vec4 worldPos = vec4( (@insertpiece( input_vertex ) * worldMat).xyz, 1.0f );

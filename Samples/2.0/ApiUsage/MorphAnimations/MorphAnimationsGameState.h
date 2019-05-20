@@ -15,6 +15,7 @@ namespace Demo
     class MorphAnimationsGameState : public TutorialGameState
     {
         Ogre::Item* mSmileyItem;
+        Ogre::Item* mSpringItem;
         float mAccumulator;
         
     public:

@@ -68,7 +68,7 @@ namespace Demo
             //Set the new samplerblock. The Hlms system will
             //automatically create the API block if necessary
             datablock->setSamplerblock( Ogre::PBSM_ROUGHNESS, samplerblock );    
-        }        
+        }
 
         Ogre::v1::MeshPtr v1Mesh;
         Ogre::MeshPtr v2Mesh;
@@ -77,7 +77,8 @@ namespace Demo
         bool halfUVs = true;
         bool useQtangents = false;
 
-        {
+        // Smiley
+        /*{
             v1Mesh = Ogre::v1::MeshManager::getSingleton().load(
                 "Smiley.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
                 Ogre::v1::HardwareBuffer::HBU_STATIC, Ogre::v1::HardwareBuffer::HBU_STATIC);
@@ -100,7 +101,31 @@ namespace Demo
         smileyNode->setOrientation( Ogre::Quaternion( Ogre::Radian(1.5), Ogre::Vector3(1,0,0) ) );
         
         auto* bone = mSmileyItem->getSkeletonInstance()->getBone("Bone.001");
-        bone->setOrientation(Ogre::Quaternion(Ogre::Radian(0.4), Ogre::Vector3(0,1,0)));
+        bone->setOrientation(Ogre::Quaternion(Ogre::Radian(0.4), Ogre::Vector3(0,1,0)));*/
+
+        // Spring
+
+        {
+            v1Mesh = Ogre::v1::MeshManager::getSingleton().load(
+                "Spring.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                Ogre::v1::HardwareBuffer::HBU_STATIC, Ogre::v1::HardwareBuffer::HBU_STATIC);
+            v2Mesh = Ogre::MeshManager::getSingleton().createManual(
+                "Spring.mesh", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+            v2Mesh->importV1(v1Mesh.get(), halfPosition, halfUVs, useQtangents);
+            v1Mesh->unload();
+        }
+
+        Ogre::SceneNode *springNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
+                createChildSceneNode( Ogre::SCENE_DYNAMIC );
+
+        mSpringItem = sceneManager->createItem( "Spring.mesh",
+                                                Ogre::ResourceGroupManager::
+                                                AUTODETECT_RESOURCE_GROUP_NAME,
+                                                Ogre::SCENE_DYNAMIC );
+        springNode->attachObject( mSpringItem );
+        springNode->setScale( Ogre::Vector3( 1.2 ) );
+        springNode->setPosition( 1, 0.57, 0 );
+        //springNode->setOrientation( Ogre::Quaternion( Ogre::Radian(1.5), Ogre::Vector3(1,0,0) ) );
         
         Ogre::Light *light = sceneManager->createLight();
         Ogre::SceneNode *lightNode = sceneManager->getRootSceneNode()->createChildSceneNode();
@@ -123,13 +148,16 @@ namespace Demo
     void MorphAnimationsGameState::update( float timeSinceLast )
     {        
         mAccumulator += timeSinceLast;
-        auto subItem = mSmileyItem->getSubItem( 0 );
+        Ogre::SubItem* subItem;
         
+        /*subItem = mSmileyItem->getSubItem( 0 );
         subItem->setPoseWeight( "Smile", (Ogre::Math::Sin(mAccumulator) + 1)/2 );
         subItem->setPoseWeight( "MouthOpen", (Ogre::Math::Sin(mAccumulator+1) + 1)/2 );
         subItem->setPoseWeight( "Sad", (Ogre::Math::Sin(mAccumulator+2) + 1)/2 );
-        subItem->setPoseWeight( "EyesClosed", (Ogre::Math::Sin(mAccumulator+3) + 1)/2 );
-        
+        subItem->setPoseWeight( "EyesClosed", (Ogre::Math::Sin(mAccumulator+3) + 1)/2 );*/
+
+        subItem = mSpringItem->getSubItem( 0 );
+        subItem->setPoseWeight( "Compressed", (Ogre::Math::Sin(mAccumulator) + 1)/2 );
         
         TutorialGameState::update( timeSinceLast );
     }

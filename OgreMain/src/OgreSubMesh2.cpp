@@ -645,8 +645,7 @@ namespace Ogre {
         if( mNumPoseAnimations > 0 ) 
         {
             uint32 numVertices = vertexBuffer->getNumElements();
-            // add 1 extra float4 to the size to store the number of vertices on the first entry
-            size_t bufferSize = (mNumPoseAnimations * numVertices + 1) * sizeof( float ) * 4;
+            size_t bufferSize = (mNumPoseAnimations * numVertices) * sizeof( float ) * 4;
             float *buffer = reinterpret_cast<float*>( OGRE_MALLOC_SIMD(
                                                                     bufferSize,
                                                                     MEMCATEGORY_GEOMETRY ) );                                
@@ -655,9 +654,6 @@ namespace Ogre {
             
             v1::Mesh::PoseIterator poseIt = subMesh->parent->getPoseIterator();
             float *pFloat = buffer;
-            
-            memcpy(pFloat, &numVertices, sizeof(numVertices));
-            pFloat += 4;
             
             int index = 0;
             
