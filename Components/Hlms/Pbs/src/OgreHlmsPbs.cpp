@@ -367,7 +367,7 @@ namespace Ogre
                                                 mSetProperties, queuedRenderable );
             return retVal; //D3D embeds the texture slots in the shader.
         }
-        
+
         //Set samplers.
         if( !retVal->pso.pixelShader.isNull() )
         {
@@ -2199,6 +2199,7 @@ namespace Ogre
                     uint16 numWorldTransforms = queuedRenderable.renderable->getNumWorldTransforms();
                     assert( numWorldTransforms <= 256u );
 
+                    // Pose animations need only 2 vec4's when combined with skeleton animation.
                     const size_t minimumTexBufferSize = 12 * numWorldTransforms + ( numPoseAnimations > 0 ? 8 : 0 );
                     bool exceedsTexBuffer = (currentMappedTexBuffer - mStartMappedTexBuffer) +
                             minimumTexBufferSize >= mCurrentTexBufferSize;
@@ -2254,6 +2255,7 @@ namespace Ogre
 
                     const RenderableAnimated::IndexMap *indexMap = renderableAnimated->getBlendIndexToBoneIndexMap();
 
+                    // Pose animations need only 2 vec4's when combined with skeleton animation.
                     const size_t minimumTexBufferSize = 12 * indexMap->size() + ( numPoseAnimations > 0 ? 8 : 0 );
                     bool exceedsTexBuffer = (currentMappedTexBuffer - mStartMappedTexBuffer) +
                                                 minimumTexBufferSize >= mCurrentTexBufferSize;
@@ -2293,7 +2295,10 @@ namespace Ogre
             if( numPoseAnimations > 0 )
             {
                 if( !hasSkeletonAnimation ) {
-                    const size_t minimumTexBufferSize = 5 * 4;
+                    // If not combined with skeleton animation, pose animations are gonna need 2 vec4's
+                    // for pose data (base vertex, num vertices, weights), 3 vec4's for worldMat,
+                    // and 4 vec4's for worldView. 
+                    const size_t minimumTexBufferSize = 9 * 4;
                     bool exceedsTexBuffer = (currentMappedTexBuffer - mStartMappedTexBuffer) +
                                                 minimumTexBufferSize >= mCurrentTexBufferSize;
 
@@ -2335,13 +2340,40 @@ namespace Ogre
                 currentMappedTexBuffer += 4;
 
                 if( !hasSkeletonAnimation ) {
+                    //mat4x3 world
+        #if !OGRE_DOUBLE_PRECISION
                     memcpy( currentMappedTexBuffer, &worldMat, 4 * 3 * sizeof( float ) );
                     currentMappedTexBuffer += 12;
+        #else
+                    for( int y = 0; y < 3; ++y )
+                    {
+                        for( int x = 0; x < 4; ++x )
+                        {
+                            *currentMappedTexBuffer++ = worldMat[ y ][ x ];
+                        }
+                    }
+        #endif
 
                     //mat4 worldView
                     Matrix4 tmp = mPreparedPass.viewMatrix.concatenateAffine( worldMat );
+            #ifdef OGRE_GLES2_WORKAROUND_1
+                    tmp = tmp.transpose();
+        #endif
+        #if !OGRE_DOUBLE_PRECISION
                     memcpy( currentMappedTexBuffer, &tmp, sizeof( Matrix4 ) * !casterPass );
                     currentMappedTexBuffer += 16 * !casterPass;
+        #else
+                    if( !casterPass )
+                    {
+                        for( int y = 0; y < 4; ++y )
+                        {
+                            for( int x = 0; x < 4; ++x )
+                            {
+                                *currentMappedTexBuffer++ = tmp[ y ][ x ];
+                            }
+                        }
+                    }
+        #endif
                 }
 
                 TexBufferPacked* poseBuf = queuedRenderable.renderable->getPoseTexBuffer();
