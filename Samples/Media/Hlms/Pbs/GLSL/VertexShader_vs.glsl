@@ -129,9 +129,9 @@ out block
 	worldPos.w = 1.0;
 @end @end //SkeletonTransform // !hlms_skeleton
 
-@property( hlms_skeleton )
+@property( hlms_skeleton || hlms_pose )
 	@piece( worldViewMat )passBuf.view@end
-@end @property( !hlms_skeleton )
+@end @property( !hlms_skeleton && !hlms_pose )
     @piece( worldViewMat )worldView@end
 @end
 
@@ -165,12 +165,13 @@ void main()
     @insertpiece( custom_vs_preExecution )
     
 @property( hlms_pose )
+	uint poseDataStart = (instance.worldMaterialIdx[drawId].x >> 9u) @property( hlms_skeleton ) + @value(hlms_bones_per_vertex)u * 12u@end ;
 	vec4 inputPos = vertex;
 
-	vec4 poseData = bufferFetch( worldMatBuf, int(( @property( !hlms_shadowcaster )(drawId << 1u) + drawId@end @property( hlms_shadowcaster )drawId << 1u@end ) << 2u) + 8 );
+	vec4 poseData = bufferFetch( worldMatBuf, int(poseDataStart) );
 	int baseVertexID = floatBitsToInt( poseData.x );
 	int vertexID = gl_VertexID - baseVertexID;
-	vec4 poseWeights = bufferFetch( worldMatBuf, int(( @property( !hlms_shadowcaster )(drawId << 1u) + drawId@end @property( hlms_shadowcaster )drawId << 1u@end ) << 2u) + 9 );
+	vec4 poseWeights = bufferFetch( worldMatBuf, int(poseDataStart) + 1 );
 
 	@property( hlms_pose_1 )
 		vec4 posePos = bufferFetch( poseBuf, vertexID );
@@ -183,16 +184,21 @@ void main()
 			inputPos += posePos * poseWeights[@n];
 		@end
 	@end
+
+	@property( !hlms_skeleton )
+		mat3x4 worldMat = UNPACK_MAT3x4( worldMatBuf, int(poseDataStart) + 2 );
+		vec4 worldPos = vec4( (inputPos * worldMat).xyz, 1.0f );
+	@end
 @end
 
-@property( !hlms_skeleton )
+@property( !hlms_skeleton && !hlms_pose )
 
-    mat3x4 worldMat = UNPACK_MAT3x4( worldMatBuf,  @property( !hlms_shadowcaster )(drawId << 1u) + drawId@end @property( hlms_shadowcaster )drawId << 1u@end );
+    mat3x4 worldMat = UNPACK_MAT3x4( worldMatBuf, drawId @property( !hlms_shadowcaster )<< 1u@end );
 	@property( hlms_normal || hlms_qtangent )
-	mat4 worldView = UNPACK_MAT4( worldMatBuf, ((drawId << 1u) + drawId) + 1u );
+	mat4 worldView = UNPACK_MAT4( worldMatBuf, (drawId << 1u) + 1u );
 	@end
-    
-	vec4 worldPos = vec4( (@insertpiece( input_vertex ) * worldMat).xyz, 1.0f );
+
+	vec4 worldPos = vec4( (vertex * worldMat).xyz, 1.0f );
 @end
 
 @property( hlms_qtangent )
