@@ -65,6 +65,11 @@ namespace v1 {
 
         virtual void initialise(void);
 
+        /** @copydoc OverlayElement::_releaseManualHardwareResources. */
+        virtual void _releaseManualHardwareResources();
+        /** @copydoc OverlayElement::_restoreManualHardwareResources. */
+        virtual void _restoreManualHardwareResources();
+
         const String& getTypeName(void) const;
         /** Sets the size of the border.
         @remarks

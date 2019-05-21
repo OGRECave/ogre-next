@@ -6878,11 +6878,11 @@ namespace Ogre{
             }
         }
         }
-        catch( Exception &e )
+        catch( Exception& )
         {
             if( i != obj->children.end() )
                 compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, (*i)->file, (*i)->line);
-            throw e;
+            throw;
         }
     }
 
@@ -7094,11 +7094,11 @@ namespace Ogre{
             }
         }
         }
-        catch( Exception &e )
+        catch( Exception& )
         {
             if( i != obj->children.end() )
                 compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, (*i)->file, (*i)->line);
-            throw e;
+            throw;
         }
     }
 
@@ -7561,11 +7561,11 @@ namespace Ogre{
             }
         }
         }
-        catch( Exception &e )
+        catch( Exception& )
         {
             if( i != obj->children.end() )
                 compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, (*i)->file, (*i)->line);
-            throw e;
+            throw;
         }
     }
 

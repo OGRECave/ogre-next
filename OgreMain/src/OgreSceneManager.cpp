@@ -104,6 +104,7 @@ mName(name),
 mRenderQueue( 0 ),
 mForwardPlusSystem( 0 ),
 mForwardPlusImpl( 0 ),
+mBuildLegacyLightList( false ),
 mDecalsDiffuseTex( TexturePtr() ),
 mDecalsNormalsTex( TexturePtr() ),
 mDecalsEmissiveTex( TexturePtr() ),
@@ -134,7 +135,6 @@ mDisplayNodes(false),
 mShowBoundingBoxes(false),
 mLateMaterialResolving(false),
 mShadowColour(ColourValue(0.25, 0.25, 0.25)),
-mShadowIndexBufferUsedSize(0),
 mFullScreenQuad(0),
 mShadowDirLightExtrudeDist(10000),
 mIlluminationStage(IRS_NONE),
@@ -148,7 +148,8 @@ mShadowTextureCustomCasterPass(0),
 mCompositorTarget( IdString(), 0 ),
 mVisibilityMask(0xFFFFFFFF & VisibilityFlags::RESERVED_VISIBILITY_FLAGS),
 mFindVisibleObjects(true),
-mNumWorkerThreads( numWorkerThreads ),
+mNumWorkerThreads( std::max<size_t>( numWorkerThreads, 1u ) ),
+mForceMainThread( numWorkerThreads == 0u ? true : false ),
 mUpdateBoundsRequest( 0 ),
 mInstancingThreadedCullingMethod( threadedCullingMethod ),
 mUserTask( 0 ),
@@ -160,8 +161,6 @@ mLastLightLimit(0),
 mLastLightHashGpuProgram(0),
 mGpuParamsDirty((uint16)GPV_ALL)
 {
-    assert( numWorkerThreads >= 1 );
-
     if( numWorkerThreads <= 1 )
         mInstancingThreadedCullingMethod = INSTANCING_CULLING_SINGLETHREAD;
 
@@ -998,6 +997,11 @@ void SceneManager::_setForwardPlusEnabledInPass( bool bEnable )
         mForwardPlusImpl = 0;
 }
 //-----------------------------------------------------------------------
+void SceneManager::setBuildLegacyLightList( bool bEnable )
+{
+    mBuildLegacyLightList = bEnable;
+}
+//-----------------------------------------------------------------------
 void SceneManager::_setPrePassMode( PrePassMode mode, const TextureVec *prepassTextures,
                                     const TextureVec *prepassDepthTexture,
                                     const TextureVec *ssrTexture )
@@ -1347,6 +1351,34 @@ void SceneManager::_setDestinationRenderSystem(RenderSystem* sys)
 
     if( mForwardPlusSystem )
         mForwardPlusSystem->_changeRenderSystem( sys );
+}
+//-----------------------------------------------------------------------
+void SceneManager::_releaseManualHardwareResources()
+{
+    // release hardware resources inside all movable objects
+    OGRE_LOCK_MUTEX(mMovableObjectCollectionMapMutex);
+    for(MovableObjectCollectionMap::iterator ci = mMovableObjectCollectionMap.begin(),
+        ci_end = mMovableObjectCollectionMap.end(); ci != ci_end; ++ci)
+    {
+        MovableObjectCollection* coll = ci->second;
+        OGRE_LOCK_MUTEX(coll->mutex);
+        for(MovableObjectVec::iterator i = coll->movableObjects.begin(), i_end = coll->movableObjects.end(); i != i_end; ++i)
+            (*i)->_releaseManualHardwareResources();
+    }
+}
+//-----------------------------------------------------------------------
+void SceneManager::_restoreManualHardwareResources()
+{
+    // restore hardware resources inside all movable objects
+    OGRE_LOCK_MUTEX(mMovableObjectCollectionMapMutex);
+    for(MovableObjectCollectionMap::iterator ci = mMovableObjectCollectionMap.begin(),
+        ci_end = mMovableObjectCollectionMap.end(); ci != ci_end; ++ci)
+    {
+        MovableObjectCollection* coll = ci->second;
+        OGRE_LOCK_MUTEX(coll->mutex);
+        for(MovableObjectVec::iterator i = coll->movableObjects.begin(), i_end = coll->movableObjects.end(); i != i_end; ++i)
+            (*i)->_restoreManualHardwareResources();
+    }
 }
 //-----------------------------------------------------------------------
 void SceneManager::prepareWorldGeometry(const String& filename)
@@ -2553,7 +2585,7 @@ void SceneManager::buildLightList()
         accumStartLightIdx += totalObjsInThread;
     }
 
-    if( accumStartLightIdx == mGlobalLightList.lights.size() )
+    if( accumStartLightIdx == mGlobalLightList.lights.size() && !mBuildLegacyLightList )
     {
         //All of the lights were directional. We're done. Avoid the sync point with worker threads.
         return;
@@ -2582,12 +2614,14 @@ void SceneManager::buildLightList()
             ++itor;
         }
     }
-#if OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN
-    _updateWorkerThread( NULL );
-#else
-    mWorkerThreadsBarrier->sync(); //Fire threads
-    mWorkerThreadsBarrier->sync(); //Wait them to complete
-#endif
+
+    if( mForceMainThread )
+        updateWorkerThreadImpl( 0 );
+    else
+    {
+        mWorkerThreadsBarrier->sync(); //Fire threads
+        mWorkerThreadsBarrier->sync(); //Wait them to complete
+    }
 
     //Now merge the results into a single list.
 
@@ -2615,19 +2649,18 @@ void SceneManager::buildLightList()
         dstOffset += numCollectedLights;
     }
 
-    //Now fire the threads again, to build the per-MovableObject lists
-
-    if( mForwardPlusSystem )
-        return; //Don't do this on non-forward passes.
-    return;
-
-    mRequestType = BUILD_LIGHT_LIST02;
-#if OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN
-    _updateWorkerThread( NULL );
-#else
-    mWorkerThreadsBarrier->sync(); //Fire threads
-    mWorkerThreadsBarrier->sync(); //Wait them to complete
-#endif
+    if( mBuildLegacyLightList )
+    {
+        //Now fire the threads again, to build the per-MovableObject lists
+        mRequestType = BUILD_LIGHT_LIST02;
+        if( mForceMainThread )
+            updateWorkerThreadImpl( 0 );
+        else
+        {
+            mWorkerThreadsBarrier->sync(); //Fire threads
+            mWorkerThreadsBarrier->sync(); //Wait them to complete
+        }
+    }
 }
 //-----------------------------------------------------------------------
 void SceneManager::buildLightListThread01( const BuildLightListRequest &buildLightListRequest,
@@ -5193,12 +5226,13 @@ void SceneManager::updateGpuProgramParameters(const Pass* pass)
 }
 void SceneManager::fireWorkerThreadsAndWait(void)
 {
-#if OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN
-    _updateWorkerThread( NULL );
-#else
-    mWorkerThreadsBarrier->sync(); //Fire threads
-    mWorkerThreadsBarrier->sync(); //Wait them to complete
-#endif
+    if( mForceMainThread )
+        updateWorkerThreadImpl( 0 );
+    else
+    {
+        mWorkerThreadsBarrier->sync(); //Fire threads
+        mWorkerThreadsBarrier->sync(); //Wait them to complete
+    }
 }
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
@@ -5228,21 +5262,23 @@ void SceneManager::executeUserScalableTask( UniformScalableTask *task, bool bBlo
     mRequestType = USER_UNIFORM_SCALABLE_TASK;
     mUserTask = task;
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN
-    _updateWorkerThread( NULL );
-#else
-    mWorkerThreadsBarrier->sync(); //Fire threads
-    if( bBlock )
-        mWorkerThreadsBarrier->sync(); //Wait them to complete
-#endif
+    if( mForceMainThread )
+        updateWorkerThreadImpl( 0 );
+    else
+    {
+        mWorkerThreadsBarrier->sync(); //Fire threads
+        if( bBlock )
+            mWorkerThreadsBarrier->sync(); //Wait them to complete
+    }
 }
 //---------------------------------------------------------------------
 void SceneManager::waitForPendingUserScalableTask()
 {
-#if OGRE_PLATFORM != OGRE_PLATFORM_EMSCRIPTEN
-    assert( mRequestType == USER_UNIFORM_SCALABLE_TASK );
-    mWorkerThreadsBarrier->sync(); //Wait them to complete
-#endif
+    if( !mForceMainThread )
+    {
+        assert( mRequestType == USER_UNIFORM_SCALABLE_TASK );
+        mWorkerThreadsBarrier->sync(); //Wait them to complete
+    }
 }
 //---------------------------------------------------------------------
 unsigned long updateWorkerThread( ThreadHandle *threadHandle )
@@ -5254,88 +5290,92 @@ THREAD_DECLARE( updateWorkerThread );
 //---------------------------------------------------------------------
 void SceneManager::startWorkerThreads()
 {
-#if OGRE_PLATFORM != OGRE_PLATFORM_EMSCRIPTEN
-    mWorkerThreadsBarrier = new Barrier( mNumWorkerThreads+1 );
-    mWorkerThreads.reserve( mNumWorkerThreads );
-    for( size_t i=0; i<mNumWorkerThreads; ++i )
+    if( !mForceMainThread )
     {
-        ThreadHandlePtr th = Threads::CreateThread( THREAD_GET( updateWorkerThread ), i, this );
-        mWorkerThreads.push_back( th );
+        mWorkerThreadsBarrier = new Barrier( mNumWorkerThreads+1 );
+        mWorkerThreads.reserve( mNumWorkerThreads );
+        for( size_t i=0; i<mNumWorkerThreads; ++i )
+        {
+            ThreadHandlePtr th = Threads::CreateThread( THREAD_GET( updateWorkerThread ), i, this );
+            mWorkerThreads.push_back( th );
+        }
     }
-#endif
 }
 //---------------------------------------------------------------------
 void SceneManager::stopWorkerThreads()
 {
-#if OGRE_PLATFORM != OGRE_PLATFORM_EMSCRIPTEN
-    mRequestType = STOP_THREADS;
-    fireWorkerThreadsAndWait();
+    if( !mForceMainThread )
+    {
+        mRequestType = STOP_THREADS;
+        fireWorkerThreadsAndWait();
 
-    Threads::WaitForThreads( mWorkerThreads );
+        Threads::WaitForThreads( mWorkerThreads );
 
-    delete mWorkerThreadsBarrier;
-    mWorkerThreadsBarrier = 0;
-#endif
+        delete mWorkerThreadsBarrier;
+        mWorkerThreadsBarrier = 0;
+    }
 }
 //---------------------------------------------------------------------
 unsigned long SceneManager::_updateWorkerThread( ThreadHandle *threadHandle )
 {
-#if OGRE_PLATFORM != OGRE_PLATFORM_EMSCRIPTEN
     bool exitThread = false;
     size_t threadIdx = threadHandle->getThreadIdx();
     while( !exitThread )
     {
         mWorkerThreadsBarrier->sync();
-#else
-        bool exitThread = false;
-        size_t threadIdx = 0;
-#endif
-        switch( mRequestType )
-        {
-        case CULL_FRUSTUM:
-            cullFrustum( mCurrentCullFrustumRequest, threadIdx );
-            break;
-        case UPDATE_ALL_ANIMATIONS:
-            updateAllAnimationsThread( threadIdx );
-            break;
-        case UPDATE_ALL_TRANSFORMS:
-            updateAllTransformsThread( mUpdateTransformRequest, threadIdx );
-            break;
-        case UPDATE_ALL_BONE_TO_TAG_TRANSFORMS:
-            updateAllTransformsBoneToTagThread( mUpdateTransformRequest, threadIdx );
-            break;
-        case UPDATE_ALL_TAG_ON_TAG_TRANSFORMS:
-            updateAllTransformsTagOnTagThread( mUpdateTransformRequest, threadIdx );
-            break;
-        case UPDATE_ALL_BOUNDS:
-            updateAllBoundsThread( *mUpdateBoundsRequest, threadIdx );
-            break;
-        case UPDATE_ALL_LODS:
-            updateAllLodsThread( mUpdateLodRequest, threadIdx );
-            break;
-        case UPDATE_INSTANCE_MANAGERS:
-            updateInstanceManagersThread( threadIdx );
-            break;
-        case BUILD_LIGHT_LIST01:
-            buildLightListThread01( mBuildLightListRequestPerThread[threadIdx], threadIdx );
-            break;
-        case BUILD_LIGHT_LIST02:
-            buildLightListThread02( threadIdx );
-            break;
-        case USER_UNIFORM_SCALABLE_TASK:
-            mUserTask->execute( threadIdx, mNumWorkerThreads );
-            break;
-        case STOP_THREADS:
-            exitThread = true;
-            break;
-        default:
-            break;
-        }
-#if OGRE_PLATFORM != OGRE_PLATFORM_EMSCRIPTEN
+        exitThread = updateWorkerThreadImpl( threadIdx );
         mWorkerThreadsBarrier->sync();
     }
-#endif
 
     return 0;
+}
+//---------------------------------------------------------------------
+inline bool SceneManager::updateWorkerThreadImpl( size_t threadIdx )
+{
+    bool exitThread = false;
+
+    switch( mRequestType )
+    {
+    case CULL_FRUSTUM:
+        cullFrustum( mCurrentCullFrustumRequest, threadIdx );
+        break;
+    case UPDATE_ALL_ANIMATIONS:
+        updateAllAnimationsThread( threadIdx );
+        break;
+    case UPDATE_ALL_TRANSFORMS:
+        updateAllTransformsThread( mUpdateTransformRequest, threadIdx );
+        break;
+    case UPDATE_ALL_BONE_TO_TAG_TRANSFORMS:
+        updateAllTransformsBoneToTagThread( mUpdateTransformRequest, threadIdx );
+        break;
+    case UPDATE_ALL_TAG_ON_TAG_TRANSFORMS:
+        updateAllTransformsTagOnTagThread( mUpdateTransformRequest, threadIdx );
+        break;
+    case UPDATE_ALL_BOUNDS:
+        updateAllBoundsThread( *mUpdateBoundsRequest, threadIdx );
+        break;
+    case UPDATE_ALL_LODS:
+        updateAllLodsThread( mUpdateLodRequest, threadIdx );
+        break;
+    case UPDATE_INSTANCE_MANAGERS:
+        updateInstanceManagersThread( threadIdx );
+        break;
+    case BUILD_LIGHT_LIST01:
+        buildLightListThread01( mBuildLightListRequestPerThread[threadIdx], threadIdx );
+        break;
+    case BUILD_LIGHT_LIST02:
+        buildLightListThread02( threadIdx );
+        break;
+    case USER_UNIFORM_SCALABLE_TASK:
+        mUserTask->execute( threadIdx, mNumWorkerThreads );
+        break;
+    case STOP_THREADS:
+        exitThread = true;
+        break;
+    default:
+        break;
+    }
+
+    return exitThread;
 }
 }

@@ -29,7 +29,7 @@ THE SOFTWARE.
 #define __D3D11TEXTURE_H__
 
 #include "OgreD3D11Prerequisites.h"
-#include "OgreD3D11Device.h"
+#include "OgreD3D11DeviceResource.h"
 #include "OgreTexture.h"
 #include "OgreRenderTexture.h"
 #include "OgreSharedPtr.h"
@@ -41,11 +41,13 @@ THE SOFTWARE.
 #endif
 
 namespace Ogre {
-    class _OgreD3D11Export D3D11Texture : public Texture
+    class _OgreD3D11Export D3D11Texture
+        : public Texture
+        , protected D3D11DeviceResource
     {
         struct CachedUavView
         {
-            ID3D11UnorderedAccessView   *uavView;
+            ComPtr<ID3D11UnorderedAccessView> uavView;
             int32           mipmapLevel;
             int32           textureArrayIndex;
             PixelFormat     pixelFormat;
@@ -68,24 +70,24 @@ namespace Ogre {
 		/// @copydoc Texture::getBuffer
         v1::HardwarePixelBufferSharedPtr getBuffer(size_t face, size_t mipmap);
 
-		ID3D11Resource *getTextureResource() { assert(mpTex); return mpTex; }
-        ID3D11Resource *getResolveTextureResource()
-                                            { assert(mpResolveTexture); return mpResolveTexture; }
-        bool hasResolveTextureResource() const  { return mpResolveTexture != 0; }
+		ID3D11Resource *getTextureResource() { assert(mpTex); return mpTex.Get(); }
 		/// retrieves a pointer to the actual texture
-        ID3D11ShaderResourceView *getTexture();
+        ID3D11ShaderResourceView *getSrvView();
 
         ID3D11UnorderedAccessView* getUavView( int32 mipmapLevel, int32 textureArrayIndex,
                                                PixelFormat pixelFormat );
 
-		ID3D11Texture1D * GetTex1D() { return mp1DTex; };
-		ID3D11Texture2D * GetTex2D() { return mp2DTex; };
-		ID3D11Texture3D	* GetTex3D() { return mp3DTex; };
+		ID3D11Texture1D * GetTex1D() { return mp1DTex.Get(); };
+		ID3D11Texture2D * GetTex2D() { return mp2DTex.Get(); };
+		ID3D11Texture3D	* GetTex3D() { return mp3DTex.Get(); };
+
+		ID3D11Texture2D *getResolvedTexture2D() { assert(mpResolved2DTex); return mpResolved2DTex.Get(); }
+		bool hasResolvedTexture2D() const { return mpResolved2DTex.Get() != 0; }
 
 		bool HasAutoMipMapGenerationEnabled() const { return mAutoMipMapGeneration; }
 
-        DXGI_FORMAT getD3dFormat(void) const                        { return mD3dFormat; }
-        D3D11_SRV_DIMENSION getD3dViewDimension(void) const         { return mD3dViewDimension; }
+        DXGI_FORMAT getD3dFormat(void) const                        { return mD3DFormat; }
+        DXGI_SAMPLE_DESC getD3dSampleDesc(void) const               { return mFSAAType; }
 
 	protected:
 		TextureUsage _getTextureUsage() { return static_cast<TextureUsage>(mUsage); }
@@ -94,31 +96,10 @@ namespace Ogre {
         // needed to store data between prepareImpl and loadImpl
         typedef SharedPtr<vector<MemoryDataStreamPtr>::type > LoadedStreams;
 
-        /// D3DDevice pointer
-		D3D11Device	&	mDevice;
-
-        // 1D texture pointer
-        ID3D11Texture1D *mp1DTex;
-        // 2D texture pointer
-        ID3D11Texture2D *mp2DTex;
-        /// cubic texture pointer
-		ID3D11Texture3D	*mp3DTex;
-        /// actual texture pointer
-		ID3D11Resource 	*mpTex;
-        /// Used by MSAA only.
-        ID3D11Resource  *mpResolveTexture;
-
-        ID3D11ShaderResourceView* mpShaderResourceView;
-        ID3D11ShaderResourceView* mpShaderResourceViewMsaa;
-        CachedUavView  mCachedUavViews[4];
-        uint8          mCurrentCacheCursor;
-
-        bool mAutoMipMapGeneration;
-
         template<typename fromtype, typename totype>
-        void _queryInterface(fromtype *from, totype **to)
+        void _queryInterface(const ComPtr<fromtype>& from, ComPtr<totype> *to)
         {
-            HRESULT hr = from->QueryInterface(__uuidof(totype), (void **)to);
+            HRESULT hr = from.As(to);
 
             if(FAILED(hr) || mDevice.isError())
             {
@@ -128,7 +109,6 @@ namespace Ogre {
                     "D3D11Texture::_queryInterface" );
             }
         }
-        unsigned int mEffectIndex;
 #ifdef USE_D3DX11_LIBRARY       
         void _loadDDS(DataStreamPtr &dstream);
 #endif
@@ -140,20 +120,6 @@ namespace Ogre {
                                                   int32 textureArrayIndex,
                                                   PixelFormat pixelFormat );
 
-        // is dynamic
-        bool mIsDynamic; 
-
-        /// cube texture individual face names
-        String                          mCubeFaceNames[6];
-        // Dynamic textures?
-        bool                            mDynamicTextures;
-        /// Vector of pointers to subsurfaces
-        typedef vector<v1::HardwarePixelBufferSharedPtr>::type SurfaceList;
-        SurfaceList                     mSurfaceList;
-
-        DXGI_FORMAT                     mD3dFormat;
-        D3D11_SRV_DIMENSION             mD3dViewDimension;
-
         /// internal method, load a normal texture
         void _loadTex(LoadedStreams & loadedStreams);
 
@@ -163,9 +129,6 @@ namespace Ogre {
         void _create2DTex();
         /// internal method, create a blank cube texture
         void _create3DTex();
-
-        /// internal method, return a D3D pixel format for texture creation
-        DXGI_FORMAT _chooseD3DFormat();
 
         /// @copydoc Texture::createInternalResources
         void createInternalResources(void);
@@ -180,14 +143,14 @@ namespace Ogre {
         /// internal method, set Texture class final texture protected attributes
         void _setFinalAttributes(unsigned long width, unsigned long height, unsigned long depth, PixelFormat format, UINT miscflags);
 
-        /// internal method, the cube map face name for the spec. face index
-		String _getCubeFaceName(unsigned char face) const { assert(face < 6); return mCubeFaceNames[face]; }
-
         virtual void _autogenerateMipmaps(void);
 
         /// internal method, create D3D11HardwarePixelBuffers for every face and
         /// mipmap level. This method must be called after the D3D texture object was created
         void _createSurfaceList(void);
+
+        void notifyDeviceLost(D3D11Device* device);
+        void notifyDeviceRestored(D3D11Device* device);
 
         /// @copydoc Resource::prepareImpl
         void prepareImpl(void);
@@ -206,16 +169,42 @@ namespace Ogre {
         LoadedStreams _prepareNormTex();
         LoadedStreams _prepareVolumeTex();
         LoadedStreams _prepareCubeTex();
+
+    protected:
+        D3D11Device&	mDevice;
+
+        DXGI_FORMAT mD3DFormat;         // Effective pixel format, already gamma corrected if requested
+        DXGI_SAMPLE_DESC mFSAAType;     // Effective FSAA mode, limited by hardware capabilities
+
+        // device depended resources
+        ComPtr<ID3D11Resource> mpTex;   // actual texture
+        ComPtr<ID3D11Texture1D> mp1DTex;
+        ComPtr<ID3D11Texture2D> mp2DTex;
+        ComPtr<ID3D11Texture3D> mp3DTex;
+        ComPtr<ID3D11Texture2D> mpResolved2DTex; /// Used by MSAA only.
+
+        ComPtr<ID3D11ShaderResourceView> mpShaderResourceView;
+        ComPtr<ID3D11ShaderResourceView> mpShaderResourceViewMsaa;
+        CachedUavView  mCachedUavViews[4];
+        uint8          mCurrentCacheCursor;
+
+        bool mAutoMipMapGeneration;
+
+        /// Vector of pointers to subsurfaces
+        typedef vector<v1::HardwarePixelBufferSharedPtr>::type SurfaceList;
+        SurfaceList                     mSurfaceList;
     };
 
     /// RenderTexture implementation for D3D11
-    class _OgreD3D11Export D3D11RenderTexture : public RenderTexture
+    class _OgreD3D11Export D3D11RenderTexture
+        : public RenderTexture
+        , protected D3D11DeviceResource
     {
         D3D11Device & mDevice;
-        ID3D11RenderTargetView * mRenderTargetView;
+        ComPtr<ID3D11RenderTargetView> mRenderTargetView;
         bool mHasFsaaResource;
     public:
-        D3D11RenderTexture( const String &name, v1::D3D11HardwarePixelBuffer *buffer,
+        D3D11RenderTexture( const String &name, v1::D3D11HardwarePixelBuffer *buffer, uint32 zoffset,
                             bool writeGamma, uint fsaa, const String &fsaaHint, D3D11Device &device );
         virtual ~D3D11RenderTexture();
 
@@ -226,6 +215,10 @@ namespace Ogre {
         bool requiresTextureFlipping() const { return false; }
 
         virtual void swapBuffers(void);
+
+    protected:
+        void notifyDeviceLost(D3D11Device* device);
+        void notifyDeviceRestored(D3D11Device* device);
     };
 
 }

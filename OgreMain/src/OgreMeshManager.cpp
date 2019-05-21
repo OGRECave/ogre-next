@@ -478,9 +478,9 @@ namespace v1
 
         // Allocate vertex buffer
         HardwareVertexBufferSharedPtr vbuf = 
-            HardwareBufferManager::getSingleton().
-            createVertexBuffer(vertexDecl->getVertexSize(0), vertexData->vertexCount,
-            params.vertexBufferUsage, params.vertexShadowBuffer);
+            pMesh->getHardwareBufferManager()->createVertexBuffer(
+                vertexDecl->getVertexSize(0), vertexData->vertexCount,
+                params.vertexBufferUsage, params.vertexShadowBuffer);
 
         // Set up the binding (one source only)
         VertexBufferBinding* binding = vertexData->vertexBufferBinding;
@@ -498,12 +498,13 @@ namespace v1
         yAxis = params.upVector;
         yAxis.normalise();
         xAxis = yAxis.crossProduct(zAxis);
-        if (xAxis.length() == 0)
+        if (xAxis.squaredLength() == 0)
         {
             //upVector must be wrong
             OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, "The upVector you supplied is parallel to the plane normal, so is not valid.",
                 "MeshManager::createPlane");
         }
+        xAxis.normalise();
 
         rot3.FromAxes(xAxis, yAxis, zAxis);
         rot = rot3;
@@ -627,11 +628,9 @@ namespace v1
 
         // Allocate memory
         HardwareVertexBufferSharedPtr vbuf = 
-            HardwareBufferManager::getSingleton().createVertexBuffer(
-            offset, 
-            vertexData->vertexCount,
-            params.vertexBufferUsage, 
-            params.vertexShadowBuffer);
+            pMesh->getHardwareBufferManager()->createVertexBuffer(
+                offset, vertexData->vertexCount,
+                params.vertexBufferUsage, params.vertexShadowBuffer);
         bind->setBinding(0, vbuf);
 
         // Work out the transform required
@@ -646,12 +645,13 @@ namespace v1
         yAxis = params.upVector;
         yAxis.normalise();
         xAxis = yAxis.crossProduct(zAxis);
-        if (xAxis.length() == 0)
+        if (xAxis.squaredLength() == 0)
         {
             //upVector must be wrong
             OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, "The upVector you supplied is parallel to the plane normal, so is not valid.",
                 "MeshManager::createPlane");
         }
+        xAxis.normalise();
 
         rot3.FromAxes(xAxis, yAxis, zAxis);
         rot = rot3;
@@ -790,9 +790,9 @@ namespace v1
 
         // Allocate vertex buffer
         HardwareVertexBufferSharedPtr vbuf = 
-            HardwareBufferManager::getSingleton().
-            createVertexBuffer(vertexDecl->getVertexSize(0), vertexData->vertexCount,
-            params.vertexBufferUsage, params.vertexShadowBuffer);
+            pMesh->getHardwareBufferManager()->createVertexBuffer(
+                vertexDecl->getVertexSize(0), vertexData->vertexCount,
+                params.vertexBufferUsage, params.vertexShadowBuffer);
 
         // Set up the binding (one source only)
         VertexBufferBinding* binding = vertexData->vertexBufferBinding;
@@ -810,12 +810,13 @@ namespace v1
         yAxis = params.upVector;
         yAxis.normalise();
         xAxis = yAxis.crossProduct(zAxis);
-        if (xAxis.length() == 0)
+        if (xAxis.squaredLength() == 0)
         {
             //upVector must be wrong
             OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, "The upVector you supplied is parallel to the plane normal, so is not valid.",
                 "MeshManager::createPlane");
         }
+        xAxis.normalise();
 
         rot3.FromAxes(xAxis, yAxis, zAxis);
         rot = rot3;
@@ -1048,14 +1049,14 @@ namespace v1
             newVertexData->vertexCount = indicesMap.size();
             HardwareBufferManager::getSingleton().
                     destroyVertexDeclaration( newVertexData->vertexDeclaration );
-            newVertexData->vertexDeclaration = sharedVertexData->vertexDeclaration->clone();
+            newVertexData->vertexDeclaration = sharedVertexData->vertexDeclaration->clone(mesh->getHardwareBufferManager());
 
             for (size_t bufIdx = 0; bufIdx < sharedVertexData->vertexBufferBinding->getBufferCount(); bufIdx++)
             {
                 HardwareVertexBufferSharedPtr sharedVertexBuffer = sharedVertexData->vertexBufferBinding->getBuffer(bufIdx);
                 size_t vertexSize = sharedVertexBuffer->getVertexSize();
 
-                HardwareVertexBufferSharedPtr newVertexBuffer = HardwareBufferManager::getSingleton().createVertexBuffer
+                HardwareVertexBufferSharedPtr newVertexBuffer = mesh->getHardwareBufferManager()->createVertexBuffer
                     (vertexSize, newVertexData->vertexCount, sharedVertexBuffer->getUsage(), sharedVertexBuffer->hasShadowBuffer());
 
                 uint8 *oldLock = (uint8*)sharedVertexBuffer->lock(0, sharedVertexData->vertexCount * vertexSize, HardwareBuffer::HBL_READ_ONLY);

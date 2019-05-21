@@ -78,7 +78,7 @@ namespace v1 {
         }
     }
 
-    PixelBox GLES2HardwarePixelBuffer::lockImpl(const Image::Box &lockBox,  LockOptions options)
+    PixelBox GLES2HardwarePixelBuffer::lockImpl(const Box &lockBox,  LockOptions options)
     {
         allocateBuffer();
         if (options != HardwareBuffer::HBL_DISCARD)
@@ -101,7 +101,7 @@ namespace v1 {
         freeBuffer();
     }
 
-    void GLES2HardwarePixelBuffer::blitFromMemory(const PixelBox &src, const Image::Box &dstBox)
+    void GLES2HardwarePixelBuffer::blitFromMemory(const PixelBox &src, const Box &dstBox)
     {
         if (!mBuffer.contains(dstBox))
         {
@@ -165,7 +165,7 @@ namespace v1 {
         }
     }
 
-    void GLES2HardwarePixelBuffer::blitToMemory(const Image::Box &srcBox, const PixelBox &dst)
+    void GLES2HardwarePixelBuffer::blitToMemory(const Box &srcBox, const PixelBox &dst)
     {
         if (!mBuffer.contains(srcBox))
         {
@@ -208,7 +208,7 @@ namespace v1 {
         }
     }
 
-    void GLES2HardwarePixelBuffer::upload(const PixelBox &data, const Image::Box &dest)
+    void GLES2HardwarePixelBuffer::upload(const PixelBox &data, const Box &dest)
     {
         OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
                     "Upload not possible for this pixelbuffer type",
@@ -326,7 +326,7 @@ namespace v1 {
 #endif
     
 #if OGRE_NO_GLES3_SUPPORT == 0
-    void GLES2TextureBuffer::upload(const PixelBox &data, const Image::Box &dest)
+    void GLES2TextureBuffer::upload(const PixelBox &data, const Box &dest)
     {
         getGLES2SupportRef()->getStateCacheManager()->bindGLTexture(mTarget, mTextureID);
 
@@ -573,7 +573,7 @@ namespace v1 {
         mBufferId = 0;
     }
 #else
-    void GLES2TextureBuffer::upload(const PixelBox &data, const Image::Box &dest)
+    void GLES2TextureBuffer::upload(const PixelBox &data, const Box &dest)
     {
 #if OGRE_DEBUG_MODE
         LogManager::getSingleton().logMessage("GLES2TextureBuffer::upload - ID: " + StringConverter::toString(mTextureID) +
@@ -750,7 +750,7 @@ namespace v1 {
     }
 
     //-----------------------------------------------------------------------------  
-    void GLES2TextureBuffer::blit(const HardwarePixelBufferSharedPtr &src, const Image::Box &srcBox, const Image::Box &dstBox)
+    void GLES2TextureBuffer::blit(const HardwarePixelBufferSharedPtr &src, const Box &srcBox, const Box &dstBox)
     {
         GLES2TextureBuffer *srct = static_cast<GLES2TextureBuffer *>(src.getPointer());
         // TODO: Check for FBO support first
@@ -777,7 +777,7 @@ namespace v1 {
     // Supports compressed formats as both source and destination format, it will use the hardware DXT compressor
     // if available.
     // @author W.J. van der Laan
-    void GLES2TextureBuffer::blitFromTexture(GLES2TextureBuffer *src, const Image::Box &srcBox, const Image::Box &dstBox)
+    void GLES2TextureBuffer::blitFromTexture(GLES2TextureBuffer *src, const Box &srcBox, const Box &dstBox)
     {
         return; // todo - add a shader attach...
 //        std::cerr << "GLES2TextureBuffer::blitFromTexture " <<
@@ -1001,7 +1001,7 @@ namespace v1 {
     }
     //-----------------------------------------------------------------------------  
     // blitFromMemory doing hardware trilinear scaling
-    void GLES2TextureBuffer::blitFromMemory(const PixelBox &src_orig, const Image::Box &dstBox)
+    void GLES2TextureBuffer::blitFromMemory(const PixelBox &src_orig, const Box &dstBox)
     {
         // Fall back to normal GLHardwarePixelBuffer::blitFromMemory in case 
         // - FBO is not supported
@@ -1081,7 +1081,7 @@ namespace v1 {
                               0, 0, (Usage)(TU_AUTOMIPMAP|HBU_STATIC_WRITE_ONLY), false, false, 0);
         
         // Upload data to 0,0,0 in temporary texture
-        Image::Box tempTarget(0, 0, 0, src.getWidth(), src.getHeight(), src.getDepth());
+        Box tempTarget(0, 0, 0, src.getWidth(), src.getHeight(), src.getDepth());
         tex.upload(src, tempTarget);
         
         // Blit

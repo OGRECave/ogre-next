@@ -1343,6 +1343,16 @@ namespace Ogre
             virtual void eventOccurred(const String& eventName, 
                 const NameValuePairList* parameters = 0) = 0;
         };
+
+        /** Sets shared listener.
+        @remarks
+        Shared listener could be set even if no render system is selected yet.
+        This listener will receive "RenderSystemChanged" event on each Root::setRenderSystem call.
+        */
+        static void setSharedListener(Listener* listener);
+        /** Retrieve a pointer to the current shared render system listener. */
+        static Listener* getSharedListener(void);
+
         /** Adds a listener to the custom events that this render system can raise.
         @remarks
         Some render systems have quite specific, internally generated events 
@@ -1461,6 +1471,21 @@ namespace Ogre
         /// Checks for the presense of an API-specific extension (eg. Vulkan, GL)
         virtual bool checkExtension( const String &ext ) const      { return false; }
 
+        /** Instructs the RenderSystem to compile shaders without optimizations
+            and with debug information, for easier debugging on APIs that support it.
+            Default is true if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH, else false
+
+            This setting takes effect for shaders compiled afterwards. Already
+            compiled shaders won't change unless you manually rebuild them.
+
+            It is highly recommended you disable the Microcode cache before changing
+            the default, or else debug shaders may contaminate your cache, or
+            alternatively a shader from the cache may be used which may have been
+            compiled with a different setting.
+        */
+        void setDebugShaders( bool bDebugShaders );
+        bool getDebugShaders(void) const                        { return mDebugShaders; }
+
         virtual const PixelFormatToShaderType* getPixelFormatToShaderType(void) const = 0;
    
     protected:
@@ -1497,6 +1522,7 @@ namespace Ogre
         // Active viewport (dest for future rendering operations)
         Viewport* mActiveViewport;
 
+        bool mDebugShaders;
         bool mWBuffer;
 
         size_t mBatchCount;
@@ -1543,6 +1569,7 @@ namespace Ogre
 
         typedef list<Listener*>::type ListenerList;
         ListenerList mEventListeners;
+        static Listener* msSharedEventListener;
 
         typedef list<HardwareOcclusionQuery*>::type HardwareOcclusionQueryList;
         HardwareOcclusionQueryList mHwOcclusionQueries;

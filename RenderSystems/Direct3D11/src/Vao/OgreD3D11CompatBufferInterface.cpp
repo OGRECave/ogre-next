@@ -37,10 +37,8 @@ THE SOFTWARE.
 namespace Ogre
 {
     D3D11CompatBufferInterface::D3D11CompatBufferInterface( size_t vboPoolIdx, ID3D11Buffer *d3dBuffer,
-                                                          D3D11Device &device ) :
-        mVboPoolIdx( vboPoolIdx ),
-        mVboName( d3dBuffer ),
-        mMappedPtr( 0 ),
+                                                            D3D11Device &device ) :
+        D3D11BufferInterfaceBase( vboPoolIdx, d3dBuffer ),
         mDevice( device )
     {
     }

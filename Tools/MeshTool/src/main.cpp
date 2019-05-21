@@ -93,8 +93,10 @@ void help(void)
     cout << "-b         = Recalculate bounding box (static meshes only)" << endl;
     cout << "-V version = Specify OGRE version format to write instead of latest" << endl;
     cout << "             Options are: 2.1, 1.10, 1.8, 1.7, 1.4, 1.0" << endl;
-    cout << "-v2          Force export the mesh as a v2 object. Keeps the original format otherwise." << endl;
-    cout << "-v1          Force export the mesh as a v1 object. Keeps the original format otherwise." << endl;
+    cout << "-v2          Export the mesh as a v2 object. Keeps the original format otherwise." << endl;
+    cout << "             Use this format if you load the mesh by the SceneManager::createItem() method." << endl;
+    cout << "-v1          Export the mesh as a v1 object. Keeps the original format otherwise." << endl;
+    cout << "             Use this if you load the mesh by the SceneManager::createEntity() method or if you import from v1 to v2 at runtime." << endl;
     cout << "-O puqs    = Optimize vertex buffers for shaders." << endl;
     cout << "             p converts POSITION to 16-bit floats" << endl;
     cout << "             q converts normal tangent and bitangent (28-36 bytes) to QTangents (8 bytes)." << endl;
@@ -934,7 +936,7 @@ bool loadMesh( const String &source, v1::MeshPtr &v1MeshPtr, MeshPtr &v2MeshPtr,
         {
             cout << "Trying to read " << source << " as a v1 mesh..." << endl;
             v1MeshPtr = v1::MeshManager::getSingleton().createManual(
-                        "conversion", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
+                        "conversionSrcV1", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
             meshSerializer->importMesh( stream, v1MeshPtr.get() );
             retVal = true;
             cout << "Success!" << endl;
@@ -942,6 +944,8 @@ bool loadMesh( const String &source, v1::MeshPtr &v1MeshPtr, MeshPtr &v2MeshPtr,
         catch( Exception & )
         {
             cout << "Failed." << endl;
+            if( v1MeshPtr )
+                v1::MeshManager::getSingleton().remove( v1MeshPtr );
             v1MeshPtr.setNull();
         }
 
@@ -951,7 +955,7 @@ bool loadMesh( const String &source, v1::MeshPtr &v1MeshPtr, MeshPtr &v2MeshPtr,
             {
                 cout << "Trying to read " << source << " as a v2 mesh..." << endl;
                 v2MeshPtr = MeshManager::getSingleton().createManual(
-                            "conversion", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
+                            "conversionSrcV2", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
                 stream->seek( 0 );
                 meshSerializer2.importMesh( stream, v2MeshPtr.get() );
                 retVal = true;
@@ -990,7 +994,7 @@ bool loadMesh( const String &source, v1::MeshPtr &v1MeshPtr, MeshPtr &v2MeshPtr,
             if( !stricmp(root->Value(), "mesh") )
             {
                 v1MeshPtr = v1::MeshManager::getSingleton().createManual(
-                            "conversion", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
+                            "conversionSrcXML", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
 
                 VertexElementType colourElementType = VET_COLOUR_ABGR;
                 if( opts.destColourFormatSet )
@@ -1038,7 +1042,7 @@ void saveMesh( const String &destination, v1::MeshPtr &v1Mesh, MeshPtr &v2Mesh,
         {
             if( opts.exportAsV1 && v1Mesh.isNull() )
             {
-                v1Mesh = v1::MeshManager::getSingleton().createManual( "conversion",
+                v1Mesh = v1::MeshManager::getSingleton().createManual( "conversionDstV1",
                                                                        ResourceGroupManager::
                                                                        DEFAULT_RESOURCE_GROUP_NAME );
                 v1Mesh->importV2( v2Mesh.get() );
@@ -1085,7 +1089,8 @@ void saveMesh( const String &destination, v1::MeshPtr &v1Mesh, MeshPtr &v2Mesh,
         if( v1Mesh.isNull() && !v2Mesh.isNull() )
         {
             v1Mesh = v1::MeshManager::getSingleton().createManual(
-                                    "conversion", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
+                                    "conversionDstXML",
+                         ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
             v1Mesh->importV2( v2Mesh.get() );
         }
 

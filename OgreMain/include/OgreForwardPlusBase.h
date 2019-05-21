@@ -44,6 +44,10 @@ namespace Ogre
 
     class CompositorShadowNode;
 
+    static const size_t c_ForwardPlusNumFloat4PerLight = 6u;
+    static const size_t c_ForwardPlusNumFloat4PerDecal = 4u;
+    static const size_t c_ForwardPlusNumFloat4PerCubemapProbe = 7u;
+
     /** ForwardPlusBase */
     class _OgreExport ForwardPlusBase : public HlmsAlloc
     {
@@ -90,12 +94,22 @@ namespace Ogre
             CachedGridBufferVec     gridBuffers;
         };
 
+        enum ObjTypes
+        {
+            ObjType_Decal = 0,
+            NumObjTypes
+        };
+
         struct LightCount
         {
             //We use LT_DIRECTIONAL (index = 0) to contain the total light count.
             uint32  lightCount[Light::MAX_FORWARD_PLUS_LIGHTS];
-            uint32  decalCount;
-            LightCount() { memset( lightCount, 0, sizeof(lightCount) ); }
+            uint32  objCount[NumObjTypes];
+            LightCount()
+            {
+                memset( lightCount, 0, sizeof(lightCount) );
+                memset( objCount, 0, sizeof(objCount) );
+            }
         };
 
         typedef vector<CachedGrid>::type CachedGridVec;
@@ -115,6 +129,8 @@ namespace Ogre
 #if !OGRE_NO_FINE_LIGHT_MASK_GRANULARITY
         bool    mFineLightMaskGranularity;
 #endif
+        //How many float4 to skip before Decals start in globalLightListBuffer
+        uint16 mDecalFloat4Offset;
 
         static size_t calculateBytesNeeded( size_t numLights, size_t numDecals );
 

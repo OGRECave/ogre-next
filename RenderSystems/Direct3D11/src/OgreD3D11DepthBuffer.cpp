@@ -30,6 +30,8 @@ THE SOFTWARE.
 #include "OgreD3D11DepthTexture.h"
 #include "OgreD3D11Texture.h"
 #include "OgreD3D11Mappings.h"
+#include "OgreD3D11RenderSystem.h"
+#include "OgreRoot.h"
 #include "OgreViewport.h"
 
 namespace Ogre
@@ -59,22 +61,6 @@ namespace Ogre
 
     D3D11DepthBuffer::~D3D11DepthBuffer()
     {
-        if( !mManual )
-        {
-            mDepthStencilView[0]->Release();
-
-            if( mDepthTextureView )
-                mDepthTextureView->Release();
-
-            mDepthStencilResource->Release();
-        }
-
-        if( mDepthStencilView[1] )
-            mDepthStencilView[1]->Release();
-        mDepthStencilView[0]    = 0;
-        mDepthStencilView[1]    = 0;
-        mDepthTextureView       = 0;
-        mDepthStencilResource   = 0;
     }
     //---------------------------------------------------------------------
     bool D3D11DepthBuffer::isCompatible( RenderTarget *renderTarget, bool exactFormatMatch ) const
@@ -127,8 +113,8 @@ namespace Ogre
             D3D11Device &device = renderSystem->_getDevice();
             ID3D11DeviceContextN *deviceContext = device.GetImmediateContext();
 
-            deviceContext->CopyResource( destination->mDepthStencilResource,
-                                         this->mDepthStencilResource );
+            deviceContext->CopyResource( destination->mDepthStencilResource.Get(),
+                                         this->mDepthStencilResource.Get() );
 
             retVal = true;
         }
@@ -138,11 +124,7 @@ namespace Ogre
     //---------------------------------------------------------------------
     void D3D11DepthBuffer::createReadOnlySRV(void)
     {
-        if( mDepthStencilView[1] )
-        {
-            mDepthStencilView[1]->Release();
-            mDepthStencilView[1] = 0;
-        }
+        mDepthStencilView[1].Reset();
 
         D3D11_DEPTH_STENCIL_VIEW_DESC pDesc;
         mDepthStencilView[0]->GetDesc( &pDesc );
@@ -158,7 +140,7 @@ namespace Ogre
         D3D11Device &device = renderSystem->_getDevice();
 
         HRESULT hr;
-        hr = device->CreateDepthStencilView( mDepthStencilResource, &pDesc, &mDepthStencilView[1] );
+        hr = device->CreateDepthStencilView( mDepthStencilResource.Get(), &pDesc, mDepthStencilView[1].ReleaseAndGetAddressOf() );
         if( FAILED(hr) )
         {
             String errorDescription = device.getErrorDescription(hr);
@@ -174,15 +156,15 @@ namespace Ogre
         {
             if( !mDepthStencilView[1] )
                 createReadOnlySRV();
-            return mDepthStencilView[1];
+            return mDepthStencilView[1].Get();
         }
 
-        return mDepthStencilView[0];
+        return mDepthStencilView[0].Get();
     }
     //---------------------------------------------------------------------
     ID3D11ShaderResourceView* D3D11DepthBuffer::getDepthTextureView() const
     {
-        return mDepthTextureView;
+        return mDepthTextureView.Get();
     }
     //---------------------------------------------------------------------
     void D3D11DepthBuffer::_resized(ID3D11DepthStencilView *depthBufferView, uint32 width, uint32 height)

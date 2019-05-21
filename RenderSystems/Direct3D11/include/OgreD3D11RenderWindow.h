@@ -30,6 +30,8 @@ THE SOFTWARE.
 #define __D3D11RENDERWINDOW_H__
 
 #include "OgreD3D11Prerequisites.h"
+#include "OgreD3D11DeviceResource.h"
+#include "OgreD3D11Mappings.h"
 #include "OgreRenderWindow.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WINRT 
@@ -46,9 +48,10 @@ namespace Ogre
 {
     class _OgreD3D11Export D3D11RenderWindowBase 
         : public RenderWindow
+        , protected D3D11DeviceResource
     {
     public:
-        D3D11RenderWindowBase(D3D11Device& device, IDXGIFactoryN* pDXGIFactory);
+        D3D11RenderWindowBase(D3D11Device& device);
         ~D3D11RenderWindowBase();
         virtual void create(const String& name, unsigned widthPt, unsigned heightPt, bool fullScreen, const NameValuePairList *miscParams);
         virtual void destroy(void);
@@ -63,7 +66,7 @@ namespace Ogre
 
         void getCustomAttribute( const String& name, void* pData );
         /** Overridden - see RenderTarget. */
-        virtual void copyContentsToMemory(const PixelBox &dst, FrameBuffer buffer);
+        virtual void copyContentsToMemory(const Box& src, const PixelBox &dst, FrameBuffer buffer);
         bool requiresTextureFlipping() const                    { return false; }
 
         virtual bool _shouldRebindBackBuffer()                  { return false; }
@@ -74,18 +77,17 @@ namespace Ogre
 
     protected:
         virtual DXGI_FORMAT _getBasicFormat()                   { return DXGI_FORMAT_B8G8R8A8_UNORM; } // preferred since Win8
-        DXGI_FORMAT _getRenderFormat()                          { return _getGammaFormat(_getBasicFormat(), isHardwareGammaEnabled()); }
+        DXGI_FORMAT _getRenderFormat()                          { return D3D11Mappings::_getGammaFormat(_getBasicFormat(), isHardwareGammaEnabled()); }
         void _createSizeDependedD3DResources();                 // assumes mpBackBuffer is already initialized
         void _destroySizeDependedD3DResources();
 
-        IDXGIDeviceN* _queryDxgiDevice();                       // release after use
-        void _updateViewportsDimensions();
+        ComPtr<IDXGIDeviceN> _queryDxgiDevice()                 { ComPtr<IDXGIDeviceN> res; _queryDxgiDeviceImpl(res.GetAddressOf()); return res; }
+        void _queryDxgiDeviceImpl(IDXGIDeviceN** dxgiDevice);   // release after use
 
-        static DXGI_FORMAT _getGammaFormat(DXGI_FORMAT format, bool appendSRGB);
+        void _updateViewportsDimensions();
 
     protected:
         D3D11Device & mDevice;          // D3D11 driver
-        IDXGIFactoryN* mpDXGIFactory;
         bool    mIsExternal;            // window not created by Ogre
         bool    mSizing;
         bool    mClosed;
@@ -95,9 +97,9 @@ namespace Ogre
         DXGI_SAMPLE_DESC mFSAAType;     // Effective FSAA mode, limited by hardware capabilities
 
         // Window size depended resources - must be released before swapchain resize and recreated later
-        ID3D11Texture2D*        mpBackBuffer;
-        ID3D11Texture2D*        mpBackBufferNoMSAA;             // optional, always holds up-to-date copy data from mpBackBuffer if not NULL
-        ID3D11RenderTargetView* mRenderTargetView;
+        ComPtr<ID3D11Texture2D>         mpBackBuffer;
+        ComPtr<ID3D11Texture2D>         mpBackBufferNoMSAA;     // optional, always holds up-to-date copy data from mpBackBuffer if not NULL
+        ComPtr<ID3D11RenderTargetView>  mRenderTargetView;
     };
 
     
@@ -105,12 +107,12 @@ namespace Ogre
         : public D3D11RenderWindowBase
     {
     public:
-        D3D11RenderWindowSwapChainBased(D3D11Device& device, IDXGIFactoryN* pDXGIFactory);
+        D3D11RenderWindowSwapChainBased(D3D11Device& device);
         ~D3D11RenderWindowSwapChainBased()                      { destroy(); }
         virtual void destroy(void);
 
         /// Get the swapchain details.
-        IDXGISwapChainN* _getSwapChain()                        { return mpSwapChain; }
+        IDXGISwapChainN* _getSwapChain()                        { return mpSwapChain.Get(); }
         DXGI_SWAP_CHAIN_DESC_N* _getSwapChainDescription(void)  { return &mSwapChainDesc; }
         virtual bool _shouldRebindBackBuffer()                  { return mUseFlipSequentialMode; }
 
@@ -125,7 +127,10 @@ namespace Ogre
         void swapBuffers();
 
     protected:
-        DXGI_FORMAT _getSwapChainFormat()                       { return _getGammaFormat(_getBasicFormat(), isHardwareGammaEnabled() && !mUseFlipSequentialMode); }
+        void notifyDeviceLost(D3D11Device* device);
+        void notifyDeviceRestored(D3D11Device* device);
+
+        DXGI_FORMAT _getSwapChainFormat()                       { return D3D11Mappings::_getGammaFormat(_getBasicFormat(), isHardwareGammaEnabled() && !mUseFlipSequentialMode); }
         void _createSwapChain();
         virtual HRESULT _createSwapChainImpl(IDXGIDeviceN* pDXGIDevice) = 0;
         void _destroySwapChain();
@@ -137,7 +142,7 @@ namespace Ogre
 
     protected:
         // Pointer to swap chain
-        IDXGISwapChainN*        mpSwapChain;
+        ComPtr<IDXGISwapChainN> mpSwapChain;
         DXGI_SWAP_CHAIN_DESC_N  mSwapChainDesc;
 
         bool                    mUseFlipSequentialMode;         // Flag to determine if the swapchain flip sequential model is enabled. Not supported before Win8.0, required for WinRT.
@@ -155,7 +160,7 @@ namespace Ogre
         : public D3D11RenderWindowSwapChainBased
     {
     public:
-        D3D11RenderWindowHwnd(D3D11Device& device, IDXGIFactoryN* pDXGIFactory);
+        D3D11RenderWindowHwnd(D3D11Device& device);
         ~D3D11RenderWindowHwnd()                                { destroy(); }
         virtual void create(const String& name, unsigned width, unsigned height, bool fullScreen, const NameValuePairList *miscParams);
         virtual void destroy(void);
@@ -178,6 +183,8 @@ namespace Ogre
         void _beginUpdate();
 
     protected:
+        void notifyDeviceRestored(D3D11Device* device);
+
         DXGI_FORMAT _getBasicFormat()                           { return DXGI_FORMAT_R8G8B8A8_UNORM; } // be compatible with pre-Win8 D3D11
         virtual HRESULT _createSwapChainImpl(IDXGIDeviceN* pDXGIDevice);
 
@@ -208,7 +215,7 @@ namespace Ogre
         : public D3D11RenderWindowSwapChainBased
     {
     public:
-        D3D11RenderWindowCoreWindow(D3D11Device& device, IDXGIFactoryN* pDXGIFactory);
+        D3D11RenderWindowCoreWindow(D3D11Device& device);
         ~D3D11RenderWindowCoreWindow()                          { destroy(); }
 
         virtual float getViewPointToPixelScale() const;
@@ -229,33 +236,64 @@ namespace Ogre
         Platform::Agile<Windows::UI::Core::CoreWindow> mCoreWindow;
     };
 
+#if defined(_WIN32_WINNT_WINBLUE) && _WIN32_WINNT >= _WIN32_WINNT_WINBLUE
+    class _OgreD3D11Export D3D11RenderWindowSwapChainPanel
+        : public D3D11RenderWindowSwapChainBased
+    {
+    public:
+        D3D11RenderWindowSwapChainPanel(D3D11Device& device);
+        ~D3D11RenderWindowSwapChainPanel()                      { destroy(); }
+
+        virtual float getViewPointToPixelScale();
+        virtual void create(const String& name, unsigned widthPt, unsigned heightPt, bool fullScreen, const NameValuePairList *miscParams);
+        virtual void destroy(void);
+
+        Windows::UI::Xaml::Controls::SwapChainPanel^ getSwapChainPanel() const    { return mSwapChainPanel; }
+
+        bool isVisible() const;
+
+        // Method for dealing with resize / move & 3d library
+        void windowMovedOrResized();
+
+    protected:
+        virtual HRESULT _createSwapChainImpl(IDXGIDeviceN* pDXGIDevice);
+        HRESULT _compensateSwapChainCompositionScale();
+
+    protected:
+        Windows::UI::Xaml::Controls::SwapChainPanel^ mSwapChainPanel;
+        Windows::Foundation::Size mCompositionScale;
+        Windows::Foundation::EventRegistrationToken sizeChangedToken, compositionScaleChangedToken;
+    };
+#endif
+
 #if !__OGRE_WINRT_PHONE_80
 
-    class D3D11RenderWindowImageSource
+    class _OgreD3D11Export D3D11RenderWindowImageSource
         : public D3D11RenderWindowBase
     {
     public:
-        D3D11RenderWindowImageSource(D3D11Device& device, IDXGIFactoryN* pDXGIFactory);
+        D3D11RenderWindowImageSource(D3D11Device& device);
         ~D3D11RenderWindowImageSource()                         { destroy(); }
         virtual void create(const String& name, unsigned width, unsigned height, bool fullScreen, const NameValuePairList *miscParams);
         virtual void destroy(void);
 
         virtual void resize(unsigned int width, unsigned int height);
-        virtual void update(bool swapBuffers = true);
         virtual void swapBuffers();
 
-        virtual bool isVisible() const                          { return mImageSourceNative != NULL; }
+        virtual bool isVisible() const                          { return mImageSourceNative.Get() != NULL; }
 
         Windows::UI::Xaml::Media::ImageBrush^ getImageBrush() const { return mBrush; }
         virtual void getCustomAttribute( const String& name, void* pData ); // "ImageBrush" -> Windows::UI::Xaml::Media::ImageBrush^
 
     protected:
+        void notifyDeviceLost(D3D11Device* device);
+        void notifyDeviceRestored(D3D11Device* device);
         void _createSizeDependedD3DResources();                 // creates mpBackBuffer and optionally mpBackBufferNoMSAA
 
     protected:
         Windows::UI::Xaml::Media::ImageBrush^                   mBrush;             // size independed
         Windows::UI::Xaml::Media::Imaging::SurfaceImageSource^  mImageSource;       // size depended, can be NULL
-        ISurfaceImageSourceNative*                              mImageSourceNative; // size depended, can be NULL
+        ComPtr<ISurfaceImageSourceNative>                       mImageSourceNative; // size depended, can be NULL
     };
 #endif // !__OGRE_WINRT_PHONE_80
 

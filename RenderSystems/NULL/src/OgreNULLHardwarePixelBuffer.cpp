@@ -72,7 +72,7 @@ namespace v1 {
         }
     }
     //-------------------------------------------------------------------------
-    PixelBox NULLHardwarePixelBuffer::lockImpl(const Image::Box &lockBox,  LockOptions options)
+    PixelBox NULLHardwarePixelBuffer::lockImpl(const Box &lockBox,  LockOptions options)
     {
         //Allocate memory for the entire image, as the buffer
         //maynot be freed and be reused in subsequent calls.
@@ -110,7 +110,7 @@ namespace v1 {
         mBuffer = PixelBox( mWidth, mHeight, mDepth, mFormat, mBuffer.data );
     }
     //-------------------------------------------------------------------------
-    void NULLHardwarePixelBuffer::blitFromMemory(const PixelBox &src, const Image::Box &dstBox)
+    void NULLHardwarePixelBuffer::blitFromMemory(const PixelBox &src, const Box &dstBox)
     {
         if (!mBuffer.contains(dstBox))
         {
@@ -142,7 +142,7 @@ namespace v1 {
         freeBuffer();
     }
     //-------------------------------------------------------------------------
-    void NULLHardwarePixelBuffer::blitToMemory(const Image::Box &srcBox, const PixelBox &dst)
+    void NULLHardwarePixelBuffer::blitToMemory(const Box &srcBox, const PixelBox &dst)
     {
         if (!mBuffer.contains(srcBox))
         {
@@ -184,7 +184,7 @@ namespace v1 {
          }
     }
     //-------------------------------------------------------------------------
-    void NULLHardwarePixelBuffer::upload( const PixelBox &data, const Image::Box &dest )
+    void NULLHardwarePixelBuffer::upload( const PixelBox &data, const Box &dest )
     {
     }
     //-------------------------------------------------------------------------

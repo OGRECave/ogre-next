@@ -143,7 +143,7 @@ namespace Ogre
         if( mUsage & TU_UAV )
             desc.usage |= MTLTextureUsageShaderWrite;
 
-        if( mUsage & (TU_UAV|TU_NOT_TEXTURE|TU_RENDERTARGET) )
+        if( mUsage & (TU_UAV|TU_NOT_SRV|TU_RENDERTARGET) )
             desc.storageMode = MTLStorageModePrivate;
 
         mTexture = [mDevice->mDevice newTextureWithDescriptor:desc];
@@ -220,7 +220,7 @@ namespace Ogre
         }
         else if (mTextureType == TEX_TYPE_CUBE_MAP)
         {
-            if(getSourceFileType() == "dds")
+            if(getSourceFileType() == "dds" || getSourceFileType() == "oitd")
             {
                 // XX HACK there should be a better way to specify whether
                 // all faces are in the same file or not

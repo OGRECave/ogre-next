@@ -48,7 +48,7 @@ namespace Ogre
         int mNextFrame;
         unsigned long mBestFrameTime;
         unsigned long mWorstFrameTime;
-        unsigned long mLastTime;
+        uint64 mLastTime;
         unsigned long mFrameTimes[OGRE_FRAME_STATS_SAMPLES];
         size_t mFramesSampled;
 
@@ -88,9 +88,9 @@ namespace Ogre
         }
 
         /// Adds a new measured time, in *microseconds*
-        void addSample( unsigned long timeMs )
+        void addSample( uint64 timeMs )
         {
-            unsigned long frameTimeMs = timeMs - mLastTime;
+            unsigned long frameTimeMs = static_cast<unsigned long>(timeMs - mLastTime);
             mFrameTimes[mNextFrame]  = frameTimeMs;
             mBestFrameTime              = std::min( frameTimeMs, mBestFrameTime );
             mWorstFrameTime             = std::max( frameTimeMs, mWorstFrameTime );
@@ -101,7 +101,7 @@ namespace Ogre
             mLastTime = timeMs;
         }
 
-        void reset( unsigned long timeMs )
+        void reset( uint64 timeMs )
         {
             mNextFrame   = 0;
             mBestFrameTime  = std::numeric_limits<unsigned long>::max();

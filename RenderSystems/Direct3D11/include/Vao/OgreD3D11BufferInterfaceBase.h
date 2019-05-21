@@ -2,7 +2,7 @@
 -----------------------------------------------------------------------------
 This source file is part of OGRE
 (Object-oriented Graphics Rendering Engine)
-For the latest info, see http://www.ogre3d.org/
+For the latest info, see http://www.ogre3d.org
 
 Copyright (c) 2000-2014 Torus Knot Software Ltd
 
@@ -26,35 +26,32 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
+#ifndef _Ogre_D3D11BufferInterfaceBase_H_
+#define _Ogre_D3D11BufferInterfaceBase_H_
 
-#ifndef __GLSLProgramFactory_H__
-#define __GLSLProgramFactory_H__
+#include "OgreD3D11Prerequisites.h"
 
-#include "OgreHighLevelGpuProgramManager.h"
-#include "OgreGLSLExtSupport.h"
+#include "Vao/OgreBufferInterface.h"
 
 namespace Ogre
 {
-    /** Factory class for GLSL programs. */
-    class _OgreGL3PlusExport GLSLProgramFactory : public HighLevelGpuProgramFactory
+    /** For D3D11, most (if not all) buffers, can be treated with the same code.
+        Hence most equivalent functionality is encapsulated here.
+    */
+    class _OgreD3D11Export D3D11BufferInterfaceBase : public BufferInterface
     {
     protected:
-        static String sLanguageName;
-    public:
-        GLSLProgramFactory(void);
-        ~GLSLProgramFactory(void);
-        /// Get the name of the language this factory creates programs for
-        const String& getLanguage(void) const;
-        /// Create an instance of GLSLProgram
-        HighLevelGpuProgram* create(ResourceManager* creator, 
-            const String& name, ResourceHandle handle,
-            const String& group, bool isManual, ManualResourceLoader* loader);
-        void destroy(HighLevelGpuProgram* prog);
+        size_t          mVboPoolIdx;
+        ID3D11Buffer    *mVboName;
+        void            *mMappedPtr;
 
-    private:
-        static GLSLLinkProgramManager* mLinkProgramManager;
-        static GLSLProgramPipelineManager* mProgramPipelineManager;
+    public:
+        D3D11BufferInterfaceBase( size_t vboPoolIdx, ID3D11Buffer *d3dBuffer );
+        ~D3D11BufferInterfaceBase();
+
+        size_t getVboPoolIndex(void)                { return mVboPoolIdx; }
+        ID3D11Buffer* getVboName(void) const        { return mVboName; }
     };
 }
 
-#endif // __GLSLProgramFactory_H__
+#endif

@@ -76,7 +76,7 @@ namespace Ogre
         virtual bool isClosed(void) const;
 
         // RenderTarget overloads.
-        virtual void copyContentsToMemory(const PixelBox &dst, FrameBuffer buffer) {}
+        virtual void copyContentsToMemory(const Box& src, const PixelBox &dst, FrameBuffer buffer) {}
         virtual bool requiresTextureFlipping() const { return false; }
 
         virtual void getCustomAttribute( const String& name, void* pData );

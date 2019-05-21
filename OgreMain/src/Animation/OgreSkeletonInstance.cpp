@@ -339,8 +339,8 @@ namespace Ogre
 
         if( itor != end && itor->boneChild == bone )
         {
+            itor->sceneNodeParent->_detachBone( this, itor->boneChild );
             efficientVectorRemove( mCustomParentSceneNodes, itor );
-            nodeParent->_detachBone( this, itor->boneChild );
         }
 
         if( nodeParent )
@@ -354,6 +354,11 @@ namespace Ogre
             bone->_setNodeParent( mParentNode );
         }
     }
+    //-----------------------------------------------------------------------------------
+    bool SkeletonInstance::hasBone( IdString boneName ) const
+    {
+        return mDefinition->mBoneIndexByName.find( boneName ) != mDefinition->mBoneIndexByName.end();
+    }      
     //-----------------------------------------------------------------------------------
     Bone* SkeletonInstance::getBone( IdString boneName )
     {

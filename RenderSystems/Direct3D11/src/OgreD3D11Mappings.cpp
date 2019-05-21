@@ -26,7 +26,9 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #include "OgreD3D11Mappings.h"
+#include "OgreD3D11RenderSystem.h"
 #include "OgrePixelBox.h"
+#include "OgreRoot.h"
 
 namespace Ogre 
 {
@@ -263,9 +265,9 @@ namespace Ogre
         box.data = mapping.pData;
     }
     //---------------------------------------------------------------------
-    PixelBox D3D11Mappings::getPixelBoxWithMapping(size_t width, size_t height, size_t depth, PixelFormat pixelFormat, const D3D11_MAPPED_SUBRESOURCE& mapping)
+    PixelBox D3D11Mappings::getPixelBoxWithMapping(D3D11_BOX extents, DXGI_FORMAT pixelFormat, const D3D11_MAPPED_SUBRESOURCE& mapping)
     {
-        PixelBox box(width, height, depth, pixelFormat);
+        PixelBox box(Box(extents.left, extents.top, extents.front, extents.right, extents.bottom, extents.back), _getPF(pixelFormat));
         setPixelBoxMapping(box, mapping);
         return box;
     }
@@ -594,6 +596,24 @@ namespace Ogre
         }
     }
     //---------------------------------------------------------------------
+    DXGI_FORMAT D3D11Mappings::_getGammaFormat(DXGI_FORMAT format, bool appendSRGB)
+    {
+        if(appendSRGB)
+        {
+            switch(format)
+            {
+            case DXGI_FORMAT_R8G8B8A8_UNORM:       return DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+            case DXGI_FORMAT_B8G8R8A8_UNORM:       return DXGI_FORMAT_B8G8R8A8_UNORM_SRGB;
+            case DXGI_FORMAT_B8G8R8X8_UNORM:       return DXGI_FORMAT_B8G8R8X8_UNORM_SRGB;
+            case DXGI_FORMAT_BC1_UNORM:            return DXGI_FORMAT_BC1_UNORM_SRGB;
+            case DXGI_FORMAT_BC2_UNORM:            return DXGI_FORMAT_BC2_UNORM_SRGB;
+            case DXGI_FORMAT_BC3_UNORM:            return DXGI_FORMAT_BC3_UNORM_SRGB;
+            case DXGI_FORMAT_BC7_UNORM:            return DXGI_FORMAT_BC7_UNORM_SRGB;
+            }
+        }
+        return format;
+    }
+    //---------------------------------------------------------------------
     PixelFormat D3D11Mappings::_getClosestSupportedPF(PixelFormat ogrePF)
     {
         if (_getPF(ogrePF) != DXGI_FORMAT_UNKNOWN)
@@ -717,7 +737,7 @@ namespace Ogre
 		}
 
         UINT retVal = 0;
-        if( !(usage & TU_NOT_TEXTURE) )
+        if( !(usage & TU_NOT_SRV) )
             retVal |= D3D11_BIND_SHADER_RESOURCE;
 
         if( isRenderTarget )
@@ -729,9 +749,9 @@ namespace Ogre
         return retVal;
 	}
 
-    UINT D3D11Mappings::_getTextureMiscFlags(UINT bindflags, TextureType textype, bool isdynamic, int usage)
+    UINT D3D11Mappings::_getTextureMiscFlags(UINT bindflags, TextureType textype, TextureUsage usage)
     {
-        if(isdynamic)
+        if(_isDynamic(usage))
             return 0;
 
         UINT flags = 0;

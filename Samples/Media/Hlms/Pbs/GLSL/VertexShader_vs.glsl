@@ -129,9 +129,9 @@ out block
 	worldPos.w = 1.0;
 @end @end //SkeletonTransform // !hlms_skeleton
 
-@property( hlms_skeleton || hlms_pose )
+@property( hlms_skeleton )
 	@piece( worldViewMat )passBuf.view@end
-@end @property( !hlms_skeleton && !hlms_pose )
+@end @property( !hlms_skeleton )
     @piece( worldViewMat )worldView@end
 @end
 
@@ -165,7 +165,7 @@ void main()
     @insertpiece( custom_vs_preExecution )
     
 @property( hlms_pose )
-	uint poseDataStart = (instance.worldMaterialIdx[drawId].x >> 9u) @property( hlms_skeleton ) + @value(hlms_bones_per_vertex)u * 12u@end ;
+	uint poseDataStart = (instance.worldMaterialIdx[drawId].x >> 9u) @property( hlms_skeleton ) + @value(hlms_bones_per_vertex)u * 3u@end ;
 	vec4 inputPos = vertex;
 
 	vec4 poseData = bufferFetch( worldMatBuf, int(poseDataStart) );
@@ -186,8 +186,21 @@ void main()
 	@end
 
 	@property( !hlms_skeleton )
-		mat3x4 worldMat = UNPACK_MAT3x4( worldMatBuf, int(poseDataStart) + 2 );
-		vec4 worldPos = vec4( (inputPos * worldMat).xyz, 1.0f );
+		vec4 worldMat[3];
+		worldMat[0] = bufferFetch( worldMatBuf, int( poseDataStart + 2u ) );
+		worldMat[1] = bufferFetch( worldMatBuf, int( poseDataStart + 3u ) );
+		worldMat[2] = bufferFetch( worldMatBuf, int( poseDataStart + 4u ) );
+		vec4 worldPos;
+		worldPos.x = dot( worldMat[0], inputPos );
+		worldPos.y = dot( worldMat[1], inputPos );
+		worldPos.z = dot( worldMat[2], inputPos );
+		worldPos.w = 1.0;
+		
+		@property( hlms_normal || hlms_qtangent )
+		@foreach( 4, n )
+			vec4 row@n = bufferFetch( worldMatBuf, int( poseDataStart + 5u ) + @n ); @end
+		mat4 worldView = mat4( row0, row1, row2, row3 );
+		@end
 	@end
 @end
 

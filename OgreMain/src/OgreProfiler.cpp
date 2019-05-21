@@ -368,7 +368,7 @@ namespace Ogre {
         // get the end time of this profile
         // we do this as close the beginning of this function as possible
         // to get more accurate timing results
-        const ulong endTime = mTimer->getMicroseconds();
+        const uint64 endTime = mTimer->getMicroseconds();
 
         // empty string is reserved for designating an empty parent
         assert ((profileName != "") && ("Profile name can't be an empty string"));
@@ -379,7 +379,7 @@ namespace Ogre {
             return;
 
         // calculate the elapsed time of this profile
-        const ulong timeElapsed = endTime - mCurrent->currTime;
+        const uint64 timeElapsed = endTime - mCurrent->currTime;
 
         // update parent's accumulator if it isn't the root
         if (&mRoot != mCurrent->parent) 

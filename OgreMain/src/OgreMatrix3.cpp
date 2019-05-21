@@ -35,7 +35,6 @@ namespace Ogre
     const Real Matrix3::EPSILON = 1e-06;
     const Matrix3 Matrix3::ZERO(0,0,0,0,0,0,0,0,0);
     const Matrix3 Matrix3::IDENTITY(1,0,0,0,1,0,0,0,1);
-    const Real Matrix3::msSvdEpsilon = 1e-04;
     const unsigned int Matrix3::msSvdMaxIterations = 32;
 
     //-----------------------------------------------------------------------
@@ -488,16 +487,23 @@ namespace Ogre
         Matrix3 kA = *this;
         Bidiagonalize(kA,kL,kR);
 
+        // Compute 'threshold = multiplier*epsilon*|kA|' as the threshold for
+        // diagonal entries effectively zero; that is, |d| <= |threshold|
+        // implies that d is (effectively) zero. We will use the L2-norm |kA|.
+        Real norm = Math::Sqrt(kA[0][0] * kA[0][0] + kA[0][1] * kA[0][1] +
+            kA[1][1] * kA[1][1] + kA[1][2] * kA[1][2] + kA[2][2] * kA[2][2]);
+        Real const multiplier = (Real)8;
+        Real const epsilon = std::numeric_limits<Real>::epsilon();
+        Real const threshold = multiplier * epsilon * norm;
+
         for (unsigned int i = 0; i < msSvdMaxIterations; i++)
         {
             Real fTmp, fTmp0, fTmp1;
             Real fSin0, fCos0, fTan0;
             Real fSin1, fCos1, fTan1;
 
-            bool bTest1 = (Math::Abs(kA[0][1]) <=
-                msSvdEpsilon*(Math::Abs(kA[0][0])+Math::Abs(kA[1][1])));
-            bool bTest2 = (Math::Abs(kA[1][2]) <=
-                msSvdEpsilon*(Math::Abs(kA[1][1])+Math::Abs(kA[2][2])));
+            bool bTest1 = (Math::Abs(kA[0][1]) <= threshold);
+            bool bTest2 = (Math::Abs(kA[1][2]) <= threshold);
             if ( bTest1 )
             {
                 if ( bTest2 )
@@ -549,9 +555,9 @@ namespace Ogre
                 if ( bTest2 )
                 {
                     // 2x2 closed form factorization
-                    fTmp = (kA[0][0]*kA[0][0] + kA[1][1]*kA[1][1] -
+                    fTmp = (kA[0][0]*kA[0][0] - kA[1][1]*kA[1][1] +
                         kA[0][1]*kA[0][1])/(kA[0][1]*kA[1][1]);
-                    fTan0 = 0.5f*(-fTmp+Math::Sqrt(fTmp*fTmp + 4.0f));
+                    fTan0 = 0.5f*(fTmp+Math::Sqrt(fTmp*fTmp + 4.0f));
                     fCos0 = Math::InvSqrt(1.0f+fTan0*fTan0);
                     fSin0 = fTan0*fCos0;
 

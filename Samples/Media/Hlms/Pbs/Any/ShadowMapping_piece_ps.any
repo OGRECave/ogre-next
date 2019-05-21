@@ -67,7 +67,7 @@
 			c.z = texture(shadowMap, uv + float2( invShadowMapSize.x, 0.0 ) ).r;
 			c.x = texture(shadowMap, uv + float2( 0.0, invShadowMapSize.y ) ).r;
 			c.y = texture(shadowMap, uv + float2( invShadowMapSize.x, invShadowMapSize.y ) ).r;
-		@end @property( hlms_tex_gather )
+		@else
 			c = textureGather( shadowMap, uv + invShadowMapSize.xy * 0.5 );
 		@end
 

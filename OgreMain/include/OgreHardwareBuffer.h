@@ -141,29 +141,12 @@ namespace v1 {
                 
             };
 
-            /// Device load options
-            /// The following enum is used to controls how data is loaded to devices in a multi device environment
-            /// This enum only works with the Direct3D 9 render system (5/2013).
-            enum UploadOptions 
-            {
-                /* Normal mode, 
-                    Data is automatically updated in all devices 
-                */
-                HBU_DEFAULT    = 0x0000,
-                /* Lazy load,
-                    Data is updated in the currently active device. Any other device will only be updated once 
-                    buffer is requested for rendering.
-                */
-                HBU_ON_DEMAND = 0x0001
-            };
-
         protected:
             size_t mSizeInBytes;
             Usage mUsage;
             bool mIsLocked;
             size_t mLockStart;
             size_t mLockSize;
-            UploadOptions mLockUploadOption;
             bool mSystemMemory;
             bool mUseShadowBuffer;
             HardwareBuffer* mShadowBuffer;
@@ -199,7 +182,7 @@ namespace v1 {
             @param options Locking options
             @return Pointer to the locked memory
             */
-            virtual void* lock(size_t offset, size_t length, LockOptions options, UploadOptions uploadOpt = HBU_DEFAULT)
+            virtual void* lock(size_t offset, size_t length, LockOptions options)
             {
                 assert(!isLocked() && "Cannot lock this buffer, it is already locked!");
 
@@ -219,7 +202,7 @@ namespace v1 {
                         mShadowUpdated = true;
                     }
 
-                    ret = mShadowBuffer->lock(offset, length, options, uploadOpt);
+                    ret = mShadowBuffer->lock(offset, length, options);
                 }
                 else
                 {
@@ -229,7 +212,6 @@ namespace v1 {
                 }
                 mLockStart = offset;
                 mLockSize = length;
-                mLockUploadOption = uploadOpt;
                 return ret;
             }
 
@@ -237,9 +219,9 @@ namespace v1 {
             @param options Locking options
             @return Pointer to the locked memory
             */
-            void* lock(LockOptions options, UploadOptions uploadOpt = HBU_DEFAULT)
+            void* lock(LockOptions options)
             {
-                return this->lock(0, mSizeInBytes, options, uploadOpt);
+                return this->lock(0, mSizeInBytes, options);
             }
             /** Releases the lock on this buffer. 
             @remarks 
@@ -368,30 +350,66 @@ namespace v1 {
             /// An internal function that should be used only by a render system for internal use
             virtual void* getRenderSystemData(void)     { return 0; }
     };
-    /** @} */
-    /** @} */
 
     /** Locking helper. Guaranteed unlocking even in case of exception. */
-    template <typename T> struct HardwareBufferLockGuard
+    struct HardwareBufferLockGuard
     {
-        HardwareBufferLockGuard(const T& p, HardwareBuffer::LockOptions options)
-            : pBuf(p)
+        HardwareBufferLockGuard() : pBuf(0), pData(0) {}
+        
+        HardwareBufferLockGuard(HardwareBuffer* p, HardwareBuffer::LockOptions options)
+            : pBuf(0), pData(0) { lock(p, options); }
+        
+        HardwareBufferLockGuard(HardwareBuffer* p, size_t offset, size_t length, HardwareBuffer::LockOptions options)
+            : pBuf(0), pData(0) { lock(p, offset, length, options); }
+        
+        template <typename T>
+        HardwareBufferLockGuard(const SharedPtr<T>& p, HardwareBuffer::LockOptions options)
+            : pBuf(0), pData(0) { lock(p.get(), options); }
+        
+        template <typename T>
+        HardwareBufferLockGuard(const SharedPtr<T>& p, size_t offset, size_t length, HardwareBuffer::LockOptions options)
+            : pBuf(0), pData(0) { lock(p.get(), offset, length, options); }
+        
+        ~HardwareBufferLockGuard() { unlock(); }
+        
+        void unlock()
         {
-            pData = pBuf->lock(options);
+            if(pBuf)
+            {
+                pBuf->unlock();
+                pBuf = 0;
+                pData = 0;
+            }   
         }
-        HardwareBufferLockGuard(const T& p, size_t offset, size_t length, HardwareBuffer::LockOptions options)
-            : pBuf(p)
+
+        void lock(HardwareBuffer* p, HardwareBuffer::LockOptions options)
         {
-            pData = pBuf->lock(offset, length, options);
-        }       
-        ~HardwareBufferLockGuard()
-        {
-            pBuf->unlock();
+            unlock();
+            pBuf = p;
+            pData = pBuf ? pBuf->lock(options) : 0;
         }
         
-        const T& pBuf;
+        void lock(HardwareBuffer* p, size_t offset, size_t length, HardwareBuffer::LockOptions options)
+        {
+            unlock();
+            pBuf = p;
+            pData = pBuf ? pBuf->lock(offset, length, options) : 0;
+        }
+        
+        template <typename T>
+        void lock(const SharedPtr<T>& p, HardwareBuffer::LockOptions options)
+            { lock(p.get(), options); }
+        
+        template <typename T>
+        void lock(const SharedPtr<T>& p, size_t offset, size_t length, HardwareBuffer::LockOptions options)
+            { lock(p.get(), offset, length, options); }
+        
+        HardwareBuffer* pBuf;
         void* pData;
     };
+
+    /** @} */
+    /** @} */
 }
 }
 #endif

@@ -2,7 +2,7 @@
 -----------------------------------------------------------------------------
 This source file is part of OGRE
 (Object-oriented Graphics Rendering Engine)
-For the latest info, see http://www.ogre3d.org/
+For the latest info, see http://www.ogre3d.org
 
 Copyright (c) 2000-2014 Torus Knot Software Ltd
 
@@ -26,34 +26,18 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
+#include "Vao/OgreD3D11BufferInterfaceBase.h"
 
-
-#ifndef __GLSLExtSupport_H__
-#define __GLSLExtSupport_H__
-
-#include "OgreGL3PlusPrerequisites.h"
-
-//
-// OpenGL Shading Language entry points
-//
 namespace Ogre
 {
-
-    // forward declarations
-    class GLSLProgram;
-    class GLSLGpuProgram;
-    class GLSLLinkProgram;
-    class GLSLLinkProgramManager;
-    class GLSLProgramPipelineManager;
-    class GLSLProgramFactory;
-
-    /** If there is a message in GL info log then post it in the Ogre Log
-    @param msg The info log message string is appended to this string
-    @param obj The GL object that is used to retrieve the info log
-    */
-    String logObjectInfo(const String& msg, const GLuint obj);
-
-
-} // namespace Ogre
-
-#endif // __GLSLExtSupport_H__
+    D3D11BufferInterfaceBase::D3D11BufferInterfaceBase( size_t vboPoolIdx, ID3D11Buffer *d3dBuffer ) :
+        mVboPoolIdx( vboPoolIdx ),
+        mVboName( d3dBuffer ),
+        mMappedPtr( 0 )
+    {
+    }
+    //-----------------------------------------------------------------------------------
+    D3D11BufferInterfaceBase::~D3D11BufferInterfaceBase()
+    {
+    }
+}

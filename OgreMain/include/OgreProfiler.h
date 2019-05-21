@@ -337,7 +337,7 @@ namespace Ogre {
         ProfileHistory history;
 
         /// The time this profile was started
-        ulong           currTime;
+        uint64 currTime;
 
         /// Represents the total time of all child profiles to subtract
         /// from this profile

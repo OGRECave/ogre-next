@@ -45,6 +45,7 @@ THE SOFTWARE.
 #include "OgreD3D11RenderSystem.h"
 
 #include "OgreRenderQueue.h"
+#include "OgreRoot.h"
 
 #include "OgreD3D11HardwareBufferManager.h" //D3D11HardwareBufferManager::getGLType
 
@@ -1251,7 +1252,7 @@ namespace Ogre
     {
         HlmsManager *hlmsManager = Root::getSingleton().getHlmsManager();
         VertexElement2VecVec vertexElements = VertexArrayObject::getVertexDeclaration( vertexBuffers );
-        uint8 inputLayout = hlmsManager->_addInputLayoutId( vertexElements, opType );
+        uint16 inputLayout = hlmsManager->_getInputLayoutId( vertexElements, opType );
 
         {
             bool hasImmutableDelayedBuffer = false;

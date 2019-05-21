@@ -78,7 +78,7 @@ namespace Demo
         bool useQtangents = false;
 
         // Smiley
-        /*{
+        {
             v1Mesh = Ogre::v1::MeshManager::getSingleton().load(
                 "Smiley.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
                 Ogre::v1::HardwareBuffer::HBU_STATIC, Ogre::v1::HardwareBuffer::HBU_STATIC);
@@ -101,7 +101,7 @@ namespace Demo
         smileyNode->setOrientation( Ogre::Quaternion( Ogre::Radian(1.5), Ogre::Vector3(1,0,0) ) );
         
         auto* bone = mSmileyItem->getSkeletonInstance()->getBone("Bone.001");
-        bone->setOrientation(Ogre::Quaternion(Ogre::Radian(0.4), Ogre::Vector3(0,1,0)));*/
+        bone->setOrientation(Ogre::Quaternion(Ogre::Radian(0.4), Ogre::Vector3(0,1,0)));
 
         // Spring
 
@@ -150,11 +150,11 @@ namespace Demo
         mAccumulator += timeSinceLast;
         Ogre::SubItem* subItem;
         
-        /*subItem = mSmileyItem->getSubItem( 0 );
+        subItem = mSmileyItem->getSubItem( 0 );
         subItem->setPoseWeight( "Smile", (Ogre::Math::Sin(mAccumulator) + 1)/2 );
         subItem->setPoseWeight( "MouthOpen", (Ogre::Math::Sin(mAccumulator+1) + 1)/2 );
         subItem->setPoseWeight( "Sad", (Ogre::Math::Sin(mAccumulator+2) + 1)/2 );
-        subItem->setPoseWeight( "EyesClosed", (Ogre::Math::Sin(mAccumulator+3) + 1)/2 );*/
+        subItem->setPoseWeight( "EyesClosed", (Ogre::Math::Sin(mAccumulator+3) + 1)/2 );
 
         subItem = mSpringItem->getSubItem( 0 );
         subItem->setPoseWeight( "Compressed", (Ogre::Math::Sin(mAccumulator) + 1)/2 );

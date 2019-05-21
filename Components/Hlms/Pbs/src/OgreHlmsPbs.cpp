@@ -780,6 +780,7 @@ namespace Ogre
             }
             else if( itor->keyName != PbsProperty::HwGammaRead &&
                      itor->keyName != PbsProperty::UvDiffuse &&
+                     itor->keyName != HlmsPsoProp::InputLayoutId &&
                      itor->keyName != HlmsBaseProp::Skeleton &&
                      itor->keyName != HlmsBaseProp::Pose &&
                      itor->keyName != HlmsBaseProp::Pose1 &&
@@ -2336,6 +2337,11 @@ namespace Ogre
                 if( !hasSkeletonAnimation ) {
                     memcpy( currentMappedTexBuffer, &worldMat, 4 * 3 * sizeof( float ) );
                     currentMappedTexBuffer += 12;
+
+                    //mat4 worldView
+                    Matrix4 tmp = mPreparedPass.viewMatrix.concatenateAffine( worldMat );
+                    memcpy( currentMappedTexBuffer, &tmp, sizeof( Matrix4 ) * !casterPass );
+                    currentMappedTexBuffer += 16 * !casterPass;
                 }
 
                 TexBufferPacked* poseBuf = queuedRenderable.renderable->getPoseTexBuffer();
@@ -2363,6 +2369,7 @@ namespace Ogre
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
         *( currentMappedConstBuffer+3u ) = queuedRenderable.renderable->mCustomParameter & 0x7F;
 #endif
+        currentMappedConstBuffer += 4;
 
         //---------------------------------------------------------------------------
         //                          ---- PIXEL SHADER ----

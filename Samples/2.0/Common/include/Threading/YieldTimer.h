@@ -16,9 +16,9 @@ namespace Demo
         {
         }
 
-        unsigned long yield( double frameTime, unsigned long startTime )
+        Ogre::uint64 yield( double frameTime, Ogre::uint64 startTime )
         {
-            unsigned long endTime = mExternalTimer->getMicroseconds();
+            Ogre::uint64 endTime = mExternalTimer->getMicroseconds();
 
             while( frameTime * 1000000.0 > (endTime - startTime) )
             {

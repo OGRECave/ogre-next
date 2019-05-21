@@ -52,6 +52,8 @@ THE SOFTWARE.
 
 namespace Ogre {
 
+    RenderSystem::Listener* RenderSystem::msSharedEventListener = 0;
+
     static const TexturePtr sNullTexPtr;
 
     //-----------------------------------------------------------------------
@@ -60,6 +62,11 @@ namespace Ogre {
         , mTextureManager(0)
         , mVaoManager(0)
         , mActiveViewport(0)
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+        , mDebugShaders(true)
+#else
+        , mDebugShaders(false)
+#endif
         , mWBuffer(false)
         , mBatchCount(0)
         , mFaceCount(0)
@@ -945,6 +952,17 @@ namespace Ogre {
     }
 
     //-----------------------------------------------------------------------
+    void RenderSystem::setSharedListener(Listener* listener)
+    {
+        assert(msSharedEventListener == NULL || listener == NULL); // you can set or reset, but for safety not directly override
+        msSharedEventListener = listener;
+    }
+    //-----------------------------------------------------------------------
+    RenderSystem::Listener* RenderSystem::getSharedListener(void)
+    {
+        return msSharedEventListener;
+    }
+    //-----------------------------------------------------------------------
     void RenderSystem::addListener(Listener* l)
     {
         mEventListeners.push_back(l);
@@ -962,6 +980,9 @@ namespace Ogre {
         {
             (*i)->eventOccurred(name, params);
         }
+
+        if(msSharedEventListener)
+            msSharedEventListener->eventOccurred(name, params);
     }
     //-----------------------------------------------------------------------
     void RenderSystem::destroyHardwareOcclusionQuery( HardwareOcclusionQuery *hq)
@@ -1083,5 +1104,10 @@ namespace Ogre {
     void RenderSystem::getCustomAttribute(const String& name, void* pData)
     {
         OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, "Attribute not found.", "RenderSystem::getCustomAttribute");
+    }
+    //---------------------------------------------------------------------
+    void RenderSystem::setDebugShaders( bool bDebugShaders )
+    {
+        mDebugShaders = bDebugShaders;
     }
 }

@@ -510,7 +510,7 @@ namespace Ogre
                 {
                     //Ignore datablocks that already exist (useful for reloading materials)
                     if( e.getNumber() != Exception::ERR_DUPLICATE_ITEM )
-                        throw e;
+                        throw;
                     else
                         LogManager::getSingleton().logMessage( e.getFullDescription() );
                 }
@@ -777,17 +777,17 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     String HlmsJson::getName( const HlmsMacroblock *macroblock ) const
     {
-        return "\"Macroblock_" + StringConverter::toString( macroblock->mId ) + '"';
+        return "\"Macroblock_" + StringConverter::toString( macroblock->mLifetimeId ) + '"';
     }
     //-----------------------------------------------------------------------------------
     String HlmsJson::getName( const HlmsBlendblock *blendblock ) const
     {
-        return "\"Blendblock_" + StringConverter::toString( blendblock->mId ) + '"';
+        return "\"Blendblock_" + StringConverter::toString( blendblock->mLifetimeId ) + '"';
     }
     //-----------------------------------------------------------------------------------
     String HlmsJson::getName( const HlmsSamplerblock *samplerblock )
     {
-        return "\"Sampler_" + StringConverter::toString( samplerblock->mId ) + '"';
+        return "\"Sampler_" + StringConverter::toString( samplerblock->mLifetimeId ) + '"';
     }
     //-----------------------------------------------------------------------------------
     void HlmsJson::saveSamplerblock( const HlmsSamplerblock *samplerblock, String &outString )

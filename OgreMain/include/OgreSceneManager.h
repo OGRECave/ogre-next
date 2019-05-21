@@ -489,6 +489,7 @@ namespace Ogre {
 
         ForwardPlusBase *mForwardPlusSystem;
         ForwardPlusBase *mForwardPlusImpl;
+        bool mBuildLegacyLightList;
 
         TexturePtr mDecalsDiffuseTex;
         TexturePtr mDecalsNormalsTex;
@@ -795,8 +796,6 @@ namespace Ogre {
         bool mLateMaterialResolving;
 
         ColourValue mShadowColour;
-        v1::HardwareIndexBufferSharedPtr mShadowIndexBuffer;
-        size_t mShadowIndexBufferUsedSize;
         v1::Rectangle2D* mFullScreenQuad;
         Real mShadowDirLightExtrudeDist;
         IlluminationRenderStage mIlluminationStage;
@@ -921,7 +920,8 @@ namespace Ogre {
             NUM_REQUESTS
         };
 
-        size_t mNumWorkerThreads;
+        size_t  mNumWorkerThreads;
+        bool    mForceMainThread;
 
         CullFrustumRequest              mCurrentCullFrustumRequest;
         UpdateLodRequest                mUpdateLodRequest;
@@ -1338,6 +1338,14 @@ namespace Ogre {
         void setForwardClustered( bool bEnable, uint32 width, uint32 height, uint32 numSlices,
                                   uint32 lightsPerCell, uint32 decalsPerCell, float minDistance,
                                   float maxDistance );
+
+        /** Enables or disables the legace 1.9 way of building light lists which can be 
+            used by HlmsLowLevel materials.
+            This light list can be turned on regardless of any Forward* mode but it 
+            consumes a lot of performance and is only used by HlmsLowLevel materials 
+            that need ligting.
+        */
+        void setBuildLegacyLightList( bool bEnable );
 
         ForwardPlusBase* getForwardPlus(void)                       { return mForwardPlusSystem; }
         ForwardPlusBase* _getActivePassForwardPlus(void)            { return mForwardPlusImpl; }
@@ -2034,6 +2042,24 @@ namespace Ogre {
 
         void _setViewport( Viewport *vp )                               { setViewport( vp ); }
         void _setCameraInProgress( Camera *camera )                     { mCameraInProgress = camera; }
+
+        /** Notifies the scene manager that hardware resources were lost
+            @remarks
+                Called automatically by RenderSystem if hardware resources
+                were lost and can not be restored using some internal mechanism.
+                Among affected resources are manual meshes without loaders, 
+                manual textures without loaders, ManualObjects, etc.
+        */
+        virtual void _releaseManualHardwareResources();
+
+        /** Notifies the scene manager that hardware resources should be restored
+            @remarks
+                Called automatically by RenderSystem if hardware resources
+                were lost and can not be restored using some internal mechanism.
+                Among affected resources are manual meshes without loaders, 
+                manual textures without loaders, ManualObjects, etc.
+        */
+        virtual void _restoreManualHardwareResources();
 
         /** Enables / disables a 'sky plane' i.e. a plane at constant
             distance from the camera representing the sky.
@@ -3210,6 +3236,8 @@ namespace Ogre {
             requests when a sync is performed
         */
         unsigned long _updateWorkerThread( ThreadHandle *threadHandle );
+    protected:
+        inline bool updateWorkerThreadImpl( size_t threadIdx );
     };
 
     /** Default implementation of IntersectionSceneQuery. */

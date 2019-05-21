@@ -826,7 +826,7 @@ namespace Ogre {
                 sm->_buildBoneAssignmentsFromVertexData( vertexData );
             }
         }
-        catch( Exception &e )
+        catch( Exception& )
         {
             SubMeshLodVec::iterator itor = totalSubmeshLods.begin();
             SubMeshLodVec::iterator end  = totalSubmeshLods.end();
@@ -852,7 +852,7 @@ namespace Ogre {
 
             //TODO: Delete created mVaos. Don't erase the data from those vaos?
 
-            throw e;
+            throw;
         }
 
         popInnerChunk(stream);
@@ -2246,7 +2246,7 @@ namespace Ogre {
                 submeshLods.clear();
             }
         }
-        catch( Exception &e )
+        catch( Exception& )
         {
             SubMeshLodVec::iterator itor = totalSubmeshLods.begin();
             SubMeshLodVec::iterator end  = totalSubmeshLods.end();
@@ -2272,7 +2272,7 @@ namespace Ogre {
 
             //TODO: Delete created mVaos. Don't erase the data from those vaos?
 
-            throw e;
+            throw;
         }
 
         popInnerChunk(stream);

@@ -50,7 +50,7 @@ namespace v1 {
         ~D3D11HardwareVertexBuffer();
 
         // override all data-gathering methods
-        void* lock(size_t offset, size_t length, LockOptions options, UploadOptions uploadOpt = HBU_DEFAULT);
+        void* lock(size_t offset, size_t length, LockOptions options);
         void unlock(void);
         void readData(size_t offset, size_t length, void* pDest);
         void writeData(size_t offset, size_t length, const void* pSource,

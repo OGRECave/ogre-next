@@ -32,8 +32,7 @@ THE SOFTWARE.
 #include "OgreTextureUnitState.h"
 #include "OgreHlmsSamplerblock.h"
 #include "OgreRenderSystem.h"
-#include "OgreRoot.h"
-#include "OgreD3D11RenderSystem.h"
+#include "OgreHardwareIndexBuffer.h"
 
 namespace Ogre 
 {
@@ -69,7 +68,7 @@ namespace Ogre
 		static void get(const ColourValue& inColour, float * outColour );
 
 		/// utility method, generates Ogre PixelBox using usual parameters and dataPtr/rowPitch/slicePitch from D3D11_MAPPED_SUBRESOURCE
-		static PixelBox getPixelBoxWithMapping(size_t width, size_t height, size_t depth, PixelFormat pixelFormat, const D3D11_MAPPED_SUBRESOURCE& mapping);
+		static PixelBox getPixelBoxWithMapping(D3D11_BOX extents, DXGI_FORMAT pixelFormat, const D3D11_MAPPED_SUBRESOURCE& mapping);
 		/// utility method, applies dataPtr/rowPitch/slicePitch from D3D11_MAPPED_SUBRESOURCE to Ogre PixelBox
 		static void setPixelBoxMapping(PixelBox& box, const D3D11_MAPPED_SUBRESOURCE& mapping);
 
@@ -77,6 +76,8 @@ namespace Ogre
 		static PixelFormat _getPF(DXGI_FORMAT d3dPF);
 		/// utility method, convert Ogre pixel format to D3D11 pixel format
 		static DXGI_FORMAT _getPF(PixelFormat ogrePF);
+		/// utility method, optionally maps plain format to _SRGB counterparts
+		static DXGI_FORMAT _getGammaFormat(DXGI_FORMAT format, bool appendSRGB);
 
         static D3D11_USAGE _getUsage(v1::HardwareBuffer::Usage usage);
         static D3D11_USAGE _getUsage(TextureUsage usage) { return _getUsage(static_cast<v1::HardwareBuffer::Usage>(usage)); }
@@ -91,7 +92,7 @@ namespace Ogre
 		static TextureType _getTexType(D3D11_SRV_DIMENSION type);
 
 		static UINT _getTextureBindFlags(DXGI_FORMAT format, TextureUsage usage);
-        static UINT _getTextureMiscFlags(UINT bindflags, TextureType textype, bool isdynamic, int usage);
+        static UINT _getTextureMiscFlags(UINT bindflags, TextureType textype, TextureUsage usage);
 	};
 }
 #endif

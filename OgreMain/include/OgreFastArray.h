@@ -80,7 +80,7 @@ namespace Ogre
         {
             if( mSize + newElements > mCapacity )
             {
-                mCapacity = std::max( mSize + newElements, mCapacity + (mCapacity >> 1) + 1 );
+                mCapacity = std::max<size_t>( mSize + newElements, mCapacity + (mCapacity >> 1u) + 1u );
                 T *data = (T*)::operator new( mCapacity * sizeof(T) );
                 if( mData )
                 {
@@ -295,6 +295,25 @@ namespace Ogre
         }
 
         void resize( size_t newSize, const T &value=T() )
+        {
+            if( newSize > mSize )
+            {
+                growToFit( newSize - mSize );
+                for( size_t i=mSize; i<newSize; ++i )
+                {
+                    new (&mData[i]) T( value );
+                }
+            }
+            else
+            {
+                for( size_t i=newSize; i<mSize; ++i )
+                    mData[i].~T();
+            }
+
+            mSize = newSize;
+        }
+
+        void resizePOD( size_t newSize, const T &value=T() )
         {
             if( newSize > mSize )
             {
