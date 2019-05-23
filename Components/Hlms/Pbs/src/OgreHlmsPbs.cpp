@@ -2325,7 +2325,13 @@ namespace Ogre
                 const VertexArrayObjectArray &vaos = queuedRenderable.renderable->getVaos(
                             static_cast<VertexPass>(casterPass) );
                 VertexArrayObject *vao = vaos[meshLod];
+                // According to this https://forums.ogre3d.org/viewtopic.php?f=25&t=95040#p545057
+                // "macOS uses an old OpenGL version which doesn't use baseVertex"
+        #ifdef __APPLE__
+                int32 baseVertex = 0;
+        #else
                 int32 baseVertex = vao->getBaseVertexBuffer()->_getFinalBufferStart();
+        #endif
                 memcpy( currentMappedTexBuffer, &baseVertex, sizeof( int32 ) );
                 int32 numVertices = vao->getBaseVertexBuffer()->getNumElements();
                 memcpy( currentMappedTexBuffer + 1, &numVertices, sizeof( int32 ) );
