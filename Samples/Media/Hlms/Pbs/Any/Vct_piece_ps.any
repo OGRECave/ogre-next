@@ -35,6 +35,10 @@
 		#define OGRE_VCT_ANISO_PROBE_ARG_DECL , OGRE_Texture3D_float4 probeX, OGRE_Texture3D_float4 probeY, OGRE_Texture3D_float4 probeZ
 		#define OGRE_VCT_ANISO_PROBE_ARG , probeX, probeY, probeZ
 		#define OGRE_VCT_ANISO_ROOT_PROBE_ARG , vctProbeX, vctProbeY, vctProbeZ
+	@else
+		#define OGRE_VCT_ANISO_PROBE_ARG_DECL
+		#define OGRE_VCT_ANISO_PROBE_ARG
+		#define OGRE_VCT_ANISO_ROOT_PROBE_ARG
 	@end
 
 	/// Generates a TBN matrix when no tangent information is present using
