@@ -219,9 +219,9 @@ bool GTKGLSupport::checkExtension(const String& ext) const
         _main_window->gl_end();
 }
 
-void* GTKGLSupport::getProcAddress(const String& procname)
+void* GTKGLSupport::getProcAddress(const char* procname) const
 {
-    return (void*)Gdk::GL::get_proc_address(procname.c_str());
+    return (void*)Gdk::GL::get_proc_address(procname);
 }
 
 Glib::RefPtr<const Gdk::GL::Context> GTKGLSupport::getMainContext() const {

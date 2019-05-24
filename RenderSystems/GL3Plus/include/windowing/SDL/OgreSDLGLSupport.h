@@ -42,7 +42,7 @@ public:
     /**
     * Get the address of a function
     */
-    void* getProcAddress(const String& procname);
+    void* getProcAddress(const char* procname) const;
 private:
     // Allowed video modes
     SDL_Rect** mVideoModes;

@@ -347,29 +347,9 @@ void OSXGL3PlusSupport::stop()
 			"***********************************************");
 }
 
-void* OSXGL3PlusSupport::getProcAddress( const char* name )
+void* OSXGL3PlusSupport::getProcAddress(const char* procname) const
 {
-    void *symbol;
-    symbol = NULL;
-    
-    String fullPath = macPluginPath() + "RenderSystem_GL3Plus.dylib";
-    void *handle = dlopen(fullPath.c_str(), RTLD_LAZY | RTLD_GLOBAL);
-    if(handle) {
-        symbol = dlsym (handle, name);
-    }
-    dlclose(handle);
-    
-    return symbol;
-}
-
-void* OSXGL3PlusSupport::getProcAddress( const String& procname )
-{
-	return getProcAddress( procname.c_str() );
-}
-
-bool OSXGL3PlusSupport::supportsPBuffers()
-{
-	return false;
+    return dlsym (RTLD_DEFAULT, name);
 }
 
 CFComparisonResult OSXGL3PlusSupport::_compareModes (const void *val1, const void *val2, void *context)

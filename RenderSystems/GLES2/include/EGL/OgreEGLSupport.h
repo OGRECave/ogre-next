@@ -79,7 +79,7 @@ namespace Ogre {
             EGLConfig* chooseGLConfig(const EGLint *attribList, EGLint *nElements);
             EGLConfig* getConfigs(EGLint *nElements);
             EGLBoolean getGLConfigAttrib(EGLConfig fbConfig, EGLint attribute, EGLint *value);
-            void* getProcAddress(const Ogre::String& name);
+            void* getProcAddress(const char* procname) const;
             ::EGLContext createNewContext(EGLDisplay eglDisplay, ::EGLConfig glconfig, ::EGLContext shareList) const;
 
             RenderWindow* createWindow(bool autoCreateWindow,

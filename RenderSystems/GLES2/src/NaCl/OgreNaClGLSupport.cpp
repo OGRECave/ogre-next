@@ -150,9 +150,9 @@ namespace Ogre {
         GLES2Support::setConfigOption(name, value);
     }
     
-    void* NaClGLSupport::getProcAddress(const Ogre::String& name)
+    void* NaClGLSupport::getProcAddress(const char* procname) const
     {
-        //return (void*)pglGetProcAddress((const char*) name.c_str()); - doesn't link
+        //return (void*)pglGetProcAddress(procname); - doesn't link
         return 0;
     }
     

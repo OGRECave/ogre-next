@@ -58,7 +58,7 @@ namespace Ogre {
             void refreshConfig(void);
             String validateConfig(void);
             void setConfigOption(const String &name, const String &value);
-            void* getProcAddress(const Ogre::String& name);
+            void* getProcAddress(const char* procname) const;
     };
 }
 

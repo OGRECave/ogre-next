@@ -64,7 +64,7 @@ namespace Ogre {
             CFDictionaryRef chooseGLConfig(const GLint *attribList, GLint *nElements);
             GLint getGLConfigAttrib(CFDictionaryRef fbConfig, GLint attribute, GLint *value);
             float getCurrentOSVersion(void) { return mCurrentOSVersion; }
-            void * getProcAddress(const Ogre::String& name);
+            void * getProcAddress(const char* procname) const;
             RenderWindow * createWindow(bool autoCreateWindow,
                                            GLES2RenderSystem *renderSystem,
                                            const String& windowTitle);
