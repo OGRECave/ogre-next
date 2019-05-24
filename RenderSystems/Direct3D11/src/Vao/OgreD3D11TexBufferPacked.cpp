@@ -69,22 +69,23 @@ namespace Ogre
     {
         assert( cacheIdx < 16 );
 
-        const size_t formatSize = PixelUtil::getNumElemBytes( mPixelFormat );
+        const size_t formatSize = mPixelFormat == PF_UNKNOWN ?
+                                      mBytesPerElement : PixelUtil::getNumElemBytes( mPixelFormat );
 
         if( mCachedResourceViews[cacheIdx].mResourceView )
             mCachedResourceViews[cacheIdx].mResourceView->Release();
 
-        mCachedResourceViews[cacheIdx].mOffset  = mFinalBufferStart + offset;
+        mCachedResourceViews[cacheIdx].mOffset  = static_cast<uint32>( mFinalBufferStart + offset );
         mCachedResourceViews[cacheIdx].mSize    = sizeBytes;
 
         D3D11_SHADER_RESOURCE_VIEW_DESC srDesc;
 
         srDesc.Format               = mInternalFormat;
         srDesc.ViewDimension        = D3D11_SRV_DIMENSION_BUFFER;
-        srDesc.Buffer.FirstElement  = (mFinalBufferStart + offset) / formatSize;
+        srDesc.Buffer.FirstElement  = static_cast<UINT>( (mFinalBufferStart + offset) / formatSize );
         srDesc.Buffer.NumElements   = sizeBytes / formatSize;
 
-        D3D11RenderSystem *rs = static_cast<D3D11VaoManager*>(mVaoManager)->getD3D11RenderSystem();
+        //D3D11RenderSystem *rs = static_cast<D3D11VaoManager*>(mVaoManager)->getD3D11RenderSystem();
         ID3D11Buffer *vboName = 0;
 
         D3D11BufferInterfaceBase *bufferInterface = static_cast<D3D11BufferInterfaceBase*>(
@@ -139,7 +140,8 @@ namespace Ogre
         assert( bufferSlot.offset < (mNumElements - 1) );
         assert( bufferSlot.sizeBytes < mNumElements );
 
-        const size_t formatSize = PixelUtil::getNumElemBytes( mPixelFormat );
+        const size_t formatSize = mPixelFormat == PF_UNKNOWN ?
+                                      mBytesPerElement : PixelUtil::getNumElemBytes( mPixelFormat );
 
         const size_t sizeBytes = !bufferSlot.sizeBytes ? (mNumElements * mBytesPerElement -
                                                           bufferSlot.offset) : bufferSlot.sizeBytes;
@@ -149,8 +151,9 @@ namespace Ogre
 
         srvDesc.Format               = mInternalFormat;
         srvDesc.ViewDimension        = D3D11_SRV_DIMENSION_BUFFER;
-        srvDesc.Buffer.FirstElement  = (mFinalBufferStart + bufferSlot.offset) / formatSize;
-        srvDesc.Buffer.NumElements   = sizeBytes / formatSize/*mBytesPerElement*/;
+        srvDesc.Buffer.FirstElement  = static_cast<UINT>( (mFinalBufferStart + bufferSlot.offset) /
+                                                          formatSize );
+        srvDesc.Buffer.NumElements   = static_cast<UINT>( sizeBytes / formatSize );
 
         D3D11BufferInterfaceBase *bufferInterface = static_cast<D3D11BufferInterfaceBase*>(
                                                         mBufferInterface );

@@ -26,6 +26,8 @@ ogre_float4x3 loadOgreFloat4x3( device const float4 *matrixBuf, uint offsetIdx )
 	float4 row2 = matrixBuf[offsetIdx + 2u];
 	return float3x4( row0, row1, row2 );
 }
+
+#define makeOgreFloat4x3( row0, row1, row2 ) float3x4( row0, row1, row2 )
 @end
 
 @end

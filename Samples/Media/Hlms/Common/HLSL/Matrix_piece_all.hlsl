@@ -30,4 +30,6 @@ ogre_float4x3 loadOgreFloat4x3( Buffer<float4> matrixBuf, uint offsetIdx )
 
 	return transpose( float3x4( row1, row2, row3 ) );
 }
+
+#define makeOgreFloat4x3( row0, row1, row2 ) transpose( float3x4( row0, row1, row2 ) )
 @end

@@ -147,6 +147,7 @@ namespace Ogre
         /// However the way we will be using may abuse the cache too much, thus we pre-set
         /// all variants as long as the number of variants is manageable.
         HlmsComputeJob  *mComputeJobs[1u<<5u];
+        HlmsComputeJob  *mAabbCalculator;
 
         float           *mCpuInstanceBuffer;
         UavBufferPacked *mInstanceBuffer;

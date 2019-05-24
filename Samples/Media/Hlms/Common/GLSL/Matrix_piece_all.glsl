@@ -29,6 +29,8 @@ ogre_float4x3 loadOgreFloat4x3( samplerBuffer matrixBuf, uint offsetIdx )
 	retVal[2] = texelFetch( matrixBuf, int(offsetIdx + 2u) );
 	return retVal;
 }
+
+#define makeOgreFloat4x3( row0, row1, row2 ) mat3x4( row0, row1, row2 )
 @end
 @end
 
@@ -74,6 +76,8 @@ ogre_float4x3 loadOgreFloat4x3( samplerBuffer matrixBuf, uint offsetIdx )
 	retVal[2] = texelFetch( matrixBuf, pos2, 0 );
 	return retVal;
 }
+
+#define makeOgreFloat4x3( row0, row1, row2 ) mat3x4( row0, row1, row2 )
 @end
 @end
 

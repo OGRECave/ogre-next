@@ -22,6 +22,18 @@
 			uint4 pos_normal_uv;
 		};
 	@end
+
+	@property( syntax != glsl )
+		struct InstanceBuffer
+		{
+			float4 worldTransformRow0;
+			float4 worldTransformRow1;
+			float4 worldTransformRow2;
+			float4 aabb0;
+			float4 aabb1;
+			uint4 meshData;
+		};
+	@end
 @end
 
 @piece( HeaderCS )
@@ -88,6 +100,8 @@
 	Instance getInstance( uint instanceIdx )
 	{
 		Instance retVal;
+
+	@property( syntax == glsl )
 		retVal.worldTransform = loadOgreFloat4x3( instanceBuffer, instanceIdx * 6u );
 
 		float4 aabb0 = bufferFetch( instanceBuffer, int( instanceIdx * 6u + 3u ) );
@@ -99,10 +113,26 @@
 		//retVal.meshIdx		= floatBitsToUint( aabb0.w );
 		retVal.materialIdx	= floatBitsToUint( aabb1.w );
 
-		uint3 meshData = floatBitsToUint( bufferFetch( instanceBuffer, int( instanceIdx * 6u + 5u ) ).xyz );
+		uint3 meshData = floatBitsToUint( bufferFetch( instanceBuffer,
+													   int( instanceIdx * 6u + 5u ) ).xyz );
 		retVal.mesh.vertexBufferStart	= meshData.x;
 		retVal.mesh.indexBufferStart	= meshData.y;
 		retVal.mesh.numIndices			= meshData.z;
+	@else
+		retVal.worldTransform = makeOgreFloat4x3( instanceBuffer[instanceIdx].worldTransformRow0,
+												  instanceBuffer[instanceIdx].worldTransformRow1,
+												  instanceBuffer[instanceIdx].worldTransformRow2 );
+
+		retVal.bounds.center	= instanceBuffer[instanceIdx].aabb0.xyz;
+		retVal.bounds.halfSize	= instanceBuffer[instanceIdx].aabb1.xyz;
+
+		//retVal.meshIdx		= floatBitsToUint( instanceBuffer[instanceIdx].aabb0.w );
+		retVal.materialIdx	= floatBitsToUint( instanceBuffer[instanceIdx].aabb1.w );
+
+		retVal.mesh.vertexBufferStart	= instanceBuffer[instanceIdx].meshData.x;
+		retVal.mesh.indexBufferStart	= instanceBuffer[instanceIdx].meshData.y;
+		retVal.mesh.numIndices			= instanceBuffer[instanceIdx].meshData.z;
+	@end
 
 		return retVal;
 	}

@@ -14,6 +14,16 @@
 		    uint4 pos_normal_uv;
 		};
 	@end
+
+	struct InstanceBuffer
+	{
+		float4 worldTransformRow0;
+		float4 worldTransformRow1;
+		float4 worldTransformRow2;
+		float4 aabb0;
+		float4 aabb1;
+		uint4 meshData;
+	};
 @end
 
 @piece( HeaderCS )
@@ -42,20 +52,12 @@
 		bool needsAabbUpdate;
 	};
 
-	struct InstanceBuffer
-	{
-		float4 worldTransformRow0;
-		float4 worldTransformRow1;
-		float4 worldTransformRow2;
-		float4 aabb0;
-		float4 aabb1;
-		uint4 meshData;
-	};
-
     Instance getInstance( uint instanceIdx )
 	{
 	    Instance retVal;
-		retVal.worldTransform = loadOgreFloat4x3( instanceBuffer, instanceIdx * 6u );
+		retVal.worldTransform = makeOgreFloat4x3( instanceBuffer[instanceIdx].worldTransformRow0,
+												  instanceBuffer[instanceIdx].worldTransformRow1,
+												  instanceBuffer[instanceIdx].worldTransformRow2 );
 
 		retVal.bounds.center	= instanceBuffer[instanceIdx].aabb0.xyz;
 		retVal.bounds.halfSize	= instanceBuffer[instanceIdx].aabb1.xyz;

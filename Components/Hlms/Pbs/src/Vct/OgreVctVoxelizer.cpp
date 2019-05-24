@@ -92,6 +92,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     VctVoxelizer::VctVoxelizer( IdType id, RenderSystem *renderSystem, HlmsManager *hlmsManager ) :
         IdObject( id ),
+        mAabbCalculator( 0 ),
         mCpuInstanceBuffer( 0 ),
         mInstanceBuffer( 0 ),
         mInstanceBufferAsTex( 0 ),
@@ -222,6 +223,8 @@ namespace Ogre
                 }
             }
         }
+
+        mAabbCalculator = hlmsCompute->findComputeJob( "VCT/AabbCalculator" );
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::countBuffersSize( const MeshPtr &mesh, QueuedMesh &queuedMesh )
@@ -750,16 +753,16 @@ namespace Ogre
             ++itor;
         }
 
-        const size_t bytesNeeded = instanceCount * mOctants.size() * sizeof(float) * 4u * 6u;
+        const size_t structStride = sizeof(float) * 4u * 6u;
+        const size_t elementCount = instanceCount * mOctants.size();
 
-        if( !mInstanceBuffer || bytesNeeded > mInstanceBuffer->getTotalSizeBytes() )
+        if( !mInstanceBuffer || elementCount > mInstanceBuffer->getNumElements() )
         {
             destroyInstanceBuffers();
-            mInstanceBuffer = mVaoManager->createUavBuffer( bytesNeeded, 1u,
+            mInstanceBuffer = mVaoManager->createUavBuffer( elementCount, structStride,
                                                             BB_FLAG_UAV|BB_FLAG_TEX, 0, false );
-            mCpuInstanceBuffer = reinterpret_cast<float*>( OGRE_MALLOC_SIMD( bytesNeeded,
+            mCpuInstanceBuffer = reinterpret_cast<float*>( OGRE_MALLOC_SIMD( elementCount * structStride,
                                                                              MEMCATEGORY_GENERAL ) );
-
             mInstanceBufferAsTex = mInstanceBuffer->getAsTexBufferView( PF_FLOAT32_RGBA );
         }
     }
