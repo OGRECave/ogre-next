@@ -343,14 +343,6 @@ namespace Ogre
             <td>Parent window handle, for embedding the OGRE in a child of an external window</td>
             <td>&nbsp;</td>
         </tr>
-        <tr>
-            <td>macAPI</td>
-            <td>String: "cocoa" or "carbon"</td>
-            <td>"carbon"</td>
-            <td>Specifies the type of rendering window on the Mac Platform.</td>
-            <td>Mac OS X Specific</td>
-            <td>&nbsp;</td>
-         </tr>
          <tr>
             <td>macAPICocoaUseNSView</td>
             <td>bool "true" or "false"</td>

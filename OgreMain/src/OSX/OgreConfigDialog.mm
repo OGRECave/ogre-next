@@ -56,10 +56,10 @@ namespace Ogre {
                          "ConfigDialog::initialise");
 
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
-        NSArray *keys = [[NSArray alloc] initWithObjects:@"Stereo Mode", @"Full Screen", @"FSAA", @"Colour Depth", @"RTT Preferred Mode", @"Video Mode", @"sRGB Gamma Conversion", @"macAPI", @"Content Scaling Factor", nil];
+        NSArray *keys = [[NSArray alloc] initWithObjects:@"Stereo Mode", @"Full Screen", @"FSAA", @"Colour Depth", @"RTT Preferred Mode", @"Video Mode", @"sRGB Gamma Conversion", @"Content Scaling Factor", nil];
         NSArray *stereoModeOptions = [[NSArray alloc] initWithObjects:@"None", @"Frame Sequential", nil];
 #else
-        NSArray *keys = [[NSArray alloc] initWithObjects:@"Full Screen", @"FSAA", @"Colour Depth", @"RTT Preferred Mode", @"Video Mode", @"sRGB Gamma Conversion", @"macAPI", @"Content Scaling Factor", nil];
+        NSArray *keys = [[NSArray alloc] initWithObjects:@"Full Screen", @"FSAA", @"Colour Depth", @"RTT Preferred Mode", @"Video Mode", @"sRGB Gamma Conversion", @"Content Scaling Factor", nil];
 #endif
         
         NSArray *fullScreenOptions = [[NSArray alloc] initWithObjects:@"Yes", @"No", nil];
@@ -69,11 +69,6 @@ namespace Ogre {
         NSMutableArray *fsaaOptions = [[NSMutableArray alloc] initWithCapacity:1];
         NSArray *sRGBOptions = [[NSArray alloc] initWithObjects:@"Yes", @"No", nil];
         NSArray *contentScaleOptions = [[NSArray alloc] initWithObjects:@"2.0", @"1.5", @"1.33", @"1.0", nil];
-#ifdef __LP64__
-        NSArray *macAPIOptions = [[NSArray alloc] initWithObjects:@"cocoa", nil];
-#else
-        NSArray *macAPIOptions = [[NSArray alloc] initWithObjects:@"cocoa", @"carbon", nil];
-#endif
 		const RenderSystemList& renderers = Root::getSingleton().getAvailableRenderers();
 
         // Add renderers and options that are detected per RenderSystem
@@ -89,11 +84,6 @@ namespace Ogre {
 			rs->setConfigOption("RTT Preferred Mode", "FBO");
 			rs->setConfigOption("sRGB Gamma Conversion", "No");
 			rs->setConfigOption("Content Scaling Factor", "1.0");
-#ifdef __LP64__
-			rs->setConfigOption("macAPI", "cocoa");
-#else
-			rs->setConfigOption("macAPI", "carbon");
-#endif
             
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
 			rs->setConfigOption("Stereo Mode", "None");
@@ -134,10 +124,10 @@ namespace Ogre {
 
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
 		NSArray *objects = [[NSArray alloc] initWithObjects:stereoModeOptions, fullScreenOptions, fsaaOptions,
-			 colourDepthOptions, rttOptions, videoModeOptions, sRGBOptions, macAPIOptions, contentScaleOptions, nil];
+			 colourDepthOptions, rttOptions, videoModeOptions, sRGBOptions, contentScaleOptions, nil];
 #else
         NSArray *objects = [[NSArray alloc] initWithObjects:fullScreenOptions, fsaaOptions,
-                            colourDepthOptions, rttOptions, videoModeOptions, sRGBOptions, macAPIOptions, contentScaleOptions, nil];
+                            colourDepthOptions, rttOptions, videoModeOptions, sRGBOptions, contentScaleOptions, nil];
 #endif
 		[mWindowDelegate setOptions:[NSDictionary dictionaryWithObjects:objects forKeys:keys]];
 
