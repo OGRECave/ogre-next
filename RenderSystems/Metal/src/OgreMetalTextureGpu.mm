@@ -330,7 +330,8 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     id<MTLTexture> MetalTextureGpu::getView( PixelFormatGpu pixelFormat, uint8 mipLevel,
-                                             uint16 arraySlice, bool cubemapsAs2DArrays, bool forUav )
+                                             uint8 numMipmaps, uint16 arraySlice,
+                                             bool cubemapsAs2DArrays, bool forUav )
     {
         if( pixelFormat == PFG_UNKNOWN )
         {
@@ -350,8 +351,14 @@ namespace Ogre
             texType = MTLTextureType2DArray;
         }
 
+        if( !numMipmaps )
+            numMipmaps = mNumMipmaps - mipLevel;
+
+        OGRE_ASSERT_LOW( numMipmaps <= mNumMipmaps - mipLevel &&
+                         "Asking for more mipmaps than the texture has!" );
+
         NSRange mipLevels;
-        mipLevels = NSMakeRange( mipLevel, mNumMipmaps - mipLevel );
+        mipLevels = NSMakeRange( mipLevel, numMipmaps );
         NSRange slices;
         slices = NSMakeRange( arraySlice, this->getNumSlices() - arraySlice );
 
@@ -363,13 +370,13 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     id<MTLTexture> MetalTextureGpu::getView( DescriptorSetTexture2::TextureSlot texSlot )
     {
-        return getView( texSlot.pixelFormat, texSlot.mipmapLevel,
+        return getView( texSlot.pixelFormat, texSlot.mipmapLevel, texSlot.numMipmaps,
                         texSlot.textureArrayIndex, texSlot.cubemapsAs2DArrays, false );
     }
     //-----------------------------------------------------------------------------------
     id<MTLTexture> MetalTextureGpu::getView( DescriptorSetUav::TextureSlot texSlot )
     {
-        return getView( texSlot.pixelFormat, texSlot.mipmapLevel,
+        return getView( texSlot.pixelFormat, texSlot.mipmapLevel, 1u,
                         texSlot.textureArrayIndex, false, true );
     }
     //-----------------------------------------------------------------------------------

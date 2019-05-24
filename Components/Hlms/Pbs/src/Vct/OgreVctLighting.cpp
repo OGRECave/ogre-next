@@ -273,6 +273,7 @@ namespace Ogre
                 {
                     texSlot.texture = mLightVoxel[axis+1u];
                     texSlot.mipmapLevel = i;
+                    texSlot.numMipmaps = 1u;
                     mipJob->setTexture( axis, texSlot );
 
                     DescriptorSetUav::TextureSlot uavSlot( DescriptorSetUav::TextureSlot::makeEmpty() );

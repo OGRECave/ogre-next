@@ -571,7 +571,7 @@ namespace Ogre
         // set final tex. attributes from tex. description
         // they may differ from the source image !!!
         mp1DTex->GetDesc(&desc);
-        mNumMipmaps = desc.MipLevels - 1;
+        mNumMipmaps = static_cast<uint8>( desc.MipLevels - 1u );
 
         D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
         ZeroMemory( &srvDesc, sizeof(srvDesc) );
@@ -581,7 +581,7 @@ namespace Ogre
             srvDesc.Format = desc.Format;
             srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE1D;
             srvDesc.Texture1D.MipLevels = desc.MipLevels;
-            mD3dFormat = srvDesc.Format,
+            mD3dFormat = srvDesc.Format;
             mD3dViewDimension = srvDesc.ViewDimension;
 
             hr = mDevice->CreateShaderResourceView( mp1DTex, &srvDesc, &mpShaderResourceView );
@@ -734,7 +734,7 @@ namespace Ogre
         HRESULT hr;
         D3D11_TEXTURE2D_DESC desc;
         mp2DTex->GetDesc(&desc);
-        mNumMipmaps = desc.MipLevels - 1;
+        mNumMipmaps = static_cast<uint8>( desc.MipLevels - 1u );
         
         D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
         ZeroMemory( &srvDesc, sizeof(srvDesc) );
@@ -784,7 +784,7 @@ namespace Ogre
                 break;
             }
 
-            mD3dFormat = srvDesc.Format,
+            mD3dFormat = srvDesc.Format;
             mD3dViewDimension = srvDesc.ViewDimension;
 
             if( mFSAA > 1 || atoi(mFSAAHint.c_str()) > 0 )
@@ -907,7 +907,7 @@ namespace Ogre
         HRESULT hr;
         D3D11_TEXTURE3D_DESC desc;
         mp3DTex->GetDesc(&desc);
-        mNumMipmaps = desc.MipLevels - 1;
+        mNumMipmaps = static_cast<uint8>( desc.MipLevels - 1u );
 
         D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
         ZeroMemory( &srvDesc, sizeof(srvDesc) );
@@ -918,7 +918,7 @@ namespace Ogre
             srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE3D;
             srvDesc.Texture3D.MostDetailedMip = 0;
             srvDesc.Texture3D.MipLevels = desc.MipLevels;
-            mD3dFormat = srvDesc.Format,
+            mD3dFormat = srvDesc.Format;
             mD3dViewDimension = srvDesc.ViewDimension;
             hr = mDevice->CreateShaderResourceView( mp3DTex, &srvDesc, &mpShaderResourceView );
             if (FAILED(hr) || mDevice.isError())

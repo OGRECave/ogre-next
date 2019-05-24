@@ -531,6 +531,7 @@ namespace Ogre
         if( format != mPixelFormat ||
             texSlot.cubemapsAs2DArrays ||
             texSlot.mipmapLevel > 0 ||
+            texSlot.numMipmaps != 0 ||
             texSlot.textureArrayIndex > 0 ||
             isReinterpretable() ||
             PixelFormatGpuUtils::isDepth( mPixelFormat ) )
@@ -560,8 +561,15 @@ namespace Ogre
             else
             {
                 //It's a union, so 2DArray == everyone else.
+                uint8 numMipmaps = texSlot.numMipmaps;
+                if( !texSlot.numMipmaps )
+                    numMipmaps = mNumMipmaps - texSlot.mipmapLevel;
+
+                OGRE_ASSERT_LOW( numMipmaps <= mNumMipmaps - texSlot.mipmapLevel &&
+                                 "Asking for more mipmaps than the texture has!" );
+
                 srvDesc.Texture2DArray.MostDetailedMip  = texSlot.mipmapLevel;
-                srvDesc.Texture2DArray.MipLevels        = mNumMipmaps - texSlot.mipmapLevel;
+                srvDesc.Texture2DArray.MipLevels        = numMipmaps;
 
                 if( mTextureType == TextureTypes::Type1DArray ||
                     mTextureType == TextureTypes::Type2DArray )

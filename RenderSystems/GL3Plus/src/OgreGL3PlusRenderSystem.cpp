@@ -2040,8 +2040,16 @@ namespace Ogre {
                     const GLenum format = GL3PlusMappings::get( pixelFormat );
                     srvList[i].target = GL3PlusMappings::get( textureGpu->getTextureType(),
                                                               texSlot.cubemapsAs2DArrays );
+
+                    uint8 numMipmaps = texSlot.numMipmaps;
+                    if( !texSlot.numMipmaps )
+                        numMipmaps = textureGpu->getNumMipmaps() - texSlot.mipmapLevel;
+
+                    OGRE_ASSERT_LOW( numMipmaps <= textureGpu->getNumMipmaps() - texSlot.mipmapLevel &&
+                                     "Asking for more mipmaps than the texture has!" );
+
                     glTextureView( srvList[i].texName, srvList[i].target, displayTex, format,
-                                   texSlot.mipmapLevel, 1u,
+                                   texSlot.mipmapLevel, numMipmaps,
                                    texSlot.textureArrayIndex,
                                    textureGpu->getNumSlices() - texSlot.textureArrayIndex );
                 }
