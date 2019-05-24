@@ -27,6 +27,8 @@ THE SOFTWARE.
 */
 
 #import "OgreOSXCocoaContext.h"
+#include "OgreGL3PlusRenderSystem.h"
+#include "OgreRoot.h"
 
 namespace Ogre
 {
