@@ -102,6 +102,10 @@ namespace Ogre
         mNumVerticesUncompressed( 0 ),
         mNumIndices16( 0 ),
         mNumIndices32( 0 ),
+        mDefaultIndexCountSplit( /*2001u*/
+                                 static_cast<uint32>(
+                                     alignToNextMultiple( std::numeric_limits<uint32>::max() - 3u,
+                                                          3u ) ) ),
         mAlbedoVox( 0 ),
         mEmissiveVox( 0 ),
         mNormalVox( 0 ),
@@ -283,9 +287,23 @@ namespace Ogre
 
             TODO_deal_no_index_buffer;
 
-            queuedMesh.submeshes[subMeshIdx].vbOffset = vbOffset;
-            queuedMesh.submeshes[subMeshIdx].ibOffset = ibOffset;
-            queuedMesh.submeshes[subMeshIdx].numIndices = numIndices;
+            //If the mesh has a lot of triangles, the voxelizer will test N triangles for every WxHxD
+            //voxel, which can be very inefficient. By partitioning the submeshes and calculating
+            //their AABBs, we can perform broadphase culling and skip a lot of triangles
+            const uint32 numPartitions =
+                    static_cast<uint32>( alignToNextMultiple( numIndices, queuedMesh.indexCountSplit ) /
+                                         queuedMesh.indexCountSplit );
+            queuedMesh.submeshes[subMeshIdx].partSubMeshes.resize( numPartitions );
+
+            for( uint32 partition=0u; partition<numPartitions; ++partition )
+            {
+                PartitionedSubMesh &partSubMesh =
+                        queuedMesh.submeshes[subMeshIdx].partSubMeshes[partition];
+                partSubMesh.vbOffset = vbOffset;
+                partSubMesh.ibOffset = ibOffset + queuedMesh.indexCountSplit * partition;
+                partSubMesh.numIndices = std::min( numIndices - queuedMesh.indexCountSplit * partition,
+                                                   queuedMesh.indexCountSplit );
+            }
 
             //Request to download the vertex buffer(s) to CPU (it will be mapped soon)
             VertexElementSemanticFullArray semanticsToDownload;
@@ -404,16 +422,25 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void VctVoxelizer::addItem( Item *item, bool bCompressed )
+    void VctVoxelizer::addItem( Item *item, bool bCompressed, uint32 indexCountSplit )
     {
         const MeshPtr &mesh = item->getMesh();
+
+        if( indexCountSplit == 0u )
+            indexCountSplit = mDefaultIndexCountSplit;
+        indexCountSplit = static_cast<uint32>( alignToNextMultiple( indexCountSplit, 3u ) );
 
         if( !bCompressed )
         {
             //Force no compression, even if the entry was already there
             QueuedMesh &queuedMesh = mMeshesV2[mesh];
             queuedMesh.bCompressed = false;
-            queuedMesh.submeshes.resize( mesh->getNumSubMeshes() );
+
+            if( queuedMesh.submeshes.empty() )
+            {
+                queuedMesh.indexCountSplit = indexCountSplit;
+                queuedMesh.submeshes.resize( mesh->getNumSubMeshes() );
+            }
         }
         else
         {
@@ -423,6 +450,7 @@ namespace Ogre
             {
                 QueuedMesh queuedMesh;
                 queuedMesh.bCompressed = true;
+                queuedMesh.indexCountSplit = indexCountSplit;
                 queuedMesh.submeshes.resize( mesh->getNumSubMeshes() );
                 mMeshesV2[mesh] = queuedMesh;
             }
@@ -690,12 +718,19 @@ namespace Ogre
                                                                                         mIndexBuffer16;
 
                 QueuedInstance queuedInstance;
-                queuedInstance.movableObject = item;
-                queuedInstance.vertexBufferStart    = itMesh->second.submeshes[i].vbOffset;
-                queuedInstance.indexBufferStart     = itMesh->second.submeshes[i].ibOffset;
-                queuedInstance.numIndices           = itMesh->second.submeshes[i].numIndices;
-                queuedInstance.materialIdx          = convResult.slotIdx;
-                mBuckets[bucket].push_back( queuedInstance );
+                queuedInstance.movableObject    = item;
+                queuedInstance.materialIdx      = convResult.slotIdx;
+
+                const size_t numPartitions = itMesh->second.submeshes[i].partSubMeshes.size();
+                for( size_t j=0u; j<numPartitions; ++j )
+                {
+                    const PartitionedSubMesh &partSubMesh = itMesh->second.submeshes[i].partSubMeshes[j];
+                    queuedInstance.vertexBufferStart    = partSubMesh.vbOffset;
+                    queuedInstance.indexBufferStart     = partSubMesh.ibOffset;
+                    queuedInstance.numIndices           = partSubMesh.numIndices;
+                    queuedInstance.needsAabbUpdate      = numPartitions != 1u || numSubItems != 1u;
+                    mBuckets[bucket].push_back( queuedInstance );
+                }
             }
 
             ++itor;
@@ -789,7 +824,7 @@ namespace Ogre
                         *AS_U32PTR( instanceBuffer ) = instance.vertexBufferStart;  ++instanceBuffer;
                         *AS_U32PTR( instanceBuffer ) = instance.indexBufferStart;   ++instanceBuffer;
                         *AS_U32PTR( instanceBuffer ) = instance.numIndices;         ++instanceBuffer;
-                        *instanceBuffer++ = 0.0f;
+                        *AS_U32PTR( instanceBuffer ) = instance.needsAabbUpdate ? 1u:0u;++instanceBuffer;
 
                         #undef AS_U32PTR
                     }

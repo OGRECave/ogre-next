@@ -110,12 +110,17 @@ namespace Ogre
             size_t index32BufferOffset;
         };
 
-        struct QueuedSubMesh
+        struct PartitionedSubMesh
         {
-            VertexBufferDownloadHelper downloadHelper;
             uint32  vbOffset;
             uint32  ibOffset;
             uint32  numIndices;
+        };
+
+        struct QueuedSubMesh
+        {
+            VertexBufferDownloadHelper downloadHelper;
+            FastArray<PartitionedSubMesh> partSubMeshes;
         };
 
         typedef FastArray<QueuedSubMesh> QueuedSubMeshArray;
@@ -123,6 +128,7 @@ namespace Ogre
         struct QueuedMesh
         {
             bool                bCompressed;
+            uint32              indexCountSplit;
             QueuedSubMeshArray  submeshes;
         };
 
@@ -154,6 +160,8 @@ namespace Ogre
         uint32 mNumIndices16;
         uint32 mNumIndices32;
 
+        uint32 mDefaultIndexCountSplit;
+
         TextureGpu  *mAlbedoVox;
         TextureGpu  *mEmissiveVox;
         TextureGpu  *mNormalVox;
@@ -173,6 +181,7 @@ namespace Ogre
             uint32          indexBufferStart;
             uint32          numIndices;
             uint32          materialIdx;
+            bool            needsAabbUpdate;
         };
         typedef map< VoxelizerBucket, FastArray<QueuedInstance> >::type VoxelizerBucketMap;
         VoxelizerBucketMap mBuckets;
@@ -237,8 +246,11 @@ namespace Ogre
             False if we should use everything as 32-bit float
             If multiple Items using the same Mesh are added and one of them asks
             to not use compression, then not using compression takes precedence.
+        @param indexCountSplit
+            0 to use mDefaultIndexCountSplit. Use a different value to override
+            This value is ignored if the mesh had already been added.
         */
-        void addItem( Item *item, bool bCompressed );
+        void addItem( Item *item, bool bCompressed, uint32 indexCountSplit=0u );
 
         void autoCalculateRegion(void);
 
