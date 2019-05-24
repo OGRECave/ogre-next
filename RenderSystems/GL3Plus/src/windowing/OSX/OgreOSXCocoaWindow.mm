@@ -181,11 +181,6 @@ namespace Ogre {
                 NSOpenGLPixelFormatAttribute attribs[30];
                 int i = 0;
                 
-                // Specify the display ID to associate the GL context with (main display for now)
-                // Useful if there is ambiguity
-                attribs[i++] = NSOpenGLPFAScreenMask;
-                attribs[i++] = (NSOpenGLPixelFormatAttribute)CGDisplayIDToOpenGLDisplayMask(CGMainDisplayID());
-                
                 // Specify that we want to use the OpenGL 3.2 Core profile
                 attribs[i++] = NSOpenGLPFAOpenGLProfile;
                 attribs[i++] = NSOpenGLProfileVersion3_2Core;

@@ -47,37 +47,37 @@ using namespace Ogre;
 		// Note that
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(windowDidResize:)
-                                                     name:@"NSWindowDidResizeNotification" 
+                                                     name:NSWindowDidResizeNotification 
 												   object:window];
 
         [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(windowWillMove:)
-                                                     name:@"NSWindowWillMoveNotification"
+                                                 selector:@selector(windowDidMove:)
+                                                     name:NSWindowDidMoveNotification
 												   object:window];
 
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(windowWillClose:)
-                                                     name:@"NSWindowWillCloseNotification"
+                                                     name:NSWindowWillCloseNotification
 												   object:window];
 
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(windowDidBecomeKey:)
-                                                     name:@"NSWindowDidBecomeKeyNotification" 
+                                                     name:NSWindowDidBecomeKeyNotification 
 												   object:window];
 
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(windowDidResignKey:)
-                                                     name:@"NSWindowDidResignKeyNotification"
+                                                     name:NSWindowDidResignKeyNotification
 												   object:window];
         
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(windowDidMiniaturize:)
-                                                     name:@"NSWindowDidMiniaturizeNotification" 
+                                                     name:NSWindowDidMiniaturizeNotification 
 												   object:window];
 
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(windowDidDeminiaturize:)
-                                                     name:@"NSWindowDidDeminiaturizeNotification" 
+                                                     name:NSWindowDidDeminiaturizeNotification 
 												   object:window];
     }
     return self;
@@ -103,7 +103,7 @@ using namespace Ogre;
 		
 }
 
-- (void)windowWillMove:(NSNotification *)notification
+- (void)windowDidMove:(NSNotification *)notification
 {
     CocoaWindow * curWindow = static_cast<CocoaWindow *>(ogreWindow);
 
