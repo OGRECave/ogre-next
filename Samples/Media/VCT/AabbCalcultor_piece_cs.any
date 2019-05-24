@@ -52,11 +52,6 @@
 		uint4 meshData;
 	};
 
-	layout(std430, binding = 0) buffer instanceBufferLayout
-	{
-		InstanceBuffer instanceBuffer[];
-	};
-
     Instance getInstance( uint instanceIdx )
 	{
 	    Instance retVal;
@@ -109,11 +104,6 @@
 //in uvec3 gl_GlobalInvocationID;
 //in uint  gl_LocalInvocationIndex;
 
-@piece( sharedOnlyBarrier )
-    memoryBarrierShared();
-	barrier();
-@end
-
 @piece( BodyCS )
     for( uint i=p_instanceStart; i<p_instanceEnd; ++i )
 	{
@@ -137,7 +127,7 @@
 			g_minAabb[gl_LocalInvocationIndex] = minAabb;
 			g_maxAabb[gl_LocalInvocationIndex] = maxAabb;
 
-			@insertpiece( sharedOnlyBarrier )
+			__sharedOnlyBarrier();
 
 			for( uint s=@value( threads_per_group_x )/2u; s > 0u; s >>= 1u )
 			{
@@ -148,7 +138,7 @@
 					g_maxAabb[gl_LocalInvocationIndex] = max( g_maxAabb[gl_LocalInvocationIndex],
 															  g_maxAabb[gl_LocalInvocationIndex + s] );
 				}
-				@insertpiece( sharedOnlyBarrier )
+				__sharedOnlyBarrier();
 			}
 
 			if( gl_LocalInvocationIndex == 0u )

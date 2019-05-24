@@ -94,7 +94,6 @@ uniform float3 voxelCellSize;
 
 #define p_instanceStart instanceStart_instanceEnd.x
 #define p_instanceEnd instanceStart_instanceEnd.y
-#define p_numInstances numInstances
 #define p_voxelOrigin voxelOrigin
 #define p_voxelCellSize voxelCellSize
 

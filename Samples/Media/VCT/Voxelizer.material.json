@@ -132,6 +132,14 @@
                 ["inLightLowerMip",         [0, 1, 2], "int"],
                 ["outLightHigherMip",       [0, 1, 2], "int"]
             ]
+        },
+
+        "VCT/AabbCalculator" :
+        {
+            "threads_per_group" : [1024, 1, 1],
+
+            "source" : "AabbCalcultor_cs",
+            "pieces" : ["CrossPlatformSettings_piece_all", "AabbCalcultor_piece_cs.any"],
         }
 	}
 }
