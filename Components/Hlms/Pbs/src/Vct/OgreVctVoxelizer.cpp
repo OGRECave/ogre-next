@@ -94,6 +94,7 @@ namespace Ogre
         IdObject( id ),
         mCpuInstanceBuffer( 0 ),
         mInstanceBuffer( 0 ),
+        mInstanceBufferAsTex( 0 ),
         mVertexBufferCompressed( 0 ),
         mVertexBufferUncompressed( 0 ),
         mIndexBuffer16( 0 ),
@@ -754,11 +755,12 @@ namespace Ogre
         if( !mInstanceBuffer || bytesNeeded > mInstanceBuffer->getTotalSizeBytes() )
         {
             destroyInstanceBuffers();
-            mInstanceBuffer = mVaoManager->createTexBuffer( PF_FLOAT32_RGBA, bytesNeeded,
-                                                            BT_DEFAULT
-                                                            /*BT_DYNAMIC_DEFAULT*/, 0, false );
+            mInstanceBuffer = mVaoManager->createUavBuffer( bytesNeeded, 1u,
+                                                            BB_FLAG_UAV|BB_FLAG_TEX, 0, false );
             mCpuInstanceBuffer = reinterpret_cast<float*>( OGRE_MALLOC_SIMD( bytesNeeded,
                                                                              MEMCATEGORY_GENERAL ) );
+
+            mInstanceBufferAsTex = mInstanceBuffer->getAsTexBufferView( PF_FLOAT32_RGBA );
         }
     }
     //-------------------------------------------------------------------------
@@ -766,8 +768,9 @@ namespace Ogre
     {
         if( mInstanceBuffer )
         {
-            mVaoManager->destroyTexBuffer( mInstanceBuffer );
+            mVaoManager->destroyUavBuffer( mInstanceBuffer );
             mInstanceBuffer = 0;
+            mInstanceBufferAsTex = 0;
 
             OGRE_FREE_SIMD( mCpuInstanceBuffer, MEMCATEGORY_GENERAL );
             mCpuInstanceBuffer = 0;
@@ -940,7 +943,7 @@ namespace Ogre
             mComputeJobs[i]->_setUavTexture( 5, uavSlot );
 
             DescriptorSetTexture2::BufferSlot texBufSlot(DescriptorSetTexture2::BufferSlot::makeEmpty());
-            texBufSlot.buffer = mInstanceBuffer;
+            texBufSlot.buffer = mInstanceBufferAsTex;
             mComputeJobs[i]->setTexBuffer( 0, texBufSlot );
         }
 

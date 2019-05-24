@@ -74,6 +74,8 @@ namespace Ogre
                     mInternalBufferStart * mBytesPerElement, mNumElements, mBytesPerElement, 0,
                     mBufferType, (void*)0, false, (VaoManager*)0, bufferInterface,
                     pixelFormat, mDevice );
+        //We were overriden by the BufferPacked we just created. Restore this back!
+        bufferInterface->_notifyBuffer( this );
 
         mTexBufferViews.push_back( retVal );
 

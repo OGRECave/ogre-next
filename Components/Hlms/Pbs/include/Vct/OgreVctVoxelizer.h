@@ -149,7 +149,8 @@ namespace Ogre
         HlmsComputeJob  *mComputeJobs[1u<<5u];
 
         float           *mCpuInstanceBuffer;
-        TexBufferPacked *mInstanceBuffer;
+        UavBufferPacked *mInstanceBuffer;
+        TexBufferPacked *mInstanceBufferAsTex;
         UavBufferPacked *mVertexBufferCompressed;
         UavBufferPacked *mVertexBufferUncompressed;
         UavBufferPacked *mIndexBuffer16;

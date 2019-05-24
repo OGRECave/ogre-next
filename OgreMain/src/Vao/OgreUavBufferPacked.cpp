@@ -63,7 +63,7 @@ namespace Ogre
         }
 
         if( !retVal )
-            getAsTexBufferImpl( pixelFormat );
+            retVal = getAsTexBufferImpl( pixelFormat );
 
         return retVal;
     }
