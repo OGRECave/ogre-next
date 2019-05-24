@@ -14,6 +14,8 @@
 
 #define mul( x, y ) ((x) * (y))
 
+#define __sharedOnlyBarrier() memoryBarrierShared();barrier();
+
 @insertpiece( PreBindingsHeaderCS )
 
 layout(std430, binding = 0) buffer vertexBufferLayout
