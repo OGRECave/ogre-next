@@ -63,9 +63,10 @@ THE SOFTWARE.
 namespace Ogre {
 
     CocoaWindow::CocoaWindow() : mWindow(nil), mView(nil), mGLContext(nil), mGLPixelFormat(nil), mWindowOriginPt(NSZeroPoint),
-        mWindowDelegate(NULL), mActive(false), mClosed(false), mHasResized(false), mIsExternal(false), mWindowTitle(""),
+        mWindowDelegate(NULL), mActive(false), mClosed(false), mVSync(true), mHasResized(false), mIsExternal(false), mWindowTitle(""),
         mUseNSView(false), mContentScalingFactor(1.0)
     {
+        // Set vsync by default to save battery and reduce tearing
     }
 
     CocoaWindow::~CocoaWindow()
@@ -293,6 +294,7 @@ namespace Ogre {
                 mHeight = _getPixelFromPoint((int)b.size.height);
                 
                 mWindow = [mView window];
+                mIsExternal = true;
                 
                 // Add our window to the window event listener class
                 WindowEventUtilities::_addRenderWindow(this);
@@ -367,7 +369,7 @@ namespace Ogre {
                 WindowEventUtilities::_removeRenderWindow(this);
             }
 
-            if(mWindow)
+            if(mWindow && !mIsExternal)
             {
                 [mWindow performClose:nil];
             }

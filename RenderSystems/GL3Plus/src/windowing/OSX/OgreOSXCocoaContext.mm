@@ -38,6 +38,8 @@ namespace Ogre
 
 	CocoaContext::~CocoaContext()
 	{
+		GL3PlusRenderSystem *rs = static_cast<GL3PlusRenderSystem*>(Root::getSingleton().getRenderSystem());
+		rs->_unregisterContext(this);
     }
 
     void CocoaContext::setCurrent()
