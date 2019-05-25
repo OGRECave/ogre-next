@@ -112,6 +112,45 @@ struct PS_INPUT
 	worldPos.w = 1.0;
 @end @end  //SkeletonTransform // !hlms_skeleton
 
+@property( hlms_pose )@piece( PoseTransform )
+	// Pose data starts after all 3x4 bone matrices
+	uint poseDataStart = (worldMaterialIdx[drawId].x >> 9u) @property( hlms_skeleton ) + @value(hlms_bones_per_vertex)u * 3u@end ;
+	uint poseVertexId = vertexId - baseVertex;
+	float4 poseWeights = worldMatBuf[poseDataStart + 1u];
+	
+	@psub( MoreThanOnePose, hlms_pose, 1 )
+	@property( !MoreThanOnePose )
+		float4 posePos = poseBuf[poseVertexId];
+		input.position += posePos * poseWeights.x;
+	@end @property( MoreThanOnePose )
+		float4 poseData = worldMatBuf[poseDataStart];
+		uint numVertices = as_type<uint>( poseData.y );
+		@foreach( hlms_pose, n )
+			input.position += poseBuf[poseVertexId + numVertices * @nu] * poseWeights[@nu];
+		@end
+	@end
+	
+	// If hlms_skeleton is defined the transforms will be provided by bones.
+	// If hlms_pose is not combined with hlms_skeleton the object's worldMat and worldView have to be set.
+	@property( !hlms_skeleton )
+		float4 worldMat[3];
+		worldMat[0] = worldMatBuf[poseDataStart + 2u];
+		worldMat[1] = worldMatBuf[poseDataStart + 3u];
+		worldMat[2] = worldMatBuf[poseDataStart + 4u];
+		float4 worldPos;
+		worldPos.x = dot( worldMat[0], input.position );
+		worldPos.y = dot( worldMat[1], input.position );
+		worldPos.z = dot( worldMat[2], input.position );
+		worldPos.w = 1.0;
+		
+		@property( hlms_normal || hlms_qtangent )
+		@foreach( 4, n )
+			float4 row@n = worldMatBuf[poseDataStart + 5u + @nu];@end
+		float4x4 worldView = float4x4( row0, row1, row2, row3 );
+		@end
+	@end
+@end @end // PoseTransform
+
 @property( hlms_skeleton )
 	@piece( worldViewMat )passBuf.view@end
 @end @property( !hlms_skeleton )
@@ -169,33 +208,7 @@ vertex PS_INPUT main_metal
 	PS_INPUT outVs;
 	@insertpiece( custom_vs_preExecution )
 	
-@property( hlms_pose )
-	@property( hlms_pose_1 )
-		float poseWeight = as_type<float>( worldMaterialIdx[drawId].w );
-		float4 posePos = poseBuf[1u + vertexId - baseVertex];
-		input.position += posePos * poseWeight;
-	@end @property( !hlms_pose_1 )
-		// number of vertices is stored in the first entry, thus add 1u below
-		// when indexing into poseBuf
-		uint numVertices = as_type<uint>( poseBuf[0].x );
-	
-		@property( hlms_pose_2 )
-			float2 poseWeights = unpack_unorm2x16_to_float( worldMaterialIdx[drawId].w );
-		@end @property( hlms_pose_3 )
-			float4 poseWeights = unpack_unorm10a2_to_float( worldMaterialIdx[drawId].w );
-		@end @property( hlms_pose_4 )
-			float4 poseWeights = unpack_unorm4x8_to_float( worldMaterialIdx[drawId].w );
-		@end
-		
-		float4 posePos;
-		@foreach( hlms_pose, n )
-			posePos = poseBuf[1u + vertexId - baseVertex + numVertices * @n];
-			input.position += posePos * poseWeights[@nu];
-		@end
-	@end
-@end
-	
-@property( !hlms_skeleton )
+@property( !hlms_skeleton && !hlms_pose )
 	float3x4 worldMat = UNPACK_MAT3x4( worldMatBuf, drawId @property( !hlms_shadowcaster )<< 1u@end );
 	@property( hlms_normal || hlms_qtangent )
 	float4x4 worldView = UNPACK_MAT4( worldMatBuf, (drawId << 1u) + 1u );
@@ -216,6 +229,7 @@ vertex PS_INPUT main_metal
 	@property( normal_map )float3 tangent	= input.tangent;@end
 @end
 
+	@insertpiece( PoseTransform )
 	@insertpiece( SkeletonTransform )
 	@insertpiece( VertexTransform )
 
