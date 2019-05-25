@@ -143,11 +143,41 @@
 
             "uav_units" : 3,
 
+            "textures" :
+            [
+                {}
+            ],
+
             "properties" :
             {
                 "index_32bit" : 0,
                 "compressed_vertex_format" : 0
-            }
+            },
+
+            "params_glsl" :
+            [
+                ["inMeshBuffer",            [0], "int"]
+            ]
+        },
+
+        "VCT/AabbWorldSpace" :
+        {
+            "threads_per_group" : [64, 1, 1],
+
+            "source" : "AabbWorldSpace_cs",
+            "pieces" : ["CrossPlatformSettings_piece_all", "AabbWorldSpace_piece_cs.any"],
+
+            "uav_units" : 1,
+
+            "textures" :
+            [
+                {}
+            ],
+
+            "params_glsl" :
+            [
+                ["inMeshAabb",              [0], "int"]
+            ]
         }
 	}
 }

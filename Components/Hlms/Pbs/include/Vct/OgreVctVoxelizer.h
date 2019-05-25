@@ -115,6 +115,7 @@ namespace Ogre
             uint32  vbOffset;
             uint32  ibOffset;
             uint32  numIndices;
+            uint32  partSubMeshIdx;
         };
 
         struct QueuedSubMesh
@@ -148,6 +149,7 @@ namespace Ogre
         /// all variants as long as the number of variants is manageable.
         HlmsComputeJob  *mComputeJobs[1u<<5u];
         HlmsComputeJob  *mAabbCalculator[1u<<2u];
+        HlmsComputeJob  *mAabbWorldSpaceJob;
 
         float           *mCpuInstanceBuffer;
         UavBufferPacked *mInstanceBuffer;
@@ -156,6 +158,16 @@ namespace Ogre
         UavBufferPacked *mVertexBufferUncompressed;
         UavBufferPacked *mIndexBuffer16;
         UavBufferPacked *mIndexBuffer32;
+        //Aabb Calculator
+        uint32			mNumUncompressedPartSubMeshes16;
+        uint32			mNumUncompressedPartSubMeshes32;
+        uint32			mNumCompressedPartSubMeshes16;
+        uint32			mNumCompressedPartSubMeshes32;
+        TexBufferPacked *mMeshBufferData;
+        UavBufferPacked *mMeshAabb;
+        /// Normally once we're done we free all memory that isn't needed. However
+        /// we leave mMeshBufferData & mMeshAabb around because they occupy very little memory
+        bool            mGpuMeshAabbDataDirty;
 
         uint32 mNumVerticesCompressed;
         uint32 mNumVerticesUncompressed;
@@ -182,6 +194,7 @@ namespace Ogre
             uint32          vertexBufferStart;
             uint32          indexBufferStart;
             uint32          numIndices;
+            uint32          partSubMeshIdx;
             uint32          materialIdx;
             bool            needsAabbUpdate;
         };
@@ -220,11 +233,14 @@ namespace Ogre
         void createComputeJobs();
 
         void countBuffersSize( const MeshPtr &mesh, QueuedMesh &queuedMesh );
+        void prepareAabbCalculatorMeshData(void);
+        void destroyAabbCalculatorMeshData(void);
         void convertMeshUncompressed( const MeshPtr &mesh, QueuedMesh &queuedMesh,
                                       MappedBuffers &mappedBuffers );
 
         void freeBuffers( bool bForceFree );
 
+        void computeMeshAabbs(void);
         void buildMeshBuffers(void);
         void createVoxelTextures(void);
         void destroyVoxelTextures(void);

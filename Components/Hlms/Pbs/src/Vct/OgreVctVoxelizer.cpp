@@ -93,6 +93,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     VctVoxelizer::VctVoxelizer( IdType id, RenderSystem *renderSystem, HlmsManager *hlmsManager ) :
         IdObject( id ),
+        mAabbWorldSpaceJob( 0 ),
         mCpuInstanceBuffer( 0 ),
         mInstanceBuffer( 0 ),
         mInstanceBufferAsTex( 0 ),
@@ -100,6 +101,13 @@ namespace Ogre
         mVertexBufferUncompressed( 0 ),
         mIndexBuffer16( 0 ),
         mIndexBuffer32( 0 ),
+        mNumUncompressedPartSubMeshes16( 0 ),
+        mNumUncompressedPartSubMeshes32( 0 ),
+        mNumCompressedPartSubMeshes16( 0 ),
+        mNumCompressedPartSubMeshes32( 0 ),
+        mMeshBufferData( 0 ),
+        mMeshAabb( 0 ),
+        mGpuMeshAabbDataDirty( true ),
         mNumVerticesCompressed( 0 ),
         mNumVerticesUncompressed( 0 ),
         mNumIndices16( 0 ),
@@ -152,7 +160,7 @@ namespace Ogre
             indexStart -= 1u;
             ++numIndices;
         }
-        numIndices = alignToNextMultiple( numIndices, 2u );
+        numIndices = static_cast<uint32>( alignToNextMultiple( numIndices, 2u ) );
         return adjustedIndexStart;
     }
     //-------------------------------------------------------------------------
@@ -249,6 +257,8 @@ namespace Ogre
                 }
             }
         }
+
+        mAabbWorldSpaceJob = hlmsCompute->findComputeJob( "VCT/AabbWorldSpace" );
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::countBuffersSize( const MeshPtr &mesh, QueuedMesh &queuedMesh )
@@ -273,6 +283,8 @@ namespace Ogre
             uint32 ibOffset = 0;
             uint32 numIndices = 0;
 
+            uint32 *partSubMeshIdx = 0;
+
             bool uses32bitIndices = false;
 
             IndexBufferPacked *indexBuffer = vao->getIndexBuffer();
@@ -287,6 +299,9 @@ namespace Ogre
                     ibOffset = mNumIndices16 + totalNumIndices16;
                     totalNumIndices16 += numIndices;
 
+                    partSubMeshIdx = queuedMesh.bCompressed ? &mNumUncompressedPartSubMeshes16 :
+                                                              &mNumCompressedPartSubMeshes16;
+
                     //BufferPacked::copyTo needs to be multiple of 2, but our compute shader
                     //must start reading from the correct offset and the right number
                     //of indices are processed (both of which can be odd)
@@ -298,6 +313,8 @@ namespace Ogre
                 }
                 else
                 {
+                    partSubMeshIdx = queuedMesh.bCompressed ? &mNumUncompressedPartSubMeshes32 :
+                                                              &mNumCompressedPartSubMeshes32;
                     ibOffset = mNumIndices32 + totalNumIndices32;
                     totalNumIndices32 += numIndices;
                 }
@@ -331,6 +348,8 @@ namespace Ogre
                 partSubMesh.ibOffset = ibOffset + queuedMesh.indexCountSplit * partition;
                 partSubMesh.numIndices = std::min( numIndices - queuedMesh.indexCountSplit * partition,
                                                    queuedMesh.indexCountSplit );
+                partSubMesh.partSubMeshIdx = *partSubMeshIdx;
+                ++partSubMeshIdx;
             }
 
             //Request to download the vertex buffer(s) to CPU (it will be mapped soon)
@@ -349,6 +368,111 @@ namespace Ogre
 
         mNumIndices16 += totalNumIndices16;
         mNumIndices32 += totalNumIndices32;
+
+    }
+    //-------------------------------------------------------------------------
+    void VctVoxelizer::prepareAabbCalculatorMeshData(void)
+    {
+        if( !mGpuMeshAabbDataDirty )
+            return;
+
+        destroyAabbCalculatorMeshData();
+        const size_t totalNumMeshes = mNumUncompressedPartSubMeshes16 +
+                                      mNumUncompressedPartSubMeshes32 +
+                                      mNumCompressedPartSubMeshes16 +
+                                      mNumCompressedPartSubMeshes32;
+        mMeshAabb = mVaoManager->createUavBuffer( totalNumMeshes, sizeof(float) * 4u * 2u, 0, 0, false );
+
+        PartitionedSubMesh *partitionedSubMeshGpu =
+                reinterpret_cast<PartitionedSubMesh*>(
+                    OGRE_MALLOC_SIMD( totalNumMeshes * sizeof(PartitionedSubMesh),
+                                      MEMCATEGORY_GEOMETRY ) );
+        FreeOnDestructor partitionedSubMeshGpuPtr( partitionedSubMeshGpu );
+
+        const size_t uncompressedPartSubmeshStart16 = 0u;
+        const size_t uncompressedPartSubmeshStart32 = uncompressedPartSubmeshStart16 +
+                                                      mNumUncompressedPartSubMeshes16;
+        const size_t compressedPartSubmeshStart16   = uncompressedPartSubmeshStart32 +
+                                                      mNumUncompressedPartSubMeshes32;
+        const size_t compressedPartSubmeshStart32   = compressedPartSubmeshStart16 +
+                                                      mNumCompressedPartSubMeshes16;
+
+        MeshPtrMap::iterator itor = mMeshesV2.begin();
+        MeshPtrMap::iterator end  = mMeshesV2.end();
+
+        while( itor != end )
+        {
+            const Mesh *mesh = itor->first.get();
+            QueuedMesh &queuedMesh = itor->second;
+            const size_t numSubMeshes = queuedMesh.submeshes.size();
+            for( size_t i=0u; i<numSubMeshes; ++i )
+            {
+                VertexArrayObject *vao = mesh->getSubMesh( (uint16)(i) )->mVao[VpNormal].front();
+                IndexBufferPacked *indexBuffer = vao->getIndexBuffer();
+                const bool is16bit = indexBuffer->getIndexType() == IndexBufferPacked::IT_16BIT;
+
+                FastArray<PartitionedSubMesh>::iterator itPartSub =
+                        queuedMesh.submeshes[i].partSubMeshes.begin();
+                FastArray<PartitionedSubMesh>::iterator enPartSub =
+                        queuedMesh.submeshes[i].partSubMeshes.end();
+
+                while( itPartSub != enPartSub )
+                {
+                    if( queuedMesh.bCompressed )
+                    {
+                        if( is16bit )
+                            itPartSub->partSubMeshIdx += compressedPartSubmeshStart16;
+                        else
+                            itPartSub->partSubMeshIdx += compressedPartSubmeshStart32;
+                    }
+                    else
+                    {
+                        if( is16bit )
+                            itPartSub->partSubMeshIdx += uncompressedPartSubmeshStart16;
+                        else
+                            itPartSub->partSubMeshIdx += uncompressedPartSubmeshStart32;
+                    }
+
+                    partitionedSubMeshGpu->vbOffset = itPartSub->vbOffset;
+                    partitionedSubMeshGpu->ibOffset = itPartSub->ibOffset;
+                    partitionedSubMeshGpu->numIndices = itPartSub->numIndices;
+                    partitionedSubMeshGpu->partSubMeshIdx = itPartSub->partSubMeshIdx;
+
+//                    const bool needsAabbCalc = numSubMeshes != 1u ||
+//                                               queuedMesh.submeshes[i].partSubMeshes.size() != 1u;
+//                    if( needsAabbCalc )
+//                        partitionedSubMeshGpu->numIndices |= 0x80000000;
+
+                    ++itPartSub;
+                    ++partitionedSubMeshGpu;
+                }
+
+            }
+            ++itor;
+        }
+
+        OGRE_ASSERT_LOW( (size_t)(partitionedSubMeshGpu -
+                                  (PartitionedSubMesh*)partitionedSubMeshGpuPtr.ptr) == totalNumMeshes );
+
+        mMeshBufferData = mVaoManager->createTexBuffer( PF_FLOAT32_RGBA, totalNumMeshes,
+                                                        BT_IMMUTABLE, partitionedSubMeshGpuPtr.ptr,
+                                                        false );
+        mGpuMeshAabbDataDirty = false;
+    }
+    //-------------------------------------------------------------------------
+    void VctVoxelizer::destroyAabbCalculatorMeshData(void)
+    {
+        //if( mGpuMeshDataDirty )
+        if( mMeshBufferData )
+        {
+            mVaoManager->destroyTexBuffer( mMeshBufferData );
+            mMeshBufferData = 0;
+        }
+        if( mMeshAabb )
+        {
+            mVaoManager->destroyUavBuffer( mMeshAabb );
+            mMeshAabb = 0;
+        }
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::convertMeshUncompressed( const MeshPtr &mesh, QueuedMesh &queuedMesh,
@@ -458,22 +582,28 @@ namespace Ogre
             indexCountSplit = mDefaultIndexCountSplit;
         indexCountSplit = static_cast<uint32>( alignToNextMultiple( indexCountSplit, 3u ) );
 
+        MeshPtrMap::iterator itor = mMeshesV2.find( mesh );
+
         if( !bCompressed )
         {
+            const bool isNewEntry = itor == mMeshesV2.end();
             //Force no compression, even if the entry was already there
             QueuedMesh &queuedMesh = mMeshesV2[mesh];
+            const bool wasCompressed = queuedMesh.bCompressed;
             queuedMesh.bCompressed = false;
 
-            if( queuedMesh.submeshes.empty() )
+            if( isNewEntry )
             {
                 queuedMesh.indexCountSplit = indexCountSplit;
                 queuedMesh.submeshes.resize( mesh->getNumSubMeshes() );
             }
+
+            if( isNewEntry || queuedMesh.bCompressed != wasCompressed )
+                mGpuMeshAabbDataDirty = true;
         }
         else
         {
             //We can only request with compression if the entry wasn't already there
-            MeshPtrMap::iterator itor = mMeshesV2.find( mesh );
             if( itor == mMeshesV2.end() )
             {
                 QueuedMesh queuedMesh;
@@ -481,6 +611,7 @@ namespace Ogre
                 queuedMesh.indexCountSplit = indexCountSplit;
                 queuedMesh.submeshes.resize( mesh->getNumSubMeshes() );
                 mMeshesV2[mesh] = queuedMesh;
+                mGpuMeshAabbDataDirty = true;
             }
         }
 
@@ -515,6 +646,79 @@ namespace Ogre
             mVaoManager->destroyUavBuffer( mVertexBufferUncompressed );
             mVertexBufferUncompressed = 0;
         }
+
+        if( bForceFree )
+        {
+            mGpuMeshAabbDataDirty = true;
+            destroyAabbCalculatorMeshData();
+        }
+    }
+    //-------------------------------------------------------------------------
+    void VctVoxelizer::computeMeshAabbs(void)
+    {
+        HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
+
+        const size_t numVariants = 1u << c_numAabCalcProperties;
+
+        OGRE_STATIC_ASSERT( sizeof(mAabbCalculator) / sizeof(mAabbCalculator[0]) == numVariants );
+
+        const uint32 numMeshes[numVariants] =
+        {
+            mNumUncompressedPartSubMeshes16,
+            mNumUncompressedPartSubMeshes32,
+            mNumCompressedPartSubMeshes16,
+            mNumCompressedPartSubMeshes32
+        };
+
+        ShaderParams::Param paramMeshRange;
+        paramMeshRange.name	= "meshStart_meshEnd";
+
+        uint32 meshStart = 0u;
+
+        for( size_t i=0; i<numVariants; ++i )
+        {
+            if( numMeshes[i] == 0u )
+                continue;
+
+            const bool compressedVf = (i & VoxelizerJobSetting::CompressedVertexFormat) != 0;
+            const bool hasIndices32 = (i & VoxelizerJobSetting::Index32bit) != 0;
+
+            DescriptorSetUav::BufferSlot bufferSlot( DescriptorSetUav::BufferSlot::makeEmpty() );
+            bufferSlot.buffer = compressedVf ? mVertexBufferCompressed : mVertexBufferUncompressed;
+            mAabbCalculator[i]->_setUavBuffer( 0, bufferSlot );
+            bufferSlot.buffer = hasIndices32 ? mIndexBuffer32 : mIndexBuffer16;
+            mAabbCalculator[i]->_setUavBuffer( 1, bufferSlot );
+            bufferSlot.buffer = mMeshAabb;
+            mAabbCalculator[i]->_setUavBuffer( 2, bufferSlot );
+
+            DescriptorSetTexture2::BufferSlot texBufSlot(DescriptorSetTexture2::BufferSlot::makeEmpty());
+            texBufSlot.buffer = mMeshBufferData;
+            mAabbCalculator[i]->setTexBuffer( 0, texBufSlot );
+
+            uint32 meshRange[2] = { meshStart, meshStart + numMeshes[i] };
+
+            paramMeshRange.setManualValue( meshRange, 2u );
+
+            ShaderParams &shaderParams = mAabbCalculator[i]->getShaderParams( "default" );
+            shaderParams.mParams.clear();
+            shaderParams.mParams.push_back( paramMeshRange );
+            shaderParams.setDirty();
+
+            hlmsCompute->dispatch( mAabbCalculator[i], 0, 0 );
+            meshStart += numMeshes[i];
+        }
+
+        TODO_add_barrier;
+
+        DescriptorSetUav::BufferSlot bufferSlot( DescriptorSetUav::BufferSlot::makeEmpty() );
+        bufferSlot.buffer = mInstanceBuffer;
+        mAabbWorldSpaceJob->_setUavBuffer( 0, bufferSlot );
+
+        DescriptorSetTexture2::BufferSlot texBufSlot(DescriptorSetTexture2::BufferSlot::makeEmpty());
+        texBufSlot.buffer = mMeshAabb->getAsTexBufferView( PF_FLOAT32_RGBA );
+        mAabbWorldSpaceJob->setTexBuffer( 0, texBufSlot );
+
+        hlmsCompute->dispatch( mAabbWorldSpaceJob, 0, 0 );
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::buildMeshBuffers(void)
@@ -523,6 +727,11 @@ namespace Ogre
         mNumVerticesUncompressed    = 0;
         mNumIndices16 = 0;
         mNumIndices32 = 0;
+
+        mNumUncompressedPartSubMeshes16 = 0;
+        mNumUncompressedPartSubMeshes32 = 0;
+        mNumCompressedPartSubMeshes16   = 0;
+        mNumCompressedPartSubMeshes32   = 0;
 
         MeshPtrMap::iterator itor = mMeshesV2.begin();
         MeshPtrMap::iterator end  = mMeshesV2.end();
@@ -756,6 +965,7 @@ namespace Ogre
                     queuedInstance.vertexBufferStart    = partSubMesh.vbOffset;
                     queuedInstance.indexBufferStart     = partSubMesh.ibOffset;
                     queuedInstance.numIndices           = partSubMesh.numIndices;
+                    queuedInstance.partSubMeshIdx       = partSubMesh.partSubMeshIdx;
                     queuedInstance.needsAabbUpdate      = numPartitions != 1u || numSubItems != 1u;
                     mBuckets[bucket].push_back( queuedInstance );
                 }
@@ -851,10 +1061,14 @@ namespace Ogre
                         *instanceBuffer++ = worldAabb.mHalfSize.z;
                         *AS_U32PTR( instanceBuffer ) = instance.materialIdx;        ++instanceBuffer;
 
+                        uint32 partSubMeshIdx = instance.partSubMeshIdx;
+                        if( instance.needsAabbUpdate )
+                            partSubMeshIdx |= 0x80000000;
+
                         *AS_U32PTR( instanceBuffer ) = instance.vertexBufferStart;  ++instanceBuffer;
                         *AS_U32PTR( instanceBuffer ) = instance.indexBufferStart;   ++instanceBuffer;
                         *AS_U32PTR( instanceBuffer ) = instance.numIndices;         ++instanceBuffer;
-                        *AS_U32PTR( instanceBuffer ) = instance.needsAabbUpdate ? 1u:0u;++instanceBuffer;
+                        *AS_U32PTR( instanceBuffer ) = partSubMeshIdx;              ++instanceBuffer;
 
                         #undef AS_U32PTR
                     }
@@ -920,6 +1134,8 @@ namespace Ogre
             TODO_clear_voxels;
         }
 
+        mRenderSystem->endRenderPassDescriptor();
+
         buildMeshBuffers();
 
         createVoxelTextures();
@@ -974,22 +1190,6 @@ namespace Ogre
             mComputeJobs[i]->setTexBuffer( 0, texBufSlot );
         }
 
-        for( size_t i=0; i<sizeof(mAabbCalculator) / sizeof(mAabbCalculator[0]); ++i )
-        {
-            const bool compressedVf = (i & VoxelizerJobSetting::CompressedVertexFormat) != 0;
-            const bool hasIndices32 = (i & VoxelizerJobSetting::Index32bit) != 0;
-
-            DescriptorSetUav::BufferSlot bufferSlot( DescriptorSetUav::BufferSlot::makeEmpty() );
-            bufferSlot.buffer = compressedVf ? mVertexBufferCompressed : mVertexBufferUncompressed;
-            mAabbCalculator[i]->_setUavBuffer( 0, bufferSlot );
-            bufferSlot.buffer = hasIndices32 ? mIndexBuffer32 : mIndexBuffer16;
-            mAabbCalculator[i]->_setUavBuffer( 1, bufferSlot );
-            bufferSlot.buffer = mInstanceBuffer;
-            mAabbCalculator[i]->_setUavBuffer( 2, bufferSlot );
-        }
-
-        mRenderSystem->endRenderPassDescriptor();
-
         HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
 
         float fClearValue[4];
@@ -1037,7 +1237,7 @@ namespace Ogre
 
                 bucket.job->setConstBuffer( 0, bucket.materialBuffer );
 
-                uint32 texUnit = 1u;
+                uint8 texUnit = 1u;
 
                 DescriptorSetTexture2::TextureSlot
                         texSlot( DescriptorSetTexture2::TextureSlot::makeEmpty() );

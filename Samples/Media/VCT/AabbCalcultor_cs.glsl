@@ -26,21 +26,23 @@ layout(std430, binding = 1) buffer indexBufferLayout
 {
 	uint indexBuffer[];
 };
-layout(std430, binding = 2) buffer instanceBufferLayout
+layout(std430, binding = 2) buffer outMeshAabbLayout
 {
-	InstanceBuffer instanceBuffer[];
+	MeshAabb outMeshAabb[];
 };
 
 layout( local_size_x = @value( threads_per_group_x ),
 		local_size_y = @value( threads_per_group_y ),
 		local_size_z = @value( threads_per_group_z ) ) in;
 
+uniform usamplerBuffer inMeshBuffer;
+
 @insertpiece( HeaderCS )
 
-uniform uint2 instanceStart_instanceEnd;
+uniform uint2 meshStart_meshEnd;
 
-#define p_instanceStart instanceStart_instanceEnd.x
-#define p_instanceEnd instanceStart_instanceEnd.y
+#define p_meshStart meshStart_meshEnd.x
+#define p_meshEnd meshStart_meshEnd.y
 
 //in uvec3 gl_NumWorkGroups;
 //in uvec3 gl_WorkGroupID;

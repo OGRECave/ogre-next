@@ -2,101 +2,77 @@
 //#include "SyntaxHighlightingMisc.h"
 
 @piece( PreBindingsHeaderCS )
-    @property( !compressed_vertex_format )
-	    struct Vertex
+	@property( !compressed_vertex_format )
+		struct Vertex
 		{
-		    float4 pos_normX;
+			float4 pos_normX;
 			float4 normYZ_uv;
 		};
 	@else
-	    struct Vertex
+		struct Vertex
 		{
-		    uint4 pos_normal_uv;
+			uint4 pos_normal_uv;
 		};
 	@end
 
-	struct InstanceBuffer
+	struct MeshAabb
 	{
-		float4 worldTransformRow0;
-		float4 worldTransformRow1;
-		float4 worldTransformRow2;
-		float4 aabb0;
-		float4 aabb1;
-		uint4 meshData;
+		float4 center;
+		float4 halfSize;
 	};
 @end
 
 @piece( HeaderCS )
-    @insertpiece( Common_Matrix_DeclLoadOgreFloat4x3 )
-
-    struct Aabb
+	struct Aabb
 	{
-	    float3 center;
+		float3 center;
 		float3 halfSize;
 	};
 
-    struct Mesh
+	struct PartitionedSubMesh
 	{
-	    uint vertexBufferStart;
+		uint vertexBufferStart;
 		uint indexBufferStart;
 		uint numIndices;
+		uint padding;
 	};
 
-    struct Instance
+	PartitionedSubMesh getPartitionedSubMesh( uint meshIdx )
 	{
-		ogre_float4x3 worldTransform;
-//		uint materialIdx;
-		Aabb bounds;
-
-		Mesh mesh;
-		bool needsAabbUpdate;
-	};
-
-    Instance getInstance( uint instanceIdx )
-	{
-	    Instance retVal;
-		retVal.worldTransform = makeOgreFloat4x3( instanceBuffer[instanceIdx].worldTransformRow0,
-												  instanceBuffer[instanceIdx].worldTransformRow1,
-												  instanceBuffer[instanceIdx].worldTransformRow2 );
-
-		retVal.bounds.center	= instanceBuffer[instanceIdx].aabb0.xyz;
-		retVal.bounds.halfSize	= instanceBuffer[instanceIdx].aabb1.xyz;
-
-//		retVal.materialIdx	= floatBitsToUint( instanceBuffer[instanceIdx].aabb1.w );
-
-		retVal.mesh.vertexBufferStart	= instanceBuffer[instanceIdx].meshData.x;
-		retVal.mesh.indexBufferStart	= instanceBuffer[instanceIdx].meshData.y;
-		retVal.mesh.numIndices			= instanceBuffer[instanceIdx].meshData.z;
-		retVal.needsAabbUpdate			= instanceBuffer[instanceIdx].meshData.w != 0u;
-
-        return retVal;
+		uint4 meshData = bufferFetch( inMeshBuffer, meshIdx );
+		PartitionedSubMesh retVal;
+		retVal.vertexBufferStart	= meshData.x;
+		retVal.indexBufferStart		= meshData.y;
+		retVal.numIndices			= meshData.z;
+		retVal.padding				= 0u;
+		return retVal;
 	}
 
-    uint getIndexBufferIndex( uint index )
+	uint getIndexBufferIndex( uint index )
 	{
 	@property( !index_32bit )
-	    uint retVal = indexBuffer[index >> 1u];
+		uint retVal = indexBuffer[index >> 1u];
 		retVal = ((index & 0x01u) != 0u) ? (retVal >> 16u) : (retVal & 0xFFFFu);
 	@else
-	    uint retVal = indexBuffer[index];
+		uint retVal = indexBuffer[index];
 	@end
-	    return retVal;
+		return retVal;
 	}
 
-	float3 getVertexPos( uint indexId, Mesh mesh )
+	float3 getVertexPos( uint indexId, PartitionedSubMesh mesh )
 	{
-	    float3 retVal;
+		float3 retVal;
 
 		uint idx = getIndexBufferIndex( mesh.indexBufferStart + indexId );
 		@property( !compressed_vertex_format )
-		    retVal = vertexBuffer[idx + mesh.vertexBufferStart].pos_normX.xyz;
+			retVal = vertexBuffer[idx + mesh.vertexBufferStart].pos_normX.xyz;
 		@else
-		    uint4 pos_normal_uv = vertexBuffer[idx + mesh.vertexBufferStart].pos_normal_uv;
+			uint4 pos_normal_uv = vertexBuffer[idx + mesh.vertexBufferStart].pos_normal_uv;
 			retVal.xy	= unpackSnorm2x16( pos_normal_uv.x );
 			retVal.z    = unpackSnorm2x16( pos_normal_uv.y ).x;
 		@end
 
-        return retVal;
+		return retVal;
 	}
 @end
 
@@ -107,59 +83,50 @@
 //in uint  gl_LocalInvocationIndex;
 
 @piece( BodyCS )
-    for( uint i=p_instanceStart; i<p_instanceEnd; ++i )
+	for( uint i=p_meshStart; i<p_meshEnd; ++i )
 	{
-	    Instance instance = getInstance( i );
+		PartitionedSubMesh mesh = getPartitionedSubMesh( i );
 
-		if( instance.needsAabbUpdate )
+		float3 minAabb = float3( 3.402823e+38f, 3.402823e+38f, 3.402823e+38f );
+		float3 maxAabb = float3( -3.402823e+38f, -3.402823e+38f, -3.402823e+38f );
+
+		for( uint j=0u; j<mesh.numIndices; j += @value( threads_per_group_x )u )
 		{
-			float3 minAabb = float3( 3.402823e+38f, 3.402823e+38f, 3.402823e+38f );
-			float3 maxAabb = float3( -3.402823e+38f, -3.402823e+38f, -3.402823e+38f );
+			uint indexId = min( j, mesh.numIndices - 1u );
+			float3 vertexPos = getVertexPos( indexId, mesh );
+			minAabb.xyz = min( minAabb.xyz, vertexPos.xyz );
+			maxAabb.xyz = max( maxAabb.xyz, vertexPos.xyz );
+		}
 
-			for( uint i=0u; indexId<instance.mesh.numIndices; i += @value( threads_per_group_x )u )
+		//Now we have threads_per_group_x threads with the AABB data.
+		//We must perform a parallel reduction
+		g_minAabb[gl_LocalInvocationIndex] = minAabb;
+		g_maxAabb[gl_LocalInvocationIndex] = maxAabb;
+
+		__sharedOnlyBarrier();
+
+		for( uint s=@value( threads_per_group_x )/2u; s > 0u; s >>= 1u )
+		{
+			if( gl_LocalInvocationIndex < s )
 			{
-				uint indexId = min( i, instance.mesh.numIndices - 1u );
-				float3 vertexPos = getVertexPos( indexId, instance.mesh );
-				minAabb.xyz = min( minAabb.xyz, vertexPos.xyz );
-				maxAabb.xyz = max( maxAabb.xyz, vertexPos.xyz );
+				g_minAabb[gl_LocalInvocationIndex] = min( g_minAabb[gl_LocalInvocationIndex],
+														  g_minAabb[gl_LocalInvocationIndex + s] );
+				g_maxAabb[gl_LocalInvocationIndex] = max( g_maxAabb[gl_LocalInvocationIndex],
+														  g_maxAabb[gl_LocalInvocationIndex + s] );
 			}
-
-			//Now we have threads_per_group_x threads with the AABB data.
-			//We must perform a parallel reduction
-			g_minAabb[gl_LocalInvocationIndex] = minAabb;
-			g_maxAabb[gl_LocalInvocationIndex] = maxAabb;
-
 			__sharedOnlyBarrier();
+		}
 
-			for( uint s=@value( threads_per_group_x )/2u; s > 0u; s >>= 1u )
-			{
-				if( gl_LocalInvocationIndex < s )
-				{
-					g_minAabb[gl_LocalInvocationIndex] = min( g_minAabb[gl_LocalInvocationIndex],
-															  g_minAabb[gl_LocalInvocationIndex + s] );
-					g_maxAabb[gl_LocalInvocationIndex] = max( g_maxAabb[gl_LocalInvocationIndex],
-															  g_maxAabb[gl_LocalInvocationIndex + s] );
-				}
-				__sharedOnlyBarrier();
-			}
+		if( gl_LocalInvocationIndex == 0u )
+		{
+			aabbMin = g_minAabb[0];
+			aabbMax = g_maxAabb[0];
 
-			if( gl_LocalInvocationIndex == 0u )
-			{
-				aabbMin = g_minAabb[0];
-				aabbMax = g_maxAabb[0];
+			float3 aabbCenter	= (aabbMin + aabbMax) * 0.5f;
+			float3 aabbHalfSize	= (aabbMax - aabbMin) * 0.5f;
 
-				float3 aabbCenter	= (aabbMin + aabbMax) * 0.5f;
-				float3 aabbHalfSize	= (aabbMax - aabbMin) * 0.5f;
-
-				float3 worldAabbCenter = mul( float4( aabbCenter, 1.0f ), instance.worldTransform ).xyz;
-				float3 worldAabbHalfSize;
-				worldAabbHalfSize.x = dot( abs( instance.worldTransform[0] ), aabbHalfSize );
-				worldAabbHalfSize.y = dot( abs( instance.worldTransform[1] ), aabbHalfSize );
-				worldAabbHalfSize.z = dot( abs( instance.worldTransform[2] ), aabbHalfSize );
-
-				instanceBuffer[instanceIdx].aabb0.xyz = worldAabbCenter.xyz;
-				instanceBuffer[instanceIdx].aabb1.xyz = worldAabbHalfSize.xyz;
-			}
+			outMeshAabb[i].center.xyzw	= float4( aabbCenter.xyz, 1.0f );
+			outMeshAabb[i].halfSize.xyz	= float4( aabbHalfSize.xyz, 0.0f );
 		}
 	}
 @end
