@@ -42,11 +42,11 @@ namespace Ogre
     {
         enum VoxelizerJobSetting
         {
-            HasDiffuseTex           = 1u << 0u,
-            HasEmissiveTex          = 1u << 1u,
-            EmissiveIsDiffuseTex    = 1u << 2u,
-            Index32bit              = 1u << 3u,
-            CompressedVertexFormat  = 1u << 4u,
+            Index32bit              = 1u << 0u,
+            CompressedVertexFormat  = 1u << 1u,
+            HasDiffuseTex           = 1u << 2u,
+            HasEmissiveTex          = 1u << 3u,
+            EmissiveIsDiffuseTex    = 1u << 4u,
         };
     }
 
@@ -147,7 +147,7 @@ namespace Ogre
         /// However the way we will be using may abuse the cache too much, thus we pre-set
         /// all variants as long as the number of variants is manageable.
         HlmsComputeJob  *mComputeJobs[1u<<5u];
-        HlmsComputeJob  *mAabbCalculator;
+        HlmsComputeJob  *mAabbCalculator[1u<<2u];
 
         float           *mCpuInstanceBuffer;
         UavBufferPacked *mInstanceBuffer;

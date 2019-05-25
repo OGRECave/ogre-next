@@ -63,6 +63,7 @@ THE SOFTWARE.
 namespace Ogre
 {
     static const size_t c_numVctProperties = 5u;
+    static const size_t c_numAabCalcProperties = 2u;
 
     struct VctVoxelizerProp
     {
@@ -83,16 +84,15 @@ namespace Ogre
 
     const IdString* VctVoxelizerProp::AllProps[c_numVctProperties] =
     {
+        &VctVoxelizerProp::Index32bit,
+        &VctVoxelizerProp::CompressedVertexFormat,
         &VctVoxelizerProp::HasDiffuseTex,
         &VctVoxelizerProp::HasEmissiveTex,
         &VctVoxelizerProp::EmissiveIsDiffuseTex,
-        &VctVoxelizerProp::Index32bit,
-        &VctVoxelizerProp::CompressedVertexFormat,
     };
     //-------------------------------------------------------------------------
     VctVoxelizer::VctVoxelizer( IdType id, RenderSystem *renderSystem, HlmsManager *hlmsManager ) :
         IdObject( id ),
-        mAabbCalculator( 0 ),
         mCpuInstanceBuffer( 0 ),
         mInstanceBuffer( 0 ),
         mInstanceBufferAsTex( 0 ),
@@ -126,6 +126,7 @@ namespace Ogre
         mMaxRegion( Aabb::BOX_INFINITE )
     {
         memset( mComputeJobs, 0, sizeof(mComputeJobs) );
+        memset( mAabbCalculator, 0, sizeof(mAabbCalculator) );
         createComputeJobs();
     }
     //-------------------------------------------------------------------------
@@ -177,7 +178,7 @@ namespace Ogre
                          "VctVoxelizer::createComputeJobs" );
         }
 
-        const size_t numVariants = 1u << c_numVctProperties;
+        size_t numVariants = 1u << c_numVctProperties;
 
         char tmpBuffer[128];
         LwString jobName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
@@ -219,12 +220,35 @@ namespace Ogre
                 for( size_t property=0; property<c_numVctProperties; ++property )
                 {
                     const int32 propValue = variant & (1u << property) ? 1 : 0;
-                    voxelizerJob->setProperty( *VctVoxelizerProp::AllProps[property], propValue );
+                    mComputeJobs[variant]->setProperty( *VctVoxelizerProp::AllProps[property],
+                                                        propValue );
                 }
             }
         }
 
-        mAabbCalculator = hlmsCompute->findComputeJob( "VCT/AabbCalculator" );
+
+        HlmsComputeJob *aabbCalc = hlmsCompute->findComputeJob( "VCT/AabbCalculator" );
+
+        numVariants = 1u << c_numAabCalcProperties;
+        for( size_t variant=0u; variant<numVariants; ++variant )
+        {
+            jobName.clear();
+            jobName.a( "VCT/AabbCalculator/", static_cast<uint32>( variant ) );
+
+            mAabbCalculator[variant] = hlmsCompute->findComputeJobNoThrow( jobName.c_str() );
+
+            if( !mAabbCalculator[variant] )
+            {
+                mAabbCalculator[variant] = aabbCalc->clone( jobName.c_str() );
+
+                for( size_t property=0; property<c_numAabCalcProperties; ++property )
+                {
+                    const int32 propValue = variant & (1u << property) ? 1 : 0;
+                    mAabbCalculator[variant]->setProperty( *VctVoxelizerProp::AllProps[property],
+                                                           propValue );
+                }
+            }
+        }
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::countBuffersSize( const MeshPtr &mesh, QueuedMesh &queuedMesh )
@@ -948,6 +972,20 @@ namespace Ogre
             DescriptorSetTexture2::BufferSlot texBufSlot(DescriptorSetTexture2::BufferSlot::makeEmpty());
             texBufSlot.buffer = mInstanceBufferAsTex;
             mComputeJobs[i]->setTexBuffer( 0, texBufSlot );
+        }
+
+        for( size_t i=0; i<sizeof(mAabbCalculator) / sizeof(mAabbCalculator[0]); ++i )
+        {
+            const bool compressedVf = (i & VoxelizerJobSetting::CompressedVertexFormat) != 0;
+            const bool hasIndices32 = (i & VoxelizerJobSetting::Index32bit) != 0;
+
+            DescriptorSetUav::BufferSlot bufferSlot( DescriptorSetUav::BufferSlot::makeEmpty() );
+            bufferSlot.buffer = compressedVf ? mVertexBufferCompressed : mVertexBufferUncompressed;
+            mAabbCalculator[i]->_setUavBuffer( 0, bufferSlot );
+            bufferSlot.buffer = hasIndices32 ? mIndexBuffer32 : mIndexBuffer16;
+            mAabbCalculator[i]->_setUavBuffer( 1, bufferSlot );
+            bufferSlot.buffer = mInstanceBuffer;
+            mAabbCalculator[i]->_setUavBuffer( 2, bufferSlot );
         }
 
         mRenderSystem->endRenderPassDescriptor();

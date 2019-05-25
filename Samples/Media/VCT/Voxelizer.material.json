@@ -139,7 +139,15 @@
             "threads_per_group" : [1024, 1, 1],
 
             "source" : "AabbCalcultor_cs",
-            "pieces" : ["CrossPlatformSettings_piece_all", "AabbCalcultor_piece_cs.any"]
+            "pieces" : ["CrossPlatformSettings_piece_all", "AabbCalcultor_piece_cs.any"],
+
+            "uav_units" : 3,
+
+            "properties" :
+            {
+                "index_32bit" : 0,
+                "compressed_vertex_format" : 0
+            }
         }
 	}
 }
