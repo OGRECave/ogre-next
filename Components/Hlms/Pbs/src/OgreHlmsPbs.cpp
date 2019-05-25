@@ -783,10 +783,6 @@ namespace Ogre
                      itor->keyName != HlmsPsoProp::InputLayoutId &&
                      itor->keyName != HlmsBaseProp::Skeleton &&
                      itor->keyName != HlmsBaseProp::Pose &&
-                     itor->keyName != HlmsBaseProp::Pose1 &&
-                     itor->keyName != HlmsBaseProp::Pose2 &&
-                     itor->keyName != HlmsBaseProp::Pose3 &&
-                     itor->keyName != HlmsBaseProp::Pose4 &&
                      itor->keyName != HlmsBaseProp::BonesPerVertex &&
                      itor->keyName != HlmsBaseProp::DualParaboloidMapping &&
                      itor->keyName != HlmsBaseProp::AlphaTest &&

@@ -139,10 +139,11 @@ out block
 	int vertexID = gl_VertexID - baseVertexID;
 	vec4 poseWeights = bufferFetch( worldMatBuf, poseDataStart + 1 );
 
-	@property( hlms_pose_1 )
+	@psub( MoreThanOnePose, hlms_pose, 1 )
+	@property( !MoreThanOnePose )
 		vec4 posePos = bufferFetch( poseBuf, vertexID );
 		inputPos += posePos * poseWeights.x;
-	@end @property( !hlms_pose_1 )
+	@end @property( MoreThanOnePose )
 		int numVertices = floatBitsToInt( poseData.y );
 		vec4 posePos;
 		@foreach( hlms_pose, n )

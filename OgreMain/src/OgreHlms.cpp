@@ -86,10 +86,6 @@ namespace Ogre
     const IdString HlmsBaseProp::Skeleton           = IdString( "hlms_skeleton" );
     const IdString HlmsBaseProp::BonesPerVertex     = IdString( "hlms_bones_per_vertex" );
     const IdString HlmsBaseProp::Pose               = IdString( "hlms_pose" );
-    const IdString HlmsBaseProp::Pose1              = IdString( "hlms_pose_1" );
-    const IdString HlmsBaseProp::Pose2              = IdString( "hlms_pose_2" );
-    const IdString HlmsBaseProp::Pose3              = IdString( "hlms_pose_3" );
-    const IdString HlmsBaseProp::Pose4              = IdString( "hlms_pose_4" );
 
     const IdString HlmsBaseProp::Normal             = IdString( "hlms_normal" );
     const IdString HlmsBaseProp::QTangent           = IdString( "hlms_qtangent" );
@@ -2445,10 +2441,6 @@ namespace Ogre
         
         unsigned short numPoseAnimations = renderable->getNumPoseAnimations();
         setProperty( HlmsBaseProp::Pose, numPoseAnimations );
-        setProperty( HlmsBaseProp::Pose1, numPoseAnimations == 1 );
-        setProperty( HlmsBaseProp::Pose2, numPoseAnimations == 2 );
-        setProperty( HlmsBaseProp::Pose3, numPoseAnimations == 3 );
-        setProperty( HlmsBaseProp::Pose4, numPoseAnimations == 4 );
 
         uint16 numTexCoords = 0;
         if( renderable->getVaos( VpNormal ).empty() )
