@@ -44,8 +44,8 @@
 	Aabb getMeshAabb( uint localAabbIdx )
 	{
 		Aabb retVal;
-		retVal.center	= bufferFetch( inMeshAabb, localAabbIdx << 1u ).xyz;
-		retVal.halfSize	= bufferFetch( inMeshAabb, (localAabbIdx << 1u) + 1u ).xyz;
+		retVal.center	= bufferFetch( inMeshAabb, rint(localAabbIdx << 1u) ).xyz;
+		retVal.halfSize	= bufferFetch( inMeshAabb, rint((localAabbIdx << 1u) + 1u) ).xyz;
 		return retVal;
 	}
 @end
@@ -64,9 +64,9 @@
 	{
 		float3 worldAabbCenter = mul( float4( meshAabb.center, 1.0f ), instance.worldTransform ).xyz;
 		float3 worldAabbHalfSize;
-		worldAabbHalfSize.x = dot( abs( instance.worldTransform[0] ), meshAabb.halfSize );
-		worldAabbHalfSize.y = dot( abs( instance.worldTransform[1] ), meshAabb.halfSize );
-		worldAabbHalfSize.z = dot( abs( instance.worldTransform[2] ), meshAabb.halfSize );
+		worldAabbHalfSize.x = dot( abs( instance.worldTransform[0].xyz ), meshAabb.halfSize );
+		worldAabbHalfSize.y = dot( abs( instance.worldTransform[1].xyz ), meshAabb.halfSize );
+		worldAabbHalfSize.z = dot( abs( instance.worldTransform[2].xyz ), meshAabb.halfSize );
 
 		instanceBuffer[gl_GlobalInvocationID.x].aabb0.xyz = worldAabbCenter.xyz;
 		instanceBuffer[gl_GlobalInvocationID.x].aabb1.xyz = worldAabbHalfSize.xyz;

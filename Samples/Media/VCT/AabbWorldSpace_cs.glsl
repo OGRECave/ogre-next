@@ -12,7 +12,11 @@
 
 #define ogre_float4x3 mat3x4
 
+#define rint int
+
 #define mul( x, y ) ((x) * (y))
+
+#define bufferFetch texelFetch
 
 @insertpiece( PreBindingsHeaderCS )
 

@@ -94,6 +94,7 @@ namespace Ogre
     VctVoxelizer::VctVoxelizer( IdType id, RenderSystem *renderSystem, HlmsManager *hlmsManager ) :
         IdObject( id ),
         mAabbWorldSpaceJob( 0 ),
+        mTotalNumInstances( 0 ),
         mCpuInstanceBuffer( 0 ),
         mInstanceBuffer( 0 ),
         mInstanceBufferAsTex( 0 ),
@@ -299,8 +300,8 @@ namespace Ogre
                     ibOffset = mNumIndices16 + totalNumIndices16;
                     totalNumIndices16 += numIndices;
 
-                    partSubMeshIdx = queuedMesh.bCompressed ? &mNumUncompressedPartSubMeshes16 :
-                                                              &mNumCompressedPartSubMeshes16;
+                    partSubMeshIdx = queuedMesh.bCompressed ? &mNumCompressedPartSubMeshes16 :
+                                                              &mNumUncompressedPartSubMeshes16;
 
                     //BufferPacked::copyTo needs to be multiple of 2, but our compute shader
                     //must start reading from the correct offset and the right number
@@ -313,8 +314,8 @@ namespace Ogre
                 }
                 else
                 {
-                    partSubMeshIdx = queuedMesh.bCompressed ? &mNumUncompressedPartSubMeshes32 :
-                                                              &mNumCompressedPartSubMeshes32;
+                    partSubMeshIdx = queuedMesh.bCompressed ? &mNumCompressedPartSubMeshes32 :
+                                                              &mNumUncompressedPartSubMeshes32;
                     ibOffset = mNumIndices32 + totalNumIndices32;
                     totalNumIndices32 += numIndices;
                 }
@@ -349,7 +350,7 @@ namespace Ogre
                 partSubMesh.numIndices = std::min( numIndices - queuedMesh.indexCountSplit * partition,
                                                    queuedMesh.indexCountSplit );
                 partSubMesh.partSubMeshIdx = *partSubMeshIdx;
-                ++partSubMeshIdx;
+                *partSubMeshIdx += 1u;
             }
 
             //Request to download the vertex buffer(s) to CPU (it will be mapped soon)
@@ -381,7 +382,8 @@ namespace Ogre
                                       mNumUncompressedPartSubMeshes32 +
                                       mNumCompressedPartSubMeshes16 +
                                       mNumCompressedPartSubMeshes32;
-        mMeshAabb = mVaoManager->createUavBuffer( totalNumMeshes, sizeof(float) * 4u * 2u, 0, 0, false );
+        mMeshAabb = mVaoManager->createUavBuffer( totalNumMeshes, sizeof(float) * 4u * 2u,
+                                                  BB_FLAG_TEX, 0, false );
 
         PartitionedSubMesh *partitionedSubMeshGpu =
                 reinterpret_cast<PartitionedSubMesh*>(
@@ -654,73 +656,6 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void VctVoxelizer::computeMeshAabbs(void)
-    {
-        HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
-
-        const size_t numVariants = 1u << c_numAabCalcProperties;
-
-        OGRE_STATIC_ASSERT( sizeof(mAabbCalculator) / sizeof(mAabbCalculator[0]) == numVariants );
-
-        const uint32 numMeshes[numVariants] =
-        {
-            mNumUncompressedPartSubMeshes16,
-            mNumUncompressedPartSubMeshes32,
-            mNumCompressedPartSubMeshes16,
-            mNumCompressedPartSubMeshes32
-        };
-
-        ShaderParams::Param paramMeshRange;
-        paramMeshRange.name	= "meshStart_meshEnd";
-
-        uint32 meshStart = 0u;
-
-        for( size_t i=0; i<numVariants; ++i )
-        {
-            if( numMeshes[i] == 0u )
-                continue;
-
-            const bool compressedVf = (i & VoxelizerJobSetting::CompressedVertexFormat) != 0;
-            const bool hasIndices32 = (i & VoxelizerJobSetting::Index32bit) != 0;
-
-            DescriptorSetUav::BufferSlot bufferSlot( DescriptorSetUav::BufferSlot::makeEmpty() );
-            bufferSlot.buffer = compressedVf ? mVertexBufferCompressed : mVertexBufferUncompressed;
-            mAabbCalculator[i]->_setUavBuffer( 0, bufferSlot );
-            bufferSlot.buffer = hasIndices32 ? mIndexBuffer32 : mIndexBuffer16;
-            mAabbCalculator[i]->_setUavBuffer( 1, bufferSlot );
-            bufferSlot.buffer = mMeshAabb;
-            mAabbCalculator[i]->_setUavBuffer( 2, bufferSlot );
-
-            DescriptorSetTexture2::BufferSlot texBufSlot(DescriptorSetTexture2::BufferSlot::makeEmpty());
-            texBufSlot.buffer = mMeshBufferData;
-            mAabbCalculator[i]->setTexBuffer( 0, texBufSlot );
-
-            uint32 meshRange[2] = { meshStart, meshStart + numMeshes[i] };
-
-            paramMeshRange.setManualValue( meshRange, 2u );
-
-            ShaderParams &shaderParams = mAabbCalculator[i]->getShaderParams( "default" );
-            shaderParams.mParams.clear();
-            shaderParams.mParams.push_back( paramMeshRange );
-            shaderParams.setDirty();
-
-            hlmsCompute->dispatch( mAabbCalculator[i], 0, 0 );
-            meshStart += numMeshes[i];
-        }
-
-        TODO_add_barrier;
-
-        DescriptorSetUav::BufferSlot bufferSlot( DescriptorSetUav::BufferSlot::makeEmpty() );
-        bufferSlot.buffer = mInstanceBuffer;
-        mAabbWorldSpaceJob->_setUavBuffer( 0, bufferSlot );
-
-        DescriptorSetTexture2::BufferSlot texBufSlot(DescriptorSetTexture2::BufferSlot::makeEmpty());
-        texBufSlot.buffer = mMeshAabb->getAsTexBufferView( PF_FLOAT32_RGBA );
-        mAabbWorldSpaceJob->setTexBuffer( 0, texBufSlot );
-
-        hlmsCompute->dispatch( mAabbWorldSpaceJob, 0, 0 );
-    }
-    //-------------------------------------------------------------------------
     void VctVoxelizer::buildMeshBuffers(void)
     {
         mNumVerticesCompressed      = 0;
@@ -792,6 +727,8 @@ namespace Ogre
                                            mVertexBufferUncompressed->getTotalSizeBytes() ) );
 
         vbUncomprStagingBuffer->removeReferenceCount();
+
+        prepareAabbCalculatorMeshData();
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::createVoxelTextures(void)
@@ -988,7 +925,8 @@ namespace Ogre
         }
 
         const size_t structStride = sizeof(float) * 4u * 6u;
-        const size_t elementCount = instanceCount * mOctants.size();
+        const size_t elementCount = alignToNextMultiple( instanceCount * mOctants.size(),
+                                                         mAabbWorldSpaceJob->getThreadsPerGroupX() );
 
         if( !mInstanceBuffer || elementCount > mInstanceBuffer->getNumElements() )
         {
@@ -1084,8 +1022,85 @@ namespace Ogre
 
         OGRE_ASSERT_LOW( (size_t)(instanceBuffer - instanceBufferStart) * sizeof(float) <=
                          mInstanceBuffer->getTotalSizeBytes() );
+
+        mTotalNumInstances = (instanceBuffer - instanceBufferStart) / (4u * (3u + 3u));
+
+        //Fill the remaining bytes with 0 so that mAabbWorldSpaceJob ignores those
+        memset( instanceBuffer, 0, mInstanceBuffer->getTotalSizeBytes() -
+                (static_cast<size_t>(instanceBuffer - instanceBufferStart) * sizeof(float)) );
 //        mInstanceBuffer->unmap( UO_UNMAP_ALL );
         mInstanceBuffer->upload( mCpuInstanceBuffer, 0u, mInstanceBuffer->getNumElements() );
+    }
+    //-------------------------------------------------------------------------
+    void VctVoxelizer::computeMeshAabbs(void)
+    {
+        HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
+
+        const size_t numVariants = 1u << c_numAabCalcProperties;
+
+        OGRE_STATIC_ASSERT( sizeof(mAabbCalculator) / sizeof(mAabbCalculator[0]) == numVariants );
+
+        const uint32 numMeshes[numVariants] =
+        {
+            mNumUncompressedPartSubMeshes16,
+            mNumUncompressedPartSubMeshes32,
+            mNumCompressedPartSubMeshes16,
+            mNumCompressedPartSubMeshes32
+        };
+
+        ShaderParams::Param paramMeshRange;
+        paramMeshRange.name	= "meshStart_meshEnd";
+
+        uint32 meshStart = 0u;
+
+        for( size_t i=0; i<numVariants; ++i )
+        {
+            if( numMeshes[i] == 0u )
+                continue;
+
+            const bool compressedVf = (i & VoxelizerJobSetting::CompressedVertexFormat) != 0;
+            const bool hasIndices32 = (i & VoxelizerJobSetting::Index32bit) != 0;
+
+            DescriptorSetUav::BufferSlot bufferSlot( DescriptorSetUav::BufferSlot::makeEmpty() );
+            bufferSlot.buffer = compressedVf ? mVertexBufferCompressed : mVertexBufferUncompressed;
+            mAabbCalculator[i]->_setUavBuffer( 0, bufferSlot );
+            bufferSlot.buffer = hasIndices32 ? mIndexBuffer32 : mIndexBuffer16;
+            mAabbCalculator[i]->_setUavBuffer( 1, bufferSlot );
+            bufferSlot.buffer = mMeshAabb;
+            mAabbCalculator[i]->_setUavBuffer( 2, bufferSlot );
+
+            DescriptorSetTexture2::BufferSlot texBufSlot(DescriptorSetTexture2::BufferSlot::makeEmpty());
+            texBufSlot.buffer = mMeshBufferData;
+            mAabbCalculator[i]->setTexBuffer( 0, texBufSlot );
+
+            uint32 meshRange[2] = { meshStart, meshStart + numMeshes[i] };
+
+            paramMeshRange.setManualValue( meshRange, 2u );
+
+            ShaderParams &shaderParams = mAabbCalculator[i]->getShaderParams( "default" );
+            shaderParams.mParams.clear();
+            shaderParams.mParams.push_back( paramMeshRange );
+            shaderParams.setDirty();
+
+            hlmsCompute->dispatch( mAabbCalculator[i], 0, 0 );
+            meshStart += numMeshes[i];
+        }
+
+        TODO_add_barrier;
+
+        DescriptorSetUav::BufferSlot bufferSlot( DescriptorSetUav::BufferSlot::makeEmpty() );
+        bufferSlot.buffer = mInstanceBuffer;
+        mAabbWorldSpaceJob->_setUavBuffer( 0, bufferSlot );
+
+        DescriptorSetTexture2::BufferSlot texBufSlot(DescriptorSetTexture2::BufferSlot::makeEmpty());
+        texBufSlot.buffer = mMeshAabb->getAsTexBufferView( PF_FLOAT32_RGBA );
+        mAabbWorldSpaceJob->setTexBuffer( 0, texBufSlot );
+
+        const uint32 threadsPerGroupX = mAabbWorldSpaceJob->getThreadsPerGroupX();
+        mAabbWorldSpaceJob->setNumThreadGroups( (mTotalNumInstances + threadsPerGroupX - 1u) /
+                                                threadsPerGroupX, 1u, 1u );
+
+        hlmsCompute->dispatch( mAabbWorldSpaceJob, 0, 0 );
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::dividideOctants( uint32 numOctantsX, uint32 numOctantsY, uint32 numOctantsZ )
@@ -1143,6 +1158,8 @@ namespace Ogre
         placeItemsInBuckets();
 
         fillInstanceBuffers();
+
+        computeMeshAabbs();
 
         const bool hasTypedUavs = mRenderSystem->getCapabilities()->hasCapability( RSC_TYPED_UAV_LOADS );
 

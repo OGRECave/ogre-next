@@ -137,9 +137,10 @@
         "VCT/AabbCalculator" :
         {
             "threads_per_group" : [1024, 1, 1],
+            "thread_groups" : [1, 1, 1],
 
             "source" : "AabbCalcultor_cs",
-            "pieces" : ["CrossPlatformSettings_piece_all", "AabbCalcultor_piece_cs.any"],
+            "pieces" : ["CrossPlatformSettings_piece_all", "Matrix_piece_all", "AabbCalcultor_piece_cs.any"],
 
             "uav_units" : 3,
 
@@ -165,7 +166,7 @@
             "threads_per_group" : [64, 1, 1],
 
             "source" : "AabbWorldSpace_cs",
-            "pieces" : ["CrossPlatformSettings_piece_all", "AabbWorldSpace_piece_cs.any"],
+            "pieces" : ["CrossPlatformSettings_piece_all", "Matrix_piece_all", "AabbWorldSpace_piece_cs.any"],
 
             "uav_units" : 1,
 

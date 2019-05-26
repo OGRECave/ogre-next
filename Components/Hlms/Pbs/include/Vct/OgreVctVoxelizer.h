@@ -151,6 +151,7 @@ namespace Ogre
         HlmsComputeJob  *mAabbCalculator[1u<<2u];
         HlmsComputeJob  *mAabbWorldSpaceJob;
 
+        uint32			mTotalNumInstances;
         float           *mCpuInstanceBuffer;
         UavBufferPacked *mInstanceBuffer;
         TexBufferPacked *mInstanceBufferAsTex;
@@ -240,7 +241,6 @@ namespace Ogre
 
         void freeBuffers( bool bForceFree );
 
-        void computeMeshAabbs(void);
         void buildMeshBuffers(void);
         void createVoxelTextures(void);
         void destroyVoxelTextures(void);
@@ -249,6 +249,8 @@ namespace Ogre
         void createInstanceBuffers(void);
         void destroyInstanceBuffers(void);
         void fillInstanceBuffers(void);
+
+        void computeMeshAabbs(void);
 
     public:
         VctVoxelizer( IdType id, RenderSystem *renderSystem, HlmsManager *hlmsManager );

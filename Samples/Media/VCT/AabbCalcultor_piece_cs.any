@@ -39,7 +39,7 @@
 
 	PartitionedSubMesh getPartitionedSubMesh( uint meshIdx )
 	{
-		uint4 meshData = bufferFetch( inMeshBuffer, meshIdx );
+		uint4 meshData = bufferFetch( inMeshBuffer, rint(meshIdx) );
 		PartitionedSubMesh retVal;
 		retVal.vertexBufferStart	= meshData.x;
 		retVal.indexBufferStart		= meshData.y;
@@ -103,7 +103,7 @@
 		g_minAabb[gl_LocalInvocationIndex] = minAabb;
 		g_maxAabb[gl_LocalInvocationIndex] = maxAabb;
 
-		__sharedOnlyBarrier();
+		__sharedOnlyBarrier;
 
 		for( uint s=@value( threads_per_group_x )/2u; s > 0u; s >>= 1u )
 		{
@@ -114,19 +114,19 @@
 				g_maxAabb[gl_LocalInvocationIndex] = max( g_maxAabb[gl_LocalInvocationIndex],
 														  g_maxAabb[gl_LocalInvocationIndex + s] );
 			}
-			__sharedOnlyBarrier();
+			__sharedOnlyBarrier;
 		}
 
 		if( gl_LocalInvocationIndex == 0u )
 		{
-			aabbMin = g_minAabb[0];
-			aabbMax = g_maxAabb[0];
+			float3 aabbMin = g_minAabb[0];
+			float3 aabbMax = g_maxAabb[0];
 
 			float3 aabbCenter	= (aabbMin + aabbMax) * 0.5f;
 			float3 aabbHalfSize	= (aabbMax - aabbMin) * 0.5f;
 
-			outMeshAabb[i].center.xyzw	= float4( aabbCenter.xyz, 1.0f );
-			outMeshAabb[i].halfSize.xyz	= float4( aabbHalfSize.xyz, 0.0f );
+			outMeshAabb[i].center.xyzw		= float4( aabbCenter.xyz, 1.0f );
+			outMeshAabb[i].halfSize.xyzw	= float4( aabbHalfSize.xyz, 0.0f );
 		}
 	}
 @end

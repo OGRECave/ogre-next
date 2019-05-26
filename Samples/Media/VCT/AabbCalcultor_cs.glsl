@@ -12,9 +12,13 @@
 
 #define ogre_float4x3 mat3x4
 
+#define rint int
+
 #define mul( x, y ) ((x) * (y))
 
-#define __sharedOnlyBarrier() memoryBarrierShared();barrier();
+#define bufferFetch texelFetch
+
+#define __sharedOnlyBarrier memoryBarrierShared();barrier();
 
 @insertpiece( PreBindingsHeaderCS )
 
@@ -36,6 +40,9 @@ layout( local_size_x = @value( threads_per_group_x ),
 		local_size_z = @value( threads_per_group_z ) ) in;
 
 uniform usamplerBuffer inMeshBuffer;
+
+shared float3 g_minAabb[@value( threads_per_group_x )];
+shared float3 g_maxAabb[@value( threads_per_group_x )];
 
 @insertpiece( HeaderCS )
 

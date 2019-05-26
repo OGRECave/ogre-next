@@ -142,6 +142,7 @@ namespace Ogre
         Hlms* getCreator(void) const                { return mCreator; }
 
         IdString getName(void) const                { return mName; }
+        String getNameStr(void) const;
 
         void _updateAutoProperties(void);
 

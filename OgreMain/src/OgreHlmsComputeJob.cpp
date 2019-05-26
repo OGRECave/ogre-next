@@ -294,6 +294,20 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    String HlmsComputeJob::getNameStr(void) const
+    {
+        String retVal;
+        HlmsCompute *compute = static_cast<HlmsCompute*>( mCreator );
+        const String *nameStr = compute->getJobNameStr( mName );
+
+        if( nameStr )
+            retVal = *nameStr;
+        else
+            retVal = mName.getFriendlyText();
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
     void HlmsComputeJob::_updateAutoProperties(void)
     {
         setProperty( ComputeProperty::ThreadsPerGroupX, mThreadsPerGroup[0] );

@@ -327,7 +327,8 @@ namespace Ogre
             pso.mNumThreadGroups[0] * pso.mNumThreadGroups[1] * pso.mNumThreadGroups[2] == 0u )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "Shader or C++ must set threads_per_group_x, threads_per_group_y & "
+                         job->getNameStr() +
+                         ": Shader or C++ must set threads_per_group_x, threads_per_group_y & "
                          "threads_per_group_z and num_thread_groups_x through num_thread_groups_z."
                          " Otherwise we can't run on Metal. Use @pset( threads_per_group_x, 512 );"
                          " or read the value using @value( threads_per_group_x ) if you've already"
