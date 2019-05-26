@@ -18,6 +18,9 @@ struct VS_INPUT
 	uint4 blendIndices	: BLENDINDICES;
 	float4 blendWeights : BLENDWEIGHT;@end
 
+@property( hlms_pose )
+	uint vertexId: SV_VertexID;@end
+
 @foreach( hlms_uv_count, n )
 	float@value( hlms_uv_count@n ) uv@n : TEXCOORD@n;@end
 	uint drawId : DRAWID;
@@ -41,8 +44,10 @@ struct PS_INPUT
 
 // START UNIFORM DECLARATION
 @insertpiece( PassDecl )
-@property( hlms_skeleton || hlms_shadowcaster )@insertpiece( InstanceDecl )@end
+@property( hlms_skeleton || hlms_shadowcaster || hlms_pose )@insertpiece( InstanceDecl )@end
 Buffer<float4> worldMatBuf : register(t0);
+@property(hlms_pose)
+	Buffer<float4> poseBuf : register(t4);@end
 @insertpiece( custom_vs_uniformDeclaration )
 // END UNIFORM DECLARATION
 
@@ -113,6 +118,44 @@ Buffer<float4> worldMatBuf : register(t0);
 	worldPos.w = 1.0;
 @end @end  //SkeletonTransform // !hlms_skeleton
 
+@property( hlms_pose )@piece( PoseTransform )
+	// Pose data starts after all 3x4 bone matrices
+	uint poseDataStart = (worldMaterialIdx[input.drawId].x >> 9u) @property( hlms_skeleton ) + @value(hlms_bones_per_vertex)u * 3u@end ;
+	float4 poseWeights = worldMatBuf.Load( int(poseDataStart + 1u) );
+
+	@psub( MoreThanOnePose, hlms_pose, 1 )
+	@property( !MoreThanOnePose )
+		float4 posePos = poseBuf.Load( int(input.vertexId) );
+		input.vertex += posePos * poseWeights.x;
+	@end @property( MoreThanOnePose )
+		float4 poseData = worldMatBuf.Load( int(poseDataStart) );
+		uint numVertices = asuint( poseData.y );
+		@foreach( hlms_pose, n )
+			input.vertex += poseBuf.Load( int(input.vertexId + numVertices * @nu) ) * poseWeights[@n];
+		@end
+	@end
+
+	// If hlms_skeleton is defined the transforms will be provided by bones.
+	// If hlms_pose is not combined with hlms_skeleton the object's worldMat and worldView have to be set.
+	@property( !hlms_skeleton )
+		float4 worldMat[3];
+		worldMat[0] = worldMatBuf.Load( int(poseDataStart + 2u) );
+		worldMat[1] = worldMatBuf.Load( int(poseDataStart + 3u) );
+		worldMat[2] = worldMatBuf.Load( int(poseDataStart + 4u) );
+		float4 worldPos;
+		worldPos.x = dot( worldMat[0], input.vertex );
+		worldPos.y = dot( worldMat[1], input.vertex );
+		worldPos.z = dot( worldMat[2], input.vertex );
+		worldPos.w = 1.0;
+
+		@property( hlms_normal || hlms_qtangent )
+		@foreach( 4, n )
+			float4 row@n = worldMatBuf.Load( int(poseDataStart + 5u + @nu) );@end
+		float4x4 worldView = transpose( float4x4( row0, row1, row2, row3 ) );
+		@end
+	@end
+@end @end // PoseTransform
+
 @property( hlms_skeleton )
 	@piece( worldViewMat )passBuf.view@end
 @end @property( !hlms_skeleton )
@@ -144,7 +187,7 @@ PS_INPUT main( VS_INPUT input )
 {
 	PS_INPUT outVs;
 	@insertpiece( custom_vs_preExecution )
-@property( !hlms_skeleton )
+@property( !hlms_skeleton && !hlms_pose)
 	float4x3 worldMat = UNPACK_MAT4x3( worldMatBuf, input.drawId @property( !hlms_shadowcaster )<< 1u@end );
 	@property( hlms_normal || hlms_qtangent )
     float4x4 worldView = UNPACK_MAT4( worldMatBuf, (input.drawId << 1u) + 1u );
@@ -165,6 +208,7 @@ PS_INPUT main( VS_INPUT input )
 	@property( normal_map )float3 tangent	= input.tangent;@end
 @end
 
+	@insertpiece( PoseTransform )
 	@insertpiece( SkeletonTransform )
 	@insertpiece( VertexTransform )
 
