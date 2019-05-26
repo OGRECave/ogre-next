@@ -56,6 +56,8 @@ THE SOFTWARE.
 #include "OgreTextureGpuManager.h"
 #include "OgreStringConverter.h"
 
+#include "OgreProfiler.h"
+
 #define TODO_deal_no_index_buffer
 #define TODO_clear_voxels
 #define TODO_add_barrier
@@ -374,6 +376,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VctVoxelizer::prepareAabbCalculatorMeshData(void)
     {
+        OgreProfile( "VctVoxelizer::prepareAabbCalculatorMeshData" );
         if( !mGpuMeshAabbDataDirty )
             return;
 
@@ -661,6 +664,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VctVoxelizer::buildMeshBuffers(void)
     {
+        OgreProfile( "VctVoxelizer::buildMeshBuffers" );
+
         mNumVerticesCompressed      = 0;
         mNumVerticesUncompressed    = 0;
         mNumIndices16 = 0;
@@ -843,6 +848,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VctVoxelizer::placeItemsInBuckets()
     {
+        OgreProfile( "VctVoxelizer::placeItemsInBuckets" );
+
         mBuckets.clear();
 
         ItemArray::const_iterator itor = mItems.begin();
@@ -975,6 +982,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VctVoxelizer::fillInstanceBuffers(void)
     {
+        OgreProfile( "VctVoxelizer::fillInstanceBuffers" );
+
         createInstanceBuffers();
 
 //        float * RESTRICT_ALIAS instanceBuffer =
@@ -1044,7 +1053,8 @@ namespace Ogre
         OGRE_ASSERT_LOW( (size_t)(instanceBuffer - instanceBufferStart) * sizeof(float) <=
                          mInstanceBuffer->getTotalSizeBytes() );
 
-        mTotalNumInstances = (instanceBuffer - instanceBufferStart) / (4u * (3u + 3u));
+        mTotalNumInstances = static_cast<uint32>( (instanceBuffer - instanceBufferStart) /
+                                                  (4u * (3u + 3u)) );
 
         //Fill the remaining bytes with 0 so that mAabbWorldSpaceJob ignores those
         memset( instanceBuffer, 0, mInstanceBuffer->getTotalSizeBytes() -
@@ -1055,6 +1065,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VctVoxelizer::computeMeshAabbs(void)
     {
+        OgreProfile( "VctVoxelizer::computeMeshAabbs" );
         HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
 
         const size_t numVariants = 1u << c_numAabCalcProperties;
@@ -1073,6 +1084,8 @@ namespace Ogre
         paramMeshRange.name	= "meshStart_meshEnd";
 
         uint32 meshStart = 0u;
+
+        OgreProfileGpuBegin( "VCT Mesh AABB calculation" );
 
         for( size_t i=0; i<numVariants; ++i )
         {
@@ -1107,6 +1120,8 @@ namespace Ogre
             meshStart += numMeshes[i];
         }
 
+        OgreProfileGpuEnd( "VCT Mesh AABB calculation" );
+
         TODO_add_barrier;
 
         DescriptorSetUav::BufferSlot bufferSlot( DescriptorSetUav::BufferSlot::makeEmpty() );
@@ -1121,7 +1136,9 @@ namespace Ogre
         mAabbWorldSpaceJob->setNumThreadGroups( (mTotalNumInstances + threadsPerGroupX - 1u) /
                                                 threadsPerGroupX, 1u, 1u );
 
+        OgreProfileGpuBegin( "VCT AABB local to world space conversion" );
         hlmsCompute->dispatch( mAabbWorldSpaceJob, 0, 0 );
+        OgreProfileGpuEnd( "VCT AABB local to world space conversion" );
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::dividideOctants( uint32 numOctantsX, uint32 numOctantsY, uint32 numOctantsZ )
@@ -1163,6 +1180,9 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VctVoxelizer::build(void)
     {
+        OgreProfile( "VctVoxelizer::build" );
+        OgreProfileGpuBegin( "VCT build" );
+
         OGRE_ASSERT_LOW( !mOctants.empty() );
 
         if( mItems.empty() )
@@ -1230,6 +1250,7 @@ namespace Ogre
 
         HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
 
+        OgreProfileGpuBegin( "VCT Voxelization Clear" );
         float fClearValue[4];
         uint32 uClearValue[4];
         memset( fClearValue, 0, sizeof(fClearValue) );
@@ -1238,6 +1259,7 @@ namespace Ogre
         mComputeTools->clearUavFloat( mEmissiveVox, fClearValue );
         mComputeTools->clearUavFloat( mNormalVox, fClearValue );
         mComputeTools->clearUavUint( mAccumValVox, uClearValue );
+        OgreProfileGpuEnd( "VCT Voxelization Clear" );
 
         TODO_add_barrier;
 
@@ -1256,6 +1278,8 @@ namespace Ogre
         paramVoxelCellSize.setManualValue( getVoxelCellSize() );
 
         uint32 instanceStart = 0;
+
+        OgreProfileGpuBegin( "VCT Voxelization Jobs" );
 
         FastArray<Octant>::const_iterator itor = mOctants.begin();
         FastArray<Octant>::const_iterator end  = mOctants.end();
@@ -1315,8 +1339,12 @@ namespace Ogre
             ++itor;
         }
 
+        OgreProfileGpuEnd( "VCT Voxelization Jobs" );
+
         //This texture is no longer needed, it's not used for the injection phase. Save memory.
         mAccumValVox->scheduleTransitionTo( GpuResidency::OnStorage );
+
+        OgreProfileGpuEnd( "VCT build" );
     }
     //-------------------------------------------------------------------------
     Vector3 VctVoxelizer::getVoxelOrigin(void) const
