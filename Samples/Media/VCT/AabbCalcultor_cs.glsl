@@ -22,15 +22,15 @@
 
 @insertpiece( PreBindingsHeaderCS )
 
-layout(std430, binding = 0) buffer vertexBufferLayout
+layout(std430, binding = 0) readonly restrict buffer vertexBufferLayout
 {
 	Vertex vertexBuffer[];
 };
-layout(std430, binding = 1) buffer indexBufferLayout
+layout(std430, binding = 1) readonly restrict buffer indexBufferLayout
 {
 	uint indexBuffer[];
 };
-layout(std430, binding = 2) buffer outMeshAabbLayout
+layout(std430, binding = 2) writeonly restrict buffer outMeshAabbLayout
 {
 	MeshAabb outMeshAabb[];
 };

@@ -676,13 +676,16 @@ namespace Ogre
         mNumCompressedPartSubMeshes16   = 0;
         mNumCompressedPartSubMeshes32   = 0;
 
-        MeshPtrMap::iterator itor = mMeshesV2.begin();
-        MeshPtrMap::iterator end  = mMeshesV2.end();
-
-        while( itor != end )
         {
-            countBuffersSize( itor->first, itor->second );
-            ++itor;
+            OgreProfile( "VctVoxelizer::countBuffersSize aggregated" );
+            MeshPtrMap::iterator itor = mMeshesV2.begin();
+            MeshPtrMap::iterator end  = mMeshesV2.end();
+
+            while( itor != end )
+            {
+                countBuffersSize( itor->first, itor->second );
+                ++itor;
+            }
         }
 
         freeBuffers( false );
@@ -711,13 +714,16 @@ namespace Ogre
         const float *uncompressedVertexBufferStart = mappedBuffers.uncompressedVertexBuffer;
 #endif
 
-        itor = mMeshesV2.begin();
-        end  = mMeshesV2.end();
-
-        while( itor != end )
         {
-            convertMeshUncompressed( itor->first, itor->second, mappedBuffers );
-            ++itor;
+            OgreProfile( "VctVoxelizer::convertMeshUncompressed aggregated" );
+            MeshPtrMap::iterator itor = mMeshesV2.begin();
+            MeshPtrMap::iterator end  = mMeshesV2.end();
+
+            while( itor != end )
+            {
+                convertMeshUncompressed( itor->first, itor->second, mappedBuffers );
+                ++itor;
+            }
         }
 
         OGRE_ASSERT_LOW( (size_t)(mappedBuffers.uncompressedVertexBuffer -

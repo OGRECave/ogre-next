@@ -20,7 +20,7 @@
 
 @insertpiece( PreBindingsHeaderCS )
 
-layout(std430, binding = 0) buffer instanceBufferLayout
+layout(std430, binding = 0) restrict buffer instanceBufferLayout
 {
 	InstanceBuffer instanceBuffer[];
 };
