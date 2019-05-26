@@ -246,6 +246,7 @@ namespace Ogre
         void destroyVoxelTextures(void);
 
         void placeItemsInBuckets(void);
+        size_t countSubMeshPartitionsIn( Item *item ) const;
         void createInstanceBuffers(void);
         void destroyInstanceBuffers(void);
         void fillInstanceBuffers(void);

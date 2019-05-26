@@ -915,6 +915,24 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
+    size_t VctVoxelizer::countSubMeshPartitionsIn( Item *item ) const
+    {
+        size_t numSubMeshPartitions = 0;
+        MeshPtrMap::const_iterator itMesh = mMeshesV2.find( item->getMesh() );
+        OGRE_ASSERT_MEDIUM( itMesh != mMeshesV2.end() );
+
+        QueuedSubMeshArray::const_iterator itor = itMesh->second.submeshes.begin();
+        QueuedSubMeshArray::const_iterator end  = itMesh->second.submeshes.end();
+
+        while( itor != end )
+        {
+            numSubMeshPartitions += itor->partSubMeshes.size();
+            ++itor;
+        }
+
+        return numSubMeshPartitions;
+    }
+    //-------------------------------------------------------------------------
     void VctVoxelizer::createInstanceBuffers(void)
     {
         size_t instanceCount = 0;
@@ -923,7 +941,7 @@ namespace Ogre
 
         while( itor != end )
         {
-            instanceCount += (*itor)->getNumSubItems();
+            instanceCount += countSubMeshPartitionsIn( *itor );
             ++itor;
         }
 
