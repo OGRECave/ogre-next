@@ -106,7 +106,7 @@ namespace Ogre
         mNumUncompressedPartSubMeshes32( 0 ),
         mNumCompressedPartSubMeshes16( 0 ),
         mNumCompressedPartSubMeshes32( 0 ),
-        mMeshBufferData( 0 ),
+        mGpuPartitionedSubMeshes( 0 ),
         mMeshAabb( 0 ),
         mGpuMeshAabbDataDirty( true ),
         mNumVerticesCompressed( 0 ),
@@ -456,19 +456,22 @@ namespace Ogre
         OGRE_ASSERT_LOW( (size_t)(partitionedSubMeshGpu -
                                   (PartitionedSubMesh*)partitionedSubMeshGpuPtr.ptr) == totalNumMeshes );
 
-        mMeshBufferData = mVaoManager->createTexBuffer( PF_FLOAT32_RGBA, totalNumMeshes,
-                                                        BT_IMMUTABLE, partitionedSubMeshGpuPtr.ptr,
-                                                        false );
+        mGpuPartitionedSubMeshes = mVaoManager->createTexBuffer( PF_R32G32B32A32_UINT,
+                                                                 totalNumMeshes *
+                                                                 sizeof(PartitionedSubMesh),
+                                                                 BT_IMMUTABLE,
+                                                                 partitionedSubMeshGpuPtr.ptr,
+                                                                 false );
         mGpuMeshAabbDataDirty = false;
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::destroyAabbCalculatorMeshData(void)
     {
         //if( mGpuMeshDataDirty )
-        if( mMeshBufferData )
+        if( mGpuPartitionedSubMeshes )
         {
-            mVaoManager->destroyTexBuffer( mMeshBufferData );
-            mMeshBufferData = 0;
+            mVaoManager->destroyTexBuffer( mGpuPartitionedSubMeshes );
+            mGpuPartitionedSubMeshes = 0;
         }
         if( mMeshAabb )
         {
@@ -1070,7 +1073,7 @@ namespace Ogre
             mAabbCalculator[i]->_setUavBuffer( 2, bufferSlot );
 
             DescriptorSetTexture2::BufferSlot texBufSlot(DescriptorSetTexture2::BufferSlot::makeEmpty());
-            texBufSlot.buffer = mMeshBufferData;
+            texBufSlot.buffer = mGpuPartitionedSubMeshes;
             mAabbCalculator[i]->setTexBuffer( 0, texBufSlot );
 
             uint32 meshRange[2] = { meshStart, meshStart + numMeshes[i] };

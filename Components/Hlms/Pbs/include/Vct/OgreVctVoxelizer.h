@@ -164,10 +164,10 @@ namespace Ogre
         uint32			mNumUncompressedPartSubMeshes32;
         uint32			mNumCompressedPartSubMeshes16;
         uint32			mNumCompressedPartSubMeshes32;
-        TexBufferPacked *mMeshBufferData;
+        TexBufferPacked *mGpuPartitionedSubMeshes;
         UavBufferPacked *mMeshAabb;
         /// Normally once we're done we free all memory that isn't needed. However
-        /// we leave mMeshBufferData & mMeshAabb around because they occupy very little memory
+        /// we leave mGpuPartitionedSubMeshes & mMeshAabb around because they occupy very little memory
         bool            mGpuMeshAabbDataDirty;
 
         uint32 mNumVerticesCompressed;

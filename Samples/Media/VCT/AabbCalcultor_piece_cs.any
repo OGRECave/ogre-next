@@ -92,7 +92,7 @@
 
 		for( uint j=0u; j<mesh.numIndices; j += @value( threads_per_group_x )u )
 		{
-			uint indexId = min( j, mesh.numIndices - 1u );
+			uint indexId = min( j + gl_LocalInvocationIndex, mesh.numIndices - 1u );
 			float3 vertexPos = getVertexPos( indexId, mesh );
 			minAabb.xyz = min( minAabb.xyz, vertexPos.xyz );
 			maxAabb.xyz = max( maxAabb.xyz, vertexPos.xyz );
