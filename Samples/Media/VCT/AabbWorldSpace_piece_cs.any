@@ -2,7 +2,7 @@
 //#include "SyntaxHighlightingMisc.h"
 
 @piece( PreBindingsHeaderCS )
-    struct InstanceBuffer
+	struct InstanceBuffer
 	{
 		float4 worldTransformRow0;
 		float4 worldTransformRow1;
@@ -11,18 +11,24 @@
 		float4 aabb1;
 		uint4 meshData;
 	};
+
+	struct AabbBuffer
+	{
+		float4 center;
+		float4 halfSize;
+	};
 @end
 
 @piece( HeaderCS )
-    @insertpiece( Common_Matrix_DeclLoadOgreFloat4x3 )
+	@insertpiece( Common_Matrix_DeclLoadOgreFloat4x3 )
 
-    struct Aabb
+	struct Aabb
 	{
-	    float3 center;
+		float3 center;
 		float3 halfSize;
 	};
 
-    struct Instance
+	struct Instance
 	{
 		ogre_float4x3 worldTransform;
 		uint localAabbIdx;
@@ -33,8 +39,8 @@
 	{
 		Instance retVal;
 		retVal.worldTransform = makeOgreFloat4x3( instanceBuffer[instanceIdx].worldTransformRow0,
-		                                          instanceBuffer[instanceIdx].worldTransformRow1,
-		                                          instanceBuffer[instanceIdx].worldTransformRow2 );
+												  instanceBuffer[instanceIdx].worldTransformRow1,
+												  instanceBuffer[instanceIdx].worldTransformRow2 );
 		retVal.localAabbIdx		= instanceBuffer[instanceIdx].meshData.w & ~0x80000000u;
 		retVal.needsAabbUpdate	= (instanceBuffer[instanceIdx].meshData.w & 0x80000000u) != 0u;
 
@@ -44,8 +50,13 @@
 	Aabb getMeshAabb( uint localAabbIdx )
 	{
 		Aabb retVal;
-		retVal.center	= bufferFetch( inMeshAabb, rint(localAabbIdx << 1u) ).xyz;
-		retVal.halfSize	= bufferFetch( inMeshAabb, rint((localAabbIdx << 1u) + 1u) ).xyz;
+	@property( syntax == glsl )
+		retVal.center	= structuredBufferFetch( inMeshAabb, rint(localAabbIdx << 1u) ).xyz;
+		retVal.halfSize	= structuredBufferFetch( inMeshAabb, rint((localAabbIdx << 1u) + 1u) ).xyz;
+	@else
+		retVal.center	= inMeshAabb[localAabbIdx].center.xyz;
+		retVal.halfSize	= inMeshAabb[localAabbIdx].halfSize.xyz;
+	@end
 		return retVal;
 	}
 @end

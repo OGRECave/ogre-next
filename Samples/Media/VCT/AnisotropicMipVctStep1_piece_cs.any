@@ -8,9 +8,9 @@
 //in uint  gl_LocalInvocationIndex;
 
 @piece( BodyCS )
-	if( gl_GlobalInvocationID.x >= p_higherMipHalfRes.x ||
-		gl_GlobalInvocationID.y >= p_higherMipHalfRes.y ||
-		gl_GlobalInvocationID.z >= p_higherMipHalfRes.z )
+	if( gl_GlobalInvocationID.x >= uint( p_higherMipHalfRes.x ) ||
+		gl_GlobalInvocationID.y >= uint( p_higherMipHalfRes.y ) ||
+		gl_GlobalInvocationID.z >= uint( p_higherMipHalfRes.z ) )
 	{
 		return;
 	}

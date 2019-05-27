@@ -18,6 +18,7 @@ inline float3x3 toMat3x3( float4x4 m )
 
 //Short used for read operations. It's an int in GLSL & HLSL. An ushort in Metal
 #define rshort2 ushort2
+#define rint uint
 //Short used for write operations. It's an int in GLSL. An ushort in HLSL & Metal
 #define wshort2 ushort2
 #define wshort3 ushort3
@@ -76,6 +77,8 @@ inline float3x3 toMat3x3( float4x4 m )
 
 #define bufferFetch( buffer, idx ) buffer[idx]
 #define bufferFetch1( buffer, idx ) buffer[idx]
+
+#define structuredBufferFetch( buffer, idx ) buffer[idx]
 
 #define OGRE_Texture3D_float4 texture3d<float>
 

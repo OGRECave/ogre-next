@@ -308,6 +308,11 @@ namespace Ogre
             create3DTexture();
             break;
         }
+
+        //Set debug name for RenderDoc and similar tools
+        const String texName = getNameStr();
+        mFinalTextureName->SetPrivateData( WKPDID_D3DDebugObjectName,
+                                           static_cast<UINT>( texName.size() ), texName.c_str() );
     }
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpu::destroyInternalResourcesImpl(void)

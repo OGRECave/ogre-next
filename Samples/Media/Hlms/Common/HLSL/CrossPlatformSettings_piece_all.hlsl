@@ -4,6 +4,7 @@
 
 //Short used for read operations. It's an int in GLSL & HLSL. An ushort in Metal
 #define rshort2 int2
+#define rint int
 //Short used for write operations. It's an int in GLSL. An ushort in HLSL & Metal
 #define wshort2 uint2
 #define wshort3 uint3
@@ -61,6 +62,8 @@
 
 #define bufferFetch( buffer, idx ) buffer.Load( idx )
 #define bufferFetch1( buffer, idx ) buffer.Load( idx ).x
+
+#define structuredBufferFetch( buffer, idx ) buffer[idx]
 
 #define OGRE_Texture3D_float4 Texture3D
 

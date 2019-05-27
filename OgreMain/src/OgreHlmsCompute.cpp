@@ -463,10 +463,8 @@ namespace Ogre
 
         mRenderSystem->_setComputePso( &psoCache.pso );
 
-        HlmsComputeJob::ConstBufferSlotVec::const_iterator itConst =
-                job->mConstBuffers.begin();
-        HlmsComputeJob::ConstBufferSlotVec::const_iterator enConst =
-                job->mConstBuffers.end();
+        HlmsComputeJob::ConstBufferSlotVec::const_iterator itConst = job->mConstBuffers.begin();
+        HlmsComputeJob::ConstBufferSlotVec::const_iterator enConst = job->mConstBuffers.end();
 
         while( itConst != enConst )
         {

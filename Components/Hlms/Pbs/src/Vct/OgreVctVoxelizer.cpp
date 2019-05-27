@@ -462,7 +462,7 @@ namespace Ogre
         mGpuPartitionedSubMeshes = mVaoManager->createTexBuffer( PF_R32G32B32A32_UINT,
                                                                  totalNumMeshes *
                                                                  sizeof(PartitionedSubMesh),
-                                                                 BT_IMMUTABLE,
+                                                                 BT_DEFAULT,
                                                                  partitionedSubMeshGpuPtr.ptr,
                                                                  false );
         mGpuMeshAabbDataDirty = false;
@@ -486,6 +486,8 @@ namespace Ogre
     void VctVoxelizer::convertMeshUncompressed( const MeshPtr &mesh, QueuedMesh &queuedMesh,
                                                 MappedBuffers &mappedBuffers )
     {
+        OgreProfile( "VctVoxelizer::convertMeshUncompressed" );
+
         const uint16 numSubmeshes = mesh->getNumSubMeshes();
 
         for( uint16 subMeshIdx=0; subMeshIdx<numSubmeshes; ++subMeshIdx )

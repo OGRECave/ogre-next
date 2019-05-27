@@ -73,7 +73,7 @@ namespace Ogre
         TexBufferPacked *retVal = OGRE_NEW D3D11TexBufferPacked(
                     mInternalBufferStart * mBytesPerElement, mNumElements, mBytesPerElement, 0,
                     mBufferType, (void*)0, false, (VaoManager*)0, bufferInterface,
-                    PF_UNKNOWN, mDevice );
+                    pixelFormat, true, mDevice );
         //We were overriden by the BufferPacked we just created. Restore this back!
         bufferInterface->_notifyBuffer( this );
 

@@ -39,8 +39,8 @@ namespace Ogre
     D3D11TexBufferPacked::D3D11TexBufferPacked(
             size_t internalBufStartBytes, size_t numElements, uint32 bytesPerElement,
             uint32 numElementsPadding, BufferType bufferType, void *initialData, bool keepAsShadow,
-            VaoManager *vaoManager, BufferInterface *bufferInterface, PixelFormat pf,
-            D3D11Device &device ) :
+            VaoManager *vaoManager, BufferInterface *bufferInterface,
+            PixelFormat pf, bool bIsStructured, D3D11Device &device ) :
         TexBufferPacked( internalBufStartBytes, numElements, bytesPerElement, numElementsPadding,
                          bufferType, initialData, keepAsShadow, vaoManager, bufferInterface, pf ),
         mInternalFormat( DXGI_FORMAT_UNKNOWN ),
@@ -49,7 +49,8 @@ namespace Ogre
     {
         memset( mCachedResourceViews, 0, sizeof( mCachedResourceViews ) );
 
-        mInternalFormat = D3D11Mappings::_getPF( pf );
+        if( !bIsStructured )
+            mInternalFormat = D3D11Mappings::_getPF( pf );
     }
     //-----------------------------------------------------------------------------------
     D3D11TexBufferPacked::~D3D11TexBufferPacked()
@@ -64,13 +65,18 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    bool D3D11TexBufferPacked::isD3D11Structured(void) const
+    {
+        return mInternalFormat == DXGI_FORMAT_UNKNOWN;
+    }
+    //-----------------------------------------------------------------------------------
     ID3D11ShaderResourceView* D3D11TexBufferPacked::createResourceView( int cacheIdx, uint32 offset,
                                                                         uint32 sizeBytes )
     {
         assert( cacheIdx < 16 );
 
-        const size_t formatSize = mPixelFormat == PF_UNKNOWN ?
-                                      mBytesPerElement : PixelUtil::getNumElemBytes( mPixelFormat );
+        const size_t formatSize = isD3D11Structured() ? mBytesPerElement :
+                                                        PixelUtil::getNumElemBytes( mPixelFormat );
 
         if( mCachedResourceViews[cacheIdx].mResourceView )
             mCachedResourceViews[cacheIdx].mResourceView->Release();
@@ -140,8 +146,8 @@ namespace Ogre
         assert( bufferSlot.offset < (mNumElements - 1) );
         assert( bufferSlot.sizeBytes < mNumElements );
 
-        const size_t formatSize = mPixelFormat == PF_UNKNOWN ?
-                                      mBytesPerElement : PixelUtil::getNumElemBytes( mPixelFormat );
+        const size_t formatSize = isD3D11Structured() ? mBytesPerElement :
+                                                        PixelUtil::getNumElemBytes( mPixelFormat );
 
         const size_t sizeBytes = !bufferSlot.sizeBytes ? (mNumElements * mBytesPerElement -
                                                           bufferSlot.offset) : bufferSlot.sizeBytes;

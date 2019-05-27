@@ -1110,7 +1110,8 @@ namespace Ogre
                                                         bufferOffset, numElements, bytesPerElement,
                                                         (sizeBytes - requestedSize) / bytesPerElement,
                                                         bufferType, initialData, keepAsShadow,
-                                                        this, bufferInterface, pixelFormat, mDevice );
+                                                        this, bufferInterface,
+                                                        pixelFormat, false, mDevice );
 
         if( mD3D11RenderSystem->_getFeatureLevel() > D3D_FEATURE_LEVEL_11_0 )
         {

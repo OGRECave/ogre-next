@@ -14,6 +14,7 @@
 
 @property( GL_ARB_texture_buffer_range )
 	#define bufferFetch texelFetch
+	#define structuredBufferFetch texelFetch
 @end
 
 @property( hlms_amd_trinary_minmax )
