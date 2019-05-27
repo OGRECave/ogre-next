@@ -86,7 +86,7 @@ THE SOFTWARE.
 
 /** Define max number of poses per item.
 */
-#define OGRE_MAX_POSES 4
+#define OGRE_MAX_POSES 16
 
 // define the memory allocator configuration to use
 #define OGRE_MEMORY_ALLOCATOR_STD 1

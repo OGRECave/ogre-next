@@ -193,9 +193,14 @@ namespace Ogre
         return mMaterial;
     }
     //-----------------------------------------------------------------------------------
-    unsigned short Renderable::getNumPoseAnimations(void) const
+    unsigned short Renderable::getNumPoses(void) const
     {
         return mPoseData ? mPoseData->numPoses : 0;
+    }
+    //-----------------------------------------------------------------------------------
+    float* Renderable::getPoseWeights() const
+    { 
+        return mPoseData ? mPoseData->weights : 0;
     }
     //-----------------------------------------------------------------------------------
     float Renderable::getPoseWeight(size_t index) const
@@ -210,7 +215,7 @@ namespace Ogre
             return;
         
         assert( (index < OGRE_MAX_POSES && index < mPoseData->numPoses) && "Pose weight index out of bounds" );
-        mPoseData->weights[index] = Math::Clamp( w, 0.f, 1.f ); 
+        mPoseData->weights[index] = w; 
     }
     void Renderable::addPoseWeight(size_t index, float w)
     {
@@ -218,7 +223,7 @@ namespace Ogre
             return;
 
         assert( (index < OGRE_MAX_POSES && index < mPoseData->numPoses) && "Pose weight index out of bounds" );
-        mPoseData->weights[index] = Math::Clamp( mPoseData->weights[index] + w, 0.f, 1.f ); 
+        mPoseData->weights[index] += w;
     }
     //-----------------------------------------------------------------------------------
     TexBufferPacked* Renderable::getPoseTexBuffer() const
