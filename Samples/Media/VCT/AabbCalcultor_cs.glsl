@@ -16,7 +16,7 @@
 
 #define mul( x, y ) ((x) * (y))
 
-#define structuredBufferFetch texelFetch
+#define bufferFetch texelFetch
 
 #define __sharedOnlyBarrier memoryBarrierShared();barrier();
 
