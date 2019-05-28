@@ -324,8 +324,14 @@ namespace Ogre {
             
             CGLLockContext((CGLContextObj)[mGLContext CGLContextObj]);
             
-            [mView setNeedsDisplay:YES];
+            // At least NSOpenGLView responds to both setPixelFormat: and setOpenGLContext:,
+            // call it to avoid creation of the unused internal copy
+            if([mView respondsToSelector:@selector(setPixelFormat:)])
+                [(id)mView setPixelFormat:mGLPixelFormat];
+            if([mView respondsToSelector:@selector(setOpenGLContext:)])
+                [(id)mView setOpenGLContext:mGLContext];
             
+            // Repeat what -[NSOpenGLView setOpenGLContext:] does in case mView is not NSOpenGLView
             if([mGLContext view] != mView)
                 [mGLContext setView:mView];
             [mGLContext makeCurrentContext];
@@ -342,7 +348,7 @@ namespace Ogre {
             
             //        rs->clearFrameBuffer(FBT_COLOUR);
             
-            [mGLContext flushBuffer];
+            //[mGLContext flushBuffer];
             CGLUnlockContext((CGLContextObj)[mGLContext CGLContextObj]);
         }
 
@@ -356,7 +362,7 @@ namespace Ogre {
     unsigned int CocoaWindow::getWidth() const
     {
         // keep mWidth in sync with reality
-        assert(mView == nil || mWidth == _getPixelFromPoint([mView frame].size.width));
+        assert(mView == nil || int(mWidth) == _getPixelFromPoint([mView frame].size.width));
         
         return mWidth;
     }
@@ -364,7 +370,7 @@ namespace Ogre {
     unsigned int CocoaWindow::getHeight() const
     {
         // keep mHeight in sync with reality
-        assert(mView == nil || mHeight == _getPixelFromPoint([mView frame].size.height));
+        assert(mView == nil || int(mHeight) == _getPixelFromPoint([mView frame].size.height));
         
         return mHeight;
     }
