@@ -72,8 +72,8 @@ namespace Ogre {
 
 
     CocoaWindow::CocoaWindow() : mWindow(nil), mView(nil), mGLContext(nil), mGLPixelFormat(nil), mWindowOriginPt(NSZeroPoint),
-        mWindowDelegate(NULL), mActive(false), mClosed(false), mVSync(true), mHasResized(false), mIsExternal(false), mWindowTitle(""),
-        mUseNSView(false), mContentScalingFactor(1.0), mHidden(false)
+        mWindowDelegate(NULL), mActive(false), mClosed(false), mHidden(false), mVSync(true), mHasResized(false), mIsExternal(false), mWindowTitle(""),
+        mUseNSView(false), mContentScalingFactor(1.0)
     {
         // Set vsync by default to save battery and reduce tearing
     }
@@ -243,7 +243,7 @@ namespace Ogre {
             
             if(opt != miscParams->end())
             {
-                NSOpenGLContext *openGLContext = (__bridge NSOpenGLContext *)(void*)StringConverter::parseUnsignedLong(opt->second);
+                NSOpenGLContext *openGLContext = (__bridge NSOpenGLContext *)(void*)StringConverter::parseSizeT(opt->second);
                 mGLContext = openGLContext;
             }
             else
@@ -284,11 +284,11 @@ namespace Ogre {
                 
                 if(mUseNSView) {
                     LogManager::getSingleton().logMessage("Mac Cocoa Window: Rendering on an external plain NSView*");
-                    NSView *nsview = (__bridge NSView*)(void*)StringConverter::parseUnsignedLong(opt->second);
+                    NSView *nsview = (__bridge NSView*)(void*)StringConverter::parseSizeT(opt->second);
                     mView = nsview;
                 } else {
                     LogManager::getSingleton().logMessage("Mac Cocoa Window: Rendering on an external OgreGL3PlusView*");
-                    OgreGL3PlusView *view = (__bridge OgreGL3PlusView*)(void*)StringConverter::parseUnsignedLong(opt->second);
+                    OgreGL3PlusView *view = (__bridge OgreGL3PlusView*)(void*)StringConverter::parseSizeT(opt->second);
                     [view setOgreWindow:this];
                     mView = view;
                 }
