@@ -129,6 +129,8 @@ namespace Ogre {
             NSString *windowTitle = [NSString stringWithCString:name.c_str() encoding:NSUTF8StringEncoding];
             int winxPt = 0, winyPt = 0;
             int colourDepth = 32;
+            NSOpenGLContext *externalGLContext;
+            NSObject* externalWindowHandle; // NSOpenGLView, NSView or NSWindow
             NameValuePairList::const_iterator opt;
             
             mIsFullScreen = fullScreen;
@@ -179,6 +181,22 @@ namespace Ogre {
                 if(opt != miscParams->end())
                     mContentScalingFactor = StringConverter::parseReal(opt->second);
                 
+                opt = miscParams->find("externalGLContext");
+                if(opt != miscParams->end())
+                    externalGLContext = (__bridge NSOpenGLContext *)(void*)StringConverter::parseSizeT(opt->second);
+                
+                opt = miscParams->find("externalWindowHandle");
+                if(opt != miscParams->end())
+                    externalWindowHandle = (__bridge NSObject*)(void*)StringConverter::parseSizeT(opt->second);
+
+                // TODO: implement proper parentWindowHandle support as in Metal RS, emulate it now for OgreSamplesCommon.
+                if(!externalWindowHandle) 
+                {
+                    opt = miscParams->find("parentWindowHandle");
+                    if(opt != miscParams->end())
+                        externalWindowHandle = (__bridge NSObject*)(void*)StringConverter::parseSizeT(opt->second);
+                }
+                
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
                 opt = miscParams->find("stereoMode");
                 if (opt != miscParams->end())
@@ -190,7 +208,12 @@ namespace Ogre {
 #endif
             }
             
-            if(!miscParams || miscParams->find("externalGLContext") == miscParams->end())
+            if(externalGLContext)
+            {
+                mGLContext = externalGLContext;
+                mGLPixelFormat = externalGLContext.pixelFormat;
+            }
+            else
             {
                 NSOpenGLPixelFormatAttribute attribs[30];
                 int i = 0;
@@ -237,31 +260,16 @@ namespace Ogre {
                 attribs[i++] = (NSOpenGLPixelFormatAttribute) 0;
                 
                 mGLPixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:attribs];
-            }
-            
-            GL3PlusRenderSystem *rs = static_cast<GL3PlusRenderSystem*>(Root::getSingleton().getRenderSystem());
-            CocoaContext *mainContext = (CocoaContext*)rs->_getMainContext();
-            NSOpenGLContext *shareContext = mainContext == 0 ? nil : mainContext->getContext();
-            
-            if(miscParams)
-                opt = miscParams->find("externalGLContext");
-            
-            if(miscParams && opt != miscParams->end())
-            {
-                NSOpenGLContext *openGLContext = (__bridge NSOpenGLContext *)(void*)StringConverter::parseSizeT(opt->second);
-                mGLContext = openGLContext;
-            }
-            else
-            {
+                
+                GL3PlusRenderSystem *rs = static_cast<GL3PlusRenderSystem*>(Root::getSingleton().getRenderSystem());
+                CocoaContext *mainContext = (CocoaContext*)rs->_getMainContext();
+                NSOpenGLContext *shareContext = mainContext == 0 ? nil : mainContext->getContext();
                 mGLContext = [[NSOpenGLContext alloc] initWithFormat:mGLPixelFormat shareContext:shareContext];
             }
             
             // Set vsync
             GLint swapInterval = (GLint)mVSync;
             [mGLContext setValues:&swapInterval forParameter:NSOpenGLCPSwapInterval];
-            
-            if(miscParams)
-                opt = miscParams->find("parentWindowHandle");
             
             // Make active
             setHidden(hidden);
@@ -272,16 +280,15 @@ namespace Ogre {
             mHeight = _getPixelFromPoint(heightPt);
             mFSAA = fsaa_samples;
             
-            if(!miscParams || opt == miscParams->end())
+            if(!externalWindowHandle)
             {
                 createNewWindow(widthPt, heightPt, [windowTitle cStringUsingEncoding:NSUTF8StringEncoding]);
             }
             else
             {
-                NSObject* externalHandle = (__bridge NSObject*)(void*)StringConverter::parseSizeT(opt->second);
-                if([externalHandle isKindOfClass:[NSWindow class]])
+                if([externalWindowHandle isKindOfClass:[NSWindow class]])
                 {
-                    mView = [(NSWindow*)externalHandle contentView];
+                    mView = [(NSWindow*)externalWindowHandle contentView];
                     mUseOgreGLView = [mView isKindOfClass:[OgreGL3PlusView class]];
                     LogManager::getSingleton().logMessage(mUseOgreGLView ?
                         "Mac Cocoa Window: Rendering on an external NSWindow with nested OgreGL3PlusView" :
@@ -289,8 +296,8 @@ namespace Ogre {
                 }
                 else
                 {
-                    assert([externalHandle isKindOfClass:[NSView class]]);
-                    mView = (NSView*)externalHandle;
+                    assert([externalWindowHandle isKindOfClass:[NSView class]]);
+                    mView = (NSView*)externalWindowHandle;
                     mUseOgreGLView = [mView isKindOfClass:[OgreGL3PlusView class]];
                     LogManager::getSingleton().logMessage(mUseOgreGLView ?
                         "Mac Cocoa Window: Rendering on an external OgreGL3PlusView" :
