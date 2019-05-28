@@ -117,8 +117,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     ID3D11UnorderedAccessView* D3D11UavBufferPacked::_bindBufferCommon( size_t offset, size_t sizeBytes )
     {
-        assert( offset < (mNumElements - 1) );
-        assert( sizeBytes < mNumElements );
+        assert( offset <= getTotalSizeBytes() );
+        assert( sizeBytes <= getTotalSizeBytes() );
+        assert( (offset + sizeBytes) <= getTotalSizeBytes() );
 
         sizeBytes = !sizeBytes ? (mNumElements * mBytesPerElement - offset) : sizeBytes;
 
@@ -152,8 +153,9 @@ namespace Ogre
     ID3D11UnorderedAccessView* D3D11UavBufferPacked::createUav(
             const DescriptorSetUav::BufferSlot &bufferSlot ) const
     {
-        assert( bufferSlot.offset < (mNumElements - 1) );
-        assert( bufferSlot.sizeBytes < mNumElements );
+        assert( bufferSlot.offset <= getTotalSizeBytes() );
+        assert( bufferSlot.sizeBytes <= getTotalSizeBytes() );
+        assert( (bufferSlot.offset + bufferSlot.sizeBytes) <= getTotalSizeBytes() );
 
         const size_t sizeBytes = !bufferSlot.sizeBytes ? (mNumElements * mBytesPerElement -
                                                           bufferSlot.offset) : bufferSlot.sizeBytes;

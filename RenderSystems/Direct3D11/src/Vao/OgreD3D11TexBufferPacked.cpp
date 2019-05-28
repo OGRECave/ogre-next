@@ -108,10 +108,11 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     ID3D11ShaderResourceView* D3D11TexBufferPacked::bindBufferCommon( size_t offset, size_t sizeBytes )
     {
-        assert( offset < (mNumElements - 1) );
-        assert( (offset + sizeBytes) <= mNumElements );
+        assert( offset <= getTotalSizeBytes() );
+        assert( sizeBytes <= getTotalSizeBytes() );
+        assert( (offset + sizeBytes) <= getTotalSizeBytes() );
 
-        sizeBytes = !sizeBytes ? (mNumElements - offset) : sizeBytes;
+        sizeBytes = !sizeBytes ? (mNumElements * mBytesPerElement - offset) : sizeBytes;
 
         ID3D11ShaderResourceView *resourceView = 0;
         for( int i=0; i<16; ++i )
@@ -143,8 +144,9 @@ namespace Ogre
     ID3D11ShaderResourceView* D3D11TexBufferPacked::createSrv(
             const DescriptorSetTexture2::BufferSlot &bufferSlot ) const
     {
-        assert( bufferSlot.offset < (mNumElements - 1) );
-        assert( bufferSlot.sizeBytes < mNumElements );
+        assert( bufferSlot.offset <= getTotalSizeBytes() );
+        assert( bufferSlot.sizeBytes <= getTotalSizeBytes() );
+        assert( (bufferSlot.offset + bufferSlot.sizeBytes) <= getTotalSizeBytes() );
 
         const size_t formatSize = isD3D11Structured() ? mBytesPerElement :
                                                         PixelUtil::getNumElemBytes( mPixelFormat );
