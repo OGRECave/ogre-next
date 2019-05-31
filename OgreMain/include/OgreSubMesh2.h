@@ -186,7 +186,7 @@ namespace Ogre {
         String getMaterialName(void) const                  { return mMaterialName; }
 
         /// Imports a v1 SubMesh @See Mesh::importV1. Automatically performs what arrangeEfficient does.
-        void importFromV1( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords, bool qTangents );
+        void importFromV1( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords, bool qTangents, bool halfPose );
 
         /// Converts this SubMesh to an efficient arrangement. @See Mesh::importV1 for an
         /// explanation on the parameters. @see dearrangeEfficientToInefficient
@@ -208,12 +208,12 @@ namespace Ogre {
 
     protected:
         void importBuffersFromV1( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords, bool qTangents,
-                                  size_t vaoPassIdx );
+                                  bool halfPose, size_t vaoPassIdx);
 
         /// Converts a v1 IndexBuffer to a v2 format. Returns nullptr if indexData is also nullptr
         IndexBufferPacked* importFromV1( v1::IndexData *indexData );
 
-        void importPosesFromV1( v1::SubMesh *subMesh, VertexBufferPacked *vertexBuffer );
+        void importPosesFromV1( v1::SubMesh *subMesh, VertexBufferPacked *vertexBuffer, bool halfPrecision );
 
         /** @see arrangeEfficient overload
         @param vao

@@ -497,7 +497,7 @@ namespace Ogre {
         return 0;
     }
     //---------------------------------------------------------------------
-    void SubMesh::importFromV1( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords, bool qTangents )
+    void SubMesh::importFromV1( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords, bool qTangents, bool halfPose )
     {
         mMaterialName = subMesh->getMaterialName();
 
@@ -522,7 +522,7 @@ namespace Ogre {
         mBlendIndexToBoneIndexMap = subMesh->blendIndexToBoneIndexMap;
         mBoneAssignmentsOutOfDate = false;
 
-        importBuffersFromV1( subMesh, halfPos, halfTexCoords, qTangents, 0 );
+        importBuffersFromV1( subMesh, halfPos, halfTexCoords, qTangents, halfPose, 0 );
 
         assert( subMesh->parent->hasValidShadowMappingBuffers() );
 
@@ -531,7 +531,7 @@ namespace Ogre {
             subMesh->indexData[VpNormal] != subMesh->indexData[VpShadow] )
         {
             //Use the special version already built for v1
-            importBuffersFromV1( subMesh, halfPos, halfTexCoords, qTangents, 1 );
+            importBuffersFromV1( subMesh, halfPos, halfTexCoords, qTangents, halfPose, 1 );
         }
         else
         {
@@ -541,7 +541,7 @@ namespace Ogre {
     }
     //---------------------------------------------------------------------
     void SubMesh::importBuffersFromV1( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords,
-                                       bool qTangents, size_t vaoPassIdx )
+                                       bool qTangents, bool halfPose, size_t vaoPassIdx )
     {
         VertexElement2Vec vertexElements;
         char *data = _arrangeEfficient( subMesh, halfPos, halfTexCoords, qTangents, &vertexElements,
@@ -588,7 +588,7 @@ namespace Ogre {
             ++itor;
         }
         
-        importPosesFromV1( subMesh, vertexBuffer );
+        importPosesFromV1( subMesh, vertexBuffer, halfPose );
     }
     //---------------------------------------------------------------------
     IndexBufferPacked* SubMesh::importFromV1( v1::IndexData *indexData )
@@ -623,7 +623,7 @@ namespace Ogre {
         return indexBuffer;
     }
     //---------------------------------------------------------------------
-    void SubMesh::importPosesFromV1( v1::SubMesh *subMesh, VertexBufferPacked *vertexBuffer )
+    void SubMesh::importPosesFromV1( v1::SubMesh *subMesh, VertexBufferPacked *vertexBuffer, bool halfPrecision )
     {
         // Find the index of this subMesh and only process poses which have this
         // subMesh as their target.
@@ -645,15 +645,15 @@ namespace Ogre {
         if( mNumPoseAnimations > 0 ) 
         {
             uint32 numVertices = vertexBuffer->getNumElements();
-            size_t bufferSize = (mNumPoseAnimations * numVertices) * sizeof( float ) * 4;
-            float *buffer = reinterpret_cast<float*>( OGRE_MALLOC_SIMD(
-                                                                    bufferSize,
-                                                                    MEMCATEGORY_GEOMETRY ) );                                
+            size_t elementSize = halfPrecision ? sizeof( uint16 ) : sizeof( float );
+            size_t singlePoseBufferSize = numVertices * elementSize * 4;
+            size_t bufferSize = mNumPoseAnimations * singlePoseBufferSize;
+            char *buffer = static_cast<char*>( OGRE_MALLOC_SIMD( bufferSize,
+                                                                 MEMCATEGORY_GEOMETRY ) );                                
             FreeOnDestructor bufferPtrContainer( buffer );
             memset( buffer, 0, bufferSize );
             
             v1::Mesh::PoseIterator poseIt = subMesh->parent->getPoseIterator();
-            float *pFloat = buffer;
             
             int index = 0;
             
@@ -663,22 +663,38 @@ namespace Ogre {
                 v1::Pose::VertexOffsetMap::const_iterator v = pose->getVertexOffsets().begin();
                 // TODO: import normals
                 
-                while( v != pose->getVertexOffsets().end() )
+                if( halfPrecision )
                 {
-                    size_t idx = v->first;
-                    pFloat[4*idx+0] = v->second.x;
-                    pFloat[4*idx+1] = v->second.y;
-                    pFloat[4*idx+2] = v->second.z;
-                    pFloat[4*idx+3] = 0.f;
-                    ++v;
+                    uint16* pHalf = reinterpret_cast<uint16*>( buffer +  index * singlePoseBufferSize );
+                    while( v != pose->getVertexOffsets().end() )
+                    {
+                        size_t idx = v->first;
+                        pHalf[4*idx+0] = Bitwise::floatToHalf( v->second.x );
+                        pHalf[4*idx+1] = Bitwise::floatToHalf( v->second.y );
+                        pHalf[4*idx+2] = Bitwise::floatToHalf( v->second.z );
+                        pHalf[4*idx+3] = Bitwise::floatToHalf( 0.f );
+                        ++v;
+                    }
                 }
-                
-                pFloat += numVertices * 4;
+                else
+                {
+                    float* pFloat = reinterpret_cast<float*>( buffer + index * singlePoseBufferSize );
+                    while( v != pose->getVertexOffsets().end() )
+                    {
+                        size_t idx = v->first;
+                        pFloat[4*idx+0] = v->second.x;
+                        pFloat[4*idx+1] = v->second.y;
+                        pFloat[4*idx+2] = v->second.z;
+                        pFloat[4*idx+3] = 0.f;
+                        ++v;
+                    }
+                }
                 
                 mPoseIndexMap[pose->getName()] = index++;
             }
             
-            mPoseTexBuffer = mParent->mVaoManager->createTexBuffer( PF_FLOAT32_RGBA, bufferSize,
+            PixelFormat pixelFormat = halfPrecision ? PF_FLOAT16_RGBA : PF_FLOAT32_RGBA;
+            mPoseTexBuffer = mParent->mVaoManager->createTexBuffer( pixelFormat, bufferSize,
                                                                     BT_IMMUTABLE, buffer, false );
         }
     }

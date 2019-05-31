@@ -76,6 +76,7 @@ namespace Demo
         bool halfPosition = true;
         bool halfUVs = true;
         bool useQtangents = false;
+        bool halfPose = true;
 
         // Smiley
         {
@@ -84,7 +85,7 @@ namespace Demo
                 Ogre::v1::HardwareBuffer::HBU_STATIC, Ogre::v1::HardwareBuffer::HBU_STATIC);
             v2Mesh = Ogre::MeshManager::getSingleton().createManual(
                 "Smiley.mesh", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
-            v2Mesh->importV1(v1Mesh.get(), halfPosition, halfUVs, useQtangents);
+            v2Mesh->importV1( v1Mesh.get(), halfPosition, halfUVs, useQtangents, halfPose);
             v1Mesh->unload();
         }
 
@@ -111,7 +112,7 @@ namespace Demo
                 Ogre::v1::HardwareBuffer::HBU_STATIC, Ogre::v1::HardwareBuffer::HBU_STATIC);
             v2Mesh = Ogre::MeshManager::getSingleton().createManual(
                 "Spring.mesh", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
-            v2Mesh->importV1(v1Mesh.get(), halfPosition, halfUVs, useQtangents);
+            v2Mesh->importV1( v1Mesh.get(), halfPosition, halfUVs, useQtangents, halfPose );
             v1Mesh->unload();
         }
 
@@ -134,7 +135,7 @@ namespace Demo
                 Ogre::v1::HardwareBuffer::HBU_STATIC, Ogre::v1::HardwareBuffer::HBU_STATIC);
             v2Mesh = Ogre::MeshManager::getSingleton().createManual(
                 "Blob.mesh", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
-            v2Mesh->importV1(v1Mesh.get(), halfPosition, halfUVs, useQtangents);
+            v2Mesh->importV1( v1Mesh.get(), halfPosition, halfUVs, useQtangents, halfPose);
             v1Mesh->unload();
         }
 
@@ -188,7 +189,7 @@ namespace Demo
         subItem = mBlobItem->getSubItem( 0 );
         for( int i = 0; i < subItem->getNumPoses(); ++i )
         {
-            subItem->setPoseWeight(i, (Ogre::Math::Sin(mAccumulator * (1 + i * 0.1) + i) + 1) * 0.27 );
+            subItem->setPoseWeight(i, Ogre::Math::Sin(mAccumulator * (1 + i * 0.1) * 3 + i) * 0.27 );
         }
         
         TutorialGameState::update( timeSinceLast );
