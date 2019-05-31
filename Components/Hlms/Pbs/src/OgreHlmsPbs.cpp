@@ -2112,7 +2112,7 @@ namespace Ogre
 
         bool hasSkeletonAnimation = queuedRenderable.renderable->hasSkeletonAnimation();
         uint32 numPoses = queuedRenderable.renderable->getNumPoses();
-        uint32 poseWeightsNumFloats = ((numPoses >> 2) + (numPoses % 4 == 0 ? 0 : 1)) * 4;
+        uint32 poseWeightsNumFloats = ((numPoses >> 2) + std::min(numPoses % 4, 1U)) * 4;
 
         const Matrix4 &worldMat = queuedRenderable.movableObject->_getParentNodeFullTransform();
 

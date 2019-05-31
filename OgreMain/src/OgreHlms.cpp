@@ -2439,8 +2439,7 @@ namespace Ogre
 
         setProperty( HlmsBaseProp::Skeleton, renderable->hasSkeletonAnimation() );
         
-        unsigned short numPoses = renderable->getNumPoses();
-        setProperty( HlmsBaseProp::Pose, numPoses );
+        setProperty( HlmsBaseProp::Pose, renderable->getNumPoses() );
 
         uint16 numTexCoords = 0;
         if( renderable->getVaos( VpNormal ).empty() )

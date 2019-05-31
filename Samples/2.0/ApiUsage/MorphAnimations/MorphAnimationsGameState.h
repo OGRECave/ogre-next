@@ -16,6 +16,7 @@ namespace Demo
     {
         Ogre::Item* mSmileyItem;
         Ogre::Item* mSpringItem;
+        Ogre::Item* mBlobItem;
         float mAccumulator;
         
     public:

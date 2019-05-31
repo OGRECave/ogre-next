@@ -137,16 +137,39 @@ out block
 	vec4 poseData = bufferFetch( worldMatBuf, poseDataStart );
 	int baseVertexID = int(floatBitsToUint( poseData.x ));
 	int vertexID = gl_VertexID - baseVertexID;
-	vec4 poseWeights = bufferFetch( worldMatBuf, poseDataStart + 1 );
 
 	@psub( MoreThanOnePose, hlms_pose, 1 )
 	@property( !MoreThanOnePose )
 		vec4 posePos = bufferFetch( poseBuf, vertexID );
+		vec4 poseWeights = bufferFetch( worldMatBuf, poseDataStart + 1 );
 		inputPos += posePos * poseWeights.x;
+		@pset( NumPoseWeightVectors, 1 )
 	@end @property( MoreThanOnePose )
+		// NumPoseWeightVectors = (hlms_pose / 4) + min(hlms_pose % 4, 1)
+		@pdiv( NumPoseWeightVectorsA, hlms_pose, 4 )
+		@pmod( NumPoseWeightVectorsB, hlms_pose, 4 )
+		@pmin( NumPoseWeightVectorsC, NumPoseWeightVectorsB, 1 )
+		@padd( NumPoseWeightVectors, NumPoseWeightVectorsA, NumPoseWeightVectorsC)
 		int numVertices = int(floatBitsToUint( poseData.y ));
-		@foreach( hlms_pose, n )
-			inputPos += bufferFetch( poseBuf, vertexID + numVertices * @n ) * poseWeights[@n];
+
+		@psub( MoreThanOnePoseWeightVector, NumPoseWeightVectors, 1)
+		@property( !MoreThanOnePoseWeightVector )
+			vec4 poseWeights = bufferFetch( worldMatBuf, poseDataStart + 1 );
+			@foreach( hlms_pose, n )
+				inputPos += bufferFetch( poseBuf, vertexID + numVertices * @n ) * poseWeights[@n];
+			@end
+		@end @property( MoreThanOnePoseWeightVector )
+			float poseWeights[@value(NumPoseWeightVectors) * 4];
+			@foreach( NumPoseWeightVectors, n)
+				vec4 weights@n = bufferFetch( worldMatBuf, poseDataStart + 1 + @n );
+				poseWeights[@n * 4 + 0] = weights@n[0];
+				poseWeights[@n * 4 + 1] = weights@n[1];
+				poseWeights[@n * 4 + 2] = weights@n[2];
+				poseWeights[@n * 4 + 3] = weights@n[3];
+			@end
+			@foreach( hlms_pose, n )
+				inputPos += bufferFetch( poseBuf, vertexID + numVertices * @n ) * poseWeights[@n];
+			@end
 		@end
 	@end
 
@@ -154,9 +177,9 @@ out block
 	// If hlms_pose is not combined with hlms_skeleton the object's worldMat and worldView have to be set.
 	@property( !hlms_skeleton )
 		vec4 worldMat[3];
-		worldMat[0] = bufferFetch( worldMatBuf, poseDataStart + 2 );
-		worldMat[1] = bufferFetch( worldMatBuf, poseDataStart + 3 );
-		worldMat[2] = bufferFetch( worldMatBuf, poseDataStart + 4 );
+		worldMat[0] = bufferFetch( worldMatBuf, poseDataStart + @value(NumPoseWeightVectors) + 1 );
+		worldMat[1] = bufferFetch( worldMatBuf, poseDataStart + @value(NumPoseWeightVectors) + 2 );
+		worldMat[2] = bufferFetch( worldMatBuf, poseDataStart + @value(NumPoseWeightVectors) + 3 );
 		vec4 worldPos;
 		worldPos.x = dot( worldMat[0], inputPos );
 		worldPos.y = dot( worldMat[1], inputPos );
@@ -165,7 +188,7 @@ out block
 		
 		@property( hlms_normal || hlms_qtangent )
 		@foreach( 4, n )
-			vec4 row@n = bufferFetch( worldMatBuf, poseDataStart + 5 + @n ); @end
+			vec4 row@n = bufferFetch( worldMatBuf, poseDataStart + @value(NumPoseWeightVectors) + 4 + @n ); @end
 		mat4 worldView = mat4( row0, row1, row2, row3 );
 		@end
 	@end

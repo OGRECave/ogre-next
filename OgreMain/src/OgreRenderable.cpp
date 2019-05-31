@@ -198,7 +198,7 @@ namespace Ogre
         return mPoseData ? mPoseData->numPoses : 0;
     }
     //-----------------------------------------------------------------------------------
-    float* Renderable::getPoseWeights() const
+    float* Renderable::getPoseWeights(void) const
     { 
         return mPoseData ? mPoseData->weights : 0;
     }
@@ -226,7 +226,7 @@ namespace Ogre
         mPoseData->weights[index] += w;
     }
     //-----------------------------------------------------------------------------------
-    TexBufferPacked* Renderable::getPoseTexBuffer() const
+    TexBufferPacked* Renderable::getPoseTexBuffer(void) const
     {
         return mPoseData ? mPoseData->buffer : 0;
     }

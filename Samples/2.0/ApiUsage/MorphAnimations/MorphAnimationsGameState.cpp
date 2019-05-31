@@ -125,7 +125,31 @@ namespace Demo
         springNode->attachObject( mSpringItem );
         springNode->setScale( Ogre::Vector3( 1.2 ) );
         springNode->setPosition( 1, 0.57, 0 );
-        //springNode->setOrientation( Ogre::Quaternion( Ogre::Radian(1.5), Ogre::Vector3(1,0,0) ) );
+
+        // Blob
+
+        {
+            v1Mesh = Ogre::v1::MeshManager::getSingleton().load(
+                "Blob.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                Ogre::v1::HardwareBuffer::HBU_STATIC, Ogre::v1::HardwareBuffer::HBU_STATIC);
+            v2Mesh = Ogre::MeshManager::getSingleton().createManual(
+                "Blob.mesh", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+            v2Mesh->importV1(v1Mesh.get(), halfPosition, halfUVs, useQtangents);
+            v1Mesh->unload();
+        }
+
+        Ogre::SceneNode *blobNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
+                createChildSceneNode( Ogre::SCENE_DYNAMIC );
+
+        mBlobItem = sceneManager->createItem( "Blob.mesh",
+                                                Ogre::ResourceGroupManager::
+                                                AUTODETECT_RESOURCE_GROUP_NAME,
+                                                Ogre::SCENE_DYNAMIC );
+        blobNode->attachObject( mBlobItem );
+        blobNode->setScale( Ogre::Vector3( 0.4 ) );
+        blobNode->setPosition( -1, 0.7, 0.7 );
+
+        // Lights
         
         Ogre::Light *light = sceneManager->createLight();
         Ogre::SceneNode *lightNode = sceneManager->getRootSceneNode()->createChildSceneNode();
@@ -137,6 +161,8 @@ namespace Demo
         sceneManager->setAmbientLight( Ogre::ColourValue( 0.3f, 0.5f, 0.7f ) * 0.1f * 0.75f,
                                        Ogre::ColourValue( 0.6f, 0.45f, 0.3f ) * 0.065f * 0.75f,
                                        -light->getDirection() + Ogre::Vector3::UNIT_Y * 0.2f );
+
+        // Camera
 
         mCameraController = new CameraController( mGraphicsSystem, false );
         Ogre::Camera *camera = mGraphicsSystem->getCamera();
@@ -158,6 +184,12 @@ namespace Demo
 
         subItem = mSpringItem->getSubItem( 0 );
         subItem->setPoseWeight( "Compressed", (Ogre::Math::Sin(mAccumulator) + 1)/2 );
+
+        subItem = mBlobItem->getSubItem( 0 );
+        for( int i = 0; i < subItem->getNumPoses(); ++i )
+        {
+            subItem->setPoseWeight(i, (Ogre::Math::Sin(mAccumulator * (1 + i * 0.1) + i) + 1) * 0.27 );
+        }
         
         TutorialGameState::update( timeSinceLast );
     }
