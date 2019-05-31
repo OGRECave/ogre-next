@@ -234,7 +234,6 @@ namespace Demo
         #elif __MACOSX__
         case SDL_SYSWM_COCOA:
             //required to make OGRE play nice with our window
-            params.insert( std::make_pair("macAPI", "cocoa") );
             params.insert( std::make_pair("macAPICocoaUseNSView", "true") );
 
             winHandle  = Ogre::StringConverter::toString(WindowContentViewHandle(wmInfo));

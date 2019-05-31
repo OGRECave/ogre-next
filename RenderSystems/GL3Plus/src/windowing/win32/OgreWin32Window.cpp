@@ -204,7 +204,7 @@ namespace Ogre {
             }
             if ((opt = miscParams->find("externalGLContext")) != end)
             {
-                mGlrc = (HGLRC)StringConverter::parseUnsignedLong(opt->second);
+                mGlrc = (HGLRC)StringConverter::parseSizeT(opt->second);
 
                 if( mGlrc )
                 {

@@ -30,9 +30,9 @@ THE SOFTWARE.
 #define __OSXCocoaView_H__
 
 #include "OgreRenderWindow.h"
-#include <AppKit/NSView.h>
+#include <AppKit/NSOpenGLView.h>
 
-@interface OgreGL3PlusView : NSView
+@interface OgreGL3PlusView : NSOpenGLView
 {
     Ogre::RenderWindow *window;
 }

@@ -466,9 +466,9 @@ namespace Ogre {
     }
 
 
-    void* Win32GLSupport::getProcAddress(const String& procname)
+    void* Win32GLSupport::getProcAddress(const char* procname) const
     {
-            return (void*)wglGetProcAddress( procname.c_str() );
+        return (void*)wglGetProcAddress(procname);
     }
     void Win32GLSupport::initialiseWGL()
     {

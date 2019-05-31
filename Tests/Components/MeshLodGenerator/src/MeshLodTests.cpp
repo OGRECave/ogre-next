@@ -46,14 +46,7 @@ void MeshLodTests::setUp()
     root->setRenderSystem(root->getAvailableRenderers().back());
     root->initialise(false); // Needed for setting up HardwareBufferManager
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
-    Ogre::NameValuePairList misc;
-    // Tell OGRE that we're using cocoa, so it doesn't need to make a window for us
-    misc["macAPI"] = "cocoa";
-    root->createRenderWindow("", 320, 240, false, &misc)->setHidden(true);
-#else
     root->createRenderWindow("", 320, 240, false, NULL)->setHidden(true);
-#endif
 
     new MeshLodGenerator;
 

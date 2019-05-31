@@ -88,14 +88,14 @@ namespace Ogre {
             if(opt != end)
             {
                 LogManager::getSingleton().logMessage("\tgetting pp::Instance - if stopped here - it means the parameter is null!");
-                mInstance = (pp::Instance*)(Ogre::StringConverter::parseUnsignedLong(opt->second));
+                mInstance = (pp::Instance*)(Ogre::StringConverter::parseSizeT(opt->second));
                 LogManager::getSingleton().logMessage("\tgot the pp::Instance.");
             }
             opt = miscParams->find("SwapCallback");
             if(opt != end)
             {
                 LogManager::getSingleton().logMessage("\tgetting SwapCallback - if stopped here - it means the parameter is null!");
-                mSwapCallback = (pp::CompletionCallback*)(Ogre::StringConverter::parseUnsignedLong(opt->second));
+                mSwapCallback = (pp::CompletionCallback*)(Ogre::StringConverter::parseSizeT(opt->second));
                 LogManager::getSingleton().logMessage("\tgot the SwapCallback.");
             }
             

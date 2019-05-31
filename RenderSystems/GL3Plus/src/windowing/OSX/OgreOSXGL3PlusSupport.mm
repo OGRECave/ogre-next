@@ -60,7 +60,6 @@ void OSXGL3PlusSupport::addConfig( void )
 	ConfigOption optBitDepth;
 	ConfigOption optFSAA;
 	ConfigOption optRTTMode;
-    ConfigOption optMacAPI;
 	ConfigOption optHiddenWindow;
 	ConfigOption optVsync;
 	ConfigOption optSRGB;
@@ -126,12 +125,6 @@ void OSXGL3PlusSupport::addConfig( void )
 	optStereoMode.immutable = false;
 #endif
 
-    optMacAPI.name = "macAPI";
-    optMacAPI.possibleValues.push_back( "cocoa" );
-	optMacAPI.currentValue = "cocoa";
-    optMacAPI.immutable = false;
-
-    mOptions[ optMacAPI.name ] = optMacAPI;
     mOptions[ optFullScreen.name ] = optFullScreen;
 	mOptions[ optBitDepth.name ] = optBitDepth;
     mOptions[ optContentScalingFactor.name ] = optContentScalingFactor;
@@ -298,12 +291,6 @@ RenderWindow* OSXGL3PlusSupport::createWindow( bool autoCreateWindow, GL3PlusRen
         if( opt != mOptions.end() )
             winOptions["gamma"] = opt->second.currentValue;
 
-        opt = mOptions.find( "macAPI" );
-        if( opt != mOptions.end() )
-        {
-			winOptions[ "macAPI" ] = opt->second.currentValue;
-        }
-
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
 		opt = mOptions.find("Stereo Mode");
 		if (opt == mOptions.end())
@@ -347,29 +334,9 @@ void OSXGL3PlusSupport::stop()
 			"***********************************************");
 }
 
-void* OSXGL3PlusSupport::getProcAddress( const char* name )
+void* OSXGL3PlusSupport::getProcAddress(const char* procname) const
 {
-    void *symbol;
-    symbol = NULL;
-    
-    String fullPath = macPluginPath() + "RenderSystem_GL3Plus.dylib";
-    void *handle = dlopen(fullPath.c_str(), RTLD_LAZY | RTLD_GLOBAL);
-    if(handle) {
-        symbol = dlsym (handle, name);
-    }
-    dlclose(handle);
-    
-    return symbol;
-}
-
-void* OSXGL3PlusSupport::getProcAddress( const String& procname )
-{
-	return getProcAddress( procname.c_str() );
-}
-
-bool OSXGL3PlusSupport::supportsPBuffers()
-{
-	return false;
+    return dlsym (RTLD_DEFAULT, procname);
 }
 
 CFComparisonResult OSXGL3PlusSupport::_compareModes (const void *val1, const void *val2, void *context)
