@@ -285,14 +285,6 @@ namespace Ogre
                          srcNumElems * this->getBytesPerElement() <=
                          dstBuffer->mNumElements * dstBuffer->getBytesPerElement() );
 
-        if( srcNumElems * this->getBytesPerElement() % dstBuffer->getBytesPerElement() != 0u )
-        {
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "srcNumElems * this->getBytesPerElement() must be multiple of"
-                         " dstBuffer->getBytesPerElement()",
-                         "BufferPacked::copyTo" );
-        }
-
         if( dstBuffer->mShadowCopy )
         {
             if( !this->mShadowCopy )

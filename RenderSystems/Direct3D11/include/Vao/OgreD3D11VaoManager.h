@@ -147,6 +147,7 @@ namespace Ogre
         D3D11SyncVec mFrameSyncVec;
 
         VertexBufferPacked  *mDrawId;
+        ID3D11Buffer        *mSplicingHelperBuffer;
 
         D3D11RenderSystem   *mD3D11RenderSystem;
 
@@ -300,6 +301,12 @@ namespace Ogre
 
         virtual void _beginFrame(void);
         virtual void _update(void);
+
+        /// When dealing with copy operations on structured buffers, D3D11 wants buffers
+        /// to be of the same size as the structured buffer's stride. Because we allow
+        /// more relaxed copies, we create a helper buffer of 2kb (max stride) to splice
+        /// buffer copies and workaround this limitation
+        ID3D11Buffer* getSplicingHelperBuffer(void);
 
         /// @see VaoManager::waitForTailFrameToFinish
         virtual uint8 waitForTailFrameToFinish(void);
