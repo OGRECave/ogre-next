@@ -270,6 +270,8 @@ namespace Ogre
         @param indexCountSplit
             0 to use mDefaultIndexCountSplit. Use a different value to override
             This value is ignored if the mesh had already been added.
+
+            Use std::numeric_limits<uint32>::max to avoid partitioning at all.
         */
         void addItem( Item *item, bool bCompressed, uint32 indexCountSplit=0u );
 

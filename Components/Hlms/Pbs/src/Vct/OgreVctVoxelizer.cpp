@@ -115,10 +115,8 @@ namespace Ogre
         mNumVerticesUncompressed( 0 ),
         mNumIndices16( 0 ),
         mNumIndices32( 0 ),
-        mDefaultIndexCountSplit( /*2001u*/
-                                 static_cast<uint32>(
-                                     alignToNextMultiple( std::numeric_limits<uint32>::max() - 3u,
-                                                          3u ) ) ),
+        mDefaultIndexCountSplit( 2001u
+                                 /*std::numeric_limits<uint32>::max()*/ ),
         mAlbedoVox( 0 ),
         mEmissiveVox( 0 ),
         mNormalVox( 0 ),
@@ -328,8 +326,10 @@ namespace Ogre
             //voxel, which can be very inefficient. By partitioning the submeshes and calculating
             //their AABBs, we can perform broadphase culling and skip a lot of triangles
             const uint32 numPartitions =
-                    static_cast<uint32>( alignToNextMultiple( numIndices, queuedMesh.indexCountSplit ) /
-                                         queuedMesh.indexCountSplit );
+                    queuedMesh.indexCountSplit == std::numeric_limits<uint32>::max() ?
+                        1u : static_cast<uint32>( alignToNextMultiple( numIndices,
+                                                                       queuedMesh.indexCountSplit ) /
+                                                  queuedMesh.indexCountSplit );
             queuedMesh.submeshes[subMeshIdx].partSubMeshes.resize( numPartitions );
 
             for( uint32 partition=0u; partition<numPartitions; ++partition )
@@ -577,7 +577,8 @@ namespace Ogre
 
         if( indexCountSplit == 0u )
             indexCountSplit = mDefaultIndexCountSplit;
-        indexCountSplit = static_cast<uint32>( alignToNextMultiple( indexCountSplit, 3u ) );
+        if( indexCountSplit != std::numeric_limits<uint32>::max() )
+            indexCountSplit = static_cast<uint32>( alignToNextMultiple( indexCountSplit, 3u ) );
 
         MeshPtrMap::iterator itor = mMeshesV2.find( mesh );
 
