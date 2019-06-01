@@ -874,8 +874,8 @@ namespace Ogre {
         bool hasTangents = false;
 
         v1::VertexData *vertexData = subMesh->vertexData[vaoPassIdx];
-        
-        {    
+
+        {
             //Get an AZDO-friendly vertex declaration out of the original declaration.
             const v1::VertexDeclaration::VertexElementList &origElements = vertexData->
                                                                 vertexDeclaration->getElements();
