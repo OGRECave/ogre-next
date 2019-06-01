@@ -121,27 +121,49 @@ Buffer<float4> worldMatBuf : register(t0);
 @property( hlms_pose )@piece( PoseTransform )
 	// Pose data starts after all 3x4 bone matrices
 	uint poseDataStart = (worldMaterialIdx[input.drawId].x >> 9u) @property( hlms_skeleton ) + @value(hlms_bones_per_vertex)u * 3u@end ;
-	float4 poseWeights = worldMatBuf.Load( int(poseDataStart + 1u) );
 
 	@psub( MoreThanOnePose, hlms_pose, 1 )
 	@property( !MoreThanOnePose )
 		float4 posePos = poseBuf.Load( int(input.vertexId) );
+		float4 poseWeights = worldMatBuf.Load( int(poseDataStart + 1u) );
 		input.vertex += posePos * poseWeights.x;
 	@end @property( MoreThanOnePose )
+		// NumPoseWeightVectors = (hlms_pose / 4) + min(hlms_pose % 4, 1)
+		@pdiv( NumPoseWeightVectorsA, hlms_pose, 4 )
+		@pmod( NumPoseWeightVectorsB, hlms_pose, 4 )
+		@pmin( NumPoseWeightVectorsC, NumPoseWeightVectorsB, 1 )
+		@padd( NumPoseWeightVectors, NumPoseWeightVectorsA, NumPoseWeightVectorsC)
 		float4 poseData = worldMatBuf.Load( int(poseDataStart) );
 		uint numVertices = asuint( poseData.y );
-		@foreach( hlms_pose, n )
-			input.vertex += poseBuf.Load( int(input.vertexId + numVertices * @nu) ) * poseWeights[@n];
+
+		@psub( MoreThanOnePoseWeightVector, NumPoseWeightVectors, 1)
+		@property( !MoreThanOnePoseWeightVector )
+			float4 poseWeights = worldMatBuf.Load( int(poseDataStart + 1u) );
+			@foreach( hlms_pose, n )
+				input.vertex += poseBuf.Load( int(input.vertexId + numVertices * @nu) ) * poseWeights[@n];
+			@end
+		@end @property( MoreThanOnePoseWeightVector )
+			float poseWeights[@value(NumPoseWeightVectors) * 4];
+			@foreach( NumPoseWeightVectors, n)
+				float4 weights@n = worldMatBuf.Load( int(poseDataStart + 1u + @nu) );
+				poseWeights[@n * 4 + 0] = weights@n[0];
+				poseWeights[@n * 4 + 1] = weights@n[1];
+				poseWeights[@n * 4 + 2] = weights@n[2];
+				poseWeights[@n * 4 + 3] = weights@n[3];
+			@end
+			@foreach( hlms_pose, n )
+				input.vertex += poseBuf.Load( int(input.vertexId + numVertices * @nu) ) * poseWeights[@n];
+			@end
 		@end
 	@end
 
 	// If hlms_skeleton is defined the transforms will be provided by bones.
-	// If hlms_pose is not combined with hlms_skeleton the object's worldMat and worldView have to be set.
+	// If hlms_pose is not combined with h lms_skeleton the object's worldMat and worldView have to be set.
 	@property( !hlms_skeleton )
 		float4 worldMat[3];
-		worldMat[0] = worldMatBuf.Load( int(poseDataStart + 2u) );
-		worldMat[1] = worldMatBuf.Load( int(poseDataStart + 3u) );
-		worldMat[2] = worldMatBuf.Load( int(poseDataStart + 4u) );
+		worldMat[0] = worldMatBuf.Load( int(poseDataStart + @value(NumPoseWeightVectors)u + 1u) );
+		worldMat[1] = worldMatBuf.Load( int(poseDataStart + @value(NumPoseWeightVectors)u + 2u) );
+		worldMat[2] = worldMatBuf.Load( int(poseDataStart + @value(NumPoseWeightVectors)u + 3u) );
 		float4 worldPos;
 		worldPos.x = dot( worldMat[0], input.vertex );
 		worldPos.y = dot( worldMat[1], input.vertex );
@@ -150,7 +172,7 @@ Buffer<float4> worldMatBuf : register(t0);
 
 		@property( hlms_normal || hlms_qtangent )
 		@foreach( 4, n )
-			float4 row@n = worldMatBuf.Load( int(poseDataStart + 5u + @nu) );@end
+			float4 row@n = worldMatBuf.Load( int(poseDataStart + @value(NumPoseWeightVectors)u + 4u + @nu) );@end
 		float4x4 worldView = transpose( float4x4( row0, row1, row2, row3 ) );
 		@end
 	@end
