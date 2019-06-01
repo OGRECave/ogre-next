@@ -297,22 +297,11 @@ namespace Ogre
                 if( indexBuffer->getIndexType() == IndexBufferPacked::IT_16BIT )
                 {
                     uses32bitIndices = false;
-                    uint32 indexStart = vao->getPrimitiveStart();
-                    const bool indexStartWasDecremented = adjustIndexOffsets16( indexStart, numIndices );
                     ibOffset = mNumIndices16 + totalNumIndices16;
-                    totalNumIndices16 += numIndices;
+                    totalNumIndices16 += alignToNextMultiple( numIndices, 4u );
 
                     partSubMeshIdx = queuedMesh.bCompressed ? &mNumCompressedPartSubMeshes16 :
                                                               &mNumUncompressedPartSubMeshes16;
-
-                    //BufferPacked::copyTo needs to be multiple of 2, but our compute shader
-                    //must start reading from the correct offset and the right number
-                    //of indices are processed (both of which can be odd)
-                    if( indexStartWasDecremented )
-                    {
-                        ++ibOffset;
-                        --numIndices;
-                    }
                 }
                 else
                 {
@@ -371,7 +360,6 @@ namespace Ogre
 
         mNumIndices16 += totalNumIndices16;
         mNumIndices32 += totalNumIndices32;
-
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::prepareAabbCalculatorMeshData(void)
@@ -505,11 +493,10 @@ namespace Ogre
                 {
                     uint32 indexStart = vao->getPrimitiveStart();
                     uint32 numIndices = vao->getPrimitiveCount();
-                    adjustIndexOffsets16( indexStart, numIndices );
                     indexBuffer->copyTo( mIndexBuffer16,
                                          mappedBuffers.index16BufferOffset >> 1u,
                                          indexStart, numIndices );
-                    mappedBuffers.index16BufferOffset += numIndices;
+                    mappedBuffers.index16BufferOffset += alignToNextMultiple( numIndices, 4u );
                 }
                 else
                 {
