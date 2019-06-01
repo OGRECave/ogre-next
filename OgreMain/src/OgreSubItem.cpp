@@ -58,6 +58,7 @@ namespace Ogre {
             mPoseData.reset(new PoseData);
             mPoseData->numPoses = subMeshBasis->getNumPoseAnimations();
             mPoseData->buffer = subMeshBasis->getPoseTexBuffer();
+            mPoseData->halfPrecision = subMeshBasis->getPoseHalfPrecision();
         }
     }
     //-----------------------------------------------------------------------

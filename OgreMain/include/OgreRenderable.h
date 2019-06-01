@@ -146,6 +146,7 @@ namespace Ogre {
         bool hasSkeletonAnimation(void) const               { return mHasSkeletonAnimation; }
 
         unsigned short getNumPoses(void) const;
+        bool getPoseHalfPrecision() const;
         float* getPoseWeights() const;
         float getPoseWeight(size_t index) const;
         void setPoseWeight(size_t index, float w);
@@ -471,9 +472,10 @@ namespace Ogre {
         
         struct PoseData
         {
-            unsigned short  numPoses;
+            unsigned short   numPoses;
             float            weights[OGRE_MAX_POSES];
-            TexBufferPacked *buffer;
+            TexBufferPacked* buffer;
+            bool             halfPrecision;
             
             PoseData();
         };

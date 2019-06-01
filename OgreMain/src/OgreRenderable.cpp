@@ -198,6 +198,11 @@ namespace Ogre
         return mPoseData ? mPoseData->numPoses : 0;
     }
     //-----------------------------------------------------------------------------------
+    bool Renderable::getPoseHalfPrecision() const
+    {
+      return mPoseData ? mPoseData->halfPrecision : false;
+    }
+    //-----------------------------------------------------------------------------------
     float* Renderable::getPoseWeights(void) const
     { 
         return mPoseData ? mPoseData->weights : 0;

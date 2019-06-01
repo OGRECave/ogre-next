@@ -116,17 +116,39 @@ struct PS_INPUT
 	// Pose data starts after all 3x4 bone matrices
 	uint poseDataStart = (worldMaterialIdx[drawId].x >> 9u) @property( hlms_skeleton ) + @value(hlms_bones_per_vertex)u * 3u@end ;
 	uint poseVertexId = vertexId - baseVertex;
-	float4 poseWeights = worldMatBuf[poseDataStart + 1u];
 	
 	@psub( MoreThanOnePose, hlms_pose, 1 )
 	@property( !MoreThanOnePose )
-		float4 posePos = poseBuf[poseVertexId];
+		float4 posePos = static_cast<float4>( poseBuf[poseVertexId] );
+		float4 poseWeights = worldMatBuf[poseDataStart + 1u];
 		input.position += posePos * poseWeights.x;
 	@end @property( MoreThanOnePose )
+		// NumPoseWeightVectors = (hlms_pose / 4) + min(hlms_pose % 4, 1)
+		@pdiv( NumPoseWeightVectorsA, hlms_pose, 4 )
+		@pmod( NumPoseWeightVectorsB, hlms_pose, 4 )
+		@pmin( NumPoseWeightVectorsC, NumPoseWeightVectorsB, 1 )
+		@padd( NumPoseWeightVectors, NumPoseWeightVectorsA, NumPoseWeightVectorsC)
 		float4 poseData = worldMatBuf[poseDataStart];
 		uint numVertices = as_type<uint>( poseData.y );
-		@foreach( hlms_pose, n )
-			input.position += poseBuf[poseVertexId + numVertices * @nu] * poseWeights[@nu];
+		
+		@psub( MoreThanOnePoseWeightVector, NumPoseWeightVectors, 1)
+		@property( !MoreThanOnePoseWeightVector )
+			float4 poseWeights = worldMatBuf[poseDataStart + 1u];
+			@foreach( hlms_pose, n )
+				input.position += static_cast<float4>( poseBuf[poseVertexId + numVertices * @nu] ) * poseWeights[@n];
+			@end
+		@end @property( MoreThanOnePoseWeightVector )
+			float poseWeights[@value(NumPoseWeightVectors) * 4];
+			@foreach( NumPoseWeightVectors, n)
+				float4 weights@n = worldMatBuf[poseDataStart + 1u + @nu];
+				poseWeights[@n * 4 + 0] = weights@n[0];
+				poseWeights[@n * 4 + 1] = weights@n[1];
+				poseWeights[@n * 4 + 2] = weights@n[2];
+				poseWeights[@n * 4 + 3] = weights@n[3];
+			@end
+			@foreach( hlms_pose, n )
+				input.position += static_cast<float4>( poseBuf[poseVertexId + numVertices * @nu] ) * poseWeights[@n];
+			@end
 		@end
 	@end
 	
@@ -134,9 +156,9 @@ struct PS_INPUT
 	// If hlms_pose is not combined with hlms_skeleton the object's worldMat and worldView have to be set.
 	@property( !hlms_skeleton )
 		float4 worldMat[3];
-		worldMat[0] = worldMatBuf[poseDataStart + 2u];
-		worldMat[1] = worldMatBuf[poseDataStart + 3u];
-		worldMat[2] = worldMatBuf[poseDataStart + 4u];
+		worldMat[0] = worldMatBuf[poseDataStart + @value(NumPoseWeightVectors)u + 1u];
+		worldMat[1] = worldMatBuf[poseDataStart + @value(NumPoseWeightVectors)u + 2u];
+		worldMat[2] = worldMatBuf[poseDataStart + @value(NumPoseWeightVectors)u + 3u];
 		float4 worldPos;
 		worldPos.x = dot( worldMat[0], input.position );
 		worldPos.y = dot( worldMat[1], input.position );
@@ -145,7 +167,7 @@ struct PS_INPUT
 		
 		@property( hlms_normal || hlms_qtangent )
 		@foreach( 4, n )
-			float4 row@n = worldMatBuf[poseDataStart + 5u + @nu];@end
+			float4 row@n = worldMatBuf[poseDataStart + @value(NumPoseWeightVectors)u + 4u + @nu];@end
 		float4x4 worldView = float4x4( row0, row1, row2, row3 );
 		@end
 	@end
@@ -191,7 +213,11 @@ vertex PS_INPUT main_metal
 	@insertpiece( InstanceDecl )
 	, device const float4 *worldMatBuf [[buffer(TEX_SLOT_START+0)]]
 	@property( hlms_pose )
+		@property( !hlms_pose_half )
 		, device const float4 *poseBuf [[buffer(TEX_SLOT_START+4)]]
+		@end @property( hlms_pose_half )
+		, device const half4 *poseBuf [[buffer(TEX_SLOT_START+4)]]
+		@end
 		, uint vertexId [[vertex_id]]
 		, uint baseVertex [[base_vertex]]
 	@end

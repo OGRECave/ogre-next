@@ -50,6 +50,7 @@ namespace Ogre {
         mParent( 0 ),
         mBoneAssignmentsOutOfDate( false ),
         mNumPoseAnimations( 0 ),
+        mPoseHalfPrecision( false ),
         mPoseTexBuffer( 0 )
     {
     }
@@ -632,7 +633,7 @@ namespace Ogre {
         v1::Mesh::SubMeshList::const_iterator subMeshIt = std::find( subMeshBegin, subMeshEnd, subMesh );
         
         assert( subMeshIt != subMeshEnd && "Parent mesh does not contain this subMesh.");
-        
+                
         int subMeshIndex = subMeshIt - subMeshBegin;
         
         v1::PoseList poseList = subMesh->parent->getPoseList();
@@ -696,6 +697,7 @@ namespace Ogre {
             PixelFormat pixelFormat = halfPrecision ? PF_FLOAT16_RGBA : PF_FLOAT32_RGBA;
             mPoseTexBuffer = mParent->mVaoManager->createTexBuffer( pixelFormat, bufferSize,
                                                                     BT_IMMUTABLE, buffer, false );
+            mPoseHalfPrecision = halfPrecision;
         }
     }
     //---------------------------------------------------------------------

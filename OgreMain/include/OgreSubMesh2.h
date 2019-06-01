@@ -110,6 +110,7 @@ namespace Ogre {
         uint8 rationaliseBoneAssignments(void);
         
         unsigned short mNumPoseAnimations;
+        bool mPoseHalfPrecision;
         std::map<Ogre::String, size_t> mPoseIndexMap;
         TexBufferPacked *mPoseTexBuffer;
 
@@ -201,6 +202,8 @@ namespace Ogre {
         void _prepareForShadowMapping( bool forceSameBuffers );
         
         unsigned short getNumPoseAnimations() { return mNumPoseAnimations; }
+        
+        bool getPoseHalfPrecision() { return mPoseHalfPrecision; }
         
         size_t getPoseIndex(const Ogre::String& name) { return mPoseIndexMap.count(name) ? mPoseIndexMap[name] : SIZE_MAX; }
         
