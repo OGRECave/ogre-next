@@ -45,7 +45,6 @@ THE SOFTWARE.
 #include "OgreRotationAffectorFactory.h"
 #include "OgreDirectionRandomiserAffectorFactory.h"
 #include "OgreDeflectorPlaneAffectorFactory.h"
-#include "OgreDamperAffectorFactory.h"
 
 namespace Ogre 
 {
@@ -142,11 +141,6 @@ namespace Ogre
 
         // DeflectorPlaneAffector
         pAffFact = OGRE_NEW DeflectorPlaneAffectorFactory();
-        ParticleSystemManager::getSingleton().addAffectorFactory(pAffFact);
-        mAffectorFactories.push_back(pAffFact);
-        
-        // DamperAffector
-        pAffFact = OGRE_NEW DamperAffectorFactory();
         ParticleSystemManager::getSingleton().addAffectorFactory(pAffFact);
         mAffectorFactories.push_back(pAffFact);
     }
