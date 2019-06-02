@@ -94,7 +94,7 @@
 	@end
 
 	@property( obb_restraint_approx || obb_restraint_ltc )
-		bool testObbRestraint( @property( syntax == metal )constant@end float4 obbRestraint[3],
+		bool testObbRestraint( @property( syntax == metal )constant@end  float4 obbRestraint[3],
 							   float3 pos )
 		{
 			float3 obbTest;
