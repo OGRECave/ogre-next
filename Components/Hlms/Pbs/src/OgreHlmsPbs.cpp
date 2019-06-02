@@ -1341,7 +1341,7 @@ namespace Ogre
         const uint32 realNumAreaApproxLights = mRealNumAreaApproxLights;
         const uint32 realNumAreaLtcLights = mRealNumAreaLtcLights;
 #if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
-        const size_t numAreaApproxFloat4Vars = 7u + (mUseObbRestraintAreaApprox ? 3u : 0u);
+        const size_t numAreaApproxFloat4Vars = 7u + (mUseObbRestraintAreaApprox ? 4u : 0u);
         const size_t numAreaLtcFloat4Vars = 7u + (mUseObbRestraintAreaLtc ? 3u : 0u);
 #else
         const size_t numAreaApproxFloat4Vars = 7u;
@@ -2005,6 +2005,13 @@ namespace Ogre
 #if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
                 if( mUseObbRestraintAreaApprox )
                 {
+                    //float4 obbFadeFactorApprox
+                    const Vector3 obbRestraintFadeFactor = light->_getObbRestraintFadeFactor();
+                    *passBufferPtr++ = obbRestraintFadeFactor.x;
+                    *passBufferPtr++ = obbRestraintFadeFactor.y;
+                    *passBufferPtr++ = obbRestraintFadeFactor.z;
+                    *passBufferPtr++ = 0.0f;
+
                     //float4x3 obbRestraint;
                     passBufferPtr = fillObbRestraint( light, viewMatrix, passBufferPtr );
                 }
@@ -2076,13 +2083,28 @@ namespace Ogre
                 rectPoints[2] = lightPos + xAxis + yAxis;
                 rectPoints[3] = lightPos - xAxis + yAxis;
 
+#if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
+                //float4 obbFadeFactorApprox
+                const Vector3 obbRestraintFadeFactor = light->_getObbRestraintFadeFactor();
+#endif
+
                 for( size_t j=0; j<4u; ++j )
                 {
                     *passBufferPtr++ = rectPoints[j].x;
                     *passBufferPtr++ = rectPoints[j].y;
                     *passBufferPtr++ = rectPoints[j].z;
+#if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
+                    if( j == 0u )
+                    {
+                        *reinterpret_cast<uint32 * RESTRICT_ALIAS>(passBufferPtr) = realNumAreaLtcLights;
+                        ++passBufferPtr;
+                    }
+                    else
+                        *passBufferPtr++ = obbRestraintFadeFactor[j-1u];
+#else
                     *reinterpret_cast<uint32 * RESTRICT_ALIAS>(passBufferPtr) = realNumAreaLtcLights;
                     ++passBufferPtr;
+#endif
                 }
 
 #if OGRE_ENABLE_LIGHT_OBB_RESTRAINT

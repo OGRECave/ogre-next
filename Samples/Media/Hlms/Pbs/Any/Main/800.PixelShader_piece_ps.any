@@ -94,17 +94,20 @@
 	@end
 
 	@property( obb_restraint_approx || obb_restraint_ltc )
-		bool testObbRestraint( @property( syntax == metal )constant@end  float4 obbRestraint[3],
-							   float3 pos )
+		/// Returns value in range [-inf; 1]
+		/// Values <= 0 means 'pos' is outside the obb
+		float getObbRestraintFade( @property( syntax == metal )constant@end  float4 obbRestraint[3],
+								   float3 pos, float3 obbFadeFactors )
 		{
-			float3 obbTest;
-			obbTest.x = dot( obbRestraint[0].xyzw, float4( pos.xyz, 1.0 ) );
-			obbTest.y = dot( obbRestraint[1].xyzw, float4( pos.xyz, 1.0 ) );
-			obbTest.z = dot( obbRestraint[2].xyzw, float4( pos.xyz, 1.0 ) );
-			bool isInsideObbRestraint = abs( obbTest.x ) <= 1.0 &&
-										abs( obbTest.y ) <= 1.0 &&
-										abs( obbTest.z ) <= 1.0;
-			return isInsideObbRestraint;
+			float3 obbDistToBounds;
+			obbDistToBounds.x = dot( obbRestraint[0].xyzw, float4( pos.xyz, 1.0 ) );
+			obbDistToBounds.y = dot( obbRestraint[1].xyzw, float4( pos.xyz, 1.0 ) );
+			obbDistToBounds.z = dot( obbRestraint[2].xyzw, float4( pos.xyz, 1.0 ) );
+			//Until this point, obbDistToBounds in range [-1;1] means we're inside the OBB.
+			obbDistToBounds = abs( obbDistToBounds );
+
+			float3 obbFade = (1.0 - obbDistToBounds) * obbFadeFactors;
+			return min( min3( obbFade.x, obbFade.y, obbFade.z ), 1.0 );
 		}
 	@end
 

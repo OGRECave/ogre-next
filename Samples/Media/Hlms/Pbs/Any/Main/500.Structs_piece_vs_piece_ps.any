@@ -39,6 +39,7 @@ struct Light
 #define numAreaApproxLightsWithMask areaApproxLights[0].doubleSided.z
 
 #define numAreaLtcLights areaLtcLights[0].points[0].w
+#define numAreaLtcLights areaLtcLights[0].points[0].w
 
 struct AreaLight
 {
@@ -61,6 +62,7 @@ struct AreaLight
 	float4 doubleSided;	//.y contains numAreaApproxLights
 						//.z contains numAreaApproxLightsWithMask
 	@property( obb_restraint_approx )
+		float4 obbFadeFactorApprox; //.w unused
 		float4 obbRestraint[3];
 	@end
 };
@@ -76,6 +78,7 @@ struct AreaLtcLight
 	float4 diffuse;			//.w contains attenuation range
 	float4 specular;		//.w contains doubleSided
 	float4 points[4];		//.w contains numAreaLtcLights
+							//points[1].w, points[2].w, points[3].w contain obbFadeFactorLtc.xyz
 	@property( obb_restraint_ltc )
 		float4 obbRestraint[3];
 	@end
