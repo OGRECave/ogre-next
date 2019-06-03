@@ -47,6 +47,10 @@ if( APPLE )
 		 ${CMAKE_SOURCE_DIR}/Samples/Media/models
 		 ${CMAKE_SOURCE_DIR}/Samples/Media/materials/textures )
 
+	 set( SAMPLE_COMMON_COMPUTE_RESOURCES
+		  ${CMAKE_SOURCE_DIR}/Samples/Media/Compute
+		  ${CMAKE_SOURCE_DIR}/Samples/Media/VCT )
+
         if( OGRE_BUILD_PLATFORM_APPLE_IOS )
             set( SAMPLES_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Common/src/System/iOS/Resources/Info.plist )
         else()

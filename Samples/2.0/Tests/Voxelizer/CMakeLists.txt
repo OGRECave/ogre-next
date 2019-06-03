@@ -18,12 +18,12 @@ ogre_add_component_include_dir(Hlms/Pbs)
 
 add_recursive( ./ SOURCE_FILES )
 
-ogre_add_executable(Test_Voxelizer WIN32 MACOSX_BUNDLE ${SOURCE_FILES} ${SAMPLE_COMMON_RESOURCES})
+ogre_add_executable(Test_Voxelizer WIN32 MACOSX_BUNDLE ${SOURCE_FILES} ${SAMPLE_COMMON_RESOURCES} ${SAMPLE_COMMON_COMPUTE_RESOURCES})
 
 target_link_libraries(Test_Voxelizer ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES})
 ogre_config_sample_lib(Test_Voxelizer)
 
 if( APPLE )
-	set_target_properties( Test_Voxelizer PROPERTIES RESOURCE "${SAMPLE_COMMON_RESOURCES}" )
+	set_target_properties( Test_Voxelizer PROPERTIES RESOURCE "${SAMPLE_COMMON_RESOURCES} ${SAMPLE_COMMON_COMPUTE_RESOURCES}" )
 	set_target_properties( Test_Voxelizer PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${SAMPLES_PLIST} )
 endif()
