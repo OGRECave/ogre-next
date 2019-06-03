@@ -2,14 +2,17 @@
 
 #define __sharedOnlyBarrier threadgroup_barrier( mem_flags::mem_threadgroup )
 
-@insertpiece( PreBindingsHeaderCS )
-
-@insertpiece( HeaderCS )
+#define PARAMS_ARG_DECL , device Vertex *vertexBuffer, device uint *indexBuffer, device MeshAabb *outMeshAabb, device uint4 *inMeshBuffer, constant Params &p
+#define PARAMS_ARG , vertexBuffer, indexBuffer, outMeshAabb, inMeshBuffer, p
 
 struct Params
 {
 	uint2 meshStart_meshEnd;
 };
+
+@insertpiece( PreBindingsHeaderCS )
+
+@insertpiece( HeaderCS )
 
 #define p_meshStart p.meshStart_meshEnd.x
 #define p_meshEnd p.meshStart_meshEnd.y
@@ -20,13 +23,13 @@ struct Params
 //in uvec3 gl_GlobalInvocationID;
 //in uint  gl_LocalInvocationIndex;
 
-void main_metal
+kernel void main_metal
 (
 	device Vertex *vertexBuffer		[[buffer(UAV_SLOT_START+0)]],
 	device uint *indexBuffer		[[buffer(UAV_SLOT_START+1)]],
-	device MeshAabb *indexBuffer	[[buffer(UAV_SLOT_START+2)]],
+	device MeshAabb *outMeshAabb	[[buffer(UAV_SLOT_START+2)]],
 
-	device uint4 inMeshBuffer		[[buffer(TEX_SLOT_START+0)]],
+	device uint4 *inMeshBuffer		[[buffer(TEX_SLOT_START+0)]],
 
 	constant Params &p				[[buffer(PARAMETER_SLOT)]],
 

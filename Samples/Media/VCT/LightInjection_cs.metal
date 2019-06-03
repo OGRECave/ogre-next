@@ -34,7 +34,7 @@ struct Params
 //in uvec3 gl_GlobalInvocationID;
 //in uint  gl_LocalInvocationIndex;
 
-void main_metal
+kernel void main_metal
 (
 	texture3d<float> voxelAlbedoTex		[[texture(0)]],
 	texture3d<float> voxelNormalTex		[[texture(1)]],

@@ -35,7 +35,7 @@
 		bool needsAabbUpdate;
 	};
 
-	Instance getInstance( uint instanceIdx )
+	INLINE Instance getInstance( uint instanceIdx PARAMS_ARG_DECL )
 	{
 		Instance retVal;
 		retVal.worldTransform = makeOgreFloat4x3( instanceBuffer[instanceIdx].worldTransformRow0,
@@ -47,7 +47,7 @@
 		return retVal;
 	}
 
-	Aabb getMeshAabb( uint localAabbIdx )
+	INLINE Aabb getMeshAabb( uint localAabbIdx PARAMS_ARG_DECL )
 	{
 		Aabb retVal;
 	@property( syntax == glsl )
@@ -68,8 +68,8 @@
 //in uint  gl_LocalInvocationIndex;
 
 @piece( BodyCS )
-	Instance instance = getInstance( gl_GlobalInvocationID.x );
-	Aabb meshAabb = getMeshAabb( instance.localAabbIdx );
+	Instance instance = getInstance( gl_GlobalInvocationID.x PARAMS_ARG );
+	Aabb meshAabb = getMeshAabb( instance.localAabbIdx PARAMS_ARG );
 
 	if( instance.needsAabbUpdate )
 	{

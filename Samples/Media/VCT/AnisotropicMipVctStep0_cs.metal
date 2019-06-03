@@ -6,7 +6,7 @@
 
 #define p_higherMipHalfWidth higherMipHalfWidth
 
-void main_metal
+kernel void main_metal
 (
 	texture3d<float> inLightLowerMip		[[texture(0)]],
 	texture3d<float> inVoxelNormalTex		[[texture(1)]],

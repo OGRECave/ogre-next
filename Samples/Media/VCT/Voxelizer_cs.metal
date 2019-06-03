@@ -80,7 +80,7 @@ struct Params
 #define p_voxelOrigin p.voxelOrigin
 #define p_voxelCellSize p.voxelCellSize
 
-void main_metal
+kernel void main_metal
 (
 	device Vertex *vertexBuffer				[[buffer(UAV_SLOT_START+0)]],
 	device uint *indexBuffer				[[buffer(UAV_SLOT_START+1)]],

@@ -45,6 +45,7 @@
 
 //Short used for read operations. It's an int in GLSL & HLSL. An ushort in Metal
 #define rshort2 int2
+#define rint int
 //Short used for write operations. It's an int in GLSL. An ushort in HLSL & Metal
 #define wshort2 int2
 #define wshort3 int3

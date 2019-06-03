@@ -37,7 +37,7 @@
 		uint padding;
 	};
 
-	PartitionedSubMesh getPartitionedSubMesh( uint meshIdx )
+	INLINE PartitionedSubMesh getPartitionedSubMesh( uint meshIdx PARAMS_ARG_DECL )
 	{
 		uint4 meshData = bufferFetch( inMeshBuffer, rint(meshIdx) );
 		PartitionedSubMesh retVal;
@@ -48,7 +48,7 @@
 		return retVal;
 	}
 
-	uint getIndexBufferIndex( uint index )
+	INLINE uint getIndexBufferIndex( uint index PARAMS_ARG_DECL )
 	{
 	@property( !index_32bit )
 		uint retVal = indexBuffer[index >> 1u];
@@ -59,11 +59,11 @@
 		return retVal;
 	}
 
-	float3 getVertexPos( uint indexId, PartitionedSubMesh mesh )
+	INLINE float3 getVertexPos( uint indexId, PartitionedSubMesh mesh PARAMS_ARG_DECL )
 	{
 		float3 retVal;
 
-		uint idx = getIndexBufferIndex( mesh.indexBufferStart + indexId );
+		uint idx = getIndexBufferIndex( mesh.indexBufferStart + indexId PARAMS_ARG );
 		@property( !compressed_vertex_format )
 			retVal = vertexBuffer[idx + mesh.vertexBufferStart].pos_normX.xyz;
 		@else
@@ -85,7 +85,7 @@
 @piece( BodyCS )
 	for( uint i=p_meshStart; i<p_meshEnd; ++i )
 	{
-		PartitionedSubMesh mesh = getPartitionedSubMesh( i );
+		PartitionedSubMesh mesh = getPartitionedSubMesh( i PARAMS_ARG );
 
 		float3 minAabb = float3( 3.402823e+38f, 3.402823e+38f, 3.402823e+38f );
 		float3 maxAabb = float3( -3.402823e+38f, -3.402823e+38f, -3.402823e+38f );
@@ -93,7 +93,7 @@
 		for( uint j=0u; j<mesh.numIndices; j += @value( threads_per_group_x )u )
 		{
 			uint indexId = min( j + gl_LocalInvocationIndex, mesh.numIndices - 1u );
-			float3 vertexPos = getVertexPos( indexId, mesh );
+			float3 vertexPos = getVertexPos( indexId, mesh PARAMS_ARG );
 			minAabb.xyz = min( minAabb.xyz, vertexPos.xyz );
 			maxAabb.xyz = max( maxAabb.xyz, vertexPos.xyz );
 		}
