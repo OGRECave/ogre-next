@@ -5,6 +5,8 @@
     #version 330 core
 @end
 
+@insertpiece( CustomGlslExtensions )
+
 @property( GL_ARB_shading_language_420pack )
     #extension GL_ARB_shading_language_420pack: require
     #define layout_constbuffer(x) layout( std140, x )

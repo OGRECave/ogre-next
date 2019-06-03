@@ -9,40 +9,11 @@
 // Adapted for Ogre and for use for Voxel Cone Tracing by
 // Matias N. Goldberg Copyright (c) 2019
 
-#version 430
+@insertpiece( SetCrossPlatformSettings )
 
-@property( hlms_amd_trinary_minmax )
-	#extension GL_AMD_shader_trinary_minmax: require
-@else
-	#define min3( a, b, c ) min( a, min( b, c ) )
-	#define max3( a, b, c ) max( a, max( b, c ) )
+@piece( CustomGlslExtensions )
+	#extension GL_ARB_shader_group_vote: require
 @end
-
-#extension GL_ARB_shader_group_vote: require
-
-#define float2 vec2
-#define float3 vec3
-#define float4 vec4
-
-#define int3 ivec3
-
-#define uint2 uvec2
-#define uint3 uvec3
-#define uint4 uvec4
-
-#define wshort3 int3
-
-#define ogre_float4x3 mat3x4
-
-#define mul( x, y ) ((x) * (y))
-
-#define toFloat3x3( x ) mat3( x )
-
-#define bufferFetch texelFetch
-
-#define OGRE_SampleArray2D( tex, sampler, uv, arrayIdx ) texture( tex, vec3( uv, arrayIdx ) )
-
-#define CONST_BUFFER( bufferName, bindingPoint ) layout( std140, binding = bindingPoint) uniform bufferName
 
 #define OGRE_imageLoad3D( inImage, iuv ) imageLoad( inImage, int3( iuv ) )
 #define OGRE_imageWrite3D1( outImage, iuv, value ) imageStore( outImage, int3( iuv ), value )
