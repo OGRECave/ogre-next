@@ -27,16 +27,36 @@ Copyright (c) 2000-2017 Torus Knot Software Ltd
 */
 
 #include "OgreMetalPixelFormatToShaderType.h"
+#include "OgreMetalPixelFormatToShaderType.inl"
+
+#include "OgrePixelFormatGpuUtils.h"
+#include "OgreTextureGpu.h"
 
 namespace Ogre
 {
-    const char* MetalPixelFormatToShaderType::getPixelFormatType( PixelFormatGpu pixelFormat ) const
+    static const char c_pixelFormatTypes[PixelFormatDataTypes::NumPixelFormatDataTypes][8] =
+    {
+        { "float" },
+        { "half" },
+
+        { "int" },
+        { "unit" },
+
+        { "short" },
+        { "ushort" },
+
+        { "char" },
+        { "uchar" }
+    };
+
+    //-------------------------------------------------------------------------
+    PixelFormatDataTypes::PixelFormatDataTypes MetalPixelFormatToShaderType::getPixelFormatDataType(
+            PixelFormatGpu pixelFormat )
     {
         switch( pixelFormat )
         {
         case PFG_RGBA32_FLOAT:
         case PFG_RGB32_FLOAT:
-        case PFG_RGBA16_FLOAT:
         case PFG_RGBA16_UNORM:
         case PFG_RG32_FLOAT:
         case PFG_D32_FLOAT_S8X24_UINT:
@@ -44,14 +64,12 @@ namespace Ogre
         case PFG_R11G11B10_FLOAT:
         case PFG_RGBA8_UNORM:
         case PFG_RGBA8_UNORM_SRGB:
-        case PFG_RG16_FLOAT:
         case PFG_RG16_UNORM:
         case PFG_D32_FLOAT:
         case PFG_R32_FLOAT:
         case PFG_D24_UNORM:
         case PFG_D24_UNORM_S8_UINT:
         case PFG_RG8_UNORM:
-        case PFG_R16_FLOAT:
         case PFG_D16_UNORM:
         case PFG_R16_UNORM:
         case PFG_R8_UNORM:
@@ -128,36 +146,114 @@ namespace Ogre
         case PFG_ASTC_RGBA_UNORM_10X10_LDR: case PFG_ASTC_RGBA_UNORM_10X10_sRGB:
         case PFG_ASTC_RGBA_UNORM_12X10_LDR: case PFG_ASTC_RGBA_UNORM_12X10_sRGB:
         case PFG_ASTC_RGBA_UNORM_12X12_LDR: case PFG_ASTC_RGBA_UNORM_12X12_sRGB:
-            return "float";
+            return PixelFormatDataTypes::Float;
+
+        case PFG_RGBA16_FLOAT:
+        case PFG_RG16_FLOAT:
+        case PFG_R16_FLOAT:
+            return PixelFormatDataTypes::Half;
 
         case PFG_RGBA32_UINT:
         case PFG_RGB32_UINT:
-        case PFG_RGBA16_UINT:
         case PFG_RG32_UINT:
-        case PFG_R10G10B10A2_UINT:
-        case PFG_RGBA8_UINT:
-        case PFG_RG16_UINT:
         case PFG_R32_UINT:
-        case PFG_RG8_UINT:
-        case PFG_R16_UINT:
-        case PFG_R8_UINT:
-            return "uint";
+            return PixelFormatDataTypes::Uint;
 
         case PFG_RGBA32_SINT:
         case PFG_RGB32_SINT:
-        case PFG_RGBA16_SINT:
         case PFG_RG32_SINT:
-        case PFG_RGBA8_SINT:
-        case PFG_RG16_SINT:
         case PFG_R32_SINT:
-        case PFG_RG8_SINT:
+            return PixelFormatDataTypes::Int;
+
+        case PFG_R10G10B10A2_UINT:
+        case PFG_RG16_UINT:
+        case PFG_R16_UINT:
+            return PixelFormatDataTypes::Ushort;
+
+        case PFG_RGBA16_SINT:
+        case PFG_RG16_SINT:
         case PFG_R16_SINT:
+            return PixelFormatDataTypes::Short;
+
+        case PFG_RGBA8_UINT:
+        case PFG_RG8_UINT:
+        case PFG_R8_UINT:
+            return PixelFormatDataTypes::Uchar;
+
+        case PFG_RGBA8_SINT:
+        case PFG_RG8_SINT:
         case PFG_R8_SINT:
-            return "int";
+            return PixelFormatDataTypes::Char;
+
         default:
-            return 0;
+            return PixelFormatDataTypes::NumPixelFormatDataTypes;
         }
 
-        return 0;
+        return PixelFormatDataTypes::NumPixelFormatDataTypes;
+    }
+    //-------------------------------------------------------------------------
+    const char* MetalPixelFormatToShaderType::getPixelFormatType( PixelFormatGpu pixelFormat ) const
+    {
+        PixelFormatDataTypes::PixelFormatDataTypes pfDataType = getPixelFormatDataType( pixelFormat );
+
+        if( pfDataType == PixelFormatDataTypes::NumPixelFormatDataTypes )
+            return 0;
+
+        return c_pixelFormatTypes[pfDataType];
+    }
+    //-------------------------------------------------------------------------
+    const char* MetalPixelFormatToShaderType::getDataType( PixelFormatGpu pixelFormat,
+                                                           uint32 textureType,
+                                                           bool isMsaa,
+                                                           ResourceAccess::ResourceAccess access ) const
+    {
+        if( textureType == TextureTypes::Unknown )
+            textureType = TextureTypes::Type2D;
+
+        PixelFormatDataTypes::PixelFormatDataTypes pfDataType = getPixelFormatDataType( pixelFormat );
+        if( pfDataType == PixelFormatDataTypes::NumPixelFormatDataTypes )
+            return 0;
+
+        size_t accessIdx = static_cast<size_t>( access );
+
+        if( !PixelFormatGpuUtils::isDepth( pixelFormat ) )
+        {
+            if( isMsaa )
+            {
+                if( textureType == TextureTypes::Type2D )
+                    textureType = 7u;
+                else if( textureType == TextureTypes::Type2DArray )
+                    textureType = 8u;
+            }
+            else
+            {
+                --textureType;
+            }
+
+            size_t dataTypeIdx = textureType * PixelFormatDataTypes::NumPixelFormatDataTypes * 4u +
+                                 pfDataType + accessIdx;
+            return c_dataTypes[dataTypeIdx];
+        }
+        else
+        {
+            if( isMsaa )
+            {
+                if( textureType == TextureTypes::Type2D )
+                    textureType = 11u;
+                else if( textureType == TextureTypes::Type2DArray )
+                    textureType = 12u;
+            }
+            else
+            {
+                if( textureType == TextureTypes::Type2D )
+                    textureType = 9u;
+                else
+                    textureType = 10u;
+            }
+
+            size_t dataTypeIdx = 9u * PixelFormatDataTypes::NumPixelFormatDataTypes * 4u +
+                                 (textureType - 9u) * 4u + accessIdx;
+            return c_dataTypes[dataTypeIdx];
+        }
     }
 }

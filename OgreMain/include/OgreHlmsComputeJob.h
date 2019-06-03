@@ -128,8 +128,8 @@ namespace Ogre
         void destroyDescriptorUavs(void);
 
         void setTextureProperties( const TextureGpu *texture,
-                                   PixelFormatGpu pixelFormat, LwString &propName,
-                                   const PixelFormatToShaderType *toShaderType );
+                                   PixelFormatGpu pixelFormat, ResourceAccess::ResourceAccess access,
+                                   LwString &propName, const PixelFormatToShaderType *toShaderType );
         void clearAutoProperties( const char *propTexture, uint8 maxTexUnitReached );
 
         void removeProperty( IdString key );

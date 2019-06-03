@@ -141,7 +141,9 @@ namespace Ogre
     }
     //-------------------------------------------------------------------------
     const char* GL3PlusPixelFormatToShaderType::getDataType( PixelFormatGpu pixelFormat,
-                                                             uint32 _textureType, bool isMsaa ) const
+                                                             uint32 _textureType, bool isMsaa,
+                                                             ResourceAccess::
+                                                             ResourceAccess access ) const
     {
         const bool bIsInteger = PixelFormatGpuUtils::isInteger( pixelFormat );
         TextureTypes::TextureTypes textureType = static_cast<TextureTypes::TextureTypes>( _textureType );

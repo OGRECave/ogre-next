@@ -188,7 +188,8 @@ namespace Ogre
     }
     //-------------------------------------------------------------------------
     const char* D3D11PixelFormatToShaderType::getDataType( PixelFormatGpu pixelFormat,
-                                                           uint32 textureType, bool isMsaa ) const
+                                                           uint32 textureType, bool isMsaa,
+                                                           ResourceAccess::ResourceAccess access ) const
     {
         if( textureType == TextureTypes::Unknown )
             textureType = TextureTypes::Type2D;

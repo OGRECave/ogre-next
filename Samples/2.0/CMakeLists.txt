@@ -40,7 +40,8 @@ if( APPLE )
                  ${CMAKE_BINARY_DIR}/bin/plugins.cfg
 		 ${CMAKE_SOURCE_DIR}/Samples/Media/2.0
 		 ${CMAKE_SOURCE_DIR}/Samples/Media/Hlms
-		 ${CMAKE_SOURCE_DIR}/Samples/Media/packs/DebugPack.zip )
+		 ${CMAKE_SOURCE_DIR}/Samples/Media/packs/DebugPack.zip
+		 ${CMAKE_SOURCE_DIR}/Samples/Media/packs/CornellBox.zip )
 
 	set( SAMPLE_COMMON_RESOURCES ${SAMPLE_COMMON_BASIC_RESOURCES}
 		 ${CMAKE_SOURCE_DIR}/Samples/Media/models

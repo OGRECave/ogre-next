@@ -150,6 +150,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void HlmsComputeJob::setTextureProperties( const TextureGpu *texture, PixelFormatGpu pixelFormat,
+                                               ResourceAccess::ResourceAccess access,
                                                LwString &propName,
                                                const PixelFormatToShaderType *toShaderType )
     {
@@ -196,7 +197,8 @@ namespace Ogre
         propName.a( "_data_type" );             //uav0_data_type
         const char *dataType = toShaderType->getDataType( pixelFormat,
                                                           texture->getTextureType(),
-                                                          texture->getMsaa() > 1u );
+                                                          texture->getMsaa() > 1u,
+                                                          access );
         if( typeName )
             setPiece( propName.c_str(), dataType );
         propName.resize( texturePropSize );
@@ -373,6 +375,7 @@ namespace Ogre
                         {
                             setTextureProperties( itor->getTexture().texture,
                                                   itor->getTexture().pixelFormat,
+                                                  ResourceAccess::Undefined,
                                                   propName, toShaderType );
                         }
                         else if( itor->isBuffer() )
@@ -415,7 +418,7 @@ namespace Ogre
                     if( itor->isTexture() && itor->getTexture().texture )
                     {
                         const DescriptorSetUav::TextureSlot &texSlot = itor->getTexture();
-                        setTextureProperties( texSlot.texture, texSlot.pixelFormat,
+                        setTextureProperties( texSlot.texture, texSlot.pixelFormat, texSlot.access,
                                               propName, toShaderType );
 
                         const TextureGpu *texture = texSlot.texture;
