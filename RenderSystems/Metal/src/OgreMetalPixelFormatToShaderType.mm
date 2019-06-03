@@ -231,7 +231,7 @@ namespace Ogre
             }
 
             size_t dataTypeIdx = textureType * PixelFormatDataTypes::NumPixelFormatDataTypes * 4u +
-                                 pfDataType + accessIdx;
+                                 pfDataType * 4u + accessIdx;
             return c_dataTypes[dataTypeIdx];
         }
         else

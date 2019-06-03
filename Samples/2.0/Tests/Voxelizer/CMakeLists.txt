@@ -24,6 +24,7 @@ target_link_libraries(Test_Voxelizer ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES}
 ogre_config_sample_lib(Test_Voxelizer)
 
 if( APPLE )
-	set_target_properties( Test_Voxelizer PROPERTIES RESOURCE "${SAMPLE_COMMON_RESOURCES} ${SAMPLE_COMMON_COMPUTE_RESOURCES}" )
+	set( Voxelizer_RESOURCES ${SAMPLE_COMMON_RESOURCES} ${SAMPLE_COMMON_COMPUTE_RESOURCES} )
+	set_target_properties( Test_Voxelizer PROPERTIES RESOURCE "${Voxelizer_RESOURCES}" )
 	set_target_properties( Test_Voxelizer PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${SAMPLES_PLIST} )
 endif()

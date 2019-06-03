@@ -1,5 +1,7 @@
+#include <metal_stdlib>
+using namespace metal;
 
-void main_metal
+kernel void main_metal
 (
 	@insertpiece(uav0_data_type) dstTex [[texture(UAV_SLOT_START+0)]],
 
