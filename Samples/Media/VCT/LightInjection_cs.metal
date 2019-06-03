@@ -5,11 +5,13 @@
 
 @insertpiece( PreBindingsHeaderCS )
 
-@property( !iOS )
+#include <metal_simdgroup>
+
+#if defined(__HAVE_SIMDGROUP_BALLOT__)
 	#define anyInvocationARB( value ) simd_any( value )
-@else
+#else
 	#define anyInvocationARB( value ) (value)
-@end
+#endif
 
 @insertpiece( HeaderCS )
 
@@ -42,8 +44,9 @@ kernel void main_metal
 
 	sampler voxelAlbedoSampler			[[sampler(0)]],
 
-	texture3d<@insertpiece(uav0_pf_type), access::write> lightVoxel [[texture(UAV_SLOT_START+0)]];
+	texture3d<@insertpiece(uav0_pf_type), access::write> lightVoxel [[texture(UAV_SLOT_START+0)]],
 
+	constant Light *lights			[[buffer(0)]],
 	constant Params &p				[[buffer(PARAMETER_SLOT)]],
 	ushort3 gl_GlobalInvocationID	[[thread_position_in_grid]]
 )

@@ -97,7 +97,7 @@
 		Mesh mesh;
 	};
 
-	Instance getInstance( uint instanceIdx )
+	INLINE Instance getInstance( uint instanceIdx PARAMS_ARG_DECL )
 	{
 		Instance retVal;
 
@@ -137,7 +137,7 @@
 		return retVal;
 	}
 
-	uint getIndexBufferIndex( uint index )
+	INLINE uint getIndexBufferIndex( uint index PARAMS_ARG_DECL )
 	{
 	@property( !index_32bit )
 		uint retVal = indexBuffer[index >> 1u];
@@ -148,13 +148,13 @@
 		return retVal;
 	}
 
-	Triangle getTriangle( uint triIdx, Mesh mesh )
+	INLINE Triangle getTriangle( uint triIdx, Mesh mesh PARAMS_ARG_DECL )
 	{
 		Triangle retVal;
 
 		for( uint i=0u; i<3u; ++i )
 		{
-			uint idx = getIndexBufferIndex( mesh.indexBufferStart + triIdx * 3u + i );
+			uint idx = getIndexBufferIndex( mesh.indexBufferStart + triIdx * 3u + i PARAMS_ARG );
 			@property( !compressed_vertex_format )
 				retVal.v[i] = vertexBuffer[idx + mesh.vertexBufferStart].pos_normX.xyz;
 				retVal.n[i] = float3( vertexBuffer[idx + mesh.vertexBufferStart].pos_normX.w,
@@ -177,9 +177,9 @@
 		return retVal;
 	}
 
-	Aabb getTriangleAabb( uint triIdx, Mesh mesh, ogre_float4x3 worldTransform )
+	INLINE Aabb getTriangleAabb( uint triIdx, Mesh mesh, ogre_float4x3 worldTransform PARAMS_ARG_DECL )
 	{
-		uint idx = getIndexBufferIndex( mesh.indexBufferStart + triIdx * 3u + 0 );
+		uint idx = getIndexBufferIndex( mesh.indexBufferStart + triIdx * 3u + 0 PARAMS_ARG );
 	@property( !compressed_vertex_format )
 		float3 vertexPos = vertexBuffer[idx + mesh.vertexBufferStart].pos_normX.xyz;
 	@else
@@ -193,7 +193,7 @@
 		float3 maxValue = vertexPos;
 		for( uint i=1u; i<3u; ++i )
 		{
-			idx = getIndexBufferIndex( mesh.indexBufferStart + triIdx * 3u + i );
+			idx = getIndexBufferIndex( mesh.indexBufferStart + triIdx * 3u + i PARAMS_ARG );
 
 			@property( !compressed_vertex_format )
 				vertexPos = vertexBuffer[idx + mesh.vertexBufferStart].pos_normX.xyz;
@@ -214,7 +214,7 @@
 		return retVal;
 	}
 
-	bool intersects( Aabb a, Aabb b )
+	INLINE bool intersects( Aabb a, Aabb b )
 	{
 		float3 absDistance = abs( a.center - b.center );
 		float3 sumHalfSizes = a.halfSize + b.halfSize;
@@ -227,7 +227,7 @@
 				absDistance.z <= sumHalfSizes.z;
 	}
 
-	bool intersects_tri_aabb_onto_axis( float3 v0, float3 v1, float3 v2, float3 halfSize, float3 axis )
+	INLINE bool intersects_tri_aabb_onto_axis( float3 v0, float3 v1, float3 v2, float3 halfSize, float3 axis )
 	{
 		// project all 3 vertices of the triangle onto the axis
 		float p0 = dot( v0, axis );
@@ -241,7 +241,7 @@
 		return !((maxP < -r) || (r < minP));
 	}
 
-	bool intersects_plane_aabb( Plane pl, Aabb aabb )
+	INLINE bool intersects_plane_aabb( Plane pl, Aabb aabb )
 	{
 		float r =	aabb.halfSize.x * abs( pl.normal.x ) +
 					aabb.halfSize.y * abs( pl.normal.y ) +
@@ -250,10 +250,8 @@
 		return abs(s) <= r;
 	}
 
-	bool intersects_tri_aabb( Triangle tri, Aabb aabb )
+	INLINE bool intersects_tri_aabb( Triangle tri, Aabb aabb )
 	{
-		float p0, p1, p2, r;
-
 		// Make the triangle local space to Aabb
 		float3 v0 = tri.v[0] - aabb.center;
 		float3 v1 = tri.v[1] - aabb.center;
@@ -316,7 +314,7 @@
 
 	// https://gamedev.stackexchange.com/questions/23743/
 	// whats-the-most-efficient-way-to-find-barycentric-coordinates
-	float3 tri_barycentric( float3 p, Triangle tri )
+	INLINE float3 tri_barycentric( float3 p, Triangle tri )
 	{
 		float3 v0 = tri.v[1] - tri.v[0];
 		float3 v1 = tri.v[2] - tri.v[0];
@@ -337,24 +335,26 @@
 		return uvw;
 	}
 
-	float3 tri_barycentric_normal( float3 p, Triangle tri )
+	INLINE float3 tri_barycentric_normal( float3 p, Triangle tri )
 	{
 		float3 uvw = tri_barycentric( p, tri );
 		return tri.n[0] * uvw.x + tri.n[1] * uvw.y + tri.n[2] * uvw.z;
 	}
 
-	float2 tri_barycentric_uv( float3 p, Triangle tri )
+	INLINE float2 tri_barycentric_uv( float3 p, Triangle tri )
 	{
 		float3 uvw = tri_barycentric( p, tri );
 		return tri.uv[0] * uvw.x + tri.uv[1] * uvw.y + tri.uv[2] * uvw.z;
 	}
 
-	float3 mixAverage3( float3 newAccumValues, float numTris, float3 oldAveragedValue, float oldNumTris )
+	INLINE float3 mixAverage3( float3 newAccumValues, float numTris,
+							   float3 oldAveragedValue, float oldNumTris )
 	{
 		return newAccumValues / (numTris + oldNumTris) +
 			   oldAveragedValue * (oldNumTris / (numTris + oldNumTris));
 	}
-	float4 mixAverage4( float4 newAccumValues, float numTris, float4 oldAveragedValue, float oldNumTris )
+	INLINE float4 mixAverage4( float4 newAccumValues, float numTris,
+							   float4 oldAveragedValue, float oldNumTris )
 	{
 		return newAccumValues / (numTris + oldNumTris) +
 			   oldAveragedValue * (oldNumTris / (numTris + oldNumTris));
@@ -385,7 +385,7 @@
 
 	for( uint i=p_instanceStart; i<p_instanceEnd; ++i )
 	{
-		Instance instance = getInstance( i );
+		Instance instance = getInstance( i PARAMS_ARG );
 
 		//Broadphase culling.
 	@property( syntax == hlsl && !vendor_shader_extension )
@@ -408,7 +408,7 @@
 				//against the combined AABB of the 4x4x4 block. If none do, we can skip
 				//64 triangles in one go (actual performance improvement is around 32x).
 				uint tmpTriIdx = min( triIdxBase + gl_LocalInvocationIndex, numTris - 1u );
-				Aabb tmpTriAabb = getTriangleAabb( tmpTriIdx, instance.mesh, instance.worldTransform );
+				Aabb tmpTriAabb = getTriangleAabb( tmpTriIdx, instance.mesh, instance.worldTransform PARAMS_ARG );
 
 				bool groupTriInters = intersects( tmpTriAabb, groupVoxelAabb );
 
@@ -417,7 +417,7 @@
 					for( uint subTri=0u; subTri<64u; ++subTri )
 					{
 						uint triIdx = min( triIdxBase + subTri, numTris - 1u );
-						Triangle tri = getTriangle( triIdx, instance.mesh );
+						Triangle tri = getTriangle( triIdx, instance.mesh PARAMS_ARG );
 
 						for( uint i=0; i<3u; ++i )
 						{

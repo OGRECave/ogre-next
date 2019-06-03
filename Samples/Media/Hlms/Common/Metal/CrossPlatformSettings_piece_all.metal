@@ -13,6 +13,10 @@ inline float3x3 toMat3x3( float4x4 m )
 {
     return float3x3( m[0].xyz, m[1].xyz, m[2].xyz );
 }
+inline float3x3 toMat3x3( float3x4 m )
+{
+	return float3x3( m[0].xyz, m[1].xyz, m[2].xyz );
+}
 
 #define ogre_float4x3 float3x4
 
@@ -74,6 +78,8 @@ inline float3x3 toMat3x3( float4x4 m )
 #define OGRE_ddy( val ) dfdy( val )
 #define OGRE_Load2D( tex, iuv, lod ) tex.read( iuv, lod )
 #define OGRE_Load2DMS( tex, iuv, subsample ) tex.read( iuv, subsample )
+
+#define OGRE_Load3D( tex, iuv, lod ) tex.read( ushort3( iuv ), lod )
 
 #define bufferFetch( buffer, idx ) buffer[idx]
 #define bufferFetch1( buffer, idx ) buffer[idx]

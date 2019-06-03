@@ -10,7 +10,9 @@ kernel void main_metal
 (
 	texture3d<float> inLightLowerMip		[[texture(0)]],
 	texture3d<float> inVoxelNormalTex		[[texture(1)]],
-	texture3d<@insertpiece(uav0_pf_type), access::write> outLightHigherMip[3]	[[texture(UAV_SLOT_START+0)]],
+	texture3d<@insertpiece(uav0_pf_type), access::write> outLightHigherMip0	[[texture(UAV_SLOT_START+0)]],
+	texture3d<@insertpiece(uav1_pf_type), access::write> outLightHigherMip1	[[texture(UAV_SLOT_START+1)]],
+	texture3d<@insertpiece(uav2_pf_type), access::write> outLightHigherMip2	[[texture(UAV_SLOT_START+2)]],
 
 	constant int &higherMipHalfWidth		[[buffer(PARAMETER_SLOT)]],
 

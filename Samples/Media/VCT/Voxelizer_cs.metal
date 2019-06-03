@@ -15,12 +15,24 @@
 #define OGRE_imageWrite3D1( outImage, iuv, value ) outImage.write( value.x, iuv )
 #define OGRE_imageWrite3D4( outImage, iuv, value ) outImage.write( value, iuv )
 
-@property( !iOS )
+#define PARAMS_ARG_DECL , device Vertex *vertexBuffer, device uint *indexBuffer, device InstanceBuffer *instanceBuffer, constant Params &p
+#define PARAMS_ARG , vertexBuffer, indexBuffer, instanceBuffer, p
+
+struct Params
+{
+	uint2 instanceStart_instanceEnd;
+	float3 voxelOrigin;
+	float3 voxelCellSize;
+};
+
+#include <metal_simdgroup>
+
+#if defined(__HAVE_SIMDGROUP_BALLOT__)
 	#define anyInvocationARB( value ) simd_any( value )
-@else
-	inline bool emulatedAnyInvocationARB( bool value, uint gl_LocalInvocationIndex )
+#else
+	inline bool emulatedAnyInvocationARB( bool value, uint gl_LocalInvocationIndex,
+										  threadgroup bool g_emulatedGroupVote[64] )
 	{
-		threadgroup bool g_emulatedGroupVote[64];
 		g_emulatedGroupVote[gl_LocalInvocationIndex] = value;
 
 		for( uint i=0u; i<6u; ++i )
@@ -39,8 +51,9 @@
 		return g_emulatedGroupVote[0];
 	}
 
-	#define anyInvocationARB( value ) emulatedAnyInvocationARB( value, gl_LocalInvocationIndex )
-@end
+	#define anyInvocationARB( value ) emulatedAnyInvocationARB( value, gl_LocalInvocationIndex, g_emulatedGroupVote )
+	//#define anyInvocationARB( value ) value
+#endif
 
 /*inline float4 unpackUnormRGB10A2( uint v )
 {
@@ -66,13 +79,6 @@ inline uint packUnormRGB10A2( float4 v )
 @pset( texRegister, 1 )
 
 @insertpiece( HeaderCS )
-
-struct Params
-{
-	uint2 instanceStart_instanceEnd;
-	float3 voxelOrigin;
-	float3 voxelCellSize;
-};
 
 #define p_instanceStart p.instanceStart_instanceEnd.x
 #define p_instanceEnd p.instanceStart_instanceEnd.y
@@ -107,6 +113,7 @@ kernel void main_metal
 	, texture2d_array<float>		emissiveTex [[texture(@counter(texRegister))]]
 @end
 
+	constant Material *materials	[[buffer(0)]],
 	constant Params &p				[[buffer(PARAMETER_SLOT)]],
 
 	ushort3 gl_GlobalInvocationID	[[thread_position_in_grid]],
@@ -114,5 +121,8 @@ kernel void main_metal
 	ushort gl_LocalInvocationIndex	[[thread_index_in_threadgroup]]
 )
 {
+	#if !defined(__HAVE_SIMDGROUP_BALLOT__)
+		threadgroup bool g_emulatedGroupVote[64];
+	#endif
 	@insertpiece( BodyCS )
 }

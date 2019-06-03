@@ -4,7 +4,9 @@
 
 Texture3D inLightLowerMip	: register(t0);
 Texture3D inVoxelNormalTex	: register(t1);
-RWTexture3D<@insertpiece(uav0_pf_type)> outLightHigherMip[3] : register(u0);
+RWTexture3D<@insertpiece(uav0_pf_type)> outLightHigherMip0 : register(u0);
+RWTexture3D<@insertpiece(uav1_pf_type)> outLightHigherMip1 : register(u1);
+RWTexture3D<@insertpiece(uav2_pf_type)> outLightHigherMip2 : register(u2);
 
 @insertpiece( HeaderCS )
 

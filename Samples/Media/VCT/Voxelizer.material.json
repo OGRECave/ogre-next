@@ -99,7 +99,9 @@
             [
                 ["inLightLowerMip",         [0], "int"],
                 ["inVoxelNormalTex",        [1], "int"],
-                ["outLightHigherMip",       [0, 1, 2], "int"]
+                ["outLightHigherMip0",       [0], "int"],
+                ["outLightHigherMip1",       [1], "int"],
+                ["outLightHigherMip2",       [2], "int"]
             ]
         },
 

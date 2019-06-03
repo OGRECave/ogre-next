@@ -214,6 +214,11 @@ namespace Ogre {
         parsePreprocessorDefinitions( preprocessorMacros );
 
         options.preprocessorMacros = preprocessorMacros;
+        options.languageVersion = MTLLanguageVersion2_0;
+        if( @available( iOS 12.0, macOS 10.14, tvOS 12.0, * ) )
+        {
+            options.languageVersion = MTLLanguageVersion2_1;
+        }
 
         NSError *error;
         mLibrary = [mDevice->mDevice newLibraryWithSource:[NSString stringWithUTF8String:mSource.c_str()]

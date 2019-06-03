@@ -4,7 +4,9 @@
 
 uniform sampler3D inLightLowerMip;
 uniform sampler3D inVoxelNormalTex;
-layout (@insertpiece(uav0_pf_type)) uniform restrict writeonly image3D outLightHigherMip[3];
+layout (@insertpiece(uav0_pf_type)) uniform restrict writeonly image3D outLightHigherMip0;
+layout (@insertpiece(uav1_pf_type)) uniform restrict writeonly image3D outLightHigherMip1;
+layout (@insertpiece(uav2_pf_type)) uniform restrict writeonly image3D outLightHigherMip2;
 
 layout( local_size_x = @value( threads_per_group_x ),
 		local_size_y = @value( threads_per_group_y ),
