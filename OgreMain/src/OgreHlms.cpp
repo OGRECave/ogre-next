@@ -2484,6 +2484,12 @@ namespace Ogre
             piecesCaster[PixelShader][HlmsBasePieces::AlphaTestCmpFunc] =
                     pieces[PixelShader][HlmsBasePieces::AlphaTestCmpFunc];
         }
+        if( !renderable->getVaos( VpShadow ).empty() )
+        {
+            //v2 objects can have an input layout that is different for shadow mapping
+            VertexArrayObject *vao = renderable->getVaos( VpShadow )[0];
+            setProperty( HlmsPsoProp::InputLayoutId, vao->getInputLayoutId() );
+        }
         calculateHashForPreCaster( renderable, piecesCaster );
         setProperty( HlmsPsoProp::Macroblock,
                      renderable->getDatablock()->getMacroblock(true)->mLifetimeId );
