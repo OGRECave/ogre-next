@@ -5,10 +5,14 @@
 #define p_higherMipHalfRes higherMipHalfRes_lowerMipHalfWidth.xyz
 #define p_lowerMipHalfWidth higherMipHalfRes_lowerMipHalfWidth.w
 
-void main
+kernel void main_metal
 (
-	texture3d<float> inLightLowerMip[3]											[[texture(0)]],
-	texture3d<@insertpiece(uav0_pf_type), access::write> outLightHigherMip[3]	[[texture(UAV_SLOT_START+0)]],
+	texture3d<float> inLightLowerMip0											[[texture(0)]],
+	texture3d<float> inLightLowerMip1											[[texture(1)]],
+	texture3d<float> inLightLowerMip2											[[texture(2)]],
+	texture3d<@insertpiece(uav0_pf_type), access::write> outLightHigherMip0	[[texture(UAV_SLOT_START+0)]],
+	texture3d<@insertpiece(uav1_pf_type), access::write> outLightHigherMip1	[[texture(UAV_SLOT_START+1)]],
+	texture3d<@insertpiece(uav2_pf_type), access::write> outLightHigherMip2	[[texture(UAV_SLOT_START+2)]],
 
 	constant int4 &higherMipHalfRes_lowerMipHalfWidth		[[buffer(PARAMETER_SLOT)]],
 

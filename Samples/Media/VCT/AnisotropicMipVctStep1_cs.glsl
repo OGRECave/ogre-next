@@ -2,8 +2,13 @@
 
 #define OGRE_imageWrite3D4( outImage, iuv, value ) imageStore( outImage, int3( iuv ), value )
 
-uniform sampler3D inLightLowerMip[3];
-layout (@insertpiece(uav0_pf_type)) uniform restrict writeonly image3D outLightHigherMip[3];
+uniform sampler3D inLightLowerMip0;
+uniform sampler3D inLightLowerMip1;
+uniform sampler3D inLightLowerMip2;
+
+layout (@insertpiece(uav0_pf_type)) uniform restrict writeonly image3D outLightHigherMip0;
+layout (@insertpiece(uav1_pf_type)) uniform restrict writeonly image3D outLightHigherMip1;
+layout (@insertpiece(uav2_pf_type)) uniform restrict writeonly image3D outLightHigherMip2;
 
 layout( local_size_x = @value( threads_per_group_x ),
 		local_size_y = @value( threads_per_group_y ),

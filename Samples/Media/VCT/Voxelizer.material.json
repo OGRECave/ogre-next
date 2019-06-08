@@ -131,8 +131,12 @@
 
             "params_glsl" :
             [
-                ["inLightLowerMip",         [0, 1, 2], "int"],
-                ["outLightHigherMip",       [0, 1, 2], "int"]
+                ["inLightLowerMip0",        [0], "int"],
+                ["inLightLowerMip1",        [0], "int"],
+                ["inLightLowerMip2",        [0], "int"],
+                ["outLightHigherMip0",      [0], "int"],
+                ["outLightHigherMip1",      [1], "int"],
+                ["outLightHigherMip2",      [2], "int"]
             ]
         },
 
