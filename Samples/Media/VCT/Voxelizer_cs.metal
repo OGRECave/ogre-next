@@ -94,7 +94,7 @@ kernel void main_metal
 	device Vertex *vertexBuffer				[[buffer(UAV_SLOT_START+0)]],
 	device uint *indexBuffer				[[buffer(UAV_SLOT_START+1)]],
 
-	device InstanceBuffer *instanceBuffer	[[buffer(TEX_SLOT_START+1)]],
+	device InstanceBuffer *instanceBuffer	[[buffer(TEX_SLOT_START+0)]],
 
 	texture3d<@insertpiece(uav2_pf_type), access::read_write> voxelAlbedoTex	[[texture(UAV_SLOT_START+2)]],
 	texture3d<@insertpiece(uav3_pf_type), access::read_write> voxelNormalTex	[[texture(UAV_SLOT_START+3)]],

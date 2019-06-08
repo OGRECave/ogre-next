@@ -87,9 +87,7 @@ namespace Ogre
             desc.sampleCount = mMsaa;
         }
 
-        desc.usage = MTLTextureUsageUnknown;
-        if( isTexture() )
-            desc.usage |= MTLTextureUsageShaderRead;
+        desc.usage = MTLTextureUsageShaderRead;
         if( isRenderToTexture() )
             desc.usage |= MTLTextureUsageRenderTarget;
         if( isUav() )
