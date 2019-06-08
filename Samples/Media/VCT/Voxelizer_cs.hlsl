@@ -52,6 +52,7 @@
 	}
 
 	#define anyInvocationARB( value ) emulatedAnyInvocationARB( value, gl_LocalInvocationIndex )
+	#define EMULATING_anyInvocationARB
 @end
 
 float4 unpackUnorm4x8( uint v )

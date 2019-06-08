@@ -30,20 +30,18 @@ struct Params
 #if defined(__HAVE_SIMDGROUP_BALLOT__)
 	#define anyInvocationARB( value ) simd_any( value )
 #else
-	//At least on High Sierra AMD, when using a threadgroup uchar or bool, it crashes the Metal compiler
-	//so we're using uint instead (ushort appears to work but the compiler may just be upgrading
-	//it to a uint internally, so I'm using uint to be safe in case it breaks on GPUs that do
-	//support 16-bit).
-	inline bool emulatedAnyInvocationARB( bool value, uint gl_LocalInvocationIndex,
-										  threadgroup uint g_emulatedGroupVote[64] )
+	//At least on High Sierra AMD, when using a threadgroup uchar or bool,
+	//it crashes the Metal compiler so we're using ushort instead
+	inline bool emulatedAnyInvocationARB( bool value, ushort gl_LocalInvocationIndex,
+										  threadgroup ushort g_emulatedGroupVote[64] )
 	{
 		g_emulatedGroupVote[gl_LocalInvocationIndex] = value ? 1u : 0u;
 
-		for( uint i=0u; i<6u; ++i )
+		for( ushort i=0u; i<6u; ++i )
 		{
 			threadgroup_barrier( mem_flags::mem_threadgroup );
-			uint nextIdx = gl_LocalInvocationIndex + (1u << i);
-			uint mask = (1u << (i+1u)) - 1u;
+			ushort nextIdx = gl_LocalInvocationIndex + (1u << i);
+			ushort mask = (1u << (i+1u)) - 1u;
 			if( !(gl_LocalInvocationIndex & mask) )
 			{
 				g_emulatedGroupVote[gl_LocalInvocationIndex] =
@@ -56,6 +54,7 @@ struct Params
 	}
 
 	#define anyInvocationARB( value ) emulatedAnyInvocationARB( value, gl_LocalInvocationIndex, g_emulatedGroupVote )
+	#define EMULATING_anyInvocationARB
 #endif
 
 /*inline float4 unpackUnormRGB10A2( uint v )
@@ -125,7 +124,7 @@ kernel void main_metal
 )
 {
 	#if !defined(__HAVE_SIMDGROUP_BALLOT__)
-		threadgroup uint g_emulatedGroupVote[64];
+		threadgroup ushort g_emulatedGroupVote[64];
 	#endif
 	@insertpiece( BodyCS )
 }

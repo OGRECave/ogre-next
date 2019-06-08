@@ -388,15 +388,15 @@
 		Instance instance = getInstance( i PARAMS_ARG );
 
 		//Broadphase culling.
-	@property( syntax == hlsl && !vendor_shader_extension )
+	#ifdef EMULATING_anyInvocationARB
 		//Cull against groupVoxelAabb so that emulatedAnyInvocationARB can work (all lanes
 		//must be active for GroupMemoryBarrierWithGroupSync to work)
 		if( intersects( groupVoxelAabb, instance.bounds ) )
-	@else
+	#else
 		//Cull against voxelAabb since that gives us finer granularity and
 		//native anyInvocationARB can filter out inactive lanes
 		if( intersects( voxelAabb, instance.bounds ) )
-	@end
+	#endif
 		{
 			Material material = materials[instance.materialIdx];
 
