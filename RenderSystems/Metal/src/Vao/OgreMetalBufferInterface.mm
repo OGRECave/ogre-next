@@ -186,11 +186,22 @@ namespace Ogre
         OGRE_ASSERT_HIGH( dynamic_cast<MetalBufferInterface*>( dstBuffer ) );
         MetalBufferInterface *dstBufferMetal = static_cast<MetalBufferInterface*>( dstBuffer );
 
-        __unsafe_unretained id<MTLBlitCommandEncoder> blitEncoder = device->getBlitEncoder();
-        [blitEncoder copyFromBuffer:mVboName
-                       sourceOffset:srcOffsetBytes
-                           toBuffer:dstBufferMetal->getVboName()
-                  destinationOffset:dstOffsetBytes
-                               size:sizeBytes];
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
+        if( dstOffsetBytes % 4u || sizeBytes % 4u || srcOffsetBytes % 4u )
+        {
+            //macOS Mojave and earlier
+            vaoManager->unalignedCopy( dstBufferMetal->getVboName(), dstOffsetBytes,
+                                       this->mVboName, srcOffsetBytes, sizeBytes );
+        }
+        else
+#endif
+        {
+            __unsafe_unretained id<MTLBlitCommandEncoder> blitEncoder = device->getBlitEncoder();
+            [blitEncoder copyFromBuffer:mVboName
+                           sourceOffset:srcOffsetBytes
+                               toBuffer:dstBufferMetal->getVboName()
+                      destinationOffset:dstOffsetBytes
+                                   size:sizeBytes];
+        }
     }
 }
