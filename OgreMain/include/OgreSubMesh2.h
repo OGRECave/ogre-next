@@ -109,7 +109,7 @@ namespace Ogre {
         /// if we need to strip, normalizes all weights to sum 1.
         uint8 rationaliseBoneAssignments(void);
         
-        unsigned short mNumPoseAnimations;
+        unsigned short mNumPoses;
         bool mPoseHalfPrecision;
         std::map<Ogre::String, size_t> mPoseIndexMap;
         TexBufferPacked *mPoseTexBuffer;
@@ -201,13 +201,16 @@ namespace Ogre {
 
         void _prepareForShadowMapping( bool forceSameBuffers );
         
-        unsigned short getNumPoseAnimations() { return mNumPoseAnimations; }
+        unsigned short getNumPoses() { return mNumPoses; }
         
         bool getPoseHalfPrecision() { return mPoseHalfPrecision; }
         
         size_t getPoseIndex(const Ogre::String& name) { return mPoseIndexMap.count(name) ? mPoseIndexMap[name] : SIZE_MAX; }
         
         TexBufferPacked* getPoseTexBuffer() { return mPoseTexBuffer; }
+
+        void createPoses( const vector<float*>::type& poseData, size_t numVertices, bool halfPrecision = true );
+
 
     protected:
         void importBuffersFromV1( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords, bool qTangents,
