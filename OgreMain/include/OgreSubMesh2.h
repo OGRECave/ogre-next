@@ -111,6 +111,7 @@ namespace Ogre {
         
         unsigned short mNumPoses;
         bool mPoseHalfPrecision;
+        bool mPoseNormals;
         std::map<Ogre::String, size_t> mPoseIndexMap;
         TexBufferPacked *mPoseTexBuffer;
 
@@ -204,6 +205,8 @@ namespace Ogre {
         unsigned short getNumPoses() { return mNumPoses; }
         
         bool getPoseHalfPrecision() { return mPoseHalfPrecision; }
+
+        bool getPoseNormals() { return mPoseNormals; }
         
         size_t getPoseIndex(const Ogre::String& name) { return mPoseIndexMap.count(name) ? mPoseIndexMap[name] : SIZE_MAX; }
         
@@ -211,12 +214,13 @@ namespace Ogre {
 
         /** Fills the pose animation buffer with the given poseData.
         @remarks
-            poseData is an array with a pointer to a block of data for each pose, and each pose
+            positionData is an array with a pointer to a block of data for each pose, and each pose
             should contain (x,y,z) offsets for each vertex in sequence. The size of each block 
             of data must be equals to numVertices * 3 * sizeof(float) or else a buffer overrun
-            shall occur.
+            shall occur. The same applies to normalData, which should contain normal offsets and
+            can be nullptr if morphing normals is not desired and it will also save memory.
          */
-        void createPoses( const float** poseData, size_t numPoses, size_t numVertices, bool halfPrecision = true );
+        void createPoses( const float** positionData, const float** normalData, size_t numPoses, size_t numVertices, bool halfPrecision = true );
 
     protected:
         void importBuffersFromV1( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords, bool qTangents,

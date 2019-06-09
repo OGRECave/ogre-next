@@ -51,6 +51,7 @@ namespace Ogre {
         mBoneAssignmentsOutOfDate( false ),
         mNumPoses( 0 ),
         mPoseHalfPrecision( false ),
+        mPoseNormals( false ),
         mPoseTexBuffer( 0 )
     {
     }
@@ -642,6 +643,8 @@ namespace Ogre {
                                       poseList.end());
         
         mNumPoses = poseList.size();
+        mPoseHalfPrecision = halfPrecision;
+        mPoseNormals = false; // TODO: import normals
         
         if( mNumPoses > 0 ) 
         {
@@ -662,7 +665,6 @@ namespace Ogre {
             {
                 v1::Pose* pose = poseIt.getNext();
                 v1::Pose::VertexOffsetMap::const_iterator v = pose->getVertexOffsets().begin();
-                // TODO: import normals
                 
                 if( halfPrecision )
                 {
@@ -697,15 +699,18 @@ namespace Ogre {
             PixelFormat pixelFormat = halfPrecision ? PF_FLOAT16_RGBA : PF_FLOAT32_RGBA;
             mPoseTexBuffer = mParent->mVaoManager->createTexBuffer( pixelFormat, bufferSize,
                                                                     BT_IMMUTABLE, buffer, false );
-            mPoseHalfPrecision = halfPrecision;
         }
     }
     //---------------------------------------------------------------------
-    void SubMesh::createPoses( const float** poseData, size_t numPoses, size_t numVertices, bool halfPrecision ) 
+    void SubMesh::createPoses( const float** positionData, const float** normalData, 
+                               size_t numPoses, size_t numVertices, bool halfPrecision )
     {
         mNumPoses = numPoses;
+        mPoseHalfPrecision = halfPrecision;
+        mPoseNormals = normalData != nullptr;
         size_t elementSize = halfPrecision ? sizeof( uint16 ) : sizeof( float );
-        size_t singlePoseBufferSize = numVertices * elementSize * 4;
+        size_t elementsPerVertex = mPoseNormals ? 8 : 4;
+        size_t singlePoseBufferSize = numVertices * elementSize * elementsPerVertex;
         size_t bufferSize = numPoses * singlePoseBufferSize;
         char *buffer = static_cast<char*>( OGRE_MALLOC_SIMD( bufferSize,
                                                              MEMCATEGORY_GEOMETRY ) );                                
@@ -714,20 +719,28 @@ namespace Ogre {
         
         for( size_t poseIndex = 0; poseIndex < numPoses; ++poseIndex )
         {
-            // TODO: import normals
-            const float* data = poseData[poseIndex];
-            size_t beginIndex = poseIndex * numVertices * 4;
+            const float* pPosition = positionData[poseIndex];
+            const float* pNormal = normalData ? normalData[poseIndex] : nullptr;
+            size_t beginIndex = poseIndex * numVertices * elementsPerVertex;
 
             if( halfPrecision )
             {
                 uint16* pHalf = reinterpret_cast<uint16*>( buffer +  poseIndex * singlePoseBufferSize );
                 for( size_t i = 0; i < numVertices; ++i )
                 {
-                    size_t idx = beginIndex + i * 4;
-                    pHalf[idx+0] = Bitwise::floatToHalf( *data++ );
-                    pHalf[idx+1] = Bitwise::floatToHalf( *data++ );
-                    pHalf[idx+2] = Bitwise::floatToHalf( *data++ );
+                    size_t idx = beginIndex + i * elementsPerVertex;
+                    pHalf[idx+0] = Bitwise::floatToHalf( *pPosition++ );
+                    pHalf[idx+1] = Bitwise::floatToHalf( *pPosition++ );
+                    pHalf[idx+2] = Bitwise::floatToHalf( *pPosition++ );
                     pHalf[idx+3] = Bitwise::floatToHalf( 0.f );
+
+                    if( pNormal )
+                    {
+                        pHalf[idx+4] = Bitwise::floatToHalf( *pNormal++ );
+                        pHalf[idx+5] = Bitwise::floatToHalf( *pNormal++ );
+                        pHalf[idx+6] = Bitwise::floatToHalf( *pNormal++ );
+                        pHalf[idx+7] = Bitwise::floatToHalf( 0.f );
+                    }
                 }
             }
             else
@@ -735,11 +748,19 @@ namespace Ogre {
                 float* pFloat = reinterpret_cast<float*>( buffer + poseIndex * singlePoseBufferSize );
                 for( size_t i = 0; i < numVertices; ++i )
                 {
-                    size_t idx = beginIndex + i * 4;
-                    pFloat[idx+0] = *data++;
-                    pFloat[idx+1] = *data++;
-                    pFloat[idx+2] = *data++;
+                    size_t idx = beginIndex + i * elementsPerVertex;
+                    pFloat[idx+0] = *pPosition++;
+                    pFloat[idx+1] = *pPosition++;
+                    pFloat[idx+2] = *pPosition++;
                     pFloat[idx+3] = 0.f;
+
+                    if( pNormal )
+                    {
+                        pFloat[idx+4] = *pNormal++;
+                        pFloat[idx+5] = *pNormal++;
+                        pFloat[idx+6] = *pNormal++;
+                        pFloat[idx+7] = 0.f;
+                    }
                 }
             }
         }
@@ -747,7 +768,6 @@ namespace Ogre {
         PixelFormat pixelFormat = halfPrecision ? PF_FLOAT16_RGBA : PF_FLOAT32_RGBA;
         mPoseTexBuffer = mParent->mVaoManager->createTexBuffer( pixelFormat, bufferSize,
                                                                 BT_IMMUTABLE, buffer, false );
-        mPoseHalfPrecision = halfPrecision;
     }
     //---------------------------------------------------------------------
     void SubMesh::arrangeEfficient( bool halfPos, bool halfTexCoords, bool qTangents )
