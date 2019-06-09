@@ -53,10 +53,10 @@ namespace Ogre {
             mBlendIndexToBoneIndexMap = &subMeshBasis->mBlendIndexToBoneIndexMap;
         }
         
-        if( subMeshBasis->getNumPoseAnimations() > 0 ) 
+        if( subMeshBasis->getNumPoses() > 0 ) 
         {
             mPoseData.reset(new PoseData);
-            mPoseData->numPoses = subMeshBasis->getNumPoseAnimations();
+            mPoseData->numPoses = subMeshBasis->getNumPoses();
             mPoseData->buffer = subMeshBasis->getPoseTexBuffer();
             mPoseData->halfPrecision = subMeshBasis->getPoseHalfPrecision();
         }

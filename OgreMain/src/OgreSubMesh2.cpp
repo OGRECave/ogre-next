@@ -49,7 +49,7 @@ namespace Ogre {
     SubMesh::SubMesh() :
         mParent( 0 ),
         mBoneAssignmentsOutOfDate( false ),
-        mNumPoseAnimations( 0 ),
+        mNumPoses( 0 ),
         mPoseHalfPrecision( false ),
         mPoseTexBuffer( 0 )
     {
@@ -641,14 +641,14 @@ namespace Ogre {
                                       [=](const v1::Pose* pose) { return pose->getTarget() != subMeshIndex; }),
                                       poseList.end());
         
-        mNumPoseAnimations = poseList.size();
+        mNumPoses = poseList.size();
         
-        if( mNumPoseAnimations > 0 ) 
+        if( mNumPoses > 0 ) 
         {
             uint32 numVertices = vertexBuffer->getNumElements();
             size_t elementSize = halfPrecision ? sizeof( uint16 ) : sizeof( float );
             size_t singlePoseBufferSize = numVertices * elementSize * 4;
-            size_t bufferSize = mNumPoseAnimations * singlePoseBufferSize;
+            size_t bufferSize = mNumPoses * singlePoseBufferSize;
             char *buffer = static_cast<char*>( OGRE_MALLOC_SIMD( bufferSize,
                                                                  MEMCATEGORY_GEOMETRY ) );                                
             FreeOnDestructor bufferPtrContainer( buffer );
@@ -699,6 +699,55 @@ namespace Ogre {
                                                                     BT_IMMUTABLE, buffer, false );
             mPoseHalfPrecision = halfPrecision;
         }
+    }
+    //---------------------------------------------------------------------
+    void SubMesh::createPoses( const float** poseData, size_t numPoses, size_t numVertices, bool halfPrecision ) 
+    {
+        mNumPoses = numPoses;
+        size_t elementSize = halfPrecision ? sizeof( uint16 ) : sizeof( float );
+        size_t singlePoseBufferSize = numVertices * elementSize * 4;
+        size_t bufferSize = numPoses * singlePoseBufferSize;
+        char *buffer = static_cast<char*>( OGRE_MALLOC_SIMD( bufferSize,
+                                                             MEMCATEGORY_GEOMETRY ) );                                
+        FreeOnDestructor bufferPtrContainer( buffer );
+        memset( buffer, 0, bufferSize );
+        
+        for( size_t poseIndex = 0; poseIndex < numPoses; ++poseIndex )
+        {
+            // TODO: import normals
+            const float* data = poseData[poseIndex];
+            size_t beginIndex = poseIndex * numVertices * 4;
+
+            if( halfPrecision )
+            {
+                uint16* pHalf = reinterpret_cast<uint16*>( buffer +  poseIndex * singlePoseBufferSize );
+                for( size_t i = 0; i < numVertices; ++i )
+                {
+                    size_t idx = beginIndex + i * 4;
+                    pHalf[idx+0] = Bitwise::floatToHalf( *data++ );
+                    pHalf[idx+1] = Bitwise::floatToHalf( *data++ );
+                    pHalf[idx+2] = Bitwise::floatToHalf( *data++ );
+                    pHalf[idx+3] = Bitwise::floatToHalf( 0.f );
+                }
+            }
+            else
+            {
+                float* pFloat = reinterpret_cast<float*>( buffer + poseIndex * singlePoseBufferSize );
+                for( size_t i = 0; i < numVertices; ++i )
+                {
+                    size_t idx = beginIndex + i * 4;
+                    pFloat[idx+0] = *data++;
+                    pFloat[idx+1] = *data++;
+                    pFloat[idx+2] = *data++;
+                    pFloat[idx+3] = 0.f;
+                }
+            }
+        }
+        
+        PixelFormat pixelFormat = halfPrecision ? PF_FLOAT16_RGBA : PF_FLOAT32_RGBA;
+        mPoseTexBuffer = mParent->mVaoManager->createTexBuffer( pixelFormat, bufferSize,
+                                                                BT_IMMUTABLE, buffer, false );
+        mPoseHalfPrecision = halfPrecision;
     }
     //---------------------------------------------------------------------
     void SubMesh::arrangeEfficient( bool halfPos, bool halfTexCoords, bool qTangents )
