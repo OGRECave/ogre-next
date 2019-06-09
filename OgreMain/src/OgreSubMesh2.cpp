@@ -701,29 +701,26 @@ namespace Ogre {
         }
     }
     //---------------------------------------------------------------------
-    void SubMesh::createPoses( const vector<float*>::type& poseData, size_t numVertices, bool halfPrecision ) 
+    void SubMesh::createPoses( const float** poseData, size_t numPoses, size_t numVertices, bool halfPrecision ) 
     {
-        mNumPoses = poseData.size();
+        mNumPoses = numPoses;
         size_t elementSize = halfPrecision ? sizeof( uint16 ) : sizeof( float );
         size_t singlePoseBufferSize = numVertices * elementSize * 4;
-        size_t bufferSize = mNumPoses * singlePoseBufferSize;
+        size_t bufferSize = numPoses * singlePoseBufferSize;
         char *buffer = static_cast<char*>( OGRE_MALLOC_SIMD( bufferSize,
                                                              MEMCATEGORY_GEOMETRY ) );                                
         FreeOnDestructor bufferPtrContainer( buffer );
         memset( buffer, 0, bufferSize );
         
-        vector<float*>::const_iterator poseIt;
-        size_t index = 0;
-        
-        for( poseIt = poseData.begin(); poseIt != poseData.end(); ++poseIt )
+        for( size_t poseIndex = 0; poseIndex < numPoses; ++poseIndex )
         {
             // TODO: import normals
-            float* data = *poseIt;
-            size_t beginIndex = index * numVertices * 4;
+            const float* data = poseData[poseIndex];
+            size_t beginIndex = poseIndex * numVertices * 4;
 
             if( halfPrecision )
             {
-                uint16* pHalf = reinterpret_cast<uint16*>( buffer +  index * singlePoseBufferSize );
+                uint16* pHalf = reinterpret_cast<uint16*>( buffer +  poseIndex * singlePoseBufferSize );
                 for( size_t i = 0; i < numVertices; ++i )
                 {
                     size_t idx = beginIndex + i * 4;
@@ -735,7 +732,7 @@ namespace Ogre {
             }
             else
             {
-                float* pFloat = reinterpret_cast<float*>( buffer + index * singlePoseBufferSize );
+                float* pFloat = reinterpret_cast<float*>( buffer + poseIndex * singlePoseBufferSize );
                 for( size_t i = 0; i < numVertices; ++i )
                 {
                     size_t idx = beginIndex + i * 4;
@@ -745,8 +742,6 @@ namespace Ogre {
                     pFloat[idx+3] = 0.f;
                 }
             }
-
-            ++index;
         }
         
         PixelFormat pixelFormat = halfPrecision ? PF_FLOAT16_RGBA : PF_FLOAT32_RGBA;

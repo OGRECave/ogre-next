@@ -209,8 +209,14 @@ namespace Ogre {
         
         TexBufferPacked* getPoseTexBuffer() { return mPoseTexBuffer; }
 
-        void createPoses( const vector<float*>::type& poseData, size_t numVertices, bool halfPrecision = true );
-
+        /** Fills the pose animation buffer with the given poseData.
+        @remarks
+            poseData is an array with a pointer to a block of data for each pose, and each pose
+            should contain (x,y,z) offsets for each vertex in sequence. The size of each block 
+            of data must be equals to numVertices * 3 * sizeof(float) or else a buffer overrun
+            shall occur.
+         */
+        void createPoses( const float** poseData, size_t numPoses, size_t numVertices, bool halfPrecision = true );
 
     protected:
         void importBuffersFromV1( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords, bool qTangents,
