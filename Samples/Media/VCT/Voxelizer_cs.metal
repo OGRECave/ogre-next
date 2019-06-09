@@ -25,8 +25,6 @@ struct Params
 	float3 voxelCellSize;
 };
 
-#include <metal_simdgroup>
-
 #if defined(__HAVE_SIMDGROUP_BALLOT__)
 	#define anyInvocationARB( value ) simd_any( value )
 #else

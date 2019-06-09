@@ -453,10 +453,13 @@
 							//passes. But we need it normalized for this check to work
 							float cosAngle = dot( normalize( voxelNormal.xyz ), triNormal );
 							float cos120 = -0.5f;
+							/*Rewrote as ternary operator because it was glitching in iOS Metal
 							if( cosAngle <= cos120 )
 								doubleSided = true;
 							else
-								voxelNormal.xyz += triNormal;
+								voxelNormal.xyz += triNormal;*/
+							doubleSided		= cosAngle <= cos120 ? true : doubleSided;
+							voxelNormal.xyz	+= cosAngle <= cos120 ? float3( 0, 0, 0 ) : triNormal;
 
 							++accumTris;
 						}
