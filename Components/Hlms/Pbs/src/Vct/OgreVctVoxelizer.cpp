@@ -58,11 +58,6 @@ THE SOFTWARE.
 
 #include "OgreProfiler.h"
 
-#include "Compositor/OgreCompositorManager2.h"
-#include "Compositor/OgreCompositorWorkspaceDef.h"
-#include "Compositor/OgreCompositorNodeDef.h"
-#include "Compositor/Pass/PassCompute/OgreCompositorPassComputeDef.h"
-
 #define TODO_deal_no_index_buffer
 
 namespace Ogre
