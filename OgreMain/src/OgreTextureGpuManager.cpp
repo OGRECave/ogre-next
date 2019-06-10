@@ -2294,9 +2294,10 @@ namespace Ogre
 
         for( uint8 i=firstMip; i<numMips; ++i )
         {
-            for( uint32 z=0; z<img.getDepthOrSlices(); ++z )
+            TextureBox srcBox = img.getData( i );
+            const uint32 imgDepthOrSlices = srcBox.getDepthOrSlices();
+            for( uint32 z=0; z<imgDepthOrSlices; ++z )
             {
-                TextureBox srcBox = img.getData( i );
                 if( queuedImage.isMipSliceQueued( i, z ) )
                 {
                     srcBox.z            = is3DVolume ? z : 0;
@@ -3280,6 +3281,19 @@ namespace Ogre
             {
                 mipLevelBitSet[i] = (1ul << numMipSlices) - 1ul;
                 numMipSlices = 0;
+            }
+        }
+
+        if( srcImage.getTextureType() == TextureTypes::Type3D )
+        {
+            //For 3D textures, depth is not constant per mip level. If we don't unqueue those
+            //now we will later get stuck in an infinite loop (empty() will never return true)
+            uint32 currDepth = std::max<uint32>( numSlices >> 1u, 1u );
+            for( uint8 mip=1u; mip<numMips; ++mip )
+            {
+                for( uint32 slice=currDepth; slice<numSlices; ++slice )
+                    unqueueMipSlice( mip, static_cast<uint8>( slice ) );
+                currDepth = std::max<uint32>( currDepth >> 1u, 1u );
             }
         }
     }
