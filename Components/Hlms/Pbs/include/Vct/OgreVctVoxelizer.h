@@ -120,7 +120,21 @@ namespace Ogre
 
         struct QueuedSubMesh
         {
+            //Due to an infrastructure bug, we're commenting out the 'STREAM_DOWNLOAD' path
+            //The goal was to queue up several transfer GPU -> staging area, then map
+            //the staging area. However this backfired as each AsyncTicket will hold its own
+            //StagingBuffer (and each one is at least 4MB) instead of sharing it. This balloons
+            //memory consumption and still needs to map staging buffers a lot, defeating part of
+            //its purpose.
+            //Since fixing it would take a lot of time, it has been ifdef'ed out and instead
+            //we download the data and immediately map it. This causes more stalls but is
+            //far more memory friendly.
+#ifdef STREAM_DOWNLOAD
             VertexBufferDownloadHelper downloadHelper;
+#else
+            size_t  downloadVertexStart;
+            size_t  downloadNumVertices;
+#endif
             FastArray<PartitionedSubMesh> partSubMeshes;
         };
 

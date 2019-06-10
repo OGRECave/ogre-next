@@ -344,6 +344,7 @@ namespace Ogre
                 *partSubMeshIdx += 1u;
             }
 
+#ifdef STREAM_DOWNLOAD
             //Request to download the vertex buffer(s) to CPU (it will be mapped soon)
             VertexElementSemanticFullArray semanticsToDownload;
             semanticsToDownload.push_back( VES_POSITION );
@@ -351,6 +352,10 @@ namespace Ogre
             semanticsToDownload.push_back( VES_TEXTURE_COORDINATES );
             queuedMesh.submeshes[subMeshIdx].downloadHelper.queueDownload( vao, semanticsToDownload,
                                                                            vertexStart, numVertices );
+#else
+            queuedMesh.submeshes[subMeshIdx].downloadVertexStart = vertexStart;
+            queuedMesh.submeshes[subMeshIdx].downloadNumVertices = numVertices;
+#endif
         }
 
         if( queuedMesh.bCompressed )
@@ -515,7 +520,21 @@ namespace Ogre
 
             float * RESTRICT_ALIAS uncVertexBuffer = mappedBuffers.uncompressedVertexBuffer;
 
+#ifdef STREAM_DOWNLOAD
             VertexBufferDownloadHelper &downloadHelper = queuedMesh.submeshes[subMeshIdx].downloadHelper;
+#else
+            VertexBufferDownloadHelper downloadHelper;
+            {
+                VertexElementSemanticFullArray semanticsToDownload;
+                semanticsToDownload.push_back( VES_POSITION );
+                semanticsToDownload.push_back( VES_NORMAL );
+                semanticsToDownload.push_back( VES_TEXTURE_COORDINATES );
+
+                downloadHelper.queueDownload( vao, semanticsToDownload,
+                                              queuedMesh.submeshes[subMeshIdx].downloadVertexStart,
+                                              queuedMesh.submeshes[subMeshIdx].downloadNumVertices );
+            }
+#endif
             const VertexBufferDownloadHelper::DownloadData *downloadData =
                     downloadHelper.getDownloadData().begin();
 
