@@ -267,6 +267,8 @@ namespace Ogre
 
         void computeMeshAabbs(void);
 
+        void clearVoxels(void);
+
     public:
         VctVoxelizer( IdType id, RenderSystem *renderSystem, HlmsManager *hlmsManager );
         ~VctVoxelizer();

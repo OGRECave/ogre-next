@@ -59,7 +59,6 @@ THE SOFTWARE.
 #include "OgreProfiler.h"
 
 #define TODO_deal_no_index_buffer
-#define TODO_clear_voxels
 #define TODO_add_barrier
 
 namespace Ogre
@@ -1193,6 +1192,20 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
+    void VctVoxelizer::clearVoxels(void)
+    {
+        OgreProfileGpuBegin( "VCT Voxelization Clear" );
+        float fClearValue[4];
+        uint32 uClearValue[4];
+        memset( fClearValue, 0, sizeof(fClearValue) );
+        memset( uClearValue, 0, sizeof(uClearValue) );
+        mComputeTools->clearUavFloat( mAlbedoVox, fClearValue );
+        mComputeTools->clearUavFloat( mEmissiveVox, fClearValue );
+        mComputeTools->clearUavFloat( mNormalVox, fClearValue );
+        mComputeTools->clearUavUint( mAccumValVox, uClearValue );
+        OgreProfileGpuEnd( "VCT Voxelization Clear" );
+    }
+    //-------------------------------------------------------------------------
     void VctVoxelizer::build(void)
     {
         OgreProfile( "VctVoxelizer::build" );
@@ -1202,7 +1215,9 @@ namespace Ogre
 
         if( mItems.empty() )
         {
-            TODO_clear_voxels;
+            clearVoxels();
+            return;
+            TODO_add_barrier;
         }
 
         mRenderSystem->endRenderPassDescriptor();
@@ -1264,17 +1279,7 @@ namespace Ogre
         }
 
         HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
-
-        OgreProfileGpuBegin( "VCT Voxelization Clear" );
-        float fClearValue[4];
-        uint32 uClearValue[4];
-        memset( fClearValue, 0, sizeof(fClearValue) );
-        memset( uClearValue, 0, sizeof(uClearValue) );
-        mComputeTools->clearUavFloat( mAlbedoVox, fClearValue );
-        mComputeTools->clearUavFloat( mEmissiveVox, fClearValue );
-        mComputeTools->clearUavFloat( mNormalVox, fClearValue );
-        mComputeTools->clearUavUint( mAccumValVox, uClearValue );
-        OgreProfileGpuEnd( "VCT Voxelization Clear" );
+        clearVoxels();
 
         TODO_add_barrier;
 
