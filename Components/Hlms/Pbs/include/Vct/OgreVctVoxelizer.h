@@ -237,6 +237,13 @@ namespace Ogre
 
         FastArray<Octant> mOctants;
 
+        ResourceTransition mStartupTrans;
+        ResourceTransition mAfterClearTrans;
+        ResourceTransition mAfterAabbCalculatorTrans;
+        ResourceTransition mAfterAabbWorldUpdateTrans;
+        ResourceTransition mVoxelizerInterDispatchTrans;
+        ResourceTransition mVoxelizerPrepareForSamplingTrans;
+
         /** 16-bit buffer values must always be even since the UAV buffer
             is internally packed uint32 and BufferPacked::copyTo doesn't
             like copying with odd-starting offsets in some APIs.
@@ -266,6 +273,9 @@ namespace Ogre
         void fillInstanceBuffers(void);
 
         void computeMeshAabbs(void);
+
+        void createBarriers(void);
+        void destroyBarriers(void);
 
         void clearVoxels(void);
 

@@ -127,6 +127,52 @@ namespace Ogre
         destroyTextures();
     }
     //-------------------------------------------------------------------------
+    void VctLighting::createBarriers(void)
+    {
+        RenderSystem *renderSystem = mVoxelizer->getRenderSystem();
+
+        if( renderSystem->getCapabilities()->hasCapability( RSC_EXPLICIT_API ) )
+        {
+            //If calling every frame, left resources in texture mode
+            mStartupTrans.oldLayout = ResourceLayout::Texture;
+            mStartupTrans.newLayout = ResourceLayout::Uav;
+            mStartupTrans.writeBarrierBits = 0;
+            mStartupTrans.readBarrierBits  = ReadBarrier::Uav;
+            renderSystem->_resourceTransitionCreated( &mStartupTrans );
+        }
+
+        //We're done writing to mLightVoxel[0], we will only sample from it as texture
+        mPrepareForSamplingTrans.oldLayout = ResourceLayout::Uav;
+        mPrepareForSamplingTrans.newLayout = ResourceLayout::Texture;
+        mPrepareForSamplingTrans.writeBarrierBits = WriteBarrier::Uav;
+        mPrepareForSamplingTrans.readBarrierBits  = ReadBarrier::Texture;
+        renderSystem->_resourceTransitionCreated( &mPrepareForSamplingTrans );
+
+        //We're done writing to mLightVoxel[i] MIPS, we will only sample from them as textures
+        mAfterAnisoMip0Trans.oldLayout = ResourceLayout::Uav;
+        mAfterAnisoMip0Trans.newLayout = ResourceLayout::Texture;
+        mAfterAnisoMip0Trans.writeBarrierBits = WriteBarrier::Uav;
+        mAfterAnisoMip0Trans.readBarrierBits  = ReadBarrier::Texture;
+        renderSystem->_resourceTransitionCreated( &mAfterAnisoMip0Trans );
+
+        //We're done writing to mLightVoxel[i] MIPS, we will only sample from them as textures
+        mAfterAnisoMip1Trans.oldLayout = ResourceLayout::Uav;
+        mAfterAnisoMip1Trans.newLayout = ResourceLayout::Texture;
+        mAfterAnisoMip1Trans.writeBarrierBits = WriteBarrier::Uav;
+        mAfterAnisoMip1Trans.readBarrierBits  = ReadBarrier::Texture;
+        renderSystem->_resourceTransitionCreated( &mAfterAnisoMip1Trans );
+    }
+    //-------------------------------------------------------------------------
+    void VctLighting::destroyBarriers(void)
+    {
+        RenderSystem *renderSystem = mVoxelizer->getRenderSystem();
+        if( renderSystem->getCapabilities()->hasCapability( RSC_EXPLICIT_API ) )
+            renderSystem->_resourceTransitionDestroyed( &mStartupTrans );
+        renderSystem->_resourceTransitionDestroyed( &mPrepareForSamplingTrans );
+        renderSystem->_resourceTransitionDestroyed( &mAfterAnisoMip0Trans );
+        renderSystem->_resourceTransitionDestroyed( &mAfterAnisoMip1Trans );
+    }
+    //-------------------------------------------------------------------------
     void VctLighting::addLight( ShaderVctLight * RESTRICT_ALIAS vctLight, Light *light,
                                 const Vector3 &voxelOrigin, const Vector3 &invVoxelRes )
     {
@@ -301,10 +347,14 @@ namespace Ogre
                 mAnisoGeneratorStep1[i] = mipJob;
             }
         }
+
+        createBarriers();
     }
     //-------------------------------------------------------------------------
     void VctLighting::destroyTextures()
     {
+        destroyBarriers();
+
         TextureGpuManager *textureManager = mVoxelizer->getTextureGpuManager();
         for( size_t i=0; i<sizeof(mLightVoxel) / sizeof(mLightVoxel[0]); ++i )
         {
@@ -337,8 +387,11 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VctLighting::generateAnisotropicMips()
     {
+        RenderSystem *renderSystem = mVoxelizer->getRenderSystem();
         HlmsCompute *hlmsCompute = mVoxelizer->getHlmsManager()->getComputeHlms();
         hlmsCompute->dispatch( mAnisoGeneratorStep0, 0, 0 );
+
+        renderSystem->_executeResourceTransition( &mAfterAnisoMip0Trans );
 
         TODO_memory_barrier;
 
@@ -348,6 +401,7 @@ namespace Ogre
         while( itor != end )
         {
             hlmsCompute->dispatch( *itor, 0, 0 );
+            renderSystem->_executeResourceTransition( &mAfterAnisoMip1Trans );
             ++itor;
         }
     }
@@ -355,6 +409,10 @@ namespace Ogre
     void VctLighting::update( SceneManager *sceneManager, float rayMarchStepScale, uint32 _lightMask )
     {
         OGRE_ASSERT_LOW( rayMarchStepScale >= 1.0f );
+
+        RenderSystem *renderSystem = mVoxelizer->getRenderSystem();
+        if( renderSystem->getCapabilities()->hasCapability( RSC_EXPLICIT_API ) )
+            renderSystem->_resourceTransitionCreated( &mStartupTrans );
 
         mLightInjectionJob->setConstBuffer( 0, mLightsConstBuffer );
 
@@ -428,6 +486,8 @@ namespace Ogre
 
         HlmsCompute *hlmsCompute = mVoxelizer->getHlmsManager()->getComputeHlms();
         hlmsCompute->dispatch( mLightInjectionJob, 0, 0 );
+
+        renderSystem->_executeResourceTransition( &mPrepareForSamplingTrans );
 
         if( mAnisotropic )
             generateAnisotropicMips();

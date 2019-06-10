@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "OgreHlmsPbsPrerequisites.h"
 #include "OgreId.h"
 #include "OgreShaderParams.h"
+#include "OgreResourceTransition.h"
 
 #include "OgreHeaderPrefix.h"
 
@@ -91,6 +92,14 @@ namespace Ogre
         ShaderParams::Param *mVoxelCellSize;
         ShaderParams::Param *mInvVoxelResolution;
         ShaderParams        *mShaderParams;
+
+        ResourceTransition mStartupTrans;
+        ResourceTransition mPrepareForSamplingTrans;
+        ResourceTransition mAfterAnisoMip0Trans;
+        ResourceTransition mAfterAnisoMip1Trans;
+
+        void createBarriers(void);
+        void destroyBarriers(void);
 
     public:
         /** Bias/distance in units (i.e. if your engine is in meters, then this value

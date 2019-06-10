@@ -58,8 +58,12 @@ THE SOFTWARE.
 
 #include "OgreProfiler.h"
 
+#include "Compositor/OgreCompositorManager2.h"
+#include "Compositor/OgreCompositorWorkspaceDef.h"
+#include "Compositor/OgreCompositorNodeDef.h"
+#include "Compositor/Pass/PassCompute/OgreCompositorPassComputeDef.h"
+
 #define TODO_deal_no_index_buffer
-#define TODO_add_barrier
 
 namespace Ogre
 {
@@ -761,6 +765,9 @@ namespace Ogre
             mAlbedoVox->getDepth() == mDepth )
         {
             mAccumValVox->scheduleTransitionTo( GpuResidency::Resident );
+
+            if( mRenderSystem->getCapabilities()->hasCapability( RSC_EXPLICIT_API ) )
+                mRenderSystem->_resourceTransitionCreated( &mStartupTrans );
             return;
         }
 
@@ -1134,9 +1141,9 @@ namespace Ogre
             meshStart += numMeshes[i];
         }
 
-        OgreProfileGpuEnd( "VCT Mesh AABB calculation" );
+        mRenderSystem->_executeResourceTransition( &mAfterAabbCalculatorTrans );
 
-        TODO_add_barrier;
+        OgreProfileGpuEnd( "VCT Mesh AABB calculation" );
 
         DescriptorSetUav::BufferSlot bufferSlot( DescriptorSetUav::BufferSlot::makeEmpty() );
         bufferSlot.buffer = mInstanceBuffer;
@@ -1152,6 +1159,7 @@ namespace Ogre
 
         OgreProfileGpuBegin( "VCT AABB local to world space conversion" );
         hlmsCompute->dispatch( mAabbWorldSpaceJob, 0, 0 );
+        mRenderSystem->_executeResourceTransition( &mAfterAabbWorldUpdateTrans );
         OgreProfileGpuEnd( "VCT AABB local to world space conversion" );
     }
     //-------------------------------------------------------------------------
@@ -1192,6 +1200,65 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
+    void VctVoxelizer::createBarriers(void)
+    {
+        if( mRenderSystem->getCapabilities()->hasCapability( RSC_EXPLICIT_API ) )
+        {
+            //If calling every frame, left resources in texture mode
+            mStartupTrans.oldLayout = ResourceLayout::Texture;
+            mStartupTrans.newLayout = ResourceLayout::Uav;
+            mStartupTrans.writeBarrierBits = 0;
+            mStartupTrans.readBarrierBits  = ReadBarrier::Uav;
+            mRenderSystem->_resourceTransitionCreated( &mStartupTrans );
+        }
+
+        //We wrote to mAlbedoVox & co., we will read from them still as UAV
+        mAfterClearTrans.oldLayout = ResourceLayout::Uav;
+        mAfterClearTrans.newLayout = ResourceLayout::Uav;
+        mAfterClearTrans.writeBarrierBits = WriteBarrier::Uav;
+        mAfterClearTrans.readBarrierBits  = ReadBarrier::Uav;
+        mRenderSystem->_resourceTransitionCreated( &mAfterClearTrans );
+
+        //We wrote to mMeshAabb UAV, we will read mMeshAabb->getAsTexBufferView
+        mAfterAabbCalculatorTrans.oldLayout = ResourceLayout::Uav;
+        mAfterAabbCalculatorTrans.newLayout = ResourceLayout::Texture;
+        mAfterAabbCalculatorTrans.writeBarrierBits = WriteBarrier::Uav;
+        mAfterAabbCalculatorTrans.readBarrierBits  = ReadBarrier::Texture;
+        mRenderSystem->_resourceTransitionCreated( &mAfterAabbCalculatorTrans );
+
+        //We wrote to mInstanceBuffer, we will read mInstanceBufferAsTex
+        mAfterAabbWorldUpdateTrans.oldLayout = ResourceLayout::Uav;
+        mAfterAabbWorldUpdateTrans.newLayout = ResourceLayout::Texture;
+        mAfterAabbWorldUpdateTrans.writeBarrierBits = WriteBarrier::Uav;
+        mAfterAabbWorldUpdateTrans.readBarrierBits  = ReadBarrier::Texture;
+        mRenderSystem->_resourceTransitionCreated( &mAfterAabbWorldUpdateTrans );
+
+        //We wrote to mAlbedoVox & co., we will read from them still as UAV
+        mVoxelizerInterDispatchTrans.oldLayout = ResourceLayout::Uav;
+        mVoxelizerInterDispatchTrans.newLayout = ResourceLayout::Uav;
+        mVoxelizerInterDispatchTrans.writeBarrierBits = WriteBarrier::Uav;
+        mVoxelizerInterDispatchTrans.readBarrierBits  = ReadBarrier::Uav;
+        mRenderSystem->_resourceTransitionCreated( &mVoxelizerInterDispatchTrans );
+
+        //We're done writing to mAlbedoVox & co., we will only sample from them as textures
+        mVoxelizerPrepareForSamplingTrans.oldLayout = ResourceLayout::Uav;
+        mVoxelizerPrepareForSamplingTrans.newLayout = ResourceLayout::Texture;
+        mVoxelizerPrepareForSamplingTrans.writeBarrierBits  = WriteBarrier::Uav;
+        mVoxelizerPrepareForSamplingTrans.readBarrierBits   = ReadBarrier::Texture;
+        mRenderSystem->_resourceTransitionCreated( &mVoxelizerPrepareForSamplingTrans );
+    }
+    //-------------------------------------------------------------------------
+    void VctVoxelizer::destroyBarriers(void)
+    {
+        if( mRenderSystem->getCapabilities()->hasCapability( RSC_EXPLICIT_API ) )
+            mRenderSystem->_resourceTransitionDestroyed( &mStartupTrans );
+        mRenderSystem->_resourceTransitionDestroyed( &mAfterClearTrans );
+        mRenderSystem->_resourceTransitionDestroyed( &mAfterAabbCalculatorTrans );
+        mRenderSystem->_resourceTransitionDestroyed( &mAfterAabbWorldUpdateTrans );
+        mRenderSystem->_resourceTransitionDestroyed( &mVoxelizerInterDispatchTrans );
+        mRenderSystem->_resourceTransitionDestroyed( &mVoxelizerPrepareForSamplingTrans );
+    }
+    //-------------------------------------------------------------------------
     void VctVoxelizer::clearVoxels(void)
     {
         OgreProfileGpuBegin( "VCT Voxelization Clear" );
@@ -1203,6 +1270,7 @@ namespace Ogre
         mComputeTools->clearUavFloat( mEmissiveVox, fClearValue );
         mComputeTools->clearUavFloat( mNormalVox, fClearValue );
         mComputeTools->clearUavUint( mAccumValVox, uClearValue );
+        mRenderSystem->_executeResourceTransition( &mAfterClearTrans );
         OgreProfileGpuEnd( "VCT Voxelization Clear" );
     }
     //-------------------------------------------------------------------------
@@ -1213,11 +1281,16 @@ namespace Ogre
 
         OGRE_ASSERT_LOW( !mOctants.empty() );
 
+        mRenderSystem->endRenderPassDescriptor();
+
+        createBarriers();
+
         if( mItems.empty() )
         {
             clearVoxels();
+            mRenderSystem->_executeResourceTransition( &mVoxelizerPrepareForSamplingTrans );
+            destroyBarriers();
             return;
-            TODO_add_barrier;
         }
 
         mRenderSystem->endRenderPassDescriptor();
@@ -1280,8 +1353,6 @@ namespace Ogre
 
         HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
         clearVoxels();
-
-        TODO_add_barrier;
 
         const uint32 *threadsPerGroup = mComputeJobs[0]->getThreadsPerGroup();
 
@@ -1350,6 +1421,7 @@ namespace Ogre
                 shaderParams.setDirty();
 
                 hlmsCompute->dispatch( bucket.job, 0, 0 );
+                mRenderSystem->_executeResourceTransition( &mVoxelizerInterDispatchTrans );
 
                 instanceStart += numInstancesInBucket;
 
@@ -1363,6 +1435,10 @@ namespace Ogre
 
         //This texture is no longer needed, it's not used for the injection phase. Save memory.
         mAccumValVox->scheduleTransitionTo( GpuResidency::OnStorage );
+
+        mRenderSystem->_executeResourceTransition( &mVoxelizerPrepareForSamplingTrans );
+
+        destroyBarriers();
 
         OgreProfileGpuEnd( "VCT build" );
     }
