@@ -2834,7 +2834,6 @@ namespace Ogre {
     void GL3PlusRenderSystem::_dispatch( const HlmsComputePso &pso )
     {
         glDispatchCompute( pso.mNumThreadGroups[0], pso.mNumThreadGroups[1], pso.mNumThreadGroups[2] );
-        glMemoryBarrier( GL_ALL_BARRIER_BITS & ~GL_CLIENT_MAPPED_BUFFER_BARRIER_BIT );
     }
 
     void GL3PlusRenderSystem::_setVertexArrayObject( const VertexArrayObject *_vao )
