@@ -124,9 +124,14 @@ Buffer<float4> worldMatBuf : register(t0);
 
 	@psub( MoreThanOnePose, hlms_pose, 1 )
 	@property( !MoreThanOnePose )
-		float4 posePos = poseBuf.Load( int(input.vertexId) );
 		float4 poseWeights = worldMatBuf.Load( int(poseDataStart + 1u) );
+		float4 posePos = poseBuf.Load( int(input.vertexId @property( hlms_pose_normals )<< 1u@end ) );
 		input.vertex += posePos * poseWeights.x;
+		@property( hlms_pose_normals )
+			float4 poseNormal = poseBuf.Load( int((input.vertexId << 1u) + 1u) );
+			input.normal += poseNormal.xyz * poseWeights.x;
+		@end
+		@pset( NumPoseWeightVectors, 1 )
 	@end @property( MoreThanOnePose )
 		// NumPoseWeightVectors = (hlms_pose / 4) + min(hlms_pose % 4, 1)
 		@pdiv( NumPoseWeightVectorsA, hlms_pose, 4 )
@@ -140,7 +145,10 @@ Buffer<float4> worldMatBuf : register(t0);
 		@property( !MoreThanOnePoseWeightVector )
 			float4 poseWeights = worldMatBuf.Load( int(poseDataStart + 1u) );
 			@foreach( hlms_pose, n )
-				input.vertex += poseBuf.Load( int(input.vertexId + numVertices * @nu) ) * poseWeights[@n];
+				input.vertex += poseBuf.Load( int((input.vertexId + numVertices * @nu) @property( hlms_pose_normals )<< 1u@end ) ) * poseWeights[@n];
+				@property( hlms_pose_normals )
+				input.normal += poseBuf.Load( int(((input.vertexId + numVertices * @nu) << 1u) + 1u) ) * poseWeights[@n];
+				@end
 			@end
 		@end @property( MoreThanOnePoseWeightVector )
 			float poseWeights[@value(NumPoseWeightVectors) * 4];
@@ -152,7 +160,10 @@ Buffer<float4> worldMatBuf : register(t0);
 				poseWeights[@n * 4 + 3] = weights@n[3];
 			@end
 			@foreach( hlms_pose, n )
-				input.vertex += poseBuf.Load( int(input.vertexId + numVertices * @nu) ) * poseWeights[@n];
+				input.vertex += poseBuf.Load( int((input.vertexId + numVertices * @nu) @property( hlms_pose_normals )<< 1u@end ) ) * poseWeights[@n];
+				@property( hlms_pose_normals )
+				input.normal += poseBuf.Load( int(((input.vertexId + numVertices * @nu) << 1u) + 1u) ) * poseWeights[@n];
+				@end
 			@end
 		@end
 	@end
