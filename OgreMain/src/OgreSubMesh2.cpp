@@ -644,13 +644,14 @@ namespace Ogre {
         
         mNumPoses = poseList.size();
         mPoseHalfPrecision = halfPrecision;
-        mPoseNormals = false; // TODO: import normals
         
         if( mNumPoses > 0 ) 
         {
+            mPoseNormals = poseList[0]->getIncludesNormals();
             uint32 numVertices = vertexBuffer->getNumElements();
             size_t elementSize = halfPrecision ? sizeof( uint16 ) : sizeof( float );
-            size_t singlePoseBufferSize = numVertices * elementSize * 4;
+            size_t elementsPerVertex = mPoseNormals ? 8 : 4;
+            size_t singlePoseBufferSize = numVertices * elementSize * elementsPerVertex;
             size_t bufferSize = mNumPoses * singlePoseBufferSize;
             char *buffer = static_cast<char*>( OGRE_MALLOC_SIMD( bufferSize,
                                                                  MEMCATEGORY_GEOMETRY ) );                                
@@ -665,18 +666,28 @@ namespace Ogre {
             {
                 v1::Pose* pose = poseIt.getNext();
                 v1::Pose::VertexOffsetMap::const_iterator v = pose->getVertexOffsets().begin();
+                v1::Pose::NormalsIterator::const_iterator n = pose->getNormalsIterator().begin();
                 
                 if( halfPrecision )
                 {
                     uint16* pHalf = reinterpret_cast<uint16*>( buffer +  index * singlePoseBufferSize );
                     while( v != pose->getVertexOffsets().end() )
                     {
-                        size_t idx = v->first;
-                        pHalf[4*idx+0] = Bitwise::floatToHalf( v->second.x );
-                        pHalf[4*idx+1] = Bitwise::floatToHalf( v->second.y );
-                        pHalf[4*idx+2] = Bitwise::floatToHalf( v->second.z );
-                        pHalf[4*idx+3] = Bitwise::floatToHalf( 0.f );
+                        size_t idx = v->first * elementsPerVertex;
+                        pHalf[idx+0] = Bitwise::floatToHalf( v->second.x );
+                        pHalf[idx+1] = Bitwise::floatToHalf( v->second.y );
+                        pHalf[idx+2] = Bitwise::floatToHalf( v->second.z );
+                        pHalf[idx+3] = Bitwise::floatToHalf( 0.f );
                         ++v;
+
+                        if( mPoseNormals )
+                        {
+                            pHalf[idx+4] = Bitwise::floatToHalf( n->second.x );
+                            pHalf[idx+5] = Bitwise::floatToHalf( n->second.y );
+                            pHalf[idx+6] = Bitwise::floatToHalf( n->second.z );
+                            pHalf[idx+7] = Bitwise::floatToHalf( 0.f );
+                            ++n;
+                        }
                     }
                 }
                 else
@@ -684,12 +695,21 @@ namespace Ogre {
                     float* pFloat = reinterpret_cast<float*>( buffer + index * singlePoseBufferSize );
                     while( v != pose->getVertexOffsets().end() )
                     {
-                        size_t idx = v->first;
-                        pFloat[4*idx+0] = v->second.x;
-                        pFloat[4*idx+1] = v->second.y;
-                        pFloat[4*idx+2] = v->second.z;
-                        pFloat[4*idx+3] = 0.f;
+                        size_t idx = v->first * elementsPerVertex;
+                        pFloat[idx+0] = v->second.x;
+                        pFloat[idx+1] = v->second.y;
+                        pFloat[idx+2] = v->second.z;
+                        pFloat[idx+3] = 0.f;
                         ++v;
+
+                        if( mPoseNormals )
+                        {
+                            pFloat[idx+4] = n->second.x;
+                            pFloat[idx+5] = n->second.y;
+                            pFloat[idx+6] = n->second.z;
+                            pFloat[idx+7] = 0.f;
+                            ++n;
+                        }
                     }
                 }
                 
