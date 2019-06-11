@@ -123,7 +123,7 @@ struct PS_INPUT
 		uint idx = poseVertexId @property( hlms_pose_normals )<< 1u@end ;
 		float4 posePos = static_cast<float4>( poseBuf[idx] );
 		input.position += posePos * poseWeights.x;
-		@property( hlms_pose_normals && !hlms_shadowcaster )
+		@property( hlms_pose_normals && (hlms_normal || hlms_qtangent) )
 			float4 poseNormal = static_cast<float4>( poseBuf[idx + 1u] );
 			normal += poseNormal.xyz * poseWeights.x;
 		@end
@@ -143,7 +143,7 @@ struct PS_INPUT
 			@foreach( hlms_pose, n )
 				uint idx@n = (poseVertexId + numVertices * @nu) @property( hlms_pose_normals )<< 1u@end ;
 				input.position += static_cast<float4>( poseBuf[idx@n] ) * poseWeights[@n];
-				@property( hlms_pose_normals && !hlms_shadowcaster )
+				@property( hlms_pose_normals && (hlms_normal || hlms_qtangent) )
 				normal += static_cast<float4>( poseBuf[idx@n + 1u] ).xyz * poseWeights[@n];
 				@end
 			@end
@@ -159,7 +159,7 @@ struct PS_INPUT
 			@foreach( hlms_pose, n )
 				uint idx@n = (poseVertexId + numVertices * @nu) @property( hlms_pose_normals )<< 1u@end ;
 				input.position += static_cast<float4>( poseBuf[idx@n] ) * poseWeights[@n];
-				@property( hlms_pose_normals && !hlms_shadowcaster )
+				@property( hlms_pose_normals && (hlms_normal || hlms_qtangent) )
 				normal += static_cast<float4>( poseBuf[idx@n + 1u] ).xyz * poseWeights[@n];
 				@end
 			@end

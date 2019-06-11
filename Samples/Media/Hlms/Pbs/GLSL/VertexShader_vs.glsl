@@ -140,7 +140,7 @@ out block
 	// Pose data starts after all 3x4 bone matrices
 	int poseDataStart = int(instance.worldMaterialIdx[drawId].x >> 9u) @property( hlms_skeleton ) + @value(hlms_bones_per_vertex) * 3@end ;
 	vec4 inputPos = vertex;
-	@property( hlms_pose_normals )vec3 inputNormal = normal;@end
+	@property( hlms_pose_normals && (hlms_normal || hlms_qtangent) )vec3 inputNormal = normal;@end
 
 	vec4 poseData = bufferFetch( worldMatBuf, poseDataStart );
 	int baseVertexID = int(floatBitsToUint( poseData.x ));
@@ -151,7 +151,7 @@ out block
 		vec4 poseWeights = bufferFetch( worldMatBuf, poseDataStart + 1 );
 		vec4 posePos = bufferFetch( poseBuf, vertexID @property( hlms_pose_normals )<< 1@end );
 		inputPos += posePos * poseWeights.x;
-		@property( hlms_pose_normals )
+		@property( hlms_pose_normals && (hlms_normal || hlms_qtangent) )
 			vec4 poseNormal = bufferFetch( poseBuf, (vertexID << 1) + 1 );
 			inputNormal += poseNormal.xyz * poseWeights.x;
 		@end
@@ -169,7 +169,7 @@ out block
 			vec4 poseWeights = bufferFetch( worldMatBuf, poseDataStart + 1 );
 			@foreach( hlms_pose, n )
 				inputPos += bufferFetch( poseBuf, (vertexID + numVertices * @n) @property( hlms_pose_normals )<< 1@end ) * poseWeights[@n];
-				@property( hlms_pose_normals )
+				@property( hlms_pose_normals && (hlms_normal || hlms_qtangent) )
 				inputNormal += bufferFetch( poseBuf, ((vertexID + numVertices * @n) << 1) + 1 ).xyz * poseWeights[@n];
 				@end
 			@end
@@ -184,7 +184,7 @@ out block
 			@end
 			@foreach( hlms_pose, n )
 				inputPos += bufferFetch( poseBuf, (vertexID + numVertices * @n) @property( hlms_pose_normals )<< 1@end ) * poseWeights[@n];
-				@property( hlms_pose_normals )
+				@property( hlms_pose_normals && (hlms_normal || hlms_qtangent) )
 				inputNormal += bufferFetch( poseBuf, ((vertexID + numVertices * @n) << 1) + 1 ).xyz * poseWeights[@n];
 				@end
 			@end
