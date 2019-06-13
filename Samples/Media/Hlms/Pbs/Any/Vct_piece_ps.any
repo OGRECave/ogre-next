@@ -263,7 +263,7 @@
 	@end
 
 	@property( ambient_hemisphere || ambient_fixed || envmap_scale )
-		float3 vctAmbient = passBuf.ambientUpperHemi;
+		float3 vctAmbient = passBuf.ambientUpperHemi.xyz;
 	@else
 		float3 vctAmbient = float3( 0, 0, 0 );
 	@end
