@@ -339,6 +339,20 @@ namespace Ogre
 
         rsc->setDriverVersion( driverVersion );
 
+        uint32 threadgroupLimits[3] = { 1024u, 1024u, 64u };
+        uint32 maxThreadsPerThreadgroup = 1024u;
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+        if( driverVersion.major < 4 )
+        {
+            threadgroupLimits[0] = 512u;
+            threadgroupLimits[1] = 512u;
+            maxThreadsPerThreadgroup = 512u;
+        }
+#endif
+        rsc->setMaxThreadsPerThreadgroupAxis( threadgroupLimits );
+        rsc->setMaxThreadsPerThreadgroup( maxThreadsPerThreadgroup );
+
         return rsc;
     }
     //-------------------------------------------------------------------------

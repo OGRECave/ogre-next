@@ -432,6 +432,17 @@ namespace Ogre
         /// The number of boolean constants compute programs support
         ushort mComputeProgramConstantBoolCount;
 
+        /// Note that it's the maximum per axis, but GPUs may *not* necessarily
+        /// support issuing a threadgroup of
+        ///     mMaxThreadsPerThreadgroupAxis[0] * mMaxThreadsPerThreadgroupAxis[1] *
+        ///     mMaxThreadsPerThreadgroupAxis[2]
+        ///
+        /// The actual limit is mMaxThreadsPerThreadgroup
+        uint32 mMaxThreadsPerThreadgroupAxis[3];
+
+        /// Max threads per threadgroup
+        uint32 mMaxThreadsPerThreadgroup;
+
 
 
     public: 
@@ -963,6 +974,27 @@ namespace Ogre
             return mComputeProgramConstantBoolCount;           
         }
 
+        void setMaxThreadsPerThreadgroupAxis( const uint32 value[3] )
+        {
+            mMaxThreadsPerThreadgroupAxis[0] = value[0];
+            mMaxThreadsPerThreadgroupAxis[1] = value[1];
+            mMaxThreadsPerThreadgroupAxis[2] = value[2];
+        }
+
+        void setMaxThreadsPerThreadgroup( uint32 value )
+        {
+            mMaxThreadsPerThreadgroup = value;
+        }
+
+        const uint32* getMaxThreadsPerThreadgroupAxis(void) const
+        {
+            return mMaxThreadsPerThreadgroupAxis;
+        }
+
+        uint32 getMaxThreadsPerThreadgroup(void) const
+        {
+            return mMaxThreadsPerThreadgroup;
+        }
     };
 
     /** @} */

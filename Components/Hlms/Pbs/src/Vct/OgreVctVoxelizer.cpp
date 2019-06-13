@@ -233,8 +233,10 @@ namespace Ogre
             }
         }
 
-
         HlmsComputeJob *aabbCalc = hlmsCompute->findComputeJob( "VCT/AabbCalculator" );
+
+        const RenderSystemCapabilities *caps = mRenderSystem->getCapabilities();
+        aabbCalc->setThreadsPerGroup( caps->getMaxThreadsPerThreadgroupAxis()[0], 1u, 1u );
 
         numVariants = 1u << c_numAabCalcProperties;
         for( size_t variant=0u; variant<numVariants; ++variant )
