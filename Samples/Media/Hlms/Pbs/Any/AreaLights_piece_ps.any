@@ -155,7 +155,7 @@
 											  pixelData ) * ( globalDot * globalDot ) * booster;
 			float atten = 1.0 / (0.5 + (passBuf.areaApproxLights[i].attenuation.y + passBuf.areaApproxLights[i].attenuation.z * fDistance) * fDistance );
 
-			@property( obb_restraint_ltc )
+			@property( obb_restraint_approx )
 				atten *= obbRestraintFade;
 			@end
 
