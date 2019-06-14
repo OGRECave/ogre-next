@@ -594,12 +594,15 @@ namespace Ogre
             textureType = TextureTypes::TypeCube;
 
         TextureGpuManager *textureManager = mCreator->getRenderSystem()->getTextureGpuManager();
-        TextureGpu *texture =
-                textureManager->createOrRetrieveTexture( name, GpuPageOutStrategy::Discard,
-                                                         textureFlags, textureType,
-                                                         ResourceGroupManager::
-                                                         AUTODETECT_RESOURCE_GROUP_NAME,
-                                                         filters );
+        TextureGpu *texture = 0;
+        if( !name.empty() )
+        {
+            texture = textureManager->createOrRetrieveTexture( name, GpuPageOutStrategy::Discard,
+                                                               textureFlags, textureType,
+                                                               ResourceGroupManager::
+                                                               AUTODETECT_RESOURCE_GROUP_NAME,
+                                                               filters );
+        }
         setTexture( texUnit, texture, refParams );
     }
     //-----------------------------------------------------------------------------------
