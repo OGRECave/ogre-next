@@ -282,13 +282,16 @@ namespace Ogre
                                          const HlmsSamplerblock *refParams )
     {
         TextureGpuManager *textureManager = mCreator->getRenderSystem()->getTextureGpuManager();
-        TextureGpu *texture =
-                textureManager->createOrRetrieveTexture( name, GpuPageOutStrategy::Discard,
-                                                         TextureFlags::AutomaticBatching |
-                                                         TextureFlags::PrefersLoadingFromFileAsSRGB,
-                                                         TextureTypes::Type2D,
-                                                         ResourceGroupManager::
-                                                         AUTODETECT_RESOURCE_GROUP_NAME );
+        TextureGpu *texture = 0;
+        if( !name.empty() )
+        {
+            textureManager->createOrRetrieveTexture( name, GpuPageOutStrategy::Discard,
+                                                     TextureFlags::AutomaticBatching |
+                                                     TextureFlags::PrefersLoadingFromFileAsSRGB,
+                                                     TextureTypes::Type2D,
+                                                     ResourceGroupManager::
+                                                     AUTODETECT_RESOURCE_GROUP_NAME );
+        }
         setTexture( texUnit, texture, refParams );
     }
     //-----------------------------------------------------------------------------------
