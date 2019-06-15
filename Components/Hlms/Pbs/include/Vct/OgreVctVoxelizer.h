@@ -318,6 +318,14 @@ namespace Ogre
 
         void dividideOctants( uint32 numOctantsX, uint32 numOctantsY, uint32 numOctantsZ );
 
+        /** Changes resolution. Note that after calling this, you will need to call
+            VctVoxelizer::build again, and VctLighting::build again.
+        @param width
+        @param height
+        @param depth
+        */
+        void setResolution( uint32 width, uint32 height, uint32 depth );
+
         void build(void);
 
         Vector3 getVoxelOrigin(void) const;

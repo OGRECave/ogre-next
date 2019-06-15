@@ -117,8 +117,9 @@ namespace Ogre
         void addLight( ShaderVctLight * RESTRICT_ALIAS vctLight, Light *light,
                        const Vector3 &voxelOrigin, const Vector3 &invVoxelRes );
 
-        void createTextures();
-        void destroyTextures();
+        void createTextures(void);
+        void destroyTextures(void);
+        void checkTextures(void);
 
         void generateAnisotropicMips(void);
 

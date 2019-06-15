@@ -385,6 +385,18 @@ namespace Ogre
         mAnisoGeneratorStep1.clear();
     }
     //-------------------------------------------------------------------------
+    void VctLighting::checkTextures(void)
+    {
+        const TextureGpu *albedoVox = mVoxelizer->getAlbedoVox();
+
+        if( albedoVox->getWidth() != mLightVoxel[0]->getWidth() ||
+            albedoVox->getHeight() != mLightVoxel[0]->getHeight() ||
+            albedoVox->getDepth() != mLightVoxel[0]->getDepth() )
+        {
+            createTextures();
+        }
+    }
+    //-------------------------------------------------------------------------
     void VctLighting::generateAnisotropicMips()
     {
         RenderSystem *renderSystem = mVoxelizer->getRenderSystem();
@@ -410,9 +422,11 @@ namespace Ogre
     {
         OGRE_ASSERT_LOW( rayMarchStepScale >= 1.0f );
 
+        checkTextures();
+
         RenderSystem *renderSystem = mVoxelizer->getRenderSystem();
         if( renderSystem->getCapabilities()->hasCapability( RSC_EXPLICIT_API ) )
-            renderSystem->_resourceTransitionCreated( &mStartupTrans );
+            renderSystem->_executeResourceTransition( &mStartupTrans );
 
         mLightInjectionJob->setConstBuffer( 0, mLightsConstBuffer );
 

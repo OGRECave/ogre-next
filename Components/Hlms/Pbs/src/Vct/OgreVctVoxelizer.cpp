@@ -1301,6 +1301,14 @@ namespace Ogre
         OgreProfileGpuEnd( "VCT Voxelization Clear" );
     }
     //-------------------------------------------------------------------------
+    void VctVoxelizer::setResolution( uint32 width, uint32 height, uint32 depth )
+    {
+        destroyVoxelTextures();
+        mWidth  = width;
+        mHeight = height;
+        mDepth  = depth;
+    }
+    //-------------------------------------------------------------------------
     void VctVoxelizer::build(void)
     {
         OgreProfile( "VctVoxelizer::build" );
