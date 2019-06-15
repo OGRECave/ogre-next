@@ -143,6 +143,7 @@ namespace Ogre
         struct QueuedMesh
         {
             bool                bCompressed;
+            uint32              numItems;
             uint32              indexCountSplit;
             QueuedSubMeshArray  submeshes;
         };
@@ -300,6 +301,18 @@ namespace Ogre
             Use std::numeric_limits<uint32>::max to avoid partitioning at all.
         */
         void addItem( Item *item, bool bCompressed, uint32 indexCountSplit=0u );
+
+        /** Removes an item added via VctVoxelizer::addItem
+        @remarks
+            Once the last item that shares the same mesh is removed, the entry about
+            that mesh is also removed.
+            That means informations such as 'compressed' setting is forgot.
+
+            Will throw if Item is not found.
+        @param item
+            Item to remove
+        */
+        void removeItem( Item *item );
 
         void autoCalculateRegion(void);
 

@@ -611,9 +611,12 @@ namespace Ogre
 
             if( isNewEntry )
             {
+                queuedMesh.numItems = 0u;
                 queuedMesh.indexCountSplit = indexCountSplit;
                 queuedMesh.submeshes.resize( mesh->getNumSubMeshes() );
             }
+
+            ++queuedMesh.numItems;
 
             if( isNewEntry || queuedMesh.bCompressed != wasCompressed )
                 mGpuMeshAabbDataDirty = true;
@@ -624,15 +627,42 @@ namespace Ogre
             if( itor == mMeshesV2.end() )
             {
                 QueuedMesh queuedMesh;
+                queuedMesh.numItems = 0u;
                 queuedMesh.bCompressed = true;
                 queuedMesh.indexCountSplit = indexCountSplit;
                 queuedMesh.submeshes.resize( mesh->getNumSubMeshes() );
                 mMeshesV2[mesh] = queuedMesh;
                 mGpuMeshAabbDataDirty = true;
             }
+            else
+            {
+                ++itor->second.numItems;
+            }
         }
 
         mItems.push_back( item );
+    }
+    //-------------------------------------------------------------------------
+    void VctVoxelizer::removeItem( Item *item )
+    {
+        ItemArray::iterator itor = std::find( mItems.begin(), mItems.end(), item );
+        if( itor == mItems.end() )
+            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND, "", "VctVoxelizer::removeItem" );
+
+        const MeshPtr &mesh = item->getMesh();
+        MeshPtrMap::iterator itMesh = mMeshesV2.find( mesh );
+        if( itMesh == mMeshesV2.end() )
+        {
+            OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
+                         "The item was in our records but its mesh wasn't! This should be "
+                         "impossible. Was the mesh ptr of the item altered manually?",
+                         "VctVoxelizer::removeItem" );
+        }
+        --itMesh->second.numItems;
+        if( !itMesh->second.numItems )
+            mMeshesV2.erase( mesh );
+
+        efficientVectorRemove( mItems, itor );
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::freeBuffers( bool bForceFree )
