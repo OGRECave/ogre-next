@@ -46,7 +46,7 @@
 	/// Should only we used as a fallback as the result isn't fully stable due to how DDX works
 	/// and due to floating point precision. It is possible for the TBN to change as you zoom-in
 	/// to the triangle.
-	float3x3 generateTbn( float3 geomNormal, float3 pos )
+	INLINE float3x3 generateTbn( float3 geomNormal, float3 pos )
 	{
 		float3 tangentX = OGRE_ddx( pos.xyz ).xyz;
 		tangentX = normalize( tangentX );
@@ -55,12 +55,45 @@
 		float3x3 TBN = buildFloat3x3( tangentX, binormal, geomNormal );
 		return TBN;
 	}
+	@property( vct_occlusion_approx )
+		/// VCT occlusion/soft shadows can be in theory calculated with a lot of accuracy. But that is
+		/// either computationally expensive (we must cast a ray towards each light), or consumes
+		/// a lot of memory (we must cache the result in a large 3D texture)
+		///
+		/// However we can use a hacky approximation with great success: The VCT probe already
+		/// has shadow information baked in it:
+		///		probe = albedo * NdotL * shadowTerm;
+		///
+		/// Ideally we need the shadowTerm. So we we use max3( probe.xyz ) as an approximation.
+		/// This isn't accurate because if albedo = 0 (or close to it), we would return 0, even though
+		/// this area may not actually be shadowed at all.
+		///
+		/// However the approximation still works very well because if albedo = 0, then chances are we
+		/// are rendering that very same object which is already black.
+		///	A general problem is that we will probably overdarken everything.
+		/// But that's what vctSoftShadowDampenFactor is for (which is user tweakable).
+		///
+		/// Another issue is that the lights baked on VCT may not consider all the lights currently
+		/// being used in regular rendering. Again, that's why vctSoftShadowDampenFactor is for.
+		///
+		/// This is one big hack, but it looks good enough.
+		INLINE float getVctSoftShadow( VctProbeParams probeParams, float3 posLS,
+									   OGRE_Texture3D_float4 probe
+									   OGRE_SAMPLER_ARG_DECL( probeSampler )
+									   OGRE_VCT_ANISO_PROBE_ARG_DECL )
+		{
+			float4 lightValue = OGRE_Sample( probe, probeSampler, posLS );
+			float occlusion = lerp( 1.0f, max3( lightValue.x, lightValue.y, lightValue.z ),
+									lightValue.w );
+			return occlusion;
+		}
+	@end
 
 	@foreach( 2, n )
 		@property( @n == 0 )
-			float3 voxelConeTraceDiff
+			INLINE float3 voxelConeTraceDiff
 		@else
-			float3 voxelConeTraceSpec
+			INLINE float3 voxelConeTraceSpec
 		@end
 			( VctProbeParams probeParams, float3 posLS, float3 ambient,
 			  float3 dirLS, float tanHalfAngle,
@@ -105,7 +138,7 @@
 					lodLevel += lodStep;
 				@else
 					lodLevel = log2( diameter * probeParams.vctInvStartBias );
-				@end
+                @end
 			}
 
 			@property( vct_anisotropic )
@@ -154,7 +187,7 @@
 		}
 	@end
 
-	float3 toVctProbeSpacePos( float3 pos, VctProbeParams probeParams )
+	INLINE float3 toVctProbeSpacePos( float3 pos, VctProbeParams probeParams )
 	{
 		float3 posLS;
 		posLS.x = dot( probeParams.xform_row0.xyzw, float4( pos, 1.0 ) );
@@ -163,7 +196,7 @@
 		return posLS;
 	}
 
-	float3 toVctProbeSpaceDir( float3 dir, VctProbeParams probeParams )
+	INLINE float3 toVctProbeSpaceDir( float3 dir, VctProbeParams probeParams )
 	{
 		float3 dirLS;
 		dirLS.x = dot( probeParams.xform_row0.xyz, dir );
@@ -174,9 +207,9 @@
 
 	#define M_PI 3.141592654f
 
-	void computeVctProbe
+	INLINE void computeVctProbe
 	(
-		OGRE_INOUT_REF( float3, outDiffuse ), OGRE_INOUT_REF( float4, outSpecular ),
+        OGRE_INOUT_REF( float4, outDiffuse ), OGRE_INOUT_REF( float4, outSpecular ),
 		PixelData pixelData, float3 pos, float3x3 TBN, float3 ambientUpperHemi,
 		VctProbeParams probeParams,
 		OGRE_Texture3D_float4 probe OGRE_SAMPLER_ARG_DECL( probeSampler )
@@ -192,6 +225,13 @@
 		{
 			return;
 		}
+
+		@property( vct_occlusion_approx )
+			float3 posNoBiasLS = toVctProbeSpacePos( pos, probeParams );
+			outDiffuse.w += getVctSoftShadow( probeParams, posNoBiasLS,
+											  probe OGRE_SAMPLER_ARG( probeSampler )
+											  OGRE_VCT_ANISO_PROBE_ARG );
+		@end
 
 		@property( vct_num_probes > 1 )
 			float3 blendv = abs( posLS * 2.0f - 1.0f );
@@ -242,7 +282,7 @@
 														  OGRE_VCT_ANISO_PROBE_ARG );
 		}
 
-		outDiffuse += light * (probeParams.vctBlendFade * blend);
+		outDiffuse.xyz += light * (probeParams.vctBlendFade * blend);
 
 		//Irradiance / specular
 		float3 reflVecLS = toVctProbeSpaceDir( pixelData.reflDir, probeParams );
@@ -268,7 +308,7 @@
 		float3 vctAmbient = float3( 0, 0, 0 );
 	@end
 
-	float3 vctDiffuse = float3( 0, 0, 0 );
+	float4 vctDiffuse = float4( 0, 0, 0, 0 );
 	float4 vctSpecular = float4( 0, 0, 0, 0 );
 	computeVctProbe( vctDiffuse, vctSpecular, pixelData, inPs.pos, TBN,
 					 vctAmbient, passBuf.vctProbeParams,
@@ -281,9 +321,13 @@
 		if( vctSpecular.w > 0 )
 		{
 			float accumProbeInfluenceBorderBlend = 1.0f / vctSpecular.w;
-			vctDiffuse.xyz *= accumProbeInfluenceBorderBlend;
+			vctDiffuse.xyzw *= accumProbeInfluenceBorderBlend;
 			vctSpecular.xyz *= accumProbeInfluenceBorderBlend;
 		}
+	@end
+
+	@property( vct_occlusion_approx )
+		finalColour.xyz *= lerp( 1.0f, vctDiffuse.w, passBuf.vctProbeParams.vctSoftShadowDampenFactor );
 	@end
 
 	finalColour.xyz += pixelData.diffuse.xyz * vctDiffuse.xyz;

@@ -19,6 +19,9 @@
 
 		//Used by area lights
 		//points[0].w contains double sided info
+		//points[1].w contains lightStraightDir.x
+		//points[2].w contains lightStraightDir.y
+		//points[3].w contains lightStraightDir.z
 		float4 points[4];
 	};
 
@@ -73,13 +76,7 @@
 			float3 lightDir = light.pos.xyz - voxelAabbCenter * light.pos.w;
 			lightDir = normalize( lightDir );
 
-			lightDir /= max3( abs( lightDir.x ), abs( lightDir.y ), abs( lightDir.z ) );
-
-			float NdotL = dot( normalVal.xyz, lightDir );
-			if( normalVal.a > 0 )
-				NdotL = abs( NdotL );
-			else
-				NdotL = saturate( NdotL );
+			float NdotL;
 
 			@property( hlms_lights_area_ltc )
 				if( light.lightType == LT_AREA_LTC )
@@ -90,17 +87,35 @@
 														 float3( 0, 1, 0 ),
 														 float3( 0, 0, 1 ) ),
 										  light.points, doubleSidedLtc );
+					float3 lightStraightDir = float3( light.points[1].w,
+													  light.points[2].w,
+													  light.points[3].w );
+					lightDir += lightStraightDir;
+					lightDir = normalize( lightDir );
+				}
+				else
+				{
+			@end
+					NdotL = dot( normalVal.xyz, lightDir );
+					if( normalVal.a > 0 )
+						NdotL = abs( NdotL );
+					else
+						NdotL = saturate( NdotL );
+			@property( hlms_lights_area_ltc )
 				}
 			@end
+
+			lightDir /= max3( abs( lightDir.x ), abs( lightDir.y ), abs( lightDir.z ) );
 
 			float alpha = albedoVal.w;
 			bool reachedDst = false;
 			float3 currUvwPos = voxelUvwPos + lightDir * p_rayMarchStepSize;
+			float lodLevel = 0;
 
 			while( alpha > 0 && !reachedDst )
 			{
 				float4 albedoAtIt = OGRE_SampleLevel( voxelAlbedoTex, voxelAlbedoSampler,
-													  currUvwPos.xyz, 0 );
+													  currUvwPos.xyz, lodLevel );
 				alpha *= (1.0f - albedoAtIt.w);
 
 				currUvwPos += lightDir * p_rayMarchStepSize;
@@ -118,6 +133,14 @@
 					float dotDirs = dot( lightDir, toLight );
 					if( dotDirs <= 0 )
 						reachedDst = true;
+
+					@property( correct_area_light_shadows )
+						if( light.lightType == LT_AREA_LTC )
+						{
+							lightDir *= 1.025f;
+							lodLevel += 0.2f;
+						}
+					@end
 				}
 			}
 

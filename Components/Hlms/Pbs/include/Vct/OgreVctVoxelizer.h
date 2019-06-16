@@ -185,6 +185,8 @@ namespace Ogre
         /// we leave mGpuPartitionedSubMeshes & mMeshAabb around because they occupy very little memory
         bool            mGpuMeshAabbDataDirty;
 
+        bool    mNeedsAlbedoMipmaps;
+
         uint32 mNumVerticesCompressed;
         uint32 mNumVerticesUncompressed;
         uint32 mNumIndices16;
@@ -281,7 +283,8 @@ namespace Ogre
         void clearVoxels(void);
 
     public:
-        VctVoxelizer( IdType id, RenderSystem *renderSystem, HlmsManager *hlmsManager );
+        VctVoxelizer( IdType id, RenderSystem *renderSystem, HlmsManager *hlmsManager,
+                      bool correctAreaLightShadows );
         ~VctVoxelizer();
 
         /**

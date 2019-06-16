@@ -5,7 +5,7 @@
 	struct VctProbeParams
 	{
 		float4 startBias_invStartBias_maxDistance_blendAmbient;
-		float4 normalBias_blendFade_unused2;
+		float4 normalBias_blendFade_softShadowDampenFactor_unused;
 
 		float4 xform_row0;
 		float4 xform_row1;
@@ -17,8 +17,9 @@
 	#define vctMaxDistance	startBias_invStartBias_maxDistance_blendAmbient.z
 	#define vctBlendAmbient	startBias_invStartBias_maxDistance_blendAmbient.w
 
-	#define vctNormalBias	normalBias_blendFade_unused2.x
-	#define vctBlendFade	normalBias_blendFade_unused2.y
+	#define vctNormalBias				normalBias_blendFade_softShadowDampenFactor_unused.x
+	#define vctBlendFade				normalBias_blendFade_softShadowDampenFactor_unused.y
+	#define vctSoftShadowDampenFactor	normalBias_blendFade_softShadowDampenFactor_unused.z
 @end
 @piece( DeclVctUniform )
 	VctProbeParams vctProbeParams;

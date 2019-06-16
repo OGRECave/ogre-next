@@ -87,8 +87,6 @@ namespace Ogre
     {
         memset( mLightVoxel, 0, sizeof(mLightVoxel) );
 
-        createTextures();
-
         //VctVoxelizer should've already been initialized, thus no need
         //to check if JSON has been built or if the assets were added
         HlmsCompute *hlmsCompute = mVoxelizer->getHlmsManager()->getComputeHlms();
@@ -109,6 +107,8 @@ namespace Ogre
         HlmsSamplerblock samplerblock;
         samplerblock.mMipFilter = FO_LINEAR;
         mSamplerblockTrilinear = hlmsManager->getSamplerblock( samplerblock );
+
+        createTextures();
     }
     //-------------------------------------------------------------------------
     VctLighting::~VctLighting()
@@ -195,7 +195,7 @@ namespace Ogre
             lightType = Light::LT_AREA_LTC;
 
         Vector4 light4dVec = light->getAs4DVector();
-        if( light->getType() != Light::LT_DIRECTIONAL )
+        if( lightType != Light::LT_DIRECTIONAL )
             light4dVec -= Vector4( voxelOrigin, 0.0f );
 
         for( size_t i=0; i<4u; ++i )
@@ -209,11 +209,13 @@ namespace Ogre
 
         Vector3 rectPoints[4];
 
+        const Quaternion qRot = light->getParentNode()->_getDerivedOrientation();
+        const Vector3 lightDir = qRot.zAxis();
+
         if( lightType == Light::LT_AREA_LTC )
         {
             const Vector3 lightPos( light4dVec.xyz() );
             const Vector2 rectSize = light->getDerivedRectSize() * 0.5f;
-            const Quaternion qRot = light->getParentNode()->_getDerivedOrientation();
             Vector3 xAxis = qRot.xAxis() * rectSize.x;
             Vector3 yAxis = qRot.yAxis() * rectSize.y;
 
@@ -234,6 +236,10 @@ namespace Ogre
                 vctLight->points[i][j] = rectPoints[i][j];
             vctLight->points[i][3u] = isDoubleSided;
         }
+
+        vctLight->points[1][3u] = static_cast<float>( lightDir.x );
+        vctLight->points[2][3u] = static_cast<float>( lightDir.y );
+        vctLight->points[3][3u] = static_cast<float>( lightDir.z );
     }
     //-------------------------------------------------------------------------
     void VctLighting::createTextures()
@@ -383,6 +389,9 @@ namespace Ogre
                 mAnisoGeneratorStep1[i] = mipJob;
             }
         }
+
+        mLightInjectionJob->setProperty( "correct_area_light_shadows",
+                                         albedoVox->getNumMipmaps() > 1u ? 1 : 0 );
 
         createBarriers();
     }
@@ -569,7 +578,7 @@ namespace Ogre
         *passBufferPtr++ = 1.414213562f;
         *passBufferPtr++ = 0.0f;
 
-        //float4 normalBias_blendFade_unused2;
+        //float4 normalBias_blendFade_softShadowDampenFactor_unused;
         *passBufferPtr++ = mNormalBias;
         *passBufferPtr++ = 1.0f;
         *passBufferPtr++ = 0.0f;

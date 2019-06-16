@@ -54,6 +54,7 @@ THE SOFTWARE.
 #include "OgreLwString.h"
 
 #include "OgreTextureGpuManager.h"
+#include "OgrePixelFormatGpuUtils.h"
 #include "OgreStringConverter.h"
 
 #include "OgreProfiler.h"
@@ -91,7 +92,8 @@ namespace Ogre
         &VctVoxelizerProp::EmissiveIsDiffuseTex,
     };
     //-------------------------------------------------------------------------
-    VctVoxelizer::VctVoxelizer( IdType id, RenderSystem *renderSystem, HlmsManager *hlmsManager ) :
+    VctVoxelizer::VctVoxelizer( IdType id, RenderSystem *renderSystem, HlmsManager *hlmsManager,
+                                bool correctAreaLightShadows ) :
         IdObject( id ),
         mAabbWorldSpaceJob( 0 ),
         mTotalNumInstances( 0 ),
@@ -109,6 +111,7 @@ namespace Ogre
         mGpuPartitionedSubMeshes( 0 ),
         mMeshAabb( 0 ),
         mGpuMeshAabbDataDirty( true ),
+        mNeedsAlbedoMipmaps( correctAreaLightShadows ),
         mNumVerticesCompressed( 0 ),
         mNumVerticesUncompressed( 0 ),
         mNumIndices16( 0 ),
@@ -806,11 +809,17 @@ namespace Ogre
             if( !hasTypedUavs )
                 texFlags |= TextureFlags::Reinterpretable;
 
+            if( mNeedsAlbedoMipmaps )
+                texFlags |= TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps;
+
             mAlbedoVox = mTextureGpuManager->createTexture( "VctVoxelizer" +
                                                             StringConverter::toString( getId() ) +
                                                             "/Albedo",
                                                             GpuPageOutStrategy::Discard,
                                                             texFlags, TextureTypes::Type3D );
+
+            texFlags &= ~(uint32)(TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps);
+
             mEmissiveVox = mTextureGpuManager->createTexture( "VctVoxelizer" +
                                                               StringConverter::toString( getId() ) +
                                                               "/Emissive",
@@ -841,13 +850,15 @@ namespace Ogre
         else
             mAccumValVox->setPixelFormat( PFG_R32_UINT );
 
+        const uint8 numMipmaps = PixelFormatGpuUtils::getMaxMipmapCount( mWidth, mHeight, mDepth );
+
         for( size_t i=0; i<sizeof(textures) / sizeof(textures[0]); ++i )
         {
             if( textures[i] != mAccumValVox || hasTypedUavs )
                 textures[i]->setResolution( mWidth, mHeight, mDepth );
             else
                 textures[i]->setResolution( mWidth >> 1u, mHeight, mDepth );
-            textures[i]->setNumMipmaps( 1u );
+            textures[i]->setNumMipmaps( mNeedsAlbedoMipmaps && i == 0u ? numMipmaps : 1u );
             textures[i]->scheduleTransitionTo( GpuResidency::Resident );
         }
     }
@@ -1472,6 +1483,9 @@ namespace Ogre
         mAccumValVox->scheduleTransitionTo( GpuResidency::OnStorage );
 
         mRenderSystem->_executeResourceTransition( &mVoxelizerPrepareForSamplingTrans );
+
+        if( mNeedsAlbedoMipmaps )
+            mAlbedoVox->_autogenerateMipmaps();
 
         destroyBarriers();
 
