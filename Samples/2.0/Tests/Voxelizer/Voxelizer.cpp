@@ -54,7 +54,8 @@ namespace Demo
                 "VCT",
                 "Hlms/Common/GLSL",
                 "Hlms/Common/HLSL",
-                "Hlms/Common/Metal"
+                "Hlms/Common/Metal",
+                "Hlms/Pbs/Any"
             };
 
             for( size_t i=0; i<sizeof(c_locations) / sizeof(c_locations[0]); ++i )

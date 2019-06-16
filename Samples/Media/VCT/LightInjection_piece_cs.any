@@ -2,6 +2,10 @@
 //#include "SyntaxHighlightingMisc.h"
 
 @piece( HeaderCS )
+	#define LT_DIRECTIONAL 0.0f
+	#define LT_SPOTLIGHT 2.0f
+	#define LT_AREA_LTC 5.0f
+
 	struct Light
 	{
 		//Pre-mul by PI? -No because we lose a ton of precision
@@ -10,8 +14,12 @@
 		//For directional lights, pos.xyz contains -dir.xyz and pos.w = 0;
 		//For the rest of lights, pos.xyz contains pos.xyz and pos.w = 1;
 		float4 pos;
+		//uvwPos.w contains the light type
 		float4 uvwPos;
-	//	float4 dir;
+
+		//Used by area lights
+		//points[0].w contains double sided info
+		float4 points[4];
 	};
 
 	@property( syntax != metal )
@@ -22,7 +30,10 @@
 	@end
 
 	#define lightSqDistThreshold diffuse.w
+	#define lightType uvwPos.w
 	#define c_invPI 3.14159265359f
+
+	@insertpiece( DeclAreaLtcLightFuncs )
 @end
 
 //in uvec3 gl_NumWorkGroups;
@@ -62,13 +73,25 @@
 			float3 lightDir = light.pos.xyz - voxelAabbCenter * light.pos.w;
 			lightDir = normalize( lightDir );
 
-			lightDir /= max3( lightDir.x, lightDir.y, lightDir.z );
+			lightDir /= max3( abs( lightDir.x ), abs( lightDir.y ), abs( lightDir.z ) );
 
 			float NdotL = dot( normalVal.xyz, lightDir );
 			if( normalVal.a > 0 )
 				NdotL = abs( NdotL );
 			else
 				NdotL = saturate( NdotL );
+
+			@property( hlms_lights_area_ltc )
+				if( light.lightType == LT_AREA_LTC )
+				{
+					bool doubleSidedLtc = light.points[0].w != 0.0f;
+					NdotL = LTC_Evaluate( normalVal.xyz, float3( 0, 1, 0 ), voxelAabbCenter.xyz,
+										  buildFloat3x3( float3( 1, 0, 0 ),
+														 float3( 0, 1, 0 ),
+														 float3( 0, 0, 1 ) ),
+										  light.points, doubleSidedLtc );
+				}
+			@end
 
 			float alpha = albedoVal.w;
 			bool reachedDst = false;
@@ -80,7 +103,6 @@
 													  currUvwPos.xyz, 0 );
 				alpha *= (1.0f - albedoAtIt.w);
 
-				float3 oldCross = cross( light.uvwPos.xyz, currUvwPos );
 				currUvwPos += lightDir * p_rayMarchStepSize;
 				reachedDst = currUvwPos.x <= 0.0f ||
 							 currUvwPos.x >= 1.0f ||
@@ -90,17 +112,11 @@
 							 currUvwPos.z >= 1.0f;
 
 				//For non-directional lights, check if we've reached the light emitter
-				if( light.pos.w != 0 )
+				if( light.lightType != LT_DIRECTIONAL )
 				{
-					float3 posToLight = light.uvwPos.xyz - currUvwPos.xyz;
-					float sqDist = dot( posToLight.xyz, posToLight.xyz );
-					if( sqDist <= light.lightSqDistThreshold )
-						reachedDst = true;
-
-					//If p_rayMarchStepSize is too big, we may have gone through/past
-					//the emitter (and from now on we'd be stepping further away)
-					float3 newCross = cross( light.uvwPos.xyz, currUvwPos );
-					if( dot( oldCross, newCross ) <= 0 )
+					float3 toLight = light.uvwPos.xyz - currUvwPos; //NOT unit-length
+					float dotDirs = dot( lightDir, toLight );
+					if( dotDirs <= 0 )
 						reachedDst = true;
 				}
 			}

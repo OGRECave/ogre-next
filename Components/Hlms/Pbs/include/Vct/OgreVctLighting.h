@@ -115,7 +115,7 @@ namespace Ogre
 
     protected:
         void addLight( ShaderVctLight * RESTRICT_ALIAS vctLight, Light *light,
-                       const Vector3 &voxelOrigin, const Vector3 &invVoxelRes );
+                       const Vector3 &voxelOrigin, const Vector3 &invVoxelSize );
 
         void createTextures(void);
         void destroyTextures(void);

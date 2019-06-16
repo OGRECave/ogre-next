@@ -40,7 +40,7 @@
             "threads_per_group" : [4, 4, 4],
 
             "source" : "LightInjection_cs",
-            "pieces" : ["CrossPlatformSettings_piece_all", "LightInjection_piece_cs.any"],
+            "pieces" : ["CrossPlatformSettings_piece_all", "AreaLights_LTC_piece_ps.any", "LightInjection_piece_cs.any"],
             "inform_shader_of_texture_data_change" : true,
 
             "thread_groups_based_on_uav" : 0,
@@ -53,6 +53,11 @@
                 {},
                 {}
             ],
+
+            "properties" :
+            {
+                "hlms_lights_area_ltc" : 1
+            },
 
             "params" :
             [

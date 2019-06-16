@@ -59,8 +59,12 @@ namespace Ogre
         //For directional lights, pos.xyz contains -dir.xyz and pos.w = 0;
         //For the rest of lights, pos.xyz contains pos.xyz and pos.w = 1;
         float pos[4];
+        //uvwPos.w contains the light type
         float uvwPos[4];
-    //	float4 dir;
+
+        //Used by area lights
+        //points[0].w contains double sided info
+        float points[4][4];
     };
 
     const uint16 VctLighting::msDistanceThresholdCustomParam = 3876u;
@@ -174,7 +178,7 @@ namespace Ogre
     }
     //-------------------------------------------------------------------------
     void VctLighting::addLight( ShaderVctLight * RESTRICT_ALIAS vctLight, Light *light,
-                                const Vector3 &voxelOrigin, const Vector3 &invVoxelRes )
+                                const Vector3 &voxelOrigin, const Vector3 &invVoxelSize )
     {
         const ColourValue diffuseColour = light->getDiffuseColour() * light->getPowerScale();
         for( size_t i=0; i<3u; ++i )
@@ -186,6 +190,10 @@ namespace Ogre
                                    (lightDistThreshold->x * lightDistThreshold->x) :
                                    (mDefaultLightDistThreshold * mDefaultLightDistThreshold);
 
+        Light::LightTypes lightType = light->getType();
+        if( lightType == Light::LT_AREA_APPROX )
+            lightType = Light::LT_AREA_LTC;
+
         Vector4 light4dVec = light->getAs4DVector();
         if( light->getType() != Light::LT_DIRECTIONAL )
             light4dVec -= Vector4( voxelOrigin, 0.0f );
@@ -194,10 +202,38 @@ namespace Ogre
             vctLight->pos[i] = static_cast<float>( light4dVec[i] );
 
         Vector3 uvwPos = light->getParentNode()->_getDerivedPosition();
-        uvwPos = (uvwPos - voxelOrigin) * invVoxelRes;
+        uvwPos = (uvwPos - voxelOrigin) * invVoxelSize;
         for( size_t i=0; i<3u; ++i )
             vctLight->uvwPos[i] = static_cast<float>( uvwPos[i] );
-        vctLight->uvwPos[3] = 0;
+        vctLight->uvwPos[3] = static_cast<float>( lightType );
+
+        Vector3 rectPoints[4];
+
+        if( lightType == Light::LT_AREA_LTC )
+        {
+            const Vector3 lightPos( light4dVec.xyz() );
+            const Vector2 rectSize = light->getDerivedRectSize() * 0.5f;
+            const Quaternion qRot = light->getParentNode()->_getDerivedOrientation();
+            Vector3 xAxis = qRot.xAxis() * rectSize.x;
+            Vector3 yAxis = qRot.yAxis() * rectSize.y;
+
+            rectPoints[0] = lightPos - xAxis - yAxis;
+            rectPoints[1] = lightPos + xAxis - yAxis;
+            rectPoints[2] = lightPos + xAxis + yAxis;
+            rectPoints[3] = lightPos - xAxis + yAxis;
+        }
+        else
+        {
+            memset( rectPoints, 0, sizeof(rectPoints) );
+        }
+
+        const float isDoubleSided = light->getDoubleSided() ? 1.0f : 0.0f;
+        for( size_t i=0; i<4u; ++i )
+        {
+            for( size_t j=0; j<3u; ++j )
+                vctLight->points[i][j] = rectPoints[i][j];
+            vctLight->points[i][3u] = isDoubleSided;
+        }
     }
     //-------------------------------------------------------------------------
     void VctLighting::createTextures()
@@ -445,6 +481,7 @@ namespace Ogre
 
         const Vector3 voxelOrigin   = mVoxelizer->getVoxelOrigin();
         const Vector3 invVoxelRes   = 1.0f / mVoxelizer->getVoxelResolution();
+        const Vector3 invVoxelSize  = 1.0f / mVoxelizer->getVoxelSize();
 
         ShaderVctLight * RESTRICT_ALIAS vctLight =
                 reinterpret_cast<ShaderVctLight*>(
@@ -474,9 +511,11 @@ namespace Ogre
                     {
                         Light *light = static_cast<Light*>( objData.mOwner[k] );
                         if( light->getType() == Light::LT_DIRECTIONAL ||
-                            light->getType() == Light::LT_POINT )
+                            light->getType() == Light::LT_POINT ||
+                            light->getType() == Light::LT_AREA_APPROX ||
+                            light->getType() == Light::LT_AREA_LTC )
                         {
-                            addLight( vctLight, light, voxelOrigin, invVoxelRes );
+                            addLight( vctLight, light, voxelOrigin, invVoxelSize );
                             ++vctLight;
                             ++numCollectedLights;
                         }
@@ -494,7 +533,7 @@ namespace Ogre
 
         mNumLights->setManualValue( numCollectedLights );
         mRayMarchStepSize->setManualValue( 1.0f / voxelRes );
-        mVoxelCellSize->setManualValue( mVoxelizer->getVoxelSize() );
+        mVoxelCellSize->setManualValue( mVoxelizer->getVoxelCellSize() );
         mInvVoxelResolution->setManualValue( invVoxelRes );
         mShaderParams->setDirty();
 
