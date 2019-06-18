@@ -1415,7 +1415,6 @@ namespace Ogre
         if (mFeatureLevel >= D3D_FEATURE_LEVEL_10_0)
         {
             rsc->addShaderProfile("cs_4_0");
-            rsc->setCapability(RSC_COMPUTE_PROGRAM);
         }
         if (mFeatureLevel >= D3D_FEATURE_LEVEL_10_1)
         {
@@ -1424,6 +1423,7 @@ namespace Ogre
         if (mFeatureLevel >= D3D_FEATURE_LEVEL_11_0)
         {
             rsc->addShaderProfile("cs_5_0");
+            rsc->setCapability(RSC_COMPUTE_PROGRAM);
         }
 
 
