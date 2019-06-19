@@ -34,6 +34,8 @@
 
 	#define lightSqDistThreshold diffuse.w
 	#define lightType uvwPos.w
+	#define spotDirection points[0].xyz
+	#define spotParams points[1]
 	#define c_invPI 3.14159265359f
 
 	@insertpiece( DeclAreaLtcLightFuncs )
@@ -101,6 +103,15 @@
 						NdotL = abs( NdotL );
 					else
 						NdotL = saturate( NdotL );
+
+					if( light.lightType == LT_SPOTLIGHT )
+					{
+						float spotCosAngle = dot( -lightDir, light.spotDirection.xyz );
+						float spotAtten = saturate( (spotCosAngle - light.spotParams.y) *
+													light.spotParams.x );
+						spotAtten = pow( spotAtten, light.spotParams.z );
+						NdotL *= spotAtten;
+					}
 			@property( hlms_lights_area_ltc )
 				}
 			@end

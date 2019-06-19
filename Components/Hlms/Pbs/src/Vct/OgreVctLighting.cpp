@@ -227,6 +227,22 @@ namespace Ogre
         else
         {
             memset( rectPoints, 0, sizeof(rectPoints) );
+
+            if( lightType == Light::LT_SPOTLIGHT )
+            {
+                //float3 spotDirection
+                rectPoints[0].x = -lightDir.x;
+                rectPoints[0].y = -lightDir.y;
+                rectPoints[0].z = -lightDir.z;
+
+                //float3 spotParams
+                const Radian innerAngle = light->getSpotlightInnerAngle();
+                const Radian outerAngle = light->getSpotlightOuterAngle();
+                rectPoints[1].x = 1.0f / ( cosf( innerAngle.valueRadians() * 0.5f ) -
+                                           cosf( outerAngle.valueRadians() * 0.5f ) );
+                rectPoints[1].y = cosf( outerAngle.valueRadians() * 0.5f );
+                rectPoints[1].z = light->getSpotlightFalloff();
+            }
         }
 
         const float isDoubleSided = light->getDoubleSided() ? 1.0f : 0.0f;
@@ -521,6 +537,7 @@ namespace Ogre
                         Light *light = static_cast<Light*>( objData.mOwner[k] );
                         if( light->getType() == Light::LT_DIRECTIONAL ||
                             light->getType() == Light::LT_POINT ||
+                            light->getType() == Light::LT_SPOTLIGHT ||
                             light->getType() == Light::LT_AREA_APPROX ||
                             light->getType() == Light::LT_AREA_LTC )
                         {

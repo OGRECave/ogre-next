@@ -177,7 +177,7 @@
 			//spotParams.z = falloff
 
 			//Spot light
-			float spotCosAngle = dot( normalize( inPs.pos - posAndType.xyz ), spotDirection.xyz );
+			float spotCosAngle = dot( -lightDir, spotDirection.xyz );
 
 			float spotAtten = saturate( (spotCosAngle - spotParams.y) * spotParams.x );
 			spotAtten = pow( spotAtten, spotParams.z );

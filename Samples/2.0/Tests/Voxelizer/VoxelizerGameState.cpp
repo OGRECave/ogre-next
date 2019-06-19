@@ -108,7 +108,8 @@ namespace Demo
         Ogre::Root *root = mGraphicsSystem->getRoot();
         voxelizer =
                 new Ogre::VctVoxelizer( Ogre::Id::generateNewId<Ogre::VctVoxelizer>(),
-                                        root->getRenderSystem(), root->getHlmsManager() );
+                                        root->getRenderSystem(), root->getHlmsManager(),
+                                        true );
         voxelizer->addItem( cornellItem, false );
         voxelizer->addItem( item, false );
         voxelizer->autoCalculateRegion();
