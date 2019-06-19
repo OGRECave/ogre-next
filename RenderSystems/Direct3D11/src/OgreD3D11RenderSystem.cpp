@@ -1412,14 +1412,14 @@ namespace Ogre
     void D3D11RenderSystem::convertComputeShaderCaps(RenderSystemCapabilities* rsc) const
     {
 
-        if (mFeatureLevel >= D3D_FEATURE_LEVEL_10_0)
-        {
-            rsc->addShaderProfile("cs_4_0");
-        }
-        if (mFeatureLevel >= D3D_FEATURE_LEVEL_10_1)
-        {
-            rsc->addShaderProfile("cs_4_1");
-        }
+//        if (mFeatureLevel >= D3D_FEATURE_LEVEL_10_0)
+//        {
+//            rsc->addShaderProfile("cs_4_0");
+//        }
+//        if (mFeatureLevel >= D3D_FEATURE_LEVEL_10_1)
+//        {
+//            rsc->addShaderProfile("cs_4_1");
+//        }
         if (mFeatureLevel >= D3D_FEATURE_LEVEL_11_0)
         {
             rsc->addShaderProfile("cs_5_0");
