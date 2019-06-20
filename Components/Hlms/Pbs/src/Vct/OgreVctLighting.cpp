@@ -548,8 +548,8 @@ namespace Ogre
 
         mBounceVoxelCellSize->setManualValue( mVoxelizer->getVoxelCellSize() );
         mBounceInvVoxelResolution->setManualValue( 1.0f / mVoxelizer->getVoxelResolution() );
-		mBounceIterationDampening->setManualValue( 1.0f / (Math::PI * (bounceIteration * 0.5f + 1.0f)) );
-		mBounceStartBiasInvBias->setManualValue( Vector2( invSmallestRes, smallestRes ) );
+        mBounceIterationDampening->setManualValue( 1.0f / (Math::PI * (bounceIteration * 0.5f + 1.0f)) );
+        mBounceStartBiasInvBias->setManualValue( Vector2( invSmallestRes, smallestRes ) );
         mBounceShaderParams->setDirty();
 
         HlmsCompute *hlmsCompute = mVoxelizer->getHlmsManager()->getComputeHlms();
