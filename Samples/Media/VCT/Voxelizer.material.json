@@ -145,6 +145,48 @@
             ]
         },
 
+        "VCT/LightVctBounceInject" :
+        {
+            "threads_per_group" : [4, 4, 4],
+
+            "source" : "LightVctBounceInject_cs",
+            "pieces" : ["CrossPlatformSettings_piece_all", "LightVctBounceInject_piece_cs.any"],
+            "inform_shader_of_texture_data_change" : true,
+
+            "thread_groups_based_on_uav" : 0,
+
+            "uav_units" : 1,
+
+            "textures" :
+            [
+                {},
+                {},
+                {}
+            ],
+
+            "properties" :
+            {
+                "vct_anisotropic" : 0
+            },
+
+            "params" :
+            [
+                ["voxelCellSize",           [1,1,1],    "float"],
+                ["invVoxelResolution",      [1,1,1],    "float"],
+                ["iterationDampening",      [1],        "float"],
+                ["startBias_invStartBias",  [1,1],      "float"]
+            ],
+
+            "params_glsl" :
+            [
+                ["voxelAlbedoTex",          [0], "int"],
+                ["voxelNormalTex",          [1], "int"],
+                ["vctProbe",                [2], "int"],
+
+                ["lightVoxel",              [0], "int"]
+            ]
+        },
+
         "VCT/AabbCalculator" :
         {
             "threads_per_group" : [1024, 1, 1],

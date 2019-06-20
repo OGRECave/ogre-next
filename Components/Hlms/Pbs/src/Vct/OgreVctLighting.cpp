@@ -47,7 +47,6 @@ THE SOFTWARE.
 
 #include "OgreLwString.h"
 
-#define TODO_memory_barrier
 
 namespace Ogre
 {
@@ -76,6 +75,8 @@ namespace Ogre
         mLightInjectionJob( 0 ),
         mLightsConstBuffer( 0 ),
         mAnisoGeneratorStep0( 0 ),
+        mLightVctBounceInject( 0 ),
+        mLightBounce( 0 ),
         mDefaultLightDistThreshold( 0.5f ),
         mAnisotropic( bAnisotropic ),
         mNumLights( 0 ),
@@ -83,6 +84,12 @@ namespace Ogre
         mVoxelCellSize( 0 ),
         mInvVoxelResolution( 0 ),
         mShaderParams( 0 ),
+        mBounceVoxelCellSize( 0 ),
+        mBounceInvVoxelResolution( 0 ),
+        mBounceIterationDampening( 0 ),
+        mBounceStartBiasInvBias( 0 ),
+        mBounceShaderParams( 0 ),
+        mBarriersCreated( false ),
         mNormalBias( 0.25f )
     {
         memset( mLightVoxel, 0, sizeof(mLightVoxel) );
@@ -107,6 +114,14 @@ namespace Ogre
         HlmsSamplerblock samplerblock;
         samplerblock.mMipFilter = FO_LINEAR;
         mSamplerblockTrilinear = hlmsManager->getSamplerblock( samplerblock );
+
+        mLightVctBounceInject = hlmsCompute->findComputeJob( "VCT/LightVctBounceInject" );
+
+        mBounceShaderParams = &mLightVctBounceInject->getShaderParams( "default" );
+        mBounceVoxelCellSize        = mBounceShaderParams->findParameter( "voxelCellSize" );
+        mBounceInvVoxelResolution   = mBounceShaderParams->findParameter( "invVoxelResolution" );
+        mBounceIterationDampening   = mBounceShaderParams->findParameter( "iterationDampening" );
+        mBounceStartBiasInvBias     = mBounceShaderParams->findParameter( "startBias_invStartBias" );
 
         createTextures();
     }
@@ -133,48 +148,61 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VctLighting::createBarriers(void)
     {
+        OGRE_ASSERT_LOW( !mBarriersCreated );
+        mBarriersCreated = true;
+
         RenderSystem *renderSystem = mVoxelizer->getRenderSystem();
 
-        if( renderSystem->getCapabilities()->hasCapability( RSC_EXPLICIT_API ) )
+        for( size_t i=0u; i<2u; ++i )
         {
-            //If calling every frame, left resources in texture mode
-            mStartupTrans.oldLayout = ResourceLayout::Texture;
-            mStartupTrans.newLayout = ResourceLayout::Uav;
-            mStartupTrans.writeBarrierBits = 0;
-            mStartupTrans.readBarrierBits  = ReadBarrier::Uav;
-            renderSystem->_resourceTransitionCreated( &mStartupTrans );
+            if( renderSystem->getCapabilities()->hasCapability( RSC_EXPLICIT_API ) )
+            {
+                //If calling every frame, left resources in texture mode
+                mStartupTrans[i].oldLayout = ResourceLayout::Texture;
+                mStartupTrans[i].newLayout = ResourceLayout::Uav;
+                mStartupTrans[i].writeBarrierBits = 0;
+                mStartupTrans[i].readBarrierBits  = ReadBarrier::Uav;
+                renderSystem->_resourceTransitionCreated( &mStartupTrans[i] );
+            }
+
+            //We're done writing to mLightVoxel[0], we will only sample from it as texture
+            mPrepareForSamplingTrans[i].oldLayout = ResourceLayout::Uav;
+            mPrepareForSamplingTrans[i].newLayout = ResourceLayout::Texture;
+            mPrepareForSamplingTrans[i].writeBarrierBits = WriteBarrier::Uav;
+            mPrepareForSamplingTrans[i].readBarrierBits  = ReadBarrier::Texture;
+            renderSystem->_resourceTransitionCreated( &mPrepareForSamplingTrans[i] );
+
+            //We're done writing to mLightVoxel[i] MIPS, we will only sample from them as textures
+            mAfterAnisoMip0Trans[i].oldLayout = ResourceLayout::Uav;
+            mAfterAnisoMip0Trans[i].newLayout = ResourceLayout::Texture;
+            mAfterAnisoMip0Trans[i].writeBarrierBits = WriteBarrier::Uav;
+            mAfterAnisoMip0Trans[i].readBarrierBits  = ReadBarrier::Texture;
+            renderSystem->_resourceTransitionCreated( &mAfterAnisoMip0Trans[i] );
+
+            //We're done writing to mLightVoxel[i] MIPS, we will only sample from them as textures
+            mAfterAnisoMip1Trans[i].oldLayout = ResourceLayout::Uav;
+            mAfterAnisoMip1Trans[i].newLayout = ResourceLayout::Texture;
+            mAfterAnisoMip1Trans[i].writeBarrierBits = WriteBarrier::Uav;
+            mAfterAnisoMip1Trans[i].readBarrierBits  = ReadBarrier::Texture;
+            renderSystem->_resourceTransitionCreated( &mAfterAnisoMip1Trans[i] );
         }
-
-        //We're done writing to mLightVoxel[0], we will only sample from it as texture
-        mPrepareForSamplingTrans.oldLayout = ResourceLayout::Uav;
-        mPrepareForSamplingTrans.newLayout = ResourceLayout::Texture;
-        mPrepareForSamplingTrans.writeBarrierBits = WriteBarrier::Uav;
-        mPrepareForSamplingTrans.readBarrierBits  = ReadBarrier::Texture;
-        renderSystem->_resourceTransitionCreated( &mPrepareForSamplingTrans );
-
-        //We're done writing to mLightVoxel[i] MIPS, we will only sample from them as textures
-        mAfterAnisoMip0Trans.oldLayout = ResourceLayout::Uav;
-        mAfterAnisoMip0Trans.newLayout = ResourceLayout::Texture;
-        mAfterAnisoMip0Trans.writeBarrierBits = WriteBarrier::Uav;
-        mAfterAnisoMip0Trans.readBarrierBits  = ReadBarrier::Texture;
-        renderSystem->_resourceTransitionCreated( &mAfterAnisoMip0Trans );
-
-        //We're done writing to mLightVoxel[i] MIPS, we will only sample from them as textures
-        mAfterAnisoMip1Trans.oldLayout = ResourceLayout::Uav;
-        mAfterAnisoMip1Trans.newLayout = ResourceLayout::Texture;
-        mAfterAnisoMip1Trans.writeBarrierBits = WriteBarrier::Uav;
-        mAfterAnisoMip1Trans.readBarrierBits  = ReadBarrier::Texture;
-        renderSystem->_resourceTransitionCreated( &mAfterAnisoMip1Trans );
     }
     //-------------------------------------------------------------------------
     void VctLighting::destroyBarriers(void)
     {
+        if( !mBarriersCreated )
+            return;
         RenderSystem *renderSystem = mVoxelizer->getRenderSystem();
-        if( renderSystem->getCapabilities()->hasCapability( RSC_EXPLICIT_API ) )
-            renderSystem->_resourceTransitionDestroyed( &mStartupTrans );
-        renderSystem->_resourceTransitionDestroyed( &mPrepareForSamplingTrans );
-        renderSystem->_resourceTransitionDestroyed( &mAfterAnisoMip0Trans );
-        renderSystem->_resourceTransitionDestroyed( &mAfterAnisoMip1Trans );
+        for( size_t i=0u; i<2u; ++i )
+        {
+            if( renderSystem->getCapabilities()->hasCapability( RSC_EXPLICIT_API ) )
+                renderSystem->_resourceTransitionDestroyed( &mStartupTrans[i] );
+            renderSystem->_resourceTransitionDestroyed( &mPrepareForSamplingTrans[i] );
+            renderSystem->_resourceTransitionDestroyed( &mAfterAnisoMip0Trans[i] );
+            renderSystem->_resourceTransitionDestroyed( &mAfterAnisoMip1Trans[i] );
+        }
+
+        mBarriersCreated = false;
     }
     //-------------------------------------------------------------------------
     void VctLighting::addLight( ShaderVctLight * RESTRICT_ALIAS vctLight, Light *light,
@@ -260,6 +288,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VctLighting::createTextures()
     {
+        const bool allowsMultipleBounces = getAllowMultipleBounces();
         destroyTextures();
 
         TextureGpuManager *textureManager = mVoxelizer->getTextureGpuManager();
@@ -409,6 +438,7 @@ namespace Ogre
         mLightInjectionJob->setProperty( "correct_area_light_shadows",
                                          albedoVox->getNumMipmaps() > 1u ? 1 : 0 );
 
+        setAllowMultipleBounces( allowsMultipleBounces, false );
         createBarriers();
     }
     //-------------------------------------------------------------------------
@@ -444,6 +474,7 @@ namespace Ogre
         }
 
         mAnisoGeneratorStep1.clear();
+        setAllowMultipleBounces( false, false );
     }
     //-------------------------------------------------------------------------
     void VctLighting::checkTextures(void)
@@ -458,15 +489,38 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
+    void VctLighting::setupBounceTextures(void)
+    {
+        DescriptorSetTexture2::TextureSlot texSlot( DescriptorSetTexture2::TextureSlot::makeEmpty() );
+        texSlot.texture = mVoxelizer->getAlbedoVox();
+        mLightVctBounceInject->setTexture( 0, texSlot );
+        texSlot.texture = mVoxelizer->getNormalVox();
+        mLightVctBounceInject->setTexture( 1, texSlot );
+        texSlot.texture = mLightVoxel[0];
+        mLightVctBounceInject->setTexture( 2, texSlot );
+
+        if( mAnisotropic )
+        {
+            for( uint8 i=0u; i<3u; ++i )
+            {
+                texSlot.texture = mLightVoxel[i+1u];
+                mLightVctBounceInject->setTexture( i+3u, texSlot );
+            }
+
+            DescriptorSetUav::TextureSlot uavSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
+            uavSlot.access = ResourceAccess::Write;
+            uavSlot.texture = mLightBounce;
+            mLightVctBounceInject->_setUavTexture( 0, uavSlot );
+        }
+    }
+    //-------------------------------------------------------------------------
     void VctLighting::generateAnisotropicMips()
     {
         RenderSystem *renderSystem = mVoxelizer->getRenderSystem();
         HlmsCompute *hlmsCompute = mVoxelizer->getHlmsManager()->getComputeHlms();
         hlmsCompute->dispatch( mAnisoGeneratorStep0, 0, 0 );
 
-        renderSystem->_executeResourceTransition( &mAfterAnisoMip0Trans );
-
-        TODO_memory_barrier;
+        renderSystem->_executeResourceTransition( &mAfterAnisoMip0Trans[0] );
 
         FastArray<HlmsComputeJob*>::const_iterator itor = mAnisoGeneratorStep1.begin();
         FastArray<HlmsComputeJob*>::const_iterator end  = mAnisoGeneratorStep1.end();
@@ -474,12 +528,158 @@ namespace Ogre
         while( itor != end )
         {
             hlmsCompute->dispatch( *itor, 0, 0 );
-            renderSystem->_executeResourceTransition( &mAfterAnisoMip1Trans );
+            renderSystem->_executeResourceTransition( &mAfterAnisoMip1Trans[0] );
             ++itor;
         }
     }
     //-------------------------------------------------------------------------
-    void VctLighting::update( SceneManager *sceneManager, float rayMarchStepScale, uint32 _lightMask )
+    void VctLighting::runBounce( uint32 bounceIteration )
+    {
+        RenderSystem *renderSystem = mVoxelizer->getRenderSystem();
+        if( renderSystem->getCapabilities()->hasCapability( RSC_EXPLICIT_API ) )
+            renderSystem->_executeResourceTransition( &mStartupTrans[1] );
+
+        const uint32 width  = mLightVoxel[0]->getWidth();
+        const uint32 height = mLightVoxel[0]->getHeight();
+        const uint32 depth  = mLightVoxel[0]->getDepth();
+
+        const float smallestRes = static_cast<float>( std::min( std::min( width, height ), depth ) );
+        const float invSmallestRes = 1.0f / smallestRes;
+
+        mBounceVoxelCellSize->setManualValue( mVoxelizer->getVoxelCellSize() );
+        mBounceInvVoxelResolution->setManualValue( 1.0f / mVoxelizer->getVoxelResolution() );
+		mBounceIterationDampening->setManualValue( 1.0f / (Math::PI * (bounceIteration * 0.5f + 1.0f)) );
+		mBounceStartBiasInvBias->setManualValue( Vector2( invSmallestRes, smallestRes ) );
+        mBounceShaderParams->setDirty();
+
+        HlmsCompute *hlmsCompute = mVoxelizer->getHlmsManager()->getComputeHlms();
+        hlmsCompute->dispatch( mLightVctBounceInject, 0, 0 );
+
+        renderSystem->_executeResourceTransition( &mPrepareForSamplingTrans[1] );
+
+        std::swap( mLightVoxel[0], mLightBounce );
+        std::swap( mStartupTrans[0], mStartupTrans[1] );
+        std::swap( mPrepareForSamplingTrans[0], mPrepareForSamplingTrans[1] );
+        std::swap( mAfterAnisoMip0Trans[0], mAfterAnisoMip0Trans[1] );
+        std::swap( mAfterAnisoMip1Trans[0], mAfterAnisoMip1Trans[1] );
+
+        DescriptorSetTexture2::TextureSlot texSlot( DescriptorSetTexture2::TextureSlot::makeEmpty() );
+        texSlot.texture = mLightVoxel[0];
+        mLightVctBounceInject->setTexture( 2, texSlot );
+        if( mAnisotropic )
+        {
+            DescriptorSetUav::TextureSlot uavSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
+            uavSlot.access = ResourceAccess::Write;
+            uavSlot.texture = mLightBounce;
+            mLightVctBounceInject->_setUavTexture( 0, uavSlot );
+        }
+
+        if( mAnisotropic )
+        {
+            texSlot.texture = mLightVoxel[0];
+            mAnisoGeneratorStep0->setTexture( 0, texSlot );
+
+            generateAnisotropicMips();
+        }
+        else
+            mLightVoxel[0]->_autogenerateMipmaps();
+    }
+    //-------------------------------------------------------------------------
+    void VctLighting::setAllowMultipleBounces( bool bAllowMultipleBounces, bool bChangeBarriers )
+    {
+        if( getAllowMultipleBounces() == bAllowMultipleBounces )
+            return;
+
+        TextureGpuManager *textureManager = mVoxelizer->getTextureGpuManager();
+        if( bAllowMultipleBounces )
+        {
+            uint32 texFlags = TextureFlags::Uav;
+            if( !mAnisotropic )
+                texFlags |= TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps;
+
+            char tmpBuffer[128];
+            LwString texName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
+            texName.a( "VctLightingBounce/Id", getId() );
+            TextureGpu *texture = textureManager->createTexture( texName.c_str(),
+                                                                 GpuPageOutStrategy::Discard,
+                                                                 texFlags, TextureTypes::Type3D );
+
+            texture->setResolution( mLightVoxel[0]->getWidth(), mLightVoxel[0]->getHeight(),
+                                    mLightVoxel[0]->getDepth() );
+            texture->setNumMipmaps( mLightVoxel[0]->getNumMipmaps() );
+            texture->setPixelFormat( PFG_RGBA8_UNORM );
+            texture->scheduleTransitionTo( GpuResidency::Resident );
+            mLightBounce = texture;
+        }
+        else
+        {
+            textureManager->destroyTexture( mLightBounce );
+            mLightBounce = 0;
+        }
+
+        if( mLightVctBounceInject )
+        {
+            if( mAnisotropic )
+            {
+                mLightVctBounceInject->setProperty( "vct_anisotropic", 1 );
+                mLightVctBounceInject->setNumTexUnits( 6u );
+                ShaderParams &glslShaderParams = mLightVctBounceInject->getShaderParams( "glsl" );
+
+                ShaderParams::Param param;
+                if( !glslShaderParams.findParameter( "vctProbeX" ) )
+                {
+                    param.name = "vctProbeX";
+                    param.setManualValue( (int32)3 );
+                    glslShaderParams.mParams.push_back( param );
+                }
+                if( !glslShaderParams.findParameter( "vctProbeY" ) )
+                {
+                    param.name = "vctProbeY";
+                    param.setManualValue( (int32)4 );
+                    glslShaderParams.mParams.push_back( param );
+                }
+                if( !glslShaderParams.findParameter( "vctProbeZ" ) )
+                {
+                    param.name = "vctProbeZ";
+                    param.setManualValue( (int32)5 );
+                    glslShaderParams.mParams.push_back( param );
+                }
+                glslShaderParams.setDirty();
+            }
+            else
+            {
+                mLightVctBounceInject->setProperty( "vct_anisotropic", 0 );
+                mLightVctBounceInject->setNumTexUnits( 3u );
+                ShaderParams &glslShaderParams = mLightVctBounceInject->getShaderParams( "glsl" );
+                glslShaderParams.removeParameterNoThrow( "vctProbeX" );
+                glslShaderParams.removeParameterNoThrow( "vctProbeY" );
+                glslShaderParams.removeParameterNoThrow( "vctProbeZ" );
+                glslShaderParams.setDirty();
+            }
+        }
+
+        if( bAllowMultipleBounces )
+            setupBounceTextures();
+
+        if( bChangeBarriers )
+        {
+            destroyBarriers();
+            createBarriers();
+        }
+    }
+    //-------------------------------------------------------------------------
+    void VctLighting::setAllowMultipleBounces( bool bAllowMultipleBounces )
+    {
+        setAllowMultipleBounces( bAllowMultipleBounces, true );
+    }
+    //-------------------------------------------------------------------------
+    bool VctLighting::getAllowMultipleBounces(void) const
+    {
+        return mLightBounce != 0;
+    }
+    //-------------------------------------------------------------------------
+    void VctLighting::update( SceneManager *sceneManager, uint32 numBounces,
+                              float rayMarchStepScale, uint32 _lightMask )
     {
         OGRE_ASSERT_LOW( rayMarchStepScale >= 1.0f );
 
@@ -487,7 +687,7 @@ namespace Ogre
 
         RenderSystem *renderSystem = mVoxelizer->getRenderSystem();
         if( renderSystem->getCapabilities()->hasCapability( RSC_EXPLICIT_API ) )
-            renderSystem->_executeResourceTransition( &mStartupTrans );
+            renderSystem->_executeResourceTransition( &mStartupTrans[0] );
 
         mLightInjectionJob->setConstBuffer( 0, mLightsConstBuffer );
 
@@ -566,12 +766,24 @@ namespace Ogre
         HlmsCompute *hlmsCompute = mVoxelizer->getHlmsManager()->getComputeHlms();
         hlmsCompute->dispatch( mLightInjectionJob, 0, 0 );
 
-        renderSystem->_executeResourceTransition( &mPrepareForSamplingTrans );
+        renderSystem->_executeResourceTransition( &mPrepareForSamplingTrans[1] );
 
         if( mAnisotropic )
             generateAnisotropicMips();
         else
             mLightVoxel[0]->_autogenerateMipmaps();
+
+        if( numBounces > 0u )
+        {
+            if( !getAllowMultipleBounces() )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                             "numBounces must be 0, else call setAllowMultipleBounces first!",
+                             "VctLighting::update" );
+            }
+            for( uint32 i=0u; i<numBounces; ++i )
+                runBounce( i );
+        }
     }
     //-------------------------------------------------------------------------
     size_t VctLighting::getConstBufferSize(void) const

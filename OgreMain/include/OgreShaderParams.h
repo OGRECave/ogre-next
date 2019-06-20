@@ -157,6 +157,21 @@ namespace Ogre
         /// You can cache the return pointer (as long as the
         /// iterators from mParams aren't invalidated)
         Param* findParameter( const String &name );
+
+        /** Removes a parameter if it matches the name
+        @remarks
+            You shouldn't have multiple parameters with the same name. But if you do,
+            then we will only remove the first match.
+            You can call this function again until all matches are removed
+            (beware of O(N^2) behavior though!)
+
+            Calling this function may alter the order of entries in mParams!
+        @param name
+        @return
+            Returns true if we removed a parameter with such name.
+            Returns false if said parameter couldn't be found.
+        */
+        bool removeParameterNoThrow( const String &name );
     };
 
     /** @} */

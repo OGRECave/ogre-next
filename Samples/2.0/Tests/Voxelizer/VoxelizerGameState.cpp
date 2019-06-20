@@ -118,7 +118,8 @@ namespace Demo
 
         vctLighting = new Ogre::VctLighting( Ogre::Id::generateNewId<Ogre::VctLighting>(),
                                              voxelizer, true );
-        vctLighting->update( sceneManager );
+        vctLighting->setAllowMultipleBounces( true );
+        vctLighting->update( sceneManager, 6u );
 
         {
             Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();

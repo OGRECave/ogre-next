@@ -84,6 +84,9 @@ namespace Ogre
         HlmsComputeJob              *mAnisoGeneratorStep0;
         FastArray<HlmsComputeJob*>  mAnisoGeneratorStep1;
 
+        HlmsComputeJob              *mLightVctBounceInject;
+        TextureGpu                  *mLightBounce;
+
         float mDefaultLightDistThreshold;
         bool    mAnisotropic;
 
@@ -93,10 +96,19 @@ namespace Ogre
         ShaderParams::Param *mInvVoxelResolution;
         ShaderParams        *mShaderParams;
 
-        ResourceTransition mStartupTrans;
-        ResourceTransition mPrepareForSamplingTrans;
-        ResourceTransition mAfterAnisoMip0Trans;
-        ResourceTransition mAfterAnisoMip1Trans;
+        ShaderParams::Param *mBounceVoxelCellSize;
+        ShaderParams::Param *mBounceInvVoxelResolution;
+        ShaderParams::Param *mBounceIterationDampening;
+        ShaderParams::Param *mBounceStartBiasInvBias;
+        ShaderParams        *mBounceShaderParams;
+
+        bool mBarriersCreated;
+        //We create 2 of each, one for mLightVoxel[0], another for mLightBounce
+        //This actually only matters in explicit APIs like Vulkan or D3D12
+        ResourceTransition mStartupTrans[2];
+        ResourceTransition mPrepareForSamplingTrans[2];
+        ResourceTransition mAfterAnisoMip0Trans[2];
+        ResourceTransition mAfterAnisoMip1Trans[2];
 
         void createBarriers(void);
         void destroyBarriers(void);
@@ -120,15 +132,40 @@ namespace Ogre
         void createTextures(void);
         void destroyTextures(void);
         void checkTextures(void);
+        void setupBounceTextures(void);
 
         void generateAnisotropicMips(void);
+
+        void runBounce( uint32 bounceIteration );
+
+        void setAllowMultipleBounces( bool bAllowMultipleBounces, bool bChangeBarriers );
 
     public:
         VctLighting( IdType id, VctVoxelizer *voxelizer, bool bAnisotropic );
         ~VctLighting();
 
+        /** This function allows VctLighting::update to pass numBounces > 0 as argument.
+            Note however, that multiple bounces requires creating another RGBA32_UNORM texture
+            of the same resolution as the voxel texture.
+
+            This can cause increase memory consumption.
+        @remarks
+            It is valid to call setAllowMultipleBounces( false ) right after calling
+            update( sceneManager, numBounces > 0 ) in order to release the extra memory.
+
+            However remember to call setAllowMultipleBounces( true ) before calling update()
+            again with numBounces > 0.
+        @param bAllowMultipleBounces
+            True to allow multiple bounces, and consume more memory.
+            False to no longer allow multiple bounces, and release memory.
+        */
+        void setAllowMultipleBounces( bool bAllowMultipleBounces );
+        bool getAllowMultipleBounces(void) const;
+
         /**
         @param sceneManager
+        @param numBounces
+            Number of GI bounces. This value must be 0 if getAllowMultipleBounces() == false
         @param rayMarchStepScale
             Scale for the ray march step size. A value < 1.0f makes little sense
             and will trigger an assert.
@@ -138,8 +175,8 @@ namespace Ogre
             are supposed to be shadowed won't be shadowed)
         @param lightMask
         */
-        void update( SceneManager *sceneManager, float rayMarchStepScale=1.0f,
-                     uint32 lightMask=0xffffffff );
+        void update( SceneManager *sceneManager, uint32 numBounces,
+                     float rayMarchStepScale=1.0f, uint32 lightMask=0xffffffff );
 
         size_t getConstBufferSize(void) const;
 
