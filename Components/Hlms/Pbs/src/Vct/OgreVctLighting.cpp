@@ -506,12 +506,12 @@ namespace Ogre
                 texSlot.texture = mLightVoxel[i+1u];
                 mLightVctBounceInject->setTexture( i+3u, texSlot );
             }
-
-            DescriptorSetUav::TextureSlot uavSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
-            uavSlot.access = ResourceAccess::Write;
-            uavSlot.texture = mLightBounce;
-            mLightVctBounceInject->_setUavTexture( 0, uavSlot );
         }
+
+        DescriptorSetUav::TextureSlot uavSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
+        uavSlot.access = ResourceAccess::Write;
+        uavSlot.texture = mLightBounce;
+        mLightVctBounceInject->_setUavTexture( 0, uavSlot );
     }
     //-------------------------------------------------------------------------
     void VctLighting::generateAnisotropicMips()
@@ -566,13 +566,11 @@ namespace Ogre
         DescriptorSetTexture2::TextureSlot texSlot( DescriptorSetTexture2::TextureSlot::makeEmpty() );
         texSlot.texture = mLightVoxel[0];
         mLightVctBounceInject->setTexture( 2, texSlot );
-        if( mAnisotropic )
-        {
-            DescriptorSetUav::TextureSlot uavSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
-            uavSlot.access = ResourceAccess::Write;
-            uavSlot.texture = mLightBounce;
-            mLightVctBounceInject->_setUavTexture( 0, uavSlot );
-        }
+
+        DescriptorSetUav::TextureSlot uavSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
+        uavSlot.access = ResourceAccess::Write;
+        uavSlot.texture = mLightBounce;
+        mLightVctBounceInject->_setUavTexture( 0, uavSlot );
 
         if( mAnisotropic )
         {
