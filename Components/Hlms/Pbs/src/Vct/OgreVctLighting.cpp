@@ -90,7 +90,8 @@ namespace Ogre
         mBounceStartBiasInvBias( 0 ),
         mBounceShaderParams( 0 ),
         mBarriersCreated( false ),
-        mNormalBias( 0.25f )
+        mNormalBias( 0.25f ),
+        mSpecularSdfQuality( 0.875f )
     {
         memset( mLightVoxel, 0, sizeof(mLightVoxel) );
 
@@ -300,7 +301,8 @@ namespace Ogre
         if( !hasTypedUavs )
             texFlags |= TextureFlags::Reinterpretable;
 
-        if( !mAnisotropic )
+        const bool bSdfQuality = shouldEnableSpecularSdfQuality();
+        if( !mAnisotropic || bSdfQuality )
             texFlags |= TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps;
 
         const TextureGpu *albedoVox = mVoxelizer->getAlbedoVox();
@@ -313,8 +315,9 @@ namespace Ogre
         const uint32 heightAniso    = std::max( 1u, height >> 1u );
         const uint32 depthAniso     = std::max( 1u, depth >> 1u );
 
-        const uint8 numMipsMain  =
-                mAnisotropic ? 1u : PixelFormatGpuUtils::getMaxMipmapCount( width, height, depth );
+        const uint8 numMipsMain  = (mAnisotropic && !bSdfQuality) ?
+                                       1u :
+                                       PixelFormatGpuUtils::getMaxMipmapCount( width, height, depth );
         //numMipsAniso needs one less mip; because the last mip must be 2x1x1, not 1x1x1
         const uint8 numMipsAniso =
                 PixelFormatGpuUtils::getMaxMipmapCount( widthAniso, heightAniso, depthAniso ) - 1u;
@@ -350,6 +353,8 @@ namespace Ogre
             texture->setPixelFormat( PFG_RGBA8_UNORM );
             texture->scheduleTransitionTo( GpuResidency::Resident );
             mLightVoxel[i] = texture;
+
+            texFlags &= (uint32)~(TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps);
         }
 
         if( mAnisotropic )
@@ -579,7 +584,8 @@ namespace Ogre
 
             generateAnisotropicMips();
         }
-        else
+
+        if( mLightVoxel[0]->getNumMipmaps() > 1u )
             mLightVoxel[0]->_autogenerateMipmaps();
     }
     //-------------------------------------------------------------------------
@@ -592,7 +598,7 @@ namespace Ogre
         if( bAllowMultipleBounces )
         {
             uint32 texFlags = TextureFlags::Uav;
-            if( !mAnisotropic )
+            if( !mAnisotropic || shouldEnableSpecularSdfQuality() )
                 texFlags |= TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps;
 
             char tmpBuffer[128];
@@ -768,7 +774,8 @@ namespace Ogre
 
         if( mAnisotropic )
             generateAnisotropicMips();
-        else
+
+        if( mLightVoxel[0]->getNumMipmaps() > 1u )
             mLightVoxel[0]->_autogenerateMipmaps();
 
         if( numBounces > 0u )
@@ -799,17 +806,25 @@ namespace Ogre
         const float smallestRes = static_cast<float>( std::min( std::min( width, height ), depth ) );
         const float invSmallestRes = 1.0f / smallestRes;
 
-        //float4 startBias_invStartBias_maxDistance_blendAmbient;
+        float mipDiff = (static_cast<float>( PixelFormatGpuUtils::getMaxMipmapCount(
+                                                 static_cast<uint32>( smallestRes ) ) ) - 8.0f) * 0.5f;
+
+        //float4 startBias_invStartBias_specSdfMaxMip_blendAmbient;
         *passBufferPtr++ = invSmallestRes;
         *passBufferPtr++ = smallestRes;
-        *passBufferPtr++ = 1.414213562f;
+        *passBufferPtr++ = 7.0f + mipDiff;
         *passBufferPtr++ = 0.0f;
 
-        //float4 normalBias_blendFade_softShadowDampenFactor_unused;
+        //float4 normalBias_blendFade_softShadowDampenFactor_specularSdfFactor;
         *passBufferPtr++ = mNormalBias;
         *passBufferPtr++ = 1.0f;
         *passBufferPtr++ = 0.0f;
-        *passBufferPtr++ = 0.0f;
+        //Where did 0.1875f & 0.3125f come from? Empirically obtained.
+        //At 128x128x128, values in range [24; 40] gave good results.
+        //Below 24, quality became unnacceptable.
+        //Past 40, performance only went down without visible changes.
+        //Thus 24 / 128 and 40 / 128 = 0.1875f and 0.3125f
+        *passBufferPtr++ = Math::lerp( 0.1875f, 0.3125f, mSpecularSdfQuality ) * smallestRes;
 
         Matrix4 xform;
         xform.makeTransform( -mVoxelizer->getVoxelOrigin() / mVoxelizer->getVoxelSize(),
@@ -823,6 +838,13 @@ namespace Ogre
         //float4 xform_row2;
         for( size_t i=0; i<12u; ++i )
             *passBufferPtr++ = static_cast<float>( xform[0][i] );
+    }
+    //-------------------------------------------------------------------------
+    bool VctLighting::shouldEnableSpecularSdfQuality(void) const
+    {
+        return mVoxelizer->getAlbedoVox()->getWidth() > 32u &&
+                mVoxelizer->getAlbedoVox()->getHeight() > 32u &&
+                mVoxelizer->getAlbedoVox()->getDepth() > 32u;
     }
     //-------------------------------------------------------------------------
     void VctLighting::setAnisotropic( bool bAnisotropic )

@@ -125,6 +125,36 @@ namespace Ogre
         */
         float   mNormalBias;
 
+        /** When roughness is close to 0.02, specular cone tracing becomes path tracing.
+            This is very slow. However we can greatly speed it up by skipping gaps of empty
+            voxels.
+
+            We use the alpha (opacity) component of the higher mips to approximate
+            the SDF (Signed Distance Field) and thus know how much to skip. This is
+            theoretically wrong, but not very wrong because the mips are very close to
+            its true SDF representation thus in it works practice.
+
+            Some of these formulas have been empirically tuned to match a good
+            performance/quality ratio
+
+            Once the roughness is higher, this formula starts hurting quality (produces
+            noticeable artifacts) and thus we disable it.
+
+            This formula has tweakable parameters to leverage performance vs quality
+
+            Recommended range is [0; 1] where 1 is high quality and 0 is high performance
+            (artifacts may appear).
+
+            However you can go outside that range.
+        @remarks
+            When resolution is <= 32; we completely disable this hack as it only hurts
+            performance (fetching the opacity is more expensive than skipping pixels)
+
+            PUBLIC VARIABLE. This variable can be altered directly.
+            Changes are reflected immediately.
+        */
+        float   mSpecularSdfQuality;
+
     protected:
         void addLight( ShaderVctLight * RESTRICT_ALIAS vctLight, Light *light,
                        const Vector3 &voxelOrigin, const Vector3 &invVoxelSize );
@@ -182,6 +212,8 @@ namespace Ogre
 
         void fillConstBufferData( const Matrix4 &viewMatrix,
                                   float * RESTRICT_ALIAS passBufferPtr ) const;
+
+        bool shouldEnableSpecularSdfQuality(void) const;
 
         /** Toggles anisotropic mips.
 

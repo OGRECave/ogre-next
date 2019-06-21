@@ -173,6 +173,7 @@ namespace Ogre
     const IdString PbsProperty::VctNumProbes      = IdString( "vct_num_probes" );
     const IdString PbsProperty::VctConeDirs       = IdString( "vct_cone_dirs" );
     const IdString PbsProperty::VctAnisotropic    = IdString( "vct_anisotropic" );
+    const IdString PbsProperty::VctEnableSpecularSdfQuality=IdString("vct_enable_specular_sdf_quality");
     const IdString PbsProperty::ObbRestraintApprox= IdString( "obb_restraint_approx" );
     const IdString PbsProperty::ObbRestraintLtc   = IdString( "obb_restraint_ltc" );
 
@@ -1265,6 +1266,8 @@ namespace Ogre
                 setProperty( PbsProperty::VctNumProbes, 1 );
                 setProperty( PbsProperty::VctConeDirs, mVctFullConeCount ? 6 : 4 );
                 setProperty( PbsProperty::VctAnisotropic, mVctLighting->isAnisotropic() );
+                setProperty( PbsProperty::VctEnableSpecularSdfQuality,
+                             mVctLighting->shouldEnableSpecularSdfQuality() );
             }
 
             if( mIrradianceVolume )

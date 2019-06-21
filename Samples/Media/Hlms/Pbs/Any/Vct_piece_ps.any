@@ -119,21 +119,56 @@
 				float lodLevel = log2( diameter * probeParams.vctInvStartBias );
 			@end
 
+			@property( @n == 1 && vct_enable_specular_sdf_quality )
+				float skipLod = 1;
+			@end
+
+			#define vctMaxDistance 1.414213562f
+
 			@property( !vct_anisotropic )
 				#define VCT_ANISOTROPIC_EARLY_OUT
 			@else
 				#define VCT_ANISOTROPIC_EARLY_OUT && lodLevel <= 0.5
 			@end
-			while( dist < probeParams.vctMaxDistance && alpha < 0.95 VCT_ANISOTROPIC_EARLY_OUT )
+			while( dist < vctMaxDistance && alpha < 0.95 VCT_ANISOTROPIC_EARLY_OUT )
 			{
-				float4 scolor = OGRE_SampleLevel( probe, probeSampler,
-												  posLS + dist * dirLS,
-												  lodLevel );
+				float3 uwvPos = posLS + dist * dirLS;
+				float4 scolor = OGRE_SampleLevel( probe, probeSampler, uwvPos, lodLevel );
 				float a = (1.0f - alpha);
 				color += scolor.xyz * a;
 				alpha += a * scolor.w;
-				dist += diameter * 0.5f;
-				diameter = 2.0 * tanHalfAngle * dist;
+
+				@property( @n == 1 && vct_enable_specular_sdf_quality )
+					//When roughness is close to 0.02, specular cone tracing becomes path tracing.
+					//This is very slow. However we can greatly speed it up by skipping gaps of empty
+					//voxels.
+					//
+					//We use the alpha (opacity) component of the higher mips to approximate
+					//the SDF (Signed Distance Field) and thus know how much to skip. This is
+					//theoretically wrong, but not very wrong because the mips are very close to
+					//its true SDF representation thus in it works practice.
+					//
+					//Some of these formulas have been empirically tuned to match a good
+					//performance/quality ratio
+					//
+					//Once the roughness is higher, this formula starts hurting quality (produces
+					//noticeable artifacts) and thus we disable it.
+					//
+					//This formula has tweakable parameters to leverage performance vs quality
+					float finalOpac = OGRE_SampleLevel( probe, probeSampler, uwvPos, skipLod ).w;
+					float skipFactor = exp2( max( 0, skipLod * 0.5f - 1.0f ) ) * (1.0f - finalOpac) +
+									   finalOpac;
+					skipFactor = lerp( skipFactor, 1.0f,
+									   min( -1.0 + finalOpac * probeParams.vctSpecularSdfFactor +
+											tanHalfAngle * 50.0f, 1.0f ) );
+					skipLod = clamp( skipLod + (1.0f - finalOpac) * 2.0f - 1.0f,
+									 1.0f, probeParams.vctSpecSdfMaxMip );
+
+					dist += diameter * 0.5f * skipFactor;
+				@else
+					dist += diameter * 0.5f;
+				@end
+				diameter = max( probeParams.vctStartBias, 2.0 * tanHalfAngle * dist );
 				@property( @n == 0 && vct_cone_dirs == 4 )
 					lodLevel += lodStep;
 				@else
@@ -149,7 +184,7 @@
 
 				float3 dirLSSquared = dirLS.xyz * dirLS.xyz;
 
-				while( dist < probeParams.vctMaxDistance && alpha < 0.95 )
+				while( dist < vctMaxDistance && alpha < 0.95 )
 				{
 					float3 sampleUVW = posLS + dist * dirLS;
 					sampleUVW.x = saturate( sampleUVW.x ) * 0.5;
@@ -171,7 +206,7 @@
 					color += scolor.xyz * a;
 					alpha += a * scolor.w;
 					dist += diameter * 0.5f;
-					diameter = 2.0 * tanHalfAngle * dist;
+					diameter = max( probeParams.vctStartBias, 2.0 * tanHalfAngle * dist );
 					@property( @n == 0 && vct_cone_dirs == 4 )
 						lodLevel += lodStep;
 					@else
@@ -253,7 +288,6 @@
 
 			float coneWeights[6] = OGRE_ARRAY_START( float ) 0.25, 0.15, 0.15, 0.15, 0.15, 0.15 OGRE_ARRAY_END;
 			float coneAngleTan = 0.577;
-			float minRefTan = 0.0;
 		@else
 			float3 cone_dirs[4] =
 				OGRE_ARRAY_START( float3 )
@@ -265,7 +299,6 @@
 
 			float coneWeights[4] = OGRE_ARRAY_START( float ) 0.25, 0.25, 0.25, 0.25 OGRE_ARRAY_END;
 			float coneAngleTan = 0.98269;
-			float minRefTan = 0.1;
 		@end
 
 		//Radiance / diffuse
@@ -286,7 +319,9 @@
 
 		//Irradiance / specular
 		float3 reflVecLS = toVctProbeSpaceDir( pixelData.reflDir, probeParams );
-		float specConeAngleTan = max( minRefTan, tan( pixelData.roughness * 0.5f * M_PI * 0.99f ) );
+		// 1 / (1 - 0.02) = 1.020408163
+		float vctRoughness = (pixelData.roughness - 0.02) * 1.020408163f;
+		float specConeAngleTan = max( 0.0f, tan( vctRoughness * 0.5f * M_PI * 0.99f ) );
 		//TODO: There are better values than passBuf.ambientUpperHemi. When VCT probe can be used
 		//then we should not apply BRDF_EnvMap and use the values in pixelData.envColourS
 		float3 irrLight = voxelConeTraceSpec( probeParams, posLS, ambientUpperHemi, reflVecLS,
