@@ -365,8 +365,17 @@
 		finalColour.xyz *= lerp( 1.0f, vctDiffuse.w, passBuf.vctProbeParams.vctSoftShadowDampenFactor );
 	@end
 
-	finalColour.xyz += pixelData.diffuse.xyz * vctDiffuse.xyz;
-	finalColour.xyz += pixelData.specular.xyz * vctSpecular.xyz;
+	//Normally we'd use VdotH. However:
+	//	H = normalize(lightDir + viewDir)
+	//since:
+	//	lightDir = pixelData.reflDir
+	//then:
+	//	H = geomNormal
+	//Thus H = N, and therefore we use VdotN (NdotV)
+	float_fresnel vctFresnel = pixelData.F0 + pow( 1.0 - pixelData.NdotV, 5.0 ) * (1.0 - pixelData.F0);
+
+	finalColour.xyz += (1.0f - vctFresnel) * pixelData.diffuse.xyz * vctDiffuse.xyz;
+	finalColour.xyz += vctFresnel * pixelData.specular.xyz * vctSpecular.xyz;
 @end
 
 @end
