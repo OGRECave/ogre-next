@@ -1,0 +1,49 @@
+
+compositor_node VctTexDownsampleNode
+{
+	in 0 downsampleTex
+
+	target downsampleTex
+	{
+		pass render_quad
+		{
+			execution_mask 0x01
+
+			load
+			{
+				all				dont_care
+			}
+			store
+			{
+				//We only care about the contents of the colour target
+				depth			dont_care
+				stencil			dont_care
+			}
+
+			material	Ogre/Copy/4xFP32_2DArray
+		}
+
+		pass render_quad
+		{
+			execution_mask 0x02
+
+			load
+			{
+				all				dont_care
+			}
+			store
+			{
+				//We only care about the contents of the colour target
+				depth			dont_care
+				stencil			dont_care
+			}
+
+			material	Ogre/Copy/4xFP32
+		}
+	}
+}
+
+workspace VctTexDownsampleWorkspace
+{
+	connect_output VctTexDownsampleNode 0
+}

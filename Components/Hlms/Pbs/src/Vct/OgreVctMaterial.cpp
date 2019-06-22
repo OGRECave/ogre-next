@@ -39,7 +39,12 @@ THE SOFTWARE.
 #include "OgreTextureGpuManager.h"
 #include "OgreTextureBox.h"
 
+#include "OgreMaterialManager.h"
+#include "OgreTechnique.h"
+#include "OgrePass.h"
 #include "OgreTextureUnitState.h"
+#include "OgreDepthBuffer.h"
+#include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorWorkspace.h"
 
 #include "OgreLogManager.h"
@@ -58,14 +63,30 @@ namespace Ogre
         uint32 padding01[2];
     };
     //-------------------------------------------------------------------------
-    VctMaterial::VctMaterial( VaoManager *vaoManager ) :
+    VctMaterial::VctMaterial( IdType id, VaoManager *vaoManager, CompositorManager2 *compositorManager,
+                              TextureGpuManager *textureGpuManager ) :
+        IdObject( id ),
         mVaoManager( vaoManager ),
         mNumUsedPoolSlices( 0u ),
         mTexturePool( 0 ),
-        mDownscaleTex( 0 ),
-        mDownscaleMatTextureUnit( 0 ),
-        mDownscaleWorkspace( 0 )
+        mTextureGpuManager( textureGpuManager ),
+        mCompositorManager( compositorManager ),
+        mDownsampleTex( 0 ),
+        mDownsampleMatPass2DArray( 0 ),
+        mDownsampleMatPass2D( 0 ),
+        mDownsampleWorkspace2DArray( 0 ),
+        mDownsampleWorkspace2D( 0 )
     {
+        MaterialPtr mat;
+        mat = MaterialManager::getSingleton().load(
+                  "Ogre/Copy/4xFP32_2DArray",
+                  ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME ).staticCast<Material>();
+        mDownsampleMatPass2DArray = mat->getTechnique( 0 )->getPass( 0 );
+
+        mat = MaterialManager::getSingleton().load(
+                  "Ogre/Copy/4xFP32",
+                  ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME ).staticCast<Material>();
+        mDownsampleMatPass2D = mat->getTechnique( 0 )->getPass( 0 );
     }
     //-------------------------------------------------------------------------
     VctMaterial::~VctMaterial()
@@ -84,8 +105,7 @@ namespace Ogre
 
         if( mTexturePool )
         {
-            TextureGpuManager *textureManager = 0;
-            textureManager->destroyTexture( mTexturePool );
+            mTextureGpuManager->destroyTexture( mTexturePool );
             mTexturePool = 0;
         }
     }
@@ -152,15 +172,27 @@ namespace Ogre
         if( itor != mTextureToPoolEntry.end() )
             return itor->second; //We already copied that texture. We're done
 
-        mDownscaleMatTextureUnit->setTexture( texture );
-        mDownscaleWorkspace->_update();
+        if( texture->getInternalTextureType() == TextureTypes::Type2DArray )
+        {
+            GpuProgramParametersSharedPtr psParams =
+                    mDownsampleMatPass2DArray->getFragmentProgramParameters();
+            psParams->setNamedConstant( "sliceIdx",
+                                        static_cast<float>( texture->getInternalSliceStart() ) );
+            mDownsampleMatPass2DArray->getTextureUnitState( 0 )->setTexture( texture );
+            mDownsampleWorkspace2DArray->_update();
+        }
+        else
+        {
+            mDownsampleMatPass2D->getTextureUnitState( 0 )->setTexture( texture );
+            mDownsampleWorkspace2D->_update();
+        }
 
         const uint16 sliceIdx = mNumUsedPoolSlices++;
 
         TextureBox dstBox = mTexturePool->getEmptyBox( 0u );
         dstBox.sliceStart = sliceIdx;
         dstBox.numSlices = 1u;
-        mDownscaleTex->copyTo( mTexturePool, dstBox, 0u, mDownscaleTex->getEmptyBox( 0u ), 0u );
+        mDownsampleTex->copyTo( mTexturePool, dstBox, 0u, mDownsampleTex->getEmptyBox( 0u ), 0u );
 
         mTextureToPoolEntry[texture] = sliceIdx;
         return sliceIdx;
@@ -168,12 +200,11 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VctMaterial::resizeTexturePool(void)
     {
-        TextureGpuManager *textureManager = 0;
-
-
-        TextureGpu *newPool = textureManager->createTexture( "", "", GpuPageOutStrategy::Discard,
-                                                             TextureFlags::ManualTexture,
-                                                             TextureTypes::Type2DArray );
+        String texName = "VctMaterial" + StringConverter::toString( getId() );
+        TextureGpu *newPool = mTextureGpuManager->createTexture( texName, texName,
+                                                                 GpuPageOutStrategy::Discard,
+                                                                 TextureFlags::ManualTexture,
+                                                                 TextureTypes::Type2DArray );
         newPool->setResolution( 64u, 64u, 64u );
         newPool->setPixelFormat( PFG_RGBA8_UNORM_SRGB );
         if( mTexturePool )
@@ -187,7 +218,7 @@ namespace Ogre
         {
             TextureBox box( mTexturePool->getEmptyBox( 0u ) );
             mTexturePool->copyTo( newPool, box, 0u, box, 0u );
-            textureManager->destroyTexture( mTexturePool );
+            mTextureGpuManager->destroyTexture( mTexturePool );
         }
 
         mTexturePool = newPool;
@@ -214,6 +245,40 @@ namespace Ogre
             retVal = &(*itor);
 
         return retVal;
+    }
+    //-------------------------------------------------------------------------
+    void VctMaterial::initTempResources(void)
+    {
+        mDownsampleTex = mTextureGpuManager->createTexture( "VctMaterialDownsampleTex",
+                                                            "VctMaterialDownsampleTex",
+                                                            GpuPageOutStrategy::Discard,
+															TextureFlags::RenderToTexture,
+                                                            TextureTypes::Type2D );
+        mDownsampleTex->setResolution( 64u, 64u );
+		mDownsampleTex->setPixelFormat( PFG_RGBA8_UNORM_SRGB );
+		mDownsampleTex->_setDepthBufferDefaults( DepthBuffer::POOL_NO_DEPTH, false, PFG_UNKNOWN );
+        mDownsampleTex->scheduleTransitionTo( GpuResidency::Resident );
+
+        mDownsampleWorkspace2DArray =
+                mCompositorManager->addWorkspace(
+                    0, mDownsampleTex, 0, "VctTexDownsampleWorkspace", false,
+                    -1, 0, 0, 0, Vector4::ZERO, 0x00, 0x01 );
+        mDownsampleWorkspace2D =
+                mCompositorManager->addWorkspace(
+                    0, mDownsampleTex, 0, "VctTexDownsampleWorkspace", false,
+                    -1, 0, 0, 0, Vector4::ZERO, 0x00, 0x02 );
+    }
+    //-------------------------------------------------------------------------
+    void VctMaterial::destroyTempResources(void)
+    {
+        mTextureGpuManager->destroyTexture( mDownsampleTex );
+        mDownsampleTex = 0;
+
+        mCompositorManager->removeWorkspace( mDownsampleWorkspace2DArray );
+        mDownsampleWorkspace2DArray = 0;
+
+        mCompositorManager->removeWorkspace( mDownsampleWorkspace2D );
+        mDownsampleWorkspace2D = 0;
     }
     //-------------------------------------------------------------------------
     VctMaterial::DatablockConversionResult VctMaterial::addDatablock( HlmsDatablock *datablock )

@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "Vct/OgreVctMaterial.h"
 
 #include "OgreRenderSystem.h"
+#include "OgreRoot.h"
 
 #include "OgreItem.h"
 #include "OgreMesh2.h"
@@ -127,7 +128,9 @@ namespace Ogre
         mHlmsManager( hlmsManager ),
         mTextureGpuManager( renderSystem->getTextureGpuManager() ),
         mComputeTools( new ComputeTools( hlmsManager->getComputeHlms() ) ),
-        mVctMaterial( new VctMaterial( renderSystem->getVaoManager() ) ),
+        mVctMaterial( new VctMaterial( id, renderSystem->getVaoManager(),
+                                       Root::getSingleton().getCompositorManager2(),
+                                       renderSystem->getTextureGpuManager() ) ),
         mWidth( 128u ),
         mHeight( 128u ),
         mDepth( 128u ),
@@ -1347,7 +1350,9 @@ namespace Ogre
 
         createVoxelTextures();
 
+        mVctMaterial->initTempResources();
         placeItemsInBuckets();
+        mVctMaterial->destroyTempResources();
 
         fillInstanceBuffers();
 
