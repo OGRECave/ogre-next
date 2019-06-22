@@ -60,6 +60,8 @@ namespace Ogre
 
         virtual void _notifyBuffer( BufferPacked *buffer )  { mBuffer = buffer; }
         BufferPacked* getBufferPacked(void)                 { return mBuffer; }
+
+        virtual void _ensureDelayedImmutableBuffersAreReady(void);
     };
 }
 

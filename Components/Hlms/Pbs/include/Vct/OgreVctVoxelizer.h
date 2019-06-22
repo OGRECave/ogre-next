@@ -32,6 +32,11 @@ THE SOFTWARE.
 #include "OgreId.h"
 #include "Math/Simple/OgreAabb.h"
 #include "Vao/OgreVertexBufferDownloadHelper.h"
+
+#ifdef OGRE_FORCE_VCT_VOXELIZER_DETERMINISTIC
+    #include "OgreMesh2.h"
+#endif
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
@@ -75,6 +80,16 @@ namespace Ogre
             return this->emissiveTex < other.emissiveTex;
         }
     };
+
+#ifdef OGRE_FORCE_VCT_VOXELIZER_DETERMINISTIC
+    struct DeterministicMeshPtrOrder
+    {
+        bool operator()( const MeshPtr &a, const MeshPtr &b ) const
+        {
+            return a->getName() < b->getName();
+        }
+    };
+#endif
 
     /**
     @class VctVoxelizer
@@ -149,7 +164,11 @@ namespace Ogre
         };
 
         typedef map<v1::MeshPtr, bool>::type v1MeshPtrMap;
+#ifdef OGRE_FORCE_VCT_VOXELIZER_DETERMINISTIC
+        typedef map<MeshPtr, QueuedMesh, DeterministicMeshPtrOrder>::type MeshPtrMap;
+#else
         typedef map<MeshPtr, QueuedMesh>::type MeshPtrMap;
+#endif
         typedef FastArray<Item*> ItemArray;
 
         v1MeshPtrMap    mMeshesV1;

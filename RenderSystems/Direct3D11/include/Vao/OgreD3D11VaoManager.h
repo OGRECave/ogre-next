@@ -208,6 +208,9 @@ namespace Ogre
 
         virtual void destroyVertexBufferImpl( VertexBufferPacked *vertexBuffer );
 
+    public:
+        void _forceCreateDelayedImmutableBuffers(void);
+    protected:
         void createDelayedImmutableBuffers(void);
         void reorganizeImmutableVaos(void);
 

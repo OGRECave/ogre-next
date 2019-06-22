@@ -301,6 +301,9 @@ namespace Ogre
             }
         }
 
+        dstBuffer->getBufferInterface()->_ensureDelayedImmutableBuffersAreReady();
+        this->mBufferInterface->_ensureDelayedImmutableBuffersAreReady();
+
         mBufferInterface->copyTo( dstBuffer->getBufferInterface(),
                                   (dstBuffer->mFinalBufferStart + dstElemStart) *
                                   dstBuffer->mBytesPerElement,

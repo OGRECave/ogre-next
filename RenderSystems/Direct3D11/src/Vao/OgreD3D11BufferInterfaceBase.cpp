@@ -139,4 +139,13 @@ namespace Ogre
                                             this->mVboName, 0, &srcBox );
         }
     }
+    //-----------------------------------------------------------------------------------
+    void D3D11BufferInterfaceBase::_ensureDelayedImmutableBuffersAreReady(void)
+    {
+        if( !mVboName )
+        {
+            D3D11VaoManager *vaoManager = static_cast<D3D11VaoManager*>( mBuffer->mVaoManager );
+            vaoManager->_forceCreateDelayedImmutableBuffers();
+        }
+    }
 }
