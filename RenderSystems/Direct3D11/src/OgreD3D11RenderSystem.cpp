@@ -289,7 +289,7 @@ namespace Ogre
         optDevice.immutable = false;
 
         optVideoMode.name = "Video Mode";
-        optVideoMode.currentValue = "800 x 600 @ 32-bit colour";
+        //optVideoMode.currentValue = "800 x 600 @ 32-bit colour";
         optVideoMode.immutable = false;
 
         optFullScreen.name = "Full Screen";
@@ -525,7 +525,10 @@ namespace Ogre
                               optVideoMode->currentValue);
                 if (itValue == optVideoMode->possibleValues.end())
                 {
-                    optVideoMode->currentValue = "800 x 600 @ 32-bit colour";
+                    if( optVideoMode->possibleValues.empty() )
+                        optVideoMode->currentValue = "800 x 600 @ 32-bit colour";
+                    else
+                        optVideoMode->currentValue = optVideoMode->possibleValues.back();
                 }
 
                 // Also refresh FSAA options
