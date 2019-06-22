@@ -8,7 +8,7 @@
 //	getDiffuseFresnelWithRoughness = max(roughness, (1.0 - F0) - F0 + pow( 1.0 - NdotL, 5.0 ) * F0
 @piece( getSpecularFresnel )pixelData.F0 + pow( 1.0 - VdotH, 5.0 ) * (1.0 - pixelData.F0)@end
 @piece( getDiffuseFresnel )1.0 - pixelData.F0 + pow( 1.0 - NdotL, 5.0 ) * pixelData.F0@end
-@piece( getSpecularFresnelWithRoughness )pixelData.F0 + pow( 1.0 - VdotH, 5.0 ) * (max( make_float_fresnel( 1.0 - pixelData.roughness ), pixelData.F0 ) - pixelData.F0)@end
+@piece( getSpecularFresnelWithRoughness )pixelData.F0 + pow( 1.0 - pixelData.NdotV, 5.0 ) * (max( make_float_fresnel( 1.0 - pixelData.roughness ), pixelData.F0 ) - pixelData.F0)@end
 @piece( getDiffuseFresnelWithRoughness )max( make_float_fresnel( 1.0 - pixelData.roughness ), pixelData.F0 ) - pixelData.F0 + pow( 1.0 - NdotL, 5.0 ) * pixelData.F0@end
 
 @property( !fresnel_scalar )
@@ -203,7 +203,14 @@ float3 BRDF_IR( float3 lightDir, float3 lightDiffuse, PixelData pixelData )
 /// to white) does not go all the way to white at glancing angles in the case of rough surfaces."
 /// So we use getSpecularFresnelWithRoughness instead.
 @piece( BRDF_EnvMap )
-    float VdotH = saturate( dot( pixelData.viewDir, normalize( pixelData.reflDir + pixelData.viewDir ) ) );
+    //Normally we'd use VdotH. However:
+    //	H = normalize(lightDir + viewDir)
+    //since:
+    //	lightDir = pixelData.reflDir
+    //then:
+    //	H = geomNormal
+    //Thus H = N, and therefore we use VdotN (NdotV)
+    //float VdotH = saturate( dot( pixelData.viewDir, normalize( pixelData.reflDir + pixelData.viewDir ) ) );
     float_fresnel fresnelS = @insertpiece( getSpecularFresnelWithRoughness );
 
 	@property( fresnel_separate_diffuse )
