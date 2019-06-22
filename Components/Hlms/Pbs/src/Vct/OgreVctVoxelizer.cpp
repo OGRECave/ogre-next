@@ -1325,7 +1325,7 @@ namespace Ogre
         mDepth  = depth;
     }
     //-------------------------------------------------------------------------
-    void VctVoxelizer::build(void)
+    void VctVoxelizer::build( SceneManager *sceneManager )
     {
         OgreProfile( "VctVoxelizer::build" );
         OgreProfileGpuBegin( "VCT build" );
@@ -1350,7 +1350,7 @@ namespace Ogre
 
         createVoxelTextures();
 
-        mVctMaterial->initTempResources();
+        mVctMaterial->initTempResources( sceneManager );
         placeItemsInBuckets();
         mVctMaterial->destroyTempResources();
 

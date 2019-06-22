@@ -255,7 +255,7 @@ namespace Ogre
         mShaderSyntax( "unset!" ),
         mShaderFileExt( "unset!" ),
         mDebugOutput( true ),
-        mDebugOutputProperties( true ),
+        mDebugOutputProperties( false ),
         mHighQuality( false ),
         mFastShaderBuildHack( false ),
         mDefaultDatablock( 0 ),

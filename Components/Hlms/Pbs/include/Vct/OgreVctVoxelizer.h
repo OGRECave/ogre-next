@@ -349,7 +349,7 @@ namespace Ogre
         */
         void setResolution( uint32 width, uint32 height, uint32 depth );
 
-        void build(void);
+        void build( SceneManager *sceneManager );
 
         Vector3 getVoxelOrigin(void) const;
         Vector3 getVoxelCellSize(void) const;

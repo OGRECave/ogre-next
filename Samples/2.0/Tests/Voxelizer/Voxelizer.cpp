@@ -55,7 +55,8 @@ namespace Demo
                 "Hlms/Common/GLSL",
                 "Hlms/Common/HLSL",
                 "Hlms/Common/Metal",
-                "Hlms/Pbs/Any"
+                "Hlms/Pbs/Any",
+                "2.0/scripts/materials/Postprocessing/SceneAssets"
             };
 
             for( size_t i=0; i<sizeof(c_locations) / sizeof(c_locations[0]); ++i )

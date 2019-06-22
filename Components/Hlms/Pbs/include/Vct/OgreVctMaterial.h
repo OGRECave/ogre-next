@@ -97,7 +97,7 @@ namespace Ogre
                      TextureGpuManager *textureGpuManager );
         ~VctMaterial();
 
-        void initTempResources(void);
+        void initTempResources( SceneManager *sceneManager );
         void destroyTempResources(void);
 
         /// Adds a datablock, if not already cached.

@@ -427,6 +427,10 @@
 
 						if( intersects_tri_aabb( tri, voxelAabb ) )
 						{
+							@property( has_diffuse_tex || has_emissive_tex )
+								float2 uv = tri_barycentric_uv( voxelAabb.center, tri );
+							@end
+
 							float4 finalDiffuse		= material.diffuse.xyzw;
 							float3 finalEmissive	= material.emissive.xyz;
 						@property( has_diffuse_tex )
@@ -446,8 +450,6 @@
 
 							float3 triNormal = tri_barycentric_normal( voxelAabb.center, tri );
 							triNormal = normalize( triNormal );
-
-							float2 uv = tri_barycentric_uv( voxelAabb.center, tri );
 
 							//voxelNormal is not normalized for properly blend-averaging in multiple
 							//passes. But we need it normalized for this check to work

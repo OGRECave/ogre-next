@@ -38,6 +38,7 @@ THE SOFTWARE.
 
 #include "OgreTextureGpuManager.h"
 #include "OgreTextureBox.h"
+#include "OgreSceneManager.h"
 
 #include "OgreMaterialManager.h"
 #include "OgreTechnique.h"
@@ -172,6 +173,11 @@ namespace Ogre
         if( itor != mTextureToPoolEntry.end() )
             return itor->second; //We already copied that texture. We're done
 
+        if( !mTexturePool )
+            resizeTexturePool();
+
+        texture->waitForData();
+
         if( texture->getInternalTextureType() == TextureTypes::Type2DArray )
         {
             GpuProgramParametersSharedPtr psParams =
@@ -247,7 +253,7 @@ namespace Ogre
         return retVal;
     }
     //-------------------------------------------------------------------------
-    void VctMaterial::initTempResources(void)
+    void VctMaterial::initTempResources( SceneManager *sceneManager )
     {
         mDownsampleTex = mTextureGpuManager->createTexture( "VctMaterialDownsampleTex",
                                                             "VctMaterialDownsampleTex",
@@ -259,13 +265,15 @@ namespace Ogre
 		mDownsampleTex->_setDepthBufferDefaults( DepthBuffer::POOL_NO_DEPTH, false, PFG_UNKNOWN );
         mDownsampleTex->scheduleTransitionTo( GpuResidency::Resident );
 
+        Camera *dummyCamera = sceneManager->createCamera( "VctMaterialCam" );
+
         mDownsampleWorkspace2DArray =
                 mCompositorManager->addWorkspace(
-                    0, mDownsampleTex, 0, "VctTexDownsampleWorkspace", false,
+                    sceneManager, mDownsampleTex, dummyCamera, "VctTexDownsampleWorkspace", false,
                     -1, 0, 0, 0, Vector4::ZERO, 0x00, 0x01 );
         mDownsampleWorkspace2D =
                 mCompositorManager->addWorkspace(
-                    0, mDownsampleTex, 0, "VctTexDownsampleWorkspace", false,
+                    sceneManager, mDownsampleTex, dummyCamera, "VctTexDownsampleWorkspace", false,
                     -1, 0, 0, 0, Vector4::ZERO, 0x00, 0x02 );
     }
     //-------------------------------------------------------------------------
@@ -273,6 +281,11 @@ namespace Ogre
     {
         mTextureGpuManager->destroyTexture( mDownsampleTex );
         mDownsampleTex = 0;
+
+        Camera *dummyCamera = mDownsampleWorkspace2DArray->getDefaultCamera();
+        SceneManager *sceneManager = mDownsampleWorkspace2DArray->getSceneManager();
+        sceneManager->destroyCamera( dummyCamera );
+        dummyCamera = 0;
 
         mCompositorManager->removeWorkspace( mDownsampleWorkspace2DArray );
         mDownsampleWorkspace2DArray = 0;

@@ -41,7 +41,7 @@ namespace Demo
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
         Ogre::v1::MeshPtr v1Mesh;
-        Ogre::MeshPtr Voxelizer;
+        Ogre::MeshPtr v2Mesh;
 
         //---------------------------------------------------------------------------------------
         //Import Athene to v2 and render it without saving to disk.
@@ -55,7 +55,7 @@ namespace Demo
                     Ogre::v1::HardwareBuffer::HBU_STATIC, Ogre::v1::HardwareBuffer::HBU_STATIC );
 
         //Create a v2 mesh to import to, with a different name (arbitrary).
-        Voxelizer = Ogre::MeshManager::getSingleton().createManual(
+        v2Mesh = Ogre::MeshManager::getSingleton().createManual(
                     "athene.mesh Imported", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
 
         bool halfPosition   = true;
@@ -63,10 +63,18 @@ namespace Demo
         bool useQtangents   = true;
 
         //Import the v1 mesh to v2
-        Voxelizer->importV1( v1Mesh.get(), halfPosition, halfUVs, useQtangents );
+        v2Mesh->importV1( v1Mesh.get(), halfPosition, halfUVs, useQtangents );
 
         //We don't need the v1 mesh. Free CPU memory, get it out of the GPU.
         //Leave it loaded if you want to use athene with v1 Entity.
+        v1Mesh->unload();
+
+        v1Mesh = Ogre::v1::MeshManager::getSingleton().load(
+                    "tudorhouse.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                    Ogre::v1::HardwareBuffer::HBU_STATIC, Ogre::v1::HardwareBuffer::HBU_STATIC );
+        v2Mesh = Ogre::MeshManager::getSingleton().createManual(
+                    "tudorhouse.mesh", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
+        v2Mesh->importV1( v1Mesh.get(), halfPosition, halfUVs, useQtangents );
         v1Mesh->unload();
 
         Ogre::Item *cornellItem = sceneManager->createItem( "CornellBox.mesh",
@@ -91,6 +99,16 @@ namespace Demo
         sceneNode->setScale( Ogre::Vector3( 0.01f ) );
         sceneNode->setPosition( 0, item->getWorldAabbUpdated().mHalfSize.y, 0 );
 
+        Ogre::Item *itemBarrel = sceneManager->createItem( "tudorhouse.mesh",
+                                                           Ogre::ResourceGroupManager::
+                                                           AUTODETECT_RESOURCE_GROUP_NAME,
+                                                           Ogre::SCENE_DYNAMIC );
+        sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
+                    createChildSceneNode( Ogre::SCENE_DYNAMIC );
+        sceneNode->attachObject( itemBarrel );
+        sceneNode->setScale( Ogre::Vector3( 0.001f ) );
+        sceneNode->setPosition( -0.5, itemBarrel->getWorldAabbUpdated().mHalfSize.y, 0 );
+
         Ogre::Light *light = sceneManager->createLight();
         Ogre::SceneNode *lightNode = sceneManager->getRootSceneNode()->createChildSceneNode();
         lightNode->attachObject( light );
@@ -112,9 +130,10 @@ namespace Demo
                                         true );
         voxelizer->addItem( cornellItem, false );
         voxelizer->addItem( item, false );
+        voxelizer->addItem( itemBarrel, false );
         voxelizer->autoCalculateRegion();
         voxelizer->dividideOctants( 1u, 1u, 1u );
-        voxelizer->build();
+        voxelizer->build( sceneManager );
 
         vctLighting = new Ogre::VctLighting( Ogre::Id::generateNewId<Ogre::VctLighting>(),
                                              voxelizer, true );
@@ -138,7 +157,7 @@ namespace Demo
 //        {
 //            static int frame = 0;
 //            if( frame > 1 )
-//                voxelizer->build();
+//                voxelizer->build( sceneManager );
 //            ++frame;
 //            Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 //            vctLighting->update( sceneManager );
