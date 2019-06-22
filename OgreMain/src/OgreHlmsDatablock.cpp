@@ -513,6 +513,26 @@ namespace Ogre
         return *macroblock0 != macroblock1;
     }
     //-----------------------------------------------------------------------------------
+    ColourValue HlmsDatablock::getDiffuseColour(void) const
+    {
+        return ColourValue::White;
+    }
+    //-----------------------------------------------------------------------------------
+    ColourValue HlmsDatablock::getEmissiveColour(void) const
+    {
+        return ColourValue::Black;
+    }
+    //-----------------------------------------------------------------------------------
+    TextureGpu* HlmsDatablock::getDiffuseTexture(void) const
+    {
+        return 0;
+    }
+    //-----------------------------------------------------------------------------------
+    TextureGpu* HlmsDatablock::getEmissiveTexture(void) const
+    {
+        return 0;
+    }
+    //-----------------------------------------------------------------------------------
     void HlmsDatablock::saveTextures( const String &folderPath, set<String>::type &savedTextures,
                                       bool saveOitd, bool saveOriginal,
                                       HlmsTextureExportListener *listener )

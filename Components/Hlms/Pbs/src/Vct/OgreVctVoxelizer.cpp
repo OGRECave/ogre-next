@@ -944,17 +944,19 @@ namespace Ogre
                 VctMaterial::DatablockConversionResult convResult =
                         mVctMaterial->addDatablock( datablock );
 
-                if( convResult.diffuseTex )
+                if( convResult.hasDiffuseTex() )
                     variant |= VoxelizerJobSetting::HasDiffuseTex;
-                if( convResult.emissiveTex )
+                if( convResult.hasEmissiveTex() )
                     variant |= VoxelizerJobSetting::HasEmissiveTex;
-                if( convResult.diffuseTex && convResult.diffuseTex == convResult.emissiveTex )
-                    variant |= VoxelizerJobSetting::EmissiveIsDiffuseTex;
+//                if( convResult.diffuseTex && convResult.diffuseTex == convResult.emissiveTex )
+//                    variant |= VoxelizerJobSetting::EmissiveIsDiffuseTex;
 
                 bucket.job              = mComputeJobs[variant];
                 bucket.materialBuffer   = convResult.constBuffer;
-                bucket.diffuseTex       = convResult.diffuseTex;
-                bucket.emissiveTex      = convResult.emissiveTex;
+                bucket.diffuseTex       = 0;
+                if( convResult.hasDiffuseTex() || convResult.hasEmissiveTex() )
+                    bucket.diffuseTex = mVctMaterial->getTexturePool();
+//                bucket.emissiveTex      = convResult.emissiveTexIdx;
                 bucket.vertexBuffer     = itMesh->second.bCompressed ? mVertexBufferCompressed :
                                                                        mVertexBufferUncompressed;
                 bucket.indexBuffer      = (variant & VoxelizerJobSetting::Index32bit) ? mIndexBuffer32 :
@@ -1446,12 +1448,12 @@ namespace Ogre
                     bucket.job->setTexture( texUnit, texSlot );
                     ++texUnit;
                 }
-                if( bucket.emissiveTex )
-                {
-                    texSlot.texture = bucket.emissiveTex;
-                    bucket.job->setTexture( texUnit, texSlot );
-                    ++texUnit;
-                }
+//                if( bucket.emissiveTex )
+//                {
+//                    texSlot.texture = bucket.emissiveTex;
+//                    bucket.job->setTexture( texUnit, texSlot );
+//                    ++texUnit;
+//                }
 
                 uint32 numInstancesInBucket = static_cast<uint32 >( itBucket->second.size() );
                 uint32 instanceRange[2] = { instanceStart, instanceStart + numInstancesInBucket };

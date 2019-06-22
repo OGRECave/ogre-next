@@ -40,10 +40,17 @@ namespace Ogre
         {
             uint32              slotIdx;
             ConstBufferPacked   *constBuffer;
-            TextureGpu          *diffuseTex;
-            TextureGpu          *emissiveTex;
+            uint16              diffuseTexIdx;
+            uint16              emissiveTexIdx;
             DatablockConversionResult() :
-                slotIdx( (uint32)-1 ), constBuffer( 0 ), diffuseTex( 0 ), emissiveTex( 0 ) {}
+                slotIdx( (uint32)-1 ), constBuffer( 0 ),
+                diffuseTexIdx( std::numeric_limits<uint16>::max() ),
+                emissiveTexIdx( std::numeric_limits<uint16>::max() ) {}
+
+            bool hasDiffuseTex(void) const
+            { return diffuseTexIdx != std::numeric_limits<uint16>::max(); }
+            bool hasEmissiveTex(void) const
+            { return emissiveTexIdx != std::numeric_limits<uint16>::max(); }
         };
 
     protected:
@@ -51,12 +58,11 @@ namespace Ogre
         struct MaterialBucket
         {
             ConstBufferPacked   *buffer;
+            bool                hasDiffuse;
+            bool                hasEmissive;
             HlmsDatablockSet    datablocks;
         };
         typedef FastArray<MaterialBucket> BucketArray;
-
-        typedef map<HlmsDatablock*, MaterialBucket*>::type DatablockToBucketMap;
-        DatablockToBucketMap mDatablockToBucket;
 
         typedef map<HlmsDatablock*, DatablockConversionResult>::type DatablockConversionResultMap;
         DatablockConversionResultMap mDatablockConversionResults;
@@ -65,14 +71,29 @@ namespace Ogre
 
         VaoManager  *mVaoManager;
 
+        typedef map<TextureGpu*, uint16>::type TextureToPoolEntryMap;
+        uint16                  mNumUsedPoolSlices;
+        TextureGpu              *mTexturePool;
+        TextureGpu              *mDownscaleTex;
+        TextureUnitState        *mDownscaleMatTextureUnit;
+        CompositorWorkspace     *mDownscaleWorkspace;
+        TextureToPoolEntryMap   mTextureToPoolEntry;
+
         DatablockConversionResult addDatablockToBucket( HlmsDatablock *datablock,
                                                         MaterialBucket &bucket );
+        uint16 getPoolSliceIdxForTexture( TextureGpu *texture );
+
+        void resizeTexturePool(void);
+
+        MaterialBucket* findFreeBucketFor( HlmsDatablock *datablock );
 
     public:
         VctMaterial( VaoManager *vaoManager );
         ~VctMaterial();
 
         DatablockConversionResult addDatablock( HlmsDatablock *datablock );
+
+        TextureGpu* getTexturePool(void) const      { return mTexturePool; }
     };
 }
 

@@ -36,10 +36,13 @@ THE SOFTWARE.
 #include "OgreHlms.h"
 #include "OgreHlmsPbsDatablock.h"
 
-#include "OgreLogManager.h"
+#include "OgreTextureGpuManager.h"
+#include "OgreTextureBox.h"
 
-#define TODO_convert_unlit_datablock
-#define TODO_free_buffers
+#include "OgreTextureUnitState.h"
+#include "Compositor/OgreCompositorWorkspace.h"
+
+#include "OgreLogManager.h"
 
 namespace Ogre
 {
@@ -56,13 +59,35 @@ namespace Ogre
     };
     //-------------------------------------------------------------------------
     VctMaterial::VctMaterial( VaoManager *vaoManager ) :
-        mVaoManager( vaoManager )
+        mVaoManager( vaoManager ),
+        mNumUsedPoolSlices( 0u ),
+        mTexturePool( 0 ),
+        mDownscaleTex( 0 ),
+        mDownscaleMatTextureUnit( 0 ),
+        mDownscaleWorkspace( 0 )
     {
     }
     //-------------------------------------------------------------------------
     VctMaterial::~VctMaterial()
     {
-        TODO_free_buffers;
+        BucketArray::const_iterator itor = mBuckets.begin();
+        BucketArray::const_iterator end  = mBuckets.end();
+
+        while( itor != end )
+        {
+            mVaoManager->destroyConstBuffer( itor->buffer );
+            ++itor;
+        }
+
+        mBuckets.clear();
+        mDatablockConversionResults.clear();
+
+        if( mTexturePool )
+        {
+            TextureGpuManager *textureManager = 0;
+            textureManager->destroyTexture( mTexturePool );
+            mTexturePool = 0;
+        }
     }
     //-------------------------------------------------------------------------
     VctMaterial::DatablockConversionResult VctMaterial::addDatablockToBucket( HlmsDatablock *datablock,
@@ -75,53 +100,120 @@ namespace Ogre
         ShaderVctMaterial shaderMaterial;
         memset( &shaderMaterial, 0, sizeof(shaderMaterial) );
 
+        {
+            ColourValue diffuseCol = datablock->getDiffuseColour();
+            ColourValue emissiveCol = datablock->getEmissiveColour();
+            for( size_t i=0; i<4; ++i )
+            {
+                shaderMaterial.diffuse[i] = diffuseCol[i];
+                shaderMaterial.emissive[i] = emissiveCol[i];
+            }
+
+            shaderMaterial.diffuse[3] = Ogre::max( diffuseCol.a, emissiveCol.a );
+        }
+
         if( datablock->getCreator()->getType() == HLMS_PBS )
         {
             OGRE_ASSERT_HIGH( dynamic_cast<HlmsPbsDatablock*>( datablock ) );
             HlmsPbsDatablock *pbsDatablock = static_cast<HlmsPbsDatablock*>( datablock );
 
             ColourValue bgDiffuse = pbsDatablock->getBackgroundDiffuse();
-            Vector3 diffuse = pbsDatablock->getDiffuse();
             float transparency = pbsDatablock->getTransparency();
-            Vector3 emissive = pbsDatablock->getEmissive();
 
             for( size_t i=0; i<4; ++i )
                 shaderMaterial.bgDiffuse[i] = bgDiffuse[i];
-
-            for( size_t i=0; i<3; ++i )
-            {
-                shaderMaterial.diffuse[i] = diffuse[i];
-                shaderMaterial.emissive[i] = emissive[i];
-            }
             shaderMaterial.diffuse[3] = transparency;
             shaderMaterial.emissive[3] = 1.0f;
         }
-        else
-        {
-            //Default to white if we can't recognize the material
-            for( size_t i=0; i<4; ++i )
-                shaderMaterial.diffuse[i] = 1.0f;
-
-            const String *datablockNamePtr = datablock->getNameStr();
-            String datablockName = datablockNamePtr ? *datablockNamePtr :
-                                                      datablock->getName().getFriendlyText();
-            LogManager::getSingleton().logMessage(
-                        "WARNING: VctMaterial::addDatablockToBucket could not recognize the "
-                        "type of datablock '" + datablockName + "' using white instead." );
-        }
-        TODO_convert_unlit_datablock;
 
         bucket.buffer->upload( &shaderMaterial, usedSlots * sizeof( ShaderVctMaterial ),
                                sizeof( ShaderVctMaterial ) );
 
         bucket.datablocks.insert( datablock );
 
+        TextureGpu *diffuseTex = datablock->getDiffuseTexture();
+        TextureGpu *emissiveTex = datablock->getEmissiveTexture();
+
         DatablockConversionResult conversionResult;
         conversionResult.slotIdx        = static_cast<uint32>( usedSlots );
         conversionResult.constBuffer    = bucket.buffer;
+        if( diffuseTex )
+            conversionResult.diffuseTexIdx = getPoolSliceIdxForTexture( diffuseTex );
+        if( emissiveTex )
+            conversionResult.emissiveTexIdx = getPoolSliceIdxForTexture( emissiveTex );
         mDatablockConversionResults[datablock] = conversionResult;
 
         return conversionResult;
+    }
+    //-------------------------------------------------------------------------
+    uint16 VctMaterial::getPoolSliceIdxForTexture( TextureGpu *texture )
+    {
+        TextureToPoolEntryMap::const_iterator itor = mTextureToPoolEntry.find( texture );
+        if( itor != mTextureToPoolEntry.end() )
+            return itor->second; //We already copied that texture. We're done
+
+        mDownscaleMatTextureUnit->setTexture( texture );
+        mDownscaleWorkspace->_update();
+
+        const uint16 sliceIdx = mNumUsedPoolSlices++;
+
+        TextureBox dstBox = mTexturePool->getEmptyBox( 0u );
+        dstBox.sliceStart = sliceIdx;
+        dstBox.numSlices = 1u;
+        mDownscaleTex->copyTo( mTexturePool, dstBox, 0u, mDownscaleTex->getEmptyBox( 0u ), 0u );
+
+        mTextureToPoolEntry[texture] = sliceIdx;
+        return sliceIdx;
+    }
+    //-------------------------------------------------------------------------
+    void VctMaterial::resizeTexturePool(void)
+    {
+        TextureGpuManager *textureManager = 0;
+
+
+        TextureGpu *newPool = textureManager->createTexture( "", "", GpuPageOutStrategy::Discard,
+                                                             TextureFlags::ManualTexture,
+                                                             TextureTypes::Type2DArray );
+        newPool->setResolution( 64u, 64u, 64u );
+        newPool->setPixelFormat( PFG_RGBA8_UNORM_SRGB );
+        if( mTexturePool )
+        {
+            //We use quadratic growth because AMD GCN cards already round up to the next power of 2.
+            newPool->setResolution( 64u, 64u, mTexturePool->getDepthOrSlices() << 1u );
+        }
+        newPool->scheduleTransitionTo( GpuResidency::Resident );
+
+        if( mTexturePool )
+        {
+            TextureBox box( mTexturePool->getEmptyBox( 0u ) );
+            mTexturePool->copyTo( newPool, box, 0u, box, 0u );
+            textureManager->destroyTexture( mTexturePool );
+        }
+
+        mTexturePool = newPool;
+    }
+    //-------------------------------------------------------------------------
+    VctMaterial::MaterialBucket* VctMaterial::findFreeBucketFor( HlmsDatablock *datablock )
+    {
+        const bool needsDiffuse = datablock->getDiffuseTexture() != 0;
+        const bool needsEmissive = datablock->getEmissiveTexture() != 0;
+
+        BucketArray::iterator itor = mBuckets.begin();
+        BucketArray::iterator end  = mBuckets.end();
+
+        while( itor != end &&
+               (itor->datablocks.size() >= c_numDatablocksPerConstBuffer ||
+                itor->hasDiffuse != needsDiffuse ||
+                itor->hasEmissive != needsEmissive) )
+        {
+            ++itor;
+        }
+
+        MaterialBucket *retVal = 0;
+        if( itor != end )
+            retVal = &(*itor);
+
+        return retVal;
     }
     //-------------------------------------------------------------------------
     VctMaterial::DatablockConversionResult VctMaterial::addDatablock( HlmsDatablock *datablock )
@@ -134,16 +226,20 @@ namespace Ogre
             retVal = itResult->second;
         else
         {
-            if( mBuckets.empty() || mBuckets.back().datablocks.size() >= c_numDatablocksPerConstBuffer )
+            MaterialBucket *bucket = findFreeBucketFor( datablock );
+            if( !bucket )
             {
                 //Create a new bucket
-                MaterialBucket bucket;
-                bucket.buffer = mVaoManager->createConstBuffer( 1024u * sizeof(ShaderVctMaterial),
-                                                                BT_DEFAULT, 0, false );
-                mBuckets.push_back( bucket );
+                MaterialBucket newBucket;
+                newBucket.buffer = mVaoManager->createConstBuffer( 1024u * sizeof(ShaderVctMaterial),
+                                                                   BT_DEFAULT, 0, false );
+                newBucket.hasDiffuse = datablock->getDiffuseTexture() != 0;
+                newBucket.hasEmissive = datablock->getEmissiveTexture() != 0;
+                mBuckets.push_back( newBucket );
+                bucket = &mBuckets.back();
             }
 
-            retVal = addDatablockToBucket( datablock, mBuckets.back() );
+            retVal = addDatablockToBucket( datablock, *bucket );
         }
 
         return retVal;

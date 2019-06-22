@@ -426,4 +426,19 @@ namespace Ogre
     {
         return mEnablePlanarReflection[textureUnit];
     }
+    //-----------------------------------------------------------------------------------
+    ColourValue HlmsUnlitDatablock::getDiffuseColour(void) const
+    {
+        return ColourValue( 0, 0, 0, 0 );
+    }
+    //-----------------------------------------------------------------------------------
+    ColourValue HlmsUnlitDatablock::getEmissiveColour(void) const
+    {
+        return hasColour() ? getColour() : ColourValue::White;
+    }
+    //-----------------------------------------------------------------------------------
+    TextureGpu* HlmsUnlitDatablock::getEmissiveTexture(void) const
+    {
+        return getTexture( 0 );
+    }
 }

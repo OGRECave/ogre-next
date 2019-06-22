@@ -415,6 +415,26 @@ namespace Ogre
 
         virtual bool hasCustomShadowMacroblock(void) const;
 
+        /// Returns the closest match for a diffuse colour,
+        /// if applicable by the actual implementation.
+        ///
+        /// Note that Unlit implementation returns 0 as diffuse, since it's considered
+        /// emissive instead due to being bright even in the absence lights.
+        virtual ColourValue getDiffuseColour(void) const;
+        /// Returns the closest match for a emissive colour,
+        /// if applicable by the actual implementation.
+        /// See HlmsDatablock::getDiffuseColour
+        virtual ColourValue getEmissiveColour(void) const;
+
+        /// Returns the closest match for a diffuse texture,
+        /// if applicable by the actual implementation.
+        /// See HlmsDatablock::getDiffuseColour
+        virtual TextureGpu* getDiffuseTexture(void) const;
+        /// Returns the closest match for a emissive texture,
+        /// if applicable by the actual implementation.
+        /// See HlmsDatablock::getDiffuseColour
+        virtual TextureGpu* getEmissiveTexture(void) const;
+
         /**
         @remarks
             It's possible to set both saveOitd & saveOriginal to true, but will likely double
