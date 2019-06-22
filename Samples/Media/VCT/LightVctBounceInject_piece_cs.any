@@ -19,6 +19,7 @@
 		OGRE_Texture3D_float4 probe
 		OGRE_SAMPLER_ARG_DECL( probeSampler )
 		OGRE_VCT_ANISO_PROBE_ARG_DECL
+		PARAMS_ARG_DECL
 	)
 	{
 		float dist = p_vctStartBias;
@@ -92,6 +93,7 @@
 		float3 posLS, float3 geomNormal, float3x3 TBN,
 		OGRE_Texture3D_float4 probe OGRE_SAMPLER_ARG_DECL( probeSampler )
 		OGRE_VCT_ANISO_PROBE_ARG_DECL
+		PARAMS_ARG_DECL
 	)
 	{
 		geomNormal.xyz /= max3( abs( geomNormal.x ), abs( geomNormal.y ), abs( geomNormal.z ) );
@@ -126,7 +128,8 @@
 			dir = normalize( dir );
 			light += coneWeights[i] * voxelConeTraceDiff( posLS, dir,coneAngleTan,
 														  probe OGRE_SAMPLER_ARG( probeSampler )
-														  OGRE_VCT_ANISO_PROBE_ARG );
+														  OGRE_VCT_ANISO_PROBE_ARG
+														  PARAMS_ARG );
 		}
 
 		outDiffuse.xyz = light;
@@ -160,7 +163,7 @@
 		float3 vctDiffuse = float3( 0, 0, 0 );
 		computeVctProbe( vctDiffuse, voxelUvwPos, normalVal.xyz, TBN,
 						 vctProbe OGRE_SAMPLER_ARG( vctProbeSampler )
-						 OGRE_VCT_ANISO_ROOT_PROBE_ARG );
+						 OGRE_VCT_ANISO_ROOT_PROBE_ARG PARAMS_ARG );
 		currentLight.xyz += albedoVal.xyz * vctDiffuse.xyz * p_iterationDampening;
 	}
 

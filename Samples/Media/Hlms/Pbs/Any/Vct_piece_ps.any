@@ -156,7 +156,7 @@
 					//
 					//This formula has tweakable parameters to leverage performance vs quality
 					float finalOpac = OGRE_SampleLevel( probe, probeSampler, uwvPos, skipLod ).w;
-					float skipFactor = exp2( max( 0, skipLod * 0.5f - 1.0f ) ) * (1.0f - finalOpac) +
+					float skipFactor = exp2( max( 0.0f, skipLod * 0.5f - 1.0f ) ) * (1.0f - finalOpac) +
 									   finalOpac;
 					skipFactor = lerp( skipFactor, 1.0f,
 									   min( -1.0 + finalOpac * probeParams.vctSpecularSdfFactor +

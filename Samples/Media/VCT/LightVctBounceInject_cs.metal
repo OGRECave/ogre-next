@@ -3,6 +3,9 @@
 #define OGRE_imageWrite3D1( outImage, iuv, value ) outImage.write( value.x, iuv )
 #define OGRE_imageWrite3D4( outImage, iuv, value ) outImage.write( value, iuv )
 
+#define PARAMS_ARG_DECL , constant Params &p
+#define PARAMS_ARG , p
+
 @insertpiece( PreBindingsHeaderCS )
 
 #if defined(__HAVE_SIMDGROUP_BALLOT__)
@@ -10,8 +13,6 @@
 #else
 	#define anyInvocationARB( value ) (value)
 #endif
-
-@insertpiece( HeaderCS )
 
 struct Params
 {
@@ -26,6 +27,8 @@ struct Params
 #define p_iterationDampening p.iterationDampening
 #define p_vctStartBias p.startBias_invStartBias.x
 #define p_vctInvStartBias p.startBias_invStartBias.y
+
+@insertpiece( HeaderCS )
 
 //in uvec3 gl_NumWorkGroups;
 //in uvec3 gl_WorkGroupID;
