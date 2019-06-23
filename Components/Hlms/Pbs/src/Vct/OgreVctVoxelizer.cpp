@@ -30,13 +30,18 @@ THE SOFTWARE.
 
 #include "Vct/OgreVctVoxelizer.h"
 #include "Vct/OgreVctMaterial.h"
+#include "Vct/OgreVoxelVisualizer.h"
 
 #include "OgreRenderSystem.h"
 #include "OgreRoot.h"
+#include "OgreSceneManager.h"
 
 #include "OgreItem.h"
 #include "OgreMesh2.h"
 #include "OgreSubMesh2.h"
+
+#include "OgreMaterialManager.h"
+#include "OgreMaterial.h"
 
 #include "Vao/OgreVertexArrayObject.h"
 
@@ -1497,6 +1502,26 @@ namespace Ogre
         destroyBarriers();
 
         OgreProfileGpuEnd( "VCT build" );
+    }
+    //-------------------------------------------------------------------------
+    void VctVoxelizer::showDebugVisualization( bool bShow, SceneManager *sceneManager )
+    {
+        MaterialPtr mat = MaterialManager::getSingleton().load(
+                              "VCT/VoxelVisualizer", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME ).
+                          staticCast<Material>();
+        SceneNode *rootNode = sceneManager->getRootSceneNode( SCENE_STATIC );
+        SceneNode *visNode = rootNode->createChildSceneNode( SCENE_STATIC );
+
+        VoxelVisualizer *voxelVisualizer =
+                OGRE_NEW VoxelVisualizer( Ogre::Id::generateNewId<Ogre::MovableObject>(),
+                                          &sceneManager->_getEntityMemoryManager( Ogre::SCENE_STATIC ),
+                                          sceneManager, 0u, mat );
+
+        voxelVisualizer->setTrackingVoxel( mAlbedoVox );
+
+        visNode->setPosition( getVoxelOrigin() );
+        visNode->setScale( getVoxelCellSize() );
+        visNode->attachObject( voxelVisualizer );
     }
     //-------------------------------------------------------------------------
     Vector3 VctVoxelizer::getVoxelOrigin(void) const

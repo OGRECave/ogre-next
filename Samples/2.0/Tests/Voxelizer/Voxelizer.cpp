@@ -52,6 +52,7 @@ namespace Demo
                 "Compute/Tools/HLSL",
                 "Compute/Tools/Metal",
                 "VCT",
+                "VCT/Visualizer",
                 "Hlms/Common/GLSL",
                 "Hlms/Common/HLSL",
                 "Hlms/Common/Metal",

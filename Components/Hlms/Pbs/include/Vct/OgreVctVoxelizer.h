@@ -351,6 +351,8 @@ namespace Ogre
 
         void build( SceneManager *sceneManager );
 
+        void showDebugVisualization( bool bShow, SceneManager *sceneManager );
+
         Vector3 getVoxelOrigin(void) const;
         Vector3 getVoxelCellSize(void) const;
         Vector3 getVoxelSize(void) const;
