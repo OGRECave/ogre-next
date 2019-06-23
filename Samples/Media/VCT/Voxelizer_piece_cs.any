@@ -388,15 +388,10 @@
 		Instance instance = getInstance( i PARAMS_ARG );
 
 		//Broadphase culling.
-	#ifdef EMULATING_anyInvocationARB
-		//Cull against groupVoxelAabb so that emulatedAnyInvocationARB can work (all lanes
-		//must be active for GroupMemoryBarrierWithGroupSync to work)
+		//Cull against groupVoxelAabb so that anyInvocationARB can work (all lanes
+		//must be active for GroupMemoryBarrierWithGroupSync to work, and even in the
+		//non-emulated version we need all threads to be in the same iteration)
 		if( intersects( groupVoxelAabb, instance.bounds ) )
-	#else
-		//Cull against voxelAabb since that gives us finer granularity and
-		//native anyInvocationARB can filter out inactive lanes
-		if( intersects( voxelAabb, instance.bounds ) )
-	#endif
 		{
 			Material material = materials[instance.materialIdx];
 
