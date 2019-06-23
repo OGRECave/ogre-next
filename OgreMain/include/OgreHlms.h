@@ -773,6 +773,7 @@ namespace Ogre
         static const IdString BonesPerVertex;
         static const IdString Pose;
         static const IdString PoseHalfPrecision;
+        static const IdString PoseNormals;
 
         static const IdString Normal;
         static const IdString QTangent;

@@ -1111,3 +1111,4 @@ namespace Ogre {
         mDebugShaders = bDebugShaders;
     }
 }
+

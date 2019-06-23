@@ -368,33 +368,20 @@ namespace Ogre {
 
     unsigned int CocoaWindow::getWidth() const
     {
-<<<<<<< working copy
-        return mContext->mBackingWidth;
-=======
         // keep mWidth in sync with reality
         assert(mView == nil || int(mWidth) == _getPixelFromPoint([mView frame].size.width));
         
         return mWidth;
->>>>>>> merge rev
     }
 
     unsigned int CocoaWindow::getHeight() const
     {
-<<<<<<< working copy
-        return mContext->mBackingHeight;
-=======
         // keep mHeight in sync with reality
         assert(mView == nil || int(mHeight) == _getPixelFromPoint([mView frame].size.height));
         
         return mHeight;
->>>>>>> merge rev
     }
 
-    float CocoaWindow::getViewPointToPixelScale() const
-    {
-        return mContentScalingFactor;
-    }
-    
     void CocoaWindow::destroy(void)
     {
         if(!mIsFullScreen)

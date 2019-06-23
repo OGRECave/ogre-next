@@ -59,6 +59,7 @@ namespace Ogre {
             mPoseData->numPoses = subMeshBasis->getNumPoses();
             mPoseData->buffer = subMeshBasis->getPoseTexBuffer();
             mPoseData->halfPrecision = subMeshBasis->getPoseHalfPrecision();
+            mPoseData->hasNormals = subMeshBasis->getPoseNormals();
         }
     }
     //-----------------------------------------------------------------------

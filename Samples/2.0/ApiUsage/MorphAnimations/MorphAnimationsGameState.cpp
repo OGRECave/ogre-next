@@ -150,6 +150,20 @@ namespace Demo
         blobNode->setScale( Ogre::Vector3( 0.4 ) );
         blobNode->setPosition( -1, 0.7, 0.7 );
 
+        // Add a material to the blob
+        Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
+        Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
+        Ogre::HlmsPbsDatablock *datablock = static_cast<Ogre::HlmsPbsDatablock*>(
+                    hlmsPbs->createDatablock(   "BlobMaterial",
+                                                "BlobMaterial",
+                                                Ogre::HlmsMacroblock(),
+                                                Ogre::HlmsBlendblock(),
+                                                Ogre::HlmsParamVec() ) );
+        datablock->setDiffuse( Ogre::Vector3( 1.0f, 0.0f, 0.0f ) );
+        datablock->setRoughness( 0.12f );
+        datablock->setFresnel( Ogre::Vector3( 1.9f ), false );
+        mBlobItem->setDatablock( datablock );
+
         // Lights
         
         Ogre::Light *light = sceneManager->createLight();

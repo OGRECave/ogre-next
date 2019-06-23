@@ -68,9 +68,16 @@ out block
 @piece( input_vertex )inputPos@end
 @end
 
+@property( !hlms_pose_normals )
+@piece( input_normal )normal@end
+@end
+@property( hlms_pose_normals )
+@piece( input_normal )inputNormal@end
+@end
+
 @property( !hlms_skeleton )
 @piece( local_vertex )@insertpiece( input_vertex )@end
-@piece( local_normal )normal@end
+@piece( local_normal )@insertpiece( input_normal )@end
 @piece( local_tangent )tangent@end
 @end
 @property( hlms_skeleton )
@@ -92,9 +99,9 @@ out block
     worldPos.z = dot( worldMat[2], @insertpiece( input_vertex ) );
     worldPos.xyz *= blendWeights[0];
     @property( hlms_normal || hlms_qtangent )vec3 worldNorm;
-    worldNorm.x = dot( worldMat[0].xyz, normal );
-    worldNorm.y = dot( worldMat[1].xyz, normal );
-    worldNorm.z = dot( worldMat[2].xyz, normal );
+    worldNorm.x = dot( worldMat[0].xyz, @insertpiece( input_normal ) );
+    worldNorm.y = dot( worldMat[1].xyz, @insertpiece( input_normal ) );
+    worldNorm.z = dot( worldMat[2].xyz, @insertpiece( input_normal ) );
     worldNorm *= blendWeights[0];@end
     @property( normal_map )vec3 worldTang;
     worldTang.x = dot( worldMat[0].xyz, tangent );
@@ -115,9 +122,9 @@ out block
 	tmp.z = dot( worldMat[2], @insertpiece( input_vertex ) );
 	worldPos.xyz += (tmp * blendWeights[@n]).xyz;
 	@property( hlms_normal || hlms_qtangent )
-	tmp.x = dot( worldMat[0].xyz, normal );
-	tmp.y = dot( worldMat[1].xyz, normal );
-	tmp.z = dot( worldMat[2].xyz, normal );
+	tmp.x = dot( worldMat[0].xyz, @insertpiece( input_normal ) );
+	tmp.y = dot( worldMat[1].xyz, @insertpiece( input_normal ) );
+	tmp.z = dot( worldMat[2].xyz, @insertpiece( input_normal ) );
     worldNorm += tmp.xyz * blendWeights[@n];@end
 	@property( normal_map )
 	tmp.x = dot( worldMat[0].xyz, tangent );
@@ -133,6 +140,7 @@ out block
 	// Pose data starts after all 3x4 bone matrices
 	int poseDataStart = int(instance.worldMaterialIdx[drawId].x >> 9u) @property( hlms_skeleton ) + @value(hlms_bones_per_vertex) * 3@end ;
 	vec4 inputPos = vertex;
+	@property( hlms_pose_normals && (hlms_normal || hlms_qtangent) )vec3 inputNormal = normal;@end
 
 	vec4 poseData = bufferFetch( worldMatBuf, poseDataStart );
 	int baseVertexID = int(floatBitsToUint( poseData.x ));
@@ -140,9 +148,13 @@ out block
 
 	@psub( MoreThanOnePose, hlms_pose, 1 )
 	@property( !MoreThanOnePose )
-		vec4 posePos = bufferFetch( poseBuf, vertexID );
 		vec4 poseWeights = bufferFetch( worldMatBuf, poseDataStart + 1 );
+		vec4 posePos = bufferFetch( poseBuf, vertexID @property( hlms_pose_normals )<< 1@end );
 		inputPos += posePos * poseWeights.x;
+		@property( hlms_pose_normals && (hlms_normal || hlms_qtangent) )
+			vec4 poseNormal = bufferFetch( poseBuf, (vertexID << 1) + 1 );
+			inputNormal += poseNormal.xyz * poseWeights.x;
+		@end
 		@pset( NumPoseWeightVectors, 1 )
 	@end @property( MoreThanOnePose )
 		// NumPoseWeightVectors = (hlms_pose / 4) + min(hlms_pose % 4, 1)
@@ -156,7 +168,10 @@ out block
 		@property( !MoreThanOnePoseWeightVector )
 			vec4 poseWeights = bufferFetch( worldMatBuf, poseDataStart + 1 );
 			@foreach( hlms_pose, n )
-				inputPos += bufferFetch( poseBuf, vertexID + numVertices * @n ) * poseWeights[@n];
+				inputPos += bufferFetch( poseBuf, (vertexID + numVertices * @n) @property( hlms_pose_normals )<< 1@end ) * poseWeights[@n];
+				@property( hlms_pose_normals && (hlms_normal || hlms_qtangent) )
+				inputNormal += bufferFetch( poseBuf, ((vertexID + numVertices * @n) << 1) + 1 ).xyz * poseWeights[@n];
+				@end
 			@end
 		@end @property( MoreThanOnePoseWeightVector )
 			float poseWeights[@value(NumPoseWeightVectors) * 4];
@@ -168,7 +183,10 @@ out block
 				poseWeights[@n * 4 + 3] = weights@n[3];
 			@end
 			@foreach( hlms_pose, n )
-				inputPos += bufferFetch( poseBuf, vertexID + numVertices * @n ) * poseWeights[@n];
+				inputPos += bufferFetch( poseBuf, (vertexID + numVertices * @n) @property( hlms_pose_normals )<< 1@end ) * poseWeights[@n];
+				@property( hlms_pose_normals && (hlms_normal || hlms_qtangent) )
+				inputNormal += bufferFetch( poseBuf, ((vertexID + numVertices * @n) << 1) + 1 ).xyz * poseWeights[@n];
+				@end
 			@end
 		@end
 	@end

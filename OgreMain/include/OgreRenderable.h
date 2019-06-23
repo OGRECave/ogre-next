@@ -147,6 +147,7 @@ namespace Ogre {
 
         unsigned short getNumPoses(void) const;
         bool getPoseHalfPrecision() const;
+        bool getPoseNormals() const;
         float* getPoseWeights() const;
         float getPoseWeight(size_t index) const;
         void setPoseWeight(size_t index, float w);
@@ -476,6 +477,7 @@ namespace Ogre {
             float            weights[OGRE_MAX_POSES];
             TexBufferPacked* buffer;
             bool             halfPrecision;
+            bool             hasNormals;
             
             PoseData();
         };

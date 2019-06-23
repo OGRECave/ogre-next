@@ -119,9 +119,15 @@ struct PS_INPUT
 	
 	@psub( MoreThanOnePose, hlms_pose, 1 )
 	@property( !MoreThanOnePose )
-		float4 posePos = static_cast<float4>( poseBuf[poseVertexId] );
 		float4 poseWeights = worldMatBuf[poseDataStart + 1u];
+		uint idx = poseVertexId @property( hlms_pose_normals )<< 1u@end ;
+		float4 posePos = static_cast<float4>( poseBuf[idx] );
 		input.position += posePos * poseWeights.x;
+		@property( hlms_pose_normals && (hlms_normal || hlms_qtangent) )
+			float4 poseNormal = static_cast<float4>( poseBuf[idx + 1u] );
+			normal += poseNormal.xyz * poseWeights.x;
+		@end
+		@pset( NumPoseWeightVectors, 1 )
 	@end @property( MoreThanOnePose )
 		// NumPoseWeightVectors = (hlms_pose / 4) + min(hlms_pose % 4, 1)
 		@pdiv( NumPoseWeightVectorsA, hlms_pose, 4 )
@@ -135,7 +141,11 @@ struct PS_INPUT
 		@property( !MoreThanOnePoseWeightVector )
 			float4 poseWeights = worldMatBuf[poseDataStart + 1u];
 			@foreach( hlms_pose, n )
-				input.position += static_cast<float4>( poseBuf[poseVertexId + numVertices * @nu] ) * poseWeights[@n];
+				uint idx@n = (poseVertexId + numVertices * @nu) @property( hlms_pose_normals )<< 1u@end ;
+				input.position += static_cast<float4>( poseBuf[idx@n] ) * poseWeights[@n];
+				@property( hlms_pose_normals && (hlms_normal || hlms_qtangent) )
+				normal += static_cast<float4>( poseBuf[idx@n + 1u] ).xyz * poseWeights[@n];
+				@end
 			@end
 		@end @property( MoreThanOnePoseWeightVector )
 			float poseWeights[@value(NumPoseWeightVectors) * 4];
@@ -147,7 +157,11 @@ struct PS_INPUT
 				poseWeights[@n * 4 + 3] = weights@n[3];
 			@end
 			@foreach( hlms_pose, n )
-				input.position += static_cast<float4>( poseBuf[poseVertexId + numVertices * @nu] ) * poseWeights[@n];
+				uint idx@n = (poseVertexId + numVertices * @nu) @property( hlms_pose_normals )<< 1u@end ;
+				input.position += static_cast<float4>( poseBuf[idx@n] ) * poseWeights[@n];
+				@property( hlms_pose_normals && (hlms_normal || hlms_qtangent) )
+				normal += static_cast<float4>( poseBuf[idx@n + 1u] ).xyz * poseWeights[@n];
+				@end
 			@end
 		@end
 	@end

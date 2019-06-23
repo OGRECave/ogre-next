@@ -304,7 +304,7 @@ namespace Ogre
         {
             // Keep fractions, otherwise a high frame rate will result in zero emissions!
             mRemainder += mEmissionRate * timeElapsed;
-            unsigned short intRequest = Math::Ceil(mRemainder);
+            unsigned short intRequest = (unsigned short)mRemainder;
             mRemainder -= intRequest;
 
             // Check duration
@@ -696,3 +696,4 @@ namespace Ogre
     //-----------------------------------------------------------------------
 
 }
+

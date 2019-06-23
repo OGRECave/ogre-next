@@ -22,52 +22,12 @@ if (OGRE_BUILD_PLATFORM_APPLE_IOS)
 	set( SOURCE_FILES ${SOURCE_FILES} ${CMAKE_CURRENT_SOURCE_DIR}/iOS/TutorialViewController.mm )
 endif (OGRE_BUILD_PLATFORM_APPLE_IOS)
 
-set(SAMPLE_NAME Sample_Tutorial01_Initialization)
-ogre_add_executable(${SAMPLE_NAME} WIN32 MACOSX_BUNDLE ${SOURCE_FILES} ${TUTORIAL_RESOURCES} )
+ogre_add_executable(Sample_Tutorial01_Initialization WIN32 MACOSX_BUNDLE ${SOURCE_FILES} ${TUTORIAL_RESOURCES} )
 
-target_link_libraries(${SAMPLE_NAME} ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES})
-ogre_config_sample_lib(${SAMPLE_NAME})
+target_link_libraries(Sample_Tutorial01_Initialization ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES})
+ogre_config_sample_lib(Sample_Tutorial01_Initialization)
 
 if( APPLE )
-	set(MACOSX_BUNDLE_GUI_IDENTIFIER "org.ogre3d.${SAMPLE_NAME}")
-    set(MACOSX_BUNDLE_BUNDLE_NAME "${SAMPLE_NAME}")
-	set(MACOSX_BUNDLE_EXECUTABLE "${SAMPLE_NAME}")
-	set_target_properties(${SAMPLE_NAME} PROPERTIES RESOURCE "${TUTORIAL_RESOURCES}")
-	set_target_properties(${SAMPLE_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${SAMPLES_PLIST})
-	
-	if (CMAKE_GENERATOR STREQUAL "Xcode")
-        #if (IOS)
-        #    set(APP_CONTENTS_PATH ${CMAKE_CURRENT_BINARY_DIR}/bin/$(CONFIGURATION)/${SAMPLE_NAME}.app)
-	#else ()
-            set(APP_CONTENTS_PATH ${CMAKE_CURRENT_BINARY_DIR}/../../../../bin/$(CONFIGURATION)/${SAMPLE_NAME}.app/Contents)
-        #endif ()
-    else ()
-        #if (IOS)
-        #    set(APP_CONTENTS_PATH ${CMAKE_CURRENT_BINARY_DIR}/bin/${SAMPLE_NAME}.app)
-	#else ()
-            set(APP_CONTENTS_PATH ${CMAKE_CURRENT_BINARY_DIR}/../../../../bin/${SAMPLE_NAME}.app/Contents)
-        #endif ()
-    endif ()
-	
-	set(FRAMEWORKS
-		Ogre
-        RenderSystem_GL3PLUS
-		RenderSystem_Metal
-        OgreHlmsPbs
-        OgreHlmsUnlit
-        OgreOverlay
-		Plugin_ParticleFX
-    )
-
-    foreach(FWK ${FRAMEWORKS})
-		add_custom_command(TARGET ${SAMPLE_NAME} POST_BUILD
-			COMMAND ditto ${CMAKE_CURRENT_BINARY_DIR}/../../../../lib/macosx/${FWK}.framework ${APP_CONTENTS_PATH}/Frameworks/${FWK}.framework
-		)
-    endforeach(FWK)
-	
-	foreach(RSC ${TUTORIAL_RESOURCES})
-		add_custom_command(TARGET ${SAMPLE_NAME} POST_BUILD
-			COMMAND cp -r ${RSC} ${APP_CONTENTS_PATH}/Resources/
-		)
-    endforeach(FWK)
+	set_target_properties( Sample_Tutorial01_Initialization PROPERTIES RESOURCE "${TUTORIAL_RESOURCES}" )
+	set_target_properties( Sample_Tutorial01_Initialization PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/iOS/Info.plist )
 endif()

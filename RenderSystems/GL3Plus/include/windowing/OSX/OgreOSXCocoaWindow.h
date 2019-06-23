@@ -118,9 +118,8 @@ namespace Ogre {
 
         bool requiresTextureFlipping() const { return false; }      
         void getCustomAttribute( const String& name, void* pData );
-        
-        virtual float getViewPointToPixelScale() const;
     };
 }
 
 #endif
+

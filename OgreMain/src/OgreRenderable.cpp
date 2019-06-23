@@ -203,6 +203,11 @@ namespace Ogre
       return mPoseData ? mPoseData->halfPrecision : false;
     }
     //-----------------------------------------------------------------------------------
+    bool Renderable::getPoseNormals() const
+    {
+      return mPoseData ? mPoseData->hasNormals : false;
+    }
+    //-----------------------------------------------------------------------------------
     float* Renderable::getPoseWeights(void) const
     { 
         return mPoseData ? mPoseData->weights : 0;
@@ -244,7 +249,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     Renderable::PoseData::PoseData():
     numPoses( 0 ),
-    buffer( 0 )
+    buffer( 0 ),
+    halfPrecision( false ),
+    hasNormals( false )
     {
         memset(weights, 0, OGRE_MAX_POSES * sizeof(float));
     }
