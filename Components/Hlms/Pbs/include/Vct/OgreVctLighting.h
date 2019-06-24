@@ -38,6 +38,7 @@ THE SOFTWARE.
 namespace Ogre
 {
     class VctVoxelizer;
+    class VoxelVisualizer;
     struct ShaderVctLight;
 
     class _OgreHlmsPbsExport VctLighting : public IdObject
@@ -110,9 +111,6 @@ namespace Ogre
         ResourceTransition mAfterAnisoMip0Trans[2];
         ResourceTransition mAfterAnisoMip1Trans[2];
 
-        void createBarriers(void);
-        void destroyBarriers(void);
-
     public:
         /** Bias/distance in units (i.e. if your engine is in meters, then this value
             is in meters) along the geometric normal at which to start cone tracing.
@@ -156,6 +154,12 @@ namespace Ogre
         float   mSpecularSdfQuality;
 
     protected:
+
+        VoxelVisualizer *mDebugVoxelVisualizer;
+
+        void createBarriers(void);
+        void destroyBarriers(void);
+
         void addLight( ShaderVctLight * RESTRICT_ALIAS vctLight, Light *light,
                        const Vector3 &voxelOrigin, const Vector3 &invVoxelSize );
 
@@ -214,6 +218,9 @@ namespace Ogre
                                   float * RESTRICT_ALIAS passBufferPtr ) const;
 
         bool shouldEnableSpecularSdfQuality(void) const;
+
+        void setDebugVisualization( bool bShow, SceneManager *sceneManager );
+        bool getDebugVisualizationMode(void) const;
 
         /** Toggles anisotropic mips.
 

@@ -17,7 +17,7 @@ INLINE float3 getCubeVertex( uint vertexId )
 
 #else
 
-    uint cubeInstance = (uint( inVs_vertexId ) - p_vertexBase) / 16u;
+	uint cubeInstance = (uint( inVs_vertexId ) - p_vertexBase) / 16u;
 	uint yRow = cubeInstance / p_voxelResolution.x;
 
 	uint3 xyzCoord;

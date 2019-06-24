@@ -1551,7 +1551,7 @@ namespace Ogre
 
             mDebugVoxelVisualizer =
                     OGRE_NEW VoxelVisualizer( Ogre::Id::generateNewId<Ogre::MovableObject>(),
-                                              &sceneManager->_getEntityMemoryManager( Ogre::SCENE_STATIC ),
+                                              &sceneManager->_getEntityMemoryManager( SCENE_STATIC ),
                                               sceneManager, 0u );
 
             setTextureToDebugVisualizer();

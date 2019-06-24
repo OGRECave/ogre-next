@@ -30,6 +30,7 @@ THE SOFTWARE.
 
 #include "Vct/OgreVctLighting.h"
 #include "Vct/OgreVctVoxelizer.h"
+#include "Vct/OgreVoxelVisualizer.h"
 
 #include "OgreHlmsManager.h"
 #include "OgreHlmsCompute.h"
@@ -91,7 +92,8 @@ namespace Ogre
         mBounceShaderParams( 0 ),
         mBarriersCreated( false ),
         mNormalBias( 0.25f ),
-        mSpecularSdfQuality( 0.875f )
+        mSpecularSdfQuality( 0.875f ),
+        mDebugVoxelVisualizer( 0 )
     {
         memset( mLightVoxel, 0, sizeof(mLightVoxel) );
 
@@ -131,6 +133,8 @@ namespace Ogre
     {
         RenderSystem *renderSystem = mVoxelizer->getRenderSystem();
         VaoManager *vaoManager = renderSystem->getVaoManager();
+
+        setDebugVisualization( false, 0 );
 
         if( mLightsConstBuffer )
         {
@@ -445,6 +449,12 @@ namespace Ogre
 
         setAllowMultipleBounces( allowsMultipleBounces, false );
         createBarriers();
+
+        if( mDebugVoxelVisualizer )
+        {
+            mDebugVoxelVisualizer->setTrackingVoxel( mLightVoxel[0], mLightVoxel[0] );
+            mDebugVoxelVisualizer->setVisible( true );
+        }
     }
     //-------------------------------------------------------------------------
     void VctLighting::destroyTextures()
@@ -480,6 +490,9 @@ namespace Ogre
 
         mAnisoGeneratorStep1.clear();
         setAllowMultipleBounces( false, false );
+
+        if( mDebugVoxelVisualizer )
+            mDebugVoxelVisualizer->setVisible( false );
     }
     //-------------------------------------------------------------------------
     void VctLighting::checkTextures(void)
@@ -845,6 +858,41 @@ namespace Ogre
         return mVoxelizer->getAlbedoVox()->getWidth() > 32u &&
                 mVoxelizer->getAlbedoVox()->getHeight() > 32u &&
                 mVoxelizer->getAlbedoVox()->getDepth() > 32u;
+    }
+    //-------------------------------------------------------------------------
+    void VctLighting::setDebugVisualization( bool bShow, SceneManager *sceneManager )
+    {
+        if( bShow == getDebugVisualizationMode() )
+            return;
+
+        if( !bShow )
+        {
+            SceneNode *sceneNode = mDebugVoxelVisualizer->getParentSceneNode();
+            sceneNode->getParentSceneNode()->removeAndDestroyChild( sceneNode );
+            OGRE_DELETE mDebugVoxelVisualizer;
+            mDebugVoxelVisualizer = 0;
+        }
+        else
+        {
+            SceneNode *rootNode = sceneManager->getRootSceneNode( SCENE_STATIC );
+            SceneNode *visNode = rootNode->createChildSceneNode( SCENE_STATIC );
+
+            mDebugVoxelVisualizer =
+                    OGRE_NEW VoxelVisualizer( Ogre::Id::generateNewId<Ogre::MovableObject>(),
+                                              &sceneManager->_getEntityMemoryManager( SCENE_STATIC ),
+                                              sceneManager, 0u );
+
+            mDebugVoxelVisualizer->setTrackingVoxel( mLightVoxel[0], mLightVoxel[0] );
+
+            visNode->setPosition( mVoxelizer->getVoxelOrigin() );
+            visNode->setScale( mVoxelizer->getVoxelCellSize() );
+            visNode->attachObject( mDebugVoxelVisualizer );
+        }
+    }
+    //-------------------------------------------------------------------------
+    bool VctLighting::getDebugVisualizationMode(void) const
+    {
+        return mDebugVoxelVisualizer != 0;
     }
     //-------------------------------------------------------------------------
     void VctLighting::setAnisotropic( bool bAnisotropic )
