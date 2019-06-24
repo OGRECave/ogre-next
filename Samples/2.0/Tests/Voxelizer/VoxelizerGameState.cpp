@@ -28,11 +28,10 @@ using namespace Demo;
 
 namespace Demo
 {
-    Ogre::VctVoxelizer *voxelizer = 0;
-    Ogre::VctLighting *vctLighting = 0;
-
     VoxelizerGameState::VoxelizerGameState( const Ogre::String &helpDescription ) :
-        TutorialGameState( helpDescription )
+        TutorialGameState( helpDescription ),
+        mVoxelizer( 0 ),
+        mVctLighting( 0 )
     {
     }
     //-----------------------------------------------------------------------------------
@@ -124,33 +123,53 @@ namespace Demo
         sceneManager->updateSceneGraph();
 
         Ogre::Root *root = mGraphicsSystem->getRoot();
-        voxelizer =
+        mVoxelizer =
                 new Ogre::VctVoxelizer( Ogre::Id::generateNewId<Ogre::VctVoxelizer>(),
                                         root->getRenderSystem(), root->getHlmsManager(),
                                         true );
-        voxelizer->addItem( cornellItem, false );
-        voxelizer->addItem( item, false );
-        voxelizer->addItem( itemBarrel, false );
-        voxelizer->autoCalculateRegion();
-        voxelizer->dividideOctants( 1u, 1u, 1u );
-        voxelizer->build( sceneManager );
+        mVoxelizer->addItem( cornellItem, false );
+        mVoxelizer->addItem( item, false );
+        mVoxelizer->addItem( itemBarrel, false );
+        mVoxelizer->autoCalculateRegion();
+        mVoxelizer->dividideOctants( 1u, 1u, 1u );
+        mVoxelizer->build( sceneManager );
 
-//        voxelizer->setDebugVisualization( Ogre::VctVoxelizer::DebugVisualizationNormal, sceneManager );
+        mVoxelizer->setDebugVisualization( Ogre::VctVoxelizer::DebugVisualizationNormal, sceneManager );
 
-        vctLighting = new Ogre::VctLighting( Ogre::Id::generateNewId<Ogre::VctLighting>(),
-                                             voxelizer, true );
-        vctLighting->setAllowMultipleBounces( true );
-        vctLighting->update( sceneManager, 6u );
+        mVctLighting = new Ogre::VctLighting( Ogre::Id::generateNewId<Ogre::VctLighting>(),
+                                              mVoxelizer, true );
+        mVctLighting->setAllowMultipleBounces( true );
+        mVctLighting->update( sceneManager, 6u );
 
         {
             Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
 
             assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
             Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
-            hlmsPbs->setVctLighting( vctLighting );
+            hlmsPbs->setVctLighting( mVctLighting );
         }
 
+        cornellItem->setVisible( false );
+        item->setVisible( false );
+        itemBarrel->setVisible( false );
+
         mGraphicsSystem->getCamera()->setPosition( Ogre::Vector3( 0, 1.8, 2.5 ) );
+    }
+    //-----------------------------------------------------------------------------------
+    void VoxelizerGameState::destroyScene(void)
+    {
+        delete mVctLighting;
+        mVctLighting = 0;
+        delete mVoxelizer;
+        mVoxelizer = 0;
+
+        {
+            Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
+
+            assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
+            Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
+            hlmsPbs->setVctLighting( 0 );
+        }
     }
     //-----------------------------------------------------------------------------------
     void VoxelizerGameState::update( float timeSinceLast )
