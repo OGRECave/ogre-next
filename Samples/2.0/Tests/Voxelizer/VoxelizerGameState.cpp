@@ -134,7 +134,7 @@ namespace Demo
         mVoxelizer->dividideOctants( 1u, 1u, 1u );
         mVoxelizer->build( sceneManager );
 
-        mVoxelizer->setDebugVisualization( Ogre::VctVoxelizer::DebugVisualizationNormal, sceneManager );
+        //mVoxelizer->setDebugVisualization( Ogre::VctVoxelizer::DebugVisualizationNormal, sceneManager );
 
         mVctLighting = new Ogre::VctLighting( Ogre::Id::generateNewId<Ogre::VctLighting>(),
                                               mVoxelizer, true );
@@ -149,9 +149,9 @@ namespace Demo
             hlmsPbs->setVctLighting( mVctLighting );
         }
 
-        cornellItem->setVisible( false );
-        item->setVisible( false );
-        itemBarrel->setVisible( false );
+//        cornellItem->setVisible( false );
+//        item->setVisible( false );
+//        itemBarrel->setVisible( false );
 
         mGraphicsSystem->getCamera()->setPosition( Ogre::Vector3( 0, 1.8, 2.5 ) );
     }
