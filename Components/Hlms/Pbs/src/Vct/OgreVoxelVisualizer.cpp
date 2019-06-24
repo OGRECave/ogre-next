@@ -35,14 +35,14 @@ THE SOFTWARE.
 
 #include "OgreSceneManager.h"
 
+#include "OgreMaterialManager.h"
 #include "OgreTechnique.h"
 #include "OgrePass.h"
 
 namespace Ogre
 {
     VoxelVisualizer::VoxelVisualizer( IdType id, ObjectMemoryManager *objectMemoryManager,
-                                      SceneManager *manager, uint8 renderQueueId,
-                                      const MaterialPtr &material ) :
+                                      SceneManager *manager, uint8 renderQueueId ) :
         MovableObject( id, objectMemoryManager, manager, renderQueueId ),
         Renderable()
     {
@@ -56,9 +56,6 @@ namespace Ogre
 
         mRenderables.push_back( this );
 
-        //If we don't set a datablock, we'll crash Ogre.
-        this->setMaterial( material );
-
         setCastShadows( false );
     }
     //-----------------------------------------------------------------------------------
@@ -70,6 +67,12 @@ namespace Ogre
         VertexArrayObjectArray::const_iterator end  = mVaoPerLod[0].end();
         while( itor != end )
             vaoManager->destroyVertexArrayObject( *itor++ );
+
+        String matName;
+        matName = "VCT/VoxelVisualizer" + StringConverter::toString( getId() );
+        MaterialManager::getSingleton().remove( matName );
+        matName = "VCT/VoxelVisualizer/SeparateOpacity" + StringConverter::toString( getId() );
+        MaterialManager::getSingleton().remove( matName );
     }
     //-----------------------------------------------------------------------------------
     void VoxelVisualizer::createBuffers(void)
@@ -84,8 +87,29 @@ namespace Ogre
         mVaoPerLod[1].push_back( vao );
     }
     //-----------------------------------------------------------------------------------
-    void VoxelVisualizer::setTrackingVoxel( TextureGpu *texture )
+    void VoxelVisualizer::setTrackingVoxel( TextureGpu *opacityTex, TextureGpu *texture )
     {
+        String matName = "VCT/VoxelVisualizer";
+        if( opacityTex != texture )
+            matName += "/SeparateOpacity";
+
+        const size_t stringNameBaseSize = matName.size();
+        matName += StringConverter::toString( getId() );
+        MaterialPtr mat = MaterialManager::getSingleton().getByName(
+                              matName, ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME ).
+                          staticCast<Material>();
+        if( mat.isNull() )
+        {
+            MaterialPtr baseMat = MaterialManager::getSingleton().load(
+                                      matName.substr( 0u, stringNameBaseSize ),
+                                      ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME ).
+                                  staticCast<Material>();
+            mat = baseMat->clone( matName );
+            mat->load();
+        }
+
+        setMaterial( mat );
+
         const uint32 width  = texture->getWidth();
         const uint32 height = texture->getHeight();
         const uint32 depth  = texture->getDepth();
@@ -100,7 +124,9 @@ namespace Ogre
         uint32 voxelResolution[4] = { width, height, depth, 1u };
         vsParams->setNamedConstant( "voxelResolution", voxelResolution, 1u, 3u );
 
-        pass->getTextureUnitState( 0 )->setTexture( texture );
+        pass->getTextureUnitState( 0 )->setTexture( opacityTex );
+        if( opacityTex != texture )
+            pass->getTextureUnitState( 1 )->setTexture( texture );
 
         Aabb aabb( Vector3( width, height, depth ) * 0.5f, Vector3( width, height, depth ) * 0.5f );
         mObjectData.mLocalAabb->setFromAabb( aabb, mObjectData.mIndex );

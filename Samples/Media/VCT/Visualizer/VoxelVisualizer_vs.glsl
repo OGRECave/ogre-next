@@ -19,6 +19,9 @@
 #define outVs_Position gl_Position
 
 uniform sampler3D voxelTex;
+#ifdef SEPARATE_OPACITY
+	uniform sampler3D otherTex;
+#endif
 
 uniform float4x4 worldViewProjMatrix;
 uniform uint vertexBase;

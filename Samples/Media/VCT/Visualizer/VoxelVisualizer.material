@@ -82,3 +82,77 @@ material VCT/VoxelVisualizer
 		}
 	}
 }
+
+
+vertex_program VCT/VoxelVisualizerSeparateOpacity_vs_HLSL hlsl
+{
+	source VoxelVisualizer_vs.hlsl
+	entry_point main
+	target vs_5_0 vs_4_0
+	preprocessor_defines SEPARATE_OPACITY
+}
+
+vertex_program VCT/VoxelVisualizerSeparateOpacity_vs_GLSL glsl
+{
+	source VoxelVisualizer_vs.glsl
+	enable_include_header true
+	default_params
+	{
+		param_named voxelTex int 0
+		param_named otherTex int 1
+	}
+	preprocessor_defines SEPARATE_OPACITY
+}
+
+vertex_program VCT/VoxelVisualizerSeparateOpacity_vs_Metal metal
+{
+	source VoxelVisualizer_vs.metal
+	enable_include_header true
+	preprocessor_defines SEPARATE_OPACITY
+}
+
+vertex_program VCT/VoxelVisualizerSeparateOpacity_vs unified
+{
+	delegate VCT/VoxelVisualizerSeparateOpacity_vs_GLSL
+	delegate VCT/VoxelVisualizerSeparateOpacity_vs_HLSL
+	delegate VCT/VoxelVisualizerSeparateOpacity_vs_Metal
+
+	default_params
+	{
+		param_named_auto worldViewProjMatrix worldviewproj_matrix
+	}
+}
+
+material VCT/VoxelVisualizer/SeparateOpacity
+{
+	technique
+	{
+		pass
+		{
+			depth_check on
+			depth_write on
+
+			cull_hardware anticlockwise
+
+			vertex_program_ref VCT/VoxelVisualizerSeparateOpacity_vs
+			{
+			}
+
+			fragment_program_ref VCT/VoxelVisualizer_ps
+			{
+			}
+
+			texture_unit
+			{
+				filtering none
+				tex_address_mode clamp
+			}
+
+			texture_unit
+			{
+				filtering none
+				tex_address_mode clamp
+			}
+		}
+	}
+}

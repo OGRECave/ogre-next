@@ -135,7 +135,7 @@ namespace Demo
         voxelizer->dividideOctants( 1u, 1u, 1u );
         voxelizer->build( sceneManager );
 
-        //voxelizer->showDebugVisualization( true, sceneManager );
+//        voxelizer->setDebugVisualization( Ogre::VctVoxelizer::DebugVisualizationNormal, sceneManager );
 
         vctLighting = new Ogre::VctLighting( Ogre::Id::generateNewId<Ogre::VctLighting>(),
                                              voxelizer, true );

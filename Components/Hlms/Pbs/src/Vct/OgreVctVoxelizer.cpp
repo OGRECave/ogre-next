@@ -141,7 +141,9 @@ namespace Ogre
         mDepth( 128u ),
         mAutoRegion( true ),
         mRegionToVoxelize( Aabb::BOX_ZERO ),
-        mMaxRegion( Aabb::BOX_INFINITE )
+        mMaxRegion( Aabb::BOX_INFINITE ),
+        mDebugVisualizationMode( DebugVisualizationNone ),
+        mDebugVoxelVisualizer( 0 )
     {
         memset( mComputeJobs, 0, sizeof(mComputeJobs) );
         memset( mAabbCalculator, 0, sizeof(mAabbCalculator) );
@@ -150,6 +152,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     VctVoxelizer::~VctVoxelizer()
     {
+        setDebugVisualization( DebugVisualizationNone, 0 );
         destroyVoxelTextures();
         freeBuffers( true );
         destroyInstanceBuffers();
@@ -869,6 +872,25 @@ namespace Ogre
             textures[i]->setNumMipmaps( mNeedsAlbedoMipmaps && i == 0u ? numMipmaps : 1u );
             textures[i]->scheduleTransitionTo( GpuResidency::Resident );
         }
+
+        if( mDebugVoxelVisualizer )
+        {
+            setTextureToDebugVisualizer();
+            mDebugVoxelVisualizer->setVisible( true );
+        }
+    }
+    //-------------------------------------------------------------------------
+    void VctVoxelizer::setTextureToDebugVisualizer(void)
+    {
+        TextureGpu *trackedTex = mAlbedoVox;
+        switch( mDebugVisualizationMode )
+        {
+        default:
+        case DebugVisualizationAlbedo: trackedTex = mAlbedoVox; break;
+        case DebugVisualizationNormal: trackedTex = mNormalVox; break;
+        case DebugVisualizationEmissive: trackedTex = mEmissiveVox; break;
+        }
+        mDebugVoxelVisualizer->setTrackingVoxel( mAlbedoVox, trackedTex );
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::destroyVoxelTextures(void)
@@ -884,6 +906,9 @@ namespace Ogre
             mEmissiveVox = 0;
             mNormalVox = 0;
             mAccumValVox = 0;
+
+            if( mDebugVoxelVisualizer )
+                mDebugVoxelVisualizer->setVisible( false );
         }
     }
     //-------------------------------------------------------------------------
@@ -1504,24 +1529,42 @@ namespace Ogre
         OgreProfileGpuEnd( "VCT build" );
     }
     //-------------------------------------------------------------------------
-    void VctVoxelizer::showDebugVisualization( bool bShow, SceneManager *sceneManager )
+    void VctVoxelizer::setDebugVisualization( VctVoxelizer::DebugVisualizationMode mode,
+                                              SceneManager *sceneManager )
     {
-        MaterialPtr mat = MaterialManager::getSingleton().load(
-                              "VCT/VoxelVisualizer", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME ).
-                          staticCast<Material>();
-        SceneNode *rootNode = sceneManager->getRootSceneNode( SCENE_STATIC );
-        SceneNode *visNode = rootNode->createChildSceneNode( SCENE_STATIC );
+        if( mode == mDebugVisualizationMode )
+            return;
 
-        VoxelVisualizer *voxelVisualizer =
-                OGRE_NEW VoxelVisualizer( Ogre::Id::generateNewId<Ogre::MovableObject>(),
-                                          &sceneManager->_getEntityMemoryManager( Ogre::SCENE_STATIC ),
-                                          sceneManager, 0u, mat );
+        mDebugVisualizationMode = mode;
 
-        voxelVisualizer->setTrackingVoxel( mAlbedoVox );
+        if( mode == DebugVisualizationNone )
+        {
+            SceneNode *sceneNode = mDebugVoxelVisualizer->getParentSceneNode();
+            sceneNode->getParentSceneNode()->removeAndDestroyChild( sceneNode );
+            OGRE_DELETE mDebugVoxelVisualizer;
+            mDebugVoxelVisualizer = 0;
+        }
+        else
+        {
+            SceneNode *rootNode = sceneManager->getRootSceneNode( SCENE_STATIC );
+            SceneNode *visNode = rootNode->createChildSceneNode( SCENE_STATIC );
 
-        visNode->setPosition( getVoxelOrigin() );
-        visNode->setScale( getVoxelCellSize() );
-        visNode->attachObject( voxelVisualizer );
+            mDebugVoxelVisualizer =
+                    OGRE_NEW VoxelVisualizer( Ogre::Id::generateNewId<Ogre::MovableObject>(),
+                                              &sceneManager->_getEntityMemoryManager( Ogre::SCENE_STATIC ),
+                                              sceneManager, 0u );
+
+            setTextureToDebugVisualizer();
+
+            visNode->setPosition( getVoxelOrigin() );
+            visNode->setScale( getVoxelCellSize() );
+            visNode->attachObject( mDebugVoxelVisualizer );
+        }
+    }
+    //-------------------------------------------------------------------------
+    VctVoxelizer::DebugVisualizationMode VctVoxelizer::getDebugVisualizationMode(void) const
+    {
+        return mDebugVisualizationMode;
     }
     //-------------------------------------------------------------------------
     Vector3 VctVoxelizer::getVoxelOrigin(void) const

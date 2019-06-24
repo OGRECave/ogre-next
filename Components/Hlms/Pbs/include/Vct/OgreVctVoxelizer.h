@@ -42,6 +42,7 @@ THE SOFTWARE.
 namespace Ogre
 {
     class VctMaterial;
+    class VoxelVisualizer;
 
     namespace VoxelizerJobSetting
     {
@@ -119,6 +120,15 @@ namespace Ogre
     */
     class _OgreHlmsPbsExport VctVoxelizer : public IdObject
     {
+    public:
+        enum DebugVisualizationMode
+        {
+            DebugVisualizationAlbedo,
+            DebugVisualizationNormal,
+            DebugVisualizationEmissive,
+            DebugVisualizationNone
+        };
+    protected:
         struct MappedBuffers
         {
             float * RESTRICT_ALIAS uncompressedVertexBuffer;
@@ -267,6 +277,9 @@ namespace Ogre
         ResourceTransition mVoxelizerInterDispatchTrans;
         ResourceTransition mVoxelizerPrepareForSamplingTrans;
 
+        DebugVisualizationMode  mDebugVisualizationMode;
+        VoxelVisualizer         *mDebugVoxelVisualizer;
+
         /** 16-bit buffer values must always be even since the UAV buffer
             is internally packed uint32 and BufferPacked::copyTo doesn't
             like copying with odd-starting offsets in some APIs.
@@ -288,6 +301,7 @@ namespace Ogre
         void buildMeshBuffers(void);
         void createVoxelTextures(void);
         void destroyVoxelTextures(void);
+        void setTextureToDebugVisualizer(void);
 
         void placeItemsInBuckets(void);
         size_t countSubMeshPartitionsIn( Item *item ) const;
@@ -351,7 +365,9 @@ namespace Ogre
 
         void build( SceneManager *sceneManager );
 
-        void showDebugVisualization( bool bShow, SceneManager *sceneManager );
+        void setDebugVisualization( VctVoxelizer::DebugVisualizationMode mode,
+                                    SceneManager *sceneManager );
+        VctVoxelizer::DebugVisualizationMode getDebugVisualizationMode(void) const;
 
         Vector3 getVoxelOrigin(void) const;
         Vector3 getVoxelCellSize(void) const;

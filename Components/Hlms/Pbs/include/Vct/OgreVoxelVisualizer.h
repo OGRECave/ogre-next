@@ -11,17 +11,16 @@
 
 namespace Ogre
 {
-	class _OgreHlmsPbsExport VoxelVisualizer : public MovableObject, public Renderable
+    class _OgreHlmsPbsExport VoxelVisualizer : public MovableObject, public Renderable
     {
         void createBuffers(void);
 
     public:
-		VoxelVisualizer( IdType id, ObjectMemoryManager *objectMemoryManager,
-                         SceneManager* manager, uint8 renderQueueId,
-                         const MaterialPtr &material );
-		virtual ~VoxelVisualizer();
+        VoxelVisualizer( IdType id, ObjectMemoryManager *objectMemoryManager,
+                         SceneManager* manager, uint8 renderQueueId );
+        virtual ~VoxelVisualizer();
 
-        void setTrackingVoxel( TextureGpu *texture );
+        void setTrackingVoxel( TextureGpu *opacityTex, TextureGpu *texture );
 
         //Overrides from MovableObject
         virtual const String& getMovableType(void) const;

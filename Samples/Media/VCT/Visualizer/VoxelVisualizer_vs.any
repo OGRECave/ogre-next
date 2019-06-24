@@ -35,7 +35,13 @@ INLINE float3 getCubeVertex( uint vertexId )
 
         localPos.xyz += float3( xyzCoord.xyz );
         outVs_Position.xyzw = mul( p_worldViewProjMatrix, float4( localPos, 1.0f ) );
-		outVs.voxelColour.xyzw = voxelValues.xyzw;
+
+		#ifndef SEPARATE_OPACITY
+			outVs.voxelColour.xyzw = voxelValues.xyzw;
+		#else
+			outVs.voxelColour.xyz = OGRE_Load3D( otherTex, xyzCoord, 0 ).xyz;
+			outVs.voxelColour.w = voxelValues.w;
+		#endif
     }
     else
     {
