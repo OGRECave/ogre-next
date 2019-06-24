@@ -429,15 +429,15 @@
 							float4 finalDiffuse		= material.diffuse.xyzw;
 							float3 finalEmissive	= material.emissive.xyz;
 						@property( has_diffuse_tex )
-							finalDiffuse *= OGRE_SampleArray2D( diffuseTex, diffuseSampler, uv,
-																material.diffuseTexIdx );
+							finalDiffuse *= OGRE_SampleArray2DLevel( diffuseTex, diffuseSampler, uv,
+																	 material.diffuseTexIdx, 0 );
 						@else
 							finalDiffuse *= material.bgDiffuse.xyzw;
 						@end
 
 						@property( has_emissive_tex )
-							finalEmissive *= OGRE_SampleArray2D( emissiveTex, emissiveSampler, uv,
-																 material.emissiveTexIdx ).xyz;
+							finalEmissive *= OGRE_SampleArray2DLevel( emissiveTex, emissiveSampler, uv,
+																	  material.emissiveTexIdx, 0 ).xyz;
 						@end
 
 							voxelAlbedo			+= finalDiffuse;
