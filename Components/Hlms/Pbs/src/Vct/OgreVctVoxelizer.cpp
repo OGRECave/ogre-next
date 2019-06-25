@@ -69,14 +69,13 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    static const size_t c_numVctProperties = 5u;
+    static const size_t c_numVctProperties = 4u;
     static const size_t c_numAabCalcProperties = 2u;
 
     struct VctVoxelizerProp
     {
         static const IdString HasDiffuseTex;
         static const IdString HasEmissiveTex;
-        static const IdString EmissiveIsDiffuseTex;
         static const IdString Index32bit;
         static const IdString CompressedVertexFormat;
 
@@ -85,7 +84,6 @@ namespace Ogre
 
     const IdString VctVoxelizerProp::HasDiffuseTex          = IdString( "has_diffuse_tex" );
     const IdString VctVoxelizerProp::HasEmissiveTex         = IdString( "has_emissive_tex" );
-    const IdString VctVoxelizerProp::EmissiveIsDiffuseTex   = IdString( "emissive_is_diffuse_tex" );
     const IdString VctVoxelizerProp::Index32bit             = IdString( "index_32bit" );
     const IdString VctVoxelizerProp::CompressedVertexFormat = IdString( "compressed_vertex_format" );
 
@@ -95,7 +93,6 @@ namespace Ogre
         &VctVoxelizerProp::CompressedVertexFormat,
         &VctVoxelizerProp::HasDiffuseTex,
         &VctVoxelizerProp::HasEmissiveTex,
-        &VctVoxelizerProp::EmissiveIsDiffuseTex,
     };
     //-------------------------------------------------------------------------
     VctVoxelizer::VctVoxelizer( IdType id, RenderSystem *renderSystem, HlmsManager *hlmsManager,
@@ -218,19 +215,10 @@ namespace Ogre
                 ShaderParams &glslShaderParams = mComputeJobs[variant]->getShaderParams( "glsl" );
 
                 uint8 numTexUnits = 1u;
-                if( variant & VoxelizerJobSetting::HasDiffuseTex )
+                if( variant & (VoxelizerJobSetting::HasDiffuseTex|VoxelizerJobSetting::HasEmissiveTex) )
                 {
                     ShaderParams::Param param;
-                    param.name = "diffuseTex";
-                    param.setManualValue( static_cast<int32>( numTexUnits ) );
-                    glslShaderParams.mParams.push_back( param );
-                    glslShaderParams.setDirty();
-                    ++numTexUnits;
-                }
-                if( variant & VoxelizerJobSetting::HasEmissiveTex )
-                {
-                    ShaderParams::Param param;
-                    param.name = "emissiveTex";
+                    param.name = "texturePool";
                     param.setManualValue( static_cast<int32>( numTexUnits ) );
                     glslShaderParams.mParams.push_back( param );
                     glslShaderParams.setDirty();
@@ -981,15 +969,12 @@ namespace Ogre
                     variant |= VoxelizerJobSetting::HasDiffuseTex;
                 if( convResult.hasEmissiveTex() )
                     variant |= VoxelizerJobSetting::HasEmissiveTex;
-//                if( convResult.diffuseTex && convResult.diffuseTex == convResult.emissiveTex )
-//                    variant |= VoxelizerJobSetting::EmissiveIsDiffuseTex;
 
                 bucket.job              = mComputeJobs[variant];
                 bucket.materialBuffer   = convResult.constBuffer;
-                bucket.diffuseTex       = 0;
+                bucket.texPool          = 0;
                 if( convResult.hasDiffuseTex() || convResult.hasEmissiveTex() )
-                    bucket.diffuseTex = mVctMaterial->getTexturePool();
-//                bucket.emissiveTex      = convResult.emissiveTexIdx;
+                    bucket.texPool = mVctMaterial->getTexturePool();
                 bucket.vertexBuffer     = itMesh->second.bCompressed ? mVertexBufferCompressed :
                                                                        mVertexBufferUncompressed;
                 bucket.indexBuffer      = (variant & VoxelizerJobSetting::Index32bit) ? mIndexBuffer32 :
@@ -1477,18 +1462,12 @@ namespace Ogre
 
                 DescriptorSetTexture2::TextureSlot
                         texSlot( DescriptorSetTexture2::TextureSlot::makeEmpty() );
-                if( bucket.diffuseTex )
+                if( bucket.texPool )
                 {
-                    texSlot.texture = bucket.diffuseTex;
+                    texSlot.texture = bucket.texPool;
                     bucket.job->setTexture( texUnit, texSlot );
                     ++texUnit;
                 }
-//                if( bucket.emissiveTex )
-//                {
-//                    texSlot.texture = bucket.emissiveTex;
-//                    bucket.job->setTexture( texUnit, texSlot );
-//                    ++texUnit;
-//                }
 
                 uint32 numInstancesInBucket = static_cast<uint32 >( itBucket->second.size() );
                 uint32 instanceRange[2] = { instanceStart, instanceStart + numInstancesInBucket };

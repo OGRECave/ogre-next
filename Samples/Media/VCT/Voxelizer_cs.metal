@@ -98,19 +98,9 @@ kernel void main_metal
 	texture3d<@insertpiece(uav4_pf_type), access::read_write> voxelEmissiveTex	[[texture(UAV_SLOT_START+4)]],
 	texture3d<@insertpiece(uav5_pf_type), access::read_write> voxelAccumVal		[[texture(UAV_SLOT_START+5)]],
 
-@property( has_diffuse_tex || emissive_is_diffuse_tex )
-	@property( has_diffuse_tex || !emissive_sampler_separate )
-	,	sampler	diffuseSampler					[[sampler(@counter(samplerRegister))]],
-	@end
-	, texture2d_array<float>		diffuseTex	[[texture(@counter(texRegister))]]
-@end
-@property( has_emissive_tex )
-	@property( !emissive_sampler_separate )
-		#define emissiveSampler diffuseSampler
-	@else
-	,	sampler	emissiveSampler					[[sampler(@counter(samplerRegister))]],
-	@end
-	, texture2d_array<float>		emissiveTex [[texture(@counter(texRegister))]]
+@property( has_diffuse_tex || has_emissive_tex )
+	sampler					poolSampler	[[sampler(@counter(samplerRegister))]],
+	texture2d_array<float>	texturePool	[[texture(@counter(texRegister))]],
 @end
 
 	constant Material *materials	[[buffer(0)]],

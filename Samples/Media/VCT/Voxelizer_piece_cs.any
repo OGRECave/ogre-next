@@ -57,10 +57,6 @@
 		};
 	@end
 
-	@property( emissive_is_diffuse_tex )
-		#define emissiveTex diffuseTex
-	@end
-
 	struct Plane
 	{
 		float3 normal;
@@ -429,14 +425,14 @@
 							float4 finalDiffuse		= material.diffuse.xyzw;
 							float3 finalEmissive	= material.emissive.xyz;
 						@property( has_diffuse_tex )
-							finalDiffuse *= OGRE_SampleArray2DLevel( diffuseTex, diffuseSampler, uv,
+							finalDiffuse *= OGRE_SampleArray2DLevel( texturePool, poolSampler, uv,
 																	 material.diffuseTexIdx, 0 );
 						@else
 							finalDiffuse *= material.bgDiffuse.xyzw;
 						@end
 
 						@property( has_emissive_tex )
-							finalEmissive *= OGRE_SampleArray2DLevel( emissiveTex, emissiveSampler, uv,
+							finalEmissive *= OGRE_SampleArray2DLevel( texturePool, poolSampler, uv,
 																	  material.emissiveTexIdx, 0 ).xyz;
 						@end
 

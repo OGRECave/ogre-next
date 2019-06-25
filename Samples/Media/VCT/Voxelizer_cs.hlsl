@@ -103,22 +103,9 @@ RWTexture3D<@insertpiece(uav5_pf_type)> voxelAccumVal		: register(u5);
 
 StructuredBuffer<InstanceBuffer> instanceBuffer : register(t0);
 
-@pset( samplerRegister, 1 )
-@pset( texRegister, 1 )
-
-@property( has_diffuse_tex || emissive_is_diffuse_tex )
-	@property( has_diffuse_tex || !emissive_sampler_separate )
-		SamplerState	diffuseSampler	: register(s@counter(samplerRegister));
-	@end
-	Texture2DArray		diffuseTex		: register(t@counter(texRegister));
-@end
-@property( has_emissive_tex )
-	@property( !emissive_sampler_separate )
-		#define emissiveSampler diffuseSampler
-	@else
-		SamplerState	emissiveSampler	: register(s@counter(samplerRegister));
-	@end
-	Texture2DArray		emissiveTex		: register(t@counter(texRegister));
+@property( has_diffuse_tex || has_emissive_tex )
+	SamplerState		poolSampler		: register(s1);
+	Texture2DArray		texturePool		: register(t1);
 @end
 
 @insertpiece( HeaderCS )

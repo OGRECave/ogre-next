@@ -50,11 +50,8 @@ layout( local_size_x = @value( threads_per_group_x ),
 
 uniform samplerBuffer instanceBuffer;
 
-@property( has_diffuse_tex || emissive_is_diffuse_tex )
-	uniform sampler2DArray diffuseTex;
-@end
-@property( has_emissive_tex )
-	uniform sampler2DArray emissiveTex;
+@property( has_diffuse_tex || has_emissive_tex )
+	uniform sampler2DArray texturePool;
 @end
 
 @insertpiece( HeaderCS )

@@ -52,7 +52,6 @@ namespace Ogre
             CompressedVertexFormat  = 1u << 1u,
             HasDiffuseTex           = 1u << 2u,
             HasEmissiveTex          = 1u << 3u,
-            EmissiveIsDiffuseTex    = 1u << 4u,
         };
     }
 
@@ -62,7 +61,7 @@ namespace Ogre
         ConstBufferPacked   *materialBuffer;
         UavBufferPacked     *vertexBuffer;
         UavBufferPacked     *indexBuffer;
-        TextureGpu          *diffuseTex;
+        TextureGpu          *texPool;
 //        TextureGpu          *emissiveTex;
 
         bool operator < ( const VoxelizerBucket &other ) const
@@ -75,11 +74,7 @@ namespace Ogre
                 return this->vertexBuffer < other.vertexBuffer;
             if( this->indexBuffer != other.indexBuffer )
                 return this->indexBuffer < other.indexBuffer;
-            return this->diffuseTex < other.diffuseTex;
-//            if( this->diffuseTex != other.diffuseTex )
-//                return this->diffuseTex < other.diffuseTex;
-
-//            return this->emissiveTex < other.emissiveTex;
+            return this->texPool < other.texPool;
         }
     };
 
@@ -192,7 +187,7 @@ namespace Ogre
         ///
         /// However the way we will be using may abuse the cache too much, thus we pre-set
         /// all variants as long as the number of variants is manageable.
-        HlmsComputeJob  *mComputeJobs[1u<<5u];
+        HlmsComputeJob  *mComputeJobs[1u<<4u];
         HlmsComputeJob  *mAabbCalculator[1u<<2u];
         HlmsComputeJob  *mAabbWorldSpaceJob;
 
