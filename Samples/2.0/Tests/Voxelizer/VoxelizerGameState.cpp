@@ -32,14 +32,24 @@ namespace Demo
         TutorialGameState( helpDescription ),
         mVoxelizer( 0 ),
         mVctLighting( 0 ),
-        mDebugVisualizationMode( Ogre::VctVoxelizer::DebugVisualizationNone )
+        mDebugVisualizationMode( Ogre::VctVoxelizer::DebugVisualizationNone ),
+        mNumBounces( 6u )
     {
     }
     //-----------------------------------------------------------------------------------
-    void VoxelizerGameState::cycleVisualizationMode()
+    void VoxelizerGameState::cycleVisualizationMode( bool bPrev )
     {
-        mDebugVisualizationMode = (mDebugVisualizationMode + 1u) %
-                                  (Ogre::VctVoxelizer::DebugVisualizationNone + 2u);
+        if( !bPrev )
+        {
+            mDebugVisualizationMode = (mDebugVisualizationMode + 1u) %
+                                      (Ogre::VctVoxelizer::DebugVisualizationNone + 2u);
+        }
+        else
+        {
+            mDebugVisualizationMode = (mDebugVisualizationMode +
+                                       Ogre::VctVoxelizer::DebugVisualizationNone + 2u - 1u) %
+                                      (Ogre::VctVoxelizer::DebugVisualizationNone + 2u);
+        }
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
         if( mDebugVisualizationMode <= Ogre::VctVoxelizer::DebugVisualizationNone )
@@ -55,6 +65,14 @@ namespace Demo
                                                sceneManager );
             mVctLighting->setDebugVisualization( true, sceneManager );
         }
+    }
+    //-----------------------------------------------------------------------------------
+    void VoxelizerGameState::toggletVctQuality(void)
+    {
+        Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
+        assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
+        Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
+        hlmsPbs->setVctFullConeCount( !hlmsPbs->getVctFullConeCount() );
     }
     //-----------------------------------------------------------------------------------
     void VoxelizerGameState::createScene01(void)
@@ -120,6 +138,21 @@ namespace Demo
         sceneNode->setScale( Ogre::Vector3( 0.01f ) );
         sceneNode->setPosition( 0, item->getWorldAabbUpdated().mHalfSize.y, 0 );
 
+        //Ogre::Item *item2 = sceneManager->createItem( "athene.mesh Imported",
+        Ogre::Item *item2 = sceneManager->createItem( "Sphere1000.mesh",
+                                                     Ogre::ResourceGroupManager::
+                                                     AUTODETECT_RESOURCE_GROUP_NAME,
+                                                     Ogre::SCENE_DYNAMIC );
+        sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
+                    createChildSceneNode( Ogre::SCENE_DYNAMIC );
+        sceneNode->attachObject( item2 );
+        sceneNode->setScale( Ogre::Vector3( 0.5f ) );
+        sceneNode->setPosition( 0.5, /*1.5*/item2->getWorldAabbUpdated().mHalfSize.y, 0 );
+
+        Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
+        item2->setDatablock( hlmsManager->getHlms( Ogre::HLMS_UNLIT )->getDefaultDatablock() );
+//        item2->setDatablockOrMaterialName( "Examples/TudorHouse2" );
+
         Ogre::Item *itemBarrel = sceneManager->createItem( "tudorhouse.mesh",
                                                            Ogre::ResourceGroupManager::
                                                            AUTODETECT_RESOURCE_GROUP_NAME,
@@ -151,6 +184,7 @@ namespace Demo
                                         true );
         mVoxelizer->addItem( cornellItem, false );
         mVoxelizer->addItem( item, false );
+        mVoxelizer->addItem( item2, false );
         mVoxelizer->addItem( itemBarrel, false );
         mVoxelizer->autoCalculateRegion();
         mVoxelizer->dividideOctants( 1u, 1u, 1u );
@@ -159,7 +193,7 @@ namespace Demo
         mVctLighting = new Ogre::VctLighting( Ogre::Id::generateNewId<Ogre::VctLighting>(),
                                               mVoxelizer, true );
         mVctLighting->setAllowMultipleBounces( true );
-        mVctLighting->update( sceneManager, 6u );
+        mVctLighting->update( sceneManager, mNumBounces );
 
         {
             Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
@@ -172,6 +206,7 @@ namespace Demo
 //        cornellItem->setVisible( false );
 //        item->setVisible( false );
 //        itemBarrel->setVisible( false );
+//        item2->setVisible( false );
 
         mGraphicsSystem->getCamera()->setPosition( Ogre::Vector3( 0, 1.8, 2.5 ) );
     }
@@ -196,12 +231,15 @@ namespace Demo
     {
 //        if( mGraphicsSystem->getRenderWindow()->isVisible() )
 //        {
+//            Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
+
 //            static int frame = 0;
 //            if( frame > 1 )
-//                voxelizer->build( sceneManager );
+//            {
+//                mVoxelizer->build( sceneManager );
+//                mVctLighting->update( sceneManager, mNumBounces );
+//            }
 //            ++frame;
-//            Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
-//            vctLighting->update( sceneManager );
 //        }
         TutorialGameState::update( timeSinceLast );
     }
@@ -209,6 +247,10 @@ namespace Demo
     void VoxelizerGameState::generateDebugText( float timeSinceLast, Ogre::String &outText )
     {
         TutorialGameState::generateDebugText( timeSinceLast, outText );
+
+        Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
+        assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
+        Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
 
         static const Ogre::String visualizationModes[] =
         {
@@ -219,13 +261,21 @@ namespace Demo
             "Lighting"
         };
 
-        outText += "\nDebug Visualization: " + visualizationModes[mDebugVisualizationMode];
-        outText += "\nPress F2 to switch to cycle visualization modes";
+        outText += "\nPress F2 to switch to cycle visualization modes [";
+        outText += visualizationModes[mDebugVisualizationMode];
+        outText += "]";
+        outText += "\nPress F3 to toggle VCT quality [";
+        outText += hlmsPbs->getVctFullConeCount() ? "High]" : "Low]";
+        outText += "\nPress F4 to toggle Anisotropic VCT [";
+        outText += mVctLighting->isAnisotropic() ? "Anisotropic]" : "Isotropic]";
+        outText += "\nPress [Shift+] F5 to increase/decrease num indirect bounces [";
+        outText += Ogre::StringConverter::toString( mNumBounces );
+        outText += "]";
     }
     //-----------------------------------------------------------------------------------
     void VoxelizerGameState::keyReleased( const SDL_KeyboardEvent &arg )
     {
-        if( (arg.keysym.mod & ~(KMOD_NUM|KMOD_CAPS)) != 0 )
+        if( (arg.keysym.mod & ~(KMOD_NUM|KMOD_CAPS|KMOD_LSHIFT|KMOD_RSHIFT)) != 0 )
         {
             TutorialGameState::keyReleased( arg );
             return;
@@ -233,7 +283,25 @@ namespace Demo
 
         if( arg.keysym.sym == SDLK_F2 )
         {
-            cycleVisualizationMode();
+            cycleVisualizationMode( (arg.keysym.mod & (KMOD_LSHIFT|KMOD_RSHIFT)) );
+        }
+        else if( arg.keysym.sym == SDLK_F3 )
+        {
+            toggletVctQuality();
+        }
+        else if( arg.keysym.sym == SDLK_F4 )
+        {
+            mVctLighting->setAnisotropic( !mVctLighting->isAnisotropic() );
+            mVctLighting->update( mGraphicsSystem->getSceneManager(), mNumBounces );
+        }
+        else if( arg.keysym.sym == SDLK_F5 )
+        {
+            if( !(arg.keysym.mod & (KMOD_LSHIFT|KMOD_RSHIFT)) )
+                ++mNumBounces;
+            else if( mNumBounces > 0u )
+                --mNumBounces;
+
+            mVctLighting->update( mGraphicsSystem->getSceneManager(), mNumBounces );
         }
         else
         {

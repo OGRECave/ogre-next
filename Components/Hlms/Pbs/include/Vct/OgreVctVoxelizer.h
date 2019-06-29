@@ -61,7 +61,7 @@ namespace Ogre
         ConstBufferPacked   *materialBuffer;
         UavBufferPacked     *vertexBuffer;
         UavBufferPacked     *indexBuffer;
-        TextureGpu          *texPool;
+        bool                needsTexPool;
 //        TextureGpu          *emissiveTex;
 
         bool operator < ( const VoxelizerBucket &other ) const
@@ -74,7 +74,7 @@ namespace Ogre
                 return this->vertexBuffer < other.vertexBuffer;
             if( this->indexBuffer != other.indexBuffer )
                 return this->indexBuffer < other.indexBuffer;
-            return this->texPool < other.texPool;
+            return this->needsTexPool < other.needsTexPool;
         }
     };
 

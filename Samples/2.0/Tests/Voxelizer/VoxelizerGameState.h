@@ -19,8 +19,10 @@ namespace Demo
         Ogre::VctLighting   *mVctLighting;
 
         Ogre::uint32    mDebugVisualizationMode;
+        Ogre::uint32    mNumBounces;
 
-        void cycleVisualizationMode();
+        void cycleVisualizationMode( bool bPrev );
+        void toggletVctQuality(void);
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 

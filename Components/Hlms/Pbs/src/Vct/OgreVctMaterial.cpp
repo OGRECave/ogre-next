@@ -126,6 +126,7 @@ namespace Ogre
             ColourValue emissiveCol = datablock->getEmissiveColour();
             for( size_t i=0; i<4; ++i )
             {
+                shaderMaterial.bgDiffuse[i] = 1.0f;
                 shaderMaterial.diffuse[i] = diffuseCol[i];
                 shaderMaterial.emissive[i] = emissiveCol[i];
             }

@@ -983,9 +983,7 @@ namespace Ogre
 
                 bucket.job              = mComputeJobs[variant];
                 bucket.materialBuffer   = convResult.constBuffer;
-                bucket.texPool          = 0;
-                if( convResult.hasDiffuseTex() || convResult.hasEmissiveTex() )
-                    bucket.texPool = mVctMaterial->getTexturePool();
+                bucket.needsTexPool     = convResult.hasDiffuseTex() || convResult.hasEmissiveTex();
                 bucket.vertexBuffer     = itMesh->second.bCompressed ? mVertexBufferCompressed :
                                                                        mVertexBufferUncompressed;
                 bucket.indexBuffer      = (variant & VoxelizerJobSetting::Index32bit) ? mIndexBuffer32 :
@@ -1473,9 +1471,9 @@ namespace Ogre
 
                 DescriptorSetTexture2::TextureSlot
                         texSlot( DescriptorSetTexture2::TextureSlot::makeEmpty() );
-                if( bucket.texPool )
+                if( bucket.needsTexPool )
                 {
-                    texSlot.texture = bucket.texPool;
+                    texSlot.texture = mVctMaterial->getTexturePool();
                     bucket.job->setTexture( texUnit, texSlot );
                     ++texUnit;
                 }
