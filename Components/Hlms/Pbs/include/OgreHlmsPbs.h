@@ -304,6 +304,16 @@ namespace Ogre
         void setVctLighting( VctLighting *vctLighting )     { mVctLighting = vctLighting; }
         VctLighting* getVctLighting(void)                   { return mVctLighting; }
 
+        /** When false, we will use 4 cones for diffuse VCT.
+            When true, we will use 6 cones instead. This is higher quality but consumes more
+            performance and is usually overkill (benefit / cost ratio).
+
+            Default value is false
+        @param vctFullConeCount
+        */
+        void setVctFullConeCount( bool vctFullConeCount )   { mVctFullConeCount = vctFullConeCount; }
+        bool getVctFullConeCount(void) const                { return mVctFullConeCount; }
+
         void setAreaLightMasks( TextureGpu *areaLightMask );
         TextureGpu* getAreaLightMasks(void) const           { return mAreaLightMasks; }
 
