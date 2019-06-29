@@ -662,9 +662,19 @@ namespace Ogre
         }
         --itMesh->second.numItems;
         if( !itMesh->second.numItems )
+        {
             mMeshesV2.erase( mesh );
+            mGpuMeshAabbDataDirty = true;
+        }
 
         efficientVectorRemove( mItems, itor );
+    }
+    //-------------------------------------------------------------------------
+    void VctVoxelizer::removeAllItems(void)
+    {
+        mItems.clear();
+        mMeshesV2.clear();
+        mGpuMeshAabbDataDirty = true;
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::freeBuffers( bool bForceFree )

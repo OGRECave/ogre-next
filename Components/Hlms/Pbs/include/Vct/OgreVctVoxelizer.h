@@ -346,6 +346,9 @@ namespace Ogre
         */
         void removeItem( Item *item );
 
+        /// Removes all items added via VctVoxelizer::addItem
+        void removeAllItems(void);
+
         void autoCalculateRegion(void);
 
         void dividideOctants( uint32 numOctantsX, uint32 numOctantsY, uint32 numOctantsZ );
