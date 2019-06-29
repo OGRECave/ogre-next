@@ -316,7 +316,8 @@ namespace Ogre
             {
                 //Create a new bucket
                 MaterialBucket newBucket;
-                newBucket.buffer = mVaoManager->createConstBuffer( 1024u * sizeof(ShaderVctMaterial),
+                newBucket.buffer = mVaoManager->createConstBuffer( c_numDatablocksPerConstBuffer *
+                                                                   sizeof(ShaderVctMaterial),
                                                                    BT_DEFAULT, 0, false );
                 newBucket.hasDiffuse = datablock->getDiffuseTexture() != 0;
                 newBucket.hasEmissive = datablock->getEmissiveTexture() != 0;
