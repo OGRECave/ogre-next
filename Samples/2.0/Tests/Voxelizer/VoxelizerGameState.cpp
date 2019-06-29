@@ -31,8 +31,30 @@ namespace Demo
     VoxelizerGameState::VoxelizerGameState( const Ogre::String &helpDescription ) :
         TutorialGameState( helpDescription ),
         mVoxelizer( 0 ),
-        mVctLighting( 0 )
+        mVctLighting( 0 ),
+        mDebugVisualizationMode( Ogre::VctVoxelizer::DebugVisualizationNone )
     {
+    }
+    //-----------------------------------------------------------------------------------
+    void VoxelizerGameState::cycleVisualizationMode()
+    {
+        mDebugVisualizationMode = (mDebugVisualizationMode + 1u) %
+                                  (Ogre::VctVoxelizer::DebugVisualizationNone + 2u);
+        Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
+
+        if( mDebugVisualizationMode <= Ogre::VctVoxelizer::DebugVisualizationNone )
+        {
+            mVctLighting->setDebugVisualization( false, sceneManager );
+            mVoxelizer->setDebugVisualization( static_cast<Ogre::VctVoxelizer::
+                                               DebugVisualizationMode>( mDebugVisualizationMode ),
+                                               sceneManager );
+        }
+        else
+        {
+            mVoxelizer->setDebugVisualization( Ogre::VctVoxelizer::DebugVisualizationNone,
+                                               sceneManager );
+            mVctLighting->setDebugVisualization( true, sceneManager );
+        }
     }
     //-----------------------------------------------------------------------------------
     void VoxelizerGameState::createScene01(void)
@@ -134,8 +156,6 @@ namespace Demo
         mVoxelizer->dividideOctants( 1u, 1u, 1u );
         mVoxelizer->build( sceneManager );
 
-        //mVoxelizer->setDebugVisualization( Ogre::VctVoxelizer::DebugVisualizationNormal, sceneManager );
-
         mVctLighting = new Ogre::VctLighting( Ogre::Id::generateNewId<Ogre::VctLighting>(),
                                               mVoxelizer, true );
         mVctLighting->setAllowMultipleBounces( true );
@@ -184,5 +204,40 @@ namespace Demo
 //            vctLighting->update( sceneManager );
 //        }
         TutorialGameState::update( timeSinceLast );
+    }
+    //-----------------------------------------------------------------------------------
+    void VoxelizerGameState::generateDebugText( float timeSinceLast, Ogre::String &outText )
+    {
+        TutorialGameState::generateDebugText( timeSinceLast, outText );
+
+        static const Ogre::String visualizationModes[] =
+        {
+            "Albedo",
+            "Normal",
+            "Emissive",
+            "None",
+            "Lighting"
+        };
+
+        outText += "\nDebug Visualization: " + visualizationModes[mDebugVisualizationMode];
+        outText += "\nPress F2 to switch to cycle visualization modes";
+    }
+    //-----------------------------------------------------------------------------------
+    void VoxelizerGameState::keyReleased( const SDL_KeyboardEvent &arg )
+    {
+        if( (arg.keysym.mod & ~(KMOD_NUM|KMOD_CAPS)) != 0 )
+        {
+            TutorialGameState::keyReleased( arg );
+            return;
+        }
+
+        if( arg.keysym.sym == SDLK_F2 )
+        {
+            cycleVisualizationMode();
+        }
+        else
+        {
+            TutorialGameState::keyReleased( arg );
+        }
     }
 }

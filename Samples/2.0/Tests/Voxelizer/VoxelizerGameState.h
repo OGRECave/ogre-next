@@ -18,12 +18,20 @@ namespace Demo
         Ogre::VctVoxelizer  *mVoxelizer;
         Ogre::VctLighting   *mVctLighting;
 
+        Ogre::uint32    mDebugVisualizationMode;
+
+        void cycleVisualizationMode();
+
+        virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
+
     public:
         VoxelizerGameState( const Ogre::String &helpDescription );
 
         virtual void createScene01(void);
         virtual void destroyScene(void);
         virtual void update( float timeSinceLast );
+
+        virtual void keyReleased( const SDL_KeyboardEvent &arg );
     };
 }
 

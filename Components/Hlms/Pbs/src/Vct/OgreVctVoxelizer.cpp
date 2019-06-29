@@ -1511,19 +1511,17 @@ namespace Ogre
     void VctVoxelizer::setDebugVisualization( VctVoxelizer::DebugVisualizationMode mode,
                                               SceneManager *sceneManager )
     {
-        if( mode == mDebugVisualizationMode )
-            return;
-
-        mDebugVisualizationMode = mode;
-
-        if( mode == DebugVisualizationNone )
+        if( mDebugVoxelVisualizer )
         {
             SceneNode *sceneNode = mDebugVoxelVisualizer->getParentSceneNode();
             sceneNode->getParentSceneNode()->removeAndDestroyChild( sceneNode );
             OGRE_DELETE mDebugVoxelVisualizer;
             mDebugVoxelVisualizer = 0;
         }
-        else
+
+        mDebugVisualizationMode = mode;
+
+        if( mode != DebugVisualizationNone )
         {
             SceneNode *rootNode = sceneManager->getRootSceneNode( SCENE_STATIC );
             SceneNode *visNode = rootNode->createChildSceneNode( SCENE_STATIC );
