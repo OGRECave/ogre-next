@@ -148,11 +148,6 @@ namespace Ogre
             shaderMaterial.emissive[3] = 1.0f;
         }
 
-        bucket.buffer->upload( &shaderMaterial, usedSlots * sizeof( ShaderVctMaterial ),
-                               sizeof( ShaderVctMaterial ) );
-
-        bucket.datablocks.insert( datablock );
-
         TextureGpu *diffuseTex = datablock->getDiffuseTexture();
         TextureGpu *emissiveTex = datablock->getEmissiveTexture();
 
@@ -160,9 +155,20 @@ namespace Ogre
         conversionResult.slotIdx        = static_cast<uint32>( usedSlots );
         conversionResult.constBuffer    = bucket.buffer;
         if( diffuseTex )
+        {
             conversionResult.diffuseTexIdx = getPoolSliceIdxForTexture( diffuseTex );
+            shaderMaterial.diffuseTexIdx = conversionResult.diffuseTexIdx;
+        }
         if( emissiveTex )
+        {
             conversionResult.emissiveTexIdx = getPoolSliceIdxForTexture( emissiveTex );
+            shaderMaterial.emissiveTexIdx = conversionResult.emissiveTexIdx;
+        }
+
+        bucket.buffer->upload( &shaderMaterial, usedSlots * sizeof( ShaderVctMaterial ),
+                               sizeof( ShaderVctMaterial ) );
+
+        bucket.datablocks.insert( datablock );
         mDatablockConversionResults[datablock] = conversionResult;
 
         return conversionResult;
@@ -174,7 +180,7 @@ namespace Ogre
         if( itor != mTextureToPoolEntry.end() )
             return itor->second; //We already copied that texture. We're done
 
-        if( !mTexturePool )
+        if( !mTexturePool || mNumUsedPoolSlices >= mTexturePool->getNumSlices() )
             resizeTexturePool();
 
         texture->waitForData();
