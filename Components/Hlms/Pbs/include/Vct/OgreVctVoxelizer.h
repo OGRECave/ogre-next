@@ -62,7 +62,6 @@ namespace Ogre
         UavBufferPacked     *vertexBuffer;
         UavBufferPacked     *indexBuffer;
         bool                needsTexPool;
-//        TextureGpu          *emissiveTex;
 
         bool operator < ( const VoxelizerBucket &other ) const
         {

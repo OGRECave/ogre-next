@@ -213,7 +213,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VctMaterial::resizeTexturePool(void)
     {
-        String texName = "VctMaterial" + StringConverter::toString( getId() );
+        String texName = "VctMaterial" + StringConverter::toString( getId() ) + "/" +
+                         StringConverter::toString( mNumUsedPoolSlices );
         TextureGpu *newPool = mTextureGpuManager->createTexture( texName, texName,
                                                                  GpuPageOutStrategy::Discard,
                                                                  TextureFlags::ManualTexture,
