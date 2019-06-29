@@ -888,7 +888,8 @@ namespace Ogre
         case DebugVisualizationNormal: trackedTex = mNormalVox; break;
         case DebugVisualizationEmissive: trackedTex = mEmissiveVox; break;
         }
-        mDebugVoxelVisualizer->setTrackingVoxel( mAlbedoVox, trackedTex );
+        mDebugVoxelVisualizer->setTrackingVoxel( mAlbedoVox, trackedTex,
+                                                 mDebugVisualizationMode == DebugVisualizationEmissive );
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::destroyVoxelTextures(void)

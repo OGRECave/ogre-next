@@ -87,11 +87,16 @@ namespace Ogre
         mVaoPerLod[1].push_back( vao );
     }
     //-----------------------------------------------------------------------------------
-    void VoxelVisualizer::setTrackingVoxel( TextureGpu *opacityTex, TextureGpu *texture )
+    void VoxelVisualizer::setTrackingVoxel( TextureGpu *opacityTex, TextureGpu *texture, bool anyColour )
     {
         String matName = "VCT/VoxelVisualizer";
-        if( opacityTex != texture )
-            matName += "/SeparateOpacity";
+        if( anyColour )
+            matName += "/OpacityAnyColour";
+        else
+        {
+            if( opacityTex != texture )
+                matName += "/SeparateOpacity";
+        }
 
         const size_t stringNameBaseSize = matName.size();
         matName += StringConverter::toString( getId() );
@@ -124,9 +129,16 @@ namespace Ogre
         uint32 voxelResolution[4] = { width, height, depth, 1u };
         vsParams->setNamedConstant( "voxelResolution", voxelResolution, 1u, 3u );
 
-        pass->getTextureUnitState( 0 )->setTexture( opacityTex );
-        if( opacityTex != texture )
-            pass->getTextureUnitState( 1 )->setTexture( texture );
+        if( !anyColour )
+        {
+            pass->getTextureUnitState( 0 )->setTexture( opacityTex );
+            if( opacityTex != texture )
+                pass->getTextureUnitState( 1 )->setTexture( texture );
+        }
+        else
+        {
+            pass->getTextureUnitState( 0 )->setTexture( texture );
+        }
 
         Aabb aabb( Vector3( width, height, depth ) * 0.5f, Vector3( width, height, depth ) * 0.5f );
         mObjectData.mLocalAabb->setFromAabb( aabb, mObjectData.mIndex );

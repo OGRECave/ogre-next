@@ -20,7 +20,7 @@ namespace Ogre
                          SceneManager* manager, uint8 renderQueueId );
         virtual ~VoxelVisualizer();
 
-        void setTrackingVoxel( TextureGpu *opacityTex, TextureGpu *texture );
+        void setTrackingVoxel( TextureGpu *opacityTex, TextureGpu *texture, bool anyColour );
 
         //Overrides from MovableObject
         virtual const String& getMovableType(void) const;

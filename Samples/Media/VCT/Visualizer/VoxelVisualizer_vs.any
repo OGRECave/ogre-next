@@ -21,20 +21,24 @@ INLINE float3 getCubeVertex( uint vertexId )
 	uint yRow = cubeInstance / p_voxelResolution.x;
 
 	uint3 xyzCoord;
-    xyzCoord.x = cubeInstance % p_voxelResolution.x;
-    xyzCoord.y = yRow % p_voxelResolution.y;
-    xyzCoord.z = yRow / p_voxelResolution.y;
+	xyzCoord.x = cubeInstance % p_voxelResolution.x;
+	xyzCoord.y = yRow % p_voxelResolution.y;
+	xyzCoord.z = yRow / p_voxelResolution.y;
 
 	float4 voxelValues = OGRE_Load3D( voxelTex, xyzCoord, 0 );
-    if( voxelValues.w > 0.0 )
-    {
-        //We need 14 vertices, but we have to use 16 (one extra
-        //at beginning and one at the end) for degenerate triangles
-        uint cubVertId = clamp( uint( inVs_vertexId ) % 16u, 1u, 14u ) - 1u;
+#ifndef OPACITY_ANY_COLOUR
+	if( voxelValues.w > 0.0 )
+#else
+	if( voxelValues.x > 0.0 || voxelValues.y > 0.0 || voxelValues.z > 0.0 || voxelValues.w > 0.0 )
+#endif
+	{
+		//We need 14 vertices, but we have to use 16 (one extra
+		//at beginning and one at the end) for degenerate triangles
+		uint cubVertId = clamp( uint( inVs_vertexId ) % 16u, 1u, 14u ) - 1u;
 		float3 localPos = getCubeVertex( cubVertId );
 
-        localPos.xyz += float3( xyzCoord.xyz );
-        outVs_Position.xyzw = mul( p_worldViewProjMatrix, float4( localPos, 1.0f ) );
+		localPos.xyz += float3( xyzCoord.xyz );
+		outVs_Position.xyzw = mul( p_worldViewProjMatrix, float4( localPos, 1.0f ) );
 
 		#ifndef SEPARATE_OPACITY
 			outVs.voxelColour.xyzw = voxelValues.xyzw;
@@ -42,14 +46,11 @@ INLINE float3 getCubeVertex( uint vertexId )
 			outVs.voxelColour.xyz = OGRE_Load3D( otherTex, xyzCoord, 0 ).xyz;
 			outVs.voxelColour.w = voxelValues.w;
 		#endif
-    }
-    else
-    {
-        outVs_Position.xyzw = float4( 0, 0, 0, 0 );
-        outVs.voxelColour.xyzw = float4( 0, 0, 0, 0 );
-    }
-
-    /*outVs.voxelColour.xyz = float3( xyzCoord.xyz );
-    outVs.voxelColour.w = float( inVs_vertexId );*/
+	}
+	else
+	{
+		outVs_Position.xyzw = float4( 0, 0, 0, 0 );
+		outVs.voxelColour.xyzw = float4( 0, 0, 0, 0 );
+	}
 
 #endif

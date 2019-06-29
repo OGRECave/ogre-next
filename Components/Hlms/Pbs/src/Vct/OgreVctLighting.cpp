@@ -452,7 +452,7 @@ namespace Ogre
 
         if( mDebugVoxelVisualizer )
         {
-            mDebugVoxelVisualizer->setTrackingVoxel( mLightVoxel[0], mLightVoxel[0] );
+            mDebugVoxelVisualizer->setTrackingVoxel( mLightVoxel[0], mLightVoxel[0], true );
             mDebugVoxelVisualizer->setVisible( true );
         }
     }
@@ -882,7 +882,7 @@ namespace Ogre
                                               &sceneManager->_getEntityMemoryManager( SCENE_STATIC ),
                                               sceneManager, 0u );
 
-            mDebugVoxelVisualizer->setTrackingVoxel( mLightVoxel[0], mLightVoxel[0] );
+            mDebugVoxelVisualizer->setTrackingVoxel( mLightVoxel[0], mLightVoxel[0], true );
 
             visNode->setPosition( mVoxelizer->getVoxelOrigin() );
             visNode->setScale( mVoxelizer->getVoxelCellSize() );
