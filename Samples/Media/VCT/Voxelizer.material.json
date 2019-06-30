@@ -40,7 +40,7 @@
             "threads_per_group" : [4, 4, 4],
 
             "source" : "LightInjection_cs",
-            "pieces" : ["CrossPlatformSettings_piece_all", "AreaLights_LTC_piece_ps.any", "LightInjection_piece_cs.any"],
+            "pieces" : ["CrossPlatformSettings_piece_all", "AreaLights_LTC_piece_ps.any", "sRGB.any", "LightInjection_piece_cs.any"],
             "inform_shader_of_texture_data_change" : true,
 
             "thread_groups_based_on_uav" : 0,
@@ -64,7 +64,7 @@
                 ["numLights",               [0],        "uint"],
                 ["rayMarchStepSize",        [1,1,1],    "float"],
                 ["voxelCellSize",           [1,1,1],    "float"],
-                ["invVoxelCellSize",        [1,1,1],    "float"],
+                ["dirCorrectionRatio_thinWallCounter", [1,1,1,1],    "float"],
                 ["invVoxelResolution",      [1,1,1],    "float"]
             ],
 
@@ -83,7 +83,7 @@
             "threads_per_group" : [4, 4, 4],
 
             "source" : "AnisotropicMipVctStep0_cs",
-            "pieces" : ["CrossPlatformSettings_piece_all", "AnisotropicMipVctStep0_piece_cs.any"],
+            "pieces" : ["CrossPlatformSettings_piece_all", "sRGB.any", "AnisotropicMipVctStep0_piece_cs.any"],
             "inform_shader_of_texture_data_change" : true,
 
             "thread_groups_based_on_uav" : { "slot" : 0, "divisor" : [2, 1, 1] },
@@ -116,7 +116,7 @@
             "threads_per_group" : [4, 4, 4],
 
             "source" : "AnisotropicMipVctStep1_cs",
-            "pieces" : ["CrossPlatformSettings_piece_all", "AnisotropicMipVctStep1_piece_cs.any"],
+            "pieces" : ["CrossPlatformSettings_piece_all", "sRGB.any", "AnisotropicMipVctStep1_piece_cs.any"],
             "inform_shader_of_texture_data_change" : true,
 
             "thread_groups_based_on_uav" : { "slot" : 0, "divisor" : [2, 1, 1] },
@@ -151,7 +151,7 @@
             "threads_per_group" : [4, 4, 4],
 
             "source" : "LightVctBounceInject_cs",
-            "pieces" : ["CrossPlatformSettings_piece_all", "LightVctBounceInject_piece_cs.any"],
+            "pieces" : ["CrossPlatformSettings_piece_all", "sRGB.any", "LightVctBounceInject_piece_cs.any"],
             "inform_shader_of_texture_data_change" : true,
 
             "thread_groups_based_on_uav" : 0,

@@ -26,6 +26,7 @@ namespace Demo
 
         Ogre::VctVoxelizer  *mVoxelizer;
         Ogre::VctLighting   *mVctLighting;
+        float               mThinWallCounter;
 
         Ogre::uint32    mDebugVisualizationMode;
         Ogre::uint32    mNumBounces;

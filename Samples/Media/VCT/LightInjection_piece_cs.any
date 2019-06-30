@@ -39,6 +39,7 @@
 	#define c_invPI 3.14159265359f
 
 	@insertpiece( DeclAreaLtcLightFuncs )
+	@insertpiece( DeclSRgbFuncs )
 @end
 
 //in uvec3 gl_NumWorkGroups;
@@ -117,7 +118,7 @@
 			@end
 
 			//lightDir is in world space, it needs to be in UV space (which may be stretched)
-			lightDir *= p_voxelInvCellSize.xyz;
+			lightDir *= p_dirCorrectionRatio.xyz;
 			//Ensure lightDir makes pixel-sized steps
 			lightDir /= max3( abs( lightDir.x ), abs( lightDir.y ), abs( lightDir.z ) );
 
@@ -130,7 +131,7 @@
 			{
 				float4 albedoAtIt = OGRE_SampleLevel( voxelAlbedoTex, voxelAlbedoSampler,
 													  currUvwPos.xyz, lodLevel );
-				alpha *= (1.0f - albedoAtIt.w);
+				alpha *= max( 0.0f, (1.0f - albedoAtIt.w * p_thinWallCounter ) );
 
 				currUvwPos += lightDir * p_rayMarchStepSize;
 				reachedDst = currUvwPos.x <= 0.0f ||
@@ -163,5 +164,5 @@
 	}
 
 	wshort3 voxelCelUvw = wshort3( gl_GlobalInvocationID.xyz );
-	OGRE_imageWrite3D4( lightVoxel, voxelCelUvw, float4( blockColour, albedoVal.w ) );
+	OGRE_imageWrite3D4( lightVoxel, voxelCelUvw, toSRGB( float4( blockColour, albedoVal.w ) ) );
 @end

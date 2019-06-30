@@ -35,6 +35,7 @@ namespace Demo
         TutorialGameState( helpDescription ),
         mVoxelizer( 0 ),
         mVctLighting( 0 ),
+        mThinWallCounter( 1.0f ),
         mDebugVisualizationMode( Ogre::VctVoxelizer::DebugVisualizationNone ),
         mNumBounces( 6u ),
         mCurrentScene( SceneCornell ),
@@ -123,7 +124,7 @@ namespace Demo
             hlmsPbs->setVctLighting( mVctLighting );
         }
 
-        mVctLighting->update( sceneManager, mNumBounces );
+        mVctLighting->update( sceneManager, mNumBounces, mThinWallCounter );
     }
     //-----------------------------------------------------------------------------------
     void VoxelizerGameState::cycleScenes( bool bPrev )
@@ -152,6 +153,7 @@ namespace Demo
     void VoxelizerGameState::destroyCurrentScene(void)
     {
         mVoxelizer->removeAllItems();
+        mThinWallCounter = 1.0f;
 
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
@@ -216,6 +218,8 @@ namespace Demo
         sceneNode->setScale( Ogre::Vector3( 0.001f ) );
         sceneNode->setPosition( -0.5, item->getWorldAabbUpdated().mHalfSize.y, 0 );
         mItems.push_back( item );
+
+        mThinWallCounter = 2.0f;
     }
     //-----------------------------------------------------------------------------------
     void VoxelizerGameState::createSibenikScene(void)
@@ -412,7 +416,7 @@ namespace Demo
         else if( arg.keysym.sym == SDLK_F4 )
         {
             mVctLighting->setAnisotropic( !mVctLighting->isAnisotropic() );
-            mVctLighting->update( mGraphicsSystem->getSceneManager(), mNumBounces );
+            mVctLighting->update( mGraphicsSystem->getSceneManager(), mNumBounces, mThinWallCounter );
         }
         else if( arg.keysym.sym == SDLK_F5 )
         {
@@ -421,7 +425,7 @@ namespace Demo
             else if( mNumBounces > 0u )
                 --mNumBounces;
 
-            mVctLighting->update( mGraphicsSystem->getSceneManager(), mNumBounces );
+            mVctLighting->update( mGraphicsSystem->getSceneManager(), mNumBounces, mThinWallCounter );
         }
         else if( arg.keysym.sym == SDLK_F6 )
         {

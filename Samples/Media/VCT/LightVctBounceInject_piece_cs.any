@@ -134,6 +134,8 @@
 
 		outDiffuse.xyz = light;
 	}
+
+	@insertpiece( DeclSRgbFuncs )
 @end
 
 //in uvec3 gl_NumWorkGroups;
@@ -168,5 +170,5 @@
 	}
 
 	wshort3 voxelCelUvw = wshort3( gl_GlobalInvocationID.xyz );
-	OGRE_imageWrite3D4( lightVoxel, voxelCelUvw, currentLight );
+	OGRE_imageWrite3D4( lightVoxel, voxelCelUvw, toSRGB( currentLight ) );
 @end

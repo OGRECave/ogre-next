@@ -1,0 +1,12 @@
+
+@piece( DeclSRgbFuncs )
+	float toSRGB( float x )
+	{
+		return (x < 0.0031308 ? x * 12.92 : 1.055 * pow( x, 0.41666 ) - 0.055 );
+	}
+
+	float4 toSRGB( float4 x )
+	{
+		return float4( toSRGB( x.x ), toSRGB( x.y ), toSRGB( x.z ), x.w );
+	}
+@end

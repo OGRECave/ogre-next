@@ -21,6 +21,8 @@
 		accumVal.xyzw += sampleVal.xyzw * weight;
 		accumWeight += weight;
 	}
+
+	@insertpiece( DeclSRgbFuncs )
 @end
 
 @piece( BodyCS )
@@ -76,6 +78,6 @@
 		@property( @dir == 1 || @dir == 3 || @dir == 5 )
 			outIUvw.x += p_higherMipHalfWidth;
 		@end
-		OGRE_imageWrite3D4( outLightHigherMip@value(axis), outIUvw, accumVal.xyzw );
+		OGRE_imageWrite3D4( outLightHigherMip@value(axis), outIUvw, toSRGB( accumVal.xyzw ) );
 	@end
 @end

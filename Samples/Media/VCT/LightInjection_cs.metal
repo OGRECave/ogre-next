@@ -19,7 +19,7 @@ struct Params
 	float3 rayMarchStepSize;
 	//float3 voxelOrigin;
 	float3 voxelCellSize;
-	float3 invVoxelCellSize;
+	float4 dirCorrectionRatio_thinWallCounter;
 	float3 invVoxelResolution;
 };
 
@@ -27,7 +27,8 @@ struct Params
 #define p_rayMarchStepSize p.rayMarchStepSize
 //#define p_voxelOrigin p.voxelOrigin
 #define p_voxelCellSize p.voxelCellSize
-#define p_voxelInvCellSize p.invVoxelCellSize
+#define p_dirCorrectionRatio dirCorrectionRatio_thinWallCounter.xyz
+#define p_thinWallCounter dirCorrectionRatio_thinWallCounter.w
 #define p_invVoxelResolution p.invVoxelResolution
 
 //in uvec3 gl_NumWorkGroups;

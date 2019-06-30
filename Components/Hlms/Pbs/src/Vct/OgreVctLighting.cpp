@@ -83,7 +83,7 @@ namespace Ogre
         mNumLights( 0 ),
         mRayMarchStepSize( 0 ),
         mVoxelCellSize( 0 ),
-        mInvVoxelCellSize( 0 ),
+        mDirCorrectionRatioThinWallCounter( 0 ),
         mInvVoxelResolution( 0 ),
         mShaderParams( 0 ),
         mBounceVoxelCellSize( 0 ),
@@ -107,7 +107,8 @@ namespace Ogre
         mNumLights = mShaderParams->findParameter( "numLights" );
         mRayMarchStepSize = mShaderParams->findParameter( "rayMarchStepSize" );
         mVoxelCellSize = mShaderParams->findParameter( "voxelCellSize" );
-        mInvVoxelCellSize = mShaderParams->findParameter( "invVoxelCellSize" );
+        mDirCorrectionRatioThinWallCounter =
+                mShaderParams->findParameter( "dirCorrectionRatio_thinWallCounter" );
         mInvVoxelResolution = mShaderParams->findParameter( "invVoxelResolution" );
 
         RenderSystem *renderSystem = mVoxelizer->getRenderSystem();
@@ -300,12 +301,7 @@ namespace Ogre
 
         TextureGpuManager *textureManager = mVoxelizer->getTextureGpuManager();
 
-        RenderSystem *renderSystem = mVoxelizer->getRenderSystem();
-        const bool hasTypedUavs = renderSystem->getCapabilities()->hasCapability( RSC_TYPED_UAV_LOADS );
-
-        uint32 texFlags = TextureFlags::Uav;
-        if( !hasTypedUavs )
-            texFlags |= TextureFlags::Reinterpretable;
+        uint32 texFlags = TextureFlags::Uav | TextureFlags::Reinterpretable;
 
         const bool bSdfQuality = shouldEnableSpecularSdfQuality();
         if( !mAnisotropic || bSdfQuality )
@@ -356,7 +352,7 @@ namespace Ogre
                 texture->setResolution( widthAniso, heightAniso, depthAniso );
                 texture->setNumMipmaps( numMipsAniso );
             }
-            texture->setPixelFormat( PFG_RGBA8_UNORM );
+            texture->setPixelFormat( PFG_RGBA8_UNORM_SRGB );
             texture->scheduleTransitionTo( GpuResidency::Resident );
             mLightVoxel[i] = texture;
 
@@ -382,6 +378,7 @@ namespace Ogre
                 DescriptorSetUav::TextureSlot uavSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
                 uavSlot.access = ResourceAccess::Write;
                 uavSlot.texture = mLightVoxel[i+1u];
+                uavSlot.pixelFormat = PFG_RGBA8_UNORM;
                 mAnisoGeneratorStep0->_setUavTexture( i, uavSlot );
             }
 
@@ -424,6 +421,7 @@ namespace Ogre
                     uavSlot.access = ResourceAccess::Write;
                     uavSlot.texture = mLightVoxel[axis+1u];
                     uavSlot.mipmapLevel = i + 1u;
+                    uavSlot.pixelFormat = PFG_RGBA8_UNORM;
                     mipJob->_setUavTexture( axis, uavSlot );
                 }
 
@@ -531,6 +529,7 @@ namespace Ogre
         DescriptorSetUav::TextureSlot uavSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
         uavSlot.access = ResourceAccess::Write;
         uavSlot.texture = mLightBounce;
+        uavSlot.pixelFormat = PFG_RGBA8_UNORM;
         mLightVctBounceInject->_setUavTexture( 0, uavSlot );
     }
     //-------------------------------------------------------------------------
@@ -590,6 +589,7 @@ namespace Ogre
         DescriptorSetUav::TextureSlot uavSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
         uavSlot.access = ResourceAccess::Write;
         uavSlot.texture = mLightBounce;
+        uavSlot.pixelFormat = PFG_RGBA8_UNORM;
         mLightVctBounceInject->_setUavTexture( 0, uavSlot );
 
         if( mAnisotropic )
@@ -612,7 +612,7 @@ namespace Ogre
         TextureGpuManager *textureManager = mVoxelizer->getTextureGpuManager();
         if( bAllowMultipleBounces )
         {
-            uint32 texFlags = TextureFlags::Uav;
+            uint32 texFlags = TextureFlags::Uav | TextureFlags::Reinterpretable;
             if( !mAnisotropic || shouldEnableSpecularSdfQuality() )
                 texFlags |= TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps;
 
@@ -626,7 +626,7 @@ namespace Ogre
             texture->setResolution( mLightVoxel[0]->getWidth(), mLightVoxel[0]->getHeight(),
                                     mLightVoxel[0]->getDepth() );
             texture->setNumMipmaps( mLightVoxel[0]->getNumMipmaps() );
-            texture->setPixelFormat( PFG_RGBA8_UNORM );
+            texture->setPixelFormat( PFG_RGBA8_UNORM_SRGB );
             texture->scheduleTransitionTo( GpuResidency::Resident );
             mLightBounce = texture;
         }
@@ -697,7 +697,7 @@ namespace Ogre
         return mLightBounce != 0;
     }
     //-------------------------------------------------------------------------
-    void VctLighting::update( SceneManager *sceneManager, uint32 numBounces,
+    void VctLighting::update( SceneManager *sceneManager, uint32 numBounces, float thinWallCounter,
                               float rayMarchStepScale, uint32 _lightMask )
     {
         OGRE_ASSERT_LOW( rayMarchStepScale >= 1.0f );
@@ -721,6 +721,7 @@ namespace Ogre
         DescriptorSetUav::TextureSlot uavSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
         uavSlot.access = ResourceAccess::Write;
         uavSlot.texture = mLightVoxel[0];
+        uavSlot.pixelFormat = PFG_RGBA8_UNORM;
         mLightInjectionJob->_setUavTexture( 0, uavSlot );
 
         const Vector3 voxelOrigin   = mVoxelizer->getVoxelOrigin();
@@ -777,10 +778,15 @@ namespace Ogre
                                 mLightVoxel[0]->getDepth() );
         const Vector3 voxelCellSize( mVoxelizer->getVoxelCellSize() );
 
+        Vector3 dirCorrection( 1.0f / voxelCellSize );
+        dirCorrection /= Ogre::max( Ogre::max( fabsf( dirCorrection.x ),
+                                               fabsf( dirCorrection.y ) ),
+                                    fabsf( dirCorrection.z ) );
+
         mNumLights->setManualValue( numCollectedLights );
         mRayMarchStepSize->setManualValue( 1.0f / voxelRes );
         mVoxelCellSize->setManualValue( voxelCellSize );
-        mInvVoxelCellSize->setManualValue( 1.0f / voxelCellSize );
+        mDirCorrectionRatioThinWallCounter->setManualValue( Vector4( dirCorrection, thinWallCounter ) );
         mInvVoxelResolution->setManualValue( invVoxelRes );
         mShaderParams->setDirty();
 

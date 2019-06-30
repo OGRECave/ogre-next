@@ -48,6 +48,7 @@ namespace Demo
             const char *c_locations[] =
             {
                 "Compute/Tools",
+                "Compute/Tools/Any",
                 "Compute/Tools/GLSL",
                 "Compute/Tools/HLSL",
                 "Compute/Tools/Metal",

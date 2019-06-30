@@ -23,6 +23,8 @@ uniform int4 higherMipHalfRes_lowerMipHalfWidth;
 #define p_higherMipHalfRes higherMipHalfRes_lowerMipHalfWidth.xyz
 #define p_lowerMipHalfWidth higherMipHalfRes_lowerMipHalfWidth.w
 
+@insertpiece( HeaderCS )
+
 //in uvec3 gl_NumWorkGroups;
 //in uvec3 gl_WorkGroupID;
 //in uvec3 gl_LocalInvocationID;

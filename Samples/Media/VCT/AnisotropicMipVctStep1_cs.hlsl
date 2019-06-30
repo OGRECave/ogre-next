@@ -15,6 +15,8 @@ uniform int4 higherMipHalfRes_lowerMipHalfWidth;
 #define p_higherMipHalfRes higherMipHalfRes_lowerMipHalfWidth.xyz
 #define p_lowerMipHalfWidth higherMipHalfRes_lowerMipHalfWidth.w
 
+@insertpiece( HeaderCS )
+
 [numthreads(@value( threads_per_group_x ), @value( threads_per_group_y ), @value( threads_per_group_z ))]
 void main( uint3 gl_GlobalInvocationID		: SV_DispatchThreadId )
 {

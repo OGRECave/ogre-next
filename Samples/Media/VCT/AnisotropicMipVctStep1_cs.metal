@@ -5,6 +5,8 @@
 #define p_higherMipHalfRes higherMipHalfRes_lowerMipHalfWidth.xyz
 #define p_lowerMipHalfWidth higherMipHalfRes_lowerMipHalfWidth.w
 
+@insertpiece( HeaderCS )
+
 kernel void main_metal
 (
 	texture3d<float> inLightLowerMip0											[[texture(0)]],

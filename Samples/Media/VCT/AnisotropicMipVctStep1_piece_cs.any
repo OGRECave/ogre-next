@@ -7,6 +7,10 @@
 //in uvec3 gl_GlobalInvocationID;
 //in uint  gl_LocalInvocationIndex;
 
+@piece( HeaderCS )
+	@insertpiece( DeclSRgbFuncs )
+@end
+
 @piece( BodyCS )
 	if( gl_GlobalInvocationID.x >= uint( p_higherMipHalfRes.x ) ||
 		gl_GlobalInvocationID.y >= uint( p_higherMipHalfRes.y ) ||
@@ -47,7 +51,7 @@
 			  samples[5] + samples[1] * (1.0f - samples[5].a) +
 			  samples[6] + samples[2] * (1.0f - samples[6].a) +
 			  samples[7] + samples[3] * (1.0f - samples[7].a) ) * 0.25f;
-	OGRE_imageWrite3D4( outLightHigherMip0, negAxisDstIUvw, finalValue.xyzw );
+	OGRE_imageWrite3D4( outLightHigherMip0, negAxisDstIUvw, toSRGB( finalValue.xyzw ) );
 
 	//+X
 	@foreach( 8, n )
@@ -58,7 +62,7 @@
 			  samples[1] + samples[5] * (1.0f - samples[1].a) +
 			  samples[2] + samples[6] * (1.0f - samples[2].a) +
 			  samples[3] + samples[7] * (1.0f - samples[3].a) ) * 0.25f;
-	OGRE_imageWrite3D4( outLightHigherMip0, posAxisDstIUvw, finalValue.xyzw );
+	OGRE_imageWrite3D4( outLightHigherMip0, posAxisDstIUvw, toSRGB( finalValue.xyzw ) );
 
 	//-Y
 	@foreach( 8, n )
@@ -69,7 +73,7 @@
 			  samples[3] + samples[1] * (1.0f - samples[3].a) +
 			  samples[7] + samples[5] * (1.0f - samples[7].a) +
 			  samples[6] + samples[4] * (1.0f - samples[6].a) ) * 0.25f;
-	OGRE_imageWrite3D4( outLightHigherMip1, negAxisDstIUvw, finalValue.xyzw );
+	OGRE_imageWrite3D4( outLightHigherMip1, negAxisDstIUvw, toSRGB( finalValue.xyzw ) );
 
 	//+Y
 	@foreach( 8, n )
@@ -80,7 +84,7 @@
 			  samples[1] + samples[3] * (1.0f - samples[1].a) +
 			  samples[5] + samples[7] * (1.0f - samples[5].a) +
 			  samples[4] + samples[6] * (1.0f - samples[4].a) ) * 0.25f;
-	OGRE_imageWrite3D4( outLightHigherMip1, posAxisDstIUvw, finalValue.xyzw );
+	OGRE_imageWrite3D4( outLightHigherMip1, posAxisDstIUvw, toSRGB( finalValue.xyzw ) );
 
 	//-Z
 	@foreach( 8, n )
@@ -91,7 +95,7 @@
 			  samples[3] + samples[2] * (1.0f - samples[3].a) +
 			  samples[5] + samples[4] * (1.0f - samples[5].a) +
 			  samples[7] + samples[6] * (1.0f - samples[7].a) ) * 0.25f;
-	OGRE_imageWrite3D4( outLightHigherMip2, negAxisDstIUvw, finalValue.xyzw );
+	OGRE_imageWrite3D4( outLightHigherMip2, negAxisDstIUvw, toSRGB( finalValue.xyzw ) );
 
 	//+Z
 	@foreach( 8, n )
@@ -102,5 +106,5 @@
 			  samples[2] + samples[3] * (1.0f - samples[2].a) +
 			  samples[4] + samples[5] * (1.0f - samples[4].a) +
 			  samples[6] + samples[7] * (1.0f - samples[6].a) ) * 0.25f;
-	OGRE_imageWrite3D4( outLightHigherMip2, posAxisDstIUvw, finalValue.xyzw );
+	OGRE_imageWrite3D4( outLightHigherMip2, posAxisDstIUvw, toSRGB( finalValue.xyzw ) );
 @end

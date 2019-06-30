@@ -77,6 +77,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreViewport.h"
 #include "OgreWindow.h"
 #include "OgreGL3PlusPixelFormat.h"
+#include "OgrePixelFormatGpuUtils.h"
 
 #include "OgreProfiler.h"
 
@@ -1299,8 +1300,8 @@ namespace Ogre {
         }
     }
 
-    void GL3PlusRenderSystem::setTextureUavCS( uint32 slot,
-                                               const DescriptorSetUav::TextureSlot &texSlot )
+    void GL3PlusRenderSystem::setTextureUavCS( uint32 slot, const DescriptorSetUav::TextureSlot &texSlot,
+                                               GLuint srvView )
     {
         if( texSlot.texture )
         {
@@ -1327,8 +1328,6 @@ namespace Ogre {
             if( pixelFormat == PFG_UNKNOWN )
                 pixelFormat = texSlot.texture->getPixelFormat();
 
-            const GLuint textureName =
-                    static_cast<GL3PlusTextureGpu*>(texSlot.texture)->getDisplayTextureName();
             GLboolean isArrayTexture;
             const TextureTypes::TextureTypes textureType = texSlot.texture->getTextureType();
             if( textureType == TextureTypes::Type1DArray ||
@@ -1345,7 +1344,7 @@ namespace Ogre {
             }
             const GLenum format = GL3PlusMappings::get( pixelFormat );
 
-            OCGE( glBindImageTexture( slot, textureName, texSlot.mipmapLevel, isArrayTexture,
+            OCGE( glBindImageTexture( slot, srvView, texSlot.mipmapLevel, isArrayTexture,
                                       texSlot.textureArrayIndex, access, format ) );
         }
         else
@@ -1360,6 +1359,9 @@ namespace Ogre {
         if( !set )
             return;
 
+        GLuint *srvList = reinterpret_cast<GLuint*>( set->mRsData );
+        size_t elementIdx = 0;
+
         FastArray<DescriptorSetUav::Slot>::const_iterator itor = set->mUavs.begin();
         FastArray<DescriptorSetUav::Slot>::const_iterator end  = set->mUavs.end();
 
@@ -1368,8 +1370,9 @@ namespace Ogre {
             if( itor->isBuffer() )
                 setBufferUavCS( slotStart, itor->getBuffer() );
             else
-                setTextureUavCS( slotStart, itor->getTexture() );
+                setTextureUavCS( slotStart, itor->getTexture(), srvList[elementIdx] );
 
+            ++elementIdx;
             ++slotStart;
             ++itor;
         }
@@ -2080,6 +2083,72 @@ namespace Ogre {
                 const DescriptorSetTexture2::TextureSlot &texSlot = itor->getTexture();
                 if( texSlot.needsDifferentView() )
                     glDeleteTextures( 1u, &srvList[i].texName );
+            }
+        }
+
+        delete [] srvList;
+        set->mRsData = 0;
+    }
+
+    void GL3PlusRenderSystem::_descriptorSetUavCreated( DescriptorSetUav *newSet )
+    {
+        const size_t numElements = newSet->mUavs.size();
+        GLuint *srvList = new GLuint[numElements];
+        newSet->mRsData = srvList;
+
+        FastArray<DescriptorSetUav::Slot>::const_iterator itor = newSet->mUavs.begin();
+
+        for( size_t i=0u; i<numElements; ++i )
+        {
+            srvList[i] = 0;
+            if( itor->isTexture() && itor->getTexture().texture )
+            {
+                const DescriptorSetUav::TextureSlot &texSlot = itor->getTexture();
+
+                const GL3PlusTextureGpu *textureGpu =
+                        static_cast<const GL3PlusTextureGpu*>( itor->getTexture().texture );
+                srvList[i] = textureGpu->getDisplayTextureName();
+
+                if( texSlot.needsDifferentView() &&
+                    texSlot.pixelFormat != PFG_UNKNOWN &&
+                    PixelFormatGpuUtils::isSRgb( texSlot.texture->getPixelFormat() ) )
+                {
+                    OCGE( glGenTextures( 1u, &srvList[i] ) );
+
+                    PixelFormatGpu pixelFormat = texSlot.pixelFormat;
+
+                    const GLenum format = GL3PlusMappings::get( pixelFormat );
+
+                    OCGE( glTextureView( srvList[i], textureGpu->getGlTextureTarget(),
+                                         textureGpu->getDisplayTextureName(), format,
+                                         0, textureGpu->getNumMipmaps(),
+                                         0, textureGpu->getNumSlices() ) );
+                }
+            }
+
+            ++itor;
+        }
+    }
+
+    void GL3PlusRenderSystem::_descriptorSetUavDestroyed( DescriptorSetUav *set )
+    {
+        OGRE_ASSERT_LOW( set->mRsData );
+        GLuint *srvList = reinterpret_cast<GLuint*>( set->mRsData );
+
+        const size_t numElements = set->mUavs.size();
+        FastArray<DescriptorSetUav::Slot>::const_iterator itor = set->mUavs.begin();
+
+        for( size_t i=0u; i<numElements; ++i )
+        {
+            if( itor->isTexture() && itor->getTexture().texture )
+            {
+                const DescriptorSetUav::TextureSlot &texSlot = itor->getTexture();
+                if( texSlot.needsDifferentView() &&
+                    texSlot.pixelFormat != PFG_UNKNOWN &&
+                    PixelFormatGpuUtils::isSRgb( texSlot.texture->getPixelFormat() ) )
+                {
+                    glDeleteTextures( 1u, &srvList[i] );
+                }
             }
         }
 
