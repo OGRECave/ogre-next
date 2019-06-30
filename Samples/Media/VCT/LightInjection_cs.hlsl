@@ -32,12 +32,14 @@ uniform uint numLights;
 uniform float3 rayMarchStepSize;
 //uniform float3 voxelOrigin;
 uniform float3 voxelCellSize;
+uniform float3 invVoxelCellSize;
 uniform float3 invVoxelResolution;
 
 #define p_numLights numLights
 #define p_rayMarchStepSize rayMarchStepSize
 //#define p_voxelOrigin voxelOrigin
 #define p_voxelCellSize voxelCellSize
+#define p_voxelInvCellSize invVoxelCellSize
 #define p_invVoxelResolution invVoxelResolution
 
 //in uvec3 gl_NumWorkGroups;

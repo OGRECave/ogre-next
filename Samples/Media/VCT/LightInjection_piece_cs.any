@@ -116,6 +116,9 @@
 				}
 			@end
 
+			//lightDir is in world space, it needs to be in UV space (which may be stretched)
+			lightDir *= p_voxelInvCellSize.xyz;
+			//Ensure lightDir makes pixel-sized steps
 			lightDir /= max3( abs( lightDir.x ), abs( lightDir.y ), abs( lightDir.z ) );
 
 			float alpha = albedoVal.w;

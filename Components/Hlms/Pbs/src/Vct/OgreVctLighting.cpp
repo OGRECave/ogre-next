@@ -83,6 +83,7 @@ namespace Ogre
         mNumLights( 0 ),
         mRayMarchStepSize( 0 ),
         mVoxelCellSize( 0 ),
+        mInvVoxelCellSize( 0 ),
         mInvVoxelResolution( 0 ),
         mShaderParams( 0 ),
         mBounceVoxelCellSize( 0 ),
@@ -106,6 +107,7 @@ namespace Ogre
         mNumLights = mShaderParams->findParameter( "numLights" );
         mRayMarchStepSize = mShaderParams->findParameter( "rayMarchStepSize" );
         mVoxelCellSize = mShaderParams->findParameter( "voxelCellSize" );
+        mInvVoxelCellSize = mShaderParams->findParameter( "invVoxelCellSize" );
         mInvVoxelResolution = mShaderParams->findParameter( "invVoxelResolution" );
 
         RenderSystem *renderSystem = mVoxelizer->getRenderSystem();
@@ -773,10 +775,12 @@ namespace Ogre
 
         const Vector3 voxelRes( mLightVoxel[0]->getWidth(), mLightVoxel[0]->getHeight(),
                                 mLightVoxel[0]->getDepth() );
+        const Vector3 voxelCellSize( mVoxelizer->getVoxelCellSize() );
 
         mNumLights->setManualValue( numCollectedLights );
         mRayMarchStepSize->setManualValue( 1.0f / voxelRes );
-        mVoxelCellSize->setManualValue( mVoxelizer->getVoxelCellSize() );
+        mVoxelCellSize->setManualValue( voxelCellSize );
+        mInvVoxelCellSize->setManualValue( 1.0f / voxelCellSize );
         mInvVoxelResolution->setManualValue( invVoxelRes );
         mShaderParams->setDirty();
 

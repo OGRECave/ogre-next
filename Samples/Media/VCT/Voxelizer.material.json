@@ -64,6 +64,7 @@
                 ["numLights",               [0],        "uint"],
                 ["rayMarchStepSize",        [1,1,1],    "float"],
                 ["voxelCellSize",           [1,1,1],    "float"],
+                ["invVoxelCellSize",        [1,1,1],    "float"],
                 ["invVoxelResolution",      [1,1,1],    "float"]
             ],
 

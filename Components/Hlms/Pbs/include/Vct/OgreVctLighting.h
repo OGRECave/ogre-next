@@ -94,6 +94,7 @@ namespace Ogre
         ShaderParams::Param *mNumLights;
         ShaderParams::Param *mRayMarchStepSize;
         ShaderParams::Param *mVoxelCellSize;
+        ShaderParams::Param *mInvVoxelCellSize;
         ShaderParams::Param *mInvVoxelResolution;
         ShaderParams        *mShaderParams;
 
