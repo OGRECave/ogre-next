@@ -191,9 +191,6 @@ namespace Demo
         sceneNode->setScale( Ogre::Vector3( 0.1f ) );
         sceneNode->setPosition( 0, item->getWorldAabbUpdated().mHalfSize.y, 0 );
         mItems.push_back( item );
-
-        Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
-        item->setDatablock( hlmsManager->getHlms( Ogre::HLMS_UNLIT )->getDefaultDatablock() );
     }
     //-----------------------------------------------------------------------------------
     void VoxelizerGameState::createStressScene(void)
