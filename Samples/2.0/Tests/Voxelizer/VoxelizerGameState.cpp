@@ -37,6 +37,7 @@ namespace Demo
         mVctLighting( 0 ),
         mDebugVisualizationMode( Ogre::VctVoxelizer::DebugVisualizationNone ),
         mNumBounces( 6u ),
+        mCurrentScene( SceneCornell ),
         mTestUtils( 0 )
     {
     }
@@ -123,6 +124,48 @@ namespace Demo
         }
 
         mVctLighting->update( sceneManager, mNumBounces );
+    }
+    //-----------------------------------------------------------------------------------
+    void VoxelizerGameState::cycleScenes( bool bPrev )
+    {
+        if( !bPrev )
+            mCurrentScene = static_cast<Scenes>( (mCurrentScene + 1u) % NumScenes );
+        else
+            mCurrentScene = static_cast<Scenes>( (mCurrentScene + NumScenes - 1u) % NumScenes );
+
+        destroyCurrentScene();
+
+        switch( mCurrentScene )
+        {
+        case SceneCornell:
+        case NumScenes:
+            createCornellScene(); break;
+        case SceneSibenik:
+            createSibenikScene(); break;
+        case SceneStress:
+            createStressScene(); break;
+        }
+
+        voxelizeScene();
+    }
+    //-----------------------------------------------------------------------------------
+    void VoxelizerGameState::destroyCurrentScene(void)
+    {
+        mVoxelizer->removeAllItems();
+
+        Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
+
+        Ogre::FastArray<Ogre::Item*>::const_iterator itor = mItems.begin();
+        Ogre::FastArray<Ogre::Item*>::const_iterator end  = mItems.end();
+        while( itor != end )
+        {
+            Ogre::SceneNode *sceneNode = (*itor)->getParentSceneNode();
+            sceneNode->getParentSceneNode()->removeAndDestroyChild( sceneNode );
+            sceneManager->destroyItem( *itor );
+            ++itor;
+        }
+
+        mItems.clear();
     }
     //-----------------------------------------------------------------------------------
     void VoxelizerGameState::createCornellScene(void)
@@ -323,16 +366,22 @@ namespace Demo
 
         static const Ogre::String visualizationModes[] =
         {
-            "Albedo",
-            "Normal",
-            "Emissive",
-            "None",
-            "Lighting"
+            "[Albedo]",
+            "[Normal]",
+            "[Emissive]",
+            "[None]",
+            "[Lighting]"
         };
 
-        outText += "\nPress F2 to switch to cycle visualization modes [";
+        static const Ogre::String sceneNames[] =
+        {
+            "[Cornell]",
+            "[Sibenik]",
+            "[Stress Test]",
+        };
+
+        outText += "\nPress F2 to cycle visualization modes ";
         outText += visualizationModes[mDebugVisualizationMode];
-        outText += "]";
         outText += "\nPress F3 to toggle VCT quality [";
         outText += hlmsPbs->getVctFullConeCount() ? "High]" : "Low]";
         outText += "\nPress F4 to toggle Anisotropic VCT [";
@@ -340,6 +389,8 @@ namespace Demo
         outText += "\nPress [Shift+] F5 to increase/decrease num indirect bounces [";
         outText += Ogre::StringConverter::toString( mNumBounces );
         outText += "]";
+        outText += "\nPress [Shift+] F6 to cycle scenes ";
+        outText += sceneNames[mCurrentScene];
     }
     //-----------------------------------------------------------------------------------
     void VoxelizerGameState::keyReleased( const SDL_KeyboardEvent &arg )
@@ -371,6 +422,10 @@ namespace Demo
                 --mNumBounces;
 
             mVctLighting->update( mGraphicsSystem->getSceneManager(), mNumBounces );
+        }
+        else if( arg.keysym.sym == SDLK_F6 )
+        {
+            cycleScenes( arg.keysym.mod & (KMOD_LSHIFT|KMOD_RSHIFT) );
         }
         else
         {

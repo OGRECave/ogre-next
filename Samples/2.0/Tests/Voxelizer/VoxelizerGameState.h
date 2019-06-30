@@ -16,6 +16,14 @@ namespace Demo
     class TestUtils;
     class VoxelizerGameState : public TutorialGameState
     {
+        enum Scenes
+        {
+            SceneCornell,
+            SceneSibenik,
+            SceneStress,
+            NumScenes
+        };
+
         Ogre::VctVoxelizer  *mVoxelizer;
         Ogre::VctLighting   *mVctLighting;
 
@@ -24,12 +32,17 @@ namespace Demo
 
         Ogre::FastArray<Ogre::Item*>    mItems;
 
+        Scenes			mCurrentScene;
+
         TestUtils       *mTestUtils;
 
         void cycleVisualizationMode( bool bPrev );
         void toggletVctQuality(void);
 
         void voxelizeScene(void);
+
+        void cycleScenes( bool bPrev );
+        void destroyCurrentScene(void);
 
         void createCornellScene(void);
         void createSibenikScene(void);
