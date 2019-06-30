@@ -13,6 +13,7 @@ namespace Ogre
 
 namespace Demo
 {
+    class TestUtils;
     class VoxelizerGameState : public TutorialGameState
     {
         Ogre::VctVoxelizer  *mVoxelizer;
@@ -23,12 +24,16 @@ namespace Demo
 
         Ogre::FastArray<Ogre::Item*>    mItems;
 
+        TestUtils       *mTestUtils;
+
         void cycleVisualizationMode( bool bPrev );
         void toggletVctQuality(void);
 
         void voxelizeScene(void);
 
         void createCornellScene(void);
+        void createSibenikScene(void);
+        void createStressScene(void);
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 

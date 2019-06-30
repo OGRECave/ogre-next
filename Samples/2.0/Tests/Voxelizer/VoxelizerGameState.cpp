@@ -21,6 +21,7 @@
 #include "Vct/OgreVctLighting.h"
 
 #include "Utils/MeshUtils.h"
+#include "Utils/TestUtils.h"
 
 #include "OgreWindow.h"
 
@@ -35,7 +36,8 @@ namespace Demo
         mVoxelizer( 0 ),
         mVctLighting( 0 ),
         mDebugVisualizationMode( Ogre::VctVoxelizer::DebugVisualizationNone ),
-        mNumBounces( 6u )
+        mNumBounces( 6u ),
+        mTestUtils( 0 )
     {
     }
     //-----------------------------------------------------------------------------------
@@ -173,6 +175,75 @@ namespace Demo
         mItems.push_back( item );
     }
     //-----------------------------------------------------------------------------------
+    void VoxelizerGameState::createSibenikScene(void)
+    {
+        Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
+
+        Ogre::Item *item = 0;
+        Ogre::SceneNode *sceneNode = 0;
+
+        item = sceneManager->createItem( "sibenik.mesh",
+                                         Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                                         Ogre::SCENE_DYNAMIC );
+        sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
+                    createChildSceneNode( Ogre::SCENE_DYNAMIC );
+        sceneNode->attachObject( item );
+        sceneNode->setScale( Ogre::Vector3( 0.1f ) );
+        sceneNode->setPosition( 0, item->getWorldAabbUpdated().mHalfSize.y, 0 );
+        mItems.push_back( item );
+
+        Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
+        item->setDatablock( hlmsManager->getHlms( Ogre::HLMS_UNLIT )->getDefaultDatablock() );
+    }
+    //-----------------------------------------------------------------------------------
+    void VoxelizerGameState::createStressScene(void)
+    {
+        createCornellScene();
+
+        if( !mTestUtils )
+        {
+            mTestUtils = new TestUtils();
+            mTestUtils->generateRandomBlankTextures( 512u, 128u, 256u );
+            mTestUtils->generateUnlitDatablocksWithTextures( 256u, 0u, 256u );
+            mTestUtils->generatePbsDatablocksWithTextures( 256u, 256u, 256u );
+        }
+
+        Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
+
+        Ogre::Item *item = 0;
+        Ogre::SceneNode *sceneNode = 0;
+
+        for( size_t i=0; i<512u; ++i )
+        {
+            item = sceneManager->createItem( "Cube_d.mesh",
+                                             Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                                             Ogre::SCENE_STATIC );
+            sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_STATIC )->
+                        createChildSceneNode( Ogre::SCENE_STATIC );
+            sceneNode->setScale( Ogre::Vector3( 0.05f ) );
+
+            const float xPos = (i % 16u) - 7.5f;
+            const float zPos = (i / 16u) % 16u - 7.5f;
+            const float yPos = i / (16u * 16u);
+
+            sceneNode->setPosition( xPos * 0.12f, 0.05f + 0.35f * yPos, zPos * 0.12f );
+            sceneNode->attachObject( item );
+
+            if( i < 256u )
+            {
+                item->setDatablockOrMaterialName( "UnitTestUnlit" +
+                                                  Ogre::StringConverter::toString( i ) );
+            }
+            else
+            {
+                item->setDatablockOrMaterialName( "UnitTestPbs" +
+                                                  Ogre::StringConverter::toString( i - 256u ) );
+            }
+
+            mItems.push_back( item );
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void VoxelizerGameState::createScene01(void)
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
@@ -180,6 +251,8 @@ namespace Demo
         MeshUtils::importV1Mesh( "athene.mesh",
                                  Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
         MeshUtils::importV1Mesh( "tudorhouse.mesh",
+                                 Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
+        MeshUtils::importV1Mesh( "sibenik.mesh",
                                  Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
 
         Ogre::Light *light = sceneManager->createLight();
@@ -201,7 +274,9 @@ namespace Demo
 
         mGraphicsSystem->getCamera()->setPosition( Ogre::Vector3( 0.0f, 1.8f, 2.5f ) );
 
-        createCornellScene();
+        //createCornellScene();
+        //createStressScene();
+        createSibenikScene();
         voxelizeScene();
     }
     //-----------------------------------------------------------------------------------
@@ -219,6 +294,9 @@ namespace Demo
             Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
             hlmsPbs->setVctLighting( 0 );
         }
+
+        delete mTestUtils;
+        mTestUtils = 0;
     }
     //-----------------------------------------------------------------------------------
     void VoxelizerGameState::update( float timeSinceLast )
