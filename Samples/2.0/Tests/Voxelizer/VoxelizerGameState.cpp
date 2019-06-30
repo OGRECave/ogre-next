@@ -314,9 +314,9 @@ namespace Demo
 
         mGraphicsSystem->getCamera()->setPosition( Ogre::Vector3( 0.0f, 1.8f, 2.5f ) );
 
-        //createCornellScene();
+        createCornellScene();
         //createStressScene();
-        createSibenikScene();
+        //createSibenikScene();
         voxelizeScene();
     }
     //-----------------------------------------------------------------------------------
