@@ -20,6 +20,8 @@
 #include "Vct/OgreVctVoxelizer.h"
 #include "Vct/OgreVctLighting.h"
 
+#include "Utils/MeshUtils.h"
+
 #include "OgreWindow.h"
 
 using namespace Demo;
@@ -65,6 +67,17 @@ namespace Demo
                                                sceneManager );
             mVctLighting->setDebugVisualization( true, sceneManager );
         }
+
+        const bool showItems = mDebugVisualizationMode == Ogre::VctVoxelizer::DebugVisualizationNone ||
+                               mDebugVisualizationMode == Ogre::VctVoxelizer::DebugVisualizationEmissive;
+
+        Ogre::FastArray<Ogre::Item*>::const_iterator itor = mItems.begin();
+        Ogre::FastArray<Ogre::Item*>::const_iterator end  = mItems.end();
+        while( itor != end )
+        {
+            (*itor)->setVisible( showItems );
+            ++itor;
+        }
     }
     //-----------------------------------------------------------------------------------
     void VoxelizerGameState::toggletVctQuality(void)
@@ -75,93 +88,99 @@ namespace Demo
         hlmsPbs->setVctFullConeCount( !hlmsPbs->getVctFullConeCount() );
     }
     //-----------------------------------------------------------------------------------
-    void VoxelizerGameState::createScene01(void)
+    void VoxelizerGameState::voxelizeScene(void)
+    {
+        TODO_do_this_in_voxelizer;
+        Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
+        sceneManager->updateSceneGraph();
+
+        mVoxelizer->removeAllItems();
+
+        Ogre::FastArray<Ogre::Item*>::const_iterator itor = mItems.begin();
+        Ogre::FastArray<Ogre::Item*>::const_iterator end  = mItems.end();
+
+        while( itor != end )
+            mVoxelizer->addItem( *itor++, false );
+
+        mVoxelizer->autoCalculateRegion();
+        mVoxelizer->dividideOctants( 1u, 1u, 1u );
+
+        mVoxelizer->build( sceneManager );
+
+        if( !mVctLighting )
+        {
+            mVctLighting = new Ogre::VctLighting( Ogre::Id::generateNewId<Ogre::VctLighting>(),
+                                                  mVoxelizer, true );
+            mVctLighting->setAllowMultipleBounces( true );
+
+            Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
+
+            assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
+            Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
+            hlmsPbs->setVctLighting( mVctLighting );
+        }
+
+        mVctLighting->update( sceneManager, mNumBounces );
+    }
+    //-----------------------------------------------------------------------------------
+    void VoxelizerGameState::createCornellScene(void)
     {
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
-        Ogre::v1::MeshPtr v1Mesh;
-        Ogre::MeshPtr v2Mesh;
+        Ogre::Item *item = 0;
+        Ogre::SceneNode *sceneNode = 0;
 
-        //---------------------------------------------------------------------------------------
-        //Import Athene to v2 and render it without saving to disk.
-        //---------------------------------------------------------------------------------------
+        item = sceneManager->createItem( "CornellBox.mesh",
+                                         Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                                         Ogre::SCENE_DYNAMIC );
+        sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
+                    createChildSceneNode( Ogre::SCENE_DYNAMIC );
+        sceneNode->attachObject( item );
+        mItems.push_back( item );
 
-        //Load the v1 mesh. Notice the v1 namespace
-        //Also notice the HBU_STATIC flag; since the HBU_WRITE_ONLY
-        //bit would prohibit us from reading the data for importing.
-        v1Mesh = Ogre::v1::MeshManager::getSingleton().load(
-                    "athene.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
-                    Ogre::v1::HardwareBuffer::HBU_STATIC, Ogre::v1::HardwareBuffer::HBU_STATIC );
-
-        //Create a v2 mesh to import to, with a different name (arbitrary).
-        v2Mesh = Ogre::MeshManager::getSingleton().createManual(
-                    "athene.mesh Imported", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
-
-        bool halfPosition   = true;
-        bool halfUVs        = true;
-        bool useQtangents   = true;
-
-        //Import the v1 mesh to v2
-        v2Mesh->importV1( v1Mesh.get(), halfPosition, halfUVs, useQtangents );
-
-        //We don't need the v1 mesh. Free CPU memory, get it out of the GPU.
-        //Leave it loaded if you want to use athene with v1 Entity.
-        v1Mesh->unload();
-
-        v1Mesh = Ogre::v1::MeshManager::getSingleton().load(
-                    "tudorhouse.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
-                    Ogre::v1::HardwareBuffer::HBU_STATIC, Ogre::v1::HardwareBuffer::HBU_STATIC );
-        v2Mesh = Ogre::MeshManager::getSingleton().createManual(
-                    "tudorhouse.mesh", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
-        v2Mesh->importV1( v1Mesh.get(), halfPosition, halfUVs, useQtangents );
-        v1Mesh->unload();
-
-        Ogre::Item *cornellItem = sceneManager->createItem( "CornellBox.mesh",
-                                                            Ogre::ResourceGroupManager::
-                                                            AUTODETECT_RESOURCE_GROUP_NAME,
-                                                            Ogre::SCENE_DYNAMIC );
-        Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
-                                     createChildSceneNode( Ogre::SCENE_DYNAMIC );
-        sceneNode->attachObject( cornellItem );
-
-        //Create an Item with the model we just imported.
-        //Notice we use the name of the imported model. We could also use the overload
-        //with the mesh pointer:
-        //  item = sceneManager->createItem( Voxelizer, Ogre::SCENE_DYNAMIC );
-        Ogre::Item *item = sceneManager->createItem( "athene.mesh Imported",
-                                                     Ogre::ResourceGroupManager::
-                                                     AUTODETECT_RESOURCE_GROUP_NAME,
-                                                     Ogre::SCENE_DYNAMIC );
+        item = sceneManager->createItem( "athene.mesh",
+                                         Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                                         Ogre::SCENE_DYNAMIC );
         sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
                     createChildSceneNode( Ogre::SCENE_DYNAMIC );
         sceneNode->attachObject( item );
         sceneNode->setScale( Ogre::Vector3( 0.01f ) );
         sceneNode->setPosition( 0, item->getWorldAabbUpdated().mHalfSize.y, 0 );
+        mItems.push_back( item );
 
         //Ogre::Item *item2 = sceneManager->createItem( "athene.mesh Imported",
-        Ogre::Item *item2 = sceneManager->createItem( "Sphere1000.mesh",
-                                                     Ogre::ResourceGroupManager::
-                                                     AUTODETECT_RESOURCE_GROUP_NAME,
-                                                     Ogre::SCENE_DYNAMIC );
+        item = sceneManager->createItem( "Sphere1000.mesh",
+                                         Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                                         Ogre::SCENE_DYNAMIC );
         sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
                     createChildSceneNode( Ogre::SCENE_DYNAMIC );
-        sceneNode->attachObject( item2 );
-        sceneNode->setScale( Ogre::Vector3( 0.5f ) );
-        sceneNode->setPosition( 0.5, /*1.5*/item2->getWorldAabbUpdated().mHalfSize.y, 0 );
+        sceneNode->attachObject( item );
+        sceneNode->setScale( Ogre::Vector3( 0.45f ) );
+        sceneNode->setPosition( 0.6f, item->getWorldAabbUpdated().mHalfSize.y, -0.25f );
+        mItems.push_back( item );
 
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
-        item2->setDatablock( hlmsManager->getHlms( Ogre::HLMS_UNLIT )->getDefaultDatablock() );
-//        item2->setDatablockOrMaterialName( "Examples/TudorHouse2" );
+        item->setDatablock( hlmsManager->getHlms( Ogre::HLMS_UNLIT )->getDefaultDatablock() );
 
-        Ogre::Item *itemBarrel = sceneManager->createItem( "tudorhouse.mesh",
-                                                           Ogre::ResourceGroupManager::
-                                                           AUTODETECT_RESOURCE_GROUP_NAME,
-                                                           Ogre::SCENE_DYNAMIC );
+        item = sceneManager->createItem( "tudorhouse.mesh",
+                                         Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                                         Ogre::SCENE_DYNAMIC );
         sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
                     createChildSceneNode( Ogre::SCENE_DYNAMIC );
-        sceneNode->attachObject( itemBarrel );
+        sceneNode->attachObject( item );
         sceneNode->setScale( Ogre::Vector3( 0.001f ) );
-        sceneNode->setPosition( -0.5, itemBarrel->getWorldAabbUpdated().mHalfSize.y, 0 );
+        sceneNode->setPosition( -0.5, item->getWorldAabbUpdated().mHalfSize.y, 0 );
+        mItems.push_back( item );
+    }
+    //-----------------------------------------------------------------------------------
+    void VoxelizerGameState::createScene01(void)
+    {
+        Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
+
+        MeshUtils::importV1Mesh( "athene.mesh",
+                                 Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
+        MeshUtils::importV1Mesh( "tudorhouse.mesh",
+                                 Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
 
         Ogre::Light *light = sceneManager->createLight();
         Ogre::SceneNode *lightNode = sceneManager->getRootSceneNode()->createChildSceneNode();
@@ -174,41 +193,16 @@ namespace Demo
 
         TutorialGameState::createScene01();
 
-        TODO_do_this_in_voxelizer;
-        sceneManager->updateSceneGraph();
-
         Ogre::Root *root = mGraphicsSystem->getRoot();
         mVoxelizer =
                 new Ogre::VctVoxelizer( Ogre::Id::generateNewId<Ogre::VctVoxelizer>(),
                                         root->getRenderSystem(), root->getHlmsManager(),
                                         true );
-        mVoxelizer->addItem( cornellItem, false );
-        mVoxelizer->addItem( item, false );
-        mVoxelizer->addItem( item2, false );
-        mVoxelizer->addItem( itemBarrel, false );
-        mVoxelizer->autoCalculateRegion();
-        mVoxelizer->dividideOctants( 1u, 1u, 1u );
-        mVoxelizer->build( sceneManager );
 
-        mVctLighting = new Ogre::VctLighting( Ogre::Id::generateNewId<Ogre::VctLighting>(),
-                                              mVoxelizer, true );
-        mVctLighting->setAllowMultipleBounces( true );
-        mVctLighting->update( sceneManager, mNumBounces );
+        mGraphicsSystem->getCamera()->setPosition( Ogre::Vector3( 0.0f, 1.8f, 2.5f ) );
 
-        {
-            Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
-
-            assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
-            Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
-            hlmsPbs->setVctLighting( mVctLighting );
-        }
-
-//        cornellItem->setVisible( false );
-//        item->setVisible( false );
-//        itemBarrel->setVisible( false );
-//        item2->setVisible( false );
-
-        mGraphicsSystem->getCamera()->setPosition( Ogre::Vector3( 0, 1.8, 2.5 ) );
+        createCornellScene();
+        voxelizeScene();
     }
     //-----------------------------------------------------------------------------------
     void VoxelizerGameState::destroyScene(void)

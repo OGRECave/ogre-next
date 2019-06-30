@@ -21,8 +21,14 @@ namespace Demo
         Ogre::uint32    mDebugVisualizationMode;
         Ogre::uint32    mNumBounces;
 
+        Ogre::FastArray<Ogre::Item*>    mItems;
+
         void cycleVisualizationMode( bool bPrev );
         void toggletVctQuality(void);
+
+        void voxelizeScene(void);
+
+        void createCornellScene(void);
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
