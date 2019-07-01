@@ -63,12 +63,12 @@ namespace Ogre
             bool                hasEmissive;
             HlmsDatablockSet    datablocks;
         };
-        typedef FastArray<MaterialBucket> BucketArray;
+        typedef vector<MaterialBucket>::type BucketVec;
 
         typedef map<HlmsDatablock*, DatablockConversionResult>::type DatablockConversionResultMap;
         DatablockConversionResultMap mDatablockConversionResults;
 
-        BucketArray mBuckets;
+        BucketVec mBuckets;
 
         VaoManager  *mVaoManager;
 

@@ -475,8 +475,8 @@ namespace Ogre
                                  "AlwaysKeepSystemRamCopy; or we shouldn't have a"
                                  "SysRAM copy if we weren't in that strategy." );
 
-                OGRE_ASSERT_LOW( mPageOutStrategy == GpuPageOutStrategy::AlwaysKeepSystemRamCopy ||
-                                 !sysRamCopy || mSysRamCopy == sysRamCopy &&
+                OGRE_ASSERT_LOW( (mPageOutStrategy == GpuPageOutStrategy::AlwaysKeepSystemRamCopy ||
+                                 !sysRamCopy || mSysRamCopy == sysRamCopy) &&
                                  "sysRamCopy must be nullptr or equal to mSysRamCopy when "
                                  "mPageOutStrategy != GpuPageOutStrategy::AlwaysKeepSystemRamCopy" );
 

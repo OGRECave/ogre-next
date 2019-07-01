@@ -4630,5 +4630,7 @@ namespace Ogre
 
         mDevice.GetImmediateContext()->ClearState();
         mDevice.GetImmediateContext()->Flush();
+
+        endRenderPassDescriptor();
     }
 }

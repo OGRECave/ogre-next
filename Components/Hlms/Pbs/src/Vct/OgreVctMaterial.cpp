@@ -92,8 +92,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     VctMaterial::~VctMaterial()
     {
-        BucketArray::const_iterator itor = mBuckets.begin();
-        BucketArray::const_iterator end  = mBuckets.end();
+        BucketVec::const_iterator itor = mBuckets.begin();
+        BucketVec::const_iterator end  = mBuckets.end();
 
         while( itor != end )
         {
@@ -243,8 +243,8 @@ namespace Ogre
         const bool needsDiffuse = datablock->getDiffuseTexture() != 0;
         const bool needsEmissive = datablock->getEmissiveTexture() != 0;
 
-        BucketArray::iterator itor = mBuckets.begin();
-        BucketArray::iterator end  = mBuckets.end();
+        BucketVec::iterator itor = mBuckets.begin();
+        BucketVec::iterator end  = mBuckets.end();
 
         while( itor != end &&
                (itor->datablocks.size() >= c_numDatablocksPerConstBuffer ||
