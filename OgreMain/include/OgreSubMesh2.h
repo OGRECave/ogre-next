@@ -109,7 +109,7 @@ namespace Ogre {
         /// if we need to strip, normalizes all weights to sum 1.
         uint8 rationaliseBoneAssignments(void);
         
-        unsigned short mNumPoses;
+        uint16 mNumPoses;
         bool mPoseHalfPrecision;
         bool mPoseNormals;
         std::map<Ogre::String, size_t> mPoseIndexMap;
@@ -202,7 +202,7 @@ namespace Ogre {
 
         void _prepareForShadowMapping( bool forceSameBuffers );
         
-        unsigned short getNumPoses() { return mNumPoses; }
+        uint16 getNumPoses() { return mNumPoses; }
         
         bool getPoseHalfPrecision() { return mPoseHalfPrecision; }
 

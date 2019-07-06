@@ -238,10 +238,6 @@ struct Material
 				float4 posL@n;@end @end
 
 		@property( hlms_pssm_splits )float depth;@end
-		
-		@property( hlms_colour )
-			float4 colour;
-		@end
 	@end
 
 	@property( hlms_shadowcaster )

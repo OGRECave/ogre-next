@@ -499,7 +499,8 @@ namespace Ogre {
         return 0;
     }
     //---------------------------------------------------------------------
-    void SubMesh::importFromV1( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords, bool qTangents, bool halfPose )
+    void SubMesh::importFromV1( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords,
+                                bool qTangents, bool halfPose )
     {
         mMaterialName = subMesh->getMaterialName();
 
@@ -625,17 +626,18 @@ namespace Ogre {
         return indexBuffer;
     }
     //---------------------------------------------------------------------
-    void SubMesh::importPosesFromV1( v1::SubMesh *subMesh, VertexBufferPacked *vertexBuffer, bool halfPrecision )
+    void SubMesh::importPosesFromV1( v1::SubMesh *subMesh, VertexBufferPacked *vertexBuffer,
+                                     bool halfPrecision )
     {
         // Find the index of this subMesh and only process poses which have this
         // subMesh as their target.
-        v1::Mesh::SubMeshList::const_iterator subMeshBegin = subMesh->parent->getSubMeshIterator().begin();
+        v1::Mesh::SubMeshList::const_iterator subMeshBegin =subMesh->parent->getSubMeshIterator().begin();
         v1::Mesh::SubMeshList::const_iterator subMeshEnd = subMesh->parent->getSubMeshIterator().end();
         v1::Mesh::SubMeshList::const_iterator subMeshIt = std::find( subMeshBegin, subMeshEnd, subMesh );
         
         assert( subMeshIt != subMeshEnd && "Parent mesh does not contain this subMesh.");
                 
-        int subMeshIndex = subMeshIt - subMeshBegin;
+        const size_t subMeshIndex = static_cast<size_t>( subMeshIt - subMeshBegin );
         
         const v1::PoseList &poseListOrig = subMesh->parent->getPoseList();
         v1::PoseList poseList;
@@ -652,7 +654,7 @@ namespace Ogre {
             }
         }
         
-        mNumPoses = poseList.size();
+        mNumPoses = static_cast<uint16>( poseList.size() );
         mPoseHalfPrecision = halfPrecision;
         
         if( mNumPoses > 0 ) 
@@ -735,7 +737,7 @@ namespace Ogre {
     void SubMesh::createPoses( const float** positionData, const float** normalData, 
                                size_t numPoses, size_t numVertices, bool halfPrecision )
     {
-        mNumPoses = numPoses;
+        mNumPoses = static_cast<uint16>( numPoses );
         mPoseHalfPrecision = halfPrecision;
         mPoseNormals = normalData != 0;
         size_t elementSize = halfPrecision ? sizeof( uint16 ) : sizeof( float );

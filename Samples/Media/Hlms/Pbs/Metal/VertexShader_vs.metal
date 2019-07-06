@@ -10,7 +10,6 @@
 struct VS_INPUT
 {
 	float4 position [[attribute(VES_POSITION)]];
-@property( hlms_colour )	float4 colour [[attribute(VES_DIFFUSE)]];@end
 @property( hlms_normal )	float3 normal [[attribute(VES_NORMAL)]];@end
 @property( hlms_qtangent )	float4 qtangent [[attribute(VES_NORMAL)]];@end
 
@@ -275,9 +274,6 @@ vertex PS_INPUT main_metal
 
 	@insertpiece( DoShadowReceiveVS )
 	@insertpiece( DoShadowCasterVS )
-	
-@property( hlms_colour )	
-	outVs.colour = input.colour;@end
 
 	/// hlms_uv_count will be 0 on shadow caster passes w/out alpha test
 @foreach( hlms_uv_count, n )

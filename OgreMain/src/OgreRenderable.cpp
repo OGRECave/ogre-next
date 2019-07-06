@@ -224,15 +224,18 @@ namespace Ogre
         if( !mPoseData ) 
             return;
         
-        assert( (index < OGRE_MAX_POSES && index < mPoseData->numPoses) && "Pose weight index out of bounds" );
+        assert( (index < OGRE_MAX_POSES && index < mPoseData->numPoses) &&
+                "Pose weight index out of bounds" );
         mPoseData->weights[index] = w; 
     }
+    //-----------------------------------------------------------------------------------
     void Renderable::addPoseWeight(size_t index, float w)
     {
         if( !mPoseData ) 
             return;
 
-        assert( (index < OGRE_MAX_POSES && index < mPoseData->numPoses) && "Pose weight index out of bounds" );
+        assert( (index < OGRE_MAX_POSES && index < mPoseData->numPoses) &&
+                "Pose weight index out of bounds" );
         mPoseData->weights[index] += w;
     }
     //-----------------------------------------------------------------------------------

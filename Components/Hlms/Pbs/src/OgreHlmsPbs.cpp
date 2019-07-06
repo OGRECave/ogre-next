@@ -2114,7 +2114,7 @@ namespace Ogre
 
         bool hasSkeletonAnimation = queuedRenderable.renderable->hasSkeletonAnimation();
         uint32 numPoses = queuedRenderable.renderable->getNumPoses();
-        uint32 poseWeightsNumFloats = ((numPoses >> 2) + std::min(numPoses % 4, 1U)) * 4;
+        uint32 poseWeightsNumFloats = ((numPoses >> 2u) + std::min(numPoses % 4u, 1u)) * 4u;
 
         const Matrix4 &worldMat = queuedRenderable.movableObject->_getParentNodeFullTransform();
 
@@ -2192,13 +2192,14 @@ namespace Ogre
             bool exceedsConstBuffer = (size_t)((currentMappedConstBuffer - mStartMappedConstBuffer) + 4)
                                         > mCurrentConstBufferSize;
 
-            if( hasSkeletonAnimation ) {
+            if( hasSkeletonAnimation )
+            {
                 if( isV1 )
                 {
                     uint16 numWorldTransforms = queuedRenderable.renderable->getNumWorldTransforms();
                     assert( numWorldTransforms <= 256u );
 
-                    const size_t poseDataSize = numPoses > 0 ? 4 + poseWeightsNumFloats : 0;
+                    const size_t poseDataSize = numPoses > 0u ? (4u + poseWeightsNumFloats) : 0u;
                     const size_t minimumTexBufferSize = 12 * numWorldTransforms + poseDataSize;
                     bool exceedsTexBuffer = (currentMappedTexBuffer - mStartMappedTexBuffer) +
                             minimumTexBufferSize >= mCurrentTexBufferSize;
@@ -2254,7 +2255,7 @@ namespace Ogre
 
                     const RenderableAnimated::IndexMap *indexMap = renderableAnimated->getBlendIndexToBoneIndexMap();
 
-                    const size_t poseDataSize = numPoses > 0 ? 4 + poseWeightsNumFloats : 0;
+                    const size_t poseDataSize = numPoses > 0u ? (4u + poseWeightsNumFloats) : 0u;
                     const size_t minimumTexBufferSize = 12 * indexMap->size() + poseDataSize;
                     bool exceedsTexBuffer = (currentMappedTexBuffer - mStartMappedTexBuffer) +
                                                 minimumTexBufferSize >= mCurrentTexBufferSize;
@@ -2293,7 +2294,8 @@ namespace Ogre
 
             if( numPoses > 0 )
             {
-                if( !hasSkeletonAnimation ) {
+                if( !hasSkeletonAnimation )
+                {
                     // If not combined with skeleton animation, pose animations are gonna need 1 vec4's
                     // for pose data (base vertex, num vertices), enough vec4's to accomodate
                     // the weight of each pose, 3 vec4's for worldMat, and 4 vec4's for worldView. 
@@ -2336,10 +2338,12 @@ namespace Ogre
                 memcpy( currentMappedTexBuffer + 1, &numVertices, sizeof( numVertices ) );
                 currentMappedTexBuffer += 4;
 
-                memcpy( currentMappedTexBuffer, queuedRenderable.renderable->getPoseWeights(), sizeof(float) * numPoses);
+                memcpy( currentMappedTexBuffer, queuedRenderable.renderable->getPoseWeights(),
+                        sizeof(float) * numPoses);
                 currentMappedTexBuffer += poseWeightsNumFloats;
 
-                if( !hasSkeletonAnimation ) {
+                if( !hasSkeletonAnimation )
+                {
                     //mat4x3 world
         #if !OGRE_DOUBLE_PRECISION
                     memcpy( currentMappedTexBuffer, &worldMat, 4 * 3 * sizeof( float ) );
