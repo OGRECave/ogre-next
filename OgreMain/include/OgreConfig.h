@@ -84,6 +84,10 @@ THE SOFTWARE.
 */
 #define OGRE_MAX_BLEND_WEIGHTS 4
 
+/** Define max number of poses per item.
+*/
+#define OGRE_MAX_POSES 16
+
 // define the memory allocator configuration to use
 #define OGRE_MEMORY_ALLOCATOR_STD 1
 #define OGRE_MEMORY_ALLOCATOR_NED 2

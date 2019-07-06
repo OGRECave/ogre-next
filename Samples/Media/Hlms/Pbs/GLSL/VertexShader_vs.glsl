@@ -46,10 +46,13 @@ out block
 
 // START UNIFORM DECLARATION
 @insertpiece( PassDecl )
-@property( hlms_skeleton || hlms_shadowcaster )@insertpiece( InstanceDecl )@end
+@property( hlms_skeleton || hlms_shadowcaster || hlms_pose )@insertpiece( InstanceDecl )@end
 /*layout(binding = 0) */uniform samplerBuffer worldMatBuf;
 @insertpiece( custom_vs_uniformDeclaration )
 @property( !GL_ARB_base_instance )uniform uint baseInstance;@end
+@property( hlms_pose )
+	uniform samplerBuffer poseBuf;
+@end
 // END UNIFORM DECLARATION
 
 @property( hlms_qtangent )
@@ -58,9 +61,23 @@ out block
 @insertpiece( DeclQuat_yAxis )
 @end @end
 
+@property( !hlms_pose )
+@piece( input_vertex )vertex@end
+@end
+@property( hlms_pose )
+@piece( input_vertex )inputPos@end
+@end
+
+@property( !hlms_pose_normals )
+@piece( input_normal )normal@end
+@end
+@property( hlms_pose_normals )
+@piece( input_normal )inputNormal@end
+@end
+
 @property( !hlms_skeleton )
-@piece( local_vertex )vertex@end
-@piece( local_normal )normal@end
+@piece( local_vertex )@insertpiece( input_vertex )@end
+@piece( local_normal )@insertpiece( input_normal )@end
 @piece( local_tangent )tangent@end
 @end
 @property( hlms_skeleton )
@@ -77,14 +94,14 @@ out block
 		worldMat[1] = bufferFetch( worldMatBuf, int(matStart + _idx + 1u) );
 		worldMat[2] = bufferFetch( worldMatBuf, int(matStart + _idx + 2u) );
     vec4 worldPos;
-    worldPos.x = dot( worldMat[0], vertex );
-    worldPos.y = dot( worldMat[1], vertex );
-    worldPos.z = dot( worldMat[2], vertex );
+    worldPos.x = dot( worldMat[0], @insertpiece( input_vertex ) );
+    worldPos.y = dot( worldMat[1], @insertpiece( input_vertex ) );
+    worldPos.z = dot( worldMat[2], @insertpiece( input_vertex ) );
     worldPos.xyz *= blendWeights[0];
     @property( hlms_normal || hlms_qtangent )vec3 worldNorm;
-    worldNorm.x = dot( worldMat[0].xyz, normal );
-    worldNorm.y = dot( worldMat[1].xyz, normal );
-    worldNorm.z = dot( worldMat[2].xyz, normal );
+    worldNorm.x = dot( worldMat[0].xyz, @insertpiece( input_normal ) );
+    worldNorm.y = dot( worldMat[1].xyz, @insertpiece( input_normal ) );
+    worldNorm.z = dot( worldMat[2].xyz, @insertpiece( input_normal ) );
     worldNorm *= blendWeights[0];@end
     @property( normal_map )vec3 worldTang;
     worldTang.x = dot( worldMat[0].xyz, tangent );
@@ -100,14 +117,14 @@ out block
 		worldMat[0] = bufferFetch( worldMatBuf, int(matStart + _idx + 0u) );
 		worldMat[1] = bufferFetch( worldMatBuf, int(matStart + _idx + 1u) );
 		worldMat[2] = bufferFetch( worldMatBuf, int(matStart + _idx + 2u) );
-	tmp.x = dot( worldMat[0], vertex );
-	tmp.y = dot( worldMat[1], vertex );
-	tmp.z = dot( worldMat[2], vertex );
+	tmp.x = dot( worldMat[0], @insertpiece( input_vertex ) );
+	tmp.y = dot( worldMat[1], @insertpiece( input_vertex ) );
+	tmp.z = dot( worldMat[2], @insertpiece( input_vertex ) );
 	worldPos.xyz += (tmp * blendWeights[@n]).xyz;
 	@property( hlms_normal || hlms_qtangent )
-	tmp.x = dot( worldMat[0].xyz, normal );
-	tmp.y = dot( worldMat[1].xyz, normal );
-	tmp.z = dot( worldMat[2].xyz, normal );
+	tmp.x = dot( worldMat[0].xyz, @insertpiece( input_normal ) );
+	tmp.y = dot( worldMat[1].xyz, @insertpiece( input_normal ) );
+	tmp.z = dot( worldMat[2].xyz, @insertpiece( input_normal ) );
     worldNorm += tmp.xyz * blendWeights[@n];@end
 	@property( normal_map )
 	tmp.x = dot( worldMat[0].xyz, tangent );
@@ -118,6 +135,82 @@ out block
 
 	worldPos.w = 1.0;
 @end @end //SkeletonTransform // !hlms_skeleton
+
+@property( hlms_pose )@piece( PoseTransform )
+	// Pose data starts after all 3x4 bone matrices
+	int poseDataStart = int(instance.worldMaterialIdx[drawId].x >> 9u) @property( hlms_skeleton ) + @value(hlms_bones_per_vertex) * 3@end ;
+	vec4 inputPos = vertex;
+	@property( hlms_pose_normals && (hlms_normal || hlms_qtangent) )vec3 inputNormal = normal;@end
+
+	vec4 poseData = bufferFetch( worldMatBuf, poseDataStart );
+	int baseVertexID = int(floatBitsToUint( poseData.x ));
+	int vertexID = gl_VertexID - baseVertexID;
+
+	@psub( MoreThanOnePose, hlms_pose, 1 )
+	@property( !MoreThanOnePose )
+		vec4 poseWeights = bufferFetch( worldMatBuf, poseDataStart + 1 );
+		vec4 posePos = bufferFetch( poseBuf, vertexID @property( hlms_pose_normals )<< 1@end );
+		inputPos += posePos * poseWeights.x;
+		@property( hlms_pose_normals && (hlms_normal || hlms_qtangent) )
+			vec4 poseNormal = bufferFetch( poseBuf, (vertexID << 1) + 1 );
+			inputNormal += poseNormal.xyz * poseWeights.x;
+		@end
+		@pset( NumPoseWeightVectors, 1 )
+	@end @property( MoreThanOnePose )
+		// NumPoseWeightVectors = (hlms_pose / 4) + min(hlms_pose % 4, 1)
+		@pdiv( NumPoseWeightVectorsA, hlms_pose, 4 )
+		@pmod( NumPoseWeightVectorsB, hlms_pose, 4 )
+		@pmin( NumPoseWeightVectorsC, NumPoseWeightVectorsB, 1 )
+		@padd( NumPoseWeightVectors, NumPoseWeightVectorsA, NumPoseWeightVectorsC)
+		int numVertices = int(floatBitsToUint( poseData.y ));
+
+		@psub( MoreThanOnePoseWeightVector, NumPoseWeightVectors, 1)
+		@property( !MoreThanOnePoseWeightVector )
+			vec4 poseWeights = bufferFetch( worldMatBuf, poseDataStart + 1 );
+			@foreach( hlms_pose, n )
+				inputPos += bufferFetch( poseBuf, (vertexID + numVertices * @n) @property( hlms_pose_normals )<< 1@end ) * poseWeights[@n];
+				@property( hlms_pose_normals && (hlms_normal || hlms_qtangent) )
+				inputNormal += bufferFetch( poseBuf, ((vertexID + numVertices * @n) << 1) + 1 ).xyz * poseWeights[@n];
+				@end
+			@end
+		@end @property( MoreThanOnePoseWeightVector )
+			float poseWeights[@value(NumPoseWeightVectors) * 4];
+			@foreach( NumPoseWeightVectors, n)
+				vec4 weights@n = bufferFetch( worldMatBuf, poseDataStart + 1 + @n );
+				poseWeights[@n * 4 + 0] = weights@n[0];
+				poseWeights[@n * 4 + 1] = weights@n[1];
+				poseWeights[@n * 4 + 2] = weights@n[2];
+				poseWeights[@n * 4 + 3] = weights@n[3];
+			@end
+			@foreach( hlms_pose, n )
+				inputPos += bufferFetch( poseBuf, (vertexID + numVertices * @n) @property( hlms_pose_normals )<< 1@end ) * poseWeights[@n];
+				@property( hlms_pose_normals && (hlms_normal || hlms_qtangent) )
+				inputNormal += bufferFetch( poseBuf, ((vertexID + numVertices * @n) << 1) + 1 ).xyz * poseWeights[@n];
+				@end
+			@end
+		@end
+	@end
+
+	// If hlms_skeleton is defined the transforms will be provided by bones.
+	// If hlms_pose is not combined with hlms_skeleton the object's worldMat and worldView have to be set.
+	@property( !hlms_skeleton )
+		vec4 worldMat[3];
+		worldMat[0] = bufferFetch( worldMatBuf, poseDataStart + @value(NumPoseWeightVectors) + 1 );
+		worldMat[1] = bufferFetch( worldMatBuf, poseDataStart + @value(NumPoseWeightVectors) + 2 );
+		worldMat[2] = bufferFetch( worldMatBuf, poseDataStart + @value(NumPoseWeightVectors) + 3 );
+		vec4 worldPos;
+		worldPos.x = dot( worldMat[0], inputPos );
+		worldPos.y = dot( worldMat[1], inputPos );
+		worldPos.z = dot( worldMat[2], inputPos );
+		worldPos.w = 1.0;
+		
+		@property( hlms_normal || hlms_qtangent )
+		@foreach( 4, n )
+			vec4 row@n = bufferFetch( worldMatBuf, poseDataStart + @value(NumPoseWeightVectors) + 4 + @n ); @end
+		mat4 worldView = mat4( row0, row1, row2, row3 );
+		@end
+	@end
+@end @end // PoseTransform
 
 @property( hlms_skeleton )
 	@piece( worldViewMat )passBuf.view@end
@@ -154,7 +247,7 @@ void main()
 
     @insertpiece( custom_vs_preExecution )
 
-@property( !hlms_skeleton )
+@property( !hlms_skeleton && !hlms_pose )
 
     mat3x4 worldMat = UNPACK_MAT3x4( worldMatBuf, drawId @property( !hlms_shadowcaster )<< 1u@end );
 	@property( hlms_normal || hlms_qtangent )
@@ -173,6 +266,7 @@ void main()
 	@end
 @end
 
+	@insertpiece( PoseTransform )
 	@insertpiece( SkeletonTransform )
 	@insertpiece( VertexTransform )
 

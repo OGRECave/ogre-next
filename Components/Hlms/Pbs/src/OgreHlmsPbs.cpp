@@ -478,6 +478,11 @@ namespace Ogre
         GpuProgramParametersSharedPtr vsParams = retVal->pso.vertexShader->getDefaultParameters();
         vsParams->setNamedConstant( "worldMatBuf", 0 );
 
+        if( queuedRenderable.renderable->getNumPoses() > 0 )
+        {
+            vsParams->setNamedConstant( "poseBuf", 4 );
+        }
+        
         mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache,
                                             mSetProperties, queuedRenderable );
 
@@ -777,6 +782,9 @@ namespace Ogre
                      itor->keyName != PbsProperty::UvDiffuse &&
                      itor->keyName != HlmsPsoProp::InputLayoutId &&
                      itor->keyName != HlmsBaseProp::Skeleton &&
+                     itor->keyName != HlmsBaseProp::Pose &&
+                     itor->keyName != HlmsBaseProp::PoseHalfPrecision &&
+                     itor->keyName != HlmsBaseProp::PoseNormals &&
                      itor->keyName != HlmsBaseProp::BonesPerVertex &&
                      itor->keyName != HlmsBaseProp::DualParaboloidMapping &&
                      itor->keyName != HlmsBaseProp::AlphaTest &&
@@ -2105,6 +2113,8 @@ namespace Ogre
         float * RESTRICT_ALIAS currentMappedTexBuffer       = mCurrentMappedTexBuffer;
 
         bool hasSkeletonAnimation = queuedRenderable.renderable->hasSkeletonAnimation();
+        uint32 numPoses = queuedRenderable.renderable->getNumPoses();
+        uint32 poseWeightsNumFloats = ((numPoses >> 2u) + std::min(numPoses % 4u, 1u)) * 4u;
 
         const Matrix4 &worldMat = queuedRenderable.movableObject->_getParentNodeFullTransform();
 
@@ -2112,10 +2122,10 @@ namespace Ogre
         //                          ---- VERTEX SHADER ----
         //---------------------------------------------------------------------------
 
-        if( !hasSkeletonAnimation )
+        if( !hasSkeletonAnimation && numPoses == 0 )
         {
             //We need to correct currentMappedConstBuffer to point to the right texture buffer's
-            //offset, which may not be in sync if the previous draw had skeletal animation.
+            //offset, which may not be in sync if the previous draw had skeletal and/or pose animation.
             const size_t currentConstOffset = (currentMappedTexBuffer - mStartMappedTexBuffer) >>
                                                 (2 + !casterPass);
             currentMappedConstBuffer =  currentConstOffset + mStartMappedConstBuffer;
@@ -2182,99 +2192,199 @@ namespace Ogre
             bool exceedsConstBuffer = (size_t)((currentMappedConstBuffer - mStartMappedConstBuffer) + 4)
                                         > mCurrentConstBufferSize;
 
-            if( isV1 )
+            if( hasSkeletonAnimation )
             {
-                uint16 numWorldTransforms = queuedRenderable.renderable->getNumWorldTransforms();
-                assert( numWorldTransforms <= 256u );
-
-                const size_t minimumTexBufferSize = 12 * numWorldTransforms;
-                bool exceedsTexBuffer = (currentMappedTexBuffer - mStartMappedTexBuffer) +
-                        minimumTexBufferSize >= mCurrentTexBufferSize;
-
-                if( exceedsConstBuffer || exceedsTexBuffer )
+                if( isV1 )
                 {
-                    currentMappedConstBuffer = mapNextConstBuffer( commandBuffer );
+                    uint16 numWorldTransforms = queuedRenderable.renderable->getNumWorldTransforms();
+                    assert( numWorldTransforms <= 256u );
 
-                    if( exceedsTexBuffer )
-                        mapNextTexBuffer( commandBuffer, minimumTexBufferSize * sizeof(float) );
-                    else
-                        rebindTexBuffer( commandBuffer, true, minimumTexBufferSize * sizeof(float) );
+                    const size_t poseDataSize = numPoses > 0u ? (4u + poseWeightsNumFloats) : 0u;
+                    const size_t minimumTexBufferSize = 12 * numWorldTransforms + poseDataSize;
+                    bool exceedsTexBuffer = (currentMappedTexBuffer - mStartMappedTexBuffer) +
+                            minimumTexBufferSize >= mCurrentTexBufferSize;
 
-                    currentMappedTexBuffer = mCurrentMappedTexBuffer;
+                    if( exceedsConstBuffer || exceedsTexBuffer )
+                    {
+                        currentMappedConstBuffer = mapNextConstBuffer( commandBuffer );
+
+                        if( exceedsTexBuffer )
+                            mapNextTexBuffer( commandBuffer, minimumTexBufferSize * sizeof(float) );
+                        else
+                            rebindTexBuffer( commandBuffer, true, minimumTexBufferSize * sizeof(float) );
+
+                        currentMappedTexBuffer = mCurrentMappedTexBuffer;
+                    }
+
+                    //uint worldMaterialIdx[]
+                    size_t distToWorldMatStart = mCurrentMappedTexBuffer - mStartMappedTexBuffer;
+                    distToWorldMatStart >>= 2;
+                    *currentMappedConstBuffer = (distToWorldMatStart << 9 ) |
+                            (datablock->getAssignedSlot() & 0x1FF);
+
+                    //vec4 worldMat[][3]
+                    //TODO: Don't rely on a virtual function + make a direct 4x3 copy
+                    Matrix4 tmp[256];
+                    queuedRenderable.renderable->getWorldTransforms( tmp );
+                    for( size_t i=0; i<numWorldTransforms; ++i )
+                    {
+    #if !OGRE_DOUBLE_PRECISION
+                        memcpy( currentMappedTexBuffer, &tmp[ i ], 12 * sizeof( float ) );
+                        currentMappedTexBuffer += 12;
+    #else
+                        for( int y = 0; y < 3; ++y )
+                        {
+                            for( int x = 0; x < 4; ++x )
+                            {
+                                *currentMappedTexBuffer++ = tmp[ i ][ y ][ x ];
+                            }
+                        }
+    #endif
+                    }
                 }
-
-                //uint worldMaterialIdx[]
-                size_t distToWorldMatStart = mCurrentMappedTexBuffer - mStartMappedTexBuffer;
-                distToWorldMatStart >>= 2;
-                *currentMappedConstBuffer = (distToWorldMatStart << 9 ) |
-                        (datablock->getAssignedSlot() & 0x1FF);
-
-                //vec4 worldMat[][3]
-                //TODO: Don't rely on a virtual function + make a direct 4x3 copy
-                Matrix4 tmp[256];
-                queuedRenderable.renderable->getWorldTransforms( tmp );
-                for( size_t i=0; i<numWorldTransforms; ++i )
+                else
                 {
-#if !OGRE_DOUBLE_PRECISION
-                    memcpy( currentMappedTexBuffer, &tmp[ i ], 12 * sizeof( float ) );
+                    SkeletonInstance *skeleton = queuedRenderable.movableObject->getSkeletonInstance();
+
+    #if OGRE_DEBUG_MODE
+                    assert( dynamic_cast<const RenderableAnimated*>( queuedRenderable.renderable ) );
+    #endif
+
+                    const RenderableAnimated *renderableAnimated = static_cast<const RenderableAnimated*>(
+                                                                            queuedRenderable.renderable );
+
+                    const RenderableAnimated::IndexMap *indexMap = renderableAnimated->getBlendIndexToBoneIndexMap();
+
+                    const size_t poseDataSize = numPoses > 0u ? (4u + poseWeightsNumFloats) : 0u;
+                    const size_t minimumTexBufferSize = 12 * indexMap->size() + poseDataSize;
+                    bool exceedsTexBuffer = (currentMappedTexBuffer - mStartMappedTexBuffer) +
+                                                minimumTexBufferSize >= mCurrentTexBufferSize;
+
+                    if( exceedsConstBuffer || exceedsTexBuffer )
+                    {
+                        currentMappedConstBuffer = mapNextConstBuffer( commandBuffer );
+
+                        if( exceedsTexBuffer )
+                            mapNextTexBuffer( commandBuffer, minimumTexBufferSize * sizeof(float) );
+                        else
+                            rebindTexBuffer( commandBuffer, true, minimumTexBufferSize * sizeof(float) );
+
+                        currentMappedTexBuffer = mCurrentMappedTexBuffer;
+                    }
+
+                    //uint worldMaterialIdx[]
+                    size_t distToWorldMatStart = mCurrentMappedTexBuffer - mStartMappedTexBuffer;
+                    distToWorldMatStart >>= 2;
+                    *currentMappedConstBuffer = (distToWorldMatStart << 9 ) |
+                            (datablock->getAssignedSlot() & 0x1FF);
+
+                    RenderableAnimated::IndexMap::const_iterator itBone = indexMap->begin();
+                    RenderableAnimated::IndexMap::const_iterator enBone = indexMap->end();
+
+                    while( itBone != enBone )
+                    {
+                        const SimpleMatrixAf4x3 &mat4x3 = skeleton->_getBoneFullTransform( *itBone );
+                        mat4x3.streamTo4x3( currentMappedTexBuffer );
+                        currentMappedTexBuffer += 12;
+
+                        ++itBone;
+                    }
+                }
+            }
+
+            if( numPoses > 0 )
+            {
+                if( !hasSkeletonAnimation )
+                {
+                    // If not combined with skeleton animation, pose animations are gonna need 1 vec4's
+                    // for pose data (base vertex, num vertices), enough vec4's to accomodate
+                    // the weight of each pose, 3 vec4's for worldMat, and 4 vec4's for worldView. 
+                    const size_t minimumTexBufferSize = 4 + poseWeightsNumFloats + 3*4 + 4*4;
+                    bool exceedsTexBuffer = (currentMappedTexBuffer - mStartMappedTexBuffer) +
+                                                minimumTexBufferSize >= mCurrentTexBufferSize;
+
+                    if( exceedsConstBuffer || exceedsTexBuffer )
+                    {
+                        currentMappedConstBuffer = mapNextConstBuffer( commandBuffer );
+
+                        if( exceedsTexBuffer )
+                            mapNextTexBuffer( commandBuffer, minimumTexBufferSize * sizeof(float) );
+                        else
+                            rebindTexBuffer( commandBuffer, true, minimumTexBufferSize * sizeof(float) );
+
+                        currentMappedTexBuffer = mCurrentMappedTexBuffer;
+                    }
+
+                    //uint worldMaterialIdx[]
+                    size_t distToWorldMatStart = mCurrentMappedTexBuffer - mStartMappedTexBuffer;
+                    distToWorldMatStart >>= 2;
+                    *currentMappedConstBuffer = (distToWorldMatStart << 9 ) |
+                            (datablock->getAssignedSlot() & 0x1FF);
+                }
+                
+                uint8 meshLod = queuedRenderable.movableObject->getCurrentMeshLod();
+                const VertexArrayObjectArray &vaos = queuedRenderable.renderable->getVaos(
+                            static_cast<VertexPass>(casterPass) );
+                VertexArrayObject *vao = vaos[meshLod];
+                // According to this https://forums.ogre3d.org/viewtopic.php?f=25&t=95040#p545057
+                // "macOS uses an old OpenGL version which doesn't use baseVertex"
+        #ifdef __APPLE__
+                size_t baseVertex = 0;
+        #else
+                size_t baseVertex = vao->getBaseVertexBuffer()->_getFinalBufferStart();
+        #endif
+                memcpy( currentMappedTexBuffer, &baseVertex, sizeof( baseVertex ) );
+                size_t numVertices = vao->getBaseVertexBuffer()->getNumElements();
+                memcpy( currentMappedTexBuffer + 1, &numVertices, sizeof( numVertices ) );
+                currentMappedTexBuffer += 4;
+
+                memcpy( currentMappedTexBuffer, queuedRenderable.renderable->getPoseWeights(),
+                        sizeof(float) * numPoses);
+                currentMappedTexBuffer += poseWeightsNumFloats;
+
+                if( !hasSkeletonAnimation )
+                {
+                    //mat4x3 world
+        #if !OGRE_DOUBLE_PRECISION
+                    memcpy( currentMappedTexBuffer, &worldMat, 4 * 3 * sizeof( float ) );
                     currentMappedTexBuffer += 12;
-#else
+        #else
                     for( int y = 0; y < 3; ++y )
                     {
                         for( int x = 0; x < 4; ++x )
                         {
-                            *currentMappedTexBuffer++ = tmp[ i ][ y ][ x ];
+                            *currentMappedTexBuffer++ = worldMat[ y ][ x ];
                         }
                     }
-#endif
-                }
-            }
-            else
-            {
-                SkeletonInstance *skeleton = queuedRenderable.movableObject->getSkeletonInstance();
+        #endif
 
-#if OGRE_DEBUG_MODE
-                assert( dynamic_cast<const RenderableAnimated*>( queuedRenderable.renderable ) );
-#endif
-
-                const RenderableAnimated *renderableAnimated = static_cast<const RenderableAnimated*>(
-                                                                        queuedRenderable.renderable );
-
-                const RenderableAnimated::IndexMap *indexMap = renderableAnimated->getBlendIndexToBoneIndexMap();
-
-                const size_t minimumTexBufferSize = 12 * indexMap->size();
-                bool exceedsTexBuffer = (currentMappedTexBuffer - mStartMappedTexBuffer) +
-                                            minimumTexBufferSize >= mCurrentTexBufferSize;
-
-                if( exceedsConstBuffer || exceedsTexBuffer )
-                {
-                    currentMappedConstBuffer = mapNextConstBuffer( commandBuffer );
-
-                    if( exceedsTexBuffer )
-                        mapNextTexBuffer( commandBuffer, minimumTexBufferSize * sizeof(float) );
-                    else
-                        rebindTexBuffer( commandBuffer, true, minimumTexBufferSize * sizeof(float) );
-
-                    currentMappedTexBuffer = mCurrentMappedTexBuffer;
+                    //mat4 worldView
+                    Matrix4 tmp = mPreparedPass.viewMatrix.concatenateAffine( worldMat );
+            #ifdef OGRE_GLES2_WORKAROUND_1
+                    tmp = tmp.transpose();
+        #endif
+        #if !OGRE_DOUBLE_PRECISION
+                    memcpy( currentMappedTexBuffer, &tmp, sizeof( Matrix4 ) * !casterPass );
+                    currentMappedTexBuffer += 16 * !casterPass;
+        #else
+                    if( !casterPass )
+                    {
+                        for( int y = 0; y < 4; ++y )
+                        {
+                            for( int x = 0; x < 4; ++x )
+                            {
+                                *currentMappedTexBuffer++ = tmp[ y ][ x ];
+                            }
+                        }
+                    }
+        #endif
                 }
 
-                //uint worldMaterialIdx[]
-                size_t distToWorldMatStart = mCurrentMappedTexBuffer - mStartMappedTexBuffer;
-                distToWorldMatStart >>= 2;
-                *currentMappedConstBuffer = (distToWorldMatStart << 9 ) |
-                        (datablock->getAssignedSlot() & 0x1FF);
-
-                RenderableAnimated::IndexMap::const_iterator itBone = indexMap->begin();
-                RenderableAnimated::IndexMap::const_iterator enBone = indexMap->end();
-
-                while( itBone != enBone )
-                {
-                    const SimpleMatrixAf4x3 &mat4x3 = skeleton->_getBoneFullTransform( *itBone );
-                    mat4x3.streamTo4x3( currentMappedTexBuffer );
-                    currentMappedTexBuffer += 12;
-
-                    ++itBone;
-                }
+                TexBufferPacked* poseBuf = queuedRenderable.renderable->getPoseTexBuffer();
+                *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer( VertexShader,
+                                                                               4, poseBuf, 0,
+                                                                               poseBuf->
+                                                                               getTotalSizeBytes() );
             }
 
             //If the next entity will not be skeletally animated, we'll need

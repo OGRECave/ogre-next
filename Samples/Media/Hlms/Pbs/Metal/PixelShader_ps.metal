@@ -239,7 +239,7 @@ float4 diffuseCol;
 
 	@property( alpha_test && !alpha_test_shadow_caster_only )
 		if( material.kD.w @insertpiece( alpha_test_cmp_func ) diffuseCol.a )
-			discard;
+			discard_fragment();
 	@end
 @end
 
@@ -599,7 +599,7 @@ fragment @insertpiece( output_type ) main_metal
 	/// Apply the material's diffuse over the textures
 @property( TODO_REFACTOR_ACCOUNT_MATERIAL_ALPHA )	diffuseCol.xyz *= material.kD.xyz;@end
 	if( material.kD.w @insertpiece( alpha_test_cmp_func ) diffuseCol )
-		discard;
+		discard_fragment();
 @end /// !alpha_test
 
 	@insertpiece( DoShadowCastPS )
