@@ -637,10 +637,20 @@ namespace Ogre {
                 
         int subMeshIndex = subMeshIt - subMeshBegin;
         
-        v1::PoseList poseList = subMesh->parent->getPoseList();
-        poseList.erase(std::remove_if(poseList.begin(), poseList.end(), 
-                                      [=](const v1::Pose* pose) { return pose->getTarget() != subMeshIndex; }),
-                                      poseList.end());
+        const v1::PoseList &poseListOrig = subMesh->parent->getPoseList();
+        v1::PoseList poseList;
+        poseList.reserve( poseListOrig.size() );
+        {
+            v1::PoseList::const_iterator itor = poseListOrig.begin();
+            v1::PoseList::const_iterator end  = poseListOrig.end();
+
+            while( itor != end )
+            {
+                if( (*itor)->getTarget() == subMeshIndex )
+                    poseList.push_back( *itor );
+                ++itor;
+            }
+        }
         
         mNumPoses = poseList.size();
         mPoseHalfPrecision = halfPrecision;
@@ -648,7 +658,7 @@ namespace Ogre {
         if( mNumPoses > 0 ) 
         {
             mPoseNormals = poseList[0]->getIncludesNormals();
-            uint32 numVertices = vertexBuffer->getNumElements();
+            size_t numVertices = vertexBuffer->getNumElements();
             size_t elementSize = halfPrecision ? sizeof( uint16 ) : sizeof( float );
             size_t elementsPerVertex = mPoseNormals ? 8 : 4;
             size_t singlePoseBufferSize = numVertices * elementSize * elementsPerVertex;
@@ -727,7 +737,7 @@ namespace Ogre {
     {
         mNumPoses = numPoses;
         mPoseHalfPrecision = halfPrecision;
-        mPoseNormals = normalData != nullptr;
+        mPoseNormals = normalData != 0;
         size_t elementSize = halfPrecision ? sizeof( uint16 ) : sizeof( float );
         size_t elementsPerVertex = mPoseNormals ? 8 : 4;
         size_t singlePoseBufferSize = numVertices * elementSize * elementsPerVertex;
@@ -740,7 +750,7 @@ namespace Ogre {
         for( size_t poseIndex = 0; poseIndex < numPoses; ++poseIndex )
         {
             const float* pPosition = positionData[poseIndex];
-            const float* pNormal = normalData ? normalData[poseIndex] : nullptr;
+            const float* pNormal = normalData ? normalData[poseIndex] : 0;
             size_t beginIndex = poseIndex * numVertices * elementsPerVertex;
 
             if( halfPrecision )

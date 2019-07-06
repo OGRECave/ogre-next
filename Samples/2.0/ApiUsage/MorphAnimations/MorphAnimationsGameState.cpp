@@ -52,7 +52,7 @@ namespace Demo
             
             Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
                                                     createChildSceneNode( Ogre::SCENE_DYNAMIC );
-            sceneNode->setPosition( 0, -1.02, 0 );
+            sceneNode->setPosition( 0, -1.02f, 0 );
             sceneNode->attachObject( item );
             
             //Change the addressing mode of the roughness map to wrap via code.
@@ -98,11 +98,11 @@ namespace Demo
                                                 Ogre::SCENE_DYNAMIC );
         smileyNode->attachObject( mSmileyItem );
         smileyNode->setScale( Ogre::Vector3( 0.5 ) );
-        smileyNode->setPosition( 0, 0.57, 0 );
-        smileyNode->setOrientation( Ogre::Quaternion( Ogre::Radian(1.5), Ogre::Vector3(1,0,0) ) );
+        smileyNode->setPosition( 0, 0.57f, 0 );
+        smileyNode->setOrientation( Ogre::Quaternion( Ogre::Radian(1.5), Ogre::Vector3::UNIT_X ) );
         
-        auto* bone = mSmileyItem->getSkeletonInstance()->getBone("Bone.001");
-        bone->setOrientation(Ogre::Quaternion(Ogre::Radian(0.4), Ogre::Vector3(0,1,0)));
+        Ogre::Bone *bone = mSmileyItem->getSkeletonInstance()->getBone("Bone.001");
+        bone->setOrientation( Ogre::Quaternion( Ogre::Radian( 0.4f ), Ogre::Vector3::UNIT_Y ) );
 
         // Spring
 
@@ -125,7 +125,7 @@ namespace Demo
                                                 Ogre::SCENE_DYNAMIC );
         springNode->attachObject( mSpringItem );
         springNode->setScale( Ogre::Vector3( 1.2 ) );
-        springNode->setPosition( 1, 0.57, 0 );
+        springNode->setPosition( 1, 0.57f, 0 );
 
         // Blob
 
@@ -147,8 +147,8 @@ namespace Demo
                                                 AUTODETECT_RESOURCE_GROUP_NAME,
                                                 Ogre::SCENE_DYNAMIC );
         blobNode->attachObject( mBlobItem );
-        blobNode->setScale( Ogre::Vector3( 0.4 ) );
-        blobNode->setPosition( -1, 0.7, 0.7 );
+        blobNode->setScale( Ogre::Vector3( 0.4f ) );
+        blobNode->setPosition( -1, 0.7f, 0.7f );
 
         // Add a material to the blob
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
