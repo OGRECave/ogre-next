@@ -2260,6 +2260,9 @@ namespace Ogre
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setTexturesCS( uint32 slotStart, const DescriptorSetTexture *set )
     {
+        const uint32 oldSrvCount = mMaxComputeShaderSrvCount;
+        uint32 newSrvCount = 0;
+
         ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
         ID3D11ShaderResourceView **srvList =
                 reinterpret_cast<ID3D11ShaderResourceView**>( set->mRsData );
@@ -2276,10 +2279,22 @@ namespace Ogre
                                                   slotStart + texIdx + numTexturesUsed );
             texIdx += numTexturesUsed;
         }
+
+        //We must unbound old textures otherwise they could clash with the next _setUavCS call
+        if( newSrvCount < oldSrvCount )
+        {
+            const uint32 excessSlots = oldSrvCount - newSrvCount;
+            context->CSSetShaderResources( newSrvCount, excessSlots, mNullViews );
+        }
+
+        mMaxComputeShaderSrvCount = newSrvCount;
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setTexturesCS( uint32 slotStart, const DescriptorSetTexture2 *set )
     {
+        const uint32 oldSrvCount = mMaxComputeShaderSrvCount;
+        uint32 newSrvCount = 0;
+
         ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
         ID3D11ShaderResourceView **srvList =
                 reinterpret_cast<ID3D11ShaderResourceView**>( set->mRsData );
@@ -2292,10 +2307,18 @@ namespace Ogre
 
             context->CSSetShaderResources( slotStart + texIdx, numTexturesUsed, &srvList[texIdx] );
 
-            mMaxComputeShaderSrvCount = std::max( mMaxComputeShaderSrvCount,
-                                                  slotStart + texIdx + numTexturesUsed );
+            newSrvCount = std::max( newSrvCount, slotStart + texIdx + numTexturesUsed );
             texIdx += numTexturesUsed;
         }
+
+        //We must unbound old textures otherwise they could clash with the next _setUavCS call
+        if( newSrvCount < oldSrvCount )
+        {
+            const uint32 excessSlots = oldSrvCount - newSrvCount;
+            context->CSSetShaderResources( newSrvCount, excessSlots, mNullViews );
+        }
+
+        mMaxComputeShaderSrvCount = newSrvCount;
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setSamplersCS( uint32 slotStart, const DescriptorSetSampler *set )
@@ -3667,6 +3690,7 @@ namespace Ogre
         memset( nullUavViews, 0, sizeof( nullUavViews ) );
         mDevice.GetImmediateContext()->CSSetUnorderedAccessViews( 0, mMaxBoundUavCS + 1u,
                                                                   nullUavViews, NULL );
+        mMaxBoundUavCS = 0u;
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setVertexArrayObject( const VertexArrayObject *_vao )

@@ -232,11 +232,14 @@ namespace Ogre
                 // Get the size of the message
                 SIZE_T messageLength = 0;
                 mInfoQueue->GetMessage(i, NULL, &messageLength);
-                // Allocate space and get the message
-                D3D11_MESSAGE * pMessage = (D3D11_MESSAGE*)malloc(messageLength);
-                mInfoQueue->GetMessage(i, pMessage, &messageLength);
-                res = res + pMessage->pDescription + "\n";
-                free(pMessage);
+                if( messageLength > 0u )
+                {
+                    // Allocate space and get the message
+                    D3D11_MESSAGE * pMessage = (D3D11_MESSAGE*)malloc(messageLength);
+                    mInfoQueue->GetMessage(i, pMessage, &messageLength);
+                    res = res + pMessage->pDescription + "\n";
+                    free(pMessage);
+                }
             }
         }
 
@@ -259,45 +262,48 @@ namespace Ogre
                 // Get the size of the message
                 SIZE_T messageLength = 0;
                 mInfoQueue->GetMessage(i, NULL, &messageLength);
-                // Allocate space and get the message
-                D3D11_MESSAGE * pMessage = (D3D11_MESSAGE*)malloc(messageLength);
-                mInfoQueue->GetMessage(i, pMessage, &messageLength);
-
-                bool res = false;
-                switch(pMessage->Severity)
+                if( messageLength > 0u )
                 {
-                case D3D11_MESSAGE_SEVERITY_CORRUPTION:
-                    if (D3D_CORRUPTION == mExceptionsErrorLevel)
-                    {
-                        res = true;
-                    }
-                    break;
-                case D3D11_MESSAGE_SEVERITY_ERROR:
-                    switch(mExceptionsErrorLevel)
-                    {
-                    case D3D_INFO:
-                    case D3D_WARNING:
-                    case D3D_ERROR:
-                        res = true;
-                    }
-                    break;
-                case D3D11_MESSAGE_SEVERITY_WARNING:
-                    switch(mExceptionsErrorLevel)
-                    {
-                    case D3D_INFO:
-                    case D3D_WARNING:
-                        res = true;
-                    }
-                    break;
-                }
+                    // Allocate space and get the message
+                    D3D11_MESSAGE * pMessage = (D3D11_MESSAGE*)malloc(messageLength);
+                    mInfoQueue->GetMessage(i, pMessage, &messageLength);
 
-                free(pMessage);
-                if (res)
-                {
-                    // we don't need to loop anymore...
-                    return true;
-                }
+                    bool res = false;
+                    switch(pMessage->Severity)
+                    {
+                    case D3D11_MESSAGE_SEVERITY_CORRUPTION:
+                        if (D3D_CORRUPTION == mExceptionsErrorLevel)
+                        {
+                            res = true;
+                        }
+                        break;
+                    case D3D11_MESSAGE_SEVERITY_ERROR:
+                        switch(mExceptionsErrorLevel)
+                        {
+                        case D3D_INFO:
+                        case D3D_WARNING:
+                        case D3D_ERROR:
+                            res = true;
+                        }
+                        break;
+                    case D3D11_MESSAGE_SEVERITY_WARNING:
+                        switch(mExceptionsErrorLevel)
+                        {
+                        case D3D_INFO:
+                        case D3D_WARNING:
+                            res = true;
+                        }
+                        break;
+                    }
 
+                    free(pMessage);
+
+                    if (res)
+                    {
+                        // we don't need to loop anymore...
+                        return true;
+                    }
+                }
             }
 
             clearStoredErrorMessages();
