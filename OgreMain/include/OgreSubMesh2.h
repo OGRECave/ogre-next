@@ -234,7 +234,7 @@ namespace Ogre {
             format PF_FLOAT32_RGBA. Rarely the extra precision is needed.
          */
         void createPoses( const float** positionData, const float** normalData, size_t numPoses, size_t numVertices, 
-                          const String* names = nullptr, bool halfPrecision = true );
+                          const String* names = 0, bool halfPrecision = true );
 
     protected:
         void importBuffersFromV1( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords, bool qTangents,
