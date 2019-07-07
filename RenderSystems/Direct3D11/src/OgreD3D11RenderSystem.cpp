@@ -227,7 +227,7 @@ namespace Ogre
     void D3D11RenderSystem::createD3D11Device( D3D11VendorExtension *vendorExtension,
                                                const String &appName,
                                                D3D11Driver* d3dDriver,
-                                               D3D_DRIVER_TYPE ogreDriverType,
+                                               D3D_DRIVER_TYPE driverType,
                                                D3D_FEATURE_LEVEL minFL, D3D_FEATURE_LEVEL maxFL,
                                                D3D_FEATURE_LEVEL* pFeatureLevel,
                                                ID3D11DeviceN **outDevice, ID3D11Device1 **outDevice1 )
@@ -763,7 +763,7 @@ namespace Ogre
 #endif
 
         // create the device for the selected adapter
-        createDevice();
+        createDevice( windowTitle );
 
         if( autoCreateWindow )
         {
@@ -1927,10 +1927,12 @@ namespace Ogre
         }
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::createDevice()
+    void D3D11RenderSystem::createDevice( const String &windowTitle )
     {
         _cleanupDepthBuffers( false );
         mDevice.ReleaseAll();
+
+        mLastWindowTitlePassedToExtensions = windowTitle;
 
         D3D11Driver *d3dDriver = getDirect3DDrivers(true)->findByName( mDriverName );
         mActiveD3DDriver = *d3dDriver; // store copy of selected driver, so that it is not
@@ -1990,7 +1992,7 @@ namespace Ogre
         _cleanupDepthBuffers();
 
         // recreate device
-        createDevice();
+        createDevice( mLastWindowTitlePassedToExtensions );
 
         // recreate device depended resources
         notifyDeviceRestored(&mDevice);

@@ -88,7 +88,7 @@ namespace Ogre
         void refreshFSAAOptions(void);
 
         void freeDevice(void);
-        void createDevice(void);
+        void createDevice( const String &windowTitle );
 #if OGRE_PLATFORM != OGRE_PLATFORM_WINRT
             bool isWindows8OrGreater();
 #endif
@@ -176,6 +176,8 @@ namespace Ogre
         ID3D11ShaderResourceView *mNullViews[D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT];
         uint32 mMaxSrvCount[NumShaderTypes];
         uint32 mMaxComputeShaderSrvCount;
+
+        String mLastWindowTitlePassedToExtensions;
 		
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
 		D3D11StereoDriverBridge* mStereoDriver;
