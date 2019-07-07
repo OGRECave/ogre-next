@@ -92,6 +92,8 @@ namespace Ogre
             desc.usage |= MTLTextureUsageRenderTarget;
         if( isUav() )
             desc.usage |= MTLTextureUsageShaderWrite;
+        if( isReinterpretable() )
+            desc.usage |= MTLTextureUsagePixelFormatView;
 
         String textureName = getNameStr();
 

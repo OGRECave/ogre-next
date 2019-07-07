@@ -27,8 +27,8 @@ struct Params
 #define p_rayMarchStepSize p.rayMarchStepSize
 //#define p_voxelOrigin p.voxelOrigin
 #define p_voxelCellSize p.voxelCellSize
-#define p_dirCorrectionRatio dirCorrectionRatio_thinWallCounter.xyz
-#define p_thinWallCounter dirCorrectionRatio_thinWallCounter.w
+#define p_dirCorrectionRatio p.dirCorrectionRatio_thinWallCounter.xyz
+#define p_thinWallCounter p.dirCorrectionRatio_thinWallCounter.w
 #define p_invVoxelResolution p.invVoxelResolution
 
 //in uvec3 gl_NumWorkGroups;
