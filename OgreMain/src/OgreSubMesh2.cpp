@@ -734,8 +734,8 @@ namespace Ogre {
         }
     }
     //---------------------------------------------------------------------
-    void SubMesh::createPoses( const float** positionData, const float** normalData, 
-                               size_t numPoses, size_t numVertices, bool halfPrecision )
+    void SubMesh::createPoses( const float** positionData, const float** normalData, size_t numPoses, 
+                               size_t numVertices, const String* names, bool halfPrecision )
     {
         mNumPoses = static_cast<uint16>( numPoses );
         mPoseHalfPrecision = halfPrecision;
@@ -794,6 +794,11 @@ namespace Ogre {
                         pFloat[idx+7] = 0.f;
                     }
                 }
+            }
+
+            if( names )
+            {
+                mPoseIndexMap[names[poseIndex]] = poseIndex;
             }
         }
         
