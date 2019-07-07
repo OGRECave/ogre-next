@@ -271,6 +271,47 @@ namespace Ogre
         return mBufferInterface->regressFrame();
     }
     //-----------------------------------------------------------------------------------
+    void BufferPacked::copyTo( BufferPacked *dstBuffer, size_t dstElemStart,
+                               size_t srcElemStart, size_t srcNumElems )
+    {
+        if( srcNumElems > mNumElements || srcElemStart + srcNumElems > mNumElements )
+            srcNumElems = mNumElements - srcElemStart;
+
+        OGRE_ASSERT_LOW( dstBuffer->getBufferType() == BT_DEFAULT );
+
+        OGRE_ASSERT_LOW( srcElemStart <= this->mNumElements );
+        OGRE_ASSERT_LOW( dstElemStart <= dstBuffer->mNumElements );
+        OGRE_ASSERT_LOW( dstElemStart * dstBuffer->getBytesPerElement() +
+                         srcNumElems * this->getBytesPerElement() <=
+                         dstBuffer->mNumElements * dstBuffer->getBytesPerElement() );
+
+        if( dstBuffer->mShadowCopy )
+        {
+            if( !this->mShadowCopy )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                             "dstBuffer has a shadow copy. We can only perform this "
+                             "copy if src also has a shadow copy", "BufferPacked::copyTo" );
+            }
+            else
+            {
+                memcpy( (char*)dstBuffer->mShadowCopy + dstElemStart * dstBuffer->mBytesPerElement,
+                        (char*)this->mShadowCopy + srcElemStart * this->mBytesPerElement,
+                        srcNumElems * this->mBytesPerElement );
+            }
+        }
+
+        dstBuffer->getBufferInterface()->_ensureDelayedImmutableBuffersAreReady();
+        this->mBufferInterface->_ensureDelayedImmutableBuffersAreReady();
+
+        mBufferInterface->copyTo( dstBuffer->getBufferInterface(),
+                                  (dstBuffer->mFinalBufferStart + dstElemStart) *
+                                  dstBuffer->mBytesPerElement,
+                                  (this->mFinalBufferStart + srcElemStart) *
+                                  this->mBytesPerElement,
+                                  srcNumElems * this->getBytesPerElement() );
+    }
+    //-----------------------------------------------------------------------------------
     bool BufferPacked::isCurrentlyMapped(void) const
     {
         if( mMappingState == MS_UNMAPPED )

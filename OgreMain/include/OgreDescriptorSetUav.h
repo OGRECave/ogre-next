@@ -57,7 +57,7 @@ namespace Ogre
             SlotTypeBuffer,
             SlotTypeTexture
         };
-        struct BufferSlot
+        struct _OgreExport BufferSlot
         {
             /// UAV buffer to bind
             UavBufferPacked *buffer;
@@ -102,7 +102,7 @@ namespace Ogre
                 return retVal;
             }
         };
-        struct TextureSlot
+        struct _OgreExport TextureSlot
         {
             TextureGpu *texture;
 
@@ -147,7 +147,7 @@ namespace Ogre
                 return retVal;
             }
         };
-        struct Slot
+        struct _OgreExport Slot
         {
             SlotType        slotType;
         protected:

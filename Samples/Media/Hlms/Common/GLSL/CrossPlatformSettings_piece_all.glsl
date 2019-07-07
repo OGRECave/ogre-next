@@ -5,6 +5,8 @@
     #version 330 core
 @end
 
+@insertpiece( CustomGlslExtensions )
+
 @property( GL_ARB_shading_language_420pack )
     #extension GL_ARB_shading_language_420pack: require
     #define layout_constbuffer(x) layout( std140, x )
@@ -14,6 +16,7 @@
 
 @property( GL_ARB_texture_buffer_range )
 	#define bufferFetch texelFetch
+	#define structuredBufferFetch texelFetch
 @end
 
 @property( hlms_amd_trinary_minmax )
@@ -44,8 +47,10 @@
 
 //Short used for read operations. It's an int in GLSL & HLSL. An ushort in Metal
 #define rshort2 int2
+#define rint int
 //Short used for write operations. It's an int in GLSL. An ushort in HLSL & Metal
 #define wshort2 int2
+#define wshort3 int3
 
 #define toFloat3x3( x ) mat3( x )
 #define buildFloat3x3( row0, row1, row2 ) mat3( row0, row1, row2 )
@@ -89,7 +94,14 @@
 #define OGRE_Load2D( tex, iuv, lod ) texelFetch( tex, iuv, lod )
 #define OGRE_Load2DMS( tex, iuv, subsample ) texelFetch( tex, iuv, subsample )
 
+#define OGRE_Load3D( tex, iuv, lod ) texelFetch( tex, ivec3( iuv ), lod )
+
 #define bufferFetch1( buffer, idx ) texelFetch( buffer, idx ).x
+
+#define OGRE_SAMPLER_ARG_DECL( samplerName )
+#define OGRE_SAMPLER_ARG( samplerName )
+
+#define OGRE_Texture3D_float4 sampler3D
 
 #define CONST_BUFFER( bufferName, bindingPoint ) layout_constbuffer(binding = bindingPoint) uniform bufferName
 #define CONST_BUFFER_STRUCT_BEGIN( structName, bindingPoint ) layout_constbuffer(binding = bindingPoint) uniform structName
@@ -97,6 +109,12 @@
 
 #define FLAT_INTERPOLANT( decl, bindingPoint ) flat decl
 #define INTERPOLANT( decl, bindingPoint ) decl
+
+#define OGRE_OUT_REF( declType, variableName ) out declType variableName
+#define OGRE_INOUT_REF( declType, variableName ) inout declType variableName
+
+#define OGRE_ARRAY_START( type ) type[](
+#define OGRE_ARRAY_END )
 @end
 
 @property( !GL_ARB_texture_buffer_range || !GL_ARB_shading_language_420pack )

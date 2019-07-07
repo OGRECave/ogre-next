@@ -1062,63 +1062,28 @@ namespace Ogre
 
         return 0;
     }
-    /*HlmsTextureManager::TextureMapType HlmsPbsDatablock::suggestMapTypeBasedOnTextureType(
-                                                                        PbsTextureTypes type )
+    //-----------------------------------------------------------------------------------
+    ColourValue HlmsPbsDatablock::getDiffuseColour(void) const
     {
-        HlmsTextureManager::TextureMapType retVal;
-        switch( type )
-        {
-        default:
-        case PBSM_DIFFUSE:
-            retVal = HlmsTextureManager::TEXTURE_TYPE_DIFFUSE;
-            break;
-        case PBSM_SPECULAR:
-            if( mWorkflow == MetallicWorkflow )
-            {
-                retVal = HlmsTextureManager::TEXTURE_TYPE_MONOCHROME;
-            }
-            else
-            {
-                retVal = HlmsTextureManager::TEXTURE_TYPE_DIFFUSE;
-            }
-            break;
-        case PBSM_DETAIL_WEIGHT:
-            retVal = HlmsTextureManager::TEXTURE_TYPE_NON_COLOR_DATA;
-            break;
-        case PBSM_DETAIL0:
-        case PBSM_DETAIL1:
-        case PBSM_DETAIL2:
-        case PBSM_DETAIL3:
-#ifdef OGRE_TEXTURE_ATLAS
-            retVal = HlmsTextureManager::TEXTURE_TYPE_DETAIL;
-#else
-            retVal = HlmsTextureManager::TEXTURE_TYPE_DIFFUSE;
-#endif
-            break;
-
-        case PBSM_NORMAL:
-            retVal = HlmsTextureManager::TEXTURE_TYPE_NORMALS;
-            break;
-        case PBSM_DETAIL0_NM:
-        case PBSM_DETAIL1_NM:
-        case PBSM_DETAIL2_NM:
-        case PBSM_DETAIL3_NM:
-#ifdef OGRE_TEXTURE_ATLAS
-            retVal = HlmsTextureManager::TEXTURE_TYPE_DETAIL_NORMAL_MAP;
-#else
-            retVal = HlmsTextureManager::TEXTURE_TYPE_NORMALS;
-#endif
-            break;
-
-        case PBSM_ROUGHNESS:
-            retVal = HlmsTextureManager::TEXTURE_TYPE_MONOCHROME;
-            break;
-
-        case PBSM_REFLECTION:
-            retVal = HlmsTextureManager::TEXTURE_TYPE_ENV_MAP;
-            break;
-        }
-
+        Vector3 diffuse = getDiffuse();
+        ColourValue retVal( diffuse.x, diffuse.y, diffuse.z, getTransparency() );
         return retVal;
-    }*/
+    }
+    //-----------------------------------------------------------------------------------
+    ColourValue HlmsPbsDatablock::getEmissiveColour(void) const
+    {
+        Vector3 emissive = getEmissive();
+        ColourValue retVal( emissive.x, emissive.y, emissive.z, 0.0f );
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    TextureGpu* HlmsPbsDatablock::getDiffuseTexture(void) const
+    {
+        return getTexture( PBSM_DIFFUSE );
+    }
+    //-----------------------------------------------------------------------------------
+    TextureGpu* HlmsPbsDatablock::getEmissiveTexture(void) const
+    {
+        return getTexture( PBSM_EMISSIVE );
+    }
 }

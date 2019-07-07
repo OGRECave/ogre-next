@@ -97,6 +97,8 @@ SamplerState samplerStateTerra		: register(s@value(terrainNormals));
 @insertpiece( DeclAreaLtcTextures )
 @insertpiece( DeclAreaLtcLightFuncs )
 
+@insertpiece( DeclVctTextures )
+
 @insertpiece( DeclOutputType )
 
 @insertpiece( custom_ps_functions )

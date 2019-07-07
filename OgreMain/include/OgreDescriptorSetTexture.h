@@ -136,7 +136,7 @@ namespace Ogre
             SlotTypeBuffer,
             SlotTypeTexture
         };
-        struct BufferSlot
+        struct _OgreExport BufferSlot
         {
             /// Texture buffer to bind
             TexBufferPacked *buffer;
@@ -175,11 +175,13 @@ namespace Ogre
                 return retVal;
             }
         };
-        struct TextureSlot
+        struct _OgreExport TextureSlot
         {
             TextureGpu      *texture;
             bool            cubemapsAs2DArrays;
             uint8           mipmapLevel;
+            /// When this value is 0, it means all mipmaps from mipmapLevel until the end.
+            uint8           numMipmaps;
             uint16          textureArrayIndex;
             /// When left as PFG_UNKNOWN, we'll automatically use the TextureGpu's native format
             PixelFormatGpu  pixelFormat;
@@ -188,6 +190,7 @@ namespace Ogre
             {
                 return  this->texture != other.texture ||
                         this->mipmapLevel != other.mipmapLevel ||
+                        this->numMipmaps != other.numMipmaps ||
                         this->textureArrayIndex != other.textureArrayIndex ||
                         this->pixelFormat != other.pixelFormat;
             }
@@ -198,6 +201,8 @@ namespace Ogre
                     return this->texture < other.texture;
                 if( this->mipmapLevel != other.mipmapLevel )
                     return this->mipmapLevel < other.mipmapLevel;
+                if( this->numMipmaps != other.numMipmaps )
+                    return this->numMipmaps < other.numMipmaps;
                 if( this->textureArrayIndex != other.textureArrayIndex )
                     return this->textureArrayIndex < other.textureArrayIndex;
                 if( this->pixelFormat != other.pixelFormat )
@@ -216,7 +221,7 @@ namespace Ogre
                 return retVal;
             }
         };
-        struct Slot
+        struct _OgreExport Slot
         {
             SlotType        slotType;
         protected:

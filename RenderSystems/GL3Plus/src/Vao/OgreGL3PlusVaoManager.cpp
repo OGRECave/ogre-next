@@ -850,7 +850,7 @@ namespace Ogre
         size_t vboIdx;
         size_t bufferOffset;
 
-        GLint alignment = mUavBufferAlignment;
+        size_t alignment = Math::lcm( mUavBufferAlignment, bytesPerElement );
 
         //UAV Buffers can't be dynamic.
         const BufferType bufferType = BT_DEFAULT;

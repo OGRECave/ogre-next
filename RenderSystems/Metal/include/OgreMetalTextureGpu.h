@@ -93,8 +93,8 @@ namespace Ogre
         virtual void _setToDisplayDummyTexture(void);
         virtual void _notifyTextureSlotChanged( const TexturePool *newPool, uint16 slice );
 
-        id<MTLTexture> getView( PixelFormatGpu pixelFormat, uint8 mipLevel, uint16 arraySlice,
-                                bool cubemapsAs2DArrays, bool forUav );
+        id<MTLTexture> getView( PixelFormatGpu pixelFormat, uint8 mipLevel, uint8 numMipmaps,
+                                uint16 arraySlice, bool cubemapsAs2DArrays, bool forUav );
         id<MTLTexture> getView( DescriptorSetTexture2::TextureSlot texSlot );
         id<MTLTexture> getView( DescriptorSetUav::TextureSlot uavSlot );
 

@@ -55,7 +55,13 @@ namespace Ogre
         virtual void advanceFrame(void) = 0;
         virtual void regressFrame(void) = 0;
 
+        virtual void copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes,
+                             size_t srcOffsetBytes, size_t sizeBytes ) = 0;
+
         virtual void _notifyBuffer( BufferPacked *buffer )  { mBuffer = buffer; }
+        BufferPacked* getBufferPacked(void)                 { return mBuffer; }
+
+        virtual void _ensureDelayedImmutableBuffersAreReady(void);
     };
 }
 

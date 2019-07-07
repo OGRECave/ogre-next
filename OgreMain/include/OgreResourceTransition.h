@@ -111,7 +111,7 @@ namespace Ogre
     {
         Undefined = 0x00,
         Read = 0x01,
-        Write = 0x10,
+        Write = 0x02,
         ReadWrite = Read | Write
     };
 

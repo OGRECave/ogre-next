@@ -1,0 +1,110 @@
+
+//#include "SyntaxHighlightingMisc.h"
+
+//in uvec3 gl_NumWorkGroups;
+//in uvec3 gl_WorkGroupID;
+//in uvec3 gl_LocalInvocationID;
+//in uvec3 gl_GlobalInvocationID;
+//in uint  gl_LocalInvocationIndex;
+
+@piece( HeaderCS )
+	@insertpiece( DeclSRgbFuncs )
+@end
+
+@piece( BodyCS )
+	if( gl_GlobalInvocationID.x >= uint( p_higherMipHalfRes.x ) ||
+		gl_GlobalInvocationID.y >= uint( p_higherMipHalfRes.y ) ||
+		gl_GlobalInvocationID.z >= uint( p_higherMipHalfRes.z ) )
+	{
+		return;
+	}
+
+	int3 offsets[8] =
+	OGRE_ARRAY_START( int3 )
+		int3( 1, 1, 1 ),
+		int3( 1, 1, 0 ),
+		int3( 1, 0, 1 ),
+		int3( 1, 0, 0 ),
+		int3( 0, 1, 1 ),
+		int3( 0, 1, 0 ),
+		int3( 0, 0, 1 ),
+		int3( 0, 0, 0 )
+	OGRE_ARRAY_END;
+
+	float4 samples[8];
+	float4 finalValue;
+
+	wshort3 negAxisDstIUvw = wshort3( gl_GlobalInvocationID.xyz );
+	wshort3 posAxisDstIUvw = negAxisDstIUvw;
+	posAxisDstIUvw.x += p_higherMipHalfRes.x;
+
+	int3 negISourceUvw = int3( gl_GlobalInvocationID.xyz << 1u );
+	int3 posISourceUvw = negISourceUvw;
+	posISourceUvw.x += p_lowerMipHalfWidth;
+
+	//-X
+	@foreach( 8, n )
+		samples[@n] = OGRE_Load3D( inLightLowerMip0, negISourceUvw.xyz + offsets[@n], 0 );@end
+
+	finalValue =
+			( samples[4] + samples[0] * (1.0f - samples[4].a) +
+			  samples[5] + samples[1] * (1.0f - samples[5].a) +
+			  samples[6] + samples[2] * (1.0f - samples[6].a) +
+			  samples[7] + samples[3] * (1.0f - samples[7].a) ) * 0.25f;
+	OGRE_imageWrite3D4( outLightHigherMip0, negAxisDstIUvw, toSRGB( finalValue.xyzw ) );
+
+	//+X
+	@foreach( 8, n )
+		samples[@n] = OGRE_Load3D( inLightLowerMip0, posISourceUvw.xyz + offsets[@n], 0 );@end
+
+	finalValue =
+			( samples[0] + samples[4] * (1.0f - samples[0].a) +
+			  samples[1] + samples[5] * (1.0f - samples[1].a) +
+			  samples[2] + samples[6] * (1.0f - samples[2].a) +
+			  samples[3] + samples[7] * (1.0f - samples[3].a) ) * 0.25f;
+	OGRE_imageWrite3D4( outLightHigherMip0, posAxisDstIUvw, toSRGB( finalValue.xyzw ) );
+
+	//-Y
+	@foreach( 8, n )
+		samples[@n] = OGRE_Load3D( inLightLowerMip1, negISourceUvw.xyz + offsets[@n], 0 );@end
+
+	finalValue =
+			( samples[2] + samples[0] * (1.0f - samples[2].a) +
+			  samples[3] + samples[1] * (1.0f - samples[3].a) +
+			  samples[7] + samples[5] * (1.0f - samples[7].a) +
+			  samples[6] + samples[4] * (1.0f - samples[6].a) ) * 0.25f;
+	OGRE_imageWrite3D4( outLightHigherMip1, negAxisDstIUvw, toSRGB( finalValue.xyzw ) );
+
+	//+Y
+	@foreach( 8, n )
+		samples[@n] = OGRE_Load3D( inLightLowerMip1, posISourceUvw.xyz + offsets[@n], 0 );@end
+
+	finalValue =
+			( samples[0] + samples[2] * (1.0f - samples[0].a) +
+			  samples[1] + samples[3] * (1.0f - samples[1].a) +
+			  samples[5] + samples[7] * (1.0f - samples[5].a) +
+			  samples[4] + samples[6] * (1.0f - samples[4].a) ) * 0.25f;
+	OGRE_imageWrite3D4( outLightHigherMip1, posAxisDstIUvw, toSRGB( finalValue.xyzw ) );
+
+	//-Z
+	@foreach( 8, n )
+		samples[@n] = OGRE_Load3D( inLightLowerMip2, negISourceUvw.xyz + offsets[@n], 0 );@end
+
+	finalValue =
+			( samples[1] + samples[0] * (1.0f - samples[1].a) +
+			  samples[3] + samples[2] * (1.0f - samples[3].a) +
+			  samples[5] + samples[4] * (1.0f - samples[5].a) +
+			  samples[7] + samples[6] * (1.0f - samples[7].a) ) * 0.25f;
+	OGRE_imageWrite3D4( outLightHigherMip2, negAxisDstIUvw, toSRGB( finalValue.xyzw ) );
+
+	//+Z
+	@foreach( 8, n )
+		samples[@n] = OGRE_Load3D( inLightLowerMip2, posISourceUvw.xyz + offsets[@n], 0 );@end
+
+	finalValue =
+			( samples[0] + samples[1] * (1.0f - samples[0].a) +
+			  samples[2] + samples[3] * (1.0f - samples[2].a) +
+			  samples[4] + samples[5] * (1.0f - samples[4].a) +
+			  samples[6] + samples[7] * (1.0f - samples[6].a) ) * 0.25f;
+	OGRE_imageWrite3D4( outLightHigherMip2, posAxisDstIUvw, toSRGB( finalValue.xyzw ) );
+@end

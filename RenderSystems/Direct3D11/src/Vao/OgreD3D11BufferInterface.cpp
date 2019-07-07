@@ -31,6 +31,9 @@ THE SOFTWARE.
 #include "Vao/OgreD3D11StagingBuffer.h"
 #include "Vao/OgreD3D11DynamicBuffer.h"
 
+#include "Vao/OgreD3D11CompatBufferInterface.h"
+#include "OgreD3D11Device.h"
+
 namespace Ogre
 {
     D3D11BufferInterface::D3D11BufferInterface( size_t vboPoolIdx, ID3D11Buffer *d3dBuffer,

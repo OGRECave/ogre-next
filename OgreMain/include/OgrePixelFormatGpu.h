@@ -29,6 +29,7 @@ THE SOFTWARE.
 #define _OgrePixelFormatGpu_H_
 
 #include "OgrePrerequisites.h"
+#include "OgreResourceTransition.h"
 
 #include "OgreHeaderPrefix.h"
 
@@ -271,6 +272,21 @@ namespace Ogre {
             loaded.
         */
         virtual const char* getPixelFormatType( PixelFormatGpu pixelFormat ) const = 0;
+
+        /**
+        @param pixelFormat
+        @param textureType
+            See TextureTypes::TextureTypes
+        @param isMsaa
+        @param access
+            Texture access. Use ResourceAccess::Undefined for requesting sampling mode
+        @return
+            String for the shader to use "as is". Returned pointer may be null.
+            The validity of the pointer lasts as long as the RenderSystem remains
+            loaded.
+        */
+        virtual const char* getDataType( PixelFormatGpu pixelFormat, uint32 textureType,
+                                         bool isMsaa, ResourceAccess::ResourceAccess access ) const = 0;
     };
 
     /** @} */

@@ -62,6 +62,8 @@ namespace Ogre
     const IdString ComputeProperty::NumThreadGroupsY    = IdString( "num_thread_groups_y" );
     const IdString ComputeProperty::NumThreadGroupsZ    = IdString( "num_thread_groups_z" );
 
+    const IdString ComputeProperty::TypedUavLoad        = IdString( "typed_uav_load" );
+
     const IdString ComputeProperty::NumTextureSlots     = IdString( "num_texture_slots" );
     const IdString ComputeProperty::MaxTextureSlot      = IdString( "max_texture_slot" );
     const char *ComputeProperty::Texture                = "texture";
@@ -131,6 +133,7 @@ namespace Ogre
             String::size_type pos = filename.find_last_of( '.' );
             if( pos == String::npos ||
                 (filename.compare( pos + 1, String::npos, mShaderFileExt ) != 0 &&
+                 filename.compare( pos + 1, String::npos, "any" ) != 0 &&
                  filename.compare( pos + 1, String::npos, "metal" ) != 0 &&
                  filename.compare( pos + 1, String::npos, "glsl" ) != 0 &&
                  filename.compare( pos + 1, String::npos, "glsles" ) != 0 &&
@@ -190,9 +193,27 @@ namespace Ogre
         DataStreamPtr inFile = resourceGroupMgr.openResource( sourceFilename );
 
         if( mShaderProfile == "glsl" ) //TODO: String comparision
-            setProperty( HlmsBaseProp::GL3Plus, 330 );
+        {
+            setProperty( HlmsBaseProp::GL3Plus,
+                         mRenderSystem->getNativeShadingLanguageVersion() );
+        }
 
+        setProperty( HlmsBaseProp::Syntax,  mShaderSyntax.mHash );
+        setProperty( HlmsBaseProp::Hlsl,    HlmsBaseProp::Hlsl.mHash );
+        setProperty( HlmsBaseProp::Glsl,    HlmsBaseProp::Glsl.mHash );
+        setProperty( HlmsBaseProp::Glsles,  HlmsBaseProp::Glsles.mHash );
+        setProperty( HlmsBaseProp::Metal,   HlmsBaseProp::Metal.mHash );
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+        setProperty( HlmsBaseProp::iOS, 1 );
+#endif
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+        setProperty( HlmsBaseProp::macOS, 1 );
+#endif
         setProperty( HlmsBaseProp::HighQuality, mHighQuality );
+
+        if( mFastShaderBuildHack )
+            setProperty( HlmsBaseProp::FastShaderBuildHack, 1 );
 
         //Piece files
         processPieces( job->mIncludedPieceFiles );
@@ -239,6 +260,8 @@ namespace Ogre
                                     job->mSourceFilename + mShaderFileExt;
             std::ofstream outFile( debugFilenameOutput.c_str(),
                                    std::ios::out | std::ios::binary );
+            if( mDebugOutputProperties )
+                dumpProperties( outFile );
             outFile.write( &outString[0], outString.size() );
         }
 
@@ -304,7 +327,8 @@ namespace Ogre
             pso.mNumThreadGroups[0] * pso.mNumThreadGroups[1] * pso.mNumThreadGroups[2] == 0u )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "Shader or C++ must set threads_per_group_x, threads_per_group_y & "
+                         job->getNameStr() +
+                         ": Shader or C++ must set threads_per_group_x, threads_per_group_y & "
                          "threads_per_group_z and num_thread_groups_x through num_thread_groups_z."
                          " Otherwise we can't run on Metal. Use @pset( threads_per_group_x, 512 );"
                          " or read the value using @value( threads_per_group_x ) if you've already"
@@ -439,10 +463,8 @@ namespace Ogre
 
         mRenderSystem->_setComputePso( &psoCache.pso );
 
-        HlmsComputeJob::ConstBufferSlotVec::const_iterator itConst =
-                job->mConstBuffers.begin();
-        HlmsComputeJob::ConstBufferSlotVec::const_iterator enConst =
-                job->mConstBuffers.end();
+        HlmsComputeJob::ConstBufferSlotVec::const_iterator itConst = job->mConstBuffers.begin();
+        HlmsComputeJob::ConstBufferSlotVec::const_iterator enConst = job->mConstBuffers.end();
 
         while( itConst != enConst )
         {

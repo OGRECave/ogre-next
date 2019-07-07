@@ -61,7 +61,7 @@ namespace Ogre
     bool DescriptorSetTexture2::TextureSlot::needsDifferentView(void) const
     {
         return formatNeedsReinterpret() ||
-                mipmapLevel != 0 || textureArrayIndex != 0 ||
+                mipmapLevel != 0 || textureArrayIndex != 0 || numMipmaps != 0 ||
                 (cubemapsAs2DArrays &&
                  (texture->getTextureType() == TextureTypes::TypeCube ||
                   texture->getTextureType() == TextureTypes::TypeCubeArray));

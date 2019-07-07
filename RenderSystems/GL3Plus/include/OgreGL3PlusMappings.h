@@ -40,7 +40,7 @@ namespace Ogre
     class _OgreGL3PlusExport GL3PlusMappings
     {
     public:
-        static GLenum get( TextureTypes::TextureTypes textureType );
+        static GLenum get( TextureTypes::TextureTypes textureType, bool cubemapsAs2DArrays );
         static GLenum get( PixelFormatGpu pf );
         static void getFormatAndType( PixelFormatGpu pf, GLenum &format, GLenum &type );
     };

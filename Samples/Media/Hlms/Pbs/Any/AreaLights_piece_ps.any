@@ -39,8 +39,9 @@
 		fDistance = length( lightDir );
 
 		@property( obb_restraint_approx )
-			bool isInsideObbRestraint = testObbRestraint( passBuf.areaApproxLights[i].obbRestraint, inPs.pos );
-			@piece( obbRestraintTestApprox )&& isInsideObbRestraint@end
+			float obbRestraintFade = getObbRestraintFade( passBuf.areaApproxLights[i].obbRestraint, inPs.pos,
+														  passBuf.areaApproxLights[i].obbFadeFactorApprox.xyz );
+			@piece( obbRestraintTestApprox )&& obbRestraintFade > 0.0@end
 		@end
 
 		if( fDistance <= passBuf.areaApproxLights[i].attenuation.x
@@ -153,6 +154,11 @@
 											  passBuf.areaApproxLights[i].specular.xyz * specCol,
 											  pixelData ) * ( globalDot * globalDot ) * booster;
 			float atten = 1.0 / (0.5 + (passBuf.areaApproxLights[i].attenuation.y + passBuf.areaApproxLights[i].attenuation.z * fDistance) * fDistance );
+
+			@property( obb_restraint_approx )
+				atten *= obbRestraintFade;
+			@end
+
 			finalColour += tmpColour * atten;
 			//finalColour.xyz = float3( dot( lightDir, pixelData.normal ) );
 			//finalColour.xyz = float3( lightUV.xy + 0.5f, 0.0f );

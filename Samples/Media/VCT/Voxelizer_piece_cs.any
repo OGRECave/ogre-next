@@ -1,0 +1,522 @@
+// Heavily modified version based on voxelization shader written by mattatz
+//	https://github.com/mattatz/unity-voxel
+// Original work Copyright (c) 2018 mattatz under MIT license.
+//
+// mattatz's work is a full voxelization algorithm.
+// We only need to voxelize the shell (aka the contour),
+// not to fill the entire voxel.
+//
+// Adapted for Ogre and for use for Voxel Cone Tracing by
+// Matias N. Goldberg Copyright (c) 2019
+
+@piece( PreBindingsHeaderCS )
+	@property( !compressed_vertex_format )
+		struct Vertex
+		{
+			float4 pos_normX;
+			float4 normYZ_uv;
+		};
+	@else
+		struct Vertex
+		{
+			uint4 pos_normal_uv;
+		};
+	@end
+
+	@property( syntax != glsl )
+		struct InstanceBuffer
+		{
+			float4 worldTransformRow0;
+			float4 worldTransformRow1;
+			float4 worldTransformRow2;
+			float4 aabb0;
+			float4 aabb1;
+			uint4 meshData;
+		};
+	@end
+@end
+
+@piece( HeaderCS )
+	@insertpiece( Common_Matrix_DeclLoadOgreFloat4x3 )
+
+	struct Material
+	{
+		float4 bgDiffuse;
+		float4 diffuse;
+		float4 emissive;
+		uint diffuseTexIdx;
+		uint emissiveTexIdx;
+		uint padding0;
+		uint padding1;
+	};
+
+	@property( syntax != metal )
+		CONST_BUFFER( MaterialBuf, 0 )
+		{
+			Material materials[1024];
+		};
+	@end
+
+	struct Plane
+	{
+		float3 normal;
+		float distance;
+	};
+
+	struct Aabb
+	{
+		float3 center;
+		float3 halfSize;
+	};
+
+	struct Triangle
+	{
+		float3 v[3];
+		float3 n[3];
+		float2 uv[3];
+	};
+
+	struct Mesh
+	{
+		uint vertexBufferStart;
+		uint indexBufferStart;
+		uint numIndices;
+	};
+
+	struct Instance
+	{
+		ogre_float4x3 worldTransform;
+		//uint meshIdx;
+		uint materialIdx;
+		Aabb bounds;
+
+		Mesh mesh;
+	};
+
+	INLINE Instance getInstance( uint instanceIdx PARAMS_ARG_DECL )
+	{
+		Instance retVal;
+
+	@property( syntax == glsl )
+		retVal.worldTransform = loadOgreFloat4x3( instanceBuffer, instanceIdx * 6u );
+
+		float4 aabb0 = bufferFetch( instanceBuffer, int( instanceIdx * 6u + 3u ) );
+		float4 aabb1 = bufferFetch( instanceBuffer, int( instanceIdx * 6u + 4u ) );
+
+		retVal.bounds.center	= aabb0.xyz;
+		retVal.bounds.halfSize	= aabb1.xyz;
+
+		//retVal.meshIdx		= floatBitsToUint( aabb0.w );
+		retVal.materialIdx	= floatBitsToUint( aabb1.w );
+
+		uint3 meshData = floatBitsToUint( bufferFetch( instanceBuffer,
+													   int( instanceIdx * 6u + 5u ) ).xyz );
+		retVal.mesh.vertexBufferStart	= meshData.x;
+		retVal.mesh.indexBufferStart	= meshData.y;
+		retVal.mesh.numIndices			= meshData.z;
+	@else
+		retVal.worldTransform = makeOgreFloat4x3( instanceBuffer[instanceIdx].worldTransformRow0,
+												  instanceBuffer[instanceIdx].worldTransformRow1,
+												  instanceBuffer[instanceIdx].worldTransformRow2 );
+
+		retVal.bounds.center	= instanceBuffer[instanceIdx].aabb0.xyz;
+		retVal.bounds.halfSize	= instanceBuffer[instanceIdx].aabb1.xyz;
+
+		//retVal.meshIdx		= floatBitsToUint( instanceBuffer[instanceIdx].aabb0.w );
+		retVal.materialIdx	= floatBitsToUint( instanceBuffer[instanceIdx].aabb1.w );
+
+		retVal.mesh.vertexBufferStart	= instanceBuffer[instanceIdx].meshData.x;
+		retVal.mesh.indexBufferStart	= instanceBuffer[instanceIdx].meshData.y;
+		retVal.mesh.numIndices			= instanceBuffer[instanceIdx].meshData.z;
+	@end
+
+		return retVal;
+	}
+
+	INLINE uint getIndexBufferIndex( uint index PARAMS_ARG_DECL )
+	{
+	@property( !index_32bit )
+		uint retVal = indexBuffer[index >> 1u];
+		retVal = ((index & 0x01u) != 0u) ? (retVal >> 16u) : (retVal & 0xFFFFu);
+	@else
+		uint retVal = indexBuffer[index];
+	@end
+		return retVal;
+	}
+
+	INLINE Triangle getTriangle( uint triIdx, Mesh mesh PARAMS_ARG_DECL )
+	{
+		Triangle retVal;
+
+		for( uint i=0u; i<3u; ++i )
+		{
+			uint idx = getIndexBufferIndex( mesh.indexBufferStart + triIdx * 3u + i PARAMS_ARG );
+			@property( !compressed_vertex_format )
+				retVal.v[i] = vertexBuffer[idx + mesh.vertexBufferStart].pos_normX.xyz;
+				retVal.n[i] = float3( vertexBuffer[idx + mesh.vertexBufferStart].pos_normX.w,
+									  vertexBuffer[idx + mesh.vertexBufferStart].normYZ_uv.xy );
+				retVal.uv[i] = vertexBuffer[idx + mesh.vertexBufferStart].normYZ_uv.zw;
+			@else
+				uint4 pos_normal_uv = vertexBuffer[idx + mesh.vertexBufferStart].pos_normal_uv;
+				retVal.v[i].xy = unpackSnorm2x16( pos_normal_uv.x );
+
+				float2 tmp = unpackSnorm2x16( pos_normal_uv.y );
+				retVal.v[i].z	= tmp.x;
+
+				retVal.n[i].x	= tmp.y;
+				retVal.n[i].xy	= unpackSnorm2x16( pos_normal_uv.z );
+
+				retVal.uv[i].xy = unpackHalf2x16( pos_normal_uv.w );
+			@end
+		}
+
+		return retVal;
+	}
+
+	INLINE Aabb getTriangleAabb( uint triIdx, Mesh mesh, ogre_float4x3 worldTransform PARAMS_ARG_DECL )
+	{
+		uint idx = getIndexBufferIndex( mesh.indexBufferStart + triIdx * 3u + 0 PARAMS_ARG );
+	@property( !compressed_vertex_format )
+		float3 vertexPos = vertexBuffer[idx + mesh.vertexBufferStart].pos_normX.xyz;
+	@else
+		uint4 pos_normal_uv = vertexBuffer[idx + mesh.vertexBufferStart].pos_normal_uv;
+		float3 vertexPos;
+		vertexPos.xy	= unpackSnorm2x16( pos_normal_uv.x );
+		vertexPos.z		= unpackSnorm2x16( pos_normal_uv.y ).x;
+	@end
+		vertexPos = mul( float4( vertexPos, 1.0f ), worldTransform );
+		float3 minValue = vertexPos;
+		float3 maxValue = vertexPos;
+		for( uint i=1u; i<3u; ++i )
+		{
+			idx = getIndexBufferIndex( mesh.indexBufferStart + triIdx * 3u + i PARAMS_ARG );
+
+			@property( !compressed_vertex_format )
+				vertexPos = vertexBuffer[idx + mesh.vertexBufferStart].pos_normX.xyz;
+			@else
+				pos_normal_uv = vertexBuffer[idx + mesh.vertexBufferStart].pos_normal_uv;
+				vertexPos.xy	= unpackSnorm2x16( pos_normal_uv.x );
+				vertexPos.z		= unpackSnorm2x16( pos_normal_uv.y ).x;
+			@end
+				vertexPos = mul( float4( vertexPos, 1.0f ), worldTransform );
+				minValue = min( minValue, vertexPos );
+				maxValue = max( maxValue, vertexPos );
+		}
+
+		Aabb retVal;
+		retVal.center	= (minValue + maxValue) * 0.5f;
+		retVal.halfSize	= (maxValue - minValue) * 0.5f;
+
+		return retVal;
+	}
+
+	INLINE bool intersects( Aabb a, Aabb b )
+	{
+		float3 absDistance = abs( a.center - b.center );
+		float3 sumHalfSizes = a.halfSize + b.halfSize;
+
+		// ( abs( center.x - center2.x ) <= halfSize.x + halfSize2.x &&
+		//   abs( center.y - center2.y ) <= halfSize.y + halfSize2.y &&
+		//   abs( center.z - center2.z ) <= halfSize.z + halfSize2.z )
+		return	absDistance.x <= sumHalfSizes.x &&
+				absDistance.y <= sumHalfSizes.y &&
+				absDistance.z <= sumHalfSizes.z;
+	}
+
+	INLINE bool intersects_tri_aabb_onto_axis( float3 v0, float3 v1, float3 v2, float3 halfSize, float3 axis )
+	{
+		// project all 3 vertices of the triangle onto the axis
+		float p0 = dot( v0, axis );
+		float p1 = dot( v1, axis );
+		float p2 = dot( v2, axis );
+
+		// project the Aabb onto the axis
+		float r = halfSize.x * abs( axis.x ) + halfSize.y * abs( axis.y ) + halfSize.z * abs( axis.z );
+		float minP = min(p0, min(p1, p2));
+		float maxP = max(p0, max(p1, p2));
+		return !((maxP < -r) || (r < minP));
+	}
+
+	INLINE bool intersects_plane_aabb( Plane pl, Aabb aabb )
+	{
+		float r =	aabb.halfSize.x * abs( pl.normal.x ) +
+					aabb.halfSize.y * abs( pl.normal.y ) +
+					aabb.halfSize.z * abs( pl.normal.z );
+		float s = dot( pl.normal, aabb.center ) - pl.distance;
+		return abs(s) <= r;
+	}
+
+	INLINE bool intersects_tri_aabb( Triangle tri, Aabb aabb )
+	{
+		// Make the triangle local space to Aabb
+		float3 v0 = tri.v[0] - aabb.center;
+		float3 v1 = tri.v[1] - aabb.center;
+		float3 v2 = tri.v[2] - aabb.center;
+
+		// Test x axis
+		if( max3( v0.x, v1.x, v2.x ) < -aabb.halfSize.x || min3( v0.x, v1.x, v2.x ) > aabb.halfSize.x )
+			return false;
+
+		// Test y axis
+		if( max3( v0.y, v1.y, v2.y ) < -aabb.halfSize.y || min3( v0.y, v1.y, v2.y ) > aabb.halfSize.y )
+			return false;
+
+		// Test z axis
+		if( max3( v0.z, v1.z, v2.z ) < -aabb.halfSize.z || min3( v0.z, v1.z, v2.z ) > aabb.halfSize.z )
+			return false;
+
+		// compute the edge vectors of the triangle
+		// get the lines between the points as vectors
+		float3 f0 = v1 - v0;
+		float3 f1 = v2 - v1;
+		float3 f2 = v0 - v2;
+
+		// cross products of triangle edges & aabb edges
+		// AABB normals are the x( 1, 0, 0 ), y( 0, 1, 0 ), z( 0, 0, 1 ) axis.
+		// so we can get the cross products between triangle edge vectors
+		// and AABB normals without calculation
+		float3 a00 = float3( 0, -f0.z, f0.y ); // cross product of X and f0
+		float3 a01 = float3( 0, -f1.z, f1.y ); // X and f1
+		float3 a02 = float3( 0, -f2.z, f2.y ); // X and f2
+		float3 a10 = float3( f0.z, 0, -f0.x ); // Y and f0
+		float3 a11 = float3( f1.z, 0, -f1.x ); // Y and f1
+		float3 a12 = float3( f2.z, 0, -f2.x ); // Y and f2
+		float3 a20 = float3( -f0.y, f0.x, 0 ); // Z and f0
+		float3 a21 = float3( -f1.y, f1.x, 0 ); // Z and f1
+		float3 a22 = float3( -f2.y, f2.x, 0); // Z and f2
+
+		// Test 9 axes
+		if (
+			!intersects_tri_aabb_onto_axis( v0, v1, v2, aabb.halfSize, a00 ) ||
+			!intersects_tri_aabb_onto_axis( v0, v1, v2, aabb.halfSize, a01 ) ||
+			!intersects_tri_aabb_onto_axis( v0, v1, v2, aabb.halfSize, a02 ) ||
+			!intersects_tri_aabb_onto_axis( v0, v1, v2, aabb.halfSize, a10 ) ||
+			!intersects_tri_aabb_onto_axis( v0, v1, v2, aabb.halfSize, a11 ) ||
+			!intersects_tri_aabb_onto_axis( v0, v1, v2, aabb.halfSize, a12 ) ||
+			!intersects_tri_aabb_onto_axis( v0, v1, v2, aabb.halfSize, a20 ) ||
+			!intersects_tri_aabb_onto_axis( v0, v1, v2, aabb.halfSize, a21 ) ||
+			!intersects_tri_aabb_onto_axis( v0, v1, v2, aabb.halfSize, a22 )
+		)
+		{
+			return false;
+		}
+
+		// Test triangle normal
+		Plane pl;
+		pl.normal	= normalize( cross( f1, f0 ) );
+		pl.distance	= dot( pl.normal, tri.v[0] );
+		return intersects_plane_aabb( pl, aabb );
+	}
+
+	// https://gamedev.stackexchange.com/questions/23743/
+	// whats-the-most-efficient-way-to-find-barycentric-coordinates
+	INLINE float3 tri_barycentric( float3 p, Triangle tri )
+	{
+		float3 v0 = tri.v[1] - tri.v[0];
+		float3 v1 = tri.v[2] - tri.v[0];
+		float3 v2 = p - tri.v[0];
+
+		float d00 = dot( v0, v0 );
+		float d01 = dot( v0, v1 );
+		float d11 = dot( v1, v1 );
+		float d20 = dot( v2, v0 );
+		float d21 = dot( v2, v1 );
+		float denom = 1.0 / (d00 * d11 - d01 * d01);
+
+		float3 uvw;
+		uvw.y = (d11 * d20 - d01 * d21) * denom;
+		uvw.z = (d00 * d21 - d01 * d20) * denom;
+		uvw.x = 1.0f - uvw.y - uvw.z;
+
+		return uvw;
+	}
+
+	INLINE float3 tri_barycentric_normal( float3 p, Triangle tri )
+	{
+		float3 uvw = tri_barycentric( p, tri );
+		return tri.n[0] * uvw.x + tri.n[1] * uvw.y + tri.n[2] * uvw.z;
+	}
+
+	INLINE float2 tri_barycentric_uv( float3 p, Triangle tri )
+	{
+		float3 uvw = tri_barycentric( p, tri );
+		return tri.uv[0] * uvw.x + tri.uv[1] * uvw.y + tri.uv[2] * uvw.z;
+	}
+
+	INLINE float3 mixAverage3( float3 newAccumValues, float numTris,
+							   float3 oldAveragedValue, float oldNumTris )
+	{
+		return newAccumValues / (numTris + oldNumTris) +
+			   oldAveragedValue * (oldNumTris / (numTris + oldNumTris));
+	}
+	INLINE float4 mixAverage4( float4 newAccumValues, float numTris,
+							   float4 oldAveragedValue, float oldNumTris )
+	{
+		return newAccumValues / (numTris + oldNumTris) +
+			   oldAveragedValue * (oldNumTris / (numTris + oldNumTris));
+	}
+@end
+
+//in uvec3 gl_NumWorkGroups;
+//in uvec3 gl_WorkGroupID;
+//in uvec3 gl_LocalInvocationID;
+//in uvec3 gl_GlobalInvocationID;
+//in uint  gl_LocalInvocationIndex;
+
+@piece( BodyCS )
+	Aabb voxelAabb;
+	voxelAabb.center	= p_voxelOrigin + p_voxelCellSize * (float3( gl_GlobalInvocationID.xyz ) + 0.5f);
+	voxelAabb.halfSize	= p_voxelCellSize * 0.5f;
+
+	Aabb groupVoxelAabb;
+	groupVoxelAabb.center	= p_voxelOrigin +
+							  4.0f * p_voxelCellSize * (float3( gl_WorkGroupID.xyz ) + 0.5f);
+	groupVoxelAabb.halfSize	= 4.0f * p_voxelCellSize * 0.5f;
+
+	bool doubleSided = false;
+	float accumTris = 0;
+	float4 voxelAlbedo		= float4( 0, 0, 0, 0 );
+	float4 voxelNormal		= float4( 0, 0, 0, 0 );
+	float4 voxelEmissive	= float4( 0, 0, 0, 0 );
+
+	for( uint i=p_instanceStart; i<p_instanceEnd; ++i )
+	{
+		Instance instance = getInstance( i PARAMS_ARG );
+
+		//Broadphase culling.
+		//Cull against groupVoxelAabb so that anyInvocationARB can work (all lanes
+		//must be active for GroupMemoryBarrierWithGroupSync to work, and even in the
+		//non-emulated version we need all threads to be in the same iteration)
+		if( intersects( groupVoxelAabb, instance.bounds ) )
+		{
+			Material material = materials[instance.materialIdx];
+
+			uint numTris = instance.mesh.numIndices / 3u;
+
+			for( uint triIdxBase=0u; triIdxBase<numTris; triIdxBase += 64u )
+			{
+				//First make the 64 threads check if any of the triangles intersects
+				//against the combined AABB of the 4x4x4 block. If none do, we can skip
+				//64 triangles in one go (actual performance improvement is around 32x).
+				uint tmpTriIdx = min( triIdxBase + gl_LocalInvocationIndex, numTris - 1u );
+				Aabb tmpTriAabb = getTriangleAabb( tmpTriIdx, instance.mesh, instance.worldTransform PARAMS_ARG );
+
+				bool groupTriInters = intersects( tmpTriAabb, groupVoxelAabb );
+
+				if( anyInvocationARB( groupTriInters ) )
+				{
+					for( uint subTri=0u; subTri<64u; ++subTri )
+					{
+						uint triIdx = min( triIdxBase + subTri, numTris - 1u );
+						Triangle tri = getTriangle( triIdx, instance.mesh PARAMS_ARG );
+
+						for( uint i=0; i<3u; ++i )
+						{
+							tri.v[i] = mul( float4( tri.v[i], 1.0f ), instance.worldTransform );
+							tri.n[i] = mul( tri.n[i], toFloat3x3( instance.worldTransform ) );
+						}
+
+						if( intersects_tri_aabb( tri, voxelAabb ) )
+						{
+							@property( has_diffuse_tex || has_emissive_tex )
+								float2 uv = tri_barycentric_uv( voxelAabb.center, tri );
+							@end
+
+							float4 finalDiffuse		= material.diffuse.xyzw;
+							float3 finalEmissive	= material.emissive.xyz;
+						@property( has_diffuse_tex )
+							finalDiffuse *= OGRE_SampleArray2DLevel( texturePool, poolSampler, uv,
+																	 material.diffuseTexIdx, 0 );
+						@else
+							finalDiffuse *= material.bgDiffuse.xyzw;
+						@end
+
+						@property( has_emissive_tex )
+							finalEmissive *= OGRE_SampleArray2DLevel( texturePool, poolSampler, uv,
+																	  material.emissiveTexIdx, 0 ).xyz;
+						@end
+
+							voxelAlbedo			+= finalDiffuse;
+							voxelEmissive.xyz	+= finalEmissive;
+
+							float3 triNormal = tri_barycentric_normal( voxelAabb.center, tri );
+							triNormal = normalize( triNormal );
+
+							//voxelNormal is not normalized for properly blend-averaging in multiple
+							//passes. But we need it normalized for this check to work
+							float cosAngle = dot( normalize( voxelNormal.xyz ), triNormal );
+							float cos120 = -0.5f;
+							/*Rewrote as ternary operator because it was glitching in iOS Metal
+							if( cosAngle <= cos120 )
+								doubleSided = true;
+							else
+								voxelNormal.xyz += triNormal;*/
+							doubleSided		= cosAngle <= cos120 ? true : doubleSided;
+							voxelNormal.xyz	+= cosAngle <= cos120 ? float3( 0, 0, 0 ) : triNormal;
+
+							++accumTris;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	wshort3 voxelCelUvw = wshort3( gl_GlobalInvocationID.xyz );
+
+	@property( syntax != hlsl || typed_uav_load )
+		float4 origAlbedo	= OGRE_imageLoad3D( voxelAlbedoTex, voxelCelUvw );
+		float4 origNormal	= OGRE_imageLoad3D( voxelNormalTex, voxelCelUvw );
+		float4 origEmissive = OGRE_imageLoad3D( voxelEmissiveTex, voxelCelUvw );
+		float origAccumTris = OGRE_imageLoad3D( voxelAccumVal, voxelCelUvw ).x;
+	@else
+		float4 origAlbedo	= unpackUnorm4x8( OGRE_imageLoad3D( voxelAlbedoTex, voxelCelUvw ) );
+		float4 origNormal	= unpackUnormRGB10A2( OGRE_imageLoad3D( voxelNormalTex, voxelCelUvw ) );
+		float4 origEmissive = unpackUnorm4x8( OGRE_imageLoad3D( voxelEmissiveTex, voxelCelUvw ) );
+		uint origAccumTrisVal = OGRE_imageLoad3D( voxelAccumVal,
+												  wshort3( voxelCelUvw.x >> 1u, voxelCelUvw.yz ) ).x;
+		float origAccumTris = (gl_LocalInvocationIndex & 0x1u) ? (origAccumTrisVal >> 16u) :
+																 (origAccumTrisVal & 0xFFFFu);
+	@end
+
+	origNormal.xyz = origNormal.xyz * 2.0f - 1.0f;
+
+	if( accumTris + origAccumTris > 0 )
+	{
+		voxelAlbedo			= mixAverage4( voxelAlbedo, accumTris, origAlbedo, origAccumTris );
+		voxelNormal.xyz		= mixAverage3( voxelNormal.xyz, accumTris, origNormal.xyz, origAccumTris );
+		voxelEmissive.xyz	= mixAverage3( voxelEmissive.xyz, accumTris, origEmissive.xyz, origAccumTris );
+
+		voxelNormal.a	= doubleSided ? 1.0f : 0.0f;
+		voxelNormal.a	= max( voxelNormal.a, voxelNormal.a );
+		voxelNormal.xyz	= voxelNormal.xyz * 0.5 + 0.5f;
+
+		@property( syntax != hlsl || typed_uav_load )
+			OGRE_imageWrite3D4( voxelAlbedoTex, voxelCelUvw, voxelAlbedo );
+			OGRE_imageWrite3D4( voxelNormalTex, voxelCelUvw, voxelNormal );
+			OGRE_imageWrite3D4( voxelEmissiveTex, voxelCelUvw, voxelEmissive );
+			OGRE_imageWrite3D1( voxelAccumVal, voxelCelUvw,
+								uint4( accumTris + origAccumTris, 0, 0, 0 ) );
+		@else
+			OGRE_imageWrite3D4( voxelAlbedoTex, voxelCelUvw, packUnorm4x8( voxelAlbedo ) );
+			OGRE_imageWrite3D4( voxelNormalTex, voxelCelUvw, packUnormRGB10A2( voxelNormal ) );
+			OGRE_imageWrite3D4( voxelEmissiveTex, voxelCelUvw, packUnorm4x8( voxelEmissive ) );
+		@end
+	}
+
+	@property( syntax == hlsl && !typed_uav_load )
+		if( gl_LocalInvocationIndex & 0x1u )
+			g_voxelAccumValue[gl_LocalInvocationIndex >> 1u] = 0;
+		GroupMemoryBarrier();
+
+		origAccumTrisVal = uint( accumTris + origAccumTris );
+		origAccumTrisVal = (gl_LocalInvocationIndex & 0x1u) ? (origAccumTrisVal << 16u) :
+															  origAccumTrisVal;
+		InterlockedOr( g_voxelAccumValue[gl_LocalInvocationIndex >> 1u], origAccumTrisVal );
+		if( gl_LocalInvocationIndex & 0x1u )
+		{
+			OGRE_imageWrite3D1( voxelAccumVal, wshort3( voxelCelUvw.x >> 1u, voxelCelUvw.yz ),
+								uint4( g_voxelAccumValue[gl_LocalInvocationIndex >> 1u], 0, 0, 0 ) );
+		}
+	@end
+@end

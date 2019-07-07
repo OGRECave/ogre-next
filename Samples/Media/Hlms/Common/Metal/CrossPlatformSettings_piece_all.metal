@@ -13,13 +13,19 @@ inline float3x3 toMat3x3( float4x4 m )
 {
     return float3x3( m[0].xyz, m[1].xyz, m[2].xyz );
 }
+inline float3x3 toMat3x3( float3x4 m )
+{
+	return float3x3( m[0].xyz, m[1].xyz, m[2].xyz );
+}
 
 #define ogre_float4x3 float3x4
 
 //Short used for read operations. It's an int in GLSL & HLSL. An ushort in Metal
 #define rshort2 ushort2
+#define rint uint
 //Short used for write operations. It's an int in GLSL. An ushort in HLSL & Metal
 #define wshort2 ushort2
+#define wshort3 ushort3
 
 #define toFloat3x3( x ) toMat3x3( x )
 #define buildFloat3x3( row0, row1, row2 ) float3x3( row0, row1, row2 )
@@ -73,12 +79,27 @@ inline float3x3 toMat3x3( float4x4 m )
 #define OGRE_Load2D( tex, iuv, lod ) tex.read( iuv, lod )
 #define OGRE_Load2DMS( tex, iuv, subsample ) tex.read( iuv, subsample )
 
+#define OGRE_Load3D( tex, iuv, lod ) tex.read( ushort3( iuv ), lod )
+
 #define bufferFetch( buffer, idx ) buffer[idx]
 #define bufferFetch1( buffer, idx ) buffer[idx]
+
+#define structuredBufferFetch( buffer, idx ) buffer[idx]
+
+#define OGRE_Texture3D_float4 texture3d<float>
+
+#define OGRE_SAMPLER_ARG_DECL( samplerName ) , sampler samplerName
+#define OGRE_SAMPLER_ARG( samplerName ) , samplerName
 
 #define CONST_BUFFER_STRUCT_BEGIN( structName, bindingPoint ) struct structName
 #define CONST_BUFFER_STRUCT_END( variableName )
 
 #define FLAT_INTERPOLANT( decl, bindingPoint ) decl [[flat]]
 #define INTERPOLANT( decl, bindingPoint ) decl
+
+#define OGRE_OUT_REF( declType, variableName ) thread declType &variableName
+#define OGRE_INOUT_REF( declType, variableName ) thread declType &variableName
+
+#define OGRE_ARRAY_START( type ) {
+#define OGRE_ARRAY_END }
 @end

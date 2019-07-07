@@ -722,13 +722,13 @@ namespace Ogre
 
         if( !mIsExternalGLControl )
         {
-            if( _glXSwapIntervalEXT )
+            if( _glXSwapIntervalMESA )
+                _glXSwapIntervalMESA( mVSync ? mVSyncInterval : 0 );
+            else if( _glXSwapIntervalEXT )
             {
                 _glXSwapIntervalEXT( mGLSupport->getGLDisplay(), mContext->mDrawable,
                                      mVSync ? mVSyncInterval : 0 );
             }
-            else if( _glXSwapIntervalMESA )
-                _glXSwapIntervalMESA( mVSync ? mVSyncInterval : 0 );
             else
                 _glXSwapIntervalSGI( mVSync ? mVSyncInterval : 0 );
         }

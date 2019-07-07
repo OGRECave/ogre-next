@@ -1,0 +1,238 @@
+{
+	"compute" :
+	{
+        "VCT/Voxelizer" :
+		{
+            "threads_per_group" : [4, 4, 4],
+
+            "source" : "Voxelizer_cs",
+            "pieces" : ["CrossPlatformSettings_piece_all", "Matrix_piece_all", "Voxelizer_piece_cs.any"],
+            "inform_shader_of_texture_data_change" : true,
+
+            "uav_units" : 6,
+			
+			"params" :
+            [
+			],
+			
+			"params_glsl" :
+			[
+                ["instanceBuffer",          [0], "int"],
+
+                ["voxelAlbedoTex",      	[2], "int"],
+                ["voxelNormalTex",  		[3], "int"],
+                ["voxelEmissiveTex",		[4], "int"],
+                ["voxelAccumVal",			[5], "int"]
+			],
+
+			"properties" :
+			{
+                "has_diffuse_tex" : 0,
+                "has_emissive_tex" : 0,
+                "emissive_is_diffuse_tex" : 0,
+                "index_32bit" : 0,
+                "compressed_vertex_format" : 0
+			}
+        },
+
+        "VCT/LightInjection" :
+        {
+            "threads_per_group" : [4, 4, 4],
+
+            "source" : "LightInjection_cs",
+            "pieces" : ["CrossPlatformSettings_piece_all", "AreaLights_LTC_piece_ps.any", "sRGB.any", "LightInjection_piece_cs.any"],
+            "inform_shader_of_texture_data_change" : true,
+
+            "thread_groups_based_on_uav" : 0,
+
+            "uav_units" : 1,
+
+            "textures" :
+            [
+                {},
+                {},
+                {}
+            ],
+
+            "properties" :
+            {
+                "hlms_lights_area_ltc" : 1
+            },
+
+            "params" :
+            [
+                ["numLights",               [0],        "uint"],
+                ["rayMarchStepSize",        [1,1,1],    "float"],
+                ["voxelCellSize",           [1,1,1],    "float"],
+                ["dirCorrectionRatio_thinWallCounter", [1,1,1,1],    "float"],
+                ["invVoxelResolution",      [1,1,1],    "float"]
+            ],
+
+            "params_glsl" :
+            [
+                ["voxelAlbedoTex",          [0], "int"],
+                ["voxelNormalTex",          [1], "int"],
+                ["voxelEmissiveTex",        [2], "int"],
+
+                ["lightVoxel",              [0], "int"]
+            ]
+        },
+
+        "VCT/AnisotropicMipStep0" :
+        {
+            "threads_per_group" : [4, 4, 4],
+
+            "source" : "AnisotropicMipVctStep0_cs",
+            "pieces" : ["CrossPlatformSettings_piece_all", "sRGB.any", "AnisotropicMipVctStep0_piece_cs.any"],
+            "inform_shader_of_texture_data_change" : true,
+
+            "thread_groups_based_on_uav" : { "slot" : 0, "divisor" : [2, 1, 1] },
+
+            "uav_units" : 3,
+
+            "textures" :
+            [
+                {},
+                {}
+            ],
+
+            "params" :
+            [
+                ["higherMipHalfWidth",      [1],    "int"]
+            ],
+
+            "params_glsl" :
+            [
+                ["inLightLowerMip",         [0], "int"],
+                ["inVoxelNormalTex",        [1], "int"],
+                ["outLightHigherMip0",       [0], "int"],
+                ["outLightHigherMip1",       [1], "int"],
+                ["outLightHigherMip2",       [2], "int"]
+            ]
+        },
+
+        "VCT/AnisotropicMipStep1" :
+        {
+            "threads_per_group" : [4, 4, 4],
+
+            "source" : "AnisotropicMipVctStep1_cs",
+            "pieces" : ["CrossPlatformSettings_piece_all", "sRGB.any", "AnisotropicMipVctStep1_piece_cs.any"],
+            "inform_shader_of_texture_data_change" : true,
+
+            "thread_groups_based_on_uav" : { "slot" : 0, "divisor" : [2, 1, 1] },
+
+            "uav_units" : 3,
+
+            "textures" :
+            [
+                {},
+                {},
+                {}
+            ],
+
+            "params" :
+            [
+                ["higherMipHalfRes_lowerMipHalfWidth",  [1, 1, 1, 1],   "int"]
+            ],
+
+            "params_glsl" :
+            [
+                ["inLightLowerMip0",        [0], "int"],
+                ["inLightLowerMip1",        [0], "int"],
+                ["inLightLowerMip2",        [0], "int"],
+                ["outLightHigherMip0",      [0], "int"],
+                ["outLightHigherMip1",      [1], "int"],
+                ["outLightHigherMip2",      [2], "int"]
+            ]
+        },
+
+        "VCT/LightVctBounceInject" :
+        {
+            "threads_per_group" : [4, 4, 4],
+
+            "source" : "LightVctBounceInject_cs",
+            "pieces" : ["CrossPlatformSettings_piece_all", "sRGB.any", "LightVctBounceInject_piece_cs.any"],
+            "inform_shader_of_texture_data_change" : true,
+
+            "thread_groups_based_on_uav" : 0,
+
+            "uav_units" : 1,
+
+            "textures" :
+            [
+                {},
+                {},
+                {}
+            ],
+
+            "properties" :
+            {
+                "vct_anisotropic" : 0
+            },
+
+            "params" :
+            [
+                ["voxelCellSize",           [1,1,1],    "float"],
+                ["invVoxelResolution",      [1,1,1],    "float"],
+                ["iterationDampening",      [1],        "float"],
+                ["startBias_invStartBias",  [1,1],      "float"]
+            ],
+
+            "params_glsl" :
+            [
+                ["voxelAlbedoTex",          [0], "int"],
+                ["voxelNormalTex",          [1], "int"],
+                ["vctProbe",                [2], "int"],
+
+                ["lightVoxel",              [0], "int"]
+            ]
+        },
+
+        "VCT/AabbCalculator" :
+        {
+            "threads_per_group" : [1024, 1, 1],
+            "thread_groups" : [1, 1, 1],
+
+            "source" : "AabbCalcultor_cs",
+            "pieces" : ["CrossPlatformSettings_piece_all", "Matrix_piece_all", "AabbCalcultor_piece_cs.any"],
+
+            "uav_units" : 3,
+
+            "textures" :
+            [
+                {}
+            ],
+
+            "properties" :
+            {
+                "index_32bit" : 0,
+                "compressed_vertex_format" : 0
+            },
+
+            "params_glsl" :
+            [
+                ["inMeshBuffer",            [0], "int"]
+            ]
+        },
+
+        "VCT/AabbWorldSpace" :
+        {
+            "threads_per_group" : [64, 1, 1],
+
+            "source" : "AabbWorldSpace_cs",
+            "pieces" : ["CrossPlatformSettings_piece_all", "Matrix_piece_all", "AabbWorldSpace_piece_cs.any"],
+
+            "uav_units" : 1,
+
+            "textures" :
+            [
+                {}
+            ],
+
+            "params_glsl" :
+            [
+                ["inMeshAabb",              [0], "int"]
+            ]
+        }
+	}
+}

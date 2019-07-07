@@ -40,11 +40,16 @@ if( APPLE )
                  ${CMAKE_BINARY_DIR}/bin/plugins.cfg
 		 ${CMAKE_SOURCE_DIR}/Samples/Media/2.0
 		 ${CMAKE_SOURCE_DIR}/Samples/Media/Hlms
-		 ${CMAKE_SOURCE_DIR}/Samples/Media/packs/DebugPack.zip )
+		 ${CMAKE_SOURCE_DIR}/Samples/Media/packs/DebugPack.zip
+		 ${CMAKE_SOURCE_DIR}/Samples/Media/packs/CornellBox.zip )
 
 	set( SAMPLE_COMMON_RESOURCES ${SAMPLE_COMMON_BASIC_RESOURCES}
 		 ${CMAKE_SOURCE_DIR}/Samples/Media/models
 		 ${CMAKE_SOURCE_DIR}/Samples/Media/materials/textures )
+
+	 set( SAMPLE_COMMON_COMPUTE_RESOURCES
+		  ${CMAKE_SOURCE_DIR}/Samples/Media/Compute
+		  ${CMAKE_SOURCE_DIR}/Samples/Media/VCT )
 
         if( OGRE_BUILD_PLATFORM_APPLE_IOS )
             set( SAMPLES_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Common/src/System/iOS/Resources/Info.plist )
@@ -139,4 +144,5 @@ if( OGRE_BUILD_TESTS )
 	add_subdirectory(Tests/MemoryCleanup)
 	add_subdirectory(Tests/Restart)
 	add_subdirectory(Tests/TextureResidency)
+	add_subdirectory(Tests/Voxelizer)
 endif()

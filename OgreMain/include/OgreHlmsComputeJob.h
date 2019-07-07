@@ -127,8 +127,9 @@ namespace Ogre
         void destroyDescriptorTextures(void);
         void destroyDescriptorUavs(void);
 
-        void setTextureProperties( const TextureGpu *texture, LwString &propName,
-                                   const PixelFormatToShaderType *toShaderType );
+        void setTextureProperties( const TextureGpu *texture,
+                                   PixelFormatGpu pixelFormat, ResourceAccess::ResourceAccess access,
+                                   LwString &propName, const PixelFormatToShaderType *toShaderType );
         void clearAutoProperties( const char *propTexture, uint8 maxTexUnitReached );
 
         void removeProperty( IdString key );
@@ -141,6 +142,7 @@ namespace Ogre
         Hlms* getCreator(void) const                { return mCreator; }
 
         IdString getName(void) const                { return mName; }
+        String getNameStr(void) const;
 
         void _updateAutoProperties(void);
 

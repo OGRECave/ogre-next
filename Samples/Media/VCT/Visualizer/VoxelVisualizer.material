@@ -1,0 +1,224 @@
+vertex_program VCT/VoxelVisualizer_vs_HLSL hlsl
+{
+	source VoxelVisualizer_vs.hlsl
+	entry_point main
+	target vs_5_0 vs_4_0
+}
+
+vertex_program VCT/VoxelVisualizer_vs_GLSL glsl
+{
+	source VoxelVisualizer_vs.glsl
+	enable_include_header true
+	default_params { param_named voxelTex int 0 }
+}
+
+vertex_program VCT/VoxelVisualizer_vs_Metal metal
+{
+	source VoxelVisualizer_vs.metal
+	enable_include_header true
+}
+
+vertex_program VCT/VoxelVisualizer_vs unified
+{
+	delegate VCT/VoxelVisualizer_vs_GLSL
+	delegate VCT/VoxelVisualizer_vs_HLSL
+	delegate VCT/VoxelVisualizer_vs_Metal
+
+	default_params
+	{
+		param_named_auto worldViewProjMatrix worldviewproj_matrix
+	}
+}
+
+fragment_program VCT/VoxelVisualizer_ps_HLSL hlsl
+{
+	source VoxelVisualizer_ps.hlsl
+	entry_point main
+	target ps_5_0 ps_4_0
+}
+
+fragment_program VCT/VoxelVisualizer_ps_GLSL glsl
+{
+	source VoxelVisualizer_ps.glsl
+}
+
+fragment_program VCT/VoxelVisualizer_ps_Metal metal
+{
+	source VoxelVisualizer_ps.metal
+	shader_reflection_pair_hint VCT/VoxelVisualizer_vs
+}
+
+fragment_program VCT/VoxelVisualizer_ps unified
+{
+	delegate VCT/VoxelVisualizer_ps_GLSL
+	delegate VCT/VoxelVisualizer_ps_HLSL
+	delegate VCT/VoxelVisualizer_ps_Metal
+}
+
+material VCT/VoxelVisualizer
+{
+	technique
+	{
+		pass
+		{
+			depth_check on
+			depth_write on
+
+			cull_hardware anticlockwise
+
+			vertex_program_ref VCT/VoxelVisualizer_vs
+			{
+			}
+
+			fragment_program_ref VCT/VoxelVisualizer_ps
+			{
+			}
+
+			texture_unit
+			{
+				filtering none
+				tex_address_mode clamp
+			}
+		}
+	}
+}
+
+
+vertex_program VCT/VoxelVisualizerSeparateOpacity_vs_HLSL hlsl
+{
+	source VoxelVisualizer_vs.hlsl
+	entry_point main
+	target vs_5_0 vs_4_0
+	preprocessor_defines SEPARATE_OPACITY
+}
+
+vertex_program VCT/VoxelVisualizerSeparateOpacity_vs_GLSL glsl
+{
+	source VoxelVisualizer_vs.glsl
+	enable_include_header true
+	default_params
+	{
+		param_named voxelTex int 0
+		param_named otherTex int 1
+	}
+	preprocessor_defines SEPARATE_OPACITY
+}
+
+vertex_program VCT/VoxelVisualizerSeparateOpacity_vs_Metal metal
+{
+	source VoxelVisualizer_vs.metal
+	enable_include_header true
+	preprocessor_defines SEPARATE_OPACITY
+}
+
+vertex_program VCT/VoxelVisualizerSeparateOpacity_vs unified
+{
+	delegate VCT/VoxelVisualizerSeparateOpacity_vs_GLSL
+	delegate VCT/VoxelVisualizerSeparateOpacity_vs_HLSL
+	delegate VCT/VoxelVisualizerSeparateOpacity_vs_Metal
+
+	default_params
+	{
+		param_named_auto worldViewProjMatrix worldviewproj_matrix
+	}
+}
+
+material VCT/VoxelVisualizer/SeparateOpacity
+{
+	technique
+	{
+		pass
+		{
+			depth_check on
+			depth_write on
+
+			cull_hardware anticlockwise
+
+			vertex_program_ref VCT/VoxelVisualizerSeparateOpacity_vs
+			{
+			}
+
+			fragment_program_ref VCT/VoxelVisualizer_ps
+			{
+			}
+
+			texture_unit
+			{
+				filtering none
+				tex_address_mode clamp
+			}
+
+			texture_unit
+			{
+				filtering none
+				tex_address_mode clamp
+			}
+		}
+	}
+}
+
+vertex_program VCT/VoxelVisualizerOpacityAnyColour_vs_HLSL hlsl
+{
+	source VoxelVisualizer_vs.hlsl
+	entry_point main
+	target vs_5_0 vs_4_0
+	preprocessor_defines OPACITY_ANY_COLOUR
+}
+
+vertex_program VCT/VoxelVisualizerOpacityAnyColour_vs_GLSL glsl
+{
+	source VoxelVisualizer_vs.glsl
+	enable_include_header true
+	default_params
+	{
+		param_named voxelTex int 0
+	}
+	preprocessor_defines OPACITY_ANY_COLOUR
+}
+
+vertex_program VCT/VoxelVisualizerOpacityAnyColour_vs_Metal metal
+{
+	source VoxelVisualizer_vs.metal
+	enable_include_header true
+	preprocessor_defines OPACITY_ANY_COLOUR
+}
+
+vertex_program VCT/VoxelVisualizerOpacityAnyColour_vs unified
+{
+	delegate VCT/VoxelVisualizerOpacityAnyColour_vs_GLSL
+	delegate VCT/VoxelVisualizerOpacityAnyColour_vs_HLSL
+	delegate VCT/VoxelVisualizerOpacityAnyColour_vs_Metal
+
+	default_params
+	{
+		param_named_auto worldViewProjMatrix worldviewproj_matrix
+	}
+}
+
+material VCT/VoxelVisualizer/OpacityAnyColour
+{
+	technique
+	{
+		pass
+		{
+			depth_check on
+			depth_write on
+
+			cull_hardware anticlockwise
+
+			vertex_program_ref VCT/VoxelVisualizerOpacityAnyColour_vs
+			{
+			}
+
+			fragment_program_ref VCT/VoxelVisualizer_ps
+			{
+			}
+
+			texture_unit
+			{
+				filtering none
+				tex_address_mode clamp
+			}
+		}
+	}
+}

@@ -291,6 +291,7 @@ namespace Ogre
         rsc->setCapability(RSC_UAV);
         rsc->setCapability(RSC_TEXTURE_CUBE_MAP_ARRAY);
 #endif
+        rsc->setCapability( RSC_TYPED_UAV_LOADS );
         //rsc->setCapability(RSC_ATOMIC_COUNTERS);
 
         rsc->addShaderProfile( "metal" );
@@ -337,6 +338,20 @@ namespace Ogre
         }
 
         rsc->setDriverVersion( driverVersion );
+
+        uint32 threadgroupLimits[3] = { 1024u, 1024u, 64u };
+        uint32 maxThreadsPerThreadgroup = 1024u;
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+        if( driverVersion.major < 4 )
+        {
+            threadgroupLimits[0] = 512u;
+            threadgroupLimits[1] = 512u;
+            maxThreadsPerThreadgroup = 512u;
+        }
+#endif
+        rsc->setMaxThreadsPerThreadgroupAxis( threadgroupLimits );
+        rsc->setMaxThreadsPerThreadgroup( maxThreadsPerThreadgroup );
 
         return rsc;
     }
@@ -527,12 +542,17 @@ namespace Ogre
             for( size_t j=0u; j<numTexturesUsed; ++j )
             {
                 const MetalTextureGpu *metalTex = static_cast<const MetalTextureGpu*>( *itor );
-                __unsafe_unretained id<MTLTexture> metalTexture = metalTex->getDisplayTextureName();
+                __unsafe_unretained id<MTLTexture> metalTexture = 0;
 
-                if( (texUnit - slotStart) == hazardousTexIdx &&
-                    mCurrentRenderPassDescriptor->hasAttachment( set->mTextures[hazardousTexIdx] ) )
+                if( metalTex )
                 {
-                    metalTexture = nil;
+                    metalTexture = metalTex->getDisplayTextureName();
+
+                    if( (texUnit - slotStart) == hazardousTexIdx &&
+                        mCurrentRenderPassDescriptor->hasAttachment( set->mTextures[hazardousTexIdx] ) )
+                    {
+                        metalTexture = nil;
+                    }
                 }
 
                 switch( i )
@@ -641,7 +661,10 @@ namespace Ogre
 
             for( size_t j=0; j<numSamplersUsed; ++j )
             {
-                samplers[j] = (__bridge id<MTLSamplerState>)(*itor)->mRsData;
+                if( *itor )
+                    samplers[j] = (__bridge id<MTLSamplerState>)(*itor)->mRsData;
+                else
+                    samplers[j] = 0;
                 ++itor;
             }
 
@@ -680,7 +703,10 @@ namespace Ogre
             for( size_t j=0u; j<numTexturesUsed; ++j )
             {
                 const MetalTextureGpu *metalTex = static_cast<const MetalTextureGpu*>( *itor );
-                __unsafe_unretained id<MTLTexture> metalTexture = metalTex->getDisplayTextureName();
+                __unsafe_unretained id<MTLTexture> metalTexture = 0;
+
+                if( metalTex )
+                    metalTexture = metalTex->getDisplayTextureName();
 
                 [computeEncoder setTexture:metalTexture atIndex:slotStart + texIdx];
                 texIdx += numTexturesUsed;
@@ -748,7 +774,10 @@ namespace Ogre
 
             for( size_t j=0; j<numSamplersUsed; ++j )
             {
-                samplers[j] = (__bridge id<MTLSamplerState>)(*itor)->mRsData;
+                if( *itor )
+                    samplers[j] = (__bridge id<MTLSamplerState>)(*itor)->mRsData;
+                else
+                    samplers[j] = 0;
                 ++itor;
             }
 

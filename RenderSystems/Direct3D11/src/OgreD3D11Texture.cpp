@@ -209,7 +209,7 @@ namespace Ogre
             descUAV.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE3D;
             descUAV.Texture3D.MipSlice      = static_cast<UINT>( mipmapLevel );
             descUAV.Texture3D.FirstWSlice   = 0;
-            descUAV.Texture3D.WSize         = static_cast<UINT>( this->getDepth() );
+            descUAV.Texture3D.WSize         = static_cast<UINT>( this->getDepth() >> mipmapLevel );
             break;
         default:
             break;
@@ -589,7 +589,7 @@ namespace Ogre
         // set final tex. attributes from tex. description
         // they may differ from the source image !!!
         mp1DTex->GetDesc(&desc);
-        mNumMipmaps = desc.MipLevels - 1;
+        mNumMipmaps = static_cast<uint8>( desc.MipLevels - 1u );
 
         D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
         ZeroMemory( &srvDesc, sizeof(srvDesc) );
@@ -705,7 +705,7 @@ namespace Ogre
         HRESULT hr;
         D3D11_TEXTURE2D_DESC desc;
         mp2DTex->GetDesc(&desc);
-        mNumMipmaps = desc.MipLevels - 1;
+        mNumMipmaps = static_cast<uint8>( desc.MipLevels - 1u );
         
         D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
         ZeroMemory( &srvDesc, sizeof(srvDesc) );
@@ -863,7 +863,7 @@ namespace Ogre
         HRESULT hr;
         D3D11_TEXTURE3D_DESC desc;
         mp3DTex->GetDesc(&desc);
-        mNumMipmaps = desc.MipLevels - 1;
+        mNumMipmaps = static_cast<uint8>( desc.MipLevels - 1u );
 
         D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
         ZeroMemory( &srvDesc, sizeof(srvDesc) );

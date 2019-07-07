@@ -1,0 +1,21 @@
+{
+	"compute" :
+	{
+        "Compute/Tools/ClearUav" :
+		{
+			"threads_per_group" : [32, 2, 1],
+            "thread_groups" : [4, 4, 4],
+
+            "source" : "ClearUav_cs",
+			"inform_shader_of_texture_data_change" : true,
+
+            "thread_groups_based_on_uav" :
+            {
+                "slot" : 0,
+                "divisor" : [ 1, 1, 1 ]
+            },
+
+            "uav_units" : 1
+        }
+	}
+}

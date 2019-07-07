@@ -1,0 +1,168 @@
+
+//#include "SyntaxHighlightingMisc.h"
+
+@piece( HeaderCS )
+	#define LT_DIRECTIONAL 0.0f
+	#define LT_SPOTLIGHT 2.0f
+	#define LT_AREA_LTC 5.0f
+
+	struct Light
+	{
+		//Pre-mul by PI? -No because we lose a ton of precision
+		//.w contains lightSqDistThreshold
+		float4 diffuse;
+		//For directional lights, pos.xyz contains -dir.xyz and pos.w = 0;
+		//For the rest of lights, pos.xyz contains pos.xyz and pos.w = 1;
+		float4 pos;
+		//uvwPos.w contains the light type
+		float4 uvwPos;
+
+		//Used by area lights
+		//points[0].w contains double sided info
+		//points[1].w contains lightStraightDir.x
+		//points[2].w contains lightStraightDir.y
+		//points[3].w contains lightStraightDir.z
+		float4 points[4];
+	};
+
+	@property( syntax != metal )
+		CONST_BUFFER( LightBuf, 0 )
+		{
+			Light lights[16];
+		};
+	@end
+
+	#define lightSqDistThreshold diffuse.w
+	#define lightType uvwPos.w
+	#define spotDirection points[0].xyz
+	#define spotParams points[1]
+	#define c_invPI 3.14159265359f
+
+	@insertpiece( DeclAreaLtcLightFuncs )
+	@insertpiece( DeclSRgbFuncs )
+@end
+
+//in uvec3 gl_NumWorkGroups;
+//in uvec3 gl_WorkGroupID;
+//in uvec3 gl_LocalInvocationID;
+//in uvec3 gl_GlobalInvocationID;
+//in uint  gl_LocalInvocationIndex;
+
+@piece( BodyCS )
+//	Aabb voxelAabb;
+//	voxelAabbCenter	= p_voxelOrigin + p_voxelCellSize * (float3( gl_GlobalInvocationID.xyz ) + 0.5f);
+//	voxelAabb.halfSize	= p_voxelCellSize * 0.5f;
+
+//	float3 voxelUvwPos = ;
+
+	//All lights are offsetted by p_voxelOrigin so that we don't
+	//have to do this calculation per cell
+	float3 voxelAabbCenter = /*p_voxelOrigin +*/
+							 p_voxelCellSize * (float3( gl_GlobalInvocationID.xyz ) + 0.5f);
+	float3 voxelUvwPos = p_invVoxelResolution * (float3( gl_GlobalInvocationID.xyz ) + 0.5f);
+
+	float4 albedoVal = OGRE_Load3D( voxelAlbedoTex, gl_GlobalInvocationID.xyz, 0 );
+	float4 normalVal = OGRE_Load3D( voxelNormalTex, gl_GlobalInvocationID.xyz, 0 );
+	float4 emissiveVal = OGRE_Load3D( voxelEmissiveTex, gl_GlobalInvocationID.xyz, 0 );
+
+	normalVal.xyz = normalVal.xyz * 2.0f - 1.0f;
+	normalVal.xyz = normalize( normalVal.xyz );
+
+	float3 blockColour = emissiveVal.xyz;
+
+	if( anyInvocationARB( albedoVal.a > 0 ) )
+	{
+		for( uint lightIdx=0u; lightIdx<p_numLights; ++lightIdx )
+		{
+			Light light = lights[lightIdx];
+
+			float3 lightDir = light.pos.xyz - voxelAabbCenter * light.pos.w;
+			lightDir = normalize( lightDir );
+
+			float NdotL;
+
+			@property( hlms_lights_area_ltc )
+				if( light.lightType == LT_AREA_LTC )
+				{
+					bool doubleSidedLtc = light.points[0].w != 0.0f;
+					NdotL = LTC_Evaluate( normalVal.xyz, float3( 0, 1, 0 ), voxelAabbCenter.xyz,
+										  buildFloat3x3( float3( 1, 0, 0 ),
+														 float3( 0, 1, 0 ),
+														 float3( 0, 0, 1 ) ),
+										  lights[lightIdx].points, doubleSidedLtc );
+					float3 lightStraightDir = float3( light.points[1].w,
+													  light.points[2].w,
+													  light.points[3].w );
+					lightDir += lightStraightDir;
+					lightDir = normalize( lightDir );
+				}
+				else
+				{
+			@end
+					NdotL = dot( normalVal.xyz, lightDir );
+					if( normalVal.a > 0 )
+						NdotL = abs( NdotL );
+					else
+						NdotL = saturate( NdotL );
+
+					if( light.lightType == LT_SPOTLIGHT )
+					{
+						float spotCosAngle = dot( -lightDir, light.spotDirection.xyz );
+						float spotAtten = saturate( (spotCosAngle - light.spotParams.y) *
+													light.spotParams.x );
+						spotAtten = pow( spotAtten, light.spotParams.z );
+						NdotL *= spotAtten;
+					}
+			@property( hlms_lights_area_ltc )
+				}
+			@end
+
+			//lightDir is in world space, it needs to be in UV space (which may be stretched)
+			lightDir *= p_dirCorrectionRatio.xyz;
+			//Ensure lightDir makes pixel-sized steps
+			lightDir /= max3( abs( lightDir.x ), abs( lightDir.y ), abs( lightDir.z ) );
+
+			float alpha = albedoVal.w;
+			bool reachedDst = false;
+			float3 currUvwPos = voxelUvwPos + lightDir * p_rayMarchStepSize;
+			float lodLevel = 0;
+
+			while( alpha > 0 && !reachedDst )
+			{
+				float4 albedoAtIt = OGRE_SampleLevel( voxelAlbedoTex, voxelAlbedoSampler,
+													  currUvwPos.xyz, lodLevel );
+				alpha *= max( 0.0f, (1.0f - albedoAtIt.w * p_thinWallCounter ) );
+
+				currUvwPos += lightDir * p_rayMarchStepSize;
+				reachedDst = currUvwPos.x <= 0.0f ||
+							 currUvwPos.x >= 1.0f ||
+							 currUvwPos.y <= 0.0f ||
+							 currUvwPos.y >= 1.0f ||
+							 currUvwPos.z <= 0.0f ||
+							 currUvwPos.z >= 1.0f;
+
+				//For non-directional lights, check if we've reached the light emitter
+				if( light.lightType != LT_DIRECTIONAL )
+				{
+					float3 toLight = light.uvwPos.xyz - currUvwPos; //NOT unit-length
+					float dotDirs = dot( lightDir, toLight );
+					if( dotDirs <= 0 )
+						reachedDst = true;
+
+					@property( correct_area_light_shadows )
+						if( light.lightType == LT_AREA_LTC )
+						{
+							lightDir *= 1.025f;
+							lodLevel += 0.2f;
+						}
+					@end
+				}
+			}
+
+			blockColour += NdotL * light.diffuse.xyz * alpha * albedoVal.xyz;
+		}
+	}
+
+	wshort3 voxelCelUvw = wshort3( gl_GlobalInvocationID.xyz );
+	OGRE_imageWrite3D4( lightVoxel, voxelCelUvw, toSRGB( float4( blockColour, albedoVal.w ) ) );
+@end

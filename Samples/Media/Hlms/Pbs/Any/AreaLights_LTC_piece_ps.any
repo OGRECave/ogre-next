@@ -291,9 +291,13 @@ for( int i=0; i<floatBitsToInt( passBuf.numAreaLtcLights ); ++i )
 	lightDir = passBuf.areaLtcLights[i].position.xyz - inPs.pos;
 	fDistance = length( lightDir );
 
-	@property( obb_restraint_approx )
-		bool isInsideObbRestraint = testObbRestraint( passBuf.areaLtcLights[i].obbRestraint, inPs.pos );
-		@piece( obbRestraintTestLtc )&& isInsideObbRestraint@end
+	@property( obb_restraint_ltc )
+		float3 obbFadeFactorLtc = float3( passBuf.areaLtcLights[i].points[1].w,
+										  passBuf.areaLtcLights[i].points[2].w,
+										  passBuf.areaLtcLights[i].points[3].w );
+		float obbRestraintFade = getObbRestraintFade( passBuf.areaLtcLights[i].obbRestraint, inPs.pos,
+													  obbFadeFactorLtc );
+		@piece( obbRestraintTestLtc )&& obbRestraintFade > 0.0@end
 	@end
 
 	if( fDistance <= passBuf.areaLtcLights[i].diffuse.w
@@ -331,6 +335,11 @@ for( int i=0; i<floatBitsToInt( passBuf.numAreaLtcLights ); ++i )
 		float ltcDiffuse = LTC_Evaluate( pixelData.normal.xyz, pixelData.viewDir.xyz, inPs.pos.xyz,
 										 buildFloat3x3( float3( 1, 0, 0 ), float3( 0, 1, 0 ), float3( 0, 0, 1 ) ),
 										 passBuf.areaLtcLights[i].points, doubleSidedLtc );
+
+		@property( obb_restraint_ltc )
+			ltcDiffuse	*= obbRestraintFade;
+			ltcSpecular	*= obbRestraintFade;
+		@end
 
 		finalColour += passBuf.areaLtcLights[i].diffuse.xyz * ltcDiffuse * pixelData.diffuse.xyz;
 		finalColour += passBuf.areaLtcLights[i].specular.xyz * ltcSpecular * pixelData.specular.xyz;

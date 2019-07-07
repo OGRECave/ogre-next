@@ -180,4 +180,17 @@ namespace Ogre
         mBuffer->mFinalBufferStart = mBuffer->mInternalBufferStart +
                                         dynamicCurrentFrame * mBuffer->_getInternalNumElements();
     }
+    //-----------------------------------------------------------------------------------
+    void GL3PlusBufferInterface::copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes,
+                                         size_t srcOffsetBytes, size_t sizeBytes )
+    {
+        OGRE_ASSERT_HIGH( dynamic_cast<GL3PlusBufferInterface*>( dstBuffer ) );
+        GL3PlusBufferInterface *dstBufferGl = static_cast<GL3PlusBufferInterface*>( dstBuffer );
+
+        OCGE( glBindBuffer( GL_COPY_READ_BUFFER, mVboName ) );
+        OCGE( glBindBuffer( GL_COPY_WRITE_BUFFER, dstBufferGl->getVboName() ) );
+
+        OCGE( glCopyBufferSubData( GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER,
+                                   srcOffsetBytes, dstOffsetBytes, sizeBytes ) );
+    }
 }

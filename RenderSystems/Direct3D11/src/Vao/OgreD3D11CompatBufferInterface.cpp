@@ -31,6 +31,8 @@ THE SOFTWARE.
 #include "Vao/OgreD3D11StagingBuffer.h"
 #include "Vao/OgreD3D11DynamicBuffer.h"
 
+#include "Vao/OgreD3D11BufferInterface.h"
+
 #include "OgreD3D11Device.h"
 #include "OgreD3D11RenderSystem.h"
 

@@ -356,7 +356,8 @@ namespace Ogre {
         virtual void _setSamplersCS( uint32 slotStart, const DescriptorSetSampler *set );
     protected:
         virtual void setBufferUavCS( uint32 slot, const DescriptorSetUav::BufferSlot &bufferSlot );
-        virtual void setTextureUavCS( uint32 slot, const DescriptorSetUav::TextureSlot &texSlot );
+        virtual void setTextureUavCS( uint32 slot, const DescriptorSetUav::TextureSlot &texSlot,
+                                      GLuint srvView );
     public:
         virtual void _setUavCS( uint32 slotStart, const DescriptorSetUav *set );
         /** See
@@ -391,6 +392,10 @@ namespace Ogre {
         virtual void _hlmsBlendblockDestroyed( HlmsBlendblock *block );
         virtual void _hlmsSamplerblockCreated( HlmsSamplerblock *newBlock );
         virtual void _hlmsSamplerblockDestroyed( HlmsSamplerblock *block );
+        virtual void _descriptorSetTexture2Created( DescriptorSetTexture2 *newSet );
+        virtual void _descriptorSetTexture2Destroyed( DescriptorSetTexture2 *set );
+        virtual void _descriptorSetUavCreated( DescriptorSetUav *newSet );
+        virtual void _descriptorSetUavDestroyed( DescriptorSetUav *set );
         void _setHlmsMacroblock( const HlmsMacroblock *macroblock, const GL3PlusHlmsPso *pso );
         void _setHlmsBlendblock( const HlmsBlendblock *blendblock, const GL3PlusHlmsPso *pso );
         virtual void _setHlmsSamplerblock( uint8 texUnit, const HlmsSamplerblock *samplerblock );

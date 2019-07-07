@@ -65,6 +65,8 @@ namespace Ogre
                                                         mBufferType, (void*)0, false,
                                                         (VaoManager*)0, bufferInterface, pixelFormat,
                                                         mDevice );
+        //We were overriden by the BufferPacked we just created. Restore this back!
+        bufferInterface->_notifyBuffer( this );
 
         mTexBufferViews.push_back( retVal );
 

@@ -4,8 +4,10 @@
 
 //Short used for read operations. It's an int in GLSL & HLSL. An ushort in Metal
 #define rshort2 int2
+#define rint int
 //Short used for write operations. It's an int in GLSL. An ushort in HLSL & Metal
 #define wshort2 uint2
+#define wshort3 uint3
 
 #define toFloat3x3( x ) ((float3x3)(x))
 #define buildFloat3x3( row0, row1, row2 ) transpose( float3x3( row0, row1, row2 ) )
@@ -56,8 +58,17 @@
 #define OGRE_Load2D( tex, iuv, lod ) tex.Load( int3( iuv, lod ) )
 #define OGRE_Load2DMS( tex, iuv, subsample ) tex.Load( iuv, subsample )
 
+#define OGRE_Load3D( tex, iuv, lod ) tex.Load( int4( iuv, lod ) )
+
 #define bufferFetch( buffer, idx ) buffer.Load( idx )
 #define bufferFetch1( buffer, idx ) buffer.Load( idx ).x
+
+#define structuredBufferFetch( buffer, idx ) buffer[idx]
+
+#define OGRE_Texture3D_float4 Texture3D
+
+#define OGRE_SAMPLER_ARG_DECL( samplerName ) , SamplerState samplerName
+#define OGRE_SAMPLER_ARG( samplerName ) , samplerName
 
 #define CONST_BUFFER( bufferName, bindingPoint ) cbuffer bufferName : register(b##bindingPoint)
 #define CONST_BUFFER_STRUCT_BEGIN( structName, bindingPoint ) cbuffer structName : register(b##bindingPoint) { struct _##structName
@@ -65,4 +76,10 @@
 
 #define FLAT_INTERPOLANT( decl, bindingPoint ) nointerpolation decl : TEXCOORD##bindingPoint
 #define INTERPOLANT( decl, bindingPoint ) decl : TEXCOORD##bindingPoint
+
+#define OGRE_OUT_REF( declType, variableName ) out declType variableName
+#define OGRE_INOUT_REF( declType, variableName ) inout declType variableName
+
+#define OGRE_ARRAY_START( type ) {
+#define OGRE_ARRAY_END }
 @end

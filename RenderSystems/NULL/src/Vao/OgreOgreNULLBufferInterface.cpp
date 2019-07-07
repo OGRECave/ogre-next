@@ -177,4 +177,15 @@ namespace Ogre
         mNullDataPtr = reinterpret_cast<uint8*>( OGRE_MALLOC_SIMD( mBuffer->getTotalSizeBytes(),
                                                                     MEMCATEGORY_RENDERSYS ) );
     }
+    //-----------------------------------------------------------------------------------
+    void NULLBufferInterface::copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes,
+                                      size_t srcOffsetBytes, size_t sizeBytes )
+    {
+        OGRE_ASSERT_HIGH( dynamic_cast<NULLBufferInterface*>( dstBuffer ) );
+        NULLBufferInterface *dstBufferNull = static_cast<NULLBufferInterface*>( dstBuffer );
+
+        memcpy( (char*)dstBufferNull->mNullDataPtr + dstOffsetBytes,
+                (char*)mNullDataPtr + srcOffsetBytes,
+                sizeBytes );
+    }
 }

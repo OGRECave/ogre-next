@@ -107,6 +107,7 @@ namespace Ogre
     class D3D11StagingTexture;
     class D3D11TextureGpu;
     class D3D11VaoManager;
+    class D3D11VendorExtension;
     struct D3D11VertexArrayObjectShared;
     class D3D11Window;
 

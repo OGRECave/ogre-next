@@ -1,0 +1,83 @@
+
+//#include "SyntaxHighlightingMisc.h"
+
+//in uvec3 gl_NumWorkGroups;
+//in uvec3 gl_WorkGroupID;
+//in uvec3 gl_LocalInvocationID;
+//in uvec3 gl_GlobalInvocationID;
+//in uint  gl_LocalInvocationIndex;
+
+@piece( HeaderCS )
+	void blendAdd( OGRE_INOUT_REF( float, accumWeight ),
+				   OGRE_INOUT_REF( float4, accumVal ),
+				   float4 sampleVal, float4 vNormal, float3 axisNormal )
+	{
+		float weight = dot( vNormal.xyz, axisNormal );
+		if( vNormal.w > 0 )
+			weight = abs( weight );
+		weight = weight * 0.5f + 0.5f;
+		//Normals with no opacity are garbage thus should have the same weight as dot( N, axis ) = 0
+		weight = lerp( 0.5f, weight, sampleVal.a );
+		accumVal.xyzw += sampleVal.xyzw * weight;
+		accumWeight += weight;
+	}
+
+	@insertpiece( DeclSRgbFuncs )
+@end
+
+@piece( BodyCS )
+	int3 offsets[8] =
+	OGRE_ARRAY_START( int3 )
+		int3( 1, 1, 1 ),
+		int3( 1, 1, 0 ),
+		int3( 1, 0, 1 ),
+		int3( 1, 0, 0 ),
+		int3( 0, 1, 1 ),
+		int3( 0, 1, 0 ),
+		int3( 0, 0, 1 ),
+		int3( 0, 0, 0 )
+	OGRE_ARRAY_END;
+
+	int3 iSourceUvw = int3( gl_GlobalInvocationID.xyz << 1u );
+
+	float4 samples[8];
+	float4 vNormals[8];
+	@foreach( 8, n )
+		samples[@n] = OGRE_Load3D( inLightLowerMip, iSourceUvw.xyz + offsets[@n], 0 );
+		vNormals[@n] = OGRE_Load3D( inVoxelNormalTex, iSourceUvw.xyz + offsets[@n], 0 );
+		vNormals[@n].xyz = vNormals[@n].xyz * 2.0f - 1.0f;
+		vNormals[@n].xyz = normalize( vNormals[@n].xyz );
+	@end
+
+	float3 axisNormal[6] =
+	OGRE_ARRAY_START( float3 )
+		float3( -1,  0,  0 ),
+		float3(  1,  0,  0 ),
+		float3(  0, -1,  0 ),
+		float3(  0,  1,  0 ),
+		float3(  0,  0, -1 ),
+		float3(  0,  0,  1 )
+	OGRE_ARRAY_END;
+
+	wshort3 outIUvw;
+	float4 accumVal;
+	float accumWeight;
+	@foreach( 6, dir )
+		accumWeight = 0;
+		accumVal = float4( 0, 0, 0, 0 );
+		@foreach( 8, n )
+			blendAdd( accumWeight, accumVal, samples[@n], vNormals[@n], axisNormal[@dir] );
+		@end
+
+		if( accumWeight > 0 )
+			accumVal /= accumWeight;
+
+		outIUvw.xyz = wshort3( gl_GlobalInvocationID.xyz );
+
+		@div( axis, @dir, 2 )
+		@property( @dir == 1 || @dir == 3 || @dir == 5 )
+			outIUvw.x += p_higherMipHalfWidth;
+		@end
+		OGRE_imageWrite3D4( outLightHigherMip@value(axis), outIUvw, toSRGB( accumVal.xyzw ) );
+	@end
+@end

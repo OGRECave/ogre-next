@@ -266,6 +266,10 @@ namespace Ogre
                     startPos = endPos;
                 }
             }
+            else
+            {
+                startPos += sizeof( "#include " ) - 1u;
+            }
 
             startPos = source.find( includeKeyword, startPos );
         }

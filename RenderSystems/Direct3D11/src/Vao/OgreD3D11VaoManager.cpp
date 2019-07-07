@@ -82,6 +82,7 @@ namespace Ogre
         mVaoNames( 1 ),
         mDevice( device ),
         mDrawId( 0 ),
+        mSplicingHelperBuffer( 0 ),
         mD3D11RenderSystem( renderSystem )
     {
         mDefaultPoolSize[VERTEX_BUFFER][BT_IMMUTABLE]   = 64 * 1024 * 1024;
@@ -152,6 +153,12 @@ namespace Ogre
 
         destroyAllVertexArrayObjects();
         deleteAllBuffers();
+
+        if( mSplicingHelperBuffer )
+        {
+            mSplicingHelperBuffer->Release();
+            mSplicingHelperBuffer = 0;
+        }
 
         for( size_t i=0; i<2; ++i )
         {
@@ -719,6 +726,32 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void D3D11VaoManager::_forceCreateDelayedImmutableBuffers(void)
+    {
+        bool delayedBuffersPending = false;
+        for( size_t i=0; i<NumInternalBufferTypes; ++i )
+        {
+            delayedBuffersPending |= !mDelayedBuffers[i].empty() &&
+                                     mDefaultPoolSize[i][BT_IMMUTABLE] > 0u;
+        }
+
+        if( delayedBuffersPending )
+        {
+            LogManager::getSingleton().logMessage(
+                        "PERFORMANCE WARNING D3D11: Calling createAsyncTicket when there are "
+                        "pending immutable buffers to be created. This will force Ogre to "
+                        "create them immediately; which diminish our ability to batch meshes "
+                        "toghether & could affect performance during rendering.\n"
+                        "You should call createAsyncTicket after all immutable meshes have "
+                        "been loaded to ensure they get batched together. If you're already "
+                        "doing this, you can ignore this warning.\n"
+                        "If you're not going to render (i.e. this is a mesh export tool) "
+                        "you can also ignore this warning." );
+        }
+
+        createDelayedImmutableBuffers();
+    }
+    //-----------------------------------------------------------------------------------
     void D3D11VaoManager::createDelayedImmutableBuffers(void)
     {
         OgreProfileExhaustive( "D3D11VaoManager::createDelayedImmutableBuffers" );
@@ -1111,7 +1144,8 @@ namespace Ogre
                                                         bufferOffset, numElements, bytesPerElement,
                                                         (sizeBytes - requestedSize) / bytesPerElement,
                                                         bufferType, initialData, keepAsShadow,
-                                                        this, bufferInterface, pixelFormat, mDevice );
+                                                        this, bufferInterface,
+                                                        pixelFormat, false, mDevice );
 
         if( mD3D11RenderSystem->_getFeatureLevel() > D3D_FEATURE_LEVEL_11_0 )
         {
@@ -1567,30 +1601,7 @@ namespace Ogre
                                                        size_t elementStart, size_t elementCount )
     {
         if( creator->getBufferType() == BT_IMMUTABLE )
-        {
-            bool delayedBuffersPending = false;
-            for( size_t i=0; i<NumInternalBufferTypes; ++i )
-            {
-                delayedBuffersPending |= !mDelayedBuffers[i].empty() &&
-                                         mDefaultPoolSize[i][BT_IMMUTABLE] > 0u;
-            }
-
-            if( delayedBuffersPending )
-            {
-                LogManager::getSingleton().logMessage(
-                            "PERFORMANCE WARNING D3D11: Calling createAsyncTicket when there are "
-                            "pending immutable buffers to be created. This will force Ogre to "
-                            "create them immediately; which diminish our ability to batch meshes "
-                            "toghether & could affect performance during rendering.\n"
-                            "You should call createAsyncTicket after all immutable meshes have "
-                            "been loaded to ensure they get batched together. If you're already "
-                            "doing this, you can ignore this warning.\n"
-                            "If you're not going to render (i.e. this is a mesh export tool) "
-                            "you can also ignore this warning." );
-            }
-
-            createDelayedImmutableBuffers();
-        }
+            _forceCreateDelayedImmutableBuffers();
 
         return AsyncTicketPtr( OGRE_NEW D3D11AsyncTicket( creator, stagingBuffer,
                                                           elementStart, elementCount,
@@ -1665,6 +1676,29 @@ namespace Ogre
 
         mFrameSyncVec[mDynamicBufferCurrentFrame] = createFence();
         mDynamicBufferCurrentFrame = (mDynamicBufferCurrentFrame + 1) % mDynamicBufferMultiplier;
+    }
+    //-----------------------------------------------------------------------------------
+    ID3D11Buffer* D3D11VaoManager::getSplicingHelperBuffer(void)
+    {
+        if( !mSplicingHelperBuffer )
+        {
+            D3D11_BUFFER_DESC desc;
+            ZeroMemory( &desc, sizeof(desc) );
+
+            desc.BindFlags	= 0;
+            desc.ByteWidth	= 2048u;
+            desc.CPUAccessFlags = 0;
+            desc.Usage          = D3D11_USAGE_DEFAULT;
+
+            HRESULT hr = mDevice.get()->CreateBuffer( &desc, 0, &mSplicingHelperBuffer );
+            if( FAILED( hr ) )
+            {
+                OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
+                                "Failed to create helper buffer!",
+                                "D3D11VaoManager::getSplicingHelperBuffer" );
+            }
+        }
+        return mSplicingHelperBuffer;
     }
     //-----------------------------------------------------------------------------------
     ID3D11Query* D3D11VaoManager::createFence( D3D11Device &device )

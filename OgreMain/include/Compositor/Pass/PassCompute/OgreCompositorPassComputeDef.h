@@ -62,7 +62,11 @@ namespace Ogre
             int32           mipmapLevel;
             int32           textureArrayIndex;
             PixelFormatGpu  pixelFormat;
-            bool            allowWriteAfterWrite;
+            union
+            {
+                bool        allowWriteAfterWrite;
+                bool        usesAllFields;
+            };
 
             ComputeTextureSource( size_t _texUnitIdx, IdString _textureName ) :
                 texUnitIdx( _texUnitIdx ), textureName( _textureName ),
@@ -119,6 +123,8 @@ namespace Ogre
             @See ComputeTextureSource for params
         */
         void addTextureSource( uint32 texUnitIdx, const String &textureName );
+        void addTextureSource( uint32 texUnitIdx, const String &textureName,
+                               int32 textureArrayIndex, int32 mipmapLevel, PixelFormatGpu pixelFormat );
 
         void addUavSource( uint32 texUnitIdx, const String &textureName,
                            ResourceAccess::ResourceAccess access, int32 textureArrayIndex,

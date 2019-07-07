@@ -61,7 +61,8 @@ namespace Ogre {
           mShadowNearClipDist(-1),
           mShadowFarClipDist(-1)
     #if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
-        , mObbRestraint( 0 )
+        , mObbRestraintSmoothFadeDistance( 0 ),
+          mObbRestraint( 0 )
     #endif
     {
         //mMinPixelSize should always be zero for lights otherwise lights will disapear
@@ -594,6 +595,39 @@ namespace Ogre {
     {
         mObbRestraint = node;
     }
+    //-----------------------------------------------------------------------
+    void Light::setObbRestraintSmoothFadeDistance( float smoothFadeDistance )
+    {
+        OGRE_ASSERT_MEDIUM( smoothFadeDistance >= 0 );
+        mObbRestraintSmoothFadeDistance = smoothFadeDistance;
+    }
+    //-----------------------------------------------------------------------
+    Vector3 Light::_getObbRestraintFadeFactor(void) const
+    {
+        if( !mObbRestraint )
+            return Vector3::UNIT_SCALE;
+
+        const Vector3 halfSize = mObbRestraint->getScale();
+        const Vector3 fadeDistanceNormalized = mObbRestraintSmoothFadeDistance / halfSize;
+
+        //Shader code will perform:
+        //  (1 - x) * restraintFadeFactor
+        //
+        //where x is the distance to center of the OBB, and is in range [0;1];
+        //as values where x >= 1 means the pixel is outside the OBB
+        //
+        //And:
+        //  1. For x >= 1 - fadeDistanceNormalized, this formula will give values < 1.
+        //  2. For x >= 1, this formula will give <= 0; which means pixel is outside OBB.
+        //
+        //Thus we need to find the value that satisfies:
+        //  (1 - (1-fadeDistanceNormalized)) * restraintFadeFactor <= 1
+        //Thus:
+        //  restraintFadeFactor <= 1 / (1 - (1 - fadeDistanceNormalized))
+        //  restraintFadeFactor <= 1 / fadeDistanceNormalized
+        const Vector3 restraintFadeFactor = 1.0f / fadeDistanceNormalized;
+        return restraintFadeFactor;
+    }
 #endif
     //-----------------------------------------------------------------------
     void Light::setCustomParameter(uint16 index, const Ogre::Vector4 &value)
@@ -614,6 +648,15 @@ namespace Ogre {
                 "Parameter at the given index was not found.",
                 "Light::getCustomParameter");
         }
+    }
+    //-----------------------------------------------------------------------
+    const Vector4* Light::getCustomParameterNoThrow( uint16 index ) const
+    {
+        const Vector4 *retVal = 0;
+        CustomParameterMap::const_iterator i = mCustomParameters.find(index);
+        if( i != mCustomParameters.end() )
+            retVal = &i->second;
+        return retVal;
     }
     //-----------------------------------------------------------------------
     void Light::_updateCustomGpuParameter(uint16 paramIndex, const GpuProgramParameters::AutoConstantEntry& constantEntry, GpuProgramParameters *params) const

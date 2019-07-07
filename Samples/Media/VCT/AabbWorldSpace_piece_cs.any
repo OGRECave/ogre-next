@@ -1,0 +1,85 @@
+
+//#include "SyntaxHighlightingMisc.h"
+
+@piece( PreBindingsHeaderCS )
+	struct InstanceBuffer
+	{
+		float4 worldTransformRow0;
+		float4 worldTransformRow1;
+		float4 worldTransformRow2;
+		float4 aabb0;
+		float4 aabb1;
+		uint4 meshData;
+	};
+
+	struct AabbBuffer
+	{
+		float4 center;
+		float4 halfSize;
+	};
+@end
+
+@piece( HeaderCS )
+	@insertpiece( Common_Matrix_DeclLoadOgreFloat4x3 )
+
+	struct Aabb
+	{
+		float3 center;
+		float3 halfSize;
+	};
+
+	struct Instance
+	{
+		ogre_float4x3 worldTransform;
+		uint localAabbIdx;
+		bool needsAabbUpdate;
+	};
+
+	INLINE Instance getInstance( uint instanceIdx PARAMS_ARG_DECL )
+	{
+		Instance retVal;
+		retVal.worldTransform = makeOgreFloat4x3( instanceBuffer[instanceIdx].worldTransformRow0,
+												  instanceBuffer[instanceIdx].worldTransformRow1,
+												  instanceBuffer[instanceIdx].worldTransformRow2 );
+		retVal.localAabbIdx		= instanceBuffer[instanceIdx].meshData.w & ~0x80000000u;
+		retVal.needsAabbUpdate	= (instanceBuffer[instanceIdx].meshData.w & 0x80000000u) != 0u;
+
+		return retVal;
+	}
+
+	INLINE Aabb getMeshAabb( uint localAabbIdx PARAMS_ARG_DECL )
+	{
+		Aabb retVal;
+	@property( syntax == glsl )
+		retVal.center	= structuredBufferFetch( inMeshAabb, rint(localAabbIdx << 1u) ).xyz;
+		retVal.halfSize	= structuredBufferFetch( inMeshAabb, rint((localAabbIdx << 1u) + 1u) ).xyz;
+	@else
+		retVal.center	= inMeshAabb[localAabbIdx].center.xyz;
+		retVal.halfSize	= inMeshAabb[localAabbIdx].halfSize.xyz;
+	@end
+		return retVal;
+	}
+@end
+
+//in uvec3 gl_NumWorkGroups;
+//in uvec3 gl_WorkGroupID;
+//in uvec3 gl_LocalInvocationID;
+//in uvec3 gl_GlobalInvocationID;
+//in uint  gl_LocalInvocationIndex;
+
+@piece( BodyCS )
+	Instance instance = getInstance( gl_GlobalInvocationID.x PARAMS_ARG );
+	Aabb meshAabb = getMeshAabb( instance.localAabbIdx PARAMS_ARG );
+
+	if( instance.needsAabbUpdate )
+	{
+		float3 worldAabbCenter = mul( float4( meshAabb.center, 1.0f ), instance.worldTransform ).xyz;
+		float3 worldAabbHalfSize;
+		worldAabbHalfSize.x = dot( abs( instance.worldTransform[0].xyz ), meshAabb.halfSize );
+		worldAabbHalfSize.y = dot( abs( instance.worldTransform[1].xyz ), meshAabb.halfSize );
+		worldAabbHalfSize.z = dot( abs( instance.worldTransform[2].xyz ), meshAabb.halfSize );
+
+		instanceBuffer[gl_GlobalInvocationID.x].aabb0.xyz = worldAabbCenter.xyz;
+		instanceBuffer[gl_GlobalInvocationID.x].aabb1.xyz = worldAabbHalfSize.xyz;
+	}
+@end

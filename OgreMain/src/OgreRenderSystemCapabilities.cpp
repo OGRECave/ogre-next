@@ -47,6 +47,7 @@ namespace Ogre {
         , mMaxSupportedAnisotropy(0)
         , mVertexTextureUnitsShared(0)
         , mGeometryProgramNumOutputVertices(0)
+        , mMaxThreadsPerThreadgroup(1024u)
     {
         for(int i = 0; i < CAPS_CATEGORY_COUNT; i++)
         {
@@ -57,6 +58,10 @@ namespace Ogre {
         // each rendersystem should enable these
         mCategoryRelevant[CAPS_CATEGORY_D3D9] = false;
         mCategoryRelevant[CAPS_CATEGORY_GL] = false;
+
+        mMaxThreadsPerThreadgroupAxis[0] = 1024u;
+        mMaxThreadsPerThreadgroupAxis[1] = 1024u;
+        mMaxThreadsPerThreadgroupAxis[2] = 64u;
     }
     //-----------------------------------------------------------------------
     RenderSystemCapabilities::~RenderSystemCapabilities()
@@ -308,6 +313,18 @@ namespace Ogre {
         pLog->logMessage(
             " * Hardware Atomic Counters: "
             + StringConverter::toString(hasCapability(RSC_ATOMIC_COUNTERS), true));
+
+        if( hasCapability( RSC_COMPUTE_PROGRAM ) )
+        {
+            pLog->logMessage(
+                " * Compute max threads per threadgroup per axis: "
+                + StringConverter::toString( mMaxThreadsPerThreadgroupAxis[0] ) + ", "
+                + StringConverter::toString( mMaxThreadsPerThreadgroupAxis[1] ) + ", "
+                + StringConverter::toString( mMaxThreadsPerThreadgroupAxis[2] ) );
+            pLog->logMessage(
+                " * Compute max threads per threadgroup total: "
+                + StringConverter::toString( mMaxThreadsPerThreadgroup ) );
+        }
 
         if (mCategoryRelevant[CAPS_CATEGORY_GL])
         {

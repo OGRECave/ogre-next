@@ -489,6 +489,18 @@ namespace Ogre {
         */
         void setObbRestraint( Node *node );
         Node* getObbRestraint(void) const       { return mObbRestraint; }
+
+        /// Sets the distance in Ogre units (e.g. cm, meters, whatever your engine is using)
+        /// to the OBB bounds at which the smooth fade kicks in.
+        /// Set 0 for no smooth fading.
+        /// This value should be smaller than all 3 xyz components of mObbRestraint->getScale()
+        /// However values higher than that are allowed and may give interesting results.
+        ///
+        /// Valid Range: [0; min( obbRestraintScale.x, obbRestraintScale.y, obbRestraintScale.z ))
+        void setObbRestraintSmoothFadeDistance( float smoothFadeDistance );
+        float getObbRestraintSmoothFadeDistance(void) const	{ return mObbRestraintSmoothFadeDistance; }
+
+        Vector3 _getObbRestraintFadeFactor(void) const;
 #endif
 
         /** Sets a custom parameter for this Light, which may be used to 
@@ -515,8 +527,9 @@ namespace Ogre {
         @see setCustomParameter for full details.
         */
         const Vector4& getCustomParameter(uint16 index) const;
+        const Vector4* getCustomParameterNoThrow( uint16 index ) const;
 
-        /** Update a custom GpuProgramParameters constant which is derived from 
+        /** Update a custom GpuProgramParameters constant which is derived from
             information only this Light knows.
         @remarks
             This method allows a Light to map in a custom GPU program parameter
@@ -618,6 +631,7 @@ namespace Ogre {
         Real mShadowFarClipDist;
 
 #if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
+        float mObbRestraintSmoothFadeDistance;
         Node *mObbRestraint;
 #endif
 

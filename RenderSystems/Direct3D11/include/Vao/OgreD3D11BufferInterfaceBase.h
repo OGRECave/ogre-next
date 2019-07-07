@@ -45,12 +45,21 @@ namespace Ogre
         ID3D11Buffer    *mVboName;
         void            *mMappedPtr;
 
+        void splicedCopy( size_t dstOffsetBytes, size_t srcOffsetBytes, size_t sizeBytes,
+                          size_t alignment, ID3D11Buffer *dstBuffer, ID3D11Buffer *srcBuffer,
+                          ID3D11DeviceContextN *context );
+
     public:
         D3D11BufferInterfaceBase( size_t vboPoolIdx, ID3D11Buffer *d3dBuffer );
         ~D3D11BufferInterfaceBase();
 
         size_t getVboPoolIndex(void)                { return mVboPoolIdx; }
         ID3D11Buffer* getVboName(void) const        { return mVboName; }
+
+        virtual void copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes,
+                             size_t srcOffsetBytes, size_t sizeBytes );
+
+        void _ensureDelayedImmutableBuffersAreReady(void);
     };
 }
 

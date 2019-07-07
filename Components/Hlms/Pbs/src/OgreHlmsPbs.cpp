@@ -46,6 +46,7 @@ THE SOFTWARE.
 #include "OgreForward3D.h"
 #include "Cubemaps/OgreParallaxCorrectedCubemap.h"
 #include "OgreIrradianceVolume.h"
+#include "Vct/OgreVctLighting.h"
 
 #include "OgreSceneManager.h"
 #include "Compositor/OgreCompositorShadowNode.h"
@@ -169,6 +170,10 @@ namespace Ogre
     const IdString PbsProperty::CubemapsUseDpm    = IdString( "hlms_cubemaps_use_dpm" );
     const IdString PbsProperty::CubemapsAsDiffuseGi=IdString( "cubemaps_as_diffuse_gi" );
     const IdString PbsProperty::IrradianceVolumes = IdString( "irradiance_volumes" );
+    const IdString PbsProperty::VctNumProbes      = IdString( "vct_num_probes" );
+    const IdString PbsProperty::VctConeDirs       = IdString( "vct_cone_dirs" );
+    const IdString PbsProperty::VctAnisotropic    = IdString( "vct_anisotropic" );
+    const IdString PbsProperty::VctEnableSpecularSdfQuality=IdString("vct_enable_specular_sdf_quality");
     const IdString PbsProperty::ObbRestraintApprox= IdString( "obb_restraint_approx" );
     const IdString PbsProperty::ObbRestraintLtc   = IdString( "obb_restraint_ltc" );
 
@@ -183,6 +188,7 @@ namespace Ogre
     const IdString PbsProperty::UseEnvProbeMap    = IdString( "use_envprobe_map" );
     const IdString PbsProperty::NeedsViewDir      = IdString( "needs_view_dir" );
     const IdString PbsProperty::NeedsReflDir      = IdString( "needs_refl_dir" );
+    const IdString PbsProperty::NeedsEnvBrdf      = IdString( "needs_env_brdf" );
 
     const IdString *PbsProperty::UvSourcePtrs[NUM_PBSM_SOURCES] =
     {
@@ -244,6 +250,7 @@ namespace Ogre
         mPrePassTextures( 0 ),
         mSsrTexture( 0 ),
         mIrradianceVolume( 0 ),
+        mVctLighting( 0 ),
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
         mPlanarReflections( 0 ),
         mPlanarReflectionsSamplerblock( 0 ),
@@ -268,6 +275,7 @@ namespace Ogre
 #endif
         mSetupWorldMatBuf( true ),
         mDebugPssmSplits( false ),
+        mVctFullConeCount( false ),
 #if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
         mUseObbRestraintAreaApprox( false ),
         mUseObbRestraintAreaLtc( false ),
@@ -888,9 +896,11 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsPbs::notifyPropertiesMergedPreGenerationStep(void)
     {
-        if( getProperty( HlmsBaseProp::DecalsNormals ) )
+        const bool hasVct = getProperty( PbsProperty::VctNumProbes ) > 0;
+        if( getProperty( HlmsBaseProp::DecalsNormals ) ||
+            hasVct )
         {
-            //If decals normals are enabled, we need to generate the TBN matrix.
+            //If decals normals are enabled or VCT is used, we need to generate the TBN matrix.
             bool normalMapCanBeSupported = (getProperty( HlmsBaseProp::Normal ) &&
                                             getProperty( HlmsBaseProp::Tangent )) ||
                                             getProperty( HlmsBaseProp::QTangent );
@@ -916,10 +926,14 @@ namespace Ogre
             getProperty( PbsProperty::UsePlanarReflections ) ||
             getProperty( PbsProperty::AmbientHemisphere ) ||
             getProperty( HlmsBaseProp::LightsAreaApprox ) ||
-            getProperty( HlmsBaseProp::LightsAreaLtc ) )
+            getProperty( HlmsBaseProp::LightsAreaLtc ) ||
+            hasVct )
         {
             setProperty( PbsProperty::NeedsViewDir, 1 );
         }
+
+        if( hasVct )
+            setProperty( PbsProperty::NeedsReflDir, 1 );
 
         if( getProperty( HlmsBaseProp::UseSsr ) ||
             getProperty( PbsProperty::UseEnvProbeMap ) ||
@@ -928,6 +942,7 @@ namespace Ogre
             getProperty( PbsProperty::EnableCubemapsAuto ) )
         {
             setProperty( PbsProperty::NeedsReflDir, 1 );
+            setProperty( PbsProperty::NeedsEnvBrdf, 1 );
         }
 
         int32 texUnit = mReservedTexSlots;
@@ -953,6 +968,17 @@ namespace Ogre
             getProperty( HlmsBaseProp::ShadowCaster ) == 0 )
         {
             setTextureReg( PixelShader, "irradianceVolume", texUnit++ );
+        }
+
+        if( getProperty( PbsProperty::VctNumProbes ) > 0 )
+        {
+            setTextureReg( PixelShader, "vctProbe", texUnit++ );
+            if( getProperty( PbsProperty::VctAnisotropic ) )
+            {
+                setTextureReg( PixelShader, "vctProbeX", texUnit++ );
+                setTextureReg( PixelShader, "vctProbeY", texUnit++ );
+                setTextureReg( PixelShader, "vctProbeZ", texUnit++ );
+            }
         }
 
         if( getProperty( HlmsBaseProp::LightsAreaTexMask ) > 0 )
@@ -1235,6 +1261,15 @@ namespace Ogre
                 }
             }
 
+            if( mVctLighting )
+            {
+                setProperty( PbsProperty::VctNumProbes, 1 );
+                setProperty( PbsProperty::VctConeDirs, mVctFullConeCount ? 6 : 4 );
+                setProperty( PbsProperty::VctAnisotropic, mVctLighting->isAnisotropic() );
+                setProperty( PbsProperty::VctEnableSpecularSdfQuality,
+                             mVctLighting->shouldEnableSpecularSdfQuality() );
+            }
+
             if( mIrradianceVolume )
                 setProperty( PbsProperty::IrradianceVolumes, 1 );
 
@@ -1309,7 +1344,7 @@ namespace Ogre
         const uint32 realNumAreaApproxLights = mRealNumAreaApproxLights;
         const uint32 realNumAreaLtcLights = mRealNumAreaLtcLights;
 #if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
-        const size_t numAreaApproxFloat4Vars = 7u + (mUseObbRestraintAreaApprox ? 3u : 0u);
+        const size_t numAreaApproxFloat4Vars = 7u + (mUseObbRestraintAreaApprox ? 4u : 0u);
         const size_t numAreaLtcFloat4Vars = 7u + (mUseObbRestraintAreaLtc ? 3u : 0u);
 #else
         const size_t numAreaApproxFloat4Vars = 7u;
@@ -1368,6 +1403,9 @@ namespace Ogre
                 mParallaxCorrectedCubemap->_notifyPreparePassHash( viewMatrix );
                 mapSize += mParallaxCorrectedCubemap->getConstBufferSize();
             }
+
+            if( mVctLighting )
+                mapSize += mVctLighting->getConstBufferSize();
 
             //mat4 view + mat4 shadowRcv[numShadowMapLights].texViewProj +
             //              vec2 shadowRcv[numShadowMapLights].shadowDepthRange +
@@ -1970,6 +2008,13 @@ namespace Ogre
 #if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
                 if( mUseObbRestraintAreaApprox )
                 {
+                    //float4 obbFadeFactorApprox
+                    const Vector3 obbRestraintFadeFactor = light->_getObbRestraintFadeFactor();
+                    *passBufferPtr++ = obbRestraintFadeFactor.x;
+                    *passBufferPtr++ = obbRestraintFadeFactor.y;
+                    *passBufferPtr++ = obbRestraintFadeFactor.z;
+                    *passBufferPtr++ = 0.0f;
+
                     //float4x3 obbRestraint;
                     passBufferPtr = fillObbRestraint( light, viewMatrix, passBufferPtr );
                 }
@@ -2041,13 +2086,28 @@ namespace Ogre
                 rectPoints[2] = lightPos + xAxis + yAxis;
                 rectPoints[3] = lightPos - xAxis + yAxis;
 
+#if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
+                //float4 obbFadeFactorApprox
+                const Vector3 obbRestraintFadeFactor = light->_getObbRestraintFadeFactor();
+#endif
+
                 for( size_t j=0; j<4u; ++j )
                 {
                     *passBufferPtr++ = rectPoints[j].x;
                     *passBufferPtr++ = rectPoints[j].y;
                     *passBufferPtr++ = rectPoints[j].z;
+#if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
+                    if( j == 0u )
+                    {
+                        *reinterpret_cast<uint32 * RESTRICT_ALIAS>(passBufferPtr) = realNumAreaLtcLights;
+                        ++passBufferPtr;
+                    }
+                    else
+                        *passBufferPtr++ = obbRestraintFadeFactor[j-1u];
+#else
                     *reinterpret_cast<uint32 * RESTRICT_ALIAS>(passBufferPtr) = realNumAreaLtcLights;
                     ++passBufferPtr;
+#endif
                 }
 
 #if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
@@ -2097,6 +2157,12 @@ namespace Ogre
             {
                 mParallaxCorrectedCubemap->fillConstBufferData( viewMatrix, passBufferPtr );
                 passBufferPtr += mParallaxCorrectedCubemap->getConstBufferSize() >> 2u;
+            }
+
+            if( mVctLighting )
+            {
+                mVctLighting->fillConstBufferData( viewMatrix, passBufferPtr );
+                passBufferPtr += mVctLighting->getConstBufferSize() >> 2u;
             }
         }
         else
@@ -2158,6 +2224,8 @@ namespace Ogre
                 mTexUnitSlotStart += 2;
             if( mIrradianceVolume )
                 mTexUnitSlotStart += 1;
+            if( mVctLighting )
+                mTexUnitSlotStart += mVctLighting->getNumVoxelTextures();
             if( mParallaxCorrectedCubemap && !mParallaxCorrectedCubemap->isRendering() )
                 mTexUnitSlotStart += 1;
             if( !mPrePassTextures->empty() )
@@ -2291,6 +2359,20 @@ namespace Ogre
                                                                          irradianceTex,
                                                                          samplerblock );
                     ++texUnit;
+                }
+
+                if( mVctLighting )
+                {
+                    TextureGpu **lightVoxelTexs = mVctLighting->getLightVoxelTextures();
+                    const size_t numVctTextures = mVctLighting->getNumVoxelTextures();
+                    const HlmsSamplerblock *samplerblock =
+                            mVctLighting->getBindTrilinearSamplerblock();
+                    for( size_t i=0; i<numVctTextures; ++i )
+                    {
+                        *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit, lightVoxelTexs[i],
+                                                                             samplerblock );
+                        ++texUnit;
+                    }
                 }
 
                 if( mUsingAreaLightMasks )

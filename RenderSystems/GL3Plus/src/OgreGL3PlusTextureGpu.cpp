@@ -71,7 +71,7 @@ namespace Ogre
         {
             OCGE( glGenTextures( 1u, &mFinalTextureName ) );
 
-            mGlTextureTarget = GL3PlusMappings::get( mTextureType );
+            mGlTextureTarget = GL3PlusMappings::get( mTextureType, false );
 
             OCGE( glBindTexture( mGlTextureTarget, mFinalTextureName ) );
             OCGE( glTexParameteri( mGlTextureTarget, GL_TEXTURE_BASE_LEVEL, 0 ) );
@@ -264,7 +264,7 @@ namespace Ogre
         else
         {
             mDisplayTextureName = textureManagerGl->getBlankTextureGlName( mTextureType );
-            mGlTextureTarget = GL3PlusMappings::get( mTextureType );
+            mGlTextureTarget = GL3PlusMappings::get( mTextureType, false );
         }
     }
     //-----------------------------------------------------------------------------------

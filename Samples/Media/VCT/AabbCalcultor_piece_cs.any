@@ -1,0 +1,132 @@
+
+//#include "SyntaxHighlightingMisc.h"
+
+@piece( PreBindingsHeaderCS )
+	@property( !compressed_vertex_format )
+		struct Vertex
+		{
+			float4 pos_normX;
+			float4 normYZ_uv;
+		};
+	@else
+		struct Vertex
+		{
+			uint4 pos_normal_uv;
+		};
+	@end
+
+	struct MeshAabb
+	{
+		float4 center;
+		float4 halfSize;
+	};
+@end
+
+@piece( HeaderCS )
+	struct Aabb
+	{
+		float3 center;
+		float3 halfSize;
+	};
+
+	struct PartitionedSubMesh
+	{
+		uint vertexBufferStart;
+		uint indexBufferStart;
+		uint numIndices;
+		uint padding;
+	};
+
+	INLINE PartitionedSubMesh getPartitionedSubMesh( uint meshIdx PARAMS_ARG_DECL )
+	{
+		uint4 meshData = bufferFetch( inMeshBuffer, rint(meshIdx) );
+		PartitionedSubMesh retVal;
+		retVal.vertexBufferStart	= meshData.x;
+		retVal.indexBufferStart		= meshData.y;
+		retVal.numIndices			= meshData.z;
+		retVal.padding				= 0u;
+		return retVal;
+	}
+
+	INLINE uint getIndexBufferIndex( uint index PARAMS_ARG_DECL )
+	{
+	@property( !index_32bit )
+		uint retVal = indexBuffer[index >> 1u];
+		retVal = ((index & 0x01u) != 0u) ? (retVal >> 16u) : (retVal & 0xFFFFu);
+	@else
+		uint retVal = indexBuffer[index];
+	@end
+		return retVal;
+	}
+
+	INLINE float3 getVertexPos( uint indexId, PartitionedSubMesh mesh PARAMS_ARG_DECL )
+	{
+		float3 retVal;
+
+		uint idx = getIndexBufferIndex( mesh.indexBufferStart + indexId PARAMS_ARG );
+		@property( !compressed_vertex_format )
+			retVal = vertexBuffer[idx + mesh.vertexBufferStart].pos_normX.xyz;
+		@else
+			uint4 pos_normal_uv = vertexBuffer[idx + mesh.vertexBufferStart].pos_normal_uv;
+			retVal.xy	= unpackSnorm2x16( pos_normal_uv.x );
+			retVal.z    = unpackSnorm2x16( pos_normal_uv.y ).x;
+		@end
+
+		return retVal;
+	}
+@end
+
+//in uvec3 gl_NumWorkGroups;
+//in uvec3 gl_WorkGroupID;
+//in uvec3 gl_LocalInvocationID;
+//in uvec3 gl_GlobalInvocationID;
+//in uint  gl_LocalInvocationIndex;
+
+@piece( BodyCS )
+	for( uint i=p_meshStart; i<p_meshEnd; ++i )
+	{
+		PartitionedSubMesh mesh = getPartitionedSubMesh( i PARAMS_ARG );
+
+		float3 minAabb = float3( 3.402823e+38f, 3.402823e+38f, 3.402823e+38f );
+		float3 maxAabb = float3( -3.402823e+38f, -3.402823e+38f, -3.402823e+38f );
+
+		for( uint j=0u; j<mesh.numIndices; j += @value( threads_per_group_x )u )
+		{
+			uint indexId = min( j + gl_LocalInvocationIndex, mesh.numIndices - 1u );
+			float3 vertexPos = getVertexPos( indexId, mesh PARAMS_ARG );
+			minAabb.xyz = min( minAabb.xyz, vertexPos.xyz );
+			maxAabb.xyz = max( maxAabb.xyz, vertexPos.xyz );
+		}
+
+		//Now we have threads_per_group_x threads with the AABB data.
+		//We must perform a parallel reduction
+		g_minAabb[gl_LocalInvocationIndex] = minAabb;
+		g_maxAabb[gl_LocalInvocationIndex] = maxAabb;
+
+		__sharedOnlyBarrier;
+
+		for( uint s=@value( threads_per_group_x )/2u; s > 0u; s >>= 1u )
+		{
+			if( gl_LocalInvocationIndex < s )
+			{
+				g_minAabb[gl_LocalInvocationIndex] = min( g_minAabb[gl_LocalInvocationIndex],
+														  g_minAabb[gl_LocalInvocationIndex + s] );
+				g_maxAabb[gl_LocalInvocationIndex] = max( g_maxAabb[gl_LocalInvocationIndex],
+														  g_maxAabb[gl_LocalInvocationIndex + s] );
+			}
+			__sharedOnlyBarrier;
+		}
+
+		if( gl_LocalInvocationIndex == 0u )
+		{
+			float3 aabbMin = g_minAabb[0];
+			float3 aabbMax = g_maxAabb[0];
+
+			float3 aabbCenter	= (aabbMin + aabbMax) * 0.5f;
+			float3 aabbHalfSize	= (aabbMax - aabbMin) * 0.5f;
+
+			outMeshAabb[i].center.xyzw		= float4( aabbCenter.xyz, 1.0f );
+			outMeshAabb[i].halfSize.xyzw	= float4( aabbHalfSize.xyz, 0.0f );
+		}
+	}
+@end

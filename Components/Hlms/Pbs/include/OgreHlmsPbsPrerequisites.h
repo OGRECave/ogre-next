@@ -100,6 +100,7 @@ namespace Ogre
     class ParallaxCorrectedCubemap;
     class ParallaxCorrectedCubemapAuto;
     class ParallaxCorrectedCubemapBase;
+    class VctLighting;
 }
 
 #endif

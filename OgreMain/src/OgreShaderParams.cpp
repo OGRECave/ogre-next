@@ -124,6 +124,25 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
+    bool ShaderParams::removeParameterNoThrow( const String &name )
+    {
+        bool wasRemoved = false;
+
+        ParamVec::iterator itor = mParams.begin();
+        ParamVec::iterator end  = mParams.end();
+
+        while( itor != end && itor->name != name )
+            ++itor;
+
+        if( itor != end )
+        {
+            efficientVectorRemove( mParams, itor );
+            wasRemoved = true;
+        }
+
+        return wasRemoved;
+    }
+    //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     void ShaderParams::Param::setManualValue( const Vector2 &value )

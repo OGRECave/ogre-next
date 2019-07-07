@@ -44,6 +44,9 @@ namespace Ogre
     {
     public:
         virtual const char* getPixelFormatType( PixelFormatGpu pixelFormat ) const { return 0; }
+        virtual const char* getDataType( PixelFormatGpu pixelFormat, uint32 textureType,
+                                         bool isMsaa,
+                                         ResourceAccess::ResourceAccess access ) const { return 0; }
     };
 
     /**

@@ -146,7 +146,7 @@ namespace Ogre
                 const uint32 blockHeight= PixelFormatGpuUtils::getCompressedBlockHeight( pixelFormat,
                                                                                          false );
                 const size_t yBlock = yPos / blockHeight;
-                const uint32 xBlock = xPos / blockWidth;
+                const size_t xBlock = xPos / blockWidth;
                 return reinterpret_cast<uint8*>( data ) +
                         zPos * bytesPerImage + yBlock * bytesPerRow + xBlock * blockSize;
             }

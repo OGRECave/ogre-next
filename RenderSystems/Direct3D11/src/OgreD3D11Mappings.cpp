@@ -565,6 +565,7 @@ namespace Ogre
         case PF_FLOAT16_RGBA:   return DXGI_FORMAT_R16G16B16A16_FLOAT;
         case PF_FLOAT32_R:      return DXGI_FORMAT_R32_FLOAT;
         case PF_FLOAT32_RGBA:   return DXGI_FORMAT_R32G32B32A32_FLOAT;
+        case PF_R32G32B32A32_UINT:  return DXGI_FORMAT_R32G32B32A32_UINT;
         case PF_SHORT_RGBA:     return DXGI_FORMAT_R16G16B16A16_UNORM;
         case PF_R32_UINT:       return DXGI_FORMAT_R32_UINT;
         case PF_R32_SINT:       return DXGI_FORMAT_R32_SINT;
@@ -683,6 +684,8 @@ namespace Ogre
         case TextureTypes::TypeCubeArray:
             return cubemapsAs2DArrays ? D3D11_SRV_DIMENSION_TEXTURE2DARRAY :
                                         D3D11_SRV_DIMENSION_TEXTURECUBEARRAY;
+        case TextureTypes::Type3D:
+            return D3D11_SRV_DIMENSION_TEXTURE3D;
         }
 
         return D3D11_SRV_DIMENSION_UNKNOWN;

@@ -148,6 +148,16 @@ endif () # OGRE_INSTALL_DEPENDENCIES
 	  install_release(SDL2.dll)
 	endif ()
 
+	if( OGRE_CONFIG_AMD_AGS )
+		if( CMAKE_SIZEOF_VOID_P EQUAL 8 )
+			install_debug(amd_ags_x64.dll)
+			install_release(amd_ags_x64.dll)
+		else()
+			install_debug(amd_ags_x86.dll)
+			install_release(amd_ags_x86.dll)
+		endif()
+	endif()
+
     if (OGRE_BUILD_PLUGIN_CG)
       # if MinGW or NMake, the release/debug cg.dll's would conflict, so just pick one
       if (MINGW OR (CMAKE_GENERATOR STREQUAL "NMake Makefiles"))
@@ -288,6 +298,15 @@ if (OGRE_COPY_DEPENDENCIES)
 		  file(COPY ${Remotery_BINARY_REL} DESTINATION ${OGRE_BINARY_DIR}/bin/release)
 		  file(COPY ${Remotery_BINARY_REL} DESTINATION ${OGRE_BINARY_DIR}/bin/relwithdebinfo)
 		  file(COPY ${Remotery_BINARY_REL} DESTINATION ${OGRE_BINARY_DIR}/bin/minsizerel)
+		endif()
+	endif()
+
+	if( OGRE_CONFIG_AMD_AGS )
+		if(EXISTS ${AMDAGS_BINARY_DBG} AND EXISTS ${AMDAGS_BINARY_REL})
+		  file(COPY ${AMDAGS_BINARY_DBG} DESTINATION ${OGRE_BINARY_DIR}/bin/debug)
+		  file(COPY ${AMDAGS_BINARY_REL} DESTINATION ${OGRE_BINARY_DIR}/bin/release)
+		  file(COPY ${AMDAGS_BINARY_REL} DESTINATION ${OGRE_BINARY_DIR}/bin/relwithdebinfo)
+		  file(COPY ${AMDAGS_BINARY_REL} DESTINATION ${OGRE_BINARY_DIR}/bin/minsizerel)
 		endif()
 	endif()
 

@@ -34,10 +34,46 @@ Copyright (c) 2000-2016 Torus Knot Software Ltd
 
 namespace Ogre
 {
+    namespace PixelFormatDataTypes
+    {
+        enum PixelFormatDataTypes
+        {
+            UnormFloat,
+            UnormFloat2,
+            UnormFloat3,
+            UnormFloat4,
+
+            SnormFloat,
+            SnormFloat2,
+            SnormFloat4,
+
+            Sint,
+            Sint2,
+            Sint3,
+            Sint4,
+
+            Uint,
+            Uint2,
+            Uint3,
+            Uint4,
+
+            Float,
+            Float2,
+            Float3,
+            Float4,
+
+            NumPixelFormatDataTypes
+        };
+    }
+
     class _OgreD3D11Export D3D11PixelFormatToShaderType : public PixelFormatToShaderType
     {
+        static PixelFormatDataTypes::PixelFormatDataTypes getPixelFormatDataType(
+                PixelFormatGpu pixelFormat );
     public:
         virtual const char* getPixelFormatType( PixelFormatGpu pixelFormat ) const;
+        virtual const char* getDataType( PixelFormatGpu pixelFormat, uint32 textureType,
+                                         bool isMsaa, ResourceAccess::ResourceAccess access ) const;
     };
 }
 

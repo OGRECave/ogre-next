@@ -31,6 +31,10 @@ THE SOFTWARE.
 #include "Vao/OgreMetalStagingBuffer.h"
 #include "Vao/OgreMetalDynamicBuffer.h"
 
+#include "OgreMetalDevice.h"
+
+#include <Metal/MTLBlitCommandEncoder.h>
+
 namespace Ogre
 {
     MetalBufferInterface::MetalBufferInterface( size_t vboPoolIdx, id<MTLBuffer> vboName,
@@ -171,5 +175,33 @@ namespace Ogre
 
         mBuffer->mFinalBufferStart = mBuffer->mInternalBufferStart +
                                         dynamicCurrentFrame * mBuffer->_getInternalNumElements();
+    }
+    //-----------------------------------------------------------------------------------
+    void MetalBufferInterface::copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes,
+                                       size_t srcOffsetBytes, size_t sizeBytes )
+    {
+        MetalVaoManager *vaoManager = static_cast<MetalVaoManager*>( mBuffer->mVaoManager );
+        MetalDevice *device = vaoManager->getDevice();
+
+        OGRE_ASSERT_HIGH( dynamic_cast<MetalBufferInterface*>( dstBuffer ) );
+        MetalBufferInterface *dstBufferMetal = static_cast<MetalBufferInterface*>( dstBuffer );
+
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
+        if( dstOffsetBytes % 4u || sizeBytes % 4u || srcOffsetBytes % 4u )
+        {
+            //macOS Mojave and earlier
+            vaoManager->unalignedCopy( dstBufferMetal->getVboName(), dstOffsetBytes,
+                                       this->mVboName, srcOffsetBytes, sizeBytes );
+        }
+        else
+#endif
+        {
+            __unsafe_unretained id<MTLBlitCommandEncoder> blitEncoder = device->getBlitEncoder();
+            [blitEncoder copyFromBuffer:mVboName
+                           sourceOffset:srcOffsetBytes
+                               toBuffer:dstBufferMetal->getVboName()
+                      destinationOffset:dstOffsetBytes
+                                   size:sizeBytes];
+        }
     }
 }

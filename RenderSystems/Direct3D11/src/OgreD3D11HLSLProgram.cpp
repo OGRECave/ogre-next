@@ -2108,21 +2108,24 @@ namespace Ogre {
 
         ID3D11InputLayout *d3dInputLayout = 0;
 
-        HRESULT hr = d3dDevice->CreateInputLayout(
-                    inputDesc,
-                    currDesc,
-                    &mMicroCode[0],
+        if( currDesc > 0u )
+        {
+            HRESULT hr = d3dDevice->CreateInputLayout(
+                             inputDesc,
+                             currDesc,
+                             &mMicroCode[0],
                     mMicroCode.size(),
                     &d3dInputLayout );
 
-        if( FAILED(hr) || mDevice.isError() )
-        {
-            String errorDescription = mDevice.getErrorDescription(hr);
-            errorDescription += "\nBound shader name: " + mName;
+            if( FAILED(hr) || mDevice.isError() )
+            {
+                String errorDescription = mDevice.getErrorDescription(hr);
+                errorDescription += "\nBound shader name: " + mName;
 
-            OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
-                            "Unable to create D3D11 input layout: " + errorDescription,
-                            "D3D11HLSLProgram::getLayoutForPso" );
+                OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
+                                "Unable to create D3D11 input layout: " + errorDescription,
+                                "D3D11HLSLProgram::getLayoutForPso" );
+            }
         }
 
         return d3dInputLayout;

@@ -52,6 +52,8 @@ THE SOFTWARE.
 
 #import <Metal/MTLDevice.h>
 #import <Metal/MTLRenderCommandEncoder.h>
+#import <Metal/MTLComputeCommandEncoder.h>
+#import <Metal/MTLComputePipeline.h>
 
 namespace Ogre
 {
@@ -93,6 +95,36 @@ namespace Ogre
         "CPU_ACCESSIBLE_PERSISTENT",
         "CPU_ACCESSIBLE_PERSISTENT_COHERENT",
     };
+
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
+    static const char c_gpuMemcpyComputeShader[] =
+            "#include <metal_stdlib>\n"
+            "using namespace metal;\n"
+            "\n"
+            "struct Params\n"
+            "{\n"
+            "	uint32_t dstOffset;\n"
+            "	uint32_t srcOffset;\n"
+            "	uint32_t sizeBytes;\n"
+            "};\n"
+            "\n"
+            "kernel void ogre_gpu_memcpy\n"
+            "(\n"
+            "	device uint8_t* dst			[[ buffer(0) ]],\n"
+            "	device uint8_t* src			[[ buffer(1) ]],\n"
+            "	constant Params &p			[[ buffer(2) ]],\n"
+            "	uint3 gl_GlobalInvocationID	[[thread_position_in_grid]]\n"
+            ")\n"
+            "{\n"
+            "//	for( uint32_t i=0u; i<p.sizeBytes; ++i )\n"
+            "//		dst[i + p.dstOffset] = src[i + p.srcOffset];\n"
+            "	uint32_t srcOffsetStart	= p.srcOffset + gl_GlobalInvocationID.x * 64u;\n"
+            "	uint32_t dstOffsetStart	= p.dstOffset + gl_GlobalInvocationID.x * 64u;\n"
+            "	uint32_t numBytesToCopy	= min( 64u, p.sizeBytes - gl_GlobalInvocationID.x * 64u );\n"
+            "	for( uint32_t i=0u; i<numBytesToCopy; ++i )\n"
+            "		dst[i + dstOffsetStart] = src[i + srcOffsetStart];\n"
+            "}";
+#endif
 
     MetalVaoManager::MetalVaoManager( uint8 dynamicBufferMultiplier, MetalDevice *device,
                                       const NameValuePairList *params ) :
@@ -173,6 +205,8 @@ namespace Ogre
         for( uint32 i=0; i<4096; ++i )
             drawIdPtr[i] = i;
         mDrawId = createVertexBuffer( vertexElements, 4096, BT_IMMUTABLE, drawIdPtr, true );
+
+        createUnalignedCopyShader();
 #endif
     }
     //-----------------------------------------------------------------------------------
@@ -195,6 +229,67 @@ namespace Ogre
             }
         }
     }
+    //-----------------------------------------------------------------------------------
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
+    void MetalVaoManager::createUnalignedCopyShader(void)
+    {
+        NSError *error;
+        id <MTLLibrary> library =
+                [mDevice->mDevice newLibraryWithSource:
+                [NSString stringWithUTF8String:c_gpuMemcpyComputeShader]
+                                               options:nil
+                                                 error:&error];
+
+        if( !library )
+        {
+            String errorDesc;
+            if( error )
+                errorDesc = [error localizedDescription].UTF8String;
+
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "Metal SL Compiler Error while compiling internal c_gpuMemcpyComputeShader:\n" +
+                         errorDesc,
+                         "MetalVaoManager::MetalVaoManager" );
+        }
+        else
+        {
+            if( error )
+            {
+                String errorDesc;
+                if( error )
+                    errorDesc = [error localizedDescription].UTF8String;
+                LogManager::getSingleton().logMessage(
+                            "Metal SL Compiler Warnings in c_gpuMemcpyComputeShader:\n" + errorDesc );
+            }
+        }
+        library.label = @"c_gpuMemcpyComputeShader";
+        id<MTLFunction> unalignedCopyFunc = [library newFunctionWithName:@"ogre_gpu_memcpy"];
+        if( !unalignedCopyFunc )
+        {
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "Error retriving entry point from internal 'ogre_gpu_memcpy'",
+                         "MetalVaoManager::MetalVaoManager" );
+        }
+
+        MTLComputePipelineDescriptor *psd = [[MTLComputePipelineDescriptor alloc] init];
+        psd.computeFunction = unalignedCopyFunc;
+        mUnalignedCopyPso =
+                [mDevice->mDevice newComputePipelineStateWithDescriptor:psd
+                                                                options:MTLPipelineOptionNone
+                                                             reflection:nil
+                                                                  error:&error];
+        if( !mUnalignedCopyPso || error )
+        {
+            String errorDesc;
+            if( error )
+                errorDesc = [error localizedDescription].UTF8String;
+
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "Failed to create pipeline state for compute for mUnalignedCopyPso, error " +
+                         errorDesc, "MetalVaoManager::MetalVaoManager" );
+        }
+    }
+#endif
     //-----------------------------------------------------------------------------------
     void MetalVaoManager::getMemoryStats( const Block &block, size_t vboIdx, size_t poolCapacity,
                                           LwString &text, MemoryStatsEntryVec &outStats,
@@ -790,7 +885,7 @@ namespace Ogre
         size_t vboIdx;
         size_t bufferOffset;
 
-        size_t alignment = mUavBufferAlignment;
+        size_t alignment = Math::lcm( mUavBufferAlignment, bytesPerElement );
 
         //UAV Buffers can't be dynamic.
         const BufferType bufferType = BT_DEFAULT;
@@ -1103,6 +1198,41 @@ namespace Ogre
         return AsyncTicketPtr( OGRE_NEW MetalAsyncTicket( creator, stagingBuffer,
                                                           elementStart, elementCount, mDevice ) );
     }
+    //-----------------------------------------------------------------------------------
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
+    void MetalVaoManager::unalignedCopy( id<MTLBuffer> dstBuffer, size_t dstOffsetBytes,
+                                         id<MTLBuffer> srcBuffer, size_t srcOffsetBytes,
+                                         size_t sizeBytes )
+    {
+        __unsafe_unretained id<MTLComputeCommandEncoder> computeEncoder = mDevice->getComputeEncoder();
+
+        [computeEncoder setBuffer:dstBuffer offset:0 atIndex:0];
+        [computeEncoder setBuffer:srcBuffer offset:0 atIndex:1];
+        uint32_t copyInfo[3] =
+        {
+            static_cast<uint32_t>( dstOffsetBytes ),
+            static_cast<uint32_t>( srcOffsetBytes ),
+            static_cast<uint32_t>( sizeBytes )
+        };
+        [computeEncoder setBytes:copyInfo length:sizeof(copyInfo) atIndex:2];
+
+        MTLSize threadsPerThreadgroup   = MTLSizeMake( 1024u, 1u, 1u );
+        MTLSize threadgroupsPerGrid     = MTLSizeMake( 1u, 1u, 1u );
+
+        const size_t threadsRequired = alignToNextMultiple( sizeBytes, 64u ) / 64u;
+        threadsPerThreadgroup.width =
+                std::min<NSUInteger>( static_cast<NSUInteger>( threadsRequired ), 1024u );
+        threadgroupsPerGrid.width =
+                static_cast<NSUInteger>( alignToNextMultiple( threadsRequired,
+                                                              threadsPerThreadgroup.width ) /
+                                         threadsPerThreadgroup.width );
+
+        [computeEncoder setComputePipelineState:mUnalignedCopyPso];
+
+        [computeEncoder dispatchThreadgroups:threadgroupsPerGrid
+                       threadsPerThreadgroup:threadsPerThreadgroup];
+    }
+#endif
     //-----------------------------------------------------------------------------------
     void MetalVaoManager::_update(void)
     {

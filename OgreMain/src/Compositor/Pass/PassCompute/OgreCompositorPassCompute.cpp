@@ -58,6 +58,15 @@ namespace Ogre
         mTextureSources.push_back( ComputeTextureSource( texUnitIdx, textureName ) );
     }
     //-----------------------------------------------------------------------------------
+    void CompositorPassComputeDef::addTextureSource( uint32 texUnitIdx, const String &textureName,
+                                                     int32 textureArrayIndex, int32 mipmapLevel,
+                                                     PixelFormatGpu pixelFormat )
+    {
+        mTextureSources.push_back( ComputeTextureSource( texUnitIdx, textureName, ResourceAccess::Read,
+                                                         mipmapLevel, textureArrayIndex, pixelFormat,
+                                                         true ) );
+    }
+    //-----------------------------------------------------------------------------------
     void CompositorPassComputeDef::addUavSource( uint32 texUnitIdx, const String &textureName,
                                                  ResourceAccess::ResourceAccess access,
                                                  int32 textureArrayIndex, int32 mipmapLevel,
@@ -205,6 +214,12 @@ namespace Ogre
                 DescriptorSetTexture2::TextureSlot texSlot( DescriptorSetTexture2::TextureSlot::
                                                             makeEmpty() );
                 texSlot.texture = mParentNode->getDefinedTexture( itor->textureName );
+                if( itor->usesAllFields )
+                {
+                    texSlot.mipmapLevel         = static_cast<uint8>( itor->mipmapLevel );
+                    texSlot.textureArrayIndex   = static_cast<uint16>( itor->textureArrayIndex );
+                    texSlot.pixelFormat         = itor->pixelFormat;
+                }
                 mComputeJob->setTexture( itor->texUnitIdx, texSlot );
                 ++itor;
             }

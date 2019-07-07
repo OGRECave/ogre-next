@@ -73,7 +73,9 @@ namespace Ogre
         TexBufferPacked *retVal = OGRE_NEW D3D11TexBufferPacked(
                     mInternalBufferStart * mBytesPerElement, mNumElements, mBytesPerElement, 0,
                     mBufferType, (void*)0, false, (VaoManager*)0, bufferInterface,
-                    pixelFormat, mDevice );
+                    pixelFormat, true, mDevice );
+        //We were overriden by the BufferPacked we just created. Restore this back!
+        bufferInterface->_notifyBuffer( this );
 
         mTexBufferViews.push_back( retVal );
 
@@ -115,8 +117,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     ID3D11UnorderedAccessView* D3D11UavBufferPacked::_bindBufferCommon( size_t offset, size_t sizeBytes )
     {
-        assert( offset < (mNumElements - 1) );
-        assert( sizeBytes < mNumElements );
+        assert( offset <= getTotalSizeBytes() );
+        assert( sizeBytes <= getTotalSizeBytes() );
+        assert( (offset + sizeBytes) <= getTotalSizeBytes() );
 
         sizeBytes = !sizeBytes ? (mNumElements * mBytesPerElement - offset) : sizeBytes;
 
@@ -150,8 +153,9 @@ namespace Ogre
     ID3D11UnorderedAccessView* D3D11UavBufferPacked::createUav(
             const DescriptorSetUav::BufferSlot &bufferSlot ) const
     {
-        assert( bufferSlot.offset < (mNumElements - 1) );
-        assert( bufferSlot.sizeBytes < mNumElements );
+        assert( bufferSlot.offset <= getTotalSizeBytes() );
+        assert( bufferSlot.sizeBytes <= getTotalSizeBytes() );
+        assert( (bufferSlot.offset + bufferSlot.sizeBytes) <= getTotalSizeBytes() );
 
         const size_t sizeBytes = !bufferSlot.sizeBytes ? (mNumElements * mBytesPerElement -
                                                           bufferSlot.offset) : bufferSlot.sizeBytes;

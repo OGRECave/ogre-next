@@ -4,8 +4,6 @@
 @insertpiece( SetCrossPlatformSettings )
 @insertpiece( DeclareUvModifierMacros )
 
-@insertpiece( DefaultHeaderPS )
-
 // START UNIFORM STRUCT DECLARATION
 @property( !hlms_shadowcaster || alpha_test )
 	@property( !hlms_shadowcaster )
@@ -15,6 +13,8 @@
 @end
 @insertpiece( custom_ps_uniformStructDeclaration )
 // END UNIFORM STRUCT DECLARATION
+
+@insertpiece( DefaultHeaderPS )
 
 struct PS_INPUT
 {
@@ -127,6 +127,7 @@ fragment @insertpiece( output_type ) main_metal
 	@insertpiece( DeclDecalsSamplers )
 	@insertpiece( DeclShadowSamplers )
 	@insertpiece( DeclAreaLtcTextures )
+	@insertpiece( DeclVctTextures )
 )
 {
 	PS_OUTPUT outPs;

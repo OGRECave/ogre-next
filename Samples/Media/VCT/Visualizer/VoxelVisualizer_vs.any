@@ -1,0 +1,56 @@
+
+//#include "SyntaxHighlightingMisc.h"
+
+#ifdef HEADER
+/** Creates a unit cube triangle strip from just vertex ID (14 vertices)
+	Credit to Don Williamson @Donzanoid
+@param vertexId
+	Must be in range [0; 14)
+@return
+	Cube vertex position. It is in range [0; 1] (i.e. it is centered around 0.5, 0.5, 0.5 )
+*/
+INLINE float3 getCubeVertex( uint vertexId )
+{
+	uint b = 1u << vertexId;
+	return float3( (0x287Au & b) != 0u, (0x02AFu & b) != 0u, (0x31E3u & b) != 0u );
+}
+
+#else
+
+	uint cubeInstance = (uint( inVs_vertexId ) - p_vertexBase) / 16u;
+	uint yRow = cubeInstance / p_voxelResolution.x;
+
+	uint3 xyzCoord;
+	xyzCoord.x = cubeInstance % p_voxelResolution.x;
+	xyzCoord.y = yRow % p_voxelResolution.y;
+	xyzCoord.z = yRow / p_voxelResolution.y;
+
+	float4 voxelValues = OGRE_Load3D( voxelTex, xyzCoord, 0 );
+#ifndef OPACITY_ANY_COLOUR
+	if( voxelValues.w > 0.0 )
+#else
+	if( voxelValues.x > 0.0 || voxelValues.y > 0.0 || voxelValues.z > 0.0 || voxelValues.w > 0.0 )
+#endif
+	{
+		//We need 14 vertices, but we have to use 16 (one extra
+		//at beginning and one at the end) for degenerate triangles
+		uint cubVertId = clamp( uint( inVs_vertexId ) % 16u, 1u, 14u ) - 1u;
+		float3 localPos = getCubeVertex( cubVertId );
+
+		localPos.xyz += float3( xyzCoord.xyz );
+		outVs_Position.xyzw = mul( p_worldViewProjMatrix, float4( localPos, 1.0f ) );
+
+		#ifndef SEPARATE_OPACITY
+			outVs.voxelColour.xyzw = voxelValues.xyzw;
+		#else
+			outVs.voxelColour.xyz = OGRE_Load3D( otherTex, xyzCoord, 0 ).xyz;
+			outVs.voxelColour.w = voxelValues.w;
+		#endif
+	}
+	else
+	{
+		outVs_Position.xyzw = float4( 0, 0, 0, 0 );
+		outVs.voxelColour.xyzw = float4( 0, 0, 0, 0 );
+	}
+
+#endif

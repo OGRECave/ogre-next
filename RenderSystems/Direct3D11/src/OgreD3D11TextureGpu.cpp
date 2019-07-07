@@ -309,6 +309,11 @@ namespace Ogre
             create3DTexture();
             break;
         }
+
+        //Set debug name for RenderDoc and similar tools
+        const String texName = getNameStr();
+        mFinalTextureName->SetPrivateData( WKPDID_D3DDebugObjectName,
+                                           static_cast<UINT>( texName.size() ), texName.c_str() );
     }
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpu::destroyInternalResourcesImpl(void)
@@ -532,6 +537,7 @@ namespace Ogre
         if( format != mPixelFormat ||
             texSlot.cubemapsAs2DArrays ||
             texSlot.mipmapLevel > 0 ||
+            texSlot.numMipmaps != 0 ||
             texSlot.textureArrayIndex > 0 ||
             isReinterpretable() ||
             PixelFormatGpuUtils::isDepth( mPixelFormat ) )
@@ -561,8 +567,15 @@ namespace Ogre
             else
             {
                 //It's a union, so 2DArray == everyone else.
+                uint8 numMipmaps = texSlot.numMipmaps;
+                if( !texSlot.numMipmaps )
+                    numMipmaps = mNumMipmaps - texSlot.mipmapLevel;
+
+                OGRE_ASSERT_LOW( numMipmaps <= mNumMipmaps - texSlot.mipmapLevel &&
+                                 "Asking for more mipmaps than the texture has!" );
+
                 srvDesc.Texture2DArray.MostDetailedMip  = texSlot.mipmapLevel;
-                srvDesc.Texture2DArray.MipLevels        = mNumMipmaps - texSlot.mipmapLevel;
+                srvDesc.Texture2DArray.MipLevels        = numMipmaps;
 
                 if( mTextureType == TextureTypes::Type1DArray ||
                     mTextureType == TextureTypes::Type2DArray )
@@ -649,7 +662,7 @@ namespace Ogre
             uavDesc.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE3D;
             uavDesc.Texture3D.MipSlice      = static_cast<UINT>( texSlot.mipmapLevel );
             uavDesc.Texture3D.FirstWSlice   = 0;
-            uavDesc.Texture3D.WSize         = static_cast<UINT>( getDepth() );
+            uavDesc.Texture3D.WSize         = static_cast<UINT>( getDepth() >> texSlot.mipmapLevel );
             break;
         default:
             break;

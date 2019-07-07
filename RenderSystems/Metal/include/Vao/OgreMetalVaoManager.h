@@ -34,6 +34,8 @@ THE SOFTWARE.
 
 #import <dispatch/dispatch.h>
 
+@protocol MTLComputePipelineState;
+
 namespace Ogre
 {
     class _OgreMetalExport MetalVaoManager : public VaoManager
@@ -147,9 +149,15 @@ namespace Ogre
         ConstBufferPacked   *mDrawId;
 #else
         VertexBufferPacked  *mDrawId;
+
+        id<MTLComputePipelineState> mUnalignedCopyPso;
 #endif
 
         static const uint32 VERTEX_ATTRIBUTE_INDEX[VES_COUNT];
+
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
+        void createUnalignedCopyShader(void);
+#endif
 
         /** Asks for allocating buffer space in a VBO (Vertex Buffer Object).
             If the VBO doesn't exist, all VBOs are full or can't fit this request,
@@ -278,6 +286,16 @@ namespace Ogre
 
         virtual AsyncTicketPtr createAsyncTicket( BufferPacked *creator, StagingBuffer *stagingBuffer,
                                                   size_t elementStart, size_t elementCount );
+
+        MetalDevice* getDevice(void)        { return mDevice; }
+
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
+        /// In macOS before Catalina (i.e. <= Mojave), MTLBlitCommandEncoder copyFromBuffer
+        /// must be aligned to 4 bytes. When that's not possible, we have to workaround
+        /// this limitation with a compute shader
+        void unalignedCopy( id<MTLBuffer> dstBuffer, size_t dstOffsetBytes,
+                            id<MTLBuffer> srcBuffer, size_t srcOffsetBytes, size_t sizeBytes );
+#endif
 
         virtual void _update(void);
         void _notifyNewCommandBuffer(void);

@@ -226,6 +226,10 @@ namespace Ogre
         void setEnablePlanarReflection( uint8 textureUnit, bool bEnable );
         bool getEnablePlanarReflection( uint8 textureUnit ) const;
 
+        virtual ColourValue getDiffuseColour(void) const;
+        virtual ColourValue getEmissiveColour(void) const;
+        virtual TextureGpu* getEmissiveTexture(void) const;
+
         virtual void calculateHash();
 
         static const size_t MaterialSizeInGpu;

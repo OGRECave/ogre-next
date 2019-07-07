@@ -228,6 +228,16 @@ namespace Ogre
         // ***** DirectX specific caps *****
         /// Is DirectX feature "per stage constants" supported
         RSC_PERSTAGECONSTANT = OGRE_CAPS_VALUE(CAPS_CATEGORY_D3D9, 0),
+        /// DX11 has this annoying requirement that "typed UAV loads" are not allowed.
+        /// Meaning you can only read from UAVs if it's in format PGF_R32_UINT.
+        ///
+        /// You can workaround this issue by creating the UAV as TextureFlags::Reinterpretable
+        /// and performing bitpacking by hand in the shader.
+        ///
+        /// See
+        /// https://docs.microsoft.com/en-us/windows/desktop/direct3dhlsl/
+        /// dx-graphics-hlsl-unpacking-packing-dxgi-format
+        RSC_TYPED_UAV_LOADS = OGRE_CAPS_VALUE(CAPS_CATEGORY_D3D9, 1),
 
         // ***** GL Specific Caps *****
         /// Supports OpenGL version 1.5
@@ -421,6 +431,17 @@ namespace Ogre
         ushort mComputeProgramConstantIntCount;           
         /// The number of boolean constants compute programs support
         ushort mComputeProgramConstantBoolCount;
+
+        /// Note that it's the maximum per axis, but GPUs may *not* necessarily
+        /// support issuing a threadgroup of
+        ///     mMaxThreadsPerThreadgroupAxis[0] * mMaxThreadsPerThreadgroupAxis[1] *
+        ///     mMaxThreadsPerThreadgroupAxis[2]
+        ///
+        /// The actual limit is mMaxThreadsPerThreadgroup
+        uint32 mMaxThreadsPerThreadgroupAxis[3];
+
+        /// Max threads per threadgroup
+        uint32 mMaxThreadsPerThreadgroup;
 
 
 
@@ -953,6 +974,27 @@ namespace Ogre
             return mComputeProgramConstantBoolCount;           
         }
 
+        void setMaxThreadsPerThreadgroupAxis( const uint32 value[3] )
+        {
+            mMaxThreadsPerThreadgroupAxis[0] = value[0];
+            mMaxThreadsPerThreadgroupAxis[1] = value[1];
+            mMaxThreadsPerThreadgroupAxis[2] = value[2];
+        }
+
+        void setMaxThreadsPerThreadgroup( uint32 value )
+        {
+            mMaxThreadsPerThreadgroup = value;
+        }
+
+        const uint32* getMaxThreadsPerThreadgroupAxis(void) const
+        {
+            return mMaxThreadsPerThreadgroupAxis;
+        }
+
+        uint32 getMaxThreadsPerThreadgroup(void) const
+        {
+            return mMaxThreadsPerThreadgroup;
+        }
     };
 
     /** @} */

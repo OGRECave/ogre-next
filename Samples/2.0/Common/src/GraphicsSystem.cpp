@@ -163,7 +163,7 @@ namespace Demo
     #endif
 
         mRoot->getRenderSystem()->setConfigOption( "sRGB Gamma Conversion", "Yes" );
-        mRoot->initialise(false);
+        mRoot->initialise( false, windowTitle );
 
         Ogre::ConfigOptionMap& cfgOpts = mRoot->getRenderSystem()->getConfigOptions();
 
