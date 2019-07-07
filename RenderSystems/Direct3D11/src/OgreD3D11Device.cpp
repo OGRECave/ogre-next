@@ -337,6 +337,9 @@ namespace Ogre
         if(value == "10.0") return D3D_FEATURE_LEVEL_10_0;
         if(value == "10.1") return D3D_FEATURE_LEVEL_10_1;
         if(value == "11.0") return D3D_FEATURE_LEVEL_11_0;
+#if defined(_WIN32_WINNT_WIN8)
+        if(value == "11.1") return D3D_FEATURE_LEVEL_11_1;
+#endif
         return fallback;
     }
     //---------------------------------------------------------------------
