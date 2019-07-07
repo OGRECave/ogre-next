@@ -274,9 +274,9 @@ namespace Ogre {
         return status;
     }
 
-    void* EGLSupport::getProcAddress(const Ogre::String& name)
+    void* EGLSupport::getProcAddress(const char* procname) const
     {
-        return (void*)eglGetProcAddress((const char*) name.c_str());
+        return (void*)eglGetProcAddress(procname);
     }
 
     ::EGLConfig EGLSupport::getGLConfigFromContext(::EGLContext context)

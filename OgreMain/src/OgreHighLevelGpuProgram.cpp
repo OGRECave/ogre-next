@@ -292,10 +292,10 @@ namespace Ogre
         {
             loadFromSource();
         }
-        catch( RenderingAPIException &e )
+        catch( RenderingAPIException& )
         {
             dumpSourceIfHasIncludeEnabled();
-            throw e;
+            throw;
         }
 
         dumpSourceIfHasIncludeEnabled();

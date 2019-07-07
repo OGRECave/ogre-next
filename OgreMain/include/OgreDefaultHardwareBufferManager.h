@@ -65,7 +65,7 @@ namespace v1 {
         void writeData(size_t offset, size_t length, const void* pSource,
                 bool discardWholeBuffer = false);
         /** Override HardwareBuffer to turn off all shadowing. */
-        void* lock(size_t offset, size_t length, LockOptions options, UploadOptions uploadOpt = HBU_DEFAULT);
+        void* lock(size_t offset, size_t length, LockOptions options);
         /** Override HardwareBuffer to turn off all shadowing. */
         void unlock(void);
 
@@ -90,7 +90,7 @@ namespace v1 {
         void writeData(size_t offset, size_t length, const void* pSource,
                 bool discardWholeBuffer = false);
         /** Override HardwareBuffer to turn off all shadowing. */
-        void* lock(size_t offset, size_t length, LockOptions options, UploadOptions uploadOpt = HBU_DEFAULT);
+        void* lock(size_t offset, size_t length, LockOptions options);
         /** Override HardwareBuffer to turn off all shadowing. */
         void unlock(void);
 
@@ -117,7 +117,7 @@ namespace v1 {
         void writeData(size_t offset, size_t length, const void* pSource,
                 bool discardWholeBuffer = false);
         /** Override HardwareBuffer to turn off all shadowing. */
-        void* lock(size_t offset, size_t length, LockOptions options, UploadOptions uploadOpt = HBU_DEFAULT);
+        void* lock(size_t offset, size_t length, LockOptions options);
         /** Override HardwareBuffer to turn off all shadowing. */
         void unlock(void);
     };
@@ -143,7 +143,7 @@ namespace v1 {
         void writeData(size_t offset, size_t length, const void* pSource,
                        bool discardWholeBuffer = false);
         /** Override HardwareBuffer to turn off all shadowing. */
-        void* lock(size_t offset, size_t length, LockOptions options, UploadOptions uploadOpt = HBU_DEFAULT);
+        void* lock(size_t offset, size_t length, LockOptions options);
         /** Override HardwareBuffer to turn off all shadowing. */
         void unlock(void);
     };

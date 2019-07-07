@@ -224,7 +224,7 @@ namespace Ogre
             {
                 LogManager::getSingleton().logMessage("Mac Cocoa Window: Rendering on an external plain NSView*");
                 opt = miscParams->find("parentWindowHandle");
-                NSView *nsview = (__bridge NSView*)reinterpret_cast<void*>(StringConverter::parseUnsignedLong(opt->second));
+                NSView *nsview = (__bridge NSView*)reinterpret_cast<void*>(StringConverter::parseSizeT(opt->second));
                 assert( nsview &&
                        "Unable to get a pointer to the parent NSView."
                        "Was the 'parentWindowHandle' parameter set correctly in the call to createRenderWindow()?");

@@ -167,7 +167,7 @@ void SDLGLSupport::stop()
     SDL_Quit();
 }
 
-void* SDLGLSupport::getProcAddress(const String& procname)
+void* SDLGLSupport::getProcAddress(const char* procname) const
 {
-    return SDL_GL_GetProcAddress(procname.c_str());
+    return SDL_GL_GetProcAddress(procname);
 }

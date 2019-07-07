@@ -752,8 +752,6 @@ namespace Ogre {
         bool mLateMaterialResolving;
 
         ColourValue mShadowColour;
-        v1::HardwareIndexBufferSharedPtr mShadowIndexBuffer;
-        size_t mShadowIndexBufferUsedSize;
         v1::Rectangle2D* mFullScreenQuad;
         Real mShadowDirLightExtrudeDist;
         IlluminationRenderStage mIlluminationStage;
@@ -1986,6 +1984,24 @@ namespace Ogre {
 
         void _setViewport( Viewport *vp )                               { setViewport( vp ); }
         void _setCamerasInProgress(const CamerasInProgress& cameras)    { mCamerasInProgress = cameras; }
+
+        /** Notifies the scene manager that hardware resources were lost
+            @remarks
+                Called automatically by RenderSystem if hardware resources
+                were lost and can not be restored using some internal mechanism.
+                Among affected resources are manual meshes without loaders, 
+                manual textures without loaders, ManualObjects, etc.
+        */
+        virtual void _releaseManualHardwareResources();
+
+        /** Notifies the scene manager that hardware resources should be restored
+            @remarks
+                Called automatically by RenderSystem if hardware resources
+                were lost and can not be restored using some internal mechanism.
+                Among affected resources are manual meshes without loaders, 
+                manual textures without loaders, ManualObjects, etc.
+        */
+        virtual void _restoreManualHardwareResources();
 
         /** Enables / disables a 'sky plane' i.e. a plane at constant
             distance from the camera representing the sky.

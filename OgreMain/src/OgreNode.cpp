@@ -624,10 +624,6 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     void Node::rotate(const Quaternion& q, TransformSpace relativeTo)
     {
-        // Normalise quaternion to avoid drift
-        Quaternion qnorm = q;
-        qnorm.normalise();
-
         Quaternion orientation;
         mTransform.mOrientation->getAsQuaternion( orientation, mTransform.mIndex );
 
@@ -635,21 +631,20 @@ namespace Ogre {
         {
         case TS_PARENT:
             // Rotations are normally relative to local axes, transform up
-            orientation = qnorm * orientation;
+            orientation = q * orientation;
             break;
         case TS_WORLD:
             // Rotations are normally relative to local axes, transform up
             orientation = orientation * _getDerivedOrientation().Inverse()
-                * qnorm * _getDerivedOrientation();
+                * q * _getDerivedOrientation();
             break;
         case TS_LOCAL:
             // Note the order of the mult, i.e. q comes after
-            orientation = orientation * qnorm;
+            orientation = orientation * q;
             break;
         }
 
-        //It should be already normalized, but floating point can cause
-        //successive calls to rotate to accumulate error.
+        // Normalise quaternion to avoid drift
         orientation.normalise();
 
         mTransform.mOrientation->setFromQuaternion( orientation, mTransform.mIndex );

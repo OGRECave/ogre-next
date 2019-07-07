@@ -288,10 +288,9 @@ namespace Ogre {
         // Note the order of the mult, i.e. q comes after
 
         // Normalise the quat to avoid cumulative problems with precision
-        Quaternion qnorm = q;
-        qnorm.normalise();
-        mOrientation = qnorm * mOrientation;
-        mOrientation.normalise();
+        Quaternion qres = q * mOrientation;
+        qres.normalise();
+        mOrientation = qres;
 
         invalidateView();
 

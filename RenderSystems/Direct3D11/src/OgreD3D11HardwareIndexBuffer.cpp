@@ -48,7 +48,7 @@ namespace v1 {
         delete mBufferImpl;
     }
     //---------------------------------------------------------------------
-    void* D3D11HardwareIndexBuffer::lock(size_t offset, size_t length, LockOptions options, UploadOptions uploadOpt)
+    void* D3D11HardwareIndexBuffer::lock(size_t offset, size_t length, LockOptions options)
     {
         return mBufferImpl->lock(offset, length, options);
     }

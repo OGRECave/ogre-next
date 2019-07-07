@@ -72,7 +72,7 @@ namespace Ogre {
         void initialiseExtensions();
 
         /** @copydoc see GL3PlusSupport::getProcAddress */
-        void* getProcAddress(const String& procname);
+        void* getProcAddress(const char* procname) const;
 
         // The remaining functions are internal to the GLX Rendersystem:
 

@@ -64,7 +64,7 @@ public:
     void initialiseExtensions(void);
     bool checkMinGLVersion(const String& v) const;
     bool checkExtension(const String& ext) const;
-    void* getProcAddress(const String& procname);
+    void* getProcAddress(const char* procname) const;
 
     Glib::RefPtr<const Gdk::GL::Context> getMainContext() const; 
 

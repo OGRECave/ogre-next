@@ -123,6 +123,9 @@ namespace v1
         ManualObject( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager );
         virtual ~ManualObject();
 
+        /** @copydoc MovableObject::_releaseManualHardwareResources. */
+        void _releaseManualHardwareResources() { clear(); }
+
         //pre-declare ManualObjectSection
         class ManualObjectSection;
 

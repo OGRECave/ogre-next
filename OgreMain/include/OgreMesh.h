@@ -366,6 +366,9 @@ namespace v1 {
         */
         MeshPtr clone(const String& newName, const String& newGroup = BLANKSTRING);
 
+        /** @copydoc Resource::reload */
+        void reload(LoadingFlags flags = LF_DEFAULT);
+
         /** Get the axis-aligned bounding box for this mesh.
         */
         const AxisAlignedBox& getBounds(void) const;

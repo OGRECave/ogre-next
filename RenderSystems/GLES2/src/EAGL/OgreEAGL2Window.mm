@@ -42,6 +42,16 @@ THE SOFTWARE.
 #import <UIKit/UIGraphics.h>
 
 namespace Ogre {
+
+    struct EAGLContextGuard
+    {
+        EAGLContextGuard(EAGLContext* ctx) : mPrevContext([EAGLContext currentContext]) { if(ctx != mPrevContext) [EAGLContext setCurrentContext:ctx]; }
+        ~EAGLContextGuard() { [EAGLContext setCurrentContext:mPrevContext]; }
+    private:
+         EAGLContext *mPrevContext;
+    };
+
+
     EAGL2Window::EAGL2Window(EAGL2Support *glsupport)
         :   mClosed(false),
             mVisible(false),
@@ -123,7 +133,9 @@ namespace Ogre {
         if(mWidth == w && mHeight == h)
             return;
         
-        // Destroy and recreate the framebuffer with new dimensions 
+        // Destroy and recreate the framebuffer with new dimensions
+        EAGLContextGuard ctx_guard(mContext->getContext());
+        
         mContext->destroyFramebuffer();
         
         mWidth = w;
@@ -241,7 +253,7 @@ namespace Ogre {
             
             if ((option = miscParams->find("externalSharegroup")) != miscParams->end())
             {
-                group = (EAGLSharegroup *)StringConverter::parseUnsignedLong(option->second);
+                group = (EAGLSharegroup *)StringConverter::parseSizeT(option->second);
                 LogManager::getSingleton().logMessage("iOS: Using an external EAGLSharegroup");
             }
             
@@ -348,14 +360,14 @@ namespace Ogre {
 
             if ((opt = miscParams->find("externalWindowHandle")) != end)
             {
-                mWindow = (UIWindow *)StringConverter::parseUnsignedLong(opt->second);
+                mWindow = (UIWindow *)StringConverter::parseSizeT(opt->second);
                 mIsExternal = true;
                 LogManager::getSingleton().logMessage("iOS: Using an external window handle");
             }
         
             if ((opt = miscParams->find("externalViewHandle")) != end)
             {
-                mView = (EAGL2View *)StringConverter::parseUnsignedLong(opt->second);
+                mView = (EAGL2View *)StringConverter::parseSizeT(opt->second);
                 CGRect b = [mView bounds];
                 mWidth = b.size.width;
                 mHeight = b.size.height;
@@ -365,7 +377,7 @@ namespace Ogre {
         
             if ((opt = miscParams->find("externalViewControllerHandle")) != end)
             {
-                mViewController = (EAGL2ViewController *)StringConverter::parseUnsignedLong(opt->second);
+                mViewController = (EAGL2ViewController *)StringConverter::parseSizeT(opt->second);
                 if(mViewController.view != nil)
                     mView = (EAGL2View *)mViewController.view;
                 mUsingExternalViewController = true;
@@ -481,15 +493,13 @@ namespace Ogre {
 		}
 	}
 
-    void EAGL2Window::copyContentsToMemory(const PixelBox &dst, FrameBuffer buffer)
+    void EAGL2Window::copyContentsToMemory(const Box& src, const PixelBox &dst, FrameBuffer buffer)
     {
-        if (dst.getWidth() > mWidth ||
-            dst.getHeight() > mHeight ||
-            dst.front != 0 || dst.back != 1)
+        if(src.right > mWidth || src.bottom > mHeight || src.front != 0 || src.back != 1
+        || dst.getWidth() != src.getWidth() || dst.getHeight() != src.getHeight() || dst.getDepth() != 1
+        || dst.getWidth() != dst.rowPitch /* GLES2 does not support GL_PACK_ROW_LENGTH, nor iOS supports GL_NV_pack_subimage */)
 		{
-			OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                        "Invalid box.",
-                        __FUNCTION__ );
+			OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, "Invalid box.", __FUNCTION__ );
 		}
 
 		if (buffer == FB_AUTO)
@@ -528,7 +538,8 @@ namespace Ogre {
         OGRE_CHECK_GL_ERROR(glBindFramebuffer(GL_FRAMEBUFFER, currentFBO));
         
         // Read pixel data from the framebuffer
-        OGRE_CHECK_GL_ERROR(glReadPixels((GLint)0, (GLint)(mHeight - dst.getHeight()),
+        OGRE_CHECK_GL_ERROR(glPixelStorei(GL_PACK_ALIGNMENT, 1));
+        OGRE_CHECK_GL_ERROR(glReadPixels((GLint)src.left, (GLint)(mHeight - src.bottom),
                                          (GLsizei)width, (GLsizei)height,
                                          format, type, data));
         OGRE_CHECK_GL_ERROR(glPixelStorei(GL_PACK_ALIGNMENT, 4));

@@ -36,14 +36,14 @@ namespace Ogre
     class _OgreD3D11Export D3D11Device
     {
     private:
-        ID3D11DeviceN*             mD3D11Device;
-        ID3D11Device1*             mD3D11Device1;
-        ID3D11DeviceContextN*      mImmediateContext;
-        ID3D11DeviceContext1*      mImmediateContext1;
-        ID3D11ClassLinkage*        mClassLinkage;
-        ID3D11InfoQueue*           mInfoQueue;
+        ComPtr<ID3D11DeviceN>           mD3D11Device;
+        ComPtr<ID3D11DeviceContextN>    mImmediateContext;
+        ComPtr<ID3D11ClassLinkage>      mClassLinkage;
+        ComPtr<ID3D11InfoQueue>         mInfoQueue;
+        LARGE_INTEGER                   mDriverVersion;
+        ComPtr<IDXGIFactoryN>           mDXGIFactory;
 #if OGRE_D3D11_PROFILING
-        ID3DUserDefinedAnnotation* mPerf;
+        ComPtr<ID3DUserDefinedAnnotation> mPerf;
 #endif
 
         const D3D11Device& operator=(D3D11Device& device); /* intentionally not implemented */
@@ -53,15 +53,16 @@ namespace Ogre
         ~D3D11Device();
 
         void ReleaseAll();
-        void TransferOwnership( ID3D11DeviceN* device, ID3D11Device1* device1 );
+        void TransferOwnership(ID3D11DeviceN* device, ID3D11Device1* device1 );
 
-        bool isNull()                                { return mD3D11Device == 0; }
-        ID3D11DeviceN* get()                         { return mD3D11Device; }
-        ID3D11DeviceContextN* GetImmediateContext()  { return mImmediateContext; }
-        ID3D11DeviceContext1* GetImmediateContext1() { return mImmediateContext1; }
-        ID3D11ClassLinkage* GetClassLinkage()        { return mClassLinkage; }
+        bool isNull()                                { return !mD3D11Device; }
+        ID3D11DeviceN* get()                         { return mD3D11Device.Get(); }
+        ID3D11DeviceContextN* GetImmediateContext()  { return mImmediateContext.Get(); }
+        ID3D11ClassLinkage* GetClassLinkage()        { return mClassLinkage.Get(); }
+        IDXGIFactoryN* GetDXGIFactory()              { return mDXGIFactory.Get(); }
+        LARGE_INTEGER GetDriverVersion()             { return mDriverVersion; }
 #if OGRE_D3D11_PROFILING
-        ID3DUserDefinedAnnotation* GetProfiler()     { return mPerf; }
+        ID3DUserDefinedAnnotation* GetProfiler()     { return mPerf.Get(); }
 #endif
         
         ID3D11DeviceN* operator->() const
@@ -71,8 +72,11 @@ namespace Ogre
             {
                 clearStoredErrorMessages();
             }
-            return mD3D11Device;
+            return mD3D11Device.Get();
         }
+
+        void throwIfFailed(HRESULT hr, const char* desc, const char* src);
+        void throwIfFailed(const char* desc, const char* src) { throwIfFailed(NO_ERROR, desc, src); }
 
         String getErrorDescription(const HRESULT hr = NO_ERROR) const;
         void clearStoredErrorMessages() const;
@@ -90,8 +94,12 @@ namespace Ogre
         };
 
         static eExceptionsErrorLevel mExceptionsErrorLevel;
-        static void setExceptionsErrorLevel(const eExceptionsErrorLevel exceptionsErrorLevel);
         static const eExceptionsErrorLevel getExceptionsErrorLevel();
+        static void setExceptionsErrorLevel(const eExceptionsErrorLevel exceptionsErrorLevel);
+        static void setExceptionsErrorLevel(const Ogre::String& exceptionsErrorLevel);
+
+        static D3D_FEATURE_LEVEL parseFeatureLevel(const Ogre::String& value, D3D_FEATURE_LEVEL fallback);
+        static D3D_DRIVER_TYPE parseDriverType(const Ogre::String& value, D3D_DRIVER_TYPE fallback = D3D_DRIVER_TYPE_HARDWARE);
     };
 }
 #endif

@@ -308,9 +308,9 @@ namespace Ogre {
         return context;
     }
 
-    void * EAGL2Support::getProcAddress(const Ogre::String& name)
+    void * EAGL2Support::getProcAddress(const char* procname) const
     {
-        return NULL;
+        return (void*)gleswGetProcAddress(procname);
     }
     
     void EAGL2Support::start()

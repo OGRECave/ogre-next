@@ -31,6 +31,8 @@ THE SOFTWARE.
 #include "OgreD3D11Prerequisites.h"
 #include "OgreRenderSystem.h"
 #include "OgreD3D11Device.h"
+#include "OgreD3D11DeviceResource.h"
+#include "OgreD3D11Driver.h"
 #include "OgreD3D11RenderPassDescriptor.h"
 #include "OgreD3D11Mappings.h"
 #include "OgreD3D11PixelFormatToShaderType.h"
@@ -48,19 +50,13 @@ namespace Ogre
     /**
     Implementation of DirectX11 as a rendering system.
     */
-    class _OgreD3D11Export D3D11RenderSystem : public RenderSystem
+    class _OgreD3D11Export D3D11RenderSystem
+        : public RenderSystem
+        , protected D3D11DeviceResourceManager
     {
     private:
-
-        // an enum to define the driver type of d3d11
-        enum OGRE_D3D11_DRIVER_TYPE
-        {
-            DT_HARDWARE, // GPU based
-            DT_SOFTWARE, // microsoft original (slow) software driver
-            DT_WARP // microsoft new (faster) software driver - (Windows Advanced Rasterization Platform) - http://msdn.microsoft.com/en-us/library/dd285359.aspx
-        };
-
-        OGRE_D3D11_DRIVER_TYPE mDriverType; // d3d11 driver type
+        Ogre::String mDriverName;    // it`s hint rather than hard requirement, could be ignored if empty or device removed
+        D3D_DRIVER_TYPE mDriverType; // should be XXX_HARDWARE, XXX_SOFTWARE or XXX_WARP, never XXX_UNKNOWN or XXX_NULL
         D3D_FEATURE_LEVEL mFeatureLevel;
         D3D_FEATURE_LEVEL mMinRequestedFeatureLevel;
         D3D_FEATURE_LEVEL mMaxRequestedFeatureLevel;
@@ -74,7 +70,7 @@ namespace Ogre
         /// List of D3D drivers installed (video cards)
         D3D11DriverList* mDriverList;
         /// Currently active driver
-        D3D11Driver* mActiveD3DDriver;
+        D3D11Driver mActiveD3DDriver;
         /// NVPerfHUD allowed?
         bool mUseNVPerfHUD;
 		int mSwitchingFullscreenCounter;	// Are we switching from windowed to fullscreen 
@@ -84,10 +80,12 @@ namespace Ogre
                                        D3D_FEATURE_LEVEL* pFeatureLevel,
                                        ID3D11DeviceN **outDevice, ID3D11Device1 **outDevice1 );
 
-        D3D11DriverList* getDirect3DDrivers(void);
+        D3D11DriverList* getDirect3DDrivers(bool refreshList = false);
         void refreshD3DSettings(void);
         void refreshFSAAOptions(void);
+
         void freeDevice(void);
+        void createDevice();
 #if OGRE_PLATFORM != OGRE_PLATFORM_WINRT
             bool isWindows8OrGreater();
 #endif
@@ -127,8 +125,6 @@ namespace Ogre
         v1::IndexData   *mCurrentIndexBuffer;
 
         TextureUnitState::BindingType mBindingType;
-
-        ID3D11ShaderResourceView* mDSTResView;
 
         UINT                        mStencilRef;
 
@@ -172,9 +168,6 @@ namespace Ogre
 
         bool mRenderSystemWasInited;
 
-        IDXGIFactoryN *mpDXGIFactory;
-        IDXGIFactory2 *mpDXGIFactory2;
-
         D3D11PixelFormatToShaderType mD3D11PixelFormatToShaderType;
 
         ID3D11ShaderResourceView *mNullViews[D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT];
@@ -183,6 +176,10 @@ namespace Ogre
 		
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
 		D3D11StereoDriverBridge* mStereoDriver;
+#endif
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT
+		Windows::Foundation::EventRegistrationToken suspendingToken, surfaceContentLostToken;
 #endif
 
     protected:
@@ -266,6 +263,8 @@ namespace Ogre
         void setConfigOption( const String &name, const String &value );
         void reinitialise();
         void shutdown();
+        void validateDevice(bool forceDeviceElection = false);
+        void handleDeviceLost();
         void setShadingType( ShadeOptions so );
         void setLightingEnabled( bool enabled );
         void destroyRenderTarget(const String& name);

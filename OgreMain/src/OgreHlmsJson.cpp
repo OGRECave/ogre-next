@@ -511,7 +511,7 @@ namespace Ogre
                 {
                     //Ignore datablocks that already exist (useful for reloading materials)
                     if( e.getNumber() != Exception::ERR_DUPLICATE_ITEM )
-                        throw e;
+                        throw;
                     else
                         LogManager::getSingleton().logMessage( e.getFullDescription() );
                 }

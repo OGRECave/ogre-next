@@ -54,10 +54,10 @@ namespace Ogre
         void _resized(ID3D11DepthStencilView *depthBufferView, uint32 width, uint32 height);
 
     protected:
-        ID3D11DepthStencilView      *mDepthStencilView[2]; //aka. actual "DepthBuffer"
-        ID3D11ShaderResourceView    *mDepthTextureView;
-        uint32                      mMultiSampleQuality;
-        ID3D11Texture2D             *mDepthStencilResource;
+        ComPtr<ID3D11DepthStencilView>   mDepthStencilView[2]; //aka. actual "DepthBuffer"
+        ComPtr<ID3D11ShaderResourceView> mDepthTextureView;
+        uint32                           mMultiSampleQuality;
+        ComPtr<ID3D11Texture2D>          mDepthStencilResource;
 
         virtual bool copyToImpl( DepthBuffer *destination );
 

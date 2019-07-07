@@ -314,7 +314,7 @@ namespace Ogre
             <td>externalWindowHandle</td>
             <td>Win32: HWND as integer<br/>
                 GLX: poslong:posint:poslong (display*:screen:windowHandle) or poslong:posint:poslong:poslong (display*:screen:windowHandle:XVisualInfo*)<br/>
-                OS X: WindowRef for Carbon or NSWindow for Cocoa address as an integer
+                OS X Cocoa: OgreGLView address as an integer. You can pass NSView or NSWindow too, but should perform OgreGLView callbacks into the Ogre manually.
                 iOS: UIWindow address as an integer
             </td>
             <td>0 (none)</td>
@@ -348,29 +348,6 @@ namespace Ogre
             <td>Parent window handle, for embedding the OGRE in a child of an external window</td>
             <td>&nbsp;</td>
         </tr>
-        <tr>
-            <td>macAPI</td>
-            <td>String: "cocoa" or "carbon"</td>
-            <td>"carbon"</td>
-            <td>Specifies the type of rendering window on the Mac Platform.</td>
-            <td>Mac OS X Specific</td>
-            <td>&nbsp;</td>
-         </tr>
-         <tr>
-            <td>macAPICocoaUseNSView</td>
-            <td>bool "true" or "false"</td>
-            <td>"false"</td>
-            <td>On the Mac platform the most diffused method to embed OGRE in a custom application is to use Interface Builder
-                and add to the interface an instance of OgreView.
-                The pointer to this instance is then used as "externalWindowHandle".
-                However, there are cases where you are NOT using Interface Builder and you get the Cocoa NSView* of an existing interface.
-                For example, this is happens when you want to render into a Java/AWT interface.
-                In short, by setting this flag to "true" the Ogre::Root::createRenderWindow interprets the "externalWindowHandle" as a NSView*
-                instead of an OgreView*. See OgreOSXCocoaView.h/mm.
-            </td>
-            <td>Mac OS X Specific</td>
-            <td>&nbsp;</td>
-         </tr>
          <tr>
              <td>contentScalingFactor</td>
              <td>Positive Float greater than 1.0</td>
@@ -1314,6 +1291,16 @@ namespace Ogre
             virtual void eventOccurred(const String& eventName, 
                 const NameValuePairList* parameters = 0) = 0;
         };
+
+        /** Sets shared listener.
+        @remarks
+        Shared listener could be set even if no render system is selected yet.
+        This listener will receive "RenderSystemChanged" event on each Root::setRenderSystem call.
+        */
+        static void setSharedListener(Listener* listener);
+        /** Retrieve a pointer to the current shared render system listener. */
+        static Listener* getSharedListener(void);
+
         /** Adds a listener to the custom events that this render system can raise.
         @remarks
         Some render systems have quite specific, internally generated events 
@@ -1552,6 +1539,7 @@ namespace Ogre
 
         typedef list<Listener*>::type ListenerList;
         ListenerList mEventListeners;
+        static Listener* msSharedEventListener;
 
         typedef list<HardwareOcclusionQuery*>::type HardwareOcclusionQueryList;
         HardwareOcclusionQueryList mHwOcclusionQueries;

@@ -330,6 +330,17 @@ namespace Ogre
               where N is a number between 0 and 3.
                 UV set to use for the particular texture map.
                 The UV value must be in range [0; 8)
+
+            * transparency <value>
+              Specifies the transparency amount. Value in range [0; 1]
+              where 0 = full transparency and 1 = fully opaque.
+
+            * transparency_mode <transparent, none, fade>
+              Specifies the transparency mode. @see TransparencyModes
+
+            * alpha_from_textures <true, false>
+              When set to false transparency calculations ignore the alpha channel in
+              the textures
         */
         HlmsPbsDatablock( IdString name, HlmsPbs *creator,
                           const HlmsMacroblock *macroblock,

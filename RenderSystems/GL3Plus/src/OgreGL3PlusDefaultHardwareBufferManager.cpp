@@ -66,8 +66,7 @@ namespace v1 {
 
     void* GL3PlusDefaultHardwareVertexBuffer::lock(size_t offset,
                                                    size_t length,
-                                                   LockOptions options,
-                                                   HardwareBuffer::UploadOptions uploadOpt)
+                                                   LockOptions options)
     {
         mIsLocked = true;
         return mData + offset;
@@ -122,7 +121,7 @@ namespace v1 {
         // Nothing to do
     }
 
-    void* GL3PlusDefaultHardwareIndexBuffer::lock(size_t offset, size_t length, LockOptions options, HardwareBuffer::UploadOptions uploadOpt)
+    void* GL3PlusDefaultHardwareIndexBuffer::lock(size_t offset, size_t length, LockOptions options)
     {
         mIsLocked = true;
         return mData + offset;
@@ -184,8 +183,7 @@ namespace v1 {
 
     void* GL3PlusDefaultHardwareUniformBuffer::lock(size_t offset,
                                                     size_t length,
-                                                    LockOptions options,
-                                                    HardwareBuffer::UploadOptions uploadOpt)
+                                                    LockOptions options)
     {
         mIsLocked = true;
         return mData + offset;
@@ -247,8 +245,7 @@ namespace v1 {
 
     void* GL3PlusDefaultHardwareCounterBuffer::lock(size_t offset,
                                                     size_t length,
-                                                    LockOptions options,
-                                                    HardwareBuffer::UploadOptions uploadOpt)
+                                                    LockOptions options)
     {
         mIsLocked = true;
         return mData + offset;

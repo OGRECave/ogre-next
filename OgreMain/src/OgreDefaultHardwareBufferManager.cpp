@@ -62,7 +62,7 @@ namespace v1 {
         // Nothing to do
     }
     //-----------------------------------------------------------------------
-    void* DefaultHardwareVertexBuffer::lock(size_t offset, size_t length, LockOptions options, UploadOptions uploadOpt)
+    void* DefaultHardwareVertexBuffer::lock(size_t offset, size_t length, LockOptions options)
     {
         mIsLocked = true;
         return mData + offset;
@@ -113,7 +113,7 @@ namespace v1 {
         // Nothing to do
     }
     //-----------------------------------------------------------------------
-    void* DefaultHardwareIndexBuffer::lock(size_t offset, size_t length, LockOptions options, UploadOptions uploadOpt)
+    void* DefaultHardwareIndexBuffer::lock(size_t offset, size_t length, LockOptions options)
     {
         mIsLocked = true;
         return mData + offset;
@@ -170,7 +170,7 @@ namespace v1 {
     }
     */
     //-----------------------------------------------------------------------
-    void* DefaultHardwareUniformBuffer::lock(size_t offset, size_t length, LockOptions options, UploadOptions uploadOpt)
+    void* DefaultHardwareUniformBuffer::lock(size_t offset, size_t length, LockOptions options)
     {
         mIsLocked = true;
         return mData + offset;
@@ -226,7 +226,7 @@ namespace v1 {
      }
      */
     //-----------------------------------------------------------------------
-    void* DefaultHardwareCounterBuffer::lock(size_t offset, size_t length, LockOptions options, UploadOptions uploadOpt)
+    void* DefaultHardwareCounterBuffer::lock(size_t offset, size_t length, LockOptions options)
     {
         mIsLocked = true;
         return mData + offset;

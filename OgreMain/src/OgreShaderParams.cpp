@@ -96,7 +96,7 @@ namespace Ogre
                 catch( Exception &e )
                 {
                     if( e.getNumber() != Exception::ERR_ITEM_NOT_FOUND )
-                        throw e;
+                        throw;
                     else if( !mSilenceMissingParameterWarnings )
                     {
                         LogManager::getSingleton().logMessage( e.getFullDescription() );

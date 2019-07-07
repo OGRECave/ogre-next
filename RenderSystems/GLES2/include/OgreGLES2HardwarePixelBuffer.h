@@ -38,7 +38,7 @@ namespace v1 {
     {
         protected:
             /// Lock a box
-            PixelBox lockImpl(const Image::Box &lockBox,  LockOptions options);
+            PixelBox lockImpl(const Box &lockBox,  LockOptions options);
 
             /// Unlock a box
             void unlockImpl(void);
@@ -55,7 +55,7 @@ namespace v1 {
             void freeBuffer();
 
             // Upload a box of pixels to this buffer on the card
-            virtual void upload(const PixelBox &data, const Image::Box &dest);
+            virtual void upload(const PixelBox &data, const Box &dest);
 
             // Download a box of pixels from the card
             virtual void download(const PixelBox &data);
@@ -67,10 +67,10 @@ namespace v1 {
                                   HardwareBuffer::Usage usage);
 
             /// @copydoc HardwarePixelBuffer::blitFromMemory
-            void blitFromMemory(const PixelBox &src, const Image::Box &dstBox);
+            void blitFromMemory(const PixelBox &src, const Box &dstBox);
 
             /// @copydoc HardwarePixelBuffer::blitToMemory
-            void blitToMemory(const Image::Box &srcBox, const PixelBox &dst);
+            void blitToMemory(const Box &srcBox, const PixelBox &dst);
 
             virtual ~GLES2HardwarePixelBuffer();
 
@@ -97,13 +97,13 @@ namespace v1 {
             RenderTexture* getRenderTarget(size_t slice);
 
             /// Upload a box of pixels to this buffer on the card
-            virtual void upload(const PixelBox &data, const Image::Box &dest);
+            virtual void upload(const PixelBox &data, const Box &dest);
 
             /// Download a box of pixels from the card
             virtual void download(const PixelBox &data);
 
             /// Hardware implementation of blitFromMemory
-            virtual void blitFromMemory(const PixelBox &src_orig, const Image::Box &dstBox);
+            virtual void blitFromMemory(const PixelBox &src_orig, const Box &dstBox);
 
             /// Notify TextureBuffer of destruction of render target
             void _clearSliceRTT(size_t zoffset)
@@ -115,9 +115,9 @@ namespace v1 {
             void copyFromFramebuffer(size_t zoffset);
 
             /// @copydoc HardwarePixelBuffer::blit
-            void blit(const HardwarePixelBufferSharedPtr &src, const Image::Box &srcBox, const Image::Box &dstBox);
+            void blit(const HardwarePixelBufferSharedPtr &src, const Box &srcBox, const Box &dstBox);
             // Blitting implementation
-            void blitFromTexture(GLES2TextureBuffer *src, const Image::Box &srcBox, const Image::Box &dstBox);
+            void blitFromTexture(GLES2TextureBuffer *src, const Box &srcBox, const Box &dstBox);
             
 #if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID || OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN
         // Friends.

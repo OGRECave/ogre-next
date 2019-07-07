@@ -151,7 +151,7 @@ namespace v1
             Root::getSingleton().getRenderSystem()->destroyRenderTarget( mDummyRenderTexture->getName() );
     }
     //-----------------------------------------------------------------------------------
-    PixelBox GL3PlusNullPixelBuffer::lockImpl( const Image::Box &lockBox, LockOptions options )
+    PixelBox GL3PlusNullPixelBuffer::lockImpl( const Box &lockBox, LockOptions options )
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "", "GL3PlusNullPixelBuffer::lockImpl" );
     }
@@ -166,12 +166,12 @@ namespace v1
         mDummyRenderTexture = 0;
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusNullPixelBuffer::blitFromMemory( const PixelBox &src, const Image::Box &dstBox )
+    void GL3PlusNullPixelBuffer::blitFromMemory( const PixelBox &src, const Box &dstBox )
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "", "GL3PlusNullPixelBuffer::blitFromMemory" );
     }
     //-----------------------------------------------------------------------------------
-    void GL3PlusNullPixelBuffer::blitToMemory( const Image::Box &srcBox, const PixelBox &dst )
+    void GL3PlusNullPixelBuffer::blitToMemory( const Box &srcBox, const PixelBox &dst )
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "", "GL3PlusNullPixelBuffer::blitToMemory" );
     }

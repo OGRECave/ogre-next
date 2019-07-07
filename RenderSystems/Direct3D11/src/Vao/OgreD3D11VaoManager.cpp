@@ -45,6 +45,7 @@ THE SOFTWARE.
 #include "OgreD3D11RenderSystem.h"
 
 #include "OgreRenderQueue.h"
+#include "OgreRoot.h"
 
 #include "OgreD3D11HardwareBufferManager.h" //D3D11HardwareBufferManager::getGLType
 

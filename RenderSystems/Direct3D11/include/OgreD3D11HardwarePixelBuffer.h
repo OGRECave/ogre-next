@@ -40,7 +40,7 @@ namespace v1 {
     {
     protected:
         /// Lock a box
-        PixelBox lockImpl(const Image::Box &lockBox, LockOptions options);
+        PixelBox lockImpl(const Box &lockBox, LockOptions options);
 
         /// Unlock a box
         void unlockImpl(void);
@@ -49,18 +49,13 @@ namespace v1 {
         D3D11Device & mDevice;
 
         D3D11Texture * mParentTexture;
-        size_t mSubresourceIndex;
+        const UINT mFace;
+        const UINT mMipLevel;
 
         // if the usage is static - alloc at lock then use device UpdateSubresource when unlock and free memory
-        int8 * mDataForStaticUsageLock; 
+        vector<int8>::type mDataForStaticUsageLock; 
 
-        size_t mFace;
-
-        Image::Box mLockBox;
-        PixelBox mCurrentLock;
         LockOptions mCurrentLockOptions;
-
-        D3D11_BOX OgreImageBoxToDx11Box(const Image::Box &inBox) const;
 
         /// Render targets
         typedef vector<RenderTexture*>::type SliceTRT;
@@ -68,29 +63,28 @@ namespace v1 {
 
         void createStagingBuffer();
         bool mUsingStagingBuffer;
-        ID3D11Resource *mStagingBuffer;
+        ComPtr<ID3D11Resource> mStagingBuffer;
         
         void _map(ID3D11Resource *res, D3D11_MAP flags, PixelBox & box);
         void _mapstagingbuffer(D3D11_MAP flags, PixelBox &box);
-        void *_mapstaticbuffer(PixelBox lock);
         void _unmap(ID3D11Resource *res);
         void _unmapstagingbuffer(bool copyback = true);
         void _unmapstaticbuffer();
     public:
         D3D11HardwarePixelBuffer( D3D11Texture *parentTexture, D3D11Device &device,
-                                  size_t subresourceIndex, size_t width, size_t height,
-                                  size_t depth, size_t face, PixelFormat format,
+                                  UINT mipLevel, size_t width, size_t height,
+                                  size_t depth, UINT face, PixelFormat format,
                                   uint fsaa, const String &fsaaHint,
                                   HardwareBuffer::Usage usage );
 
         /// @copydoc HardwarePixelBuffer::blit
-        void blit(const HardwarePixelBufferSharedPtr &src, const Image::Box &srcBox, const Image::Box &dstBox);
+        void blit(const HardwarePixelBufferSharedPtr &src, const Box &srcBox, const Box &dstBox);
 
         /// @copydoc HardwarePixelBuffer::blitFromMemory
-        void blitFromMemory(const PixelBox &src, const Image::Box &dstBox);
+        void blitFromMemory(const PixelBox &src, const Box &dstBox);
 
         /// @copydoc HardwarePixelBuffer::blitToMemory
-        void blitToMemory(const Image::Box &srcBox, const PixelBox &dst);
+        void blitToMemory(const Box &srcBox, const PixelBox &dst);
 
         /// Internal function to update mipmaps on update of level 0
         void _genMipmaps();
@@ -111,8 +105,10 @@ namespace v1 {
         }
 
         D3D11Texture * getParentTexture() const;
-        size_t getSubresourceIndex() const;
-        size_t getFace() const;
+
+        UINT getFace() const;
+        UINT getSubresourceIndex(size_t box_front) const;
+        D3D11_BOX getSubresourceBox(const Box &box) const;
     };
 }
 };

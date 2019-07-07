@@ -47,35 +47,40 @@ namespace Ogre {
     */
     enum TextureUsage
     {
-        /// @copydoc HardwareBuffer::Usage
+        /// same as HardwareBuffer::HBU_STATIC
         TU_STATIC = v1::HardwareBuffer::HBU_STATIC,
+        /// same as HardwareBuffer::HBU_DYNAMIC
         TU_DYNAMIC = v1::HardwareBuffer::HBU_DYNAMIC,
+        /// same as HardwareBuffer::HBU_WRITE_ONLY
         TU_WRITE_ONLY = v1::HardwareBuffer::HBU_WRITE_ONLY,
+        /// same as HardwareBuffer::HBU_STATIC_WRITE_ONLY
         TU_STATIC_WRITE_ONLY = v1::HardwareBuffer::HBU_STATIC_WRITE_ONLY,
+        /// same as HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY
         TU_DYNAMIC_WRITE_ONLY = v1::HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY,
+        /// same as HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE
         TU_DYNAMIC_WRITE_ONLY_DISCARDABLE = v1::HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE,
         /// Mipmaps will be automatically generated for this texture
         TU_AUTOMIPMAP = 0x10,
         /** This texture will be a render target, i.e. used as a target for render to texture
-            setting this flag will ignore all other texture usages except TU_AUTOMIPMAP */
+            setting this flag will ignore all other texture usages except TU_AUTOMIPMAP, TU_UAV, TU_NOT_SRV */
         TU_RENDERTARGET = 0x20,
-
+        /// Texture would not be used as Shader Resource View, i.e. as regular texture.
+        /// That flag could be combined with TU_RENDERTARGET or TU_UAV to remove possible limitations on some hardware
+        TU_NOT_SRV = 0x40,
         /// Texture can be bound as an Unordered Access View
         /// (imageStore/imageRead/glBindImageTexture in GL jargon)
-        TU_UAV = 0x40,
-
-        /// @see TU_UAV_NOT_TEXTURE
-        TU_NOT_TEXTURE = 0x80,
-
+        TU_UAV = 0x80,
         /// Texture can be used as an UAV, but not as a regular texture.
-        TU_UAV_NOT_TEXTURE = TU_UAV|TU_NOT_TEXTURE,
-
+        TU_UAV_NOT_SRV = TU_UAV | TU_NOT_SRV,
         /// Must be used with TU_AUTOMIPMAP. When this flag is present, writing to a RenderTexture
         /// will automatically call _autogenerateMipmaps when it's used as a Texture again.
         TU_AUTOMIPMAP_AUTO = 0x100,
-
         /// Default to automatic mipmap generation static textures
-        TU_DEFAULT = TU_AUTOMIPMAP | TU_STATIC_WRITE_ONLY
+        TU_DEFAULT = TU_AUTOMIPMAP | TU_STATIC_WRITE_ONLY,
+
+        // deprecated
+        TU_NOT_TEXTURE = TU_NOT_SRV,
+        TU_UAV_NOT_TEXTURE = TU_UAV | TU_NOT_SRV
     };
 
     /** Enum identifying the texture type

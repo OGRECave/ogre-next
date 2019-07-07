@@ -295,6 +295,50 @@ namespace Ogre
             }
         }
 
+        bool applyTransparency = false;
+        float transparency = 1.0f;
+        TransparencyModes transparencyMode = Transparent;
+        bool transparencyAlphaFromTextures = true;
+
+        if( Hlms::findParamInVec( params, "transparency", paramVal ) )
+        {
+            transparency = StringConverter::parseReal( paramVal, transparency );
+            applyTransparency = true;
+        }
+
+        if( Hlms::findParamInVec( params, "transparency_mode", paramVal ) )
+        {
+            if( paramVal == "none" )
+            {
+                transparencyMode = None;
+            }
+            else if( paramVal == "transparent" )
+            {
+                transparencyMode = Transparent;
+            }
+            else if( paramVal == "fade" )
+            {
+                transparencyMode = Fade;
+            }
+            else
+            {
+                LogManager::getSingleton().logMessage(
+                    "ERROR: unknown transparency_mode: " + paramVal);
+            }
+
+            applyTransparency = true;
+        }
+
+        if( Hlms::findParamInVec( params, "alpha_from_textures", paramVal ) )
+        {
+            transparencyAlphaFromTextures = StringConverter::parseBool( paramVal,
+                transparencyAlphaFromTextures );
+            applyTransparency = true;
+        }
+
+        if( applyTransparency )
+            setTransparency( transparency, transparencyMode, transparencyAlphaFromTextures );
+
         creator->requestSlot( /*mTextureHash*/0, this, false );
         calculateHash();
     }

@@ -134,7 +134,6 @@ mShowBoundingBoxes(false),
 mAutoParamDataSource(0),
 mLateMaterialResolving(false),
 mShadowColour(ColourValue(0.25, 0.25, 0.25)),
-mShadowIndexBufferUsedSize(0),
 mFullScreenQuad(0),
 mShadowDirLightExtrudeDist(10000),
 mIlluminationStage(IRS_NONE),
@@ -1433,6 +1432,34 @@ void SceneManager::_setDestinationRenderSystem(RenderSystem* sys)
 
     if( mForwardPlusSystem )
         mForwardPlusSystem->_changeRenderSystem( sys );
+}
+//-----------------------------------------------------------------------
+void SceneManager::_releaseManualHardwareResources()
+{
+    // release hardware resources inside all movable objects
+    OGRE_LOCK_MUTEX(mMovableObjectCollectionMapMutex);
+    for(MovableObjectCollectionMap::iterator ci = mMovableObjectCollectionMap.begin(),
+        ci_end = mMovableObjectCollectionMap.end(); ci != ci_end; ++ci)
+    {
+        MovableObjectCollection* coll = ci->second;
+        OGRE_LOCK_MUTEX(coll->mutex);
+        for(MovableObjectVec::iterator i = coll->movableObjects.begin(), i_end = coll->movableObjects.end(); i != i_end; ++i)
+            (*i)->_releaseManualHardwareResources();
+    }
+}
+//-----------------------------------------------------------------------
+void SceneManager::_restoreManualHardwareResources()
+{
+    // restore hardware resources inside all movable objects
+    OGRE_LOCK_MUTEX(mMovableObjectCollectionMapMutex);
+    for(MovableObjectCollectionMap::iterator ci = mMovableObjectCollectionMap.begin(),
+        ci_end = mMovableObjectCollectionMap.end(); ci != ci_end; ++ci)
+    {
+        MovableObjectCollection* coll = ci->second;
+        OGRE_LOCK_MUTEX(coll->mutex);
+        for(MovableObjectVec::iterator i = coll->movableObjects.begin(), i_end = coll->movableObjects.end(); i != i_end; ++i)
+            (*i)->_restoreManualHardwareResources();
+    }
 }
 //-----------------------------------------------------------------------
 void SceneManager::prepareWorldGeometry(const String& filename)

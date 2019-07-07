@@ -73,7 +73,7 @@ namespace Ogre
         /**
         * Get the address of a function
         */
-        void* getProcAddress(const String& procname);
+        void* getProcAddress(const char* procname) const;
 
         /**
          * Initialise extensions

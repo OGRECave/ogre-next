@@ -128,7 +128,7 @@ unsigned long renderThreadApp( Ogre::ThreadHandle *threadHandle )
 
     Ogre::Timer timer;
 
-    unsigned long startTime = timer.getMicroseconds();
+    Ogre::uint64 startTime = timer.getMicroseconds();
 
     double timeSinceLast = 1.0 / 60.0;
 
@@ -147,7 +147,7 @@ unsigned long renderThreadApp( Ogre::ThreadHandle *threadHandle )
         if( gFakeFrameskip )
             Ogre::Threads::Sleep( 120 );
 
-        unsigned long endTime = timer.getMicroseconds();
+        Ogre::uint64 endTime = timer.getMicroseconds();
         timeSinceLast = (endTime - startTime) / 1000000.0;
         timeSinceLast = std::min( 1.0, timeSinceLast ); //Prevent from going haywire.
         startTime = endTime;
@@ -214,7 +214,7 @@ unsigned long logicThread( Ogre::ThreadHandle *threadHandle )
     Ogre::Timer timer;
     YieldTimer yieldTimer( &timer );
 
-    unsigned long startTime = timer.getMicroseconds();
+    Ogre::uint64 startTime = timer.getMicroseconds();
 
     while( !graphicsSystem->getQuit() )
     {

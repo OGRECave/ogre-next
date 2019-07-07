@@ -123,34 +123,39 @@ namespace Ogre {
     {
         return PixelUtil::getMemorySize(getWidth(), getHeight(), getDepth(), format);
     }
-    PixelBox PixelBox::getSubVolume(const Box &def) const
+    PixelBox PixelBox::getSubVolume(const Box &def, bool resetOrigin /* = true */) const
     {
-        if(PixelUtil::isCompressed(format))
-        {
-            if(def.left == left && def.top == top && def.right == right &&
-			   def.bottom == bottom)
-            {
-                // Entire buffer is being queried
-                return *this;
-            }
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, "Cannot return subvolume of compressed PixelBuffer", "PixelBox::getSubVolume");
-        }
         if(!contains(def))
             OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, "Bounds out of range", "PixelBox::getSubVolume");
 
-        const size_t elemSize = PixelUtil::getNumElemBytes(format);
-        // Calculate new data origin
-        // Notice how we do not propagate left/top/front from the incoming box, since
-        // the returned pointer is already offset
-        PixelBox rval(def.getWidth(), def.getHeight(), def.getDepth(), format, 
-            ((uint8*)data) + ((def.left-left)*elemSize)
-            + ((def.top-top)*rowPitch*elemSize)
-            + ((def.front-front)*slicePitch*elemSize)
-        );
+        if(PixelUtil::isCompressed(format) && (def.left != left || def.top != top || def.right != right || def.bottom != bottom))
+            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, "Cannot return subvolume of compressed PixelBuffer with less than slice granularity", "PixelBox::getSubVolume");
 
+        // Calculate new pixelbox and optionally reset origin.
+        PixelBox rval(def, format, data);
         rval.rowPitch = rowPitch;
         rval.slicePitch = slicePitch;
-        rval.format = format;
+
+        if(resetOrigin)
+        {
+            if(PixelUtil::isCompressed(format))
+            {
+                if(rval.front > 0)
+                {
+                    rval.data = (uint8*)rval.data + rval.front * PixelUtil::getMemorySize(getWidth(), getHeight(), 1, format);
+                    rval.back -= rval.front;
+                    rval.front = 0;
+                }
+            }
+            else
+            {
+                rval.data = rval.getTopLeftFrontPixelPtr();
+                rval.right -= rval.left;
+                rval.bottom -= rval.top;
+                rval.back -= rval.front;
+                rval.front = rval.top = rval.left = 0;
+            }
+        }
 
         return rval;
     }
@@ -1070,15 +1075,24 @@ namespace Ogre {
     void PixelUtil::bulkPixelConversion(const PixelBox &src, const PixelBox &dst)
     {
         assert(src.getWidth() == dst.getWidth() &&
-               src.getHeight() == dst.getHeight());
+               src.getHeight() == dst.getHeight() &&
+               src.getDepth() == dst.getDepth());
 
         // Check for compressed formats, we don't support decompression, compression or recoding
         if(PixelUtil::isCompressed(src.format) || PixelUtil::isCompressed(dst.format))
         {
             if(src.format == dst.format)
             {
-                if( src.getConsecutiveSize() && dst.isConsecutive() )
-                    memcpy(dst.data, src.data, src.getConsecutiveSize());
+                if(src.isConsecutive() && dst.isConsecutive())
+                {
+                    // we can copy with slice granularity, useful for Tex2DArray handling
+                    size_t bytesPerSlice = getMemorySize(src.getWidth(), src.getHeight(), 1, src.format);
+                    memcpy(
+                        (uint8*)dst.data + bytesPerSlice * dst.front,
+                        (uint8*)src.data + bytesPerSlice * src.front,
+                        bytesPerSlice * src.getDepth());
+                    return;
+                }
                 else
                 {
                     const size_t rowSize = PixelUtil::getMemorySize( src.getWidth(), 1, 1, src.format );
@@ -1139,7 +1153,7 @@ namespace Ogre {
             // Everything consecutive?
             if(src.isConsecutive() && dst.isConsecutive())
             {
-                memcpy(dst.data, src.data, src.getConsecutiveSize());
+                memcpy(dst.getTopLeftFrontPixelPtr(), src.getTopLeftFrontPixelPtr(), src.getConsecutiveSize());
                 return;
             }
 

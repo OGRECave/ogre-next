@@ -768,7 +768,7 @@ namespace Ogre
             LogManager::getSingleton().logMessage( LML_CRITICAL, e.getFullDescription() );
 
             if( e.getNumber() != Exception::ERR_FILE_NOT_FOUND )
-                throw e;
+                throw;
             else
             {
                 retVal.texture  = mBlankTexture;
