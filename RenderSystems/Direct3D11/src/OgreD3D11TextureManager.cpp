@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "OgreLogManager.h"
 #include "OgreD3D11RenderSystem.h"
 #include "OgreD3D11Device.h"
+#include "OgreD3D11Mappings.h"
 
 namespace Ogre 
 {

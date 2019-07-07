@@ -47,6 +47,7 @@ THE SOFTWARE.
 #include "OgreD3D11TextureGpuManager.h"
 #include "OgreD3D11RenderPassDescriptor.h"
 #include "OgrePixelFormatGpuUtils.h"
+#include "OgreD3D11Mappings.h"
 
 #include "OgreD3D11HardwareOcclusionQuery.h"
 #include "OgreFrustum.h"
@@ -107,7 +108,6 @@ namespace Ogre
           mCurrentIndexBuffer( 0 ),
           mNumberOfViews( 0 ),
           mDepthStencilView( 0 ),
-          mDSTResView(0),
           mMaxComputeShaderSrvCount( 0 )
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
 		, mStereoDriver(NULL)
@@ -217,17 +217,19 @@ namespace Ogre
         return mDriverList;
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::createD3D11Device( D3D11Driver* d3dDriver, OGRE_D3D11_DRIVER_TYPE ogreDriverType,
+    void D3D11RenderSystem::createD3D11Device( D3D11Driver* d3dDriver, D3D_DRIVER_TYPE driverType,
                                                D3D_FEATURE_LEVEL minFL, D3D_FEATURE_LEVEL maxFL,
                                                D3D_FEATURE_LEVEL* pFeatureLevel,
                                                ID3D11DeviceN **outDevice, ID3D11Device1 **outDevice1 )
 	{
-		IDXGIAdapterN* pAdapter = (d3dDriver && driverType == D3D_DRIVER_TYPE_HARDWARE) ? d3dDriver->getDeviceAdapter() : NULL;
+        IDXGIAdapterN* pAdapter = (d3dDriver && driverType == D3D_DRIVER_TYPE_HARDWARE) ?
+                                      d3dDriver->getDeviceAdapter() : NULL;
 
-		assert(driverType == D3D_DRIVER_TYPE_HARDWARE || driverType == D3D_DRIVER_TYPE_SOFTWARE || driverType == D3D_DRIVER_TYPE_WARP);
-		if(d3dDriver != NULL)
+        assert( driverType == D3D_DRIVER_TYPE_HARDWARE || driverType == D3D_DRIVER_TYPE_SOFTWARE ||
+                driverType == D3D_DRIVER_TYPE_WARP );
+        if( d3dDriver != NULL )
 		{
-			if(0 == wcscmp(d3dDriver->getAdapterIdentifier().Description, L"NVIDIA PerfHUD"))
+            if( 0 == wcscmp(d3dDriver->getAdapterIdentifier().Description, L"NVIDIA PerfHUD") )
 				driverType = D3D_DRIVER_TYPE_REFERENCE;
 			else
 				driverType = D3D_DRIVER_TYPE_UNKNOWN;
@@ -649,7 +651,6 @@ namespace Ogre
 #else
             mMaxRequestedFeatureLevel = D3D11Device::parseFeatureLevel(value, D3D_FEATURE_LEVEL_11_0);
 #endif
-            }
         }
 
         if( name == "Allow NVPerfHUD" )
@@ -680,11 +681,12 @@ namespace Ogre
         {
             it = mOptions.find("Video Mode");
             ComPtr<ID3D11DeviceN> device;
-            ComPtr<ID3D11Device1> device;
+            ComPtr<ID3D11Device1> device1;
             createD3D11Device( driver, mDriverType,
                                mMinRequestedFeatureLevel, mMaxRequestedFeatureLevel,
-                               NULL, &device, &device1 );
-            D3D11VideoMode* videoMode = driver->getVideoModeList()->item(it->second.currentValue); // Could be NULL if working over RDP/Simulator
+                               NULL, device.GetAddressOf(), device1.GetAddressOf() );
+            // 'videoMode' could be NULL if working over RDP/Simulator
+            D3D11VideoMode* videoMode = driver->getVideoModeList()->item(it->second.currentValue);
             DXGI_FORMAT format = videoMode ? videoMode->getFormat() : DXGI_FORMAT_R8G8B8A8_UNORM;
             UINT numLevels = 0;
             // set maskable levels supported
@@ -981,8 +983,7 @@ namespace Ogre
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
         D3D11Window* win = new D3D11WindowHwnd(  name, width, height, fullScreen,
                                                  DepthBuffer::DefaultDepthBufferFormat,
-                                                 miscParams, mDevice, mpDXGIFactory, mpDXGIFactory2,
-                                                 this );
+                                                 miscParams, mDevice, this );
 #elif OGRE_PLATFORM == OGRE_PLATFORM_WINRT
 		String windowType;
 		if(miscParams)
@@ -1761,7 +1762,8 @@ namespace Ogre
         }
 
 
-        HRESULT hr = mDevice->CreateTexture2D( &descDepth, NULL, pDepthStencil.ReleaseAndGetAddressOf() );
+        HRESULT hr = mDevice->CreateTexture2D( &descDepth, NULL,
+                                               pDepthStencil.ReleaseAndGetAddressOf() );
         if( FAILED(hr) || mDevice.isError())
         {
             String errorDescription = mDevice.getErrorDescription(hr);
@@ -1820,7 +1822,8 @@ namespace Ogre
                                                                    D3D11_SRV_DIMENSION_TEXTURE2D;
             viewDesc.Texture2D.MostDetailedMip = 0;
             viewDesc.Texture2D.MipLevels = 1;
-            HRESULT hr = mDevice->CreateShaderResourceView( pDepthStencil.Get(), &viewDesc, depthTextureView.ReleaseAndGetAddressOf());
+            hr = mDevice->CreateShaderResourceView( pDepthStencil.Get(), &viewDesc,
+                                                    depthTextureView.ReleaseAndGetAddressOf() );
             if( FAILED(hr) || mDevice.isError())
             {
                 String errorDescription = mDevice.getErrorDescription(hr);
@@ -1868,7 +1871,8 @@ namespace Ogre
                                                                 D3D11_DSV_DIMENSION_TEXTURE2D;
         descDSV.Flags = 0 /* D3D11_DSV_READ_ONLY_DEPTH | D3D11_DSV_READ_ONLY_STENCIL */;
         descDSV.Texture2D.MipSlice = 0;
-        hr = mDevice->CreateDepthStencilView( pDepthStencil.Get(), &descDSV, depthStencilView.ReleaseAndGetAddressOf() );
+        hr = mDevice->CreateDepthStencilView( pDepthStencil.Get(), &descDSV,
+                                              depthStencilView.ReleaseAndGetAddressOf() );
         if( FAILED(hr) )
         {
 			String errorDescription = mDevice.getErrorDescription(hr);
@@ -1950,18 +1954,26 @@ namespace Ogre
         _cleanupDepthBuffers( false );
         mDevice.ReleaseAll();
 
-        D3D11Driver* d3dDriver = getDirect3DDrivers(true)->findByName(mDriverName);
-        mActiveD3DDriver = *d3dDriver; // store copy of selected driver, so that it is not lost when drivers would be re-enumerated
-        LogManager::getSingleton().stream() << "D3D11: Requested \"" << mDriverName << "\", selected \"" << d3dDriver->DriverDescription() << "\"";
+        D3D11Driver *d3dDriver = getDirect3DDrivers(true)->findByName( mDriverName );
+        mActiveD3DDriver = *d3dDriver; // store copy of selected driver, so that it is not
+                                       //lost when drivers would be re-enumerated
+        LogManager::getSingleton().stream() << "D3D11: Requested \"" << mDriverName <<
+                                               "\", selected \"" <<
+                                               d3dDriver->DriverDescription() << "\"";
 
-        if(D3D11Driver* nvPerfHudDriver = (mDriverType == D3D_DRIVER_TYPE_HARDWARE && mUseNVPerfHUD) ? getDirect3DDrivers()->item("NVIDIA PerfHUD") : NULL)
+        if( D3D11Driver *nvPerfHudDriver = (mDriverType == D3D_DRIVER_TYPE_HARDWARE && mUseNVPerfHUD) ?
+            getDirect3DDrivers()->item("NVIDIA PerfHUD") : NULL )
         {
             d3dDriver = nvPerfHudDriver;
             LogManager::getSingleton().logMessage("D3D11: Actually \"NVIDIA PerfHUD\" is used");
         }
 
-        ID3D11DeviceN * device = createD3D11Device(d3dDriver, mDriverType, mMinRequestedFeatureLevel, mMaxRequestedFeatureLevel, &mFeatureLevel);
-        mDevice.TransferOwnership(device);
+        ID3D11DeviceN *device = 0;
+        ID3D11Device1 *device1 = 0;
+        createD3D11Device( d3dDriver, mDriverType,
+                           mMinRequestedFeatureLevel, mMaxRequestedFeatureLevel, &mFeatureLevel,
+                           &device, &device1 );
+        mDevice.TransferOwnership( device, device1 );
 
         LARGE_INTEGER driverVersion = mDevice.GetDriverVersion();
         mDriverVersion.major = HIWORD(driverVersion.HighPart);
@@ -1975,64 +1987,7 @@ namespace Ogre
         //NVIDIA's preference? Dunno, they don't tell. But at least the quality
         //will be consistent.
         if( mFeatureLevel >= D3D_FEATURE_LEVEL_11_0 )
-            DepthBuffer::DefaultDepthBufferFormat = PF_D32_FLOAT_X24_S8_UINT;
-
-/// 2.2 CODE!!!
-D3D11Driver* d3dDriver = mActiveD3DDriver;
-            if(D3D11Driver* d3dDriverOverride = (mDriverType == DT_HARDWARE && mUseNVPerfHUD) ? getDirect3DDrivers()->item("NVIDIA PerfHUD") : NULL)
-                d3dDriver = d3dDriverOverride;
-
-            ID3D11DeviceN *device = 0;
-            ID3D11Device1 *device1 = 0;
-            createD3D11Device( d3dDriver, mDriverType,
-                               mMinRequestedFeatureLevel, mMaxRequestedFeatureLevel,
-                               &mFeatureLevel, &device, &device1 );
-
-            IDXGIDeviceN * pDXGIDevice;
-            device->QueryInterface(__uuidof(IDXGIDeviceN), (void **)&pDXGIDevice);
-
-            IDXGIAdapterN * pDXGIAdapter;
-            pDXGIDevice->GetParent(__uuidof(IDXGIAdapterN), (void **)&pDXGIAdapter);
-
-            if (mDriverType != DT_HARDWARE)
-            {
-                // get the IDXGIFactoryN from the device for software drivers
-                // Remark(dec-09):
-                //  Seems that IDXGIFactoryN::CreateSoftwareAdapter doesn't work with
-                // D3D11CreateDevice - so I needed to create with pSelectedAdapter = 0.
-                // If pSelectedAdapter == 0 then you have to get the IDXGIFactory1 from
-                // the device - else CreateSwapChain fails later.
-                //  Update (Jun 12, 2012)
-                // If using WARP driver, get factory from created device
-                SAFE_RELEASE(mpDXGIFactory);
-                pDXGIAdapter->GetParent(__uuidof(IDXGIFactoryN), (void **)&mpDXGIFactory);
-            }
-
-            // We intentionally check for ID3D10Device support instead of ID3D11Device as CheckInterfaceSupport() is not supported for later.
-            // We hope, that there would be one UMD for both D3D10 and D3D11, or two different but with the same version number,
-            // or with different but correlated version numbers, so that blacklisting could be done with high confidence level.
-            LARGE_INTEGER driverVersion;
-            if(SUCCEEDED(pDXGIAdapter->CheckInterfaceSupport(IID_ID3D10Device /* intentionally D3D10, not D3D11 */, &driverVersion)))
-            {
-                mDriverVersion.major = HIWORD(driverVersion.HighPart);
-                mDriverVersion.minor = LOWORD(driverVersion.HighPart);
-                mDriverVersion.release = HIWORD(driverVersion.LowPart);
-                mDriverVersion.build = LOWORD(driverVersion.LowPart);
-            }
-
-            SAFE_RELEASE(pDXGIAdapter);
-            SAFE_RELEASE(pDXGIDevice);
-
-            mDevice.TransferOwnership( device, device1 ) ;
-
-            //On AMD's GCN cards, there is no performance or memory difference between
-            //PF_D24_UNORM_S8_UINT & PF_D32_FLOAT_X24_S8_UINT, so prefer the latter
-            //on modern cards (GL >= 4.3) and that also claim to support this format.
-            //NVIDIA's preference? Dunno, they don't tell. But at least the quality
-            //will be consistent.
-            if( mFeatureLevel >= D3D_FEATURE_LEVEL_11_0 )
-                DepthBuffer::DefaultDepthBufferFormat = PFG_D32_FLOAT_S8X24_UINT;
-        }
+            DepthBuffer::DefaultDepthBufferFormat = PFG_D32_FLOAT_S8X24_UINT;
     }
     //-----------------------------------------------------------------------
     void D3D11RenderSystem::handleDeviceLost()
@@ -4482,7 +4437,7 @@ D3D11Driver* d3dDriver = mActiveD3DDriver;
 
         ID3D11DeviceN *device = 0;
         ID3D11Device1 *device1 = 0;
-        createD3D11Device( NULL, DT_HARDWARE,
+        createD3D11Device( NULL, D3D_DRIVER_TYPE_HARDWARE,
                            mMinRequestedFeatureLevel, mMaxRequestedFeatureLevel, 0,
                            &device, &device1 );
         mDevice.TransferOwnership( device, device1 );

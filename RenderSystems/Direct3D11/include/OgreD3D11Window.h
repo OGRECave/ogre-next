@@ -39,8 +39,6 @@ namespace Ogre
     {
     protected:
         D3D11Device     &mDevice;
-        IDXGIFactory1   *mDxgiFactory1;
-        IDXGIFactory2   *mDxgiFactory2;
         /// Whether window was not created by Ogre
         bool mIsExternal;
         bool mSizing;
@@ -68,8 +66,7 @@ namespace Ogre
         D3D11Window( const String &title, uint32 width, uint32 height,
                      bool fullscreenMode, PixelFormatGpu depthStencilFormat,
                      const NameValuePairList *miscParams,
-                     D3D11Device &device, IDXGIFactory1 *dxgiFactory1,
-                     IDXGIFactory2 *dxgiFactory2, D3D11RenderSystem *renderSystem );
+                     D3D11Device &device, D3D11RenderSystem *renderSystem );
         virtual ~D3D11Window();
 
         bool isClosed() const                                   { return mClosed; }
@@ -100,8 +97,7 @@ namespace Ogre
         D3D11WindowSwapChainBased( const String &title, uint32 width, uint32 height,
                                    bool fullscreenMode, PixelFormatGpu depthStencilFormat,
                                    const NameValuePairList *miscParams,
-                                   D3D11Device &device, IDXGIFactory1 *dxgiFactory1,
-                                   IDXGIFactory2 *dxgiFactory2, D3D11RenderSystem *renderSystem );
+                                   D3D11Device &device, D3D11RenderSystem *renderSystem );
         virtual ~D3D11WindowSwapChainBased();
     };
 }

@@ -38,12 +38,9 @@ namespace Ogre
     D3D11Window::D3D11Window( const String &title, uint32 width, uint32 height,
                               bool fullscreenMode, PixelFormatGpu depthStencilFormat,
                               const NameValuePairList *miscParams,
-                              D3D11Device &device, IDXGIFactory1 *dxgiFactory1,
-                              IDXGIFactory2 *dxgiFactory2 , D3D11RenderSystem *renderSystem ) :
+                              D3D11Device &device, D3D11RenderSystem *renderSystem ) :
         Window( title, width, height, fullscreenMode ),
         mDevice( device ),
-        mDxgiFactory1( dxgiFactory1 ),
-        mDxgiFactory2( dxgiFactory2 ),
         mIsExternal( false ),
         mSizing( false ),
         mClosed( false ),
@@ -110,12 +107,10 @@ namespace Ogre
     D3D11WindowSwapChainBased::D3D11WindowSwapChainBased(
             const String &title, uint32 width, uint32 height, bool fullscreenMode,
             PixelFormatGpu depthStencilFormat, const NameValuePairList *miscParams,
-            D3D11Device &device, IDXGIFactory1 *dxgiFactory1,
-            IDXGIFactory2 *dxgiFactory2 , D3D11RenderSystem *renderSystem ) :
+            D3D11Device &device, D3D11RenderSystem *renderSystem ) :
         D3D11Window( title, width, height, fullscreenMode,
                      depthStencilFormat, miscParams,
-                     device, dxgiFactory1,
-                     dxgiFactory2, renderSystem ),
+                     device, renderSystem ),
         mSwapChain( 0 ),
         mSwapChain1( 0 ),
         mUseFlipSequentialMode( false ),

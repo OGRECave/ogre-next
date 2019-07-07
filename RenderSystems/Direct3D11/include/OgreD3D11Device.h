@@ -37,11 +37,14 @@ namespace Ogre
     {
     private:
         ComPtr<ID3D11DeviceN>           mD3D11Device;
+        ComPtr<ID3D11Device1>           mD3D11Device1;
         ComPtr<ID3D11DeviceContextN>    mImmediateContext;
+        ComPtr<ID3D11DeviceContext1>    mImmediateContext1;
         ComPtr<ID3D11ClassLinkage>      mClassLinkage;
         ComPtr<ID3D11InfoQueue>         mInfoQueue;
         LARGE_INTEGER                   mDriverVersion;
         ComPtr<IDXGIFactoryN>           mDXGIFactory;
+        ComPtr<IDXGIFactory2>           mDXGIFactory2;
 #if OGRE_D3D11_PROFILING
         ComPtr<ID3DUserDefinedAnnotation> mPerf;
 #endif
@@ -54,12 +57,15 @@ namespace Ogre
 
         void ReleaseAll();
         void TransferOwnership(ID3D11DeviceN* device, ID3D11Device1* device1 );
+        bool IsDeviceLost();
 
         bool isNull()                                { return !mD3D11Device; }
         ID3D11DeviceN* get()                         { return mD3D11Device.Get(); }
         ID3D11DeviceContextN* GetImmediateContext()  { return mImmediateContext.Get(); }
+        ID3D11DeviceContext1* GetImmediateContext1() { return mImmediateContext1.Get(); }
         ID3D11ClassLinkage* GetClassLinkage()        { return mClassLinkage.Get(); }
         IDXGIFactoryN* GetDXGIFactory()              { return mDXGIFactory.Get(); }
+        IDXGIFactory2* GetDXGIFactory2()             { return mDXGIFactory2.Get(); }
         LARGE_INTEGER GetDriverVersion()             { return mDriverVersion; }
 #if OGRE_D3D11_PROFILING
         ID3DUserDefinedAnnotation* GetProfiler()     { return mPerf.Get(); }
@@ -94,7 +100,7 @@ namespace Ogre
         };
 
         static eExceptionsErrorLevel mExceptionsErrorLevel;
-        static const eExceptionsErrorLevel getExceptionsErrorLevel();
+        static eExceptionsErrorLevel getExceptionsErrorLevel();
         static void setExceptionsErrorLevel(const eExceptionsErrorLevel exceptionsErrorLevel);
         static void setExceptionsErrorLevel(const Ogre::String& exceptionsErrorLevel);
 

@@ -34,7 +34,6 @@ THE SOFTWARE.
 #include "OgreD3D11DeviceResource.h"
 #include "OgreD3D11Driver.h"
 #include "OgreD3D11RenderPassDescriptor.h"
-#include "OgreD3D11Mappings.h"
 #include "OgreD3D11PixelFormatToShaderType.h"
 
 namespace Ogre 
@@ -75,7 +74,7 @@ namespace Ogre
         bool mUseNVPerfHUD;
 		int mSwitchingFullscreenCounter;	// Are we switching from windowed to fullscreen 
 
-        static void createD3D11Device( D3D11Driver* d3dDriver, OGRE_D3D11_DRIVER_TYPE driverType,
+        static void createD3D11Device( D3D11Driver* d3dDriver, D3D_DRIVER_TYPE driverType,
                                        D3D_FEATURE_LEVEL minFL, D3D_FEATURE_LEVEL maxFL,
                                        D3D_FEATURE_LEVEL* pFeatureLevel,
                                        ID3D11DeviceN **outDevice, ID3D11Device1 **outDevice1 );
@@ -85,7 +84,7 @@ namespace Ogre
         void refreshFSAAOptions(void);
 
         void freeDevice(void);
-        void createDevice();
+        void createDevice(void);
 #if OGRE_PLATFORM != OGRE_PLATFORM_WINRT
             bool isWindows8OrGreater();
 #endif

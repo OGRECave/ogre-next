@@ -159,7 +159,7 @@ namespace Ogre
                 createReadOnlySRV();
             return mDepthStencilView[1].Get();
         }
-
+#endif
         return mDepthStencilView[0].Get();
     }
     //---------------------------------------------------------------------

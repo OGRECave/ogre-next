@@ -36,7 +36,6 @@ THE SOFTWARE.
 #include "OgreRoot.h"
 #include "OgrePixelFormatGpu.h"
 #include "OgreTextureGpu.h"
-#include "OgreD3D11RenderSystem.h"
 
 namespace Ogre 
 {

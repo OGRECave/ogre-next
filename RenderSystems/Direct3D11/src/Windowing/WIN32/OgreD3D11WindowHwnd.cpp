@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "OgreD3D11Mappings.h"
 #include "OgreD3D11TextureGpuWindow.h"
 #include "OgreD3D11TextureGpuManager.h"
+#include "OgreD3D11RenderSystem.h"
 #include "OgreWindowEventUtilities.h"
 #include "OgreDepthBuffer.h"
 #include "OgrePixelFormatGpuUtils.h"
@@ -55,10 +56,9 @@ namespace Ogre
     D3D11WindowHwnd::D3D11WindowHwnd( const String &title, uint32 width, uint32 height,
                                       bool fullscreenMode, PixelFormatGpu depthStencilFormat,
                                       const NameValuePairList *miscParams,
-                                      D3D11Device &device, IDXGIFactory1 *dxgiFactory1,
-                                      IDXGIFactory2 *dxgiFactory2 , D3D11RenderSystem *renderSystem ) :
+                                      D3D11Device &device, D3D11RenderSystem *renderSystem ) :
         D3D11WindowSwapChainBased( title, width, height, fullscreenMode, depthStencilFormat,
-                                   miscParams, device, dxgiFactory1, dxgiFactory2, renderSystem ),
+                                   miscParams, device, renderSystem ),
         mHwnd( 0 ),
         mWindowedWinStyle( 0 ),
         mFullscreenWinStyle( 0 ),
@@ -184,7 +184,8 @@ namespace Ogre
         HRESULT hr;
 
         // Create swap chain
-        if( mDxgiFactory2 )
+        IDXGIFactory2 *dxgiFactory2 = mDevice.GetDXGIFactory2();
+        if( dxgiFactory2 )
         {
             // DirectX 11.1 or later
             DXGI_SWAP_CHAIN_DESC1 sd;
@@ -201,15 +202,15 @@ namespace Ogre
             fsDesc.RefreshRate.Denominator  = mFrequencyDenominator;
             fsDesc.Windowed = !(mRequestedFullscreenMode && !mAlwaysWindowedMode);
 
-            hr = mDxgiFactory2->CreateSwapChainForHwnd( mDevice.get(), mHwnd, &sd,
-                                                        &fsDesc, 0, &mSwapChain1 );
+            hr = dxgiFactory2->CreateSwapChainForHwnd( mDevice.get(), mHwnd, &sd,
+                                                       &fsDesc, 0, &mSwapChain1 );
             if( SUCCEEDED(hr) )
             {
                 hr = mSwapChain1->QueryInterface( __uuidof(IDXGISwapChain),
                                                   reinterpret_cast<void**>(&mSwapChain) );
             }
 
-            mDxgiFactory2->Release();
+            dxgiFactory2->Release();
         }
         else
         {
@@ -225,7 +226,8 @@ namespace Ogre
             sd.OutputWindow = mHwnd;
             sd.Windowed = !(mRequestedFullscreenMode && !mAlwaysWindowedMode);
 
-            hr = mDxgiFactory1->CreateSwapChain( mDevice.get(), &sd, &mSwapChain );
+            IDXGIFactory1 *dxgiFactory1 = mDevice.GetDXGIFactory();
+            hr = dxgiFactory1->CreateSwapChain( mDevice.get(), &sd, &mSwapChain );
         }
 
         if( FAILED(hr) )
@@ -619,8 +621,9 @@ namespace Ogre
 #endif
         setResolutionFromSwapChain();
 
-        mDxgiFactory1->MakeWindowAssociation( mHwnd,
-                                              mAlwaysWindowedMode == true ? DXGI_MWA_NO_ALT_ENTER : 0 );
+        IDXGIFactory1 *dxgiFactory1 = mDevice.GetDXGIFactory();
+        dxgiFactory1->MakeWindowAssociation( mHwnd,
+                                             mAlwaysWindowedMode == true ? DXGI_MWA_NO_ALT_ENTER : 0 );
         setHidden( mHidden );
     }
     //-----------------------------------------------------------------------------------

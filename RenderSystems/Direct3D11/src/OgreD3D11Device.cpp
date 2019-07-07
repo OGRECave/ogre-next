@@ -57,6 +57,7 @@ namespace Ogre
         mInfoQueue.Reset();
         mClassLinkage.Reset();
         mImmediateContext.Reset();
+        mImmediateContext1.Reset();
 
         /*
         //Uncomment this code to get detailed information of resource leaks.
@@ -72,40 +73,52 @@ namespace Ogre
         }*/
 
         mD3D11Device.Reset();
+        mD3D11Device1.Reset();
         mDXGIFactory.Reset();
+        mDXGIFactory2.Reset();
         mDriverVersion.QuadPart = 0;
     }
     //---------------------------------------------------------------------
     void D3D11Device::TransferOwnership( ID3D11DeviceN* d3d11device, ID3D11Device1 *device1 )
     {
-        assert(mD3D11Device.Get() != d3d11device);
+        assert( mD3D11Device.Get() != d3d11device );
+        assert( mD3D11Device1.Get() != device1 );
         ReleaseAll();
 
         if (d3d11device)
         {
             HRESULT hr = S_OK;
 
-            mD3D11Device.Attach(d3d11device);
+            mD3D11Device.Attach( d3d11device );
+            mD3D11Device1.Attach( device1 );
 
             // get DXGI factory from device
             ComPtr<IDXGIDeviceN> pDXGIDevice;
             ComPtr<IDXGIAdapterN> pDXGIAdapter;
-            if(SUCCEEDED(mD3D11Device.As(&pDXGIDevice))
-            && SUCCEEDED(pDXGIDevice->GetParent(__uuidof(IDXGIAdapterN), (void **)pDXGIAdapter.GetAddressOf())))
+            if( SUCCEEDED( mD3D11Device.As(&pDXGIDevice) )
+                && SUCCEEDED( pDXGIDevice->GetParent( __uuidof(IDXGIAdapterN),
+                                                      (void **)pDXGIAdapter.GetAddressOf() ) ) )
             {
-                pDXGIAdapter->GetParent(__uuidof(IDXGIFactoryN), (void **)mDXGIFactory.ReleaseAndGetAddressOf());
+                pDXGIAdapter->GetParent( __uuidof(IDXGIFactoryN),
+                                         (void **)mDXGIFactory.ReleaseAndGetAddressOf() );
 
-                // We intentionally check for ID3D10Device support instead of ID3D11Device as CheckInterfaceSupport() is not supported for later.
-                // We hope, that there would be one UMD for both D3D10 and D3D11, or two different but with the same version number,
-                // or with different but correlated version numbers, so that blacklisting could be done with high confidence level.
-                if(FAILED(pDXGIAdapter->CheckInterfaceSupport(IID_ID3D10Device /* intentionally D3D10, not D3D11 */, &mDriverVersion)))
+                // We intentionally check for ID3D10Device support instead of ID3D11Device as
+                // CheckInterfaceSupport() is not supported for later.
+                // We hope, that there would be one UMD for both D3D10 and D3D11, or two different
+                // but with the same version number, or with different but correlated version numbers,
+                // so that blacklisting could be done with high confidence level.
+                if( FAILED( pDXGIAdapter->CheckInterfaceSupport(
+                                IID_ID3D10Device, // intentionally D3D10, not D3D11
+                                &mDriverVersion ) ) )
+                {
                     mDriverVersion.QuadPart = 0;
+                }
             }
 
 
-            mD3D11Device->GetImmediateContext(&mImmediateContext.ReleaseAndGetAddressOf());
+            mD3D11Device->GetImmediateContext( mImmediateContext.ReleaseAndGetAddressOf() );
             if( mD3D11Device1 )
-                mD3D11Device->GetImmediateContext1(&mImmediateContext1.ReleaseAndGetAddressOf());
+                mD3D11Device1->GetImmediateContext1( mImmediateContext1.ReleaseAndGetAddressOf() );
 
 #if OGRE_D3D11_PROFILING
             hr = mImmediateContext.As(&mPerf);
@@ -128,10 +141,13 @@ namespace Ogre
                 {
                 case D3D_NO_EXCEPTION:
                     severityList.push_back(D3D11_MESSAGE_SEVERITY_CORRUPTION);
+                    // fallthrough
                 case D3D_CORRUPTION:
                     severityList.push_back(D3D11_MESSAGE_SEVERITY_ERROR);
+                    // fallthrough
                 case D3D_ERROR:
                     severityList.push_back(D3D11_MESSAGE_SEVERITY_WARNING);
+                    // fallthrough
                 case D3D_WARNING:
                 case D3D_INFO:
                     severityList.push_back(D3D11_MESSAGE_SEVERITY_INFO);
@@ -139,10 +155,9 @@ namespace Ogre
                     break;
                 }
 
-
                 if (severityList.size() > 0)
                 {
-                    filter.DenyList.NumSeverities = severityList.size();
+                    filter.DenyList.NumSeverities = static_cast<UINT>( severityList.size() );
                     filter.DenyList.pSeverityList = &severityList[0];
                 }
 
@@ -307,7 +322,7 @@ namespace Ogre
         }
     }
     //---------------------------------------------------------------------
-    const D3D11Device::eExceptionsErrorLevel D3D11Device::getExceptionsErrorLevel()
+    D3D11Device::eExceptionsErrorLevel D3D11Device::getExceptionsErrorLevel()
     {
         return mExceptionsErrorLevel;
     }
@@ -336,6 +351,9 @@ namespace Ogre
         if(value == "10.0") return D3D_FEATURE_LEVEL_10_0;
         if(value == "10.1") return D3D_FEATURE_LEVEL_10_1;
         if(value == "11.0") return D3D_FEATURE_LEVEL_11_0;
+#if defined(_WIN32_WINNT_WIN8)
+        if(value == "11.1") return D3D_FEATURE_LEVEL_11_1;
+#endif
         return fallback;
     }
     //---------------------------------------------------------------------

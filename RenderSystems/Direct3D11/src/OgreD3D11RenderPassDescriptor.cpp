@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "OgreD3D11TextureGpu.h"
 #include "OgreD3D11RenderSystem.h"
 #include "OgreD3D11Window.h"
+#include "OgreD3D11Mappings.h"
 
 #include "OgreHlmsDatablock.h"
 #include "OgrePixelFormatGpuUtils.h"
