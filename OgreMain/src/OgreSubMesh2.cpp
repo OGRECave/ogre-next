@@ -734,8 +734,8 @@ namespace Ogre {
         }
     }
     //---------------------------------------------------------------------
-    void SubMesh::createPoses( const float** positionData, const float** normalData, 
-                               size_t numPoses, size_t numVertices, bool halfPrecision )
+    void SubMesh::createPoses( const float** positionData, const float** normalData, size_t numPoses, 
+                               size_t numVertices, const String* names, bool halfPrecision )
     {
         mNumPoses = static_cast<uint16>( numPoses );
         mPoseHalfPrecision = halfPrecision;
@@ -753,14 +753,13 @@ namespace Ogre {
         {
             const float* pPosition = positionData[poseIndex];
             const float* pNormal = normalData ? normalData[poseIndex] : 0;
-            size_t beginIndex = poseIndex * numVertices * elementsPerVertex;
 
             if( halfPrecision )
             {
                 uint16* pHalf = reinterpret_cast<uint16*>( buffer +  poseIndex * singlePoseBufferSize );
                 for( size_t i = 0; i < numVertices; ++i )
                 {
-                    size_t idx = beginIndex + i * elementsPerVertex;
+                    size_t idx = i * elementsPerVertex;
                     pHalf[idx+0] = Bitwise::floatToHalf( *pPosition++ );
                     pHalf[idx+1] = Bitwise::floatToHalf( *pPosition++ );
                     pHalf[idx+2] = Bitwise::floatToHalf( *pPosition++ );
@@ -780,7 +779,7 @@ namespace Ogre {
                 float* pFloat = reinterpret_cast<float*>( buffer + poseIndex * singlePoseBufferSize );
                 for( size_t i = 0; i < numVertices; ++i )
                 {
-                    size_t idx = beginIndex + i * elementsPerVertex;
+                    size_t idx = i * elementsPerVertex;
                     pFloat[idx+0] = *pPosition++;
                     pFloat[idx+1] = *pPosition++;
                     pFloat[idx+2] = *pPosition++;
@@ -794,6 +793,11 @@ namespace Ogre {
                         pFloat[idx+7] = 0.f;
                     }
                 }
+            }
+
+            if( names )
+            {
+                mPoseIndexMap[names[poseIndex]] = poseIndex;
             }
         }
         
