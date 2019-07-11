@@ -252,10 +252,10 @@
 													  texIndex_specularIdx ).xyz;
 		@end
 		@property( specular_map && fresnel_workflow )
-			pixelData.F0.xyz *= SampleSpecular( textureMaps@value( specular_map_idx ),
-												samplerState@value(specular_map_sampler),
-												UV_SPECULAR( inPs.uv@value(uv_specular).xy ),
-												texIndex_specularIdx ).@insertpiece( FresnelSwizzle );
+			pixelData.F0 *= SampleSpecular( textureMaps@value( specular_map_idx ),
+											samplerState@value(specular_map_sampler),
+											UV_SPECULAR( inPs.uv@value(uv_specular).xy ),
+											texIndex_specularIdx ).@insertpiece( FresnelSwizzle );
 		@end
 	@else
 		float metalness = material.F0.x;
