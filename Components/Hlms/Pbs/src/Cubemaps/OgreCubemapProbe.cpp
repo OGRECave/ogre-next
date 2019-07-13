@@ -425,7 +425,7 @@ namespace Ogre
                                                       Vector4::ZERO,
                                                       0x00, mipmapsExecutionMask );
 
-        if( !mStatic )
+        if( !mStatic && !mCreator->getAutomaticMode() )
         {
             mClearWorkspace =
                     compositorManager->addWorkspace( sceneManager, channels,
