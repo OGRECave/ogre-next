@@ -388,7 +388,7 @@ namespace Ogre
             const Vector3 posLS = probe->mInvOrientation * (mTrackedPosition - probe->mArea.mCenter);
             const Aabb areaLS = probe->getAreaLS();
             if( ((areaLS.contains( posLS ) && !probe->mStatic) || probe->mDirty) &&
-                probe->mEnabled &&
+                probe->mEnabled && probe->mTexture &&
                 (probe->mMask & systemMask) )
             {
                 mDirtyProbes.push_back( probe );
@@ -396,7 +396,7 @@ namespace Ogre
 
             if( probe->mInternalProbe )
             {
-                probe->mInternalProbe->setVisible( probe->mEnabled &&
+                probe->mInternalProbe->setVisible( probe->mEnabled && probe->mTexture &&
                                                    (probe->mMask & systemMask) != 0u );
             }
 
@@ -501,7 +501,7 @@ namespace Ogre
         while( itor != end )
         {
             CubemapProbe *probe = *itor;
-            if( probe->mDirty && probe->mEnabled )
+            if( probe->mDirty && probe->mEnabled && probe->mTexture )
                 mDirtyProbes.push_back( probe );
             ++itor;
         }

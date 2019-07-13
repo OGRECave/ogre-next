@@ -160,19 +160,15 @@ namespace Ogre
         if( !mCreator->getAutomaticMode() )
             return;
 
-        const bool oldEnabled = mEnabled;
-
         releaseTextureAuto();
         mTexture = mCreator->_acquireTextureSlot( mCubemapArrayIdx );
 
         if( mTexture )
         {
-            mEnabled = oldEnabled;
             createInternalProbe();
         }
         else
         {
-            mEnabled = false;
             LogManager::getSingleton().logMessage( "Warning: CubemapProbe::acquireTextureAuto failed. "
                                                    "You ran out of slots in the cubemap array. "
                                                    "Disabling this probe" );
@@ -190,7 +186,6 @@ namespace Ogre
             mCreator->_releaseTextureSlot( mTexture, mCubemapArrayIdx );
             mTexture = 0;
             mCubemapArrayIdx = std::numeric_limits<uint32>::max();
-            mEnabled = false;
         }
     }
     //-----------------------------------------------------------------------------------
