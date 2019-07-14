@@ -195,6 +195,6 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     inline bool Aabb::operator != ( const Aabb &_r ) const
     {
-        return mCenter != _r.mCenter && mHalfSize != _r.mHalfSize;
+        return mCenter != _r.mCenter || mHalfSize != _r.mHalfSize;
     }
 }
