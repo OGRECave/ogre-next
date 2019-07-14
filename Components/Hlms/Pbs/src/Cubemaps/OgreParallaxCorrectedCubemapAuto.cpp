@@ -162,7 +162,7 @@ namespace Ogre
 
         OGRE_ASSERT_LOW( idx < mReservedSlotBitset.size() && "Slot is invalid. Out of bounds!" );
         OGRE_ASSERT_LOW( !(mReservedSlotBitset[idx] & mask) && "Slot was already released!" );
-        mReservedSlotBitset[idx] |= texSlot;
+        mReservedSlotBitset[idx] |= mask;
     }
     //-----------------------------------------------------------------------------------
     TextureGpu* ParallaxCorrectedCubemapAuto::findTmpRtt( const TextureGpu *baseParams )
