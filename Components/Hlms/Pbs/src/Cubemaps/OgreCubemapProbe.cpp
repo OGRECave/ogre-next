@@ -69,6 +69,7 @@ namespace Ogre
         mInternalProbe( 0 ),
         mConstBufferForManualProbes( 0 ),
         mNumDatablockUsers( 0 ),
+        mPriority( 10u ),
         mStatic( true ),
         mEnabled( true ),
         mDirty( true ),
@@ -246,7 +247,9 @@ namespace Ogre
 
         mCreator->fillConstBufferData( *this, Matrix4::IDENTITY, Matrix3::IDENTITY,
                                        reinterpret_cast<float*>( mInternalProbe->mGpuData ) );
-        mInternalProbe->mGpuData[3][3] = static_cast<float>( mCubemapArrayIdx );
+
+        uint32 finalValue = uint32(mPriority << 16u) | mCubemapArrayIdx;
+        memcpy( &mInternalProbe->mGpuData[3][3], &finalValue, sizeof( finalValue ) );
 
         Vector3 probeToAreaCenterOffsetLS = mInvOrientation * (mArea.mCenter - mProbeShape.mCenter);
         mInternalProbe->mGpuData[4][3] = probeToAreaCenterOffsetLS.x;
@@ -454,11 +457,21 @@ namespace Ogre
         areaLocalToShape.mCenter = mInvOrientation * areaLocalToShape.mCenter;
         areaLocalToShape.mCenter += mProbeShape.mCenter;
 
-        if( !mProbeShape.contains( mArea ) )
+        if( (!mProbeShape.contains( mArea ) && !mCreator->getAutomaticMode()) ||
+            (!mProbeShape.intersects( mArea ) && mCreator->getAutomaticMode()) )
         {
-            LogManager::getSingleton().logMessage(
-                        "WARNING: Area must be fully inside probe's shape otherwise "
-                        "artifacts appear. Forcing area to be inside probe" );
+            if( !mCreator->getAutomaticMode() )
+            {
+                LogManager::getSingleton().logMessage(
+                            "WARNING: Area must be fully inside probe's shape otherwise "
+                            "artifacts appear. Forcing area to be inside probe" );
+            }
+            else
+            {
+                LogManager::getSingleton().logMessage(
+                            "WARNING: Area must intersect with the probe's shape otherwise "
+                            "PCC will not have any effect. Forcing intersection" );
+            }
             Vector3 vMin = mArea.getMinimum() * 0.98f;
             Vector3 vMax = mArea.getMaximum() * 0.98f;
 
@@ -484,6 +497,22 @@ namespace Ogre
             //We're not initialized yet, but still save the intention...
             mStatic = isStatic;
         }
+    }
+    //-----------------------------------------------------------------------------------
+    void CubemapProbe::setPriority( uint16 priority )
+    {
+        OGRE_ASSERT_LOW( mCreator->getAutomaticMode() );
+        priority = std::max<uint16>( priority, 1u );
+        if( mPriority != priority )
+        {
+            mPriority = priority;
+            syncInternalProbe();
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    uint16_t CubemapProbe::getPriority(void) const
+    {
+        return mPriority;
     }
     //-----------------------------------------------------------------------------------
     Real CubemapProbe::getNDF( const Vector3 &posLS ) const

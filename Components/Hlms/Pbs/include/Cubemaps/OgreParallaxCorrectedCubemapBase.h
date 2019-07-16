@@ -112,7 +112,7 @@ namespace Ogre
         @return
             Texture. Can be nullptr if ran out of slots.
         */
-        virtual TextureGpu* _acquireTextureSlot( uint32 &outTexSlot );
+        virtual TextureGpu* _acquireTextureSlot( uint16 &outTexSlot );
         virtual void _releaseTextureSlot( TextureGpu *texture, uint32 texSlot );
 
         virtual void _addManuallyActiveProbe( CubemapProbe *probe );

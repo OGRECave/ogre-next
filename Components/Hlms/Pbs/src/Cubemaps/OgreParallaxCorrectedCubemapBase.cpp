@@ -213,7 +213,7 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* ParallaxCorrectedCubemapBase::_acquireTextureSlot( uint32 &outTexSlot )
+    TextureGpu* ParallaxCorrectedCubemapBase::_acquireTextureSlot( uint16 &outTexSlot )
     {
         OGRE_EXCEPT( Exception::ERR_INVALID_CALL, "", "" );
         outTexSlot = 0;

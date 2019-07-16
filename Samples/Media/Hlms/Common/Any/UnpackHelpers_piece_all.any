@@ -1,0 +1,7 @@
+
+@piece( UnpackHelpers )
+	INLINE float2 unpackUshort2ToFloat2( uint value )
+	{
+		return float2( value & 0xFFFFu, value >> 16u );
+	}
+@end

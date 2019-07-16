@@ -60,7 +60,7 @@ namespace Ogre
         Aabb    mProbeShape;
 
         TextureGpu  *mTexture;
-        uint32      mCubemapArrayIdx;
+        uint16      mCubemapArrayIdx;
         uint8       mMsaa;
 
         uint8               mWorkspaceMipmapsExecMask;
@@ -75,6 +75,8 @@ namespace Ogre
 
         ConstBufferPacked   *mConstBufferForManualProbes;
         uint32              mNumDatablockUsers;
+
+        uint16  mPriority;
 
         /// False if it should be updated every frame. True if only updated when dirty
         bool    mStatic;
@@ -192,6 +194,17 @@ namespace Ogre
         void setStatic( bool isStatic );
         bool getStatic(void) const          { return mStatic; }
 
+        /** When two probes overlap, you may want one probe to have particularly more influence
+            than the others. Use this value to decrease/increase the weight when blending the probes.
+        @remarks
+            This value is only useful for Per-Pixel cubemaps
+        @param priority
+            A value in range [1; 65535]
+            A higher value means the probe should have a stronger influence over the others.
+        */
+        void setPriority( uint16 priority );
+        uint16_t getPriority(void) const;
+
         Aabb getAreaLS(void) const          { return Aabb( Vector3::ZERO, mArea.mHalfSize ); }
 
         /** Gets the Normalized Distance Function.
@@ -223,7 +236,7 @@ namespace Ogre
 
         const SceneNode* getInternalCubemapProbeSceneNode(void) const;
 
-        uint32 getInternalSliceToArrayTexture(void) const   { return mCubemapArrayIdx; }
+        uint16 getInternalSliceToArrayTexture(void) const   { return mCubemapArrayIdx; }
 
         ConstBufferPacked* getConstBufferForManualProbes(void)  { return mConstBufferForManualProbes; }
     };

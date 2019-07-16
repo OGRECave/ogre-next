@@ -93,7 +93,7 @@ namespace Ogre
                                       const CompositorWorkspaceDef *probeWorkspaceDef );
         ~ParallaxCorrectedCubemapAuto();
 
-        virtual TextureGpu* _acquireTextureSlot( uint32 &outTexSlot );
+        virtual TextureGpu* _acquireTextureSlot( uint16 &outTexSlot );
         virtual void _releaseTextureSlot( TextureGpu *texture, uint32 texSlot );
 
         virtual TextureGpu* findTmpRtt( const TextureGpu *baseParams );

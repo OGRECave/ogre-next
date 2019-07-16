@@ -164,6 +164,10 @@
 
 		if( probeFade > 0 )
 		{
+			float2 cubemapIdx_priority = unpackUshort2ToFloat2( floatBitsToUint( probe.halfSize.w ) );
+			float probeCubemapIdx   = cubemapIdx_priority.x;
+			float probePriority     = cubemapIdx_priority.y;
+
 			float3 probeToAreaCenterOffsetLS = float3( probe.cubemapPosLS.w,
 													   probeInnerRange.w,
 													   probeOuterRange.w );
@@ -171,6 +175,7 @@
 									 probeInnerRange.xyz, probeOuterRange.xyz );
 			ndf = saturate( ndf );
 			probeFade = ndf <= 0 ? 10000.0f : (1.0 - ndf);
+			probeFade *= probePriority;
 
 			float3 reflDirLS = localCorrect( pixelData.reflDir, posInProbSpace, probe );
 			float3 normalLS = localCorrect( pixelData.normal, posInProbSpace, probe );
@@ -178,24 +183,24 @@
 			@property( !hlms_cubemaps_use_dpm )
 				pixelData.envColourS += OGRE_SampleArrayCubeLevel(
 					texEnvProbeMap, samplerState@value(envMapRegSampler), reflDirLS,
-					probe.halfSize.w, @insertpiece( envSpecularRoughness ) ).xyz
+					probeCubemapIdx, @insertpiece( envSpecularRoughness ) ).xyz
 					@insertpiece( ApplyEnvMapScale ) * probeFade;
 				@property( cubemaps_as_diffuse_gi )
 					pixelData.envColourD += OGRE_SampleArrayCubeLevel(
 						texEnvProbeMap, samplerState@value(envMapRegSampler), normalLS,
-						probe.halfSize.w, 11.0 ).xyz
+						probeCubemapIdx, 11.0 ).xyz
 						@insertpiece( ApplyEnvMapScale ) * probeFade;
 				@end
 			@end
 			@property( hlms_cubemaps_use_dpm )
 				pixelData.envColourS += OGRE_SampleArray2DLevel(
 					texEnvProbeMap, samplerState@value(envMapRegSampler), mapCubemapToDpm( reflDirLS ),
-					probe.halfSize.w, @insertpiece( envSpecularRoughness ) ).xyz
+					probeCubemapIdx, @insertpiece( envSpecularRoughness ) ).xyz
 					@insertpiece( ApplyEnvMapScale ) * probeFade;
 				@property( cubemaps_as_diffuse_gi )
 					pixelData.envColourD += OGRE_SampleArray2DLevel(
 						texEnvProbeMap, samplerState@value(envMapRegSampler), mapCubemapToDpm( normalLS ),
-						probe.halfSize.w, 11.0 ).xyz
+						probeCubemapIdx, 11.0 ).xyz
 						@insertpiece( ApplyEnvMapScale ) * probeFade;
 				@end
 			@end

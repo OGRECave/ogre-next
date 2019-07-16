@@ -11,6 +11,10 @@
 
 	@insertpiece( DeclReverseDepthMacros )
 
+	@property( hlms_enable_cubemaps_auto )
+		@insertpiece( UnpackHelpers )
+	@end
+
 	struct PixelData
 	{
 		@property( !hlms_shadowcaster )

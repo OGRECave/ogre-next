@@ -127,7 +127,7 @@ namespace Ogre
         mTrackedPosition = trackedCamera->getDerivedPosition();
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* ParallaxCorrectedCubemapAuto::_acquireTextureSlot( uint32 &outTexSlot )
+    TextureGpu* ParallaxCorrectedCubemapAuto::_acquireTextureSlot( uint16 &outTexSlot )
     {
         OGRE_ASSERT_LOW( mBindTexture && "Must call ParallaxCorrectedCubemapAuto::setEnabled first!" );
 
@@ -142,7 +142,7 @@ namespace Ogre
             if( firstBitSet != 64u )
             {
                 uint32 idx = static_cast<uint32>( itor - mReservedSlotBitset.begin() );
-                outTexSlot = firstBitSet + 64u * idx;
+                outTexSlot = static_cast<uint16>( firstBitSet + 64u * idx );
                 retVal = mBindTexture;
                 *itor &= ~(((uint64)1ul) << firstBitSet);
             }
