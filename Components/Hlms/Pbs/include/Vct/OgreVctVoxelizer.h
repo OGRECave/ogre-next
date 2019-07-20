@@ -348,6 +348,21 @@ namespace Ogre
         /// Removes all items added via VctVoxelizer::addItem
         void removeAllItems(void);
 
+        /** Call this function before VctVoxelizer::autoCalculateRegion
+        @param autoRegion
+            True to autocalculate region to cover all the added items
+            False to use 'regionToVoxelize' instead
+        @param regionToVoxelize
+            When autoRegion = false, use this to manually provide the region
+            When autoRegion = true, it is ignored as it will be overwritten by autoCalculateRegion
+        @param maxRegion
+            Maximum size of the regions are allowed to cover (mostly useful when autoRegion = true)
+        */
+        void setRegionToVoxelize( bool autoRegion,
+                                  const Aabb &regionToVoxelize,
+                                  const Aabb &maxRegion=Aabb::BOX_INFINITE );
+
+        /// Does nothing if VctVoxelizer::setRegionToVoxelize( false, ... ) was called.
         void autoCalculateRegion(void);
 
         void dividideOctants( uint32 numOctantsX, uint32 numOctantsY, uint32 numOctantsZ );

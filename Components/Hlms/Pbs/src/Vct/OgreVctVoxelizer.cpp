@@ -911,6 +911,14 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
+    void VctVoxelizer::setRegionToVoxelize( bool autoRegion, const Aabb &regionToVoxelize,
+                                            const Aabb &maxRegion )
+    {
+        mAutoRegion = autoRegion;
+        mRegionToVoxelize = regionToVoxelize;
+        mMaxRegion = maxRegion;
+    }
+    //-------------------------------------------------------------------------
     void VctVoxelizer::autoCalculateRegion()
     {
         if( !mAutoRegion )
