@@ -521,9 +521,9 @@ namespace Ogre
             if( tex )
             {
                 uint32 resolution[3];
-                resolution[0] = tex->getWidth() >> mipLevel;
-                resolution[1] = tex->getHeight() >> mipLevel;
-                resolution[2] = tex->getDepthOrSlices() >> mipLevel;
+                resolution[0] = std::max( tex->getWidth() >> mipLevel, 1u );
+                resolution[1] = std::max( tex->getHeight() >> mipLevel, 1u );
+                resolution[2] = std::max( tex->getDepthOrSlices() >> mipLevel, 1u );
 
                 for( int i=0; i<3; ++i )
                 {
