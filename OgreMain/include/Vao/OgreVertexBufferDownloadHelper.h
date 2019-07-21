@@ -187,9 +187,9 @@ namespace  Ogre
                 //Raw. Transfer as is.
                 float tmpData[4];
                 memcpy( tmpData, srcData, readSize );
-                retVal = Vector3( static_cast<Real>( retVal[0] ),
-                                  static_cast<Real>( retVal[1] ),
-                                  static_cast<Real>( retVal[2] ) );
+                retVal = Vector3( static_cast<Real>( tmpData[0] ),
+                                  static_cast<Real>( tmpData[1] ),
+                                  static_cast<Real>( tmpData[2] ) );
             }
 
             return retVal;
