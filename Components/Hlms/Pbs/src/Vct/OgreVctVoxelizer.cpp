@@ -113,7 +113,6 @@ namespace Ogre
         mNumCompressedPartSubMeshes32( 0 ),
         mGpuPartitionedSubMeshes( 0 ),
         mMeshAabb( 0 ),
-        mGpuMeshAabbDataDirty( true ),
         mNeedsAlbedoMipmaps( correctAreaLightShadows ),
         mNumVerticesCompressed( 0 ),
         mNumVerticesUncompressed( 0 ),
@@ -342,7 +341,7 @@ namespace Ogre
                 partSubMesh.ibOffset = ibOffset + queuedMesh.indexCountSplit * partition;
                 partSubMesh.numIndices = std::min( numIndices - queuedMesh.indexCountSplit * partition,
                                                    queuedMesh.indexCountSplit );
-                partSubMesh.partSubMeshIdx = *partSubMeshIdx;
+                partSubMesh.aabbSubMeshIdx = *partSubMeshIdx;
                 *partSubMeshIdx += 1u;
             }
 
@@ -372,8 +371,6 @@ namespace Ogre
     void VctVoxelizer::prepareAabbCalculatorMeshData(void)
     {
         OgreProfile( "VctVoxelizer::prepareAabbCalculatorMeshData" );
-        if( !mGpuMeshAabbDataDirty )
-            return;
 
         destroyAabbCalculatorMeshData();
         const size_t totalNumMeshes = mNumUncompressedPartSubMeshes16 +
@@ -389,13 +386,21 @@ namespace Ogre
                                       MEMCATEGORY_GEOMETRY ) );
         FreeOnDestructor partitionedSubMeshGpuPtr( partitionedSubMeshGpu );
 
-        const size_t uncompressedPartSubmeshStart16 = 0u;
-        const size_t uncompressedPartSubmeshStart32 = uncompressedPartSubmeshStart16 +
-                                                      mNumUncompressedPartSubMeshes16;
-        const size_t compressedPartSubmeshStart16   = uncompressedPartSubmeshStart32 +
-                                                      mNumUncompressedPartSubMeshes32;
-        const size_t compressedPartSubmeshStart32   = compressedPartSubmeshStart16 +
-                                                      mNumCompressedPartSubMeshes16;
+        const size_t numVariants = 1u << c_numAabCalcProperties;
+
+        size_t submeshStarts[numVariants];
+        submeshStarts[0] = 0u;                                                  //16-bit uncompressed
+        submeshStarts[1] = submeshStarts[0] + mNumUncompressedPartSubMeshes16;  //32-bit uncompressed
+        submeshStarts[2] = submeshStarts[1] + mNumUncompressedPartSubMeshes32;  //16-bit compressed
+        submeshStarts[3] = submeshStarts[2] + mNumCompressedPartSubMeshes16;    //32-bit compressed
+
+        PartitionedSubMesh *partitionedSubMeshGpuPtrs[numVariants] =
+        {
+            partitionedSubMeshGpu + submeshStarts[0],
+            partitionedSubMeshGpu + submeshStarts[1],
+            partitionedSubMeshGpu + submeshStarts[2],
+            partitionedSubMeshGpu + submeshStarts[3]
+        };
 
         MeshPtrMap::iterator itor = mMeshesV2.begin();
         MeshPtrMap::iterator end  = mMeshesV2.end();
@@ -418,25 +423,19 @@ namespace Ogre
 
                 while( itPartSub != enPartSub )
                 {
+                    size_t variantIdx = is16bit ? 0u : 1u;
                     if( queuedMesh.bCompressed )
-                    {
-                        if( is16bit )
-                            itPartSub->partSubMeshIdx += compressedPartSubmeshStart16;
-                        else
-                            itPartSub->partSubMeshIdx += compressedPartSubmeshStart32;
-                    }
-                    else
-                    {
-                        if( is16bit )
-                            itPartSub->partSubMeshIdx += uncompressedPartSubmeshStart16;
-                        else
-                            itPartSub->partSubMeshIdx += uncompressedPartSubmeshStart32;
-                    }
+                        variantIdx += 2u;
 
-                    partitionedSubMeshGpu->vbOffset = itPartSub->vbOffset;
-                    partitionedSubMeshGpu->ibOffset = itPartSub->ibOffset;
-                    partitionedSubMeshGpu->numIndices = itPartSub->numIndices;
-                    partitionedSubMeshGpu->partSubMeshIdx = itPartSub->partSubMeshIdx;
+                    itPartSub->aabbSubMeshIdx += submeshStarts[variantIdx];
+
+                    partitionedSubMeshGpuPtrs[variantIdx]->vbOffset = itPartSub->vbOffset;
+                    partitionedSubMeshGpuPtrs[variantIdx]->ibOffset = itPartSub->ibOffset;
+                    partitionedSubMeshGpuPtrs[variantIdx]->numIndices = itPartSub->numIndices;
+                    //VCT/AabbWorldSpace compute shader needs to read aabbSubMeshIdx from
+                    //InstanceBuffer::meshData.w & ~0x80000000u; not from inMeshAabb which is
+                    //what we're filling right now. So set it to 0 to avoid confussion
+                    partitionedSubMeshGpuPtrs[variantIdx]->aabbSubMeshIdx = 0;
 
 //                    const bool needsAabbCalc = numSubMeshes != 1u ||
 //                                               queuedMesh.submeshes[i].partSubMeshes.size() != 1u;
@@ -444,15 +443,21 @@ namespace Ogre
 //                        partitionedSubMeshGpu->numIndices |= 0x80000000;
 
                     ++itPartSub;
-                    ++partitionedSubMeshGpu;
+                    ++partitionedSubMeshGpuPtrs[variantIdx];
                 }
 
             }
             ++itor;
         }
 
-        OGRE_ASSERT_LOW( (size_t)(partitionedSubMeshGpu -
-                                  (PartitionedSubMesh*)partitionedSubMeshGpuPtr.ptr) == totalNumMeshes );
+        OGRE_ASSERT_LOW( (size_t)(partitionedSubMeshGpuPtrs[0] -
+                         partitionedSubMeshGpu) == mNumUncompressedPartSubMeshes16 );
+        OGRE_ASSERT_LOW( (size_t)(partitionedSubMeshGpuPtrs[1] -
+                         partitionedSubMeshGpuPtrs[0]) == mNumUncompressedPartSubMeshes32 );
+        OGRE_ASSERT_LOW( (size_t)(partitionedSubMeshGpuPtrs[2] -
+                         partitionedSubMeshGpuPtrs[1]) == mNumCompressedPartSubMeshes16 );
+        OGRE_ASSERT_LOW( (size_t)(partitionedSubMeshGpuPtrs[3] -
+                         partitionedSubMeshGpuPtrs[2] ) == mNumCompressedPartSubMeshes32 );
 
         mGpuPartitionedSubMeshes = mVaoManager->createTexBuffer( PF_R32G32B32A32_UINT,
                                                                  totalNumMeshes *
@@ -460,7 +465,6 @@ namespace Ogre
                                                                  BT_DEFAULT,
                                                                  partitionedSubMeshGpuPtr.ptr,
                                                                  false );
-        mGpuMeshAabbDataDirty = false;
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::destroyAabbCalculatorMeshData(void)
@@ -619,9 +623,6 @@ namespace Ogre
             }
 
             ++queuedMesh.numItems;
-
-            if( isNewEntry || queuedMesh.bCompressed != wasCompressed )
-                mGpuMeshAabbDataDirty = true;
         }
         else
         {
@@ -634,7 +635,6 @@ namespace Ogre
                 queuedMesh.indexCountSplit = indexCountSplit;
                 queuedMesh.submeshes.resize( mesh->getNumSubMeshes() );
                 mMeshesV2[mesh] = queuedMesh;
-                mGpuMeshAabbDataDirty = true;
             }
             else
             {
@@ -662,10 +662,7 @@ namespace Ogre
         }
         --itMesh->second.numItems;
         if( !itMesh->second.numItems )
-        {
             mMeshesV2.erase( mesh );
-            mGpuMeshAabbDataDirty = true;
-        }
 
         efficientVectorRemove( mItems, itor );
     }
@@ -674,7 +671,6 @@ namespace Ogre
     {
         mItems.clear();
         mMeshesV2.clear();
-        mGpuMeshAabbDataDirty = true;
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::freeBuffers( bool bForceFree )
@@ -707,10 +703,7 @@ namespace Ogre
         }
 
         if( bForceFree )
-        {
-            mGpuMeshAabbDataDirty = true;
             destroyAabbCalculatorMeshData();
-        }
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::buildMeshBuffers(void)
@@ -1008,7 +1001,7 @@ namespace Ogre
                     queuedInstance.vertexBufferStart    = partSubMesh.vbOffset;
                     queuedInstance.indexBufferStart     = partSubMesh.ibOffset;
                     queuedInstance.numIndices           = partSubMesh.numIndices;
-                    queuedInstance.partSubMeshIdx       = partSubMesh.partSubMeshIdx;
+                    queuedInstance.aabbSubMeshIdx       = partSubMesh.aabbSubMeshIdx;
                     queuedInstance.needsAabbUpdate      = numPartitions != 1u || numSubItems != 1u;
                     mBuckets[bucket].push_back( queuedInstance );
                 }
@@ -1125,14 +1118,14 @@ namespace Ogre
                         *instanceBuffer++ = worldAabb.mHalfSize.z;
                         *AS_U32PTR( instanceBuffer ) = instance.materialIdx;        ++instanceBuffer;
 
-                        uint32 partSubMeshIdx = instance.partSubMeshIdx;
+                        uint32 aabbSubMeshIdx = instance.aabbSubMeshIdx;
                         if( instance.needsAabbUpdate )
-                            partSubMeshIdx |= 0x80000000;
+                            aabbSubMeshIdx |= 0x80000000;
 
                         *AS_U32PTR( instanceBuffer ) = instance.vertexBufferStart;  ++instanceBuffer;
                         *AS_U32PTR( instanceBuffer ) = instance.indexBufferStart;   ++instanceBuffer;
                         *AS_U32PTR( instanceBuffer ) = instance.numIndices;         ++instanceBuffer;
-                        *AS_U32PTR( instanceBuffer ) = partSubMeshIdx;              ++instanceBuffer;
+                        *AS_U32PTR( instanceBuffer ) = aabbSubMeshIdx;              ++instanceBuffer;
 
                         #undef AS_U32PTR
                     }

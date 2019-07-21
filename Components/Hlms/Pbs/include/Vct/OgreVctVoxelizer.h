@@ -135,7 +135,7 @@ namespace Ogre
             uint32  vbOffset;
             uint32  ibOffset;
             uint32  numIndices;
-            uint32  partSubMeshIdx;
+            uint32  aabbSubMeshIdx;
         };
 
         struct QueuedSubMesh
@@ -205,9 +205,6 @@ namespace Ogre
         uint32			mNumCompressedPartSubMeshes32;
         TexBufferPacked *mGpuPartitionedSubMeshes;
         UavBufferPacked *mMeshAabb;
-        /// Normally once we're done we free all memory that isn't needed. However
-        /// we leave mGpuPartitionedSubMeshes & mMeshAabb around because they occupy very little memory
-        bool            mGpuMeshAabbDataDirty;
 
         bool    mNeedsAlbedoMipmaps;
 
@@ -236,7 +233,7 @@ namespace Ogre
             uint32          vertexBufferStart;
             uint32          indexBufferStart;
             uint32          numIndices;
-            uint32          partSubMeshIdx;
+            uint32          aabbSubMeshIdx;
             uint32          materialIdx;
             bool            needsAabbUpdate;
         };
