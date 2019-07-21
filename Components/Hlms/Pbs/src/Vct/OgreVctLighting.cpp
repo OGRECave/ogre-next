@@ -782,7 +782,7 @@ namespace Ogre
                                     fabsf( dirCorrection.z ) );
 
         mNumLights->setManualValue( numCollectedLights );
-        mRayMarchStepSize->setManualValue( 1.0f / voxelRes );
+        mRayMarchStepSize->setManualValue( rayMarchStepScale / voxelRes );
         mVoxelCellSize->setManualValue( voxelCellSize );
         mDirCorrectionRatioThinWallCounter->setManualValue( Vector4( dirCorrection, thinWallCounter ) );
         mInvVoxelResolution->setManualValue( invVoxelRes );
