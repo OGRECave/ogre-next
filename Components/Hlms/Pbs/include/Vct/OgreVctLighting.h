@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "OgreId.h"
 #include "OgreShaderParams.h"
 #include "OgreResourceTransition.h"
+#include "OgreTextureGpuListener.h"
 
 #include "OgreHeaderPrefix.h"
 
@@ -41,7 +42,7 @@ namespace Ogre
     class VoxelVisualizer;
     struct ShaderVctLight;
 
-    class _OgreHlmsPbsExport VctLighting : public IdObject
+    class _OgreHlmsPbsExport VctLighting : public IdObject, public TextureGpuListener
     {
     public:
         static const uint16 msDistanceThresholdCustomParam;
@@ -71,6 +72,7 @@ namespace Ogre
         TextureGpu              *mLightVoxel[4];
         HlmsSamplerblock const  *mSamplerblockTrilinear;
         VctVoxelizer    *mVoxelizer;
+        bool            mVoxelizerTexturesChanged;
 
         HlmsComputeJob      *mLightInjectionJob;
         ConstBufferPacked   *mLightsConstBuffer;
@@ -260,6 +262,11 @@ namespace Ogre
         uint32 getNumVoxelTextures(void) const              { return mAnisotropic ? 4u : 1u; }
         const HlmsSamplerblock* getBindTrilinearSamplerblock(void)
                                                             { return mSamplerblockTrilinear; }
+
+        //TextureGpuListener overloads
+        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                           void *extraData );
+        virtual bool shouldStayLoaded( TextureGpu *texture )        { return false; }
     };
 }
 

@@ -73,6 +73,7 @@ namespace Ogre
         IdObject( id ),
         mSamplerblockTrilinear( 0 ),
         mVoxelizer( voxelizer ),
+        mVoxelizerTexturesChanged( false ),
         mLightInjectionJob( 0 ),
         mLightsConstBuffer( 0 ),
         mAnisoGeneratorStep0( 0 ),
@@ -97,6 +98,9 @@ namespace Ogre
         mDebugVoxelVisualizer( 0 )
     {
         memset( mLightVoxel, 0, sizeof(mLightVoxel) );
+
+        mVoxelizer->getAlbedoVox()->addListener( this );
+        mVoxelizer->getNormalVox()->addListener( this );
 
         //VctVoxelizer should've already been initialized, thus no need
         //to check if JSON has been built or if the assets were added
@@ -497,14 +501,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VctLighting::checkTextures(void)
     {
-        const TextureGpu *albedoVox = mVoxelizer->getAlbedoVox();
-
-        if( albedoVox->getWidth() != mLightVoxel[0]->getWidth() ||
-            albedoVox->getHeight() != mLightVoxel[0]->getHeight() ||
-            albedoVox->getDepth() != mLightVoxel[0]->getDepth() )
-        {
+        if( mVoxelizerTexturesChanged )
             createTextures();
-        }
     }
     //-------------------------------------------------------------------------
     void VctLighting::setupBounceTextures(void)
@@ -912,5 +910,15 @@ namespace Ogre
             mAnisotropic = bAnisotropic;
             createTextures();
         }
+    }
+    //-------------------------------------------------------------------------
+    void VctLighting::notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                            void *extraData )
+    {
+        if( reason == TextureGpuListener::LostResidency || reason == TextureGpuListener::Deleted )
+            mVoxelizerTexturesChanged = true;
+
+        if( reason == TextureGpuListener::Deleted )
+            texture->removeListener( this );
     }
 }
