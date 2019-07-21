@@ -1003,7 +1003,7 @@ namespace Ogre
                     queuedInstance.numIndices           = partSubMesh.numIndices;
                     queuedInstance.aabbSubMeshIdx       = partSubMesh.aabbSubMeshIdx;
                     queuedInstance.needsAabbUpdate      = numPartitions != 1u || numSubItems != 1u;
-                    mBuckets[bucket].push_back( queuedInstance );
+                    mBuckets[bucket].queuedInst.push_back( queuedInstance );
                 }
             }
 
@@ -1085,13 +1085,16 @@ namespace Ogre
         while( itor != end )
         {
             const Aabb octantAabb = itor->region;
-            VoxelizerBucketMap::const_iterator itBucket = mBuckets.begin();
-            VoxelizerBucketMap::const_iterator enBucket = mBuckets.end();
+            VoxelizerBucketMap::iterator itBucket = mBuckets.begin();
+            VoxelizerBucketMap::iterator enBucket = mBuckets.end();
 
             while( itBucket != enBucket )
             {
-                FastArray<QueuedInstance>::const_iterator itQueuedInst = itBucket->second.begin();
-                FastArray<QueuedInstance>::const_iterator enQueuedInst = itBucket->second.end();
+                uint32 numInstancesAfterCulling = 0u;
+                FastArray<QueuedInstance>::const_iterator itQueuedInst =
+                        itBucket->second.queuedInst.begin();
+                FastArray<QueuedInstance>::const_iterator enQueuedInst =
+                        itBucket->second.queuedInst.end();
 
                 while( itQueuedInst != enQueuedInst )
                 {
@@ -1128,10 +1131,14 @@ namespace Ogre
                         *AS_U32PTR( instanceBuffer ) = aabbSubMeshIdx;              ++instanceBuffer;
 
                         #undef AS_U32PTR
+
+                        ++numInstancesAfterCulling;
                     }
 
                     ++itQueuedInst;
                 }
+
+                itBucket->second.numInstancesAfterCulling = numInstancesAfterCulling;
 
                 ++itBucket;
             }
@@ -1475,11 +1482,13 @@ namespace Ogre
                 if( bucket.needsTexPool )
                 {
                     texSlot.texture = mVctMaterial->getTexturePool();
-                    bucket.job->setTexture( texUnit, texSlot );
+                    HlmsSamplerblock samplerblock;
+                    samplerblock.setAddressingMode( TAM_WRAP );
+                    bucket.job->setTexture( texUnit, texSlot, &samplerblock );
                     ++texUnit;
                 }
 
-                uint32 numInstancesInBucket = static_cast<uint32 >( itBucket->second.size() );
+                uint32 numInstancesInBucket = itBucket->second.numInstancesAfterCulling;
                 uint32 instanceRange[2] = { instanceStart, instanceStart + numInstancesInBucket };
 
                 paramInstanceRange.setManualValue( instanceRange, 2u );

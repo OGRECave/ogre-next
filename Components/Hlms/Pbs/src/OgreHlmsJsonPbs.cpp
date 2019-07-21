@@ -680,7 +680,7 @@ namespace Ogre
                     {
                         outString += ",\n\t\t\t\t\"texture\" : [\"";
                         outString += *aliasName;
-                        outString += "\", ";
+                        outString += "\", \"";
                         outString += finalTexName;
                         outString += "\"]";
                     }

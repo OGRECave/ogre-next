@@ -237,7 +237,12 @@ namespace Ogre
             uint32          materialIdx;
             bool            needsAabbUpdate;
         };
-        typedef map< VoxelizerBucket, FastArray<QueuedInstance> >::type VoxelizerBucketMap;
+        struct BucketData
+        {
+            FastArray<QueuedInstance>   queuedInst;
+            uint32                      numInstancesAfterCulling;
+        };
+        typedef map< VoxelizerBucket, BucketData >::type VoxelizerBucketMap;
         VoxelizerBucketMap mBuckets;
 
         VctMaterial *mVctMaterial;
