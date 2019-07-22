@@ -237,7 +237,7 @@
 		dirLS.x = dot( probeParams.xform_row0.xyz, dir );
 		dirLS.y = dot( probeParams.xform_row1.xyz, dir );
 		dirLS.z = dot( probeParams.xform_row2.xyz, dir );
-		return dirLS;
+		return normalize( dirLS );
 	}
 
 	#define M_PI 3.141592654f
@@ -306,7 +306,6 @@
 		for( int i=0; i<@value( vct_cone_dirs ); ++i )
 		{
 			float3 dir = toVctProbeSpaceDir( mul( TBN, cone_dirs[i] ), probeParams );
-			dir = normalize( dir );
 			//TODO: There are better values than passBuf.ambientUpperHemi. When VCT probe can be used
 			//then we should not apply BRDF_EnvMap and use the values in pixelData.envColourD
 			light += coneWeights[i] * voxelConeTraceDiff( probeParams, posLS, ambientUpperHemi, dir,
