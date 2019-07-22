@@ -74,6 +74,7 @@ namespace Ogre
         mSamplerblockTrilinear( 0 ),
         mVoxelizer( voxelizer ),
         mVoxelizerTexturesChanged( false ),
+        mVoxelizerListenersRemoved( false ),
         mLightInjectionJob( 0 ),
         mLightsConstBuffer( 0 ),
         mAnisoGeneratorStep0( 0 ),
@@ -101,6 +102,7 @@ namespace Ogre
 
         mVoxelizer->getAlbedoVox()->addListener( this );
         mVoxelizer->getNormalVox()->addListener( this );
+        mVoxelizerListenersRemoved = false;
 
         //VctVoxelizer should've already been initialized, thus no need
         //to check if JSON has been built or if the assets were added
@@ -154,6 +156,13 @@ namespace Ogre
         HlmsManager *hlmsManager = mVoxelizer->getHlmsManager();
         hlmsManager->destroySamplerblock( mSamplerblockTrilinear );
         mSamplerblockTrilinear = 0;
+
+        if( !mVoxelizerListenersRemoved )
+        {
+            mVoxelizer->getAlbedoVox()->removeListener( this );
+            mVoxelizer->getNormalVox()->removeListener( this );
+            mVoxelizerListenersRemoved = true;
+        }
 
         destroyTextures();
     }
@@ -503,6 +512,13 @@ namespace Ogre
     {
         if( mVoxelizerTexturesChanged )
             createTextures();
+
+        if( mVoxelizerListenersRemoved )
+        {
+            mVoxelizer->getAlbedoVox()->addListener( this );
+            mVoxelizer->getNormalVox()->addListener( this );
+            mVoxelizerListenersRemoved = false;
+        }
     }
     //-------------------------------------------------------------------------
     void VctLighting::setupBounceTextures(void)
@@ -920,6 +936,9 @@ namespace Ogre
             mVoxelizerTexturesChanged = true;
 
         if( reason == TextureGpuListener::Deleted )
+        {
             texture->removeListener( this );
+            mVoxelizerListenersRemoved = true;
+        }
     }
 }

@@ -73,6 +73,7 @@ namespace Ogre
         HlmsSamplerblock const  *mSamplerblockTrilinear;
         VctVoxelizer    *mVoxelizer;
         bool            mVoxelizerTexturesChanged;
+        bool            mVoxelizerListenersRemoved;
 
         HlmsComputeJob      *mLightInjectionJob;
         ConstBufferPacked   *mLightsConstBuffer;
