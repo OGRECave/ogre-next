@@ -375,7 +375,7 @@
 		pixelData.NdotV		= saturate( dot( pixelData.normal, pixelData.viewDir ) );
 	@end
 
-	@property( !ambient_fixed )
+	@property( !ambient_fixed || vct_num_probes )
 		float3 finalColour = float3(0, 0, 0);
 	@else
 		float3 finalColour = passBuf.ambientUpperHemi.xyz * pixelData.diffuse.xyz;
@@ -389,6 +389,11 @@
 	@end
 	@property( needs_refl_dir )
 		pixelData.reflDir = 2.0 * dot( pixelData.viewDir, pixelData.normal ) * pixelData.normal - pixelData.viewDir;
+	@end
+
+	@property( ambient_hemisphere || vct_ambient_hemisphere )
+		float ambientWD = dot( passBuf.ambientHemisphereDir.xyz, pixelData.normal ) * 0.5 + 0.5;
+		float ambientWS = dot( passBuf.ambientHemisphereDir.xyz, pixelData.reflDir ) * 0.5 + 0.5;
 	@end
 @end
 
@@ -490,18 +495,16 @@
 	{
 		float3 reflDirLS = localCorrect( pixelData.reflDir, posInProbSpace, @insertpiece( pccProbeSource ) );
 		float3 nNormalLS = localCorrect( pixelData.normal, posInProbSpace, @insertpiece( pccProbeSource ) );
-		pixelData.envColourS = SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
-											   reflDirLS, @insertpiece( envSpecularRoughness ) ).xyz @insertpiece( ApplyEnvMapScale );// * 0.0152587890625;
+		pixelData.envColourS += SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
+												reflDirLS, @insertpiece( envSpecularRoughness ) ).xyz @insertpiece( ApplyEnvMapScale );// * 0.0152587890625;
 		@property( cubemaps_as_diffuse_gi )
 			pixelData.envColourD = SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
 												   nNormalLS, 11.0 ).xyz @insertpiece( ApplyEnvMapScale );// * 0.0152587890625;
 		@end
 
-		pixelData.envColourS = pixelData.envColourS * saturate( probeFade * 200.0 );
+		pixelData.envColourS += pixelData.envColourS * saturate( probeFade * 200.0 );
 		@property( cubemaps_as_diffuse_gi )
-			pixelData.envColourD = pixelData.envColourD * saturate( probeFade * 200.0 );
-		@else
-			pixelData.envColourD = float3( 0, 0, 0 );
+			pixelData.envColourD += pixelData.envColourD * saturate( probeFade * 200.0 );
 		@end
 	}
 	else
@@ -513,15 +516,13 @@
 @end
 
 @piece( CubemapGlobal )
-	pixelData.envColourS = SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
-										   mul( pixelData.reflDir, passBuf.invViewMatCubemap ),
-										   @insertpiece( envSpecularRoughness ) ).xyz @insertpiece( ApplyEnvMapScale );
+	pixelData.envColourS += SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
+											mul( pixelData.reflDir, passBuf.invViewMatCubemap ),
+											@insertpiece( envSpecularRoughness ) ).xyz @insertpiece( ApplyEnvMapScale );
 	@property( cubemaps_as_diffuse_gi )
-		pixelData.envColourD = SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
-											   mul( pixelData.normal, passBuf.invViewMatCubemap ),
-											   11.0 ).xyz @insertpiece( ApplyEnvMapScale );
-	@else
-		pixelData.envColourD = float3( 0, 0, 0 );
+		pixelData.envColourD += SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
+												mul( pixelData.normal, passBuf.invViewMatCubemap ),
+												11.0 ).xyz @insertpiece( ApplyEnvMapScale );
 	@end
 @end
 
@@ -636,6 +637,12 @@
 			@insertpiece( DoAreaLtcLights )
 
 			@insertpiece( forward3dLighting )
+
+			@property( needs_env_brdf && !use_envprobe_map && !hlms_use_ssr && !use_planar_reflections && !vct_num_probes )
+				pixelData.envColourS = float3( 0, 0, 0 );
+				pixelData.envColourD = float3( 0, 0, 0 );
+			@end
+
 			@insertpiece( forwardPlusDoCubemaps )
 			@insertpiece( applyIrradianceVolumes )
 
@@ -657,18 +664,14 @@
 				@property( use_envprobe_map )
 					pixelData.envColourS = lerp( pixelData.envColourS.xyz, ssrReflection.xyz, ssrReflection.w );
 				@else
-					pixelData.envColourS = ssrReflection.xyz * ssrReflection.w;
-					pixelData.envColourD = float3( 0, 0, 0 );
+					pixelData.envColourS += ssrReflection.xyz * ssrReflection.w;
 				@end
 			@end
 
 			@insertpiece( DoPlanarReflectionsPS )
 
 			@property( ambient_hemisphere )
-				float ambientWD = dot( passBuf.ambientHemisphereDir.xyz, pixelData.normal ) * 0.5 + 0.5;
-				float ambientWS = dot( passBuf.ambientHemisphereDir.xyz, pixelData.reflDir ) * 0.5 + 0.5;
-
-				@property( use_envprobe_map || hlms_use_ssr || use_planar_reflections )
+				@property( use_envprobe_map || hlms_use_ssr || use_planar_reflections || vct_num_probes )
 					pixelData.envColourS += lerp( passBuf.ambientLowerHemi.xyz, passBuf.ambientUpperHemi.xyz, ambientWD );
 					pixelData.envColourD += lerp( passBuf.ambientLowerHemi.xyz, passBuf.ambientUpperHemi.xyz, ambientWS );
 				@else

@@ -163,6 +163,8 @@
 		}
 	}
 
+	blockColour *= p_bakingMultiplier;
+
 	wshort3 voxelCelUvw = wshort3( gl_GlobalInvocationID.xyz );
 	OGRE_imageWrite3D4( lightVoxel, voxelCelUvw, toSRGB( float4( blockColour, albedoVal.w ) ) );
 @end

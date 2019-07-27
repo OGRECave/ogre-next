@@ -62,9 +62,9 @@
             "params" :
             [
                 ["numLights",               [0],        "uint"],
-                ["rayMarchStepSize",        [1,1,1],    "float"],
+                ["rayMarchStepSize_bakingMultiplier",   [1,1,1,1],  "float"],
                 ["voxelCellSize",           [1,1,1],    "float"],
-                ["dirCorrectionRatio_thinWallCounter", [1,1,1,1],    "float"],
+                ["dirCorrectionRatio_thinWallCounter", [1,1,1,1],   "float"],
                 ["invVoxelResolution",      [1,1,1],    "float"]
             ],
 

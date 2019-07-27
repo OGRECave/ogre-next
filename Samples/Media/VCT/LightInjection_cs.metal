@@ -16,7 +16,7 @@
 struct Params
 {
 	uint numLights;
-	float3 rayMarchStepSize;
+	float4 rayMarchStepSize_bakingMultiplier;
 	//float3 voxelOrigin;
 	float3 voxelCellSize;
 	float4 dirCorrectionRatio_thinWallCounter;
@@ -24,7 +24,8 @@ struct Params
 };
 
 #define p_numLights p.numLights
-#define p_rayMarchStepSize p.rayMarchStepSize
+#define p_rayMarchStepSize rayMarchStepSize_bakingMultiplier.xyz
+#define p_bakingMultiplier rayMarchStepSize_bakingMultiplier.w
 //#define p_voxelOrigin p.voxelOrigin
 #define p_voxelCellSize p.voxelCellSize
 #define p_dirCorrectionRatio p.dirCorrectionRatio_thinWallCounter.xyz

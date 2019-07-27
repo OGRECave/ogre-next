@@ -80,6 +80,8 @@ namespace Ogre
         mAnisoGeneratorStep0( 0 ),
         mLightVctBounceInject( 0 ),
         mLightBounce( 0 ),
+        mBakingMultiplier( 1.0f ),
+        mRealtimeMultiplier( 1.0f ),
         mDefaultLightDistThreshold( 0.5f ),
         mAnisotropic( bAnisotropic ),
         mNumLights( 0 ),
@@ -99,6 +101,8 @@ namespace Ogre
         mDebugVoxelVisualizer( 0 )
     {
         memset( mLightVoxel, 0, sizeof(mLightVoxel) );
+        memset( mUpperHemisphere, 0, sizeof(mUpperHemisphere) );
+        memset( mLowerHemisphere, 0, sizeof(mLowerHemisphere) );
 
         mVoxelizer->getAlbedoVox()->addListener( this );
         mVoxelizer->getNormalVox()->addListener( this );
@@ -111,7 +115,7 @@ namespace Ogre
 
         mShaderParams = &mLightInjectionJob->getShaderParams( "default" );
         mNumLights = mShaderParams->findParameter( "numLights" );
-        mRayMarchStepSize = mShaderParams->findParameter( "rayMarchStepSize" );
+        mRayMarchStepSize = mShaderParams->findParameter( "rayMarchStepSize_bakingMultiplier" );
         mVoxelCellSize = mShaderParams->findParameter( "voxelCellSize" );
         mDirCorrectionRatioThinWallCounter =
                 mShaderParams->findParameter( "dirCorrectionRatio_thinWallCounter" );
@@ -226,8 +230,8 @@ namespace Ogre
         mBarriersCreated = false;
     }
     //-------------------------------------------------------------------------
-    void VctLighting::addLight( ShaderVctLight * RESTRICT_ALIAS vctLight, Light *light,
-                                const Vector3 &voxelOrigin, const Vector3 &invVoxelSize )
+    float VctLighting::addLight( ShaderVctLight * RESTRICT_ALIAS vctLight, Light *light,
+                                 const Vector3 &voxelOrigin, const Vector3 &invVoxelSize )
     {
         const ColourValue diffuseColour = light->getDiffuseColour() * light->getPowerScale();
         for( size_t i=0; i<3u; ++i )
@@ -305,6 +309,11 @@ namespace Ogre
         vctLight->points[1][3u] = static_cast<float>( lightDir.x );
         vctLight->points[2][3u] = static_cast<float>( lightDir.y );
         vctLight->points[3][3u] = static_cast<float>( lightDir.z );
+
+        float maxValue;
+        maxValue = Ogre::max( diffuseColour.r, diffuseColour.g );
+        maxValue = Ogre::max( maxValue, diffuseColour.b );
+        return maxValue;
     }
     //-------------------------------------------------------------------------
     void VctLighting::createTextures()
@@ -712,8 +721,19 @@ namespace Ogre
         return mLightBounce != 0;
     }
     //-------------------------------------------------------------------------
-    void VctLighting::update( SceneManager *sceneManager, uint32 numBounces, float thinWallCounter,
-                              float rayMarchStepScale, uint32 _lightMask )
+    void VctLighting::setMultiplier( float realtimeMult )
+    {
+        setMultiplier( realtimeMult, 1.0f / realtimeMult );
+    }
+    //-------------------------------------------------------------------------
+    void VctLighting::setMultiplier( float realtimeMult, float bakingMult )
+    {
+        mRealtimeMultiplier = realtimeMult;
+        mBakingMultiplier = bakingMult;
+    }
+    //-------------------------------------------------------------------------
+    void VctLighting::update( SceneManager *sceneManager, uint32 numBounces, bool autoMultiplier,
+                              float thinWallCounter, float rayMarchStepScale, uint32 _lightMask )
     {
         OGRE_ASSERT_LOW( rayMarchStepScale >= 1.0f );
 
@@ -738,6 +758,8 @@ namespace Ogre
         uavSlot.texture = mLightVoxel[0];
         uavSlot.pixelFormat = PFG_RGBA8_UNORM;
         mLightInjectionJob->_setUavTexture( 0, uavSlot );
+
+        float autoMultiplierValue = 0.0f;
 
         const Vector3 voxelOrigin   = mVoxelizer->getVoxelOrigin();
         const Vector3 invVoxelRes   = 1.0f / mVoxelizer->getVoxelResolution();
@@ -776,7 +798,8 @@ namespace Ogre
                             light->getType() == Light::LT_AREA_APPROX ||
                             light->getType() == Light::LT_AREA_LTC )
                         {
-                            addLight( vctLight, light, voxelOrigin, invVoxelSize );
+                            const float maxVal = addLight( vctLight, light, voxelOrigin, invVoxelSize );
+                            autoMultiplierValue = Ogre::max( autoMultiplierValue, maxVal );
                             ++vctLight;
                             ++numCollectedLights;
                         }
@@ -789,6 +812,9 @@ namespace Ogre
 
         mLightsConstBuffer->unmap( UO_KEEP_PERSISTENT );
 
+        if( autoMultiplier )
+            setMultiplier( autoMultiplierValue / Math::PI );
+
         const Vector3 voxelRes( mLightVoxel[0]->getWidth(), mLightVoxel[0]->getHeight(),
                                 mLightVoxel[0]->getDepth() );
         const Vector3 voxelCellSize( mVoxelizer->getVoxelCellSize() );
@@ -799,7 +825,7 @@ namespace Ogre
                                     fabsf( dirCorrection.z ) );
 
         mNumLights->setManualValue( numCollectedLights );
-        mRayMarchStepSize->setManualValue( rayMarchStepScale / voxelRes );
+        mRayMarchStepSize->setManualValue( Vector4( rayMarchStepScale / voxelRes, mBakingMultiplier ) );
         mVoxelCellSize->setManualValue( voxelCellSize );
         mDirCorrectionRatioThinWallCounter->setManualValue( Vector4( dirCorrection, thinWallCounter ) );
         mInvVoxelResolution->setManualValue( invVoxelRes );
@@ -829,9 +855,14 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
+    bool VctLighting::needsAmbientHemisphere() const
+    {
+        return memcmp( mUpperHemisphere, mLowerHemisphere, sizeof(mUpperHemisphere) ) != 0;
+    }
+    //-------------------------------------------------------------------------
     size_t VctLighting::getConstBufferSize(void) const
     {
-        return 5u * 4u * sizeof(float);
+        return 7u * 4u * sizeof(float);
     }
     //-------------------------------------------------------------------------
     void VctLighting::fillConstBufferData( const Matrix4 &viewMatrix,
@@ -847,11 +878,11 @@ namespace Ogre
         float mipDiff = (static_cast<float>( PixelFormatGpuUtils::getMaxMipmapCount(
                                                  static_cast<uint32>( smallestRes ) ) ) - 8.0f) * 0.5f;
 
-        //float4 startBias_invStartBias_specSdfMaxMip_blendAmbient;
+        //float4 startBias_invStartBias_specSdfMaxMip_multiplier;
         *passBufferPtr++ = invSmallestRes;
         *passBufferPtr++ = smallestRes;
         *passBufferPtr++ = 7.0f + mipDiff;
-        *passBufferPtr++ = 0.0f;
+        *passBufferPtr++ = mRealtimeMultiplier;
 
         //float4 normalBias_blendFade_softShadowDampenFactor_specularSdfFactor;
         *passBufferPtr++ = mNormalBias;
@@ -863,6 +894,16 @@ namespace Ogre
         //Past 40, performance only went down without visible changes.
         //Thus 24 / 128 and 40 / 128 = 0.1875f and 0.3125f
         *passBufferPtr++ = Math::lerp( 0.1875f, 0.3125f, mSpecularSdfQuality ) * smallestRes;
+
+        *passBufferPtr++ = mUpperHemisphere[0];
+        *passBufferPtr++ = mUpperHemisphere[1];
+        *passBufferPtr++ = mUpperHemisphere[2];
+        *passBufferPtr++ = 0;
+
+        *passBufferPtr++ = mLowerHemisphere[0];
+        *passBufferPtr++ = mLowerHemisphere[1];
+        *passBufferPtr++ = mLowerHemisphere[2];
+        *passBufferPtr++ = 0;
 
         Matrix4 xform;
         xform.makeTransform( -mVoxelizer->getVoxelOrigin() / mVoxelizer->getVoxelSize(),
@@ -926,6 +967,16 @@ namespace Ogre
         {
             mAnisotropic = bAnisotropic;
             createTextures();
+        }
+    }
+    //-------------------------------------------------------------------------
+    void VctLighting::setAmbient( const ColourValue& upperHemisphere,
+                                  const ColourValue& lowerHemisphere )
+    {
+        for( size_t i=0; i<3u; ++i )
+        {
+            mUpperHemisphere[i] = static_cast<float>( upperHemisphere[i] );
+            mLowerHemisphere[i] = static_cast<float>( lowerHemisphere[i] );
         }
     }
     //-------------------------------------------------------------------------

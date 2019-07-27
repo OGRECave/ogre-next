@@ -91,6 +91,12 @@ namespace Ogre
         HlmsComputeJob              *mLightVctBounceInject;
         TextureGpu                  *mLightBounce;
 
+        float   mBakingMultiplier;
+        float   mRealtimeMultiplier;
+
+        float	mUpperHemisphere[3];
+        float	mLowerHemisphere[3];
+
         float mDefaultLightDistThreshold;
         bool    mAnisotropic;
 
@@ -164,8 +170,8 @@ namespace Ogre
         void createBarriers(void);
         void destroyBarriers(void);
 
-        void addLight( ShaderVctLight * RESTRICT_ALIAS vctLight, Light *light,
-                       const Vector3 &voxelOrigin, const Vector3 &invVoxelSize );
+        float addLight( ShaderVctLight * RESTRICT_ALIAS vctLight, Light *light,
+                        const Vector3 &voxelOrigin, const Vector3 &invVoxelSize );
 
         void createTextures(void);
         void destroyTextures(void);
@@ -200,10 +206,51 @@ namespace Ogre
         void setAllowMultipleBounces( bool bAllowMultipleBounces );
         bool getAllowMultipleBounces(void) const;
 
+        /// Same as calling setMultiplier( realtimeMult, 1.0f / realtimeMult );
+        void setMultiplier( float realtimeMult );
+
+        /** Sets multipliers for HDR rendering.
+
+            Internally the lighting data is stored in RGBA8_UNORM_sRGB, which is not enough
+            for HDR. More precise formats would allow for native HDR, however it's memory cost
+            and bandwidth could be prohibtive.
+
+            Hence bakingMult is used to bring down the lighting data to usable levels without
+            saturation (however beware areas with very low lighting conditions may round to 0).
+
+            During rendering, realtimeMult will be bring back to its original range.
+
+            Typically you would want to set:
+                realtimeMult    => 1.0
+                bakingMult      = 1.0 / realtimeMult;
+
+            For LDR rendering, you would want to set both values to 1.
+        @remarks
+            These values can be overwritten by VctLighting::update if autoMultiplier = true
+        @param realtimeMult
+            Value to multiply against GI lighting during regular rendering.
+            Values >= 1.0 make the GI stronger, values < 1.0 make the GI weaker.
+
+            Changes to this value take effect immediately
+        @param bakingMult
+            Value to multiply against GI lighting during baking.
+            Values >= 1 make the GI stronger but can saturate quickly
+            Values <= 1 make the GI weaker but can cause low light to become 0 (too dark)
+
+            Changes to this value take effect after calling VctLighting::update
+        */
+        void setMultiplier( float realtimeMult, float bakingMult );
+
+        float getRealtimeMultiplier(void) const     { return mRealtimeMultiplier; }
+        float getBakingMultiplier(void) const       { return mBakingMultiplier; }
+
         /**
         @param sceneManager
         @param numBounces
             Number of GI bounces. This value must be 0 if getAllowMultipleBounces() == false
+        @param autoMultiplier
+            Whether we should calculate the ideal multiplier based on lights on scene.
+            See VctLighting::setMultiplier
         @param thinWallCounter
             Shadows are calculated by raymarching towards the light source. However sometimes
             the ray 'may go through' a wall due to how bilinear interpolation works.
@@ -228,8 +275,10 @@ namespace Ogre
         @param lightMask
         */
         void update( SceneManager *sceneManager, uint32 numBounces,
-                     float thinWallCounter=1.0f,
+                     bool autoMultiplier=true, float thinWallCounter=1.0f,
                      float rayMarchStepScale=1.0f, uint32 lightMask=0xffffffff );
+
+        bool needsAmbientHemisphere() const;
 
         size_t getConstBufferSize(void) const;
 
@@ -258,6 +307,21 @@ namespace Ogre
         */
         void setAnisotropic( bool bAnisotropic );
         bool isAnisotropic(void) const                      { return mAnisotropic; }
+
+        /** Extremely similar version of SceneManager::setAmbientLight
+            In fact the hemisphereDir parameter is shared and set in SceneManager::setAmbientLight
+
+            Setting upperHemisphere = lowerHemisphere can cause shader recompilations.
+
+            These values are used when cone tracing reaches the end of the probe without hitting
+            anything, which usually means the sky must be visible.
+        @param upperHemisphere
+            upperHemisphere should be set to the sky colour, which is usually set to a value *much*
+            brighter than the ambient light (i.e. use the clear colour instead of the ambient colour)
+        @param lowerHemisphere
+            lowerHemisphere should be set to the ground colour
+        */
+        void setAmbient( const ColourValue& upperHemisphere, const ColourValue& lowerHemisphere );
 
         TextureGpu** getLightVoxelTextures(void)            { return mLightVoxel; }
         uint32 getNumVoxelTextures(void) const              { return mAnisotropic ? 4u : 1u; }

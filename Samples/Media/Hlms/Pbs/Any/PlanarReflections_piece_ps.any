@@ -52,11 +52,10 @@
 	//	x/(1-cos20) - cos20/(1-cos20);
 	//	x * 16.581718739 - 15.581718739;
 	planarWeight *= saturate( dot( planarReflection.xyz, pixelData.normal.xyz ) * 16.581718739 - 15.581718739 );
-	@property( hlms_use_ssr || ((envprobe_map && envprobe_map != target_envprobe_map) || parallax_correct_cubemaps) )
+	@property( hlms_use_ssr || vct_num_probes || ((envprobe_map && envprobe_map != target_envprobe_map) || parallax_correct_cubemaps) )
 		pixelData.envColourS = lerp( pixelData.envColourS, planarReflectionS, planarWeight );
 	@end @property( !hlms_use_ssr && !((envprobe_map && envprobe_map != target_envprobe_map) || parallax_correct_cubemaps) )
-		pixelData.envColourS = planarReflectionS * planarWeight;
-		pixelData.envColourD = float3( 0, 0, 0 );
+		pixelData.envColourS += planarReflectionS * planarWeight;
 	@end
 @end
 

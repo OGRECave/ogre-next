@@ -122,10 +122,10 @@ CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
 	float4 windowHeight;
 @end
 
-@property( ambient_hemisphere || ambient_fixed || envmap_scale )
+@property( ambient_hemisphere || ambient_fixed || envmap_scale || vct_ambient_hemisphere )
 	float4 ambientUpperHemi;
 @end
-@property( ambient_hemisphere )
+@property( ambient_hemisphere || vct_ambient_hemisphere )
 	float4 ambientLowerHemi;
 	float4 ambientHemisphereDir;
 @end

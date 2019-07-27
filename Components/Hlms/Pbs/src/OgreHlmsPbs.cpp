@@ -174,6 +174,7 @@ namespace Ogre
     const IdString PbsProperty::VctConeDirs       = IdString( "vct_cone_dirs" );
     const IdString PbsProperty::VctAnisotropic    = IdString( "vct_anisotropic" );
     const IdString PbsProperty::VctEnableSpecularSdfQuality=IdString("vct_enable_specular_sdf_quality");
+    const IdString PbsProperty::VctAmbientSphere  = IdString("vct_ambient_hemisphere");
     const IdString PbsProperty::ObbRestraintApprox= IdString( "obb_restraint_approx" );
     const IdString PbsProperty::ObbRestraintLtc   = IdString( "obb_restraint_ltc" );
 
@@ -932,14 +933,12 @@ namespace Ogre
             setProperty( PbsProperty::NeedsViewDir, 1 );
         }
 
-        if( hasVct )
-            setProperty( PbsProperty::NeedsReflDir, 1 );
-
         if( getProperty( HlmsBaseProp::UseSsr ) ||
             getProperty( PbsProperty::UseEnvProbeMap ) ||
             getProperty( PbsProperty::UsePlanarReflections ) ||
             getProperty( PbsProperty::AmbientHemisphere ) ||
-            getProperty( PbsProperty::EnableCubemapsAuto ) )
+            getProperty( PbsProperty::EnableCubemapsAuto ) ||
+            hasVct )
         {
             setProperty( PbsProperty::NeedsReflDir, 1 );
             setProperty( PbsProperty::NeedsEnvBrdf, 1 );
@@ -1200,6 +1199,9 @@ namespace Ogre
         assert( !(mPrePassTextures->empty() && mSsrTexture) &&
                 "Using SSR *requires* to be in prepass mode" );
 
+        const bool vctNeedsAmbientHemi = !casterPass && mVctLighting &&
+                                         mVctLighting->needsAmbientHemisphere();
+
         AmbientLightMode ambientMode = mAmbientLightMode;
         ColourValue upperHemisphere = sceneManager->getAmbientLightUpperHemisphere();
         ColourValue lowerHemisphere = sceneManager->getAmbientLightLowerHemisphere();
@@ -1268,6 +1270,7 @@ namespace Ogre
                 setProperty( PbsProperty::VctAnisotropic, mVctLighting->isAnisotropic() );
                 setProperty( PbsProperty::VctEnableSpecularSdfQuality,
                              mVctLighting->shouldEnableSpecularSdfQuality() );
+                setProperty( PbsProperty::VctAmbientSphere, vctNeedsAmbientHemi );
             }
 
             if( mIrradianceVolume )
@@ -1427,12 +1430,17 @@ namespace Ogre
                 mapSize += 4 * 4;
 
             //vec3 ambientUpperHemi + float envMapScale
-            if( ambientMode == AmbientFixed || ambientMode == AmbientHemisphere || envMapScale != 1.0f )
+            if( ambientMode == AmbientFixed || ambientMode == AmbientHemisphere ||
+                envMapScale != 1.0f || vctNeedsAmbientHemi )
+            {
                 mapSize += 4 * 4;
+            }
 
             //vec3 ambientLowerHemi + padding + vec3 ambientHemisphereDir + padding
-            if( ambientMode == AmbientHemisphere )
+            if( ambientMode == AmbientHemisphere || vctNeedsAmbientHemi )
+            {
                 mapSize += 8 * 4;
+            }
 
             //vec3 irradianceOrigin + float maxPower +
             //vec3 irradianceSize + float invHeight + mat4 invView
@@ -1665,7 +1673,8 @@ namespace Ogre
             }
 
             //vec3 ambientUpperHemi + padding
-            if( ambientMode == AmbientFixed || ambientMode == AmbientHemisphere || envMapScale != 1.0f )
+            if( ambientMode == AmbientFixed || ambientMode == AmbientHemisphere ||
+                envMapScale != 1.0f || vctNeedsAmbientHemi )
             {
                 *passBufferPtr++ = static_cast<float>( upperHemisphere.r );
                 *passBufferPtr++ = static_cast<float>( upperHemisphere.g );
@@ -1674,7 +1683,7 @@ namespace Ogre
             }
 
             //vec3 ambientLowerHemi + padding + vec3 ambientHemisphereDir + padding
-            if( ambientMode == AmbientHemisphere )
+            if( ambientMode == AmbientHemisphere || vctNeedsAmbientHemi )
             {
                 *passBufferPtr++ = static_cast<float>( lowerHemisphere.r );
                 *passBufferPtr++ = static_cast<float>( lowerHemisphere.g );

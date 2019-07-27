@@ -124,7 +124,7 @@ namespace Demo
             hlmsPbs->setVctLighting( mVctLighting );
         }
 
-        mVctLighting->update( sceneManager, mNumBounces, mThinWallCounter );
+        mVctLighting->update( sceneManager, mNumBounces, true, mThinWallCounter );
     }
     //-----------------------------------------------------------------------------------
     void VoxelizerGameState::cycleScenes( bool bPrev )
@@ -416,7 +416,8 @@ namespace Demo
         else if( arg.keysym.sym == SDLK_F4 )
         {
             mVctLighting->setAnisotropic( !mVctLighting->isAnisotropic() );
-            mVctLighting->update( mGraphicsSystem->getSceneManager(), mNumBounces, mThinWallCounter );
+            mVctLighting->update( mGraphicsSystem->getSceneManager(), mNumBounces,
+                                  true, mThinWallCounter );
         }
         else if( arg.keysym.sym == SDLK_F5 )
         {
@@ -425,7 +426,8 @@ namespace Demo
             else if( mNumBounces > 0u )
                 --mNumBounces;
 
-            mVctLighting->update( mGraphicsSystem->getSceneManager(), mNumBounces, mThinWallCounter );
+            mVctLighting->update( mGraphicsSystem->getSceneManager(), mNumBounces,
+                                  true, mThinWallCounter );
         }
         else if( arg.keysym.sym == SDLK_F6 )
         {

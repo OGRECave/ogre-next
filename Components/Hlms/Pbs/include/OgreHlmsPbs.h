@@ -446,6 +446,7 @@ namespace Ogre
         static const IdString VctConeDirs;
         static const IdString VctAnisotropic;
         static const IdString VctEnableSpecularSdfQuality;
+        static const IdString VctAmbientSphere;
         static const IdString ObbRestraintApprox;
         static const IdString ObbRestraintLtc;
 

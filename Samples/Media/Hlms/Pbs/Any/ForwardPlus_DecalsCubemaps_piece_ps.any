@@ -140,8 +140,6 @@
 
 	@property( hlms_forwardplus_debug )totalNumLightsInGrid += numLightsInGrid;@end
 
-	pixelData.envColourS = float3( 0, 0, 0 );
-	pixelData.envColourD = float3( 0, 0, 0 );
 	float cubemapAccumWeight = 0;
 
 	for( uint i=0u; i<numLightsInGrid; ++i )
