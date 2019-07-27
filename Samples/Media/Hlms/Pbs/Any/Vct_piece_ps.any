@@ -331,8 +331,8 @@
 		}
 	@end
 
-	pixelData.envColourD.xyz = vctDiffuse.xyz;
-	pixelData.envColourS.xyz = vctSpecular.xyz;
+	pixelData.envColourD.xyz += vctDiffuse.xyz;
+	pixelData.envColourS.xyz += vctSpecular.xyz;
 @end
 
 @end

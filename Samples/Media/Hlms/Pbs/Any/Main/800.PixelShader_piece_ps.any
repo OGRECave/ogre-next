@@ -638,7 +638,7 @@
 
 			@insertpiece( forward3dLighting )
 
-			@property( needs_env_brdf && !use_envprobe_map && !hlms_use_ssr && !use_planar_reflections && !vct_num_probes )
+			@property( needs_env_brdf && (use_envprobe_map || hlms_use_ssr || use_planar_reflections || vct_num_probes) )
 				pixelData.envColourS = float3( 0, 0, 0 );
 				pixelData.envColourD = float3( 0, 0, 0 );
 			@end
