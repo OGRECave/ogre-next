@@ -808,6 +808,7 @@ namespace Ogre
         mLightsConstBuffer->unmap( UO_KEEP_PERSISTENT );
 
         autoMultiplierValue /= Math::PI;
+        autoMultiplierValue = 1.0f / autoMultiplierValue;
         if( !autoMultiplier )
             autoMultiplierValue = mBakingMultiplier;
         mInvBakingMultiplier = 1.0f / autoMultiplierValue;
