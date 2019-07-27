@@ -672,12 +672,25 @@
 
 			@property( ambient_hemisphere )
 				@property( use_envprobe_map || hlms_use_ssr || use_planar_reflections || vct_num_probes )
-					pixelData.envColourS += lerp( passBuf.ambientLowerHemi.xyz, passBuf.ambientUpperHemi.xyz, ambientWD );
-					pixelData.envColourD += lerp( passBuf.ambientLowerHemi.xyz, passBuf.ambientUpperHemi.xyz, ambientWS );
+					@property( vct_num_probes )
+						//Only use ambient lighting if object is outside any VCT probe
+						if( vctSpecular.w > 0 )
+						{
+					@end
+							pixelData.envColourS += lerp( passBuf.ambientLowerHemi.xyz, passBuf.ambientUpperHemi.xyz, ambientWD );
+							pixelData.envColourD += lerp( passBuf.ambientLowerHemi.xyz, passBuf.ambientUpperHemi.xyz, ambientWS );
+					@property( vct_num_probes )
+						}
+					@end
 				@else
 					pixelData.envColourS = lerp( passBuf.ambientLowerHemi.xyz, passBuf.ambientUpperHemi.xyz, ambientWD );
 					pixelData.envColourD = lerp( passBuf.ambientLowerHemi.xyz, passBuf.ambientUpperHemi.xyz, ambientWS );
 				@end
+			@end
+			@property( ambient_fixed && vct_num_probes )
+				//Only use ambient lighting if object is outside any VCT probe
+				finalColour += vctSpecular.w > 0 ? float3( 0, 0, 0 ) :
+												   (passBuf.ambientUpperHemi.xyz * pixelData.diffuse.xyz);
 			@end
 
 			@property( needs_env_brdf )
