@@ -92,7 +92,7 @@ namespace Ogre
         TextureGpu                  *mLightBounce;
 
         float   mBakingMultiplier;
-        float   mRealtimeMultiplier;
+        float   mInvBakingMultiplier;
 
         float	mUpperHemisphere[3];
         float	mLowerHemisphere[3];
@@ -163,6 +163,18 @@ namespace Ogre
         */
         float   mSpecularSdfQuality;
 
+        /** Sets the intensity/brightness of the GI. e.g. to make the GI 2x brighter, set it to 2.0
+            To make the GI darker, set it to 0.5
+
+            Default value is 1.0
+
+            Valid range is (0; inf)
+
+            @remark	 PUBLIC VARIABLE. This variable can be altered directly.
+                     Changes are reflected immediately.
+        */
+        float   mMultiplier;
+
     protected:
 
         VoxelVisualizer *mDebugVoxelVisualizer;
@@ -186,7 +198,7 @@ namespace Ogre
 
     public:
         VctLighting( IdType id, VctVoxelizer *voxelizer, bool bAnisotropic );
-        ~VctLighting();
+        virtual ~VctLighting();
 
         /** This function allows VctLighting::update to pass numBounces > 0 as argument.
             Note however, that multiple bounces requires creating another RGBA32_UNORM texture
@@ -206,10 +218,7 @@ namespace Ogre
         void setAllowMultipleBounces( bool bAllowMultipleBounces );
         bool getAllowMultipleBounces(void) const;
 
-        /// Same as calling setMultiplier( realtimeMult, 1.0f / realtimeMult );
-        void setMultiplier( float realtimeMult );
-
-        /** Sets multipliers for HDR rendering.
+        /** Sets baking multiplier for HDR rendering.
 
             Internally the lighting data is stored in RGBA8_UNORM_sRGB, which is not enough
             for HDR. More precise formats would allow for native HDR, however it's memory cost
@@ -218,39 +227,39 @@ namespace Ogre
             Hence bakingMult is used to bring down the lighting data to usable levels without
             saturation (however beware areas with very low lighting conditions may round to 0).
 
-            During rendering, realtimeMult will be bring back to its original range.
+            During rendering, we use 1.0 / bakingMult to bring back the values its original range.
 
-            Typically you would want to set:
-                realtimeMult    => 1.0
-                bakingMult      = 1.0 / realtimeMult;
-
-            For LDR rendering, you would want to set both values to 1.
+            For LDR rendering, you probably would want to set this value to 1.0.
         @remarks
-            These values can be overwritten by VctLighting::update if autoMultiplier = true
-        @param realtimeMult
-            Value to multiply against GI lighting during regular rendering.
-            Values >= 1.0 make the GI stronger, values < 1.0 make the GI weaker.
+            This value will be ignored if VctLighting::update is not called after setting this value
+            or if VctLighting::update gets called again but autoMultiplier = true
 
-            Changes to this value take effect immediately
+            This function is different from VctLighting::mMultiplier.
+            That variable controls the GI strength/brightness.
+            This function only controls precision and accuracy.
         @param bakingMult
             Value to multiply against GI lighting during baking.
-            Values >= 1 make the GI stronger but can saturate quickly
-            Values <= 1 make the GI weaker but can cause low light to become 0 (too dark)
+            Use values >= 1 when all your lights are too dim,
+            but could saturate quickly if that's not the case
+
+            Values <= 1 make when your lights are very bright,
+            but can cause low light to become 0 (too dark)
 
             Changes to this value take effect after calling VctLighting::update
+            and autoMultiplier must be set to false
         */
-        void setMultiplier( float realtimeMult, float bakingMult );
+        void setBakingMultiplier( float bakingMult );
+        float getBakingMultiplier(void) const               { return mBakingMultiplier; }
 
-        float getRealtimeMultiplier(void) const     { return mRealtimeMultiplier; }
-        float getBakingMultiplier(void) const       { return mBakingMultiplier; }
+        /// If you've set setBakingMultiplier but haven't yet called VctLighting::update
+        /// with autoMultiplier = false, this function returns the baking multiplier that
+        /// is currently in use (beware of floating point accuracy differences)
+        float getCurrentBakingMultiplier(void) const        { return 1.0f / mInvBakingMultiplier; }
 
         /**
         @param sceneManager
         @param numBounces
             Number of GI bounces. This value must be 0 if getAllowMultipleBounces() == false
-        @param autoMultiplier
-            Whether we should calculate the ideal multiplier based on lights on scene.
-            See VctLighting::setMultiplier
         @param thinWallCounter
             Shadows are calculated by raymarching towards the light source. However sometimes
             the ray 'may go through' a wall due to how bilinear interpolation works.
@@ -265,6 +274,9 @@ namespace Ogre
 
             Note that thinWallCounter can *not* fight all sources of light leaking,
             thus increasing it to ridiculous high values may not yield any benefit.
+        @param autoMultiplier
+            Whether we should calculate the ideal multiplier based on lights on scene.
+            See VctLighting::setMultiplier
         @param rayMarchStepScale
             Scale for the ray march step size. A value < 1.0f makes little sense
             and will trigger an assert.
@@ -275,7 +287,7 @@ namespace Ogre
         @param lightMask
         */
         void update( SceneManager *sceneManager, uint32 numBounces,
-                     bool autoMultiplier=true, float thinWallCounter=1.0f,
+                     float thinWallCounter=1.0f, bool autoMultiplier=true,
                      float rayMarchStepScale=1.0f, uint32 lightMask=0xffffffff );
 
         bool needsAmbientHemisphere() const;

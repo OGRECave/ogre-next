@@ -81,7 +81,7 @@ namespace Ogre
         mLightVctBounceInject( 0 ),
         mLightBounce( 0 ),
         mBakingMultiplier( 1.0f ),
-        mRealtimeMultiplier( 1.0f ),
+        mInvBakingMultiplier( 1.0f ),
         mDefaultLightDistThreshold( 0.5f ),
         mAnisotropic( bAnisotropic ),
         mNumLights( 0 ),
@@ -98,6 +98,7 @@ namespace Ogre
         mBarriersCreated( false ),
         mNormalBias( 0.25f ),
         mSpecularSdfQuality( 0.875f ),
+        mMultiplier( 1.0f ),
         mDebugVoxelVisualizer( 0 )
     {
         memset( mLightVoxel, 0, sizeof(mLightVoxel) );
@@ -721,19 +722,13 @@ namespace Ogre
         return mLightBounce != 0;
     }
     //-------------------------------------------------------------------------
-    void VctLighting::setMultiplier( float realtimeMult )
+    void VctLighting::setBakingMultiplier( float bakingMult )
     {
-        setMultiplier( realtimeMult, 1.0f / realtimeMult );
-    }
-    //-------------------------------------------------------------------------
-    void VctLighting::setMultiplier( float realtimeMult, float bakingMult )
-    {
-        mRealtimeMultiplier = realtimeMult;
         mBakingMultiplier = bakingMult;
     }
     //-------------------------------------------------------------------------
-    void VctLighting::update( SceneManager *sceneManager, uint32 numBounces, bool autoMultiplier,
-                              float thinWallCounter, float rayMarchStepScale, uint32 _lightMask )
+    void VctLighting::update( SceneManager *sceneManager, uint32 numBounces, float thinWallCounter,
+                              bool autoMultiplier, float rayMarchStepScale, uint32 _lightMask )
     {
         OGRE_ASSERT_LOW( rayMarchStepScale >= 1.0f );
 
@@ -812,8 +807,10 @@ namespace Ogre
 
         mLightsConstBuffer->unmap( UO_KEEP_PERSISTENT );
 
-        if( autoMultiplier )
-            setMultiplier( autoMultiplierValue / Math::PI );
+        autoMultiplierValue /= Math::PI;
+        if( !autoMultiplier )
+            autoMultiplierValue = mBakingMultiplier;
+        mInvBakingMultiplier = 1.0f / autoMultiplierValue;
 
         const Vector3 voxelRes( mLightVoxel[0]->getWidth(), mLightVoxel[0]->getHeight(),
                                 mLightVoxel[0]->getDepth() );
@@ -825,7 +822,8 @@ namespace Ogre
                                     fabsf( dirCorrection.z ) );
 
         mNumLights->setManualValue( numCollectedLights );
-        mRayMarchStepSize->setManualValue( Vector4( rayMarchStepScale / voxelRes, mBakingMultiplier ) );
+        mRayMarchStepSize->setManualValue( Vector4( rayMarchStepScale / voxelRes,
+                                                    autoMultiplierValue ) );
         mVoxelCellSize->setManualValue( voxelCellSize );
         mDirCorrectionRatioThinWallCounter->setManualValue( Vector4( dirCorrection, thinWallCounter ) );
         mInvVoxelResolution->setManualValue( invVoxelRes );
@@ -878,11 +876,14 @@ namespace Ogre
         float mipDiff = (static_cast<float>( PixelFormatGpuUtils::getMaxMipmapCount(
                                                  static_cast<uint32>( smallestRes ) ) ) - 8.0f) * 0.5f;
 
+        const float finalMultiplier     = mInvBakingMultiplier * mMultiplier;
+        const float invFinalMultiplier  = 1.0f / finalMultiplier;
+
         //float4 startBias_invStartBias_specSdfMaxMip_multiplier;
         *passBufferPtr++ = invSmallestRes;
         *passBufferPtr++ = smallestRes;
         *passBufferPtr++ = 7.0f + mipDiff;
-        *passBufferPtr++ = mRealtimeMultiplier;
+        *passBufferPtr++ = finalMultiplier;
 
         //float4 normalBias_blendFade_softShadowDampenFactor_specularSdfFactor;
         *passBufferPtr++ = mNormalBias;
@@ -895,14 +896,14 @@ namespace Ogre
         //Thus 24 / 128 and 40 / 128 = 0.1875f and 0.3125f
         *passBufferPtr++ = Math::lerp( 0.1875f, 0.3125f, mSpecularSdfQuality ) * smallestRes;
 
-        *passBufferPtr++ = mUpperHemisphere[0];
-        *passBufferPtr++ = mUpperHemisphere[1];
-        *passBufferPtr++ = mUpperHemisphere[2];
+        *passBufferPtr++ = mUpperHemisphere[0] * invFinalMultiplier;
+        *passBufferPtr++ = mUpperHemisphere[1] * invFinalMultiplier;
+        *passBufferPtr++ = mUpperHemisphere[2] * invFinalMultiplier;
         *passBufferPtr++ = 0;
 
-        *passBufferPtr++ = mLowerHemisphere[0];
-        *passBufferPtr++ = mLowerHemisphere[1];
-        *passBufferPtr++ = mLowerHemisphere[2];
+        *passBufferPtr++ = mLowerHemisphere[0] * invFinalMultiplier;
+        *passBufferPtr++ = mLowerHemisphere[1] * invFinalMultiplier;
+        *passBufferPtr++ = mLowerHemisphere[2] * invFinalMultiplier;
         *passBufferPtr++ = 0;
 
         Matrix4 xform;
