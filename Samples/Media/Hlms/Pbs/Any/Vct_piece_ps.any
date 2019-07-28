@@ -64,15 +64,18 @@
 		@end
 			( VctProbeParams probeParams, float3 posLS,
 			  float3 dirLS, float tanHalfAngle,
+		  @property( use_parallax_correct_cubemaps && @n == 1 )
+			  OGRE_OUT_REF( float3, vctSpecPosLS ),
+		  @end
 			  OGRE_Texture3D_float4 probe
 			  OGRE_SAMPLER_ARG_DECL( probeSampler )
 			  OGRE_VCT_ANISO_PROBE_ARG_DECL )
 		{
-			float dist = probeParams.vctStartBias;
+			float dist = probeParams.vctInvResolution;
 			float alpha = 0.0;
 			float4 color = float4( 0.0, 0.0, 0.0, 0.0 );
 
-			float diameter = max( probeParams.vctStartBias, 2.0 * tanHalfAngle * dist );
+			float diameter = max( probeParams.vctInvResolution, 2.0 * tanHalfAngle * dist );
 
 			@property( @n == 0 )
 				@property( vct_cone_dirs == 6 )
@@ -83,7 +86,7 @@
 					float lodStep	= 1.0;
 				@end
 			@else
-				float lodLevel = log2( diameter * probeParams.vctInvStartBias );
+				float lodLevel = log2( diameter * probeParams.vctResolution );
 			@end
 
 			@property( @n == 1 && vct_enable_specular_sdf_quality )
@@ -92,15 +95,23 @@
 
 			float3 uwvPos = posLS;
 
+			//The formula is:
+			//	threshold = 0.5f + invResolution * exp2( lodLevel ) * 0.5;
+			//Thus:
+			//	threshold = 0.5f + invRes * exp2( log2( diameter * probeParams.vctResolution ) ) * 0.5;
+			//	threshold = 0.5f + invRes * diameter * probeParams.vctResolution ) * 0.5;
+			//	threshold = 0.5f + diameter * 0.5;
+			float threshold = 0.5f + diameter * 0.5;
+
 			@property( !vct_anisotropic )
 				#define VCT_ANISOTROPIC_EARLY_OUT
 			@else
 				#define VCT_ANISOTROPIC_EARLY_OUT && lodLevel <= 0.5
 			@end
 			while( alpha < 0.95 &&
-					abs(uwvPos - 0.5).x < 0.5 &&
-					abs(uwvPos - 0.5).y < 0.5 &&
-					abs(uwvPos - 0.5).z < 0.5 VCT_ANISOTROPIC_EARLY_OUT )
+					abs(uwvPos - 0.5).x < threshold &&
+					abs(uwvPos - 0.5).y < threshold &&
+					abs(uwvPos - 0.5).z < threshold VCT_ANISOTROPIC_EARLY_OUT )
 			{
 				uwvPos = posLS + dist * dirLS;
 				float4 scolor = OGRE_SampleLevel( probe, probeSampler, uwvPos, lodLevel );
@@ -138,12 +149,14 @@
 				@else
 					dist += diameter * 0.5f;
 				@end
-				diameter = max( probeParams.vctStartBias, 2.0 * tanHalfAngle * dist );
+				diameter = max( probeParams.vctInvResolution, 2.0 * tanHalfAngle * dist );
 				@property( @n == 0 && vct_cone_dirs == 4 )
 					lodLevel += lodStep;
 				@else
-					lodLevel = log2( diameter * probeParams.vctInvStartBias );
-                @end
+					lodLevel = log2( diameter * probeParams.vctResolution );
+				@end
+
+				threshold = 0.5f + diameter * 0.5;
 			}
 
 			@property( vct_anisotropic )
@@ -155,9 +168,9 @@
 				float3 dirLSSquared = dirLS.xyz * dirLS.xyz;
 
 				while( alpha < 0.95 &&
-						abs(uwvPos - 0.5).x < 0.5 &&
-						abs(uwvPos - 0.5).y < 0.5 &&
-						abs(uwvPos - 0.5).z < 0.5 )
+						abs(uwvPos - 0.5).x < threshold &&
+						abs(uwvPos - 0.5).y < threshold &&
+						abs(uwvPos - 0.5).z < threshold )
 				{
 					uwvPos = posLS + dist * dirLS;
 					float3 sampleUVW = uwvPos;
@@ -180,16 +193,22 @@
 					color.xyz += scolor.xyz * a;
 					alpha += a * scolor.w;
 					dist += diameter * 0.5f;
-					diameter = max( probeParams.vctStartBias, 2.0 * tanHalfAngle * dist );
+					diameter = max( probeParams.vctInvResolution, 2.0 * tanHalfAngle * dist );
 					@property( @n == 0 && vct_cone_dirs == 4 )
 						lodLevel += lodStep;
 					@else
-						lodLevel = log2( diameter * probeParams.vctInvStartBias );
+						lodLevel = log2( diameter * probeParams.vctResolution );
 					@end
+
+					threshold = 0.5f + diameter * 0.5;
 				}
 			@end
 
 			color.w = 1.0f - min( 1.0f, alpha / 0.95f );
+
+		@property( use_parallax_correct_cubemaps && @n == 1 )
+			vctSpecPosLS = uwvPos;
+		@end
 
 			return color;
 		}
@@ -213,6 +232,16 @@
 		return normalize( dirLS );
 	}
 
+
+	INLINE float3 fromVctToViewSpace( float3 pos, VctProbeParams probeParams )
+	{
+		float3 posVS;
+		posVS.x = dot( probeParams.invXform_row0.xyzw, float4( pos, 1.0 ) );
+		posVS.y = dot( probeParams.invXform_row1.xyzw, float4( pos, 1.0 ) );
+		posVS.z = dot( probeParams.invXform_row2.xyzw, float4( pos, 1.0 ) );
+		return posVS;
+	}
+
 	#define M_PI 3.141592654f
 
 	INLINE void computeVctProbe
@@ -222,13 +251,15 @@
 	@property( vct_ambient_hemisphere )
 		float ambientWD, float ambientWS,
 	@end
+	@property( use_parallax_correct_cubemaps )
+		OGRE_INOUT_REF( float3, vctSpecPosVS ),
+	@end
 		VctProbeParams probeParams,
 		OGRE_Texture3D_float4 probe OGRE_SAMPLER_ARG_DECL( probeSampler )
 		OGRE_VCT_ANISO_PROBE_ARG_DECL
 	)
 	{
-		float3 posLS = toVctProbeSpacePos( pos + pixelData.geomNormal.xyz * probeParams.vctNormalBias,
-										   probeParams );
+		float3 posLS = toVctProbeSpacePos( pos, probeParams );
 
 		if( posLS.x < 0.0 || posLS.x > 1.0 ||
 			posLS.y < 0.0 || posLS.y > 1.0 ||
@@ -236,6 +267,14 @@
 		{
 			return;
 		}
+
+		//Bias away from current position in order to avoid self-occlusion (specular reflections
+		//won't work otherwise). When the geometry is facing diagonally to the axes, we want that
+		//bias to be stronger as aliasing can still cause oclussion (i.e. imagine the ray hitting
+		//the steps of a staircase).
+		float3 dirLS = toVctProbeSpaceDir( pixelData.geomNormal.xyz, probeParams );
+		float maxVal = max3( abs( dirLS.x ), abs( dirLS.y ), abs( dirLS.z ) ) + 1e-6f;
+		posLS += (dirLS / maxVal) * probeParams.vctInvResolution * lerp( 15.0f, 1.0f, maxVal );
 
 		@property( vct_num_probes > 1 )
 			float3 blendv = abs( posLS * 2.0f - 1.0f );
@@ -294,12 +333,18 @@
 		outDiffuse.xyz += light.xyz * blendWeight;
 
 		//Irradiance / specular
+		@property( use_parallax_correct_cubemaps )
+			float3 vctSpecPosLS;
+		@end
 		float3 reflVecLS = toVctProbeSpaceDir( pixelData.reflDir, probeParams );
 		// 1 / (1 - 0.02) = 1.020408163
 		float vctRoughness = (pixelData.roughness - 0.02) * 1.020408163f;
 		float specConeAngleTan = max( 0.0f, tan( vctRoughness * 0.5f * M_PI * 0.99f ) );
 		float4 irrLight = voxelConeTraceSpec( probeParams, posLS, reflVecLS,
 											  specConeAngleTan,
+										  @property( use_parallax_correct_cubemaps )
+											  vctSpecPosLS,
+										  @end
 											  probe OGRE_SAMPLER_ARG( probeSampler )
 											  OGRE_VCT_ANISO_PROBE_ARG );
 		@property( vct_ambient_hemisphere )
@@ -309,6 +354,10 @@
 			irrLight.xyz += probeParams.vctAmbientUpperHemi.xyz * irrLight.w;
 		@end
 		outSpecular += float4( irrLight.xyz * blendWeight, blend );
+
+		@property( use_parallax_correct_cubemaps )
+			vctSpecPosVS = fromVctToViewSpace( vctSpecPosLS, probeParams );
+		@end
 	}
 @end
 
@@ -317,11 +366,18 @@
 		float3x3 TBN = generateTbn( pixelData.geomNormal, inPs.pos );
 	@end
 
+	@property( use_parallax_correct_cubemaps )
+		float3 vctSpecPosVS = float3( 0, 0, 0 );
+	@end
+
 	float4 vctDiffuse = float4( 0, 0, 0, 0 );
 	float4 vctSpecular = float4( 0, 0, 0, 0 );
 	computeVctProbe( vctDiffuse, vctSpecular, pixelData, inPs.pos, TBN,
 				@property( vct_ambient_hemisphere )
 					 ambientWD, ambientWS,
+				@end
+				@property( use_parallax_correct_cubemaps )
+					 vctSpecPosVS,
 				@end
 					 passBuf.vctProbeParams,
 					 vctProbe OGRE_SAMPLER_ARG( vctProbeSampler )

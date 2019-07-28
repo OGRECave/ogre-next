@@ -122,17 +122,6 @@ namespace Ogre
         ResourceTransition mAfterAnisoMip1Trans[2];
 
     public:
-        /** Bias/distance in units (i.e. if your engine is in meters, then this value
-            is in meters) along the geometric normal at which to start cone tracing.
-
-            If this value is 0, then VCT results may resemble direct lighting rather
-            than indirect lighting due to self-illumination.
-
-            @remark	 PUBLIC VARIABLE. This variable can be altered directly.
-                     Changes are reflected immediately.
-        */
-        float   mNormalBias;
-
         /** When roughness is close to 0.02, specular cone tracing becomes path tracing.
             This is very slow. However we can greatly speed it up by skipping gaps of empty
             voxels.

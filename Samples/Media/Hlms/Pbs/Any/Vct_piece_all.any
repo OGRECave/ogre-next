@@ -4,28 +4,29 @@
 @piece( DeclVctStruct )
 	struct VctProbeParams
 	{
-		float4 startBias_invStartBias_specSdfMaxMip_multiplier;
-		float4 normalBias_blendFade_softShadowDampenFactor_specularSdfFactor;
-		float4 ambientUpperHemi;
-		float4 ambientLowerHemi;
+		float4 invRes_resolution_specSdfMaxMip_multiplier;
+		float4 ambientUpperHemi_specularSdfFactor;
+		float4 ambientLowerHemi_blendFade;
 
 		float4 xform_row0;
 		float4 xform_row1;
 		float4 xform_row2;
+
+		float4 invXform_row0;
+		float4 invXform_row1;
+		float4 invXform_row2;
 	};
 
-	#define vctStartBias		startBias_invStartBias_specSdfMaxMip_multiplier.x
-	#define vctInvStartBias		startBias_invStartBias_specSdfMaxMip_multiplier.y
-	#define vctSpecSdfMaxMip	startBias_invStartBias_specSdfMaxMip_multiplier.z
-	#define vctMultiplier		startBias_invStartBias_specSdfMaxMip_multiplier.w
+	#define vctInvResolution	invRes_resolution_specSdfMaxMip_multiplier.x
+	#define vctResolution		invRes_resolution_specSdfMaxMip_multiplier.y
+	#define vctSpecSdfMaxMip	invRes_resolution_specSdfMaxMip_multiplier.z
+	#define vctMultiplier		invRes_resolution_specSdfMaxMip_multiplier.w
 
-	#define vctNormalBias				normalBias_blendFade_softShadowDampenFactor_specularSdfFactor.x
-	#define vctBlendFade				normalBias_blendFade_softShadowDampenFactor_specularSdfFactor.y
-	#define vctSoftShadowDampenFactor	normalBias_blendFade_softShadowDampenFactor_specularSdfFactor.z
-	#define vctSpecularSdfFactor		normalBias_blendFade_softShadowDampenFactor_specularSdfFactor.w
+	#define vctAmbientUpperHemi ambientUpperHemi_specularSdfFactor.xyz
+	#define vctAmbientLowerHemi	ambientLowerHemi_blendFade.xyz
 
-	#define vctAmbientUpperHemi ambientUpperHemi.xyz
-	#define vctAmbientLowerHemi	ambientLowerHemi.xyz
+	#define vctSpecularSdfFactor	ambientUpperHemi_specularSdfFactor.w
+	#define vctBlendFade			ambientLowerHemi_blendFade.w
 @end
 @piece( DeclVctUniform )
 	VctProbeParams vctProbeParams;

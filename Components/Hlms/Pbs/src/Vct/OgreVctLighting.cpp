@@ -96,7 +96,6 @@ namespace Ogre
         mBounceStartBiasInvBias( 0 ),
         mBounceShaderParams( 0 ),
         mBarriersCreated( false ),
-        mNormalBias( 0.25f ),
         mSpecularSdfQuality( 0.875f ),
         mMultiplier( 1.0f ),
         mDebugVoxelVisualizer( 0 )
@@ -104,6 +103,9 @@ namespace Ogre
         memset( mLightVoxel, 0, sizeof(mLightVoxel) );
         memset( mUpperHemisphere, 0, sizeof(mUpperHemisphere) );
         memset( mLowerHemisphere, 0, sizeof(mLowerHemisphere) );
+
+        OGRE_ASSERT_LOW( mVoxelizer->getAlbedoVox() &&
+                         "VctVoxelizer::build must've been called before creating VctLighting!" );
 
         mVoxelizer->getAlbedoVox()->addListener( this );
         mVoxelizer->getNormalVox()->addListener( this );
@@ -861,7 +863,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     size_t VctLighting::getConstBufferSize(void) const
     {
-        return 7u * 4u * sizeof(float);
+        return 9u * 4u * sizeof(float);
     }
     //-------------------------------------------------------------------------
     void VctLighting::fillConstBufferData( const Matrix4 &viewMatrix,
@@ -874,22 +876,25 @@ namespace Ogre
         const float smallestRes = static_cast<float>( std::min( std::min( width, height ), depth ) );
         const float invSmallestRes = 1.0f / smallestRes;
 
-        float mipDiff = (static_cast<float>( PixelFormatGpuUtils::getMaxMipmapCount(
-                                                 static_cast<uint32>( smallestRes ) ) ) - 8.0f) * 0.5f;
+        const float maxMipmapCount =
+                static_cast<float>( PixelFormatGpuUtils::getMaxMipmapCount(
+                                        static_cast<uint32>( smallestRes ) ) );
+
+        float mipDiff = (maxMipmapCount - 8.0f) * 0.5f;
 
         const float finalMultiplier     = mInvBakingMultiplier * mMultiplier;
         const float invFinalMultiplier  = 1.0f / finalMultiplier;
 
-        //float4 startBias_invStartBias_specSdfMaxMip_multiplier;
+        //float4 invRes_resolution_specSdfMaxMip_multiplier;
         *passBufferPtr++ = invSmallestRes;
         *passBufferPtr++ = smallestRes;
         *passBufferPtr++ = 7.0f + mipDiff;
         *passBufferPtr++ = finalMultiplier;
 
-        //float4 normalBias_blendFade_softShadowDampenFactor_specularSdfFactor;
-        *passBufferPtr++ = mNormalBias;
-        *passBufferPtr++ = 1.0f;
-        *passBufferPtr++ = 0.0f;
+        //float4 ambientUpperHemi_specularSdfFactor
+        *passBufferPtr++ = mUpperHemisphere[0] * invFinalMultiplier;
+        *passBufferPtr++ = mUpperHemisphere[1] * invFinalMultiplier;
+        *passBufferPtr++ = mUpperHemisphere[2] * invFinalMultiplier;
         //Where did 0.1875f & 0.3125f come from? Empirically obtained.
         //At 128x128x128, values in range [24; 40] gave good results.
         //Below 24, quality became unnacceptable.
@@ -897,28 +902,31 @@ namespace Ogre
         //Thus 24 / 128 and 40 / 128 = 0.1875f and 0.3125f
         *passBufferPtr++ = Math::lerp( 0.1875f, 0.3125f, mSpecularSdfQuality ) * smallestRes;
 
-        *passBufferPtr++ = mUpperHemisphere[0] * invFinalMultiplier;
-        *passBufferPtr++ = mUpperHemisphere[1] * invFinalMultiplier;
-        *passBufferPtr++ = mUpperHemisphere[2] * invFinalMultiplier;
-        *passBufferPtr++ = 0;
-
+        //float4 ambientLowerHemi_blendFade
         *passBufferPtr++ = mLowerHemisphere[0] * invFinalMultiplier;
         *passBufferPtr++ = mLowerHemisphere[1] * invFinalMultiplier;
         *passBufferPtr++ = mLowerHemisphere[2] * invFinalMultiplier;
-        *passBufferPtr++ = 0;
+        *passBufferPtr++ = 1.0f;
 
-        Matrix4 xform;
+        Matrix4 xform, invXForm;
         xform.makeTransform( -mVoxelizer->getVoxelOrigin() / mVoxelizer->getVoxelSize(),
                              1.0f / mVoxelizer->getVoxelSize(),
                              Quaternion::IDENTITY );
         //xform = xform * viewMatrix.inverse();
         xform = xform.concatenateAffine( viewMatrix.inverseAffine() );
+        invXForm = xform.inverseAffine();
 
         //float4 xform_row0;
         //float4 xform_row1;
         //float4 xform_row2;
         for( size_t i=0; i<12u; ++i )
             *passBufferPtr++ = static_cast<float>( xform[0][i] );
+
+        //float4 invXform_row0;
+        //float4 invXform_row1;
+        //float4 invXform_row2;
+        for( size_t i=0; i<12u; ++i )
+            *passBufferPtr++ = static_cast<float>( invXForm[0][i] );
     }
     //-------------------------------------------------------------------------
     bool VctLighting::shouldEnableSpecularSdfQuality(void) const
