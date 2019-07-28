@@ -90,16 +90,19 @@
 				float skipLod = 1;
 			@end
 
-			#define vctMaxDistance 1.414213562f
+			float3 uwvPos = posLS;
 
 			@property( !vct_anisotropic )
 				#define VCT_ANISOTROPIC_EARLY_OUT
 			@else
 				#define VCT_ANISOTROPIC_EARLY_OUT && lodLevel <= 0.5
 			@end
-			while( dist < vctMaxDistance && alpha < 0.95 VCT_ANISOTROPIC_EARLY_OUT )
+			while( alpha < 0.95 &&
+					abs(uwvPos - 0.5).x < 0.5 &&
+					abs(uwvPos - 0.5).y < 0.5 &&
+					abs(uwvPos - 0.5).z < 0.5 VCT_ANISOTROPIC_EARLY_OUT )
 			{
-				float3 uwvPos = posLS + dist * dirLS;
+				uwvPos = posLS + dist * dirLS;
 				float4 scolor = OGRE_SampleLevel( probe, probeSampler, uwvPos, lodLevel );
 				float a = (1.0f - alpha);
 				color.xyz += scolor.xyz * a;
@@ -151,9 +154,13 @@
 
 				float3 dirLSSquared = dirLS.xyz * dirLS.xyz;
 
-				while( dist < vctMaxDistance && alpha < 0.95 )
+				while( alpha < 0.95 &&
+						abs(uwvPos - 0.5).x < 0.5 &&
+						abs(uwvPos - 0.5).y < 0.5 &&
+						abs(uwvPos - 0.5).z < 0.5 )
 				{
-					float3 sampleUVW = posLS + dist * dirLS;
+					uwvPos = posLS + dist * dirLS;
+					float3 sampleUVW = uwvPos;
 					sampleUVW.x = saturate( sampleUVW.x ) * 0.5;
 
 					float4 xColor = OGRE_SampleLevel( probeX, probeSampler,
