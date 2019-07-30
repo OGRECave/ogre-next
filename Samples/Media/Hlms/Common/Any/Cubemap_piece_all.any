@@ -25,20 +25,16 @@ struct CubemapProbe
 \return
 	Parallax-Corrected reflection dir, IN LOCAL SPACE (local to probe's).
 	Unlike the inputs, this vector is LEFT HANDED.
+
+	The w component contains the distance from pos to intersection walking across reflDir
 */
-@property( syntax == metal )inline @end float3 localCorrect( float3 reflDir, float3 posLS,
-															 CubemapProbe probe )
+INLINE float4 localCorrect( float3 reflDir, float3 posLS, CubemapProbe probe )
 {
 	float3 probeShapeHalfSize	= probe.halfSize.xyz;
-	float3x3 viewSpaceToProbeLocal = float3x3( probe.row0_centerX.xyz,
-											   probe.row1_centerY.xyz,
-											   probe.row2_centerZ.xyz );
-
-	@property( syntax == hlsl )
-		float3 reflDirLS = mul( viewSpaceToProbeLocal, reflDir );
-	@end @property( syntax != hlsl )
-		float3 reflDirLS = reflDir * viewSpaceToProbeLocal;
-	@end
+	float3x3 viewSpaceToProbeLocal = buildFloat3x3( probe.row0_centerX.xyz,
+													probe.row1_centerY.xyz,
+													probe.row2_centerZ.xyz );
+	float3 reflDirLS = mul( reflDir, viewSpaceToProbeLocal );
 
 	//Find the ray intersection with box plane
 	float3 invReflDirLS = float3( 1.0, 1.0, 1.0 ) / reflDirLS;
@@ -55,8 +51,9 @@ struct CubemapProbe
 
 	//Make it left-handed.
 	localCorrectedVec.z = -localCorrectedVec.z;
-	return localCorrectedVec;
+	return float4( localCorrectedVec, distance );
 }
+
 /** Converts a position from view space to probe's local space.
 \param pos
 	Position of the object where the reflection is going to reflect, in view space

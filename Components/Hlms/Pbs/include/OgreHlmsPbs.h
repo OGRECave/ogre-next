@@ -119,6 +119,8 @@ namespace Ogre
         HlmsSamplerblock const  *mShadowmapEsmSamplerblock; /// For ESM.
         HlmsSamplerblock const  *mCurrentShadowmapSamplerblock;
         ParallaxCorrectedCubemapBase *mParallaxCorrectedCubemap;
+        float                   mPccVctMinDistance;
+        float                   mInvPccVctInvDistance;
 
         uint32                  mCurrentPassBuffer;     /// Resets to zero every new frame.
 
@@ -292,8 +294,42 @@ namespace Ogre
         void setAmbientLightMode( AmbientLightMode mode );
         AmbientLightMode getAmbientLightMode(void) const    { return mAmbientLightMode; }
 
-        void setParallaxCorrectedCubemap( ParallaxCorrectedCubemapBase *pcc )
-                                                            { mParallaxCorrectedCubemap = pcc; }
+        /** Sets PCC
+        @remarks
+            PCC is a crude approximation of reflections that works best when the shape
+            of the objects in the scene resemble the rectangle shape set by the PCC probe(s).
+
+            But when they do not, severe distortion could happen.
+
+            When both VCT and PCC are active, VCT can be used to determine whether the PCC
+            approximation is accurate. If it is, it uses the PCC result. If it's not, it uses
+            the VCT one (which is accurate but more 'blocky' due to voxelization)
+
+            This setting determines how much deviation is allowed and smoothly transition
+            between the VCT and PCC results.
+
+            This value *only* affects specular reflections.
+            For diffuse GI, VCT is always preferred over the cubemap's.
+        @param pcc
+            Pointer to PCC
+        @param pccVctMinDistance
+            Value in units (e.g. meters, centimeters, whatever your engine uses)
+            Any discrepancy between PCC and VCT below this threshold means PCC
+            reflections will be used.
+
+            The assertion pccVctMinDistance < pccVctMaxDistance must be true.
+            Use a very high pccVctMinDistance to always use PCC
+        @param pccVctMaxDistance
+            Value in units (e.g. meters, centimeters, whatever your engine uses)
+            Any discrepancy between PCC and VCT above this threshold means VCT
+            reflections will be used.
+
+            Errors between pccVctMinDistance & pccVctMaxDistance will be faded smoothly
+            Use negative pccVctMaxDistance to always use VCT
+        */
+        void setParallaxCorrectedCubemap( ParallaxCorrectedCubemapBase *pcc,
+                                          float pccVctMinDistance = 1.0f,
+                                          float pccVctMaxDistance = 2.0f );
         ParallaxCorrectedCubemapBase* getParallaxCorrectedCubemap(void) const
                                                             { return mParallaxCorrectedCubemap; }
 
@@ -444,6 +480,7 @@ namespace Ogre
         static const IdString IrradianceVolumes;
         static const IdString VctNumProbes;
         static const IdString VctConeDirs;
+        static const IdString VctDisableSpecular;
         static const IdString VctAnisotropic;
         static const IdString VctEnableSpecularSdfQuality;
         static const IdString VctAmbientSphere;

@@ -142,6 +142,15 @@
 
 	float cubemapAccumWeight = 0;
 
+	float3 pccEnvS = float3( 0, 0, 0 );
+	float3 pccEnvD = float3( 0, 0, 0 );
+
+	@property( vct_num_probes )
+	if( pixelData.roughness <= 0.02 || vctSpecular.w == 0 )
+	{
+		float accumVctLerp = 0;
+		float numProbesVctLerp = 0;
+	@end
 	for( uint i=0u; i<numLightsInGrid; ++i )
 	{
 		//Get the probe index
@@ -175,32 +184,52 @@
 			probeFade = ndf <= 0 ? 10000.0f : (1.0 - ndf);
 			probeFade *= probePriority;
 
-			float3 reflDirLS = localCorrect( pixelData.reflDir, posInProbSpace, probe );
-			float3 normalLS = localCorrect( pixelData.normal, posInProbSpace, probe );
+			@property( vct_num_probes )
+				float4 reflDirLS_dist = localCorrect( pixelData.reflDir, posInProbSpace, probe );
+				float3 reflDirLS = reflDirLS_dist.xyz;
+
+				float3 interesectionPosVS = inPs.pos + pixelData.reflDir * reflDirLS_dist.w;
+				float3 vctSpecPosToPccSpecPos = interesectionPosVS - vctSpecPosVS;
+				float distToVct = max3( abs( vctSpecPosToPccSpecPos ).x,
+										abs( vctSpecPosToPccSpecPos ).y,
+										abs( vctSpecPosToPccSpecPos ).z );
+				float vctLerp = (distToVct - passBuf.pccVctMinDistance) * passBuf.invPccVctInvDistance;
+				vctLerp = saturate( vctLerp );
+				vctLerp = (vctSpecular.w == 0) ? 0.0f : vctLerp;
+				//vctLerp = 1;
+			@else
+				float3 reflDirLS = localCorrect( pixelData.reflDir, posInProbSpace, probe ).xyz;
+			@end
+			float3 normalLS = localCorrect( pixelData.normal, posInProbSpace, probe ).xyz;
 
 			@property( !hlms_cubemaps_use_dpm )
-				pixelData.envColourS += OGRE_SampleArrayCubeLevel(
+				pccEnvS += OGRE_SampleArrayCubeLevel(
 					texEnvProbeMap, samplerState@value(envMapRegSampler), reflDirLS,
 					probeCubemapIdx, @insertpiece( envSpecularRoughness ) ).xyz
 					@insertpiece( ApplyEnvMapScale ) * probeFade;
 				@property( cubemaps_as_diffuse_gi )
-					pixelData.envColourD += OGRE_SampleArrayCubeLevel(
+					pccEnvD += OGRE_SampleArrayCubeLevel(
 						texEnvProbeMap, samplerState@value(envMapRegSampler), normalLS,
 						probeCubemapIdx, 11.0 ).xyz
 						@insertpiece( ApplyEnvMapScale ) * probeFade;
 				@end
-			@end
-			@property( hlms_cubemaps_use_dpm )
-				pixelData.envColourS += OGRE_SampleArray2DLevel(
+			@else
+				pccEnvS += OGRE_SampleArray2DLevel(
 					texEnvProbeMap, samplerState@value(envMapRegSampler), mapCubemapToDpm( reflDirLS ),
 					probeCubemapIdx, @insertpiece( envSpecularRoughness ) ).xyz
 					@insertpiece( ApplyEnvMapScale ) * probeFade;
 				@property( cubemaps_as_diffuse_gi )
-					pixelData.envColourD += OGRE_SampleArray2DLevel(
+					pccEnvD += OGRE_SampleArray2DLevel(
 						texEnvProbeMap, samplerState@value(envMapRegSampler), mapCubemapToDpm( normalLS ),
 						probeCubemapIdx, 11.0 ).xyz
 						@insertpiece( ApplyEnvMapScale ) * probeFade;
 				@end
+			@end
+
+			@property( vct_num_probes )
+				pccEnvS *= 1.0f - vctLerp;
+				accumVctLerp += 1.0f - vctLerp;
+				numProbesVctLerp += 1.0f;
 			@end
 
 			cubemapAccumWeight += probeFade;
@@ -208,9 +237,29 @@
 	}
 
 	@property( cubemaps_as_diffuse_gi )
-		pixelData.envColourD.xyz *= cubemapAccumWeight == 0.0f ? 1.0f : (1.0f / cubemapAccumWeight);
+		pccEnvD.xyz *= cubemapAccumWeight == 0.0f ? 1.0f : (1.0f / cubemapAccumWeight);
 	@end
-	pixelData.envColourS.xyz *= cubemapAccumWeight == 0.0f ? 1.0f : (1.0f / cubemapAccumWeight);
+	pccEnvS.xyz *= cubemapAccumWeight == 0.0f ? 1.0f : (1.0f / cubemapAccumWeight);
+
+	@property( vct_num_probes )
+		numProbesVctLerp = numProbesVctLerp == 0.0f ? 1.0f : numProbesVctLerp;
+		pixelData.envColourS.xyz = ( pccEnvS +
+									 pixelData.envColourS * (numProbesVctLerp - accumVctLerp) ) /
+								   numProbesVctLerp;
+		@property( cubemaps_as_diffuse_gi )
+			pixelData.envColourD += vctSpecular.w > 0 ? float3( 0, 0, 0 ) : pccEnvD;
+		@end
+	@else
+		pixelData.envColourS.xyz = pccEnvS;
+		@property( cubemaps_as_diffuse_gi )
+			pixelData.envColourD.xyz = pccEnvD;
+		@end
+	@end
+
+
+	@property( vct_num_probes )
+	}
+	@end
 @end
 @end /// hlms_enable_cubemaps_auto
 

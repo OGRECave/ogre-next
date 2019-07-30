@@ -64,7 +64,7 @@
 		@end
 			( VctProbeParams probeParams, float3 posLS,
 			  float3 dirLS, float tanHalfAngle,
-		  @property( use_parallax_correct_cubemaps && @n == 1 )
+		  @property( parallax_correct_cubemaps && @n == 1 )
 			  OGRE_OUT_REF( float3, vctSpecPosLS ),
 		  @end
 			  OGRE_Texture3D_float4 probe
@@ -206,7 +206,7 @@
 
 			color.w = 1.0f - min( 1.0f, alpha / 0.95f );
 
-		@property( use_parallax_correct_cubemaps && @n == 1 )
+		@property( parallax_correct_cubemaps && @n == 1 )
 			vctSpecPosLS = uwvPos;
 		@end
 
@@ -251,7 +251,7 @@
 	@property( vct_ambient_hemisphere )
 		float ambientWD, float ambientWS,
 	@end
-	@property( use_parallax_correct_cubemaps )
+	@property( parallax_correct_cubemaps )
 		OGRE_INOUT_REF( float3, vctSpecPosVS ),
 	@end
 		VctProbeParams probeParams,
@@ -333,30 +333,34 @@
 		outDiffuse.xyz += light.xyz * blendWeight;
 
 		//Irradiance / specular
-		@property( use_parallax_correct_cubemaps )
-			float3 vctSpecPosLS;
-		@end
-		float3 reflVecLS = toVctProbeSpaceDir( pixelData.reflDir, probeParams );
-		// 1 / (1 - 0.02) = 1.020408163
-		float vctRoughness = (pixelData.roughness - 0.02) * 1.020408163f;
-		float specConeAngleTan = max( 0.0f, tan( vctRoughness * 0.5f * M_PI * 0.99f ) );
-		float4 irrLight = voxelConeTraceSpec( probeParams, posLS, reflVecLS,
-											  specConeAngleTan,
-										  @property( use_parallax_correct_cubemaps )
-											  vctSpecPosLS,
-										  @end
-											  probe OGRE_SAMPLER_ARG( probeSampler )
-											  OGRE_VCT_ANISO_PROBE_ARG );
-		@property( vct_ambient_hemisphere )
-			irrLight.xyz += lerp( probeParams.vctAmbientLowerHemi.xyz,
-								  probeParams.vctAmbientUpperHemi.xyz, ambientWS ) * irrLight.w;
-		@else
-			irrLight.xyz += probeParams.vctAmbientUpperHemi.xyz * irrLight.w;
-		@end
-		outSpecular += float4( irrLight.xyz * blendWeight, blend );
+		@property( !vct_disable_specular )
+			@property( parallax_correct_cubemaps )
+				float3 vctSpecPosLS;
+			@end
+			float3 reflVecLS = toVctProbeSpaceDir( pixelData.reflDir, probeParams );
+			// 1 / (1 - 0.02) = 1.020408163
+			float vctRoughness = (pixelData.roughness - 0.02) * 1.020408163f;
+			float specConeAngleTan = max( 0.0f, tan( vctRoughness * 0.5f * M_PI * 0.99f ) );
+			float4 irrLight = voxelConeTraceSpec( probeParams, posLS, reflVecLS,
+												  specConeAngleTan,
+											  @property( parallax_correct_cubemaps )
+												  vctSpecPosLS,
+											  @end
+												  probe OGRE_SAMPLER_ARG( probeSampler )
+												  OGRE_VCT_ANISO_PROBE_ARG );
+			@property( vct_ambient_hemisphere )
+				irrLight.xyz += lerp( probeParams.vctAmbientLowerHemi.xyz,
+									  probeParams.vctAmbientUpperHemi.xyz, ambientWS ) * irrLight.w;
+			@else
+				irrLight.xyz += probeParams.vctAmbientUpperHemi.xyz * irrLight.w;
+			@end
+			outSpecular += float4( irrLight.xyz * blendWeight, blend );
 
-		@property( use_parallax_correct_cubemaps )
-			vctSpecPosVS = fromVctToViewSpace( vctSpecPosLS, probeParams );
+			@property( parallax_correct_cubemaps )
+				vctSpecPosVS = fromVctToViewSpace( vctSpecPosLS, probeParams );
+			@end
+		@else
+			outSpecular.w += blend;
 		@end
 	}
 @end
@@ -366,7 +370,7 @@
 		float3x3 TBN = generateTbn( pixelData.geomNormal, inPs.pos );
 	@end
 
-	@property( use_parallax_correct_cubemaps )
+	@property( parallax_correct_cubemaps )
 		float3 vctSpecPosVS = float3( 0, 0, 0 );
 	@end
 
@@ -376,7 +380,7 @@
 				@property( vct_ambient_hemisphere )
 					 ambientWD, ambientWS,
 				@end
-				@property( use_parallax_correct_cubemaps )
+				@property( parallax_correct_cubemaps )
 					 vctSpecPosVS,
 				@end
 					 passBuf.vctProbeParams,

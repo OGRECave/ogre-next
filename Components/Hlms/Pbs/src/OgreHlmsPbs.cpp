@@ -172,6 +172,7 @@ namespace Ogre
     const IdString PbsProperty::IrradianceVolumes = IdString( "irradiance_volumes" );
     const IdString PbsProperty::VctNumProbes      = IdString( "vct_num_probes" );
     const IdString PbsProperty::VctConeDirs       = IdString( "vct_cone_dirs" );
+    const IdString PbsProperty::VctDisableSpecular= IdString( "vct_disable_specular" );
     const IdString PbsProperty::VctAnisotropic    = IdString( "vct_anisotropic" );
     const IdString PbsProperty::VctEnableSpecularSdfQuality=IdString("vct_enable_specular_sdf_quality");
     const IdString PbsProperty::VctAmbientSphere  = IdString("vct_ambient_hemisphere");
@@ -244,6 +245,8 @@ namespace Ogre
         mShadowmapEsmSamplerblock( 0 ),
         mCurrentShadowmapSamplerblock( 0 ),
         mParallaxCorrectedCubemap( 0 ),
+        mPccVctMinDistance( 1.0f ),
+        mInvPccVctInvDistance( 1.0f ),
         mCurrentPassBuffer( 0 ),
         mGridBuffer( 0 ),
         mGlobalLightListBuffer( 0 ),
@@ -749,7 +752,7 @@ namespace Ogre
         if( !datablockNormalMaps.empty() )
         {
             // NB if texture has not loaded yet, getPixelFormat will return PFG_UNKNOWN and so
-            // isSigned may be incorrect. However calculateHasFor will be called again when it 
+            // isSigned may be incorrect. However calculateHasFor will be called again when it
             // has loaded, so just assume default for now.
             const bool isSigned = PixelFormatGpuUtils::isSigned(
                                       datablockNormalMaps[0]->getPixelFormat() );
@@ -1271,6 +1274,10 @@ namespace Ogre
                 setProperty( PbsProperty::VctEnableSpecularSdfQuality,
                              mVctLighting->shouldEnableSpecularSdfQuality() );
                 setProperty( PbsProperty::VctAmbientSphere, vctNeedsAmbientHemi );
+
+                //'Static' reflections on cubemaps look horrible
+                if( mParallaxCorrectedCubemap && mParallaxCorrectedCubemap->isRendering() )
+                    setProperty( PbsProperty::VctDisableSpecular, 1 );
             }
 
             if( mIrradianceVolume )
@@ -1416,6 +1423,9 @@ namespace Ogre
             //              vec4 shadowRcv[numShadowMapLights].invShadowMapSize +
             //mat3 invViewMatCubemap (upgraded to three vec4)
             mapSize += ( 16 + (16 + 2 + 2 + 4) * numShadowMapLights + 4 * 3 ) * 4;
+
+            //float4 pccVctMinDistance_invPccVctInvDistance_unused2;
+            mapSize += 4u * 4u;
 
             //vec4 shadowRcv[numShadowMapLights].texViewZRow
             if( mShadowFilter == ExponentialShadowMaps )
@@ -1661,6 +1671,12 @@ namespace Ogre
                 if( !( (i+1) % 3 ) )
                     ++passBufferPtr;
             }
+
+            //float4 pccVctMinDistance_invPccVctInvDistance_unused2
+            *passBufferPtr++ = mPccVctMinDistance;
+            *passBufferPtr++ = mInvPccVctInvDistance;
+            *passBufferPtr++ = 0.0f;
+            *passBufferPtr++ = 0.0f;
 
             if( !mPrePassTextures->empty() )
             {
@@ -2859,6 +2875,15 @@ namespace Ogre
     void HlmsPbs::setAmbientLightMode( AmbientLightMode mode )
     {
         mAmbientLightMode = mode;
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsPbs::setParallaxCorrectedCubemap( ParallaxCorrectedCubemapBase *pcc,
+                                               float pccVctMinDistance, float pccVctMaxDistance )
+    {
+        OGRE_ASSERT_LOW( pccVctMinDistance < pccVctMaxDistance );
+        mParallaxCorrectedCubemap = pcc;
+        mPccVctMinDistance = pccVctMinDistance;
+        mInvPccVctInvDistance = 1.0f / (pccVctMaxDistance - pccVctMinDistance);
     }
     //-----------------------------------------------------------------------------------
     void HlmsPbs::setAreaLightMasks( TextureGpu *areaLightMask )

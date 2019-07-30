@@ -118,6 +118,8 @@ CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
 	float padding; //Compatibility with GLSL
 @end
 
+	float4 pccVctMinDistance_invPccVctInvDistance_unused2;
+
 @property( hlms_use_prepass )
 	float4 windowHeight;
 @end
@@ -182,6 +184,9 @@ CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
 	@insertpiece( DeclVctUniform )
 
 	@insertpiece( custom_passBuffer )
+
+#define pccVctMinDistance		pccVctMinDistance_invPccVctInvDistance_unused2.x
+#define invPccVctInvDistance	pccVctMinDistance_invPccVctInvDistance_unused2.y
 }
 CONST_BUFFER_STRUCT_END( passBuf );
 @end
