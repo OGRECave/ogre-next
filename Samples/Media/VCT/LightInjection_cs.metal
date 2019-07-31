@@ -24,8 +24,8 @@ struct Params
 };
 
 #define p_numLights p.numLights
-#define p_rayMarchStepSize rayMarchStepSize_bakingMultiplier.xyz
-#define p_bakingMultiplier rayMarchStepSize_bakingMultiplier.w
+#define p_rayMarchStepSize p.rayMarchStepSize_bakingMultiplier.xyz
+#define p_bakingMultiplier p.rayMarchStepSize_bakingMultiplier.w
 //#define p_voxelOrigin p.voxelOrigin
 #define p_voxelCellSize p.voxelCellSize
 #define p_dirCorrectionRatio p.dirCorrectionRatio_thinWallCounter.xyz
