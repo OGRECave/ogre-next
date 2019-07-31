@@ -404,6 +404,11 @@ namespace Ogre
         */
         void _setUavTexture( uint8 slotIdx, const DescriptorSetUav::TextureSlot &texSlot );
 
+        /// Sets all texture buffers to nullptr
+        void clearTexBuffers(void);
+        /// Sets all UAV buffers to nullptr
+        void clearUavBuffers(void);
+
         HlmsComputeJob *clone( const String &cloneName );
         void cloneTo( HlmsComputeJob *dstJob );
 

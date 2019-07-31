@@ -173,7 +173,7 @@ namespace Ogre
         return adjustedIndexStart;
     }
     //-------------------------------------------------------------------------
-    void VctVoxelizer::createComputeJobs()
+    void VctVoxelizer::createComputeJobs(void)
     {
         HlmsCompute *hlmsCompute = mHlmsManager->getComputeHlms();
 
@@ -261,6 +261,33 @@ namespace Ogre
         }
 
         mAabbWorldSpaceJob = hlmsCompute->findComputeJob( "VCT/AabbWorldSpace" );
+    }
+    //-------------------------------------------------------------------------
+    void VctVoxelizer::clearComputeJobResources( bool calculatorDataOnly )
+    {
+        //Do not leave dangling pointers when destroying buffers, even if we later set them
+        //with a new pointer (if malloc reuses an address and the jobs weren't cleared, we're screwed)
+        if( !calculatorDataOnly )
+        {
+            for( size_t i=0; i<sizeof(mComputeJobs) / sizeof(mComputeJobs[0]); ++i )
+            {
+                mComputeJobs[i]->clearUavBuffers();
+                mComputeJobs[i]->clearTexBuffers();
+            }
+        }
+
+        {
+            const size_t numVariants = 1u << c_numAabCalcProperties;
+
+            for( size_t i=0; i<numVariants; ++i )
+            {
+                mAabbCalculator[i]->clearUavBuffers();
+                mAabbCalculator[i]->clearTexBuffers();
+            }
+        }
+
+        mAabbWorldSpaceJob->clearTexBuffers();
+        mAabbWorldSpaceJob->clearUavBuffers();
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::countBuffersSize( const MeshPtr &mesh, QueuedMesh &queuedMesh )
@@ -480,6 +507,8 @@ namespace Ogre
             mVaoManager->destroyUavBuffer( mMeshAabb );
             mMeshAabb = 0;
         }
+
+        clearComputeJobResources( true );
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::convertMeshUncompressed( const MeshPtr &mesh, QueuedMesh &queuedMesh,
@@ -704,6 +733,8 @@ namespace Ogre
 
         if( bForceFree )
             destroyAabbCalculatorMeshData();
+
+        clearComputeJobResources( false );
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::buildMeshBuffers(void)
@@ -1067,6 +1098,8 @@ namespace Ogre
             OGRE_FREE_SIMD( mCpuInstanceBuffer, MEMCATEGORY_GENERAL );
             mCpuInstanceBuffer = 0;
         }
+
+        clearComputeJobResources( false );
     }
     //-------------------------------------------------------------------------
     void VctVoxelizer::fillInstanceBuffers(void)

@@ -284,7 +284,8 @@ namespace Ogre
         */
         static bool adjustIndexOffsets16( uint32 &indexStart, uint32 &numIndices );
 
-        void createComputeJobs();
+        void createComputeJobs(void);
+        void clearComputeJobResources( bool calculatorDataOnly );
 
         void countBuffersSize( const MeshPtr &mesh, QueuedMesh &queuedMesh );
         void prepareAabbCalculatorMeshData(void);

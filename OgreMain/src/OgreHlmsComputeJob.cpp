@@ -941,6 +941,48 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void HlmsComputeJob::clearTexBuffers(void)
+    {
+        bool bChanged = false;
+        DescriptorSetTexture2::BufferSlot emptySlot = DescriptorSetTexture2::BufferSlot::makeEmpty();
+        DescriptorSetTexSlotArray::iterator itor = mTexSlots.begin();
+        DescriptorSetTexSlotArray::iterator end  = mTexSlots.end();
+
+        while( itor != end )
+        {
+            if( itor->isBuffer() && itor->getBuffer().buffer )
+            {
+                itor->getBuffer() = emptySlot;
+                bChanged = true;
+            }
+            ++itor;
+        }
+
+        if( bChanged )
+            destroyDescriptorTextures();
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsComputeJob::clearUavBuffers(void)
+    {
+        bool bChanged = false;
+        DescriptorSetUav::BufferSlot emptySlot = DescriptorSetUav::BufferSlot::makeEmpty();
+        DescriptorSetUavSlotArray::iterator itor = mUavSlots.begin();
+        DescriptorSetUavSlotArray::iterator end  = mUavSlots.end();
+
+        while( itor != end )
+        {
+            if( itor->isBuffer() && itor->getBuffer().buffer )
+            {
+                itor->getBuffer() = emptySlot;
+                bChanged = true;
+            }
+            ++itor;
+        }
+
+        if( bChanged )
+            destroyDescriptorUavs();
+    }
+    //-----------------------------------------------------------------------------------
     HlmsComputeJob* HlmsComputeJob::clone( const String &cloneName )
     {
         HlmsCompute *compute = static_cast<HlmsCompute*>( mCreator );
