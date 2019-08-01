@@ -519,10 +519,10 @@
 		@property( cubemaps_as_diffuse_gi )
 			float3 envD = SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
 										  nNormalLS, 11.0 ).xyz @insertpiece( ApplyEnvMapScale );// * 0.0152587890625;
+			envD.xyz *= probeFade;
 		@end
 
 		envS.xyz *= probeFade;
-		envD.xyz *= probeFade;
 
 		@property( vct_num_probes )
 			pixelData.envColourS = lerp( envS, pixelData.envColourS, vctLerp );
