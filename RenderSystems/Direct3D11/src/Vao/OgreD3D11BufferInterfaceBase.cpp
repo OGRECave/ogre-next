@@ -69,8 +69,8 @@ namespace Ogre
         context->CopySubresourceRegion( helperBuffer, 0, 0, 0, 0, dstBuffer, 0, &srcBox );
 
         //Merge in SRC's contents
-        srcBox.left     = static_cast<UINT>( alignToPreviousMult( srcOffsetBytes + sizeBytes,
-                                                                  alignment ) );
+        srcBox.left     = static_cast<UINT>( srcOffsetBytes + alignToPreviousMult( sizeBytes,
+                                                                                   alignment ) );
         srcBox.right    = srcBox.left + static_cast<UINT>( sizeBytes % alignment );
         context->CopySubresourceRegion( helperBuffer, 0, 0, 0, 0, srcBuffer, 0, &srcBox );
 

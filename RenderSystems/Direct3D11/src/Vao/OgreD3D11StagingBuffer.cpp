@@ -144,7 +144,7 @@ namespace Ogre
         }
 
         assert( !mUploadOnly );
-        assert( dynamic_cast<D3D11BufferInterface*>( source->getBufferInterface() ) );
+        assert( dynamic_cast<D3D11BufferInterfaceBase*>( source->getBufferInterface() ) );
         assert( (srcOffset + srcLength) <= source->getTotalSizeBytes() );
 
         D3D11BufferInterfaceBase *bufferInterface = static_cast<D3D11BufferInterfaceBase*>(
