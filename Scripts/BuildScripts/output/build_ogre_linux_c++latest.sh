@@ -1,6 +1,6 @@
 #!/bin/bash
 
-OGRE_BRANCH_NAME="v2-2"
+OGRE_BRANCH_NAME="v2-1"
 
 mkdir Ogre
 cd Ogre
@@ -22,7 +22,7 @@ ninja install
 cd ../../
 if test ! -f ogre; then
 	mkdir ogre
-	echo "--- Cloning Ogre v2-2 ---"
+	echo "--- Cloning Ogre v2-1 ---"
 	hg clone https://bitbucket.org/sinbad/ogre -r ${OGRE_BRANCH_NAME} ogre
 fi
 cd ogre

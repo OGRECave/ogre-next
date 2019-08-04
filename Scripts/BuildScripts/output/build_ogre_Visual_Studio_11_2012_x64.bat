@@ -2,7 +2,7 @@
 @echo off
 SETLOCAL
 
-set OGRE_BRANCH_NAME=v2-2
+set OGRE_BRANCH_NAME=v2-1
 set GENERATOR="Visual Studio 11 2012"
 set PLATFORM=x64
 
@@ -45,7 +45,7 @@ echo --- Building Ogredeps ---
 cd ../../
 IF NOT EXIST ogre (
 	mkdir ogre
-	echo --- Cloning Ogre v2-2 ---
+	echo --- Cloning Ogre v2-1 ---
 	hg clone https://bitbucket.org/sinbad/ogre -r %OGRE_BRANCH_NAME% ogre
 )
 cd ogre
