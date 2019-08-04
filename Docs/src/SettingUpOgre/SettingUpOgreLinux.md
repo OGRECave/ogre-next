@@ -12,9 +12,8 @@
     * Arch: `pacman -S freeimage freetype2 libxaw libxrandr mesa zziplib cmake gcc`
     * For HW & SW requirements, please visit http://www.ogre3d.org/developers/requirements
     * NVIDIA users: Proprietary drivers are recommended.
-    * AMD users: latest Mesa from git is recommended, though its Compute Shader
-      support is a bit flaky at the time being (doesn't produce correct output)
 
+@copydoc DownloadingOgreScriptsCommon
 
 # Downloading Ogre {#DownloadingOgreLinux}
 

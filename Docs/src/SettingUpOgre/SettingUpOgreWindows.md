@@ -6,7 +6,7 @@
     * [CMake 3.x](https://cmake.org/download/)
     * Mercurial. We recommend [TortoiseHg](https://tortoisehg.bitbucket.io/download/index.html)
     * What you do **NOT** need: Boost. Don't waste your time.
-    * Visual Studio 2008 SP1 - 2015 (2017RC not tested). MinGW may work but we strongly recommend Visual Studio.
+    * Visual Studio 2008 SP1 - 2017 (2019 not tested). MinGW may work but we strongly recommend Visual Studio.
     * [DirectX June 2010 SDK](https://www.microsoft.com/en-us/download/details.aspx?id=6812). Optional.
       Needed if you use older Visual Studio versions and want the D3D11 plugin. Also comes with useful tools.
     * Windows 10 SDK. Contains the latest DirectX SDK, thus recommended over the DX June 2010 SDK,
@@ -16,6 +16,7 @@
       **YOUR END USERS NEED THIS UPDATE AS WELL**.
     * For HW & SW requirements, please visit http://www.ogre3d.org/developers/requirements
 
+@copydoc DownloadingOgreScriptsCommon
 
 # Downloading Ogre {#DownloadingOgreWindows}
 
@@ -71,6 +72,20 @@ Don't worry, those CMake configs are about the *old threading* model. For more i
 
 @addtogroup MdInternal
 @{
+
+@addtogroup DownloadingOgreScriptsCommon
+@ingroup MdInternal
+@{
+
+# Automatic download & build scripts
+
+We easy-to-use scripts that will download and setup all dependencies for you in a self-contained folder
+Download build_ogre_scripts for the branch you need from:
+
+https://bitbucket.org/sinbad/ogre/downloads/
+
+@}
+
 @addtogroup DownloadingOgreCommon
 @ingroup MdInternal
 @{

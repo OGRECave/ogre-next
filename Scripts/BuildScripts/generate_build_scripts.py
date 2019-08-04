@@ -1,14 +1,28 @@
 #!/usr/bin/env python
 
+import subprocess
+
+def compressTo7z( branchName, generatedFilenames ):
+	print( "Compressing to 7z..." )
+	cmds = ["7z", "a", "../output/build_ogre_scripts-" + branchName + ".7z"]
+	cmds.extend( generatedFilenames )
+	retCode = subprocess.call( cmds, cwd='./output' )
+	if retCode != 0:
+		print( "Warning: 7z " + cmds + "failed" )
+		exit()
+	else:
+		print( "7z finished" )
+
 # Get the branch name from Mercurial
 print( 'Retrieving Mercurial branch name' )
-from subprocess import Popen, PIPE
 
-process = Popen( ['hg', 'identify', '-b'], stdout=PIPE )
+process = subprocess.Popen( ['hg', 'identify', '-b'], stdout=subprocess.PIPE )
 (output, err) = process.communicate()
 exitCode = process.wait()
 
 branchName = output.replace( '\n', '' )
+
+generatedFilenames = []
 
 print( 'Branch name is: ' + output )
 
@@ -53,8 +67,10 @@ for generator in generators:
 		batchScript = templateStr.format( branchName, generator, platform )
 		generatorUnderscores = generator.replace( ' ', '_' )
 		filename = 'build_ogre_{0}_{1}.bat'.format( generatorUnderscores, platform )
+		generatedFilenames.append( filename )
 		file = open( './output/' + filename, 'wt' )
 		file.write( batchScript )
+		file.close()
 
 print( 'Done' )
 print( 'Generating scripts for Linux' )
@@ -76,10 +92,14 @@ for cppVersion in cppVersions:
 	else:
 		cppVersionParam = '-D CMAKE_CXX_STANDARD=' + str( cppVersion )
 		filename = 'build_ogre_linux_c++{0}.sh'.format( cppVersion )
+	generatedFilenames.append( filename )
 	batchScript = templateStr.format( branchName, cppVersionParam )
 	path = './output/' + filename
 	file = open( path, 'wt' )
 	file.write( batchScript )
 	os.chmod( path, stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH | stat.S_IWUSR | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH )
+	file.close()
+
+compressTo7z( branchName, generatedFilenames )
 
 print( 'Done' )
