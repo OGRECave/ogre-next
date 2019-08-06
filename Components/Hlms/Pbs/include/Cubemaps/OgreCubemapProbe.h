@@ -239,6 +239,8 @@ namespace Ogre
         uint16 getInternalSliceToArrayTexture(void) const   { return mCubemapArrayIdx; }
 
         ConstBufferPacked* getConstBufferForManualProbes(void)  { return mConstBufferForManualProbes; }
+
+        ParallaxCorrectedCubemapBase* getCreator(void)      { return mCreator; }
     };
 }
 

@@ -64,7 +64,7 @@
 		@end
 			( VctProbeParams probeParams, float3 posLS,
 			  float3 dirLS, float tanHalfAngle,
-		  @property( parallax_correct_cubemaps && @n == 1 )
+		  @property( use_parallax_correct_cubemaps && @n == 1 )
 			  OGRE_OUT_REF( float3, vctSpecPosLS ),
 		  @end
 			  OGRE_Texture3D_float4 probe
@@ -206,7 +206,7 @@
 
 			color.w = 1.0f - min( 1.0f, alpha / 0.95f );
 
-		@property( parallax_correct_cubemaps && @n == 1 )
+		@property( use_parallax_correct_cubemaps && @n == 1 )
 			vctSpecPosLS = uwvPos;
 		@end
 
@@ -251,7 +251,7 @@
 	@property( vct_ambient_hemisphere )
 		float ambientWD, float ambientWS,
 	@end
-	@property( parallax_correct_cubemaps )
+	@property( use_parallax_correct_cubemaps )
 		OGRE_INOUT_REF( float3, vctSpecPosVS ),
 	@end
 		VctProbeParams probeParams,
@@ -334,7 +334,7 @@
 
 		//Irradiance / specular
 		@property( !vct_disable_specular )
-			@property( parallax_correct_cubemaps )
+			@property( use_parallax_correct_cubemaps )
 				float3 vctSpecPosLS;
 			@end
 			float3 reflVecLS = toVctProbeSpaceDir( pixelData.reflDir, probeParams );
@@ -343,7 +343,7 @@
 			float specConeAngleTan = max( 0.0f, tan( vctRoughness * 0.5f * M_PI * 0.99f ) );
 			float4 irrLight = voxelConeTraceSpec( probeParams, posLS, reflVecLS,
 												  specConeAngleTan,
-											  @property( parallax_correct_cubemaps )
+											  @property( use_parallax_correct_cubemaps )
 												  vctSpecPosLS,
 											  @end
 												  probe OGRE_SAMPLER_ARG( probeSampler )
@@ -356,7 +356,7 @@
 			@end
 			outSpecular += float4( irrLight.xyz * blendWeight, blend );
 
-			@property( parallax_correct_cubemaps )
+			@property( use_parallax_correct_cubemaps )
 				vctSpecPosVS = fromVctToViewSpace( vctSpecPosLS, probeParams );
 			@end
 		@else
@@ -370,7 +370,7 @@
 		float3x3 TBN = generateTbn( pixelData.geomNormal, inPs.pos );
 	@end
 
-	@property( parallax_correct_cubemaps )
+	@property( use_parallax_correct_cubemaps )
 		float3 vctSpecPosVS = float3( 0, 0, 0 );
 	@end
 
@@ -380,7 +380,7 @@
 				@property( vct_ambient_hemisphere )
 					 ambientWD, ambientWS,
 				@end
-				@property( parallax_correct_cubemaps )
+				@property( use_parallax_correct_cubemaps )
 					 vctSpecPosVS,
 				@end
 					 passBuf.vctProbeParams,

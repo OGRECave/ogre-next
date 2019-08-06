@@ -916,12 +916,27 @@ namespace Ogre
         if( !getProperty( PbsProperty::HasPlanarReflections ) )
             setProperty( PbsProperty::UsePlanarReflections, 0 );
 
-        int32 envProbeMapVal = getProperty( PbsProperty::EnvProbeMap );
-        if( (envProbeMapVal && envProbeMapVal != getProperty( PbsProperty::TargetEnvprobeMap )) ||
+        const int32 envProbeMapVal = getProperty( PbsProperty::EnvProbeMap );
+        const bool canUseManualProbe = envProbeMapVal &&
+                                       envProbeMapVal != getProperty( PbsProperty::TargetEnvprobeMap );
+        if( canUseManualProbe ||
             getProperty( PbsProperty::ParallaxCorrectCubemaps ) )
         {
             setProperty( PbsProperty::UseEnvProbeMap, 1 );
+
+            if( !canUseManualProbe )
+            {
+                /// "No cubemap"? Then we're in auto mode or...
+                /// We're rendering to the cubemap probe we're using as manual.
+                /// Use the auto mode as fallback.
+                setProperty( PbsProperty::UseParallaxCorrectCubemaps, 1 );
+            }
         }
+
+        OGRE_ASSERT_MEDIUM( !getProperty( PbsProperty::UseParallaxCorrectCubemaps ) ||
+                            getProperty( PbsProperty::ParallaxCorrectCubemaps ) &&
+                            "Object with manual cubemap probe but "
+                            "setParallaxCorrectedCubemap() was not called!" );
 
         if( getProperty( HlmsBaseProp::LightsSpot ) ||
             getProperty( HlmsBaseProp::UseSsr ) ||
@@ -2487,6 +2502,9 @@ namespace Ogre
             CubemapProbe *manualProbe = datablock->getCubemapProbe();
             if( manualProbe )
             {
+                OGRE_ASSERT_HIGH( manualProbe->getCreator() == mParallaxCorrectedCubemap &&
+                                  "Material has manual cubemap probe that does not match the "
+                                  "PCC currently set" );
                 ConstBufferPacked *probeConstBuf = manualProbe->getConstBufferForManualProbes();
                 *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer( PixelShader,
                                                                                3, probeConstBuf,
