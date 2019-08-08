@@ -426,6 +426,8 @@ namespace Ogre
             the projection matrix on this frustum, rather than having it 
             calculate itself based on the clipping distances or the field 
             of view.
+
+            See Frustum::setCustomViewMatrix
         @note
             After enabling a custom projection matrix, the frustum will no 
             longer update on its own based on field of view and near / far
@@ -443,10 +445,18 @@ namespace Ogre
             projection matrix.
         @param projectionMatrix
             The custom view matrix to use.
-        @see Frustum::setCustomViewMatrix
+        @param alternateDepthRange
+            Set this to true if the input projectionMatrix has the depth in range [0; 1]
+            instead of the range [-1; 1] that Ogre expects.
+
+            Projection matrices obtained from Oculus SDK's need to set this to true.
+
+            Note that we will internally convert the projection matrix by performing the
+            range conversion, so don't expect Frustum::getProjectionMatrix to return you
+            exactly the same projection matrix you passed to us!
         */
         virtual void setCustomProjectionMatrix(bool enable, 
-            const Matrix4& projectionMatrix = Matrix4::IDENTITY);
+            const Matrix4& projectionMatrix = Matrix4::IDENTITY, bool alternateDepthRange=false);
         /// Returns whether a custom projection matrix is in use
         virtual bool isCustomProjectionMatrixEnabled(void) const
         { return mCustomProjMatrix; }
