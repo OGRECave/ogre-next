@@ -335,17 +335,16 @@ namespace Ogre {
         {
             // Convert clipspace corners to camera space
             Matrix4 invProj = mProjMatrix.inverse();
-            Vector3 topLeft(-1.0f, 1.0f, 0.0f);
-            Vector3 bottomRight(1.0f, -1.0f, 0.0f);
+            Vector4 topLeft( -1.0f, 1.0f, -1.0f, 1.0f );
+            Vector4 bottomRight( 1.0f, -1.0f, -1.0f, 1.0f );
 
             topLeft = invProj * topLeft;
             bottomRight = invProj * bottomRight;
 
-            left = topLeft.x;
-            top = topLeft.y;
-            right = bottomRight.x;
-            bottom = bottomRight.y;
-
+            left = topLeft.x / topLeft.w;
+            top = topLeft.y / topLeft.w;
+            right = bottomRight.x / bottomRight.w;
+            bottom = bottomRight.y / bottomRight.w;
         }
         else
         {
@@ -1320,12 +1319,21 @@ namespace Ogre {
         invalidateView();
     }
     //---------------------------------------------------------------------
-    void Frustum::setCustomProjectionMatrix(bool enable, const Matrix4& projMatrix)
+    void Frustum::setCustomProjectionMatrix( bool enable, const Matrix4& projMatrix,
+                                             bool alternateDepthRange )
     {
         mCustomProjMatrix = enable;
         if (enable)
         {
             mProjMatrix = projMatrix;
+            if( alternateDepthRange )
+            {
+                // Convert depth range from [0,1] to [-1,+1]
+                mProjMatrix[2][0] = (mProjMatrix[2][0] + mProjMatrix[3][0]) * 2;
+                mProjMatrix[2][1] = (mProjMatrix[2][1] + mProjMatrix[3][1]) * 2;
+                mProjMatrix[2][2] = (mProjMatrix[2][2] + mProjMatrix[3][2]) * 2;
+                mProjMatrix[2][3] = (mProjMatrix[2][3] + mProjMatrix[3][3]) * 2;
+            }
         }
         invalidateFrustum();
     }
