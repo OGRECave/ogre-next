@@ -1,0 +1,47 @@
+
+//#include "SyntaxHighlightingMisc.h"
+
+#ifdef HEADER
+/**
+	Finds the intersection between the cube of half size probeShapeHalfSize and center at origin
+	and the reflDir, so that posLS + reflDirLS * retVal = intersectionPos;
+*/
+INLINE float findIntersectionDistance( float3 reflDirLS, float3 posLS, float3 probeShapeHalfSize )
+{
+	//Find the ray intersection with box plane
+	float3 invReflDirLS = float3( 1.0, 1.0, 1.0 ) / reflDirLS;
+	float3 intersectAtMinPlane = ( -probeShapeHalfSize - posLS ) * invReflDirLS;
+	float3 intersectAtMaxPlane = (  probeShapeHalfSize - posLS ) * invReflDirLS;
+	//Get the largest intersection values (we are not interested in negative values)
+	float3 largestIntersect = max( intersectAtMaxPlane.xyz, intersectAtMinPlane.xyz );
+	//Get the closest of all solutions
+	float distance = min( min( largestIntersect.x, largestIntersect.y ), largestIntersect.z );
+	return distance;
+}
+
+#else
+
+	float fDepth = OGRE_Sample( depthTexture, pointSampler, inPs.uv0 ).x;
+
+	float linearDepth = p_projectionParams.y / (fDepth - p_projectionParams.x);
+
+	float3 viewSpacePosition = inPs.cameraDir * linearDepth;
+
+	float fDist = length( viewSpacePosition.xyz );
+	float3 probeToPosDir = viewSpacePosition / fDist;
+
+	probeToPosDir = mul( p_viewSpaceToProbeLocalSpace, probeToPosDir );
+
+	float fApproxDist = findIntersectionDistance( probeToPosDir, p_cameraPosLS, p_probeShapeHalfSize );
+
+	//We can't store fDist directly because we have limited precision (often 8 bits)
+	//Thus we store it in terms of
+	//	fApproxDist * alpha = fDist;
+	//During render we'll know fApproxDist and alpha, but want to know fDist
+	//We also know alpha >= 0
+	//For precision issues and because it's good enough, we force alpha <= 2.0
+	float alpha = fDist / fApproxDist;
+	alpha *= 0.5;
+	alpha = min( alpha, 1.0 );
+
+#endif

@@ -42,11 +42,33 @@ abstract target cubemap_target
 		material SkyPostprocess
 		camera_cubemap_reorient true
 	}*/
+
+	pass render_quad
+	{
+		store
+		{
+			depth	dont_care
+			stencil	dont_care
+		}
+
+		quad_normals	camera_far_corners_view_space
+		material		PCC/DepthCompressor
+
+		input			0 depthTexture
+	}
 }
 
 compositor_node LocalCubemapProbeRendererNode
 {
 	in 0 cubemap
+
+	texture depthTexture	target_width target_height PFG_D32_FLOAT
+
+	rtv cubemap_customDepthTex
+	{
+		colour	cubemap
+		depth	depthTexture
+	}
 
 	target cubemap +X : cubemap_target { }
 	target cubemap -X : cubemap_target { }

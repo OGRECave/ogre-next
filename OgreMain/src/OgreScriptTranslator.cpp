@@ -2476,6 +2476,37 @@ namespace Ogre{
                                                prop->values.front()->getValue() + " is not a valid boolean");
                     }
                     break;
+                case ID_CHANNEL_MASK:
+                    if(prop->values.empty())
+                    {
+                        compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line);
+                    }
+                    else if(prop->values.size() > 1)
+                    {
+                        compiler->addError(ScriptCompiler::CE_FEWERPARAMETERSEXPECTED, prop->file, prop->line,
+                                           "channel_mask must have at most 1 argument");
+                    }
+                    else
+                    {
+                        String val;
+                        if( getString(prop->values.front(), &val) )
+                        {
+                            StringUtil::toLowerCase( val );
+                            blendblock.mBlendChannelMask = 0u;
+                            if( val.find( 'r' ) != String::npos )
+                                blendblock.mBlendChannelMask |= HlmsBlendblock::BlendChannelRed;
+                            if( val.find( 'g' ) != String::npos )
+                                blendblock.mBlendChannelMask |= HlmsBlendblock::BlendChannelGreen;
+                            if( val.find( 'b' ) != String::npos )
+                                blendblock.mBlendChannelMask |= HlmsBlendblock::BlendChannelBlue;
+                            if( val.find( 'a' ) != String::npos )
+                                blendblock.mBlendChannelMask |= HlmsBlendblock::BlendChannelAlpha;
+                        }
+                        else
+                            compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
+                                               prop->values.front()->getValue() + " is not a valid rgba string");
+                    }
+                    break;
                 case ID_MAX_LIGHTS:
                     if(prop->values.empty())
                     {
@@ -7727,6 +7758,14 @@ namespace Ogre{
         if(mRtv == 0)
         {
             compiler->addError(ScriptCompiler::CE_OBJECTALLOCATIONERROR, obj->file, obj->line);
+            return;
+        }
+
+        if( mRtv->isRuntimeAnalyzed() )
+        {
+            compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, obj->file, obj->line,
+                               "RTV " + obj->name + "cannot be overriden because it comes "
+                               "from an input. Create a duplicate instead");
             return;
         }
 

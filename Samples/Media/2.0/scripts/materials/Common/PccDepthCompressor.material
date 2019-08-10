@@ -1,0 +1,67 @@
+
+// GLSL shaders
+fragment_program PccDepthCompressor_ps_GLSL glsl
+{
+	source PccDepthCompressor_ps.glsl
+	enable_include_header true
+	default_params
+	{
+		param_named depthTexture int 0
+	}
+}
+
+// HLSL shaders
+fragment_program PccDepthCompressor_ps_HLSL hlsl
+{
+	source PccDepthCompressor_ps.hlsl
+	entry_point main
+	target ps_5_0 ps_4_0 ps_4_0_level_9_1 ps_4_0_level_9_3
+}
+
+// Metal shaders
+fragment_program PccDepthCompressor_ps_Metal metal
+{
+	source PccDepthCompressor_ps.metal
+	enable_include_header true
+	shader_reflection_pair_hint PccDepthCompressor_vs_Metal
+}
+
+// Unified definitions
+fragment_program PccDepthCompressor_ps unified
+{
+	delegate PccDepthCompressor_ps_HLSL
+	delegate PccDepthCompressor_ps_GLSL
+	delegate PccDepthCompressor_ps_Metal
+}
+
+// Material definition
+material PCC/DepthCompressor
+{
+	technique
+	{
+		pass
+		{
+			depth_check off
+			depth_write off
+
+			cull_hardware none
+
+			//Only write to alpha channel
+			channel_mask a
+
+			vertex_program_ref Ogre/Compositor/QuadCameraDir_vs
+			{
+			}
+
+			fragment_program_ref PccDepthCompressor_ps
+			{
+			}
+
+			texture_unit
+			{
+				filtering			none
+				tex_address_mode	clamp
+			}
+		}
+	}
+}

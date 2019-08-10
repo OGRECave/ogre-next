@@ -135,6 +135,8 @@ namespace Ogre
 
         desc.a( mWidth, "x", mHeight, "x", mDepthOrSlices );
         desc.a( " ", mMsaa, "xMSAA ", PixelFormatGpuUtils::toString( mPixelFormat ) );
+        if( isRenderWindowSpecific() )
+            desc.a( " renderwindow" );
 
         return String( desc.c_str() );
     }
