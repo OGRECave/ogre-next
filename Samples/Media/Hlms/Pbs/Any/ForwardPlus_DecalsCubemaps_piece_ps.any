@@ -146,7 +146,7 @@
 	float3 pccEnvD = float3( 0, 0, 0 );
 
 	@property( vct_num_probes )
-	if( pixelData.roughness <= 0.02 || vctSpecular.w == 0 )
+	if( pixelData.roughness < 1.0f || vctSpecular.w == 0 )
 	{
 		float accumVctLerp = 0;
 		float numProbesVctLerp = 0;
@@ -187,26 +187,16 @@
 			@property( vct_num_probes )
 				float4 reflDirLS_dist = localCorrect( pixelData.reflDir, posInProbSpace, probe );
 				float3 reflDirLS = reflDirLS_dist.xyz;
-
-				float3 interesectionPosVS = inPs.pos + pixelData.reflDir * reflDirLS_dist.w;
-				float3 vctSpecPosToPccSpecPos = interesectionPosVS - vctSpecPosVS;
-				float distToVct = max3( abs( vctSpecPosToPccSpecPos ).x,
-										abs( vctSpecPosToPccSpecPos ).y,
-										abs( vctSpecPosToPccSpecPos ).z );
-				float vctLerp = (distToVct - passBuf.pccVctMinDistance) * passBuf.invPccVctInvDistance;
-				vctLerp = saturate( vctLerp );
-				vctLerp = (vctSpecular.w == 0) ? 0.0f : vctLerp;
-				//vctLerp = 1;
 			@else
 				float3 reflDirLS = localCorrect( pixelData.reflDir, posInProbSpace, probe ).xyz;
 			@end
 			float3 normalLS = localCorrect( pixelData.normal, posInProbSpace, probe ).xyz;
 
+			float4 pccSingleEnvS;
 			@property( !hlms_cubemaps_use_dpm )
-				pccEnvS += OGRE_SampleArrayCubeLevel(
+				pccSingleEnvS = OGRE_SampleArrayCubeLevel(
 					texEnvProbeMap, samplerState@value(envMapRegSampler), reflDirLS,
-					probeCubemapIdx, @insertpiece( envSpecularRoughness ) ).xyz
-					@insertpiece( ApplyEnvMapScale ) * probeFade;
+					probeCubemapIdx, @insertpiece( envSpecularRoughness ) );
 				@property( cubemaps_as_diffuse_gi )
 					pccEnvD += OGRE_SampleArrayCubeLevel(
 						texEnvProbeMap, samplerState@value(envMapRegSampler), normalLS,
@@ -214,10 +204,9 @@
 						@insertpiece( ApplyEnvMapScale ) * probeFade;
 				@end
 			@else
-				pccEnvS += OGRE_SampleArray2DLevel(
+				pccSingleEnvS = OGRE_SampleArray2DLevel(
 					texEnvProbeMap, samplerState@value(envMapRegSampler), mapCubemapToDpm( reflDirLS ),
-					probeCubemapIdx, @insertpiece( envSpecularRoughness ) ).xyz
-					@insertpiece( ApplyEnvMapScale ) * probeFade;
+					probeCubemapIdx, @insertpiece( envSpecularRoughness ) ).xyz;
 				@property( cubemaps_as_diffuse_gi )
 					pccEnvD += OGRE_SampleArray2DLevel(
 						texEnvProbeMap, samplerState@value(envMapRegSampler), mapCubemapToDpm( normalLS ),
@@ -226,11 +215,26 @@
 				@end
 			@end
 
+			pccSingleEnvS.xyz *= probeFade;
+			@property( envmap_scale )
+				pccSingleEnvS.xyz *= passBuf.ambientUpperHemi.w;
+			@end
+
 			@property( vct_num_probes )
-				pccEnvS *= 1.0f - vctLerp;
+				float vctLerp = getPccVctBlendWeight( inPs.pos, pixelData.reflDir, reflDirLS_dist.w,
+													  pixelData.roughness,
+													  probe.cubemapPosLS.xyz,
+													  vctSpecPosVS, vctSpecular.w,
+													  passBuf.pccVctMinDistance,
+													  passBuf.invPccVctInvDistance,
+													  pccSingleEnvS.w );
+
+				pccSingleEnvS *= 1.0f - vctLerp;
 				accumVctLerp += 1.0f - vctLerp;
 				numProbesVctLerp += 1.0f;
 			@end
+
+			pccEnvS	+= pccSingleEnvS.xyz;
 
 			cubemapAccumWeight += probeFade;
 		}

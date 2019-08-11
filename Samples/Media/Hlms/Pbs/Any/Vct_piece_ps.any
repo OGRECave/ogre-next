@@ -363,6 +363,46 @@
 			outSpecular.w += blend;
 		@end
 	}
+
+	INLINE float getPccVctBlendWeight( float3 inPsPos, float3 reflDir, float fDist,
+									   float roughness, float3 cubemapPosLS,
+									   float3 vctSpecPosVS, float vctSpecularW,
+									   float pccVctMinDistanceVar, float invPccVctInvDistanceVar,
+									   float pccCompressedDepth )
+	{
+		//Calculate interesectionPosVS as the intersection between the reflection ray and a cube
+		float3 interesectionPosVS = inPsPos + reflDir * fDist;
+
+		//Now increase interesectionPosVS accuracy (it will no longer be a box)
+		//by taking the compressed PCC depth stored in pccCompressedDepth
+		//The compressed PCC depth is in the form of:
+		//	interesectionPosVS = cubemapPosLS + reflDirLS * (pccCompressedDir * 2.0);
+		interesectionPosVS = cubemapPosLS.xyz +
+							 (interesectionPosVS - cubemapPosLS.xyz) * (pccCompressedDepth * 2.0);
+		float3 vctSpecPosToPccSpecPos = interesectionPosVS - vctSpecPosVS;
+		//Calculate distance to VCT pos and blend based on that
+		float distToVct = max3( abs( vctSpecPosToPccSpecPos ).x,
+								abs( vctSpecPosToPccSpecPos ).y,
+								abs( vctSpecPosToPccSpecPos ).z );
+		float vctLerp = (distToVct - pccVctMinDistanceVar) * invPccVctInvDistanceVar;
+		vctLerp = saturate( vctLerp );
+
+		//vctLerp has quantization artifacts due to 8-bit precision when interpolating via HW
+		//texture filtering present in vctSpecPosVS. They're very noticeable at non-zero roughness.
+		//Hide these artifacts by reusing the PCC compressed depth as a mask.
+		float pccErrorMask = ( pccCompressedDepth - 0.5f ) * ( pccCompressedDepth - 0.5f ) * 4.0f;
+		float roughThreshWeight = roughness - 0.02f;
+		roughThreshWeight = min( roughThreshWeight * 200.0f, 1.0f );
+		vctLerp = lerp( vctLerp, vctLerp * pccErrorMask, roughThreshWeight );
+
+		//At very high roughness, VCT (anisotropic) is much more accurate. Thus bias towards VCT
+		vctLerp = min( vctLerp + roughness * roughness * roughness, 1.0f );
+
+		//If no VCT probe was found, fallback to PCC
+		vctLerp = (vctSpecularW == 0) ? 0.0f : vctLerp;
+
+		return vctLerp;
+	}
 @end
 
 @piece( applyVoxelConeTracing )

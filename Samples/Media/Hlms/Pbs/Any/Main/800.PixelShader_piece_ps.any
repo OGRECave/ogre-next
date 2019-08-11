@@ -492,7 +492,7 @@
 	float3 posInProbSpace = toProbeLocalSpace( inPs.pos, @insertpiece( pccProbeSource ) );
 	float probeFade = getProbeFade( posInProbSpace, @insertpiece( pccProbeSource ) );
 @property( vct_num_probes )
-	if( probeFade > 0 && (pixelData.roughness <= 0.02 || vctSpecular.w == 0) )
+	if( probeFade > 0 && (pixelData.roughness < 1.0f || vctSpecular.w == 0) )
 @else
 	if( probeFade > 0 )
 @end
@@ -501,36 +501,38 @@
 		@property( vct_num_probes )
 			float4 reflDirLS_dist = localCorrect( pixelData.reflDir, posInProbSpace, @insertpiece( pccProbeSource ) );
 			float3 reflDirLS = reflDirLS_dist.xyz;
-
-			float3 interesectionPosVS = inPs.pos + pixelData.reflDir * reflDirLS_dist.w;
-			float3 vctSpecPosToPccSpecPos = interesectionPosVS - vctSpecPosVS;
-			float distToVct = max3( abs( vctSpecPosToPccSpecPos ).x,
-									abs( vctSpecPosToPccSpecPos ).y,
-									abs( vctSpecPosToPccSpecPos ).z );
-			float vctLerp = (distToVct - passBuf.pccVctMinDistance) * passBuf.invPccVctInvDistance;
-			vctLerp = saturate( vctLerp );
-			vctLerp = (vctSpecular.w == 0) ? 0.0f : vctLerp;
 		@else
 			float3 reflDirLS = localCorrect( pixelData.reflDir, posInProbSpace, @insertpiece( pccProbeSource ) ).xyz;
 		@end
 		float3 nNormalLS = localCorrect( pixelData.normal, posInProbSpace, @insertpiece( pccProbeSource ) ).xyz;
-		float3 envS = SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
-									  reflDirLS, @insertpiece( envSpecularRoughness ) ).xyz @insertpiece( ApplyEnvMapScale );// * 0.0152587890625;
+		float4 envS = SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
+									  reflDirLS, sqrt( pixelData.roughness ) * 11.0 );
+		@property( envmap_scale )
+			envS.xyz *= passBuf.ambientUpperHemi.w;
+		@end
 		@property( cubemaps_as_diffuse_gi )
 			float3 envD = SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
-										  nNormalLS, 11.0 ).xyz @insertpiece( ApplyEnvMapScale );// * 0.0152587890625;
+										  nNormalLS, 11.0 ).xyz @insertpiece( ApplyEnvMapScale );
 			envD.xyz *= probeFade;
 		@end
 
 		envS.xyz *= probeFade;
 
 		@property( vct_num_probes )
-			pixelData.envColourS = lerp( envS, pixelData.envColourS, vctLerp );
+			float vctLerp = getPccVctBlendWeight( inPs.pos, pixelData.reflDir, reflDirLS_dist.w,
+												  pixelData.roughness,
+												  @insertpiece( pccProbeSource ).cubemapPosLS.xyz,
+												  vctSpecPosVS, vctSpecular.w,
+												  passBuf.pccVctMinDistance,
+												  passBuf.invPccVctInvDistance,
+												  envS.w );
+
+			pixelData.envColourS = lerp( envS.xyz, pixelData.envColourS, vctLerp );
 			@property( cubemaps_as_diffuse_gi )
 				pixelData.envColourD += vctSpecular.w > 0 ? float3( 0, 0, 0 ) : envD;
 			@end
 		@else
-			pixelData.envColourS += envS;
+			pixelData.envColourS += envS.xyz;
 			@property( cubemaps_as_diffuse_gi )
 				pixelData.envColourD += envD;
 			@end
