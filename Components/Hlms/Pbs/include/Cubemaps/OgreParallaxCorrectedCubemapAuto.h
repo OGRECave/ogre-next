@@ -54,7 +54,6 @@ namespace Ogre
         To deactivate it, call CubemapProbe::destroyWorkspace.
     */
     class _OgreHlmsPbsExport ParallaxCorrectedCubemapAuto : public ParallaxCorrectedCubemapBase,
-                                                            public CompositorWorkspaceListener,
                                                             public FrameListener
     {
         CubemapProbeVec mDirtyProbes;

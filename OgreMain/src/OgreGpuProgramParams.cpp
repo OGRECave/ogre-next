@@ -3128,6 +3128,11 @@ namespace Ogre
             _writeRawConstant(def->physicalIndex, vec);
     }
     //---------------------------------------------------------------------------
+    void GpuProgramParameters::setNamedConstant(const String& name, const Matrix3& m)
+    {
+        setNamedConstant( name, &m[0][0], 3u * 3u, 1u );
+    }
+    //---------------------------------------------------------------------------
     void GpuProgramParameters::setNamedConstant(const String& name, const Matrix4& m)
     {
         // look up, and throw an exception if we're not ignoring missing

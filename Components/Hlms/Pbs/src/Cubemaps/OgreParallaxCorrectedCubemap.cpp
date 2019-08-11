@@ -398,7 +398,7 @@ namespace Ogre
                     {
                         CompositorPassSceneDef *passScene = static_cast<CompositorPassSceneDef*>
                                                                 ( targetDef->addPass( PASS_SCENE ) );
-                        passScene->mIdentifier = i;
+                        passScene->mIdentifier = 10u + i;
                         passScene->mCameraCubemapReorient = true;
                         passScene->mFirstRQ = mReservedRqId;
                         passScene->mLastRQ  = mReservedRqId + 1u;
@@ -448,7 +448,7 @@ namespace Ogre
                                                                 ( targetDef->addPass( PASS_QUAD ) );
                         materialName.resize( matNameSize );
                         materialName.a( cSuffixes[i] );
-                        passQuad->mIdentifier = i;
+                        passQuad->mIdentifier = 10u + i;
                         passQuad->mMaterialName = materialName.c_str();
 
                         passQuad->mLoadActionColour[0]  = LoadAction::Clear;
@@ -1181,7 +1181,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemap::passPreExecute( CompositorPass *pass )
     {
-        if( pass->getType() == PASS_SCENE && pass->getDefinition()->mIdentifier == 0 )
+        if( pass->getType() == PASS_SCENE && pass->getDefinition()->mIdentifier == 10u )
         {
             for( size_t i=0; i<OGRE_MAX_CUBE_PROBES; ++i )
             {
@@ -1191,13 +1191,17 @@ namespace Ogre
             }
             ++mCurrentMip;
         }
-        else if( pass->getType() == PASS_QUAD && pass->getDefinition()->mIdentifier == 0 )
+        else if( pass->getType() == PASS_QUAD && pass->getDefinition()->mIdentifier == 10u )
         {
             const float mipLevel = ( mCurrentMip * mCollectedProbes[0]->mTexture->getNumMipmaps() ) /
                                     mBindTexture->getNumMipmaps();
             for( size_t i=0; i<6; ++i )
                 mCopyCubemapParams[i]->setNamedConstant( "lodLevel", mipLevel );
             ++mCurrentMip;
+        }
+        else
+        {
+            ParallaxCorrectedCubemapBase::passPreExecute( pass );
         }
     }
     //-----------------------------------------------------------------------------------

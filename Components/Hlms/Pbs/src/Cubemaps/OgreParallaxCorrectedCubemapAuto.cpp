@@ -553,5 +553,9 @@ namespace Ogre
             psParams->setNamedConstant( "lodLevel", static_cast<float>(
                                             pass->getRenderPassDesc()->mColour[0].mipLevel ) );
         }
+        else
+        {
+            ParallaxCorrectedCubemapBase::passPreExecute( pass );
+        }
     }
 }

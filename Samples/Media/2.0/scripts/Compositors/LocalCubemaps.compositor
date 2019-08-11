@@ -42,7 +42,10 @@ abstract target cubemap_target
 		material SkyPostprocess
 		camera_cubemap_reorient true
 	}*/
+}
 
+abstract target pcc_depth_compress
+{
 	pass render_quad
 	{
 		store
@@ -55,6 +58,8 @@ abstract target cubemap_target
 		material		PCC/DepthCompressor
 
 		input			0 depthTexture
+
+		camera_cubemap_reorient true
 	}
 }
 
@@ -64,18 +69,29 @@ compositor_node LocalCubemapProbeRendererNode
 
 	texture depthTexture	target_width target_height PFG_D32_FLOAT
 
-	rtv cubemap_customDepthTex
+	rtv cubemap_customRtv
 	{
 		colour	cubemap
 		depth	depthTexture
 	}
+	rtv cubemap_noDepth
+	{
+		colour		cubemap
+		depth_pool	0
+	}
 
-	target cubemap +X : cubemap_target { }
-	target cubemap -X : cubemap_target { }
-	target cubemap +Y : cubemap_target { }
-	target cubemap -Y : cubemap_target { }
-	target cubemap +Z : cubemap_target { }
-	target cubemap -Z : cubemap_target
+	target cubemap_customRtv	+X : cubemap_target { }
+	target cubemap_noDepth		+X : pcc_depth_compress { }
+	target cubemap_customRtv	-X : cubemap_target { }
+	target cubemap_noDepth		-X : pcc_depth_compress { }
+	target cubemap_customRtv	+Y : cubemap_target { }
+	target cubemap_noDepth		+Y : pcc_depth_compress { }
+	target cubemap_customRtv	-Y : cubemap_target { }
+	target cubemap_noDepth		-Y : pcc_depth_compress { }
+	target cubemap_customRtv	+Z : cubemap_target { }
+	target cubemap_noDepth		+Z : pcc_depth_compress { }
+	target cubemap_customRtv	-Z : cubemap_target { }
+	target cubemap_noDepth		-Z : pcc_depth_compress
 	{
 		pass generate_mipmaps
 		{

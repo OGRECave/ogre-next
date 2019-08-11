@@ -422,6 +422,7 @@ namespace Ogre
                                                       (const ResourceAccessMap*)0,
                                                       Vector4::ZERO,
                                                       0x00, mipmapsExecutionMask );
+        mWorkspace->setListener( mCreator );
 
         if( !mStatic && !mCreator->getAutomaticMode() )
         {
@@ -578,7 +579,9 @@ namespace Ogre
         if( automaticMode )
             mCreator->_setIsRendering( true );
 
+        mCreator->_setProbeRenderInProgress( this );
         mWorkspace->_update();
+        mCreator->_setProbeRenderInProgress( 0 );
 
         if( automaticMode )
             mCreator->_setIsRendering( false );

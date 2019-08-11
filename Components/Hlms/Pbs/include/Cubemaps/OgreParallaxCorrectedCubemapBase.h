@@ -30,6 +30,7 @@ THE SOFTWARE.
 
 #include "OgreHlmsPbsPrerequisites.h"
 #include "Cubemaps/OgreCubemapProbe.h"
+#include "Compositor/OgreCompositorWorkspaceListener.h"
 #include "OgreIdString.h"
 #include "OgreId.h"
 #include "OgreHeaderPrefix.h"
@@ -42,7 +43,8 @@ namespace Ogre
     /**
     @see HlmsPbsDatablock::setCubemapProbe
     */
-    class _OgreHlmsPbsExport ParallaxCorrectedCubemapBase : public IdObject
+    class _OgreHlmsPbsExport ParallaxCorrectedCubemapBase : public IdObject,
+                                                            public CompositorWorkspaceListener
     {
     protected:
         TextureGpu                      *mBindTexture;
@@ -59,6 +61,9 @@ namespace Ogre
         Root                            *mRoot;
         SceneManager                    *mSceneManager;
         CompositorWorkspaceDef const    *mDefaultWorkspaceDef;
+
+        Pass            *mPccCompressorPass;
+        CubemapProbe    *mProbeRenderInProgress;
 
     public:
         ParallaxCorrectedCubemapBase( IdType id, Root *root, SceneManager *sceneManager,
@@ -124,8 +129,12 @@ namespace Ogre
         /// as the cubemap texture, or because other glitches may occur
         bool isRendering(void) const                    { return mIsRendering; }
 
+        void _setProbeRenderInProgress( CubemapProbe *probe )   { mProbeRenderInProgress = probe; }
+
         SceneManager* getSceneManager(void) const;
         const CompositorWorkspaceDef* getDefaultWorkspaceDef(void) const;
+
+        virtual void passPreExecute( CompositorPass *pass );
     };
 
     /** @} */

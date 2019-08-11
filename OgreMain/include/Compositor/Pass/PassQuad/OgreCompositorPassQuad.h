@@ -106,6 +106,7 @@ namespace Ogre
         /// Don't make this const (useful for compile-time multithreading errors)
         /// Pointer can be null if using HLMS
         Pass* getPass(void)                                     { return mPass; }
+        Camera* getCamera(void)                                 { return mCamera; }
     };
 
     /** @} */

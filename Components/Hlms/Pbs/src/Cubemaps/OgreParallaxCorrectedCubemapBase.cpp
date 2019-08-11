@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorNodeDef.h"
 #include "Compositor/Pass/PassClear/OgreCompositorPassClearDef.h"
+#include "Compositor/Pass/PassQuad/OgreCompositorPassQuad.h"
 #include "Compositor/Pass/PassQuad/OgreCompositorPassQuadDef.h"
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
 
@@ -73,12 +74,23 @@ namespace Ogre
         mMask( 0xffffffff ),
         mRoot( root ),
         mSceneManager( sceneManager ),
-        mDefaultWorkspaceDef( probeWorkspcDef )
+        mDefaultWorkspaceDef( probeWorkspcDef ),
+        mPccCompressorPass( 0 ),
+        mProbeRenderInProgress( 0 )
     {
         HlmsManager *hlmsManager = mRoot->getHlmsManager();
         HlmsSamplerblock samplerblock;
         samplerblock.mMipFilter = FO_LINEAR;
         mSamplerblockTrilinear = hlmsManager->getSamplerblock( samplerblock );
+
+        MaterialPtr depthCompressor =
+                MaterialManager::getSingleton().getByName(
+                    "PCC/DepthCompressor", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
+        if( depthCompressor )
+        {
+            depthCompressor->load();
+            mPccCompressorPass = depthCompressor->getTechnique( 0 )->getPass( 0 );
+        }
     }
     //-----------------------------------------------------------------------------------
     ParallaxCorrectedCubemapBase::~ParallaxCorrectedCubemapBase()
@@ -243,5 +255,41 @@ namespace Ogre
     const CompositorWorkspaceDef* ParallaxCorrectedCubemapBase::getDefaultWorkspaceDef(void) const
     {
         return mDefaultWorkspaceDef;
+    }
+    //-----------------------------------------------------------------------------------
+    void ParallaxCorrectedCubemapBase::passPreExecute( CompositorPass *pass )
+    {
+        const CompositorPassDef *passDef = pass->getDefinition();
+        if( passDef->getType() != PASS_QUAD )
+            return;
+
+        OGRE_ASSERT_HIGH( dynamic_cast<CompositorPassQuad*>( pass ) );
+        CompositorPassQuad *passQuad = static_cast<CompositorPassQuad*>( pass );
+        if( passQuad->getPass() == mPccCompressorPass )
+        {
+            GpuProgramParametersSharedPtr psParams = mPccCompressorPass->getFragmentProgramParameters();
+
+            Ogre::Camera *camera = passQuad->getCamera();
+            Ogre::Vector2 projectionAB = camera->getProjectionParamsAB();
+            //The division will keep "linearDepth" in the shader in the [0; 1] range.
+            projectionAB.y /= camera->getFarClipDistance();
+            psParams->setNamedConstant( "projectionParams", projectionAB );
+
+            CubemapProbe *probe = mProbeRenderInProgress;
+
+            const Aabb &probeShape = probe->getProbeShape();
+            Vector3 cameraPosLS = probe->mProbeCameraPos - probeShape.mCenter;
+            cameraPosLS = probe->mInvOrientation * cameraPosLS;
+
+            const Matrix4 viewMatrix4 = camera->getViewMatrix();
+            Matrix3 viewMatrix3;
+            viewMatrix4.extract3x3Matrix( viewMatrix3 );
+            const Matrix3 invViewMatrix3 = viewMatrix3.Inverse();
+
+            Matrix3 viewSpaceToProbeLocalSpace = probe->mInvOrientation * invViewMatrix3;
+            psParams->setNamedConstant( "probeShapeHalfSize", probe->mProbeShape.mHalfSize );
+            psParams->setNamedConstant( "cameraPosLS", cameraPosLS );
+            psParams->setNamedConstant( "viewSpaceToProbeLocalSpace", viewSpaceToProbeLocalSpace );
+        }
     }
 }

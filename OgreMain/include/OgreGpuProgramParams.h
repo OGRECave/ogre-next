@@ -2157,6 +2157,7 @@ namespace Ogre {
             @param vec The value to set
         */
         void setNamedConstant(const String& name, const Vector2& vec);
+        void setNamedConstant(const String& name, const Matrix3& m);
         /** Sets a Matrix4 parameter to the program.
             @param name The name of the parameter
             @param m The value to set

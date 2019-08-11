@@ -43,7 +43,6 @@ namespace Ogre
     @see HlmsPbsDatablock::setCubemapProbe
     */
     class _OgreHlmsPbsExport ParallaxCorrectedCubemap : public ParallaxCorrectedCubemapBase,
-                                                        public CompositorWorkspaceListener,
                                                         public FrameListener
     {
         CubemapProbe    *mCollectedProbes[OGRE_MAX_CUBE_PROBES];
