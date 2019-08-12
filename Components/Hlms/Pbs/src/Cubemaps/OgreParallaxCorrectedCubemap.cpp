@@ -1079,7 +1079,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     size_t ParallaxCorrectedCubemap::getConstBufferSizeStatic(void)
     {
-        return 5 * 4 * sizeof(float); //CubemapProbe localProbe;
+        return 6u * 4u * sizeof(float); //CubemapProbe localProbe;
     }
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemap::fillConstBufferData( const Matrix4 &viewMatrix,

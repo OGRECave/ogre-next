@@ -338,6 +338,9 @@ namespace Ogre
                 const Matrix3 viewSpaceToProbeLocal = probeInvOrientation * invViewMatrix3;
                 const Vector3 probeShapeCenter( probe->mGpuData[0][3],
                                                 probe->mGpuData[1][3], probe->mGpuData[2][3] );
+                Vector3 cubemapPosVS( probe->mGpuData[5][3],
+                                      probe->mGpuData[5][3], probe->mGpuData[5][3] );
+                cubemapPosVS = viewMatrix * cubemapPosVS;
                 Vector3 probeShapeCenterVS = viewMatrix * probeShapeCenter;
 
                 //float4 row0_centerX;
@@ -370,17 +373,23 @@ namespace Ogre
                 *lightData++ = probe->mGpuData[4][2];
                 *lightData++ = probe->mGpuData[4][3];
 
-                //float4 probeInnerRange;
-                *lightData++ = probe->mGpuData[5][0];
-                *lightData++ = probe->mGpuData[5][1];
-                *lightData++ = probe->mGpuData[5][2];
+                //float4 cubemapPosVS;
+                *lightData++ = cubemapPosVS.x;
+                *lightData++ = cubemapPosVS.y;
+                *lightData++ = cubemapPosVS.z;
                 *lightData++ = probe->mGpuData[5][3];
 
-                //float4 probeOuterRange;
+                //float4 probeInnerRange;
                 *lightData++ = probe->mGpuData[6][0];
                 *lightData++ = probe->mGpuData[6][1];
                 *lightData++ = probe->mGpuData[6][2];
                 *lightData++ = probe->mGpuData[6][3];
+
+                //float4 probeOuterRange;
+                *lightData++ = probe->mGpuData[7][0];
+                *lightData++ = probe->mGpuData[7][1];
+                *lightData++ = probe->mGpuData[7][2];
+                *lightData++ = probe->mGpuData[7][3];
 
                 ++itor;
             }

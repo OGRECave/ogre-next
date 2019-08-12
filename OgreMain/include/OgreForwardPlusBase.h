@@ -46,7 +46,7 @@ namespace Ogre
 
     static const size_t c_ForwardPlusNumFloat4PerLight = 6u;
     static const size_t c_ForwardPlusNumFloat4PerDecal = 4u;
-    static const size_t c_ForwardPlusNumFloat4PerCubemapProbe = 7u;
+    static const size_t c_ForwardPlusNumFloat4PerCubemapProbe = 8u;
 
     /** ForwardPlusBase */
     class _OgreExport ForwardPlusBase : public HlmsAlloc

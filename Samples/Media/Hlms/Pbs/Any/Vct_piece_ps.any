@@ -365,7 +365,7 @@
 	}
 
 	INLINE float getPccVctBlendWeight( float3 inPsPos, float3 reflDir, float fDist,
-									   float roughness, float3 cubemapPosLS,
+									   float roughness, float3 cubemapPosVS,
 									   float3 vctSpecPosVS, float vctSpecularW,
 									   float pccVctMinDistanceVar, float invPccVctInvDistanceVar,
 									   float pccCompressedDepth )
@@ -376,9 +376,9 @@
 		//Now increase interesectionPosVS accuracy (it will no longer be a box)
 		//by taking the compressed PCC depth stored in pccCompressedDepth
 		//The compressed PCC depth is in the form of:
-		//	interesectionPosVS = cubemapPosLS + reflDirLS * (pccCompressedDir * 2.0);
-		interesectionPosVS = cubemapPosLS.xyz +
-							 (interesectionPosVS - cubemapPosLS.xyz) * (pccCompressedDepth * 2.0);
+		//	interesectionPosVS = cubemapPosVS + reflDirLS * (pccCompressedDir * 2.0);
+		interesectionPosVS = cubemapPosVS.xyz +
+							 (interesectionPosVS - cubemapPosVS.xyz) * (pccCompressedDepth * 2.0);
 		float3 vctSpecPosToPccSpecPos = interesectionPosVS - vctSpecPosVS;
 		//Calculate distance to VCT pos and blend based on that
 		float distToVct = max3( abs( vctSpecPosToPccSpecPos ).x,

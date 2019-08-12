@@ -521,7 +521,7 @@
 		@property( vct_num_probes )
 			float vctLerp = getPccVctBlendWeight( inPs.pos, pixelData.reflDir, reflDirLS_dist.w,
 												  pixelData.roughness,
-												  @insertpiece( pccProbeSource ).cubemapPosLS.xyz,
+												  @insertpiece( pccProbeSource ).cubemapPosVS.xyz,
 												  vctSpecPosVS, vctSpecular.w,
 												  passBuf.pccVctMinDistance,
 												  passBuf.invPccVctInvDistance,

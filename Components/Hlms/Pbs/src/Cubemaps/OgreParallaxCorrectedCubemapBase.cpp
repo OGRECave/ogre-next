@@ -202,11 +202,18 @@ namespace Ogre
         *passBufferPtr++ = 1.0f;
 
         //float4 cubemapPosLS;
-        Vector3 cubemapPosLS = probe.mProbeCameraPos - probeShape.mCenter;
-        cubemapPosLS = probe.mInvOrientation * cubemapPosLS;
+        const Vector3 cubemapPos    = probe.mProbeCameraPos - probeShape.mCenter;
+        const Vector3 cubemapPosLS  = probe.mInvOrientation * cubemapPos;
         *passBufferPtr++ = cubemapPosLS.x;
         *passBufferPtr++ = cubemapPosLS.y;
         *passBufferPtr++ = cubemapPosLS.z;
+        *passBufferPtr++ = 1.0f;
+
+        //float4 cubemapPosVS;
+        const Vector3 cubemapPosVS = viewMatrix * cubemapPos;
+        *passBufferPtr++ = cubemapPosVS.x;
+        *passBufferPtr++ = cubemapPosVS.y;
+        *passBufferPtr++ = cubemapPosVS.z;
         *passBufferPtr++ = 1.0f;
     }
     //-----------------------------------------------------------------------------------

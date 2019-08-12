@@ -256,13 +256,13 @@ namespace Ogre
         mInternalProbe->mGpuData[5][3] = probeToAreaCenterOffsetLS.y;
         mInternalProbe->mGpuData[6][3] = probeToAreaCenterOffsetLS.z;
 
-        mInternalProbe->mGpuData[5][0] = mArea.mHalfSize.x * mAreaInnerRegion.x;
-        mInternalProbe->mGpuData[5][1] = mArea.mHalfSize.y * mAreaInnerRegion.y;
-        mInternalProbe->mGpuData[5][2] = mArea.mHalfSize.z * mAreaInnerRegion.z;
+        mInternalProbe->mGpuData[6][0] = mArea.mHalfSize.x * mAreaInnerRegion.x;
+        mInternalProbe->mGpuData[6][1] = mArea.mHalfSize.y * mAreaInnerRegion.y;
+        mInternalProbe->mGpuData[6][2] = mArea.mHalfSize.z * mAreaInnerRegion.z;
 
-        mInternalProbe->mGpuData[6][0] = mArea.mHalfSize.x;
-        mInternalProbe->mGpuData[6][1] = mArea.mHalfSize.y;
-        mInternalProbe->mGpuData[6][2] = mArea.mHalfSize.z;
+        mInternalProbe->mGpuData[7][0] = mArea.mHalfSize.x;
+        mInternalProbe->mGpuData[7][1] = mArea.mHalfSize.y;
+        mInternalProbe->mGpuData[7][2] = mArea.mHalfSize.z;
 
         if( mStatic )
         {

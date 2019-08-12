@@ -163,8 +163,9 @@
 		probe.row2_centerZ	= bufferFetch( f3dLightList, int(idx + 2u) ).xyzw;
 		probe.halfSize		= bufferFetch( f3dLightList, int(idx + 3u) ).xyzw;
 		probe.cubemapPosLS	= bufferFetch( f3dLightList, int(idx + 4u) ).xyzw;
-		float4 probeInnerRange = bufferFetch( f3dLightList, int(idx + 5u) ).xyzw;
-		float4 probeOuterRange = bufferFetch( f3dLightList, int(idx + 6u) ).xyzw;
+		probe.cubemapPosVS	= bufferFetch( f3dLightList, int(idx + 5u) ).xyzw;
+		float4 probeInnerRange = bufferFetch( f3dLightList, int(idx + 6u) ).xyzw;
+		float4 probeOuterRange = bufferFetch( f3dLightList, int(idx + 7u) ).xyzw;
 
 		float3 posInProbSpace = toProbeLocalSpace( inPs.pos, probe );
 		float probeFade = getProbeFade( posInProbSpace, probe );
@@ -176,8 +177,8 @@
 			float probePriority     = cubemapIdx_priority.y;
 
 			float3 probeToAreaCenterOffsetLS = float3( probe.cubemapPosLS.w,
-													   probeInnerRange.w,
-													   probeOuterRange.w );
+													   probe.cubemapPosVS.w,
+													   probeInnerRange.w );
 			float ndf = getProbeNDF( posInProbSpace.xyz, probeToAreaCenterOffsetLS.xyz,
 									 probeInnerRange.xyz, probeOuterRange.xyz );
 			ndf = saturate( ndf );
@@ -223,7 +224,7 @@
 			@property( vct_num_probes )
 				float vctLerp = getPccVctBlendWeight( inPs.pos, pixelData.reflDir, reflDirLS_dist.w,
 													  pixelData.roughness,
-													  probe.cubemapPosLS.xyz,
+													  probe.cubemapPosVS.xyz,
 													  vctSpecPosVS, vctSpecular.w,
 													  passBuf.pccVctMinDistance,
 													  passBuf.invPccVctInvDistance,

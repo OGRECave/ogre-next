@@ -10,6 +10,7 @@ struct CubemapProbe
 	float4 row2_centerZ;
 	float4 halfSize;
 	float4 cubemapPosLS;
+	float4 cubemapPosVS;
 };
 @end
 
