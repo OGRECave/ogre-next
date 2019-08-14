@@ -82,7 +82,7 @@ namespace Demo
         invViewMatrixCubemap[2][2] = -invViewMatrixCubemap[2][2];
         invViewMatrixCubemap = invViewMatrixCubemap.Inverse();
 
-        mPsParams[1]->setNamedConstant( "invViewMatCubemap", &invViewMatrixCubemap[0][0], 3*3, 1 );
+        mPsParams[1]->setNamedConstant( "invViewMatCubemap", invViewMatrixCubemap );
 
         //Why do we need to 2x the camera position in GL (so that difference is 2x)? I have no clue,
         //but could be realted with OpenGL's depth range being in range [-1;1] and projection magic.

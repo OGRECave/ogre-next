@@ -3130,7 +3130,23 @@ namespace Ogre
     //---------------------------------------------------------------------------
     void GpuProgramParameters::setNamedConstant(const String& name, const Matrix3& m)
     {
-        setNamedConstant( name, &m[0][0], 3u * 3u, 1u );
+        const GpuConstantDefinition* def =
+            _findNamedConstantDefinition(name, !mIgnoreMissingParams);
+        if( def )
+        {
+            if( def->elementSize == 9u )
+            {
+                //Not padded
+                _writeRawConstants(def->physicalIndex, &m[0][0], def->elementSize);
+            }
+            else
+            {
+                //Padded to float4
+                _writeRawConstants(def->physicalIndex + 0u, &m[0][0], 3u);
+                _writeRawConstants(def->physicalIndex + 4u, &m[1][0], 3u);
+                _writeRawConstants(def->physicalIndex + 8u, &m[2][0], 3u);
+            }
+        }
     }
     //---------------------------------------------------------------------------
     void GpuProgramParameters::setNamedConstant(const String& name, const Matrix4& m)
