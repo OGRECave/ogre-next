@@ -27,7 +27,7 @@ uniform float3x3 viewSpaceToProbeLocalSpace;
 	#include "PccDepthCompressor_ps.any"
 #undef HEADER
 
-float3 main
+float4 main
 (
 	PS_INPUT inPs
 ) : SV_Target0
