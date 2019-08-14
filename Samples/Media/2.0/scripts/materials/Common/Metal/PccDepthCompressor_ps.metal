@@ -18,7 +18,7 @@ struct Params
 	float3 cameraPosLS;
 
 	float3x3 viewSpaceToProbeLocalSpace;
-}
+};
 
 #define p_projectionParams				p.projectionParams
 #define p_probeShapeHalfSize			p.probeShapeHalfSize

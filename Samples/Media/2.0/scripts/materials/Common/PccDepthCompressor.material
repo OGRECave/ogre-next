@@ -23,7 +23,7 @@ fragment_program PccDepthCompressor_ps_Metal metal
 {
 	source PccDepthCompressor_ps.metal
 	enable_include_header true
-	shader_reflection_pair_hint PccDepthCompressor_vs_Metal
+	shader_reflection_pair_hint Ogre/Compositor/QuadCameraDir_vs
 }
 
 // Unified definitions
