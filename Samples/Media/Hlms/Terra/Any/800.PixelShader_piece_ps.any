@@ -275,6 +275,14 @@
 		@insertpiece( DoAreaLtcLights )
 
 		@insertpiece( forward3dLighting )
+
+		@property( needs_env_brdf && (use_envprobe_map || hlms_use_ssr || use_planar_reflections || vct_num_probes) )
+			pixelData.envColourS = float3( 0, 0, 0 );
+			pixelData.envColourD = float3( 0, 0, 0 );
+		@end
+
+		@insertpiece( applyVoxelConeTracing )
+
 		@insertpiece( forwardPlusDoCubemaps )
 		@insertpiece( applyIrradianceVolumes )
 
@@ -294,27 +302,36 @@
 			@property( use_envprobe_map )
 				pixelData.envColourS = lerp( pixelData.envColourS.xyz, ssrReflection.xyz, ssrReflection.w );
 			@else
-				pixelData.envColourS = ssrReflection.xyz * ssrReflection.w;
-				pixelData.envColourD = float3( 0, 0, 0 );
+				pixelData.envColourS += ssrReflection.xyz * ssrReflection.w;
 			@end
 		@end
 
 		@insertpiece( DoPlanarReflectionsPS )
 
 		@property( ambient_hemisphere )
-			float ambientWD = dot( passBuf.ambientHemisphereDir.xyz, pixelData.normal ) * 0.5 + 0.5;
-			float ambientWS = dot( passBuf.ambientHemisphereDir.xyz, pixelData.reflDir ) * 0.5 + 0.5;
-
-			@property( use_envprobe_map || hlms_use_ssr || use_planar_reflections )
-				pixelData.envColourS += lerp( passBuf.ambientLowerHemi.xyz, passBuf.ambientUpperHemi.xyz, ambientWD );
-				pixelData.envColourD += lerp( passBuf.ambientLowerHemi.xyz, passBuf.ambientUpperHemi.xyz, ambientWS );
-			@else
-				pixelData.envColourS = lerp( passBuf.ambientLowerHemi.xyz, passBuf.ambientUpperHemi.xyz, ambientWD );
-				pixelData.envColourD = lerp( passBuf.ambientLowerHemi.xyz, passBuf.ambientUpperHemi.xyz, ambientWS );
+			@property( use_envprobe_map || hlms_use_ssr || use_planar_reflections || vct_num_probes )
+				@property( vct_num_probes )
+					//Only use ambient lighting if object is outside any VCT probe
+					if( vctSpecular.w == 0 )
+					{
+				@end
+						pixelData.envColourS += lerp( passBuf.ambientLowerHemi.xyz, passBuf.ambientUpperHemi.xyz, ambientWD );
+						pixelData.envColourD += lerp( passBuf.ambientLowerHemi.xyz, passBuf.ambientUpperHemi.xyz, ambientWS );
+					@property( vct_num_probes )
+					}
+				@end
+				@else
+					pixelData.envColourS = lerp( passBuf.ambientLowerHemi.xyz, passBuf.ambientUpperHemi.xyz, ambientWD );
+					pixelData.envColourD = lerp( passBuf.ambientLowerHemi.xyz, passBuf.ambientUpperHemi.xyz, ambientWS );
+				@end
 			@end
-		@end
+			@property( ambient_fixed && vct_num_probes )
+				//Only use ambient lighting if object is outside any VCT probe
+				finalColour += vctSpecular.w == 0 ? float3( 0, 0, 0 ) :
+													(passBuf.ambientUpperHemi.xyz * pixelData.diffuse.xyz);
+			@end
 
-		@property( needs_refl_dir )
+		@property( needs_env_brdf )
 			@insertpiece( BRDF_EnvMap )
 		@end
 	@end ///!hlms_prepass
