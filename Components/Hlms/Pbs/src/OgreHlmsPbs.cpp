@@ -641,19 +641,14 @@ namespace Ogre
             ++numNormalWeights;
         }
 
+        for( size_t i=0; i<4; ++i )
         {
-            size_t validDetailMaps = 0;
-            for( size_t i=0; i<4; ++i )
+            if( datablock->getTexture( PBSM_DETAIL0_NM + i ) )
             {
-                if( datablock->getTexture( PBSM_DETAIL0_NM + i ) )
+                if( datablock->getDetailNormalWeight( i ) != 1.0f )
                 {
-                    if( datablock->getDetailNormalWeight( i ) != 1.0f )
-                    {
-                        setProperty( *PbsProperty::DetailNormalWeights[validDetailMaps], 1 );
-                        ++numNormalWeights;
-                    }
-
-                    ++validDetailMaps;
+                    setProperty( *PbsProperty::DetailNormalWeights[i], 1 );
+                    ++numNormalWeights;
                 }
             }
         }
