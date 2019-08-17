@@ -911,6 +911,7 @@ namespace Ogre
                     ID_LAST_RENDER_QUEUE,
                     ID_CAMERA_CUBEMAP_REORIENT,
                     ID_ENABLE_FORWARDPLUS,
+                    ID_FLUSH_COMMAND_BUFFERS_AFTER_SHADOW_NODE,
                     ID_IS_PREPASS,
                     ID_USE_PREPASS,
                     ID_UV_BAKING,

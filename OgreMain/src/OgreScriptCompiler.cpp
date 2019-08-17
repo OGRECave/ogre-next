@@ -1304,6 +1304,7 @@ namespace Ogre
         mIds["rq_last"]         = ID_LAST_RENDER_QUEUE;
         mIds["camera_cubemap_reorient"] = ID_CAMERA_CUBEMAP_REORIENT;
         mIds["enable_forwardplus"]= ID_ENABLE_FORWARDPLUS;
+        mIds["flush_command_buffers_after_shadow_node"]= ID_FLUSH_COMMAND_BUFFERS_AFTER_SHADOW_NODE;
         mIds["is_prepass"]      = ID_IS_PREPASS;
         mIds["use_prepass"]     = ID_USE_PREPASS;
         mIds["uv_baking"]       = ID_UV_BAKING;

@@ -134,6 +134,13 @@ namespace Ogre
         /// the most recent frustum culling execution are used.
         bool            mReuseCullData;
 
+        /// Same as CompositorPassDef::mFlushCommandBuffers, but executed after the shadow node
+        /// Note you may end up flushing twice if the shadow node also has flushing of its own
+        ///
+        /// Does not do anything if mShadowNodeRecalculation is set to SHADOW_NODE_REUSE
+        /// (whether explicitly or automatically determined)
+        bool            mFlushCommandBuffersAfterShadowNode;
+
         /// Used for baking lightmaps and similar stuff.
         /// When set to 0xFF it is disabled.
         /// Otherwise, the selected UV set will be used to bake the texture with the render results.
@@ -184,6 +191,7 @@ namespace Ogre
             mUpdateLodLists( true ),
             mLodBias( 1.0f ),
             mReuseCullData( false ),
+            mFlushCommandBuffersAfterShadowNode( false ),
             mUvBakingSet( 0xFF ),
             mBakeLightingOnly( false ),
             mUvBakingOffset( Vector2::ZERO ),

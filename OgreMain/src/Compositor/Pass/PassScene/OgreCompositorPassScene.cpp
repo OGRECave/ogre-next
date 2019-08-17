@@ -194,6 +194,11 @@ namespace Ogre
             viewport->_setVisibilityMask( oldVisibilityMask, oldLightVisibilityMask );
             mCullCamera->_notifyViewport(viewport);
 
+            if( mDefinition->mFlushCommandBuffersAfterShadowNode )
+            {
+                RenderSystem *renderSystem = mParentNode->getRenderSystem();
+                renderSystem->flushCommands();
+            }
             //We need to restore the previous RT's update
         }
 

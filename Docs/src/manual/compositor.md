@@ -620,10 +620,10 @@ should we render to. Default: No.
 **Note:** if the target is not a cubemap, Ogre will still try to rotate
 the camera, often to unintended angles.
 
--   enable\_forward3d \[yes|no\]
+-   enable\_plus \[yes|no\]
 
-When yes, this pass will use Forward3D (must be enabled first by the
-developer via C++, see Forward3D sample). When No, Forward3D will not be
+When yes, this pass will use Forward3D/ForwardClustered (must be enabled first
+by the developer via C++, see Forward3D sample). When No, Forward3D will not be
 used for this pass, which can improve performance both CPU and GPU side
 (but many lights are likely not going to be drawn or used). Default:
 Yes.
@@ -632,6 +632,11 @@ Yes.
 saving if F3D didn't already have a cache from a previous pass during
 the same frame, with the exact same camera and angle). GPU side, the
 pixel shaders will be lighter.
+
+-   flush\_command\_buffers\_after\_shadow\_node \[yes|no\]
+
+Same as flush\_command\_buffers. Does not do anything if 'shadows' is set to
+'reuse' (or was set to 'first' and this node is not the first)
 
 -   expose \<textureName\>;
 
