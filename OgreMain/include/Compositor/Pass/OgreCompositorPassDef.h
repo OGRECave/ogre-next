@@ -148,6 +148,18 @@ namespace Ogre
         */
         bool                mIncludeOverlays;
 
+        /// Whether to flush the command buffer at the end of the pass.
+        /// This can incur in a performance overhead (see OpenGL's glFlush and
+        /// D3D11' ID3D11DeviceContext::Flush) for info.
+        /// Usually you want to leave this off. However for VR applications that
+        /// must meet VSync, profiling may show your workload benefits from
+        /// submitting earlier so the GPU can start right away executing
+        /// rendering commands.
+        ///
+        /// The main reason to use this is in CPU-bound scenarios where
+        /// the GPU starts too late after sitting idle.
+        bool                mFlushCommandBuffers;
+
         uint8               mExecutionMask;
         uint8               mViewportModifierMask;
 
@@ -200,6 +212,7 @@ namespace Ogre
             mReadOnlyDepth( false ),
             mReadOnlyStencil( false ),
             mIncludeOverlays( false ),
+            mFlushCommandBuffers( false ),
             mExecutionMask( 0xFF ),
             mViewportModifierMask( 0xFF ),
             mShadowMapFullViewport( false )

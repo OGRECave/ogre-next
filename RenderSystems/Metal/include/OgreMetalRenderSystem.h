@@ -316,6 +316,8 @@ namespace Ogre
                                               SceneManagerEnumerator &sceneManagers,
                                               HlmsManager *hlmsManager );
 
+        virtual void flushCommands(void);
+
         MetalDevice* getActiveDevice(void)                      { return mActiveDevice; }
         MetalProgramFactory* getMetalProgramFactory(void)       { return mMetalProgramFactory; }
 
@@ -323,6 +325,8 @@ namespace Ogre
         void _notifyActiveComputeEnded(void);
         void _notifyNewCommandBuffer(void);
         void _notifyDeviceStalled(void);
+
+
     };
 }
 

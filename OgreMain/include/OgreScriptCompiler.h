@@ -884,6 +884,7 @@ namespace Ogre
                     ID_STORE,
                     ID_VIEWPORT,
                     ID_NUM_INITIAL,
+                    ID_FLUSH_COMMAND_BUFFERS,
                     ID_IDENTIFIER,
                     ID_OVERLAYS,
                     ID_EXECUTION_MASK,

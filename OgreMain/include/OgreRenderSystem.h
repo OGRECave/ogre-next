@@ -1443,6 +1443,8 @@ namespace Ogre
         /// the device state, thus leaving it inconsistent with what we think it is set to.
         virtual void _clearStateAndFlushCommandBuffer(void);
 
+        virtual void flushCommands(void) = 0;
+
         virtual const PixelFormatToShaderType* getPixelFormatToShaderType(void) const = 0;
    
     protected:

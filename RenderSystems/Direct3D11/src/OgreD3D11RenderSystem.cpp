@@ -4583,4 +4583,10 @@ namespace Ogre
 
         endRenderPassDescriptor();
     }
+    //---------------------------------------------------------------------
+    void D3D11RenderSystem::flushCommands(void)
+    {
+        OgreProfileExhaustive( "D3D11RenderSystem::flushCommands" );
+        mDevice.GetImmediateContext()->Flush();
+    }
 }

@@ -426,6 +426,7 @@ namespace Ogre
         virtual const PixelFormatToShaderType* getPixelFormatToShaderType(void) const;
 
         virtual void _clearStateAndFlushCommandBuffer(void);
+        virtual void flushCommands(void);
     };
 }
 #endif

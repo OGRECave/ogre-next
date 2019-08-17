@@ -2724,6 +2724,12 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
+    void MetalRenderSystem::flushCommands(void)
+    {
+        endRenderPassDescriptor( false );
+        mActiveDevice->commitAndNextCommandBuffer();
+    }
+    //-------------------------------------------------------------------------
     void MetalRenderSystem::setStencilBufferParams( uint32 refValue, const StencilParams &stencilParams )
     {
         RenderSystem::setStencilBufferParams( refValue, stencilParams );

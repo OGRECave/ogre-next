@@ -411,6 +411,10 @@ namespace Ogre
         return &mPixelFormatToShaderType;
     }
     //-------------------------------------------------------------------------
+    void NULLRenderSystem::flushCommands(void)
+    {
+    }
+    //-------------------------------------------------------------------------
     void NULLRenderSystem::beginProfileEvent( const String &eventName )
     {
     }

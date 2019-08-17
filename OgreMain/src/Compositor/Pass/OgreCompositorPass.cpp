@@ -416,6 +416,11 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CompositorPass::profilingEnd(void)
     {
+        if( mDefinition->mFlushCommandBuffers )
+        {
+            RenderSystem *renderSystem = mParentNode->getRenderSystem();
+            renderSystem->flushCommands();
+        }
 #if OGRE_PROFILING
         if( !mParentNode->getWorkspace()->getAmalgamatedProfiling() )
         {

@@ -4067,6 +4067,13 @@ namespace Ogre {
     //---------------------------------------------------------------------
     void GL3PlusRenderSystem::_clearStateAndFlushCommandBuffer(void)
     {
+        OgreProfileExhaustive( "GL3PlusRenderSystem::_clearStateAndFlushCommandBuffer" );
+        OCGE( glFlush() );
+    }
+    //---------------------------------------------------------------------
+    void GL3PlusRenderSystem::flushCommands(void)
+    {
+        OgreProfileExhaustive( "GL3PlusRenderSystem::flushCommands" );
         OCGE( glFlush() );
     }
 }

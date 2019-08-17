@@ -177,6 +177,8 @@ namespace Ogre
 
         virtual const PixelFormatToShaderType* getPixelFormatToShaderType(void) const;
 
+        virtual void flushCommands(void);
+
         virtual void beginProfileEvent( const String &eventName );
         virtual void endProfileEvent( void );
         virtual void markProfileEvent( const String &event );

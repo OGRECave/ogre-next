@@ -8958,6 +8958,7 @@ namespace Ogre{
                     break;
                 case ID_VIEWPORT:
                 case ID_IDENTIFIER:
+                case ID_FLUSH_COMMAND_BUFFERS:
                 case ID_NUM_INITIAL:
                 case ID_OVERLAYS:
                 case ID_EXECUTION_MASK:
@@ -9029,6 +9030,7 @@ namespace Ogre{
                     }
                     break;
                 case ID_IDENTIFIER:
+                case ID_FLUSH_COMMAND_BUFFERS:
                 case ID_NUM_INITIAL:
                 case ID_EXECUTION_MASK:
                 case ID_VIEWPORT_MODIFIER_MASK:
@@ -9192,6 +9194,7 @@ namespace Ogre{
                     break;
                 case ID_VIEWPORT:
                 case ID_IDENTIFIER:
+                case ID_FLUSH_COMMAND_BUFFERS:
                 case ID_NUM_INITIAL:
                 case ID_OVERLAYS:
                 case ID_EXECUTION_MASK:
@@ -9630,6 +9633,7 @@ namespace Ogre{
                     break;
                 case ID_VIEWPORT:
                 case ID_IDENTIFIER:
+                case ID_FLUSH_COMMAND_BUFFERS:
                 case ID_NUM_INITIAL:
                 case ID_OVERLAYS:
                 case ID_EXECUTION_MASK:
@@ -9741,6 +9745,7 @@ namespace Ogre{
                     break;
                 case ID_VIEWPORT:
                 case ID_IDENTIFIER:
+                case ID_FLUSH_COMMAND_BUFFERS:
                 case ID_NUM_INITIAL:
                 case ID_OVERLAYS:
                 case ID_EXECUTION_MASK:
@@ -10016,6 +10021,7 @@ namespace Ogre{
                 break;
                 //case ID_VIEWPORT:
                 case ID_IDENTIFIER:
+                case ID_FLUSH_COMMAND_BUFFERS:
                 case ID_NUM_INITIAL:
                 //case ID_OVERLAYS:
                 case ID_EXECUTION_MASK:
@@ -10310,6 +10316,7 @@ namespace Ogre{
                     break;
                 //case ID_VIEWPORT:
                 case ID_IDENTIFIER:
+                case ID_FLUSH_COMMAND_BUFFERS:
                 case ID_NUM_INITIAL:
                 //case ID_OVERLAYS:
                 case ID_EXECUTION_MASK:
@@ -10433,6 +10440,7 @@ namespace Ogre{
 
                 //case ID_VIEWPORT:
                 case ID_IDENTIFIER:
+                case ID_FLUSH_COMMAND_BUFFERS:
                 case ID_NUM_INITIAL:
                 case ID_EXECUTION_MASK:
                 case ID_VIEWPORT_MODIFIER_MASK:
@@ -10649,6 +10657,25 @@ namespace Ogre{
                     else
                     {
                         if( !getUInt(prop->values.front(), &mPassDef->mIdentifier) )
+                        {
+                            compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line);
+                        }
+                    }
+                    break;
+                case ID_FLUSH_COMMAND_BUFFERS:
+                    if(prop->values.empty())
+                    {
+                        compiler->addError(ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line);
+                        return;
+                    }
+                    else if (prop->values.size() > 1)
+                    {
+                        compiler->addError(ScriptCompiler::CE_FEWERPARAMETERSEXPECTED, prop->file, prop->line);
+                        return;
+                    }
+                    else
+                    {
+                        if( !getBoolean(prop->values.front(), &mPassDef->mFlushCommandBuffers) )
                         {
                             compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line);
                         }

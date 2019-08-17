@@ -166,6 +166,8 @@ namespace Ogre {
 
         virtual void _clearStateAndFlushCommandBuffer(void);
 
+        virtual void flushCommands(void);
+
         unsigned char *mSwIndirectBufferPtr;
 
         uint8   mFirstUavBoundSlot;

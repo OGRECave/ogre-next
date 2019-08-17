@@ -1280,6 +1280,7 @@ namespace Ogre
         mIds["warn_if_rtv_was_flushed"]   = ID_WARN_IF_RTV_WAS_FLUSHED;
         mIds["viewport"]        = ID_VIEWPORT;
         mIds["num_initial"]     = ID_NUM_INITIAL;
+        mIds["flush_command_buffers"] = ID_FLUSH_COMMAND_BUFFERS;
         mIds["identifier"]      = ID_IDENTIFIER;
         mIds["overlays"]        = ID_OVERLAYS;
         mIds["execution_mask"]  = ID_EXECUTION_MASK;
