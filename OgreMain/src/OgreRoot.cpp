@@ -924,10 +924,13 @@ namespace Ogre {
         _syncAddedRemovedFrameListeners();
 
         // Tell all listeners
-        for (set<FrameListener*>::type::iterator i = mFrameListeners.begin(); i != mFrameListeners.end(); ++i)
         {
-            if (!(*i)->frameStarted(evt))
-                return false;
+            OgreProfile( "Root::frameStarted Listeners" );
+            for (set<FrameListener*>::type::iterator i = mFrameListeners.begin(); i != mFrameListeners.end(); ++i)
+            {
+                if (!(*i)->frameStarted(evt))
+                    return false;
+            }
         }
 
         return true;
@@ -940,10 +943,13 @@ namespace Ogre {
         _syncAddedRemovedFrameListeners();
 
         // Tell all listeners
-        for (set<FrameListener*>::type::iterator i = mFrameListeners.begin(); i != mFrameListeners.end(); ++i)
         {
-            if (!(*i)->frameRenderingQueued(evt))
-                return false;
+            OgreProfile( "Root::frameRenderingQueued Listeners" );
+            for (set<FrameListener*>::type::iterator i = mFrameListeners.begin(); i != mFrameListeners.end(); ++i)
+            {
+                if (!(*i)->frameRenderingQueued(evt))
+                    return false;
+            }
         }
 
         return true;
@@ -955,12 +961,15 @@ namespace Ogre {
 
         // Tell all listeners
         bool ret = true;
-        for (set<FrameListener*>::type::iterator i = mFrameListeners.begin(); i != mFrameListeners.end(); ++i)
         {
-            if (!(*i)->frameEnded(evt))
+            OgreProfile( "Root::frameEnded Listeners" );
+            for (set<FrameListener*>::type::iterator i = mFrameListeners.begin(); i != mFrameListeners.end(); ++i)
             {
-                ret = false;
-                break;
+                if (!(*i)->frameEnded(evt))
+                {
+                    ret = false;
+                    break;
+                }
             }
         }
 

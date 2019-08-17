@@ -51,6 +51,7 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorManager2.h"
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreVertexArrayObject.h"
+#include "OgreProfiler.h"
 
 #include "OgreLwString.h"
 
@@ -1360,6 +1361,7 @@ namespace Ogre {
     //---------------------------------------------------------------------
     void RenderSystem::_update(void)
     {
+        OgreProfile( "RenderSystem::_update" );
         mTextureGpuManager->_update( false );
         mVaoManager->_update();
         cleanReleasedDepthBuffers();
