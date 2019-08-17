@@ -46,7 +46,8 @@ THE SOFTWARE.
 namespace Ogre
 {
     NULLVaoManager::NULLVaoManager() :
-        mDrawId( 0 )
+        mDrawId( 0 ),
+        VaoManager( 0 )
     {
         mConstBufferAlignment   = 256;
         mTexBufferAlignment     = 256;
