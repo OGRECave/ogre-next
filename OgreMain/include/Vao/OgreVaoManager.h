@@ -158,7 +158,7 @@ namespace Ogre
                                              BufferPacked *buffer ) = 0;
 
     public:
-        VaoManager();
+        VaoManager( const NameValuePairList *params );
         virtual ~VaoManager();
 
         struct _OgreExport MemoryStatsEntry

@@ -36,11 +36,12 @@ THE SOFTWARE.
 #include "Vao/OgreIndirectBufferPacked.h"
 #include "OgreTimer.h"
 #include "OgreCommon.h"
+#include "OgreStringConverter.h"
 #include "OgreLogManager.h"
 
 namespace Ogre
 {
-    VaoManager::VaoManager() :
+    VaoManager::VaoManager( const NameValuePairList *params ) :
         mTimer( 0 ),
         mDefaultStagingBufferUnfencedTime( 300000 - 1000 ), //4 minutes, 59 seconds
         mDefaultStagingBufferLifetime( 300000 ), //5 minutes
@@ -60,6 +61,19 @@ namespace Ogre
         mUavBufferMaxSize( 16 * 1024 * 1024 )    //Minimum guaranteed by GL.
     {
         mTimer = OGRE_NEW Timer();
+
+        if( params )
+        {
+            NameValuePairList::const_iterator itor =
+                    params->find( "VaoManager::mDynamicBufferMultiplier" );
+            if( itor != params->end() )
+            {
+                const uint32 newBufMult = StringConverter::parseUnsignedInt( itor->second,
+                                                                             mDynamicBufferMultiplier );
+                mDynamicBufferMultiplier = static_cast<uint8>( newBufMult );
+                OGRE_ASSERT_LOW( mDynamicBufferMultiplier > 0u );
+            }
+        }
     }
     //-----------------------------------------------------------------------------------
     VaoManager::~VaoManager()

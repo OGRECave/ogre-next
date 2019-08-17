@@ -128,6 +128,7 @@ namespace Ogre
 
     MetalVaoManager::MetalVaoManager( uint8 dynamicBufferMultiplier, MetalDevice *device,
                                       const NameValuePairList *params ) :
+        VaoManager( params ),
         mVaoNames( 1 ),
         mSemaphoreFlushed( true ),
         mDevice( device ),

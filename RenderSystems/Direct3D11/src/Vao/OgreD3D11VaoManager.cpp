@@ -79,6 +79,7 @@ namespace Ogre
     D3D11VaoManager::D3D11VaoManager( bool _supportsIndirectBuffers, D3D11Device &device,
                                       D3D11RenderSystem *renderSystem,
                                       const NameValuePairList *params ) :
+        VaoManager( params ),
         mVaoNames( 1 ),
         mDevice( device ),
         mDrawId( 0 ),

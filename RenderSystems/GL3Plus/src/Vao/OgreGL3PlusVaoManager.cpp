@@ -91,6 +91,7 @@ namespace Ogre
                                           bool _supportsBaseInstance,
                                           bool _supportsSsbo,
                                           const NameValuePairList *params ) :
+        VaoManager( params ),
         mArbBufferStorage( _supportsArbBufferStorage ),
         mEmulateTexBuffers( emulateTexBuffers ),
         mMaxVertexAttribs( 30 ),
