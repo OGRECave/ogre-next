@@ -1273,6 +1273,8 @@ namespace Ogre
         if (defaultLog)
         {
             caps->log(defaultLog);
+            defaultLog->logMessage(
+                " * Using Reverse Z: " + StringConverter::toString( mReverseDepth, true ) );
         }
 
         mGpuProgramManager->setSaveMicrocodesToCache(true);
@@ -2799,9 +2801,11 @@ namespace Ogre
         rasterDesc.FrontCounterClockwise = true;
 
         const float nearFarFactor = 10.0;
-        rasterDesc.DepthBias        = static_cast<int>(-nearFarFactor * newBlock->mDepthBiasConstant);
+        const float biasSign = mReverseDepth ? 1.0f : -1.0f;
+        rasterDesc.DepthBias            = static_cast<int>( nearFarFactor * biasSign *
+                                                            newBlock->mDepthBiasConstant );
+        rasterDesc.SlopeScaledDepthBias = newBlock->mDepthBiasSlopeScale * biasSign;
         rasterDesc.DepthBiasClamp   = 0;
-        rasterDesc.SlopeScaledDepthBias = newBlock->mDepthBiasSlopeScale;
 
         rasterDesc.DepthClipEnable  = true;
         rasterDesc.ScissorEnable    = newBlock->mScissorTestEnabled;

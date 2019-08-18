@@ -639,6 +639,8 @@ namespace Ogre {
         if (defaultLog)
         {
             caps->log(defaultLog);
+            defaultLog->logMessage(
+                " * Using Reverse Z: " + StringConverter::toString( mReverseDepth, true ) );
         }
 
         // Create the texture manager
@@ -2480,10 +2482,11 @@ namespace Ogre {
         //FIXME glPolygonOffset currently is buggy in GL3+ RS but not GL RS.
         if (constantBias != 0 || slopeScaleBias != 0)
         {
+            const float biasSign = mReverseDepth ? 1.0f : -1.0f;
             OGRE_CHECK_GL_ERROR(glEnable(GL_POLYGON_OFFSET_FILL));
             OGRE_CHECK_GL_ERROR(glEnable(GL_POLYGON_OFFSET_POINT));
             OGRE_CHECK_GL_ERROR(glEnable(GL_POLYGON_OFFSET_LINE));
-            OGRE_CHECK_GL_ERROR(glPolygonOffset(-slopeScaleBias, -constantBias));
+            OCGE( glPolygonOffset( slopeScaleBias * biasSign, constantBias * biasSign ) );
         }
         else
         {

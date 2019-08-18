@@ -1994,8 +1994,9 @@ namespace Ogre
         if( !mPso || mPso->depthStencilState != metalPso->depthStencilState )
             [mActiveRenderEncoder setDepthStencilState:metalPso->depthStencilState];
 
-        [mActiveRenderEncoder setDepthBias:pso->macroblock->mDepthBiasConstant
-                                     slopeScale:pso->macroblock->mDepthBiasSlopeScale
+        const float biasSign = mReverseDepth ? 1.0f : -1.0f;
+        [mActiveRenderEncoder setDepthBias:pso->macroblock->mDepthBiasConstant * biasSign
+                                     slopeScale:pso->macroblock->mDepthBiasSlopeScale * biasSign
                                      clamp:0.0f];
         [mActiveRenderEncoder setCullMode:metalPso->cullMode];
 
@@ -2307,10 +2308,11 @@ namespace Ogre
                 // Update derived depth bias.
                 if (mDerivedDepthBias && mCurrentPassIterationNum > 0)
                 {
-                    [mActiveRenderEncoder setDepthBias:mDerivedDepthBiasBase +
-                                                       mDerivedDepthBiasMultiplier *
-                                                       mCurrentPassIterationNum
-                                            slopeScale:mDerivedDepthBiasSlopeScale
+                    const float biasSign = mReverseDepth ? 1.0f : -1.0f;
+                    [mActiveRenderEncoder setDepthBias:(mDerivedDepthBiasBase +
+                                                        mDerivedDepthBiasMultiplier *
+                                                        mCurrentPassIterationNum) * biasSign
+                                            slopeScale:mDerivedDepthBiasSlopeScale * biasSign
                                                  clamp:0.0f];
                 }
 
@@ -2358,10 +2360,11 @@ namespace Ogre
                 // Update derived depth bias.
                 if (mDerivedDepthBias && mCurrentPassIterationNum > 0)
                 {
-                    [mActiveRenderEncoder setDepthBias:mDerivedDepthBiasBase +
-                                                       mDerivedDepthBiasMultiplier *
-                                                       mCurrentPassIterationNum
-                                            slopeScale:mDerivedDepthBiasSlopeScale
+                    const float biasSign = mReverseDepth ? 1.0f : -1.0f;
+                    [mActiveRenderEncoder setDepthBias:(mDerivedDepthBiasBase +
+                                                        mDerivedDepthBiasMultiplier *
+                                                        mCurrentPassIterationNum) * biasSign
+                                            slopeScale:mDerivedDepthBiasSlopeScale * biasSign
                                                  clamp:0.0f];
                 }
 
