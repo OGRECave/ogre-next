@@ -128,7 +128,7 @@ namespace Ogre
         bool                    mMainSemaphoreAlreadyWaited;
         bool                    mBeginFrameOnceStarted;
 
-        FrameBufferDescMap      mFrameBufferDescMap;
+        MetalFrameBufferDescMap mFrameBufferDescMap;
         uint32                  mEntriesToFlush;
         bool                    mVpChanged;
         bool                    mInterruptedRenderCommandEncoder;
@@ -197,7 +197,7 @@ namespace Ogre
         virtual void _setUavCS( uint32 slotStart, const DescriptorSetUav *set );
 
         virtual void _setCurrentDeviceFromTexture( TextureGpu *texture );
-        virtual FrameBufferDescMap& _getFrameBufferDescMap(void)        { return mFrameBufferDescMap; }
+        virtual MetalFrameBufferDescMap& _getFrameBufferDescMap(void)   { return mFrameBufferDescMap; }
         virtual RenderPassDescriptor* createRenderPassDescriptor(void);
         virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc,
                                                 TextureGpu *anyTarget, uint8 mipLevel,

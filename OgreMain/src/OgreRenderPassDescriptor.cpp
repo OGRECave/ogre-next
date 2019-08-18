@@ -353,4 +353,55 @@ namespace Ogre
         return mStencil.texture || (mDepth.texture &&
                                     PixelFormatGpuUtils::isStencil( mDepth.texture->getPixelFormat() ));
     }
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    FrameBufferDescKey::FrameBufferDescKey()
+    {
+        memset( this, 0, sizeof( *this ) );
+    }
+    //-----------------------------------------------------------------------------------
+    FrameBufferDescKey::FrameBufferDescKey( const RenderPassDescriptor &desc )
+    {
+        memset( this, 0, sizeof( *this ) );
+        numColourEntries = desc.getNumColourEntries();
+
+        //Load & Store actions don't matter for generating different FBOs.
+
+        for( size_t i=0; i<numColourEntries; ++i )
+        {
+            colour[i] = desc.mColour[i];
+            allLayers[i] = desc.mColour[i].allLayers;
+            colour[i].loadAction = LoadAction::DontCare;
+            colour[i].storeAction = StoreAction::DontCare;
+        }
+
+        depth = desc.mDepth;
+        depth.loadAction = LoadAction::DontCare;
+        depth.storeAction = StoreAction::DontCare;
+        stencil = desc.mStencil;
+        stencil.loadAction = LoadAction::DontCare;
+        stencil.storeAction = StoreAction::DontCare;
+    }
+    //-----------------------------------------------------------------------------------
+    bool FrameBufferDescKey::operator < ( const FrameBufferDescKey &other ) const
+    {
+        if( this->numColourEntries != other.numColourEntries )
+            return this->numColourEntries < other.numColourEntries;
+
+        for( size_t i=0; i<numColourEntries; ++i )
+        {
+            if( this->allLayers[i] != other.allLayers[i] )
+                return this->allLayers[i] < other.allLayers[i];
+            if( this->colour[i] != other.colour[i] )
+                return this->colour[i] < other.colour[i];
+        }
+
+        if( this->depth != other.depth )
+            return this->depth < other.depth;
+        if( this->stencil != other.stencil )
+            return this->stencil < other.stencil;
+
+        return false;
+    }
 }

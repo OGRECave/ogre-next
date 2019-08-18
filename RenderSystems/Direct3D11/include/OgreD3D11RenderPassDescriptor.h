@@ -45,26 +45,13 @@ namespace Ogre
     *  @{
     */
 
-    struct FrameBufferDescKey
-    {
-        uint8                   numColourEntries;
-        bool                    allLayers[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
-        RenderPassTargetBase    colour[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
-        RenderPassTargetBase    depth;
-        RenderPassTargetBase    stencil;
-
-        FrameBufferDescKey();
-        FrameBufferDescKey( const RenderPassDescriptor &desc );
-
-        bool operator < ( const FrameBufferDescKey &other ) const;
-    };
-    struct FrameBufferDescValue
+    struct D3D11FrameBufferDescValue
     {
         uint16 refCount;
-        FrameBufferDescValue();
+        D3D11FrameBufferDescValue();
     };
 
-    typedef map<FrameBufferDescKey, FrameBufferDescValue>::type FrameBufferDescMap;
+    typedef map<FrameBufferDescKey, D3D11FrameBufferDescValue>::type D3D11FrameBufferDescMap;
 
     /** D3D11 will share groups of ID3D11RenderTargetView all D3D11RenderPassDescriptor that
         share the same RTV setup. This doesn't mean these RenderPassDescriptor are exactly the
@@ -79,7 +66,7 @@ namespace Ogre
         bool                    mHasStencilFormat;
         bool                    mHasRenderWindow;
 
-        FrameBufferDescMap::iterator mSharedFboItor;
+        D3D11FrameBufferDescMap::iterator mSharedFboItor;
 
         D3D11Device         &mDevice;
         D3D11RenderSystem   *mRenderSystem;

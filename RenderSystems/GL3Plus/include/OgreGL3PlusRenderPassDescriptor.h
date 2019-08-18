@@ -43,27 +43,14 @@ namespace Ogre
     *  @{
     */
 
-    struct FrameBufferDescKey
-    {
-        uint8                   numColourEntries;
-        bool                    allLayers[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
-        RenderPassTargetBase    colour[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
-        RenderPassTargetBase    depth;
-        RenderPassTargetBase    stencil;
-
-        FrameBufferDescKey();
-        FrameBufferDescKey( const RenderPassDescriptor &desc );
-
-        bool operator < ( const FrameBufferDescKey &other ) const;
-    };
-    struct FrameBufferDescValue
+    struct GL3PlusFrameBufferDescValue
     {
         GLuint  fboName;
         uint16  refCount;
-        FrameBufferDescValue();
+        GL3PlusFrameBufferDescValue();
     };
 
-    typedef map<FrameBufferDescKey, FrameBufferDescValue>::type FrameBufferDescMap;
+    typedef map<FrameBufferDescKey, GL3PlusFrameBufferDescValue>::type GL3PlusFrameBufferDescMap;
 
     /** GL3+ will share FBO handles between all GL3PlusRenderPassDescriptor that share the
         same FBO setup. This doesn't mean these RenderPassDescriptor are exactly the
@@ -78,7 +65,7 @@ namespace Ogre
         bool    mAnyColourLoadActionsSetToClear;
         bool    mHasRenderWindow;
 
-        FrameBufferDescMap::iterator mSharedFboItor;
+        GL3PlusFrameBufferDescMap::iterator mSharedFboItor;
 
         GL3PlusRenderSystem *mRenderSystem;
 

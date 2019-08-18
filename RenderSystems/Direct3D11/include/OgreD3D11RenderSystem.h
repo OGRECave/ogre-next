@@ -159,7 +159,7 @@ namespace Ogre
         size_t     mLastTextureUnitState;
 		bool       mSamplerStatesChanged;
 
-        FrameBufferDescMap mFrameBufferDescMap;
+        D3D11FrameBufferDescMap mFrameBufferDescMap;
 
 
         /// Primary window, the one used to create the device
@@ -236,7 +236,7 @@ namespace Ogre
 
         virtual void _setCurrentDeviceFromTexture( TextureGpu *texture ) {}
 
-        virtual FrameBufferDescMap& _getFrameBufferDescMap(void)        { return mFrameBufferDescMap; }
+        virtual D3D11FrameBufferDescMap& _getFrameBufferDescMap(void)   { return mFrameBufferDescMap; }
         virtual RenderPassDescriptor* createRenderPassDescriptor(void);
         virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc,
                                                 TextureGpu *anyTarget, uint8 mipLevel,

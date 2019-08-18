@@ -57,7 +57,7 @@ namespace Ogre
             mFboMsaaResolve = 0;
         }
 
-        FrameBufferDescMap &frameBufferDescMap = mRenderSystem->_getFrameBufferDescMap();
+        GL3PlusFrameBufferDescMap &frameBufferDescMap = mRenderSystem->_getFrameBufferDescMap();
         if( mSharedFboItor != frameBufferDescMap.end() )
         {
             --mSharedFboItor->second.refCount;
@@ -104,7 +104,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void GL3PlusRenderPassDescriptor::switchToRenderWindow(void)
     {
-        FrameBufferDescMap &frameBufferDescMap = mRenderSystem->_getFrameBufferDescMap();
+        GL3PlusFrameBufferDescMap &frameBufferDescMap = mRenderSystem->_getFrameBufferDescMap();
         if( mSharedFboItor != frameBufferDescMap.end() )
         {
             --mSharedFboItor->second.refCount;
@@ -123,12 +123,12 @@ namespace Ogre
     void GL3PlusRenderPassDescriptor::switchToFBO(void)
     {
         FrameBufferDescKey key( *this );
-        FrameBufferDescMap &frameBufferDescMap = mRenderSystem->_getFrameBufferDescMap();
-        FrameBufferDescMap::iterator newItor = frameBufferDescMap.find( key );
+        GL3PlusFrameBufferDescMap &frameBufferDescMap = mRenderSystem->_getFrameBufferDescMap();
+        GL3PlusFrameBufferDescMap::iterator newItor = frameBufferDescMap.find( key );
 
         if( newItor == frameBufferDescMap.end() )
         {
-            FrameBufferDescValue value;
+            GL3PlusFrameBufferDescValue value;
             value.refCount = 0;
 
             OCGE( glGenFramebuffers( 1, &value.fboName ) );
@@ -710,56 +710,5 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
-    FrameBufferDescKey::FrameBufferDescKey()
-    {
-        memset( this, 0, sizeof( *this ) );
-    }
-    //-----------------------------------------------------------------------------------
-    FrameBufferDescKey::FrameBufferDescKey( const RenderPassDescriptor &desc )
-    {
-        memset( this, 0, sizeof( *this ) );
-        numColourEntries = desc.getNumColourEntries();
-
-        //Load & Store actions don't matter for generating different FBOs.
-
-        for( size_t i=0; i<numColourEntries; ++i )
-        {
-            colour[i] = desc.mColour[i];
-            allLayers[i] = desc.mColour[i].allLayers;
-            colour[i].loadAction = LoadAction::DontCare;
-            colour[i].storeAction = StoreAction::DontCare;
-        }
-
-        depth = desc.mDepth;
-        depth.loadAction = LoadAction::DontCare;
-        depth.storeAction = StoreAction::DontCare;
-        stencil = desc.mStencil;
-        stencil.loadAction = LoadAction::DontCare;
-        stencil.storeAction = StoreAction::DontCare;
-    }
-    //-----------------------------------------------------------------------------------
-    bool FrameBufferDescKey::operator < ( const FrameBufferDescKey &other ) const
-    {
-        if( this->numColourEntries != other.numColourEntries )
-            return this->numColourEntries < other.numColourEntries;
-
-        for( size_t i=0; i<numColourEntries; ++i )
-        {
-            if( this->allLayers[i] != other.allLayers[i] )
-                return this->allLayers[i] < other.allLayers[i];
-            if( this->colour[i] != other.colour[i] )
-                return this->colour[i] < other.colour[i];
-        }
-
-        if( this->depth != other.depth )
-            return this->depth < other.depth;
-        if( this->stencil != other.stencil )
-            return this->stencil < other.stencil;
-
-        return false;
-    }
-    //-----------------------------------------------------------------------------------
-    //-----------------------------------------------------------------------------------
-    //-----------------------------------------------------------------------------------
-    FrameBufferDescValue::FrameBufferDescValue() : fboName( 0 ), refCount( 0 ) {}
+    GL3PlusFrameBufferDescValue::GL3PlusFrameBufferDescValue() : fboName( 0 ), refCount( 0 ) {}
 }

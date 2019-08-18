@@ -46,26 +46,13 @@ namespace Ogre
     *  @{
     */
 
-    struct FrameBufferDescKey
-    {
-        uint8                   numColourEntries;
-        bool                    allLayers[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
-        RenderPassTargetBase    colour[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
-        RenderPassTargetBase    depth;
-        RenderPassTargetBase    stencil;
-
-        FrameBufferDescKey();
-        FrameBufferDescKey( const RenderPassDescriptor &desc );
-
-        bool operator < ( const FrameBufferDescKey &other ) const;
-    };
-    struct FrameBufferDescValue
+    struct MetalFrameBufferDescValue
     {
         uint16 refCount;
-        FrameBufferDescValue();
+        MetalFrameBufferDescValue();
     };
 
-    typedef map<FrameBufferDescKey, FrameBufferDescValue>::type FrameBufferDescMap;
+    typedef map<FrameBufferDescKey, MetalFrameBufferDescValue>::type MetalFrameBufferDescMap;
 
     class _OgreMetalExport MetalRenderPassDescriptor : public RenderPassDescriptor
     {
@@ -77,7 +64,7 @@ namespace Ogre
         MTLRenderPassColorAttachmentDescriptor  *mResolveColourAttachm[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
         bool mRequiresManualResolve;
 
-        FrameBufferDescMap::iterator mSharedFboItor;
+        MetalFrameBufferDescMap::iterator mSharedFboItor;
 
         MetalDevice         *mDevice;
         MetalRenderSystem   *mRenderSystem;

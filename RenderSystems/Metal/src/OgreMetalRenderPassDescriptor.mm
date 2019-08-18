@@ -66,7 +66,7 @@ namespace Ogre
         mDepthAttachment = 0;
         mStencilAttachment = 0;
 
-        FrameBufferDescMap &frameBufferDescMap = mRenderSystem->_getFrameBufferDescMap();
+        MetalFrameBufferDescMap &frameBufferDescMap = mRenderSystem->_getFrameBufferDescMap();
         if( mSharedFboItor != frameBufferDescMap.end() )
         {
             --mSharedFboItor->second.refCount;
@@ -106,12 +106,12 @@ namespace Ogre
     void MetalRenderPassDescriptor::calculateSharedKey(void)
     {
         FrameBufferDescKey key( *this );
-        FrameBufferDescMap &frameBufferDescMap = mRenderSystem->_getFrameBufferDescMap();
-        FrameBufferDescMap::iterator newItor = frameBufferDescMap.find( key );
+        MetalFrameBufferDescMap &frameBufferDescMap = mRenderSystem->_getFrameBufferDescMap();
+        MetalFrameBufferDescMap::iterator newItor = frameBufferDescMap.find( key );
 
         if( newItor == frameBufferDescMap.end() )
         {
-            FrameBufferDescValue value;
+            MetalFrameBufferDescValue value;
             value.refCount = 0;
             frameBufferDescMap[key] = value;
             newItor = frameBufferDescMap.find( key );
@@ -743,5 +743,5 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
-    FrameBufferDescValue::FrameBufferDescValue() : refCount( 0 ) {}
+    MetalFrameBufferDescValue::MetalFrameBufferDescValue() : refCount( 0 ) {}
 }

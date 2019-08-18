@@ -181,7 +181,7 @@ namespace Ogre {
 
         GL3PlusPixelFormatToShaderType mPixelFormatToShaderType;
 
-        FrameBufferDescMap mFrameBufferDescMap;
+        GL3PlusFrameBufferDescMap mFrameBufferDescMap;
 
         GLint getTextureAddressingMode(TextureAddressingMode tam) const;
         static GLenum getBlendMode(SceneBlendFactor ogreBlend);
@@ -264,7 +264,7 @@ namespace Ogre {
                                         GLenum *stencilFormat );
 
         virtual void _setCurrentDeviceFromTexture( TextureGpu *texture );
-        virtual FrameBufferDescMap& _getFrameBufferDescMap(void)        { return mFrameBufferDescMap; }
+        virtual GL3PlusFrameBufferDescMap& _getFrameBufferDescMap(void) { return mFrameBufferDescMap; }
         virtual RenderPassDescriptor* createRenderPassDescriptor(void);
         virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc,
                                                 TextureGpu *anyTarget, uint8 mipLevel,

@@ -241,6 +241,20 @@ namespace Ogre
         virtual void getCustomAttribute( IdString name, void *pData, uint32 extraParam ) {}
     };
 
+    struct _OgreExport FrameBufferDescKey
+    {
+        uint8                   numColourEntries;
+        bool                    allLayers[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
+        RenderPassTargetBase    colour[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
+        RenderPassTargetBase    depth;
+        RenderPassTargetBase    stencil;
+
+        FrameBufferDescKey();
+        FrameBufferDescKey( const RenderPassDescriptor &desc );
+
+        bool operator < ( const FrameBufferDescKey &other ) const;
+    };
+
     /** @} */
     /** @} */
 }
