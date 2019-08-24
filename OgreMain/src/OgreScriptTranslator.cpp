@@ -10657,7 +10657,7 @@ namespace Ogre{
                             {
                                 if( vpNum < 16u )
                                 {
-                                    mPassDef->mNumViewports = std::max( mPassDef->mNumViewports, vpNum );
+                                    mPassDef->mNumViewports = std::max( mPassDef->mNumViewports, vpNum + 1u );
                                 }
                                 else
                                 {
