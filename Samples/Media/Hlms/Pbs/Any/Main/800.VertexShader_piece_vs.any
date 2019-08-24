@@ -107,7 +107,7 @@
         @property( !hlms_use_uv_baking )
 			outVs_Position = mul( worldPos, passBuf.viewProj );
 			@property( hlms_instanced_stereo )
-				if( inVs_stereoDrawId & 0x01u )
+				if( (inVs_stereoDrawId & 0x01u) != 0u )
 				{
 					@property( !hlms_skeleton )
 						//With skeletons, passBuf.view is used which we don't want to alter
@@ -144,9 +144,8 @@
 		@property( hlms_normal || hlms_qtangent )
 			float4x4 worldView = UNPACK_MAT4( worldMatBuf, (inVs_drawId << 1u) + 1u );
 			@property( hlms_instanced_stereo )
-				if( inVs_stereoDrawId & 0x01u )
+				if( (inVs_stereoDrawId & 0x01u) != 0u )
 				{
-					TODO_inVs_drawId_divideBy2;
 					//worldView = offsetMat * worldView;
 					//offsetMat =
 					// 1 0 0 stereoOffset
@@ -208,7 +207,7 @@
 	@end
 
 	@property( hlms_instanced_stereo )
-		gl_ViewportIndex	= inVs_stereoDrawId & 0x01u;
-		gl_Layer			= inVs_stereoDrawId & 0x01u;
+		gl_ViewportIndex	= int( inVs_stereoDrawId & 0x01u );
+		gl_Layer			= int( inVs_stereoDrawId & 0x01u );
 	@end
 @end

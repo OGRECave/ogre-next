@@ -516,7 +516,7 @@ Replaces last\_render\_queue. The default is `max` which is a special
 parameter that implies the last active render queue ID. If numeric,
 value must be between 0 and 255. The value is **not** inclusive.
 
--   viewport \<left\>; \<top\>; \<width\>; \<height\>;
+-   viewport \[idx\] \<left\>; \<top\>; \<width\>; \<height\>;
     \[\<scissor\_left\>; \<scissor\_top\>; \<scissor\_width\>;
     \<scissor\_height\>;\]
 
@@ -528,6 +528,12 @@ When 4 parameters are suplied, the scissor box will match the
 viewport's. All 8 parameters allow to set a custom scissor box. *Note:*
 Scissor testing must be enabled by the Hlms Macroblock for it to work,
 we just set the size here.
+
+When the optional 'idx' parameter is supplied at the begginning there will be
+either 5 or 9 parameters instead of 4 or 8 respectively.
+This index allows you to set multiple viewports for e.g. instanced\_stereo or
+for shaders that make use of gl_Layer/SV_ViewportArrayIndex.
+When not provided, this value defaults to 0. The value is in range \[0; 16\)
 
 The Compositor will automatically share Viewport pointers between
 different passes to the same RenderTarget (even for different nodes) as
@@ -660,6 +666,11 @@ Indicates this pass will take advantage of the data generated during the prepass
 which means depth buffer writes may be forced to off; normals will be sourced
 for the GBuffer. And if present, a reflection texture will be used for calculating
 SSR (Screen Space Reflections).
+
+-   instanced\_stereo \[yes|no\]
+
+Whether to use instanced stereo, for VR rendering. See InstancedStereo and OpenVR samples.
+You will probably want to also set multiple viewports, at the very least viewports 0 and 1
 
 ### stencil {#CompositorNodesPassesStencil}
 

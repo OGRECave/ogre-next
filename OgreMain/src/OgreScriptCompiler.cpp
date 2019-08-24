@@ -1310,6 +1310,7 @@ namespace Ogre
         mIds["uv_baking"]       = ID_UV_BAKING;
         mIds["uv_baking_offset"]= ID_UV_BAKING_OFFSET;
         mIds["bake_lighting_only"] = ID_BAKE_LIGHTING_ONLY;
+        mIds["instanced_stereo"]= ID_INSTANCED_STEREO;
 
         mIds["use_quad"]        = ID_USE_QUAD;
         mIds["quad_normals"]    = ID_QUAD_NORMALS;
