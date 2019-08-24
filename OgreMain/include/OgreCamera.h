@@ -565,6 +565,7 @@ namespace Ogre {
         /// Gets the window clip planes, only applicable if isWindowSet == true
         const vector<Plane>::type& getWindowPlanes(void) const;
 
+        void setStereoEyeSeparation( Real eyeSeparation );
         Real getStereoEyeSeparation(void) const     { return mStereoEyeSeparation; }
 
         /** Get the auto tracking target for this camera, if any. */

@@ -813,6 +813,11 @@ namespace Ogre {
         return mWindowClipPlanes;
     }
     // -------------------------------------------------------------------
+    void Camera::setStereoEyeSeparation( Real eyeSeparation )
+    {
+        mStereoEyeSeparation = eyeSeparation;
+    }
+    // -------------------------------------------------------------------
 #ifdef ENABLE_INCOMPATIBLE_OGRE_2_0
     Real Camera::getBoundingRadius(void) const
     {
