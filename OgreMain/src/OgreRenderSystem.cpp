@@ -61,7 +61,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     RenderSystem::RenderSystem()
         : mCurrentRenderPassDescriptor(0)
-        , mCurrentRenderViewport( 0, 0, 0, 0 )
+        , mMaxBoundViewports(16u)
         , mActiveRenderTarget(0)
         , mTextureManager(0)
         , mVaoManager(0)
@@ -548,16 +548,23 @@ namespace Ogre {
     void RenderSystem::beginRenderPassDescriptor( RenderPassDescriptor *desc,
                                                   TextureGpu *anyTarget,
                                                   uint8 mipLevel,
-                                                  const Vector4 &viewportSize,
-                                                  const Vector4 &scissors,
+                                                  const Vector4 *viewportSizes,
+                                                  const Vector4 *scissors,
+                                                  uint32 numViewports,
                                                   bool overlaysEnabled,
                                                   bool warnIfRtvWasFlushed )
     {
         assert( anyTarget );
 
         mCurrentRenderPassDescriptor = desc;
-        mCurrentRenderViewport.setDimensions( anyTarget, viewportSize, scissors, mipLevel );
-        mCurrentRenderViewport.setOverlaysEnabled( overlaysEnabled );
+        for( size_t i=0; i<numViewports; ++i )
+        {
+            mCurrentRenderViewport[i].setDimensions( anyTarget, viewportSizes[i],
+                                                     scissors[i], mipLevel );
+            mCurrentRenderViewport[i].setOverlaysEnabled( overlaysEnabled );
+        }
+
+        mMaxBoundViewports = numViewports;
     }
     //---------------------------------------------------------------------
     void RenderSystem::executeRenderPassDescriptorDelayedActions(void)
@@ -567,7 +574,10 @@ namespace Ogre {
     void RenderSystem::endRenderPassDescriptor(void)
     {
         mCurrentRenderPassDescriptor = 0;
-        mCurrentRenderViewport.setDimensions( 0, Vector4::ZERO, Vector4::ZERO, 0u );
+        const size_t maxBoundViewports = mMaxBoundViewports;
+        for( size_t i=0; i<maxBoundViewports; ++i )
+            mCurrentRenderViewport[i].setDimensions( 0, Vector4::ZERO, Vector4::ZERO, 0u );
+        mMaxBoundViewports = 1u;
 
         //Where graphics ends, compute may start, or a new frame.
         //Very likely we'll have to flush the UAVs again, so assume we need.

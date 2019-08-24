@@ -679,7 +679,7 @@ namespace Ogre
 
         Vector4 fullVp( 0, 0, 1, 1 );
         renderSystem->beginRenderPassDescriptor( renderPassDescriptor, this, 0,
-                                                 fullVp, fullVp, false, false );
+                                                 &fullVp, &fullVp, 1u, false, false );
         renderSystem->executeRenderPassDescriptorDelayedActions();
         renderSystem->endRenderPassDescriptor();
         renderSystem->destroyRenderPassDescriptor( renderPassDescriptor );

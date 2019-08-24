@@ -125,6 +125,7 @@ namespace Ogre
     const IdString HlmsBaseProp::PsoClipDistances	= IdString( "hlms_pso_clip_distances" );
     const IdString HlmsBaseProp::GlobalClipPlanes	= IdString( "hlms_global_clip_planes" );
     const IdString HlmsBaseProp::DualParaboloidMapping= IdString( "hlms_dual_paraboloid_mapping" );
+    const IdString HlmsBaseProp::InstancedStereo    = IdString( "hlms_instanced_stereo" );
     const IdString HlmsBaseProp::StaticBranchLights = IdString( "hlms_static_branch_lights" );
     const IdString HlmsBaseProp::NumShadowMapLights = IdString( "hlms_num_shadow_map_lights" );
     const IdString HlmsBaseProp::NumShadowMapTextures= IdString("hlms_num_shadow_map_textures" );
@@ -2882,6 +2883,9 @@ namespace Ogre
                     if( passSceneDef->mBakeLightingOnly )
                         setProperty( HlmsBaseProp::BakeLightingOnly, 1 );
                 }
+
+                if( passSceneDef->mInstancedStereo )
+                    setProperty( HlmsBaseProp::InstancedStereo, 1 );
             }
         }
         else

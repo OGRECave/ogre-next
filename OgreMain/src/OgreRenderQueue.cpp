@@ -548,7 +548,8 @@ namespace Ogre
         else if( mVaoManager->supportsBaseInstance() )
             baseInstanceAndIndirectBuffers = 1;
 
-        uint32 instanceCount = 1;
+        const uint32 instancesPerDraw = mSceneManager->isUsingInstancedStereo() ? 2u : 1u;
+        uint32 instanceCount = instancesPerDraw;
 
         CbDrawCall *drawCmd = 0;
         CbSharedDraw    *drawCountPtr = 0;
@@ -633,13 +634,13 @@ namespace Ogre
 
                     drawCountPtr = drawIndexedPtr;
                     drawIndexedPtr->primCount       = vao->mPrimCount;
-                    drawIndexedPtr->instanceCount   = 1;
+                    drawIndexedPtr->instanceCount   = instancesPerDraw;
                     drawIndexedPtr->firstVertexIndex= vao->mIndexBuffer->_getFinalBufferStart() +
                                                                                     vao->mPrimStart;
                     drawIndexedPtr->baseVertex      = vao->mBaseVertexBuffer->_getFinalBufferStart();
                     drawIndexedPtr->baseInstance    = baseInstance;
 
-                    instanceCount = 1;
+                    instanceCount = instancesPerDraw;
                 }
                 else
                 {
@@ -648,12 +649,12 @@ namespace Ogre
 
                     drawCountPtr = drawStripPtr;
                     drawStripPtr->primCount         = vao->mPrimCount;
-                    drawStripPtr->instanceCount     = 1;
+                    drawStripPtr->instanceCount     = instancesPerDraw;
                     drawStripPtr->firstVertexIndex  = vao->mBaseVertexBuffer->_getFinalBufferStart() +
                                                                                         vao->mPrimStart;
                     drawStripPtr->baseInstance      = baseInstance;
 
-                    instanceCount = 1;
+                    instanceCount = instancesPerDraw;
                 }
 
                 lastVao = vao;
@@ -662,7 +663,8 @@ namespace Ogre
             {
                 //Same mesh. Just go with instancing. Keep the counter in
                 //an external variable, as the region can be write-combined
-                drawCountPtr->instanceCount = ++instanceCount;
+                instanceCount += instancesPerDraw;
+                drawCountPtr->instanceCount = instanceCount;
             }
 
             ++itor;
@@ -852,7 +854,7 @@ namespace Ogre
         mFreeIndirectBuffers.insert( mFreeIndirectBuffers.end(),
                                      mUsedIndirectBuffers.begin(),
                                      mUsedIndirectBuffers.end() );
-        mUsedIndirectBuffers.clear();        
+        mUsedIndirectBuffers.clear();
     }
     //-----------------------------------------------------------------------
     void RenderQueue::setRenderQueueMode( uint8 rqId, Modes newMode )

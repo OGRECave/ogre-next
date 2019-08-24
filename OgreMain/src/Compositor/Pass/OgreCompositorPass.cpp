@@ -125,22 +125,30 @@ namespace Ogre
         bool applyModifier = (workspaceVpMask & mDefinition->mViewportModifierMask) != 0;
         Vector4 vpModifier = applyModifier ? workspace->getViewportModifier() : Vector4( 0, 0, 1, 1 );
 
-        Real left   = mDefinition->mVpLeft      + vpModifier.x;
-        Real top    = mDefinition->mVpTop       + vpModifier.y;
-        Real width  = mDefinition->mVpWidth     * vpModifier.z;
-        Real height = mDefinition->mVpHeight    * vpModifier.w;
+        const uint32 numViewports = mDefinition->mNumViewports;
+        Vector4 vpSize[16];
+        Vector4 scissors[16];
 
-        Real scLeft   = mDefinition->mVpScissorLeft     + vpModifier.x;
-        Real scTop    = mDefinition->mVpScissorTop      + vpModifier.y;
-        Real scWidth  = mDefinition->mVpScissorWidth    * vpModifier.z;
-        Real scHeight = mDefinition->mVpScissorHeight   * vpModifier.w;
+        for( size_t i=0; i<numViewports; ++i )
+        {
+            Real left   = mDefinition->mVpRect[i].mVpLeft      + vpModifier.x;
+            Real top    = mDefinition->mVpRect[i].mVpTop       + vpModifier.y;
+            Real width  = mDefinition->mVpRect[i].mVpWidth     * vpModifier.z;
+            Real height = mDefinition->mVpRect[i].mVpHeight    * vpModifier.w;
 
-        Vector4 vpSize( left, top, width, height );
-        Vector4 scissors( scLeft, scTop, scWidth, scHeight );
+            Real scLeft   = mDefinition->mVpRect[i].mVpScissorLeft     + vpModifier.x;
+            Real scTop    = mDefinition->mVpRect[i].mVpScissorTop      + vpModifier.y;
+            Real scWidth  = mDefinition->mVpRect[i].mVpScissorWidth    * vpModifier.z;
+            Real scHeight = mDefinition->mVpRect[i].mVpScissorHeight   * vpModifier.w;
+
+            vpSize[i] = Vector4( left, top, width, height );
+            scissors[i] = Vector4( scLeft, scTop, scWidth, scHeight );
+        }
 
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
         renderSystem->beginRenderPassDescriptor( mRenderPassDesc, mAnyTargetTexture, mAnyMipLevel,
-                                                 vpSize, scissors, mDefinition->mIncludeOverlays,
+                                                 vpSize, scissors, numViewports,
+                                                 mDefinition->mIncludeOverlays,
                                                  mDefinition->mWarnIfRtvWasFlushed );
     }
     //-----------------------------------------------------------------------------------
@@ -817,8 +825,8 @@ namespace Ogre
     Vector2 CompositorPass::getActualDimensions(void) const
     {
         return Vector2( floorf( (mAnyTargetTexture->getWidth() >> mAnyMipLevel) *
-                                mDefinition->mVpWidth ),
+                                mDefinition->mVpRect[0].mVpWidth ),
                         floorf( (mAnyTargetTexture->getHeight() >> mAnyMipLevel) *
-                                mDefinition->mVpHeight ) );
+                                mDefinition->mVpRect[0].mVpHeight ) );
     }
 }

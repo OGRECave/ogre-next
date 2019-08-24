@@ -953,8 +953,9 @@ namespace Ogre {
     //-----------------------------------------------------------------------------------
     void GL3PlusRenderSystem::beginRenderPassDescriptor( RenderPassDescriptor *desc,
                                                          TextureGpu *anyTarget, uint8 mipLevel,
-                                                         const Vector4 &viewportSize,
-                                                         const Vector4 &scissors,
+                                                         const Vector4 *viewportSizes,
+                                                         const Vector4 *scissors,
+                                                         uint32 numViewports,
                                                          bool overlaysEnabled,
                                                          bool warnIfRtvWasFlushed )
     {
@@ -966,8 +967,8 @@ namespace Ogre {
         GL3PlusRenderPassDescriptor *currPassDesc =
                 static_cast<GL3PlusRenderPassDescriptor*>( mCurrentRenderPassDescriptor );
 
-        RenderSystem::beginRenderPassDescriptor( desc, anyTarget, mipLevel, viewportSize, scissors,
-                                                 overlaysEnabled, warnIfRtvWasFlushed );
+        RenderSystem::beginRenderPassDescriptor( desc, anyTarget, mipLevel, viewportSizes, scissors,
+                                                 numViewports, overlaysEnabled, warnIfRtvWasFlushed );
 
         GL3PlusRenderPassDescriptor *newPassDesc =
                 static_cast<GL3PlusRenderPassDescriptor*>( desc );
@@ -1000,32 +1001,60 @@ namespace Ogre {
         newPassDesc->performLoadActions( mBlendChannelMask, mDepthWrite,
                                          mStencilParams.writeMask, entriesToFlush );
 
-        GLsizei x, y, w, h;
-        w = mCurrentRenderViewport.getActualWidth();
-        h = mCurrentRenderViewport.getActualHeight();
-        x = mCurrentRenderViewport.getActualLeft();
-        y = mCurrentRenderViewport.getActualTop();
-
-        if( !desc->requiresTextureFlipping() )
         {
-            // Convert "upper-left" corner to "lower-left"
-            y = anyTarget->getHeight() - h - y;
+            GLfloat xywhVp[16][4];
+            GLint xywhSc[16][4];
+            for( size_t i=0; i<numViewports; ++i )
+            {
+                xywhVp[i][0] = mCurrentRenderViewport[0].getActualLeft();
+                xywhVp[i][1] = mCurrentRenderViewport[0].getActualTop();
+                xywhVp[i][2] = mCurrentRenderViewport[0].getActualWidth();
+                xywhVp[i][3] = mCurrentRenderViewport[0].getActualHeight();
+
+                xywhSc[i][0] = mCurrentRenderViewport[0].getScissorActualLeft();
+                xywhSc[i][1] = mCurrentRenderViewport[0].getScissorActualTop();
+                xywhSc[i][2] = mCurrentRenderViewport[0].getScissorActualWidth();
+                xywhSc[i][3] = mCurrentRenderViewport[0].getScissorActualHeight();
+
+                if( !desc->requiresTextureFlipping() )
+                {
+                    // Convert "upper-left" corner to "lower-left"
+                    xywhVp[i][1] = anyTarget->getHeight() - xywhVp[i][3] - xywhVp[i][1];
+                    xywhSc[i][1] = anyTarget->getHeight() - xywhSc[i][3] - xywhSc[i][1];
+                }
+            }
+            glViewportArrayv( 0u, numViewports, reinterpret_cast<GLfloat*>( xywhVp ) );
+            glScissorArrayv( 0u, numViewports, reinterpret_cast<GLint*>( xywhVp ) );
         }
-        OCGE( glViewport( x, y, w, h ) );
-
-        w = mCurrentRenderViewport.getScissorActualWidth();
-        h = mCurrentRenderViewport.getScissorActualHeight();
-        x = mCurrentRenderViewport.getScissorActualLeft();
-        y = mCurrentRenderViewport.getScissorActualTop();
-
-        if( !desc->requiresTextureFlipping() )
+        /*else
         {
-            // Convert "upper-left" corner to "lower-left"
-            y = anyTarget->getHeight() - h - y;
-        }
+            GLsizei x, y, w, h;
+            w = mCurrentRenderViewport[0].getActualWidth();
+            h = mCurrentRenderViewport[0].getActualHeight();
+            x = mCurrentRenderViewport[0].getActualLeft();
+            y = mCurrentRenderViewport[0].getActualTop();
 
-        // Configure the viewport clipping
-        OCGE( glScissor( x, y, w, h ) );
+            if( !desc->requiresTextureFlipping() )
+            {
+                // Convert "upper-left" corner to "lower-left"
+                y = anyTarget->getHeight() - h - y;
+            }
+            OCGE( glViewport( x, y, w, h ) );
+
+            w = mCurrentRenderViewport[0].getScissorActualWidth();
+            h = mCurrentRenderViewport[0].getScissorActualHeight();
+            x = mCurrentRenderViewport[0].getScissorActualLeft();
+            y = mCurrentRenderViewport[0].getScissorActualTop();
+
+            if( !desc->requiresTextureFlipping() )
+            {
+                // Convert "upper-left" corner to "lower-left"
+                y = anyTarget->getHeight() - h - y;
+            }
+
+            // Configure the viewport clipping
+            OCGE( glScissor( x, y, w, h ) );
+        }*/
     }
     //-----------------------------------------------------------------------------------
     void GL3PlusRenderSystem::endRenderPassDescriptor(void)
@@ -3262,7 +3291,7 @@ namespace Ogre {
                                                 TextureGpu *anyTarget, uint8 mipLevel )
     {
         Vector4 fullVp( 0, 0, 1, 1 );
-        beginRenderPassDescriptor( desc, anyTarget, mipLevel, fullVp, fullVp, false, false );
+        beginRenderPassDescriptor( desc, anyTarget, mipLevel, &fullVp, &fullVp, 1u, false, false );
     }
 
     void GL3PlusRenderSystem::discardFrameBuffer( unsigned int buffers )

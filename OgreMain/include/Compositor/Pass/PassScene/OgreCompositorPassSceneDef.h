@@ -130,6 +130,10 @@ namespace Ogre
         */
         Real            mLodBias;
 
+        /// When true, will render in instanced stereo mode, thus outputting left & right eyes
+        /// at the same time
+        bool            mInstancedStereo;
+
         /// When true, the frustum culling is skipped in this pass. To cull objects, data from
         /// the most recent frustum culling execution are used.
         bool            mReuseCullData;
@@ -190,6 +194,7 @@ namespace Ogre
             mCameraCubemapReorient( false ),
             mUpdateLodLists( true ),
             mLodBias( 1.0f ),
+            mInstancedStereo( false ),
             mReuseCullData( false ),
             mFlushCommandBuffersAfterShadowNode( false ),
             mUvBakingSet( 0xFF ),

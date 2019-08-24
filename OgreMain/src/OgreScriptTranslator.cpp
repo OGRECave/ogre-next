@@ -10622,15 +10622,20 @@ namespace Ogre{
                                                 "4 or 8 numeric arguments expected");
                             return;
                         }
+
+                        mPassDef->mNumViewports = 1u;
+
                         AbstractNodeList::const_iterator it3 = prop->values.begin();
                         AbstractNodeList::const_iterator it0 = it3++;
                         AbstractNodeList::const_iterator it1 = it3++;
                         AbstractNodeList::const_iterator it2 = it3++;
 
-                        if( !getFloat( *it0, &mPassDef->mVpLeft ) || !getFloat( *it1, &mPassDef->mVpTop ) ||
-                            !getFloat( *it2, &mPassDef->mVpWidth ) || !getFloat( *it3, &mPassDef->mVpHeight ) )
+                        if( !getFloat( *it0, &mPassDef->mVpRect[0].mVpLeft ) ||
+                            !getFloat( *it1, &mPassDef->mVpRect[0].mVpTop ) ||
+                            !getFloat( *it2, &mPassDef->mVpRect[0].mVpWidth ) ||
+                            !getFloat( *it3, &mPassDef->mVpRect[0].mVpHeight ) )
                         {
-                                compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line);
+                            compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line);
                         }
 
                         if( prop->values.size() == 8 )
@@ -10640,20 +10645,20 @@ namespace Ogre{
                             AbstractNodeList::const_iterator it5 = it7++;
                             AbstractNodeList::const_iterator it6 = it7++;
 
-                            if( !getFloat( *it4, &mPassDef->mVpScissorLeft ) ||
-                                !getFloat( *it5, &mPassDef->mVpScissorTop ) ||
-                                !getFloat( *it6, &mPassDef->mVpScissorWidth ) ||
-                                !getFloat( *it7, &mPassDef->mVpScissorHeight ) )
+                            if( !getFloat( *it4, &mPassDef->mVpRect[0].mVpScissorLeft ) ||
+                                !getFloat( *it5, &mPassDef->mVpRect[0].mVpScissorTop ) ||
+                                !getFloat( *it6, &mPassDef->mVpRect[0].mVpScissorWidth ) ||
+                                !getFloat( *it7, &mPassDef->mVpRect[0].mVpScissorHeight ) )
                             {
                                  compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line);
                             }
                         }
                         else
                         {
-                            mPassDef->mVpScissorLeft    = mPassDef->mVpLeft;
-                            mPassDef->mVpScissorTop     = mPassDef->mVpTop;
-                            mPassDef->mVpScissorWidth   = mPassDef->mVpWidth;
-                            mPassDef->mVpScissorHeight  = mPassDef->mVpHeight;
+                            mPassDef->mVpRect[0].mVpScissorLeft    = mPassDef->mVpRect[0].mVpLeft;
+                            mPassDef->mVpRect[0].mVpScissorTop     = mPassDef->mVpRect[0].mVpTop;
+                            mPassDef->mVpRect[0].mVpScissorWidth   = mPassDef->mVpRect[0].mVpWidth;
+                            mPassDef->mVpRect[0].mVpScissorHeight  = mPassDef->mVpRect[0].mVpHeight;
                         }
                     }
                     break;

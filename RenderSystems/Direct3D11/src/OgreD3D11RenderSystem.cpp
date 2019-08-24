@@ -100,7 +100,7 @@ THE SOFTWARE.
 #include <dxgi1_3.h> // for IDXGIDevice3::Trim
 #endif
 
-namespace Ogre 
+namespace Ogre
 {
     //---------------------------------------------------------------------
     D3D11RenderSystem::D3D11RenderSystem()
@@ -117,11 +117,11 @@ namespace Ogre
           mDepthStencilView( 0 ),
           mMaxComputeShaderSrvCount( 0 )
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
-		, mStereoDriver(NULL)
-#endif	
+        , mStereoDriver(NULL)
+#endif
 #if OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-		, suspendingToken()
-		, surfaceContentLostToken()
+        , suspendingToken()
+        , surfaceContentLostToken()
 #endif
     {
         LogManager::getSingleton().logMessage( "D3D11: " + getName() + " created." );
@@ -148,29 +148,29 @@ namespace Ogre
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WINRT
 #if defined(_WIN32_WINNT_WINBLUE) && _WIN32_WINNT >= _WIN32_WINNT_WINBLUE
-		suspendingToken = (Windows::ApplicationModel::Core::CoreApplication::Suspending +=
-			ref new Windows::Foundation::EventHandler<Windows::ApplicationModel::SuspendingEventArgs^>([this](Platform::Object ^sender, Windows::ApplicationModel::SuspendingEventArgs ^e)
-		{
-			// Hints to the driver that the app is entering an idle state and that its memory can be used temporarily for other apps.
-			ComPtr<IDXGIDevice3> pDXGIDevice;
-			if(mDevice.get() && SUCCEEDED(mDevice->QueryInterface(pDXGIDevice.GetAddressOf())))
-				pDXGIDevice->Trim();
-		}));
+        suspendingToken = (Windows::ApplicationModel::Core::CoreApplication::Suspending +=
+            ref new Windows::Foundation::EventHandler<Windows::ApplicationModel::SuspendingEventArgs^>([this](Platform::Object ^sender, Windows::ApplicationModel::SuspendingEventArgs ^e)
+        {
+            // Hints to the driver that the app is entering an idle state and that its memory can be used temporarily for other apps.
+            ComPtr<IDXGIDevice3> pDXGIDevice;
+            if(mDevice.get() && SUCCEEDED(mDevice->QueryInterface(pDXGIDevice.GetAddressOf())))
+                pDXGIDevice->Trim();
+        }));
 
-		surfaceContentLostToken = (Windows::Graphics::Display::DisplayInformation::DisplayContentsInvalidated +=
-			ref new Windows::Foundation::TypedEventHandler<Windows::Graphics::Display::DisplayInformation^, Platform::Object^>(
-				[this](Windows::Graphics::Display::DisplayInformation^ sender, Platform::Object^ arg)
-		{
-			LogManager::getSingleton().logMessage("D3D11: DisplayContentsInvalidated.");
-			validateDevice(true);
-		}));
+        surfaceContentLostToken = (Windows::Graphics::Display::DisplayInformation::DisplayContentsInvalidated +=
+            ref new Windows::Foundation::TypedEventHandler<Windows::Graphics::Display::DisplayInformation^, Platform::Object^>(
+                [this](Windows::Graphics::Display::DisplayInformation^ sender, Platform::Object^ arg)
+        {
+            LogManager::getSingleton().logMessage("D3D11: DisplayContentsInvalidated.");
+            validateDevice(true);
+        }));
 #else // Win 8.0
-		surfaceContentLostToken = (Windows::Graphics::Display::DisplayProperties::DisplayContentsInvalidated +=
-			ref new Windows::Graphics::Display::DisplayPropertiesEventHandler([this](Platform::Object ^sender)
-		{
-			LogManager::getSingleton().logMessage("D3D11: DisplayContentsInvalidated.");
-			validateDevice(true);
-		}));
+        surfaceContentLostToken = (Windows::Graphics::Display::DisplayProperties::DisplayContentsInvalidated +=
+            ref new Windows::Graphics::Display::DisplayPropertiesEventHandler([this](Platform::Object ^sender)
+        {
+            LogManager::getSingleton().logMessage("D3D11: DisplayContentsInvalidated.");
+            validateDevice(true);
+        }));
 #endif
 #endif
     }
@@ -179,10 +179,10 @@ namespace Ogre
     {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WINRT
 #if defined(_WIN32_WINNT_WINBLUE) && _WIN32_WINNT >= _WIN32_WINNT_WINBLUE
-		Windows::ApplicationModel::Core::CoreApplication::Suspending -= suspendingToken;
-		Windows::Graphics::Display::DisplayInformation::DisplayContentsInvalidated -= surfaceContentLostToken;
+        Windows::ApplicationModel::Core::CoreApplication::Suspending -= suspendingToken;
+        Windows::Graphics::Display::DisplayInformation::DisplayContentsInvalidated -= surfaceContentLostToken;
 #else // Win 8.0
-		Windows::Graphics::Display::DisplayProperties::DisplayContentsInvalidated -= surfaceContentLostToken;
+        Windows::Graphics::Display::DisplayProperties::DisplayContentsInvalidated -= surfaceContentLostToken;
 #endif
 #endif
 
@@ -207,12 +207,12 @@ namespace Ogre
         return strName;
     }
     //---------------------------------------------------------------------
-	const String& D3D11RenderSystem::getFriendlyName(void) const
-	{
-		static String strName("Direct3D 11");
-		return strName;
-	}
-	//---------------------------------------------------------------------
+    const String& D3D11RenderSystem::getFriendlyName(void) const
+    {
+        static String strName("Direct3D 11");
+        return strName;
+    }
+    //---------------------------------------------------------------------
     D3D11DriverList* D3D11RenderSystem::getDirect3DDrivers(bool refreshList /* = false*/)
     {
         if(!mDriverList)
@@ -231,72 +231,72 @@ namespace Ogre
                                                D3D_FEATURE_LEVEL minFL, D3D_FEATURE_LEVEL maxFL,
                                                D3D_FEATURE_LEVEL* pFeatureLevel,
                                                ID3D11DeviceN **outDevice, ID3D11Device1 **outDevice1 )
-	{
+    {
         IDXGIAdapterN* pAdapter = (d3dDriver && driverType == D3D_DRIVER_TYPE_HARDWARE) ?
                                       d3dDriver->getDeviceAdapter() : NULL;
 
         assert( driverType == D3D_DRIVER_TYPE_HARDWARE || driverType == D3D_DRIVER_TYPE_SOFTWARE ||
                 driverType == D3D_DRIVER_TYPE_WARP );
         if( d3dDriver != NULL )
-		{
+        {
             if( 0 == wcscmp(d3dDriver->getAdapterIdentifier().Description, L"NVIDIA PerfHUD") )
-				driverType = D3D_DRIVER_TYPE_REFERENCE;
-			else
-				driverType = D3D_DRIVER_TYPE_UNKNOWN;
-		}
+                driverType = D3D_DRIVER_TYPE_REFERENCE;
+            else
+                driverType = D3D_DRIVER_TYPE_UNKNOWN;
+        }
 
-		// determine deviceFlags
-		UINT deviceFlags = 0;
+        // determine deviceFlags
+        UINT deviceFlags = 0;
 #if OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-		// This flag is required in order to enable compatibility with Direct2D.
-		deviceFlags |= D3D11_CREATE_DEVICE_BGRA_SUPPORT;
+        // This flag is required in order to enable compatibility with Direct2D.
+        deviceFlags |= D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 #endif
         if( OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH && !IsWorkingUnderNsight() &&
             D3D11Device::D3D_NO_EXCEPTION != D3D11Device::getExceptionsErrorLevel() )
-		{
-			deviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
-		}
+        {
+            deviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+        }
         if( !OGRE_THREAD_SUPPORT )
             deviceFlags |= D3D11_CREATE_DEVICE_SINGLETHREADED;
 
-		// determine feature levels
+        // determine feature levels
         D3D_FEATURE_LEVEL requestedLevels[] =
         {
             // Windows Phone support only FL 9.3, but simulator can create
             // much more capable device, so restrict it artificially here
 #if !__OGRE_WINRT_PHONE
 #if defined( _WIN32_WINNT_WIN8 )
-			D3D_FEATURE_LEVEL_11_1,
+            D3D_FEATURE_LEVEL_11_1,
 #endif
-			D3D_FEATURE_LEVEL_11_0,
-			D3D_FEATURE_LEVEL_10_1,
-			D3D_FEATURE_LEVEL_10_0,
+            D3D_FEATURE_LEVEL_11_0,
+            D3D_FEATURE_LEVEL_10_1,
+            D3D_FEATURE_LEVEL_10_0,
 #endif // !__OGRE_WINRT_PHONE
-			D3D_FEATURE_LEVEL_9_3,
-			D3D_FEATURE_LEVEL_9_2,
-			D3D_FEATURE_LEVEL_9_1
-		};
+            D3D_FEATURE_LEVEL_9_3,
+            D3D_FEATURE_LEVEL_9_2,
+            D3D_FEATURE_LEVEL_9_1
+        };
 
         D3D_FEATURE_LEVEL *pFirstFL = requestedLevels;
         D3D_FEATURE_LEVEL *pLastFL  = pFirstFL + ARRAYSIZE(requestedLevels) - 1;
         for( size_t i = 0; i <ARRAYSIZE(requestedLevels); ++i )
-		{
+        {
             if( minFL == requestedLevels[i] )
                 pLastFL = &requestedLevels[i];
             if( maxFL == requestedLevels[i] )
                 pFirstFL = &requestedLevels[i];
-		}
+        }
         if( pLastFL < pFirstFL )
-		{
+        {
             OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR,
                          "Requested min level feature is bigger the requested max level feature.",
                          "D3D11RenderSystem::initialise" );
-		}
+        }
 
         vendorExtension->createDevice( appName, pAdapter, driverType, deviceFlags, pFirstFL,
                                        static_cast<UINT>( pLastFL - pFirstFL + 1u ),
                                        pFeatureLevel, outDevice, outDevice1 );
-	}
+    }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::initConfigOptions()
     {
@@ -305,7 +305,7 @@ namespace Ogre
         ConfigOption optFullScreen;
         ConfigOption optVSync;
         ConfigOption optVSyncInterval;
-		ConfigOption optBackBufferCount;
+        ConfigOption optBackBufferCount;
         ConfigOption optAA;
         ConfigOption optFPUMode;
         ConfigOption optNVPerfHUD;
@@ -317,7 +317,7 @@ namespace Ogre
         ConfigOption optVendorExt;
         ConfigOption optFastShaderBuildHack;
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
-		ConfigOption optStereoMode;
+        ConfigOption optStereoMode;
 #endif
 
         optDevice.name = "Rendering Device";
@@ -355,12 +355,12 @@ namespace Ogre
         optVSyncInterval.possibleValues.push_back( "4" );
         optVSyncInterval.currentValue = "1";
 
-		optBackBufferCount.name = "Backbuffer Count";
-		optBackBufferCount.immutable = false;
-		optBackBufferCount.possibleValues.push_back( "Auto" );
-		optBackBufferCount.possibleValues.push_back( "1" );
-		optBackBufferCount.possibleValues.push_back( "2" );
-		optBackBufferCount.currentValue = "Auto";
+        optBackBufferCount.name = "Backbuffer Count";
+        optBackBufferCount.immutable = false;
+        optBackBufferCount.possibleValues.push_back( "Auto" );
+        optBackBufferCount.possibleValues.push_back( "1" );
+        optBackBufferCount.possibleValues.push_back( "2" );
+        optBackBufferCount.currentValue = "Auto";
 
 
         optAA.name = "MSAA";
@@ -390,7 +390,7 @@ namespace Ogre
         optSRGB.possibleValues.push_back("Yes");
         optSRGB.possibleValues.push_back("No");
         optSRGB.currentValue = "No";
-        optSRGB.immutable = false;      
+        optSRGB.immutable = false;
 
         // min feature level
         optMinFeatureLevels;
@@ -402,7 +402,7 @@ namespace Ogre
         optMinFeatureLevels.possibleValues.push_back("11.0");
 
         optMinFeatureLevels.currentValue = "9.1";
-        optMinFeatureLevels.immutable = false;      
+        optMinFeatureLevels.immutable = false;
 
 
         // max feature level
@@ -439,8 +439,8 @@ namespace Ogre
 #else
         optMaxFeatureLevels.currentValue = "11.0";
 #endif
-#endif 
-        optMaxFeatureLevels.immutable = false;      
+#endif
+        optMaxFeatureLevels.immutable = false;
 
         // Exceptions Error Level
         optExceptionsErrorLevel.name = "Information Queue Exceptions Bottom Level";
@@ -455,7 +455,7 @@ namespace Ogre
         optExceptionsErrorLevel.currentValue = "No information queue exceptions";
 #endif
         optExceptionsErrorLevel.immutable = false;
-        
+
 
         // Driver type
         optDriverType.name = "Driver type";
@@ -493,13 +493,13 @@ namespace Ogre
         optFastShaderBuildHack.immutable = false;
 
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
-		optStereoMode.name = "Stereo Mode";
-		optStereoMode.possibleValues.push_back(StringConverter::toString(SMT_NONE));
-		optStereoMode.possibleValues.push_back(StringConverter::toString(SMT_FRAME_SEQUENTIAL));
-		optStereoMode.currentValue = optStereoMode.possibleValues[0];
-		optStereoMode.immutable = false;
-		
-		mOptions[optStereoMode.name] = optStereoMode;
+        optStereoMode.name = "Stereo Mode";
+        optStereoMode.possibleValues.push_back(StringConverter::toString(SMT_NONE));
+        optStereoMode.possibleValues.push_back(StringConverter::toString(SMT_FRAME_SEQUENTIAL));
+        optStereoMode.currentValue = optStereoMode.possibleValues[0];
+        optStereoMode.immutable = false;
+
+        mOptions[optStereoMode.name] = optStereoMode;
 #endif
 
         mOptions[optDevice.name] = optDevice;
@@ -518,9 +518,9 @@ namespace Ogre
         mOptions[optVendorExt.name] = optVendorExt;
         mOptions[optFastShaderBuildHack.name] = optFastShaderBuildHack;
 
-		mOptions[optBackBufferCount.name] = optBackBufferCount;
+        mOptions[optBackBufferCount.name] = optBackBufferCount;
 
-        
+
         refreshD3DSettings();
     }
     //---------------------------------------------------------------------
@@ -707,7 +707,7 @@ namespace Ogre
     String D3D11RenderSystem::validateConfigOptions()
     {
         ConfigOptionMap::iterator it;
-        
+
         // check if video mode is selected
         it = mOptions.find( "Video Mode" );
         if (it->second.currentValue.empty())
@@ -736,8 +736,8 @@ namespace Ogre
         Window* autoWindow = NULL;
         LogManager::getSingleton().logMessage( "D3D11 : Subsystem Initialising" );
 
-		if(IsWorkingUnderNsight())
-			LogManager::getSingleton().logMessage( "D3D11: Nvidia Nsight found");
+        if(IsWorkingUnderNsight())
+            LogManager::getSingleton().logMessage( "D3D11: Nvidia Nsight found");
 
         // Init using current settings
         ConfigOptionMap::iterator opt = mOptions.find( "Rendering Device" );
@@ -859,13 +859,13 @@ namespace Ogre
             // If we have 16bit depth buffer enable w-buffering.
             assert( autoWindow );
             if ( PixelFormatGpuUtils::getBytesPerPixel( autoWindow->getPixelFormat() ) * 8u == 16u )
-            { 
+            {
                 mWBuffer = true;
-            } 
-            else 
+            }
+            else
             {
                 mWBuffer = false;
-            }           
+            }
         }
 
         LogManager::getSingleton().logMessage("***************************************");
@@ -905,84 +905,84 @@ namespace Ogre
     Window* D3D11RenderSystem::_createRenderWindow( const String &name,
                                                     uint32 width, uint32 height, bool fullScreen,
                                                     const NameValuePairList *miscParams )
-	{
+    {
 
-		// Check we're not creating a secondary window when the primary
-		// was fullscreen
+        // Check we're not creating a secondary window when the primary
+        // was fullscreen
         if (mPrimaryWindow && mPrimaryWindow->isFullscreen() && fullScreen == false)
-		{
-			OGRE_EXCEPT(Exception::ERR_INVALID_STATE,
-				"Cannot create secondary windows not in full screen when the primary is full screen",
-				"D3D11RenderSystem::_createRenderWindow");
-		}
+        {
+            OGRE_EXCEPT(Exception::ERR_INVALID_STATE,
+                "Cannot create secondary windows not in full screen when the primary is full screen",
+                "D3D11RenderSystem::_createRenderWindow");
+        }
 
-		// Log a message
-		StringStream ss;
-		ss << "D3D11RenderSystem::_createRenderWindow \"" << name << "\", " <<
-			width << "x" << height << " ";
-		if (fullScreen)
-			ss << "fullscreen ";
-		else
-			ss << "windowed ";
-		if (miscParams)
-		{
-			ss << " miscParams: ";
-			NameValuePairList::const_iterator it;
-			for (it = miscParams->begin(); it != miscParams->end(); ++it)
-			{
-				ss << it->first << "=" << it->second << " ";
-			}
-			LogManager::getSingleton().logMessage(ss.str());
-		}
+        // Log a message
+        StringStream ss;
+        ss << "D3D11RenderSystem::_createRenderWindow \"" << name << "\", " <<
+            width << "x" << height << " ";
+        if (fullScreen)
+            ss << "fullscreen ";
+        else
+            ss << "windowed ";
+        if (miscParams)
+        {
+            ss << " miscParams: ";
+            NameValuePairList::const_iterator it;
+            for (it = miscParams->begin(); it != miscParams->end(); ++it)
+            {
+                ss << it->first << "=" << it->second << " ";
+            }
+            LogManager::getSingleton().logMessage(ss.str());
+        }
 
-		String msg;
+        String msg;
 
-		// Make sure we don't already have a render target of the 
-		// sam name as the one supplied
-		if (mRenderTargets.find(name) != mRenderTargets.end())
-		{
-			msg = "A render target of the same name '" + name + "' already "
-				"exists.  You cannot create a new window with this name.";
-			OGRE_EXCEPT(Exception::ERR_INTERNAL_ERROR, msg, "D3D11RenderSystem::_createRenderWindow");
-		}
+        // Make sure we don't already have a render target of the
+        // sam name as the one supplied
+        if (mRenderTargets.find(name) != mRenderTargets.end())
+        {
+            msg = "A render target of the same name '" + name + "' already "
+                "exists.  You cannot create a new window with this name.";
+            OGRE_EXCEPT(Exception::ERR_INTERNAL_ERROR, msg, "D3D11RenderSystem::_createRenderWindow");
+        }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
         D3D11Window* win = new D3D11WindowHwnd(  name, width, height, fullScreen,
                                                  DepthBuffer::DefaultDepthBufferFormat,
                                                  miscParams, mDevice, this );
 #elif OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-		String windowType;
-		if(miscParams)
-		{
-			// Get variable-length params
-			NameValuePairList::const_iterator opt = miscParams->find("windowType");
-			if(opt != miscParams->end())
-				windowType = opt->second;
-		}
+        String windowType;
+        if(miscParams)
+        {
+            // Get variable-length params
+            NameValuePairList::const_iterator opt = miscParams->find("windowType");
+            if(opt != miscParams->end())
+                windowType = opt->second;
+        }
 
-		D3D11RenderWindowBase* win = NULL;
+        D3D11RenderWindowBase* win = NULL;
 #if !__OGRE_WINRT_PHONE_80
-		if(win == NULL && windowType == "SurfaceImageSource")
-			win = new D3D11RenderWindowImageSource(mDevice);
-		if(win == NULL && windowType == "SwapChainPanel")
-			win = new D3D11RenderWindowSwapChainPanel(mDevice);
+        if(win == NULL && windowType == "SurfaceImageSource")
+            win = new D3D11RenderWindowImageSource(mDevice);
+        if(win == NULL && windowType == "SwapChainPanel")
+            win = new D3D11RenderWindowSwapChainPanel(mDevice);
 #endif // !__OGRE_WINRT_PHONE_80
-		if(win == NULL)
-			win = new D3D11RenderWindowCoreWindow(mDevice);
+        if(win == NULL)
+            win = new D3D11RenderWindowCoreWindow(mDevice);
 #endif
 
         mWindows.insert( win );
 
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
-		// Must be called after device has been linked to window
-		D3D11StereoDriverBridge::getSingleton().addRenderWindow(win);
-		win->_validateStereo();
+        // Must be called after device has been linked to window
+        D3D11StereoDriverBridge::getSingleton().addRenderWindow(win);
+        win->_validateStereo();
 #endif
 
-		// If this is the first window, get the D3D device and create the texture manager
-		if (!mPrimaryWindow)
-		{
-			mPrimaryWindow = win;
+        // If this is the first window, get the D3D device and create the texture manager
+        if (!mPrimaryWindow)
+        {
+            mPrimaryWindow = win;
             //win->getCustomAttribute("D3DDEVICE", &mDevice);
 
             if( miscParams )
@@ -992,26 +992,26 @@ namespace Ogre
                     mReverseDepth = StringConverter::parseBool( itOption->second, true );
             }
 
-			// Create the texture manager for use by others
-			mTextureManager = new D3D11TextureManager(mDevice);
-			// Also create hardware buffer manager
+            // Create the texture manager for use by others
+            mTextureManager = new D3D11TextureManager(mDevice);
+            // Also create hardware buffer manager
             mHardwareBufferManager = new v1::D3D11HardwareBufferManager(mDevice);
 
-			// Create the GPU program manager
-			mGpuProgramManager = new D3D11GpuProgramManager();
-			// create & register HLSL factory
-			if (mHLSLProgramFactory == NULL)
-				mHLSLProgramFactory = new D3D11HLSLProgramFactory(mDevice);
-			mRealCapabilities = createRenderSystemCapabilities();
+            // Create the GPU program manager
+            mGpuProgramManager = new D3D11GpuProgramManager();
+            // create & register HLSL factory
+            if (mHLSLProgramFactory == NULL)
+                mHLSLProgramFactory = new D3D11HLSLProgramFactory(mDevice);
+            mRealCapabilities = createRenderSystemCapabilities();
 
-			// if we are using custom capabilities, then 
-			// mCurrentCapabilities has already been loaded
-			if (!mUseCustomCapabilities)
-				mCurrentCapabilities = mRealCapabilities;
+            // if we are using custom capabilities, then
+            // mCurrentCapabilities has already been loaded
+            if (!mUseCustomCapabilities)
+                mCurrentCapabilities = mRealCapabilities;
 
-			fireEvent("RenderSystemCapabilitiesCreated");
+            fireEvent("RenderSystemCapabilitiesCreated");
 
-			initialiseFromRenderSystemCapabilities(mCurrentCapabilities, mPrimaryWindow);
+            initialiseFromRenderSystemCapabilities(mCurrentCapabilities, mPrimaryWindow);
 
             assert( !mVaoManager );
             mVaoManager = OGRE_NEW D3D11VaoManager( false, mDevice, this, miscParams );
@@ -1019,16 +1019,16 @@ namespace Ogre
             mTextureGpuManager = OGRE_NEW D3D11TextureGpuManager( mVaoManager, this, mDevice );
 
             mTextureGpuManager->_update( true );
-		}
-		else
-		{
-			mSecondaryWindows.push_back(win);
-		}
+        }
+        else
+        {
+            mSecondaryWindows.push_back(win);
+        }
 
         win->_initialize( mTextureGpuManager );
 
-		return win;
-	}
+        return win;
+    }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::fireDeviceEvent( D3D11Device* device, const String & name,
                                              D3D11Window* sendingWindow /* = NULL */)
@@ -1093,8 +1093,8 @@ namespace Ogre
         rsc->setCapability(RSC_TEXTURE_COMPRESSION);
         rsc->setCapability(RSC_TEXTURE_COMPRESSION_DXT);
 
-		if(mFeatureLevel >= D3D_FEATURE_LEVEL_10_0)
-			rsc->setCapability(RSC_TWO_SIDED_STENCIL);
+        if(mFeatureLevel >= D3D_FEATURE_LEVEL_10_0)
+            rsc->setCapability(RSC_TWO_SIDED_STENCIL);
 
         rsc->setCapability(RSC_STENCIL_WRAP);
         rsc->setCapability(RSC_HWOCCLUSION);
@@ -1236,7 +1236,7 @@ namespace Ogre
         rsc->setCapability(RSC_POINT_SPRITES);
         rsc->setCapability(RSC_POINT_EXTENDED_PARAMETERS);
         rsc->setMaxPointSize(256); // TODO: guess!
-    
+
         rsc->setCapability(RSC_VERTEX_TEXTURE_FETCH);
         rsc->setNumVertexTextureUnits(4);
         rsc->setVertexTextureUnitsShared(false);
@@ -1261,11 +1261,11 @@ namespace Ogre
     {
         if(caps->getRenderSystemName() != getName())
         {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, 
+            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
                 "Trying to initialize D3D11RenderSystem from RenderSystemCapabilities that do not support Direct3D11",
                 "D3D11RenderSystem::initialiseFromRenderSystemCapabilities");
         }
-        
+
         // add hlsl
         HighLevelGpuProgramManager::getSingleton().addFactory(mHLSLProgramFactory);
 
@@ -1380,7 +1380,7 @@ namespace Ogre
         if (mFeatureLevel >= D3D_FEATURE_LEVEL_11_0)
         {
             rsc->addShaderProfile("hs_5_0");
-            
+
             rsc->setCapability(RSC_TESSELLATION_HULL_PROGRAM);
 
             // TODO: constant buffers have no limits but lower models do
@@ -1483,32 +1483,33 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11RenderSystem::beginRenderPassDescriptor( RenderPassDescriptor *desc,
                                                        TextureGpu *anyTarget, uint8 mipLevel,
-                                                       const Vector4 &viewportSize,
-                                                       const Vector4 &scissors,
+                                                       const Vector4 *viewportSizes,
+                                                       const Vector4 *scissors,
+                                                       uint32 numViewports,
                                                        bool overlaysEnabled,
                                                        bool warnIfRtvWasFlushed )
     {
         if( desc->mInformationOnly && desc->hasSameAttachments( mCurrentRenderPassDescriptor ) )
             return;
 
-        const int oldWidth = mCurrentRenderViewport.getActualWidth();
-        const int oldHeight = mCurrentRenderViewport.getActualHeight();
-        const int oldX = mCurrentRenderViewport.getActualLeft();
-        const int oldY = mCurrentRenderViewport.getActualTop();
+        const int oldWidth = mCurrentRenderViewport[0].getActualWidth();
+        const int oldHeight = mCurrentRenderViewport[0].getActualHeight();
+        const int oldX = mCurrentRenderViewport[0].getActualLeft();
+        const int oldY = mCurrentRenderViewport[0].getActualTop();
 
         D3D11RenderPassDescriptor *currPassDesc =
                 static_cast<D3D11RenderPassDescriptor*>( mCurrentRenderPassDescriptor );
 
-        RenderSystem::beginRenderPassDescriptor( desc, anyTarget, mipLevel, viewportSize, scissors,
-                                                 overlaysEnabled, warnIfRtvWasFlushed );
+        RenderSystem::beginRenderPassDescriptor( desc, anyTarget, mipLevel, viewportSizes, scissors,
+                                                 numViewports, overlaysEnabled, warnIfRtvWasFlushed );
 
         int x, y, w, h;
 
         // Calculate the new "lower-left" corner of the viewport to compare with the old one
-        w = mCurrentRenderViewport.getActualWidth();
-        h = mCurrentRenderViewport.getActualHeight();
-        x = mCurrentRenderViewport.getActualLeft();
-        y = mCurrentRenderViewport.getActualTop();
+        w = mCurrentRenderViewport[0].getActualWidth();
+        h = mCurrentRenderViewport[0].getActualHeight();
+        x = mCurrentRenderViewport[0].getActualLeft();
+        y = mCurrentRenderViewport[0].getActualTop();
 
         ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
 
@@ -1547,27 +1548,32 @@ namespace Ogre
             entriesToFlush = RenderPassDescriptor::All;
         }
 
-        if( vpChanged )
+        if( vpChanged || numViewports > 1u )
         {
-            D3D11_VIEWPORT d3dViewport;
-            d3dViewport.TopLeftX= static_cast<FLOAT>( mCurrentRenderViewport.getActualLeft() );
-            d3dViewport.TopLeftY= static_cast<FLOAT>( mCurrentRenderViewport.getActualTop() );
-            d3dViewport.Width   = static_cast<FLOAT>( mCurrentRenderViewport.getActualWidth() );
-            d3dViewport.Height  = static_cast<FLOAT>( mCurrentRenderViewport.getActualHeight() );
-            d3dViewport.MinDepth= 0.0f;
-            d3dViewport.MaxDepth= 1.0f;
-            context->RSSetViewports( 1u, &d3dViewport );
+            D3D11_VIEWPORT d3dVp[16];
+            for( size_t i=0; i<numViewports; ++i )
+            {
+                d3dVp[i].TopLeftX= static_cast<FLOAT>( mCurrentRenderViewport[i].getActualLeft() );
+                d3dVp[i].TopLeftY= static_cast<FLOAT>( mCurrentRenderViewport[i].getActualTop() );
+                d3dVp[i].Width   = static_cast<FLOAT>( mCurrentRenderViewport[i].getActualWidth() );
+                d3dVp[i].Height  = static_cast<FLOAT>( mCurrentRenderViewport[i].getActualHeight() );
+                d3dVp[i].MinDepth= 0.0f;
+                d3dVp[i].MaxDepth= 1.0f;
+            }
+            context->RSSetViewports( numViewports, d3dVp );
         }
 
-        // Configure the viewport clipping
-        D3D11_RECT scissorRc;
-        scissorRc.left  = mCurrentRenderViewport.getScissorActualLeft();
-        scissorRc.top   = mCurrentRenderViewport.getScissorActualTop();
-        scissorRc.right = scissorRc.left + mCurrentRenderViewport.getScissorActualWidth();
-        scissorRc.bottom= scissorRc.top + mCurrentRenderViewport.getScissorActualHeight();
-        context->RSSetScissorRects( 1u, &scissorRc );
+        D3D11_RECT scRc[16];
+        for( size_t i=0; i<numViewports; ++i )
+        {
+            scRc[i].left  = mCurrentRenderViewport[i].getScissorActualLeft();
+            scRc[i].top   = mCurrentRenderViewport[i].getScissorActualTop();
+            scRc[i].right = scRc[i].left + mCurrentRenderViewport[i].getScissorActualWidth();
+            scRc[i].bottom= scRc[i].top + mCurrentRenderViewport[i].getScissorActualHeight();
+        }
+        context->RSSetScissorRects( numViewports, scRc );
 
-        newPassDesc->performLoadActions( &mCurrentRenderViewport, entriesToFlush,
+        newPassDesc->performLoadActions( &mCurrentRenderViewport[0], entriesToFlush,
                                          mUavStartingSlot, mUavRenderingDescSet );
     }
     //-----------------------------------------------------------------------------------
@@ -1747,7 +1753,7 @@ namespace Ogre
         if( FAILED(hr) || mDevice.isError())
         {
             String errorDescription = mDevice.getErrorDescription(hr);
-			OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr,
+            OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr,
                 "Unable to create depth texture\nError Description:" + errorDescription,
                 "D3D11RenderSystem::_createDepthBufferFor");
         }
@@ -1855,8 +1861,8 @@ namespace Ogre
                                               depthStencilView.ReleaseAndGetAddressOf() );
         if( FAILED(hr) )
         {
-			String errorDescription = mDevice.getErrorDescription(hr);
-			OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr,
+            String errorDescription = mDevice.getErrorDescription(hr);
+            OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr,
                 "Unable to create depth stencil view\nError Description:" + errorDescription,
                 "D3D11RenderSystem::_createDepthBufferFor");
         }
@@ -1896,14 +1902,14 @@ namespace Ogre
         if( mPrimaryWindow == window )
         {
             // We're destroying the primary window, so reset device and window
-			mPrimaryWindow = NULL;
+            mPrimaryWindow = NULL;
         }
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::destroyRenderTarget(const String& name)
     {
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
-		D3D11StereoDriverBridge::getSingleton().removeRenderWindow(name);
+        D3D11StereoDriverBridge::getSingleton().removeRenderWindow(name);
 #endif
 
         // Do the real removal
@@ -2084,7 +2090,7 @@ namespace Ogre
     {
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::_setPointParameters(Real size, 
+    void D3D11RenderSystem::_setPointParameters(Real size,
         bool attenuationEnabled, Real constant, Real linear, Real quadratic,
         Real minSize, Real maxSize)
     {
@@ -2443,7 +2449,7 @@ namespace Ogre
             if (mDevice.isError())
             {
                 String errorDescription = mDevice.getErrorDescription();
-                OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
+                OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
                     "D3D11 device cannot Clear State\nError Description:" + errorDescription,
                     "D3D11RenderSystem::_setRenderTarget");
             }
@@ -2508,7 +2514,7 @@ namespace Ogre
             if (mDevice.isError())
             {
                 String errorDescription = mDevice.getErrorDescription();
-                OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
+                OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
                     "D3D11 device cannot set render target\nError Description:" + errorDescription,
                     "D3D11RenderSystem::_setRenderTargetViews");
             }
@@ -2557,7 +2563,7 @@ namespace Ogre
             if (mDevice.isError())
             {
                 String errorDescription = mDevice.getErrorDescription();
-                OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
+                OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
                     "D3D11 device cannot set viewports\nError Description: " + errorDescription,
                     "D3D11RenderSystem::_setViewport");
             }
@@ -3352,17 +3358,17 @@ namespace Ogre
 
         // Call super class
         RenderSystem::_render(op);
-        
+
         D3D11RenderOperationState stackOpState;
         D3D11RenderOperationState * opState = &stackOpState;
 
         if(mSamplerStatesChanged)
-		{
+        {
             // samplers mapping
             const size_t numberOfSamplers = std::min( mLastTextureUnitState,
                                                       (size_t)(OGRE_MAX_TEXTURE_LAYERS + 1) );
             opState->mTexturesCount = numberOfSamplers;
-                            
+
             for (size_t n = 0; n < numberOfSamplers; n++)
             {
                 ID3D11SamplerState * samplerState  = NULL;
@@ -3380,9 +3386,9 @@ namespace Ogre
                 opState->mTextures[n]       = texture;
             }
             for (size_t n = opState->mTexturesCount; n < OGRE_MAX_TEXTURE_LAYERS; n++)
-			{
-				opState->mTextures[n] = NULL;
-			}
+            {
+                opState->mTextures[n] = NULL;
+            }
         }
 
         if (mSamplerStatesChanged && opState->mTexturesCount > 0 ) //  if the NumTextures is 0, the operation effectively does nothing.
@@ -3394,16 +3400,16 @@ namespace Ogre
                 if (mDevice.isError())
                 {
                     String errorDescription = mDevice.getErrorDescription();
-                    OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
+                    OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
                         "D3D11 device cannot set pixel shader resources\nError Description:" + errorDescription,
                         "D3D11RenderSystem::_render");
                 }
             }
-            
+
             /// Vertex Shader binding
-			
-			/*if (mBindingType == TextureUnitState::BindingType::BT_VERTEX)*/
-			
+
+            /*if (mBindingType == TextureUnitState::BindingType::BT_VERTEX)*/
+
             {
                 if (mFeatureLevel >= D3D_FEATURE_LEVEL_10_0)
                 {
@@ -3411,7 +3417,7 @@ namespace Ogre
                     if (mDevice.isError())
                     {
                         String errorDescription = mDevice.getErrorDescription();
-                        OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
+                        OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
                             "D3D11 device cannot set pixel shader resources\nError Description:" + errorDescription,
                             "D3D11RenderSystem::_render");
                     }
@@ -3442,13 +3448,13 @@ namespace Ogre
                     if (mDevice.isError())
                     {
                         String errorDescription = mDevice.getErrorDescription();
-                        OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
+                        OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
                             "D3D11 device cannot set hull shader resources\nError Description:" + errorDescription,
                             "D3D11RenderSystem::_render");
                     }
                 }
             }
-            
+
             /// Domain Shader binding
             if (mPso->domainShader && mBindingType == TextureUnitState::BT_TESSELLATION_DOMAIN)
             {
@@ -3458,7 +3464,7 @@ namespace Ogre
                     if (mDevice.isError())
                     {
                         String errorDescription = mDevice.getErrorDescription();
-                        OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
+                        OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
                             "D3D11 device cannot set domain shader resources\nError Description:" + errorDescription,
                             "D3D11RenderSystem::_render");
                     }
@@ -3473,10 +3479,10 @@ namespace Ogre
         //check consistency of vertex-fragment shaders
         if (!mPso->vertexShader ||
              (!mPso->pixelShader && op.operationType != OT_POINT_LIST && !pSOTarget )
-           ) 
+           )
         {
-            
-            OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
+
+            OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
                 "Attempted to render to a D3D11 device without both vertex and fragment shaders there is no fixed pipeline in d3d11 - use the RTSS or write custom shaders.",
                 "D3D11RenderSystem::_render");
         }
@@ -3486,21 +3492,21 @@ namespace Ogre
             (!mPso->hullShader && mPso->domainShader) )
         {
             if (mPso->hullShader && !mPso->domainShader) {
-            OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
+            OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
                 "Attempted to use tessellation, but domain shader is missing",
                 "D3D11RenderSystem::_render");
             }
             else {
-                OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
+                OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
                 "Attempted to use tessellation, but hull shader is missing",
                 "D3D11RenderSystem::_render"); }
         }
 
         if (mDevice.isError())
         {
-            // this will never happen but we want to be consistent with the error checks... 
+            // this will never happen but we want to be consistent with the error checks...
             String errorDescription = mDevice.getErrorDescription();
-            OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
+            OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
                 "D3D11 device cannot set geometry shader to null\nError Description:" + errorDescription,
                 "D3D11RenderSystem::_render");
         }
@@ -3574,7 +3580,7 @@ namespace Ogre
                 break;
             }
         }
-        
+
         if (primCount)
         {
             // Issue the op
@@ -3587,7 +3593,7 @@ namespace Ogre
                 if (mDevice.isError())
                 {
                     String errorDescription = mDevice.getErrorDescription();
-                    OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
+                    OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
                         "D3D11 device cannot set index buffer\nError Description:" + errorDescription,
                         "D3D11RenderSystem::_render");
                 }
@@ -3597,7 +3603,7 @@ namespace Ogre
             if (mDevice.isError())
             {
                 String errorDescription = mDevice.getErrorDescription();
-                OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
+                OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
                     "D3D11 device cannot set primitive topology\nError Description:" + errorDescription,
                     "D3D11RenderSystem::_render");
             }
@@ -3609,9 +3615,9 @@ namespace Ogre
                     if(hasInstanceData)
                     {
                         mDevice.GetImmediateContext()->DrawIndexedInstanced(
-                            static_cast<UINT>(op.indexData->indexCount), 
-                            static_cast<UINT>(numberOfInstances), 
-                            static_cast<UINT>(op.indexData->indexStart), 
+                            static_cast<UINT>(op.indexData->indexCount),
+                            static_cast<UINT>(numberOfInstances),
+                            static_cast<UINT>(op.indexData->indexStart),
                             static_cast<INT>(op.vertexData->vertexStart),
                             0);
                     }
@@ -3671,14 +3677,14 @@ namespace Ogre
         // Crashy : commented this, 99% sure it's useless but really time consuming
         /*if (true) // for now - clear the render state
         {
-            mDevice.GetImmediateContext()->OMSetBlendState(0, 0, 0xffffffff); 
+            mDevice.GetImmediateContext()->OMSetBlendState(0, 0, 0xffffffff);
             mDevice.GetImmediateContext()->RSSetState(0);
-            mDevice.GetImmediateContext()->OMSetDepthStencilState(0, 0); 
+            mDevice.GetImmediateContext()->OMSetDepthStencilState(0, 0);
 //          mDevice->PSSetSamplers(static_cast<UINT>(0), static_cast<UINT>(0), 0);
-            
+
             // Clear class instance storage
             memset(mClassInstances, 0, sizeof(mClassInstances));
-            memset(mNumClassInstances, 0, sizeof(mNumClassInstances));      
+            memset(mNumClassInstances, 0, sizeof(mNumClassInstances));
         }*/
 
     }
@@ -3875,11 +3881,11 @@ namespace Ogre
                 if (mDevice.isError())
                 {
                     String errorDescription = mDevice.getErrorDescription();
-                    OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
+                    OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
                         "D3D11 device cannot set render target\nError Description:" + errorDescription,
                         "D3D11RenderSystem::_renderUsingReadBackAsTexture");
                 }
-                
+
                 mDevice.GetImmediateContext()->ClearDepthStencilView(depthBuffer->getDepthStencilView(0), D3D11_CLEAR_DEPTH, 1.0f, 0);
 
                 float ClearColor[4];
@@ -3924,7 +3930,7 @@ namespace Ogre
                 if (mDevice.isError())
                 {
                     String errorDescription = mDevice.getErrorDescription();
-                    OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
+                    OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
                         "D3D11 device cannot set pixel shader resources\nError Description:" + errorDescription,
                         "D3D11RenderSystem::_renderUsingReadBackAsTexture");
                 }
@@ -3937,17 +3943,17 @@ namespace Ogre
             // will be used later as the typical depth buffer, again
             // must call Apply(0) here : to flush SetResource(NULL)
             //
-            
+
             if (target)
             {
                 mDevice.GetImmediateContext()->PSSetShaderResources(static_cast<UINT>(StartSlot), 1, NULL);
                     if (mDevice.isError())
                     {
                         String errorDescription = mDevice.getErrorDescription();
-                        OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
+                        OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
                             "D3D11 device cannot set pixel shader resources\nError Description:" + errorDescription,
                             "D3D11RenderSystem::_renderUsingReadBackAsTexture");
-                    }           
+                    }
             }
 
             break;
@@ -4133,7 +4139,7 @@ namespace Ogre
     void D3D11RenderSystem::setSubroutine(GpuProgramType gptype, unsigned int slotIndex, const String& subroutineName)
     {
         ID3D11ClassInstance* instance = 0;
-        
+
         ClassInstanceIterator it = mInstanceMap.find(subroutineName);
         if (it == mInstanceMap.end())
         {
@@ -4145,9 +4151,9 @@ namespace Ogre
                 hr = mDevice.GetClassLinkage()->CreateClassInstance(subroutineName.c_str(), 0, 0, 0, 0, &instance);
                 if (FAILED(hr) || instance == 0)
                 {
-					OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr,
-						"Shader subroutine with name " + subroutineName + " doesn't exist.",
-						"D3D11RenderSystem::setSubroutineName");
+                    OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr,
+                        "Shader subroutine with name " + subroutineName + " doesn't exist.",
+                        "D3D11RenderSystem::setSubroutineName");
                 }
             }
 
@@ -4158,7 +4164,7 @@ namespace Ogre
         {
             instance = it->second;
         }
-        
+
         // If already created, store class instance
         mClassInstances[gptype][slotIndex] = instance;
         mNumClassInstances[gptype] = mNumClassInstances[gptype] + 1;
@@ -4218,7 +4224,7 @@ namespace Ogre
             }
             break;
         };
-        
+
         // Set subroutine for slot
         setSubroutine(gptype, slotIdx, subroutineName);
     }
@@ -4277,7 +4283,7 @@ namespace Ogre
     //---------------------------------------------------------------------
     HardwareOcclusionQuery* D3D11RenderSystem::createHardwareOcclusionQuery(void)
     {
-        D3D11HardwareOcclusionQuery* ret = new D3D11HardwareOcclusionQuery (mDevice); 
+        D3D11HardwareOcclusionQuery* ret = new D3D11HardwareOcclusionQuery (mDevice);
         mHwOcclusionQueries.push_back(ret);
         return ret;
     }
@@ -4332,11 +4338,11 @@ namespace Ogre
         return mDevice.getErrorDescription(errorNumber);
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::determineFSAASettings(uint fsaa, const String& fsaaHint, 
+    void D3D11RenderSystem::determineFSAASettings(uint fsaa, const String& fsaaHint,
         DXGI_FORMAT format, DXGI_SAMPLE_DESC* outFSAASettings)
     {
         bool qualityHint = fsaa >= 8 && fsaaHint.find("Quality") != String::npos;
-        
+
         // NVIDIA, AMD - prefer CSAA aka EQAA if available.
         // see http://developer.nvidia.com/object/coverage-sampled-aa.html
         // see http://developer.amd.com/wordpress/media/2012/10/EQAA%20Modes%20for%20AMD%20HD%206900%20Series%20Cards.pdf
@@ -4399,7 +4405,7 @@ namespace Ogre
         {
             return 0;
         }
-        
+
         for (size_t i = 0; i < mDriverList->count(); ++i)
         {
             for (size_t m = 0;; ++m)
@@ -4451,8 +4457,8 @@ namespace Ogre
         mHLSLProgramFactory = NULL;
 
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
-		OGRE_DELETE mStereoDriver;
-		mStereoDriver = NULL;
+        OGRE_DELETE mStereoDriver;
+        mStereoDriver = NULL;
 #endif
 
         mPso = NULL;
@@ -4461,8 +4467,8 @@ namespace Ogre
         mBindingType = TextureUnitState::BT_FRAGMENT;
 
         //sets the modification trackers to true
-		mSamplerStatesChanged = true;
-		mLastTextureUnitState = 0;
+        mSamplerStatesChanged = true;
+        mLastTextureUnitState = 0;
 
         ZeroMemory(mTexStageDesc, OGRE_MAX_TEXTURE_LAYERS * sizeof(sD3DTextureStageDesc));
         mReadBackAsTexture = false;
@@ -4503,21 +4509,21 @@ namespace Ogre
     {
         return mBoundComputeProgram;
     }
-	//---------------------------------------------------------------------
-	bool D3D11RenderSystem::setDrawBuffer(ColourBufferType colourBuffer)
-	{
+    //---------------------------------------------------------------------
+    bool D3D11RenderSystem::setDrawBuffer(ColourBufferType colourBuffer)
+    {
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
-		return D3D11StereoDriverBridge::getSingleton().setDrawBuffer(colourBuffer);
+        return D3D11StereoDriverBridge::getSingleton().setDrawBuffer(colourBuffer);
 #else
-		return false;
+        return false;
 #endif
-	}
+    }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::beginProfileEvent( const String &eventName )
     {
 #if OGRE_D3D11_PROFILING
         if(mDevice.GetProfiler())
-        {			
+        {
             wchar_t wideName[256]; // Let avoid heap memory allocation if we are in profiling code.
             bool wideNameOk = !eventName.empty() && 0 != MultiByteToWideChar(CP_ACP, 0, eventName.data(), eventName.length() + 1, wideName, ARRAYSIZE(wideName));
             mDevice.GetProfiler()->BeginEvent(wideNameOk ? wideName : L"<too long or empty event name>");

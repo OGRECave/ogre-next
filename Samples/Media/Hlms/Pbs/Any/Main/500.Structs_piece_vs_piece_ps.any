@@ -97,6 +97,11 @@ CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
 	float4 clipPlane0;
 @end
 
+@property( instanced_stereo )
+	float stereoOffset;
+	@foreach( n, 3 )float paddingA@n;@end
+@end
+
 @property( hlms_shadowcaster_point )
 	float4 cameraPosWS;	//Camera position in world space
 @end

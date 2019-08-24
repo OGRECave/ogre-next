@@ -132,6 +132,9 @@ namespace Ogre {
         /// Stored number of visible batches in the last render
         unsigned int mVisBatchesLastRender;
 
+        /// Distance between eyes when performing stereo rendering
+        Real mStereoEyeSeparation;
+
         /// Shared class-level name for Movable type
         static String msMovableType;
 
@@ -360,8 +363,8 @@ namespace Ogre {
                                 Viewport *vp, uint8 firstRq, uint8 lastRq,
                                 bool reuseCullData );
 
-        void _renderScenePhase02(const Camera *lodCamera, Viewport *vp, uint8 firstRq, uint8 lastRq,
-                                 bool includeOverlays);
+        void _renderScenePhase02( const Camera *lodCamera
+                                  , uint8 firstRq, uint8 lastRq, bool includeOverlays );
 
         /** Function for outputting to a stream.
         */
@@ -561,6 +564,8 @@ namespace Ogre {
         virtual bool isWindowSet(void) const { return mWindowSet; }
         /// Gets the window clip planes, only applicable if isWindowSet == true
         const vector<Plane>::type& getWindowPlanes(void) const;
+
+        Real getStereoEyeSeparation(void) const     { return mStereoEyeSeparation; }
 
         /** Get the auto tracking target for this camera, if any. */
         SceneNode* getAutoTrackTarget(void) const { return mAutoTrackTarget; }

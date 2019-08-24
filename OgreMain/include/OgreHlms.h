@@ -854,6 +854,7 @@ namespace Ogre
         static const IdString PsoClipDistances;
         static const IdString GlobalClipPlanes;
         static const IdString DualParaboloidMapping;
+        static const IdString InstancedStereo;
         static const IdString StaticBranchLights;
         static const IdString NumShadowMapLights;
         static const IdString NumShadowMapTextures;

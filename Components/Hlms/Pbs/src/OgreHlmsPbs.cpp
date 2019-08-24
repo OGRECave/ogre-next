@@ -1385,6 +1385,8 @@ namespace Ogre
             passSceneDef = static_cast<const CompositorPassSceneDef*>( pass->getDefinition() );
         }
 
+        const bool isInstancedStereo = passSceneDef && passSceneDef->mInstancedStereo;
+
         //mat4 viewProj;
         size_t mapSize = 16 * 4;
 
@@ -1519,6 +1521,10 @@ namespace Ogre
         if( isCameraReflected )
             mapSize += 4 * 4;
 
+        //float stereoOffset + float3 padding
+        if( isInstancedStereo )
+            mapSize += 4u * 4u;
+
         mapSize += mListener->getPassBufferSize( shadowNode, casterPass, dualParaboloid,
                                                  sceneManager );
 
@@ -1557,6 +1563,15 @@ namespace Ogre
             *passBufferPtr++ = (float)reflPlane.normal.y;
             *passBufferPtr++ = (float)reflPlane.normal.z;
             *passBufferPtr++ = (float)reflPlane.d;
+        }
+
+        if( isInstancedStereo )
+        {
+            const Real stereoEyeSeparation = cameras.renderingCamera->getStereoEyeSeparation();
+            *passBufferPtr++ = static_cast<float>( stereoEyeSeparation );
+            *passBufferPtr++ = 0;
+            *passBufferPtr++ = 0;
+            *passBufferPtr++ = 0;
         }
 
         //vec4 cameraPosWS;

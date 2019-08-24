@@ -106,6 +106,19 @@
 	@property( !hlms_dual_paraboloid_mapping )
         @property( !hlms_use_uv_baking )
 			outVs_Position = mul( worldPos, passBuf.viewProj );
+			@property( hlms_instanced_stereo )
+				if( inVs_stereoDrawId & 0x01u )
+				{
+					@property( !hlms_skeleton )
+						//With skeletons, passBuf.view is used which we don't want to alter
+						//to avoid moving it from SGPR to VGPR. Fortunately, it's used for
+						//rotations (3x3) where the stereo offset does not matter, except
+						//for position. Correct outVs.pos here.
+						outVs.pos.x += passBuf.stereoOffset;
+					@end
+					outVs_Position.x += passBuf.stereoOffset;
+				}
+			@end
 		@else
 			outVs_Position.xy = inVs_uv@value( hlms_uv_baking ).xy * 2.0f - 1.0f + passBuf.pixelOffset2x.xy;
 			@property( !hlms_forwardplus_flipY || syntax != glsl )
@@ -130,6 +143,20 @@
 		ogre_float4x3 worldMat = UNPACK_MAT4x3( worldMatBuf, inVs_drawId @property( !hlms_shadowcaster )<< 1u@end );
 		@property( hlms_normal || hlms_qtangent )
 			float4x4 worldView = UNPACK_MAT4( worldMatBuf, (inVs_drawId << 1u) + 1u );
+			@property( hlms_instanced_stereo )
+				if( inVs_stereoDrawId & 0x01u )
+				{
+					TODO_inVs_drawId_divideBy2;
+					//worldView = offsetMat * worldView;
+					//offsetMat =
+					// 1 0 0 stereoOffset
+					// 0 1 0 0
+					// 0 0 1 0
+					// 0 0 0 1
+					//worldView[0] += stereoOffset * worldView[3]
+					worldView[0] += passBuf.stereoOffset * worldView[3].xyzw;
+				}
+			@end
 		@end
 
 		float4 worldPos = float4( mul(inVs_vertex, worldMat).xyz, 1.0f );
@@ -178,5 +205,10 @@
 
 	@property( hlms_global_clip_planes )
 		outVs_clipDistance0 = dot( float4( worldPos.xyz, 1.0 ), passBuf.clipPlane0.xyzw );
+	@end
+
+	@property( hlms_instanced_stereo )
+		gl_ViewportIndex	= inVs_stereoDrawId & 0x01u;
+		gl_Layer			= inVs_stereoDrawId & 0x01u;
 	@end
 @end

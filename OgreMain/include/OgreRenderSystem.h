@@ -720,7 +720,9 @@ namespace Ogre
         void destroyRenderPassDescriptor( RenderPassDescriptor *renderPassDesc );
 
         RenderPassDescriptor* getCurrentPassDescriptor(void)    { return mCurrentRenderPassDescriptor; }
-        Viewport& _getCurrentRenderViewport(void)               { return mCurrentRenderViewport; }
+        Viewport& _getCurrentRenderViewport(void)               { return mCurrentRenderViewport[0]; }
+        Viewport* getCurrentRenderViewports(void)				{ return mCurrentRenderViewport; }
+        uint32 getMaxBoundViewports(void)						{ return mMaxBoundViewports; }
 
         /** When the descriptor is set to Load clear, two possible things may happen:
                 1. The region is cleared.
@@ -752,8 +754,9 @@ namespace Ogre
         */
         virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc,
                                                 TextureGpu *anyTarget, uint8 mipLevel,
-                                                const Vector4 &viewportSize,
-                                                const Vector4 &scissors,
+                                                const Vector4 *viewportSizes,
+                                                const Vector4 *scissors,
+                                                uint32 numViewports,
                                                 bool overlaysEnabled,
                                                 bool warnIfRtvWasFlushed );
         /// Metal needs to delay RenderCommand creation to the last minute, because
@@ -1461,7 +1464,8 @@ namespace Ogre
         typedef set<RenderPassDescriptor*>::type RenderPassDescriptorSet;
         RenderPassDescriptorSet mRenderPassDescs;
         RenderPassDescriptor    *mCurrentRenderPassDescriptor;
-        Viewport                mCurrentRenderViewport;
+        Viewport                mCurrentRenderViewport[16];
+        uint32                  mMaxBoundViewports;
 
         typedef set<Window*>::type WindowSet;
         WindowSet mWindows;

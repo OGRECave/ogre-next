@@ -839,33 +839,35 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalRenderSystem::beginRenderPassDescriptor( RenderPassDescriptor *desc,
                                                        TextureGpu *anyTarget, uint8 mipLevel,
-                                                       const Vector4 &viewportSize,
-                                                       const Vector4 &scissors,
+                                                       const Vector4 *viewportSizes,
+                                                       const Vector4 *scissors,
+                                                       uint32 numViewports,
                                                        bool overlaysEnabled,
                                                        bool warnIfRtvWasFlushed )
     {
         if( desc->mInformationOnly && desc->hasSameAttachments( mCurrentRenderPassDescriptor ) )
             return;
 
-        const int oldWidth = mCurrentRenderViewport.getActualWidth();
-        const int oldHeight = mCurrentRenderViewport.getActualHeight();
-        const int oldX = mCurrentRenderViewport.getActualLeft();
-        const int oldY = mCurrentRenderViewport.getActualTop();
+        const int oldWidth = mCurrentRenderViewport[0].getActualWidth();
+        const int oldHeight = mCurrentRenderViewport[0].getActualHeight();
+        const int oldX = mCurrentRenderViewport[0].getActualLeft();
+        const int oldY = mCurrentRenderViewport[0].getActualTop();
 
         MetalRenderPassDescriptor *currPassDesc =
                 static_cast<MetalRenderPassDescriptor*>( mCurrentRenderPassDescriptor );
 
-        RenderSystem::beginRenderPassDescriptor( desc, anyTarget, mipLevel, viewportSize, scissors,
-                                                 overlaysEnabled, warnIfRtvWasFlushed );
+        RenderSystem::beginRenderPassDescriptor( desc, anyTarget, mipLevel, viewportSizes, scissors,
+                                                 numViewports, overlaysEnabled, warnIfRtvWasFlushed );
 
 
         // Calculate the new "lower-left" corner of the viewport to compare with the old one
-        const int w = mCurrentRenderViewport.getActualWidth();
-        const int h = mCurrentRenderViewport.getActualHeight();
-        const int x = mCurrentRenderViewport.getActualLeft();
-        const int y = mCurrentRenderViewport.getActualTop();
+        const int w = mCurrentRenderViewport[0].getActualWidth();
+        const int h = mCurrentRenderViewport[0].getActualHeight();
+        const int x = mCurrentRenderViewport[0].getActualLeft();
+        const int y = mCurrentRenderViewport[0].getActualTop();
 
-        const bool vpChanged = oldX != x || oldY != y || oldWidth != w || oldHeight != h;
+        const bool vpChanged = oldX != x || oldY != y || oldWidth != w || oldHeight != h ||
+                               numViewports > 1u;
 
         MetalRenderPassDescriptor *newPassDesc =
                 static_cast<MetalRenderPassDescriptor*>( desc );
@@ -898,7 +900,7 @@ namespace Ogre
             entriesToFlush = RenderPassDescriptor::All;
         }
 
-        mActiveViewport = &mCurrentRenderViewport;
+        mActiveViewport = &mCurrentRenderViewport[0];
 
         mEntriesToFlush = entriesToFlush;
         mVpChanged      = vpChanged;
@@ -936,28 +938,72 @@ namespace Ogre
 
         flushUAVs();
 
+        const uint32 numViewports = mMaxBoundViewports;
+
         //If we flushed, viewport and scissor settings got reset.
-        if( !mCurrentRenderViewport.coversEntireTarget() || (mVpChanged && !mEntriesToFlush) )
+        if( !mCurrentRenderViewport[0].coversEntireTarget() || (mVpChanged && !mEntriesToFlush) ||
+            numViewports > 1u  )
         {
             MTLViewport mtlVp;
-            mtlVp.originX   = mCurrentRenderViewport.getActualLeft();
-            mtlVp.originY   = mCurrentRenderViewport.getActualTop();
-            mtlVp.width     = mCurrentRenderViewport.getActualWidth();
-            mtlVp.height    = mCurrentRenderViewport.getActualHeight();
-            mtlVp.znear     = 0;
-            mtlVp.zfar      = 1;
-            [mActiveRenderEncoder setViewport:mtlVp];
+#if defined( __IPHONE_12_0 ) || defined( MAC_OS_X_VERSION_10_13 )
+            if( numViewports <= 1u || @available( iOS 12.0, macOS 10.13, tvOS 12.0, * ) )
+#endif
+            {
+                mtlVp.originX   = mCurrentRenderViewport[0].getActualLeft();
+                mtlVp.originY   = mCurrentRenderViewport[0].getActualTop();
+                mtlVp.width     = mCurrentRenderViewport[0].getActualWidth();
+                mtlVp.height    = mCurrentRenderViewport[0].getActualHeight();
+                mtlVp.znear     = 0;
+                mtlVp.zfar      = 1;
+                [mActiveRenderEncoder setViewport:mtlVp];
+            }
+#if defined( __IPHONE_12_0 ) || defined( MAC_OS_X_VERSION_10_13 )
+            else
+            {
+                MTLViewport mtlVp[16];
+                for( size_t i=0; i<numViewports; ++i )
+                {
+                    mtlVp[i].originX    = mCurrentRenderViewport[i].getActualLeft();
+                    mtlVp[i].originY    = mCurrentRenderViewport[i].getActualTop();
+                    mtlVp[i].width      = mCurrentRenderViewport[i].getActualWidth();
+                    mtlVp[i].height     = mCurrentRenderViewport[i].getActualHeight();
+                    mtlVp[i].znear      = 0;
+                    mtlVp[i].zfar       = 1;
+                }
+                [mActiveRenderEncoder setViewports:mtlVp count:numViewports];
+            }
+#endif
         }
 
-        if( (!mCurrentRenderViewport.coversEntireTarget() ||
-             !mCurrentRenderViewport.scissorsMatchViewport()) || !mEntriesToFlush )
+        if( (!mCurrentRenderViewport[0].coversEntireTarget() ||
+             !mCurrentRenderViewport[0].scissorsMatchViewport()) || !mEntriesToFlush ||
+            numViewports > 1u )
         {
-            MTLScissorRect scissorRect;
-            scissorRect.x       = mCurrentRenderViewport.getScissorActualLeft();
-            scissorRect.y       = mCurrentRenderViewport.getScissorActualTop();
-            scissorRect.width   = mCurrentRenderViewport.getScissorActualWidth();
-            scissorRect.height  = mCurrentRenderViewport.getScissorActualHeight();
-            [mActiveRenderEncoder setScissorRect:scissorRect];
+#if defined( __IPHONE_12_0 ) || defined( MAC_OS_X_VERSION_10_13 )
+            if( numViewports <= 1u || @available( iOS 12.0, macOS 10.13, tvOS 12.0, * ) )
+#endif
+            {
+                MTLScissorRect scissorRect;
+                scissorRect.x       = mCurrentRenderViewport[0].getScissorActualLeft();
+                scissorRect.y       = mCurrentRenderViewport[0].getScissorActualTop();
+                scissorRect.width   = mCurrentRenderViewport[0].getScissorActualWidth();
+                scissorRect.height  = mCurrentRenderViewport[0].getScissorActualHeight();
+                [mActiveRenderEncoder setScissorRect:scissorRect];
+            }
+#if defined( __IPHONE_12_0 ) || defined( MAC_OS_X_VERSION_10_13 )
+            else
+            {
+                MTLScissorRect scissorRect[16];
+                for( size_t i=0; i<numViewports; ++i )
+                {
+                    scissorRect[i].x        = mCurrentRenderViewport[i].getScissorActualLeft();
+                    scissorRect[i].y        = mCurrentRenderViewport[i].getScissorActualTop();
+                    scissorRect[i].width    = mCurrentRenderViewport[i].getScissorActualWidth();
+                    scissorRect[i].height   = mCurrentRenderViewport[i].getScissorActualHeight();
+                }
+                [mActiveRenderEncoder setScissorRects:scissorRect count:numViewports];
+            }
+#endif
         }
 
         mEntriesToFlush = 0;
@@ -981,12 +1027,6 @@ namespace Ogre
     {
         if( mCurrentRenderPassDescriptor )
         {
-            uint32 x, y, w, h;
-            w = mCurrentRenderViewport.getActualWidth();
-            h = mCurrentRenderViewport.getActualHeight();
-            x = mCurrentRenderViewport.getActualLeft();
-            y = mCurrentRenderViewport.getActualTop();
-
             MetalRenderPassDescriptor *passDesc =
                     static_cast<MetalRenderPassDescriptor*>( mCurrentRenderPassDescriptor );
             passDesc->performStoreActions( RenderPassDescriptor::All, isInterruptingRender );
@@ -2505,7 +2545,8 @@ namespace Ogre
                                               TextureGpu *anyTarget, uint8 mipLevel )
     {
         Vector4 fullVp( 0, 0, 1, 1 );
-        beginRenderPassDescriptor( renderPassDesc, anyTarget, mipLevel, fullVp, fullVp, false, false );
+        beginRenderPassDescriptor( renderPassDesc, anyTarget, mipLevel,
+                                   &fullVp, &fullVp, 1u, false, false );
         executeRenderPassDescriptorDelayedActions();
     }
     //-------------------------------------------------------------------------

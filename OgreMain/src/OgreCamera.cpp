@@ -45,6 +45,7 @@ namespace Ogre {
         mSceneMgr(sm),
         mOrientation(Quaternion::IDENTITY),
         mPosition(Vector3::ZERO),
+        mStereoEyeSeparation(0),
         mAutoTrackTarget(0),
         mAutoTrackOffset(Vector3::ZERO),
         mSceneLodFactor(1.0f),
@@ -370,9 +371,8 @@ namespace Ogre {
         mSceneMgr->_setLightCullingVisibility( this, collectLights, isCubemap );
     }
     //-----------------------------------------------------------------------
-    void Camera::_cullScenePhase01( Camera *renderCamera, const Camera *lodCamera,
-                                    Viewport *vp, uint8 firstRq, uint8 lastRq,
-                                    bool reuseCullData )
+    void Camera::_cullScenePhase01( Camera *renderCamera, const Camera *lodCamera, Viewport *vp,
+                                    uint8 firstRq, uint8 lastRq, bool reuseCullData )
     {
         OgreProfileBeginGPUEvent("Camera: " + getName());
 
@@ -394,14 +394,14 @@ namespace Ogre {
         }
 
         //render scene
-        mSceneMgr->_cullPhase01( this, renderCamera, lodCamera, vp, firstRq, lastRq, reuseCullData );
+        mSceneMgr->_cullPhase01( this, renderCamera, lodCamera, firstRq, lastRq, reuseCullData );
     }
     //-----------------------------------------------------------------------
-    void Camera::_renderScenePhase02(const Camera *lodCamera, Viewport *vp,
-                                     uint8 firstRq, uint8 lastRq, bool includeOverlays)
+    void Camera::_renderScenePhase02( const Camera *lodCamera,
+                                      uint8 firstRq, uint8 lastRq, bool includeOverlays )
     {
         //render scene
-        mSceneMgr->_renderPhase02( this, lodCamera, vp, firstRq, lastRq, includeOverlays );
+        mSceneMgr->_renderPhase02( this, lodCamera, firstRq, lastRq, includeOverlays );
 
         // Listener list may have changed
         ListenerList listenersCopy = mListeners;
