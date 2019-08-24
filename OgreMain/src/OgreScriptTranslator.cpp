@@ -10623,8 +10623,6 @@ namespace Ogre{
                             return;
                         }
 
-                        mPassDef->mNumViewports = 1u;
-
                         AbstractNodeList::const_iterator it3 = prop->values.begin();
                         AbstractNodeList::const_iterator it0 = it3++;
                         AbstractNodeList::const_iterator it1 = it3++;
