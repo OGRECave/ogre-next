@@ -56,7 +56,7 @@ namespace Demo
         light->setType( Ogre::Light::LT_DIRECTIONAL );
         light->setDirection( Ogre::Vector3( -1, -1, -1 ).normalisedCopy() );
 
-        mCameraController = new CameraController( mGraphicsSystem, true );
+        mCameraController = new CameraController( mGraphicsSystem, false );
 
         TutorialGameState::createScene01();
     }
