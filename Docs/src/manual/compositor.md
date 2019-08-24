@@ -532,7 +532,7 @@ we just set the size here.
 When the optional 'idx' parameter is supplied at the begginning there will be
 either 5 or 9 parameters instead of 4 or 8 respectively.
 This index allows you to set multiple viewports for e.g. instanced\_stereo or
-for shaders that make use of gl_Layer/SV_ViewportArrayIndex.
+for shaders that make use of gl\_ViewportIndex/SV\_ViewportArrayIndex.
 When not provided, this value defaults to 0. The value is in range \[0; 16\)
 
 The Compositor will automatically share Viewport pointers between
