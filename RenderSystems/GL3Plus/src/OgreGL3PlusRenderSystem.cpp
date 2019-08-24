@@ -1138,7 +1138,7 @@ namespace Ogre {
             // independent size if you're looking for attenuation.
             // So, scale the point size up by viewport size (this is equivalent to
             // what D3D does as standard).
-            size = size * mActiveViewport->getActualHeight();
+            size = size * mCurrentRenderViewport[0].getActualHeight();
 
             // XXX: why do I need this for results to be consistent with D3D?
             // Equations are supposedly the same once you factor in vp height.
@@ -1638,63 +1638,6 @@ namespace Ogre {
         }
 
         OGRE_CHECK_GL_ERROR(glBlendEquationSeparate(func, alphaFunc));
-    }
-
-    void GL3PlusRenderSystem::_setViewport(Viewport *vp)
-    {
-        mActiveViewport = vp;
-#if TODO_OGRE_2_2
-        // Check if viewport is different
-        if (!vp)
-        {
-            mActiveViewport = NULL;
-            _setRenderTarget(NULL, VP_RTT_COLOUR_WRITE);
-        }
-        else if (vp != mActiveViewport || vp->_isUpdated())
-        {
-            RenderTarget* target;
-
-            target = vp->getTarget();
-            _setRenderTarget(target, vp->getViewportRenderTargetFlags());
-            mActiveViewport = vp;
-
-            GLsizei x, y, w, h;
-
-            // Calculate the "lower-left" corner of the viewport
-            w = vp->getActualWidth();
-            h = vp->getActualHeight();
-            x = vp->getActualLeft();
-            y = vp->getActualTop();
-
-            if (target && !target->requiresTextureFlipping())
-            {
-                // Convert "upper-left" corner to "lower-left"
-                y = target->getHeight() - h - y;
-            }
-
-            OGRE_CHECK_GL_ERROR(glViewport(x, y, w, h));
-
-            w = vp->getScissorActualWidth();
-            h = vp->getScissorActualHeight();
-            x = vp->getScissorActualLeft();
-            y = vp->getScissorActualTop();
-
-            if (target && !target->requiresTextureFlipping())
-            {
-                // Convert "upper-left" corner to "lower-left"
-                y = target->getHeight() - h - y;
-            }
-
-            // Configure the viewport clipping
-            OGRE_CHECK_GL_ERROR(glScissor(x, y, w, h));
-
-            vp->_clearUpdatedFlag();
-        }
-        else if( mMaxModifiedUavPlusOne )
-        {
-            flushUAVs();
-        }
-#endif
     }
 
     void GL3PlusRenderSystem::_resourceTransitionCreated( ResourceTransition *resTransition )

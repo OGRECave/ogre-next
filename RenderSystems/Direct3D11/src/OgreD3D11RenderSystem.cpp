@@ -2011,9 +2011,6 @@ namespace Ogre
         while(scnIt.hasMoreElements())
             scnIt.getNext()->_restoreManualHardwareResources();
 
-        // Invalidate active view port.
-        mActiveViewport = NULL;
-
         fireDeviceEvent(&mDevice, "DeviceRestored");
 
         LogManager::getSingleton().logMessage("D3D11: Device was restored.");
@@ -2426,7 +2423,6 @@ namespace Ogre
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setRenderTarget( RenderTarget *target, uint8 viewportRenderTargetFlags )
     {
-        mActiveViewport = 0;
         mActiveRenderTarget = target;
         if (mActiveRenderTarget)
         {
@@ -2517,97 +2513,6 @@ namespace Ogre
                 OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
                     "D3D11 device cannot set render target\nError Description:" + errorDescription,
                     "D3D11RenderSystem::_setRenderTargetViews");
-            }
-        }
-#endif
-    }
-    //---------------------------------------------------------------------
-    void D3D11RenderSystem::_setViewport( Viewport *vp )
-    {
-        mActiveViewport = vp;
-#if TODO_OGRE_2_2
-        if (!vp)
-        {
-            mActiveViewport = NULL;
-            _setRenderTarget(NULL, VP_RTT_COLOUR_WRITE);
-        }
-        else if( vp != mActiveViewport || vp->_isUpdated() )
-        {
-            // ok, it's different, time to set render target and viewport params
-            D3D11_VIEWPORT d3dvp;
-
-            // Set render target
-            RenderTarget* target;
-            target = vp->getTarget();
-
-            _setRenderTarget(target, vp->getViewportRenderTargetFlags());
-
-            mActiveViewport = vp;
-
-            // set viewport dimensions
-            d3dvp.TopLeftX = static_cast<FLOAT>(vp->getActualLeft());
-            d3dvp.TopLeftY = static_cast<FLOAT>(vp->getActualTop());
-            d3dvp.Width = static_cast<FLOAT>(vp->getActualWidth());
-            d3dvp.Height = static_cast<FLOAT>(vp->getActualHeight());
-            if (target->requiresTextureFlipping())
-            {
-                // Convert "top-left" to "bottom-left"
-                d3dvp.TopLeftY = target->getHeight() - d3dvp.Height - d3dvp.TopLeftY;
-            }
-
-            // Z-values from 0.0 to 1.0 (TODO: standardise with OpenGL)
-            d3dvp.MinDepth = 0.0f;
-            d3dvp.MaxDepth = 1.0f;
-
-            mDevice.GetImmediateContext()->RSSetViewports(1, &d3dvp);
-            if (mDevice.isError())
-            {
-                String errorDescription = mDevice.getErrorDescription();
-                OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
-                    "D3D11 device cannot set viewports\nError Description: " + errorDescription,
-                    "D3D11RenderSystem::_setViewport");
-            }
-
-            D3D11_RECT scissorRect;
-            scissorRect.left    = static_cast<LONG>(vp->getScissorActualLeft());
-            scissorRect.top     = static_cast<LONG>(vp->getScissorActualTop());
-            scissorRect.right   = scissorRect.left + static_cast<LONG>(vp->getScissorActualWidth());
-            scissorRect.bottom  = scissorRect.top + static_cast<LONG>(vp->getScissorActualHeight());
-
-            mDevice.GetImmediateContext()->RSSetScissorRects( 1, &scissorRect );
-            if (mDevice.isError())
-            {
-                String errorDescription = mDevice.getErrorDescription();
-                OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
-                    "D3D11 device cannot set scissor rects\nError Description: " + errorDescription,
-                    "D3D11RenderSystem::_setViewport");
-            }
-
-#if OGRE_NO_QUAD_BUFFER_STEREO == 0
-            if( target->isRenderWindow() )
-            {
-                assert( dynamic_cast<D3D11RenderWindowBase*>(target) );
-                D3D11RenderWindowBase* d3d11Window = static_cast<D3D11RenderWindowBase*>(target);
-                d3d11Window->_validateStereo();
-            }
-#endif
-
-            vp->_clearUpdatedFlag();
-        }
-        else
-        {
-            if( vp->getTarget()->isRenderWindow() )
-            {
-                // if swapchain was created with DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL
-                // we need to reestablish render target views
-                assert( dynamic_cast<D3D11RenderWindowBase*>(vp->getTarget()) );
-
-                if( static_cast<D3D11RenderWindowBase*>(vp->getTarget())->_shouldRebindBackBuffer() )
-                    _setRenderTargetViews( vp->getViewportRenderTargetFlags() );
-            }
-            else if( mUavsDirty )
-            {
-                flushUAVs();
             }
         }
 #endif

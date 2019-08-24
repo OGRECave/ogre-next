@@ -1588,7 +1588,7 @@ namespace Ogre
 
         mPreparedPass.shadowMaps.clear();
 
-        TextureGpu *renderTarget = mRenderSystem->_getViewport()->getCurrentTarget();
+        TextureGpu *renderTarget = mRenderSystem->getCurrentRenderViewports()[0].getCurrentTarget();
 
         if( !casterPass )
         {
@@ -2190,7 +2190,7 @@ namespace Ogre
             ForwardPlusBase *forwardPlus = sceneManager->_getActivePassForwardPlus();
             if( forwardPlus )
             {
-                forwardPlus->fillConstBufferData( sceneManager->getCurrentViewport(), renderTarget,
+                forwardPlus->fillConstBufferData( sceneManager->getCurrentViewport0(), renderTarget,
                                                   mShaderSyntax, passBufferPtr );
                 passBufferPtr += forwardPlus->getConstBufferSize() >> 2u;
             }

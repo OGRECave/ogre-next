@@ -900,8 +900,6 @@ namespace Ogre
             entriesToFlush = RenderPassDescriptor::All;
         }
 
-        mActiveViewport = &mCurrentRenderViewport[0];
-
         mEntriesToFlush = entriesToFlush;
         mVpChanged      = vpChanged;
         mInterruptedRenderCommandEncoder = false;
@@ -1191,7 +1189,6 @@ namespace Ogre
         mBeginFrameOnceStarted = true;
 
         mActiveRenderTarget = 0;
-        mActiveViewport = 0;
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_endFrameOnce(void)
@@ -1214,7 +1211,6 @@ namespace Ogre
         mActiveDevice->commitAndNextCommandBuffer();
 
         mActiveRenderTarget = 0;
-        mActiveViewport = 0;
         mActiveDevice->mFrameAborted = false;
         mMainSemaphoreAlreadyWaited = false;
         mBeginFrameOnceStarted = false;
@@ -1319,61 +1315,6 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_endFrame(void)
     {
-    }
-    //-------------------------------------------------------------------------
-    void MetalRenderSystem::_setViewport(Viewport *vp)
-    {
-        mActiveViewport = vp;
-#if TODO_OGRE_2_2
-        if( mActiveViewport != vp )
-        {
-            mActiveViewport = vp;
-
-            if( vp )
-            {
-                const bool activeHasColourWrites = mNumMRTs != 0;
-
-                if( vp->getTarget() != mActiveRenderTarget ||
-                    vp->getColourWrite() != activeHasColourWrites )
-                {
-                    _setRenderTarget( vp->getTarget(), vp->getViewportRenderTargetFlags() );
-                }
-
-                if( mActiveRenderEncoder || ( !mActiveRenderEncoder &&
-                                              (!vp->coversEntireTarget() ||
-                                               !vp->scissorsMatchViewport()) ) )
-                {
-                    if( !mActiveRenderEncoder )
-                        createRenderEncoder();
-
-                    if( !vp->coversEntireTarget() )
-                    {
-                        MTLViewport mtlVp;
-                        mtlVp.originX   = vp->getActualLeft();
-                        mtlVp.originY   = vp->getActualTop();
-                        mtlVp.width     = vp->getActualWidth();
-                        mtlVp.height    = vp->getActualHeight();
-                        mtlVp.znear     = 0;
-                        mtlVp.zfar      = 1;
-                        [mActiveRenderEncoder setViewport:mtlVp];
-                    }
-
-                    if( !vp->scissorsMatchViewport() )
-                    {
-                        MTLScissorRect scissorRect;
-                        scissorRect.x       = vp->getScissorActualLeft();
-                        scissorRect.y       = vp->getScissorActualTop();
-                        scissorRect.width   = vp->getScissorActualWidth();
-                        scissorRect.height  = vp->getScissorActualHeight();
-                        [mActiveRenderEncoder setScissorRect:scissorRect];
-                    }
-                }
-            }
-        }
-
-        if( mActiveRenderEncoder && mUavsDirty )
-            flushUAVs();
-#endif
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::setActiveDevice( MetalDevice *device )

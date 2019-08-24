@@ -498,7 +498,7 @@ namespace Ogre {
         /// Cameras in progress
         CamerasInProgress mCamerasInProgress;
         /// Current Viewport
-        Viewport* mCurrentViewport[16];
+        Viewport *mCurrentViewport0;
 
         CompositorPass          *mCurrentPass;
         CompositorShadowNode    *mCurrentShadowNode;
@@ -2989,7 +2989,7 @@ namespace Ogre {
 
         /** Gets the current viewport being rendered (advanced use only, only 
             valid during viewport update. */
-        Viewport* getCurrentViewport(void) const { return mCurrentViewport[0]; }
+        Viewport* getCurrentViewport0(void) const { return mCurrentViewport0; }
 
         /** Gets the current camera being rendered (advanced use only, only 
             valid during viewport update. */

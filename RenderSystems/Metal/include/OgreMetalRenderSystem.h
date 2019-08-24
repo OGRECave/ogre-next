@@ -237,7 +237,6 @@ namespace Ogre
 
         virtual void _beginFrame(void);
         virtual void _endFrame(void);
-        virtual void _setViewport(Viewport *vp);
 
         virtual void _hlmsPipelineStateObjectCreated( HlmsPso *newPso );
         virtual void _hlmsPipelineStateObjectDestroyed( HlmsPso *pso );

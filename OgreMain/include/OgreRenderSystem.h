@@ -962,17 +962,6 @@ namespace Ogre
                                               SceneManagerEnumerator &sceneManagers,
                                               HlmsManager *hlmsManager );
 
-        /**
-        Sets the provided viewport as the active one for future
-        rendering operations. This viewport is aware of it's own
-        camera and render target. Must be implemented by subclass.
-
-        @param vp Pointer to the appropriate viewport.
-        */
-        virtual void _setViewport(Viewport *vp) = 0;
-        /** Get the current active viewport for rendering. */
-        virtual Viewport* _getViewport(void);
-
         /// @See HlmsSamplerblock. This function MUST be called after _setTexture, not before.
         /// Otherwise not all APIs may see the change.
         virtual void _setHlmsSamplerblock( uint8 texUnit, const HlmsSamplerblock *Samplerblock ) = 0;
@@ -1492,9 +1481,6 @@ namespace Ogre
 
         VaoManager          *mVaoManager;
         TextureGpuManager   *mTextureGpuManager;
-
-        // Active viewport (dest for future rendering operations)
-        Viewport* mActiveViewport;
 
         bool mDebugShaders;
         bool mWBuffer;

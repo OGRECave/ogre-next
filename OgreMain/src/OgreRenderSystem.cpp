@@ -66,7 +66,6 @@ namespace Ogre {
         , mTextureManager(0)
         , mVaoManager(0)
         , mTextureGpuManager(0)
-        , mActiveViewport(0)
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
         , mDebugShaders(true)
 #else
@@ -290,11 +289,6 @@ namespace Ogre {
             mActiveRenderTarget = 0;
 
         return ret;
-    }
-    //-----------------------------------------------------------------------
-    Viewport* RenderSystem::_getViewport(void)
-    {
-        return mActiveViewport;
     }
     //-----------------------------------------------------------------------
     void RenderSystem::_setPipelineStateObject( const HlmsPso *pso )

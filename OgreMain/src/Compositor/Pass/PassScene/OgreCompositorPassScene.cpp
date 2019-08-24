@@ -167,7 +167,7 @@ namespace Ogre
                                                                                     SHADOW_NODE_REUSE );
         }
 
-        Viewport *viewport = sceneManager->getCurrentViewport();
+        Viewport *viewport = sceneManager->getCurrentViewport0();
         viewport->_setVisibilityMask( mDefinition->mVisibilityMask, mDefinition->mLightVisibilityMask );
 
         //Fire the listener in case it wants to change anything

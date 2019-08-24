@@ -379,10 +379,6 @@ namespace Ogre {
 
         virtual void flushUAVs(void);
 
-        /** See
-            RenderSystem
-        */
-        void _setViewport(Viewport *vp);
         virtual void _resourceTransitionCreated( ResourceTransition *resTransition );
         virtual void _resourceTransitionDestroyed( ResourceTransition *resTransition );
         virtual void _executeResourceTransition( ResourceTransition *resTransition );

@@ -600,7 +600,7 @@ namespace Ogre
         if( mEnableVpls )
             hlms->_setProperty( HlmsBaseProp::EnableVpls, 1 );
 
-        Viewport *viewport = mSceneManager->getCurrentViewport();
+        Viewport *viewport = mSceneManager->getCurrentViewport0();
         if( viewport->coversEntireTarget() )
             hlms->_setProperty( HlmsBaseProp::ForwardPlusCoversEntireTarget, 1 );
 

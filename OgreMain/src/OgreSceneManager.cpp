@@ -108,6 +108,7 @@ mDecalsDiffuseTex( 0 ),
 mDecalsNormalsTex( 0 ),
 mDecalsEmissiveTex( 0 ),
 mCamerasInProgress(0),
+mCurrentViewport0(0),
 mCurrentPass(0),
 mCurrentShadowNode(0),
 mShadowNodeIsReused( false ),
@@ -162,8 +163,6 @@ mGpuParamsDirty((uint16)GPV_ALL)
     for( size_t i=0; i<NUM_SCENE_MEMORY_MANAGER_TYPES; ++i )
         mSceneRoot[i] = 0;
     mSceneDummy = 0;
-
-    memset( mCurrentViewport, 0, sizeof(mCurrentViewport) );
 
     setAmbientLight( ColourValue::Black, ColourValue::Black, Vector3::UNIT_Y, 1.0f );
 
@@ -1309,7 +1308,7 @@ void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera,
 
             bool casterPass = mIlluminationStage == IRS_RENDER_TO_TEXTURE;
 
-            firePreFindVisibleObjects( getCurrentViewport() );
+            firePreFindVisibleObjects( mCurrentViewport0 );
 
             //Some v1 Renderables may bind their own GL buffers during _updateRenderQueue,
             //thus we need to be sure the correct VAO is bound.
@@ -1344,10 +1343,10 @@ void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera,
                 ++it;
             }
 
-            firePostFindVisibleObjects( getCurrentViewport() );
+            firePostFindVisibleObjects( mCurrentViewport0 );
         }
         // Queue skies, if viewport seems it
-        if( getCurrentViewport()->getSkiesEnabled() && mFindVisibleObjects &&
+        if( mCurrentViewport0->getSkiesEnabled() && mFindVisibleObjects &&
             mIlluminationStage != IRS_RENDER_TO_TEXTURE )
         {
             _queueSkiesForRendering(camera);
@@ -3872,18 +3871,19 @@ void SceneManager::fireSceneManagerDestroyed()
 //---------------------------------------------------------------------
 void SceneManager::setViewports( Viewport **vp, size_t numViewports )
 {
-
-    for( size_t i=0; i<numViewports; ++i )
-        mCurrentViewport[i] = vp[i];
-    for( size_t i=numViewports; i<16u; ++i )
-        mCurrentViewport[i] = vp[i];
+    if( numViewports >= 1u )
+        mCurrentViewport0 = vp[0];
+    else
+        mCurrentViewport0 = 0;
 
     // Set viewport in render system
-    mDestRenderSystem->_setViewport( vp[0] );
     if( mAutoParamDataSource )
-        mAutoParamDataSource->setCurrentViewport( vp[0] );
-    // Set the active material scheme for this viewport
-    MaterialManager::getSingleton().setActiveScheme( vp[0]->getMaterialScheme() );
+        mAutoParamDataSource->setCurrentViewport( mCurrentViewport0 );
+    if( mCurrentViewport0 )
+    {
+        // Set the active material scheme for this viewport
+        MaterialManager::getSingleton().setActiveScheme( mCurrentViewport0->getMaterialScheme() );
+    }
 }
 //---------------------------------------------------------------------
 void SceneManager::showBoundingBoxes(bool bShow) 
@@ -4975,10 +4975,10 @@ RenderSystem *SceneManager::getDestinationRenderSystem()
 uint32 SceneManager::_getCombinedVisibilityMask(void) const
 {
     //Always preserve the settings of the reserved visibility flags in the viewport.
-    return mCurrentViewport[0] ?
-        ((mCurrentViewport[0]->getVisibilityMask() & mVisibilityMask) |
-        (mCurrentViewport[0]->getVisibilityMask() & ~VisibilityFlags::RESERVED_VISIBILITY_FLAGS)) :
-            mVisibilityMask;
+    return mCurrentViewport0 ?
+        ((mCurrentViewport0->getVisibilityMask() & mVisibilityMask) |
+        (mCurrentViewport0->getVisibilityMask() & ~VisibilityFlags::RESERVED_VISIBILITY_FLAGS)) :
+                mVisibilityMask;
 
 }
 //---------------------------------------------------------------------
