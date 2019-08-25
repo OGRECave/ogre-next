@@ -1340,7 +1340,7 @@ namespace Ogre
         retVal.setProperties = mSetProperties;
 
         CamerasInProgress cameras = sceneManager->getCamerasInProgress();
-        Matrix4 viewMatrix = cameras.renderingCamera->getViewMatrix(true);
+        Matrix4 viewMatrix = cameras.renderingCamera->getVrViewMatrix( 0 );
 
         Matrix4 projectionMatrix = cameras.renderingCamera->getProjectionMatrixWithRSDepth();
         RenderPassDescriptor *renderPassDesc = mRenderSystem->getCurrentPassDescriptor();
@@ -1521,9 +1521,9 @@ namespace Ogre
         if( isCameraReflected )
             mapSize += 4 * 4;
 
-        //float stereoOffset + float3 padding
+        //float4x4 viewProj[2] (second only) + float4x4 leftToRightView
         if( isInstancedStereo )
-            mapSize += 4u * 4u;
+            mapSize += 16u * 4u + 16u * 4u;
 
         mapSize += mListener->getPassBufferSize( shadowNode, casterPass, dualParaboloid,
                                                  sceneManager );
@@ -1550,10 +1550,25 @@ namespace Ogre
         //                          ---- VERTEX SHADER ----
         //---------------------------------------------------------------------------
 
-        //mat4 viewProj;
-        Matrix4 viewProjMatrix = projectionMatrix * viewMatrix;
-        for( size_t i=0; i<16; ++i )
-            *passBufferPtr++ = (float)viewProjMatrix[0][i];
+        if( !isInstancedStereo )
+        {
+            //mat4 viewProj;
+            Matrix4 viewProjMatrix = projectionMatrix * viewMatrix;
+            for( size_t i=0; i<16; ++i )
+                *passBufferPtr++ = (float)viewProjMatrix[0][i];
+        }
+        else
+        {
+            //float4x4 viewProj[2];
+            for( size_t eyeIdx=0u; eyeIdx<2u; ++eyeIdx )
+            {
+                Matrix4 vrViewMat = cameras.renderingCamera->getVrViewMatrix( eyeIdx );
+                Matrix4 vrProjMat = cameras.renderingCamera->getVrProjectionMatrix( eyeIdx );
+                Matrix4 viewProjMatrix = vrProjMat * vrViewMat;
+                for( size_t i=0; i<16; ++i )
+                    *passBufferPtr++ = (float)viewProjMatrix[0][i];
+            }
+        }
 
         //vec4 clipPlane0
         if( isCameraReflected )
@@ -1565,13 +1580,20 @@ namespace Ogre
             *passBufferPtr++ = (float)reflPlane.d;
         }
 
+        //float4x4 leftToRightView;
         if( isInstancedStereo )
         {
-            const Real stereoEyeSeparation = cameras.renderingCamera->getStereoEyeSeparation();
-            *passBufferPtr++ = static_cast<float>( stereoEyeSeparation );
-            *passBufferPtr++ = 0;
-            *passBufferPtr++ = 0;
-            *passBufferPtr++ = 0;
+            const VrData *vrData = cameras.renderingCamera->getVrData();
+            if( vrData )
+            {
+                for( size_t i=0; i<16; ++i )
+                    *passBufferPtr++ = (float)vrData->mLeftToRight[0][i];
+            }
+            else
+            {
+                for( size_t i=0; i<16; ++i )
+                    *passBufferPtr++ = (float)Matrix4::IDENTITY[0][i];
+            }
         }
 
         //vec4 cameraPosWS;

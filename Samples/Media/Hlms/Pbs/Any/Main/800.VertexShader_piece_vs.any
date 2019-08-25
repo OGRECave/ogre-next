@@ -105,18 +105,15 @@
 	@property( normal_map )						outVs.tangent	= mul( @insertpiece(local_tangent), toFloat3x3( worldViewMat ) );@end
 	@property( !hlms_dual_paraboloid_mapping )
         @property( !hlms_use_uv_baking )
-			outVs_Position = mul( worldPos, passBuf.viewProj );
-			@property( hlms_instanced_stereo )
+			@property( !hlms_instanced_stereo )
+				outVs_Position = mul( worldPos, passBuf.viewProj );
+			@else
+				outVs_Position = mul( worldPos, passBuf.viewProj[(inVs_stereoDrawId & 0x01u)] );
 				if( (inVs_stereoDrawId & 0x01u) != 0u )
 				{
-					@property( !hlms_skeleton )
-						//With skeletons, passBuf.view is used which we don't want to alter
-						//to avoid moving it from SGPR to VGPR. Fortunately, it's used for
-						//rotations (3x3) where the stereo offset does not matter, except
-						//for position. Correct outVs.pos here.
-						outVs.pos.x += passBuf.stereoOffset;
-					@end
-					outVs_Position.x += passBuf.stereoOffset;
+					@property( hlms_normal || hlms_qtangent )	outVs.pos		= mul( float4( outVs.pos, 1.0f ), passBuf.leftToRightView ).xyz;@end
+					@property( hlms_normal || hlms_qtangent )	outVs.normal	= mul( outVs.normal, toFloat3x3( passBuf.leftToRightView ) );@end
+					@property( normal_map )						outVs.tangent	= mul( outVs.tangent, toFloat3x3( passBuf.leftToRightView ) );@end
 				}
 			@end
 		@else
@@ -143,19 +140,6 @@
 		ogre_float4x3 worldMat = UNPACK_MAT4x3( worldMatBuf, inVs_drawId @property( !hlms_shadowcaster )<< 1u@end );
 		@property( hlms_normal || hlms_qtangent )
 			float4x4 worldView = UNPACK_MAT4( worldMatBuf, (inVs_drawId << 1u) + 1u );
-			@property( hlms_instanced_stereo )
-				if( (inVs_stereoDrawId & 0x01u) != 0u )
-				{
-					//worldView = offsetMat * worldView;
-					//offsetMat =
-					// 1 0 0 stereoOffset
-					// 0 1 0 0
-					// 0 0 1 0
-					// 0 0 0 1
-					//worldView[0] += stereoOffset * worldView[3]
-					worldView[0] += passBuf.stereoOffset * worldView[3].xyzw;
-				}
-			@end
 		@end
 
 		float4 worldPos = float4( mul(inVs_vertex, worldMat).xyz, 1.0f );

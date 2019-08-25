@@ -91,15 +91,18 @@ struct AreaLtcLight
 CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
 {
 	//Vertex shader (common to both receiver and casters)
+@property( !hlms_instanced_stereo )
 	float4x4 viewProj;
+@else
+	float4x4 viewProj[2];
+@end
 
 @property( hlms_global_clip_planes )
 	float4 clipPlane0;
 @end
 
 @property( hlms_instanced_stereo )
-	float stereoOffset;
-	@foreach( n, 3 )float paddingA@n;@end
+	float4x4 leftToRightView;
 @end
 
 @property( hlms_shadowcaster_point )

@@ -45,7 +45,7 @@ namespace Ogre {
         mSceneMgr(sm),
         mOrientation(Quaternion::IDENTITY),
         mPosition(Vector3::ZERO),
-        mStereoEyeSeparation(0),
+        mVrData(0),
         mAutoTrackTarget(0),
         mAutoTrackOffset(Vector3::ZERO),
         mSceneLodFactor(1.0f),
@@ -813,11 +813,6 @@ namespace Ogre {
         return mWindowClipPlanes;
     }
     // -------------------------------------------------------------------
-    void Camera::setStereoEyeSeparation( Real eyeSeparation )
-    {
-        mStereoEyeSeparation = eyeSeparation;
-    }
-    // -------------------------------------------------------------------
 #ifdef ENABLE_INCOMPATIBLE_OGRE_2_0
     Real Camera::getBoundingRadius(void) const
     {
@@ -837,6 +832,27 @@ namespace Ogre {
     const Quaternion& Camera::getOrientationForViewUpdate(void) const
     {
         return mRealOrientation;
+    }
+    //-----------------------------------------------------------------------
+    void Camera::setVrData( VrData *vrData )
+    {
+        mVrData = vrData;
+    }
+    //-----------------------------------------------------------------------
+    Matrix4 Camera::getVrViewMatrix( size_t eyeIdx ) const
+    {
+        Matrix4 retVal = getViewMatrix( true );
+        if( mVrData )
+            retVal = retVal.concatenateAffine( mVrData->mHeadToEye[eyeIdx] );
+        return retVal;
+    }
+    //-----------------------------------------------------------------------
+    Matrix4 Camera::getVrProjectionMatrix( size_t eyeIdx ) const
+    {
+        if( mVrData )
+            return mVrData->mProjectionMatrix[eyeIdx];
+        else
+            return getProjectionMatrixWithRSDepth();
     }
     //-----------------------------------------------------------------------
     bool Camera::getAutoAspectRatio(void) const
