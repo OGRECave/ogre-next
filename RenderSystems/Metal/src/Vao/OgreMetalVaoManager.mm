@@ -190,22 +190,23 @@ namespace Ogre
 
         mDynamicBufferMultiplier = dynamicBufferMultiplier;
 
+        const uint32 maxNumInstances = 4096u * 2u;
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-        uint32 *drawIdPtr = static_cast<uint32*>( OGRE_MALLOC_SIMD( 4096 * sizeof(uint32),
+        uint32 *drawIdPtr = static_cast<uint32*>( OGRE_MALLOC_SIMD( maxNumInstances * sizeof(uint32),
                                                                     MEMCATEGORY_GEOMETRY ) );
-        for( uint32 i=0; i<4096; ++i )
+        for( uint32 i=0; i<maxNumInstances; ++i )
             drawIdPtr[i] = i;
-        mDrawId = createConstBuffer( 4096 * sizeof(uint32), BT_IMMUTABLE, drawIdPtr, false );
+        mDrawId = createConstBuffer( maxNumInstances * sizeof(uint32), BT_IMMUTABLE, drawIdPtr, false );
         OGRE_FREE_SIMD( drawIdPtr, MEMCATEGORY_GEOMETRY );
         drawIdPtr = 0;
 #else
         VertexElement2Vec vertexElements;
         vertexElements.push_back( VertexElement2( VET_UINT1, VES_COUNT ) );
-        uint32 *drawIdPtr = static_cast<uint32*>( OGRE_MALLOC_SIMD( 4096 * sizeof(uint32),
+        uint32 *drawIdPtr = static_cast<uint32*>( OGRE_MALLOC_SIMD( maxNumInstances * sizeof(uint32),
                                                                     MEMCATEGORY_GEOMETRY ) );
-        for( uint32 i=0; i<4096; ++i )
+        for( uint32 i=0; i<maxNumInstances; ++i )
             drawIdPtr[i] = i;
-        mDrawId = createVertexBuffer( vertexElements, 4096, BT_IMMUTABLE, drawIdPtr, true );
+        mDrawId = createVertexBuffer( vertexElements, maxNumInstances, BT_IMMUTABLE, drawIdPtr, true );
 
         createUnalignedCopyShader();
 #endif

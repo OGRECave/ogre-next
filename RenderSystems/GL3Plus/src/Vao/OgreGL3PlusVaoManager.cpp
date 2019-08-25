@@ -167,13 +167,19 @@ namespace Ogre
         mSupportsIndirectBuffers    = _supportsIndirectBuffers;
         mSupportsBaseInstance       = _supportsBaseInstance;
 
+        //4096u is a sensible default because most Hlms implementations need 16 bytes per
+        //instance in a const buffer. HlmsBufferManager::mapNextConstBuffer purposedly clamps
+        //its const buffers to 64kb, so that 64kb / 16 = 4096 and thus it can never exceed
+        //4096 instances.
+        //However due to instanced stereo, we need twice that
+        const uint32 maxNumInstances = 4096u * 2u;
         VertexElement2Vec vertexElements;
         vertexElements.push_back( VertexElement2( VET_UINT1, VES_COUNT ) );
-        uint32 *drawIdPtr = static_cast<uint32*>( OGRE_MALLOC_SIMD( 4096 * sizeof(uint32),
+        uint32 *drawIdPtr = static_cast<uint32*>( OGRE_MALLOC_SIMD( maxNumInstances * sizeof(uint32),
                                                                     MEMCATEGORY_GEOMETRY ) );
-        for( uint32 i=0; i<4096; ++i )
+        for( uint32 i=0; i<maxNumInstances; ++i )
             drawIdPtr[i] = i;
-        mDrawId = createVertexBuffer( vertexElements, 4096, BT_IMMUTABLE, drawIdPtr, true );
+        mDrawId = createVertexBuffer( vertexElements, maxNumInstances, BT_IMMUTABLE, drawIdPtr, true );
     }
     //-----------------------------------------------------------------------------------
     GL3PlusVaoManager::~GL3PlusVaoManager()

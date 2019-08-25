@@ -548,7 +548,9 @@ namespace Ogre
         else if( mVaoManager->supportsBaseInstance() )
             baseInstanceAndIndirectBuffers = 1;
 
-        const uint32 instancesPerDraw = mSceneManager->isUsingInstancedStereo() ? 2u : 1u;
+        const bool isUsingInstancedStereo = mSceneManager->isUsingInstancedStereo();
+        const uint32 instancesPerDraw = isUsingInstancedStereo ? 2u : 1u;
+        const uint32 baseInstanceShift = isUsingInstancedStereo ? 1u : 0u;
         uint32 instanceCount = instancesPerDraw;
 
         CbDrawCall *drawCmd = 0;
@@ -638,7 +640,7 @@ namespace Ogre
                     drawIndexedPtr->firstVertexIndex= vao->mIndexBuffer->_getFinalBufferStart() +
                                                                                     vao->mPrimStart;
                     drawIndexedPtr->baseVertex      = vao->mBaseVertexBuffer->_getFinalBufferStart();
-                    drawIndexedPtr->baseInstance    = baseInstance;
+                    drawIndexedPtr->baseInstance    = baseInstance << baseInstanceShift;
 
                     instanceCount = instancesPerDraw;
                 }
@@ -652,7 +654,7 @@ namespace Ogre
                     drawStripPtr->instanceCount     = instancesPerDraw;
                     drawStripPtr->firstVertexIndex  = vao->mBaseVertexBuffer->_getFinalBufferStart() +
                                                                                         vao->mPrimStart;
-                    drawStripPtr->baseInstance      = baseInstance;
+                    drawStripPtr->baseInstance      = baseInstance << baseInstanceShift;
 
                     instanceCount = instancesPerDraw;
                 }
