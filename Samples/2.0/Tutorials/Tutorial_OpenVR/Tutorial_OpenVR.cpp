@@ -109,6 +109,11 @@ namespace Demo
         mVrTexture->setResolution( width, height );
         mVrTexture->setPixelFormat( Ogre::PFG_RGBA8_UNORM_SRGB );
         mVrTexture->scheduleTransitionTo( Ogre::GpuResidency::Resident );
+
+        Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
+        mVrWorkspace = compositorManager->addWorkspace( mSceneManager, mVrTexture, mCamera,
+                                                        "Tutorial_OpenVRWorkspace",
+                                                        true, 0 );
     }
 
     void Tutorial_OpenVRGraphicsSystem::initCompositorVR(void)

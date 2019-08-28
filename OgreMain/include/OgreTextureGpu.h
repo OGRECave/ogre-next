@@ -521,6 +521,8 @@ namespace Ogre
         void writeContentsToFile( const String& filename, uint8 minMip, uint8 maxMip,
                                   bool automaticResolve=true );
 
+        static const IdString msFinalTextureBuffer;
+        static const IdString msMsaaTextureBuffer;
         virtual void getCustomAttribute( IdString name, void *pData ) {}
 
         TextureGpuManager* getTextureManager(void) const;

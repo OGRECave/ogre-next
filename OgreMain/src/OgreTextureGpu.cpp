@@ -45,6 +45,9 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    const IdString TextureGpu::msFinalTextureBuffer = IdString( "msFinalTextureBuffer" );
+    const IdString TextureGpu::msMsaaTextureBuffer  = IdString( "msMsaaTextureBuffer" );
+
     TextureGpu::TextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                             VaoManager *vaoManager, IdString name, uint32 textureFlags,
                             TextureTypes::TextureTypes initialType,

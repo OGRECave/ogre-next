@@ -28,7 +28,8 @@ namespace Demo
         std::string mStrDisplay;
         vr::TrackedDevicePose_t mTrackedDevicePose[vr::k_unMaxTrackedDeviceCount];
 
-        Ogre::TextureGpu    *mVrTexture;
+        Ogre::CompositorWorkspace   *mVrWorkspace;
+        Ogre::TextureGpu            *mVrTexture;
 
         virtual Ogre::CompositorWorkspace* setupCompositor();
 
