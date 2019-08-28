@@ -194,6 +194,11 @@ namespace Demo
         }
     }
     //-------------------------------------------------------------------------
+    void OpenVRCompositorListener::setWaitingMode( VrWaitingMode::VrWaitingMode waitingMode )
+    {
+        mWaitingMode = waitingMode;
+    }
+    //-------------------------------------------------------------------------
     void OpenVRCompositorListener::setGlitchFree( VrWaitingMode::VrWaitingMode firstGlitchFreeMode )
     {
         mFirstGlitchFreeMode = firstGlitchFreeMode;

@@ -152,6 +152,9 @@ namespace Demo
         virtual void passSceneAfterShadowMaps( Ogre::CompositorPassScene *pass );
         virtual void passSceneAfterFrustumCulling( Ogre::CompositorPassScene *pass );
 
+        /// See VrWaitingMode::VrWaitingMode
+        void setWaitingMode( VrWaitingMode::VrWaitingMode waitingMode );
+
         /** When operating in VrWaitingMode::AfterSceneGraph or later, there's a chance
             graphical artifacts appear if the camera transform is immediately changed after
             calling WaitGetPoses instead of waiting for the next frame.
