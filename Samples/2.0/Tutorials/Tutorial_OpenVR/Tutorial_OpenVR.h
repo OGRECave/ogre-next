@@ -32,6 +32,7 @@ namespace Demo
 
         Ogre::CompositorWorkspace   *mVrWorkspace;
         Ogre::TextureGpu            *mVrTexture;
+        Ogre::Camera                *mVrCullCamera;
 
         OpenVRCompositorListener    *mOvrCompositorListener;
 
@@ -50,12 +51,15 @@ namespace Demo
             GraphicsSystem( gameState ),
             mHMD( 0 ),
             mVrTexture( 0 ),
+            mVrCullCamera( 0 ),
             mOvrCompositorListener( 0 )
         {
             memset( mTrackedDevicePose, 0, sizeof (mTrackedDevicePose) );
         }
 
         virtual void deinitialize(void);
+
+        OpenVRCompositorListener* getOvrCompositorListener(void) { return mOvrCompositorListener; }
     };
 }
 

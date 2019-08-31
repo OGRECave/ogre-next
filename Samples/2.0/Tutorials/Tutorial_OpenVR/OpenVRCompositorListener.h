@@ -126,6 +126,8 @@ namespace Demo
         Ogre::Matrix4           mDevicePose[vr::k_unMaxTrackedDeviceCount];
         Ogre::VrData            mVrData;
         Ogre::Camera            *mCamera;
+        Ogre::Camera            *mVrCullCamera;
+        Ogre::Vector3           mCullCameraOffset;
 
         VrWaitingMode::VrWaitingMode mWaitingMode;
         VrWaitingMode::VrWaitingMode mFirstGlitchFreeMode;
@@ -143,7 +145,7 @@ namespace Demo
         OpenVRCompositorListener( vr::IVRSystem *hmd, vr::IVRCompositor *vrCompositor,
                                   Ogre::TextureGpu *vrTexture, Ogre::Root *root,
                                   Ogre::CompositorWorkspace *workspace,
-                                  Ogre::Camera *camera );
+                                  Ogre::Camera *camera, Ogre::Camera *cullCamera );
         virtual ~OpenVRCompositorListener();
 
         virtual bool frameStarted( const Ogre::FrameEvent& evt );
@@ -158,6 +160,7 @@ namespace Demo
 
         /// See VrWaitingMode::VrWaitingMode
         void setWaitingMode( VrWaitingMode::VrWaitingMode waitingMode );
+        VrWaitingMode::VrWaitingMode getWaitingMode(void)   { return mWaitingMode; }
 
         /** When operating in VrWaitingMode::AfterSceneGraph or later, there's a chance
             graphical artifacts appear if the camera transform is immediately changed after

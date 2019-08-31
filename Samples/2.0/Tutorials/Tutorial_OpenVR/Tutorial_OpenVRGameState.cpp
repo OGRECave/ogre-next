@@ -22,6 +22,9 @@
 #include "OgreTextureFilters.h"
 #include "OgreHlmsPbs.h"
 
+#include "OpenVRCompositorListener.h"
+#include "Tutorial_OpenVR.h"
+
 using namespace Demo;
 
 namespace Demo
@@ -249,6 +252,23 @@ namespace Demo
         outText += mTransparencyMode == Ogre::HlmsPbsDatablock::Fade ? "[Fade]" : "[Transparent]";
         outText += "\n+/- to change transparency. [";
         outText += Ogre::StringConverter::toString( mTransparencyValue ) + "]";
+
+        Tutorial_OpenVRGraphicsSystem *ovrGraphicsSystem =
+                static_cast<Tutorial_OpenVRGraphicsSystem*>( mGraphicsSystem );
+        OpenVRCompositorListener *ovrListener = ovrGraphicsSystem->getOvrCompositorListener();
+        const VrWaitingMode::VrWaitingMode waitingMode = ovrListener->getWaitingMode();
+        const char* c_waitingModes[VrWaitingMode::NumVrWaitingModes + 1u] =
+        {
+            "[AfterSwap]",
+            "[BeforeSceneGraph]",
+            "[AfterSceneGraph]",
+            "[BeforeShadowmaps]",
+            "[BeforeFrustumCulling]",
+            "[AfterFrustumCulling]",
+            "[NumVrWaitingModes"
+        };
+        outText += "\nPress F9 for next waiting mode";
+        outText += c_waitingModes[waitingMode];
     }
     //-----------------------------------------------------------------------------------
     void Tutorial_OpenVRGameState::setTransparencyToMaterials(void)
@@ -315,6 +335,15 @@ namespace Demo
                                                             Ogre::HlmsPbsDatablock::Fade;
             if( mTransparencyValue != 1.0f )
                 setTransparencyToMaterials();
+        }
+        else if( arg.keysym.sym == SDLK_F9 )
+        {
+            Tutorial_OpenVRGraphicsSystem *ovrGraphicsSystem =
+                    static_cast<Tutorial_OpenVRGraphicsSystem*>( mGraphicsSystem );
+            OpenVRCompositorListener *ovrListener = ovrGraphicsSystem->getOvrCompositorListener();
+            const VrWaitingMode::VrWaitingMode nextMode = static_cast<VrWaitingMode::VrWaitingMode>(
+                        (ovrListener->getWaitingMode() + 1u) % VrWaitingMode::NumVrWaitingModes );
+            ovrListener->setWaitingMode( nextMode );
         }
         else if( arg.keysym.scancode == SDL_SCANCODE_KP_PLUS )
         {

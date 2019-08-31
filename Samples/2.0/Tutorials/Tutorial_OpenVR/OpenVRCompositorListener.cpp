@@ -14,7 +14,7 @@ namespace Demo
             vr::IVRSystem *hmd, vr::IVRCompositor *vrCompositor,
             Ogre::TextureGpu *vrTexture, Ogre::Root *root,
             Ogre::CompositorWorkspace *workspace,
-            Ogre::Camera *camera ) :
+            Ogre::Camera *camera, Ogre::Camera *cullCamera ) :
         mHMD( hmd ),
         mVrCompositor( vrCompositor ),
         mVrTexture( vrTexture ),
@@ -23,6 +23,8 @@ namespace Demo
         mWorkspace( workspace ),
         mValidPoseCount( 0 ),
         mCamera( camera ),
+        mVrCullCamera( cullCamera ),
+        mCullCameraOffset( Ogre::Vector3::ZERO ),
         mWaitingMode( VrWaitingMode::BeforeSceneGraph ),
         mFirstGlitchFreeMode( VrWaitingMode::NumVrWaitingModes ),
         mLastCamNear( 0 ),
@@ -100,6 +102,12 @@ namespace Demo
         OGRE_ASSERT_MEDIUM( mTrackedDevicePose[vr::k_unTrackedDeviceIndex_Hmd].bPoseIsValid );
         mCamera->setPosition( mDevicePose[vr::k_unTrackedDeviceIndex_Hmd].getTrans() );
         mCamera->setOrientation( mDevicePose[vr::k_unTrackedDeviceIndex_Hmd].extractQuaternion() );
+
+        const Ogre::Quaternion derivedRot = mCamera->getDerivedOrientation();
+        Ogre::Vector3 camPos = mCamera->getDerivedPosition();
+        mVrCullCamera->setOrientation( derivedRot );
+        mVrCullCamera->setPosition( camPos - derivedRot * mCullCameraOffset );
+
         mMustSyncAtEndOfFrame = false;
     }
     //-------------------------------------------------------------------------
@@ -110,29 +118,45 @@ namespace Demo
 
         if( mLastCamNear != camNear || mLastCamFar != camFar )
         {
-            Ogre::Matrix4 eyeToHead[2] =
-            {
-                convertSteamVRMatrixToMatrix4( mHMD->GetEyeToHeadTransform( vr::Eye_Left ) ),
-                convertSteamVRMatrixToMatrix4( mHMD->GetEyeToHeadTransform( vr::Eye_Right ) )
-            };
-            Ogre::Matrix4 projectionMatrix[2] =
-            {
-                convertSteamVRMatrixToMatrix4( mHMD->GetProjectionMatrix( vr::Eye_Left,
-                                                                          camNear, camFar ) ),
-                convertSteamVRMatrixToMatrix4( mHMD->GetProjectionMatrix( vr::Eye_Right,
-                                                                          camNear, camFar ) )
-            };
-
+            Ogre::Matrix4 eyeToHead[2];
+            Ogre::Matrix4 projectionMatrix[2];
             Ogre::Matrix4 projectionMatrixRS[2];
+            Ogre::Vector4 eyeFrustumExtents[2];
+
             for( size_t i=0u; i<2u; ++i )
             {
+                vr::EVREye eyeIdx = static_cast<vr::EVREye>( i );
+                eyeToHead[i] = convertSteamVRMatrixToMatrix4( mHMD->GetEyeToHeadTransform( eyeIdx ) );
+                projectionMatrix[i] =
+                        convertSteamVRMatrixToMatrix4( mHMD->GetProjectionMatrix( eyeIdx,
+                                                                                  camNear, camFar ) );
                 mRenderSystem->_convertOpenVrProjectionMatrix( projectionMatrix[i],
                                                                projectionMatrixRS[i] );
+                mHMD->GetProjectionRaw( eyeIdx, &eyeFrustumExtents[i].x, &eyeFrustumExtents[i].y,
+                                        &eyeFrustumExtents[i].z, &eyeFrustumExtents[i].w );
             }
 
             mVrData.set( eyeToHead, projectionMatrixRS );
             mLastCamNear = camNear;
             mLastCamFar = camFar;
+
+            Ogre::Vector4 cameraCullFrustumExtents;
+            cameraCullFrustumExtents.x = std::min( eyeFrustumExtents[0].x, eyeFrustumExtents[1].x );
+            cameraCullFrustumExtents.y = std::max( eyeFrustumExtents[0].y, eyeFrustumExtents[1].y );
+            cameraCullFrustumExtents.z = std::max( eyeFrustumExtents[0].z, eyeFrustumExtents[1].z );
+            cameraCullFrustumExtents.w = std::min( eyeFrustumExtents[0].w, eyeFrustumExtents[1].w );
+
+            mVrCullCamera->setFrustumExtents( cameraCullFrustumExtents.x, cameraCullFrustumExtents.y,
+                                              cameraCullFrustumExtents.w, cameraCullFrustumExtents.z,
+                                              Ogre::FET_TAN_HALF_ANGLES );
+
+            const float ipd = mVrData.mLeftToRight.getTrans().x;
+            mCullCameraOffset = Ogre::Vector3::ZERO;
+            mCullCameraOffset.z = (ipd / 2.0f) / Ogre::Math::Abs( cameraCullFrustumExtents.x );
+
+            const Ogre::Real offset = mCullCameraOffset.length();
+            mVrCullCamera->setNearClipDistance( camNear + offset );
+            mVrCullCamera->setFarClipDistance( camFar + offset );
         }
     }
     //-------------------------------------------------------------------------
@@ -165,6 +189,26 @@ namespace Demo
         mVrCompositor->Submit( vr::Eye_Right, &eyeTexture, &texBounds );
 
         mRenderSystem->flushCommands();
+
+
+        vr::VREvent_t event;
+        while( mHMD->PollNextEvent( &event, sizeof(event) ) )
+        {
+            if( event.trackedDeviceIndex != vr::k_unTrackedDeviceIndex_Hmd &&
+                event.trackedDeviceIndex != vr::k_unTrackedDeviceIndexInvalid )
+            {
+                continue;
+            }
+
+            switch( event.eventType )
+            {
+            case vr::VREvent_TrackedDeviceUpdated:
+            case vr::VREvent_IpdChanged:
+            case vr::VREvent_ChaperoneDataHasChanged:
+                syncCameraProjection();
+                break;
+            }
+        }
 
         return true;
     }

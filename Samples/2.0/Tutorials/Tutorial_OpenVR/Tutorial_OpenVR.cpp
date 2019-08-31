@@ -25,10 +25,13 @@ int mainApp( int argc, const char *argv[] )
     return Demo::MainEntryPoints::mainAppSingleThreaded( DEMO_MAIN_ENTRY_PARAMS );
 }
 
+#define USE_OPEN_VR
+
 namespace Demo
 {
     Ogre::CompositorWorkspace* Tutorial_OpenVRGraphicsSystem::setupCompositor()
     {
+#ifdef USE_OPEN_VR
         initOpenVR();
 
         Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
@@ -37,6 +40,10 @@ namespace Demo
         channels[1] = mVrTexture;
         return compositorManager->addWorkspace( mSceneManager, channels, mCamera,
                                                 "Tutorial_OpenVRMirrorWindowWorkspace", true );
+#else
+        return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(), mCamera,
+                                                "InstancedStereoWorkspace", true );
+#endif
     }
 
     void Tutorial_OpenVRGraphicsSystem::setupResources(void)
@@ -115,7 +122,10 @@ namespace Demo
                                                               Ogre::TextureTypes::Type2D );
         mVrTexture->setResolution( width << 1u, height );
         mVrTexture->setPixelFormat( Ogre::PFG_RGBA8_UNORM_SRGB );
+        mVrTexture->setMsaa( 4u );
         mVrTexture->scheduleTransitionTo( Ogre::GpuResidency::Resident );
+
+        mVrCullCamera = mSceneManager->createCamera( "VrCullCamera" );
 
         Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
         mVrWorkspace = compositorManager->addWorkspace( mSceneManager, mVrTexture, mCamera,
@@ -123,7 +133,8 @@ namespace Demo
                                                         true, 0 );
 
         mOvrCompositorListener = new OpenVRCompositorListener( mHMD, vr::VRCompositor(), mVrTexture,
-                                                               mRoot, mVrWorkspace, mCamera );
+                                                               mRoot, mVrWorkspace,
+                                                               mCamera, mVrCullCamera );
     }
 
     void Tutorial_OpenVRGraphicsSystem::initCompositorVR(void)
@@ -146,6 +157,12 @@ namespace Demo
             Ogre::TextureGpuManager *textureManager = mRoot->getRenderSystem()->getTextureGpuManager();
             textureManager->destroyTexture( mVrTexture );
             mVrTexture = 0;
+        }
+
+        if( mVrCullCamera )
+        {
+            mSceneManager->destroyCamera( mVrCullCamera );
+            mVrCullCamera = 0;
         }
 
         if( mHMD )
