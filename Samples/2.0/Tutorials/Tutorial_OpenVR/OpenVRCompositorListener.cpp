@@ -22,6 +22,7 @@ namespace Demo
         mRenderSystem( root->getRenderSystem() ),
         mWorkspace( workspace ),
         mValidPoseCount( 0 ),
+        mApiTextureType( vr::TextureType_Invalid ),
         mCamera( camera ),
         mVrCullCamera( cullCamera ),
         mCullCameraOffset( Ogre::Vector3::ZERO ),
@@ -40,6 +41,14 @@ namespace Demo
 
         mRoot->addFrameListener( this );
         mWorkspace->setListener( this );
+
+        const Ogre::String &renderSystemName = mRenderSystem->getName();
+        if( renderSystemName == "OpenGL 3+ Rendering Subsystem" )
+            mApiTextureType = vr::TextureType_OpenGL;
+        else if( renderSystemName == "Direct3D11 Rendering Subsystem" )
+            mApiTextureType = vr::TextureType_DirectX;
+        else if( renderSystemName == "Metal Rendering Subsystem" )
+            mApiTextureType = vr::TextureType_Metal;
     }
     //-------------------------------------------------------------------------
     OpenVRCompositorListener::~OpenVRCompositorListener()
@@ -170,13 +179,21 @@ namespace Demo
     bool OpenVRCompositorListener::frameRenderingQueued( const Ogre::FrameEvent &evt )
     {
         vr::VRTextureBounds_t texBounds;
-        texBounds.vMin = 1.0f;
-        texBounds.vMax = 0.0f;
+        if( mVrTexture->requiresTextureFlipping() )
+        {
+            texBounds.vMin = 1.0f;
+            texBounds.vMax = 0.0f;
+        }
+        else
+        {
+            texBounds.vMin = 0.0f;
+            texBounds.vMax = 1.0f;
+        }
 
         vr::Texture_t eyeTexture =
         {
             0,
-            vr::TextureType_OpenGL,
+            mApiTextureType,
             vr::ColorSpace_Gamma
         };
         mVrTexture->getCustomAttribute( Ogre::TextureGpu::msFinalTextureBuffer, &eyeTexture.handle );

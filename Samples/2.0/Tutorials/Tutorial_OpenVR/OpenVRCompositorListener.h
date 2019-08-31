@@ -124,6 +124,7 @@ namespace Demo
         int mValidPoseCount;
         vr::TrackedDevicePose_t mTrackedDevicePose[vr::k_unMaxTrackedDeviceCount];
         Ogre::Matrix4           mDevicePose[vr::k_unMaxTrackedDeviceCount];
+        vr::ETextureType        mApiTextureType;
         Ogre::VrData            mVrData;
         Ogre::Camera            *mCamera;
         Ogre::Camera            *mVrCullCamera;
