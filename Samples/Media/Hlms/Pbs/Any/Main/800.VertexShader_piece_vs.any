@@ -191,6 +191,6 @@
 	@end
 
 	@property( hlms_instanced_stereo )
-		gl_ViewportIndex	= int( inVs_stereoDrawId & 0x01u );
+		outVs_viewportIndex	= int( inVs_stereoDrawId & 0x01u );
 	@end
 @end

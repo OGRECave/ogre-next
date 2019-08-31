@@ -52,14 +52,25 @@ inline float3x3 toMat3x3( float3x4 m )
 #define inVs_blendIndices input.blendIndices
 #define inVs_qtangent input.qtangent
 @property( iOS )
-    #define inVs_drawId (baseInstance + instanceId)
+	@property( !hlms_instanced_stereo )
+		#define inVs_drawId (baseInstance + instanceId)
+	@else
+		#define inVs_drawId ((baseInstance + instanceId) >> 1u)
+		#define inVs_stereoDrawId (baseInstance + instanceId)
+	@end
 @else
-    #define inVs_drawId input.drawId
+	@property( !hlms_instanced_stereo )
+		#define inVs_drawId input.drawId
+	@else
+		#define inVs_drawId (input.drawId >> 1u)
+		#define inVs_stereoDrawId input.drawId
+	@end
 @end
 @foreach( hlms_uv_count, n )
     #define inVs_uv@n input.uv@n@end
 
 #define outVs_Position outVs.gl_Position
+#define outVs_viewportIndex outVs.gl_ViewportIndex
 #define outVs_clipDistance0 outVs.gl_ClipDistance0
 
 #define gl_SampleMaskIn0 gl_SampleMask
