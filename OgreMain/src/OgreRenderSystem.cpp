@@ -1080,6 +1080,20 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------
+    void RenderSystem::_convertOpenVrProjectionMatrix( const Matrix4& matrix, Matrix4& dest )
+    {
+        dest = matrix;
+
+        if( mReverseDepth )
+        {
+            // Convert depth range from [0,1] to [1,0]
+            dest[2][0] = (-dest[2][0] + dest[3][0]);
+            dest[2][1] = (-dest[2][1] + dest[3][1]);
+            dest[2][2] = (-dest[2][2] + dest[3][2]);
+            dest[2][3] = (-dest[2][3] + dest[3][3]);
+        }
+    }
+    //-----------------------------------------------------------------------
     void RenderSystem::_setWorldMatrices(const Matrix4* m, unsigned short count)
     {
         // Do nothing with these matrices here, it never used for now,

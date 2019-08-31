@@ -1027,6 +1027,13 @@ namespace Ogre
         */
         virtual void _convertProjectionMatrix( const Matrix4& matrix, Matrix4& dest );
 
+        /** Converts an OpenVR projection matrix to have the proper depth range and
+            reverse Z settings
+        @param matrix
+        @param dest
+        */
+        virtual void _convertOpenVrProjectionMatrix( const Matrix4& matrix, Matrix4& dest );
+
         /// OpenGL depth is in range [-1;1] so it returns 2.0f;
         /// D3D11 & Metal are in range [0;1] so it returns 1.0f;
         ///

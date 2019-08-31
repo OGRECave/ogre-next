@@ -2496,6 +2496,24 @@ namespace Ogre {
         }
     }
 
+    void GL3PlusRenderSystem::_convertOpenVrProjectionMatrix( const Matrix4& matrix, Matrix4& dest )
+    {
+        if( !mReverseDepth )
+        {
+            dest = matrix;
+
+            // Convert depth range from [0,1] to [-1,1]
+            dest[2][0] = (dest[2][0] + dest[3][0]) * 2.0f;
+            dest[2][1] = (dest[2][1] + dest[3][1]) * 2.0f;
+            dest[2][2] = (dest[2][2] + dest[3][2]) * 2.0f;
+            dest[2][3] = (dest[2][3] + dest[3][3]) * 2.0f;
+        }
+        else
+        {
+            RenderSystem::_convertProjectionMatrix( matrix, dest );
+        }
+    }
+
     Real GL3PlusRenderSystem::getRSDepthRange(void) const
     {
         return mReverseDepth ? 1.0f : 2.0f;

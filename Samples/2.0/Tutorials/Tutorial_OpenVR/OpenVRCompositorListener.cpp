@@ -6,16 +6,21 @@
 #include "Compositor/Pass/OgreCompositorPassDef.h"
 #include "Compositor/Pass/PassScene/OgreCompositorPassScene.h"
 
+#include "Compositor/OgreCompositorWorkspace.h"
+
 namespace Demo
 {
     OpenVRCompositorListener::OpenVRCompositorListener(
             vr::IVRSystem *hmd, vr::IVRCompositor *vrCompositor,
-            Ogre::TextureGpu *vrTexture, Ogre::RenderSystem *renderSystem,
+            Ogre::TextureGpu *vrTexture, Ogre::Root *root,
+            Ogre::CompositorWorkspace *workspace,
             Ogre::Camera *camera ) :
         mHMD( hmd ),
         mVrCompositor( vrCompositor ),
         mVrTexture( vrTexture ),
-        mRenderSystem( renderSystem ),
+        mRoot( root ),
+        mRenderSystem( root->getRenderSystem() ),
+        mWorkspace( workspace ),
         mValidPoseCount( 0 ),
         mCamera( camera ),
         mWaitingMode( VrWaitingMode::BeforeSceneGraph ),
@@ -30,12 +35,19 @@ namespace Demo
 
         mCamera->setVrData( &mVrData );
         syncCameraProjection();
+
+        mRoot->addFrameListener( this );
+        mWorkspace->setListener( this );
     }
     //-------------------------------------------------------------------------
     OpenVRCompositorListener::~OpenVRCompositorListener()
     {
         if( mCamera )
             mCamera->setVrData( 0 );
+
+        if( mWorkspace->getListener() == this )
+            mWorkspace->setListener( 0 );
+        mRoot->removeFrameListener( this );
     }
     //-------------------------------------------------------------------------
     Ogre::Matrix4 OpenVRCompositorListener::convertSteamVRMatrixToMatrix4( vr::HmdMatrix34_t matPose )
@@ -111,7 +123,14 @@ namespace Demo
                                                                           camNear, camFar ) )
             };
 
-            mVrData.set( eyeToHead, projectionMatrix );
+            Ogre::Matrix4 projectionMatrixRS[2];
+            for( size_t i=0u; i<2u; ++i )
+            {
+                mRenderSystem->_convertOpenVrProjectionMatrix( projectionMatrix[i],
+                                                               projectionMatrixRS[i] );
+            }
+
+            mVrData.set( eyeToHead, projectionMatrixRS );
             mLastCamNear = camNear;
             mLastCamFar = camFar;
         }
@@ -127,8 +146,8 @@ namespace Demo
     bool OpenVRCompositorListener::frameRenderingQueued( const Ogre::FrameEvent &evt )
     {
         vr::VRTextureBounds_t texBounds;
-        texBounds.vMin = 0;
-        texBounds.vMax = 1.0f;
+        texBounds.vMin = 1.0f;
+        texBounds.vMax = 0.0f;
 
         vr::Texture_t eyeTexture =
         {

@@ -1564,6 +1564,13 @@ namespace Ogre
             {
                 Matrix4 vrViewMat = cameras.renderingCamera->getVrViewMatrix( eyeIdx );
                 Matrix4 vrProjMat = cameras.renderingCamera->getVrProjectionMatrix( eyeIdx );
+                if( renderPassDesc->requiresTextureFlipping() )
+                {
+                    vrProjMat[1][0] = -vrProjMat[1][0];
+                    vrProjMat[1][1] = -vrProjMat[1][1];
+                    vrProjMat[1][2] = -vrProjMat[1][2];
+                    vrProjMat[1][3] = -vrProjMat[1][3];
+                }
                 Matrix4 viewProjMatrix = vrProjMat * vrViewMat;
                 for( size_t i=0; i<16; ++i )
                     *passBufferPtr++ = (float)viewProjMatrix[0][i];

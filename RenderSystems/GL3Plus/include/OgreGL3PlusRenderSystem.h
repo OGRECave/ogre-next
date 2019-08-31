@@ -424,6 +424,7 @@ namespace Ogre {
             RenderSystem
         */
         virtual void _convertProjectionMatrix(const Matrix4& matrix, Matrix4& dest);
+        virtual void _convertOpenVrProjectionMatrix(const Matrix4& matrix, Matrix4& dest);
         virtual Real getRSDepthRange(void) const;
         /** See
             RenderSystem

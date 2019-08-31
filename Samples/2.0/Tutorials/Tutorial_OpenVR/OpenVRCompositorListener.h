@@ -116,7 +116,10 @@ namespace Demo
         vr::IVRCompositor	*mVrCompositor;
 
         Ogre::TextureGpu	*mVrTexture;
+        Ogre::Root          *mRoot;
         Ogre::RenderSystem  *mRenderSystem;
+
+        Ogre::CompositorWorkspace *mWorkspace;
 
         int mValidPoseCount;
         vr::TrackedDevicePose_t mTrackedDevicePose[vr::k_unMaxTrackedDeviceCount];
@@ -138,7 +141,8 @@ namespace Demo
         void syncCameraProjection(void);
     public:
         OpenVRCompositorListener( vr::IVRSystem *hmd, vr::IVRCompositor *vrCompositor,
-                                  Ogre::TextureGpu *vrTexture, Ogre::RenderSystem *renderSystem,
+                                  Ogre::TextureGpu *vrTexture, Ogre::Root *root,
+                                  Ogre::CompositorWorkspace *workspace,
                                   Ogre::Camera *camera );
         virtual ~OpenVRCompositorListener();
 

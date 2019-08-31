@@ -14,6 +14,8 @@
 #include "MainEntryPointHelper.h"
 #include "System/MainEntryPoints.h"
 
+#include "OpenVRCompositorListener.h"
+
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 INT WINAPI WinMainApp( HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR strCmdLine, INT nCmdShow )
 #else
@@ -27,9 +29,14 @@ namespace Demo
 {
     Ogre::CompositorWorkspace* Tutorial_OpenVRGraphicsSystem::setupCompositor()
     {
+        initOpenVR();
+
         Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
-        return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(), mCamera,
-                                                "Tutorial_OpenVRWorkspace", true );
+        Ogre::CompositorChannelVec channels( 2u );
+        channels[0] = mRenderWindow->getTexture();
+        channels[1] = mVrTexture;
+        return compositorManager->addWorkspace( mSceneManager, channels, mCamera,
+                                                "Tutorial_OpenVRMirrorWindowWorkspace", true );
     }
 
     void Tutorial_OpenVRGraphicsSystem::setupResources(void)
@@ -106,7 +113,7 @@ namespace Demo
                                                               Ogre::GpuPageOutStrategy::Discard,
                                                               Ogre::TextureFlags::RenderToTexture,
                                                               Ogre::TextureTypes::Type2D );
-        mVrTexture->setResolution( width, height );
+        mVrTexture->setResolution( width << 1u, height );
         mVrTexture->setPixelFormat( Ogre::PFG_RGBA8_UNORM_SRGB );
         mVrTexture->scheduleTransitionTo( Ogre::GpuResidency::Resident );
 
@@ -114,6 +121,9 @@ namespace Demo
         mVrWorkspace = compositorManager->addWorkspace( mSceneManager, mVrTexture, mCamera,
                                                         "Tutorial_OpenVRWorkspace",
                                                         true, 0 );
+
+        mOvrCompositorListener = new OpenVRCompositorListener( mHMD, vr::VRCompositor(), mVrTexture,
+                                                               mRoot, mVrWorkspace, mCamera );
     }
 
     void Tutorial_OpenVRGraphicsSystem::initCompositorVR(void)
@@ -128,6 +138,9 @@ namespace Demo
 
     void Tutorial_OpenVRGraphicsSystem::deinitialize(void)
     {
+        delete mOvrCompositorListener;
+        mOvrCompositorListener = 0;
+
         if( mVrTexture )
         {
             Ogre::TextureGpuManager *textureManager = mRoot->getRenderSystem()->getTextureGpuManager();
@@ -142,12 +155,6 @@ namespace Demo
         }
 
         GraphicsSystem::deinitialize();
-    }
-
-    void Tutorial_OpenVRGraphicsSystem::createScene01(void)
-    {
-        initOpenVR();
-        GraphicsSystem::createScene01();
     }
 
     void MainEntryPoints::createSystems( GameState **outGraphicsGameState,

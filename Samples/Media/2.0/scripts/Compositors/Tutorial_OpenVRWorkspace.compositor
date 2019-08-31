@@ -1,8 +1,8 @@
 compositor_node Tutorial_OpenVRNode
 {
-	in 0 rt_renderwindow
+	in 0 stereo_output
 
-	target rt_renderwindow
+	target stereo_output
 	{
 		//Eye render
 		pass render_scene
@@ -17,6 +17,9 @@ compositor_node Tutorial_OpenVRNode
 				depth	dont_care
 				stencil	dont_care
 			}
+
+			//0x01234567
+			identifier 19088743
 
 			overlays	off
 
@@ -36,7 +39,35 @@ compositor_node Tutorial_OpenVRNode
 	}
 }
 
+compositor_node Tutorial_OpenVRMirrorWindowNode
+{
+	in 0 rt_renderwindow
+	in 1 stereo_results
+
+	target rt_renderwindow
+	{
+		//Eye render
+		pass render_quad
+		{
+			load { all dont_care }
+			store
+			{
+				depth	dont_care
+				stencil	dont_care
+			}
+			material Ogre/Copy/4xFP32
+			input 0 stereo_results
+		}
+	}
+}
+
 workspace Tutorial_OpenVRWorkspace
 {
 	connect_output Tutorial_OpenVRNode 0
+}
+
+workspace Tutorial_OpenVRMirrorWindowWorkspace
+{
+	connect_external 0 Tutorial_OpenVRMirrorWindowNode 0
+	connect_external 1 Tutorial_OpenVRMirrorWindowNode 1
 }

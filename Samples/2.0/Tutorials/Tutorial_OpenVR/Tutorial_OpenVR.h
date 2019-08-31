@@ -21,6 +21,8 @@
 
 namespace Demo
 {
+    class OpenVRCompositorListener;
+
     class Tutorial_OpenVRGraphicsSystem : public GraphicsSystem
     {
         vr::IVRSystem *mHMD;
@@ -30,6 +32,8 @@ namespace Demo
 
         Ogre::CompositorWorkspace   *mVrWorkspace;
         Ogre::TextureGpu            *mVrTexture;
+
+        OpenVRCompositorListener    *mOvrCompositorListener;
 
         virtual Ogre::CompositorWorkspace* setupCompositor();
 
@@ -45,14 +49,13 @@ namespace Demo
         Tutorial_OpenVRGraphicsSystem( GameState *gameState ) :
             GraphicsSystem( gameState ),
             mHMD( 0 ),
-            mVrTexture( 0 )
+            mVrTexture( 0 ),
+            mOvrCompositorListener( 0 )
         {
             memset( mTrackedDevicePose, 0, sizeof (mTrackedDevicePose) );
         }
 
         virtual void deinitialize(void);
-
-        virtual void createScene01(void);
     };
 }
 
