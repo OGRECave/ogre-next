@@ -25,6 +25,15 @@
 	outVs.pos		= mul( float4(worldPos.xyz, 1.0f), passBuf.view ).xyz;
 	@property( !hlms_dual_paraboloid_mapping )
 		outVs_Position = mul( float4(worldPos.xyz, 1.0f), passBuf.viewProj );
+		@property( !hlms_instanced_stereo )
+			outVs_Position = mul( float4(worldPos.xyz, 1.0f), passBuf.viewProj );
+		@else
+			outVs_Position = mul( float4(worldPos.xyz, 1.0f), passBuf.viewProj[(inVs_stereoDrawId & 0x01u)] );
+			@property( hlms_forwardplus )
+				outVs.cullCamPosXY.xyz = mul( float4( outVs.pos.xyz, 1.0f ),
+											  passBuf.leftEyeViewSpaceToCullCamClipSpace ).xyw;
+			@end
+		@end
 	@else
 		//Dual Paraboloid Mapping
 		outVs_Position.w	= 1.0f;
@@ -108,5 +117,9 @@
 
 	@property( hlms_use_prepass_msaa > 1 )
 		outVs.zwDepth.xy = outVs_Position.zw;
+	@end
+
+	@property( hlms_instanced_stereo )
+		outVs_viewportIndex	= int( inVs_stereoDrawId & 0x01u );
 	@end
 @end
