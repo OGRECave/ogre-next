@@ -1602,6 +1602,13 @@ namespace Ogre
             {
                 Matrix4 cullViewMat = cameras.cullingCamera->getViewMatrix( true );
                 Matrix4 cullProjMat = cameras.cullingCamera->getProjectionMatrix();
+                if( renderPassDesc->requiresTextureFlipping() )
+                {
+                    cullProjMat[1][0] = -cullProjMat[1][0];
+                    cullProjMat[1][1] = -cullProjMat[1][1];
+                    cullProjMat[1][2] = -cullProjMat[1][2];
+                    cullProjMat[1][3] = -cullProjMat[1][3];
+                }
                 Matrix4 leftEyeViewSpaceToCullCamClipSpace;
                 leftEyeViewSpaceToCullCamClipSpace = cullProjMat * cullViewMat *
                                                      vrViewMat[0].inverseAffine();
