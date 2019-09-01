@@ -112,10 +112,15 @@ namespace Demo
         mCamera->setPosition( mDevicePose[vr::k_unTrackedDeviceIndex_Hmd].getTrans() );
         mCamera->setOrientation( mDevicePose[vr::k_unTrackedDeviceIndex_Hmd].extractQuaternion() );
 
-        const Ogre::Quaternion derivedRot = mCamera->getDerivedOrientation();
-        Ogre::Vector3 camPos = mCamera->getDerivedPosition();
-        mVrCullCamera->setOrientation( derivedRot );
-        mVrCullCamera->setPosition( camPos - derivedRot * mCullCameraOffset );
+        if( mWaitingMode < VrWaitingMode::AfterFrustumCulling || mMustSyncAtEndOfFrame )
+        {
+            //We can't change the culling camera after frustum culling.
+            //It will trigger all sorts of asserts, like in Forward+
+            const Ogre::Quaternion derivedRot = mCamera->getDerivedOrientation();
+            Ogre::Vector3 camPos = mCamera->getDerivedPosition();
+            mVrCullCamera->setOrientation( derivedRot );
+            mVrCullCamera->setPosition( camPos - derivedRot * mCullCameraOffset );
+        }
 
         mMustSyncAtEndOfFrame = false;
     }
