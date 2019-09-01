@@ -140,6 +140,7 @@ namespace Demo
         static Ogre::Matrix4 convertSteamVRMatrixToMatrix4( vr::HmdMatrix44_t matPose );
         void updateHmdTrackingPose(void);
 
+        void syncCullCamera(void);
         void syncCamera(void);
         void syncCameraProjection(void);
     public:

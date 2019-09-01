@@ -106,21 +106,22 @@ namespace Demo
         }
     }
     //-------------------------------------------------------------------------
+    void OpenVRCompositorListener::syncCullCamera(void)
+    {
+        const Ogre::Quaternion derivedRot = mCamera->getDerivedOrientation();
+        Ogre::Vector3 camPos = mCamera->getDerivedPosition();
+        mVrCullCamera->setOrientation( derivedRot );
+        mVrCullCamera->setPosition( camPos - derivedRot * mCullCameraOffset );
+    }
+    //-------------------------------------------------------------------------
     void OpenVRCompositorListener::syncCamera(void)
     {
         OGRE_ASSERT_MEDIUM( mTrackedDevicePose[vr::k_unTrackedDeviceIndex_Hmd].bPoseIsValid );
         mCamera->setPosition( mDevicePose[vr::k_unTrackedDeviceIndex_Hmd].getTrans() );
         mCamera->setOrientation( mDevicePose[vr::k_unTrackedDeviceIndex_Hmd].extractQuaternion() );
 
-        if( mWaitingMode < VrWaitingMode::AfterFrustumCulling || mMustSyncAtEndOfFrame )
-        {
-            //We can't change the culling camera after frustum culling.
-            //It will trigger all sorts of asserts, like in Forward+
-            const Ogre::Quaternion derivedRot = mCamera->getDerivedOrientation();
-            Ogre::Vector3 camPos = mCamera->getDerivedPosition();
-            mVrCullCamera->setOrientation( derivedRot );
-            mVrCullCamera->setPosition( camPos - derivedRot * mCullCameraOffset );
-        }
+        if( mWaitingMode < VrWaitingMode::AfterFrustumCulling )
+            syncCullCamera();
 
         mMustSyncAtEndOfFrame = false;
     }
@@ -242,6 +243,8 @@ namespace Demo
             updateHmdTrackingPose();
         if( mMustSyncAtEndOfFrame )
             syncCamera();
+        if( mWaitingMode >= VrWaitingMode::AfterFrustumCulling )
+            syncCullCamera();
         return true;
     }
     //-------------------------------------------------------------------------
