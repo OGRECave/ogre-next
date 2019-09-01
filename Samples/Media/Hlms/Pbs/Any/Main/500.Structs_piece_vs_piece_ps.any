@@ -95,14 +95,14 @@ CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
 	float4x4 viewProj;
 @else
 	float4x4 viewProj[2];
+	float4x4 leftToRightView;
+	@property( hlms_forwardplus )
+		float4x4 leftEyeViewSpaceToCullCamClipSpace;
+	@end
 @end
 
 @property( hlms_global_clip_planes )
 	float4 clipPlane0;
-@end
-
-@property( hlms_instanced_stereo )
-	float4x4 leftToRightView;
 @end
 
 @property( hlms_shadowcaster_point )
@@ -350,6 +350,10 @@ struct Material
 		@property( hlms_pssm_splits )INTERPOLANT( float depth, @counter(texcoord) );@end
 		@property( hlms_use_prepass_msaa > 1 )
 			INTERPOLANT( float2 zwDepth, @counter(texcoord) );
+		@end
+
+		@property( hlms_forwardplus && hlms_instanced_stereo )
+			INTERPOLANT( float3 cullCamPosXY, @counter(texcoord) );
 		@end
 	@else
 		@property( alpha_test )

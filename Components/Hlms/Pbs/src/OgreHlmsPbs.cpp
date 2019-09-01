@@ -1398,9 +1398,10 @@ namespace Ogre
         mDecalsTextures[2] = 0;
         mDecalsDiffuseMergedEmissive = true;
 
+        ForwardPlusBase *forwardPlus = sceneManager->_getActivePassForwardPlus();
+
         if( !casterPass )
         {
-            ForwardPlusBase *forwardPlus = sceneManager->_getActivePassForwardPlus();
             if( forwardPlus )
             {
                 mapSize += forwardPlus->getConstBufferSize();
@@ -1523,7 +1524,13 @@ namespace Ogre
 
         //float4x4 viewProj[2] (second only) + float4x4 leftToRightView
         if( isInstancedStereo )
+        {
             mapSize += 16u * 4u + 16u * 4u;
+
+            //float4x4 leftEyeViewSpaceToCullCamClipSpace
+            if( forwardPlus )
+                mapSize += 16u * 4u;
+        }
 
         mapSize += mListener->getPassBufferSize( shadowNode, casterPass, dualParaboloid,
                                                  sceneManager );
@@ -1554,15 +1561,16 @@ namespace Ogre
         {
             //mat4 viewProj;
             Matrix4 viewProjMatrix = projectionMatrix * viewMatrix;
-            for( size_t i=0; i<16; ++i )
+            for( size_t i=0u; i<16u; ++i )
                 *passBufferPtr++ = (float)viewProjMatrix[0][i];
         }
         else
         {
             //float4x4 viewProj[2];
+            Matrix4 vrViewMat[2];
             for( size_t eyeIdx=0u; eyeIdx<2u; ++eyeIdx )
             {
-                Matrix4 vrViewMat = cameras.renderingCamera->getVrViewMatrix( eyeIdx );
+                vrViewMat[eyeIdx] = cameras.renderingCamera->getVrViewMatrix( eyeIdx );
                 Matrix4 vrProjMat = cameras.renderingCamera->getVrProjectionMatrix( eyeIdx );
                 if( renderPassDesc->requiresTextureFlipping() )
                 {
@@ -1571,9 +1579,34 @@ namespace Ogre
                     vrProjMat[1][2] = -vrProjMat[1][2];
                     vrProjMat[1][3] = -vrProjMat[1][3];
                 }
-                Matrix4 viewProjMatrix = vrProjMat * vrViewMat;
+                Matrix4 viewProjMatrix = vrProjMat * vrViewMat[eyeIdx];
                 for( size_t i=0; i<16; ++i )
                     *passBufferPtr++ = (float)viewProjMatrix[0][i];
+            }
+
+            //float4x4 leftToRightView
+            const VrData *vrData = cameras.renderingCamera->getVrData();
+            if( vrData )
+            {
+                for( size_t i=0u; i<16u; ++i )
+                    *passBufferPtr++ = (float)vrData->mLeftToRight[0][i];
+            }
+            else
+            {
+                for( size_t i=0u; i<16u; ++i )
+                    *passBufferPtr++ = (float)Matrix4::IDENTITY[0][i];
+            }
+
+            //float4x4 leftEyeViewSpaceToCullCamClipSpace
+            if( forwardPlus )
+            {
+                Matrix4 cullViewMat = cameras.cullingCamera->getViewMatrix( true );
+                Matrix4 cullProjMat = cameras.cullingCamera->getProjectionMatrix();
+                Matrix4 leftEyeViewSpaceToCullCamClipSpace;
+                leftEyeViewSpaceToCullCamClipSpace = cullProjMat * cullViewMat *
+                                                     vrViewMat[0].inverseAffine();
+                for( size_t i=0u; i<16u; ++i )
+                    *passBufferPtr++ = (float)leftEyeViewSpaceToCullCamClipSpace[0][i];
             }
         }
 
@@ -1585,22 +1618,6 @@ namespace Ogre
             *passBufferPtr++ = (float)reflPlane.normal.y;
             *passBufferPtr++ = (float)reflPlane.normal.z;
             *passBufferPtr++ = (float)reflPlane.d;
-        }
-
-        //float4x4 leftToRightView;
-        if( isInstancedStereo )
-        {
-            const VrData *vrData = cameras.renderingCamera->getVrData();
-            if( vrData )
-            {
-                for( size_t i=0; i<16; ++i )
-                    *passBufferPtr++ = (float)vrData->mLeftToRight[0][i];
-            }
-            else
-            {
-                for( size_t i=0; i<16; ++i )
-                    *passBufferPtr++ = (float)Matrix4::IDENTITY[0][i];
-            }
         }
 
         //vec4 cameraPosWS;
@@ -2216,11 +2233,10 @@ namespace Ogre
                 }
             }
 
-            ForwardPlusBase *forwardPlus = sceneManager->_getActivePassForwardPlus();
             if( forwardPlus )
             {
                 forwardPlus->fillConstBufferData( sceneManager->getCurrentViewport0(), renderTarget,
-                                                  mShaderSyntax, passBufferPtr );
+                                                  mShaderSyntax, isInstancedStereo, passBufferPtr );
                 passBufferPtr += forwardPlus->getConstBufferSize() >> 2u;
             }
 

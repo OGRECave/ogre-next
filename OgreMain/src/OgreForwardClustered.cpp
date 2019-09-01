@@ -893,20 +893,24 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void ForwardClustered::fillConstBufferData( Viewport *viewport, TextureGpu *renderTarget,
-                                                IdString shaderSyntax,
+                                                IdString shaderSyntax, bool instancedStereo,
                                                 float * RESTRICT_ALIAS passBufferPtr ) const
     {
-        const float viewportWidth = static_cast<float>( viewport->getActualWidth());
-        const float viewportHeight = static_cast<float>( viewport->getActualHeight() );
-        const float viewportWidthOffset = static_cast<float>( viewport->getActualLeft() );
-        float viewportHeightOffset = static_cast<float>( viewport->getActualTop() );
+        const float viewportWidth =
+                instancedStereo ? 1.0f : static_cast<float>( viewport->getActualWidth());
+        const float viewportHeight =
+                instancedStereo ? 1.0f : static_cast<float>( viewport->getActualHeight() );
+        const float viewportWidthOffset =
+                instancedStereo ? 0.0f : static_cast<float>( viewport->getActualLeft() );
+        float viewportHeightOffset =
+                instancedStereo ? 0.0f : static_cast<float>( viewport->getActualTop() );
 
         //The way ogre represents viewports is top = 0 bottom = 1. As a result if 'texture flipping'
         //is required then all is ok. However if it is not required then viewport offsets are
         //actually represented from the bottom up.
         //As a result we need convert our viewport height offsets to work bottom up instead of top down;
         //This is compounded by OpenGL standard being different to DirectX and Metal
-        if ( !renderTarget->requiresTextureFlipping() && shaderSyntax == "glsl" )
+        if ( !renderTarget->requiresTextureFlipping() && shaderSyntax == "glsl" && !instancedStereo )
         {
             viewportHeightOffset =
                     static_cast<float>( (1.0 - (viewport->getTop() + viewport->getHeight())) *

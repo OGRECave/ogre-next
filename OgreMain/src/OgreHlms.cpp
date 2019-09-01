@@ -2713,6 +2713,25 @@ namespace Ogre
                 setProperty( HlmsBaseProp::ShadowUsesDepthTexture, usesDepthTextures );
             }
 
+            const CompositorPass *pass = sceneManager->getCurrentCompositorPass();
+
+            if( pass && pass->getType() == PASS_SCENE )
+            {
+                OGRE_ASSERT_HIGH( dynamic_cast<const CompositorPassSceneDef*>( pass->getDefinition() ) );
+                const CompositorPassSceneDef *passSceneDef =
+                        static_cast<const CompositorPassSceneDef*>( pass->getDefinition() );
+                if( passSceneDef->mUvBakingSet != 0xFF )
+                {
+                    setProperty( HlmsBaseProp::UseUvBaking, 1 );
+                    setProperty( HlmsBaseProp::UvBaking, passSceneDef->mUvBakingSet );
+                    if( passSceneDef->mBakeLightingOnly )
+                        setProperty( HlmsBaseProp::BakeLightingOnly, 1 );
+                }
+
+                if( passSceneDef->mInstancedStereo )
+                    setProperty( HlmsBaseProp::InstancedStereo, 1 );
+            }
+
             ForwardPlusBase *forwardPlus = sceneManager->_getActivePassForwardPlus();
             if( forwardPlus )
                 forwardPlus->setHlmsPassProperties( this );
@@ -2868,25 +2887,6 @@ namespace Ogre
                 setProperty( HlmsBaseProp::LightsAreaLtc, mNumAreaLtcLightsLimit );
             if( numAreaApproxLightsWithMask > 0 )
                 setProperty( HlmsBaseProp::LightsAreaTexMask, 1 );
-
-            const CompositorPass *pass = sceneManager->getCurrentCompositorPass();
-
-            if( pass && pass->getType() == PASS_SCENE )
-            {
-                OGRE_ASSERT_HIGH( dynamic_cast<const CompositorPassSceneDef*>( pass->getDefinition() ) );
-                const CompositorPassSceneDef *passSceneDef =
-                        static_cast<const CompositorPassSceneDef*>( pass->getDefinition() );
-                if( passSceneDef->mUvBakingSet != 0xFF )
-                {
-                    setProperty( HlmsBaseProp::UseUvBaking, 1 );
-                    setProperty( HlmsBaseProp::UvBaking, passSceneDef->mUvBakingSet );
-                    if( passSceneDef->mBakeLightingOnly )
-                        setProperty( HlmsBaseProp::BakeLightingOnly, 1 );
-                }
-
-                if( passSceneDef->mInstancedStereo )
-                    setProperty( HlmsBaseProp::InstancedStereo, 1 );
-            }
         }
         else
         {

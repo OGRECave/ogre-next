@@ -601,7 +601,7 @@ namespace Ogre
             hlms->_setProperty( HlmsBaseProp::EnableVpls, 1 );
 
         Viewport *viewport = mSceneManager->getCurrentViewport0();
-        if( viewport->coversEntireTarget() )
+        if( viewport->coversEntireTarget() && !hlms->_getProperty( HlmsBaseProp::InstancedStereo ) )
             hlms->_setProperty( HlmsBaseProp::ForwardPlusCoversEntireTarget, 1 );
 
 #if !OGRE_NO_FINE_LIGHT_MASK_GRANULARITY

@@ -109,6 +109,8 @@
 				outVs_Position = mul( worldPos, passBuf.viewProj );
 			@else
 				outVs_Position = mul( worldPos, passBuf.viewProj[(inVs_stereoDrawId & 0x01u)] );
+				outVs.cullCamPosXY.xyz = mul( float4( outVs.pos.xyz, 1.0f ),
+											  passBuf.leftEyeViewSpaceToCullCamClipSpace ).xyw;
 				if( (inVs_stereoDrawId & 0x01u) != 0u )
 				{
 					@property( hlms_normal || hlms_qtangent )	outVs.pos		= mul( float4( outVs.pos, 1.0f ), passBuf.leftToRightView ).xyz;@end
