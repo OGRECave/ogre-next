@@ -843,7 +843,7 @@ namespace Ogre {
     {
         Matrix4 retVal = getViewMatrix( true );
         if( mVrData )
-            retVal = retVal.concatenateAffine( mVrData->mHeadToEye[eyeIdx] );
+            retVal = mVrData->mHeadToEye[eyeIdx].concatenateAffine( retVal );
         return retVal;
     }
     //-----------------------------------------------------------------------
