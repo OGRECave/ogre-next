@@ -18,17 +18,11 @@ ogre_add_component_include_dir(Hlms/Pbs)
 
 add_recursive( ./ SOURCE_FILES )
 
-if( UNIX )
-	include_directories( /home/matias/openvr/headers )
-	link_directories( /home/matias/openvr/lib/linux64 )
-else()
-	include_directories( C:/Projects/SDK/openvr/headers )
-	link_directories( C:/Projects/SDK/openvr/lib/win64 )
-endif()
+include_directories( ${OpenVR_INCLUDE_DIRS} )
 
 ogre_add_executable(Tutorial_OpenVR WIN32 MACOSX_BUNDLE ${SOURCE_FILES} ${SAMPLE_COMMON_RESOURCES})
 
-target_link_libraries(Tutorial_OpenVR ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES} openvr_api)
+target_link_libraries(Tutorial_OpenVR ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES} ${OpenVR_LIBRARIES})
 ogre_config_sample_lib(Tutorial_OpenVR)
 
 if( APPLE )
