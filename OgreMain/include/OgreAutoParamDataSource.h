@@ -173,6 +173,7 @@ namespace Ogre {
          const Vector4& getCameraPositionObjectSpace(void) const;
          const Vector4& getLodCameraPosition(void) const;
          const Vector4& getLodCameraPositionObjectSpace(void) const;
+         const Vector2 getRSDepthRange(void) const;
          bool hasLightList() const { return mCurrentLightList != 0; }
          float getLightCount() const;
          float getLightCastsShadows(size_t index) const;

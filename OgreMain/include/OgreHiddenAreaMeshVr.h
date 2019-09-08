@@ -43,6 +43,23 @@ namespace Ogre
      *  @{
      */
 
+    struct HiddenAreaVrSettings
+    {
+        Ogre::Vector2 leftEyeCenter;
+        Ogre::Vector2 leftEyeRadius;
+
+        Ogre::Vector2 leftNoseCenter;
+        Ogre::Vector2 leftNoseRadius;
+
+        Ogre::Vector2 rightEyeCenter;
+        Ogre::Vector2 rightEyeRadius;
+
+        Ogre::Vector2 rightNoseCenter;
+        Ogre::Vector2 rightNoseRadius;
+
+        Ogre::uint32 tessellation;
+    };
+
     class _OgreExport HiddenAreaMeshVrGenerator
     {
         static float *generate( Vector2 circleCenter, Vector2 radius, uint32 tessellation,
@@ -50,9 +67,7 @@ namespace Ogre
                                 float *RESTRICT_ALIAS vertexBuffer );
 
     public:
-        static void generate( const String &meshName, Vector2 leftEyeCenter, Vector2 leftRadius,
-                              Vector2 rightEyeCenter, Vector2 rightRadius, float ipCenterY,
-                              Vector2 ipRadius, uint32 tessellation );
+        static void generate( const String &meshName, const HiddenAreaVrSettings &setting );
     };
 
     /** @} */

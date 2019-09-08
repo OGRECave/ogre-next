@@ -488,6 +488,21 @@ namespace Ogre {
         return mLodCameraPositionObjectSpace;
     }
     //-----------------------------------------------------------------------------
+    const Vector2 AutoParamDataSource::getRSDepthRange(void) const
+    {
+        RenderSystem *rs = Root::getSingleton().getRenderSystem();
+        if( rs->isReverseDepth() )
+            return Vector2( 1.0f, 0.0f );
+        else
+        {
+            Real rsDepthRange = rs->getRSDepthRange();
+            if( rsDepthRange > 1.0 )
+                return Vector2( -1.0f, 1.0f );
+            else
+                return Vector2( 0.0f, 1.0f );
+        }
+    }
+    //-----------------------------------------------------------------------------
     void AutoParamDataSource::setAmbientLightColour( const ColourValue hemispheres[2],
                                                      const Vector3 &hemisphereDir)
     {

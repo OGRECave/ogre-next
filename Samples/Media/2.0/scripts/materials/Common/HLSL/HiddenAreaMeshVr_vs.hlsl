@@ -12,14 +12,15 @@ struct PS_INPUT
 PS_INPUT main
 (
 	VS_INPUT input,
-	uniform float4x4 projectionMatrix
+	uniform float4x4 projectionMatrix,
+	uniform float2 rsDepthRange
 )
 {
 	PS_INPUT outVs;
 
 	outVs.gl_Position.xy	= mul( projectionMatrix, float4( input.position.xy, 0.0f, 1.0f ) ).xy;
-	outVs.gl_Position.z		= 0.0f;
-	outVs.gl_Position.w		= input.position.w;
+	outVs.gl_Position.z		= rsDepthRange.x;
+	outVs.gl_Position.w		= 1.0f;
 	outVs.gl_ViewportIndex	= int( input.position.z );
 
 	return outVs;

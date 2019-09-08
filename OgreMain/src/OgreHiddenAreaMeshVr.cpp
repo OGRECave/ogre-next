@@ -37,17 +37,15 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    void HiddenAreaMeshVrGenerator::generate( const String &meshName, Vector2 leftEyeCenter,
-                                              Vector2 leftRadius, Vector2 rightEyeCenter,
-                                              Vector2 rightRadius, float ipCenterY, Vector2 ipRadius,
-                                              uint32 tessellation )
+    void HiddenAreaMeshVrGenerator::generate( const String &meshName,
+                                              const HiddenAreaVrSettings &setting )
     {
         // Create now, because if it raises an exception, memory will leak
         MeshPtr mesh = MeshManager::getSingleton().createManual(
             meshName, ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME );
 
         size_t numVertices;
-        numVertices = ( tessellation + 1u ) * 2u * 3u;
+        numVertices = ( setting.tessellation + 1u ) * 2u * 3u;
         numVertices = numVertices * 3u;  // left + center + right
 
         float *vertexData = reinterpret_cast<float *>(
@@ -55,15 +53,20 @@ namespace Ogre
         float *vertexDataStart = vertexData;
         FreeOnDestructor dataPtr( vertexDataStart );
 
-        const Vector2 ipCenterLeft( 1.0f, ipCenterY );
-        const Vector2 ipCenterRight( -1.0f, ipCenterY );
-
-        vertexData = generate( leftEyeCenter, leftRadius, tessellation, -1, -1, 0, vertexData );
-        vertexData = generate( leftEyeCenter, leftRadius, tessellation, 1, 1, 0, vertexData );
-        vertexData = generate( ipCenterLeft, ipRadius, tessellation, -1, 1, 0, vertexData );
-        vertexData = generate( ipCenterRight, ipRadius, tessellation, 1, -1, 1, vertexData );
-        vertexData = generate( rightEyeCenter, rightRadius, tessellation, 1, 1, 1, vertexData );
-        vertexData = generate( rightEyeCenter, rightRadius, tessellation, -1, -1, 1, vertexData );
+        // clang-format off
+        vertexData = generate( setting.leftEyeCenter, setting.leftEyeRadius, setting.tessellation,
+                               -1, -1, 0, vertexData );
+        vertexData = generate( setting.leftEyeCenter, setting.leftEyeRadius, setting.tessellation,
+                               1, 1, 0, vertexData );
+        vertexData = generate( setting.leftNoseCenter, setting.leftNoseRadius, setting.tessellation,
+                               -1, 1, 0, vertexData );
+        vertexData = generate( setting.rightNoseCenter, setting.rightNoseRadius, setting.tessellation,
+                               1, -1, 1, vertexData );
+        vertexData = generate( setting.rightEyeCenter, setting.rightEyeRadius, setting.tessellation,
+                               1, 1, 1, vertexData );
+        vertexData = generate( setting.rightEyeCenter, setting.rightEyeRadius, setting.tessellation,
+                               -1, -1, 1, vertexData );
+        // clang-format on
 
         const uint32 numUsedVertices = static_cast<uint32>( vertexData - vertexDataStart ) / 4u;
 
@@ -83,12 +86,22 @@ namespace Ogre
         submesh->mVao[VpNormal].push_back( vao );
         submesh->mVao[VpShadow].push_back( vao );
         submesh->mMaterialName = "Ogre/VR/HiddenAreaMeshVr";
+        mesh->_setBounds( Aabb::BOX_INFINITE, false );
     }
     //-------------------------------------------------------------------------
     float *HiddenAreaMeshVrGenerator::generate( Vector2 circleCenter, Vector2 radius,
                                                 uint32 tessellation, float circleDir, float fillDir,
                                                 float eyeIdx, float *RESTRICT_ALIAS vertexBuffer )
     {
+        // We try to extend the triangle to infinity so that the triangle becomes a quad,
+        // and rely on scissor clipping at the middle of the eyes.
+        // However we can't:
+        //  1. Use .w = 0; This is a very good trick, but it
+        //     breaks with depth != 0 (i.e. breaks with Reverse Z)
+        //  2. Use infinity. It is easy to generate NaNs.
+        //  3. Use an extremely large value, it breaks GPUs (vertex ends up collapsing to origin).
+        const float c_veryLargeValue = 65000.0f;
+
         const float fCircleStep = Math::PI / ( tessellation - 1u ) * circleDir;
 
         Vector2 circlePos[2];
@@ -118,9 +131,9 @@ namespace Ogre
                 else
                 {
                     *vertexBuffer++ = vertexPoint[0].x;
-                    *vertexBuffer++ = 1.0f;
+                    *vertexBuffer++ = c_veryLargeValue;
                     *vertexBuffer++ = eyeIdx;
-                    *vertexBuffer++ = 0.0f;
+                    *vertexBuffer++ = 1.0f;
                 }
                 if( i != tessellation )
                 {
@@ -132,15 +145,15 @@ namespace Ogre
                 else
                 {
                     *vertexBuffer++ = vertexPoint[0].x;
-                    *vertexBuffer++ = -1.0f;
+                    *vertexBuffer++ = -c_veryLargeValue;
                     *vertexBuffer++ = eyeIdx;
-                    *vertexBuffer++ = 0.0f;
+                    *vertexBuffer++ = 1.0f;
                 }
 
-                *vertexBuffer++ = fillDir;
-                *vertexBuffer++ = 0.0f;
+                *vertexBuffer++ = c_veryLargeValue * fillDir;
+                *vertexBuffer++ = vertexPoint[0].y;
                 *vertexBuffer++ = eyeIdx;
-                *vertexBuffer++ = 0.0f;
+                *vertexBuffer++ = 1.0f;
             }
 
             circlePos[0].swap( circlePos[1] );

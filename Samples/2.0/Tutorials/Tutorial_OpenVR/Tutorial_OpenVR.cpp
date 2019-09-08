@@ -9,6 +9,7 @@
 #include "OgreConfigFile.h"
 #include "Compositor/OgreCompositorManager2.h"
 #include "OgreTextureGpuManager.h"
+#include "OgreHiddenAreaMeshVr.h"
 
 //Declares WinMain / main
 #include "MainEntryPointHelper.h"
@@ -29,6 +30,15 @@ int mainApp( int argc, const char *argv[] )
 
 namespace Demo
 {
+    namespace HmdSettings
+    {
+        enum HmdSettings
+        {
+            Vive,
+            NumHmdSettings
+        };
+    }
+
     Ogre::CompositorWorkspace* Tutorial_OpenVRGraphicsSystem::setupCompositor()
     {
 #ifdef USE_OPEN_VR
@@ -132,6 +142,8 @@ namespace Demo
                                                         "Tutorial_OpenVRWorkspace",
                                                         true, 0 );
 
+        createHiddenAreaMeshVR();
+
         mOvrCompositorListener = new OpenVRCompositorListener( mHMD, vr::VRCompositor(), mVrTexture,
                                                                mRoot, mVrWorkspace,
                                                                mCamera, mVrCullCamera );
@@ -145,6 +157,31 @@ namespace Demo
                          "VR Compositor initialization failed. See log file for details",
                          "Tutorial_OpenVRGraphicsSystem::initCompositorVR" );
         }
+    }
+
+    void Tutorial_OpenVRGraphicsSystem::createHiddenAreaMeshVR(void)
+    {
+        const Ogre::HiddenAreaVrSettings settings[HmdSettings::NumHmdSettings] =
+        {
+            {
+                Ogre::Vector2( 0.054481547f, 0.0f ),
+                Ogre::Vector2( 1.145869947f, 1.0304f ),
+
+                Ogre::Vector2( 2.374340949f, 0.224f ),
+                Ogre::Vector2( 2.483304042f, 1.456f ),
+
+                Ogre::Vector2( -0.054481547f, 0.0f ),
+                Ogre::Vector2( 1.145869947f, 1.0304f ),
+
+                Ogre::Vector2( -2.374340949f, 0.224f ),
+                Ogre::Vector2( 2.483304042f, 1.456f ),
+
+                12u
+            }
+        };
+
+        Ogre::HiddenAreaMeshVrGenerator::generate( "HiddenAreaMeshVr.mesh",
+                                                   settings[HmdSettings::Vive] );
     }
 
     void Tutorial_OpenVRGraphicsSystem::deinitialize(void)

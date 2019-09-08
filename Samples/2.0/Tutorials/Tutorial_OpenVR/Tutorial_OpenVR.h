@@ -45,6 +45,7 @@ namespace Demo
                                                    vr::TrackedPropertyError *peError = NULL );
         void initOpenVR(void);
         void initCompositorVR(void);
+        void createHiddenAreaMeshVR(void);
 
     public:
         Tutorial_OpenVRGraphicsSystem( GameState *gameState ) :

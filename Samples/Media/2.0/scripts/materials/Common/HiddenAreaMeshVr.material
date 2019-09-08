@@ -7,7 +7,7 @@ vertex_program Ogre/VR/HiddenAreaMeshVr_vs_HLSL hlsl
 {
 	source HiddenAreaMeshVr_vs.hlsl
 	entry_point main
-	target ps_5_0 ps_4_0 ps_4_0_level_9_1 ps_4_0_level_9_3
+	target vs_5_0 vs_4_0 vs_4_0_level_9_1 vs_4_0_level_9_3
 }
 
 vertex_program Ogre/VR/HiddenAreaMeshVr_vs_Metal metal
@@ -25,6 +25,7 @@ vertex_program Ogre/VR/HiddenAreaMeshVr_vs unified
 	default_params
 	{
 		param_named_auto	projectionMatrix	projection_matrix
+		param_named_auto	rsDepthRange		rs_depth_range
 	}
 }
 
@@ -59,10 +60,12 @@ material Ogre/VR/HiddenAreaMeshVr
 	{
 		pass
 		{
-			depth_check off
-			depth_write off
+			//depth_check off
+			//depth_write off
 
 			cull_hardware none
+
+			depth_func always_pass
 
 			//Do not write colour at all
 			channel_mask 0

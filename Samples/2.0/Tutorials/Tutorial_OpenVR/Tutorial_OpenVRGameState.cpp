@@ -45,6 +45,16 @@ namespace Demo
 
         const float armsLength = 2.5f;
 
+        Ogre::Item *hiddenAreaMeshVr =
+                sceneManager->createItem( "HiddenAreaMeshVr.mesh",
+                                          Ogre::ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME,
+                                          Ogre::SCENE_STATIC );
+        hiddenAreaMeshVr->setCastShadows( false );
+        hiddenAreaMeshVr->getSubItem(0)->setUseIdentityProjection( true );
+        sceneManager->getRootSceneNode( Ogre::SCENE_STATIC )->attachObject( hiddenAreaMeshVr );
+
+        sceneManager->getRenderQueue()->setRenderQueueMode( 1u, Ogre::RenderQueue::FAST );
+
         Ogre::v1::MeshPtr planeMeshV1 = Ogre::v1::MeshManager::getSingleton().createPlane( "Plane v1",
                                             Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
                                             Ogre::Plane( Ogre::Vector3::UNIT_Y, 1.0f ), 50.0f, 50.0f,
@@ -60,6 +70,7 @@ namespace Demo
         {
             Ogre::Item *item = sceneManager->createItem( planeMesh, Ogre::SCENE_DYNAMIC );
             item->setDatablock( "Marble" );
+            item->setRenderQueueGroup( 1u );
             Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
                                                     createChildSceneNode( Ogre::SCENE_DYNAMIC );
             sceneNode->setPosition( 0, -1, 0 );
@@ -95,6 +106,7 @@ namespace Demo
                                                              Ogre::ResourceGroupManager::
                                                              AUTODETECT_RESOURCE_GROUP_NAME,
                                                              Ogre::SCENE_DYNAMIC );
+                item->setRenderQueueGroup( 1u );
                 if( i % 2 == 0 )
                     item->setDatablock( "Rocks" );
                 else
@@ -167,6 +179,7 @@ namespace Demo
                                                                  Ogre::ResourceGroupManager::
                                                                  AUTODETECT_RESOURCE_GROUP_NAME,
                                                                  Ogre::SCENE_DYNAMIC );
+                    item->setRenderQueueGroup( 1u );
                     item->setDatablock( datablock );
                     item->setVisibilityFlags( 0x000000002 );
 

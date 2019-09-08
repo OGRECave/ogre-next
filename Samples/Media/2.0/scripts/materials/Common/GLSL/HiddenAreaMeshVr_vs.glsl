@@ -10,6 +10,7 @@
 #define mul( x, y ) ((x) * (y))
 
 uniform float4x4 projectionMatrix;
+uniform float2 rsDepthRange;
 
 in vec4 vertex;
 
@@ -21,7 +22,7 @@ out gl_PerVertex
 void main()
 {
 	gl_Position.xy = mul( projectionMatrix, float4( vertex.xy, 0.0f, 1.0f ) ).xy;
-	gl_Position.z = 0.0f;
-	gl_Position.w = vertex.w;
+	gl_Position.z = rsDepthRange.x;
+	gl_Position.w = 1.0f;
 	gl_ViewportIndex = int( vertex.z );
 }
