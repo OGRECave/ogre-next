@@ -165,13 +165,13 @@ namespace Demo
         {
             {
                 Ogre::Vector2( 0.054481547f, 0.0f ),
-                Ogre::Vector2( 1.145869947f, 1.0304f ),
+                Ogre::Vector2( 1.145869947f, 1.1904f ),
 
                 Ogre::Vector2( 3.265377856f, 0.0f ),
                 Ogre::Vector2( 2.483304042f, 1.456f ),
 
                 Ogre::Vector2( -0.054481547f, 0.0f ),
-                Ogre::Vector2( 1.145869947f, 1.0304f ),
+                Ogre::Vector2( 1.145869947f, 1.1904f ),
 
                 Ogre::Vector2( -3.265377856f, 0.0f ),
                 Ogre::Vector2( 2.483304042f, 1.456f ),
