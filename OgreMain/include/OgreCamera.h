@@ -46,7 +46,8 @@ namespace Ogre {
     {
         Matrix4 mHeadToEye[2];
         Matrix4 mProjectionMatrix[2];
-        Matrix4 mLeftToRight;
+        //Matrix4 mLeftToRight;
+        Vector3 mLeftToRight;
 
         void set( const Matrix4 eyeToHead[2], const Matrix4 projectionMatrix[2] )
         {
@@ -56,7 +57,7 @@ namespace Ogre {
                 mProjectionMatrix[i] = projectionMatrix[i];
                 mHeadToEye[i] = mHeadToEye[i].inverseAffine();
             }
-            mLeftToRight = mHeadToEye[1] * eyeToHead[0];
+            mLeftToRight = (mHeadToEye[0] * eyeToHead[1]).getTrans();
         }
     };
 

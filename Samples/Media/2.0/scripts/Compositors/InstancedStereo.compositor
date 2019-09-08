@@ -20,6 +20,8 @@ compositor_node InstancedStereoNode
 
 			overlays	off
 
+			shadows		ShadowMapDebuggingShadowNode
+
 			instanced_stereo true
 			viewport 0 0.0 0.0 0.5 1.0
 			viewport 1 0.5 0.0 0.5 1.0

@@ -371,7 +371,14 @@
 @piece( LightingHeader )
 	//Everything's in Camera space
 	@property( needs_view_dir )
-		pixelData.viewDir	= normalize( -inPs.pos );
+		@property( !hlms_instanced_stereo )
+			pixelData.viewDir	= normalize( -inPs.pos );
+		@else
+			pixelData.viewDir = -inPs.pos;
+			if( gl_FragCoord.x > passBuf.rightEyePixelStartX )
+				pixelData.viewDir += passBuf.leftToRightView.xyz;
+			pixelData.viewDir = normalize( pixelData.viewDir );
+		@end
 		pixelData.NdotV		= saturate( dot( pixelData.normal, pixelData.viewDir ) );
 	@end
 

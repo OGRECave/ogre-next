@@ -37,7 +37,7 @@ namespace Demo
         memset( &mVrData, 0, sizeof( mVrData ) );
 
         mCamera->setVrData( &mVrData );
-        syncCameraProjection();
+        syncCameraProjection( true );
 
         mRoot->addFrameListener( this );
         mWorkspace->setListener( this );
@@ -111,7 +111,7 @@ namespace Demo
         const Ogre::Quaternion derivedRot = mCamera->getDerivedOrientation();
         Ogre::Vector3 camPos = mCamera->getDerivedPosition();
         mVrCullCamera->setOrientation( derivedRot );
-        mVrCullCamera->setPosition( camPos - derivedRot * mCullCameraOffset );
+        mVrCullCamera->setPosition( camPos + derivedRot * mCullCameraOffset );
     }
     //-------------------------------------------------------------------------
     void OpenVRCompositorListener::syncCamera(void)
@@ -126,12 +126,12 @@ namespace Demo
         mMustSyncAtEndOfFrame = false;
     }
     //-------------------------------------------------------------------------
-    void OpenVRCompositorListener::syncCameraProjection(void)
+    void OpenVRCompositorListener::syncCameraProjection( bool bForceUpdate )
     {
         const Ogre::Real camNear = mCamera->getNearClipDistance();
         const Ogre::Real camFar  = mCamera->getFarClipDistance();
 
-        if( mLastCamNear != camNear || mLastCamFar != camFar )
+        if( mLastCamNear != camNear || mLastCamFar != camFar || bForceUpdate )
         {
             Ogre::Matrix4 eyeToHead[2];
             Ogre::Matrix4 projectionMatrix[2];
@@ -165,7 +165,7 @@ namespace Demo
                                               cameraCullFrustumExtents.w, cameraCullFrustumExtents.z,
                                               Ogre::FET_TAN_HALF_ANGLES );
 
-            const float ipd = mVrData.mLeftToRight.getTrans().x;
+            const float ipd = mVrData.mLeftToRight.x;
             mCullCameraOffset = Ogre::Vector3::ZERO;
             mCullCameraOffset.z = (ipd / 2.0f) / Ogre::Math::Abs( cameraCullFrustumExtents.x );
 
@@ -228,7 +228,7 @@ namespace Demo
             case vr::VREvent_TrackedDeviceUpdated:
             case vr::VREvent_IpdChanged:
             case vr::VREvent_ChaperoneDataHasChanged:
-                syncCameraProjection();
+                syncCameraProjection( true );
                 break;
             }
         }
@@ -238,7 +238,7 @@ namespace Demo
     //-------------------------------------------------------------------------
     bool OpenVRCompositorListener::frameEnded( const Ogre::FrameEvent& evt )
     {
-        syncCameraProjection();
+        syncCameraProjection( false );
         if( mWaitingMode == VrWaitingMode::AfterSwap )
             updateHmdTrackingPose();
         if( mMustSyncAtEndOfFrame )

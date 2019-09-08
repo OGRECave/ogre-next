@@ -113,12 +113,6 @@
 					outVs.cullCamPosXY.xyz = mul( float4( outVs.pos.xyz, 1.0f ),
 												  passBuf.leftEyeViewSpaceToCullCamClipSpace ).xyw;
 				@end
-				if( (inVs_stereoDrawId & 0x01u) != 0u )
-				{
-					@property( hlms_normal || hlms_qtangent )	outVs.pos		= mul( float4( outVs.pos, 1.0f ), passBuf.leftToRightView ).xyz;@end
-					@property( hlms_normal || hlms_qtangent )	outVs.normal	= mul( outVs.normal, toFloat3x3( passBuf.leftToRightView ) );@end
-					@property( normal_map )						outVs.tangent	= mul( outVs.tangent, toFloat3x3( passBuf.leftToRightView ) );@end
-				}
 			@end
 		@else
 			outVs_Position.xy = inVs_uv@value( hlms_uv_baking ).xy * 2.0f - 1.0f + passBuf.pixelOffset2x.xy;

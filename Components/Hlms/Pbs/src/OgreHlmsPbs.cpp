@@ -1223,6 +1223,18 @@ namespace Ogre
         //Ignore alpha channel
         upperHemisphere.a = lowerHemisphere.a = 1.0;
 
+        const CompositorPass *pass = sceneManager->getCurrentCompositorPass();
+        CompositorPassSceneDef const *passSceneDef = 0;
+
+        if( pass && pass->getType() == PASS_SCENE )
+        {
+            OGRE_ASSERT_HIGH( dynamic_cast<const CompositorPassSceneDef*>( pass->getDefinition() ) );
+            passSceneDef = static_cast<const CompositorPassSceneDef*>( pass->getDefinition() );
+        }
+        const bool isInstancedStereo = passSceneDef && passSceneDef->mInstancedStereo;
+        if( isInstancedStereo )
+            setProperty( HlmsBaseProp::VPos, 1 );
+
         if( !casterPass )
         {
             if( mAmbientLightMode == AmbientAuto )
@@ -1376,17 +1388,6 @@ namespace Ogre
 
         bool isShadowCastingPointLight = false;
 
-        const CompositorPass *pass = sceneManager->getCurrentCompositorPass();
-        CompositorPassSceneDef const *passSceneDef = 0;
-
-        if( pass && pass->getType() == PASS_SCENE )
-        {
-            OGRE_ASSERT_HIGH( dynamic_cast<const CompositorPassSceneDef*>( pass->getDefinition() ) );
-            passSceneDef = static_cast<const CompositorPassSceneDef*>( pass->getDefinition() );
-        }
-
-        const bool isInstancedStereo = passSceneDef && passSceneDef->mInstancedStereo;
-
         //mat4 viewProj;
         size_t mapSize = 16 * 4;
 
@@ -1437,7 +1438,7 @@ namespace Ogre
             //mat3 invViewMatCubemap (upgraded to three vec4)
             mapSize += ( 16 + (16 + 2 + 2 + 4) * numShadowMapLights + 4 * 3 ) * 4;
 
-            //float4 pccVctMinDistance_invPccVctInvDistance_unused2;
+            //float4 pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_unused;
             mapSize += 4u * 4u;
 
             //vec4 shadowRcv[numShadowMapLights].texViewZRow
@@ -1522,10 +1523,10 @@ namespace Ogre
         if( isCameraReflected )
             mapSize += 4 * 4;
 
-        //float4x4 viewProj[2] (second only) + float4x4 leftToRightView
+        //float4x4 viewProj[2] (second only) + float4 leftToRightView
         if( isInstancedStereo )
         {
-            mapSize += 16u * 4u + 16u * 4u;
+            mapSize += 16u * 4u + 4u * 4u;
 
             //float4x4 leftEyeViewSpaceToCullCamClipSpace
             if( forwardPlus )
@@ -1584,19 +1585,6 @@ namespace Ogre
                     *passBufferPtr++ = (float)viewProjMatrix[0][i];
             }
 
-            //float4x4 leftToRightView
-            const VrData *vrData = cameras.renderingCamera->getVrData();
-            if( vrData )
-            {
-                for( size_t i=0u; i<16u; ++i )
-                    *passBufferPtr++ = (float)vrData->mLeftToRight[0][i];
-            }
-            else
-            {
-                for( size_t i=0u; i<16u; ++i )
-                    *passBufferPtr++ = (float)Matrix4::IDENTITY[0][i];
-            }
-
             //float4x4 leftEyeViewSpaceToCullCamClipSpace
             if( forwardPlus )
             {
@@ -1614,6 +1602,20 @@ namespace Ogre
                                                      vrViewMat[0].inverseAffine();
                 for( size_t i=0u; i<16u; ++i )
                     *passBufferPtr++ = (float)leftEyeViewSpaceToCullCamClipSpace[0][i];
+            }
+
+            //float4 leftToRightView
+            const VrData *vrData = cameras.renderingCamera->getVrData();
+            if( vrData )
+            {
+                for( size_t i=0u; i<3u; ++i )
+                    *passBufferPtr++ = (float)vrData->mLeftToRight[i];
+                *passBufferPtr++ = 0;
+            }
+            else
+            {
+                for( size_t i=0u; i<4u; ++i )
+                    *passBufferPtr++ = 0.0f;
             }
         }
 
@@ -1641,7 +1643,8 @@ namespace Ogre
 
         mPreparedPass.shadowMaps.clear();
 
-        TextureGpu *renderTarget = mRenderSystem->getCurrentRenderViewports()[0].getCurrentTarget();
+        Viewport *currViewports = mRenderSystem->getCurrentRenderViewports();
+        TextureGpu *renderTarget = currViewports[0].getCurrentTarget();
 
         if( !casterPass )
         {
@@ -1750,10 +1753,10 @@ namespace Ogre
                     ++passBufferPtr;
             }
 
-            //float4 pccVctMinDistance_invPccVctInvDistance_unused2
+            //float4 pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_unused
             *passBufferPtr++ = mPccVctMinDistance;
             *passBufferPtr++ = mInvPccVctInvDistance;
-            *passBufferPtr++ = 0.0f;
+            *passBufferPtr++ = currViewports[1].getActualLeft();
             *passBufferPtr++ = 0.0f;
 
             if( !mPrePassTextures->empty() )

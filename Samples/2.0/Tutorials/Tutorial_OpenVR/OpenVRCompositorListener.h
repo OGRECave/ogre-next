@@ -142,7 +142,7 @@ namespace Demo
 
         void syncCullCamera(void);
         void syncCamera(void);
-        void syncCameraProjection(void);
+        void syncCameraProjection( bool bForceUpdate );
     public:
         OpenVRCompositorListener( vr::IVRSystem *hmd, vr::IVRCompositor *vrCompositor,
                                   Ogre::TextureGpu *vrTexture, Ogre::Root *root,
