@@ -34,7 +34,8 @@ namespace Demo
         mAnimateObjects( true ),
         mNumSpheres( 0 ),
         mTransparencyMode( Ogre::HlmsPbsDatablock::None ),
-        mTransparencyValue( 1.0f )
+        mTransparencyValue( 1.0f ),
+        mHiddenAreaMeshVr( 0 )
     {
         memset( mSceneNode, 0, sizeof(mSceneNode) );
     }
@@ -45,13 +46,13 @@ namespace Demo
 
         const float armsLength = 2.5f;
 
-        Ogre::Item *hiddenAreaMeshVr =
+        mHiddenAreaMeshVr =
                 sceneManager->createItem( "HiddenAreaMeshVr.mesh",
                                           Ogre::ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME,
                                           Ogre::SCENE_STATIC );
-        hiddenAreaMeshVr->setCastShadows( false );
-        hiddenAreaMeshVr->getSubItem(0)->setUseIdentityProjection( true );
-        sceneManager->getRootSceneNode( Ogre::SCENE_STATIC )->attachObject( hiddenAreaMeshVr );
+        mHiddenAreaMeshVr->setCastShadows( false );
+        mHiddenAreaMeshVr->getSubItem(0)->setUseIdentityProjection( true );
+        sceneManager->getRootSceneNode( Ogre::SCENE_STATIC )->attachObject( mHiddenAreaMeshVr );
 
         sceneManager->getRenderQueue()->setRenderQueueMode( 1u, Ogre::RenderQueue::FAST );
 
@@ -282,6 +283,8 @@ namespace Demo
         };
         outText += "\nPress F9 for next waiting mode";
         outText += c_waitingModes[waitingMode];
+        outText += "\nF10 toggles hidden area mesh optimization";
+        outText += mHiddenAreaMeshVr->getVisible() ? "[Optimizing]" : "[Disabled]";
     }
     //-----------------------------------------------------------------------------------
     void Tutorial_OpenVRGameState::setTransparencyToMaterials(void)
@@ -357,6 +360,10 @@ namespace Demo
             const VrWaitingMode::VrWaitingMode nextMode = static_cast<VrWaitingMode::VrWaitingMode>(
                         (ovrListener->getWaitingMode() + 1u) % VrWaitingMode::NumVrWaitingModes );
             ovrListener->setWaitingMode( nextMode );
+        }
+        else if( arg.keysym.sym == SDLK_F10 )
+        {
+            mHiddenAreaMeshVr->setVisible( !mHiddenAreaMeshVr->getVisible() );
         }
         else if( arg.keysym.scancode == SDL_SCANCODE_KP_PLUS )
         {

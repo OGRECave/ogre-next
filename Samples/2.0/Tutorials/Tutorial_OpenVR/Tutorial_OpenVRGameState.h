@@ -19,6 +19,8 @@ namespace Demo
         Ogre::uint8     mTransparencyMode;
         float           mTransparencyValue;
 
+        Ogre::Item      *mHiddenAreaMeshVr;
+
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
         void setTransparencyToMaterials(void);
