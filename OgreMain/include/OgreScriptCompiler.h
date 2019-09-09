@@ -917,6 +917,7 @@ namespace Ogre
                     ID_UV_BAKING,
                     ID_UV_BAKING_OFFSET,
                     ID_BAKE_LIGHTING_ONLY,
+                    ID_INSTANCED_STEREO,
 
                     //Used by PASS_QUAD
                     ID_USE_QUAD,

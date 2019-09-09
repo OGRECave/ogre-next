@@ -80,6 +80,8 @@ namespace Ogre {
         _updateDimensions();
     }
     //---------------------------------------------------------------------
+    Viewport::Viewport() : Viewport( 0, 0, 0, 0 ) {}
+    //---------------------------------------------------------------------
     Viewport::~Viewport()
     {
     }
@@ -240,7 +242,7 @@ namespace Ogre {
     void Viewport::_updateRenderPhase02( Camera* camera, const Camera *lodCamera,
                                          uint8 firstRq, uint8 lastRq )
     {
-        camera->_renderScenePhase02( lodCamera, this, firstRq, lastRq, mShowOverlays );
+        camera->_renderScenePhase02( lodCamera, firstRq, lastRq, mShowOverlays );
     }
     //---------------------------------------------------------------------
     void Viewport::setOrientationMode(OrientationMode orientationMode, bool setDefault)

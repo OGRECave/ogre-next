@@ -1223,6 +1223,18 @@ namespace Ogre
         //Ignore alpha channel
         upperHemisphere.a = lowerHemisphere.a = 1.0;
 
+        const CompositorPass *pass = sceneManager->getCurrentCompositorPass();
+        CompositorPassSceneDef const *passSceneDef = 0;
+
+        if( pass && pass->getType() == PASS_SCENE )
+        {
+            OGRE_ASSERT_HIGH( dynamic_cast<const CompositorPassSceneDef*>( pass->getDefinition() ) );
+            passSceneDef = static_cast<const CompositorPassSceneDef*>( pass->getDefinition() );
+        }
+        const bool isInstancedStereo = passSceneDef && passSceneDef->mInstancedStereo;
+        if( isInstancedStereo )
+            setProperty( HlmsBaseProp::VPos, 1 );
+
         if( !casterPass )
         {
             if( mAmbientLightMode == AmbientAuto )
@@ -1340,7 +1352,7 @@ namespace Ogre
         retVal.setProperties = mSetProperties;
 
         CamerasInProgress cameras = sceneManager->getCamerasInProgress();
-        Matrix4 viewMatrix = cameras.renderingCamera->getViewMatrix(true);
+        Matrix4 viewMatrix = cameras.renderingCamera->getVrViewMatrix( 0 );
 
         Matrix4 projectionMatrix = cameras.renderingCamera->getProjectionMatrixWithRSDepth();
         RenderPassDescriptor *renderPassDesc = mRenderSystem->getCurrentPassDescriptor();
@@ -1376,15 +1388,6 @@ namespace Ogre
 
         bool isShadowCastingPointLight = false;
 
-        const CompositorPass *pass = sceneManager->getCurrentCompositorPass();
-        CompositorPassSceneDef const *passSceneDef = 0;
-
-        if( pass && pass->getType() == PASS_SCENE )
-        {
-            OGRE_ASSERT_HIGH( dynamic_cast<const CompositorPassSceneDef*>( pass->getDefinition() ) );
-            passSceneDef = static_cast<const CompositorPassSceneDef*>( pass->getDefinition() );
-        }
-
         //mat4 viewProj;
         size_t mapSize = 16 * 4;
 
@@ -1396,9 +1399,10 @@ namespace Ogre
         mDecalsTextures[2] = 0;
         mDecalsDiffuseMergedEmissive = true;
 
+        ForwardPlusBase *forwardPlus = sceneManager->_getActivePassForwardPlus();
+
         if( !casterPass )
         {
-            ForwardPlusBase *forwardPlus = sceneManager->_getActivePassForwardPlus();
             if( forwardPlus )
             {
                 mapSize += forwardPlus->getConstBufferSize();
@@ -1434,7 +1438,7 @@ namespace Ogre
             //mat3 invViewMatCubemap (upgraded to three vec4)
             mapSize += ( 16 + (16 + 2 + 2 + 4) * numShadowMapLights + 4 * 3 ) * 4;
 
-            //float4 pccVctMinDistance_invPccVctInvDistance_unused2;
+            //float4 pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_unused;
             mapSize += 4u * 4u;
 
             //vec4 shadowRcv[numShadowMapLights].texViewZRow
@@ -1519,6 +1523,16 @@ namespace Ogre
         if( isCameraReflected )
             mapSize += 4 * 4;
 
+        //float4x4 viewProj[2] (second only) + float4 leftToRightView
+        if( isInstancedStereo )
+        {
+            mapSize += 16u * 4u + 4u * 4u;
+
+            //float4x4 leftEyeViewSpaceToCullCamClipSpace
+            if( forwardPlus )
+                mapSize += 16u * 4u;
+        }
+
         mapSize += mListener->getPassBufferSize( shadowNode, casterPass, dualParaboloid,
                                                  sceneManager );
 
@@ -1544,10 +1558,66 @@ namespace Ogre
         //                          ---- VERTEX SHADER ----
         //---------------------------------------------------------------------------
 
-        //mat4 viewProj;
-        Matrix4 viewProjMatrix = projectionMatrix * viewMatrix;
-        for( size_t i=0; i<16; ++i )
-            *passBufferPtr++ = (float)viewProjMatrix[0][i];
+        if( !isInstancedStereo )
+        {
+            //mat4 viewProj;
+            Matrix4 viewProjMatrix = projectionMatrix * viewMatrix;
+            for( size_t i=0u; i<16u; ++i )
+                *passBufferPtr++ = (float)viewProjMatrix[0][i];
+        }
+        else
+        {
+            //float4x4 viewProj[2];
+            Matrix4 vrViewMat[2];
+            for( size_t eyeIdx=0u; eyeIdx<2u; ++eyeIdx )
+            {
+                vrViewMat[eyeIdx] = cameras.renderingCamera->getVrViewMatrix( eyeIdx );
+                Matrix4 vrProjMat = cameras.renderingCamera->getVrProjectionMatrix( eyeIdx );
+                if( renderPassDesc->requiresTextureFlipping() )
+                {
+                    vrProjMat[1][0] = -vrProjMat[1][0];
+                    vrProjMat[1][1] = -vrProjMat[1][1];
+                    vrProjMat[1][2] = -vrProjMat[1][2];
+                    vrProjMat[1][3] = -vrProjMat[1][3];
+                }
+                Matrix4 viewProjMatrix = vrProjMat * vrViewMat[eyeIdx];
+                for( size_t i=0; i<16; ++i )
+                    *passBufferPtr++ = (float)viewProjMatrix[0][i];
+            }
+
+            //float4x4 leftEyeViewSpaceToCullCamClipSpace
+            if( forwardPlus )
+            {
+                Matrix4 cullViewMat = cameras.cullingCamera->getViewMatrix( true );
+                Matrix4 cullProjMat = cameras.cullingCamera->getProjectionMatrix();
+                if( renderPassDesc->requiresTextureFlipping() )
+                {
+                    cullProjMat[1][0] = -cullProjMat[1][0];
+                    cullProjMat[1][1] = -cullProjMat[1][1];
+                    cullProjMat[1][2] = -cullProjMat[1][2];
+                    cullProjMat[1][3] = -cullProjMat[1][3];
+                }
+                Matrix4 leftEyeViewSpaceToCullCamClipSpace;
+                leftEyeViewSpaceToCullCamClipSpace = cullProjMat * cullViewMat *
+                                                     vrViewMat[0].inverseAffine();
+                for( size_t i=0u; i<16u; ++i )
+                    *passBufferPtr++ = (float)leftEyeViewSpaceToCullCamClipSpace[0][i];
+            }
+
+            //float4 leftToRightView
+            const VrData *vrData = cameras.renderingCamera->getVrData();
+            if( vrData )
+            {
+                for( size_t i=0u; i<3u; ++i )
+                    *passBufferPtr++ = (float)vrData->mLeftToRight[i];
+                *passBufferPtr++ = 0;
+            }
+            else
+            {
+                for( size_t i=0u; i<4u; ++i )
+                    *passBufferPtr++ = 0.0f;
+            }
+        }
 
         //vec4 clipPlane0
         if( isCameraReflected )
@@ -1573,7 +1643,8 @@ namespace Ogre
 
         mPreparedPass.shadowMaps.clear();
 
-        TextureGpu *renderTarget = mRenderSystem->_getViewport()->getCurrentTarget();
+        Viewport *currViewports = mRenderSystem->getCurrentRenderViewports();
+        TextureGpu *renderTarget = currViewports[0].getCurrentTarget();
 
         if( !casterPass )
         {
@@ -1682,10 +1753,10 @@ namespace Ogre
                     ++passBufferPtr;
             }
 
-            //float4 pccVctMinDistance_invPccVctInvDistance_unused2
+            //float4 pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_unused
             *passBufferPtr++ = mPccVctMinDistance;
             *passBufferPtr++ = mInvPccVctInvDistance;
-            *passBufferPtr++ = 0.0f;
+            *passBufferPtr++ = currViewports[1].getActualLeft();
             *passBufferPtr++ = 0.0f;
 
             if( !mPrePassTextures->empty() )
@@ -2172,11 +2243,10 @@ namespace Ogre
                 }
             }
 
-            ForwardPlusBase *forwardPlus = sceneManager->_getActivePassForwardPlus();
             if( forwardPlus )
             {
-                forwardPlus->fillConstBufferData( sceneManager->getCurrentViewport(), renderTarget,
-                                                  mShaderSyntax, passBufferPtr );
+                forwardPlus->fillConstBufferData( sceneManager->getCurrentViewport0(), renderTarget,
+                                                  mShaderSyntax, isInstancedStereo, passBufferPtr );
                 passBufferPtr += forwardPlus->getConstBufferSize() >> 2u;
             }
 

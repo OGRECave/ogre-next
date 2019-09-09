@@ -268,8 +268,9 @@ namespace Ogre {
         virtual RenderPassDescriptor* createRenderPassDescriptor(void);
         virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc,
                                                 TextureGpu *anyTarget, uint8 mipLevel,
-                                                const Vector4 &viewportSize,
-                                                const Vector4 &scissors,
+                                                const Vector4 *viewportSizes,
+                                                const Vector4 *scissors,
+                                                uint32 numViewports,
                                                 bool overlaysEnabled,
                                                 bool warnIfRtvWasFlushed );
         virtual void endRenderPassDescriptor(void);
@@ -378,10 +379,6 @@ namespace Ogre {
 
         virtual void flushUAVs(void);
 
-        /** See
-            RenderSystem
-        */
-        void _setViewport(Viewport *vp);
         virtual void _resourceTransitionCreated( ResourceTransition *resTransition );
         virtual void _resourceTransitionDestroyed( ResourceTransition *resTransition );
         virtual void _executeResourceTransition( ResourceTransition *resTransition );
@@ -427,6 +424,7 @@ namespace Ogre {
             RenderSystem
         */
         virtual void _convertProjectionMatrix(const Matrix4& matrix, Matrix4& dest);
+        virtual void _convertOpenVrProjectionMatrix(const Matrix4& matrix, Matrix4& dest);
         virtual Real getRSDepthRange(void) const;
         /** See
             RenderSystem

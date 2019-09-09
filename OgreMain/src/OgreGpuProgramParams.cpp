@@ -139,6 +139,7 @@ namespace Ogre
         AutoConstantDefinition(ACT_SPOTLIGHT_VIEWPROJ_MATRIX_ARRAY, "spotlight_viewproj_matrix_array", 16, ET_REAL, ACDT_INT),
         AutoConstantDefinition(ACT_SPOTLIGHT_WORLDVIEWPROJ_MATRIX,  "spotlight_worldviewproj_matrix",16, ET_REAL, ACDT_INT),
         AutoConstantDefinition(ACT_SPOTLIGHT_WORLDVIEWPROJ_MATRIX_ARRAY,  "spotlight_worldviewproj_matrix_array",16, ET_REAL, ACDT_INT),
+        AutoConstantDefinition(ACT_RS_DEPTH_RANGE,                "rs_depth_range",               2, ET_REAL, ACDT_NONE),
         AutoConstantDefinition(ACT_CUSTOM,                        "custom",                       4, ET_REAL, ACDT_INT),  // *** needs to be tested
         AutoConstantDefinition(ACT_TIME,                               "time",                               1, ET_REAL, ACDT_REAL),
         AutoConstantDefinition(ACT_TIME_0_X,                      "time_0_x",                     4, ET_REAL, ACDT_REAL),
@@ -1381,6 +1382,7 @@ namespace Ogre
         case ACT_SURFACE_SHININESS:
         case ACT_SURFACE_ALPHA_REJECTION_VALUE:
         case ACT_CAMERA_POSITION:
+        case ACT_RS_DEPTH_RANGE:
         case ACT_TIME:
         case ACT_TIME_0_X:
         case ACT_COSTIME_0_X:
@@ -2523,6 +2525,9 @@ namespace Ogre
 
                 case ACT_CAMERA_POSITION:
                     _writeRawConstant(i->physicalIndex, source->getCameraPosition(), i->elementCount);
+                    break;
+                case ACT_RS_DEPTH_RANGE:
+                    _writeRawConstant(i->physicalIndex, source->getRSDepthRange());
                     break;
                 case ACT_TIME:
                     _writeRawConstant(i->physicalIndex, source->getTime() * i->fData);

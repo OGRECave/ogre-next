@@ -734,7 +734,7 @@ namespace Ogre
             }
         }
 
-        TextureGpu *renderTarget = mRenderSystem->_getViewport()->getCurrentTarget();
+        TextureGpu *renderTarget = mRenderSystem->getCurrentRenderViewports()[0].getCurrentTarget();
         //vec4 invWindowSize;
         *passBufferPtr++ = 1.0f / (float)renderTarget->getWidth();
         *passBufferPtr++ = 1.0f / (float)renderTarget->getHeight();

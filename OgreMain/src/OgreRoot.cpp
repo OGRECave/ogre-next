@@ -1160,9 +1160,6 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     void Root::shutdown(void)
     {
-        if(mActiveRenderer)
-            mActiveRenderer->_setViewport(NULL);
-
         // Since background thread might be access resources,
         // ensure shutdown before destroying resource manager.
         mResourceBackgroundQueue->shutdown();

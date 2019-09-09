@@ -727,6 +727,14 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void GL3PlusTextureGpu::getCustomAttribute( IdString name, void *pData )
+    {
+        if( name == msFinalTextureBuffer )
+            *static_cast<GLuint*>(pData) = mFinalTextureName;
+        else if( name == msMsaaTextureBuffer )
+            *static_cast<GLuint*>(pData) = mMsaaFramebufferName;
+    }
+    //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------
     GL3PlusTextureGpuRenderTarget::GL3PlusTextureGpuRenderTarget(

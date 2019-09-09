@@ -91,7 +91,15 @@ struct AreaLtcLight
 CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
 {
 	//Vertex shader (common to both receiver and casters)
+@property( !hlms_instanced_stereo )
 	float4x4 viewProj;
+@else
+	float4x4 viewProj[2];
+	@property( hlms_forwardplus )
+		float4x4 leftEyeViewSpaceToCullCamClipSpace;
+	@end
+	float4 leftToRightView;
+@end
 
 @property( hlms_global_clip_planes )
 	float4 clipPlane0;
@@ -118,7 +126,7 @@ CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
 	float padding; //Compatibility with GLSL
 @end
 
-	float4 pccVctMinDistance_invPccVctInvDistance_unused2;
+	float4 pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_unused;
 
 @property( hlms_use_prepass )
 	float4 windowHeight;
@@ -185,8 +193,9 @@ CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
 
 	@insertpiece( custom_passBuffer )
 
-#define pccVctMinDistance		pccVctMinDistance_invPccVctInvDistance_unused2.x
-#define invPccVctInvDistance	pccVctMinDistance_invPccVctInvDistance_unused2.y
+#define pccVctMinDistance		pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_unused.x
+#define invPccVctInvDistance	pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_unused.y
+#define rightEyePixelStartX		pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_unused.z
 }
 CONST_BUFFER_STRUCT_END( passBuf );
 @end
@@ -342,6 +351,10 @@ struct Material
 		@property( hlms_pssm_splits )INTERPOLANT( float depth, @counter(texcoord) );@end
 		@property( hlms_use_prepass_msaa > 1 )
 			INTERPOLANT( float2 zwDepth, @counter(texcoord) );
+		@end
+
+		@property( hlms_forwardplus && hlms_instanced_stereo )
+			INTERPOLANT( float3 cullCamPosXY, @counter(texcoord) );
 		@end
 	@else
 		@property( alpha_test )

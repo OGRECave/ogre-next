@@ -61,12 +61,11 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     RenderSystem::RenderSystem()
         : mCurrentRenderPassDescriptor(0)
-        , mCurrentRenderViewport( 0, 0, 0, 0 )
+        , mMaxBoundViewports(16u)
         , mActiveRenderTarget(0)
         , mTextureManager(0)
         , mVaoManager(0)
         , mTextureGpuManager(0)
-        , mActiveViewport(0)
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
         , mDebugShaders(true)
 #else
@@ -290,11 +289,6 @@ namespace Ogre {
             mActiveRenderTarget = 0;
 
         return ret;
-    }
-    //-----------------------------------------------------------------------
-    Viewport* RenderSystem::_getViewport(void)
-    {
-        return mActiveViewport;
     }
     //-----------------------------------------------------------------------
     void RenderSystem::_setPipelineStateObject( const HlmsPso *pso )
@@ -548,16 +542,23 @@ namespace Ogre {
     void RenderSystem::beginRenderPassDescriptor( RenderPassDescriptor *desc,
                                                   TextureGpu *anyTarget,
                                                   uint8 mipLevel,
-                                                  const Vector4 &viewportSize,
-                                                  const Vector4 &scissors,
+                                                  const Vector4 *viewportSizes,
+                                                  const Vector4 *scissors,
+                                                  uint32 numViewports,
                                                   bool overlaysEnabled,
                                                   bool warnIfRtvWasFlushed )
     {
         assert( anyTarget );
 
         mCurrentRenderPassDescriptor = desc;
-        mCurrentRenderViewport.setDimensions( anyTarget, viewportSize, scissors, mipLevel );
-        mCurrentRenderViewport.setOverlaysEnabled( overlaysEnabled );
+        for( size_t i=0; i<numViewports; ++i )
+        {
+            mCurrentRenderViewport[i].setDimensions( anyTarget, viewportSizes[i],
+                                                     scissors[i], mipLevel );
+            mCurrentRenderViewport[i].setOverlaysEnabled( overlaysEnabled );
+        }
+
+        mMaxBoundViewports = numViewports;
     }
     //---------------------------------------------------------------------
     void RenderSystem::executeRenderPassDescriptorDelayedActions(void)
@@ -567,7 +568,10 @@ namespace Ogre {
     void RenderSystem::endRenderPassDescriptor(void)
     {
         mCurrentRenderPassDescriptor = 0;
-        mCurrentRenderViewport.setDimensions( 0, Vector4::ZERO, Vector4::ZERO, 0u );
+        const size_t maxBoundViewports = mMaxBoundViewports;
+        for( size_t i=0; i<maxBoundViewports; ++i )
+            mCurrentRenderViewport[i].setDimensions( 0, Vector4::ZERO, Vector4::ZERO, 0u );
+        mMaxBoundViewports = 1u;
 
         //Where graphics ends, compute may start, or a new frame.
         //Very likely we'll have to flush the UAVs again, so assume we need.
@@ -1073,6 +1077,20 @@ namespace Ogre {
             dest[2][1] = (-dest[2][1] + dest[3][1]) / 2;
             dest[2][2] = (-dest[2][2] + dest[3][2]) / 2;
             dest[2][3] = (-dest[2][3] + dest[3][3]) / 2;
+        }
+    }
+    //-----------------------------------------------------------------------
+    void RenderSystem::_convertOpenVrProjectionMatrix( const Matrix4& matrix, Matrix4& dest )
+    {
+        dest = matrix;
+
+        if( mReverseDepth )
+        {
+            // Convert depth range from [0,1] to [1,0]
+            dest[2][0] = (-dest[2][0] + dest[3][0]);
+            dest[2][1] = (-dest[2][1] + dest[3][1]);
+            dest[2][2] = (-dest[2][2] + dest[3][2]);
+            dest[2][3] = (-dest[2][3] + dest[3][3]);
         }
     }
     //-----------------------------------------------------------------------

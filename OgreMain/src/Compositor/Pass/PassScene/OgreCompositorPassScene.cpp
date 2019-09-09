@@ -167,7 +167,7 @@ namespace Ogre
                                                                                     SHADOW_NODE_REUSE );
         }
 
-        Viewport *viewport = sceneManager->getCurrentViewport();
+        Viewport *viewport = sceneManager->getCurrentViewport0();
         viewport->_setVisibilityMask( mDefinition->mVisibilityMask, mDefinition->mLightVisibilityMask );
 
         //Fire the listener in case it wants to change anything
@@ -202,6 +202,9 @@ namespace Ogre
             //We need to restore the previous RT's update
         }
 
+        if( listener )
+            listener->passSceneAfterShadowMaps( this );
+
         executeResourceTransitions();
         setRenderPassDescToCurrent();
 
@@ -213,6 +216,9 @@ namespace Ogre
         viewport->_updateCullPhase01( mCamera, mCullCamera, usedLodCamera,
                                       mDefinition->mFirstRQ, mDefinition->mLastRQ,
                                       mDefinition->mReuseCullData );
+
+        if( listener )
+            listener->passSceneAfterFrustumCulling( this );
 
 #if TODO_OGRE_2_2
         mTarget->setFsaaResolveDirty();

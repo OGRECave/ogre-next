@@ -720,7 +720,9 @@ namespace Ogre
         void destroyRenderPassDescriptor( RenderPassDescriptor *renderPassDesc );
 
         RenderPassDescriptor* getCurrentPassDescriptor(void)    { return mCurrentRenderPassDescriptor; }
-        Viewport& _getCurrentRenderViewport(void)               { return mCurrentRenderViewport; }
+        Viewport& _getCurrentRenderViewport(void)               { return mCurrentRenderViewport[0]; }
+        Viewport* getCurrentRenderViewports(void)				{ return mCurrentRenderViewport; }
+        uint32 getMaxBoundViewports(void)						{ return mMaxBoundViewports; }
 
         /** When the descriptor is set to Load clear, two possible things may happen:
                 1. The region is cleared.
@@ -752,8 +754,9 @@ namespace Ogre
         */
         virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc,
                                                 TextureGpu *anyTarget, uint8 mipLevel,
-                                                const Vector4 &viewportSize,
-                                                const Vector4 &scissors,
+                                                const Vector4 *viewportSizes,
+                                                const Vector4 *scissors,
+                                                uint32 numViewports,
                                                 bool overlaysEnabled,
                                                 bool warnIfRtvWasFlushed );
         /// Metal needs to delay RenderCommand creation to the last minute, because
@@ -959,17 +962,6 @@ namespace Ogre
                                               SceneManagerEnumerator &sceneManagers,
                                               HlmsManager *hlmsManager );
 
-        /**
-        Sets the provided viewport as the active one for future
-        rendering operations. This viewport is aware of it's own
-        camera and render target. Must be implemented by subclass.
-
-        @param vp Pointer to the appropriate viewport.
-        */
-        virtual void _setViewport(Viewport *vp) = 0;
-        /** Get the current active viewport for rendering. */
-        virtual Viewport* _getViewport(void);
-
         /// @See HlmsSamplerblock. This function MUST be called after _setTexture, not before.
         /// Otherwise not all APIs may see the change.
         virtual void _setHlmsSamplerblock( uint8 texUnit, const HlmsSamplerblock *Samplerblock ) = 0;
@@ -1034,6 +1026,13 @@ namespace Ogre
         back a generic OGRE matrix for storage in the engine.
         */
         virtual void _convertProjectionMatrix( const Matrix4& matrix, Matrix4& dest );
+
+        /** Converts an OpenVR projection matrix to have the proper depth range and
+            reverse Z settings
+        @param matrix
+        @param dest
+        */
+        virtual void _convertOpenVrProjectionMatrix( const Matrix4& matrix, Matrix4& dest );
 
         /// OpenGL depth is in range [-1;1] so it returns 2.0f;
         /// D3D11 & Metal are in range [0;1] so it returns 1.0f;
@@ -1461,7 +1460,8 @@ namespace Ogre
         typedef set<RenderPassDescriptor*>::type RenderPassDescriptorSet;
         RenderPassDescriptorSet mRenderPassDescs;
         RenderPassDescriptor    *mCurrentRenderPassDescriptor;
-        Viewport                mCurrentRenderViewport;
+        Viewport                mCurrentRenderViewport[16];
+        uint32                  mMaxBoundViewports;
 
         typedef set<Window*>::type WindowSet;
         WindowSet mWindows;
@@ -1488,9 +1488,6 @@ namespace Ogre
 
         VaoManager          *mVaoManager;
         TextureGpuManager   *mTextureGpuManager;
-
-        // Active viewport (dest for future rendering operations)
-        Viewport* mActiveViewport;
 
         bool mDebugShaders;
         bool mWBuffer;

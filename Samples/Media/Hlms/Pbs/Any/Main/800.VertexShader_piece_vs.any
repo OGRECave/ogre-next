@@ -105,7 +105,15 @@
 	@property( normal_map )						outVs.tangent	= mul( @insertpiece(local_tangent), toFloat3x3( worldViewMat ) );@end
 	@property( !hlms_dual_paraboloid_mapping )
         @property( !hlms_use_uv_baking )
-			outVs_Position = mul( worldPos, passBuf.viewProj );
+			@property( !hlms_instanced_stereo )
+				outVs_Position = mul( worldPos, passBuf.viewProj );
+			@else
+				outVs_Position = mul( worldPos, passBuf.viewProj[(inVs_stereoDrawId & 0x01u)] );
+				@property( hlms_forwardplus )
+					outVs.cullCamPosXY.xyz = mul( float4( outVs.pos.xyz, 1.0f ),
+												  passBuf.leftEyeViewSpaceToCullCamClipSpace ).xyw;
+				@end
+			@end
 		@else
 			outVs_Position.xy = inVs_uv@value( hlms_uv_baking ).xy * 2.0f - 1.0f + passBuf.pixelOffset2x.xy;
 			@property( !hlms_forwardplus_flipY || syntax != glsl )
@@ -178,5 +186,9 @@
 
 	@property( hlms_global_clip_planes )
 		outVs_clipDistance0 = dot( float4( worldPos.xyz, 1.0 ), passBuf.clipPlane0.xyzw );
+	@end
+
+	@property( hlms_instanced_stereo )
+		outVs_viewportIndex	= int( inVs_stereoDrawId & 0x01u );
 	@end
 @end

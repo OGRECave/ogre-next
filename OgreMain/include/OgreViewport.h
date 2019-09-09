@@ -78,6 +78,7 @@ namespace Ogre {
         Viewport(
             Real left, Real top,
             Real width, Real height );
+        Viewport();
 
         /** Default destructor.
         */

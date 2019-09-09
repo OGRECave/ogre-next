@@ -45,6 +45,9 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    const IdString TextureGpu::msFinalTextureBuffer = IdString( "msFinalTextureBuffer" );
+    const IdString TextureGpu::msMsaaTextureBuffer  = IdString( "msMsaaTextureBuffer" );
+
     TextureGpu::TextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                             VaoManager *vaoManager, IdString name, uint32 textureFlags,
                             TextureTypes::TextureTypes initialType,
@@ -679,7 +682,7 @@ namespace Ogre
 
         Vector4 fullVp( 0, 0, 1, 1 );
         renderSystem->beginRenderPassDescriptor( renderPassDescriptor, this, 0,
-                                                 fullVp, fullVp, false, false );
+                                                 &fullVp, &fullVp, 1u, false, false );
         renderSystem->executeRenderPassDescriptorDelayedActions();
         renderSystem->endRenderPassDescriptor();
         renderSystem->destroyRenderPassDescriptor( renderPassDescriptor );

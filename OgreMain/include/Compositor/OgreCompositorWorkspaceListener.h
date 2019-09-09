@@ -65,6 +65,24 @@ namespace Ogre
         */
         virtual void passPosExecute( CompositorPass *pass ) {}
 
+        /** Called after a pass scene has rendered shadow casting (it gets called even if
+            there is no shadow node).
+
+            Gets called after passPreExecute and before passSceneAfterFrustumCulling
+
+            Warning: calling pass->execute can result in recursive calls.
+        */
+        virtual void passSceneAfterShadowMaps( CompositorPassScene *pass ) {}
+
+        /** Called after a pass scene has performed frustum caulling but has yet
+            to prepare and execute rendering commands.
+
+            Gets called after passSceneAfterFrustumCulling and before passPosExecute
+
+            Warning: calling pass->execute can result in recursive calls.
+        */
+        virtual void passSceneAfterFrustumCulling( CompositorPassScene *pass ) {}
+
         /** Called from CompositorManager2 (not CompositorWorkspace) when we're
             about to begin updating all the workspaces. You'll have to manage
             the RenderSystem and SceneManager to call the adequate begin/end calls

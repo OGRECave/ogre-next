@@ -14,6 +14,10 @@
 	#define layout_constbuffer(x) layout( std140 )
 @end
 
+@property( hlms_instanced_stereo )
+	#extension GL_ARB_shader_viewport_layer_array: require
+@end
+
 @property( GL_ARB_texture_buffer_range )
 	#define bufferFetch texelFetch
 	#define structuredBufferFetch texelFetch
@@ -72,11 +76,19 @@
 #define inVs_blendWeights blendWeights
 #define inVs_blendIndices blendIndices
 #define inVs_qtangent qtangent
-#define inVs_drawId drawId
+
+@property( !hlms_instanced_stereo )
+	#define inVs_drawId drawId
+@else
+	#define inVs_drawId (drawId >> 1u)
+	#define inVs_stereoDrawId drawId
+@end
+
 @foreach( hlms_uv_count, n )
 	#define inVs_uv@n uv@n@end
 
 #define outVs_Position gl_Position
+#define outVs_viewportIndex gl_ViewportIndex
 #define outVs_clipDistance0 gl_ClipDistance[0]
 
 #define gl_SampleMaskIn0 gl_SampleMaskIn[0]

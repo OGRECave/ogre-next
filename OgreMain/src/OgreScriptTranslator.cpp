@@ -9631,6 +9631,23 @@ namespace Ogre{
                         }
                     }
                     break;
+                case ID_INSTANCED_STEREO:
+                    if(prop->values.size() != 1)
+                    {
+                        compiler->addError(ScriptCompiler::CE_FEWERPARAMETERSEXPECTED, prop->file, prop->line,
+                                           "instanced_stereo requires exactly one parameter (boolean)");
+                    }
+                    else
+                    {
+                        AbstractNodeList::const_iterator it0 = prop->values.begin();
+
+                        if( !getBoolean( *it0, &passScene->mInstancedStereo ) )
+                        {
+                            compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
+                                "instanced_stereo must be a boolean");
+                        }
+                    }
+                    break;
                 case ID_MATERIAL_SCHEME:
                     {
                         if (prop->values.empty())
@@ -10616,44 +10633,74 @@ namespace Ogre{
                 }
                 case ID_VIEWPORT:
                     {
-                        if(prop->values.size() != 4 && prop->values.size() != 8)
+                        const size_t numParams = prop->values.size();
+                        if( numParams != 4u && numParams != 5u &&
+                            numParams != 8u && numParams != 9u )
                         {
                             compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
-                                                "4 or 8 numeric arguments expected");
+                                                "4, 5, 8 or 9 numeric arguments expected");
                             return;
                         }
+
                         AbstractNodeList::const_iterator it3 = prop->values.begin();
+                        uint32 vpNum = 0u;
+
+                        if( numParams == 5u || numParams == 9u )
+                        {
+                            AbstractNodeList::const_iterator itVpNum = it3++;
+
+                            if( !getUInt( *itVpNum, &vpNum ) )
+                            {
+                                compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line);
+                            }
+                            else
+                            {
+                                if( vpNum < 16u )
+                                {
+                                    mPassDef->mNumViewports = std::max( mPassDef->mNumViewports, vpNum + 1u );
+                                }
+                                else
+                                {
+                                    compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line,
+                                                       "Viewport number must be < 16");
+                                    vpNum = 0;
+                                }
+                            }
+                        }
+
                         AbstractNodeList::const_iterator it0 = it3++;
                         AbstractNodeList::const_iterator it1 = it3++;
                         AbstractNodeList::const_iterator it2 = it3++;
 
-                        if( !getFloat( *it0, &mPassDef->mVpLeft ) || !getFloat( *it1, &mPassDef->mVpTop ) ||
-                            !getFloat( *it2, &mPassDef->mVpWidth ) || !getFloat( *it3, &mPassDef->mVpHeight ) )
+                        if( !getFloat( *it0, &mPassDef->mVpRect[vpNum].mVpLeft ) ||
+                            !getFloat( *it1, &mPassDef->mVpRect[vpNum].mVpTop ) ||
+                            !getFloat( *it2, &mPassDef->mVpRect[vpNum].mVpWidth ) ||
+                            !getFloat( *it3, &mPassDef->mVpRect[vpNum].mVpHeight ) )
                         {
-                                compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line);
+                            compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line);
                         }
 
-                        if( prop->values.size() == 8 )
+                        if( numParams >= 8 )
                         {
                             AbstractNodeList::const_iterator it7 = ++it3;
                             AbstractNodeList::const_iterator it4 = it7++;
                             AbstractNodeList::const_iterator it5 = it7++;
                             AbstractNodeList::const_iterator it6 = it7++;
 
-                            if( !getFloat( *it4, &mPassDef->mVpScissorLeft ) ||
-                                !getFloat( *it5, &mPassDef->mVpScissorTop ) ||
-                                !getFloat( *it6, &mPassDef->mVpScissorWidth ) ||
-                                !getFloat( *it7, &mPassDef->mVpScissorHeight ) )
+                            if( !getFloat( *it4, &mPassDef->mVpRect[vpNum].mVpScissorLeft ) ||
+                                !getFloat( *it5, &mPassDef->mVpRect[vpNum].mVpScissorTop ) ||
+                                !getFloat( *it6, &mPassDef->mVpRect[vpNum].mVpScissorWidth ) ||
+                                !getFloat( *it7, &mPassDef->mVpRect[vpNum].mVpScissorHeight ) )
                             {
                                  compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line);
                             }
                         }
                         else
                         {
-                            mPassDef->mVpScissorLeft    = mPassDef->mVpLeft;
-                            mPassDef->mVpScissorTop     = mPassDef->mVpTop;
-                            mPassDef->mVpScissorWidth   = mPassDef->mVpWidth;
-                            mPassDef->mVpScissorHeight  = mPassDef->mVpHeight;
+                            mPassDef->mVpRect[vpNum].mVpScissorLeft = mPassDef->mVpRect[vpNum].mVpLeft;
+                            mPassDef->mVpRect[vpNum].mVpScissorTop  = mPassDef->mVpRect[vpNum].mVpTop;
+                            mPassDef->mVpRect[vpNum].mVpScissorWidth= mPassDef->mVpRect[vpNum].mVpWidth;
+                            mPassDef->mVpRect[vpNum].mVpScissorHeight= mPassDef->mVpRect[vpNum].mVpHeight;
                         }
                     }
                     break;

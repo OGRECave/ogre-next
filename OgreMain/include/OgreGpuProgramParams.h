@@ -1166,6 +1166,15 @@ namespace Ogre {
                 combined with the current world matrix
             */
             ACT_SPOTLIGHT_WORLDVIEWPROJ_MATRIX_ARRAY,
+            /** .x = 'min' / 'close' value according to current RS depth mode
+                .y = 'max' / 'far' value according to current RS depth mode
+
+                e.g.
+                    Reverse-Z: .xy = 1.0, 0.0
+                    D3D11 & Metal, non-reverse-Z: .xy = 0.0, 1.0
+                    GL, non-reverse-Z: .xy = -1.0, 1.0
+            */
+            ACT_RS_DEPTH_RANGE,
             /// A custom parameter which will come from the renderable, using 'data' as the identifier
             ACT_CUSTOM,
             /** provides current elapsed time

@@ -291,10 +291,6 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    void NULLRenderSystem::_setViewport(Viewport *vp)
-    {
-    }
-    //-------------------------------------------------------------------------
     void NULLRenderSystem::_setHlmsSamplerblock( uint8 texUnit, const HlmsSamplerblock *Samplerblock )
     {
     }

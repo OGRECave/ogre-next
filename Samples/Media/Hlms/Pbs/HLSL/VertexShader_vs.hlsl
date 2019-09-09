@@ -33,6 +33,10 @@ struct PS_INPUT
 	@insertpiece( VStoPS_block )
 	float4 gl_Position: SV_Position;
 
+	@property( hlms_instanced_stereo )
+		uint gl_ViewportIndex : SV_ViewportArrayIndex;
+	@end
+
 	@pdiv( full_pso_clip_distances, hlms_pso_clip_distances, 4 )
 	@pmod( partial_pso_clip_distances, hlms_pso_clip_distances, 4 )
 	@foreach( full_pso_clip_distances, n )

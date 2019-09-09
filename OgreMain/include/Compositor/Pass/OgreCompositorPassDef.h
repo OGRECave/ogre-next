@@ -91,15 +91,26 @@ namespace Ogre
         CompositorTargetDef *mParentTargetDef;
 
     public:
+        struct ViewportRect
+        {
+            float               mVpLeft;
+            float               mVpTop;
+            float               mVpWidth;
+            float               mVpHeight;
+            float               mVpScissorLeft;
+            float               mVpScissorTop;
+            float               mVpScissorWidth;
+            float               mVpScissorHeight;
+
+            ViewportRect() :
+                mVpLeft( 0 ), mVpTop( 0 ),
+                mVpWidth( 1 ), mVpHeight( 1 ),
+                mVpScissorLeft( 0 ), mVpScissorTop( 0 ),
+                mVpScissorWidth( 1 ), mVpScissorHeight( 1 ) {}
+        };
         /// Viewport's region to draw
-        float               mVpLeft;
-        float               mVpTop;
-        float               mVpWidth;
-        float               mVpHeight;
-        float               mVpScissorLeft;
-        float               mVpScissorTop;
-        float               mVpScissorWidth;
-        float               mVpScissorHeight;
+        ViewportRect        mVpRect[16];
+        uint32              mNumViewports;
 
         /// Shadow map index it belongs to (only filled in passes owned by Shadow Nodes)
         uint32              mShadowMapIdx;
@@ -195,10 +206,7 @@ namespace Ogre
     public:
         CompositorPassDef( CompositorPassType passType, CompositorTargetDef *parentTargetDef ) :
             mPassType( passType ), mParentTargetDef( parentTargetDef ),
-            mVpLeft( 0 ), mVpTop( 0 ),
-            mVpWidth( 1 ), mVpHeight( 1 ),
-            mVpScissorLeft( 0 ), mVpScissorTop( 0 ),
-            mVpScissorWidth( 1 ), mVpScissorHeight( 1 ),
+            mNumViewports( 1u ),
             mShadowMapIdx( ~0U ),
             mNumInitialPasses( ~0U ), mIdentifier( 0U ),
             mClearDepth( 1.0f ),

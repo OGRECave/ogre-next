@@ -125,6 +125,7 @@ namespace Ogre
     const IdString HlmsBaseProp::PsoClipDistances	= IdString( "hlms_pso_clip_distances" );
     const IdString HlmsBaseProp::GlobalClipPlanes	= IdString( "hlms_global_clip_planes" );
     const IdString HlmsBaseProp::DualParaboloidMapping= IdString( "hlms_dual_paraboloid_mapping" );
+    const IdString HlmsBaseProp::InstancedStereo    = IdString( "hlms_instanced_stereo" );
     const IdString HlmsBaseProp::StaticBranchLights = IdString( "hlms_static_branch_lights" );
     const IdString HlmsBaseProp::NumShadowMapLights = IdString( "hlms_num_shadow_map_lights" );
     const IdString HlmsBaseProp::NumShadowMapTextures= IdString("hlms_num_shadow_map_textures" );
@@ -2712,6 +2713,25 @@ namespace Ogre
                 setProperty( HlmsBaseProp::ShadowUsesDepthTexture, usesDepthTextures );
             }
 
+            const CompositorPass *pass = sceneManager->getCurrentCompositorPass();
+
+            if( pass && pass->getType() == PASS_SCENE )
+            {
+                OGRE_ASSERT_HIGH( dynamic_cast<const CompositorPassSceneDef*>( pass->getDefinition() ) );
+                const CompositorPassSceneDef *passSceneDef =
+                        static_cast<const CompositorPassSceneDef*>( pass->getDefinition() );
+                if( passSceneDef->mUvBakingSet != 0xFF )
+                {
+                    setProperty( HlmsBaseProp::UseUvBaking, 1 );
+                    setProperty( HlmsBaseProp::UvBaking, passSceneDef->mUvBakingSet );
+                    if( passSceneDef->mBakeLightingOnly )
+                        setProperty( HlmsBaseProp::BakeLightingOnly, 1 );
+                }
+
+                if( passSceneDef->mInstancedStereo )
+                    setProperty( HlmsBaseProp::InstancedStereo, 1 );
+            }
+
             ForwardPlusBase *forwardPlus = sceneManager->_getActivePassForwardPlus();
             if( forwardPlus )
                 forwardPlus->setHlmsPassProperties( this );
@@ -2867,22 +2887,6 @@ namespace Ogre
                 setProperty( HlmsBaseProp::LightsAreaLtc, mNumAreaLtcLightsLimit );
             if( numAreaApproxLightsWithMask > 0 )
                 setProperty( HlmsBaseProp::LightsAreaTexMask, 1 );
-
-            const CompositorPass *pass = sceneManager->getCurrentCompositorPass();
-
-            if( pass && pass->getType() == PASS_SCENE )
-            {
-                OGRE_ASSERT_HIGH( dynamic_cast<const CompositorPassSceneDef*>( pass->getDefinition() ) );
-                const CompositorPassSceneDef *passSceneDef =
-                        static_cast<const CompositorPassSceneDef*>( pass->getDefinition() );
-                if( passSceneDef->mUvBakingSet != 0xFF )
-                {
-                    setProperty( HlmsBaseProp::UseUvBaking, 1 );
-                    setProperty( HlmsBaseProp::UvBaking, passSceneDef->mUvBakingSet );
-                    if( passSceneDef->mBakeLightingOnly )
-                        setProperty( HlmsBaseProp::BakeLightingOnly, 1 );
-                }
-            }
         }
         else
         {

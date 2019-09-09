@@ -240,8 +240,9 @@ namespace Ogre
         virtual RenderPassDescriptor* createRenderPassDescriptor(void);
         virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc,
                                                 TextureGpu *anyTarget, uint8 mipLevel,
-                                                const Vector4 &viewportSize,
-                                                const Vector4 &scissors,
+                                                const Vector4 *viewportSizes,
+                                                const Vector4 *scissors,
+                                                uint32 numViewports,
                                                 bool overlaysEnabled,
                                                 bool warnIfRtvWasFlushed );
         virtual void endRenderPassDescriptor(void);
@@ -306,7 +307,6 @@ namespace Ogre
         void _setTextureCoordCalculation(size_t unit, TexCoordCalcMethod m, const Frustum* frustum = 0);
         void _setTextureBlendMode( size_t unit, const LayerBlendModeEx& bm );
         void _setTextureMatrix( size_t unit, const Matrix4 &xform );
-        void _setViewport( Viewport *vp );
 
         virtual void flushUAVs(void) {}
 

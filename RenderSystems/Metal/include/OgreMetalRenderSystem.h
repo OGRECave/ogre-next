@@ -201,8 +201,9 @@ namespace Ogre
         virtual RenderPassDescriptor* createRenderPassDescriptor(void);
         virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc,
                                                 TextureGpu *anyTarget, uint8 mipLevel,
-                                                const Vector4 &viewportSize,
-                                                const Vector4 &scissors,
+                                                const Vector4 *viewportSizes,
+                                                const Vector4 *scissors,
+                                                uint32 numViewports,
                                                 bool overlaysEnabled,
                                                 bool warnIfRtvWasFlushed );
         void executeRenderPassDescriptorDelayedActions( bool officialCall );
@@ -236,7 +237,6 @@ namespace Ogre
 
         virtual void _beginFrame(void);
         virtual void _endFrame(void);
-        virtual void _setViewport(Viewport *vp);
 
         virtual void _hlmsPipelineStateObjectCreated( HlmsPso *newPso );
         virtual void _hlmsPipelineStateObjectDestroyed( HlmsPso *pso );

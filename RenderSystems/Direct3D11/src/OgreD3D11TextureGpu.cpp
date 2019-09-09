@@ -762,10 +762,15 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpu::getCustomAttribute( IdString name, void *pData )
     {
-        if( name == "ID3D11Resource" )
+        if( name == msFinalTextureBuffer || name == "ID3D11Resource" )
         {
             ID3D11Resource **pTex = (ID3D11Resource**)pData;
             *pTex = mFinalTextureName;
+        }
+        else if( name == msMsaaTextureBuffer )
+        {
+            ID3D11Resource **pTex = (ID3D11Resource**)pData;
+            *pTex = mMsaaFramebufferName;
         }
         else
         {

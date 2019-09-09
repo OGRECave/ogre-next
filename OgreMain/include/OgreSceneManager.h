@@ -498,7 +498,7 @@ namespace Ogre {
         /// Cameras in progress
         CamerasInProgress mCamerasInProgress;
         /// Current Viewport
-        Viewport* mCurrentViewport;
+        Viewport *mCurrentViewport0;
 
         CompositorPass          *mCurrentPass;
         CompositorShadowNode    *mCurrentShadowNode;
@@ -713,7 +713,7 @@ namespace Ogre {
         /// Internal method for firing destruction event
         virtual void fireSceneManagerDestroyed();
         /** Internal method for setting the destination viewport for the next render. */
-        virtual void setViewport(Viewport *vp);
+        virtual void setViewports( Viewport **vp, size_t numViewports );
 
         /** Flag that indicates if all of the scene node's bounding boxes should be shown as a wireframe. */
         bool mShowBoundingBoxes;      
@@ -1934,8 +1934,7 @@ namespace Ogre {
             @param firstRq first render queue ID to render (gets clamped if too big)
             @param lastRq last render queue ID to render (gets clamped if too big)
         */
-        virtual void _cullPhase01( Camera *cullCamera, Camera *renderCamera,
-                                   const Camera *lodCamera, Viewport* vp,
+        virtual void _cullPhase01( Camera *cullCamera, Camera *renderCamera, const Camera *lodCamera,
                                    uint8 firstRq, uint8 lastRq, bool reuseCullData );
 
         /** Prompts the class to send its contents to the renderer.
@@ -1956,7 +1955,7 @@ namespace Ogre {
             @param lastRq last render queue ID to render (gets clamped if too big)
             @param includeOverlays Whether or not overlay objects should be rendered
         */
-        virtual void _renderPhase02( Camera* camera, const Camera* lodCamera, Viewport* vp,
+        virtual void _renderPhase02( Camera* camera, const Camera* lodCamera,
                                      uint8 firstRq, uint8 lastRq, bool includeOverlays );
 
         void cullLights( Camera *camera, Light::LightTypes startType,
@@ -1982,7 +1981,6 @@ namespace Ogre {
         */
         virtual void _setDestinationRenderSystem(RenderSystem* sys);
 
-        void _setViewport( Viewport *vp )                               { setViewport( vp ); }
         void _setCamerasInProgress(const CamerasInProgress& cameras)    { mCamerasInProgress = cameras; }
 
         /** Notifies the scene manager that hardware resources were lost
@@ -2773,6 +2771,8 @@ namespace Ogre {
         const CompositorShadowNode* getCurrentShadowNode(void) const    { return mCurrentShadowNode; }
         bool isCurrentShadowNodeReused(void) const                      { return mShadowNodeIsReused; }
 
+        bool isUsingInstancedStereo(void) const;
+
         /** Sets whether to use late material resolving or not. If set, materials will be resolved
             from the materials at the pass-setting stage and not at the render queue building stage.
             This is useful when the active material scheme during the render queue building stage
@@ -2989,7 +2989,7 @@ namespace Ogre {
 
         /** Gets the current viewport being rendered (advanced use only, only 
             valid during viewport update. */
-        Viewport* getCurrentViewport(void) const { return mCurrentViewport; }
+        Viewport* getCurrentViewport0(void) const { return mCurrentViewport0; }
 
         /** Gets the current camera being rendered (advanced use only, only 
             valid during viewport update. */

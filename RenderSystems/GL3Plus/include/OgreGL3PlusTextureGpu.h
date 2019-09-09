@@ -126,6 +126,8 @@ namespace Ogre
 
         /// Returns GL_TEXTURE_2D / GL_TEXTURE_2D_ARRAY / etc
         GLenum getGlTextureTarget(void) const       { return mGlTextureTarget; }
+
+        void getCustomAttribute( IdString name, void *pData );
     };
 
     class _OgreGL3PlusExport GL3PlusTextureGpuRenderTarget : public GL3PlusTextureGpu

@@ -146,6 +146,10 @@ endif () # OGRE_INSTALL_DEPENDENCIES
 	if( OGRE_BUILD_SAMPLES2 )
 	  install_debug(SDL2.dll)
 	  install_release(SDL2.dll)
+	  install_debug(openvr_api.dll)
+	  install_release(openvr_api.dll)
+	  install_debug(openvr_api.pdb)
+	  install_release(openvr_api.pdb)
 	endif ()
 
 	if( OGRE_CONFIG_AMD_AGS )

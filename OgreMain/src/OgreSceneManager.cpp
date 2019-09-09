@@ -75,6 +75,7 @@ THE SOFTWARE.
 #include "Animation/OgreSkeletonInstance.h"
 #include "Animation/OgreTagPoint.h"
 #include "Compositor/OgreCompositorShadowNode.h"
+#include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
 #include "Threading/OgreBarrier.h"
 #include "Threading/OgreUniformScalableTask.h"
 
@@ -107,7 +108,7 @@ mDecalsDiffuseTex( 0 ),
 mDecalsNormalsTex( 0 ),
 mDecalsEmissiveTex( 0 ),
 mCamerasInProgress(0),
-mCurrentViewport(0),
+mCurrentViewport0(0),
 mCurrentPass(0),
 mCurrentShadowNode(0),
 mShadowNodeIsReused( false ),
@@ -1168,8 +1169,7 @@ bool SceneManager::_collectForwardPlusObjects( const Camera *camera )
     return retVal;
 }
 //-----------------------------------------------------------------------
-void SceneManager::_cullPhase01( Camera *cullCamera, Camera *renderCamera,
-                                 const Camera *lodCamera, Viewport* vp,
+void SceneManager::_cullPhase01( Camera *cullCamera, Camera *renderCamera, const Camera *lodCamera,
                                  uint8 firstRq, uint8 lastRq, bool reuseCullData )
 {
     OgreProfileGroup( "Frustum Culling", OGREPROF_CULLING );
@@ -1177,7 +1177,6 @@ void SceneManager::_cullPhase01( Camera *cullCamera, Camera *renderCamera,
     Root::getSingleton()._pushCurrentSceneManager(this);
     mAutoParamDataSource->setCurrentSceneManager(this);
 
-    setViewport( vp );
     mCamerasInProgress = CamerasInProgress(renderCamera,cullCamera, lodCamera);
 
     if( !reuseCullData )
@@ -1262,7 +1261,7 @@ void SceneManager::_cullPhase01( Camera *cullCamera, Camera *renderCamera,
     Root::getSingleton()._popCurrentSceneManager(this);
 }
 //-----------------------------------------------------------------------
-void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera, Viewport* vp,
+void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera,
                                   uint8 firstRq, uint8 lastRq, bool includeOverlays)
 {
     OgreProfileGroup( "Rendering", OGREPROF_RENDERING );
@@ -1280,8 +1279,6 @@ void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera, Viewp
 
         mCamerasInProgress.renderingCamera = camera;
         mCamerasInProgress.lodCamera = lodCamera;
-
-        setViewport( vp );
 
         // Tell params about camera
         mAutoParamDataSource->setCurrentCamera(camera);
@@ -1311,7 +1308,7 @@ void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera, Viewp
 
             bool casterPass = mIlluminationStage == IRS_RENDER_TO_TEXTURE;
 
-            firePreFindVisibleObjects(vp);
+            firePreFindVisibleObjects( mCurrentViewport0 );
 
             //Some v1 Renderables may bind their own GL buffers during _updateRenderQueue,
             //thus we need to be sure the correct VAO is bound.
@@ -1346,10 +1343,11 @@ void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera, Viewp
                 ++it;
             }
 
-            firePostFindVisibleObjects(vp);
+            firePostFindVisibleObjects( mCurrentViewport0 );
         }
         // Queue skies, if viewport seems it
-        if (vp->getSkiesEnabled() && mFindVisibleObjects && mIlluminationStage != IRS_RENDER_TO_TEXTURE)
+        if( mCurrentViewport0->getSkiesEnabled() && mFindVisibleObjects &&
+            mIlluminationStage != IRS_RENDER_TO_TEXTURE )
         {
             _queueSkiesForRendering(camera);
         }
@@ -1428,7 +1426,12 @@ void SceneManager::_frameEnded(void)
 void SceneManager::_setDestinationRenderSystem(RenderSystem* sys)
 {
     mDestRenderSystem = sys;
-    setViewport( &mDestRenderSystem->_getCurrentRenderViewport() );
+    const uint32 maxBoundVps = mDestRenderSystem->getMaxBoundViewports();
+    Viewport *currVps = mDestRenderSystem->getCurrentRenderViewports();
+    Viewport *vp[16];
+    for( size_t i=0; i<maxBoundVps; ++i )
+        vp[i] = &currVps[i];
+    setViewports( vp, maxBoundVps );
 
     if( mForwardPlusSystem )
         mForwardPlusSystem->_changeRenderSystem( sys );
@@ -3719,6 +3722,19 @@ void SceneManager::_setCurrentShadowNode( CompositorShadowNode *shadowNode, bool
     mAutoParamDataSource->setCurrentShadowNode( shadowNode );
 }
 //---------------------------------------------------------------------
+bool SceneManager::isUsingInstancedStereo(void) const
+{
+    bool retVal = false;
+    if( mCurrentPass && mCurrentPass->getType() == PASS_SCENE )
+    {
+        OGRE_ASSERT_HIGH( dynamic_cast<const CompositorPassSceneDef*>( mCurrentPass->getDefinition() ) );
+        CompositorPassSceneDef const *passSceneDef = static_cast<const CompositorPassSceneDef*>(
+                                                         mCurrentPass->getDefinition() );
+        retVal = passSceneDef->mInstancedStereo;
+    }
+    return retVal;
+}
+//---------------------------------------------------------------------
 void SceneManager::addListener(Listener* newListener)
 {
     mListeners.push_back(newListener);
@@ -3853,15 +3869,21 @@ void SceneManager::fireSceneManagerDestroyed()
     }
 }
 //---------------------------------------------------------------------
-void SceneManager::setViewport(Viewport* vp)
+void SceneManager::setViewports( Viewport **vp, size_t numViewports )
 {
-    mCurrentViewport = vp;
+    if( numViewports >= 1u )
+        mCurrentViewport0 = vp[0];
+    else
+        mCurrentViewport0 = 0;
+
     // Set viewport in render system
-    mDestRenderSystem->_setViewport(vp);
     if( mAutoParamDataSource )
-        mAutoParamDataSource->setCurrentViewport(vp);
-    // Set the active material scheme for this viewport
-    MaterialManager::getSingleton().setActiveScheme(vp->getMaterialScheme());
+        mAutoParamDataSource->setCurrentViewport( mCurrentViewport0 );
+    if( mCurrentViewport0 )
+    {
+        // Set the active material scheme for this viewport
+        MaterialManager::getSingleton().setActiveScheme( mCurrentViewport0->getMaterialScheme() );
+    }
 }
 //---------------------------------------------------------------------
 void SceneManager::showBoundingBoxes(bool bShow) 
@@ -4516,7 +4538,7 @@ SceneManager::RenderContext* SceneManager::_pauseRendering()
 {
     RenderContext* context = new RenderContext;
     context->renderQueue = mRenderQueue;
-    context->viewport = mCurrentViewport;
+    //context->viewport = mCurrentViewport;
     context->camerasInProgress = mCamerasInProgress;
 
     context->rsContext = mDestRenderSystem->_pauseFrame();
@@ -4532,7 +4554,7 @@ void SceneManager::_resumeRendering(SceneManager::RenderContext* context)
     const Ogre::Camera* camera = context->camerasInProgress.renderingCamera;
 
     // Tell params about viewport
-    setViewport(vp);
+    //setViewport(vp);
 
     // Tell params about camera
     mAutoParamDataSource->setCurrentCamera(camera);
@@ -4953,9 +4975,9 @@ RenderSystem *SceneManager::getDestinationRenderSystem()
 uint32 SceneManager::_getCombinedVisibilityMask(void) const
 {
     //Always preserve the settings of the reserved visibility flags in the viewport.
-    return mCurrentViewport ?
-        (mCurrentViewport->getVisibilityMask() & mVisibilityMask) |
-        (mCurrentViewport->getVisibilityMask() & ~VisibilityFlags::RESERVED_VISIBILITY_FLAGS) :
+    return mCurrentViewport0 ?
+        ((mCurrentViewport0->getVisibilityMask() & mVisibilityMask) |
+        (mCurrentViewport0->getVisibilityMask() & ~VisibilityFlags::RESERVED_VISIBILITY_FLAGS)) :
                 mVisibilityMask;
 
 }
