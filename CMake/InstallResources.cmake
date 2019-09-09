@@ -128,10 +128,14 @@ configure_file(${OGRE_TEMPLATES_DIR}/samples.cfg.in ${OGRE_BINARY_DIR}/inst/bin/
 # create samples.cfg
 configure_file(${OGRE_TEMPLATES_DIR}/tests.cfg.in ${OGRE_BINARY_DIR}/inst/bin/release/tests.cfg)
 configure_file(${OGRE_TEMPLATES_DIR}/tests_d.cfg.in ${OGRE_BINARY_DIR}/inst/bin/debug/tests_d.cfg)
+# create HiddenAreaMeshVr.cfg
+configure_file(${OGRE_TEMPLATES_DIR}/HiddenAreaMeshVr.cfg.in ${OGRE_BINARY_DIR}/inst/bin/debug/HiddenAreaMeshVr.cfg)
+configure_file(${OGRE_TEMPLATES_DIR}/HiddenAreaMeshVr.cfg.in ${OGRE_BINARY_DIR}/inst/bin/release/HiddenAreaMeshVr.cfg)
 
 # install resource files
 if (OGRE_INSTALL_SAMPLES OR OGRE_INSTALL_SAMPLES_SOURCE)
   install(FILES 
+	${OGRE_BINARY_DIR}/inst/bin/debug/HiddenAreaMeshVr.cfg
     ${OGRE_BINARY_DIR}/inst/bin/debug/resources2.cfg
     ${OGRE_BINARY_DIR}/inst/bin/debug/resources_d.cfg
     ${OGRE_BINARY_DIR}/inst/bin/debug/plugins_d.cfg
@@ -141,6 +145,7 @@ if (OGRE_INSTALL_SAMPLES OR OGRE_INSTALL_SAMPLES_SOURCE)
     DESTINATION "${OGRE_CFG_INSTALL_PATH}${OGRE_DEBUG_PATH}" CONFIGURATIONS Debug
   )
   install(FILES 
+	${OGRE_BINARY_DIR}/inst/bin/release/HiddenAreaMeshVr.cfg
     ${OGRE_BINARY_DIR}/inst/bin/release/resources2.cfg
     ${OGRE_BINARY_DIR}/inst/bin/release/resources.cfg
     ${OGRE_BINARY_DIR}/inst/bin/release/plugins.cfg
@@ -150,6 +155,7 @@ if (OGRE_INSTALL_SAMPLES OR OGRE_INSTALL_SAMPLES_SOURCE)
     DESTINATION "${OGRE_CFG_INSTALL_PATH}${OGRE_RELEASE_PATH}" CONFIGURATIONS Release None ""
   )
   install(FILES 
+	${OGRE_BINARY_DIR}/inst/bin/release/HiddenAreaMeshVr.cfg
     ${OGRE_BINARY_DIR}/inst/bin/release/resources2.cfg
     ${OGRE_BINARY_DIR}/inst/bin/release/resources.cfg
     ${OGRE_BINARY_DIR}/inst/bin/release/plugins.cfg
@@ -159,6 +165,7 @@ if (OGRE_INSTALL_SAMPLES OR OGRE_INSTALL_SAMPLES_SOURCE)
 	DESTINATION "${OGRE_CFG_INSTALL_PATH}${OGRE_RELWDBG_PATH}" CONFIGURATIONS RelWithDebInfo
   )
   install(FILES 
+	${OGRE_BINARY_DIR}/inst/bin/release/HiddenAreaMeshVr.cfg
     ${OGRE_BINARY_DIR}/inst/bin/release/resources2.cfg
     ${OGRE_BINARY_DIR}/inst/bin/release/resources.cfg
     ${OGRE_BINARY_DIR}/inst/bin/release/plugins.cfg
@@ -171,6 +178,7 @@ if (OGRE_INSTALL_SAMPLES OR OGRE_INSTALL_SAMPLES_SOURCE)
   # Need a special case here for the iOS SDK, configuration is not being matched, could be a CMake bug.
   if (OGRE_BUILD_PLATFORM_APPLE_IOS)
     install(FILES 
+	  ${OGRE_BINARY_DIR}/inst/bin/release/HiddenAreaMeshVr.cfg
       ${OGRE_BINARY_DIR}/inst/bin/release/resources2.cfg
       ${OGRE_BINARY_DIR}/inst/bin/release/resources.cfg
       ${OGRE_BINARY_DIR}/inst/bin/release/plugins.cfg
@@ -266,6 +274,11 @@ elseif (MSVC AND NOT NMAKE)
   configure_file(${OGRE_TEMPLATES_DIR}/tests.cfg.in ${OGRE_BINARY_DIR}/bin/release/tests.cfg)
   configure_file(${OGRE_TEMPLATES_DIR}/tests.cfg.in ${OGRE_BINARY_DIR}/bin/relwithdebinfo/tests.cfg)
   configure_file(${OGRE_TEMPLATES_DIR}/tests.cfg.in ${OGRE_BINARY_DIR}/bin/minsizerel/tests.cfg)
+  # create HiddenAreaMeshVr.cfg
+  configure_file(${OGRE_TEMPLATES_DIR}/HiddenAreaMeshVr.cfg.in ${OGRE_BINARY_DIR}/bin/debug/HiddenAreaMeshVr.cfg)
+  configure_file(${OGRE_TEMPLATES_DIR}/HiddenAreaMeshVr.cfg.in ${OGRE_BINARY_DIR}/bin/release/HiddenAreaMeshVr.cfg)
+  configure_file(${OGRE_TEMPLATES_DIR}/HiddenAreaMeshVr.cfg.in ${OGRE_BINARY_DIR}/bin/relwithdebinfo/HiddenAreaMeshVr.cfg)
+  configure_file(${OGRE_TEMPLATES_DIR}/HiddenAreaMeshVr.cfg.in ${OGRE_BINARY_DIR}/bin/minsizerel/HiddenAreaMeshVr.cfg)
 else() # other OS only need one cfg file
   string(TOLOWER "${CMAKE_BUILD_TYPE}" OGRE_BUILD_TYPE)
   if (OGRE_BUILD_TYPE STREQUAL "debug" AND NOT APPLE)
@@ -283,5 +296,7 @@ else() # other OS only need one cfg file
   configure_file(${OGRE_TEMPLATES_DIR}/samples${OGRE_CFG_SUFFIX}.cfg.in ${OGRE_BINARY_DIR}/bin/samples${OGRE_CFG_SUFFIX}.cfg)
   # create tests.cfg
   configure_file(${OGRE_TEMPLATES_DIR}/tests${OGRE_CFG_SUFFIX}.cfg.in ${OGRE_BINARY_DIR}/bin/tests${OGRE_CFG_SUFFIX}.cfg)
+  # create HiddenAreaMeshVr.cfg
+  configure_file(${OGRE_TEMPLATES_DIR}/HiddenAreaMeshVr.cfg.in ${OGRE_BINARY_DIR}/bin/HiddenAreaMeshVr.cfg)
 endif ()
 

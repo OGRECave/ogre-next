@@ -16,6 +16,7 @@
 #include "System/MainEntryPoints.h"
 
 #include "OpenVRCompositorListener.h"
+#include "OgreLogManager.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 INT WINAPI WinMainApp( HINSTANCE hInst, HINSTANCE hPrevInstance, LPSTR strCmdLine, INT nCmdShow )
@@ -30,15 +31,6 @@ int mainApp( int argc, const char *argv[] )
 
 namespace Demo
 {
-    namespace HmdSettings
-    {
-        enum HmdSettings
-        {
-            Vive,
-            NumHmdSettings
-        };
-    }
-
     Ogre::CompositorWorkspace* Tutorial_OpenVRGraphicsSystem::setupCompositor()
     {
 #ifdef USE_OPEN_VR
@@ -119,6 +111,8 @@ namespace Demo
                                              vr::Prop_TrackingSystemName_String );
         mStrDisplay = GetTrackedDeviceString( vr::k_unTrackedDeviceIndex_Hmd,
                                               vr::Prop_SerialNumber_String );
+        mDeviceModelNumber = GetTrackedDeviceString( vr::k_unTrackedDeviceIndex_Hmd,
+                                                     vr::Prop_ModelNumber_String );
 
         initCompositorVR();
 
@@ -161,27 +155,22 @@ namespace Demo
 
     void Tutorial_OpenVRGraphicsSystem::createHiddenAreaMeshVR(void)
     {
-        const Ogre::HiddenAreaVrSettings settings[HmdSettings::NumHmdSettings] =
+        try
         {
-            {
-                Ogre::Vector2( 0.054481547f, 0.0f ),
-                Ogre::Vector2( 1.145869947f, 1.1904f ),
+            Ogre::ConfigFile cfgFile;
+            cfgFile.load( mResourcePath + "HiddenAreaMeshVr.cfg" );
 
-                Ogre::Vector2( 3.265377856f, 0.0f ),
-                Ogre::Vector2( 2.483304042f, 1.456f ),
-
-                Ogre::Vector2( -0.054481547f, 0.0f ),
-                Ogre::Vector2( 1.145869947f, 1.1904f ),
-
-                Ogre::Vector2( -3.265377856f, 0.0f ),
-                Ogre::Vector2( 2.483304042f, 1.456f ),
-
-                17u
-            }
-        };
-
-        Ogre::HiddenAreaMeshVrGenerator::generate( "HiddenAreaMeshVr.mesh",
-                                                   settings[HmdSettings::Vive] );
+            Ogre::HiddenAreaVrSettings setting;
+            setting = Ogre::HiddenAreaMeshVrGenerator::loadSettings( mDeviceModelNumber, cfgFile );
+            if( setting.tessellation > 0u )
+                Ogre::HiddenAreaMeshVrGenerator::generate( "HiddenAreaMeshVr.mesh", setting );
+        }
+        catch( Ogre::FileNotFoundException &e )
+        {
+            Ogre::LogManager &logManager = Ogre::LogManager::getSingleton();
+            logManager.logMessage( e.getDescription() );
+            logManager.logMessage( "HiddenAreaMeshVR optimization won't be available" );
+        }
     }
 
     void Tutorial_OpenVRGraphicsSystem::deinitialize(void)

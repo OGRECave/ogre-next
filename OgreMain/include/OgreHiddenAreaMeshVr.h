@@ -43,6 +43,8 @@ namespace Ogre
      *  @{
      */
 
+    class ConfigFile;
+
     struct HiddenAreaVrSettings
     {
         Ogre::Vector2 leftEyeCenter;
@@ -68,6 +70,17 @@ namespace Ogre
 
     public:
         static void generate( const String &meshName, const HiddenAreaVrSettings &setting );
+
+        /** Fills HiddenAreaVrSettings from a config file
+        @param deviceName
+            Name of the device. Partial string matching will be carried against all sections
+            in the config file.
+        @param configFile
+            Config file to read data from
+        @return
+            Forces tessellation to 0 if enabled = false
+        */
+        static HiddenAreaVrSettings loadSettings( const String &deviceName, ConfigFile &configFile );
     };
 
     /** @} */

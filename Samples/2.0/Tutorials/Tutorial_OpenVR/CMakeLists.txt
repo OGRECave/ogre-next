@@ -20,7 +20,8 @@ add_recursive( ./ SOURCE_FILES )
 
 include_directories( ${OpenVR_INCLUDE_DIRS} )
 
-ogre_add_executable(Tutorial_OpenVR WIN32 MACOSX_BUNDLE ${SOURCE_FILES} ${SAMPLE_COMMON_RESOURCES})
+ogre_add_executable(Tutorial_OpenVR WIN32 MACOSX_BUNDLE ${SOURCE_FILES} ${SAMPLE_COMMON_RESOURCES}
+	${CMAKE_BINARY_DIR}/bin/HiddenAreaMeshVr.cfg )
 
 target_link_libraries(Tutorial_OpenVR ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES} ${OpenVR_LIBRARIES})
 ogre_config_sample_lib(Tutorial_OpenVR)

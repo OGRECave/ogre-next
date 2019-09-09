@@ -46,13 +46,21 @@ namespace Demo
 
         const float armsLength = 2.5f;
 
-        mHiddenAreaMeshVr =
-                sceneManager->createItem( "HiddenAreaMeshVr.mesh",
-                                          Ogre::ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME,
-                                          Ogre::SCENE_STATIC );
-        mHiddenAreaMeshVr->setCastShadows( false );
-        mHiddenAreaMeshVr->getSubItem(0)->setUseIdentityProjection( true );
-        sceneManager->getRootSceneNode( Ogre::SCENE_STATIC )->attachObject( mHiddenAreaMeshVr );
+        const bool bIsHamVrOptEnabled = !Ogre::MeshManager::
+                                        getSingleton().getByName( "HiddenAreaMeshVr.mesh",
+                                                                  Ogre::ResourceGroupManager::
+                                                                  INTERNAL_RESOURCE_GROUP_NAME ).
+                                        isNull();
+        if( bIsHamVrOptEnabled )
+        {
+            mHiddenAreaMeshVr =
+                    sceneManager->createItem( "HiddenAreaMeshVr.mesh",
+                                              Ogre::ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME,
+                                              Ogre::SCENE_STATIC );
+            mHiddenAreaMeshVr->setCastShadows( false );
+            mHiddenAreaMeshVr->getSubItem(0)->setUseIdentityProjection( true );
+            sceneManager->getRootSceneNode( Ogre::SCENE_STATIC )->attachObject( mHiddenAreaMeshVr );
+        }
 
         sceneManager->getRenderQueue()->setRenderQueueMode( 1u, Ogre::RenderQueue::FAST );
 
@@ -284,7 +292,10 @@ namespace Demo
         outText += "\nPress F9 for next waiting mode";
         outText += c_waitingModes[waitingMode];
         outText += "\nF10 toggles hidden area mesh optimization";
-        outText += mHiddenAreaMeshVr->getVisible() ? "[Optimizing]" : "[Disabled]";
+        if( mHiddenAreaMeshVr )
+            outText += mHiddenAreaMeshVr->getVisible() ? "[Optimizing]" : "[Disabled]";
+        else
+            outText += "[Unavailable]";
     }
     //-----------------------------------------------------------------------------------
     void Tutorial_OpenVRGameState::setTransparencyToMaterials(void)
@@ -363,7 +374,8 @@ namespace Demo
         }
         else if( arg.keysym.sym == SDLK_F10 )
         {
-            mHiddenAreaMeshVr->setVisible( !mHiddenAreaMeshVr->getVisible() );
+            if( mHiddenAreaMeshVr )
+                mHiddenAreaMeshVr->setVisible( !mHiddenAreaMeshVr->getVisible() );
         }
         else if( arg.keysym.scancode == SDL_SCANCODE_KP_PLUS )
         {

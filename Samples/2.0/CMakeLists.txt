@@ -37,7 +37,7 @@ if( APPLE )
 	set( SAMPLE_COMMON_BASIC_RESOURCES ${SAMPLE_COMMON_BASIC_RESOURCES}
                  ${SAMPLE_COMMON_STORYBOARD_RESOURCE}
 		 ${CMAKE_BINARY_DIR}/bin/resources2.cfg
-                 ${CMAKE_BINARY_DIR}/bin/plugins.cfg
+		 ${CMAKE_BINARY_DIR}/bin/plugins.cfg
 		 ${CMAKE_SOURCE_DIR}/Samples/Media/2.0
 		 ${CMAKE_SOURCE_DIR}/Samples/Media/Hlms
 		 ${CMAKE_SOURCE_DIR}/Samples/Media/packs/DebugPack.zip

@@ -1,0 +1,20 @@
+[Vive]
+enabled=1
+leftEyeCenter=0.054481547 0.0
+leftEyeRadius=1.145869947 1.1904
+leftNoseCenter=3.265377856 0.0
+leftNoseRadius=2.483304042 1.456
+rightEyeCenter=-0.054481547 0.0
+rightEyeRadius=1.145869947 1.1904
+rightNoseCenter=-3.265377856 0.0
+rightNoseRadius=2.483304042 1.456
+tessellation=17
+
+[DK2]
+enabled=0
+
+[CV1]
+enabled=0
+
+[Rift S]
+enabled=0

@@ -35,8 +35,77 @@ THE SOFTWARE.
 #include "OgreMeshManager2.h"
 #include "OgreSubMesh2.h"
 
+#include "OgreConfigFile.h"
+#include "OgreLogManager.h"
+
 namespace Ogre
 {
+    //-------------------------------------------------------------------------
+    HiddenAreaVrSettings HiddenAreaMeshVrGenerator::loadSettings( const String &deviceName,
+                                                                  ConfigFile &configFile )
+    {
+        HiddenAreaVrSettings retVal;
+        memset( &retVal, 0, sizeof( retVal ) );
+
+        ConfigFile::SectionIterator itor = configFile.getSectionIterator();
+
+        String bestMatch;
+        String deviceConfigName;
+        while( itor.hasMoreElements() )
+        {
+            deviceConfigName = itor.peekNextKey();
+            if( deviceName.find( deviceConfigName ) != String::npos &&
+                deviceConfigName.size() > bestMatch.size() )
+            {
+                bestMatch = deviceConfigName;
+            }
+
+            itor.getNext();
+        }
+
+        if( bestMatch.empty() )
+        {
+            LogManager::getSingleton().logMessage( "No HiddenAreaMeshVr entry found for '" + deviceName +
+                                                   "'. Disabling optimization." );
+        }
+        else
+        {
+            String value;
+            value = configFile.getSetting( "leftEyeCenter", deviceConfigName, "" );
+            retVal.leftEyeCenter = StringConverter::parseVector2( value );
+            value = configFile.getSetting( "leftEyeRadius", deviceConfigName, "" );
+            retVal.leftEyeRadius = StringConverter::parseVector2( value );
+            value = configFile.getSetting( "leftNoseCenter", deviceConfigName, "" );
+            retVal.leftNoseCenter = StringConverter::parseVector2( value );
+            value = configFile.getSetting( "leftNoseRadius", deviceConfigName, "" );
+            retVal.leftNoseRadius = StringConverter::parseVector2( value );
+
+            value = configFile.getSetting( "rightEyeCenter", deviceConfigName, "" );
+            retVal.rightEyeCenter = StringConverter::parseVector2( value );
+            value = configFile.getSetting( "rightEyeRadius", deviceConfigName, "" );
+            retVal.rightEyeRadius = StringConverter::parseVector2( value );
+            value = configFile.getSetting( "rightNoseCenter", deviceConfigName, "" );
+            retVal.rightNoseCenter = StringConverter::parseVector2( value );
+            value = configFile.getSetting( "rightNoseRadius", deviceConfigName, "" );
+            retVal.rightNoseRadius = StringConverter::parseVector2( value );
+
+            value = configFile.getSetting( "tessellation", deviceConfigName, "" );
+            retVal.tessellation = StringConverter::parseUnsignedInt( value );
+
+            value = configFile.getSetting( "enabled", deviceConfigName, "" );
+            if( !StringConverter::parseBool( value ) )
+                retVal.tessellation = 0u;
+
+            if( retVal.tessellation == 0u )
+            {
+                LogManager::getSingleton().logMessage( "HiddenAreaMeshVr optimization for '" +
+                                                       deviceName + "' explicitly disabled." );
+            }
+        }
+
+        return retVal;
+    }
+    //-------------------------------------------------------------------------
     void HiddenAreaMeshVrGenerator::generate( const String &meshName,
                                               const HiddenAreaVrSettings &setting )
     {

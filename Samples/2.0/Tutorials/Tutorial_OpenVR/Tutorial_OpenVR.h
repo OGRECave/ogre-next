@@ -28,6 +28,7 @@ namespace Demo
         vr::IVRSystem *mHMD;
         std::string mStrDriver;
         std::string mStrDisplay;
+        std::string mDeviceModelNumber;
         vr::TrackedDevicePose_t mTrackedDevicePose[vr::k_unMaxTrackedDeviceCount];
 
         Ogre::CompositorWorkspace   *mVrWorkspace;
