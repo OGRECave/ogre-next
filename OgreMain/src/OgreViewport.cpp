@@ -64,7 +64,6 @@ namespace Ogre {
         // Actual dimensions will update later
         , mUpdated(false)
         , mShowOverlays(true)
-        , mShowSkies(true)
         , mVisibilityMask(0)
         , mMaterialSchemeName(MaterialManager::DEFAULT_SCHEME_NAME)
         , mColourBuffer(CBT_BACK)
@@ -317,16 +316,6 @@ namespace Ogre {
     bool Viewport::getOverlaysEnabled(void) const
     {
         return mShowOverlays;
-    }
-    //---------------------------------------------------------------------
-    void Viewport::setSkiesEnabled(bool enabled)
-    {
-        mShowSkies = enabled;
-    }
-    //---------------------------------------------------------------------
-    bool Viewport::getSkiesEnabled(void) const
-    {
-        return mShowSkies;
     }
     //-----------------------------------------------------------------------
     void Viewport::_setVisibilityMask( uint32 mask, uint32 lightMask )
