@@ -942,11 +942,15 @@ namespace Ogre
         if( !mCurrentRenderViewport[0].coversEntireTarget() || (mVpChanged && !mEntriesToFlush) ||
             numViewports > 1u  )
         {
-            MTLViewport mtlVp;
-#if defined( __IPHONE_12_0 ) || defined( MAC_OS_X_VERSION_10_13 )
-            if( numViewports <= 1u || @available( iOS 12.0, macOS 10.13, tvOS 12.0, * ) )
+#if defined( __IPHONE_12_0 ) || \
+    (defined( MAC_OS_X_VERSION_10_13 ) && OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS)
+            bool hasMultiViewports = false;
+            if( @available( iOS 12.0, macOS 10.13, tvOS 12.0, * ) )
+                hasMultiViewports = true;
+            if( numViewports <= 1u || !hasMultiViewports )
 #endif
             {
+                MTLViewport mtlVp;
                 mtlVp.originX   = mCurrentRenderViewport[0].getActualLeft();
                 mtlVp.originY   = mCurrentRenderViewport[0].getActualTop();
                 mtlVp.width     = mCurrentRenderViewport[0].getActualWidth();
@@ -955,7 +959,8 @@ namespace Ogre
                 mtlVp.zfar      = 1;
                 [mActiveRenderEncoder setViewport:mtlVp];
             }
-#if defined( __IPHONE_12_0 ) || defined( MAC_OS_X_VERSION_10_13 )
+#if defined( __IPHONE_12_0 ) || \
+    (defined( MAC_OS_X_VERSION_10_13 ) && OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS)
             else
             {
                 MTLViewport mtlVp[16];
@@ -977,8 +982,12 @@ namespace Ogre
              !mCurrentRenderViewport[0].scissorsMatchViewport()) || !mEntriesToFlush ||
             numViewports > 1u )
         {
-#if defined( __IPHONE_12_0 ) || defined( MAC_OS_X_VERSION_10_13 )
-            if( numViewports <= 1u || @available( iOS 12.0, macOS 10.13, tvOS 12.0, * ) )
+#if defined( __IPHONE_12_0 ) || \
+    (defined( MAC_OS_X_VERSION_10_13 ) && OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS)
+            bool hasMultiViewports = false;
+            if( @available( iOS 12.0, macOS 10.13, tvOS 12.0, * ) )
+                hasMultiViewports = true;
+            if( numViewports <= 1u || !hasMultiViewports )
 #endif
             {
                 MTLScissorRect scissorRect;
@@ -988,7 +997,8 @@ namespace Ogre
                 scissorRect.height  = mCurrentRenderViewport[0].getScissorActualHeight();
                 [mActiveRenderEncoder setScissorRect:scissorRect];
             }
-#if defined( __IPHONE_12_0 ) || defined( MAC_OS_X_VERSION_10_13 )
+#if defined( __IPHONE_12_0 ) || \
+    (defined( MAC_OS_X_VERSION_10_13 ) && OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS)
             else
             {
                 MTLScissorRect scissorRect[16];
