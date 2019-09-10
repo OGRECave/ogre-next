@@ -274,7 +274,7 @@ namespace Ogre
             mReservedSlotBitset.resize( alignToNextMultiple( maxNumProbes, 64u ) >> 6u,
                                         0xffffffffffffffff );
             if( remainder != 0u )
-                mReservedSlotBitset.back() = (1u << remainder) - 1u;
+                mReservedSlotBitset.back() = ((uint64_t)1u << remainder) - 1u;
 
             mRoot->addFrameListener( this );
             CompositorManager2 *compositorManager = mDefaultWorkspaceDef->getCompositorManager();
