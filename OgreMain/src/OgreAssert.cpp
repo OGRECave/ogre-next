@@ -136,15 +136,13 @@ Assert::FailBehavior Assert::ReportFailure(const char* condition,
                                            const char* msg, ...)
 {
     const char* message = NULL;
+    char messageBuffer[1024];
     if (msg != NULL)
     {
-        char messageBuffer[1024];
-        {
-            va_list args;
-            va_start(args, msg);
-            vsnprintf(messageBuffer, 1024, msg, args);
-            va_end(args);
-        }
+        va_list args;
+        va_start(args, msg);
+        vsnprintf(messageBuffer, 1024, msg, args);
+        va_end(args);
 
         message = messageBuffer;
     }
