@@ -61,7 +61,7 @@ THE SOFTWARE.
 #include "OgreRenderTexture.h"
 #include "OgreTextureManager.h"
 #include "OgreSceneNode.h"
-#include "OgreRectangle2D.h"
+#include "OgreRectangle2D2.h"
 #include "OgreLodListener.h"
 #include "OgreOldNode.h"
 #include "OgreLodStrategyManager.h"
@@ -625,24 +625,21 @@ void SceneManager::destroyAllEntities(void)
     destroyAllMovableObjectsByType(v1::EntityFactory::FACTORY_TYPE_NAME);
 }
 //-----------------------------------------------------------------------
-v1::Rectangle2D* SceneManager::createRectangle2D( bool bQuad, SceneMemoryMgrTypes sceneType )
+Rectangle2D* SceneManager::createRectangle2D( SceneMemoryMgrTypes sceneType )
 {
     // delegate to factory implementation
-    NameValuePairList params;
-    params["quad"] = StringConverter::toString( bQuad );
-    return static_cast<v1::Rectangle2D*>( createMovableObject( v1::Rectangle2DFactory::FACTORY_TYPE_NAME,
-                                                               &mEntityMemoryManager[sceneType],
-                                                               &params ) );
+    return static_cast<Rectangle2D*>( createMovableObject( Rectangle2DFactory::FACTORY_TYPE_NAME,
+                                                           &mEntityMemoryManager[sceneType], 0 ) );
 }
 //-----------------------------------------------------------------------
-void SceneManager::destroyRectangle2D( v1::Rectangle2D *rect )
+void SceneManager::destroyRectangle2D( Rectangle2D *rect )
 {
     destroyMovableObject( rect );
 }
 //-----------------------------------------------------------------------
 void SceneManager::destroyAllRectangle2D(void)
 {
-    destroyAllMovableObjectsByType(v1::Rectangle2DFactory::FACTORY_TYPE_NAME);
+    destroyAllMovableObjectsByType(Rectangle2DFactory::FACTORY_TYPE_NAME);
 }
 //-----------------------------------------------------------------------
 void SceneManager::_addCompositorTexture( IdString name, TextureGpu *tex )

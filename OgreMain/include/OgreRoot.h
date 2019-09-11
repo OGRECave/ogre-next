@@ -140,6 +140,7 @@ namespace Ogre
         MovableObjectFactory* mEntityFactory;
         MovableObjectFactory* mItemFactory;
         MovableObjectFactory* mLightFactory;
+        MovableObjectFactory* mRectangle2DFactory;
         MovableObjectFactory* mBillboardSetFactory;
         MovableObjectFactory* mManualObjectFactory;
         MovableObjectFactory* mBillboardChainFactory;

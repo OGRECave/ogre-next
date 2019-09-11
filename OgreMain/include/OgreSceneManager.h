@@ -1389,11 +1389,6 @@ namespace Ogre {
             but only low level materials will honour that request. PBS shaders will
             ignore it (thus the rectangle will be drawn in 3D space) and other Hlms
             types may work differently and you'll have to check its documentation.
-        @param bQuad
-            When true, the rectangle is drawn with two triangles. When false, it is
-            drawn as a single oversized triangle. Full screen triangles are faster
-            than quads, but will only work correctly if they cover the entire screen,
-            or are aided by scissor tests to clip the borders.
         @param sceneType
             Whether you will be moving the Rectangle2D's scene node around. Unless you're
             planning to use this Rectangle2D for 3D purposes, it is highly recomended that
@@ -1402,15 +1397,14 @@ namespace Ogre {
         @return
             The Rectangle2D.
         */
-        virtual v1::Rectangle2D* createRectangle2D( bool bQuad,
-                                                    SceneMemoryMgrTypes sceneType = SCENE_STATIC );
+        virtual Rectangle2D* createRectangle2D( SceneMemoryMgrTypes sceneType = SCENE_STATIC );
 
         /** Removes & destroys an Entity from the SceneManager.
         @warning
             It may be safer to wait to clear the whole scene if you are unsure use clearScene.
             @see SceneManager::clearScene
         */
-        virtual void destroyRectangle2D( v1::Rectangle2D *rect );
+        virtual void destroyRectangle2D( Rectangle2D *rect );
 
         /** Removes & destroys all Rectangle2D.
             @warning

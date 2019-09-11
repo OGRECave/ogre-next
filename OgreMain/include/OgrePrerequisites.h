@@ -278,6 +278,7 @@ namespace Ogre {
     class Ray;
     class RaySceneQuery;
     class RaySceneQueryListener;
+    class Rectangle2D;
     class Renderable;
     class RenderPriorityGroup;
     class RenderQueue;

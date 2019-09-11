@@ -59,6 +59,7 @@ THE SOFTWARE.
 #include "OgreBillboardChain.h"
 #include "OgreRibbonTrail.h"
 #include "OgreLight.h"
+#include "OgreRectangle2D2.h"
 #include "OgreManualObject.h"
 #include "OgrePlatformInformation.h"
 #include "OgreConvexBody.h"
@@ -292,6 +293,8 @@ namespace Ogre {
         addMovableObjectFactory(mItemFactory);
         mLightFactory = OGRE_NEW LightFactory();
         addMovableObjectFactory(mLightFactory);
+        mRectangle2DFactory = OGRE_NEW Rectangle2DFactory();
+        addMovableObjectFactory(mRectangle2DFactory);
         mBillboardSetFactory = OGRE_NEW v1::BillboardSetFactory();
         addMovableObjectFactory(mBillboardSetFactory);
         mManualObjectFactory = OGRE_NEW ManualObjectFactory();
@@ -398,6 +401,7 @@ namespace Ogre {
         OGRE_DELETE mEntityFactory;
         OGRE_DELETE mItemFactory;
         OGRE_DELETE mLightFactory;
+        OGRE_DELETE mRectangle2DFactory;
         OGRE_DELETE mBillboardSetFactory;
         OGRE_DELETE mManualObjectFactory;
         OGRE_DELETE mBillboardChainFactory;
