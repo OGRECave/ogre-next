@@ -1,0 +1,326 @@
+/*
+-----------------------------------------------------------------------------
+This source file is part of OGRE
+(Object-oriented Graphics Rendering Engine)
+For the latest info, see http://www.ogre3d.org/
+
+Copyright (c) 2000-present Torus Knot Software Ltd
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-----------------------------------------------------------------------------
+*/
+#include "OgreStableHeaders.h"
+
+#include "OgreRectangle2D2.h"
+
+#include "Vao/OgreStagingBuffer.h"
+#include "Vao/OgreVaoManager.h"
+#include "Vao/OgreVertexArrayObject.h"
+
+#include "OgreSceneManager.h"
+
+#include "OgreHlms.h"
+#include "OgreHlmsManager.h"
+#include "OgreRoot.h"
+
+namespace Ogre
+{
+    Rectangle2D::Rectangle2D( IdType id, ObjectMemoryManager *objectMemoryManager,
+                              SceneManager *manager ) :
+        MovableObject( id, objectMemoryManager, manager, 0u ),
+        Renderable(),
+        mChanged( true ),
+        mGeometryFlags( 0 )
+    {
+        // Always visible
+        Aabb aabb( Aabb::BOX_INFINITE );
+        mObjectData.mLocalAabb->setFromAabb( aabb, mObjectData.mIndex );
+        mObjectData.mWorldAabb->setFromAabb( aabb, mObjectData.mIndex );
+        mObjectData.mLocalRadius[mObjectData.mIndex] = std::numeric_limits<Real>::max();
+        mObjectData.mWorldRadius[mObjectData.mIndex] = std::numeric_limits<Real>::max();
+
+        setCastShadows( false );
+        setUseIdentityView( true );
+        setUseIdentityProjection( true );
+
+        mRenderables.push_back( this );
+    }
+    //-----------------------------------------------------------------------------------
+    Rectangle2D::~Rectangle2D()
+    {
+        VaoManager *vaoManager = mManager->getDestinationRenderSystem()->getVaoManager();
+
+        VertexArrayObjectArray::const_iterator itor = mVaoPerLod[0].begin();
+        VertexArrayObjectArray::const_iterator endr = mVaoPerLod[0].end();
+        while( itor != endr )
+        {
+            VertexArrayObject *vao = *itor;
+
+            const VertexBufferPackedVec &vertexBuffers = vao->getVertexBuffers();
+            VertexBufferPackedVec::const_iterator itBuffers = vertexBuffers.begin();
+            VertexBufferPackedVec::const_iterator enBuffers = vertexBuffers.end();
+
+            while( itBuffers != enBuffers )
+            {
+                if( ( *itBuffers )->getMappingState() != MS_UNMAPPED )
+                    ( *itBuffers )->unmap( UO_UNMAP_ALL );
+                vaoManager->destroyVertexBuffer( *itBuffers );
+                ++itBuffers;
+            }
+
+            if( vao->getIndexBuffer() )
+                vaoManager->destroyIndexBuffer( vao->getIndexBuffer() );
+            vaoManager->destroyVertexArrayObject( vao );
+
+            ++itor;
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    bool Rectangle2D::isQuad( void ) const { return mGeometryFlags & GeometryFlagQuad; }
+    //-----------------------------------------------------------------------------------
+    bool Rectangle2D::isStereo( void ) const { return mGeometryFlags & GeometryFlagStereo; }
+    //-----------------------------------------------------------------------------------
+    bool Rectangle2D::hasNormals( void ) const { return mGeometryFlags & GeometryFlagNormals; }
+    //-----------------------------------------------------------------------------------
+    BufferType Rectangle2D::getBufferType( void ) const
+    {
+        return static_cast<BufferType>( ( mGeometryFlags & GeometryFlagReserved0 ) >> 3u );
+    }
+    //-----------------------------------------------------------------------------------
+    uint32 Rectangle2D::calculateNumVertices( void ) const
+    {
+        uint32 numVertices = isQuad() ? 4u : 3u;
+        if( isStereo() )
+            numVertices = numVertices << 1u;
+        return numVertices;
+    }
+    //-----------------------------------------------------------------------------------
+    void Rectangle2D::createBuffers( void )
+    {
+        VaoManager *vaoManager = mManager->getDestinationRenderSystem()->getVaoManager();
+
+        // Create the vertex buffer
+
+        const uint32 numVertices = calculateNumVertices();
+
+        // Vertex declaration
+        VertexElement2Vec vertexElements;
+        vertexElements.push_back( VertexElement2( VET_FLOAT2, VES_POSITION ) );
+        if( isQuad() )
+            vertexElements.push_back( VertexElement2( VET_FLOAT3, VES_NORMAL ) );
+
+        const uint32 bytesPerVertex = VaoManager::calculateVertexSize( vertexElements );
+
+        const BufferType bufferType = getBufferType();
+
+        float *vertexData = reinterpret_cast<float *>( OGRE_MALLOC_SIMD(
+            sizeof( float ) * bytesPerVertex * numVertices, Ogre::MEMCATEGORY_GEOMETRY ) );
+        FreeOnDestructor dataPtr( vertexData );
+        fillBuffer( vertexData, numVertices );
+
+        Ogre::VertexBufferPacked *vertexBuffer = 0;
+        // Create the actual vertex buffer.
+        vertexBuffer =
+            vaoManager->createVertexBuffer( vertexElements, numVertices, bufferType, vertexData, false );
+
+        // Now the Vao. We'll just use one vertex buffer source (multi-source not working yet)
+        VertexBufferPackedVec vertexBuffers;
+        vertexBuffers.push_back( vertexBuffer );
+        Ogre::VertexArrayObject *vao =
+            vaoManager->createVertexArrayObject( vertexBuffers, 0, OT_TRIANGLE_STRIP );
+
+        mVaoPerLod[0].push_back( vao );
+        mVaoPerLod[1].push_back( vao );
+        mChanged = true;
+    }
+    //-----------------------------------------------------------------------------------
+    void Rectangle2D::fillBuffer( float *RESTRICT_ALIAS vertexData, size_t maxElements )
+    {
+        const float *vertexDataStart = vertexData;
+
+        const size_t numIterations = isStereo() ? 2u : 1u;
+        const bool bHasNormals = hasNormals();
+
+        for( size_t i = 0u; i < numIterations; ++i )
+        {
+            // Bottom left
+            *vertexData++ = static_cast<float>( mPosition.x );
+            *vertexData++ = static_cast<float>( mPosition.y );
+            if( bHasNormals )
+            {
+                for( size_t i = 0u; i < 3u; ++i )
+                    *vertexData++ = mNormals[0][i];
+            }
+
+            // Top left
+            *vertexData++ = static_cast<float>( mPosition.x );
+            *vertexData++ = static_cast<float>( mPosition.y + mSize.y );
+            if( bHasNormals )
+            {
+                for( size_t i = 0u; i < 3u; ++i )
+                    *vertexData++ = mNormals[1][i];
+            }
+
+            // Bottom right
+            *vertexData++ = static_cast<float>( mPosition.x + mSize.x );
+            *vertexData++ = static_cast<float>( mPosition.y );
+            if( bHasNormals )
+            {
+                for( size_t i = 0u; i < 3u; ++i )
+                    *vertexData++ = mNormals[2][i];
+            }
+
+            if( isQuad() )
+            {
+                // Top right
+                *vertexData++ = static_cast<float>( mPosition.x + mSize.x );
+                *vertexData++ = static_cast<float>( mPosition.y + mSize.y );
+                if( bHasNormals )
+                {
+                    for( size_t i = 0u; i < 3u; ++i )
+                        *vertexData++ = mNormals[3][i];
+                }
+            }
+        }
+
+        OGRE_ASSERT_LOW( ( size_t )( vertexData - vertexDataStart ) * ( hasNormals() ? 5u : 2u ) ==
+                         maxElements );
+    }
+    //-----------------------------------------------------------------------------------
+    void Rectangle2D::setGeometry( const Vector2 &pos, const Vector2 &size )
+    {
+        OGRE_ASSERT_MEDIUM( getBufferType() != BT_IMMUTABLE );
+        mPosition = pos;
+        mSize = size;
+        mChanged = true;
+    }
+    //-----------------------------------------------------------------------------------
+    void Rectangle2D::setNormals( const Vector3 &upperLeft, const Vector3 &bottomLeft,
+                                  const Vector3 &upperRight, const Vector3 &bottomRight )
+    {
+        OGRE_ASSERT_MEDIUM( getBufferType() != BT_IMMUTABLE );
+        mNormals[CornerBottomLeft] = bottomLeft;
+        mNormals[CornerUpperLeft] = upperLeft;
+        mNormals[CornerBottomRight] = bottomRight;
+        mNormals[CornerUpperRight] = upperRight;
+        mChanged = true;
+    }
+    //-----------------------------------------------------------------------------------
+    void Rectangle2D::initialize( BufferType bufferType, uint32 geometryFlags )
+    {
+        OGRE_ASSERT_LOW( mVaoPerLod[0].empty() && "Can only call Rectangle2D::initialize once!" );
+        mGeometryFlags = geometryFlags;
+        mGeometryFlags |= ( geometryFlags & GeometryFlagReserved0 ) | ( (uint32)bufferType << 3u );
+        createBuffers();
+        mChanged = false;
+    }
+    //-----------------------------------------------------------------------------------
+    void Rectangle2D::update( void )
+    {
+        if( !mChanged )
+            return;
+
+        VertexBufferPacked *vertexBuffer = mVaoPerLod[0].back()->getVertexBuffers().back();
+        VaoManager *vaoManager = mManager->getDestinationRenderSystem()->getVaoManager();
+        const size_t numTotalBytes = vertexBuffer->getTotalSizeBytes();
+
+        const bool bIsDynamic = vertexBuffer->getBufferType() != BT_DEFAULT;
+
+        float *RESTRICT_ALIAS vertexData = 0;
+        StagingBuffer *stagingBuffer = 0;
+        if( bIsDynamic )
+        {
+            vertexData = reinterpret_cast<float * RESTRICT_ALIAS>(
+                vertexBuffer->map( 0u, vertexBuffer->getNumElements() ) );
+        }
+        else
+        {
+            stagingBuffer = vaoManager->getStagingBuffer( vertexBuffer->getTotalSizeBytes(), true );
+            vertexData = reinterpret_cast<float * RESTRICT_ALIAS>( stagingBuffer->map( numTotalBytes ) );
+        }
+
+        fillBuffer( vertexData, vertexBuffer->getNumElements() );
+
+        if( bIsDynamic )
+            vertexBuffer->unmap( UO_KEEP_PERSISTENT );
+        else
+        {
+            stagingBuffer->unmap( StagingBuffer::Destination( vertexBuffer, 0u, 0u, numTotalBytes ) );
+            stagingBuffer->removeReferenceCount();
+            stagingBuffer = 0;
+        }
+
+        mChanged = false;
+    }
+    //-----------------------------------------------------------------------------------
+    const String &Rectangle2D::getMovableType( void ) const
+    {
+        return Rectangle2DFactory::FACTORY_TYPE_NAME;
+    }
+    //-----------------------------------------------------------------------------------
+    const LightList &Rectangle2D::getLights( void ) const
+    {
+        return this->queryLights();  // Return the data from our MovableObject base class.
+    }
+    //-----------------------------------------------------------------------------------
+    void Rectangle2D::getRenderOperation( v1::RenderOperation &op, bool casterPass )
+    {
+        OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
+                     "Rectangle2D do not implement getRenderOperation."
+                     " You've put a v2 object in "
+                     "the wrong RenderQueue ID (which is set to be compatible with "
+                     "v1::Entity). Do not mix v2 and v1 objects",
+                     "Rectangle2D::getRenderOperation" );
+    }
+    //-----------------------------------------------------------------------------------
+    void Rectangle2D::getWorldTransforms( Matrix4 *xform ) const
+    {
+        OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
+                     "Rectangle2D do not implement getWorldTransforms."
+                     " You've put a v2 object in "
+                     "the wrong RenderQueue ID (which is set to be compatible with "
+                     "v1::Entity). Do not mix v2 and v1 objects",
+                     "Rectangle2D::getRenderOperation" );
+    }
+    //-----------------------------------------------------------------------------------
+    bool Rectangle2D::getCastsShadows( void ) const
+    {
+        OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
+                     "Rectangle2D do not implement getCastsShadows."
+                     " You've put a v2 object in "
+                     "the wrong RenderQueue ID (which is set to be compatible with "
+                     "v1::Entity). Do not mix v2 and v1 objects",
+                     "Rectangle2D::getRenderOperation" );
+    }
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    String Rectangle2DFactory::FACTORY_TYPE_NAME = "Rectangle2Dv2";
+    //-----------------------------------------------------------------------------------
+    const String &Rectangle2DFactory::getType( void ) const { return FACTORY_TYPE_NAME; }
+    //-----------------------------------------------------------------------------------
+    MovableObject *Rectangle2DFactory::createInstanceImpl( IdType id,
+                                                           ObjectMemoryManager *objectMemoryManager,
+                                                           SceneManager *manager,
+                                                           const NameValuePairList *params )
+    {
+        return OGRE_NEW Rectangle2D( id, objectMemoryManager, manager );
+    }
+    //-----------------------------------------------------------------------------------
+    void Rectangle2DFactory::destroyInstance( MovableObject *obj ) { OGRE_DELETE obj; }
+}  // namespace Ogre
