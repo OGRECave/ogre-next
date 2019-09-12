@@ -1,0 +1,62 @@
+
+// GLSL shaders
+fragment_program Ogre/Sky/Cubemap_ps_GLSL glsl
+{
+	source SkyCubemap_ps.glsl
+	default_params
+	{
+		param_named skyCubemap int 0
+	}
+}
+
+// HLSL shaders
+fragment_program Ogre/Sky/Cubemap_ps_HLSL hlsl
+{
+	source SkyCubemap_ps.hlsl
+	entry_point main
+	target ps_5_0 ps_4_0 ps_4_0_level_9_1 ps_4_0_level_9_3
+}
+
+// Metal shaders
+fragment_program Ogre/Sky/Cubemap_ps_Metal metal
+{
+	source SkyCubemap_ps.metal
+	shader_reflection_pair_hint Ogre/Compositor/QuadCameraDirNoUV_vs
+}
+
+// Unified definitions
+fragment_program Ogre/Sky/Cubemap_ps unified
+{
+	delegate Ogre/Sky/Cubemap_ps_HLSL
+	delegate Ogre/Sky/Cubemap_ps_GLSL
+	delegate Ogre/Sky/Cubemap_ps_Metal
+}
+
+// Material definition
+material Ogre/Sky/Cubemap
+{
+	technique
+	{
+		pass
+		{
+			depth_check on
+			depth_write off
+
+			cull_hardware none
+
+			vertex_program_ref Ogre/Compositor/QuadCameraDirNoUV_vs
+			{
+			}
+
+			fragment_program_ref Ogre/Sky/Cubemap_ps
+			{
+			}
+
+			texture_unit
+			{
+				filtering			trilinear
+				tex_address_mode	clamp
+			}
+		}
+	}
+}

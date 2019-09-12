@@ -221,7 +221,7 @@ namespace Ogre {
         dependent on the Camera, which will always call back the SceneManager
         which created it to render the scene. 
      */
-    class _OgreExport SceneManager : public SceneMgtAlignedAlloc
+    class _OgreExport SceneManager : public SceneMgtAlignedAlloc, public IdObject
     {
     public:
         /// Default query mask for entities @see SceneQuery
@@ -505,6 +505,16 @@ namespace Ogre {
 		typedef vector<AutoTrackingSceneNode>::type AutoTrackingSceneNodeVec;
         AutoTrackingSceneNodeVec mAutoTrackingSceneNodes;
 
+    public:
+        enum SkyMethod
+        {
+            SkyCubemap
+        };
+    protected:
+        SkyMethod mSkyMethod;
+        Rectangle2D *mSky;
+        MaterialPtr mSkyMaterial;
+
         // Fog
         FogMode mFogMode;
         ColourValue mFogColour;
@@ -684,7 +694,6 @@ namespace Ogre {
         bool mLateMaterialResolving;
 
         ColourValue mShadowColour;
-        v1::Rectangle2D* mFullScreenQuad;
         Real mShadowDirLightExtrudeDist;
         IlluminationRenderStage mIlluminationStage;
         /// Struct for caching light clipping information for re-use in a frame
@@ -1119,6 +1128,18 @@ namespace Ogre {
             to delete the nodes when the scene is cleared.
         */
         virtual void destroySceneNode(SceneNode* sn);
+
+        /** Sets a sky, to use a particular material based on SkyMethod
+        @param bEnabled
+        @param skyMethod
+        @param texture
+        */
+        void setSky( bool bEnabled, SkyMethod skyMethod, TextureGpu *texture );
+
+        Rectangle2D* getSky(void)                       { return mSky; }
+        bool isSkyEnabled(void) const                   { return mSky != 0; }
+        SkyMethod getSkyMethod(void) const              { return mSkyMethod; }
+        MaterialPtr getSkyMaterial(void)                { return mSkyMaterial; }
 
         /** Gets the SceneNode at the root of the scene hierarchy.
             @remarks

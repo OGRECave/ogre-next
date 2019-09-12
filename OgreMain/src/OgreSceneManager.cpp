@@ -60,6 +60,7 @@ THE SOFTWARE.
 #include "OgreProfiler.h"
 #include "OgreRenderTexture.h"
 #include "OgreTextureManager.h"
+#include "OgreTextureGpuManager.h"
 #include "OgreSceneNode.h"
 #include "OgreRectangle2D2.h"
 #include "OgreLodListener.h"
@@ -93,6 +94,7 @@ uint32 SceneManager::QUERY_LIGHT_DEFAULT_MASK          = 0x10000000;
 uint32 SceneManager::QUERY_FRUSTUM_DEFAULT_MASK        = 0x08000000;
 //-----------------------------------------------------------------------
 SceneManager::SceneManager( const String& name, size_t numWorkerThreads ) :
+IdObject( Id::generateNewId<SceneManager>() ),
 mNumDecals( 0 ),
 mNumCubemapProbes( 0 ),
 mStaticMinDepthLevelDirty( 0 ),
@@ -112,6 +114,8 @@ mCurrentViewport0(0),
 mCurrentPass(0),
 mCurrentShadowNode(0),
 mShadowNodeIsReused( false ),
+mSkyMethod( SkyCubemap ),
+mSky( 0 ),
 mFogMode(FOG_NONE),
 mFogColour(),
 mFogStart(0),
@@ -127,14 +131,13 @@ mShowBoundingBoxes(false),
 mAutoParamDataSource(0),
 mLateMaterialResolving(false),
 mShadowColour(ColourValue(0.25, 0.25, 0.25)),
-mFullScreenQuad(0),
 mShadowDirLightExtrudeDist(10000),
 mIlluminationStage(IRS_NONE),
 mLightClippingInfoMapFrameNumber(999),
 mDefaultShadowFarDist(200),
 mDefaultShadowFarDistSquared(200*200),
-mShadowTextureOffset(0.6), 
-mShadowTextureFadeStart(0.7), 
+mShadowTextureOffset(0.6),
+mShadowTextureFadeStart(0.7),
 mShadowTextureFadeEnd(0.9),
 mShadowTextureCustomCasterPass(0),
 mVisibilityMask(0xFFFFFFFF & VisibilityFlags::RESERVED_VISIBILITY_FLAGS),
@@ -254,11 +257,9 @@ SceneManager::~SceneManager()
         OGRE_DELETE mSceneRoot[i];
         mSceneRoot[i] = 0;
     }
-    OGRE_DELETE mFullScreenQuad;
     OGRE_DELETE mRenderQueue;
     OGRE_DELETE mAutoParamDataSource;
 
-    mFullScreenQuad         = 0;
     mRenderQueue            = 0;
     mAutoParamDataSource    = 0;
 
@@ -972,6 +973,71 @@ void SceneManager::unregisterSceneNodeListener( SceneNode *sceneNode )
         mSceneNodesWithListeners.erase( itor );
 }
 //-----------------------------------------------------------------------
+void SceneManager::setSky( bool bEnabled, SkyMethod skyMethod, TextureGpu *texture )
+{
+    MaterialManager &materialManager = MaterialManager::getSingleton();
+
+    if( bEnabled )
+    {
+        if( !mSky )
+        {
+            mSky = OGRE_NEW Rectangle2D( Id::generateNewId<MovableObject>(),
+                                         &mEntityMemoryManager[SCENE_STATIC], this );
+            // We can't use BT_DYNAMIC_* because the scene may be rendered from multiple cameras
+            // in the same frame, and dynamic supports only one set of values per frame
+            mSky->initialize( BT_DEFAULT,
+                              Rectangle2D::GeometryFlagQuad | Rectangle2D::GeometryFlagNormals );
+            mSky->setGeometry( -Ogre::Vector2::UNIT_SCALE, Ogre::Vector2( 2.0f ) );
+            mSceneRoot[SCENE_STATIC]->attachObject( mSky );
+        }
+
+        const IdType sceneManagerId = getId();
+
+        const String matName = "Ogre/Sky/Cubemap" + StringConverter::toString( sceneManagerId );
+
+        mSkyMaterial = materialManager.getByName( matName );
+        if( !mSkyMaterial )
+        {
+            mSkyMaterial = materialManager.getByName(
+                "Ogre/Sky/Cubemap", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
+            if( !mSkyMaterial )
+            {
+                OGRE_EXCEPT( Exception::ERR_FILE_NOT_FOUND,
+                             "To use the sky bundle the resources included in Samples/Media/Common",
+                             "SceneManager::setSky" );
+            }
+            mSkyMaterial->load();
+            mSkyMaterial = mSkyMaterial->clone( matName );
+        }
+
+        if( skyMethod == SkyCubemap && texture->getTextureType() != TextureTypes::TypeCube )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "SkyCubemap method requires a cubemap texture",
+                         "SceneManager::setSky" );
+        }
+
+        TextureUnitState *tu = mSkyMaterial->getTechnique( 0 )->getPass( 0 )->getTextureUnitState( 0 );
+        // Ensure we don't accidentally clone the texture (minimize
+        // mem consumption by being Automatic Batching aware)
+        tu->setAutomaticBatching( texture->hasAutomaticBatching() );
+        tu->setTexture( texture );
+
+        mSky->setMaterial( mSkyMaterial );
+    }
+    else
+    {
+        if( mSky )
+            mSky->detachFromParent();
+        OGRE_DELETE mSky;
+        mSky = 0;
+        if( mSkyMaterial )
+        {
+            materialManager.remove( mSkyMaterial );
+            mSkyMaterial.reset();
+        }
+    }
+}
+//-----------------------------------------------------------------------
 void SceneManager::setForward3D( bool bEnable, uint32 width, uint32 height, uint32 numSlices,
                                  uint32 lightsPerCell, float minDistance, float maxDistance )
 {
@@ -1210,10 +1276,26 @@ void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera,
         if (mDestRenderSystem->getCapabilities()->hasCapability(RSC_USER_CLIP_PLANES))
         {
             mDestRenderSystem->resetClipPlanes();
-            if (camera->isWindowSet())  
+            if (camera->isWindowSet())
             {
                 mDestRenderSystem->setClipPlanes(camera->getWindowPlanes());
             }
+        }
+
+        if( mSky )
+        {
+            const Vector3 *corners = camera->getWorldSpaceCorners();
+            const Vector3 &cameraPos = camera->getDerivedPosition();
+
+            const Real invFarPlane = 1.0f / camera->getFarClipDistance();
+            Vector3 cameraDirs[4];
+            cameraDirs[0] = ( corners[5] - cameraPos ) / invFarPlane;
+            cameraDirs[1] = ( corners[6] - cameraPos ) / invFarPlane;
+            cameraDirs[2] = ( corners[4] - cameraPos ) / invFarPlane;
+            cameraDirs[3] = ( corners[7] - cameraPos ) / invFarPlane;
+
+            mSky->setNormals( cameraDirs[0], cameraDirs[1], cameraDirs[2], cameraDirs[3] );
+            mSky->update();
         }
 
         if (mFindVisibleObjects)

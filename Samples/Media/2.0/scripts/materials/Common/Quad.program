@@ -75,3 +75,34 @@ vertex_program Ogre/Compositor/QuadCameraDir_vs unified
 	delegate Ogre/Compositor/QuadCameraDir_vs_HLSL
 	delegate Ogre/Compositor/QuadCameraDir_vs_Metal
 }
+
+vertex_program Ogre/Compositor/QuadCameraDirNoUV_vs_GLSL glsl
+{
+	source QuadCameraDirNoUV_vs.glsl
+}
+
+vertex_program Ogre/Compositor/QuadCameraDirNoUV_vs_HLSL hlsl
+{
+	source QuadCameraDirNoUV_vs.hlsl
+	entry_point main
+	target vs_5_0 vs_4_0 vs_4_0_level_9_1 vs_4_0_level_9_3
+}
+
+vertex_program Ogre/Compositor/QuadCameraDirNoUV_vs_Metal metal
+{
+	source QuadCameraDirNoUV_vs.metal
+}
+
+// Unified definitions
+vertex_program Ogre/Compositor/QuadCameraDirNoUV_vs unified
+{
+	delegate Ogre/Compositor/QuadCameraDirNoUV_vs_GLSL
+	delegate Ogre/Compositor/QuadCameraDirNoUV_vs_HLSL
+	delegate Ogre/Compositor/QuadCameraDirNoUV_vs_Metal
+
+	default_params
+	{
+		param_named_auto	worldViewProj	worldviewproj_matrix
+		param_named_auto	rsDepthRange	rs_depth_range
+	}
+}

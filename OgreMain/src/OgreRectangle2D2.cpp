@@ -199,8 +199,8 @@ namespace Ogre
             }
         }
 
-        OGRE_ASSERT_LOW( ( size_t )( vertexData - vertexDataStart ) * ( hasNormals() ? 5u : 2u ) ==
-                         maxElements );
+        OGRE_ASSERT_LOW( ( size_t )( vertexData - vertexDataStart ) ==
+                         maxElements * ( hasNormals() ? 5u : 2u ) );
     }
     //-----------------------------------------------------------------------------------
     void Rectangle2D::setGeometry( const Vector2 &pos, const Vector2 &size )
