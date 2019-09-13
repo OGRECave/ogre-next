@@ -60,3 +60,66 @@ material Ogre/Sky/Cubemap
 		}
 	}
 }
+
+// GLSL shaders
+fragment_program Ogre/Sky/Equirectangular_ps_GLSL glsl
+{
+	source SkyEquirectangular_ps.glsl
+	default_params
+	{
+		param_named skyEquirectangular int 0
+	}
+}
+
+// HLSL shaders
+fragment_program Ogre/Sky/Equirectangular_ps_HLSL hlsl
+{
+	source SkyEquirectangular_ps.hlsl
+	entry_point main
+	target ps_5_0 ps_4_0 ps_4_0_level_9_1 ps_4_0_level_9_3
+}
+
+// Metal shaders
+fragment_program Ogre/Sky/Equirectangular_ps_Metal metal
+{
+	source SkyEquirectangular_ps.metal
+	shader_reflection_pair_hint Ogre/Compositor/QuadCameraDirNoUV_vs
+}
+
+// Unified definitions
+fragment_program Ogre/Sky/Equirectangular_ps unified
+{
+	delegate Ogre/Sky/Equirectangular_ps_HLSL
+	delegate Ogre/Sky/Equirectangular_ps_GLSL
+	delegate Ogre/Sky/Equirectangular_ps_Metal
+}
+
+// Material definition
+material Ogre/Sky/Equirectangular
+{
+	technique
+	{
+		pass
+		{
+			depth_check on
+			depth_write off
+
+			cull_hardware none
+
+			vertex_program_ref Ogre/Compositor/QuadCameraDirNoUV_vs
+			{
+			}
+
+			fragment_program_ref Ogre/Sky/Equirectangular_ps
+			{
+				param_named	sliceIdx	float 0.0
+			}
+
+			texture_unit
+			{
+				filtering			trilinear
+				tex_address_mode	clamp
+			}
+		}
+	}
+}

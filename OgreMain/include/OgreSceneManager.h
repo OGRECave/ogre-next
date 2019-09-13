@@ -508,7 +508,8 @@ namespace Ogre {
     public:
         enum SkyMethod
         {
-            SkyCubemap
+            SkyCubemap,
+            SkyEquirectangular
         };
     protected:
         SkyMethod mSkyMethod;

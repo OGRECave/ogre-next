@@ -14,5 +14,5 @@ fragment float4 main_metal
 )
 {
 	//Cubemaps are left-handed
-	return float4( skyCubemap.sample( samplerState, float3( inPs.cameraDir.xy, -inPs.cameraDir.z ) ).xyz, 1.0f );
+	return skyCubemap.sample( samplerState, float3( inPs.cameraDir.xy, -inPs.cameraDir.z ) ).xyzw;
 }

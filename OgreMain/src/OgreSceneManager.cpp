@@ -234,6 +234,9 @@ SceneManager::~SceneManager()
     mForwardPlusSystem  = 0;
     mForwardPlusImpl    = 0;
 
+    OGRE_DELETE mSky;
+    mSky = 0;
+
     fireSceneManagerDestroyed();
     clearScene( true, false );
     destroyAllCameras();
@@ -795,6 +798,9 @@ void SceneManager::clearScene( bool deleteIndestructibleToo, bool reattachCamera
         }
     }
 
+    if( mSky )
+        mSceneRoot[SCENE_STATIC]->attachObject( mSky );
+
     if( reattachCameras )
     {
         //Reattach all cameras to the root scene node
@@ -993,13 +999,19 @@ void SceneManager::setSky( bool bEnabled, SkyMethod skyMethod, TextureGpu *textu
 
         const IdType sceneManagerId = getId();
 
-        const String matName = "Ogre/Sky/Cubemap" + StringConverter::toString( sceneManagerId );
+        const char *baseMatNames[] =
+        {
+            "Ogre/Sky/Cubemap",
+            "Ogre/Sky/Equirectangular",
+        };
+
+        const String matName = baseMatNames[skyMethod] + StringConverter::toString( sceneManagerId );
 
         mSkyMaterial = materialManager.getByName( matName );
         if( !mSkyMaterial )
         {
             mSkyMaterial = materialManager.getByName(
-                "Ogre/Sky/Cubemap", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
+                baseMatNames[skyMethod], ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
             if( !mSkyMaterial )
             {
                 OGRE_EXCEPT( Exception::ERR_FILE_NOT_FOUND,
@@ -1015,8 +1027,22 @@ void SceneManager::setSky( bool bEnabled, SkyMethod skyMethod, TextureGpu *textu
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "SkyCubemap method requires a cubemap texture",
                          "SceneManager::setSky" );
         }
+        else if( skyMethod == SkyEquirectangular &&
+                 texture->getInternalTextureType() != TextureTypes::Type2DArray )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "SkyEquirectangular method requires a 2D texture",
+                         "SceneManager::setSky" );
+        }
 
-        TextureUnitState *tu = mSkyMaterial->getTechnique( 0 )->getPass( 0 )->getTextureUnitState( 0 );
+        Pass *pass = mSkyMaterial->getTechnique( 0 )->getPass( 0 );
+
+        if( skyMethod == SkyEquirectangular )
+        {
+            GpuProgramParametersSharedPtr psParams = pass->getFragmentProgramParameters();
+            psParams->setNamedConstant( "sliceIdx", (float)texture->getInternalSliceStart() );
+        }
+
+        TextureUnitState *tu = pass->getTextureUnitState( 0 );
         // Ensure we don't accidentally clone the texture (minimize
         // mem consumption by being Automatic Batching aware)
         tu->setAutomaticBatching( texture->hasAutomaticBatching() );
@@ -1289,10 +1315,10 @@ void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera,
 
             const Real invFarPlane = 1.0f / camera->getFarClipDistance();
             Vector3 cameraDirs[4];
-            cameraDirs[0] = ( corners[5] - cameraPos ) / invFarPlane;
-            cameraDirs[1] = ( corners[6] - cameraPos ) / invFarPlane;
-            cameraDirs[2] = ( corners[4] - cameraPos ) / invFarPlane;
-            cameraDirs[3] = ( corners[7] - cameraPos ) / invFarPlane;
+            cameraDirs[0] = ( corners[5] - cameraPos ) * invFarPlane;
+            cameraDirs[1] = ( corners[6] - cameraPos ) * invFarPlane;
+            cameraDirs[2] = ( corners[4] - cameraPos ) * invFarPlane;
+            cameraDirs[3] = ( corners[7] - cameraPos ) * invFarPlane;
 
             mSky->setNormals( cameraDirs[0], cameraDirs[1], cameraDirs[2], cameraDirs[3] );
             mSky->update();
