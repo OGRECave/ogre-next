@@ -183,6 +183,7 @@ namespace Ogre
     #define OGRE_LIN_TO_GAM( x ) x
     #define OGRE_UINT8 uint8
     #define OGRE_UINT32 uint32
+    #define OGRE_ROUND_HALF 0.5f
 
     #define ITERATING
     #define OGRE_DOWNSAMPLE_R 0
@@ -298,8 +299,10 @@ namespace Ogre
 
     #undef OGRE_UINT8
     #undef OGRE_UINT32
+    #undef OGRE_ROUND_HALF
     #define OGRE_UINT8 float
     #define OGRE_UINT32 float
+    #define OGRE_ROUND_HALF 0.0f
 
     #define OGRE_DOWNSAMPLE_R 0
     #define OGRE_DOWNSAMPLE_G 1
@@ -361,8 +364,10 @@ namespace Ogre
 
     #undef OGRE_UINT8
     #undef OGRE_UINT32
+    #undef OGRE_ROUND_HALF
     #define OGRE_UINT8 uint8
     #define OGRE_UINT32 uint32
+    #define OGRE_ROUND_HALF 0.5f
 
     #define OGRE_DOWNSAMPLE_R 0
     #define OGRE_DOWNSAMPLE_G 1
@@ -447,6 +452,9 @@ namespace Ogre
         OGRE_UINT8 *dstPtr = reinterpret_cast<OGRE_UINT8*>( _dstPtr );
         OGRE_UINT8 const *srcPtr = reinterpret_cast<OGRE_UINT8 const *>( _srcPtr );
 
+        srcBytesPerRow /= sizeof( OGRE_UINT8 );
+        dstBytesPerRow /= sizeof( OGRE_UINT8 );
+
         int32 srcBytesPerRowSkip = srcBytesPerRow - srcWidth * OGRE_TOTAL_SIZE;
         int32 dstBytesPerRowSkip = dstBytesPerRow - dstWidth * OGRE_TOTAL_SIZE;
 
@@ -507,13 +515,13 @@ namespace Ogre
     #endif
 
     #ifdef OGRE_DOWNSAMPLE_R
-                dstPtr[OGRE_DOWNSAMPLE_R] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumR * invDivisor ) + 0.5f );
+                dstPtr[OGRE_DOWNSAMPLE_R] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumR * invDivisor ) + OGRE_ROUND_HALF );
     #endif
     #ifdef OGRE_DOWNSAMPLE_G
-                dstPtr[OGRE_DOWNSAMPLE_G] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumG * invDivisor ) + 0.5f );
+                dstPtr[OGRE_DOWNSAMPLE_G] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumG * invDivisor ) + OGRE_ROUND_HALF );
     #endif
     #ifdef OGRE_DOWNSAMPLE_B
-                dstPtr[OGRE_DOWNSAMPLE_B] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumB * invDivisor ) + 0.5f );
+                dstPtr[OGRE_DOWNSAMPLE_B] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumB * invDivisor ) + OGRE_ROUND_HALF );
     #endif
     #ifdef OGRE_DOWNSAMPLE_A
                 dstPtr[OGRE_DOWNSAMPLE_A] = static_cast<OGRE_UINT8>( (accumA + divisor - 1u) / divisor );
@@ -539,6 +547,9 @@ namespace Ogre
     {
         OGRE_UINT8 *dstPtr = reinterpret_cast<OGRE_UINT8*>( _dstPtr );
         OGRE_UINT8 const **allPtr = reinterpret_cast<OGRE_UINT8 const **>( _allPtr );
+
+        srcBytesPerRow /= sizeof( OGRE_UINT8 );
+        dstBytesPerRow /= sizeof( OGRE_UINT8 );
 
         Quaternion kRotations[5][5];
 
@@ -637,13 +648,13 @@ namespace Ogre
     #endif
 
     #ifdef OGRE_DOWNSAMPLE_R
-                dstPtr[OGRE_DOWNSAMPLE_R] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumR * invDivisor ) + 0.5f );
+                dstPtr[OGRE_DOWNSAMPLE_R] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumR * invDivisor ) + OGRE_ROUND_HALF );
     #endif
     #ifdef OGRE_DOWNSAMPLE_G
-                dstPtr[OGRE_DOWNSAMPLE_G] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumG * invDivisor ) + 0.5f );
+                dstPtr[OGRE_DOWNSAMPLE_G] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumG * invDivisor ) + OGRE_ROUND_HALF );
     #endif
     #ifdef OGRE_DOWNSAMPLE_B
-                dstPtr[OGRE_DOWNSAMPLE_B] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumB * invDivisor ) + 0.5f );
+                dstPtr[OGRE_DOWNSAMPLE_B] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumB * invDivisor ) + OGRE_ROUND_HALF );
     #endif
     #ifdef OGRE_DOWNSAMPLE_A
                 dstPtr[OGRE_DOWNSAMPLE_A] = static_cast<OGRE_UINT8>( (accumA + divisor - 1u) / divisor );
@@ -663,6 +674,8 @@ namespace Ogre
     {
         OGRE_UINT8 *dstPtr = reinterpret_cast<OGRE_UINT8*>( _tmpPtr );
         OGRE_UINT8 const *srcPtr = reinterpret_cast<OGRE_UINT8 const *>( _srcDstPtr );
+
+        bytesPerRow /= sizeof( OGRE_UINT8 );
 
         const int32 bytesPerRowSkip = bytesPerRow - width * OGRE_TOTAL_SIZE;
 
@@ -717,13 +730,13 @@ namespace Ogre
     #endif
 
     #ifdef OGRE_DOWNSAMPLE_R
-                dstPtr[OGRE_DOWNSAMPLE_R] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumR * invDivisor ) + 0.5f );
+                dstPtr[OGRE_DOWNSAMPLE_R] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumR * invDivisor ) + OGRE_ROUND_HALF );
     #endif
     #ifdef OGRE_DOWNSAMPLE_G
-                dstPtr[OGRE_DOWNSAMPLE_G] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumG * invDivisor ) + 0.5f );
+                dstPtr[OGRE_DOWNSAMPLE_G] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumG * invDivisor ) + OGRE_ROUND_HALF );
     #endif
     #ifdef OGRE_DOWNSAMPLE_B
-                dstPtr[OGRE_DOWNSAMPLE_B] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumB * invDivisor ) + 0.5f );
+                dstPtr[OGRE_DOWNSAMPLE_B] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumB * invDivisor ) + OGRE_ROUND_HALF );
     #endif
     #ifdef OGRE_DOWNSAMPLE_A
                 dstPtr[OGRE_DOWNSAMPLE_A] = static_cast<OGRE_UINT8>( (accumA + divisor - 1u) / divisor );
@@ -791,13 +804,13 @@ namespace Ogre
     #endif
 
     #ifdef OGRE_DOWNSAMPLE_R
-                dstPtr[OGRE_DOWNSAMPLE_R] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumR * invDivisor ) + 0.5f );
+                dstPtr[OGRE_DOWNSAMPLE_R] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumR * invDivisor ) + OGRE_ROUND_HALF );
     #endif
     #ifdef OGRE_DOWNSAMPLE_G
-                dstPtr[OGRE_DOWNSAMPLE_G] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumG * invDivisor ) + 0.5f );
+                dstPtr[OGRE_DOWNSAMPLE_G] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumG * invDivisor ) + OGRE_ROUND_HALF );
     #endif
     #ifdef OGRE_DOWNSAMPLE_B
-                dstPtr[OGRE_DOWNSAMPLE_B] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumB * invDivisor ) + 0.5f );
+                dstPtr[OGRE_DOWNSAMPLE_B] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumB * invDivisor ) + OGRE_ROUND_HALF );
     #endif
     #ifdef OGRE_DOWNSAMPLE_A
                 dstPtr[OGRE_DOWNSAMPLE_A] = static_cast<OGRE_UINT8>( (accumA + divisor - 1u) / divisor );
@@ -873,13 +886,13 @@ namespace Ogre
     #endif
 
     #ifdef OGRE_DOWNSAMPLE_R
-                dstPtr[OGRE_DOWNSAMPLE_R] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumR * invDivisor ) + 0.5f );
+                dstPtr[OGRE_DOWNSAMPLE_R] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumR * invDivisor ) + OGRE_ROUND_HALF );
     #endif
     #ifdef OGRE_DOWNSAMPLE_G
-                dstPtr[OGRE_DOWNSAMPLE_G] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumG * invDivisor ) + 0.5f );
+                dstPtr[OGRE_DOWNSAMPLE_G] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumG * invDivisor ) + OGRE_ROUND_HALF );
     #endif
     #ifdef OGRE_DOWNSAMPLE_B
-                dstPtr[OGRE_DOWNSAMPLE_B] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumB * invDivisor ) + 0.5f );
+                dstPtr[OGRE_DOWNSAMPLE_B] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumB * invDivisor ) + OGRE_ROUND_HALF );
     #endif
     #ifdef OGRE_DOWNSAMPLE_A
                 dstPtr[OGRE_DOWNSAMPLE_A] = static_cast<OGRE_UINT8>( (accumA + divisor - 1u) / divisor );
@@ -944,13 +957,13 @@ namespace Ogre
     #endif
 
     #ifdef OGRE_DOWNSAMPLE_R
-                dstPtr[OGRE_DOWNSAMPLE_R] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumR * invDivisor ) + 0.5f );
+                dstPtr[OGRE_DOWNSAMPLE_R] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumR * invDivisor ) + OGRE_ROUND_HALF );
     #endif
     #ifdef OGRE_DOWNSAMPLE_G
-                dstPtr[OGRE_DOWNSAMPLE_G] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumG * invDivisor ) + 0.5f );
+                dstPtr[OGRE_DOWNSAMPLE_G] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumG * invDivisor ) + OGRE_ROUND_HALF );
     #endif
     #ifdef OGRE_DOWNSAMPLE_B
-                dstPtr[OGRE_DOWNSAMPLE_B] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumB * invDivisor ) + 0.5f );
+                dstPtr[OGRE_DOWNSAMPLE_B] = static_cast<OGRE_UINT8>( OGRE_LIN_TO_GAM( accumB * invDivisor ) + OGRE_ROUND_HALF );
     #endif
     #ifdef OGRE_DOWNSAMPLE_A
                 dstPtr[OGRE_DOWNSAMPLE_A] = static_cast<OGRE_UINT8>( (accumA + divisor - 1u) / divisor );
