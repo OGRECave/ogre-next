@@ -539,6 +539,7 @@ namespace Ogre
             texSlot.mipmapLevel > 0 ||
             texSlot.numMipmaps != 0 ||
             texSlot.textureArrayIndex > 0 ||
+            (getInternalTextureType() == TextureTypes::Type2DArray && mDepthOrSlices == 1u) ||
             isReinterpretable() ||
             PixelFormatGpuUtils::isDepth( mPixelFormat ) )
         {

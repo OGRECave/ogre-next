@@ -1,6 +1,8 @@
 #include <metal_stdlib>
 using namespace metal;
 
+#define PI 3.14159265359f
+
 struct PS_INPUT
 {
 	float3 cameraDir;
