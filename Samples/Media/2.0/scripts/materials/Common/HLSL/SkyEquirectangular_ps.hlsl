@@ -3,8 +3,8 @@ struct PS_INPUT
 	float3 cameraDir	: TEXCOORD0;
 };
 
-TextureCube<float4> skyEquirectangular	: register(t0);
-SamplerState samplerState				: register(s0);
+Texture2DArray<float4> skyEquirectangular	: register(t0);
+SamplerState samplerState					: register(s0);
 
 float4 main
 (

@@ -9,8 +9,8 @@ struct PS_INPUT
 fragment float4 main_metal
 (
 	PS_INPUT inPs [[stage_in]],
-	texturecube<float> skyEquirectangular	[[texture(0)]],
-	sampler samplerState					[[sampler(0)]],
+	texture2d_array<float> skyEquirectangular	[[texture(0)]],
+	sampler samplerState						[[sampler(0)]],
 
 	constant float &sliceIdx [[buffer(PARAMETER_SLOT)]]
 )
