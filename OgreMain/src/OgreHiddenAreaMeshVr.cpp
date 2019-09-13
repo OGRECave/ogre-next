@@ -71,28 +71,28 @@ namespace Ogre
         else
         {
             String value;
-            value = configFile.getSetting( "leftEyeCenter", deviceConfigName, "" );
+            value = configFile.getSetting( "leftEyeCenter", bestMatch, "" );
             retVal.leftEyeCenter = StringConverter::parseVector2( value );
-            value = configFile.getSetting( "leftEyeRadius", deviceConfigName, "" );
+            value = configFile.getSetting( "leftEyeRadius", bestMatch, "" );
             retVal.leftEyeRadius = StringConverter::parseVector2( value );
-            value = configFile.getSetting( "leftNoseCenter", deviceConfigName, "" );
+            value = configFile.getSetting( "leftNoseCenter", bestMatch, "" );
             retVal.leftNoseCenter = StringConverter::parseVector2( value );
-            value = configFile.getSetting( "leftNoseRadius", deviceConfigName, "" );
+            value = configFile.getSetting( "leftNoseRadius", bestMatch, "" );
             retVal.leftNoseRadius = StringConverter::parseVector2( value );
 
-            value = configFile.getSetting( "rightEyeCenter", deviceConfigName, "" );
+            value = configFile.getSetting( "rightEyeCenter", bestMatch, "" );
             retVal.rightEyeCenter = StringConverter::parseVector2( value );
-            value = configFile.getSetting( "rightEyeRadius", deviceConfigName, "" );
+            value = configFile.getSetting( "rightEyeRadius", bestMatch, "" );
             retVal.rightEyeRadius = StringConverter::parseVector2( value );
-            value = configFile.getSetting( "rightNoseCenter", deviceConfigName, "" );
+            value = configFile.getSetting( "rightNoseCenter", bestMatch, "" );
             retVal.rightNoseCenter = StringConverter::parseVector2( value );
-            value = configFile.getSetting( "rightNoseRadius", deviceConfigName, "" );
+            value = configFile.getSetting( "rightNoseRadius", bestMatch, "" );
             retVal.rightNoseRadius = StringConverter::parseVector2( value );
 
-            value = configFile.getSetting( "tessellation", deviceConfigName, "" );
+            value = configFile.getSetting( "tessellation", bestMatch, "" );
             retVal.tessellation = StringConverter::parseUnsignedInt( value );
 
-            value = configFile.getSetting( "enabled", deviceConfigName, "" );
+            value = configFile.getSetting( "enabled", bestMatch, "" );
             if( !StringConverter::parseBool( value ) )
                 retVal.tessellation = 0u;
 
