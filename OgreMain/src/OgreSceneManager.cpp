@@ -1064,6 +1064,35 @@ void SceneManager::setSky( bool bEnabled, SkyMethod skyMethod, TextureGpu *textu
     }
 }
 //-----------------------------------------------------------------------
+void SceneManager::setSky( bool bEnabled, SkyMethod skyMethod, const String &texName,
+                           const String &resourceGroup )
+{
+    TextureGpu *texture = 0;
+
+    if( bEnabled )
+    {
+        TextureGpuManager *textureManager = mDestRenderSystem->getTextureGpuManager();
+        if( skyMethod == SkyCubemap )
+        {
+            texture = textureManager->createOrRetrieveTexture(
+                texName, GpuPageOutStrategy::Discard, CommonTextureTypes::EnvMap, resourceGroup );
+        }
+        else
+        {
+            // Do not generate mipmaps for equirectangular maps.
+            // They cause artifacts when it wraps around due to the sudden change in UV
+            texture = textureManager->createOrRetrieveTexture(
+                texName, texName, GpuPageOutStrategy::Discard,
+                TextureFlags::AutomaticBatching | TextureFlags::PrefersLoadingFromFileAsSRGB,
+                TextureTypes::Type2D, resourceGroup, 0 );
+        }
+
+        texture->scheduleTransitionTo( GpuResidency::Resident );
+    }
+
+    setSky( bEnabled, skyMethod, texture );
+}
+//-----------------------------------------------------------------------
 void SceneManager::setForward3D( bool bEnable, uint32 width, uint32 height, uint32 numSlices,
                                  uint32 lightsPerCell, float minDistance, float maxDistance )
 {

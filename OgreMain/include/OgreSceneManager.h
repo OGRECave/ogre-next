@@ -1136,6 +1136,8 @@ namespace Ogre {
         @param texture
         */
         void setSky( bool bEnabled, SkyMethod skyMethod, TextureGpu *texture );
+        void setSky( bool bEnabled, SkyMethod skyMethod, const String &texName,
+                     const String &resourceGroup );
 
         Rectangle2D* getSky(void)                       { return mSky; }
         bool isSkyEnabled(void) const                   { return mSky != 0; }
