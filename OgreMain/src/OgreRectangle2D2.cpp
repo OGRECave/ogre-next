@@ -164,53 +164,57 @@ namespace Ogre
     void Rectangle2D::fillHollowFsRect( float *RESTRICT_ALIAS vertexData, size_t maxElements )
     {
         const float c_veryLargeValue = 65000.0f;
-        //const float c_veryLargeValue = 1.0f;
+        // const float c_veryLargeValue = 1.0f;
         const float radius = static_cast<float>( getHollowRectRadius() );
+
+        Vector2 posCenter[2] = { mPosition, mSize };
 
         const size_t numIterations = isStereo() ? 2u : 1u;
         const float *vertexDataStart = vertexData;
 
         for( size_t i = 0u; i < numIterations; ++i )
         {
+            posCenter[i].y = -posCenter[i].y;
+
             // 1st upper right quad
-            *vertexData++ = radius;
+            *vertexData++ = radius + posCenter[i].x;
             *vertexData++ = 1.0f;
 
             *vertexData++ = -c_veryLargeValue;
-            *vertexData++ = radius;
+            *vertexData++ = radius + posCenter[i].y;
 
-            *vertexData++ = radius;
-            *vertexData++ = radius;
+            *vertexData++ = radius + posCenter[i].x;
+            *vertexData++ = radius + posCenter[i].y;
 
             // 2nd lower right quad
             *vertexData++ = 1.0f;
-            *vertexData++ = -radius;
+            *vertexData++ = -radius + posCenter[i].y;
 
-            *vertexData++ = radius;
+            *vertexData++ = radius + posCenter[i].x;
             *vertexData++ = c_veryLargeValue;
 
-            *vertexData++ = radius;
-            *vertexData++ = -radius;
+            *vertexData++ = radius + posCenter[i].x;
+            *vertexData++ = -radius + posCenter[i].y;
 
             // 3rd lower left quad
-            *vertexData++ = -radius;
+            *vertexData++ = -radius + posCenter[i].x;
             *vertexData++ = -1.0f;
 
             *vertexData++ = c_veryLargeValue;
-            *vertexData++ = -radius;
+            *vertexData++ = -radius + posCenter[i].y;
 
-            *vertexData++ = -radius;
-            *vertexData++ = -radius;
+            *vertexData++ = -radius + posCenter[i].x;
+            *vertexData++ = -radius + posCenter[i].y;
 
             // 4th upper left quad
             *vertexData++ = -1.0f;
-            *vertexData++ = radius;
+            *vertexData++ = radius + posCenter[i].y;
 
-            *vertexData++ = -radius;
+            *vertexData++ = -radius + posCenter[i].x;
             *vertexData++ = -c_veryLargeValue;
 
-            *vertexData++ = -radius;
-            *vertexData++ = radius;
+            *vertexData++ = -radius + posCenter[i].x;
+            *vertexData++ = radius + posCenter[i].y;
         }
 
         OGRE_ASSERT_LOW( ( size_t )( vertexData - vertexDataStart ) == maxElements * 2u );

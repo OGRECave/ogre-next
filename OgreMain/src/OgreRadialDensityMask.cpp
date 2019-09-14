@@ -50,6 +50,7 @@ namespace Ogre
                                   &sceneManager->_getEntityMemoryManager( SCENE_STATIC ), sceneManager );
 
         mRectangle->setHollowRectRadius( mRadius[0] );
+        mRectangle->setGeometry( mLeftEyeCenter, mRightEyeCenter );
         mRectangle->initialize(
             BT_IMMUTABLE, Rectangle2D::GeometryFlagStereo | Rectangle2D::GeometryFlagHollowFsRect );
 
