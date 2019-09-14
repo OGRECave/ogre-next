@@ -49,7 +49,9 @@ namespace Ogre
             /// For stereo
             GeometryFlagStereo      = 1u << 1u,
             GeometryFlagNormals     = 1u << 2u,
-            GeometryFlagReserved0   = 1u << 3u | 1u << 4u | 1u << 5u
+            GeometryFlagReserved0   = 1u << 3u | 1u << 4u | 1u << 5u,
+            ///
+            GeometryFlagHollowFsRect= 1 << 6u
             // clang-format on
         };
 
@@ -71,6 +73,7 @@ namespace Ogre
         Vector2 mSize;
 
         void createBuffers( void );
+        void fillHollowFsRect( float *RESTRICT_ALIAS vertexData, size_t maxElements );
         void fillBuffer( float *RESTRICT_ALIAS vertexData, size_t maxElements );
 
     public:
@@ -81,6 +84,7 @@ namespace Ogre
         bool isStereo( void ) const;
         bool hasNormals( void ) const;
         BufferType getBufferType( void ) const;
+        bool isHollowFullscreenRect( void ) const;
 
         uint32 calculateNumVertices( void ) const;
 
@@ -88,6 +92,9 @@ namespace Ogre
 
         void setNormals( const Vector3 &upperLeft, const Vector3 &bottomLeft,  //
                          const Vector3 &upperRight, const Vector3 &bottomRight );
+
+        void setHollowRectRadius( Real radius );
+        Real getHollowRectRadius( void ) const { return mNormals[0].x; }
 
         void initialize( BufferType bufferType, uint32 geometryFlags );
 

@@ -62,6 +62,7 @@ THE SOFTWARE.
 #include "OgreTextureManager.h"
 #include "OgreTextureGpuManager.h"
 #include "OgreSceneNode.h"
+#include "OgreRadialDensityMask.h"
 #include "OgreRectangle2D2.h"
 #include "OgreLodListener.h"
 #include "OgreOldNode.h"
@@ -116,6 +117,7 @@ mCurrentShadowNode(0),
 mShadowNodeIsReused( false ),
 mSkyMethod( SkyCubemap ),
 mSky( 0 ),
+mRadialDensityMask( 0 ),
 mFogMode(FOG_NONE),
 mFogColour(),
 mFogStart(0),
@@ -236,6 +238,9 @@ SceneManager::~SceneManager()
 
     OGRE_DELETE mSky;
     mSky = 0;
+
+    OGRE_DELETE mRadialDensityMask;
+    mRadialDensityMask = 0;
 
     fireSceneManagerDestroyed();
     clearScene( true, false );
@@ -801,6 +806,9 @@ void SceneManager::clearScene( bool deleteIndestructibleToo, bool reattachCamera
     if( mSky )
         mSceneRoot[SCENE_STATIC]->attachObject( mSky );
 
+    if( mRadialDensityMask )
+        mSceneRoot[SCENE_STATIC]->attachObject( mRadialDensityMask->getRectangle() );
+
     if( reattachCameras )
     {
         //Reattach all cameras to the root scene node
@@ -1093,6 +1101,22 @@ void SceneManager::setSky( bool bEnabled, SkyMethod skyMethod, const String &tex
     setSky( bEnabled, skyMethod, texture );
 }
 //-----------------------------------------------------------------------
+void SceneManager::setRadialDensityMask( bool bEnabled, const float radius[3] )
+{
+    if( bEnabled )
+    {
+        if( !mRadialDensityMask )
+            mRadialDensityMask = OGRE_NEW RadialDensityMask( this, radius );
+        else
+            mRadialDensityMask->setNewRadius( radius );
+    }
+    else
+    {
+        OGRE_DELETE mRadialDensityMask;
+        mRadialDensityMask = 0;
+    }
+}
+//-----------------------------------------------------------------------
 void SceneManager::setForward3D( bool bEnable, uint32 width, uint32 height, uint32 numSlices,
                                  uint32 lightsPerCell, float minDistance, float maxDistance )
 {
@@ -1337,7 +1361,7 @@ void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera,
             }
         }
 
-        if( mSky )
+        if( mSky && mIlluminationStage != IRS_RENDER_TO_TEXTURE )
         {
             const Vector3 *corners = camera->getWorldSpaceCorners();
             const Vector3 &cameraPos = camera->getDerivedPosition();
@@ -1352,6 +1376,9 @@ void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera,
             mSky->setNormals( cameraDirs[0], cameraDirs[1], cameraDirs[2], cameraDirs[3] );
             mSky->update();
         }
+
+        if( mRadialDensityMask && mIlluminationStage != IRS_RENDER_TO_TEXTURE )
+            mRadialDensityMask->update( mDestRenderSystem->getCurrentRenderViewports() );
 
         if (mFindVisibleObjects)
         {

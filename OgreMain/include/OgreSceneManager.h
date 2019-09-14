@@ -85,6 +85,8 @@ namespace Ogre {
     class CompositorShadowNode;
     class UniformScalableTask;
 
+    class RadialDensityMask;
+
     namespace v1
     {
         class Rectangle2D;
@@ -515,6 +517,9 @@ namespace Ogre {
         SkyMethod mSkyMethod;
         Rectangle2D *mSky;
         MaterialPtr mSkyMaterial;
+
+        /// For VR optimization
+        RadialDensityMask *mRadialDensityMask;
 
         // Fog
         FogMode mFogMode;
@@ -1131,6 +1136,17 @@ namespace Ogre {
         virtual void destroySceneNode(SceneNode* sn);
 
         /** Sets a sky, to use a particular material based on SkyMethod
+        @remarks
+            You can control the order in which the sky appears (for best performance render
+            the sky LAST i.e. after all opaque objects, but before transparent objects).
+
+            You can control the order of the sky and its visibility flags by calling:
+            @code
+                Rectangle2D *sky = sceneManager->getSky()
+                sky->setRenderQueueGroup( rqId )
+                sky->setRenderQueueSubGroup( rqSubGroupId )
+                sky->setVisibilityFlags( mask )
+            @endcode
         @param bEnabled
         @param skyMethod
         @param texture
@@ -1143,6 +1159,27 @@ namespace Ogre {
         bool isSkyEnabled(void) const                   { return mSky != 0; }
         SkyMethod getSkyMethod(void) const              { return mSkyMethod; }
         MaterialPtr getSkyMaterial(void)                { return mSkyMaterial; }
+
+        /** Draws a Radial Density Mask to lower the quality around the edges in VR
+        @remarks
+            You can control the order in which this RDM appears (to actually work as an optimization
+            it must be the first thing being rendered!) and its visibility flags by calling:
+            @code
+                RadialDensityMask *rdm = sceneManager->getRadialDensityMask()
+                rdm->getRectangle()->setRenderQueueGroup( rqId )
+                rdm->getRectangle()->setRenderQueueSubGroup( rqSubGroupId )
+                rdm->getRectangle()->setVisibilityFlags( mask )
+            @endcode
+        @param bEnabled
+        @param radius
+            Three sets of radiuses in clip space (i.e. in range [0; 1]) around each eye's center
+                All pixels inside radius[0] are rendered at full rate
+                All pixels between radius[0] & radius[1] are masked at half rate
+                All pixels between radius[1] & radius[2] are masked at quarter rate
+                All pixels beyond radius[2] are masked at 1/16th rate
+        */
+        void setRadialDensityMask( bool bEnabled, const float radius[3] );
+        RadialDensityMask* getRadialDensityMask(void) const     { return mRadialDensityMask; }
 
         /** Gets the SceneNode at the root of the scene hierarchy.
             @remarks

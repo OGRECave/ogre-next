@@ -92,20 +92,27 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    bool Rectangle2D::isQuad( void ) const { return mGeometryFlags & GeometryFlagQuad; }
+    bool Rectangle2D::isQuad( void ) const { return ( mGeometryFlags & GeometryFlagQuad ) != 0u; }
     //-----------------------------------------------------------------------------------
-    bool Rectangle2D::isStereo( void ) const { return mGeometryFlags & GeometryFlagStereo; }
+    bool Rectangle2D::isStereo( void ) const { return ( mGeometryFlags & GeometryFlagStereo ) != 0u; }
     //-----------------------------------------------------------------------------------
-    bool Rectangle2D::hasNormals( void ) const { return mGeometryFlags & GeometryFlagNormals; }
+    bool Rectangle2D::hasNormals( void ) const { return ( mGeometryFlags & GeometryFlagNormals ) != 0u; }
     //-----------------------------------------------------------------------------------
     BufferType Rectangle2D::getBufferType( void ) const
     {
         return static_cast<BufferType>( ( mGeometryFlags & GeometryFlagReserved0 ) >> 3u );
     }
     //-----------------------------------------------------------------------------------
+    bool Rectangle2D::isHollowFullscreenRect( void ) const
+    {
+        return ( mGeometryFlags & GeometryFlagHollowFsRect ) != 0u;
+    }
+    //-----------------------------------------------------------------------------------
     uint32 Rectangle2D::calculateNumVertices( void ) const
     {
         uint32 numVertices = isQuad() ? 4u : 3u;
+        if( isHollowFullscreenRect() )
+            numVertices = 3u * 4u;
         if( isStereo() )
             numVertices = numVertices << 1u;
         return numVertices;
@@ -132,22 +139,81 @@ namespace Ogre
         float *vertexData = reinterpret_cast<float *>( OGRE_MALLOC_SIMD(
             sizeof( float ) * bytesPerVertex * numVertices, Ogre::MEMCATEGORY_GEOMETRY ) );
         FreeOnDestructor dataPtr( vertexData );
-        fillBuffer( vertexData, numVertices );
+        if( !isHollowFullscreenRect() )
+            fillBuffer( vertexData, numVertices );
+        else
+            fillHollowFsRect( vertexData, numVertices );
 
         Ogre::VertexBufferPacked *vertexBuffer = 0;
         // Create the actual vertex buffer.
         vertexBuffer =
             vaoManager->createVertexBuffer( vertexElements, numVertices, bufferType, vertexData, false );
 
+        const OperationType opType = isHollowFullscreenRect() ? OT_TRIANGLE_LIST : OT_TRIANGLE_STRIP;
+
         // Now the Vao. We'll just use one vertex buffer source (multi-source not working yet)
         VertexBufferPackedVec vertexBuffers;
         vertexBuffers.push_back( vertexBuffer );
-        Ogre::VertexArrayObject *vao =
-            vaoManager->createVertexArrayObject( vertexBuffers, 0, OT_TRIANGLE_STRIP );
+        Ogre::VertexArrayObject *vao = vaoManager->createVertexArrayObject( vertexBuffers, 0, opType );
 
         mVaoPerLod[0].push_back( vao );
         mVaoPerLod[1].push_back( vao );
         mChanged = true;
+    }
+    //-----------------------------------------------------------------------------------
+    void Rectangle2D::fillHollowFsRect( float *RESTRICT_ALIAS vertexData, size_t maxElements )
+    {
+        const float c_veryLargeValue = 65000.0f;
+        //const float c_veryLargeValue = 1.0f;
+        const float radius = static_cast<float>( getHollowRectRadius() );
+
+        const size_t numIterations = isStereo() ? 2u : 1u;
+        const float *vertexDataStart = vertexData;
+
+        for( size_t i = 0u; i < numIterations; ++i )
+        {
+            // 1st upper right quad
+            *vertexData++ = radius;
+            *vertexData++ = 1.0f;
+
+            *vertexData++ = -c_veryLargeValue;
+            *vertexData++ = radius;
+
+            *vertexData++ = radius;
+            *vertexData++ = radius;
+
+            // 2nd lower right quad
+            *vertexData++ = 1.0f;
+            *vertexData++ = -radius;
+
+            *vertexData++ = radius;
+            *vertexData++ = c_veryLargeValue;
+
+            *vertexData++ = radius;
+            *vertexData++ = -radius;
+
+            // 3rd lower left quad
+            *vertexData++ = -radius;
+            *vertexData++ = -1.0f;
+
+            *vertexData++ = c_veryLargeValue;
+            *vertexData++ = -radius;
+
+            *vertexData++ = -radius;
+            *vertexData++ = -radius;
+
+            // 4th upper left quad
+            *vertexData++ = -1.0f;
+            *vertexData++ = radius;
+
+            *vertexData++ = -radius;
+            *vertexData++ = -c_veryLargeValue;
+
+            *vertexData++ = -radius;
+            *vertexData++ = radius;
+        }
+
+        OGRE_ASSERT_LOW( ( size_t )( vertexData - vertexDataStart ) == maxElements * 2u );
     }
     //-----------------------------------------------------------------------------------
     void Rectangle2D::fillBuffer( float *RESTRICT_ALIAS vertexData, size_t maxElements )
@@ -205,7 +271,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void Rectangle2D::setGeometry( const Vector2 &pos, const Vector2 &size )
     {
-        OGRE_ASSERT_MEDIUM( getBufferType() != BT_IMMUTABLE );
+        OGRE_ASSERT_MEDIUM( getBufferType() != BT_IMMUTABLE || mVaoPerLod[0].empty() );
         mPosition = pos;
         mSize = size;
         mChanged = true;
@@ -214,11 +280,20 @@ namespace Ogre
     void Rectangle2D::setNormals( const Vector3 &upperLeft, const Vector3 &bottomLeft,
                                   const Vector3 &upperRight, const Vector3 &bottomRight )
     {
-        OGRE_ASSERT_MEDIUM( getBufferType() != BT_IMMUTABLE );
+        OGRE_ASSERT_MEDIUM( getBufferType() != BT_IMMUTABLE || mVaoPerLod[0].empty() );
+        OGRE_ASSERT_MEDIUM( hasNormals() || mVaoPerLod[0].empty() );
         mNormals[CornerBottomLeft] = bottomLeft;
         mNormals[CornerUpperLeft] = upperLeft;
         mNormals[CornerBottomRight] = bottomRight;
         mNormals[CornerUpperRight] = upperRight;
+        mChanged = true;
+    }
+    //-----------------------------------------------------------------------------------
+    void Rectangle2D::setHollowRectRadius( Real radius )
+    {
+        OGRE_ASSERT_MEDIUM( getBufferType() != BT_IMMUTABLE || mVaoPerLod[0].empty() );
+        OGRE_ASSERT_MEDIUM( isHollowFullscreenRect() || mVaoPerLod[0].empty() );
+        mNormals[0].x = radius;
         mChanged = true;
     }
     //-----------------------------------------------------------------------------------
@@ -227,6 +302,8 @@ namespace Ogre
         OGRE_ASSERT_LOW( mVaoPerLod[0].empty() && "Can only call Rectangle2D::initialize once!" );
         mGeometryFlags = geometryFlags;
         mGeometryFlags |= ( geometryFlags & GeometryFlagReserved0 ) | ( (uint32)bufferType << 3u );
+        OGRE_ASSERT_LOW( !( hasNormals() && isHollowFullscreenRect() ) &&
+                         "Can't set normals and hollow FS rect at the same time!" );
         createBuffers();
         mChanged = false;
     }
@@ -255,7 +332,10 @@ namespace Ogre
             vertexData = reinterpret_cast<float * RESTRICT_ALIAS>( stagingBuffer->map( numTotalBytes ) );
         }
 
-        fillBuffer( vertexData, vertexBuffer->getNumElements() );
+        if( !isHollowFullscreenRect() )
+            fillBuffer( vertexData, vertexBuffer->getNumElements() );
+        else
+            fillHollowFsRect( vertexData, vertexBuffer->getNumElements() );
 
         if( bIsDynamic )
             vertexBuffer->unmap( UO_KEEP_PERSISTENT );

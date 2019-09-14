@@ -1,0 +1,77 @@
+vertex_program Ogre/Compositor/RadialDensityMask_vs_GLSL glsl
+{
+	source RadialDensityMask_vs.glsl
+}
+
+vertex_program Ogre/Compositor/RadialDensityMask_vs_HLSL hlsl
+{
+	source RadialDensityMask_vs.hlsl
+	entry_point main
+	target vs_5_0 vs_4_0 vs_4_0_level_9_1 vs_4_0_level_9_3
+}
+
+vertex_program Ogre/Compositor/RadialDensityMask_vs_Metal metal
+{
+	source RadialDensityMask_vs.metal
+}
+
+// Unified definitions
+vertex_program Ogre/Compositor/RadialDensityMask_vs unified
+{
+	delegate Ogre/Compositor/RadialDensityMask_vs_GLSL
+	delegate Ogre/Compositor/RadialDensityMask_vs_HLSL
+	delegate Ogre/Compositor/RadialDensityMask_vs_Metal
+
+	default_params
+	{
+		param_named_auto	worldViewProj	worldviewproj_matrix
+		param_named_auto	rsDepthRange	rs_depth_range
+	}
+}
+
+fragment_program Ogre/VR/RadialDensityMask_ps_GLSL glsl
+{
+	source RadialDensityMask_ps.glsl
+}
+
+fragment_program Ogre/VR/RadialDensityMask_ps_HLSL hlsl
+{
+	source RadialDensityMask_ps.hlsl
+	entry_point main
+	target ps_5_0 ps_4_0 ps_4_0_level_9_1 ps_4_0_level_9_3
+}
+
+fragment_program Ogre/VR/RadialDensityMask_ps_Metal metal
+{
+	source RadialDensityMask_ps.metal
+	shader_reflection_pair_hint Ogre/Compositor/RadialDensityMask_vs
+}
+
+fragment_program Ogre/VR/RadialDensityMask_ps unified
+{
+	delegate Ogre/VR/RadialDensityMask_ps_GLSL
+	delegate Ogre/VR/RadialDensityMask_ps_HLSL
+	delegate Ogre/VR/RadialDensityMask_ps_Metal
+}
+
+material Ogre/VR/RadialDensityMask
+{
+	technique
+	{
+		pass
+		{
+			cull_hardware none
+
+			//Do not write colour at all
+			//channel_mask 0
+
+			vertex_program_ref Ogre/Compositor/RadialDensityMask_vs
+			{
+			}
+
+			fragment_program_ref Ogre/VR/RadialDensityMask_ps
+			{
+			}
+		}
+	}
+}
