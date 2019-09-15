@@ -59,8 +59,14 @@ namespace Demo
                                               Ogre::SCENE_STATIC );
             mHiddenAreaMeshVr->setCastShadows( false );
             mHiddenAreaMeshVr->getSubItem(0)->setUseIdentityProjection( true );
+            mHiddenAreaMeshVr->getSubItem(0)->setRenderQueueSubGroup( 1u );
             sceneManager->getRootSceneNode( Ogre::SCENE_STATIC )->attachObject( mHiddenAreaMeshVr );
         }
+
+        /*const float radiuses[3] = {0.55f, 0.7f, 0.85f};
+        sceneManager->setRadialDensityMask( true, radiuses );*/
+        const float radiuses[3] = {0.25f, 0.7f, 0.85f};
+        sceneManager->setRadialDensityMask( true, radiuses );
 
         sceneManager->getRenderQueue()->setRenderQueueMode( 1u, Ogre::RenderQueue::FAST );
 

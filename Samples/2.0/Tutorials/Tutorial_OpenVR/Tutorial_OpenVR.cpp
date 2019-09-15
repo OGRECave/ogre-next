@@ -62,9 +62,29 @@ namespace Demo
         else if( *(dataFolder.end() - 1) != '/' )
             dataFolder += "/";
 
-        dataFolder += "2.0/scripts/materials/PbsMaterials";
+        Ogre::String originalDataFolder = cf.getSetting( "DoNotUseAsResource", "Hlms", "" );
 
-        addResourceLocation( dataFolder, "FileSystem", "General" );
+        if( originalDataFolder.empty() )
+            originalDataFolder = "./";
+        else if( *(originalDataFolder.end() - 1) != '/' )
+            originalDataFolder += "/";
+
+        const char *c_locations[] =
+        {
+            "Hlms/Common/GLSL",
+            "Hlms/Common/HLSL",
+            "Hlms/Common/Metal",
+            "Compute/Tools/Any",
+            "Compute/VR",
+            "Compute/VR/Foveated",
+            "2.0/scripts/materials/PbsMaterials"
+        };
+
+        for( size_t i=0; i<sizeof(c_locations) / sizeof(c_locations[0]); ++i )
+        {
+            Ogre::String dataFolder = originalDataFolder + c_locations[i];
+            addResourceLocation( dataFolder, "FileSystem", "General" );
+        }
     }
 
     //-----------------------------------------------------------------------------
@@ -122,11 +142,12 @@ namespace Demo
         Ogre::TextureGpuManager *textureManager = mRoot->getRenderSystem()->getTextureGpuManager();
         mVrTexture = textureManager->createOrRetrieveTexture( "OpenVR Both Eyes",
                                                               Ogre::GpuPageOutStrategy::Discard,
-                                                              Ogre::TextureFlags::RenderToTexture,
+                                                              Ogre::TextureFlags::RenderToTexture |
+                                                              Ogre::TextureFlags::Reinterpretable,
                                                               Ogre::TextureTypes::Type2D );
         mVrTexture->setResolution( width << 1u, height );
         mVrTexture->setPixelFormat( Ogre::PFG_RGBA8_UNORM_SRGB );
-        mVrTexture->setMsaa( 4u );
+        //mVrTexture->setMsaa( 4u );
         mVrTexture->scheduleTransitionTo( Ogre::GpuResidency::Resident );
 
         mVrCullCamera = mSceneManager->createCamera( "VrCullCamera" );

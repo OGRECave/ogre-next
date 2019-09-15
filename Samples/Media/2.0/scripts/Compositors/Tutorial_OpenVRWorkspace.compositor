@@ -2,7 +2,9 @@ compositor_node Tutorial_OpenVRNode
 {
 	in 0 stereo_output
 
-	target stereo_output
+	texture rtt target_width target_height target_format msaa 4
+
+	target rtt
 	{
 		//Eye render
 		pass render_scene
@@ -39,6 +41,17 @@ compositor_node Tutorial_OpenVRNode
 			rq_last		255
 
 			overlays	on
+		}
+	}
+
+	target stereo_output
+	{
+		pass compute
+		{
+			job VR/RadialDensityMaskReconstruct
+
+			input 0 rtt
+			uav 0 stereo_output write PFG_RGBA8_UNORM
 		}
 	}
 }
