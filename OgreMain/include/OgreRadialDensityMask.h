@@ -88,10 +88,6 @@ namespace Ogre
         GpuProgramParametersSharedPtr mPsParams;
 
         HlmsComputeJob *mReconstructJob;
-//        ShaderParams *mJobParams;
-//        ShaderParams::Param *mParamRightEyeStart;
-//        ShaderParams::Param *mParamEyeCenters;
-//        ShaderParams::Param *mParamInvBlockResolution;
         ConstBufferPacked *mJobParams;
 
         static void setEyeCenter( Real *outEyeCenter, Vector2 inEyeCenterClipSpace, const Viewport &vp );
