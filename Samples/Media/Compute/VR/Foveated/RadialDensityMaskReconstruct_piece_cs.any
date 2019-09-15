@@ -1,5 +1,4 @@
 @piece( HeaderCS )
-
 	CONST_BUFFER_STRUCT_BEGIN( RdmShaderParams, 0 )
 	{
 		float4 rightEyeStart_radius;
@@ -19,6 +18,8 @@
 			local_size_y = @value( threads_per_group_y ),
 			local_size_z = @value( threads_per_group_z ) ) in;
 
+	@insertpiece( DeclSRgbFuncs )
+
 	/** Takes the pattern:
 			a x c x
 			x b x d
@@ -30,7 +31,7 @@
 			e e f f
 			g g h h
 	*/
-	void reconstructHalfRes( wshort2 dstUV, ushort2 uFragCoordHalf )
+	INLINE void reconstructHalfRes( wshort2 dstUV, ushort2 uFragCoordHalf )
 	{
 		short2 offset;
 		if( (uFragCoordHalf.x & 0x01u) != (uFragCoordHalf.y & 0x01u) )
@@ -42,7 +43,7 @@
 		rshort2 uv = rshort2( short2( dstUV ) + offset );
 		float4 srcVal = OGRE_Load2D( srcTex, uv.xy, 0 );
 
-		OGRE_imageWrite2D4( dstTex, dstUV, srcVal );
+		OGRE_imageWrite2D4( dstTex, dstUV, toSRGB( srcVal ) );
 	}
 
 	/** Takes the pattern:
@@ -56,7 +57,7 @@
 			a b a b
 			c d c d
 	*/
-	void reconstructQuarterRes( wshort2 dstUV, ushort2 uFragCoordHalf )
+	INLINE void reconstructQuarterRes( wshort2 dstUV, ushort2 uFragCoordHalf )
 	{
 		/* This outputs:
 			a a b b
@@ -68,7 +69,7 @@
 		short2 offset = -(dstUV & 0x03);
 		rshort2 uv = rshort2( short2( dstUV ) + offset );
 		float4 srcVal = OGRE_Load2D( srcTex, uv.xy, 0 );
-		OGRE_imageWrite2D4( dstTex, dstUV, srcVal );*/
+		OGRE_imageWrite2D4( dstTex, dstUV, toSRGB( srcVal ) );*/
 
 		short2 offset;
 		offset.x = (uFragCoordHalf.x & 0x01u) == 0 ? 0 : -2;
@@ -77,7 +78,7 @@
 		rshort2 uv = rshort2( short2( dstUV ) + offset );
 		float4 srcVal = OGRE_Load2D( srcTex, uv.xy, 0 );
 
-		OGRE_imageWrite2D4( dstTex, dstUV, srcVal );
+		OGRE_imageWrite2D4( dstTex, dstUV, toSRGB( srcVal ) );
 	}
 
 	/** Same as reconstructQuarterRes, but a lot more samples to repeat:
@@ -99,7 +100,7 @@
 			a b a b a b a b
 			c d c d c d c d
 	*/
-	void reconstructSixteenthRes( wshort2 dstUV, ushort2 uFragCoordHalf )
+	INLINE void reconstructSixteenthRes( wshort2 dstUV, ushort2 uFragCoordHalf )
 	{
 		int2 block = int2( uFragCoordHalf ) & 0x03;
 
@@ -110,7 +111,7 @@
 		rshort2 uv = rshort2( short2( dstUV ) + offset );
 		float4 srcVal = OGRE_Load2D( srcTex, uv.xy, 0 );
 
-		OGRE_imageWrite2D4( dstTex, dstUV, srcVal );
+		OGRE_imageWrite2D4( dstTex, dstUV, toSRGB( srcVal ) );
 	}
 @end
 
@@ -149,6 +150,6 @@
 	}
 	else
 	{
-		OGRE_imageWrite2D4( dstTex, currentUV, OGRE_Load2D( srcTex, rshort2( currentUV ), 0 ) );
+		OGRE_imageWrite2D4( dstTex, currentUV, toSRGB( OGRE_Load2D( srcTex, rshort2( currentUV ), 0 ) ) );
 	}
 @end

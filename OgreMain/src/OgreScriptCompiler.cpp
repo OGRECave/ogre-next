@@ -1248,6 +1248,7 @@ namespace Ogre
         mIds["msaa"]                = ID_MSAA;
         mIds["msaa_auto"]           = ID_MSAA_AUTO;
         mIds["explicit_resolve"]    = ID_EXPLICIT_RESOLVE;
+        mIds["reinterpretable"]     = ID_REINTERPRETABLE;
         mIds["depth_pool"]          = ID_DEPTH_POOL;
         mIds["depth_texture"]       = ID_DEPTH_TEXTURE;
         mIds["depth_format"]        = ID_DEPTH_FORMAT;

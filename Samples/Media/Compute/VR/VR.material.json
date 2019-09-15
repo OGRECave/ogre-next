@@ -7,7 +7,7 @@
             "thread_groups" : [1, 1, 1],
 
             "source" : "RadialDensityMaskReconstruct_cs",
-            "pieces" : ["CrossPlatformSettings_piece_all", "RadialDensityMaskReconstruct_piece_cs.any"],
+            "pieces" : ["CrossPlatformSettings_piece_all", "sRGB.any", "RadialDensityMaskReconstruct_piece_cs.any"],
 			"inform_shader_of_texture_data_change" : true,
 
             "uav_units" : 1,

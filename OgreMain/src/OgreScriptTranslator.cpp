@@ -6350,6 +6350,9 @@ namespace Ogre{
             case ID_EXPLICIT_RESOLVE:
                 textureFlags |= TextureFlags::MsaaExplicitResolve;
                 break;
+            case ID_REINTERPRETABLE:
+                textureFlags |= TextureFlags::Reinterpretable;
+                break;
             case ID_DEPTH_POOL:
                 {
                     // advance to next to get the ID
