@@ -1,0 +1,154 @@
+@piece( HeaderCS )
+
+	CONST_BUFFER_STRUCT_BEGIN( RdmShaderParams, 0 )
+	{
+		float4 rightEyeStart_radius;
+		float4 leftEyeCenter_rightEyeCenter;
+		float4 invBlockResolution_invResolution;
+	}
+	CONST_BUFFER_STRUCT_END( p );
+
+	#define leftEyeCenter			leftEyeCenter_rightEyeCenter.xy
+	#define rightEyeCenter			leftEyeCenter_rightEyeCenter.zw
+	#define rightEyeStart			rightEyeStart_radius.x
+	#define radius					rightEyeStart_radius.yzw
+	#define invBlockResolution		invBlockResolution_invResolution.xy
+	#define invResolution			invBlockResolution_invResolution.zw
+
+	layout( local_size_x = @value( threads_per_group_x ),
+			local_size_y = @value( threads_per_group_y ),
+			local_size_z = @value( threads_per_group_z ) ) in;
+
+	/** Takes the pattern:
+			a x c x
+			x b x d
+			e x f x
+			x g x h
+		And outputs:
+			a a c c
+			b b d d
+			e e f f
+			g g h h
+	*/
+	void reconstructHalfRes( wshort2 dstUV, ushort2 uFragCoordHalf )
+	{
+		short2 offset;
+		if( (uFragCoordHalf.x & 0x01u) != (uFragCoordHalf.y & 0x01u) )
+			offset.x = (uFragCoordHalf.y & 0x01u) == 0 ? -2 : 2;
+		else
+			offset.x = 0;
+		offset.y = 0;
+
+		rshort2 uv = rshort2( short2( dstUV ) + offset );
+		float4 srcVal = OGRE_Load2D( srcTex, uv.xy, 0 );
+
+		OGRE_imageWrite2D4( dstTex, dstUV, srcVal );
+	}
+
+	/** Takes the pattern:
+			a b x x
+			c d x x
+			x x x x
+			x x x x
+		And outputs:
+			a b a b
+			c d c d
+			a b a b
+			c d c d
+	*/
+	void reconstructQuarterRes( wshort2 dstUV, ushort2 uFragCoordHalf )
+	{
+		/* This outputs:
+			a a b b
+			a a b b
+			c c d d
+			c c d d
+		But it looks MUCH worse so it's not used
+
+		short2 offset = -(dstUV & 0x03);
+		rshort2 uv = rshort2( short2( dstUV ) + offset );
+		float4 srcVal = OGRE_Load2D( srcTex, uv.xy, 0 );
+		OGRE_imageWrite2D4( dstTex, dstUV, srcVal );*/
+
+		short2 offset;
+		offset.x = (uFragCoordHalf.x & 0x01u) == 0 ? 0 : -2;
+		offset.y = (uFragCoordHalf.y & 0x01u) == 0 ? 0 : -2;
+
+		rshort2 uv = rshort2( short2( dstUV ) + offset );
+		float4 srcVal = OGRE_Load2D( srcTex, uv.xy, 0 );
+
+		OGRE_imageWrite2D4( dstTex, dstUV, srcVal );
+	}
+
+	/** Same as reconstructQuarterRes, but a lot more samples to repeat:
+			a b x x x x x x
+			c d x x x x x x
+			x x x x x x x x
+			x x x x x x x x
+			x x x x x x x x
+			x x x x x x x x
+			x x x x x x x x
+			x x x x x x x x
+		And outputs:
+			a b a b a b a b
+			c d c d c d c d
+			a b a b a b a b
+			c d c d c d c d
+			a b a b a b a b
+			c d c d c d c d
+			a b a b a b a b
+			c d c d c d c d
+	*/
+	void reconstructSixteenthRes( wshort2 dstUV, ushort2 uFragCoordHalf )
+	{
+		int2 block = int2( uFragCoordHalf ) & 0x03;
+
+		short2 offset;
+		offset.x = block.x * -2;
+		offset.y = block.y * -2;
+
+		rshort2 uv = rshort2( short2( dstUV ) + offset );
+		float4 srcVal = OGRE_Load2D( srcTex, uv.xy, 0 );
+
+		OGRE_imageWrite2D4( dstTex, dstUV, srcVal );
+	}
+@end
+
+@piece( BodyCS )
+	ushort2 currentUV = ushort2( gl_GlobalInvocationID.xy );
+	ushort2 uFragCoordHalf = ushort2( currentUV >> 1u );
+
+	bool bIsRightEye = currentUV.x >= p.rightEyeStart;
+	float2 eyeCenter = bIsRightEye ? p.rightEyeCenter : p.leftEyeCenter;
+
+	//We must work in blocks so the reconstruction filter can work properly
+	float2 toCenter = (currentUV >> 3u) * p.invBlockResolution.xy - eyeCenter;
+	toCenter.x *= 2.0f; //Twice because of stereo (each eye is half the size of the full res)
+	float distToCenter = length( toCenter );
+
+	float2 toCenterFullRes = currentUV * p.invResolution.xy - eyeCenter;
+	//We make distToBox one pixel bigger in the Y value because due to the Top-left
+	//rule of rasterization, there's a row of pixels that was left outside the safe zone)
+	float distToBox = max( abs( toCenterFullRes.x * 2.0f ),
+						   abs( toCenterFullRes.y ) + p.invResolution.y );
+
+	if( distToCenter >= p.radius.x && distToBox >= p.radius.x )
+	{
+		if( distToCenter < p.radius.y )
+		{
+			reconstructHalfRes( wshort2( currentUV ), uFragCoordHalf );
+		}
+		else if( distToCenter < p.radius.z )
+		{
+			reconstructQuarterRes( wshort2( currentUV ), uFragCoordHalf );
+		}
+		else
+		{
+			reconstructSixteenthRes( wshort2( currentUV ), uFragCoordHalf );
+		}
+	}
+	else
+	{
+		OGRE_imageWrite2D4( dstTex, currentUV, OGRE_Load2D( srcTex, rshort2( currentUV ), 0 ) );
+	}
+@end

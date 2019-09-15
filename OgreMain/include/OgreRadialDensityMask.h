@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "OgrePrerequisites.h"
 
 #include "OgreGpuProgram.h"
+#include "OgreShaderParams.h"
 
 #include "OgreHeaderPrefix.h"
 
@@ -81,12 +82,22 @@ namespace Ogre
         Vector2 mLeftEyeCenter;
         Vector2 mRightEyeCenter;
 
+        bool mDirty;
+        int32 mLastVpWidth;
+        int32 mLastVpHeight;
         GpuProgramParametersSharedPtr mPsParams;
+
+        HlmsComputeJob *mReconstructJob;
+//        ShaderParams *mJobParams;
+//        ShaderParams::Param *mParamRightEyeStart;
+//        ShaderParams::Param *mParamEyeCenters;
+//        ShaderParams::Param *mParamInvBlockResolution;
+        ConstBufferPacked *mJobParams;
 
         static void setEyeCenter( Real *outEyeCenter, Vector2 inEyeCenterClipSpace, const Viewport &vp );
 
     public:
-        RadialDensityMask( SceneManager *sceneManager, const float radius[3] );
+        RadialDensityMask( SceneManager *sceneManager, const float radius[3], HlmsManager *hlmsManager );
         ~RadialDensityMask();
 
         void update( Viewport *viewports );

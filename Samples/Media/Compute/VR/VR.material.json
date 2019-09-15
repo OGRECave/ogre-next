@@ -1,0 +1,27 @@
+{
+	"compute" :
+	{
+        "VR/RadialDensityMaskReconstruct" :
+		{
+            "threads_per_group" : [8, 8, 1],
+            "thread_groups" : [1, 1, 1],
+
+            "source" : "RadialDensityMaskReconstruct_cs",
+            "pieces" : ["CrossPlatformSettings_piece_all", "RadialDensityMaskReconstruct_piece_cs.any"],
+			"inform_shader_of_texture_data_change" : true,
+
+            "uav_units" : 1,
+
+            "textures" :
+            [
+                {}
+            ],
+
+            "params_glsl" :
+            [
+                ["srcTex",              [0], "int"],
+                ["dstTex",              [0], "int"]
+            ]
+        }
+	}
+}

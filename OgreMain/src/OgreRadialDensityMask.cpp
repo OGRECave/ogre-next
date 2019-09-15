@@ -36,12 +36,69 @@ THE SOFTWARE.
 #include "OgreSceneManager.h"
 #include "OgreTechnique.h"
 
+#include "OgreHlmsCompute.h"
+#include "OgreHlmsComputeJob.h"
+#include "OgreHlmsManager.h"
+#include "Vao/OgreConstBufferPacked.h"
+
 namespace Ogre
 {
-    RadialDensityMask::RadialDensityMask( SceneManager *sceneManager, const float radius[3] ) :
+    struct float4
+    {
+        float x, y, z, w;
+        float4() {}
+        float4( const Vector4 &val ) : x( val.x ), y( val.y ), z( val.z ), w( val.w ) {}
+        float4( const Vector2 &valXY, const Vector2 &valZW ) :
+            x( valXY.x ),
+            y( valXY.y ),
+            z( valZW.x ),
+            w( valZW.y )
+        {
+        }
+    };
+    struct float2
+    {
+        float x, y;
+        float2() {}
+        float2( const Vector2 &val ) : x( val.x ), y( val.y ) {}
+    };
+    // struct uint4
+    //{
+    //    uint32 x, y, z, w;
+    //    uint4() {}
+    //    uint4( const Vector4 &val ) :
+    //        x( static_cast<uint32>( val.x ) ),
+    //        y( static_cast<uint32>( val.y ) ),
+    //        z( static_cast<uint32>( val.z ) ),
+    //        w( static_cast<uint32>( val.w ) )
+    //    {
+    //    }
+    //    uint4( const Vector2 &valXY, const Vector2 &valZW ) :
+    //        x( static_cast<uint32>( valXY.x ) ),
+    //        y( static_cast<uint32>( valXY.y ) ),
+    //        z( static_cast<uint32>( valZW.x ) ),
+    //        w( static_cast<uint32>( valZW.y ) )
+    //    {
+    //    }
+    //};
+
+    struct RdmShaderParams
+    {
+        float4 rightEyeStart_radius;
+        float4 leftEyeCenter_rightEyeCenter;
+        float4 invBlockResolution_invResolution;
+    };
+
+    RadialDensityMask::RadialDensityMask( SceneManager *sceneManager, const float radius[3],
+                                          HlmsManager *hlmsManager ) :
         mRectangle( 0 ),
         mLeftEyeCenter( Vector2::ZERO ),
-        mRightEyeCenter( Vector2::ZERO )
+        mRightEyeCenter( Vector2::ZERO ),
+        mDirty( true ),
+        mLastVpWidth( 0 ),
+        mLastVpHeight( 0 ),
+        mReconstructJob( 0 ),
+        mJobParams( 0 )
     {
         memcpy( mRadius, radius, sizeof( mRadius ) );
 
@@ -84,10 +141,38 @@ namespace Ogre
                                                           .back()
                                                           ->getBaseVertexBuffer()
                                                           ->_getFinalBufferStart() );
+
+        HlmsCompute *hlmsCompute = hlmsManager->getComputeHlms();
+        mReconstructJob = hlmsCompute->findComputeJobNoThrow( "VR/RadialDensityMaskReconstruct" );
+        if( !mReconstructJob )
+        {
+#if OGRE_NO_JSON
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "To use RadialDensityMask, Ogre must be build with JSON support "
+                         "and you must include the resources bundled at "
+                         "Samples/Media/Compute/VR",
+                         "RadialDensityMask::RadialDensityMask" );
+#endif
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "To use RadialDensityMask, you must include the resources bundled at "
+                         "Samples/Media/Compute/VR\n"
+                         "Could not find VCT/Voxelizer",
+                         "RadialDensityMask::RadialDensityMask" );
+        }
+
+        VaoManager *vaoManager = sceneManager->getDestinationRenderSystem()->getVaoManager();
+        mJobParams = vaoManager->createConstBuffer(
+            alignToNextMultiple( sizeof( RdmShaderParams ), 16u ), BT_DEFAULT, 0, false );
+        mReconstructJob->setConstBuffer( 0, mJobParams );
     }
     //-------------------------------------------------------------------------
     RadialDensityMask::~RadialDensityMask()
     {
+        VaoManager *vaoManager =
+            mRectangle->_getManager()->getDestinationRenderSystem()->getVaoManager();
+        vaoManager->destroyConstBuffer( mJobParams );
+        mJobParams = 0;
+
         MaterialPtr material = mRectangle->getMaterial();
         MaterialManager::getSingleton().remove( material );
 
@@ -98,12 +183,25 @@ namespace Ogre
     void RadialDensityMask::setEyeCenter( Real *outEyeCenter, Vector2 inEyeCenterClipSpace,
                                           const Viewport &vp )
     {
-        outEyeCenter[0] = (inEyeCenterClipSpace.x * 0.5f + 0.5f) * vp.getWidth() + vp.getLeft();
-        outEyeCenter[1] = (inEyeCenterClipSpace.y * 0.5f + 0.5f) * vp.getHeight() + vp.getTop();
+        outEyeCenter[0] = ( inEyeCenterClipSpace.x * 0.5f + 0.5f ) * vp.getWidth() + vp.getLeft();
+        outEyeCenter[1] = ( inEyeCenterClipSpace.y * 0.5f + 0.5f ) * vp.getHeight() + vp.getTop();
     }
     //-------------------------------------------------------------------------
     void RadialDensityMask::update( Viewport *viewports )
     {
+        const int32 width = viewports[1].getActualLeft() + viewports[1].getActualWidth();
+        const int32 height = viewports[1].getActualHeight();
+
+        if( width != mLastVpWidth || height != mLastVpHeight )
+        {
+            mLastVpWidth = width;
+            mLastVpHeight = height;
+            mDirty = true;
+        }
+
+        if( !mDirty )
+            return;
+
         Vector4 leftEyeCenter_rightEyeCenter;
         setEyeCenter( &leftEyeCenter_rightEyeCenter[0], mLeftEyeCenter, viewports[0] );
         setEyeCenter( &leftEyeCenter_rightEyeCenter[2], mRightEyeCenter, viewports[1] );
@@ -113,20 +211,31 @@ namespace Ogre
         for( size_t i = 0u; i < 3u; ++i )
             rightEyeStart_radius[i + 1u] = mRadius[i] * 0.5f;
 
-        const int32 width = viewports[1].getActualLeft() + viewports[1].getActualWidth();
-        const int32 height = viewports[1].getActualHeight();
-
         const Vector2 invBlockResolution( 8.0f / width, 8.0f / height );
 
         mPsParams->setNamedConstant( "leftEyeCenter_rightEyeCenter", leftEyeCenter_rightEyeCenter );
         mPsParams->setNamedConstant( "rightEyeStart_radius", rightEyeStart_radius );
         mPsParams->setNamedConstant( "invBlockResolution", invBlockResolution );
+
+        RdmShaderParams shaderParams;
+        shaderParams.rightEyeStart_radius = rightEyeStart_radius;
+        shaderParams.leftEyeCenter_rightEyeCenter = leftEyeCenter_rightEyeCenter;
+        shaderParams.invBlockResolution_invResolution =
+            float4( invBlockResolution, Vector2( 1.0f / width, 1.0f / height ) );
+        mJobParams->upload( &shaderParams, 0, sizeof( shaderParams ) );
+
+        const uint32 threadGroupsX = ( (uint32)width + mReconstructJob->getThreadsPerGroupX() - 1u ) /
+                                     mReconstructJob->getThreadsPerGroupX();
+        const uint32 threadGroupsY = ( (uint32)height + mReconstructJob->getThreadsPerGroupY() - 1u ) /
+                                     mReconstructJob->getThreadsPerGroupY();
+        mReconstructJob->setNumThreadGroups( threadGroupsX, threadGroupsY, 1u );
     }
     //-------------------------------------------------------------------------
     void RadialDensityMask::setEyesCenter( const Vector2 &leftEyeCenter, const Vector2 &rightEyeCenter )
     {
         mLeftEyeCenter = leftEyeCenter;
         mRightEyeCenter = rightEyeCenter;
+        mDirty = true;
     }
     //-------------------------------------------------------------------------
     void RadialDensityMask::setNewRadius( const float radius[3] )
@@ -158,5 +267,6 @@ namespace Ogre
                                                               ->getBaseVertexBuffer()
                                                               ->_getFinalBufferStart() );
         }
+        mDirty = true;
     }
 }  // namespace Ogre

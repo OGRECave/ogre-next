@@ -169,7 +169,7 @@ namespace Demo
         }
         else if( arg.keysym.sym == SDLK_F3 && (arg.keysym.mod & (KMOD_LCTRL|KMOD_RCTRL)) )
         {
-            //Hot reload of Unlit shaders.
+            //Hot reload of Compute shaders.
             Ogre::Root *root = mGraphicsSystem->getRoot();
             Ogre::HlmsManager *hlmsManager = root->getHlmsManager();
 

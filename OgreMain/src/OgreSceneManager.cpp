@@ -1106,9 +1106,14 @@ void SceneManager::setRadialDensityMask( bool bEnabled, const float radius[3] )
     if( bEnabled )
     {
         if( !mRadialDensityMask )
-            mRadialDensityMask = OGRE_NEW RadialDensityMask( this, radius );
+        {
+            mRadialDensityMask =
+                    OGRE_NEW RadialDensityMask( this, radius, Root::getSingleton().getHlmsManager() );
+        }
         else
+        {
             mRadialDensityMask->setNewRadius( radius );
+        }
     }
     else
     {
@@ -1377,8 +1382,11 @@ void SceneManager::_renderPhase02(Camera* camera, const Camera *lodCamera,
             mSky->update();
         }
 
-        if( mRadialDensityMask && mIlluminationStage != IRS_RENDER_TO_TEXTURE )
+        if( mRadialDensityMask && mIlluminationStage != IRS_RENDER_TO_TEXTURE &&
+            isUsingInstancedStereo() )
+        {
             mRadialDensityMask->update( mDestRenderSystem->getCurrentRenderViewports() );
+        }
 
         if (mFindVisibleObjects)
         {
