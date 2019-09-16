@@ -240,7 +240,7 @@ namespace Ogre
         mReconstructJob->setPiece( "Quality", qualityStr[quality] );
         for( int32 i = 0; i < 3; ++i )
             mReconstructJob->setProperty( qualityProp[i], i + 1 );
-        mReconstructJob->setProperty( "quality", static_cast<int32>( quality ) );
+        mReconstructJob->setProperty( "quality", static_cast<int32>( quality ) + 1 );
     }
     //-------------------------------------------------------------------------
     void RadialDensityMask::setEyesCenter( const Vector2 &leftEyeCenter, const Vector2 &rightEyeCenter )

@@ -140,9 +140,11 @@ namespace Demo
         mHMD->GetRecommendedRenderTargetSize( &width, &height );
 
         Ogre::TextureGpuManager *textureManager = mRoot->getRenderSystem()->getTextureGpuManager();
+        //Radial Density Mask requires the VR texture to be UAV & reinterpretable
         mVrTexture = textureManager->createOrRetrieveTexture( "OpenVR Both Eyes",
                                                               Ogre::GpuPageOutStrategy::Discard,
                                                               Ogre::TextureFlags::RenderToTexture |
+                                                              Ogre::TextureFlags::Uav |
                                                               Ogre::TextureFlags::Reinterpretable,
                                                               Ogre::TextureTypes::Type2D );
         mVrTexture->setResolution( width << 1u, height );

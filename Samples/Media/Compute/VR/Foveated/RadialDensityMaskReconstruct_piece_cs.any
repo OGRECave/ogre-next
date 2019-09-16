@@ -14,10 +14,6 @@
 	#define invBlockResolution		invBlockResolution_invResolution.xy
 	#define invResolution			invBlockResolution_invResolution.zw
 
-	layout( local_size_x = @value( threads_per_group_x ),
-			local_size_y = @value( threads_per_group_y ),
-			local_size_z = @value( threads_per_group_z ) ) in;
-
 	@insertpiece( DeclSRgbFuncs )
 
 	/** Takes the pattern (low quality):

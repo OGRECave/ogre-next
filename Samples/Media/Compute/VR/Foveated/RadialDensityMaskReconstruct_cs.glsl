@@ -12,6 +12,10 @@ layout (@insertpiece(uav0_pf_type)) uniform restrict writeonly @insertpiece(uav0
 
 uniform sampler2D srcTex;
 
+layout( local_size_x = @value( threads_per_group_x ),
+		local_size_y = @value( threads_per_group_y ),
+		local_size_z = @value( threads_per_group_z ) ) in;
+
 @insertpiece( HeaderCS )
 
 void main()

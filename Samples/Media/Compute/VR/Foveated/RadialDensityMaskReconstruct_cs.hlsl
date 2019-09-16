@@ -15,11 +15,12 @@
 
 #define short2 int2
 #define ushort2 uint2
-#define OGRE_imageWrite3D4( outImage, iuv, value ) outImage[uint2( iuv )] = value
+#define OGRE_imageWrite2D4( outImage, iuv, value ) outImage[uint2( iuv )] = value
 
 RWTexture2D<@insertpiece(uav0_pf_type)> dstTex		: register(u0);
 
-Texture2D srcTex : register(t0);
+Texture2D srcTex				: register(t0);
+SamplerState bilinearSampler	: register(s0);
 
 @insertpiece( HeaderCS )
 
