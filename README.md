@@ -1,5 +1,5 @@
 
-# OGRE3D (OBJECT-ORIENTED GRAPHICS ENGINE)
+# OGRE3D (Object-Oriented Graphics Rendering Engine)
 
 Ogre is a 3D graphics rendering engine. Not to be confused with a game engine, which provides Networking, Sound, Physics, etc.
 This project provides advanced, efficient modern 3D rendering capabilities.
