@@ -164,6 +164,8 @@ namespace Ogre
         mJobParams = vaoManager->createConstBuffer(
             alignToNextMultiple( sizeof( RdmShaderParams ), 16u ), BT_DEFAULT, 0, false );
         mReconstructJob->setConstBuffer( 0, mJobParams );
+
+        setQuality( RdmHigh );
     }
     //-------------------------------------------------------------------------
     RadialDensityMask::~RadialDensityMask()
@@ -229,6 +231,16 @@ namespace Ogre
         const uint32 threadGroupsY = ( (uint32)height + mReconstructJob->getThreadsPerGroupY() - 1u ) /
                                      mReconstructJob->getThreadsPerGroupY();
         mReconstructJob->setNumThreadGroups( threadGroupsX, threadGroupsY, 1u );
+    }
+    //-------------------------------------------------------------------------
+    void RadialDensityMask::setQuality( RdmQuality quality )
+    {
+        const String qualityStr[3] = { "Low", "Medium", "High" };
+        const IdString qualityProp[3] = { "low", "medium", "high" };
+        mReconstructJob->setPiece( "Quality", qualityStr[quality] );
+        for( int32 i = 0; i < 3; ++i )
+            mReconstructJob->setProperty( qualityProp[i], i + 1 );
+        mReconstructJob->setProperty( "quality", static_cast<int32>( quality ) );
     }
     //-------------------------------------------------------------------------
     void RadialDensityMask::setEyesCenter( const Vector2 &leftEyeCenter, const Vector2 &rightEyeCenter )

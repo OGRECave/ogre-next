@@ -20,18 +20,18 @@
 
 	@insertpiece( DeclSRgbFuncs )
 
-	/** Takes the pattern:
-			a x c x
-			x b x d
-			e x f x
-			x g x h
+	/** Takes the pattern (low quality):
+			ab xx ef xx
+			cd xx gh xx
+			xx ij xx mn
+			xx kl xx op
 		And outputs:
-			a a c c
-			b b d d
-			e e f f
-			g g h h
+			ab ab ef ef
+			cd cd gh gh
+			ik ij mn mn
+			kl kl op op
 	*/
-	INLINE void reconstructHalfRes( wshort2 dstUV, ushort2 uFragCoordHalf )
+	INLINE void reconstructHalfResLow( wshort2 dstUV, ushort2 uFragCoordHalf )
 	{
 		short2 offset;
 		if( (uFragCoordHalf.x & 0x01u) != (uFragCoordHalf.y & 0x01u) )
@@ -44,6 +44,123 @@
 		float4 srcVal = OGRE_Load2D( srcTex, uv.xy, 0 );
 
 		OGRE_imageWrite2D4( dstTex, dstUV, toSRGB( srcVal ) );
+	}
+
+	/** For non-rendered pixels, it averages the closest neighbours eg.
+			ab
+			cd
+		 ef xy ij
+		 gh zw kl
+			mn
+			op
+		x = avg( f, c )
+		y = avg( d, i )
+		z = avg( h, m )
+		w = avg( n, k )
+
+		For rendered samples, it averages diagonals:
+		ef
+		gh
+			ab
+			cd
+		outputs:
+		h' = avg( a, h )
+		a' = avg( a, h )
+	*/
+	INLINE void reconstructHalfResMedium( wshort2 dstUV, ushort2 uFragCoordHalf )
+	{
+		if( (uFragCoordHalf.x & 0x01u) != (uFragCoordHalf.y & 0x01u) )
+		{
+			short2 offset0;
+			short2 offset1;
+			offset0.x = (dstUV.x & 0x01) == 0 ? -1 : 1;
+			offset0.y = 0;
+
+			offset1.x = 0;
+			offset1.y = (dstUV.y & 0x01) == 0 ? -1 : 1;
+
+			rshort2 uv0 = rshort2( short2( dstUV ) + offset0 );
+			float4 srcVal0 = OGRE_Load2D( srcTex, uv0.xy, 0 );
+			rshort2 uv1 = rshort2( short2( dstUV ) + offset1 );
+			float4 srcVal1 = OGRE_Load2D( srcTex, uv1.xy, 0 );
+
+			OGRE_imageWrite2D4( dstTex, dstUV, toSRGB( (srcVal0 + srcVal1) * 0.5f ) );
+		}
+		else
+		{
+			rshort2 uv = rshort2( dstUV );
+			float4 srcVal = OGRE_Load2D( srcTex, uv.xy, 0 );
+
+			short2 offset0;
+			offset0.x = (dstUV.x & 0x01) == 0 ? -1 : 1;
+			offset0.y = (dstUV.y & 0x01) == 0 ? -1 : 1;
+
+			rshort2 uv0 = rshort2( short2( dstUV ) + offset0 );
+			float4 srcVal0 = OGRE_Load2D( srcTex, uv0.xy, 0 );
+
+			OGRE_imageWrite2D4( dstTex, dstUV, toSRGB( (srcVal + srcVal0) * 0.5f ) );
+		}
+	}
+
+	/* Uses Valve's Alex Vlachos Advanced VR Rendering Performance technique
+	   (bilinear approximation) GDC 2016
+	*/
+	INLINE void reconstructHalfResHigh( wshort2 dstUV, ushort2 uFragCoordHalf )
+	{
+		if( (uFragCoordHalf.x & 0x01u) != (uFragCoordHalf.y & 0x01u) )
+		{
+			float2 offset0;
+			float2 offset1;
+			offset0.x = (dstUV.x & 0x01) == 0 ? -0.5f : 1.5f;
+			offset0.y =	(dstUV.y & 0x01) == 0 ? 0.75f : 0.25f;
+
+			offset1.x = (dstUV.x & 0x01) == 0 ? 0.75f : 0.25f;
+			offset1.y = (dstUV.y & 0x01) == 0 ? -0.5f : 1.5f;
+
+			float2 offset0N = offset0;
+			offset0N.x = (dstUV.x & 0x01) == 0 ? 2.5f : -1.5f;
+			float2 offset1N = offset1;
+			offset1N.y = (dstUV.y & 0x01) == 0 ? 2.5f : -1.5f;
+
+			float2 uv0 = ( float2( dstUV ) + offset0 ) * p.invResolution;
+			float4 srcVal0 = OGRE_SampleLevel( srcTex, bilinearSampler, uv0.xy, 0 );
+			float2 uv1 = ( float2( dstUV ) + offset1 ) * p.invResolution;
+			float4 srcVal1 = OGRE_SampleLevel( srcTex, bilinearSampler, uv1.xy, 0 );
+			float2 uv0N = ( float2( dstUV ) + offset0N ) * p.invResolution;
+			float4 srcVal0N = OGRE_SampleLevel( srcTex, bilinearSampler, uv0N.xy, 0 );
+			float2 uv1N = ( float2( dstUV ) + offset1N ) * p.invResolution;
+			float4 srcVal1N = OGRE_SampleLevel( srcTex, bilinearSampler, uv1N.xy, 0 );
+
+			float4 finalVal = srcVal0 * 0.375f + srcVal1 * 0.375f + srcVal0N * 0.125f + srcVal1N * 0.125f;
+			OGRE_imageWrite2D4( dstTex, dstUV, toSRGB( finalVal ) );
+		}
+		else
+		{
+			float2 uv = float2( dstUV );
+			uv.x += (dstUV.x & 0x01) == 0 ? 0.75f : 0.25f;
+			uv.y += (dstUV.y & 0x01) == 0 ? 0.75f : 0.25f;
+			uv.xy *= p.invResolution;
+			float4 srcVal = OGRE_SampleLevel( srcTex, bilinearSampler, uv.xy, 0 );
+
+			rshort2 uv0 = rshort2( uFragCoordHalf << 1u );
+			float4 srcTL = OGRE_Load2D( srcTex, uv0 + rshort2( -1, -1 ), 0 );
+			float4 srcTR = OGRE_Load2D( srcTex, uv0 + rshort2(  2, -1 ), 0 );
+			float4 srcBL = OGRE_Load2D( srcTex, uv0 + rshort2( -1,  2 ), 0 );
+			float4 srcBR = OGRE_Load2D( srcTex, uv0 + rshort2(  2,  2 ), 0 );
+
+			float weights[4] =
+				OGRE_ARRAY_START( float ) 0.28125f, 0.09375f, 0.09375f, 0.03125f OGRE_ARRAY_END;
+
+			int idx = (dstUV.x & 0x01) + ((dstUV.y & 0x01) << 1u);
+
+			float4 finalVal =	srcVal * 0.5f +
+								srcTL * weights[(idx + 0)] +
+								srcTR * weights[(idx + 1) & 0x03] +
+								srcBL * weights[(idx + 2) & 0x03] +
+								srcBR * weights[(idx + 3) & 0x03];
+
+			OGRE_imageWrite2D4( dstTex, dstUV, toSRGB( finalVal ) );
+		}
 	}
 
 	/** Takes the pattern:
@@ -133,13 +250,27 @@
 	float distToBox = max( abs( toCenterFullRes.x * 2.0f ),
 						   abs( toCenterFullRes.y ) + p.invResolution.y );
 
-	if( distToCenter >= p.radius.x && distToBox >= p.radius.x )
+	//We know for a fact distToCenter is in blocks of 8x8
+	if( anyInvocationARB( distToCenter >= p.radius.x ) && distToBox >= p.radius.x )
 	{
-		if( distToCenter < p.radius.y )
+		if( anyInvocationARB( distToCenter < p.radius.y ) )
 		{
-			reconstructHalfRes( wshort2( currentUV ), uFragCoordHalf );
+			@property( quality == low )
+				reconstructHalfResLow( wshort2( currentUV ), uFragCoordHalf );
+			@else
+				if( anyInvocationARB( distToCenter + p.invBlockResolution.x * 2.0 < p.radius.y ) )
+				{
+					//Right next to the border with lower res rendering.
+					//We can't use anything else than low quality filter
+					reconstructHalfRes@insertpiece( Quality )( wshort2( currentUV ), uFragCoordHalf );
+				}
+				else
+				{
+					reconstructHalfResLow( wshort2( currentUV ), uFragCoordHalf );
+				}
+			@end
 		}
-		else if( distToCenter < p.radius.z )
+		else if( anyInvocationARB( distToCenter < p.radius.z ) )
 		{
 			reconstructQuarterRes( wshort2( currentUV ), uFragCoordHalf );
 		}

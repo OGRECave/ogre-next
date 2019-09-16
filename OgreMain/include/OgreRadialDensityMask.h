@@ -98,6 +98,25 @@ namespace Ogre
 
         void update( Viewport *viewports );
 
+        enum RdmQuality
+        {
+            /// Cheap, pixelated and grainy
+            RdmLow,
+            /// Slower than low but much better results.
+            /// Can result in sharp text but still aliasing, shimmering/grain
+            RdmMedium,
+            /// Slowest, but best results.
+            /// Can result in blurry text but smoother graphics
+            /// (i.e. less aliasing and shimmering/grain)
+            RdmHigh
+        };
+
+        /** Sets the quality of the reconstruction filter for half resolution rendering.
+            Quarter and Sixteenth resolution rendering is always reconstructed using low quality.
+        @param quality
+        */
+        void setQuality( RdmQuality quality );
+
         /** Sets the center of the eye. Each eye is relative to its own viewport. e.g.
             the default for both eyes is Vector2( 0, 0 ) and not Vector2( -0.5, 0 ) for the
             left eye and Vector2( 0.5, 0 ) for the right eye

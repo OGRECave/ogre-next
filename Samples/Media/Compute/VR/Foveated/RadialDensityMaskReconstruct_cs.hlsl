@@ -1,5 +1,18 @@
 @insertpiece( SetCrossPlatformSettings )
 
+@property( vendor_shader_extension == Intel )
+	#define anyInvocationARB( value ) IntelExt_WaveActiveAnyTrue( value )
+@end
+@property( vendor_shader_extension == NVIDIA )
+	#define anyInvocationARB( value ) NvAny( value )
+@end
+@property( vendor_shader_extension == AMD )
+	#define anyInvocationARB( value ) AmdDxExtShaderIntrinsics_BallotAny( value )
+@end
+@property( !vendor_shader_extension )
+	#define anyInvocationARB( value ) (value)
+@end
+
 #define short2 int2
 #define ushort2 uint2
 #define OGRE_imageWrite3D4( outImage, iuv, value ) outImage[uint2( iuv )] = value
