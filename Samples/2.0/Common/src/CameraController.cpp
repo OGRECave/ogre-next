@@ -72,20 +72,20 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     bool CameraController::keyPressed( const SDL_KeyboardEvent &arg )
     {
-        if( arg.keysym.sym == SDLK_LSHIFT )
+        if( arg.keysym.scancode == SDL_SCANCODE_LSHIFT )
             mSpeedMofifier = true;
 
-        if( arg.keysym.sym == SDLK_w )
+        if( arg.keysym.scancode == SDL_SCANCODE_W )
             mWASD[0] = true;
-        else if( arg.keysym.sym == SDLK_a )
+        else if( arg.keysym.scancode == SDL_SCANCODE_A )
             mWASD[1] = true;
-        else if( arg.keysym.sym == SDLK_s )
+        else if( arg.keysym.scancode == SDL_SCANCODE_S )
             mWASD[2] = true;
-        else if( arg.keysym.sym == SDLK_d )
+        else if( arg.keysym.scancode == SDL_SCANCODE_D )
             mWASD[3] = true;
-        else if( arg.keysym.sym == SDLK_PAGEUP )
+        else if( arg.keysym.scancode == SDL_SCANCODE_PAGEUP )
             mSlideUpDown[0] = true;
-        else if( arg.keysym.sym == SDLK_PAGEDOWN )
+        else if( arg.keysym.scancode == SDL_SCANCODE_PAGEDOWN )
             mSlideUpDown[1] = true;
         else
             return false;
@@ -95,20 +95,20 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     bool CameraController::keyReleased( const SDL_KeyboardEvent &arg )
     {
-        if( arg.keysym.sym == SDLK_LSHIFT )
+        if( arg.keysym.scancode == SDL_SCANCODE_LSHIFT )
             mSpeedMofifier = false;
 
-        if( arg.keysym.sym == SDLK_w )
+        if( arg.keysym.scancode == SDL_SCANCODE_W )
             mWASD[0] = false;
-        else if( arg.keysym.sym == SDLK_a )
+        else if( arg.keysym.scancode == SDL_SCANCODE_A )
             mWASD[1] = false;
-        else if( arg.keysym.sym == SDLK_s )
+        else if( arg.keysym.scancode == SDL_SCANCODE_S )
             mWASD[2] = false;
-        else if( arg.keysym.sym == SDLK_d )
+        else if( arg.keysym.scancode == SDL_SCANCODE_D )
             mWASD[3] = false;
-        else if( arg.keysym.sym == SDLK_PAGEUP )
+        else if( arg.keysym.scancode == SDL_SCANCODE_PAGEUP )
             mSlideUpDown[0] = false;
-        else if( arg.keysym.sym == SDLK_PAGEDOWN )
+        else if( arg.keysym.scancode == SDL_SCANCODE_PAGEDOWN )
             mSlideUpDown[1] = false;
         else
             return false;
