@@ -234,38 +234,38 @@ namespace Demo
             const SDL_Keysym &keySym = itor->second;
             const bool reverse = (keySym.mod & (KMOD_LSHIFT|KMOD_RSHIFT)) != 0;
             const float modPerFrame = reverse ? -timeSinceLast : timeSinceLast;
-            if( keySym.sym == SDLK_h )
+            if( keySym.scancode == SDL_SCANCODE_H )
             {
                 mInstantRadiosity->mCellSize += modPerFrame;
                 mInstantRadiosity->mCellSize = Ogre::max( mInstantRadiosity->mCellSize,
                                                           Ogre::Real(0.001f) );
                 needsRebuild = true;
             }
-            if( keySym.sym == SDLK_j )
+            if( keySym.scancode == SDL_SCANCODE_J )
             {
                 mInstantRadiosity->mBias += modPerFrame;
                 mInstantRadiosity->mBias = Ogre::Math::Clamp( mInstantRadiosity->mBias,
                                                               Ogre::Real(0.0f), Ogre::Real(1.0f) );
                 needsRebuild = true;
             }
-            if( keySym.sym == SDLK_u )
+            if( keySym.scancode == SDL_SCANCODE_U )
             {
                 mInstantRadiosity->mVplMaxRange += modPerFrame * 4.0f;
                 changedVplSetting = true;
                 needsIrradianceVolumeRebuild = true;
             }
-            if( keySym.sym == SDLK_i )
+            if( keySym.scancode == SDL_SCANCODE_I )
             {
                 mInstantRadiosity->mVplPowerBoost += modPerFrame * 2.0f;
                 changedVplSetting = true;
                 needsIrradianceVolumeRebuild = true;
             }
-            if( keySym.sym == SDLK_o )
+            if( keySym.scancode == SDL_SCANCODE_O )
             {
                 mInstantRadiosity->mVplThreshold += modPerFrame * 0.05f;
                 changedVplSetting = true;
             }
-            if( keySym.sym == SDLK_p )
+            if( keySym.scancode == SDL_SCANCODE_P )
             {
                 mInstantRadiosity->mVplIntensityRangeMultiplier += modPerFrame * 10.0;
                 mInstantRadiosity->mVplIntensityRangeMultiplier =
@@ -273,7 +273,7 @@ namespace Demo
                 changedVplSetting = true;
                 needsIrradianceVolumeRebuild = true;
             }
-            if( keySym.sym == SDLK_m )
+            if( keySym.scancode == SDL_SCANCODE_M )
             {
                 mIrradianceCellSize += modPerFrame * 10.0f;
                 mIrradianceCellSize = std::max( mIrradianceCellSize, Ogre::Real(0.1f) );
@@ -366,13 +366,13 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void InstantRadiosityGameState::keyPressed( const SDL_KeyboardEvent &arg )
     {
-        mKeysHold[arg.keysym.sym] = arg.keysym;
+        mKeysHold[arg.keySym.scancode] = arg.keysym;
         TutorialGameState::keyPressed( arg );
     }
     //-----------------------------------------------------------------------------------
     void InstantRadiosityGameState::keyReleased( const SDL_KeyboardEvent &arg )
     {
-        mKeysHold.erase( arg.keysym.sym );
+        mKeysHold.erase( arg.keySym.scancode );
 
         if( (arg.keysym.mod & ~(KMOD_NUM|KMOD_CAPS|KMOD_LSHIFT|KMOD_RSHIFT)) != 0 )
         {
@@ -380,25 +380,25 @@ namespace Demo
             return;
         }
 
-        if( arg.keysym.sym == SDLK_F2 )
+        if( arg.keySym.scancode == SDL_SCANCODE_F2 )
         {
             mInstantRadiosity->setEnableDebugMarkers( !mInstantRadiosity->getEnableDebugMarkers() );
         }
-        else if( arg.keysym.sym == SDLK_F3 )
+        else if( arg.keySym.scancode == SDL_SCANCODE_F3 )
         {
             mCurrentType = static_cast<Ogre::Light::LightTypes>( (mCurrentType + 1) %
                                                                  Ogre::Light::LT_VPL );
             createLight();
             updateIrradianceVolume();
         }
-        else if( arg.keysym.sym == SDLK_F4 )
+        else if( arg.keySym.scancode == SDL_SCANCODE_F4 )
         {
             mInstantRadiosity->mVplUseIntensityForMaxRange =
                     !mInstantRadiosity->mVplUseIntensityForMaxRange;
             mInstantRadiosity->updateExistingVpls();
             updateIrradianceVolume();
         }
-        else if( arg.keysym.sym == SDLK_F5 )
+        else if( arg.keySym.scancode == SDL_SCANCODE_F5 )
         {
             Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
             assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
@@ -416,7 +416,7 @@ namespace Demo
                 mInstantRadiosity->setUseIrradianceVolume(false);
             }
         }
-        else if( arg.keysym.sym == SDLK_g )
+        else if( arg.keySym.scancode == SDL_SCANCODE_G )
         {
             const bool reverse = (arg.keysym.mod & (KMOD_LSHIFT|KMOD_RSHIFT)) != 0;
             if( reverse )
@@ -431,7 +431,7 @@ namespace Demo
             mInstantRadiosity->build();
             updateIrradianceVolume();
         }
-        else if( arg.keysym.sym == SDLK_k )
+        else if( arg.keySym.scancode == SDL_SCANCODE_K )
         {
             const bool reverse = (arg.keysym.mod & (KMOD_LSHIFT|KMOD_RSHIFT)) != 0;
             if( reverse )
@@ -448,7 +448,7 @@ namespace Demo
             mInstantRadiosity->build();
             updateIrradianceVolume();
         }
-        else if( arg.keysym.sym == SDLK_l )
+        else if( arg.keySym.scancode == SDL_SCANCODE_L )
         {
             const bool reverse = (arg.keysym.mod & (KMOD_LSHIFT|KMOD_RSHIFT)) != 0;
             if( reverse )

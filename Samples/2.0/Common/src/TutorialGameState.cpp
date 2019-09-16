@@ -137,7 +137,7 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void TutorialGameState::keyReleased( const SDL_KeyboardEvent &arg )
     {
-        if( arg.keysym.sym == SDLK_F1 && (arg.keysym.mod & ~(KMOD_NUM|KMOD_CAPS)) == 0 )
+        if( arg.keysym.scancode == SDL_SCANCODE_F1 && (arg.keysym.mod & ~(KMOD_NUM|KMOD_CAPS)) == 0 )
         {
             mDisplayHelpMode = (mDisplayHelpMode + 1) % mNumDisplayHelpModes;
 
@@ -146,7 +146,7 @@ namespace Demo
             mDebugText->setCaption( finalText );
             mDebugTextShadow->setCaption( finalText );
         }
-        else if( arg.keysym.sym == SDLK_F1 && (arg.keysym.mod & (KMOD_LCTRL|KMOD_RCTRL)) )
+        else if( arg.keysym.scancode == SDL_SCANCODE_F1 && (arg.keysym.mod & (KMOD_LCTRL|KMOD_RCTRL)) )
         {
             //Hot reload of PBS shaders. We need to clear the microcode cache
             //to prevent using old compiled versions.
@@ -157,7 +157,7 @@ namespace Demo
             Ogre::GpuProgramManager::getSingleton().clearMicrocodeCache();
             hlms->reloadFrom( hlms->getDataFolder() );
         }
-        else if( arg.keysym.sym == SDLK_F2 && (arg.keysym.mod & (KMOD_LCTRL|KMOD_RCTRL)) )
+        else if( arg.keysym.scancode == SDL_SCANCODE_F2  && (arg.keysym.mod & (KMOD_LCTRL|KMOD_RCTRL)) )
         {
             //Hot reload of Unlit shaders.
             Ogre::Root *root = mGraphicsSystem->getRoot();
@@ -167,7 +167,7 @@ namespace Demo
             Ogre::GpuProgramManager::getSingleton().clearMicrocodeCache();
             hlms->reloadFrom( hlms->getDataFolder() );
         }
-        else if( arg.keysym.sym == SDLK_F3 && (arg.keysym.mod & (KMOD_LCTRL|KMOD_RCTRL)) )
+        else if( arg.keysym.scancode == SDL_SCANCODE_F3 && (arg.keysym.mod & (KMOD_LCTRL|KMOD_RCTRL)) )
         {
             //Hot reload of Compute shaders.
             Ogre::Root *root = mGraphicsSystem->getRoot();
