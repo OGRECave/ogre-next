@@ -690,7 +690,11 @@ namespace Ogre
 
         const bool supportsBaseInstance = mVaoManager->supportsBaseInstance();
 
-        uint32 instanceCount = 1;
+        const bool isUsingInstancedStereo = mSceneManager->isUsingInstancedStereo();
+        const uint32 instancesPerDraw = isUsingInstancedStereo ? 2u : 1u;
+        const uint32 baseInstanceShift = isUsingInstancedStereo ? 1u : 0u;
+
+        uint32 instanceCount = instancesPerDraw;
 
         v1::CbDrawCall *drawCmd = 0;
 
@@ -757,11 +761,11 @@ namespace Ogre
                     /*drawCall->useGlobalInstancingVertexBufferIsAvailable =
                             renderOp.useGlobalInstancingVertexBufferIsAvailable;*/
                     drawCall->primCount         = renderOp.indexData->indexCount;
-                    drawCall->instanceCount     = renderOp.numberOfInstances;
+                    drawCall->instanceCount     = instancesPerDraw;
                     drawCall->firstVertexIndex  = renderOp.indexData->indexStart;
-                    drawCall->baseInstance      = baseInstance;
+                    drawCall->baseInstance      = baseInstance << baseInstanceShift;
 
-                    instanceCount = renderOp.numberOfInstances;
+                    instanceCount = instancesPerDraw;
 
                     drawCmd = drawCall;
                 }
@@ -776,9 +780,9 @@ namespace Ogre
                     drawCall->primCount         = renderOp.vertexData->vertexCount;
                     drawCall->instanceCount     = renderOp.numberOfInstances;
                     drawCall->firstVertexIndex  = renderOp.vertexData->vertexStart;
-                    drawCall->baseInstance      = baseInstance;
+                    drawCall->baseInstance      = baseInstance << baseInstanceShift;
 
-                    instanceCount = renderOp.numberOfInstances;
+                    instanceCount = instancesPerDraw;
 
                     drawCmd = drawCall;
                 }
@@ -787,7 +791,8 @@ namespace Ogre
             {
                 //Same mesh. Just go with instancing. Keep the counter in
                 //an external variable, as the region can be write-combined
-                drawCmd->instanceCount = ++instanceCount;
+                instanceCount += instancesPerDraw;
+                drawCmd->instanceCount = instanceCount;
             }
 
             ++itor;
