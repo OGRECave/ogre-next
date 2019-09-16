@@ -241,6 +241,8 @@ namespace Demo
         syncCameraProjection( false );
         if( mWaitingMode == VrWaitingMode::AfterSwap )
             updateHmdTrackingPose();
+        else
+            mVrCompositor->PostPresentHandoff();
         if( mMustSyncAtEndOfFrame )
             syncCamera();
         if( mWaitingMode >= VrWaitingMode::AfterFrustumCulling )
