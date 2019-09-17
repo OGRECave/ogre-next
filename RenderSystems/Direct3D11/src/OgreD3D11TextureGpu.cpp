@@ -539,7 +539,8 @@ namespace Ogre
             texSlot.mipmapLevel > 0 ||
             texSlot.numMipmaps != 0 ||
             texSlot.textureArrayIndex > 0 ||
-            (getInternalTextureType() == TextureTypes::Type2DArray && mDepthOrSlices == 1u) ||
+            (getTextureType() == TextureTypes::Type2DArray && mDepthOrSlices == 1u) ||
+            (mTexturePool && mTexturePool->masterTexture->getNumSlices() == 1u) ||
             isReinterpretable() ||
             PixelFormatGpuUtils::isDepth( mPixelFormat ) )
         {
@@ -547,8 +548,10 @@ namespace Ogre
 
             srvDesc.Format = D3D11Mappings::getForSrv( format );
 
+            const TextureTypes::TextureTypes textureType = getInternalTextureType();
+
             const bool isMsaaSrv = mMsaa > 1u && hasMsaaExplicitResolves();
-            srvDesc.ViewDimension = D3D11Mappings::get( mTextureType, texSlot.cubemapsAs2DArrays,
+            srvDesc.ViewDimension = D3D11Mappings::get( textureType, texSlot.cubemapsAs2DArrays,
                                                         isMsaaSrv );
 
             if( isMsaaSrv )
@@ -556,7 +559,7 @@ namespace Ogre
                 srvDesc.Texture2DMSArray.FirstArraySlice    = texSlot.textureArrayIndex;
                 srvDesc.Texture2DMSArray.ArraySize          = mDepthOrSlices - texSlot.textureArrayIndex;
             }
-            else if( mTextureType == TextureTypes::TypeCubeArray && !texSlot.cubemapsAs2DArrays )
+            else if( textureType == TextureTypes::TypeCubeArray && !texSlot.cubemapsAs2DArrays )
             {
                 //Write to all elements due to C++ aliasing rules on the union.
                 srvDesc.TextureCubeArray.MostDetailedMip    = texSlot.mipmapLevel;
@@ -578,8 +581,8 @@ namespace Ogre
                 srvDesc.Texture2DArray.MostDetailedMip  = texSlot.mipmapLevel;
                 srvDesc.Texture2DArray.MipLevels        = numMipmaps;
 
-                if( mTextureType == TextureTypes::Type1DArray ||
-                    mTextureType == TextureTypes::Type2DArray )
+                if( textureType == TextureTypes::Type1DArray ||
+                    textureType == TextureTypes::Type2DArray )
                 {
                     srvDesc.Texture2DArray.FirstArraySlice  = texSlot.textureArrayIndex;
                     srvDesc.Texture2DArray.ArraySize        = mDepthOrSlices - texSlot.textureArrayIndex;
