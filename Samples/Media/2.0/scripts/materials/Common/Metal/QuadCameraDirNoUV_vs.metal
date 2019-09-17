@@ -28,7 +28,7 @@ vertex PS_INPUT main_metal
 {
 	PS_INPUT outVs;
 
-	outVs.gl_Position.xy= ( p.worldViewProj * float4( input.position.xy, 0.0f, 1.0f ) ).xyzw;
+	outVs.gl_Position.xy= ( p.worldViewProj * float4( input.position.xy, 0.0f, 1.0f ) ).xy;
 	outVs.gl_Position.z	= p.rsDepthRange.y;
 	outVs.gl_Position.w	= 1.0f;
 	outVs.cameraDir		= input.normal;

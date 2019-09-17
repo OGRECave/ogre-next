@@ -14,21 +14,21 @@ struct PS_INPUT
 
 struct Params
 {
-    float4x4 projectionMatrix;
-    float2 rsDepthRange;
+	float4x4 projectionMatrix;
+	float2 rsDepthRange;
 };
 
 vertex PS_INPUT main_metal
 (
 	VS_INPUT input [[stage_in]],
-    constant Params &p	[[buffer(PARAMETER_SLOT)]]
+	constant Params &p	[[buffer(PARAMETER_SLOT)]]
 )
 {
 	PS_INPUT outVs;
 
-    outVs.gl_Position.xy	= mul( p.projectionMatrix, float4( input.position.xy, 0.0f, 1.0f ) ).xy;
-    outVs.gl_Position.z		= p.rsDepthRange.x;
-    outVs.gl_Position.w		= 1.0f;
+	outVs.gl_Position.xy	= ( p.projectionMatrix * float4( input.position.xy, 0.0f, 1.0f ) ).xy;
+	outVs.gl_Position.z		= p.rsDepthRange.x;
+	outVs.gl_Position.w		= 1.0f;
 	outVs.gl_ViewportIndex	= uint( input.position.z );
 
 	return outVs;
