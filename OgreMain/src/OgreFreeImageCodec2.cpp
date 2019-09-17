@@ -502,6 +502,7 @@ namespace Ogre {
         FIBITMAP* fiBitmap = FreeImage_LoadFromMemory( (FREE_IMAGE_FORMAT)mFreeImageType, fiMem );
         if( !fiBitmap )
         {
+            FreeImage_CloseMemory( fiMem );
             OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR,
                          "Error decoding image",
                          "FreeImageCodec2::decode" );
@@ -529,6 +530,8 @@ namespace Ogre {
         case FIT_INT32:
         case FIT_DOUBLE:
         default:
+            OGRE_DELETE imgData;
+            FreeImage_CloseMemory( fiMem );
             OGRE_EXCEPT( Exception::ERR_ITEM_NOT_FOUND,
                          "Unknown or unsupported image format",
                          "FreeImageCodec2::decode" );
