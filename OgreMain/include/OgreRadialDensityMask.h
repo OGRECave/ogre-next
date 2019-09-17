@@ -44,25 +44,6 @@ namespace Ogre
      *  @{
      */
 
-    class ConfigFile;
-
-    struct HiddenAreaVrSettings
-    {
-        Ogre::Vector2 leftEyeCenter;
-        Ogre::Vector2 leftEyeRadius;
-
-        Ogre::Vector2 leftNoseCenter;
-        Ogre::Vector2 leftNoseRadius;
-
-        Ogre::Vector2 rightEyeCenter;
-        Ogre::Vector2 rightEyeRadius;
-
-        Ogre::Vector2 rightNoseCenter;
-        Ogre::Vector2 rightNoseRadius;
-
-        Ogre::uint32 tessellation;
-    };
-
     /**
     @class RadialDensityMaskVrGenerator
         Manages a full screen stereo rectangle that masks rectangles in the periphery and then
