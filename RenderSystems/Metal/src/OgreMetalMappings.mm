@@ -332,8 +332,8 @@ namespace Ogre
         case CMPF_LESS_EQUAL:           return MTLCompareFunctionLessEqual;
         case CMPF_EQUAL:                return MTLCompareFunctionEqual;
         case CMPF_NOT_EQUAL:            return MTLCompareFunctionNotEqual;
-        case CMPF_GREATER_EQUAL:        return MTLCompareFunctionGreater;
-        case CMPF_GREATER:              return MTLCompareFunctionGreaterEqual;
+        case CMPF_GREATER_EQUAL:        return MTLCompareFunctionGreaterEqual;
+        case CMPF_GREATER:              return MTLCompareFunctionGreater;
         case NUM_COMPARE_FUNCTIONS:
             assert( false ); //Should never hit.
             return MTLCompareFunctionAlways;
