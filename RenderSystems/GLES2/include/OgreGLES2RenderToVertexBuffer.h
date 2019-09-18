@@ -34,6 +34,7 @@ THE SOFTWARE.
 #if OGRE_NO_GLES3_SUPPORT == 0
 
 namespace Ogre {
+namespace v1 {
     /**
         An object which renders geometry to a vertex.
     @remarks
@@ -69,6 +70,7 @@ namespace Ogre {
         GLuint mPrimitivesDrawnQuery;
         bool mFeedbackActive;
     };
+}
 }
 
 #endif

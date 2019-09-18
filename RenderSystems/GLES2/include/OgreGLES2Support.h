@@ -32,16 +32,16 @@ THE SOFTWARE.
 #include "OgreGLES2Prerequisites.h"
 #include "OgreRenderWindow.h"
 #include "OgreConfigOptionMap.h"
+#include "OgreRenderSystemCapabilities.h"
 
 namespace Ogre
 {
     class GLES2RenderSystem;
-    class GLES2StateCacheManager;
 
     class _OgreGLES2Export GLES2Support
     {
         public:
-            GLES2Support() : mStateCacheMgr(0)  { }
+            GLES2Support() { }
             virtual ~GLES2Support() { }
 
             /**
@@ -79,7 +79,7 @@ namespace Ogre
             /**
             * Get version information
             */
-            const String& getGLVersion(void) const
+            const DriverVersion& getGLVersion(void) const
             {
                 return mVersion;
             }
@@ -117,6 +117,11 @@ namespace Ogre
             }
 
             /**
+            * Check if GL Version is supported
+            */
+            bool hasMinGLVersion(int major, int minor) const;
+
+            /**
             * Get the address of a function
             */
             virtual void *getProcAddress(const char* procname) const = 0;
@@ -138,22 +143,6 @@ namespace Ogre
             }
 
             /**
-            * Get the state cache manager
-            */
-            GLES2StateCacheManager* getStateCacheManager() const
-            {
-                return mStateCacheMgr;
-            }
-        
-            /**
-            * Set a valid state cache manager
-            */
-            void setStateCacheManager(GLES2StateCacheManager* stateCacheMgr)
-            {
-                mStateCacheMgr = stateCacheMgr;
-            }
-            
-            /**
             * Start anything special
             */
             virtual void start() = 0;
@@ -163,7 +152,7 @@ namespace Ogre
             virtual void stop() = 0;
 
         private:
-            String mVersion;
+            DriverVersion mVersion;
             String mVendor;
             String mShaderCachePath;
             String mShaderLibraryPath;
@@ -174,9 +163,6 @@ namespace Ogre
 
             // This contains the complete list of supported extensions
             set<String>::type extensionList;
-            
-            // State cache management
-            GLES2StateCacheManager* mStateCacheMgr;
     };
 
 }

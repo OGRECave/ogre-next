@@ -9,8 +9,8 @@
 
 # Configure OpenGL ES 2.0 RenderSystem build
 
-file(GLOB HEADER_FILES "include/*.h")
-file(GLOB SOURCE_FILES "src/*.cpp")
+file(GLOB HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/include/Vao/*.h")
+file(GLOB SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"  "${CMAKE_CURRENT_SOURCE_DIR}/src/Vao/*.cpp")
 
 file(GLOB GLSLES_FILES "src/GLSLES/include/*.h" "src/GLSLES/src/*.cpp")
 
@@ -36,27 +36,6 @@ else()
 endif()
 
 file(GLOB KHR_HEADERS "include/KHR/*.h")
-
-include_directories(src/StateCacheManager)
-if(OGRE_CONFIG_ENABLE_GL_STATE_CACHE_SUPPORT)
-  list(APPEND STATECACHE_HEADERS
-      ${CMAKE_CURRENT_SOURCE_DIR}/src/StateCacheManager/OgreGLES2StateCacheManagerImp.h
-      ${CMAKE_CURRENT_SOURCE_DIR}/src/StateCacheManager/OgreGLES2UniformCacheImp.h
-  )
-  list(APPEND SOURCE_FILES
-      ${CMAKE_CURRENT_SOURCE_DIR}/src/StateCacheManager/OgreGLES2StateCacheManagerImp.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/src/StateCacheManager/OgreGLES2UniformCacheImp.cpp
-  )
-else()
-  list(APPEND STATECACHE_HEADERS
-      ${CMAKE_CURRENT_SOURCE_DIR}/src/StateCacheManager/OgreGLES2NullStateCacheManagerImp.h
-      ${CMAKE_CURRENT_SOURCE_DIR}/src/StateCacheManager/OgreGLES2NullUniformCacheImp.h
-  )
-  list(APPEND SOURCE_FILES
-      ${CMAKE_CURRENT_SOURCE_DIR}/src/StateCacheManager/OgreGLES2NullStateCacheManagerImp.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/src/StateCacheManager/OgreGLES2NullUniformCacheImp.cpp
-  )
-endif()
 
 if (OGRE_CONFIG_ENABLE_GLES2_CG_SUPPORT)
   list(APPEND GLSLES_FILES
@@ -132,7 +111,7 @@ include_directories(
   ${OPENGLES3_INCLUDE_DIR} ${OPENGLES2_INCLUDE_DIR} ${EGL_INCLUDE_DIR}
 )
 
-ogre_add_library(RenderSystem_GLES2 ${OGRE_LIB_TYPE} ${HEADER_FILES} ${STATECACHE_HEADERS} ${GLESW_HEADERS} ${KHR_HEADERS} ${PLATFORM_HEADERS} ${SOURCE_FILES} ${PLATFORM_SOURCES} SEPARATE ${GLSLES_FILES})
+ogre_add_library(RenderSystem_GLES2 ${OGRE_LIB_TYPE} ${HEADER_FILES} ${GLESW_HEADERS} ${KHR_HEADERS} ${PLATFORM_HEADERS} ${SOURCE_FILES} ${PLATFORM_SOURCES} SEPARATE ${GLSLES_FILES})
 target_link_libraries(RenderSystem_GLES2 OgreMain ${OPENGLES3_LIBRARIES} ${OPENGLES2_LIBRARIES} ${EGL_LIBRARIES} ${PLATFORM_LIBS})
 
 if (NOT OGRE_STATIC)
@@ -140,6 +119,10 @@ if (NOT OGRE_STATIC)
     COMPILE_DEFINITIONS OGRE_GLES2PLUGIN_EXPORTS
   )
 endif ()
+
+if (OGRE_BUILD_PLATFORM_APPLE_IOS)
+  target_link_libraries(RenderSystem_GLES2 "-framework OpenGLES")
+endif()
 
 if (OGRE_CONFIG_THREADS)
   target_link_libraries(RenderSystem_GLES2 ${OGRE_THREAD_LIBRARIES})
@@ -151,5 +134,4 @@ install(FILES ${HEADER_FILES} DESTINATION include/OGRE/RenderSystems/GLES2)
 install(FILES ${PLATFORM_HEADERS} DESTINATION include/OGRE/RenderSystems/GLES2/${PLATFORM_HEADER_INSTALL})
 install(FILES ${GLESW_HEADERS} DESTINATION include/OGRE/RenderSystems/GLES2/${GLESW_HEADER_INSTALL})
 install(FILES ${KHR_HEADERS} DESTINATION include/OGRE/RenderSystems/GLES2/KHR)
-install(FILES ${STATECACHE_HEADERS} DESTINATION include/OGRE/RenderSystems/GLES2/StateCacheManager)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/GLSLES/include/ DESTINATION include/OGRE/RenderSystems/GLES2/GLSLES)

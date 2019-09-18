@@ -27,28 +27,32 @@
  */
 
 #include "OgreGLSLESProgramCommon.h"
-#include "OgreGLSLESGpuProgram.h"
+#include "OgreGLSLESShader.h"
 #include "OgreGpuProgramManager.h"
-#include "OgreGLES2Util.h"
 #include "OgreGLES2RenderSystem.h"
 #include "OgreRoot.h"
 
+#include "Vao/OgreGLES2VaoManager.h"
+
 namespace Ogre {
     
-    //-----------------------------------------------------------------------
-    GLSLESProgramCommon::GLSLESProgramCommon(GLSLESGpuProgram* vertexProgram, GLSLESGpuProgram* fragmentProgram)
-    : mVertexProgram(vertexProgram)
-    , mFragmentProgram(fragmentProgram)
-    , mUniformRefsBuilt(false)
-    , mLinked(false)
-    , mTriedToLinkAndFailed(false)
+    GLSLESProgramCommon::GLSLESProgramCommon(GLSLESShader* vertexShader, GLSLESShader* fragmentShader)
+        : mBaseInstanceLocation( GL_INVALID_INDEX )
+        , mVertexShader(vertexShader)
+        , mFragmentShader(fragmentShader)
+        , mUniformRefsBuilt(false)
+        , mLinked(false)
+        , mTriedToLinkAndFailed(false)
+        , mSkeletalAnimation(false)
     {
         // init mCustomAttributesIndexes
         for(size_t i = 0 ; i < VES_COUNT; i++)
+        {
             for(size_t j = 0 ; j < OGRE_MAX_TEXTURE_COORD_SETS; j++)
             {
                 mCustomAttributesIndexes[i][j] = NULL_CUSTOM_ATTRIBUTES_INDEX;
             }
+        }
 
         // Initialize the attribute to semantic map
         mSemanticTypeMap.insert(SemanticToStringMap::value_type("vertex", VES_POSITION));
@@ -61,47 +65,59 @@ namespace Ogre {
         mSemanticTypeMap.insert(SemanticToStringMap::value_type("binormal", VES_BINORMAL));
         mSemanticTypeMap.insert(SemanticToStringMap::value_type("uv", VES_TEXTURE_COORDINATES));
 
-        if ((!mVertexProgram || !mFragmentProgram) && 
+        if ((!mVertexShader || !mFragmentShader) && 
             !Root::getSingleton().getRenderSystem()->getCapabilities()->hasCapability(RSC_SEPARATE_SHADER_OBJECTS))
         {
             OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
                         "Attempted to create a shader program without both a vertex and fragment program.",
                         "GLSLESProgramCommon::GLSLESProgramCommon");
         }
-
-        // Initialise uniform cache
-        mUniformCache = new GLES2UniformCache();
     }
     
-    //-----------------------------------------------------------------------
     GLSLESProgramCommon::~GLSLESProgramCommon(void)
     {
         OGRE_CHECK_GL_ERROR(glDeleteProgram(mGLProgramHandle));
-
-        delete mUniformCache;
-        mUniformCache = 0;
     }
     
-    //-----------------------------------------------------------------------
     Ogre::String GLSLESProgramCommon::getCombinedName()
     {
         String name;
-        if (mVertexProgram)
+        if (mVertexShader)
         {
-            name += "Vertex Program:" ;
-            name += mVertexProgram->getName();
+            name += "Vertex Shader:" ;
+            name += mVertexShader->getName();
+            name += "\n";
         }
-        if (mFragmentProgram)
+        if (mFragmentShader)
         {
-            name += " Fragment Program:" ;
-            name += mFragmentProgram->getName();
+            name += " Fragment Shader:" ;
+            name += mFragmentShader->getName();
+            name += "\n";
         }
-        name += "\n";
 
         return name;
     }
 
-    //-----------------------------------------------------------------------
+    Ogre::String GLSLESProgramCommon::getCombinedSource() const
+    {
+        String retVal;
+        size_t memorySize = 0;
+
+        if( mVertexShader )
+            memorySize += mVertexShader->getSource().size();
+        if( mFragmentShader )
+            memorySize += mFragmentShader->getSource().size();
+
+        retVal.reserve( memorySize );
+
+        if( mVertexShader )
+            retVal += mVertexShader->getSource();
+        if( mFragmentShader )
+            retVal += mFragmentShader->getSource();
+
+        return retVal;
+    }
+
     VertexElementSemantic GLSLESProgramCommon::getAttributeSemanticEnum(String type)
     {
         VertexElementSemantic semantic = mSemanticTypeMap[type];
@@ -112,11 +128,10 @@ namespace Ogre {
         else
         {
             assert(false && "Missing attribute!");
-            return (VertexElementSemantic)0;
+            return (VertexElementSemantic)1;
         }
     }
     
-    //-----------------------------------------------------------------------
     const char * GLSLESProgramCommon::getAttributeSemanticString(VertexElementSemantic semantic)
     {
         for (SemanticToStringMap::iterator i = mSemanticTypeMap.begin(); i != mSemanticTypeMap.end(); ++i)
@@ -129,7 +144,6 @@ namespace Ogre {
         return 0;
     }
     
-    //-----------------------------------------------------------------------
     GLint GLSLESProgramCommon::getAttributeIndex(VertexElementSemantic semantic, uint index)
     {
         GLint res = mCustomAttributesIndexes[semantic-1][index];
@@ -139,56 +153,52 @@ namespace Ogre {
             GLint attrib;
             OGRE_CHECK_GL_ERROR(attrib = glGetAttribLocation(mGLProgramHandle, attString));
 
-            // sadly position is a special case 
+            // Sadly position is a special case.
             if (attrib == NOT_FOUND_CUSTOM_ATTRIBUTES_INDEX && semantic == VES_POSITION)
             {
                 OGRE_CHECK_GL_ERROR(attrib = glGetAttribLocation(mGLProgramHandle, "position"));
             }
 
-            // for uv and other case the index is a part of the name
+            // For uv and other case the index is a part of the name.
             if (attrib == NOT_FOUND_CUSTOM_ATTRIBUTES_INDEX)
             {
                 String attStringWithSemantic = String(attString) + StringConverter::toString(index);
                 OGRE_CHECK_GL_ERROR(attrib = glGetAttribLocation(mGLProgramHandle, attStringWithSemantic.c_str()));
             }
 
-            // update mCustomAttributesIndexes with the index we found (or didn't find) 
+            // Update mCustomAttributesIndexes with the index we found (or didn't find).
             mCustomAttributesIndexes[semantic-1][index] = attrib;
             res = attrib;
         }
         return res;
     }
-    //-----------------------------------------------------------------------
+
     bool GLSLESProgramCommon::isAttributeValid(VertexElementSemantic semantic, uint index)
     {
         return getAttributeIndex(semantic, index) != NOT_FOUND_CUSTOM_ATTRIBUTES_INDEX;
     }
-    //-----------------------------------------------------------------------
+
     void GLSLESProgramCommon::getMicrocodeFromCache(void)
     {
         GpuProgramManager::Microcode cacheMicrocode =
-            GpuProgramManager::getSingleton().getMicrocodeFromCache(getCombinedName());
-
-        // add to the microcode to the cache
-        String name;
-        name = getCombinedName();
-
-        // turns out we need this param when loading
-        GLenum binaryFormat = 0;
+            GpuProgramManager::getSingleton().getMicrocodeFromCache(getCombinedSource());
 
         cacheMicrocode->seek(0);
 
-        // get size of binary
+        // Turns out we need this param when loading.
+        GLenum binaryFormat = 0;
         cacheMicrocode->read(&binaryFormat, sizeof(GLenum));
 
-        if(getGLES2SupportRef()->checkExtension("GL_OES_get_program_binary") || gleswIsSupported(3, 0))
+        // Get size of binary.
+        GLES2RenderSystem* rs = getGLES2RenderSystem();
+        if(rs->hasMinGLVersion(3, 0) || rs->checkExtension("GL_OES_get_program_binary"))
         {
             GLint binaryLength = static_cast<GLint>(cacheMicrocode->size() - sizeof(GLenum));
 
-            // load binary
+            // Load binary.
             OGRE_CHECK_GL_ERROR(glProgramBinaryOES(mGLProgramHandle,
                                binaryFormat, 
-                               cacheMicrocode->getPtr(),
+                               cacheMicrocode->getCurrentPtr(),
                                binaryLength));
         }
 
@@ -196,13 +206,149 @@ namespace Ogre {
         OGRE_CHECK_GL_ERROR(glGetProgramiv(mGLProgramHandle, GL_LINK_STATUS, &success));
         if (!success)
         {
-            //
             // Something must have changed since the program binaries
             // were cached away.  Fallback to source shader loading path,
             // and then retrieve and cache new program binaries once again.
-            //
             compileAndLink();
         }
+        else
+        {
+            mLinked = true;
+        }
+    }
+
+    void GLSLESProgramCommon::extractLayoutQualifiers(void)
+    {
+        // Format is:
+        //      layout(location = 0) attribute vec4 vertex;
+
+        if(mVertexShader)
+        {
+            String shaderSource = mVertexShader->getSource();
+            String::size_type currPos = shaderSource.find("layout");
+            while (currPos != String::npos)
+            {
+                VertexElementSemantic semantic;
+                GLint index = 0;
+                
+                String::size_type endPos = shaderSource.find(";", currPos);
+                if (endPos == String::npos)
+                {
+                    // Problem, missing semicolon, abort.
+                    break;
+                }
+                
+                String line = shaderSource.substr(currPos, endPos - currPos);
+                
+                // Skip over 'layout'.
+                currPos += 6;
+                
+                // Skip until '='.
+                String::size_type eqPos = line.find("=");
+                String::size_type parenPos = line.find(")");
+                
+                // Skip past '=' up to a ')' which contains an integer(the position).
+                // TODO This could be a definition, does the preprocessor do replacement?
+                String attrLocation = line.substr(eqPos + 1, parenPos - eqPos - 1);
+                StringUtil::trim(attrLocation);
+                GLint attrib = StringConverter::parseInt(attrLocation);
+                
+                // The rest of the line is a standard attribute definition.
+                // Erase up to it then split the remainder by spaces.
+                line.erase (0, parenPos + 1);
+                StringUtil::trim(line);
+                StringVector parts = StringUtil::split(line, " ");
+                
+                if(parts.size() < 3)
+                {
+                    // This is a malformed attribute.
+                    // It should contain 3 parts, i.e. "attribute vec4 vertex".
+                    break;
+                }
+                
+                String attrName = parts[2];
+                
+                // Special case for attribute named position.
+                if(attrName == "position")
+                    semantic = getAttributeSemanticEnum("vertex");
+                else
+                    semantic = getAttributeSemanticEnum(attrName);
+                
+                // Find the texture unit index.
+                String::size_type uvPos = attrName.find("uv");
+                if(uvPos != String::npos)
+                {
+                    String uvIndex = attrName.substr(uvPos + 2, attrName.length() - 2);
+                    index = StringConverter::parseInt(uvIndex);
+                }
+                
+                mCustomAttributesIndexes[semantic-1][index] = attrib;
+                
+                currPos = shaderSource.find("layout", currPos);
+            }
+        }
+    }
+
+    void GLSLESProgramCommon::bindFixedAttributes( GLuint programName )
+    {
+        struct SemanticNameTable
+        {
+            const char *semanticName;
+            VertexElementSemantic semantic;
+        };
+
+#define OGRE_NUM_SEMANTICS 12
+        static const SemanticNameTable attributesTable[OGRE_NUM_SEMANTICS] =
+        {
+            { "vertex",         VES_POSITION },
+            { "blendWeights",   VES_BLEND_WEIGHTS },
+            { "blendIndices",   VES_BLEND_INDICES },
+            { "normal",         VES_NORMAL },
+            { "colour",         VES_DIFFUSE },
+            { "secondary_colour",VES_SPECULAR },
+            { "tangent",        VES_TANGENT },
+            { "binormal",       VES_BINORMAL },
+            { "qtangent",       VES_NORMAL },
+            { "blendWeights2",  VES_BLEND_WEIGHTS2 },
+            { "blendIndices2",  VES_BLEND_INDICES2 },
+            { "uv",             VES_TEXTURE_COORDINATES },
+        };
+
+        VaoManager *vaoManagerBase = Root::getSingleton().getRenderSystem()->getVaoManager();
+        GLES2VaoManager *vaoManager = static_cast<GLES2VaoManager*>( vaoManagerBase );
+
+        const GLint maxVertexAttribs = vaoManager->getMaxVertexAttribs();
+
+        for( size_t i=0; i<OGRE_NUM_SEMANTICS - 1; ++i )
+        {
+            const SemanticNameTable &entry = attributesTable[i];
+            GLint attrIdx = GLES2VaoManager::getAttributeIndexFor( entry.semantic );
+            if( attrIdx < maxVertexAttribs )
+            {
+                OCGE( glBindAttribLocation( programName,
+                                            attrIdx,
+                                            entry.semanticName ) );
+            }
+        }
+
+        for( size_t i=0; i<8; ++i )
+        {
+            //UVs are a special case.
+            OCGE( glBindAttribLocation( programName,
+                                        GLES2VaoManager::getAttributeIndexFor(
+                                                    VES_TEXTURE_COORDINATES ) + i,
+                                        ("uv" + StringConverter::toString( i )).c_str() ) );
+        }
+
+        if( vaoManager->supportsBaseInstance() )
+            OCGE( glBindAttribLocation( programName, 15, "drawId" ) );
+    }
+
+    void GLSLESProgramCommon::setupBaseInstance( GLuint programName )
+    {
+        VaoManager *vaoManager = Root::getSingleton().getRenderSystem()->getVaoManager();
+        if( !vaoManager->supportsBaseInstance() )
+            mBaseInstanceLocation = glGetUniformLocation( programName, "baseInstance" );
     }
 
 } // namespace Ogre

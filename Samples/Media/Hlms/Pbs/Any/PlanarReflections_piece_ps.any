@@ -3,7 +3,7 @@
 
 @property( use_planar_reflections )
 
-@property( syntax == glsl )
+@property( syntax == glsl || syntax == glsles )
 	@piece( DeclPlanarReflTextures )
 		uniform sampler2D planarReflectionTex;
 	@end
@@ -22,7 +22,7 @@
 @end
 
 @piece( DoPlanarReflectionsPS )
-	@property( syntax == glsl )
+	@property( syntax == glsl || syntax == glsles )
 		uint planarReflectionIdx = instance.worldMaterialIdx[inPs.drawId].w;
 	@end
 	@property( syntax == hlsl )

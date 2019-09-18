@@ -859,6 +859,7 @@ namespace Ogre
         static const IdString Glsles;
         static const IdString Metal;
         static const IdString GL3Plus;
+        static const IdString GLES;
         static const IdString iOS;
         static const IdString macOS;
         static const IdString GLVersion;

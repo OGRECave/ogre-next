@@ -3,7 +3,7 @@
 
 @property( hlms_shadowcaster )
 	@piece( DoShadowCasterVS )
-		@property( syntax == glsl )
+		@property( syntax == glsl || syntax == glsles )
 			float shadowConstantBias = uintBitsToFloat( instance.worldMaterialIdx[drawId].y );
 		@end
 		@property( syntax == hlsl )
@@ -20,7 +20,7 @@
 			@end @property( !hlms_shadowcaster_directional )
 				outVs.depth	= (outVs_Position.z + shadowConstantBias * passBuf.depthRange.y) * passBuf.depthRange.y;
 			@end
-			@property( syntax == glsl )outVs.depth = (outVs.depth * 0.5) + 0.5;@end
+			@property( syntax == glsl || syntax == glsles )outVs.depth = (outVs.depth * 0.5) + 0.5;@end
 		@end
 
 		@property( hlms_shadowcaster_point )

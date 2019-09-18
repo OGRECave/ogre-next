@@ -191,6 +191,8 @@ namespace Ogre
 
         if( mShaderProfile == "glsl" ) //TODO: String comparision
             setProperty( HlmsBaseProp::GL3Plus, 330 );
+        if( mShaderProfile == "glsles" ) //TODO: String comparision
+            setProperty( HlmsBaseProp::GLES, 300 );
 
         setProperty( HlmsBaseProp::HighQuality, mHighQuality );
 

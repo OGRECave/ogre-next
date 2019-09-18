@@ -32,12 +32,8 @@
 #include "OgreGpuProgram.h"
 #include "OgreHardwareVertexBuffer.h"
 #include "OgreHardwareUniformBuffer.h"
-#include "OgreGLES2UniformCache.h"
 
 namespace Ogre {
-
-    class GLSLESGpuProgram;
-
     /// Structure used to keep track of named uniforms in the linked program object
     struct GLUniformReference
     {
@@ -61,17 +57,67 @@ namespace Ogre {
 
     class _OgreGLES2Export GLSLESProgramCommon
     {
+    public:
+        /// Constructor should only be used by GLSLESLinkProgramManager and GLSLESProgramPipelineManager
+        GLSLESProgramCommon(GLSLESShader* vertexProgram, GLSLESShader* fragmentProgram);
+        virtual ~GLSLESProgramCommon(void);
+
+        /** Makes a program object active by making sure it is linked and then putting it in use.
+         */
+        virtual void activate(void) = 0;
+
+        /** Updates program object uniforms using data from GpuProgramParameters.
+         Normally called by GLSLESShader::bindParameters() just before rendering occurs.
+         */
+        virtual void updateUniforms(GpuProgramParametersSharedPtr params, uint16 mask, GpuProgramType fromProgType) = 0;
+        /** Updates program object uniform blocks using data from GpuProgramParameters.
+         Normally called by GLSLESShader::bindParameters() just before rendering occurs.
+         */
+        virtual void updateUniformBlocks(GpuProgramParametersSharedPtr params, uint16 mask, GpuProgramType fromProgType) = 0;
+        /** Updates program object uniforms using data from pass iteration GpuProgramParameters.
+         Normally called by GLSLESShader::bindMultiPassParameters() just before multi pass rendering occurs.
+         */
+        virtual void updatePassIterationUniforms(GpuProgramParametersSharedPtr params) = 0;
+        /// Finds layout qualifiers in the shader source and sets attribute indices appropriately
+        virtual void extractLayoutQualifiers(void);
+        /// Get the GL Handle for the program object
+        GLuint getGLProgramHandle(void) const { return mGLProgramHandle; }
+        /** Sets whether the linked program includes the required instructions
+         to perform skeletal animation.
+         @remarks
+         If this is set to true, OGRE will not blend the geometry according to
+         skeletal animation, it will expect the vertex program to do it.
+         */
+        void setSkeletalAnimationIncluded(bool included) { mSkeletalAnimation = included; }
+
+        /** Returns whether the linked program includes the required instructions
+         to perform skeletal animation.
+         @remarks
+         If this returns true, OGRE will not blend the geometry according to
+         skeletal animation, it will expect the vertex program to do it.
+         */
+        bool isSkeletalAnimationIncluded(void) const { return mSkeletalAnimation; }
+
+        /// Get the index of a non-standard attribute bound in the linked code
+        virtual GLint getAttributeIndex(VertexElementSemantic semantic, uint index);
+        /// Is a non-standard attribute bound in the linked code?
+        bool isAttributeValid(VertexElementSemantic semantic, uint index);
+
+        GLSLESShader* getVertexShader() const { return mVertexShader; }
+        GLSLESShader* getFragmentShader() const { return mFragmentShader; }
+
+        GLint getBaseInstanceLocation() const { return mBaseInstanceLocation; }
     protected:
+        GLint mBaseInstanceLocation;
         /// Container of uniform references that are active in the program object
         GLUniformReferenceList mGLUniformReferences;
         /// Container of uniform buffer references that are active in the program object
         GLUniformBufferList mGLUniformBufferReferences;
 
-        /// Linked vertex program
-        GLSLESGpuProgram* mVertexProgram;
-        /// Linked fragment program
-        GLSLESGpuProgram* mFragmentProgram;
-        GLES2UniformCache *mUniformCache;
+        /// Linked vertex shader.
+        GLSLESShader* mVertexShader;
+        /// Linked fragment shader.
+        GLSLESShader* mFragmentShader;
         /// Flag to indicate that uniform references have already been built
         bool mUniformRefsBuilt;
         /// GL handle for the program object
@@ -95,12 +141,13 @@ namespace Ogre {
 #define NOT_FOUND_CUSTOM_ATTRIBUTES_INDEX -1
 
         Ogre::String getCombinedName(void);
+        Ogre::String getCombinedSource(void) const;
         /// Get the the binary data of a program from the microcode cache
         void getMicrocodeFromCache(void);
         /// Compiles and links the vertex and fragment programs
         virtual void compileAndLink(void) = 0;
-        /// Put a program in use
-        virtual void _useProgram(void) = 0;
+        // /// Put a program in use
+        // virtual void _useProgram(void) = 0;
 
         typedef map<String, VertexElementSemantic>::type SemanticToStringMap;
         SemanticToStringMap mSemanticTypeMap;
@@ -108,53 +155,8 @@ namespace Ogre {
         VertexElementSemantic getAttributeSemanticEnum(String type);
         const char * getAttributeSemanticString(VertexElementSemantic semantic);
 
-    public:
-        /// Constructor should only be used by GLSLESLinkProgramManager and GLSLESProgramPipelineManager
-        GLSLESProgramCommon(GLSLESGpuProgram* vertexProgram, GLSLESGpuProgram* fragmentProgram);
-        virtual ~GLSLESProgramCommon(void);
-
-        /** Makes a program object active by making sure it is linked and then putting it in use.
-         */
-        virtual void activate(void) = 0;
-
-        /** Updates program object uniforms using data from GpuProgramParameters.
-         normally called by GLSLESGpuProgram::bindParameters() just before rendering occurs.
-         */
-        virtual void updateUniforms(GpuProgramParametersSharedPtr params, uint16 mask, GpuProgramType fromProgType) = 0;
-        /** Updates program object uniform blocks using data from GpuProgramParameters.
-         normally called by GLSLGpuProgram::bindParameters() just before rendering occurs.
-         */
-        virtual void updateUniformBlocks(GpuProgramParametersSharedPtr params, uint16 mask, GpuProgramType fromProgType) = 0;
-        /** Updates program object uniforms using data from pass iteration GpuProgramParameters.
-         normally called by GLSLESGpuProgram::bindMultiPassParameters() just before multi pass rendering occurs.
-         */
-        virtual void updatePassIterationUniforms(GpuProgramParametersSharedPtr params) = 0;
-        /// Get the GL Handle for the program object
-        GLuint getGLProgramHandle(void) const { return mGLProgramHandle; }
-        /** Sets whether the linked program includes the required instructions
-         to perform skeletal animation. 
-         @remarks
-         If this is set to true, OGRE will not blend the geometry according to 
-         skeletal animation, it will expect the vertex program to do it.
-         */
-        void setSkeletalAnimationIncluded(bool included) { mSkeletalAnimation = included; }
-
-        /** Returns whether the linked program includes the required instructions
-         to perform skeletal animation. 
-         @remarks
-         If this returns true, OGRE will not blend the geometry according to 
-         skeletal animation, it will expect the vertex program to do it.
-         */
-        bool isSkeletalAnimationIncluded(void) const { return mSkeletalAnimation; }
-
-        /// Get the index of a non-standard attribute bound in the linked code
-        virtual GLint getAttributeIndex(VertexElementSemantic semantic, uint index);
-        /// Is a non-standard attribute bound in the linked code?
-        bool isAttributeValid(VertexElementSemantic semantic, uint index);
-
-        GLSLESGpuProgram* getVertexProgram(void) const { return mVertexProgram; }
-        GLSLESGpuProgram* getFragmentProgram(void) const { return mFragmentProgram; }
-        GLES2UniformCache * getUniformCache(void) { return mUniformCache; }
+        void bindFixedAttributes( GLuint programName );
+        void setupBaseInstance( GLuint programName );
     };
 }
 

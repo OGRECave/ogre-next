@@ -6,7 +6,7 @@
 ///--------------------------------------------------------------------------------------
 
 @piece( DeclShadowCasterMacros )
-	@property( syntax == glsl )
+	@property( syntax == glsl || syntax == glsles )
 		@property( !hlms_render_depth_only )
 			@property( GL3+ )
 				#define outDepth outColour

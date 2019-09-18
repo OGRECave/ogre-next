@@ -33,20 +33,12 @@ THE SOFTWARE.
 #include "OgreHardwareBufferManager.h"
 
 namespace Ogre {
-    class GLES2StateCacheManager;
 
 namespace v1 {
 
     /** Implementation of HardwareBufferManager for OpenGL ES. */
     class _OgreGLES2Export GLES2HardwareBufferManagerBase : public HardwareBufferManagerBase
     {
-        protected:
-            GLES2StateCacheManager* mStateCacheManager;
-            /// Internal method for creates a new vertex declaration, may be overridden by certain rendering APIs
-            VertexDeclaration* createVertexDeclarationImpl(void);
-            /// Internal method for destroys a vertex declaration, may be overridden by certain rendering APIs
-            void destroyVertexDeclarationImpl(VertexDeclaration* decl);
-
         public:
             GLES2HardwareBufferManagerBase();
             virtual ~GLES2HardwareBufferManagerBase();
@@ -73,8 +65,6 @@ namespace v1 {
 
             /// Utility function to get the correct GL type based on VET's
             static GLenum getGLType(unsigned int type);
-
-            GLES2StateCacheManager * getStateCacheManager() { return mStateCacheManager; }
     };
 
     /// GLES2HardwareBufferManagerBase as a Singleton

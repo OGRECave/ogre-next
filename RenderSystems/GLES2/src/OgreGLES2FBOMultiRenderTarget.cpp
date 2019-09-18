@@ -70,10 +70,10 @@ namespace Ogre {
         }
     }
     //-----------------------------------------------------------------------------
-    bool GLES2FBOMultiRenderTarget::attachDepthBuffer( DepthBuffer *depthBuffer )
+    bool GLES2FBOMultiRenderTarget::attachDepthBuffer( DepthBuffer *depthBuffer, bool exactFormatMatch )
     {
         bool result;
-        if( (result = MultiRenderTarget::attachDepthBuffer( depthBuffer )) )
+        if( (result = MultiRenderTarget::attachDepthBuffer( depthBuffer, exactFormatMatch )) )
             fbo.attachDepthBuffer( depthBuffer );
 
         return result;

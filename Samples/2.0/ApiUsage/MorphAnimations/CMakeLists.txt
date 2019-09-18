@@ -72,6 +72,6 @@ if( APPLE )
 			add_custom_command(TARGET ${SAMPLE_NAME} POST_BUILD
 				COMMAND cp -r ${RSC} ${APP_CONTENTS_PATH}/Resources/
 			)
-	    endforeach(FWK)
+	    endforeach()
 	endif()
 endif()

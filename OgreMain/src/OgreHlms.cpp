@@ -174,6 +174,7 @@ namespace Ogre
     const IdString HlmsBaseProp::Glsles         = IdString( "glsles" );
     const IdString HlmsBaseProp::Metal          = IdString( "metal" );
     const IdString HlmsBaseProp::GL3Plus        = IdString( "GL3+" );
+    const IdString HlmsBaseProp::GLES           = IdString( "GLES" );
     const IdString HlmsBaseProp::iOS            = IdString( "iOS" );
     const IdString HlmsBaseProp::macOS          = IdString( "macOS" );
     const IdString HlmsBaseProp::HighQuality    = IdString( "hlms_high_quality" );
@@ -2125,6 +2126,11 @@ namespace Ogre
                 if( mShaderProfile == "glsl" ) //TODO: String comparision
                 {
                     setProperty( HlmsBaseProp::GL3Plus,
+                                 mRenderSystem->getNativeShadingLanguageVersion() );
+                }
+                else if( mShaderProfile == "glsles" ) //TODO: String comparision
+                {
+                    setProperty( HlmsBaseProp::GLES,
                                  mRenderSystem->getNativeShadingLanguageVersion() );
                 }
 
