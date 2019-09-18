@@ -2214,9 +2214,16 @@ namespace Ogre {
         _disableTextureUnitsFrom(0);
 
         // It's ready for switching
-        if(mCurrentContext)
+        if (mCurrentContext!=context)
+        {
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+            // EAGLContext::setCurrentContext does not flush automatically. everybody else does.
+            // see https://developer.apple.com/library/content/qa/qa1612/_index.html
+            glFlush();
+#endif
             mCurrentContext->endCurrent();
-        mCurrentContext = context;
+            mCurrentContext = context;
+        }
         mCurrentContext->setCurrent();
 
         // Check if the context has already done one-time initialisation

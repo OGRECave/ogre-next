@@ -73,6 +73,10 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 
 #include "OgreProfiler.h"
 
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+extern "C" void glFlushRenderAPPLE();
+#endif
+
 #if OGRE_DEBUG_MODE
 static void APIENTRY GLDebugCallback(GLenum source,
                                      GLenum type,
@@ -3276,9 +3280,15 @@ namespace Ogre {
         _disableTextureUnitsFrom(0);
 
         // It's ready for switching
-        if (mCurrentContext)
+        if (mCurrentContext!=context)
+        {
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+            // NSGLContext::makeCurrentContext does not flush automatically. everybody else does.
+            glFlushRenderAPPLE();
+#endif
             mCurrentContext->endCurrent();
-        mCurrentContext = context;
+            mCurrentContext = context;
+        }
         mCurrentContext->setCurrent();
 
         // Check if the context has already done one-time initialisation
