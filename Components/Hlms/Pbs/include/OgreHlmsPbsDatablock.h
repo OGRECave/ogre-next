@@ -371,7 +371,10 @@ namespace Ogre
         /// in PBSM_EMISSIVE slot.
         void setEmissive( const Vector3 &emissiveColour );
         Vector3 getEmissive(void) const;
-        bool hasEmissive(void) const;
+        /// Returns true iif getEmissive is non-zero
+        bool hasEmissiveConstant(void) const;
+        /// Returns true if getEmissive is non-zero or if there is an emissive texture set
+        bool _hasEmissive(void) const;
 
         /** Sets whether to use a specular workflow, or a metallic workflow.
         @remarks
