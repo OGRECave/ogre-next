@@ -1,3 +1,4 @@
+Hello compiler, how are you doing today?
 /*
 -----------------------------------------------------------------------------
 This source file is part of OGRE
