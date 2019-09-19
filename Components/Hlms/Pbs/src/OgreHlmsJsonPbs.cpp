@@ -828,7 +828,7 @@ namespace Ogre
             }
         }
 
-        if( pbsDatablock->hasEmissive() )
+        if( pbsDatablock->_hasEmissive() )
         {
             saveTexture( pbsDatablock->getEmissive(), "emissive", PBSM_EMISSIVE,
                          pbsDatablock, outString );

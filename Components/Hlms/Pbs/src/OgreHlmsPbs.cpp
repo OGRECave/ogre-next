@@ -704,9 +704,9 @@ namespace Ogre
             }
         }
 
-        if( datablock->hasEmissive() )
+        if( datablock->_hasEmissive() )
         {
-            if( datablock->getEmissive() != Vector3::ZERO )
+            if( datablock->hasEmissiveConstant() )
                 setProperty( PbsProperty::EmissiveConstant, 1 );
         }
 

@@ -629,14 +629,14 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void HlmsPbsDatablock::setEmissive( const Vector3 &emissiveColour )
     {
-        bool hadEmissive = hasEmissive();
+        bool hadEmissive = hasEmissiveConstant();
         mEmissive[0] = emissiveColour.x;
         mEmissive[1] = emissiveColour.y;
         mEmissive[2] = emissiveColour.z;
 
         scheduleConstBufferUpdate();
 
-        if( hadEmissive != hasEmissive() )
+        if( hadEmissive != hasEmissiveConstant() )
             flushRenderables();
     }
     //-----------------------------------------------------------------------------------
@@ -645,10 +645,14 @@ namespace Ogre
         return Vector3( mEmissive[0], mEmissive[1], mEmissive[2] );
     }
     //-----------------------------------------------------------------------------------
-    bool HlmsPbsDatablock::hasEmissive(void) const
+    bool HlmsPbsDatablock::hasEmissiveConstant() const
     {
-        return  mEmissive[0] != 0 || mEmissive[1] != 0 ||
-                mEmissive[2] != 0 || mTexToBakedTextureIdx[PBSM_EMISSIVE] != NUM_PBSM_TEXTURE_TYPES;
+        return  mEmissive[0] != 0 || mEmissive[1] != 0 || mEmissive[2] != 0;
+    }
+    //-----------------------------------------------------------------------------------
+    bool HlmsPbsDatablock::_hasEmissive(void) const
+    {
+        return hasEmissiveConstant() || mTexToBakedTextureIdx[PBSM_EMISSIVE] != NUM_PBSM_TEXTURE_TYPES;
     }
     //-----------------------------------------------------------------------------------
     float HlmsPbsDatablock::getRoughness(void) const
