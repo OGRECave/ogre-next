@@ -2,7 +2,7 @@
 @echo off
 SETLOCAL
 
-set OGRE_BRANCH_NAME=v2-2
+set OGRE_BRANCH_NAME=master
 set GENERATOR="Visual Studio 14 2015"
 set PLATFORM=x64
 set CONFIGURATION=Debug

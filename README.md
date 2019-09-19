@@ -14,7 +14,7 @@ differences have diverged long enough.
 
 | Build | Status (github) |
 |-------|-----------------|
-| MSVC | [![Build status](https://ci.appveyor.com/api/projects/status/github/OGRECave/ogre-next?branch=v2-2&svg=true)](https://ci.appveyor.com/project/MatiasNGoldberg/ogre-next/branch/v2-2)|
+| MSVC | [![Build status](https://ci.appveyor.com/api/projects/status/github/OGRECave/ogre-next?branch=master&svg=true)](https://ci.appveyor.com/project/MatiasNGoldberg/ogre-next/branch/master)|
 
 # Dependencies
 
