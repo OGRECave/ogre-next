@@ -9,7 +9,12 @@ Active development of the 1.x branch happens in https://github.com/OGRECave/ogre
 
 Both branches are in active development. See [What version to choose?](https://www.ogre3d.org/about/what-version-to-choose) to understand the differences between 1.x and 2.x
 
-Both mirrors are periodically synced.
+Both repositories are compatible for merging, but have been split in separate ways as their
+differences have diverged long enough.
+
+| Build | Status (github) |
+|-------|-----------------|
+| MSVC | [![Build status](https://ci.appveyor.com/api/projects/status/github/OGRECave/ogre-next?branch=v2-2&svg=true)](https://ci.appveyor.com/project/MatiasNGoldberg/ogre-next/branch/v2-2)|
 
 # Dependencies
 
