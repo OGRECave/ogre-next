@@ -25,17 +25,17 @@ IF EXIST %CMAKE_BIN_x64% (
 )
 echo Using CMake at %CMAKE_BIN%
 
-IF NOT EXIST %BUILD_FOLDER%\ogredeps (
-	mkdir %BUILD_FOLDER%\ogredeps
+IF NOT EXIST %BUILD_FOLDER%\..\ogredeps (
+	mkdir %BUILD_FOLDER%\..\ogredeps
 	echo --- Cloning Ogredeps ---
-	hg clone https://bitbucket.org/cabalistic/ogredeps %BUILD_FOLDER%\ogredeps
+	hg clone https://bitbucket.org/cabalistic/ogredeps %BUILD_FOLDER%\..\ogredeps
 ) ELSE (
 	echo --- Ogredeps repo detected. Cloning skipped ---
 )
-mkdir %BUILD_FOLDER%\ogredeps\build
-cd %BUILD_FOLDER%\ogredeps\build
+mkdir %BUILD_FOLDER%\..\ogredeps\build
+cd %BUILD_FOLDER%\..\ogredeps\build
 echo --- Building Ogredeps ---
-%CMAKE_BIN% -G %GENERATOR% -A %PLATFORM% %BUILD_FOLDER%\ogredeps
+%CMAKE_BIN% -G %GENERATOR% -A %PLATFORM% %BUILD_FOLDER%\..\ogredeps
 %CMAKE_BIN% --build . --config %CONFIGURATION%
 %CMAKE_BIN% --build . --target install --config %CONFIGURATION%
 
@@ -43,7 +43,7 @@ cd %BUILD_FOLDER%
 mkdir %BUILD_FOLDER%\build
 cd %BUILD_FOLDER%\build
 echo --- Running CMake configure ---
-%CMAKE_BIN% -D OGRE_UNITY_BUILD=1 -D OGRE_USE_BOOST=0 -D OGRE_CONFIG_THREAD_PROVIDER=0 -D OGRE_CONFIG_THREADS=0 -D OGRE_BUILD_COMPONENT_SCENE_FORMAT=1 -D OGRE_BUILD_SAMPLES2=1 -D OGRE_BUILD_TESTS=1 -D OGRE_DEPENDENCIES_DIR=%BUILD_FOLDER%\ogredeps\build\ogredeps -G %GENERATOR% -A %PLATFORM% %BUILD_FOLDER%
+%CMAKE_BIN% -D OGRE_UNITY_BUILD=1 -D OGRE_USE_BOOST=0 -D OGRE_CONFIG_THREAD_PROVIDER=0 -D OGRE_CONFIG_THREADS=0 -D OGRE_BUILD_COMPONENT_SCENE_FORMAT=1 -D OGRE_BUILD_SAMPLES2=1 -D OGRE_BUILD_TESTS=1 -D OGRE_DEPENDENCIES_DIR=%BUILD_FOLDER%\..\ogredeps\build\ogredeps -G %GENERATOR% -A %PLATFORM% %BUILD_FOLDER%
 echo --- Building Ogre ---
 %CMAKE_BIN% --build . --config %CONFIGURATION%
 %CMAKE_BIN% --build . --target install --config %CONFIGURATION%
