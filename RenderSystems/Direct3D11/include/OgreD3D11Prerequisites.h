@@ -112,6 +112,8 @@ namespace Ogre
     class D3D11Texture;
     class D3D11TextureManager;
     class D3D11DepthBuffer;
+
+    typedef SharedPtr<D3D11Texture>     D3D11TexturePtr;
 #endif
 
     namespace v1
@@ -123,7 +125,6 @@ namespace Ogre
     }
 
     typedef SharedPtr<D3D11HLSLProgram> D3D11HLSLProgramPtr;
-    typedef SharedPtr<D3D11Texture>     D3D11TexturePtr;
 
     //-------------------------------------------
     // Windows setttings
