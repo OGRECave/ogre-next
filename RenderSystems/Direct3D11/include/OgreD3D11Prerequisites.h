@@ -91,9 +91,6 @@ namespace Ogre
     class D3D11RenderSystem;
     class D3D11RenderWindowBase;
     class D3D11CompatBufferInterface;
-    class D3D11Texture;
-    class D3D11TextureManager;
-    class D3D11DepthBuffer;
     class D3D11Driver;
     class D3D11DriverList;
     class D3D11DynamicBuffer;
@@ -110,6 +107,12 @@ namespace Ogre
     class D3D11VendorExtension;
     struct D3D11VertexArrayObjectShared;
     class D3D11Window;
+
+#ifdef OGRE_DEPRECATED_2_2
+    class D3D11Texture;
+    class D3D11TextureManager;
+    class D3D11DepthBuffer;
+#endif
 
     namespace v1
     {

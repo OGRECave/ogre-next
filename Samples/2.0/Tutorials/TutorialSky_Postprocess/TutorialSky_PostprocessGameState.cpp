@@ -17,7 +17,6 @@
 #include "Vao/OgreVertexArrayObject.h"
 
 #include "OgreCamera.h"
-#include "OgreRenderWindow.h"
 
 using namespace Demo;
 

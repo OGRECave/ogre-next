@@ -29,7 +29,6 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #define __GL3PlusPIXELFORMAT_H__
 
 #include "OgreGL3PlusPrerequisites.h"
-#include "OgrePixelFormat.h"
 
 namespace Ogre {
 

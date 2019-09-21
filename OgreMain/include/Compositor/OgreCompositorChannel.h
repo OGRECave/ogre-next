@@ -29,8 +29,11 @@ THE SOFTWARE.
 #ifndef __CompositorChannel_H__
 #define __CompositorChannel_H__
 
-#include "OgreHeaderPrefix.h"
+#include "OgrePrerequisites.h"
+
 #include "Compositor/OgreCompositorCommon.h"
+
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {

@@ -36,7 +36,6 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/OgreCompositorWorkspaceListener.h"
 
-#include "OgreRenderTarget.h"
 #include "OgreMaterialManager.h"
 #include "OgreRectangle2D.h"
 #include "OgreSceneManager.h"

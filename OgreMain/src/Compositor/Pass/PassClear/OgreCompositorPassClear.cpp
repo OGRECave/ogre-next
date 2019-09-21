@@ -36,7 +36,6 @@ THE SOFTWARE.
 #include "OgreSceneManager.h"
 #include "OgreViewport.h"
 #include "OgreSceneManager.h"
-#include "OgreRenderTarget.h"
 #include "OgrePixelFormatGpuUtils.h"
 
 namespace Ogre

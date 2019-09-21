@@ -52,8 +52,6 @@ THE SOFTWARE.
 
 #include "OgreRenderSystem.h"
 #include "OgreSceneManager.h"
-#include "OgreHardwarePixelBuffer.h"
-#include "OgreRenderTexture.h"
 
 #include "OgreTextureGpu.h"
 

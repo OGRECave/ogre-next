@@ -452,23 +452,6 @@ namespace Ogre
         /** Get an iterator over all the existing SceneManager instances. */
         SceneManagerEnumerator::SceneManagerIterator getSceneManagerIterator(void);
 
-        /** Retrieves a reference to the current TextureManager.
-            @remarks
-                This performs the same function as
-                TextureManager::getSingleton, but is provided for convenience
-                particularly to scripting engines.
-            @par
-                Note that a TextureManager will NOT be available until the
-                Ogre system has been initialised by selecting a RenderSystem,
-                calling Root::initialise and a window having been created
-                (this may have been done by initialise if required). This is
-                because the exact runtime subclass which will be implementing
-                the calls will differ depending on the rendering engine
-                selected, and these typically require a window upon which to
-                base texture format decisions.
-        */
-        TextureManager* getTextureManager(void);
-
         /** Retrieves a reference to the current MeshManager.
             @remarks
                 This performs the same function as MeshManager::getSingleton
@@ -707,32 +690,6 @@ namespace Ogre
         */
         bool createRenderWindows(const RenderWindowDescriptionList& renderWindowDescriptions,
             WindowList &createdWindows);
-    
-        /** Detaches a RenderTarget from the active render system
-        and returns a pointer to it.
-        @note
-        If the render target cannot be found, NULL is returned.
-        */
-        RenderTarget* detachRenderTarget( RenderTarget* pWin );
-
-        /** Detaches a named RenderTarget from the active render system
-        and returns a pointer to it.
-        @note
-        If the render target cannot be found, NULL is returned.
-        */
-        RenderTarget* detachRenderTarget( const String & name );
-
-        /** Destroys the given RenderTarget.
-        */
-        void destroyRenderTarget(RenderTarget* target);
-
-        /** Destroys the given named RenderTarget.
-        */
-        void destroyRenderTarget(const String &name);
-
-        /** Retrieves a pointer to a named render target.
-        */
-        RenderTarget * getRenderTarget(const String &name);
 
         /** Manually load a Plugin contained in a DLL / DSO.
          @remarks

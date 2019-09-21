@@ -62,7 +62,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    TexBufferPacked* D3D11UavBufferPacked::getAsTexBufferImpl( PixelFormat pixelFormat )
+    TexBufferPacked* D3D11UavBufferPacked::getAsTexBufferImpl( PixelFormatGpu pixelFormat )
     {
         assert( dynamic_cast<D3D11CompatBufferInterface*>( mBufferInterface ) );
 

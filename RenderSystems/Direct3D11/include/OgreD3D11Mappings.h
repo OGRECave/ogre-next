@@ -70,27 +70,9 @@ namespace Ogre
 		/// Get dx11 color
 		static void get(const ColourValue& inColour, float * outColour );
 
-		/// utility method, generates Ogre PixelBox using usual parameters and dataPtr/rowPitch/slicePitch from D3D11_MAPPED_SUBRESOURCE
-		static PixelBox getPixelBoxWithMapping(D3D11_BOX extents, DXGI_FORMAT pixelFormat, const D3D11_MAPPED_SUBRESOURCE& mapping);
-		/// utility method, applies dataPtr/rowPitch/slicePitch from D3D11_MAPPED_SUBRESOURCE to Ogre PixelBox
-		static void setPixelBoxMapping(PixelBox& box, const D3D11_MAPPED_SUBRESOURCE& mapping);
-
-		/// utility method, convert D3D11 pixel format to Ogre pixel format
-		static PixelFormat _getPF(DXGI_FORMAT d3dPF);
-		/// utility method, convert Ogre pixel format to D3D11 pixel format
-		static DXGI_FORMAT _getPF(PixelFormat ogrePF);
-		/// utility method, optionally maps plain format to _SRGB counterparts
-		static DXGI_FORMAT _getGammaFormat(DXGI_FORMAT format, bool appendSRGB);
-
         static D3D11_USAGE _getUsage(v1::HardwareBuffer::Usage usage);
-        static D3D11_USAGE _getUsage(TextureUsage usage) { return _getUsage(static_cast<v1::HardwareBuffer::Usage>(usage)); }
         static UINT _getAccessFlags(v1::HardwareBuffer::Usage usage);
-        static UINT _getAccessFlags(TextureUsage usage) { return _getAccessFlags(static_cast<v1::HardwareBuffer::Usage>(usage)); }
         static bool _isDynamic(v1::HardwareBuffer::Usage usage);
-        static bool _isDynamic(TextureUsage usage) { return _isDynamic(static_cast<v1::HardwareBuffer::Usage>(usage)); }
-
-		/// utility method, find closest Ogre pixel format that D3D11 can support
-        static PixelFormat _getClosestSupportedPF(PixelFormat ogrePF);
 
         static UINT get( MsaaPatterns::MsaaPatterns msaaPatterns );
         static D3D11_SRV_DIMENSION get( TextureTypes::TextureTypes type,
@@ -98,11 +80,6 @@ namespace Ogre
         static DXGI_FORMAT get( PixelFormatGpu pf );
         static DXGI_FORMAT getForSrv( PixelFormatGpu pf );
         static DXGI_FORMAT getFamily( PixelFormatGpu pf );
-
-		static TextureType _getTexType(D3D11_SRV_DIMENSION type);
-
-		static UINT _getTextureBindFlags(DXGI_FORMAT format, TextureUsage usage);
-        static UINT _getTextureMiscFlags(UINT bindflags, TextureType textype, TextureUsage usage);
 	};
 }
 #endif

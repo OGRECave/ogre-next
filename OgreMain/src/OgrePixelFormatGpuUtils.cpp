@@ -1356,6 +1356,14 @@ namespace Ogre
         return (desc.flags & PFF_PALLETE) != 0;
     }
     //-----------------------------------------------------------------------------------
+    bool PixelFormatGpuUtils::isAccessible( PixelFormatGpu format )
+    {
+        if( format == PFG_UNKNOWN )
+            return false;
+        const PixelFormatDesc &desc = getDescriptionFor( format );
+        return ( desc.flags & ( PFF_COMPRESSED | PFF_DEPTH | PFF_STENCIL ) ) != 0;
+    }
+    //-----------------------------------------------------------------------------------
     bool PixelFormatGpuUtils::hasSRGBEquivalent( PixelFormatGpu format )
     {
         return getEquivalentSRGB( format ) != getEquivalentLinear( format );

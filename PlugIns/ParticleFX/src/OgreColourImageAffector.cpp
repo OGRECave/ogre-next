@@ -32,6 +32,8 @@ THE SOFTWARE.
 #include "OgreException.h"
 #include "OgreResourceGroupManager.h"
 
+#include "OgrePixelFormatGpuUtils.h"
+
 namespace Ogre {
     
     // init statics
@@ -126,9 +128,9 @@ namespace Ogre {
     {
         mColourImage.load(mColourImageName, mParent->getResourceGroupName());
 
-        PixelFormat format = mColourImage.getFormat();
+        PixelFormatGpu format = mColourImage.getPixelFormat();
 
-        if ( !PixelUtil::isAccessible(format) )
+        if ( !PixelFormatGpuUtils::isAccessible(format) )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Error: Image is not accessible (rgba) image.",
                     "ColourImageAffector::_loadImage" );

@@ -30,7 +30,6 @@ THE SOFTWARE.
 
 #include "OgreForwardClustered.h"
 #include "OgreSceneManager.h"
-#include "OgreRenderTarget.h"
 #include "OgreViewport.h"
 #include "OgreCamera.h"
 #include "OgreDecal.h"
@@ -822,7 +821,7 @@ namespace Ogre
         CachedGridBuffer &gridBuffers = cachedGrid->gridBuffers[cachedGrid->currentBufIdx];
         if( !gridBuffers.gridBuffer )
         {
-            gridBuffers.gridBuffer = mVaoManager->createTexBuffer( PF_R16_UINT,
+            gridBuffers.gridBuffer = mVaoManager->createTexBuffer( PFG_R16_UINT,
                                                                    mWidth * mHeight * mNumSlices *
                                                                    mObjsPerCell * sizeof(uint16),
                                                                    BT_DYNAMIC_PERSISTENT, 0, false );
@@ -842,7 +841,7 @@ namespace Ogre
             }
 
             gridBuffers.globalLightListBuffer = mVaoManager->createTexBuffer(
-                                                                    PF_FLOAT32_RGBA,
+                                                                    PFG_RGBA32_FLOAT,
                                                                     bufferBytesNeeded,
                                                                     BT_DYNAMIC_PERSISTENT, 0, false );
         }

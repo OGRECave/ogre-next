@@ -34,11 +34,7 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorShadowNode.h"
 
 #include "OgreViewport.h"
-#include "OgreRenderTarget.h"
 #include "OgreSceneManager.h"
-
-#include "OgreHardwarePixelBuffer.h"
-#include "OgreRenderTexture.h"
 
 namespace Ogre
 {

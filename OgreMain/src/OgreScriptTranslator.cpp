@@ -3187,7 +3187,7 @@ namespace Ogre{
                             TextureTypes::TextureTypes texType = TextureTypes::Type2D;
                             bool isAlpha = false;
                             bool sRGBRead = false;
-                            int mipmaps = MIP_DEFAULT;
+                            int mipmaps = 1u;
 
                             ++j;
                             while(j != prop->values.end())
@@ -3222,7 +3222,7 @@ namespace Ogre{
                                         texType = TextureTypes::Type2DArray;
                                         break;
                                     case ID_UNLIMITED:
-                                        mipmaps = MIP_UNLIMITED;
+                                        // mipmaps = MIP_UNLIMITED;
                                         break;
                                     case ID_ALPHA:
                                         isAlpha = true;

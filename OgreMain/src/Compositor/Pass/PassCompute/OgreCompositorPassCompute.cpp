@@ -43,9 +43,6 @@ THE SOFTWARE.
 
 #include "Vao/OgreUavBufferPacked.h"
 
-#include "OgreRenderTexture.h"
-#include "OgreHardwarePixelBuffer.h"
-
 namespace Ogre
 {
     void CompositorPassComputeDef::addTextureSource( uint32 texUnitIdx, const String &textureName )

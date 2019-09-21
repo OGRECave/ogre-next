@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgrePVRTCCodec.h"
-#include "OgreImage.h"
+#include "OgreImage2.h"
 #include "OgreException.h"
 #include "OgreLogManager.h"
 #include "OgreBitwise.h"
@@ -190,8 +190,7 @@ namespace Ogre {
         uint32 flags = 0, formatFlags = 0;
         size_t numFaces = 1; // Assume one face until we know otherwise
 
-        ImageData *imgData = OGRE_NEW ImageData();
-        MemoryDataStreamPtr output;
+        ImageData2 *imgData = OGRE_NEW ImageData2();
 
         // Read the PVRTC header
         stream->read(&header, sizeof(PVRTCTexHeaderV2));
@@ -208,37 +207,41 @@ namespace Ogre {
         {
             if (formatFlags == kPVRTextureFlagTypePVRTC_4)
             {
-                imgData->format = bitmaskAlpha ? PF_PVRTC_RGBA4 : PF_PVRTC_RGB4;
+                imgData->format = bitmaskAlpha ? PFG_PVRTC_RGBA4 : PFG_PVRTC_RGB4;
             }
             else if (formatFlags == kPVRTextureFlagTypePVRTC_2)
             {
-                imgData->format = bitmaskAlpha ? PF_PVRTC_RGBA2 : PF_PVRTC_RGB2;
+                imgData->format = bitmaskAlpha ? PFG_PVRTC_RGBA2 : PFG_PVRTC_RGB2;
             }
 
-            imgData->depth = 1;
-            imgData->width = header.width;
-            imgData->height = header.height;
-            imgData->num_mipmaps = static_cast<uint8>(header.numMipmaps);
+            imgData->box.depth = 1u;
+            imgData->box.numSlices = static_cast<uint32>( numFaces );
+            imgData->box.width = header.width;
+            imgData->box.height = header.height;
+            imgData->numMipmaps = static_cast<uint8>( header.numMipmaps );
 
             // PVRTC is a compressed format
-            imgData->flags |= IF_COMPRESSED;
+            imgData->box.setCompressedPixelFormat( imgData->format );
         }
 
         // Calculate total size from number of mipmaps, faces and size
-        imgData->size = Image::calculateSize(imgData->num_mipmaps, numFaces, 
-                                             imgData->width, imgData->height, imgData->depth, imgData->format);
-
+        const uint32 rowAlignment = 4u;
+        const size_t requiredBytes = PixelFormatGpuUtils::calculateSizeBytes( imgData->box.width,
+                                                                              imgData->box.height,
+                                                                              imgData->box.depth,
+                                                                              imgData->box.numSlices,
+                                                                              imgData->format,
+                                                                              imgData->numMipmaps,
+                                                                              rowAlignment );
         // Bind output buffer
-        output.bind(OGRE_NEW MemoryDataStream(imgData->size));
+        imgData->box.data = OGRE_MALLOC_SIMD( requiredBytes, MEMCATEGORY_RESOURCE );
 
         // Now deal with the data
-        void *destPtr = output->getPtr();
-        stream->read(destPtr, imgData->size);
-        destPtr = static_cast<void*>(static_cast<uchar*>(destPtr));
+        stream->read( imgData->box.data, requiredBytes );
 
         DecodeResult ret;
-        ret.first = output;
-        ret.second = CodecDataPtr(imgData);
+        ret.first.reset();
+        ret.second = CodecDataPtr( imgData );
 
         return ret;
     }
@@ -250,8 +253,7 @@ namespace Ogre {
         uint32 flags = 0;
         size_t numFaces = 1; // Assume one face until we know otherwise
 
-        ImageData *imgData = OGRE_NEW ImageData();
-        MemoryDataStreamPtr output;
+        ImageData2 *imgData = OGRE_NEW ImageData2();
 
         // Read the PVRTC header
         stream->read(&header, sizeof(PVRTCTexHeaderV3));
@@ -266,22 +268,22 @@ namespace Ogre {
         switch (header.pixelFormat)
         {
             case kPVRTC1_PF_2BPP_RGB:
-                imgData->format = PF_PVRTC_RGB2;
+                imgData->format = PFG_PVRTC_RGB2;
                 break;
             case kPVRTC1_PF_2BPP_RGBA:
-                imgData->format = PF_PVRTC_RGBA2;
+                imgData->format = PFG_PVRTC_RGBA2;
                 break;
             case kPVRTC1_PF_4BPP_RGB:
-                imgData->format = PF_PVRTC_RGB4;
+                imgData->format = PFG_PVRTC_RGB4;
                 break;
             case kPVRTC1_PF_4BPP_RGBA:
-                imgData->format = PF_PVRTC_RGBA4;
+                imgData->format = PFG_PVRTC_RGBA4;
                 break;
             case kPVRTC2_PF_2BPP:
-                imgData->format = PF_PVRTC2_2BPP;
+                imgData->format = PFG_PVRTC2_2BPP;
                 break;
             case kPVRTC2_PF_4BPP:
-                imgData->format = PF_PVRTC2_4BPP;
+                imgData->format = PFG_PVRTC2_4BPP;
                 break;
         }
 
@@ -289,57 +291,76 @@ namespace Ogre {
         flags = header.flags;
         flipEndian(&flags, sizeof(uint32));
 
-        imgData->depth = header.depth;
-        imgData->width = header.width;
-        imgData->height = header.height;
-        imgData->num_mipmaps = static_cast<uint8>(header.mipMapCount);
+        imgData->box.depth = header.depth;
+        imgData->box.numSlices = static_cast<uint32>( header.numSurfaces );
+        imgData->box.width = header.width;
+        imgData->box.height = header.height;
+        imgData->numMipmaps = static_cast<uint8>( header.mipMapCount );
 
         // PVRTC is a compressed format
-        imgData->flags |= IF_COMPRESSED;
+        imgData->box.setCompressedPixelFormat( imgData->format );
 
-        if(header.numFaces == 6)
-            imgData->flags |= IF_CUBEMAP;
+        if( !( header.numFaces % 6u ) )
+        {
+            imgData->textureType =
+                header.numFaces == 6u ? TextureTypes::TypeCube : TextureTypes::TypeCubeArray;
+            imgData->box.numSlices = header.numFaces;
+        }
 
-        if(header.depth > 1)
-            imgData->flags |= IF_3D_TEXTURE;
+        if( header.depth > 1 )
+            imgData->textureType = TextureTypes::Type3D;
 
         // Calculate total size from number of mipmaps, faces and size
-        imgData->size = Image::calculateSize(imgData->num_mipmaps, numFaces, 
-                                             imgData->width, imgData->height, imgData->depth, imgData->format);
-
+        const uint32 rowAlignment = 4u;
+        const size_t requiredBytes = PixelFormatGpuUtils::calculateSizeBytes( imgData->box.width,
+                                                                              imgData->box.height,
+                                                                              imgData->box.depth,
+                                                                              imgData->box.numSlices,
+                                                                              imgData->format,
+                                                                              imgData->numMipmaps,
+                                                                              rowAlignment );
         // Bind output buffer
-        output.bind(OGRE_NEW MemoryDataStream(imgData->size));
+        imgData->box.data = OGRE_MALLOC_SIMD( requiredBytes, MEMCATEGORY_RESOURCE );
 
         // Now deal with the data
-        void *destPtr = output->getPtr();
+        void *destPtr = imgData->box.data;
         
-        uint width = imgData->width;
-        uint height = imgData->height;
-        uint depth = imgData->depth;
+        uint32 width = imgData->box.width;
+        uint32 height = imgData->box.height;
+        uint32 depth = imgData->box.depth;
 
         // All mips for a surface, then each face
-        for(size_t mip = 0; mip <= imgData->num_mipmaps; ++mip)
+        for( size_t mip = 0; mip <= imgData->numMipmaps; ++mip )
         {
-            for(size_t surface = 0; surface < header.numSurfaces; ++surface)
+            //for( size_t surface = 0; surface < header.numSurfaces; ++surface )
+            size_t depthOrSlices = imgData->box.getDepthOrSlices();
+            if( imgData->textureType == TextureTypes::Type3D )
+                depthOrSlices = depth;  // account for mips
+
+            for( size_t surface = 0; surface < depthOrSlices; ++surface )
             {
-                for(size_t i = 0; i < numFaces; ++i)
+                // Ogre does not support 3D arrays or weird (incompatible) combinaations)
+                //for( size_t i = 0; i < numFaces; ++i )
                 {
                     // Load directly
-                    size_t pvrSize = PixelUtil::getMemorySize(width, height, depth, imgData->format);
-                    stream->read(destPtr, pvrSize);
-                    destPtr = static_cast<void*>(static_cast<uchar*>(destPtr) + pvrSize);
+                    const size_t pvrSize = PixelFormatGpuUtils::calculateSizeBytes(
+                        width, height, depth, 1u, imgData->format, 1u, rowAlignment );
+                    stream->read( destPtr, pvrSize );
+                    destPtr = static_cast<void *>( static_cast<uchar *>( destPtr ) + pvrSize );
                 }
             }
 
             // Next mip
-            if(width!=1) width /= 2;
-            if(height!=1) height /= 2;
-            if(depth!=1) depth /= 2;
+            // clang-format off
+            width   = std::max( 1u, width  >> 1u );
+            height  = std::max( 1u, height >> 1u );
+            depth   = std::max( 1u, depth  >> 1u );
+            // clang-format on
         }
 
         DecodeResult ret;
-        ret.first = output;
-        ret.second = CodecDataPtr(imgData);
+        ret.first.reset();
+        ret.second = CodecDataPtr( imgData );
 
         return ret;
     }

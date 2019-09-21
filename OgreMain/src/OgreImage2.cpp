@@ -32,8 +32,7 @@ THE SOFTWARE.
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreColourValue.h"
 #include "OgreMath.h"
-#include "OgrePixelBox.h"
-#include "OgreImageResampler.h"
+//#include "OgreImageResampler.h"
 #include "OgreImageDownsampler.h"
 #include "OgreTextureGpuManager.h"
 #include "OgreAsyncTextureTicket.h"
@@ -56,7 +55,7 @@ namespace Ogre {
     {
     }
     //-----------------------------------------------------------------------------------
-    Image2::Image2( const Image &img ) :
+    Image2::Image2( const Image2 &img ) :
         mBuffer( NULL ),
         mAutoDelete( true )
     {

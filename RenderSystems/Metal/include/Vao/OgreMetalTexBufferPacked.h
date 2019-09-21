@@ -45,7 +45,7 @@ namespace Ogre
                               uint32 numElementsPadding, BufferType bufferType,
                               void *initialData, bool keepAsShadow,
                               VaoManager *vaoManager, MetalBufferInterface *bufferInterface,
-                              Ogre::PixelFormat pf, MetalDevice *device );
+                              PixelFormatGpu pf, MetalDevice *device );
         virtual ~MetalTexBufferPacked();
 
         virtual void bindBufferVS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );

@@ -316,12 +316,5 @@ namespace v1 {
         return HardwareCounterBufferSharedPtr(
             new GL3PlusDefaultHardwareCounterBuffer(this, name));
     }
-
-    RenderToVertexBufferSharedPtr GL3PlusDefaultHardwareBufferManagerBase::createRenderToVertexBuffer( void )
-    {
-        OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
-                    "Cannot create RenderToVertexBuffer in GL3PlusDefaultHardwareBufferManagerBase",
-                    "GL3PlusDefaultHardwareBufferManagerBase::createRenderToVertexBuffer");
-    }
 }
 }

@@ -91,7 +91,7 @@ namespace Ogre {
             This event is raised just before any of the viewports on the target
             are rendered to. You can perform manual rendering operations here if
             you want, but please note that if the Viewport objects attached to this
-            target are set up to clear the background, you will lose whatever you 
+            target are set up to clear the background, you will lose whatever you
             render. If you want some kind of backdrop in this event
             you should turn off background clearing off on the viewports, and either
             clear the viewports yourself in this event handler before doing your rendering
@@ -105,7 +105,7 @@ namespace Ogre {
             This event is called just after all the viewports attached to the target
             in question have been rendered to. You can perform your own manual rendering
             commands in this event handler if you like, these will be composited with
-            the contents of the target already there (depending on the material settings 
+            the contents of the target already there (depending on the material settings
             you use etc).
         */
         virtual void postRenderTargetUpdate(const RenderTargetEvent& evt)

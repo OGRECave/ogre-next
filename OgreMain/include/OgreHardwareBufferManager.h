@@ -279,12 +279,6 @@ namespace v1 {
             createIndexBuffer(HardwareIndexBuffer::IndexType itype, size_t numIndexes, 
             HardwareBuffer::Usage usage, bool useShadowBuffer = false) = 0;
 
-        /** Create a render to vertex buffer.
-        @remarks The parameters (such as vertex size etc) are determined later
-            and are allocated when needed.
-        */
-        virtual RenderToVertexBufferSharedPtr createRenderToVertexBuffer() = 0;
-
         /**
          * Create uniform buffer. This type of buffer allows the upload of shader constants once,
          * and sharing between shader stages or even shaders from another materials. 
@@ -451,12 +445,6 @@ namespace v1 {
             HardwareBuffer::Usage usage, bool useShadowBuffer = false)
         {
             return mImpl->createIndexBuffer(itype, numIndexes, usage, useShadowBuffer);
-        }
-
-        /** @copydoc HardwareBufferManagerBase::createRenderToVertexBuffer */
-        RenderToVertexBufferSharedPtr createRenderToVertexBuffer()
-        {
-            return mImpl->createRenderToVertexBuffer();
         }
 
         /** @copydoc HardwareBufferManagerBase::createUniformBuffer */

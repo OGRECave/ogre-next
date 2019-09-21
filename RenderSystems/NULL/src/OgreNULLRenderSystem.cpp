@@ -28,7 +28,6 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 
 #include "OgreNULLRenderSystem.h"
 #include "OgreNULLWindow.h"
-#include "OgreNULLTextureManager.h"
 #include "OgreNULLTextureGpuManager.h"
 #include "OgreRenderPassDescriptor.h"
 #include "Vao/OgreNULLVaoManager.h"
@@ -49,22 +48,6 @@ namespace Ogre
     {
         OGRE_DELETE mHardwareBufferManager;
         mHardwareBufferManager = 0;
-
-        OGRE_DELETE mTextureManager;
-        mTextureManager = 0;
-
-        {
-            vector<RenderTarget*>::type::const_iterator itor = mRenderTargets.begin();
-            vector<RenderTarget*>::type::const_iterator end  = mRenderTargets.end();
-
-            while( itor != end )
-            {
-                OGRE_DELETE *itor;
-                ++itor;
-            }
-
-            mRenderTargets.clear();
-        }
     }
     //-------------------------------------------------------------------------
     const String& NULLRenderSystem::getName(void) const
@@ -158,7 +141,6 @@ namespace Ogre
             mCurrentCapabilities = mRealCapabilities;
 
             mHardwareBufferManager = new v1::DefaultHardwareBufferManager();
-            mTextureManager = new NULLTextureManager();
             mVaoManager = OGRE_NEW NULLVaoManager();
             mTextureGpuManager = OGRE_NEW NULLTextureGpuManager( mVaoManager, this );
 
@@ -168,11 +150,6 @@ namespace Ogre
         win->_initialize( mTextureGpuManager );
 
         return win;
-    }
-    //-------------------------------------------------------------------------
-    MultiRenderTarget* NULLRenderSystem::createMultiRenderTarget(const String & name)
-    {
-        return 0;
     }
     //-------------------------------------------------------------------------
     String NULLRenderSystem::getErrorDescription(long errorNumber) const
@@ -277,12 +254,6 @@ namespace Ogre
         return retVal;
     }
     //-------------------------------------------------------------------------
-    DepthBuffer* NULLRenderSystem::_createDepthBufferFor( RenderTarget *renderTarget,
-                                                          bool exactMatchFormat )
-    {
-        return 0;
-    }
-    //-------------------------------------------------------------------------
     void NULLRenderSystem::_beginFrame(void)
     {
     }
@@ -358,10 +329,6 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    void NULLRenderSystem::discardFrameBuffer( unsigned int buffers )
-    {
-    }
-    //-------------------------------------------------------------------------
     Real NULLRenderSystem::getHorizontalTexelOffset(void)
     {
         return 0.0f;
@@ -380,10 +347,6 @@ namespace Ogre
     Real NULLRenderSystem::getMaximumDepthInputValue(void)
     {
         return 1.0f;
-    }
-    //-------------------------------------------------------------------------
-    void NULLRenderSystem::_setRenderTarget(RenderTarget *target, uint8 viewportRenderTargetFlags)
-    {
     }
     //-------------------------------------------------------------------------
     void NULLRenderSystem::preExtraThreadsStarted()

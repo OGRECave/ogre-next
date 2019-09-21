@@ -33,7 +33,6 @@ THE SOFTWARE.
 #include "OgreRoot.h"
 #include "OgreMaterialManager.h"
 #include "OgreRenderSystem.h"
-#include "OgreRenderTarget.h"
 #include <iomanip>
 
 namespace Ogre {

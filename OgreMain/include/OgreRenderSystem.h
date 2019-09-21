@@ -54,10 +54,7 @@ namespace Ogre
     */
 
     typedef vector<TextureGpu*>::type TextureGpuVec;
-    typedef vector<DepthBuffer*>::type DepthBufferVec;
-    typedef map< uint16, DepthBufferVec >::type DepthBufferMap;
     typedef map< uint16, TextureGpuVec >::type DepthBufferMap2;
-    typedef map< String, RenderTarget * >::type RenderTargetMap;
 
     class TextureManager;
     /// Enum describing the ways to generate texture coordinates
@@ -532,41 +529,9 @@ namespace Ogre
         virtual bool _createRenderWindows(const RenderWindowDescriptionList& renderWindowDescriptions, 
             WindowList &createdWindows);
 
-        
-        /** Create a MultiRenderTarget, which is a render target that renders to multiple RenderTextures
-        at once. Surfaces can be bound and unbound at will.
-        This fails if mCapabilities->getNumMultiRenderTargets() is smaller than 2.
-        */
-        virtual MultiRenderTarget * createMultiRenderTarget(const String & name) = 0; 
-
         /** Destroys a render window */
         virtual void destroyRenderWindow( Window *window );
-        /** Destroys a render texture */
-        virtual void destroyRenderTexture(const String& name);
-        /** Destroys a render target of any sort */
-        virtual void destroyRenderTarget(const String& name);
 
-        /** Attaches the passed render target to the render system.
-        */
-        virtual void attachRenderTarget( RenderTarget &target );
-        /** Returns a pointer to the render target with the passed name, or NULL if that
-        render target cannot be found.
-        */
-        virtual RenderTarget * getRenderTarget( const String &name );
-        /** Detaches the render target with the passed name from the render system and
-        returns a pointer to it.
-        @note
-        If the render target cannot be found, NULL is returned.
-        */
-        virtual RenderTarget * detachRenderTarget( const String &name );
-
-        /// Iterator over RenderTargets
-        typedef MapIterator<Ogre::RenderTargetMap> RenderTargetIterator;
-
-        /** Returns a specialised MapIterator over all render targets attached to the RenderSystem. */
-        virtual RenderTargetIterator getRenderTargetIterator(void) {
-            return RenderTargetIterator( mRenderTargets.begin(), mRenderTargets.end() );
-        }
         /** Returns a description of an error code.
         */
         virtual String getErrorDescription(long errorNumber) const = 0;
@@ -593,17 +558,6 @@ namespace Ogre
         /** Returns true if fixed pipeline rendering is enabled on the system.
         */
         bool getFixedPipelineEnabled(void) const;
-
-        /** Retrieves an existing DepthBuffer or creates a new one suited for the given RenderTarget
-            and sets it.
-            @remarks
-                RenderTarget's pool ID is respected. @see RenderTarget::setDepthBufferPool()
-        */
-        virtual void setDepthBufferFor( RenderTarget *renderTarget, bool exactMatch );
-
-        virtual void createUniqueDepthBufferFor( RenderTarget *renderTarget, bool exactMatch );
-
-        virtual void _destroyDepthBuffer( DepthBuffer *depthBuffer );
 
         // ------------------------------------------------------------------------
         //                     Internal Rendering Access
@@ -898,25 +852,6 @@ namespace Ogre
         */
         virtual void _setTextureProjectionRelativeTo(bool enabled, const Vector3& pos);
 
-        /** Creates a DepthBuffer that can be attached to the specified RenderTarget
-            @remarks
-                It doesn't attach anything, it just returns a pointer to a new DepthBuffer
-                Caller is responsible for putting this buffer into the right pool, for
-                attaching, and deleting it. Here's where API-specific magic happens.
-                Don't call this directly unless you know what you're doing.
-        */
-        virtual DepthBuffer* _createDepthBufferFor( RenderTarget *renderTarget,
-                                                    bool exactMatchFormat ) = 0;
-
-        /** Removes all depth buffers. Should be called on device lost and shutdown
-            @remarks
-                Advanced users can call this directly with bCleanManualBuffers=false to
-                remove all depth buffers created for RTTs; when they think the pool has
-                grown too big or they've used lots of depth buffers they don't need anymore,
-                freeing GPU RAM.
-        */
-        void _cleanupDepthBuffers( bool bCleanManualBuffers=true );
-
         /// Signifies the beginning of the main frame. i.e. will only be called once per frame,
         /// not per viewport
         virtual void _beginFrameOnce(void);
@@ -1110,8 +1045,6 @@ namespace Ogre
         virtual void _renderNoBaseInstance( const v1::CbDrawCallIndexed *cmd ) {}
         virtual void _renderNoBaseInstance( const v1::CbDrawCallStrip *cmd ) {}
 
-        virtual void _renderUsingReadBackAsTexture(unsigned int secondPass,Ogre::String variableName,unsigned int StartSlot);
-
         /** Gets the capabilities of the render system. */
         const RenderSystemCapabilities* getCapabilities(void) const { return mCurrentCapabilities; }
 
@@ -1170,9 +1103,6 @@ namespace Ogre
         */
         virtual void resetClipPlanes();
 
-        /** Utility method for initialising all render targets attached to this rendering system. */
-        virtual void _initRenderTargets(void);
-
         /** Sets whether or not vertex windings set should be inverted; this can be important
         for rendering reflections. */
         void setInvertVertexWinding(bool invert);
@@ -1195,9 +1125,6 @@ namespace Ogre
         */
         virtual void clearFrameBuffer( RenderPassDescriptor *renderPassDesc,
                                        TextureGpu *anyTarget, uint8 mipLevel ) = 0;
-
-        /// @copydoc Viewport::discard
-        virtual void discardFrameBuffer( unsigned int buffers ) = 0;
 
         /** Returns the horizontal texel offset value required for mapping 
         texel origins to pixel origins in this rendersystem.
@@ -1262,15 +1189,6 @@ namespace Ogre
             mDerivedDepthBiasMultiplier = multiplier;
             mDerivedDepthBiasSlopeScale = slopeScale;
         }
-
-        /**
-         * Set current render target to target, enabling its device context if needed
-        @param viewportRenderTargetFlags
-            See ViewportRenderTargetFlags
-            See CompositorPassDef::mColourWrite
-            The RenderTarget is needed to know the depth/stencil information.
-         */
-        virtual void _setRenderTarget( RenderTarget *target, uint8 viewportRenderTargetFlags ) = 0;
 
         /** Defines a listener on the custom events that this render system 
         can raise.
@@ -1449,13 +1367,8 @@ namespace Ogre
     protected:
 
         void destroyAllRenderPassDescriptors(void);
-        void cleanReleasedDepthBuffers(void);
 
         DepthBufferMap2 mDepthBufferPool2;
-
-        /** DepthBuffers to be attached to render targets */
-        DepthBufferMap  mDepthBufferPool;
-        DepthBufferVec  mReleasedDepthBuffers;
 
         typedef set<RenderPassDescriptor*>::type RenderPassDescriptorSet;
         RenderPassDescriptorSet mRenderPassDescs;
@@ -1465,10 +1378,6 @@ namespace Ogre
 
         typedef set<Window*>::type WindowSet;
         WindowSet mWindows;
-        /** The render targets. */
-        RenderTargetMap mRenderTargets;
-        /** The Active render target. */
-        RenderTarget * mActiveRenderTarget;
 
         StencilParams   mStencilParams;
 
@@ -1479,12 +1388,6 @@ namespace Ogre
         GpuProgramParametersSharedPtr mActiveTessellationHullGpuProgramParameters;
         GpuProgramParametersSharedPtr mActiveTessellationDomainGpuProgramParameters;
         GpuProgramParametersSharedPtr mActiveComputeGpuProgramParameters;
-
-        // Texture manager
-        // A concrete class of this will be created and
-        // made available under the TextureManager singleton,
-        // managed by the RenderSystem
-        TextureManager* mTextureManager;
 
         VaoManager          *mVaoManager;
         TextureGpuManager   *mTextureGpuManager;

@@ -32,7 +32,6 @@ THE SOFTWARE.
 #include "OgreCommon.h"
 #include "OgreBlendMode.h"
 #include "OgreMatrix4.h"
-#include "OgreTexture.h"
 #include "OgreIdString.h"
 #include "OgreTextureGpu.h"
 #include "OgreTextureGpuListener.h"

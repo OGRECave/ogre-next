@@ -486,7 +486,7 @@ namespace Ogre
         OGRE_ASSERT_LOW( (size_t)(partitionedSubMeshGpuPtrs[3] -
                          partitionedSubMeshGpuPtrs[2] ) == mNumCompressedPartSubMeshes32 );
 
-        mGpuPartitionedSubMeshes = mVaoManager->createTexBuffer( PF_R32G32B32A32_UINT,
+        mGpuPartitionedSubMeshes = mVaoManager->createTexBuffer( PFG_RGBA32_UINT,
                                                                  totalNumMeshes *
                                                                  sizeof(PartitionedSubMesh),
                                                                  BT_DEFAULT,
@@ -1083,7 +1083,7 @@ namespace Ogre
                                                             BB_FLAG_UAV|BB_FLAG_TEX, 0, false );
             mCpuInstanceBuffer = reinterpret_cast<float*>( OGRE_MALLOC_SIMD( elementCount * structStride,
                                                                              MEMCATEGORY_GENERAL ) );
-            mInstanceBufferAsTex = mInstanceBuffer->getAsTexBufferView( PF_FLOAT32_RGBA );
+            mInstanceBufferAsTex = mInstanceBuffer->getAsTexBufferView( PFG_RGBA32_FLOAT );
         }
     }
     //-------------------------------------------------------------------------
@@ -1258,7 +1258,7 @@ namespace Ogre
         mAabbWorldSpaceJob->_setUavBuffer( 0, bufferSlot );
 
         DescriptorSetTexture2::BufferSlot texBufSlot(DescriptorSetTexture2::BufferSlot::makeEmpty());
-        texBufSlot.buffer = mMeshAabb->getAsTexBufferView( PF_FLOAT32_RGBA );
+        texBufSlot.buffer = mMeshAabb->getAsTexBufferView( PFG_RGBA32_FLOAT );
         mAabbWorldSpaceJob->setTexBuffer( 0, texBufSlot );
 
         const uint32 threadsPerGroupX = mAabbWorldSpaceJob->getThreadsPerGroupX();

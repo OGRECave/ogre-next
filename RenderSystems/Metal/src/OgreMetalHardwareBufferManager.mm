@@ -128,13 +128,5 @@ namespace v1 {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "Use v2 interfaces.",
                      "MetalHardwareBufferManagerBase::createCounterBuffer" );
     }
-    //-----------------------------------------------------------------------------------
-    RenderToVertexBufferSharedPtr MetalHardwareBufferManagerBase::createRenderToVertexBuffer(void)
-    {
-        OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "Use v2 interfaces.",
-                     "MetalHardwareBufferManagerBase::createRenderToVertexBuffer" );
-        //return RenderToVertexBufferSharedPtr(new MetalRenderToVertexBuffer);
-        return RenderToVertexBufferSharedPtr();
-    }
 }
 }

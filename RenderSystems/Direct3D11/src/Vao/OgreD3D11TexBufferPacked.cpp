@@ -34,13 +34,15 @@ THE SOFTWARE.
 #include "OgreD3D11Mappings.h"
 #include "OgreD3D11RenderSystem.h"
 
+#include "OgrePixelFormatGpuUtils.h"
+
 namespace Ogre
 {
     D3D11TexBufferPacked::D3D11TexBufferPacked(
             size_t internalBufStartBytes, size_t numElements, uint32 bytesPerElement,
             uint32 numElementsPadding, BufferType bufferType, void *initialData, bool keepAsShadow,
             VaoManager *vaoManager, BufferInterface *bufferInterface,
-            PixelFormat pf, bool bIsStructured, D3D11Device &device ) :
+            PixelFormatGpu pf, bool bIsStructured, D3D11Device &device ) :
         TexBufferPacked( internalBufStartBytes, numElements, bytesPerElement, numElementsPadding,
                          bufferType, initialData, keepAsShadow, vaoManager, bufferInterface, pf ),
         mInternalFormat( DXGI_FORMAT_UNKNOWN ),
@@ -50,7 +52,7 @@ namespace Ogre
         memset( mCachedResourceViews, 0, sizeof( mCachedResourceViews ) );
 
         if( !bIsStructured )
-            mInternalFormat = D3D11Mappings::_getPF( pf );
+            mInternalFormat = D3D11Mappings::get( pf );
     }
     //-----------------------------------------------------------------------------------
     D3D11TexBufferPacked::~D3D11TexBufferPacked()
@@ -75,8 +77,9 @@ namespace Ogre
     {
         assert( cacheIdx < 16 );
 
-        const size_t formatSize = isD3D11Structured() ? mBytesPerElement :
-                                                        PixelUtil::getNumElemBytes( mPixelFormat );
+        const size_t formatSize = isD3D11Structured()
+                                      ? mBytesPerElement
+                                      : PixelFormatGpuUtils::getBytesPerPixel( mPixelFormat );
 
         if( mCachedResourceViews[cacheIdx].mResourceView )
             mCachedResourceViews[cacheIdx].mResourceView->Release();
@@ -148,8 +151,9 @@ namespace Ogre
         assert( bufferSlot.sizeBytes <= getTotalSizeBytes() );
         assert( (bufferSlot.offset + bufferSlot.sizeBytes) <= getTotalSizeBytes() );
 
-        const size_t formatSize = isD3D11Structured() ? mBytesPerElement :
-                                                        PixelUtil::getNumElemBytes( mPixelFormat );
+        const size_t formatSize = isD3D11Structured()
+                                      ? mBytesPerElement
+                                      : PixelFormatGpuUtils::getBytesPerPixel( mPixelFormat );
 
         const size_t sizeBytes = !bufferSlot.sizeBytes ? (mNumElements * mBytesPerElement -
                                                           bufferSlot.offset) : bufferSlot.sizeBytes;

@@ -177,7 +177,9 @@ namespace Ogre {
     class Decal;
     class DefaultWorkQueue;
     class Degree;
-    class DepthBuffer;
+#ifndef OGRE_DEPRECATED_2_2
+    struct DepthBuffer;
+#endif
     struct DescriptorSetSampler;
     struct DescriptorSetTexture;
     struct DescriptorSetTexture2;
@@ -221,14 +223,12 @@ namespace Ogre {
     struct HlmsPso;
     struct HlmsSamplerblock;
     class HlmsTextureExportListener;
-    class HlmsTextureManager;
     struct HlmsTexturePack;
     class IndexBufferPacked;
     class IndirectBufferPacked;
     class InternalCubemapProbe;
     class IntersectionSceneQuery;
     class IntersectionSceneQueryListener;
-    class Image;
     class Image2;
     class Item;
     struct KfTransform;
@@ -267,7 +267,6 @@ namespace Ogre {
     class ParticleSystemRendererFactory;
     class ParticleVisualData;
     class Pass;
-    class PixelBox;
     class Plane;
     class PlaneBoundedVolume;
     class Plugin;
@@ -289,11 +288,6 @@ namespace Ogre {
     class RenderSystemCapabilities;
     class RenderSystemCapabilitiesManager;
     class RenderSystemCapabilitiesSerializer;
-    class RenderTarget;
-    class RenderTargetListener;
-    class RenderTexture;
-    class MultiRenderTarget;
-    class RenderWindow;
     class Resource;
     class ResourceBackgroundQueue;
     class ResourceGroupManager;
@@ -334,7 +328,6 @@ namespace Ogre {
     class TextureGpu;
     class TextureGpuListener;
     class TextureGpuManager;
-    class TextureManager;
     struct TexturePool;
     struct Transform;
     class Timer;
@@ -354,6 +347,23 @@ namespace Ogre {
     class WorkQueue;
     class CompositorManager2;
     class CompositorWorkspace;
+
+#ifdef OGRE_DEPRECATED_2_2
+    class DepthBuffer;
+    class HlmsTextureManager;
+    class Image;
+    class PixelBox;
+    class RenderTarget;
+    class RenderTargetListener;
+    class RenderTexture;
+    class RenderToVertexBuffer;
+    class RenderWindow;
+    class MultiRenderTarget;
+    class TextureManager;
+
+    template<typename T> class SharedPtr;
+    typedef SharedPtr<RenderToVertexBuffer> RenderToVertexBufferSharedPtr;
+#endif
 
     template<typename T> class SharedPtr;
     typedef SharedPtr<AnimableValue> AnimableValuePtr;
@@ -407,7 +417,6 @@ namespace Ogre {
         class PatchMesh;
         class Pose;
         class RenderOperation;
-        class RenderToVertexBuffer;
         class RibbonTrail;
         class SimpleRenderable;
         class Skeleton;
@@ -423,7 +432,6 @@ namespace Ogre {
 
         typedef SharedPtr<Mesh> MeshPtr;
         typedef SharedPtr<PatchMesh> PatchMeshPtr;
-        typedef SharedPtr<RenderToVertexBuffer> RenderToVertexBufferSharedPtr;
         typedef SharedPtr<Skeleton> SkeletonPtr;
     }
 }

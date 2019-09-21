@@ -67,8 +67,6 @@ namespace v1 {
                                                                     HardwareBuffer::Usage usage,
                                                                     bool useShadowBuffer,
                                                                     const String& name = "" );
-        /// Create a render to vertex buffer
-        virtual RenderToVertexBufferSharedPtr createRenderToVertexBuffer(void);
     };
 
     /// MetalHardwareBufferManagerBase as a Singleton

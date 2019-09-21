@@ -59,8 +59,6 @@ namespace Ogre
 
         ConfigOptionMap mOptions;
 
-        vector<RenderTarget*>::type mRenderTargets;
-
         NULLPixelFormatToShaderType mPixelFormatToShaderType;
 
     public:
@@ -88,8 +86,6 @@ namespace Ogre
                                              uint32 width, uint32 height,
                                              bool fullScreen,
                                              const NameValuePairList *miscParams = 0);
-
-        virtual MultiRenderTarget* createMultiRenderTarget(const String & name);
 
         virtual String getErrorDescription(long errorNumber) const;
 
@@ -128,9 +124,6 @@ namespace Ogre
 
         virtual RenderPassDescriptor* createRenderPassDescriptor(void);
 
-        virtual DepthBuffer* _createDepthBufferFor( RenderTarget *renderTarget,
-                                                    bool exactMatchFormat );
-
         virtual void _beginFrame(void);
         virtual void _endFrame(void);
 
@@ -160,14 +153,12 @@ namespace Ogre
 
         virtual void clearFrameBuffer( RenderPassDescriptor *renderPassDesc,
                                        TextureGpu *anyTarget, uint8 mipLevel );
-        virtual void discardFrameBuffer( unsigned int buffers );
 
         virtual Real getHorizontalTexelOffset(void);
         virtual Real getVerticalTexelOffset(void);
         virtual Real getMinimumDepthInputValue(void);
         virtual Real getMaximumDepthInputValue(void);
 
-        virtual void _setRenderTarget( RenderTarget *target, uint8 viewportRenderTargetFlags );
         virtual void preExtraThreadsStarted();
         virtual void postExtraThreadsStarted();
         virtual void registerThread();

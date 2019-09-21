@@ -34,7 +34,6 @@
 #include <algorithm>
 
 #include "OgreWin32GLSupport.h"
-#include "OgreGL3PlusTexture.h"
 #include "OgreWin32Window.h"
 #include <GL/wglext.h>
 

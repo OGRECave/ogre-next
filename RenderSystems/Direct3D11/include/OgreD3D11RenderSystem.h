@@ -109,9 +109,6 @@ namespace Ogre
         void convertComputeShaderCaps(RenderSystemCapabilities* rsc) const;
 
         bool checkVertexTextureFormats(void);
-        
-        //TODO: Looks like dead code or useless now
-        bool mReadBackAsTexture;
 
         ID3D11Buffer    *mBoundIndirectBuffer;
         unsigned char   *mSwIndirectBufferPtr;
@@ -144,17 +141,6 @@ namespace Ogre
         typedef std::map<String, ID3D11ClassInstance*> ClassInstanceMap;
         typedef std::map<String, ID3D11ClassInstance*>::iterator ClassInstanceIterator;
         ClassInstanceMap mInstanceMap;
-
-        /// structure holding texture unit settings for every stage
-        struct sD3DTextureStageDesc
-        {
-            /// the type of the texture
-            TextureType type;
-
-            /// texture 
-            ID3D11ShaderResourceView  *pTex;
-            bool used;
-        } mTexStageDesc[OGRE_MAX_TEXTURE_LAYERS];
 
         size_t     mLastTextureUnitState;
 		bool       mSamplerStatesChanged;
@@ -191,12 +177,6 @@ namespace Ogre
 
         void setClipPlanesImpl(const PlaneList& clipPlanes);
 
-        /**
-         * With DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL flag render target views are unbound
-         * from us each Present(), and we need the way to reestablish connection.
-         */
-        void _setRenderTargetViews( uint8 viewportRenderTargetFlags );
-
     public:
         // constructor
         D3D11RenderSystem( );
@@ -229,11 +209,6 @@ namespace Ogre
                               D3D11RenderWindowBase *sendingWindow = NULL ) {}
 #endif
 
-        /// @copydoc RenderSystem::createRenderTexture
-        RenderTexture * createRenderTexture( const String & name, unsigned int width, unsigned int height,
-            TextureType texType = TEX_TYPE_2D, PixelFormat internalFormat = PF_X8R8G8B8, 
-            const NameValuePairList *miscParams = 0 ); 
-
         virtual void _setCurrentDeviceFromTexture( TextureGpu *texture ) {}
 
         virtual D3D11FrameBufferDescMap& _getFrameBufferDescMap(void)   { return mFrameBufferDescMap; }
@@ -250,16 +225,6 @@ namespace Ogre
         TextureGpu* createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
                                           PixelFormatGpu depthBufferFormat );
 
-        /// @copydoc RenderSystem::createMultiRenderTarget
-        virtual MultiRenderTarget * createMultiRenderTarget(const String & name);
-
-        virtual DepthBuffer* _createDepthBufferFor( RenderTarget *renderTarget, bool exactMatchFormat );
-
-        /// Reverts _addManualDepthBuffer actions
-        void _removeManualDepthBuffer(DepthBuffer *depthBuffer);
-        /// @copydoc RenderSystem::detachRenderTarget
-        virtual RenderTarget * detachRenderTarget(const String &name);
-
         const String& getName(void) const;
 		
 		const String& getFriendlyName(void) const;
@@ -273,7 +238,6 @@ namespace Ogre
         void handleDeviceLost();
         void setShadingType( ShadeOptions so );
         void setLightingEnabled( bool enabled );
-        void destroyRenderTarget(const String& name);
         VertexElementType getColourVertexElementType(void) const;
         virtual void setStencilBufferParams( uint32 refValue, const StencilParams &stencilParams );
         void setNormaliseNormals(bool normalise);
@@ -338,7 +302,6 @@ namespace Ogre
         void _beginFrame(void);
         void _endFrame(void);
         void _setFog( FogMode mode = FOG_NONE, const ColourValue& colour = ColourValue::White, Real expDensity = 1.0, Real linearStart = 0.0, Real linearEnd = 1.0 );
-        void _renderUsingReadBackAsTexture(unsigned int passNr, Ogre::String variableName,unsigned int StartSlot);
         void _render(const v1::RenderOperation& op);
 
         virtual void _dispatch( const HlmsComputePso &pso );
@@ -363,7 +326,6 @@ namespace Ogre
 
         virtual void clearFrameBuffer( RenderPassDescriptor *renderPassDesc,
                                        TextureGpu *anyTarget, uint8 mipLevel );
-        void discardFrameBuffer( unsigned int buffers );
         void setClipPlane (ushort index, Real A, Real B, Real C, Real D);
         void enableClipPlane (ushort index, bool enable);
         HardwareOcclusionQuery* createHardwareOcclusionQuery(void);
@@ -375,16 +337,6 @@ namespace Ogre
         void unregisterThread();
         void preExtraThreadsStarted();
         void postExtraThreadsStarted();
-
-        /**
-         * Set current render target to target, enabling its GL context if needed
-         */
-        virtual void _setRenderTarget( RenderTarget *target, uint8 viewportRenderTargetFlags );
-
-        /** Check whether or not filtering is supported for the precise texture format requested
-        with the given usage options.
-        */
-        bool _checkTextureFilteringSupported(TextureType ttype, PixelFormat format, int usage);
 
         void determineFSAASettings(uint fsaa, const String& fsaaHint, DXGI_FORMAT format, DXGI_SAMPLE_DESC* outFSAASettings);
 

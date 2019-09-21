@@ -62,7 +62,7 @@ namespace Ogre
                               uint32 numElementsPadding, BufferType bufferType,
                               void *initialData, bool keepAsShadow,
                               VaoManager *vaoManager, BufferInterface *bufferInterface,
-                              Ogre::PixelFormat pf, bool bIsStructured, D3D11Device &device );
+                              PixelFormatGpu pf, bool bIsStructured, D3D11Device &device );
         virtual ~D3D11TexBufferPacked();
 
         ID3D11ShaderResourceView* createSrv( const DescriptorSetTexture2::BufferSlot &bufferSlot ) const;

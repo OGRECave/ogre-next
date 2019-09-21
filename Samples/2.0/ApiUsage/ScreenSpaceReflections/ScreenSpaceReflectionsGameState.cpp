@@ -16,7 +16,6 @@
 
 #include "OgreRoot.h"
 #include "OgreHlmsManager.h"
-#include "OgreHlmsTextureManager.h"
 #include "OgreHlmsPbs.h"
 
 #include "OgreLwString.h"
@@ -26,9 +25,6 @@
 #include "OgreMaterialManager.h"
 #include "OgreMaterial.h"
 #include "OgreTechnique.h"
-
-#include "OgreTextureManager.h"
-#include "OgreRenderWindow.h"
 
 #include "OgreForward3D.h"
 

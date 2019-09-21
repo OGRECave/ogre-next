@@ -37,7 +37,6 @@ THE SOFTWARE.
 #endif
 
 #include "OgreViewport.h"
-#include "OgreRenderTarget.h"
 #include "OgreHighLevelGpuProgramManager.h"
 #include "OgreHighLevelGpuProgram.h"
 #include "OgreForward3D.h"

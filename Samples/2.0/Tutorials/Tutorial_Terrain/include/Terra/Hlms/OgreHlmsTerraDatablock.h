@@ -30,7 +30,6 @@ THE SOFTWARE.
 
 #include "Terra/Hlms/OgreHlmsTerraPrerequisites.h"
 #include "OgreHlmsDatablock.h"
-#include "OgreHlmsTextureManager.h"
 #include "OgreConstBufferPool.h"
 #include "OgreVector4.h"
 

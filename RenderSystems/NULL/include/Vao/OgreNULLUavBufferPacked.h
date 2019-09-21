@@ -40,7 +40,7 @@ namespace Ogre
     class _OgreNULLExport NULLUavBufferPacked : public UavBufferPacked
     {
     protected:
-        virtual TexBufferPacked* getAsTexBufferImpl( PixelFormat pixelFormat );
+        virtual TexBufferPacked* getAsTexBufferImpl( PixelFormatGpu pixelFormat );
 
     public:
         NULLUavBufferPacked( size_t internalBufStartBytes, size_t numElements, uint32 bytesPerElement,

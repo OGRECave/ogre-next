@@ -32,7 +32,6 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreStringConverter.h"
 #include "OgreLight.h"
 #include "OgreCamera.h"
-#include "OgreGL3PlusTextureManager.h"
 #include "OgreGL3PlusHardwareCounterBuffer.h"
 #include "OgreGL3PlusHardwareUniformBuffer.h"
 #include "OgreGL3PlusHardwareShaderStorageBuffer.h"
@@ -46,16 +45,12 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreGLSLExtSupport.h"
 #include "OgreGL3PlusDescriptorSetTexture.h"
 #include "OgreGL3PlusHardwareOcclusionQuery.h"
-#include "OgreGL3PlusDepthBuffer.h"
-#include "OgreGL3PlusHardwarePixelBuffer.h"
 #include "OgreGL3PlusContext.h"
 #include "OgreGLSLShaderFactory.h"
-#include "OgreGL3PlusFBORenderTexture.h"
 #include "OgreGL3PlusHardwareBufferManager.h"
 #include "OgreGLSLSeparableProgramManager.h"
 #include "OgreGLSLSeparableProgram.h"
 #include "OgreGLSLMonolithicProgramManager.h"
-#include "OgreGL3PlusPixelFormat.h"
 #include "OgreGL3PlusVertexArrayObject.h"
 #include "OgreGL3PlusTextureGpuManager.h"
 #include "OgreGL3PlusTextureGpu.h"
@@ -75,8 +70,8 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreRoot.h"
 #include "OgreConfig.h"
 #include "OgreViewport.h"
+#include "OgreDepthBuffer.h"
 #include "OgreWindow.h"
-#include "OgreGL3PlusPixelFormat.h"
 #include "OgrePixelFormatGpuUtils.h"
 
 #include "OgreProfiler.h"
@@ -176,7 +171,6 @@ namespace Ogre {
           mShaderManager(0),
           mGLSLShaderFactory(0),
           mHardwareBufferManager(0),
-          mRTTManager(0),
           mActiveTextureUnit(0),
           mHasArbInvalidateSubdata( false ),
           mNullColourFramebuffer( 0 )
@@ -202,7 +196,6 @@ namespace Ogre {
             mTextureTypes[i] = GL_TEXTURE_2D;
         }
 
-        mActiveRenderTarget = 0;
         mCurrentContext = 0;
         mMainContext = 0;
         mGLInitialised = false;
@@ -222,14 +215,6 @@ namespace Ogre {
     GL3PlusRenderSystem::~GL3PlusRenderSystem()
     {
         shutdown();
-
-        // Destroy render windows
-        RenderTargetMap::iterator i;
-        for (i = mRenderTargets.begin(); i != mRenderTargets.end(); ++i)
-        {
-            OGRE_DELETE i->second;
-        }
-        mRenderTargets.clear();
 
         if (mGLSupport)
             OGRE_DELETE mGLSupport;
@@ -629,10 +614,6 @@ namespace Ogre {
         // Use VBO's by default
         mHardwareBufferManager = new v1::GL3PlusHardwareBufferManager();
 
-        // Use FBO's for RTT, PBuffers and Copy are no longer supported
-        // Create FBO manager
-        LogManager::getSingleton().logMessage("GL3+: Using FBOs for rendering to textures");
-        mRTTManager = new GL3PlusFBOManager(*mGLSupport);
         caps->setCapability(RSC_RTT_DEPTHBUFFER_RESOLUTION_LESSEQUAL);
 
         Log* defaultLog = LogManager::getSingleton().getDefaultLog();
@@ -642,9 +623,6 @@ namespace Ogre {
             defaultLog->logMessage(
                 " * Using Reverse Z: " + StringConverter::toString( mReverseDepth, true ) );
         }
-
-        // Create the texture manager
-        mTextureManager = new GL3PlusTextureManager(*mGLSupport);
 
         /*if (caps->hasCapability(RSC_CAN_GET_COMPILED_SHADER_BUFFER))
         {
@@ -681,12 +659,6 @@ namespace Ogre {
 
         OGRE_DELETE mHardwareBufferManager;
         mHardwareBufferManager = 0;
-
-        OGRE_DELETE mRTTManager;
-        mRTTManager = 0;
-
-        OGRE_DELETE mTextureManager;
-        mTextureManager = 0;
 
         // Delete extra threads contexts
         for (GL3PlusContextList::iterator i = mBackgroundContextList.begin();
@@ -754,13 +726,6 @@ namespace Ogre {
                                                       bool fullScreen,
                                                       const NameValuePairList *miscParams )
     {
-        if (mRenderTargets.find(name) != mRenderTargets.end())
-        {
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                        "Window with name '" + name + "' already exists",
-                        "GL3PlusRenderSystem::_createRenderWindow");
-        }
-
         // Log a message
         StringStream ss;
         ss << "GL3PlusRenderSystem::_createRenderWindow \"" << name << "\", " <<
@@ -869,69 +834,6 @@ namespace Ogre {
         win->_initialize( mTextureGpuManager );
 
         return win;
-    }
-
-    //---------------------------------------------------------------------
-    DepthBuffer* GL3PlusRenderSystem::_createDepthBufferFor( RenderTarget *renderTarget,
-                                                             bool exactMatchFormat )
-    {
-        GL3PlusDepthBuffer *retVal = 0;
-
-        // Only FBOs support different depth buffers, so everything
-        // else creates dummy (empty) containers
-        // retVal = mRTTManager->_createDepthBufferFor( renderTarget );
-        GL3PlusFrameBufferObject *fbo = 0;
-        renderTarget->getCustomAttribute(GL3PlusRenderTexture::CustomAttributeString_FBO, &fbo);
-
-        if( fbo || renderTarget->getForceDisableColourWrites() )
-        {
-            PixelFormat desiredDepthBufferFormat = renderTarget->getDesiredDepthBufferFormat();
-
-            if( !exactMatchFormat )
-            {
-                if( desiredDepthBufferFormat == PF_D24_UNORM_X8 && renderTarget->prefersDepthTexture() )
-                    desiredDepthBufferFormat = PF_D24_UNORM;
-                else
-                    desiredDepthBufferFormat = PF_D24_UNORM_S8_UINT;
-            }
-
-            PixelFormat renderTargetFormat;
-
-            if( fbo )
-                renderTargetFormat = fbo->getFormat();
-            else
-            {
-                //Deal with depth textures
-                renderTargetFormat = desiredDepthBufferFormat;
-            }
-
-            // Presence of an FBO means the manager is an FBO Manager, that's why it's safe to downcast
-            // Find best depth & stencil format suited for the RT's format
-            GLenum depthFormat, stencilFormat;
-            static_cast<GL3PlusFBOManager*>(mRTTManager)->getBestDepthStencil( desiredDepthBufferFormat,
-                                                                               renderTargetFormat,
-                                                                               &depthFormat,
-                                                                               &stencilFormat );
-
-            // OpenGL specs explicitly disallow depth textures with separate stencil.
-            if( stencilFormat == GL_NONE || !renderTarget->prefersDepthTexture() )
-            {
-                // No "custom-quality" multisample for now in GL
-                retVal = new GL3PlusDepthBuffer( 0, this, mCurrentContext, depthFormat, stencilFormat,
-                                                 renderTarget->getWidth(), renderTarget->getHeight(),
-                                                 renderTarget->getFSAA(), 0,
-                                                 desiredDepthBufferFormat,
-                                                 renderTarget->prefersDepthTexture(), false );
-            }
-        }
-
-        return retVal;
-    }
-    //---------------------------------------------------------------------
-    void GL3PlusRenderSystem::_getDepthStencilFormatFor( GLenum internalColourFormat, GLenum *depthFormat,
-                                                      GLenum *stencilFormat )
-    {
-        mRTTManager->getBestDepthStencil( internalColourFormat, depthFormat, stencilFormat );
     }
     //-----------------------------------------------------------------------------------
     extern const IdString CustomAttributeIdString_GLCONTEXT;
@@ -1084,13 +986,6 @@ namespace Ogre {
 
         return RenderSystem::createDepthBufferFor( colourTexture, preferDepthTexture,
                                                    depthBufferFormat );
-    }
-    //-----------------------------------------------------------------------------------
-    MultiRenderTarget* GL3PlusRenderSystem::createMultiRenderTarget(const String & name)
-    {
-        MultiRenderTarget *retval = mRTTManager->createMultiRenderTarget(name);
-        attachRenderTarget(*retval);
-        return retval;
     }
 
     String GL3PlusRenderSystem::getErrorDescription(long errorNumber) const
@@ -3255,70 +3150,6 @@ namespace Ogre {
         beginRenderPassDescriptor( desc, anyTarget, mipLevel, &fullVp, &fullVp, 1u, false, false );
     }
 
-    void GL3PlusRenderSystem::discardFrameBuffer( unsigned int buffers )
-    {
-        //To GLES2 porting note:
-        //GL_EXT_discard_framebuffer does not imply a clear.
-        //GL_EXT_discard_framebuffer should be called after rendering
-        //(Allows to omit writeback of unneeded data e.g. Z-buffers, Stencil)
-        //On most renderers, not clearing (and invalidate is not clearing)
-        //can put you in slow mode
-
-        //GL_ARB_invalidate_subdata
-
-        assert( mActiveRenderTarget );
-        if( !mHasArbInvalidateSubdata )
-            return;
-
-        GLsizei numAttachments = 0;
-        GLenum attachments[OGRE_MAX_MULTIPLE_RENDER_TARGETS+2];
-
-        GL3PlusFrameBufferObject *fbo = 0;
-        mActiveRenderTarget->getCustomAttribute( GL3PlusRenderTexture::CustomAttributeString_FBO, &fbo );
-
-        if( fbo )
-        {
-            if( buffers & FBT_COLOUR )
-            {
-                for( size_t i=0; i<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
-                {
-                    const GL3PlusSurfaceDesc &surfDesc = fbo->getSurface( i );
-                    if( surfDesc.buffer )
-                        attachments[numAttachments++] = static_cast<GLenum>( GL_COLOR_ATTACHMENT0 + i );
-                }
-            }
-
-            GL3PlusDepthBuffer *depthBuffer = static_cast<GL3PlusDepthBuffer*>(
-                                                mActiveRenderTarget->getDepthBuffer() );
-
-            if( depthBuffer )
-            {
-                if( buffers & FBT_STENCIL && depthBuffer->getStencilBuffer() )
-                    attachments[numAttachments++] = GL_STENCIL_ATTACHMENT;
-                if( buffers & FBT_DEPTH )
-                    attachments[numAttachments++] = GL_DEPTH_ATTACHMENT;
-            }
-        }
-        else
-        {
-            if( buffers & FBT_COLOUR )
-            {
-                attachments[numAttachments++] = GL_COLOR;
-                /*attachments[numAttachments++] = GL_BACK_LEFT;
-                attachments[numAttachments++] = GL_BACK_RIGHT;*/
-            }
-
-            if( buffers & FBT_DEPTH )
-                attachments[numAttachments++] = GL_DEPTH;
-            if( buffers & FBT_STENCIL )
-                attachments[numAttachments++] = GL_STENCIL;
-        }
-
-        assert( numAttachments && "Bad flags provided" );
-        assert( numAttachments <= (GLsizei)(sizeof(attachments) / sizeof(attachments[0])) );
-        glInvalidateFramebuffer( GL_FRAMEBUFFER, numAttachments, attachments );
-    }
-
     void GL3PlusRenderSystem::_switchContext(GL3PlusContext *context)
     {
         // Unbind GPU programs and rebind to new context later, because
@@ -3464,8 +3295,7 @@ namespace Ogre {
     {
         // Set main and current context
         mMainContext = 0;
-        primary->getCustomAttribute( GL3PlusRenderTexture::CustomAttributeString_GLCONTEXT,
-                                     &mMainContext );
+        primary->getCustomAttribute( "GLCONTEXT", &mMainContext );
         mCurrentContext = mMainContext;
 
         // Set primary context as active
@@ -3497,123 +3327,6 @@ namespace Ogre {
         LogManager::getSingleton().logMessage("**************************************");
         LogManager::getSingleton().logMessage("***   OpenGL 3+ Renderer Started   ***");
         LogManager::getSingleton().logMessage("**************************************");
-    }
-
-    void GL3PlusRenderSystem::_setRenderTarget(RenderTarget *target, uint8 viewportRenderTargetFlags)
-    {
-#if TODO_OGRE_2_2
-        mActiveViewport = 0;
-
-        // Unbind frame buffer object
-        if (mActiveRenderTarget)
-        {
-            mRTTManager->unbind(mActiveRenderTarget);
-
-            if( mActiveRenderTarget->getForceDisableColourWrites() &&
-                !mActiveRenderTarget->getDepthBuffer() )
-            {
-                //Disable target independent rasterization to let the driver warn us
-                //of wrong behavior during regular rendering.
-                OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, 0 ) );
-                OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, 0 ) );
-            }
-        }
-
-        mActiveRenderTarget = target;
-        if (target)
-        {        
-            // Switch context if different from current one
-            GL3PlusContext *newContext = 0;
-            target->getCustomAttribute(GL3PlusRenderTexture::CustomAttributeString_GLCONTEXT, &newContext);
-            if (newContext && mCurrentContext != newContext)
-            {
-                _switchContext(newContext);
-            }
-
-            // Check the FBO's depth buffer status
-            GL3PlusDepthBuffer *depthBuffer = static_cast<GL3PlusDepthBuffer*>(target->getDepthBuffer());
-
-            if( target->getDepthBufferPool() != DepthBuffer::POOL_NO_DEPTH &&
-                (!depthBuffer || depthBuffer->getGLContext() != mCurrentContext ) )
-            {
-                // Depth is automatically managed and there is no depth buffer attached to this RT
-                // or the Current context doesn't match the one this Depth buffer was created with
-                setDepthBufferFor( target, true );
-            }
-
-            depthBuffer = static_cast<GL3PlusDepthBuffer*>(target->getDepthBuffer());
-
-            if( target->getForceDisableColourWrites() )
-                viewportRenderTargetFlags &= ~VP_RTT_COLOUR_WRITE;
-
-            if( !(viewportRenderTargetFlags & VP_RTT_COLOUR_WRITE) )
-            {
-                if( target->isRenderWindow() )
-                {
-                    OCGE( glBindFramebuffer( GL_FRAMEBUFFER, 0 ) );
-                }
-                else
-                {
-                    OCGE( glBindFramebuffer( GL_FRAMEBUFFER, mNullColourFramebuffer ) );
-
-                    if( depthBuffer )
-                    {
-                        //Attach the depth buffer to this no-colour framebuffer
-                        depthBuffer->bindToFramebuffer();
-                     }
-                    else
-                    {
-                        //Detach all depth buffers from this no-colour framebuffer
-                        OCGE( glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
-                                                         GL_RENDERBUFFER, 0 ) );
-                        OCGE( glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT,
-                                                         GL_RENDERBUFFER, 0 ) );
-
-                        OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH,
-                                                       target->getWidth() ) );
-                        OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT,
-                                                       target->getHeight() ) );
-
-                        OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_SAMPLES,
-                                                       target->getFSAA() > 1 ? target->getFSAA() : 0 ) );
-                        
-                     }
-                }
-
-                //Do not render to colour Render Targets.
-                OCGE( glDrawBuffer( GL_NONE ) );
-            }
-            else
-            {
-                if( target->isRenderWindow() )
-                {
-                    //Make sure colour writes are enabled for RenderWindows.
-                    OCGE( glBindFramebuffer( GL_FRAMEBUFFER, 0 ) );
-                    //TODO: Restore the setting sent to OGRE_NO_QUAD_BUFFER_STEREO?
-                    OCGE( glDrawBuffer( GL_BACK ) );
-                }
-
-                // Bind frame buffer object
-                mRTTManager->bind(target);
-            }
-
-            // Enable / disable sRGB states
-            if (target->isHardwareGammaEnabled())
-            {
-                OGRE_CHECK_GL_ERROR(glEnable(GL_FRAMEBUFFER_SRGB));
-
-                // Note: could test GL_FRAMEBUFFER_SRGB_CAPABLE here before
-                // enabling, but GL spec says incapable surfaces ignore the setting
-                // anyway. We test the capability to enable isHardwareGammaEnabled.
-            }
-            else
-            {
-                OGRE_CHECK_GL_ERROR(glDisable(GL_FRAMEBUFFER_SRGB));
-            }
-        }
-
-        flushUAVs();
-#endif
     }
 
     GLint GL3PlusRenderSystem::convertCompareFunction(CompareFunction func) const

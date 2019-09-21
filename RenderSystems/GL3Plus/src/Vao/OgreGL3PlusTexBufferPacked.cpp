@@ -29,14 +29,16 @@ THE SOFTWARE.
 #include "Vao/OgreGL3PlusTexBufferPacked.h"
 #include "Vao/OgreGL3PlusBufferInterface.h"
 
-#include "OgreGL3PlusPixelFormat.h"
+#include "OgreGL3PlusMappings.h"
 
 namespace Ogre
 {
-    GL3PlusTexBufferPacked::GL3PlusTexBufferPacked(
-                size_t internalBufStartBytes, size_t numElements, uint32 bytesPerElement,
-                uint32 numElementsPadding, BufferType bufferType, void *initialData, bool keepAsShadow,
-                VaoManager *vaoManager, GL3PlusBufferInterface *bufferInterface, PixelFormat pf ) :
+    GL3PlusTexBufferPacked::GL3PlusTexBufferPacked( size_t internalBufStartBytes, size_t numElements,
+                                                    uint32 bytesPerElement, uint32 numElementsPadding,
+                                                    BufferType bufferType, void *initialData,
+                                                    bool keepAsShadow, VaoManager *vaoManager,
+                                                    GL3PlusBufferInterface *bufferInterface,
+                                                    PixelFormatGpu pf ) :
         TexBufferPacked( internalBufStartBytes, numElements, bytesPerElement, numElementsPadding,
                          bufferType, initialData, keepAsShadow, vaoManager, bufferInterface, pf ),
         mTexName( 0 )
@@ -44,7 +46,7 @@ namespace Ogre
         OCGE( glGenTextures( 1, &mTexName ) );
         OCGE( glBindTexture( GL_TEXTURE_BUFFER, mTexName ) );
 
-        mInternalFormat = GL3PlusPixelUtil::getGLImageInternalFormat( pf );
+        mInternalFormat = GL3PlusMappings::get( pf );
     }
     //-----------------------------------------------------------------------------------
     GL3PlusTexBufferPacked::~GL3PlusTexBufferPacked()
@@ -121,4 +123,4 @@ namespace Ogre
         bindBuffer( slot, offset, sizeBytes );
     }
     //-----------------------------------------------------------------------------------
-}
+}  // namespace Ogre

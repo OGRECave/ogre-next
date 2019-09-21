@@ -269,7 +269,7 @@ namespace Ogre
             {
                 if( mExtraBufferParams.useTextureBuffers )
                 {
-                    extraBuffer = _mVaoManager->createTexBuffer( PF_FLOAT32_RGBA,
+                    extraBuffer = _mVaoManager->createTexBuffer( PFG_RGBA32_FLOAT,
                                                                  mExtraBufferParams.bytesPerSlot *
                                                                                     mSlotsPerPool,
                                                                  mExtraBufferParams.bufferType,

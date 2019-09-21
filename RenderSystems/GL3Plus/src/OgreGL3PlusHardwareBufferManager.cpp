@@ -32,7 +32,6 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreGL3PlusHardwareUniformBuffer.h"
 #include "OgreGL3PlusHardwareShaderStorageBuffer.h"
 #include "OgreGL3PlusHardwareVertexBuffer.h"
-#include "OgreGL3PlusRenderToVertexBuffer.h"
 #include "OgreRoot.h"
 
 namespace Ogre {
@@ -143,11 +142,6 @@ namespace v1 {
             mCounterBuffers.insert(buf);
         }
         return HardwareCounterBufferSharedPtr(buf);
-    }
-
-    RenderToVertexBufferSharedPtr GL3PlusHardwareBufferManagerBase::createRenderToVertexBuffer()
-    {
-        return RenderToVertexBufferSharedPtr(new GL3PlusRenderToVertexBuffer);
     }
 
     GLenum GL3PlusHardwareBufferManagerBase::getGLUsage(unsigned int usage)

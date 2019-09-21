@@ -812,23 +812,23 @@ namespace Ogre
 
                 switch (pTex->getTextureType())
                 {
-                case TEX_TYPE_1D:
+                case TextureTypes::Type1D:
                     writeValue("1d");
                     break;
-                case TEX_TYPE_2D:
+                case TextureTypes::Type2D:
                     // nothing, this is the default
                     break;
-                case TEX_TYPE_3D:
+                case TextureTypes::Type3D:
                     writeValue("3d");
                     break;
-                case TEX_TYPE_CUBE_MAP:
+                case TextureTypes::TypeCube:
                     // nothing, deal with this as cubic_texture since it copes with all variants
                     break;
                 default:
                     break;
                 };
 
-                if (pTex->getNumMipmaps() != MIP_DEFAULT)
+                if (pTex->getNumMipmaps() != 1u)
                 {
                     writeValue(StringConverter::toString(pTex->getNumMipmaps()));
                 }

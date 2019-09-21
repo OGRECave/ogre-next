@@ -75,8 +75,8 @@ add_filter_only( "Header Files\\Threading" "${CMAKE_CURRENT_SOURCE_DIR}/include/
 add_filter_only( "Source Files\\Threading" "${CMAKE_CURRENT_SOURCE_DIR}/src/Threading/*.cpp" )
 
 # Remove optional header files
-list(REMOVE_ITEM HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/OgreFreeImageCodec.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/include/OgreDDSCodec.h"
+list(REMOVE_ITEM HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/OgreFreeImageCodec2.h"
+	"${CMAKE_CURRENT_SOURCE_DIR}/include/OgreDDSCodec2.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/include/OgrePVRTCCodec.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/include/OgreETCCodec.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/include/OgreZip.h"
@@ -85,8 +85,8 @@ list(REMOVE_ITEM HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/OgreFreeImage
 )
 
 # Remove optional source files
-list(REMOVE_ITEM SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/OgreFreeImageCodec.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/OgreDDSCodec.cpp"
+list(REMOVE_ITEM SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/OgreFreeImageCodec2.cpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/OgreDDSCodec2.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/OgrePVRTCCodec.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/OgreETCCodec.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/OgreZip.cpp"
@@ -333,8 +333,8 @@ if (OGRE_PROFILING_PROVIDER STREQUAL "remotery")
 endif ()
 
 if (OGRE_CONFIG_ENABLE_FREEIMAGE)
-  list(APPEND HEADER_FILES include/OgreFreeImageCodec.h)
-  list(APPEND SOURCE_FILES src/OgreFreeImageCodec.cpp)
+  list(APPEND HEADER_FILES include/OgreFreeImageCodec2.h)
+  list(APPEND SOURCE_FILES src/OgreFreeImageCodec2.cpp)
   list(APPEND LIBRARIES    "${FreeImage_LIBRARIES}")
 endif()
 
@@ -344,8 +344,8 @@ if (OGRE_CONFIG_ENABLE_STBI)
 endif ()
 
 if (OGRE_CONFIG_ENABLE_DDS)
-  list(APPEND HEADER_FILES include/OgreDDSCodec.h)
-  list(APPEND SOURCE_FILES src/OgreDDSCodec.cpp)
+  list(APPEND HEADER_FILES include/OgreDDSCodec2.h)
+  list(APPEND SOURCE_FILES src/OgreDDSCodec2.cpp)
 endif ()
 
 if (OGRE_CONFIG_ENABLE_PVRTC)

@@ -11,7 +11,6 @@
 #include "OgreMesh2.h"
 
 #include "OgreCamera.h"
-#include "OgreRenderWindow.h"
 
 #include "OgreHlmsPbsDatablock.h"
 #include "OgreHlmsSamplerblock.h"
@@ -23,7 +22,6 @@
 #include "OgreTextureGpuManager.h"
 
 #include "OgreDecal.h"
-#include "OgreTextureManager.h"
 #include "OgreWireAabb.h"
 
 using namespace Demo;

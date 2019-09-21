@@ -58,7 +58,7 @@ namespace Ogre {
         StringVector extsVector = StringUtil::split(exts, ",");
         for (StringVector::iterator v = extsVector.begin(); v != extsVector.end(); ++v)
         {
-            ImageCodec* codec = OGRE_NEW STBIImageCodec(*v);
+            ImageCodec2* codec = OGRE_NEW STBIImageCodec(*v);
             msCodecList.push_back(codec);
             Codec::registerCodec(codec);
         }
@@ -110,9 +110,9 @@ namespace Ogre {
         MemoryDataStream memStream(input, true);
 
         int width, height, components;
-        stbi_uc* pixelData = stbi_load_from_memory(memStream.getPtr(), static_cast<int>(memStream.size()), &width, &height, &components, 0);
-        
-        
+        stbi_uc *pixelData = stbi_load_from_memory(
+            memStream.getPtr(), static_cast<int>( memStream.size() ), &width, &height, &components, 0 );
+
         if (!pixelData)
         {
             OGRE_EXCEPT(Exception::ERR_INTERNAL_ERROR, 
@@ -120,48 +120,73 @@ namespace Ogre {
                 "STBIImageCodec::decode");
         }
 
-        ImageData* imgData = OGRE_NEW ImageData();
-        MemoryDataStreamPtr output;
+        ImageData2* imgData = OGRE_NEW ImageData2();
 
-        imgData->depth = 1; // only 2D formats handled by this codec
-        imgData->width = width;
-        imgData->height = height;
-        imgData->num_mipmaps = 0; // no mipmaps in non-DDS 
-        imgData->flags = 0;
+        imgData->box.depth = 1u; // only 2D formats handled by this codec
+        imgData->box.numSlices = 1u;
+        imgData->box.width = static_cast<uint32>( width );
+        imgData->box.height = static_cast<uint32>( height );
+        imgData->numMipmaps = 1u; // no mipmaps in non-DDS
+        imgData->textureType = TextureTypes::Type2D;
 
         switch( components )
         {
             case 1:
-                imgData->format = PF_BYTE_L;
+                imgData->format = PFG_R8_UNORM;
                 break;
             case 2:
-                imgData->format = PF_BYTE_LA;
+                imgData->format = PFG_RG8_UNORM;
                 break;
             case 3:
-                imgData->format = PF_BYTE_RGB;
+                imgData->format = PFG_RGBA8_UNORM;
                 break;
             case 4:
-                imgData->format = PF_BYTE_RGBA;
+                imgData->format = PFG_RGBA8_UNORM;
                 break;
             default:
                 stbi_image_free(pixelData);
+                OGRE_DELETE imgData;
                 OGRE_EXCEPT(Exception::ERR_ITEM_NOT_FOUND,
                             "Unknown or unsupported image format",
                             "STBIImageCodec::decode");
                 break;
         }
-        
-        size_t dstPitch = imgData->width * PixelUtil::getNumElemBytes(imgData->format);
-        imgData->size = dstPitch * imgData->height;
-        output.bind(OGRE_NEW MemoryDataStream(imgData->size));
-        
-        uchar* pDst = output->getPtr();
-        memcpy(pDst, pixelData, imgData->size);
-        
+
+        const uint32 rowAlignment = 4u;
+        imgData->box.bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( imgData->format );
+        imgData->box.bytesPerRow = PixelFormatGpuUtils::getSizeBytes( imgData->box.width,
+                                                                      1u, 1u, 1u,
+                                                                      imgData->format,
+                                                                      rowAlignment );
+        imgData->box.bytesPerImage = imgData->box.bytesPerRow * imgData->box.height;
+
+        imgData->box.data = OGRE_MALLOC_SIMD( imgData->box.bytesPerImage, MEMCATEGORY_RESOURCE );
+
+        if( components != 3 )
+            memcpy( imgData->box.data, pixelData, imgData->box.bytesPerImage );
+        else
+        {
+            for( size_t y = 0; y < (size_t)height; ++y )
+            {
+                uint8 *pDst = reinterpret_cast<uint8 *>( imgData->box.at( 0u, y, 0u ) );
+                uint8 const *pSrc = pixelData + y * imgData->box.bytesPerRow;
+                for( size_t x = 0; x << (size_t)width; ++x )
+                {
+                    const uint8 b = *pSrc++;
+                    const uint8 g = *pSrc++;
+                    const uint8 r = *pSrc++;
+
+                    *pDst++ = r;
+                    *pDst++ = g;
+                    *pDst++ = b;
+                    *pDst++ = 0xFF;
+                }
+            }
+        }
         stbi_image_free(pixelData);
 
         DecodeResult ret;
-        ret.first = output;
+        ret.first.reset();
         ret.second = CodecDataPtr(imgData);
         return ret;
     }

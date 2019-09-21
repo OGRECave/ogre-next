@@ -42,7 +42,6 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 namespace Ogre {
     class GL3PlusContext;
     class GL3PlusSupport;
-    class GL3PlusRTTManager;
     class GLSLShaderManager;
     class GLSLShaderFactory;
 
@@ -123,13 +122,6 @@ namespace Ogre {
         GLSLShaderManager *mShaderManager;
         GLSLShaderFactory* mGLSLShaderFactory;
         v1::HardwareBufferManager* mHardwareBufferManager;
-
-        /** Manager object for creating render textures.
-            Direct render to texture via FBO is preferable
-            to pbuffers, which depend on the GL support used and are generally
-            unwieldy and slow. However, FBO support for stencil buffers is poor.
-        */
-        GL3PlusRTTManager *mRTTManager;
 
         /** These variables are used for caching RenderSystem state.
             They are cached because OpenGL state changes can be quite expensive,
@@ -256,13 +248,6 @@ namespace Ogre {
         bool _createRenderWindows( const RenderWindowDescriptionList &renderWindowDescriptions,
                                    WindowList &createdWindows );
 
-        /// @copydoc RenderSystem::_createDepthBufferFor
-        DepthBuffer* _createDepthBufferFor( RenderTarget *renderTarget, bool exactMatchFormat );
-
-        /// Mimics D3D9RenderSystem::_getDepthStencilFormatFor, if no FBO RTT manager, outputs GL_NONE
-        void _getDepthStencilFormatFor( GLenum internalColourFormat, GLenum *depthFormat,
-                                        GLenum *stencilFormat );
-
         virtual void _setCurrentDeviceFromTexture( TextureGpu *texture );
         virtual GL3PlusFrameBufferDescMap& _getFrameBufferDescMap(void) { return mFrameBufferDescMap; }
         virtual RenderPassDescriptor* createRenderPassDescriptor(void);
@@ -277,9 +262,6 @@ namespace Ogre {
 
         TextureGpu* createDepthBufferFor( TextureGpu *colourTexture, bool preferDepthTexture,
                                           PixelFormatGpu depthBufferFormat );
-
-        /// @copydoc RenderSystem::createMultiRenderTarget
-        virtual MultiRenderTarget * createMultiRenderTarget(const String & name);
 
         /** See
             RenderSystem
@@ -462,7 +444,6 @@ namespace Ogre {
 
         virtual void clearFrameBuffer( RenderPassDescriptor *renderPassDesc,
                                        TextureGpu *anyTarget, uint8 mipLevel );
-        virtual void discardFrameBuffer( unsigned int buffers );
         HardwareOcclusionQuery* createHardwareOcclusionQuery(void);
         Real getHorizontalTexelOffset(void) { return 0.0; }               // No offset in GL
         Real getVerticalTexelOffset(void) { return 0.0; }                 // No offset in GL
@@ -496,10 +477,6 @@ namespace Ogre {
         */
         void _oneTimeContextInitialization();
         void initialiseContext( Window *primary );
-        /**
-         * Set current render target to target, enabling its GL context if needed
-         */
-        void _setRenderTarget( RenderTarget *target, uint8 viewportRenderTargetFlags );
 
         GLint convertCompareFunction(CompareFunction func) const;
         GLint convertStencilOp(StencilOperation op) const;

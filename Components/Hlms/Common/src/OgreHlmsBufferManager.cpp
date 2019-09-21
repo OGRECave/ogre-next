@@ -88,7 +88,7 @@ namespace Ogre
         {
             size_t bufferSize = std::min<size_t>( mTextureBufferDefaultSize,
                                                   mVaoManager->getTexBufferMaxSize() );
-            TexBufferPacked *newBuffer = mVaoManager->createTexBuffer( PF_FLOAT32_RGBA, bufferSize,
+            TexBufferPacked *newBuffer = mVaoManager->createTexBuffer( PFG_RGBA32_FLOAT, bufferSize,
                                                                        BT_DYNAMIC_PERSISTENT, 0, false );
             mTexBuffers.push_back( newBuffer );
         }
@@ -192,7 +192,7 @@ namespace Ogre
             {
                 size_t bufferSize = std::min<size_t>( mTextureBufferDefaultSize,
                                                       mVaoManager->getTexBufferMaxSize() );
-                TexBufferPacked *newBuffer = mVaoManager->createTexBuffer( PF_FLOAT32_RGBA, bufferSize,
+                TexBufferPacked *newBuffer = mVaoManager->createTexBuffer( PFG_RGBA32_FLOAT, bufferSize,
                                                                            BT_DYNAMIC_PERSISTENT,
                                                                            0, false );
                 mTexBuffers.push_back( newBuffer );

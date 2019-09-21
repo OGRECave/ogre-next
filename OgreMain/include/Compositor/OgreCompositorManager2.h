@@ -29,15 +29,17 @@ THE SOFTWARE.
 #ifndef __CompositorManager2_H__
 #define __CompositorManager2_H__
 
-#include "OgreHeaderPrefix.h"
+#include "OgrePrerequisites.h"
+
 #include "OgreCompositorCommon.h"
+
 #include "OgreIdString.h"
 #include "OgreResourceTransition.h"
 #include "OgreVector4.h"
 #include "OgrePixelFormatGpu.h"
 #include "Compositor/OgreCompositorChannel.h"
 
-#include "OgreTexture.h"
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {

@@ -25,12 +25,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
-#ifndef __DepthBuffer_H__
-#define __DepthBuffer_H__
+#ifndef _OgreDepthBuffer_H_
+#define _OgreDepthBuffer_H_
 
 #include "OgrePrerequisites.h"
-#include "OgrePixelFormat.h"
 #include "OgrePixelFormatGpu.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
@@ -81,9 +81,8 @@ namespace Ogre
         @version
             1.0
      */
-    class _OgreExport DepthBuffer : public RenderSysAlloc
+    struct _OgreExport DepthBuffer
     {
-    public:
         enum PoolId
         {
             POOL_NO_DEPTH       = 0,
@@ -93,97 +92,7 @@ namespace Ogre
             POOL_INVALID        = 65535
         };
 
-        DepthBuffer( uint16 poolId, uint16 bitDepth, uint32 width, uint32 height,
-                     uint32 fsaa, const String &fsaaHint, PixelFormat pixelFormat,
-                     bool isDepthTexture, bool manual, RenderSystem *renderSystem );
-        virtual ~DepthBuffer();
-
-        /** Sets the pool id in which this DepthBuffer lives.
-            Note this will detach any render target from this depth buffer */
-        void _setPoolId( uint16 poolId );
-
-        /// Gets the pool id in which this DepthBuffer lives
-        virtual uint16 getPoolId() const;
-        virtual uint16 getBitDepth() const;
-        virtual uint32 getWidth() const;
-        virtual uint32 getHeight() const;
-        virtual uint32 getFsaa() const;
-        virtual const String& getFsaaHint() const;
-        PixelFormat getFormat(void) const;
-        bool isDepthTexture(void) const;
-
-        /** Manual DepthBuffers are cleared in RenderSystem's destructor. Non-manual ones are released
-            with it's render target (aka, a backbuffer or similar) */
-        bool isManual() const;
-
-        /** Returns whether the specified RenderTarget is compatible with this DepthBuffer
-            That is, this DepthBuffer can be attached to that RenderTarget
-        @remarks
-            Most APIs impose the following restrictions:
-            Width & height must be equal or higher than the render target's
-            They must be of the same bit depth.
-            They need to have the same FSAA setting
-        @param renderTarget
-            The render target to test against
-        @param exactFormatMatch
-            True if looking for the exact format according to the RT's preferred format.
-            False if the RT's preferred format should be ignored.
-        */
-        virtual bool isCompatible( RenderTarget *renderTarget, bool exactFormatMatch ) const;
-
-        /** Copies the contents of the DepthBuffer to the destination. Useful when you
-            want to bind a DepthBuffer for sampling as a texture, but later resume
-            rendering with this depth buffer (binding a DepthBuffer as a texture forces
-            it to be decompressed and disables other optimization algorithms on a lot of
-            Hardware. GCN Tahiti aka AMD Radeon R9 280 is no longer affected by this issue)
-        @remarks
-            The function will throw if the depth buffers are incompatible (e.g. different
-            resolution, different format, different MSAA settings)
-        @param destination
-            DepthBuffer to copy to.
-        @return
-            False if failed to copy for hardware reasons (DX10 does not allow copying
-            MSAA depth buffer; DX10.1 does)
-        */
-        bool copyTo( DepthBuffer *destination );
-
-        /** Called when a RenderTarget is attaches this DepthBuffer
-            @remarks
-                This function doesn't actually attach. It merely informs the DepthBuffer
-                which RenderTarget did attach. The real attachment happens in
-                RenderTarget::attachDepthBuffer()
-            @param renderTarget The RenderTarget that has just been attached
-        */
-        virtual void _notifyRenderTargetAttached( RenderTarget *renderTarget );
-
-        /** Called when a RenderTarget is detaches from this DepthBuffer
-            @remarks
-                Same as DepthBuffer::_notifyRenderTargetAttached()
-            @param renderTarget The RenderTarget that has just been detached
-        */
-        virtual void _notifyRenderTargetDetached( RenderTarget *renderTarget );
-
         static PixelFormatGpu DefaultDepthBufferFormat;
-
-    protected:
-        typedef set<RenderTarget*>::type RenderTargetSet;
-
-        uint16                      mPoolId;
-        uint16                      mBitDepth;
-        uint32                      mWidth;
-        uint32                      mHeight;
-        uint32                      mFsaa;
-        String                      mFsaaHint;
-        PixelFormat                 mFormat;
-        bool                        mDepthTexture;
-
-        bool                        mManual; //We don't Release manual surfaces on destruction
-        RenderTargetSet             mAttachedRenderTargets;
-        RenderSystem                *mRenderSystem;
-
-        void detachFromAllRenderTargets( bool inDestructor );
-
-        virtual bool copyToImpl( DepthBuffer *destination ) = 0;
     };
 
     /** @} */

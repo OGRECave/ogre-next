@@ -31,10 +31,7 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorNode.h"
 #include "Compositor/Pass/OgreCompositorPass.h"
 
-#include "OgreRenderTexture.h"
-#include "OgreHardwarePixelBuffer.h"
 #include "OgreRenderSystem.h"
-#include "OgreTextureManager.h"
 #include "OgreTextureGpuManager.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreDepthBuffer.h"

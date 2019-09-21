@@ -126,7 +126,6 @@ namespace Demo
         {
             size_t numItems = 0;
             Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
-            Ogre::HlmsTextureManager *hlmsTextureManager = hlmsManager->getTextureManager();
 
             assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
 

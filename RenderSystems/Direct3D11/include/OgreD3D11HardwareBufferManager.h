@@ -52,8 +52,6 @@ namespace v1 {
         /// Create a hardware vertex buffer
         HardwareIndexBufferSharedPtr 
             createIndexBuffer(HardwareIndexBuffer::IndexType itype, size_t numIndexes, HardwareBuffer::Usage usage, bool useShadowBuffer = false);
-        /// @copydoc HardwareBufferManager::createRenderToVertexBuffer
-        RenderToVertexBufferSharedPtr createRenderToVertexBuffer();
         /// @copydoc HardwareBufferManager::createUniformBuffer
         HardwareUniformBufferSharedPtr createUniformBuffer(size_t sizeBytes, 
                                     HardwareBuffer::Usage usage = HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE, 

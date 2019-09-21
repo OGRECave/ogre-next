@@ -34,7 +34,6 @@ THE SOFTWARE.
 #include "OgreHlmsManager.h"
 #include "OgreHlmsCompute.h"
 #include "OgreHlmsComputeJob.h"
-#include "OgreHlmsTextureManager.h"
 #include "OgreLwString.h"
 #include "OgreLogManager.h"
 #include "OgreTextureGpuManager.h"

@@ -39,7 +39,6 @@ THE SOFTWARE
 
 #ifdef OGRE_BUILD_COMPONENT_HLMS_UNLIT
     #include "OgreHlmsUnlitDatablock.h"
-    #include "OgreHardwarePixelBuffer.h"
 #else
     #include "OgreHlmsUnlitMobileDatablock.h"
 #endif

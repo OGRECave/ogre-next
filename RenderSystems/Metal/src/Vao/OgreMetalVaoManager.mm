@@ -827,7 +827,7 @@ namespace Ogre
                        constBuffer->getBufferType() );
     }
     //-----------------------------------------------------------------------------------
-    TexBufferPacked* MetalVaoManager::createTexBufferImpl( PixelFormat pixelFormat, size_t sizeBytes,
+    TexBufferPacked* MetalVaoManager::createTexBufferImpl( PixelFormatGpu pixelFormat, size_t sizeBytes,
                                                            BufferType bufferType,
                                                            void *initialData, bool keepAsShadow )
     {

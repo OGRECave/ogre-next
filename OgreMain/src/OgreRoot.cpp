@@ -31,7 +31,6 @@ THE SOFTWARE.
 #include "OgreRoot.h"
 
 #include "OgreRenderSystem.h"
-#include "OgreRenderWindow.h"
 #include "OgreException.h"
 #include "OgreControllerManager.h"
 #include "OgreLogManager.h"
@@ -42,7 +41,6 @@ THE SOFTWARE.
 #include "OgreRenderSystemCapabilitiesManager.h"
 #include "OgreMeshManager.h"
 #include "OgreMeshManager2.h"
-#include "OgreTextureManager.h"
 #include "OgreParticleSystemManager.h"
 #include "OgreOldSkeletonManager.h"
 #include "OgreProfiler.h"
@@ -77,11 +75,9 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorManager2.h"
 
 #if OGRE_NO_FREEIMAGE == 0
-#include "OgreFreeImageCodec.h"
 #include "OgreFreeImageCodec2.h"
 #endif
 #if OGRE_NO_DDS_CODEC == 0
-#include "OgreDDSCodec.h"
 #include "OgreDDSCodec2.h"
 #endif
 #if OGRE_NO_STBI_CODEC == 0
@@ -874,11 +870,6 @@ namespace Ogre {
         return mSceneManagerEnum->getSceneManagerIterator();
     }
     //-----------------------------------------------------------------------
-    TextureManager* Root::getTextureManager(void)
-    {
-        return &TextureManager::getSingleton();
-    }
-    //-----------------------------------------------------------------------
     v1::MeshManager* Root::getMeshManagerV1(void)
     {
         return &v1::MeshManager::getSingleton();
@@ -1079,8 +1070,6 @@ namespace Ogre {
     void Root::startRendering(void)
     {
         assert(mActiveRenderer != 0);
-
-        mActiveRenderer->_initRenderTargets();
 
         // Clear event times
         clearEventTimes();
@@ -1409,54 +1398,6 @@ namespace Ogre {
         }
 
         return success;
-    }
-    //-----------------------------------------------------------------------
-    RenderTarget* Root::detachRenderTarget(RenderTarget* target)
-    {
-        if (!mActiveRenderer)
-        {
-            OGRE_EXCEPT(Exception::ERR_INVALID_STATE,
-            "Cannot detach target - no render "
-            "system has been selected.", "Root::detachRenderTarget");
-        }
-
-        return mActiveRenderer->detachRenderTarget( target->getName() );
-    }
-    //-----------------------------------------------------------------------
-    RenderTarget* Root::detachRenderTarget(const String &name)
-    {
-        if (!mActiveRenderer)
-        {
-            OGRE_EXCEPT(Exception::ERR_INVALID_STATE,
-            "Cannot detach target - no render "
-            "system has been selected.", "Root::detachRenderTarget");
-        }
-
-        return mActiveRenderer->detachRenderTarget( name );
-    }
-    //-----------------------------------------------------------------------
-    void Root::destroyRenderTarget(RenderTarget* target)
-    {
-        detachRenderTarget(target);
-        OGRE_DELETE target;
-    }
-    //-----------------------------------------------------------------------
-    void Root::destroyRenderTarget(const String &name)
-    {
-        RenderTarget* target = getRenderTarget(name);
-        destroyRenderTarget(target);
-    }
-    //-----------------------------------------------------------------------
-    RenderTarget* Root::getRenderTarget(const String &name)
-    {
-        if (!mActiveRenderer)
-        {
-            OGRE_EXCEPT(Exception::ERR_INVALID_STATE,
-            "Cannot get target - no render "
-            "system has been selected.", "Root::getRenderTarget");
-        }
-
-        return mActiveRenderer->getRenderTarget(name);
     }
     //---------------------------------------------------------------------
     void Root::installPlugin(Plugin* plugin)

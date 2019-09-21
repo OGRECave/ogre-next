@@ -34,10 +34,7 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorWorkspaceListener.h"
 
 #include "OgreRenderSystem.h"
-#include "OgreRenderTexture.h"
-#include "OgreHardwarePixelBuffer.h"
 
-#include "OgreTextureManager.h"
 #include "OgreLwString.h"
 #include "OgreTextureGpuManager.h"
 

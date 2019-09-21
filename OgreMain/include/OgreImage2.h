@@ -75,7 +75,7 @@ namespace Ogre {
     public:
         Image2();
         /// Copy-constructor - copies all the data from the target image.
-        Image2( const Image &img );
+        Image2( const Image2 &img );
         virtual ~Image2();
 
         /// Assignment operator - copies all the data from the target image.

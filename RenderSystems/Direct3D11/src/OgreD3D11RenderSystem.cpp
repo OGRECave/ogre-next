@@ -32,8 +32,6 @@ THE SOFTWARE.
 #include "OgreD3D11VideoModeList.h"
 #include "OgreD3D11VideoMode.h"
 #include "OgreD3D11Window.h"
-#include "OgreD3D11TextureManager.h"
-#include "OgreD3D11Texture.h"
 #include "OgreViewport.h"
 #include "OgreLogManager.h"
 #include "OgreMeshManager.h"
@@ -49,20 +47,18 @@ THE SOFTWARE.
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreD3D11Mappings.h"
 
+#include "OgreDepthBuffer.h"
+
 #include "VendorExtensions/OgreD3D11VendorExtension.h"
 
 #include "OgreD3D11HardwareOcclusionQuery.h"
 #include "OgreFrustum.h"
-#include "OgreD3D11MultiRenderTarget.h"
 #include "OgreD3D11HLSLProgram.h"
 
 #include "OgreHlmsDatablock.h"
 #include "OgreHlmsSamplerblock.h"
 #include "OgreD3D11HlmsPso.h"
 
-#include "OgreD3D11DepthBuffer.h"
-#include "OgreD3D11DepthTexture.h"
-#include "OgreD3D11HardwarePixelBuffer.h"
 #include "OgreException.h"
 
 #include "Vao/OgreD3D11VaoManager.h"
@@ -897,7 +893,6 @@ namespace Ogre
         mActiveD3DDriver = D3D11Driver();
         mDevice.ReleaseAll();
         LogManager::getSingleton().logMessage("D3D11: Shutting down cleanly.");
-        SAFE_DELETE( mTextureManager );
         SAFE_DELETE( mHardwareBufferManager );
         SAFE_DELETE( mGpuProgramManager );
     }
@@ -936,15 +931,6 @@ namespace Ogre
         }
 
         String msg;
-
-        // Make sure we don't already have a render target of the
-        // sam name as the one supplied
-        if (mRenderTargets.find(name) != mRenderTargets.end())
-        {
-            msg = "A render target of the same name '" + name + "' already "
-                "exists.  You cannot create a new window with this name.";
-            OGRE_EXCEPT(Exception::ERR_INTERNAL_ERROR, msg, "D3D11RenderSystem::_createRenderWindow");
-        }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
         D3D11Window* win = new D3D11WindowHwnd(  name, width, height, fullScreen,
@@ -992,8 +978,6 @@ namespace Ogre
                     mReverseDepth = StringConverter::parseBool( itOption->second, true );
             }
 
-            // Create the texture manager for use by others
-            mTextureManager = new D3D11TextureManager(mDevice);
             // Also create hardware buffer manager
             mHardwareBufferManager = new v1::D3D11HardwareBufferManager(mDevice);
 
@@ -1468,11 +1452,6 @@ namespace Ogre
     {
         return true;
     }
-    //-----------------------------------------------------------------------
-    bool D3D11RenderSystem::_checkTextureFilteringSupported(TextureType ttype, PixelFormat format, int usage)
-    {
-        return true;
-    }
     //-----------------------------------------------------------------------------------
     RenderPassDescriptor* D3D11RenderSystem::createRenderPassDescriptor(void)
     {
@@ -1616,285 +1595,6 @@ namespace Ogre
         return RenderSystem::createDepthBufferFor( colourTexture, preferDepthTexture,
                                                    depthBufferFormat );
     }
-    //-----------------------------------------------------------------------
-    MultiRenderTarget * D3D11RenderSystem::createMultiRenderTarget(const String & name)
-    {
-        MultiRenderTarget *retval;
-        retval = new D3D11MultiRenderTarget(name);
-        attachRenderTarget(*retval);
-
-        return retval;
-    }
-    //-----------------------------------------------------------------------
-    DepthBuffer* D3D11RenderSystem::_createDepthBufferFor( RenderTarget *renderTarget,
-                                                           bool exactMatchFormat )
-    {
-        //Get surface data (mainly to get MSAA data)
-        ID3D11Texture2D *rtTexture = 0;
-        renderTarget->getCustomAttribute( "First_ID3D11Texture2D", &rtTexture );
-
-        D3D11_TEXTURE2D_DESC BBDesc;
-        ZeroMemory( &BBDesc, sizeof(D3D11_TEXTURE2D_DESC) );
-        if( rtTexture )
-        {
-            rtTexture->GetDesc( &BBDesc );
-        }
-        else
-        {
-            //Depth textures.
-            assert( dynamic_cast<D3D11DepthTextureTarget*>(renderTarget) );
-            //BBDesc.ArraySize = renderTarget;
-            BBDesc.SampleDesc.Count     = std::max( 1u, renderTarget->getFSAA() );
-            BBDesc.SampleDesc.Quality   = atoi( renderTarget->getFSAAHint().c_str() );
-        }
-
-        // Create depth stencil texture
-        ComPtr<ID3D11Texture2D> pDepthStencil;
-        D3D11_TEXTURE2D_DESC descDepth;
-
-        descDepth.Width     = renderTarget->getWidth();
-        descDepth.Height    = renderTarget->getHeight();
-        descDepth.MipLevels = 1;
-        descDepth.ArraySize = 1; //BBDesc.ArraySize?
-
-        PixelFormat desiredDepthBufferFormat = renderTarget->getDesiredDepthBufferFormat();
-
-        if( !exactMatchFormat )
-            desiredDepthBufferFormat = PF_D24_UNORM_S8_UINT;
-
-        const bool bDepthTexture = renderTarget->prefersDepthTexture();
-
-        if( bDepthTexture )
-        {
-            switch( desiredDepthBufferFormat )
-            {
-            case PF_D24_UNORM_S8_UINT:
-            case PF_D24_UNORM_X8:
-            case PF_X24_S8_UINT:
-            case PF_D24_UNORM:
-                descDepth.Format = DXGI_FORMAT_R24G8_TYPELESS;
-                break;
-            case PF_D16_UNORM:
-                descDepth.Format = DXGI_FORMAT_R16_TYPELESS;
-                break;
-            case PF_D32_FLOAT:
-                descDepth.Format = DXGI_FORMAT_R32_TYPELESS;
-                break;
-            case PF_D32_FLOAT_X24_S8_UINT:
-            case PF_D32_FLOAT_X24_X8:
-            case PF_X32_X24_S8_UINT:
-                descDepth.Format = DXGI_FORMAT_R32G8X24_TYPELESS;
-                break;
-            default:
-                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                             "PixelFormat '" + PixelUtil::getFormatName( desiredDepthBufferFormat ) +
-                             "' is not a valid depth buffer format",
-                             "D3D11RenderSystem::_createDepthBufferFor" );
-            }
-        }
-        else
-        {
-            switch( desiredDepthBufferFormat )
-            {
-            case PF_D24_UNORM_S8_UINT:
-            case PF_D24_UNORM_X8:
-            case PF_X24_S8_UINT:
-            case PF_D24_UNORM:
-                descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-                break;
-            case PF_D16_UNORM:
-                descDepth.Format = DXGI_FORMAT_D16_UNORM;
-                break;
-            case PF_D32_FLOAT:
-                descDepth.Format = DXGI_FORMAT_D32_FLOAT;
-                break;
-            case PF_D32_FLOAT_X24_S8_UINT:
-            case PF_D32_FLOAT_X24_X8:
-            case PF_X32_X24_S8_UINT:
-                descDepth.Format = DXGI_FORMAT_D32_FLOAT_S8X24_UINT;
-                break;
-            default:
-                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                             "PixelFormat '" + PixelUtil::getFormatName( desiredDepthBufferFormat ) +
-                             "' is not a valid depth buffer format",
-                             "D3D11RenderSystem::_createDepthBufferFor" );
-            }
-        }
-
-        {
-            UINT supported = 0;
-            mDevice->CheckFormatSupport( descDepth.Format, &supported );
-
-            if( !supported )
-                return 0;
-        }
-
-        descDepth.SampleDesc.Count      = BBDesc.SampleDesc.Count;
-        descDepth.SampleDesc.Quality    = BBDesc.SampleDesc.Quality;
-        descDepth.Usage                 = D3D11_USAGE_DEFAULT;
-        descDepth.BindFlags             = D3D11_BIND_DEPTH_STENCIL;
-
-        // If we tell we want to use it as a Shader Resource when in MSAA, we will fail
-        // This is a recomandation from NVidia.
-        if( bDepthTexture && (mFeatureLevel >= D3D_FEATURE_LEVEL_10_1 || BBDesc.SampleDesc.Count == 1) )
-            descDepth.BindFlags |= D3D11_BIND_SHADER_RESOURCE;
-
-        descDepth.CPUAccessFlags        = 0;
-        descDepth.MiscFlags             = 0;
-
-        if (descDepth.ArraySize == 6)
-        {
-            descDepth.MiscFlags     |= D3D11_RESOURCE_MISC_TEXTURECUBE;
-        }
-
-
-        HRESULT hr = mDevice->CreateTexture2D( &descDepth, NULL,
-                                               pDepthStencil.ReleaseAndGetAddressOf() );
-        if( FAILED(hr) || mDevice.isError())
-        {
-            String errorDescription = mDevice.getErrorDescription(hr);
-            OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr,
-                "Unable to create depth texture\nError Description:" + errorDescription,
-                "D3D11RenderSystem::_createDepthBufferFor");
-        }
-
-        //
-        // Create the View of the texture
-        // If MSAA is used, we cannot do this
-        //
-        ComPtr<ID3D11ShaderResourceView> depthTextureView;
-        if( bDepthTexture && (mFeatureLevel >= D3D_FEATURE_LEVEL_10_1 || BBDesc.SampleDesc.Count == 1) )
-        {
-            D3D11_SHADER_RESOURCE_VIEW_DESC viewDesc;
-            //viewDesc.Format = DXGI_FORMAT_R32_FLOAT;
-            viewDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
-            switch( desiredDepthBufferFormat )
-            {
-            case PF_D24_UNORM_S8_UINT:
-                //TODO: Unsupported by API?
-                viewDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
-                break;
-            case PF_D24_UNORM_X8:
-                viewDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
-                break;
-            case PF_X24_S8_UINT:
-                viewDesc.Format = DXGI_FORMAT_X24_TYPELESS_G8_UINT;
-                break;
-            case PF_D24_UNORM:
-                viewDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
-                break;
-            case PF_D16_UNORM:
-                viewDesc.Format = DXGI_FORMAT_R16_UNORM;
-                break;
-            case PF_D32_FLOAT:
-                viewDesc.Format = DXGI_FORMAT_R32_FLOAT;
-                break;
-            case PF_D32_FLOAT_X24_S8_UINT:
-                //TODO: Unsupported by API?
-                viewDesc.Format = DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS;
-                break;
-            case PF_D32_FLOAT_X24_X8:
-                viewDesc.Format = DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS;
-                break;
-            case PF_X32_X24_S8_UINT:
-                viewDesc.Format = DXGI_FORMAT_X32_TYPELESS_G8X24_UINT;
-                break;
-            default:
-                assert( false && "This is impossible" );
-                break;
-            }
-
-            viewDesc.ViewDimension = BBDesc.SampleDesc.Count > 1 ? D3D11_SRV_DIMENSION_TEXTURE2DMS :
-                                                                   D3D11_SRV_DIMENSION_TEXTURE2D;
-            viewDesc.Texture2D.MostDetailedMip = 0;
-            viewDesc.Texture2D.MipLevels = 1;
-            hr = mDevice->CreateShaderResourceView( pDepthStencil.Get(), &viewDesc,
-                                                    depthTextureView.ReleaseAndGetAddressOf() );
-            if( FAILED(hr) || mDevice.isError())
-            {
-                String errorDescription = mDevice.getErrorDescription(hr);
-                OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr,
-                    "Unable to create the view of the depth texture \nError Description:" + errorDescription,
-                    "D3D11RenderSystem::_createDepthBufferFor");
-            }
-        }
-
-        // Create the depth stencil view
-        ComPtr<ID3D11DepthStencilView> depthStencilView;
-        D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
-        ZeroMemory( &descDSV, sizeof(D3D11_DEPTH_STENCIL_VIEW_DESC) );
-
-        if( bDepthTexture )
-        {
-            switch( desiredDepthBufferFormat )
-            {
-            case PF_D24_UNORM_S8_UINT:
-            case PF_D24_UNORM_X8:
-            case PF_X24_S8_UINT:
-            case PF_D24_UNORM:
-                descDSV.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-                break;
-            case PF_D16_UNORM:
-                descDSV.Format = DXGI_FORMAT_R16_UNORM;
-                break;
-            case PF_D32_FLOAT:
-                descDSV.Format = DXGI_FORMAT_D32_FLOAT;
-                break;
-            case PF_D32_FLOAT_X24_S8_UINT:
-            case PF_D32_FLOAT_X24_X8:
-            case PF_X32_X24_S8_UINT:
-                descDSV.Format = DXGI_FORMAT_D32_FLOAT_S8X24_UINT;
-                break;
-            default:
-                assert( false && "This is impossible" );
-                break;
-            }
-        }
-        else
-            descDSV.Format = descDepth.Format;
-
-        descDSV.ViewDimension = (BBDesc.SampleDesc.Count > 1) ? D3D11_DSV_DIMENSION_TEXTURE2DMS :
-                                                                D3D11_DSV_DIMENSION_TEXTURE2D;
-        descDSV.Flags = 0 /* D3D11_DSV_READ_ONLY_DEPTH | D3D11_DSV_READ_ONLY_STENCIL */;
-        descDSV.Texture2D.MipSlice = 0;
-        hr = mDevice->CreateDepthStencilView( pDepthStencil.Get(), &descDSV,
-                                              depthStencilView.ReleaseAndGetAddressOf() );
-        if( FAILED(hr) )
-        {
-            String errorDescription = mDevice.getErrorDescription(hr);
-            OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr,
-                "Unable to create depth stencil view\nError Description:" + errorDescription,
-                "D3D11RenderSystem::_createDepthBufferFor");
-        }
-
-        //Create the abstract container
-        D3D11DepthBuffer *newDepthBuffer = new D3D11DepthBuffer( DepthBuffer::POOL_DEFAULT, this,
-                                                                 pDepthStencil.Get(),
-                                                                 depthStencilView.Get(),
-                                                                 depthTextureView.Get(),
-                                                                 descDepth.Width, descDepth.Height,
-                                                                 descDepth.SampleDesc.Count,
-                                                                 descDepth.SampleDesc.Quality,
-                                                                 desiredDepthBufferFormat,
-                                                                 bDepthTexture, false );
-
-        return newDepthBuffer;
-    }
-    //---------------------------------------------------------------------
-    void D3D11RenderSystem::_removeManualDepthBuffer(DepthBuffer *depthBuffer)
-    {
-        if(depthBuffer != NULL)
-        {
-            DepthBufferVec& pool = mDepthBufferPool[depthBuffer->getPoolId()];
-            pool.erase(std::remove(pool.begin(), pool.end(), depthBuffer), pool.end());
-        }
-    }
-    //---------------------------------------------------------------------
-    RenderTarget* D3D11RenderSystem::detachRenderTarget(const String &name)
-    {
-        RenderTarget* target = RenderSystem::detachRenderTarget(name);
-        return target;
-    }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_notifyWindowDestroyed( Window *window )
     {
@@ -1905,31 +1605,11 @@ namespace Ogre
             mPrimaryWindow = NULL;
         }
     }
-    //---------------------------------------------------------------------
-    void D3D11RenderSystem::destroyRenderTarget(const String& name)
-    {
-#if OGRE_NO_QUAD_BUFFER_STEREO == 0
-        D3D11StereoDriverBridge::getSingleton().removeRenderWindow(name);
-#endif
-
-        // Do the real removal
-        RenderSystem::destroyRenderTarget(name);
-
-        // Did we destroy the primary?
-        if (!mPrimaryWindow)
-        {
-            // device is no longer valid, so free it all up
-            freeDevice();
-        }
-
-    }
     //-----------------------------------------------------------------------
     void D3D11RenderSystem::freeDevice(void)
     {
         if (!mDevice.isNull() && mCurrentCapabilities)
         {
-            // Set all texture units to nothing to release texture surfaces
-            _cleanupDepthBuffers( false );
             // Clean up depth stencil surfaces
             mDevice.ReleaseAll();
         }
@@ -1937,7 +1617,6 @@ namespace Ogre
     //---------------------------------------------------------------------
     void D3D11RenderSystem::createDevice( const String &windowTitle )
     {
-        _cleanupDepthBuffers( false );
         mDevice.ReleaseAll();
 
         mLastWindowTitlePassedToExtensions = windowTitle;
@@ -1995,9 +1674,6 @@ namespace Ogre
         // temporary buffers, so we doesn't need to recreate them,
         // and they will reallocate on demand.
         v1::HardwareBufferManager::getSingleton()._releaseBufferCopies(true);
-
-        // Cleanup depth stencils surfaces.
-        _cleanupDepthBuffers();
 
         // recreate device
         createDevice( mLastWindowTitlePassedToExtensions );
@@ -2419,103 +2095,6 @@ namespace Ogre
         RenderSystem::setStencilBufferParams( refValue, stencilParams );
 
         mStencilRef = refValue;
-    }
-    //---------------------------------------------------------------------
-    void D3D11RenderSystem::_setRenderTarget( RenderTarget *target, uint8 viewportRenderTargetFlags )
-    {
-        mActiveRenderTarget = target;
-        if (mActiveRenderTarget)
-        {
-            // we need to clear the state -- dark_sylinc: No we don't.
-            //mDevice.GetImmediateContext()->ClearState();
-
-            //Set all textures to 0 to prevent the runtime from thinkin we might
-            //be sampling from the render target (common when doing shadow map
-            //rendering)
-            ID3D11ShaderResourceView *nullViews[16];
-            memset( nullViews, 0, sizeof( nullViews ) );
-            ID3D11DeviceContextN *deviceContext = mDevice.GetImmediateContext();
-            deviceContext->VSSetShaderResources( 0, 16, nullViews );
-            deviceContext->PSSetShaderResources( 0, 16, nullViews );
-            deviceContext->HSSetShaderResources( 0, 16, nullViews );
-            deviceContext->DSSetShaderResources( 0, 16, nullViews );
-            deviceContext->GSSetShaderResources( 0, 16, nullViews );
-            deviceContext->CSSetShaderResources( 0, 16, nullViews );
-
-            if (mDevice.isError())
-            {
-                String errorDescription = mDevice.getErrorDescription();
-                OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
-                    "D3D11 device cannot Clear State\nError Description:" + errorDescription,
-                    "D3D11RenderSystem::_setRenderTarget");
-            }
-
-            _setRenderTargetViews( viewportRenderTargetFlags );
-        }
-    }
-
-    //---------------------------------------------------------------------
-    void D3D11RenderSystem::_setRenderTargetViews( uint8 viewportRenderTargetFlags )
-    {
-#if TODO_OGRE_2_2
-        RenderTarget *target = mActiveRenderTarget;
-
-        if (target)
-        {
-            target->getCustomAttribute( "ID3D11RenderTargetView", &mRenderTargetViews );
-            target->getCustomAttribute( "numberOfViews", &mNumberOfViews );
-
-            //Retrieve depth buffer
-            D3D11DepthBuffer *depthBuffer = static_cast<D3D11DepthBuffer*>(target->getDepthBuffer());
-
-            if( target->getDepthBufferPool() != DepthBuffer::POOL_NO_DEPTH && !depthBuffer )
-            {
-                //Depth is automatically managed and there is no depth buffer attached to this RT
-                //or the Current D3D device doesn't match the one this Depth buffer was created
-                setDepthBufferFor( target, true );
-            }
-
-            //Retrieve depth buffer again (it may have changed)
-            depthBuffer = static_cast<D3D11DepthBuffer*>(target->getDepthBuffer());
-
-            if( !(viewportRenderTargetFlags & VP_RTT_COLOUR_WRITE) )
-                mNumberOfViews = 0;
-
-            mDepthStencilView = depthBuffer ?
-                        depthBuffer->getDepthStencilView( viewportRenderTargetFlags ) : 0;
-
-            if( mMaxModifiedUavPlusOne )
-            {
-                if( mUavStartingSlot < mNumberOfViews )
-                {
-                    OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
-                        "mUavStartingSlot is lower than the number of RenderTargets attached.\n"
-                        "There are " + StringConverter::toString( mNumberOfViews ) + " RTs attached,\n"
-                        "and mUavStartingSlot = " + StringConverter::toString( mUavStartingSlot ) + "\n"
-                        "use setUavStartingSlot to fix this, or set a MRT with less RTs",
-                        "D3D11RenderSystem::_setRenderTargetViews" );
-                }
-
-                mDevice.GetImmediateContext()->OMSetRenderTargetsAndUnorderedAccessViews(
-                            mNumberOfViews, mRenderTargetViews, mDepthStencilView,
-                            mUavStartingSlot, mMaxModifiedUavPlusOne, mUavs, 0 );
-            }
-            else
-            {
-                // now switch to the new render target
-                mDevice.GetImmediateContext()->OMSetRenderTargets( mNumberOfViews, mRenderTargetViews,
-                                                                   mDepthStencilView );
-            }
-
-            if (mDevice.isError())
-            {
-                String errorDescription = mDevice.getErrorDescription();
-                OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
-                    "D3D11 device cannot set render target\nError Description:" + errorDescription,
-                    "D3D11RenderSystem::_setRenderTargetViews");
-            }
-        }
-#endif
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *block )
@@ -3276,18 +2855,7 @@ namespace Ogre
 
             for (size_t n = 0; n < numberOfSamplers; n++)
             {
-                ID3D11SamplerState * samplerState  = NULL;
                 ID3D11ShaderResourceView *texture = NULL;
-                sD3DTextureStageDesc & stage = mTexStageDesc[n];
-                if(!stage.used)
-                {
-                    samplerState    = NULL;
-                    texture         = NULL;
-                }
-                else
-                {
-                    texture = stage.pTex;
-                }
                 opState->mTextures[n]       = texture;
             }
             for (size_t n = opState->mTexturesCount; n < OGRE_MAX_TEXTURE_LAYERS; n++)
@@ -3758,113 +3326,6 @@ namespace Ogre
                     cmd->baseInstance );
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::_renderUsingReadBackAsTexture(unsigned int passNr, Ogre::String variableName, unsigned int StartSlot)
-    {
-        RenderTarget *target = mActiveRenderTarget;
-        switch (passNr)
-        {
-        case 1:
-            if (target)
-            {
-                ID3D11RenderTargetView * pRTView[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
-                memset(pRTView, 0, sizeof(pRTView));
-
-                target->getCustomAttribute( "ID3D11RenderTargetView", &pRTView );
-
-                uint numberOfViews;
-                target->getCustomAttribute( "numberOfViews", &numberOfViews );
-
-                //Retrieve depth buffer
-                D3D11DepthBuffer *depthBuffer = static_cast<D3D11DepthBuffer*>(target->getDepthBuffer());
-
-                // now switch to the new render target
-                mDevice.GetImmediateContext()->OMSetRenderTargets(
-                    numberOfViews,
-                    pRTView,
-                    depthBuffer->getDepthStencilView(0));
-
-                if (mDevice.isError())
-                {
-                    String errorDescription = mDevice.getErrorDescription();
-                    OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
-                        "D3D11 device cannot set render target\nError Description:" + errorDescription,
-                        "D3D11RenderSystem::_renderUsingReadBackAsTexture");
-                }
-
-                mDevice.GetImmediateContext()->ClearDepthStencilView(depthBuffer->getDepthStencilView(0), D3D11_CLEAR_DEPTH, 1.0f, 0);
-
-                float ClearColor[4];
-                //D3D11Mappings::get(colour, ClearColor);
-                // Clear all views
-                mActiveRenderTarget->getCustomAttribute( "numberOfViews", &numberOfViews );
-                if( numberOfViews == 1 )
-                    mDevice.GetImmediateContext()->ClearRenderTargetView( pRTView[0], ClearColor );
-                else
-                {
-                    for( uint i = 0; i < numberOfViews; ++i )
-                        mDevice.GetImmediateContext()->ClearRenderTargetView( pRTView[i], ClearColor );
-                }
-
-            }
-            break;
-        case 2:
-            if (target)
-            {
-                //
-                // We need to remove the the DST from the Render Targets if we want to use it as a texture :
-                //
-                ID3D11RenderTargetView * pRTView[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
-                memset(pRTView, 0, sizeof(pRTView));
-
-                target->getCustomAttribute( "ID3D11RenderTargetView", &pRTView );
-
-                uint numberOfViews;
-                target->getCustomAttribute( "numberOfViews", &numberOfViews );
-
-                //Retrieve depth buffer
-                D3D11DepthBuffer *depthBuffer = static_cast<D3D11DepthBuffer*>(target->getDepthBuffer());
-                ID3D11ShaderResourceView *depthTextureView = depthBuffer ? depthBuffer->getDepthTextureView() : NULL;
-
-                // now switch to the new render target
-                mDevice.GetImmediateContext()->OMSetRenderTargets(
-                    numberOfViews,
-                    pRTView,
-                    NULL);
-
-                mDevice.GetImmediateContext()->PSSetShaderResources(static_cast<UINT>(StartSlot), 1, &depthTextureView);
-                if (mDevice.isError())
-                {
-                    String errorDescription = mDevice.getErrorDescription();
-                    OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
-                        "D3D11 device cannot set pixel shader resources\nError Description:" + errorDescription,
-                        "D3D11RenderSystem::_renderUsingReadBackAsTexture");
-                }
-
-            }
-            break;
-        case 3:
-            //
-            // We need to unbind depthTextureView from the given variable because this buffer
-            // will be used later as the typical depth buffer, again
-            // must call Apply(0) here : to flush SetResource(NULL)
-            //
-
-            if (target)
-            {
-                mDevice.GetImmediateContext()->PSSetShaderResources(static_cast<UINT>(StartSlot), 1, NULL);
-                    if (mDevice.isError())
-                    {
-                        String errorDescription = mDevice.getErrorDescription();
-                        OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
-                            "D3D11 device cannot set pixel shader resources\nError Description:" + errorDescription,
-                            "D3D11RenderSystem::_renderUsingReadBackAsTexture");
-                    }
-            }
-
-            break;
-        }
-    }
-    //---------------------------------------------------------------------
     void D3D11RenderSystem::setNormaliseNormals(bool normalise)
     {
     }
@@ -4145,37 +3606,6 @@ namespace Ogre
                 static_cast<D3D11RenderPassDescriptor*>( renderPassDesc );
         renderPassDescD3d->clearFrameBuffer();
     }
-    //---------------------------------------------------------------------
-    void D3D11RenderSystem::discardFrameBuffer( unsigned int buffers )
-    {
-        //TODO: Use DX11.1 interfaces on Windows too.
-#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-        if (mActiveRenderTarget)
-        {
-            ID3D11RenderTargetView * pRTView[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
-            memset(pRTView, 0, sizeof(pRTView));
-
-            mActiveRenderTarget->getCustomAttribute( "ID3D11RenderTargetView", &pRTView );
-
-            if (buffers & FBT_COLOUR)
-            {
-                // Clear all views
-                uint numberOfViews;
-                mActiveRenderTarget->getCustomAttribute( "numberOfViews", &numberOfViews );
-                for( uint i = 0; i < numberOfViews; ++i )
-                    mDevice.GetImmediateContext()->DiscardView( pRTView[i] );
-            }
-
-            if( buffers & (FBT_DEPTH|FBT_STENCIL) )
-            {
-                D3D11DepthBuffer *depthBuffer = static_cast<D3D11DepthBuffer*>(
-                                                    mActiveRenderTarget-> getDepthBuffer() );
-                if( depthBuffer )
-                    mDevice.GetImmediateContext()->DiscardView( depthBuffer->getDepthStencilView(0) );
-            }
-        }
-#endif
-    }
     // ------------------------------------------------------------------
     void D3D11RenderSystem::setClipPlane (ushort index, Real A, Real B, Real C, Real D)
     {
@@ -4343,7 +3773,6 @@ namespace Ogre
         mRenderSystemWasInited = true;
         // set pointers to NULL
         mDriverList = NULL;
-        mTextureManager = NULL;
         mHardwareBufferManager = NULL;
         mGpuProgramManager = NULL;
         mPrimaryWindow = NULL;
@@ -4374,9 +3803,6 @@ namespace Ogre
         //sets the modification trackers to true
         mSamplerStatesChanged = true;
         mLastTextureUnitState = 0;
-
-        ZeroMemory(mTexStageDesc, OGRE_MAX_TEXTURE_LAYERS * sizeof(sD3DTextureStageDesc));
-        mReadBackAsTexture = false;
 
         mVendorExtension = D3D11VendorExtension::initializeExtension( GPU_VENDOR_COUNT, 0 );
 

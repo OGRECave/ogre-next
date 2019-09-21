@@ -30,7 +30,6 @@
 #include "OgreRoot.h"
 #include "OgreGL3PlusRenderSystem.h"
 #include "OgreGL3PlusTextureGpuWindow.h"
-#include "OgreImageCodec.h"
 #include "OgreException.h"
 #include "OgreLogManager.h"
 #include "OgreStringConverter.h"

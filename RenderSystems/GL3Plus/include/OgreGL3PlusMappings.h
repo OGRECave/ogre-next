@@ -41,6 +41,7 @@ namespace Ogre
     {
     public:
         static GLenum get( TextureTypes::TextureTypes textureType, bool cubemapsAs2DArrays );
+        /// Returns GL internal format
         static GLenum get( PixelFormatGpu pf );
         static void getFormatAndType( PixelFormatGpu pf, GLenum &format, GLenum &type );
     };

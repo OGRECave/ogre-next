@@ -28,7 +28,6 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 #include "OgreCommon.h"
 #include "OgreWindowEventUtilities.h"
-#include "OgreRenderWindow.h"
 #include "OgreLogManager.h"
 #include "OgreWindow.h"
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX

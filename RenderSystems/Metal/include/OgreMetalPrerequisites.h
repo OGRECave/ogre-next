@@ -62,7 +62,6 @@ THE SOFTWARE.
 namespace Ogre
 {
     // Forward declarations
-    class MetalDepthBuffer;
     struct MetalDescriptorSetTexture;
     struct MetalDevice;
     class MetalDiscardBuffer;
@@ -77,6 +76,10 @@ namespace Ogre
     class MetalRenderTargetCommon;
     class MetalVaoManager;
     class MetalWindow;
+
+#ifdef OGRE_DEPRECATED_2_2
+    class MetalDepthBuffer;
+#endif
 
     namespace v1
     {

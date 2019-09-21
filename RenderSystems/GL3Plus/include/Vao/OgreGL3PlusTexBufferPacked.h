@@ -48,7 +48,7 @@ namespace Ogre
                                 uint32 numElementsPadding, BufferType bufferType,
                                 void *initialData, bool keepAsShadow,
                                 VaoManager *vaoManager, GL3PlusBufferInterface *bufferInterface,
-                                Ogre::PixelFormat pf );
+                                PixelFormatGpu pf );
         virtual ~GL3PlusTexBufferPacked();
 
         virtual void bindBufferVS( uint16 slot, size_t offset=0, size_t sizeBytes=0 );

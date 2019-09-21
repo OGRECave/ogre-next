@@ -119,7 +119,6 @@ namespace Ogre
 
         uint8           mNumMRTs;
         MetalRenderTargetCommon     *mCurrentColourRTs[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
-        MetalDepthBuffer            *mCurrentDepthBuffer;
         MetalDevice                 *mActiveDevice;
         __unsafe_unretained id<MTLRenderCommandEncoder> mActiveRenderEncoder;
 
@@ -164,8 +163,6 @@ namespace Ogre
 
         virtual Window* _createRenderWindow( const String &name, uint32 width, uint32 height,
                                              bool fullScreen, const NameValuePairList *miscParams = 0 );
-
-        virtual MultiRenderTarget* createMultiRenderTarget(const String & name);
 
         virtual String getErrorDescription(long errorNumber) const;
 
@@ -224,9 +221,6 @@ namespace Ogre
         virtual void _hlmsComputePipelineStateObjectCreated( HlmsComputePso *newPso );
         virtual void _hlmsComputePipelineStateObjectDestroyed( HlmsComputePso *pso );
 
-        virtual DepthBuffer* _createDepthBufferFor( RenderTarget *renderTarget,
-                                                    bool exactMatchFormat );
-
         virtual void setStencilBufferParams( uint32 refValue, const StencilParams &stencilParams );
 
         /// See VaoManager::waitForTailFrameToFinish
@@ -282,14 +276,12 @@ namespace Ogre
 
         virtual void clearFrameBuffer( RenderPassDescriptor *renderPassDesc, TextureGpu *anyTarget,
                                        uint8 mipLevel );
-        virtual void discardFrameBuffer( unsigned int buffers );
 
         virtual Real getHorizontalTexelOffset(void);
         virtual Real getVerticalTexelOffset(void);
         virtual Real getMinimumDepthInputValue(void);
         virtual Real getMaximumDepthInputValue(void);
 
-        virtual void _setRenderTarget(RenderTarget *target, uint8 viewportRenderTargetFlags);
         virtual void preExtraThreadsStarted();
         virtual void postExtraThreadsStarted();
         virtual void registerThread();

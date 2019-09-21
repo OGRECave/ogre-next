@@ -2,7 +2,6 @@
 #include "GraphicsSystem.h"
 #include "V2ManualObjectGameState.h"
 
-#include "OgreRenderWindow.h"
 #include "OgreRoot.h"
 #include "OgreConfigFile.h"
 #include "Compositor/OgreCompositorManager2.h"

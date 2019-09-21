@@ -171,9 +171,9 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    TexBufferPacked* NULLVaoManager::createTexBufferImpl( PixelFormat pixelFormat, size_t sizeBytes,
-                                                             BufferType bufferType,
-                                                             void *initialData, bool keepAsShadow )
+    TexBufferPacked *NULLVaoManager::createTexBufferImpl( PixelFormatGpu pixelFormat, size_t sizeBytes,
+                                                          BufferType bufferType, void *initialData,
+                                                          bool keepAsShadow )
     {
         uint32 alignment = mTexBufferAlignment;
 

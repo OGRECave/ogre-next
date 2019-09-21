@@ -40,26 +40,32 @@ namespace Ogre {
     class GL3PlusStagingTexture;
     class GL3PlusSupport;
     class GL3PlusRenderSystem;
-    class GL3PlusTexture;
-    class GL3PlusTextureManager;
     class GL3PlusContext;
     struct GL3PlusHlmsPso;
-    class GL3PlusRTTManager;
     class GL3PlusTextureGpuManager;
-    class GL3PlusFBOManager;
-    class GL3PlusDepthBuffer;
     class GL3PlusVaoManager;
     
     class GLSLShader;
+
+
+#ifdef OGRE_DEPRECATED_2_2
+    class GL3PlusTexture;
+    class GL3PlusTextureManager;
+    class GL3PlusDepthBuffer;
+    class GL3PlusRTTManager;
+    class GL3PlusFBOManager;
+
+
+    typedef SharedPtr<GL3PlusTexture> GL3PlusTexturePtr;
 
     namespace v1
     {
         class GL3PlusHardwarePixelBuffer;
         class GL3PlusRenderBuffer;
     }
+#endif
 
     typedef SharedPtr<GLSLShader> GLSLShaderPtr;
-    typedef SharedPtr<GL3PlusTexture> GL3PlusTexturePtr;
 }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32

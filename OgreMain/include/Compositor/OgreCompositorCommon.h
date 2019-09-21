@@ -26,10 +26,11 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#ifndef __CompositorCommon_H__
-#define __CompositorCommon_H__
+#ifndef _OgreCompositorCommon_H_
+#define _OgreCompositorCommon_H_
 
-#include "OgrePixelFormat.h"
+#include "OgrePrerequisites.h"
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
@@ -39,7 +40,7 @@ namespace Ogre
     class CompositorShadowNode;
     class CompositorWorkspace;
     class CompositorWorkspaceListener;
-    class RenderTarget;
+    class TextureGpu;
     typedef TextureGpu* CompositorChannel;
 
     class CompositorNodeDef;
@@ -55,8 +56,8 @@ namespace Ogre
     typedef vector<CompositorNode*>::type       CompositorNodeVec;
     typedef vector<CompositorPass*>::type       CompositorPassVec;
     typedef vector<CompositorShadowNode*>::type CompositorShadowNodeVec;
-
-    typedef vector<PixelFormat>::type PixelFormatList;
 }
+
+#include "OgreHeaderSuffix.h"
 
 #endif

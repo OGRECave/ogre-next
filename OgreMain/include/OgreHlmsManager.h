@@ -115,8 +115,6 @@ namespace Ogre
         RenderSystem        *mRenderSystem;
         bool                mShadowMappingUseBackFaces;
 
-        HlmsTextureManager  *mTextureManager;
-
         public: typedef std::map<IdString, HlmsDatablock*> HlmsDatablockMap;
     protected:
         HlmsDatablockMap mRegisteredDatablocks;
@@ -298,8 +296,6 @@ namespace Ogre
         /// "Material" first. Datablock is a more technical (and accurate) name of what it does
         /// (it's a block.. of data). Prefer calling getDatablock directly.
         HlmsDatablock* getMaterial( IdString name ) const   { return getDatablock( name ); }
-
-        HlmsTextureManager* getTextureManager(void) const   { return mTextureManager; }
 
         void useDefaultDatablockFrom( HlmsTypes type )      { mDefaultHlmsType = type; }
 

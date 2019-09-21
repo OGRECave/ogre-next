@@ -243,7 +243,7 @@ namespace Ogre
         mBuffers[ BP_TYPE_CONST ].erase( itor );
     }
     //-----------------------------------------------------------------------------------
-    TexBufferPacked* VaoManager::createTexBuffer( PixelFormat pixelFormat, size_t sizeBytes,
+    TexBufferPacked* VaoManager::createTexBuffer( PixelFormatGpu pixelFormat, size_t sizeBytes,
                                                   BufferType bufferType,
                                                   void *initialData, bool keepAsShadow )
     {

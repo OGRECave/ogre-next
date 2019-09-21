@@ -5,8 +5,6 @@
 #include "OgrePrerequisites.h"
 #include "TutorialGameState.h"
 
-#include "OgreTexture.h"
-
 namespace Ogre
 {
     class ParallaxCorrectedCubemap;

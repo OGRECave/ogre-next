@@ -173,8 +173,6 @@ namespace v1 {
         /// Create a counter buffer
         HardwareCounterBufferSharedPtr
             createCounterBuffer(size_t sizeBytes, HardwareBuffer::Usage usage, bool useShadowBuffer, const String& name = "");
-        /// Create a render to vertex buffer
-        RenderToVertexBufferSharedPtr createRenderToVertexBuffer(void);
     };
 
     /// GL3PlusDefaultHardwareBufferManagerBase as a Singleton

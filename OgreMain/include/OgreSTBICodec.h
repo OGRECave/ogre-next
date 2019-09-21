@@ -28,7 +28,7 @@ THE SOFTWARE.
 #ifndef __STBICodec_H__
 #define __STBICodec_H__
 
-#include "OgreImageCodec.h"
+#include "OgreImageCodec2.h"
 
 namespace Ogre {
 
@@ -43,12 +43,12 @@ namespace Ogre {
             The users implementing subclasses of ImageCodec are required to return
             a valid pointer to a ImageData class from the decode(...) function.
     */
-    class _OgreExport STBIImageCodec : public ImageCodec
+    class _OgreExport STBIImageCodec : public ImageCodec2
     {
     private:
         String mType;
 
-        typedef list<ImageCodec*>::type RegisteredCodecList;
+        typedef list<ImageCodec2*>::type RegisteredCodecList;
         static RegisteredCodecList msCodecList;
 
     public:

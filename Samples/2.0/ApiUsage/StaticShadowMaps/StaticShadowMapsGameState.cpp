@@ -11,7 +11,6 @@
 #include "OgreMesh2.h"
 
 #include "OgreCamera.h"
-#include "OgreRenderWindow.h"
 
 #include "OgreHlmsUnlitDatablock.h"
 #include "OgreHlmsSamplerblock.h"

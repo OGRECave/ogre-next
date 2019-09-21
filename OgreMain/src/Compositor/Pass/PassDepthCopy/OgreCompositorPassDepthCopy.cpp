@@ -36,7 +36,6 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorWorkspaceListener.h"
 
 #include "OgreDepthBuffer.h"
-#include "OgreRenderTarget.h"
 #include "OgreTextureBox.h"
 
 #include "OgreRenderSystem.h"

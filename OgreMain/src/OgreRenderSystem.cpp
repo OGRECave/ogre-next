@@ -37,12 +37,9 @@ THE SOFTWARE.
 #include "OgreRoot.h"
 #include "OgreViewport.h"
 #include "OgreException.h"
-#include "OgreRenderTarget.h"
-#include "OgreRenderWindow.h"
 #include "OgreDepthBuffer.h"
 #include "OgreIteratorWrappers.h"
 #include "OgreLogManager.h"
-#include "OgreTextureManager.h"
 #include "OgreMaterialManager.h"
 #include "OgreHardwareOcclusionQuery.h"
 #include "OgreHlmsPso.h"
@@ -62,8 +59,6 @@ namespace Ogre {
     RenderSystem::RenderSystem()
         : mCurrentRenderPassDescriptor(0)
         , mMaxBoundViewports(16u)
-        , mActiveRenderTarget(0)
-        , mTextureManager(0)
         , mVaoManager(0)
         , mTextureGpuManager(0)
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
@@ -113,20 +108,6 @@ namespace Ogre {
         mRealCapabilities = 0;
         // Current capabilities managed externally
         mCurrentCapabilities = 0;
-    }
-    //-----------------------------------------------------------------------
-    void RenderSystem::_initRenderTargets(void)
-    {
-
-        // Init stats
-        for(
-            RenderTargetMap::iterator it = mRenderTargets.begin();
-            it != mRenderTargets.end();
-            ++it )
-        {
-            it->second->resetStatistics();
-        }
-
     }
     //-----------------------------------------------------------------------
     Window *RenderSystem::_initialise( bool autoCreateWindow, const String& windowTitle )
@@ -185,17 +166,13 @@ namespace Ogre {
 
             bool renderWindowFound = false;
 
-            if (mRenderTargets.find(curDesc->name) != mRenderTargets.end())
-                renderWindowFound = true;
-            else
+            for( unsigned int nSecWindow = nWindow + 1; nSecWindow < renderWindowDescriptions.size();
+                 ++nSecWindow )
             {
-                for (unsigned int nSecWindow = nWindow + 1 ; nSecWindow < renderWindowDescriptions.size(); ++nSecWindow)
+                if( curDesc->name == renderWindowDescriptions[nSecWindow].name )
                 {
-                    if (curDesc->name == renderWindowDescriptions[nSecWindow].name)
-                    {
-                        renderWindowFound = true;
-                        break;
-                    }                   
+                    renderWindowFound = true;
+                    break;
                 }
             }
 
@@ -239,56 +216,6 @@ namespace Ogre {
         }
         mWindows.erase( window );
         OGRE_DELETE window;
-    }
-    //---------------------------------------------------------------------------------------------
-    void RenderSystem::destroyRenderTexture(const String& name)
-    {
-        destroyRenderTarget(name);
-    }
-    //---------------------------------------------------------------------------------------------
-    void RenderSystem::destroyRenderTarget(const String& name)
-    {
-        RenderTarget* rt = detachRenderTarget(name);
-        OGRE_DELETE rt;
-    }
-    //---------------------------------------------------------------------------------------------
-    void RenderSystem::attachRenderTarget( RenderTarget &target )
-    {
-        assert( target.getPriority() < OGRE_NUM_RENDERTARGET_GROUPS );
-
-        mRenderTargets.insert( RenderTargetMap::value_type( target.getName(), &target ) );
-    }
-
-    //---------------------------------------------------------------------------------------------
-    RenderTarget * RenderSystem::getRenderTarget( const String &name )
-    {
-        RenderTargetMap::iterator it = mRenderTargets.find( name );
-        RenderTarget *ret = NULL;
-
-        if( it != mRenderTargets.end() )
-        {
-            ret = it->second;
-        }
-
-        return ret;
-    }
-
-    //---------------------------------------------------------------------------------------------
-    RenderTarget * RenderSystem::detachRenderTarget( const String &name )
-    {
-        RenderTargetMap::iterator it = mRenderTargets.find( name );
-        RenderTarget *ret = NULL;
-
-        if( it != mRenderTargets.end() )
-        {
-            ret = it->second;
-            mRenderTargets.erase( it );
-        }
-        /// If detached render target is the active render target, reset active render target
-        if(ret == mActiveRenderTarget)
-            mActiveRenderTarget = 0;
-
-        return ret;
     }
     //-----------------------------------------------------------------------
     void RenderSystem::_setPipelineStateObject( const HlmsPso *pso )
@@ -678,47 +605,6 @@ namespace Ogre {
             mUavRenderingDirty = true;
         }
     }
-    //---------------------------------------------------------------------
-    void RenderSystem::_cleanupDepthBuffers( bool bCleanManualBuffers )
-    {
-        DepthBufferMap::iterator itMap = mDepthBufferPool.begin();
-        DepthBufferMap::iterator enMap = mDepthBufferPool.end();
-
-        while( itMap != enMap )
-        {
-            DepthBufferVec::const_iterator itor = itMap->second.begin();
-            DepthBufferVec::const_iterator end  = itMap->second.end();
-
-            while( itor != end )
-            {
-                if( bCleanManualBuffers || !(*itor)->isManual() )
-                    delete *itor;
-                ++itor;
-            }
-
-            itMap->second.clear();
-
-            ++itMap;
-        }
-
-        mDepthBufferPool.clear();
-
-        cleanReleasedDepthBuffers();
-    }
-    //-----------------------------------------------------------------------
-    void RenderSystem::cleanReleasedDepthBuffers(void)
-    {
-        DepthBufferVec::const_iterator itor = mReleasedDepthBuffers.begin();
-        DepthBufferVec::const_iterator end  = mReleasedDepthBuffers.end();
-
-        while( itor != end )
-        {
-            delete *itor;
-            ++itor;
-        }
-
-        mReleasedDepthBuffers.clear();
-    }
     //-----------------------------------------------------------------------
     void RenderSystem::_beginFrameOnce(void)
     {
@@ -728,109 +614,6 @@ namespace Ogre {
     void RenderSystem::_endFrameOnce(void)
     {
         queueBindUAVs( 0 );
-    }
-    //-----------------------------------------------------------------------
-    void RenderSystem::setDepthBufferFor( RenderTarget *renderTarget, bool exactMatch )
-    {
-        uint16 poolId = renderTarget->getDepthBufferPool();
-        if( poolId == DepthBuffer::POOL_NO_DEPTH )
-            return; //RenderTarget explicitly requested no depth buffer
-
-        if( poolId == DepthBuffer::POOL_NON_SHAREABLE )
-        {
-            createUniqueDepthBufferFor( renderTarget, exactMatch );
-            return;
-        }
-
-        //Find a depth buffer in the pool
-        DepthBufferVec::const_iterator itor = mDepthBufferPool[poolId].begin();
-        DepthBufferVec::const_iterator end  = mDepthBufferPool[poolId].end();
-
-        bool bAttached = false;
-        while( itor != end && !bAttached )
-            bAttached = renderTarget->attachDepthBuffer( *itor++, exactMatch );
-
-        //Not found yet? Create a new one!
-        if( !bAttached )
-        {
-            DepthBuffer *newDepthBuffer = _createDepthBufferFor( renderTarget, exactMatch );
-
-            if( newDepthBuffer )
-            {
-                newDepthBuffer->_setPoolId( poolId );
-                mDepthBufferPool[poolId].push_back( newDepthBuffer );
-
-                bAttached = renderTarget->attachDepthBuffer( newDepthBuffer, exactMatch );
-
-                assert( bAttached && "A new DepthBuffer for a RenderTarget was created, but after"
-                                     " creation it says it's incompatible with that RT" );
-            }
-            else
-            {
-                if( exactMatch )
-                {
-                    //The GPU doesn't support this depth buffer format. Try a fallback.
-                    setDepthBufferFor( renderTarget, false );
-                }
-                else
-                {
-                    LogManager::getSingleton().logMessage( "WARNING: Couldn't create a suited "
-                                                           "DepthBuffer for RT: " +
-                                                           renderTarget->getName(), LML_CRITICAL );
-                }
-            }
-        }
-    }
-    //-----------------------------------------------------------------------
-    void RenderSystem::createUniqueDepthBufferFor( RenderTarget *renderTarget, bool exactMatch )
-    {
-        assert( renderTarget->getForceDisableColourWrites() );
-        assert( renderTarget->getDepthBufferPool() == DepthBuffer::POOL_NON_SHAREABLE );
-        assert( !renderTarget->getDepthBuffer() );
-
-        const uint16 poolId = DepthBuffer::POOL_NON_SHAREABLE;
-
-        DepthBuffer *newDepthBuffer = _createDepthBufferFor( renderTarget, exactMatch );
-
-        if( newDepthBuffer )
-        {
-            newDepthBuffer->_setPoolId( poolId );
-            mDepthBufferPool[poolId].push_back( newDepthBuffer );
-
-            bool bAttached = renderTarget->attachDepthBuffer( newDepthBuffer, exactMatch );
-
-            assert( bAttached && "A new DepthBuffer for a RenderTarget was created, but after"
-                                 " creation it says it's incompatible with that RT" );
-        }
-        else
-        {
-            if( exactMatch )
-            {
-                //The GPU doesn't support this depth buffer format. Try a fallback.
-                createUniqueDepthBufferFor( renderTarget, false );
-            }
-            else
-            {
-                LogManager::getSingleton().logMessage( "WARNING: Couldn't create a suited "
-                                                       "unique DepthBuffer for RT: " +
-                                                       renderTarget->getName(), LML_CRITICAL );
-            }
-        }
-    }
-    //-----------------------------------------------------------------------
-    void RenderSystem::_destroyDepthBuffer( DepthBuffer *depthBuffer )
-    {
-        DepthBufferVec &depthBuffersInPool = mDepthBufferPool[depthBuffer->getPoolId()];
-        DepthBufferVec::iterator itor = depthBuffersInPool.begin();
-        DepthBufferVec::iterator end  = depthBuffersInPool.end();
-
-        while( itor != end && *itor != depthBuffer )
-            ++itor;
-
-        assert( itor != depthBuffersInPool.end() );
-
-        efficientVectorRemove( depthBuffersInPool, itor );
-        mReleasedDepthBuffers.push_back( depthBuffer );
     }
     //-----------------------------------------------------------------------
     bool RenderSystem::getWBufferEnabled(void) const
@@ -852,8 +635,6 @@ namespace Ogre {
             OGRE_DELETE *i;
         }
         mHwOcclusionQueries.clear();
-
-        _cleanupDepthBuffers();
 
         destroyAllRenderPassDescriptors();
 
@@ -890,19 +671,6 @@ namespace Ogre {
             OGRE_DELETE primary;
             mWindows.clear();
         }
-
-        // Remove all the render targets.
-        // (destroy primary target last since others may depend on it)
-        RenderTarget* primary = 0;
-        for (RenderTargetMap::iterator it = mRenderTargets.begin(); it != mRenderTargets.end(); ++it)
-        {
-            if (!primary && it->second->isPrimary())
-                primary = it->second;
-            else
-                OGRE_DELETE it->second;
-        }
-        OGRE_DELETE primary;
-        mRenderTargets.clear();
     }
     //-----------------------------------------------------------------------
     void RenderSystem::_beginGeometryCount(void)
@@ -1205,14 +973,6 @@ namespace Ogre {
         ++mBatchCount;
     }*/
     //-----------------------------------------------------------------------
-    void RenderSystem::_renderUsingReadBackAsTexture(unsigned int secondPass,Ogre::String variableName,unsigned int StartSlot)
-    {
-        OGRE_EXCEPT(Exception::ERR_NOT_IMPLEMENTED, 
-            "This rendersystem does not support reading back the inactive depth/stencil \
-            buffer as a texture. Only DirectX 11 Render System supports it.",
-            "RenderSystem::_renderUsingReadBackAsTexture"); 
-    }
-    //-----------------------------------------------------------------------
     void RenderSystem::setInvertVertexWinding(bool invert)
     {
         mInvertVertexWinding = invert;
@@ -1382,7 +1142,6 @@ namespace Ogre {
         OgreProfile( "RenderSystem::_update" );
         mTextureGpuManager->_update( false );
         mVaoManager->_update();
-        cleanReleasedDepthBuffers();
     }
     //---------------------------------------------------------------------
     void RenderSystem::updateCompositorManager( CompositorManager2 *compositorManager,

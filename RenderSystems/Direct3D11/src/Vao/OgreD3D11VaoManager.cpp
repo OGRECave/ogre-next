@@ -1104,7 +1104,7 @@ namespace Ogre
         bufferInterface->getVboName()->Release();
     }
     //-----------------------------------------------------------------------------------
-    TexBufferPacked* D3D11VaoManager::createTexBufferImpl( PixelFormat pixelFormat, size_t sizeBytes,
+    TexBufferPacked* D3D11VaoManager::createTexBufferImpl( PixelFormatGpu pixelFormat, size_t sizeBytes,
                                                            BufferType bufferType,
                                                            void *initialData, bool keepAsShadow )
     {

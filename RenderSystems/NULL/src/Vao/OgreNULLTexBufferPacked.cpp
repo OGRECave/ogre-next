@@ -31,17 +31,16 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    NULLTexBufferPacked::NULLTexBufferPacked(
-                size_t internalBufStartBytes, size_t numElements, uint32 bytesPerElement,
-                uint32 numElementsPadding, BufferType bufferType, void *initialData, bool keepAsShadow,
-                VaoManager *vaoManager, NULLBufferInterface *bufferInterface, PixelFormat pf ) :
+    NULLTexBufferPacked::NULLTexBufferPacked( size_t internalBufStartBytes, size_t numElements,
+                                              uint32 bytesPerElement, uint32 numElementsPadding,
+                                              BufferType bufferType, void *initialData,
+                                              bool keepAsShadow, VaoManager *vaoManager,
+                                              NULLBufferInterface *bufferInterface, PixelFormatGpu pf ) :
         TexBufferPacked( internalBufStartBytes, numElements, bytesPerElement, numElementsPadding,
                          bufferType, initialData, keepAsShadow, vaoManager, bufferInterface, pf )
     {
     }
     //-----------------------------------------------------------------------------------
-    NULLTexBufferPacked::~NULLTexBufferPacked()
-    {
-    }
+    NULLTexBufferPacked::~NULLTexBufferPacked() {}
     //-----------------------------------------------------------------------------------
-}
+}  // namespace Ogre

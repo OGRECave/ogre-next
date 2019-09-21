@@ -45,7 +45,7 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    TexBufferPacked* NULLUavBufferPacked::getAsTexBufferImpl( PixelFormat pixelFormat )
+    TexBufferPacked* NULLUavBufferPacked::getAsTexBufferImpl( PixelFormatGpu pixelFormat )
     {
         assert( dynamic_cast<NULLBufferInterface*>( mBufferInterface ) );
 

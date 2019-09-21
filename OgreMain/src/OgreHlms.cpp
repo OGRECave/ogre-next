@@ -47,7 +47,6 @@ THE SOFTWARE.
 //#include "OgreMovableObject.h"
 //#include "OgreRenderable.h"
 #include "OgreViewport.h"
-#include "OgreRenderTarget.h"
 #include "OgreDepthBuffer.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreLwString.h"

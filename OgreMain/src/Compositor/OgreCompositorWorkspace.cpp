@@ -35,12 +35,9 @@ THE SOFTWARE.
 
 #include "Compositor/Pass/PassScene/OgreCompositorPassScene.h"
 
-#include "OgreHardwarePixelBuffer.h"
-#include "OgreRenderTexture.h"
 #include "OgreViewport.h"
 
 #include "OgreSceneManager.h"
-#include "OgreRenderTarget.h"
 #include "OgreLogManager.h"
 
 #include "OgreProfiler.h"

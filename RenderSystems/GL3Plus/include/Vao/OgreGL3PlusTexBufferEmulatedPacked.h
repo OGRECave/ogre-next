@@ -56,7 +56,7 @@ namespace Ogre
                                         BufferType bufferType,
                                         void *initialData, bool keepAsShadow,
                                         VaoManager *vaoManager, GL3PlusBufferInterface *bufferInterface,
-                                        Ogre::PixelFormat pf );
+                                        PixelFormatGpu pf );
         virtual ~GL3PlusTexBufferEmulatedPacked();
 
         virtual void _bindBufferDirectly( size_t offset, size_t sizeBytes );

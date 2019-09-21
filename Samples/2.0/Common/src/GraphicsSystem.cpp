@@ -10,7 +10,6 @@
 #include "OgreException.h"
 #include "OgreConfigFile.h"
 
-#include "OgreRenderWindow.h"
 #include "OgreCamera.h"
 #include "OgreItem.h"
 

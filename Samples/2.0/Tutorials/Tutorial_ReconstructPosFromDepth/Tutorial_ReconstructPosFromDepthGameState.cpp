@@ -17,7 +17,6 @@
 #include "Vao/OgreVertexArrayObject.h"
 
 #include "OgreCamera.h"
-#include "OgreRenderWindow.h"
 
 #include "OgreMaterialManager.h"
 #include "OgreTechnique.h"

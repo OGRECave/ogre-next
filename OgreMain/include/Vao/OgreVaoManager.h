@@ -34,7 +34,6 @@ THE SOFTWARE.
 #include "Vao/OgreVertexBufferPacked.h"
 #include "Vao/OgreIndexBufferPacked.h"
 #include "OgreRenderOperation.h"
-#include "OgrePixelFormat.h"
 
 namespace Ogre
 {
@@ -111,7 +110,7 @@ namespace Ogre
                                                           void *initialData, bool keepAsShadow ) = 0;
         virtual void destroyConstBufferImpl( ConstBufferPacked *constBuffer ) = 0;
 
-        virtual TexBufferPacked* createTexBufferImpl( PixelFormat pixelFormat, size_t sizeBytes,
+        virtual TexBufferPacked* createTexBufferImpl( PixelFormatGpu pixelFormat, size_t sizeBytes,
                                                       BufferType bufferType,
                                                       void *initialData, bool keepAsShadow ) = 0;
         virtual void destroyTexBufferImpl( TexBufferPacked *texBuffer ) = 0;
@@ -298,7 +297,7 @@ namespace Ogre
         @return
             The desired texture buffer pointer
         */
-        TexBufferPacked* createTexBuffer( PixelFormat pixelFormat, size_t sizeBytes,
+        TexBufferPacked* createTexBuffer( PixelFormatGpu pixelFormat, size_t sizeBytes,
                                           BufferType bufferType,
                                           void *initialData, bool keepAsShadow );
 

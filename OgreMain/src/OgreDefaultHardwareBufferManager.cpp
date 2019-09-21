@@ -278,14 +278,6 @@ namespace v1 {
         DefaultHardwareIndexBuffer* ib = OGRE_NEW DefaultHardwareIndexBuffer(itype, numIndexes, usage);
         return HardwareIndexBufferSharedPtr(ib);
     }
-    //-----------------------------------------------------------------------
-    RenderToVertexBufferSharedPtr
-        DefaultHardwareBufferManagerBase::createRenderToVertexBuffer()
-    {
-        OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR, 
-            "Cannot create RenderToVertexBuffer in DefaultHardwareBufferManagerBase", 
-            "DefaultHardwareBufferManagerBase::createRenderToVertexBuffer");
-    }
 
     HardwareUniformBufferSharedPtr 
         DefaultHardwareBufferManagerBase::createUniformBuffer(size_t sizeBytes, 

@@ -30,7 +30,6 @@ THE SOFTWARE.
 
 #include "OgreForward3D.h"
 #include "OgreSceneManager.h"
-#include "OgreRenderTarget.h"
 #include "OgreViewport.h"
 #include "OgreCamera.h"
 
@@ -188,7 +187,7 @@ namespace Ogre
         if( !gridBuffers.gridBuffer )
         {
             const size_t p = -((1 - (1 << (mNumSlices << 1))) / 3);
-            gridBuffers.gridBuffer = mVaoManager->createTexBuffer( PF_R16_UINT,
+            gridBuffers.gridBuffer = mVaoManager->createTexBuffer( PFG_R16_UINT,
                                                                    p * mTableSize * sizeof(uint16),
                                                                    BT_DYNAMIC_PERSISTENT, 0, false );
         }
@@ -207,7 +206,7 @@ namespace Ogre
             }
 
             gridBuffers.globalLightListBuffer = mVaoManager->createTexBuffer(
-                                                                    PF_FLOAT32_RGBA,
+                                                                    PFG_RGBA32_FLOAT,
                                                                     bufferBytesNeeded,
                                                                     BT_DYNAMIC_PERSISTENT, 0, false );
         }

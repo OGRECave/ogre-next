@@ -28,18 +28,14 @@ Copyright (c) 2000-2016 Torus Knot Software Ltd
 
 #include "OgreMetalRenderSystem.h"
 #include "OgreMetalWindow.h"
-#include "OgreMetalTextureManager.h"
 #include "Vao/OgreMetalVaoManager.h"
 #include "Vao/OgreMetalBufferInterface.h"
 #include "OgreMetalHlmsPso.h"
 #include "OgreMetalRenderTargetCommon.h"
-#include "OgreMetalDepthBuffer.h"
 #include "OgreMetalDevice.h"
 #include "OgreMetalGpuProgramManager.h"
 #include "OgreMetalProgram.h"
 #include "OgreMetalProgramFactory.h"
-#include "OgreMetalTexture.h"
-#include "OgreMetalMultiRenderTarget.h"
 #include "OgreMetalTextureGpu.h"
 #include "OgreMetalRenderPassDescriptor.h"
 #include "OgreMetalDescriptorSetTexture.h"
@@ -56,6 +52,8 @@ Copyright (c) 2000-2016 Torus Knot Software Ltd
 #include "Vao/OgreIndirectBufferPacked.h"
 #include "Vao/OgreVertexArrayObject.h"
 #include "CommandBuffer/OgreCbDrawCall.h"
+
+#include "OgreDepthBuffer.h"
 
 #include "OgreFrustum.h"
 #include "OgreViewport.h"
@@ -87,7 +85,6 @@ namespace Ogre
         mCurrentAutoParamsBufferPtr( 0 ),
         mCurrentAutoParamsBufferSpaceLeft( 0 ),
         mNumMRTs( 0 ),
-        mCurrentDepthBuffer( 0 ),
         mActiveDevice( 0 ),
         mActiveRenderEncoder( 0 ),
         mDevice( this ),
@@ -106,12 +103,6 @@ namespace Ogre
     MetalRenderSystem::~MetalRenderSystem()
     {
         shutdown();
-
-        // Destroy render windows
-        RenderTargetMap::iterator i;
-        for (i = mRenderTargets.begin(); i != mRenderTargets.end(); ++i)
-            OGRE_DELETE i->second;
-        mRenderTargets.clear();
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::shutdown(void)
@@ -143,9 +134,6 @@ namespace Ogre
 
         OGRE_DELETE mShaderManager;
         mShaderManager = 0;
-
-        OGRE_DELETE mTextureManager;
-        mTextureManager = 0;
     }
     //-------------------------------------------------------------------------
     const String& MetalRenderSystem::getName(void) const
@@ -402,7 +390,6 @@ namespace Ogre
 
             initialiseFromRenderSystemCapabilities( mCurrentCapabilities, 0 );
 
-            mTextureManager = new MetalTextureManager( &mDevice );
             mVaoManager = OGRE_NEW MetalVaoManager( c_inFlightCommandBuffers, &mDevice, miscParams );
             mHardwareBufferManager = new v1::MetalHardwareBufferManager( &mDevice, mVaoManager );
             mTextureGpuManager = OGRE_NEW MetalTextureGpuManager( mVaoManager, this, &mDevice );
@@ -413,13 +400,6 @@ namespace Ogre
         Window *win = OGRE_NEW MetalWindow( name, width, height, fullScreen, miscParams, &mDevice );
         win->_initialize( mTextureGpuManager );
         return win;
-    }
-    //-------------------------------------------------------------------------
-    MultiRenderTarget* MetalRenderSystem::createMultiRenderTarget( const String & name )
-    {
-        MetalMultiRenderTarget *retVal = OGRE_NEW MetalMultiRenderTarget( name );
-        attachRenderTarget( *retVal );
-        return retVal;
     }
     //-------------------------------------------------------------------------
     String MetalRenderSystem::getErrorDescription(long errorNumber) const
@@ -1104,76 +1084,6 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    DepthBuffer* MetalRenderSystem::_createDepthBufferFor( RenderTarget *renderTarget,
-                                                           bool exactMatchFormat )
-    {
-        return 0;
-#if TODO_OGRE_2_2
-        MTLTextureDescriptor *desc = [MTLTextureDescriptor new];
-        desc.sampleCount = renderTarget->getFSAA();
-        desc.textureType = renderTarget->getFSAA() > 1u ? MTLTextureType2DMultisample :
-                                                          MTLTextureType2D;
-        desc.width              = (NSUInteger)renderTarget->getWidth();
-        desc.height             = (NSUInteger)renderTarget->getHeight();
-        desc.depth              = (NSUInteger)1u;
-        desc.arrayLength        = 1u;
-        desc.mipmapLevelCount   = 1u;
-
-        desc.usage = MTLTextureUsageRenderTarget;
-        if( renderTarget->prefersDepthTexture() )
-            desc.usage |= MTLTextureUsageShaderRead;
-
-#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
-        desc.storageMode = MTLStorageModePrivate;
-#endif
-
-        PixelFormat desiredDepthBufferFormat = renderTarget->getDesiredDepthBufferFormat();
-
-        MTLPixelFormat depthFormat = MTLPixelFormatInvalid;
-        MTLPixelFormat stencilFormat = MTLPixelFormatInvalid;
-        MetalMappings::getDepthStencilFormat( mActiveDevice, desiredDepthBufferFormat,
-                                              depthFormat, stencilFormat );
-
-        id<MTLTexture> depthTexture = 0;
-        id<MTLTexture> stencilTexture = 0;
-
-        if( depthFormat != MTLPixelFormatInvalid )
-        {
-            desc.pixelFormat = depthFormat;
-            depthTexture = [mActiveDevice->mDevice newTextureWithDescriptor: desc];
-        }
-
-        if( stencilFormat != MTLPixelFormatInvalid )
-        {
-            if( stencilFormat != MTLPixelFormatDepth32Float_Stencil8
-   #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
-            && stencilFormat != MTLPixelFormatDepth24Unorm_Stencil8
-   #endif
-            )
-            {
-                //Separate Stencil & Depth
-                desc.pixelFormat = stencilFormat;
-                stencilTexture = [mActiveDevice->mDevice newTextureWithDescriptor: desc];
-            }
-            else
-            {
-                //Combined Stencil & Depth
-                stencilTexture = depthTexture;
-            }
-        }
-
-        DepthBuffer *retVal = new MetalDepthBuffer( 0, this, renderTarget->getWidth(),
-                                                    renderTarget->getHeight(),
-                                                    renderTarget->getFSAA(), 0,
-                                                    desiredDepthBufferFormat,
-                                                    renderTarget->prefersDepthTexture(), false,
-                                                    depthTexture, stencilTexture,
-                                                    mActiveDevice );
-
-        return retVal;
-#endif
-    }
-    //-------------------------------------------------------------------------
     void MetalRenderSystem::_waitForTailFrameToFinish(void)
     {
         if( !mMainSemaphoreAlreadyWaited )
@@ -1197,8 +1107,6 @@ namespace Ogre
         _waitForTailFrameToFinish();
 
         mBeginFrameOnceStarted = true;
-
-        mActiveRenderTarget = 0;
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::_endFrameOnce(void)
@@ -1220,7 +1128,6 @@ namespace Ogre
 
         mActiveDevice->commitAndNextCommandBuffer();
 
-        mActiveRenderTarget = 0;
         mActiveDevice->mFrameAborted = false;
         mMainSemaphoreAlreadyWaited = false;
         mBeginFrameOnceStarted = false;
@@ -2501,27 +2408,6 @@ namespace Ogre
         executeRenderPassDescriptorDelayedActions();
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::discardFrameBuffer( unsigned int buffers )
-    {
-        if( buffers & FBT_COLOUR )
-        {
-            for( size_t i=0; i<mNumMRTs; ++i )
-            {
-                if( mCurrentColourRTs[i] )
-                    mCurrentColourRTs[i]->mColourAttachmentDesc.loadAction = MTLLoadActionDontCare;
-            }
-        }
-
-        if( mCurrentDepthBuffer )
-        {
-            if( buffers & FBT_DEPTH && mCurrentDepthBuffer->mDepthAttachmentDesc )
-                mCurrentDepthBuffer->mDepthAttachmentDesc.loadAction = MTLLoadActionDontCare;
-
-            if( buffers & FBT_STENCIL && mCurrentDepthBuffer->mStencilAttachmentDesc )
-                mCurrentDepthBuffer->mStencilAttachmentDesc.loadAction = MTLLoadActionDontCare;
-        }
-    }
-    //-------------------------------------------------------------------------
     Real MetalRenderSystem::getHorizontalTexelOffset(void)
     {
         return 0.0f;
@@ -2540,97 +2426,6 @@ namespace Ogre
     Real MetalRenderSystem::getMaximumDepthInputValue(void)
     {
         return 1.0f;
-    }
-    //-------------------------------------------------------------------------
-    void MetalRenderSystem::_setRenderTarget(RenderTarget *target, uint8 viewportRenderTargetFlags)
-    {
-#if TODO_OGRE_2_2
-        {
-            const bool activeHasColourWrites = mNumMRTs != 0;
-            if( mActiveRenderTarget == target &&
-                activeHasColourWrites == (viewportRenderTargetFlags & VP_RTT_COLOUR_WRITE) )
-            {
-                if( mActiveRenderEncoder && mUavsDirty )
-                    flushUAVs();
-                return;
-            }
-        }
-
-        if( mActiveDevice )
-            mActiveDevice->endRenderEncoder();
-
-        mActiveRenderTarget = target;
-
-        if( target )
-        {
-            if( target->getForceDisableColourWrites() )
-                viewportRenderTargetFlags &= ~VP_RTT_COLOUR_WRITE;
-
-            mCurrentColourRTs[0] = 0;
-            //We need to set mCurrentColourRTs[0] to grab the active device,
-            //even if we won't be drawing to colour target.
-            target->getCustomAttribute( "mNumMRTs", &mNumMRTs );
-            target->getCustomAttribute( "MetalRenderTargetCommon", &mCurrentColourRTs[0] );
-
-            MetalDevice *ownerDevice = 0;
-
-            if( viewportRenderTargetFlags & VP_RTT_COLOUR_WRITE )
-            {
-                for( size_t i=0; i<mNumMRTs; ++i )
-                {
-                    MTLRenderPassColorAttachmentDescriptor *desc =
-                            mCurrentColourRTs[i]->mColourAttachmentDesc;
-
-                    //TODO. This information is stored in Texture. Metal needs it now.
-                    const bool explicitResolve = false;
-
-                    //TODO: Compositor should be able to tell us whether to use
-                    //MTLStoreActionDontCare with some future enhancements.
-                    if( target->getFSAA() > 1 && !explicitResolve )
-                    {
-                        desc.storeAction = MTLStoreActionMultisampleResolve;
-                    }
-                    else
-                    {
-                        desc.storeAction = MTLStoreActionStore;
-                    }
-
-                    ownerDevice = mCurrentColourRTs[i]->getOwnerDevice();
-                }
-            }
-            else
-            {
-                mNumMRTs = 0;
-            }
-
-            MetalDepthBuffer *depthBuffer = static_cast<MetalDepthBuffer*>( target->getDepthBuffer() );
-
-            if( target->getDepthBufferPool() != DepthBuffer::POOL_NO_DEPTH && !depthBuffer )
-            {
-                // Depth is automatically managed and there is no depth buffer attached to this RT
-                setDepthBufferFor( target, true );
-            }
-
-            depthBuffer = static_cast<MetalDepthBuffer*>( target->getDepthBuffer() );
-            mCurrentDepthBuffer = depthBuffer;
-            if( depthBuffer )
-            {
-                if( depthBuffer->mDepthAttachmentDesc )
-                    depthBuffer->mDepthAttachmentDesc.storeAction = MTLStoreActionStore;
-                if( depthBuffer->mStencilAttachmentDesc )
-                    depthBuffer->mStencilAttachmentDesc.storeAction = MTLStoreActionStore;
-
-                ownerDevice = depthBuffer->getOwnerDevice();
-            }
-
-            setActiveDevice( ownerDevice );
-        }
-        else
-        {
-            mNumMRTs = 0;
-            mCurrentDepthBuffer = 0;
-        }
-#endif
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::preExtraThreadsStarted()

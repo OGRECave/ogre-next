@@ -30,7 +30,6 @@ THE SOFTWARE.
 #include "OgreAutoParamDataSource.h"
 #include "OgreRenderable.h"
 #include "OgreCamera.h"
-#include "OgreRenderTarget.h"
 #include "OgreControllerManager.h"
 #include "OgreMath.h"
 #include "OgreRoot.h"
@@ -42,7 +41,6 @@ THE SOFTWARE.
 #include "OgreSceneNode.h"
 #include "OgrePass.h"
 #include "OgreViewport.h"
-#include "OgreTexture.h"
 #include "OgreHlmsComputeJob.h"
 
 #include "Compositor/OgreCompositorShadowNode.h"

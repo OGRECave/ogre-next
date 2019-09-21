@@ -19,7 +19,6 @@
 
 #include "OgreRoot.h"
 #include "OgreHlmsManager.h"
-#include "OgreHlmsTextureManager.h"
 #include "OgreHlmsPbs.h"
 #include "OgreHlmsUnlit.h"
 

@@ -40,7 +40,7 @@ namespace Ogre
                 size_t internalBufStartBytes, size_t numElements, uint32 bytesPerElement,
                 uint32 numElementsPadding, BufferType bufferType,
                 void *initialData, bool keepAsShadow,
-                VaoManager *vaoManager, MetalBufferInterface *bufferInterface, PixelFormat pf,
+                VaoManager *vaoManager, MetalBufferInterface *bufferInterface, PixelFormatGpu pf,
                 MetalDevice *device ) :
         TexBufferPacked( internalBufStartBytes, numElements, bytesPerElement, numElementsPadding,
                          bufferType, initialData, keepAsShadow, vaoManager, bufferInterface, pf ),

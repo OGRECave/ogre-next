@@ -28,7 +28,6 @@ THE SOFTWARE.
 #include "OgreD3D11HardwareBufferManager.h"
 #include "OgreD3D11HardwareVertexBuffer.h"
 #include "OgreD3D11HardwareIndexBuffer.h"
-#include "OgreD3D11RenderToVertexBuffer.h"
 #include "OgreD3D11HardwareUniformBuffer.h"
 #include "OgreLogManager.h"
 #include "OgreStringConverter.h"
@@ -92,13 +91,7 @@ namespace v1 {
 		}
 		return HardwareIndexBufferSharedPtr(idx);
 
-	}
-	//-----------------------------------------------------------------------
-	RenderToVertexBufferSharedPtr
-		D3D11HardwareBufferManagerBase::createRenderToVertexBuffer()
-	{
-		return RenderToVertexBufferSharedPtr(new D3D11RenderToVertexBuffer(mlpD3DDevice, this));
-	}
+    }
 	//-----------------------------------------------------------------------
 	HardwareUniformBufferSharedPtr
 		D3D11HardwareBufferManagerBase::createUniformBuffer(size_t sizeBytes, HardwareBuffer::Usage usage, bool useShadowBuffer, const String& name)

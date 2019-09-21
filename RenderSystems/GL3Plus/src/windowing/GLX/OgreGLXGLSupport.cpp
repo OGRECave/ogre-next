@@ -36,6 +36,9 @@
 #include "OgreGLXUtils.h"
 #include "OgreGLXWindow.h"
 
+#include "OgreImage2.h"
+#include "OgreTextureBox.h"
+
 #ifndef Status
 #define Status int
 #endif
@@ -682,19 +685,22 @@ namespace Ogre
     //-------------------------------------------------------------------------------------------------//
     bool GLXGLSupport::loadIcon(const String &name, Pixmap *pixmap, Pixmap *bitmap)
     {
-        Image image;
+        Image2 image;
         int width, height;
         char* imageData;
 
-        if (! Ogre::ResourceGroupManager::getSingleton().resourceExists(ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, name))
+        if( !Ogre::ResourceGroupManager::getSingleton().resourceExists(
+                ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, name ) )
+        {
             return false;
+        }
 
         try
         {
             // Try to load image
             image.load(name, ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 
-            if(image.getFormat() != PF_A8R8G8B8)
+            if(image.getPixelFormat() != PFG_RGBA8_UNORM)
             {
                 // Image format must be RGBA
                 return false;
@@ -702,7 +708,7 @@ namespace Ogre
 
             width  = image.getWidth();
             height = image.getHeight();
-            imageData = (char*)image.getData();
+            imageData = (char*)image.getData( 0 ).data;
         }
         catch(Exception &e)
         {

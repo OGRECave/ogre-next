@@ -31,8 +31,6 @@ THE SOFTWARE.
 #include "OgreHlmsUnlitDatablock.h"
 #include "OgreHlmsUnlit.h"
 #include "OgreHlmsManager.h"
-#include "OgreHlmsTextureManager.h"
-#include "OgreTexture.h"
 #include "OgreTextureGpu.h"
 #include "OgreTextureGpuManager.h"
 #include "OgreRenderSystem.h"

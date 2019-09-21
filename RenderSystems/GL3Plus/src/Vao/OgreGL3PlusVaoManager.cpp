@@ -780,7 +780,8 @@ namespace Ogre
                        constBuffer->getBufferType() );
     }
     //-----------------------------------------------------------------------------------
-    TexBufferPacked* GL3PlusVaoManager::createTexBufferImpl( PixelFormat pixelFormat, size_t sizeBytes,
+    TexBufferPacked* GL3PlusVaoManager::createTexBufferImpl( PixelFormatGpu pixelFormat,
+                                                             size_t sizeBytes,
                                                              BufferType bufferType,
                                                              void *initialData, bool keepAsShadow )
     {
@@ -795,7 +796,7 @@ namespace Ogre
         if( mEmulateTexBuffers )
         {
             // Align to the texture size since we must copy the PBO to a texture.
-            ushort maxTexSizeBytes = 2048 * PixelUtil::getNumElemBytes( pixelFormat );
+            ushort maxTexSizeBytes = 2048 * PixelFormatGpuUtils::getBytesPerPixel( pixelFormat );
             // We need another line of maxTexSizeBytes for uploading
             //to create a rectangle when calling glTexSubImage2D().
             sizeBytes = alignToNextMultiple( sizeBytes, maxTexSizeBytes );

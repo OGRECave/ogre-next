@@ -30,7 +30,6 @@ THE SOFTWARE.
 #define __GL3PlusSupport_H__
 
 #include "OgreGL3PlusPrerequisites.h"
-#include "OgreRenderWindow.h"
 #include "OgreConfigOptionMap.h"
 #include "OgreRenderSystemCapabilities.h"
 

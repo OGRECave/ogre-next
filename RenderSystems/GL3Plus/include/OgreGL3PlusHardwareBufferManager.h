@@ -77,8 +77,6 @@ namespace v1 {
         /// Create a counter buffer
         HardwareCounterBufferSharedPtr createCounterBuffer(size_t sizeBytes, HardwareBuffer::Usage usage,
                                                            bool useShadowBuffer, size_t binding, const String& name = "");
-        /// Create a render to vertex buffer
-        RenderToVertexBufferSharedPtr createRenderToVertexBuffer();
 
         /// Utility function to get the correct GL usage based on HBU's
         static GLenum getGLUsage(unsigned int usage);

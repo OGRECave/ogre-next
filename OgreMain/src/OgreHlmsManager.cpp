@@ -30,7 +30,6 @@ THE SOFTWARE.
 
 #include "OgreHlmsManager.h"
 #include "OgreHlms.h"
-#include "OgreHlmsTextureManager.h"
 #include "OgreRenderSystem.h"
 #include "OgreHlmsCompute.h"
 #include "OgreLogManager.h"
@@ -44,7 +43,6 @@ namespace Ogre
         mComputeHlms( 0 ),
         mRenderSystem( 0 ),
         mShadowMappingUseBackFaces( true ),
-        mTextureManager( 0 ),
         mDefaultHlmsType( HLMS_PBS )
   #if !OGRE_NO_JSON
     ,   mJsonListener( 0 )
@@ -56,8 +54,6 @@ namespace Ogre
 
         mMacroblocks.reserve( OGRE_HLMS_MAX_LIFETIME_MACROBLOCKS );
         mBlendblocks.reserve( OGRE_HLMS_MAX_LIFETIME_BLENDBLOCKS );
-
-        mTextureManager = OGRE_NEW HlmsTextureManager();
 
         mActiveBlocks[BLOCK_MACRO].reserve( OGRE_HLMS_NUM_MACROBLOCKS );
         mFreeBlockIds[BLOCK_MACRO].reserve( OGRE_HLMS_NUM_MACROBLOCKS );
@@ -91,9 +87,6 @@ namespace Ogre
         ResourceGroupManager::getSingleton()._unregisterScriptLoader(this);
 #endif
         renderSystemDestroyAllBlocks();
-
-        OGRE_DELETE mTextureManager;
-        mTextureManager = 0;
 
         for( size_t i=0; i<HLMS_MAX; ++i )
         {
@@ -818,8 +811,6 @@ namespace Ogre
                 }
             }
         }
-
-        mTextureManager->_changeRenderSystem( newRs );
 
         for( size_t i=0; i<HLMS_MAX; ++i )
         {
