@@ -2,7 +2,7 @@
 @echo off
 SETLOCAL
 
-set OGRE_BRANCH_NAME=v2-2
+set OGRE_BRANCH_NAME=master
 set GENERATOR="Visual Studio 14 2015"
 set PLATFORM=Win32
 
@@ -44,7 +44,7 @@ echo --- Building Ogredeps ---
 
 cd ../../
 IF NOT EXIST ogre-next (
-	echo --- Cloning Ogre v2-2 ---
+	echo --- Cloning Ogre master ---
 	git clone --branch %OGRE_BRANCH_NAME% https://github.com/OGRECave/ogre-next
 )
 cd ogre-next
