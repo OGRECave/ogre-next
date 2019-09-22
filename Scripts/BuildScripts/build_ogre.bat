@@ -43,12 +43,11 @@ echo --- Building Ogredeps ---
 %CMAKE_BIN% --build . --target install --config Release
 
 cd ../../
-IF NOT EXIST ogre (
-	mkdir ogre
+IF NOT EXIST ogre-next (
 	echo --- Cloning Ogre {0} ---
-	hg clone https://bitbucket.org/sinbad/ogre -r %OGRE_BRANCH_NAME% ogre
+	git clone --branch %OGRE_BRANCH_NAME% https://github.com/OGRECave/ogre-next
 )
-cd ogre
+cd ogre-next
 IF NOT EXIST Dependencies (
 	mklink /D Dependencies ..\ogredeps\build\ogredeps
 )

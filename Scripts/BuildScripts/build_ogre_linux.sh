@@ -20,12 +20,12 @@ ninja
 ninja install
 
 cd ../../
-if test ! -f ogre; then
-	mkdir ogre
+if test ! -f ogre-next; then
+	mkdir ogre-next
 	echo "--- Cloning Ogre {0} ---"
-	hg clone https://bitbucket.org/sinbad/ogre -r ${{OGRE_BRANCH_NAME}} ogre
+	git clone --branch ${{OGRE_BRANCH_NAME}} https://github.com/OGRECave/ogre-next
 fi
-cd ogre
+cd ogre-next
 if test ! -f Dependencies; then
 	ln -s ../ogredeps/build/ogredeps Dependencies
 fi
