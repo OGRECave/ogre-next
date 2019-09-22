@@ -13,18 +13,43 @@ def compressTo7z( branchName, generatedFilenames ):
 	else:
 		print( "7z finished" )
 
-# Get the branch name from Mercurial
-print( 'Retrieving Mercurial branch name' )
+def getMercurialBranchName():
+	print( 'Retrieving Mercurial bookmark name' )
+	process = subprocess.Popen( ['hg', 'log', '--template', '{bookmarks}\n', '-r', 'bookmark() & .'], stdout=subprocess.PIPE )
+	(output, err) = process.communicate()
+	exitCode = process.wait()
 
-process = subprocess.Popen( ['hg', 'identify', '-b'], stdout=subprocess.PIPE )
-(output, err) = process.communicate()
-exitCode = process.wait()
+	if exitCode == 0:
+		branchName = output.replace( '\n', '' )
+		return branchName
+	else:
+		return None
 
-branchName = output.replace( '\n', '' )
+def getGitBranchName():
+	print( 'Retrieving git branch name' )
+	process = subprocess.Popen( ['git', 'rev-parse', '--abbrev-ref', 'HEAD'], stdout=subprocess.PIPE )
+	(output, err) = process.communicate()
+	exitCode = process.wait()
+
+	if exitCode == 0:
+		branchName = output.replace( '\n', '' )
+		return branchName
+	else:
+		return None
+
+branchName = getMercurialBranchName()
+
+if branchName == None:
+	print( 'Mercurial failed. This is likely not a Mercurial repo' )
+	branchName = getGitBranchName()
+
+if branchName == None:
+	print( 'Failed to retrieve branch name. Cannot continue.' )
+	exit( 1 )
 
 generatedFilenames = []
 
-print( 'Branch name is: ' + output )
+print( 'Branch name is: ' + branchName )
 
 import os
 import stat
