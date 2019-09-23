@@ -484,3 +484,26 @@ install(FILES ${PLATFORM_HEADERS}
 install(FILES ${THREAD_HEADER_FILES}
 	DESTINATION include/OGRE/Threading
 )
+
+set( DEPRECATED_HEADER_FILES
+	include/Deprecated/OgreDDSCodec.h
+	include/Deprecated/OgreDepthBuffer.h
+	include/Deprecated/OgreFreeImageCodec.h
+	include/Deprecated/OgreHardwarePixelBuffer.h
+	include/Deprecated/OgreImageCodec.h
+	include/Deprecated/OgreImage.h
+	include/Deprecated/OgrePixelBox.h
+	include/Deprecated/OgrePixelFormatDescriptions.h
+	include/Deprecated/OgrePixelFormat.h
+	include/Deprecated/OgreRenderTarget.h
+	include/Deprecated/OgreRenderTargetListener.h
+	include/Deprecated/OgreRenderTexture.h
+	include/Deprecated/OgreRenderToVertexBuffer.h
+	include/Deprecated/OgreRenderWindow.h
+	include/Deprecated/OgreTexture.h
+	include/Deprecated/OgreTextureManager.h
+)
+
+install(FILES ${DEPRECATED_HEADER_FILES}
+  DESTINATION include/OGRE/Deprecated
+)
