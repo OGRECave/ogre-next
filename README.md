@@ -156,6 +156,10 @@ ninja OgreDoc
  * [Ogre 2.1+ FAQ](http://wiki.ogre3d.org/Ogre+2.1+FAQ)
  * [Older resources for interfaces carried over from 1.x](https://www.ogre3d.org/documentation)
 
+# Samples
+
+If you want to test or evaluate Ogre, you can try the [prebuilt samples for Windows](https://bintray.com/darksylinc/ogre-next/download_file?file_path=ogre-samples-windows-x64-vs2015.7z).
+
 # License
 
 OGRE (www.ogre3d.org) is made available under the MIT License.
