@@ -134,7 +134,7 @@ namespace Ogre
         assert( belongsToUs( srcBox ) &&
                 "This srcBox does not belong to us! Was it created with mapRegion? "
                 "Did you modify it? Did it get corrupted?" );
-        assert( !cpuSrcBox || srcBox.equalSize( *cpuSrcBox ) && "Src & cpuSrcBox must be equal" );
+        assert( ( !cpuSrcBox || srcBox.equalSize( *cpuSrcBox ) ) && "Src & cpuSrcBox must be equal" );
 
         if( dstTexture->getMsaa() > 1u )
         {
