@@ -29,7 +29,6 @@
 		float diameter = max( p_vctStartBias, 2.0 * tanHalfAngle * dist );
 
 		float lodLevel	= 0.0;
-		float lodStep	= 0.71;
 
 		@property( !vct_anisotropic )
 			#define VCT_ANISOTROPIC_EARLY_OUT
