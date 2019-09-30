@@ -1,0 +1,30 @@
+{
+    "compute" :
+    {
+        "IrradianceField/Gen" :
+        {
+            "threads_per_group" : [64, 1, 1],
+            "thread_groups" : [1, 1, 1],
+
+            "source" : "IrradianceFieldGenFromVct_cs",
+            "pieces" : ["CrossPlatformSettings_piece_all", "sRGB.any", "IrradianceFieldGenFromVct_piece_cs.any"],
+            "inform_shader_of_texture_data_change" : true,
+
+            "uav_units" : 2,
+
+            "textures" :
+            [
+                {}
+            ],
+
+            "params_glsl" :
+            [
+                ["directionsBuffer",        [0], "int"],
+                ["vctProbe",                [1], "int"],
+                ["vctProbeX",               [2], "int"],
+                ["vctProbeY",               [3], "int"],
+                ["vctProbeZ",               [4], "int"],
+            ]
+        }
+    }
+}

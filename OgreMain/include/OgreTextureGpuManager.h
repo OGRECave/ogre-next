@@ -1040,6 +1040,7 @@ namespace Ogre
                                            void *extraData );
 
         RenderSystem* getRenderSystem(void) const;
+        VaoManager* getVaoManager(void) const;
 
     protected:
         void scheduleLoadRequest( TextureGpu *texture, Image2 *image,

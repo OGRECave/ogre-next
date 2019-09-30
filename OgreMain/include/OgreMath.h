@@ -512,6 +512,15 @@ namespace Ogre
        /** Convert from degrees to the current AngleUnit. */
        static Real DegreesToAngleUnits(Real degrees);
 
+    protected:
+       static Vector2 octahedronMappingWrap( Vector2 v );
+    public:
+       /// Takes a directional 3D vector n and returns a 2D value in range [0; 1]
+       /// Vector 'n' doesn't have to be normalized
+       static Vector2 octahedronMappingEncode( Vector3 n );
+       /// Takes a 2D value in range [0; 1] and returns a unit-length 3D vector
+       static Vector3 octahedronMappingDecode( Vector2 f );
+
        /** Checks whether a given point is inside a triangle, in a
             2-dimensional (Cartesian) space.
             @remarks

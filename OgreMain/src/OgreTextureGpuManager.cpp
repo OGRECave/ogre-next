@@ -1521,6 +1521,11 @@ namespace Ogre
         return mRenderSystem;
     }
     //-----------------------------------------------------------------------------------
+    VaoManager* TextureGpuManager::getVaoManager(void) const
+    {
+        return mVaoManager;
+    }
+    //-----------------------------------------------------------------------------------
     void TextureGpuManager::scheduleLoadRequest( TextureGpu *texture,
                                                  const String &name,
                                                  const String &resourceGroup,

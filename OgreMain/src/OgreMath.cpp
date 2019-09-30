@@ -240,7 +240,34 @@ namespace Ogre
        else
            return degrees;
     }
+    //-----------------------------------------------------------------------
+    Vector2 Math::octahedronMappingWrap( Vector2 v )
+    {
+        Vector2 retVal;
+        retVal.x = ( Real( 1.0f ) - Abs( v.y ) ) * ( v.x >= 0 ? Real( 1.0f ) : -Real( 1.0f ) );
+        retVal.y = ( Real( 1.0f ) - Abs( v.x ) ) * ( v.y >= 0 ? Real( 1.0f ) : -Real( 1.0f ) );
+        return retVal;
+    }
+    //-----------------------------------------------------------------------
+    Vector2 Math::octahedronMappingEncode( Vector3 n )
+    {
+        n /= ( abs( n.x ) + abs( n.y ) + abs( n.z ) );
+        Vector2 nxy = n.z >= 0 ? n.xy() : octahedronMappingWrap( n.xy() );
+        nxy = nxy * Real( 0.5f ) + Real( 0.5f );
+        return n.xy();
+    }
+    //-----------------------------------------------------------------------
+    Vector3 Math::octahedronMappingDecode( Vector2 f )
+    {
+        f = f * Real( 2.0f ) - Real( 1.0f );
 
+        // https://twitter.com/Stubbesaurus/status/937994790553227264
+        Vector3 n = Vector3( f.x, f.y, Real( 1.0f ) - Abs( f.x ) - Abs( f.y ) );
+        float t = saturate( -n.z );
+        n.x += n.x >= 0 ? -t : t;
+        n.y += n.y >= 0 ? -t : t;
+        return n.normalisedCopy();
+    }
     //-----------------------------------------------------------------------
     bool Math::pointInTri2D(const Vector2& p, const Vector2& a, 
         const Vector2& b, const Vector2& c)
