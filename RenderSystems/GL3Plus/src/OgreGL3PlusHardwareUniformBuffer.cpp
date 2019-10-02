@@ -131,7 +131,7 @@ namespace v1 {
 
         if (mUsage & HBU_WRITE_ONLY)
         {
-            OGRE_CHECK_GL_ERROR(glFlushMappedBufferRange(GL_UNIFORM_BUFFER, mLockStart, mLockSize));
+            OGRE_CHECK_GL_ERROR(glFlushMappedBufferRange(GL_UNIFORM_BUFFER, 0, mLockSize));
         }
 
         GLboolean mapped;
