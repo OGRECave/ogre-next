@@ -158,7 +158,8 @@ namespace Ogre
           mNumberOfViews( 0 ),
           mDepthStencilView( 0 ),
           mMaxModifiedUavPlusOne( 0 ),
-          mUavsDirty( false )
+          mUavsDirty( false ),
+          mMapL8toRGB8( false )
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
 		, mStereoDriver(NULL)
 #endif	
@@ -1009,6 +1010,13 @@ namespace Ogre
 		{
 			mPrimaryWindow = win;
 			win->getCustomAttribute("D3DDEVICE", &mDevice);
+
+            if( miscParams )
+            {
+                NameValuePairList::const_iterator itOption = miscParams->find( "map_L8_to_RGB8" );
+                if( itOption != miscParams->end() )
+                    mMapL8toRGB8 = StringConverter::parseBool( itOption->second, true );
+            }
 
 			// Create the texture manager for use by others
 			mTextureManager = new D3D11TextureManager(mDevice);
@@ -2155,6 +2163,16 @@ namespace Ogre
         RenderSystem::setStencilBufferParams( refValue, stencilParams );
 
         mStencilRef = refValue;
+    }
+    //---------------------------------------------------------------------
+    void D3D11RenderSystem::setMapL8toRGB8( bool bMap )
+    {
+        mMapL8toRGB8 = bMap;
+    }
+    //---------------------------------------------------------------------
+    bool D3D11RenderSystem::getMapL8toRGB8(void) const
+    {
+        return mMapL8toRGB8;
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::_setRenderTarget( RenderTarget *target, uint8 viewportRenderTargetFlags )

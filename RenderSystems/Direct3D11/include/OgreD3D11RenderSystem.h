@@ -128,6 +128,8 @@ namespace Ogre
         uint8   mMaxModifiedUavPlusOne;
         bool    mUavsDirty;
 
+        bool    mMapL8toRGB8;
+
         /// For rendering legacy objects.
         v1::VertexData  *mCurrentVertexBuffer;
         v1::IndexData   *mCurrentIndexBuffer;
@@ -369,6 +371,9 @@ namespace Ogre
         void unregisterThread();
         void preExtraThreadsStarted();
         void postExtraThreadsStarted();
+
+        void setMapL8toRGB8( bool bMap );
+        bool getMapL8toRGB8(void) const;
 
         /**
          * Set current render target to target, enabling its GL context if needed
