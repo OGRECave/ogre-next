@@ -52,6 +52,7 @@ namespace Demo
                 "Compute/Tools/GLSL",
                 "Compute/Tools/HLSL",
                 "Compute/Tools/Metal",
+                "Compute/Algorithms/IrradianceFields",
                 "VCT",
                 "VCT/Visualizer",
                 "Hlms/Common/GLSL",

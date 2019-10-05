@@ -39,7 +39,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    struct IrradianceFieldSettings
+    struct _OgreHlmsPbsExport IrradianceFieldSettings
     {
         /** Number of rays per pixel in terms of mDepthProbeResolution.
 
@@ -78,7 +78,7 @@ namespace Ogre
             }
         }
 
-        void createSubsamples(void);
+        void createSubsamples( void );
 
         uint32 getTotalNumProbes( void ) const;
         uint32 getDepthProbeFullResolution( void ) const;
@@ -146,14 +146,14 @@ namespace Ogre
         ConstBufferPacked *mIfGenParamsBuffer;
         TexBufferPacked *mDirectionsBuffer;
 
-        TextureGpuManager *mTextureManager;
-        HlmsManager *mHlmsManager;
+        Root *mRoot;
+        SceneManager *mSceneManager;
 
         void fillDirections( float *RESTRICT_ALIAS outBuffer );
         void setIrradianceFieldGenParams();
 
     public:
-        IrradianceField( TextureGpuManager *textureManager, HlmsManager *hlmsManager );
+        IrradianceField( Root *root, SceneManager *sceneManager );
         ~IrradianceField();
 
         void createTextures( void );

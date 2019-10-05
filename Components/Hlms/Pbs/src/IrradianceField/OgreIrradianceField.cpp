@@ -32,7 +32,9 @@ THE SOFTWARE.
 #include "Vct/OgreVctLighting.h"
 #include "Vct/OgreVctVoxelizer.h"
 
+#include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorWorkspace.h"
+#include "OgreRoot.h"
 
 #include "OgreHlmsCompute.h"
 #include "OgreHlmsComputeJob.h"
@@ -90,7 +92,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     uint32 IrradianceFieldSettings::getTotalNumProbes( void ) const
     {
-        return mNumProbes[0] + mNumProbes[1] + mNumProbes[2];
+        return mNumProbes[0] * mNumProbes[1] * mNumProbes[2];
     }
     //-------------------------------------------------------------------------
     uint32 IrradianceFieldSettings::getDepthProbeFullResolution( void ) const
@@ -115,7 +117,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    IrradianceField::IrradianceField( TextureGpuManager *textureManager, HlmsManager *hlmsManager ) :
+    IrradianceField::IrradianceField( Root *root, SceneManager *sceneManager ) :
         IdObject( Id::generateNewId<IrradianceField>() ),
         mNumProbesProcessed( 0u ),
         mFieldOrigin( Vector3::ZERO ),
@@ -127,8 +129,8 @@ namespace Ogre
         mGenerationJob( 0 ),
         mIfGenParamsBuffer( 0 ),
         mDirectionsBuffer( 0 ),
-        mTextureManager( textureManager ),
-        mHlmsManager( hlmsManager )
+        mRoot( root ),
+        mSceneManager( sceneManager )
     {
 #if OGRE_NO_JSON
         OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
@@ -137,17 +139,17 @@ namespace Ogre
                      "Samples/Media/Compute",
                      "IrradianceField::IrradianceField" );
 #endif
-        VaoManager *vaoManager = mTextureManager->getVaoManager();
+        VaoManager *vaoManager = mRoot->getRenderSystem()->getVaoManager();
         mIfGenParamsBuffer = vaoManager->createConstBuffer( sizeof( IrradianceFieldGenParams ),
                                                             BT_DYNAMIC_PERSISTENT, 0, false );
 
-        HlmsCompute *hlmsCompute = hlmsManager->getComputeHlms();
+        HlmsCompute *hlmsCompute = mRoot->getHlmsManager()->getComputeHlms();
         mGenerationJob = hlmsCompute->findComputeJobNoThrow( "IrradianceField/Gen" );
 
         if( !mGenerationJob )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "To use VctVoxelizer, you must include the resources bundled at "
+                         "To use IrradianceField, you must include the resources bundled at "
                          "Samples/Media/Compute\n"
                          "Could not find IrradianceField/Gen",
                          "IrradianceField::IrradianceField" );
@@ -157,7 +159,7 @@ namespace Ogre
     IrradianceField::~IrradianceField()
     {
         destroyTextures();
-        VaoManager *vaoManager = mTextureManager->getVaoManager();
+        VaoManager *vaoManager = mRoot->getRenderSystem()->getVaoManager();
         if( mIfGenParamsBuffer->getMappingState() != MS_UNMAPPED )
             mIfGenParamsBuffer->unmap( UO_UNMAP_ALL );
         vaoManager->destroyConstBuffer( mIfGenParamsBuffer );
@@ -252,10 +254,12 @@ namespace Ogre
     {
         destroyTextures();
 
-        mIrradianceTex = mTextureManager->createTexture(
+        TextureGpuManager *textureManager = mRoot->getRenderSystem()->getTextureGpuManager();
+
+        mIrradianceTex = textureManager->createTexture(
             "IrradianceField" + StringConverter::toString( getId() ), GpuPageOutStrategy::Discard,
             TextureFlags::Uav, TextureTypes::Type2D );
-        mIrradianceTex = mTextureManager->createTexture(
+        mDepthVarianceTex = textureManager->createTexture(
             "IrradianceFieldDepth" + StringConverter::toString( getId() ), GpuPageOutStrategy::Discard,
             TextureFlags::Uav, TextureTypes::Type2D );
 
@@ -273,19 +277,19 @@ namespace Ogre
             reinterpret_cast<float *>( OGRE_MALLOC_SIMD( updateDataSize, MEMCATEGORY_GEOMETRY ) );
         FreeOnDestructor dataPtr( directionsBuffer );
         fillDirections( directionsBuffer );
-        VaoManager *vaoManager = mTextureManager->getVaoManager();
+        VaoManager *vaoManager = textureManager->getVaoManager();
         mDirectionsBuffer = vaoManager->createTexBuffer( PFG_RGBA32_FLOAT, updateDataSize, BT_IMMUTABLE,
                                                          directionsBuffer, false );
 
         mGenerationJob->setConstBuffer( 0, mIfGenParamsBuffer );
 
+        const bool bIsAnisotropic = mVctLighting->isAnisotropic();
+        mGenerationJob->setProperty( "vct_anisotropic", 1 );
+        mGenerationJob->setNumTexUnits( 1u + ( bIsAnisotropic ? 4u : 1u ) );
+
         DescriptorSetTexture2::BufferSlot bufferSlot( DescriptorSetTexture2::BufferSlot::makeEmpty() );
         bufferSlot.buffer = mDirectionsBuffer;
         mGenerationJob->setTexBuffer( 0, bufferSlot );
-
-        const bool bIsAnisotropic = mVctLighting->isAnisotropic();
-        mGenerationJob->setProperty( "vct_anisotropic", 1 );
-        mGenerationJob->setNumTexUnits( 1u + ( bIsAnisotropic ? 1u : 4u ) );
 
         TextureGpu **vctLightingTextures = mVctLighting->getLightVoxelTextures();
         DescriptorSetTexture2::TextureSlot texSlot( DescriptorSetTexture2::TextureSlot::makeEmpty() );
@@ -294,23 +298,38 @@ namespace Ogre
             texSlot.texture = vctLightingTextures[i];
             mGenerationJob->setTexture( 1u + i, texSlot, mVctLighting->getBindTrilinearSamplerblock() );
         }
+
+        CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
+        CompositorChannelVec channels;
+        channels.push_back( mIrradianceTex );
+        channels.push_back( mDepthVarianceTex );
+        mGenerationWorkspace = compositorManager->addWorkspace( mSceneManager, channels, 0,
+                                                                "IrradianceField/Gen/Workspace", false );
     }
     //-------------------------------------------------------------------------
     void IrradianceField::destroyTextures( void )
     {
+        TextureGpuManager *textureManager = mRoot->getRenderSystem()->getTextureGpuManager();
+
+        if( mGenerationWorkspace )
+        {
+            CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
+            compositorManager->removeWorkspace( mGenerationWorkspace );
+            mGenerationWorkspace = 0;
+        }
         if( mIrradianceTex )
         {
-            mTextureManager->destroyTexture( mIrradianceTex );
+            textureManager->destroyTexture( mIrradianceTex );
             mIrradianceTex = 0;
         }
         if( mDepthVarianceTex )
         {
-            mTextureManager->destroyTexture( mDepthVarianceTex );
+            textureManager->destroyTexture( mDepthVarianceTex );
             mDepthVarianceTex = 0;
         }
         if( mDirectionsBuffer )
         {
-            VaoManager *vaoManager = mTextureManager->getVaoManager();
+            VaoManager *vaoManager = textureManager->getVaoManager();
             vaoManager->destroyTexBuffer( mDirectionsBuffer );
             mDirectionsBuffer = 0;
         }
@@ -338,7 +357,7 @@ namespace Ogre
 
         const uint32 numRays = probesPerFrame * depthResolution * depthResolution * numRaysPerPixel;
 
-        OGRE_ASSERT_LOW( numRays % threadsPerGroup );
+        OGRE_ASSERT_LOW( ( numRays % threadsPerGroup ) == 0u );
 
         const uint32 numWorkGroups = numRays / threadsPerGroup;
 

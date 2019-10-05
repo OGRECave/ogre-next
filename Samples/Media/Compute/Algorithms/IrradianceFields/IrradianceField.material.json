@@ -23,7 +23,7 @@
                 ["vctProbe",                [1], "int"],
                 ["vctProbeX",               [2], "int"],
                 ["vctProbeY",               [3], "int"],
-                ["vctProbeZ",               [4], "int"],
+                ["vctProbeZ",               [4], "int"]
             ]
         }
     }

@@ -19,6 +19,8 @@
 #include "Vct/OgreVctVoxelizer.h"
 #include "Vct/OgreVctLighting.h"
 
+#include "IrradianceField/OgreIrradianceField.h"
+
 #include "Utils/MeshUtils.h"
 #include "Utils/TestUtils.h"
 
@@ -30,6 +32,8 @@ using namespace Demo;
 
 namespace Demo
 {
+    Ogre::IrradianceField *mIrradianceField;
+
     VoxelizerGameState::VoxelizerGameState( const Ogre::String &helpDescription ) :
         TutorialGameState( helpDescription ),
         mVoxelizer( 0 ),
@@ -124,6 +128,10 @@ namespace Demo
         }
 
         mVctLighting->update( sceneManager, mNumBounces, mThinWallCounter );
+
+        Ogre::IrradianceFieldSettings ifSettings;
+        mIrradianceField->initialize( ifSettings, mVoxelizer->getVoxelOrigin(),
+                                      mVoxelizer->getVoxelSize(), mVctLighting );
     }
     //-----------------------------------------------------------------------------------
     void VoxelizerGameState::cycleScenes( bool bPrev )
@@ -315,6 +323,8 @@ namespace Demo
                                         root->getRenderSystem(), root->getHlmsManager(),
                                         true );
 
+        mIrradianceField = new Ogre::IrradianceField( root, sceneManager );
+
         mGraphicsSystem->getCamera()->setPosition( Ogre::Vector3( 0.0f, 1.8f, 2.5f ) );
 
         createCornellScene();
@@ -356,6 +366,7 @@ namespace Demo
 //            }
 //            ++frame;
 //        }
+        mIrradianceField->update();
         TutorialGameState::update( timeSinceLast );
     }
     //-----------------------------------------------------------------------------------

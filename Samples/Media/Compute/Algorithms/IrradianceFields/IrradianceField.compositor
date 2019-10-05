@@ -14,7 +14,7 @@ compositor_node IrradianceField/Gen
 	}
 }
 
-workspace IrradianceField/GenWorkspace
+workspace IrradianceField/Gen/Workspace
 {
 	connect_external 0 IrradianceField/Gen 0
 	connect_external 1 IrradianceField/Gen 1
