@@ -50,6 +50,7 @@
 #define ushort uint
 
 //Short used for read operations. It's an int in GLSL & HLSL. An ushort in Metal
+#define rshort int
 #define rshort2 int2
 #define rint int
 //Short used for write operations. It's an int in GLSL. An ushort in HLSL & Metal

@@ -160,6 +160,7 @@
         vPos.x = probeIdx & (p.numProbes.x - 1u);
         vPos.y = (probeIdx & ((p.numProbes.x * p.numProbes.y) - 1u)) >> findMSB( p.numProbes.x );
         vPos.z = probeIdx >> findMSB( p.numProbes.x * p.numProbes.y );
+        return vPos;
     }
 @end
 
@@ -170,17 +171,17 @@
 //in uint  gl_LocalInvocationIndex;
 
 @piece( BodyCS )
-    RayIndex rayIdx = getProbeIdx( gl_GlobalInvocationID.xy );
+    RayIndex rayIdx = getRayIndex( gl_GlobalInvocationID.xy );
     ProbeIndex probeIdx = getProbeIdx( rayIdx PARAMS_ARG );
 
-    float3 dir = bufferFetch( directionsBuffer, gl_LocalInvocationIndex ).xyz;
+    float3 dir = bufferFetch( directionsBuffer, rshort( gl_LocalInvocationIndex ) ).xyz;
 
     float3 probeCenter = getProbeCenterInVctSpace( probeIdx PARAMS_ARG );
-    float3 posLS = mul( probeCenter, p.irrProbeToVctTransform );
+    float3 posLS = mul( float4( probeCenter, 0.0f ), p.irrProbeToVctTransform ).xyz;
 
     float4 diffuse = voxelConeTraceDiff( posLS, dir, p.coneAngleTan,
 										 vctProbe OGRE_SAMPLER_ARG( probeSampler )
-										 OGRE_VCT_ANISO_PROBE_ARG
+                                         OGRE_VCT_ANISO_ROOT_PROBE_ARG
                                          PARAMS_ARG );
     g_diffuseDepth[gl_LocalInvocationIndex] = diffuse;
 
@@ -205,7 +206,7 @@
         sqDepth *= p.invNumRaysPerPixel;
         OGRE_imageWrite2D2( irradianceFieldDepth, irradianceFieldDepthXY, float2( diffuse.w, sqDepth ) );
 
-        g_diffuseDepth[gl_LocalInvocationIndex + i].xyz = diffuse.xyz;
+        g_diffuseDepth[gl_LocalInvocationIndex].xyz = diffuse.xyz;
     }
 
     __sharedOnlyBarrier;
@@ -214,7 +215,7 @@
     if( gl_LocalInvocationIndex % p.numRaysPerIrradiancePixel == 0u )
     {
         for( uint i=1u; i<p.numRaysPerIrradiancePixel; ++i )
-            diffuse.xyz += g_diffuseDepth[gl_LocalInvocationIndex + i];
+            diffuse.xyz += g_diffuseDepth[gl_LocalInvocationIndex + i].xyz;
 
         diffuse.xyz *= p.invNumRaysPerIrradiancePixel;
 
