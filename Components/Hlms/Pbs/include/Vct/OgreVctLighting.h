@@ -329,6 +329,8 @@ namespace Ogre
         const HlmsSamplerblock* getBindTrilinearSamplerblock(void)
                                                             { return mSamplerblockTrilinear; }
 
+        const VctVoxelizer* getVoxelizer(void) const        { return mVoxelizer; }
+
         //TextureGpuListener overloads
         virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
                                            void *extraData );

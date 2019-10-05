@@ -927,8 +927,8 @@ namespace Ogre
             }
         }
 
-        OGRE_ASSERT_MEDIUM( !getProperty( PbsProperty::UseParallaxCorrectCubemaps ) ||
-                            getProperty( PbsProperty::ParallaxCorrectCubemaps ) &&
+        OGRE_ASSERT_MEDIUM( ( !getProperty( PbsProperty::UseParallaxCorrectCubemaps ) ||
+                              getProperty( PbsProperty::ParallaxCorrectCubemaps ) ) &&
                             "Object with manual cubemap probe but "
                             "setParallaxCorrectedCubemap() was not called!" );
 

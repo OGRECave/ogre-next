@@ -30,6 +30,7 @@ THE SOFTWARE.
 
 #include "IrradianceField/OgreIrradianceField.h"
 #include "Vct/OgreVctLighting.h"
+#include "Vct/OgreVctVoxelizer.h"
 
 #include "Compositor/OgreCompositorWorkspace.h"
 
@@ -54,6 +55,39 @@ namespace Ogre
         mNumProbes[1] = 8u;
     }
     //-------------------------------------------------------------------------
+    void IrradianceFieldSettings::createSubsamples( void )
+    {
+        const size_t numRaysPerPixel = mNumRaysPerPixel;
+        mSubsamples.resize( numRaysPerPixel );
+
+        if( numRaysPerPixel == 1u )
+            mSubsamples[0] = Vector2( 0.5f, 0.5f );
+        else if( numRaysPerPixel == 2u )
+        {
+            mSubsamples[0] = Vector2( 0.75f, 0.75f );
+            mSubsamples[1] = Vector2( 0.25f, 0.25f );
+        }
+        else if( numRaysPerPixel == 3u )
+        {
+            mSubsamples[0] = Vector2( 0.50f, 0.75f );
+            mSubsamples[1] = Vector2( 0.25f, 0.25f );
+            mSubsamples[2] = Vector2( 0.75f, 0.25f );
+        }
+        else
+        {
+            const float fGridSize = ceilf( sqrtf( numRaysPerPixel ) );
+            const float invGridSize = 1.0f / fGridSize;
+            const size_t gridSize = static_cast<size_t>( fGridSize );
+            const size_t numGridCells = gridSize * gridSize;
+
+            for( size_t i = 0u; i < numGridCells && i < numRaysPerPixel; ++i )
+            {
+                mSubsamples[i].x = ( i % ( gridSize ) ) * invGridSize;
+                mSubsamples[i].y = ( i / ( gridSize ) ) * invGridSize;
+            }
+        }
+    }
+    //-------------------------------------------------------------------------
     uint32 IrradianceFieldSettings::getTotalNumProbes( void ) const
     {
         return mNumProbes[0] + mNumProbes[1] + mNumProbes[2];
@@ -71,6 +105,12 @@ namespace Ogre
         const uint32 totalNumProbes = getTotalNumProbes();
         const uint32 sqrtNumProbes = static_cast<uint32>( sqrt( totalNumProbes ) );
         return sqrtNumProbes * mIrradianceResolution;
+    }
+    //-------------------------------------------------------------------------
+    Vector3 IrradianceFieldSettings::getNumProbes3f( void ) const
+    {
+        return Vector3( static_cast<Real>( mNumProbes[0] ), static_cast<Real>( mNumProbes[1] ),
+                        static_cast<Real>( mNumProbes[2] ) );
     }
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
@@ -157,12 +197,55 @@ namespace Ogre
                          ( depthProbeRes * depthProbeRes * numRaysPerPixel * 4u ) );
     }
     //-------------------------------------------------------------------------
+    void IrradianceField::setIrradianceFieldGenParams()
+    {
+        const uint32 numRaysPerPixel = mSettings.mNumRaysPerPixel;
+        const uint32 depthProbeRes = mSettings.mDepthProbeResolution;
+
+        const uint32 numRaysPerProbe = depthProbeRes * depthProbeRes * numRaysPerPixel;
+
+        mIfGenParams.invNumRaysPerPixel = 1.0f / numRaysPerPixel;
+        mIfGenParams.numRaysPerPixel = numRaysPerPixel;
+        mIfGenParams.numRaysPerIrradiancePixel =
+            depthProbeRes * numRaysPerProbe / mSettings.mIrradianceResolution;
+        mIfGenParams.invNumRaysPerIrradiancePixel = 1.0f / mIfGenParams.numRaysPerIrradiancePixel;
+
+        const TextureGpu *vctLightingTex = mVctLighting->getLightVoxelTextures()[0];
+        const float smallestRes = static_cast<float>(
+            std::min( std::min( vctLightingTex->getWidth(), vctLightingTex->getHeight() ),
+                      vctLightingTex->getDepth() ) );
+        const float invSmallestRes = 1.0f / smallestRes;
+
+        mIfGenParams.coneAngleTan = Math::Tan( Math::TWO_PI / static_cast<float>( numRaysPerProbe ) );
+        mIfGenParams.numProcessedProbes = 0u;
+        mIfGenParams.vctStartBias = invSmallestRes;
+        mIfGenParams.vctInvStartBias = smallestRes;
+
+        mIfGenParams.numProbes_unused.x = mSettings.mNumProbes[0];
+        mIfGenParams.numProbes_unused.y = mSettings.mNumProbes[1];
+        mIfGenParams.numProbes_unused.z = mSettings.mNumProbes[2];
+        mIfGenParams.numProbes_unused.w = 0u;
+
+        const VctVoxelizer *voxelizer = mVctLighting->getVoxelizer();
+        Matrix4 irrProbeToVctTransform;
+        irrProbeToVctTransform.makeTransform(
+            ( voxelizer->getVoxelOrigin() - mFieldOrigin ) / voxelizer->getVoxelSize(),
+            ( mFieldSize / voxelizer->getVoxelSize() ) / mSettings.getNumProbes3f(),
+            Quaternion::IDENTITY );
+        mIfGenParams.irrProbeToVctTransform = irrProbeToVctTransform;
+    }
+    //-------------------------------------------------------------------------
     void IrradianceField::initialize( const IrradianceFieldSettings &settings,
                                       const Vector3 &fieldOrigin, const Vector3 &fieldSize,
                                       VctLighting *vctLighting )
     {
         mSettings = settings;
+        mSettings.createSubsamples();
         mVctLighting = vctLighting;
+        mFieldOrigin = fieldOrigin;
+        mFieldSize = fieldSize;
+        createTextures();
+        setIrradianceFieldGenParams();
     }
     //-------------------------------------------------------------------------
     void IrradianceField::createTextures( void )
@@ -206,7 +289,7 @@ namespace Ogre
 
         TextureGpu **vctLightingTextures = mVctLighting->getLightVoxelTextures();
         DescriptorSetTexture2::TextureSlot texSlot( DescriptorSetTexture2::TextureSlot::makeEmpty() );
-        for( uint8 i = 0u; i < (bIsAnisotropic ? 4u : 1u); ++i )
+        for( uint8 i = 0u; i < ( bIsAnisotropic ? 4u : 1u ); ++i )
         {
             texSlot.texture = vctLightingTextures[i];
             mGenerationJob->setTexture( 1u + i, texSlot, mVctLighting->getBindTrilinearSamplerblock() );

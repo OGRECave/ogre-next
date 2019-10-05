@@ -57,6 +57,11 @@ namespace Ogre
             w( static_cast<T>( valZW.y ) )
         {
         }
+
+        Vector3 toVec3() const
+        {
+            return Vector3( static_cast<Real>( x ), static_cast<Real>( y ), static_cast<Real>( z ) );
+        }
     };
 
     struct float2

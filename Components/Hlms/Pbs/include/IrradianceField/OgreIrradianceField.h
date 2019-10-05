@@ -78,9 +78,13 @@ namespace Ogre
             }
         }
 
+        void createSubsamples(void);
+
         uint32 getTotalNumProbes( void ) const;
         uint32 getDepthProbeFullResolution( void ) const;
         uint32 getIrradProbeFullResolution( void ) const;
+
+        Vector3 getNumProbes3f( void ) const;
 
         const vector<Vector2>::type &getSubsamples( void ) const { return mSubsamples; }
     };
