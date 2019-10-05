@@ -56,7 +56,6 @@ namespace Ogre
     typedef vector<TextureGpu*>::type TextureGpuVec;
     typedef map< uint16, TextureGpuVec >::type DepthBufferMap2;
 
-    class TextureManager;
     /// Enum describing the ways to generate texture coordinates
     enum TexCoordCalcMethod
     {
