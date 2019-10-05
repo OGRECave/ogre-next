@@ -782,6 +782,22 @@ namespace Ogre
     public:
         void destroyTexture( TextureGpu *texture );
 
+        /** Returns true if a texture with the given aliasName exists, or if a
+            ResourceGroupListener provides such texture, or if such texture
+            exists (i.e. as a file) in the ResourceGroupManager.
+
+            This can return true regardless of whether the texture has been loaded or created.
+
+            Not to be confused with findTextureNoThrow which only looks
+            for already created textures.
+        @param aliasName
+        @param resourceGroup
+        @return
+            True if there is such texture (loaded or not)
+            False if there is no such texture
+        */
+        bool hasTextureResource( const String &aliasName, const String &resourceGroup ) const;
+
         /** Creates a StagingTexture which is required to upload data CPU -> GPU into
             a TextureGpu.
             To download data GPU -> CPU see readRequest

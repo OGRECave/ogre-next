@@ -19,7 +19,7 @@ namespace Demo
         0,      0,    1,    0,
         0,      0,    0,    1);
 
-    ScreenSpaceReflections::ScreenSpaceReflections( const Ogre::TexturePtr &globalCubemap,
+    ScreenSpaceReflections::ScreenSpaceReflections( Ogre::TextureGpu *globalCubemap,
                                                     Ogre::RenderSystem *renderSystem ) :
         mLastUvSpaceViewProjMatrix( PROJECTIONCLIPSPACE2DTOIMAGESPACE_PERSPECTIVE ),
         mRsDepthRange( 1.0f )

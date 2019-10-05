@@ -29,10 +29,16 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "IrradianceField/OgreIrradianceField.h"
+#include "Vct/OgreVctLighting.h"
 
+#include "Compositor/OgreCompositorWorkspace.h"
+
+#include "OgreHlmsCompute.h"
 #include "OgreHlmsComputeJob.h"
+#include "OgreHlmsManager.h"
 #include "OgreStringConverter.h"
 #include "OgreTextureGpuManager.h"
+#include "Vao/OgreConstBufferPacked.h"
 #include "Vao/OgreTexBufferPacked.h"
 #include "Vao/OgreVaoManager.h"
 
@@ -69,20 +75,54 @@ namespace Ogre
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
-    IrradianceField::IrradianceField() :
+    IrradianceField::IrradianceField( TextureGpuManager *textureManager, HlmsManager *hlmsManager ) :
         IdObject( Id::generateNewId<IrradianceField>() ),
         mNumProbesProcessed( 0u ),
         mFieldOrigin( Vector3::ZERO ),
         mFieldSize( Vector3::ZERO ),
+        mVctLighting( 0 ),
         mIrradianceTex( 0 ),
         mDepthVarianceTex( 0 ),
+        mGenerationWorkspace( 0 ),
         mGenerationJob( 0 ),
+        mIfGenParamsBuffer( 0 ),
         mDirectionsBuffer( 0 ),
-        mTextureManager( 0 )
+        mTextureManager( textureManager ),
+        mHlmsManager( hlmsManager )
     {
+#if OGRE_NO_JSON
+        OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                     "To use IrradianceField, Ogre must be build with JSON support "
+                     "and you must include the resources bundled at "
+                     "Samples/Media/Compute",
+                     "IrradianceField::IrradianceField" );
+#endif
+        VaoManager *vaoManager = mTextureManager->getVaoManager();
+        mIfGenParamsBuffer = vaoManager->createConstBuffer( sizeof( IrradianceFieldGenParams ),
+                                                            BT_DYNAMIC_PERSISTENT, 0, false );
+
+        HlmsCompute *hlmsCompute = hlmsManager->getComputeHlms();
+        mGenerationJob = hlmsCompute->findComputeJobNoThrow( "IrradianceField/Gen" );
+
+        if( !mGenerationJob )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "To use VctVoxelizer, you must include the resources bundled at "
+                         "Samples/Media/Compute\n"
+                         "Could not find IrradianceField/Gen",
+                         "IrradianceField::IrradianceField" );
+        }
     }
     //-------------------------------------------------------------------------
-    IrradianceField::~IrradianceField() { destroyTextures(); }
+    IrradianceField::~IrradianceField()
+    {
+        destroyTextures();
+        VaoManager *vaoManager = mTextureManager->getVaoManager();
+        if( mIfGenParamsBuffer->getMappingState() != MS_UNMAPPED )
+            mIfGenParamsBuffer->unmap( UO_UNMAP_ALL );
+        vaoManager->destroyConstBuffer( mIfGenParamsBuffer );
+        mIfGenParamsBuffer = 0;
+    }
     //-------------------------------------------------------------------------
     void IrradianceField::fillDirections( float *RESTRICT_ALIAS outBuffer )
     {
@@ -117,6 +157,14 @@ namespace Ogre
                          ( depthProbeRes * depthProbeRes * numRaysPerPixel * 4u ) );
     }
     //-------------------------------------------------------------------------
+    void IrradianceField::initialize( const IrradianceFieldSettings &settings,
+                                      const Vector3 &fieldOrigin, const Vector3 &fieldSize,
+                                      VctLighting *vctLighting )
+    {
+        mSettings = settings;
+        mVctLighting = vctLighting;
+    }
+    //-------------------------------------------------------------------------
     void IrradianceField::createTextures( void )
     {
         destroyTextures();
@@ -145,6 +193,24 @@ namespace Ogre
         VaoManager *vaoManager = mTextureManager->getVaoManager();
         mDirectionsBuffer = vaoManager->createTexBuffer( PFG_RGBA32_FLOAT, updateDataSize, BT_IMMUTABLE,
                                                          directionsBuffer, false );
+
+        mGenerationJob->setConstBuffer( 0, mIfGenParamsBuffer );
+
+        DescriptorSetTexture2::BufferSlot bufferSlot( DescriptorSetTexture2::BufferSlot::makeEmpty() );
+        bufferSlot.buffer = mDirectionsBuffer;
+        mGenerationJob->setTexBuffer( 0, bufferSlot );
+
+        const bool bIsAnisotropic = mVctLighting->isAnisotropic();
+        mGenerationJob->setProperty( "vct_anisotropic", 1 );
+        mGenerationJob->setNumTexUnits( 1u + ( bIsAnisotropic ? 1u : 4u ) );
+
+        TextureGpu **vctLightingTextures = mVctLighting->getLightVoxelTextures();
+        DescriptorSetTexture2::TextureSlot texSlot( DescriptorSetTexture2::TextureSlot::makeEmpty() );
+        for( uint8 i = 0u; i < (bIsAnisotropic ? 4u : 1u); ++i )
+        {
+            texSlot.texture = vctLightingTextures[i];
+            mGenerationJob->setTexture( 1u + i, texSlot, mVctLighting->getBindTrilinearSamplerblock() );
+        }
     }
     //-------------------------------------------------------------------------
     void IrradianceField::destroyTextures( void )
@@ -173,6 +239,11 @@ namespace Ogre
         if( mNumProbesProcessed >= totalNumProbes )
             return;
 
+        IrradianceFieldGenParams *ifGenParams = reinterpret_cast<IrradianceFieldGenParams *>(
+            mIfGenParamsBuffer->map( 0, mIfGenParamsBuffer->getNumElements() ) );
+        mIfGenParams.numProcessedProbes = mNumProbesProcessed;
+        *ifGenParams = mIfGenParams;
+
         probesPerFrame = std::min( totalNumProbes - mNumProbesProcessed, probesPerFrame );
         OGRE_ASSERT_LOW( ( ( probesPerFrame & 0x01u ) == 0u ) && "probesPerFrame must be even!" );
 
@@ -193,6 +264,12 @@ namespace Ogre
         const uint32 numThreadGroupsY = numWorkGroups / 65535u + 1u;
         mGenerationJob->setNumThreadGroups( numThreadGroupsX, numThreadGroupsY, 1u );
 
+        mGenerationWorkspace->_beginUpdate( false );
+        mGenerationWorkspace->_update();
+        mGenerationWorkspace->_endUpdate( false );
+
         mNumProbesProcessed += probesPerFrame;
+
+        mIfGenParamsBuffer->unmap( UO_KEEP_PERSISTENT );
     }
 }  // namespace Ogre

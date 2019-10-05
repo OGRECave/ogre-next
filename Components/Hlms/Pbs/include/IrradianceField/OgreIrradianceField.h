@@ -32,7 +32,8 @@ THE SOFTWARE.
 #include "OgreHlmsPbsPrerequisites.h"
 
 #include "OgreId.h"
-#include "OgreVector3.h"
+
+#include "OgreShaderPrimitives.h"
 
 #include "OgreHeaderPrefix.h"
 
@@ -84,8 +85,43 @@ namespace Ogre
         const vector<Vector2>::type &getSubsamples( void ) const { return mSubsamples; }
     };
 
+    /**
+    @class IrradianceField
+        Implements an Irradiance Field with Depth, inspired on DDGI
+
+        We use the voxelized results from VCT.
+        Afterwards once we have Raytracing, we'll also allow to use Raytracing instead;
+        since both are very similars (with VCT we shoot cones instead of rays)
+
+    @see
+        Snippet taken from Dynamic Diffuse Global Illumination with Ray-Traced Irradiance Fields
+        Zander Majercik, NVIDIA; Jean-Philippe Guertin, Université de Montréal;
+        Derek Nowrouzezahrai, McGill University; Morgan McGuire, NVIDIA and McGill University
+        http://jcgt.org/published/0008/02/01/
+
+    @see
+        https://github.com/OGRECave/ogre-next/issues/29
+    */
     class _OgreHlmsPbsExport IrradianceField : public IdObject
     {
+        struct IrradianceFieldGenParams
+        {
+            float invNumRaysPerPixel;
+            uint32 numRaysPerPixel;
+            float invNumRaysPerIrradiancePixel;
+            uint32 numRaysPerIrradiancePixel;
+
+            float coneAngleTan;
+            uint32 numProcessedProbes;
+            float vctStartBias;
+            float vctInvStartBias;
+
+            // float invFieldResolution;
+            uint4 numProbes_unused;
+
+            float4x4 irrProbeToVctTransform;
+        };
+
         IrradianceFieldSettings mSettings;
         /// Number of probes processed so far.
         /// We process the entire field across multiple frames.
@@ -94,32 +130,40 @@ namespace Ogre
         Vector3 mFieldOrigin;
         Vector3 mFieldSize;
 
+        VctLighting *mVctLighting;
+
         TextureGpu *mIrradianceTex;
         TextureGpu *mDepthVarianceTex;
 
+        CompositorWorkspace *mGenerationWorkspace;
         HlmsComputeJob *mGenerationJob;
 
+        IrradianceFieldGenParams mIfGenParams;
+        ConstBufferPacked *mIfGenParamsBuffer;
         TexBufferPacked *mDirectionsBuffer;
 
         TextureGpuManager *mTextureManager;
+        HlmsManager *mHlmsManager;
 
         void fillDirections( float *RESTRICT_ALIAS outBuffer );
+        void setIrradianceFieldGenParams();
 
     public:
-        IrradianceField();
+        IrradianceField( TextureGpuManager *textureManager, HlmsManager *hlmsManager );
         ~IrradianceField();
 
         void createTextures( void );
         void destroyTextures( void );
 
         /**
-         * @brief initialize
-         * @param settings
-         * @param fieldOrigin
-         * @param fieldSize
+        @brief initialize
+        @param settings
+        @param fieldOrigin
+        @param fieldSize
+        @param vctLighting
          */
         void initialize( const IrradianceFieldSettings &settings, const Vector3 &fieldOrigin,
-                         const Vector3 &fieldSize );
+                         const Vector3 &fieldSize, VctLighting *vctLighting );
 
         void update( uint32 probesPerFrame = 200u );
     };

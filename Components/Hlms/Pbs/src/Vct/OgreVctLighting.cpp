@@ -541,14 +541,14 @@ namespace Ogre
         texSlot.texture = mVoxelizer->getNormalVox();
         mLightVctBounceInject->setTexture( 1, texSlot );
         texSlot.texture = mLightVoxel[0];
-        mLightVctBounceInject->setTexture( 2, texSlot );
+        mLightVctBounceInject->setTexture( 2, texSlot, mSamplerblockTrilinear );
 
         if( mAnisotropic )
         {
             for( uint8 i=0u; i<3u; ++i )
             {
                 texSlot.texture = mLightVoxel[i+1u];
-                mLightVctBounceInject->setTexture( i+3u, texSlot );
+                mLightVctBounceInject->setTexture( i+3u, texSlot, mSamplerblockTrilinear );
             }
         }
 
@@ -611,7 +611,7 @@ namespace Ogre
 
         DescriptorSetTexture2::TextureSlot texSlot( DescriptorSetTexture2::TextureSlot::makeEmpty() );
         texSlot.texture = mLightVoxel[0];
-        mLightVctBounceInject->setTexture( 2, texSlot );
+        mLightVctBounceInject->setTexture( 2, texSlot, mSamplerblockTrilinear );
 
         DescriptorSetUav::TextureSlot uavSlot( DescriptorSetUav::TextureSlot::makeEmpty() );
         uavSlot.access = ResourceAccess::Write;

@@ -1,0 +1,21 @@
+compositor_node IrradianceField/Gen
+{
+	in 0 colour_if
+	in 1 depth_if
+
+	target colour_if
+	{
+		pass compute
+		{
+			job IrradianceField/Gen
+			uav 0 colour_if write
+			uav 1 depth_if write
+		}
+	}
+}
+
+workspace IrradianceField/GenWorkspace
+{
+	connect_external 0 IrradianceField/Gen 0
+	connect_external 1 IrradianceField/Gen 1
+}

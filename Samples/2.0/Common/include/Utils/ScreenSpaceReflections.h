@@ -14,7 +14,7 @@ namespace Demo
         Ogre::Real      mRsDepthRange;
 
     public:
-        ScreenSpaceReflections( const Ogre::TexturePtr &globalCubemap,
+        ScreenSpaceReflections( Ogre::TextureGpu *globalCubemap,
                                 Ogre::RenderSystem *renderSystem );
 
         void update( Ogre::Camera *camera );
