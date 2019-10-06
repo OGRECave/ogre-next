@@ -81,8 +81,8 @@ namespace Ogre
         void createSubsamples( void );
 
         uint32 getTotalNumProbes( void ) const;
-        uint32 getDepthProbeFullResolution( void ) const;
-        uint32 getIrradProbeFullResolution( void ) const;
+        void getDepthProbeFullResolution( uint32 &outWidth, uint32 &outHeight ) const;
+        void getIrradProbeFullResolution( uint32 &outWidth, uint32 &outHeight ) const;
 
         Vector3 getNumProbes3f( void ) const;
 

@@ -129,12 +129,19 @@
 	INLINE ushort2 getIrradianceFieldDepthXY( RayIndex rayIndex, ProbeIndex probeIdx )
 	{
 		ushort2 retVal;
-		ushort depthPixelIdx = rayIndex / @value( num_rays_per_depth_pixel )u;
-		retVal.x = depthPixelIdx % @value( depth_resolution )u;
-		retVal.y = (depthPixelIdx % @value( num_depth_pixels_per_probe )u) / @value( depth_resolution )u;
+		ushort irradPixelIdx = rayIndex / @value( num_rays_per_irrad_pixel )u;
+		retVal.x = irradPixelIdx % @value( irrad_resolution )u;
+		retVal.y = (irradPixelIdx % @value( num_irrad_pixels_per_probe )u) / @value( irrad_resolution )u;
 
-		retVal.x += (probeIdx * @value( depth_resolution )u) % @value( depth_full_resolution )u;
-		retVal.y += ((probeIdx * @value( depth_resolution )u) / @value( depth_full_resolution )u) *
+		retVal.xy *= @value( colour_to_depth_resolution_ratio );
+
+		uint irradPixelRaySubIdx = rayIndex % @value( num_rays_per_irrad_pixel )u;
+		retVal.x += irradPixelRaySubIdx % @value( colour_to_depth_resolution_ratio );
+		retVal.y += irradPixelRaySubIdx / @value( colour_to_depth_resolution_ratio );
+
+
+		retVal.x += (probeIdx * @value( depth_resolution )u) % @value( depth_full_width )u;
+		retVal.y += ((probeIdx * @value( depth_resolution )u) / @value( depth_full_width )u) *
 					@value( depth_resolution )u;
 
 		return retVal;
@@ -142,7 +149,7 @@
 
 	INLINE ushort2 depthXyToColourXy( ushort2 depthXy )
 	{
-		return depthXy / @value( depth_to_colour_resolution_ratio )u;
+		return depthXy / @value( colour_to_depth_resolution_ratio )u;
 	}
 
 	INLINE float3 getProbeCenterInVctSpace( ProbeIndex probeIdx PARAMS_ARG_DECL )
@@ -203,7 +210,7 @@
 		for( uint i=1u; i<p.numRaysPerPixel; ++i )
 		{
 			float4 otherVal = g_diffuseDepth[gl_LocalInvocationIndex + i];
-			diffuse.xyzw += otherVal.xyzw;
+			diffuse.w += otherVal.w;
 			sqDepth += otherVal.w * otherVal.w;
 		}
 
@@ -212,15 +219,15 @@
 		sqDepth *= p.invNumRaysPerPixel;
 		OGRE_imageWrite2D2( irradianceFieldDepth, irradianceFieldDepthXY, float2( diffuse.w, sqDepth ) );
 
-		g_diffuseDepth[gl_LocalInvocationIndex].xyz = diffuse.xyz;
+		//g_diffuseDepth[gl_LocalInvocationIndex].xyz = diffuse.xyz;
 	}
 
 	__sharedOnlyBarrier;
 
 	// Irradiance has 'bigger pixels' than depth, thus we need to reduce again.
-	if( gl_LocalInvocationIndex % p.numRaysPerIrradiancePixel == 0u )
+	if( gl_LocalInvocationIndex % @value( num_rays_per_irrad_pixel ) == 0u )
 	{
-		for( uint i=1u; i<p.numRaysPerIrradiancePixel; ++i )
+		for( uint i=1u; i<@value( num_rays_per_irrad_pixel ); ++i )
 			diffuse.xyz += g_diffuseDepth[gl_LocalInvocationIndex + i].xyz;
 
 		diffuse.xyz *= p.invNumRaysPerIrradiancePixel;

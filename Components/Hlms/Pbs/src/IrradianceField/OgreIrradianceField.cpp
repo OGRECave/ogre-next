@@ -98,18 +98,28 @@ namespace Ogre
         return mNumProbes[0] * mNumProbes[1] * mNumProbes[2];
     }
     //-------------------------------------------------------------------------
-    uint32 IrradianceFieldSettings::getDepthProbeFullResolution( void ) const
+    void IrradianceFieldSettings::getDepthProbeFullResolution( uint32 &outWidth,
+                                                               uint32 &outHeight ) const
     {
+        // totalNumProbes is a power of 2, thus it can be expressed as 2ⁿ
+        // Hence find the resolution where 2ᵃ * 2ᵇ = 2ⁿ
         const uint32 totalNumProbes = getTotalNumProbes();
-        const uint32 sqrtNumProbes = static_cast<uint32>( sqrt( totalNumProbes ) );
-        return sqrtNumProbes * mDepthProbeResolution;
+        const uint32 exponent = Bitwise::ctz32( totalNumProbes );
+        outWidth = mDepthProbeResolution * ( 1u << ( exponent >> 1u ) );
+        outHeight = mDepthProbeResolution * ( 1u << ( exponent - ( exponent >> 1u ) ) );
+        OGRE_ASSERT_LOW( outWidth * outHeight ==
+                         totalNumProbes * mDepthProbeResolution * mDepthProbeResolution );
     }
     //-------------------------------------------------------------------------
-    uint32 IrradianceFieldSettings::getIrradProbeFullResolution( void ) const
+    void IrradianceFieldSettings::getIrradProbeFullResolution( uint32 &outWidth,
+                                                               uint32 &outHeight ) const
     {
         const uint32 totalNumProbes = getTotalNumProbes();
-        const uint32 sqrtNumProbes = static_cast<uint32>( sqrt( totalNumProbes ) );
-        return sqrtNumProbes * mIrradianceResolution;
+        const uint32 exponent = Bitwise::ctz32( totalNumProbes );
+        outWidth = mIrradianceResolution * ( 1u << ( exponent >> 1u ) );
+        outHeight = mIrradianceResolution * ( 1u << ( exponent - ( exponent >> 1u ) ) );
+        OGRE_ASSERT_LOW( outWidth * outHeight ==
+                         totalNumProbes * mIrradianceResolution * mIrradianceResolution );
     }
     //-------------------------------------------------------------------------
     Vector3 IrradianceFieldSettings::getNumProbes3f( void ) const
@@ -178,22 +188,34 @@ namespace Ogre
 
         const size_t numRaysPerPixel = mSettings.mNumRaysPerPixel;
         const size_t depthProbeRes = mSettings.mDepthProbeResolution;
+        const size_t irradProbeRes = mSettings.mIrradianceResolution;
 
-        for( size_t y = 0u; y < depthProbeRes; ++y )
+        const size_t colourToDepthRatio = depthProbeRes / irradProbeRes;
+
+        for( size_t irradY = 0u; irradY < irradProbeRes; ++irradY )
         {
-            for( size_t x = 0u; x < depthProbeRes; ++x )
+            const size_t y = irradY * colourToDepthRatio;
+            for( size_t irradX = 0u; irradX < irradProbeRes; ++irradX )
             {
-                for( size_t rayIdx = 0u; rayIdx < numRaysPerPixel; ++rayIdx )
+                const size_t x = irradX * colourToDepthRatio;
+
+                for( size_t blockY = 0u; blockY < colourToDepthRatio; ++blockY )
                 {
-                    Vector2 uvOct = Vector2( x, y ) + subsamples[rayIdx];
-                    uvOct /= static_cast<float>( depthProbeRes );
+                    for( size_t blockX = 0u; blockX < colourToDepthRatio; ++blockX )
+                    {
+                        for( size_t rayIdx = 0u; rayIdx < numRaysPerPixel; ++rayIdx )
+                        {
+                            Vector2 uvOct = Vector2( x + blockX, y + blockY ) + subsamples[rayIdx];
+                            uvOct /= static_cast<float>( depthProbeRes );
 
-                    Vector3 directionVector = Math::octahedronMappingDecode( uvOct );
+                            Vector3 directionVector = Math::octahedronMappingDecode( uvOct );
 
-                    *updateData++ = static_cast<float>( directionVector.x );
-                    *updateData++ = static_cast<float>( directionVector.y );
-                    *updateData++ = static_cast<float>( directionVector.z );
-                    *updateData++ = 0.0f;
+                            *updateData++ = static_cast<float>( directionVector.x );
+                            *updateData++ = static_cast<float>( directionVector.y );
+                            *updateData++ = static_cast<float>( directionVector.z );
+                            *updateData++ = 0.0f;
+                        }
+                    }
                 }
             }
         }
@@ -207,13 +229,14 @@ namespace Ogre
         const uint32 numRaysPerPixel = mSettings.mNumRaysPerPixel;
         const uint32 depthProbeRes = mSettings.mDepthProbeResolution;
         const uint32 irradProbeRes = mSettings.mIrradianceResolution;
+        const uint32 numRaysPerIrradiancePixel =
+            depthProbeRes * depthProbeRes * numRaysPerPixel / ( irradProbeRes * irradProbeRes );
 
         const uint32 numRaysPerProbe = depthProbeRes * depthProbeRes * numRaysPerPixel;
 
         mIfGenParams.invNumRaysPerPixel = 1.0f / numRaysPerPixel;
         mIfGenParams.numRaysPerPixel = numRaysPerPixel;
-        mIfGenParams.numRaysPerIrradiancePixel =
-            depthProbeRes * depthProbeRes * numRaysPerPixel / ( irradProbeRes * irradProbeRes );
+        mIfGenParams.numRaysPerIrradiancePixel = numRaysPerIrradiancePixel;
         mIfGenParams.invNumRaysPerIrradiancePixel = 1.0f / mIfGenParams.numRaysPerIrradiancePixel;
 
         const TextureGpu *vctLightingTex = mVctLighting->getLightVoxelTextures()[0];
@@ -241,13 +264,17 @@ namespace Ogre
         mIfGenParams.irrProbeToVctTransform = irrProbeToVctTransform;
 
         mGenerationJob->setProperty( "num_rays_per_probe", static_cast<int32>( numRaysPerProbe ) );
-        mGenerationJob->setProperty( "num_rays_per_depth_pixel", static_cast<int32>( numRaysPerPixel ) );
+
+        mGenerationJob->setProperty( "num_rays_per_irrad_pixel",
+                                     static_cast<int32>( numRaysPerIrradiancePixel ) );
+        mGenerationJob->setProperty( "irrad_resolution", static_cast<int32>( irradProbeRes ) );
+        mGenerationJob->setProperty( "num_irrad_pixels_per_probe",
+                                     static_cast<int32>( irradProbeRes * irradProbeRes ) );
+
         mGenerationJob->setProperty( "depth_resolution", static_cast<int32>( depthProbeRes ) );
-        mGenerationJob->setProperty( "num_depth_pixels_per_probe",
-                                     static_cast<int32>( depthProbeRes * depthProbeRes ) );
-        mGenerationJob->setProperty( "depth_full_resolution",
+        mGenerationJob->setProperty( "depth_full_width",
                                      static_cast<int32>( mDepthVarianceTex->getWidth() ) );
-        mGenerationJob->setProperty( "depth_to_colour_resolution_ratio",
+        mGenerationJob->setProperty( "colour_to_depth_resolution_ratio",
                                      static_cast<int32>( depthProbeRes / irradProbeRes ) );
     }
     //-------------------------------------------------------------------------
@@ -277,19 +304,21 @@ namespace Ogre
             "IrradianceFieldDepth" + StringConverter::toString( getId() ), GpuPageOutStrategy::Discard,
             TextureFlags::Uav, TextureTypes::Type2D );
 
-        const uint32 irradResolution = mSettings.getIrradProbeFullResolution();
-        mIrradianceTex->setResolution( irradResolution, irradResolution );
+        uint32 irradWidth, irradHeight;
+        mSettings.getIrradProbeFullResolution( irradWidth, irradHeight );
+        mIrradianceTex->setResolution( irradWidth, irradHeight );
         mIrradianceTex->setPixelFormat( PFG_R10G10B10A2_UNORM );
 
-        const uint32 depthResolution = mSettings.getDepthProbeFullResolution();
-        mDepthVarianceTex->setResolution( depthResolution, depthResolution );
+        uint32 depthWidth, depthHeight;
+        mSettings.getDepthProbeFullResolution( depthWidth, depthHeight );
+        mDepthVarianceTex->setResolution( depthWidth, depthHeight );
         mDepthVarianceTex->setPixelFormat( PFG_RG32_FLOAT );
 
         mIrradianceTex->scheduleTransitionTo( GpuResidency::Resident );
         mDepthVarianceTex->scheduleTransitionTo( GpuResidency::Resident );
 
-        const size_t updateDataSize =
-            sizeof( float ) * 4u * mSettings.mNumRaysPerPixel * depthResolution * depthResolution;
+        const size_t updateDataSize = sizeof( float ) * 4u * mSettings.mNumRaysPerPixel *
+                                      mSettings.mDepthProbeResolution * mSettings.mDepthProbeResolution;
         float *directionsBuffer =
             reinterpret_cast<float *>( OGRE_MALLOC_SIMD( updateDataSize, MEMCATEGORY_GEOMETRY ) );
         FreeOnDestructor dataPtr( directionsBuffer );
