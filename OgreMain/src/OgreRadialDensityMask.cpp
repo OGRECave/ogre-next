@@ -41,47 +41,10 @@ THE SOFTWARE.
 #include "OgreHlmsManager.h"
 #include "Vao/OgreConstBufferPacked.h"
 
+#include "OgreShaderPrimitives.h"
+
 namespace Ogre
 {
-    struct float4
-    {
-        float x, y, z, w;
-        float4() {}
-        float4( const Vector4 &val ) : x( val.x ), y( val.y ), z( val.z ), w( val.w ) {}
-        float4( const Vector2 &valXY, const Vector2 &valZW ) :
-            x( valXY.x ),
-            y( valXY.y ),
-            z( valZW.x ),
-            w( valZW.y )
-        {
-        }
-    };
-    struct float2
-    {
-        float x, y;
-        float2() {}
-        float2( const Vector2 &val ) : x( val.x ), y( val.y ) {}
-    };
-    // struct uint4
-    //{
-    //    uint32 x, y, z, w;
-    //    uint4() {}
-    //    uint4( const Vector4 &val ) :
-    //        x( static_cast<uint32>( val.x ) ),
-    //        y( static_cast<uint32>( val.y ) ),
-    //        z( static_cast<uint32>( val.z ) ),
-    //        w( static_cast<uint32>( val.w ) )
-    //    {
-    //    }
-    //    uint4( const Vector2 &valXY, const Vector2 &valZW ) :
-    //        x( static_cast<uint32>( valXY.x ) ),
-    //        y( static_cast<uint32>( valXY.y ) ),
-    //        z( static_cast<uint32>( valZW.x ) ),
-    //        w( static_cast<uint32>( valZW.y ) )
-    //    {
-    //    }
-    //};
-
     struct RdmShaderParams
     {
         float4 rightEyeStart_radius;

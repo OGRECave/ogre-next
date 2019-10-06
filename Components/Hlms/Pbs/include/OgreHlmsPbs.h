@@ -52,8 +52,6 @@ namespace Ogre
 
     class HlmsPbsDatablock;
 
-    typedef vector<TexturePtr>::type TextureVec;
-
     /** Physically based shading implementation specfically designed for
         OpenGL 3+, D3D11 and other RenderSystems which support uniform buffers.
     */

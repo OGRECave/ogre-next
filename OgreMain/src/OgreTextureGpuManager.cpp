@@ -563,6 +563,21 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    bool TextureGpuManager::hasTextureResource( const String &aliasName,
+                                                const String &resourceGroup ) const
+    {
+        if( findTextureNoThrow( aliasName ) != 0 )
+            return true;
+        ResourceGroupManager &resourceGroupManager = ResourceGroupManager::getSingleton();
+        ResourceLoadingListener *loadingListener = resourceGroupManager.getLoadingListener();
+        if( loadingListener )
+        {
+            if( loadingListener->grouplessResourceExists( aliasName ) )
+                return true;
+        }
+        return resourceGroupManager.resourceExists( resourceGroup, aliasName );
+    }
+    //-----------------------------------------------------------------------------------
     StagingTexture* TextureGpuManager::getStagingTexture( uint32 width, uint32 height,
                                                           uint32 depth, uint32 slices,
                                                           PixelFormatGpu pixelFormat,
