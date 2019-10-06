@@ -27,46 +27,55 @@ THE SOFTWARE.
 */
 
 #include "OgreStableHeaders.h"
+
 #include "OgreTextureGpuManagerListener.h"
-#include "OgreTextureGpu.h"
+
 #include "OgreBitwise.h"
+#include "OgreTextureGpu.h"
 
 namespace Ogre
 {
-	DefaultTextureGpuManagerListener::DefaultTextureGpuManagerListener() :
-        mPackNonPow2( false )
-	{
-		mMinSlicesPerPool[0] = 16;
-		mMinSlicesPerPool[1] = 8;
-		mMinSlicesPerPool[2] = 4;
-		mMinSlicesPerPool[3] = 2;
-		mMaxResolutionToApplyMinSlices[0] = 256;
-		mMaxResolutionToApplyMinSlices[1] = 512;
-		mMaxResolutionToApplyMinSlices[2] = 1024;
-		mMaxResolutionToApplyMinSlices[3] = 4096;
-	}
-	//-----------------------------------------------------------------------------------
+    TextureGpuManagerListener::~TextureGpuManagerListener() {}
+    //-----------------------------------------------------------------------------------
+    DefaultTextureGpuManagerListener::DefaultTextureGpuManagerListener() : mPackNonPow2( false )
+    {
+        mMinSlicesPerPool[0] = 16;
+        mMinSlicesPerPool[1] = 8;
+        mMinSlicesPerPool[2] = 4;
+        mMinSlicesPerPool[3] = 2;
+        mMaxResolutionToApplyMinSlices[0] = 256;
+        mMaxResolutionToApplyMinSlices[1] = 512;
+        mMaxResolutionToApplyMinSlices[2] = 1024;
+        mMaxResolutionToApplyMinSlices[3] = 4096;
+    }
+    //-----------------------------------------------------------------------------------
     size_t DefaultTextureGpuManagerListener::getNumSlicesFor( TextureGpu *texture,
                                                               TextureGpuManager *textureManager )
-	{
-		uint32 maxResolution = std::max( texture->getWidth(), texture->getHeight() );
-		uint16 minSlicesPerPool = 1u;
+    {
+        uint32 maxResolution = std::max( texture->getWidth(), texture->getHeight() );
+        uint16 minSlicesPerPool = 1u;
 
-		for( int i=0; i<4; ++i )
-		{
+        for( int i = 0; i < 4; ++i )
+        {
             if( maxResolution <= mMaxResolutionToApplyMinSlices[i] )
-			{
+            {
                 minSlicesPerPool = mMinSlicesPerPool[i];
-				break;
-			}
-		}
+                break;
+            }
+        }
 
-		if( !mPackNonPow2 )
-		{
-		   if( !Bitwise::isPO2( texture->getWidth() ) || !Bitwise::isPO2( texture->getHeight() ) )
-			   minSlicesPerPool = 1u;
-		}
+        if( !mPackNonPow2 )
+        {
+            if( !Bitwise::isPO2( texture->getWidth() ) || !Bitwise::isPO2( texture->getHeight() ) )
+                minSlicesPerPool = 1u;
+        }
 
-		return minSlicesPerPool;
-	}
-}
+        return minSlicesPerPool;
+    }
+    //-----------------------------------------------------------------------------------
+    void DefaultTextureGpuManagerListener::notifyTextureChanged( TextureGpu *texture,
+                                                                 TextureGpuListener::Reason reason,
+                                                                 void *extraData )
+    {
+    }
+}  // namespace Ogre
