@@ -46,6 +46,7 @@ THE SOFTWARE.
 #include "Vao/OgreVaoManager.h"
 
 #define TODO_handle_leftover
+#define TODO_threadsPerGroup_must_be_multiple_of_numRaysPerIrradiancePixel
 
 namespace Ogre
 {
@@ -211,7 +212,8 @@ namespace Ogre
 
         mIfGenParams.invNumRaysPerPixel = 1.0f / numRaysPerPixel;
         mIfGenParams.numRaysPerPixel = numRaysPerPixel;
-        mIfGenParams.numRaysPerIrradiancePixel = 2u * depthProbeRes * numRaysPerPixel / irradProbeRes;
+        mIfGenParams.numRaysPerIrradiancePixel =
+            depthProbeRes * depthProbeRes * numRaysPerPixel / ( irradProbeRes * irradProbeRes );
         mIfGenParams.invNumRaysPerIrradiancePixel = 1.0f / mIfGenParams.numRaysPerIrradiancePixel;
 
         const TextureGpu *vctLightingTex = mVctLighting->getLightVoxelTextures()[0];
@@ -361,7 +363,7 @@ namespace Ogre
 
         probesPerFrame = totalNumProbes;
         probesPerFrame = std::min( totalNumProbes - mNumProbesProcessed, probesPerFrame );
-        OGRE_ASSERT_LOW( ( ( probesPerFrame & 0x01u ) == 0u ) && "probesPerFrame must be even!" );
+        // OGRE_ASSERT_LOW( ( ( probesPerFrame & 0x01u ) == 0u ) && "probesPerFrame must be even!" );
 
         const uint32 threadsPerGroup = 64u;
         mGenerationJob->setThreadsPerGroup( threadsPerGroup, 1u, 1u );
@@ -378,6 +380,7 @@ namespace Ogre
         // There's a leftover the first dispatch is not currently handling,
         // i.e. numThreadGroupsX * numThreadGroupsY * threadsPerGroup != numRays
         TODO_handle_leftover;
+        TODO_threadsPerGroup_must_be_multiple_of_numRaysPerIrradiancePixel;
         // Most GPUs allow up to 65535 thread groups per dimension
         const uint32 numThreadGroupsY = numWorkGroups / 65535u + 1u;
         const uint32 numThreadGroupsX = numWorkGroups / numThreadGroupsY;
