@@ -2,26 +2,27 @@
 //#include "SyntaxHighlightingMisc.h"
 
 @piece( HeaderCS )
-    CONST_BUFFER_STRUCT_BEGIN( IrradianceFieldGenParams, 0 )
-    {
-        float invNumRaysPerPixel;
-        uint numRaysPerPixel;
-        float invNumRaysPerIrradiancePixel;
-        uint numRaysPerIrradiancePixel;
+	CONST_BUFFER_STRUCT_BEGIN( IrradianceFieldGenParams, 0 )
+	{
+		float invNumRaysPerPixel;
+		uint numRaysPerPixel;
+		float invNumRaysPerIrradiancePixel;
+		uint numRaysPerIrradiancePixel;
 
-        float coneAngleTan;
-        uint numProcessedProbes;
-        float vctStartBias;
-        float vctInvStartBias;
+		float coneAngleTan;
+		uint numProcessedProbes;
+		float vctStartBias;
+		float vctInvStartBias;
 
-        //float invFieldResolution;
-        uint4 numProbes_unused;
+		//float invFieldResolution;
+		uint4 numProbes_threadsPerRow;
 
-        float4x4 irrProbeToVctTransform;
-    }
-    CONST_BUFFER_STRUCT_END( p );
+		float4x4 irrProbeToVctTransform;
+	}
+	CONST_BUFFER_STRUCT_END( p );
 
-#define numProbes numProbes_unused
+	#define numProbes numProbes_threadsPerRow.xyz
+	#define threadsPerRow numProbes_threadsPerRow.w
 
 	struct Probe
 	{
@@ -48,11 +49,11 @@
 		PARAMS_ARG_DECL
 	)
 	{
-        float dist = p.vctStartBias;
+		float dist = p.vctStartBias;
 		float alpha = 0.0;
 		float3 color = float3( 0.0, 0.0, 0.0 );
 
-        float diameter = max( p.vctStartBias, 2.0 * tanHalfAngle * dist );
+		float diameter = max( p.vctStartBias, 2.0 * tanHalfAngle * dist );
 
 		float lodLevel	= 0.0;
 
@@ -71,7 +72,7 @@
 			alpha += a * scolor.w;
 			dist += diameter * 0.5f;
 			diameter = 2.0 * tanHalfAngle * dist;
-            lodLevel = log2( diameter * p.vctInvStartBias );
+			lodLevel = log2( diameter * p.vctInvStartBias );
 		}
 
 		@property( vct_anisotropic )
@@ -105,63 +106,68 @@
 				alpha += a * scolor.w;
 				dist += diameter * 0.5f;
 				diameter = 2.0 * tanHalfAngle * dist;
-                lodLevel = log2( diameter * p.vctInvStartBias );
+				lodLevel = log2( diameter * p.vctInvStartBias );
 			}
 		@end
 
 		return float4( color, dist );
 	}
 
-    #define RayIndex uint
-    #define ProbeIndex uint
+	#define RayIndex uint
+	#define ProbeIndex uint
 
-    INLINE RayIndex getRayIndex( uint2 globalInvocationId )
-    {
-        return globalInvocationId.x + globalInvocationId.y * 65535u;
-    }
+	INLINE RayIndex getRayIndex( uint2 globalInvocationId )
+	{
+		return globalInvocationId.x + globalInvocationId.y * p.threadsPerRow;
+	}
 
-    INLINE ProbeIndex getProbeIdx( RayIndex rayIndex PARAMS_ARG_DECL )
-    {
-        return rayIndex / @value( num_rays_per_probe ) + p.numProcessedProbes;
-    }
+	INLINE ProbeIndex getProbeIdx( RayIndex rayIndex PARAMS_ARG_DECL )
+	{
+		return rayIndex / @value( num_rays_per_probe )u + p.numProcessedProbes;
+	}
 
-    INLINE ushort2 getIrradianceFieldDepthXY( RayIndex rayIndex )
-    {
-        ushort2 retVal;
-        ushort depthPixelIdx = rayIndex / @value( num_rays_per_depth_pixel )u;
-        retVal.x = depthPixelIdx % @value( depth_resolution )u;
-        retVal.y = (depthPixelIdx % @value( num_depth_pixels_per_probe )u) / @value( depth_resolution )u;
-        return retVal;
-    }
+	INLINE ushort2 getIrradianceFieldDepthXY( RayIndex rayIndex, ProbeIndex probeIdx )
+	{
+		ushort2 retVal;
+		ushort depthPixelIdx = rayIndex / @value( num_rays_per_depth_pixel )u;
+		retVal.x = depthPixelIdx % @value( depth_resolution )u;
+		retVal.y = (depthPixelIdx % @value( num_depth_pixels_per_probe )u) / @value( depth_resolution )u;
 
-    INLINE ushort2 depthXyToColourXy( ushort2 depthXy )
-    {
-        return depthXy / @value( depth_to_colour_resolution_ratio )u;
-    }
+		retVal.x += (probeIdx * @value( depth_resolution )u) % @value( depth_full_resolution )u;
+		retVal.y += ((probeIdx * @value( depth_resolution )u) / @value( depth_full_resolution )u) *
+					@value( depth_resolution )u;
 
-    INLINE float3 getProbeCenterInVctSpace( ProbeIndex probeIdx PARAMS_ARG_DECL )
-    {
-        // Snippet taken from Dynamic Diffuse Global Illumination with Ray-Traced Irradiance Fields
-        // Zander Majercik, NVIDIA; Jean-Philippe Guertin, Université de Montréal;
-        // Derek Nowrouzezahrai, McGill University; Morgan McGuire, NVIDIA and McGill University
-        // http://jcgt.org/published/0008/02/01/
+		return retVal;
+	}
 
-        // Works for any # of probes
-        /*
-        iPos.x = probeIdx % p.numProbes.x;
-        iPos.y = (probeIdx % (p.numProbes.x * p.numProbes.y)) / p.numProbes.x;
-        iPos.z = probeIdx / (p.numProbes.x * p.numProbes.y);
-        */
+	INLINE ushort2 depthXyToColourXy( ushort2 depthXy )
+	{
+		return depthXy / @value( depth_to_colour_resolution_ratio )u;
+	}
 
-        // Assumes numProbes are powers of two.
-        // Saves ~10ms compared to the divisions above
-        // Precomputing the MSB actually slows this code down substantially
-        float3 vPos;
-        vPos.x = probeIdx & (p.numProbes.x - 1u);
-        vPos.y = (probeIdx & ((p.numProbes.x * p.numProbes.y) - 1u)) >> findMSB( p.numProbes.x );
-        vPos.z = probeIdx >> findMSB( p.numProbes.x * p.numProbes.y );
-        return vPos;
-    }
+	INLINE float3 getProbeCenterInVctSpace( ProbeIndex probeIdx PARAMS_ARG_DECL )
+	{
+		// Snippet taken from Dynamic Diffuse Global Illumination with Ray-Traced Irradiance Fields
+		// Zander Majercik, NVIDIA; Jean-Philippe Guertin, Université de Montréal;
+		// Derek Nowrouzezahrai, McGill University; Morgan McGuire, NVIDIA and McGill University
+		// http://jcgt.org/published/0008/02/01/
+
+		// Works for any # of probes
+		/*
+		iPos.x = probeIdx % p.numProbes.x;
+		iPos.y = (probeIdx % (p.numProbes.x * p.numProbes.y)) / p.numProbes.x;
+		iPos.z = probeIdx / (p.numProbes.x * p.numProbes.y);
+		*/
+
+		// Assumes numProbes are powers of two.
+		// Saves ~10ms compared to the divisions above
+		// Precomputing the MSB actually slows this code down substantially
+		float3 vPos;
+		vPos.x = probeIdx & (p.numProbes.x - 1u);
+		vPos.y = (probeIdx & ((p.numProbes.x * p.numProbes.y) - 1u)) >> findMSB( p.numProbes.x );
+		vPos.z = probeIdx >> findMSB( p.numProbes.x * p.numProbes.y );
+		return vPos;
+	}
 @end
 
 //in uvec3 gl_NumWorkGroups;
@@ -171,56 +177,56 @@
 //in uint  gl_LocalInvocationIndex;
 
 @piece( BodyCS )
-    RayIndex rayIdx = getRayIndex( gl_GlobalInvocationID.xy );
-    ProbeIndex probeIdx = getProbeIdx( rayIdx PARAMS_ARG );
+	RayIndex rayIdx = getRayIndex( gl_GlobalInvocationID.xy );
+	ProbeIndex probeIdx = getProbeIdx( rayIdx PARAMS_ARG );
 
-    float3 dir = bufferFetch( directionsBuffer, rshort( gl_LocalInvocationIndex ) ).xyz;
+	float3 dir = bufferFetch( directionsBuffer, rshort( gl_LocalInvocationIndex ) ).xyz;
 
-    float3 probeCenter = getProbeCenterInVctSpace( probeIdx PARAMS_ARG );
-    float3 posLS = mul( float4( probeCenter, 0.0f ), p.irrProbeToVctTransform ).xyz;
+	float3 probeCenter = getProbeCenterInVctSpace( probeIdx PARAMS_ARG );
+	float3 posLS = mul( float4( probeCenter, 0.0f ), p.irrProbeToVctTransform ).xyz;
 
-    float4 diffuse = voxelConeTraceDiff( posLS, dir, p.coneAngleTan,
+	float4 diffuse = voxelConeTraceDiff( posLS, dir, p.coneAngleTan,
 										 vctProbe OGRE_SAMPLER_ARG( probeSampler )
-                                         OGRE_VCT_ANISO_ROOT_PROBE_ARG
-                                         PARAMS_ARG );
-    g_diffuseDepth[gl_LocalInvocationIndex] = diffuse;
+										 OGRE_VCT_ANISO_ROOT_PROBE_ARG
+										 PARAMS_ARG );
+	g_diffuseDepth[gl_LocalInvocationIndex] = diffuse;
 
-    __sharedOnlyBarrier;
+	__sharedOnlyBarrier;
 
-    ushort2 irradianceFieldDepthXY = getIrradianceFieldDepthXY( rayIdx );
+	ushort2 irradianceFieldDepthXY = getIrradianceFieldDepthXY( rayIdx, probeIdx );
 
-    if( gl_LocalInvocationIndex % p.numRaysPerPixel == 0u )
-    {
-        float sqDepth = diffuse.w * diffuse.w;
+	if( gl_LocalInvocationIndex % p.numRaysPerPixel == 0u )
+	{
+		float sqDepth = diffuse.w * diffuse.w;
 
-        //Reduction
-        for( uint i=1u; i<p.numRaysPerPixel; ++i )
-        {
-            float4 otherVal = g_diffuseDepth[gl_LocalInvocationIndex + i];
-            diffuse.xyzw += otherVal.xyzw;
-            sqDepth += otherVal.w * otherVal.w;
-        }
+		//Reduction
+		for( uint i=1u; i<p.numRaysPerPixel; ++i )
+		{
+			float4 otherVal = g_diffuseDepth[gl_LocalInvocationIndex + i];
+			diffuse.xyzw += otherVal.xyzw;
+			sqDepth += otherVal.w * otherVal.w;
+		}
 
-        //We can already write depth
-        diffuse.w *= p.invNumRaysPerPixel;
-        sqDepth *= p.invNumRaysPerPixel;
-        OGRE_imageWrite2D2( irradianceFieldDepth, irradianceFieldDepthXY, float2( diffuse.w, sqDepth ) );
+		//We can already write depth
+		diffuse.w *= p.invNumRaysPerPixel;
+		sqDepth *= p.invNumRaysPerPixel;
+		OGRE_imageWrite2D2( irradianceFieldDepth, irradianceFieldDepthXY, float2( diffuse.w, sqDepth ) );
 
-        g_diffuseDepth[gl_LocalInvocationIndex].xyz = diffuse.xyz;
-    }
+		g_diffuseDepth[gl_LocalInvocationIndex].xyz = diffuse.xyz;
+	}
 
-    __sharedOnlyBarrier;
+	__sharedOnlyBarrier;
 
-    // Irradiance has 'bigger pixels' than depth, thus we need to reduce again.
-    if( gl_LocalInvocationIndex % p.numRaysPerIrradiancePixel == 0u )
-    {
-        for( uint i=1u; i<p.numRaysPerIrradiancePixel; ++i )
-            diffuse.xyz += g_diffuseDepth[gl_LocalInvocationIndex + i].xyz;
+	// Irradiance has 'bigger pixels' than depth, thus we need to reduce again.
+	if( gl_LocalInvocationIndex % p.numRaysPerIrradiancePixel == 0u )
+	{
+		for( uint i=1u; i<p.numRaysPerIrradiancePixel; ++i )
+			diffuse.xyz += g_diffuseDepth[gl_LocalInvocationIndex + i].xyz;
 
-        diffuse.xyz *= p.invNumRaysPerIrradiancePixel;
+		diffuse.xyz *= p.invNumRaysPerIrradiancePixel;
 
-        ushort2 irradianceFieldXY = depthXyToColourXy( irradianceFieldDepthXY );
+		ushort2 irradianceFieldXY = depthXyToColourXy( irradianceFieldDepthXY );
 
-        OGRE_imageWrite2D4( irradianceField, irradianceFieldXY, diffuse );
-    }
+		OGRE_imageWrite2D4( irradianceField, irradianceFieldXY, diffuse );
+	}
 @end

@@ -121,7 +121,7 @@ namespace Ogre
             float vctInvStartBias;
 
             // float invFieldResolution;
-            uint4 numProbes_unused;
+            uint4 numProbes_threadsPerRow;
 
             float4x4 irrProbeToVctTransform;
         };

@@ -45,12 +45,14 @@ THE SOFTWARE.
 #include "Vao/OgreTexBufferPacked.h"
 #include "Vao/OgreVaoManager.h"
 
+#define TODO_handle_leftover
+
 namespace Ogre
 {
     IrradianceFieldSettings::IrradianceFieldSettings() :
-        mNumRaysPerPixel( 4u ),
-        mDepthProbeResolution( 8u ),
-        mIrradianceResolution( 16u )
+        mNumRaysPerPixel( 1u ),
+        mDepthProbeResolution( 16u ),
+        mIrradianceResolution( 8u )
     {
         for( size_t i = 0u; i < 3u; ++i )
             mNumProbes[i] = 32u;
@@ -203,13 +205,13 @@ namespace Ogre
     {
         const uint32 numRaysPerPixel = mSettings.mNumRaysPerPixel;
         const uint32 depthProbeRes = mSettings.mDepthProbeResolution;
+        const uint32 irradProbeRes = mSettings.mIrradianceResolution;
 
         const uint32 numRaysPerProbe = depthProbeRes * depthProbeRes * numRaysPerPixel;
 
         mIfGenParams.invNumRaysPerPixel = 1.0f / numRaysPerPixel;
         mIfGenParams.numRaysPerPixel = numRaysPerPixel;
-        mIfGenParams.numRaysPerIrradiancePixel =
-            depthProbeRes * numRaysPerProbe / mSettings.mIrradianceResolution;
+        mIfGenParams.numRaysPerIrradiancePixel = 2u * depthProbeRes * numRaysPerPixel / irradProbeRes;
         mIfGenParams.invNumRaysPerIrradiancePixel = 1.0f / mIfGenParams.numRaysPerIrradiancePixel;
 
         const TextureGpu *vctLightingTex = mVctLighting->getLightVoxelTextures()[0];
@@ -223,10 +225,10 @@ namespace Ogre
         mIfGenParams.vctStartBias = invSmallestRes;
         mIfGenParams.vctInvStartBias = smallestRes;
 
-        mIfGenParams.numProbes_unused.x = mSettings.mNumProbes[0];
-        mIfGenParams.numProbes_unused.y = mSettings.mNumProbes[1];
-        mIfGenParams.numProbes_unused.z = mSettings.mNumProbes[2];
-        mIfGenParams.numProbes_unused.w = 0u;
+        mIfGenParams.numProbes_threadsPerRow.x = mSettings.mNumProbes[0];
+        mIfGenParams.numProbes_threadsPerRow.y = mSettings.mNumProbes[1];
+        mIfGenParams.numProbes_threadsPerRow.z = mSettings.mNumProbes[2];
+        mIfGenParams.numProbes_threadsPerRow.w = 0u;
 
         const VctVoxelizer *voxelizer = mVctLighting->getVoxelizer();
         Matrix4 irrProbeToVctTransform;
@@ -235,6 +237,16 @@ namespace Ogre
             ( mFieldSize / voxelizer->getVoxelSize() ) / mSettings.getNumProbes3f(),
             Quaternion::IDENTITY );
         mIfGenParams.irrProbeToVctTransform = irrProbeToVctTransform;
+
+        mGenerationJob->setProperty( "num_rays_per_probe", static_cast<int32>( numRaysPerProbe ) );
+        mGenerationJob->setProperty( "num_rays_per_depth_pixel", static_cast<int32>( numRaysPerPixel ) );
+        mGenerationJob->setProperty( "depth_resolution", static_cast<int32>( depthProbeRes ) );
+        mGenerationJob->setProperty( "num_depth_pixels_per_probe",
+                                     static_cast<int32>( depthProbeRes * depthProbeRes ) );
+        mGenerationJob->setProperty( "depth_full_resolution",
+                                     static_cast<int32>( mDepthVarianceTex->getWidth() ) );
+        mGenerationJob->setProperty( "depth_to_colour_resolution_ratio",
+                                     static_cast<int32>( depthProbeRes / irradProbeRes ) );
     }
     //-------------------------------------------------------------------------
     void IrradianceField::initialize( const IrradianceFieldSettings &settings,
@@ -270,6 +282,9 @@ namespace Ogre
         const uint32 depthResolution = mSettings.getDepthProbeFullResolution();
         mDepthVarianceTex->setResolution( depthResolution, depthResolution );
         mDepthVarianceTex->setPixelFormat( PFG_RG32_FLOAT );
+
+        mIrradianceTex->scheduleTransitionTo( GpuResidency::Resident );
+        mDepthVarianceTex->scheduleTransitionTo( GpuResidency::Resident );
 
         const size_t updateDataSize =
             sizeof( float ) * 4u * mSettings.mNumRaysPerPixel * depthResolution * depthResolution;
@@ -343,9 +358,8 @@ namespace Ogre
 
         IrradianceFieldGenParams *ifGenParams = reinterpret_cast<IrradianceFieldGenParams *>(
             mIfGenParamsBuffer->map( 0, mIfGenParamsBuffer->getNumElements() ) );
-        mIfGenParams.numProcessedProbes = mNumProbesProcessed;
-        *ifGenParams = mIfGenParams;
 
+        probesPerFrame = totalNumProbes;
         probesPerFrame = std::min( totalNumProbes - mNumProbesProcessed, probesPerFrame );
         OGRE_ASSERT_LOW( ( ( probesPerFrame & 0x01u ) == 0u ) && "probesPerFrame must be even!" );
 
@@ -361,10 +375,17 @@ namespace Ogre
 
         const uint32 numWorkGroups = numRays / threadsPerGroup;
 
+        // There's a leftover the first dispatch is not currently handling,
+        // i.e. numThreadGroupsX * numThreadGroupsY * threadsPerGroup != numRays
+        TODO_handle_leftover;
         // Most GPUs allow up to 65535 thread groups per dimension
-        const uint32 numThreadGroupsX = numWorkGroups % 65535u;
         const uint32 numThreadGroupsY = numWorkGroups / 65535u + 1u;
+        const uint32 numThreadGroupsX = numWorkGroups / numThreadGroupsY;
         mGenerationJob->setNumThreadGroups( numThreadGroupsX, numThreadGroupsY, 1u );
+
+        mIfGenParams.numProcessedProbes = mNumProbesProcessed;
+        mIfGenParams.numProbes_threadsPerRow.w = numThreadGroupsX * threadsPerGroup;
+        *ifGenParams = mIfGenParams;
 
         mGenerationWorkspace->_beginUpdate( false );
         mGenerationWorkspace->_update();
