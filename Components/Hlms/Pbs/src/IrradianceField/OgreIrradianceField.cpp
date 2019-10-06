@@ -39,6 +39,7 @@ THE SOFTWARE.
 #include "OgreHlmsCompute.h"
 #include "OgreHlmsComputeJob.h"
 #include "OgreHlmsManager.h"
+#include "OgreLogManager.h"
 #include "OgreStringConverter.h"
 #include "OgreTextureGpuManager.h"
 #include "Vao/OgreConstBufferPacked.h"
@@ -46,14 +47,13 @@ THE SOFTWARE.
 #include "Vao/OgreVaoManager.h"
 
 #define TODO_handle_leftover
-#define TODO_threadsPerGroup_must_be_multiple_of_numRaysPerIrradiancePixel
 
 namespace Ogre
 {
     IrradianceFieldSettings::IrradianceFieldSettings() :
         mNumRaysPerPixel( 1u ),
-        mDepthProbeResolution( 16u ),
-        mIrradianceResolution( 8u )
+        mDepthProbeResolution( 12u ),
+        mIrradianceResolution( 6u )
     {
         for( size_t i = 0u; i < 3u; ++i )
             mNumProbes[i] = 32u;
@@ -122,6 +122,12 @@ namespace Ogre
                          totalNumProbes * mIrradianceResolution * mIrradianceResolution );
     }
     //-------------------------------------------------------------------------
+    uint32 IrradianceFieldSettings::getNumRaysPerIrradiancePixel( void ) const
+    {
+        return mDepthProbeResolution * mDepthProbeResolution * mNumRaysPerPixel /
+               ( mIrradianceResolution * mIrradianceResolution );
+    }
+    //-------------------------------------------------------------------------
     Vector3 IrradianceFieldSettings::getNumProbes3f( void ) const
     {
         return Vector3( static_cast<Real>( mNumProbes[0] ), static_cast<Real>( mNumProbes[1] ),
@@ -143,7 +149,8 @@ namespace Ogre
         mIfGenParamsBuffer( 0 ),
         mDirectionsBuffer( 0 ),
         mRoot( root ),
-        mSceneManager( sceneManager )
+        mSceneManager( sceneManager ),
+        mAlreadyWarned( false )
     {
 #if OGRE_NO_JSON
         OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
@@ -229,15 +236,12 @@ namespace Ogre
         const uint32 numRaysPerPixel = mSettings.mNumRaysPerPixel;
         const uint32 depthProbeRes = mSettings.mDepthProbeResolution;
         const uint32 irradProbeRes = mSettings.mIrradianceResolution;
-        const uint32 numRaysPerIrradiancePixel =
-            depthProbeRes * depthProbeRes * numRaysPerPixel / ( irradProbeRes * irradProbeRes );
+        const uint32 numRaysPerIrradiancePixel = mSettings.getNumRaysPerIrradiancePixel();
 
         const uint32 numRaysPerProbe = depthProbeRes * depthProbeRes * numRaysPerPixel;
 
         mIfGenParams.invNumRaysPerPixel = 1.0f / numRaysPerPixel;
-        mIfGenParams.numRaysPerPixel = numRaysPerPixel;
-        mIfGenParams.numRaysPerIrradiancePixel = numRaysPerIrradiancePixel;
-        mIfGenParams.invNumRaysPerIrradiancePixel = 1.0f / mIfGenParams.numRaysPerIrradiancePixel;
+        mIfGenParams.invNumRaysPerIrradiancePixel = 1.0f / numRaysPerIrradiancePixel;
 
         const TextureGpu *vctLightingTex = mVctLighting->getLightVoxelTextures()[0];
         const float smallestRes = static_cast<float>(
@@ -276,6 +280,10 @@ namespace Ogre
                                      static_cast<int32>( mDepthVarianceTex->getWidth() ) );
         mGenerationJob->setProperty( "colour_to_depth_resolution_ratio",
                                      static_cast<int32>( depthProbeRes / irradProbeRes ) );
+
+        mGenerationJob->setProperty( "reduction_iterations",
+                                     static_cast<int32>( numRaysPerIrradiancePixel / numRaysPerPixel ) );
+        mGenerationJob->setProperty( "num_rays_per_depth_pixel", static_cast<int32>( numRaysPerPixel ) );
     }
     //-------------------------------------------------------------------------
     void IrradianceField::initialize( const IrradianceFieldSettings &settings,
@@ -287,6 +295,7 @@ namespace Ogre
         mVctLighting = vctLighting;
         mFieldOrigin = fieldOrigin;
         mFieldSize = fieldSize;
+        mAlreadyWarned = false;
         createTextures();
         setIrradianceFieldGenParams();
     }
@@ -390,12 +399,21 @@ namespace Ogre
         IrradianceFieldGenParams *ifGenParams = reinterpret_cast<IrradianceFieldGenParams *>(
             mIfGenParamsBuffer->map( 0, mIfGenParamsBuffer->getNumElements() ) );
 
-        probesPerFrame = totalNumProbes;
         probesPerFrame = std::min( totalNumProbes - mNumProbesProcessed, probesPerFrame );
         // OGRE_ASSERT_LOW( ( ( probesPerFrame & 0x01u ) == 0u ) && "probesPerFrame must be even!" );
 
-        const uint32 threadsPerGroup = 64u;
+        const uint32 numRaysPerIrradiancePixel = mSettings.getNumRaysPerIrradiancePixel();
+        const uint32 threadsPerGroup = (uint32)alignToNextMultiple( 128u, numRaysPerIrradiancePixel );
         mGenerationJob->setThreadsPerGroup( threadsPerGroup, 1u, 1u );
+
+        if( threadsPerGroup % 64u && !mAlreadyWarned )
+        {
+            LogManager::getSingleton().logMessage(
+                "PERFORMANCE WARNING: mSettings.getNumRaysPerIrradiancePixel() is not a multiple of 64. "
+                "This lowers the performance of IrradianceField::update. Tweak mDepthProbeResolution, "
+                "mIrradianceResolution, or mNumRaysPerPixel until it is" );
+            mAlreadyWarned = true;
+        }
 
         const uint32 numRaysPerPixel = mSettings.mNumRaysPerPixel;
         const uint32 depthResolution = mSettings.mDepthProbeResolution;
@@ -409,7 +427,6 @@ namespace Ogre
         // There's a leftover the first dispatch is not currently handling,
         // i.e. numThreadGroupsX * numThreadGroupsY * threadsPerGroup != numRays
         TODO_handle_leftover;
-        TODO_threadsPerGroup_must_be_multiple_of_numRaysPerIrradiancePixel;
         // Most GPUs allow up to 65535 thread groups per dimension
         const uint32 numThreadGroupsY = numWorkGroups / 65535u + 1u;
         const uint32 numThreadGroupsX = numWorkGroups / numThreadGroupsY;

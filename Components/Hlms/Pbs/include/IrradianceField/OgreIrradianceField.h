@@ -84,6 +84,8 @@ namespace Ogre
         void getDepthProbeFullResolution( uint32 &outWidth, uint32 &outHeight ) const;
         void getIrradProbeFullResolution( uint32 &outWidth, uint32 &outHeight ) const;
 
+        uint32 getNumRaysPerIrradiancePixel( void ) const;
+
         Vector3 getNumProbes3f( void ) const;
 
         const vector<Vector2>::type &getSubsamples( void ) const { return mSubsamples; }
@@ -111,9 +113,9 @@ namespace Ogre
         struct IrradianceFieldGenParams
         {
             float invNumRaysPerPixel;
-            uint32 numRaysPerPixel;
             float invNumRaysPerIrradiancePixel;
-            uint32 numRaysPerIrradiancePixel;
+            float unused0;
+            float unused1;
 
             float coneAngleTan;
             uint32 numProcessedProbes;
@@ -148,6 +150,7 @@ namespace Ogre
 
         Root *mRoot;
         SceneManager *mSceneManager;
+        bool mAlreadyWarned;
 
         void fillDirections( float *RESTRICT_ALIAS outBuffer );
         void setIrradianceFieldGenParams();

@@ -5,9 +5,9 @@
 	CONST_BUFFER_STRUCT_BEGIN( IrradianceFieldGenParams, 0 )
 	{
 		float invNumRaysPerPixel;
-		uint numRaysPerPixel;
 		float invNumRaysPerIrradiancePixel;
-		uint numRaysPerIrradiancePixel;
+		float unused0;
+		float unused1;
 
 		float coneAngleTan;
 		uint numProcessedProbes;
@@ -202,15 +202,15 @@
 
 	ushort2 irradianceFieldDepthXY = getIrradianceFieldDepthXY( rayIdx, probeIdx );
 
-	if( gl_LocalInvocationIndex % p.numRaysPerPixel == 0u )
+	if( gl_LocalInvocationIndex % @value( num_rays_per_depth_pixel )u == 0u )
 	{
 		float sqDepth = diffuse.w * diffuse.w;
 
 		//Reduction
-		for( uint i=1u; i<p.numRaysPerPixel; ++i )
+		for( uint i=1u; i<@value( num_rays_per_depth_pixel )u; ++i )
 		{
 			float4 otherVal = g_diffuseDepth[gl_LocalInvocationIndex + i];
-			diffuse.w += otherVal.w;
+			diffuse.xyzw += otherVal.xyzw;
 			sqDepth += otherVal.w * otherVal.w;
 		}
 
@@ -219,7 +219,7 @@
 		sqDepth *= p.invNumRaysPerPixel;
 		OGRE_imageWrite2D2( irradianceFieldDepth, irradianceFieldDepthXY, float2( diffuse.w, sqDepth ) );
 
-		//g_diffuseDepth[gl_LocalInvocationIndex].xyz = diffuse.xyz;
+		g_diffuseDepth[gl_LocalInvocationIndex].xyz = diffuse.xyz;
 	}
 
 	__sharedOnlyBarrier;
@@ -227,8 +227,8 @@
 	// Irradiance has 'bigger pixels' than depth, thus we need to reduce again.
 	if( gl_LocalInvocationIndex % @value( num_rays_per_irrad_pixel ) == 0u )
 	{
-		for( uint i=1u; i<@value( num_rays_per_irrad_pixel ); ++i )
-			diffuse.xyz += g_diffuseDepth[gl_LocalInvocationIndex + i].xyz;
+		for( uint i=1u; i<@value( reduction_iterations ); ++i )
+			diffuse.xyz += g_diffuseDepth[gl_LocalInvocationIndex + i * @value( num_rays_per_depth_pixel )u].xyz;
 
 		diffuse.xyz *= p.invNumRaysPerIrradiancePixel;
 
