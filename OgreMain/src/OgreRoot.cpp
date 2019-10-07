@@ -141,6 +141,7 @@ namespace Ogre {
       , mDefaultMinPixelSize(0)
       , mNextMovableObjectTypeFlag(1)
       , mIsInitialised(false)
+      , mFrameStarted( false )
       , mIsBlendIndicesGpuRedundant(true)
       , mIsBlendWeightsGpuRedundant(true)
     {
@@ -1524,7 +1525,7 @@ namespace Ogre {
     {
         // update all targets but don't swap buffers
         //mActiveRenderer->_updateAllRenderTargets(false);
-        mCompositorManager2->_update( *mSceneManagerEnum, mHlmsManager );
+        mCompositorManager2->_update();
 
         // give client app opportunity to use queued GPU time
         bool ret = _fireFrameRenderingQueued();
@@ -1543,7 +1544,7 @@ namespace Ogre {
     bool Root::_updateAllRenderTargets(FrameEvent& evt)
     {
         // update all targets but don't swap buffers
-        mCompositorManager2->_update( *mSceneManagerEnum, mHlmsManager );
+        mCompositorManager2->_update();
         // give client app opportunity to use queued GPU time
         bool ret = _fireFrameRenderingQueued(evt);
         // block for final swap
@@ -1556,6 +1557,37 @@ namespace Ogre {
             it.peekNextValue()->_handleLodEvents();
 
         return ret;
+    }
+    //-----------------------------------------------------------------------
+    void Root::_renderingFrameEnded( void )
+    {
+        if( !mFrameStarted )
+            return;
+
+        SceneManagerEnumerator::SceneManagerIterator sceneManagerItor =
+            mSceneManagerEnum->getSceneManagerIterator();
+
+        while( sceneManagerItor.hasMoreElements() )
+        {
+            SceneManager *sceneManager = sceneManagerItor.getNext();
+            sceneManager->_frameEnded();
+        }
+
+        HlmsManager *hlmsManager = mHlmsManager;
+
+        for( size_t i = 0; i < HLMS_MAX; ++i )
+        {
+            Hlms *hlms = hlmsManager->getHlms( static_cast<HlmsTypes>( i ) );
+            if( hlms )
+                hlms->frameEnded();
+        }
+
+        mFrameStarted = false;
+    }
+    //-----------------------------------------------------------------------
+    void Root::_notifyRenderingFrameStarted( void )
+    {
+        mFrameStarted = true;
     }
     //-----------------------------------------------------------------------
     void Root::clearEventTimes(void)

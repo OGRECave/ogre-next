@@ -40,6 +40,7 @@ THE SOFTWARE.
 #include "OgreHlmsDatablock.h"
 #include "OgreHlmsManager.h"
 #include "OgreHlms.h"
+#include "OgreRoot.h"
 
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreVertexArrayObject.h"
@@ -87,12 +88,14 @@ namespace Ogre
         mHlmsManager( hlmsManager ),
         mSceneManager( sceneManager ),
         mVaoManager( vaoManager ),
+        mRoot( Root::getSingletonPtr() ),
         mLastWasCasterPass( false ),
         mLastVaoName( 0 ),
         mLastVertexData( 0 ),
         mLastIndexData( 0 ),
         mLastTextureHash( 0 ),
-        mCommandBuffer( 0 )
+        mCommandBuffer( 0 ),
+        mRenderingStarted( 0u )
     {
         mCommandBuffer = new CommandBuffer();
 
@@ -297,6 +300,9 @@ namespace Ogre
     {
         OgreProfileGroup( "Hlms Pass preparation", OGREPROF_RENDERING );
 
+        ++mRenderingStarted;
+        mRoot->_notifyRenderingFrameStarted();
+
         for( size_t i=0; i<HLMS_MAX; ++i )
         {
             Hlms *hlms = mHlmsManager->getHlms( static_cast<HlmsTypes>( i ) );
@@ -463,6 +469,8 @@ namespace Ogre
             if( hlms )
                 hlms->postCommandBufferExecution( mCommandBuffer );
         }
+
+        --mRenderingStarted;
 
         OgreProfileGpuEnd( "Command Execution" );
         OgreProfileEndGroup( "Command Execution", OGREPROF_RENDERING );
@@ -821,6 +829,9 @@ namespace Ogre
 
         const HlmsDatablock *datablock = pRend->getDatablock();
 
+        ++mRenderingStarted;
+        mRoot->_notifyRenderingFrameStarted();
+
         Hlms *hlms = datablock->getCreator();
         HlmsCache passCache = hlms->preparePassHash( mSceneManager->getCurrentShadowNode(), casterPass,
                                                      dualParaboloid, mSceneManager );
@@ -854,10 +865,20 @@ namespace Ogre
         rs->_render( op );
 
         mLastVaoName        = 0;
+        --mRenderingStarted;
     }
     //-----------------------------------------------------------------------
     void RenderQueue::frameEnded(void)
     {
+        OGRE_ASSERT_LOW(
+            mRenderingStarted == 0u &&
+            "Called RenderQueue::frameEnded mid-render. This may happen if VaoManager::_update got "
+            "called after RenderQueue::renderPassPrepare but before RenderQueue::render returns. Please "
+            "move that VaoManager::_update call outside, otherwise we cannot guarantee rendering will "
+            "be glitch-free, as the BufferPacked buffers from Hlms may be bound at the wrong offset. "
+            "For more info see https://github.com/OGRECave/ogre-next/issues/33 and "
+            "https://forums.ogre3d.org/viewtopic.php?f=25&t=95092#p545907" );
+
         mFreeIndirectBuffers.insert( mFreeIndirectBuffers.end(),
                                      mUsedIndirectBuffers.begin(),
                                      mUsedIndirectBuffers.end() );

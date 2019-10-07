@@ -38,6 +38,7 @@ THE SOFTWARE.
 #include "OgreCommon.h"
 #include "OgreStringConverter.h"
 #include "OgreLogManager.h"
+#include "OgreRoot.h"
 
 namespace Ogre
 {
@@ -607,6 +608,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VaoManager::_update(void)
     {
+        Root::getSingleton()._renderingFrameEnded();
         ++mFrameCount;
     }
     //-----------------------------------------------------------------------------------

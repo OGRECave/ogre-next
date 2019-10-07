@@ -146,6 +146,7 @@ namespace Ogre {
         HlmsManager *mHlmsManager;
         SceneManager*mSceneManager;
         VaoManager  *mVaoManager;
+        Root        *mRoot;
 
         bool                    mLastWasCasterPass;
         uint32                  mLastVaoName;
@@ -158,6 +159,8 @@ namespace Ogre {
         IndirectBufferPackedVec mUsedIndirectBuffers;
 
         HlmsCache               mPassCache[HLMS_MAX];
+
+        uint32 mRenderingStarted;
 
         /** Returns a new (or an existing) indirect buffer that can hold the requested number of draws.
         @param numDraws

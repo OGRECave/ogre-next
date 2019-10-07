@@ -892,9 +892,7 @@ namespace Ogre
         /// This gives the renderer a chance to perform the compositor update in a special way.
         /// When the render system is ready to perform the actual update it should just
         /// compositorManager->_updateImplementation.
-        virtual void updateCompositorManager( CompositorManager2 *compositorManager,
-                                              SceneManagerEnumerator &sceneManagers,
-                                              HlmsManager *hlmsManager );
+        virtual void updateCompositorManager( CompositorManager2 *compositorManager );
 
         /// @See HlmsSamplerblock. This function MUST be called after _setTexture, not before.
         /// Otherwise not all APIs may see the change.

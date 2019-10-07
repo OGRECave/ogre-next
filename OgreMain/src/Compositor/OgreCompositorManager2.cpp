@@ -643,16 +643,16 @@ namespace Ogre
         mUnfinishedShadowNodes.clear();
     }
     //-----------------------------------------------------------------------------------
-    void CompositorManager2::_update( SceneManagerEnumerator &sceneManagers, HlmsManager *hlmsManager )
+    void CompositorManager2::_update( void )
     {
         //The Apple render systems need to run the update in a special way.
         //So we defer to the render system.
         //If the render system doesn't need to do anything special it
         //should just call compositorManager->_updateImplementation.
-        mRenderSystem->updateCompositorManager( this, sceneManagers, hlmsManager );
+        mRenderSystem->updateCompositorManager( this );
     }
     //-----------------------------------------------------------------------------------
-    void CompositorManager2::_updateImplementation( SceneManagerEnumerator &sceneManagers, HlmsManager *hlmsManager )
+    void CompositorManager2::_updateImplementation( void )
     {
         addQueuedWorkspaces();
 
@@ -733,22 +733,6 @@ namespace Ogre
             if( workspace->getEnabled() && workspace->isValid() )
                     workspace->_endUpdate( false );
             ++itor;
-        }
-
-        SceneManagerEnumerator::SceneManagerIterator sceneManagerItor =
-                sceneManagers.getSceneManagerIterator();
-
-        while( sceneManagerItor.hasMoreElements() )
-        {
-            SceneManager *sceneManager = sceneManagerItor.getNext();
-            sceneManager->_frameEnded();
-        }
-
-        for( size_t i=0; i<HLMS_MAX; ++i )
-        {
-            Hlms *hlms = hlmsManager->getHlms( static_cast<HlmsTypes>( i ) );
-            if( hlms )
-                hlms->frameEnded();
         }
 
         mRenderSystem->_update();
