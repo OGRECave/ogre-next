@@ -914,14 +914,6 @@ namespace Ogre
                         mCollectedProbes[i]->_updateRender();
                     mCopyWorkspace->_endUpdate( true );
 
-                    mSceneManager->_frameEnded();
-                    for( size_t k=0; k<HLMS_MAX; ++k )
-                    {
-                        Hlms *hlms = hlmsManager->getHlms( static_cast<HlmsTypes>( k ) );
-                        if( hlms )
-                            hlms->frameEnded();
-                    }
-
                     renderSystem->_update();
                     renderSystem->_endFrameOnce();
 
