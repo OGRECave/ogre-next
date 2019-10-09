@@ -64,26 +64,16 @@ namespace Ogre {
     class _OgreExport StringConverter
     {
     public:
-
-        /** Converts a Real to a String. */
-        static String toString(Real val, unsigned short precision = 6, 
-            unsigned short width = 0, char fill = ' ', 
-            std::ios::fmtflags flags = std::ios::fmtflags(0));
-
-// This counter-intuitive guard is correct. In case of enabled double precision
-// the toString() version above using Ogre::Real already provides a double precision
-// version and hence we need to explicitly declare a float version as well.
-#if OGRE_DOUBLE_PRECISION == 1
         /** Converts a float to a String. */
         static String toString(float val, unsigned short precision = 6,
                                unsigned short width = 0, char fill = ' ',
                                std::ios::fmtflags flags = std::ios::fmtflags(0));
-#else
+
         /** Converts a double to a String. */
         static String toString(double val, unsigned short precision = 6,
                                unsigned short width = 0, char fill = ' ',
                                std::ios::fmtflags flags = std::ios::fmtflags(0));
-#endif
+
         /** Converts a Radian to a String. */
         static String toString(Radian val, unsigned short precision = 6, 
             unsigned short width = 0, char fill = ' ', 
@@ -107,10 +97,6 @@ namespace Ogre {
         static String toString(unsigned int val, 
             unsigned short width = 0, char fill = ' ', 
             std::ios::fmtflags flags = std::ios::fmtflags(0));
-        /** Converts a size_t to a String. */
-        static String toString(size_t val, 
-            unsigned short width = 0, char fill = ' ', 
-            std::ios::fmtflags flags = std::ios::fmtflags(0));
         #if OGRE_COMPILER == OGRE_COMPILER_MSVC
         /** Converts an unsigned long to a String. */
         static String toString(unsigned long val, 
@@ -118,15 +104,15 @@ namespace Ogre {
             std::ios::fmtflags flags = std::ios::fmtflags(0));
         #endif
 #else
-        /** Converts a size_t to a String. */
-        static String toString(size_t val, 
-            unsigned short width = 0, char fill = ' ', 
-            std::ios::fmtflags flags = std::ios::fmtflags(0));
         /** Converts an unsigned long to a String. */
         static String toString(unsigned long val, 
             unsigned short width = 0, char fill = ' ', 
             std::ios::fmtflags flags = std::ios::fmtflags(0));
 #endif
+        /** Converts a size_t to a String. */
+        static String toString(size_t val,
+            unsigned short width = 0, char fill = ' ',
+            std::ios::fmtflags flags = std::ios::fmtflags(0));
         /** Converts a long to a String. */
         static String toString(long val, 
             unsigned short width = 0, char fill = ' ', 
@@ -313,6 +299,9 @@ namespace Ogre {
         //-----------------------------------------------------------------------
 
     protected:
+        template<typename T>
+        static String _toString(T val, uint16 width, char fill, std::ios::fmtflags flags);
+        
         static String msDefaultStringLocale;
         static std::locale msLocale;
         static bool msUseLocale;		
