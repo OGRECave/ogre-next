@@ -463,8 +463,7 @@ namespace Ogre
 
             uint32 depthResolution;
             uint32 depthFullWidth;
-            uint32 padding1;
-            uint32 padding2;
+            float2 depthInvFullResolution;
         };
 
         Vector3 numProbes( mSettings.mNumProbes[0], mSettings.mNumProbes[1], mSettings.mNumProbes[2] );
@@ -476,6 +475,7 @@ namespace Ogre
 
         const uint32 depthResolution = mSettings.mDepthProbeResolution;
         const uint32 depthFullWidth = mDepthVarianceTex->getWidth();
+        const uint32 depthFullHeight = mDepthVarianceTex->getHeight();
 
         IrradianceFieldRenderParams *RESTRICT_ALIAS renderParams =
             reinterpret_cast<IrradianceFieldRenderParams * RESTRICT_ALIAS>( passBufferPtr );
@@ -489,7 +489,7 @@ namespace Ogre
 
         renderParams->depthResolution = mSettings.mDepthProbeResolution;
         renderParams->depthFullWidth = depthFullWidth;
-        renderParams->padding1 = 0u;
-        renderParams->padding2 = 0u;
+        renderParams->depthInvFullResolution.x = 1.0f / depthFullWidth;
+        renderParams->depthInvFullResolution.y = 1.0f / depthFullHeight;
     }
 }  // namespace Ogre

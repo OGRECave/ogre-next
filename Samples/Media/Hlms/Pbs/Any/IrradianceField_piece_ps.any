@@ -49,8 +49,18 @@
         return retVal;
     }
 
+    INLINE float3 transformDir3( float3 dir, float4 row0, float4 row1, float4 row2 )
+    {
+        float3 retVal;
+        retVal.x = dot( row0.xyz, dir );
+        retVal.y = dot( row1.xyz, dir );
+        retVal.z = dot( row2.xyz, dir );
+        return retVal;
+    }
+
     INLINE float2 getIrradianceFieldXY( float3 dir, IrfProbeIndex probeIdx, ushort resolution,
-                                        ushort fullWidth, float invProbeResFullWidthRatio )
+                                        ushort fullWidth, float invProbeResFullWidthRatio,
+                                        float2 invFullResolution )
     {
         float2 retVal;
         retVal.x = ( probeIdx * resolution ) % fullWidth;
@@ -62,6 +72,7 @@
         float2 uv = octahedronMappingEncode( dir ) * invProbeResFullWidthRatio;
 
         retVal += uv;
+        retVal *= invFullResolution;
         return retVal;
     }
 
@@ -89,6 +100,11 @@
                        passBuf.irradianceField.viewToIrradianceFieldRow1,
                        passBuf.irradianceField.viewToIrradianceFieldRow2 );
     float3 ifdGridProbeOrigin = trunc( ifdGridPos );
+    float3 ifdSpaceNormal = normalize( transformDir3( pixelData.normal, //
+                                       passBuf.irradianceField.viewToIrradianceFieldRow0,
+                                       passBuf.irradianceField.viewToIrradianceFieldRow1,
+                                       passBuf.irradianceField.viewToIrradianceFieldRow2 ) );
+    ifdSpaceNormal.y = -ifdSpaceNormal.y;
 
     // ifdAlpha is how far from the floor( ifdGridPos ). on [0, 1] for each axis.
     float3 ifdAlpha = saturate( fract( ifdGridPos ) );
@@ -109,7 +125,7 @@
         dir *= 1.0 / r;
 
         // Smooth backface
-        float weight = ( dot( dir, pixelData.normal ) + 1.0 ) * 0.5;
+        float weight = ( dot( dir, ifdSpaceNormal ) + 1.0 ) * 0.5;
 
         // Compute the trilinear weights based on the grid cell vertex to smoothly
         // transition between probes. Avoid ever going entirely to zero because that
@@ -121,9 +137,11 @@
         trilinear.z = probeOffset.z < 1 ? ( 1.0 - ifdAlpha.z ) : ifdAlpha.z;
 
         // Visibility (Chebyshev)
-        float2 ifdUV = getIrradianceFieldXY( dir, probeIdx, passBuf.irradianceField.depthResolution,
+        float2 ifdUV = getIrradianceFieldXY( ifdSpaceNormal, probeIdx,
+                                             passBuf.irradianceField.depthResolution,
                                              passBuf.irradianceField.depthFullWidth,
-                                             passBuf.irradianceField.depthInvProbeResFullWidthRatio );
+                                             passBuf.irradianceField.depthInvProbeResFullWidthRatio,
+                                             passBuf.irradianceField.depthInvFullResolution );
         float2 temp = OGRE_SampleLevel( ifdDepth, bilinearSampler, ifdUV, 0 ).xy;
         float mean = temp.x;
         float meanSq = temp.y;
