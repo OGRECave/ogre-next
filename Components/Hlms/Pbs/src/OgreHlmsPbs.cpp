@@ -74,6 +74,8 @@ THE SOFTWARE.
 #include "OgreLogManager.h"
 #include "OgreProfiler.h"
 
+#define TODO_irradianceField_samplerblock
+
 namespace Ogre
 {
     const IdString PbsProperty::HwGammaRead       = IdString( "hw_gamma_read" );
@@ -2508,7 +2510,8 @@ namespace Ogre
 
                 if( mIrradianceField )
                 {
-                    const HlmsSamplerblock *samplerblock = mShadowmapEsmSamplerblock; // TODO
+                    TODO_irradianceField_samplerblock;
+                    const HlmsSamplerblock *samplerblock = mDecalsSamplerblock;
                     *commandBuffer->addCommand<CbTexture>() =
                         CbTexture( texUnit++, mIrradianceField->getIrradianceTex(), samplerblock );
                     *commandBuffer->addCommand<CbTexture>() =

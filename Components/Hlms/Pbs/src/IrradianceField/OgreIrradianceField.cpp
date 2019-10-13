@@ -296,6 +296,7 @@ namespace Ogre
         mFieldOrigin = fieldOrigin;
         mFieldSize = fieldSize;
         mAlreadyWarned = false;
+        mNumProbesProcessed = 0u;
         createTextures();
         setIrradianceFieldGenParams();
     }
@@ -458,8 +459,8 @@ namespace Ogre
             float4x3 viewToIrradianceFieldRows;
 
             float2 numProbesAggregated;
-            float depthInvProbeResFullWidthRatio;
             float padding0;
+            float padding1;
 
             uint32 depthResolution;
             uint32 depthFullWidth;
@@ -473,7 +474,6 @@ namespace Ogre
         xform.makeTransform( -mFieldOrigin * finalSize, finalSize, Quaternion::IDENTITY );
         xform = xform.concatenateAffine( viewMatrix.inverseAffine() );
 
-        const uint32 depthResolution = mSettings.mDepthProbeResolution;
         const uint32 depthFullWidth = mDepthVarianceTex->getWidth();
         const uint32 depthFullHeight = mDepthVarianceTex->getHeight();
 
@@ -483,9 +483,8 @@ namespace Ogre
         renderParams->viewToIrradianceFieldRows = xform;
         renderParams->numProbesAggregated.x = mSettings.mNumProbes[0];
         renderParams->numProbesAggregated.y = mSettings.mNumProbes[0] * mSettings.mNumProbes[1];
-        renderParams->depthInvProbeResFullWidthRatio =
-            static_cast<float>( depthFullWidth ) / depthResolution;
         renderParams->padding0 = 0;
+        renderParams->padding1 = 0;
 
         renderParams->depthResolution = mSettings.mDepthProbeResolution;
         renderParams->depthFullWidth = depthFullWidth;

@@ -59,8 +59,7 @@
 	}
 
 	INLINE float2 getIrradianceFieldXY( float3 dir, IrfProbeIndex probeIdx, ushort resolution,
-										ushort fullWidth, float invProbeResFullWidthRatio,
-										float2 invFullResolution )
+										ushort fullWidth, float2 invFullResolution )
 	{
 		float2 retVal;
 		retVal.x = ( probeIdx * resolution ) % fullWidth;
@@ -69,7 +68,7 @@
 		// Texel's center offset to avoid bleeding with adjacent probes
 		retVal += 0.5;
 
-		float2 uv = octahedronMappingEncode( dir ) * invProbeResFullWidthRatio;
+		float2 uv = octahedronMappingEncode( dir ) * resolution;
 
 		retVal += uv;
 		retVal *= invFullResolution;
@@ -94,11 +93,13 @@
 {
 @piece( applyIrradianceField )
 
+	// ifdGridPos in range [0; mNumProbes)
 	float3 ifdGridPos =
 		transformPos3( inPs.pos.xyz, //
 					   passBuf.irradianceField.viewToIrradianceFieldRow0,
 					   passBuf.irradianceField.viewToIrradianceFieldRow1,
 					   passBuf.irradianceField.viewToIrradianceFieldRow2 );
+
 	float3 ifdGridProbeOrigin = trunc( ifdGridPos );
 	float3 ifdSpaceNormal = normalize( transformDir3( pixelData.normal, //
 									   passBuf.irradianceField.viewToIrradianceFieldRow0,
@@ -141,7 +142,6 @@
 		float2 ifdUV = getIrradianceFieldXY( ifdSpaceNormal, probeIdx,
 											 passBuf.irradianceField.depthResolution,
 											 passBuf.irradianceField.depthFullWidth,
-											 passBuf.irradianceField.depthInvProbeResFullWidthRatio,
 											 passBuf.irradianceField.depthInvFullResolution );
 		float2 temp = OGRE_SampleLevel( ifdDepth, bilinearSampler, ifdUV, 0 ).xy;
 		float mean = temp.x;
