@@ -97,6 +97,20 @@ namespace Ogre
                 _m[i] = static_cast<float>( val[0][i] );
         }
     };
+    struct float4x3
+    {
+        union {
+            float m[3][4];
+            float _m[12];
+        };
+
+        float4x3() {}
+        float4x3( const Matrix4 &val )
+        {
+            for( size_t i = 0u; i < 12u; ++i )
+                _m[i] = static_cast<float>( val[0][i] );
+        }
+    };
 }  // namespace Ogre
 
 #endif

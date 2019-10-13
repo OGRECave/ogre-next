@@ -96,6 +96,7 @@ namespace Ogre
 
     class CubemapProbe;
     class HlmsPbs;
+    class IrradianceField;
     class IrradianceVolume;
     class ParallaxCorrectedCubemap;
     class ParallaxCorrectedCubemapAuto;

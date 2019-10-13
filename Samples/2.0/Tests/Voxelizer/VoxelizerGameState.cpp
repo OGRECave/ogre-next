@@ -32,13 +32,12 @@ using namespace Demo;
 
 namespace Demo
 {
-    Ogre::IrradianceField *mIrradianceField;
-
     VoxelizerGameState::VoxelizerGameState( const Ogre::String &helpDescription ) :
         TutorialGameState( helpDescription ),
         mVoxelizer( 0 ),
         mVctLighting( 0 ),
         mThinWallCounter( 1.0f ),
+        mIrradianceField( 0 ),
         mDebugVisualizationMode( Ogre::VctVoxelizer::DebugVisualizationNone ),
         mNumBounces( 6u ),
         mCurrentScene( SceneCornell ),
@@ -124,7 +123,7 @@ namespace Demo
 
             assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
             Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
-            hlmsPbs->setVctLighting( mVctLighting );
+            // hlmsPbs->setVctLighting( mVctLighting );
         }
 
         mVctLighting->update( sceneManager, mNumBounces, mThinWallCounter );
@@ -322,8 +321,15 @@ namespace Demo
                 new Ogre::VctVoxelizer( Ogre::Id::generateNewId<Ogre::VctVoxelizer>(),
                                         root->getRenderSystem(), root->getHlmsManager(),
                                         true );
+        {
+            mIrradianceField = new Ogre::IrradianceField( root, sceneManager );
 
-        mIrradianceField = new Ogre::IrradianceField( root, sceneManager );
+            Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
+
+            assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
+            Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
+            hlmsPbs->setIrradianceField( mIrradianceField );
+        }
 
         mGraphicsSystem->getCamera()->setPosition( Ogre::Vector3( 0.0f, 1.8f, 2.5f ) );
 

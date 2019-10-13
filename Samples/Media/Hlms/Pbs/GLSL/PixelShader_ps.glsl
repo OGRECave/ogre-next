@@ -104,6 +104,7 @@ in block
 @insertpiece( DeclAreaLtcLightFuncs )
 
 @insertpiece( DeclVctTextures )
+@insertpiece( DeclIrradianceFieldTextures )
 
 @insertpiece( custom_ps_functions )
 

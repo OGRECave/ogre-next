@@ -101,7 +101,7 @@ namespace Ogre
 
     @see
         Snippet taken from Dynamic Diffuse Global Illumination with Ray-Traced Irradiance Fields
-        Zander Majercik, NVIDIA; Jean-Philippe Guertin, Université de Montréal;
+        Zander Majercik, NVIDIA; Jean-Philippe Guertin, Université de Montréal;
         Derek Nowrouzezahrai, McGill University; Morgan McGuire, NVIDIA and McGill University
         http://jcgt.org/published/0008/02/01/
 
@@ -173,6 +173,12 @@ namespace Ogre
                          const Vector3 &fieldSize, VctLighting *vctLighting );
 
         void update( uint32 probesPerFrame = 200u );
+
+        size_t getConstBufferSize( void ) const;
+        void fillConstBufferData( const Matrix4 &viewMatrix, float *RESTRICT_ALIAS passBufferPtr ) const;
+
+        TextureGpu *getIrradianceTex( void ) const { return mIrradianceTex; }
+        TextureGpu *getDepthVarianceTex( void ) const { return mDepthVarianceTex; }
     };
 }  // namespace Ogre
 

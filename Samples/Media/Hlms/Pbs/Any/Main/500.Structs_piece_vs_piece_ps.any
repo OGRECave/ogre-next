@@ -86,6 +86,7 @@ struct AreaLtcLight
 
 @insertpiece( DeclCubemapProbeStruct )
 @insertpiece( DeclVctStruct )
+@insertpiece( DeclIrradianceFieldStruct )
 
 //Uniforms that change per pass
 CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
@@ -190,6 +191,7 @@ CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
 @end
 
 	@insertpiece( DeclVctUniform )
+	@insertpiece( DeclIrradianceFieldUniform )
 
 	@insertpiece( custom_passBuffer )
 

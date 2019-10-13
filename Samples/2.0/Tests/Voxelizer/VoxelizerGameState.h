@@ -9,6 +9,7 @@ namespace Ogre
 {
     class VctVoxelizer;
     class VctLighting;
+    class IrradianceField;
 }
 
 namespace Demo
@@ -27,6 +28,8 @@ namespace Demo
         Ogre::VctVoxelizer  *mVoxelizer;
         Ogre::VctLighting   *mVctLighting;
         float               mThinWallCounter;
+
+        Ogre::IrradianceField *mIrradianceField;
 
         Ogre::uint32    mDebugVisualizationMode;
         Ogre::uint32    mNumBounces;

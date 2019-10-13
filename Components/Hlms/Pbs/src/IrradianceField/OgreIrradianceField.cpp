@@ -444,4 +444,52 @@ namespace Ogre
 
         mIfGenParamsBuffer->unmap( UO_KEEP_PERSISTENT );
     }
+    //-------------------------------------------------------------------------
+    size_t IrradianceField::getConstBufferSize( void ) const
+    {
+        return sizeof( float ) * ( 4u * 3u + 4u + 4u );
+    }
+    //-------------------------------------------------------------------------
+    void IrradianceField::fillConstBufferData( const Matrix4 &viewMatrix,
+                                               float *RESTRICT_ALIAS passBufferPtr ) const
+    {
+        struct IrradianceFieldRenderParams
+        {
+            float4x3 viewToIrradianceFieldRows;
+
+            float2 numProbesAggregated;
+            float depthInvProbeResFullWidthRatio;
+            float padding0;
+
+            uint32 depthResolution;
+            uint32 depthFullWidth;
+            uint32 padding1;
+            uint32 padding2;
+        };
+
+        Vector3 numProbes( mSettings.mNumProbes[0], mSettings.mNumProbes[1], mSettings.mNumProbes[2] );
+        const Vector3 finalSize = numProbes / mFieldSize;
+
+        Matrix4 xform;
+        xform.makeTransform( -mFieldOrigin * finalSize, finalSize, Quaternion::IDENTITY );
+        xform = xform.concatenateAffine( viewMatrix.inverseAffine() );
+
+        const uint32 depthResolution = mSettings.mDepthProbeResolution;
+        const uint32 depthFullWidth = mDepthVarianceTex->getWidth();
+
+        IrradianceFieldRenderParams *RESTRICT_ALIAS renderParams =
+            reinterpret_cast<IrradianceFieldRenderParams * RESTRICT_ALIAS>( passBufferPtr );
+
+        renderParams->viewToIrradianceFieldRows = xform;
+        renderParams->numProbesAggregated.x = mSettings.mNumProbes[0];
+        renderParams->numProbesAggregated.y = mSettings.mNumProbes[0] * mSettings.mNumProbes[1];
+        renderParams->depthInvProbeResFullWidthRatio =
+            static_cast<float>( depthFullWidth ) / depthResolution;
+        renderParams->padding0 = 0;
+
+        renderParams->depthResolution = mSettings.mDepthProbeResolution;
+        renderParams->depthFullWidth = depthFullWidth;
+        renderParams->padding1 = 0u;
+        renderParams->padding2 = 0u;
+    }
 }  // namespace Ogre

@@ -46,6 +46,7 @@ THE SOFTWARE.
 #include "Cubemaps/OgreParallaxCorrectedCubemap.h"
 #include "OgreIrradianceVolume.h"
 #include "Vct/OgreVctLighting.h"
+#include "IrradianceField/OgreIrradianceField.h"
 
 #include "OgreSceneManager.h"
 #include "Compositor/OgreCompositorShadowNode.h"
@@ -175,6 +176,7 @@ namespace Ogre
     const IdString PbsProperty::VctAnisotropic    = IdString( "vct_anisotropic" );
     const IdString PbsProperty::VctEnableSpecularSdfQuality=IdString("vct_enable_specular_sdf_quality");
     const IdString PbsProperty::VctAmbientSphere  = IdString("vct_ambient_hemisphere");
+    const IdString PbsProperty::IrradianceField   = IdString("irradiance_field");
     const IdString PbsProperty::ObbRestraintApprox= IdString( "obb_restraint_approx" );
     const IdString PbsProperty::ObbRestraintLtc   = IdString( "obb_restraint_ltc" );
 
@@ -254,6 +256,7 @@ namespace Ogre
         mSsrTexture( 0 ),
         mIrradianceVolume( 0 ),
         mVctLighting( 0 ),
+        mIrradianceField( 0 ),
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
         mPlanarReflections( 0 ),
         mPlanarReflectionsSamplerblock( 0 ),
@@ -932,6 +935,8 @@ namespace Ogre
                             "Object with manual cubemap probe but "
                             "setParallaxCorrectedCubemap() was not called!" );
 
+        const bool hasIrradianceField = getProperty( PbsProperty::IrradianceField ) != 0;
+
         if( getProperty( HlmsBaseProp::LightsSpot ) ||
             getProperty( HlmsBaseProp::UseSsr ) ||
             getProperty( HlmsBaseProp::ForwardPlus ) ||
@@ -940,6 +945,7 @@ namespace Ogre
             getProperty( PbsProperty::AmbientHemisphere ) ||
             getProperty( HlmsBaseProp::LightsAreaApprox ) ||
             getProperty( HlmsBaseProp::LightsAreaLtc ) ||
+            hasIrradianceField ||
             hasVct )
         {
             setProperty( PbsProperty::NeedsViewDir, 1 );
@@ -950,6 +956,7 @@ namespace Ogre
             getProperty( PbsProperty::UsePlanarReflections ) ||
             getProperty( PbsProperty::AmbientHemisphere ) ||
             getProperty( PbsProperty::EnableCubemapsAuto ) ||
+            hasIrradianceField ||
             hasVct )
         {
             setProperty( PbsProperty::NeedsReflDir, 1 );
@@ -990,6 +997,12 @@ namespace Ogre
                 setTextureReg( PixelShader, "vctProbeY", texUnit++ );
                 setTextureReg( PixelShader, "vctProbeZ", texUnit++ );
             }
+        }
+
+        if( getProperty( PbsProperty::IrradianceField ) )
+        {
+            setTextureReg( PixelShader, "ifdColour", texUnit++ );
+            setTextureReg( PixelShader, "ifdDepth", texUnit++ );
         }
 
         if( getProperty( HlmsBaseProp::LightsAreaTexMask ) > 0 )
@@ -1301,6 +1314,9 @@ namespace Ogre
                     setProperty( PbsProperty::VctDisableSpecular, 1 );
             }
 
+            if( mIrradianceField )
+                setProperty( PbsProperty::IrradianceField, 1 );
+
             if( mIrradianceVolume )
                 setProperty( PbsProperty::IrradianceVolumes, 1 );
 
@@ -1429,6 +1445,9 @@ namespace Ogre
 
             if( mVctLighting )
                 mapSize += mVctLighting->getConstBufferSize();
+
+            if( mIrradianceField )
+                mapSize += mIrradianceField->getConstBufferSize();
 
             //mat4 view + mat4 shadowRcv[numShadowMapLights].texViewProj +
             //              vec2 shadowRcv[numShadowMapLights].shadowDepthRange +
@@ -2268,6 +2287,12 @@ namespace Ogre
                 mVctLighting->fillConstBufferData( viewMatrix, passBufferPtr );
                 passBufferPtr += mVctLighting->getConstBufferSize() >> 2u;
             }
+
+            if( mIrradianceField )
+            {
+                mIrradianceField->fillConstBufferData( viewMatrix, passBufferPtr );
+                passBufferPtr += mIrradianceField->getConstBufferSize() >> 2u;
+            }
         }
         else
         {
@@ -2330,6 +2355,8 @@ namespace Ogre
                 mTexUnitSlotStart += 1;
             if( mVctLighting )
                 mTexUnitSlotStart += mVctLighting->getNumVoxelTextures();
+            if( mIrradianceField )
+                mTexUnitSlotStart += 2u;
             if( mParallaxCorrectedCubemap && !mParallaxCorrectedCubemap->isRendering() )
                 mTexUnitSlotStart += 1;
             if( !mPrePassTextures->empty() )
@@ -2477,6 +2504,15 @@ namespace Ogre
                                                                              samplerblock );
                         ++texUnit;
                     }
+                }
+
+                if( mIrradianceField )
+                {
+                    const HlmsSamplerblock *samplerblock = mShadowmapEsmSamplerblock; // TODO
+                    *commandBuffer->addCommand<CbTexture>() =
+                        CbTexture( texUnit++, mIrradianceField->getIrradianceTex(), samplerblock );
+                    *commandBuffer->addCommand<CbTexture>() =
+                        CbTexture( texUnit++, mIrradianceField->getDepthVarianceTex(), samplerblock );
                 }
 
                 if( mUsingAreaLightMasks )

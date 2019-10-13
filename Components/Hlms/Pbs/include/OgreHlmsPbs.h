@@ -132,6 +132,7 @@ namespace Ogre
         TextureGpu              *mSsrTexture;
         IrradianceVolume        *mIrradianceVolume;
         VctLighting             *mVctLighting;
+        IrradianceField         *mIrradianceField;
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
         //TODO: After texture refactor it should be possible to abstract this,
         //so we don't have to be aware of PlanarReflections class.
@@ -338,6 +339,10 @@ namespace Ogre
         void setVctLighting( VctLighting *vctLighting )     { mVctLighting = vctLighting; }
         VctLighting* getVctLighting(void)                   { return mVctLighting; }
 
+        void setIrradianceField( IrradianceField *irradianceField )
+                                                    { mIrradianceField = irradianceField; }
+        IrradianceField *getIrradianceField( void ) { return mIrradianceField; }
+
         /** When false, we will use 4 cones for diffuse VCT.
             When true, we will use 6 cones instead. This is higher quality but consumes more
             performance and is usually overkill (benefit / cost ratio).
@@ -482,6 +487,7 @@ namespace Ogre
         static const IdString VctAnisotropic;
         static const IdString VctEnableSpecularSdfQuality;
         static const IdString VctAmbientSphere;
+        static const IdString IrradianceField;
         static const IdString ObbRestraintApprox;
         static const IdString ObbRestraintLtc;
 
