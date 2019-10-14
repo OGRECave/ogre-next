@@ -68,7 +68,12 @@
 		// Texel's center offset to avoid bleeding with adjacent probes
 		retVal += 0.5;
 
-		dir.y = -dir.y;
+		//dir.y = -dir.y;
+		// Quantize direction to fix noise artifacts where the texels output from
+		// octahedronMappingEncode keep jumping due to octahedronMappingWrap being too sharp
+		// https://github.com/OGRECave/ogre-next/issues/29#issuecomment-541491145
+		dir = ceil( dir * 2048.0 );
+		dir *= 1.0 / 2048.0;
 		float2 uv = octahedronMappingEncode( dir ) * resolution;
 
 		retVal += uv;
