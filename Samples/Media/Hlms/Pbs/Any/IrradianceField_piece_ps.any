@@ -68,6 +68,7 @@
 		// Texel's center offset to avoid bleeding with adjacent probes
 		retVal += 0.5;
 
+		dir.y = -dir.y;
 		float2 uv = octahedronMappingEncode( dir ) * resolution;
 
 		retVal += uv;
@@ -105,10 +106,12 @@
 									   passBuf.irradianceField.viewToIrradianceFieldRow0,
 									   passBuf.irradianceField.viewToIrradianceFieldRow1,
 									   passBuf.irradianceField.viewToIrradianceFieldRow2 ) );
-	ifdSpaceNormal.y = -ifdSpaceNormal.y;
 
 	// ifdAlpha is how far from the floor( ifdGridPos ). on [0, 1] for each axis.
 	float3 ifdAlpha = saturate( fract( ifdGridPos ) );
+
+	float3 ifdIrradiance = float3( 0, 0, 0 );
+	float sumIfdWeight = 0;
 
 	// Iterate over adjacent probe cage
 	for( int i = 0; i < 8; ++i )
@@ -126,8 +129,11 @@
 		float r = length( dir );
 		dir *= 1.0 / r;
 
-		// Smooth backface
-		float weight = ( dot( dir, ifdSpaceNormal ) + 1.0 ) * 0.5;
+		// Ignore probes that are behind us, but don't black them out completely
+		// as detailed surface may otherwise have very few probes ppointing at it
+		float weight;
+		weight = dot( dir, ifdSpaceNormal ) * 200.0;
+		weight = saturate( weight ) + 0.2;
 
 		// Compute the trilinear weights based on the grid cell vertex to smoothly
 		// transition between probes. Avoid ever going entirely to zero because that
@@ -148,15 +154,19 @@
 		float meanSq = temp.y;
 		if( r > mean )
 		{
-			float variance = abs( mean * mean - meanSq );
-			weight *= variance / ( variance + ( r - mean ) * ( r - mean ) );
+			float variance = abs( mean * mean - meanSq ) + 1e-6;
+			float dev = ( r - mean );
+			weight *= variance / ( variance + dev * dev );
 		}
 
 		weight *= trilinear.x * trilinear.y * trilinear.z;
 
 		float3 irrColour = OGRE_SampleLevel( ifdColour, bilinearSampler, ifdUV, 0 ).xyz;
-		pixelData.envColourD.xyz += irrColour * weight;
+		ifdIrradiance += irrColour * weight;
+		sumIfdWeight += weight;
 	}
+
+	pixelData.envColourD.xyz += ifdIrradiance * ( 1.0 / sumIfdWeight );
 @end
 }
 
