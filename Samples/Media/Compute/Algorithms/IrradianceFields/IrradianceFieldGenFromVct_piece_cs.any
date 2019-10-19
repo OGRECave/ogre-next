@@ -7,7 +7,7 @@
 		float invNumRaysPerPixel;
 		float invNumRaysPerIrradiancePixel;
 		float unused0;
-		float unused1;
+		uint probesPerRow; // Used by integration CS, not by us
 
 		float coneAngleTan;
 		uint numProcessedProbes;
@@ -109,6 +109,9 @@
 				lodLevel = log2( diameter * p.vctInvStartBias );
 			}
 		@end
+
+		// Put dist in the same space it will be evaluted in during the pixel shader
+		dist *= dot( abs( dirLS ), float3( p.numProbes.xyz ) );
 
 		return float4( color, dist );
 	}

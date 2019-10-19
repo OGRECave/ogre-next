@@ -150,26 +150,43 @@
 		trilinear.z = probeOffset.z < 1 ? ( 1.0 - ifdAlpha.z ) : ifdAlpha.z;
 
 		// Visibility (Chebyshev)
-		float2 ifdUV = getIrradianceFieldXY( ifdSpaceNormal, probeIdx,
-											 passBuf.irradianceField.depthResolution,
-											 passBuf.irradianceField.depthFullWidth,
-											 passBuf.irradianceField.depthInvFullResolution );
-		float2 temp = OGRE_SampleLevel( ifdDepth, bilinearSampler, ifdUV, 0 ).xy;
+		float2 ifdDepthUV = getIrradianceFieldXY(
+			-dir, probeIdx, passBuf.irradianceField.depthResolution,
+			passBuf.irradianceField.depthFullWidth, passBuf.irradianceField.depthInvFullResolution );
+		float2 temp = OGRE_SampleLevel( ifdDepth, bilinearSampler, ifdDepthUV, 0 ).xy;
 		float mean = temp.x;
 		float meanSq = temp.y;
 		if( r > mean )
 		{
 			float variance = abs( mean * mean - meanSq ) + 1e-6;
 			float dev = ( r - mean );
-			weight *= variance / ( variance + dev * dev );
+			float chebyshevWeight = variance / ( variance + dev * dev );
+			chebyshevWeight = max( chebyshevWeight * chebyshevWeight * chebyshevWeight, 0.0 );
+
+			weight *= chebyshevWeight;
 		}
+
+		// Avoid zero weight
+		weight = max(0.000001, weight);
+
+		/*const float crushThreshold = 0.2;
+		if (weight < crushThreshold) {
+			weight *= weight * weight * (1.0 / (crushThreshold*crushThreshold));
+		}*/
 
 		weight *= trilinear.x * trilinear.y * trilinear.z;
 
-		float3 irrColour = OGRE_SampleLevel( ifdColour, bilinearSampler, ifdUV, 0 ).xyz;
+		float2 ifdColourUV = getIrradianceFieldXY(
+			ifdSpaceNormal, probeIdx, passBuf.irradianceField.depthResolution,
+			passBuf.irradianceField.depthFullWidth, passBuf.irradianceField.depthInvFullResolution );
+
+		float3 irrColour = OGRE_SampleLevel( ifdColour, bilinearSampler, ifdColourUV, 0 ).xyz;
+//		irrColour = sqrt(irrColour);
 		ifdIrradiance += irrColour * weight;
 		sumIfdWeight += weight;
 	}
+
+//	ifdIrradiance = ifdIrradiance * ifdIrradiance;
 
 	pixelData.envColourD.xyz += ifdIrradiance * ( 1.0 / sumIfdWeight );
 @end

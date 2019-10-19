@@ -115,7 +115,7 @@ namespace Ogre
             float invNumRaysPerPixel;
             float invNumRaysPerIrradiancePixel;
             float unused0;
-            float unused1;
+            uint32 probesPerRow; // Used by integration CS
 
             float coneAngleTan;
             uint32 numProcessedProbes;
@@ -136,6 +136,9 @@ namespace Ogre
         Vector3 mFieldOrigin;
         Vector3 mFieldSize;
 
+        uint32 mDepthMaxIntegrationTapsPerPixel;
+        uint32 mColourMaxIntegrationTapsPerPixel;
+
         VctLighting *mVctLighting;
 
         TextureGpu *mIrradianceTex;
@@ -143,16 +146,33 @@ namespace Ogre
 
         CompositorWorkspace *mGenerationWorkspace;
         HlmsComputeJob *mGenerationJob;
+        HlmsComputeJob *mDepthIntegrationJob;
+        HlmsComputeJob *mColourIntegrationJob;
 
         IrradianceFieldGenParams mIfGenParams;
         ConstBufferPacked *mIfGenParamsBuffer;
         TexBufferPacked *mDirectionsBuffer;
+        TexBufferPacked *mDepthTapsIntegrationBuffer;
+        TexBufferPacked *mColourTapsIntegrationBuffer;
 
         Root *mRoot;
         SceneManager *mSceneManager;
         bool mAlreadyWarned;
 
         void fillDirections( float *RESTRICT_ALIAS outBuffer );
+
+        static TexBufferPacked *setupIntegrationTaps( VaoManager *vaoManager, uint32 probeRes,
+                                                      uint32 fullWidth, HlmsComputeJob *integrationJob,
+                                                      ConstBufferPacked *ifGenParamsBuffer,
+                                                      uint32 &outMaxIntegrationTapsPerPixel );
+        static uint32 countNumIntegrationTaps( uint32 probeRes );
+        /**
+         * @brief fillIntegrationWeights
+        @param outBuffer
+            Buffer must NOT be write-combined because we write and then read back from it
+        */
+        static void fillIntegrationWeights( float2 *RESTRICT_ALIAS outBuffer, uint32 probeRes,
+                                            uint32 maxTapsPerPixel );
         void setIrradianceFieldGenParams();
 
     public:

@@ -11,6 +11,18 @@ compositor_node IrradianceField/Gen
 			uav 0 colour_if write
 			uav 1 depth_if write
 		}
+
+		pass compute
+		{
+			job IrradianceField/Integration/Depth
+			uav 0 depth_if write
+		}
+
+		pass compute
+		{
+			job IrradianceField/Integration/Colour
+			uav 0 colour_if write
+		}
 	}
 }
 

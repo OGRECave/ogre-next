@@ -141,13 +141,19 @@ namespace Ogre
         mNumProbesProcessed( 0u ),
         mFieldOrigin( Vector3::ZERO ),
         mFieldSize( Vector3::ZERO ),
+        mDepthMaxIntegrationTapsPerPixel( 0u ),
+        mColourMaxIntegrationTapsPerPixel( 0u ),
         mVctLighting( 0 ),
         mIrradianceTex( 0 ),
         mDepthVarianceTex( 0 ),
         mGenerationWorkspace( 0 ),
         mGenerationJob( 0 ),
+        mDepthIntegrationJob( 0 ),
+        mColourIntegrationJob( 0 ),
         mIfGenParamsBuffer( 0 ),
         mDirectionsBuffer( 0 ),
+        mDepthTapsIntegrationBuffer( 0 ),
+        mColourTapsIntegrationBuffer( 0 ),
         mRoot( root ),
         mSceneManager( sceneManager ),
         mAlreadyWarned( false )
@@ -174,6 +180,9 @@ namespace Ogre
                          "Could not find IrradianceField/Gen",
                          "IrradianceField::IrradianceField" );
         }
+
+        mDepthIntegrationJob = hlmsCompute->findComputeJob( "IrradianceField/Integration/Depth" );
+        mColourIntegrationJob = hlmsCompute->findComputeJob( "IrradianceField/Integration/Colour" );
     }
     //-------------------------------------------------------------------------
     IrradianceField::~IrradianceField()
@@ -229,6 +238,138 @@ namespace Ogre
 
         OGRE_ASSERT_LOW( ( size_t )( updateData - updateDataStart ) <=
                          ( depthProbeRes * depthProbeRes * numRaysPerPixel * 4u ) );
+    }
+    //-------------------------------------------------------------------------
+    TexBufferPacked *IrradianceField::setupIntegrationTaps( VaoManager *vaoManager, uint32 probeRes,
+                                                            uint32 fullWidth,
+                                                            HlmsComputeJob *integrationJob,
+                                                            ConstBufferPacked *ifGenParamsBuffer,
+                                                            uint32 &outMaxIntegrationTapsPerPixel )
+    {
+        const uint32 maxIntegrationTapsPerPixel = countNumIntegrationTaps( probeRes );
+        const size_t bufferSize = probeRes * probeRes * maxIntegrationTapsPerPixel * sizeof( float2 );
+        float2 *integrationTapsBuffer =
+            reinterpret_cast<float2 *>( OGRE_MALLOC_SIMD( bufferSize, MEMCATEGORY_GEOMETRY ) );
+        FreeOnDestructor dataPtr( integrationTapsBuffer );
+
+        fillIntegrationWeights( integrationTapsBuffer, probeRes, maxIntegrationTapsPerPixel );
+
+        TexBufferPacked *retVal = vaoManager->createTexBuffer( PFG_RG32_FLOAT, bufferSize, BT_IMMUTABLE,
+                                                               integrationTapsBuffer, false );
+
+        integrationJob->setConstBuffer( 0, ifGenParamsBuffer );
+        DescriptorSetTexture2::BufferSlot bufferSlot( DescriptorSetTexture2::BufferSlot::makeEmpty() );
+        bufferSlot.buffer = retVal;
+        integrationJob->setTexBuffer( 0, bufferSlot );
+        integrationJob->setProperty( "num_taps", static_cast<int32>( maxIntegrationTapsPerPixel ) );
+        integrationJob->setProperty( "probe_resolution", static_cast<int32>( probeRes ) );
+        integrationJob->setProperty( "full_width", static_cast<int32>( fullWidth ) );
+
+        integrationJob->setThreadsPerGroup( probeRes, probeRes, 1u );
+
+        outMaxIntegrationTapsPerPixel = maxIntegrationTapsPerPixel;
+
+        return retVal;
+    }
+    //-------------------------------------------------------------------------
+    uint32 IrradianceField::countNumIntegrationTaps( uint32 probeRes )
+    {
+        uint32 maxNumTaps = 0u;
+
+        for( size_t y = 0u; y < probeRes; ++y )
+        {
+            for( size_t x = 0u; x < probeRes; ++x )
+            {
+                Vector2 uvOct = Vector2( x, y );
+                uvOct /= static_cast<float>( probeRes );
+                Vector3 directionVector = Math::octahedronMappingDecode( uvOct );
+
+                uint32 numTaps = 0u;
+
+                for( size_t otherY = 0u; otherY < probeRes; ++otherY )
+                {
+                    for( size_t otherX = 0u; otherX < probeRes; ++otherX )
+                    {
+                        Vector2 otherUv = Vector2( otherX, otherY );
+                        otherUv /= static_cast<float>( probeRes );
+                        Vector3 otherDir = Math::octahedronMappingDecode( otherUv );
+
+                        const Real dotProduct = directionVector.dotProduct( otherDir );
+                        if( dotProduct > 0 )
+                            ++numTaps;
+                    }
+                }
+
+                maxNumTaps = std::max( numTaps, maxNumTaps );
+            }
+        }
+
+        return maxNumTaps;
+    }
+    //-------------------------------------------------------------------------
+    void IrradianceField::fillIntegrationWeights( float2 *RESTRICT_ALIAS outBuffer, uint32 probeRes,
+                                                  uint32 maxTapsPerPixel )
+    {
+        float2 *RESTRICT_ALIAS updateData = reinterpret_cast<float2 * RESTRICT_ALIAS>( outBuffer );
+        const float2 *RESTRICT_ALIAS updateDataStart = updateData;
+
+        for( size_t y = 0u; y < probeRes; ++y )
+        {
+            for( size_t x = 0u; x < probeRes; ++x )
+            {
+                Vector2 uvOct = Vector2( x, y );
+                uvOct /= static_cast<float>( probeRes );
+                Vector3 directionVector = Math::octahedronMappingDecode( uvOct );
+
+                float2 *RESTRICT_ALIAS updateDataCheckpoint = updateData;
+
+                float accumWeight = 0.0f;
+
+                for( size_t otherY = 0u; otherY < probeRes; ++otherY )
+                {
+                    for( size_t otherX = 0u; otherX < probeRes; ++otherX )
+                    {
+                        Vector2 otherUv = Vector2( otherX, otherY );
+                        otherUv /= static_cast<float>( probeRes );
+                        Vector3 otherDir = Math::octahedronMappingDecode( otherUv );
+
+                        const Real dotProduct = directionVector.dotProduct( otherDir );
+                        if( dotProduct > 0 )
+                        {
+                            updateData->x = static_cast<float>( otherY * probeRes + otherX );
+                            updateData->y = dotProduct;
+                            ++updateData;
+                            accumWeight += dotProduct;
+                        }
+                    }
+                }
+
+                const uint32 numTaps = static_cast<uint32>( updateData - updateDataCheckpoint );
+
+                OGRE_ASSERT_LOW( accumWeight > 0 &&
+                                 "accumWeight can't be 0. It must've at least evalute to itself!" );
+
+                // Normalize weights
+                updateData = updateDataCheckpoint;
+                const float invAccumWeight = 1.0f / accumWeight;
+                for( size_t i = 0u; i < numTaps; ++i )
+                {
+                    updateData->y *= invAccumWeight;
+                    ++updateData;
+                }
+
+                const uint32 maxIntegrationTapsPerPixel = maxTapsPerPixel;
+                for( size_t i = numTaps; i < maxIntegrationTapsPerPixel; ++i )
+                {
+                    updateData->x = y * probeRes + x;
+                    updateData->y = 0;
+                    ++updateData;
+                }
+            }
+        }
+
+        OGRE_ASSERT_LOW( ( size_t )( updateData - updateDataStart ) <=
+                         ( probeRes * probeRes * maxTapsPerPixel ) );
     }
     //-------------------------------------------------------------------------
     void IrradianceField::setIrradianceFieldGenParams()
@@ -337,6 +478,13 @@ namespace Ogre
         mDirectionsBuffer = vaoManager->createTexBuffer( PFG_RGBA32_FLOAT, updateDataSize, BT_IMMUTABLE,
                                                          directionsBuffer, false );
 
+        mDepthTapsIntegrationBuffer = setupIntegrationTaps(
+            vaoManager, mSettings.mDepthProbeResolution, depthWidth, mDepthIntegrationJob,
+            mIfGenParamsBuffer, mDepthMaxIntegrationTapsPerPixel );
+        mColourTapsIntegrationBuffer = setupIntegrationTaps(
+            vaoManager, mSettings.mIrradianceResolution, irradWidth, mColourIntegrationJob,
+            mIfGenParamsBuffer, mColourMaxIntegrationTapsPerPixel );
+
         mGenerationJob->setConstBuffer( 0, mIfGenParamsBuffer );
 
         const bool bIsAnisotropic = mVctLighting->isAnisotropic();
@@ -383,11 +531,21 @@ namespace Ogre
             textureManager->destroyTexture( mDepthVarianceTex );
             mDepthVarianceTex = 0;
         }
+        VaoManager *vaoManager = textureManager->getVaoManager();
         if( mDirectionsBuffer )
         {
-            VaoManager *vaoManager = textureManager->getVaoManager();
             vaoManager->destroyTexBuffer( mDirectionsBuffer );
             mDirectionsBuffer = 0;
+        }
+        if( mDepthTapsIntegrationBuffer )
+        {
+            vaoManager->destroyTexBuffer( mDepthTapsIntegrationBuffer );
+            mDepthTapsIntegrationBuffer = 0;
+        }
+        if( mColourTapsIntegrationBuffer )
+        {
+            vaoManager->destroyTexBuffer( mColourTapsIntegrationBuffer );
+            mColourTapsIntegrationBuffer = 0;
         }
     }
     //-------------------------------------------------------------------------
@@ -427,14 +585,21 @@ namespace Ogre
 
         // There's a leftover the first dispatch is not currently handling,
         // i.e. numThreadGroupsX * numThreadGroupsY * threadsPerGroup != numRays
+        // i.e. numIntegrationTGroupsY * numIntegrationTGroupsX != probesPerFrame
         TODO_handle_leftover;
         // Most GPUs allow up to 65535 thread groups per dimension
         const uint32 numThreadGroupsY = numWorkGroups / 65535u + 1u;
         const uint32 numThreadGroupsX = numWorkGroups / numThreadGroupsY;
         mGenerationJob->setNumThreadGroups( numThreadGroupsX, numThreadGroupsY, 1u );
 
+        const uint32 numIntegrationTGroupsY = probesPerFrame / 65535u + 1u;
+        const uint32 numIntegrationTGroupsX = probesPerFrame / numIntegrationTGroupsY;
+        mDepthIntegrationJob->setNumThreadGroups( numIntegrationTGroupsX, numIntegrationTGroupsY, 1u );
+        mColourIntegrationJob->setNumThreadGroups( numIntegrationTGroupsX, numIntegrationTGroupsY, 1u );
+
         mIfGenParams.numProcessedProbes = mNumProbesProcessed;
         mIfGenParams.numProbes_threadsPerRow.w = numThreadGroupsX * threadsPerGroup;
+        mIfGenParams.probesPerRow = numIntegrationTGroupsX * 1u;  // There's one probe per group
         *ifGenParams = mIfGenParams;
 
         mGenerationWorkspace->_beginUpdate( false );

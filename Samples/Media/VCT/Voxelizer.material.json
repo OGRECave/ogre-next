@@ -151,7 +151,7 @@
             "threads_per_group" : [4, 4, 4],
 
             "source" : "LightVctBounceInject_cs",
-            "pieces" : ["CrossPlatformSettings_piece_all", "sRGB.any", "LightVctBounceInject_piece_cs.any"],
+            "pieces" : ["CrossPlatformSettings_piece_all", "UavCrossPlatform_piece_all", "sRGB.any", "LightVctBounceInject_piece_cs.any"],
             "inform_shader_of_texture_data_change" : true,
 
             "thread_groups_based_on_uav" : 0,

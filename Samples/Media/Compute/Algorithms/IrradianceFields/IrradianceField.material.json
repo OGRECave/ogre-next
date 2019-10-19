@@ -7,7 +7,7 @@
             "thread_groups" : [1, 1, 1],
 
             "source" : "IrradianceFieldGenFromVct_cs",
-            "pieces" : ["CrossPlatformSettings_piece_all", "sRGB.any", "IrradianceFieldGenFromVct_piece_cs.any"],
+            "pieces" : ["CrossPlatformSettings_piece_all", "UavCrossPlatform_piece_all", "sRGB.any", "IrradianceFieldGenFromVct_piece_cs.any"],
             "inform_shader_of_texture_data_change" : true,
 
             "uav_units" : 2,
@@ -28,6 +28,60 @@
                 ["irradianceField",         [0], "int"],
                 ["irradianceFieldDepth",    [1], "int"]
             ]
+        },
+
+        "IrradianceField/Integration/Depth" :
+        {
+            "threads_per_group" : [64, 1, 1],
+            "thread_groups" : [1, 1, 1],
+
+            "source" : "IrradianceFieldIntegration_cs",
+            "pieces" : ["CrossPlatformSettings_piece_all", "UavCrossPlatform_piece_all", "sRGB.any", "IrradianceFieldIntegration_piece_cs.any"],
+            "inform_shader_of_texture_data_change" : true,
+
+            "uav_units" : 1,
+
+            "textures" :
+            [
+                {}
+            ],
+
+            "params_glsl" :
+            [
+                ["integrationTapsBuffer",   [0], "int"]
+            ],
+
+            "properties" :
+            {
+                "integrate_depth" : 1
+            }
+        },
+
+        "IrradianceField/Integration/Colour" :
+        {
+            "threads_per_group" : [64, 1, 1],
+            "thread_groups" : [1, 1, 1],
+
+            "source" : "IrradianceFieldIntegration_cs",
+            "pieces" : ["CrossPlatformSettings_piece_all", "UavCrossPlatform_piece_all", "sRGB.any", "IrradianceFieldIntegration_piece_cs.any"],
+            "inform_shader_of_texture_data_change" : true,
+
+            "uav_units" : 1,
+
+            "textures" :
+            [
+                {}
+            ],
+
+            "params_glsl" :
+            [
+                ["integrationTapsBuffer",   [0], "int"]
+            ],
+
+            "properties" :
+            {
+                "integrate_depth" : 0
+            }
         }
     }
 }

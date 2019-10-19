@@ -1,0 +1,81 @@
+
+//#include "SyntaxHighlightingMisc.h"
+
+@piece( HeaderCS )
+	CONST_BUFFER_STRUCT_BEGIN( IrradianceFieldGenParams, 0 )
+	{
+		float invNumRaysPerPixel;
+		float invNumRaysPerIrradiancePixel;
+		float unused0;
+		uint probesPerRow;
+
+		float coneAngleTan;
+		uint numProcessedProbes;
+		float vctStartBias;
+		float vctInvStartBias;
+
+		//float invFieldResolution;
+		uint4 numProbes_threadsPerRow;
+
+		float4x4 irrProbeToVctTransform;
+	}
+	CONST_BUFFER_STRUCT_END( p );
+
+	#define ProbeIndex uint
+
+	INLINE ProbeIndex getProbeIdx( uint2 workGroupID PARAMS_ARG_DECL )
+	{
+		return workGroupID.x + workGroupID.y * p.probesPerRow + p.numProcessedProbes;
+	}
+
+	INLINE ushort2 getUv( ProbeIndex probeIdx, uint2 localInvocationId )
+	{
+		ushort2 retVal;
+		retVal.x = (probeIdx * @value( probe_resolution )u) % @value( full_width )u;
+		retVal.y = ((probeIdx * @value( probe_resolution )u) / @value( full_width )u) *
+					@value( probe_resolution )u;
+		retVal += localInvocationId;
+		return retVal;
+	}
+@end
+
+//in uvec3 gl_NumWorkGroups;
+//in uvec3 gl_WorkGroupID;
+//in uvec3 gl_LocalInvocationID;
+//in uvec3 gl_GlobalInvocationID;
+//in uint  gl_LocalInvocationIndex;
+
+@piece( BodyCS )
+	ProbeIndex probeIdx = getProbeIdx( gl_WorkGroupID.xy );
+	ushort2 uv = getUv( probeIdx, gl_LocalInvocationID.xy );
+	@property( integrate_depth )
+		float2 pixelValue = OGRE_imageLoad2D( irradianceField, uv.xy ).xy;
+	@else
+		float4 pixelValue = OGRE_imageLoad2D( irradianceField, uv.xy ).xyzw;
+	@end
+
+	g_sharedValues[gl_LocalInvocationIndex] = pixelValue;
+
+	__sharedOnlyBarrier;
+
+	float2 tapsData;
+
+	@property( integrate_depth )
+		pixelValue = float2( 0, 0 );
+	@else
+		pixelValue = float4( 0, 0, 0, 0 );
+	@end
+
+	uint tapsIdxBase = gl_LocalInvocationIndex * @value( num_taps );
+
+	@foreach( @n, num_taps )
+		tapsData = bufferFetch( integrationTapsBuffer, tapsIdxBase + @nu ).xy;
+		pixelValue += g_sharedValues[(int)tapsData.x] * tapsData.y;
+	@end
+
+	@property( integrate_depth )
+		OGRE_imageWrite2D2( irradianceField, uv.xy, pixelValue.xy );
+	@else
+		OGRE_imageWrite2D4( irradianceField, uv.xy, pixelValue );
+	@end
+@end

@@ -1,8 +1,7 @@
 @insertpiece( SetCrossPlatformSettings )
 #extension GL_ARB_shader_group_vote: require
 
-#define OGRE_imageLoad3D( inImage, iuv ) imageLoad( inImage, int3( iuv ) )
-#define OGRE_imageWrite3D4( outImage, iuv, value ) imageStore( outImage, int3( iuv ), value )
+@insertpiece( DeclUavCrossPlatform )
 
 @insertpiece( PreBindingsHeaderCS )
 

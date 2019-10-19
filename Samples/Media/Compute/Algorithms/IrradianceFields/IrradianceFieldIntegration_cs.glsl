@@ -5,20 +5,15 @@
 
 @insertpiece( PreBindingsHeaderCS )
 
-uniform samplerBuffer directionsBuffer;
+uniform samplerBuffer integrationTapsBuffer;
 
-uniform sampler3D vctProbe;
+layout (@insertpiece(uav0_pf_type)) uniform restrict image2D irradianceField;
 
-@property( vct_anisotropic )
-	uniform sampler3D vctProbeX;
-	uniform sampler3D vctProbeY;
-	uniform sampler3D vctProbeZ;
+@property( integrate_depth )
+	shared float2 g_sharedValues[@value( threads_per_group_x ) * @value( threads_per_group_y )];
+@else
+	shared float4 g_sharedValues[@value( threads_per_group_x ) * @value( threads_per_group_y )];
 @end
-
-layout (@insertpiece(uav0_pf_type)) uniform restrict writeonly image2D irradianceField;
-layout (@insertpiece(uav1_pf_type)) uniform restrict writeonly image2D irradianceFieldDepth;
-
-shared float4 g_diffuseDepth[@value( threads_per_group_x ) * @value( threads_per_group_y ) * @value( threads_per_group_z )];
 
 layout( local_size_x = @value( threads_per_group_x ),
 		local_size_y = @value( threads_per_group_y ),
