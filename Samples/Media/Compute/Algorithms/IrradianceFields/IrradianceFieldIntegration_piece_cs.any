@@ -66,11 +66,11 @@
 		pixelValue = float4( 0, 0, 0, 0 );
 	@end
 
-	uint tapsIdxBase = gl_LocalInvocationIndex * @value( num_taps );
+	uint tapsIdxBase = gl_LocalInvocationIndex * @value( num_taps )u;
 
-	@foreach( @n, num_taps )
-		tapsData = bufferFetch( integrationTapsBuffer, tapsIdxBase + @nu ).xy;
-		pixelValue += g_sharedValues[(int)tapsData.x] * tapsData.y;
+	@foreach( num_taps, n )
+		tapsData = bufferFetch( integrationTapsBuffer, int( tapsIdxBase + @nu ) ).xy;
+		pixelValue += g_sharedValues[int(tapsData.x)] * tapsData.y;
 	@end
 
 	@property( integrate_depth )
