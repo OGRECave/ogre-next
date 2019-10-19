@@ -167,12 +167,12 @@
 		}
 
 		// Avoid zero weight
-		weight = max(0.000001, weight);
+		weight = max( 0.000001, weight );
 
-		/*const float crushThreshold = 0.2;
+		const float crushThreshold = 0.2;
 		if (weight < crushThreshold) {
 			weight *= weight * weight * (1.0 / (crushThreshold*crushThreshold));
-		}*/
+		}
 
 		weight *= trilinear.x * trilinear.y * trilinear.z;
 
