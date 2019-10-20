@@ -174,6 +174,7 @@ namespace Ogre
     const IdString PbsProperty::IrradianceVolumes = IdString( "irradiance_volumes" );
     const IdString PbsProperty::VctNumProbes      = IdString( "vct_num_probes" );
     const IdString PbsProperty::VctConeDirs       = IdString( "vct_cone_dirs" );
+    const IdString PbsProperty::VctDisableDiffuse = IdString( "vct_disable_diffuse" );
     const IdString PbsProperty::VctDisableSpecular= IdString( "vct_disable_specular" );
     const IdString PbsProperty::VctAnisotropic    = IdString( "vct_anisotropic" );
     const IdString PbsProperty::VctEnableSpecularSdfQuality=IdString("vct_enable_specular_sdf_quality");
@@ -1317,7 +1318,10 @@ namespace Ogre
             }
 
             if( mIrradianceField )
+            {
                 setProperty( PbsProperty::IrradianceField, 1 );
+                setProperty( PbsProperty::VctDisableDiffuse, 1 );
+            }
 
             if( mIrradianceVolume )
                 setProperty( PbsProperty::IrradianceVolumes, 1 );

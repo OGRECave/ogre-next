@@ -94,21 +94,62 @@ namespace Demo
         hlmsPbs->setVctFullConeCount( !hlmsPbs->getVctFullConeCount() );
     }
     //-----------------------------------------------------------------------------------
-    void VoxelizerGameState::toggletIrradianceField(void)
+    VoxelizerGameState::GiMode VoxelizerGameState::getGiMode(void) const
     {
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
         assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
         Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
 
-        if( hlmsPbs->getIrradianceField() )
+        const bool hasVct = hlmsPbs->getVctLighting() != 0;
+        const bool hasIfd = hlmsPbs->getIrradianceField() != 0;
+        if( hasVct && hasIfd )
+            return IfdVct;
+        else if( hasIfd )
+            return IfdOnly;
+        else if( hasVct )
+            return VctOnly;
+        else
+            return NoGI;
+    }
+    //-----------------------------------------------------------------------------------
+    void VoxelizerGameState::cycleIrradianceField( bool bPrev )
+    {
+        Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
+        assert( dynamic_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
+        Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) );
+
+        VoxelizerGameState::GiMode giMode = getGiMode();
+
+        if( !bPrev )
         {
-            hlmsPbs->setIrradianceField( 0 );
-            hlmsPbs->setVctLighting( mVctLighting );
+            giMode = static_cast<VoxelizerGameState::GiMode>( ( giMode + 1u ) % NumGiModes );
         }
         else
         {
+            giMode =
+                static_cast<VoxelizerGameState::GiMode>( ( giMode + NumGiModes - 1u ) % NumGiModes );
+        }
+
+        switch( giMode )
+        {
+        case NoGI:
+            hlmsPbs->setIrradianceField( 0 );
+            hlmsPbs->setVctLighting( 0 );
+            break;
+        case VctOnly:
+            hlmsPbs->setIrradianceField( 0 );
+            hlmsPbs->setVctLighting( mVctLighting );
+            break;
+        case IfdOnly:
             hlmsPbs->setIrradianceField( mIrradianceField );
             hlmsPbs->setVctLighting( 0 );
+            break;
+        case IfdVct:
+            hlmsPbs->setIrradianceField( mIrradianceField );
+            hlmsPbs->setVctLighting( mVctLighting );
+            break;
+        case NumGiModes:
+            break;
         }
     }
     //-----------------------------------------------------------------------------------
@@ -141,7 +182,7 @@ namespace Demo
 
             assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
             Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
-            // hlmsPbs->setVctLighting( mVctLighting );
+            hlmsPbs->setVctLighting( mVctLighting );
         }
 
         mVctLighting->update( sceneManager, mNumBounces, mThinWallCounter );
@@ -432,8 +473,25 @@ namespace Demo
         outText += "]";
         outText += "\n[Shift+] F6 to cycle scenes ";
         outText += sceneNames[mCurrentScene];
-        outText += "\nF7 to toggle IFD [";
-        outText += hlmsPbs->getIrradianceField() ? "On]" : "Off]";
+        outText += "\n[Shift+] F7 to cycle GI [";
+        const GiMode giMode = getGiMode();
+        switch( giMode )
+        {
+        case NoGI:
+            outText += "No GI]";
+            break;
+        case VctOnly:
+            outText += "VCT]";
+            break;
+        case IfdOnly:
+            outText += "IFD]";
+            break;
+        case IfdVct:
+            outText += "IFD+VCT]";
+            break;
+        case NumGiModes:
+            break;
+        }
     }
     //-----------------------------------------------------------------------------------
     void VoxelizerGameState::keyReleased( const SDL_KeyboardEvent &arg )
@@ -472,7 +530,7 @@ namespace Demo
         }
         else if( arg.keysym.sym == SDLK_F7 )
         {
-            toggletIrradianceField();
+            cycleIrradianceField( arg.keysym.mod & (KMOD_LSHIFT|KMOD_RSHIFT) );
         }
         else
         {

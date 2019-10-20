@@ -25,6 +25,15 @@ namespace Demo
             NumScenes
         };
 
+        enum GiMode
+        {
+            NoGI,
+            VctOnly,
+            IfdOnly,
+            IfdVct,
+            NumGiModes
+        };
+
         Ogre::VctVoxelizer  *mVoxelizer;
         Ogre::VctLighting   *mVctLighting;
         float               mThinWallCounter;
@@ -42,7 +51,8 @@ namespace Demo
 
         void cycleVisualizationMode( bool bPrev );
         void toggletVctQuality(void);
-        void toggletIrradianceField(void);
+        GiMode getGiMode(void) const;
+        void cycleIrradianceField( bool bPrev );
 
         void voxelizeScene(void);
 

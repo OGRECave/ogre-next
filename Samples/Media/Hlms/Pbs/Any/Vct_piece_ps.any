@@ -283,54 +283,58 @@
 			float blend = 1.0f;
 		@end
 
-		@property( vct_cone_dirs == 6 )
-			float3 cone_dirs[6] =
-				OGRE_ARRAY_START( float3 )
-					float3( 0.0, 0.0, 1.0 ),
-					float3( 0.866025, 0.0, 0.5 ),
-					float3( 0.267617, 0.823639, 0.5 ),
-					float3( -0.700629, 0.509037, 0.5 ),
-					float3( -0.700629, -0.509037, 0.5 ),
-					float3( 0.267617, -0.823639, 0.5 )
-				OGRE_ARRAY_END;
+		@property( !vct_disable_diffuse )
+			@property( vct_cone_dirs == 6 )
+				float3 cone_dirs[6] =
+					OGRE_ARRAY_START( float3 )
+						float3( 0.0, 0.0, 1.0 ),
+						float3( 0.866025, 0.0, 0.5 ),
+						float3( 0.267617, 0.823639, 0.5 ),
+						float3( -0.700629, 0.509037, 0.5 ),
+						float3( -0.700629, -0.509037, 0.5 ),
+						float3( 0.267617, -0.823639, 0.5 )
+					OGRE_ARRAY_END;
 
-			float coneWeights[6] = OGRE_ARRAY_START( float ) 0.25, 0.15, 0.15, 0.15, 0.15, 0.15 OGRE_ARRAY_END;
-			float coneAngleTan = 0.577;
-		@else
-			float3 cone_dirs[4] =
-				OGRE_ARRAY_START( float3 )
-					float3( 0.707107, 0.0, 0.707107 ),
-					float3( 0.0, 0.707107, 0.707107 ),
-					float3( -0.707107, 0.0, 0.707107 ),
-					float3( 0.0, -0.707107, 0.707107 )
-				OGRE_ARRAY_END;
+				float coneWeights[6] = OGRE_ARRAY_START( float ) 0.25, 0.15, 0.15, 0.15, 0.15, 0.15 OGRE_ARRAY_END;
+				float coneAngleTan = 0.577;
+			@else
+				float3 cone_dirs[4] =
+					OGRE_ARRAY_START( float3 )
+						float3( 0.707107, 0.0, 0.707107 ),
+						float3( 0.0, 0.707107, 0.707107 ),
+						float3( -0.707107, 0.0, 0.707107 ),
+						float3( 0.0, -0.707107, 0.707107 )
+					OGRE_ARRAY_END;
 
-			float coneWeights[4] = OGRE_ARRAY_START( float ) 0.25, 0.25, 0.25, 0.25 OGRE_ARRAY_END;
-			float coneAngleTan = 0.98269;
-		@end
+				float coneWeights[4] = OGRE_ARRAY_START( float ) 0.25, 0.25, 0.25, 0.25 OGRE_ARRAY_END;
+				float coneAngleTan = 0.98269;
+			@end
 
-		//Radiance / diffuse
-		float4 light = float4( 0.0f, 0.0f, 0.0f, 0.0f );
-		for( int i=0; i<@value( vct_cone_dirs ); ++i )
-		{
-			float3 dir = toVctProbeSpaceDir( mul( TBN, cone_dirs[i] ), probeParams );
-			light += coneWeights[i] * voxelConeTraceDiff( probeParams, posLS, dir,
-														  coneAngleTan,
-														  probe OGRE_SAMPLER_ARG( probeSampler )
-														  OGRE_VCT_ANISO_PROBE_ARG );
-		}
-		@property( vct_ambient_hemisphere )
-			//Add ambient light after all cones have been weighted
-			light.xyz += lerp( probeParams.vctAmbientLowerHemi.xyz,
-							   probeParams.vctAmbientUpperHemi.xyz, ambientWD ) * light.w;
-		@else
-			//Add ambient light after all cones have been weighted
-			light.xyz += probeParams.vctAmbientUpperHemi.xyz * light.w;
+			//Radiance / diffuse
+			float4 light = float4( 0.0f, 0.0f, 0.0f, 0.0f );
+			for( int i=0; i<@value( vct_cone_dirs ); ++i )
+			{
+				float3 dir = toVctProbeSpaceDir( mul( TBN, cone_dirs[i] ), probeParams );
+				light += coneWeights[i] * voxelConeTraceDiff( probeParams, posLS, dir,
+															  coneAngleTan,
+															  probe OGRE_SAMPLER_ARG( probeSampler )
+															  OGRE_VCT_ANISO_PROBE_ARG );
+			}
+			@property( vct_ambient_hemisphere )
+				//Add ambient light after all cones have been weighted
+				light.xyz += lerp( probeParams.vctAmbientLowerHemi.xyz,
+								   probeParams.vctAmbientUpperHemi.xyz, ambientWD ) * light.w;
+			@else
+				//Add ambient light after all cones have been weighted
+				light.xyz += probeParams.vctAmbientUpperHemi.xyz * light.w;
+			@end
 		@end
 
 		float blendWeight = probeParams.vctBlendFade * blend * probeParams.vctMultiplier;
 
-		outDiffuse.xyz += light.xyz * blendWeight;
+		@property( !vct_disable_diffuse )
+			outDiffuse.xyz += light.xyz * blendWeight;
+		@end
 
 		//Irradiance / specular
 		@property( !vct_disable_specular )
@@ -433,13 +437,19 @@
 		if( vctSpecular.w > 0 )
 		{
 			float accumProbeInfluenceBorderBlend = 1.0f / vctSpecular.w;
-			vctDiffuse.xyz *= accumProbeInfluenceBorderBlend;
+			@property( !vct_disable_diffuse )
+				vctDiffuse.xyz *= accumProbeInfluenceBorderBlend;
+			@end
 			vctSpecular.xyz *= accumProbeInfluenceBorderBlend;
 		}
 	@end
 
-	pixelData.envColourD.xyz += vctDiffuse.xyz;
-	pixelData.envColourS.xyz += vctSpecular.xyz;
+	@property( !vct_disable_diffuse )
+		pixelData.envColourD.xyz += vctDiffuse.xyz;
+	@end
+	@property( !vct_disable_specular )
+		pixelData.envColourS.xyz += vctSpecular.xyz;
+	@end
 @end
 
 @end
