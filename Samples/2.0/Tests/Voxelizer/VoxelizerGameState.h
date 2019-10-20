@@ -42,6 +42,7 @@ namespace Demo
 
         void cycleVisualizationMode( bool bPrev );
         void toggletVctQuality(void);
+        void toggletIrradianceField(void);
 
         void voxelizeScene(void);
 

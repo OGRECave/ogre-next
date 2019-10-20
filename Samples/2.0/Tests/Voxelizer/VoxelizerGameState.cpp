@@ -94,6 +94,24 @@ namespace Demo
         hlmsPbs->setVctFullConeCount( !hlmsPbs->getVctFullConeCount() );
     }
     //-----------------------------------------------------------------------------------
+    void VoxelizerGameState::toggletIrradianceField(void)
+    {
+        Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
+        assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
+        Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
+
+        if( hlmsPbs->getIrradianceField() )
+        {
+            hlmsPbs->setIrradianceField( 0 );
+            hlmsPbs->setVctLighting( mVctLighting );
+        }
+        else
+        {
+            hlmsPbs->setIrradianceField( mIrradianceField );
+            hlmsPbs->setVctLighting( 0 );
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void VoxelizerGameState::voxelizeScene(void)
     {
         TODO_do_this_in_voxelizer;
@@ -341,6 +359,8 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void VoxelizerGameState::destroyScene(void)
     {
+        delete mIrradianceField;
+        mIrradianceField = 0;
         delete mVctLighting;
         mVctLighting = 0;
         delete mVoxelizer;
@@ -352,6 +372,7 @@ namespace Demo
             assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
             Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
             hlmsPbs->setVctLighting( 0 );
+            hlmsPbs->setIrradianceField( 0 );
         }
 
         delete mTestUtils;
@@ -400,17 +421,19 @@ namespace Demo
             "[Stress Test]",
         };
 
-        outText += "\nPress F2 to cycle visualization modes ";
+        outText += "\nF2 to cycle visualization modes ";
         outText += visualizationModes[mDebugVisualizationMode];
-        outText += "\nPress F3 to toggle VCT quality [";
+        outText += "\nF3 to toggle VCT quality [";
         outText += hlmsPbs->getVctFullConeCount() ? "High]" : "Low]";
-        outText += "\nPress F4 to toggle Anisotropic VCT [";
+        outText += "\nF4 to toggle Anisotropic VCT [";
         outText += mVctLighting->isAnisotropic() ? "Anisotropic]" : "Isotropic]";
-        outText += "\nPress [Shift+] F5 to increase/decrease num indirect bounces [";
+        outText += "\n[Shift+] F5 to increase/decrease num indirect bounces [";
         outText += Ogre::StringConverter::toString( mNumBounces );
         outText += "]";
-        outText += "\nPress [Shift+] F6 to cycle scenes ";
+        outText += "\n[Shift+] F6 to cycle scenes ";
         outText += sceneNames[mCurrentScene];
+        outText += "\nF7 to toggle IFD [";
+        outText += hlmsPbs->getIrradianceField() ? "On]" : "Off]";
     }
     //-----------------------------------------------------------------------------------
     void VoxelizerGameState::keyReleased( const SDL_KeyboardEvent &arg )
@@ -446,6 +469,10 @@ namespace Demo
         else if( arg.keysym.sym == SDLK_F6 )
         {
             cycleScenes( arg.keysym.mod & (KMOD_LSHIFT|KMOD_RSHIFT) );
+        }
+        else if( arg.keysym.sym == SDLK_F7 )
+        {
+            toggletIrradianceField();
         }
         else
         {
