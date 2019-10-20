@@ -246,7 +246,7 @@
 
 	INLINE void computeVctProbe
 	(
-		OGRE_INOUT_REF( float4, outDiffuse ), OGRE_INOUT_REF( float4, outSpecular ),
+		OGRE_INOUT_REF( float3, outDiffuse ), OGRE_INOUT_REF( float4, outSpecular ),
 		PixelData pixelData, float3 pos, float3x3 TBN,
 	@property( vct_ambient_hemisphere )
 		float ambientWD, float ambientWS,
@@ -414,7 +414,7 @@
 		float3 vctSpecPosVS = float3( 0, 0, 0 );
 	@end
 
-	float4 vctDiffuse = float4( 0, 0, 0, 0 );
+	float3 vctDiffuse = float3( 0, 0, 0 );
 	float4 vctSpecular = float4( 0, 0, 0, 0 );
 	computeVctProbe( vctDiffuse, vctSpecular, pixelData, inPs.pos, TBN,
 				@property( vct_ambient_hemisphere )
@@ -433,7 +433,7 @@
 		if( vctSpecular.w > 0 )
 		{
 			float accumProbeInfluenceBorderBlend = 1.0f / vctSpecular.w;
-			vctDiffuse.xyzw *= accumProbeInfluenceBorderBlend;
+			vctDiffuse.xyz *= accumProbeInfluenceBorderBlend;
 			vctSpecular.xyz *= accumProbeInfluenceBorderBlend;
 		}
 	@end
