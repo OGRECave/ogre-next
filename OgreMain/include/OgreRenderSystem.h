@@ -584,10 +584,6 @@ namespace Ogre
         */
         void setGlobalNumberOfInstances(const size_t val);
 
-        /** Returns true if fixed pipeline rendering is enabled on the system.
-        */
-        bool getFixedPipelineEnabled(void) const;
-
         /** Retrieves an existing DepthBuffer or creates a new one suited for the given RenderTarget
             and sets it.
             @remarks
