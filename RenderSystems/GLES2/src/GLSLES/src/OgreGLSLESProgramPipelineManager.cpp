@@ -27,21 +27,17 @@
  */
 
 #include "OgreGLSLESProgramPipelineManager.h"
-#include "OgreGLSLESGpuProgram.h"
-#include "OgreGLSLESProgram.h"
+#include "OgreGLSLESShader.h"
 
 namespace Ogre
 {
-    //-----------------------------------------------------------------------
     template<> GLSLESProgramPipelineManager* Singleton<GLSLESProgramPipelineManager>::msSingleton = 0;
     
-    //-----------------------------------------------------------------------
     GLSLESProgramPipelineManager* GLSLESProgramPipelineManager::getSingletonPtr(void)
     {
         return msSingleton;
     }
     
-    //-----------------------------------------------------------------------
     GLSLESProgramPipelineManager& GLSLESProgramPipelineManager::getSingleton(void)
     {  
         assert( msSingleton );  return ( *msSingleton );  
@@ -52,7 +48,7 @@ namespace Ogre
 
     GLSLESProgramPipelineManager::~GLSLESProgramPipelineManager(void)
     {
-        // Iterate through map container and delete program pipelines
+        // Iterate through map container and delete program pipelines.
         for (ProgramPipelineIterator currentProgram = mProgramPipelines.begin();
              currentProgram != mProgramPipelines.end(); ++currentProgram)
         {
@@ -60,70 +56,66 @@ namespace Ogre
         }
     }
 
-    //-----------------------------------------------------------------------
-    void GLSLESProgramPipelineManager::setActiveFragmentLinkProgram(GLSLESGpuProgram* fragmentGpuProgram)
+    void GLSLESProgramPipelineManager::setActiveFragmentShader(GLSLESShader* fragmentShader)
     {
-        if (fragmentGpuProgram != mActiveFragmentGpuProgram)
+        if (fragmentShader != mActiveFragmentShader)
         {
-            mActiveFragmentGpuProgram = fragmentGpuProgram;
-            // ActiveProgramPipeline is no longer valid
+            mActiveFragmentShader = fragmentShader;
+            // ActiveProgramPipeline is no longer valid.
             mActiveProgramPipeline = NULL;
         }
     }
     
-    //-----------------------------------------------------------------------
-    void GLSLESProgramPipelineManager::setActiveVertexLinkProgram(GLSLESGpuProgram* vertexGpuProgram)
+    void GLSLESProgramPipelineManager::setActiveVertexShader(GLSLESShader* vertexShader)
     {
-        if (vertexGpuProgram != mActiveVertexGpuProgram)
+        if (vertexShader != mActiveVertexShader)
         {
-            mActiveVertexGpuProgram = vertexGpuProgram;
-            // ActiveProgramPipeline is no longer valid
+            mActiveVertexShader = vertexShader;
+            // ActiveProgramPipeline is no longer valid.
             mActiveProgramPipeline = NULL;
         }
     }
 
-    //-----------------------------------------------------------------------
     GLSLESProgramPipeline* GLSLESProgramPipelineManager::getActiveProgramPipeline(void)
     {
-        // If there is an active link program then return it
+        // If there is an active link program then return it.
         if (mActiveProgramPipeline)
             return mActiveProgramPipeline;
 
-        // No active link program so find one or make a new one
+        // No active link program so find one or make a new one.
         // Is there an active key?
         uint64 activeKey = 0;
-
-        if (mActiveVertexGpuProgram)
+        if (mActiveVertexShader)
         {
-            activeKey = static_cast<uint64>(mActiveVertexGpuProgram->getProgramID()) << 32;
+            activeKey = static_cast<uint64>(mActiveVertexShader->getShaderID()) << 32;
         }
-        if (mActiveFragmentGpuProgram)
+        if (mActiveFragmentShader)
         {
-            activeKey += static_cast<uint64>(mActiveFragmentGpuProgram->getProgramID());
+            activeKey += static_cast<uint64>(mActiveFragmentShader->getShaderID());
         }
 
-        // Only return a program pipeline object if a vertex or fragment stage exist
+        // Only return a program pipeline object if a vertex or fragment stage exist.
         if (activeKey > 0)
         {
-            // Find the key in the hash map
+            // Find the key in the hash map.
             ProgramPipelineIterator programFound = mProgramPipelines.find(activeKey);
-            // Program object not found for key so need to create it
+            // Program object not found for key so need to create it.
             if (programFound == mProgramPipelines.end())
             {
-                mActiveProgramPipeline = new GLSLESProgramPipeline(mActiveVertexGpuProgram, mActiveFragmentGpuProgram);
+                mActiveProgramPipeline = new GLSLESProgramPipeline(mActiveVertexShader, mActiveFragmentShader);
                 mProgramPipelines[activeKey] = mActiveProgramPipeline;
             }
             else
             {
-                // Found a link program in map container so make it active
+                // Found a link program in map container so make it active.
                 mActiveProgramPipeline = programFound->second;
             }
             
         }
-        // Make the program object active
+        // Make the program object active.
         if (mActiveProgramPipeline)
             mActiveProgramPipeline->activate();
-        
+
         return mActiveProgramPipeline;
     }
 

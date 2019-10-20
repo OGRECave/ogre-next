@@ -40,39 +40,49 @@ THE SOFTWARE.
 namespace Ogre {
 
 
-    /** Ogre assumes that there are separate vertex and fragment programs to deal with but
-        GLSL ES has one program object that represents the active vertex and fragment shader objects
-        during a rendering state.  GLSL Vertex and fragment 
-        shader objects are compiled separately and then attached to a program object and then the
-        program object is linked.  Since Ogre can only handle one vertex program and one fragment
-        program being active in a pass, the GLSL ES Link Program Manager does the same.  The GLSL ES Link
-        program manager acts as a state machine and activates a program object based on the active
-        vertex and fragment program.  Previously created program objects are stored along with a unique
-        key in a hash_map for quick retrieval the next time the program object is required.
+    /** Ogre assumes that there are separate programs to deal with but
+        GLSL ES has one program object that represents the active shader
+        objects during a rendering state.  GLSL shader objects are
+        compiled separately and then attached to a program object and
+        then the program object is linked.  Since Ogre can only handle
+        one program being active in a pass, the GLSL ES Link Program
+        Manager does the same.  The GLSL ES Link program manager acts as
+        a state machine and activates a program object based on the
+        active programs.  Previously created program objects are
+        stored along with a unique key in a hash_map for quick
+        retrieval the next time the program object is required.
     */
 
     class _OgreGLES2Export GLSLESProgramManagerCommon
     {
     protected:
-        /// Active objects defining the active rendering gpu state
-        GLSLESGpuProgram* mActiveVertexGpuProgram;
-        GLSLESGpuProgram* mActiveFragmentGpuProgram;
+        /// Active shader objects defining the active program object.
+        GLSLESShader* mActiveVertexShader;
+        GLSLESShader* mActiveFragmentShader;
 
         typedef map<String, GLenum>::type StringToEnumMap;
         StringToEnumMap mTypeEnumMap;
 #if !OGRE_NO_GLES2_GLSL_OPTIMISER
         struct glslopt_ctx *mGLSLOptimiserContext;
 #endif
-        /// Use type to complete other information
-        void completeDefInfo(GLenum gltype, GpuConstantDefinition& defToUpdate);
-        /// Find where the data for a specific uniform should come from, populate
-        bool completeParamSource(const String& paramName,
+        /** Convert GL uniform size and type to OGRE constant types
+            and associate uniform definitions together. */
+        void convertGLUniformtoOgreType(GLenum gltype,
+                                        GpuConstantDefinition& defToUpdate);
+        /** Find the data source definition for a given uniform name
+            and reference. Return true if found and pair the reference
+            with its data source. */
+        bool findUniformDataSource(
+            const String& paramName,
             const GpuConstantDefinitionMap* vertexConstantDefs, 
             const GpuConstantDefinitionMap* fragmentConstantDefs,
             GLUniformReference& refToUpdate);
-        void parseIndividualConstant(const String& src, GpuNamedConstants& defs,
-                                     String::size_type currPos,
-                                     const String& filename, GpuSharedParametersPtr sharedParams);
+        /** Parse an individual uniform from a GLSL source file and
+            store it in a GpuNamedConstant. */
+        void parseGLSLUniform(
+            const String& src, GpuNamedConstants& defs,
+            String::size_type currPos,
+            const String& filename, GpuSharedParametersPtr sharedParams);
 
     public:
 
@@ -83,32 +93,36 @@ namespace Ogre {
         /**
          
         */
-        void optimiseShaderSource(GLSLESGpuProgram* gpuProgram);
+        void optimiseShaderSource(GLSLESShader* gpuProgram);
 #endif
 
-        /** Populate a list of uniforms based on a program object.
-        @param programObject Handle to the program object to query
-        @param vertexConstantDefs Definition of the constants extracted from the
+        /** Populate a list of uniforms based on an OpenGL program object.
+        @param programObject Handle to the program object to query.
+        @param vertexConstantDefs Definition of the uniforms extracted from the
             vertex program, used to match up physical buffer indexes with program
             uniforms. May be null if there is no vertex program.
-        @param fragmentConstantDefs Definition of the constants extracted from the
+        @param fragmentConstantDefs Definition of the uniforms extracted from the
             fragment program, used to match up physical buffer indexes with program
             uniforms. May be null if there is no fragment program.
         @param list The list to populate (will not be cleared before adding, clear
         it yourself before calling this if that's what you want).
         */
-        void extractUniforms(GLuint programObject, 
+        void extractUniformsFromProgram(
+            GLuint programObject,
             const GpuConstantDefinitionMap* vertexConstantDefs, 
             const GpuConstantDefinitionMap* fragmentConstantDefs,
-            GLUniformReferenceList& list, GLUniformBufferList& sharedList);
-        /** Populate a list of uniforms based on GLSL ES source.
-        @param src Reference to the source code
-        @param constantDefs The defs to populate (will not be cleared before adding, clear
-        it yourself before calling this if that's what you want).
+            GLUniformReferenceList& uniformList,
+            GLUniformBufferList& uniformBufferList);
+        /** Populate a list of uniforms based on GLSL source and store
+         them in GpuNamedConstants.
+        @param src Reference to the source code.
+        @param constantDefs The defs to populate (will
+        not be cleared before adding, clear it yourself before
+        calling this if that's what you want).
         @param filename The file name this came from, for logging errors.
         */
-        void extractConstantDefs(const String& src, GpuNamedConstants& constantDefs, 
-            const String& filename);
+        void extractUniformsFromGLSL(
+            const String& src, GpuNamedConstants& constantDefs, const String& filename);
     };
 
 }

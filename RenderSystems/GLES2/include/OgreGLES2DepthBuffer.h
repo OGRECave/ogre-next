@@ -35,9 +35,6 @@ THE SOFTWARE.
 namespace Ogre 
 {
     class GLES2Context;
-    namespace v1 {
-    class GLES2RenderBuffer;
-    }
     class GLES2RenderSystem;
     /**
         @copydoc DepthBuffer
@@ -52,26 +49,34 @@ namespace Ogre
     */
     class _OgreGLES2Export GLES2DepthBuffer : public DepthBuffer
     {
+        GLuint createRenderBuffer( GLenum format );
+
     public:
-        GLES2DepthBuffer( uint16 poolId, GLES2RenderSystem *renderSystem, GLES2Context *creatorContext,
-                          v1::GLES2RenderBuffer *depth, v1::GLES2RenderBuffer *stencil,
+        GLES2DepthBuffer( uint16 poolId, GLES2RenderSystem *renderSystem,
+                          GLES2Context *creatorContext,
+                          GLenum depthFormat, GLenum stencilFormat,
                           uint32 width, uint32 height, uint32 fsaa, uint32 multiSampleQuality,
-                          bool isManual );
+                          PixelFormat pixelFormat, bool isDepthTexture, bool isManual );
         ~GLES2DepthBuffer();
 
         /// @copydoc DepthBuffer::isCompatible
-        virtual bool isCompatible( RenderTarget *renderTarget ) const;
+        virtual bool isCompatible( RenderTarget *renderTarget, bool exactFormatMatch ) const;
+
+        void bindToFramebuffer( GLenum target = GL_FRAMEBUFFER );
 
         GLES2Context* getGLContext() const { return mCreatorContext; }
-        v1::GLES2RenderBuffer* getDepthBuffer() const  { return mDepthBuffer; }
-        v1::GLES2RenderBuffer* getStencilBuffer() const { return mStencilBuffer; }
+        GLuint getDepthBuffer() const  { return mDepthBufferName; }
+        GLuint getStencilBuffer() const { return mStencilBufferName; }
+
+        bool hasSeparateStencilBuffer() const;
 
     protected:
         uint32                      mMultiSampleQuality;
         GLES2Context                *mCreatorContext;
-        v1::GLES2RenderBuffer       *mDepthBuffer;
-        v1::GLES2RenderBuffer       *mStencilBuffer;
-        GLES2RenderSystem           *mRenderSystem;
+        GLuint                      mDepthBufferName;
+        GLuint                      mStencilBufferName;
+
+        virtual bool copyToImpl( DepthBuffer *destination );
     };
 }
 #endif

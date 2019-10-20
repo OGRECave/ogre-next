@@ -31,7 +31,6 @@ THE SOFTWARE.
 #include "OgreGLES2RenderSystem.h"
 #include "OgreRoot.h"
 #include "OgreGLES2Util.h"
-#include "OgreGLES2StateCacheManager.h"
 
 namespace Ogre {
 namespace v1 {
@@ -42,15 +41,6 @@ namespace v1 {
                                                      bool useShadowBuffer)
         : HardwareIndexBuffer(mgr, idxType, numIndexes, usage, false, useShadowBuffer)
     {
-#if OGRE_NO_GLES3_SUPPORT == 1
-        if (!Root::getSingleton().getRenderSystem()->getCapabilities()->hasCapability(RSC_32BIT_INDEX) &&
-            idxType == HardwareIndexBuffer::IT_32BIT)
-        {
-            OGRE_EXCEPT(Exception::ERR_INTERNAL_ERROR,
-                "32 bit hardware buffers are not allowed in OpenGL ES.",
-                "GLES2HardwareIndexBuffer");
-        }
-#endif
         createBuffer();
     }
 
@@ -61,13 +51,17 @@ namespace v1 {
     
     void GLES2HardwareIndexBuffer::createBuffer()
     {
-        OGRE_CHECK_GL_ERROR(glGenBuffers(1, &mBufferId));
-
-        if(getGLES2SupportRef()->checkExtension("GL_EXT_debug_label"))
+        GLES2RenderSystem* rs = getGLES2RenderSystem();
+#if OGRE_NO_GLES3_SUPPORT == 1
+        if (!rs->getCapabilities()->hasCapability(RSC_32BIT_INDEX) && idxType == HardwareIndexBuffer::IT_32BIT)
         {
-            OGRE_IF_IOS_VERSION_IS_GREATER_THAN(5.0)
-            OGRE_CHECK_GL_ERROR(glLabelObjectEXT(GL_BUFFER_OBJECT_EXT, mBufferId, 0, ("Index Buffer #" + StringConverter::toString(mBufferId)).c_str()));
+            OGRE_EXCEPT(Exception::ERR_INTERNAL_ERROR,
+                "32 bit hardware buffers are not allowed in OpenGL ES.",
+                "GLES2HardwareIndexBuffer");
         }
+#endif
+
+        OGRE_CHECK_GL_ERROR(glGenBuffers(1, &mBufferId));
 
         if (!mBufferId)
         {
@@ -76,8 +70,13 @@ namespace v1 {
                         "GLES2HardwareIndexBuffer::GLES2HardwareIndexBuffer");
         }
         
-        static_cast<GLES2HardwareBufferManagerBase*>(mMgr)->getStateCacheManager()->bindGLBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferId);
+        OGRE_CHECK_GL_ERROR(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferId));
         
+        if(rs->checkExtension("GL_EXT_debug_label"))
+        {
+            OGRE_CHECK_GL_ERROR(glLabelObjectEXT(GL_BUFFER_OBJECT_EXT, mBufferId, 0, ("Index Buffer #" + StringConverter::toString(mBufferId)).c_str()));
+        }
+
         OGRE_CHECK_GL_ERROR(glBufferData(GL_ELEMENT_ARRAY_BUFFER, (GLsizeiptr)mSizeInBytes, NULL,
                                          GLES2HardwareBufferManager::getGLUsage(mUsage)));
     }
@@ -85,7 +84,7 @@ namespace v1 {
     void GLES2HardwareIndexBuffer::destroyBuffer()
     {
         // Delete the cached value
-        static_cast<GLES2HardwareBufferManagerBase*>(mMgr)->getStateCacheManager()->deleteGLBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferId);
+       OGRE_CHECK_GL_ERROR(glDeleteBuffers(1, &mBufferId));
     }
     
 #if OGRE_PLATFORM == OGRE_PLATFORM_ANDROID || OGRE_PLATFORM == OGRE_PLATFORM_EMSCRIPTEN
@@ -104,12 +103,12 @@ namespace v1 {
     
     void GLES2HardwareIndexBuffer::unlockImpl(void)
     {
-        static_cast<GLES2HardwareBufferManagerBase*>(mMgr)->getStateCacheManager()->bindGLBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferId);
+        OGRE_CHECK_GL_ERROR(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferId));
 
 #if OGRE_NO_GLES3_SUPPORT == 0 || defined(GL_EXT_map_buffer_range)
         if (mUsage & HBU_WRITE_ONLY)
         {
-            OGRE_CHECK_GL_ERROR(glFlushMappedBufferRangeEXT(GL_ELEMENT_ARRAY_BUFFER, mLockStart, mLockSize));
+            OGRE_CHECK_GL_ERROR(glFlushMappedBufferRangeEXT(GL_ELEMENT_ARRAY_BUFFER, 0, mLockSize));
         }
 #endif
         GLboolean mapped;
@@ -135,7 +134,7 @@ namespace v1 {
         }
 
         GLenum access = 0;
-        static_cast<GLES2HardwareBufferManagerBase*>(mMgr)->getStateCacheManager()->bindGLBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferId);
+        OGRE_CHECK_GL_ERROR(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferId));
 
         void* pBuffer;
 #if OGRE_NO_GLES3_SUPPORT == 0 || defined(GL_EXT_map_buffer_range)
@@ -195,7 +194,8 @@ namespace v1 {
         }
         else
         {
-            if(getGLES2SupportRef()->checkExtension("GL_EXT_map_buffer_range") || gleswIsSupported(3, 0))
+            GLES2RenderSystem* rs = getGLES2RenderSystem();
+            if(rs->hasMinGLVersion(3, 0) || rs->checkExtension("GL_EXT_map_buffer_range"))
             {
                 // Map the buffer range then copy out of it into our destination buffer
                 void* srcData;
@@ -225,7 +225,7 @@ namespace v1 {
                                             const void* pSource,
                                             bool discardWholeBuffer)
     {
-        static_cast<GLES2HardwareBufferManagerBase*>(mMgr)->getStateCacheManager()->bindGLBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferId);
+        OGRE_CHECK_GL_ERROR(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferId));
 
         // Update the shadow buffer
         if (mUseShadowBuffer)
@@ -291,7 +291,7 @@ namespace v1 {
         {
             const void *srcData = mShadowBuffer->lock(mLockStart, mLockSize, HBL_READ_ONLY);
 
-            static_cast<GLES2HardwareBufferManagerBase*>(mMgr)->getStateCacheManager()->bindGLBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferId);
+            OGRE_CHECK_GL_ERROR(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferId));
 
             OGRE_CHECK_GL_ERROR(glBufferData(GL_ELEMENT_ARRAY_BUFFER, (GLsizeiptr)mSizeInBytes, srcData,
                                              GLES2HardwareBufferManager::getGLUsage(mUsage)));

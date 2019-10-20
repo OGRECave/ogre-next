@@ -62,11 +62,6 @@ namespace Ogre {
             
             void getCustomAttribute(const String& name, void* pData);
 
-#if OGRE_NO_GLES3_SUPPORT != 0
-            void bindSamplerBlock( GLES2HlmsSamplerblock *samplerblock );
-            uint32 getLastBoundSamplerblockRsId(void) const { return mLastBoundSamplerblockRsId; }
-#endif
-
         protected:
             /// @copydoc Texture::createInternalResourcesImpl
             void createInternalResourcesImpl(void);
@@ -76,7 +71,7 @@ namespace Ogre {
             void unprepareImpl(void);
             /// @copydoc Resource::loadImpl
             void loadImpl(void);
-            /// @copydoc Texture::freeInternalResourcesImpl
+            /// @copydoc Resource::freeInternalResourcesImpl
             void freeInternalResourcesImpl(void);
 
             /** Internal method, create GLHardwarePixelBuffers for every face and
@@ -85,6 +80,8 @@ namespace Ogre {
              actually allocate the buffer
              */
             void _createSurfaceList();
+
+            virtual void _autogenerateMipmaps(void);
 
             /// Used to hold images between calls to prepare and load.
             typedef SharedPtr<vector<Image>::type > LoadedImages;
@@ -106,11 +103,7 @@ namespace Ogre {
             virtual void notifyOnContextReset();
 #endif
 
-        private:
             GLuint mTextureID;
-#if OGRE_NO_GLES3_SUPPORT != 0
-            uint32 mLastBoundSamplerblockRsId;
-#endif
             GLES2Support& mGLSupport;
             
             /// Vector of pointers to subsurfaces

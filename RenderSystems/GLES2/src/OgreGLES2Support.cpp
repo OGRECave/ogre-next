@@ -54,14 +54,26 @@ namespace Ogre {
 
     void GLES2Support::initialiseExtensions(void)
     {
+        String tmpStr;
+#if 1
         // Set version string
         const GLubyte* pcVer = glGetString(GL_VERSION);
-
         assert(pcVer && "Problems getting GL version string using glGetString");
+        tmpStr = (const char*)pcVer;
+        
+        // format explained here:
+        // https://www.khronos.org/opengles/sdk/docs/man/xhtml/glGetString.xml
+        size_t offset = sizeof("OpenGL ES ") - 1;
+        if(tmpStr.length() > offset) {
+            mVersion.fromString(tmpStr.substr(offset, tmpStr.find(' ', offset)));
+        }
+#else
+        // GLES3 way, but does not work with ES2 as well, so disabled for now
+        glGetIntegerv(GL_MAJOR_VERSION, &mVersion.major);
+        glGetIntegerv(GL_MINOR_VERSION, &mVersion.minor);
+#endif
 
-        String tmpStr = (const char*)pcVer;
         LogManager::getSingleton().logMessage("GL_VERSION = " + tmpStr);
-        mVersion = tmpStr.substr(0, tmpStr.find(" "));
 
         // Get vendor
         const GLubyte* pcVendor = glGetString(GL_VENDOR);
@@ -75,7 +87,7 @@ namespace Ogre {
         LogManager::getSingleton().logMessage("GL_RENDERER = " + tmpStr);
 
         // Set extension list
-        std::stringstream ext;
+        StringStream ext;
         String str;
 
         const GLubyte* pcExt = glGetString(GL_EXTENSIONS);
@@ -92,11 +104,16 @@ namespace Ogre {
         }
     }
 
+    bool GLES2Support::hasMinGLVersion(int major, int minor) const
+    {
+        if (mVersion.major == major) {
+            return mVersion.minor >= minor;
+        }
+        return mVersion.major >= major;
+    }
+
     bool GLES2Support::checkExtension(const String& ext) const
     {
-        if(extensionList.find(ext) == extensionList.end())
-            return false;
-
-        return true;
+        return extensionList.find(ext) != extensionList.end();
     }
 }

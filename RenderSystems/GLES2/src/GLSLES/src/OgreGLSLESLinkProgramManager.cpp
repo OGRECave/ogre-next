@@ -27,158 +27,102 @@ THE SOFTWARE.
 */
 
 #include "OgreGLSLESLinkProgramManager.h"
-#include "OgreGLSLESGpuProgram.h"
+#include "OgreGLSLESShader.h"
 #include "OgreStringConverter.h"
-#include "OgreGLSLESProgram.h"
+#include "OgreGLSLESShader.h"
 
 namespace Ogre {
 
-    //-----------------------------------------------------------------------
+
     template<> GLSLESLinkProgramManager* Singleton<GLSLESLinkProgramManager>::msSingleton = 0;
 
-    //-----------------------------------------------------------------------
+
     GLSLESLinkProgramManager* GLSLESLinkProgramManager::getSingletonPtr(void)
     {
         return msSingleton;
     }
 
-    //-----------------------------------------------------------------------
     GLSLESLinkProgramManager& GLSLESLinkProgramManager::getSingleton(void)
     {  
-        assert( msSingleton );  return ( *msSingleton );  
+        assert(msSingleton);
+        return (*msSingleton);
     }
 
-    //-----------------------------------------------------------------------
-    GLSLESLinkProgramManager::GLSLESLinkProgramManager(void) :
-        GLSLESProgramManagerCommon(), mActiveLinkProgram(NULL) { }
+    GLSLESLinkProgramManager::GLSLESLinkProgramManager(void)
+        : GLSLESProgramManagerCommon()
+        , mActiveLinkProgram(NULL)
+    {
+    }
 
-    //-----------------------------------------------------------------------
     GLSLESLinkProgramManager::~GLSLESLinkProgramManager(void)
     {
         // iterate through map container and delete link programs
         for (LinkProgramIterator currentProgram = mLinkPrograms.begin();
-            currentProgram != mLinkPrograms.end(); ++currentProgram)
+             currentProgram != mLinkPrograms.end(); ++currentProgram)
         {
             OGRE_DELETE currentProgram->second;
         }
     }
 
-    //-----------------------------------------------------------------------
     GLSLESLinkProgram* GLSLESLinkProgramManager::getActiveLinkProgram(void)
     {
-        // If there is an active link program then return it
+        // If there is an active link program then return it.
         if (mActiveLinkProgram)
             return mActiveLinkProgram;
 
-        // No active link program so find one or make a new one
+        // No active link program so find one or make a new one.
         // Is there an active key?
         uint64 activeKey = 0;
 
-        if (mActiveVertexGpuProgram)
+        if (mActiveVertexShader)
         {
-            activeKey = static_cast<uint64>(mActiveVertexGpuProgram->getProgramID()) << 32;
+            activeKey = static_cast<uint64>(mActiveVertexShader->getShaderID()) << 32;
         }
-        if (mActiveFragmentGpuProgram)
+        if (mActiveFragmentShader)
         {
-            activeKey += static_cast<uint64>(mActiveFragmentGpuProgram->getProgramID());
+            activeKey += static_cast<uint64>(mActiveFragmentShader->getShaderID());
         }
 
-        // Only return a link program object if a vertex or fragment program exist
+        // Only return a link program object if a program exists.
         if (activeKey > 0)
         {
-            // Find the key in the hash map
+            // Find the key in the hash map.
             LinkProgramIterator programFound = mLinkPrograms.find(activeKey);
-            // Program object not found for key so need to create it
+            // Program object not found for key so need to create it.
             if (programFound == mLinkPrograms.end())
             {
-                mActiveLinkProgram = new GLSLESLinkProgram(mActiveVertexGpuProgram,mActiveFragmentGpuProgram);
+                mActiveLinkProgram = new GLSLESLinkProgram(mActiveVertexShader, mActiveFragmentShader);
                 mLinkPrograms[activeKey] = mActiveLinkProgram;
             }
             else
             {
-                // Found a link program in map container so make it active
+                // Found a link program in map container so make it active.
                 mActiveLinkProgram = programFound->second;
             }
 
         }
-        // Make the program object active
-        if (mActiveLinkProgram) mActiveLinkProgram->activate();
+        // Make the program object active.
+        if (mActiveLinkProgram)
+            mActiveLinkProgram->activate();
 
         return mActiveLinkProgram;
 	}
 
-	//-----------------------------------------------------------------------
-	GLSLESLinkProgram* GLSLESLinkProgramManager::getByProgram(GLSLESGpuProgram* gpuProgram)
-	{
-		for (LinkProgramIterator currentProgram = mLinkPrograms.begin();
-			currentProgram != mLinkPrograms.end(); ++currentProgram)
-		{
-			GLSLESLinkProgram* prgm = currentProgram->second;
-			if(prgm->getVertexProgram() == gpuProgram || prgm->getFragmentProgram() == gpuProgram)
-			{
-				return prgm;
-			}
-		}
-
-		return NULL;
-	}
-
-	//-----------------------------------------------------------------------
-	bool GLSLESLinkProgramManager::destroyLinkProgram(GLSLESLinkProgram* linkProgram)
-	{
-		for (LinkProgramIterator currentProgram = mLinkPrograms.begin();
-			currentProgram != mLinkPrograms.end(); ++currentProgram)
-		{
-			GLSLESLinkProgram* prgm = currentProgram->second;
-			if(prgm == linkProgram)
-			{
-				mLinkPrograms.erase(mLinkPrograms.find(currentProgram->first));
-				OGRE_DELETE prgm;
-				return true;				
-			}
-		}
-
-		return false;
-	}
-
-	//-----------------------------------------------------------------------
-	void GLSLESLinkProgramManager::destroyAllByProgram(GLSLESGpuProgram* gpuProgram)
-	{
-		std::vector<uint64> keysToErase;
-		for (LinkProgramIterator currentProgram = mLinkPrograms.begin();
-			currentProgram != mLinkPrograms.end(); ++currentProgram)
-		{
-			GLSLESLinkProgram* prgm = currentProgram->second;
-			if(prgm->getVertexProgram() == gpuProgram || prgm->getFragmentProgram() == gpuProgram)
-			{
-				OGRE_DELETE prgm;
-				keysToErase.push_back(currentProgram->first);
-			}
-		}
-		
-		for(size_t i = 0; i < keysToErase.size(); ++i)
-		{
-			mLinkPrograms.erase(mLinkPrograms.find(keysToErase[i]));
-		}
-    }
-
-    //-----------------------------------------------------------------------
-    void GLSLESLinkProgramManager::setActiveFragmentShader(GLSLESGpuProgram* fragmentGpuProgram)
+    void GLSLESLinkProgramManager::setActiveFragmentShader(GLSLESShader* fragmentShader)
     {
-        if (fragmentGpuProgram != mActiveFragmentGpuProgram)
+        if (fragmentShader != mActiveFragmentShader)
         {
-            mActiveFragmentGpuProgram = fragmentGpuProgram;
+            mActiveFragmentShader = fragmentShader;
             // ActiveLinkProgram is no longer valid
             mActiveLinkProgram = NULL;
         }
     }
 
-    //-----------------------------------------------------------------------
-    void GLSLESLinkProgramManager::setActiveVertexShader(GLSLESGpuProgram* vertexGpuProgram)
+    void GLSLESLinkProgramManager::setActiveVertexShader(GLSLESShader* vertexShader)
     {
-        if (vertexGpuProgram != mActiveVertexGpuProgram)
+        if (vertexShader != mActiveVertexShader)
         {
-            mActiveVertexGpuProgram = vertexGpuProgram;
+            mActiveVertexShader = vertexShader;
             // ActiveLinkProgram is no longer valid
             mActiveLinkProgram = NULL;
         }

@@ -27,19 +27,17 @@ THE SOFTWARE.
 */
 
 #include "OgreGLSLESProgramManagerCommon.h"
-#include "OgreGLSLESGpuProgram.h"
 #include "OgreLogManager.h"
 #include "OgreStringConverter.h"
+#include "OgreGLSLESShader.h"
 #include "OgreGpuProgramManager.h"
 #include "OgreGLES2HardwareUniformBuffer.h"
 #include "OgreHardwareBufferManager.h"
-#include "OgreGLSLESProgram.h"
 
 namespace Ogre {
 
-    //-----------------------------------------------------------------------
-    GLSLESProgramManagerCommon::GLSLESProgramManagerCommon(void) : mActiveVertexGpuProgram(NULL),
-        mActiveFragmentGpuProgram(NULL)
+    GLSLESProgramManagerCommon::GLSLESProgramManagerCommon(void) : mActiveVertexShader(NULL),
+        mActiveFragmentShader(NULL)
     {
         // Fill in the relationship between type names and enums
         mTypeEnumMap.insert(StringToEnumMap::value_type("float", GL_FLOAT));
@@ -53,6 +51,10 @@ namespace Ogre {
         mTypeEnumMap.insert(StringToEnumMap::value_type("ivec2", GL_INT_VEC2));
         mTypeEnumMap.insert(StringToEnumMap::value_type("ivec3", GL_INT_VEC3));
         mTypeEnumMap.insert(StringToEnumMap::value_type("ivec4", GL_INT_VEC4));
+        mTypeEnumMap.insert(StringToEnumMap::value_type("bool", GL_BOOL));
+        mTypeEnumMap.insert(StringToEnumMap::value_type("bvec2", GL_BOOL_VEC2));
+        mTypeEnumMap.insert(StringToEnumMap::value_type("bvec3", GL_BOOL_VEC3));
+        mTypeEnumMap.insert(StringToEnumMap::value_type("bvec4", GL_BOOL_VEC4));
         mTypeEnumMap.insert(StringToEnumMap::value_type("mat2", GL_FLOAT_MAT2));
         mTypeEnumMap.insert(StringToEnumMap::value_type("mat3", GL_FLOAT_MAT3));
         mTypeEnumMap.insert(StringToEnumMap::value_type("mat4", GL_FLOAT_MAT4));
@@ -63,9 +65,6 @@ namespace Ogre {
         mTypeEnumMap.insert(StringToEnumMap::value_type("mat4x3", GL_FLOAT_MAT4x3));
         mTypeEnumMap.insert(StringToEnumMap::value_type("mat2x4", GL_FLOAT_MAT2x4));
         mTypeEnumMap.insert(StringToEnumMap::value_type("mat4x2", GL_FLOAT_MAT4x2));
-        mTypeEnumMap.insert(StringToEnumMap::value_type("bvec2", GL_BOOL_VEC2));
-        mTypeEnumMap.insert(StringToEnumMap::value_type("bvec3", GL_BOOL_VEC3));
-        mTypeEnumMap.insert(StringToEnumMap::value_type("bvec4", GL_BOOL_VEC4));
         mTypeEnumMap.insert(StringToEnumMap::value_type("uint", GL_UNSIGNED_INT));
         mTypeEnumMap.insert(StringToEnumMap::value_type("uvec2", GL_UNSIGNED_INT_VEC2));
         mTypeEnumMap.insert(StringToEnumMap::value_type("uvec3", GL_UNSIGNED_INT_VEC3));
@@ -94,7 +93,6 @@ namespace Ogre {
 #endif
     }
 
-    //-----------------------------------------------------------------------
     GLSLESProgramManagerCommon::~GLSLESProgramManagerCommon(void)
     {
 #if !OGRE_NO_GLES2_GLSL_OPTIMISER
@@ -105,13 +103,12 @@ namespace Ogre {
         }
 #endif
     }
-    //---------------------------------------------------------------------
-    void GLSLESProgramManagerCommon::completeDefInfo(GLenum gltype, 
+
+    void GLSLESProgramManagerCommon::convertGLUniformtoOgreType(GLenum gltype, 
         GpuConstantDefinition& defToUpdate)
     {
-        // Decode uniform size and type
-        // Note GLSL ES never packs rows into float4's(from an API perspective anyway)
-        // therefore all values are tight in the buffer
+        // Note GLSL never packs rows into float4's (from an API perspective anyway)
+        // therefore all values are tight in the buffer.
         switch (gltype)
         {
         case GL_FLOAT:
@@ -192,7 +189,31 @@ namespace Ogre {
         case GL_FLOAT_MAT4x3:
             defToUpdate.constType = GCT_MATRIX_4X3;
             break;
+        case GL_UNSIGNED_INT:
+            defToUpdate.constType = GCT_UINT1;
+            break;
+        case GL_UNSIGNED_INT_VEC2:
+            defToUpdate.constType = GCT_UINT2;
+            break;
+        case GL_UNSIGNED_INT_VEC3:
+            defToUpdate.constType = GCT_UINT3;
+            break;
+        case GL_UNSIGNED_INT_VEC4:
+            defToUpdate.constType = GCT_UINT4;
+            break;
 #endif
+        case GL_BOOL:
+            defToUpdate.constType = GCT_BOOL1;
+            break;
+        case GL_BOOL_VEC2:
+            defToUpdate.constType = GCT_BOOL2;
+            break;
+        case GL_BOOL_VEC3:
+            defToUpdate.constType = GCT_BOOL3;
+            break;
+        case GL_BOOL_VEC4:
+            defToUpdate.constType = GCT_BOOL4;
+            break;
         default:
             defToUpdate.constType = GCT_UNKNOWN;
             break;
@@ -202,8 +223,7 @@ namespace Ogre {
         defToUpdate.elementSize = GpuConstantDefinition::getElementSize(defToUpdate.constType, false);
     }
 
-    //---------------------------------------------------------------------
-    bool GLSLESProgramManagerCommon::completeParamSource(
+    bool GLSLESProgramManagerCommon::findUniformDataSource(
         const String& paramName,
         const GpuConstantDefinitionMap* vertexConstantDefs, 
         const GpuConstantDefinitionMap* fragmentConstantDefs,
@@ -236,29 +256,29 @@ namespace Ogre {
     }
 
 #if !OGRE_NO_GLES2_GLSL_OPTIMISER
-    void GLSLESProgramManagerCommon::optimiseShaderSource(GLSLESGpuProgram* gpuProgram)
+    void GLSLESProgramManagerCommon::optimiseShaderSource(GLSLESShader* gpuProgram)
     {
-        if(!gpuProgram->getGLSLProgram()->getIsOptimised())
+        if(!gpuProgram->getIsOptimised())
         {
             GpuProgramType gpuType = gpuProgram->getType();
             const glslopt_shader_type shaderType = (gpuType == GPT_VERTEX_PROGRAM) ? kGlslOptShaderVertex : kGlslOptShaderFragment;
-            String shaderSource = gpuProgram->getGLSLProgram()->getSource();
+            String shaderSource = gpuProgram->getSource();
             glslopt_shader* shader = glslopt_optimize(mGLSLOptimiserContext, shaderType, shaderSource.c_str(), 0);
 
             StringStream os;
             if(glslopt_get_status(shader))
             {
                 const String source = glslopt_get_output(shader);
-                gpuProgram->getGLSLProgram()->setOptimisedSource(source);
-                gpuProgram->getGLSLProgram()->setIsOptimised(true);
+                gpuProgram->setOptimisedSource(source);
+                gpuProgram->setIsOptimised(true);
             }
             else
             {
                 LogManager::getSingleton().logMessage("Error from GLSL Optimiser, disabling optimisation for program: " + gpuProgram->getName());
-                gpuProgram->getGLSLProgram()->setParameter("use_optimiser", "false");
+                gpuProgram->setParameter("use_optimiser", "false");
                 //LogManager::getSingleton().logMessage(String(glslopt_get_log(shader)));
                 //LogManager::getSingleton().logMessage("Original Shader");
-                //LogManager::getSingleton().logMessage(gpuProgram->getGLSLProgram()->getSource());
+                //LogManager::getSingleton().logMessage(gpuProgram->getSource());
                 //LogManager::getSingleton().logMessage("Optimized Shader");
                 //LogManager::getSingleton().logMessage(os.str());
             }
@@ -267,45 +287,39 @@ namespace Ogre {
     }
 #endif
 
-    //---------------------------------------------------------------------
-    void GLSLESProgramManagerCommon::extractUniforms(GLuint programObject, 
+    void GLSLESProgramManagerCommon::extractUniformsFromProgram(
+        GLuint programObject,
         const GpuConstantDefinitionMap* vertexConstantDefs, 
         const GpuConstantDefinitionMap* fragmentConstantDefs,
-        GLUniformReferenceList& list, GLUniformBufferList& sharedList)
+        GLUniformReferenceList& uniformList,
+        GLUniformBufferList& sharedList)
     {
-        // Scan through the active uniforms and add them to the reference list
+        // Scan through the active uniforms and add them to the reference list.
         GLint uniformCount = 0;
-        GLint maxLength = 0;
-        char* uniformName = NULL;
-        #define uniformLength 200
+#define uniformLength 200
+//        GLint uniformLength = 0;
+//        glGetProgramiv(programObject, GL_ACTIVE_UNIFORM_MAX_LENGTH, &uniformLength);
+        char uniformName[uniformLength];
 
-        OGRE_CHECK_GL_ERROR(glGetProgramiv(programObject, GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxLength));
-
-        // If the max length of active uniforms is 0, then there are 0 active.
-        // There won't be any to extract so we can return.
-        if(maxLength == 0)
-            return;
-
-        uniformName = new char[maxLength + 1];
         GLUniformReference newGLUniformReference;
 
         // Get the number of active uniforms
         OGRE_CHECK_GL_ERROR(glGetProgramiv(programObject, GL_ACTIVE_UNIFORMS, &uniformCount));
 
-        // Loop over each of the active uniforms, and add them to the reference container
-        // only do this for user defined uniforms, ignore built in gl state uniforms
+        // Loop over each active uniform and add it to the reference
+        // container.
         for (GLuint index = 0; index < (GLuint)uniformCount; index++)
         {
             GLint arraySize = 0;
             GLenum glType = GL_NONE;
-            OGRE_CHECK_GL_ERROR(glGetActiveUniform(programObject, index, maxLength, NULL,
+            OGRE_CHECK_GL_ERROR(glGetActiveUniform(programObject, index, uniformLength, NULL,
                 &arraySize, &glType, uniformName));
 
             // Don't add built in uniforms
-            newGLUniformReference.mLocation = glGetUniformLocation(programObject, uniformName);
+            OGRE_CHECK_GL_ERROR(newGLUniformReference.mLocation = glGetUniformLocation(programObject, uniformName));
             if (newGLUniformReference.mLocation >= 0)
             {
-                // User defined uniform found, add it to the reference list
+                // User defined uniform found, add it to the reference list.
                 String paramName = String( uniformName );
 
                 // If the uniform name has a "[" in it then its an array element uniform.
@@ -318,15 +332,17 @@ namespace Ogre {
                 }
 
                 // Find out which params object this comes from
-                bool foundSource = completeParamSource(paramName,
-                        vertexConstantDefs, fragmentConstantDefs, newGLUniformReference);
+                bool foundSource = findUniformDataSource(
+                        paramName,
+                        vertexConstantDefs, fragmentConstantDefs,
+                        newGLUniformReference);
 
                 // Only add this parameter if we found the source
                 if (foundSource)
                 {
                     assert(size_t (arraySize) == newGLUniformReference.mConstantDef->arraySize
                             && "GL doesn't agree with our array size!");
-                    list.push_back(newGLUniformReference);
+                    uniformList.push_back(newGLUniformReference);
                 }
 
                 // Don't bother adding individual array params, they will be
@@ -336,15 +352,10 @@ namespace Ogre {
             } // end if
         } // end for
         
-        if( uniformName != NULL ) 
-        {
-            delete[] uniformName;
-        }
-
-#if OGRE_NO_GLES3_SUPPORT == 0
-        // Now deal with uniform blocks
-
         GLint blockCount = 0;
+
+#if 0 //OGRE_NO_GLES3_SUPPORT == 0
+        // Now deal with uniform blocks
 
         OGRE_CHECK_GL_ERROR(glGetProgramiv(programObject, GL_ACTIVE_UNIFORM_BLOCKS, &blockCount));
 
@@ -357,28 +368,25 @@ namespace Ogre {
             GLint blockSize, blockBinding;
             OGRE_CHECK_GL_ERROR(glGetActiveUniformBlockiv(programObject, index, GL_UNIFORM_BLOCK_DATA_SIZE, &blockSize));
             OGRE_CHECK_GL_ERROR(glGetActiveUniformBlockiv(programObject, index, GL_UNIFORM_BLOCK_BINDING, &blockBinding));
-            HardwareUniformBufferSharedPtr newUniformBuffer = HardwareBufferManager::getSingleton().createUniformBuffer(blockSize, HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE, false, uniformName);
+            v1::HardwareUniformBufferSharedPtr newUniformBuffer = v1::HardwareBufferManager::getSingleton().createUniformBuffer(blockSize, v1::HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE, false, uniformName);
 
-            GLES2HardwareUniformBuffer* hwGlBuffer = static_cast<GLES2HardwareUniformBuffer*>(newUniformBuffer.get());
+            v1::GLES2HardwareUniformBuffer* hwGlBuffer = static_cast<v1::GLES2HardwareUniformBuffer*>(newUniformBuffer.get());
             hwGlBuffer->setGLBufferBinding(blockBinding);
             sharedList.push_back(newUniformBuffer);
         }
 #endif
     }
-    //---------------------------------------------------------------------
-    void GLSLESProgramManagerCommon::extractConstantDefs(const String& src,
-        GpuNamedConstants& defs, const String& filename)
+
+    void GLSLESProgramManagerCommon::extractUniformsFromGLSL(
+        const String& src, GpuNamedConstants& defs, const String& filename)
     {
         // Parse the output string and collect all uniforms
         // NOTE this relies on the source already having been preprocessed
-        // which is done in GLSLESProgram::loadFromSource
+        // which is done in GLSLESShader::loadFromSource
         String line;
         String::size_type currPos = src.find("uniform");
         while (currPos != String::npos)
         {
-            GpuConstantDefinition def;
-            String paramName;
-
             // Now check for using the word 'uniform' in a larger string & ignore
             bool inLargerString = false;
             if (currPos != 0)
@@ -404,8 +412,9 @@ namespace Ogre {
                 String typeString;
                 GpuSharedParametersPtr blockSharedParams;
 
-                // Check for a type. If there is one, then the semicolon is missing
-                // otherwise treat as if it is a uniform block
+                // Check for a type. If there is one, then the
+                // semicolon is missing. Otherwise treat as if it is
+                // a uniform block.
                 String::size_type lineEndPos = src.find_first_of("\n\r", currPos);
                 line = src.substr(currPos, lineEndPos - currPos);
                 StringVector parts = StringUtil::split(line, " \t");
@@ -421,9 +430,6 @@ namespace Ogre {
                 StringToEnumMap::iterator typei = mTypeEnumMap.find(typeString);
                 if (typei == mTypeEnumMap.end())
                 {
-                    // Gobble up the external name
-                    String externalName = parts.front();
-
                     // Now there should be an opening brace
                     String::size_type openBracePos = src.find("{", currPos);
                     if (openBracePos != String::npos)
@@ -433,7 +439,7 @@ namespace Ogre {
                     else
                     {
                         LogManager::getSingleton().logMessage("Missing opening brace in GLSL Uniform Block in file "
-                                                              + filename);
+                                                              + filename, LML_CRITICAL);
                         break;
                     }
 
@@ -459,7 +465,7 @@ namespace Ogre {
                         break;
                     }
                     
-                    parseIndividualConstant(src, defs, currPos, filename, blockSharedParams);
+                    parseGLSLUniform(src, defs, currPos, filename, blockSharedParams);
                 }
                 line = src.substr(currPos, endPos - currPos);
             } // not commented or a larger symbol
@@ -469,10 +475,11 @@ namespace Ogre {
         }
         
     }
-    //---------------------------------------------------------------------
-    void GLSLESProgramManagerCommon::parseIndividualConstant(const String& src, GpuNamedConstants& defs,
-                                                           String::size_type currPos,
-                                                           const String& filename, GpuSharedParametersPtr sharedParams)
+
+    void GLSLESProgramManagerCommon::parseGLSLUniform(
+        const String& src, GpuNamedConstants& defs,
+        String::size_type currPos,
+        const String& filename, GpuSharedParametersPtr sharedParams)
     {
         GpuConstantDefinition def;
         String paramName = "";
@@ -482,6 +489,8 @@ namespace Ogre {
         // Remove spaces before opening square braces, otherwise
         // the following split() can split the line at inappropriate
         // places (e.g. "vec3 something [3]" won't work).
+        //FIXME What are valid ways of including spaces in GLSL
+        // variable declarations?  May need regex.
         for (String::size_type sqp = line.find (" ["); sqp != String::npos;
              sqp = line.find (" ["))
             line.erase (sqp, 1);
@@ -494,7 +503,7 @@ namespace Ogre {
             StringToEnumMap::iterator typei = mTypeEnumMap.find(*i);
             if (typei != mTypeEnumMap.end())
             {
-                completeDefInfo(typei->second, def);
+                convertGLUniformtoOgreType(typei->second, def);
             }
             else
             {
@@ -516,15 +525,21 @@ namespace Ogre {
                     StringUtil::trim(name);
                     if (!name.empty())
                         paramName = name;
+                    
+                    def.arraySize = 1;
 
-                    String::size_type arrayEnd = i->find("]", arrayStart);
-                    String arrayDimTerm = i->substr(arrayStart + 1, arrayEnd - arrayStart - 1);
-                    StringUtil::trim(arrayDimTerm);
-                    // the array term might be a simple number or it might be
-                    // an expression (e.g. 24*3) or refer to a constant expression
-                    // we'd have to evaluate the expression which could get nasty
-                    // TODO
-                    def.arraySize = StringConverter::parseInt(arrayDimTerm);
+                    // N-dimensional arrays
+                    while (arrayStart != String::npos) {
+                        String::size_type arrayEnd = i->find("]", arrayStart);
+                        String arrayDimTerm = i->substr(arrayStart + 1, arrayEnd - arrayStart - 1);
+                        StringUtil::trim(arrayDimTerm);
+                        // TODO
+                        // the array term might be a simple number or it might be
+                        // an expression (e.g. 24*3) or refer to a constant expression
+                        // we'd have to evaluate the expression which could get nasty
+                        def.arraySize *= StringConverter::parseInt(arrayDimTerm);
+                        arrayStart = i->find("[", arrayEnd);
+                    }
                 }
                 else
                 {
@@ -538,7 +553,7 @@ namespace Ogre {
                 if (def.constType == GCT_UNKNOWN)
                 {
                     LogManager::getSingleton().logMessage("Problem parsing the following GLSL Uniform: '"
-                                                          + line + "' in file " + filename);
+                                                          + line + "' in file " + filename, LML_CRITICAL);
                     // next uniform
                     break;
                 }
@@ -554,10 +569,30 @@ namespace Ogre {
                         def.physicalIndex = defs.floatBufferSize;
                         defs.floatBufferSize += def.arraySize * def.elementSize;
                     }
-                    else
+                    else if (def.isDouble())
+                    {
+                        def.physicalIndex = defs.doubleBufferSize;
+                        defs.doubleBufferSize += def.arraySize * def.elementSize;
+                    }
+                    else if(def.isInt() || def.isSampler())
                     {
                         def.physicalIndex = defs.intBufferSize;
                         defs.intBufferSize += def.arraySize * def.elementSize;
+                    }
+                    else if(def.isUnsignedInt() || def.isBool())
+                    {
+                        def.physicalIndex = defs.uintBufferSize;
+                        defs.uintBufferSize += def.arraySize * def.elementSize;
+                    }
+                    // else if (def.isBool())
+                    // {
+                    //     def.physicalIndex = defs.boolBufferSize;
+                    //     defs.boolBufferSize += def.arraySize * def.elementSize;
+                    // }
+                    else
+                    {
+                        LogManager::getSingleton().logMessage("Could not parse type of GLSL Uniform: '"
+                                                              + line + "' in file " + filename);
                     }
                     defs.map.insert(GpuConstantDefinitionMap::value_type(paramName, def));
 
@@ -571,7 +606,7 @@ namespace Ogre {
                         const GpuConstantDefinition &sharedDef = sharedParams->getConstantDefinition(paramName);
                         (void)sharedDef;    // Silence warning
                     }
-                    catch (Exception& e)
+                    catch (Exception&)
                     {
                         // This constant doesn't exist so we'll create a new one
                         sharedParams->addConstantDefinition(paramName, def.constType);

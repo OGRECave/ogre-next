@@ -66,9 +66,6 @@ namespace Ogre {
         /// active objects defining the active rendering gpu state
         GLSLMonolithicProgram* mActiveMonolithicProgram;
 
-        typedef map<String, GLenum>::type StringToEnumMap;
-        StringToEnumMap mTypeEnumMap;
-
     public:
 
         GLSLMonolithicProgramManager(const GL3PlusSupport& support);

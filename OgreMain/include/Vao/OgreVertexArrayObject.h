@@ -60,6 +60,7 @@ namespace Ogre
         friend class RenderSystem;
         friend class D3D11RenderSystem;
         friend class GL3PlusRenderSystem;
+        friend class GLES2RenderSystem;
         friend class MetalRenderSystem;
 
     protected:
