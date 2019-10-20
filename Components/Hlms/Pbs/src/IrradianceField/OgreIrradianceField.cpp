@@ -602,13 +602,13 @@ namespace Ogre
         mIfGenParams.probesPerRow = numIntegrationTGroupsX * 1u;  // There's one probe per group
         *ifGenParams = mIfGenParams;
 
+        mIfGenParamsBuffer->unmap( UO_KEEP_PERSISTENT );
+
         mGenerationWorkspace->_beginUpdate( false );
         mGenerationWorkspace->_update();
         mGenerationWorkspace->_endUpdate( false );
 
         mNumProbesProcessed += probesPerFrame;
-
-        mIfGenParamsBuffer->unmap( UO_KEEP_PERSISTENT );
     }
     //-------------------------------------------------------------------------
     size_t IrradianceField::getConstBufferSize( void ) const

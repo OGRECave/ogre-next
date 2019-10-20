@@ -11,10 +11,12 @@
 	@property( syntax == hlsl )
 		Texture2D<float4> ifdColour		: register(t@value(ifdColour));
 		Texture2D<float2> ifdDepth		: register(t@value(ifdDepth));
+		SamplerState ifdSampler         : register(s@value(ifdColour));
 	@end
 	@property( syntax == metal )
 		, texture2d<float> ifdColour	[[texture(@value(ifdColour))]]
 		, texture2d<float> ifdDepth		[[texture(@value(ifdDepth))]]
+		, sampler ifdSampler            [[sampler(@value(ifdColour))]]
 	@end
 @end
 // clang-format on
@@ -153,7 +155,7 @@
 		float2 ifdDepthUV = getIrradianceFieldXY(
 			-dir, probeIdx, passBuf.irradianceField.depthResolution,
 			passBuf.irradianceField.depthFullWidth, passBuf.irradianceField.depthInvFullResolution );
-		float2 temp = OGRE_SampleLevel( ifdDepth, bilinearSampler, ifdDepthUV, 0 ).xy;
+		float2 temp = OGRE_SampleLevel( ifdDepth, ifdSampler, ifdDepthUV, 0 ).xy;
 		float mean = temp.x;
 		float meanSq = temp.y;
 		if( r > mean )
@@ -180,7 +182,7 @@
 			ifdSpaceNormal, probeIdx, passBuf.irradianceField.depthResolution,
 			passBuf.irradianceField.depthFullWidth, passBuf.irradianceField.depthInvFullResolution );
 
-		float3 irrColour = OGRE_SampleLevel( ifdColour, bilinearSampler, ifdColourUV, 0 ).xyz;
+		float3 irrColour = OGRE_SampleLevel( ifdColour, ifdSampler, ifdColourUV, 0 ).xyz;
 //		irrColour = sqrt(irrColour);
 		ifdIrradiance += irrColour * weight;
 		sumIfdWeight += weight;
