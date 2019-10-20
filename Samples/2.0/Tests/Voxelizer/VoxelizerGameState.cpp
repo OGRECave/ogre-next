@@ -136,13 +136,13 @@ namespace Demo
             hlmsPbs->setIrradianceField( 0 );
             hlmsPbs->setVctLighting( 0 );
             break;
-        case VctOnly:
-            hlmsPbs->setIrradianceField( 0 );
-            hlmsPbs->setVctLighting( mVctLighting );
-            break;
         case IfdOnly:
             hlmsPbs->setIrradianceField( mIrradianceField );
             hlmsPbs->setVctLighting( 0 );
+            break;
+        case VctOnly:
+            hlmsPbs->setIrradianceField( 0 );
+            hlmsPbs->setVctLighting( mVctLighting );
             break;
         case IfdVct:
             hlmsPbs->setIrradianceField( mIrradianceField );
@@ -480,11 +480,11 @@ namespace Demo
         case NoGI:
             outText += "No GI]";
             break;
-        case VctOnly:
-            outText += "VCT]";
-            break;
         case IfdOnly:
             outText += "IFD]";
+            break;
+        case VctOnly:
+            outText += "VCT]";
             break;
         case IfdVct:
             outText += "IFD+VCT]";

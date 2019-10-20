@@ -28,8 +28,8 @@ namespace Demo
         enum GiMode
         {
             NoGI,
-            VctOnly,
             IfdOnly,
+            VctOnly,
             IfdVct,
             NumGiModes
         };
