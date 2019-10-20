@@ -254,7 +254,7 @@ namespace Ogre
 
         fillIntegrationWeights( integrationTapsBuffer, probeRes, maxIntegrationTapsPerPixel );
 
-        TexBufferPacked *retVal = vaoManager->createTexBuffer( PFG_RG32_FLOAT, bufferSize, BT_IMMUTABLE,
+        TexBufferPacked *retVal = vaoManager->createTexBuffer( PFG_RG32_FLOAT, bufferSize, BT_DEFAULT,
                                                                integrationTapsBuffer, false );
 
         integrationJob->setConstBuffer( 0, ifGenParamsBuffer );
@@ -475,7 +475,7 @@ namespace Ogre
         FreeOnDestructor dataPtr( directionsBuffer );
         fillDirections( directionsBuffer );
         VaoManager *vaoManager = textureManager->getVaoManager();
-        mDirectionsBuffer = vaoManager->createTexBuffer( PFG_RGBA32_FLOAT, updateDataSize, BT_IMMUTABLE,
+        mDirectionsBuffer = vaoManager->createTexBuffer( PFG_RGBA32_FLOAT, updateDataSize, BT_DEFAULT,
                                                          directionsBuffer, false );
 
         mDepthTapsIntegrationBuffer = setupIntegrationTaps(

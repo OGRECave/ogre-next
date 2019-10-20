@@ -27,6 +27,7 @@ RWTexture2D<@insertpiece(uav0_pf_type)> irradianceField;
 void main
 (
 	uint3 gl_WorkGroupID			: SV_GroupID,
+	uint3 gl_LocalInvocationID		: SV_GroupThreadID,
 	uint gl_LocalInvocationIndex	: SV_GroupIndex
 )
 {

@@ -124,7 +124,7 @@
 	{
 		// Compute the offset grid coord and clamp to the probe grid boundary
 		// Offset = 0 or 1 along each axis
-		float3 probeOffset = float3( int3( i, i >> 1, i >> 2 ) & int3( 1 ) );
+		float3 probeOffset = float3( int3( i, i >> 1, i >> 2 ) & int3( 1, 1, 1 ) );
 		float3 probeOrigin = ifdGridProbeOrigin + probeOffset;
 
 		IrfProbeIndex probeIdx =

@@ -7,6 +7,8 @@
 
 Buffer<float4> directionsBuffer	: register(t0);
 
+SamplerState probeSampler		: register(s1);
+
 Texture3D vctProbe				: register(t1);
 
 @property( vct_anisotropic )
