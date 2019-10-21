@@ -60,12 +60,17 @@
 		return retVal;
 	}
 
-	INLINE float2 getIrradianceFieldXY( float3 dir, IrfProbeIndex probeIdx, ushort resolution,
-										ushort fullWidth, float2 invFullResolution )
+	INLINE float2 getIrradianceFieldXY( float3 dir, IrfProbeIndex probeIdx, float resolution,
+										float fullWidth, float2 invFullResolution )
 	{
 		float2 retVal;
+		/* Perform the following, but in floating point:
 		retVal.x = ( probeIdx * resolution ) % fullWidth;
-		retVal.y = ( ( probeIdx * resolution ) / fullWidth ) * resolution;
+		retVal.y = ( ( probeIdx * resolution ) / fullWidth ) * resolution;*/
+		float temp = probeIdx * resolution;
+		retVal.y = floor( temp * invFullResolution.x );
+		retVal.x = temp - retVal.y * fullWidth;
+		retVal.y *= resolution;
 
 		// Texel's center offset to avoid bleeding with adjacent probes
 		retVal += 0.5;

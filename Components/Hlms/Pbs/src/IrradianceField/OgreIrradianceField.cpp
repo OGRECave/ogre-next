@@ -627,8 +627,8 @@ namespace Ogre
             float padding0;
             float padding1;
 
-            uint32 depthResolution;
-            uint32 depthFullWidth;
+            float depthResolution;
+            float depthFullWidth;
             float2 depthInvFullResolution;
         };
 
@@ -639,8 +639,8 @@ namespace Ogre
         xform.makeTransform( -mFieldOrigin * finalSize - 0.5f, finalSize, Quaternion::IDENTITY );
         xform = xform.concatenateAffine( viewMatrix.inverseAffine() );
 
-        const uint32 depthFullWidth = mDepthVarianceTex->getWidth();
-        const uint32 depthFullHeight = mDepthVarianceTex->getHeight();
+        const float fDepthFullWidth = static_cast<float>( mDepthVarianceTex->getWidth() );
+        const float fDepthFullHeight = static_cast<float>( mDepthVarianceTex->getHeight() );
 
         IrradianceFieldRenderParams *RESTRICT_ALIAS renderParams =
             reinterpret_cast<IrradianceFieldRenderParams * RESTRICT_ALIAS>( passBufferPtr );
@@ -651,9 +651,9 @@ namespace Ogre
         renderParams->padding0 = 0;
         renderParams->padding1 = 0;
 
-        renderParams->depthResolution = mSettings.mDepthProbeResolution;
-        renderParams->depthFullWidth = depthFullWidth;
-        renderParams->depthInvFullResolution.x = 1.0f / depthFullWidth;
-        renderParams->depthInvFullResolution.y = 1.0f / depthFullHeight;
+        renderParams->depthResolution = static_cast<float>( mSettings.mDepthProbeResolution );
+        renderParams->depthFullWidth = fDepthFullWidth;
+        renderParams->depthInvFullResolution.x = 1.0f / fDepthFullWidth;
+        renderParams->depthInvFullResolution.y = 1.0f / fDepthFullHeight;
     }
 }  // namespace Ogre

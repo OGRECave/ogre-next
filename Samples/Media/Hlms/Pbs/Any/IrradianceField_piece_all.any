@@ -13,8 +13,8 @@
 		float padding0;
 		float padding1;
 
-		uint depthResolution;
-		uint depthFullWidth;
+		float depthResolution;
+		float depthFullWidth;
 		float2 depthInvFullResolution;
 	};
 @end
