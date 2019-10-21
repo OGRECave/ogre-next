@@ -193,7 +193,7 @@
 	float3 dir = bufferFetch( directionsBuffer, rshort( rayIdx % @value( num_rays_per_probe ) ) ).xyz;
 
 	float3 probeCenter = getProbeCenterInVctSpace( probeIdx PARAMS_ARG );
-	float3 posLS = mul( float4( probeCenter, 0.0f ), p.irrProbeToVctTransform ).xyz;
+	float3 posLS = mul( float4( probeCenter, 1.0f ), p.irrProbeToVctTransform ).xyz;
 
 	float4 diffuse = voxelConeTraceDiff( posLS, dir, p.coneAngleTan,
 										 vctProbe OGRE_SAMPLER_ARG( probeSampler )

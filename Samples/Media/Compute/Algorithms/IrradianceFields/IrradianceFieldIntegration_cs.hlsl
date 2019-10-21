@@ -5,7 +5,7 @@
 
 @insertpiece( PreBindingsHeaderCS )
 
-Buffer<float4> integrationTapsBuffer	: register(t0);
+Buffer<float2> integrationTapsBuffer	: register(t0);
 
 RWTexture2D<@insertpiece(uav0_pf_type)> irradianceField;
 

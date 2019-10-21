@@ -22,7 +22,7 @@ kernel void main_metal
 
 	constant IrradianceFieldGenParams &p		[[buffer(0)]],
 
-	device const float4 *integrationTapsBuffer	[[buffer(TEX_SLOT_START+0)]],
+	device const float2 *integrationTapsBuffer	[[buffer(TEX_SLOT_START+0)]],
 
 	texture2d<@insertpiece(uav0_pf_type), access::read_write> irradianceField [[texture(UAV_SLOT_START+0)]]
 )
