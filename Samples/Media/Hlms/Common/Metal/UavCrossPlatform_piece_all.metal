@@ -3,7 +3,7 @@
 
 #define OGRE_imageLoad2D( inImage, iuv ) inImage.read( ushort2( iuv ) )
 
-#define OGRE_imageWrite2D2( outImage, iuv, value ) outImage.write( value.xy, iuv )
+#define OGRE_imageWrite2D2( outImage, iuv, value ) outImage.write( value.xyxy, iuv )
 #define OGRE_imageWrite2D4( outImage, iuv, value ) outImage.write( value, iuv )
 
 #define OGRE_imageLoad3D( inImage, iuv ) inImage.read( ushort3( iuv ) )

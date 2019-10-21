@@ -1,4 +1,5 @@
 @insertpiece( SetCrossPlatformSettings )
+@insertpiece( DeclUavCrossPlatform )
 
 #define OGRE_imageWrite3D1( outImage, iuv, value ) outImage.write( value.x, iuv )
 #define OGRE_imageWrite3D4( outImage, iuv, value ) outImage.write( value, iuv )
@@ -42,9 +43,11 @@ kernel void main_metal
 	texture3d<float> voxelNormalTex		[[texture(1)]],
 	texture3d<float> vctProbe			[[texture(2)]],
 
-	texture3d<float> vctProbeX			[[texture(3)]],
-	texture3d<float> vctProbeY			[[texture(4)]],
-	texture3d<float> vctProbeZ			[[texture(5)]],
+	@property( vct_anisotropic )
+		texture3d<float> vctProbeX			[[texture(3)]],
+		texture3d<float> vctProbeY			[[texture(4)]],
+		texture3d<float> vctProbeZ			[[texture(5)]],
+	@end
 
 	sampler vctProbeSampler				[[sampler(2)]],
 

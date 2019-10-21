@@ -28,7 +28,7 @@
 		return workGroupID.x + workGroupID.y * p.probesPerRow + p.numProcessedProbes;
 	}
 
-	INLINE ushort2 getUv( ProbeIndex probeIdx, uint2 localInvocationId )
+	INLINE ushort2 getUv( ProbeIndex probeIdx, ushort2 localInvocationId )
 	{
 		ushort2 retVal;
 		retVal.x = (probeIdx * @value( probe_resolution )u) % @value( full_width )u;
@@ -46,7 +46,7 @@
 //in uint  gl_LocalInvocationIndex;
 
 @piece( BodyCS )
-	ProbeIndex probeIdx = getProbeIdx( gl_WorkGroupID.xy );
+	ProbeIndex probeIdx = getProbeIdx( gl_WorkGroupID.xy PARAMS_ARG );
 	ushort2 uv = getUv( probeIdx, gl_LocalInvocationID.xy );
 	@property( integrate_depth )
 		float2 pixelValue = OGRE_imageLoad2D( irradianceField, uv.xy ).xy;

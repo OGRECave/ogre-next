@@ -119,7 +119,7 @@
 	#define RayIndex uint
 	#define ProbeIndex uint
 
-	INLINE RayIndex getRayIndex( uint2 globalInvocationId )
+	INLINE RayIndex getRayIndex( uint2 globalInvocationId PARAMS_ARG_DECL )
 	{
 		return globalInvocationId.x + globalInvocationId.y * p.threadsPerRow;
 	}
@@ -187,7 +187,7 @@
 //in uint  gl_LocalInvocationIndex;
 
 @piece( BodyCS )
-	RayIndex rayIdx = getRayIndex( gl_GlobalInvocationID.xy );
+	RayIndex rayIdx = getRayIndex( gl_GlobalInvocationID.xy PARAMS_ARG );
 	ProbeIndex probeIdx = getProbeIdx( rayIdx PARAMS_ARG );
 
 	float3 dir = bufferFetch( directionsBuffer, rshort( rayIdx % @value( num_rays_per_probe ) ) ).xyz;

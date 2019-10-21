@@ -21,6 +21,7 @@ inline float3x3 toMat3x3( float3x4 m )
 #define ogre_float4x3 float3x4
 
 //Short used for read operations. It's an int in GLSL & HLSL. An ushort in Metal
+#define rshort ushort
 #define rshort2 ushort2
 #define rint uint
 //Short used for write operations. It's an int in GLSL. An ushort in HLSL & Metal
