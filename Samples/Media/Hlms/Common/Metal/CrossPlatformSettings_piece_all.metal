@@ -76,8 +76,8 @@ inline float3x3 toMat3x3( float3x4 m )
 
 #define gl_SampleMaskIn0 gl_SampleMask
 //#define interpolateAtSample( interp, subsample ) interpolateAtSample( interp, subsample )
-#define findLSB ctz
-#define findMSB clz
+#define findLSB clz
+#define findMSB ctz
 
 #define outPs_colour0 outPs.colour0
 #define OGRE_Sample( tex, sampler, uv ) tex.sample( sampler, uv )

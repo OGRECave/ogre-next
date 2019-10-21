@@ -132,7 +132,7 @@
 	INLINE ushort2 getIrradianceFieldDepthXY( RayIndex rayIndex, ProbeIndex probeIdx )
 	{
 		ushort2 retVal;
-		ushort irradPixelIdx = rayIndex / @value( num_rays_per_irrad_pixel )u;
+		uint irradPixelIdx = rayIndex / @value( num_rays_per_irrad_pixel )u;
 		retVal.x = irradPixelIdx % @value( irrad_resolution )u;
 		retVal.y = (irradPixelIdx % @value( num_irrad_pixels_per_probe )u) / @value( irrad_resolution )u;
 
