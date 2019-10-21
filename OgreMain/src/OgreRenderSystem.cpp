@@ -1144,11 +1144,9 @@ namespace Ogre {
         mVaoManager->_update();
     }
     //---------------------------------------------------------------------
-    void RenderSystem::updateCompositorManager( CompositorManager2 *compositorManager,
-                                                SceneManagerEnumerator &sceneManagers,
-                                                HlmsManager *hlmsManager )
+    void RenderSystem::updateCompositorManager( CompositorManager2 *compositorManager )
     {
-        compositorManager->_updateImplementation( sceneManagers, hlmsManager );
+        compositorManager->_updateImplementation();
     }
     //---------------------------------------------------------------------
     const String& RenderSystem::_getDefaultViewportMaterialScheme( void ) const

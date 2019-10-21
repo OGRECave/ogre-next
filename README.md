@@ -51,6 +51,10 @@ differences have diverged long enough.
 
 ![](./Docs/frontpage/YoySimulators.jpg)
 
+## [Skyline Game Engine](https://aurasoft-skyline.co.uk/)
+
+![](./Docs/frontpage/SkylineGameEngineEditorFull.jpg)
+
 ## [Racecraft](https://store.steampowered.com/app/346610/Racecraft/)
 
 ![](./Docs/frontpage/Racecraft.jpg)

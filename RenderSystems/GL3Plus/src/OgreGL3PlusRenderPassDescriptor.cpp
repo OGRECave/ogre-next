@@ -542,6 +542,7 @@ namespace Ogre
         }
 
         if( (entriesToFlush & RenderPassDescriptor::Depth) &&
+            mDepth.texture &&
             (mDepth.loadAction == LoadAction::Clear ||
              (isTiler && (mDepth.loadAction == LoadAction::DontCare ||
                           mDepth.loadAction == LoadAction::ClearOnTilers))) )
@@ -564,6 +565,7 @@ namespace Ogre
         }
 
         if( (entriesToFlush & RenderPassDescriptor::Stencil) &&
+            mStencil.texture &&
             (mStencil.loadAction == LoadAction::Clear ||
              (isTiler && (mStencil.loadAction == LoadAction::DontCare ||
                           mStencil.loadAction == LoadAction::ClearOnTilers))) )
@@ -683,6 +685,7 @@ namespace Ogre
         }
 
         if( (entriesToFlush & RenderPassDescriptor::Depth) &&
+            mDepth.texture &&
             mDepth.storeAction == StoreAction::DontCare )
         {
             attachments[numAttachments] = mHasRenderWindow ? GL_DEPTH : GL_DEPTH_ATTACHMENT;
@@ -690,6 +693,7 @@ namespace Ogre
         }
 
         if( (entriesToFlush & RenderPassDescriptor::Stencil) &&
+            mStencil.texture &&
             mStencil.storeAction == StoreAction::DontCare )
         {
             attachments[numAttachments] = mHasRenderWindow ? GL_STENCIL : GL_STENCIL_ATTACHMENT;

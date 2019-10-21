@@ -380,12 +380,12 @@ namespace Ogre
         void validateAllNodes();
 
         /// Will call the renderSystem which in turns calls _updateImplementation
-        void _update( SceneManagerEnumerator &sceneManagers, HlmsManager *hlmsManager );
+        void _update( void );
         
         /// This should be called by the render system to
         /// perform the actual compositor manager update.
         /// DO NOT CALL THIS DIRECTLY.
-        void _updateImplementation( SceneManagerEnumerator &sceneManagers, HlmsManager *hlmsManager );
+        void _updateImplementation( void );
 
         void _swapAllFinalTargets(void);
 

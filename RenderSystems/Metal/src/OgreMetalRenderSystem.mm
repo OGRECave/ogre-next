@@ -2502,15 +2502,13 @@ namespace Ogre
         HighLevelGpuProgramManager::getSingleton().addFactory( mMetalProgramFactory );
     }
     //-------------------------------------------------------------------------
-    void MetalRenderSystem::updateCompositorManager( CompositorManager2 *compositorManager,
-                                                     SceneManagerEnumerator &sceneManagers,
-                                                     HlmsManager *hlmsManager )
+    void MetalRenderSystem::updateCompositorManager( CompositorManager2 *compositorManager )
     {
         // Metal requires that a frame's worth of rendering be invoked inside an autorelease pool.
         // This is true for both iOS and macOS.
         @autoreleasepool
         {
-            compositorManager->_updateImplementation( sceneManagers, hlmsManager );
+            compositorManager->_updateImplementation();
         }
     }
     //-------------------------------------------------------------------------

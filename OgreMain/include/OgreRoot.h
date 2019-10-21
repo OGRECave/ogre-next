@@ -152,6 +152,8 @@ namespace Ogre
 
         WorkQueue* mWorkQueue;
 
+        bool mFrameStarted;
+
         ///Tells whether blend indices information needs to be passed to the GPU
         bool mIsBlendIndicesGpuRedundant;
         ///Tells whether blend weights information needs to be passed to the GPU
@@ -886,6 +888,9 @@ namespace Ogre
         @return false if a FrameListener indicated it wishes to exit the render loop
         */
         bool _updateAllRenderTargets(FrameEvent& evt);
+
+        void _renderingFrameEnded( void );
+        void _notifyRenderingFrameStarted( void );
 
         /** Override standard Singleton retrieval.
             @remarks

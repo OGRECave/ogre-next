@@ -780,6 +780,29 @@ namespace Ogre
     protected:
         void destroyTextureImmediate( TextureGpu *texture );
     public:
+        /** Destroys a texture
+
+            Classes who wish to hold a weak reference should listen for TextureGpuListener::Deleted
+            events and clear their pointers when the texture gets destroyed.
+
+            Classes who wish to hold a stronger reference (note: it says 'stronger', not 'strong')
+            should return true in TextureGpuListener::shouldStayLoaded, but it is not guaranteed
+            to be honoured.
+
+            Users should iterate through listeners and see if any listener's shouldStayLoaded
+            returns true. If you still want to destroy the texture, the class should still
+            be able to handle TextureGpuListener::Deleted gracefully.
+
+            See MemoryGameState::unloadUnusedTextures in Tutorial_MemoryGameState.cpp
+
+            Ogre doesn't call destroyTexture unless it's on shutdown or a specific Ogre-controlled
+            texture (e.g. something related to PBS, Irradiance Fields, etc)
+
+            Users are the ones in control of which textures get unloaded. It is suggested users
+            group textures by criteria so that they can be loaded and unloaded in bulk (i.e.
+            by relation to a level, or area in an open world game, by scene, etc)
+        @param texture
+        */
         void destroyTexture( TextureGpu *texture );
 
         /** Returns true if a texture with the given aliasName exists, or if a

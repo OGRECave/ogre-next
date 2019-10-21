@@ -1477,6 +1477,7 @@ namespace Ogre
                                                   void *extraData )
     {
         notifyTextureChanged( texture, reason, false );
+        mTextureGpuManagerListener->notifyTextureChanged( texture, reason, extraData );
     }
     //-----------------------------------------------------------------------------------
     void TextureGpuManager::notifyTextureChanged( TextureGpu *texture,
