@@ -69,8 +69,12 @@ namespace Ogre
 
             if( PixelFormatGpuUtils::isCompressed( mFormatFamily ) )
             {
-                desc.Width  = std::max( desc.Width, 4u );
-                desc.Height = std::max( desc.Height, 4u );
+                const uint32 blockWidth =
+                    PixelFormatGpuUtils::getCompressedBlockWidth( mFormatFamily, false );
+                const uint32 blockHeight =
+                    PixelFormatGpuUtils::getCompressedBlockHeight( mFormatFamily, false );
+                desc.Width  = std::max( desc.Width, blockWidth );
+                desc.Height = std::max( desc.Height, blockHeight );
             }
 
             ID3D11Texture3D *texture = 0;
@@ -101,8 +105,12 @@ namespace Ogre
 
             if( PixelFormatGpuUtils::isCompressed( mFormatFamily ) )
             {
-                desc.Width  = std::max( desc.Width, 4u );
-                desc.Height = std::max( desc.Height, 4u );
+                const uint32 blockWidth =
+                    PixelFormatGpuUtils::getCompressedBlockWidth( mFormatFamily, false );
+                const uint32 blockHeight =
+                    PixelFormatGpuUtils::getCompressedBlockHeight( mFormatFamily, false );
+                desc.Width  = std::max( desc.Width, blockWidth );
+                desc.Height = std::max( desc.Height, blockHeight );
             }
 
             ID3D11Texture2D *texture = 0;
@@ -224,6 +232,8 @@ namespace Ogre
         uint32 blockWidth = 1u;
         uint32 blockHeight= 1u;
 
+        bool canShrink = true;
+
         if( isCompressed )
         {
             //Always consume the whole block for compressed formats.
@@ -231,9 +241,19 @@ namespace Ogre
             blockHeight= PixelFormatGpuUtils::getCompressedBlockHeight( mFormatFamily, false );
             consumedBox.width   = alignToNextMultiple( consumedBox.width, blockWidth );
             consumedBox.height  = alignToNextMultiple( consumedBox.height, blockHeight );
+
+            // This StagingTexture is theoretically smaller than the minimum block size and we only
+            // rounded it upwards to satisfy D3D11. We can't shrink this further.
+            // There can and should only be one record.
+            if( mWidth < blockWidth || mHeight < blockHeight )
+            {
+                OGRE_ASSERT_LOW( mFreeBoxes.size() == 1u );
+                canShrink = false;
+            }
         }
 
-        if( record->width == consumedBox.width && record->height == consumedBox.height )
+        if( ( record->width == consumedBox.width && record->height == consumedBox.height ) ||
+            !canShrink )
         {
             //Whole record was consumed. Easy case.
             efficientVectorRemove( mFreeBoxes[slice], record );
