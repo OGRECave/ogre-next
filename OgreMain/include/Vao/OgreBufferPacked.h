@@ -140,6 +140,7 @@ namespace Ogre
         friend class GL3PlusBufferInterface;
         friend class MetalBufferInterface;
         friend class NULLBufferInterface;
+        friend class VulkanBufferInterface;
 
     protected:
         size_t mInternalBufferStart;  /// In elements
