@@ -115,6 +115,7 @@ if( OGRE_BUILD_SAMPLES2 AND NOT OGRE_BUILD_SAMPLES2_SKIP )
 	add_subdirectory(Showcase/PbsMaterials)
 	add_subdirectory(Showcase/Postprocessing)
 
+	add_subdirectory(Tutorials/Tutorial00_Basic)
 	add_subdirectory(Tutorials/Tutorial01_Initialization)
 	add_subdirectory(Tutorials/Tutorial02_VariableFramerate)
 	add_subdirectory(Tutorials/Tutorial03_DeterministicLoop)
