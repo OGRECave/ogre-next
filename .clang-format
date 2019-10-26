@@ -7,7 +7,7 @@ AllowShortFunctionsOnASingleLine: InlineOnly
 AllowShortIfStatementsOnASingleLine: 'false'
 AllowShortLoopsOnASingleLine: 'false'
 BinPackParameters: 'true'
-BreakBeforeBraces: Allman
+BreakBeforeBraces: Custom
 ColumnLimit: '105'
 ConstructorInitializerAllOnOneLineOrOnePerLine: 'true'
 BreakConstructorInitializers: 'AfterColon'
@@ -25,5 +25,18 @@ SpacesInParentheses: 'true'
 TabWidth: '4'
 UseTab: Never
 AccessModifierOffset: '-4'
+IndentPPDirectives: 'AfterHash'
+BraceWrapping:
+  AfterClass:      true
+  AfterControlStatement: true
+  AfterEnum:       true
+  AfterFunction:   true
+  AfterNamespace:  true
+  AfterObjCDeclaration: true
+  AfterStruct:     true
+  AfterUnion:      true
+  BeforeCatch:     true
+  BeforeElse:      true
+  IndentBraces:    false
 
 ...
