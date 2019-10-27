@@ -65,6 +65,12 @@ namespace Ogre
 
         delete mDevice;
         mDevice = 0;
+
+        if( mVkInstance )
+        {
+            vkDestroyInstance( mVkInstance, 0 );
+            mVkInstance = 0;
+        }
     }
     //-------------------------------------------------------------------------
     const String &VulkanRenderSystem::getName( void ) const

@@ -43,6 +43,16 @@ namespace Ogre
         createPhysicalDevice( deviceIdx );
     }
     //-------------------------------------------------------------------------
+    VulkanDevice::~VulkanDevice()
+    {
+        if( mDevice )
+        {
+            vkDestroyDevice( mDevice, 0 );
+            mDevice = 0;
+            mPhysicalDevice = 0;
+        }
+    }
+    //-------------------------------------------------------------------------
     VkInstance VulkanDevice::createInstance( const String &appName,
                                              const FastArray<const char *> &extensions )
     {

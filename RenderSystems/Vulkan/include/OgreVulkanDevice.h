@@ -93,6 +93,7 @@ namespace Ogre
 
     public:
         VulkanDevice( VkInstance instance, uint32 deviceIdx );
+        ~VulkanDevice();
 
         static VkInstance createInstance( const String &appName,
                                           const FastArray<const char *> &extensions );
