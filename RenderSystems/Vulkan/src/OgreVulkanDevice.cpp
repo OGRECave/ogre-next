@@ -248,6 +248,10 @@ namespace Ogre
                 vkGetDeviceQueue( mDevice, mSelectedQueues[i].familyIdx, mSelectedQueues[i].queueIdx,
                                   &mQueues[i] );
             }
+            else
+            {
+                mQueues[i] = 0;
+            }
         }
     }
     //-------------------------------------------------------------------------
