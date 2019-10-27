@@ -30,13 +30,21 @@ THE SOFTWARE.
 namespace Ogre
 {
     VulkanWindow::VulkanWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode ) :
-        Window( title, width, height, fullscreenMode )
+        Window( title, width, height, fullscreenMode ),
+        mClosed( false ),
+        mDevice( 0 ),
+        mSurfaceKHR( 0 )
     {
         mFocused = true;
-        mClosed = false;
     }
     //-------------------------------------------------------------------------
     VulkanWindow::~VulkanWindow() {}
+    //-------------------------------------------------------------------------
+    void VulkanWindow::_setDevice( VulkanDevice *device )
+    {
+        OGRE_ASSERT_LOW( !mDevice );
+        mDevice = device;
+    }
     //-------------------------------------------------------------------------
     bool VulkanWindow::isClosed( void ) const { return mClosed; }
     //-------------------------------------------------------------------------

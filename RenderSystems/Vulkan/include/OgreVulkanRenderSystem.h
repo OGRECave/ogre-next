@@ -89,6 +89,8 @@ namespace Ogre
 
         virtual void reinitialise( void );
 
+        VkInstance getVkInstance( void ) const { return mVkInstance; }
+
         virtual Window *_initialise( bool autoCreateWindow,
                                      const String &windowTitle = "OGRE Render Window" );
 

@@ -53,8 +53,8 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    VkInstance VulkanDevice::createInstance( const String &appName,
-                                             const FastArray<const char *> &extensions )
+    VkInstance VulkanDevice::createInstance( const String &appName, FastArray<const char *> &extensions,
+                                             FastArray<const char *> &layers )
     {
         VkInstanceCreateInfo createInfo;
         VkApplicationInfo appInfo;
@@ -70,27 +70,46 @@ namespace Ogre
         createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
         createInfo.pApplicationInfo = &appInfo;
 
+        createInfo.enabledLayerCount = static_cast<uint32>( layers.size() );
+        createInfo.ppEnabledLayerNames = layers.begin();
+
+        extensions.push_back( VK_KHR_SURFACE_EXTENSION_NAME );
+
         createInfo.enabledExtensionCount = static_cast<uint32>( extensions.size() );
         createInfo.ppEnabledExtensionNames = extensions.begin();
 
         VkInstance instance;
-        vkCreateInstance( &createInfo, 0, &instance );
+        VkResult result = vkCreateInstance( &createInfo, 0, &instance );
+
+        if( result != VK_SUCCESS )
+        {
+            OGRE_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result, "vkCreateInstance failed",
+                            "VulkanDevice::createInstance" );
+        }
 
         return instance;
     }
     //-------------------------------------------------------------------------
     void VulkanDevice::createPhysicalDevice( uint32 deviceIdx )
     {
+        VkResult result = VK_SUCCESS;
+
         // Note multiple GPUs may be present, and there may be multiple drivers for
         // each GPU hence the number of devices can theoretically get really high
         const uint32_t c_maxDevices = 64u;
-        uint32 numDevices;
-        vkEnumeratePhysicalDevices( mInstance, &numDevices, NULL );
+        uint32 numDevices = 0u;
+        result = vkEnumeratePhysicalDevices( mInstance, &numDevices, NULL );
+
+        if( result != VK_SUCCESS )
+        {
+            OGRE_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result,
+                            "vkEnumeratePhysicalDevices failed", "VulkanDevice::createPhysicalDevice" );
+        }
 
         if( numDevices == 0u )
         {
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "No Vulkan devices found.",
-                         "VulkanDevice::createDevice" );
+                         "VulkanDevice::createPhysicalDevice" );
         }
 
         numDevices = std::min( numDevices, c_maxDevices );
@@ -112,7 +131,12 @@ namespace Ogre
         LogManager::getSingleton().logMessage( "[Vulkan] Selecting device " + deviceIdsStr );
 
         VkPhysicalDevice pd[c_maxDevices];
-        vkEnumeratePhysicalDevices( mInstance, &numDevices, pd );
+        result = vkEnumeratePhysicalDevices( mInstance, &numDevices, pd );
+        if( result != VK_SUCCESS )
+        {
+            OGRE_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result,
+                            "vkEnumeratePhysicalDevices failed", "VulkanDevice::createPhysicalDevice" );
+        }
         mPhysicalDevice = pd[0];
 
         vkGetPhysicalDeviceMemoryProperties( mPhysicalDevice, &mMemoryProperties );
@@ -239,7 +263,13 @@ namespace Ogre
         createInfo.queueCreateInfoCount = numQueuesToCreate;
         createInfo.pQueueCreateInfos = queueCreateInfo;
 
-        vkCreateDevice( mPhysicalDevice, &createInfo, NULL, &mDevice );
+        VkResult result = vkCreateDevice( mPhysicalDevice, &createInfo, NULL, &mDevice );
+
+        if( result != VK_SUCCESS )
+        {
+            OGRE_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result, "vkCreateDevice failed",
+                            "VulkanDevice::createDevice" );
+        }
 
         for( uint32 i = 0u; i < NumQueueFamilies; ++i )
         {
@@ -251,6 +281,23 @@ namespace Ogre
             else
             {
                 mQueues[i] = 0;
+            }
+        }
+
+        // Create one cmd pool per queue family, per thread (assume single threaded for now)
+        VkCommandPoolCreateInfo cmdPoolCreateInfo;
+        memset( &cmdPoolCreateInfo, 0, sizeof( cmdPoolCreateInfo ) );
+        cmdPoolCreateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+        for( size_t i = 0u; i < numQueuesToCreate; ++i )
+        {
+            cmdPoolCreateInfo.queueFamilyIndex = createInfo.pQueueCreateInfos[i].queueFamilyIndex;
+            cmdPoolCreateInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+            VkCommandPool commandPool;
+            vkCreateCommandPool( mDevice, &cmdPoolCreateInfo, 0, &commandPool );
+            for( size_t j = 0u; j < NumQueueFamilies; ++j )
+            {
+                if( mSelectedQueues[j].familyIdx == cmdPoolCreateInfo.queueFamilyIndex )
+                    mCommandPools[j] = commandPool;
             }
         }
     }

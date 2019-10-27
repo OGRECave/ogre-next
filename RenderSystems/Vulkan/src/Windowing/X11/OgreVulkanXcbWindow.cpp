@@ -28,6 +28,7 @@ THE SOFTWARE.
 
 #include "Windowing/X11/OgreVulkanXcbWindow.h"
 
+#include "OgreVulkanDevice.h"
 #include "OgreVulkanTextureGpu.h"
 #include "OgreVulkanTextureGpuManager.h"
 
@@ -147,6 +148,27 @@ namespace Ogre
         initConnection();  // TODO: Connection must be shared by ALL windows
         createWindow( mTitle, mRequestedWidth, mRequestedHeight );
         setHidden( false );
+
+        PFN_vkGetPhysicalDeviceXcbPresentationSupportKHR get_xcb_presentation_support =
+            (PFN_vkGetPhysicalDeviceXcbPresentationSupportKHR)vkGetInstanceProcAddr(
+                mDevice->mInstance, "vkGetPhysicalDeviceXcbPresentationSupportKHR" );
+        PFN_vkCreateXcbSurfaceKHR create_xcb_surface = (PFN_vkCreateXcbSurfaceKHR)vkGetInstanceProcAddr(
+            mDevice->mInstance, "vkCreateXcbSurfaceKHR" );
+
+        if( !get_xcb_presentation_support( mDevice->mPhysicalDevice,
+                                           mDevice->mSelectedQueues[VulkanDevice::Graphics].familyIdx,
+                                           mConnection, mScreen->root_visual ) )
+        {
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "Vulkan not supported on given X11 window",
+                         "VulkanXcbWindow::_initialize" );
+        }
+
+        VkXcbSurfaceCreateInfoKHR xcbSurfCreateInfo;
+        memset( &xcbSurfCreateInfo, 0, sizeof( xcbSurfCreateInfo ) );
+        xcbSurfCreateInfo.sType = VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR;
+        xcbSurfCreateInfo.connection = mConnection;
+        xcbSurfCreateInfo.window = mXcbWindow;
+        create_xcb_surface( mDevice->mInstance, &xcbSurfCreateInfo, 0, &mSurfaceKHR );
     }
     //-------------------------------------------------------------------------
     void VulkanXcbWindow::initConnection( void )

@@ -41,8 +41,34 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 
 #include <vulkan/vulkan.h>
 
+#define TODO_check_layers_exist
+
 namespace Ogre
 {
+    /*static bool checkLayers( const FastArray<layer_properties> &layer_props,
+                             const FastArray<const char *> &layer_names )
+    {
+        uint32_t check_count = layer_names.size();
+        uint32_t layer_count = layer_props.size();
+        for( uint32_t i = 0; i < check_count; i++ )
+        {
+            VkBool32 found = 0;
+            for( uint32_t j = 0; j < layer_count; j++ )
+            {
+                if( !strcmp( layer_names[i], layer_props[j].properties.layerName ) )
+                {
+                    found = 1;
+                }
+            }
+            if( !found )
+            {
+                std::cout << "Cannot find layer: " << layer_names[i] << std::endl;
+                return 0;
+            }
+        }
+        return 1;
+    }*/
+
     //-------------------------------------------------------------------------
     VulkanRenderSystem::VulkanRenderSystem() :
         RenderSystem(),
@@ -199,7 +225,8 @@ namespace Ogre
                                                      const NameValuePairList *miscParams )
     {
         FastArray<const char *> reqInstanceExtensions;
-        Window *win = OGRE_NEW VulkanXcbWindow( reqInstanceExtensions, name, width, height, fullScreen );
+        VulkanWindow *win =
+            OGRE_NEW VulkanXcbWindow( reqInstanceExtensions, name, width, height, fullScreen );
         mWindows.insert( win );
 
         if( !mInitialized )
@@ -211,7 +238,13 @@ namespace Ogre
                     mReverseDepth = StringConverter::parseBool( itOption->second, true );
             }
 
-            mVkInstance = VulkanDevice::createInstance( name, reqInstanceExtensions );
+            TODO_check_layers_exist;
+            FastArray<const char *> instanceLayers;
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+            instanceLayers.push_back( "VK_LAYER_KHRONOS_validation" );
+#endif
+
+            mVkInstance = VulkanDevice::createInstance( name, reqInstanceExtensions, instanceLayers );
             mDevice = new VulkanDevice( mVkInstance, 0 );
             mActiveDevice = mDevice;
 
@@ -220,6 +253,9 @@ namespace Ogre
 
             initialiseFromRenderSystemCapabilities( mCurrentCapabilities, 0 );
 
+            FastArray<const char *> deviceExtensions;
+            mDevice->createDevice( deviceExtensions );
+
             mHardwareBufferManager = new v1::DefaultHardwareBufferManager();
             mVaoManager = OGRE_NEW VulkanVaoManager();
             mTextureGpuManager = OGRE_NEW VulkanTextureGpuManager( mVaoManager, this );
@@ -227,6 +263,7 @@ namespace Ogre
             mInitialized = true;
         }
 
+        win->_setDevice( mActiveDevice );
         win->_initialize( mTextureGpuManager );
 
         return win;

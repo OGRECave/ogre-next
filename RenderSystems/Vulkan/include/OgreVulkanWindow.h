@@ -44,9 +44,15 @@ namespace Ogre
 
         bool mClosed;
 
+        VulkanDevice *mDevice;
+
+        VkSurfaceKHR mSurfaceKHR;
+
     public:
         VulkanWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode );
         virtual ~VulkanWindow();
+
+        void _setDevice( VulkanDevice *device );
 
         virtual bool isClosed( void ) const;
 

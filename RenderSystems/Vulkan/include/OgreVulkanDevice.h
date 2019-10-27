@@ -63,6 +63,7 @@ namespace Ogre
         // clang-format on
 
         VkQueue mQueues[NumQueueFamilies];
+        VkCommandPool mCommandPools[NumQueueFamilies];
 
         VkPhysicalDeviceMemoryProperties mMemoryProperties;
         FastArray<VkQueueFamilyProperties> mQueueProps;
@@ -95,8 +96,8 @@ namespace Ogre
         VulkanDevice( VkInstance instance, uint32 deviceIdx );
         ~VulkanDevice();
 
-        static VkInstance createInstance( const String &appName,
-                                          const FastArray<const char *> &extensions );
+        static VkInstance createInstance( const String &appName, FastArray<const char *> &extensions,
+                                          FastArray<const char *> &layers );
 
         void createPhysicalDevice( uint32 deviceIdx );
 

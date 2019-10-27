@@ -46,6 +46,11 @@ typedef struct VkInstance_T *VkInstance;
 typedef struct VkPhysicalDevice_T *VkPhysicalDevice;
 typedef struct VkDevice_T *VkDevice;
 
+typedef struct VkSurfaceKHR_T *VkSurfaceKHR;
+
+#define OGRE_VK_EXCEPT( code, num, desc, src ) \
+    OGRE_EXCEPT( code, desc + ( "\nVkResult = " + StringConverter::toString( num ) ), src )
+
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #    if !defined( __MINGW32__ )
 #        define WIN32_LEAN_AND_MEAN
