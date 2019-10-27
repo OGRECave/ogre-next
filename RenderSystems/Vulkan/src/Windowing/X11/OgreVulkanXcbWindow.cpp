@@ -37,6 +37,8 @@ THE SOFTWARE.
 #include "OgreWindowEventUtilities.h"
 
 #include <xcb/xcb.h>
+#include "vulkan/vulkan_core.h"
+#include "vulkan/vulkan_xcb.h"
 
 namespace Ogre
 {
@@ -57,8 +59,9 @@ namespace Ogre
         return atom;
     }
 
-    VulkanXcbWindow::VulkanXcbWindow( StringVector &inOutRequiredExtensions, const String &title,
-                                      uint32 width, uint32 height, bool fullscreenMode ) :
+    VulkanXcbWindow::VulkanXcbWindow( FastArray<const char *> &inOutRequiredInstanceExts,
+                                      const String &title, uint32 width, uint32 height,
+                                      bool fullscreenMode ) :
         VulkanWindow( title, width, height, fullscreenMode ),
         mConnection( 0 ),
         mScreen( 0 ),
@@ -70,7 +73,7 @@ namespace Ogre
         mIsTopLevel( true ),
         mIsExternal( false )
     {
-        inOutRequiredExtensions.push_back( "VK_KHR_xcb_surface" );
+        inOutRequiredInstanceExts.push_back( VK_KHR_XCB_SURFACE_EXTENSION_NAME );
     }
     //-------------------------------------------------------------------------
     VulkanXcbWindow::~VulkanXcbWindow()
@@ -173,7 +176,7 @@ namespace Ogre
         uint32_t value_mask, value_list[32];
         value_mask = XCB_CW_BACK_PIXEL | XCB_CW_EVENT_MASK;
         value_list[0] = mScreen->black_pixel;
-        value_list[1] = XCB_EVENT_MASK_KEY_PRESS | XCB_EVENT_MASK_STRUCTURE_NOTIFY;
+        value_list[1] = /*XCB_EVENT_MASK_KEY_PRESS |*/ XCB_EVENT_MASK_STRUCTURE_NOTIFY;
 
         xcb_create_window( mConnection, XCB_COPY_FROM_PARENT, mXcbWindow, mScreen->root, 0, 0,
                            static_cast<uint16>( width ), static_cast<uint16>( height ), 10u,

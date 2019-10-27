@@ -26,8 +26,8 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
   -----------------------------------------------------------------------------
 */
 
-#ifndef __VulkanRenderSystem_H__
-#define __VulkanRenderSystem_H__
+#ifndef _OgreVulkanRenderSystem_H_
+#define _OgreVulkanRenderSystem_H_
 
 #include "OgreVulkanPrerequisites.h"
 
@@ -64,6 +64,12 @@ namespace Ogre
         VulkanPixelFormatToShaderType mPixelFormatToShaderType;
 
         VulkanGpuProgramManager *mShaderManager;
+
+        VkInstance mVkInstance;
+
+        VulkanDevice *mActiveDevice;
+
+        VulkanDevice *mDevice;
 
     public:
         VulkanRenderSystem();

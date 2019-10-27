@@ -326,8 +326,9 @@ namespace Ogre
         GPU_QUALCOMM = 14,
         GPU_MOZILLA = 15, // WebGL on Mozilla/Firefox based browser
         GPU_WEBKIT = 16, // WebGL on WebKit/Chrome base browser
+        GPU_IMGTEC = 17, // PowerVR
         /// placeholder
-        GPU_VENDOR_COUNT = 17
+        GPU_VENDOR_COUNT = 18
     };
 
     /** singleton class for storing the capabilities of the graphics card. 

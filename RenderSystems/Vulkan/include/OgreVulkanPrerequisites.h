@@ -35,11 +35,16 @@ THE SOFTWARE.
 namespace Ogre
 {
     // Forward declarations
+    struct VulkanDevice;
     class VulkanGpuProgramManager;
     class VulkanStagingBuffer;
     class VulkanRenderSystem;
     class VulkanVaoManager;
 }  // namespace Ogre
+
+typedef struct VkInstance_T *VkInstance;
+typedef struct VkPhysicalDevice_T *VkPhysicalDevice;
+typedef struct VkDevice_T *VkDevice;
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #    if !defined( __MINGW32__ )

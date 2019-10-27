@@ -29,6 +29,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreVulkanRenderSystem.h"
 
 #include "OgreRenderPassDescriptor.h"
+#include "OgreVulkanDevice.h"
 #include "OgreVulkanGpuProgramManager.h"
 #include "OgreVulkanTextureGpuManager.h"
 #include "OgreVulkanWindow.h"
@@ -38,6 +39,8 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 
 #include "Windowing/X11/OgreVulkanXcbWindow.h"
 
+#include <vulkan/vulkan.h>
+
 namespace Ogre
 {
     //-------------------------------------------------------------------------
@@ -45,7 +48,10 @@ namespace Ogre
         RenderSystem(),
         mInitialized( false ),
         mHardwareBufferManager( 0 ),
-        mShaderManager( 0 )
+        mShaderManager( 0 ),
+        mVkInstance( 0 ),
+        mActiveDevice( 0 ),
+        mDevice( 0 )
     {
     }
     //-------------------------------------------------------------------------
@@ -56,6 +62,9 @@ namespace Ogre
 
         OGRE_DELETE mHardwareBufferManager;
         mHardwareBufferManager = 0;
+
+        delete mDevice;
+        mDevice = 0;
     }
     //-------------------------------------------------------------------------
     const String &VulkanRenderSystem::getName( void ) const
@@ -79,6 +88,57 @@ namespace Ogre
     {
         RenderSystemCapabilities *rsc = new RenderSystemCapabilities();
         rsc->setRenderSystemName( getName() );
+
+        VkPhysicalDeviceProperties properties;
+        vkGetPhysicalDeviceProperties( mActiveDevice->mPhysicalDevice, &properties );
+
+        rsc->setDeviceName( properties.deviceName );
+
+        switch( properties.vendorID )
+        {
+        case 0x10DE:
+        {
+            rsc->setVendor( GPU_NVIDIA );
+            // 10 bits = major version (up to r1023)
+            // 8 bits = minor version (up to 255)
+            // 8 bits = secondary branch version/build version (up to 255)
+            // 6 bits = tertiary branch/build version (up to 63)
+
+            DriverVersion driverVersion;
+            driverVersion.major = ( properties.driverVersion >> 22u ) & 0x3ff;
+            driverVersion.minor = ( properties.driverVersion >> 14u ) & 0x0ff;
+            driverVersion.release = ( properties.driverVersion >> 6u ) & 0x0ff;
+            driverVersion.build = ( properties.driverVersion ) & 0x003f;
+            rsc->setDriverVersion( driverVersion );
+        }
+        break;
+        case 0x1002:
+            rsc->setVendor( GPU_AMD );
+            break;
+        case 0x8086:
+            rsc->setVendor( GPU_INTEL );
+            break;
+        case 0x13B5:
+            rsc->setVendor( GPU_ARM );  // Mali
+            break;
+        case 0x5143:
+            rsc->setVendor( GPU_QUALCOMM );
+            break;
+        case 0x1010:
+            rsc->setVendor( GPU_IMGTEC );  // PowerVR
+            break;
+        }
+
+        if( rsc->getVendor() != GPU_NVIDIA )
+        {
+            // Generic version routine that matches SaschaWillems's VulkanCapsViewer
+            DriverVersion driverVersion;
+            driverVersion.major = ( properties.driverVersion >> 22u ) & 0x3ff;
+            driverVersion.minor = ( properties.driverVersion >> 12u ) & 0x3ff;
+            driverVersion.release = ( properties.driverVersion ) & 0xfff;
+            driverVersion.build = 0;
+            rsc->setDriverVersion( driverVersion );
+        }
 
         rsc->setCapability( RSC_HWSTENCIL );
         rsc->setStencilBufferBitDepth( 8 );
@@ -132,8 +192,8 @@ namespace Ogre
                                                      bool fullScreen,
                                                      const NameValuePairList *miscParams )
     {
-        StringVector requiredExtensions;
-        Window *win = OGRE_NEW VulkanXcbWindow( requiredExtensions, name, width, height, fullScreen );
+        FastArray<const char *> reqInstanceExtensions;
+        Window *win = OGRE_NEW VulkanXcbWindow( reqInstanceExtensions, name, width, height, fullScreen );
         mWindows.insert( win );
 
         if( !mInitialized )
@@ -144,6 +204,10 @@ namespace Ogre
                 if( itOption != miscParams->end() )
                     mReverseDepth = StringConverter::parseBool( itOption->second, true );
             }
+
+            mVkInstance = VulkanDevice::createInstance( name, reqInstanceExtensions );
+            mDevice = new VulkanDevice( mVkInstance, 0 );
+            mActiveDevice = mDevice;
 
             mRealCapabilities = createRenderSystemCapabilities();
             mCurrentCapabilities = mRealCapabilities;
@@ -318,5 +382,13 @@ namespace Ogre
                                                                      Window *primary )
     {
         mShaderManager = OGRE_NEW VulkanGpuProgramManager();
+
+        Log *defaultLog = LogManager::getSingleton().getDefaultLog();
+        if( defaultLog )
+        {
+            caps->log( defaultLog );
+            defaultLog->logMessage( " * Using Reverse Z: " +
+                                    StringConverter::toString( mReverseDepth, true ) );
+        }
     }
 }  // namespace Ogre

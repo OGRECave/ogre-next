@@ -24,6 +24,7 @@ include_directories(
 
 ogre_add_library(RenderSystem_Vulkan ${OGRE_LIB_TYPE} ${HEADER_FILES} ${SOURCE_FILES})
 #target_link_libraries(RenderSystem_Vulkan OgreMain)
+target_link_libraries(RenderSystem_Vulkan vulkan)
 
 if (OGRE_CONFIG_THREADS)
   target_link_libraries(RenderSystem_Vulkan ${OGRE_THREAD_LIBRARIES})

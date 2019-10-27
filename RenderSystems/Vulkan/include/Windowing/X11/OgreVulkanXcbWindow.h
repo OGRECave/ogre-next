@@ -63,8 +63,8 @@ namespace Ogre
         void createWindow( const String &windowName, uint32 width, uint32 height );
 
     public:
-        VulkanXcbWindow( StringVector &inOutRequiredExtensions, const String &title, uint32 width,
-                   uint32 height, bool fullscreenMode );
+        VulkanXcbWindow( FastArray<const char *> &inOutRequiredInstanceExts, const String &title,
+                         uint32 width, uint32 height, bool fullscreenMode );
         ~VulkanXcbWindow();
 
         virtual void destroy( void );
