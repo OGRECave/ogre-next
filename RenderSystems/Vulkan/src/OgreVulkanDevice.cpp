@@ -251,6 +251,13 @@ namespace Ogre
             queueCreateInfo[i].sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
         fillQueueSelectionData( queueCreateInfo, numQueuesToCreate );
 
+        FastArray<float> queuePriorities[NumQueueFamilies];
+        for( size_t i = 0u; i < numQueuesToCreate; ++i )
+        {
+            queuePriorities[i].resize( queueCreateInfo[i].queueCount, 1.0f );
+            queueCreateInfo[i].pQueuePriorities = queuePriorities[i].begin();
+        }
+
         extensions.push_back( VK_KHR_SWAPCHAIN_EXTENSION_NAME );
 
         VkDeviceCreateInfo createInfo;
