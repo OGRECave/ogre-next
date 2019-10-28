@@ -1,5 +1,10 @@
 version: 2.2.{build}
 
+branches:
+   only:
+     - master
+     - v2-1
+
 environment:
   matrix:
 #    - PLATFORM: x86
