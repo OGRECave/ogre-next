@@ -129,22 +129,6 @@ namespace Ogre
         mFocused = true;
         mClosed = false;
 
-        VulkanTextureGpuManager *textureManager =
-            static_cast<VulkanTextureGpuManager *>( textureGpuManager );
-
-        mTexture = textureManager->createTextureGpuWindow( this );
-        mDepthBuffer = textureManager->createTextureGpuWindow( this );
-        mStencilBuffer = mDepthBuffer;
-
-        mDepthBuffer->setPixelFormat( PFG_D32_FLOAT_S8X24_UINT );
-
-        setFinalResolution( mRequestedWidth, mRequestedHeight );
-        mTexture->setPixelFormat( PFG_RGBA8_UNORM );
-        mDepthBuffer->setPixelFormat( PFG_D32_FLOAT_S8X24_UINT );
-
-        mTexture->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
-        mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
-
         initConnection();  // TODO: Connection must be shared by ALL windows
         createWindow( mTitle, mRequestedWidth, mRequestedHeight );
         setHidden( false );
@@ -169,6 +153,26 @@ namespace Ogre
         xcbSurfCreateInfo.connection = mConnection;
         xcbSurfCreateInfo.window = mXcbWindow;
         create_xcb_surface( mDevice->mInstance, &xcbSurfCreateInfo, 0, &mSurfaceKHR );
+
+        VulkanTextureGpuManager *textureManager =
+            static_cast<VulkanTextureGpuManager *>( textureGpuManager );
+
+        mTexture = textureManager->createTextureGpuWindow( this );
+        mDepthBuffer = textureManager->createTextureGpuWindow( this );
+        mStencilBuffer = mDepthBuffer;
+
+        mDepthBuffer->setPixelFormat( PFG_D32_FLOAT_S8X24_UINT );
+
+        bool hwGamma = true;
+
+        setFinalResolution( mRequestedWidth, mRequestedHeight );
+        mTexture->setPixelFormat( chooseSurfaceFormat( hwGamma ) );
+        mDepthBuffer->setPixelFormat( PFG_D32_FLOAT_S8X24_UINT );
+
+        mTexture->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
+        mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
+
+        createSwapchain();
     }
     //-------------------------------------------------------------------------
     void VulkanXcbWindow::initConnection( void )

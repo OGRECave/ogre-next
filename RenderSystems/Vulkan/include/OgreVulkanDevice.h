@@ -70,6 +70,8 @@ namespace Ogre
         // Index via mQueueProps[mSelectedQueues[Graphics].familyIdx]
         SelectedQueue mSelectedQueues[NumQueueFamilies];
 
+        VulkanRenderSystem *mRenderSystem;
+
     protected:
         /** Modifies mSelectedQueues[family].queueIdx; attempting to have each QueueFamily its own
             unique queue, but share if there's HW limitations.
@@ -93,7 +95,7 @@ namespace Ogre
         void fillQueueSelectionData( VkDeviceQueueCreateInfo *outQueueCreateInfo, uint32 &outNumQueues );
 
     public:
-        VulkanDevice( VkInstance instance, uint32 deviceIdx );
+        VulkanDevice( VkInstance instance, uint32 deviceIdx, VulkanRenderSystem *renderSystem );
         ~VulkanDevice();
 
         static VkInstance createInstance( const String &appName, FastArray<const char *> &extensions,

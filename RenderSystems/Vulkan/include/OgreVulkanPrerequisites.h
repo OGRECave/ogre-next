@@ -47,6 +47,8 @@ typedef struct VkPhysicalDevice_T *VkPhysicalDevice;
 typedef struct VkDevice_T *VkDevice;
 
 typedef struct VkSurfaceKHR_T *VkSurfaceKHR;
+typedef struct VkSwapchainKHR_T *VkSwapchainKHR;
+typedef struct VkImage_T *VkImage;
 
 #define OGRE_VK_EXCEPT( code, num, desc, src ) \
     OGRE_EXCEPT( code, desc + ( "\nVkResult = " + StringConverter::toString( num ) ), src )

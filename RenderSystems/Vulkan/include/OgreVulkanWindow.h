@@ -47,6 +47,11 @@ namespace Ogre
         VulkanDevice *mDevice;
 
         VkSurfaceKHR mSurfaceKHR;
+        VkSwapchainKHR mSwapchain;
+        FastArray<VkImage> mSwapchainImages;
+
+        PixelFormatGpu chooseSurfaceFormat( bool hwGamma );
+        void createSwapchain( void );
 
     public:
         VulkanWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode );

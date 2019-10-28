@@ -245,7 +245,7 @@ namespace Ogre
 #endif
 
             mVkInstance = VulkanDevice::createInstance( name, reqInstanceExtensions, instanceLayers );
-            mDevice = new VulkanDevice( mVkInstance, 0 );
+            mDevice = new VulkanDevice( mVkInstance, 0u, this );
             mActiveDevice = mDevice;
 
             mRealCapabilities = createRenderSystemCapabilities();

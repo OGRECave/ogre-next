@@ -35,10 +35,12 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    VulkanDevice::VulkanDevice( VkInstance instance, uint32 deviceIdx ) :
+    VulkanDevice::VulkanDevice( VkInstance instance, uint32 deviceIdx,
+                                VulkanRenderSystem *renderSystem ) :
         mInstance( instance ),
         mPhysicalDevice( 0 ),
-        mDevice( 0 )
+        mDevice( 0 ),
+        mRenderSystem( renderSystem )
     {
         createPhysicalDevice( deviceIdx );
     }
