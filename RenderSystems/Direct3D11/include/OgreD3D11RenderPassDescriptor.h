@@ -74,8 +74,8 @@ namespace Ogre
         void checkRenderWindowStatus(void);
         void calculateSharedKey(void);
 
-        virtual void updateColourRtv( uint8 lastNumColourEntries );
-        virtual void updateDepthRtv(void);
+        void updateColourRtv( uint8 lastNumColourEntries );
+        void updateDepthRtv(void);
 
         /// Returns a mask of RenderPassDescriptor::EntryTypes bits set that indicates
         /// if 'other' wants to perform clears on colour, depth and/or stencil values.
