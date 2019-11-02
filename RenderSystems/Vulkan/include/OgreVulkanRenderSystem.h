@@ -33,6 +33,8 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 
 #include "OgreRenderSystem.h"
 
+#include "OgreVulkanRenderPassDescriptor.h"
+
 namespace Ogre
 {
     namespace v1
@@ -70,6 +72,18 @@ namespace Ogre
         VulkanDevice *mActiveDevice;
 
         VulkanDevice *mDevice;
+
+        // clang-format off
+        VulkanFrameBufferDescMap    mFrameBufferDescMap;
+        uint32                      mEntriesToFlush;
+        bool                        mVpChanged;
+        // clang-format on
+
+        PFN_vkCreateDebugReportCallbackEXT CreateDebugReportCallback;
+        PFN_vkDestroyDebugReportCallbackEXT DestroyDebugReportCallback;
+        VkDebugReportCallbackEXT mDebugReportCallback;
+
+        void addInstanceDebugCallback( void );
 
     public:
         VulkanRenderSystem();
@@ -193,6 +207,16 @@ namespace Ogre
         virtual void setClipPlanesImpl( const PlaneList &clipPlanes );
         virtual void initialiseFromRenderSystemCapabilities( RenderSystemCapabilities *caps,
                                                              Window *primary );
+
+        virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc,
+                                                TextureGpu *anyTarget, uint8 mipLevel,
+                                                const Vector4 *viewportSizes,
+                                                const Vector4 *scissors,
+                                                uint32 numViewports,
+                                                bool overlaysEnabled,
+                                                bool warnIfRtvWasFlushed );
+        virtual void executeRenderPassDescriptorDelayedActions(void);
+        virtual void endRenderPassDescriptor(void);
     };
 }  // namespace Ogre
 

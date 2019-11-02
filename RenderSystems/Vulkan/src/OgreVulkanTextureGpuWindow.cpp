@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "OgreVulkanTextureGpuWindow.h"
 
 #include "OgreVulkanTextureGpuManager.h"
+#include "OgreVulkanWindow.h"
 
 #include "OgreTextureBox.h"
 #include "OgreTextureGpuListener.h"
@@ -46,15 +47,37 @@ namespace Ogre
     VulkanTextureGpuWindow::VulkanTextureGpuWindow(
         GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy, VaoManager *vaoManager, IdString name,
         uint32 textureFlags, TextureTypes::TextureTypes initialType, TextureGpuManager *textureManager,
-        Window *window ) :
+        VulkanWindow *window ) :
         VulkanTextureGpuRenderTarget( pageOutStrategy, vaoManager, name, textureFlags, initialType,
                                       textureManager ),
-        mWindow( window )
+        mWindow( window ),
+        mCurrentSwapchainIdx( 0u )
     {
         mTextureType = TextureTypes::Type2D;
     }
     //-----------------------------------------------------------------------------------
     VulkanTextureGpuWindow::~VulkanTextureGpuWindow() { destroyInternalResourcesImpl(); }
+    //-----------------------------------------------------------------------------------
+    VkSemaphore VulkanTextureGpuWindow::getImageAcquiredSemaphore( void )
+    {
+        return mWindow->getImageAcquiredSemaphore();
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanTextureGpuWindow::_setCurrentSwapchain( VkImage image, uint32 swapchainIdx )
+    {
+        mFinalTextureName = image;
+        mCurrentSwapchainIdx = swapchainIdx;
+    }
+    //-----------------------------------------------------------------------------------
+    VkImage VulkanTextureGpuWindow::getWindowFinalTextureName( size_t idx ) const
+    {
+        return mWindow->getSwapchainImage( idx );
+    }
+    //-----------------------------------------------------------------------------------
+    size_t VulkanTextureGpuWindow::getWindowNumSurfaces( void ) const
+    {
+        return mWindow->getNumSwapchains();
+    }
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpuWindow::createInternalResourcesImpl( void ) {}
     //-----------------------------------------------------------------------------------

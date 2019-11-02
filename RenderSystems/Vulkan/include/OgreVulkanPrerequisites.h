@@ -4,7 +4,7 @@ This source file is part of OGRE
     (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org/
 
-Copyright (c) 2000-2014 Torus Knot Software Ltd
+Copyright (c) 2000-present Torus Knot Software Ltd
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -32,6 +32,18 @@ THE SOFTWARE.
 
 #include "OgreLogManager.h"
 
+typedef struct VkInstance_T *VkInstance;
+typedef struct VkPhysicalDevice_T *VkPhysicalDevice;
+typedef struct VkDevice_T *VkDevice;
+
+typedef struct VkSurfaceKHR_T *VkSurfaceKHR;
+typedef struct VkSwapchainKHR_T *VkSwapchainKHR;
+typedef struct VkImage_T *VkImage;
+typedef struct VkSemaphore_T *VkSemaphore;
+
+typedef struct VkRenderPass_T *VkRenderPass;
+typedef struct VkFramebuffer_T *VkFramebuffer;
+
 namespace Ogre
 {
     // Forward declarations
@@ -40,18 +52,13 @@ namespace Ogre
     class VulkanStagingBuffer;
     class VulkanRenderSystem;
     class VulkanVaoManager;
+    class VulkanWindow;
+
+    typedef FastArray<VkSemaphore> VkSemaphoreArray;
 }  // namespace Ogre
 
-typedef struct VkInstance_T *VkInstance;
-typedef struct VkPhysicalDevice_T *VkPhysicalDevice;
-typedef struct VkDevice_T *VkDevice;
-
-typedef struct VkSurfaceKHR_T *VkSurfaceKHR;
-typedef struct VkSwapchainKHR_T *VkSwapchainKHR;
-typedef struct VkImage_T *VkImage;
-
 #define OGRE_VK_EXCEPT( code, num, desc, src ) \
-    OGRE_EXCEPT( code, desc + ( "\nVkResult = " + StringConverter::toString( num ) ), src )
+    OGRE_EXCEPT( code, desc + ( "\nVkResult = " + vkResultToString( num ) ), src )
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #    if !defined( __MINGW32__ )

@@ -28,6 +28,8 @@ THE SOFTWARE.
 
 #include "OgreVulkanTextureGpu.h"
 
+#include "OgrePixelFormatGpuUtils.h"
+
 #include "OgreException.h"
 #include "OgreVector2.h"
 
@@ -37,7 +39,9 @@ namespace Ogre
                                         VaoManager *vaoManager, IdString name, uint32 textureFlags,
                                         TextureTypes::TextureTypes initialType,
                                         TextureGpuManager *textureManager ) :
-        TextureGpu( pageOutStrategy, vaoManager, name, textureFlags, initialType, textureManager )
+        TextureGpu( pageOutStrategy, vaoManager, name, textureFlags, initialType, textureManager ),
+        mFinalTextureName( 0 ),
+        mMsaaFramebufferName( 0 )
     {
     }
     //-----------------------------------------------------------------------------------
@@ -46,6 +50,24 @@ namespace Ogre
     void VulkanTextureGpu::createInternalResourcesImpl( void ) {}
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpu::destroyInternalResourcesImpl( void ) {}
+    //-----------------------------------------------------------------------------------
+    VkImageSubresourceRange VulkanTextureGpu::getFullSubresourceRange( void ) const
+    {
+        VkImageSubresourceRange retVal;
+        const uint32 flags = PixelFormatGpuUtils::getFlags( mPixelFormat );
+        retVal.aspectMask = 0u;
+        if( flags & PixelFormatGpuUtils::PFF_DEPTH )
+            retVal.aspectMask |= VK_IMAGE_ASPECT_DEPTH_BIT;
+        if( flags & PixelFormatGpuUtils::PFF_STENCIL )
+            retVal.aspectMask |= VK_IMAGE_ASPECT_STENCIL_BIT;
+        if( !( flags & ( PixelFormatGpuUtils::PFF_DEPTH | PixelFormatGpuUtils::PFF_STENCIL ) ) )
+            retVal.aspectMask |= VK_IMAGE_ASPECT_COLOR_BIT;
+        retVal.baseMipLevel = 0u;
+        retVal.levelCount = VK_REMAINING_MIP_LEVELS;
+        retVal.baseArrayLayer = 0u;
+        retVal.layerCount = VK_REMAINING_ARRAY_LAYERS;
+        return retVal;
+    }
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpu::getSubsampleLocations( vector<Vector2>::type locations )
     {

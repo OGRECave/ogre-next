@@ -173,8 +173,12 @@ namespace Ogre
     {
         BufferInterface::_notifyBuffer( buffer );
 
-        mVulkanDataPtr = reinterpret_cast<uint8 *>(
-            OGRE_MALLOC_SIMD( mBuffer->getTotalSizeBytes(), MEMCATEGORY_RENDERSYS ) );
+        size_t totalSizeBytes = mBuffer->getTotalSizeBytes();
+        if( mBuffer->getBufferType() >= BT_DYNAMIC_DEFAULT )
+            totalSizeBytes *= mBuffer->mVaoManager->getDynamicBufferMultiplier();
+
+        mVulkanDataPtr =
+            reinterpret_cast<uint8 *>( OGRE_MALLOC_SIMD( totalSizeBytes, MEMCATEGORY_RENDERSYS ) );
     }
     //-----------------------------------------------------------------------------------
     void VulkanBufferInterface::copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes,

@@ -180,7 +180,7 @@ namespace Ogre
                                              BufferPacked *buffer );
 
     public:
-        VulkanVaoManager();
+        VulkanVaoManager( uint8 dynBufferMultiplier );
         virtual ~VulkanVaoManager();
 
         virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
@@ -201,6 +201,10 @@ namespace Ogre
                                                   size_t elementStart, size_t elementCount );
 
         virtual void _update( void );
+
+        /// Insert into the end of semaphoreArray 'numSemaphores'
+        /// number of semaphores that are safe for use.
+        void getAvailableSempaphores( VkSemaphoreArray &semaphoreArray, size_t numSemaphores );
 
         /// Returns the current frame # (which wraps to 0 every mDynamicBufferMultiplier
         /// times). But first stalls until that mDynamicBufferMultiplier-1 frame behind

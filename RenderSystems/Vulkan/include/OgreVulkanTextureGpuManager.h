@@ -64,7 +64,7 @@ namespace Ogre
         VulkanTextureGpuManager( VaoManager *vaoManager, RenderSystem *renderSystem );
         virtual ~VulkanTextureGpuManager();
 
-        TextureGpu *createTextureGpuWindow( Window *window );
+        TextureGpu *createTextureGpuWindow( VulkanWindow *window );
     };
 
     /** @} */

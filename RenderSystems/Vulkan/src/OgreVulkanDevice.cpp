@@ -28,10 +28,19 @@ THE SOFTWARE.
 
 #include "OgreVulkanDevice.h"
 
+#include "OgreVulkanRenderSystem.h"
+#include "OgreVulkanWindow.h"
+#include "Vao/OgreVulkanVaoManager.h"
+
 #include "OgreException.h"
 #include "OgreStringConverter.h"
 
+#include "OgreVulkanUtils.h"
+
 #include <vulkan/vulkan.h>
+
+#define TODO_resetCmdPools
+#define TODO_removeCmdBuffer
 
 namespace Ogre
 {
@@ -40,8 +49,13 @@ namespace Ogre
         mInstance( instance ),
         mPhysicalDevice( 0 ),
         mDevice( 0 ),
+        mPresentQueue( 0 ),
+        mVaoManager( 0 ),
         mRenderSystem( renderSystem )
     {
+        memset( mQueues, 0, sizeof( mQueues ) );
+        memset( mCurrentCmdBuffer, 0, sizeof( mCurrentCmdBuffer ) );
+        memset( &mMemoryProperties, 0, sizeof( mMemoryProperties ) );
         createPhysicalDevice( deviceIdx );
     }
     //-------------------------------------------------------------------------
@@ -49,14 +63,29 @@ namespace Ogre
     {
         if( mDevice )
         {
+            vkDeviceWaitIdle( mDevice );
             vkDestroyDevice( mDevice, 0 );
             mDevice = 0;
             mPhysicalDevice = 0;
         }
     }
     //-------------------------------------------------------------------------
+    VkDebugReportCallbackCreateInfoEXT VulkanDevice::addDebugCallback(
+        PFN_vkDebugReportCallbackEXT debugCallback )
+    {
+        // This is info for a temp callback to use during CreateInstance.
+        // After the instance is created, we use the instance-based
+        // function to register the final callback.
+        VkDebugReportCallbackCreateInfoEXT dbgCreateInfoTemp;
+        makeVkStruct( dbgCreateInfoTemp, VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT );
+        dbgCreateInfoTemp.pfnCallback = debugCallback;
+        dbgCreateInfoTemp.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT;
+        return dbgCreateInfoTemp;
+    }
+    //-------------------------------------------------------------------------
     VkInstance VulkanDevice::createInstance( const String &appName, FastArray<const char *> &extensions,
-                                             FastArray<const char *> &layers )
+                                             FastArray<const char *> &layers,
+                                             PFN_vkDebugReportCallbackEXT debugCallback )
     {
         VkInstanceCreateInfo createInfo;
         VkApplicationInfo appInfo;
@@ -79,6 +108,11 @@ namespace Ogre
 
         createInfo.enabledExtensionCount = static_cast<uint32>( extensions.size() );
         createInfo.ppEnabledExtensionNames = extensions.begin();
+
+#if OGRE_DEBUG_MODE >= OGRE_DEBUG_HIGH
+        VkDebugReportCallbackCreateInfoEXT debugCb = addDebugCallback( debugCallback );
+        createInfo.pNext = &debugCb;
+#endif
 
         VkInstance instance;
         VkResult result = vkCreateInstance( &createInfo, 0, &instance );
@@ -192,7 +226,7 @@ namespace Ogre
         outNumQueues = numQueues;
     }
     //-------------------------------------------------------------------------
-    void VulkanDevice::createDevice( FastArray<const char *> &extensions )
+    void VulkanDevice::createDevice( FastArray<const char *> &extensions, size_t maxNumFrames )
     {
         uint32 numQueues;
         vkGetPhysicalDeviceQueueFamilyProperties( mPhysicalDevice, &numQueues, NULL );
@@ -294,22 +328,130 @@ namespace Ogre
         }
 
         // Create one cmd pool per queue family, per thread (assume single threaded for now)
+        FastArray<VkCommandPool> commandPools;
+        commandPools.resize( maxNumFrames );
         VkCommandPoolCreateInfo cmdPoolCreateInfo;
         memset( &cmdPoolCreateInfo, 0, sizeof( cmdPoolCreateInfo ) );
         cmdPoolCreateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+        cmdPoolCreateInfo.flags = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
         for( size_t i = 0u; i < numQueuesToCreate; ++i )
         {
             cmdPoolCreateInfo.queueFamilyIndex = createInfo.pQueueCreateInfos[i].queueFamilyIndex;
-            cmdPoolCreateInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-            VkCommandPool commandPool;
-            vkCreateCommandPool( mDevice, &cmdPoolCreateInfo, 0, &commandPool );
+
+            for( size_t j = 0; j < maxNumFrames; ++j )
+                vkCreateCommandPool( mDevice, &cmdPoolCreateInfo, 0, &commandPools[j] );
+
             for( size_t j = 0u; j < NumQueueFamilies; ++j )
             {
                 if( mSelectedQueues[j].familyIdx == cmdPoolCreateInfo.queueFamilyIndex )
-                    mCommandPools[j] = commandPool;
+                    mCommandPools[j] = commandPools;
             }
         }
     }
+    //-------------------------------------------------------------------------
+    void VulkanDevice::newCommandBuffer( QueueFamily family )
+    {
+        TODO_resetCmdPools;
+        TODO_removeCmdBuffer;
+
+        const size_t currFrame = mVaoManager->waitForTailFrameToFinish();
+
+        VkCommandBufferAllocateInfo allocateInfo;
+        makeVkStruct( allocateInfo, VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO );
+        allocateInfo.commandPool = mCommandPools[family][currFrame];
+        allocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+        allocateInfo.commandBufferCount = 1u;
+        VkResult result = vkAllocateCommandBuffers( mDevice, &allocateInfo, &mCurrentCmdBuffer[family] );
+
+        if( result != VK_SUCCESS )
+        {
+            OGRE_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result, "vkAllocateCommandBuffers",
+                            "VulkanDevice::newCommandBuffer" );
+        }
+
+        VkCommandBufferBeginInfo beginInfo;
+        makeVkStruct( beginInfo, VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO );
+        beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+        vkBeginCommandBuffer( mCurrentCmdBuffer[family], &beginInfo );
+    }
+    //-------------------------------------------------------------------------
+    void VulkanDevice::endCommandBuffer( VulkanDevice::QueueFamily family )
+    {
+        TODO_removeCmdBuffer;
+        if( mCurrentCmdBuffer[family] )
+        {
+            VkResult result = vkEndCommandBuffer( mCurrentCmdBuffer[family] );
+            if( result != VK_SUCCESS )
+            {
+                OGRE_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result, "vkEndCommandBuffer",
+                                "VulkanDevice::closeCommandBuffer" );
+            }
+
+            mPendingCmds[family].push_back( mCurrentCmdBuffer[family] );
+            mCurrentCmdBuffer[family] = 0;
+        }
+    }
+    //-------------------------------------------------------------------------
+    void VulkanDevice::addWindowToWaitFor( VkSemaphore imageAcquisitionSemaph )
+    {
+        mGpuWaitFlags[VulkanDevice::Graphics].push_back( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT );
+        mGpuWaitSemaphForCurrCmdBuff[VulkanDevice::Graphics].push_back( imageAcquisitionSemaph );
+    }
+    //-------------------------------------------------------------------------
+    void VulkanDevice::commitAndNextCommandBuffer( void )
+    {
+        const uint8 dynBufferFrame = mVaoManager->_getDynamicBufferCurrentFrameNoWait();
+
+        VkSubmitInfo submitInfo;
+        makeVkStruct( submitInfo, VK_STRUCTURE_TYPE_SUBMIT_INFO );
+
+        for( size_t i = 0u; i < NumQueueFamilies; ++i )
+        {
+            QueueFamily family = static_cast<QueueFamily>( i );
+
+            endCommandBuffer( family );
+
+            const size_t windowsSemaphStart = mGpuSignalSemaphForCurrCmdBuff[family].size();
+            const size_t numWindowsPendingSwap = mWindowsPendingSwap.size();
+            mGpuSignalSemaphForCurrCmdBuff[family].reserve( windowsSemaphStart + numWindowsPendingSwap );
+            mVaoManager->getAvailableSempaphores( mGpuSignalSemaphForCurrCmdBuff[family],
+                                                  numWindowsPendingSwap );
+
+            if( mGpuWaitSemaphForCurrCmdBuff[family].empty() )
+            {
+                submitInfo.waitSemaphoreCount =
+                    static_cast<uint32>( mGpuWaitSemaphForCurrCmdBuff[family].size() );
+                submitInfo.pWaitSemaphores = mGpuWaitSemaphForCurrCmdBuff[family].begin();
+                submitInfo.pWaitDstStageMask = mGpuWaitFlags[family].begin();
+            }
+            if( mGpuSignalSemaphForCurrCmdBuff[family].empty() )
+            {
+                submitInfo.signalSemaphoreCount =
+                    static_cast<uint32>( mGpuSignalSemaphForCurrCmdBuff[family].size() );
+                submitInfo.pSignalSemaphores = mGpuSignalSemaphForCurrCmdBuff[family].begin();
+            }
+            // clang-format off
+            submitInfo.commandBufferCount   = 1u;
+            submitInfo.pCommandBuffers      = &mCurrentCmdBuffer[i];
+            // clang-format on
+
+            vkQueueSubmit( mQueues[family], 1u, &submitInfo, mFrameFence[dynBufferFrame].fence[family] );
+
+            mGpuWaitSemaphForCurrCmdBuff[family].clear();
+            mGpuSignalSemaphForCurrCmdBuff[family].clear();
+
+            newCommandBuffer( family );
+
+            for( size_t windowIdx = 0u; windowIdx < numWindowsPendingSwap; ++windowIdx )
+            {
+                mWindowsPendingSwap[windowIdx]->_swapBuffers(
+                    mGpuSignalSemaphForCurrCmdBuff[family][windowsSemaphStart + windowIdx] );
+            }
+            mWindowsPendingSwap.clear();
+        }
+    }
+    //-------------------------------------------------------------------------
+    void VulkanDevice::stall( void ) { vkDeviceWaitIdle( mDevice ); }
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------

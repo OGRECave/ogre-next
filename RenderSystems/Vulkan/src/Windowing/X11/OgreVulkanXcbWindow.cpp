@@ -106,6 +106,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanXcbWindow::destroy( void )
     {
+        VulkanWindow::destroy();
+
         if( mClosed )
             return;
 
@@ -158,19 +160,19 @@ namespace Ogre
             static_cast<VulkanTextureGpuManager *>( textureGpuManager );
 
         mTexture = textureManager->createTextureGpuWindow( this );
-        mDepthBuffer = textureManager->createTextureGpuWindow( this );
+        //mDepthBuffer = textureManager->createTextureGpuWindow( this );
         mStencilBuffer = mDepthBuffer;
 
-        mDepthBuffer->setPixelFormat( PFG_D32_FLOAT_S8X24_UINT );
+        //mDepthBuffer->setPixelFormat( PFG_D32_FLOAT_S8X24_UINT );
 
         bool hwGamma = true;
 
         setFinalResolution( mRequestedWidth, mRequestedHeight );
         mTexture->setPixelFormat( chooseSurfaceFormat( hwGamma ) );
-        mDepthBuffer->setPixelFormat( PFG_D32_FLOAT_S8X24_UINT );
+        //mDepthBuffer->setPixelFormat( PFG_D32_FLOAT_S8X24_UINT );
 
         mTexture->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
-        mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
+        //mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
 
         createSwapchain();
     }

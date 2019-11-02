@@ -33,6 +33,24 @@ Copyright (c) 2000-present Torus Knot Software Ltd
 namespace Ogre
 {
     //-----------------------------------------------------------------------------------
+    VkImageViewType VulkanMappings::get( TextureTypes::TextureTypes textureType )
+    {
+        switch( textureType )
+        {
+        // clang-format off
+        case TextureTypes::Unknown:         return VK_IMAGE_VIEW_TYPE_2D;
+        case TextureTypes::Type1D:          return VK_IMAGE_VIEW_TYPE_1D;
+        case TextureTypes::Type1DArray:     return VK_IMAGE_VIEW_TYPE_1D_ARRAY;
+        case TextureTypes::Type2D:          return VK_IMAGE_VIEW_TYPE_2D;
+        case TextureTypes::Type2DArray:     return VK_IMAGE_VIEW_TYPE_2D_ARRAY;
+        case TextureTypes::TypeCube:        return VK_IMAGE_VIEW_TYPE_CUBE;
+        case TextureTypes::TypeCubeArray:   return VK_IMAGE_VIEW_TYPE_CUBE_ARRAY;
+        case TextureTypes::Type3D:          return VK_IMAGE_VIEW_TYPE_3D;
+            // clang-format on
+        }
+        return VK_IMAGE_VIEW_TYPE_2D;
+    }
+    //-----------------------------------------------------------------------------------
     VkFormat VulkanMappings::get( PixelFormatGpu pf )
     {
         // clang-format off

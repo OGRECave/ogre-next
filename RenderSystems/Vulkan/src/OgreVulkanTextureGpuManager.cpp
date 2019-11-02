@@ -50,7 +50,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     VulkanTextureGpuManager::~VulkanTextureGpuManager() { destroyAll(); }
     //-----------------------------------------------------------------------------------
-    TextureGpu *VulkanTextureGpuManager::createTextureGpuWindow( Window *window )
+    TextureGpu *VulkanTextureGpuManager::createTextureGpuWindow( VulkanWindow *window )
     {
         return OGRE_NEW VulkanTextureGpuWindow( GpuPageOutStrategy::Discard, mVaoManager,
                                                 "RenderWindow",                      //

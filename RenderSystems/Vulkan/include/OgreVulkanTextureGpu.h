@@ -33,6 +33,8 @@ THE SOFTWARE.
 
 #include "OgreTextureGpu.h"
 
+#include "vulkan/vulkan_core.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
@@ -47,6 +49,22 @@ namespace Ogre
     class _OgreVulkanExport VulkanTextureGpu : public TextureGpu
     {
     protected:
+        /// When we're transitioning to GpuResidency::Resident but we're not there yet,
+        /// we will be either displaying a 4x4 dummy texture or a 64x64 one. However
+        /// we reserve a spot to a final place will already be there for us once the
+        /// texture data is fully uploaded. This variable contains that texture.
+        /// Async upload operations should stack to this variable.
+        /// May contain:
+        ///     1. 0, if not resident or resident but not yet reached main thread.
+        ///     2. The texture
+        ///     3. An msaa texture (hasMsaaExplicitResolves == true)
+        ///     4. The msaa resolved texture (hasMsaaExplicitResolves==false)
+        /// This value may be a renderbuffer instead of a texture if isRenderbuffer() returns true.
+        VkImage mFinalTextureName;
+
+        /// Only used when hasMsaaExplicitResolves() == false
+        VkImage mMsaaFramebufferName;
+
         virtual void createInternalResourcesImpl( void );
         virtual void destroyInternalResourcesImpl( void );
 
@@ -55,6 +73,26 @@ namespace Ogre
                           IdString name, uint32 textureFlags, TextureTypes::TextureTypes initialType,
                           TextureGpuManager *textureManager );
         virtual ~VulkanTextureGpu();
+
+        /// Always returns the internal handle that belongs to this texture.
+        /// Note that for TextureFlags::AutomaticBatching textures, this will be the
+        /// handle of a 2D Array texture pool.
+        ///
+        /// If the texture has MSAA enabled, this returns the handle to the resolve
+        /// texture, not the MSAA one.
+        ///
+        /// If TextureFlags::MsaaExplicitResolve is set, it returns the handle
+        /// to the MSAA texture, since there is no resolve texture.
+        VkImage getFinalTextureName( void ) const { return mFinalTextureName; }
+
+        /// If MSAA > 1u and TextureFlags::MsaaExplicitResolve is not set, this
+        /// returns the handle to the temporary MSAA renderbuffer used for rendering,
+        /// which will later be resolved into the resolve texture.
+        ///
+        /// Otherwise it returns null.
+        VkImage getMsaaFramebufferName( void ) const { return mMsaaFramebufferName; }
+
+        VkImageSubresourceRange getFullSubresourceRange( void ) const;
 
         virtual void getSubsampleLocations( vector<Vector2>::type locations );
         virtual void notifyDataIsReady( void );

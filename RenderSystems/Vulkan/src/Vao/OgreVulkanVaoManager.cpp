@@ -46,7 +46,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    VulkanVaoManager::VulkanVaoManager() : VaoManager( 0 ), mDrawId( 0 )
+    VulkanVaoManager::VulkanVaoManager( uint8 dynBufferMultiplier ) : VaoManager( 0 ), mDrawId( 0 )
     {
         mConstBufferAlignment = 256;
         mTexBufferAlignment = 256;
@@ -57,7 +57,7 @@ namespace Ogre
         mSupportsPersistentMapping = true;
         mSupportsIndirectBuffers = false;
 
-        mDynamicBufferMultiplier = 1;
+        mDynamicBufferMultiplier = dynBufferMultiplier;
 
         VertexElement2Vec vertexElements;
         vertexElements.push_back( VertexElement2( VET_UINT1, VES_COUNT ) );

@@ -32,6 +32,7 @@ Copyright (c) 2000-present Torus Knot Software Ltd
 #include "OgreVulkanPrerequisites.h"
 
 #include "OgrePixelFormatGpu.h"
+#include "OgreTextureGpu.h"
 
 #include "vulkan/vulkan_core.h"
 
@@ -40,8 +41,9 @@ namespace Ogre
     class _OgreVulkanExport VulkanMappings
     {
     public:
+        static VkImageViewType get( TextureTypes::TextureTypes textureType );
         static VkFormat get( PixelFormatGpu pf );
     };
-}
+}  // namespace Ogre
 
 #endif

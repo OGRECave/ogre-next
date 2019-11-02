@@ -41,6 +41,26 @@ namespace Ogre
         {
             BackendX11 = 1u << 0u
         };
+        enum SwapchainStatus
+        {
+            /// We already called VulkanWindow::acquireNextSwapchain.
+            ///
+            /// Can only go into this state if we're coming from SwapchainReleased
+            SwapchainAcquired,
+            /// We already called VulkanWindow::getImageAcquiredSemaphore.
+            /// Further calls to getImageAcquiredSemaphore will return null.
+            /// Ogre is rendering or intends to into this swapchain.
+            ///
+            /// Can only go into this state if we're coming from SwapchainAcquired
+            SwapchainUsedInRendering,
+            /// We've come from SwapchainUsedInRendering and are waiting for
+            /// VulkanDevice::commitAndNextCommandBuffer to present us
+            SwapchainPendingSwap,
+            /// We don't own a swapchain. Ogre cannot render to this window.
+            ///
+            /// This status should not last long unless we're not initialized yet.
+            SwapchainReleased
+        };
 
         bool mClosed;
 
@@ -49,19 +69,44 @@ namespace Ogre
         VkSurfaceKHR mSurfaceKHR;
         VkSwapchainKHR mSwapchain;
         FastArray<VkImage> mSwapchainImages;
+        /// Note: mSwapchainSemaphores.size != mSwapchainImages.size !!!
+        /// We need a semaphore per frame, not per swapchain.
+        ///
+        /// Makes Queue execution wait until the acquired image is done presenting
+        VkSemaphoreArray mSwapchainSemaphores;
+        SwapchainStatus mSwapchainStatus;
 
         PixelFormatGpu chooseSurfaceFormat( bool hwGamma );
         void createSwapchain( void );
+        void acquireNextSwapchain( void );
 
     public:
         VulkanWindow( const String &title, uint32 width, uint32 height, bool fullscreenMode );
         virtual ~VulkanWindow();
 
+        virtual void destroy( void );
+
         void _setDevice( VulkanDevice *device );
+
+        /// Returns null if getImageAcquiredSemaphore has already been called during this frame
+        VkSemaphore getImageAcquiredSemaphore( void );
+
+        size_t getNumSwapchains( void ) const { return mSwapchainImages.size(); }
+        VkImage getSwapchainImage( size_t idx ) const { return mSwapchainImages[idx]; }
 
         virtual bool isClosed( void ) const;
 
+        /// Tells our VulkanDevice that the next commitAndNextCommandBuffer call should present us
+        /// Calling swapBuffers during the command buffer that is rendering to us is key for
+        /// good performance; otherwise Ogre may split the commands that render to this window
+        /// and the command that presents this window into two queue submissions.
         virtual void swapBuffers( void );
+
+        /** Actually performs present. Called by VulkanDevice::commitAndNextCommandBuffer
+        @param queueFinishSemaphore
+            Makes our present request wait until the Queue is done executing before we can present
+        */
+        void _swapBuffers( VkSemaphore queueFinishSemaphore );
     };
 }  // namespace Ogre
 

@@ -55,21 +55,43 @@ namespace Ogre
 
             bool hasValidFamily( void ) const;
         };
+        struct FrameFence
+        {
+            VkFence fence[NumQueueFamilies];
+        };
 
         // clang-format off
         VkInstance          mInstance;
         VkPhysicalDevice    mPhysicalDevice;
         VkDevice            mDevice;
+
+        VkQueue                     mPresentQueue;
+        VkQueue                     mQueues[NumQueueFamilies];
+        // There's one per buffered frame, per family
+        FastArray<VkCommandPool>    mCommandPools[NumQueueFamilies];
+        VkCommandBuffer             mCurrentCmdBuffer[NumQueueFamilies];
+    protected:
+        /// Collection of semaphore we need to wait on before our queue executes
+        /// pending commands when commitAndNextCommandBuffer is called
+        VkSemaphoreArray                mGpuWaitSemaphForCurrCmdBuff[NumQueueFamilies];
+        FastArray<VkPipelineStageFlags> mGpuWaitFlags[NumQueueFamilies];
+    public:
+        /// Collection of semaphore we will signal when our queue
+        /// submitted in commitAndNextCommandBuffer is done
+        VkSemaphoreArray            mGpuSignalSemaphForCurrCmdBuff[NumQueueFamilies];
+        FastArray<FrameFence>       mFrameFence;
         // clang-format on
 
-        VkQueue mQueues[NumQueueFamilies];
-        VkCommandPool mCommandPools[NumQueueFamilies];
+        FastArray<VulkanWindow *> mWindowsPendingSwap;
 
         VkPhysicalDeviceMemoryProperties mMemoryProperties;
         FastArray<VkQueueFamilyProperties> mQueueProps;
         // Index via mQueueProps[mSelectedQueues[Graphics].familyIdx]
         SelectedQueue mSelectedQueues[NumQueueFamilies];
 
+        FastArray<VkCommandBuffer> mPendingCmds[NumQueueFamilies];
+
+        VulkanVaoManager *mVaoManager;
         VulkanRenderSystem *mRenderSystem;
 
     protected:
@@ -98,12 +120,33 @@ namespace Ogre
         VulkanDevice( VkInstance instance, uint32 deviceIdx, VulkanRenderSystem *renderSystem );
         ~VulkanDevice();
 
+    protected:
+        static VkDebugReportCallbackCreateInfoEXT addDebugCallback(
+            PFN_vkDebugReportCallbackEXT debugCallback );
+
+    public:
         static VkInstance createInstance( const String &appName, FastArray<const char *> &extensions,
-                                          FastArray<const char *> &layers );
+                                          FastArray<const char *> &layers,
+                                          PFN_vkDebugReportCallbackEXT debugCallback );
 
         void createPhysicalDevice( uint32 deviceIdx );
 
-        void createDevice( FastArray<const char *> &extensions );
+        void createDevice( FastArray<const char *> &extensions, size_t maxNumFrames );
+
+        void newCommandBuffer( VulkanDevice::QueueFamily family );
+
+    protected:
+        void endCommandBuffer( VulkanDevice::QueueFamily family );
+
+    public:
+        /// When we'll call commitAndNextCommandBuffer, we'll have to wait for
+        /// this semaphore on to execute STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+        void addWindowToWaitFor( VkSemaphore imageAcquisitionSemaph );
+
+        void commitAndNextCommandBuffer( void );
+
+        /// Waits for the GPU to finish all pending commands.
+        void stall( void );
     };
 
 }  // namespace Ogre
