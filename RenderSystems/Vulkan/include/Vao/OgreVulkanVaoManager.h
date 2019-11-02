@@ -132,6 +132,10 @@ namespace Ogre
 
         VertexBufferPacked *mDrawId;
 
+        VkSemaphoreArray mAvailableSemaphores;
+
+        VulkanDevice *mDevice;
+
     protected:
         virtual VertexBufferPacked *createVertexBufferImpl( size_t numElements, uint32 bytesPerElement,
                                                             BufferType bufferType, void *initialData,

@@ -60,6 +60,22 @@ namespace Ogre
 #define OGRE_VK_EXCEPT( code, num, desc, src ) \
     OGRE_EXCEPT( code, desc + ( "\nVkResult = " + vkResultToString( num ) ), src )
 
+#if OGRE_COMPILER == OGRE_COMPILER_MSVC
+#    define checkVkResult( result, functionName ) \
+        if( result != VK_SUCCESS ) \
+        { \
+            OGRE_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result, functionName " failed", \
+                            __FUNCSIG__ ); \
+        }
+#else
+#    define checkVkResult( result, functionName ) \
+        if( result != VK_SUCCESS ) \
+        { \
+            OGRE_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result, functionName " failed", \
+                            __PRETTY_FUNCTION__ ); \
+        }
+#endif
+
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #    if !defined( __MINGW32__ )
 #        define WIN32_LEAN_AND_MEAN

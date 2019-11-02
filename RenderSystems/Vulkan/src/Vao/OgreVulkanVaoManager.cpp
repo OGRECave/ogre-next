@@ -28,6 +28,8 @@ THE SOFTWARE.
 
 #include "Vao/OgreVulkanVaoManager.h"
 
+#include "OgreVulkanDevice.h"
+#include "OgreVulkanUtils.h"
 #include "Vao/OgreVulkanAsyncTicket.h"
 #include "Vao/OgreVulkanBufferInterface.h"
 #include "Vao/OgreVulkanConstBufferPacked.h"
@@ -46,7 +48,10 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    VulkanVaoManager::VulkanVaoManager( uint8 dynBufferMultiplier ) : VaoManager( 0 ), mDrawId( 0 )
+    VulkanVaoManager::VulkanVaoManager( uint8 dynBufferMultiplier ) :
+        VaoManager( 0 ),
+        mDrawId( 0 ),
+        mDevice( 0 )
     {
         mConstBufferAlignment = 256;
         mTexBufferAlignment = 256;
@@ -358,6 +363,36 @@ namespace Ogre
         }
 
         mDynamicBufferCurrentFrame = ( mDynamicBufferCurrentFrame + 1 ) % mDynamicBufferMultiplier;
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanVaoManager::getAvailableSempaphores( VkSemaphoreArray &semaphoreArray,
+                                                    size_t numSemaphores )
+    {
+        semaphoreArray.reserve( semaphoreArray.size() + numSemaphores );
+
+        if( mAvailableSemaphores.size() < numSemaphores )
+        {
+            const size_t requiredNewSemaphores = numSemaphores - mAvailableSemaphores.size();
+            VkSemaphoreCreateInfo semaphoreCreateInfo;
+            makeVkStruct( semaphoreCreateInfo, VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO );
+
+            for( size_t i = 0u; i < requiredNewSemaphores; ++i )
+            {
+                VkSemaphore semaphore = 0;
+                const VkResult result =
+                    vkCreateSemaphore( mDevice->mDevice, &semaphoreCreateInfo, 0, &semaphore );
+                checkVkResult( result, "vkCreateSemaphore" );
+                semaphoreArray.push_back( semaphore );
+            }
+
+            numSemaphores -= requiredNewSemaphores;
+        }
+
+        for( size_t i = 0u; i < numSemaphores; ++i )
+        {
+            semaphoreArray.push_back( mAvailableSemaphores.back() );
+            mAvailableSemaphores.pop_back();
+        }
     }
     //-----------------------------------------------------------------------------------
     uint8 VulkanVaoManager::waitForTailFrameToFinish( void ) { return mDynamicBufferCurrentFrame; }

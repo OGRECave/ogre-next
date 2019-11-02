@@ -62,12 +62,7 @@ namespace Ogre
         uint32 numFormats = 0u;
         VkResult result = vkGetPhysicalDeviceSurfaceFormatsKHR( mDevice->mPhysicalDevice, mSurfaceKHR,
                                                                 &numFormats, 0 );
-        if( result != VK_SUCCESS )
-        {
-            OGRE_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result,
-                            "vkGetPhysicalDeviceSurfaceFormatsKHR failed",
-                            "VulkanWindow::chooseSurfaceFormat" );
-        }
+        checkVkResult( result, "vkGetPhysicalDeviceSurfaceFormatsKHR" );
         if( numFormats == 0 )
         {
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
@@ -79,12 +74,7 @@ namespace Ogre
         formats.resize( numFormats );
         result = vkGetPhysicalDeviceSurfaceFormatsKHR( mDevice->mPhysicalDevice, mSurfaceKHR,
                                                        &numFormats, formats.begin() );
-        if( result != VK_SUCCESS )
-        {
-            OGRE_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result,
-                            "vkGetPhysicalDeviceSurfaceFormatsKHR failed",
-                            "VulkanWindow::chooseSurfaceFormat" );
-        }
+        checkVkResult( result, "vkGetPhysicalDeviceSurfaceFormatsKHR" );
 
         PixelFormatGpu pixelFormat = PFG_UNKNOWN;
         for( size_t i = 0; i < numFormats && pixelFormat == PFG_UNKNOWN; ++i )
@@ -126,24 +116,13 @@ namespace Ogre
         VkSurfaceCapabilitiesKHR surfaceCaps;
         VkResult result = vkGetPhysicalDeviceSurfaceCapabilitiesKHR( mDevice->mPhysicalDevice,
                                                                      mSurfaceKHR, &surfaceCaps );
-        if( result != VK_SUCCESS )
-        {
-            OGRE_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result,
-                            "vkGetPhysicalDeviceSurfaceCapabilitiesKHR failed",
-                            "VulkanWindow::createSwapchain" );
-        }
+        checkVkResult( result, "vkGetPhysicalDeviceSurfaceCapabilitiesKHR" );
 
         VkBool32 supported;
         result = vkGetPhysicalDeviceSurfaceSupportKHR(
             mDevice->mPhysicalDevice, mDevice->mSelectedQueues[VulkanDevice::Graphics].familyIdx,
             mSurfaceKHR, &supported );
-
-        if( result != VK_SUCCESS )
-        {
-            OGRE_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result,
-                            "vkGetPhysicalDeviceSurfaceSupportKHR failed",
-                            "VulkanWindow::createSwapchain" );
-        }
+        checkVkResult( result, "vkGetPhysicalDeviceSurfaceSupportKHR" );
 
         if( !supported )
         {
@@ -225,30 +204,18 @@ namespace Ogre
         //-----------------------------
 
         result = vkCreateSwapchainKHR( mDevice->mDevice, &swapchainCreateInfo, 0, &mSwapchain );
-        if( result != VK_SUCCESS )
-        {
-            OGRE_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result, "vkCreateSwapchainKHR failed",
-                            "VulkanWindow::createSwapchain" );
-        }
+        checkVkResult( result, "vkCreateSwapchainKHR" );
 
         uint32 numSwapchainImages = 0u;
         result = vkGetSwapchainImagesKHR( mDevice->mDevice, mSwapchain, &numSwapchainImages, NULL );
-        if( result != VK_SUCCESS )
-        {
-            OGRE_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result, "vkGetSwapchainImagesKHR failed",
-                            "VulkanWindow::createSwapchain" );
-        }
+        checkVkResult( result, "vkGetSwapchainImagesKHR" );
 
         OGRE_ASSERT_LOW( numSwapchainImages > 0u );
 
         mSwapchainImages.resize( numSwapchainImages );
         result = vkGetSwapchainImagesKHR( mDevice->mDevice, mSwapchain, &numSwapchainImages,
                                           mSwapchainImages.begin() );
-        if( result != VK_SUCCESS )
-        {
-            OGRE_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result, "vkGetSwapchainImagesKHR failed",
-                            "VulkanWindow::createSwapchain" );
-        }
+        checkVkResult( result, "vkGetSwapchainImagesKHR" );
 
         VkSemaphoreCreateInfo semaphoreCreateInfo;
         makeVkStruct( semaphoreCreateInfo, VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO );
@@ -258,11 +225,7 @@ namespace Ogre
         {
             result = vkCreateSemaphore( mDevice->mDevice, &semaphoreCreateInfo, NULL,
                                         &mSwapchainSemaphores[i] );
-            if( result != VK_SUCCESS )
-            {
-                OGRE_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result, "vkCreateSemaphore failed",
-                                "VulkanWindow::createSwapchain" );
-            }
+            checkVkResult( result, "vkCreateSemaphore" );
         }
 
         acquireNextSwapchain();

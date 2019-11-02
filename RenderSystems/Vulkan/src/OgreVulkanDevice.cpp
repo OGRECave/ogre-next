@@ -116,12 +116,7 @@ namespace Ogre
 
         VkInstance instance;
         VkResult result = vkCreateInstance( &createInfo, 0, &instance );
-
-        if( result != VK_SUCCESS )
-        {
-            OGRE_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result, "vkCreateInstance failed",
-                            "VulkanDevice::createInstance" );
-        }
+        checkVkResult( result, "vkCreateInstance" );
 
         return instance;
     }
@@ -135,12 +130,7 @@ namespace Ogre
         const uint32_t c_maxDevices = 64u;
         uint32 numDevices = 0u;
         result = vkEnumeratePhysicalDevices( mInstance, &numDevices, NULL );
-
-        if( result != VK_SUCCESS )
-        {
-            OGRE_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result,
-                            "vkEnumeratePhysicalDevices failed", "VulkanDevice::createPhysicalDevice" );
-        }
+        checkVkResult( result, "vkEnumeratePhysicalDevices" );
 
         if( numDevices == 0u )
         {
@@ -168,11 +158,7 @@ namespace Ogre
 
         VkPhysicalDevice pd[c_maxDevices];
         result = vkEnumeratePhysicalDevices( mInstance, &numDevices, pd );
-        if( result != VK_SUCCESS )
-        {
-            OGRE_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result,
-                            "vkEnumeratePhysicalDevices failed", "VulkanDevice::createPhysicalDevice" );
-        }
+        checkVkResult( result, "vkEnumeratePhysicalDevices" );
         mPhysicalDevice = pd[0];
 
         vkGetPhysicalDeviceMemoryProperties( mPhysicalDevice, &mMemoryProperties );
@@ -307,12 +293,7 @@ namespace Ogre
         createInfo.pQueueCreateInfos = queueCreateInfo;
 
         VkResult result = vkCreateDevice( mPhysicalDevice, &createInfo, NULL, &mDevice );
-
-        if( result != VK_SUCCESS )
-        {
-            OGRE_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result, "vkCreateDevice failed",
-                            "VulkanDevice::createDevice" );
-        }
+        checkVkResult( result, "vkCreateDevice" );
 
         for( uint32 i = 0u; i < NumQueueFamilies; ++i )
         {
@@ -362,12 +343,7 @@ namespace Ogre
         allocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
         allocateInfo.commandBufferCount = 1u;
         VkResult result = vkAllocateCommandBuffers( mDevice, &allocateInfo, &mCurrentCmdBuffer[family] );
-
-        if( result != VK_SUCCESS )
-        {
-            OGRE_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result, "vkAllocateCommandBuffers",
-                            "VulkanDevice::newCommandBuffer" );
-        }
+        checkVkResult( result, "vkAllocateCommandBuffers" );
 
         VkCommandBufferBeginInfo beginInfo;
         makeVkStruct( beginInfo, VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO );
@@ -381,11 +357,7 @@ namespace Ogre
         if( mCurrentCmdBuffer[family] )
         {
             VkResult result = vkEndCommandBuffer( mCurrentCmdBuffer[family] );
-            if( result != VK_SUCCESS )
-            {
-                OGRE_VK_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, result, "vkEndCommandBuffer",
-                                "VulkanDevice::closeCommandBuffer" );
-            }
+            checkVkResult( result, "vkEndCommandBuffer" );
 
             mPendingCmds[family].push_back( mCurrentCmdBuffer[family] );
             mCurrentCmdBuffer[family] = 0;
@@ -413,7 +385,6 @@ namespace Ogre
 
             const size_t windowsSemaphStart = mGpuSignalSemaphForCurrCmdBuff[family].size();
             const size_t numWindowsPendingSwap = mWindowsPendingSwap.size();
-            mGpuSignalSemaphForCurrCmdBuff[family].reserve( windowsSemaphStart + numWindowsPendingSwap );
             mVaoManager->getAvailableSempaphores( mGpuSignalSemaphForCurrCmdBuff[family],
                                                   numWindowsPendingSwap );
 
