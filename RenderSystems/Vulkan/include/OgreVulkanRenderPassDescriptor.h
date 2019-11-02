@@ -75,7 +75,7 @@ namespace Ogre
         uint32 mTargetWidth;
         uint32 mTargetHeight;
 
-        VulkanDevice *mDevice;
+        VulkanQueue *mQueue;
         VulkanRenderSystem *mRenderSystem;
 
         void checkRenderWindowStatus( void );
@@ -101,7 +101,7 @@ namespace Ogre
         bool cannotInterruptRendering( void ) const;
 
     public:
-        VulkanRenderPassDescriptor( VulkanDevice *device, VulkanRenderSystem *renderSystem );
+        VulkanRenderPassDescriptor( VulkanQueue *graphicsQueue, VulkanRenderSystem *renderSystem );
         virtual ~VulkanRenderPassDescriptor();
 
         virtual void entriesModified( uint32 entryTypes );

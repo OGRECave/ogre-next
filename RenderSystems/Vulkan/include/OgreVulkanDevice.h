@@ -31,6 +31,8 @@ THE SOFTWARE.
 
 #include "OgreVulkanPrerequisites.h"
 
+#include "OgreVulkanQueue.h"
+
 #include "vulkan/vulkan_core.h"
 
 #include "OgreHeaderPrefix.h"
@@ -39,25 +41,12 @@ namespace Ogre
 {
     struct _OgreVulkanExport VulkanDevice
     {
-        enum QueueFamily
-        {
-            Graphics,
-            Compute,
-            Transfer,
-            NumQueueFamilies
-        };
         struct SelectedQueue
         {
+            VulkanQueue::QueueFamily usage;
             uint32 familyIdx;
             uint32 queueIdx;
-
             SelectedQueue();
-
-            bool hasValidFamily( void ) const;
-        };
-        struct FrameFence
-        {
-            VkFence fence[NumQueueFamilies];
         };
 
         // clang-format off
@@ -65,56 +54,30 @@ namespace Ogre
         VkPhysicalDevice    mPhysicalDevice;
         VkDevice            mDevice;
 
-        VkQueue                     mPresentQueue;
-        VkQueue                     mQueues[NumQueueFamilies];
-        // There's one per buffered frame, per family
-        FastArray<VkCommandPool>    mCommandPools[NumQueueFamilies];
-        VkCommandBuffer             mCurrentCmdBuffer[NumQueueFamilies];
-    protected:
-        /// Collection of semaphore we need to wait on before our queue executes
-        /// pending commands when commitAndNextCommandBuffer is called
-        VkSemaphoreArray                mGpuWaitSemaphForCurrCmdBuff[NumQueueFamilies];
-        FastArray<VkPipelineStageFlags> mGpuWaitFlags[NumQueueFamilies];
-    public:
-        /// Collection of semaphore we will signal when our queue
-        /// submitted in commitAndNextCommandBuffer is done
-        VkSemaphoreArray            mGpuSignalSemaphForCurrCmdBuff[NumQueueFamilies];
-        FastArray<FrameFence>       mFrameFence;
+        VkQueue             mPresentQueue;
+        /// Graphics queue is *guaranteed by spec* to also be able to run compute and transfer
+        /// A GPU may not have a graphics queue though (Ogre can't run there)
+        VulkanQueue             mGraphicsQueue;
+        /// Additional compute queues to run async compute (besides the main graphics one)
+        FastArray<VulkanQueue>  mComputeQueues;
+        /// Additional transfer queues to run async transfers (besides the main graphics one)
+        FastArray<VulkanQueue>  mTransferQueues;
         // clang-format on
-
-        FastArray<VulkanWindow *> mWindowsPendingSwap;
 
         VkPhysicalDeviceMemoryProperties mMemoryProperties;
         FastArray<VkQueueFamilyProperties> mQueueProps;
-        // Index via mQueueProps[mSelectedQueues[Graphics].familyIdx]
-        SelectedQueue mSelectedQueues[NumQueueFamilies];
-
-        FastArray<VkCommandBuffer> mPendingCmds[NumQueueFamilies];
 
         VulkanVaoManager *mVaoManager;
         VulkanRenderSystem *mRenderSystem;
 
-    protected:
-        /** Modifies mSelectedQueues[family].queueIdx; attempting to have each QueueFamily its own
-            unique queue, but share if there's HW limitations.
-        */
-        void calculateQueueIdx( QueueFamily family );
+        static void destroyQueues( FastArray<VulkanQueue> &queueArray );
 
-        /** Calls calculateQueueIdx on all families except the first one (Graphics)
+        void findGraphicsQueue( FastArray<uint32> &inOutUsedQueueCount );
+        void findComputeQueue( FastArray<uint32> &inOutUsedQueueCount, uint32 maxNumQueues );
+        void findTransferQueue( FastArray<uint32> &inOutUsedQueueCount, uint32 maxNumQueues );
 
-            Then fills:
-                * VkDeviceQueueCreateInfo::queueFamilyIndex
-                * VkDeviceQueueCreateInfo::queueCount
-
-            The rest of VkDeviceQueueCreateInfo's members are not read nor written
-
-            @see    VulkanDevice::calculateQueueIdx
-        @param outQueueCreateInfo
-            Pointer for us to fill. Must have a size of at least outQueueCreateInfo[NumQueueFamilies]
-        @param outNumQueues
-            Outputs value in range [1; NumQueueFamilies]
-        */
-        void fillQueueSelectionData( VkDeviceQueueCreateInfo *outQueueCreateInfo, uint32 &outNumQueues );
+        void fillQueueCreationInfo( uint32 maxComputeQueues, uint32 maxTransferQueues,
+                                    FastArray<VkDeviceQueueCreateInfo> &outQueueCiArray );
 
     public:
         VulkanDevice( VkInstance instance, uint32 deviceIdx, VulkanRenderSystem *renderSystem );
@@ -131,17 +94,10 @@ namespace Ogre
 
         void createPhysicalDevice( uint32 deviceIdx );
 
-        void createDevice( FastArray<const char *> &extensions, size_t maxNumFrames );
+        void createDevice( FastArray<const char *> &extensions, size_t maxNumFrames,
+                           uint32 maxComputeQueues, uint32 maxTransferQueues );
 
-        void newCommandBuffer( VulkanDevice::QueueFamily family );
-
-    protected:
-        void endCommandBuffer( VulkanDevice::QueueFamily family );
-
-    public:
-        /// When we'll call commitAndNextCommandBuffer, we'll have to wait for
-        /// this semaphore on to execute STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-        void addWindowToWaitFor( VkSemaphore imageAcquisitionSemaph );
+        void initQueues( void );
 
         void commitAndNextCommandBuffer( void );
 

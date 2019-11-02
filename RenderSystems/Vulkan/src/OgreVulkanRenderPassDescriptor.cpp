@@ -43,7 +43,7 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    VulkanRenderPassDescriptor::VulkanRenderPassDescriptor( VulkanDevice *device,
+    VulkanRenderPassDescriptor::VulkanRenderPassDescriptor( VulkanQueue *graphicsQueue,
                                                             VulkanRenderSystem *renderSystem ) :
         mRenderPass( 0 ),
         mNumImageViews( 0u ),
@@ -52,7 +52,7 @@ namespace Ogre
 #endif
         mTargetWidth( 0u ),
         mTargetHeight( 0u ),
-        mDevice( device ),
+        mQueue( graphicsQueue ),
         mRenderSystem( renderSystem )
     {
         memset( mImageViews, 0, sizeof( mImageViews ) );
@@ -274,7 +274,7 @@ namespace Ogre
         if( !colour.texture->isRenderWindowSpecific() )
         {
             imgViewCreateInfo.image = texName;
-            vkCreateImageView( mDevice->mDevice, &imgViewCreateInfo, 0, &retVal );
+            vkCreateImageView( mQueue->mDevice, &imgViewCreateInfo, 0, &retVal );
         }
         else
         {
@@ -288,8 +288,7 @@ namespace Ogre
             for( size_t surfIdx = 0u; surfIdx < numSurfaces; ++surfIdx )
             {
                 imgViewCreateInfo.image = textureVulkan->getWindowFinalTextureName( surfIdx );
-                vkCreateImageView( mDevice->mDevice, &imgViewCreateInfo, 0,
-                                   &mWindowImageViews[surfIdx] );
+                vkCreateImageView( mQueue->mDevice, &imgViewCreateInfo, 0, &mWindowImageViews[surfIdx] );
             }
         }
 
@@ -334,7 +333,7 @@ namespace Ogre
         VulkanTextureGpu *textureVulkan = static_cast<VulkanTextureGpu *>( mDepth.texture );
 
         imgViewCreateInfo.image = textureVulkan->getFinalTextureName();
-        vkCreateImageView( mDevice->mDevice, &imgViewCreateInfo, 0, &retVal );
+        vkCreateImageView( mQueue->mDevice, &imgViewCreateInfo, 0, &retVal );
 
         return retVal;
     }
@@ -495,7 +494,7 @@ namespace Ogre
         renderPassCreateInfo.pAttachments = attachments;
         renderPassCreateInfo.subpassCount = 1u;
         renderPassCreateInfo.pSubpasses = &subpass;
-        vkCreateRenderPass( mDevice->mDevice, &renderPassCreateInfo, 0, &mRenderPass );
+        vkCreateRenderPass( mQueue->mDevice, &renderPassCreateInfo, 0, &mRenderPass );
 
         VkFramebufferCreateInfo fbCreateInfo;
         makeVkStruct( fbCreateInfo, VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO );
@@ -512,7 +511,7 @@ namespace Ogre
         {
             if( !mWindowImageViews.empty() )
                 mImageViews[windowAttachmentIdx] = mWindowImageViews[i];
-            vkCreateFramebuffer( mDevice->mDevice, &fbCreateInfo, 0, &mFramebuffers[i] );
+            vkCreateFramebuffer( mQueue->mDevice, &fbCreateInfo, 0, &mFramebuffers[i] );
             if( !mWindowImageViews.empty() )
                 mImageViews[windowAttachmentIdx] = 0;
         }
@@ -524,7 +523,7 @@ namespace Ogre
             FastArray<VkFramebuffer>::const_iterator itor = mFramebuffers.begin();
             FastArray<VkFramebuffer>::const_iterator endt = mFramebuffers.end();
             while( itor != endt )
-                vkDestroyFramebuffer( mDevice->mDevice, *itor++, 0 );
+                vkDestroyFramebuffer( mQueue->mDevice, *itor++, 0 );
             mFramebuffers.clear();
         }
 
@@ -533,7 +532,7 @@ namespace Ogre
             FastArray<VkImageView>::const_iterator endt = mWindowImageViews.end();
 
             while( itor != endt )
-                vkDestroyImageView( mDevice->mDevice, *itor++, 0 );
+                vkDestroyImageView( mQueue->mDevice, *itor++, 0 );
             mWindowImageViews.clear();
         }
 
@@ -541,7 +540,7 @@ namespace Ogre
         {
             if( mImageViews[i] )
             {
-                vkDestroyImageView( mDevice->mDevice, mImageViews[i], 0 );
+                vkDestroyImageView( mQueue->mDevice, mImageViews[i], 0 );
                 mImageViews[i] = 0;
             }
         }
@@ -709,7 +708,7 @@ namespace Ogre
         if( mInformationOnly )
             return;
 
-        VkCommandBuffer cmdBuffer = mDevice->mCurrentCmdBuffer[VulkanDevice::Graphics];
+        VkCommandBuffer cmdBuffer = mQueue->mCurrentCmdBuffer;
 
         size_t fboIdx = 0u;
         if( !mWindowImageViews.empty() )
@@ -741,11 +740,10 @@ namespace Ogre
 
                 imageBarrier.subresourceRange = textureVulkan->getFullSubresourceRange();
 
-                vkCmdPipelineBarrier( mDevice->mCurrentCmdBuffer[VulkanDevice::Graphics],
-                                      VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-                                      VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, 0u, 0u, 0,
-                                      0u, 0, 1u, &imageBarrier );
-                mDevice->addWindowToWaitFor( semaphore );
+                vkCmdPipelineBarrier(
+                    mQueue->mCurrentCmdBuffer, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+                    VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, 0u, 0u, 0, 0u, 0, 1u, &imageBarrier );
+                mQueue->addWindowToWaitFor( semaphore );
             }
         }
 
@@ -768,7 +766,7 @@ namespace Ogre
         if( mInformationOnly )
             return;
 
-        vkCmdEndRenderPass( mDevice->mCurrentCmdBuffer[VulkanDevice::Graphics] );
+        vkCmdEndRenderPass( mQueue->mCurrentCmdBuffer );
     }
 #if VULKAN_DISABLED
     //-----------------------------------------------------------------------------------

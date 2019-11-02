@@ -40,6 +40,7 @@ typedef struct VkSurfaceKHR_T *VkSurfaceKHR;
 typedef struct VkSwapchainKHR_T *VkSwapchainKHR;
 typedef struct VkImage_T *VkImage;
 typedef struct VkSemaphore_T *VkSemaphore;
+typedef struct VkFence_T *VkFence;
 
 typedef struct VkRenderPass_T *VkRenderPass;
 typedef struct VkFramebuffer_T *VkFramebuffer;
@@ -49,12 +50,14 @@ namespace Ogre
     // Forward declarations
     struct VulkanDevice;
     class VulkanGpuProgramManager;
+    class VulkanQueue;
     class VulkanStagingBuffer;
     class VulkanRenderSystem;
     class VulkanVaoManager;
     class VulkanWindow;
 
     typedef FastArray<VkSemaphore> VkSemaphoreArray;
+    typedef FastArray<VkFence> VkFenceArray;
 }  // namespace Ogre
 
 #define OGRE_VK_EXCEPT( code, num, desc, src ) \

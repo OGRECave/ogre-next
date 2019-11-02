@@ -120,8 +120,7 @@ namespace Ogre
 
         VkBool32 supported;
         result = vkGetPhysicalDeviceSurfaceSupportKHR(
-            mDevice->mPhysicalDevice, mDevice->mSelectedQueues[VulkanDevice::Graphics].familyIdx,
-            mSurfaceKHR, &supported );
+            mDevice->mPhysicalDevice, mDevice->mGraphicsQueue.mFamilyIdx, mSurfaceKHR, &supported );
         checkVkResult( result, "vkGetPhysicalDeviceSurfaceSupportKHR" );
 
         if( !supported )
@@ -161,10 +160,6 @@ namespace Ogre
         if( surfaceCaps.maxImageCount != 0u )
             minImageCount = std::min<uint32>( minImageCount, surfaceCaps.maxImageCount );
 
-        const uint32_t queueFamilyIndices[1] = {
-            mDevice->mSelectedQueues[VulkanDevice::Graphics].familyIdx
-        };
-
         VkSwapchainCreateInfoKHR swapchainCreateInfo;
         memset( &swapchainCreateInfo, 0, sizeof( swapchainCreateInfo ) );
         swapchainCreateInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
@@ -177,8 +172,8 @@ namespace Ogre
         swapchainCreateInfo.imageArrayLayers = 1u;
         swapchainCreateInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
         swapchainCreateInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
-        swapchainCreateInfo.queueFamilyIndexCount = 1u;
-        swapchainCreateInfo.pQueueFamilyIndices = queueFamilyIndices;
+        swapchainCreateInfo.queueFamilyIndexCount = 0u;
+        swapchainCreateInfo.pQueueFamilyIndices = 0;
         // Find a supported composite alpha mode - one of these is guaranteed to be set
         swapchainCreateInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
         VkCompositeAlphaFlagBitsKHR compositeAlphaFlags[4] = {
@@ -317,7 +312,7 @@ namespace Ogre
         }
 
         OGRE_ASSERT_LOW( mSwapchainStatus == SwapchainUsedInRendering );
-        mDevice->mWindowsPendingSwap.push_back( this );
+        mDevice->mGraphicsQueue.mWindowsPendingSwap.push_back( this );
         mSwapchainStatus = SwapchainPendingSwap;
     }
     //-------------------------------------------------------------------------

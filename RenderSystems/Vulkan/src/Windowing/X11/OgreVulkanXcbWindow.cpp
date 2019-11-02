@@ -142,7 +142,7 @@ namespace Ogre
             mDevice->mInstance, "vkCreateXcbSurfaceKHR" );
 
         if( !get_xcb_presentation_support( mDevice->mPhysicalDevice,
-                                           mDevice->mSelectedQueues[VulkanDevice::Graphics].familyIdx,
+                                           mDevice->mGraphicsQueue.mFamilyIdx,
                                            mConnection, mScreen->root_visual ) )
         {
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR, "Vulkan not supported on given X11 window",

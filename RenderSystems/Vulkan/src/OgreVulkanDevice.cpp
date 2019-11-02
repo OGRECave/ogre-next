@@ -54,8 +54,6 @@ namespace Ogre
         mVaoManager( 0 ),
         mRenderSystem( renderSystem )
     {
-        memset( mQueues, 0, sizeof( mQueues ) );
-        memset( mCurrentCmdBuffer, 0, sizeof( mCurrentCmdBuffer ) );
         memset( &mMemoryProperties, 0, sizeof( mMemoryProperties ) );
         createPhysicalDevice( deviceIdx );
     }
@@ -66,23 +64,27 @@ namespace Ogre
         {
             vkDeviceWaitIdle( mDevice );
 
-            FastArray<FrameFence>::const_iterator itor = mFrameFence.begin();
-            FastArray<FrameFence>::const_iterator endt = mFrameFence.end();
-
-            while( itor != endt )
-            {
-                for( size_t j = 0u; j < NumQueueFamilies; ++j )
-                    vkDestroyFence( mDevice, itor->fence[j], 0 );
-
-                ++itor;
-            }
-
-            mFrameFence.clear();
+            mGraphicsQueue.destroy();
+            destroyQueues( mComputeQueues );
+            destroyQueues( mTransferQueues );
 
             vkDestroyDevice( mDevice, 0 );
             mDevice = 0;
             mPhysicalDevice = 0;
         }
+    }
+    //-------------------------------------------------------------------------
+    void VulkanDevice::destroyQueues( FastArray<VulkanQueue> &queueArray )
+    {
+        FastArray<VulkanQueue>::iterator itor = queueArray.begin();
+        FastArray<VulkanQueue>::iterator endt = queueArray.end();
+
+        while( itor != endt )
+        {
+            itor->destroy();
+            ++itor;
+        }
+        queueArray.clear();
     }
     //-------------------------------------------------------------------------
     VkDebugReportCallbackCreateInfoEXT VulkanDevice::addDebugCallback(
@@ -179,55 +181,85 @@ namespace Ogre
         vkGetPhysicalDeviceMemoryProperties( mPhysicalDevice, &mMemoryProperties );
     }
     //-------------------------------------------------------------------------
-    void VulkanDevice::calculateQueueIdx( QueueFamily family )
+    void VulkanDevice::findGraphicsQueue( FastArray<uint32> &inOutUsedQueueCount )
     {
-        uint32 queueIdx = 0u;
-        for( size_t i = 0u; i < family; ++i )
+        const size_t numQueues = mQueueProps.size();
+        for( size_t i = 0u; i < numQueues; ++i )
         {
-            if( mSelectedQueues[family].familyIdx == mSelectedQueues[i].familyIdx )
-                ++queueIdx;
-        }
-        const size_t familyIdx = mSelectedQueues[family].familyIdx;
-        queueIdx = std::min( queueIdx, mQueueProps[familyIdx].queueCount - 1u );
-        mSelectedQueues[family].queueIdx = queueIdx;
-    }
-    //-------------------------------------------------------------------------
-    void VulkanDevice::fillQueueSelectionData( VkDeviceQueueCreateInfo *outQueueCreateInfo,
-                                               uint32 &outNumQueues )
-    {
-        uint32 numQueues = 0u;
-
-        bool queueInserted[NumQueueFamilies];
-        for( size_t i = 0u; i < NumQueueFamilies; ++i )
-            queueInserted[i] = false;
-
-        for( size_t i = 1u; i < NumQueueFamilies; ++i )
-            calculateQueueIdx( static_cast<QueueFamily>( i ) );
-
-        for( size_t i = 0u; i < NumQueueFamilies; ++i )
-        {
-            if( !queueInserted[i] )
+            if( mQueueProps[i].queueFlags & VK_QUEUE_GRAPHICS_BIT &&
+                inOutUsedQueueCount[i] < mQueueProps[i].queueCount )
             {
-                outQueueCreateInfo[numQueues].queueFamilyIndex = mSelectedQueues[i].familyIdx;
-                outQueueCreateInfo[numQueues].queueCount = 1u;
-                queueInserted[i] = true;
-                for( size_t j = i + 1u; j < NumQueueFamilies; ++j )
-                {
-                    if( mSelectedQueues[i].familyIdx == mSelectedQueues[j].familyIdx )
-                    {
-                        outQueueCreateInfo[numQueues].queueCount =
-                            std::max( mSelectedQueues[i].queueIdx, mSelectedQueues[j].queueIdx ) + 1u;
-                        queueInserted[j] = true;
-                    }
-                }
-                ++numQueues;
+                mGraphicsQueue.setQueueData( VulkanQueue::Graphics, static_cast<uint32>( i ),
+                                             inOutUsedQueueCount[i] );
+                ++inOutUsedQueueCount[i];
+                return;
             }
         }
 
-        outNumQueues = numQueues;
+        OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                     "GPU does not expose Graphics queue. Cannot be used for rendering",
+                     "VulkanQueue::findGraphicsQueue" );
     }
     //-------------------------------------------------------------------------
-    void VulkanDevice::createDevice( FastArray<const char *> &extensions, size_t maxNumFrames )
+    void VulkanDevice::findComputeQueue( FastArray<uint32> &inOutUsedQueueCount, uint32 maxNumQueues )
+    {
+        const size_t numQueues = mQueueProps.size();
+        for( size_t i = 0u; i < numQueues && mComputeQueues.size() < maxNumQueues; ++i )
+        {
+            if( mQueueProps[i].queueFlags & VK_QUEUE_COMPUTE_BIT &&
+                inOutUsedQueueCount[i] < mQueueProps[i].queueCount )
+            {
+                mComputeQueues.push_back( VulkanQueue() );
+                mComputeQueues.back().setQueueData( VulkanQueue::Compute, static_cast<uint32>( i ),
+                                                    inOutUsedQueueCount[i] );
+                ++inOutUsedQueueCount[i];
+            }
+        }
+    }
+    //-------------------------------------------------------------------------
+    void VulkanDevice::findTransferQueue( FastArray<uint32> &inOutUsedQueueCount, uint32 maxNumQueues )
+    {
+        const size_t numQueues = mQueueProps.size();
+        for( size_t i = 0u; i < numQueues && mTransferQueues.size() < maxNumQueues; ++i )
+        {
+            if( mQueueProps[i].queueFlags & VK_QUEUE_TRANSFER_BIT &&
+                !( mQueueProps[i].queueFlags & ( VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_COMPUTE_BIT ) ) &&
+                inOutUsedQueueCount[i] < mQueueProps[i].queueCount )
+            {
+                mTransferQueues.push_back( VulkanQueue() );
+                mTransferQueues.back().setQueueData( VulkanQueue::Transfer, static_cast<uint32>( i ),
+                                                     inOutUsedQueueCount[i] );
+                ++inOutUsedQueueCount[i];
+            }
+        }
+    }
+    //-------------------------------------------------------------------------
+    void VulkanDevice::fillQueueCreationInfo( uint32 maxComputeQueues, uint32 maxTransferQueues,
+                                              FastArray<VkDeviceQueueCreateInfo> &outQueueCiArray )
+    {
+        const size_t numQueueFamilies = mQueueProps.size();
+
+        FastArray<uint32> usedQueueCount;
+        usedQueueCount.resize( numQueueFamilies, 0u );
+
+        findGraphicsQueue( usedQueueCount );
+        findComputeQueue( usedQueueCount, maxComputeQueues );
+        findTransferQueue( usedQueueCount, maxTransferQueues );
+
+        VkDeviceQueueCreateInfo queueCi;
+        makeVkStruct( queueCi, VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO );
+
+        for( size_t i = 0u; i < numQueueFamilies; ++i )
+        {
+            queueCi.queueFamilyIndex = static_cast<uint32>( i );
+            queueCi.queueCount = usedQueueCount[i];
+            if( queueCi.queueCount > 0u )
+                outQueueCiArray.push_back( queueCi );
+        }
+    }
+    //-------------------------------------------------------------------------
+    void VulkanDevice::createDevice( FastArray<const char *> &extensions, size_t maxNumFrames,
+                                     uint32 maxComputeQueues, uint32 maxTransferQueues )
     {
         uint32 numQueues;
         vkGetPhysicalDeviceQueueFamilyProperties( mPhysicalDevice, &numQueues, NULL );
@@ -239,57 +271,14 @@ namespace Ogre
         mQueueProps.resize( numQueues );
         vkGetPhysicalDeviceQueueFamilyProperties( mPhysicalDevice, &numQueues, &mQueueProps[0] );
 
-        for( size_t i = 0; i < NumQueueFamilies; ++i )
-            mSelectedQueues[i] = SelectedQueue();
+        // Setup queue creation
+        FastArray<VkDeviceQueueCreateInfo> queueCreateInfo;
+        fillQueueCreationInfo( maxComputeQueues, maxTransferQueues, queueCreateInfo );
 
-        for( uint32 i = 0u; i < numQueues; ++i )
-        {
-            if( ( mQueueProps[i].queueFlags & VK_QUEUE_GRAPHICS_BIT ) &&
-                !mSelectedQueues[Graphics].hasValidFamily() )
-            {
-                mSelectedQueues[Graphics].familyIdx = i;
-            }
+        FastArray<FastArray<float> > queuePriorities;
+        queuePriorities.resize( queueCreateInfo.size() );
 
-            if( ( mQueueProps[i].queueFlags & VK_QUEUE_COMPUTE_BIT ) )
-            {
-                // Prefer *not* sharing compute and graphics in the same Queue
-                // Note some GPUs may advertise a queue family that has both
-                // graphics & compute and support multiples queues. That's fine!
-                const uint32 familyIdx = mSelectedQueues[Compute].familyIdx;
-                if( !mSelectedQueues[Compute].hasValidFamily() ||
-                    ( ( mQueueProps[familyIdx].queueFlags & VK_QUEUE_GRAPHICS_BIT ) &&
-                      mQueueProps[familyIdx].queueCount == 1u ) )
-                {
-                    mSelectedQueues[Compute].familyIdx = i;
-                }
-            }
-
-            if( ( mQueueProps[i].queueFlags & VK_QUEUE_TRANSFER_BIT ) )
-            {
-                // Prefer the transfer queue that doesn't share with anything else!
-                const uint32 familyIdx = mSelectedQueues[Transfer].familyIdx;
-                if( !mSelectedQueues[Transfer].hasValidFamily() ||
-                    !( mQueueProps[familyIdx].queueFlags & ( uint32 )( ~VK_QUEUE_TRANSFER_BIT ) ) )
-                {
-                    mSelectedQueues[Transfer].familyIdx = i;
-                }
-            }
-        }
-
-        // Graphics and Compute queues are implicitly Transfer; and drivers are
-        // not required to advertise the transfer bit on those queues.
-        if( !mSelectedQueues[Transfer].hasValidFamily() )
-            mSelectedQueues[Transfer] = mSelectedQueues[Graphics];
-
-        uint32 numQueuesToCreate = 0u;
-        VkDeviceQueueCreateInfo queueCreateInfo[NumQueueFamilies];
-        memset( &queueCreateInfo, 0, sizeof( queueCreateInfo ) );
-        for( size_t i = 0; i < NumQueueFamilies; ++i )
-            queueCreateInfo[i].sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-        fillQueueSelectionData( queueCreateInfo, numQueuesToCreate );
-
-        FastArray<float> queuePriorities[NumQueueFamilies];
-        for( size_t i = 0u; i < numQueuesToCreate; ++i )
+        for( size_t i = 0u; i < queueCreateInfo.size(); ++i )
         {
             queuePriorities[i].resize( queueCreateInfo[i].queueCount, 1.0f );
             queueCreateInfo[i].pQueuePriorities = queuePriorities[i].begin();
@@ -298,162 +287,51 @@ namespace Ogre
         extensions.push_back( VK_KHR_SWAPCHAIN_EXTENSION_NAME );
 
         VkDeviceCreateInfo createInfo;
-        memset( &createInfo, 0, sizeof( createInfo ) );
+        makeVkStruct( createInfo, VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO );
 
         createInfo.enabledExtensionCount = static_cast<uint32>( extensions.size() );
         createInfo.ppEnabledExtensionNames = extensions.begin();
 
-        createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-        createInfo.queueCreateInfoCount = numQueuesToCreate;
-        createInfo.pQueueCreateInfos = queueCreateInfo;
+        createInfo.queueCreateInfoCount = static_cast<uint32>( queueCreateInfo.size() );
+        createInfo.pQueueCreateInfos = &queueCreateInfo[0];
 
         VkResult result = vkCreateDevice( mPhysicalDevice, &createInfo, NULL, &mDevice );
         checkVkResult( result, "vkCreateDevice" );
+    }
+    //-------------------------------------------------------------------------
+    void VulkanDevice::initQueues( void )
+    {
+        VkQueue queue = 0;
+        vkGetDeviceQueue( mDevice, mGraphicsQueue.mFamilyIdx, mGraphicsQueue.mQueueIdx, &queue );
+        mGraphicsQueue.init( mDevice, queue, mRenderSystem );
 
-        for( uint32 i = 0u; i < NumQueueFamilies; ++i )
+        FastArray<VulkanQueue>::iterator itor = mComputeQueues.begin();
+        FastArray<VulkanQueue>::iterator endt = mComputeQueues.end();
+
+        while( itor != endt )
         {
-            if( mSelectedQueues[i].hasValidFamily() )
-            {
-                vkGetDeviceQueue( mDevice, mSelectedQueues[i].familyIdx, mSelectedQueues[i].queueIdx,
-                                  &mQueues[i] );
-            }
-            else
-            {
-                mQueues[i] = 0;
-            }
+            vkGetDeviceQueue( mDevice, itor->mFamilyIdx, itor->mQueueIdx, &queue );
+            itor->init( mDevice, queue, mRenderSystem );
+            ++itor;
         }
 
-        mFrameFence.resize( maxNumFrames );
+        itor = mTransferQueues.begin();
+        endt = mTransferQueues.end();
 
-        VkFenceCreateInfo fenceCi;
-        makeVkStruct( fenceCi, VK_STRUCTURE_TYPE_FENCE_CREATE_INFO );
-        for( size_t i = 0; i < maxNumFrames; ++i )
+        while( itor != endt )
         {
-            for( size_t j = 0u; j < NumQueueFamilies; ++j )
-            {
-                result = vkCreateFence( mDevice, &fenceCi, 0, &mFrameFence[i].fence[j] );
-                checkVkResult( result, "vkCreateFence" );
-            }
-        }
-
-        // Create one cmd pool per queue family, per thread (assume single threaded for now)
-        FastArray<VkCommandPool> commandPools;
-        commandPools.resize( maxNumFrames );
-        VkCommandPoolCreateInfo cmdPoolCreateInfo;
-        memset( &cmdPoolCreateInfo, 0, sizeof( cmdPoolCreateInfo ) );
-        cmdPoolCreateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-        cmdPoolCreateInfo.flags = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
-        for( size_t i = 0u; i < numQueuesToCreate; ++i )
-        {
-            cmdPoolCreateInfo.queueFamilyIndex = createInfo.pQueueCreateInfos[i].queueFamilyIndex;
-
-            for( size_t j = 0; j < maxNumFrames; ++j )
-                vkCreateCommandPool( mDevice, &cmdPoolCreateInfo, 0, &commandPools[j] );
-
-            for( size_t j = 0u; j < NumQueueFamilies; ++j )
-            {
-                if( mSelectedQueues[j].familyIdx == cmdPoolCreateInfo.queueFamilyIndex )
-                    mCommandPools[j] = commandPools;
-            }
+            vkGetDeviceQueue( mDevice, itor->mFamilyIdx, itor->mQueueIdx, &queue );
+            itor->init( mDevice, queue, mRenderSystem );
+            ++itor;
         }
 
         TODO_findRealPresentQueue;
-        mPresentQueue = mQueues[Graphics];
-    }
-    //-------------------------------------------------------------------------
-    void VulkanDevice::newCommandBuffer( QueueFamily family )
-    {
-        TODO_resetCmdPools;
-        TODO_removeCmdBuffer;
-
-        const size_t currFrame = mVaoManager->waitForTailFrameToFinish();
-
-        VkCommandBufferAllocateInfo allocateInfo;
-        makeVkStruct( allocateInfo, VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO );
-        allocateInfo.commandPool = mCommandPools[family][currFrame];
-        allocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-        allocateInfo.commandBufferCount = 1u;
-        VkResult result = vkAllocateCommandBuffers( mDevice, &allocateInfo, &mCurrentCmdBuffer[family] );
-        checkVkResult( result, "vkAllocateCommandBuffers" );
-
-        VkCommandBufferBeginInfo beginInfo;
-        makeVkStruct( beginInfo, VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO );
-        beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-        vkBeginCommandBuffer( mCurrentCmdBuffer[family], &beginInfo );
-    }
-    //-------------------------------------------------------------------------
-    void VulkanDevice::endCommandBuffer( VulkanDevice::QueueFamily family )
-    {
-        TODO_removeCmdBuffer;
-        if( mCurrentCmdBuffer[family] )
-        {
-            VkResult result = vkEndCommandBuffer( mCurrentCmdBuffer[family] );
-            checkVkResult( result, "vkEndCommandBuffer" );
-
-            mPendingCmds[family].push_back( mCurrentCmdBuffer[family] );
-            mCurrentCmdBuffer[family] = 0;
-        }
-    }
-    //-------------------------------------------------------------------------
-    void VulkanDevice::addWindowToWaitFor( VkSemaphore imageAcquisitionSemaph )
-    {
-        mGpuWaitFlags[VulkanDevice::Graphics].push_back( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT );
-        mGpuWaitSemaphForCurrCmdBuff[VulkanDevice::Graphics].push_back( imageAcquisitionSemaph );
+        mPresentQueue = mGraphicsQueue.mQueue;
     }
     //-------------------------------------------------------------------------
     void VulkanDevice::commitAndNextCommandBuffer( void )
     {
-        const uint8 dynBufferFrame = mVaoManager->waitForTailFrameToFinish();
-
-        VkSubmitInfo submitInfo;
-        makeVkStruct( submitInfo, VK_STRUCTURE_TYPE_SUBMIT_INFO );
-
-        for( size_t i = 0u; i < NumQueueFamilies; ++i )
-        {
-            QueueFamily family = static_cast<QueueFamily>( i );
-
-            endCommandBuffer( family );
-
-            if( mPendingCmds[i].empty() )
-                continue;
-
-            const size_t windowsSemaphStart = mGpuSignalSemaphForCurrCmdBuff[family].size();
-            const size_t numWindowsPendingSwap = mWindowsPendingSwap.size();
-            mVaoManager->getAvailableSempaphores( mGpuSignalSemaphForCurrCmdBuff[family],
-                                                  numWindowsPendingSwap );
-
-            if( !mGpuWaitSemaphForCurrCmdBuff[family].empty() )
-            {
-                submitInfo.waitSemaphoreCount =
-                    static_cast<uint32>( mGpuWaitSemaphForCurrCmdBuff[family].size() );
-                submitInfo.pWaitSemaphores = mGpuWaitSemaphForCurrCmdBuff[family].begin();
-                submitInfo.pWaitDstStageMask = mGpuWaitFlags[family].begin();
-            }
-            if( !mGpuSignalSemaphForCurrCmdBuff[family].empty() )
-            {
-                submitInfo.signalSemaphoreCount =
-                    static_cast<uint32>( mGpuSignalSemaphForCurrCmdBuff[family].size() );
-                submitInfo.pSignalSemaphores = mGpuSignalSemaphForCurrCmdBuff[family].begin();
-            }
-            // clang-format off
-            submitInfo.commandBufferCount   = static_cast<uint32>( mPendingCmds[i].size() );
-            submitInfo.pCommandBuffers      = &mPendingCmds[i][0];
-            // clang-format on
-
-            vkQueueSubmit( mQueues[family], 1u, &submitInfo, mFrameFence[dynBufferFrame].fence[family] );
-
-            newCommandBuffer( family );
-
-            for( size_t windowIdx = 0u; windowIdx < numWindowsPendingSwap; ++windowIdx )
-            {
-                mWindowsPendingSwap[windowIdx]->_swapBuffers(
-                    mGpuSignalSemaphForCurrCmdBuff[family][windowsSemaphStart + windowIdx] );
-            }
-            mWindowsPendingSwap.clear();
-
-            mGpuWaitSemaphForCurrCmdBuff[family].clear();
-            mGpuSignalSemaphForCurrCmdBuff[family].clear();
-        }
+        mGraphicsQueue.commitAndNextCommandBuffer();
     }
     //-------------------------------------------------------------------------
     void VulkanDevice::stall( void ) { vkDeviceWaitIdle( mDevice ); }
@@ -461,13 +339,9 @@ namespace Ogre
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     VulkanDevice::SelectedQueue::SelectedQueue() :
+        usage( VulkanQueue::NumQueueFamilies ),
         familyIdx( std::numeric_limits<uint32>::max() ),
         queueIdx( 0 )
     {
-    }
-    //-------------------------------------------------------------------------
-    bool VulkanDevice::SelectedQueue::hasValidFamily( void ) const
-    {
-        return familyIdx != std::numeric_limits<uint32>::max();
     }
 }  // namespace Ogre

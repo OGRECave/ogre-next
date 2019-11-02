@@ -409,7 +409,7 @@ namespace Ogre
             initialiseFromRenderSystemCapabilities( mCurrentCapabilities, 0 );
 
             FastArray<const char *> deviceExtensions;
-            mDevice->createDevice( deviceExtensions, dynBufferMultiplier );
+            mDevice->createDevice( deviceExtensions, dynBufferMultiplier, 0u, 0u );
 
             mHardwareBufferManager = new v1::DefaultHardwareBufferManager();
             VulkanVaoManager *vaoManager = OGRE_NEW VulkanVaoManager( dynBufferMultiplier, mDevice );
@@ -417,7 +417,7 @@ namespace Ogre
             mTextureGpuManager = OGRE_NEW VulkanTextureGpuManager( mVaoManager, this );
 
             mActiveDevice->mVaoManager = vaoManager;
-            mActiveDevice->newCommandBuffer( VulkanDevice::Graphics );
+            mActiveDevice->initQueues();
 
             mInitialized = true;
         }
@@ -488,7 +488,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     RenderPassDescriptor *VulkanRenderSystem::createRenderPassDescriptor( void )
     {
-        VulkanRenderPassDescriptor *retVal = OGRE_NEW VulkanRenderPassDescriptor( mDevice, this );
+        VulkanRenderPassDescriptor *retVal =
+            OGRE_NEW VulkanRenderPassDescriptor( &mDevice->mGraphicsQueue, this );
         mRenderPassDescs.insert( retVal );
         return retVal;
     }
@@ -687,8 +688,7 @@ namespace Ogre
                 vkVp[i].maxDepth = 1;
             }
 
-            vkCmdSetViewport( mDevice->mCurrentCmdBuffer[VulkanDevice::Graphics], 0u, numViewports,
-                              vkVp );
+            vkCmdSetViewport( mDevice->mGraphicsQueue.mCurrentCmdBuffer, 0u, numViewports, vkVp );
         }
 
         if( mVpChanged || numViewports > 1u )
@@ -704,8 +704,7 @@ namespace Ogre
                     static_cast<uint32>( mCurrentRenderViewport[i].getScissorActualHeight() );
             }
 
-            vkCmdSetScissor( mDevice->mCurrentCmdBuffer[VulkanDevice::Graphics], 0u, numViewports,
-                             scissorRect );
+            vkCmdSetScissor( mDevice->mGraphicsQueue.mCurrentCmdBuffer, 0u, numViewports, scissorRect );
         }
 
         mEntriesToFlush = 0;
