@@ -41,6 +41,7 @@ THE SOFTWARE.
 
 #define TODO_resetCmdPools
 #define TODO_removeCmdBuffer
+#define TODO_findRealPresentQueue
 
 namespace Ogre
 {
@@ -355,6 +356,9 @@ namespace Ogre
                     mCommandPools[j] = commandPools;
             }
         }
+
+        TODO_findRealPresentQueue;
+        mPresentQueue = mQueues[Graphics];
     }
     //-------------------------------------------------------------------------
     void VulkanDevice::newCommandBuffer( QueueFamily family )
@@ -410,27 +414,30 @@ namespace Ogre
 
             endCommandBuffer( family );
 
+            if( mPendingCmds[i].empty() )
+                continue;
+
             const size_t windowsSemaphStart = mGpuSignalSemaphForCurrCmdBuff[family].size();
             const size_t numWindowsPendingSwap = mWindowsPendingSwap.size();
             mVaoManager->getAvailableSempaphores( mGpuSignalSemaphForCurrCmdBuff[family],
                                                   numWindowsPendingSwap );
 
-            if( mGpuWaitSemaphForCurrCmdBuff[family].empty() )
+            if( !mGpuWaitSemaphForCurrCmdBuff[family].empty() )
             {
                 submitInfo.waitSemaphoreCount =
                     static_cast<uint32>( mGpuWaitSemaphForCurrCmdBuff[family].size() );
                 submitInfo.pWaitSemaphores = mGpuWaitSemaphForCurrCmdBuff[family].begin();
                 submitInfo.pWaitDstStageMask = mGpuWaitFlags[family].begin();
             }
-            if( mGpuSignalSemaphForCurrCmdBuff[family].empty() )
+            if( !mGpuSignalSemaphForCurrCmdBuff[family].empty() )
             {
                 submitInfo.signalSemaphoreCount =
                     static_cast<uint32>( mGpuSignalSemaphForCurrCmdBuff[family].size() );
                 submitInfo.pSignalSemaphores = mGpuSignalSemaphForCurrCmdBuff[family].begin();
             }
             // clang-format off
-            submitInfo.commandBufferCount   = 1u;
-            submitInfo.pCommandBuffers      = &mCurrentCmdBuffer[i];
+            submitInfo.commandBufferCount   = static_cast<uint32>( mPendingCmds[i].size() );
+            submitInfo.pCommandBuffers      = &mPendingCmds[i][0];
             // clang-format on
 
             vkQueueSubmit( mQueues[family], 1u, &submitInfo, mFrameFence[dynBufferFrame].fence[family] );
