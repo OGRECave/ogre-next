@@ -318,6 +318,7 @@ namespace Ogre
 
         OGRE_ASSERT_LOW( mSwapchainStatus == SwapchainUsedInRendering );
         mDevice->mWindowsPendingSwap.push_back( this );
+        mSwapchainStatus = SwapchainPendingSwap;
     }
     //-------------------------------------------------------------------------
     void VulkanWindow::_swapBuffers( VkSemaphore queueFinishSemaphore )

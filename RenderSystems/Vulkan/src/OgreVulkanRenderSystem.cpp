@@ -412,7 +412,7 @@ namespace Ogre
             mDevice->createDevice( deviceExtensions, dynBufferMultiplier );
 
             mHardwareBufferManager = new v1::DefaultHardwareBufferManager();
-            VulkanVaoManager *vaoManager = OGRE_NEW VulkanVaoManager( dynBufferMultiplier );
+            VulkanVaoManager *vaoManager = OGRE_NEW VulkanVaoManager( dynBufferMultiplier, mDevice );
             mVaoManager = vaoManager;
             mTextureGpuManager = OGRE_NEW VulkanTextureGpuManager( mVaoManager, this );
 
@@ -495,7 +495,9 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_beginFrame( void ) {}
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_endFrame( void )
+    void VulkanRenderSystem::_endFrame( void ) {}
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::_endFrameOnce( void )
     {
         RenderSystem::_endFrameOnce();
         endRenderPassDescriptor();

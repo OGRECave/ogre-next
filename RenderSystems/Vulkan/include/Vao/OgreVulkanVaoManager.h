@@ -132,6 +132,8 @@ namespace Ogre
 
         VertexBufferPacked *mDrawId;
 
+        FastArray<VkSemaphoreArray> mInUseSemaphores;
+
         VkSemaphoreArray mAvailableSemaphores;
 
         VulkanDevice *mDevice;
@@ -184,7 +186,7 @@ namespace Ogre
                                              BufferPacked *buffer );
 
     public:
-        VulkanVaoManager( uint8 dynBufferMultiplier );
+        VulkanVaoManager( uint8 dynBufferMultiplier, VulkanDevice *device );
         virtual ~VulkanVaoManager();
 
         virtual void getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,

@@ -64,6 +64,20 @@ namespace Ogre
         if( mDevice )
         {
             vkDeviceWaitIdle( mDevice );
+
+            FastArray<FrameFence>::const_iterator itor = mFrameFence.begin();
+            FastArray<FrameFence>::const_iterator endt = mFrameFence.end();
+
+            while( itor != endt )
+            {
+                for( size_t j = 0u; j < NumQueueFamilies; ++j )
+                    vkDestroyFence( mDevice, itor->fence[j], 0 );
+
+                ++itor;
+            }
+
+            mFrameFence.clear();
+
             vkDestroyDevice( mDevice, 0 );
             mDevice = 0;
             mPhysicalDevice = 0;
@@ -308,6 +322,19 @@ namespace Ogre
             }
         }
 
+        mFrameFence.resize( maxNumFrames );
+
+        VkFenceCreateInfo fenceCi;
+        makeVkStruct( fenceCi, VK_STRUCTURE_TYPE_FENCE_CREATE_INFO );
+        for( size_t i = 0; i < maxNumFrames; ++i )
+        {
+            for( size_t j = 0u; j < NumQueueFamilies; ++j )
+            {
+                result = vkCreateFence( mDevice, &fenceCi, 0, &mFrameFence[i].fence[j] );
+                checkVkResult( result, "vkCreateFence" );
+            }
+        }
+
         // Create one cmd pool per queue family, per thread (assume single threaded for now)
         FastArray<VkCommandPool> commandPools;
         commandPools.resize( maxNumFrames );
@@ -372,7 +399,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanDevice::commitAndNextCommandBuffer( void )
     {
-        const uint8 dynBufferFrame = mVaoManager->_getDynamicBufferCurrentFrameNoWait();
+        const uint8 dynBufferFrame = mVaoManager->waitForTailFrameToFinish();
 
         VkSubmitInfo submitInfo;
         makeVkStruct( submitInfo, VK_STRUCTURE_TYPE_SUBMIT_INFO );
@@ -408,9 +435,6 @@ namespace Ogre
 
             vkQueueSubmit( mQueues[family], 1u, &submitInfo, mFrameFence[dynBufferFrame].fence[family] );
 
-            mGpuWaitSemaphForCurrCmdBuff[family].clear();
-            mGpuSignalSemaphForCurrCmdBuff[family].clear();
-
             newCommandBuffer( family );
 
             for( size_t windowIdx = 0u; windowIdx < numWindowsPendingSwap; ++windowIdx )
@@ -419,6 +443,9 @@ namespace Ogre
                     mGpuSignalSemaphForCurrCmdBuff[family][windowsSemaphStart + windowIdx] );
             }
             mWindowsPendingSwap.clear();
+
+            mGpuWaitSemaphForCurrCmdBuff[family].clear();
+            mGpuSignalSemaphForCurrCmdBuff[family].clear();
         }
     }
     //-------------------------------------------------------------------------

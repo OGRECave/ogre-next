@@ -149,6 +149,7 @@ namespace Ogre
 
         virtual void _beginFrame( void );
         virtual void _endFrame( void );
+        virtual void _endFrameOnce( void );
 
         virtual void _setHlmsSamplerblock( uint8 texUnit, const HlmsSamplerblock *Samplerblock );
         virtual void _setPipelineStateObject( const HlmsPso *pso );

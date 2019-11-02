@@ -48,10 +48,10 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    VulkanVaoManager::VulkanVaoManager( uint8 dynBufferMultiplier ) :
+    VulkanVaoManager::VulkanVaoManager( uint8 dynBufferMultiplier, VulkanDevice *device ) :
         VaoManager( 0 ),
         mDrawId( 0 ),
-        mDevice( 0 )
+        mDevice( device )
     {
         mConstBufferAlignment = 256;
         mTexBufferAlignment = 256;
@@ -63,6 +63,8 @@ namespace Ogre
         mSupportsIndirectBuffers = false;
 
         mDynamicBufferMultiplier = dynBufferMultiplier;
+
+        mInUseSemaphores.resize( dynBufferMultiplier );
 
         VertexElement2Vec vertexElements;
         vertexElements.push_back( VertexElement2( VET_UINT1, VES_COUNT ) );
@@ -368,6 +370,8 @@ namespace Ogre
     void VulkanVaoManager::getAvailableSempaphores( VkSemaphoreArray &semaphoreArray,
                                                     size_t numSemaphores )
     {
+        const size_t currFrame = waitForTailFrameToFinish();
+
         semaphoreArray.reserve( semaphoreArray.size() + numSemaphores );
 
         if( mAvailableSemaphores.size() < numSemaphores )
@@ -383,6 +387,7 @@ namespace Ogre
                     vkCreateSemaphore( mDevice->mDevice, &semaphoreCreateInfo, 0, &semaphore );
                 checkVkResult( result, "vkCreateSemaphore" );
                 semaphoreArray.push_back( semaphore );
+                mInUseSemaphores[currFrame].push_back( semaphore );
             }
 
             numSemaphores -= requiredNewSemaphores;
@@ -390,7 +395,9 @@ namespace Ogre
 
         for( size_t i = 0u; i < numSemaphores; ++i )
         {
-            semaphoreArray.push_back( mAvailableSemaphores.back() );
+            VkSemaphore semaphore = mAvailableSemaphores.back();
+            semaphoreArray.push_back( semaphore );
+            mInUseSemaphores[currFrame].push_back( semaphore );
             mAvailableSemaphores.pop_back();
         }
     }
