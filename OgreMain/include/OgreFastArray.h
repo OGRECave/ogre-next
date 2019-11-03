@@ -248,13 +248,16 @@ namespace Ogre
 
             size_t idx      = (first - mData);
             size_t idxNext  = (last - mData);
-            while( first != last )
+            if( first != last )
             {
-                first->~T();
-                ++first;
+                while( first != last )
+                {
+                    first->~T();
+                    ++first;
+                }
+                memmove( mData + idx, mData + idxNext, (mSize - idxNext) * sizeof(T) );
+                mSize -= idxNext - idx;
             }
-            memmove( mData + idx, mData + idxNext, (mSize - idxNext) * sizeof(T) );
-            mSize -= idxNext - idx;
 
             return mData + idx;
         }
@@ -265,8 +268,11 @@ namespace Ogre
 
             size_t idx      = (first - mData);
             size_t idxNext  = (last - mData);
-            memmove( mData + idx, mData + idxNext, (mSize - idxNext) * sizeof(T) );
-            mSize -= idxNext - idx;
+            if( first != last )
+            {
+                memmove( mData + idx, mData + idxNext, (mSize - idxNext) * sizeof(T) );
+                mSize -= idxNext - idx;
+            }
 
             return mData + idx;
         }
