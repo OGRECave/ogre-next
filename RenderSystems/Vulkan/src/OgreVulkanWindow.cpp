@@ -50,6 +50,7 @@ namespace Ogre
         mClosed( false ),
         mDevice( 0 ),
         mSurfaceKHR( 0 ),
+        mSwapchain( 0 ),
         mSwapchainSemaphore( 0 ),
         mSwapchainStatus( SwapchainReleased )
     {
@@ -252,8 +253,17 @@ namespace Ogre
             mSwapchainSemaphore = 0;
         }
 
+        if( mSwapchain )
+        {
+            vkDestroySwapchainKHR( mDevice->mDevice, mSwapchain, 0 );
+            mSwapchain = 0;
+        }
+
         if( mSurfaceKHR )
+        {
             vkDestroySurfaceKHR( mDevice->mInstance, mSurfaceKHR, 0 );
+            mSurfaceKHR = 0;
+        }
     }
     //-------------------------------------------------------------------------
     void VulkanWindow::_setDevice( VulkanDevice *device )
