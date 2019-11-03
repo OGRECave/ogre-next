@@ -39,8 +39,6 @@ THE SOFTWARE.
 
 #include <vulkan/vulkan.h>
 
-#define TODO_resetCmdPools
-#define TODO_removeCmdBuffer
 #define TODO_findRealPresentQueue
 
 #define TODO
@@ -109,6 +107,30 @@ namespace Ogre
         return retVal;
     }
     //-------------------------------------------------------------------------
+    VkCommandBuffer VulkanQueue::getCmdBuffer( size_t currFrame )
+    {
+        PerFrameData &frameData = mPerFrameData[currFrame];
+
+        if( frameData.mCurrentCmdIdx >= frameData.mCommands.size() )
+        {
+            VkCommandBuffer cmdBuffer;
+
+            VkCommandBufferAllocateInfo allocateInfo;
+            makeVkStruct( allocateInfo, VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO );
+            allocateInfo.commandPool = frameData.mCmdPool;
+            allocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+            allocateInfo.commandBufferCount = 1u;
+            VkResult result = vkAllocateCommandBuffers( mDevice, &allocateInfo, &cmdBuffer );
+            checkVkResult( result, "vkAllocateCommandBuffers" );
+
+            frameData.mCommands.push_back( cmdBuffer );
+        }
+        else if( frameData.mCurrentCmdIdx == 0u )
+            vkResetCommandPool( mDevice, frameData.mCmdPool, 0 );
+
+        return frameData.mCommands[frameData.mCurrentCmdIdx++];
+    }
+    //-------------------------------------------------------------------------
     void VulkanQueue::setQueueData( QueueFamily family, uint32 familyIdx, uint32 queueIdx )
     {
         mFamily = family;
@@ -154,18 +176,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanQueue::newCommandBuffer( void )
     {
-        TODO_resetCmdPools;
-        TODO_removeCmdBuffer;
-
         const size_t currFrame = mVaoManager->waitForTailFrameToFinish();
-
-        VkCommandBufferAllocateInfo allocateInfo;
-        makeVkStruct( allocateInfo, VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO );
-        allocateInfo.commandPool = mPerFrameData[currFrame].mCmdPool;
-        allocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-        allocateInfo.commandBufferCount = 1u;
-        VkResult result = vkAllocateCommandBuffers( mDevice, &allocateInfo, &mCurrentCmdBuffer );
-        checkVkResult( result, "vkAllocateCommandBuffers" );
+        mCurrentCmdBuffer = getCmdBuffer( currFrame );
 
         VkCommandBufferBeginInfo beginInfo;
         makeVkStruct( beginInfo, VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO );
@@ -175,7 +187,6 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanQueue::endCommandBuffer( void )
     {
-        TODO_removeCmdBuffer;
         if( mCurrentCmdBuffer )
         {
             VkResult result = vkEndCommandBuffer( mCurrentCmdBuffer );
@@ -245,12 +256,13 @@ namespace Ogre
 
         mPerFrameData[dynBufferFrame].mProtectingFences.push_back( fence );
 
-        TODO;
-        // recyclePendingCommands();
         mPendingCmds.clear();
 
         if( endingFrame )
+        {
+            mPerFrameData[dynBufferFrame].mCurrentCmdIdx = 0u;
             mVaoManager->_notifyNewCommandBuffer();
+        }
 
         newCommandBuffer();
 

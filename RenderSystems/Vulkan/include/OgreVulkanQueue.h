@@ -93,6 +93,8 @@ namespace Ogre
         /// Returns a signaled fence, could be recycled or new
         VkFence getFence( void );
 
+        VkCommandBuffer getCmdBuffer( size_t currFrame );
+
     public:
         VulkanQueue();
         ~VulkanQueue();
