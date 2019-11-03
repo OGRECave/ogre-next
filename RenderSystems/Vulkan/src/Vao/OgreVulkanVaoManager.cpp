@@ -67,8 +67,6 @@ namespace Ogre
 
         mDynamicBufferMultiplier = dynBufferMultiplier;
 
-        mInUseSemaphores.resize( dynBufferMultiplier );
-
         VertexElement2Vec vertexElements;
         vertexElements.push_back( VertexElement2( VET_UINT1, VES_COUNT ) );
         uint32 *drawIdPtr =
@@ -82,6 +80,26 @@ namespace Ogre
     {
         destroyAllVertexArrayObjects();
         deleteAllBuffers();
+
+        mDevice->stall();
+
+        {
+            VkSemaphoreArray::const_iterator itor = mAvailableSemaphores.begin();
+            VkSemaphoreArray::const_iterator endt = mAvailableSemaphores.end();
+
+            while( itor != endt )
+                vkDestroySemaphore( mDevice->mDevice, *itor++, 0 );
+        }
+        {
+            FastArray<UsedSemaphore>::const_iterator itor = mUsedSemaphores.begin();
+            FastArray<UsedSemaphore>::const_iterator endt = mUsedSemaphores.end();
+
+            while( itor != endt )
+            {
+                vkDestroySemaphore( mDevice->mDevice, itor->semaphore, 0 );
+                ++itor;
+            }
+        }
     }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
@@ -318,6 +336,12 @@ namespace Ogre
     {
         VaoManager::_update();
 
+        if( !mFenceFlushed )
+        {
+            // Undo the increment from VaoManager::_update. We'll do it later
+            --mFrameCount;
+        }
+
         unsigned long currentTimeMs = mTimer->getMilliseconds();
 
         if( currentTimeMs >= mNextStagingBufferTimestampCheckpoint )
@@ -360,6 +384,22 @@ namespace Ogre
             }
         }
 
+        if( !mUsedSemaphores.empty() )
+        {
+            waitForTailFrameToFinish();
+
+            FastArray<UsedSemaphore>::iterator itor = mUsedSemaphores.begin();
+            FastArray<UsedSemaphore>::iterator endt = mUsedSemaphores.end();
+
+            while( itor != endt && ( mFrameCount - itor->frame ) >= mDynamicBufferMultiplier )
+            {
+                mAvailableSemaphores.push_back( itor->semaphore );
+                ++itor;
+            }
+
+            mUsedSemaphores.erasePOD( mUsedSemaphores.begin(), itor );
+        }
+
         if( !mDelayedDestroyBuffers.empty() &&
             mDelayedDestroyBuffers.front().frameNumDynamic == mDynamicBufferCurrentFrame )
         {
@@ -383,13 +423,12 @@ namespace Ogre
     {
         mFenceFlushed = true;
         mDynamicBufferCurrentFrame = ( mDynamicBufferCurrentFrame + 1 ) % mDynamicBufferMultiplier;
+        ++mFrameCount;
     }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::getAvailableSempaphores( VkSemaphoreArray &semaphoreArray,
                                                     size_t numSemaphores )
     {
-        const size_t currFrame = waitForTailFrameToFinish();
-
         semaphoreArray.reserve( semaphoreArray.size() + numSemaphores );
 
         if( mAvailableSemaphores.size() < numSemaphores )
@@ -405,7 +444,6 @@ namespace Ogre
                     vkCreateSemaphore( mDevice->mDevice, &semaphoreCreateInfo, 0, &semaphore );
                 checkVkResult( result, "vkCreateSemaphore" );
                 semaphoreArray.push_back( semaphore );
-                mInUseSemaphores[currFrame].push_back( semaphore );
             }
 
             numSemaphores -= requiredNewSemaphores;
@@ -415,9 +453,50 @@ namespace Ogre
         {
             VkSemaphore semaphore = mAvailableSemaphores.back();
             semaphoreArray.push_back( semaphore );
-            mInUseSemaphores[currFrame].push_back( semaphore );
             mAvailableSemaphores.pop_back();
         }
+    }
+    //-----------------------------------------------------------------------------------
+    VkSemaphore VulkanVaoManager::getAvailableSempaphore( void )
+    {
+        VkSemaphore retVal;
+        if( mAvailableSemaphores.empty() )
+        {
+            VkSemaphoreCreateInfo semaphoreCreateInfo;
+            makeVkStruct( semaphoreCreateInfo, VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO );
+
+            const VkResult result =
+                vkCreateSemaphore( mDevice->mDevice, &semaphoreCreateInfo, 0, &retVal );
+            checkVkResult( result, "vkCreateSemaphore" );
+        }
+        else
+        {
+            retVal = mAvailableSemaphores.back();
+            mAvailableSemaphores.pop_back();
+        }
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanVaoManager::notifyWaitSemaphoreSubmitted( VkSemaphore semaphore )
+    {
+        mUsedSemaphores.push_back( UsedSemaphore( semaphore, mFrameCount ) );
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanVaoManager::notifyWaitSemaphoresSubmitted( const VkSemaphoreArray &semaphores )
+    {
+        mUsedSemaphores.reserve( mUsedSemaphores.size() + semaphores.size() );
+
+        VkSemaphoreArray::const_iterator itor = semaphores.begin();
+        VkSemaphoreArray::const_iterator endt = semaphores.end();
+
+        while( itor != endt )
+            mUsedSemaphores.push_back( UsedSemaphore( *itor++, mFrameCount ) );
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanVaoManager::notifySemaphoreUnused( VkSemaphore semaphore )
+    {
+        vkDestroySemaphore( mDevice->mDevice, semaphore, 0 );
     }
     //-----------------------------------------------------------------------------------
     uint8 VulkanVaoManager::waitForTailFrameToFinish( void )

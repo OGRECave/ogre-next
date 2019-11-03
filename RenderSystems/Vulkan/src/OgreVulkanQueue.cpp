@@ -41,8 +41,6 @@ THE SOFTWARE.
 
 #define TODO_findRealPresentQueue
 
-#define TODO
-
 namespace Ogre
 {
     VulkanQueue::VulkanQueue() :
@@ -258,6 +256,16 @@ namespace Ogre
 
         mPendingCmds.clear();
 
+        for( size_t windowIdx = 0u; windowIdx < numWindowsPendingSwap; ++windowIdx )
+        {
+            VkSemaphore semaphore = mGpuSignalSemaphForCurrCmdBuff[windowsSemaphStart + windowIdx];
+            mWindowsPendingSwap[windowIdx]->_swapBuffers( semaphore );
+            mVaoManager->notifyWaitSemaphoreSubmitted( semaphore );
+        }
+        mWindowsPendingSwap.clear();
+
+        mVaoManager->notifyWaitSemaphoresSubmitted( mGpuWaitSemaphForCurrCmdBuff );
+
         if( endingFrame )
         {
             mPerFrameData[dynBufferFrame].mCurrentCmdIdx = 0u;
@@ -265,18 +273,6 @@ namespace Ogre
         }
 
         newCommandBuffer();
-
-        for( size_t windowIdx = 0u; windowIdx < numWindowsPendingSwap; ++windowIdx )
-        {
-            VkSemaphore semaphore = mGpuSignalSemaphForCurrCmdBuff[windowsSemaphStart + windowIdx];
-            mWindowsPendingSwap[windowIdx]->_swapBuffers( semaphore );
-            TODO;
-            // mVaoManager->notifyWaitSemaphoreSubmitted( semaphore );
-        }
-        mWindowsPendingSwap.clear();
-
-        TODO;
-        // mVaoManager->notifyWaitSemaphoresSubmitted( mGpuWaitSemaphForCurrCmdBuff );
 
         mGpuWaitSemaphForCurrCmdBuff.clear();
         mGpuSignalSemaphForCurrCmdBuff.clear();

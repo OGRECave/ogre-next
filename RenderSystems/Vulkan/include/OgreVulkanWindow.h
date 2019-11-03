@@ -69,11 +69,10 @@ namespace Ogre
         VkSurfaceKHR mSurfaceKHR;
         VkSwapchainKHR mSwapchain;
         FastArray<VkImage> mSwapchainImages;
-        /// Note: mSwapchainSemaphores.size != mSwapchainImages.size !!!
-        /// We need a semaphore per frame, not per swapchain.
+        /// Note: We need a semaphore per frame, not per swapchain.
         ///
         /// Makes Queue execution wait until the acquired image is done presenting
-        VkSemaphoreArray mSwapchainSemaphores;
+        VkSemaphore mSwapchainSemaphore;
         SwapchainStatus mSwapchainStatus;
 
         PixelFormatGpu chooseSurfaceFormat( bool hwGamma );

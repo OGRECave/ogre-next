@@ -81,7 +81,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpuWindow::createInternalResourcesImpl( void ) {}
     //-----------------------------------------------------------------------------------
-    void VulkanTextureGpuWindow::destroyInternalResourcesImpl( void ) {}
+    void VulkanTextureGpuWindow::destroyInternalResourcesImpl( void ) { mFinalTextureName = 0; }
     //-----------------------------------------------------------------------------------
     void VulkanTextureGpuWindow::notifyDataIsReady( void )
     {

@@ -50,6 +50,7 @@ namespace Ogre
         mClosed( false ),
         mDevice( 0 ),
         mSurfaceKHR( 0 ),
+        mSwapchainSemaphore( 0 ),
         mSwapchainStatus( SwapchainReleased )
     {
         mFocused = true;
@@ -153,7 +154,6 @@ namespace Ogre
         //-----------------------------
 
         VaoManager *vaoManager = mDevice->mVaoManager;
-        const uint8 numDynFrames = vaoManager->getDynamicBufferMultiplier();
 
         uint32 minImageCount =
             std::max<uint32>( surfaceCaps.minImageCount, vaoManager->getDynamicBufferMultiplier() );
@@ -212,17 +212,6 @@ namespace Ogre
                                           mSwapchainImages.begin() );
         checkVkResult( result, "vkGetSwapchainImagesKHR" );
 
-        VkSemaphoreCreateInfo semaphoreCreateInfo;
-        makeVkStruct( semaphoreCreateInfo, VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO );
-        mSwapchainSemaphores.resize( numDynFrames );
-
-        for( size_t i = 0u; i < numDynFrames; ++i )
-        {
-            result = vkCreateSemaphore( mDevice->mDevice, &semaphoreCreateInfo, NULL,
-                                        &mSwapchainSemaphores[i] );
-            checkVkResult( result, "vkCreateSemaphore" );
-        }
-
         acquireNextSwapchain();
     }
     //-------------------------------------------------------------------------
@@ -230,13 +219,13 @@ namespace Ogre
     {
         OGRE_ASSERT_LOW( mSwapchainStatus == SwapchainReleased );
 
-        VaoManager *vaoManager = mDevice->mVaoManager;
-        const size_t currFrame = vaoManager->waitForTailFrameToFinish();
+        VulkanVaoManager *vaoManager = mDevice->mVaoManager;
+
+        mSwapchainSemaphore = vaoManager->getAvailableSempaphore();
 
         uint32 swapchainIdx = 0u;
-        VkResult result =
-            vkAcquireNextImageKHR( mDevice->mDevice, mSwapchain, UINT64_MAX,
-                                   mSwapchainSemaphores[currFrame], VK_NULL_HANDLE, &swapchainIdx );
+        VkResult result = vkAcquireNextImageKHR( mDevice->mDevice, mSwapchain, UINT64_MAX,
+                                                 mSwapchainSemaphore, VK_NULL_HANDLE, &swapchainIdx );
         if( result != VK_SUCCESS )
         {
             // VK_ERROR_OUT_OF_DATE_KHR means the swapchain changed (e.g. was resized)
@@ -250,21 +239,17 @@ namespace Ogre
             mSwapchainStatus = SwapchainAcquired;
 
             VulkanTextureGpuWindow *vulkanTexture = static_cast<VulkanTextureGpuWindow *>( mTexture );
+
             vulkanTexture->_setCurrentSwapchain( mSwapchainImages[swapchainIdx], swapchainIdx );
         }
     }
     //-------------------------------------------------------------------------
     void VulkanWindow::destroy( void )
     {
-        if( !mSwapchainSemaphores.empty() )
+        if( mSwapchainSemaphore )
         {
-            mDevice->stall();
-            VkSemaphoreArray::const_iterator itor = mSwapchainSemaphores.begin();
-            VkSemaphoreArray::const_iterator endt = mSwapchainSemaphores.end();
-
-            while( itor != endt )
-                vkDestroySemaphore( mDevice->mDevice, *itor++, 0 );
-            mSwapchainSemaphores.clear();
+            mDevice->mVaoManager->notifySemaphoreUnused( mSwapchainSemaphore );
+            mSwapchainSemaphore = 0;
         }
 
         if( mSurfaceKHR )
@@ -293,8 +278,8 @@ namespace Ogre
         if( mSwapchainStatus == SwapchainAcquired )
         {
             mSwapchainStatus = SwapchainUsedInRendering;
-            const size_t currFrame = mDevice->mVaoManager->waitForTailFrameToFinish();
-            retVal = mSwapchainSemaphores[currFrame];
+            retVal = mSwapchainSemaphore;
+            mSwapchainSemaphore = 0;
         }
         return retVal;
     }

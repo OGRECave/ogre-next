@@ -132,7 +132,18 @@ namespace Ogre
 
         VertexBufferPacked *mDrawId;
 
-        FastArray<VkSemaphoreArray> mInUseSemaphores;
+        struct UsedSemaphore
+        {
+            VkSemaphore semaphore;
+            uint32 frame;
+            UsedSemaphore( VkSemaphore _semaphore, uint32 _frame ) :
+                semaphore( _semaphore ),
+                frame( _frame )
+            {
+            }
+        };
+
+        FastArray<UsedSemaphore> mUsedSemaphores;
 
         VkSemaphoreArray mAvailableSemaphores;
 
@@ -214,6 +225,17 @@ namespace Ogre
         /// Insert into the end of semaphoreArray 'numSemaphores'
         /// number of semaphores that are safe for use.
         void getAvailableSempaphores( VkSemaphoreArray &semaphoreArray, size_t numSemaphores );
+        VkSemaphore getAvailableSempaphore( void );
+
+        /// Call this function after you've submitted to the GPU a VkSemaphore that will be waited on.
+        /// i.e. 'semaphore' is part of VkSubmitInfo::pWaitSemaphores or part of
+        /// VkPresentInfoKHR::pWaitSemaphores
+        ///
+        /// After enough frames have passed, this semaphore goes
+        /// back to a pool for getAvailableSempaphores to use
+        void notifyWaitSemaphoreSubmitted( VkSemaphore semaphore );
+        void notifyWaitSemaphoresSubmitted( const VkSemaphoreArray &semaphores );
+        void notifySemaphoreUnused( VkSemaphore semaphore );
 
         /// Returns the current frame # (which wraps to 0 every mDynamicBufferMultiplier
         /// times). But first stalls until that mDynamicBufferMultiplier-1 frame behind
