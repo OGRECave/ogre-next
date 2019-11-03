@@ -99,7 +99,7 @@ namespace Ogre
 
         void initQueues( void );
 
-        void commitAndNextCommandBuffer( void );
+        void commitAndNextCommandBuffer( bool endingFrame );
 
         /// Waits for the GPU to finish all pending commands.
         void stall( void );

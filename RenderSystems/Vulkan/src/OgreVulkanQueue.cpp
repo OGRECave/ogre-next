@@ -43,6 +43,8 @@ THE SOFTWARE.
 #define TODO_removeCmdBuffer
 #define TODO_findRealPresentQueue
 
+#define TODO
+
 namespace Ogre
 {
     VulkanQueue::VulkanQueue() :
@@ -63,14 +65,48 @@ namespace Ogre
         {
             vkDeviceWaitIdle( mDevice );
 
-            VkFenceArray::const_iterator itor = mFrameFence.begin();
-            VkFenceArray::const_iterator endt = mFrameFence.end();
+            {
+                FastArray<PerFrameData>::iterator itor = mPerFrameData.begin();
+                FastArray<PerFrameData>::iterator endt = mPerFrameData.end();
+
+                while( itor != endt )
+                {
+                    VkFenceArray::const_iterator itFence = itor->mProtectingFences.begin();
+                    VkFenceArray::const_iterator enFence = itor->mProtectingFences.end();
+
+                    while( itFence != enFence )
+                        vkDestroyFence( mDevice, *itFence++, 0 );
+
+                    itor->mProtectingFences.clear();
+                }
+            }
+
+            VkFenceArray::const_iterator itor = mAvailableFences.begin();
+            VkFenceArray::const_iterator endt = mAvailableFences.end();
 
             while( itor != endt )
                 vkDestroyFence( mDevice, *itor++, 0 );
 
-            mFrameFence.clear();
+            mAvailableFences.clear();
         }
+    }
+    //-------------------------------------------------------------------------
+    VkFence VulkanQueue::getFence( void )
+    {
+        VkFence retVal;
+        if( !mAvailableFences.empty() )
+        {
+            retVal = mAvailableFences.back();
+            mAvailableFences.pop_back();
+        }
+        else
+        {
+            VkFenceCreateInfo fenceCi;
+            makeVkStruct( fenceCi, VK_STRUCTURE_TYPE_FENCE_CREATE_INFO );
+            VkResult result = vkCreateFence( mDevice, &fenceCi, 0, &retVal );
+            checkVkResult( result, "vkCreateFence" );
+        }
+        return retVal;
     }
     //-------------------------------------------------------------------------
     void VulkanQueue::setQueueData( QueueFamily family, uint32 familyIdx, uint32 queueIdx )
@@ -92,25 +128,26 @@ namespace Ogre
         VkDeviceQueueCreateInfo queueCreateInfo;
         makeVkStruct( queueCreateInfo, VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO );
 
-        mFrameFence.resize( maxNumFrames );
+        // Create at least maxNumFrames fences, though we may need more
+        mAvailableFences.resize( maxNumFrames );
 
         VkFenceCreateInfo fenceCi;
         makeVkStruct( fenceCi, VK_STRUCTURE_TYPE_FENCE_CREATE_INFO );
         for( size_t i = 0; i < maxNumFrames; ++i )
         {
-            VkResult result = vkCreateFence( mDevice, &fenceCi, 0, &mFrameFence[i] );
+            VkResult result = vkCreateFence( mDevice, &fenceCi, 0, &mAvailableFences[i] );
             checkVkResult( result, "vkCreateFence" );
         }
 
         // Create one cmd pool per thread (assume single threaded for now)
-        mCommandPools.resize( maxNumFrames );
+        mPerFrameData.resize( maxNumFrames );
         VkCommandPoolCreateInfo cmdPoolCreateInfo;
         makeVkStruct( cmdPoolCreateInfo, VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO );
         cmdPoolCreateInfo.flags = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
         cmdPoolCreateInfo.queueFamilyIndex = mFamilyIdx;
 
         for( size_t i = 0; i < maxNumFrames; ++i )
-            vkCreateCommandPool( mDevice, &cmdPoolCreateInfo, 0, &mCommandPools[i] );
+            vkCreateCommandPool( mDevice, &cmdPoolCreateInfo, 0, &mPerFrameData[i].mCmdPool );
 
         newCommandBuffer();
     }
@@ -124,7 +161,7 @@ namespace Ogre
 
         VkCommandBufferAllocateInfo allocateInfo;
         makeVkStruct( allocateInfo, VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO );
-        allocateInfo.commandPool = mCommandPools[currFrame];
+        allocateInfo.commandPool = mPerFrameData[currFrame].mCmdPool;
         allocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
         allocateInfo.commandBufferCount = 1u;
         VkResult result = vkAllocateCommandBuffers( mDevice, &allocateInfo, &mCurrentCmdBuffer );
@@ -156,7 +193,21 @@ namespace Ogre
         mGpuWaitSemaphForCurrCmdBuff.push_back( imageAcquisitionSemaph );
     }
     //-------------------------------------------------------------------------
-    void VulkanQueue::commitAndNextCommandBuffer( void )
+    void VulkanQueue::_waitOnFrame( uint8 frameIdx )
+    {
+        FastArray<VkFence> &fences = mPerFrameData[frameIdx].mProtectingFences;
+
+        if( !fences.empty() )
+        {
+            const uint32 numFences = static_cast<uint32>( fences.size() );
+            vkWaitForFences( mDevice, numFences, &fences[0], VK_TRUE, UINT64_MAX );
+            vkResetFences( mDevice, numFences, &fences[0] );
+            mAvailableFences.appendPOD( fences.begin(), fences.end() );
+            fences.clear();
+        }
+    }
+    //-------------------------------------------------------------------------
+    void VulkanQueue::commitAndNextCommandBuffer( bool endingFrame )
     {
         VkSubmitInfo submitInfo;
         makeVkStruct( submitInfo, VK_STRUCTURE_TYPE_SUBMIT_INFO );
@@ -188,16 +239,32 @@ namespace Ogre
         // clang-format on
 
         const uint8 dynBufferFrame = mVaoManager->waitForTailFrameToFinish();
-        vkQueueSubmit( mQueue, 1u, &submitInfo, mFrameFence[dynBufferFrame] );
+        VkFence fence = getFence();
+
+        vkQueueSubmit( mQueue, 1u, &submitInfo, fence );
+
+        mPerFrameData[dynBufferFrame].mProtectingFences.push_back( fence );
+
+        TODO;
+        // recyclePendingCommands();
+        mPendingCmds.clear();
+
+        if( endingFrame )
+            mVaoManager->_notifyNewCommandBuffer();
 
         newCommandBuffer();
 
         for( size_t windowIdx = 0u; windowIdx < numWindowsPendingSwap; ++windowIdx )
         {
-            mWindowsPendingSwap[windowIdx]->_swapBuffers(
-                mGpuSignalSemaphForCurrCmdBuff[windowsSemaphStart + windowIdx] );
+            VkSemaphore semaphore = mGpuSignalSemaphForCurrCmdBuff[windowsSemaphStart + windowIdx];
+            mWindowsPendingSwap[windowIdx]->_swapBuffers( semaphore );
+            TODO;
+            // mVaoManager->notifyWaitSemaphoreSubmitted( semaphore );
         }
         mWindowsPendingSwap.clear();
+
+        TODO;
+        // mVaoManager->notifyWaitSemaphoresSubmitted( mGpuWaitSemaphForCurrCmdBuff );
 
         mGpuWaitSemaphForCurrCmdBuff.clear();
         mGpuSignalSemaphForCurrCmdBuff.clear();

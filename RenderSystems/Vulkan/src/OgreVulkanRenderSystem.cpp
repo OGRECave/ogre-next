@@ -502,7 +502,7 @@ namespace Ogre
     {
         RenderSystem::_endFrameOnce();
         endRenderPassDescriptor();
-        mActiveDevice->commitAndNextCommandBuffer();
+        mActiveDevice->commitAndNextCommandBuffer( true );
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setHlmsSamplerblock( uint8 texUnit, const HlmsSamplerblock *Samplerblock )

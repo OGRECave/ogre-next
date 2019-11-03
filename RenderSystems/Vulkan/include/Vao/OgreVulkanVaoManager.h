@@ -138,6 +138,8 @@ namespace Ogre
 
         VulkanDevice *mDevice;
 
+        bool mFenceFlushed;
+
     protected:
         virtual VertexBufferPacked *createVertexBufferImpl( size_t numElements, uint32 bytesPerElement,
                                                             BufferType bufferType, void *initialData,
@@ -207,6 +209,7 @@ namespace Ogre
                                                   size_t elementStart, size_t elementCount );
 
         virtual void _update( void );
+        void _notifyNewCommandBuffer( void );
 
         /// Insert into the end of semaphoreArray 'numSemaphores'
         /// number of semaphores that are safe for use.

@@ -329,9 +329,10 @@ namespace Ogre
         mPresentQueue = mGraphicsQueue.mQueue;
     }
     //-------------------------------------------------------------------------
-    void VulkanDevice::commitAndNextCommandBuffer( void )
+    void VulkanDevice::commitAndNextCommandBuffer( bool endingFrame )
     {
-        mGraphicsQueue.commitAndNextCommandBuffer();
+        mRenderSystem->endRenderPassDescriptor();
+        mGraphicsQueue.commitAndNextCommandBuffer( endingFrame );
     }
     //-------------------------------------------------------------------------
     void VulkanDevice::stall( void ) { vkDeviceWaitIdle( mDevice ); }

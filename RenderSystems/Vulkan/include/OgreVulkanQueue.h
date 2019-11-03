@@ -48,6 +48,14 @@ namespace Ogre
             NumQueueFamilies
         };
 
+        struct PerFrameData
+        {
+            VkCommandPool mCmdPool;
+            FastArray<VkCommandBuffer> mCommands;
+            size_t mCurrentCmdIdx;
+            FastArray<VkFence> mProtectingFences;
+        };
+
         VkDevice mDevice;
         QueueFamily mFamily;
 
@@ -60,18 +68,18 @@ namespace Ogre
     protected:
         // clang-format off
         // One per buffered frame
-        FastArray<VkCommandPool>    mCommandPools;
+        FastArray<PerFrameData> mPerFrameData;
 
         /// Collection of semaphore we need to wait on before our queue executes
         /// pending commands when commitAndNextCommandBuffer is called
         VkSemaphoreArray                mGpuWaitSemaphForCurrCmdBuff;
         FastArray<VkPipelineStageFlags> mGpuWaitFlags;
-
         /// Collection of semaphore we will signal when our queue
         /// submitted in commitAndNextCommandBuffer is done
         VkSemaphoreArray                mGpuSignalSemaphForCurrCmdBuff;
-        VkFenceArray                    mFrameFence;
         // clang-format on
+
+        VkFenceArray mAvailableFences;
 
     public:
         FastArray<VulkanWindow *> mWindowsPendingSwap;
@@ -81,6 +89,9 @@ namespace Ogre
 
         VulkanVaoManager *mVaoManager;
         VulkanRenderSystem *mRenderSystem;
+
+        /// Returns a signaled fence, could be recycled or new
+        VkFence getFence( void );
 
     public:
         VulkanQueue();
@@ -101,7 +112,9 @@ namespace Ogre
         /// this semaphore on to execute STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
         void addWindowToWaitFor( VkSemaphore imageAcquisitionSemaph );
 
-        void commitAndNextCommandBuffer( void );
+        void _waitOnFrame( uint8 frameIdx );
+
+        void commitAndNextCommandBuffer( bool endingFrame );
     };
 
 }  // namespace Ogre

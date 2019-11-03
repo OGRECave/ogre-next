@@ -46,12 +46,15 @@ THE SOFTWARE.
 #include "OgreStringConverter.h"
 #include "OgreTimer.h"
 
+#define TODO_call_commitAndNextCommandBuffer
+
 namespace Ogre
 {
     VulkanVaoManager::VulkanVaoManager( uint8 dynBufferMultiplier, VulkanDevice *device ) :
         VaoManager( 0 ),
         mDrawId( 0 ),
-        mDevice( device )
+        mDevice( device ),
+        mFenceFlushed( true )
     {
         mConstBufferAlignment = 256;
         mTexBufferAlignment = 256;
@@ -364,6 +367,21 @@ namespace Ogre
             destroyDelayedBuffers( mDynamicBufferCurrentFrame );
         }
 
+        if( !mFenceFlushed )
+        {
+            // We could only reach here if _update() was called
+            // twice in a row without completing a full frame.
+            // Without this, waitForTailFrameToFinish becomes unsafe.
+            mDevice->commitAndNextCommandBuffer( false );
+            mDynamicBufferCurrentFrame = ( mDynamicBufferCurrentFrame + 1 ) % mDynamicBufferMultiplier;
+        }
+
+        mFenceFlushed = false;
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanVaoManager::_notifyNewCommandBuffer()
+    {
+        mFenceFlushed = true;
         mDynamicBufferCurrentFrame = ( mDynamicBufferCurrentFrame + 1 ) % mDynamicBufferMultiplier;
     }
     //-----------------------------------------------------------------------------------
@@ -402,7 +420,11 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    uint8 VulkanVaoManager::waitForTailFrameToFinish( void ) { return mDynamicBufferCurrentFrame; }
+    uint8 VulkanVaoManager::waitForTailFrameToFinish( void )
+    {
+        mDevice->mGraphicsQueue._waitOnFrame( mDynamicBufferCurrentFrame );
+        return mDynamicBufferCurrentFrame;
+    }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::waitForSpecificFrameToFinish( uint32 frameCount ) {}
     //-----------------------------------------------------------------------------------
