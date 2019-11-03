@@ -63,6 +63,7 @@ namespace Ogre
 
     public:
         NULLRenderSystem();
+        virtual ~NULLRenderSystem(void);
 
         virtual void shutdown(void);
 
