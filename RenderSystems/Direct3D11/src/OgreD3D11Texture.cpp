@@ -1241,14 +1241,12 @@ namespace Ogre
                                             const String &fsaaHint,
                                             D3D11Device & device ) :
         RenderTexture(buffer, zoffset),
-        mDevice(device),
-        mHasFsaaResource( false )
+        mDevice(device)
     {
         mName = name;
         mHwGamma = writeGamma;
         mFSAA = fsaa;
         mFSAAHint = fsaaHint;
-        mHasFsaaResource = mFSAA > 1 || (atoi(mFSAAHint.c_str()) > 0);
 
         rebind(buffer);
     }
@@ -1268,17 +1266,20 @@ namespace Ogre
     //---------------------------------------------------------------------
     void D3D11RenderTexture::swapBuffers(void)
     {
-        if( isFsaaResolveDirty() && mHasFsaaResource )
+        if( isFsaaResolveDirty() )
         {
             assert( dynamic_cast<v1::D3D11HardwarePixelBuffer*>( mBuffer ) );
             v1::D3D11HardwarePixelBuffer *buffer = static_cast<v1::D3D11HardwarePixelBuffer*>( mBuffer );
 
             D3D11Texture *texture = buffer->getParentTexture();
-            mDevice.GetImmediateContext()->ResolveSubresource( texture->getResolvedTexture2D(),
-                                                               buffer->getSubresourceIndex(mZOffset),
-                                                               texture->getTextureResource(),
-                                                               buffer->getSubresourceIndex(mZOffset),
-                                                               texture->getD3dFormat() );
+            if(texture->hasResolvedTexture2D()) // TU_NOT_SRV multisampled textures has no resolved one
+            {
+                mDevice.GetImmediateContext()->ResolveSubresource( texture->getResolvedTexture2D(),
+                                                                   buffer->getSubresourceIndex(mZOffset),
+                                                                   texture->getTextureResource(),
+                                                                   buffer->getSubresourceIndex(mZOffset),
+                                                                   texture->getD3dFormat() );
+            }
         }
         RenderTexture::swapBuffers();
     }

@@ -202,7 +202,6 @@ namespace Ogre {
     {
         D3D11Device & mDevice;
         ComPtr<ID3D11RenderTargetView> mRenderTargetView;
-        bool mHasFsaaResource;
     public:
         D3D11RenderTexture( const String &name, v1::D3D11HardwarePixelBuffer *buffer, uint32 zoffset,
                             bool writeGamma, uint fsaa, const String &fsaaHint, D3D11Device &device );
