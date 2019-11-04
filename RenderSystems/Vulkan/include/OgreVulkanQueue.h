@@ -65,6 +65,8 @@ namespace Ogre
         VkQueue mQueue;
         VkCommandBuffer mCurrentCmdBuffer;
 
+        VulkanDevice *mOwnerDevice;
+
     protected:
         // clang-format off
         // One per buffered frame
@@ -99,7 +101,7 @@ namespace Ogre
         VulkanQueue();
         ~VulkanQueue();
 
-        void setQueueData( QueueFamily family, uint32 familyIdx, uint32 queueIdx );
+        void setQueueData( VulkanDevice *owner, QueueFamily family, uint32 familyIdx, uint32 queueIdx );
 
         void init( VkDevice device, VkQueue queue, VulkanRenderSystem *renderSystem );
         void destroy( void );

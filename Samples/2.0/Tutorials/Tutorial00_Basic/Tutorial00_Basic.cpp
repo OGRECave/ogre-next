@@ -199,8 +199,9 @@ int main( int argc, const char *argv[] )
     while( !bQuit )
     {
         WindowEventUtilities::messagePump();
-        bQuit |= !root->renderOneFrame();
         bQuit |= myWindowEventListener.getQuit();
+        if( !bQuit )
+            bQuit |= !root->renderOneFrame();
     }
 
     WindowEventUtilities::removeWindowEventListener( window, &myWindowEventListener );

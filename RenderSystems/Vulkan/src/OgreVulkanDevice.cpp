@@ -189,7 +189,7 @@ namespace Ogre
             if( mQueueProps[i].queueFlags & VK_QUEUE_GRAPHICS_BIT &&
                 inOutUsedQueueCount[i] < mQueueProps[i].queueCount )
             {
-                mGraphicsQueue.setQueueData( VulkanQueue::Graphics, static_cast<uint32>( i ),
+                mGraphicsQueue.setQueueData( this, VulkanQueue::Graphics, static_cast<uint32>( i ),
                                              inOutUsedQueueCount[i] );
                 ++inOutUsedQueueCount[i];
                 return;
@@ -210,7 +210,7 @@ namespace Ogre
                 inOutUsedQueueCount[i] < mQueueProps[i].queueCount )
             {
                 mComputeQueues.push_back( VulkanQueue() );
-                mComputeQueues.back().setQueueData( VulkanQueue::Compute, static_cast<uint32>( i ),
+                mComputeQueues.back().setQueueData( this, VulkanQueue::Compute, static_cast<uint32>( i ),
                                                     inOutUsedQueueCount[i] );
                 ++inOutUsedQueueCount[i];
             }
@@ -227,8 +227,8 @@ namespace Ogre
                 inOutUsedQueueCount[i] < mQueueProps[i].queueCount )
             {
                 mTransferQueues.push_back( VulkanQueue() );
-                mTransferQueues.back().setQueueData( VulkanQueue::Transfer, static_cast<uint32>( i ),
-                                                     inOutUsedQueueCount[i] );
+                mTransferQueues.back().setQueueData( this, VulkanQueue::Transfer,
+                                                     static_cast<uint32>( i ), inOutUsedQueueCount[i] );
                 ++inOutUsedQueueCount[i];
             }
         }
@@ -258,8 +258,8 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void VulkanDevice::createDevice( FastArray<const char *> &extensions, size_t maxNumFrames,
-                                     uint32 maxComputeQueues, uint32 maxTransferQueues )
+    void VulkanDevice::createDevice( FastArray<const char *> &extensions, uint32 maxComputeQueues,
+                                     uint32 maxTransferQueues )
     {
         uint32 numQueues;
         vkGetPhysicalDeviceQueueFamilyProperties( mPhysicalDevice, &numQueues, NULL );

@@ -50,6 +50,7 @@ namespace Ogre
         mQueueIdx( 0u ),
         mQueue( 0 ),
         mCurrentCmdBuffer( 0 ),
+        mOwnerDevice( 0 ),
         mVaoManager( 0 ),
         mRenderSystem( 0 )
     {
@@ -129,8 +130,10 @@ namespace Ogre
         return frameData.mCommands[frameData.mCurrentCmdIdx++];
     }
     //-------------------------------------------------------------------------
-    void VulkanQueue::setQueueData( QueueFamily family, uint32 familyIdx, uint32 queueIdx )
+    void VulkanQueue::setQueueData( VulkanDevice *owner, QueueFamily family, uint32 familyIdx,
+                                    uint32 queueIdx )
     {
+        mOwnerDevice = owner;
         mFamily = family;
         mFamilyIdx = familyIdx;
         mQueueIdx = queueIdx;

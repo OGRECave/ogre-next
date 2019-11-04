@@ -91,34 +91,7 @@ namespace Ogre
             sprintf(message, "INFORMATION: [%s] Code %d : %s", pLayerPrefix, msgCode, pMsg);
         }
 
-    #ifdef _WIN32
-
-        in_callback = true;
-        MessageBox(NULL, message, "Alert", MB_OK);
-        in_callback = false;
-
-    #elif defined(ANDROID)
-
-        if (msgFlags & VK_DEBUG_REPORT_INFORMATION_BIT_EXT) {
-            __android_log_print(ANDROID_LOG_INFO,  APP_SHORT_NAME, "%s", message);
-        } else if (msgFlags & VK_DEBUG_REPORT_WARNING_BIT_EXT) {
-            __android_log_print(ANDROID_LOG_WARN,  APP_SHORT_NAME, "%s", message);
-        } else if (msgFlags & VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT) {
-            __android_log_print(ANDROID_LOG_WARN,  APP_SHORT_NAME, "%s", message);
-        } else if (msgFlags & VK_DEBUG_REPORT_ERROR_BIT_EXT) {
-            __android_log_print(ANDROID_LOG_ERROR, APP_SHORT_NAME, "%s", message);
-        } else if (msgFlags & VK_DEBUG_REPORT_DEBUG_BIT_EXT) {
-            __android_log_print(ANDROID_LOG_DEBUG, APP_SHORT_NAME, "%s", message);
-        } else {
-            __android_log_print(ANDROID_LOG_INFO,  APP_SHORT_NAME, "%s", message);
-        }
-
-    #else
-
-        printf("%s\n", message);
-        fflush(stdout);
-
-    #endif
+        LogManager::getSingleton().logMessage( message );
 
         free(message);
 
@@ -409,7 +382,7 @@ namespace Ogre
             initialiseFromRenderSystemCapabilities( mCurrentCapabilities, 0 );
 
             FastArray<const char *> deviceExtensions;
-            mDevice->createDevice( deviceExtensions, dynBufferMultiplier, 0u, 0u );
+            mDevice->createDevice( deviceExtensions, 0u, 0u );
 
             mHardwareBufferManager = new v1::DefaultHardwareBufferManager();
             VulkanVaoManager *vaoManager = OGRE_NEW VulkanVaoManager( dynBufferMultiplier, mDevice );

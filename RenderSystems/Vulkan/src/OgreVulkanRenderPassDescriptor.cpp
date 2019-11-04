@@ -519,6 +519,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void VulkanRenderPassDescriptor::destroyFbo( void )
     {
+        mQueue->mOwnerDevice->stall();
+
         {
             FastArray<VkFramebuffer>::const_iterator itor = mFramebuffers.begin();
             FastArray<VkFramebuffer>::const_iterator endt = mFramebuffers.end();

@@ -94,8 +94,8 @@ namespace Ogre
 
         void createPhysicalDevice( uint32 deviceIdx );
 
-        void createDevice( FastArray<const char *> &extensions, size_t maxNumFrames,
-                           uint32 maxComputeQueues, uint32 maxTransferQueues );
+        void createDevice( FastArray<const char *> &extensions, uint32 maxComputeQueues,
+                           uint32 maxTransferQueues );
 
         void initQueues( void );
 
