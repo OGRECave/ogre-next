@@ -209,15 +209,15 @@ namespace Ogre
         virtual void initialiseFromRenderSystemCapabilities( RenderSystemCapabilities *caps,
                                                              Window *primary );
 
-        virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc,
-                                                TextureGpu *anyTarget, uint8 mipLevel,
-                                                const Vector4 *viewportSizes,
-                                                const Vector4 *scissors,
-                                                uint32 numViewports,
-                                                bool overlaysEnabled,
-                                                bool warnIfRtvWasFlushed );
-        virtual void executeRenderPassDescriptorDelayedActions(void);
-        virtual void endRenderPassDescriptor(void);
+        virtual void beginRenderPassDescriptor( RenderPassDescriptor *desc, TextureGpu *anyTarget,
+                                                uint8 mipLevel, const Vector4 *viewportSizes,
+                                                const Vector4 *scissors, uint32 numViewports,
+                                                bool overlaysEnabled, bool warnIfRtvWasFlushed );
+        virtual void executeRenderPassDescriptorDelayedActions( void );
+        virtual void endRenderPassDescriptor( void );
+
+        void notifySwapchainCreated( VulkanWindow *window );
+        void notifySwapchainDestroyed( VulkanWindow *window );
     };
 }  // namespace Ogre
 

@@ -46,8 +46,6 @@ THE SOFTWARE.
 #include "OgreStringConverter.h"
 #include "OgreTimer.h"
 
-#define TODO_call_commitAndNextCommandBuffer
-
 namespace Ogre
 {
     VulkanVaoManager::VulkanVaoManager( uint8 dynBufferMultiplier, VulkanDevice *device ) :

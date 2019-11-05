@@ -104,6 +104,9 @@ namespace Ogre
         VulkanRenderPassDescriptor( VulkanQueue *graphicsQueue, VulkanRenderSystem *renderSystem );
         virtual ~VulkanRenderPassDescriptor();
 
+        void notifySwapchainCreated( VulkanWindow *window );
+        void notifySwapchainDestroyed( VulkanWindow *window );
+
         virtual void entriesModified( uint32 entryTypes );
 
         virtual void setClearColour( uint8 idx, const ColourValue &clearColour );

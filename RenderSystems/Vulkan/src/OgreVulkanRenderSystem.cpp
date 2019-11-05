@@ -684,7 +684,7 @@ namespace Ogre
         mVpChanged = false;
     }
     //-------------------------------------------------------------------------
-    inline void VulkanRenderSystem::endRenderPassDescriptor( void )
+    void VulkanRenderSystem::endRenderPassDescriptor( void )
     {
         if( mCurrentRenderPassDescriptor )
         {
@@ -697,5 +697,35 @@ namespace Ogre
 
             RenderSystem::endRenderPassDescriptor();
         }
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::notifySwapchainCreated( VulkanWindow *window )
+    {
+        RenderPassDescriptorSet::const_iterator itor = mRenderPassDescs.begin();
+        RenderPassDescriptorSet::const_iterator endt = mRenderPassDescs.end();
+
+        while( itor != endt )
+        {
+            OGRE_ASSERT_HIGH( dynamic_cast<VulkanRenderPassDescriptor *>( *itor ) );
+            VulkanRenderPassDescriptor *renderPassDesc =
+                static_cast<VulkanRenderPassDescriptor *>( *itor );
+            renderPassDesc->notifySwapchainCreated( window );
+            ++itor;
+        }
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::notifySwapchainDestroyed( VulkanWindow *window )
+    {
+        RenderPassDescriptorSet::const_iterator itor = mRenderPassDescs.begin();
+        RenderPassDescriptorSet::const_iterator endt = mRenderPassDescs.end();
+
+        while( itor != endt )
+        {
+            OGRE_ASSERT_HIGH( dynamic_cast<VulkanRenderPassDescriptor *>( *itor ) );
+            VulkanRenderPassDescriptor *renderPassDesc =
+                static_cast<VulkanRenderPassDescriptor *>( *itor );
+            renderPassDesc->notifySwapchainDestroyed( window );
+            ++itor;
+        };
     }
 }  // namespace Ogre

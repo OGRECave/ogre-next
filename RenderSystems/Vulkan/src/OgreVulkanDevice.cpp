@@ -39,8 +39,6 @@ THE SOFTWARE.
 
 #include <vulkan/vulkan.h>
 
-#define TODO_resetCmdPools
-#define TODO_removeCmdBuffer
 #define TODO_findRealPresentQueue
 
 namespace Ogre

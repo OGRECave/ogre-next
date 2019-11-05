@@ -280,7 +280,11 @@ namespace Ogre
             mTop = geom->y;
         }
 
+        mDevice->stall();
+
+        destroySwapchain();
         setFinalResolution( geom->width, geom->height );
+        createSwapchain();
 
         free( geom );
     }

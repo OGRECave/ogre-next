@@ -40,7 +40,6 @@ THE SOFTWARE.
 #include "vulkan/vulkan_core.h"
 
 #define TODO_allow_users_to_choose_presentModes
-#define TODO_handle_VK_ERROR_OUT_OF_DATE_KHR
 #define TODO_handleSeparatePresentQueue
 
 namespace Ogre
@@ -52,7 +51,8 @@ namespace Ogre
         mSurfaceKHR( 0 ),
         mSwapchain( 0 ),
         mSwapchainSemaphore( 0 ),
-        mSwapchainStatus( SwapchainReleased )
+        mSwapchainStatus( SwapchainReleased ),
+        mRebuildingSwapchain( false )
     {
         mFocused = true;
     }
@@ -214,6 +214,27 @@ namespace Ogre
         checkVkResult( result, "vkGetSwapchainImagesKHR" );
 
         acquireNextSwapchain();
+
+        mDevice->mRenderSystem->notifySwapchainCreated( this );
+    }
+    //-------------------------------------------------------------------------
+    void VulkanWindow::destroySwapchain( void )
+    {
+        mDevice->mRenderSystem->notifySwapchainDestroyed( this );
+
+        if( mSwapchainSemaphore )
+        {
+            mDevice->mVaoManager->notifySemaphoreUnused( mSwapchainSemaphore );
+            mSwapchainSemaphore = 0;
+        }
+
+        if( mSwapchain )
+        {
+            vkDestroySwapchainKHR( mDevice->mDevice, mSwapchain, 0 );
+            mSwapchain = 0;
+        }
+
+        mSwapchainStatus = SwapchainReleased;
     }
     //-------------------------------------------------------------------------
     void VulkanWindow::acquireNextSwapchain( void )
@@ -229,11 +250,21 @@ namespace Ogre
                                                  mSwapchainSemaphore, VK_NULL_HANDLE, &swapchainIdx );
         if( result != VK_SUCCESS )
         {
-            // VK_ERROR_OUT_OF_DATE_KHR means the swapchain changed (e.g. was resized)
-            TODO_handle_VK_ERROR_OUT_OF_DATE_KHR;
-            LogManager::getSingleton().logMessage(
-                "[VulkanWindow::acquireNextSwapchain] vkAcquireNextImageKHR failed VkResult = " +
-                StringConverter::toString( result ) );
+            // Recreate the swapchain if it's no longer compatible with the surface (OUT_OF_DATE)
+            // or no longer optimal for presentation (SUBOPTIMAL)
+            if( ( result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR ) &&
+                !mRebuildingSwapchain )
+            {
+                mRebuildingSwapchain = true;
+                windowMovedOrResized();
+                mRebuildingSwapchain = false;
+            }
+            else
+            {
+                LogManager::getSingleton().logMessage(
+                    "[VulkanWindow::acquireNextSwapchain] vkAcquireNextImageKHR failed VkResult = " +
+                    vkResultToString( result ) );
+            }
         }
         else
         {
@@ -247,18 +278,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanWindow::destroy( void )
     {
-        if( mSwapchainSemaphore )
-        {
-            mDevice->mVaoManager->notifySemaphoreUnused( mSwapchainSemaphore );
-            mSwapchainSemaphore = 0;
-        }
-
-        if( mSwapchain )
-        {
-            vkDestroySwapchainKHR( mDevice->mDevice, mSwapchain, 0 );
-            mSwapchain = 0;
-        }
-
+        destroySwapchain();
         if( mSurfaceKHR )
         {
             vkDestroySurfaceKHR( mDevice->mInstance, mSurfaceKHR, 0 );
@@ -350,11 +370,11 @@ namespace Ogre
 
         VkResult result = vkQueuePresentKHR( mDevice->mPresentQueue, &present );
 
-        if( result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR )
+        if( result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR && result != VK_ERROR_OUT_OF_DATE_KHR )
         {
             LogManager::getSingleton().logMessage(
                 "[VulkanWindow::swapBuffers] vkQueuePresentKHR: error presenting VkResult = " +
-                StringConverter::toString( result ) );
+                vkResultToString( result ) );
         }
 
         mSwapchainStatus = SwapchainReleased;

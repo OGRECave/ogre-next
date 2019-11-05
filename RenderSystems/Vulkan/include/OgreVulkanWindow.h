@@ -74,9 +74,11 @@ namespace Ogre
         /// Makes Queue execution wait until the acquired image is done presenting
         VkSemaphore mSwapchainSemaphore;
         SwapchainStatus mSwapchainStatus;
+        bool mRebuildingSwapchain;
 
         PixelFormatGpu chooseSurfaceFormat( bool hwGamma );
         void createSwapchain( void );
+        void destroySwapchain( void );
         void acquireNextSwapchain( void );
 
     public:

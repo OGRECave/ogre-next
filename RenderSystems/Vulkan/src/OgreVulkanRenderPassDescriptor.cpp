@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "OgreVulkanRenderSystem.h"
 #include "OgreVulkanTextureGpu.h"
 #include "OgreVulkanTextureGpuWindow.h"
+#include "OgreVulkanWindow.h"
 
 #include "OgreHlmsDatablock.h"
 #include "OgrePixelFormatGpuUtils.h"
@@ -547,6 +548,24 @@ namespace Ogre
             }
         }
         mNumImageViews = 0u;
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanRenderPassDescriptor::notifySwapchainCreated( VulkanWindow *window )
+    {
+        if( mNumColourEntries > 0 && mColour[0].texture->isRenderWindowSpecific() &&
+            mColour[0].texture == window->getTexture() )
+        {
+            entriesModified( RenderPassDescriptor::All );
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanRenderPassDescriptor::notifySwapchainDestroyed( VulkanWindow *window )
+    {
+        if( mNumColourEntries > 0 && mColour[0].texture->isRenderWindowSpecific() &&
+            mColour[0].texture == window->getTexture() )
+        {
+            destroyFbo();
+        }
     }
     //-----------------------------------------------------------------------------------
     void VulkanRenderPassDescriptor::entriesModified( uint32 entryTypes )
