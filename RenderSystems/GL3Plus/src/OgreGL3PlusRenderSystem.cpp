@@ -289,7 +289,9 @@ namespace Ogre {
 
         // Check for hardware mipmapping support.
         bool disableAutoMip = false;
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || \
+    OGRE_PLATFORM == OGRE_PLATFORM_LINUX || \
+    OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD
         // Apple & Linux ATI drivers have faults in hardware mipmap generation
         // TODO: Test this with GL3+
         if (rsc->getVendor() == GPU_AMD)
