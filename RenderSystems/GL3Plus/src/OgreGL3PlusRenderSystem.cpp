@@ -1747,8 +1747,8 @@ namespace Ogre {
 
     void GL3PlusRenderSystem::_hlmsSamplerblockCreated( HlmsSamplerblock *newBlock )
     {
-        GLuint samplerName;
-        glGenSamplers( 1, &samplerName );
+        GLuint samplerName = 0;
+        OCGE( glGenSamplers( 1, &samplerName ) );
 
         GLint minFilter, magFilter;
         switch( newBlock->mMinFilter )
