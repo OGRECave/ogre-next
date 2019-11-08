@@ -721,44 +721,41 @@ namespace Ogre {
     Vector3 Node::convertWorldToLocalPosition( const Vector3 &worldPos )
     {
         OGRE_ASSERT_MEDIUM( !mCachedTransformOutOfDate );
-
-        ArrayVector3 arrayWorldPos;
-        arrayWorldPos.setAll( worldPos );
-        arrayWorldPos = mTransform.mDerivedOrientation->Inverse() *
-                            (arrayWorldPos - (*mTransform.mDerivedPosition)) /
-                            (*mTransform.mDerivedScale);
-
-        Vector3 retVal;
-        arrayWorldPos.getAsVector3( retVal, mTransform.mIndex );
-        return retVal;
+        return Node::_getDerivedOrientation().Inverse() * (worldPos - Node::_getDerivedPosition()) / Node::_getDerivedScale(); // non virt calls
     }
     //-----------------------------------------------------------------------
     Vector3 Node::convertLocalToWorldPosition( const Vector3 &localPos )
     {
         OGRE_ASSERT_MEDIUM( !mCachedTransformOutOfDate );
-
-        ArrayVector3 arrayLocalPos;
-        arrayLocalPos.setAll( localPos );
-        arrayLocalPos = ( (*mTransform.mDerivedOrientation) *
-                            (arrayLocalPos * (*mTransform.mDerivedScale)) ) +
-                            (*mTransform.mDerivedPosition);
-
-        Vector3 retVal;
-        arrayLocalPos.getAsVector3( retVal, mTransform.mIndex );
-        return retVal;
+        return Node::_getDerivedOrientation() * (localPos * Node::_getDerivedScale()) + Node::_getDerivedPosition(); // non virt calls
+    }
+    //-----------------------------------------------------------------------
+    Vector3 Node::convertWorldToLocalDirection( const Vector3 &worldDir, bool useScale )
+    {
+        OGRE_ASSERT_MEDIUM( !mCachedTransformOutOfDate );
+        return useScale ? 
+            Node::_getDerivedOrientation().Inverse() * worldDir / Node::_getDerivedScale() : // non virt calls
+            Node::_getDerivedOrientation().Inverse() * worldDir;
+    }
+    //-----------------------------------------------------------------------
+    Vector3 Node::convertLocalToWorldDirection( const Vector3 &localDir, bool useScale )
+    {
+        OGRE_ASSERT_MEDIUM( !mCachedTransformOutOfDate );
+        return useScale ? 
+            Node::_getDerivedOrientation() * (localDir * Node::_getDerivedScale()) : // non virt calls
+            Node::_getDerivedOrientation() * localDir;
     }
     //-----------------------------------------------------------------------
     Quaternion Node::convertWorldToLocalOrientation( const Quaternion &worldOrientation )
     {
         OGRE_ASSERT_MEDIUM( !mCachedTransformOutOfDate );
-        return mTransform.mDerivedOrientation->getAsQuaternion( mTransform.mIndex ).Inverse() *
-                worldOrientation;
+        return Node::_getDerivedOrientation().Inverse() * worldOrientation; // non virt call
     }
     //-----------------------------------------------------------------------
     Quaternion Node::convertLocalToWorldOrientation( const Quaternion &localOrientation )
     {
         OGRE_ASSERT_MEDIUM( !mCachedTransformOutOfDate );
-        return mTransform.mDerivedOrientation->getAsQuaternion( mTransform.mIndex ) * localOrientation;
+        return Node::_getDerivedOrientation() * localOrientation; // non virt call
     }
     //-----------------------------------------------------------------------
     void Node::removeAllChildren(void)

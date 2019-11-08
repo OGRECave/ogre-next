@@ -190,7 +190,7 @@ namespace Ogre {
         }
 
         // transform to parent space
-        mOrientation = mParentNode->_getDerivedOrientationUpdated().Inverse() * targetWorldOrientation;
+        mOrientation = mParentNode->convertWorldToLocalOrientationUpdated(targetWorldOrientation);
 
         // TODO If we have a fixed yaw axis, we mustn't break it by using the
         // shortest arc because this will sometimes cause a relative yaw
@@ -311,8 +311,8 @@ namespace Ogre {
             // Ok, we're out of date with SceneNode we're attached to
             mLastParentOrientation = derivedOrient;
             mLastParentPosition = derivedPos;
-            mRealOrientation = mLastParentOrientation * mOrientation;
-            mRealPosition = (mLastParentOrientation * mPosition) + mLastParentPosition;
+            mRealOrientation = mParentNode->convertLocalToWorldOrientation(mOrientation);
+            mRealPosition = mParentNode->convertLocalToWorldPosition(mPosition);
             mRecalcView = true;
             mRecalcWindow = true;
         }

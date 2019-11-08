@@ -381,8 +381,7 @@ namespace v1
             if (mParentNode)
             {
                 // Transform position to ourself space
-                newPos = mParentNode->_getDerivedOrientation().UnitInverse() *
-                    (newPos - mParentNode->_getDerivedPosition()) / mParentNode->_getDerivedScale();
+                newPos = mParentNode->convertWorldToLocalPosition(newPos);
             }
             Vector3 diff = newPos - nextElem.position;
             Real sqlen = diff.squaredLength();
@@ -477,9 +476,7 @@ namespace v1
         Vector3 position = node->_getDerivedPositionUpdated();
         if (mParentNode)
         {
-            position = mParentNode->_getDerivedOrientation().Inverse() 
-                * (position - mParentNode->_getDerivedPosition()) 
-                / mParentNode->_getDerivedScale();
+            position = mParentNode->convertWorldToLocalPosition(position);
         }
         Element e(position,
             mInitialWidth[index], 0.0f, mInitialColour[index], node->_getDerivedOrientation());

@@ -318,12 +318,12 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     Vector3 Light::getDerivedDirection(void) const
     {
-        return -mParentNode->_getDerivedOrientation().zAxis();
+        return mParentNode->convertLocalToWorldDirection(Vector3::NEGATIVE_UNIT_Z, false);
     }
     //-----------------------------------------------------------------------
     Vector3 Light::getDerivedDirectionUpdated(void) const
     {
-        return -mParentNode->_getDerivedOrientationUpdated().zAxis();
+        return mParentNode->convertLocalToWorldDirectionUpdated(Vector3::NEGATIVE_UNIT_Z, false);
     }
     //-----------------------------------------------------------------------
     Vector4 Light::getAs4DVector(void) const
