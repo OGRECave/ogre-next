@@ -72,7 +72,6 @@ namespace Ogre {
                                             "this. Pass the name of an already defined vertex shader.",
                                             PT_STRING),&msCmdShaderReflectionPairHint);
         }
-        mTargetBufferName = "";
 
         // Manually assign language now since we use it immediately
         mSyntaxCode = "metal";
@@ -709,16 +708,6 @@ namespace Ogre {
         GpuProgramParametersSharedPtr params = HighLevelGpuProgram::createParameters();
         params->setTransposeMatrices(true);
         return params;
-    }
-    //-----------------------------------------------------------------------
-    NSUInteger MetalProgram::getFunctionParamCount(void)
-    {
-        return 0;
-    }
-    //-----------------------------------------------------------------------
-    size_t MetalProgram::getSharedParamCount(void)
-    {
-        return 0;
     }
     //-----------------------------------------------------------------------
 }
