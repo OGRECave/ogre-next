@@ -218,6 +218,9 @@ namespace Ogre
 
         void notifySwapchainCreated( VulkanWindow *window );
         void notifySwapchainDestroyed( VulkanWindow *window );
+
+        virtual void _hlmsPipelineStateObjectCreated( HlmsPso *newPso );
+        virtual void _hlmsPipelineStateObjectDestroyed( HlmsPso *pos );
     };
 }  // namespace Ogre
 

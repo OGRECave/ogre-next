@@ -29,8 +29,10 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreVulkanRenderSystem.h"
 
 #include "OgreRenderPassDescriptor.h"
+#include "OgreVulkanDescriptors.h"
 #include "OgreVulkanDevice.h"
 #include "OgreVulkanGpuProgramManager.h"
+#include "OgreVulkanProgram.h"
 #include "OgreVulkanRenderPassDescriptor.h"
 #include "OgreVulkanTextureGpuManager.h"
 #include "OgreVulkanUtils.h"
@@ -564,7 +566,7 @@ namespace Ogre
     void VulkanRenderSystem::initialiseFromRenderSystemCapabilities( RenderSystemCapabilities *caps,
                                                                      Window *primary )
     {
-        mShaderManager = OGRE_NEW VulkanGpuProgramManager();
+        mShaderManager = OGRE_NEW VulkanGpuProgramManager( mActiveDevice );
 
         Log *defaultLog = LogManager::getSingleton().getDefaultLog();
         if( defaultLog )
@@ -727,5 +729,76 @@ namespace Ogre
             renderPassDesc->notifySwapchainDestroyed( window );
             ++itor;
         };
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *newPso )
+    {
+        size_t numShaderStages = 0u;
+        VkPipelineShaderStageCreateInfo shaderStages[GPT_COMPUTE_PROGRAM];
+
+        DescriptorSetLayoutArray descriptorSets;
+
+        if( !newPso->vertexShader.isNull() )
+        {
+            VulkanProgram *shader =
+                static_cast<VulkanProgram *>( newPso->vertexShader->_getBindingDelegate() );
+            shader->fillPipelineShaderStageCi( shaderStages[numShaderStages++] );
+            VulkanDescriptors::generateAndMergeDescriptorSets( shader, descriptorSets );
+        }
+
+        if( !newPso->geometryShader.isNull() )
+        {
+            VulkanProgram *shader =
+                static_cast<VulkanProgram *>( newPso->geometryShader->_getBindingDelegate() );
+            shader->fillPipelineShaderStageCi( shaderStages[numShaderStages++] );
+            VulkanDescriptors::generateAndMergeDescriptorSets( shader, descriptorSets );
+        }
+
+        if( !newPso->tesselationHullShader.isNull() )
+        {
+            VulkanProgram *shader =
+                static_cast<VulkanProgram *>( newPso->tesselationHullShader->_getBindingDelegate() );
+            shader->fillPipelineShaderStageCi( shaderStages[numShaderStages++] );
+            VulkanDescriptors::generateAndMergeDescriptorSets( shader, descriptorSets );
+        }
+
+        if( !newPso->tesselationDomainShader.isNull() )
+        {
+            VulkanProgram *shader =
+                static_cast<VulkanProgram *>( newPso->tesselationDomainShader->_getBindingDelegate() );
+            shader->fillPipelineShaderStageCi( shaderStages[numShaderStages++] );
+            VulkanDescriptors::generateAndMergeDescriptorSets( shader, descriptorSets );
+        }
+
+        if( !newPso->pixelShader.isNull() )
+        {
+            VulkanProgram *shader =
+                static_cast<VulkanProgram *>( newPso->pixelShader->_getBindingDelegate() );
+            shader->fillPipelineShaderStageCi( shaderStages[numShaderStages++] );
+            VulkanDescriptors::generateAndMergeDescriptorSets( shader, descriptorSets );
+        }
+
+        VulkanDescriptors::optimizeDescriptorSets( descriptorSets );
+        VkPipelineLayout layout = VulkanDescriptors::generateVkDescriptorSets( descriptorSets );
+
+        VkGraphicsPipelineCreateInfo pipeline;
+        makeVkStruct( pipeline, VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO );
+
+        pipeline.layout = layout;
+        pipeline.stageCount = static_cast<uint32>( numShaderStages );
+        pipeline.pStages = shaderStages;
+
+//        newPso->rsData = metalPso;
+    }
+    //-------------------------------------------------------------------------
+    void VulkanRenderSystem::_hlmsPipelineStateObjectDestroyed( HlmsPso *pso )
+    {
+        assert( pso->rsData );
+
+//        removeDepthStencilState( pso );
+
+//        MetalHlmsPso *metalPso = reinterpret_cast<MetalHlmsPso *>( pso->rsData );
+//        delete metalPso;
+        pso->rsData = 0;
     }
 }  // namespace Ogre

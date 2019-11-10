@@ -45,11 +45,17 @@ typedef struct VkFence_T *VkFence;
 typedef struct VkRenderPass_T *VkRenderPass;
 typedef struct VkFramebuffer_T *VkFramebuffer;
 
+typedef struct VkShaderModule_T *VkShaderModule;
+typedef struct VkDescriptorSetLayout_T *VkDescriptorSetLayout;
+
+struct VkPipelineShaderStageCreateInfo;
+
 namespace Ogre
 {
     // Forward declarations
     struct VulkanDevice;
     class VulkanGpuProgramManager;
+    class VulkanProgram;
     class VulkanQueue;
     class VulkanStagingBuffer;
     class VulkanRenderSystem;

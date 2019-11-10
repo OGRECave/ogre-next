@@ -28,12 +28,73 @@ THE SOFTWARE.
 
 #include "OgreVulkanGpuProgramManager.h"
 
+#include "OgreVulkanDevice.h"
+#include "OgreVulkanUtils.h"
+
 #include "OgreLogManager.h"
 //#include "OgreVulkanProgram.h"
 
 namespace Ogre
 {
-    VulkanGpuProgramManager::VulkanGpuProgramManager()
+    bool operator<( const VkDescriptorSetLayoutBinding &a, const VkDescriptorSetLayoutBinding &b )
+    {
+        if( a.binding != b.binding )
+            return a.binding < b.binding;
+        if( a.descriptorType != b.descriptorType )
+            return a.descriptorType < b.descriptorType;
+        if( a.descriptorCount != b.descriptorCount )
+            return a.descriptorCount < b.descriptorCount;
+        if( a.stageFlags != b.stageFlags )
+            return a.stageFlags < b.stageFlags;
+        return a.pImmutableSamplers < b.pImmutableSamplers;
+    }
+
+    bool operator!=( const VkDescriptorSetLayoutBinding &a, const VkDescriptorSetLayoutBinding &b )
+    {
+        return a.binding != b.binding ||                                                  //
+               a.descriptorType != b.descriptorType ||                                    //
+               a.descriptorCount != b.descriptorCount || a.stageFlags != b.stageFlags ||  //
+               a.pImmutableSamplers < b.pImmutableSamplers;
+    }
+
+    bool operator<( const VkDescriptorSetLayoutBindingArray &a,
+                    const VkDescriptorSetLayoutBindingArray &b )
+    {
+        const size_t aSize = b.size();
+        const size_t bSize = b.size();
+        if( aSize != bSize )
+            return aSize < bSize;
+
+        for( size_t i = 0u; i < aSize; ++i )
+        {
+            if( a[i] != b[i] )
+                return a[i] < b[i];
+        }
+
+        // If we're here then a and b are equals, thus a < b returns false
+        return false;
+    }
+
+    bool operator<( const VkDescriptorSetLayoutArray &a, const VkDescriptorSetLayoutArray &b )
+    {
+        const size_t aSize = b.size();
+        const size_t bSize = b.size();
+        if( aSize != bSize )
+            return aSize < bSize;
+
+        for( size_t i = 0u; i < aSize; ++i )
+        {
+            if( a[i] != b[i] )
+                return a[i] < b[i];
+        }
+
+        // If we're here then a and b are equals, thus a < b returns false
+        return false;
+    }
+    //-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+    VulkanGpuProgramManager::VulkanGpuProgramManager( VulkanDevice *device ) : mDevice( device )
     {
         // Superclass sets up members
 
@@ -56,6 +117,58 @@ namespace Ogre
     bool VulkanGpuProgramManager::unregisterProgramFactory( const String &syntaxCode )
     {
         return mProgramMap.erase( syntaxCode ) != 0;
+    }
+    //-------------------------------------------------------------------------
+    VkDescriptorSetLayout VulkanGpuProgramManager::getCachedSet(
+        const VkDescriptorSetLayoutBindingArray &set )
+    {
+        VkDescriptorSetLayout retVal = 0;
+
+        DescriptorSetMap::const_iterator itor = mDescriptorSetMap.find( set );
+
+        if( itor == mDescriptorSetMap.end() )
+        {
+            VkDescriptorSetLayoutCreateInfo descSetLayoutCi;
+            makeVkStruct( descSetLayoutCi, VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO );
+            descSetLayoutCi.bindingCount = static_cast<uint32>( set.size() );
+            descSetLayoutCi.pBindings = set.begin();
+
+            VkResult result =
+                vkCreateDescriptorSetLayout( mDevice->mDevice, &descSetLayoutCi, 0, &retVal );
+            checkVkResult( result, "vkCreateDescriptorSetLayout" );
+            mDescriptorSetMap[set] = retVal;
+        }
+        else
+        {
+            retVal = itor->second;
+        }
+
+        return retVal;
+    }
+    //-------------------------------------------------------------------------
+    VkPipelineLayout VulkanGpuProgramManager::getCachedSets( const VkDescriptorSetLayoutArray &vkSets )
+    {
+        VkPipelineLayout retVal = 0;
+
+        DescriptorSetsVkMap::const_iterator itor = mDescriptorSetsVkMap.find( vkSets );
+
+        if( itor == mDescriptorSetsVkMap.end() )
+        {
+            VkPipelineLayoutCreateInfo pipelineLayoutCi;
+            makeVkStruct( pipelineLayoutCi, VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO );
+            pipelineLayoutCi.setLayoutCount = static_cast<uint32>( vkSets.size() );
+            pipelineLayoutCi.pSetLayouts = vkSets.begin();
+
+            VkResult result = vkCreatePipelineLayout( mDevice->mDevice, &pipelineLayoutCi, 0, &retVal );
+            checkVkResult( result, "vkCreatePipelineLayout" );
+            mDescriptorSetsVkMap[vkSets] = retVal;
+        }
+        else
+        {
+            retVal = itor->second;
+        }
+
+        return retVal;
     }
     //-------------------------------------------------------------------------
     Resource *VulkanGpuProgramManager::createImpl( const String &name, ResourceHandle handle,
@@ -110,4 +223,4 @@ namespace Ogre
 
         return ( iter->second )( this, name, handle, group, isManual, loader, gptype, syntaxCode );
     }
-}
+}  // namespace Ogre

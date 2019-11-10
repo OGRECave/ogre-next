@@ -33,9 +33,20 @@ THE SOFTWARE.
 
 #include "OgreGpuProgramManager.h"
 
+#include "vulkan/vulkan_core.h"
+
 namespace Ogre
 {
     class VulkanProgram;
+
+    // Sets' descriptor
+    typedef FastArray<VkDescriptorSetLayoutBinding> VkDescriptorSetLayoutBindingArray;
+    // Sets' opaque handles
+    typedef FastArray<VkDescriptorSetLayout> VkDescriptorSetLayoutArray;
+
+    bool operator<( const VkDescriptorSetLayoutBindingArray &a,
+                    const VkDescriptorSetLayoutBindingArray &b );
+    bool operator<( const VkDescriptorSetLayoutArray &a, const VkDescriptorSetLayoutArray &b );
 
     class _OgreVulkanExport VulkanGpuProgramManager : public GpuProgramManager
     {
@@ -50,6 +61,14 @@ namespace Ogre
         typedef map<String, CreateGpuProgramCallback>::type ProgramMap;
         ProgramMap mProgramMap;
 
+        typedef map<VkDescriptorSetLayoutBindingArray, VkDescriptorSetLayout>::type DescriptorSetMap;
+        DescriptorSetMap mDescriptorSetMap;
+
+        typedef map<VkDescriptorSetLayoutArray, VkPipelineLayout>::type DescriptorSetsVkMap;
+        DescriptorSetsVkMap mDescriptorSetsVkMap;
+
+        VulkanDevice *mDevice;
+
     protected:
         /// @copydoc ResourceManager::createImpl
         Resource *createImpl( const String &name, ResourceHandle handle, const String &group,
@@ -61,10 +80,13 @@ namespace Ogre
                               const String &syntaxCode );
 
     public:
-        VulkanGpuProgramManager();
+        VulkanGpuProgramManager( VulkanDevice *device );
         virtual ~VulkanGpuProgramManager();
         bool registerProgramFactory( const String &syntaxCode, CreateGpuProgramCallback createFn );
         bool unregisterProgramFactory( const String &syntaxCode );
+
+        VkDescriptorSetLayout getCachedSet( const VkDescriptorSetLayoutBindingArray &set );
+        VkPipelineLayout getCachedSets( const VkDescriptorSetLayoutArray &vkSets );
     };
 }  // namespace Ogre
 
