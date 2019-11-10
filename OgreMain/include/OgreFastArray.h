@@ -224,6 +224,18 @@ namespace Ogre
             return mData + idx;
         }
 
+        void append( const_iterator otherBegin, const_iterator otherEnd )
+        {
+            const size_t otherSize = otherEnd - otherBegin;
+
+            growToFit( otherSize );
+
+            for( size_t i = mSize; i < mSize + otherSize; ++i )
+                new( &mData[i] ) T( *otherBegin++ );
+
+            mSize += otherSize;
+        }
+
         void appendPOD( const_iterator otherBegin, const_iterator otherEnd )
         {
             growToFit( otherEnd - otherBegin );
