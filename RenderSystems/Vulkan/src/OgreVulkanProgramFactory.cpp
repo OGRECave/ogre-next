@@ -33,21 +33,7 @@ THE SOFTWARE.
 #include "OgreVulkanDevice.h"
 #include "OgreVulkanProgram.h"
 
-// clang-format off
-#if __cplusplus <= 199711L
-    #ifndef nullptr
-        #define OgreDemoNullptrDefined
-        #define nullptr (0)
-    #endif
-#endif
-#include "glslang/Public/ShaderLang.h"
-#if __cplusplus <= 199711L
-    #ifdef OgreDemoNullptrDefined
-        #undef OgreDemoNullptrDefined
-        #undef nullptr
-    #endif
-#endif
-// clang-format on
+#include "OgreVulkanGlslangHeader.h"
 
 namespace Ogre
 {

@@ -113,7 +113,7 @@ namespace Ogre
                 {
                     char tmpBuffer[256];
                     LwString logMsg( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
-                    logMsg.a( "Descriptor set ", i, " binding ", j,
+                    logMsg.a( "Descriptor set ", (uint32)i, " binding ", (uint32)j,
                               " of two shader stages (e.g. vertex and pixel shader?) are not "
                               "compatible. These shaders cannot be used together" );
                     LogManager::getSingleton().logMessage( logMsg.c_str() );

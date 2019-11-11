@@ -421,9 +421,9 @@ namespace Ogre
                                        uint8 *RESTRICT_ALIAS dstData )
     {
         vector<GpuConstantDefinition>::type::const_iterator itor = mConstantDefsSorted.begin();
-        vector<GpuConstantDefinition>::type::const_iterator end = mConstantDefsSorted.end();
+        vector<GpuConstantDefinition>::type::const_iterator endt = mConstantDefsSorted.end();
 
-        while( itor != end )
+        while( itor != endt )
         {
             const GpuConstantDefinition &def = *itor;
 

@@ -31,6 +31,8 @@ Copyright (c) 2000-present Torus Knot Software Ltd
 
 #include "OgreVulkanPrerequisites.h"
 
+#include "OgreBlendMode.h"
+#include "OgreHlmsPso.h"
 #include "OgrePixelFormatGpu.h"
 #include "OgreTextureGpu.h"
 
@@ -41,6 +43,15 @@ namespace Ogre
     class _OgreVulkanExport VulkanMappings
     {
     public:
+        static VkPrimitiveTopology get( OperationType opType );
+        static VkPolygonMode get( PolygonMode polygonMode );
+        static VkCullModeFlags get( CullingMode cullMode );
+        static VkCompareOp get( CompareFunction compareFunc );
+        static VkStencilOp get( StencilOperation stencilOp );
+
+        static VkBlendFactor get( SceneBlendFactor blendFactor );
+        static VkBlendOp get( SceneBlendOperation blendOp );
+
         static VkImageViewType get( TextureTypes::TextureTypes textureType );
         static VkFormat get( PixelFormatGpu pf );
     };

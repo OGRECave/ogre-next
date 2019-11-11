@@ -26,28 +26,14 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 #ifndef _OgreVulkanProgram_H_
-#    define _OgreVulkanProgram_H_
+#define _OgreVulkanProgram_H_
 
-#    include "OgreVulkanPrerequisites.h"
+#include "OgreVulkanPrerequisites.h"
 
-#    include "OgreHardwareVertexBuffer.h"
-#    include "OgreHighLevelGpuProgram.h"
+#include "OgreHardwareVertexBuffer.h"
+#include "OgreHighLevelGpuProgram.h"
 
-// clang-format off
-#if __cplusplus <= 199711L
-    #ifndef nullptr
-        #define OgreDemoNullptrDefined
-        #define nullptr (0)
-    #endif
-#endif
-#include "glslang/Public/ShaderLang.h"
-#if __cplusplus <= 199711L
-    #ifdef OgreDemoNullptrDefined
-        #undef OgreDemoNullptrDefined
-        #undef nullptr
-    #endif
-#endif
-// clang-format on
+#include "OgreVulkanGlslangHeader.h"
 
 namespace Ogre
 {

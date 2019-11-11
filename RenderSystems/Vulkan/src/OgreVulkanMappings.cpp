@@ -33,6 +33,119 @@ Copyright (c) 2000-present Torus Knot Software Ltd
 namespace Ogre
 {
     //-----------------------------------------------------------------------------------
+    VkPrimitiveTopology VulkanMappings::get( OperationType opType )
+    {
+        switch( opType )
+        {
+            // clang-format off
+        case OT_POINT_LIST:     return VK_PRIMITIVE_TOPOLOGY_POINT_LIST;
+        case OT_LINE_LIST:      return VK_PRIMITIVE_TOPOLOGY_LINE_LIST;
+        case OT_LINE_STRIP:     return VK_PRIMITIVE_TOPOLOGY_LINE_STRIP;
+        case OT_TRIANGLE_LIST:  return VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+        case OT_TRIANGLE_STRIP: return VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP;
+        case OT_TRIANGLE_FAN:   return VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN;
+        default:
+            return VK_PRIMITIVE_TOPOLOGY_PATCH_LIST;
+            // clang-format on
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    VkPolygonMode VulkanMappings::get( PolygonMode polygonMode )
+    {
+        switch( polygonMode )
+        {
+            // clang-format off
+        case PM_POINTS:     return VK_POLYGON_MODE_POINT;
+        case PM_WIREFRAME:  return VK_POLYGON_MODE_LINE;
+        case PM_SOLID:      return VK_POLYGON_MODE_FILL;
+            // clang-format on
+        }
+        return VK_POLYGON_MODE_FILL;
+    }
+    //-----------------------------------------------------------------------------------
+    VkCullModeFlags VulkanMappings::get( CullingMode cullMode )
+    {
+        switch( cullMode )
+        {
+            // clang-format off
+        case CULL_NONE:             return VK_CULL_MODE_NONE;
+        case CULL_CLOCKWISE:        return VK_CULL_MODE_BACK_BIT;
+        case CULL_ANTICLOCKWISE:    return VK_CULL_MODE_FRONT_BIT;
+            // clang-format on
+        }
+        return VK_CULL_MODE_BACK_BIT;
+    }
+    //-----------------------------------------------------------------------------------
+    VkCompareOp VulkanMappings::get( CompareFunction compareFunc )
+    {
+        switch( compareFunc )
+        {
+            // clang-format off
+        case NUM_COMPARE_FUNCTIONS: return VK_COMPARE_OP_NEVER;
+        case CMPF_ALWAYS_FAIL:      return VK_COMPARE_OP_NEVER;
+        case CMPF_ALWAYS_PASS:      return VK_COMPARE_OP_ALWAYS;
+        case CMPF_LESS:             return VK_COMPARE_OP_LESS;
+        case CMPF_LESS_EQUAL:       return VK_COMPARE_OP_LESS_OR_EQUAL;
+        case CMPF_EQUAL:            return VK_COMPARE_OP_EQUAL;
+        case CMPF_NOT_EQUAL:        return VK_COMPARE_OP_NOT_EQUAL;
+        case CMPF_GREATER_EQUAL:    return VK_COMPARE_OP_GREATER_OR_EQUAL;
+        case CMPF_GREATER:          return VK_COMPARE_OP_GREATER;
+            // clang-format on
+        }
+        return VK_COMPARE_OP_NEVER;
+    }
+    //-----------------------------------------------------------------------------------
+    VkStencilOp VulkanMappings::get( StencilOperation stencilOp )
+    {
+        switch( stencilOp )
+        {
+            // clang-format off
+        case SOP_KEEP:              return VK_STENCIL_OP_KEEP;
+        case SOP_ZERO:              return VK_STENCIL_OP_ZERO;
+        case SOP_REPLACE:           return VK_STENCIL_OP_REPLACE;
+        case SOP_INCREMENT:         return VK_STENCIL_OP_INCREMENT_AND_CLAMP;
+        case SOP_DECREMENT:         return VK_STENCIL_OP_DECREMENT_AND_CLAMP;
+        case SOP_INCREMENT_WRAP:    return VK_STENCIL_OP_INCREMENT_AND_WRAP;
+        case SOP_DECREMENT_WRAP:    return VK_STENCIL_OP_DECREMENT_AND_WRAP;
+        case SOP_INVERT:            return VK_STENCIL_OP_INVERT;
+            // clang-format on
+        }
+        return VK_STENCIL_OP_KEEP;
+    }
+    //-----------------------------------------------------------------------------------
+    VkBlendFactor VulkanMappings::get( SceneBlendFactor blendFactor )
+    {
+        switch( blendFactor )
+        {
+            // clang-format off
+        case SBF_ONE:                       return VK_BLEND_FACTOR_ONE;
+        case SBF_ZERO:                      return VK_BLEND_FACTOR_ZERO;
+        case SBF_DEST_COLOUR:               return VK_BLEND_FACTOR_DST_COLOR;
+        case SBF_SOURCE_COLOUR:             return VK_BLEND_FACTOR_SRC_COLOR;
+        case SBF_ONE_MINUS_DEST_COLOUR:     return VK_BLEND_FACTOR_ONE_MINUS_DST_COLOR;
+        case SBF_ONE_MINUS_SOURCE_COLOUR:   return VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR;
+        case SBF_DEST_ALPHA:                return VK_BLEND_FACTOR_DST_ALPHA;
+        case SBF_SOURCE_ALPHA:              return VK_BLEND_FACTOR_SRC_ALPHA;
+        case SBF_ONE_MINUS_DEST_ALPHA:      return VK_BLEND_FACTOR_ONE_MINUS_DST_ALPHA;
+        case SBF_ONE_MINUS_SOURCE_ALPHA:    return VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+            // clang-format on
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    VkBlendOp VulkanMappings::get( SceneBlendOperation blendOp )
+    {
+        switch( blendOp )
+        {
+            // clang-format off
+        case SBO_ADD:               return VK_BLEND_OP_ADD;
+        case SBO_SUBTRACT:          return VK_BLEND_OP_SUBTRACT;
+        case SBO_REVERSE_SUBTRACT:  return VK_BLEND_OP_REVERSE_SUBTRACT;
+        case SBO_MIN:               return VK_BLEND_OP_MIN;
+        case SBO_MAX:               return VK_BLEND_OP_MAX;
+            // clang-format on
+        }
+    }
+    //-----------------------------------------------------------------------------------
     VkImageViewType VulkanMappings::get( TextureTypes::TextureTypes textureType )
     {
         switch( textureType )

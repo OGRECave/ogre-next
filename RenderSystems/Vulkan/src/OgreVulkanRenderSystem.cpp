@@ -32,6 +32,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreVulkanDescriptors.h"
 #include "OgreVulkanDevice.h"
 #include "OgreVulkanGpuProgramManager.h"
+#include "OgreVulkanMappings.h"
 #include "OgreVulkanProgram.h"
 #include "OgreVulkanRenderPassDescriptor.h"
 #include "OgreVulkanTextureGpuManager.h"
@@ -44,6 +45,11 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "Windowing/X11/OgreVulkanXcbWindow.h"
 
 #define TODO_check_layers_exist
+
+#define TODO_vertex_format
+#define TODO_addVpCount_to_passpso
+#define TODO_renderPass
+#define TODO_psoCaches
 
 namespace Ogre
 {
@@ -781,24 +787,188 @@ namespace Ogre
         VulkanDescriptors::optimizeDescriptorSets( descriptorSets );
         VkPipelineLayout layout = VulkanDescriptors::generateVkDescriptorSets( descriptorSets );
 
+        VkPipelineVertexInputStateCreateInfo vertexFormatCi;
+        makeVkStruct( vertexFormatCi, VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO );
+        TODO_vertex_format;
+
+        VkPipelineInputAssemblyStateCreateInfo inputAssemblyCi;
+        makeVkStruct( inputAssemblyCi, VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO );
+        inputAssemblyCi.topology = VulkanMappings::get( newPso->operationType );
+        inputAssemblyCi.primitiveRestartEnable = newPso->enablePrimitiveRestart;
+
+        VkPipelineTessellationStateCreateInfo tessStateCi;
+        makeVkStruct( tessStateCi, VK_STRUCTURE_TYPE_PIPELINE_TESSELLATION_STATE_CREATE_INFO );
+
+        VkPipelineViewportStateCreateInfo viewportStateCi;
+        makeVkStruct( viewportStateCi, VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO );
+        TODO_addVpCount_to_passpso;
+        viewportStateCi.viewportCount = 1u;
+        viewportStateCi.scissorCount = 1u;
+
+        VkPipelineRasterizationStateCreateInfo rasterState;
+        makeVkStruct( rasterState, VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO );
+        rasterState.polygonMode = VulkanMappings::get( newPso->macroblock->mPolygonMode );
+        rasterState.cullMode = VulkanMappings::get( newPso->macroblock->mCullMode );
+        rasterState.frontFace = VK_FRONT_FACE_CLOCKWISE;
+        rasterState.depthBiasEnable = newPso->macroblock->mDepthBiasConstant != 0.0f;
+        rasterState.depthBiasConstantFactor = newPso->macroblock->mDepthBiasConstant;
+        rasterState.depthBiasClamp = 0.0f;
+        rasterState.depthBiasSlopeFactor = newPso->macroblock->mDepthBiasSlopeScale;
+        rasterState.lineWidth = 1.0f;
+
+        VkPipelineMultisampleStateCreateInfo mssCi;
+        makeVkStruct( mssCi, VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO );
+        mssCi.rasterizationSamples = static_cast<VkSampleCountFlagBits>( newPso->pass.multisampleCount );
+        mssCi.alphaToCoverageEnable = newPso->blendblock->mAlphaToCoverageEnabled;
+
+        VkPipelineDepthStencilStateCreateInfo depthStencilStateCi;
+        makeVkStruct( depthStencilStateCi, VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO );
+        depthStencilStateCi.depthTestEnable = newPso->macroblock->mDepthCheck;
+        depthStencilStateCi.depthWriteEnable = newPso->macroblock->mDepthWrite;
+        depthStencilStateCi.depthCompareOp = VulkanMappings::get( newPso->macroblock->mDepthFunc );
+        depthStencilStateCi.stencilTestEnable = newPso->pass.stencilParams.enabled;
+        if( newPso->pass.stencilParams.enabled )
+        {
+            depthStencilStateCi.front.failOp =
+                VulkanMappings::get( newPso->pass.stencilParams.stencilFront.stencilFailOp );
+            depthStencilStateCi.front.passOp =
+                VulkanMappings::get( newPso->pass.stencilParams.stencilFront.stencilPassOp );
+            depthStencilStateCi.front.depthFailOp =
+                VulkanMappings::get( newPso->pass.stencilParams.stencilFront.stencilDepthFailOp );
+            depthStencilStateCi.front.compareOp =
+                VulkanMappings::get( newPso->pass.stencilParams.stencilFront.compareOp );
+            depthStencilStateCi.front.compareMask = newPso->pass.stencilParams.readMask;
+            depthStencilStateCi.front.writeMask = newPso->pass.stencilParams.writeMask;
+            depthStencilStateCi.front.reference = 0;  // Dynamic state
+
+            depthStencilStateCi.back.failOp =
+                VulkanMappings::get( newPso->pass.stencilParams.stencilBack.stencilFailOp );
+            depthStencilStateCi.back.passOp =
+                VulkanMappings::get( newPso->pass.stencilParams.stencilBack.stencilPassOp );
+            depthStencilStateCi.back.depthFailOp =
+                VulkanMappings::get( newPso->pass.stencilParams.stencilBack.stencilDepthFailOp );
+            depthStencilStateCi.back.compareOp =
+                VulkanMappings::get( newPso->pass.stencilParams.stencilBack.compareOp );
+            depthStencilStateCi.back.compareMask = newPso->pass.stencilParams.readMask;
+            depthStencilStateCi.back.writeMask = newPso->pass.stencilParams.writeMask;
+            depthStencilStateCi.back.reference = 0;  // Dynamic state
+        }
+        depthStencilStateCi.minDepthBounds = 0.0f;
+        depthStencilStateCi.maxDepthBounds = 1.0f;
+
+        VkPipelineColorBlendStateCreateInfo blendStateCi;
+        makeVkStruct( blendStateCi, VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO );
+        blendStateCi.logicOpEnable = false;
+        uint8 mrtCount = 0;
+        for( int i = 0; i < OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
+        {
+            if( newPso->pass.colourFormat[i] != PFG_NULL )
+                mrtCount = static_cast<uint8>( i ) + 1u;
+        }
+        blendStateCi.attachmentCount = mrtCount;
+        VkPipelineColorBlendAttachmentState blendStates[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
+
+        if( newPso->blendblock->mSeparateBlend )
+        {
+            if( newPso->blendblock->mSourceBlendFactor == SBF_ONE &&
+                newPso->blendblock->mDestBlendFactor == SBF_ZERO &&
+                newPso->blendblock->mSourceBlendFactorAlpha == SBF_ONE &&
+                newPso->blendblock->mDestBlendFactorAlpha == SBF_ZERO )
+            {
+                blendStates[0].blendEnable = false;
+            }
+            else
+            {
+                blendStates[0].blendEnable = true;
+                blendStates[0].srcColorBlendFactor =
+                    VulkanMappings::get( newPso->blendblock->mSourceBlendFactor );
+                blendStates[0].dstColorBlendFactor =
+                    VulkanMappings::get( newPso->blendblock->mDestBlendFactor );
+                blendStates[0].colorBlendOp = VulkanMappings::get( newPso->blendblock->mBlendOperation );
+
+                blendStates[0].srcAlphaBlendFactor =
+                    VulkanMappings::get( newPso->blendblock->mSourceBlendFactorAlpha );
+                blendStates[0].dstAlphaBlendFactor =
+                    VulkanMappings::get( newPso->blendblock->mDestBlendFactorAlpha );
+                blendStates[0].alphaBlendOp = blendStates[0].colorBlendOp;
+
+                blendStates[0].colorWriteMask = newPso->blendblock->mBlendChannelMask;
+            }
+        }
+        else
+        {
+            if( newPso->blendblock->mSourceBlendFactor == SBF_ONE &&
+                newPso->blendblock->mDestBlendFactor == SBF_ZERO )
+            {
+                blendStates[0].blendEnable = false;
+            }
+            else
+            {
+                blendStates[0].blendEnable = true;
+                blendStates[0].srcColorBlendFactor =
+                    VulkanMappings::get( newPso->blendblock->mSourceBlendFactor );
+                blendStates[0].dstColorBlendFactor =
+                    VulkanMappings::get( newPso->blendblock->mDestBlendFactor );
+                blendStates[0].colorBlendOp = VulkanMappings::get( newPso->blendblock->mBlendOperation );
+
+                blendStates[0].srcAlphaBlendFactor = blendStates[0].srcColorBlendFactor;
+                blendStates[0].dstAlphaBlendFactor = blendStates[0].dstColorBlendFactor;
+                blendStates[0].alphaBlendOp = blendStates[0].colorBlendOp;
+
+                blendStates[0].colorWriteMask = newPso->blendblock->mBlendChannelMask;
+            }
+        }
+
+        for( int i = 1; i < mrtCount; ++i )
+            blendStates[i] = blendStates[0];
+
+        blendStateCi.pAttachments = blendStates;
+
+        // Having viewport hardcoded into PSO is crazy.
+        // It could skyrocket the number of required PSOs and heavily neutralize caches.
+        const VkDynamicState dynamicStates[] = { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR,
+                                                 VK_DYNAMIC_STATE_STENCIL_REFERENCE };
+
+        VkPipelineDynamicStateCreateInfo dynamicStateCi;
+        makeVkStruct( dynamicStateCi, VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO );
+        dynamicStateCi.dynamicStateCount = sizeof( dynamicStates ) / sizeof( dynamicStates[0] );
+        dynamicStateCi.pDynamicStates = dynamicStates;
+
         VkGraphicsPipelineCreateInfo pipeline;
         makeVkStruct( pipeline, VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO );
 
         pipeline.layout = layout;
         pipeline.stageCount = static_cast<uint32>( numShaderStages );
         pipeline.pStages = shaderStages;
+        pipeline.pVertexInputState = &vertexFormatCi;
+        pipeline.pInputAssemblyState = &inputAssemblyCi;
+        pipeline.pTessellationState = &tessStateCi;
+        pipeline.pViewportState = &viewportStateCi;
+        pipeline.pRasterizationState = &rasterState;
+        pipeline.pMultisampleState = &mssCi;
+        pipeline.pDepthStencilState = &depthStencilStateCi;
+        pipeline.pColorBlendState = &blendStateCi;
+        pipeline.pDynamicState = &dynamicStateCi;
 
-//        newPso->rsData = metalPso;
+        TODO_renderPass;
+        TODO_psoCaches;
+
+        VkPipeline vulkanPso = 0;
+        VkResult result = vkCreateGraphicsPipelines( mActiveDevice->mDevice, VK_NULL_HANDLE, 1u,
+                                                     &pipeline, 0, &vulkanPso );
+        checkVkResult( result, "vkCreateGraphicsPipelines" );
+
+        //        newPso->rsData = metalPso;
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_hlmsPipelineStateObjectDestroyed( HlmsPso *pso )
     {
         assert( pso->rsData );
 
-//        removeDepthStencilState( pso );
+        //        removeDepthStencilState( pso );
 
-//        MetalHlmsPso *metalPso = reinterpret_cast<MetalHlmsPso *>( pso->rsData );
-//        delete metalPso;
+        //        MetalHlmsPso *metalPso = reinterpret_cast<MetalHlmsPso *>( pso->rsData );
+        //        delete metalPso;
         pso->rsData = 0;
     }
 }  // namespace Ogre
