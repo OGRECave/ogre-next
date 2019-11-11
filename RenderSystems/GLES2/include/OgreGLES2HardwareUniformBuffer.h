@@ -34,6 +34,7 @@ THE SOFTWARE.
 #if OGRE_NO_GLES3_SUPPORT == 0
 
 namespace Ogre {
+namespace v1 {
 
     /// Specialisation of HardwareUniformBuffer for OpenGL
     class _OgreGLES2Export GLES2HardwareUniformBuffer : public HardwareUniformBuffer
@@ -69,5 +70,6 @@ namespace Ogre {
             inline GLint getGLBufferBinding(void) const { return mBinding; }
     };
 }
-#endif // __GLES2HARDWAREUNIFORMBUFFER_H__
+}
 #endif
+#endif // __GLES2HARDWAREUNIFORMBUFFER_H__

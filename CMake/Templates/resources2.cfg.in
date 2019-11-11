@@ -17,6 +17,7 @@ FileSystem=@OGRE_MEDIA_TEXTURES_DIR@/textures/Cubemaps
 FileSystem=@OGRE_MEDIA_DIR_REL@/2.0/scripts/materials/Common
 FileSystem=@OGRE_MEDIA_DIR_REL@/2.0/scripts/materials/Common/Any
 FileSystem=@OGRE_MEDIA_DIR_REL@/2.0/scripts/materials/Common/GLSL
+FileSystem=@OGRE_MEDIA_DIR_REL@/2.0/scripts/materials/Common/GLSLES
 FileSystem=@OGRE_MEDIA_DIR_REL@/2.0/scripts/materials/Common/HLSL
 FileSystem=@OGRE_MEDIA_DIR_REL@/2.0/scripts/materials/Common/Metal
 

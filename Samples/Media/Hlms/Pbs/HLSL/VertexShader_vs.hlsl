@@ -22,6 +22,9 @@ struct VS_INPUT
 	float4 blendWeights : BLENDWEIGHT;
 @end
 
+@property( hlms_pose )
+	uint vertexId: SV_VertexID;@end
+
 @foreach( hlms_uv_count, n )
 	float@value( hlms_uv_count@n ) uv@n : TEXCOORD@n;@end
 	uint drawId : DRAWID;

@@ -30,9 +30,7 @@ THE SOFTWARE.
 #include "OgreGLES2PixelFormat.h"
 #include "OgreGLES2RenderSystem.h"
 #include "OgreGLES2HardwarePixelBuffer.h"
-#include "OgreGLES2HlmsSamplerblock.h"
-#include "OgreGLES2Support.h"
-#include "OgreGLES2StateCacheManager.h"
+#include "OgreGLES2TextureBuffer.h"
 #include "OgreRoot.h"
 #include "OgreBitwise.h"
 #include "OgreTextureManager.h"
@@ -70,9 +68,6 @@ namespace Ogre {
                              ManualResourceLoader* loader, GLES2Support& support)
         : Texture(creator, name, handle, group, isManual, loader),
           mTextureID(0),
-#if OGRE_NO_GLES3_SUPPORT != 0
-          mLastBoundSamplerblockRsId(0),
-#endif
           mGLSupport(support)
     {
     }
@@ -113,8 +108,9 @@ namespace Ogre {
 
     void GLES2Texture::_createGLTexResource()
     {
-        if(!Root::getSingleton().getRenderSystem()->getCapabilities()->hasCapability(RSC_NON_POWER_OF_2_TEXTURES) ||
-           (Root::getSingleton().getRenderSystem()->getCapabilities()->getNonPOW2TexturesLimited() && mNumRequestedMipmaps > 0))
+        GLES2RenderSystem* rs = getGLES2RenderSystem();
+        if(!rs->getCapabilities()->hasCapability(RSC_NON_POWER_OF_2_TEXTURES) ||
+           (rs->getCapabilities()->getNonPOW2TexturesLimited() && mNumRequestedMipmaps > 0))
         {
             // Convert to nearest power-of-two size if required
             mWidth = GLES2PixelUtil::optionalPO2(mWidth);
@@ -140,7 +136,7 @@ namespace Ogre {
         OGRE_CHECK_GL_ERROR(glGenTextures(1, &mTextureID));
            
         // Set texture type
-        mGLSupport.getStateCacheManager()->bindGLTexture(texTarget, mTextureID);
+        OGRE_CHECK_GL_ERROR(glBindTexture(texTarget, mTextureID));
         
         // If we can do automip generation and the user desires this, do so
         mMipmapsHardwareGenerated =
@@ -153,22 +149,18 @@ namespace Ogre {
         if((mUsage & TU_AUTOMIPMAP) && mMipmapsHardwareGenerated && mNumRequestedMipmaps)
             mNumMipmaps = maxMips;
 
-        if(getGLES2SupportRef()->checkExtension("GL_APPLE_texture_max_level") || gleswIsSupported(3, 0))
-            mGLSupport.getStateCacheManager()->setTexParameteri(texTarget, GL_TEXTURE_MAX_LEVEL_APPLE, mNumRequestedMipmaps ? mNumMipmaps + 1 : 0);
+        if(rs->hasMinGLVersion(3, 0) || rs->checkExtension("GL_APPLE_texture_max_level"))
+            OGRE_CHECK_GL_ERROR(glTexParameteri(texTarget, GL_TEXTURE_MAX_LEVEL_APPLE, mNumRequestedMipmaps ? mNumMipmaps + 1 : 0));
 
         // Set some misc default parameters, these can of course be changed later
-        mGLSupport.getStateCacheManager()->setTexParameteri(texTarget,
-                                                            GL_TEXTURE_MIN_FILTER, ((mUsage & TU_AUTOMIPMAP) && mNumRequestedMipmaps) ? GL_NEAREST_MIPMAP_NEAREST : GL_NEAREST);
-        mGLSupport.getStateCacheManager()->setTexParameteri(texTarget,
-                                                            GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        mGLSupport.getStateCacheManager()->setTexParameteri(texTarget,
-                                                            GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        mGLSupport.getStateCacheManager()->setTexParameteri(texTarget,
-                                                            GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        OGRE_CHECK_GL_ERROR(glTexParameteri(texTarget, GL_TEXTURE_MIN_FILTER, ((mUsage & TU_AUTOMIPMAP) && mNumRequestedMipmaps) ? GL_NEAREST_MIPMAP_NEAREST : GL_NEAREST));
+        OGRE_CHECK_GL_ERROR(glTexParameteri(texTarget, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
+        OGRE_CHECK_GL_ERROR(glTexParameteri(texTarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+        OGRE_CHECK_GL_ERROR(glTexParameteri(texTarget, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
 
         // Set up texture swizzling
 #if OGRE_NO_GLES3_SUPPORT == 0
-        if(gleswIsSupported(3, 0))
+        if(rs->hasMinGLVersion(3, 0))
         {
             OGRE_CHECK_GL_ERROR(glTexParameteri(texTarget, GL_TEXTURE_SWIZZLE_R, GL_RED));
             OGRE_CHECK_GL_ERROR(glTexParameteri(texTarget, GL_TEXTURE_SWIZZLE_G, GL_GREEN));
@@ -486,7 +478,6 @@ namespace Ogre {
     {
         mSurfaceList.clear();
         OGRE_CHECK_GL_ERROR(glDeleteTextures(1, &mTextureID));
-        mGLSupport.getStateCacheManager()->invalidateStateForTexture( mTextureID );
         mTextureID = 0;
     }
     
@@ -580,6 +571,15 @@ namespace Ogre {
         }
     }
 
+    void GLES2Texture::_autogenerateMipmaps(void)
+    {
+        const GLenum texTarget = getGLES2TextureTarget();
+        OCGE( glBindTexture( texTarget, mTextureID ) );
+        OCGE( glGenerateMipmap( texTarget ) );
+
+        mSurfaceList[0]->getRenderTarget()->_setMipmapsUpdated();
+    }
+
     v1::HardwarePixelBufferSharedPtr GLES2Texture::getBuffer(size_t face, size_t mipmap)
     {
         if (face >= getNumFaces())
@@ -606,40 +606,4 @@ namespace Ogre {
 		if (name == "GLID")
 			*static_cast<GLuint*>(pData) = mTextureID;
 	}
-
-#if OGRE_NO_GLES3_SUPPORT != 0
-    void GLES2Texture::bindSamplerBlock( GLES2HlmsSamplerblock *samplerblock )
-    {
-        mLastBoundSamplerblockRsId = samplerblock->mInternalId;
-
-        GLenum target = getGLES2TextureTarget();
-
-        GLES2StateCacheManager *stateCacheManager = mGLSupport.getStateCacheManager();
-
-        stateCacheManager->setTexParameteri( target, GL_TEXTURE_MIN_FILTER, samplerblock->mMinFilter );
-        stateCacheManager->setTexParameteri( target, GL_TEXTURE_MIN_FILTER, samplerblock->mMinFilter );
-        stateCacheManager->setTexParameteri( target, GL_TEXTURE_MAG_FILTER, samplerblock->mMagFilter );
-
-        stateCacheManager->setTexParameteri( target, GL_TEXTURE_WRAP_S, samplerblock->mU );
-        stateCacheManager->setTexParameteri( target, GL_TEXTURE_WRAP_T, samplerblock->mV );
-
-        if( samplerblock->mAnisotropy != 0 )
-        {
-            stateCacheManager->setTexParameterf( target, GL_TEXTURE_MAX_ANISOTROPY_EXT,
-                                                 samplerblock->mAnisotropy );
-        }
-
-        //stateCacheManager->setTexParameteri( target, GL_TEXTURE_WRAP_R_OES, samplerblock->mW );
-
-        /*stateCacheManager->setTexParameterf( target, GL_TEXTURE_LOD_BIAS, samplerblock->mMipLodBias );
-
-        OCGE( glTexParameterfv( target, GL_TEXTURE_BORDER_COLOR,
-                                              reinterpret_cast<GLfloat*>(
-                                                    &samplerblock->mBorderColour ) ) );
-
-        stateCacheManager->setTexParameterf( target, GL_TEXTURE_MIN_LOD, samplerblock->mMinLod );
-        stateCacheManager->setTexParameterf( target, GL_TEXTURE_MAX_LOD, samplerblock->mMaxLod );*/
-    }
-#endif
-
 }

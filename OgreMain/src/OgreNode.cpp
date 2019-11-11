@@ -313,6 +313,50 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     void Node::updateFromParentImpl(void)
     {
+#if OGRE_NODE_INHERIT_TRANSFORM
+        // determine our transform, without parent part
+        ArrayMatrix4 trSoA;
+        trSoA.makeTransform(*mTransform.mPosition, *mTransform.mScale, *mTransform.mOrientation);
+
+        for( size_t j=0; j<ARRAY_PACKED_REALS; ++j )
+        {
+            const Transform& parentTransform = mTransform.mParents[j]->mTransform;
+            const Matrix4& parentFullTransform = parentTransform.mDerivedTransform[parentTransform.mIndex];
+
+            Matrix4 tr;
+            trSoA.getAsMatrix4(tr, j);
+
+            if(mTransform.mInheritOrientation[j] && mTransform.mInheritScale[j]) // everything is inherited
+            {
+                mTransform.mDerivedTransform[j] = parentFullTransform * tr;
+            }
+            else if(!mTransform.mInheritOrientation[j] && !mTransform.mInheritScale[j]) // only position is inherited
+            {
+                mTransform.mDerivedTransform[j] = tr;
+                mTransform.mDerivedTransform[j].setTrans(tr.getTrans() + parentFullTransform.getTrans());
+            }
+            else // shear is inherited together with orientation, controlled by mInheritOrientation
+            {
+                Ogre::Vector3 parentScale(
+                    parentFullTransform.transformDirectionAffine(Vector3::UNIT_X).length(),
+                    parentFullTransform.transformDirectionAffine(Vector3::UNIT_Y).length(),
+                    parentFullTransform.transformDirectionAffine(Vector3::UNIT_Z).length());
+
+                assert(mTransform.mInheritOrientation[j] ^ mTransform.mInheritScale[j]);
+                mTransform.mDerivedTransform[j] = mTransform.mInheritOrientation[j] ?
+                    Matrix4::getScale(1.0f / parentScale) * parentFullTransform * tr :
+                    Matrix4::getScale(parentScale) * tr;
+            }
+
+            // Decompose full transform to position, orientation and scale, shear is lost here.
+            Vector3 pos, scale;
+            Quaternion qRot;
+            mTransform.mDerivedTransform[j].decomposition(pos, scale, qRot);
+            mTransform.mDerivedPosition->setFromVector3(pos, j);
+            mTransform.mDerivedScale->setFromVector3(scale, j);
+            mTransform.mDerivedOrientation->setFromQuaternion(qRot, j);
+        }
+#else
         //Retrieve from parents. Unfortunately we need to do SoA -> AoS -> SoA conversion
         ArrayVector3 parentPos, parentScale;
         ArrayQuaternion parentRot;
@@ -354,6 +398,7 @@ namespace Ogre {
                                          *mTransform.mDerivedScale,
                                          *mTransform.mDerivedOrientation );
         derivedTransform.storeToAoS( mTransform.mDerivedTransform );
+#endif
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
         for( size_t j=0; j<ARRAY_PACKED_REALS; ++j )
         {
@@ -368,6 +413,50 @@ namespace Ogre {
         ArrayMatrix4 derivedTransform;
         for( size_t i=0; i<numNodes; i += ARRAY_PACKED_REALS )
         {
+#if OGRE_NODE_INHERIT_TRANSFORM
+            // determine our transform, without parent part
+            ArrayMatrix4 trSoA;
+            trSoA.makeTransform(*t.mPosition, *t.mScale, *t.mOrientation);
+
+            for( size_t j=0; j<ARRAY_PACKED_REALS; ++j )
+            {
+                const Transform& parentTransform = t.mParents[j]->mTransform;
+                const Matrix4& parentFullTransform = parentTransform.mDerivedTransform[parentTransform.mIndex];
+
+                Matrix4 tr;
+                trSoA.getAsMatrix4(tr, j);
+
+                if(t.mInheritOrientation[j] && t.mInheritScale[j]) // everything is inherited
+                {
+                    t.mDerivedTransform[j] = parentFullTransform * tr;
+                }
+                else if(!t.mInheritOrientation[j] && !t.mInheritScale[j]) // only position is inherited
+                {
+                    t.mDerivedTransform[j] = tr;
+                    t.mDerivedTransform[j].setTrans(tr.getTrans() + parentFullTransform.getTrans());
+                }
+                else // shear is inherited together with orientation, controlled by mInheritOrientation
+                {
+                    Ogre::Vector3 parentScale(
+                        parentFullTransform.transformDirectionAffine(Vector3::UNIT_X).length(),
+                        parentFullTransform.transformDirectionAffine(Vector3::UNIT_Y).length(),
+                        parentFullTransform.transformDirectionAffine(Vector3::UNIT_Z).length());
+
+                    assert(t.mInheritOrientation[j] ^ t.mInheritScale[j]);
+                    t.mDerivedTransform[j] = t.mInheritOrientation[j] ?
+                        Matrix4::getScale(1.0f / parentScale) * parentFullTransform * tr :
+                        Matrix4::getScale(parentScale) * tr;
+                }
+
+                // Decompose full transform to position, orientation and scale, shear is lost here.
+                Vector3 pos, scale;
+                Quaternion qRot;
+                t.mDerivedTransform[j].decomposition(pos, scale, qRot);
+                t.mDerivedPosition->setFromVector3(pos, j);
+                t.mDerivedScale->setFromVector3(scale, j);
+                t.mDerivedOrientation->setFromQuaternion(qRot, j);
+            }
+#else
             //Retrieve from parents. Unfortunately we need to do SoA -> AoS -> SoA conversion
             ArrayVector3 parentPos, parentScale;
             ArrayQuaternion parentRot;
@@ -406,6 +495,7 @@ namespace Ogre {
                                             *t.mDerivedScale,
                                             *t.mDerivedOrientation );
             derivedTransform.storeToAoS( t.mDerivedTransform );
+#endif
 #if OGRE_DEBUG_MODE >= OGRE_DEBUG_MEDIUM
             for( size_t j=0; j<ARRAY_PACKED_REALS; ++j )
             {
@@ -721,44 +811,53 @@ namespace Ogre {
     Vector3 Node::convertWorldToLocalPosition( const Vector3 &worldPos )
     {
         OGRE_ASSERT_MEDIUM( !mCachedTransformOutOfDate );
-
-        ArrayVector3 arrayWorldPos;
-        arrayWorldPos.setAll( worldPos );
-        arrayWorldPos = mTransform.mDerivedOrientation->Inverse() *
-                            (arrayWorldPos - (*mTransform.mDerivedPosition)) /
-                            (*mTransform.mDerivedScale);
-
-        Vector3 retVal;
-        arrayWorldPos.getAsVector3( retVal, mTransform.mIndex );
-        return retVal;
+#if OGRE_NODE_INHERIT_TRANSFORM
+        return Node::_getFullTransform().inverseAffine().transformAffine(worldPos); // non virt call
+#else 
+        // result is the same as above, but inversion of Quaternion is faster than inversion of Mat3x4
+        return Node::_getDerivedOrientation().Inverse() * (worldPos - Node::_getDerivedPosition()) / Node::_getDerivedScale(); // non virt calls
+#endif
     }
     //-----------------------------------------------------------------------
     Vector3 Node::convertLocalToWorldPosition( const Vector3 &localPos )
     {
         OGRE_ASSERT_MEDIUM( !mCachedTransformOutOfDate );
-
-        ArrayVector3 arrayLocalPos;
-        arrayLocalPos.setAll( localPos );
-        arrayLocalPos = ( (*mTransform.mDerivedOrientation) *
-                            (arrayLocalPos * (*mTransform.mDerivedScale)) ) +
-                            (*mTransform.mDerivedPosition);
-
-        Vector3 retVal;
-        arrayLocalPos.getAsVector3( retVal, mTransform.mIndex );
-        return retVal;
+        return Node::_getFullTransform().transformAffine(localPos); // non virt call
+    }
+    //-----------------------------------------------------------------------
+    Vector3 Node::convertWorldToLocalDirection( const Vector3 &worldDir, bool useScale )
+    {
+        OGRE_ASSERT_MEDIUM( !mCachedTransformOutOfDate );
+#if OGRE_NODE_INHERIT_TRANSFORM
+        return useScale ? 
+            Node::_getFullTransform().inverseAffine().transformDirectionAffine(worldDir) : // non virt calls
+            Node::_getDerivedOrientation().Inverse() * worldDir;
+#else
+        // result is the same as above, but inversion of Quaternion is faster than inversion of Mat3x4
+        return useScale ? 
+            Node::_getDerivedOrientation().Inverse() * worldDir / Node::_getDerivedScale() : // non virt calls
+            Node::_getDerivedOrientation().Inverse() * worldDir;
+#endif
+    }
+    //-----------------------------------------------------------------------
+    Vector3 Node::convertLocalToWorldDirection( const Vector3 &localDir, bool useScale )
+    {
+        OGRE_ASSERT_MEDIUM( !mCachedTransformOutOfDate );
+        return useScale ? 
+            Node::_getFullTransform().transformDirectionAffine(localDir) : // non virt calls
+            Node::_getDerivedOrientation() * localDir;
     }
     //-----------------------------------------------------------------------
     Quaternion Node::convertWorldToLocalOrientation( const Quaternion &worldOrientation )
     {
         OGRE_ASSERT_MEDIUM( !mCachedTransformOutOfDate );
-        return mTransform.mDerivedOrientation->getAsQuaternion( mTransform.mIndex ).Inverse() *
-                worldOrientation;
+        return Node::_getDerivedOrientation().Inverse() * worldOrientation; // non virt call
     }
     //-----------------------------------------------------------------------
     Quaternion Node::convertLocalToWorldOrientation( const Quaternion &localOrientation )
     {
         OGRE_ASSERT_MEDIUM( !mCachedTransformOutOfDate );
-        return mTransform.mDerivedOrientation->getAsQuaternion( mTransform.mIndex ) * localOrientation;
+        return Node::_getDerivedOrientation() * localOrientation; // non virt call
     }
     //-----------------------------------------------------------------------
     void Node::removeAllChildren(void)

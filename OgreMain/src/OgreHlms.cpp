@@ -87,6 +87,8 @@ namespace Ogre
     const IdString HlmsBaseProp::Skeleton           = IdString( "hlms_skeleton" );
     const IdString HlmsBaseProp::BonesPerVertex     = IdString( "hlms_bones_per_vertex" );
     const IdString HlmsBaseProp::Pose               = IdString( "hlms_pose" );
+    const IdString HlmsBaseProp::PoseHalfPrecision  = IdString( "hlms_pose_half" );
+    const IdString HlmsBaseProp::PoseNormals        = IdString( "hlms_pose_normals" );
 
     const IdString HlmsBaseProp::Normal             = IdString( "hlms_normal" );
     const IdString HlmsBaseProp::QTangent           = IdString( "hlms_qtangent" );
@@ -181,6 +183,7 @@ namespace Ogre
     const IdString HlmsBaseProp::Glsles         = IdString( "glsles" );
     const IdString HlmsBaseProp::Metal          = IdString( "metal" );
     const IdString HlmsBaseProp::GL3Plus        = IdString( "GL3+" );
+    const IdString HlmsBaseProp::GLES           = IdString( "GLES" );
     const IdString HlmsBaseProp::iOS            = IdString( "iOS" );
     const IdString HlmsBaseProp::macOS          = IdString( "macOS" );
     const IdString HlmsBaseProp::HighQuality    = IdString( "hlms_high_quality" );
@@ -392,6 +395,10 @@ namespace Ogre
         setProperty( HlmsBaseProp::LightsDirNonCaster, 1 );
         setProperty( HlmsBaseProp::LightsPoint, 2 );
         setProperty( HlmsBaseProp::LightsSpot, 3 );
+        
+        setProperty( HlmsBaseProp::Pose, 0 );
+        setProperty( HlmsBaseProp::PoseHalfPrecision, 0 );
+        setProperty( HlmsBaseProp::PoseNormals, 0 );
     }
     //-----------------------------------------------------------------------------------
     void Hlms::enumeratePieceFiles(void)
@@ -2137,6 +2144,11 @@ namespace Ogre
                     setProperty( HlmsBaseProp::GL3Plus,
                                  mRenderSystem->getNativeShadingLanguageVersion() );
                 }
+                else if( mShaderProfile == "glsles" ) //TODO: String comparision
+                {
+                    setProperty( HlmsBaseProp::GLES,
+                                 mRenderSystem->getNativeShadingLanguageVersion() );
+                }
 
                 setProperty( HlmsBaseProp::Syntax,  mShaderSyntax.mHash );
                 setProperty( HlmsBaseProp::Hlsl,    HlmsBaseProp::Hlsl.mHash );
@@ -2459,6 +2471,10 @@ namespace Ogre
         mSetProperties.clear();
 
         setProperty( HlmsBaseProp::Skeleton, renderable->hasSkeletonAnimation() );
+        
+        setProperty( HlmsBaseProp::Pose, renderable->getNumPoses() );
+        setProperty( HlmsBaseProp::PoseHalfPrecision, renderable->getPoseHalfPrecision() );
+        setProperty( HlmsBaseProp::PoseNormals, renderable->getPoseNormals() );
 
         uint16 numTexCoords = 0;
         if( renderable->getVaos( VpNormal ).empty() )

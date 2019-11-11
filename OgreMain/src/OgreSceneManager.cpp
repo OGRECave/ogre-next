@@ -3209,24 +3209,6 @@ void SceneManager::removeListener(Listener* delListener)
         mListeners.erase(i);
 }
 //---------------------------------------------------------------------
-void SceneManager::firePreRenderQueues()
-{
-    for (RenderQueueListenerList::iterator i = mRenderQueueListeners.begin(); 
-        i != mRenderQueueListeners.end(); ++i)
-    {
-        (*i)->preRenderQueues();
-    }
-}
-//---------------------------------------------------------------------
-void SceneManager::firePostRenderQueues()
-{
-    for (RenderQueueListenerList::iterator i = mRenderQueueListeners.begin(); 
-        i != mRenderQueueListeners.end(); ++i)
-    {
-        (*i)->postRenderQueues();
-    }
-}
-//---------------------------------------------------------------------
 bool SceneManager::fireRenderQueueStarted(uint8 id, const String& invocation)
 {
     RenderQueueListenerList::iterator i, iend;

@@ -28,6 +28,7 @@ THE SOFTWARE.
 
 #include "OgreGLES2RenderTexture.h"
 #include "OgreGLES2HardwarePixelBuffer.h"
+#include "OgreGLES2TextureBuffer.h"
 
 namespace Ogre {
     template<> GLES2RTTManager* Singleton<GLES2RTTManager>::msSingleton = 0;
@@ -93,60 +94,5 @@ namespace Ogre {
 
     GLES2RenderTexture::~GLES2RenderTexture()
     {
-    }
-
-    GLES2CopyingRenderTexture::GLES2CopyingRenderTexture(GLES2CopyingRTTManager *manager,
-                                                       const String &name,
-                                                       const GLES2SurfaceDesc &target,
-                                                       bool writeGamma, uint fsaa)
-        : GLES2RenderTexture(name, target, writeGamma, fsaa)
-    {
-    }
-
-    void GLES2CopyingRenderTexture::getCustomAttribute(const String& name, void* pData)
-    {
-        if (name=="TARGET")
-        {
-            GLES2SurfaceDesc &target = *static_cast<GLES2SurfaceDesc*>(pData);
-            target.buffer = static_cast<v1::GLES2HardwarePixelBuffer*>(mBuffer);
-            target.zoffset = mZOffset;
-        }
-    }
-
-    GLES2CopyingRTTManager::GLES2CopyingRTTManager()
-    {
-    }
-
-    GLES2CopyingRTTManager::~GLES2CopyingRTTManager()
-    {
-    }
-
-    RenderTexture *GLES2CopyingRTTManager::createRenderTexture(const String &name,
-                                                              const GLES2SurfaceDesc &target,
-                                                              bool writeGamma, uint fsaa)
-    {
-        return OGRE_NEW GLES2CopyingRenderTexture(this, name, target, writeGamma, fsaa);
-    }
-
-    bool GLES2CopyingRTTManager::checkFormat(PixelFormat format)
-    {
-        return true;
-    }
-
-    void GLES2CopyingRTTManager::bind(RenderTarget *target)
-    {
-        // Nothing to do here
-    }
-
-    void GLES2CopyingRTTManager::unbind(RenderTarget *target)
-    {
-        // Copy on unbind
-        GLES2SurfaceDesc surface;
-        surface.buffer = 0;
-        target->getCustomAttribute("TARGET", &surface);
-        if (surface.buffer)
-        {
-            static_cast<v1::GLES2TextureBuffer*>(surface.buffer)->copyFromFramebuffer(surface.zoffset);
-        }
     }
 }

@@ -36,10 +36,6 @@ THE SOFTWARE.
 namespace Ogre {
     class GLES2FBOManager;
 
-    namespace v1 {
-    class GLES2RenderBuffer;
-    }
-
     /** RenderTexture for GL ES 2 FBO
     */
     class _OgreGLES2Export GLES2FBORenderTexture: public GLES2RenderTexture MANAGED_RESOURCE
@@ -53,7 +49,7 @@ namespace Ogre {
         virtual void swapBuffers();
 
         /// Override so we can attach the depth buffer to the FBO
-        virtual bool attachDepthBuffer( DepthBuffer *depthBuffer );
+        virtual bool attachDepthBuffer( DepthBuffer *depthBuffer, bool exactFormatMatch );
         virtual void detachDepthBuffer();
         virtual void _detachDepthBuffer();
     protected:
@@ -87,7 +83,8 @@ namespace Ogre {
         
         /** Get best depth and stencil supported for given internalFormat
         */
-        void getBestDepthStencil(GLenum internalFormat, GLenum *depthFormat, GLenum *stencilFormat);
+        virtual void getBestDepthStencil(PixelFormat depthFormat, PixelFormat fboFormat,
+                                         GLenum *outDepthFormat, GLenum *outStencilFormat);
         
         /** Create a texture rendertarget object
         */
@@ -115,7 +112,7 @@ namespace Ogre {
         
         /** Get a FBO without depth/stencil for temporary use, like blitting between textures.
         */
-        GLuint getTemporaryFBO() { return mTempFBO; }
+        GLuint getTemporaryFBO(size_t i);
         
         /** Detects all supported fbo's and recreates the tempory fbo */
         void _reload();
@@ -150,6 +147,7 @@ namespace Ogre {
             RBFormat(GLenum inFormat, size_t inWidth, size_t inHeight, uint fsaa):
                 format(inFormat), width(inWidth), height(inHeight), samples(fsaa)
             {}
+            RBFormat() {}
             GLenum format;
             size_t width;
             size_t height;
@@ -192,11 +190,10 @@ namespace Ogre {
         };
         typedef map<RBFormat, RBRef>::type RenderBufferMap;
         RenderBufferMap mRenderBufferMap;
-        // map(format, sizex, sizey) -> [GLSurface*,refcount]
         
         /** Temporary FBO identifier
          */
-        GLuint mTempFBO;
+        std::vector<GLuint> mTempFBO;
         
         /** Detect allowed FBO formats */
         void detectFBOFormats();

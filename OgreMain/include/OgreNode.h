@@ -699,20 +699,57 @@ namespace Ogre {
             We don't pass by reference on purpose (avoid implicit aliasing)
         */
         static void updateAllTransforms( const size_t numNodes, Transform t );
-        
+
         /** Gets the local position, relative to this node, of the given world-space position */
         virtual_l2 Vector3 convertWorldToLocalPosition( const Vector3 &worldPos );
+        Vector3 convertWorldToLocalPositionUpdated( const Vector3 &worldPos )
+        {
+            _updateFromParent();
+            return convertWorldToLocalPosition( worldPos );
+        }
 
         /** Gets the world position of a point in the node local space
             useful for simple transforms that don't require a child node.*/
         virtual_l2 Vector3 convertLocalToWorldPosition( const Vector3 &localPos );
+        Vector3 convertLocalToWorldPositionUpdated( const Vector3 &localPos )
+        {
+            _updateFromParent();
+            return convertLocalToWorldPosition( localPos );
+        }
+
+        /** Gets the local direction, relative to this node, of the given world-space direction */
+        virtual_l2 Vector3 convertWorldToLocalDirection( const Vector3 &worldDir, bool useScale );
+        Vector3 convertWorldToLocalDirectionUpdated( const Vector3 &worldDir, bool useScale )
+        {
+            _updateFromParent();
+            return convertWorldToLocalDirection( worldDir, useScale );
+        }
+
+        /** Gets the world direction of a point in the node local space
+            useful for simple transforms that don't require a child node.*/
+        virtual_l2 Vector3 convertLocalToWorldDirection( const Vector3 &localDir, bool useScale );
+        Vector3 convertLocalToWorldDirectionUpdated( const Vector3 &localDir, bool useScale )
+        {
+            _updateFromParent();
+            return convertLocalToWorldDirection( localDir, useScale );
+        }
 
         /** Gets the local orientation, relative to this node, of the given world-space orientation */
         virtual_l2 Quaternion convertWorldToLocalOrientation( const Quaternion &worldOrientation );
+        Quaternion convertWorldToLocalOrientationUpdated( const Quaternion &worldOrientation )
+        {
+            _updateFromParent();
+            return convertWorldToLocalOrientation( worldOrientation );
+        }
 
         /** Gets the world orientation of an orientation in the node local space
             useful for simple transforms that don't require a child node.*/
         virtual_l2 Quaternion convertLocalToWorldOrientation( const Quaternion &localOrientation );
+        Quaternion convertLocalToWorldOrientationUpdated( const Quaternion &localOrientation )
+        {
+            _updateFromParent();
+            return convertLocalToWorldOrientation( localOrientation );
+        }
 
         /** Helper function, get the squared view depth.  */
         virtual Real getSquaredViewDepth(const Camera* cam) const;

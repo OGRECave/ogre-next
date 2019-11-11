@@ -12,7 +12,7 @@
 			@else
 				outVs.depth	= (outVs_Position.z + shadowConstantBias * passBuf.depthRange.y) * passBuf.depthRange.y;
 			@end
-			@property( hlms_no_reverse_depth && syntax == glsl )outVs.depth = (outVs.depth * 0.5) + 0.5;@end
+			@property( hlms_no_reverse_depth && (syntax == glsl || syntax == glsles) )outVs.depth = (outVs.depth * 0.5) + 0.5;@end
 		@end
 
 		@property( hlms_shadowcaster_point )

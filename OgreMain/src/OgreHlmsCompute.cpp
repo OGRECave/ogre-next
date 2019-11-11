@@ -197,6 +197,8 @@ namespace Ogre
             setProperty( HlmsBaseProp::GL3Plus,
                          mRenderSystem->getNativeShadingLanguageVersion() );
         }
+        if( mShaderProfile == "glsles" ) //TODO: String comparision
+            setProperty( HlmsBaseProp::GLES, 300 );
 
         setProperty( HlmsBaseProp::Syntax,  mShaderSyntax.mHash );
         setProperty( HlmsBaseProp::Hlsl,    HlmsBaseProp::Hlsl.mHash );
@@ -298,7 +300,7 @@ namespace Ogre
 
                 gp->setSkeletalAnimationIncluded( getProperty( HlmsBaseProp::Skeleton ) != 0 );
                 gp->setMorphAnimationIncluded( false );
-                gp->setPoseAnimationIncluded( getProperty( HlmsBaseProp::Pose ) );
+                gp->setPoseAnimationIncluded( getProperty( HlmsBaseProp::Pose ) != 0);
                 gp->setVertexTextureFetchRequired( false );
 
                 gp->load();

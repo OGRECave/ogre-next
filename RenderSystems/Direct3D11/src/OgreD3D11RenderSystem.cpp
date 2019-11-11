@@ -971,14 +971,9 @@ namespace Ogre
             mPrimaryWindow = win;
             //win->getCustomAttribute("D3DDEVICE", &mDevice);
 
-            if( miscParams )
-            {
-                NameValuePairList::const_iterator itOption = miscParams->find( "reverse_depth" );
-                if( itOption != miscParams->end() )
-                    mReverseDepth = StringConverter::parseBool( itOption->second, true );
-            }
-
-            // Also create hardware buffer manager
+			// Create the texture manager for use by others
+			mTextureManager = new D3D11TextureManager(mDevice);
+			// Also create hardware buffer manager
             mHardwareBufferManager = new v1::D3D11HardwareBufferManager(mDevice);
 
             // Create the GPU program manager
@@ -1849,7 +1844,7 @@ namespace Ogre
             srvList[hazardousTexIdx] = hazardousSrv;
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::_setTextures( uint32 slotStart, const DescriptorSetTexture2 *set )
+    void D3D11RenderSystem::_setRenderTarget( RenderTarget *target, uint8 viewportRenderTargetFlags )
     {
         ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
         ID3D11ShaderResourceView **srvList =

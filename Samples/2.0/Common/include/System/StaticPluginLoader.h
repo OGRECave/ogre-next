@@ -40,6 +40,9 @@ namespace Ogre
     #ifdef OGRE_BUILD_RENDERSYSTEM_GL3PLUS
         class GL3PlusPlugin;
     #endif
+    #ifdef OGRE_BUILD_RENDERSYSTEM_GLES2
+        class GLES2Plugin;
+    #endif
 #endif
     class Root;
 }
@@ -53,6 +56,9 @@ namespace Demo
         unsigned int    mDummy;
     #ifdef OGRE_BUILD_RENDERSYSTEM_GL3PLUS
         Ogre::GL3PlusPlugin         *mGL3PlusPlugin;
+    #endif
+    #ifdef OGRE_BUILD_RENDERSYSTEM_GLES2
+        Ogre::GLES2Plugin           *mGLES2Plugin;
     #endif
     #ifdef OGRE_BUILD_RENDERSYSTEM_D3D11
         Ogre::D3D11Plugin           *mD3D11PlusPlugin;

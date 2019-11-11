@@ -4,7 +4,7 @@
 
 @property( hlms_lights_area_tex_mask )
 	@piece( DeclAreaApproxTextures )
-		@property( syntax == glsl )
+		@property( syntax == glsl || syntax == glsles )
 			uniform sampler2DArray areaLightMasks;
 		@end
 		@property( syntax == hlsl )

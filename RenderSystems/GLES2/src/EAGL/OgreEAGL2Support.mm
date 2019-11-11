@@ -55,6 +55,7 @@ namespace Ogre {
         ConfigOption optVideoMode;
         ConfigOption optDisplayFrequency;
         ConfigOption optContentScalingFactor;
+        ConfigOption optSRGB;
         ConfigOption optFSAA;
         ConfigOption optRTTMode;
 
@@ -89,6 +90,13 @@ namespace Ogre {
         optContentScalingFactor.currentValue = StringConverter::toString([UIScreen mainScreen].scale);
         optContentScalingFactor.immutable = false;
         
+        // SRGB on auto window
+        optSRGB.name = "sRGB Gamma Conversion";
+        optSRGB.possibleValues.push_back("Yes");
+        optSRGB.possibleValues.push_back("No");
+        optSRGB.currentValue = "No";
+        optSRGB.immutable = false;
+        
         optFSAA.name = "FSAA";
         optFSAA.possibleValues.push_back( "0" );
         optFSAA.possibleValues.push_back( "2" );
@@ -107,6 +115,7 @@ namespace Ogre {
         mOptions[optVideoMode.name] = optVideoMode;
         mOptions[optDisplayFrequency.name] = optDisplayFrequency;
         mOptions[optContentScalingFactor.name] = optContentScalingFactor;
+        mOptions[optSRGB.name] = optSRGB;
         mOptions[optFSAA.name] = optFSAA;
         mOptions[optRTTMode.name] = optRTTMode;
         
@@ -267,6 +276,10 @@ namespace Ogre {
                     h = StringConverter::parseUnsignedInt(val.substr(pos + 1));
                 }
             }
+
+            opt = mOptions.find( "sRGB Gamma Conversion" );
+            if( opt != mOptions.end() )
+                miscParams["gamma"] = opt->second.currentValue;
 
             if ((opt = mOptions.find("FSAA")) != end)
             {

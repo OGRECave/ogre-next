@@ -251,7 +251,8 @@ namespace v1 {
     GLES2DefaultHardwareBufferManagerBase::createUniformBuffer(size_t sizeBytes, HardwareBuffer::Usage usage,
                                                                  bool useShadowBuffer, const String& name)
     {
-        if(!gleswIsSupported(3, 0))
+        GLES2RenderSystem* rs = getGLES2RenderSystem();
+        if(!rs->hasMinGLVersion(3, 0))
         {
             OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
                         "GLES2 does not support uniform buffer objects",
@@ -263,12 +264,10 @@ namespace v1 {
     
     RenderToVertexBufferSharedPtr GLES2DefaultHardwareBufferManagerBase::createRenderToVertexBuffer( void )
     {
-        if(!gleswIsSupported(3, 0))
-        {
-            OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
-                    "Cannot create RenderToVertexBuffer in GLES2DefaultHardwareBufferManagerBase", 
-                    "GLES2DefaultHardwareBufferManagerBase::createRenderToVertexBuffer");
-        }
+        OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
+                "Cannot create RenderToVertexBuffer in GLES2DefaultHardwareBufferManagerBase", 
+                "GLES2DefaultHardwareBufferManagerBase::createRenderToVertexBuffer");
+
 //        return HardwareUniformBufferSharedPtr(new GLES2DefaultHardwareRenderToVertexBuffer(this, sizeBytes, usage, useShadowBuffer, name));
     }
 }

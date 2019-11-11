@@ -547,9 +547,7 @@ namespace Ogre {
 
         //TODO: (dark_sylinc) Refactor this. ControllerManager gets executed before us
         //(because it doesn't know if we'll update a SceneNode)
-        const Quaternion derivedOrientation( mParentNode->_getDerivedOrientationUpdated() );
-        const Vector3 derivedPosition( mParentNode->_getDerivedPosition() );
-        const Vector3 derivedScale( mParentNode->_getDerivedScale() );
+        const Matrix4 fullTransform = mParentNode->_getFullTransformUpdated();
 
         for (unsigned int j = 0; j < requested; ++j)
         {
@@ -571,9 +569,8 @@ namespace Ogre {
             // Translate position & direction into world space
             if (!mLocalSpace)
             {
-                p->mPosition  = 
-                    (derivedOrientation * (derivedScale * p->mPosition)) + derivedPosition;
-                p->mDirection = (derivedOrientation * p->mDirection);
+                p->mPosition = fullTransform.transformAffine(p->mPosition);
+                p->mDirection = fullTransform.transformDirectionAffine(p->mDirection);
             }
 
             // apply partial frame motion to this particle
@@ -1166,7 +1163,7 @@ namespace Ogre {
                 if (mLocalSpace)
                 {
                     // transform the camera direction into local space
-                    camDir = mParentNode->_getDerivedOrientation().UnitInverse() * camDir;
+                    camDir = mParentNode->convertWorldToLocalDirection(camDir, false);
                 }
                 mRadixSorter.sort(mActiveParticles, SortByDirectionFunctor(- camDir));
             }
@@ -1176,8 +1173,7 @@ namespace Ogre {
                 if (mLocalSpace)
                 {
                     // transform the camera position into local space
-                    camPos = mParentNode->_getDerivedOrientation().UnitInverse() *
-                        (camPos - mParentNode->_getDerivedPosition()) / mParentNode->_getDerivedScale();
+                    camPos = mParentNode->convertWorldToLocalPosition(camPos);
                 }
                 mRadixSorter.sort(mActiveParticles, SortByDistanceFunctor(camPos));
             }

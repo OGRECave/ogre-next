@@ -499,7 +499,7 @@ namespace Ogre {
         return retVal;
     }
     //---------------------------------------------------------------------
-    void Mesh::importV1( v1::Mesh *mesh, bool halfPos, bool halfTexCoords, bool qTangents )
+    void Mesh::importV1( v1::Mesh *mesh, bool halfPos, bool halfTexCoords, bool qTangents, bool halfPose )
     {
         OgreProfileExhaustive( "Mesh2::importV1" );
 
@@ -543,7 +543,7 @@ namespace Ogre {
         for( size_t i=0; i<mesh->getNumSubMeshes(); ++i )
         {
             SubMesh *subMesh = createSubMesh();
-            subMesh->importFromV1( mesh->getSubMesh( i ), halfPos, halfTexCoords, qTangents );
+            subMesh->importFromV1( mesh->getSubMesh( i ), halfPos, halfTexCoords, qTangents, halfPose );
         }
 
         mSubMeshNameMap = mesh->getSubMeshNameMap();

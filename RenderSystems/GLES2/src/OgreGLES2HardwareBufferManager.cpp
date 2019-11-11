@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "OgreGLES2HardwareVertexBuffer.h"
 #include "OgreGLES2HardwareIndexBuffer.h"
 #include "OgreGLES2HardwareUniformBuffer.h"
-#include "OgreGLES2VertexDeclaration.h"
+#include "OgreGLES2VertexArrayObject.h"
 #include "OgreGLES2RenderToVertexBuffer.h"
 #include "OgreGLES2RenderSystem.h"
 #include "OgreGLES2Support.h"
@@ -42,7 +42,6 @@ namespace v1 {
     //-----------------------------------------------------------------------
     GLES2HardwareBufferManagerBase::GLES2HardwareBufferManagerBase()
     {
-        mStateCacheManager = dynamic_cast<GLES2RenderSystem*>(Root::getSingleton().getRenderSystem())->getGLES2Support()->getStateCacheManager();
     }
 
     GLES2HardwareBufferManagerBase::~GLES2HardwareBufferManagerBase()
@@ -59,7 +58,8 @@ namespace v1 {
     {
         GLES2HardwareVertexBuffer* buf = 0;
 
-        if(getGLES2SupportRef()->checkExtension("GL_EXT_map_buffer_range") || gleswIsSupported(3, 0))
+        GLES2RenderSystem* rs = getGLES2RenderSystem();
+        if(rs->hasMinGLVersion(3, 0) || rs->checkExtension("GL_EXT_map_buffer_range"))
             buf = OGRE_NEW GLES2HardwareVertexBuffer(this, vertexSize, numVerts, usage, useShadowBuffer);
         else
             // always use shadowBuffer
@@ -78,7 +78,8 @@ namespace v1 {
                                                                               bool useShadowBuffer)
     {
         GLES2HardwareIndexBuffer* buf = 0;
-        if(getGLES2SupportRef()->checkExtension("GL_EXT_map_buffer_range") || gleswIsSupported(3, 0))
+        GLES2RenderSystem* rs = getGLES2RenderSystem();
+        if(rs->hasMinGLVersion(3, 0) || rs->checkExtension("GL_EXT_map_buffer_range"))
             buf = OGRE_NEW GLES2HardwareIndexBuffer(this, itype, numIndexes, usage, useShadowBuffer);
         else
             // always use shadowBuffer
@@ -99,17 +100,6 @@ namespace v1 {
         // not supported
         return RenderToVertexBufferSharedPtr();
 #endif
-    }
-
-    VertexDeclaration* GLES2HardwareBufferManagerBase::createVertexDeclarationImpl(void)
-    {
-        return OGRE_NEW GLES2VertexDeclaration();
-    }
-
-    void GLES2HardwareBufferManagerBase::destroyVertexDeclarationImpl(VertexDeclaration* decl)
-    {
-        if(decl)
-            OGRE_DELETE decl;
     }
 
     GLenum GLES2HardwareBufferManagerBase::getGLUsage(unsigned int usage)
@@ -138,6 +128,18 @@ namespace v1 {
             case VET_FLOAT3:
             case VET_FLOAT4:
                 return GL_FLOAT;
+#if OGRE_NO_GLES3_SUPPORT == 0
+            case VET_INT1:
+            case VET_INT2:
+            case VET_INT3:
+            case VET_INT4:
+                return GL_INT;
+            case VET_UINT1:
+            case VET_UINT2:
+            case VET_UINT3:
+            case VET_UINT4:
+                return GL_UNSIGNED_INT;
+#endif
             case VET_SHORT2:
             case VET_SHORT4:
             case VET_SHORT2_SNORM:
@@ -155,16 +157,9 @@ namespace v1 {
             case VET_UBYTE4_NORM:
                 return GL_UNSIGNED_BYTE;
 #if OGRE_NO_GLES3_SUPPORT == 0
-            case VET_INT1:
-            case VET_INT2:
-            case VET_INT3:
-            case VET_INT4:
-                return GL_INT;
-            case VET_UINT1:
-            case VET_UINT2:
-            case VET_UINT3:
-            case VET_UINT4:
-                return GL_UNSIGNED_INT;
+            case VET_HALF2:
+            case VET_HALF4:
+                return GL_HALF_FLOAT;
 #endif
             default:
                 return 0;

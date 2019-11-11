@@ -60,6 +60,7 @@ namespace Ogre
         friend class RenderSystem;
         friend class D3D11RenderSystem;
         friend class GL3PlusRenderSystem;
+        friend class GLES2RenderSystem;
         friend class MetalRenderSystem;
 
     protected:
@@ -105,6 +106,8 @@ namespace Ogre
         const VertexBufferPackedVec& getVertexBuffers(void) const       { return mVertexBuffers; }
         IndexBufferPacked* getIndexBuffer(void) const                   { return mIndexBuffer; }
         VertexBufferPacked* getBaseVertexBuffer(void) const             { return mBaseVertexBuffer; }
+
+        VertexBufferPacked* getBaseVertexBuffer(void) const { return mBaseVertexBuffer; }
 
         OperationType getOperationType(void) const { return mOperationType; }
 

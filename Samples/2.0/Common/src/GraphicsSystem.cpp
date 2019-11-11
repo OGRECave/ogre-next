@@ -154,6 +154,7 @@ namespace Demo
         }
 
     #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+        if(!mRoot->getRenderSystem())
         {
             Ogre::RenderSystem *renderSystem =
                     mRoot->getRenderSystemByName( "Metal Rendering Subsystem" );
