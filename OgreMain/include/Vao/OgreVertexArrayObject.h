@@ -107,8 +107,6 @@ namespace Ogre
         IndexBufferPacked* getIndexBuffer(void) const                   { return mIndexBuffer; }
         VertexBufferPacked* getBaseVertexBuffer(void) const             { return mBaseVertexBuffer; }
 
-        VertexBufferPacked* getBaseVertexBuffer(void) const { return mBaseVertexBuffer; }
-
         OperationType getOperationType(void) const { return mOperationType; }
 
         uint32 getPrimitiveStart(void) const                            { return mPrimStart; }

@@ -672,7 +672,7 @@ namespace Ogre {
             
             v1::Mesh::PoseIterator poseIt = subMesh->parent->getPoseIterator();
             
-            int index = 0;
+            size_t index = 0u;
             
             while( poseIt.hasMoreElements() )
             {
@@ -728,7 +728,7 @@ namespace Ogre {
                 mPoseIndexMap[pose->getName()] = index++;
             }
             
-            PixelFormat pixelFormat = halfPrecision ? PF_FLOAT16_RGBA : PF_FLOAT32_RGBA;
+            PixelFormatGpu pixelFormat = halfPrecision ? PFG_RGBA16_FLOAT : PFG_RGBA32_FLOAT;
             mPoseTexBuffer = mParent->mVaoManager->createTexBuffer( pixelFormat, bufferSize,
                                                                     BT_IMMUTABLE, buffer, false );
         }
@@ -801,7 +801,7 @@ namespace Ogre {
             }
         }
         
-        PixelFormat pixelFormat = halfPrecision ? PF_FLOAT16_RGBA : PF_FLOAT32_RGBA;
+        PixelFormatGpu pixelFormat = halfPrecision ? PFG_RGBA16_FLOAT : PFG_RGBA32_FLOAT;
         mPoseTexBuffer = mParent->mVaoManager->createTexBuffer( pixelFormat, bufferSize,
                                                                 BT_IMMUTABLE, buffer, false );
     }
