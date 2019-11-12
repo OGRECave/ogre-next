@@ -98,7 +98,7 @@
 @property( hlms_pose )
 @piece( PoseTransform )
 	// Pose data starts after all 3x4 bone matrices
-	uint poseDataStart = (worldMaterialIdx[drawId].x >> 9u) @property( hlms_skeleton ) + @value(hlms_bones_per_vertex)u * 3u@end ;
+	uint poseDataStart = (worldMaterialIdx[inVs_drawId].x >> 9u) @property( hlms_skeleton ) + @value(hlms_bones_per_vertex)u * 3u@end ;
 	float4 inputPos = inVs_vertex;
 	@property( hlms_pose_normals && (hlms_normal || hlms_qtangent) )float3 inputNormal = normal;@end
 
