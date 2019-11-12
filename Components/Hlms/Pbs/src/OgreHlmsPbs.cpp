@@ -916,6 +916,9 @@ namespace Ogre
         if( !getProperty( PbsProperty::HasPlanarReflections ) )
             setProperty( PbsProperty::UsePlanarReflections, 0 );
 
+        if( getProperty( HlmsBaseProp::Pose ) > 0 )
+            setProperty( HlmsBaseProp::VertexId, 1 );
+
         const int32 envProbeMapVal = getProperty( PbsProperty::EnvProbeMap );
         const bool canUseManualProbe = envProbeMapVal &&
                                        envProbeMapVal != getProperty( PbsProperty::TargetEnvprobeMap );

@@ -2477,9 +2477,6 @@ namespace Ogre
         setProperty( HlmsBaseProp::PoseHalfPrecision, renderable->getPoseHalfPrecision() );
         setProperty( HlmsBaseProp::PoseNormals, renderable->getPoseNormals() );
 
-        if( renderable->getNumPoses() > 0 )
-            setProperty( HlmsBaseProp::VertexId, 1 );
-
         uint16 numTexCoords = 0;
         if( renderable->getVaos( VpNormal ).empty() )
             numTexCoords = calculateHashForV1( renderable );
