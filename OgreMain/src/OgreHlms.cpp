@@ -169,6 +169,7 @@ namespace Ogre
     const IdString HlmsBaseProp::Forward3D          = IdString( "forward3d" );
     const IdString HlmsBaseProp::ForwardClustered   = IdString( "forward_clustered" );
     const IdString HlmsBaseProp::VPos               = IdString( "hlms_vpos" );
+    const IdString HlmsBaseProp::VertexId           = IdString( "hlms_vertex_id" );
 
     //Change per material (hash can be cached on the renderable)
     const IdString HlmsBaseProp::AlphaTest                 = IdString( "alpha_test" );
@@ -2475,6 +2476,9 @@ namespace Ogre
         setProperty( HlmsBaseProp::Pose, renderable->getNumPoses() );
         setProperty( HlmsBaseProp::PoseHalfPrecision, renderable->getPoseHalfPrecision() );
         setProperty( HlmsBaseProp::PoseNormals, renderable->getPoseNormals() );
+
+        if( renderable->getNumPoses() > 0 )
+            setProperty( HlmsBaseProp::VertexId, 1 );
 
         uint16 numTexCoords = 0;
         if( renderable->getVaos( VpNormal ).empty() )

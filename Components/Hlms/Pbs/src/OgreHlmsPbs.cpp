@@ -444,9 +444,7 @@ namespace Ogre
             vsParams->setNamedConstant( "worldMatBuf", 0 );
 
         if( queuedRenderable.renderable->getNumPoses() > 0 )
-        {
             vsParams->setNamedConstant( "poseBuf", 4 );
-        }
         
         mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache,
                                             mSetProperties, queuedRenderable );
