@@ -410,13 +410,6 @@ namespace Ogre
         optMaxFeatureLevels.possibleValues.push_back("9.2");
         optMaxFeatureLevels.possibleValues.push_back("9.3");
         optMaxFeatureLevels.currentValue = "9.3";
-#elif __OGRE_WINRT_PHONE || __OGRE_WINRT_STORE
-        optMaxFeatureLevels.possibleValues.push_back("9.3");
-        optMaxFeatureLevels.possibleValues.push_back("10.0");
-        optMaxFeatureLevels.possibleValues.push_back("10.1");
-        optMaxFeatureLevels.possibleValues.push_back("11.0");
-        optMaxFeatureLevels.possibleValues.push_back("11.1");
-        optMaxFeatureLevels.currentValue = "11.1";
 #else
         optMaxFeatureLevels.possibleValues.push_back("9.3");
         optMaxFeatureLevels.possibleValues.push_back("10.0");
@@ -1718,15 +1711,17 @@ namespace Ogre
         }
     }
     //---------------------------------------------------------------------
-#if OGRE_PLATFORM != OGRE_PLATFORM_WINRT
     bool D3D11RenderSystem::isWindows8OrGreater()
     {
+#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT
+        return true;
+#else
         DWORD version = GetVersion();
         DWORD major = (DWORD)(LOBYTE(LOWORD(version)));
         DWORD minor = (DWORD)(HIBYTE(LOWORD(version)));
         return (major > 6) || ((major == 6) && (minor >= 2));
-    }
 #endif
+    }
     //---------------------------------------------------------------------
     VertexElementType D3D11RenderSystem::getColourVertexElementType(void) const
     {
