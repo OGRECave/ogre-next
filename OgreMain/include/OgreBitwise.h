@@ -37,6 +37,14 @@ THE SOFTWARE.
     #define __has_builtin(x) 0
 #endif
 
+/** Undefine in <sys/endian.h> defined bswap macros for FreeBSD
+ */
+#if OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD
+    #undef bswap16
+    #undef bswap32
+    #undef bswap64
+#endif
+
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC
     #include <intrin.h>
     #if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
@@ -500,5 +508,13 @@ namespace Ogre {
     /** @} */
 
 }
+
+/** Redefine in <sys/endian.h> defined bswap macros for FreeBSD
+ */
+#if OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD
+    #define bswap16(x) __bswap16(x)
+    #define bswap32(x) __bswap32(x)
+    #define bswap64(x) __bswap64(x)
+#endif
 
 #endif
