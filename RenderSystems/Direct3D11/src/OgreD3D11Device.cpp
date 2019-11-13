@@ -79,18 +79,20 @@ namespace Ogre
         mDriverVersion.QuadPart = 0;
     }
     //---------------------------------------------------------------------
-    void D3D11Device::TransferOwnership( ID3D11DeviceN* d3d11device, ID3D11Device1 *device1 )
+    void D3D11Device::TransferOwnership( ComPtr<ID3D11Device>& d3d11device )
     {
-        assert( mD3D11Device.Get() != d3d11device );
-        assert( mD3D11Device1.Get() != device1 );
+        assert( mD3D11Device.Get() != d3d11device.Get() );
+        assert( mD3D11Device1.Get() != d3d11device.Get() );
         ReleaseAll();
 
         if (d3d11device)
         {
             HRESULT hr = S_OK;
 
-            mD3D11Device.Attach( d3d11device );
-            mD3D11Device1.Attach( device1 );
+            d3d11device.As(&mD3D11Device);
+#if defined(_WIN32_WINNT_WIN8)
+            d3d11device.As(&mD3D11Device1);
+#endif
 
             // get DXGI factory from device
             ComPtr<IDXGIDeviceN> pDXGIDevice;
@@ -116,7 +118,11 @@ namespace Ogre
             }
 
 
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
             mD3D11Device->GetImmediateContext( mImmediateContext.ReleaseAndGetAddressOf() );
+#elif OGRE_PLATFORM == OGRE_PLATFORM_WINRT
+            mD3D11Device->GetImmediateContext1( mImmediateContext.ReleaseAndGetAddressOf() );
+#endif
             if( mD3D11Device1 )
                 mD3D11Device1->GetImmediateContext1( mImmediateContext1.ReleaseAndGetAddressOf() );
 

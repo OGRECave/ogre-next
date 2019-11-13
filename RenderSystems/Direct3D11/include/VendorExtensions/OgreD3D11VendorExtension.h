@@ -65,7 +65,7 @@ namespace Ogre
                            IDXGIAdapter *adapter, D3D_DRIVER_TYPE driverType,
                            UINT deviceFlags, D3D_FEATURE_LEVEL *pFirstFL,
                            UINT numFeatureLevels, D3D_FEATURE_LEVEL *outFeatureLevel,
-                           ID3D11Device **outDevice, ID3D11Device1 **outDevice1 );
+                           ID3D11Device **outDevice );
 
         virtual void destroyDevice( ID3D11Device *device );
     };

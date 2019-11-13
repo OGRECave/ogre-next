@@ -226,7 +226,7 @@ namespace Ogre
                                                D3D_DRIVER_TYPE driverType,
                                                D3D_FEATURE_LEVEL minFL, D3D_FEATURE_LEVEL maxFL,
                                                D3D_FEATURE_LEVEL* pFeatureLevel,
-                                               ID3D11DeviceN **outDevice, ID3D11Device1 **outDevice1 )
+                                               ID3D11Device **outDevice )
     {
         IDXGIAdapterN* pAdapter = (d3dDriver && driverType == D3D_DRIVER_TYPE_HARDWARE) ?
                                       d3dDriver->getDeviceAdapter() : NULL;
@@ -291,7 +291,7 @@ namespace Ogre
 
         vendorExtension->createDevice( appName, pAdapter, driverType, deviceFlags, pFirstFL,
                                        static_cast<UINT>( pLastFL - pFirstFL + 1u ),
-                                       pFeatureLevel, outDevice, outDevice1 );
+                                       pFeatureLevel, outDevice );
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::initConfigOptions()
@@ -635,11 +635,10 @@ namespace Ogre
         if (driver)
         {
             it = mOptions.find("Video Mode");
-            ComPtr<ID3D11DeviceN> device;
-            ComPtr<ID3D11Device1> device1;
+            ComPtr<ID3D11Device> device;
             createD3D11Device( mVendorExtension, "", driver, mDriverType,
                                mMinRequestedFeatureLevel, mMaxRequestedFeatureLevel,
-                               NULL, device.GetAddressOf(), device1.GetAddressOf() );
+                               NULL, device.GetAddressOf() );
             // 'videoMode' could be NULL if working over RDP/Simulator
             D3D11VideoMode* videoMode = driver->getVideoModeList()->item(it->second.currentValue);
             DXGI_FORMAT format = videoMode ? videoMode->getFormat() : DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -1628,12 +1627,11 @@ namespace Ogre
             LogManager::getSingleton().logMessage("D3D11: Actually \"NVIDIA PerfHUD\" is used");
         }
 
-        ID3D11DeviceN *device = 0;
-        ID3D11Device1 *device1 = 0;
+        ComPtr<ID3D11Device> device;
         createD3D11Device( mVendorExtension, windowTitle, d3dDriver, mDriverType,
                            mMinRequestedFeatureLevel, mMaxRequestedFeatureLevel, &mFeatureLevel,
-                           &device, &device1 );
-        mDevice.TransferOwnership( device, device1 );
+                           device.GetAddressOf() );
+        mDevice.TransferOwnership( device );
 
         LARGE_INTEGER driverVersion = mDevice.GetDriverVersion();
         mDriverVersion.major = HIWORD(driverVersion.HighPart);
@@ -3801,12 +3799,11 @@ namespace Ogre
 
         mVendorExtension = D3D11VendorExtension::initializeExtension( GPU_VENDOR_COUNT, 0 );
 
-        ID3D11DeviceN *device = 0;
-        ID3D11Device1 *device1 = 0;
+        ComPtr<ID3D11Device> device;
         createD3D11Device( mVendorExtension, "", NULL, D3D_DRIVER_TYPE_HARDWARE,
                            mMinRequestedFeatureLevel, mMaxRequestedFeatureLevel, 0,
-                           &device, &device1 );
-        mDevice.TransferOwnership( device, device1 );
+                           device.GetAddressOf() );
+        mDevice.TransferOwnership( device );
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::getCustomAttribute(const String& name, void* pData)
