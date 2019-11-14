@@ -23,7 +23,7 @@ namespace Demo
         mMyCustomRenderable = OGRE_NEW Ogre::MyCustomRenderable(
                     Ogre::Id::generateNewId<Ogre::MovableObject>(),
                     &sceneManager->_getEntityMemoryManager( Ogre::SCENE_DYNAMIC ),
-                    sceneManager, 0 );
+                    sceneManager, 10u );
 
         Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
                 createChildSceneNode( Ogre::SCENE_DYNAMIC );

@@ -69,7 +69,7 @@ namespace v1 {
                                     SceneManager *manager, size_t maxElements,
                                     size_t numberOfChains, bool useTextureCoords,
                                     bool useColours, bool dynamic )
-        :MovableObject( id, objectMemoryManager, manager, 1 ),
+        :MovableObject( id, objectMemoryManager, manager, 110u ),
         mMaxElementsPerChain(maxElements),
         mChainCount(numberOfChains),
         mUseTexCoords(useTextureCoords),

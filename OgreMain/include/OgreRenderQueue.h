@@ -136,7 +136,7 @@ namespace Ogre {
             bool                    mSorted;
             Modes                   mMode;
 
-            RenderQueueGroup() : mSortMode( NormalSort ), mSorted( false ), mMode( V1_FAST ) {}
+            RenderQueueGroup() : mSortMode( NormalSort ), mSorted( false ), mMode( FAST ) {}
         };
 
         typedef vector<IndirectBufferPacked*>::type IndirectBufferPackedVec;
