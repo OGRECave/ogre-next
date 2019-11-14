@@ -999,7 +999,7 @@ void SceneManager::setSky( bool bEnabled, SkyMethod skyMethod, TextureGpu *textu
             mSky->initialize( BT_DEFAULT,
                               Rectangle2D::GeometryFlagQuad | Rectangle2D::GeometryFlagNormals );
             mSky->setGeometry( -Ogre::Vector2::UNIT_SCALE, Ogre::Vector2( 2.0f ) );
-            mSky->setRenderQueueGroup( 20u ); // Render after most stuff
+            mSky->setRenderQueueGroup( 212u ); // Render after most stuff
             mSceneRoot[SCENE_STATIC]->attachObject( mSky );
         }
 
