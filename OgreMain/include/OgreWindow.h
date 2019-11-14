@@ -86,6 +86,29 @@ namespace Ogre
         virtual void setTitle( const String &title );
         const String& getTitle(void) const;
 
+        /** Many windowing systems that support HiDPI displays use special points to specify
+            size of the windows and controls, so that windows and controls with hardcoded
+            sizes does not become too small on HiDPI displays. Such points have constant density
+            ~ 100 points per inch (probably 96 on Windows and 72 on Mac), that is independent
+            of pixel density of real display, and are used through the all windowing system.
+            
+            Sometimes, such view points are choosen bigger for output devices that are viewed
+            from larger distances, like 30" TV comparing to 30" monitor, therefore maintaining
+            constant points angular density rather than constant linear density.
+            
+            In any case, all such windowing system provides the way to convert such view points
+            to pixels, be it DisplayProperties::LogicalDpi on WinRT or backingScaleFactor on MacOSX.
+            We use pixels consistently through the Ogre, but window/view management functions
+            takes view points for convenience, as does the rest of windowing system. Such parameters
+            are named using xxxxPt pattern, and should not be mixed with pixels without being
+            converted using getViewPointToPixelScale() function.
+            
+            Sometimes such scale factor can change on-the-fly, for example if window is dragged
+            to monitor with different DPI. In such situation, window size in view points is usually
+            preserved by windowing system, and Ogre should adjust pixel size of RenderWindow.
+        */
+        virtual float getViewPointToPixelScale() { return 1.0f; }
+
         virtual void reposition( int32 left, int32 top ) = 0;
 
         /// Requests a change in resolution. Change is not immediate.

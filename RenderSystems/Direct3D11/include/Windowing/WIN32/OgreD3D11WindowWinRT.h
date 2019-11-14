@@ -49,6 +49,8 @@ namespace Ogre
                          const NameValuePairList *miscParams,
                          D3D11Device &device, D3D11RenderSystem *renderSystem );
         virtual ~D3D11WindowCoreWindow();
+
+        virtual float getViewPointToPixelScale();
     };
 #endif
 
@@ -66,6 +68,8 @@ namespace Ogre
                          const NameValuePairList *miscParams,
                          D3D11Device &device, D3D11RenderSystem *renderSystem );
         virtual ~D3D11WindowSwapChainPanel();
+
+        virtual float getViewPointToPixelScale();
     };
 #endif
 }

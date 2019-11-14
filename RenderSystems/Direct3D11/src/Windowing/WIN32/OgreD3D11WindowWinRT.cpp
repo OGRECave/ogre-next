@@ -45,6 +45,15 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
+    float D3D11WindowCoreWindow::getViewPointToPixelScale()
+    {
+#if _WIN32_WINNT > _WIN32_WINNT_WIN8
+        return Windows::Graphics::Display::DisplayInformation::GetForCurrentView()->LogicalDpi / 96;
+#else
+        return Windows::Graphics::Display::DisplayProperties::LogicalDpi / 96;
+#endif
+    }
+
 #endif
 #pragma endregion
 
@@ -55,7 +64,9 @@ namespace Ogre
                                       const NameValuePairList *miscParams,
                                       D3D11Device &device, D3D11RenderSystem *renderSystem ) :
         D3D11WindowSwapChainBased( title, width, height, fullscreenMode, depthStencilFormat,
-                                   miscParams, device, renderSystem )
+                                   miscParams, device, renderSystem ),
+        mCompositionScale(1.0f, 1.0f)
+
     {
     }
     //-----------------------------------------------------------------------------------
@@ -63,6 +74,10 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
+    float D3D11WindowSwapChainPanel::getViewPointToPixelScale()
+    {
+        return std::max(mCompositionScale.Width, mCompositionScale.Height);
+    }
 #endif
 #pragma endregion
 }
