@@ -938,15 +938,17 @@ namespace Ogre
                 windowType = opt->second;
         }
 
-        D3D11RenderWindowBase* win = NULL;
-#if !__OGRE_WINRT_PHONE_80
-        if(win == NULL && windowType == "SurfaceImageSource")
-            win = new D3D11RenderWindowImageSource(mDevice);
+        D3D11Window* win = NULL;
+#if defined(_WIN32_WINNT_WINBLUE) && _WIN32_WINNT >= _WIN32_WINNT_WINBLUE
         if(win == NULL && windowType == "SwapChainPanel")
-            win = new D3D11RenderWindowSwapChainPanel(mDevice);
-#endif // !__OGRE_WINRT_PHONE_80
+            win = new D3D11WindowSwapChainPanel( name, width, height, fullScreen, 
+                                                 DepthBuffer::DefaultDepthBufferFormat,
+                                                 miscParams, mDevice, this );
+#endif // defined(_WIN32_WINNT_WINBLUE) && _WIN32_WINNT >= _WIN32_WINNT_WINBLUE
         if(win == NULL)
-            win = new D3D11RenderWindowCoreWindow(mDevice);
+            win = new D3D11WindowCoreWindow(     name, width, height, fullScreen, 
+                                                 DepthBuffer::DefaultDepthBufferFormat,
+                                                 miscParams, mDevice, this );
 #endif
 
         mWindows.insert( win );
