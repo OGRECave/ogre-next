@@ -111,7 +111,7 @@ namespace v1 {
         }
 
         // Create billboard set
-        mBillboardSet = OGRE_NEW BillboardSet( id, objectMemoryManager, sceneManager, 0, true, 0 );
+        mBillboardSet = OGRE_NEW BillboardSet( id, objectMemoryManager, sceneManager, 0, true, 110u );
         // World-relative axes
         mBillboardSet->setBillboardsInWorldSpace(true);
     }

@@ -70,7 +70,7 @@ namespace Demo
                     Ogre::Id::generateNewId<Ogre::ParallaxCorrectedCubemap>(),
                     mGraphicsSystem->getRoot(),
                     mGraphicsSystem->getSceneManager(),
-                    workspaceDef, 250, 1u << 25u );
+                    workspaceDef, 250u, 1u << 25u );
 
         mParallaxCorrectedCubemap->setEnabled( true, 1024, 1024, Ogre::PF_R8G8B8A8 );
 

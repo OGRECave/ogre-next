@@ -42,7 +42,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------------
     ManualObject::ManualObject( IdType id, ObjectMemoryManager *objectMemoryManager,
                                 SceneManager *manager )
-        : MovableObject( id, objectMemoryManager, manager, 0 ),
+        : MovableObject( id, objectMemoryManager, manager, 10u ),
           mCurrentSection(0),
           mCurrentUpdating(false),
           mVertices(0), mIndices(0),

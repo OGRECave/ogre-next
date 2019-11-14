@@ -40,7 +40,7 @@ namespace v1
 {
     Rectangle2D::Rectangle2D( bool bQuad, IdType id, ObjectMemoryManager *objectMemoryManager,
                               SceneManager *manager ) :
-            MovableObject( id, objectMemoryManager, manager, 1 ),
+            MovableObject( id, objectMemoryManager, manager, 110u ),
             mPosition( Vector3::ZERO ),
             mOrientation( Quaternion::IDENTITY ),
             mScale( Vector3::UNIT_SCALE ),

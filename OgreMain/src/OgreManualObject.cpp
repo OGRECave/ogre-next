@@ -49,7 +49,7 @@ namespace v1 {
     //-----------------------------------------------------------------------------
     ManualObject::ManualObject( IdType id, ObjectMemoryManager *objectMemoryManager,
                                 SceneManager *manager )
-        : MovableObject( id, objectMemoryManager, manager, 1 ),
+        : MovableObject( id, objectMemoryManager, manager, 110u ),
           mDynamic(false), mWriteOnly(true), mCurrentSection(0), mFirstVertex(true),
           mTempVertexPending(false),
           mTempVertexBuffer(0), mTempVertexSize(TEMP_INITIAL_VERTEX_SIZE),
