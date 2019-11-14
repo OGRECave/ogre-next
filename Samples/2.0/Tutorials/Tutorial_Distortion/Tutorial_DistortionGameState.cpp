@@ -232,8 +232,8 @@ namespace Demo
 		but we are going to create just simple spheres.
 		*/
 		{
-			//Lets setup a new render queue for distortion pass. Set ID 6 to be our distortion queue
-            mGraphicsSystem->getSceneManager()->getRenderQueue()->setRenderQueueMode(6, Ogre::RenderQueue::FAST);
+			//Lets setup a new render queue for distortion pass. Set ID 16 to be our distortion queue
+			mGraphicsSystem->getSceneManager()->getRenderQueue()->setRenderQueueMode(16, Ogre::RenderQueue::FAST);
 
 			Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
 			Ogre::HlmsTextureManager *hlmsTextureManager = hlmsManager->getTextureManager();
@@ -291,8 +291,8 @@ namespace Demo
 
 				item->setDatablock(datablock);
 
-				//Set item to be rendered in distortion queue pass (ID 6)
-				item->setRenderQueueGroup(6);
+				//Set item to be rendered in distortion queue pass (ID 16)
+				item->setRenderQueueGroup(16);
 
 				mDistortionSceneNode[i] = sceneManager->getRootSceneNode(Ogre::SCENE_DYNAMIC)->
 					createChildSceneNode(Ogre::SCENE_DYNAMIC);
