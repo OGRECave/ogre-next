@@ -428,8 +428,12 @@ namespace Ogre {
             vertex shader for decoding the QTangent.
             Highly recommended on both desktop and mobile if you need tangents (i.e.
             normal mapping).
+        @param halfPose
+            True if you want the pose buffer to have pixel format PF_FLOAT16_RGBA
+            which uses significantly less memory. Otherwise it is created with pixel
+            format PF_FLOAT32_RGBA. Rarely the extra precision is needed.
         */
-        void importV1( v1::Mesh *mesh, bool halfPos, bool halfTexCoords, bool qTangents );
+        void importV1( v1::Mesh *mesh, bool halfPos, bool halfTexCoords, bool qTangents, bool halfPose = true );
 
         /// Converts this SubMesh to an efficient arrangement. @See Mesh::importV1 for an
         /// explanation on the parameters. @see dearrangeEfficientToInefficient

@@ -40,6 +40,7 @@ THE SOFTWARE.
 
 #import <UIKit/UIWindow.h>
 #import <UIKit/UIGraphics.h>
+#include "ARCMacros.h"
 
 namespace Ogre {
 
@@ -55,6 +56,7 @@ namespace Ogre {
     EAGL2Window::EAGL2Window(EAGL2Support *glsupport)
         :   mClosed(false),
             mVisible(false),
+            mHidden(false),
             mIsExternal(false),
             mUsingExternalView(false),
             mUsingExternalViewController(false),
@@ -101,36 +103,40 @@ namespace Ogre {
         {
             WindowEventUtilities::_removeRenderWindow(this);
         
-            [mWindow release];
+            SAFE_ARC_RELEASE(mWindow);
             mWindow = nil;
         }
 
-        if (mIsFullScreen)
-        {
-            switchFullScreen(false);
-        }
-
         if(!mUsingExternalViewController)
-            [mViewController release];
+            SAFE_ARC_RELEASE(mViewController);
     }
 
-    void EAGL2Window::setFullscreen(bool fullscreen, uint width, uint height)
+    void EAGL2Window::setHidden(bool hidden)
+    {
+        mHidden = hidden;
+        if (!mIsExternal)
+        {
+            [mWindow setHidden:hidden];
+        }
+    }
+
+    void EAGL2Window::setFullscreen(bool fullscreen, uint widthPt, uint heightPt)
     {
     }
 
-    void EAGL2Window::reposition(int left, int top)
+    void EAGL2Window::reposition(int leftPt, int topPt)
 	{
 	}
     
-	void EAGL2Window::resize(unsigned int width, unsigned int height)
+	void EAGL2Window::resize(unsigned int widthPt, unsigned int heightPt)
 	{
         if(!mWindow) return;
 
-        Real w = width * mContentScalingFactor;
-        Real h = height * mContentScalingFactor;
+        Real widthPx = _getPixelFromPoint(widthPt);
+        Real heightPx = _getPixelFromPoint(heightPt);
 
         // Check if the window size really changed
-        if(mWidth == w && mHeight == h)
+        if(mWidth == widthPx && mHeight == heightPx)
             return;
         
         // Destroy and recreate the framebuffer with new dimensions
@@ -138,8 +144,8 @@ namespace Ogre {
         
         mContext->destroyFramebuffer();
         
-        mWidth = w;
-        mHeight = h;
+        mWidth = widthPx;
+        mHeight = heightPx;
         
         mContext->createFramebuffer();
 
@@ -151,11 +157,24 @@ namespace Ogre {
     
 	void EAGL2Window::windowMovedOrResized()
 	{
-		CGRect frame = [mView frame];
-        mWidth = (unsigned int)frame.size.width * mContentScalingFactor;
-        mHeight = (unsigned int)frame.size.height * mContentScalingFactor;
-        mLeft = (int)frame.origin.x * mContentScalingFactor;
-        mTop = ((int)frame.origin.y + (int)frame.size.height) * mContentScalingFactor;
+        CGRect frame = [mView frame];
+        CGFloat width = _getPixelFromPoint(frame.size.width);
+        CGFloat height = _getPixelFromPoint(frame.size.height);
+        CGFloat left = _getPixelFromPoint(frame.origin.x);
+        CGFloat top = _getPixelFromPoint(frame.origin.y);
+        
+        if(mWidth == width && mHeight == height && mLeft == left && mTop == top)
+            return;
+        
+        EAGLContextGuard ctx_guard(mContext->getContext());
+        mContext->destroyFramebuffer();
+
+        mWidth  = width;
+        mHeight = height;
+        mLeft   = left;
+        mTop    = top;
+
+        mContext->createFramebuffer();
 
         for (ViewportList::iterator it = mViewportList.begin(); it != mViewportList.end(); ++it)
         {
@@ -163,52 +182,26 @@ namespace Ogre {
         }
 	}
 
-    void EAGL2Window::_beginUpdate(void)
-    {
-        // Call the base class method first
-        RenderTarget::_beginUpdate();
-
-        mContext->bindSampleFramebuffer();
-    }
-
-    void EAGL2Window::initNativeCreatedWindow(const NameValuePairList *miscParams)
+    void EAGL2Window::createNativeWindow(uint widthPt, uint heightPt, const NameValuePairList *miscParams)
     {
         // This method is called from within create() and after parameters have been parsed.
         // If the window, view or view controller objects are nil at this point, it is safe
         // to assume that external handles are either not being used or are invalid and
         // we can create our own.
-        NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+        SAFE_ARC_AUTORELEASE_POOL_START()
         
-        uint w = 0, h = 0;
-        
-        ConfigOptionMap::const_iterator opt;
-        ConfigOptionMap::const_iterator end = mGLSupport->getConfigOptions().end();
-        NameValuePairList::const_iterator param;
-
-        if ((opt = mGLSupport->getConfigOptions().find("Video Mode")) != end)
-        {
-            String val = opt->second.currentValue;
-            String::size_type pos = val.find('x');
-            
-            if (pos != String::npos)
-            {
-                w = StringConverter::parseUnsignedInt(val.substr(0, pos));
-                h = StringConverter::parseUnsignedInt(val.substr(pos + 1));
-            }
-        }
-
         // Set us up with an external window, or create our own.
         if(!mIsExternal)
         {
-            mWindow = [[[UIWindow alloc] initWithFrame:CGRectMake(0, 0, w, h)] retain];
+            mWindow = [[UIWindow alloc] initWithFrame:CGRectMake(0, 0, widthPt, heightPt)];
         }
         
-        OgreAssert(mWindow != nil, "EAGL2Window: Failed to create native window");
+        OgreAssert(mWindow || mUsingExternalViewController, "EAGL2Window: Failed to obtain required native window");
         
         // Set up the view
         if(!mUsingExternalView)
         {
-            mView = [[EAGL2View alloc] initWithFrame:CGRectMake(0, 0, w, h)];
+            mView = [[EAGL2View alloc] initWithFrame:CGRectMake(0, 0, widthPt, heightPt)];
             mView.opaque = YES;
 
             // Use the default scale factor of the screen
@@ -235,7 +228,8 @@ namespace Ogre {
         eaglLayer.opaque = YES;
         eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
                                         [NSNumber numberWithBool:retainedBacking], kEAGLDrawablePropertyRetainedBacking,
-                                        kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
+                                        (mHwGamma ? kEAGLColorFormatSRGBA8 : kEAGLColorFormatRGBA8), kEAGLDrawablePropertyColorFormat,
+                                        nil];
         // Set up the view controller
         if(!mUsingExternalViewController)
         {
@@ -253,10 +247,16 @@ namespace Ogre {
             
             if ((option = miscParams->find("externalSharegroup")) != miscParams->end())
             {
-                group = (EAGLSharegroup *)StringConverter::parseSizeT(option->second);
+                group = (__bridge EAGLSharegroup *)(void*)StringConverter::parseSizeT(option->second);
                 LogManager::getSingleton().logMessage("iOS: Using an external EAGLSharegroup");
             }
-            
+            else
+            {
+                GLES2RenderSystem *rs = static_cast<GLES2RenderSystem*>(Root::getSingleton().getRenderSystem());
+                if(EAGLES2Context* mainContext = (EAGLES2Context*)rs->_getMainContext())
+                    group = mainContext->getContext().sharegroup;
+            }
+
             mContext = mGLSupport->createNewContext(eaglLayer, group);
 
             mContext->mIsMultiSampleSupported = true;
@@ -265,38 +265,39 @@ namespace Ogre {
         
         OgreAssert(mContext != nil, "EAGL2Window: Failed to create OpenGL ES context");
 
-        if(!mUsingExternalViewController)
-            [mWindow addSubview:mViewController.view];
-        
         mViewController.mGLSupport = mGLSupport;
         
         if(!mUsingExternalViewController)
+        {
+            [mWindow addSubview:mViewController.view];
             mWindow.rootViewController = mViewController;
+            [mWindow makeKeyAndVisible];
+        }
         
         if(!mUsingExternalView)
-            [mView release];
-    
-        if(!mUsingExternalViewController)
-            [mWindow makeKeyAndVisible];
-
+            SAFE_ARC_RELEASE(mView);
+        
+        // Obtain effective view size and scale
+        CGSize sz = mView.frame.size;
+        mContentScalingFactor = mView.contentScaleFactor;
+        mWidth = _getPixelFromPoint(sz.width);
+        mHeight = _getPixelFromPoint(sz.height);
+        
         mContext->createFramebuffer();
         
         // If content scaling is supported, the window size will be smaller than the GL pixel buffer
         // used to render.  Report the buffer size for reference.
         StringStream ss;
             
-        ss  << "iOS: Window created " << w << " x " << h
-            << " with backing store size " << mContext->mBackingWidth << " x " << mContext->mBackingHeight;
-        if(mIsContentScalingSupported)
-        {
-            ss << " using content scaling factor " << std::fixed << std::setprecision(1) << mContentScalingFactor;
-        }
+        ss  << "iOS: Window created " << widthPt << " x " << heightPt
+            << " with backing store size " << mContext->mBackingWidth << " x " << mContext->mBackingHeight
+            << " using content scaling factor " << std::fixed << std::setprecision(1) << getViewPointToPixelScale();
         LogManager::getSingleton().logMessage(ss.str());
         
-        [pool release];
+        SAFE_ARC_AUTORELEASE_POOL_END()
     }
     
-    void EAGL2Window::create(const String& name, uint width, uint height,
+    void EAGL2Window::create(const String& name, uint widthPt, uint heightPt,
                                 bool fullScreen, const NameValuePairList *miscParams)
     {
         short frequency = 0;
@@ -306,8 +307,6 @@ namespace Ogre {
         
         mIsFullScreen = fullScreen;
         mName = name;
-        mWidth = width;
-        mHeight = height;
 
         // Check the configuration. This may be overridden later by the value sent via miscParams
         ConfigOptionMap::const_iterator configOpt;
@@ -328,6 +327,11 @@ namespace Ogre {
                 mFSAA = StringConverter::parseUnsignedInt(opt->second);
             }
             
+            if ((opt = miscParams->find("gamma")) != end)
+            {
+                mHwGamma = StringConverter::parseBool(opt->second);
+            }
+                
             if ((opt = miscParams->find("displayFrequency")) != end)
             {
                 frequency = (short)StringConverter::parseInt(opt->second);
@@ -360,24 +364,21 @@ namespace Ogre {
 
             if ((opt = miscParams->find("externalWindowHandle")) != end)
             {
-                mWindow = (UIWindow *)StringConverter::parseSizeT(opt->second);
+                mWindow = (__bridge UIWindow *)(void*)StringConverter::parseSizeT(opt->second);
                 mIsExternal = true;
                 LogManager::getSingleton().logMessage("iOS: Using an external window handle");
             }
         
             if ((opt = miscParams->find("externalViewHandle")) != end)
             {
-                mView = (EAGL2View *)StringConverter::parseSizeT(opt->second);
-                CGRect b = [mView bounds];
-                mWidth = b.size.width;
-                mHeight = b.size.height;
+                mView = (__bridge EAGL2View *)(void*)StringConverter::parseSizeT(opt->second);
                 mUsingExternalView = true;
                 LogManager::getSingleton().logMessage("iOS: Using an external view handle");
             }
         
             if ((opt = miscParams->find("externalViewControllerHandle")) != end)
             {
-                mViewController = (EAGL2ViewController *)StringConverter::parseSizeT(opt->second);
+                mViewController = (__bridge EAGL2ViewController *)(void*)StringConverter::parseSizeT(opt->second);
                 if(mViewController.view != nil)
                     mView = (EAGL2View *)mViewController.view;
                 mUsingExternalViewController = true;
@@ -385,14 +386,11 @@ namespace Ogre {
             }
 		}
         
-        initNativeCreatedWindow(miscParams);
+        createNativeWindow(widthPt, heightPt, miscParams);
 
         left = top = 0;
         mLeft = left;
 		mTop = top;
-
-        // Resize, taking content scaling factor into account
-        resize(mWidth, mHeight);
 
 		mActive = true;
 		mVisible = true;
@@ -412,7 +410,7 @@ namespace Ogre {
         GLenum attachments[3];
         GLES2RenderSystem *rs =
             static_cast<GLES2RenderSystem*>(Root::getSingleton().getRenderSystem());
-        unsigned int buffers = rs->getDiscardBuffers();
+        unsigned int buffers = 0; // rs->getDiscardBuffers();
         
         if(buffers & FBT_COLOUR)
         {
@@ -468,27 +466,33 @@ namespace Ogre {
 			return;
 		}
 
+        if( name == "GLFBO" )
+        {
+            *static_cast<GLuint*>(pData) = (mContext->mIsMultiSampleSupported && mContext->mNumSamples>0) ? mContext->mSampleFramebuffer : mContext->mViewFramebuffer;
+            return;
+        }
+
         if( name == "SHAREGROUP" )
 		{
-            *(void**)(pData) = mContext->getContext().sharegroup;
+            *(void**)(pData) = (__bridge void*)mContext->getContext().sharegroup;
             return;
 		}
 
 		if( name == "WINDOW" )
 		{
-            *(void**)(pData) = mWindow;
+            *(void**)(pData) = (__bridge void*)mWindow;
 			return;
 		}
         
 		if( name == "VIEW" )
 		{
-            *(void**)(pData) = mViewController.view;
+            *(void**)(pData) = (__bridge void*)mViewController.view;
             return;
 		}
 
         if( name == "VIEWCONTROLLER" )
 		{
-            *(void**)(pData) = mViewController;
+            *(void**)(pData) = (__bridge void*)mViewController;
             return;
 		}
 	}
@@ -518,7 +522,7 @@ namespace Ogre {
         NSInteger width = dst.getWidth(), height = dst.getHeight();
         NSInteger dataLength = width * height * PixelUtil::getComponentCount(dst.format);
         GLubyte *data = (GLubyte*)malloc(dataLength * sizeof(GLubyte));
-        GLenum format = GLES2PixelUtil::getGLOriginFormat(dst.format);
+        GLenum format = GLES2PixelUtil::getGLOriginFormat(dst.format, mHwGamma);
         GLenum type = GLES2PixelUtil::getGLOriginDataType(dst.format);
 
         GLint currentFBO = 0;

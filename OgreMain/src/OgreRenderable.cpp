@@ -193,9 +193,69 @@ namespace Ogre
         return mMaterial;
     }
     //-----------------------------------------------------------------------------------
+    unsigned short Renderable::getNumPoses(void) const
+    {
+        return mPoseData ? mPoseData->numPoses : 0;
+    }
+    //-----------------------------------------------------------------------------------
+    bool Renderable::getPoseHalfPrecision() const
+    {
+      return mPoseData ? mPoseData->halfPrecision : false;
+    }
+    //-----------------------------------------------------------------------------------
+    bool Renderable::getPoseNormals() const
+    {
+      return mPoseData ? mPoseData->hasNormals : false;
+    }
+    //-----------------------------------------------------------------------------------
+    float* Renderable::getPoseWeights(void) const
+    { 
+        return mPoseData ? mPoseData->weights : 0;
+    }
+    //-----------------------------------------------------------------------------------
+    float Renderable::getPoseWeight(size_t index) const
+    { 
+        assert( (index < OGRE_MAX_POSES) && "Pose weight index out of bounds" );
+        return mPoseData ? mPoseData->weights[index] : 0; 
+    }
+    //-----------------------------------------------------------------------------------
+    void Renderable::setPoseWeight(size_t index, float w)
+    { 
+        if( !mPoseData ) 
+            return;
+        
+        assert( (index < OGRE_MAX_POSES && index < mPoseData->numPoses) &&
+                "Pose weight index out of bounds" );
+        mPoseData->weights[index] = w; 
+    }
+    //-----------------------------------------------------------------------------------
+    void Renderable::addPoseWeight(size_t index, float w)
+    {
+        if( !mPoseData ) 
+            return;
+
+        assert( (index < OGRE_MAX_POSES && index < mPoseData->numPoses) &&
+                "Pose weight index out of bounds" );
+        mPoseData->weights[index] += w;
+    }
+    //-----------------------------------------------------------------------------------
+    TexBufferPacked* Renderable::getPoseTexBuffer(void) const
+    {
+        return mPoseData ? mPoseData->buffer : 0;
+    }
+    //-----------------------------------------------------------------------------------
     RenderableAnimated::RenderableAnimated() :
         Renderable(),
         mBlendIndexToBoneIndexMap( 0 )
     {
+    }
+    //-----------------------------------------------------------------------------------
+    Renderable::PoseData::PoseData():
+    numPoses( 0 ),
+    buffer( 0 ),
+    halfPrecision( false ),
+    hasNormals( false )
+    {
+        memset(weights, 0, OGRE_MAX_POSES * sizeof(float));
     }
 }

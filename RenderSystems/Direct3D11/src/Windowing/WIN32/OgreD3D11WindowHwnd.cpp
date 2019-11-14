@@ -49,6 +49,8 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+
     bool D3D11WindowHwnd::mClassRegistered = false;
 
     typedef vector<HMONITOR>::type DisplayMonitorList;
@@ -932,4 +934,5 @@ namespace Ogre
             D3D11WindowSwapChainBased::getCustomAttribute( name, pData );
         }
     }
+#endif
 }

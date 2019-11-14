@@ -92,7 +92,7 @@ namespace Ogre
                                              IDXGIAdapter *adapter, D3D_DRIVER_TYPE driverType,
                                              UINT deviceFlags, D3D_FEATURE_LEVEL *pFirstFL,
                                              UINT numFeatureLevels, D3D_FEATURE_LEVEL *outFeatureLevel,
-                                             ID3D11Device **outDevice, ID3D11Device1 **outDevice1 )
+                                             ID3D11Device **outDevice )
     {
         ID3D11Device *device = NULL;
         HRESULT hr = createDeviceImpl( appName, adapter, driverType, deviceFlags, pFirstFL,
@@ -139,12 +139,6 @@ namespace Ogre
         }
 
         *outDevice = device;
-        *outDevice1 = 0;
-
-#if defined(_WIN32_WINNT_WIN8)
-        hr = device->QueryInterface( __uuidof(ID3D11Device1),
-                                     reinterpret_cast<void**>(outDevice1) );
-#endif
     }
     //-------------------------------------------------------------------------
     void D3D11VendorExtension::destroyDevice( ID3D11Device *device )

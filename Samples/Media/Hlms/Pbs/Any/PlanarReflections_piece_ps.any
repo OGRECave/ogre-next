@@ -3,7 +3,7 @@
 
 @property( use_planar_reflections )
 
-@property( syntax == glsl )
+@property( syntax == glsl || syntax == glsles )
 	@piece( DeclPlanarReflTextures )
 		uniform sampler2D planarReflectionTex;
 	@end

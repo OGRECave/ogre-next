@@ -69,6 +69,11 @@ namespace Ogre {
         void attachDepthBuffer( DepthBuffer *depthBuffer );
         void detachDepthBuffer();
 
+        /// Get the GL id for the FBO
+        GLuint getGLFBOID() const { return mFB; }
+        /// Get the GL id for the multisample FBO
+        GLuint getGLMultisampleFBOID() const { return mMultisampleFB; }
+
         /// Accessors
         uint32 getWidth();
         uint32 getHeight();
@@ -92,8 +97,6 @@ namespace Ogre {
         GLuint mFB;
         GLuint mMultisampleFB;
         GLES2SurfaceDesc mMultisampleColourBuffer;
-        GLES2SurfaceDesc mDepth;
-        GLES2SurfaceDesc mStencil;
         // Arbitrary number of texture surfaces
         GLES2SurfaceDesc mColour[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
 

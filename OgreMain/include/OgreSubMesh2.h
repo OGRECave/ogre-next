@@ -108,6 +108,12 @@ namespace Ogre {
         /// Limits mBoneAssignments to OGRE_MAX_BLEND_WEIGHTS and
         /// if we need to strip, normalizes all weights to sum 1.
         uint8 rationaliseBoneAssignments(void);
+        
+        uint16 mNumPoses;
+        bool mPoseHalfPrecision;
+        bool mPoseNormals;
+        std::map<Ogre::String, size_t> mPoseIndexMap;
+        TexBufferPacked *mPoseTexBuffer;
 
     public:
         SubMesh();
@@ -182,7 +188,7 @@ namespace Ogre {
         String getMaterialName(void) const                  { return mMaterialName; }
 
         /// Imports a v1 SubMesh @See Mesh::importV1. Automatically performs what arrangeEfficient does.
-        void importFromV1( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords, bool qTangents );
+        void importFromV1( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords, bool qTangents, bool halfPose );
 
         /// Converts this SubMesh to an efficient arrangement. @See Mesh::importV1 for an
         /// explanation on the parameters. @see dearrangeEfficientToInefficient
@@ -195,13 +201,49 @@ namespace Ogre {
         void dearrangeToInefficient(void);
 
         void _prepareForShadowMapping( bool forceSameBuffers );
+        
+        uint16 getNumPoses() { return mNumPoses; }
+        
+        bool getPoseHalfPrecision() { return mPoseHalfPrecision; }
+
+        bool getPoseNormals() { return mPoseNormals; }
+        
+        size_t getPoseIndex(const Ogre::String& name) { return mPoseIndexMap.count(name) ? mPoseIndexMap[name] : SIZE_MAX; }
+        
+        TexBufferPacked* getPoseTexBuffer() { return mPoseTexBuffer; }
+
+        /** Fills the pose animation buffer with the given poseData.
+        @param positionData
+            Array with a pointer to a block of data for each pose, and each pose
+            should contain (x,y,z) offsets for each vertex in sequence. The size of each block 
+            of data must be equals to numVertices * 3 * sizeof(float) or else a buffer overrun
+            shall occur. 
+        @param normalData
+            Similar to positionData however should contain normal offsets and
+            can be nullptr if morphing normals is not desired and it will also save memory.
+        @param numPoses
+            Number of poses.
+        @param numVertices
+            Number of vertices 
+        @param names
+            Array containing the name of each pose or null. If not null must contain `numPoses`
+            elements.
+        @param halfPrecision
+            True if you want the pose buffer to have pixel format PF_FLOAT16_RGBA
+            which uses significantly less memory. Otherwise it is created with pixel
+            format PF_FLOAT32_RGBA. Rarely the extra precision is needed.
+         */
+        void createPoses( const float** positionData, const float** normalData, size_t numPoses, size_t numVertices, 
+                          const String* names = 0, bool halfPrecision = true );
 
     protected:
         void importBuffersFromV1( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords, bool qTangents,
-                                  size_t vaoPassIdx );
+                                  bool halfPose, size_t vaoPassIdx);
 
         /// Converts a v1 IndexBuffer to a v2 format. Returns nullptr if indexData is also nullptr
         IndexBufferPacked* importFromV1( v1::IndexData *indexData );
+
+        void importPosesFromV1( v1::SubMesh *subMesh, VertexBufferPacked *vertexBuffer, bool halfPrecision );
 
         /** @see arrangeEfficient overload
         @param vao
@@ -326,5 +368,3 @@ namespace Ogre {
 #include "OgreHeaderSuffix.h"
 
 #endif
-
-

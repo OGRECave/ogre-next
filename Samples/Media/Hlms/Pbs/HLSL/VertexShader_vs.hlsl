@@ -22,6 +22,10 @@ struct VS_INPUT
 	float4 blendWeights : BLENDWEIGHT;
 @end
 
+@property( hlms_vertex_id )
+	uint vertexId: SV_VertexID;
+@end
+
 @foreach( hlms_uv_count, n )
 	float@value( hlms_uv_count@n ) uv@n : TEXCOORD@n;@end
 	uint drawId : DRAWID;
@@ -49,6 +53,9 @@ struct PS_INPUT
 
 // START UNIFORM D3D DECLARATION
 Buffer<float4> worldMatBuf : register(t0);
+@property( hlms_pose )
+	Buffer<float4> poseBuf : register(t4);
+@end
 // END UNIFORM D3D DECLARATION
 
 PS_INPUT main( VS_INPUT input )

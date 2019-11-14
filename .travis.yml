@@ -1,0 +1,20 @@
+dist: bionic
+language: cpp
+
+addons:
+        apt:
+                update: true
+                packages:
+                        - cmake
+                        - ninja-build
+                        - libsdl2-dev
+                        - libfreetype6-dev 
+                        - libfreeimage-dev 
+                        - libzzip-dev 
+                        - libxrandr-dev 
+                        - libxaw7-dev 
+                        - freeglut3-dev 
+                        - libgl1-mesa-dev 
+                        - libglu1-mesa-dev
+
+script: ./Scripts/BuildScripts/output/build_ogre_linux_c++98.sh

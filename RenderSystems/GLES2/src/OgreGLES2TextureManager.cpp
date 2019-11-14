@@ -28,9 +28,10 @@ THE SOFTWARE.
 
 #include "OgreGLES2TextureManager.h"
 #include "OgreGLES2RenderTexture.h"
+#include "OgreGLES2DepthTexture.h"
+#include "OgreGLES2NullTexture.h"
 #include "OgreRoot.h"
 #include "OgreRenderSystem.h"
-#include "OgreGLES2StateCacheManager.h"
 
 namespace Ogre {
     GLES2TextureManager::GLES2TextureManager(GLES2Support& support)
@@ -54,6 +55,24 @@ namespace Ogre {
                                            ManualResourceLoader* loader,
                                            const NameValuePairList* createParams)
     {
+        if( createParams )
+        {
+            if( createParams->find( "DepthTexture" ) != createParams->end() )
+            {
+                const bool shareableDepthBuffer = createParams->find( "shareableDepthBuffer" ) !=
+                                                                                createParams->end();
+                return OGRE_NEW GLES2DepthTexture( shareableDepthBuffer, this, name, handle, group,
+                                                isManual, loader, mGLSupport );
+            }
+
+            NameValuePairList::const_iterator it = createParams->find( "SpecialFormat" );
+            if( it != createParams->end() && it->second == "PF_NULL" )
+            {
+                return OGRE_NEW GLES2NullTexture( this, name, handle, group,
+                                               isManual, loader, mGLSupport );
+            }
+        }
+
         return OGRE_NEW GLES2Texture(this, name, handle, group, isManual, loader, mGLSupport);
     }
 

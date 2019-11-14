@@ -333,7 +333,7 @@ namespace v1 {
         */
         BillboardSet( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
                       unsigned int poolSize = 20, bool externalDataSource = false,
-                      uint8 renderQueueId=0 );
+                      uint8 renderQueueId=110u );
 
         virtual ~BillboardSet();
 

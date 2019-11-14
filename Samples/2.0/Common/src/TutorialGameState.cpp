@@ -177,6 +177,10 @@ namespace Demo
             Ogre::GpuProgramManager::getSingleton().clearMicrocodeCache();
             hlms->reloadFrom( hlms->getDataFolder() );
         }
+        else if(arg.keysym.scancode == SDL_SCANCODE_ESCAPE)
+        {
+            mGraphicsSystem->setQuit();
+        }
         else
         {
             bool handledEvent = false;

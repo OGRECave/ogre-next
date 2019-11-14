@@ -1128,16 +1128,23 @@ namespace Ogre
         if( mD3D11RenderSystem->_getFeatureLevel() > D3D_FEATURE_LEVEL_11_0 )
         {
             //D3D11.1 supports NO_OVERWRITE on shader buffers, use the common pool
-            size_t vboIdx;
+            size_t vboIdx = 0;
 
             BufferType vboFlag = bufferType;
             if( vboFlag >= BT_DYNAMIC_DEFAULT )
                 vboFlag = BT_DYNAMIC_DEFAULT;
 
-            allocateVbo( sizeBytes, alignment, bufferType, SHADER_BUFFER, vboIdx, bufferOffset );
+            if( bufferType == BT_IMMUTABLE )
+            {
+				bufferInterface = new D3D11BufferInterface( vboIdx, 0, 0 );
+            }
+            else
+            {
+				allocateVbo( sizeBytes, alignment, bufferType, SHADER_BUFFER, vboIdx, bufferOffset );
 
-            Vbo &vbo = mVbos[SHADER_BUFFER][vboFlag][vboIdx];
-            bufferInterface = new D3D11BufferInterface( vboIdx, vbo.vboName, vbo.dynamicBuffer );
+				Vbo &vbo = mVbos[SHADER_BUFFER][vboFlag][vboIdx];
+				bufferInterface = new D3D11BufferInterface( vboIdx, vbo.vboName, vbo.dynamicBuffer );
+            }
         }
         else
         {
@@ -1643,7 +1650,7 @@ namespace Ogre
                     StagingBuffer *stagingBuffer = *itor;
 
                     mNextStagingBufferTimestampCheckpoint = std::min(
-                        mNextStagingBufferTimestampCheckpoint, 
+                        mNextStagingBufferTimestampCheckpoint,
                         stagingBuffer->getLastUsedTimestamp() + stagingBuffer->getLifetimeThreshold() );
 
                     if( stagingBuffer->getLastUsedTimestamp() + stagingBuffer->getLifetimeThreshold() < currentTimeMs )

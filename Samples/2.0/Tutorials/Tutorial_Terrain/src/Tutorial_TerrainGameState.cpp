@@ -120,9 +120,10 @@ namespace Demo
         Ogre::Root *root = mGraphicsSystem->getRoot();
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 
+        // Render terrain after most objects, to improve performance by taking advantage of early Z
         mTerra = new Ogre::Terra( Ogre::Id::generateNewId<Ogre::MovableObject>(),
                                   &sceneManager->_getEntityMemoryManager( Ogre::SCENE_STATIC ),
-                                  sceneManager, 0, root->getCompositorManager2(),
+                                  sceneManager, 11u, root->getCompositorManager2(),
                                   mGraphicsSystem->getCamera() );
         mTerra->setCastShadows( false );
 

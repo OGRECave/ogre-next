@@ -145,7 +145,17 @@ namespace Ogre {
 
         bool hasSkeletonAnimation(void) const               { return mHasSkeletonAnimation; }
 
-        /** Returns whether the world matrix is an identify matrix.
+        unsigned short getNumPoses(void) const;
+        bool getPoseHalfPrecision() const;
+        bool getPoseNormals() const;
+        float* getPoseWeights() const;
+        float getPoseWeight(size_t index) const;
+        void setPoseWeight(size_t index, float w);
+        void addPoseWeight(size_t index, float w);
+        
+        TexBufferPacked* getPoseTexBuffer() const;
+        
+        /** Returns whether the world matrix is an identity matrix.
         @remarks
             It is up to the Hlms implementation whether to honour this request. Take in mind
             changes of this value at runtime may not be seen until the datablock is flushed.
@@ -448,7 +458,7 @@ namespace Ogre {
         bool                    mHasSkeletonAnimation;
         uint8                   mCurrentMaterialLod;
         FastArray<Real> const   *mLodMaterial;
-
+        
         /** Index in the vector holding this Rendrable reference in the HLMS datablock.
             Used for O(1) removals.
         @remarks
@@ -460,6 +470,18 @@ namespace Ogre {
         bool mUseIdentityProjection;
         bool mUseIdentityView;
         UserObjectBindings mUserObjectBindings;      /// User objects binding.
+        
+        struct PoseData
+        {
+            unsigned short   numPoses;
+            float            weights[OGRE_MAX_POSES];
+            TexBufferPacked* buffer;
+            bool             halfPrecision;
+            bool             hasNormals;
+            
+            PoseData();
+        };
+        SharedPtr<PoseData> mPoseData;
     };
 
     class _OgreExport RenderableAnimated : public Renderable

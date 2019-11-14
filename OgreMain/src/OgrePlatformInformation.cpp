@@ -639,7 +639,7 @@ namespace Ogre {
     {
         uint32 numLogicalCores = 0;
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX || OGRE_PLATFORM == OGRE_PLATFORM_ANDROID
+#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX || OGRE_PLATFORM == OGRE_PLATFORM_ANDROID || OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD
         int logicalCores = (uint)sysconf( _SC_NPROCESSORS_ONLN );
 
         if( logicalCores > 0 )

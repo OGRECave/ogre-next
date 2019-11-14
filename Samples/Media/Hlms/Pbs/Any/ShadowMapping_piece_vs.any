@@ -13,7 +13,7 @@
 				@property( !hlms_shadowmap@n_is_directional_light && hlms_no_reverse_depth )
 					outVs.posL@n.z = outVs.posL@n.z * passBuf.shadowRcv[@n].shadowDepthRange.y;
 				@end
-				@property( hlms_no_reverse_depth && syntax == glsl )outVs.posL@n.z = (outVs.posL@n.z * 0.5) + 0.5;@end
+				@property( hlms_no_reverse_depth && (syntax == glsl || syntax == glsles) )outVs.posL@n.z = (outVs.posL@n.z * 0.5) + 0.5;@end
 			@end
 		@end
 

@@ -20,7 +20,7 @@
 	@end
 @end
 
-@property( syntax == glsl )
+@property( syntax == glsl || syntax == glsles )
 	#define OGRE_SAMPLE_SHADOW( tex, sampler, uv, depth ) (OGRE_DEPTH_CMP_GE( depth, OGRE_DEPTH_DEFAULT_CLEAR ) ? 1.0 : texture( tex, vec3( uv, depth ) ))
 	#define OGRE_SAMPLE_SHADOW_ESM( tex, sampler, uv ) textureLod( tex, uv, 0 ).x
 	#define PASSBUF_ARG_DECL
@@ -43,7 +43,7 @@
 @end
 @end
 
-@property( syntax == glsl && !hlms_shadow_uses_depth_texture )
+@property( ( syntax == glsl || syntax == glsles ) && !hlms_shadow_uses_depth_texture )
 @piece( regularTexturePcfGlSampling )
 	float2 fW;
 	float4 c;
@@ -92,7 +92,7 @@
 @end
 @end
 
-@property( syntax == glsl )
+@property( syntax == glsl || syntax == glsles )
 	@property( !exponential_shadow_maps )
 		@property( hlms_shadow_uses_depth_texture )@piece( TEXTURE2DSHADOW )sampler2DShadow@end @end
 		@property( !hlms_shadow_uses_depth_texture )@piece( TEXTURE2DSHADOW )sampler2D@end @end
@@ -189,45 +189,45 @@
 	@end
 
 	@property( !exponential_shadow_maps )
-		float retVal = 0;
+		float retVal = 0.;
 
 		@property( pcf_3x3 || pcf_4x4 )
 			float2 offsets[@value(pcf_iterations)] =
-            @property( syntax == glsl )
+            @property( syntax == glsl || syntax == glsles )
 				float2[@value(pcf_iterations)](
             @end
-            @property( syntax != glsl )
+            @property( syntax != glsl && syntax != glsles )
             {
             @end
 			@property( pcf_3x3 )
-				float2( 0, 0 ),	//0, 0
-				float2( 1, 0 ),	//1, 0
-				float2( 0, 1 ),	//1, 1
-				float2(-1, 0 ) 	//0, 1
+				float2( 0., 0. ),	//0, 0
+				float2( 1., 0. ),	//1, 0
+				float2( 0., 1. ),	//1, 1
+				float2(-1., 0. ) 	//0, 1
 			@end
 			@property( pcf_4x4 )
-				float2( 0, 0 ),	//0, 0
-				float2( 1, 0 ),	//1, 0
-				float2( 1, 0 ),	//2, 0
+				float2( 0., 0. ),	//0, 0
+				float2( 1., 0. ),	//1, 0
+				float2( 1., 0. ),	//2, 0
 
-				float2(-2, 1 ),	//0, 1
-				float2( 1, 0 ),	//1, 1
-				float2( 1, 0 ),	//2, 1
+				float2(-2., 1. ),	//0, 1
+				float2( 1., 0. ),	//1, 1
+				float2( 1., 0. ),	//2, 1
 
-				float2(-2, 1 ),	//0, 2
-				float2( 1, 0 ),	//1, 2
-				float2( 1, 0 )	//2, 2
+				float2(-2., 1. ),	//0, 2
+				float2( 1., 0. ),	//1, 2
+				float2( 1., 0. )	//2, 2
 			@end
-            @property( syntax == glsl )
+            @property( syntax == glsl || syntax == glsles )
             );
             @end
-            @property( syntax != glsl )
+            @property( syntax != glsl && syntax != glsles )
 			};
             @end
 		@end
 
 		@insertpiece( regularTexturePcfGlSampling )
-		@property( syntax != glsl || hlms_shadow_uses_depth_texture )
+		@property( syntax != glsl && syntax != glsles || hlms_shadow_uses_depth_texture )
 			@foreach( pcf_iterations, n )
 				@property( pcf_3x3 || pcf_4x4 )uv += offsets[@n] * invShadowMapSize.xy;@end
 				retVal += OGRE_SAMPLE_SHADOW( shadowMap, shadowSampler, uv, fDepth );@end
@@ -261,7 +261,7 @@
 @end
 @end
 
-@property( syntax != glsl )
+@property( syntax != glsl && syntax != glsles )
 	@piece( UseSamplerShadow )shadowSampler, @end
 @end
 

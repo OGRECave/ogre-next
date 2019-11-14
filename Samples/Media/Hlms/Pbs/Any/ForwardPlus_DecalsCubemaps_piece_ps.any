@@ -207,7 +207,7 @@
 			@else
 				pccSingleEnvS = OGRE_SampleArray2DLevel(
 					texEnvProbeMap, samplerState@value(envMapRegSampler), mapCubemapToDpm( reflDirLS ),
-					probeCubemapIdx, @insertpiece( envSpecularRoughness ) ).xyz;
+					probeCubemapIdx, @insertpiece( envSpecularRoughness ) );
 				@property( cubemaps_as_diffuse_gi )
 					pccEnvD += OGRE_SampleArray2DLevel(
 						texEnvProbeMap, samplerState@value(envMapRegSampler), mapCubemapToDpm( normalLS ),

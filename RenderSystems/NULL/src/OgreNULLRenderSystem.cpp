@@ -44,6 +44,11 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
+    NULLRenderSystem::~NULLRenderSystem(void)
+    {
+     shutdown();
+    }
+    //-------------------------------------------------------------------------
     void NULLRenderSystem::shutdown(void)
     {
         OGRE_DELETE mHardwareBufferManager;

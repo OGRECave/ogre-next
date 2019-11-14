@@ -58,13 +58,6 @@ namespace Ogre {
     public:
         virtual ~RenderQueueListener() {}
 
-        /** Event raised before all render queues are processed. 
-        */
-        virtual void preRenderQueues() {}
-        /** Event raised after all render queues are processed. 
-        */
-        virtual void postRenderQueues() {}
-
         /** Event raised before a queue group is rendered. 
         @remarks
             This method is called by the SceneManager before each queue group is

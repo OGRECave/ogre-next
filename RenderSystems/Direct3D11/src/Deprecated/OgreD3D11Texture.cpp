@@ -492,13 +492,18 @@ namespace Ogre
             mSrcHeight = mHeight;
         }
 
-        // PF_L8 maps to DXGI_FORMAT_R8_UNORM and grayscale textures became "redscale", without green and blue components.
-        // This can be fixed by shader modification, but here we can only convert PF_L8 to PF_R8G8B8 manually to fix the issue.
-        // Note, that you can use PF_R8 to explicitly request "redscale" behavior for grayscale textures, avoiding overhead.
-        if(mFormat == PF_L8)
+        D3D11RenderSystem *rsys = static_cast<D3D11RenderSystem*>(Root::getSingleton().getRenderSystem());
+
+        // PF_L8 maps to DXGI_FORMAT_R8_UNORM and grayscale textures became "redscale", without green and
+        // blue components. This can be fixed by shader modification, but here we can only convert PF_L8
+        // to PF_R8G8B8 manually to fix the issue. Note, that you can use PF_R8 to explicitly request
+        // "redscale" behavior for grayscale textures, avoiding overhead.
+        if( mFormat == PF_L8 && rsys->getMapL8toRGB8() )
         {
             mFormat = PF_R8G8B8;
-            LogManager::getSingleton().logMessage("D3D11: Grayscale L8 texture was unpacked to R8G8B8 for correctness. Use R8 or A8 formats explicitly to avoid this.");
+            LogManager::getSingleton().logMessage(
+                "D3D11: Grayscale L8 texture was unpacked to R8G8B8 for correctness. Use R8 or A8 "
+                "formats explicitly to avoid this." );
         }
 
         // Choose closest supported D3D format
@@ -508,7 +513,6 @@ namespace Ogre
         mFSAAType.Quality = 0;
         if((mUsage & TU_RENDERTARGET) != 0 && (mUsage & TU_DYNAMIC) == 0)
         {
-            D3D11RenderSystem* rsys = static_cast<D3D11RenderSystem*>(Root::getSingleton().getRenderSystem());
             // http://msdn.microsoft.com/en-us/library/windows/desktop/ff476150%28v=vs.85%29.aspx#ID3D11Device_CreateTexture2D
             // 10Level9, When using D3D11_BIND_SHADER_RESOURCE, SampleDesc.Count must be 1.
             if(rsys->_getFeatureLevel() >= D3D_FEATURE_LEVEL_10_0 || (mUsage & TU_NOT_SRV))
@@ -1237,14 +1241,12 @@ namespace Ogre
                                             const String &fsaaHint,
                                             D3D11Device & device ) :
         RenderTexture(buffer, zoffset),
-        mDevice(device),
-        mHasFsaaResource( false )
+        mDevice(device)
     {
         mName = name;
         mHwGamma = writeGamma;
         mFSAA = fsaa;
         mFSAAHint = fsaaHint;
-        mHasFsaaResource = mFSAA > 1 || (atoi(mFSAAHint.c_str()) > 0);
 
         rebind(buffer);
     }
@@ -1264,17 +1266,20 @@ namespace Ogre
     //---------------------------------------------------------------------
     void D3D11RenderTexture::swapBuffers(void)
     {
-        if( isFsaaResolveDirty() && mHasFsaaResource )
+        if( isFsaaResolveDirty() )
         {
             assert( dynamic_cast<v1::D3D11HardwarePixelBuffer*>( mBuffer ) );
             v1::D3D11HardwarePixelBuffer *buffer = static_cast<v1::D3D11HardwarePixelBuffer*>( mBuffer );
 
             D3D11Texture *texture = buffer->getParentTexture();
-            mDevice.GetImmediateContext()->ResolveSubresource( texture->getResolvedTexture2D(),
-                                                               buffer->getSubresourceIndex(mZOffset),
-                                                               texture->getTextureResource(),
-                                                               buffer->getSubresourceIndex(mZOffset),
-                                                               texture->getD3dFormat() );
+            if(texture->hasResolvedTexture2D()) // TU_NOT_SRV multisampled textures has no resolved one
+            {
+                mDevice.GetImmediateContext()->ResolveSubresource( texture->getResolvedTexture2D(),
+                                                                   buffer->getSubresourceIndex(mZOffset),
+                                                                   texture->getTextureResource(),
+                                                                   buffer->getSubresourceIndex(mZOffset),
+                                                                   texture->getD3dFormat() );
+            }
         }
         RenderTexture::swapBuffers();
     }

@@ -55,7 +55,7 @@ namespace Ogre {
     extern const FastArray<Real> c_DefaultLodMesh;
     //-----------------------------------------------------------------------
     Item::Item( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager )
-        : MovableObject( id, objectMemoryManager, manager, 0 ),
+        : MovableObject( id, objectMemoryManager, manager, 10u ),
           mInitialised( false )
     {
         mObjectData.mQueryFlags[mObjectData.mIndex] = SceneManager::QUERY_ENTITY_DEFAULT_MASK;
@@ -63,7 +63,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     Item::Item( IdType id, ObjectMemoryManager *objectMemoryManager, SceneManager *manager,
                 const MeshPtr& mesh ) :
-        MovableObject( id, objectMemoryManager, manager, 0 ),
+        MovableObject( id, objectMemoryManager, manager, 10u ),
         mMesh( mesh ),
         mInitialised( false )
     {

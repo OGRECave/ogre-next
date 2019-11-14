@@ -48,7 +48,11 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     SubMesh::SubMesh() :
         mParent( 0 ),
-        mBoneAssignmentsOutOfDate( false )
+        mBoneAssignmentsOutOfDate( false ),
+        mNumPoses( 0 ),
+        mPoseHalfPrecision( false ),
+        mPoseNormals( false ),
+        mPoseTexBuffer( 0 )
     {
     }
     //-----------------------------------------------------------------------
@@ -56,6 +60,9 @@ namespace Ogre {
     {
         destroyShadowMappingVaos();
         destroyVaos( mVao[VpNormal], mParent->mVaoManager );
+        
+        if( mPoseTexBuffer )
+            mParent->mVaoManager->destroyTexBuffer( mPoseTexBuffer );
     }
     //-----------------------------------------------------------------------
     void SubMesh::addBoneAssignment(const VertexBoneAssignment& vertBoneAssign)
@@ -492,7 +499,8 @@ namespace Ogre {
         return 0;
     }
     //---------------------------------------------------------------------
-    void SubMesh::importFromV1( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords, bool qTangents )
+    void SubMesh::importFromV1( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords,
+                                bool qTangents, bool halfPose )
     {
         mMaterialName = subMesh->getMaterialName();
 
@@ -517,7 +525,7 @@ namespace Ogre {
         mBlendIndexToBoneIndexMap = subMesh->blendIndexToBoneIndexMap;
         mBoneAssignmentsOutOfDate = false;
 
-        importBuffersFromV1( subMesh, halfPos, halfTexCoords, qTangents, 0 );
+        importBuffersFromV1( subMesh, halfPos, halfTexCoords, qTangents, halfPose, 0 );
 
         assert( subMesh->parent->hasValidShadowMappingBuffers() );
 
@@ -526,7 +534,7 @@ namespace Ogre {
             subMesh->indexData[VpNormal] != subMesh->indexData[VpShadow] )
         {
             //Use the special version already built for v1
-            importBuffersFromV1( subMesh, halfPos, halfTexCoords, qTangents, 1 );
+            importBuffersFromV1( subMesh, halfPos, halfTexCoords, qTangents, halfPose, 1 );
         }
         else
         {
@@ -536,7 +544,7 @@ namespace Ogre {
     }
     //---------------------------------------------------------------------
     void SubMesh::importBuffersFromV1( v1::SubMesh *subMesh, bool halfPos, bool halfTexCoords,
-                                       bool qTangents, size_t vaoPassIdx )
+                                       bool qTangents, bool halfPose, size_t vaoPassIdx )
     {
         VertexElement2Vec vertexElements;
         char *data = _arrangeEfficient( subMesh, halfPos, halfTexCoords, qTangents, &vertexElements,
@@ -582,6 +590,8 @@ namespace Ogre {
             mVao[vaoPassIdx].push_back( vao );
             ++itor;
         }
+        
+        importPosesFromV1( subMesh, vertexBuffer, halfPose );
     }
     //---------------------------------------------------------------------
     IndexBufferPacked* SubMesh::importFromV1( v1::IndexData *indexData )
@@ -614,6 +624,186 @@ namespace Ogre {
             indexDataPtrContainer.ptr = 0;
 
         return indexBuffer;
+    }
+    //---------------------------------------------------------------------
+    void SubMesh::importPosesFromV1( v1::SubMesh *subMesh, VertexBufferPacked *vertexBuffer,
+                                     bool halfPrecision )
+    {
+        // Find the index of this subMesh and only process poses which have this
+        // subMesh as their target.
+        v1::Mesh::SubMeshList::const_iterator subMeshBegin =subMesh->parent->getSubMeshIterator().begin();
+        v1::Mesh::SubMeshList::const_iterator subMeshEnd = subMesh->parent->getSubMeshIterator().end();
+        v1::Mesh::SubMeshList::const_iterator subMeshIt = std::find( subMeshBegin, subMeshEnd, subMesh );
+        
+        assert( subMeshIt != subMeshEnd && "Parent mesh does not contain this subMesh.");
+                
+        const size_t subMeshIndex = static_cast<size_t>( subMeshIt - subMeshBegin );
+        
+        const v1::PoseList &poseListOrig = subMesh->parent->getPoseList();
+        v1::PoseList poseList;
+        poseList.reserve( poseListOrig.size() );
+        {
+            v1::PoseList::const_iterator itor = poseListOrig.begin();
+            v1::PoseList::const_iterator end  = poseListOrig.end();
+
+            while( itor != end )
+            {
+                if( (*itor)->getTarget() == subMeshIndex )
+                    poseList.push_back( *itor );
+                ++itor;
+            }
+        }
+        
+        mNumPoses = static_cast<uint16>( poseList.size() );
+        mPoseHalfPrecision = halfPrecision;
+        
+        if( mNumPoses > 0 ) 
+        {
+            mPoseNormals = poseList[0]->getIncludesNormals();
+            size_t numVertices = vertexBuffer->getNumElements();
+            size_t elementSize = halfPrecision ? sizeof( uint16 ) : sizeof( float );
+            size_t elementsPerVertex = mPoseNormals ? 8 : 4;
+            size_t singlePoseBufferSize = numVertices * elementSize * elementsPerVertex;
+            size_t bufferSize = mNumPoses * singlePoseBufferSize;
+            char *buffer = static_cast<char*>( OGRE_MALLOC_SIMD( bufferSize,
+                                                                 MEMCATEGORY_GEOMETRY ) );                                
+            FreeOnDestructor bufferPtrContainer( buffer );
+            memset( buffer, 0, bufferSize );
+            
+            v1::Mesh::PoseIterator poseIt = subMesh->parent->getPoseIterator();
+            
+            size_t index = 0u;
+            
+            while( poseIt.hasMoreElements() )
+            {
+                v1::Pose* pose = poseIt.getNext();
+                v1::Pose::VertexOffsetMap::const_iterator v = pose->getVertexOffsets().begin();
+                v1::Pose::NormalsIterator::const_iterator n = pose->getNormalsIterator().begin();
+                
+                if( halfPrecision )
+                {
+                    uint16* pHalf = reinterpret_cast<uint16*>( buffer +  index * singlePoseBufferSize );
+                    while( v != pose->getVertexOffsets().end() )
+                    {
+                        size_t idx = v->first * elementsPerVertex;
+                        pHalf[idx+0] = Bitwise::floatToHalf( v->second.x );
+                        pHalf[idx+1] = Bitwise::floatToHalf( v->second.y );
+                        pHalf[idx+2] = Bitwise::floatToHalf( v->second.z );
+                        pHalf[idx+3] = Bitwise::floatToHalf( 0.f );
+                        ++v;
+
+                        if( mPoseNormals )
+                        {
+                            pHalf[idx+4] = Bitwise::floatToHalf( n->second.x );
+                            pHalf[idx+5] = Bitwise::floatToHalf( n->second.y );
+                            pHalf[idx+6] = Bitwise::floatToHalf( n->second.z );
+                            pHalf[idx+7] = Bitwise::floatToHalf( 0.f );
+                            ++n;
+                        }
+                    }
+                }
+                else
+                {
+                    float* pFloat = reinterpret_cast<float*>( buffer + index * singlePoseBufferSize );
+                    while( v != pose->getVertexOffsets().end() )
+                    {
+                        size_t idx = v->first * elementsPerVertex;
+                        pFloat[idx+0] = v->second.x;
+                        pFloat[idx+1] = v->second.y;
+                        pFloat[idx+2] = v->second.z;
+                        pFloat[idx+3] = 0.f;
+                        ++v;
+
+                        if( mPoseNormals )
+                        {
+                            pFloat[idx+4] = n->second.x;
+                            pFloat[idx+5] = n->second.y;
+                            pFloat[idx+6] = n->second.z;
+                            pFloat[idx+7] = 0.f;
+                            ++n;
+                        }
+                    }
+                }
+                
+                mPoseIndexMap[pose->getName()] = index++;
+            }
+            
+            PixelFormatGpu pixelFormat = halfPrecision ? PFG_RGBA16_FLOAT : PFG_RGBA32_FLOAT;
+            mPoseTexBuffer = mParent->mVaoManager->createTexBuffer( pixelFormat, bufferSize,
+                                                                    BT_IMMUTABLE, buffer, false );
+        }
+    }
+    //---------------------------------------------------------------------
+    void SubMesh::createPoses( const float** positionData, const float** normalData, size_t numPoses, 
+                               size_t numVertices, const String* names, bool halfPrecision )
+    {
+        mNumPoses = static_cast<uint16>( numPoses );
+        mPoseHalfPrecision = halfPrecision;
+        mPoseNormals = normalData != 0;
+        size_t elementSize = halfPrecision ? sizeof( uint16 ) : sizeof( float );
+        size_t elementsPerVertex = mPoseNormals ? 8 : 4;
+        size_t singlePoseBufferSize = numVertices * elementSize * elementsPerVertex;
+        size_t bufferSize = numPoses * singlePoseBufferSize;
+        char *buffer = static_cast<char*>( OGRE_MALLOC_SIMD( bufferSize,
+                                                             MEMCATEGORY_GEOMETRY ) );                                
+        FreeOnDestructor bufferPtrContainer( buffer );
+        memset( buffer, 0, bufferSize );
+        
+        for( size_t poseIndex = 0; poseIndex < numPoses; ++poseIndex )
+        {
+            const float* pPosition = positionData[poseIndex];
+            const float* pNormal = normalData ? normalData[poseIndex] : 0;
+
+            if( halfPrecision )
+            {
+                uint16* pHalf = reinterpret_cast<uint16*>( buffer +  poseIndex * singlePoseBufferSize );
+                for( size_t i = 0; i < numVertices; ++i )
+                {
+                    size_t idx = i * elementsPerVertex;
+                    pHalf[idx+0] = Bitwise::floatToHalf( *pPosition++ );
+                    pHalf[idx+1] = Bitwise::floatToHalf( *pPosition++ );
+                    pHalf[idx+2] = Bitwise::floatToHalf( *pPosition++ );
+                    pHalf[idx+3] = Bitwise::floatToHalf( 0.f );
+
+                    if( pNormal )
+                    {
+                        pHalf[idx+4] = Bitwise::floatToHalf( *pNormal++ );
+                        pHalf[idx+5] = Bitwise::floatToHalf( *pNormal++ );
+                        pHalf[idx+6] = Bitwise::floatToHalf( *pNormal++ );
+                        pHalf[idx+7] = Bitwise::floatToHalf( 0.f );
+                    }
+                }
+            }
+            else
+            {
+                float* pFloat = reinterpret_cast<float*>( buffer + poseIndex * singlePoseBufferSize );
+                for( size_t i = 0; i < numVertices; ++i )
+                {
+                    size_t idx = i * elementsPerVertex;
+                    pFloat[idx+0] = *pPosition++;
+                    pFloat[idx+1] = *pPosition++;
+                    pFloat[idx+2] = *pPosition++;
+                    pFloat[idx+3] = 0.f;
+
+                    if( pNormal )
+                    {
+                        pFloat[idx+4] = *pNormal++;
+                        pFloat[idx+5] = *pNormal++;
+                        pFloat[idx+6] = *pNormal++;
+                        pFloat[idx+7] = 0.f;
+                    }
+                }
+            }
+
+            if( names )
+            {
+                mPoseIndexMap[names[poseIndex]] = poseIndex;
+            }
+        }
+        
+        PixelFormatGpu pixelFormat = halfPrecision ? PFG_RGBA16_FLOAT : PFG_RGBA32_FLOAT;
+        mPoseTexBuffer = mParent->mVaoManager->createTexBuffer( pixelFormat, bufferSize,
+                                                                BT_IMMUTABLE, buffer, false );
     }
     //---------------------------------------------------------------------
     void SubMesh::arrangeEfficient( bool halfPos, bool halfTexCoords, bool qTangents )

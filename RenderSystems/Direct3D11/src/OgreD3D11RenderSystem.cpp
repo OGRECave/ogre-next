@@ -226,7 +226,7 @@ namespace Ogre
                                                D3D_DRIVER_TYPE driverType,
                                                D3D_FEATURE_LEVEL minFL, D3D_FEATURE_LEVEL maxFL,
                                                D3D_FEATURE_LEVEL* pFeatureLevel,
-                                               ID3D11DeviceN **outDevice, ID3D11Device1 **outDevice1 )
+                                               ID3D11Device **outDevice )
     {
         IDXGIAdapterN* pAdapter = (d3dDriver && driverType == D3D_DRIVER_TYPE_HARDWARE) ?
                                       d3dDriver->getDeviceAdapter() : NULL;
@@ -291,7 +291,7 @@ namespace Ogre
 
         vendorExtension->createDevice( appName, pAdapter, driverType, deviceFlags, pFirstFL,
                                        static_cast<UINT>( pLastFL - pFirstFL + 1u ),
-                                       pFeatureLevel, outDevice, outDevice1 );
+                                       pFeatureLevel, outDevice );
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::initConfigOptions()
@@ -410,13 +410,6 @@ namespace Ogre
         optMaxFeatureLevels.possibleValues.push_back("9.2");
         optMaxFeatureLevels.possibleValues.push_back("9.3");
         optMaxFeatureLevels.currentValue = "9.3";
-#elif __OGRE_WINRT_PHONE || __OGRE_WINRT_STORE
-        optMaxFeatureLevels.possibleValues.push_back("9.3");
-        optMaxFeatureLevels.possibleValues.push_back("10.0");
-        optMaxFeatureLevels.possibleValues.push_back("10.1");
-        optMaxFeatureLevels.possibleValues.push_back("11.0");
-        optMaxFeatureLevels.possibleValues.push_back("11.1");
-        optMaxFeatureLevels.currentValue = "11.1";
 #else
         optMaxFeatureLevels.possibleValues.push_back("9.3");
         optMaxFeatureLevels.possibleValues.push_back("10.0");
@@ -642,11 +635,10 @@ namespace Ogre
         if (driver)
         {
             it = mOptions.find("Video Mode");
-            ComPtr<ID3D11DeviceN> device;
-            ComPtr<ID3D11Device1> device1;
+            ComPtr<ID3D11Device> device;
             createD3D11Device( mVendorExtension, "", driver, mDriverType,
                                mMinRequestedFeatureLevel, mMaxRequestedFeatureLevel,
-                               NULL, device.GetAddressOf(), device1.GetAddressOf() );
+                               NULL, device.GetAddressOf() );
             // 'videoMode' could be NULL if working over RDP/Simulator
             D3D11VideoMode* videoMode = driver->getVideoModeList()->item(it->second.currentValue);
             DXGI_FORMAT format = videoMode ? videoMode->getFormat() : DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -946,15 +938,17 @@ namespace Ogre
                 windowType = opt->second;
         }
 
-        D3D11RenderWindowBase* win = NULL;
-#if !__OGRE_WINRT_PHONE_80
-        if(win == NULL && windowType == "SurfaceImageSource")
-            win = new D3D11RenderWindowImageSource(mDevice);
+        D3D11Window* win = NULL;
+#if defined(_WIN32_WINNT_WINBLUE) && _WIN32_WINNT >= _WIN32_WINNT_WINBLUE
         if(win == NULL && windowType == "SwapChainPanel")
-            win = new D3D11RenderWindowSwapChainPanel(mDevice);
-#endif // !__OGRE_WINRT_PHONE_80
+            win = new D3D11WindowSwapChainPanel( name, width, height, fullScreen, 
+                                                 DepthBuffer::DefaultDepthBufferFormat,
+                                                 miscParams, mDevice, this );
+#endif // defined(_WIN32_WINNT_WINBLUE) && _WIN32_WINNT >= _WIN32_WINNT_WINBLUE
         if(win == NULL)
-            win = new D3D11RenderWindowCoreWindow(mDevice);
+            win = new D3D11WindowCoreWindow(     name, width, height, fullScreen, 
+                                                 DepthBuffer::DefaultDepthBufferFormat,
+                                                 miscParams, mDevice, this );
 #endif
 
         mWindows.insert( win );
@@ -1635,12 +1629,11 @@ namespace Ogre
             LogManager::getSingleton().logMessage("D3D11: Actually \"NVIDIA PerfHUD\" is used");
         }
 
-        ID3D11DeviceN *device = 0;
-        ID3D11Device1 *device1 = 0;
+        ComPtr<ID3D11Device> device;
         createD3D11Device( mVendorExtension, windowTitle, d3dDriver, mDriverType,
                            mMinRequestedFeatureLevel, mMaxRequestedFeatureLevel, &mFeatureLevel,
-                           &device, &device1 );
-        mDevice.TransferOwnership( device, device1 );
+                           device.GetAddressOf() );
+        mDevice.TransferOwnership( device );
 
         LARGE_INTEGER driverVersion = mDevice.GetDriverVersion();
         mDriverVersion.major = HIWORD(driverVersion.HighPart);
@@ -1718,15 +1711,17 @@ namespace Ogre
         }
     }
     //---------------------------------------------------------------------
-#if OGRE_PLATFORM != OGRE_PLATFORM_WINRT
     bool D3D11RenderSystem::isWindows8OrGreater()
     {
+#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT
+        return true;
+#else
         DWORD version = GetVersion();
         DWORD major = (DWORD)(LOBYTE(LOWORD(version)));
         DWORD minor = (DWORD)(HIBYTE(LOWORD(version)));
         return (major > 6) || ((major == 6) && (minor >= 2));
-    }
 #endif
+    }
     //---------------------------------------------------------------------
     VertexElementType D3D11RenderSystem::getColourVertexElementType(void) const
     {
@@ -3806,12 +3801,11 @@ namespace Ogre
 
         mVendorExtension = D3D11VendorExtension::initializeExtension( GPU_VENDOR_COUNT, 0 );
 
-        ID3D11DeviceN *device = 0;
-        ID3D11Device1 *device1 = 0;
+        ComPtr<ID3D11Device> device;
         createD3D11Device( mVendorExtension, "", NULL, D3D_DRIVER_TYPE_HARDWARE,
                            mMinRequestedFeatureLevel, mMaxRequestedFeatureLevel, 0,
-                           &device, &device1 );
-        mDevice.TransferOwnership( device, device1 );
+                           device.GetAddressOf() );
+        mDevice.TransferOwnership( device );
     }
     //---------------------------------------------------------------------
     void D3D11RenderSystem::getCustomAttribute(const String& name, void* pData)

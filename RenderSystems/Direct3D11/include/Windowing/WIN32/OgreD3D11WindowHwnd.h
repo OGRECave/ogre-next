@@ -33,6 +33,8 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+
     class D3D11WindowHwnd : public D3D11WindowSwapChainBased
     {
     protected:
@@ -92,6 +94,7 @@ namespace Ogre
 
         virtual void getCustomAttribute( IdString name, void* pData );
     };
+#endif
 }
 
 #endif

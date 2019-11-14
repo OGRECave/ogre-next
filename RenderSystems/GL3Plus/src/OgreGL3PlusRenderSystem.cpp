@@ -76,6 +76,10 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 
 #include "OgreProfiler.h"
 
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+extern "C" void glFlushRenderAPPLE();
+#endif
+
 #if OGRE_DEBUG_MODE
 static void APIENTRY GLDebugCallback(GLenum source,
                                      GLenum type,
@@ -285,7 +289,9 @@ namespace Ogre {
 
         // Check for hardware mipmapping support.
         bool disableAutoMip = false;
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE || \
+    OGRE_PLATFORM == OGRE_PLATFORM_LINUX || \
+    OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD
         // Apple & Linux ATI drivers have faults in hardware mipmap generation
         // TODO: Test this with GL3+
         if (rsc->getVendor() == GPU_AMD)
@@ -1740,8 +1746,8 @@ namespace Ogre {
 
     void GL3PlusRenderSystem::_hlmsSamplerblockCreated( HlmsSamplerblock *newBlock )
     {
-        GLuint samplerName;
-        glGenSamplers( 1, &samplerName );
+        GLuint samplerName = 0;
+        OCGE( glGenSamplers( 1, &samplerName ) );
 
         GLint minFilter, magFilter;
         switch( newBlock->mMinFilter )
@@ -2689,7 +2695,7 @@ namespace Ogre {
                                                  static_cast<v1::GL3PlusHardwareIndexBuffer*>(op.indexData->indexBuffer.get())->getGLBufferId()));
                 void *pBufferData = GL_BUFFER_OFFSET(op.indexData->indexStart *
                                                      op.indexData->indexBuffer->getIndexSize());
-                GLenum indexType = (op.indexData->indexBuffer->getType() == v1::HardwareIndexBuffer::IT_32BIT) ? GL_UNSIGNED_BYTE : GL_UNSIGNED_SHORT;
+                GLenum indexType = (op.indexData->indexBuffer->getType() == v1::HardwareIndexBuffer::IT_16BIT) ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT;
                 OGRE_CHECK_GL_ERROR(glDrawElements(GL_PATCHES, op.indexData->indexCount, indexType, pBufferData));
                 //OGRE_CHECK_GL_ERROR(glDrawElements(GL_PATCHES, op.indexData->indexCount, indexType, pBufferData));
                 //                OGRE_CHECK_GL_ERROR(glDrawArraysInstanced(GL_PATCHES, 0, primCount, 1));
@@ -2709,9 +2715,7 @@ namespace Ogre {
             void *pBufferData = GL_BUFFER_OFFSET(op.indexData->indexStart *
                                                  op.indexData->indexBuffer->getIndexSize());
 
-            //TODO : GL_UNSIGNED_INT or GL_UNSIGNED_BYTE?  Latter breaks samples.
-            GLenum indexType = (op.indexData->indexBuffer->getType() == v1::HardwareIndexBuffer::IT_16BIT) ?
-                                GL_UNSIGNED_SHORT : GL_UNSIGNED_INT;
+            GLenum indexType = (op.indexData->indexBuffer->getType() == v1::HardwareIndexBuffer::IT_16BIT) ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT;
 
             do
             {
@@ -3172,9 +3176,15 @@ namespace Ogre {
             mCurrentComputeShader->unbind();
 
         // It's ready for switching
-        if (mCurrentContext)
+        if (mCurrentContext!=context)
+        {
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+            // NSGLContext::makeCurrentContext does not flush automatically. everybody else does.
+            glFlushRenderAPPLE();
+#endif
             mCurrentContext->endCurrent();
-        mCurrentContext = context;
+            mCurrentContext = context;
+        }
         mCurrentContext->setCurrent();
 
         // Check if the context has already done one-time initialisation

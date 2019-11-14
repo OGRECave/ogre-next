@@ -39,7 +39,7 @@ Adapted to Ogre by Matias N. Goldberg
 
 @property( hlms_lights_area_ltc )
 	@piece( DeclAreaLtcTextures )
-		@property( syntax == glsl )
+		@property( syntax == glsl || syntax == glsles )
 			uniform sampler2DArray ltcMatrix;
 		@end
 		@property( syntax == hlsl )

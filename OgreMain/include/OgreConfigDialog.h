@@ -42,7 +42,7 @@ THE SOFTWARE.
 # include "WIN32/OgreConfigDialogImp.h"
 #elif OGRE_PLATFORM == OGRE_PLATFORM_WINRT
 # include "WIN32/OgreConfigDialogImpWinRT.h"
-#elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+#elif OGRE_PLATFORM == OGRE_PLATFORM_LINUX || OGRE_PLATFORM == OGRE_PLATFORM_FREEBSD
 # include "GLX/OgreConfigDialogImp.h"
 #elif OGRE_PLATFORM == OGRE_PLATFORM_NACL
 # include "NaCl/OgreConfigDialogImp.h"

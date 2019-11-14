@@ -43,7 +43,7 @@ namespace Ogre
 {
     Rectangle2D::Rectangle2D( IdType id, ObjectMemoryManager *objectMemoryManager,
                               SceneManager *manager ) :
-        MovableObject( id, objectMemoryManager, manager, 0u ),
+        MovableObject( id, objectMemoryManager, manager, 10u ),
         Renderable(),
         mChanged( true ),
         mGeometryFlags( 0 )

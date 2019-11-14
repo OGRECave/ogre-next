@@ -29,10 +29,10 @@ if( OGRE_BUILD_SAMPLES2_SKIP )
 endif()
 
 if( APPLE )
-        if( OGRE_BUILD_PLATFORM_APPLE_IOS )
-            # This needs to be first in the list in order show up in the Copy Bundle Resources build phase.
-            set( SAMPLE_COMMON_STORYBOARD_RESOURCE ${CMAKE_CURRENT_SOURCE_DIR}/Common/src/System/iOS/Resources/Main.storyboard )
-        endif()
+    if( OGRE_BUILD_PLATFORM_APPLE_IOS )
+        # This needs to be first in the list in order show up in the Copy Bundle Resources build phase.
+        set( SAMPLE_COMMON_STORYBOARD_RESOURCE ${CMAKE_CURRENT_SOURCE_DIR}/Common/src/System/iOS/Resources/Main.storyboard )
+    endif()
 
 	set( SAMPLE_COMMON_BASIC_RESOURCES ${SAMPLE_COMMON_BASIC_RESOURCES}
                  ${SAMPLE_COMMON_STORYBOARD_RESOURCE}
@@ -69,6 +69,9 @@ if( OGRE_BUILD_SAMPLES2 AND NOT OGRE_BUILD_SAMPLES2_SKIP )
 		if( OGRE_BUILD_RENDERSYSTEM_GL3PLUS )
 			set( OGRE_SAMPLES_LIBRARIES ${OGRE_SAMPLES_LIBRARIES} "RenderSystem_GL3Plus" )
 		endif()
+		if( OGRE_BUILD_RENDERSYSTEM_GLES2 )
+			set( OGRE_SAMPLES_LIBRARIES ${OGRE_SAMPLES_LIBRARIES} "RenderSystem_GLES2" )
+		endif()
 		if( OGRE_BUILD_RENDERSYSTEM_D3D11 )
 			set( OGRE_SAMPLES_LIBRARIES ${OGRE_SAMPLES_LIBRARIES} "RenderSystem_D3D11" )
 		endif()
@@ -87,6 +90,7 @@ if( OGRE_BUILD_SAMPLES2 AND NOT OGRE_BUILD_SAMPLES2_SKIP )
 	add_subdirectory(ApiUsage/InstantRadiosity)
 	add_subdirectory(ApiUsage/LocalCubemaps)
 	add_subdirectory(ApiUsage/LocalCubemapsManualProbes)
+	add_subdirectory(ApiUsage/MorphAnimations)
 	add_subdirectory(ApiUsage/V1Interfaces)
 	add_subdirectory(ApiUsage/V2Mesh)
 	add_subdirectory(ApiUsage/V2ManualObject)

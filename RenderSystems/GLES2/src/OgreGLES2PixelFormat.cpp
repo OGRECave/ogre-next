@@ -32,20 +32,31 @@ THE SOFTWARE.
 #include "OgreBitwise.h"
 
 namespace Ogre {
-    //-----------------------------------------------------------------------------
-    GLenum GLES2PixelUtil::getGLOriginFormat(PixelFormat mFormat, bool hwGamma)
+
+    GLenum GLES2PixelUtil::getGLOriginFormat(PixelFormat format, bool hwGamma)
     {
 #if OGRE_NO_GLES3_SUPPORT != 0
 		const RenderSystemCapabilities *caps =
             Root::getSingleton().getRenderSystem()->getCapabilities();
 #endif
-        switch (mFormat)
+        switch (format)
         {
+            case PF_DEPTH_DEPRECATED:
+            case PF_D24_UNORM:
+            case PF_D16_UNORM:
+            case PF_D32_FLOAT:
+                return GL_DEPTH_COMPONENT;
+            case PF_D24_UNORM_S8_UINT:
+            case PF_D24_UNORM_X8:
+            case PF_X24_S8_UINT:
+            case PF_D32_FLOAT_X24_S8_UINT:
+            case PF_D32_FLOAT_X24_X8:
+            case PF_X32_X24_S8_UINT:
+                return GL_DEPTH_STENCIL;
+
             case PF_A8:
                 return GL_ALPHA;
-            case PF_DEPTH:
-                return GL_DEPTH_COMPONENT;
-
+                
 #if GL_OES_texture_half_float || GL_EXT_color_buffer_half_float || (OGRE_NO_GLES3_SUPPORT == 0) && OGRE_PLATFORM != OGRE_PLATFORM_NACL
             case PF_FLOAT16_RGB:
             case PF_FLOAT32_RGB:
@@ -226,13 +237,13 @@ namespace Ogre {
             case PF_R9G9B9E5_SHAREDEXP:
                 return GL_RGB;
             case PF_R8_SNORM:
-                return GL_R8_SNORM;
+                return GL_RED;
             case PF_R8G8_SNORM:
-                return GL_RG8_SNORM;
+                return GL_RG;
             case PF_R8G8B8_SNORM:
-                return GL_RGB8_SNORM;
+                return GL_RGB;
             case PF_R8G8B8A8_SNORM:
-                return GL_RGBA8_SNORM;
+                return GL_RGBA;
 #else
             case PF_L8:
             case PF_L16:
@@ -242,13 +253,11 @@ namespace Ogre {
                 return 0;
         }
     }
-    //-----------------------------------------------------------------------------
-    GLenum GLES2PixelUtil::getGLOriginDataType(PixelFormat mFormat)
+
+    GLenum GLES2PixelUtil::getGLOriginDataType(PixelFormat format)
     {
-        switch (mFormat)
+        switch (format)
         {
-            case PF_DEPTH:
-                return GL_UNSIGNED_INT;
             case PF_A8:
             case PF_L8:
             case PF_L16:
@@ -303,6 +312,7 @@ namespace Ogre {
             case PF_FLOAT32_GR:
             case PF_FLOAT32_RGB:
             case PF_FLOAT32_RGBA:
+            case PF_D32_FLOAT:
 #if (GL_OES_texture_float && OGRE_PLATFORM != OGRE_PLATFORM_NACL) || (OGRE_NO_GLES3_SUPPORT == 0)
                 return GL_FLOAT;
 #endif
@@ -333,7 +343,14 @@ namespace Ogre {
             case PF_R32G32_UINT:
             case PF_R32G32B32_UINT:
             case PF_R32G32B32A32_UINT:
+            case PF_DEPTH_DEPRECATED:
+            case PF_D24_UNORM:
+            case PF_D16_UNORM:
                 return GL_UNSIGNED_INT;
+            case PF_D24_UNORM_S8_UINT:
+            case PF_D24_UNORM_X8:
+            case PF_X24_S8_UINT:
+                return GL_UNSIGNED_INT_24_8;
             case PF_R16_UINT:
             case PF_R16G16_UINT:
             case PF_R16G16B16_UINT:
@@ -349,6 +366,10 @@ namespace Ogre {
             case PF_R32G32_SINT:
             case PF_R32G32B32A32_SINT:
                 return GL_INT;
+            case PF_D32_FLOAT_X24_S8_UINT:
+            case PF_X32_X24_S8_UINT:
+            case PF_D32_FLOAT_X24_X8:
+                return GL_FLOAT_32_UNSIGNED_INT_24_8_REV;
 
             case PF_R9G9B9E5_SHAREDEXP:
                 return GL_UNSIGNED_INT_5_9_9_9_REV;
@@ -370,8 +391,23 @@ namespace Ogre {
 
         switch (fmt)
         {
-            case PF_DEPTH:
+            case PF_DEPTH_DEPRECATED:
                 return GL_DEPTH_COMPONENT;
+            case PF_D24_UNORM_S8_UINT:
+            case PF_D24_UNORM_X8:
+            case PF_X24_S8_UINT:
+                return GL_DEPTH24_STENCIL8_OES;
+            case PF_D24_UNORM:
+                return GL_DEPTH_COMPONENT24_OES;
+            case PF_D16_UNORM:
+                return GL_DEPTH_COMPONENT16;
+            case PF_D32_FLOAT:
+                return GL_DEPTH_COMPONENT32F;
+            case PF_D32_FLOAT_X24_S8_UINT:
+            case PF_D32_FLOAT_X24_X8:
+            case PF_X32_X24_S8_UINT:
+                return GL_DEPTH32F_STENCIL8;
+
 #if GL_IMG_texture_compression_pvrtc && OGRE_PLATFORM != OGRE_PLATFORM_NACL
             case PF_PVRTC_RGB2:
                 return GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG;
@@ -579,24 +615,31 @@ namespace Ogre {
             case PF_FLOAT32_R:
                 return GL_R32F_EXT;
             case PF_R8:
+#if OGRE_NO_GLES3_SUPPORT == 0
+                return GL_R8;
+#else
                 return GL_RED_EXT;
+#endif
             case PF_FLOAT16_GR:
                 return GL_RG16F_EXT;
             case PF_FLOAT32_GR:
                 return GL_RG32F_EXT;
             case PF_RG8:
+#if OGRE_NO_GLES3_SUPPORT == 0
+                return GL_RG8;
+#else
                 return GL_RG_EXT;
+#endif
 #endif
             default:
                 return GL_NONE;
         }
     }
-    //-----------------------------------------------------------------------------
-    GLenum GLES2PixelUtil::getClosestGLInternalFormat(PixelFormat mFormat,
-                                                   bool hwGamma)
+
+    GLenum GLES2PixelUtil::getClosestGLInternalFormat(PixelFormat format, bool hwGamma)
     {
-        GLenum format = getGLInternalFormat(mFormat, hwGamma);
-        if (format == GL_NONE)
+        GLenum GLformat = getGLInternalFormat(format, hwGamma);
+        if (GLformat == GL_NONE)
         {
 #if OGRE_NO_GLES3_SUPPORT == 0
             if (hwGamma)
@@ -615,34 +658,128 @@ namespace Ogre {
             {
                 if( caps->hasCapability( RSC_HW_GAMMA ) )
                     return GL_SRGB_EXT;
-                else
-                {
-                    // TODO not supported
+                else // TODO not supported
                     return 0;
-                }
             }
             else
-            {
                 return GL_RGBA8_OES;
-            }
 #endif
         }
         else
+            return GLformat;
+    }
+    //-----------------------------------------------------------------------------
+    GLenum GLES2PixelUtil::getGLImageInternalFormat(PixelFormat format)
+    {
+        switch(format)
         {
-            return format;
+        case PF_L8:
+        case PF_A8:
+            return GL_R8;
+//        case PF_L16:
+//            return GL_R16;
+        case PF_BYTE_LA:
+            return GL_RG8;
+        case PF_A8R8G8B8:
+        case PF_B8G8R8A8:
+        case PF_A8B8G8R8:
+        case PF_R8G8B8A8:
+            return GL_RGBA8;
+        case PF_A2R10G10B10:
+        case PF_A2B10G10R10:
+            //return GL_RGB10_A2UI;
+            return GL_RGB10_A2;
+        case PF_FLOAT16_R:
+            return GL_R16F;
+        case PF_FLOAT16_GR:
+            return GL_RG16F;
+        case PF_FLOAT16_RGBA:
+            return GL_RGBA16F;
+        case PF_FLOAT32_R:
+            return GL_R32F;
+        case PF_FLOAT32_GR:
+            return GL_RG32F;
+        case PF_FLOAT32_RGBA:
+            return GL_RGBA32F;
+//        case PF_SHORT_RGBA:
+//            return GL_RGBA16;
+//        case PF_SHORT_GR:
+//            return GL_RG16;
+        case PF_R11G11B10_FLOAT:
+            return GL_R11F_G11F_B10F;
+        case PF_R8_UINT:
+            return GL_R8UI;
+        case PF_R8G8_UINT:
+            return GL_RG8UI;
+        case PF_R8G8B8A8_UINT:
+            return GL_RGBA8UI;
+        case PF_R16_UINT:
+            return GL_R16UI;
+        case PF_R16G16_UINT:
+            return GL_RG16UI;
+        case PF_R16G16B16A16_UINT:
+            return GL_RGBA16UI;
+        case PF_R32_UINT:
+            return GL_R32UI;
+        case PF_R32G32_UINT:
+            return GL_RG32UI;
+        case PF_R32G32B32A32_UINT:
+            return GL_RGBA32UI;
+        case PF_R8_SINT:
+            return GL_R8I;
+        case PF_R8G8_SINT:
+            return GL_RG8I;
+        case PF_R8G8B8_SINT:
+            return GL_RG8I;
+        case PF_R16_SINT:
+            return GL_R16I;
+        case PF_R16G16_SINT:
+            return GL_RG16I;
+        case PF_R16G16B16A16_SINT:
+            return GL_RGBA16I;
+        case PF_R32_SINT:
+            return GL_R32I;
+        case PF_R32G32_SINT:
+            return GL_RG32I;
+        case PF_R32G32B32A32_SINT:
+            return GL_RGBA32I;
+        case PF_R8G8_SNORM:
+            return GL_RG8_SNORM;
+//        case PF_R16_SNORM:
+//            return GL_R16_SNORM;
+//        case PF_R16G16_SNORM:
+//            return GL_RG16_SNORM;
+//        case PF_R16G16B16A16_SNORM:
+//            return GL_RGBA16_SNORM;
+        case PF_R8G8B8A8_SNORM:
+            return GL_RGBA8_SNORM;
+
+        default:
+            return GL_NONE;
         }
+    }
+    //-----------------------------------------------------------------------------
+    GLenum GLES2PixelUtil::getClosestGLImageInternalFormat(PixelFormat format)
+    {
+        GLenum GLformat = getGLImageInternalFormat(format);
+        return (format == GL_NONE ? GL_RGBA8 : GLformat);
     }
     //-----------------------------------------------------------------------------
     PixelFormat GLES2PixelUtil::getClosestOGREFormat(GLenum fmt, GLenum dataType)
     {
         switch (fmt)
         {
-            case GL_DEPTH_COMPONENT:
-            case GL_DEPTH24_STENCIL8_OES:
             case GL_DEPTH_COMPONENT16:
+                return PF_D16_UNORM;
             case GL_DEPTH_COMPONENT24_OES:
-            case GL_DEPTH_COMPONENT32_OES:
-                return PF_DEPTH;
+                return PF_D24_UNORM;
+            case GL_DEPTH_COMPONENT32F:
+                return PF_D32_FLOAT;
+            case GL_DEPTH_COMPONENT:
+            case GL_DEPTH24_STENCIL8:
+                return PF_D24_UNORM_S8_UINT;
+            case GL_DEPTH32F_STENCIL8:
+                return PF_D32_FLOAT_X24_S8_UINT;
 
 #if GL_IMG_texture_compression_pvrtc
             case GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG:
@@ -742,6 +879,7 @@ namespace Ogre {
 #if (GL_EXT_texture_rg && OGRE_PLATFORM != OGRE_PLATFORM_NACL) || (OGRE_NO_GLES3_SUPPORT == 0)
             case GL_R8_EXT:
                 return PF_R8;
+            case GL_RG_EXT:
             case GL_RG8_EXT:
                 return PF_RG8;
 #endif

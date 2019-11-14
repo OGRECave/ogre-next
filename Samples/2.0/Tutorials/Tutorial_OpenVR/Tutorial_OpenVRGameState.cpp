@@ -58,7 +58,9 @@ namespace Demo
                                               Ogre::ResourceGroupManager::INTERNAL_RESOURCE_GROUP_NAME,
                                               Ogre::SCENE_STATIC );
             mHiddenAreaMeshVr->setCastShadows( false );
+            mHiddenAreaMeshVr->setRenderQueueGroup( 0u );
             mHiddenAreaMeshVr->getSubItem(0)->setUseIdentityProjection( true );
+            // Set to render *after* the RadialDensityMask
             mHiddenAreaMeshVr->getSubItem(0)->setRenderQueueSubGroup( 1u );
             sceneManager->getRootSceneNode( Ogre::SCENE_STATIC )->attachObject( mHiddenAreaMeshVr );
         }
@@ -67,8 +69,6 @@ namespace Demo
         sceneManager->setRadialDensityMask( true, radiuses );*/
         const float radiuses[3] = {0.25f, 0.7f, 0.85f};
         sceneManager->setRadialDensityMask( true, radiuses );
-
-        sceneManager->getRenderQueue()->setRenderQueueMode( 1u, Ogre::RenderQueue::FAST );
 
         Ogre::v1::MeshPtr planeMeshV1 = Ogre::v1::MeshManager::getSingleton().createPlane( "Plane v1",
                                             Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
@@ -85,7 +85,6 @@ namespace Demo
         {
             Ogre::Item *item = sceneManager->createItem( planeMesh, Ogre::SCENE_DYNAMIC );
             item->setDatablock( "Marble" );
-            item->setRenderQueueGroup( 1u );
             Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
                                                     createChildSceneNode( Ogre::SCENE_DYNAMIC );
             sceneNode->setPosition( 0, -1, 0 );
@@ -121,7 +120,6 @@ namespace Demo
                                                              Ogre::ResourceGroupManager::
                                                              AUTODETECT_RESOURCE_GROUP_NAME,
                                                              Ogre::SCENE_DYNAMIC );
-                item->setRenderQueueGroup( 1u );
                 if( i % 2 == 0 )
                     item->setDatablock( "Rocks" );
                 else
@@ -194,7 +192,6 @@ namespace Demo
                                                                  Ogre::ResourceGroupManager::
                                                                  AUTODETECT_RESOURCE_GROUP_NAME,
                                                                  Ogre::SCENE_DYNAMIC );
-                    item->setRenderQueueGroup( 1u );
                     item->setDatablock( datablock );
                     item->setVisibilityFlags( 0x000000002 );
 

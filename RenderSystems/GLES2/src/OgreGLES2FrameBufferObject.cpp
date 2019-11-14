@@ -40,26 +40,38 @@ namespace Ogre {
     GLES2FrameBufferObject::GLES2FrameBufferObject(GLES2FBOManager *manager, uint fsaa):
         mManager(manager), mNumSamples(fsaa)
     {
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+        GLint oldfb = 0;
+        OGRE_CHECK_GL_ERROR(glGetIntegerv(GL_FRAMEBUFFER_BINDING, &oldfb));
+#endif
+        GLES2RenderSystem* rs = getGLES2RenderSystem();
+        
         // Generate framebuffer object
         OGRE_CHECK_GL_ERROR(glGenFramebuffers(1, &mFB));
 
-        if(getGLES2SupportRef()->checkExtension("GL_EXT_debug_label"))
+        if(rs->checkExtension("GL_EXT_debug_label"))
         {
-            OGRE_IF_IOS_VERSION_IS_GREATER_THAN(5.0)
-            OGRE_CHECK_GL_ERROR(glLabelObjectEXT(GL_BUFFER_OBJECT_EXT, mFB, 0, ("FBO #" + StringConverter::toString(mFB)).c_str()));
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+            OGRE_CHECK_GL_ERROR(glBindFramebuffer(GL_FRAMEBUFFER, mFB)); // to avoid GL_INVALID_OPERATION in glLabelObjectEXT(GL_FRAMEBUFFER,...) on iOS
+#endif
+            OGRE_CHECK_GL_ERROR(glLabelObjectEXT(GL_FRAMEBUFFER, mFB, 0, ("FBO #" + StringConverter::toString(mFB)).c_str()));
         }
 
         mNumSamples = 0;
         mMultisampleFB = 0;
 
         // Check multisampling if supported
-        if(gleswIsSupported(3, 0))
+        if(rs->hasMinGLVersion(3, 0))
         {
             // Check samples supported
             OGRE_CHECK_GL_ERROR(glBindFramebuffer(GL_FRAMEBUFFER, mFB));
             GLint maxSamples;
             OGRE_CHECK_GL_ERROR(glGetIntegerv(GL_MAX_SAMPLES_APPLE, &maxSamples));
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+            OGRE_CHECK_GL_ERROR(glBindFramebuffer(GL_FRAMEBUFFER, oldfb));
+#else
             OGRE_CHECK_GL_ERROR(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+#endif
             mNumSamples = std::min(mNumSamples, (GLsizei)maxSamples);
         }
 
@@ -67,10 +79,12 @@ namespace Ogre {
         if (mNumSamples)
         {
             OGRE_CHECK_GL_ERROR(glGenFramebuffers(1, &mMultisampleFB));
-            if(getGLES2SupportRef()->checkExtension("GL_EXT_debug_label"))
+            if(rs->checkExtension("GL_EXT_debug_label"))
             {
-                OGRE_IF_IOS_VERSION_IS_GREATER_THAN(5.0)
-                OGRE_CHECK_GL_ERROR(glLabelObjectEXT(GL_BUFFER_OBJECT_EXT, mMultisampleFB, 0, ("MSAA FBO #" + StringConverter::toString(mMultisampleFB)).c_str()));
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+                OGRE_CHECK_GL_ERROR(glBindFramebuffer(GL_FRAMEBUFFER, mMultisampleFB)); // to avoid GL_INVALID_OPERATION in glLabelObjectEXT(GL_FRAMEBUFFER,...) on iOS
+#endif
+                OGRE_CHECK_GL_ERROR(glLabelObjectEXT(GL_FRAMEBUFFER, mMultisampleFB, 0, ("MSAA FBO #" + StringConverter::toString(mMultisampleFB)).c_str()));
             }
         }
         else
@@ -78,9 +92,11 @@ namespace Ogre {
             mMultisampleFB = 0;
         }
 
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+        OGRE_CHECK_GL_ERROR(glBindFramebuffer(GL_FRAMEBUFFER, oldfb));
+#endif
+
         // Initialise state
-        mDepth.buffer = 0;
-        mStencil.buffer = 0;
         for(size_t x = 0; x < OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++x)
         {
             mColour[x].buffer=0;
@@ -89,8 +105,6 @@ namespace Ogre {
     
     GLES2FrameBufferObject::~GLES2FrameBufferObject()
     {
-        mManager->releaseRenderBuffer(mDepth);
-        mManager->releaseRenderBuffer(mStencil);
         mManager->releaseRenderBuffer(mMultisampleColourBuffer);
         // Delete framebuffer object
         OGRE_CHECK_GL_ERROR(glDeleteFramebuffers(1, &mFB));
@@ -145,8 +159,6 @@ namespace Ogre {
     void GLES2FrameBufferObject::initialise()
     {
         // Release depth and stencil, if they were bound
-        mManager->releaseRenderBuffer(mDepth);
-        mManager->releaseRenderBuffer(mStencil);
         mManager->releaseRenderBuffer(mMultisampleColourBuffer);
         // First buffer must be bound
         if(!mColour[0].buffer)
@@ -168,10 +180,14 @@ namespace Ogre {
         ushort maxSupportedMRTs = Root::getSingleton().getRenderSystem()->getCapabilities()->getNumMultiRenderTargets();
 
         // Bind simple buffer to add colour attachments
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+        GLint oldfb = 0;
+        OGRE_CHECK_GL_ERROR(glGetIntegerv(GL_FRAMEBUFFER_BINDING, &oldfb));
+#endif
         OGRE_CHECK_GL_ERROR(glBindFramebuffer(GL_FRAMEBUFFER, mFB));
 
         // Bind all attachment points to frame buffer
-        for(uint32 x=0; x<maxSupportedMRTs; ++x)
+        for(unsigned int x=0; x<maxSupportedMRTs; ++x)
         {
             if(mColour[x].buffer)
             {
@@ -191,10 +207,10 @@ namespace Ogre {
                     ss << "Attachment " << x << " has incompatible format.";
                     OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, ss.str(), "GLES2FrameBufferObject::initialise");
                 }
-                if(getFormat() == PF_DEPTH)
-                    mColour[x].buffer->bindToFramebuffer(GL_DEPTH_ATTACHMENT, mColour[x].zoffset);
-                else
-                    mColour[x].buffer->bindToFramebuffer(GL_COLOR_ATTACHMENT0+x, mColour[x].zoffset);
+
+                assert( !PixelUtil::isDepth( getFormat() ) );
+                
+                mColour[x].buffer->bindToFramebuffer(GL_COLOR_ATTACHMENT0+x, mColour[x].zoffset);
             }
             else
             {
@@ -227,11 +243,13 @@ namespace Ogre {
 
         GLenum bufs[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
 		GLsizei n=0;
-		for(size_t x=0; x<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++x)
+		for(unsigned int x=0; x<maxSupportedMRTs; ++x)
 		{
 			// Fill attached colour buffers
 			if(mColour[x].buffer)
 			{
+                assert( !PixelUtil::isDepth( getFormat() ) );
+                
 				bufs[x] = GL_COLOR_ATTACHMENT0 + x;
 				// Keep highest used buffer + 1
 				n = x+1;
@@ -244,7 +262,7 @@ namespace Ogre {
 
 #if OGRE_NO_GLES3_SUPPORT == 0
         // Drawbuffer extension supported, use it
-        if(getFormat() != PF_DEPTH)
+        if(getFormat() != PF_DEPTH_DEPRECATED)
             OGRE_CHECK_GL_ERROR(glDrawBuffers(n, bufs));
 
         if (mMultisampleFB)
@@ -264,8 +282,8 @@ namespace Ogre {
 
         // Bind main buffer
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-        // The screen buffer is 1 on iOS
-        OGRE_CHECK_GL_ERROR(glBindFramebuffer(GL_FRAMEBUFFER, 1));
+        // The screen buffer is never 0 on iOS
+        OGRE_CHECK_GL_ERROR(glBindFramebuffer(GL_FRAMEBUFFER, oldfb));
 #else
         OGRE_CHECK_GL_ERROR(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 #endif
@@ -321,16 +339,7 @@ namespace Ogre {
 
         if( glDepthBuffer )
         {
-            v1::GLES2RenderBuffer *depthBuf   = glDepthBuffer->getDepthBuffer();
-            v1::GLES2RenderBuffer *stencilBuf = glDepthBuffer->getStencilBuffer();
-
-            //Attach depth buffer, if it has one.
-            if( depthBuf )
-                depthBuf->bindToFramebuffer( GL_DEPTH_ATTACHMENT, 0 );
-
-            //Attach stencil buffer, if it has one.
-            if( stencilBuf )
-                stencilBuf->bindToFramebuffer( GL_STENCIL_ATTACHMENT, 0 );
+            glDepthBuffer->bindToFramebuffer();
         }
         else
         {
@@ -368,5 +377,4 @@ namespace Ogre {
     {
         return mNumSamples;
     }
-//-----------------------------------------------------------------------------
 }
