@@ -73,6 +73,7 @@ namespace Ogre
         mRectangle->setGeometry( mLeftEyeCenter, mRightEyeCenter );
         mRectangle->initialize(
             BT_IMMUTABLE, Rectangle2D::GeometryFlagStereo | Rectangle2D::GeometryFlagHollowFsRect );
+        mRectangle->setRenderQueueGroup( 0u ); // Render first!
 
         const String baseMatName = "Ogre/VR/RadialDensityMask";
         const String matName = baseMatName + StringConverter::toString( sceneManager->getId() );
