@@ -39,6 +39,7 @@ namespace Ogre
         D3D11WindowSwapChainBased( title, width, height, fullscreenMode, depthStencilFormat,
                                    miscParams, device, renderSystem )
     {
+        mUseFlipSequentialMode = true;
     }
     //-----------------------------------------------------------------------------------
     D3D11WindowCoreWindow::~D3D11WindowCoreWindow()
@@ -69,6 +70,7 @@ namespace Ogre
         mCompositionScale(1.0f, 1.0f)
 
     {
+        mUseFlipSequentialMode = true;
     }
     //-----------------------------------------------------------------------------------
     D3D11WindowSwapChainPanel::~D3D11WindowSwapChainPanel()

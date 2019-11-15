@@ -194,7 +194,7 @@ namespace Ogre
             ZeroMemory( &sd, sizeof(sd) );
             sd.Width  = mRequestedWidth;
             sd.Height = mRequestedHeight;
-            sd.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+            sd.Format = _getSwapChainFormat();
 
             setCommonSwapChain( sd );
 
@@ -219,7 +219,7 @@ namespace Ogre
             setCommonSwapChain( sd );
             sd.BufferDesc.Width = mRequestedWidth;
             sd.BufferDesc.Height = mRequestedHeight;
-            sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+            sd.BufferDesc.Format = _getSwapChainFormat();
             sd.BufferDesc.RefreshRate.Numerator     = mFrequencyNumerator;
             sd.BufferDesc.RefreshRate.Denominator   = mFrequencyDenominator;
             sd.OutputWindow = mHwnd;
@@ -598,7 +598,7 @@ namespace Ogre
         mTexture        = textureManager->createTextureGpuWindow( mpBackBuffer.Get(), this );
         mDepthBuffer    = textureManager->createWindowDepthBuffer();
 
-        mTexture->setPixelFormat( mHwGamma ? PFG_RGBA8_UNORM_SRGB : PFG_RGBA8_UNORM );
+        mTexture->setPixelFormat( _getRenderFormat() );
         mDepthBuffer->setPixelFormat( DepthBuffer::DefaultDepthBufferFormat );
         if( PixelFormatGpuUtils::isStencil( mDepthBuffer->getPixelFormat() ) )
             mStencilBuffer = mDepthBuffer;

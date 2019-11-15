@@ -60,7 +60,8 @@ namespace Ogre
 
         D3D11RenderSystem       *mRenderSystem;
 
-        //IDXGIDeviceN* _queryDxgiDevice();       // release after use!
+    protected:
+        virtual PixelFormatGpu _getRenderFormat() { return mHwGamma ? PFG_BGRA8_UNORM_SRGB : PFG_BGRA8_UNORM; } // preferred since Win8
 
     public:
         D3D11Window( const String &title, uint32 width, uint32 height,
@@ -93,6 +94,9 @@ namespace Ogre
         bool                    mPreviousPresentStatsIsValid;
         // Number of times we missed the v sync blank
         uint32                  mVBlankMissCount;
+
+    protected:
+        DXGI_FORMAT _getSwapChainFormat();
 
     public:
         D3D11WindowSwapChainBased( const String &title, uint32 width, uint32 height,

@@ -28,7 +28,9 @@ THE SOFTWARE.
 
 #include "OgreD3D11Window.h"
 #include "OgreD3D11RenderSystem.h"
+#include "OgreD3D11Mappings.h"
 
+#include "OgrePixelFormatGpuUtils.h"
 #include "OgreStringConverter.h"
 
 #define TODO_convert_to_MSAA_pattern
@@ -133,6 +135,17 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     D3D11WindowSwapChainBased::~D3D11WindowSwapChainBased()
     {
+    }
+    //---------------------------------------------------------------------
+    DXGI_FORMAT D3D11WindowSwapChainBased::_getSwapChainFormat()
+    {
+        // We prefer to use *_SRGB format for swapchain, so that multisampled swapchain are resolved properly.
+        // Unfortunately, swapchains in flip mode are incompatible with multisampling and with *_SRGB formats,
+        // and special handling is required.
+        PixelFormatGpu pf = _getRenderFormat();
+        if(mUseFlipSequentialMode)
+            pf = PixelFormatGpuUtils::getEquivalentLinear(pf);
+        return D3D11Mappings::get(pf);
     }
     //---------------------------------------------------------------------
     void D3D11WindowSwapChainBased::destroy()

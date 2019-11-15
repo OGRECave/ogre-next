@@ -46,6 +46,9 @@ namespace Ogre
 
         static bool mClassRegistered;
 
+    protected:
+        virtual PixelFormatGpu _getRenderFormat() { return mHwGamma ? PFG_RGBA8_UNORM_SRGB : PFG_RGBA8_UNORM; } // DXGI 1.0 compatible
+
         DWORD getWindowStyle( bool fullScreen ) const;
 
         static bool isWindows8OrGreater(void);
