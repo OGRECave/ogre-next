@@ -48,8 +48,6 @@ namespace Ogre
         mAlwaysWindowedMode( false ),
         mHwGamma( false ),
         mVisible( true ),
-        mpBackBuffer( 0 ),
-        mpBackBufferNoMSAA( 0 ),
         mRenderSystem( renderSystem )
     {
         mMsaaDesc.Count     = 1u;
@@ -111,8 +109,6 @@ namespace Ogre
         D3D11Window( title, width, height, fullscreenMode,
                      depthStencilFormat, miscParams,
                      device, renderSystem ),
-        mSwapChain( 0 ),
-        mSwapChain1( 0 ),
         mUseFlipSequentialMode( false ),
         mPreviousPresentStatsIsValid( false ),
         mVBlankMissCount( 0 )

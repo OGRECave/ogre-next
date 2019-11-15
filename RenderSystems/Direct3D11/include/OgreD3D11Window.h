@@ -53,10 +53,10 @@ namespace Ogre
 
         // Window size depended resources - must be released
         // before swapchain resize and recreated later
-        ID3D11Texture2D         *mpBackBuffer;
+        ComPtr<ID3D11Texture2D> mpBackBuffer;
         /// Optional, always holds up-to-date copy data from mpBackBuffer if not NULL
-        ID3D11Texture2D         *mpBackBufferNoMSAA;
-        //ID3D11RenderTargetView  *mRenderTargetView;
+        ComPtr<ID3D11Texture2D> mpBackBufferNoMSAA;
+        //ComPtr<ID3D11RenderTargetView> mRenderTargetView;
 
         D3D11RenderSystem       *mRenderSystem;
 
@@ -78,8 +78,8 @@ namespace Ogre
     class _OgreD3D11Export D3D11WindowSwapChainBased : public D3D11Window
     {
     protected:
-        IDXGISwapChain  *mSwapChain;
-        IDXGISwapChain1 *mSwapChain1;
+        ComPtr<IDXGISwapChain>  mSwapChain;
+        ComPtr<IDXGISwapChain1> mSwapChain1;
         //DXGI_SWAP_CHAIN_DESC_N  mSwapChainDesc;
 
         /// Flag to determine if the swapchain flip sequential model is enabled.

@@ -205,14 +205,11 @@ namespace Ogre
             fsDesc.Windowed = !(mRequestedFullscreenMode && !mAlwaysWindowedMode);
 
             hr = dxgiFactory2->CreateSwapChainForHwnd( mDevice.get(), mHwnd, &sd,
-                                                       &fsDesc, 0, &mSwapChain1 );
+                                                       &fsDesc, 0, mSwapChain1.ReleaseAndGetAddressOf() );
             if( SUCCEEDED(hr) )
             {
-                hr = mSwapChain1->QueryInterface( __uuidof(IDXGISwapChain),
-                                                  reinterpret_cast<void**>(&mSwapChain) );
+                hr = mSwapChain1.As(&mSwapChain);
             }
-
-            dxgiFactory2->Release();
         }
         else
         {
@@ -229,7 +226,7 @@ namespace Ogre
             sd.Windowed = !(mRequestedFullscreenMode && !mAlwaysWindowedMode);
 
             IDXGIFactory1 *dxgiFactory1 = mDevice.GetDXGIFactory();
-            hr = dxgiFactory1->CreateSwapChain( mDevice.get(), &sd, &mSwapChain );
+            hr = dxgiFactory1->CreateSwapChain( mDevice.get(), &sd, mSwapChain.ReleaseAndGetAddressOf() );
         }
 
         if( FAILED(hr) )
@@ -247,7 +244,8 @@ namespace Ogre
 
         mDepthBuffer->_transitionTo( GpuResidency::OnStorage, (uint8*)0 );
         mTexture->_transitionTo( GpuResidency::OnStorage, (uint8*)0 );
-        SAFE_RELEASE( mpBackBuffer );
+        mpBackBuffer.Reset();
+        mpBackBufferNoMSAA.Reset();
 
         // Call flush before resize buffers to ensure destruction of resources.
         // not doing so may result in 'Out of memory' exception.
@@ -265,7 +263,7 @@ namespace Ogre
         }
 
         // Obtain back buffer from swapchain
-        hr = mSwapChain->GetBuffer( 0, __uuidof(ID3D11Texture2D), (LPVOID*)&mpBackBuffer );
+        hr = mSwapChain->GetBuffer( 0, __uuidof(ID3D11Texture2D), (void**)mpBackBuffer.ReleaseAndGetAddressOf() );
 
         if( FAILED(hr) )
         {
@@ -308,7 +306,7 @@ namespace Ogre
 
         assert( dynamic_cast<D3D11TextureGpuWindow*>( mTexture ) );
         D3D11TextureGpuWindow *texWindow = static_cast<D3D11TextureGpuWindow*>( mTexture );
-        texWindow->_setBackbuffer( mpBackBuffer );
+        texWindow->_setBackbuffer( mpBackBuffer.Get() );
 
         mTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
         mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8*)0 );
@@ -585,9 +583,10 @@ namespace Ogre
         D3D11TextureGpuManager *textureManager =
                 static_cast<D3D11TextureGpuManager*>( textureGpuManager );
 
-        SAFE_RELEASE( mpBackBuffer );
+        mpBackBuffer.Reset();
+        mpBackBufferNoMSAA.Reset();
         // Obtain back buffer from swapchain
-        HRESULT hr = mSwapChain->GetBuffer( 0, __uuidof(ID3D11Texture2D), (LPVOID*)&mpBackBuffer );
+        HRESULT hr = mSwapChain->GetBuffer( 0, __uuidof(ID3D11Texture2D), (void**)mpBackBuffer.ReleaseAndGetAddressOf() );
 
         if( FAILED(hr) )
         {
@@ -596,7 +595,7 @@ namespace Ogre
                             "D3D11WindowHwnd::_initialize" );
         }
 
-        mTexture        = textureManager->createTextureGpuWindow( mpBackBuffer, this );
+        mTexture        = textureManager->createTextureGpuWindow( mpBackBuffer.Get(), this );
         mDepthBuffer    = textureManager->createWindowDepthBuffer();
 
         mTexture->setPixelFormat( mHwGamma ? PFG_RGBA8_UNORM_SRGB : PFG_RGBA8_UNORM );
@@ -631,9 +630,10 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11WindowHwnd::destroy(void)
     {
-        SAFE_RELEASE( mpBackBuffer );
-        SAFE_RELEASE( mSwapChain );
-        SAFE_RELEASE( mSwapChain1 );
+        mpBackBuffer.Reset();
+        mpBackBufferNoMSAA.Reset();
+        mSwapChain.Reset();
+        mSwapChain1.Reset();
 
         OGRE_DELETE mTexture;
         mTexture = 0;
