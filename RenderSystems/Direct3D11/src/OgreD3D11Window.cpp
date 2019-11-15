@@ -86,6 +86,21 @@ namespace Ogre
     {
         mRenderSystem->_notifyWindowDestroyed( this );
     }
+    //---------------------------------------------------------------------
+    void D3D11Window::destroy()
+    {
+        mpBackBuffer.Reset();
+        mpBackBufferNoMSAA.Reset();
+
+        OGRE_DELETE mTexture;
+        mTexture = 0;
+
+        OGRE_DELETE mDepthBuffer;
+        mDepthBuffer = 0;
+        mStencilBuffer = 0;
+
+        mClosed = true;
+    }
     //-----------------------------------------------------------------------------------
     void D3D11Window::getCustomAttribute( IdString name, void* pData )
     {
@@ -118,5 +133,13 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     D3D11WindowSwapChainBased::~D3D11WindowSwapChainBased()
     {
+    }
+    //---------------------------------------------------------------------
+    void D3D11WindowSwapChainBased::destroy()
+    {
+        mSwapChain.Reset();
+        mSwapChain1.Reset();
+
+        D3D11Window::destroy();
     }
 }

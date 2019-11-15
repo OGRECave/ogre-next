@@ -630,17 +630,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11WindowHwnd::destroy(void)
     {
-        mpBackBuffer.Reset();
-        mpBackBufferNoMSAA.Reset();
-        mSwapChain.Reset();
-        mSwapChain1.Reset();
-
-        OGRE_DELETE mTexture;
-        mTexture = 0;
-
-        OGRE_DELETE mDepthBuffer;
-        mDepthBuffer = 0;
-        mStencilBuffer = 0;
+        D3D11WindowSwapChainBased::destroy();
 
         if( !mHwnd )
             return;

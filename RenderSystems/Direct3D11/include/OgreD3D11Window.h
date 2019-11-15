@@ -68,6 +68,7 @@ namespace Ogre
                      const NameValuePairList *miscParams,
                      D3D11Device &device, D3D11RenderSystem *renderSystem );
         virtual ~D3D11Window();
+        virtual void destroy();
 
         bool isClosed() const                                   { return mClosed; }
         bool isHidden() const                                   { return mHidden; }
@@ -99,6 +100,7 @@ namespace Ogre
                                    const NameValuePairList *miscParams,
                                    D3D11Device &device, D3D11RenderSystem *renderSystem );
         virtual ~D3D11WindowSwapChainBased();
+        virtual void destroy();
     };
 }
 

@@ -43,6 +43,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     D3D11WindowCoreWindow::~D3D11WindowCoreWindow()
     {
+        destroy();
     }
     //-----------------------------------------------------------------------------------
     float D3D11WindowCoreWindow::getViewPointToPixelScale() const
@@ -72,6 +73,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     D3D11WindowSwapChainPanel::~D3D11WindowSwapChainPanel()
     {
+        destroy();
     }
     //-----------------------------------------------------------------------------------
     float D3D11WindowSwapChainPanel::getViewPointToPixelScale() const
