@@ -150,9 +150,19 @@ namespace Ogre
     //---------------------------------------------------------------------
     void D3D11WindowSwapChainBased::destroy()
     {
+        _destroySwapChain();
+        D3D11Window::destroy();
+    }
+    //---------------------------------------------------------------------
+    void D3D11WindowSwapChainBased::_destroySwapChain()
+    {
+        // https://docs.microsoft.com/en-us/windows/win32/direct3ddxgi/d3d10-graphics-programming-guide-dxgi#destroying-a-swap-chain
+        // You may not release a swap chain in full-screen mode because doing so may create thread contention
+        // (which will cause DXGI to raise a non-continuable exception). Before releasing a swap chain, first switch to windowed mode
+        if(mFullscreenMode && mSwapChain)
+            mSwapChain->SetFullscreenState(false, NULL);
+
         mSwapChain.Reset();
         mSwapChain1.Reset();
-
-        D3D11Window::destroy();
     }
 }

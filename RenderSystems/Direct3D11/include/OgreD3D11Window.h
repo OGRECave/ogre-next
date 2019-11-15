@@ -98,6 +98,9 @@ namespace Ogre
     protected:
         DXGI_FORMAT _getSwapChainFormat();
 
+    protected:
+        void _destroySwapChain();
+
     public:
         D3D11WindowSwapChainBased( const String &title, uint32 width, uint32 height,
                                    bool fullscreenMode, PixelFormatGpu depthStencilFormat,
