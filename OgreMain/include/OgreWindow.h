@@ -59,8 +59,8 @@ namespace Ogre
         uint32  mFrequencyNumerator;
         uint32  mFrequencyDenominator;
 
-        uint32  mRequestedWidth;
-        uint32  mRequestedHeight;
+        uint32  mRequestedWidth; // in view points
+        uint32  mRequestedHeight; // in view points
 
         bool    mFullscreenMode;
         bool    mRequestedFullscreenMode;
@@ -72,13 +72,13 @@ namespace Ogre
         bool    mVSync;
         uint32  mVSyncInterval;
 
-        int32 mLeft;
-        int32 mTop;
+        int32 mLeft; // in pixels
+        int32 mTop; // in pixels
 
         void setFinalResolution( uint32 width, uint32 height );
 
     public:
-        Window( const String &title, uint32 width, uint32 height, bool fullscreenMode );
+        Window( const String &title, uint32 widthPt, uint32 heightPt, bool fullscreenMode );
         virtual ~Window();
 
         virtual void destroy(void) = 0;
@@ -107,16 +107,16 @@ namespace Ogre
             to monitor with different DPI. In such situation, window size in view points is usually
             preserved by windowing system, and Ogre should adjust pixel size of RenderWindow.
         */
-        virtual float getViewPointToPixelScale() { return 1.0f; }
+        virtual float getViewPointToPixelScale() const { return 1.0f; }
 
-        virtual void reposition( int32 left, int32 top ) = 0;
+        virtual void reposition( int32 leftPt, int32 topPt ) = 0;
 
         /// Requests a change in resolution. Change is not immediate.
-        /// Use getRequestedWidth & getRequestedHeight if you need to know
+        /// Use getRequestedWidthPt & getRequestedHeightPt if you need to know
         /// what you've requested, but beware you may not get that resolution,
-        /// and once we get word from the OS, getRequestedWidth/Height will
-        /// change again so that getWidth == getRequestedWidth.
-        virtual void requestResolution( uint32 width, uint32 height );
+        /// and once we get word from the OS, getRequested{Width/Height}Pt will
+        /// change again so that getWidth == getRequestedWidthPt * getViewPointToPixelScale.
+        virtual void requestResolution( uint32 widthPt, uint32 heightPt );
 
         /** Requests to toggle between fullscreen and windowed mode.
         @remarks
@@ -140,7 +140,7 @@ namespace Ogre
             New frequency (fullscreen only). Leave 0 if you don't care.
         */
         virtual void requestFullscreenSwitch( bool goFullscreen, bool borderless, uint32 monitorIdx,
-                                              uint32 width, uint32 height,
+                                              uint32 widthPt, uint32 heightPt,
                                               uint32 frequencyNumerator, uint32 frequencyDenominator );
 
         virtual void setVSync( bool vSync, uint32 vSyncInterval );
@@ -159,8 +159,8 @@ namespace Ogre
         uint32 getFrequencyNumerator(void) const;
         uint32 getFrequencyDenominator(void) const;
 
-        uint32 getRequestedWidth(void) const;
-        uint32 getRequestedHeight(void) const;
+        uint32 getRequestedWidthPt(void) const;
+        uint32 getRequestedHeightPt(void) const;
 
         /// Returns true if we are currently in fullscreen mode.
         bool isFullscreen(void) const;

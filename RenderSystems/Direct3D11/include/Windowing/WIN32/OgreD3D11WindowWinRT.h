@@ -50,7 +50,7 @@ namespace Ogre
                          D3D11Device &device, D3D11RenderSystem *renderSystem );
         virtual ~D3D11WindowCoreWindow();
 
-        virtual float getViewPointToPixelScale();
+        virtual float getViewPointToPixelScale() const;
     };
 #endif
 
@@ -69,7 +69,7 @@ namespace Ogre
                          D3D11Device &device, D3D11RenderSystem *renderSystem );
         virtual ~D3D11WindowSwapChainPanel();
 
-        virtual float getViewPointToPixelScale();
+        virtual float getViewPointToPixelScale() const;
     };
 #endif
 }

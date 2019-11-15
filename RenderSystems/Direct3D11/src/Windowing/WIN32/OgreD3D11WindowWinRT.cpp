@@ -45,7 +45,7 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    float D3D11WindowCoreWindow::getViewPointToPixelScale()
+    float D3D11WindowCoreWindow::getViewPointToPixelScale() const
     {
 #if _WIN32_WINNT > _WIN32_WINNT_WIN8
         return Windows::Graphics::Display::DisplayInformation::GetForCurrentView()->LogicalDpi / 96;
@@ -74,7 +74,7 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
-    float D3D11WindowSwapChainPanel::getViewPointToPixelScale()
+    float D3D11WindowSwapChainPanel::getViewPointToPixelScale() const
     {
         return std::max(mCompositionScale.Width, mCompositionScale.Height);
     }
