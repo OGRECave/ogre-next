@@ -27,6 +27,17 @@ THE SOFTWARE.
 */
 
 #include "OgreD3D11Window.h"
+#include "OgreD3D11Device.h"
+#include "OgreD3D11RenderSystem.h"
+
+#include "OgreRoot.h"
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT && defined(_WIN32_WINNT_WINBLUE) && _WIN32_WINNT >= _WIN32_WINNT_WINBLUE
+#include <dxgi1_3.h> // for IDXGISwapChain2::SetMatrixTransform used in D3D11RenderWindowSwapChainPanel
+#if !__OGRE_WINRT_PHONE_80
+#include <windows.ui.xaml.media.dxinterop.h> // for ISwapChainPanelNative
+#endif
+#endif
 
 namespace Ogre
 {
@@ -49,11 +60,63 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     float D3D11WindowCoreWindow::getViewPointToPixelScale() const
     {
-#if _WIN32_WINNT > _WIN32_WINNT_WIN8
+#if defined(_WIN32_WINNT_WINBLUE) && _WIN32_WINNT >= _WIN32_WINNT_WINBLUE
         return Windows::Graphics::Display::DisplayInformation::GetForCurrentView()->LogicalDpi / 96;
 #else
         return Windows::Graphics::Display::DisplayProperties::LogicalDpi / 96;
 #endif
+    }
+    //---------------------------------------------------------------------
+    HRESULT D3D11WindowCoreWindow::_createSwapChainImpl()
+    {
+#if !__OGRE_WINRT_PHONE
+        D3D11RenderSystem* rsys = static_cast<D3D11RenderSystem*>(Root::getSingleton().getRenderSystem());
+        rsys->determineFSAASettings(mFSAA, mFSAAHint, _getRenderFormat(), &mMsaaDesc);
+#endif
+        DXGI_SWAP_CHAIN_DESC1 desc = {};
+        desc.Width                = 0;                                // Use automatic sizing.
+        desc.Height               = 0;
+        desc.Format               = _getSwapChainFormat();
+        desc.Stereo               = false;
+
+        assert(mUseFlipSequentialMode);                               // i.e. no MSAA for swapchain, but can be enabled in separate backbuffer
+        desc.SampleDesc.Count     = 1;
+        desc.SampleDesc.Quality   = 0;
+
+        desc.BufferUsage          = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+#if __OGRE_WINRT_PHONE_80
+        desc.BufferCount          = 1;                                // WP8: One buffer.
+        desc.Scaling              = DXGI_SCALING_STRETCH;             // WP8: Must be stretch scaling mode.
+        desc.SwapEffect           = DXGI_SWAP_EFFECT_DISCARD;         // WP8: No swap effect.
+#else
+        desc.BufferCount          = 2;                                // Use two buffers to enable flip effect.
+        desc.Scaling              = DXGI_SCALING_NONE;                // Otherwise stretch would be used by default.
+        desc.SwapEffect           = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL; // MS recommends using this swap effect for all applications.
+#endif
+        desc.AlphaMode            = DXGI_ALPHA_MODE_UNSPECIFIED;
+
+        // Create swap chain
+        HRESULT hr = mDevice.GetDXGIFactory()->CreateSwapChainForCoreWindow(mDevice.get(),
+            reinterpret_cast<IUnknown*>(mCoreWindow.Get()), &desc, NULL, mSwapChain1.ReleaseAndGetAddressOf());
+        if (FAILED(hr))
+            return hr;
+
+        // Ensure that DXGI does not queue more than one frame at a time. This both reduces 
+        // latency and ensures that the application will only render after each VSync, minimizing 
+        // power consumption.
+#if defined(_WIN32_WINNT_WINBLUE) && _WIN32_WINNT >= _WIN32_WINNT_WINBLUE
+        ComPtr<IDXGISwapChain2> pSwapChain2;
+        if (SUCCEEDED(mSwapChain1->QueryInterface(pSwapChain2.GetAddressOf())))
+            pSwapChain2->SetMaximumFrameLatency(1); // Win8.1
+        else
+#endif
+        {
+            ComPtr<IDXGIDevice2> pDXGIDevice2;
+            if (SUCCEEDED(mDevice->QueryInterface(pDXGIDevice2.GetAddressOf())))
+                pDXGIDevice2->SetMaximumFrameLatency(1); // Win8.0
+        }
+
+        return hr;
     }
 
 #endif
@@ -81,6 +144,70 @@ namespace Ogre
     float D3D11WindowSwapChainPanel::getViewPointToPixelScale() const
     {
         return std::max(mCompositionScale.Width, mCompositionScale.Height);
+    }
+    //---------------------------------------------------------------------
+    HRESULT D3D11WindowSwapChainPanel::_createSwapChainImpl()
+    {
+#if !__OGRE_WINRT_PHONE
+        D3D11RenderSystem* rsys = static_cast<D3D11RenderSystem*>(Root::getSingleton().getRenderSystem());
+        rsys->determineFSAASettings(mFSAA, mFSAAHint, _getRenderFormat(), &mMsaaDesc);
+#endif
+        DXGI_SWAP_CHAIN_DESC1 desc = {};
+        desc.Width                = mWidth;                           // Use automatic sizing.
+        desc.Height               = mHeight;
+        desc.Format               = _getSwapChainFormat();
+        desc.Stereo               = false;
+
+        assert(mUseFlipSequentialMode);                               // i.e. no FSAA for swapchain, but can be enabled in separate backbuffer
+        desc.SampleDesc.Count     = 1;
+        desc.SampleDesc.Quality   = 0;
+
+        desc.BufferUsage          = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+        desc.BufferCount          = 2;                                // Use two buffers to enable flip effect.
+        desc.Scaling              = DXGI_SCALING_STRETCH;             // Required for CreateSwapChainForComposition.
+        desc.SwapEffect           = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL; // MS recommends using this swap effect for all applications.
+        desc.AlphaMode            = DXGI_ALPHA_MODE_UNSPECIFIED;
+
+        // Create swap chain
+        HRESULT hr = mDevice.GetDXGIFactory()->CreateSwapChainForComposition(mDevice.get(),
+            &desc, NULL, mSwapChain1.ReleaseAndGetAddressOf());
+        if (FAILED(hr))
+            return hr;
+
+        // Associate swap chain with SwapChainPanel
+        // Get backing native interface for SwapChainPanel
+        ComPtr<ISwapChainPanelNative> panelNative;
+        hr = reinterpret_cast<IUnknown*>(mSwapChainPanel)->QueryInterface(IID_PPV_ARGS(panelNative.ReleaseAndGetAddressOf()));
+        if(FAILED(hr))
+            return hr;
+        hr = panelNative->SetSwapChain(mSwapChain.Get());
+        if(FAILED(hr))
+            return hr;
+
+        // Ensure that DXGI does not queue more than one frame at a time. This both reduces 
+        // latency and ensures that the application will only render after each VSync, minimizing 
+        // power consumption.
+        ComPtr<IDXGISwapChain2> pSwapChain2;
+        if (SUCCEEDED(mSwapChain1->QueryInterface(pSwapChain2.GetAddressOf())))
+            pSwapChain2->SetMaximumFrameLatency(1);
+
+        hr = _compensateSwapChainCompositionScale();
+        return hr;
+    }
+    //---------------------------------------------------------------------
+    HRESULT D3D11WindowSwapChainPanel::_compensateSwapChainCompositionScale()
+    {
+        // Setup inverse scale on the swap chain
+        DXGI_MATRIX_3X2_F inverseScale = { 0 };
+        inverseScale._11 = 1.0f / mCompositionScale.Width;
+        inverseScale._22 = 1.0f / mCompositionScale.Height;
+        ComPtr<IDXGISwapChain2> pSwapChain2;
+        HRESULT hr = mSwapChain.As<IDXGISwapChain2>(&pSwapChain2);
+        if(FAILED(hr))
+            return hr;
+
+        hr = pSwapChain2->SetMatrixTransform(&inverseScale);
+        return hr;
     }
 #endif
 #pragma endregion

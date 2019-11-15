@@ -99,6 +99,8 @@ namespace Ogre
         DXGI_FORMAT _getSwapChainFormat();
 
     protected:
+        void _createSwapChain();
+        virtual HRESULT _createSwapChainImpl() = 0;
         void _destroySwapChain();
 
     public:

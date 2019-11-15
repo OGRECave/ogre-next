@@ -43,6 +43,9 @@ namespace Ogre
     protected:
         Platform::Agile<Windows::UI::Core::CoreWindow> mCoreWindow;
 
+    protected:
+        virtual HRESULT _createSwapChainImpl();
+
     public:
         D3D11WindowCoreWindow( const String &title, uint32 width, uint32 height,
                          bool fullscreenMode, PixelFormatGpu depthStencilFormat,
@@ -61,6 +64,10 @@ namespace Ogre
         Windows::UI::Xaml::Controls::SwapChainPanel^ mSwapChainPanel;
         Windows::Foundation::Size mCompositionScale;
         Windows::Foundation::EventRegistrationToken sizeChangedToken, compositionScaleChangedToken;
+
+    protected:
+        virtual HRESULT _createSwapChainImpl();
+        HRESULT _compensateSwapChainCompositionScale();
 
     public:
         D3D11WindowSwapChainPanel( const String &title, uint32 width, uint32 height,

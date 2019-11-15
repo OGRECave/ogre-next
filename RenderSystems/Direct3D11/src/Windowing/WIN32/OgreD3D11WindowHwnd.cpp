@@ -181,7 +181,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void D3D11WindowHwnd::createSwapChain(void)
+    HRESULT D3D11WindowHwnd::_createSwapChainImpl(void)
     {
         HRESULT hr;
 
@@ -206,10 +206,6 @@ namespace Ogre
 
             hr = dxgiFactory2->CreateSwapChainForHwnd( mDevice.get(), mHwnd, &sd,
                                                        &fsDesc, 0, mSwapChain1.ReleaseAndGetAddressOf() );
-            if( SUCCEEDED(hr) )
-            {
-                hr = mSwapChain1.As(&mSwapChain);
-            }
         }
         else
         {
@@ -229,13 +225,7 @@ namespace Ogre
             hr = dxgiFactory1->CreateSwapChain( mDevice.get(), &sd, mSwapChain.ReleaseAndGetAddressOf() );
         }
 
-        if( FAILED(hr) )
-        {
-            const String errorDescription = mDevice.getErrorDescription(hr);
-            OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
-                            "Unable to create swap chain\nError Description:" + errorDescription,
-                            "D3D11WindowHwnd::createSwapChain" );
-        }
+        return hr;
     }
     //-----------------------------------------------------------------------------------
     void D3D11WindowHwnd::resizeSwapChainBuffers( uint32 width, uint32 height )
@@ -578,7 +568,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11WindowHwnd::_initialize( TextureGpuManager *textureGpuManager )
     {
-        createSwapChain();
+        _createSwapChain();
 
         D3D11TextureGpuManager *textureManager =
                 static_cast<D3D11TextureGpuManager*>( textureGpuManager );

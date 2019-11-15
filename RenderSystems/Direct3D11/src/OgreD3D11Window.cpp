@@ -165,4 +165,23 @@ namespace Ogre
         mSwapChain.Reset();
         mSwapChain1.Reset();
     }
+    //---------------------------------------------------------------------
+    void D3D11WindowSwapChainBased::_createSwapChain()
+    {
+        mSwapChain.Reset();
+        mSwapChain1.Reset();
+
+        HRESULT hr = _createSwapChainImpl();
+
+        if (SUCCEEDED(hr) && mSwapChain1)
+            hr = mSwapChain1.As(&mSwapChain);
+
+        if (FAILED(hr))
+        {
+            const String errorDescription = mDevice.getErrorDescription(hr);
+            OGRE_EXCEPT_EX(Exception::ERR_RENDERINGAPI_ERROR, hr,
+                "Unable to create swap chain\nError Description:" + errorDescription,
+                "D3D11WindowSwapChainBased::_createSwapChain");
+        }
+    }
 }

@@ -62,7 +62,7 @@ namespace Ogre
 
         template <typename T>
         void setCommonSwapChain( T &sd );
-        void createSwapChain(void);
+        virtual HRESULT _createSwapChainImpl();
         void resizeSwapChainBuffers( uint32 width, uint32 height );
         void setResolutionFromSwapChain(void);
 
