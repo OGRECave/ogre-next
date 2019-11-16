@@ -2339,7 +2339,7 @@ namespace Ogre
                 pso.vertexElements = renderOp.vertexData->vertexDeclaration->convertToV2();
             }
 
-            pso.enablePrimitiveRestart = true;
+            pso.enablePrimitiveRestart = false;
         }
 
         mRenderSystem->_hlmsPipelineStateObjectCreated( &pso );

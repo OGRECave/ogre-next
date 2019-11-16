@@ -752,14 +752,9 @@ namespace Ogre
                 imageBarrier.newLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
                 imageBarrier.image = textureVulkan->getFinalTextureName();
 
-                if( mColour[0].loadAction == LoadAction::DontCare ||
-                    mColour[0].loadAction == LoadAction::Clear )
-                {
-                    // Undefined means we don't care, which means existing contents may not be preserved
-                    imageBarrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-                }
-                else
-                    imageBarrier.oldLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+                // Undefined means we don't care, which means existing contents may not be preserved
+                // Backbuffers always start with undefined layout
+                imageBarrier.oldLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 
                 imageBarrier.subresourceRange = textureVulkan->getFullSubresourceRange();
 

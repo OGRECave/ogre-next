@@ -50,8 +50,6 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 
 #define TODO_vertex_format
 #define TODO_addVpCount_to_passpso
-#define TODO_renderPass
-#define TODO_psoCaches
 
 namespace Ogre
 {
@@ -781,7 +779,7 @@ namespace Ogre
         for( size_t i = 0; i < mrtCount; ++i )
         {
             resolveAttachRefs[numColourAttachments].attachment = VK_ATTACHMENT_UNUSED;
-            resolveAttachRefs[numColourAttachments].layout = VK_IMAGE_LAYOUT_UNDEFINED;
+            resolveAttachRefs[numColourAttachments].layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
             if( passPso.colourFormat[i] != PFG_NULL )
             {
@@ -792,6 +790,8 @@ namespace Ogre
                 attachments[attachmentIdx].samples =
                     static_cast<VkSampleCountFlagBits>( passPso.multisampleCount );
                 attachments[attachmentIdx].format = VulkanMappings::get( passPso.colourFormat[i] );
+                attachments[attachmentIdx].initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+                attachments[attachmentIdx].finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
                 ++attachmentIdx;
 
                 if( passPso.resolveColourFormat[i] != PFG_NULL )
@@ -801,6 +801,8 @@ namespace Ogre
                     attachments[attachmentIdx].samples = VK_SAMPLE_COUNT_1_BIT;
                     attachments[attachmentIdx].format =
                         VulkanMappings::get( passPso.resolveColourFormat[i] );
+                    attachments[attachmentIdx].initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+                    attachments[attachmentIdx].finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
                     ++attachmentIdx;
 
                     resolveAttachRefs[numColourAttachments].attachment = attachmentIdx;
@@ -816,6 +818,8 @@ namespace Ogre
             attachments[attachmentIdx].format = VulkanMappings::get( passPso.depthFormat );
             attachments[attachmentIdx].samples =
                 static_cast<VkSampleCountFlagBits>( passPso.multisampleCount );
+            attachments[attachmentIdx].initialLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+            attachments[attachmentIdx].finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
             depthAttachRef.attachment = attachmentIdx;
             depthAttachRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
@@ -968,6 +972,7 @@ namespace Ogre
         VkRenderPass renderPass = getVkRenderPass( newPso->pass, mrtCount );
         blendStateCi.attachmentCount = mrtCount;
         VkPipelineColorBlendAttachmentState blendStates[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
+        memset( blendStates, 0, sizeof( blendStates ) );
 
         if( newPso->blendblock->mSeparateBlend )
         {
@@ -992,8 +997,6 @@ namespace Ogre
                 blendStates[0].dstAlphaBlendFactor =
                     VulkanMappings::get( newPso->blendblock->mDestBlendFactorAlpha );
                 blendStates[0].alphaBlendOp = blendStates[0].colorBlendOp;
-
-                blendStates[0].colorWriteMask = newPso->blendblock->mBlendChannelMask;
             }
         }
         else
@@ -1015,10 +1018,9 @@ namespace Ogre
                 blendStates[0].srcAlphaBlendFactor = blendStates[0].srcColorBlendFactor;
                 blendStates[0].dstAlphaBlendFactor = blendStates[0].dstColorBlendFactor;
                 blendStates[0].alphaBlendOp = blendStates[0].colorBlendOp;
-
-                blendStates[0].colorWriteMask = newPso->blendblock->mBlendChannelMask;
             }
         }
+        blendStates[0].colorWriteMask = newPso->blendblock->mBlendChannelMask;
 
         for( int i = 1; i < mrtCount; ++i )
             blendStates[i] = blendStates[0];
@@ -1052,15 +1054,12 @@ namespace Ogre
         pipeline.pDynamicState = &dynamicStateCi;
         pipeline.renderPass = renderPass;
 
-        TODO_renderPass;
-        TODO_psoCaches;
-
         VkPipeline vulkanPso = 0;
         VkResult result = vkCreateGraphicsPipelines( mActiveDevice->mDevice, VK_NULL_HANDLE, 1u,
                                                      &pipeline, 0, &vulkanPso );
         checkVkResult( result, "vkCreateGraphicsPipelines" );
 
-        //        newPso->rsData = metalPso;
+        newPso->rsData = vulkanPso;
     }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_hlmsPipelineStateObjectDestroyed( HlmsPso *pso )
@@ -1071,6 +1070,8 @@ namespace Ogre
 
         //        MetalHlmsPso *metalPso = reinterpret_cast<MetalHlmsPso *>( pso->rsData );
         //        delete metalPso;
+
+        vkDestroyPipeline( mActiveDevice->mDevice, reinterpret_cast<VkPipeline>( pso->rsData ), 0 );
         pso->rsData = 0;
     }
 }  // namespace Ogre

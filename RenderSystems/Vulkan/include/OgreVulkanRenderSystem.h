@@ -88,6 +88,7 @@ namespace Ogre
 
         void addInstanceDebugCallback( void );
 
+        /// Creates a dummy VkRenderPass for use in PSO creation
         VkRenderPass getVkRenderPass( HlmsPassPso passPso, uint8 &outMrtCount );
 
     public:

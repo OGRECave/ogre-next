@@ -206,8 +206,6 @@ namespace Ogre
                 rpciCopy.pAttachments = attachments;
                 memcpy( attachments, renderPassCi.pAttachments,
                         rpciCopy.attachmentCount * sizeof( VkAttachmentDescription ) );
-
-                rpciCopy.pAttachments = new VkAttachmentDescription[rpciCopy.attachmentCount];
             }
             if( rpciCopy.subpassCount > 0u )
             {
