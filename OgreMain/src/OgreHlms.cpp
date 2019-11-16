@@ -2989,14 +2989,21 @@ namespace Ogre
 
         for( int i=0; i<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
         {
-            if( renderPassDesc->mColour[i].texture )
+            RenderPassColourTarget passColourTarget = renderPassDesc->mColour[i];
+
+            if( passColourTarget.texture )
             {
-                passPso.colourFormat[i]     = renderPassDesc->mColour[i].texture->getPixelFormat();
-                passPso.multisampleCount    = renderPassDesc->mColour[i].texture->getMsaa();
-                passPso.multisampleQuality  = renderPassDesc->mColour[i].texture->getMsaaPattern();
+                passPso.colourFormat[i]     = passColourTarget.texture->getPixelFormat();
+                passPso.multisampleCount    = passColourTarget.texture->getMsaa();
+                passPso.multisampleQuality  = passColourTarget.texture->getMsaaPattern();
             }
             else
                 passPso.colourFormat[i] = PFG_NULL;
+
+            if( passColourTarget.resolveTexture )
+                passPso.resolveColourFormat[i] = passColourTarget.resolveTexture->getPixelFormat();
+            else
+                passPso.resolveColourFormat[i] = PFG_NULL;
         }
 
         passPso.depthFormat = PFG_NULL;

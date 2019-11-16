@@ -130,6 +130,7 @@ namespace Ogre
         case SBF_ONE_MINUS_SOURCE_ALPHA:    return VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
             // clang-format on
         }
+        return VK_BLEND_FACTOR_ONE;
     }
     //-----------------------------------------------------------------------------------
     VkBlendOp VulkanMappings::get( SceneBlendOperation blendOp )
@@ -144,6 +145,7 @@ namespace Ogre
         case SBO_MAX:               return VK_BLEND_OP_MAX;
             // clang-format on
         }
+        return VK_BLEND_OP_ADD;
     }
     //-----------------------------------------------------------------------------------
     VkImageViewType VulkanMappings::get( TextureTypes::TextureTypes textureType )

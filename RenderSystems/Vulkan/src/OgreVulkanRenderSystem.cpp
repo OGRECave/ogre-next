@@ -29,6 +29,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreVulkanRenderSystem.h"
 
 #include "OgreRenderPassDescriptor.h"
+#include "OgreVulkanCache.h"
 #include "OgreVulkanDescriptors.h"
 #include "OgreVulkanDevice.h"
 #include "OgreVulkanGpuProgramManager.h"
@@ -125,6 +126,7 @@ namespace Ogre
         mVkInstance( 0 ),
         mActiveDevice( 0 ),
         mDevice( 0 ),
+        mCache( 0 ),
         mEntriesToFlush( 0u ),
         mVpChanged( false ),
         CreateDebugReportCallback( 0 ),
@@ -737,6 +739,95 @@ namespace Ogre
         };
     }
     //-------------------------------------------------------------------------
+    VkRenderPass VulkanRenderSystem::getVkRenderPass( HlmsPassPso passPso, uint8 &outMrtCount )
+    {
+        uint8 mrtCount = 0;
+        for( int i = 0; i < OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
+        {
+            if( passPso.colourFormat[i] != PFG_NULL )
+                mrtCount = static_cast<uint8>( i ) + 1u;
+        }
+        outMrtCount = mrtCount;
+
+        bool usesResolveAttachments = false;
+
+        uint32 attachmentIdx = 0u;
+        uint32 numColourAttachments = 0u;
+        VkAttachmentDescription attachments[OGRE_MAX_MULTIPLE_RENDER_TARGETS * 2u + 2u];
+
+        VkAttachmentReference colourAttachRefs[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
+        VkAttachmentReference resolveAttachRefs[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
+        VkAttachmentReference depthAttachRef;
+
+        memset( attachments, 0, sizeof( attachments ) );
+        memset( colourAttachRefs, 0, sizeof( colourAttachRefs ) );
+        memset( resolveAttachRefs, 0, sizeof( resolveAttachRefs ) );
+        memset( &depthAttachRef, 0, sizeof( depthAttachRef ) );
+
+        for( size_t i = 0; i < mrtCount; ++i )
+        {
+            resolveAttachRefs[numColourAttachments].attachment = VK_ATTACHMENT_UNUSED;
+            resolveAttachRefs[numColourAttachments].layout = VK_IMAGE_LAYOUT_UNDEFINED;
+
+            if( passPso.colourFormat[i] != PFG_NULL )
+            {
+                colourAttachRefs[numColourAttachments].attachment = attachmentIdx;
+                colourAttachRefs[numColourAttachments].layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+                ++numColourAttachments;
+
+                attachments[attachmentIdx].samples =
+                    static_cast<VkSampleCountFlagBits>( passPso.multisampleCount );
+                attachments[attachmentIdx].format = VulkanMappings::get( passPso.colourFormat[i] );
+                ++attachmentIdx;
+
+                if( passPso.resolveColourFormat[i] != PFG_NULL )
+                {
+                    usesResolveAttachments = true;
+
+                    attachments[attachmentIdx].samples = VK_SAMPLE_COUNT_1_BIT;
+                    attachments[attachmentIdx].format =
+                        VulkanMappings::get( passPso.resolveColourFormat[i] );
+                    ++attachmentIdx;
+
+                    resolveAttachRefs[numColourAttachments].attachment = attachmentIdx;
+                    resolveAttachRefs[numColourAttachments].layout =
+                        VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+                    ++numColourAttachments;
+                }
+            }
+        }
+
+        if( passPso.depthFormat != PFG_NULL )
+        {
+            attachments[attachmentIdx].format = VulkanMappings::get( passPso.depthFormat );
+            attachments[attachmentIdx].samples =
+                static_cast<VkSampleCountFlagBits>( passPso.multisampleCount );
+
+            depthAttachRef.attachment = attachmentIdx;
+            depthAttachRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+            ++attachmentIdx;
+        }
+
+        VkSubpassDescription subpass;
+        memset( &subpass, 0, sizeof( subpass ) );
+        subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+        subpass.inputAttachmentCount = 0u;
+        subpass.colorAttachmentCount = numColourAttachments;
+        subpass.pColorAttachments = colourAttachRefs;
+        subpass.pResolveAttachments = usesResolveAttachments ? resolveAttachRefs : 0;
+        subpass.pDepthStencilAttachment = ( passPso.depthFormat != PFG_NULL ) ? &depthAttachRef : 0;
+
+        VkRenderPassCreateInfo renderPassCreateInfo;
+        makeVkStruct( renderPassCreateInfo, VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO );
+        renderPassCreateInfo.attachmentCount = attachmentIdx;
+        renderPassCreateInfo.pAttachments = attachments;
+        renderPassCreateInfo.subpassCount = 1u;
+        renderPassCreateInfo.pSubpasses = &subpass;
+
+        VkRenderPass retVal = mCache->getRenderPass( renderPassCreateInfo );
+        return retVal;
+    }
+    //-------------------------------------------------------------------------
     void VulkanRenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *newPso )
     {
         size_t numShaderStages = 0u;
@@ -860,11 +951,7 @@ namespace Ogre
         makeVkStruct( blendStateCi, VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO );
         blendStateCi.logicOpEnable = false;
         uint8 mrtCount = 0;
-        for( int i = 0; i < OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
-        {
-            if( newPso->pass.colourFormat[i] != PFG_NULL )
-                mrtCount = static_cast<uint8>( i ) + 1u;
-        }
+        VkRenderPass renderPass = getVkRenderPass( newPso->pass, mrtCount );
         blendStateCi.attachmentCount = mrtCount;
         VkPipelineColorBlendAttachmentState blendStates[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
 
@@ -949,6 +1036,7 @@ namespace Ogre
         pipeline.pDepthStencilState = &depthStencilStateCi;
         pipeline.pColorBlendState = &blendStateCi;
         pipeline.pDynamicState = &dynamicStateCi;
+        pipeline.renderPass = renderPass;
 
         TODO_renderPass;
         TODO_psoCaches;

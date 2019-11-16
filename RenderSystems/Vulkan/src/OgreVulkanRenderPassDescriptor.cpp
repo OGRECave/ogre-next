@@ -495,7 +495,8 @@ namespace Ogre
         renderPassCreateInfo.pAttachments = attachments;
         renderPassCreateInfo.subpassCount = 1u;
         renderPassCreateInfo.pSubpasses = &subpass;
-        vkCreateRenderPass( mQueue->mDevice, &renderPassCreateInfo, 0, &mRenderPass );
+        VkResult result = vkCreateRenderPass( mQueue->mDevice, &renderPassCreateInfo, 0, &mRenderPass );
+        checkVkResult( result, "vkCreateRenderPass" );
 
         VkFramebufferCreateInfo fbCreateInfo;
         makeVkStruct( fbCreateInfo, VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO );
@@ -512,7 +513,8 @@ namespace Ogre
         {
             if( !mWindowImageViews.empty() )
                 mImageViews[windowAttachmentIdx] = mWindowImageViews[i];
-            vkCreateFramebuffer( mQueue->mDevice, &fbCreateInfo, 0, &mFramebuffers[i] );
+            result = vkCreateFramebuffer( mQueue->mDevice, &fbCreateInfo, 0, &mFramebuffers[i] );
+            checkVkResult( result, "vkCreateFramebuffer" );
             if( !mWindowImageViews.empty() )
                 mImageViews[windowAttachmentIdx] = 0;
         }

@@ -73,6 +73,8 @@ namespace Ogre
 
         VulkanDevice *mDevice;
 
+        VulkanCache *mCache;
+
         // clang-format off
         VulkanFrameBufferDescMap    mFrameBufferDescMap;
         uint32                      mEntriesToFlush;
@@ -84,6 +86,8 @@ namespace Ogre
         VkDebugReportCallbackEXT mDebugReportCallback;
 
         void addInstanceDebugCallback( void );
+
+        VkRenderPass getVkRenderPass( HlmsPassPso passPso, uint8 &outMrtCount );
 
     public:
         VulkanRenderSystem();

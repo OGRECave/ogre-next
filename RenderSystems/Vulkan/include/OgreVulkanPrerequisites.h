@@ -53,6 +53,7 @@ struct VkPipelineShaderStageCreateInfo;
 namespace Ogre
 {
     // Forward declarations
+    class VulkanCache;
     struct VulkanDevice;
     class VulkanGpuProgramManager;
     class VulkanProgram;
