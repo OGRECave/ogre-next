@@ -66,6 +66,7 @@ namespace Ogre
         VulkanPixelFormatToShaderType mPixelFormatToShaderType;
 
         VulkanGpuProgramManager *mShaderManager;
+        VulkanProgramFactory *mVulkanProgramFactory;
 
         VkInstance mVkInstance;
 

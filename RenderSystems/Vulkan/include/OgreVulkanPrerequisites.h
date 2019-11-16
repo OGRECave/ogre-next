@@ -57,6 +57,7 @@ namespace Ogre
     struct VulkanDevice;
     class VulkanGpuProgramManager;
     class VulkanProgram;
+    class VulkanProgramFactory;
     class VulkanQueue;
     class VulkanStagingBuffer;
     class VulkanRenderSystem;

@@ -35,6 +35,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreVulkanGpuProgramManager.h"
 #include "OgreVulkanMappings.h"
 #include "OgreVulkanProgram.h"
+#include "OgreVulkanProgramFactory.h"
 #include "OgreVulkanRenderPassDescriptor.h"
 #include "OgreVulkanTextureGpuManager.h"
 #include "OgreVulkanUtils.h"
@@ -123,6 +124,7 @@ namespace Ogre
         mInitialized( false ),
         mHardwareBufferManager( 0 ),
         mShaderManager( 0 ),
+        mVulkanProgramFactory( 0 ),
         mVkInstance( 0 ),
         mActiveDevice( 0 ),
         mDevice( 0 ),
@@ -139,6 +141,9 @@ namespace Ogre
     {
         OGRE_DELETE mShaderManager;
         mShaderManager = 0;
+
+        OGRE_DELETE mVulkanProgramFactory;
+        mVulkanProgramFactory = 0;
 
         OGRE_DELETE mHardwareBufferManager;
         mHardwareBufferManager = 0;
@@ -332,6 +337,8 @@ namespace Ogre
         rsc->setComputeProgramConstantFloatCount( 256u );
         rsc->setComputeProgramConstantIntCount( 256u );
         rsc->setComputeProgramConstantBoolCount( 256u );
+
+        rsc->addShaderProfile( "glsl" );
 
         return rsc;
     }
@@ -575,6 +582,8 @@ namespace Ogre
                                                                      Window *primary )
     {
         mShaderManager = OGRE_NEW VulkanGpuProgramManager( mActiveDevice );
+        mVulkanProgramFactory = new VulkanProgramFactory( mActiveDevice );
+        HighLevelGpuProgramManager::getSingleton().addFactory( mVulkanProgramFactory );
 
         Log *defaultLog = LogManager::getSingleton().getDefaultLog();
         if( defaultLog )
