@@ -139,6 +139,9 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::shutdown( void )
     {
+        OGRE_DELETE mCache;
+        mCache = 0;
+
         OGRE_DELETE mShaderManager;
         mShaderManager = 0;
 
@@ -582,8 +585,10 @@ namespace Ogre
                                                                      Window *primary )
     {
         mShaderManager = OGRE_NEW VulkanGpuProgramManager( mActiveDevice );
-        mVulkanProgramFactory = new VulkanProgramFactory( mActiveDevice );
+        mVulkanProgramFactory = OGRE_NEW VulkanProgramFactory( mActiveDevice );
         HighLevelGpuProgramManager::getSingleton().addFactory( mVulkanProgramFactory );
+
+        mCache = OGRE_NEW VulkanCache( mActiveDevice );
 
         Log *defaultLog = LogManager::getSingleton().getDefaultLog();
         if( defaultLog )

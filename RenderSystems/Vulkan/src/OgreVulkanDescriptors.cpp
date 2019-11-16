@@ -176,8 +176,9 @@ namespace Ogre
 
         SpvReflectShaderModule module;
         memset( &module, 0, sizeof( module ) );
-        SpvReflectResult result = spvReflectCreateShaderModule( spirv.size(), &spirv[0], &module );
-        if( result == SPV_REFLECT_RESULT_SUCCESS )
+        SpvReflectResult result =
+            spvReflectCreateShaderModule( spirv.size() * sizeof( uint32 ), &spirv[0], &module );
+        if( result != SPV_REFLECT_RESULT_SUCCESS )
         {
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
                          "spvReflectCreateShaderModule failed on shader " + shaderName +
@@ -187,7 +188,7 @@ namespace Ogre
 
         uint32 numDescSets = 0;
         result = spvReflectEnumerateDescriptorSets( &module, &numDescSets, 0 );
-        if( result == SPV_REFLECT_RESULT_SUCCESS )
+        if( result != SPV_REFLECT_RESULT_SUCCESS )
         {
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
                          "spvReflectEnumerateDescriptorSets failed on shader " + shaderName +
@@ -198,7 +199,7 @@ namespace Ogre
         FastArray<SpvReflectDescriptorSet *> sets;
         sets.resize( numDescSets );
         result = spvReflectEnumerateDescriptorSets( &module, &numDescSets, sets.begin() );
-        if( result == SPV_REFLECT_RESULT_SUCCESS )
+        if( result != SPV_REFLECT_RESULT_SUCCESS )
         {
             OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
                          "spvReflectEnumerateDescriptorSets failed on shader " + shaderName +

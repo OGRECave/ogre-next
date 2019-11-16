@@ -35,7 +35,8 @@ target_link_libraries(RenderSystem_Vulkan vulkan
     /home/matias/Projects/vulkan/1.1.121.1/x86_64/lib/libglslang.a
     /home/matias/Projects/vulkan/1.1.121.1/x86_64/lib/libOSDependent.a
     /home/matias/Projects/vulkan/1.1.121.1/x86_64/lib/libOGLCompiler.a
-    /home/matias/Projects/vulkan/1.1.121.1/x86_64/lib/libHLSL.a )
+    /home/matias/Projects/vulkan/1.1.121.1/x86_64/lib/libHLSL.a
+    /home/matias/Projects/vulkan/1.1.121.1/x86_64/lib/libSPIRV.a )
 
 if (OGRE_CONFIG_THREADS)
   target_link_libraries(RenderSystem_Vulkan ${OGRE_THREAD_LIBRARIES})

@@ -37,7 +37,7 @@ namespace Ogre
 {
     /**
      */
-    class _OgreVulkanExport VulkanCache
+    class _OgreVulkanExport VulkanCache : public RenderSysAlloc
     {
     protected:
         struct VkRenderPassCreateInfoCmp

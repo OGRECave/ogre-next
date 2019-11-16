@@ -255,7 +255,7 @@ namespace Ogre
         const char *sourceCString = mSource.c_str();
         shader.setStrings( &sourceCString, 1 );
 
-        if( !shader.parse( &resources, 100, false, messages ) )
+        if( !shader.parse( &resources, 450, false, messages ) )
         {
             LogManager::getSingleton().logMessage( "Vulkan GLSL compiler error in " + mName + ":\n" +
                                                    shader.getInfoLog() + "\nDEBUG LOG:\n" +
@@ -338,8 +338,6 @@ namespace Ogre
             VkResult result = vkCreateShaderModule( mDevice->mDevice, &moduleCi, 0, &mShaderModule );
             checkVkResult( result, "vkCreateShaderModule" );
         }
-
-        createDescriptorLayouts();
 
         return mCompiled;
     }

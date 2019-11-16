@@ -84,7 +84,6 @@ namespace Ogre
 
         /// Compile source into shader object
         bool compile( const bool checkErrors = false );
-        void createDescriptorLayouts( void );
 
         void fillPipelineShaderStageCi( VkPipelineShaderStageCreateInfo &pssCi );
 
