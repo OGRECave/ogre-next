@@ -4,7 +4,7 @@ This source file is part of OGRE
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
-Copyright (c) 2000-2014 Torus Knot Software Ltd
+Copyright (c) 2000-present Torus Knot Software Ltd
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,30 +26,26 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#ifndef _Ogre_GL3PlusDynamicBuffer_H_
-#define _Ogre_GL3PlusDynamicBuffer_H_
+#ifndef _Ogre_VulkanDynamicBuffer_H_
+#define _Ogre_VulkanDynamicBuffer_H_
 
-#include "OgreGL3PlusPrerequisites.h"
+#include "OgreVulkanPrerequisites.h"
 
 #include "Vao/OgreBufferPacked.h"
 
 namespace Ogre
 {
-    /** GL3+ doesn't support mapping the same buffer twice even if the regions
-        don't overlap. For performance we keep many buffers as one big buffer,
-        but for compatibility reasons (with GL3/DX10 HW) we treat them as
-        separate buffers.
+    /** Vulkan maps per pool, thus mapping the same pool twice is a common ocurrence.
     @par
-        This class takes care of mapping buffers once while allowing
+        This class takes care of mapping pools just once while allowing
         BufferInterface to map subregions of it as if they were separate
         buffers.
     @remarks
-        This is a very thin/lightweight wrapper around OpenGL glMapBufferRange, thus:
-            Caller is responsible for flushing regions before unmapping.
-            Caller is responsible for proper synchronization.
-            No check is performed to see if two map calls overlap.
+        Caller is responsible for flushing regions before unmapping.
+        Caller is responsible for proper synchronization.
+        No check is performed to see if two map calls overlap.
     */
-    class _OgreGL3PlusExport GL3PlusDynamicBuffer
+    class _OgreVulkanExport VulkanDynamicBuffer
     {
     protected:
         struct MappedRange
@@ -62,26 +58,30 @@ namespace Ogre
 
         typedef vector<MappedRange>::type MappedRangeVec;
 
-        GLuint  mVboName;
-        GLuint  mVboSize;
-        void    *mMappedPtr;
+        // clang-format off
+        VkDeviceMemory  mVboName;
+        size_t          mVboSize;
+        void            *mMappedPtr;
+        // clang-format on
 
         MappedRangeVec mMappedRanges;
         vector<size_t>::type mFreeRanges;
 
         BufferType mPersistentMethod;
 
+        VulkanDevice *mDevice;
+
         size_t addMappedRange( size_t start, size_t count );
 
     public:
-        GL3PlusDynamicBuffer( GLuint vboName, GLuint vboSize, GL3PlusVaoManager *vaoManager,
-                              BufferType persistentMethod );
-        ~GL3PlusDynamicBuffer();
+        VulkanDynamicBuffer( VkDeviceMemory vboName, size_t vboSize, VulkanVaoManager *vaoManager,
+                             BufferType persistentMethod, VulkanDevice *device );
+        ~VulkanDynamicBuffer();
 
-        GLuint getVboName(void) const               { return mVboName; }
+        VkDeviceMemory getVboName( void ) const { return mVboName; }
 
         /// Assumes mVboName is already bound to GL_COPY_WRITE_BUFFER!!!
-        void* RESTRICT_ALIAS_RETURN map( size_t start, size_t count, size_t &outTicket );
+        void *RESTRICT_ALIAS_RETURN map( size_t start, size_t count, size_t &outTicket );
 
         /// Flushes the region of the given ticket. start is 0-based.
         void flush( size_t ticket, size_t start, size_t count );
@@ -91,6 +91,6 @@ namespace Ogre
         /// The ticket becomes invalid after this.
         void unmap( size_t ticket );
     };
-}
+}  // namespace Ogre
 
 #endif

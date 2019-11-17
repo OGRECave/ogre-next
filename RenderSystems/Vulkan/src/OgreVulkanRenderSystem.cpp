@@ -500,7 +500,12 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    void VulkanRenderSystem::_setPipelineStateObject( const HlmsPso *pso ) {}
+    void VulkanRenderSystem::_setPipelineStateObject( const HlmsPso *pso )
+    {
+        VkCommandBuffer cmdBuffer = mActiveDevice->mGraphicsQueue.mCurrentCmdBuffer;
+        vkCmdBindPipeline( cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS,
+                           reinterpret_cast<VkPipeline>( pso->rsData ) );
+    }
     //-------------------------------------------------------------------------
     void VulkanRenderSystem::_setComputePso( const HlmsComputePso *pso ) {}
     //-------------------------------------------------------------------------

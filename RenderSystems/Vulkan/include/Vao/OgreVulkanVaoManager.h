@@ -87,10 +87,14 @@ namespace Ogre
     protected:
         struct Vbo
         {
-            size_t sizeBytes;
+            // clang-format off
+            VkDeviceMemory      vboName;
+            size_t              sizeBytes;
+            VulkanDynamicBuffer *dynamicBuffer; //Null for CPU_INACCESSIBLE BOs.
 
-            BlockVec freeBlocks;
-            StrideChangerVec strideChangers;
+            BlockVec            freeBlocks;
+            StrideChangerVec    strideChangers;
+            // clang-format on
         };
 
         struct Vao
@@ -126,7 +130,10 @@ namespace Ogre
         typedef vector<Vao>::type VaoVec;
         typedef map<VertexElement2Vec, Vbo>::type VboMap;
 
+        uint32 mBestVkMemoryTypeIndex[MAX_VBO_FLAG];
+
         VboVec mVbos[MAX_VBO_FLAG];
+        size_t mDefaultPoolSize[MAX_VBO_FLAG];
 
         VaoVec mVaos;
 
@@ -152,6 +159,52 @@ namespace Ogre
         bool mFenceFlushed;
 
     protected:
+        void determineBestMemoryTypes( void );
+
+        /** Asks for allocating buffer space in a memory pool.
+            If the VBO doesn't exist, all VBOs are full or can't fit this request,
+            then a new VBO will be created.
+        @remarks
+            Can throw if out of video memory
+
+            The 'VBO' stands for Vertex Buffer Object, which is only a remnant from
+            how we did things in OpenGL years ago. Today in Ogre we use it as
+            synonym for 'Handle to Device Memory"
+        @param sizeBytes
+            The requested size, in bytes.
+        @param bytesPerElement
+            The number of bytes per vertex or per index (i.e. 16-bit indices = 2).
+            Cannot be 0.
+        @param bufferType
+            The type of buffer
+        @param outVboIdx [out]
+            The index to the mVbos.
+        @param outBufferOffset [out]
+            The offset in bytes at which the buffer data should be placed.
+        */
+        void allocateVbo( size_t sizeBytes, size_t alignment, BufferType bufferType, size_t &outVboIdx,
+                          size_t &outBufferOffset );
+
+        /** Deallocates a buffer allocated with VulkanVaoManager::allocateVbo.
+        @remarks
+            All four parameters *must* match with the ones provided to or
+            returned from allocateVbo, otherwise the behavior is undefined.
+        @param vboIdx
+            The index to the mVbos pool that was returned by allocateVbo
+        @param bufferOffset
+            The buffer offset that was returned by allocateVbo
+        @param sizeBytes
+            The sizeBytes parameter that was passed to allocateVbos.
+        @param bufferType
+            The type of buffer that was passed to allocateVbo.
+        */
+        void deallocateVbo( size_t vboIdx, size_t bufferOffset, size_t sizeBytes,
+                            BufferType bufferType );
+
+        /// @see StagingBuffer::mergeContiguousBlocks
+        static void mergeContiguousBlocks( BlockVec::iterator blockToMerge,
+                                           BlockVec &blocks );
+
         virtual VertexBufferPacked *createVertexBufferImpl( size_t numElements, uint32 bytesPerElement,
                                                             BufferType bufferType, void *initialData,
                                                             bool keepAsShadow,
