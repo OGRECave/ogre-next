@@ -31,6 +31,9 @@ THE SOFTWARE.
 #include "OgreD3D11RenderSystem.h"
 
 #include "OgreRoot.h"
+#include "OgreLogManager.h"
+
+#include <iomanip>
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WINRT && defined(_WIN32_WINNT_WINBLUE) && _WIN32_WINNT >= _WIN32_WINNT_WINBLUE
 #include <dxgi1_3.h> // for IDXGISwapChain2::SetMatrixTransform used in D3D11RenderWindowSwapChainPanel
@@ -51,11 +54,53 @@ namespace Ogre
                                    miscParams, device, renderSystem )
     {
         mUseFlipSequentialMode = true;
+
+        Windows::UI::Core::CoreWindow^ externalHandle = nullptr;
+        if (miscParams)
+        {
+            NameValuePairList::const_iterator opt = miscParams->find("externalWindowHandle");
+            if (opt != miscParams->end())
+                externalHandle = reinterpret_cast<Windows::UI::Core::CoreWindow^>((void*)StringConverter::parseSizeT(opt->second));
+            else
+                externalHandle = Windows::UI::Core::CoreWindow::GetForCurrentThread();
+        }
+        else
+            externalHandle = Windows::UI::Core::CoreWindow::GetForCurrentThread();
+
+        if (!externalHandle)
+        {
+            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS, "External window handle is not specified.", "D3D11WindowSwapChainPanel::.ctor");
+        }
+        else
+        {
+            mCoreWindow = externalHandle;
+            mIsExternal = true;
+        }
+
+        float scale = getViewPointToPixelScale();
+        Windows::Foundation::Rect rc = mCoreWindow->Bounds;
+        mLeft = (int)floorf(rc.X * scale + 0.5f);
+        mTop = (int)floorf(rc.Y * scale + 0.5f);
+        mRequestedWidth = rc.Width;
+        mRequestedHeight = rc.Height;
     }
     //-----------------------------------------------------------------------------------
     D3D11WindowCoreWindow::~D3D11WindowCoreWindow()
     {
         destroy();
+    }
+    //---------------------------------------------------------------------
+    void D3D11WindowCoreWindow::destroy()
+    {
+        D3D11WindowSwapChainBased::destroy();
+
+        if (mCoreWindow.Get() && !mIsExternal)
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Only external window handles are supported."
+                , "D3D11RenderWindow::destroy" );
+        }
+
+        mCoreWindow = nullptr;
     }
     //-----------------------------------------------------------------------------------
     float D3D11WindowCoreWindow::getViewPointToPixelScale() const
@@ -118,6 +163,23 @@ namespace Ogre
 
         return hr;
     }
+    //---------------------------------------------------------------------
+    void D3D11WindowCoreWindow::windowMovedOrResized()
+    {
+        float scale = getViewPointToPixelScale();
+        Windows::Foundation::Rect rc = mCoreWindow->Bounds;
+        mLeft = (int)floorf(rc.X * scale + 0.5f);
+        mTop = (int)floorf(rc.Y * scale + 0.5f);
+        mRequestedWidth = rc.Width;
+        mRequestedHeight = rc.Height;
+
+        resizeSwapChainBuffers(0, 0);      // pass zero to autodetect size
+    }
+    //---------------------------------------------------------------------
+    bool D3D11WindowCoreWindow::isVisible() const
+    {
+        return (mCoreWindow.Get() && Windows::UI::Core::CoreWindow::GetForCurrentThread() == mCoreWindow.Get());
+    }
 
 #endif
 #pragma endregion
@@ -134,11 +196,60 @@ namespace Ogre
 
     {
         mUseFlipSequentialMode = true;
+
+        Windows::UI::Xaml::Controls::SwapChainPanel^ externalHandle = nullptr;
+        if(miscParams)
+        {
+            NameValuePairList::const_iterator opt = miscParams->find("externalWindowHandle");
+            if(opt != miscParams->end())
+                externalHandle = reinterpret_cast<Windows::UI::Xaml::Controls::SwapChainPanel^>((void*)StringConverter::parseSizeT(opt->second));
+        }
+
+        if (!externalHandle)
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "External window handle is not specified.", "D3D11RenderWindow::create" );
+        }
+        else
+        {
+            mSwapChainPanel = externalHandle;
+            mIsExternal = true;
+
+            // subscribe to important notifications
+            compositionScaleChangedToken = (mSwapChainPanel->CompositionScaleChanged +=
+                ref new Windows::Foundation::TypedEventHandler<Windows::UI::Xaml::Controls::SwapChainPanel^, Platform::Object^>([this](Windows::UI::Xaml::Controls::SwapChainPanel^ sender, Platform::Object^ e)
+            {
+                windowMovedOrResized();
+            }));
+            sizeChangedToken = (mSwapChainPanel->SizeChanged +=
+                ref new Windows::UI::Xaml::SizeChangedEventHandler([this](Platform::Object^ sender, Windows::UI::Xaml::SizeChangedEventArgs^ e)
+            {
+                windowMovedOrResized();
+            }));
+        }
+
+        Windows::Foundation::Size sz = Windows::Foundation::Size(static_cast<float>(mSwapChainPanel->ActualWidth), static_cast<float>(mSwapChainPanel->ActualHeight));
+        mCompositionScale = Windows::Foundation::Size(mSwapChainPanel->CompositionScaleX, mSwapChainPanel->CompositionScaleY);
+        mRequestedWidth = sz.Width;
+        mRequestedHeight = sz.Height;
     }
     //-----------------------------------------------------------------------------------
     D3D11WindowSwapChainPanel::~D3D11WindowSwapChainPanel()
     {
         destroy();
+    }
+    //---------------------------------------------------------------------
+    void D3D11WindowSwapChainPanel::destroy()
+    {
+        D3D11WindowSwapChainBased::destroy();
+
+        if (mSwapChainPanel && !mIsExternal)
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Only external window handles are supported."
+                , "D3D11RenderWindow::destroy" );
+        }
+        mSwapChainPanel->CompositionScaleChanged -= compositionScaleChangedToken; compositionScaleChangedToken.Value = 0;
+        mSwapChainPanel->SizeChanged -= sizeChangedToken; sizeChangedToken.Value = 0;
+        mSwapChainPanel = nullptr;
     }
     //-----------------------------------------------------------------------------------
     float D3D11WindowSwapChainPanel::getViewPointToPixelScale() const
@@ -152,9 +263,13 @@ namespace Ogre
         D3D11RenderSystem* rsys = static_cast<D3D11RenderSystem*>(Root::getSingleton().getRenderSystem());
         mMsaaDesc = rsys->getMsaaSampleDesc(mMsaa, mMsaaHint, _getRenderFormat());
 #endif
+
+        int widthPx = std::max(1, (int)floorf(mRequestedWidth * mCompositionScale.Width + 0.5f));
+        int heightPx = std::max(1, (int)floorf(mRequestedHeight * mCompositionScale.Height + 0.5f));
+
         DXGI_SWAP_CHAIN_DESC1 desc = {};
-        desc.Width                = mWidth;                           // Use automatic sizing.
-        desc.Height               = mHeight;
+        desc.Width                = widthPx;
+        desc.Height               = heightPx;
         desc.Format               = _getSwapChainFormat();
         desc.Stereo               = false;
 
@@ -208,6 +323,26 @@ namespace Ogre
 
         hr = pSwapChain2->SetMatrixTransform(&inverseScale);
         return hr;
+    }
+    //---------------------------------------------------------------------
+    void D3D11WindowSwapChainPanel::windowMovedOrResized()
+    {
+        Windows::Foundation::Size sz = Windows::Foundation::Size(static_cast<float>(mSwapChainPanel->ActualWidth), static_cast<float>(mSwapChainPanel->ActualHeight));
+        mCompositionScale = Windows::Foundation::Size(mSwapChainPanel->CompositionScaleX, mSwapChainPanel->CompositionScaleY);
+        mRequestedWidth = sz.Width;
+        mRequestedHeight = sz.Height;
+
+        int widthPx = std::max(1, (int)floorf(mRequestedWidth * mCompositionScale.Width + 0.5f));
+        int heightPx = std::max(1, (int)floorf(mRequestedHeight * mCompositionScale.Height + 0.5f));
+
+        resizeSwapChainBuffers(widthPx, heightPx);
+
+        _compensateSwapChainCompositionScale();
+    }
+    //---------------------------------------------------------------------
+    bool D3D11WindowSwapChainPanel::isVisible() const
+    {
+        return (mSwapChainPanel && mSwapChainPanel->Visibility == Windows::UI::Xaml::Visibility::Visible);
     }
 #endif
 #pragma endregion

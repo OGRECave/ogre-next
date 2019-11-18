@@ -52,8 +52,13 @@ namespace Ogre
                          const NameValuePairList *miscParams,
                          D3D11Device &device, D3D11RenderSystem *renderSystem );
         virtual ~D3D11WindowCoreWindow();
+        virtual void destroy(void);
+
+        Windows::UI::Core::CoreWindow^ getCoreWindow() const    { return mCoreWindow.Get(); }
 
         virtual float getViewPointToPixelScale() const;
+        virtual void windowMovedOrResized();
+        virtual bool isVisible() const;
     };
 #endif
 
@@ -75,8 +80,13 @@ namespace Ogre
                          const NameValuePairList *miscParams,
                          D3D11Device &device, D3D11RenderSystem *renderSystem );
         virtual ~D3D11WindowSwapChainPanel();
+        virtual void destroy();
+
+        Windows::UI::Xaml::Controls::SwapChainPanel^ getSwapChainPanel() const    { return mSwapChainPanel; }
 
         virtual float getViewPointToPixelScale() const;
+        virtual void windowMovedOrResized();
+        virtual bool isVisible() const;
     };
 #endif
 }
