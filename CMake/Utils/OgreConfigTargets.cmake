@@ -272,7 +272,7 @@ function(ogre_config_plugin PLUGINNAME)
   else (OGRE_STATIC)
     if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
       # disable "lib" prefix on Unix
-      set_target_properties(${PLUGINNAME} PROPERTIES PREFIX "")
+      set_target_properties(${PLUGINNAME} PROPERTIES PREFIX "${OGRE_PLUGIN_LIB_PREFIX}")
     endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   endif (OGRE_STATIC)
   # export only if static
