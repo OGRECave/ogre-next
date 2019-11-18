@@ -61,21 +61,14 @@ namespace Ogre
         assert( !mStencilBuffer && "Derived class didn't properly free resources" );
     }
     //-----------------------------------------------------------------------------------
-    void Window::setFinalResolution( uint32 widthPt, uint32 heightPt )
+    void Window::setFinalResolution( uint32 widthPx, uint32 heightPx )
     {
-        mRequestedWidth = widthPt;
-        mRequestedHeight = heightPt;
-
-        float scale = getViewPointToPixelScale();
-        uint32 width = (uint32)floorf(widthPt * scale + 0.5f);
-        uint32 height = (uint32)floorf(heightPt * scale + 0.5f);
-
         if( mTexture )
-            mTexture->setResolution( width, height, 1u );
+            mTexture->setResolution( widthPx, heightPx, 1u );
         if( mDepthBuffer )
-            mDepthBuffer->setResolution( width, height, 1u );
+            mDepthBuffer->setResolution( widthPx, heightPx, 1u );
         if( mStencilBuffer )
-            mStencilBuffer->setResolution( width, height, 1u );
+            mStencilBuffer->setResolution( widthPx, heightPx, 1u );
     }
     //-----------------------------------------------------------------------------------
     void Window::setTitle( const String &title )

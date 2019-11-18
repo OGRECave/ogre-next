@@ -75,7 +75,7 @@ namespace Ogre
         int32 mLeft; // in pixels
         int32 mTop; // in pixels
 
-        void setFinalResolution( uint32 width, uint32 height );
+        void setFinalResolution( uint32 widthPx, uint32 heightPx );
 
     public:
         Window( const String &title, uint32 widthPt, uint32 heightPt, bool fullscreenMode );
