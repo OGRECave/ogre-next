@@ -48,7 +48,10 @@ namespace Ogre
         bool mHwGamma;
         bool mVisible;
 
-        /// Effective FSAA mode, limited by hardware capabilities
+        /// Requested MSAA mode
+        uint mMsaa;
+        String mMsaaHint;
+        /// Effective MSAA mode, limited by hardware capabilities
         DXGI_SAMPLE_DESC mMsaaDesc;
 
         // Window size depended resources - must be released

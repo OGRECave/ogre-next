@@ -825,7 +825,7 @@ namespace Ogre
             NameValuePairList miscParams;
             miscParams["colourDepth"] = StringConverter::toString(videoMode ? videoMode->getColourDepth() : 32);
             miscParams["MSAA"] = StringConverter::toString(fsaa);
-            miscParams["MSAA_quality"] = fsaaHint;
+            miscParams["MSAAHint"] = fsaaHint;
             miscParams["useNVPerfHUD"] = StringConverter::toString(mUseNVPerfHUD);
             miscParams["gamma"] = StringConverter::toString(hwGamma);
             //miscParams["useFlipSequentialMode"] = StringConverter::toString(true);
@@ -3668,17 +3668,17 @@ namespace Ogre
         return mDevice.getErrorDescription(errorNumber);
     }
     //---------------------------------------------------------------------
-    void D3D11RenderSystem::determineFSAASettings(uint fsaa, const String& fsaaHint,
-        DXGI_FORMAT format, DXGI_SAMPLE_DESC* outFSAASettings)
+    DXGI_SAMPLE_DESC D3D11RenderSystem::getMsaaSampleDesc(uint msaa, const String& msaaHint, PixelFormatGpu format)
     {
-        bool qualityHint = fsaa >= 8 && fsaaHint.find("Quality") != String::npos;
+        DXGI_FORMAT dxgiFormat = D3D11Mappings::get(format);
+        bool qualityHint = msaa >= 8 && msaaHint.find("Quality") != String::npos;
 
         // NVIDIA, AMD - prefer CSAA aka EQAA if available.
         // see http://developer.nvidia.com/object/coverage-sampled-aa.html
         // see http://developer.amd.com/wordpress/media/2012/10/EQAA%20Modes%20for%20AMD%20HD%206900%20Series%20Cards.pdf
 
         // Modes are sorted from high quality to low quality, CSAA aka EQAA are listed first
-        // Note, that max(Count, Quality) == FSAA level and (Count >= 8 && Quality != 0) == quality hint
+        // Note, that max(Count, Quality) == MSAA level and (Count >= 8 && Quality != 0) == quality hint
         DXGI_SAMPLE_DESC presets[] = {
                 { 8, 16 }, // CSAA 16xQ, EQAA 8f16x
                 { 4, 16 }, // CSAA 16x,  EQAA 4f16x
@@ -3701,9 +3701,9 @@ namespace Ogre
         DXGI_SAMPLE_DESC* mode = presets;
         for(; mode->Count != 0; ++mode)
         {
-            unsigned modeFSAA = std::max(mode->Count, mode->Quality);
+            unsigned modeMsaa = std::max(mode->Count, mode->Quality);
             bool modeQuality = mode->Count >= 8 && mode->Quality != 0;
-            bool tooHQ = (modeFSAA > fsaa || (modeFSAA == fsaa && modeQuality && !qualityHint));
+            bool tooHQ = (modeMsaa > msaa || (modeMsaa == msaa && modeQuality && !qualityHint));
             if(!tooHQ)
                 break;
         }
@@ -3712,17 +3712,14 @@ namespace Ogre
         for(; mode->Count != 0; ++mode)
         {
             UINT outQuality;
-            HRESULT hr = mDevice->CheckMultisampleQualityLevels(format, mode->Count, &outQuality);
+            HRESULT hr = mDevice->CheckMultisampleQualityLevels(dxgiFormat, mode->Count, &outQuality);
 
             if(SUCCEEDED(hr) && outQuality > mode->Quality)
-            {
-                *outFSAASettings = *mode;
-                return;
-            }
+                return *mode;
         }
 
-        outFSAASettings->Count = 1;
-        outFSAASettings->Quality = 0;
+        DXGI_SAMPLE_DESC res = { 1, 0 };
+        return res;
     }
     //---------------------------------------------------------------------
     unsigned int D3D11RenderSystem::getDisplayMonitorCount() const

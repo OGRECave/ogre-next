@@ -50,6 +50,8 @@ namespace Ogre
         mAlwaysWindowedMode( false ),
         mHwGamma( false ),
         mVisible( true ),
+        mMsaa( 0 ),
+        mMsaaHint(),
         mRenderSystem( renderSystem )
     {
         mMsaaDesc.Count     = 1u;
@@ -65,18 +67,11 @@ namespace Ogre
             // MSAA
             opt = miscParams->find("MSAA");
             if( opt != miscParams->end() )
-            {
-                mMsaaDesc.Count = StringConverter::parseUnsignedInt( opt->second, 1u );
-//                const bool useCSAA = opt->second.find( "[Quality]" ) != String::npos;
-//                if( useCSAA )
-//                    mMsaaDesc.Quality = mMsaaDesc.Count;
-            }
-            opt = miscParams->find("MSAA_quality");
-            if( opt != miscParams->end() )
-            {
-                mMsaaDesc.Quality = StringConverter::parseUnsignedInt(opt->second);
-                TODO_convert_to_MSAA_pattern;
-            }
+                mMsaa = StringConverter::parseUnsignedInt( opt->second);
+            // MSAA Quality
+            opt = miscParams->find("MSAAHint");
+            if (opt != miscParams->end())
+                mMsaaHint = opt->second;
             // sRGB?
             opt = miscParams->find("gamma");
             if( opt != miscParams->end() )

@@ -183,6 +183,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     HRESULT D3D11WindowHwnd::_createSwapChainImpl(void)
     {
+        D3D11RenderSystem* rsys = static_cast<D3D11RenderSystem*>(Root::getSingleton().getRenderSystem());
+        mMsaaDesc = rsys->getMsaaSampleDesc(mMsaa, mMsaaHint, _getRenderFormat());
         HRESULT hr;
 
         // Create swap chain

@@ -71,7 +71,7 @@ namespace Ogre
     {
 #if !__OGRE_WINRT_PHONE
         D3D11RenderSystem* rsys = static_cast<D3D11RenderSystem*>(Root::getSingleton().getRenderSystem());
-        rsys->determineFSAASettings(mFSAA, mFSAAHint, _getRenderFormat(), &mMsaaDesc);
+        mMsaaDesc = rsys->getMsaaSampleDesc(mMsaa, mMsaaHint, _getRenderFormat());
 #endif
         DXGI_SWAP_CHAIN_DESC1 desc = {};
         desc.Width                = 0;                                // Use automatic sizing.
@@ -150,7 +150,7 @@ namespace Ogre
     {
 #if !__OGRE_WINRT_PHONE
         D3D11RenderSystem* rsys = static_cast<D3D11RenderSystem*>(Root::getSingleton().getRenderSystem());
-        rsys->determineFSAASettings(mFSAA, mFSAAHint, _getRenderFormat(), &mMsaaDesc);
+        mMsaaDesc = rsys->getMsaaSampleDesc(mMsaa, mMsaaHint, _getRenderFormat());
 #endif
         DXGI_SWAP_CHAIN_DESC1 desc = {};
         desc.Width                = mWidth;                           // Use automatic sizing.
