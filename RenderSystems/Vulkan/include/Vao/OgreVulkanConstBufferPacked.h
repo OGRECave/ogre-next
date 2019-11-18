@@ -41,8 +41,7 @@ namespace Ogre
         VulkanConstBufferPacked( size_t internalBufferStartBytes, size_t numElements,
                                  uint32 bytesPerElement, uint32 numElementsPadding,
                                  BufferType bufferType, void *initialData, bool keepAsShadow,
-                                 VaoManager *vaoManager, BufferInterface *bufferInterface,
-                                 size_t bindableSize );
+                                 VaoManager *vaoManager, BufferInterface *bufferInterface );
         ~VulkanConstBufferPacked();
 
         virtual void bindBufferVS( uint16 slot ) {}

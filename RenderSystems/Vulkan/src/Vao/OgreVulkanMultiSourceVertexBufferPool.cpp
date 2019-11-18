@@ -98,7 +98,7 @@ namespace Ogre
         {
             for( size_t i = 0; i < mVertexElementsBySource.size(); ++i )
             {
-                VulkanBufferInterface *bufferInterface = new VulkanBufferInterface( 0 );
+                VulkanBufferInterface *bufferInterface = new VulkanBufferInterface( 0, 0, 0 );
                 void *_initialData = 0;
                 if( initialData )
                     _initialData = initialData[i];

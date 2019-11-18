@@ -32,10 +32,12 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    VulkanConstBufferPacked::VulkanConstBufferPacked(
-        size_t internalBufferStartBytes, size_t numElements, uint32 bytesPerElement,
-        uint32 numElementsPadding, BufferType bufferType, void *initialData, bool keepAsShadow,
-        VaoManager *vaoManager, BufferInterface *bufferInterface, size_t bindableSize ) :
+    VulkanConstBufferPacked::VulkanConstBufferPacked( size_t internalBufferStartBytes,
+                                                      size_t numElements, uint32 bytesPerElement,
+                                                      uint32 numElementsPadding, BufferType bufferType,
+                                                      void *initialData, bool keepAsShadow,
+                                                      VaoManager *vaoManager,
+                                                      BufferInterface *bufferInterface ) :
         ConstBufferPacked( internalBufferStartBytes, numElements, bytesPerElement, numElementsPadding,
                            bufferType, initialData, keepAsShadow, vaoManager, bufferInterface )
     {

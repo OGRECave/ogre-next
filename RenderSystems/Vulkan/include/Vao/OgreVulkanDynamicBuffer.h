@@ -59,7 +59,7 @@ namespace Ogre
         typedef vector<MappedRange>::type MappedRangeVec;
 
         // clang-format off
-        VkDeviceMemory  mVboName;
+        VkDeviceMemory  mDeviceMemory;
         size_t          mVboSize;
         void            *mMappedPtr;
         // clang-format on
@@ -71,14 +71,14 @@ namespace Ogre
 
         VulkanDevice *mDevice;
 
+        bool mNonCoherentMemory;
+
         size_t addMappedRange( size_t start, size_t count );
 
     public:
-        VulkanDynamicBuffer( VkDeviceMemory vboName, size_t vboSize, VulkanVaoManager *vaoManager,
+        VulkanDynamicBuffer( VkDeviceMemory deviceMemory, size_t vboSize, VulkanVaoManager *vaoManager,
                              BufferType persistentMethod, VulkanDevice *device );
         ~VulkanDynamicBuffer();
-
-        VkDeviceMemory getVboName( void ) const { return mVboName; }
 
         /// Assumes mVboName is already bound to GL_COPY_WRITE_BUFFER!!!
         void *RESTRICT_ALIAS_RETURN map( size_t start, size_t count, size_t &outTicket );

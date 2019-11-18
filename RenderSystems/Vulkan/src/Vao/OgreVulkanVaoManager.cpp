@@ -47,6 +47,9 @@ THE SOFTWARE.
 #include "OgreStringConverter.h"
 #include "OgreTimer.h"
 
+#define TODO_implement
+#define TODO_whenImplemented_include_stagingBuffers
+
 namespace Ogre
 {
     VulkanVaoManager::VulkanVaoManager( uint8 dynBufferMultiplier, VulkanDevice *device ) :
@@ -114,11 +117,296 @@ namespace Ogre
     void VulkanVaoManager::getMemoryStats( MemoryStatsEntryVec &outStats, size_t &outCapacityBytes,
                                            size_t &outFreeBytes, Log *log ) const
     {
+        TODO_implement;
         outCapacityBytes = 0;
         outFreeBytes = 0;
     }
     //-----------------------------------------------------------------------------------
-    void VulkanVaoManager::cleanupEmptyPools( void ) {}
+    void VulkanVaoManager::cleanupEmptyPools( void ) { TODO_whenImplemented_include_stagingBuffers; }
+    //-----------------------------------------------------------------------------------
+    void VulkanVaoManager::determineBestMemoryTypes( void )
+    {
+        for( size_t i = 0u; i < MAX_VBO_FLAG; ++i )
+            mBestVkMemoryTypeIndex[i] = std::numeric_limits<uint32>::max();
+
+        const VkPhysicalDeviceMemoryProperties &memProperties = mDevice->mMemoryProperties;
+        const uint32 numMemoryTypes = memProperties.memoryTypeCount;
+
+        for( uint32 i = 0u; i < numMemoryTypes; ++i )
+        {
+            if( memProperties.memoryTypes[i].propertyFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT )
+            {
+                uint32 newValue = i;
+                const uint32 oldValue = mBestVkMemoryTypeIndex[CPU_INACCESSIBLE];
+                if( oldValue < numMemoryTypes )
+                {
+                    if( !( memProperties.memoryTypes[oldValue].propertyFlags &
+                           VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT ) )
+                    {
+                        // We had already found our best match
+                        newValue = oldValue;
+                    }
+                }
+                mBestVkMemoryTypeIndex[CPU_INACCESSIBLE] = newValue;
+            }
+
+            // Find memory that isn't coherent (many desktop GPUs don't provide this)
+            if( ( memProperties.memoryTypes[i].propertyFlags &
+                  ( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT ) ) ==
+                    VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT &&
+                mBestVkMemoryTypeIndex[CPU_ACCESSIBLE_PERSISTENT] >= numMemoryTypes )
+            {
+                mBestVkMemoryTypeIndex[CPU_ACCESSIBLE_PERSISTENT] = i;
+            }
+
+            // Find memory that is coherent, prefer write-combined (aka uncached)
+            if( ( memProperties.memoryTypes[i].propertyFlags &
+                  ( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT ) ) ==
+                ( VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT ) )
+            {
+                uint32 newValue = i;
+                const uint32 oldValue = mBestVkMemoryTypeIndex[CPU_ACCESSIBLE_PERSISTENT_COHERENT];
+                if( oldValue < numMemoryTypes )
+                {
+                    if( !( memProperties.memoryTypes[oldValue].propertyFlags &
+                           VK_MEMORY_PROPERTY_HOST_CACHED_BIT ) )
+                    {
+                        // We already found our best match
+                        newValue = oldValue;
+                    }
+                }
+                mBestVkMemoryTypeIndex[CPU_ACCESSIBLE_PERSISTENT_COHERENT] = newValue;
+            }
+        }
+
+        if( mBestVkMemoryTypeIndex[CPU_ACCESSIBLE_PERSISTENT] >= numMemoryTypes &&
+            mBestVkMemoryTypeIndex[CPU_ACCESSIBLE_PERSISTENT_COHERENT] >= numMemoryTypes )
+        {
+            OGRE_EXCEPT( Exception::ERR_RENDERINGAPI_ERROR,
+                         "Could not find a HOST_VISIBLE Memory Type that is either coherent nor "
+                         "non-coherent. Either there is an Ogre bug while looking through the types, or "
+                         "this Vulkan driver is broken. Cannot continue.",
+                         "VulkanVaoManager::determineBestMemoryTypes" );
+        }
+
+        // Set CPU_ACCESSIBLE_DEFAULT
+        if( mBestVkMemoryTypeIndex[CPU_ACCESSIBLE_PERSISTENT] >= numMemoryTypes )
+        {
+            mBestVkMemoryTypeIndex[CPU_ACCESSIBLE_DEFAULT] =
+                mBestVkMemoryTypeIndex[CPU_ACCESSIBLE_PERSISTENT_COHERENT];
+        }
+        if( mBestVkMemoryTypeIndex[CPU_ACCESSIBLE_PERSISTENT_COHERENT] >= numMemoryTypes )
+        {
+            mBestVkMemoryTypeIndex[CPU_ACCESSIBLE_DEFAULT] =
+                mBestVkMemoryTypeIndex[CPU_ACCESSIBLE_PERSISTENT];
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanVaoManager::allocateVbo( size_t sizeBytes, size_t alignment, BufferType bufferType,
+                                        size_t &outVboIdx, size_t &outBufferOffset )
+    {
+        OGRE_ASSERT_LOW( alignment > 0 );
+
+        VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
+
+        if( bufferType >= BT_DYNAMIC_DEFAULT )
+            sizeBytes *= mDynamicBufferMultiplier;
+
+        VboVec::const_iterator itor = mVbos[vboFlag].begin();
+        VboVec::const_iterator endt = mVbos[vboFlag].end();
+
+        // clang-format off
+        // Find a suitable VBO that can hold the requested size. We prefer those free
+        // blocks that have a matching stride (the current offset is a multiple of
+        // bytesPerElement) in order to minimize the amount of memory padding.
+        size_t bestVboIdx   = (size_t)-1;
+        size_t bestBlockIdx = (size_t)-1;
+        bool foundMatchingStride = false;
+        // clang-format on
+
+        while( itor != endt && !foundMatchingStride )
+        {
+            BlockVec::const_iterator blockIt = itor->freeBlocks.begin();
+            BlockVec::const_iterator blockEn = itor->freeBlocks.end();
+
+            while( blockIt != blockEn && !foundMatchingStride )
+            {
+                const Block &block = *blockIt;
+
+                // Round to next multiple of alignment
+                size_t newOffset = ( ( block.offset + alignment - 1 ) / alignment ) * alignment;
+                size_t padding = newOffset - block.offset;
+
+                if( sizeBytes + padding <= block.size )
+                {
+                    // clang-format off
+                    bestVboIdx      = static_cast<size_t>( itor - mVbos[vboFlag].begin());
+                    bestBlockIdx    = static_cast<size_t>( blockIt - itor->freeBlocks.begin() );
+                    // clang-format on
+
+                    if( newOffset == block.offset )
+                        foundMatchingStride = true;
+                }
+
+                ++blockIt;
+            }
+
+            ++itor;
+        }
+
+        if( bestBlockIdx == (size_t)-1 )
+        {
+            // clang-format off
+            bestVboIdx      = mVbos[vboFlag].size();
+            bestBlockIdx    = 0;
+            foundMatchingStride = true;
+            // clang-format on
+
+            Vbo newVbo;
+
+            size_t poolSize = std::max( mDefaultPoolSize[vboFlag], sizeBytes );
+
+            // No luck, allocate a new buffer.
+            OGRE_ASSERT_LOW( mBestVkMemoryTypeIndex[vboFlag] <
+                             mDevice->mMemoryProperties.memoryTypeCount );
+
+            VkMemoryAllocateInfo memAllocInfo;
+            makeVkStruct( memAllocInfo, VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO );
+            memAllocInfo.allocationSize = poolSize;
+            memAllocInfo.memoryTypeIndex = mBestVkMemoryTypeIndex[vboFlag];
+
+            VkResult result = vkAllocateMemory( mDevice->mDevice, &memAllocInfo, NULL, &newVbo.vboName );
+            checkVkResult( result, "vkAllocateMemory" );
+
+            VkBufferCreateInfo bufferCi;
+            makeVkStruct( bufferCi, VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO );
+            bufferCi.size = poolSize;
+            bufferCi.usage = VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+                             VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT |
+                             VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT |
+                             VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT |
+                             VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT |
+                             VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT;
+            result = vkCreateBuffer( mDevice->mDevice, &bufferCi, 0, &newVbo.vkBuffer );
+            checkVkResult( result, "vkCreateBuffer" );
+
+            newVbo.sizeBytes = poolSize;
+            newVbo.freeBlocks.push_back( Block( 0, poolSize ) );
+            newVbo.dynamicBuffer = 0;
+
+            if( vboFlag != CPU_INACCESSIBLE )
+            {
+                newVbo.dynamicBuffer = new VulkanDynamicBuffer( newVbo.vboName, newVbo.sizeBytes, this,
+                                                                bufferType, mDevice );
+            }
+
+            mVbos[vboFlag].push_back( newVbo );
+        }
+
+        // clang-format off
+        Vbo &bestVbo        = mVbos[vboFlag][bestVboIdx];
+        Block &bestBlock    = bestVbo.freeBlocks[bestBlockIdx];
+        // clang-format on
+
+        size_t newOffset = ( ( bestBlock.offset + alignment - 1 ) / alignment ) * alignment;
+        size_t padding = newOffset - bestBlock.offset;
+        // clang-format off
+        // Shrink our records about available data.
+        bestBlock.size   -= sizeBytes + padding;
+        bestBlock.offset = newOffset + sizeBytes;
+        // clang-format on
+
+        if( !foundMatchingStride )
+        {
+            // This is a stride changer, record as such.
+            StrideChangerVec::iterator itStride = std::lower_bound( bestVbo.strideChangers.begin(),
+                                                                    bestVbo.strideChangers.end(),  //
+                                                                    newOffset, StrideChanger() );
+            bestVbo.strideChangers.insert( itStride, StrideChanger( newOffset, padding ) );
+        }
+
+        if( bestBlock.size == 0u )
+            bestVbo.freeBlocks.erase( bestVbo.freeBlocks.begin() + bestBlockIdx );
+
+        // clang-format off
+        outVboIdx       = bestVboIdx;
+        outBufferOffset = newOffset;
+        // clang-format on
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanVaoManager::deallocateVbo( size_t vboIdx, size_t bufferOffset, size_t sizeBytes,
+                                          BufferType bufferType )
+    {
+        VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
+
+        if( bufferType >= BT_DYNAMIC_DEFAULT )
+            sizeBytes *= mDynamicBufferMultiplier;
+
+        Vbo &vbo = mVbos[vboFlag][vboIdx];
+        StrideChangerVec::iterator itStride =
+            std::lower_bound( vbo.strideChangers.begin(), vbo.strideChangers.end(),  //
+                              bufferOffset, StrideChanger() );
+
+        if( itStride != vbo.strideChangers.end() && itStride->offsetAfterPadding == bufferOffset )
+        {
+            // clang-format off
+            bufferOffset    -= itStride->paddedBytes;
+            sizeBytes       += itStride->paddedBytes;
+            // clang-format on
+
+            vbo.strideChangers.erase( itStride );
+        }
+
+        // See if we're contiguous to a free block and make that block grow.
+        vbo.freeBlocks.push_back( Block( bufferOffset, sizeBytes ) );
+        mergeContiguousBlocks( vbo.freeBlocks.end() - 1u, vbo.freeBlocks );
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanVaoManager::mergeContiguousBlocks( BlockVec::iterator blockToMerge, BlockVec &blocks )
+    {
+        BlockVec::iterator itor = blocks.begin();
+        BlockVec::iterator endt = blocks.end();
+
+        while( itor != endt )
+        {
+            if( itor->offset + itor->size == blockToMerge->offset )
+            {
+                itor->size += blockToMerge->size;
+                size_t idx = itor - blocks.begin();
+
+                // When blockToMerge is the last one, its index won't be the same
+                // after removing the other iterator, they will swap.
+                if( idx == blocks.size() - 1u )
+                    idx = blockToMerge - blocks.begin();
+
+                efficientVectorRemove( blocks, blockToMerge );
+
+                blockToMerge = blocks.begin() + idx;
+                itor = blocks.begin();
+                endt = blocks.end();
+            }
+            else if( blockToMerge->offset + blockToMerge->size == itor->offset )
+            {
+                blockToMerge->size += itor->size;
+                size_t idx = blockToMerge - blocks.begin();
+
+                // When blockToMerge is the last one, its index won't be the same
+                // after removing the other iterator, they will swap.
+                if( idx == blocks.size() - 1u )
+                    idx = itor - blocks.begin();
+
+                efficientVectorRemove( blocks, itor );
+
+                blockToMerge = blocks.begin() + idx;
+                itor = blocks.begin();
+                endt = blocks.end();
+            }
+            else
+            {
+                ++itor;
+            }
+        }
+    }
     //-----------------------------------------------------------------------------------
     void VulkanVaoManager::determineBestMemoryTypes( void )
     {
@@ -388,10 +676,19 @@ namespace Ogre
                                                                   void *initialData, bool keepAsShadow,
                                                                   const VertexElement2Vec &vElements )
     {
-        VulkanBufferInterface *bufferInterface = new VulkanBufferInterface( 0 );
-        VertexBufferPacked *retVal =
-            OGRE_NEW VertexBufferPacked( 0, numElements, bytesPerElement, 0, bufferType, initialData,
-                                         keepAsShadow, this, bufferInterface, vElements, 0, 0, 0 );
+        size_t vboIdx;
+        size_t bufferOffset;
+
+        allocateVbo( numElements * bytesPerElement, bytesPerElement, bufferType, vboIdx, bufferOffset );
+
+        VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
+        Vbo &vbo = mVbos[vboFlag][vboIdx];
+        VulkanBufferInterface *bufferInterface =
+            new VulkanBufferInterface( vboIdx, vbo.vkBuffer, vbo.dynamicBuffer );
+
+        VertexBufferPacked *retVal = OGRE_NEW VertexBufferPacked(
+            bufferOffset, numElements, bytesPerElement, 0, bufferType, initialData, keepAsShadow, this,
+            bufferInterface, vElements, 0, 0, 0 );
 
         if( initialData )
             bufferInterface->_firstUpload( initialData, 0, numElements );
@@ -399,7 +696,15 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void VulkanVaoManager::destroyVertexBufferImpl( VertexBufferPacked *vertexBuffer ) {}
+    void VulkanVaoManager::destroyVertexBufferImpl( VertexBufferPacked *vertexBuffer )
+    {
+        VulkanBufferInterface *bufferInterface =
+            static_cast<VulkanBufferInterface *>( vertexBuffer->getBufferInterface() );
+
+        deallocateVbo( bufferInterface->getVboPoolIndex(),
+                       vertexBuffer->_getInternalBufferStart() * vertexBuffer->getBytesPerElement(),
+                       vertexBuffer->_getInternalTotalSizeBytes(), vertexBuffer->getBufferType() );
+    }
     //-----------------------------------------------------------------------------------
     MultiSourceVertexBufferPool *VulkanVaoManager::createMultiSourceVertexBufferPoolImpl(
         const VertexElement2VecVec &vertexElementsBySource, size_t maxNumVertices,
@@ -414,10 +719,19 @@ namespace Ogre
                                                                 BufferType bufferType, void *initialData,
                                                                 bool keepAsShadow )
     {
-        VulkanBufferInterface *bufferInterface = new VulkanBufferInterface( 0 );
+        size_t vboIdx;
+        size_t bufferOffset;
+
+        allocateVbo( numElements * bytesPerElement, bytesPerElement, bufferType, vboIdx, bufferOffset );
+
+        VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
+        Vbo &vbo = mVbos[vboFlag][vboIdx];
+        VulkanBufferInterface *bufferInterface =
+            new VulkanBufferInterface( vboIdx, vbo.vkBuffer, vbo.dynamicBuffer );
+
         IndexBufferPacked *retVal =
-            OGRE_NEW IndexBufferPacked( 0, numElements, bytesPerElement, 0, bufferType, initialData,
-                                        keepAsShadow, this, bufferInterface );
+            OGRE_NEW IndexBufferPacked( bufferOffset, numElements, bytesPerElement, 0, bufferType,
+                                        initialData, keepAsShadow, this, bufferInterface );
 
         if( initialData )
             bufferInterface->_firstUpload( initialData, 0, numElements );
@@ -425,42 +739,24 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void VulkanVaoManager::destroyIndexBufferImpl( IndexBufferPacked *indexBuffer ) {}
+    void VulkanVaoManager::destroyIndexBufferImpl( IndexBufferPacked *indexBuffer )
+    {
+        VulkanBufferInterface *bufferInterface =
+            static_cast<VulkanBufferInterface *>( indexBuffer->getBufferInterface() );
+
+        deallocateVbo( bufferInterface->getVboPoolIndex(),
+                       indexBuffer->_getInternalBufferStart() * indexBuffer->getBytesPerElement(),
+                       indexBuffer->_getInternalTotalSizeBytes(), indexBuffer->getBufferType() );
+    }
     //-----------------------------------------------------------------------------------
     ConstBufferPacked *VulkanVaoManager::createConstBufferImpl( size_t sizeBytes, BufferType bufferType,
                                                                 void *initialData, bool keepAsShadow )
     {
-        uint32 alignment = mConstBufferAlignment;
+        size_t vboIdx;
+        size_t bufferOffset;
 
-        size_t bindableSize = sizeBytes;
-
-        if( bufferType >= BT_DYNAMIC_DEFAULT )
-        {
-            // For dynamic buffers, the size will be 3x times larger
-            //(depending on mDynamicBufferMultiplier); we need the
-            // offset after each map to be aligned; and for that, we
-            // sizeBytes to be multiple of alignment.
-            sizeBytes = ( ( sizeBytes + alignment - 1 ) / alignment ) * alignment;
-        }
-
-        VulkanBufferInterface *bufferInterface = new VulkanBufferInterface( 0 );
-        ConstBufferPacked *retVal =
-            OGRE_NEW VulkanConstBufferPacked( 0, sizeBytes, 1, 0, bufferType, initialData, keepAsShadow,
-                                              this, bufferInterface, bindableSize );
-
-        if( initialData )
-            bufferInterface->_firstUpload( initialData, 0, sizeBytes );
-
-        return retVal;
-    }
-    //-----------------------------------------------------------------------------------
-    void VulkanVaoManager::destroyConstBufferImpl( ConstBufferPacked *constBuffer ) {}
-    //-----------------------------------------------------------------------------------
-    TexBufferPacked *VulkanVaoManager::createTexBufferImpl( PixelFormatGpu pixelFormat, size_t sizeBytes,
-                                                            BufferType bufferType, void *initialData,
-                                                            bool keepAsShadow )
-    {
-        uint32 alignment = mTexBufferAlignment;
+        size_t alignment = mConstBufferAlignment;
+        size_t requestedSize = sizeBytes;
 
         VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
 
@@ -470,46 +766,43 @@ namespace Ogre
             //(depending on mDynamicBufferMultiplier); we need the
             // offset after each map to be aligned; and for that, we
             // sizeBytes to be multiple of alignment.
-            sizeBytes = ( ( sizeBytes + alignment - 1 ) / alignment ) * alignment;
+            sizeBytes = alignToNextMultiple( sizeBytes, alignment );
         }
 
-        VulkanBufferInterface *bufferInterface = new VulkanBufferInterface( 0 );
-        TexBufferPacked *retVal =
-            OGRE_NEW VulkanTexBufferPacked( 0, sizeBytes, 1, 0, bufferType, initialData, keepAsShadow,
-                                            this, bufferInterface, pixelFormat );
+        allocateVbo( sizeBytes, alignment, bufferType, vboIdx, bufferOffset );
 
-        if( initialData )
-            bufferInterface->_firstUpload( initialData, 0, sizeBytes );
+        Vbo &vbo = mVbos[vboFlag][vboIdx];
+        VulkanBufferInterface *bufferInterface =
+            new VulkanBufferInterface( vboIdx, vbo.vkBuffer, vbo.dynamicBuffer );
+
+        ConstBufferPacked *retVal = OGRE_NEW VulkanConstBufferPacked(
+            bufferOffset, requestedSize, 1u, ( uint32 )( sizeBytes - requestedSize ), bufferType,
+            initialData, keepAsShadow, this, bufferInterface );
 
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void VulkanVaoManager::destroyTexBufferImpl( TexBufferPacked *texBuffer ) {}
+    void VulkanVaoManager::destroyConstBufferImpl( ConstBufferPacked *constBuffer )
+    {
+        VulkanBufferInterface *bufferInterface =
+            static_cast<VulkanBufferInterface *>( constBuffer->getBufferInterface() );
+
+        deallocateVbo( bufferInterface->getVboPoolIndex(),
+                       constBuffer->_getInternalBufferStart() * constBuffer->getBytesPerElement(),
+                       constBuffer->_getInternalTotalSizeBytes(), constBuffer->getBufferType() );
+    }
     //-----------------------------------------------------------------------------------
-    UavBufferPacked *VulkanVaoManager::createUavBufferImpl( size_t numElements, uint32 bytesPerElement,
-                                                            uint32 bindFlags, void *initialData,
+    TexBufferPacked *VulkanVaoManager::createTexBufferImpl( PixelFormatGpu pixelFormat, size_t sizeBytes,
+                                                            BufferType bufferType, void *initialData,
                                                             bool keepAsShadow )
     {
-        VulkanBufferInterface *bufferInterface = new VulkanBufferInterface( 0 );
-        UavBufferPacked *retVal =
-            OGRE_NEW VulkanUavBufferPacked( 0, numElements, bytesPerElement, bindFlags, initialData,
-                                            keepAsShadow, this, bufferInterface );
+        size_t vboIdx;
+        size_t bufferOffset;
 
-        if( initialData )
-            bufferInterface->_firstUpload( initialData, 0, numElements );
+        size_t alignment = mTexBufferAlignment;
+        size_t requestedSize = sizeBytes;
 
-        return retVal;
-    }
-    //-----------------------------------------------------------------------------------
-    void VulkanVaoManager::destroyUavBufferImpl( UavBufferPacked *uavBuffer ) {}
-    //-----------------------------------------------------------------------------------
-    IndirectBufferPacked *VulkanVaoManager::createIndirectBufferImpl( size_t sizeBytes,
-                                                                      BufferType bufferType,
-                                                                      void *initialData,
-                                                                      bool keepAsShadow )
-    {
-        const size_t alignment = 4;
-        size_t bufferOffset = 0;
+        VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
 
         if( bufferType >= BT_DYNAMIC_DEFAULT )
         {
@@ -517,28 +810,114 @@ namespace Ogre
             //(depending on mDynamicBufferMultiplier); we need the
             // offset after each map to be aligned; and for that, we
             // sizeBytes to be multiple of alignment.
-            sizeBytes = ( ( sizeBytes + alignment - 1 ) / alignment ) * alignment;
+            sizeBytes = alignToNextMultiple( sizeBytes, alignment );
+        }
+
+        allocateVbo( sizeBytes, alignment, bufferType, vboIdx, bufferOffset );
+
+        Vbo &vbo = mVbos[vboFlag][vboIdx];
+        VulkanBufferInterface *bufferInterface =
+            new VulkanBufferInterface( vboIdx, vbo.vkBuffer, vbo.dynamicBuffer );
+
+        TexBufferPacked *retVal = OGRE_NEW VulkanTexBufferPacked(
+            bufferOffset, requestedSize, 1u, ( uint32 )( sizeBytes - requestedSize ), bufferType,
+            initialData, keepAsShadow, this, bufferInterface, pixelFormat );
+
+        if( initialData )
+            bufferInterface->_firstUpload( initialData, 0, requestedSize );
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanVaoManager::destroyTexBufferImpl( TexBufferPacked *texBuffer )
+    {
+        VulkanBufferInterface *bufferInterface =
+            static_cast<VulkanBufferInterface *>( texBuffer->getBufferInterface() );
+
+        deallocateVbo( bufferInterface->getVboPoolIndex(),
+                       texBuffer->_getInternalBufferStart() * texBuffer->getBytesPerElement(),
+                       texBuffer->_getInternalTotalSizeBytes(), texBuffer->getBufferType() );
+    }
+    //-----------------------------------------------------------------------------------
+    UavBufferPacked *VulkanVaoManager::createUavBufferImpl( size_t numElements, uint32 bytesPerElement,
+                                                            uint32 bindFlags, void *initialData,
+                                                            bool keepAsShadow )
+    {
+        size_t vboIdx;
+        size_t bufferOffset;
+
+        size_t alignment = Math::lcm( mUavBufferAlignment, bytesPerElement );
+
+        // UAV Buffers can't be dynamic.
+        const BufferType bufferType = BT_DEFAULT;
+        VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
+
+        allocateVbo( numElements * bytesPerElement, alignment, bufferType, vboIdx, bufferOffset );
+
+        Vbo &vbo = mVbos[vboFlag][vboIdx];
+        VulkanBufferInterface *bufferInterface =
+            new VulkanBufferInterface( vboIdx, vbo.vkBuffer, vbo.dynamicBuffer );
+
+        UavBufferPacked *retVal =
+            OGRE_NEW VulkanUavBufferPacked( bufferOffset, numElements, bytesPerElement, bindFlags,
+                                            initialData, keepAsShadow, this, bufferInterface );
+
+        if( initialData )
+            bufferInterface->_firstUpload( initialData, 0, numElements );
+
+        return retVal;
+    }
+    //-----------------------------------------------------------------------------------
+    void VulkanVaoManager::destroyUavBufferImpl( UavBufferPacked *uavBuffer )
+    {
+        VulkanBufferInterface *bufferInterface =
+            static_cast<VulkanBufferInterface *>( uavBuffer->getBufferInterface() );
+
+        deallocateVbo( bufferInterface->getVboPoolIndex(),
+                       uavBuffer->_getInternalBufferStart() * uavBuffer->getBytesPerElement(),
+                       uavBuffer->_getInternalTotalSizeBytes(), uavBuffer->getBufferType() );
+    }
+    //-----------------------------------------------------------------------------------
+    IndirectBufferPacked *VulkanVaoManager::createIndirectBufferImpl( size_t sizeBytes,
+                                                                      BufferType bufferType,
+                                                                      void *initialData,
+                                                                      bool keepAsShadow )
+    {
+        const size_t alignment = 4u;
+        size_t bufferOffset = 0u;
+        size_t requestedSize = sizeBytes;
+
+        if( bufferType >= BT_DYNAMIC_DEFAULT )
+        {
+            // For dynamic buffers, the size will be 3x times larger
+            //(depending on mDynamicBufferMultiplier); we need the
+            // offset after each map to be aligned; and for that, we
+            // sizeBytes to be multiple of alignment.
+            sizeBytes = alignToNextMultiple( sizeBytes, alignment );
         }
 
         VulkanBufferInterface *bufferInterface = 0;
         if( mSupportsIndirectBuffers )
         {
-            bufferInterface = new VulkanBufferInterface( 0 );
+            size_t vboIdx;
+            VboFlag vboFlag = bufferTypeToVboFlag( bufferType );
+
+            allocateVbo( sizeBytes, alignment, bufferType, vboIdx, bufferOffset );
+
+            Vbo &vbo = mVbos[vboFlag][vboIdx];
+            bufferInterface = new VulkanBufferInterface( vboIdx, vbo.vkBuffer, vbo.dynamicBuffer );
         }
 
         IndirectBufferPacked *retVal = OGRE_NEW IndirectBufferPacked(
-            0, sizeBytes, 1, 0, bufferType, initialData, keepAsShadow, this, bufferInterface );
+            bufferOffset, requestedSize, 1, ( uint32 )( sizeBytes - requestedSize ), bufferType,
+            initialData, keepAsShadow, this, bufferInterface );
 
         if( initialData )
         {
             if( mSupportsIndirectBuffers )
-            {
-                bufferInterface->_firstUpload( initialData, 0, sizeBytes );
-            }
+                bufferInterface->_firstUpload( initialData, 0, requestedSize );
             else
-            {
-                memcpy( retVal->getSwBufferPtr(), initialData, sizeBytes );
-            }
+                memcpy( retVal->getSwBufferPtr(), initialData, requestedSize );
         }
 
         return retVal;
@@ -548,6 +927,13 @@ namespace Ogre
     {
         if( mSupportsIndirectBuffers )
         {
+            VulkanBufferInterface *bufferInterface =
+                static_cast<VulkanBufferInterface *>( indirectBuffer->getBufferInterface() );
+
+            deallocateVbo(
+                bufferInterface->getVboPoolIndex(),
+                indirectBuffer->_getInternalBufferStart() * indirectBuffer->getBytesPerElement(),
+                indirectBuffer->_getInternalTotalSizeBytes(), indirectBuffer->getBufferType() );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -583,14 +969,26 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     StagingBuffer *VulkanVaoManager::createStagingBuffer( size_t sizeBytes, bool forUpload )
     {
-        sizeBytes = std::max<size_t>( sizeBytes, 4 * 1024 * 1024 );
+        sizeBytes = std::max<size_t>( sizeBytes, 4u * 1024u * 1024u );
+
+        size_t vboIdx;
+        size_t bufferOffset;
+        allocateVbo( sizeBytes, 4u, BT_DYNAMIC_PERSISTENT, vboIdx, bufferOffset );
+
+        const VboFlag vboFlag = CPU_ACCESSIBLE_PERSISTENT;
+        Vbo &vbo = mVbos[vboFlag][vboIdx];
+        VulkanBufferInterface *bufferInterface =
+            new VulkanBufferInterface( vboIdx, vbo.vkBuffer, vbo.dynamicBuffer );
+
         VulkanStagingBuffer *stagingBuffer =
-            OGRE_NEW VulkanStagingBuffer( 0, sizeBytes, this, forUpload );
+            OGRE_NEW VulkanStagingBuffer( bufferOffset, sizeBytes, this, forUpload, bufferInterface );
         mRefedStagingBuffers[forUpload].push_back( stagingBuffer );
 
         if( mNextStagingBufferTimestampCheckpoint == (unsigned long)( ~0 ) )
+        {
             mNextStagingBufferTimestampCheckpoint =
                 mTimer->getMilliseconds() + mDefaultStagingBufferLifetime;
+        }
 
         return stagingBuffer;
     }
@@ -789,5 +1187,12 @@ namespace Ogre
     void VulkanVaoManager::switchVboPoolIndexImpl( size_t oldPoolIdx, size_t newPoolIdx,
                                                    BufferPacked *buffer )
     {
+        if( mSupportsIndirectBuffers || buffer->getBufferPackedType() != BP_TYPE_INDIRECT )
+        {
+            VulkanBufferInterface *bufferInterface =
+                static_cast<VulkanBufferInterface *>( buffer->getBufferInterface() );
+            if( bufferInterface->getVboPoolIndex() == oldPoolIdx )
+                bufferInterface->_setVboPoolIndex( newPoolIdx );
+        }
     }
 }  // namespace Ogre

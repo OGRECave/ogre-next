@@ -4,7 +4,7 @@ This source file is part of OGRE
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
-Copyright (c) 2000-2014 Torus Knot Software Ltd
+Copyright (c) 2000-present Torus Knot Software Ltd
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,31 +28,33 @@ THE SOFTWARE.
 
 #include "Vao/OgreVulkanBufferInterface.h"
 
+#include "Vao/OgreVulkanDynamicBuffer.h"
 #include "Vao/OgreVulkanStagingBuffer.h"
 #include "Vao/OgreVulkanVaoManager.h"
 
+#include "OgreVulkanDevice.h"
+
+#include "vulkan/vulkan_core.h"
+
+#define TODO_missing_barrier
+
 namespace Ogre
 {
-    VulkanBufferInterface::VulkanBufferInterface( size_t vboPoolIdx ) :
+    VulkanBufferInterface::VulkanBufferInterface( size_t vboPoolIdx, VkBuffer vboName,
+                                                  VulkanDynamicBuffer *dynamicBuffer ) :
         mVboPoolIdx( vboPoolIdx ),
+        mVboName( vboName ),
         mMappedPtr( 0 ),
-        mVulkanDataPtr( 0 )
+        mUnmapTicket( (size_t)-1 ),
+        mDynamicBuffer( dynamicBuffer )
     {
     }
     //-----------------------------------------------------------------------------------
-    VulkanBufferInterface::~VulkanBufferInterface()
-    {
-        if( mVulkanDataPtr )
-        {
-            OGRE_FREE_SIMD( mVulkanDataPtr, MEMCATEGORY_RENDERSYS );
-            mVulkanDataPtr = 0;
-        }
-    }
+    VulkanBufferInterface::~VulkanBufferInterface() {}
     //-----------------------------------------------------------------------------------
-    void VulkanBufferInterface::_firstUpload( const void *data, size_t elementStart,
-                                              size_t elementCount )
+    void VulkanBufferInterface::_firstUpload( void *data, size_t elementStart, size_t elementCount )
     {
-        // In OpenGL; immutable buffers are a charade. They're mostly there to satisfy D3D11's needs.
+        // In Vulkan; immutable buffers are a charade. They're mostly there to satisfy D3D11's needs.
         // However we emulate the behavior and trying to upload to an immutable buffer will result
         // in an exception or an assert, thus we temporarily change the type.
         BufferType originalBufferType = mBuffer->mBufferType;
@@ -71,26 +73,26 @@ namespace Ogre
         size_t bytesPerElement = mBuffer->mBytesPerElement;
 
         VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mBuffer->mVaoManager );
-        bool canPersistentMap = vaoManager->supportsArbBufferStorage();
+
+        vaoManager->waitForTailFrameToFinish();
 
         size_t dynamicCurrentFrame = advanceFrame( bAdvanceFrame );
 
-        if( prevMappingState == MS_UNMAPPED || !canPersistentMap )
+        if( prevMappingState == MS_UNMAPPED )
         {
             // Non-persistent buffers just map the small region they'll need.
             size_t offset = mBuffer->mInternalBufferStart + elementStart +
                             mBuffer->_getInternalNumElements() * dynamicCurrentFrame;
             size_t length = elementCount;
 
-            if( mBuffer->mBufferType >= BT_DYNAMIC_PERSISTENT && canPersistentMap )
-            {
-                // Persistent buffers map the *whole* assigned buffer,
-                // we later care for the offsets and lengths
-                offset = mBuffer->mInternalBufferStart;
-                length = mBuffer->_getInternalNumElements() * vaoManager->getDynamicBufferMultiplier();
-            }
+            // Persistent buffers map the *whole* assigned buffer,
+            // we later care for the offsets and lengths
+            offset = mBuffer->mInternalBufferStart;
+            length = mBuffer->_getInternalNumElements() * vaoManager->getDynamicBufferMultiplier();
 
-            mMappedPtr = mVulkanDataPtr + offset * bytesPerElement;
+            mMappedPtr = mDynamicBuffer->map( offset * bytesPerElement,  //
+                                              length * bytesPerElement,  //
+                                              mUnmapTicket );
         }
 
         // For regular maps, mLastMappingStart is 0. So that we can later flush correctly.
@@ -99,15 +101,12 @@ namespace Ogre
 
         char *retVal = (char *)mMappedPtr;
 
-        if( mBuffer->mBufferType >= BT_DYNAMIC_PERSISTENT && canPersistentMap )
-        {
-            // For persistent maps, we've mapped the whole 3x size of the buffer. mLastMappingStart
-            // points to the right offset so that we can later flush correctly.
-            size_t lastMappingStart =
-                elementStart + mBuffer->_getInternalNumElements() * dynamicCurrentFrame;
-            mBuffer->mLastMappingStart = lastMappingStart;
-            retVal += lastMappingStart * bytesPerElement;
-        }
+        // For persistent maps, we've mapped the whole 3x size of the buffer. mLastMappingStart
+        // points to the right offset so that we can later flush correctly.
+        size_t lastMappingStart =
+            elementStart + mBuffer->_getInternalNumElements() * dynamicCurrentFrame;
+        mBuffer->mLastMappingStart = lastMappingStart;
+        retVal += lastMappingStart * bytesPerElement;
 
         return retVal;
     }
@@ -120,18 +119,19 @@ namespace Ogre
         assert( flushStartElem + flushSizeElem <= mBuffer->mLastMappingCount &&
                 "Flush region out of bounds!" );
 
-        bool canPersistentMap =
-            static_cast<VulkanVaoManager *>( mBuffer->mVaoManager )->supportsArbBufferStorage();
-
-        if( mBuffer->mBufferType <= BT_DYNAMIC_PERSISTENT || unmapOption == UO_UNMAP_ALL ||
-            !canPersistentMap )
+        if( mBuffer->mBufferType <= BT_DYNAMIC_PERSISTENT || unmapOption == UO_UNMAP_ALL )
         {
             if( !flushSizeElem )
                 flushSizeElem = mBuffer->mLastMappingCount - flushStartElem;
 
-            if( unmapOption == UO_UNMAP_ALL || !canPersistentMap ||
-                mBuffer->mBufferType == BT_DYNAMIC_DEFAULT )
+            mDynamicBuffer->flush(
+                mUnmapTicket,
+                ( mBuffer->mLastMappingStart + flushStartElem ) * mBuffer->mBytesPerElement,
+                flushSizeElem * mBuffer->mBytesPerElement );
+
+            if( unmapOption == UO_UNMAP_ALL )
             {
+                mDynamicBuffer->unmap( mUnmapTicket );
                 mMappedPtr = 0;
             }
         }
@@ -169,25 +169,21 @@ namespace Ogre
             mBuffer->mInternalBufferStart + dynamicCurrentFrame * mBuffer->_getInternalNumElements();
     }
     //-----------------------------------------------------------------------------------
-    void VulkanBufferInterface::_notifyBuffer( BufferPacked *buffer )
-    {
-        BufferInterface::_notifyBuffer( buffer );
-
-        size_t totalSizeBytes = mBuffer->getTotalSizeBytes();
-        if( mBuffer->getBufferType() >= BT_DYNAMIC_DEFAULT )
-            totalSizeBytes *= mBuffer->mVaoManager->getDynamicBufferMultiplier();
-
-        mVulkanDataPtr =
-            reinterpret_cast<uint8 *>( OGRE_MALLOC_SIMD( totalSizeBytes, MEMCATEGORY_RENDERSYS ) );
-    }
-    //-----------------------------------------------------------------------------------
     void VulkanBufferInterface::copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes,
                                         size_t srcOffsetBytes, size_t sizeBytes )
     {
-        OGRE_ASSERT_HIGH( dynamic_cast<VulkanBufferInterface *>( dstBuffer ) );
-        VulkanBufferInterface *dstBufferVulkan = static_cast<VulkanBufferInterface *>( dstBuffer );
+        TODO_missing_barrier;
+        VulkanVaoManager *vaoManager = static_cast<VulkanVaoManager *>( mBuffer->mVaoManager );
+        VulkanDevice *device = vaoManager->getDevice();
 
-        memcpy( (char *)dstBufferVulkan->mVulkanDataPtr + dstOffsetBytes,
-                (char *)mVulkanDataPtr + srcOffsetBytes, sizeBytes );
+        OGRE_ASSERT_HIGH( dynamic_cast<VulkanBufferInterface *>( dstBuffer ) );
+        VulkanBufferInterface *dstBufferVk = static_cast<VulkanBufferInterface *>( dstBuffer );
+
+        VkBufferCopy region;
+        region.srcOffset = srcOffsetBytes;
+        region.dstOffset = dstOffsetBytes;
+        region.size = sizeBytes;
+        vkCmdCopyBuffer( device->mGraphicsQueue.mCurrentCmdBuffer, mVboName, dstBufferVk->getVboName(),
+                         1u, &region );
     }
 }  // namespace Ogre

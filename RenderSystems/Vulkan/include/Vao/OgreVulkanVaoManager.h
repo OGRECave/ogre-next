@@ -89,6 +89,7 @@ namespace Ogre
         {
             // clang-format off
             VkDeviceMemory      vboName;
+            VkBuffer            vkBuffer;
             size_t              sizeBytes;
             VulkanDynamicBuffer *dynamicBuffer; //Null for CPU_INACCESSIBLE BOs.
 
@@ -202,8 +203,7 @@ namespace Ogre
                             BufferType bufferType );
 
         /// @see StagingBuffer::mergeContiguousBlocks
-        static void mergeContiguousBlocks( BlockVec::iterator blockToMerge,
-                                           BlockVec &blocks );
+        static void mergeContiguousBlocks( BlockVec::iterator blockToMerge, BlockVec &blocks );
 
         virtual VertexBufferPacked *createVertexBufferImpl( size_t numElements, uint32 bytesPerElement,
                                                             BufferType bufferType, void *initialData,
@@ -260,7 +260,8 @@ namespace Ogre
 
         virtual void cleanupEmptyPools( void );
 
-        bool supportsArbBufferStorage( void ) const { return false; }
+        bool supportsCoherentMapping( void ) const;
+        bool supportsNonCoherentMapping( void ) const;
 
         /** Creates a new staging buffer and adds it to the pool. @see getStagingBuffer.
         @remarks
@@ -274,6 +275,8 @@ namespace Ogre
 
         virtual void _update( void );
         void _notifyNewCommandBuffer( void );
+
+        VulkanDevice *getDevice( void ) const { return mDevice; }
 
         /// Insert into the end of semaphoreArray 'numSemaphores'
         /// number of semaphores that are safe for use.

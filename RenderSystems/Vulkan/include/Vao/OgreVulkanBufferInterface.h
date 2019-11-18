@@ -4,7 +4,7 @@ This source file is part of OGRE
 (Object-oriented Graphics Rendering Engine)
 For the latest info, see http://www.ogre3d.org
 
-Copyright (c) 2000-2014 Torus Knot Software Ltd
+Copyright (c) 2000-present Torus Knot Software Ltd
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,32 +35,42 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    /** For GL3+, most (if not all) buffers, can be treated with the same code.
-        Hence most equivalent functionality is encapsulated here.
-    */
     class _OgreVulkanExport VulkanBufferInterface : public BufferInterface
     {
     protected:
-        size_t mVboPoolIdx;
-        void *mMappedPtr;
+        // clang-format off
+        size_t  mVboPoolIdx;
+        VkBuffer mVboName;
+        void    *mMappedPtr;
 
-        uint8 *mVulkanDataPtr;
+        size_t  mUnmapTicket;
+        VulkanDynamicBuffer *mDynamicBuffer;
+        // clang-format on
 
+        /** See BufferPacked::map.
+        @param bAdvanceFrame
+            When false, it doesn't really advance the mBuffer->mFinalBufferStart pointer,
+            it just calculates the next index without advancing and returns its value.
+            i.e. the value after advancing (was 0, would be incremented to 1, function returns 1).
+        @return
+            The 'next frame' index in the range [0; vaoManager->getDynamicBufferMultiplier())
+            i.e. the value after advancing (was 0, gets incremented to 1, function returns 1).
+        */
         size_t advanceFrame( bool bAdvanceFrame );
 
     public:
-        VulkanBufferInterface( size_t vboPoolIdx );
+        VulkanBufferInterface( size_t vboPoolIdx, VkBuffer vboName, VulkanDynamicBuffer *dynamicBuffer );
         ~VulkanBufferInterface();
 
-        size_t getVboPoolIndex( void ) { return mVboPoolIdx; }
+        // clang-format off
+        size_t getVboPoolIndex(void)                { return mVboPoolIdx; }
+        VkBuffer getVboName(void) const             { return mVboName; }
+        // clang-format on
 
-        uint8 *getVulkanDataPtr( void ) { return mVulkanDataPtr; }
-
-        /// will Vulkan the data ptr so it wont be freed on destruction
-        void VulkanDataPtr() { mVulkanDataPtr = 0; }
+        void _setVboPoolIndex( size_t newVboPool ) { mVboPoolIdx = newVboPool; }
 
         /// Only use this function for the first upload
-        void _firstUpload( const void *data, size_t elementStart, size_t elementCount );
+        void _firstUpload( void *data, size_t elementStart, size_t elementCount );
 
         virtual void *RESTRICT_ALIAS_RETURN map( size_t elementStart, size_t elementCount,
                                                  MappingState prevMappingState,
@@ -69,8 +79,6 @@ namespace Ogre
                             size_t flushSizeElem = 0 );
         virtual void advanceFrame( void );
         virtual void regressFrame( void );
-
-        virtual void _notifyBuffer( BufferPacked *buffer );
 
         virtual void copyTo( BufferInterface *dstBuffer, size_t dstOffsetBytes, size_t srcOffsetBytes,
                              size_t sizeBytes );

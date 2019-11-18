@@ -36,17 +36,28 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    VulkanDynamicBuffer::VulkanDynamicBuffer( VkDeviceMemory vboName, size_t vboSize,
+    VulkanDynamicBuffer::VulkanDynamicBuffer( VkDeviceMemory deviceMemory, size_t vboSize,
                                               VulkanVaoManager *vaoManager, BufferType persistentMethod,
                                               VulkanDevice *device ) :
-        mVboName( vboName ),
+        mDeviceMemory( deviceMemory ),
         mVboSize( vboSize ),
         mMappedPtr( 0 ),
         mPersistentMethod( persistentMethod ),
-        mDevice( device )
+        mDevice( device ),
+        mNonCoherentMemory( false )
     {
-        if( !vaoManager->supportsArbBufferStorage() )
-            mPersistentMethod = BT_DYNAMIC_DEFAULT;
+        if( mPersistentMethod == BT_DYNAMIC_DEFAULT )
+            mPersistentMethod = BT_DYNAMIC_PERSISTENT;
+
+        if( !vaoManager->supportsCoherentMapping() &&
+            mPersistentMethod == BT_DYNAMIC_PERSISTENT_COHERENT )
+        {
+            mPersistentMethod = BT_DYNAMIC_PERSISTENT;
+        }
+        if( !vaoManager->supportsNonCoherentMapping() && mPersistentMethod == BT_DYNAMIC_PERSISTENT )
+            mPersistentMethod = BT_DYNAMIC_PERSISTENT_COHERENT;
+
+        mNonCoherentMemory = mPersistentMethod == BT_DYNAMIC_PERSISTENT;
     }
     //-----------------------------------------------------------------------------------
     VulkanDynamicBuffer::~VulkanDynamicBuffer() {}
@@ -76,7 +87,8 @@ namespace Ogre
 
         if( mMappedRanges.size() == mFreeRanges.size() )
         {
-            VkResult result = vkMapMemory( mDevice->mDevice, mVboName, 0u, mVboSize, 0, &mMappedPtr );
+            VkResult result =
+                vkMapMemory( mDevice->mDevice, mDeviceMemory, 0u, mVboSize, 0, &mMappedPtr );
             checkVkResult( result, "vkMapMemory" );
         }
 
@@ -88,16 +100,18 @@ namespace Ogre
     void VulkanDynamicBuffer::flush( size_t ticket, size_t start, size_t count )
     {
         assert( start <= mMappedRanges[ticket].count && start + count <= mMappedRanges[ticket].count );
-
-        VkMappedMemoryRange mappedRange;
-        // Not using makeVkStruct due to how frequent this function may get called
-        mappedRange.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
-        mappedRange.pNext = 0;
-        mappedRange.memory = mVboName;
-        mappedRange.offset = start;
-        mappedRange.size = count;
-        VkResult result = vkFlushMappedMemoryRanges( mDevice->mDevice, 1u, &mappedRange );
-        checkVkResult( result, "vkFlushMappedMemoryRanges" );
+        if( mNonCoherentMemory )
+        {
+            VkMappedMemoryRange mappedRange;
+            // Not using makeVkStruct due to how frequent this function may get called
+            mappedRange.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
+            mappedRange.pNext = 0;
+            mappedRange.memory = mDeviceMemory;
+            mappedRange.offset = start;
+            mappedRange.size = count;
+            VkResult result = vkFlushMappedMemoryRanges( mDevice->mDevice, 1u, &mappedRange );
+            checkVkResult( result, "vkFlushMappedMemoryRanges" );
+        }
     }
     //-----------------------------------------------------------------------------------
     void VulkanDynamicBuffer::unmap( size_t ticket )
@@ -110,7 +124,7 @@ namespace Ogre
 
         if( mMappedRanges.size() == mFreeRanges.size() )
         {
-            vkUnmapMemory( mDevice->mDevice, mVboName );
+            vkUnmapMemory( mDevice->mDevice, mDeviceMemory );
             mMappedPtr = 0;
         }
     }
