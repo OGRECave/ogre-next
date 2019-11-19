@@ -229,19 +229,27 @@ namespace Demo
         Ogre::String winHandle;
         switch( wmInfo.subsystem )
         {
-        #ifdef WIN32
+        #if defined(SDL_VIDEO_DRIVER_WINDOWS)
         case SDL_SYSWM_WINDOWS:
             // Windows code
             winHandle = Ogre::StringConverter::toString( (uintptr_t)wmInfo.info.win.window );
             break;
-        #elif __MACOSX__
+        #endif
+        #if defined(SDL_VIDEO_DRIVER_WINRT)
+        case SDL_SYSWM_WINRT:
+            // Windows code
+            winHandle = Ogre::StringConverter::toString( (uintptr_t)wmInfo.info.winrt.window );
+            break;
+        #endif
+        #if defined(SDL_VIDEO_DRIVER_COCOA)
         case SDL_SYSWM_COCOA:
             //required to make OGRE play nice with our window
             params.insert( std::make_pair("macAPICocoaUseNSView", "true") );
 
             winHandle  = Ogre::StringConverter::toString(WindowContentViewHandle(wmInfo));
             break;
-        #else
+        #endif
+        #if defined(SDL_VIDEO_DRIVER_X11)
         case SDL_SYSWM_X11:
             winHandle = Ogre::StringConverter::toString( (uintptr_t)wmInfo.info.x11.window );
             break;
@@ -253,7 +261,7 @@ namespace Demo
             break;
         }
 
-        #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+        #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
             params.insert( std::make_pair("externalWindowHandle",  winHandle) );
         #else
             params.insert( std::make_pair("parentWindowHandle",  winHandle) );
