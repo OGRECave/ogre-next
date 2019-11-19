@@ -74,8 +74,12 @@ namespace Ogre
         virtual ~D3D11Window();
         virtual void destroy();
 
-        bool isClosed() const                                   { return mClosed; }
-        bool isHidden() const                                   { return mHidden; }
+        virtual void reposition(int leftPt, int topPt)          {}
+
+        virtual bool isClosed() const                           { return mClosed; }
+        virtual void _setVisible( bool visible )                { mVisible = visible; }
+        virtual void setHidden( bool hidden )                   { mHidden = hidden; }
+        virtual bool isHidden() const                           { return mHidden; }
 
         virtual void getCustomAttribute( IdString name, void* pData );
     };
@@ -87,7 +91,7 @@ namespace Ogre
         ComPtr<IDXGISwapChain1> mSwapChain1;
         //DXGI_SWAP_CHAIN_DESC_N  mSwapChainDesc;
 
-        /// Flag to determine if the swapchain flip sequential model is enabled.
+        /// Flag to determine if the swapchain flip sequential model is active.
         /// Not supported before Win8.0, required for WinRT.
         bool mUseFlipSequentialMode;
 
@@ -100,11 +104,13 @@ namespace Ogre
 
     protected:
         DXGI_FORMAT _getSwapChainFormat();
-
-    protected:
+        uint8 _getSwapChainBufferCount(void) const;
         void _createSwapChain();
         virtual HRESULT _createSwapChainImpl() = 0;
         void _destroySwapChain();
+        void resizeSwapChainBuffers( uint32 width, uint32 height );
+        void setResolutionFromSwapChain(void);
+        void notifyResolutionChanged(void);
 
     public:
         D3D11WindowSwapChainBased( const String &title, uint32 width, uint32 height,
@@ -112,7 +118,11 @@ namespace Ogre
                                    const NameValuePairList *miscParams,
                                    D3D11Device &device, D3D11RenderSystem *renderSystem );
         virtual ~D3D11WindowSwapChainBased();
+
+        virtual void _initialize( TextureGpuManager *textureGpuManager );
         virtual void destroy();
+
+        virtual void swapBuffers(void);
     };
 }
 
