@@ -19,8 +19,4 @@ ogre_add_executable(Sample_TutorialCompute01_UavTexture WIN32 MACOSX_BUNDLE ${SO
 
 target_link_libraries(Sample_TutorialCompute01_UavTexture ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES})
 ogre_config_sample_lib(Sample_TutorialCompute01_UavTexture)
-
-if( APPLE )
-	set_target_properties( Sample_TutorialCompute01_UavTexture PROPERTIES RESOURCE "${SAMPLE_COMMON_RESOURCES}" )
-	set_target_properties( Sample_TutorialCompute01_UavTexture PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${SAMPLES_PLIST} )
-endif()
+ogre_config_sample_pkg(Sample_TutorialCompute01_UavTexture)

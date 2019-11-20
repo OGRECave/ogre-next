@@ -30,8 +30,4 @@ ogre_add_executable(Tutorial_OpenVR WIN32 MACOSX_BUNDLE ${SOURCE_FILES} ${SAMPLE
 
 target_link_libraries(Tutorial_OpenVR ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES} ${OpenVR_LIBRARIES})
 ogre_config_sample_lib(Tutorial_OpenVR)
-
-if( APPLE )
-	set_target_properties( Tutorial_OpenVR PROPERTIES RESOURCE "${SAMPLE_COMMON_RESOURCES}" )
-	set_target_properties( Tutorial_OpenVR PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${SAMPLES_PLIST} )
-endif()
+ogre_config_sample_pkg(Tutorial_OpenVR)

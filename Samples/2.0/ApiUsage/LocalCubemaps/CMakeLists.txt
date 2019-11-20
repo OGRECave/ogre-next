@@ -22,8 +22,4 @@ ogre_add_executable(Sample_LocalCubemaps WIN32 MACOSX_BUNDLE ${SOURCE_FILES} ${S
 
 target_link_libraries(Sample_LocalCubemaps ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES})
 ogre_config_sample_lib(Sample_LocalCubemaps)
-
-if( APPLE )
-	set_target_properties( Sample_LocalCubemaps PROPERTIES RESOURCE "${SAMPLE_COMMON_RESOURCES}" )
-	set_target_properties( Sample_LocalCubemaps PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${SAMPLES_PLIST} )
-endif()
+ogre_config_sample_pkg(Sample_LocalCubemaps)
