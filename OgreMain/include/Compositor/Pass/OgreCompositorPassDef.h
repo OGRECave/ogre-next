@@ -249,6 +249,8 @@ namespace Ogre
     {
         /// Name is local to Node! (unless using 'global_' prefix)
         IdString                mRenderTargetName;
+        String                  mRenderTargetNameStr;
+
         CompositorPassDefVec    mCompositorPasses;
 
         /// Used for cubemaps and 3D textures.
@@ -266,15 +268,18 @@ namespace Ogre
         CompositorNodeDef       *mParentNodeDef;
 
     public:
-        CompositorTargetDef( IdString renderTargetName, uint32 rtIndex,
+        CompositorTargetDef( String renderTargetName, uint32 rtIndex,
                              CompositorNodeDef *parentNodeDef ) :
                 mRenderTargetName( renderTargetName ),
+                mRenderTargetNameStr( renderTargetName ),
                 mRtIndex( rtIndex ),
                 mShadowMapSupportedLightTypes( 0 ),
                 mParentNodeDef( parentNodeDef ) {}
         ~CompositorTargetDef();
 
         IdString getRenderTargetName() const            { return mRenderTargetName; }
+        String getRenderTargetNameStr() const           { return mRenderTargetNameStr; }
+
         uint32 getRtIndex(void) const                   { return mRtIndex; }
 
         void setShadowMapSupportedLightTypes( uint8 types ) { mShadowMapSupportedLightTypes = types; }
