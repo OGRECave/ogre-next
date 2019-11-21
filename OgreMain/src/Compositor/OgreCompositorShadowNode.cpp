@@ -654,7 +654,7 @@ namespace Ogre
                 while( firstBitSet != 32u )
                 {
                     assert( (smCamera.scenePassesViewportSize[firstBitSet].x < Real( 0.0 ) ||
-                             smCamera.scenePassesViewportSize[firstBitSet].x < Real( 0.0 ) ||
+                             smCamera.scenePassesViewportSize[firstBitSet].y < Real( 0.0 ) ||
                              smCamera.scenePassesViewportSize[firstBitSet] == vpSize) &&
                             "Two scene passes to the same shadow map have different viewport sizes! "
                             "Ogre cannot determine how to prevent jittering. Maybe you meant assign "
@@ -1304,11 +1304,10 @@ namespace Ogre
             while( itor != end )
             {
                 const ShadowParam &shadowParam = *itor;
+                const size_t numSplits = shadowParam.technique == SHADOWMAP_PSSM ? shadowParam.numPssmSplits : 1u;
                 if( shadowParam.atlasId == atlasId &&
                     shadowParam.supportedLightTypes & spotAndDirMask )
                 {
-                    const size_t numSplits =
-                            shadowParam.technique == SHADOWMAP_PSSM ? shadowParam.numPssmSplits : 1u;
                     for( size_t i=0; i<numSplits; ++i )
                     {
                         CompositorTargetDef *targetDef = shadowNodeDef->addTargetPass( texName );
@@ -1327,7 +1326,7 @@ namespace Ogre
                 }
                 else
                 {
-                    ++shadowMapIdx;
+                    shadowMapIdx += numSplits;
                 }
                 ++itor;
             }
