@@ -3674,8 +3674,9 @@ namespace Ogre
         bool qualityHint = msaa >= 8 && msaaHint.find("Quality") != String::npos;
 
         // NVIDIA, AMD - prefer CSAA aka EQAA if available.
-        // see http://developer.nvidia.com/object/coverage-sampled-aa.html
+        // see http://developer.download.nvidia.com/assets/gamedev/docs/CSAA_Tutorial.pdf
         // see http://developer.amd.com/wordpress/media/2012/10/EQAA%20Modes%20for%20AMD%20HD%206900%20Series%20Cards.pdf
+        // also https://www.khronos.org/registry/OpenGL/extensions/NV/NV_framebuffer_multisample_coverage.txt
 
         // Modes are sorted from high quality to low quality, CSAA aka EQAA are listed first
         // Note, that max(Count, Quality) == MSAA level and (Count >= 8 && Quality != 0) == quality hint
