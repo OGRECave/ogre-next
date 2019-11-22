@@ -91,9 +91,9 @@ namespace Ogre
         ComPtr<IDXGISwapChain1> mSwapChain1;
         //DXGI_SWAP_CHAIN_DESC_N  mSwapChainDesc;
 
-        /// Flag to determine if the swapchain flip sequential model is active.
+        /// Flag to determine if the swapchain flip model is active.
         /// Not supported before Win8.0, required for WinRT.
-        bool mUseFlipSequentialMode;
+        bool mUseFlipMode;
 
         // We save the previous present stats - so we can detect a "vblank miss"
         DXGI_FRAME_STATISTICS   mPreviousPresentStats;

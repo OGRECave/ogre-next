@@ -144,7 +144,7 @@ namespace Ogre
     template <typename T>
     void D3D11WindowHwnd::setCommonSwapChain( T &sd )
     {
-        if( mUseFlipSequentialMode )
+        if( mUseFlipMode )
         {
             sd.SampleDesc.Count     = 1u;
             sd.SampleDesc.Quality   = 0;
@@ -158,8 +158,8 @@ namespace Ogre
         sd.BufferUsage  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 
         sd.BufferCount = _getSwapChainBufferCount();
-        sd.SwapEffect   = mUseFlipSequentialMode ? DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL :
-                                                   DXGI_SWAP_EFFECT_DISCARD;
+        sd.SwapEffect   = mUseFlipMode ? DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL :
+                                         DXGI_SWAP_EFFECT_DISCARD;
     }
     //-----------------------------------------------------------------------------------
     HRESULT D3D11WindowHwnd::_createSwapChainImpl(void)
@@ -267,11 +267,11 @@ namespace Ogre
                 mVSync = StringConverter::parseBool(opt->second);
 
 #if defined(_WIN32_WINNT_WIN8)
-            // useFlipSequentialMode    [parseBool]
-            opt = miscParams->find("useFlipSequentialMode");
+            // useFlipMode    [parseBool]
+            opt = miscParams->find("useFlipMode");
             if (opt != miscParams->end())
             {
-                mUseFlipSequentialMode = mVSync && isWindows8OrGreater() &&
+                mUseFlipMode = mVSync && isWindows8OrGreater() &&
                                          StringConverter::parseBool(opt->second);
             }
 #endif

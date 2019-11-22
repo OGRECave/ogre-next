@@ -53,7 +53,7 @@ namespace Ogre
         D3D11WindowSwapChainBased( title, width, height, fullscreenMode, depthStencilFormat,
                                    miscParams, device, renderSystem )
     {
-        mUseFlipSequentialMode = true;
+        mUseFlipMode = true;
 
         Windows::UI::Core::CoreWindow^ externalHandle = nullptr;
         if (miscParams)
@@ -124,7 +124,7 @@ namespace Ogre
         desc.Format               = _getSwapChainFormat();
         desc.Stereo               = false;
 
-        assert(mUseFlipSequentialMode);                               // i.e. no MSAA for swapchain, but can be enabled in separate backbuffer
+        assert(mUseFlipMode);                                         // i.e. no MSAA for swapchain, but can be enabled in separate backbuffer
         desc.SampleDesc.Count     = 1;
         desc.SampleDesc.Quality   = 0;
 
@@ -195,7 +195,7 @@ namespace Ogre
         mCompositionScale(1.0f, 1.0f)
 
     {
-        mUseFlipSequentialMode = true;
+        mUseFlipMode = true;
 
         Windows::UI::Xaml::Controls::SwapChainPanel^ externalHandle = nullptr;
         if(miscParams)
@@ -273,7 +273,7 @@ namespace Ogre
         desc.Format               = _getSwapChainFormat();
         desc.Stereo               = false;
 
-        assert(mUseFlipSequentialMode);                               // i.e. no FSAA for swapchain, but can be enabled in separate backbuffer
+        assert(mUseFlipMode);                                         // i.e. no FSAA for swapchain, but can be enabled in separate backbuffer
         desc.SampleDesc.Count     = 1;
         desc.SampleDesc.Quality   = 0;
 

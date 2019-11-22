@@ -125,7 +125,7 @@ namespace Ogre
         D3D11Window( title, width, height, fullscreenMode,
                      depthStencilFormat, miscParams,
                      device, renderSystem ),
-        mUseFlipSequentialMode( false ),
+        mUseFlipMode( false ),
         mPreviousPresentStatsIsValid( false ),
         mVBlankMissCount( 0 )
     {
@@ -142,14 +142,14 @@ namespace Ogre
         // Unfortunately, swapchains in flip mode are incompatible with multisampling and with *_SRGB formats,
         // and special handling is required.
         PixelFormatGpu pf = _getRenderFormat();
-        if(mUseFlipSequentialMode)
+        if(mUseFlipMode)
             pf = PixelFormatGpuUtils::getEquivalentLinear(pf);
         return D3D11Mappings::get(pf);
     }
     //-----------------------------------------------------------------------------------
     uint8 D3D11WindowSwapChainBased::_getSwapChainBufferCount() const
     {
-        return mUseFlipSequentialMode ? 2 : mRenderSystem->getVaoManager()->getDynamicBufferMultiplier() - 1u;
+        return mUseFlipMode ? 2 : mRenderSystem->getVaoManager()->getDynamicBufferMultiplier() - 1u;
     }
     //-----------------------------------------------------------------------------------
     void D3D11WindowSwapChainBased::_initialize( TextureGpuManager *textureGpuManager )
@@ -330,9 +330,9 @@ namespace Ogre
         if( !mDevice.isNull() )
         {
 #if TODO_OGRE_2_2
-            //Step of resolving MSAA resource for swap chains in FlipSequentialMode
+            //Step of resolving MSAA resource for swap chains in FlipMode
             //should be done by application rather than by OS.
-            if( mUseFlipSequentialMode && getMsaa() > 1u )
+            if( mUseFlipMode && getMsaa() > 1u )
             {
                 //We can't resolve MSAA sRGB -> MSAA non-sRGB, so we need to have 2 textures:
                 // 1. Render to MSAA sRGB
@@ -369,7 +369,7 @@ namespace Ogre
 #endif
 
             // flip presentation model swap chains have another semantic for first parameter
-            UINT syncInterval = mUseFlipSequentialMode ? std::max( 1u, mVSyncInterval ) :
+            UINT syncInterval = mUseFlipMode ? std::max( 1u, mVSyncInterval ) :
                                                          (mVSync ? mVSyncInterval : 0);
             HRESULT hr = mSwapChain->Present( syncInterval, 0 );
             if( FAILED(hr) )
