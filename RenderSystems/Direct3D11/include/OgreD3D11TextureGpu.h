@@ -75,7 +75,7 @@ namespace Ogre
         ID3D11Resource  *mMsaaFramebufferName;
 
         void create1DTexture(void);
-        void create2DTexture(void);
+        void create2DTexture( bool msaaTextureOnly = false );
         void create3DTexture(void);
 
         virtual void createInternalResourcesImpl(void);

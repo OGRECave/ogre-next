@@ -171,7 +171,7 @@ namespace Ogre
                             "D3D11WindowHwnd::_initialize" );
         }
 
-        mTexture        = textureManager->createTextureGpuWindow( mpBackBuffer.Get(), this );
+        mTexture        = textureManager->createTextureGpuWindow( mpBackBuffer.Get(), mUseFlipMode, this );
         mDepthBuffer    = textureManager->createWindowDepthBuffer();
 
         mTexture->setPixelFormat( _getRenderFormat() );

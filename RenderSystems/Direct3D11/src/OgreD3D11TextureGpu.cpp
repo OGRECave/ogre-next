@@ -119,7 +119,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void D3D11TextureGpu::create2DTexture(void)
+    void D3D11TextureGpu::create2DTexture( bool msaaTextureOnly /* = false */)
     {
         D3D11_TEXTURE2D_DESC desc;
         memset( &desc, 0, sizeof( desc ) );
@@ -173,8 +173,12 @@ namespace Ogre
         D3D11Device &device = textureManagerD3d->getDevice();
 
         ID3D11Texture2D *texture = 0;
-        HRESULT hr = device->CreateTexture2D( &desc, 0, &texture );
-        mFinalTextureName = texture;
+        HRESULT hr = S_FALSE;
+        if( !msaaTextureOnly )
+        {
+            hr = device->CreateTexture2D(&desc, 0, &texture);
+            mFinalTextureName = texture;
+        }
 
         if( FAILED(hr) || device.isError() )
         {

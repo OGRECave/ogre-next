@@ -64,11 +64,14 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpuWindow::createInternalResourcesImpl(void)
     {
+        assert( mFinalTextureName );
+        create2DTexture( true );
     }
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpuWindow::destroyInternalResourcesImpl(void)
     {
         _setBackbuffer( 0 );
+        D3D11TextureGpuRenderTarget::destroyInternalResourcesImpl();
     }
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpuWindow::notifyDataIsReady(void)
