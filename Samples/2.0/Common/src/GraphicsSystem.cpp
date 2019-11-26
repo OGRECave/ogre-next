@@ -144,6 +144,15 @@ namespace Demo
 
         mStaticPluginLoader.install( mRoot );
 
+        // enable sRGB Gamma Conversion mode by default for all renderers, but still allow to override it via config dialog
+        Ogre::RenderSystemList::const_iterator pRend;
+        for (pRend = mRoot->getAvailableRenderers().begin(); pRend != mRoot->getAvailableRenderers().end(); ++pRend)
+        {
+            Ogre::RenderSystem* rs = *pRend;
+            rs->setConfigOption("sRGB Gamma Conversion", "Yes");
+        }
+
+
         if( mAlwaysAskForConfig || !mRoot->restoreConfig() )
         {
             if( !mRoot->showConfigDialog() )
@@ -162,7 +171,6 @@ namespace Demo
         }
     #endif
 
-        mRoot->getRenderSystem()->setConfigOption( "sRGB Gamma Conversion", "Yes" );
         mRoot->initialise( false, windowTitle );
 
         Ogre::ConfigOptionMap& cfgOpts = mRoot->getRenderSystem()->getConfigOptions();
@@ -269,7 +277,7 @@ namespace Demo
     #endif
 
         params.insert( std::make_pair("title", windowTitle) );
-        params.insert( std::make_pair("gamma", "true") );
+        params.insert( std::make_pair("gamma", cfgOpts["sRGB Gamma Conversion"].currentValue) );
         params.insert( std::make_pair("MSAA", cfgOpts["MSAA"].currentValue) );
         params.insert( std::make_pair("vsync", cfgOpts["VSync"].currentValue) );
         params.insert( std::make_pair("reverse_depth", "Yes" ) );
