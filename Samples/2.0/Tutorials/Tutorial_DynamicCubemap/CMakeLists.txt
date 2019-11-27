@@ -22,8 +22,4 @@ ogre_add_executable(Sample_Tutorial_DynamicCubemap WIN32 MACOSX_BUNDLE ${SOURCE_
 
 target_link_libraries(Sample_Tutorial_DynamicCubemap ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES})
 ogre_config_sample_lib(Sample_Tutorial_DynamicCubemap)
-
-if( APPLE )
-	set_target_properties( Sample_Tutorial_DynamicCubemap PROPERTIES RESOURCE "${SAMPLE_COMMON_RESOURCES}" )
-	set_target_properties( Sample_Tutorial_DynamicCubemap PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${SAMPLES_PLIST} )
-endif()
+ogre_config_sample_pkg(Sample_Tutorial_DynamicCubemap)

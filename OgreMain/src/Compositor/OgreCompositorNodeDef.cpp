@@ -49,11 +49,7 @@ namespace Ogre
         if( renderTargetName.find( "global_" ) == 0 )
             addTextureSourceName( renderTargetName, 0, TEXTURE_GLOBAL );
 
-        IdString targetName;
-        if( !renderTargetName.empty() )
-            targetName = renderTargetName;
-
-        mTargetPasses.push_back( CompositorTargetDef( targetName, rtIndex, this ) );
+        mTargetPasses.push_back( CompositorTargetDef( renderTargetName, rtIndex, this ) );
         return &mTargetPasses.back();
     }
     //-----------------------------------------------------------------------------------

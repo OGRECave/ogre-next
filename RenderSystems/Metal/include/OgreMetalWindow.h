@@ -61,6 +61,8 @@ namespace Ogre
                      const NameValuePairList *miscParams, MetalDevice *ownerDevice );
         virtual ~MetalWindow();
 
+        virtual float getViewPointToPixelScale() const;
+
         virtual void swapBuffers(void);
         virtual void windowMovedOrResized(void);
 

@@ -56,22 +56,25 @@ namespace Ogre
         destroy();
     }
     //-------------------------------------------------------------------------
+    float MetalWindow::getViewPointToPixelScale() const
+    {
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
+        return mMetalView.layer.contentsScale;
+#else
+        NSScreen* screen = mMetalView.window.screen ?: [NSScreen mainScreen];
+        return screen.backingScaleFactor;
+#endif
+    }
+    //-------------------------------------------------------------------------
     inline void MetalWindow::checkLayerSizeChanges(void)
     {
         // Handle display changes here
         if( mMetalView.layerSizeDidUpdate )
         {
             // set the metal layer to the drawable size in case orientation or size changes
-            CGSize drawableSize = CGSizeMake( mMetalView.bounds.size.width,
-                                              mMetalView.bounds.size.height );
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS  
-            drawableSize.width  *= mMetalView.layer.contentsScale;
-            drawableSize.height *= mMetalView.layer.contentsScale;
-#else
-            NSScreen* screen = mMetalView.window.screen ?: [NSScreen mainScreen];
-            drawableSize.width *= screen.backingScaleFactor;
-            drawableSize.height *= screen.backingScaleFactor;
-#endif
+            float scale = getViewPointToPixelScale();
+            CGSize drawableSize = CGSizeMake( mMetalView.bounds.size.width * scale,
+                                              mMetalView.bounds.size.height * scale );
             mMetalLayer.drawableSize = drawableSize;
 
             // Resize anything if needed
@@ -83,10 +86,10 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalWindow::setResolutionFromView(void)
     {
-        const uint32 newWidth = static_cast<uint32>( mMetalLayer.drawableSize.width );
-        const uint32 newHeight = static_cast<uint32>( mMetalLayer.drawableSize.height );
+        const uint32 widthPx = static_cast<uint32>( mMetalLayer.drawableSize.width );
+        const uint32 heightPx = static_cast<uint32>( mMetalLayer.drawableSize.height );
 
-        if( newWidth > 0 && newHeight > 0 && mTexture )
+        if( widthPx > 0 && heightPx > 0 && mTexture )
         {
             assert( dynamic_cast<MetalTextureGpuWindow*>( mTexture ) );
             MetalTextureGpuWindow *texWindow = static_cast<MetalTextureGpuWindow*>( mTexture );
@@ -97,7 +100,7 @@ namespace Ogre
                 MTLTextureDescriptor* desc = [MTLTextureDescriptor
                                              texture2DDescriptorWithPixelFormat:
                                              MetalMappings::get( mTexture->getPixelFormat() )
-                                             width: newWidth height: newHeight mipmapped: NO];
+                                             width: widthPx height: heightPx mipmapped: NO];
                 desc.textureType = MTLTextureType2DMultisample;
                 desc.sampleCount = mMsaa;
                 desc.usage       = MTLTextureUsageRenderTarget;
@@ -120,7 +123,7 @@ namespace Ogre
                 wasResident = true;
             }
 
-            setFinalResolution( newWidth, newHeight );
+            setFinalResolution( widthPx, heightPx );
 
             if( mDepthBuffer && wasResident )
                 mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8*)0 );
@@ -149,11 +152,12 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalWindow::windowMovedOrResized(void)
     {
-        if( mRequestedWidth != mMetalLayer.drawableSize.width ||
-            mRequestedHeight != mMetalLayer.drawableSize.height )
+        CGSize sizePt = mMetalLayer.frame.size;
+        if( mRequestedWidth != sizePt.width ||
+            mRequestedHeight != sizePt.height )
         {
-            mRequestedWidth  = mMetalLayer.drawableSize.width;
-            mRequestedHeight = mMetalLayer.drawableSize.height;
+            mRequestedWidth  = sizePt.width;
+            mRequestedHeight = sizePt.height;
 
             setResolutionFromView();
         }

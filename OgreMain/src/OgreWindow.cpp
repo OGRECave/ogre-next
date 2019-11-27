@@ -33,15 +33,15 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    Window::Window( const String &title, uint32 width, uint32 height, bool fullscreenMode ) :
+    Window::Window( const String &title, uint32 widthPt, uint32 heightPt, bool fullscreenMode ) :
         mTitle( title ),
         mTexture( 0 ),
         mDepthBuffer( 0 ),
         mStencilBuffer( 0 ),
         mFrequencyNumerator( 0 ),
         mFrequencyDenominator( 0 ),
-        mRequestedWidth( width ),
-        mRequestedHeight( height ),
+        mRequestedWidth( widthPt ),
+        mRequestedHeight( heightPt ),
         mFullscreenMode( false ),
         mRequestedFullscreenMode( fullscreenMode ),
         mBorderless( false ),
@@ -61,17 +61,14 @@ namespace Ogre
         assert( !mStencilBuffer && "Derived class didn't properly free resources" );
     }
     //-----------------------------------------------------------------------------------
-    void Window::setFinalResolution( uint32 width, uint32 height )
+    void Window::setFinalResolution( uint32 widthPx, uint32 heightPx )
     {
-        mRequestedWidth = width;
-        mRequestedHeight = height;
-
         if( mTexture )
-            mTexture->setResolution( width, height, 1u );
+            mTexture->setResolution( widthPx, heightPx, 1u );
         if( mDepthBuffer )
-            mDepthBuffer->setResolution( width, height, 1u );
+            mDepthBuffer->setResolution( widthPx, heightPx, 1u );
         if( mStencilBuffer )
-            mStencilBuffer->setResolution( width, height, 1u );
+            mStencilBuffer->setResolution( widthPx, heightPx, 1u );
     }
     //-----------------------------------------------------------------------------------
     void Window::setTitle( const String &title )
@@ -84,19 +81,19 @@ namespace Ogre
         return mTitle;
     }
     //-----------------------------------------------------------------------------------
-    void Window::requestResolution( uint32 width, uint32 height )
+    void Window::requestResolution( uint32 widthPt, uint32 heightPt )
     {
-        mRequestedWidth = width;
-        mRequestedHeight = height;
+        mRequestedWidth = widthPt;
+        mRequestedHeight = heightPt;
     }
     //-----------------------------------------------------------------------------------
     void Window::requestFullscreenSwitch( bool goFullscreen, bool borderless, uint32 monitorIdx,
-                                          uint32 width, uint32 height,
+                                          uint32 widthPt, uint32 heightPt,
                                           uint32 frequencyNumerator, uint32 frequencyDenominator )
     {
         mRequestedFullscreenMode    = goFullscreen;
-        mRequestedWidth             = width;
-        mRequestedHeight            = height;
+        mRequestedWidth             = widthPt;
+        mRequestedHeight            = heightPt;
         mFrequencyNumerator         = frequencyNumerator;
         mFrequencyDenominator       = frequencyDenominator;
         mBorderless                 = borderless;
@@ -163,12 +160,12 @@ namespace Ogre
         return mFrequencyDenominator;
     }
     //-----------------------------------------------------------------------------------
-    uint32 Window::getRequestedWidth(void) const
+    uint32 Window::getRequestedWidthPt(void) const
     {
         return mRequestedWidth;
     }
     //-----------------------------------------------------------------------------------
-    uint32 Window::getRequestedHeight(void) const
+    uint32 Window::getRequestedHeightPt(void) const
     {
         return mRequestedHeight;
     }
@@ -212,8 +209,17 @@ namespace Ogre
     {
         left    = mLeft;
         top     = mTop;
-        width   = mTexture ? mTexture->getWidth() : mRequestedWidth;
-        height  = mTexture ? mTexture->getHeight() : mRequestedHeight;
+        if (mTexture)
+        {
+            width   = mTexture->getWidth();
+            height  = mTexture->getHeight();
+        }
+        else
+        {
+            float scale = getViewPointToPixelScale();
+            width = (uint32)floorf(mRequestedWidth * scale + 0.5f);
+            height = (uint32)floorf(mRequestedHeight * scale + 0.5f);
+        }
     }
     //-----------------------------------------------------------------------------------
     TextureGpu* Window::getTexture(void) const

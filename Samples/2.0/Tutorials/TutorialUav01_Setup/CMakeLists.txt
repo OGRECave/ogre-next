@@ -19,8 +19,4 @@ ogre_add_executable(Sample_TutorialUav01_Setup WIN32 MACOSX_BUNDLE ${SOURCE_FILE
 
 target_link_libraries(Sample_TutorialUav01_Setup ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES})
 ogre_config_sample_lib(Sample_TutorialUav01_Setup)
-
-if( APPLE )
-	set_target_properties( Sample_TutorialUav01_Setup PROPERTIES RESOURCE "${SAMPLE_COMMON_RESOURCES}" )
-	set_target_properties( Sample_TutorialUav01_Setup PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${SAMPLES_PLIST} )
-endif()
+ogre_config_sample_pkg(Sample_TutorialUav01_Setup)

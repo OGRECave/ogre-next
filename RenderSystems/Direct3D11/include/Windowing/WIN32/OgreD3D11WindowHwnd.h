@@ -46,27 +46,25 @@ namespace Ogre
 
         static bool mClassRegistered;
 
+    protected:
+        virtual PixelFormatGpu _getRenderFormat() { return mHwGamma ? PFG_RGBA8_UNORM_SRGB : PFG_RGBA8_UNORM; } // DXGI 1.0 compatible
+
         DWORD getWindowStyle( bool fullScreen ) const;
 
         static bool isWindows8OrGreater(void);
         static BOOL CALLBACK createMonitorsInfoEnumProc( HMONITOR hMonitor, HDC hdcMonitor,
                                                          LPRECT lprcMonitor, LPARAM dwData );
 
-        void notifyResolutionChanged(void);
         void updateWindowRect(void);
         void adjustWindow( uint32 clientWidth, uint32 clientHeight,
                            uint32 *outDrawableWidth, uint32 *outDrawableHeight );
 
         template <typename T>
         void setCommonSwapChain( T &sd );
-        void createSwapChain(void);
-        void resizeSwapChainBuffers( uint32 width, uint32 height );
-        void setResolutionFromSwapChain(void);
+        virtual HRESULT _createSwapChainImpl();
 
 
         void create( bool fullscreenMode, const NameValuePairList *miscParams );
-
-        uint8 getBufferCount(void) const;
 
     public:
         D3D11WindowHwnd( const String &title, uint32 width, uint32 height,
@@ -85,12 +83,8 @@ namespace Ogre
                                               uint32 frequencyNumerator, uint32 frequencyDenominator );
         virtual void windowMovedOrResized(void);
 
-        bool isClosed(void) const;
-        virtual void _setVisible( bool visible );
         virtual bool isVisible(void) const;
         virtual void setHidden( bool hidden );
-        virtual bool isHidden(void) const;
-        virtual void swapBuffers(void);
 
         virtual void getCustomAttribute( IdString name, void* pData );
     };

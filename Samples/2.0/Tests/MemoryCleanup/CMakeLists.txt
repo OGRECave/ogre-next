@@ -24,8 +24,4 @@ ogre_add_executable(Test_MemoryCleanup WIN32 MACOSX_BUNDLE ${SOURCE_FILES} ${SAM
 
 target_link_libraries(Test_MemoryCleanup ${OGRE_LIBRARIES} ${OGRE_SAMPLES_LIBRARIES})
 ogre_config_sample_lib(Test_MemoryCleanup)
-
-if( APPLE )
-	set_target_properties( Test_MemoryCleanup PROPERTIES RESOURCE "${SAMPLE_COMMON_RESOURCES}" )
-	set_target_properties( Test_MemoryCleanup PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${SAMPLES_PLIST} )
-endif()
+ogre_config_sample_pkg(Test_MemoryCleanup)

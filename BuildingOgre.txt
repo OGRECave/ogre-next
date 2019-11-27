@@ -198,8 +198,7 @@ You need Windows 8.0 or later, Windows 8.1 is recommended.
 You need Visual Studio 2012 or later, Visual Studio 2013 is recommended
 as it is bundled with WinStore 8.0/8.1 and WinPhone 8.0/8.1 SDKs.
 
-Download and install CMake 3.1 (scheduled for release 2014-11-01) 
-or CMakeMS from http://cmakems.codeplex.com/
+Download and install CMake 3.15.5 or later.
 
 Patched dependencies must be used, compiled with appropriate WINAPI_FAMILY.
 Cg is not supported, and only headers from OIS are needed. 
