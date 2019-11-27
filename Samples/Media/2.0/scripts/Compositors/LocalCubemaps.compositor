@@ -9,8 +9,8 @@ abstract target cubemap_target
 		}
 		store
 		{
-			//We only care about the contents of the colour target
-			depth			dont_care
+			//We DO care about the contents of depth for the depth compressor
+			depth			store
 			stencil			dont_care
 		}
 
