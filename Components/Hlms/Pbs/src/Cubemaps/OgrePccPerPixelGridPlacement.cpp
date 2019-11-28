@@ -160,6 +160,13 @@ namespace Ogre
         }
 
         mPcc->updateAllDirtyProbes();
+
+        TextureGpu *cubemapTex = mPcc->getBindTexture();
+        TextureGpuManager *textureManager = cubemapTex->getTextureManager();
+        AsyncTextureTicket *asyncTicket = textureManager->createAsyncTextureTicket(
+            1u, 1u, cubemapTex->getNumSlices(), TextureTypes::TypeCube, cubemapTex->getPixelFormat() );
+        asyncTicket->download( cubemapTex, cubemapTex->getNumMipmaps() - 1u, false );
+        mAsyncTicket.push_back( asyncTicket );
     }
     //-------------------------------------------------------------------------
     void PccPerPixelGridPlacement::buildEnd( void )
