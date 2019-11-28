@@ -523,7 +523,7 @@ namespace Ogre
                 if( !(flags & PFF_SIGNED) )
                 {
                     val = Math::saturate( val );
-                    if( flags & PFF_SRGB )
+                    if( flags & PFF_SRGB && i != 3u )
                         val = toSRGB( val );
                     val *= (float)std::numeric_limits<T>::max();
                     ((T*)dstPtr)[i] = static_cast<T>( roundf( val ) );
@@ -556,7 +556,7 @@ namespace Ogre
                 float rawValue = val / (float)std::numeric_limits<T>::max();
                 if( !(flags & PFF_SIGNED) )
                 {
-                    if( flags & PFF_SRGB )
+                    if( flags & PFF_SRGB && i != 3u )
                         rawValue = fromSRGB( rawValue );
                     rgbaPtr[i] = rawValue;
                 }
