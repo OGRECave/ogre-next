@@ -76,9 +76,11 @@ namespace Demo
                                          LogicSystem **outLogicSystem )
     {
         PccPerPixelGridPlacementGameState *gfxGameState = new PccPerPixelGridPlacementGameState(
-        "This sample shows how to use Parallax Reflect Cubemaps for accurate local reflections.\n"
-        "First, you'll have to create several probes with parametrized sizes, and the system\n"
-        "will transition between the areas as you move around\n"
+        "Placing multiple PCC probes by hand can be difficult and even error prone.\n"
+        "PccPerPixelGridPlacement aims at helping developers and artists by automatically\n"
+        "finding ideal probe shape sizes that adjust to underlying geometry in the scene by\n"
+        "only providing the overall enclosing AABB of the scene that needs to be covered by PCC.\n"
+        "There are other settings such as overlap which trade quality and performance\n"
         "\n"
         "This sample depends on the media files:\n"
         "   * Samples/Media/2.0/scripts/Compositors/PccPerPixelGridPlacement.compositor\n"

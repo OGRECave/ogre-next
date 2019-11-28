@@ -124,9 +124,30 @@ namespace Ogre
         /// Returns numProbes[0] * numProbes[1] * numProbes[2]
         uint32 getMaxNumProbes() const;
 
+        /** Issues GPU commands to render into all probes and obtain depth from it.
+
+            See PccPerPixelGridPlacement::buildEnd
+        @param resolution
+            Cubemap resolution. Beware you can easily run out of memory!
+        @param camera
+        @param pixelFormat
+        @param camNear
+        @param camFar
+        */
         void buildStart( uint32 resolution, Camera *camera,
                          PixelFormatGpu pixelFormat = PFG_RGBA8_UNORM_SRGB, float camNear = 0.5f,
                          float camFar = 500.0f );
+
+        /** Finishes placing all probes and renders to them again, this time with the modified
+            auto-generated shape sizes.
+
+            Must be called after buildStart. This function reads from GPU memory, thus we must
+            wait for our GPU commands issued in buildStart to finish. If you have something
+            else to do, you may want to insert your code between those buildStart and buildEnd
+            calls in order to maximize CPU/GPU parallelism.
+
+            See PccPerPixelGridPlacement::buildStart
+         */
         void buildEnd( void );
     };
 }  // namespace Ogre
