@@ -63,7 +63,7 @@ namespace Ogre
     {
     public:
         /// Gives you a chance to completely change the name of the texture when saving a material
-        virtual void savingChangeTextureName( String &inOutTexName ) {}
+        virtual void savingChangeTextureName( String &inOutAliasName, String &inOutTexName ) {}
     };
 
     /** HLMS stands for "High Level Material System". */
