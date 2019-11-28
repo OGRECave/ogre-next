@@ -94,6 +94,7 @@ namespace Ogre
         if (mWindow)
         {
             XDestroyWindow(xDisplay, mWindow);
+            XSync(xDisplay, false);
         }
 
         if (mContext)
