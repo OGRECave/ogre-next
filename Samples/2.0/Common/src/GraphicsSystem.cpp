@@ -144,14 +144,17 @@ namespace Demo
 
         mStaticPluginLoader.install( mRoot );
 
-        // enable sRGB Gamma Conversion mode by default for all renderers, but still allow to override it via config dialog
-        Ogre::RenderSystemList::const_iterator pRend;
-        for (pRend = mRoot->getAvailableRenderers().begin(); pRend != mRoot->getAvailableRenderers().end(); ++pRend)
-        {
-            Ogre::RenderSystem* rs = *pRend;
-            rs->setConfigOption("sRGB Gamma Conversion", "Yes");
-        }
+        // enable sRGB Gamma Conversion mode by default for all renderers,
+        // but still allow to override it via config dialog
+        Ogre::RenderSystemList::const_iterator itor = mRoot->getAvailableRenderers().begin();
+        Ogre::RenderSystemList::const_iterator endt = mRoot->getAvailableRenderers().end();
 
+        while( itor != endt )
+        {
+            Ogre::RenderSystem *rs = *itor;
+            rs->setConfigOption( "sRGB Gamma Conversion", "Yes" );
+            ++itor;
+        }
 
         if( mAlwaysAskForConfig || !mRoot->restoreConfig() )
         {

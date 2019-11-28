@@ -182,7 +182,9 @@
 			float ndf = getProbeNDF( posInProbSpace.xyz, probeToAreaCenterOffsetLS.xyz,
 									 probeInnerRange.xyz, probeOuterRange.xyz );
 			ndf = saturate( ndf );
-			probeFade = ndf <= 0 ? 10000.0f : (1.0 - ndf);
+			probeFade = 1.0 - ndf;
+			probeFade = probeFade * probeFade;
+			probeFade = probeFade * probeFade;
 			probeFade *= probePriority;
 
 			@property( vct_num_probes )

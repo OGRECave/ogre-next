@@ -226,6 +226,7 @@ namespace Ogre
         const Aabb& getArea(void) const                     { return mArea; }
         const Vector3& getAreaInnerRegion(void) const       { return mAreaInnerRegion; }
         const Matrix3& getOrientation(void) const           { return mOrientation; }
+        const Matrix3& getInvOrientation(void) const        { return mInvOrientation; }
         const Aabb& getProbeShape(void) const               { return mProbeShape; }
 
         CompositorWorkspace *getWorkspace(void) const       { return mWorkspace; }
