@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "OgreD3D11RenderSystem.h"
 #include "OgreWindowEventUtilities.h"
 #include "OgreDepthBuffer.h"
+#include "OgreOSVersionHelpers.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreStringConverter.h"
 
@@ -75,14 +76,6 @@ namespace Ogre
     DWORD D3D11WindowHwnd::getWindowStyle( bool fullScreen ) const
     {
         return fullScreen ? mFullscreenWinStyle : mWindowedWinStyle;
-    }
-    //-----------------------------------------------------------------------------------
-    bool D3D11WindowHwnd::isWindows8OrGreater(void)
-    {
-        DWORD version = GetVersion();
-        DWORD major = (DWORD)(LOBYTE(LOWORD(version)));
-        DWORD minor = (DWORD)(HIBYTE(LOWORD(version)));
-        return (major > 6) || ((major == 6) && (minor >= 2));
     }
     //-----------------------------------------------------------------------------------
     BOOL CALLBACK D3D11WindowHwnd::createMonitorsInfoEnumProc(
@@ -271,7 +264,7 @@ namespace Ogre
             opt = miscParams->find("useFlipMode");
             if (opt != miscParams->end())
             {
-                mUseFlipMode = mVSync && isWindows8OrGreater() &&
+                mUseFlipMode = mVSync && IsWindows8OrGreater() &&
                                          StringConverter::parseBool(opt->second);
             }
 #endif

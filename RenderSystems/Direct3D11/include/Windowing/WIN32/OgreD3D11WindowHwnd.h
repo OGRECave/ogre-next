@@ -51,7 +51,6 @@ namespace Ogre
 
         DWORD getWindowStyle( bool fullScreen ) const;
 
-        static bool isWindows8OrGreater(void);
         static BOOL CALLBACK createMonitorsInfoEnumProc( HMONITOR hMonitor, HDC hdcMonitor,
                                                          LPRECT lprcMonitor, LPARAM dwData );
 

@@ -89,7 +89,6 @@ namespace Ogre
 
         void freeDevice(void);
         void createDevice( const String &windowTitle );
-        static bool isWindows8OrGreater();
 
         v1::D3D11HardwareBufferManager* mHardwareBufferManager;
         D3D11GpuProgramManager* mGpuProgramManager;

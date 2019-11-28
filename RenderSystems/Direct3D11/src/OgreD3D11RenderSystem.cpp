@@ -70,6 +70,7 @@ THE SOFTWARE.
 #include "Vao/OgreIndirectBufferPacked.h"
 #include "CommandBuffer/OgreCbDrawCall.h"
 
+#include "OgreOSVersionHelpers.h"
 #include "OgreProfiler.h"
 
 #ifdef _WIN32_WINNT_WIN10
@@ -416,7 +417,7 @@ namespace Ogre
         optMaxFeatureLevels.possibleValues.push_back("10.1");
         optMaxFeatureLevels.possibleValues.push_back("11.0");
 #if defined(_WIN32_WINNT_WIN8)
-        if (isWindows8OrGreater())
+        if (IsWindows8OrGreater())
         {
             optMaxFeatureLevels.possibleValues.push_back("11.1");
             optMaxFeatureLevels.currentValue = "11.1";
@@ -599,7 +600,7 @@ namespace Ogre
         if( name == "Max Requested Feature Levels" )
         {
 #if defined(_WIN32_WINNT_WIN8) && _WIN32_WINNT >= _WIN32_WINNT_WIN8
-        if( isWindows8OrGreater() )
+        if( IsWindows8OrGreater() )
             mMaxRequestedFeatureLevel = D3D11Device::parseFeatureLevel(value, D3D_FEATURE_LEVEL_11_1);
         else
             mMaxRequestedFeatureLevel = D3D11Device::parseFeatureLevel(value, D3D_FEATURE_LEVEL_11_0);
@@ -1709,18 +1710,6 @@ namespace Ogre
         {
             handleDeviceLost();
         }
-    }
-    //---------------------------------------------------------------------
-    bool D3D11RenderSystem::isWindows8OrGreater()
-    {
-#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-        return true;
-#else
-        DWORD version = GetVersion();
-        DWORD major = (DWORD)(LOBYTE(LOWORD(version)));
-        DWORD minor = (DWORD)(HIBYTE(LOWORD(version)));
-        return (major > 6) || ((major == 6) && (minor >= 2));
-#endif
     }
     //---------------------------------------------------------------------
     VertexElementType D3D11RenderSystem::getColourVertexElementType(void) const
@@ -3773,7 +3762,7 @@ namespace Ogre
 #if __OGRE_WINRT_PHONE // Windows Phone support only FL 9.3, but simulator can create much more capable device, so restrict it artificially here
         mMaxRequestedFeatureLevel = D3D_FEATURE_LEVEL_9_3;
 #elif defined(_WIN32_WINNT_WIN8)
-        if( isWindows8OrGreater() )
+        if( IsWindows8OrGreater() )
             mMaxRequestedFeatureLevel = D3D_FEATURE_LEVEL_11_1;
         else
             mMaxRequestedFeatureLevel = D3D_FEATURE_LEVEL_11_0;
