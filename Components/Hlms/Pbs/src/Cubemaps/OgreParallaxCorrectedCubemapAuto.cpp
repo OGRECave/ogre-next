@@ -254,6 +254,10 @@ namespace Ogre
             //that will be bound during normal render
             TextureTypes::TextureTypes bindTextureType = mUseDpm2DArray ? TextureTypes::Type2DArray :
                                                                           TextureTypes::TypeCubeArray;
+            uint32 numSlices = maxNumProbes;
+            if( !mUseDpm2DArray )
+                numSlices *= 6u;
+
             mBindTexture =
                     textureGpuManager->createTexture(
                         "ParallaxCorrectedCubemapAuto Array " +
@@ -262,9 +266,9 @@ namespace Ogre
                         TextureFlags::ManualTexture,
                         bindTextureType );
             if( mUseDpm2DArray )
-                mBindTexture->setResolution( width << 1u, height << 1u, maxNumProbes );
+                mBindTexture->setResolution( width << 1u, height << 1u, numSlices );
             else
-                mBindTexture->setResolution( width, height, maxNumProbes );
+                mBindTexture->setResolution( width, height, numSlices );
             mBindTexture->setPixelFormat( pixelFormat );
             mBindTexture->setNumMipmaps( PixelFormatGpuUtils::getMaxMipmapCount(
                                              mBindTexture->getWidth(), mBindTexture->getHeight() ) );

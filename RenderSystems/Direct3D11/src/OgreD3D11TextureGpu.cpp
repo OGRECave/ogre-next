@@ -160,11 +160,7 @@ namespace Ogre
             desc.BindFlags |= D3D11_BIND_UNORDERED_ACCESS;
 
         if( mTextureType == TextureTypes::TypeCube || mTextureType == TextureTypes::TypeCubeArray )
-        {
             desc.MiscFlags |= D3D11_RESOURCE_MISC_TEXTURECUBE;
-            if( mTextureType == TextureTypes::TypeCubeArray )
-                desc.ArraySize *= 6u;
-        }
         if( allowsAutoMipmaps() )
             desc.MiscFlags |= D3D11_RESOURCE_MISC_GENERATE_MIPS;
 
