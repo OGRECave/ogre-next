@@ -58,8 +58,7 @@ namespace Ogre
         // before swapchain resize and recreated later
         ComPtr<ID3D11Texture2D> mpBackBuffer;
         /// Optional, always holds up-to-date copy data from mpBackBuffer if not NULL
-        ComPtr<ID3D11Texture2D> mpBackBufferNoMSAA;
-        //ComPtr<ID3D11RenderTargetView> mRenderTargetView;
+        ComPtr<ID3D11Texture2D> mpBackBufferInterim;
 
         D3D11RenderSystem       *mRenderSystem;
 
@@ -111,7 +110,6 @@ namespace Ogre
         void _createSizeDependedD3DResources();
         void _destroySizeDependedD3DResources();
         void resizeSwapChainBuffers( uint32 width, uint32 height );
-        void setResolutionFromSwapChain(void);
         void notifyResolutionChanged(void);
 
     public:

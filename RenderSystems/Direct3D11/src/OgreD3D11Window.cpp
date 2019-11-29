@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "OgreD3D11TextureGpuWindow.h"
 
 #include "OgreDepthBuffer.h"
+#include "OgreOSVersionHelpers.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreStringConverter.h"
 
@@ -91,7 +92,7 @@ namespace Ogre
     void D3D11Window::destroy()
     {
         mpBackBuffer.Reset();
-        mpBackBufferNoMSAA.Reset();
+        mpBackBufferInterim.Reset();
 
         OGRE_DELETE mTexture;
         mTexture = 0;
@@ -229,15 +230,29 @@ namespace Ogre
         mDepthBuffer->_transitionTo( GpuResidency::OnStorage, (uint8*)0 );
         mTexture->_transitionTo( GpuResidency::OnStorage, (uint8*)0 );
         mpBackBuffer.Reset();
-        mpBackBufferNoMSAA.Reset();
+        mpBackBufferInterim.Reset();
     }
     //-----------------------------------------------------------------------------------
     void D3D11WindowSwapChainBased::_createSizeDependedD3DResources()
     {
         mpBackBuffer.Reset();
-        mpBackBufferNoMSAA.Reset();
+        mpBackBufferInterim.Reset();
         // Obtain back buffer from swapchain
         HRESULT hr = mSwapChain->GetBuffer( 0, __uuidof(ID3D11Texture2D), (void**)mpBackBuffer.ReleaseAndGetAddressOf() );
+
+        // check if we need workaround for broken back buffer casting in ResolveSubresource
+        // From https://github.com/microsoft/Xbox-ATG-Samples/blob/master/PCSamples/IntroGraphics/SimpleMSAA_PC/Readme.docx
+        // Known issues:
+        //     Due to a bug in the Windows 10 validation layer prior to the Windows 10 Fall Creators
+        //     Update (16299), a DirectX 11 Resolve with an sRGB format using new "flip - style"
+        //     swapchain would fail. This has been fixed in the newer versions of Windows 10.
+        if( SUCCEEDED(hr) && mHwGamma && mMsaa > 1 && mUseFlipMode && !IsWindows10RS3OrGreater() )
+        {
+            D3D11_TEXTURE2D_DESC desc = { 0 };
+            mpBackBuffer->GetDesc(&desc);
+            desc.Format = D3D11Mappings::get(_getRenderFormat());
+            hr = mDevice->CreateTexture2D(&desc, NULL, mpBackBufferInterim.ReleaseAndGetAddressOf());
+        }
 
         if( FAILED(hr) )
         {
@@ -246,7 +261,33 @@ namespace Ogre
                             "D3D11WindowSwapChainBased::_createSizeDependedD3DResources" );
         }
 
-        setResolutionFromSwapChain();
+        if( mSwapChain1 )
+        {
+            DXGI_SWAP_CHAIN_DESC1 desc;
+            mSwapChain1->GetDesc1( &desc );
+            setFinalResolution( desc.Width, desc.Height );
+            DXGI_SWAP_CHAIN_FULLSCREEN_DESC fsDesc;
+            mSwapChain1->GetFullscreenDesc( &fsDesc );
+            //Alt-Enter together with SetWindowAssociation() can change this state
+            mRequestedFullscreenMode    = fsDesc.Windowed == 0;
+            mFullscreenMode             = mRequestedFullscreenMode;
+        }
+        else
+        {
+            DXGI_SWAP_CHAIN_DESC desc;
+            mSwapChain->GetDesc( &desc );
+            setFinalResolution( desc.BufferDesc.Width, desc.BufferDesc.Height );
+            //Alt-Enter together with SetWindowAssociation() can change this state
+            mRequestedFullscreenMode    = desc.Windowed == 0;
+            mFullscreenMode             = mRequestedFullscreenMode;
+        }
+
+        assert( dynamic_cast<D3D11TextureGpuWindow*>( mTexture ) );
+        D3D11TextureGpuWindow *texWindow = static_cast<D3D11TextureGpuWindow*>( mTexture );
+        texWindow->_setBackbuffer( mpBackBufferInterim ? mpBackBufferInterim.Get() : mpBackBuffer.Get() );
+
+        mTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+        mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8*)0 );
     }
     //-----------------------------------------------------------------------------------
     void D3D11WindowSwapChainBased::resizeSwapChainBuffers( uint32 width, uint32 height )
@@ -285,39 +326,6 @@ namespace Ogre
         mRenderSystem->fireDeviceEvent( &mDevice, "WindowResized", this );
     }
     //-----------------------------------------------------------------------------------
-    void D3D11WindowSwapChainBased::setResolutionFromSwapChain()
-    {
-        if( mSwapChain1 )
-        {
-            DXGI_SWAP_CHAIN_DESC1 desc;
-            mSwapChain1->GetDesc1( &desc );
-            setFinalResolution( desc.Width, desc.Height );
-            DXGI_SWAP_CHAIN_FULLSCREEN_DESC fsDesc;
-            mSwapChain1->GetFullscreenDesc( &fsDesc );
-            //Alt-Enter together with SetWindowAssociation() can change this state
-            mRequestedFullscreenMode    = fsDesc.Windowed == 0;
-            mFullscreenMode             = mRequestedFullscreenMode;
-        }
-        else
-        {
-            DXGI_SWAP_CHAIN_DESC desc;
-            mSwapChain->GetDesc( &desc );
-            setFinalResolution( desc.BufferDesc.Width, desc.BufferDesc.Height );
-            //Alt-Enter together with SetWindowAssociation() can change this state
-            mRequestedFullscreenMode    = desc.Windowed == 0;
-            mFullscreenMode             = mRequestedFullscreenMode;
-        }
-
-        assert( mpBackBuffer && "Back buffer should've been obtained by now!" );
-
-        assert( dynamic_cast<D3D11TextureGpuWindow*>( mTexture ) );
-        D3D11TextureGpuWindow *texWindow = static_cast<D3D11TextureGpuWindow*>( mTexture );
-        texWindow->_setBackbuffer( mpBackBuffer.Get() );
-
-        mTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
-        mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8*)0 );
-    }
-    //-----------------------------------------------------------------------------------
     void D3D11WindowSwapChainBased::notifyResolutionChanged(void)
     {
         TODO_notify_listeners;
@@ -329,44 +337,9 @@ namespace Ogre
 
         if( !mDevice.isNull() )
         {
-#if TODO_OGRE_2_2
-            //Step of resolving MSAA resource for swap chains in FlipMode
-            //should be done by application rather than by OS.
-            if( mUseFlipMode && getMsaa() > 1u )
-            {
-                //We can't resolve MSAA sRGB -> MSAA non-sRGB, so we need to have 2 textures:
-                // 1. Render to MSAA sRGB
-                // 2. Resolve MSAA sRGB -> sRGB regular tex.
-                // 3. Copy sRGB regular texture to swap chain.
-                ID3D11Texture2D* swapChainBackBuffer = NULL;
-                HRESULT hr = mpSwapChain->GetBuffer( 0, __uuidof(ID3D11Texture2D),
-                                                     (LPVOID*)&swapChainBackBuffer );
-                if( FAILED(hr) )
-                {
-                    OGRE_EXCEPT_EX( Exception::ERR_RENDERINGAPI_ERROR, hr,
-                                    "Error obtaining backbuffer",
-                                    "D3D11WindowHwnd::swapBuffers" );
-                }
-
-                ID3D11DeviceContextN *context = mDevice.GetImmediateContext();
-
-                if( !isHardwareGammaEnabled() )
-                {
-                    assert(_getRenderFormat() == _getSwapChainFormat());
-                    context->ResolveSubresource( swapChainBackBuffer, 0, mpBackBuffer,
-                                                 0, _getRenderFormat() );
-                }
-                else
-                {
-                    assert( mpBackBufferNoMSAA );
-                    context->ResolveSubresource( mpBackBufferNoMSAA, 0, mpBackBuffer,
-                                                 0, _getRenderFormat() );
-                    context->CopyResource( swapChainBackBuffer, mpBackBufferNoMSAA );
-                }
-
-                SAFE_RELEASE(swapChainBackBuffer);
-            }
-#endif
+            // workaround needed only for mHwGamma && mMsaa > 1 && mUseFlipMode && !IsWindows10RS3OrGreater()
+            if( mpBackBufferInterim && mpBackBuffer )
+                mDevice.GetImmediateContext()->CopyResource( mpBackBuffer.Get(), mpBackBufferInterim.Get() );
 
             // flip presentation model swap chains have another semantic for first parameter
             UINT syncInterval = mUseFlipMode ? std::max( 1u, mVSyncInterval ) :
