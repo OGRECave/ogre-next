@@ -175,8 +175,7 @@ namespace Ogre
         memset( mDefaultSrv, 0, sizeof(mDefaultSrv) );
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* D3D11TextureGpuManager::createTextureGpuWindow( ID3D11Texture2D *backbuffer,
-                                                                bool fromFlipModeSwapchain,
+    TextureGpu* D3D11TextureGpuManager::createTextureGpuWindow( bool fromFlipModeSwapchain,
                                                                 Window *window )
     {
         return OGRE_NEW D3D11TextureGpuWindow( GpuPageOutStrategy::Discard, mVaoManager,
@@ -186,7 +185,7 @@ namespace Ogre
                                                TextureFlags::RenderWindowSpecific|
                                                (fromFlipModeSwapchain ? 0 : TextureFlags::MsaaExplicitResolve)|
                                                (fromFlipModeSwapchain ? TextureFlags::Reinterpretable : 0),
-                                               TextureTypes::Type2D, this, backbuffer, window );
+                                               TextureTypes::Type2D, this, window );
     }
     //-----------------------------------------------------------------------------------
     TextureGpu* D3D11TextureGpuManager::createWindowDepthBuffer(void)

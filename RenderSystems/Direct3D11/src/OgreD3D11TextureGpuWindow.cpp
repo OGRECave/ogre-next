@@ -45,15 +45,14 @@ namespace Ogre
             GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
             VaoManager *vaoManager, IdString name, uint32 textureFlags,
             TextureTypes::TextureTypes initialType,
-            TextureGpuManager *textureManager,
-            ID3D11Texture2D *backbuffer, Window *window ) :
+            TextureGpuManager *textureManager, Window *window ) :
         D3D11TextureGpuRenderTarget( pageOutStrategy, vaoManager, name,
                                      textureFlags, initialType, textureManager ),
         mWindow( window )
     {
         mTextureType = TextureTypes::Type2D;
-        mFinalTextureName = backbuffer;
-        mDisplayTextureName = backbuffer;
+        mFinalTextureName = 0;
+        mDisplayTextureName = 0;
         mDefaultDisplaySrv = 0;
     }
     //-----------------------------------------------------------------------------------
