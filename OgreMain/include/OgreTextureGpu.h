@@ -328,18 +328,6 @@ namespace Ogre
         void setPixelFormat( PixelFormatGpu pixelFormat );
         PixelFormatGpu getPixelFormat(void) const;
 
-        /** In almost all cases, getPixelFormat will match with getInternalPixelFormat.
-        @par
-            However there are a few exceptions, suchs as D3D11's render window where
-            the internal pixel format will be most likely PFG_RGBA8_UNORM however
-            getPixelFormat will report PFG_RGBA8_UNORM_SRGB if HW gamma correction was asked.
-        @remarks
-            The real internal pixel format only is relevant for operations like _resolveTo
-        @return
-            The real pixel format, and not the one we pretend it is.
-        */
-        virtual PixelFormatGpu getInternalPixelFormat(void) const;
-
         /// Note: Passing 0 will be forced to 1.
         void setMsaa( uint8 msaa );
         uint8 getMsaa(void) const;

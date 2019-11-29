@@ -257,11 +257,6 @@ namespace Ogre
         return mPixelFormat;
     }
     //-----------------------------------------------------------------------------------
-    PixelFormatGpu TextureGpu::getInternalPixelFormat(void) const
-    {
-        return mPixelFormat;
-    }
-    //-----------------------------------------------------------------------------------
     uint32 TextureGpu::getInternalSliceStart(void) const
     {
         return mInternalSliceStart;
@@ -646,10 +641,10 @@ namespace Ogre
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Depth formats cannot be resolved!",
                          "TextureGpu::_resolveTo" );
         }
-        if( this->getInternalPixelFormat() != resolveTexture->getInternalPixelFormat() )
+        if( this->getPixelFormat() != resolveTexture->getPixelFormat() )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "Source Texture and Resolve texture must have the same internal pixel formats!",
+                         "Source Texture and Resolve texture must have the same pixel formats!",
                          "TextureGpu::_resolveTo" );
         }
         if( !this->getEmptyBox(0).equalSize( resolveTexture->getEmptyBox(0) ) )

@@ -345,7 +345,7 @@ namespace Ogre {
                                                              TextureFlags::RenderToTexture,
                                                              texture->getTextureType() );
             resolvedTexture->copyParametersFrom( texture );
-            resolvedTexture->setPixelFormat( texture->getInternalPixelFormat() );
+            resolvedTexture->setPixelFormat( texture->getPixelFormat() );
             resolvedTexture->setMsaa( 1u );
             resolvedTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
             texture->_resolveTo( resolvedTexture );

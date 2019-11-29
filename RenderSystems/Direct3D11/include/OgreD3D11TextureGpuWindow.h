@@ -54,8 +54,6 @@ namespace Ogre
 
         virtual void setTextureType( TextureTypes::TextureTypes textureType );
 
-        virtual PixelFormatGpu getInternalPixelFormat(void) const;
-
         virtual void getSubsampleLocations( vector<Vector2>::type locations );
 
         virtual void notifyDataIsReady(void);

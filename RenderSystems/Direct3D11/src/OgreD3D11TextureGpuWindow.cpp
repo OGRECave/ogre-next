@@ -125,11 +125,6 @@ namespace Ogre
                      "D3D11TextureGpuWindow::setTextureType" );
     }
     //-----------------------------------------------------------------------------------
-    PixelFormatGpu D3D11TextureGpuWindow::getInternalPixelFormat(void) const
-    {
-        return PixelFormatGpuUtils::getEquivalentLinear( mPixelFormat );
-    }
-    //-----------------------------------------------------------------------------------
     void D3D11TextureGpuWindow::getSubsampleLocations( vector<Vector2>::type locations )
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "",
