@@ -1040,7 +1040,8 @@ namespace Ogre
                                                          bool useEsm,
                                                          uint32 pointLightCubemapResolution,
                                                          Real pssmLambda, Real splitPadding,
-                                                         Real splitBlend, Real splitFade )
+                                                         Real splitBlend, Real splitFade, 
+                                                         uint32 visibilityMask )
     {
         typedef map<uint64, uint32>::type ResolutionsToEsmMap;
 
@@ -1331,6 +1332,7 @@ namespace Ogre
 
                         passScene->mShadowMapIdx = shadowMapIdx;
                         passScene->mIncludeOverlays = false;
+                        passScene->mVisibilityMask = visibilityMask;
                         ++shadowMapIdx;
                     }
                 }
@@ -1368,6 +1370,7 @@ namespace Ogre
                             passScene->mCameraCubemapReorient = true;
                             passScene->mShadowMapIdx = shadowMapIdx;
                             passScene->mIncludeOverlays = false;
+                            passScene->mVisibilityMask = visibilityMask;
                         }
                     }
 
