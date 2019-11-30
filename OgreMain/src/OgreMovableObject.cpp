@@ -48,8 +48,8 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     //-----------------------------------------------------------------------
     const String NullEntity::msMovableType = "NullEntity";
-    const uint32 VisibilityFlags::LAYER_SHADOW_CASTER       = 1 << 31;
-    const uint32 VisibilityFlags::LAYER_VISIBILITY          = 1 << 30;
+    const uint32 VisibilityFlags::LAYER_SHADOW_CASTER       = 1u << 31u;
+    const uint32 VisibilityFlags::LAYER_VISIBILITY          = 1u << 30u;
     const uint32 VisibilityFlags::RESERVED_VISIBILITY_FLAGS = ~(LAYER_SHADOW_CASTER|LAYER_VISIBILITY);
     uint32 MovableObject::msDefaultQueryFlags = 0xFFFFFFFF;
     uint32 MovableObject::msDefaultVisibilityFlags = 0xFFFFFFFF & (~LAYER_VISIBILITY);
