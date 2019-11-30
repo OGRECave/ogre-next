@@ -31,6 +31,8 @@ THE SOFTWARE.
 
 #include "OgreHlmsPbsPrerequisites.h"
 
+#include "Cubemaps/OgreParallaxCorrectedCubemapAuto.h"
+
 #include "OgrePixelFormatGpu.h"
 
 #include "Math/Simple/OgreAabb.h"
@@ -63,7 +65,7 @@ namespace Ogre
 
         See Samples/2.0/ApiUsage/PccPerPixelGridPlacement for usage
     */
-    class _OgreHlmsPbsExport PccPerPixelGridPlacement
+    class _OgreHlmsPbsExport PccPerPixelGridPlacement : public ParallaxCorrectedCubemapAutoListener
     {
         uint32 mNumProbes[3];
         Aabb mFullRegion;
@@ -84,7 +86,7 @@ namespace Ogre
         void deallocateFallback( void );
 
         TextureBox getFallbackBox( void ) const;
-        bool needsFallback( void ) const;
+        bool needsDpmFallback( void ) const;
 
         void processProbeDepth( TextureBox box, size_t probeIdx, size_t sliceIdx );
 
@@ -95,7 +97,6 @@ namespace Ogre
         ~PccPerPixelGridPlacement();
 
         void setParallaxCorrectedCubemapAuto( ParallaxCorrectedCubemapAuto *pcc );
-
         ParallaxCorrectedCubemapAuto *getParallaxCorrectedCubemap() { return mPcc; }
 
         /** Sets the number of probes in each axis.
@@ -161,6 +162,9 @@ namespace Ogre
             See PccPerPixelGridPlacement::buildStart
          */
         void buildEnd( void );
+
+        /// ParallaxCorrectedCubemapAutoListener overloads
+        virtual void preCopyRenderTargetToCubemap( TextureGpu *renderTarget, uint32 cubemapArrayIdx );
     };
 }  // namespace Ogre
 

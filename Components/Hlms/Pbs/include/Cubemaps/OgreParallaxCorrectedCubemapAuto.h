@@ -37,6 +37,15 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    class _OgreHlmsPbsExport ParallaxCorrectedCubemapAutoListener
+    {
+    public:
+        virtual ~ParallaxCorrectedCubemapAutoListener();
+        /// Called when the probe is done rendering to the temporary cubemap, and is now about
+        /// to be copied to the cubemap array (or about to be converted to DPM 2D array texture)
+        virtual void preCopyRenderTargetToCubemap( TextureGpu *renderTarget, uint32 cubemapArrayIdx );
+    };
+
     /**
     @class ParallaxCorrectedCubemapAuto
         Per-Pixel reflection probes.
@@ -70,6 +79,8 @@ namespace Ogre
 
         CompositorWorkspace             *mCubeToDpmWorkspace;
 
+        ParallaxCorrectedCubemapAutoListener *mListener;
+
         static void createCubemapToDpmWorkspaceDef( CompositorManager2 *compositorManager,
                                                     TextureGpu *cubeTexture );
         static void destroyCubemapToDpmWorkspaceDef( CompositorManager2 *compositorManager,
@@ -91,6 +102,9 @@ namespace Ogre
         ParallaxCorrectedCubemapAuto( IdType id, Root *root, SceneManager *sceneManager,
                                       const CompositorWorkspaceDef *probeWorkspaceDef );
         ~ParallaxCorrectedCubemapAuto();
+
+        void setListener( ParallaxCorrectedCubemapAutoListener *listener ) { mListener = listener; }
+        ParallaxCorrectedCubemapAutoListener *getListener( void ) const { return mListener; }
 
         virtual TextureGpu* _acquireTextureSlot( uint16 &outTexSlot );
         virtual void _releaseTextureSlot( TextureGpu *texture, uint32 texSlot );

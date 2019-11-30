@@ -65,6 +65,15 @@ namespace Ogre
 {
     static uint32 c_cubmapToDpmIdentifier = 1863669;
 
+    ParallaxCorrectedCubemapAutoListener::~ParallaxCorrectedCubemapAutoListener() {}
+    //-----------------------------------------------------------------------------------
+    void ParallaxCorrectedCubemapAutoListener::preCopyRenderTargetToCubemap( TextureGpu *renderTarget,
+                                                                             uint32 cubemapArrayIdx )
+    {
+    }
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------
     ParallaxCorrectedCubemapAuto::ParallaxCorrectedCubemapAuto(
             IdType id, Root *root, SceneManager *sceneManager,
             const CompositorWorkspaceDef *probeWorkspcDef ) :
@@ -177,6 +186,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemapAuto::_copyRenderTargetToCubemap( uint32 cubemapArrayIdx )
     {
+        if( mListener )
+            mListener->preCopyRenderTargetToCubemap( mRenderTarget, cubemapArrayIdx );
+
         TextureGpu *renderTarget = mRenderTarget;
 
         if( mUseDpm2DArray )

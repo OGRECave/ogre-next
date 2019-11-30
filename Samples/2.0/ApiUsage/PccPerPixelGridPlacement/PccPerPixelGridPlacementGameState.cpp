@@ -65,6 +65,7 @@ namespace Demo
             Ogre::Id::generateNewId<Ogre::ParallaxCorrectedCubemapAuto>(), root, sceneManager,
             workspaceDef );
         mPccGridPlacement = new Ogre::PccPerPixelGridPlacement();
+        mParallaxCorrectedCubemap->setUseDpm2DArray( mUseDpm2DArray );
         mPccGridPlacement->setParallaxCorrectedCubemapAuto( mParallaxCorrectedCubemap );
         Ogre::Aabb aabb( Ogre::Vector3::ZERO, Ogre::Vector3( 0.5f ) );
         mPccGridPlacement->setFullRegion( aabb );
@@ -72,8 +73,6 @@ namespace Demo
         mPccGridPlacement->buildStart( 256u, mGraphicsSystem->getCamera(), Ogre::PFG_RGBA8_UNORM_SRGB,
                                        0.02f, 10.0f );
         mPccGridPlacement->buildEnd();
-        mParallaxCorrectedCubemap = mPccGridPlacement->getParallaxCorrectedCubemap();
-        // mParallaxCorrectedCubemap->setUseDpm2DArray( mUseDpm2DArray );
         mUseDpm2DArray = mParallaxCorrectedCubemap->getUseDpm2DArray();  // Setting may be overriden
 
         hlmsPbs->setParallaxCorrectedCubemap( mParallaxCorrectedCubemap );
@@ -215,8 +214,6 @@ namespace Demo
         {
             mUseDpm2DArray = !mUseDpm2DArray;
             setupParallaxCorrectCubemaps();
-            if( mParallaxCorrectedCubemap )
-                mParallaxCorrectedCubemap->updateAllDirtyProbes();
         }
         else
         {
