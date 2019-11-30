@@ -82,7 +82,8 @@ namespace Ogre
         mRenderTarget( 0 ),
         mDpmRenderTarget( 0 ),
         mDpmCamera( 0 ),
-        mCubeToDpmWorkspace( 0 )
+        mCubeToDpmWorkspace( 0 ),
+        mListener( 0 )
     {
         const RenderSystemCapabilities *caps =
                 mSceneManager->getDestinationRenderSystem()->getCapabilities();
