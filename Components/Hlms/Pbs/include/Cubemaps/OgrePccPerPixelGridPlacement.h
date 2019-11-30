@@ -72,7 +72,19 @@ namespace Ogre
 
         ParallaxCorrectedCubemapAuto *mPcc;
 
+        /// We may need more than one in case we're using DPM instead of cubemap arrays
         FastArray<AsyncTextureTicket *> mAsyncTicket;
+
+        /// For APIs where we have to use fallback routines with mAsyncTicket,
+        /// we store everything contiguously in mDownloadedImageFallback
+        uint8 *mDownloadedImageFallback;
+        TextureGpu *mFallbackDpmMipmap;
+
+        void allocateFallback( void );
+        void deallocateFallback( void );
+
+        TextureBox getFallbackBox( void ) const;
+        bool needsFallback( void ) const;
 
         void processProbeDepth( TextureBox box, size_t probeIdx, size_t sliceIdx );
 

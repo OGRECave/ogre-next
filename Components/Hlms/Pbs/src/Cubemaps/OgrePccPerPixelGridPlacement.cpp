@@ -33,7 +33,6 @@ THE SOFTWARE.
 #include "OgreAsyncTextureTicket.h"
 #include "OgreTextureGpuManager.h"
 
-#define TODO_d3d11_path
 #define TODO_dpm_path
 
 namespace Ogre
@@ -41,7 +40,9 @@ namespace Ogre
     PccPerPixelGridPlacement::PccPerPixelGridPlacement() :
         mFullRegion( Vector3::ZERO, Vector3::UNIT_SCALE ),
         mOverlap( Vector3( 1.5f ) ),
-        mPcc( 0 )
+        mPcc( 0 ),
+        mDownloadedImageFallback( 0 ),
+        mFallbackDpmMipmap( 0 )
     {
         mNumProbes[0] = 3u;
         mNumProbes[1] = 3u;
@@ -78,6 +79,40 @@ namespace Ogre
     uint32 PccPerPixelGridPlacement::getMaxNumProbes() const
     {
         return mNumProbes[0] * mNumProbes[1] * mNumProbes[2];
+    }
+    //-------------------------------------------------------------------------
+    void PccPerPixelGridPlacement::allocateFallback( void )
+    {
+        deallocateFallback();
+        const size_t sizeBytes = PixelFormatGpuUtils::getSizeBytes(
+            1u, 1u, 1u, getMaxNumProbes() * 6u, mPcc->getBindTexture()->getPixelFormat(), 4u );
+        mDownloadedImageFallback =
+            reinterpret_cast<uint8 *>( OGRE_MALLOC_SIMD( sizeBytes, MEMCATEGORY_GENERAL ) );
+    }
+    //-------------------------------------------------------------------------
+    void PccPerPixelGridPlacement::deallocateFallback( void )
+    {
+        if( mDownloadedImageFallback )
+        {
+            OGRE_FREE_SIMD( mDownloadedImageFallback, MEMCATEGORY_GENERAL );
+            mDownloadedImageFallback = 0;
+        }
+    }
+    //-------------------------------------------------------------------------
+    TextureBox PccPerPixelGridPlacement::getFallbackBox( void ) const
+    {
+        OGRE_ASSERT_LOW( mDownloadedImageFallback );
+        const PixelFormatGpu pixelFormat = mPcc->getBindTexture()->getPixelFormat();
+        const uint32 bytesPerPixel = (uint32)PixelFormatGpuUtils::getBytesPerPixel( pixelFormat );
+        TextureBox retVal( 1u, 1u, 1u, getMaxNumProbes() * 6u, bytesPerPixel, bytesPerPixel,
+                           bytesPerPixel );
+        retVal.data = mDownloadedImageFallback;
+        return retVal;
+    }
+    //-------------------------------------------------------------------------
+    bool PccPerPixelGridPlacement::needsFallback( void ) const
+    {
+        return mPcc->getUseDpm2DArray() && getMaxNumProbes() > 1u;
     }
     //-------------------------------------------------------------------------
     void PccPerPixelGridPlacement::processProbeDepth( TextureBox box, size_t probeIdx, size_t sliceIdx )
@@ -159,14 +194,38 @@ namespace Ogre
             probe->set( camCenter, area, Vector3( 0.05f ), Matrix3::IDENTITY, mFullRegion );
         }
 
-        mPcc->updateAllDirtyProbes();
-
+        const bool bNeedsFallback = needsFallback();
         TextureGpu *cubemapTex = mPcc->getBindTexture();
         TextureGpuManager *textureManager = cubemapTex->getTextureManager();
-        AsyncTextureTicket *asyncTicket = textureManager->createAsyncTextureTicket(
-            1u, 1u, cubemapTex->getNumSlices(), TextureTypes::TypeCube, cubemapTex->getPixelFormat() );
-        asyncTicket->download( cubemapTex, cubemapTex->getNumMipmaps() - 1u, false );
-        mAsyncTicket.push_back( asyncTicket );
+
+        if( bNeedsFallback )
+        {
+            mFallbackDpmMipmap = textureManager->createOrRetrieveTexture(
+                "PccPerPixelGridPlacement/TmpDpm", GpuPageOutStrategy::Discard,
+                TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps, TextureTypes::TypeCube );
+            mFallbackDpmMipmap->setResolution( resolution, resolution, 6u );
+            mFallbackDpmMipmap->setPixelFormat( pixelFormat );
+            mFallbackDpmMipmap->setNumMipmaps(
+                PixelFormatGpuUtils::getMaxMipmapCount( resolution, resolution ) );
+            mFallbackDpmMipmap->scheduleTransitionTo( GpuResidency::Resident );
+        }
+
+        mPcc->updateAllDirtyProbes();
+
+        if( mFallbackDpmMipmap )
+        {
+            textureManager->destroyTexture( mFallbackDpmMipmap );
+            mFallbackDpmMipmap = 0;
+        }
+
+        if( !bNeedsFallback )
+        {
+            AsyncTextureTicket *asyncTicket = textureManager->createAsyncTextureTicket(
+                1u, 1u, cubemapTex->getNumSlices(), TextureTypes::TypeCube,
+                cubemapTex->getPixelFormat() );
+            asyncTicket->download( cubemapTex, cubemapTex->getNumMipmaps() - 1u, false );
+            mAsyncTicket.push_back( asyncTicket );
+        }
     }
     //-------------------------------------------------------------------------
     void PccPerPixelGridPlacement::buildEnd( void )
@@ -179,13 +238,10 @@ namespace Ogre
         TextureGpu *cubemapTex = mPcc->getBindTexture();
         TextureGpuManager *textureManager = cubemapTex->getTextureManager();
 
-        FastArray<AsyncTextureTicket *>::const_iterator itor = mAsyncTicket.begin();
-        FastArray<AsyncTextureTicket *>::const_iterator endt = mAsyncTicket.end();
-
-        while( itor != endt )
+        if( mAsyncTicket.size() == 1u )
         {
-            AsyncTextureTicket *asyncTicket = *itor;
-
+            // We're not using DPM or have just 1 probe
+            AsyncTextureTicket *asyncTicket = mAsyncTicket.back();
             if( asyncTicket->canMapMoreThanOneSlice() )
             {
                 const TextureBox box = asyncTicket->map( 0u );
@@ -195,10 +251,16 @@ namespace Ogre
             }
             else
             {
+                // We're not using DPM (or we are but we have just 1 probe),
+                // but we still need the fallback for D3D11
+                allocateFallback();
+                TextureBox fallbackBox = getFallbackBox();
+
                 for( size_t i = 0; i < asyncTicket->getNumSlices(); ++i )
                 {
                     const TextureBox box = asyncTicket->map( (uint32)i );
-                    TODO_d3d11_path;
+                    ++fallbackBox.sliceStart;
+                    fallbackBox.copyFrom( box );
                     asyncTicket->unmap();
                 }
             }
@@ -206,8 +268,52 @@ namespace Ogre
             TODO_dpm_path;
 
             textureManager->destroyAsyncTextureTicket( asyncTicket );
+        }
+        else if( mAsyncTicket.size() > 1u )
+        {
+            // We're using DPM and have more than 1 probe, we'll need the fallback
+            allocateFallback();
+            TextureBox fallbackBox = getFallbackBox();
 
-            ++itor;
+            FastArray<AsyncTextureTicket *>::const_iterator itor = mAsyncTicket.begin();
+            FastArray<AsyncTextureTicket *>::const_iterator endt = mAsyncTicket.end();
+
+            while( itor != endt )
+            {
+                AsyncTextureTicket *asyncTicket = *itor;
+
+                if( asyncTicket->canMapMoreThanOneSlice() )
+                {
+                    const TextureBox box = asyncTicket->map( 0u );
+                    fallbackBox.copyFrom( box );
+                    fallbackBox.sliceStart += box.numSlices;
+                    asyncTicket->unmap();
+                }
+                else
+                {
+                    for( size_t i = 0; i < asyncTicket->getNumSlices(); ++i )
+                    {
+                        const TextureBox box = asyncTicket->map( (uint32)i );
+                        ++fallbackBox.sliceStart;
+                        fallbackBox.copyFrom( box );
+                        asyncTicket->unmap();
+                    }
+                }
+
+                TODO_dpm_path;
+
+                textureManager->destroyAsyncTextureTicket( asyncTicket );
+
+                ++itor;
+            }
+        }
+
+        if( mDownloadedImageFallback )
+        {
+            TextureBox fallbackBox = getFallbackBox();
+            for( size_t i = 0u; i < maxNumProbes; ++i )
+                processProbeDepth( fallbackBox, i, i * 6u );
+            deallocateFallback();
         }
 
         mAsyncTicket.clear();
