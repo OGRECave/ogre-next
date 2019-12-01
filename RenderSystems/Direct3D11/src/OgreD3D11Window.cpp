@@ -36,6 +36,8 @@ THE SOFTWARE.
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreStringConverter.h"
 
+#include "Vao/OgreVaoManager.h"
+
 #define TODO_convert_to_MSAA_pattern
 #define TODO_notify_listeners
 
