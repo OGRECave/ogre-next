@@ -81,7 +81,7 @@ namespace Ogre {
         {
         public:
             Listener() {}
-            virtual ~Listener() {}
+            virtual ~Listener();
             /** Called when a node gets updated.
             @remarks
                 Note that this happens when the node's derived update happens,

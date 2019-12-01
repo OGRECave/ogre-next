@@ -57,7 +57,7 @@ namespace v1 {
     class _OgreExport AnimationContainer
     {
     public:
-        virtual ~AnimationContainer() {}
+        virtual ~AnimationContainer();
 
         /** Gets the number of animations in this container. */
         virtual unsigned short getNumAnimations(void) const = 0;

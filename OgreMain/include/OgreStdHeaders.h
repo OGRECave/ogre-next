@@ -20,7 +20,7 @@
 #endif
 
 #include <assert.h>
-#include <stdio.h>
+#include <cstdio>
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>

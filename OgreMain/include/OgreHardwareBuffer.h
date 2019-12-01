@@ -175,7 +175,7 @@ namespace v1 {
                     mUsage = HBU_STATIC_WRITE_ONLY;
                 }
             }
-            virtual ~HardwareBuffer() {}
+            virtual ~HardwareBuffer();
             /** Lock the buffer for (potentially) reading / writing.
             @param offset The byte offset from the start of the buffer to lock
             @param length The size of the area to lock, in bytes

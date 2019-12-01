@@ -2855,7 +2855,7 @@ namespace Ogre {
         virtual void initMetaData(void) const = 0;
     public:
         SceneManagerFactory() : mMetaDataInit(true) {}
-        virtual ~SceneManagerFactory() {}
+        virtual ~SceneManagerFactory();
         /** Get information about the SceneManager type created by this factory. */
         virtual const SceneManagerMetaData& getMetaData(void) const 
         {

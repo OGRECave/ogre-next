@@ -86,7 +86,7 @@ namespace Ogre {
     class _OgreExport ResourceGroupListener
     {
     public:
-        virtual ~ResourceGroupListener() {}
+        virtual ~ResourceGroupListener();
 
         /** This event is fired when a resource group begins parsing scripts.
         @note
@@ -193,7 +193,7 @@ namespace Ogre {
     class ResourceLoadingListener
     {
     public:
-        virtual ~ResourceLoadingListener() {}
+        virtual ~ResourceLoadingListener();
 
         /** This event is called when a resource beings loading. */
         virtual DataStreamPtr resourceLoading(const String &name, const String &group, Resource *resource) = 0;

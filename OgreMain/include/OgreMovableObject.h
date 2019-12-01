@@ -72,7 +72,7 @@ namespace Ogre {
         {
         public:
             Listener(void) {}
-            virtual ~Listener() {}
+            virtual ~Listener();
             /** MovableObject is being destroyed */
             virtual void objectDestroyed(MovableObject*) {}
             /** MovableObject has been attached to a node */
@@ -626,6 +626,8 @@ namespace Ogre {
         NullEntity() : MovableObject( 0 )
         {
         }
+
+        virtual ~NullEntity();
 
         virtual const String& getMovableType(void) const
         {

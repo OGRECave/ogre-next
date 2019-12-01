@@ -232,7 +232,7 @@ namespace Ogre
                 mStoreActionColour[i] = StoreAction::StoreOrResolve;
             }
         }
-        virtual ~CompositorPassDef() {}
+        virtual ~CompositorPassDef();
 
         void setAllClearColours( const ColourValue &clearValue );
         void setAllLoadActions( LoadAction::LoadAction loadAction );

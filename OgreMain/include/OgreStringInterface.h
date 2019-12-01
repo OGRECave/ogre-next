@@ -81,7 +81,7 @@ namespace Ogre {
         virtual String doGet(const void* target) const = 0;
         virtual void doSet(void* target, const String& val) = 0;
 
-        virtual ~ParamCommand() { }
+        virtual ~ParamCommand();
     };
     typedef map<String, ParamCommand* >::type ParamCommandMap;
 

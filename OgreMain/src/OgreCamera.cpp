@@ -1154,6 +1154,6 @@ namespace Ogre {
         for( size_t i=rqStart; i<rqEnd; ++i )
             mRenderedRqs[i] = true;
     }
-
-
+    //-----------------------------------------------------------------------
+    Camera::Listener::~Listener() {}
 } // namespace Ogre

@@ -340,12 +340,10 @@ namespace Ogre {
         // Continue
         return true;
     }
-
-
-
-
+    //---------------------------------------------------------------------
+    //---------------------------------------------------------------------
+    //---------------------------------------------------------------------
+    SceneQueryListener::~SceneQueryListener() {}
+    RaySceneQueryListener::~RaySceneQueryListener() {}
+    IntersectionSceneQueryListener::~IntersectionSceneQueryListener() {}
 }
-    
-
-
-

@@ -85,7 +85,7 @@ namespace v1 {
         {
         public:
             Listener() {}
-            virtual ~Listener() {}
+            virtual ~Listener();
             /** Called when a OldNode gets updated.
             @remarks
                 Note that this happens when the OldNode's derived update happens,

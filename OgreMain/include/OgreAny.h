@@ -76,10 +76,7 @@ namespace Ogre
         {
         }
 
-        virtual ~Any()
-        {
-            reset();
-        }
+        virtual ~Any();
 
     public: // modifiers
 
@@ -143,9 +140,7 @@ namespace Ogre
         {
         public: // structors
     
-            virtual ~placeholder()
-            {
-            }
+            virtual ~placeholder();
 
         public: // queries
 
@@ -242,14 +237,14 @@ namespace Ogre
             mContent = other.mContent ? other.mContent->clone() : 0; 
         }
 
+        virtual ~AnyNumeric();
+
     protected:
         class numplaceholder : public Any::placeholder
         {
         public: // structors
 
-            ~numplaceholder()
-            {
-            }
+            virtual ~numplaceholder();
             virtual placeholder* add(placeholder* rhs) = 0;
             virtual placeholder* subtract(placeholder* rhs) = 0;
             virtual placeholder* multiply(placeholder* rhs) = 0;

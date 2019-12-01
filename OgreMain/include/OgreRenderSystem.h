@@ -1192,7 +1192,7 @@ namespace Ogre
         {
         public:
             Listener() {}
-            virtual ~Listener() {}
+            virtual ~Listener();
 
             /** A rendersystem-specific event occurred.
             @param eventName The name of the event which has occurred

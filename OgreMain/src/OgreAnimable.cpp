@@ -170,6 +170,6 @@ namespace Ogre {
         }
     }
 
-
+    AnimableObject::~AnimableObject() {}
 
 }

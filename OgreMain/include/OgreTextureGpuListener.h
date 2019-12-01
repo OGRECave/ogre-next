@@ -44,6 +44,8 @@ namespace Ogre
     class _OgreExport TextureGpuListener
     {
 	public:
+        virtual ~TextureGpuListener();
+
         enum Reason
         {
             Unknown,

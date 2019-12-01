@@ -82,7 +82,7 @@ namespace Ogre {
         {
         public:
             Listener() {}
-            virtual ~Listener() {}
+            virtual ~Listener();
 
 
 
@@ -515,7 +515,7 @@ namespace Ogre {
     {
     public:
         ManualResourceLoader() {}
-        virtual ~ManualResourceLoader() {}
+        virtual ~ManualResourceLoader();
 
         /** Called when a resource wishes to load.  Note that this could get
          * called in a background thread even in just a semithreaded ogre

@@ -135,6 +135,8 @@ namespace Ogre
         return retVal;
     }
     //-----------------------------------------------------------------------------------
+    CompositorPassDef::~CompositorPassDef() {}
+    //-----------------------------------------------------------------------------------
     void CompositorPassDef::setAllClearColours( const ColourValue &clearValue )
     {
         for( int i=0; i<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )

@@ -32,6 +32,7 @@ namespace Ogre {
     OGRE_STATIC_MUTEX_INSTANCE( StringInterface::msDictionaryMutex );
     ParamDictionaryMap StringInterface::msDictionary;
 
+    ParamCommand::~ParamCommand() {}
 
     const ParameterList& StringInterface::getParameters(void) const
     {

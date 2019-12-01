@@ -4732,4 +4732,5 @@ inline bool SceneManager::updateWorkerThreadImpl( size_t threadIdx )
 
     return exitThread;
 }
+SceneManagerFactory::~SceneManagerFactory() {}
 }

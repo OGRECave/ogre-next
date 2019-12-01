@@ -57,13 +57,14 @@ namespace Ogre {
             : useCount(1)
         {}
 
-        virtual ~SharedPtrInfo() {}
+        virtual ~SharedPtrInfo();
 
         AtomicScalar<unsigned>  useCount;
     };
 
     struct SharedPtrInfoNone : public SharedPtrInfo
     {
+        virtual ~SharedPtrInfoNone();
     };
 
     template <class T>
