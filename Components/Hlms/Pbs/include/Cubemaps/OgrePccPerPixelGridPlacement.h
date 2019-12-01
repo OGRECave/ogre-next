@@ -71,6 +71,9 @@ namespace Ogre
         Aabb mFullRegion;
 
         Vector3 mOverlap;
+        Vector3 mSnapDeviationError;
+        Vector3 mSnapSidesDeviationErrorMin;
+        Vector3 mSnapSidesDeviationErrorMax;
 
         ParallaxCorrectedCubemapAuto *mPcc;
 
@@ -88,6 +91,33 @@ namespace Ogre
         TextureBox getFallbackBox( void ) const;
         bool needsDpmFallback( void ) const;
 
+        /** Snaps the new bounds of the new probe to match mFullRegion if the relative
+            difference between the two is smaller than mSnapDeviationError.
+
+            In code it performs the following:
+
+            @code
+                deviation = abs( newProbeAreaMin - mFullRegion.getMinimum() )
+                relativeDev.x = deviation.x / mFullRegion.getMinimum().x;
+                if( relativeDev <= mSnapDeviationError.x )
+                    newProbeAreaMin.x = mFullRegion.getMinimum().x;
+            @endcode
+
+            Performs this test for both min and max and
+            for each axis component (x,y,z) individually
+        @param inOutNewProbeAreaMin [in/out]
+        @param inOutNewProbeAreaMax [in/out]
+        */
+        void snapToFullRegion( Vector3 &inOutNewProbeAreaMin, Vector3 &inOutNewProbeAreaMax );
+
+        /** Very similar to PccPerPixelGridPlacement::snapToFullRegion. However this one
+            only works on the corner edges of the grid.
+        @param probeIdx
+        @param inOutNewProbeAreaMin
+        @param inOutNewProbeAreaMax
+        */
+        void snapToSides( size_t probeIdx, Vector3 &inOutNewProbeAreaMin,
+                          Vector3 &inOutNewProbeAreaMax );
         void processProbeDepth( TextureBox box, size_t probeIdx, size_t sliceIdx );
 
         Vector3 getProbeNormalizedCenter( size_t probeIdx ) const;
@@ -104,6 +134,7 @@ namespace Ogre
         @param numProbes
         */
         void setNumProbes( uint32 numProbes[3] );
+        const uint32 *getNumProbes( void ) const { return mNumProbes; }
 
         /** PccPerPixelGridPlacement needs, as guidance, the maximum region it will be occupying.
 
@@ -113,6 +144,7 @@ namespace Ogre
         @param fullRegion
         */
         void setFullRegion( const Aabb &fullRegion );
+        const Aabb &getFullRegion( void ) const { return mFullRegion; }
 
         /** PccPerPixelGridPlacement will subdivide in mNumProbes[i] probes along each axis,
             creating a 3D grid.
@@ -133,6 +165,98 @@ namespace Ogre
             Default: 1.5
         */
         void setOverlap( const Vector3 &overlap );
+        const Vector3 &getOverlap( void ) const { return mOverlap; }
+
+        /** When the probes have a different size than what they should have, but they're almost
+            the same as mFullRegion (they can be different due to precision issues, small objects
+            being on camera); it may be desirable to make them "snap" back to mFullRegion;
+            particularly to avoid artifacts (missing reflections).
+
+            If the distance between the new shape and the mFullRegion is smaller than relativeError
+            (in %) then we snap the shape's bound back to mFullRegion.
+            For more info, see snapToFullRegion.
+
+            @see    PccPerPixelGridPlacement::snapToFullRegion
+        @param relativeError
+            Valid range: [0; inf)
+            Use a very large value to always snap
+            0 to disable snapping in this axis
+        */
+        void setSnapDeviationError( const Vector3 &relativeError );
+        const Vector3 &getSnapDeviationError( void ) const { return mSnapDeviationError; }
+
+        /** Very similar to PccPerPixelGridPlacement::setSnapDeviationError but more specific; thus
+            allowing for much bigger error margins to fix glitches without causing major distortions
+
+            If a wall is outside the probe's shape, it won't have reflections. It may be quite common
+            that if setFullRegion() defines a rectangular room, then the produced shapes may
+            end up smaller than the room; thus the walls, ceiling and floor won't have reflections.
+
+            Thus this setting allows to defining relative errors for probes that are in the corners.
+
+            In a 2D version, if the layout is like the following:
+
+            @code
+                                 max
+                     -----------
+                    | A | B | C |
+                    | D | E | F |
+                    | G | H | I |
+                     -----------
+                  min
+            @endcode
+
+            Then G will be snapped against the left corner if the distance to this corner is
+            <= snapSidesDeviationErrorMin.x (in percentage)
+            and A will also snapped against the bottom corner using snapSidesDeviationErrorMin.y
+
+            While C will snapped against the right corner using snapSidesDeviationErrorMax.x
+            and against the top corner using snapSidesDeviationErrorMax.y
+
+            B will only be snapped against the top corner using snapSidesDeviationErrorMax.y
+
+            Likewise, E won't be snapped because it's not in any corner or edge.
+        @remarks
+            Why shouldn't always snap?
+            Consider a room with a hallway, or a non-rectangular room with column:
+
+            @code
+                // Room with a hallway:
+                     -----------------------
+                    | A | B | C  ___________|
+                    | D | E | F |
+                    | G | H | I |
+                     -----------
+
+                // Non-rectangular with a column:
+                     -------
+                    | A | B |___
+                    | D | E | F |
+                    | G | H | I |
+                     -----------
+            @endcode
+
+            In these cases, we don't want C to snap, because the reflections when using C's probe
+            will look unnecessarily distorted. Thus we only want to snap if the error is small
+            enough, else it should be safe to assume there is no wall at that location.
+
+            It's not always easy. If the probe is too big and the hallway/column is halfway
+            through the probe, then we could only fix this by hand by an artist, or by adding
+            more probes (which can consume significantly more resources)
+
+        @param snapSidesDeviationErrorMin
+            Valid range: [0; inf)
+            Use a very large value to always snap
+            0 to disable snapping against this corner
+        @param snapSidesDeviationErrorMax
+            Valid range: [0; inf)
+            Use a very large value to always snap
+            0 to disable snapping against this corner
+         */
+        void setSnapSides( const Vector3 &snapSidesDeviationErrorMin,
+                           const Vector3 &snapSidesDeviationErrorMax );
+        const Vector3 &getSnapSidesDeviationErrorMin( void ) const;
+        const Vector3 &getSnapSidesDeviationErrorMax( void ) const;
 
         /// Returns numProbes[0] * numProbes[1] * numProbes[2]
         uint32 getMaxNumProbes() const;

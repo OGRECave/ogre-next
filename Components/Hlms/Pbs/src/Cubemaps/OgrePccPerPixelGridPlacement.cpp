@@ -38,13 +38,16 @@ namespace Ogre
     PccPerPixelGridPlacement::PccPerPixelGridPlacement() :
         mFullRegion( Vector3::ZERO, Vector3::UNIT_SCALE ),
         mOverlap( Vector3( 1.5f ) ),
+        mSnapDeviationError( Vector3( 0.05f ) ),
+        mSnapSidesDeviationErrorMin( Vector3( 0.25f ) ),
+        mSnapSidesDeviationErrorMax( Vector3( 0.25f ) ),
         mPcc( 0 ),
         mDownloadedImageFallback( 0 ),
         mFallbackDpmMipmap( 0 )
     {
-        mNumProbes[0] = 3u;
-        mNumProbes[1] = 3u;
-        mNumProbes[2] = 3u;
+        mNumProbes[0] = 2u;
+        mNumProbes[1] = 2u;
+        mNumProbes[2] = 2u;
     }
     //-------------------------------------------------------------------------
     PccPerPixelGridPlacement::~PccPerPixelGridPlacement() {}
@@ -72,6 +75,30 @@ namespace Ogre
     {
         OGRE_ASSERT_LOW( mAsyncTicket.empty() && "Cannot change in the middle of buildBegin/buildEnd" );
         mOverlap = overlap;
+    }
+    //-------------------------------------------------------------------------
+    void PccPerPixelGridPlacement::setSnapDeviationError( const Vector3 &relativeError )
+    {
+        OGRE_ASSERT_LOW( mAsyncTicket.empty() && "Cannot change in the middle of buildBegin/buildEnd" );
+        mSnapDeviationError = relativeError;
+    }
+    //-------------------------------------------------------------------------
+    void PccPerPixelGridPlacement::setSnapSides( const Vector3 &snapSidesDeviationErrorMin,
+                                                 const Vector3 &snapSidesDeviationErrorMax )
+    {
+        OGRE_ASSERT_LOW( mAsyncTicket.empty() && "Cannot change in the middle of buildBegin/buildEnd" );
+        mSnapSidesDeviationErrorMin = snapSidesDeviationErrorMin;
+        mSnapSidesDeviationErrorMax = snapSidesDeviationErrorMax;
+    }
+    //-------------------------------------------------------------------------
+    const Vector3 &PccPerPixelGridPlacement::getSnapSidesDeviationErrorMin( void ) const
+    {
+        return mSnapSidesDeviationErrorMin;
+    }
+    //-------------------------------------------------------------------------
+    const Vector3 &PccPerPixelGridPlacement::getSnapSidesDeviationErrorMax( void ) const
+    {
+        return mSnapSidesDeviationErrorMax;
     }
     //-------------------------------------------------------------------------
     uint32 PccPerPixelGridPlacement::getMaxNumProbes() const
@@ -113,6 +140,67 @@ namespace Ogre
         return mPcc->getUseDpm2DArray() && getMaxNumProbes() > 1u;
     }
     //-------------------------------------------------------------------------
+    void PccPerPixelGridPlacement::snapToFullRegion( Vector3 &inOutNewProbeAreaMin,
+                                                     Vector3 &inOutNewProbeAreaMax )
+    {
+        Vector3 newProbeBounds[2] = { inOutNewProbeAreaMin, inOutNewProbeAreaMax };
+        Vector3 fullRegionBounds[2] = { mFullRegion.getMinimum(), mFullRegion.getMaximum() };
+
+        for( int i = 0; i < 2; ++i )
+        {
+            Vector3 deviation = fullRegionBounds[i] - newProbeBounds[i];
+            deviation.makeAbs();
+
+            for( size_t j = 0u; j < 3u; ++j )
+            {
+                const Real componentRelativeDev = ( deviation[j] / ( mFullRegion.mHalfSize[j] * 2.0f ) );
+                if( componentRelativeDev <= mSnapDeviationError[j] )
+                    newProbeBounds[i][j] = fullRegionBounds[i][j];
+            }
+        }
+
+        inOutNewProbeAreaMin = newProbeBounds[0];
+        inOutNewProbeAreaMax = newProbeBounds[1];
+    }
+    //-------------------------------------------------------------------------
+    void PccPerPixelGridPlacement::snapToSides( size_t probeIdx, Vector3 &inOutNewProbeAreaMin,
+                                                Vector3 &inOutNewProbeAreaMax )
+    {
+        const uint32 xPos = probeIdx % mNumProbes[0];
+        const uint32 yPos = ( probeIdx / mNumProbes[0] ) % mNumProbes[1];
+        const uint32 zPos = static_cast<uint32>( probeIdx / ( mNumProbes[0] * mNumProbes[1] ) );
+
+        const uint32 intPos[3] = { xPos, yPos, zPos };
+
+        for( size_t i = 0u; i < 3u; ++i )
+        {
+            if( intPos[i] == 0u )
+            {
+                // Snap to min
+                const Vector3 fullRegionMin = mFullRegion.getMinimum();
+                Real deviation = inOutNewProbeAreaMin[i] - fullRegionMin[i];
+                deviation = Math::Abs( deviation );
+
+                const Real relativeDeviation = deviation / ( mFullRegion.mHalfSize[i] * 2.0f );
+
+                if( relativeDeviation <= mSnapSidesDeviationErrorMin[i] )
+                    inOutNewProbeAreaMin[i] = fullRegionMin[i];
+            }
+            if( intPos[i] == mNumProbes[i] - 1u )
+            {
+                // Snap to max
+                const Vector3 fullRegionMax = mFullRegion.getMaximum();
+                Real deviation = inOutNewProbeAreaMax[i] - fullRegionMax[i];
+                deviation = Math::Abs( deviation );
+
+                const Real relativeDeviation = deviation / ( mFullRegion.mHalfSize[i] * 2.0f );
+
+                if( relativeDeviation <= mSnapSidesDeviationErrorMax[i] )
+                    inOutNewProbeAreaMax[i] = fullRegionMax[i];
+            }
+        }
+    }
+    //-------------------------------------------------------------------------
     void PccPerPixelGridPlacement::processProbeDepth( TextureBox box, size_t probeIdx, size_t sliceIdx )
     {
         CubemapProbe *probe = mPcc->getProbes()[probeIdx];
@@ -145,6 +233,9 @@ namespace Ogre
                                              colourVal[CubemapSide::NZ].a * 2.0f;
         probeAreaMin += probeShapeCenter;
         probeAreaMax += probeShapeCenter;
+
+        snapToFullRegion( probeAreaMin, probeAreaMax );
+        snapToSides( probeIdx, probeAreaMin, probeAreaMax );
 
         Aabb probeShape;
         probeShape.setExtents( probeAreaMin, probeAreaMax );
