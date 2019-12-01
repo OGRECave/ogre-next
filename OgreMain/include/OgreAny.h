@@ -56,7 +56,7 @@ namespace Ogre
     */
     /** Variant type that can hold Any other type.
     */
-    class Any 
+    class _OgreExport Any
     {
     public: // constructors
 
@@ -136,7 +136,7 @@ namespace Ogre
 
     protected: // types
 
-        class placeholder 
+        class _OgreExport placeholder
         {
         public: // structors
     
@@ -216,7 +216,7 @@ namespace Ogre
     /** Specialised Any class which has built in arithmetic operators, but can 
         hold only types which support operator +,-,* and / .
     */
-    class AnyNumeric : public Any
+    class _OgreExport AnyNumeric : public Any
     {
     public:
         AnyNumeric()
@@ -240,7 +240,7 @@ namespace Ogre
         virtual ~AnyNumeric();
 
     protected:
-        class numplaceholder : public Any::placeholder
+        class _OgreExport numplaceholder : public Any::placeholder
         {
         public: // structors
 

@@ -52,7 +52,7 @@ namespace Ogre {
         SPFM_NONE
     };
 
-    struct SharedPtrInfo {
+    struct _OgreExport SharedPtrInfo {
         inline SharedPtrInfo() 
             : useCount(1)
         {}
@@ -62,7 +62,7 @@ namespace Ogre {
         AtomicScalar<unsigned>  useCount;
     };
 
-    struct SharedPtrInfoNone : public SharedPtrInfo
+    struct _OgreExport SharedPtrInfoNone : public SharedPtrInfo
     {
         virtual ~SharedPtrInfoNone();
     };
