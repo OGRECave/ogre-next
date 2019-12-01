@@ -50,6 +50,7 @@ THE SOFTWARE.
 #include "OgreDepthBuffer.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreLwString.h"
+#include "OgreRenderQueue.h"
 
 #include "OgreHlmsListener.h"
 #include "OgreBitset.h"

@@ -26,6 +26,8 @@
 #include "OgreTextureGpuManager.h"
 #include "OgreLwString.h"
 
+#include "Vao/OgreVaoManager.h"
+
 using namespace Demo;
 
 namespace Demo

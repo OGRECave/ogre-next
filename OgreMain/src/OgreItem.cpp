@@ -38,17 +38,8 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreSceneManager.h"
 #include "OgreLogManager.h"
 #include "Animation/OgreSkeletonInstance.h"
-#include "OgreCamera.h"
-#include "OgreAxisAlignedBox.h"
-#include "OgreVector4.h"
 #include "OgreRoot.h"
-#include "OgreTechnique.h"
-#include "OgrePass.h"
-#include "OgreOptimisedUtil.h"
 #include "OgreSceneNode.h"
-#include "OgreLodStrategy.h"
-#include "OgreLodListener.h"
-#include "OgreMaterialManager.h"
 #include "OgreMeshManager2.h"
 
 namespace Ogre {

@@ -49,10 +49,12 @@ THE SOFTWARE.
 #include "IrradianceField/OgreIrradianceField.h"
 
 #include "OgreSceneManager.h"
+#include "OgreRenderQueue.h"
 #include "Compositor/OgreCompositorShadowNode.h"
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreConstBufferPacked.h"
 #include "Vao/OgreTexBufferPacked.h"
+#include "Vao/OgreVertexArrayObject.h"
 
 #include "CommandBuffer/OgreCommandBuffer.h"
 #include "CommandBuffer/OgreCbTexture.h"

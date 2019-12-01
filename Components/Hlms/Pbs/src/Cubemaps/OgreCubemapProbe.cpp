@@ -45,6 +45,7 @@ THE SOFTWARE.
 #include "OgreInternalCubemapProbe.h"
 
 #include "Vao/OgreConstBufferPacked.h"
+#include "Vao/OgreVaoManager.h"
 
 //Disable as OpenGL version of copyToTexture is super slow (makes a GPU->CPU->GPU roundtrip)
 #define USE_RTT_DIRECTLY 1

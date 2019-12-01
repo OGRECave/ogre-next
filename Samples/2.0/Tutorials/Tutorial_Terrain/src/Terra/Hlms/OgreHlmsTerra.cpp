@@ -45,6 +45,7 @@ THE SOFTWARE.
 #include "OgreCamera.h"
 
 #include "OgreSceneManager.h"
+#include "OgreRenderQueue.h"
 #include "Compositor/OgreCompositorShadowNode.h"
 #include "Vao/OgreVaoManager.h"
 #include "Vao/OgreConstBufferPacked.h"

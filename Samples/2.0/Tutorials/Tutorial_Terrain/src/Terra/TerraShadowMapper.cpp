@@ -12,6 +12,7 @@
 #include "OgreHlmsCompute.h"
 #include "OgreHlmsComputeJob.h"
 #include "Vao/OgreConstBufferPacked.h"
+#include "Vao/OgreVaoManager.h"
 #include "OgreRoot.h"
 
 #include "OgreLwString.h"

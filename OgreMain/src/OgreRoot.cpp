@@ -59,6 +59,7 @@ THE SOFTWARE.
 #include "OgreLight.h"
 #include "OgreRectangle2D2.h"
 #include "OgreManualObject.h"
+#include "OgreManualObject2.h"
 #include "OgrePlatformInformation.h"
 #include "OgreConvexBody.h"
 #include "OgreFrameStats.h"

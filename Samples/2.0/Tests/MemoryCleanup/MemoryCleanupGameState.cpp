@@ -16,6 +16,8 @@
 #include "OgreHlmsPbsDatablock.h"
 #include "OgreHlmsPbs.h"
 
+#include "Vao/OgreVaoManager.h"
+
 using namespace Demo;
 
 namespace Demo

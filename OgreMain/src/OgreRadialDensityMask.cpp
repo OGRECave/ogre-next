@@ -40,6 +40,8 @@ THE SOFTWARE.
 #include "OgreHlmsComputeJob.h"
 #include "OgreHlmsManager.h"
 #include "Vao/OgreConstBufferPacked.h"
+#include "Vao/OgreVaoManager.h"
+#include "Vao/OgreVertexArrayObject.h"
 
 #include "OgreShaderPrimitives.h"
 

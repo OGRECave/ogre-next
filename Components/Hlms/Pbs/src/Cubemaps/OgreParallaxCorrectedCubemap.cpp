@@ -40,6 +40,7 @@ THE SOFTWARE.
 
 #include "OgreRoot.h"
 #include "OgreSceneManager.h"
+#include "OgreRenderQueue.h"
 #include "OgreTextureGpuManager.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreHlmsManager.h"
@@ -57,6 +58,7 @@ THE SOFTWARE.
 
 #include "Vao/OgreConstBufferPacked.h"
 #include "Vao/OgreStagingBuffer.h"
+#include "Vao/OgreVaoManager.h"
 
 namespace Ogre
 {

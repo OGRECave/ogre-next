@@ -30,7 +30,8 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 #include "OgreEdgeListBuilder.h"
-#include <cstddef>
+
+#include "stddef.h"
 
 namespace Ogre {
 

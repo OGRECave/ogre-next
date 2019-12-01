@@ -38,6 +38,8 @@ THE SOFTWARE.
 #include "OgreLight.h"
 #include "OgreSceneManager.h"
 #include "Vao/OgreAsyncTicket.h"
+#include "Vao/OgreIndexBufferPacked.h"
+#include "Vao/OgreVertexArrayObject.h"
 
 #include "Math/Array/OgreBooleanMask.h"
 

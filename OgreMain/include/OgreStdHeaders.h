@@ -19,13 +19,12 @@
 #   pragma GCC visibility push(default)
 #endif
 
-#include <cassert>
-#include <cstdio>
-#include <cstdlib>
-#include <ctime>
-#include <cstring>
-#include <cstdarg>
-#include <cmath>
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
+#include <math.h>
 
 // STL containers
 #include <vector>

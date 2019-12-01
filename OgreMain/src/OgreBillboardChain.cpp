@@ -41,6 +41,7 @@ THE SOFTWARE.
 #include "OgreViewport.h"
 #include "OgreHlmsManager.h"
 #include "OgreHlms.h"
+#include "OgreRenderOperation.h"
 
 #include <limits>
 

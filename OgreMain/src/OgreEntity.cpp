@@ -36,8 +36,6 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreLogManager.h"
 #include "OgreSkeleton.h"
 #include "OgreOldBone.h"
-#include "OgreCamera.h"
-#include "OgreTagPoint.h"
 #include "OgreAxisAlignedBox.h"
 #include "OgreHardwareBufferManager.h"
 #include "OgreVector4.h"

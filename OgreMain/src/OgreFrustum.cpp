@@ -36,9 +36,9 @@ THE SOFTWARE.
 #include "OgreCamera.h"
 #include "OgreHardwareBufferManager.h"
 #include "OgreHardwareVertexBuffer.h"
-#include "OgreMaterialManager.h"
 #include "OgreRenderSystem.h"
 #include "OgreMovablePlane.h"
+#include "OgreRenderOperation.h"
 
 #include "Math/Array/OgreArrayMatrixAf4x3.h"
 
