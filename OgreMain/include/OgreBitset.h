@@ -36,25 +36,23 @@ namespace Ogre
 	/** @ingroup Core
 	@class cbitsetN
 	*/
-	template<size_t _N, typename _internalDataType, size_t _bits, size_t _mask> class cbitsetN
+	template <size_t _N, typename _internalDataType, size_t _bits, size_t _mask>
+	class cbitsetN
 	{
 		_internalDataType mValues[_N >> _bits];
-	public:
-		cbitsetN()
-		{
-			clear();
-		}
 
-		void clear()
-		{
-			memset( mValues, 0, sizeof(mValues) );
-		}
+	public:
+		cbitsetN() { clear(); }
+
+		void clear() { memset( mValues, 0, sizeof( mValues ) ); }
+
+		void setAll() { memset( mValues, 0xFF, sizeof( mValues ) ); }
 
 		void setValue( size_t position, bool bValue )
 		{
 			OGRE_ASSERT_MEDIUM( position < _N );
-			const size_t idx  = position >> _bits;
-			const size_t mask = 1u << (position & _mask);
+			const size_t idx = position >> _bits;
+			const size_t mask = 1u << ( position & _mask );
 			if( bValue )
 				mValues[idx] |= mask;
 			else
@@ -64,23 +62,54 @@ namespace Ogre
 		void set( size_t position )
 		{
 			OGRE_ASSERT_MEDIUM( position < _N );
-			const size_t idx  = position >> _bits;
-			const size_t mask = 1u << (position & _mask);
+			const size_t idx = position >> _bits;
+			const size_t mask = 1u << ( position & _mask );
 			mValues[idx] |= mask;
 		}
 		void unset( size_t position )
 		{
 			OGRE_ASSERT_MEDIUM( position < _N );
-			const size_t idx  = position >> _bits;
-			const size_t mask = 1u << (position & _mask);
+			const size_t idx = position >> _bits;
+			const size_t mask = 1u << ( position & _mask );
 			mValues[idx] &= ~mask;
 		}
 		bool test( size_t position ) const
 		{
 			OGRE_ASSERT_MEDIUM( position < _N );
-			const size_t idx  = position >> _bits;
-			const size_t mask = 1u << (position & _mask);
-			return (mValues[idx] & mask) != 0u;
+			const size_t idx = position >> _bits;
+			const size_t mask = 1u << ( position & _mask );
+			return ( mValues[idx] & mask ) != 0u;
+		}
+
+		/// Returns the number of bits that are set between range [0; positionEnd).
+		uint32 numBitsSet( size_t positionEnd ) const
+		{
+			OGRE_ASSERT_MEDIUM( positionEnd < _N );
+			uint32 retVal = 0u;
+			for( size_t i = 0u; i < positionEnd; )
+			{
+				if( ( positionEnd - i ) >= _mask )
+				{
+					const _internalDataType value = mValues[i >> _bits];
+					if( value == (_internalDataType)-1 )
+					{
+						retVal += _mask + 1u;
+					}
+					else if( value != 0u )
+					{
+						for( size_t j = 0u; j <= _mask; ++j )
+							retVal += ( value & ( 1u << j ) ) != 0u ? 1u : 0u;
+					}
+
+					i += _mask + 1u;
+				}
+				else
+				{
+					retVal += test( i ) ? 1u : 0u;
+					++i;
+				}
+			}
+			return retVal;
 		}
 	};
 
@@ -89,9 +118,10 @@ namespace Ogre
 		This is similar to std::bitset, except waaay less bloat.
 		cbitset32 stands for constant/compile-time bitset with an internal representation of 32-bits
 	*/
-	template<size_t _N> class cbitset32 : public cbitsetN<_N, uint32, 5u, 0x1Fu>
+	template <size_t _N>
+	class cbitset32 : public cbitsetN<_N, uint32, 5u, 0x1Fu>
 	{
 	};
-}
+}  // namespace Ogre
 
 #endif

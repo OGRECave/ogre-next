@@ -53,11 +53,11 @@ namespace Ogre
 {
     CubemapProbe::CubemapProbe( ParallaxCorrectedCubemapBase *creator ) :
         mProbeCameraPos( Vector3::ZERO ),
-        mArea( Aabb::BOX_NULL ),
+        mArea( Aabb::BOX_ZERO ),
         mAreaInnerRegion( Vector3::ZERO ),
         mOrientation( Matrix3::IDENTITY ),
         mInvOrientation( Matrix3::IDENTITY ),
-        mProbeShape( Aabb::BOX_NULL ),
+        mProbeShape( Aabb::BOX_ZERO ),
         mTexture( 0 ),
         mCubemapArrayIdx( std::numeric_limits<uint32>::max() ),
         mMsaa( 1u ),
