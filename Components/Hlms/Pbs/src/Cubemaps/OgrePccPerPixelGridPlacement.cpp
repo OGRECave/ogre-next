@@ -217,29 +217,30 @@ namespace Ogre
 
         const Vector3 camCenter( probe->getProbeCameraPos() );
         const Vector3 camCenterLS( probe->getInvOrientation() * ( camCenter - probeShapeCenter ) );
-        Vector3 probeAreaMax;
-        Vector3 probeAreaMin;
-        probeAreaMax.x = camCenterLS.x + ( mFullRegion.mHalfSize.x - camCenterLS.x ) *
-                                             colourVal[CubemapSide::PX].a * 2.0f;
-        probeAreaMin.x = camCenterLS.x + ( -mFullRegion.mHalfSize.x - camCenterLS.x ) *
-                                             colourVal[CubemapSide::NX].a * 2.0f;
-        probeAreaMax.y = camCenterLS.y + ( mFullRegion.mHalfSize.y - camCenterLS.y ) *
-                                             colourVal[CubemapSide::PY].a * 2.0f;
-        probeAreaMin.y = camCenterLS.y + ( -mFullRegion.mHalfSize.y - camCenterLS.y ) *
-                                             colourVal[CubemapSide::NY].a * 2.0f;
-        probeAreaMax.z = camCenterLS.z + ( mFullRegion.mHalfSize.z - camCenterLS.z ) *
-                                             colourVal[CubemapSide::PZ].a * 2.0f;
-        probeAreaMin.z = camCenterLS.z + ( -mFullRegion.mHalfSize.z - camCenterLS.z ) *
-                                             colourVal[CubemapSide::NZ].a * 2.0f;
-        probeAreaMin += probeShapeCenter;
-        probeAreaMax += probeShapeCenter;
+        Vector3 probeShapeMax;
+        Vector3 probeShapeMin;
+        probeShapeMax.x = camCenterLS.x + ( mFullRegion.mHalfSize.x - camCenterLS.x ) *
+                                              colourVal[CubemapSide::PX].a * 2.0f;
+        probeShapeMin.x = camCenterLS.x + ( -mFullRegion.mHalfSize.x - camCenterLS.x ) *
+                                              colourVal[CubemapSide::NX].a * 2.0f;
+        probeShapeMax.y = camCenterLS.y + ( mFullRegion.mHalfSize.y - camCenterLS.y ) *
+                                              colourVal[CubemapSide::PY].a * 2.0f;
+        probeShapeMin.y = camCenterLS.y + ( -mFullRegion.mHalfSize.y - camCenterLS.y ) *
+                                              colourVal[CubemapSide::NY].a * 2.0f;
+        probeShapeMax.z = camCenterLS.z + ( mFullRegion.mHalfSize.z - camCenterLS.z ) *
+                                              colourVal[CubemapSide::PZ].a * 2.0f;
+        probeShapeMin.z = camCenterLS.z + ( -mFullRegion.mHalfSize.z - camCenterLS.z ) *
+                                              colourVal[CubemapSide::NZ].a * 2.0f;
+        probeShapeMin *= 1.01f; // Padding
+        probeShapeMax *= 1.01f; // Padding
+        probeShapeMin += probeShapeCenter;
+        probeShapeMax += probeShapeCenter;
 
-        snapToFullRegion( probeAreaMin, probeAreaMax );
-        snapToSides( probeIdx, probeAreaMin, probeAreaMax );
+        snapToFullRegion( probeShapeMin, probeShapeMax );
+        snapToSides( probeIdx, probeShapeMin, probeShapeMax );
 
         Aabb probeShape;
-        probeShape.setExtents( probeAreaMin, probeAreaMax );
-        probeShape.mHalfSize *= 1.05f;
+        probeShape.setExtents( probeShapeMin, probeShapeMax );
         Aabb area( camCenter, probeAreaHalfSize );
         probe->set( camCenter, area, Vector3( 0.5f ), Matrix3::IDENTITY, probeShape );
     }

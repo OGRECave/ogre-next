@@ -239,10 +239,16 @@ namespace Ogre
     {
         if( !mInternalProbe )
             return;
+
+        Vector3 restrictedAabbMin( mArea.getMinimum() );
+        Vector3 restrictedAabbMax( mArea.getMaximum() );
+        restrictedAabbMin.makeCeil( mProbeShape.getMinimum() );
+        restrictedAabbMax.makeCeil( mProbeShape.getMaximum() );
+
         Quaternion qRot( mOrientation );
         SceneNode *sceneNode = mInternalProbe->getParentSceneNode();
-        sceneNode->setPosition( mArea.mCenter );
-        sceneNode->setScale( mArea.mHalfSize * 2.0f );
+        sceneNode->setPosition( ( restrictedAabbMin + restrictedAabbMax ) * 0.5f );
+        sceneNode->setScale( restrictedAabbMax - restrictedAabbMin );
         sceneNode->setOrientation( qRot );
 
         mCreator->fillConstBufferData( *this, Matrix4::IDENTITY, Matrix3::IDENTITY,
