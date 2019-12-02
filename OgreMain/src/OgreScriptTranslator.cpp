@@ -1894,6 +1894,7 @@ namespace Ogre{
                             Pass::_getBlendFlags( sbt1,
                                                   blendblock.mSourceBlendFactorAlpha,
                                                   blendblock.mDestBlendFactorAlpha );
+                            blendblock.mSeparateBlend = true;
                         }
                         else
                         {
@@ -1915,6 +1916,8 @@ namespace Ogre{
                                 compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
                                                    "one of the arguments to separate_scene_blend is not a valid scene blend factor directive");
                             }
+                            else
+                                blendblock.mSeparateBlend = true;
                         }
                         else
                         {
