@@ -19,7 +19,6 @@ namespace Demo
     {
         Ogre::SceneNode *mLightNodes[3];
 
-        Ogre::PccPerPixelGridPlacement *mPccGridPlacement;
         Ogre::ParallaxCorrectedCubemapAuto *mParallaxCorrectedCubemap;
         bool mUseDpm2DArray;
 

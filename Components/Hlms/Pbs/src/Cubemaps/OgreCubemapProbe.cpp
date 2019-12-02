@@ -59,7 +59,7 @@ namespace Ogre
         mInvOrientation( Matrix3::IDENTITY ),
         mProbeShape( Aabb::BOX_ZERO ),
         mTexture( 0 ),
-        mCubemapArrayIdx( std::numeric_limits<uint32>::max() ),
+        mCubemapArrayIdx( std::numeric_limits<uint16>::max() ),
         mMsaa( 1u ),
         mWorkspaceMipmapsExecMask( 0x01 ),
         mClearWorkspace( 0 ),
