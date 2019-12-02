@@ -34,7 +34,6 @@ namespace Demo
     PccPerPixelGridPlacementGameState::PccPerPixelGridPlacementGameState(
         const Ogre::String &helpDescription ) :
         TutorialGameState( helpDescription ),
-        mPccGridPlacement( 0 ),
         mParallaxCorrectedCubemap( 0 ),
         mUseDpm2DArray( false )
     {
@@ -64,16 +63,18 @@ namespace Demo
         mParallaxCorrectedCubemap = new Ogre::ParallaxCorrectedCubemapAuto(
             Ogre::Id::generateNewId<Ogre::ParallaxCorrectedCubemapAuto>(), root, sceneManager,
             workspaceDef );
-        mPccGridPlacement = new Ogre::PccPerPixelGridPlacement();
+
         mParallaxCorrectedCubemap->setUseDpm2DArray( mUseDpm2DArray );
-        mPccGridPlacement->setParallaxCorrectedCubemapAuto( mParallaxCorrectedCubemap );
-        Ogre::Aabb aabb( Ogre::Vector3::ZERO, Ogre::Vector3( 0.5f ) );
-        mPccGridPlacement->setFullRegion( aabb );
-        mPccGridPlacement->setOverlap( Ogre::Vector3( 1.25f ) );
-        mPccGridPlacement->buildStart( 256u, mGraphicsSystem->getCamera(), Ogre::PFG_RGBA8_UNORM_SRGB,
-                                       0.02f, 10.0f );
-        mPccGridPlacement->buildEnd();
         mUseDpm2DArray = mParallaxCorrectedCubemap->getUseDpm2DArray();  // Setting may be overriden
+
+        Ogre::PccPerPixelGridPlacement pccGridPlacement;
+        Ogre::Aabb aabb( Ogre::Vector3::ZERO, Ogre::Vector3( 0.5f ) );
+        pccGridPlacement.setFullRegion( aabb );
+        pccGridPlacement.setOverlap( Ogre::Vector3( 1.25f ) );
+        pccGridPlacement.setParallaxCorrectedCubemapAuto( mParallaxCorrectedCubemap );
+        pccGridPlacement.buildStart( 256u, mGraphicsSystem->getCamera(), Ogre::PFG_RGBA8_UNORM_SRGB,
+                                     0.02f, 10.0f );
+        pccGridPlacement.buildEnd();
 
         hlmsPbs->setParallaxCorrectedCubemap( mParallaxCorrectedCubemap );
     }
@@ -171,9 +172,6 @@ namespace Demo
         assert( dynamic_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
         Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) );
         hlmsPbs->setParallaxCorrectedCubemap( 0 );
-
-        delete mPccGridPlacement;
-        mPccGridPlacement = 0;
 
         delete mParallaxCorrectedCubemap;
         mParallaxCorrectedCubemap = 0;
