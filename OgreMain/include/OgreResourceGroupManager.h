@@ -190,7 +190,7 @@ namespace Ogre {
                 By overriding this class' methods, you can change how resources
                 are loaded and the behavior for resource name collisions.
     */
-    class ResourceLoadingListener
+    class _OgreExport ResourceLoadingListener
     {
     public:
         virtual ~ResourceLoadingListener();
