@@ -1241,7 +1241,7 @@ namespace Ogre
                 texDef->height  = pointLightCubemapResolution;
                 texDef->depthOrSlices = 6u;
                 texDef->textureType = TextureTypes::TypeCube;
-                texDef->format = PFG_R32_FLOAT;
+                texDef->format = useEsm ? PFG_R16_UNORM : PFG_R32_FLOAT;
                 texDef->depthBufferId = 1u;
                 texDef->depthBufferFormat = PFG_D32_FLOAT;
                 texDef->preferDepthTexture = false;
@@ -1382,7 +1382,7 @@ namespace Ogre
                     CompositorPassDef *passDef = targetDef->addPass( PASS_QUAD );
                     CompositorPassQuadDef *passQuad = static_cast<CompositorPassQuadDef*>( passDef );
                     passQuad->mMaterialIsHlms = false;
-                    passQuad->mMaterialName = "Ogre/DPSM/CubeToDpsm";
+                    passQuad->mMaterialName = useEsm ? "Ogre/DPSM/CubeToDpsmColour" : "Ogre/DPSM/CubeToDpsm";
                     passQuad->addQuadTextureSource( 0, "tmpCubemap" );
                     passQuad->mShadowMapIdx = shadowMapIdx;
                 }
