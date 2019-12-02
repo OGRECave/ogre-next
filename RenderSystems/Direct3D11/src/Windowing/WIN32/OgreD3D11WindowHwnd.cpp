@@ -151,8 +151,8 @@ namespace Ogre
         sd.BufferUsage  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 
         sd.BufferCount = _getSwapChainBufferCount();
-        sd.SwapEffect   = mUseFlipMode ? DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL :
-                                         DXGI_SWAP_EFFECT_DISCARD;
+        sd.SwapEffect   = !mUseFlipMode ? DXGI_SWAP_EFFECT_DISCARD :
+            IsWindows10OrGreater() ? DXGI_SWAP_EFFECT_FLIP_DISCARD : DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
     }
     //-----------------------------------------------------------------------------------
     HRESULT D3D11WindowHwnd::_createSwapChainImpl(void)

@@ -32,6 +32,7 @@ THE SOFTWARE.
 
 #include "OgreRoot.h"
 #include "OgreLogManager.h"
+#include "OgreOSVersionHelpers.h"
 
 #include <iomanip>
 
@@ -136,7 +137,7 @@ namespace Ogre
 #else
         desc.BufferCount          = 2;                                // Use two buffers to enable flip effect.
         desc.Scaling              = DXGI_SCALING_NONE;                // Otherwise stretch would be used by default.
-        desc.SwapEffect           = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL; // MS recommends using this swap effect for all applications.
+        desc.SwapEffect           = IsWindows10OrGreater() ? DXGI_SWAP_EFFECT_FLIP_DISCARD : DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
 #endif
         desc.AlphaMode            = DXGI_ALPHA_MODE_UNSPECIFIED;
 
@@ -280,7 +281,7 @@ namespace Ogre
         desc.BufferUsage          = DXGI_USAGE_RENDER_TARGET_OUTPUT;
         desc.BufferCount          = 2;                                // Use two buffers to enable flip effect.
         desc.Scaling              = DXGI_SCALING_STRETCH;             // Required for CreateSwapChainForComposition.
-        desc.SwapEffect           = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL; // MS recommends using this swap effect for all applications.
+        desc.SwapEffect           = IsWindows10OrGreater() ? DXGI_SWAP_EFFECT_FLIP_DISCARD : DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
         desc.AlphaMode            = DXGI_ALPHA_MODE_UNSPECIFIED;
 
         // Create swap chain
