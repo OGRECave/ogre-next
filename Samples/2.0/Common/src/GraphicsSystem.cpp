@@ -888,8 +888,8 @@ namespace Demo
                                           gEnt->mTransform[currIdx]->vScale, mThreadWeight );
             gEnt->mSceneNode->setScale( interpVec );
 
-            Ogre::Quaternion interpQ = Ogre::Math::lerp( gEnt->mTransform[prevIdx]->qRot,
-                                                         gEnt->mTransform[currIdx]->qRot, mThreadWeight );
+            Ogre::Quaternion interpQ = Ogre::Quaternion::nlerp(
+                mThreadWeight, gEnt->mTransform[prevIdx]->qRot, gEnt->mTransform[currIdx]->qRot, true );
             gEnt->mSceneNode->setOrientation( interpQ );
 
             ++itor;
