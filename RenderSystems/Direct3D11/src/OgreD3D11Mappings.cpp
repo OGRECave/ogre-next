@@ -550,11 +550,11 @@ namespace Ogre
         case PF_R8G8B8:         return DXGI_FORMAT_UNKNOWN;
         case PF_A8R8G8B8:       return DXGI_FORMAT_B8G8R8A8_UNORM;
         case PF_A8B8G8R8:       return DXGI_FORMAT_R8G8B8A8_UNORM;
+        case PF_X8R8G8B8:       return DXGI_FORMAT_B8G8R8X8_UNORM;
+        case PF_X8B8G8R8:       return DXGI_FORMAT_UNKNOWN;
         case PF_R8G8B8A8_SNORM: return DXGI_FORMAT_R8G8B8A8_SNORM;
         case PF_R8G8B8A8_UINT:  return DXGI_FORMAT_R8G8B8A8_UINT;
         case PF_R8G8B8A8_SINT:  return DXGI_FORMAT_R8G8B8A8_SINT;
-        case PF_X8R8G8B8:       return DXGI_FORMAT_UNKNOWN;
-        case PF_X8B8G8R8:       return DXGI_FORMAT_UNKNOWN;
         case PF_A2B10G10R10:    return DXGI_FORMAT_R10G10B10A2_UNORM;
         case PF_A2R10G10B10:    return DXGI_FORMAT_R10G10B10A2_UNORM;
         case PF_R16G16B16_SNORM:return DXGI_FORMAT_R16G16B16A16_SNORM;
@@ -623,6 +623,8 @@ namespace Ogre
         }
         switch(ogrePF)
         {
+        case PF_R8G8B8:
+            return PF_X8R8G8B8;
         case PF_FLOAT16_RGB:
             return PF_FLOAT16_RGBA;
         case PF_FLOAT32_RGB:
