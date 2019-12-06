@@ -224,6 +224,7 @@
 
 @piece( DefaultBodyVS )
 	@property( !hlms_pose )#define inputPos inVs_vertex@end
+	//This newline is required else the Hlms parser will put '#define a #define b' in the same line
 	@property( !hlms_pose_normals )#define inputNormal normal@end
 
 	@property( !hlms_skeleton && !hlms_pose )
