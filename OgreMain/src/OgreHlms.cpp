@@ -170,6 +170,8 @@ namespace Ogre
     const IdString HlmsBaseProp::Forward3D          = IdString( "forward3d" );
     const IdString HlmsBaseProp::ForwardClustered   = IdString( "forward_clustered" );
     const IdString HlmsBaseProp::VPos               = IdString( "hlms_vpos" );
+    const IdString HlmsBaseProp::ScreenPosInt       = IdString( "hlms_screen_pos_int" );
+    const IdString HlmsBaseProp::ScreenPosUv        = IdString( "hlms_screen_pos_uv" );
     const IdString HlmsBaseProp::VertexId           = IdString( "hlms_vertex_id" );
 
     //Change per material (hash can be cached on the renderable)
@@ -2958,6 +2960,8 @@ namespace Ogre
         {
             setProperty( HlmsBaseProp::UsePrePass, 1 );
             setProperty( HlmsBaseProp::VPos, 1 );
+
+            setProperty( HlmsBaseProp::ScreenPosInt, 1 );
 
             {
                 const TextureGpuVec &prePassTextures = sceneManager->getCurrentPrePassTextures();

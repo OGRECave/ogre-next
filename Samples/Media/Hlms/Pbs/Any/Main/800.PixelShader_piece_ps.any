@@ -561,6 +561,16 @@
 
 @property( !hlms_shadowcaster )
 @piece( DefaultBodyPS )
+	@property( hlms_screen_pos_uv )
+		float2 screenPosUv = gl_FragCoord.xy * passBuf.invWindowRes.xy;
+	@end
+	@property( hlms_screen_pos_int )
+		rshort2 iFragCoord =
+			rshort2( gl_FragCoord.x,
+					 @property( !hlms_forwardplus_flipY && syntax == glsl )passBuf.windowHeight.x - @end
+					 gl_FragCoord.y );
+	@end
+
 	@property( hlms_normal || hlms_qtangent )
 		PixelData pixelData;
 
@@ -603,10 +613,6 @@
 			@insertpiece( DoDirectionalShadowMaps )
 
 		@end @property( hlms_use_prepass )
-			rshort2 iFragCoord = rshort2( gl_FragCoord.x,
-										  @property( !hlms_forwardplus_flipY && syntax == glsl )passBuf.windowHeight.x - @end
-										  gl_FragCoord.y );
-
 			@property( hlms_use_prepass_msaa )
 				//SV_Coverage/gl_SampleMaskIn is always before depth & stencil tests,
 				//so we need to perform the test ourselves
@@ -730,6 +736,8 @@
 			@property( needs_env_brdf )
 				@insertpiece( BRDF_EnvMap )
 			@end
+
+			@insertpiece( applyRefractions )
 		@end ///!hlms_prepass
 
 	@end ///!hlms_normal || hlms_qtangent

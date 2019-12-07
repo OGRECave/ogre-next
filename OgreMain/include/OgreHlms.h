@@ -897,6 +897,8 @@ namespace Ogre
         static const IdString Forward3D;
         static const IdString ForwardClustered;
         static const IdString VPos;
+        static const IdString ScreenPosInt;
+        static const IdString ScreenPosUv;
         static const IdString VertexId;
 
         //Change per material (hash can be cached on the renderable)
