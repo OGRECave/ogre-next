@@ -234,8 +234,8 @@ namespace Ogre
             *vertexData++ = static_cast<float>( mPosition.y );
             if( bHasNormals )
             {
-                for( size_t i = 0u; i < 3u; ++i )
-                    *vertexData++ = mNormals[0][i];
+                for( size_t j = 0u; j < 3u; ++j )
+                    *vertexData++ = mNormals[0][j];
             }
 
             // Top left
@@ -243,8 +243,8 @@ namespace Ogre
             *vertexData++ = static_cast<float>( mPosition.y + mSize.y );
             if( bHasNormals )
             {
-                for( size_t i = 0u; i < 3u; ++i )
-                    *vertexData++ = mNormals[1][i];
+                for( size_t j = 0u; j < 3u; ++j )
+                    *vertexData++ = mNormals[1][j];
             }
 
             // Bottom right
@@ -252,8 +252,8 @@ namespace Ogre
             *vertexData++ = static_cast<float>( mPosition.y );
             if( bHasNormals )
             {
-                for( size_t i = 0u; i < 3u; ++i )
-                    *vertexData++ = mNormals[2][i];
+                for( size_t j = 0u; j < 3u; ++j )
+                    *vertexData++ = mNormals[2][j];
             }
 
             if( isQuad() )
@@ -263,8 +263,8 @@ namespace Ogre
                 *vertexData++ = static_cast<float>( mPosition.y + mSize.y );
                 if( bHasNormals )
                 {
-                    for( size_t i = 0u; i < 3u; ++i )
-                        *vertexData++ = mNormals[3][i];
+                    for( size_t j = 0u; j < 3u; ++j )
+                        *vertexData++ = mNormals[3][j];
                 }
             }
         }
