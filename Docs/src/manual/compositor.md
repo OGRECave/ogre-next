@@ -356,9 +356,6 @@ architectures where the Z buffer is tied with the stencil buffer,
 clearing only the Z buffer hinders the driver from discarding the buffer
 entirely or using fast Z clears.
 
-Additionally, all passes can define the viewport area they will work on,
-meaning clearing specific regions is now possible.
-
 ### generate_mipmaps {#CompositorNodesPassesGenerateMipmaps}
 
 Generate\_mipmaps doesn't have special parameters other than the shared
