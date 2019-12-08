@@ -2,16 +2,18 @@
 #include "/media/matias/Datos/SyntaxHighlightingMisc.h"
 
 @property( hlms_screen_space_refractions )
-@piece( applyRefractions )
-	float3 OGRE_refract( float3 viewDir, float3 normal, float refractionIndex, float NdotV )
-	{
-		float k = 1.0 - refractionIndex * refractionIndex * (1.0 - NdotV  * NdotV);
-		if( k < 0.0 )
-			out = float3( 0, 0, 0 );
-		else
-			out = -refractionIndex * viewDir - (sqrtf( k ) - refractionIndex * NdotV) * normal;
-	}
+@piece( DeclRefractionsFuncs )
+    float3 OGRE_refract( float3 viewDir, float3 normal, float refractionIndex, float NdotV )
+    {
+        float k = 1.0 - refractionIndex * refractionIndex * (1.0 - NdotV  * NdotV);
+        if( k < 0.0 )
+            out = float3( 0, 0, 0 );
+        else
+            out = -refractionIndex * viewDir - (sqrtf( k ) - refractionIndex * NdotV) * normal;
+    }
+@end
 
+@piece( applyRefractions )
 	// refractNormal must be in view space, and we ignore .z component
 	float3 refractNormal2d = OGRE_refract( pixelData.viewDir, pixelData.normal, pixelData.NdotV ).xy;
 	float2 refractUv = screenPosUv.xy + refractNormal2d.xy * material.refractionStrength;
@@ -29,6 +31,12 @@
 			refractionCol = OGRE_Load2D( refractionMap, iFragCoord.xy ).xyz;
 		}
 
-	finalColour += refractionCol.xyz * (1.0 - pixelData.diffuse.w);
+    @property( use_texture_alpha )
+        float refractionAlpha = material.F0.w * pixelData.diffuse.w;
+    @else
+        float refractionAlpha = material.F0.w;
+    @end
+
+    finalColour += refractionCol.xyz * (1.0 - refractionAlpha);
 @end
 @end

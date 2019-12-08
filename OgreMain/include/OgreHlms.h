@@ -905,6 +905,7 @@ namespace Ogre
         static const IdString AlphaTest;
         static const IdString AlphaTestShadowCasterOnly;
         static const IdString AlphaBlend;
+        static const IdString ScreenSpaceRefractions;
 
         //Standard depth range is being used instead of reverse Z.
         static const IdString NoReverseDepth;

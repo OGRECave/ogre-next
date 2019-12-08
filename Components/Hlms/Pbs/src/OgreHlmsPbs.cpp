@@ -607,6 +607,14 @@ namespace Ogre
         if( datablock->getReceiveShadows() )
             setProperty( PbsProperty::ReceiveShadows, 1 );
 
+        if( datablock->mTransparencyMode == HlmsPbsDatablock::Refractive )
+        {
+            setProperty( HlmsBaseProp::ScreenSpaceRefractions, 1 );
+            setProperty( HlmsBaseProp::VPos, 1 );
+            setProperty( HlmsBaseProp::ScreenPosInt, 1 );
+            setProperty( HlmsBaseProp::ScreenPosUv, 1 );
+        }
+
         uint32 brdf = datablock->getBrdf();
         if( (brdf & PbsBrdf::BRDF_MASK) == PbsBrdf::Default )
         {
@@ -799,8 +807,11 @@ namespace Ogre
             }
         }
 
-        if( datablock->mUseAlphaFromTextures && datablock->mBlendblock[0]->mIsTransparent &&
-            (getProperty( PbsProperty::DiffuseMap ) || getProperty( PbsProperty::DetailMapsDiffuse )) )
+        if( datablock->mUseAlphaFromTextures &&
+            ( datablock->mBlendblock[0]->mIsTransparent ||  //
+              datablock->mTransparencyMode == HlmsPbsDatablock::Refractive ) &&
+            ( getProperty( PbsProperty::DiffuseMap ) ||  //
+              getProperty( PbsProperty::DetailMapsDiffuse ) ) )
         {
             setProperty( PbsProperty::UseTextureAlpha, 1 );
 
@@ -1476,6 +1487,9 @@ namespace Ogre
             //float4 pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_unused;
             mapSize += 4u * 4u;
 
+            //float2 invWindowRes + float2 windowResolution
+            mapSize += 4u * 4u;
+
             //vec4 shadowRcv[numShadowMapLights].texViewZRow
             if( mShadowFilter == ExponentialShadowMaps )
                 mapSize += (4 * 4) * numShadowMapLights;
@@ -1483,10 +1497,6 @@ namespace Ogre
             //vec4 pixelOffset2x
             if( passSceneDef && passSceneDef->mUvBakingSet != 0xFF )
                 mapSize += 4u * 4u;
-
-            //float windowHeight + padding
-            if( !mPrePassTextures->empty() )
-                mapSize += 4 * 4;
 
             //vec3 ambientUpperHemi + float envMapScale
             if( ambientMode == AmbientFixed || ambientMode == AmbientHemisphere ||
@@ -1794,13 +1804,13 @@ namespace Ogre
             *passBufferPtr++ = currViewports[1].getActualLeft();
             *passBufferPtr++ = 0.0f;
 
-            if( !mPrePassTextures->empty() )
             {
-                //vec4 windowHeight
+                //float2 invWindowRes + float2 windowResolution;
+                const float windowWidth = renderTarget->getWidth();
                 const float windowHeight = renderTarget->getHeight();
-                *passBufferPtr++ = windowHeight;
-                *passBufferPtr++ = windowHeight;
-                *passBufferPtr++ = windowHeight;
+                *passBufferPtr++ = 1.0f / windowWidth;
+                *passBufferPtr++ = 1.0f / windowHeight;
+                *passBufferPtr++ = windowWidth;
                 *passBufferPtr++ = windowHeight;
             }
 

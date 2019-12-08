@@ -845,7 +845,7 @@ namespace Ogre
                 newBlendblock.mSourceBlendFactor    = SBF_ONE;
                 newBlendblock.mDestBlendFactor      = SBF_ZERO;
             }
-            else if( mTransparencyMode == Transparent )
+            else if( mTransparencyMode == Transparent || mTransparencyMode == Refractive )
             {
                 newBlendblock.mSourceBlendFactor    = SBF_ONE;
                 newBlendblock.mDestBlendFactor      = SBF_ONE_MINUS_SOURCE_ALPHA;

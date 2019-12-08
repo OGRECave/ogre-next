@@ -182,7 +182,14 @@ namespace Ogre
 
             /// Good 'ol regular alpha blending. Ideal for just fading out an
             /// object until it completely disappears.
-            Fade
+            Fade,
+
+            /// Similar to transparent, but also performs refractions.
+            /// The compositor scene pass must be set to render refractive
+            /// objects in its own pass.
+            ///
+            /// See Samples/2.0/ApiUsage/Refractions
+            Refractive
         };
 
         enum Workflows

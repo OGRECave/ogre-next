@@ -123,6 +123,7 @@
 
 	@insertpiece( DeclVctFuncs )
 	@insertpiece( DeclIrradianceFieldFuncs )
+	@insertpiece( DeclRefractionsFuncs )
 @end
 
 
@@ -567,7 +568,7 @@
 	@property( hlms_screen_pos_int )
 		rshort2 iFragCoord =
 			rshort2( gl_FragCoord.x,
-					 @property( !hlms_forwardplus_flipY && syntax == glsl )passBuf.windowHeight.x - @end
+					 @property( !hlms_forwardplus_flipY && syntax == glsl )passBuf.windowResolution.y - @end
 					 gl_FragCoord.y );
 	@end
 

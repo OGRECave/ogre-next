@@ -178,6 +178,7 @@ namespace Ogre
     const IdString HlmsBaseProp::AlphaTest                 = IdString( "alpha_test" );
     const IdString HlmsBaseProp::AlphaTestShadowCasterOnly = IdString( "alpha_test_shadow_caster_only" );
     const IdString HlmsBaseProp::AlphaBlend     = IdString( "hlms_alphablend" );
+    const IdString HlmsBaseProp::ScreenSpaceRefractions    = IdString( "hlms_screen_space_refractions" );
 
     const IdString HlmsBaseProp::NoReverseDepth = IdString( "hlms_no_reverse_depth" );
 
