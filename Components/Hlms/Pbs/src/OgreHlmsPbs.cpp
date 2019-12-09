@@ -258,7 +258,9 @@ namespace Ogre
         mGlobalLightListBuffer( 0 ),
         mTexUnitSlotStart( 0 ),
         mPrePassTextures( 0 ),
+        mDepthTexture( 0 ),
         mSsrTexture( 0 ),
+        mRefractionsTexture( 0 ),
         mIrradianceVolume( 0 ),
         mVctLighting( 0 ),
         mIrradianceField( 0 ),
@@ -995,17 +997,38 @@ namespace Ogre
             setTextureReg( PixelShader, "f3dLightList", texUnit++ );
         }
 
+        bool depthTextureDefined = false;
+
         if( getProperty( HlmsBaseProp::UsePrePass ) )
         {
             setTextureReg( PixelShader, "gBuf_normals",         texUnit++ );
             setTextureReg( PixelShader, "gBuf_shadowRoughness", texUnit++ );
 
             if( getProperty( HlmsBaseProp::UsePrePassMsaa ) )
+            {
                 setTextureReg( PixelShader, "gBuf_depthTexture", texUnit++ );
+                depthTextureDefined = true;
+            }
 
             if( getProperty( HlmsBaseProp::UseSsr ) )
                 setTextureReg( PixelShader, "ssrTexture", texUnit++ );
         }
+
+        const bool refractionsAvailable = getProperty( HlmsBaseProp::SsRefractionsAvailable );
+        if( refractionsAvailable )
+        {
+            if( !depthTextureDefined )
+            {
+                setTextureReg( PixelShader, "gBuf_depthTexture", texUnit++ );
+                depthTextureDefined = true;
+            }
+            setTextureReg( PixelShader, "refractionMap", texUnit++ );
+        }
+
+        OGRE_ASSERT_HIGH(
+            ( refractionsAvailable || getProperty( HlmsBaseProp::ScreenSpaceRefractions ) == 0 ) &&
+            "A material that uses refractions is used in a pass where refractions are unavailable! See "
+            "Samples/2.0/ApiUsage/Refractions for which pass refractions must be rendered in" );
 
         if( getProperty( PbsProperty::IrradianceVolumes ) &&
             getProperty( HlmsBaseProp::ShadowCaster ) == 0 )
@@ -1245,9 +1268,16 @@ namespace Ogre
                     "Prepass + MSAA must specify an MSAA depth texture" );
         }
 
+        mDepthTexture = sceneManager->getCurrentPrePassDepthTexture();
+
         mSsrTexture = sceneManager->getCurrentSsrTexture();
         assert( !(mPrePassTextures->empty() && mSsrTexture) &&
                 "Using SSR *requires* to be in prepass mode" );
+
+        mRefractionsTexture = sceneManager->getCurrentRefractionsTexture();
+
+        OGRE_ASSERT_LOW( ( !mRefractionsTexture || ( mRefractionsTexture && mDepthTexture ) ) &&
+                         "Refractions texture requires a depth texture!" );
 
         const bool vctNeedsAmbientHemi = !casterPass && mVctLighting &&
                                          mVctLighting->needsAmbientHemisphere();
@@ -2390,7 +2420,11 @@ namespace Ogre
                 mTexUnitSlotStart += 2;
             if( mPrePassMsaaDepthTexture )
                 mTexUnitSlotStart += 1;
+            if( mDepthTexture )
+                mTexUnitSlotStart += 1;
             if( mSsrTexture )
+                mTexUnitSlotStart += 1;
+            if( mRefractionsTexture )
                 mTexUnitSlotStart += 1;
             if( mAreaLightMasks && getProperty( HlmsBaseProp::LightsAreaTexMask ) > 0 )
             {
@@ -2502,10 +2536,22 @@ namespace Ogre
                             CbTexture( texUnit++, mPrePassMsaaDepthTexture, 0 );
                 }
 
+                if( mDepthTexture )
+                {
+                    *commandBuffer->addCommand<CbTexture>() =
+                            CbTexture( texUnit++, mDepthTexture, mDecalsSamplerblock );
+                }
+
                 if( mSsrTexture )
                 {
                     *commandBuffer->addCommand<CbTexture>() =
                             CbTexture( texUnit++, mSsrTexture, 0 );
+                }
+
+                if( mRefractionsTexture )
+                {
+                    *commandBuffer->addCommand<CbTexture>() =
+                            CbTexture( texUnit++, mRefractionsTexture, mDecalsSamplerblock );
                 }
 
                 if( mIrradianceVolume )

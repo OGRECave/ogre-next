@@ -409,6 +409,7 @@ namespace Ogre {
         TextureGpuVec   mPrePassTextures;
         TextureGpu      *mPrePassDepthTexture;
         TextureGpu      *mSsrTexture;
+        TextureGpu      *mRefractionsTexture;
 
         /// See CompositorPassSceneDef::mUvBakingSet
         uint8       mUvBakingSet;
@@ -1309,6 +1310,7 @@ namespace Ogre {
         const TextureGpuVec& getCurrentPrePassTextures(void) const  { return mPrePassTextures; }
         TextureGpu* getCurrentPrePassDepthTexture(void) const       { return mPrePassDepthTexture; }
         TextureGpu* getCurrentSsrTexture(void) const                { return mSsrTexture; }
+        TextureGpu* getCurrentRefractionsTexture(void) const        { return mRefractionsTexture; }
 
 
 

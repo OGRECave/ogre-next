@@ -129,7 +129,10 @@ namespace Ogre
 
         TextureGpuVec const     *mPrePassTextures;
         TextureGpu              *mPrePassMsaaDepthTexture;
+        /// Used by techniques: Refractions
+        TextureGpu              *mDepthTexture;
         TextureGpu              *mSsrTexture;
+        TextureGpu              *mRefractionsTexture;
         IrradianceVolume        *mIrradianceVolume;
         VctLighting             *mVctLighting;
         IrradianceField         *mIrradianceField;

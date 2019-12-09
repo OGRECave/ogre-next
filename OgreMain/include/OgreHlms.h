@@ -876,6 +876,8 @@ namespace Ogre
         static const IdString UsePrePass;
         static const IdString UsePrePassMsaa;
         static const IdString UseSsr;
+        // Per pass. Related with ScreenSpaceRefractions
+        static const IdString SsRefractionsAvailable;
         static const IdString EnableVpls;
         static const IdString ForwardPlus;
         static const IdString ForwardPlusFlipY;
@@ -905,6 +907,7 @@ namespace Ogre
         static const IdString AlphaTest;
         static const IdString AlphaTestShadowCasterOnly;
         static const IdString AlphaBlend;
+        // Per material. Related with SsRefractionsAvailable
         static const IdString ScreenSpaceRefractions;
 
         //Standard depth range is being used instead of reverse Z.

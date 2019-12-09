@@ -147,6 +147,7 @@ namespace Ogre
     const IdString HlmsBaseProp::UsePrePass         = IdString( "hlms_use_prepass" );
     const IdString HlmsBaseProp::UsePrePassMsaa     = IdString( "hlms_use_prepass_msaa" );
     const IdString HlmsBaseProp::UseSsr             = IdString( "hlms_use_ssr" );
+    const IdString HlmsBaseProp::SsRefractionsAvailable = IdString( "hlms_ss_refractions_available" );
     const IdString HlmsBaseProp::EnableVpls         = IdString( "hlms_enable_vpls" );
     const IdString HlmsBaseProp::ForwardPlus        = IdString( "hlms_forwardplus" );
     const IdString HlmsBaseProp::ForwardPlusFlipY   = IdString( "hlms_forwardplus_flipY" );
@@ -2973,6 +2974,9 @@ namespace Ogre
 
             if( sceneManager->getCurrentSsrTexture() != 0 )
                 setProperty( HlmsBaseProp::UseSsr, 1 );
+
+            if( sceneManager->getCurrentRefractionsTexture() != 0 )
+                setProperty( HlmsBaseProp::SsRefractionsAvailable, 1 );
         }
 
         mListener->preparePassHash( shadowNode, casterPass, dualParaboloid, sceneManager, this );

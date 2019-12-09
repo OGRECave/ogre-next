@@ -3,14 +3,14 @@
 
 @property( hlms_screen_space_refractions )
 @piece( DeclRefractionsFuncs )
-    float3 OGRE_refract( float3 viewDir, float3 normal, float refractionIndex, float NdotV )
-    {
-        float k = 1.0 - refractionIndex * refractionIndex * (1.0 - NdotV  * NdotV);
-        if( k < 0.0 )
-            out = float3( 0, 0, 0 );
-        else
-            out = -refractionIndex * viewDir - (sqrtf( k ) - refractionIndex * NdotV) * normal;
-    }
+	float3 OGRE_refract( float3 viewDir, float3 normal, float refractionIndex, float NdotV )
+	{
+		float k = 1.0 - refractionIndex * refractionIndex * (1.0 - NdotV  * NdotV);
+		if( k < 0.0 )
+			out = float3( 0, 0, 0 );
+		else
+			out = -refractionIndex * viewDir - (sqrtf( k ) - refractionIndex * NdotV) * normal;
+	}
 @end
 
 @piece( applyRefractions )
@@ -18,7 +18,7 @@
 	float3 refractNormal2d = OGRE_refract( pixelData.viewDir, pixelData.normal, pixelData.NdotV ).xy;
 	float2 refractUv = screenPosUv.xy + refractNormal2d.xy * material.refractionStrength;
 	float3 refractionCol = OGRE_SampleLevel( refractionMap, refractionMapSampler, refractUv, 0 ).xyz;
-	float refractionDepth = OGRE_SampleLevel( depthBuffer, refractionMapSampler, refractUv, 0 ).x;
+	float refractionDepth = OGRE_SampleLevel( gBuf_depthTexture, refractionMapSampler, refractUv, 0 ).x;
 
 	@property( hlms_no_reverse_depth )
 		if( refractionDepth < gl_FragCoord.z )
@@ -31,12 +31,12 @@
 			refractionCol = OGRE_Load2D( refractionMap, iFragCoord.xy ).xyz;
 		}
 
-    @property( use_texture_alpha )
-        float refractionAlpha = material.F0.w * pixelData.diffuse.w;
-    @else
-        float refractionAlpha = material.F0.w;
-    @end
+	@property( use_texture_alpha )
+		float refractionAlpha = material.F0.w * pixelData.diffuse.w;
+	@else
+		float refractionAlpha = material.F0.w;
+	@end
 
-    finalColour += refractionCol.xyz * (1.0 - refractionAlpha);
+	finalColour += refractionCol.xyz * (1.0 - refractionAlpha);
 @end
 @end
