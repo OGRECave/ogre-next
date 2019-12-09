@@ -200,6 +200,7 @@ namespace Ogre {
         static bool isCompressed( PixelFormatGpu format );
         static bool isPallete( PixelFormatGpu format );
         static bool isAccessible( PixelFormatGpu format );
+        static bool hasAlpha( PixelFormatGpu format );
 
         static bool hasSRGBEquivalent( PixelFormatGpu format );
         static PixelFormatGpu getEquivalentSRGB( PixelFormatGpu format );

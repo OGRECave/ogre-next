@@ -1364,6 +1364,13 @@ namespace Ogre
         return ( desc.flags & ( PFF_COMPRESSED | PFF_DEPTH | PFF_STENCIL ) ) != 0;
     }
     //-----------------------------------------------------------------------------------
+    bool PixelFormatGpuUtils::hasAlpha( PixelFormatGpu format )
+    { 
+        return getNumberOfComponents( format ) == 4
+            && format != PFG_R8G8_B8G8_UNORM && format != PFG_G8R8_G8B8_UNORM
+            || format == PFG_A8_UNORM || format == PFG_A8P8 || format == PFG_IA44 || format == PFG_AI44;
+    }
+    //-----------------------------------------------------------------------------------
     bool PixelFormatGpuUtils::hasSRGBEquivalent( PixelFormatGpu format )
     {
         return getEquivalentSRGB( format ) != getEquivalentLinear( format );
@@ -1676,7 +1683,7 @@ namespace Ogre
         {"PFG_AI44",				3u, 0,						0 },
         {"PFG_IA44",				3u, 0,						0 },
         {"PFG_P8",					1u, 1u * sizeof(uint8),		PFF_PALLETE },
-        {"PFG_A8P8",				1u, 2u * sizeof(uint8),		PFF_PALLETE },
+        {"PFG_A8P8",				2u, 2u * sizeof(uint8),		PFF_PALLETE },
         {"PFG_B4G4R4A4_UNORM",		4u, 1u * sizeof(uint16),	PFF_NORMALIZED },
         {"PFG_P208",				3u, 0,						0 },
         {"PFG_V208",				3u, 0,						0 },
