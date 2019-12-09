@@ -1650,7 +1650,7 @@ namespace Ogre
         {"PFG_B5G6R5_UNORM",		3u, 1u * sizeof(uint16),	PFF_NORMALIZED },
         {"PFG_B5G5R5A1_UNORM",		3u, 1u * sizeof(uint16),	PFF_NORMALIZED },
         {"PFG_BGRA8_UNORM",			4u, 4u * sizeof(uint8),		PFF_NORMALIZED },
-        {"PFG_BGRX8_UNORM",			4u, 4u * sizeof(uint8),		PFF_NORMALIZED },
+        {"PFG_BGRX8_UNORM",			3u, 4u * sizeof(uint8),		PFF_NORMALIZED },
         {"PFG_R10G10B10_XR_BIAS_A2_UNORM",4u, 1u * sizeof(uint32),PFF_FLOAT_RARE },
 
         {"PFG_BGRA8_UNORM_SRGB",	4u, 4u * sizeof(uint8),		PFF_NORMALIZED|PFF_SRGB },
