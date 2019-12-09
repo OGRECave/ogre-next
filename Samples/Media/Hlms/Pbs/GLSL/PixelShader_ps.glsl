@@ -38,6 +38,17 @@ layout(std140) uniform;
 	@end
 @end
 
+@property( hlms_ss_refractions_available )
+	@property( !hlms_use_prepass || !hlms_use_prepass_msaa )
+		@property( hlms_use_prepass_msaa )
+			uniform sampler2D gBuf_depthTexture;
+		@else
+			uniform sampler2DMS gBuf_depthTexture;
+		@end
+	@end
+	uniform sampler2D refractionMap;
+@end
+
 @insertpiece( DeclPlanarReflTextures )
 @insertpiece( DeclAreaApproxTextures )
 
