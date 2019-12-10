@@ -296,7 +296,7 @@ namespace Ogre
         hr = reinterpret_cast<IUnknown*>(mSwapChainPanel)->QueryInterface(IID_PPV_ARGS(panelNative.ReleaseAndGetAddressOf()));
         if(FAILED(hr))
             return hr;
-        hr = panelNative->SetSwapChain(mSwapChain.Get());
+        hr = panelNative->SetSwapChain(mSwapChain1.Get());
         if(FAILED(hr))
             return hr;
 
@@ -318,7 +318,7 @@ namespace Ogre
         inverseScale._11 = 1.0f / mCompositionScale.Width;
         inverseScale._22 = 1.0f / mCompositionScale.Height;
         ComPtr<IDXGISwapChain2> pSwapChain2;
-        HRESULT hr = mSwapChain.As<IDXGISwapChain2>(&pSwapChain2);
+        HRESULT hr = mSwapChain1.As<IDXGISwapChain2>(&pSwapChain2);
         if(FAILED(hr))
             return hr;
 
