@@ -1040,11 +1040,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void Hlms::copy( String &outBuffer, const SubStringRef &inSubString, size_t length )
     {
-        String::const_iterator itor = inSubString.begin();
-        String::const_iterator end  = inSubString.begin() + length;
-
-        while( itor != end )
-            outBuffer.push_back( *itor++ );
+        outBuffer.append( inSubString.begin(), inSubString.begin() + length );
     }
     //-----------------------------------------------------------------------------------
     void Hlms::repeat( String &outBuffer, const SubStringRef &inSubString, size_t length,
