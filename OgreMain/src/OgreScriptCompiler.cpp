@@ -285,7 +285,7 @@ namespace Ogre
     {
         ScriptLexer lexer;
         ScriptParser parser;
-        ConcreteNodeListPtr nodes = parser.parse(lexer.tokenize(str, source));
+        ConcreteNodeListPtr nodes = parser.parse(lexer.tokenize(str), source);
         return compile(nodes, group);
     }
 
@@ -394,7 +394,7 @@ namespace Ogre
 
         ScriptLexer lexer;
         ScriptParser parser;
-        ConcreteNodeListPtr cst = parser.parse(lexer.tokenize(str, source));
+        ConcreteNodeListPtr cst = parser.parse(lexer.tokenize(str), source);
 
         // Call the listener to intercept CST
         if(mListener)
@@ -596,9 +596,8 @@ namespace Ogre
             if(!stream.isNull())
             {
                 ScriptLexer lexer;
-                ScriptTokenListPtr tokens = lexer.tokenize(stream->getAsString(), name);
                 ScriptParser parser;
-                nodes = parser.parse(tokens);
+                nodes = parser.parse(lexer.tokenize(stream->getAsString()), name);
             }
         }
 
@@ -957,9 +956,8 @@ namespace Ogre
                 {
                     // Found the variable, so process it and insert it into the tree
                     ScriptLexer lexer;
-                    ScriptTokenListPtr tokens = lexer.tokenize(varAccess.second, var->file);
                     ScriptParser parser;
-                    ConcreteNodeListPtr cst = parser.parseChunk(tokens);
+                    ConcreteNodeListPtr cst = parser.parseChunk(lexer.tokenize(varAccess.second), var->file);
                     AbstractNodeListPtr ast = convertToAST(cst);
 
                     // Set up ownership for these nodes

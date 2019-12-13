@@ -36,7 +36,7 @@ namespace Ogre{
 	{
 	}
 
-	ScriptTokenListPtr ScriptLexer::tokenize(const String &str, const String &source)
+	ScriptTokenListPtr ScriptLexer::tokenize(const String &str)
 	{
 		// State enums
 		enum{ READY = 0, COMMENT, MULTICOMMENT, WORD, QUOTE, VAR, POSSIBLECOMMENT };
@@ -93,7 +93,7 @@ namespace Ogre{
 				else if(isNewline(c))
 				{
 					lexeme = c;
-					setToken(lexeme, line, source, tokens.get());
+					setToken(lexeme, line, tokens.get());
 				}
 				else if(!isWhitespace(c))
 				{
@@ -108,7 +108,7 @@ namespace Ogre{
                 if(isNewline(c))
                 {
                     lexeme = c;
-                    setToken(lexeme, line, source, tokens.get());
+                    setToken(lexeme, line, tokens.get());
                     state = READY;
                 }
 				break;
@@ -136,21 +136,21 @@ namespace Ogre{
 			case WORD:
 				if(isNewline(c))
 				{
-					setToken(lexeme, line, source, tokens.get());
+					setToken(lexeme, line, tokens.get());
 					lexeme = c;
-					setToken(lexeme, line, source, tokens.get());
+					setToken(lexeme, line, tokens.get());
 					state = READY;
 				}
 				else if(isWhitespace(c))
 				{
-					setToken(lexeme, line, source, tokens.get());
+					setToken(lexeme, line, tokens.get());
 					state = READY;
 				}
 				else if(c == openbrace || c == closebrace || c == colon)
 				{
-					setToken(lexeme, line, source, tokens.get());
+					setToken(lexeme, line, tokens.get());
 					lexeme = c;
-					setToken(lexeme, line, source, tokens.get());
+					setToken(lexeme, line, tokens.get());
 					state = READY;
 				}
 				else
@@ -169,7 +169,7 @@ namespace Ogre{
 					else if(c == quote)
 					{
 						lexeme += c;
-						setToken(lexeme, line, source, tokens.get());
+						setToken(lexeme, line, tokens.get());
 						state = READY;
 					}
 					else
@@ -185,21 +185,21 @@ namespace Ogre{
 			case VAR:
 				if(isNewline(c))
 				{
-					setToken(lexeme, line, source, tokens.get());
+					setToken(lexeme, line, tokens.get());
 					lexeme = c;
-					setToken(lexeme, line, source, tokens.get());
+					setToken(lexeme, line, tokens.get());
 					state = READY;
 				}
 				else if(isWhitespace(c))
 				{
-					setToken(lexeme, line, source, tokens.get());
+					setToken(lexeme, line, tokens.get());
 					state = READY;
 				}
 				else if(c == openbrace || c == closebrace || c == colon)
 				{
-					setToken(lexeme, line, source, tokens.get());
+					setToken(lexeme, line, tokens.get());
 					lexeme = c;
-					setToken(lexeme, line, source, tokens.get());
+					setToken(lexeme, line, tokens.get());
 					state = READY;
 				}
 				else
@@ -220,7 +220,7 @@ namespace Ogre{
 		if(state == WORD || state == VAR)
 		{
 			if(!lexeme.empty())
-				setToken(lexeme, line, source, tokens.get());
+				setToken(lexeme, line, tokens.get());
 		}
 		else
 		{
@@ -236,7 +236,7 @@ namespace Ogre{
 		return tokens;
 	}
 
-    void ScriptLexer::setToken(const Ogre::String &lexeme, Ogre::uint32 line, const String &source, Ogre::ScriptTokenList *tokens)
+    void ScriptLexer::setToken(const Ogre::String &lexeme, Ogre::uint32 line, Ogre::ScriptTokenList *tokens)
     {
 #if OGRE_WCHAR_T_STRINGS
         const wchar_t openBracket = L'{', closeBracket = L'}', colon = L':', 
@@ -249,7 +249,6 @@ namespace Ogre{
 		ScriptTokenPtr token(OGRE_NEW_T(ScriptToken, MEMCATEGORY_GENERAL)(), SPFM_DELETE_T);
 		token->lexeme = lexeme;
 		token->line = line;
-		token->file = source;
 		bool ignore = false;
 
 		// Check the user token map first
