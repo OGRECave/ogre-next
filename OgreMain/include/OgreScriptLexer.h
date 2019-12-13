@@ -72,8 +72,7 @@ namespace Ogre {
         /// This holds the line number of the input stream where the token was found.
         uint32 line;
     };
-    typedef SharedPtr<ScriptToken> ScriptTokenPtr;
-    typedef vector<ScriptTokenPtr>::type ScriptTokenList;
+    typedef vector<ScriptToken>::type ScriptTokenList;
     typedef SharedPtr<ScriptTokenList> ScriptTokenListPtr;
 
     class _OgreExport ScriptLexer : public ScriptCompilerAlloc
