@@ -907,8 +907,6 @@ namespace Ogre
 
             if( hlmsPbs && hlmsPbs->getAreaLightMasks() )
             {
-                jsonStr.a( ",\n\t\t\"area_light_masks\" : true" );
-
                 TextureGpu *areaLightMask = hlmsPbs->getAreaLightMasks();
                 Image2 image;
                 image.convertFromTexture( areaLightMask, 0, areaLightMask->getNumMipmaps() );
