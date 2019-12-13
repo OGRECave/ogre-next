@@ -53,6 +53,7 @@ namespace Ogre{
 		String lexeme;
 		uint32 line = 1, state = READY, lastQuote = 0;
 		ScriptTokenListPtr tokens(OGRE_NEW_T(ScriptTokenList, MEMCATEGORY_GENERAL)(), SPFM_DELETE_T);
+		lexemeStorage.reserve(str.length());
 
         // Iterate over the input
         const char *i = str.c_str(), *end = i + str.size();
@@ -247,7 +248,10 @@ namespace Ogre{
 #endif
 
 		ScriptTokenPtr token(OGRE_NEW_T(ScriptToken, MEMCATEGORY_GENERAL)(), SPFM_DELETE_T);
-		token->lexeme = lexeme;
+		assert(lexemeStorage.capacity() >= lexemeStorage.size() + lexeme.size()); // lexemeStorage is preallocated
+		token->lexemePtr = lexemeStorage.c_str() + lexemeStorage.size();
+		token->lexemeLen = lexeme.size();
+		lexemeStorage.append(lexeme);
 		token->line = line;
 		bool ignore = false;
 

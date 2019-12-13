@@ -58,10 +58,10 @@ namespace Ogre
             case READY:
                 if(token->type == TID_WORD)
                 {
-                    if(token->lexeme == "import")
+                    if(token->lexemeEquals("import"))
                     {
                         node = ConcreteNodePtr(OGRE_NEW ConcreteNode());
-                        node->token = token->lexeme;
+                        node->token = token->lexeme();
                         node->file = sourceFile;
                         node->line = token->line;
                         node->type = CNT_IMPORT;
@@ -78,10 +78,7 @@ namespace Ogre
                         temp->file = sourceFile;
                         temp->line = (*i)->line;
                         temp->type = (*i)->type == TID_WORD ? CNT_WORD : CNT_QUOTE;
-                        if(temp->type == CNT_QUOTE)
-                            temp->token = (*i)->lexeme.substr(1, token->lexeme.size() - 2);
-                        else
-                            temp->token = (*i)->lexeme;
+                        temp->token = (*i)->lexeme(temp->type == CNT_QUOTE);
                         node->children.push_back(temp);
 
                         // The second-next token is the source
@@ -97,10 +94,7 @@ namespace Ogre
                         temp->file = sourceFile;
                         temp->line = (*i)->line;
                         temp->type = (*i)->type == TID_WORD ? CNT_WORD : CNT_QUOTE;
-                        if(temp->type == CNT_QUOTE)
-                            temp->token = (*i)->lexeme.substr(1, (*i)->lexeme.size() - 2);
-                        else
-                            temp->token = (*i)->lexeme;
+                        temp->token = (*i)->lexeme(temp->type == CNT_QUOTE);
                         node->children.push_back(temp);
 
                         // Consume all the newlines
@@ -119,10 +113,10 @@ namespace Ogre
                         }
                         node = ConcreteNodePtr();
                     }
-                    else if(token->lexeme == "set")
+                    else if(token->lexemeEquals("set"))
                     {
                         node = ConcreteNodePtr(OGRE_NEW ConcreteNode());
-                        node->token = token->lexeme;
+                        node->token = token->lexeme();
                         node->file = sourceFile;
                         node->line = token->line;
                         node->type = CNT_VARIABLE_ASSIGN;
@@ -139,7 +133,7 @@ namespace Ogre
                         temp->file = sourceFile;
                         temp->line = (*i)->line;
                         temp->type = CNT_VARIABLE;
-                        temp->token = (*i)->lexeme;
+                        temp->token = (*i)->lexeme();
                         node->children.push_back(temp);
 
                         // The next token is the assignment
@@ -154,10 +148,7 @@ namespace Ogre
                         temp->file = sourceFile;
                         temp->line = (*i)->line;
                         temp->type = (*i)->type == TID_WORD ? CNT_WORD : CNT_QUOTE;
-                        if(temp->type == CNT_QUOTE)
-                            temp->token = (*i)->lexeme.substr(1, (*i)->lexeme.size() - 2);
-                        else
-                            temp->token = (*i)->lexeme;
+                        temp->token = (*i)->lexeme(temp->type == CNT_QUOTE);
                         node->children.push_back(temp);
 
                         // Consume all the newlines
@@ -182,10 +173,7 @@ namespace Ogre
                         node->file = sourceFile;
                         node->line = token->line;
                         node->type = token->type == TID_WORD ? CNT_WORD : CNT_QUOTE;
-                        if(node->type == CNT_QUOTE)
-                            node->token = token->lexeme.substr(1, token->lexeme.size() - 2);
-                        else
-                            node->token = token->lexeme;
+                        node->token = token->lexeme(node->type == CNT_QUOTE);
 
                         // Insert the node
                         if(parent)
@@ -215,7 +203,7 @@ namespace Ogre
                         parent = parent->parent;
 
                     node = ConcreteNodePtr(OGRE_NEW ConcreteNode());
-                    node->token = token->lexeme;
+                    node->token = token->lexeme();
                     node->file = sourceFile;
                     node->line = token->line;
                     node->type = CNT_RBRACE;
@@ -258,7 +246,7 @@ namespace Ogre
                 else if(token->type == TID_COLON)
                 {
                     node = ConcreteNodePtr(OGRE_NEW ConcreteNode());
-                    node->token = token->lexeme;
+                    node->token = token->lexeme();
                     node->file = sourceFile;
                     node->line = token->line;
                     node->type = CNT_COLON;
@@ -278,7 +266,7 @@ namespace Ogre
                     while(j != end && ((*j)->type == TID_WORD || (*j)->type == TID_QUOTE))
                     {
                         ConcreteNodePtr tempNode = ConcreteNodePtr(OGRE_NEW ConcreteNode());
-                        tempNode->token = (*j)->lexeme;
+                        tempNode->token = (*j)->lexeme();
                         tempNode->file = sourceFile;
                         tempNode->line = (*j)->line;
                         tempNode->type = (*j)->type == TID_WORD ? CNT_WORD : CNT_QUOTE;
@@ -306,7 +294,7 @@ namespace Ogre
                 else if(token->type == TID_LBRACKET)
                 {
                     node = ConcreteNodePtr(OGRE_NEW ConcreteNode());
-                    node->token = token->lexeme;
+                    node->token = token->lexeme();
                     node->file = sourceFile;
                     node->line = token->line;
                     node->type = CNT_LBRACE;
@@ -345,7 +333,7 @@ namespace Ogre
                         parent = parent->parent;
 
                     node = ConcreteNodePtr(OGRE_NEW ConcreteNode());
-                    node->token = token->lexeme;
+                    node->token = token->lexeme();
                     node->file = sourceFile;
                     node->line = token->line;
                     node->type = CNT_RBRACE;
@@ -375,7 +363,7 @@ namespace Ogre
                 else if(token->type == TID_VARIABLE)
                 {
                     node = ConcreteNodePtr(OGRE_NEW ConcreteNode());
-                    node->token = token->lexeme;
+                    node->token = token->lexeme();
                     node->file = sourceFile;
                     node->line = token->line;
                     node->type = CNT_VARIABLE;
@@ -396,7 +384,7 @@ namespace Ogre
                 else if(token->type == TID_QUOTE)
                 {
                     node = ConcreteNodePtr(OGRE_NEW ConcreteNode());
-                    node->token = token->lexeme.substr(1, token->lexeme.size() - 2);
+                    node->token = token->lexeme(true);
                     node->file = sourceFile;
                     node->line = token->line;
                     node->type = CNT_QUOTE;
@@ -417,7 +405,7 @@ namespace Ogre
                 else if(token->type == TID_WORD)
                 {
                     node = ConcreteNodePtr(OGRE_NEW ConcreteNode());
-                    node->token = token->lexeme;
+                    node->token = token->lexeme();
                     node->file = sourceFile;
                     node->line = token->line;
                     node->type = CNT_WORD;
@@ -462,7 +450,7 @@ namespace Ogre
                 node->file = sourceFile;
                 node->line = token->line;
                 node->parent = 0;
-                node->token = token->lexeme;
+                node->token = token->lexeme();
                 node->type = CNT_VARIABLE;
                 break;
             case TID_WORD:
@@ -470,7 +458,7 @@ namespace Ogre
                 node->file = sourceFile;
                 node->line = token->line;
                 node->parent = 0;
-                node->token = token->lexeme;
+                node->token = token->lexeme();
                 node->type = CNT_WORD;
                 break;
             case TID_QUOTE:
@@ -478,11 +466,11 @@ namespace Ogre
                 node->file = sourceFile;
                 node->line = token->line;
                 node->parent = 0;
-                node->token = token->lexeme.substr(1, token->lexeme.size() - 2);
+                node->token = token->lexeme(true);
                 node->type = CNT_QUOTE;
             default:
                 OGRE_EXCEPT(Exception::ERR_INVALID_STATE, 
-                    Ogre::String("unexpected token") + token->lexeme + " at line " + 
+                    Ogre::String("unexpected token") + token->lexeme() + " at line " + 
                         Ogre::StringConverter::toString(token->line),
                     "ScriptParser::parseChunk");
             }

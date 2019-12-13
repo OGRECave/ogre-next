@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define __ScriptLexer_H_
 
 #include "OgrePrerequisites.h"
+#include <string.h>
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre {
@@ -61,8 +62,11 @@ namespace Ogre {
     */
     struct ScriptToken
     {
-        /// This is the lexeme for this token
-        String lexeme;
+        /// This is the lexeme for this token, points into ScriptLexer::lexemeStorage
+        const char* lexemePtr;
+        uint32 lexemeLen;
+        String lexeme(bool unquote = false) const { return String(lexemePtr + unquote, lexemeLen - 2 * unquote); }
+        bool lexemeEquals(const char* str) const { return 0 == strncmp(str, lexemePtr, lexemeLen); }
         /// This is the id associated with the lexeme, which comes from a lexeme-token id mapping
         uint32 type;
         /// This holds the line number of the input stream where the token was found.
@@ -84,6 +88,8 @@ namespace Ogre {
         void setToken(const String &lexeme, uint32 line, ScriptTokenList *tokens);
         bool isWhitespace(Ogre::String::value_type c) const;
         bool isNewline(Ogre::String::value_type c) const;
+
+        String lexemeStorage;
     };
 
     /** @} */
