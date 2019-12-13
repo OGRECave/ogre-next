@@ -55,7 +55,7 @@ namespace Ogre{
 		ScriptTokenListPtr tokens(OGRE_NEW_T(ScriptTokenList, MEMCATEGORY_GENERAL)(), SPFM_DELETE_T);
 
         // Iterate over the input
-        String::const_iterator i = str.begin(), end = str.end();
+        const char *i = str.c_str(), *end = i + str.size();
         while(i != end)
         {
             lastc = c;
