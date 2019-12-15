@@ -150,7 +150,7 @@ namespace Ogre
 
         bool                    mSkipRequestSlotInChangeRS;
 
-        bool                    mUsingLtcMatrix;
+        /// LTC matrix texture also contains BRDF LUT for specular IBL.
         TextureGpu              *mLtcMatrixTexture;
 
         bool                    mDecalsDiffuseMergedEmissive;
@@ -472,6 +472,7 @@ namespace Ogre
         static const IdString ExponentialShadowMaps;
 
         static const IdString AmbientHemisphere;
+        static const IdString LtcTextureAvailable;
         static const IdString EnvMapScale;
         static const IdString AmbientFixed;
         static const IdString TargetEnvprobeMap;

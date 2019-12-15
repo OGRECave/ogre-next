@@ -38,22 +38,6 @@ Adapted to Ogre by Matias N. Goldberg
 */
 
 @property( hlms_lights_area_ltc )
-	@piece( DeclAreaLtcTextures )
-		@property( syntax == glsl || syntax == glsles )
-			uniform sampler2DArray ltcMatrix;
-		@end
-		@property( syntax == hlsl )
-			Texture2DArray<float4> ltcMatrix	: register(t@value(ltcMatrix));
-			SamplerState ltcSampler				: register(s@value(ltcMatrix));
-		@end
-		@property( syntax == metal )
-			, texture2d_array<float> ltcMatrix	[[texture(@value(ltcMatrix))]]
-			, sampler ltcSampler				[[sampler(@value(ltcMatrix))]]
-		@end
-	@end
-@end
-
-@property( hlms_lights_area_ltc )
 @piece( DeclAreaLtcLightFuncs )
 #define LUT_SIZE  64.0
 #define LUT_SCALE ((LUT_SIZE - 1.0)/LUT_SIZE)

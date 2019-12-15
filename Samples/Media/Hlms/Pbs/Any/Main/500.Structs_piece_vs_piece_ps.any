@@ -127,7 +127,7 @@ CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
 	float padding; //Compatibility with GLSL
 @end
 
-	float4 pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_unused;
+	float4 pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_envMapNumMipmaps;
 
 @property( hlms_use_prepass )
 	float4 windowHeight;
@@ -195,9 +195,10 @@ CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
 
 	@insertpiece( custom_passBuffer )
 
-#define pccVctMinDistance		pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_unused.x
-#define invPccVctInvDistance	pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_unused.y
-#define rightEyePixelStartX		pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_unused.z
+#define pccVctMinDistance		pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_envMapNumMipmaps.x
+#define invPccVctInvDistance	pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_envMapNumMipmaps.y
+#define rightEyePixelStartX		pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_envMapNumMipmaps.z
+#define envMapNumMipmaps		pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_envMapNumMipmaps.w
 }
 CONST_BUFFER_STRUCT_END( passBuf );
 @end

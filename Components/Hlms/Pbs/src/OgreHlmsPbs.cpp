@@ -165,6 +165,7 @@ namespace Ogre
     const IdString PbsProperty::ExponentialShadowMaps= IdString( "exponential_shadow_maps" );
 
     const IdString PbsProperty::EnvMapScale       = IdString( "envmap_scale" );
+    const IdString PbsProperty::LtcTextureAvailable= IdString( "ltc_texture_available" );
     const IdString PbsProperty::AmbientFixed      = IdString( "ambient_fixed" );
     const IdString PbsProperty::AmbientHemisphere = IdString( "ambient_hemisphere" );
     const IdString PbsProperty::TargetEnvprobeMap = IdString( "target_envprobe_map" );
@@ -183,6 +184,7 @@ namespace Ogre
     const IdString PbsProperty::VctAmbientSphere  = IdString("vct_ambient_hemisphere");
     const IdString PbsProperty::IrradianceField   = IdString("irradiance_field");
     const IdString PbsProperty::ObbRestraintApprox= IdString( "obb_restraint_approx" );
+
     const IdString PbsProperty::ObbRestraintLtc   = IdString( "obb_restraint_ltc" );
 
     const IdString PbsProperty::BrdfDefault       = IdString( "BRDF_Default" );
@@ -272,7 +274,6 @@ namespace Ogre
         mAreaLightMasksSamplerblock( 0 ),
         mUsingAreaLightMasks( false ),
         mSkipRequestSlotInChangeRS( false ),
-        mUsingLtcMatrix( false ),
         mLtcMatrixTexture( 0 ),
         mDecalsDiffuseMergedEmissive( false ),
         mDecalsSamplerblock( 0 ),
@@ -965,6 +966,8 @@ namespace Ogre
             setProperty( PbsProperty::NeedsViewDir, 1 );
         }
 
+        bool bNeedsEnvBrdf = false;
+
         if( getProperty( HlmsBaseProp::UseSsr ) ||
             getProperty( PbsProperty::UseEnvProbeMap ) ||
             getProperty( PbsProperty::UsePlanarReflections ) ||
@@ -975,6 +978,7 @@ namespace Ogre
         {
             setProperty( PbsProperty::NeedsReflDir, 1 );
             setProperty( PbsProperty::NeedsEnvBrdf, 1 );
+            bNeedsEnvBrdf = true;
         }
 
         int32 texUnit = mReservedTexSlots;
@@ -1022,8 +1026,13 @@ namespace Ogre
         if( getProperty( HlmsBaseProp::LightsAreaTexMask ) > 0 )
             setTextureReg( PixelShader, "areaLightMasks", texUnit++ );
 
-        if( getProperty( HlmsBaseProp::LightsAreaLtc ) > 0 )
+        if( bNeedsEnvBrdf || getProperty( HlmsBaseProp::LightsAreaLtc ) > 0 )
             setTextureReg( PixelShader, "ltcMatrix", texUnit++ );
+        else
+        {
+            // Always occupy the texture unit
+            ++texUnit;
+        }
 
         if( getProperty( HlmsBaseProp::EnableDecals ) )
         {
@@ -1263,6 +1272,9 @@ namespace Ogre
 
         if( !casterPass )
         {
+            if( mLtcMatrixTexture )
+                setProperty( PbsProperty::LtcTextureAvailable, 1 );
+
             if( mAmbientLightMode == AmbientAuto )
             {
                 if( upperHemisphere == lowerHemisphere )
@@ -1473,7 +1485,7 @@ namespace Ogre
             //mat3 invViewMatCubemap (upgraded to three vec4)
             mapSize += ( 16 + (16 + 2 + 2 + 4) * numShadowMapLights + 4 * 3 ) * 4;
 
-            //float4 pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_unused;
+            //float4 pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_envMapNumMipmaps;
             mapSize += 4u * 4u;
 
             //vec4 shadowRcv[numShadowMapLights].texViewZRow
@@ -1788,11 +1800,11 @@ namespace Ogre
                     ++passBufferPtr;
             }
 
-            //float4 pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_unused
+            //float4 pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_envMapNumMipmaps
             *passBufferPtr++ = mPccVctMinDistance;
             *passBufferPtr++ = mInvPccVctInvDistance;
             *passBufferPtr++ = currViewports[1].getActualLeft();
-            *passBufferPtr++ = 0.0f;
+            *passBufferPtr++ = 7.0f;
 
             if( !mPrePassTextures->empty() )
             {
@@ -2392,15 +2404,8 @@ namespace Ogre
                 mUsingAreaLightMasks = false;
             }
 
-            if( mLtcMatrixTexture && getProperty( HlmsBaseProp::LightsAreaLtc ) > 0 )
-            {
-                mTexUnitSlotStart += 1;
-                mUsingLtcMatrix = true;
-            }
-            else
-            {
-                mUsingLtcMatrix = false;
-            }
+            /// LTC / BRDF IBL reserved slot (mLtcMatrixTexture)
+            ++mTexUnitSlotStart;
 
             for( size_t i=0; i<3u; ++i )
             {
@@ -2541,13 +2546,10 @@ namespace Ogre
                     ++texUnit;
                 }
 
-                if( mUsingLtcMatrix )
-                {
-                    *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit,
-                                                                         mLtcMatrixTexture,
-                                                                         mAreaLightMasksSamplerblock );
-                    ++texUnit;
-                }
+                *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit,
+                                                                     mLtcMatrixTexture,
+                                                                     mAreaLightMasksSamplerblock );
+                ++texUnit;
 
                 for( size_t i=0; i<3u; ++i )
                 {
@@ -3032,7 +3034,7 @@ namespace Ogre
 
         TextureGpuManager *textureGpuManager = mRenderSystem->getTextureGpuManager();
         if( !textureGpuManager->hasPoolId( poolId, 64u, 64u, 1u, PFG_RGBA16_FLOAT ) )
-            textureGpuManager->reservePoolId( poolId, 64u, 64u, 2u, 1u, PFG_RGBA16_FLOAT );
+            textureGpuManager->reservePoolId( poolId, 64u, 64u, 3u, 1u, PFG_RGBA16_FLOAT );
 
         TextureGpu *ltcMat0 = textureGpuManager->createOrRetrieveTexture(
                                   "ltcMatrix0.dds", GpuPageOutStrategy::Discard,
@@ -3044,16 +3046,29 @@ namespace Ogre
                                   TextureFlags::AutomaticBatching,
                                   TextureTypes::Type2D,
                                   ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME, 0, poolId );
+        TextureGpu *brtfLut2 = textureGpuManager->createOrRetrieveTexture(
+                                  "brtfLutDfg.dds", GpuPageOutStrategy::Discard,
+                                  TextureFlags::AutomaticBatching,
+                                  TextureTypes::Type2D,
+                                  ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME, 0, poolId );
 
         ltcMat0->scheduleTransitionTo( GpuResidency::Resident );
         ltcMat1->scheduleTransitionTo( GpuResidency::Resident );
+        brtfLut2->scheduleTransitionTo( GpuResidency::Resident );
 
         ltcMat0->waitForMetadata();
         ltcMat1->waitForMetadata();
+        brtfLut2->waitForMetadata();
 
-        OGRE_ASSERT_LOW( ltcMat0->getTexturePool() == ltcMat1->getTexturePool() );
+        OGRE_ASSERT_LOW(
+            ltcMat0->getTexturePool() == ltcMat1->getTexturePool() &&
+            "ltcMatrix0.dds & ltcMatrix1.dds must be the same resolution and pixel format" );
+        OGRE_ASSERT_LOW(
+            ltcMat0->getTexturePool() == brtfLut2->getTexturePool() &&
+            "ltcMatrix0.dds & brtfLutDfg2.dds must be the same resolution and pixel format" );
         OGRE_ASSERT_LOW( ltcMat0->getInternalSliceStart() == 0u );
         OGRE_ASSERT_LOW( ltcMat1->getInternalSliceStart() == 1u );
+        OGRE_ASSERT_LOW( brtfLut2->getInternalSliceStart() == 2u );
 
         mLtcMatrixTexture = ltcMat0;
     }

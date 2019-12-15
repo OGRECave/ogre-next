@@ -778,6 +778,12 @@ namespace Demo
 
         // Initialise, parse scripts etc
         Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups( true );
+
+        // Initialize resources for LTC area lights and accurate specular reflections (IBL)
+        Ogre::Hlms *hlms = mRoot->getHlmsManager()->getHlms( Ogre::HLMS_PBS );
+        OGRE_ASSERT_HIGH( dynamic_cast<Ogre::HlmsPbs*>( hlms ) );
+        Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlms );
+        hlmsPbs->loadLtcMatrix();
     }
     //-----------------------------------------------------------------------------------
     void GraphicsSystem::chooseSceneManager(void)
