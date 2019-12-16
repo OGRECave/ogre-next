@@ -469,7 +469,7 @@ namespace Ogre
                                              const ResourceLayoutMap* initialLayouts,
                                              const ResourceAccessMap* initialUavAccess,
                                              const Vector4 &vpOffsetScale,
-                                             uint8 vpModifierMask, uint8 executionMask )
+                                             uint8 vpModifierMask, uint32 executionMask )
     {
         CompositorChannelVec channels;
         channels.push_back( finalRenderTarget );
@@ -486,7 +486,7 @@ namespace Ogre
                                              const ResourceLayoutMap* initialLayouts,
                                              const ResourceAccessMap* initialUavAccess,
                                              const Vector4 &vpOffsetScale,
-                                             uint8 vpModifierMask, uint8 executionMask )
+                                             uint8 vpModifierMask, uint32 executionMask )
     {
         validateAllNodes();
 

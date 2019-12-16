@@ -48,7 +48,7 @@ namespace Ogre
                                               const CompositorChannelVec &externalRenderTargets,
                                               SceneManager *sceneManager, Camera *defaultCam,
                                               RenderSystem *renderSys, bool bEnabled,
-                                              uint8 executionMask, uint8 viewportModifierMask,
+                                              uint32 executionMask, uint8 viewportModifierMask,
                                               const Vector4 &vpOffsetScale,
                                               const UavBufferPackedVec *uavBuffers,
                                               const ResourceLayoutMap *initialLayouts,

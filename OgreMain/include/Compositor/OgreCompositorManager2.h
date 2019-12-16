@@ -52,6 +52,17 @@ namespace Ogre
     typedef vector<TextureGpu*>::type TextureGpuVec;
     typedef vector<UavBufferPacked*>::type UavBufferPackedVec;
 
+    namespace ExecutionFlags
+    {
+        // Bit mask
+        // | -Z | +Z | -Y | +Y | -X | +X | n/a | No slice | 24-bits reserved
+        const uint32 FIRST_SLICE_EXECUTION_FLAG = 0x4000000;
+        const uint32 NO_SLICE_EXECUTION_FLAG    = 0x1000000;
+        const uint32 RESERVED_EXECUTION_FLAGS   = 0x0ffffff;
+
+        const uint32 DEFAULT_EXECUTION_FLAGS    = NO_SLICE_EXECUTION_FLAG | RESERVED_EXECUTION_FLAGS;
+    }
+
     /** \addtogroup Core
     *  @{
     */
@@ -247,9 +258,9 @@ namespace Ogre
             vpModifierMask controls which passes will ignore the stretching, and
             executionMask controls which passes get skipped.
 
-            All passes have a default executionMask = 0xFF vpModifierMask = 0xFF
+            All passes have a default executionMask = ExecutionFlags::DEFAULT_EXECUTION_FLAGS vpModifierMask = 0xFF
             except for clear passes which default to
-            executionMask = 0x01 vpModifierMask = 0x00
+            executionMask = ExecutionFlags::NO_SLICE_EXECUTION_FLAG | 0x1 vpModifierMask = 0x00
 
             The reasoning behind this is that often you want to clear the whole renderTarget
             the first time (it's GPU-friendly to discard the entire buffer; aka
@@ -330,7 +341,7 @@ namespace Ogre
             This is useful when you want to apply a pass (like Clear) to the whole render
             target and not just to the scaled region.
         @param executionMask
-            An 8-bit mask that will be AND'ed with the execution mask of each pass from
+            A 32-bit mask that will be AND'ed with the execution mask of each pass from
             every node. When the result is zero, the pass isn't executed. See remarks
             on how to use this for efficient Stereo or split screen.
 
@@ -343,7 +354,7 @@ namespace Ogre
                                            const ResourceLayoutMap* initialLayouts=0,
                                            const ResourceAccessMap* initialUavAccess=0,
                                            const Vector4 &vpOffsetScale = Vector4::ZERO,
-                                           uint8 vpModifierMask=0x00, uint8 executionMask=0xFF );
+                                           uint8 vpModifierMask=0x00, uint32 executionMask=0xFFFFFFFF );
 
         /// Overload that allows having multiple external input/outputs
         CompositorWorkspace* addWorkspace( SceneManager *sceneManager,
@@ -353,7 +364,7 @@ namespace Ogre
                                            const ResourceLayoutMap* initialLayouts=0,
                                            const ResourceAccessMap* initialUavAccess=0,
                                            const Vector4 &vpOffsetScale = Vector4::ZERO,
-                                           uint8 vpModifierMask=0x00, uint8 executionMask=0xFF );
+                                           uint8 vpModifierMask=0x00, uint32 executionMask=0xFFFFFFFF );
 
         /// Removes the given workspace. Pointer is no longer valid after this call
         void removeWorkspace( CompositorWorkspace *workspace );

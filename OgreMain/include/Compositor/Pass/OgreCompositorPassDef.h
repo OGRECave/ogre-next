@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "OgreIdString.h"
 #include "OgreResourceTransition.h"
 #include "OgreRenderPassDescriptor.h"
+#include "Compositor/OgreCompositorManager2.h"
 
 namespace Ogre
 {
@@ -171,7 +172,7 @@ namespace Ogre
         /// the GPU starts too late after sitting idle.
         bool                mFlushCommandBuffers;
 
-        uint8               mExecutionMask;
+        uint32              mExecutionMask;
         uint8               mViewportModifierMask;
 
         /// Only used if mShadowMapIdx is valid (if pass is owned by Shadow Nodes). If true,
@@ -221,7 +222,7 @@ namespace Ogre
             mReadOnlyStencil( false ),
             mIncludeOverlays( false ),
             mFlushCommandBuffers( false ),
-            mExecutionMask( 0xFF ),
+            mExecutionMask( ExecutionFlags::DEFAULT_EXECUTION_FLAGS ),
             mViewportModifierMask( 0xFF ),
             mShadowMapFullViewport( false )
         {
@@ -233,6 +234,11 @@ namespace Ogre
             }
         }
         virtual ~CompositorPassDef();
+
+        void setExecutionMask( uint8 executionMask )
+        {
+            mExecutionMask = executionMask & ExecutionFlags::RESERVED_EXECUTION_FLAGS;
+        }
 
         void setAllClearColours( const ColourValue &clearValue );
         void setAllLoadActions( LoadAction::LoadAction loadAction );

@@ -114,7 +114,7 @@ namespace Ogre
     void CompositorShadowNodeDef::postInitializePassDef( CompositorPassDef *passDef )
     {
         //Shadow nodes usually should be unaffected by these masks.
-        passDef->mExecutionMask         = 0xFF;
+        passDef->mExecutionMask         = 0xFFFFFFFF;
         passDef->mViewportModifierMask  = 0x00;
     }
     //-----------------------------------------------------------------------------------

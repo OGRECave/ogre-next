@@ -40,6 +40,7 @@ THE SOFTWARE.
 
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorWorkspace.h"
+#include "Compositor/OgreCompositorNodeDef.h"
 #include "OgreSceneManager.h"
 
 #include "OgreInternalCubemapProbe.h"
@@ -62,9 +63,12 @@ namespace Ogre
         mTexture( 0 ),
         mCubemapArrayIdx( std::numeric_limits<uint16>::max() ),
         mMsaa( 1u ),
+        mTimeSlicing( TS_ONE_FRAME ),
+        mFaceIdx( 0 ),
+        mWorkspaceExecMask( 0xFFFFFFFF ),
         mWorkspaceMipmapsExecMask( 0x01 ),
         mClearWorkspace( 0 ),
-        mWorkspace( 0 ),
+        mWorkspaces{ 0, 0, 0, 0, 0, 0 },
         mCamera( 0 ),
         mCreator( creator ),
         mInternalProbe( 0 ),
@@ -98,24 +102,27 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CubemapProbe::destroyWorkspace(void)
     {
-        if( mWorkspace )
+        for( size_t i=0; i<6; ++i )
         {
+            if( mWorkspaces[i] )
+            {
 #if !USE_RTT_DIRECTLY
-            if( mStatic )
-            {
-                TextureGpu *channel = mWorkspace->getExternalRenderTargets()[0];
-                mCreator->releaseTmpRtt( channel.textures[0] );
-            }
+                if( mStatic )
+                {
+                    TextureGpu *channel = mWorkspaces[i]->getExternalRenderTargets()[0];
+                    mCreator->releaseTmpRtt( channel.textures[0] );
+                }
 #endif
-            if( mCreator->getAutomaticMode() )
-            {
-                TextureGpu *channel = mWorkspace->getExternalRenderTargets()[0];
-                mCreator->releaseTmpRtt( channel );
-            }
+                if( mCreator->getAutomaticMode() )
+                {
+                    TextureGpu *channel = mWorkspaces[i]->getExternalRenderTargets()[0];
+                    mCreator->releaseTmpRtt( channel );
+                }
 
-            CompositorManager2 *compositorManager = mWorkspace->getCompositorManager();
-            compositorManager->removeWorkspace( mWorkspace );
-            mWorkspace = 0;
+                CompositorManager2 *compositorManager = mWorkspaces[i]->getCompositorManager();
+                compositorManager->removeWorkspace( mWorkspaces[i] );
+                mWorkspaces[i] = 0;
+            }
         }
 
         if( mClearWorkspace )
@@ -143,7 +150,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CubemapProbe::destroyTexture(void)
     {
-        assert( !mWorkspace );
+        assert( !mWorkspaces[0] );
         if( mTexture )
         {
             if( !mCreator->getAutomaticMode() )
@@ -351,7 +358,7 @@ namespace Ogre
             mDirty = true;
 
             if( reinitWorkspace && !mCreator->getAutomaticMode() )
-                initWorkspace( cameraNear, cameraFar, mWorkspaceMipmapsExecMask, mWorkspaceDefName );
+                initWorkspace( cameraNear, cameraFar, mTimeSlicing, mWorkspaceExecMask, mWorkspaceMipmapsExecMask, mWorkspaceDefName );
         }
         else
         {
@@ -363,7 +370,8 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void CubemapProbe::initWorkspace( float cameraNear, float cameraFar,
-                                      uint8 mipmapsExecutionMask,
+                                      TimeSlicing ts,
+                                      uint32 executionMask, uint32 mipmapsExecutionMask,
                                       IdString workspaceDefOverride )
     {
         assert( (mTexture != 0 || mCreator->getAutomaticMode()) && "Call setTextureParams first!" );
@@ -379,6 +387,23 @@ namespace Ogre
 
         if( workspaceDefOverride != IdString() )
             workspaceDef = compositorManager->getWorkspaceDefinition( workspaceDefOverride );
+
+        const CompositorWorkspaceDef::NodeAliasMap& workspaceNodes = workspaceDef->getNodeAliasMap();
+        assert( workspaceNodes.size() == 1 );
+
+        CompositorNodeDef* probeNode = compositorManager->getNodeDefinitionNonConst( workspaceNodes.begin()->first );
+        assert( probeNode->getNumTargetPasses() % 6 == 0 );
+        for( size_t i=0; i<probeNode->getNumTargetPasses(); ++i )
+        {
+            CompositorTargetDef* probeTarget = probeNode->getTargetPass(i);
+
+            const CompositorPassDefVec& probePasses = probeTarget->getCompositorPasses();
+            for( size_t j=0; j<probePasses.size(); ++j )
+            {
+                probePasses[j]->mExecutionMask = ( ExecutionFlags::FIRST_SLICE_EXECUTION_FLAG << probeTarget->getRtIndex() ) |
+                                                 probePasses[j]->mExecutionMask & ~ExecutionFlags::NO_SLICE_EXECUTION_FLAG;
+            }
+        }
 
         mWorkspaceDefName = workspaceDef->getName();
         SceneManager *sceneManager = mCreator->getSceneManager();
@@ -409,27 +434,32 @@ namespace Ogre
             mCamera->setLightCullingVisibility( true, true );
         }
 
+        mTimeSlicing = ts;
+
+        mWorkspaceExecMask = executionMask;
         mWorkspaceMipmapsExecMask = mipmapsExecutionMask;
 
         if( !mCreator->getAutomaticMode() )
             mTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
-        else
-        {
-            if( mCreator->getUseDpm2DArray() )
-                mipmapsExecutionMask = ~mipmapsExecutionMask;
-            else
-                mipmapsExecutionMask = 0xff;
-        }
 
         CompositorChannelVec channels( 1, rtt );
-        mWorkspace = compositorManager->addWorkspace( sceneManager, channels, mCamera,
-                                                      mWorkspaceDefName, false, -1,
-                                                      (UavBufferPackedVec*)0,
-                                                      (const ResourceLayoutMap*)0,
-                                                      (const ResourceAccessMap*)0,
-                                                      Vector4::ZERO,
-                                                      0x00, mipmapsExecutionMask );
-        mWorkspace->setListener( mCreator );
+        for( size_t i=0; i<6; ++i )
+        {
+            uint32 workspaceExecutionMask = ( ExecutionFlags::FIRST_SLICE_EXECUTION_FLAG << i ) |
+                                            mWorkspaceExecMask & ExecutionFlags::RESERVED_EXECUTION_FLAGS;
+
+            if( mCreator->getAutomaticMode() && mCreator->getUseDpm2DArray() )
+                workspaceExecutionMask &= ~mWorkspaceMipmapsExecMask;
+
+            mWorkspaces[i] = compositorManager->addWorkspace( sceneManager, channels, mCamera,
+                                                              mWorkspaceDefName, false, -1,
+                                                              (UavBufferPackedVec*)0,
+                                                              (const ResourceLayoutMap*)0,
+                                                              (const ResourceAccessMap*)0,
+                                                              Vector4::ZERO,
+                                                              0x00, workspaceExecutionMask );
+            mWorkspaces[i]->setListener( mCreator );
+        }
 
         if( !mStatic && !mCreator->getAutomaticMode() )
         {
@@ -443,7 +473,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool CubemapProbe::isInitialized(void) const
     {
-        return mWorkspace != 0;
+        return mWorkspaces[0] != 0;
     }
     //-----------------------------------------------------------------------------------
     void CubemapProbe::set( const Vector3 &cameraPos, const Aabb &area, const Vector3 &areaInnerRegion,
@@ -559,7 +589,7 @@ namespace Ogre
             CompositorManager2 *compositorManager = workspaceDef->getCompositorManager();
 
             SceneManager *sceneManager = mCreator->getSceneManager();
-            CompositorChannelVec channels( mWorkspace->getExternalRenderTargets() );
+            CompositorChannelVec channels( mWorkspaces[0]->getExternalRenderTargets() );
             mClearWorkspace =
                     compositorManager->addWorkspace( sceneManager, channels,
                                                      mCamera,
@@ -587,7 +617,8 @@ namespace Ogre
             mCreator->_setIsRendering( true );
 
         mCreator->_setProbeRenderInProgress( this );
-        mWorkspace->_update();
+        for( size_t i=0; i<mTimeSlicing; ++i )
+            mWorkspaces[mFaceIdx++]->_update();
         mCreator->_setProbeRenderInProgress( 0 );
 
         if( automaticMode )
@@ -605,6 +636,8 @@ namespace Ogre
         }
 
         mCreator->_copyRenderTargetToCubemap( mCubemapArrayIdx );
+
+        mFaceIdx %= 6;
     }
     //-----------------------------------------------------------------------------------
     void CubemapProbe::_addReference(void)

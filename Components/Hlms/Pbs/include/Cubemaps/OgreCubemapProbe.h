@@ -47,6 +47,14 @@ namespace Ogre
         friend class ParallaxCorrectedCubemap;
         friend class ParallaxCorrectedCubemapAuto;
 
+    public:
+        enum TimeSlicing
+        {
+            TS_ONE_FRAME = 6,
+            TS_SIX_FRAMES = 1
+        };
+
+    protected:
         /// Where to position the camera while constructing the probe.
         Vector3 mProbeCameraPos;
         /// When the camera enters this area, the probe is collected for blending.
@@ -63,10 +71,13 @@ namespace Ogre
         uint16      mCubemapArrayIdx;
         uint8       mMsaa;
 
-        uint8               mWorkspaceMipmapsExecMask;
+        TimeSlicing         mTimeSlicing;
+        uint8               mFaceIdx;
+        uint32              mWorkspaceExecMask;
+        uint32              mWorkspaceMipmapsExecMask;
         IdString            mWorkspaceDefName;
         CompositorWorkspace *mClearWorkspace;
-        CompositorWorkspace *mWorkspace;
+        CompositorWorkspace *mWorkspaces[6];
         Camera              *mCamera;
 
         ParallaxCorrectedCubemapBase *mCreator;
@@ -159,7 +170,8 @@ namespace Ogre
             This value allows you to override it with a different workspace definition.
         */
         void initWorkspace( float cameraNear = 0.5f, float cameraFar = 500.0f,
-                            uint8 mipmapsExecutionMask=0x01,
+                            TimeSlicing ts=TS_ONE_FRAME,
+                            uint32 executionMask=0xFFFFFFFF, uint32 mipmapsExecutionMask=0x01,
                             IdString workspaceDefOverride=IdString() );
         bool isInitialized(void) const;
 
@@ -229,7 +241,7 @@ namespace Ogre
         const Matrix3& getInvOrientation(void) const        { return mInvOrientation; }
         const Aabb& getProbeShape(void) const               { return mProbeShape; }
 
-        CompositorWorkspace *getWorkspace(void) const       { return mWorkspace; }
+        CompositorWorkspace **getWorkspaces(void)           { return mWorkspaces; }
 
         TextureGpu* getInternalTexture(void) const          { return mTexture; }
         void _addReference(void);

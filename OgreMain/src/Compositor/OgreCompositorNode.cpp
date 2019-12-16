@@ -855,7 +855,7 @@ namespace Ogre
         const CompositorShadowNode *shadowNode = 0;
         if( sceneManager->_getCurrentRenderStage() == SceneManager::IRS_RENDER_TO_TEXTURE )
             shadowNode = sceneManager->getCurrentShadowNode();
-        uint8 executionMask = mWorkspace->getExecutionMask();
+        uint32 executionMask = mWorkspace->getExecutionMask();
 
         //Execute our passes
         CompositorPassVec::const_iterator itor = mPasses.begin();
@@ -868,7 +868,9 @@ namespace Ogre
 
             const CompositorTargetDef *targetDef = passDef->getParentTargetDef();
 
-            if( executionMask & passDef->mExecutionMask &&
+            uint32 combinedMask = executionMask & passDef->mExecutionMask;
+
+            if( ( combinedMask & ~ExecutionFlags::RESERVED_EXECUTION_FLAGS ) && ( combinedMask & ExecutionFlags::RESERVED_EXECUTION_FLAGS ) &&
                 (!shadowNode || (!shadowNode->isShadowMapIdxInValidRange( passDef->mShadowMapIdx )
                 || (shadowNode->_shouldUpdateShadowMapIdx( passDef->mShadowMapIdx )
                 && (shadowNode->getShadowMapLightTypeMask( passDef->mShadowMapIdx ) &

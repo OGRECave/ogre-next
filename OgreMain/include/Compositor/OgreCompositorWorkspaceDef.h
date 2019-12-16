@@ -232,7 +232,7 @@ namespace Ogre
             Useful to know which nodes are in use by this compositor.
             Use @addNodeAlias @removeNodeAlias and @connect to safely modify the map.
         */
-        const NodeAliasMap& getNodeAliasMap(void)                   { return mAliasedNodes; }
+        const NodeAliasMap& getNodeAliasMap(void) const             { return mAliasedNodes; }
 
         /** Gets direct access to the channel route (aka the interconnections between all of our nodes).
             Useful for advanced C++ users who want fine control of the connections.

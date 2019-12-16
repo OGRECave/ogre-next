@@ -60,7 +60,7 @@ namespace Ogre
         {
             //Override so that it only gets executed on the first execution on the
             //whole screen (i.e. clear the whole viewport during the left eye pass)
-            mExecutionMask          = 0x01;
+            setExecutionMask( 0x01 );
             mViewportModifierMask   = 0x00;
 
             for( int i=0; i<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )

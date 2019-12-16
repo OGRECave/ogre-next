@@ -105,7 +105,7 @@ namespace Ogre
         uint                    mCurrentWidth;
         uint                    mCurrentHeight;
 
-        uint8                   mExecutionMask;
+        uint32                  mExecutionMask;
         uint8                   mViewportModifierMask;
         Vector4                 mViewportModifier;
 
@@ -152,7 +152,7 @@ namespace Ogre
                              const CompositorChannelVec &externalRenderTargets,
                              SceneManager *sceneManager, Camera *defaultCam,
                              RenderSystem *renderSys, bool bEnabled,
-                             uint8 executionMask, uint8 viewportModifierMask,
+                             uint32 executionMask, uint8 viewportModifierMask,
                              const Vector4 &vpOffsetScale,
                              const UavBufferPackedVec *uavBuffers,
                              const ResourceLayoutMap* initialLayouts,
@@ -313,7 +313,7 @@ namespace Ogre
         uint8 getViewportModifierMask(void) const           { return mViewportModifierMask; }
         const Vector4& getViewportModifier(void) const      { return mViewportModifier; }
 
-        uint8 getExecutionMask(void) const                  { return mExecutionMask; }
+        uint32 getExecutionMask(void) const                 { return mExecutionMask; }
 
         void _notifyBarriersDirty(void)                     { mBarriersDirty = true; }
 

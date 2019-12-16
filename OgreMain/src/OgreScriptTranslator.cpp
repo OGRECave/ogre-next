@@ -10804,7 +10804,7 @@ namespace Ogre{
                         }
                         else
                         {
-                            mPassDef->mExecutionMask = static_cast<uint8>( val & 0xFF );
+                            mPassDef->setExecutionMask( val );
                         }
                     }
                     break;
