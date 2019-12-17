@@ -1,8 +1,8 @@
 
 @property( ambient_sh )
-	@property( ambient_sh_monochrome )
+	@property( !ambient_sh_monochrome )
 		@piece( DeclIrradianceSH )
-			float3 irradianceSH( float3 n, constant PassBuffer &passBuf )
+			float3 irradianceSH( float3 n PASSBUF_ARG_DECL )
 			{
 				// We can use only the first 2 bands for better performance
 				/*return
@@ -29,7 +29,7 @@
 		@end
 	@else
 		@piece( DeclIrradianceSH )
-			float3 irradianceSH( float3 n, constant PassBuffer &passBuf )
+			float3 irradianceSH( float3 n PASSBUF_ARG_DECL )
 			{
 				// We can use only the first 2 bands for better performance
 				return
@@ -61,7 +61,7 @@
 			if( vctSpecular.w == 0 )
 			{
 		@end
-				pixelData.envColourD += irradianceSH( pixelData.normal, passBuf );
+				pixelData.envColourD += irradianceSH( pixelData.normal PASSBUF_ARG );
 		@property( vct_num_probes )
 			}
 		@end

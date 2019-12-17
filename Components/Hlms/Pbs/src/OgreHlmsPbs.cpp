@@ -1521,11 +1521,11 @@ namespace Ogre
 
             // float4 sh0 - sh6;
             if( ambientMode == AmbientSh )
-                mapSize += 7u * 4u;
+                mapSize += 7u * 4u * 4u;
 
             // float4 sh0 - sh2;
             if( ambientMode == AmbientShMonochrome )
-                mapSize += 3u * 4u;
+                mapSize += 3u * 4u * 4u;
 
             //vec3 irradianceOrigin + float maxPower +
             //vec3 irradianceSize + float invHeight + mat4 invView

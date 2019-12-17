@@ -11,6 +11,14 @@
 
 	@insertpiece( DeclReverseDepthMacros )
 
+	@property( syntax == metal )
+		#define PASSBUF_ARG_DECL , constant PassBuffer &passBuf
+		#define PASSBUF_ARG , passBuf
+	@else
+		#define PASSBUF_ARG_DECL
+		#define PASSBUF_ARG
+	@end
+
 	@property( hlms_enable_cubemaps_auto )
 		@insertpiece( UnpackHelpers )
 	@end
@@ -123,6 +131,7 @@
 
 	@insertpiece( DeclVctFuncs )
 	@insertpiece( DeclIrradianceFieldFuncs )
+	@insertpiece( DeclIrradianceSH )
 @end
 
 
