@@ -93,6 +93,12 @@ namespace Ogre
             /// dynamically very often and this might cause swapping shaders.
             AmbientHemisphere,
 
+            /// Uses spherical harmonics
+            AmbientSh,
+
+            /// Uses spherical harmonics (monochrome / single channel)
+            AmbientShMonochrome,
+
             /// Disable ambient lighting.
             AmbientNone
         };
@@ -472,6 +478,8 @@ namespace Ogre
         static const IdString ExponentialShadowMaps;
 
         static const IdString AmbientHemisphere;
+        static const IdString AmbientSh;
+        static const IdString AmbientShMonochrome;
         static const IdString LtcTextureAvailable;
         static const IdString EnvMapScale;
         static const IdString AmbientFixed;

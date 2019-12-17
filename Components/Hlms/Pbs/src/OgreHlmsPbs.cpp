@@ -168,6 +168,8 @@ namespace Ogre
     const IdString PbsProperty::LtcTextureAvailable= IdString( "ltc_texture_available" );
     const IdString PbsProperty::AmbientFixed      = IdString( "ambient_fixed" );
     const IdString PbsProperty::AmbientHemisphere = IdString( "ambient_hemisphere" );
+    const IdString PbsProperty::AmbientSh         = IdString( "ambient_sh" );
+    const IdString PbsProperty::AmbientShMonochrome=IdString( "ambient_sh_monochrome" );
     const IdString PbsProperty::TargetEnvprobeMap = IdString( "target_envprobe_map" );
     const IdString PbsProperty::ParallaxCorrectCubemaps = IdString( "parallax_correct_cubemaps" );
     const IdString PbsProperty::UseParallaxCorrectCubemaps= IdString( "use_parallax_correct_cubemaps" );
@@ -952,26 +954,13 @@ namespace Ogre
 
         const bool hasIrradianceField = getProperty( PbsProperty::IrradianceField ) != 0;
 
-        if( getProperty( HlmsBaseProp::LightsSpot ) ||
-            getProperty( HlmsBaseProp::UseSsr ) ||
-            getProperty( HlmsBaseProp::ForwardPlus ) ||
-            getProperty( PbsProperty::UseEnvProbeMap ) ||
-            getProperty( PbsProperty::UsePlanarReflections ) ||
-            getProperty( PbsProperty::AmbientHemisphere ) ||
-            getProperty( HlmsBaseProp::LightsAreaApprox ) ||
-            getProperty( HlmsBaseProp::LightsAreaLtc ) ||
-            hasIrradianceField ||
-            hasVct )
-        {
-            setProperty( PbsProperty::NeedsViewDir, 1 );
-        }
-
         bool bNeedsEnvBrdf = false;
 
         if( getProperty( HlmsBaseProp::UseSsr ) ||
             getProperty( PbsProperty::UseEnvProbeMap ) ||
             getProperty( PbsProperty::UsePlanarReflections ) ||
             getProperty( PbsProperty::AmbientHemisphere ) ||
+            getProperty( PbsProperty::AmbientSh ) ||
             getProperty( PbsProperty::EnableCubemapsAuto ) ||
             hasIrradianceField ||
             hasVct )
@@ -979,6 +968,17 @@ namespace Ogre
             setProperty( PbsProperty::NeedsReflDir, 1 );
             setProperty( PbsProperty::NeedsEnvBrdf, 1 );
             bNeedsEnvBrdf = true;
+        }
+
+        if( getProperty( HlmsBaseProp::LightsSpot ) ||
+            getProperty( HlmsBaseProp::ForwardPlus ) ||
+            getProperty( HlmsBaseProp::LightsAreaApprox ) ||
+            getProperty( HlmsBaseProp::LightsAreaLtc ) ||
+            bNeedsEnvBrdf ||
+            hasIrradianceField ||
+            hasVct )
+        {
+            setProperty( PbsProperty::NeedsViewDir, 1 );
         }
 
         int32 texUnit = mReservedTexSlots;
@@ -1294,6 +1294,12 @@ namespace Ogre
                 setProperty( PbsProperty::AmbientFixed, 1 );
             if( ambientMode == AmbientHemisphere )
                 setProperty( PbsProperty::AmbientHemisphere, 1 );
+            if( ambientMode == AmbientSh || ambientMode == AmbientShMonochrome )
+            {
+                setProperty( PbsProperty::AmbientSh, 1 );
+                if( ambientMode == AmbientShMonochrome )
+                    setProperty( PbsProperty::AmbientShMonochrome, 1 );
+            }
 
             if( envMapScale != 1.0f )
                 setProperty( PbsProperty::EnvMapScale, 1 );
@@ -1512,6 +1518,14 @@ namespace Ogre
             {
                 mapSize += 8 * 4;
             }
+
+            // float4 sh0 - sh6;
+            if( ambientMode == AmbientSh )
+                mapSize += 7u * 4u;
+
+            // float4 sh0 - sh2;
+            if( ambientMode == AmbientShMonochrome )
+                mapSize += 3u * 4u;
 
             //vec3 irradianceOrigin + float maxPower +
             //vec3 irradianceSize + float invHeight + mat4 invView
@@ -1840,6 +1854,30 @@ namespace Ogre
                 *passBufferPtr++ = static_cast<float>( hemisphereDir.y );
                 *passBufferPtr++ = static_cast<float>( hemisphereDir.z );
                 *passBufferPtr++ = 1.0f;
+            }
+
+            // float4 sh0 - sh6;
+            if( ambientMode == AmbientSh )
+            {
+                const float *ambientSphericalHarmonics = sceneManager->getSphericalHarmonics();
+                for( size_t i = 0u; i < 9u; ++i )
+                {
+                    *passBufferPtr++ = ambientSphericalHarmonics[i * 3u + 0u];
+                    *passBufferPtr++ = ambientSphericalHarmonics[i * 3u + 1u];
+                    *passBufferPtr++ = ambientSphericalHarmonics[i * 3u + 2u];
+                }
+                *passBufferPtr++ = 0.0f; // Unused / padding
+            }
+
+            // float4 sh0 - sh2;
+            if( ambientMode == AmbientShMonochrome )
+            {
+                const float *ambientSphericalHarmonics = sceneManager->getSphericalHarmonics();
+                for( size_t i = 0u; i < 9u; ++i )
+                    *passBufferPtr++ = ambientSphericalHarmonics[i * 3u + 0u];
+                *passBufferPtr++ = 0.0f; // Unused / padding
+                *passBufferPtr++ = 0.0f; // Unused / padding
+                *passBufferPtr++ = 0.0f; // Unused / padding
             }
 
             if( mIrradianceVolume )

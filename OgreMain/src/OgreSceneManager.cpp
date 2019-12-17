@@ -158,6 +158,8 @@ mGpuParamsDirty((uint16)GPV_ALL)
         mSceneRoot[i] = 0;
     mSceneDummy = 0;
 
+    memset( mAmbientSphericalHarmonics, 0, sizeof( mAmbientSphericalHarmonics ) );
+
     setAmbientLight( ColourValue::Black, ColourValue::Black, Vector3::UNIT_Y, 1.0f );
 
     mNodeMemoryManager[SCENE_STATIC]._setTwin( SCENE_STATIC, &mNodeMemoryManager[SCENE_DYNAMIC] );
@@ -2857,6 +2859,16 @@ void SceneManager::setAmbientLight( const ColourValue &upperHemisphere,
     mAmbientLightHemisphereDir.normalise();
     mAmbientLight[0].a = envmapScale;
     mEnvFeatures = envFeatures;
+}
+//-----------------------------------------------------------------------
+void SceneManager::setSphericalHarmonics( Vector3 ambientSphericalHarmonics[9] )
+{
+    for( size_t i = 0u; i < 9u; ++i )
+    {
+        mAmbientSphericalHarmonics[i * 3u + 0u] = (float)ambientSphericalHarmonics[i].x;
+        mAmbientSphericalHarmonics[i * 3u + 1u] = (float)ambientSphericalHarmonics[i].y;
+        mAmbientSphericalHarmonics[i * 3u + 2u] = (float)ambientSphericalHarmonics[i].z;
+    }
 }
 //-----------------------------------------------------------------------
 ViewPoint SceneManager::getSuggestedViewpoint(bool random)

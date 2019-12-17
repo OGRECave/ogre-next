@@ -141,6 +141,17 @@ CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
 	float4 ambientHemisphereDir;
 @end
 
+@property( ambient_sh )
+	@property( ambient_sh_monochrome )
+		float4 sh0;
+		float4 sh1;
+		float4 sh2; // sh2.yzw are unused
+	@else
+		@foreach( 7, n )
+			float4 sh@n;@end
+	@end
+@end
+
 @property( irradiance_volumes )
 	float4 irradianceOrigin;	//.w = maxPower
 	float4 irradianceSize;		//.w = 1.0f / irradianceTexture->getHeight()
