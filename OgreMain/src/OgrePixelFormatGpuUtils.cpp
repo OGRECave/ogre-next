@@ -817,6 +817,26 @@ namespace Ogre
             break;
         }
 
+        case PFG_RGB8_UNORM:
+            convertFromFloat<uint8>( rgbaPtr, dstPtr, 3u, flags );
+            break;
+        case PFG_RGB8_UNORM_SRGB:
+            convertFromFloat<uint8>( rgbaPtr, dstPtr, 3u, flags );
+            break;
+        case PFG_BGR8_UNORM:
+            ((uint8*)dstPtr)[0] = static_cast<uint8>( Math::saturate( rgbaPtr[2] ) * 255.0f + 0.5f );
+            ((uint8*)dstPtr)[1] = static_cast<uint8>( Math::saturate( rgbaPtr[1] ) * 255.0f + 0.5f );
+            ((uint8*)dstPtr)[2] = static_cast<uint8>( Math::saturate( rgbaPtr[0] ) * 255.0f + 0.5f );
+            break;
+        case PFG_BGR8_UNORM_SRGB:
+            ((uint8*)dstPtr)[0] =
+                    static_cast<uint8>( Math::saturate( toSRGB( rgbaPtr[2] ) ) * 255.0f + 0.5f );
+            ((uint8*)dstPtr)[1] =
+                    static_cast<uint8>( Math::saturate( toSRGB( rgbaPtr[1] ) ) * 255.0f + 0.5f );
+            ((uint8*)dstPtr)[2] =
+                    static_cast<uint8>( Math::saturate( toSRGB( rgbaPtr[0] ) ) * 255.0f + 0.5f );
+            break;
+
         case PFG_AYUV: case PFG_Y410: case PFG_Y416:
         case PFG_NV12: case PFG_P010: case PFG_P016:
         case PFG_420_OPAQUE:
@@ -1103,6 +1123,21 @@ namespace Ogre
             break;
         }
 
+        case PFG_RGB8_UNORM:
+            convertToFloat<uint8>( rgbaPtr, srcPtr, 3u, flags );
+            break;
+        case PFG_RGB8_UNORM_SRGB:
+            convertToFloat<uint8>( rgbaPtr, srcPtr, 3u, flags );
+            break;
+        case PFG_BGR8_UNORM:
+            convertToFloat<uint8>( rgbaPtr, srcPtr, 3u, flags );
+            std::swap( rgbaPtr[0], rgbaPtr[2] );
+            break;
+        case PFG_BGR8_UNORM_SRGB:
+            convertToFloat<uint8>( rgbaPtr, srcPtr, 3u, flags );
+            std::swap( rgbaPtr[0], rgbaPtr[2] );
+            break;
+
         case PFG_AYUV: case PFG_Y410: case PFG_Y416:
         case PFG_NV12: case PFG_P010: case PFG_P016:
         case PFG_420_OPAQUE:
@@ -1387,6 +1422,8 @@ namespace Ogre
         case PFG_BGRA8_UNORM:       return PFG_BGRA8_UNORM_SRGB;
         case PFG_BGRX8_UNORM:       return PFG_BGRX8_UNORM_SRGB;
         case PFG_BC7_UNORM:         return PFG_BC7_UNORM_SRGB;
+        case PFG_RGB8_UNORM:        return PFG_RGB8_UNORM_SRGB;
+        case PFG_BGR8_UNORM:        return PFG_BGR8_UNORM_SRGB;
         case PFG_ETC2_RGB8_UNORM:   return PFG_ETC2_RGB8_UNORM_SRGB;
         case PFG_ETC2_RGBA8_UNORM:  return PFG_ETC2_RGBA8_UNORM_SRGB;
         case PFG_ETC2_RGB8A1_UNORM: return PFG_ETC2_RGB8A1_UNORM_SRGB;
@@ -1422,6 +1459,8 @@ namespace Ogre
         case PFG_BGRA8_UNORM_SRGB:          return PFG_BGRA8_UNORM;
         case PFG_BGRX8_UNORM_SRGB:          return PFG_BGRX8_UNORM;
         case PFG_BC7_UNORM_SRGB:            return PFG_BC7_UNORM;
+        case PFG_RGB8_UNORM_SRGB:           return PFG_RGB8_UNORM;
+        case PFG_BGR8_UNORM_SRGB:           return PFG_BGR8_UNORM;
         case PFG_ETC2_RGB8_UNORM_SRGB:      return PFG_ETC2_RGB8_UNORM;
         case PFG_ETC2_RGBA8_UNORM_SRGB:     return PFG_ETC2_RGBA8_UNORM;
         case PFG_ETC2_RGB8A1_UNORM_SRGB:    return PFG_ETC2_RGB8A1_UNORM;
@@ -1688,6 +1727,11 @@ namespace Ogre
         {"PFG_P208",				3u, 0,						0 },
         {"PFG_V208",				3u, 0,						0 },
         {"PFG_V408",				3u, 0,						0 },
+
+        {"PFG_RGB8_UNORM",			3u, 3u * sizeof(uint8),		PFF_NORMALIZED },
+        {"PFG_RGB8_UNORM_SRGB",		3u, 3u * sizeof(uint8),		PFF_NORMALIZED|PFF_SRGB },
+        {"PFG_BGR8_UNORM",			3u, 3u * sizeof(uint8),		PFF_NORMALIZED },
+        {"PFG_BGR8_UNORM_SRGB",		3u, 3u * sizeof(uint8),		PFF_NORMALIZED|PFF_SRGB },
 
         {"PFG_PVRTC_RGB2",			3u, 0,						PFF_COMPRESSED_COMMON },
         {"PFG_PVRTC_RGB2_SRGB",		3u, 0,						PFF_COMPRESSED_COMMON|PFF_SRGB },
