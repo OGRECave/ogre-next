@@ -61,7 +61,8 @@
 			if( vctSpecular.w == 0 )
 			{
 		@end
-				pixelData.envColourD += irradianceSH( pixelData.normal PASSBUF_ARG );
+				float3 wsNormal = mul( passBuf.invViewMatCubemap, pixelData.normal );
+				pixelData.envColourD += irradianceSH( wsNormal PASSBUF_ARG );
 		@property( vct_num_probes )
 			}
 		@end
