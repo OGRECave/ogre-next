@@ -244,7 +244,7 @@ namespace Ogre
         Vector3 restrictedAabbMin( mArea.getMinimum() );
         Vector3 restrictedAabbMax( mArea.getMaximum() );
         restrictedAabbMin.makeCeil( mProbeShape.getMinimum() );
-        restrictedAabbMax.makeCeil( mProbeShape.getMaximum() );
+        restrictedAabbMax.makeFloor( mProbeShape.getMaximum() );
 
         Quaternion qRot( mOrientation );
         SceneNode *sceneNode = mInternalProbe->getParentSceneNode();
