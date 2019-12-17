@@ -29,7 +29,7 @@
 		@end
 	@else
 		@piece( DeclIrradianceSH )
-			float3 irradianceSH( float3 n PASSBUF_ARG_DECL )
+			float irradianceSH( float3 n PASSBUF_ARG_DECL )
 			{
 				// We can use only the first 2 bands for better performance
 				return
@@ -62,6 +62,7 @@
 			{
 		@end
 				float3 wsNormal = mul( passBuf.invViewMatCubemap, pixelData.normal );
+				wsNormal.x = -wsNormal.x;
 				pixelData.envColourD += irradianceSH( wsNormal PASSBUF_ARG );
 		@property( vct_num_probes )
 			}
