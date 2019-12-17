@@ -835,6 +835,12 @@ namespace Ogre
         image.save( filename, 0, image.getNumMipmaps() );
     }
     //-----------------------------------------------------------------------------------
+    void TextureGpu::copyContentsToMemory( TextureBox src, TextureBox dst, PixelFormatGpu dstFormat,
+        bool automaticResolve )
+    {
+        Image2::copyContentsToMemory( this, src, dst, dstFormat, automaticResolve );
+    }
+    //-----------------------------------------------------------------------------------
     TextureGpuManager* TextureGpu::getTextureManager(void) const
     {
         return mTextureManager;

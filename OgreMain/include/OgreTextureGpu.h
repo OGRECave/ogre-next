@@ -509,6 +509,10 @@ namespace Ogre
         void writeContentsToFile( const String& filename, uint8 minMip, uint8 maxMip,
                                   bool automaticResolve=true );
 
+        /// Writes the current contents of the render target to the memory.
+        void copyContentsToMemory(TextureBox src, TextureBox dst, PixelFormatGpu dstFormat,
+                                   bool automaticResolve=true);
+
         static const IdString msFinalTextureBuffer;
         static const IdString msMsaaTextureBuffer;
         virtual void getCustomAttribute( IdString name, void *pData ) {}
