@@ -743,6 +743,69 @@ namespace Ogre {
 
         mSectionList[idx]->setDatablock(name);
     }
+    //-----------------------------------------------------------------------------
+    MeshPtr ManualObject::convertToMesh( const String& meshName, const String& groupName,
+                                         bool buildShadowMapBuffers )
+    {
+        if (mCurrentSection)
+        {
+            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
+                "You cannot call convertToMesh() whilst you are in the middle of "
+                "defining the object; call end() first.",
+                "ManualObject::convertToMesh");
+        }
+        if (mSectionList.empty())
+        {
+            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
+                "No data defined to convert to a mesh.",
+                "ManualObject::convertToMesh");
+        }
+        MeshPtr m = MeshManager::getSingleton().createManual(meshName, groupName);
+
+        for (SectionList::iterator i = mSectionList.begin(); i != mSectionList.end(); ++i)
+        {
+            ManualObjectSection* sec = *i;
+            SubMesh* sm = m->createSubMesh();
+            sm->setMaterialName(sec->mDatablockName);
+
+            size_t numVertices = sec->mVao->getBaseVertexBuffer()->getNumElements();
+            size_t numIndices = sec->mVao->getIndexBuffer()->getNumElements();
+
+            Ogre::VertexBufferPacked *vertexBuffer = sec->mVaoManager->createVertexBuffer( sec->mVertexElements,
+                                                                                           numVertices,
+                                                                                           Ogre::BT_DEFAULT,
+                                                                                           0, false );
+
+            sec->mVao->getBaseVertexBuffer()->copyTo( vertexBuffer, 0, 0, numVertices );
+
+            Ogre::VertexBufferPackedVec vertexBuffers;
+            vertexBuffers.push_back( vertexBuffer );
+
+            Ogre::IndexBufferPacked *indexBuffer = sec->mVaoManager->createIndexBuffer( sec->m32BitIndices ? Ogre::IndexBufferPacked::IT_32BIT :
+                                                                                                             Ogre::IndexBufferPacked::IT_16BIT,
+                                                                                        numIndices,
+                                                                                        Ogre::BT_DEFAULT,
+                                                                                        0, false );
+
+            sec->mVao->getIndexBuffer()->copyTo( indexBuffer, 0, 0, numIndices );
+
+            Ogre::VertexArrayObject *vao = sec->mVaoManager->createVertexArrayObject(
+                        vertexBuffers, indexBuffer, sec->mOperationType );
+
+            sm->mVao[Ogre::VpNormal].push_back( vao );
+            sm->mVao[Ogre::VpShadow].push_back( vao );
+        }
+
+        Aabb aabb = mObjectData.mLocalAabb->getAsAabb(mObjectData.mIndex);
+        m->_setBounds( aabb );
+        m->_setBoundingSphereRadius( mObjectData.mLocalRadius[mObjectData.mIndex] );
+
+        m->prepareForShadowMapping( !buildShadowMapBuffers );
+
+        m->load();
+
+        return m;
+    }
     //-----------------------------------------------------------------------
     ManualObject::ManualObjectSection* ManualObject::getSection(unsigned int inIndex) const
     {
@@ -871,7 +934,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------------
     ManualObject::ManualObjectSection::ManualObjectSection(ManualObject* parent,
         const String& datablockName, OperationType opType)
-        : mParent(parent), mVao(0), mOperationType(opType), m32BitIndices(false)
+        : mParent(parent), mVao(0), mOperationType(opType), m32BitIndices(false), mDatablockName(datablockName)
     {
 
     }
