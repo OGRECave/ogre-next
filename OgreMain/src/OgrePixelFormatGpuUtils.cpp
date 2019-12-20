@@ -1264,6 +1264,20 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    namespace
+    {
+        typedef void(*row_conversion_func_t)(uint8* src, uint8* dst, size_t width);
+
+        void convCopy16Bpx(uint8* src, uint8* dst, size_t width) { memcpy(dst, src, 16 * width); }
+        void convCopy12Bpx(uint8* src, uint8* dst, size_t width) { memcpy(dst, src, 12 * width); }
+        void convCopy8Bpx(uint8* src, uint8* dst, size_t width)  { memcpy(dst, src, 8 * width); }
+        void convCopy6Bpx(uint8* src, uint8* dst, size_t width)  { memcpy(dst, src, 6 * width); }
+        void convCopy4Bpx(uint8* src, uint8* dst, size_t width)  { memcpy(dst, src, 4 * width); }
+        void convCopy3Bpx(uint8* src, uint8* dst, size_t width)  { memcpy(dst, src, 3 * width); }
+        void convCopy2Bpx(uint8* src, uint8* dst, size_t width)  { memcpy(dst, src, 2 * width); }
+        void convCopy1Bpx(uint8* src, uint8* dst, size_t width)  { memcpy(dst, src, 1 * width); }
+    }
+    //-----------------------------------------------------------------------------------
     void PixelFormatGpuUtils::bulkPixelConversion( const TextureBox &src, PixelFormatGpu srcFormat,
                                                    TextureBox &dst, PixelFormatGpu dstFormat,
                                                    bool verticalFlip )
@@ -1282,13 +1296,8 @@ namespace Ogre
         }
 
         assert( src.equalSize( dst ) );
-
-        // Is there a specialized, inlined, conversion?
-        /*if(doOptimizedConversion(src, dst))
-        {
-            // If so, good
-            return;
-        }*/
+        assert( getBytesPerPixel(srcFormat) == src.bytesPerPixel );
+        assert( getBytesPerPixel(dstFormat) == dst.bytesPerPixel );
 
         const size_t srcBytesPerPixel = src.bytesPerPixel;
         const size_t dstBytesPerPixel = dst.bytesPerPixel;
@@ -1299,6 +1308,38 @@ namespace Ogre
         const size_t width = src.width;
         const size_t height = src.height;
         const size_t depthOrSlices = src.getDepthOrSlices();
+
+        // Is there a optimized row conversion?
+        row_conversion_func_t rowConversionFunc = 0;
+        if (srcFormat == dstFormat)
+        {
+            switch (srcBytesPerPixel)
+            {
+            case 1: rowConversionFunc = convCopy1Bpx; break;
+            case 2: rowConversionFunc = convCopy2Bpx; break;
+            case 3: rowConversionFunc = convCopy3Bpx; break;
+            case 4: rowConversionFunc = convCopy4Bpx; break;
+            case 6: rowConversionFunc = convCopy6Bpx; break;
+            case 8: rowConversionFunc = convCopy8Bpx; break;
+            case 12: rowConversionFunc = convCopy12Bpx; break;
+            case 16: rowConversionFunc = convCopy16Bpx; break;
+            }
+        }
+
+        if (rowConversionFunc)
+        {
+            for( size_t z=0; z<depthOrSlices; ++z )
+            {
+                for( size_t y=0; y<height; ++y )
+                {
+                    size_t dest_y = verticalFlip ? height - 1 - y : y;
+                    uint8* srcPtr = srcData + src.bytesPerImage * z + src.bytesPerRow * y;
+                    uint8* dstPtr = dstData + dst.bytesPerImage * z + dst.bytesPerRow * dest_y;
+                    rowConversionFunc( srcPtr, dstPtr, width );
+                }
+            }
+            return;
+        }
 
         // The brute force fallback
         float rgba[4];
