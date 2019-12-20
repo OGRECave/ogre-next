@@ -1272,17 +1272,18 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     namespace
     {
-        typedef void(*row_conversion_func_t)(uint8* src, uint8* dst, size_t width);
+        typedef void ( *row_conversion_func_t )( uint8 *src, uint8 *dst, size_t width );
 
-        void convCopy16Bpx(uint8* src, uint8* dst, size_t width) { memcpy(dst, src, 16 * width); }
-        void convCopy12Bpx(uint8* src, uint8* dst, size_t width) { memcpy(dst, src, 12 * width); }
-        void convCopy8Bpx(uint8* src, uint8* dst, size_t width)  { memcpy(dst, src, 8 * width); }
-        void convCopy6Bpx(uint8* src, uint8* dst, size_t width)  { memcpy(dst, src, 6 * width); }
-        void convCopy4Bpx(uint8* src, uint8* dst, size_t width)  { memcpy(dst, src, 4 * width); }
-        void convCopy3Bpx(uint8* src, uint8* dst, size_t width)  { memcpy(dst, src, 3 * width); }
-        void convCopy2Bpx(uint8* src, uint8* dst, size_t width)  { memcpy(dst, src, 2 * width); }
-        void convCopy1Bpx(uint8* src, uint8* dst, size_t width)  { memcpy(dst, src, 1 * width); }
+        void convCopy16Bpx( uint8 *src, uint8 *dst, size_t width ) { memcpy( dst, src, 16 * width ); }
+        void convCopy12Bpx( uint8 *src, uint8 *dst, size_t width ) { memcpy( dst, src, 12 * width ); }
+        void convCopy8Bpx( uint8 *src, uint8 *dst, size_t width ) { memcpy( dst, src, 8 * width ); }
+        void convCopy6Bpx( uint8 *src, uint8 *dst, size_t width ) { memcpy( dst, src, 6 * width ); }
+        void convCopy4Bpx( uint8 *src, uint8 *dst, size_t width ) { memcpy( dst, src, 4 * width ); }
+        void convCopy3Bpx( uint8 *src, uint8 *dst, size_t width ) { memcpy( dst, src, 3 * width ); }
+        void convCopy2Bpx( uint8 *src, uint8 *dst, size_t width ) { memcpy( dst, src, 2 * width ); }
+        void convCopy1Bpx( uint8 *src, uint8 *dst, size_t width ) { memcpy( dst, src, 1 * width ); }
 
+        // clang-format off
         void convRGBA32toRGB32(uint8* _src, uint8* _dst, size_t width) {
             uint32* src = (uint32*)_src; uint32* dst = (uint32*)_dst;
             while (width--) { dst[0] = src[0]; dst[1] = src[1]; dst[2] = src[2]; src += 4; dst += 3; }
@@ -1310,7 +1311,8 @@ namespace Ogre
         }
 
         void convRGBAtoBGRA(uint8* src, uint8* dst, size_t width) {
-            while (width--) { dst[0] = src[2]; dst[1] = src[1]; dst[2] = src[0]; dst[3] = src[3]; src += 4; dst += 4; }
+            while (width--)
+            { dst[0] = src[2]; dst[1] = src[1]; dst[2] = src[0]; dst[3] = src[3]; src += 4; dst += 4; }
         }
         void convRGBAtoRGB(uint8* src, uint8* dst, size_t width) {
             while (width--) { dst[0] = src[0]; dst[1] = src[1]; dst[2] = src[2]; src += 4; dst += 3; }
@@ -1333,17 +1335,21 @@ namespace Ogre
         }
 
         void convBGRXtoRGBA(uint8* src, uint8* dst, size_t width) {
-            while (width--) { dst[0] = src[2]; dst[1] = src[1]; dst[2] = src[0]; dst[3] = 0xFF; src += 4; dst += 4; }
+            while (width--)
+            { dst[0] = src[2]; dst[1] = src[1]; dst[2] = src[0]; dst[3] = 0xFF; src += 4; dst += 4; }
         }
         void convBGRXtoBGRA(uint8* src, uint8* dst, size_t width) {
-            while (width--) { dst[0] = src[0]; dst[1] = src[1]; dst[2] = src[2]; dst[3] = 0xFF; src += 4; dst += 4; }
+            while (width--)
+            { dst[0] = src[0]; dst[1] = src[1]; dst[2] = src[2]; dst[3] = 0xFF; src += 4; dst += 4; }
         }
 
         void convRGBtoRGBA(uint8* src, uint8* dst, size_t width) {
-            while (width--) { dst[0] = src[0]; dst[1] = src[1]; dst[2] = src[2]; dst[3] = 0xFF; src += 3; dst += 4; }
+            while (width--)
+            { dst[0] = src[0]; dst[1] = src[1]; dst[2] = src[2]; dst[3] = 0xFF; src += 3; dst += 4; }
         }
         void convRGBtoBGRA(uint8* src, uint8* dst, size_t width) {
-            while (width--) { dst[0] = src[2]; dst[1] = src[1]; dst[2] = src[0]; dst[3] = 0xFF; src += 3; dst += 4; }
+            while (width--)
+            { dst[0] = src[2]; dst[1] = src[1]; dst[2] = src[0]; dst[3] = 0xFF; src += 3; dst += 4; }
         }
         void convRGBtoBGR(uint8* src, uint8* dst, size_t width) {
             while (width--) { dst[0] = src[2]; dst[1] = src[1]; dst[2] = src[0]; src += 3; dst += 3; }
@@ -1365,7 +1371,8 @@ namespace Ogre
         void convRGtoR(uint8* src, uint8* dst, size_t width) {
             while (width--) { dst[0] = src[0]; src += 2; dst += 1; }
         }
-    }
+        // clang-format on
+    }  // namespace
     //-----------------------------------------------------------------------------------
     void PixelFormatGpuUtils::bulkPixelConversion( const TextureBox &src, PixelFormatGpu srcFormat,
                                                    TextureBox &dst, PixelFormatGpu dstFormat,
@@ -1400,10 +1407,11 @@ namespace Ogre
 
         // Is there a optimized row conversion?
         row_conversion_func_t rowConversionFunc = 0;
-        if (srcFormat == dstFormat)
+        if( srcFormat == dstFormat )
         {
-            switch (srcBytesPerPixel)
+            switch( srcBytesPerPixel )
             {
+                // clang-format off
             case 1: rowConversionFunc = convCopy1Bpx; break;
             case 2: rowConversionFunc = convCopy2Bpx; break;
             case 3: rowConversionFunc = convCopy3Bpx; break;
@@ -1412,59 +1420,62 @@ namespace Ogre
             case 8: rowConversionFunc = convCopy8Bpx; break;
             case 12: rowConversionFunc = convCopy12Bpx; break;
             case 16: rowConversionFunc = convCopy16Bpx; break;
+                // clang-format on
             }
         }
-        else if(getFlags(srcFormat) == getFlags(dstFormat)) // semantic match, copy as typeless
+        else if( getFlags( srcFormat ) == getFlags( dstFormat ) )  // semantic match, copy as typeless
         {
-#define PFL_PAIR(a,b) ((a << 8) | b)
-            PixelFormatLayout srcLayout = getPixelLayout(srcFormat);
-            PixelFormatLayout dstLayout = getPixelLayout(dstFormat);
-            switch (PFL_PAIR(srcLayout, dstLayout))
+#define PFL_PAIR( a, b ) ( ( a << 8 ) | b )
+            PixelFormatLayout srcLayout = getPixelLayout( srcFormat );
+            PixelFormatLayout dstLayout = getPixelLayout( dstFormat );
+            switch( PFL_PAIR( srcLayout, dstLayout ) )
             {
-            case PFL_PAIR(PFL_RGBA32, PFL_RGB32): rowConversionFunc = convRGBA32toRGB32; break;
-            case PFL_PAIR(PFL_RGB32, PFL_RG32): rowConversionFunc = convRGB32toRG32; break;
-            case PFL_PAIR(PFL_RG32, PFL_R32): rowConversionFunc = convRG32toR32; break;
+                // clang-format off
+            case PFL_PAIR( PFL_RGBA32, PFL_RGB32 ): rowConversionFunc = convRGBA32toRGB32; break;
+            case PFL_PAIR( PFL_RGB32, PFL_RG32 ): rowConversionFunc = convRGB32toRG32; break;
+            case PFL_PAIR( PFL_RG32, PFL_R32 ): rowConversionFunc = convRG32toR32; break;
 
-            case PFL_PAIR(PFL_RGBA16, PFL_RGB16): rowConversionFunc = convRGBA16toRGB16; break;
-            case PFL_PAIR(PFL_RGB16, PFL_RG16): rowConversionFunc = convRGB16toRG16; break;
-            case PFL_PAIR(PFL_RG16, PFL_R16): rowConversionFunc = convRG16toR16; break;
+            case PFL_PAIR( PFL_RGBA16, PFL_RGB16 ): rowConversionFunc = convRGBA16toRGB16; break;
+            case PFL_PAIR( PFL_RGB16, PFL_RG16 ): rowConversionFunc = convRGB16toRG16; break;
+            case PFL_PAIR( PFL_RG16, PFL_R16 ): rowConversionFunc = convRG16toR16; break;
 
-            case PFL_PAIR(PFL_RGBA8, PFL_BGRA8): rowConversionFunc = convRGBAtoBGRA; break;
-            case PFL_PAIR(PFL_RGBA8, PFL_BGRX8): rowConversionFunc = convRGBAtoBGRA; break;
-            case PFL_PAIR(PFL_RGBA8, PFL_RGB8): rowConversionFunc = convRGBAtoRGB; break;
-            case PFL_PAIR(PFL_RGBA8, PFL_BGR8): rowConversionFunc = convRGBAtoBGR; break;
-            case PFL_PAIR(PFL_RGBA8, PFL_RG8): rowConversionFunc = convRGBAtoRG; break;
-            case PFL_PAIR(PFL_RGBA8, PFL_R8): rowConversionFunc = convRGBAtoR; break;
+            case PFL_PAIR( PFL_RGBA8, PFL_BGRA8 ): rowConversionFunc = convRGBAtoBGRA; break;
+            case PFL_PAIR( PFL_RGBA8, PFL_BGRX8 ): rowConversionFunc = convRGBAtoBGRA; break;
+            case PFL_PAIR( PFL_RGBA8, PFL_RGB8 ): rowConversionFunc = convRGBAtoRGB; break;
+            case PFL_PAIR( PFL_RGBA8, PFL_BGR8 ): rowConversionFunc = convRGBAtoBGR; break;
+            case PFL_PAIR( PFL_RGBA8, PFL_RG8 ): rowConversionFunc = convRGBAtoRG; break;
+            case PFL_PAIR( PFL_RGBA8, PFL_R8 ): rowConversionFunc = convRGBAtoR; break;
 
-            case PFL_PAIR(PFL_BGRA8, PFL_RGBA8): rowConversionFunc = convRGBAtoBGRA; break;
-            case PFL_PAIR(PFL_BGRA8, PFL_BGRX8): rowConversionFunc = convCopy4Bpx; break;
-            case PFL_PAIR(PFL_BGRA8, PFL_RGB8): rowConversionFunc = convRGBAtoBGR; break;
-            case PFL_PAIR(PFL_BGRA8, PFL_BGR8): rowConversionFunc = convRGBAtoRGB; break;
-            case PFL_PAIR(PFL_BGRA8, PFL_RG8): rowConversionFunc = convBGRAtoRG; break;
-            case PFL_PAIR(PFL_BGRA8, PFL_R8): rowConversionFunc = convBGRAtoR; break;
+            case PFL_PAIR( PFL_BGRA8, PFL_RGBA8 ): rowConversionFunc = convRGBAtoBGRA; break;
+            case PFL_PAIR( PFL_BGRA8, PFL_BGRX8 ): rowConversionFunc = convCopy4Bpx; break;
+            case PFL_PAIR( PFL_BGRA8, PFL_RGB8 ): rowConversionFunc = convRGBAtoBGR; break;
+            case PFL_PAIR( PFL_BGRA8, PFL_BGR8 ): rowConversionFunc = convRGBAtoRGB; break;
+            case PFL_PAIR( PFL_BGRA8, PFL_RG8 ): rowConversionFunc = convBGRAtoRG; break;
+            case PFL_PAIR( PFL_BGRA8, PFL_R8 ): rowConversionFunc = convBGRAtoR; break;
 
-            case PFL_PAIR(PFL_BGRX8, PFL_RGBA8): rowConversionFunc = convBGRXtoRGBA; break;
-            case PFL_PAIR(PFL_BGRX8, PFL_BGRA8): rowConversionFunc = convBGRXtoBGRA; break;
-            case PFL_PAIR(PFL_BGRX8, PFL_RGB8): rowConversionFunc = convRGBAtoBGR; break;
-            case PFL_PAIR(PFL_BGRX8, PFL_BGR8): rowConversionFunc = convRGBAtoRGB; break;
-            case PFL_PAIR(PFL_BGRX8, PFL_RG8): rowConversionFunc = convBGRAtoRG; break;
-            case PFL_PAIR(PFL_BGRX8, PFL_R8): rowConversionFunc = convBGRAtoR; break;
+            case PFL_PAIR( PFL_BGRX8, PFL_RGBA8 ): rowConversionFunc = convBGRXtoRGBA; break;
+            case PFL_PAIR( PFL_BGRX8, PFL_BGRA8 ): rowConversionFunc = convBGRXtoBGRA; break;
+            case PFL_PAIR( PFL_BGRX8, PFL_RGB8 ): rowConversionFunc = convRGBAtoBGR; break;
+            case PFL_PAIR( PFL_BGRX8, PFL_BGR8 ): rowConversionFunc = convRGBAtoRGB; break;
+            case PFL_PAIR( PFL_BGRX8, PFL_RG8 ): rowConversionFunc = convBGRAtoRG; break;
+            case PFL_PAIR( PFL_BGRX8, PFL_R8 ): rowConversionFunc = convBGRAtoR; break;
 
-            case PFL_PAIR(PFL_RGB8, PFL_RGBA8): rowConversionFunc = convRGBtoRGBA; break;
-            case PFL_PAIR(PFL_RGB8, PFL_BGRA8): rowConversionFunc = convRGBtoBGRA; break;
-            case PFL_PAIR(PFL_RGB8, PFL_BGRX8): rowConversionFunc = convRGBtoBGRA; break;
-            case PFL_PAIR(PFL_RGB8, PFL_BGR8): rowConversionFunc = convRGBtoBGR; break;
-            case PFL_PAIR(PFL_RGB8, PFL_RG8): rowConversionFunc = convRGBtoRG; break;
-            case PFL_PAIR(PFL_RGB8, PFL_R8): rowConversionFunc = convRGBtoR; break;
+            case PFL_PAIR( PFL_RGB8, PFL_RGBA8 ): rowConversionFunc = convRGBtoRGBA; break;
+            case PFL_PAIR( PFL_RGB8, PFL_BGRA8 ): rowConversionFunc = convRGBtoBGRA; break;
+            case PFL_PAIR( PFL_RGB8, PFL_BGRX8 ): rowConversionFunc = convRGBtoBGRA; break;
+            case PFL_PAIR( PFL_RGB8, PFL_BGR8 ): rowConversionFunc = convRGBtoBGR; break;
+            case PFL_PAIR( PFL_RGB8, PFL_RG8 ): rowConversionFunc = convRGBtoRG; break;
+            case PFL_PAIR( PFL_RGB8, PFL_R8 ): rowConversionFunc = convRGBtoR; break;
 
-            case PFL_PAIR(PFL_BGR8, PFL_RGBA8): rowConversionFunc = convRGBtoBGRA; break;
-            case PFL_PAIR(PFL_BGR8, PFL_BGRA8): rowConversionFunc = convRGBtoRGBA; break;
-            case PFL_PAIR(PFL_BGR8, PFL_BGRX8): rowConversionFunc = convRGBtoRGBA; break;
-            case PFL_PAIR(PFL_BGR8, PFL_RGB8): rowConversionFunc = convRGBAtoBGR; break;
-            case PFL_PAIR(PFL_BGR8, PFL_RG8): rowConversionFunc = convBGRtoRG; break;
-            case PFL_PAIR(PFL_BGR8, PFL_R8): rowConversionFunc = convBGRtoR; break;
+            case PFL_PAIR( PFL_BGR8, PFL_RGBA8 ): rowConversionFunc = convRGBtoBGRA; break;
+            case PFL_PAIR( PFL_BGR8, PFL_BGRA8 ): rowConversionFunc = convRGBtoRGBA; break;
+            case PFL_PAIR( PFL_BGR8, PFL_BGRX8 ): rowConversionFunc = convRGBtoRGBA; break;
+            case PFL_PAIR( PFL_BGR8, PFL_RGB8 ): rowConversionFunc = convRGBAtoBGR; break;
+            case PFL_PAIR( PFL_BGR8, PFL_RG8 ): rowConversionFunc = convBGRtoRG; break;
+            case PFL_PAIR( PFL_BGR8, PFL_R8 ): rowConversionFunc = convBGRtoR; break;
 
-            case PFL_PAIR(PFL_RG8, PFL_R8): rowConversionFunc = convRGtoR; break;
+            case PFL_PAIR( PFL_RG8, PFL_R8 ): rowConversionFunc = convRGtoR; break;
+                // clang-format on
             }
 #undef PFL_PAIR
         }

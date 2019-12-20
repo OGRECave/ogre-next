@@ -46,13 +46,13 @@ namespace Ogre {
         /// Pixel components size and order, typeless.
         enum PixelFormatLayout
         {
-            PFL_OTHER	= 0,
+            PFL_OTHER = 0,
 
             PFL_RGBA32,
             PFL_RGB32,
             PFL_RG32,
             PFL_R32,
-            
+
             PFL_RGBA16,
             PFL_RGB16,
             PFL_RG16,
@@ -211,7 +211,7 @@ namespace Ogre {
                                              TextureBox dst, PixelFormatGpu dstFormat );
         static void bulkPixelConversion( const TextureBox &src, PixelFormatGpu srcFormat,
                                          TextureBox &dst, PixelFormatGpu dstFormat,
-                                         bool verticalFlip = false);
+                                         bool verticalFlip = false );
 
         /// See PixelFormatFlags
         static uint32 getFlags( PixelFormatGpu format );

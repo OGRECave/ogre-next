@@ -202,8 +202,8 @@ namespace Ogre {
             When true, we will take care of resolving explicit MSAA textures if necessary,
             so that the download from GPU works fine.
         */
-        static void copyContentsToMemory( TextureGpu *srcTexture, TextureBox srcBox,
-                TextureBox dstBox, PixelFormatGpu dstFormat, bool automaticResolve=true );
+        static void copyContentsToMemory( TextureGpu *srcTexture, TextureBox srcBox, TextureBox dstBox,
+                                          PixelFormatGpu dstFormat, bool automaticResolve = true );
 
         /** Synchronously uploads the selected mips from this Image into a TextureGpu.
             This function is for convenience for when going async is not important.
