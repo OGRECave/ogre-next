@@ -1265,9 +1265,10 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void PixelFormatGpuUtils::bulkPixelConversion( const TextureBox &src, PixelFormatGpu srcFormat,
-                                                   TextureBox &dst, PixelFormatGpu dstFormat )
+                                                   TextureBox &dst, PixelFormatGpu dstFormat,
+                                                   bool verticalFlip )
     {
-        if( srcFormat == dstFormat )
+        if( srcFormat == dstFormat && !verticalFlip )
         {
             dst.copyFrom( src );
             return;
@@ -1305,8 +1306,9 @@ namespace Ogre
         {
             for( size_t y=0; y<height; ++y )
             {
+                size_t dest_y = verticalFlip ? height - 1 - y : y;
                 uint8 *srcPtr = srcData + src.bytesPerImage * z + src.bytesPerRow * y;
-                uint8 *dstPtr = dstData + dst.bytesPerImage * z + dst.bytesPerRow * y;
+                uint8 *dstPtr = dstData + dst.bytesPerImage * z + dst.bytesPerRow * dest_y;
 
                 for( size_t x=0; x<width; ++x )
                 {

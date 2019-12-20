@@ -184,7 +184,8 @@ namespace Ogre {
         static void convertForNormalMapping( TextureBox src, PixelFormatGpu srcFormat,
                                              TextureBox dst, PixelFormatGpu dstFormat );
         static void bulkPixelConversion( const TextureBox &src, PixelFormatGpu srcFormat,
-                                         TextureBox &dst, PixelFormatGpu dstFormat );
+                                         TextureBox &dst, PixelFormatGpu dstFormat,
+                                         bool verticalFlip = false);
 
         /// See PixelFormatFlags
         static uint32 getFlags( PixelFormatGpu format );
