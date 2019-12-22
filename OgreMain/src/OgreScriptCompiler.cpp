@@ -1324,6 +1324,7 @@ namespace Ogre
         mIds["camera_far_corners_world_space_centered"] = ID_CAMERA_FAR_CORNERS_WORLD_SPACE_CENTERED;
         mIds["camera_direction"]                = ID_CAMERA_DIRECTION;
         mIds["input"]           = ID_INPUT;
+        mIds["output"]          = ID_OUTPUT;
 
         mIds["non_tilers_only"] = ID_NON_TILERS_ONLY;
         mIds["buffers"]         = ID_BUFFERS;

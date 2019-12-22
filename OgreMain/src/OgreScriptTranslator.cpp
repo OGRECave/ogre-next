@@ -57,6 +57,7 @@ THE SOFTWARE.
 #include "Compositor/Pass/PassClear/OgreCompositorPassClearDef.h"
 #include "Compositor/Pass/PassCompute/OgreCompositorPassComputeDef.h"
 #include "Compositor/Pass/PassDepthCopy/OgreCompositorPassDepthCopyDef.h"
+#include "Compositor/Pass/PassIblSpecular/OgreCompositorPassIblSpecularDef.h"
 #include "Compositor/Pass/PassMipmap/OgreCompositorPassMipmapDef.h"
 #include "Compositor/Pass/PassQuad/OgreCompositorPassQuadDef.h"
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
@@ -6484,7 +6485,7 @@ namespace Ogre{
         else if( textureType == TextureTypes::TypeCube )
             depthOrSlices = 6u;
 
-        if( !noAutomipmaps && numMipmaps > 1u )
+        if( !noAutomipmaps && numMipmaps != 1u )
             textureFlags |= TextureFlags::AllowAutomipmaps;
 
         // No errors, create
@@ -10489,6 +10490,68 @@ namespace Ogre{
         }
     }
 
+    void CompositorPassTranslator::translateIblSpecular( ScriptCompiler *compiler,
+                                                         const AbstractNodePtr &node,
+                                                         CompositorTargetDef *targetDef )
+    {
+        mPassDef = targetDef->addPass( PASS_IBL_SPECULAR );
+        CompositorPassIblSpecularDef *passIbl = static_cast<CompositorPassIblSpecularDef *>( mPassDef );
+
+        ObjectAbstractNode *obj = reinterpret_cast<ObjectAbstractNode *>( node.get() );
+        obj->context = Any( mPassDef );
+
+        for( AbstractNodeList::iterator i = obj->children.begin(); i != obj->children.end(); ++i )
+        {
+            if( ( *i )->type == ANT_OBJECT )
+            {
+                processNode( compiler, *i );
+            }
+            else if( ( *i )->type == ANT_PROPERTY )
+            {
+                PropertyAbstractNode *prop = reinterpret_cast<PropertyAbstractNode *>( ( *i ).get() );
+                switch( prop->id )
+                {
+                case ID_INPUT:
+                case ID_OUTPUT:
+                    if( prop->values.size() != 1u )
+                    {
+                        compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line,
+                                            "Expecting texture name" );
+                        return;
+                    }
+                    else
+                    {
+                        AbstractNodeList::const_iterator it0 = prop->values.begin();
+                        String name;
+                        if( getString( *it0, &name ) )
+                        {
+                            if( prop->id == ID_INPUT )
+                                passIbl->setCubemapInput( name );
+                            else
+                                passIbl->setCubemapOutput( name );
+                        }
+                        else
+                        {
+                            compiler->addError( ScriptCompiler::CE_INVALIDPARAMETERS, prop->file,
+                                                prop->line );
+                        }
+                    }
+                    break;
+                // case ID_VIEWPORT:
+                case ID_IDENTIFIER:
+                case ID_FLUSH_COMMAND_BUFFERS:
+                case ID_NUM_INITIAL:
+                case ID_EXECUTION_MASK:
+                case ID_PROFILING_ID:
+                    break;
+                default:
+                    compiler->addError( ScriptCompiler::CE_UNEXPECTEDTOKEN, prop->file, prop->line,
+                                        "token \"" + prop->name + "\" is not recognized" );
+                }
+            }
+        }
+    }
+
     void CompositorPassTranslator::translateStencilFace( ScriptCompiler *compiler, const AbstractNodePtr &node,
                                                          StencilStateOp *stencilStateOp )
     {
@@ -10578,6 +10641,8 @@ namespace Ogre{
             translateCompute( compiler, node, target );
         else if(obj->name == "generate_mipmaps")
             translateMipmap( compiler, node, target );
+        else if(obj->name == "ibl_specular")
+            translateIblSpecular( compiler, node, target );
         else if(obj->name == "custom")
         {
             IdString customId;

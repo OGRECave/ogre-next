@@ -55,17 +55,22 @@ namespace Demo
         Camera *camera = mGraphicsSystem->getCamera();
         CompositorManager2 *compositorManager = root->getCompositorManager2();
 
-        //A RenderTarget created with TU_AUTOMIPMAP means the compositor still needs to
+        uint32 iblSpecularFlag = 0;
+        if( root->getRenderSystem()->getCapabilities()->hasCapability( RSC_COMPUTE_PROGRAM ) )
+            iblSpecularFlag = TextureFlags::Uav | TextureFlags::Reinterpretable;
+
+        //A RenderTarget created with AllowAutomipmaps means the compositor still needs to
         //explicitly generate the mipmaps by calling generate_mipmaps. It's just an API
         //hint to tell the GPU we will be using the mipmaps auto generation routines.
         TextureGpuManager *textureManager = root->getRenderSystem()->getTextureGpuManager();
         mDynamicCubemap = textureManager->createTexture( "DynamicCubemap",
-                                                         GpuPageOutStrategy::Discard,
-                                                         TextureFlags::RenderToTexture|
-                                                         TextureFlags::AllowAutomipmaps,
+                                                         GpuPageOutStrategy::Discard,          //
+                                                         TextureFlags::RenderToTexture |       //
+                                                             TextureFlags::AllowAutomipmaps |  //
+                                                             iblSpecularFlag,                  //
                                                          TextureTypes::TypeCube );
         mDynamicCubemap->setResolution( 1024u, 1024u );
-        mDynamicCubemap->setNumMipmaps( PixelFormatGpuUtils::getMaxMipmapCount( 1024u, 1024u ) );
+        mDynamicCubemap->setNumMipmaps( PixelFormatGpuUtils::getMaxMipmapCount( 1024u, 1024u ) - 4u );
         mDynamicCubemap->setPixelFormat( PFG_RGBA8_UNORM_SRGB );
         mDynamicCubemap->_transitionTo( GpuResidency::Resident, (uint8*)0 );
 

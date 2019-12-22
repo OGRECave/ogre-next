@@ -11,6 +11,8 @@
 #define OGRE_imageWrite3D1( outImage, iuv, value ) outImage.write( value.x, iuv )
 #define OGRE_imageWrite3D4( outImage, iuv, value ) outImage.write( value, iuv )
 
+#define OGRE_imageWrite2DArray4( outImage, iuv, value ) outImage.write( value, iuv )
+
 #define __sharedOnlyBarrier threadgroup_barrier( mem_flags::mem_threadgroup )
 
 @end

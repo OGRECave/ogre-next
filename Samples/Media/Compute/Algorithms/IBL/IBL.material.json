@@ -1,0 +1,33 @@
+{
+    "compute" :
+    {
+        "IblSpecular/Integrate" :
+        {
+            "threads_per_group" : [8, 8, 1],
+            "thread_groups" : [1, 1, 1],
+
+            "source" : "SpecularIblIntegrator_cs",
+            "pieces" : ["CrossPlatformSettings_piece_all", "UavCrossPlatform_piece_all", "sRGB.any", "SpecularIblIntegrator_piece_cs.any"],
+            "inform_shader_of_texture_data_change" : true,
+
+            "uav_units" : 1,
+
+            "thread_groups_based_on_uav" :
+            {
+                "slot" : 0,
+                "divisor" : [ 1, 1, 1 ]
+            },
+
+            "textures" :
+            [
+                {}
+            ],
+
+            "params_glsl" :
+            [
+                ["convolutionSrc",          [0], "int"],
+                ["lastResult",              [0], "int"]
+            ]
+        }
+    }
+}

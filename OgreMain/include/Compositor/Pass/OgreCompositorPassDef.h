@@ -57,6 +57,7 @@ namespace Ogre
         PASS_DEPTHCOPY,
         PASS_UAV,
         PASS_MIPMAP,
+        PASS_IBL_SPECULAR,
         PASS_COMPUTE,
         PASS_CUSTOM
     };

@@ -863,6 +863,7 @@ namespace Ogre
                 ID_CUBEMAP,
                 ID_CUBEMAP_ARRAY,
                 ID_MIPMAPS,
+
                 ID_NO_AUTOMIPMAPS,
             ID_TARGET,
         //  ID_PASS,
@@ -930,6 +931,11 @@ namespace Ogre
                         ID_CAMERA_FAR_CORNERS_WORLD_SPACE_CENTERED,
                         ID_CAMERA_DIRECTION,
                     ID_INPUT,
+
+
+                    //Used by PASS_IBL_SPECULAR
+                    //ID_INPUT,
+                    ID_OUTPUT,
 
                     //Used by PASS_CLEAR
                     ID_NON_TILERS_ONLY,
