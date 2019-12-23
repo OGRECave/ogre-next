@@ -135,7 +135,8 @@ mShadowTextureFadeEnd(0.9),
 mShadowTextureCustomCasterPass(0),
 mVisibilityMask(0xFFFFFFFF & VisibilityFlags::RESERVED_VISIBILITY_FLAGS),
 mFindVisibleObjects(true),
-mNumWorkerThreads( numWorkerThreads ),
+mNumWorkerThreads( std::max<size_t>( numWorkerThreads, 1u ) ),
+mForceMainThread( numWorkerThreads == 0u ? true : false ),
 mUpdateBoundsRequest( 0 ),
 mInstancingThreadedCullingMethod( threadedCullingMethod ),
 mUserTask( 0 ),
@@ -147,7 +148,6 @@ mLastLightLimit(0),
 mLastLightHashGpuProgram(0),
 mGpuParamsDirty((uint16)GPV_ALL)
 {
-    assert( numWorkerThreads >= 1 );
 
     if( numWorkerThreads <= 1 )
         mInstancingThreadedCullingMethod = INSTANCING_CULLING_SINGLETHREAD;
@@ -2037,8 +2037,13 @@ void SceneManager::updateAnimationTransforms( BySkeletonDef &bySkeletonDef, size
 void SceneManager::updateAllAnimations()
 {
     mRequestType = UPDATE_ALL_ANIMATIONS;
-    mWorkerThreadsBarrier->sync(); //Fire threads
-    mWorkerThreadsBarrier->sync(); //Wait them to complete
+    if( mForceMainThread )
+        updateWorkerThreadImpl( 0 );
+    else
+    {
+        mWorkerThreadsBarrier->sync(); //Fire threads
+        mWorkerThreadsBarrier->sync(); //Wait them to complete
+    }
 }
 //-----------------------------------------------------------------------
 void SceneManager::updateAllTransformsThread( const UpdateTransformRequest &request, size_t threadIdx )
@@ -2083,8 +2088,14 @@ void SceneManager::updateAllTransforms()
             //Send them to worker threads (dark_sylinc). We need to go depth by depth because
             //we may depend on parents which could be processed by different threads.
             mUpdateTransformRequest = UpdateTransformRequest( t, nodesPerThread, numNodes );
-            mWorkerThreadsBarrier->sync(); //Fire threads
-            mWorkerThreadsBarrier->sync(); //Wait them to complete
+
+            if( mForceMainThread )
+                updateWorkerThreadImpl( 0 );
+            else
+            {
+                mWorkerThreadsBarrier->sync(); //Fire threads
+                mWorkerThreadsBarrier->sync(); //Wait them to complete
+            }
             //Node::updateAllTransforms( numNodes, t );
         }
 
@@ -2141,8 +2152,14 @@ void SceneManager::updateAllBounds( const ObjectMemoryManagerVec &objectMemManag
 {
     mUpdateBoundsRequest    = &objectMemManager;
     mRequestType            = UPDATE_ALL_BOUNDS;
-    mWorkerThreadsBarrier->sync(); //Fire threads
-    mWorkerThreadsBarrier->sync(); //Wait them to complete
+
+    if( mForceMainThread )
+        updateWorkerThreadImpl( 0 );
+    else
+    {
+        mWorkerThreadsBarrier->sync(); //Fire threads
+        mWorkerThreadsBarrier->sync(); //Wait them to complete
+    }
 }
 //-----------------------------------------------------------------------
 void SceneManager::updateAllLodsThread( const UpdateLodRequest &request, size_t threadIdx )
@@ -2195,8 +2212,13 @@ void SceneManager::updateAllLods( const Camera *lodCamera, Real lodBias, uint8 f
     mUpdateLodRequest.camera->getFrustumPlanes();
     mUpdateLodRequest.lodCamera->getFrustumPlanes();
 
-    mWorkerThreadsBarrier->sync(); //Fire threads
-    mWorkerThreadsBarrier->sync(); //Wait them to complete
+    if( mForceMainThread )
+        updateWorkerThreadImpl( 0 );
+    else
+    {
+        mWorkerThreadsBarrier->sync(); //Fire threads
+        mWorkerThreadsBarrier->sync(); //Wait them to complete
+    }
 }
 //-----------------------------------------------------------------------
 void SceneManager::instanceBatchCullFrustumThread( const InstanceBatchCullRequest &request,
@@ -2326,8 +2348,14 @@ void SceneManager::buildLightList()
             ++itor;
         }
     }
-    mWorkerThreadsBarrier->sync(); //Fire threads
-    mWorkerThreadsBarrier->sync(); //Wait them to complete
+
+    if( mForceMainThread )
+        updateWorkerThreadImpl( 0 );
+    else
+    {
+        mWorkerThreadsBarrier->sync(); //Fire threads
+        mWorkerThreadsBarrier->sync(); //Wait them to complete
+    }
 
     //Now merge the results into a single list.
 
@@ -2357,8 +2385,14 @@ void SceneManager::buildLightList()
 
     //Now fire the threads again, to build the per-MovableObject lists
     mRequestType = BUILD_LIGHT_LIST02;
-    mWorkerThreadsBarrier->sync(); //Fire threads
-    mWorkerThreadsBarrier->sync(); //Wait them to complete
+
+    if( mForceMainThread )
+        updateWorkerThreadImpl( 0 );
+    else
+    {
+        mWorkerThreadsBarrier->sync(); //Fire threads
+        mWorkerThreadsBarrier->sync(); //Wait them to complete
+    }
 }
 //-----------------------------------------------------------------------
 void SceneManager::buildLightListThread01( const BuildLightListRequest &buildLightListRequest,
@@ -4784,8 +4818,14 @@ void SceneManager::updateInstanceManagers(void)
 {
     // First update the individual instances from multiple threads
     mRequestType = UPDATE_INSTANCE_MANAGERS;
-    mWorkerThreadsBarrier->sync(); //Fire threads
-    mWorkerThreadsBarrier->sync(); //Wait them to complete
+
+    if( mForceMainThread )
+        updateWorkerThreadImpl( 0 );
+    else
+    {
+        mWorkerThreadsBarrier->sync(); //Fire threads
+        mWorkerThreadsBarrier->sync(); //Wait them to complete
+    }
 
     // Now perform the final pass from a single thread
     InstanceManagerVec::const_iterator itor = mInstanceManagers.begin();
@@ -5391,8 +5431,14 @@ void SceneManager::fireCullFrustumThreads( const CullFrustumRequest &request )
     //in case they weren't up to date.
     mCurrentCullFrustumRequest.camera->getFrustumPlanes();
     mCurrentCullFrustumRequest.lodCamera->getFrustumPlanes();
-    mWorkerThreadsBarrier->sync(); //Fire threads
-    mWorkerThreadsBarrier->sync(); //Wait them to complete
+
+    if( mForceMainThread )
+        updateWorkerThreadImpl( 0 );
+    else
+    {
+        mWorkerThreadsBarrier->sync(); //Fire threads
+        mWorkerThreadsBarrier->sync(); //Wait them to complete
+    }
 }
 //---------------------------------------------------------------------
 void SceneManager::fireCullFrustumInstanceBatchThreads( const InstanceBatchCullRequest &request )
@@ -5401,23 +5447,41 @@ void SceneManager::fireCullFrustumInstanceBatchThreads( const InstanceBatchCullR
     mRequestType = CULL_FRUSTUM_INSTANCEDENTS;
     mInstanceBatchCullRequest.frustum->getFrustumPlanes(); // Ensure they're up to date.
     mInstanceBatchCullRequest.lodCamera->getFrustumPlanes(); // Ensure they're up to date.
-    mWorkerThreadsBarrier->sync(); //Fire threads
-    mWorkerThreadsBarrier->sync(); //Wait them to complete
+
+    if( mForceMainThread )
+        updateWorkerThreadImpl( 0 );
+    else
+    {
+        mWorkerThreadsBarrier->sync(); //Fire threads
+        mWorkerThreadsBarrier->sync(); //Wait them to complete
+    }
 }
 //---------------------------------------------------------------------
 void SceneManager::executeUserScalableTask( UniformScalableTask *task, bool bBlock )
 {
     mRequestType = USER_UNIFORM_SCALABLE_TASK;
     mUserTask = task;
-    mWorkerThreadsBarrier->sync(); //Fire threads
-    if( bBlock )
-        mWorkerThreadsBarrier->sync(); //Wait them to complete
+
+    if( mForceMainThread )
+        updateWorkerThreadImpl( 0 );
+    else
+    {
+        mWorkerThreadsBarrier->sync(); //Fire threads
+        if( bBlock )
+          mWorkerThreadsBarrier->sync(); //Wait them to complete
+    }
 }
 //---------------------------------------------------------------------
 void SceneManager::waitForPendingUserScalableTask()
 {
-    assert( mRequestType == USER_UNIFORM_SCALABLE_TASK );
-    mWorkerThreadsBarrier->sync(); //Wait them to complete
+
+    if( mForceMainThread )
+        updateWorkerThreadImpl( 0 );
+    else
+    {
+        assert( mRequestType == USER_UNIFORM_SCALABLE_TASK );
+        mWorkerThreadsBarrier->sync(); //Wait them to complete
+    }
 }
 //---------------------------------------------------------------------
 unsigned long updateWorkerThread( ThreadHandle *threadHandle )
@@ -5429,23 +5493,30 @@ THREAD_DECLARE( updateWorkerThread );
 //---------------------------------------------------------------------
 void SceneManager::startWorkerThreads()
 {
-    mWorkerThreadsBarrier = new Barrier( mNumWorkerThreads+1 );
-    mWorkerThreads.reserve( mNumWorkerThreads );
-    for( size_t i=0; i<mNumWorkerThreads; ++i )
+    if( !mForceMainThread )
     {
-        ThreadHandlePtr th = Threads::CreateThread( THREAD_GET( updateWorkerThread ), i, this );
-        mWorkerThreads.push_back( th );
+        mWorkerThreadsBarrier = new Barrier( mNumWorkerThreads+1 );
+        mWorkerThreads.reserve( mNumWorkerThreads );
+        for( size_t i=0; i<mNumWorkerThreads; ++i )
+        {
+            ThreadHandlePtr th = Threads::CreateThread( THREAD_GET( updateWorkerThread ), i, this );
+            mWorkerThreads.push_back( th );
+        }
     }
 }
 //---------------------------------------------------------------------
 void SceneManager::stopWorkerThreads()
 {
-    mRequestType = STOP_THREADS;
-    mWorkerThreadsBarrier->sync(); //Fire threads
-    mWorkerThreadsBarrier->sync(); //Wait them to complete
+    if( !mForceMainThread )
+    {
+        mRequestType = STOP_THREADS;
 
-    delete mWorkerThreadsBarrier;
-    mWorkerThreadsBarrier = 0;
+        mWorkerThreadsBarrier->sync(); //Fire threads
+        mWorkerThreadsBarrier->sync(); //Wait them to complete
+
+        delete mWorkerThreadsBarrier;
+        mWorkerThreadsBarrier = 0;
+    }
 }
 //---------------------------------------------------------------------
 unsigned long SceneManager::_updateWorkerThread( ThreadHandle *threadHandle )
@@ -5455,47 +5526,57 @@ unsigned long SceneManager::_updateWorkerThread( ThreadHandle *threadHandle )
     while( !exitThread )
     {
         mWorkerThreadsBarrier->sync();
-        switch( mRequestType )
-        {
-        case CULL_FRUSTUM:
-            cullFrustum( mCurrentCullFrustumRequest, threadIdx );
-            break;
-        case CULL_FRUSTUM_INSTANCEDENTS:
-            instanceBatchCullFrustumThread(mInstanceBatchCullRequest, threadIdx);
-            break;
-        case UPDATE_ALL_ANIMATIONS:
-            updateAllAnimationsThread( threadIdx );
-            break;
-        case UPDATE_ALL_TRANSFORMS:
-            updateAllTransformsThread( mUpdateTransformRequest, threadIdx );
-            break;
-        case UPDATE_ALL_BOUNDS:
-            updateAllBoundsThread( *mUpdateBoundsRequest, threadIdx );
-            break;
-        case UPDATE_ALL_LODS:
-            updateAllLodsThread( mUpdateLodRequest, threadIdx );
-            break;
-        case UPDATE_INSTANCE_MANAGERS:
-            updateInstanceManagersThread( threadIdx );
-            break;
-        case BUILD_LIGHT_LIST01:
-            buildLightListThread01( mBuildLightListRequestPerThread[threadIdx], threadIdx );
-            break;
-        case BUILD_LIGHT_LIST02:
-            buildLightListThread02( threadIdx );
-            break;
-        case USER_UNIFORM_SCALABLE_TASK:
-            mUserTask->execute( threadIdx, mNumWorkerThreads );
-            break;
-        case STOP_THREADS:
-            exitThread = true;
-            break;
-        default:
-            break;
-        }
+        exitThread = updateWorkerThreadImpl( threadIdx );
         mWorkerThreadsBarrier->sync();
     }
 
     return 0;
+}
+
+//---------------------------------------------------------------------
+inline bool SceneManager::updateWorkerThreadImpl( size_t threadIdx )
+{
+  bool exitThread = false;
+
+  switch( mRequestType )
+  {
+    case CULL_FRUSTUM:
+      cullFrustum( mCurrentCullFrustumRequest, threadIdx );
+      break;
+    case CULL_FRUSTUM_INSTANCEDENTS:
+      instanceBatchCullFrustumThread(mInstanceBatchCullRequest, threadIdx);
+      break;
+    case UPDATE_ALL_ANIMATIONS:
+      updateAllAnimationsThread( threadIdx );
+      break;
+    case UPDATE_ALL_TRANSFORMS:
+      updateAllTransformsThread( mUpdateTransformRequest, threadIdx );
+      break;
+    case UPDATE_ALL_BOUNDS:
+      updateAllBoundsThread( *mUpdateBoundsRequest, threadIdx );
+      break;
+    case UPDATE_ALL_LODS:
+      updateAllLodsThread( mUpdateLodRequest, threadIdx );
+      break;
+    case UPDATE_INSTANCE_MANAGERS:
+      updateInstanceManagersThread( threadIdx );
+      break;
+    case BUILD_LIGHT_LIST01:
+      buildLightListThread01( mBuildLightListRequestPerThread[threadIdx], threadIdx );
+      break;
+    case BUILD_LIGHT_LIST02:
+      buildLightListThread02( threadIdx );
+      break;
+    case USER_UNIFORM_SCALABLE_TASK:
+      mUserTask->execute( threadIdx, mNumWorkerThreads );
+      break;
+    case STOP_THREADS:
+      exitThread = true;
+      break;
+    default:
+      break;
+  }
+
+  return exitThread;
 }
 }
