@@ -48,6 +48,7 @@
 #define ogre_float4x3 mat3x4
 
 #define ushort uint
+#define ushort3 uint3
 
 //Short used for read operations. It's an int in GLSL & HLSL. An ushort in Metal
 #define rshort int

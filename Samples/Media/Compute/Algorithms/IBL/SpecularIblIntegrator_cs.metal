@@ -1,12 +1,8 @@
 @insertpiece( SetCrossPlatformSettings )
 @insertpiece( DeclUavCrossPlatform )
 
-TextureCube		convolutionSrc	: register(t0);
-SamplerState		: register(s0);
-RWTexture2DArray<@insertpiece(uav0_pf_type)> lastResult : register(u0);
-
-#define PARAMS_ARG_DECL , constant Params &p
-#define PARAMS_ARG , p
+#define PARAMS_ARG_DECL , constant Params &p , sampler EnvMapSampler, texturecube<float> convolutionSrc, texture2d_array<@insertpiece(uav0_pf_type), access::read_write> lastResult
+#define PARAMS_ARG , p, EnvMapSampler, convolutionSrc, lastResult
 
 struct Params
 {
@@ -32,13 +28,12 @@ struct Params
 
 @insertpiece( HeaderCS )
 
-[numthreads(@value( threads_per_group_x ), @value( threads_per_group_y ), @value( threads_per_group_z ))]
-void main
+kernel void main_metal
 (
-	ushort3 gl_GlobalInvocationID		[[thread_position_in_grid]],
+	ushort3 gl_GlobalInvocationID		[[thread_position_in_grid]]
 
 	, sampler EnvMapSampler															[[sampler(0)]]
-	, texturecube convolutionSrc													[[texture(0)]]
+	, texturecube<float> convolutionSrc												[[texture(0)]]
 	, texture2d_array<@insertpiece(uav0_pf_type), access::read_write> lastResult	[[texture(UAV_SLOT_START+0)]]
 
 	, constant Params &p	[[buffer(PARAMETER_SLOT)]]

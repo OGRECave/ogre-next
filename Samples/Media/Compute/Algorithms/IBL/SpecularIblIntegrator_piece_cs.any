@@ -47,6 +47,14 @@
 	@insertpiece( DeclSRgbFuncs )
 
 #define PI 3.141592654f
+
+	@property( syntax == metal )
+		inline float radians( float val )
+		{
+			return val * PI / 180.0;
+		}
+	@end
+
 	//
 	// Attributed to:
 	// http://holger.dammertz.org/stuff/notes_HammersleyOnHemisphere.html
@@ -82,7 +90,7 @@
 		float intensity = float( dot( hdrPixel, float3( 0.299, 0.587, 0.114 ) ) );
 
 		// Saturation adjustment
-		hdrPixel = lerp( intensity.xxx, hdrPixel, p_iblCorrection.y );
+		hdrPixel = lerp( intensity, hdrPixel, p_iblCorrection.y );
 
 		// Hue adjustment
 		float3 root3 = float3( 0.57735, 0.57735, 0.57735 );
@@ -154,10 +162,10 @@
 
 			float3 H = importanceSampleGGX( Xi, p_convolutionRoughness, N );
 			float3 L = 2 * dot( V, H ) * H - V;
-			float NoL = max( dot( N, L ), 0 );
-			float VoL = max( dot( V, L ), 0 );
-			float NoH = max( dot( N, H ), 0 );
-			float VoH = max( dot( V, H ), 0 );
+			float NoL = max( dot( N, L ), 0.0 );
+			// float VoL = max( dot( V, L ), 0.0 );
+			float NoH = max( dot( N, H ), 0.0 );
+			float VoH = max( dot( V, H ), 0.0 );
 			if( NoL > 0 )
 			{
 				//
@@ -187,7 +195,7 @@
 			return ( float4( result.xyz, alphaValue ) / result.w );
 	}
 
-	INLINE float4 runIntegrator( float3 normal, uint3 loadCoords PARAMS_ARG_DECL )
+	INLINE float4 runIntegrator( float3 normal, ushort3 loadCoords PARAMS_ARG_DECL )
 	{
 		float3 R = normalize( normal );
 		float4 sampledColor = float4( 0, 0, 0, 1 );
@@ -213,7 +221,7 @@
 @end
 
 @piece( BodyCS )
-	float2 normal2d = ( float2( gl_GlobalInvocationID.xy + 0.5 ) / p_outputResolution.xy ) * 2.0 - 1.0;
+	float2 normal2d = ( ( float2( gl_GlobalInvocationID.xy ) + 0.5 ) / p_outputResolution.xy ) * 2.0 - 1.0;
 
 	float3 normal;
 	if( gl_GlobalInvocationID.z == 0u )  //+X
@@ -226,7 +234,7 @@
 		normal = float3( normal2d.x, -1.0f, -normal2d.y );
 	else if( gl_GlobalInvocationID.z == 4u )  //+Z
 		normal = float3( normal2d.x, -normal2d.y, 1.0f );
-	else if( gl_GlobalInvocationID.z == 5u )  //-Z
+	else // if( gl_GlobalInvocationID.z == 5u )  //-Z
 		normal = float3( -normal2d.xy, -1.0f );
 
 	float4 outputValue = runIntegrator( normal, gl_GlobalInvocationID.xyz PARAMS_ARG );
