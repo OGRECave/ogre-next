@@ -75,7 +75,7 @@
                          2.0 * float3( b.y, a.x, diag.z ) );
     }
 
-    INLINE float3 rescaleHDR( float3 hdrPixel )
+	INLINE float3 rescaleHDR( float3 hdrPixel PARAMS_ARG_DECL )
     {
         hdrPixel = max( hdrPixel, float3( 0, 0, 0 ) );
 
@@ -138,7 +138,7 @@
         return r2 / pow( NoH2 * ( r2 - 1.0 ) + 1.0, 2.0 );
     }
 
-    INLINE float4 importanceSample( float3 R )
+	INLINE float4 importanceSample( float3 R PARAMS_ARG_DECL )
     {
         float3 N = R;
         float3 V = R;
@@ -148,11 +148,11 @@
         uint SampleStep = uint( ceil( p_convolutionMaxSamples / p_convolutionSampleCount ) );
         uint sampleId = uint( p_convolutionSamplesOffset );
 
-        for( uint i = 0u; i < p_convolutionSampleCount; ++i )
+		for( uint i = 0u; i < uint( p_convolutionSampleCount ); ++i )
         {
             float2 Xi = Hammersley( sampleId, uint( p_convolutionMaxSamples ) );
 
-            float3 H = importanceSampleGGX( Xi, p_convolutionRoughness, N );
+			float3 H = importanceSampleGGX( Xi, p_convolutionRoughness, N );
             float3 L = 2 * dot( V, H ) * H - V;
             float NoL = max( dot( N, L ), 0 );
             float VoL = max( dot( V, L ), 0 );
@@ -175,7 +175,7 @@
                 float4 sampleValue = OGRE_SampleLevel( convolutionSrc, EnvMapSampler, L, lod );
                 alphaValue += sampleValue.a * NoL;
 
-                float3 hdrPixel = rescaleHDR( sampleValue.xyz );
+				float3 hdrPixel = rescaleHDR( sampleValue.xyz PARAMS_ARG );
                 result = sumSpecular( hdrPixel, NoL, result );
             }
             sampleId += SampleStep;
@@ -187,13 +187,13 @@
             return ( float4( result.xyz, alphaValue ) / result.w );
     }
 
-    INLINE float4 runIntegrator( float3 normal, uint3 loadCoords )
+	INLINE float4 runIntegrator( float3 normal, uint3 loadCoords PARAMS_ARG_DECL )
     {
         float3 R = normalize( normal );
         float4 sampledColor = float4( 0, 0, 0, 1 );
 
         // Sample source cubemap at specified mip.
-        float4 importanceSampled = importanceSample( R );
+		float4 importanceSampled = importanceSample( R PARAMS_ARG );
 
         if( p_convolutionSamplesOffset >= 1 )
         {
@@ -229,7 +229,7 @@
 	else if( gl_GlobalInvocationID.z == 5u )  //-Z
 		normal = float3( -normal2d.xy, -1.0f );
 
-	float4 outputValue = runIntegrator( normal, gl_GlobalInvocationID.xyz );
+	float4 outputValue = runIntegrator( normal, gl_GlobalInvocationID.xyz PARAMS_ARG );
 
 	@property( uav0_orig_pf_srgb )
 		outputValue = toSRGB( outputValue );
