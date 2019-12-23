@@ -239,7 +239,8 @@ namespace Ogre
     protected:
         template <typename TDescriptorSetTexture,
                   typename TTexSlot,
-                  typename TBufferPacked>
+                  typename TBufferPacked,
+                  bool isUav>
         void _descriptorSetTextureCreated( TDescriptorSetTexture *newSet,
                                            const FastArray<TTexSlot> &texContainer,
                                            uint16 *shaderTypeTexCount );

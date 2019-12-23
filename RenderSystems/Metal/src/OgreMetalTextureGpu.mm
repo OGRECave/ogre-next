@@ -344,9 +344,9 @@ namespace Ogre
         if( mMsaa > 1u && hasMsaaExplicitResolves() )
             texType = MTLTextureType2DMultisample;
 
-        if( cubemapsAs2DArrays &&
-            (mTextureType == TextureTypes::TypeCube ||
-             mTextureType == TextureTypes::TypeCubeArray) )
+        if( ( cubemapsAs2DArrays || forUav ) &&          //
+            ( mTextureType == TextureTypes::TypeCube ||  //
+              mTextureType == TextureTypes::TypeCubeArray ) )
         {
             texType = MTLTextureType2DArray;
         }
