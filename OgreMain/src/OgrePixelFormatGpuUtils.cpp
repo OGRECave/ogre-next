@@ -843,6 +843,10 @@ namespace Ogre
                     static_cast<uint8>( Math::saturate( toSRGB( rgbaPtr[0] ) ) * 255.0f + 0.5f );
             break;
 
+        case PFG_RGB16_UNORM:
+            convertFromFloat<uint16>( rgbaPtr, dstPtr, 3u, flags );
+            break;
+
         case PFG_AYUV: case PFG_Y410: case PFG_Y416:
         case PFG_NV12: case PFG_P010: case PFG_P016:
         case PFG_420_OPAQUE:
@@ -1142,6 +1146,10 @@ namespace Ogre
         case PFG_BGR8_UNORM_SRGB:
             convertToFloat<uint8>( rgbaPtr, srcPtr, 3u, flags );
             std::swap( rgbaPtr[0], rgbaPtr[2] );
+            break;
+
+        case PFG_RGB16_UNORM:
+            convertToFloat<uint16>( rgbaPtr, srcPtr, 3u, flags );
             break;
 
         case PFG_AYUV: case PFG_Y410: case PFG_Y416:
@@ -1929,6 +1937,8 @@ namespace Ogre
         {"PFG_RGB8_UNORM_SRGB",		3u, 3u * sizeof(uint8),		PFL_RGB8,	PFF_NORMALIZED|PFF_SRGB },
         {"PFG_BGR8_UNORM",			3u, 3u * sizeof(uint8),		PFL_BGR8,	PFF_NORMALIZED },
         {"PFG_BGR8_UNORM_SRGB",		3u, 3u * sizeof(uint8),		PFL_BGR8,	PFF_NORMALIZED|PFF_SRGB },
+
+        {"PFG_RGB16_UNORM",			3u, 3u * sizeof(uint16),	PFL_RGB16,	PFF_NORMALIZED },
 
         {"PFG_PVRTC_RGB2",			3u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON },
         {"PFG_PVRTC_RGB2_SRGB",		3u, 0,						PFL_OTHER,	PFF_COMPRESSED_COMMON|PFF_SRGB },
