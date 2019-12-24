@@ -292,9 +292,6 @@ namespace Ogre {
         case PFG_D32_FLOAT_S8X24_UINT:
         case PFG_R11G11B10_FLOAT:
         case PFG_RG16_FLOAT:
-        case PFG_RG16_UINT:
-        case PFG_RG16_SNORM:
-        case PFG_RG16_SINT:
         case PFG_D24_UNORM_S8_UINT:
             supportedFormat = PFG_RGB32_FLOAT;
             imageType = FIT_RGBF;
@@ -307,9 +304,20 @@ namespace Ogre {
             break;
         case PFG_R10G10B10A2_UNORM:
         case PFG_R10G10B10A2_UINT:
-        case PFG_RG16_UNORM:
             supportedFormat = PFG_RGBA16_UNORM;
             imageType = FIT_RGBA16;
+            break;
+        case PFG_RGB16_UNORM:
+            imageType = FIT_RGB16;
+            break;
+        case PFG_RG16_UNORM:
+        case PFG_RG16_UINT:
+        case PFG_RG16_SNORM:
+        case PFG_RG16_SINT:
+            // typeless RG16 => RGB16 conversion
+            origFormat = PFG_RG16_UNORM;
+            supportedFormat = PFG_RGB16_UNORM;
+            imageType = FIT_RGB16;
             break;
         case PFG_RGBA8_UNORM:
         case PFG_RGBA8_UNORM_SRGB:
