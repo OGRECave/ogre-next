@@ -432,7 +432,7 @@ namespace Ogre {
         }
 
         AsyncTextureTicket *asyncTicket = textureManager->createAsyncTextureTicket(
-            texture->getWidth(), texture->getHeight(), texture->getDepthOrSlices(),
+            srcBox.width, srcBox.height, srcBox.getDepthOrSlices(),
             texture->getTextureType(), texture->getPixelFormat() );
         asyncTicket->download( resolvedTexture, 0, true, &srcBox );
 
