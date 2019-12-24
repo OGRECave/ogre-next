@@ -1384,6 +1384,12 @@ namespace Ogre
             while (width--) { dst[0] = src[2]; src += 3; dst += 1; }
         }
 
+        void convRGtoRGB(uint8* src, uint8* dst, size_t width) {
+            while (width--) { dst[0] = src[0]; dst[1] = src[1]; dst[2] = 0u; src += 2; dst += 3; }
+        }
+        void convRGtoBGR(uint8* src, uint8* dst, size_t width) {
+            while (width--) { dst[0] = 0u; dst[1] = src[1]; dst[2] = src[0]; src += 2; dst += 3; }
+        }
         void convRGtoR(uint8* src, uint8* dst, size_t width) {
             while (width--) { dst[0] = src[0]; src += 2; dst += 1; }
         }
@@ -1493,6 +1499,8 @@ namespace Ogre
             case PFL_PAIR( PFL_BGR8, PFL_RG8 ): rowConversionFunc = convBGRtoRG; break;
             case PFL_PAIR( PFL_BGR8, PFL_R8 ): rowConversionFunc = convBGRtoR; break;
 
+            case PFL_PAIR( PFL_RG8, PFL_RGB8 ): rowConversionFunc = convRGtoRGB; break;
+            case PFL_PAIR( PFL_RG8, PFL_BGR8 ): rowConversionFunc = convRGtoBGR; break;
             case PFL_PAIR( PFL_RG8, PFL_R8 ): rowConversionFunc = convRGtoR; break;
                 // clang-format on
             }
