@@ -65,6 +65,8 @@ namespace Ogre {
             PFL_BGR8,
             PFL_RG8,
             PFL_R8,
+
+            PFL_COUNT
         };
 
         enum PixelFormatFlags
