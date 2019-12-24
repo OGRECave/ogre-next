@@ -542,18 +542,18 @@ namespace Ogre {
             case 24:
 #if FREEIMAGE_COLORORDER == FREEIMAGE_COLORORDER_RGB
                 origFormat = PFG_RGB8_UNORM;
+                supportedFormat = PFG_RGBA8_UNORM;
 #else
                 origFormat = PFG_BGR8_UNORM;
+                supportedFormat = PFG_BGRA8_UNORM;
 #endif
-                supportedFormat = PFG_RGBA8_UNORM;
                 break;
             case 32:
 #if FREEIMAGE_COLORORDER == FREEIMAGE_COLORORDER_RGB
-                origFormat = PFG_RGBA8_UNORM;
-#else
-                origFormat = PFG_BGRA8_UNORM;
-#endif
                 supportedFormat = PFG_RGBA8_UNORM;
+#else
+                supportedFormat = PFG_BGRA8_UNORM;
+#endif
                 break;
             };
             break;
