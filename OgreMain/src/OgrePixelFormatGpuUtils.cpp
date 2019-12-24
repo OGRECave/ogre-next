@@ -1313,6 +1313,11 @@ namespace Ogre
             uint16* src = (uint16*)_src; uint16* dst = (uint16*)_dst;
             while (width--) { dst[0] = src[0]; dst[1] = src[1]; dst[2] = src[2]; src += 4; dst += 3; }
         }
+        void convRGB16toRGBA16(uint8* _src, uint8* _dst, size_t width) {
+            uint16* src = (uint16*)_src; uint16* dst = (uint16*)_dst;
+            while (width--)
+            { dst[0] = src[0]; dst[1] = src[1]; dst[2] = src[2]; dst[3] = 0xFFFF; src += 3; dst += 4; }
+        }
         void convRGB16toRG16(uint8* _src, uint8* _dst, size_t width) {
             uint16* src = (uint16*)_src; uint16* dst = (uint16*)_dst;
             while (width--) { dst[0] = src[0]; dst[1] = src[1]; src += 3; dst += 2; }
@@ -1460,6 +1465,7 @@ namespace Ogre
             case PFL_PAIR( PFL_RG32, PFL_R32 ): rowConversionFunc = convRG32toR32; break;
 
             case PFL_PAIR( PFL_RGBA16, PFL_RGB16 ): rowConversionFunc = convRGBA16toRGB16; break;
+            case PFL_PAIR( PFL_RGB16, PFL_RGBA16 ): rowConversionFunc = convRGB16toRGBA16; break;
             case PFL_PAIR( PFL_RGB16, PFL_RG16 ): rowConversionFunc = convRGB16toRG16; break;
             case PFL_PAIR( PFL_RG16, PFL_RGB16 ): rowConversionFunc = convRG16toRGB16; break;
             case PFL_PAIR( PFL_RG16, PFL_R16 ): rowConversionFunc = convRG16toR16; break;
