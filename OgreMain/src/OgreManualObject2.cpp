@@ -27,11 +27,16 @@ THE SOFTWARE.
 */
 
 #include "OgreStableHeaders.h"
+
 #include "OgreManualObject2.h"
+
 #include "OgreException.h"
 #include "OgreMaterialManager.h"
 #include "OgreSceneManager.h"
 #include "OgreLogManager.h"
+#include "OgreMeshManager2.h"
+#include "OgreMesh2.h"
+#include "OgreSubMesh2.h"
 
 namespace Ogre {
 
