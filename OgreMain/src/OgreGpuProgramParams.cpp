@@ -177,6 +177,9 @@ namespace Ogre
         AutoConstantDefinition(ACT_SHADOW_SCENE_DEPTH_RANGE,    "shadow_scene_depth_range",               4, ET_REAL, ACDT_INT),
         AutoConstantDefinition(ACT_SHADOW_SCENE_DEPTH_RANGE_ARRAY,    "shadow_scene_depth_range_array",           4, ET_REAL, ACDT_INT),
         AutoConstantDefinition(ACT_SHADOW_COLOUR,                               "shadow_colour",                                  4, ET_REAL, ACDT_NONE),
+        AutoConstantDefinition(ACT_UAV_SIZE,                    "uav_size",                     4, ET_REAL, ACDT_INT),
+        AutoConstantDefinition(ACT_INVERSE_UAV_SIZE,            "inverse_uav_size",             4, ET_REAL, ACDT_INT),
+        AutoConstantDefinition(ACT_PACKED_UAV_SIZE,             "packed_uav_size",              4, ET_REAL, ACDT_INT),
         AutoConstantDefinition(ACT_TEXTURE_SIZE,                "texture_size",                   4, ET_REAL, ACDT_INT),
         AutoConstantDefinition(ACT_INVERSE_TEXTURE_SIZE,        "inverse_texture_size",           4, ET_REAL, ACDT_INT),
         AutoConstantDefinition(ACT_PACKED_TEXTURE_SIZE,         "packed_texture_size",            4, ET_REAL, ACDT_INT),
@@ -1406,6 +1409,9 @@ namespace Ogre
         case ACT_INVERSE_VIEWPORT_HEIGHT:
         case ACT_VIEWPORT_SIZE:
         case ACT_TEXEL_OFFSETS:
+        case ACT_UAV_SIZE:
+        case ACT_INVERSE_UAV_SIZE:
+        case ACT_PACKED_UAV_SIZE:
         case ACT_TEXTURE_SIZE:
         case ACT_INVERSE_TEXTURE_SIZE:
         case ACT_PACKED_TEXTURE_SIZE:
@@ -2611,6 +2617,15 @@ namespace Ogre
                             rsys->getVerticalTexelOffset() * source->getInverseViewportHeight()),
                                           i->elementCount);
                     }
+                    break;
+                case ACT_UAV_SIZE:
+                    _writeRawConstant(i->physicalIndex, source->getUavSize(i->data), i->elementCount);
+                    break;
+                case ACT_INVERSE_UAV_SIZE:
+                    _writeRawConstant(i->physicalIndex, source->getInverseUavSize(i->data), i->elementCount);
+                    break;
+                case ACT_PACKED_UAV_SIZE:
+                    _writeRawConstant(i->physicalIndex, source->getPackedUavSize(i->data), i->elementCount);
                     break;
                 case ACT_TEXTURE_SIZE:
                     _writeRawConstant(i->physicalIndex, source->getTextureSize(i->data), i->elementCount);
