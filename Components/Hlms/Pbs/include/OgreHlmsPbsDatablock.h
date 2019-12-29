@@ -700,6 +700,9 @@ namespace Ogre
         virtual TextureGpu* getDiffuseTexture(void) const;
         virtual TextureGpu* getEmissiveTexture(void) const;
 
+        virtual void notifyTextureChanged( TextureGpu *texture, TextureGpuListener::Reason reason,
+                                           void *extraData );
+
         virtual void calculateHash();
 
         static const size_t MaterialSizeInGpu;

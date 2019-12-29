@@ -101,6 +101,11 @@ namespace Demo
         mDynamicCubemap->setPixelFormat( PFG_RGBA8_UNORM_SRGB );
         mDynamicCubemap->scheduleTransitionTo( GpuResidency::Resident );
 
+        Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
+        assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
+        Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
+        hlmsPbs->resetIblSpecMipmap( 0u );
+
         // Create the camera used to render to our cubemap
         if( !mCubeCamera )
         {

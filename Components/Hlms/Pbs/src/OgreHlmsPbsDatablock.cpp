@@ -1087,4 +1087,19 @@ namespace Ogre
     {
         return getTexture( PBSM_EMISSIVE );
     }
+    //-----------------------------------------------------------------------------------
+    void HlmsPbsDatablock::notifyTextureChanged( TextureGpu *texture,
+                                                             TextureGpuListener::Reason reason,
+                                                             void *extraData )
+    {
+        HlmsPbsBaseTextureDatablock::notifyTextureChanged( texture, reason, extraData );
+        if( texture == mTextures[PBSM_REFLECTION] )
+        {
+            if( reason == TextureGpuListener::FromStorageToSysRam ||
+                reason == TextureGpuListener::GainedResidency )
+            {
+                static_cast<HlmsPbs *>( mCreator )->_notifyIblSpecMipmap( texture->getNumMipmaps() );
+            }
+        }
+    }
 }

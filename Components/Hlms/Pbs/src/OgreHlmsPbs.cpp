@@ -260,7 +260,7 @@ namespace Ogre
         mCurrentPassBuffer( 0 ),
         mGridBuffer( 0 ),
         mGlobalLightListBuffer( 0 ),
-        mMaxSpecIblMipmap( 7.0f ),
+        mMaxSpecIblMipmap( 1.0f ),
         mTexUnitSlotStart( 0 ),
         mPrePassTextures( 0 ),
         mSsrTexture( 0 ),
@@ -3066,6 +3066,43 @@ namespace Ogre
     {
         HlmsBufferManager::frameEnded();
         mCurrentPassBuffer  = 0;
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsPbs::resetIblSpecMipmap( uint8 numMipmaps )
+    {
+        if( numMipmaps != 0u )
+        {
+            mAutoSpecIblMaxMipmap = false;
+            mMaxSpecIblMipmap = numMipmaps;
+        }
+        else
+        {
+            mAutoSpecIblMaxMipmap = true;
+            mMaxSpecIblMipmap = 1.0f;
+
+            HlmsDatablockMap::const_iterator itor = mDatablocks.begin();
+            HlmsDatablockMap::const_iterator endt = mDatablocks.end();
+
+            while( itor != endt )
+            {
+                assert( dynamic_cast<HlmsPbsDatablock*>( itor->second.datablock ) );
+                HlmsPbsDatablock *datablock = static_cast<HlmsPbsDatablock*>(itor->second.datablock);
+
+                TextureGpu *reflTexture = datablock->getTexture( PBSM_REFLECTION );
+                if( reflTexture )
+                {
+                    mMaxSpecIblMipmap =
+                            std::max<float>( reflTexture->getNumMipmaps(), mMaxSpecIblMipmap );
+                }
+                ++itor;
+            }
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsPbs::_notifyIblSpecMipmap( uint8 numMipmaps )
+    {
+        if( mAutoSpecIblMaxMipmap )
+            mMaxSpecIblMipmap = std::max<float>( numMipmaps, mMaxSpecIblMipmap );
     }
     //-----------------------------------------------------------------------------------
     void HlmsPbs::loadLtcMatrix(void)

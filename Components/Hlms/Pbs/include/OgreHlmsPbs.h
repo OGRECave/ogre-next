@@ -246,6 +246,17 @@ namespace Ogre
         virtual void postCommandBufferExecution( CommandBuffer *commandBuffer );
         virtual void frameEnded(void);
 
+        /** By default we see the reflection textures' mipmaps and store the largest one we found.
+            By calling resetIblSpecMipmap; you can reset this process thus if a reflection texture
+            with a large number of mipmaps was removed, these textures can be reevaluated
+        @param numMipmaps
+            When 0; we automatically check for reflection texture.
+            When non-zero, we force the number of mipmaps to the specified value
+        */
+        void resetIblSpecMipmap( uint8 numMipmaps );
+
+        void _notifyIblSpecMipmap( uint8 numMipmaps );
+
         void loadLtcMatrix(void);
 
         /** Fill the provided string and string vector with all the sub-folder needed to instantiate
