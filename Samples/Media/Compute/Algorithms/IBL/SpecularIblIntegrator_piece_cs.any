@@ -90,7 +90,7 @@
 		float intensity = float( dot( hdrPixel, float3( 0.299, 0.587, 0.114 ) ) );
 
 		// Saturation adjustment
-		hdrPixel = lerp( intensity, hdrPixel, p_iblCorrection.y );
+		hdrPixel = lerp( float3( intensity, intensity, intensity ), hdrPixel, p_iblCorrection.y );
 
 		// Hue adjustment
 		float3 root3 = float3( 0.57735, 0.57735, 0.57735 );

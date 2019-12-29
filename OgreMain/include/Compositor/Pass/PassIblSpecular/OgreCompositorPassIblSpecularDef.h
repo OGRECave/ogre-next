@@ -54,6 +54,9 @@ namespace Ogre
         /// Value Saturation Hue
         Vector4 mIblCorrectionVSH;
 
+        /// Force this pass to behave like GENERATE_MIPMAPS, regardless of compute shader support
+        bool mForceMipmapFallback;
+
         CompositorNodeDef *mParentNodeDef;
 
     public:
@@ -62,6 +65,7 @@ namespace Ogre
             CompositorPassDef( PASS_IBL_SPECULAR, parentTargetDef ),
             mSamplesPerIteration( 128.0 ),
             mIblCorrectionVSH( 0, 1.0f, 0, 0 ),
+            mForceMipmapFallback( false ),
             mParentNodeDef( parentNodeDef )
         {
         }

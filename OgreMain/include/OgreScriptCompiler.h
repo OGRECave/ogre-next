@@ -988,6 +988,10 @@ namespace Ogre
                     ID_KERNEL_RADIUS,
                     ID_GAUSS_DEVIATION,
 
+                    //Used by IBL_SPECULAR
+                    ID_SAMPLES_PER_ITERATION,
+                    ID_FORCE_MIPMAP_FALLBACK,
+
             ID_READ_BACK_AS_TEXTURE,
 
         ID_SHADOW_NODE,

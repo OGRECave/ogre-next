@@ -83,6 +83,10 @@ namespace Ogre
     {
         initialize( rtv );
 
+        RenderSystem *renderSystem = mParentNode->getRenderSystem();
+        const RenderSystemCapabilities *caps = renderSystem->getCapabilities();
+        const bool hasCompute = caps->hasCapability( RSC_COMPUTE_PROGRAM );
+
         mInputTexture = mParentNode->getDefinedTexture( mDefinition->getInputTextureName() );
         mOutputTexture = mParentNode->getDefinedTexture( mDefinition->getOutputTextureName() );
 
@@ -137,7 +141,7 @@ namespace Ogre
                     mParentNode->getName().getFriendlyText(),
                 "CompositorPassIblSpecular::CompositorPassIblSpecular" );
         }
-        if( !mOutputTexture->isUav() )
+        if( !mOutputTexture->isUav() && !mDefinition->mForceMipmapFallback && hasCompute )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          "Output texture for IblSpecular must be UAV! Node: " +
@@ -145,15 +149,20 @@ namespace Ogre
                          "CompositorPassIblSpecular::CompositorPassIblSpecular" );
         }
 
-        setupComputeShaders();
+        if( !mDefinition->mForceMipmapFallback )
+        {
+            // Even if hasCompute == false, we must call setupComputeShaders so that we
+            // can warn the user the requirements are met. Otherwise it won't raise
+            // exceptions until the app gets deployed on a system that does
+            // support Compute
+            setupComputeShaders();
+        }
     }
     //-----------------------------------------------------------------------------------
     CompositorPassIblSpecular::~CompositorPassIblSpecular() { destroyComputeShaders(); }
     //-----------------------------------------------------------------------------------
     void CompositorPassIblSpecular::destroyComputeShaders( void )
     {
-        RenderSystem *renderSystem = mParentNode->getRenderSystem();
-
         if( !mJobs.empty() )
         {
             assert( dynamic_cast<HlmsCompute *>( mJobs[0]->getCreator() ) );
@@ -171,15 +180,6 @@ namespace Ogre
 
             mJobs.clear();
         }
-
-        TextureGpuManager *textureManager = renderSystem->getTextureGpuManager();
-        TextureGpuVec::iterator itor = mTmpTextures.begin();
-        TextureGpuVec::iterator endt = mTmpTextures.end();
-
-        while( itor != endt )
-            textureManager->destroyTexture( *itor++ );
-
-        mTmpTextures.clear();
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassIblSpecular::setupComputeShaders( void )
@@ -194,7 +194,7 @@ namespace Ogre
 #if OGRE_NO_JSON
         OGRE_EXCEPT(
             Exception::ERR_INVALIDPARAMS,
-            "To use PASS_IblSpecular with compute shaders, Ogre must be build with JSON support "
+            "To use PASS_IBL_SPECULAR with compute shaders, Ogre must be build with JSON support "
             "and you must include the resource bundled at "
             "Samples/Media/2.0/scripts/materials/Common",
             "CompositorPassIblSpecular::CompositorPassIblSpecular" );
@@ -203,7 +203,7 @@ namespace Ogre
         if( !iblSpecular )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "To use PASS_IblSpecular with compute shaders, you must include the resources "
+                         "To use PASS_IBL_SPECULAR with compute shaders, you must include the resources "
                          "bundled at Samples/Media/Compute/Algorithms/IBL\n"
                          "Could not find IblSpecular",
                          "CompositorPassIblSpecular::CompositorPassIblSpecular" );

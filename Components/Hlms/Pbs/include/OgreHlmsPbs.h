@@ -131,6 +131,8 @@ namespace Ogre
         TexBufferPacked         *mGridBuffer;
         TexBufferPacked         *mGlobalLightListBuffer;
 
+
+        float                   mMaxSpecIblMipmap;
         uint32                  mTexUnitSlotStart;
 
         TextureGpuVec const     *mPrePassTextures;
@@ -175,6 +177,7 @@ namespace Ogre
         bool mSetupWorldMatBuf;
         bool mDebugPssmSplits;
 
+        bool mAutoSpecIblMaxMipmap;
         bool mVctFullConeCount;
 
 #if OGRE_ENABLE_LIGHT_OBB_RESTRAINT

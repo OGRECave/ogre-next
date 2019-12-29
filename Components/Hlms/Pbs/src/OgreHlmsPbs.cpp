@@ -260,6 +260,7 @@ namespace Ogre
         mCurrentPassBuffer( 0 ),
         mGridBuffer( 0 ),
         mGlobalLightListBuffer( 0 ),
+        mMaxSpecIblMipmap( 7.0f ),
         mTexUnitSlotStart( 0 ),
         mPrePassTextures( 0 ),
         mSsrTexture( 0 ),
@@ -289,6 +290,7 @@ namespace Ogre
 #endif
         mSetupWorldMatBuf( true ),
         mDebugPssmSplits( false ),
+        mAutoSpecIblMaxMipmap( true ),
         mVctFullConeCount( false ),
 #if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
         mUseObbRestraintAreaApprox( false ),
@@ -1818,7 +1820,7 @@ namespace Ogre
             *passBufferPtr++ = mPccVctMinDistance;
             *passBufferPtr++ = mInvPccVctInvDistance;
             *passBufferPtr++ = currViewports[1].getActualLeft();
-            *passBufferPtr++ = 7.0f;
+            *passBufferPtr++ = mMaxSpecIblMipmap;
 
             if( !mPrePassTextures->empty() )
             {

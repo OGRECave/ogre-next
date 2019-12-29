@@ -10537,6 +10537,38 @@ namespace Ogre{
                         }
                     }
                     break;
+                case ID_SAMPLES_PER_ITERATION:
+                    if( prop->values.size() != 1u )
+                    {
+                        compiler->addError( ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line );
+                        return;
+                    }
+                    else
+                    {
+                        AbstractNodeList::const_iterator it0 = prop->values.begin();
+                        if( !getFloat( *it0, &passIbl->mSamplesPerIteration ) )
+                        {
+                            compiler->addError( ScriptCompiler::CE_NUMBEREXPECTED, prop->file,
+                                                prop->line, "Boolean expected" );
+                        }
+                    }
+                    break;
+                case ID_FORCE_MIPMAP_FALLBACK:
+                    if( prop->values.size() != 1u )
+                    {
+                        compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line );
+                        return;
+                    }
+                    else
+                    {
+                        AbstractNodeList::const_iterator it0 = prop->values.begin();
+                        if( !getBoolean( *it0, &passIbl->mForceMipmapFallback ) )
+                        {
+                            compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file,
+                                                prop->line, "Boolean expected" );
+                        }
+                    }
+                    break;
                 // case ID_VIEWPORT:
                 case ID_IDENTIFIER:
                 case ID_FLUSH_COMMAND_BUFFERS:

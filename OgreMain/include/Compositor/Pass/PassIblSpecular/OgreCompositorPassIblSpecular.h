@@ -67,7 +67,6 @@ namespace Ogre
         TextureGpu *mOutputTexture;
 
         /// Compute
-        TextureGpuVec mTmpTextures;
         vector<HlmsComputeJob *>::type mJobs;
 
         void setupComputeShaders( void );

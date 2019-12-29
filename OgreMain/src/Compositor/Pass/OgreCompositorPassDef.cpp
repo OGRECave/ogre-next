@@ -58,6 +58,7 @@ namespace Ogre
         "DEPTHCOPY",
         "UAV",
         "MIPMAP",
+        "IBL_SPECULAR",
         "COMPUTE",
         "CUSTOM"
     };
