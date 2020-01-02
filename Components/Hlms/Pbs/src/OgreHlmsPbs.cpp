@@ -1028,8 +1028,11 @@ namespace Ogre
         if( getProperty( HlmsBaseProp::LightsAreaTexMask ) > 0 )
             setTextureReg( PixelShader, "areaLightMasks", texUnit++ );
 
-        if( bNeedsEnvBrdf || getProperty( HlmsBaseProp::LightsAreaLtc ) > 0 )
+        if( ( bNeedsEnvBrdf && getProperty( PbsProperty::LtcTextureAvailable ) ) ||
+            getProperty( HlmsBaseProp::LightsAreaLtc ) > 0 )
+        {
             setTextureReg( PixelShader, "ltcMatrix", texUnit++ );
+        }
         else
         {
             // Always occupy the texture unit
@@ -2444,8 +2447,9 @@ namespace Ogre
                 mUsingAreaLightMasks = false;
             }
 
-            /// LTC / BRDF IBL reserved slot (mLtcMatrixTexture)
-            ++mTexUnitSlotStart;
+            /// LTC / BRDF IBL reserved slot
+            if( mLtcMatrixTexture )
+                ++mTexUnitSlotStart;
 
             for( size_t i=0; i<3u; ++i )
             {
@@ -2586,10 +2590,13 @@ namespace Ogre
                     ++texUnit;
                 }
 
-                *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit,
-                                                                     mLtcMatrixTexture,
-                                                                     mAreaLightMasksSamplerblock );
-                ++texUnit;
+                if( mLtcMatrixTexture )
+                {
+                    *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit,
+                                                                         mLtcMatrixTexture,
+                                                                         mAreaLightMasksSamplerblock );
+                    ++texUnit;
+                }
 
                 for( size_t i=0; i<3u; ++i )
                 {
