@@ -40,15 +40,19 @@ compositor_node CubemapRendererNode
 {
 	in 0 cubemap
 
-	target cubemap +X : cubemap_target { }
-	target cubemap -X : cubemap_target { }
-	target cubemap +Y : cubemap_target { }
-	target cubemap -Y : cubemap_target { }
-	target cubemap +Z : cubemap_target { }
-	target cubemap -Z : cubemap_target
+	texture tmpCubemap target_width target_height target_format cubemap mipmaps 0
+
+	target tmpCubemap +X : cubemap_target { }
+	target tmpCubemap -X : cubemap_target { }
+	target tmpCubemap +Y : cubemap_target { }
+	target tmpCubemap -Y : cubemap_target { }
+	target tmpCubemap +Z : cubemap_target { }
+	target tmpCubemap -Z : cubemap_target
 	{
-		pass generate_mipmaps
+		pass ibl_specular
 		{
+			input tmpCubemap
+			output cubemap
 		}
 	}
 }

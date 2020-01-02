@@ -1008,7 +1008,7 @@ Mostly relevant for UAVs but is also useful for rendering. See
 
 -   mipmaps \<num Mipmaps\>
 
-Default: 0; Indicates how many mipmaps to use. 0 for none. Use -1 to
+Default: 1; Indicates how many mipmaps to use. 1 for none. Use 0 to
 fill all mipmaps until 1x1
 
 -   automipmaps

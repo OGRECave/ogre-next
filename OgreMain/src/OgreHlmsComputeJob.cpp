@@ -194,6 +194,10 @@ namespace Ogre
             setPiece( propName.c_str(), typeName );
         propName.resize( texturePropSize );
 
+        propName.a( "_orig_pf_srgb" );  // uav0_orig_pf_srgb
+        setProperty( propName.c_str(), PixelFormatGpuUtils::isSRgb( texture->getPixelFormat() ) );
+        propName.resize( texturePropSize );
+
         propName.a( "_data_type" );             //uav0_data_type
         const char *dataType = toShaderType->getDataType( pixelFormat,
                                                           texture->getTextureType(),
@@ -523,7 +527,10 @@ namespace Ogre
                 uint32 resolution[3];
                 resolution[0] = std::max( tex->getWidth() >> mipLevel, 1u );
                 resolution[1] = std::max( tex->getHeight() >> mipLevel, 1u );
-                resolution[2] = std::max( tex->getDepthOrSlices() >> mipLevel, 1u );
+                if( tex->getTextureType() == TextureTypes::Type3D )
+                    resolution[2] = std::max( tex->getDepthOrSlices() >> mipLevel, 1u );
+                else
+                    resolution[2] = std::max( tex->getDepthOrSlices(), 1u );
 
                 for( int i=0; i<3; ++i )
                 {

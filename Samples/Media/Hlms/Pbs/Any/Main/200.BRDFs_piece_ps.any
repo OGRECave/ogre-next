@@ -203,25 +203,33 @@ float3 BRDF_IR( float3 lightDir, float3 lightDiffuse, PixelData pixelData )
 /// to white) does not go all the way to white at glancing angles in the case of rough surfaces."
 /// So we use getSpecularFresnelWithRoughness instead.
 @piece( BRDF_EnvMap )
-    //Normally we'd use VdotH. However:
-    //	H = normalize(lightDir + viewDir)
-    //since:
-    //	lightDir = pixelData.reflDir
-    //then:
-    //	H = geomNormal
-    //Thus H = N, and therefore we use VdotN (NdotV)
-    //float VdotH = saturate( dot( pixelData.viewDir, normalize( pixelData.reflDir + pixelData.viewDir ) ) );
-    float_fresnel fresnelS = @insertpiece( getSpecularFresnelWithRoughness );
+	//Normally we'd use VdotH. However:
+	//	H = normalize(lightDir + viewDir)
+	//since:
+	//	lightDir = pixelData.reflDir
+	//then:
+	//	H = geomNormal
+	//Thus H = N, and therefore we use VdotN (NdotV)
+	//float VdotH = saturate( dot( pixelData.viewDir, normalize( pixelData.reflDir + pixelData.viewDir ) ) );
+	float_fresnel fresnelS = @insertpiece( getSpecularFresnelWithRoughness );
+
+	@property( ltc_texture_available )
+		#define brdfLUT ltcMatrix
+		float2 envBRDF = OGRE_SampleArray2D( brdfLUT, samplerState@value(envMapRegSampler),
+											 float2( pixelData.NdotV, 1.0 - pixelData.roughness ), 2 ).xy;
+	@else
+		float2 envBRDF = float2( 1.0f, 0.0f );
+	@end
 
 	@property( fresnel_separate_diffuse )
 		float NdotL = saturate( dot( pixelData.normal, pixelData.reflDir ) );
-        float_fresnel fresnelD = @insertpiece( getDiffuseFresnelWithRoughness );
-    @else
-        float fresnelD = 1.0f - @insertpiece( getMaxFresnelS );
-    @end
+		float_fresnel fresnelD = @insertpiece( getDiffuseFresnelWithRoughness );
+	@else
+		float fresnelD = 1.0f - @insertpiece( getMaxFresnelS );
+	@end
 
 	finalColour += pixelData.envColourD * pixelData.diffuse.xyz * fresnelD +
-                   pixelData.envColourS * pixelData.specular.xyz * fresnelS;
+				   pixelData.envColourS * pixelData.specular.xyz * ( fresnelS * envBRDF.x + envBRDF.y );
 @end
 
 @property( hlms_fine_light_mask || hlms_forwardplus_fine_light_mask )

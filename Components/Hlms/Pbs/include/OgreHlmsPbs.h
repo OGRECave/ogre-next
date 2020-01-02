@@ -93,6 +93,12 @@ namespace Ogre
             /// dynamically very often and this might cause swapping shaders.
             AmbientHemisphere,
 
+            /// Uses spherical harmonics
+            AmbientSh,
+
+            /// Uses spherical harmonics (monochrome / single channel)
+            AmbientShMonochrome,
+
             /// Disable ambient lighting.
             AmbientNone
         };
@@ -125,6 +131,8 @@ namespace Ogre
         TexBufferPacked         *mGridBuffer;
         TexBufferPacked         *mGlobalLightListBuffer;
 
+
+        float                   mMaxSpecIblMipmap;
         uint32                  mTexUnitSlotStart;
 
         TextureGpuVec const     *mPrePassTextures;
@@ -150,7 +158,7 @@ namespace Ogre
 
         bool                    mSkipRequestSlotInChangeRS;
 
-        bool                    mUsingLtcMatrix;
+        /// LTC matrix texture also contains BRDF LUT for specular IBL.
         TextureGpu              *mLtcMatrixTexture;
 
         bool                    mDecalsDiffuseMergedEmissive;
@@ -169,6 +177,7 @@ namespace Ogre
         bool mSetupWorldMatBuf;
         bool mDebugPssmSplits;
 
+        bool mAutoSpecIblMaxMipmap;
         bool mVctFullConeCount;
 
 #if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
@@ -236,6 +245,17 @@ namespace Ogre
 
         virtual void postCommandBufferExecution( CommandBuffer *commandBuffer );
         virtual void frameEnded(void);
+
+        /** By default we see the reflection textures' mipmaps and store the largest one we found.
+            By calling resetIblSpecMipmap; you can reset this process thus if a reflection texture
+            with a large number of mipmaps was removed, these textures can be reevaluated
+        @param numMipmaps
+            When 0; we automatically check for reflection texture.
+            When non-zero, we force the number of mipmaps to the specified value
+        */
+        void resetIblSpecMipmap( uint8 numMipmaps );
+
+        void _notifyIblSpecMipmap( uint8 numMipmaps );
 
         void loadLtcMatrix(void);
 
@@ -472,6 +492,9 @@ namespace Ogre
         static const IdString ExponentialShadowMaps;
 
         static const IdString AmbientHemisphere;
+        static const IdString AmbientSh;
+        static const IdString AmbientShMonochrome;
+        static const IdString LtcTextureAvailable;
         static const IdString EnvMapScale;
         static const IdString AmbientFixed;
         static const IdString TargetEnvprobeMap;

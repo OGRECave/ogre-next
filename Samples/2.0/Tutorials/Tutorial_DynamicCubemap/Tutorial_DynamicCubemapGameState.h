@@ -7,6 +7,13 @@
 
 namespace Demo
 {
+    enum IblQuality
+    {
+        MipmapsLowest,
+        IblLow,
+        IblHigh
+    };
+
     class DynamicCubemapGameState : public TutorialGameState
     {
         Ogre::SceneNode     *mSceneNode[16];
@@ -14,6 +21,8 @@ namespace Demo
         Ogre::SceneNode     *mLightNodes[3];
 
         bool                mAnimateObjects;
+
+        IblQuality          mIblQuality;
 
         std::vector<Ogre::MovableObject*> mSpheres;
         std::vector<Ogre::MovableObject*> mObjects;

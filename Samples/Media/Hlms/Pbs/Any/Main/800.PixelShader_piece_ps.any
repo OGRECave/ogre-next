@@ -1,4 +1,4 @@
-@piece( envSpecularRoughness ) pixelData.roughness * 12.0 @end
+@piece( envSpecularRoughness ) pixelData.roughness * passBuf.envMapNumMipmaps @end
 
 @piece( DefaultHeaderPS )
 	@property( !fresnel_scalar )
@@ -10,6 +10,14 @@
 	@end
 
 	@insertpiece( DeclReverseDepthMacros )
+
+	@property( syntax == metal )
+		#define PASSBUF_ARG_DECL , constant PassBuffer &passBuf
+		#define PASSBUF_ARG , passBuf
+	@else
+		#define PASSBUF_ARG_DECL
+		#define PASSBUF_ARG
+	@end
 
 	@property( hlms_enable_cubemaps_auto )
 		@insertpiece( UnpackHelpers )
@@ -123,6 +131,7 @@
 
 	@insertpiece( DeclVctFuncs )
 	@insertpiece( DeclIrradianceFieldFuncs )
+	@insertpiece( DeclIrradianceSH )
 @end
 
 
@@ -399,10 +408,7 @@
 		pixelData.reflDir = 2.0 * dot( pixelData.viewDir, pixelData.normal ) * pixelData.normal - pixelData.viewDir;
 	@end
 
-	@property( ambient_hemisphere || vct_ambient_hemisphere )
-		float ambientWD = dot( passBuf.ambientHemisphereDir.xyz, pixelData.normal ) * 0.5 + 0.5;
-		float ambientWS = dot( passBuf.ambientHemisphereDir.xyz, pixelData.reflDir ) * 0.5 + 0.5;
-	@end
+	@insertpiece( DoAmbientHeader )
 @end
 
 @piece( DoDirectionalLights )
@@ -514,7 +520,7 @@
 		@end
 		float3 nNormalLS = localCorrect( pixelData.normal, posInProbSpace, @insertpiece( pccProbeSource ) ).xyz;
 		float4 envS = SampleEnvProbe( texEnvProbeMap, samplerState@value(envMapRegSampler),
-									  reflDirLS, sqrt( pixelData.roughness ) * 11.0 );
+									  reflDirLS, @insertpiece( envSpecularRoughness ) );
 		@property( envmap_scale )
 			envS.xyz *= passBuf.ambientUpperHemi.w;
 		@end
@@ -671,7 +677,7 @@
 
 			@insertpiece( forward3dLighting )
 
-			@property( needs_env_brdf && (use_envprobe_map || hlms_use_ssr || use_planar_reflections || vct_num_probes || irradiance_field) )
+			@property( needs_env_brdf )
 				pixelData.envColourS = float3( 0, 0, 0 );
 				pixelData.envColourD = float3( 0, 0, 0 );
 			@end
@@ -704,28 +710,7 @@
 
 			@insertpiece( DoPlanarReflectionsPS )
 
-			@property( ambient_hemisphere )
-				@property( use_envprobe_map || hlms_use_ssr || use_planar_reflections || vct_num_probes || irradiance_field )
-					@property( vct_num_probes )
-						//Only use ambient lighting if object is outside any VCT probe
-						if( vctSpecular.w == 0 )
-						{
-					@end
-							pixelData.envColourS += lerp( passBuf.ambientLowerHemi.xyz, passBuf.ambientUpperHemi.xyz, ambientWD );
-							pixelData.envColourD += lerp( passBuf.ambientLowerHemi.xyz, passBuf.ambientUpperHemi.xyz, ambientWS );
-					@property( vct_num_probes )
-						}
-					@end
-				@else
-					pixelData.envColourS = lerp( passBuf.ambientLowerHemi.xyz, passBuf.ambientUpperHemi.xyz, ambientWD );
-					pixelData.envColourD = lerp( passBuf.ambientLowerHemi.xyz, passBuf.ambientUpperHemi.xyz, ambientWS );
-				@end
-			@end
-			@property( ambient_fixed && vct_num_probes )
-				//Only use ambient lighting if object is outside any VCT probe
-				finalColour += vctSpecular.w == 0 ? float3( 0, 0, 0 ) :
-													(passBuf.ambientUpperHemi.xyz * pixelData.diffuse.xyz);
-			@end
+			@insertpiece( DoAmbientLighting )
 
 			@property( needs_env_brdf )
 				@insertpiece( BRDF_EnvMap )

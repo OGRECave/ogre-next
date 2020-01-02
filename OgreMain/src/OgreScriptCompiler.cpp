@@ -1324,6 +1324,7 @@ namespace Ogre
         mIds["camera_far_corners_world_space_centered"] = ID_CAMERA_FAR_CORNERS_WORLD_SPACE_CENTERED;
         mIds["camera_direction"]                = ID_CAMERA_DIRECTION;
         mIds["input"]           = ID_INPUT;
+        mIds["output"]          = ID_OUTPUT;
 
         mIds["non_tilers_only"] = ID_NON_TILERS_ONLY;
         mIds["buffers"]         = ID_BUFFERS;
@@ -1366,6 +1367,9 @@ namespace Ogre
         mIds["compute_hq"]      = ID_COMPUTE_HQ;
         mIds["kernel_radius"]   = ID_KERNEL_RADIUS;
         mIds["gauss_deviation"] = ID_GAUSS_DEVIATION;
+
+        mIds["samples_per_iteration"] = ID_SAMPLES_PER_ITERATION;
+        mIds["force_mipmap_fallback"] = ID_FORCE_MIPMAP_FALLBACK;
 
         mIds["compositor_node_shadow"]  = ID_SHADOW_NODE;
         mIds["num_splits"]              = ID_NUM_SPLITS;

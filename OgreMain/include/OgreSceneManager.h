@@ -442,6 +442,8 @@ namespace Ogre {
         Vector3     mAmbientLightHemisphereDir;
         uint32      mEnvFeatures;
 
+        float       mAmbientSphericalHarmonics[9u*3u];
+
         /// The rendering system to send the scene to
         RenderSystem *mDestRenderSystem;
 
@@ -1635,12 +1637,15 @@ namespace Ogre {
                               const Vector3 &hemisphereDir, Real envmapScale = 1.0f,
                               uint32 envFeatures=0xffffffff );
 
+        void setSphericalHarmonics( Vector3 ambientSphericalHarmonics[9] );
+
         /** Returns the ambient light level to be used for the scene.
         */
         const ColourValue& getAmbientLightUpperHemisphere(void) const   { return mAmbientLight[0]; }
         const ColourValue& getAmbientLightLowerHemisphere(void) const   { return mAmbientLight[1]; }
         const Vector3& getAmbientLightHemisphereDir(void) const { return mAmbientLightHemisphereDir; }
         uint32 getEnvFeatures(void) const                       { return mEnvFeatures; }
+        const float* getSphericalHarmonics(void) const          { return mAmbientSphericalHarmonics; }
 
         /** Sets the source of the 'world' geometry, i.e. the large, mainly static geometry
             making up the world e.g. rooms, landscape etc.

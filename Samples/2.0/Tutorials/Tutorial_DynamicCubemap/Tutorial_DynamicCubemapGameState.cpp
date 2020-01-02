@@ -23,7 +23,10 @@
 #include "OgreTextureGpuManager.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "Compositor/OgreCompositorManager2.h"
+#include "Compositor/OgreCompositorNodeDef.h"
 #include "Compositor/OgreCompositorWorkspaceDef.h"
+
+#include "Compositor/Pass/PassIblSpecular/OgreCompositorPassIblSpecularDef.h"
 
 using namespace Demo;
 
@@ -32,6 +35,7 @@ namespace Demo
     DynamicCubemapGameState::DynamicCubemapGameState( const Ogre::String &helpDescription ) :
         TutorialGameState( helpDescription ),
         mAnimateObjects( true ),
+        mIblQuality( IblLow ),
         mCubeCamera( 0 ),
         mDynamicCubemapWorkspace( 0 )
     {
@@ -55,30 +59,79 @@ namespace Demo
         Camera *camera = mGraphicsSystem->getCamera();
         CompositorManager2 *compositorManager = root->getCompositorManager2();
 
-        //A RenderTarget created with TU_AUTOMIPMAP means the compositor still needs to
+        if( mDynamicCubemapWorkspace )
+        {
+            compositorManager->removeWorkspace( mDynamicCubemapWorkspace );
+            mDynamicCubemapWorkspace = 0;
+        }
+
+        uint32 iblSpecularFlag = 0;
+        if( root->getRenderSystem()->getCapabilities()->hasCapability( RSC_COMPUTE_PROGRAM ) &&
+            mIblQuality != MipmapsLowest )
+        {
+            iblSpecularFlag = TextureFlags::Uav | TextureFlags::Reinterpretable;
+        }
+
+        //A RenderTarget created with AllowAutomipmaps means the compositor still needs to
         //explicitly generate the mipmaps by calling generate_mipmaps. It's just an API
         //hint to tell the GPU we will be using the mipmaps auto generation routines.
         TextureGpuManager *textureManager = root->getRenderSystem()->getTextureGpuManager();
-        mDynamicCubemap = textureManager->createTexture( "DynamicCubemap",
-                                                         GpuPageOutStrategy::Discard,
-                                                         TextureFlags::RenderToTexture|
-                                                         TextureFlags::AllowAutomipmaps,
-                                                         TextureTypes::TypeCube );
-        mDynamicCubemap->setResolution( 1024u, 1024u );
-        mDynamicCubemap->setNumMipmaps( PixelFormatGpuUtils::getMaxMipmapCount( 1024u, 1024u ) );
+        mDynamicCubemap =
+            textureManager->createOrRetrieveTexture( "DynamicCubemap",
+                                                     GpuPageOutStrategy::Discard,          //
+                                                     TextureFlags::RenderToTexture |       //
+                                                         TextureFlags::AllowAutomipmaps |  //
+                                                         iblSpecularFlag,                  //
+                                                     TextureTypes::TypeCube );
+        mDynamicCubemap->scheduleTransitionTo( GpuResidency::OnStorage );
+        uint32 resolution = 512u;
+        if( mIblQuality == MipmapsLowest )
+            resolution = 1024u;
+        else if( mIblQuality == IblLow )
+            resolution = 256u;
+        else
+            resolution = 512u;
+        mDynamicCubemap->setResolution( resolution, resolution );
+        mDynamicCubemap->setNumMipmaps( PixelFormatGpuUtils::getMaxMipmapCount( resolution ) );
+        if( mIblQuality != MipmapsLowest )
+        {
+            // Limit max mipmap to 16x16
+            mDynamicCubemap->setNumMipmaps( mDynamicCubemap->getNumMipmaps() - 4u );
+        }
         mDynamicCubemap->setPixelFormat( PFG_RGBA8_UNORM_SRGB );
-        mDynamicCubemap->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+        mDynamicCubemap->scheduleTransitionTo( GpuResidency::Resident );
+
+        Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
+        assert( dynamic_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
+        Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs*>( hlmsManager->getHlms(Ogre::HLMS_PBS) );
+        hlmsPbs->resetIblSpecMipmap( 0u );
 
         // Create the camera used to render to our cubemap
-        mCubeCamera = sceneManager->createCamera( "CubeMapCamera", true, true );
-        mCubeCamera->setFOVy( Degree(90) );
-        mCubeCamera->setAspectRatio( 1 );
-        mCubeCamera->setFixedYawAxis(false);
-        mCubeCamera->setNearClipDistance(0.5);
-        //The default far clip distance is way too big for a cubemap-capable camera,
-        //hich prevents Ogre from better culling.
-        mCubeCamera->setFarClipDistance( 10000 );
-        mCubeCamera->setPosition( 0, 1.0, 0 );
+        if( !mCubeCamera )
+        {
+            mCubeCamera = sceneManager->createCamera( "CubeMapCamera", true, true );
+            mCubeCamera->setFOVy( Degree(90) );
+            mCubeCamera->setAspectRatio( 1 );
+            mCubeCamera->setFixedYawAxis(false);
+            mCubeCamera->setNearClipDistance(0.5);
+            //The default far clip distance is way too big for a cubemap-capable camera,
+            //hich prevents Ogre from better culling.
+            mCubeCamera->setFarClipDistance( 10000 );
+            mCubeCamera->setPosition( 0, 1.0, 0 );
+        }
+
+        {
+            CompositorNodeDef *nodeDef =
+                compositorManager->getNodeDefinitionNonConst( "CubemapRendererNode" );
+            const CompositorPassDefVec &passes =
+                nodeDef->getTargetPass( nodeDef->getNumTargetPasses() - 1u )->getCompositorPasses();
+
+            OGRE_ASSERT_HIGH( dynamic_cast<CompositorPassIblSpecularDef *>( passes.back() ) );
+            CompositorPassIblSpecularDef *iblSpecPassDef =
+                static_cast<CompositorPassIblSpecularDef *>( passes.back() );
+            iblSpecPassDef->mForceMipmapFallback = mIblQuality == MipmapsLowest;
+            iblSpecPassDef->mSamplesPerIteration = mIblQuality == IblLow ? 32.0f : 128.0f;
+        }
 
         //Setup the cubemap's compositor.
         CompositorChannelVec cubemapExternalChannels( 1 );
@@ -180,7 +233,7 @@ namespace Demo
 
                 item->setVisibilityFlags( 0x000000001 );
 
-                size_t idx = i * 4 + j;
+                size_t idx = i * 4u + j;
 
                 mSceneNode[idx] = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )->
                         createChildSceneNode( Ogre::SCENE_DYNAMIC );
@@ -333,13 +386,22 @@ namespace Demo
     {
         Ogre::uint32 visibilityMask = mGraphicsSystem->getSceneManager()->getVisibilityMask();
 
+        const char *c_iblQuality[] =
+        {
+            "[Lowest]",
+            "[Low]",
+            "[High]"
+        };
+
         TutorialGameState::generateDebugText( timeSinceLast, outText );
-        outText += "\nPress F2 to toggle animation. ";
+        outText += "\nF2 to toggle animation. ";
         outText += mAnimateObjects ? "[On]" : "[Off]";
-        outText += "\nPress F3 to show/hide animated objects. ";
+        outText += "\nF3 to show/hide animated objects. ";
         outText += (visibilityMask & 0x000000001) ? "[On]" : "[Off]";
-        outText += "\nPress F4 to show/hide spheres from the reflection. ";
+        outText += "\nF4 to show/hide spheres from the reflection. ";
         outText += (mSpheres.back()->getVisibilityFlags() & 0x000000004) ? "[On]" : "[Off]";
+        outText += "\nF5 to change reflection IBL quality ";
+        outText += c_iblQuality[mIblQuality];
     }
     //-----------------------------------------------------------------------------------
     void DynamicCubemapGameState::keyReleased( const SDL_KeyboardEvent &arg )
@@ -359,7 +421,7 @@ namespace Demo
             Ogre::uint32 visibilityMask = mGraphicsSystem->getSceneManager()->getVisibilityMask();
             bool showMovingObjects = (visibilityMask & 0x00000001);
             showMovingObjects = !showMovingObjects;
-            visibilityMask &= ~0x00000001;
+            visibilityMask &= ~0x00000001u;
             visibilityMask |= (Ogre::uint32)showMovingObjects;
             mGraphicsSystem->getSceneManager()->setVisibilityMask( visibilityMask );
         }
@@ -370,14 +432,19 @@ namespace Demo
             while( itor != end )
             {
                 Ogre::uint32 visibilityMask = (*itor)->getVisibilityFlags();
-                bool showPalette = (visibilityMask & 0x00000004) != 0;
+                bool showPalette = (visibilityMask & 0x00000004u) != 0u;
                 showPalette = !showPalette;
-                visibilityMask &= ~0x00000004;
+                visibilityMask &= ~0x00000004u;
                 visibilityMask |= (Ogre::uint32)(showPalette) << 2;
 
                 (*itor)->setVisibilityFlags( visibilityMask );
                 ++itor;
             }
+        }
+        else if( arg.keysym.sym == SDLK_F5 )
+        {
+            mIblQuality = static_cast<IblQuality>( (mIblQuality + 1u) % (IblHigh + 1u) );
+            mGraphicsSystem->restartCompositor();
         }
         else
         {

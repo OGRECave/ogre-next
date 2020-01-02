@@ -99,9 +99,7 @@ namespace Ogre
             uint32 width;           //0 means adapt to target width
             uint32 height;          //0 means adapt to target height
             uint32 depthOrSlices;   //Can never be 0.
-            uint8 numMipmaps;       //1u to disable mipmaps, Negative to generate until the max
-                                    //Will be set to -1 if value is 1u and automipmaps is true
-                                    //Can never be 0.
+            uint8 numMipmaps;       //1u to disable mipmaps, 0 to generate until the max
             float widthFactor;  //multiple of target width to use (if width = 0)
             float heightFactor; //multiple of target height to use (if height = 0)
             /// Use PFG_UNKNOWN to use same format as main target
