@@ -1028,15 +1028,15 @@ namespace Ogre
         if( getProperty( HlmsBaseProp::LightsAreaTexMask ) > 0 )
             setTextureReg( PixelShader, "areaLightMasks", texUnit++ );
 
-        if( ( bNeedsEnvBrdf && getProperty( PbsProperty::LtcTextureAvailable ) ) ||
-            getProperty( HlmsBaseProp::LightsAreaLtc ) > 0 )
+        if( getProperty( PbsProperty::LtcTextureAvailable ) )
         {
-            setTextureReg( PixelShader, "ltcMatrix", texUnit++ );
-        }
-        else
-        {
-            // Always occupy the texture unit
-            ++texUnit;
+            if( bNeedsEnvBrdf || getProperty( HlmsBaseProp::LightsAreaLtc ) > 0 )
+                setTextureReg( PixelShader, "ltcMatrix", texUnit++ );
+            else
+            {
+                // Always occupy the texture unit
+                ++texUnit;
+            }
         }
 
         if( getProperty( HlmsBaseProp::EnableDecals ) )
