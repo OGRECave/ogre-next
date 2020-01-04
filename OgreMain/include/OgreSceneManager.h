@@ -1306,6 +1306,7 @@ namespace Ogre {
         /// @see CompositorPassSceneDef::mPrePassMode
         void _setPrePassMode( PrePassMode mode, const TextureGpuVec &prepassTextures,
                               TextureGpu *prepassDepthTexture, TextureGpu *ssrTexture );
+        void _setRefractions( TextureGpu *prepassDepthTexture, TextureGpu *refractionsTexture );
         PrePassMode getCurrentPrePassMode(void) const               { return mPrePassMode; }
         const TextureGpuVec& getCurrentPrePassTextures(void) const  { return mPrePassTextures; }
         TextureGpu* getCurrentPrePassDepthTexture(void) const       { return mPrePassDepthTexture; }

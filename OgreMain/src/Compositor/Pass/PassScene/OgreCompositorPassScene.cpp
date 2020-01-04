@@ -50,7 +50,8 @@ namespace Ogre
                 mUpdateShadowNode( false ),
                 mPrePassTextures( 0 ),
                 mPrePassDepthTexture( 0 ),
-                mSsrTexture( 0 )
+                mSsrTexture( 0 ),
+                mRefractionsTexture( 0 )
     {
         initialize( rtv );
 
@@ -105,6 +106,9 @@ namespace Ogre
             {
                 mSsrTexture = parentNode->getDefinedTexture( mDefinition->mPrePassSsrTexture );
             }
+
+            if( mDefinition->mRefractionsTexture != IdString() )
+                mRefractionsTexture = parentNode->getDefinedTexture( mDefinition->mRefractionsTexture );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -207,6 +211,7 @@ namespace Ogre
         sceneManager->_setForwardPlusEnabledInPass( mDefinition->mEnableForwardPlus );
         sceneManager->_setPrePassMode( mDefinition->mPrePassMode, mPrePassTextures,
                                        mPrePassDepthTexture, mSsrTexture );
+        sceneManager->_setRefractions( mPrePassDepthTexture, mRefractionsTexture );
         sceneManager->_setCurrentCompositorPass( this );
 
         viewport->_updateCullPhase01( mCamera, mCullCamera, usedLodCamera,

@@ -9576,6 +9576,34 @@ namespace Ogre{
                         }
                     }
                     break;
+                case ID_USE_REFRACTIONS:
+                    if( prop->values.size() != 2u )
+                    {
+                        compiler->addError( ScriptCompiler::CE_FEWERPARAMETERSEXPECTED, prop->file,
+                                            prop->line,
+                                            "use_refractions only supports 2 arguments: the depth "
+                                            "texture & the refraction texture" );
+                    }
+                    else
+                    {
+                        IdString depthTexture, refractions;
+
+                        AbstractNodeList::const_iterator it1 = prop->values.begin();
+                        AbstractNodeList::const_iterator it0 = it1++;
+
+                        if( !getIdString( *it0, &depthTexture ) || !getIdString( *it1, &refractions ) )
+                        {
+                            compiler->addError( ScriptCompiler::CE_INVALIDPARAMETERS, prop->file,
+                                                prop->line,
+                                                "use_refractions must be the name of a texture "
+                                                "available in the local or global scope" );
+                        }
+                        else
+                        {
+                            passScene->setUseRefractions( depthTexture, refractions );
+                        }
+                    }
+                    break;
                 case ID_UV_BAKING:
                     if(prop->values.size() != 1)
                     {

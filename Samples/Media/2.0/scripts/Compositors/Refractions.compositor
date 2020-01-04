@@ -33,8 +33,10 @@ compositor_node RefractionsRenderingNode
 				depth	store
 				stencil	dont_care
 			}
-			overlays	on
+			overlays	off
 			shadows		RefractionsShadowNode
+
+			rq_last		199
 		}
 	}
 
@@ -60,8 +62,12 @@ compositor_node RefractionsRenderingNode
 				depth	dont_care
 				stencil	dont_care
 			}
-			overlays	on
-			shadows		RefractionsShadowNode reuse
+
+			rq_first		200
+
+			overlays		on
+			shadows			RefractionsShadowNode reuse
+			use_refractions	depthBuffer rtt01
 		}
 	}
 

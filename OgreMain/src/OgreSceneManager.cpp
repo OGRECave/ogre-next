@@ -98,8 +98,8 @@ mNumCubemapProbes( 0 ),
 mStaticMinDepthLevelDirty( 0 ),
 mStaticEntitiesDirty( true ),
 mPrePassMode( PrePassNone ),
-mRefractionsTexture( 0 ),
 mSsrTexture( 0 ),
+mRefractionsTexture( 0 ),
 mName(name),
 mRenderQueue( 0 ),
 mForwardPlusSystem( 0 ),
@@ -1179,6 +1179,12 @@ void SceneManager::_setPrePassMode( PrePassMode mode, const TextureGpuVec &prepa
     mPrePassTextures = prepassTextures;
     mPrePassDepthTexture = prepassDepthTexture;
     mSsrTexture = ssrTexture;
+}
+//-----------------------------------------------------------------------
+void SceneManager::_setRefractions( TextureGpu *prepassDepthTexture, TextureGpu *refractionsTexture )
+{
+    mPrePassDepthTexture = prepassDepthTexture;
+    mRefractionsTexture = refractionsTexture;
 }
 //-----------------------------------------------------------------------
 void SceneManager::setDecalsDiffuse( TextureGpu *tex )
