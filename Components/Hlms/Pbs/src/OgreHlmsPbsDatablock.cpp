@@ -425,7 +425,7 @@ namespace Ogre
         float oldkDg = mkDg;
         float oldkDb = mkDb;
 
-        if( mTransparencyMode == Transparent )
+        if( mTransparencyMode == Transparent || mTransparencyMode == Refractive )
         {
             //Precompute the transparency CPU-side.
             if( mWorkflow != MetallicWorkflow )
@@ -840,12 +840,12 @@ namespace Ogre
         {
             HlmsBlendblock newBlendblock;
 
-            if( mTransparencyMode == None )
+            if( mTransparencyMode == None || mTransparencyMode == Refractive )
             {
                 newBlendblock.mSourceBlendFactor    = SBF_ONE;
                 newBlendblock.mDestBlendFactor      = SBF_ZERO;
             }
-            else if( mTransparencyMode == Transparent || mTransparencyMode == Refractive )
+            else if( mTransparencyMode == Transparent )
             {
                 newBlendblock.mSourceBlendFactor    = SBF_ONE;
                 newBlendblock.mDestBlendFactor      = SBF_ONE_MINUS_SOURCE_ALPHA;
@@ -858,6 +858,14 @@ namespace Ogre
 
             if( newBlendblock != *mBlendblock[0] )
                 setBlendblock( newBlendblock );
+
+            if( mTransparencyMode == Refractive && mMacroblock[0]->mDepthWrite )
+            {
+                // When doing refractions, depth write must be forced off
+                HlmsMacroblock macroblock = *mMacroblock[0];
+                macroblock.mDepthWrite = false;
+                setMacroblock( macroblock );
+            }
         }
         else
         {

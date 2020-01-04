@@ -98,17 +98,24 @@ namespace Ogre
 
             if( mDefinition->mPrePassDepthTexture != IdString() )
             {
-                mPrePassDepthTexture = parentNode->getDefinedTexture(
-                                           mDefinition->mPrePassDepthTexture );
+                mPrePassDepthTexture =
+                    parentNode->getDefinedTexture( mDefinition->mPrePassDepthTexture );
             };
 
             if( mDefinition->mPrePassSsrTexture != IdString() )
             {
                 mSsrTexture = parentNode->getDefinedTexture( mDefinition->mPrePassSsrTexture );
             }
+        }
 
-            if( mDefinition->mRefractionsTexture != IdString() )
-                mRefractionsTexture = parentNode->getDefinedTexture( mDefinition->mRefractionsTexture );
+        if( mDefinition->mRefractionsTexture != IdString() )
+        {
+            mRefractionsTexture = parentNode->getDefinedTexture( mDefinition->mRefractionsTexture );
+            if( mDefinition->mPrePassDepthTexture != IdString() )
+            {
+                mPrePassDepthTexture =
+                    parentNode->getDefinedTexture( mDefinition->mPrePassDepthTexture );
+            };
         }
     }
     //-----------------------------------------------------------------------------------

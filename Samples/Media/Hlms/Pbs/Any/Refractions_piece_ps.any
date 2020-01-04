@@ -5,20 +5,32 @@
 @piece( DeclRefractionsFuncs )
 	float3 OGRE_refract( float3 viewDir, float3 normal, float refractionIndex, float NdotV )
 	{
+		float3 retVal;
 		float k = 1.0 - refractionIndex * refractionIndex * (1.0 - NdotV  * NdotV);
 		if( k < 0.0 )
-			out = float3( 0, 0, 0 );
+			retVal = float3( 0, 0, 0 );
 		else
-			out = -refractionIndex * viewDir - (sqrtf( k ) - refractionIndex * NdotV) * normal;
+			retVal = -refractionIndex * viewDir - (sqrt( k ) - refractionIndex * NdotV) * normal;
+		return retVal;
 	}
 @end
 
 @piece( applyRefractions )
 	// refractNormal must be in view space, and we ignore .z component
-	float3 refractNormal2d = OGRE_refract( pixelData.viewDir, pixelData.normal, pixelData.NdotV ).xy;
-	float2 refractUv = screenPosUv.xy + refractNormal2d.xy * material.refractionStrength;
+	float2 refractNormal2d = OGRE_refract( pixelData.viewDir, pixelData.normal, 0.5, pixelData.NdotV ).xy;
+	//TODO: Bake Aspect Ratio
+	//TODO: Strength is hardcoded
+	float2 refractUv = screenPosUv.xy + refractNormal2d.xy * /*material.refractionStrength*/float2( 0.075, 0.075 * passBuf.invWindowRes.x / passBuf.invWindowRes.y ) / max( -inPs.pos.z, 1.0 );
 	float3 refractionCol = OGRE_SampleLevel( refractionMap, refractionMapSampler, refractUv, 0 ).xyz;
 	float refractionDepth = OGRE_SampleLevel( gBuf_depthTexture, refractionMapSampler, refractUv, 0 ).x;
+
+	// We may need to fallback to regular transparency if we're sampling to close to the edges
+	// or the object being refracted is in front of us.
+	float3 fallbackRefractionCol = OGRE_Load2D( refractionMap, iFragCoord.xy, 0 ).xyz;
+
+	refractUv = saturate( abs( screenPosUv.xy * 2.0 - 1.0 ) * 20.0 - 19 );
+	float fallbackRefrW = max( refractUv.x, refractUv.y );
+	fallbackRefrW = fallbackRefrW * fallbackRefrW;
 
 	@property( hlms_no_reverse_depth )
 		if( refractionDepth < gl_FragCoord.z )
@@ -27,9 +39,10 @@
 	@end
 		{
 			// We're trying to refract an object that is in front of us. We can't do that.
-			// Revert to regular transparency.
-			refractionCol = OGRE_Load2D( refractionMap, iFragCoord.xy ).xyz;
+			fallbackRefrW = 1.0;
 		}
+
+	refractionCol = lerp( refractionCol, fallbackRefractionCol, fallbackRefrW );
 
 	@property( use_texture_alpha )
 		float refractionAlpha = material.F0.w * pixelData.diffuse.w;

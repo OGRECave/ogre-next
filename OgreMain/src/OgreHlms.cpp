@@ -2974,9 +2974,13 @@ namespace Ogre
 
             if( sceneManager->getCurrentSsrTexture() != 0 )
                 setProperty( HlmsBaseProp::UseSsr, 1 );
+        }
 
-            if( sceneManager->getCurrentRefractionsTexture() != 0 )
-                setProperty( HlmsBaseProp::SsRefractionsAvailable, 1 );
+        if( sceneManager->getCurrentRefractionsTexture() != 0 )
+        {
+            setProperty( HlmsBaseProp::VPos, 1 );
+            setProperty( HlmsBaseProp::ScreenPosInt, 1 );
+            setProperty( HlmsBaseProp::SsRefractionsAvailable, 1 );
         }
 
         mListener->preparePassHash( shadowNode, casterPass, dualParaboloid, sceneManager, this );
