@@ -30,10 +30,167 @@ namespace Demo
         TutorialGameState( helpDescription ),
         mAnimateObjects( true ),
         mNumSpheres( 0 ),
-        mTransparencyMode( Ogre::HlmsPbsDatablock::None ),
-        mTransparencyValue( 1.0f )
+        mTransparencyValue( 0.15f ),
+        mDebugVisibility( NormalSpheres )
     {
         memset( mSceneNode, 0, sizeof( mSceneNode ) );
+    }
+    //-----------------------------------------------------------------------------------
+    /** @brief RefractionsGameState::createRefractivePlaceholder
+
+        THIS IS OPTIONAL, BUT GREATLY FIXES SOME RENDERING ARTIFACTS
+
+        Multiple refractions are not supported. But to make it worse, refractive objects
+        rendered on top of other refractive objects often result in rendering artifacts.
+
+        It is similar to Order Dependent Transparency issues (i.e. regular alpha blending) but
+        with even more artifacts.
+
+        Therefore there is a very simple yet effective workaround: Create a duplicate of the
+        object rendered with regular alpha blending, and that actually outputs depth to the
+        depth buffer.
+
+        This greatly fixes some depth-related bugs and rendering order issues; while it also
+        creates a 'fallback' because now refractive objects behind other refractive objects will
+        appear (however they won't cause multiple refractions, you will be seeing the alpha blended
+        version)
+
+        The fallback might cause some glitches of its own, but this a much better alternative
+    @param item
+        Item to duplicate as fallback
+    @param sceneNode
+        Scene node containing the Item
+    @param datablock
+        Datablock to duplicate as fallback
+    */
+    void RefractionsGameState::createRefractivePlaceholder( Ogre::Item *item, Ogre::SceneNode *sceneNode,
+                                                            Ogre::HlmsPbsDatablock *datablock )
+    {
+        Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
+
+        item = sceneManager->createItem( item->getMesh()->getName(),
+                                         Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                                         item->isStatic() ? Ogre::SCENE_STATIC : Ogre::SCENE_DYNAMIC );
+        item->setVisibilityFlags( 0x000000004u );
+        item->setCastShadows( false );
+
+        datablock = reinterpret_cast<Ogre::HlmsPbsDatablock *>(
+            datablock->clone( *datablock->getNameStr() + "_placeHolder" ) );
+        datablock->setTransparency( datablock->getTransparency() * datablock->getTransparency(),
+                                    Ogre::HlmsPbsDatablock::Transparent );
+        Ogre::HlmsMacroblock macroblock;
+        datablock->setMacroblock( macroblock );
+        item->setDatablock( datablock );
+        sceneNode->attachObject( item );
+    }
+    //-----------------------------------------------------------------------------------
+    void RefractionsGameState::createRefractiveWall( void )
+    {
+        Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
+        Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
+        assert( dynamic_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
+        Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) );
+
+        // Create a cube and make it very thin
+        Ogre::Item *item = sceneManager->createItem(
+            "Cube_d.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+            Ogre::SCENE_DYNAMIC );
+        item->setVisibilityFlags( 0x000000002u );
+
+        Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
+                                         ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
+        sceneNode->setPosition( 0, 2.0f, 0 );
+        sceneNode->setScale( 0.05f, 2.0f, 3.75f );
+        sceneNode->attachObject( item );
+
+        // Create the refractive material for this wall
+        Ogre::String datablockName = "RefractiveWall";
+        Ogre::HlmsPbsDatablock *datablock = static_cast<Ogre::HlmsPbsDatablock *>(
+            hlmsPbs->createDatablock( datablockName, datablockName, Ogre::HlmsMacroblock(),
+                                      Ogre::HlmsBlendblock(), Ogre::HlmsParamVec() ) );
+        // Assign a normal map so the refractions are much more visually pleasing (and obvious)
+        datablock->setTexture( Ogre::PBSM_NORMAL, "floor_bump.PNG" );
+
+        // Do not cast shadows!
+        item->setCastShadows( false );
+
+        // These settings affect refractions directly
+
+        // Set the material to refractive, 15%
+        datablock->setTransparency( 0.15f, Ogre::HlmsPbsDatablock::Refractive );
+        datablock->setFresnel( Ogre::Vector3( 0.5f ), false );
+        datablock->setRefractionStrength( 0.2f );
+
+        // This call is very important. Refractive materials must be rendered during the
+        // refractive pass (see Samples/Media/2.0/scripts/Compositors/Refractions.compositor)
+        // We set it to 200 because we want this big wall to be rendered *before* the spheres
+        // to avoid some artifacts
+        item->setRenderQueueGroup( 200u );
+
+        item->setDatablock( datablock );
+
+        createRefractivePlaceholder( item, sceneNode, datablock );
+    }
+    //-----------------------------------------------------------------------------------
+    void RefractionsGameState::createRefractiveSphere( const int x, const int z, const int numX,
+                                                       const int numZ, const float armsLength,
+                                                       const float startX, const float startZ )
+    {
+        Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
+        Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
+        assert( dynamic_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
+        Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) );
+
+        Ogre::Root *root = mGraphicsSystem->getRoot();
+        Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
+
+        // Create a sphere
+        Ogre::Item *item = sceneManager->createItem(
+            "Sphere1000.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+            Ogre::SCENE_DYNAMIC );
+        item->setVisibilityFlags( 0x000000002u );
+
+        Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
+                                         ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
+        sceneNode->setPosition(
+            Ogre::Vector3( armsLength * x - startX, 1.0f, armsLength * z - startZ ) );
+        sceneNode->attachObject( item );
+
+        // Create the refractive material for this sphere
+        Ogre::String datablockName = "Test" + Ogre::StringConverter::toString( mNumSpheres );
+        Ogre::HlmsPbsDatablock *datablock = static_cast<Ogre::HlmsPbsDatablock *>(
+            hlmsPbs->createDatablock( datablockName, datablockName, Ogre::HlmsMacroblock(),
+                                      Ogre::HlmsBlendblock(), Ogre::HlmsParamVec() ) );
+
+        Ogre::TextureGpu *texture = textureMgr->createOrRetrieveTexture(
+            "SaintPetersBasilica.dds", Ogre::GpuPageOutStrategy::Discard,
+            Ogre::TextureFlags::PrefersLoadingFromFileAsSRGB, Ogre::TextureTypes::TypeCube,
+            Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+            Ogre::TextureFilter::TypeGenerateDefaultMipmaps );
+
+        datablock->setTexture( Ogre::PBSM_REFLECTION, texture );
+        datablock->setDiffuse( Ogre::Vector3( 0.0f, 1.0f, 0.0f ) );
+
+        datablock->setRoughness( std::max( 0.02f, x / Ogre::max( 1, (float)( numX - 1 ) ) ) );
+        datablock->setFresnel( Ogre::Vector3( z / Ogre::max( 1, (float)( numZ - 1 ) ) ), false );
+
+        // Do not cast shadows!
+        item->setCastShadows( false );
+
+        // Set the material to refractive
+        datablock->setTransparency( mTransparencyValue, Ogre::HlmsPbsDatablock::Refractive );
+
+        // This call is very important. Refractive materials must be rendered during the
+        // refractive pass (see Samples/Media/2.0/scripts/Compositors/Refractions.compositor)
+        // We set it to 201 because we want these smaller spheres to be rendered *after* the big
+        // wall to avoid some artifacts
+        item->setRenderQueueGroup( 200u );
+
+        item->setDatablock( datablock );
+
+        createRefractivePlaceholder( item, sceneNode, datablock );
+
+        ++mNumSpheres;
     }
     //-----------------------------------------------------------------------------------
     void RefractionsGameState::createScene01( void )
@@ -44,7 +201,7 @@ namespace Demo
 
         Ogre::v1::MeshPtr planeMeshV1 = Ogre::v1::MeshManager::getSingleton().createPlane(
             "Plane v1", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-            Ogre::Plane( -Ogre::Vector3::UNIT_Y, -1.0f ), 50.0f, 50.0f, 1, 1, true, 1, 4.0f, 4.0f,
+            Ogre::Plane( Ogre::Vector3::UNIT_Y, 1.0f ), 50.0f, 50.0f, 1, 1, true, 1, 4.0f, 4.0f,
             Ogre::Vector3::UNIT_Z, Ogre::v1::HardwareBuffer::HBU_STATIC,
             Ogre::v1::HardwareBuffer::HBU_STATIC );
 
@@ -55,13 +212,11 @@ namespace Demo
 
         {
             Ogre::Item *item = sceneManager->createItem( planeMesh, Ogre::SCENE_DYNAMIC );
-            item->setDatablock( "Marble2" );
+            item->setDatablock( "Marble" );
             Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
                                              ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
             sceneNode->setPosition( 0, -1, 0 );
             sceneNode->attachObject( item );
-
-            item->setRenderQueueGroup( 200u );
 
             // Change the addressing mode of the roughness map to wrap via code.
             // Detail maps default to wrap, but the rest to clamp.
@@ -76,8 +231,9 @@ namespace Demo
             // Set the new samplerblock. The Hlms system will
             // automatically create the API block if necessary
             datablock->setSamplerblock( Ogre::PBSM_ROUGHNESS, samplerblock );
-            datablock->setTransparency( 0.5f, Ogre::HlmsPbsDatablock::Refractive );
         }
+
+        createRefractiveWall();
 
         for( int i = 0; i < 4; ++i )
         {
@@ -117,12 +273,6 @@ namespace Demo
 
         {
             mNumSpheres = 0;
-            Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
-
-            assert( dynamic_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
-
-            Ogre::HlmsPbs *hlmsPbs =
-                static_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) );
 
             const int numX = 8;
             const int numZ = 8;
@@ -131,48 +281,10 @@ namespace Demo
             const float startX = ( numX - 1 ) / 2.0f;
             const float startZ = ( numZ - 1 ) / 2.0f;
 
-            Ogre::Root *root = mGraphicsSystem->getRoot();
-            Ogre::TextureGpuManager *textureMgr = root->getRenderSystem()->getTextureGpuManager();
-
             for( int x = 0; x < numX; ++x )
             {
                 for( int z = 0; z < numZ; ++z )
-                {
-                    Ogre::String datablockName =
-                        "Test" + Ogre::StringConverter::toString( mNumSpheres++ );
-                    Ogre::HlmsPbsDatablock *datablock = static_cast<Ogre::HlmsPbsDatablock *>(
-                        hlmsPbs->createDatablock( datablockName, datablockName, Ogre::HlmsMacroblock(),
-                                                  Ogre::HlmsBlendblock(), Ogre::HlmsParamVec() ) );
-
-                    Ogre::TextureGpu *texture = textureMgr->createOrRetrieveTexture(
-                        "SaintPetersBasilica.dds", Ogre::GpuPageOutStrategy::Discard,
-                        Ogre::TextureFlags::PrefersLoadingFromFileAsSRGB, Ogre::TextureTypes::TypeCube,
-                        Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
-                        Ogre::TextureFilter::TypeGenerateDefaultMipmaps );
-
-                    datablock->setTexture( Ogre::PBSM_REFLECTION, texture );
-                    datablock->setDiffuse( Ogre::Vector3( 0.0f, 1.0f, 0.0f ) );
-
-                    datablock->setRoughness(
-                        std::max( 0.02f, x / Ogre::max( 1, (float)( numX - 1 ) ) ) );
-                    datablock->setFresnel( Ogre::Vector3( z / Ogre::max( 1, (float)( numZ - 1 ) ) ),
-                                           false );
-                    datablock->setTransparency( 0.05f, Ogre::HlmsPbsDatablock::Refractive );
-
-                    Ogre::Item *item = sceneManager->createItem(
-                        "Sphere1000.mesh", Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
-                        Ogre::SCENE_DYNAMIC );
-                    item->setDatablock( datablock );
-                    item->setVisibilityFlags( 0x000000002 );
-
-                    item->setRenderQueueGroup( 200u );
-
-                    Ogre::SceneNode *sceneNode = sceneManager->getRootSceneNode( Ogre::SCENE_DYNAMIC )
-                                                     ->createChildSceneNode( Ogre::SCENE_DYNAMIC );
-                    sceneNode->setPosition(
-                        Ogre::Vector3( armsLength * x - startX, 1.0f, armsLength * z - startZ ) );
-                    sceneNode->attachObject( item );
-                }
+                    createRefractiveSphere( x, z, numX, numZ, armsLength, startX, startZ );
             }
         }
 
@@ -237,15 +349,18 @@ namespace Demo
     {
         Ogre::uint32 visibilityMask = mGraphicsSystem->getSceneManager()->getVisibilityMask();
 
+        const char *c_debugVisibility[] = { "[NoSpheres]",                        //
+                                            "[Normal Spheres]",                   //
+                                            "[Only Refractions No placeholder]",  //
+                                            "[Only Placeholder No refractions]" };
+
         TutorialGameState::generateDebugText( timeSinceLast, outText );
         outText += "\nPress F2 to toggle animation. ";
         outText += mAnimateObjects ? "[On]" : "[Off]";
         outText += "\nPress F3 to show/hide animated objects. ";
         outText += ( visibilityMask & 0x000000001 ) ? "[On]" : "[Off]";
         outText += "\nPress F4 to show/hide palette of spheres. ";
-        outText += ( visibilityMask & 0x000000002 ) ? "[On]" : "[Off]";
-        outText += "\nPress F5 to toggle transparency mode. ";
-        outText += mTransparencyMode == Ogre::HlmsPbsDatablock::Fade ? "[Fade]" : "[Transparent]";
+        outText += c_debugVisibility[mDebugVisibility];
         outText += "\n+/- to change transparency. [";
         outText += Ogre::StringConverter::toString( mTransparencyValue ) + "]";
     }
@@ -253,19 +368,8 @@ namespace Demo
     void RefractionsGameState::setTransparencyToMaterials( void )
     {
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
-
         assert( dynamic_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) ) );
-
         Ogre::HlmsPbs *hlmsPbs = static_cast<Ogre::HlmsPbs *>( hlmsManager->getHlms( Ogre::HLMS_PBS ) );
-
-        Ogre::HlmsPbsDatablock::TransparencyModes mode =
-            static_cast<Ogre::HlmsPbsDatablock::TransparencyModes>( mTransparencyMode );
-
-        if( mTransparencyValue >= 1.0f )
-            mode = Ogre::HlmsPbsDatablock::None;
-
-        if( mTransparencyMode < 1.0f && mode == Ogre::HlmsPbsDatablock::None )
-            mode = Ogre::HlmsPbsDatablock::Transparent;
 
         for( size_t i = 0; i < mNumSpheres; ++i )
         {
@@ -273,13 +377,19 @@ namespace Demo
             Ogre::HlmsPbsDatablock *datablock =
                 static_cast<Ogre::HlmsPbsDatablock *>( hlmsPbs->getDatablock( datablockName ) );
 
-            datablock->setTransparency( mTransparencyValue, mode );
+            datablock->setTransparency( mTransparencyValue, Ogre::HlmsPbsDatablock::Refractive );
+
+            datablockName += "_placeHolder";
+            datablock = static_cast<Ogre::HlmsPbsDatablock *>( hlmsPbs->getDatablock( datablockName ) );
+
+            datablock->setTransparency( mTransparencyValue * mTransparencyValue,
+                                        Ogre::HlmsPbsDatablock::Transparent );
         }
     }
     //-----------------------------------------------------------------------------------
     void RefractionsGameState::keyReleased( const SDL_KeyboardEvent &arg )
     {
-        if( ( arg.keysym.mod & ~( KMOD_NUM | KMOD_CAPS ) ) != 0 )
+        if( ( arg.keysym.mod & ~( KMOD_NUM | KMOD_CAPS | KMOD_LSHIFT | KMOD_RSHIFT ) ) != 0 )
         {
             TutorialGameState::keyReleased( arg );
             return;
@@ -294,26 +404,44 @@ namespace Demo
             Ogre::uint32 visibilityMask = mGraphicsSystem->getSceneManager()->getVisibilityMask();
             bool showMovingObjects = ( visibilityMask & 0x00000001 );
             showMovingObjects = !showMovingObjects;
-            visibilityMask &= ~0x00000001;
+            visibilityMask &= ~0x00000001u;
             visibilityMask |= (Ogre::uint32)showMovingObjects;
             mGraphicsSystem->getSceneManager()->setVisibilityMask( visibilityMask );
         }
         else if( arg.keysym.sym == SDLK_F4 )
         {
+            const bool reverse = ( arg.keysym.mod & ( KMOD_LSHIFT | KMOD_RSHIFT ) ) != 0;
+            if( !reverse )
+            {
+                mDebugVisibility = static_cast<DebugVisibility>( ( mDebugVisibility + 1u ) %
+                                                                 ( ShowOnlyPlaceholder + 1u ) );
+            }
+            else
+            {
+                mDebugVisibility =
+                    static_cast<DebugVisibility>( ( mDebugVisibility + ShowOnlyPlaceholder + 1u - 1u ) %
+                                                  ( ShowOnlyPlaceholder + 1u ) );
+            }
+
             Ogre::uint32 visibilityMask = mGraphicsSystem->getSceneManager()->getVisibilityMask();
-            bool showPalette = ( visibilityMask & 0x00000002 ) != 0;
-            showPalette = !showPalette;
-            visibilityMask &= ~0x00000002;
-            visibilityMask |= ( Ogre::uint32 )( showPalette ) << 1;
+            switch( mDebugVisibility )
+            {
+            case NoSpheres:
+                visibilityMask &= ~( 0x00000002u | 0x00000004u );
+                break;
+            case NormalSpheres:
+                visibilityMask |= 0x00000002u | 0x00000004u;
+                break;
+            case ShowOnlyRefractions:
+                visibilityMask &= ~( 0x00000004u );
+                visibilityMask |= 0x00000002u;
+                break;
+            case ShowOnlyPlaceholder:
+                visibilityMask &= ~( 0x00000002u );
+                visibilityMask |= 0x00000004u;
+                break;
+            }
             mGraphicsSystem->getSceneManager()->setVisibilityMask( visibilityMask );
-        }
-        else if( arg.keysym.sym == SDLK_F5 )
-        {
-            mTransparencyMode = mTransparencyMode == Ogre::HlmsPbsDatablock::Fade
-                                    ? Ogre::HlmsPbsDatablock::Transparent
-                                    : Ogre::HlmsPbsDatablock::Fade;
-            if( mTransparencyValue != 1.0f )
-                setTransparencyToMaterials();
         }
         else if( arg.keysym.scancode == SDL_SCANCODE_KP_PLUS )
         {

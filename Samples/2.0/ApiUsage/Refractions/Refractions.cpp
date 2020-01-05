@@ -65,32 +65,30 @@ namespace Demo
                                          LogicSystem **outLogicSystem )
     {
         RefractionsGameState *gfxGameState = new RefractionsGameState(
-        "Shows how to use the PBS material system. There's nothing really fancy,\n"
-        "it's just programmer art. The PBS materials can be setup from script or\n"
-        "code. This sample does both. At the time being, not all settings from the\n"
-        "PBS implementation can be tweaked with scripts. See PbsDatablock::PbsDatablock\n"
-        "constructor documentation. Also see the Hlms section of the porting guide in\n"
-        "the Docs/2.0 folder.\n"
+        "Shows how to use Refractions.\n"
+        "Refractions must be rendered in its own special scene pass, with depth\n"
+        "writes disabled.\n"
         "\n"
-        "The sphere palette shows what happens when tweaking the roughness around the\n"
-        "X axis; and the fresnel term around the Z axis.\n"
-        "The scene is being lit by a white directional light (3-split PSSM) and two spot\n"
-        "lights, one of warm colour, one cold. Both are also shadowed."
+        "Multiple refractions are not supported. But to make it worse, refractive objects\n"
+        "rendered on top of other refractive objects often result in rendering artifacts.\n"
         "\n"
-        "Of all the features supported by the PBS implementation, perhaps the hardest to\n"
-        "to understand is the Detail Weight Map. It allows you to 'paint' the detail maps\n"
-        "over the mesh, by controlling weight of each of the 4 maps via the RGBA channels\n"
-        "of the weight map. 'R' controls the detail map 0, 'G' the detail map 1,\n"
-        "'B' the detail map 2, and 'A' the detail map 3.\n"
+        "It is similar to Order Dependent Transparency issues (i.e. regular alpha blending) but\n"
+        "with even more artifacts.\n"
+        "\n"
+        "Therefore there is a very simple yet effective workaround: Create a duplicate of the\n"
+        "object rendered with regular alpha blending, and that actually outputs depth to the\n"
+        "depth buffer.\n"
+        "\n"
+        "This greatly fixes some depth-related bugs and rendering order issues; while it also\n"
+        "creates a 'fallback' because now refractive objects behind other refractive objects will\n"
+        "appear (however they won't cause multiple refractions, you will be seeing the alpha blended\n"
+        "version)\n"
+        "\n"
+        "The fallback might cause some glitches of its own, but this a much better alternative\n"
+        "Toggle F4 to see refractions without the placeholder\n"
         "\n"
         "This sample depends on the media files:\n"
         "   * Samples/Media/2.0/scripts/Compositors/Refractions.compositor\n"
-        "   * Samples/Media/2.0/materials/Refractions/Refractions.material\n"
-        "\n"
-        "Known issues:\n"
-        " * Non shadow casting point & spot lights require Forward3D to be enabled (on desktop).\n"
-        "   This is by design (more implementations will come: Forward+ & Deferred; for now the\n"
-        "   only ones working are Forward3D and Forward Clustered).\n"
         "\n"
         "LEGAL: Uses Saint Peter's Basilica (C) by Emil Persson under CC Attrib 3.0 Unported\n"
         "See Samples/Media/materials/textures/Cubemaps/License.txt for more information." );
@@ -114,6 +112,6 @@ namespace Demo
 
     const char* MainEntryPoints::getWindowTitle(void)
     {
-        return "PBS Materials Sample";
+        return "Refractions Sample";
     }
 }

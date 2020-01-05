@@ -41,9 +41,9 @@
 	fallbackRefrW = fallbackRefrW * fallbackRefrW;
 
 	@property( hlms_no_reverse_depth )
-		if( refractionDepth < gl_FragCoord.z )
+		if( refractionDepth < gl_FragCoord.z - 0.025 )
 	@else
-		if( refractionDepth > gl_FragCoord.z )
+		if( refractionDepth > gl_FragCoord.z + 0.025 )
 	@end
 		{
 			// We're trying to refract an object that is in front of us. We can't do that.
