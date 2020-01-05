@@ -18,9 +18,10 @@
 @piece( applyRefractions )
 	// refractNormal must be in view space, and we ignore .z component
 	float2 refractNormal2d = OGRE_refract( pixelData.viewDir, pixelData.normal, 0.5, pixelData.NdotV ).xy;
-	//TODO: Bake Aspect Ratio
-	//TODO: Strength is hardcoded
-	float2 refractUv = screenPosUv.xy + refractNormal2d.xy * /*material.refractionStrength*/float2( 0.075, 0.075 * passBuf.invWindowRes.x / passBuf.invWindowRes.y ) / max( -inPs.pos.z, 1.0 );
+	float2 refractUv = screenPosUv.xy + refractNormal2d.xy *
+					   float2( material.refractionStrength,
+							   material.refractionStrength * passBuf.aspectRatio ) /
+					   max( -inPs.pos.z, 1.0 ) * 2.0;
 	float3 refractionCol = OGRE_SampleLevel( refractionMap, refractionMapSampler, refractUv, 0 ).xyz;
 	float refractionDepth = OGRE_SampleLevel( gBuf_depthTexture, refractionMapSampler, refractUv, 0 ).x;
 

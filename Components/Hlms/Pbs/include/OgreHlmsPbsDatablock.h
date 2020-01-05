@@ -234,6 +234,8 @@ namespace Ogre
         float   mDetailsOffsetScale[4][4];
         float   mEmissive[3];
         float   mNormalMapWeight;
+        float   mRefractionStrength;
+        float   _padding1[3];
         float   mUserValue[3][4]; //can be used in custom pieces
         //uint16  mTexIndices[NUM_PBSM_TEXTURE_TYPES];
 
@@ -590,6 +592,19 @@ namespace Ogre
         float getTransparency(void) const                           { return mTransparencyValue; }
         TransparencyModes getTransparencyMode(void) const           { return mTransparencyMode; }
         bool getUseAlphaFromTextures(void) const                    { return mUseAlphaFromTextures; }
+
+        /** Sets the strength of the refraction, i.e. how much displacement in screen space.
+
+            This value is not physically based.
+            Only used when HlmsPbsDatablock::setTransparency was set to HlmsPbsDatablock::Refractive
+        @param strength
+            Refraction strength. Useful range is often (0; 1) but any value is valid (even negative),
+            but the bigger the number, the more likely glitches will appear (with large values
+            we have to fallback to regular alpha blending due to the screen space pixel landing
+            outside the screen)
+        */
+        void setRefractionStrength( float strength );
+        float getRefractionStrength( void ) const                   { return mRefractionStrength; }
 
         /** When false, objects with this material will not receive shadows (independent of
             whether they case shadows or not)

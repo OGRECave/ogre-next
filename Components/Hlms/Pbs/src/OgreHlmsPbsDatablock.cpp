@@ -61,7 +61,7 @@ namespace Ogre
         "GrainMerge", "Difference"
     };
 
-    const size_t HlmsPbsDatablock::MaterialSizeInGpu          = 56 * 4 + NUM_PBSM_TEXTURE_TYPES * 2;
+    const size_t HlmsPbsDatablock::MaterialSizeInGpu          = 60u * 4u + NUM_PBSM_TEXTURE_TYPES * 2u;
     const size_t HlmsPbsDatablock::MaterialSizeInGpuAligned   = alignToNextMultiple(
                                                                     HlmsPbsDatablock::MaterialSizeInGpu,
                                                                     4 * 4 );
@@ -87,11 +87,13 @@ namespace Ogre
         mFresnelR( 0.818f ), mFresnelG( 0.818f ), mFresnelB( 0.818f ),
         mTransparencyValue( 1.0f ),
         mNormalMapWeight( 1.0f ),
+        mRefractionStrength( 0.075f ),
         mCubemapProbe( 0 ),
         mBrdf( PbsBrdf::Default )
     {
         memset( mUvSource, 0, sizeof( mUvSource ) );
         memset( mBlendModes, 0, sizeof( mBlendModes ) );
+        memset( _padding1, 0, sizeof( _padding1 ) );
         memset( mUserValue, 0, sizeof( mUserValue ) );
 
         mBgDiffuse[0] = mBgDiffuse[1] = mBgDiffuse[2] = mBgDiffuse[3] = 1.0f;
@@ -890,6 +892,12 @@ namespace Ogre
         scheduleConstBufferUpdate();
         if( mustFlush )
             flushRenderables();
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsPbsDatablock::setRefractionStrength( float strength )
+    {
+        mRefractionStrength = strength;
+        scheduleConstBufferUpdate();
     }
     //-----------------------------------------------------------------------------------
     void HlmsPbsDatablock::setReceiveShadows( bool receiveShadows )

@@ -1514,7 +1514,7 @@ namespace Ogre
             //mat3 invViewMatCubemap (upgraded to three vec4)
             mapSize += ( 16 + (16 + 2 + 2 + 4) * numShadowMapLights + 4 * 3 ) * 4;
 
-            //float4 pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_unused;
+            //float4 pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_aspectRatio;
             mapSize += 4u * 4u;
 
             //float2 invWindowRes + float2 windowResolution
@@ -1828,16 +1828,18 @@ namespace Ogre
                     ++passBufferPtr;
             }
 
-            //float4 pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_unused
-            *passBufferPtr++ = mPccVctMinDistance;
-            *passBufferPtr++ = mInvPccVctInvDistance;
-            *passBufferPtr++ = currViewports[1].getActualLeft();
-            *passBufferPtr++ = 0.0f;
 
             {
-                //float2 invWindowRes + float2 windowResolution;
                 const float windowWidth = renderTarget->getWidth();
                 const float windowHeight = renderTarget->getHeight();
+
+                //float4 pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_aspectRatio
+                *passBufferPtr++ = mPccVctMinDistance;
+                *passBufferPtr++ = mInvPccVctInvDistance;
+                *passBufferPtr++ = currViewports[1].getActualLeft();
+                *passBufferPtr++ = windowWidth / windowHeight;
+
+                //float2 invWindowRes + float2 windowResolution;
                 *passBufferPtr++ = 1.0f / windowWidth;
                 *passBufferPtr++ = 1.0f / windowHeight;
                 *passBufferPtr++ = windowWidth;
