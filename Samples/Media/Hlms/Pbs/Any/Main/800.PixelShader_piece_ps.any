@@ -236,7 +236,7 @@
 
 	/// Apply the material's diffuse over the textures
 	pixelData.diffuse.xyz *= material.kD.xyz;
-	@property( transparent_mode )
+	@property( transparent_mode || hlms_screen_space_refractions )
 		pixelData.diffuse.xyz *= (pixelData.diffuse.w * pixelData.diffuse.w);
 	@end
 
@@ -273,9 +273,13 @@
 		@end
 		pixelData.F0 = lerp( make_float_fresnel( 0.03f ), pixelData.diffuse.xyz * 3.14159f, metalness );
 		pixelData.diffuse.xyz = pixelData.diffuse.xyz - pixelData.diffuse.xyz * metalness;
-		@property( hlms_alphablend )pixelData.F0 *= material.F0.w;@end ///Should this be done for non-metallic as well???
+		@property( hlms_alphablend || hlms_screen_space_refractions )
+			pixelData.F0 *= material.F0.w; ///Should this be done for non-metallic as well???
+		@end
 	@end
-	@property( transparent_mode )pixelData.F0 *= pixelData.diffuse.w;@end
+	@property( transparent_mode || hlms_screen_space_refractions )
+		pixelData.F0 *= pixelData.diffuse.w;
+	@end
 @end
 
 @piece( SampleRoughnessMap )

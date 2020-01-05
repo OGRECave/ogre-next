@@ -67,7 +67,7 @@ namespace Ogre
         BasicBlock( BLOCK_BLEND ),
         mAlphaToCoverageEnabled( false ),
         mBlendChannelMask( BlendChannelAll ),
-        mIsTransparent( false ),
+        mIsTransparent( 0u ),
         mSeparateBlend( false ),
         mSourceBlendFactor( SBF_ONE ),
         mDestBlendFactor( SBF_ZERO ),
@@ -91,6 +91,14 @@ namespace Ogre
         mSeparateBlend = true;
         Pass::_getBlendFlags( colour, mSourceBlendFactor, mDestBlendFactor );
         Pass::_getBlendFlags( alpha, mSourceBlendFactorAlpha, mDestBlendFactorAlpha );
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsBlendblock::setForceTransparentRenderOrder( bool bForceTransparent )
+    {
+        if( bForceTransparent )
+            mIsTransparent |= 0x02u;
+        else
+            mIsTransparent &= ~0x02u;
     }
     //-----------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------

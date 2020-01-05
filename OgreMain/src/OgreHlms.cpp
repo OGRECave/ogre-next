@@ -2494,7 +2494,7 @@ namespace Ogre
 
         setProperty( HlmsBaseProp::AlphaTest, datablock->getAlphaTest() != CMPF_ALWAYS_PASS );
         setProperty( HlmsBaseProp::AlphaTestShadowCasterOnly, datablock->getAlphaTestShadowCasterOnly() );
-        setProperty( HlmsBaseProp::AlphaBlend, datablock->getBlendblock(false)->mIsTransparent );
+        setProperty( HlmsBaseProp::AlphaBlend, datablock->getBlendblock(false)->isAutoTransparent() );
 
         if( renderable->getUseIdentityWorldMatrix() )
             setProperty( HlmsBaseProp::IdentityWorld, 1 );
@@ -2522,7 +2522,7 @@ namespace Ogre
         //For shadow casters, turn normals off. UVs & diffuse also off unless there's alpha testing.
         setProperty( HlmsBaseProp::Normal, 0 );
         setProperty( HlmsBaseProp::QTangent, 0 );
-        setProperty( HlmsBaseProp::AlphaBlend, datablock->getBlendblock(true)->mIsTransparent );
+        setProperty( HlmsBaseProp::AlphaBlend, datablock->getBlendblock(true)->isAutoTransparent() );
         PiecesMap piecesCaster[NumShaderTypes];
         if( datablock->getAlphaTest() != CMPF_ALWAYS_PASS )
         {
