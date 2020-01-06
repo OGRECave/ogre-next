@@ -29,8 +29,16 @@ namespace Demo
         virtual Ogre::CompositorWorkspace* setupCompositor()
         {
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
-            return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(), mCamera,
-                                                    "RefractionsWorkspace", true );
+            const bool useMsaa = mRenderWindow->getMsaa() > 1u;
+
+            //ScreenSpaceReflections::setupSSR( useMsaa, true, compositorManager );
+
+            Ogre::String compositorName = "RefractionsWorkspace";
+            if( useMsaa )
+                compositorName = "RefractionsWorkspaceMsaa";
+
+            return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(),
+                                                    mCamera, compositorName, true );
         }
 
         virtual void setupResources(void)

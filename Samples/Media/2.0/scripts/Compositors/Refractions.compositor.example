@@ -1,11 +1,26 @@
+//
+//	THIS EXAMPLE IS NOT USED.
+//
+//	THIS IS A SIMPLER VERSION ON HOW TO SETUP REFRACTIONS
+//
+//	This version is not MSAA-aware. For a fully MSAA aware version,
+//	see the real Refractions.compositor file
+
 compositor_node RefractionsRenderingNode
 {
+	in 0 rt_renderwindow
+
 	// rtt01 & rtt_final MUST share the same depth buffer.
 	// Depth pools already take care of that. But just to be sure, we make it explicit
-	texture depthBuffer	target_width target_height PFG_D32_FLOAT msaa_auto
-	texture rtt01		target_width target_height target_format msaa_auto
+	texture depthBuffer	target_width target_height PFG_D32_FLOAT
+	texture rtt01		target_width target_height target_format
+	texture rtt_final	target_width target_height target_format
 
 	rtv rtt01
+	{
+		depth_stencil	depthBuffer
+	}
+	rtv rtt_final
 	{
 		depth_stencil	depthBuffer
 	}
@@ -22,9 +37,7 @@ compositor_node RefractionsRenderingNode
 			}
 			store
 			{
-				// We'll need both the MSAA (to continue rendering during the refraction pass)
-				// and the resolved version (to be used sampled refractions)
-				colour	store_and_resolve
+				colour	store_or_resolve
 				depth	store
 				stencil	dont_care
 			}
@@ -35,56 +48,13 @@ compositor_node RefractionsRenderingNode
 		}
 	}
 
-	out 0 rtt01
-	out 1 depthBuffer
-}
-
-compositor_node RefractionsMsaaDepthResolve
-{
-	in 0 gBufferDepthBuffer
-
-	texture resolvedDepthBuffer target_width target_height PFG_R32_FLOAT depth_pool 0
-
-	//We need to "downsample/resolve" mrtDepthBuffer because the impact
-	//performance on Refractions is gigantic.
-	target resolvedDepthBuffer
+	target rtt_final
 	{
 		pass render_quad
 		{
 			load { all dont_care }
-			material Ogre/Resolve/1xFP32_Subsample0
-			input 0 gBufferDepthBuffer
-		}
-	}
-
-	out 0 resolvedDepthBuffer
-}
-
-compositor_node RefractionsRefractionsNode
-{
-	in 0 rtt01
-	in 1 depthBuffer
-	in 2 depthBufferNoMsaa
-	in 3 rt_renderwindow
-
-	// rtt01 & rtt_final MUST share the same depth buffer.
-	// Depth pools already take care of that. But just to be sure, we make it explicit
-	texture rtt_final	target_width target_height target_format msaa_auto
-
-	rtv rtt_final
-	{
-		depth_stencil	depthBuffer
-	}
-
-
-	target rtt_final
-	{
-		// Perform exact copy (MSAA-preserving) so we can continue rendering
-		// into rtt_final. Meanwhile rtt01 will be used for sampling refractions
-		pass texture_copy
-		{
-			in	rtt01
-			out rtt_final
+			material Ogre/Copy/4xFP32
+			input 0 rtt01
 		}
 
 		// Pass with refractive objects
@@ -105,7 +75,7 @@ compositor_node RefractionsRefractionsNode
 
 			overlays		on
 			shadows			RefractionsShadowNode reuse
-			use_refractions	depthBufferNoMsaa rtt01
+			use_refractions	depthBuffer rtt01
 		}
 	}
 
@@ -210,14 +180,5 @@ compositor_node_shadow RefractionsShadowNode
 
 workspace RefractionsWorkspace
 {
-	connect	RefractionsRenderingNode 0 1 1 RefractionsRefractionsNode 0 1 2
-	connect_output RefractionsRefractionsNode 3
-}
-
-workspace RefractionsWorkspaceMsaa
-{
-	connect	RefractionsRenderingNode 1 RefractionsMsaaDepthResolve 0
-	connect	RefractionsRenderingNode 0 1 RefractionsRefractionsNode 0 1
-	connect	RefractionsMsaaDepthResolve 0 RefractionsRefractionsNode 2
-	connect_output RefractionsRefractionsNode 3
+	connect_output RefractionsRenderingNode 0
 }

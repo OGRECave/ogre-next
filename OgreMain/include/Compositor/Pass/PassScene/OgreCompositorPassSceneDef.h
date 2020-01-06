@@ -92,6 +92,7 @@ namespace Ogre
         IdString        mPrePassDepthTexture;
         IdString        mPrePassSsrTexture;
 
+        IdString        mDepthTextureNoMsaa;
         IdString        mRefractionsTexture;
 
         /// This is a depth pre-pass. Note: Implementations may write
@@ -227,11 +228,8 @@ namespace Ogre
             mPrePassMode = PrePassUse;
             mPrePassTexture = textureName;
             mExposedTextures.insert( mExposedTextures.end(), textureName.begin(), textureName.end() );
-            if( mPrePassDepthTexture == IdString() )
-            {
-                mPrePassDepthTexture = depthTextureName;
-                mExposedTextures.push_back( depthTextureName );
-            }
+            mPrePassDepthTexture = depthTextureName;
+            mExposedTextures.push_back( depthTextureName );
             mPrePassSsrTexture = ssrTexture;
             mExposedTextures.push_back( ssrTexture );
 
@@ -241,11 +239,8 @@ namespace Ogre
 
         void setUseRefractions( IdString depthTextureName, IdString refractionsTexture )
         {
-            if( mPrePassDepthTexture == IdString() )
-            {
-                mPrePassDepthTexture = depthTextureName;
-                mExposedTextures.push_back( depthTextureName );
-            }
+            mDepthTextureNoMsaa = depthTextureName;
+            mExposedTextures.push_back( depthTextureName );
             mRefractionsTexture = refractionsTexture;
             mExposedTextures.push_back( refractionsTexture );
 

@@ -1266,6 +1266,7 @@ namespace Ogre
         mIds["render_scene"]    = ID_RENDER_SCENE;
         mIds["render_quad"]     = ID_RENDER_QUAD;
         mIds["depth_copy"]      = ID_DEPTH_COPY;
+        mIds["texture_copy"]    = ID_DEPTH_COPY;
         mIds["bind_uav"]        = ID_BIND_UAV;
         mIds["read"]            = ID_READ;
         mIds["write"]           = ID_WRITE;

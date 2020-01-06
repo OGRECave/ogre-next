@@ -10598,7 +10598,7 @@ namespace Ogre{
             translateQuad( compiler, node, target );
         else if(obj->name == "render_scene")
             translateScene( compiler, node, target );
-        else if(obj->name == "depth_copy")
+        else if(obj->name == "depth_copy" || obj->name == "texture_copy")
             translateDepthCopy( compiler, node, target );
         else if(obj->name == "bind_uav")
             translateUav( compiler, node, target );

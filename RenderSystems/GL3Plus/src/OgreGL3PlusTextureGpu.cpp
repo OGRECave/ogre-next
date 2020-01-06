@@ -587,26 +587,10 @@ namespace Ogre
                 static_cast<GL3PlusTextureGpuManager*>( mTextureManager );
         const GL3PlusSupport &support = textureManagerGl->getGlSupport();
 
-        if( !this->isRenderWindowSpecific() && !dst->isRenderWindowSpecific() )
+        if( !this->isRenderWindowSpecific() && !dst->isRenderWindowSpecific() &&
+            ( this->getMsaa() <= 1u || dst->getMsaa() <= 1u ||
+              ( this->hasMsaaExplicitResolves() && dst->hasMsaaExplicitResolves() ) ) )
         {
-            GLuint srcTextureName = this->mFinalTextureName;
-            GLuint dstTextureName = dstGl->mFinalTextureName;
-
-            //Source has explicit resolves. If destination doesn't,
-            //we must copy to its internal MSAA surface.
-            if( this->mMsaa > 1u && this->hasMsaaExplicitResolves() )
-            {
-                if( !dstGl->hasMsaaExplicitResolves() )
-                    dstTextureName = dstGl->mMsaaFramebufferName;
-            }
-            //Destination has explicit resolves. If source doesn't,
-            //we must copy from its internal MSAA surface.
-            if( dstGl->mMsaa > 1u && dstGl->hasMsaaExplicitResolves() )
-            {
-                if( !this->hasMsaaExplicitResolves() )
-                    srcTextureName = this->mMsaaFramebufferName;
-            }
-
             if( support.hasMinGLVersion( 4, 3 ) || support.checkExtension( "GL_ARB_copy_image" ) )
             {
                 OCGE( glCopyImageSubData( this->mFinalTextureName, this->mGlTextureTarget,
@@ -654,7 +638,7 @@ namespace Ogre
             }
 
             //Must keep the resolved texture up to date.
-            if( dstGl->mMsaa > 1u && !dstGl->hasMsaaExplicitResolves() )
+            /*if( dstGl->mMsaa > 1u && !dstGl->hasMsaaExplicitResolves() )
             {
                 OCGE( glBindFramebuffer( GL_READ_FRAMEBUFFER, textureManagerGl->getTemporaryFbo(0) ) );
                 OCGE( glBindFramebuffer( GL_DRAW_FRAMEBUFFER, textureManagerGl->getTemporaryFbo(1) ) );
@@ -681,7 +665,7 @@ namespace Ogre
                                                  GL_RENDERBUFFER, 0 ) );
                 OCGE( glBindFramebuffer( GL_READ_FRAMEBUFFER, 0 ) );
                 OCGE( glBindFramebuffer( GL_DRAW_FRAMEBUFFER, 0 ) );
-            }
+            }*/
         }
         else
         {

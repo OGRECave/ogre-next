@@ -1181,9 +1181,9 @@ void SceneManager::_setPrePassMode( PrePassMode mode, const TextureGpuVec &prepa
     mSsrTexture = ssrTexture;
 }
 //-----------------------------------------------------------------------
-void SceneManager::_setRefractions( TextureGpu *prepassDepthTexture, TextureGpu *refractionsTexture )
+void SceneManager::_setRefractions( TextureGpu *depthTextureNoMsaa, TextureGpu *refractionsTexture )
 {
-    mPrePassDepthTexture = prepassDepthTexture;
+    mPassDepthTextureNoMsaa = depthTextureNoMsaa;
     mRefractionsTexture = refractionsTexture;
 }
 //-----------------------------------------------------------------------

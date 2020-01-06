@@ -260,6 +260,7 @@ namespace Ogre
         mPrePassTextures( 0 ),
         mDepthTexture( 0 ),
         mSsrTexture( 0 ),
+        mDepthTextureNoMsaa( 0 ),
         mRefractionsTexture( 0 ),
         mIrradianceVolume( 0 ),
         mVctLighting( 0 ),
@@ -455,7 +456,7 @@ namespace Ogre
 
         if( queuedRenderable.renderable->getNumPoses() > 0 )
             vsParams->setNamedConstant( "poseBuf", 4 );
-        
+
         mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache,
                                             mSetProperties, queuedRenderable );
 
@@ -1017,10 +1018,14 @@ namespace Ogre
         const bool refractionsAvailable = getProperty( HlmsBaseProp::SsRefractionsAvailable );
         if( refractionsAvailable )
         {
-            if( !depthTextureDefined )
+            if( !depthTextureDefined && !getProperty( HlmsBaseProp::UsePrePassMsaa ) )
             {
                 setTextureReg( PixelShader, "gBuf_depthTexture", texUnit++ );
                 depthTextureDefined = true;
+            }
+            else
+            {
+                setTextureReg( PixelShader, "depthTextureNoMsaa", texUnit++ );
             }
             setTextureReg( PixelShader, "refractionMap", texUnit++ );
         }
@@ -1269,6 +1274,7 @@ namespace Ogre
         }
 
         mDepthTexture = sceneManager->getCurrentPrePassDepthTexture();
+        mDepthTextureNoMsaa = sceneManager->getCurrentPassDepthTextureNoMsaa();
 
         mSsrTexture = sceneManager->getCurrentSsrTexture();
         assert( !(mPrePassTextures->empty() && mSsrTexture) &&
@@ -1276,7 +1282,7 @@ namespace Ogre
 
         mRefractionsTexture = sceneManager->getCurrentRefractionsTexture();
 
-        OGRE_ASSERT_LOW( ( !mRefractionsTexture || ( mRefractionsTexture && mDepthTexture ) ) &&
+        OGRE_ASSERT_LOW( ( !mRefractionsTexture || ( mRefractionsTexture && mDepthTextureNoMsaa ) ) &&
                          "Refractions texture requires a depth texture!" );
 
         const bool vctNeedsAmbientHemi = !casterPass && mVctLighting &&
@@ -2426,6 +2432,8 @@ namespace Ogre
                 mTexUnitSlotStart += 1;
             if( mSsrTexture )
                 mTexUnitSlotStart += 1;
+            if( mDepthTextureNoMsaa && mDepthTexture != mDepthTextureNoMsaa )
+                mTexUnitSlotStart += 1;
             if( mRefractionsTexture )
                 mTexUnitSlotStart += 1;
             if( mAreaLightMasks && getProperty( HlmsBaseProp::LightsAreaTexMask ) > 0 )
@@ -2548,6 +2556,12 @@ namespace Ogre
                 {
                     *commandBuffer->addCommand<CbTexture>() =
                             CbTexture( texUnit++, mSsrTexture, 0 );
+                }
+
+                if( mDepthTextureNoMsaa && mDepthTextureNoMsaa != mPrePassMsaaDepthTexture )
+                {
+                    *commandBuffer->addCommand<CbTexture>() =
+                            CbTexture( texUnit++, mDepthTextureNoMsaa, mDecalsSamplerblock );
                 }
 
                 if( mRefractionsTexture )
@@ -2875,7 +2889,7 @@ namespace Ogre
                 {
                     // If not combined with skeleton animation, pose animations are gonna need 1 vec4's
                     // for pose data (base vertex, num vertices), enough vec4's to accomodate
-                    // the weight of each pose, 3 vec4's for worldMat, and 4 vec4's for worldView. 
+                    // the weight of each pose, 3 vec4's for worldMat, and 4 vec4's for worldView.
                     const size_t minimumTexBufferSize = 4 + poseWeightsNumFloats + 3*4 + 4*4;
                     bool exceedsTexBuffer = (currentMappedTexBuffer - mStartMappedTexBuffer) +
                                                 minimumTexBufferSize >= mCurrentTexBufferSize;
@@ -2898,7 +2912,7 @@ namespace Ogre
                     *currentMappedConstBuffer = (distToWorldMatStart << 9 ) |
                             (datablock->getAssignedSlot() & 0x1FF);
                 }
-                
+
                 uint8 meshLod = queuedRenderable.movableObject->getCurrentMeshLod();
                 const VertexArrayObjectArray &vaos = queuedRenderable.renderable->getVaos(
                             static_cast<VertexPass>(casterPass) );
