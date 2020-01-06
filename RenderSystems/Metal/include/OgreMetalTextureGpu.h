@@ -81,7 +81,8 @@ namespace Ogre
         virtual void setTextureType( TextureTypes::TextureTypes textureType );
 
         virtual void copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
-                             const TextureBox &srcBox, uint8 srcMipLevel );
+                             const TextureBox &srcBox, uint8 srcMipLevel,
+                             bool keepResolvedTexSynced = true );
 
         virtual void _autogenerateMipmaps(void);
 

@@ -418,7 +418,8 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpu::copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
-                                  const TextureBox &srcBox, uint8 srcMipLevel )
+                                  const TextureBox &srcBox, uint8 srcMipLevel,
+                                  bool keepResolvedTexSynced )
     {
         TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel );
 
@@ -466,7 +467,7 @@ namespace Ogre
                                             srcTextureName, srcResourceIndex,
                                             d3dBoxPtr );
 
-            if( dstD3d->mMsaa > 1u && !dstD3d->hasMsaaExplicitResolves() )
+            if( dstD3d->mMsaa > 1u && !dstD3d->hasMsaaExplicitResolves() && keepResolvedTexSynced )
             {
                 //Must keep the resolved texture up to date.
                 context->ResolveSubresource( dstD3d->mFinalTextureName,
