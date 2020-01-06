@@ -95,6 +95,19 @@ fragment @insertpiece( output_type ) main_metal
 		@end
 	@end
 
+	@property( hlms_ss_refractions_available )
+		@property( !hlms_use_prepass || !hlms_use_prepass_msaa || 1 )
+			@property( !hlms_use_prepass_msaa )
+				, texture2d<float> gBuf_depthTexture			[[texture(@value(gBuf_depthTexture))]]
+				#define depthTextureNoMsaa gBuf_depthTexture
+			@else
+				, texture2d<float> depthTextureNoMsaa			[[texture(@value(depthTextureNoMsaa))]]
+			@end
+		@end
+		, texture2d<float>	refractionMap			[[texture(@value(refractionMap))]]
+		, sampler			refractionMapSampler	[[sampler(@value(refractionMap))]]
+	@end
+
 	@insertpiece( DeclPlanarReflTextures )
 	@insertpiece( DeclAreaApproxTextures )
 
