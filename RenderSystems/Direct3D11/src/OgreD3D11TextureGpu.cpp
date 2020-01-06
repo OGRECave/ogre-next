@@ -441,20 +441,10 @@ namespace Ogre
         ID3D11Resource *srcTextureName = this->mFinalTextureName;
         ID3D11Resource *dstTextureName = dstD3d->mFinalTextureName;
 
-        //Source has explicit resolves. If destination doesn't,
-        //we must copy to its internal MSAA surface.
-        if( this->mMsaa > 1u && this->hasMsaaExplicitResolves() )
-        {
-            if( !dstD3d->hasMsaaExplicitResolves() )
-                dstTextureName = dstD3d->mMsaaFramebufferName;
-        }
-        //Destination has explicit resolves. If source doesn't,
-        //we must copy from its internal MSAA surface.
-        if( dstD3d->mMsaa > 1u && dstD3d->hasMsaaExplicitResolves() )
-        {
-            if( !this->hasMsaaExplicitResolves() )
-                srcTextureName = this->mMsaaFramebufferName;
-        }
+        if( this->mMsaa > 1u && !this->hasMsaaExplicitResolves() )
+            srcTextureName = this->mMsaaFramebufferName;
+        if( dstD3d->mMsaa > 1u && !dstD3d->hasMsaaExplicitResolves() )
+            dstTextureName = dstD3d->mMsaaFramebufferName;
 
         D3D11TextureGpuManager *textureManagerD3d =
                 static_cast<D3D11TextureGpuManager*>( mTextureManager );
