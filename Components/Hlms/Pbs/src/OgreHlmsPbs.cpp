@@ -1546,6 +1546,9 @@ namespace Ogre
             //float4 pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_envMapNumMipmaps;
             mapSize += 4u * 4u;
 
+            //float4 aspectRatio_unused3;
+            mapSize += 4u * 4u;
+
             //float2 invWindowRes + float2 windowResolution
             mapSize += 4u * 4u;
 
@@ -1865,16 +1868,21 @@ namespace Ogre
                     ++passBufferPtr;
             }
 
+            //float4 pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_envMapNumMipmaps
+            *passBufferPtr++ = mPccVctMinDistance;
+            *passBufferPtr++ = mInvPccVctInvDistance;
+            *passBufferPtr++ = currViewports[1].getActualLeft();
+            *passBufferPtr++ = mMaxSpecIblMipmap;
 
             {
                 const float windowWidth = renderTarget->getWidth();
                 const float windowHeight = renderTarget->getHeight();
 
-                //float4 pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_aspectRatio
-                *passBufferPtr++ = mPccVctMinDistance;
-                *passBufferPtr++ = mInvPccVctInvDistance;
-                *passBufferPtr++ = currViewports[1].getActualLeft();
-                *passBufferPtr++ = mMaxSpecIblMipmap;
+                //float4 aspectRatio_unused3
+                *passBufferPtr++ = windowWidth / windowHeight;
+                *passBufferPtr++ = 0.0f;
+                *passBufferPtr++ = 0.0f;
+                *passBufferPtr++ = 0.0f;
 
                 //float2 invWindowRes + float2 windowResolution;
                 *passBufferPtr++ = 1.0f / windowWidth;
