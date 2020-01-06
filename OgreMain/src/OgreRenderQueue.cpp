@@ -226,7 +226,7 @@ namespace Ogre
         uint32 hlmsHash = casterPass ? pRend->getHlmsCasterHash() : pRend->getHlmsHash();
         const HlmsDatablock *datablock = pRend->getDatablock();
 
-        bool transparent = datablock->mBlendblock[casterPass]->mIsTransparent;
+        const bool transparent = datablock->mBlendblock[casterPass]->mIsTransparent != 0u;
 
         uint16 macroblock = datablock->mMacroblockHash[casterPass];
         uint16 texturehash= datablock->mTextureHash;

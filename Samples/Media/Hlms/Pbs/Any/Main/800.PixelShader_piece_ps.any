@@ -131,6 +131,7 @@
 
 	@insertpiece( DeclVctFuncs )
 	@insertpiece( DeclIrradianceFieldFuncs )
+	@insertpiece( DeclRefractionsFuncs )
 	@insertpiece( DeclIrradianceSH )
 @end
 
@@ -244,7 +245,7 @@
 
 	/// Apply the material's diffuse over the textures
 	pixelData.diffuse.xyz *= material.kD.xyz;
-	@property( transparent_mode )
+	@property( transparent_mode || hlms_screen_space_refractions )
 		pixelData.diffuse.xyz *= (pixelData.diffuse.w * pixelData.diffuse.w);
 	@end
 
@@ -281,9 +282,13 @@
 		@end
 		pixelData.F0 = lerp( make_float_fresnel( 0.03f ), pixelData.diffuse.xyz * 3.14159f, metalness );
 		pixelData.diffuse.xyz = pixelData.diffuse.xyz - pixelData.diffuse.xyz * metalness;
-		@property( hlms_alphablend )pixelData.F0 *= material.F0.w;@end ///Should this be done for non-metallic as well???
+		@property( hlms_alphablend || hlms_screen_space_refractions )
+			pixelData.F0 *= material.F0.w; ///Should this be done for non-metallic as well???
+		@end
 	@end
-	@property( transparent_mode )pixelData.F0 *= pixelData.diffuse.w;@end
+	@property( transparent_mode || hlms_screen_space_refractions )
+		pixelData.F0 *= pixelData.diffuse.w;
+	@end
 @end
 
 @piece( SampleRoughnessMap )
@@ -567,6 +572,16 @@
 
 @property( !hlms_shadowcaster )
 @piece( DefaultBodyPS )
+	@property( hlms_screen_pos_uv )
+		float2 screenPosUv = gl_FragCoord.xy * passBuf.invWindowRes.xy;
+	@end
+	@property( hlms_screen_pos_int )
+		rshort2 iFragCoord =
+			rshort2( gl_FragCoord.x,
+					 @property( !hlms_forwardplus_flipY && syntax == glsl )passBuf.windowResolution.y - @end
+					 gl_FragCoord.y );
+	@end
+
 	@property( hlms_normal || hlms_qtangent )
 		PixelData pixelData;
 
@@ -609,10 +624,6 @@
 			@insertpiece( DoDirectionalShadowMaps )
 
 		@end @property( hlms_use_prepass )
-			rshort2 iFragCoord = rshort2( gl_FragCoord.x,
-										  @property( !hlms_forwardplus_flipY && syntax == glsl )passBuf.windowHeight.x - @end
-										  gl_FragCoord.y );
-
 			@property( hlms_use_prepass_msaa )
 				//SV_Coverage/gl_SampleMaskIn is always before depth & stencil tests,
 				//so we need to perform the test ourselves
@@ -715,6 +726,8 @@
 			@property( needs_env_brdf )
 				@insertpiece( BRDF_EnvMap )
 			@end
+
+			@insertpiece( applyRefractions )
 		@end ///!hlms_prepass
 
 	@end ///!hlms_normal || hlms_qtangent

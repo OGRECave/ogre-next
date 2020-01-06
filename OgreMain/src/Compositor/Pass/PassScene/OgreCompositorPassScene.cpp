@@ -50,7 +50,9 @@ namespace Ogre
                 mUpdateShadowNode( false ),
                 mPrePassTextures( 0 ),
                 mPrePassDepthTexture( 0 ),
-                mSsrTexture( 0 )
+                mSsrTexture( 0 ),
+                mDepthTextureNoMsaa( 0 ),
+                mRefractionsTexture( 0 )
     {
         initialize( rtv );
 
@@ -97,8 +99,8 @@ namespace Ogre
 
             if( mDefinition->mPrePassDepthTexture != IdString() )
             {
-                mPrePassDepthTexture = parentNode->getDefinedTexture(
-                                           mDefinition->mPrePassDepthTexture );
+                mPrePassDepthTexture =
+                    parentNode->getDefinedTexture( mDefinition->mPrePassDepthTexture );
             };
 
             if( mDefinition->mPrePassSsrTexture != IdString() )
@@ -106,6 +108,21 @@ namespace Ogre
                 mSsrTexture = parentNode->getDefinedTexture( mDefinition->mPrePassSsrTexture );
             }
         }
+
+        if( mDefinition->mDepthTextureNoMsaa != IdString() )
+        {
+            mDepthTextureNoMsaa = parentNode->getDefinedTexture( mDefinition->mDepthTextureNoMsaa );
+            if( mDepthTextureNoMsaa->getMsaa() > 1u )
+            {
+                OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                             "CompositorPassSceneDef::mDepthTextureNoMsaa must point to a depth buffer "
+                             "WITHOUT MSAA",
+                             "CompositorPassScene::CompositorPassScene" );
+            }
+        };
+
+        if( mDefinition->mRefractionsTexture != IdString() )
+            mRefractionsTexture = parentNode->getDefinedTexture( mDefinition->mRefractionsTexture );
     }
     //-----------------------------------------------------------------------------------
     CompositorPassScene::~CompositorPassScene()
@@ -207,6 +224,7 @@ namespace Ogre
         sceneManager->_setForwardPlusEnabledInPass( mDefinition->mEnableForwardPlus );
         sceneManager->_setPrePassMode( mDefinition->mPrePassMode, mPrePassTextures,
                                        mPrePassDepthTexture, mSsrTexture );
+        sceneManager->_setRefractions( mDepthTextureNoMsaa, mRefractionsTexture );
         sceneManager->_setCurrentCompositorPass( this );
 
         viewport->_updateCullPhase01( mCamera, mCullCamera, usedLodCamera,
@@ -288,6 +306,22 @@ namespace Ogre
         if( mPrePassDepthTexture )
         {
             TextureGpu *texture = mPrePassDepthTexture;
+
+            ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( texture );
+
+            if( (currentLayout->second != ResourceLayout::Texture && explicitApi) ||
+                currentLayout->second == ResourceLayout::Uav )
+            {
+                addResourceTransition( currentLayout,
+                                       ResourceLayout::Texture,
+                                       ReadBarrier::Texture );
+            }
+        }
+
+        //Check <anything> -> DepthTexture (Depth Texture)
+        if( mDepthTextureNoMsaa && mDepthTextureNoMsaa != mPrePassDepthTexture )
+        {
+            TextureGpu *texture = mDepthTextureNoMsaa;
 
             ResourceLayoutMap::iterator currentLayout = resourcesLayout.find( texture );
 

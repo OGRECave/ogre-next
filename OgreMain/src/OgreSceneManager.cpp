@@ -99,6 +99,7 @@ mStaticMinDepthLevelDirty( 0 ),
 mStaticEntitiesDirty( true ),
 mPrePassMode( PrePassNone ),
 mSsrTexture( 0 ),
+mRefractionsTexture( 0 ),
 mName(name),
 mRenderQueue( 0 ),
 mForwardPlusSystem( 0 ),
@@ -1180,6 +1181,12 @@ void SceneManager::_setPrePassMode( PrePassMode mode, const TextureGpuVec &prepa
     mPrePassTextures = prepassTextures;
     mPrePassDepthTexture = prepassDepthTexture;
     mSsrTexture = ssrTexture;
+}
+//-----------------------------------------------------------------------
+void SceneManager::_setRefractions( TextureGpu *depthTextureNoMsaa, TextureGpu *refractionsTexture )
+{
+    mPassDepthTextureNoMsaa = depthTextureNoMsaa;
+    mRefractionsTexture = refractionsTexture;
 }
 //-----------------------------------------------------------------------
 void SceneManager::setDecalsDiffuse( TextureGpu *tex )

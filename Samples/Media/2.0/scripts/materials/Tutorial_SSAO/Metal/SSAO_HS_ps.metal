@@ -66,7 +66,7 @@ fragment float main_metal
 	{
 		for( int a = 0; a < 8; ++a )
 		{
-			float3 sNoise = p.sampleDirs[(a << 2u) + i].xyz;
+			float3 sNoise = p.sampleDirs[(a << 3u) + i].xyz;
 
 			// get sample position
 			float3 oSample = TBN * sNoise; //to view-space

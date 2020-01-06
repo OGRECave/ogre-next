@@ -418,7 +418,8 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpu::copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
-                                  const TextureBox &srcBox, uint8 srcMipLevel )
+                                  const TextureBox &srcBox, uint8 srcMipLevel,
+                                  bool keepResolvedTexSynced )
     {
         TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel );
 
@@ -441,20 +442,10 @@ namespace Ogre
         ID3D11Resource *srcTextureName = this->mFinalTextureName;
         ID3D11Resource *dstTextureName = dstD3d->mFinalTextureName;
 
-        //Source has explicit resolves. If destination doesn't,
-        //we must copy to its internal MSAA surface.
-        if( this->mMsaa > 1u && this->hasMsaaExplicitResolves() )
-        {
-            if( !dstD3d->hasMsaaExplicitResolves() )
-                dstTextureName = dstD3d->mMsaaFramebufferName;
-        }
-        //Destination has explicit resolves. If source doesn't,
-        //we must copy from its internal MSAA surface.
-        if( dstD3d->mMsaa > 1u && dstD3d->hasMsaaExplicitResolves() )
-        {
-            if( !this->hasMsaaExplicitResolves() )
-                srcTextureName = this->mMsaaFramebufferName;
-        }
+        if( this->mMsaa > 1u && !this->hasMsaaExplicitResolves() )
+            srcTextureName = this->mMsaaFramebufferName;
+        if( dstD3d->mMsaa > 1u && !dstD3d->hasMsaaExplicitResolves() )
+            dstTextureName = dstD3d->mMsaaFramebufferName;
 
         D3D11TextureGpuManager *textureManagerD3d =
                 static_cast<D3D11TextureGpuManager*>( mTextureManager );
@@ -476,7 +467,7 @@ namespace Ogre
                                             srcTextureName, srcResourceIndex,
                                             d3dBoxPtr );
 
-            if( dstD3d->mMsaa > 1u && !dstD3d->hasMsaaExplicitResolves() )
+            if( dstD3d->mMsaa > 1u && !dstD3d->hasMsaaExplicitResolves() && keepResolvedTexSynced )
             {
                 //Must keep the resolved texture up to date.
                 context->ResolveSubresource( dstD3d->mFinalTextureName,

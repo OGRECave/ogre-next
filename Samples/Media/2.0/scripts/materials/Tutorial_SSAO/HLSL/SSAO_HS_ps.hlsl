@@ -57,7 +57,7 @@ float main
 	{
 		for (int a = 0; a < 8; ++a)
 		{
-			float3 sNoise = sampleDirs[(a << 2u) + i].xyz;
+			float3 sNoise = sampleDirs[(a << 3u) + i].xyz;
 
 			// get sample position
 			float3 oSample = mul(sNoise, TBN); //to view-space

@@ -54,7 +54,7 @@ void main()
     {
 		for(int a = 0; a < 8; ++a)
 		{
-			vec3 sNoise = sampleDirs[(a << 2u) + i].xyz;
+			vec3 sNoise = sampleDirs[(a << 3u) + i].xyz;
          
 			// get sample position
 			vec3 sample = TBN * sNoise; // From tangent to view-space

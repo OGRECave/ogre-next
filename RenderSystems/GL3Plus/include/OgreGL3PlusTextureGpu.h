@@ -71,11 +71,12 @@ namespace Ogre
         bool isRenderbuffer(void) const;
 
         void bindTextureToFrameBuffer( GLenum target, uint8 mipLevel, uint32 depthOrSlice );
-        void bindTextureToFrameBuffer( GLenum target, GLuint textureName,
-                                       uint8 mipLevel, uint32 depthOrSlice );
+        void bindTextureToFrameBuffer( GLenum target, GLuint textureName, uint8 mipLevel,
+                                       uint32 depthOrSlice, bool bindMsaaColourRenderbuffer );
 
         void copyViaFramebuffer( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
-                                 const TextureBox &srcBox, uint8 srcMipLevel );
+                                 const TextureBox &srcBox, uint8 srcMipLevel,
+                                 bool keepResolvedTexSynced );
 
     public:
         GL3PlusTextureGpu( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
@@ -87,7 +88,8 @@ namespace Ogre
         virtual void setTextureType( TextureTypes::TextureTypes textureType );
 
         virtual void copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
-                             const TextureBox &srcBox, uint8 srcMipLevel );
+                             const TextureBox &srcBox, uint8 srcMipLevel,
+                             bool keepResolvedTexSynced = true );
 
         virtual void _autogenerateMipmaps(void);
 

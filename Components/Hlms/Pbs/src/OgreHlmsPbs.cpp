@@ -263,7 +263,10 @@ namespace Ogre
         mMaxSpecIblMipmap( 1.0f ),
         mTexUnitSlotStart( 0 ),
         mPrePassTextures( 0 ),
+        mDepthTexture( 0 ),
         mSsrTexture( 0 ),
+        mDepthTextureNoMsaa( 0 ),
+        mRefractionsTexture( 0 ),
         mIrradianceVolume( 0 ),
         mVctLighting( 0 ),
         mIrradianceField( 0 ),
@@ -458,7 +461,7 @@ namespace Ogre
 
         if( queuedRenderable.renderable->getNumPoses() > 0 )
             vsParams->setNamedConstant( "poseBuf", 4 );
-        
+
         mListener->shaderCacheEntryCreated( mShaderProfile, retVal, passCache,
                                             mSetProperties, queuedRenderable );
 
@@ -611,6 +614,14 @@ namespace Ogre
 
         if( datablock->getReceiveShadows() )
             setProperty( PbsProperty::ReceiveShadows, 1 );
+
+        if( datablock->mTransparencyMode == HlmsPbsDatablock::Refractive )
+        {
+            setProperty( HlmsBaseProp::ScreenSpaceRefractions, 1 );
+            setProperty( HlmsBaseProp::VPos, 1 );
+            setProperty( HlmsBaseProp::ScreenPosInt, 1 );
+            setProperty( HlmsBaseProp::ScreenPosUv, 1 );
+        }
 
         uint32 brdf = datablock->getBrdf();
         if( (brdf & PbsBrdf::BRDF_MASK) == PbsBrdf::Default )
@@ -804,8 +815,11 @@ namespace Ogre
             }
         }
 
-        if( datablock->mUseAlphaFromTextures && datablock->mBlendblock[0]->mIsTransparent &&
-            (getProperty( PbsProperty::DiffuseMap ) || getProperty( PbsProperty::DetailMapsDiffuse )) )
+        if( datablock->mUseAlphaFromTextures &&
+            ( datablock->mBlendblock[0]->isAutoTransparent() ||  //
+              datablock->mTransparencyMode == HlmsPbsDatablock::Refractive ) &&
+            ( getProperty( PbsProperty::DiffuseMap ) ||  //
+              getProperty( PbsProperty::DetailMapsDiffuse ) ) )
         {
             setProperty( PbsProperty::UseTextureAlpha, 1 );
 
@@ -990,17 +1004,42 @@ namespace Ogre
             setTextureReg( PixelShader, "f3dLightList", texUnit++ );
         }
 
+        bool depthTextureDefined = false;
+
         if( getProperty( HlmsBaseProp::UsePrePass ) )
         {
             setTextureReg( PixelShader, "gBuf_normals",         texUnit++ );
             setTextureReg( PixelShader, "gBuf_shadowRoughness", texUnit++ );
 
             if( getProperty( HlmsBaseProp::UsePrePassMsaa ) )
+            {
                 setTextureReg( PixelShader, "gBuf_depthTexture", texUnit++ );
+                depthTextureDefined = true;
+            }
 
             if( getProperty( HlmsBaseProp::UseSsr ) )
                 setTextureReg( PixelShader, "ssrTexture", texUnit++ );
         }
+
+        const bool refractionsAvailable = getProperty( HlmsBaseProp::SsRefractionsAvailable );
+        if( refractionsAvailable )
+        {
+            if( !depthTextureDefined && !getProperty( HlmsBaseProp::UsePrePassMsaa ) )
+            {
+                setTextureReg( PixelShader, "gBuf_depthTexture", texUnit++ );
+                depthTextureDefined = true;
+            }
+            else
+            {
+                setTextureReg( PixelShader, "depthTextureNoMsaa", texUnit++ );
+            }
+            setTextureReg( PixelShader, "refractionMap", texUnit++ );
+        }
+
+        OGRE_ASSERT_HIGH(
+            ( refractionsAvailable || getProperty( HlmsBaseProp::ScreenSpaceRefractions ) == 0 ) &&
+            "A material that uses refractions is used in a pass where refractions are unavailable! See "
+            "Samples/2.0/ApiUsage/Refractions for which pass refractions must be rendered in" );
 
         if( getProperty( PbsProperty::IrradianceVolumes ) &&
             getProperty( HlmsBaseProp::ShadowCaster ) == 0 )
@@ -1248,9 +1287,17 @@ namespace Ogre
                     "Prepass + MSAA must specify an MSAA depth texture" );
         }
 
+        mDepthTexture = sceneManager->getCurrentPrePassDepthTexture();
+        mDepthTextureNoMsaa = sceneManager->getCurrentPassDepthTextureNoMsaa();
+
         mSsrTexture = sceneManager->getCurrentSsrTexture();
         assert( !(mPrePassTextures->empty() && mSsrTexture) &&
                 "Using SSR *requires* to be in prepass mode" );
+
+        mRefractionsTexture = sceneManager->getCurrentRefractionsTexture();
+
+        OGRE_ASSERT_LOW( ( !mRefractionsTexture || ( mRefractionsTexture && mDepthTextureNoMsaa ) ) &&
+                         "Refractions texture requires a depth texture!" );
 
         const bool vctNeedsAmbientHemi = !casterPass && mVctLighting &&
                                          mVctLighting->needsAmbientHemisphere();
@@ -1499,6 +1546,9 @@ namespace Ogre
             //float4 pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_envMapNumMipmaps;
             mapSize += 4u * 4u;
 
+            //float2 invWindowRes + float2 windowResolution
+            mapSize += 4u * 4u;
+
             //vec4 shadowRcv[numShadowMapLights].texViewZRow
             if( mShadowFilter == ExponentialShadowMaps )
                 mapSize += (4 * 4) * numShadowMapLights;
@@ -1506,10 +1556,6 @@ namespace Ogre
             //vec4 pixelOffset2x
             if( passSceneDef && passSceneDef->mUvBakingSet != 0xFF )
                 mapSize += 4u * 4u;
-
-            //float windowHeight + padding
-            if( !mPrePassTextures->empty() )
-                mapSize += 4 * 4;
 
             //vec3 ambientUpperHemi + float envMapScale
             if( ambientMode == AmbientFixed || ambientMode == AmbientHemisphere ||
@@ -1819,19 +1865,21 @@ namespace Ogre
                     ++passBufferPtr;
             }
 
-            //float4 pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_envMapNumMipmaps
-            *passBufferPtr++ = mPccVctMinDistance;
-            *passBufferPtr++ = mInvPccVctInvDistance;
-            *passBufferPtr++ = currViewports[1].getActualLeft();
-            *passBufferPtr++ = mMaxSpecIblMipmap;
 
-            if( !mPrePassTextures->empty() )
             {
-                //vec4 windowHeight
+                const float windowWidth = renderTarget->getWidth();
                 const float windowHeight = renderTarget->getHeight();
-                *passBufferPtr++ = windowHeight;
-                *passBufferPtr++ = windowHeight;
-                *passBufferPtr++ = windowHeight;
+
+                //float4 pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_aspectRatio
+                *passBufferPtr++ = mPccVctMinDistance;
+                *passBufferPtr++ = mInvPccVctInvDistance;
+                *passBufferPtr++ = currViewports[1].getActualLeft();
+                *passBufferPtr++ = mMaxSpecIblMipmap;
+
+                //float2 invWindowRes + float2 windowResolution;
+                *passBufferPtr++ = 1.0f / windowWidth;
+                *passBufferPtr++ = 1.0f / windowHeight;
+                *passBufferPtr++ = windowWidth;
                 *passBufferPtr++ = windowHeight;
             }
 
@@ -2435,7 +2483,13 @@ namespace Ogre
                 mTexUnitSlotStart += 2;
             if( mPrePassMsaaDepthTexture )
                 mTexUnitSlotStart += 1;
+            if( mDepthTexture )
+                mTexUnitSlotStart += 1;
             if( mSsrTexture )
+                mTexUnitSlotStart += 1;
+            if( mDepthTextureNoMsaa && mDepthTexture != mDepthTextureNoMsaa )
+                mTexUnitSlotStart += 1;
+            if( mRefractionsTexture )
                 mTexUnitSlotStart += 1;
             if( mAreaLightMasks && getProperty( HlmsBaseProp::LightsAreaTexMask ) > 0 )
             {
@@ -2541,10 +2595,28 @@ namespace Ogre
                             CbTexture( texUnit++, mPrePassMsaaDepthTexture, 0 );
                 }
 
+                if( mDepthTexture )
+                {
+                    *commandBuffer->addCommand<CbTexture>() =
+                            CbTexture( texUnit++, mDepthTexture, mDecalsSamplerblock );
+                }
+
                 if( mSsrTexture )
                 {
                     *commandBuffer->addCommand<CbTexture>() =
                             CbTexture( texUnit++, mSsrTexture, 0 );
+                }
+
+                if( mDepthTextureNoMsaa && mDepthTextureNoMsaa != mPrePassMsaaDepthTexture )
+                {
+                    *commandBuffer->addCommand<CbTexture>() =
+                            CbTexture( texUnit++, mDepthTextureNoMsaa, mDecalsSamplerblock );
+                }
+
+                if( mRefractionsTexture )
+                {
+                    *commandBuffer->addCommand<CbTexture>() =
+                            CbTexture( texUnit++, mRefractionsTexture, mDecalsSamplerblock );
                 }
 
                 if( mIrradianceVolume )
@@ -2866,7 +2938,7 @@ namespace Ogre
                 {
                     // If not combined with skeleton animation, pose animations are gonna need 1 vec4's
                     // for pose data (base vertex, num vertices), enough vec4's to accomodate
-                    // the weight of each pose, 3 vec4's for worldMat, and 4 vec4's for worldView. 
+                    // the weight of each pose, 3 vec4's for worldMat, and 4 vec4's for worldView.
                     const size_t minimumTexBufferSize = 4 + poseWeightsNumFloats + 3*4 + 4*4;
                     bool exceedsTexBuffer = (currentMappedTexBuffer - mStartMappedTexBuffer) +
                                                 minimumTexBufferSize >= mCurrentTexBufferSize;
@@ -2889,7 +2961,7 @@ namespace Ogre
                     *currentMappedConstBuffer = (distToWorldMatStart << 9 ) |
                             (datablock->getAssignedSlot() & 0x1FF);
                 }
-                
+
                 uint8 meshLod = queuedRenderable.movableObject->getCurrentMeshLod();
                 const VertexArrayObjectArray &vaos = queuedRenderable.renderable->getVaos(
                             static_cast<VertexPass>(casterPass) );

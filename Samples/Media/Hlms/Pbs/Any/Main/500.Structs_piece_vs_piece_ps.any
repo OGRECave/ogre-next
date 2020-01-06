@@ -129,9 +129,8 @@ CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
 
 	float4 pccVctMinDistance_invPccVctInvDistance_rightEyePixelStartX_envMapNumMipmaps;
 
-@property( hlms_use_prepass )
-	float4 windowHeight;
-@end
+	float2 invWindowRes;
+	float2 windowResolution;
 
 @property( ambient_hemisphere || ambient_fixed || envmap_scale || vct_ambient_hemisphere )
 	float4 ambientUpperHemi;
@@ -243,6 +242,10 @@ struct Material
 	float4 cDetailWeights;
 	float4 detailOffsetScale[4];
 	float4 emissive;		//emissive.w contains mNormalMapWeight.
+	float refractionStrength;
+	float _padding10;
+	float _padding11;
+	float _padding12;
 	float4 userValue[3];
 
 	@property( syntax != metal )
@@ -262,6 +265,7 @@ struct Material
 		ushort detailNormMapIdx0;
 		ushort detailNormMapIdx1;
 		ushort detailNormMapIdx2;
+
 		ushort detailNormMapIdx3;
 		ushort emissiveMapIdx;
 		ushort envMapIdx;

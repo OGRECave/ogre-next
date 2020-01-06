@@ -92,6 +92,9 @@ namespace Ogre
         IdString        mPrePassDepthTexture;
         IdString        mPrePassSsrTexture;
 
+        IdString        mDepthTextureNoMsaa;
+        IdString        mRefractionsTexture;
+
         /// This is a depth pre-pass. Note: Implementations may write
         /// to colour too for hybrid deferred & forward rendering.
         /// If you modify this, you probably want to modify
@@ -224,9 +227,22 @@ namespace Ogre
         {
             mPrePassMode = PrePassUse;
             mPrePassTexture = textureName;
-            mPrePassDepthTexture = depthTextureName;
-            mPrePassSsrTexture = ssrTexture;
             mExposedTextures.insert( mExposedTextures.end(), textureName.begin(), textureName.end() );
+            mPrePassDepthTexture = depthTextureName;
+            mExposedTextures.push_back( depthTextureName );
+            mPrePassSsrTexture = ssrTexture;
+            mExposedTextures.push_back( ssrTexture );
+
+            mReadOnlyDepth = true;
+            mReadOnlyStencil = true;
+        }
+
+        void setUseRefractions( IdString depthTextureName, IdString refractionsTexture )
+        {
+            mDepthTextureNoMsaa = depthTextureName;
+            mExposedTextures.push_back( depthTextureName );
+            mRefractionsTexture = refractionsTexture;
+            mExposedTextures.push_back( refractionsTexture );
 
             mReadOnlyDepth = true;
             mReadOnlyStencil = true;

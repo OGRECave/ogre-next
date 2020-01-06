@@ -1,0 +1,223 @@
+compositor_node RefractionsRenderingNode
+{
+	// rtt01 & rtt_final MUST share the same depth buffer.
+	// Depth pools already take care of that. But just to be sure, we make it explicit
+	texture depthBuffer	target_width target_height PFG_D32_FLOAT msaa_auto
+	texture rtt01		target_width target_height target_format msaa_auto
+
+	rtv rtt01
+	{
+		depth_stencil	depthBuffer
+	}
+
+	target rtt01
+	{
+		// Pass with opaque objects (and possibly regular transparents)
+		pass render_scene
+		{
+			load
+			{
+				all				clear
+				clear_colour	0.2 0.4 0.6 1
+			}
+			store
+			{
+				// We'll need both the MSAA (to continue rendering during the refraction pass)
+				// and the resolved version (to be used sampled refractions)
+				colour	store_and_resolve
+				depth	store
+				stencil	dont_care
+			}
+			overlays	off
+			shadows		RefractionsShadowNode
+
+			rq_last		199
+		}
+	}
+
+	out 0 rtt01
+	out 1 depthBuffer
+}
+
+compositor_node RefractionsMsaaDepthResolve
+{
+	in 0 gBufferDepthBuffer
+
+	texture resolvedDepthBuffer target_width target_height PFG_R32_FLOAT depth_pool 0
+
+	//We need to "downsample/resolve" mrtDepthBuffer because the impact
+	//performance on Refractions is gigantic.
+	target resolvedDepthBuffer
+	{
+		pass render_quad
+		{
+			load { all dont_care }
+			material Ogre/Resolve/1xFP32_Subsample0
+			input 0 gBufferDepthBuffer
+		}
+	}
+
+	out 0 resolvedDepthBuffer
+}
+
+compositor_node RefractionsRefractionsNode
+{
+	in 0 rtt01
+	in 1 depthBuffer
+	in 2 depthBufferNoMsaa
+	in 3 rt_renderwindow
+
+	// rtt01 & rtt_final MUST share the same depth buffer.
+	// Depth pools already take care of that. But just to be sure, we make it explicit
+	texture rtt_final	target_width target_height target_format msaa_auto
+
+	rtv rtt_final
+	{
+		depth_stencil	depthBuffer
+	}
+
+
+	target rtt_final
+	{
+		// Perform exact copy (MSAA-preserving) so we can continue rendering
+		// into rtt_final. Meanwhile rtt01 will be used for sampling refractions
+		pass texture_copy
+		{
+			in	rtt01
+			out rtt_final
+		}
+
+		// Pass with refractive objects
+		pass render_scene
+		{
+			load
+			{
+				all		load
+			}
+			store
+			{
+				colour	store_or_resolve
+				depth	dont_care
+				stencil	dont_care
+			}
+
+			rq_first		200
+
+			overlays		on
+			shadows			RefractionsShadowNode reuse
+			use_refractions	depthBufferNoMsaa rtt01
+		}
+	}
+
+	target rt_renderwindow
+	{
+		//Output to window
+		pass render_quad
+		{
+			load { all dont_care }
+			material Ogre/Copy/4xFP32
+			input 0 rtt_final
+		}
+	}
+}
+
+abstract target cubemap_target_shadow
+{
+	pass render_scene
+	{
+		load
+		{
+			all									clear
+			clear_colour_reverse_depth_aware	1 1 1 1
+		}
+		store
+		{
+			//We only care about the contents of the colour target with point shadows
+			depth			dont_care
+			stencil			dont_care
+		}
+		camera_cubemap_reorient true
+	}
+}
+
+compositor_node_shadow RefractionsShadowNode
+{
+	technique pssm
+
+	texture atlas		2048 7168 PFG_D32_FLOAT
+	texture tmpCubemap	1024 1024 PFG_R32_FLOAT cubemap depth_format PFG_D32_FLOAT
+
+	num_splits		3
+	pssm_lambda		0.95
+	shadow_map 0 atlas uv 0.0 0.000000000000000 1.0 0.285714285714286 light 0 split 0
+	shadow_map 1 atlas uv 0.0 0.285714285714286 0.5 0.142857142857143 light 0 split 1
+	shadow_map 2 atlas uv 0.5 0.285714285714286 0.5 0.142857142857143 light 0 split 2
+
+	technique focused
+	shadow_map 3 atlas uv 0.0 0.428571428571429 1.0 0.285714285714286 light 1
+	shadow_map 4 atlas uv 0.0 0.714285714285714 1.0 0.285714285714286 light 2
+
+	target atlas
+	{
+		pass clear
+		{
+			colour_value 1 1 1 1
+		}
+	}
+
+	shadow_map_target_type directional
+	{
+		shadow_map 0 1 2
+		{
+			pass render_scene
+			{
+			}
+		}
+	}
+
+	shadow_map_target_type directional spot
+	{
+		shadow_map 3 4
+		{
+			pass render_scene
+			{
+			}
+		}
+	}
+
+	shadow_map_target_type point
+	{
+		shadow_map_repeat 3 4
+		{
+			target tmpCubemap +X : cubemap_target_shadow {}
+			target tmpCubemap -X : cubemap_target_shadow {}
+			target tmpCubemap +Y : cubemap_target_shadow {}
+			target tmpCubemap -Y : cubemap_target_shadow {}
+			target tmpCubemap +Z : cubemap_target_shadow {}
+			target tmpCubemap -Z : cubemap_target_shadow {}
+
+			shadow_map
+			{
+				pass render_quad
+				{
+					material Ogre/DPSM/CubeToDpsm
+					input 0 tmpCubemap
+				}
+			}
+		}
+	}
+}
+
+workspace RefractionsWorkspace
+{
+	connect	RefractionsRenderingNode 0 1 1 RefractionsRefractionsNode 0 1 2
+	connect_output RefractionsRefractionsNode 3
+}
+
+workspace RefractionsWorkspaceMsaa
+{
+	connect	RefractionsRenderingNode 1 RefractionsMsaaDepthResolve 0
+	connect	RefractionsRenderingNode 0 1 RefractionsRefractionsNode 0 1
+	connect	RefractionsMsaaDepthResolve 0 RefractionsRefractionsNode 2
+	connect_output RefractionsRefractionsNode 3
+}

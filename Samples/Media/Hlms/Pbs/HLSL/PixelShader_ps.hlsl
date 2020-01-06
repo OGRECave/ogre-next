@@ -45,6 +45,19 @@ struct PS_INPUT
 	@end
 @end
 
+@property( hlms_ss_refractions_available )
+	@property( !hlms_use_prepass || !hlms_use_prepass_msaa )
+		@property( !hlms_use_prepass_msaa )
+			Texture2D<float> gBuf_depthTexture			: register(t@value(gBuf_depthTexture));
+			#define depthTextureNoMsaa gBuf_depthTexture
+		@else
+			Texture2D<float> depthTextureNoMsaa			: register(t@value(depthTextureNoMsaa));
+		@end
+	@end
+	Texture2D		refractionMap			: register(t@value(refractionMap));
+	SamplerState	refractionMapSampler	: register(s@value(refractionMap));
+@end
+
 @insertpiece( DeclPlanarReflTextures )
 @insertpiece( DeclAreaApproxTextures )
 

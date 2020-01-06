@@ -1266,6 +1266,7 @@ namespace Ogre
         mIds["render_scene"]    = ID_RENDER_SCENE;
         mIds["render_quad"]     = ID_RENDER_QUAD;
         mIds["depth_copy"]      = ID_DEPTH_COPY;
+        mIds["texture_copy"]    = ID_DEPTH_COPY;
         mIds["bind_uav"]        = ID_BIND_UAV;
         mIds["read"]            = ID_READ;
         mIds["write"]           = ID_WRITE;
@@ -1308,6 +1309,7 @@ namespace Ogre
         mIds["flush_command_buffers_after_shadow_node"]= ID_FLUSH_COMMAND_BUFFERS_AFTER_SHADOW_NODE;
         mIds["is_prepass"]      = ID_IS_PREPASS;
         mIds["use_prepass"]     = ID_USE_PREPASS;
+        mIds["use_refractions"] = ID_USE_REFRACTIONS;
         mIds["uv_baking"]       = ID_UV_BAKING;
         mIds["uv_baking_offset"]= ID_UV_BAKING_OFFSET;
         mIds["bake_lighting_only"] = ID_BAKE_LIGHTING_ONLY;
