@@ -103,6 +103,8 @@ namespace Ogre
                                       const CompositorWorkspaceDef *probeWorkspaceDef );
         ~ParallaxCorrectedCubemapAuto();
 
+        virtual void destroyProbe( CubemapProbe *probe );
+
         void setListener( ParallaxCorrectedCubemapAutoListener *listener ) { mListener = listener; }
         ParallaxCorrectedCubemapAutoListener *getListener( void ) const { return mListener; }
 
