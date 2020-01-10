@@ -116,8 +116,7 @@ namespace Ogre
     HRESULT D3D11WindowCoreWindow::_createSwapChainImpl()
     {
 #if !__OGRE_WINRT_PHONE
-        D3D11RenderSystem* rsys = static_cast<D3D11RenderSystem*>(Root::getSingleton().getRenderSystem());
-        mMsaaDesc = rsys->getMsaaSampleDesc(mMsaa, mMsaaHint, _getRenderFormat());
+        mMsaaDesc = mRenderSystem->getMsaaSampleDesc(mMsaa, mMsaaHint, _getRenderFormat());
 #endif
         DXGI_SWAP_CHAIN_DESC1 desc = {};
         desc.Width                = 0;                                // Use automatic sizing.
@@ -261,8 +260,7 @@ namespace Ogre
     HRESULT D3D11WindowSwapChainPanel::_createSwapChainImpl()
     {
 #if !__OGRE_WINRT_PHONE
-        D3D11RenderSystem* rsys = static_cast<D3D11RenderSystem*>(Root::getSingleton().getRenderSystem());
-        mMsaaDesc = rsys->getMsaaSampleDesc(mMsaa, mMsaaHint, _getRenderFormat());
+        mMsaaDesc = mRenderSystem->getMsaaSampleDesc(mMsaa, mMsaaHint, _getRenderFormat());
 #endif
 
         int widthPx = std::max(1, (int)floorf(mRequestedWidth * mCompositionScale.Width + 0.5f));
