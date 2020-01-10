@@ -122,6 +122,9 @@ namespace Ogre
         virtual void _initialize( TextureGpuManager *textureGpuManager );
         virtual void destroy();
 
+        /// @copydoc Window::setMsaa
+        virtual void setMsaa(uint msaa, const String& msaaHint);
+
         virtual void swapBuffers(void);
     };
 }

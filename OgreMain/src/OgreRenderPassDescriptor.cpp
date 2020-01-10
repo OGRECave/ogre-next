@@ -169,6 +169,21 @@ namespace Ogre
         {
             const RenderPassColourTarget &colourEntry = mColour[mNumColourEntries];
 
+            if( colourEntry.texture->isRenderWindowSpecific() )
+            {
+                RenderPassColourTarget& colourEntryRW = mColour[mNumColourEntries];
+                if( colourEntry.texture->getMsaa() <= 1u && colourEntry.resolveTexture )
+                {
+                    colourEntryRW.resolveTexture = 0;
+                    colourEntryRW.storeAction = StoreAction::Store;
+                }
+                else if( colourEntry.texture->getMsaa() > 1u && !colourEntry.resolveTexture )
+                {
+                    colourEntryRW.resolveTexture = colourEntryRW.texture;
+                    colourEntryRW.storeAction = StoreAction::MultisampleResolve;
+                }
+            }
+
             if( colourEntry.storeAction == StoreAction::MultisampleResolve &&
                 !colourEntry.resolveTexture )
             {

@@ -178,13 +178,6 @@ namespace Ogre
             mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NO_DEPTH, false, PFG_NULL );
         }
 
-        mTexture->setMsaa( mMsaaDesc.Count );
-        mDepthBuffer->setMsaa( mMsaaDesc.Count );
-
-#if TODO_OGRE_2_2
-        mTexture->setMsaaPattern( );
-        mDepthBuffer->setMsaaPattern( );
-#endif
         _createSizeDependedD3DResources();
     }
     //---------------------------------------------------------------------
@@ -286,8 +279,43 @@ namespace Ogre
         D3D11TextureGpuWindow *texWindow = static_cast<D3D11TextureGpuWindow*>( mTexture );
         texWindow->_setBackbuffer( mpBackBufferInterim ? mpBackBufferInterim.Get() : mpBackBuffer.Get() );
 
+        mTexture->setMsaa( mMsaaDesc.Count );
+        mDepthBuffer->setMsaa( mMsaaDesc.Count );
+
+#if TODO_OGRE_2_2
+        mTexture->setMsaaPattern( );
+        mDepthBuffer->setMsaaPattern( );
+#endif
+
         mTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
         mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+    }
+    //---------------------------------------------------------------------
+    void D3D11WindowSwapChainBased::setMsaa(uint msaa, const String& msaaHint)
+    {
+        mMsaa = msaa;
+        mMsaaHint = msaaHint;
+
+        mRenderSystem->fireDeviceEvent( &mDevice,"WindowBeforeResize", this );
+
+        _destroySizeDependedD3DResources();
+
+        if( mUseFlipMode )
+        {
+            // swapchain is not multisampled in flip sequential mode, so we reuse it
+            mMsaaDesc = mRenderSystem->getMsaaSampleDesc(mMsaa, mMsaaHint, _getRenderFormat());
+        }
+        else
+        {
+            _destroySwapChain();
+            _createSwapChain();
+        }
+
+        _createSizeDependedD3DResources();
+
+        // Notify viewports of resize
+        notifyResolutionChanged();
+        mRenderSystem->fireDeviceEvent( &mDevice, "WindowResized", this );
     }
     //-----------------------------------------------------------------------------------
     void D3D11WindowSwapChainBased::resizeSwapChainBuffers( uint32 width, uint32 height )

@@ -153,6 +153,14 @@ namespace Ogre
         uint32 getWidth(void) const;
         uint32 getHeight(void) const;
         PixelFormatGpu getPixelFormat(void) const;
+
+        /** Set the level of multisample AA to be used if hardware support it.
+            This option will be ignored if the hardware does not support it 
+            or setting can not be changed on the fly on per-target level. 
+            @param msaa The number of samples
+            @param msaaHint Any hinting text (@see Root::createRenderWindow)
+        */
+        virtual void setMsaa(uint msaa, const String& msaaHint) {}
         uint8 getMsaa(void) const;
         MsaaPatterns::MsaaPatterns getMsaaPatterns(void) const;
 
