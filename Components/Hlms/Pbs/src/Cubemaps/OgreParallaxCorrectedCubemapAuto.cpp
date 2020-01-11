@@ -204,26 +204,10 @@ namespace Ogre
             mRenderTarget->setNumMipmaps( PixelFormatGpuUtils::getMaxMipmapCount( width, height ) );
             mRenderTarget->_transitionTo( GpuResidency::Resident, (uint8*)0 );
 
-            uint8 numMipmaps = std::max<uint8>( mRenderTarget->getNumMipmaps(), 5u ) - 4u;
-
-            const RenderSystemCapabilities *caps =
-                mSceneManager->getDestinationRenderSystem()->getCapabilities();
-            if( !caps->hasCapability( RSC_UAV ) )
-                numMipmaps = mRenderTarget->getNumMipmaps();
+            const uint8 numMipmaps = getIblNumMipmaps( width, height );
 
             // OVERRIDE textureFlags. mIblTarget is only used by Compute Shaders
-            if( caps->hasCapability( RSC_UAV ) )
-            {
-                textureFlags = TextureFlags::Uav;
-                if( PixelFormatGpuUtils::isSRgb( pixelFormat ) )
-                    textureFlags |= TextureFlags::Reinterpretable;
-            }
-            else
-            {
-                textureFlags = TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps;
-                if( mUseDpm2DArray )
-                    ++numMipmaps;
-            }
+            textureFlags = getIblTargetTextureFlags( pixelFormat );
 
             TextureTypes::TextureTypes iblTextureType = TextureTypes::TypeCube;
             String namePostfix = "";

@@ -35,10 +35,6 @@ THE SOFTWARE.
 #include "OgreTextureGpu.h"
 #include "OgreHeaderPrefix.h"
 
-//It's slightly more accurate if we render the cubemaps and generate the cubemaps, then blend.
-//But Ogre doesn't yet support RTT to mipmaps, so we generate the mipmaps after blending.
-#define GENERATE_MIPMAPS_ON_BLEND 1
-
 namespace Ogre
 {
     class _OgreHlmsPbsExport CubemapProbe : public UtilityAlloc

@@ -105,6 +105,11 @@ namespace Ogre
                          "CompositorPassIblSpecular::CompositorPassIblSpecular" );
         }
 
+        if( mInputTexture == mOutputTexture )
+            return; // Special case for PCC - IBL is not wanted. Nothing to do
+        if( mOutputTexture->getNumMipmaps() == 1u )
+            return; // Fast copy / passthrough
+
         if( mInputTexture->getTextureType() != TextureTypes::TypeCube )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
@@ -306,13 +311,19 @@ namespace Ogre
 
         if( !usesCompute )
         {
-            mInputTexture->_autogenerateMipmaps();
-            const uint8 outNumMips = mOutputTexture->getNumMipmaps();
-
-            for( uint8 mip = 0u; mip < outNumMips; ++mip )
+            if( mInputTexture != mOutputTexture )
             {
-                TextureBox emptyBox = mOutputTexture->getEmptyBox( mip );
-                mInputTexture->copyTo( mOutputTexture, emptyBox, mip, emptyBox, mip );
+                // If output has no mipmaps, do a fast path copy
+                if( mOutputTexture->getNumMipmaps() > 1u )
+                    mInputTexture->_autogenerateMipmaps();
+
+                const uint8 outNumMips = mOutputTexture->getNumMipmaps();
+
+                for( uint8 mip = 0u; mip < outNumMips; ++mip )
+                {
+                    TextureBox emptyBox = mOutputTexture->getEmptyBox( mip );
+                    mInputTexture->copyTo( mOutputTexture, emptyBox, mip, emptyBox, mip );
+                }
             }
         }
         else

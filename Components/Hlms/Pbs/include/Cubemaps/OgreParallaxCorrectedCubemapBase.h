@@ -71,6 +71,9 @@ namespace Ogre
                                       bool automaticMode );
         virtual ~ParallaxCorrectedCubemapBase();
 
+        uint32 getIblTargetTextureFlags( PixelFormatGpu pixelFormat ) const;
+        static uint8 getIblNumMipmaps( uint32 width, uint32 height );
+
         /// Adds a cubemap probe.
         CubemapProbe* createProbe(void);
         void destroyProbe( CubemapProbe *probe );

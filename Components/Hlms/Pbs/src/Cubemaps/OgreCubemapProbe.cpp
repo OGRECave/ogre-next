@@ -47,9 +47,6 @@ THE SOFTWARE.
 #include "Vao/OgreConstBufferPacked.h"
 #include "Vao/OgreVaoManager.h"
 
-//Disable as OpenGL version of copyToTexture is super slow (makes a GPU->CPU->GPU roundtrip)
-#define USE_RTT_DIRECTLY 1
-
 namespace Ogre
 {
     CubemapProbe::CubemapProbe( ParallaxCorrectedCubemapBase *creator ) :
@@ -99,13 +96,16 @@ namespace Ogre
     {
         if( mWorkspace )
         {
-#if !USE_RTT_DIRECTLY
-            if( mStatic )
+            if( !mCreator->getAutomaticMode() )
             {
-                TextureGpu *channel = mWorkspace->getExternalRenderTargets()[0];
-                mCreator->releaseTmpRtt( channel.textures[0] );
+                const bool useManual = mTexture->getNumMipmaps() > 1u;
+                if( useManual )
+                {
+                    TextureGpu *channel = mWorkspace->getExternalRenderTargets()[0];
+                    mCreator->releaseTmpRtt( channel );
+                }
             }
-#endif
+
             if( mCreator->getAutomaticMode() )
             {
                 TextureGpu *channel = mWorkspace->getExternalRenderTargets()[0];
@@ -312,26 +312,14 @@ namespace Ogre
             LwString texName( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
             texName.a( "CubemapProbe_", Id::generateNewId<CubemapProbe>() );
 
-#if !USE_RTT_DIRECTLY
-            const uint32 flags = isStatic ? TU_STATIC_WRITE_ONLY : (TU_RENDERTARGET|TU_AUTOMIPMAP);
-#else
-    #if GENERATE_MIPMAPS_ON_BLEND
             uint32 flags = TextureFlags::RenderToTexture;
-    #else
-            const uint32 flags = TextureFlags::RenderToTexture|TextureFlags::AllowAutomipmaps;
-    #endif
-#endif
-
-#if GENERATE_MIPMAPS_ON_BLEND
             uint8 numMips = 1u;
+
             if( useManual )
             {
-                numMips = PixelFormatGpuUtils::getMaxMipmapCount( width, height );
-                flags |= TextureFlags::AllowAutomipmaps;
+                numMips = mCreator->getIblNumMipmaps( width, height );
+                flags = mCreator->getIblTargetTextureFlags( pf );
             }
-#else
-            const uint numMips = PixelUtil::getMaxMipmapCount( width, height, 1 );
-#endif
 
             mMsaa = msaa;
             msaa = isStatic ? 0 : msaa;
@@ -389,19 +377,22 @@ namespace Ogre
         mCamera->setFarClipDistance( cameraFar );
 
         TextureGpu *rtt = mTexture;
-        TextureGpu *ibl = 0;
+        TextureGpu *ibl = mTexture;
 
         if( mCreator->getAutomaticMode() )
         {
             rtt = mCreator->findTmpRtt( mTexture );
             ibl = mCreator->findIbl( mTexture );
         }
+        else
+        {
+            const bool useManual = mTexture->getNumMipmaps() > 1u;
+            if( useManual )
+                rtt = mCreator->findTmpRtt( mTexture );
+        }
+
         if( mStatic )
         {
-#if !USE_RTT_DIRECTLY
-            //Grab tmp texture
-            rtt = mCreator->findTmpRtt( mTexture );
-#endif
             //Set camera to skip light culling (efficiency)
             mCamera->setLightCullingVisibility( false, false );
         }
@@ -584,15 +575,7 @@ namespace Ogre
             mCreator->_setIsRendering( false );
 
         if( mStatic )
-        {
-#if !USE_RTT_DIRECTLY
-            //Copy from tmp RTT to real texture.
-            TextureGpu *channel = mWorkspace->getExternalRenderTargets()[0];
-            channel.textures[0]->copyToTexture( mTexture );
-#endif
-
             mCamera->setLightCullingVisibility( false, false );
-        }
 
         mCreator->_copyRenderTargetToCubemap( mCubemapArrayIdx );
     }
