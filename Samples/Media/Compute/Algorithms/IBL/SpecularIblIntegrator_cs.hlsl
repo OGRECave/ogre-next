@@ -3,7 +3,11 @@
 
 TextureCube		convolutionSrc	: register(t0);
 SamplerState	EnvMapSampler	: register(s0);
-RWTexture2DArray<@insertpiece(uav0_pf_type)> lastResult : register(u0);
+@property( uav0_texture_type == TextureTypes_TypeCube )
+	RWTexture2DArray<@insertpiece(uav0_pf_type)> lastResult : register(u0);
+@else
+	RWTexture2D<@insertpiece(uav0_pf_type)> lastResult : register(u0);
+@end
 
 uniform float4 params0;
 uniform float4 params1;

@@ -3183,6 +3183,16 @@ namespace Ogre
                 }
                 ++itor;
             }
+
+            if( mParallaxCorrectedCubemap )
+            {
+                TextureGpu *bindTexture = mParallaxCorrectedCubemap->getBindTexture();
+                if( bindTexture )
+                {
+                    mMaxSpecIblMipmap =
+                            std::max<float>( bindTexture->getNumMipmaps(), mMaxSpecIblMipmap );
+                }
+            }
         }
     }
     //-----------------------------------------------------------------------------------

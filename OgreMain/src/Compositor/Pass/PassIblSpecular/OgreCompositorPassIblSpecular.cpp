@@ -113,15 +113,8 @@ namespace Ogre
                          "CompositorPassIblSpecular::CompositorPassIblSpecular" );
         }
 
-        if( mOutputTexture->getTextureType() != TextureTypes::TypeCube )
-        {
-            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
-                         "IblSpecular requires a Cubemap texture as output! Node: " +
-                             mParentNode->getName().getFriendlyText(),
-                         "CompositorPassIblSpecular::CompositorPassIblSpecular" );
-        }
-
-        if( mInputTexture->getNumMipmaps() < mOutputTexture->getNumMipmaps() )
+        if( mInputTexture->getTextureType() == TextureTypes::TypeCube &&
+            mInputTexture->getNumMipmaps() < mOutputTexture->getNumMipmaps() )
         {
             OGRE_EXCEPT(
                 Exception::ERR_INVALIDPARAMS,

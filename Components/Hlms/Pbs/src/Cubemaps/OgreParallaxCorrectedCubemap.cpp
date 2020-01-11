@@ -38,6 +38,8 @@ THE SOFTWARE.
 #include "Compositor/Pass/PassQuad/OgreCompositorPassQuadDef.h"
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
 
+#include "OgreHlmsPbs.h"
+
 #include "OgreRoot.h"
 #include "OgreSceneManager.h"
 #include "OgreRenderQueue.h"
@@ -292,6 +294,11 @@ namespace Ogre
             mRoot->addFrameListener( this );
             CompositorManager2 *compositorManager = mDefaultWorkspaceDef->getCompositorManager();
             compositorManager->addListener( this );
+
+            HlmsManager *hlmsManager = mRoot->getHlmsManager();
+            OGRE_ASSERT_HIGH( dynamic_cast<HlmsPbs *>( hlmsManager->getHlms( HLMS_PBS ) ) );
+            HlmsPbs *hlmsPbs = static_cast<HlmsPbs *>( hlmsManager->getHlms( HLMS_PBS ) );
+            hlmsPbs->_notifyIblSpecMipmap( mBindTexture->getNumMipmaps() );
         }
         else
         {

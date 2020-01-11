@@ -63,7 +63,6 @@ namespace Ogre
         uint16      mCubemapArrayIdx;
         uint8       mMsaa;
 
-        uint8               mWorkspaceMipmapsExecMask;
         IdString            mWorkspaceDefName;
         CompositorWorkspace *mClearWorkspace;
         CompositorWorkspace *mWorkspace;
@@ -159,8 +158,7 @@ namespace Ogre
             This value allows you to override it with a different workspace definition.
         */
         void initWorkspace( float cameraNear = 0.5f, float cameraFar = 500.0f,
-                            uint8 mipmapsExecutionMask=0x01,
-                            IdString workspaceDefOverride=IdString() );
+                            IdString workspaceDefOverride = IdString() );
         bool isInitialized(void) const;
 
         /** Sets cubemap probe's parameters.

@@ -2170,6 +2170,7 @@ namespace Ogre {
         GLSLShader::unbindAll();
 
         RenderSystem::_setPipelineStateObject( pso );
+        _setComputePso( 0 );
 
         uint8 newClipDistances = 0;
         if( pso )

@@ -109,6 +109,9 @@ namespace Ogre
         virtual TextureGpu* findTmpRtt( const TextureGpu *baseParams );
         virtual void releaseTmpRtt( const TextureGpu *tmpRtt );
 
+        virtual TextureGpu* findIbl( const TextureGpu *baseParams );
+        virtual void releaseIbl( const TextureGpu *tmpRtt );
+
         virtual void _copyRenderTargetToCubemap( uint32 cubemapArrayIdx );
 
         /** Acquires a texture with a given slot.

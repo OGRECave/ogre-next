@@ -34,7 +34,11 @@ kernel void main_metal
 
 	, sampler EnvMapSampler															[[sampler(0)]]
 	, texturecube<float> convolutionSrc												[[texture(0)]]
+@property( uav0_texture_type == TextureTypes_TypeCube )
 	, texture2d_array<@insertpiece(uav0_pf_type), access::read_write> lastResult	[[texture(UAV_SLOT_START+0)]]
+@else
+	, texture2d<@insertpiece(uav0_pf_type), access::read_write> lastResult			[[texture(UAV_SLOT_START+0)]]
+@end
 
 	, constant Params &p	[[buffer(PARAMETER_SLOT)]]
 )

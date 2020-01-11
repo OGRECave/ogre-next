@@ -228,6 +228,16 @@ namespace Ogre
         OGRE_EXCEPT( Exception::ERR_INVALID_CALL, "", "" );
     }
     //-----------------------------------------------------------------------------------
+    TextureGpu *ParallaxCorrectedCubemapBase::findIbl( const TextureGpu *baseParams )
+    {
+        OGRE_EXCEPT( Exception::ERR_INVALID_CALL, "", "" );
+    }
+    //-----------------------------------------------------------------------------------
+    void ParallaxCorrectedCubemapBase::releaseIbl( const TextureGpu *ibl )
+    {
+        OGRE_EXCEPT( Exception::ERR_INVALID_CALL, "", "" );
+    }
+    //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemapBase::_copyRenderTargetToCubemap( uint32 cubemapArrayIdx )
     {
     }

@@ -62,7 +62,6 @@ namespace Ogre
         mTexture( 0 ),
         mCubemapArrayIdx( std::numeric_limits<uint16>::max() ),
         mMsaa( 1u ),
-        mWorkspaceMipmapsExecMask( 0x01 ),
         mClearWorkspace( 0 ),
         mWorkspace( 0 ),
         mCamera( 0 ),
@@ -351,7 +350,7 @@ namespace Ogre
             mDirty = true;
 
             if( reinitWorkspace && !mCreator->getAutomaticMode() )
-                initWorkspace( cameraNear, cameraFar, mWorkspaceMipmapsExecMask, mWorkspaceDefName );
+                initWorkspace( cameraNear, cameraFar, mWorkspaceDefName );
         }
         else
         {
@@ -362,9 +361,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CubemapProbe::initWorkspace( float cameraNear, float cameraFar,
-                                      uint8 mipmapsExecutionMask,
-                                      IdString workspaceDefOverride )
+    void CubemapProbe::initWorkspace( float cameraNear, float cameraFar, IdString workspaceDefOverride )
     {
         assert( (mTexture != 0 || mCreator->getAutomaticMode()) && "Call setTextureParams first!" );
 
@@ -392,9 +389,13 @@ namespace Ogre
         mCamera->setFarClipDistance( cameraFar );
 
         TextureGpu *rtt = mTexture;
+        TextureGpu *ibl = 0;
 
         if( mCreator->getAutomaticMode() )
+        {
             rtt = mCreator->findTmpRtt( mTexture );
+            ibl = mCreator->findIbl( mTexture );
+        }
         if( mStatic )
         {
 #if !USE_RTT_DIRECTLY
@@ -409,26 +410,15 @@ namespace Ogre
             mCamera->setLightCullingVisibility( true, true );
         }
 
-        mWorkspaceMipmapsExecMask = mipmapsExecutionMask;
-
         if( !mCreator->getAutomaticMode() )
             mTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
-        else
-        {
-            if( mCreator->getUseDpm2DArray() )
-                mipmapsExecutionMask = ~mipmapsExecutionMask;
-            else
-                mipmapsExecutionMask = 0xff;
-        }
 
-        CompositorChannelVec channels( 1, rtt );
-        mWorkspace = compositorManager->addWorkspace( sceneManager, channels, mCamera,
-                                                      mWorkspaceDefName, false, -1,
-                                                      (UavBufferPackedVec*)0,
-                                                      (const ResourceLayoutMap*)0,
-                                                      (const ResourceAccessMap*)0,
-                                                      Vector4::ZERO,
-                                                      0x00, mipmapsExecutionMask );
+        CompositorChannelVec channels;
+        channels.reserve( 2u );
+        channels.push_back( rtt );
+        channels.push_back( ibl );
+        mWorkspace =
+            compositorManager->addWorkspace( sceneManager, channels, mCamera, mWorkspaceDefName, false );
         mWorkspace->setListener( mCreator );
 
         if( !mStatic && !mCreator->getAutomaticMode() )

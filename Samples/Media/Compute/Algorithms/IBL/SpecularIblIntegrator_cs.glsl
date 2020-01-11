@@ -7,7 +7,11 @@ layout( local_size_x = @value( threads_per_group_x ),
 		local_size_z = @value( threads_per_group_z ) ) in;
 
 uniform samplerCube convolutionSrc;
-layout( @insertpiece( uav0_pf_type ) ) uniform restrict image2DArray lastResult;
+@property( uav0_texture_type == TextureTypes_TypeCube )
+	layout( @insertpiece( uav0_pf_type ) ) uniform restrict image2DArray lastResult;
+@else
+	layout( @insertpiece( uav0_pf_type ) ) uniform restrict image2D lastResult;
+@end
 
 uniform float4 params0;
 uniform float4 params1;

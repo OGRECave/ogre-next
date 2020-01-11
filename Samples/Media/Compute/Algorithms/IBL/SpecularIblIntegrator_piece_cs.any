@@ -205,7 +205,11 @@
 
 		if( p_convolutionSamplesOffset >= 1 )
 		{
-			float4 lastResultVal = OGRE_imageLoad2DArray( lastResult, loadCoords.xyz );
+			@property( uav0_texture_type == TextureTypes_TypeCube )
+				float4 lastResultVal = OGRE_imageLoad2DArray( lastResult, loadCoords.xyz );
+			@else
+				float4 lastResultVal = OGRE_imageLoad2D( lastResult, loadCoords.xy );
+			@end
 			@property( uav0_orig_pf_srgb )
 				lastResultVal = fromSRGB( lastResultVal );
 			@end
@@ -221,21 +225,31 @@
 @end
 
 @piece( BodyCS )
-	float2 normal2d = ( ( float2( gl_GlobalInvocationID.xy ) + 0.5 ) / p_outputResolution.xy ) * 2.0 - 1.0;
+	@property( uav0_texture_type == TextureTypes_TypeCube )
+		float2 normal2d = ( ( float2( gl_GlobalInvocationID.xy ) + 0.5 ) / p_outputResolution.xy ) * 2.0 - 1.0;
 
-	float3 normal;
-	if( gl_GlobalInvocationID.z == 0u )  //+X
-		normal = float3( 1.0f, -normal2d.yx );
-	else if( gl_GlobalInvocationID.z == 1u )  //-X
-		normal = float3( -1.0f, -normal2d.y, normal2d.x );
-	else if( gl_GlobalInvocationID.z == 2u )  //+Y
-		normal = float3( normal2d.x, 1.0f, normal2d.y );
-	else if( gl_GlobalInvocationID.z == 3u )  //-Y
-		normal = float3( normal2d.x, -1.0f, -normal2d.y );
-	else if( gl_GlobalInvocationID.z == 4u )  //+Z
-		normal = float3( normal2d.x, -normal2d.y, 1.0f );
-	else // if( gl_GlobalInvocationID.z == 5u )  //-Z
-		normal = float3( -normal2d.xy, -1.0f );
+		float3 normal;
+		if( gl_GlobalInvocationID.z == 0u )  //+X
+			normal = float3( 1.0f, -normal2d.yx );
+		else if( gl_GlobalInvocationID.z == 1u )  //-X
+			normal = float3( -1.0f, -normal2d.y, normal2d.x );
+		else if( gl_GlobalInvocationID.z == 2u )  //+Y
+			normal = float3( normal2d.x, 1.0f, normal2d.y );
+		else if( gl_GlobalInvocationID.z == 3u )  //-Y
+			normal = float3( normal2d.x, -1.0f, -normal2d.y );
+		else if( gl_GlobalInvocationID.z == 4u )  //+Z
+			normal = float3( normal2d.x, -normal2d.y, 1.0f );
+		else // if( gl_GlobalInvocationID.z == 5u )  //-Z
+			normal = float3( -normal2d.xy, -1.0f );
+	@else
+		float2 uv0 = ( float2( gl_GlobalInvocationID.xy ) + 0.5 ) / p_outputResolution.xy;
+
+		float3 normal;
+		normal.x = mod( uv0.x, 0.5 ) * 4.0 - 1.0;
+		normal.y = uv0.y * 2.0 - 1.0;
+		normal.z = 0.5 - 0.5 * (normal.x * normal.x + normal.y * normal.y);
+		normal.z = uv0.x < 0.5 ? normal.z : -normal.z;
+	@end
 
 	float4 outputValue = runIntegrator( normal, gl_GlobalInvocationID.xyz PARAMS_ARG );
 
@@ -243,5 +257,9 @@
 		outputValue = toSRGB( outputValue );
 	@end
 
-	OGRE_imageWrite2DArray4( lastResult, gl_GlobalInvocationID.xyz, outputValue );
+	@property( uav0_texture_type == TextureTypes_TypeCube )
+		OGRE_imageWrite2DArray4( lastResult, gl_GlobalInvocationID.xyz, outputValue );
+	@else
+		OGRE_imageWrite2D4( lastResult, gl_GlobalInvocationID.xy, outputValue );
+	@end
 @end
