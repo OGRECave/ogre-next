@@ -54,6 +54,7 @@
 #define interpolateAtSample( interp, subsample ) EvaluateAttributeAtSample( interp, subsample )
 #define findLSB firstbitlow
 #define findMSB firstbithigh
+#define mod( a, b ) (a - b * floor(a / b))
 
 #define outPs_colour0 outPs.colour0
 #define OGRE_Sample( tex, sampler, uv ) tex.Sample( sampler, uv )

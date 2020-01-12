@@ -1195,6 +1195,7 @@ namespace Ogre
         if (mFeatureLevel >= D3D_FEATURE_LEVEL_11_0)
         {
             rsc->setCapability(RSC_TEXTURE_COMPRESSION_BC6H_BC7);
+            rsc->setCapability(RSC_UAV);
         }
 
         rsc->setCapability(RSC_HWRENDER_TO_TEXTURE);
