@@ -76,7 +76,7 @@ namespace Ogre
 
         /// Adds a cubemap probe.
         CubemapProbe* createProbe(void);
-        void destroyProbe( CubemapProbe *probe );
+        virtual void destroyProbe( CubemapProbe *probe );
         virtual void destroyAllProbes(void);
 
         /// Destroys the Proxy Items. Useful if you need to call sceneManager->clearScene();

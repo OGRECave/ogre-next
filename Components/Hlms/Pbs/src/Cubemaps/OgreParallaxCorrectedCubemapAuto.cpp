@@ -96,6 +96,17 @@ namespace Ogre
         destroyAllProbes();
     }
     //-----------------------------------------------------------------------------------
+    void ParallaxCorrectedCubemapAuto::destroyProbe( CubemapProbe *probe )
+    {
+        CubemapProbeVec::iterator itor = std::find( mDirtyProbes.begin(), mDirtyProbes.end(), probe );
+        if( itor != mDirtyProbes.end() )
+        {
+            efficientVectorRemove( mDirtyProbes, itor );
+        }
+
+        ParallaxCorrectedCubemapBase::destroyProbe( probe );
+    }
+    //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemapAuto::setUpdatedTrackedDataFromCamera( Camera *trackedCamera )
     {
         mTrackedPosition = trackedCamera->getDerivedPosition();
