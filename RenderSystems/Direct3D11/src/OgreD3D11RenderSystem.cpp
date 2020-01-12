@@ -2647,6 +2647,8 @@ namespace Ogre
         deviceContext->PSSetShader( 0, 0, 0 );
         deviceContext->CSSetShader( 0, 0, 0 );
 
+        mBoundComputeProgram = 0;
+
         if( !pso )
             return;
 
