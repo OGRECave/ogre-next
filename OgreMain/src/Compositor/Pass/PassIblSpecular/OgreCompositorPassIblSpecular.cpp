@@ -228,7 +228,8 @@ namespace Ogre
 
         for( uint8 mip = 0u; mip < outNumMips; ++mip )
         {
-            HlmsComputeJob *job = iblSpecular->clone( "IblSpecular/Integrate/" + newId );
+            String mipNum = "/mip" + StringConverter::toString( mip );
+            HlmsComputeJob *job = iblSpecular->clone( "IblSpecular/Integrate/" + newId + mipNum );
 
             DescriptorSetTexture2::TextureSlot texSlot(
                 DescriptorSetTexture2::TextureSlot::makeEmpty() );
