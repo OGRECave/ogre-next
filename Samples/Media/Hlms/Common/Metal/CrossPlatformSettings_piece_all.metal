@@ -79,6 +79,7 @@ inline float3x3 toMat3x3( float3x4 m )
 #define findLSB clz
 #define findMSB ctz
 #define reversebits reverse_bits
+#define mod( a, b ) (a - b * floor(a / b))
 
 #define outPs_colour0 outPs.colour0
 #define OGRE_Sample( tex, sampler, uv ) tex.sample( sampler, uv )

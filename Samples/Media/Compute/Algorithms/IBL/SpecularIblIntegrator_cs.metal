@@ -1,7 +1,13 @@
 @insertpiece( SetCrossPlatformSettings )
 @insertpiece( DeclUavCrossPlatform )
 
-#define PARAMS_ARG_DECL , constant Params &p , sampler EnvMapSampler, texturecube<float> convolutionSrc, texture2d_array<@insertpiece(uav0_pf_type), access::read_write> lastResult
+@property( uav0_texture_type == TextureTypes_TypeCube )
+	#define UAV0_TEXTURE_WRITE texture2d_array<@insertpiece(uav0_pf_type), access::read_write>
+@else
+	#define UAV0_TEXTURE_WRITE texture2d<@insertpiece(uav0_pf_type), access::read_write>
+@end
+
+#define PARAMS_ARG_DECL , constant Params &p , sampler EnvMapSampler, texturecube<float> convolutionSrc, UAV0_TEXTURE_WRITE lastResult
 #define PARAMS_ARG , p, EnvMapSampler, convolutionSrc, lastResult
 
 struct Params
@@ -32,13 +38,9 @@ kernel void main_metal
 (
 	ushort3 gl_GlobalInvocationID		[[thread_position_in_grid]]
 
-	, sampler EnvMapSampler															[[sampler(0)]]
-	, texturecube<float> convolutionSrc												[[texture(0)]]
-@property( uav0_texture_type == TextureTypes_TypeCube )
-	, texture2d_array<@insertpiece(uav0_pf_type), access::read_write> lastResult	[[texture(UAV_SLOT_START+0)]]
-@else
-	, texture2d<@insertpiece(uav0_pf_type), access::read_write> lastResult			[[texture(UAV_SLOT_START+0)]]
-@end
+	, sampler EnvMapSampler					[[sampler(0)]]
+	, texturecube<float> convolutionSrc		[[texture(0)]]
+	, UAV0_TEXTURE_WRITE lastResult			[[texture(UAV_SLOT_START+0)]]
 
 	, constant Params &p	[[buffer(PARAMETER_SLOT)]]
 )

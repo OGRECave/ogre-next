@@ -275,8 +275,8 @@ namespace Ogre
         rsc->setCapability( RSC_TILER_CAN_CLEAR_STENCIL_REGION );
 #endif
 
+        rsc->setCapability( RSC_UAV );
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
-        rsc->setCapability(RSC_UAV);
         rsc->setCapability(RSC_TEXTURE_CUBE_MAP_ARRAY);
 #endif
         rsc->setCapability( RSC_TYPED_UAV_LOADS );
