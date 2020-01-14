@@ -645,43 +645,38 @@ namespace Ogre
             DXGI_FORMAT format = videoMode ? videoMode->getFormat() : DXGI_FORMAT_R8G8B8A8_UNORM;
             UINT numLevels = 0;
             // set maskable levels supported
-            for (unsigned int n = 1; n <= D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT; n++)
+            for( UINT n = 1; n <= D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT; n++ )
             {
-#if 0
-                // old style enumeration, with cryptic "8", "8 [Quality]" strings for 8xCSAA and 8xMSAA, where it is not even clear what "8" means
-                HRESULT hr = device->CheckMultisampleQualityLevels(format, n, &numLevels);
-                if (SUCCEEDED(hr) && numLevels > 0)
-                {
-                    optFSAA->possibleValues.push_back(StringConverter::toString(n));
-
-                    // 8x could mean 8xCSAA, and we need other designation for 8xMSAA
-                    if((n == 8 && SUCCEEDED(device->CheckMultisampleQualityLevels(format, 4, &numLevels)) && numLevels > 8)    // 8x CSAA
-                    || (n == 16 && SUCCEEDED(device->CheckMultisampleQualityLevels(format, 4, &numLevels)) && numLevels > 16)  // 16x CSAA
-                    || (n == 16 && SUCCEEDED(device->CheckMultisampleQualityLevels(format, 8, &numLevels)) && numLevels > 16)) // 16xQ CSAA
-                    {
-                        optFSAA->possibleValues.push_back(StringConverter::toString(n) + " [Quality]");
-                    }
-                }
-                else if(n == 16) // there could be case when 16xMSAA is not supported but 16xCSAA and may be 16xQ CSAA are supported
-                {
-                    bool csaa16x = SUCCEEDED(device->CheckMultisampleQualityLevels(format, 4, &numLevels)) && numLevels > 16;
-                    bool csaa16xQ = SUCCEEDED(device->CheckMultisampleQualityLevels(format, 8, &numLevels)) && numLevels > 16;
-                    if(csaa16x || csaa16xQ)
-                        optFSAA->possibleValues.push_back("16");
-                    if(csaa16x && csaa16xQ)
-                        optFSAA->possibleValues.push_back("16 [Quality]");
-                }
-#else
                 // new style enumeration, with "8x CSAA", "8x MSAA" values
-                if(n == 8 && SUCCEEDED(device->CheckMultisampleQualityLevels(format, 4, &numLevels)) && numLevels > 8)    // 8x CSAA
-                    optFSAA->possibleValues.push_back("8x CSAA");
-                if(n == 16 && SUCCEEDED(device->CheckMultisampleQualityLevels(format, 4, &numLevels)) && numLevels > 16)  // 16x CSAA
-                    optFSAA->possibleValues.push_back("16x CSAA");
-                if(n == 16 && SUCCEEDED(device->CheckMultisampleQualityLevels(format, 8, &numLevels)) && numLevels > 16)  // 16xQ CSAA
-                    optFSAA->possibleValues.push_back("16xQ CSAA");
-                if (SUCCEEDED(device->CheckMultisampleQualityLevels(format, n, &numLevels)) && numLevels > 0)             // Nx MSAA
-                    optFSAA->possibleValues.push_back(StringConverter::toString(n) + "x MSAA");
-#endif
+                if( n == 8 &&
+                    SUCCEEDED( device->CheckMultisampleQualityLevels( format, 4, &numLevels ) ) &&
+                    numLevels > 8 )  // 8x CSAA
+                {
+                    optFSAA->possibleValues.push_back( "8x CSAA" );
+                }
+                if( n == 8 &&
+                    SUCCEEDED( device->CheckMultisampleQualityLevels( format, 8, &numLevels ) ) &&
+                    numLevels > 8 )  // 8xQ CSAA
+                {
+                    optFSAA->possibleValues.push_back( "8xQ CSAA" );
+                }
+                if( n == 16 &&
+                    SUCCEEDED( device->CheckMultisampleQualityLevels( format, 4, &numLevels ) ) &&
+                    numLevels > 16 )  // 16x CSAA
+                {
+                    optFSAA->possibleValues.push_back( "16x CSAA" );
+                }
+                if( n == 16 &&
+                    SUCCEEDED( device->CheckMultisampleQualityLevels( format, 8, &numLevels ) ) &&
+                    numLevels > 16 )  // 16xQ CSAA
+                {
+                    optFSAA->possibleValues.push_back( "16xQ CSAA" );
+                }
+                if( SUCCEEDED( device->CheckMultisampleQualityLevels( format, n, &numLevels ) ) &&
+                    numLevels > 0 )  // Nx MSAA
+                {
+                    optFSAA->possibleValues.push_back( StringConverter::toString( n ) + "x MSAA" );
+                }
             }
         }
 
