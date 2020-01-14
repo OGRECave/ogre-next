@@ -652,7 +652,6 @@ namespace Ogre
                 {
                     optFSAA->possibleValues.push_back(StringConverter::toString(n));
 
-#if TODO_OGRE_2_2
                     // 8x could mean 8xCSAA, and we need other designation for 8xMSAA
                     if((n == 8 && SUCCEEDED(device->CheckMultisampleQualityLevels(format, 4, &numLevels)) && numLevels > 8)    // 8x CSAA
                     || (n == 16 && SUCCEEDED(device->CheckMultisampleQualityLevels(format, 4, &numLevels)) && numLevels > 16)  // 16x CSAA
@@ -660,9 +659,7 @@ namespace Ogre
                     {
                         optFSAA->possibleValues.push_back(StringConverter::toString(n) + " [Quality]");
                     }
-#endif
                 }
-#if TODO_OGRE_2_2
                 else if(n == 16) // there could be case when 16xMSAA is not supported but 16xCSAA and may be 16xQ CSAA are supported
                 {
                     bool csaa16x = SUCCEEDED(device->CheckMultisampleQualityLevels(format, 4, &numLevels)) && numLevels > 16;
@@ -672,7 +669,6 @@ namespace Ogre
                     if(csaa16x && csaa16xQ)
                         optFSAA->possibleValues.push_back("16 [Quality]");
                 }
-#endif
             }
         }
 
