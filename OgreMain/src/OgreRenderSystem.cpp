@@ -522,8 +522,8 @@ namespace Ogre {
                                                                 textureFlags, TextureTypes::Type2D );
 
         retVal->setResolution( colourTexture->getWidth(), colourTexture->getHeight() );
-        retVal->setSampleDescription( colourTexture->getSampleDescription() );
         retVal->setPixelFormat( depthBufferFormat );
+        retVal->setSampleDescription( colourTexture->getSampleDescription() );
 
         retVal->_transitionTo( GpuResidency::Resident, (uint8*)0 );
 
