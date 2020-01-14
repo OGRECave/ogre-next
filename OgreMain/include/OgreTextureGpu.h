@@ -311,9 +311,9 @@ namespace Ogre
         void setPixelFormat( PixelFormatGpu pixelFormat );
         PixelFormatGpu getPixelFormat(void) const;
 
-        /// Pixel format must already be set!
         void setSampleDescription( SampleDescription desc );
-        /// Returns effective sample description supported by the API
+        /// Returns effective sample description supported by the API.
+        /// Note it's only useful after having transitioned to resident.
         SampleDescription getSampleDescription( void ) const;
         /// Returns original requested sample description, i.e. the raw input to setSampleDescription
         SampleDescription getRequestedSampleDescription( void ) const;

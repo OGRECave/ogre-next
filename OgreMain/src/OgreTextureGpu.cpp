@@ -264,10 +264,8 @@ namespace Ogre
     void TextureGpu::setSampleDescription( SampleDescription desc )
     {
         OGRE_ASSERT_LOW( desc.getColourSamples() > 0u );
-        OGRE_ASSERT_LOW( mPixelFormat != PFG_UNKNOWN );
         mRequestedSampleDescription = desc;
-        mSampleDescription =
-            mTextureManager->getRenderSystem()->determineSampleDescription( desc, mPixelFormat );
+        mSampleDescription = desc;
     }
     //-----------------------------------------------------------------------------------
     SampleDescription TextureGpu::getSampleDescription(void) const
@@ -405,6 +403,14 @@ namespace Ogre
     void TextureGpu::transitionToResident(void)
     {
         checkValidSettings();
+
+        if( mRequestedSampleDescription.isMultisample() )
+        {
+            mSampleDescription = mTextureManager->getRenderSystem()->determineSampleDescription(
+                mRequestedSampleDescription, mPixelFormat );
+            if( !(mSampleDescription == mRequestedSampleDescription) )
+                notifyAllListenersTextureChanged( TextureGpuListener::FsaaSettingAlteredByApi, 0 );
+        }
 
         if( !hasAutomaticBatching() )
         {

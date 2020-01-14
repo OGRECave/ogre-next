@@ -949,6 +949,8 @@ namespace Ogre {
     /// quality if that particular setting is not supported by the GPU.
     ///
     /// Additionally, device lost events can cause FSAA settings to be degraded on the fly
+    /// Listen for TextureGpuListener::FsaaSettingAlteredByApi events to be notified of
+    /// this
     struct SampleDescription
     {
     protected:
