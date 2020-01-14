@@ -70,7 +70,6 @@ namespace Ogre
         mHidden( false ),
         mVisible( true ),
         mHwGamma( false ),
-        mMsaaCount( 1u ),
         mContext( 0 ),
         mWindowedWinStyle( 0 ),
         mFullscreenWinStyle( 0 )
@@ -155,8 +154,7 @@ namespace Ogre
         bool enableDoubleClick = false;
         int monitorIndex = -1;
         HMONITOR hMonitor = NULL;
-        mMsaaCount = 1u;
-//        uint8 msaaQuality = 0;
+        mFsaa = "1";
 
         if( miscParams )
         {
@@ -184,7 +182,7 @@ namespace Ogre
                 mVSyncInterval = StringConverter::parseUnsignedInt(opt->second);
             opt = miscParams->find("FSAA");
             if( opt != end )
-                mMsaaCount = StringConverter::parseUnsignedInt(opt->second);
+                mFsaa = opt->second;
             opt = miscParams->find("gamma");
             if( opt != end )
                 mHwGamma = StringConverter::parseBool(opt->second);
@@ -518,13 +516,14 @@ namespace Ogre
 
         if( !mIsExternalGLControl )
         {
-            int testFsaa = mMsaaCount > 1u ? mMsaaCount : 0;
+            unsigned msaaCount = StringConverter::parseUnsignedInt( mFsaa );
+            int testFsaa = msaaCount > 1u ? msaaCount : 0;
             bool testHwGamma = mHwGamma;
             bool formatOk = mGLSupport.selectPixelFormat( mHDC, mColourDepth, testFsaa,
                                                           depthStencilFormat, testHwGamma );
             if( !formatOk )
             {
-                if( mMsaaCount > 1u )
+                if( msaaCount > 1u )
                 {
                     // try without FSAA
                     testFsaa = 0;
@@ -536,12 +535,12 @@ namespace Ogre
                 {
                     // try without sRGB
                     testHwGamma = false;
-                    testFsaa = mMsaaCount > 1u ? mMsaaCount : 0;
+                    testFsaa = msaaCount > 1u ? msaaCount : 0;
                     formatOk = mGLSupport.selectPixelFormat( mHDC, mColourDepth, testFsaa,
                                                              depthStencilFormat, testHwGamma );
                 }
 
-                if( !formatOk && mHwGamma && mMsaaCount > 1u )
+                if( !formatOk && mHwGamma && msaaCount > 1u )
                 {
                     // try without both
                     testHwGamma = false;
@@ -561,7 +560,7 @@ namespace Ogre
             // record what gamma option we used in the end
             // this will control enabling of sRGB state flags when used
             mHwGamma = testHwGamma;
-            mMsaaCount = testFsaa == 0 ? 1u : static_cast<uint8>( testFsaa );
+            mSampleDescription = SampleDescription( testFsaa ? testFsaa : 1u );
         }
 
         GLint contextMajor = 4;
@@ -667,13 +666,8 @@ namespace Ogre
         if( PixelFormatGpuUtils::isStencil( mDepthBuffer->getPixelFormat() ) )
             mStencilBuffer = mDepthBuffer;
 
-        mTexture->setMsaa( mMsaaCount );
-        mDepthBuffer->setMsaa( mMsaaCount );
-
-#if TODO_OGRE_2_2
-        mTexture->setMsaaPattern( );
-        mDepthBuffer->setMsaaPattern( );
-#endif
+        mTexture->setSampleDescription( mSampleDescription );
+        mDepthBuffer->setSampleDescription( mSampleDescription );
 
         setFinalResolution( mRequestedWidth, mRequestedHeight );
 
@@ -738,8 +732,6 @@ namespace Ogre
             // just release the DC
             ReleaseDC( mHwnd, mHDC );
         }
-
-        mMsaaCount = 1u;
 
         mFocused = false;
         mClosed = true;
