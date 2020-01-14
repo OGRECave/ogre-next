@@ -113,10 +113,10 @@ namespace Ogre
         mCoverageSamples = samples;
     }
     //-----------------------------------------------------------------------------------
-    void SampleDescription::setEqaa( uint8 colourSamples, uint8 mCoverageSamples )
+    void SampleDescription::setEqaa( uint8 colourSamples, uint8 coverageSamples )
     {
         mColourSamples = colourSamples;
-        mCoverageSamples = mCoverageSamples;
+        mCoverageSamples = coverageSamples;
     }
     //-----------------------------------------------------------------------------------
     void SampleDescription::parseString( const String &fsaaSetting )
