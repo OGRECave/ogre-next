@@ -359,9 +359,7 @@ namespace Ogre
             RenderSystem *rs = tex->getTextureManager()->getRenderSystem();
             SampleDescription requestedDesc;
             requestedDesc.parseString( textureDef.fsaa );
-            SampleDescription desc =
-                rs->determineSampleDescription( requestedDesc, tex->getPixelFormat() );
-            tex->setSampleDescription( desc );
+            tex->setSampleDescription( requestedDesc );
         }
         else
         {
