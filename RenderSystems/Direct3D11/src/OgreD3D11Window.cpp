@@ -67,7 +67,7 @@ namespace Ogre
             // FSAA
             opt = miscParams->find("FSAA");
             if( opt != miscParams->end() )
-                mFsaa = StringConverter::parseUnsignedInt( opt->second);
+                mFsaa = opt->second;
             // sRGB?
             opt = miscParams->find("gamma");
             if( opt != miscParams->end() )
