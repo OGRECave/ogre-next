@@ -268,6 +268,14 @@ namespace Ogre
         mSampleDescription = desc;
     }
     //-----------------------------------------------------------------------------------
+    void TextureGpu::_setSampleDescription( SampleDescription desc,
+                                            SampleDescription reqeuestedSampleDesc )
+    {
+        OGRE_ASSERT_LOW( desc.getColourSamples() > 0u );
+        mRequestedSampleDescription = reqeuestedSampleDesc;
+        mSampleDescription = desc;
+    }
+    //-----------------------------------------------------------------------------------
     SampleDescription TextureGpu::getSampleDescription(void) const
     {
         return mSampleDescription;
@@ -406,9 +414,15 @@ namespace Ogre
 
         if( mRequestedSampleDescription.isMultisample() )
         {
-            mSampleDescription = mTextureManager->getRenderSystem()->determineSampleDescription(
-                mRequestedSampleDescription, mPixelFormat );
-            if( !(mSampleDescription == mRequestedSampleDescription) )
+            // RenderWindows already validated their SampleDescriptions and we cannot override
+            // Thus we rely on Windows already having properly called _setSampleDescription
+            // and just call the listeners
+            if( !isRenderWindowSpecific() )
+            {
+                mSampleDescription = mTextureManager->getRenderSystem()->determineSampleDescription(
+                    mRequestedSampleDescription, mPixelFormat );
+            }
+            if( !( mSampleDescription == mRequestedSampleDescription ) )
                 notifyAllListenersTextureChanged( TextureGpuListener::FsaaSettingAlteredByApi, 0 );
         }
 

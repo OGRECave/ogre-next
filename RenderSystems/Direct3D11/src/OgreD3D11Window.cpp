@@ -270,11 +270,13 @@ namespace Ogre
         D3D11TextureGpuWindow *texWindow = static_cast<D3D11TextureGpuWindow*>( mTexture );
         texWindow->_setBackbuffer( mpBackBufferInterim ? mpBackBufferInterim.Get() : mpBackBuffer.Get() );
 
-        mTexture->setSampleDescription( mSampleDescription );
-        mDepthBuffer->setSampleDescription( mSampleDescription );
+        SampleDescription sampleDesc;
+        sampleDesc.parseString( mFsaa );
+        mTexture->_setSampleDescription( sampleDesc, mSampleDescription );
+        mDepthBuffer->_setSampleDescription( sampleDesc, mSampleDescription );
 
         mTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
-        mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+        mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
     }
     //--------------------------------------------------------------------------
     void D3D11WindowSwapChainBased::setFsaa( const String &fsaa )
