@@ -647,6 +647,8 @@ namespace Ogre
             // set maskable levels supported
             for (unsigned int n = 1; n <= D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT; n++)
             {
+#if 0
+                // old style enumeration, with cryptic "8", "8 [Quality]" strings for 8xCSAA and 8xMSAA, where it is not even clear what "8" means
                 HRESULT hr = device->CheckMultisampleQualityLevels(format, n, &numLevels);
                 if (SUCCEEDED(hr) && numLevels > 0)
                 {
@@ -669,6 +671,17 @@ namespace Ogre
                     if(csaa16x && csaa16xQ)
                         optFSAA->possibleValues.push_back("16 [Quality]");
                 }
+#else
+                // new style enumeration, with "8x CSAA", "8x MSAA" values
+                if(n == 8 && SUCCEEDED(device->CheckMultisampleQualityLevels(format, 4, &numLevels)) && numLevels > 8)    // 8x CSAA
+                    optFSAA->possibleValues.push_back("8x CSAA");
+                if(n == 16 && SUCCEEDED(device->CheckMultisampleQualityLevels(format, 4, &numLevels)) && numLevels > 16)  // 16x CSAA
+                    optFSAA->possibleValues.push_back("16x CSAA");
+                if(n == 16 && SUCCEEDED(device->CheckMultisampleQualityLevels(format, 8, &numLevels)) && numLevels > 16)  // 16xQ CSAA
+                    optFSAA->possibleValues.push_back("16xQ CSAA");
+                if (SUCCEEDED(device->CheckMultisampleQualityLevels(format, n, &numLevels)) && numLevels > 0)             // Nx MSAA
+                    optFSAA->possibleValues.push_back(StringConverter::toString(n) + "x MSAA");
+#endif
             }
         }
 
