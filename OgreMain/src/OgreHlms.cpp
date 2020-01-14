@@ -2957,8 +2957,8 @@ namespace Ogre
             {
                 const TextureGpuVec &prePassTextures = sceneManager->getCurrentPrePassTextures();
                 assert( !prePassTextures.empty() );
-                if( prePassTextures[0]->getMsaa() > 1u )
-                    setProperty( HlmsBaseProp::UsePrePassMsaa, prePassTextures[0]->getMsaa() );
+                if( prePassTextures[0]->isMultisample() )
+                    setProperty( HlmsBaseProp::UsePrePassMsaa, prePassTextures[0]->getSampleDescription().colorSamples );
             }
 
             if( sceneManager->getCurrentSsrTexture() != 0 )
@@ -3005,8 +3005,7 @@ namespace Ogre
             if( renderPassDesc->mColour[i].texture )
             {
                 passPso.colourFormat[i]     = renderPassDesc->mColour[i].texture->getPixelFormat();
-                passPso.multisampleCount    = renderPassDesc->mColour[i].texture->getMsaa();
-                passPso.multisampleQuality  = renderPassDesc->mColour[i].texture->getMsaaPattern();
+                passPso.sampleDescription   = renderPassDesc->mColour[i].texture->getSampleDescription();
             }
             else
                 passPso.colourFormat[i] = PFG_NULL;
@@ -3015,9 +3014,8 @@ namespace Ogre
         passPso.depthFormat = PFG_NULL;
         if( renderPassDesc->mDepth.texture )
         {
-            passPso.depthFormat     = renderPassDesc->mDepth.texture->getPixelFormat();
-            passPso.multisampleCount= renderPassDesc->mDepth.texture->getMsaa();
-            passPso.multisampleQuality = renderPassDesc->mDepth.texture->getMsaaPattern();
+            passPso.depthFormat         = renderPassDesc->mDepth.texture->getPixelFormat();
+            passPso.sampleDescription   = renderPassDesc->mDepth.texture->getSampleDescription();
         }
         else
         {

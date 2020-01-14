@@ -136,7 +136,7 @@ namespace Ogre
                 "Did you modify it? Did it get corrupted?" );
         assert( ( !cpuSrcBox || srcBox.equalSize( *cpuSrcBox ) ) && "Src & cpuSrcBox must be equal" );
 
-        if( dstTexture->getMsaa() > 1u )
+        if( dstTexture->isMultisample() )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          "Cannot upload to texture '" + dstTexture->getNameStr() +

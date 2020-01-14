@@ -105,9 +105,8 @@ namespace Ogre
         /// PF_NULL if no depth buffer is used.
         PixelFormatGpu depthFormat;
 
-        /// MSAA specific settings
-        uint32      multisampleCount;
-        uint32      multisampleQuality;
+        /// FSAA specific settings
+        SampleDescription sampleDescription;
 
         /// For multi-GPU support
         uint32      adapterId;

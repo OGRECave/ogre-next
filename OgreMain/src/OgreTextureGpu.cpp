@@ -57,8 +57,6 @@ namespace Ogre
         mHeight( 0 ),
         mDepthOrSlices( 0 ),
         mNumMipmaps( 1 ),
-        mMsaa( 1 ),
-        mMsaaPattern( MsaaPatterns::Undefined ),
         mInternalSliceStart( 0 ),
         mTextureType( initialType ),
         mPixelFormat( PFG_UNKNOWN ),
@@ -137,7 +135,13 @@ namespace Ogre
         LwString desc( LwString::FromEmptyPointer( tmpBuffer, sizeof(tmpBuffer) ) );
 
         desc.a( mWidth, "x", mHeight, "x", mDepthOrSlices );
-        desc.a( " ", mMsaa, "xMSAA ", PixelFormatGpuUtils::toString( mPixelFormat ) );
+        if( mSampleDescription.coverageSamples == 0 )
+            desc.a( " ", mSampleDescription.colorSamples, "x MSAA " );
+        else if( mSampleDescription.colorSamples >= 8 )
+            desc.a( " ", mSampleDescription.coverageSamples, "xQ CSAA " );
+        else
+            desc.a( " ", mSampleDescription.coverageSamples, "x CSAA " );
+        desc.a( PixelFormatGpuUtils::toString( mPixelFormat ) );
         if( isRenderWindowSpecific() )
             desc.a( " renderwindow" );
 
@@ -262,14 +266,20 @@ namespace Ogre
         return mInternalSliceStart;
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpu::setMsaa( uint8 msaa )
+    void TextureGpu::setSampleDescription( SampleDescription desc )
     {
-        mMsaa = std::max<uint8>( msaa, 1u );
+        assert( desc.colorSamples > 0 );
+        mSampleDescription = desc;
     }
     //-----------------------------------------------------------------------------------
-    uint8 TextureGpu::getMsaa(void) const
+    SampleDescription TextureGpu::getSampleDescription(void) const
     {
-        return mMsaa;
+        return mSampleDescription;
+    }
+    //-----------------------------------------------------------------------------------
+    bool TextureGpu::isMultisample(void) const
+    {
+        return mSampleDescription.colorSamples > 1u;
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::copyParametersFrom( TextureGpu *src )
@@ -281,8 +291,7 @@ namespace Ogre
         this->mDepthOrSlices    = src->mDepthOrSlices;
         this->mNumMipmaps       = src->mNumMipmaps;
         this->mPixelFormat      = src->mPixelFormat;
-        this->mMsaa             = src->mMsaa;
-        this->mMsaaPattern      = src->mMsaaPattern;
+        this->mSampleDescription= src->mSampleDescription;
         this->mTextureType      = src->mTextureType;
     }
     //-----------------------------------------------------------------------------------
@@ -293,19 +302,8 @@ namespace Ogre
                this->mDepthOrSlices == other->mDepthOrSlices &&
                this->mNumMipmaps == other->mNumMipmaps &&
                this->mPixelFormat == other->mPixelFormat &&
-               this->mMsaa == other->mMsaa &&
-               this->mMsaaPattern == other->mMsaaPattern &&
+               this->mSampleDescription == other->mSampleDescription &&
                this->mTextureType == other->mTextureType;
-    }
-    //-----------------------------------------------------------------------------------
-    void TextureGpu::setMsaaPattern( MsaaPatterns::MsaaPatterns pattern )
-    {
-        mMsaaPattern = pattern;
-    }
-    //-----------------------------------------------------------------------------------
-    MsaaPatterns::MsaaPatterns TextureGpu::getMsaaPattern(void) const
-    {
-        return mMsaaPattern;
     }
     //-----------------------------------------------------------------------------------
     bool TextureGpu::isMsaaPatternSupported( MsaaPatterns::MsaaPatterns pattern )
@@ -321,7 +319,7 @@ namespace Ogre
         if( mPixelFormat == PFG_NULL && isTexture() )
             mTextureFlags |= TextureFlags::NotTexture;
 
-        if( mMsaa > 1u )
+        if( mSampleDescription.colorSamples > 1u )
         {
             if( (mNumMipmaps > 1u) || (!isRenderToTexture() && !isUav()) )
             {
@@ -626,7 +624,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpu::_resolveTo( TextureGpu *resolveTexture )
     {
-        if( this->getMsaa() <= 1u )
+        if( !this->isMultisample() )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Source Texture must be MSAA",
                          "TextureGpu::_resolveTo" );
@@ -653,7 +651,7 @@ namespace Ogre
                          "Source Texture and Resolve texture must have the same dimensions!",
                          "TextureGpu::_resolveTo" );
         }
-        if( resolveTexture->getMsaa() > 1u )
+        if( resolveTexture->isMultisample() )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Resolve Texture must not be MSAA",
                          "TextureGpu::_resolveTo" );
@@ -817,8 +815,7 @@ namespace Ogre
 
         if( this->mWidth == colourTarget->mWidth &&
             this->mHeight == colourTarget->mHeight &&
-            this->getMsaa() == colourTarget->getMsaa() &&
-            this->getMsaaPattern() == colourTarget->getMsaaPattern() &&
+            this->getSampleDescription() == colourTarget->getSampleDescription() &&
             this->isRenderWindowSpecific() == colourTarget->isRenderWindowSpecific() )
         {
             return true;
@@ -928,12 +925,12 @@ namespace Ogre
         size_t sizeBytes = PixelFormatGpuUtils::calculateSizeBytes( mWidth, mHeight, getDepth(),
                                                                     getNumSlices(),
                                                                     mPixelFormat, mNumMipmaps, 4u );
-        if( mMsaa > 1u )
+        if( mSampleDescription.colorSamples > 1u )
         {
             if( hasMsaaExplicitResolves() )
-                sizeBytes *= mMsaa;
+                sizeBytes *= mSampleDescription.colorSamples;
             else
-                sizeBytes *= (mMsaa + 1u);
+                sizeBytes *= (mSampleDescription.colorSamples + 1u);
         }
 
         return sizeBytes;

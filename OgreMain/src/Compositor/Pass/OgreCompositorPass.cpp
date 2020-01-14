@@ -318,7 +318,7 @@ namespace Ogre
             }
 
             //Deal with MSAA resolve textures.
-            if( renderPassTargetAttachment->texture->getMsaa() > 1u )
+            if( renderPassTargetAttachment->texture->isMultisample() )
             {
                 if( renderPassTargetAttachment->storeAction == StoreAction::MultisampleResolve ||
                     renderPassTargetAttachment->storeAction == StoreAction::StoreAndMultisampleResolve ||
@@ -364,7 +364,7 @@ namespace Ogre
                                          "CompositorPass::setupRenderPassTarget" );
                         }
 
-                        if( renderPassTargetAttachment->resolveTexture->getMsaa() > 1u )
+                        if( renderPassTargetAttachment->resolveTexture->isMultisample() )
                         {
                             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                                          "Cannot specify a non-MSAA texture for resolving an "
@@ -400,7 +400,7 @@ namespace Ogre
                 renderPassTargetAttachment->storeAction = StoreAction::DontCare;
             else
             {
-                if( renderPassTargetAttachment->texture->getMsaa() > 1u &&
+                if( renderPassTargetAttachment->texture->isMultisample() &&
                     renderPassTargetAttachment->resolveTexture )
                 {
                     renderPassTargetAttachment->storeAction = StoreAction::MultisampleResolve;

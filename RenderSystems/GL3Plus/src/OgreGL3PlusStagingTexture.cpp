@@ -155,7 +155,7 @@ namespace Ogre
 
         size_t bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( dstTexture->getPixelFormat() );
 
-        assert( dstTexture->getMsaa() <= 1u && "Cannot upload to an MSAA texture!" );
+        assert( !dstTexture->isMultisample() && "Cannot upload to an MSAA texture!" );
 
         const GLint rowLength   = bytesPerPixel > 0 ? (srcBox.bytesPerRow / bytesPerPixel) : 0;
         const GLint imageHeight = (srcBox.bytesPerRow > 0) ?

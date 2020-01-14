@@ -29,6 +29,7 @@ THE SOFTWARE.
 #ifndef _OgreTextureGpu_H_
 #define _OgreTextureGpu_H_
 
+#include "OgreCommon.h"
 #include "OgreGpuResource.h"
 #include "OgrePixelFormatGpu.h"
 
@@ -44,24 +45,6 @@ namespace Ogre
     /** \addtogroup Resources
     *  @{
     */
-
-    namespace MsaaPatterns
-    {
-        enum MsaaPatterns
-        {
-            /// Let the GPU decide.
-            Undefined,
-            /// The subsample locations follow a fixed known pattern.
-            /// Call TextureGpu::getSubsampleLocations to get them.
-            Standard,
-            /// The subsample locations are centered in a grid.
-            /// May not be supported by the GPU/API, in which case Standard will be used instead
-            /// Call TextureGpu::isMsaaPatternSupported to check whether it will be honoured.
-            Center,
-            /// All subsamples are at 0, 0; effectively "disabling" msaa.
-            CenterZero
-        };
-    }
 
     namespace TextureTypes
     {
@@ -216,8 +199,7 @@ namespace Ogre
         /// Set mNumMipmaps = 0 to auto generate until last level.
         /// mNumMipmaps = 1 means no extra mipmaps other than level 0.
         uint8       mNumMipmaps;
-        uint8       mMsaa;
-        MsaaPatterns::MsaaPatterns  mMsaaPattern;
+        SampleDescription mSampleDescription;
 
         /// Used when AutomaticBatching is set. It indicates in which slice
         /// our actual data is, inside a texture array which we do not own.
@@ -328,18 +310,15 @@ namespace Ogre
         void setPixelFormat( PixelFormatGpu pixelFormat );
         PixelFormatGpu getPixelFormat(void) const;
 
-        /// Note: Passing 0 will be forced to 1.
-        void setMsaa( uint8 msaa );
-        uint8 getMsaa(void) const;
+        void setSampleDescription( SampleDescription desc );
+        SampleDescription getSampleDescription(void) const;
+        bool isMultisample() const;
 
         void copyParametersFrom( TextureGpu *src );
         bool hasEquivalentParameters( TextureGpu *other ) const;
-        void setHlmsProperties( Hlms *hlms, LwString &propBaseName );
 
-        void setMsaaPattern( MsaaPatterns::MsaaPatterns pattern );
-        MsaaPatterns::MsaaPatterns getMsaaPattern(void) const;
         virtual bool isMsaaPatternSupported( MsaaPatterns::MsaaPatterns pattern );
-        /** Get the MSAA subsample locations. mMsaaPatterns must not be MsaaPatterns::Undefined.
+        /** Get the MSAA subsample locations. mSampleDescription.pattern must not be MsaaPatterns::Undefined.
         @param locations
             Outputs an array with the locations for each subsample. Values are in range [-1; 1]
         */

@@ -925,6 +925,41 @@ namespace Ogre {
         CLIPPED_ALL = 2
     };
 
+    namespace MsaaPatterns
+    {
+        enum MsaaPatterns
+        {
+            /// Let the GPU decide.
+            Undefined,
+            /// The subsample locations follow a fixed known pattern.
+            /// Call TextureGpu::getSubsampleLocations to get them.
+            Standard,
+            /// The subsample locations are centered in a grid.
+            /// May not be supported by the GPU/API, in which case Standard will be used instead
+            /// Call TextureGpu::isMsaaPatternSupported to check whether it will be honoured.
+            Center,
+            /// All subsamples are at 0, 0; effectively "disabling" msaa.
+            CenterZero
+        };
+    }
+
+    /// Opaque struct that holds effective FSAA (MSAA, CSAA, etc.) mode.
+    struct SampleDescription
+    {
+        uint8                       colorSamples;
+        uint8                       coverageSamples;
+        MsaaPatterns::MsaaPatterns  pattern;
+
+        SampleDescription( uint8 msaa = 1 )
+            : colorSamples( msaa ), coverageSamples( 0 ), pattern( MsaaPatterns::Undefined ) {}
+
+        bool operator==(const SampleDescription& rhs) const { 
+            return colorSamples == rhs.colorSamples
+                && coverageSamples == rhs.coverageSamples
+                && pattern == rhs.pattern;
+        }
+    };
+
     /// Render window creation parameters.
     struct RenderWindowDescription
     {

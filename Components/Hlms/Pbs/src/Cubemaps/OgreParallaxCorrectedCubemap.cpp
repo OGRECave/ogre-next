@@ -1096,7 +1096,7 @@ namespace Ogre
             if( itor->texture->getWidth() == baseParams->getWidth() &&
                 itor->texture->getHeight() == baseParams->getHeight() &&
                 itor->texture->getPixelFormat() == baseParams->getPixelFormat() &&
-                itor->texture->getMsaa() == baseParams->getMsaa() )
+                itor->texture->getSampleDescription() == baseParams->getSampleDescription() )
             {
                 retVal = itor->texture;
                 ++itor->refCount;
@@ -1118,8 +1118,7 @@ namespace Ogre
             retVal->setResolution( baseParams->getWidth(), baseParams->getHeight() );
             retVal->setPixelFormat( baseParams->getPixelFormat() );
             retVal->setNumMipmaps( baseParams->getNumMipmaps() );
-            retVal->setMsaa( baseParams->getMsaa() );
-            retVal->setMsaaPattern( baseParams->getMsaaPattern() );
+            retVal->setSampleDescription( baseParams->getSampleDescription() );
             retVal->_transitionTo( GpuResidency::Resident, (uint8*)0 );
 
             tmpRtt.texture = retVal;

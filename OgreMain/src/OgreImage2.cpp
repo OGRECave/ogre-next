@@ -337,7 +337,7 @@ namespace Ogre {
 
         TextureGpu *resolvedTexture = texture;
 
-        if( texture->getMsaa() > 1u && texture->hasMsaaExplicitResolves() && automaticResolve &&
+        if( texture->isMultisample() && texture->hasMsaaExplicitResolves() && automaticResolve &&
             !texture->isOpenGLRenderWindow() )
         {
             resolvedTexture = textureManager->createTexture( texture->getNameStr() + "/Tmp/__ResolveTex",
@@ -346,7 +346,7 @@ namespace Ogre {
                                                              texture->getTextureType() );
             resolvedTexture->copyParametersFrom( texture );
             resolvedTexture->setPixelFormat( texture->getPixelFormat() );
-            resolvedTexture->setMsaa( 1u );
+            resolvedTexture->setSampleDescription( 1u );
             resolvedTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
             texture->_resolveTo( resolvedTexture );
         }
@@ -418,7 +418,7 @@ namespace Ogre {
 
         TextureGpu *resolvedTexture = texture;
 
-        if( texture->getMsaa() > 1u && texture->hasMsaaExplicitResolves() && automaticResolve &&
+        if( texture->isMultisample() && texture->hasMsaaExplicitResolves() && automaticResolve &&
             !texture->isOpenGLRenderWindow() )
         {
             resolvedTexture = textureManager->createTexture(
@@ -426,7 +426,7 @@ namespace Ogre {
                 TextureFlags::RenderToTexture, texture->getTextureType() );
             resolvedTexture->copyParametersFrom( texture );
             resolvedTexture->setPixelFormat( texture->getPixelFormat() );
-            resolvedTexture->setMsaa( 1u );
+            resolvedTexture->setSampleDescription( 1u );
             resolvedTexture->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
             texture->_resolveTo( resolvedTexture );
         }

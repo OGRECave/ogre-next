@@ -60,7 +60,6 @@ namespace Ogre
         mProbeShape( Aabb::BOX_NULL ),
         mTexture( 0 ),
         mCubemapArrayIdx( std::numeric_limits<uint32>::max() ),
-        mMsaa( 1u ),
         mWorkspaceMipmapsExecMask( 0x01 ),
         mClearWorkspace( 0 ),
         mWorkspace( 0 ),
@@ -285,7 +284,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void CubemapProbe::setTextureParams( uint32 width, uint32 height, bool useManual,
-                                         PixelFormatGpu pf, bool isStatic, uint8 msaa )
+                                         PixelFormatGpu pf, bool isStatic, SampleDescription sampleDesc )
     {
         if( !mCreator->getAutomaticMode() )
         {
@@ -327,8 +326,8 @@ namespace Ogre
             const uint numMips = PixelUtil::getMaxMipmapCount( width, height, 1 );
 #endif
 
-            mMsaa = msaa;
-            msaa = isStatic ? 0 : msaa;
+            mSampleDescription = sampleDesc;
+            sampleDesc = isStatic ? SampleDescription() : sampleDesc;
 
             SceneManager *sceneManager = mCreator->getSceneManager();
             TextureGpuManager *textureManager =
@@ -338,7 +337,7 @@ namespace Ogre
             mTexture->setResolution( width, height );
             mTexture->setPixelFormat( pf );
             mTexture->setNumMipmaps( numMips );
-            mTexture->setMsaa( msaa );
+            mTexture->setSampleDescription( sampleDesc );
 
             mStatic = isStatic;
             mDirty = true;
@@ -491,7 +490,7 @@ namespace Ogre
         if( mStatic != isStatic && mTexture )
         {
             setTextureParams( mTexture->getWidth(), mTexture->getHeight(), mTexture->getNumMipmaps() > 0,
-                              mTexture->getPixelFormat(), isStatic, mTexture->getMsaa() );
+                              mTexture->getPixelFormat(), isStatic, mTexture->getSampleDescription() );
         }
         else
         {

@@ -161,8 +161,8 @@ namespace Ogre
             @param msaaHint Any hinting text (@see Root::createRenderWindow)
         */
         virtual void setMsaa(uint msaa, const String& msaaHint) {}
-        uint8 getMsaa(void) const;
-        MsaaPatterns::MsaaPatterns getMsaaPatterns(void) const;
+        SampleDescription getSampleDescription(void) const;
+        bool isMultisample(void) const;
 
         uint32 getFrequencyNumerator(void) const;
         uint32 getFrequencyDenominator(void) const;
