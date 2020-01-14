@@ -203,6 +203,7 @@
 		// Sample source cubemap at specified mip.
 		float4 importanceSampled = importanceSample( R PARAMS_ARG );
 
+		@property( !iOS )
 		if( p_convolutionSamplesOffset >= 1 )
 		{
 			@property( uav0_texture_type == TextureTypes_TypeCube )
@@ -216,6 +217,7 @@
 			sampledColor = lerp( lastResultVal, importanceSampled, 1.0 / ( p_convolutionSamplesOffset ) );
 		}
 		else
+		@end
 		{
 			sampledColor = importanceSampled;
 		}

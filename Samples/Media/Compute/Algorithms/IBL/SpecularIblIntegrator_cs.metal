@@ -1,10 +1,18 @@
 @insertpiece( SetCrossPlatformSettings )
 @insertpiece( DeclUavCrossPlatform )
 
-@property( uav0_texture_type == TextureTypes_TypeCube )
-	#define UAV0_TEXTURE_WRITE texture2d_array<@insertpiece(uav0_pf_type), access::read_write>
+@property( !iOS )
+	@property( uav0_texture_type == TextureTypes_TypeCube )
+		#define UAV0_TEXTURE_WRITE texture2d_array<@insertpiece(uav0_pf_type), access::read_write>
+	@else
+		#define UAV0_TEXTURE_WRITE texture2d<@insertpiece(uav0_pf_type), access::read_write>
+	@end
 @else
-	#define UAV0_TEXTURE_WRITE texture2d<@insertpiece(uav0_pf_type), access::read_write>
+	@property( uav0_texture_type == TextureTypes_TypeCube )
+		#define UAV0_TEXTURE_WRITE texture2d_array<@insertpiece(uav0_pf_type), access::write>
+	@else
+		#define UAV0_TEXTURE_WRITE texture2d<@insertpiece(uav0_pf_type), access::write>
+	@end
 @end
 
 #define PARAMS_ARG_DECL , constant Params &p , sampler EnvMapSampler, texturecube<float> convolutionSrc, UAV0_TEXTURE_WRITE lastResult
