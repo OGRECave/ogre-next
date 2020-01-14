@@ -808,7 +808,8 @@ namespace Ogre
                 {
                     jsonStr.a( ",\n\t\t\t\t\t\"width\" : ", probeTex->getWidth() );
                     jsonStr.a( ",\n\t\t\t\t\t\"height\" : ", probeTex->getHeight() );
-                    jsonStr.a( ",\n\t\t\t\t\t\"msaa\" : ", probeTex->getSampleDescription().colorSamples );
+                    jsonStr.a( ",\n\t\t\t\t\t\"msaa\" : ",
+                               probeTex->getSampleDescription().getColourSamples() );
                     jsonStr.a( ",\n\t\t\t\t\t\"pixel_format\" : \"",
                                PixelFormatGpuUtils::toString( probeTex->getPixelFormat() ), "\"" );
                     jsonStr.a( ",\n\t\t\t\t\t\"use_manual\" : ",

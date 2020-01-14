@@ -180,7 +180,7 @@ namespace Ogre
         propName.resize( texturePropSize );
 
         propName.a( "_msaa_samples" );          //texture0_msaa_samples
-        setProperty( propName.c_str(), texture->getSampleDescription().colorSamples );
+        setProperty( propName.c_str(), texture->getSampleDescription().getColourSamples() );
         propName.resize( texturePropSize );
 
         propName.a( "_texture_type" );          //_texture_type

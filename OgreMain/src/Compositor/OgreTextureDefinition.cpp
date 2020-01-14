@@ -356,8 +356,11 @@ namespace Ogre
         }
         if( !textureDef.fsaa.empty() )
         {
-            RenderSystem* rs = tex->getTextureManager()->getRenderSystem();
-            SampleDescription desc = rs->determineSampleDescription( textureDef.fsaa, tex->getPixelFormat() );
+            RenderSystem *rs = tex->getTextureManager()->getRenderSystem();
+            SampleDescription requestedDesc;
+            requestedDesc.parseString( textureDef.fsaa );
+            SampleDescription desc =
+                rs->determineSampleDescription( requestedDesc, tex->getPixelFormat() );
             tex->setSampleDescription( desc );
         }
         else

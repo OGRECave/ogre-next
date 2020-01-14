@@ -56,8 +56,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void NULLTextureGpu::getSubsampleLocations( vector<Vector2>::type locations )
     {
-        locations.reserve( mSampleDescription.colorSamples );
-        for( size_t i=0; i<mSampleDescription.colorSamples; ++i )
+        locations.reserve( mSampleDescription.getColourSamples() );
+        for( size_t i=0; i<mSampleDescription.getColourSamples(); ++i )
             locations.push_back( Vector2( 0, 0 ) );
     }
     //-----------------------------------------------------------------------------------

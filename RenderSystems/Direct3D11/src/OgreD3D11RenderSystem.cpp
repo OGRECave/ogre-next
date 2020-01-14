@@ -3646,66 +3646,71 @@ namespace Ogre
         return mDevice.getErrorDescription(errorNumber);
     }
     //---------------------------------------------------------------------
-    SampleDescription D3D11RenderSystem::determineSampleDescription(const String& fsaa, PixelFormatGpu format)
+    SampleDescription D3D11RenderSystem::determineSampleDescription( const SampleDescription &sampleDesc,
+                                                                     PixelFormatGpu format )
     {
         SampleDescription res;
-        DXGI_FORMAT dxgiFormat = D3D11Mappings::get(format);
-        unsigned samples = StringConverter::parseUnsignedInt(fsaa);
-        bool msaaOnly = fsaa.find("MSAA") != String::npos;
-        bool qualityHint = samples >= 8 && fsaa.find("Quality") != String::npos;
+        DXGI_FORMAT dxgiFormat = D3D11Mappings::get( format );
+        const uint8 samples = sampleDesc.getMaxSamples();
+        const bool msaaOnly = sampleDesc.isMsaa();
+        const bool qualityHint = sampleDesc.isCsaaQuality();
 
         // NVIDIA, AMD - prefer CSAA aka EQAA if available.
         // see http://developer.download.nvidia.com/assets/gamedev/docs/CSAA_Tutorial.pdf
-        // see http://developer.amd.com/wordpress/media/2012/10/EQAA%20Modes%20for%20AMD%20HD%206900%20Series%20Cards.pdf
-        // also https://www.khronos.org/registry/OpenGL/extensions/NV/NV_framebuffer_multisample_coverage.txt
+        // see
+        // http://developer.amd.com/wordpress/media/2012/10/EQAA%20Modes%20for%20AMD%20HD%206900%20Series%20Cards.pdf
+        // also
+        // https://www.khronos.org/registry/OpenGL/extensions/NV/NV_framebuffer_multisample_coverage.txt
 
         // Modes are sorted from high quality to low quality, CSAA aka EQAA are listed first
         // Note, that max(Count, Quality) == MSAA level and (Count >= 8 && Quality != 0) == quality hint
         DXGI_SAMPLE_DESC presets[] = {
-                { 8, 16 }, // CSAA 16xQ, EQAA 8f16x
-                { 4, 16 }, // CSAA 16x,  EQAA 4f16x
-                { 16, 0 }, // MSAA 16x
+            { 8, 16 },  // CSAA 16xQ, EQAA 8f16x
+            { 4, 16 },  // CSAA 16x,  EQAA 4f16x
+            { 16, 0 },  // MSAA 16x
 
-                { 12, 0 }, // MSAA 12x
+            { 12, 0 },  // MSAA 12x
 
-                { 8, 8 },  // CSAA 8xQ
-                { 4, 8 },  // CSAA 8x,  EQAA 4f8x
-                { 8, 0 },  // MSAA 8x
+            { 8, 8 },  // CSAA 8xQ
+            { 4, 8 },  // CSAA 8x,  EQAA 4f8x
+            { 8, 0 },  // MSAA 8x
 
-                { 6, 0 },  // MSAA 6x
-                { 4, 0 },  // MSAA 4x
-                { 2, 0 },  // MSAA 2x
-                { 1, 0 },  // MSAA 1x
-                { NULL },
+            { 6, 0 },  // MSAA 6x
+            { 4, 0 },  // MSAA 4x
+            { 2, 0 },  // MSAA 2x
+            { 1, 0 },  // MSAA 1x
+            { NULL, NULL },
         };
 
         // Use first supported mode
-        for(DXGI_SAMPLE_DESC* mode = presets; mode->Count != 0; ++mode)
+        for( DXGI_SAMPLE_DESC *mode = presets; mode->Count != 0; ++mode )
         {
             // Skip too HQ modes
-            unsigned modeSamples = std::max(mode->Count, mode->Quality);
+            unsigned modeSamples = std::max( mode->Count, mode->Quality );
             bool modeQuality = mode->Count >= 8 && mode->Quality != 0;
-            bool tooHQ = (modeSamples > samples || (modeSamples == samples && modeQuality && !qualityHint));
-            if(tooHQ)
+            bool tooHQ =
+                ( modeSamples > samples || ( modeSamples == samples && modeQuality && !qualityHint ) );
+            if( tooHQ )
                 continue;
 
             // Skip CSAA modes if specifically MSAA were requested, but not vice versa
-            if(msaaOnly && mode->Quality > 0)
+            if( msaaOnly && mode->Quality > 0 )
                 continue;
 
             // Skip unsupported modes
             UINT numQualityLevels;
-            HRESULT hr = mDevice->CheckMultisampleQualityLevels(dxgiFormat, mode->Count, &numQualityLevels);
-            if(FAILED(hr) || mode->Quality >= numQualityLevels )
+            HRESULT hr =
+                mDevice->CheckMultisampleQualityLevels( dxgiFormat, mode->Count, &numQualityLevels );
+            if( FAILED( hr ) || mode->Quality >= numQualityLevels )
                 continue;
 
             // All checks passed
-            res.colorSamples = mode->Count;
-            res.coverageSamples = mode->Quality;
-            res.pattern = mode->Quality != 0 ? MsaaPatterns::Undefined : // CSAA
-                fsaa.find("Standard") != String::npos ? MsaaPatterns::Standard :
-                fsaa.find("Center") != String::npos ? MsaaPatterns::CenterZero :
-                MsaaPatterns::Undefined;
+            MsaaPatterns::MsaaPatterns pattern;
+            if( mode->Quality != 0 )
+                pattern = MsaaPatterns::Undefined;  // CSAA / EQAA
+            else
+                pattern = sampleDesc.getMsaaPattern();
+            res._set( static_cast<uint8>( mode->Count ), static_cast<uint8>( mode->Quality ), pattern );
             break;
         }
 

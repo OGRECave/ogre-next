@@ -200,6 +200,7 @@ namespace Ogre
         /// mNumMipmaps = 1 means no extra mipmaps other than level 0.
         uint8       mNumMipmaps;
         SampleDescription mSampleDescription;
+        SampleDescription mRequestedSampleDescription;
 
         /// Used when AutomaticBatching is set. It indicates in which slice
         /// our actual data is, inside a texture array which we do not own.
@@ -310,15 +311,20 @@ namespace Ogre
         void setPixelFormat( PixelFormatGpu pixelFormat );
         PixelFormatGpu getPixelFormat(void) const;
 
+        /// Pixel format must already be set!
         void setSampleDescription( SampleDescription desc );
-        SampleDescription getSampleDescription(void) const;
-        bool isMultisample() const;
+        /// Returns effective sample description supported by the API
+        SampleDescription getSampleDescription( void ) const;
+        /// Returns original requested sample description, i.e. the raw input to setSampleDescription
+        SampleDescription getRequestedSampleDescription( void ) const;
+        bool isMultisample( void ) const;
 
         void copyParametersFrom( TextureGpu *src );
         bool hasEquivalentParameters( TextureGpu *other ) const;
 
         virtual bool isMsaaPatternSupported( MsaaPatterns::MsaaPatterns pattern );
-        /** Get the MSAA subsample locations. mSampleDescription.pattern must not be MsaaPatterns::Undefined.
+        /** Get the MSAA subsample locations.
+            mSampleDescription.pattern must not be MsaaPatterns::Undefined.
         @param locations
             Outputs an array with the locations for each subsample. Values are in range [-1; 1]
         */

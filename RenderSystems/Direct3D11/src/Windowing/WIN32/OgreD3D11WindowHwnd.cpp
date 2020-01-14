@@ -144,9 +144,10 @@ namespace Ogre
         }
         else
         {
-            sd.SampleDesc.Count   = mSampleDescription.colorSamples;
-            sd.SampleDesc.Quality = mSampleDescription.coverageSamples ?
-                mSampleDescription.coverageSamples : D3D11Mappings::get( mSampleDescription.pattern );
+            sd.SampleDesc.Count = mSampleDescription.getColourSamples();
+            sd.SampleDesc.Quality = mSampleDescription.getCoverageSamples()
+                                        ? mSampleDescription.getCoverageSamples()
+                                        : D3D11Mappings::get( mSampleDescription.getMsaaPattern() );
         }
 
         sd.Flags        = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
@@ -159,7 +160,9 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     HRESULT D3D11WindowHwnd::_createSwapChainImpl(void)
     {
-        mSampleDescription = mRenderSystem->determineSampleDescription(mFsaa, _getRenderFormat());
+        mSampleDescription.parseString( mFsaa );
+        mSampleDescription =
+            mRenderSystem->determineSampleDescription( mSampleDescription, _getRenderFormat() );
         HRESULT hr;
 
         // Create swap chain

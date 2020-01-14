@@ -2958,7 +2958,10 @@ namespace Ogre
                 const TextureGpuVec &prePassTextures = sceneManager->getCurrentPrePassTextures();
                 assert( !prePassTextures.empty() );
                 if( prePassTextures[0]->isMultisample() )
-                    setProperty( HlmsBaseProp::UsePrePassMsaa, prePassTextures[0]->getSampleDescription().colorSamples );
+                {
+                    setProperty( HlmsBaseProp::UsePrePassMsaa,
+                                 prePassTextures[0]->getSampleDescription().getColourSamples() );
+                }
             }
 
             if( sceneManager->getCurrentSsrTexture() != 0 )

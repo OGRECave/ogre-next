@@ -336,7 +336,8 @@ namespace Ogre
         void preExtraThreadsStarted();
         void postExtraThreadsStarted();
 
-        virtual SampleDescription determineSampleDescription(const String& fsaa, PixelFormatGpu format);
+        virtual SampleDescription determineSampleDescription( const SampleDescription &sampleDesc,
+                                                              PixelFormatGpu format );
 
         /// @copydoc RenderSystem::getDisplayMonitorCount
         unsigned int getDisplayMonitorCount() const;

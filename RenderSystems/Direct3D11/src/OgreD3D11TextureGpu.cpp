@@ -134,9 +134,10 @@ namespace Ogre
             desc.Format = D3D11Mappings::get( mPixelFormat );
         if( isMultisample() && hasMsaaExplicitResolves() )
         {
-            desc.SampleDesc.Count   = mSampleDescription.colorSamples;
-            desc.SampleDesc.Quality = mSampleDescription.coverageSamples ?
-                mSampleDescription.coverageSamples : D3D11Mappings::get( mSampleDescription.pattern );
+            desc.SampleDesc.Count   = mSampleDescription.getColourSamples();
+            desc.SampleDesc.Quality = mSampleDescription.getCoverageSamples()
+                                          ? mSampleDescription.getCoverageSamples()
+                                          : D3D11Mappings::get( mSampleDescription.getMsaaPattern() );
         }
         else
         {
@@ -197,9 +198,10 @@ namespace Ogre
         if( isMultisample() && !hasMsaaExplicitResolves() )
         {
             //We just created the resolve texture. Must create the actual MSAA surface now.
-            desc.SampleDesc.Count   = mSampleDescription.colorSamples;
-            desc.SampleDesc.Quality = mSampleDescription.coverageSamples ?
-                mSampleDescription.coverageSamples : D3D11Mappings::get( mSampleDescription.pattern );
+            desc.SampleDesc.Count = mSampleDescription.getColourSamples();
+            desc.SampleDesc.Quality = mSampleDescription.getCoverageSamples()
+                                          ? mSampleDescription.getCoverageSamples()
+                                          : D3D11Mappings::get( mSampleDescription.getMsaaPattern() );
 
             //Reset bind flags. We won't bind it as SRV, allows more aggressive
             //optimizations on AMD cards (DCC - Delta Color Compression since GCN 1.2)
@@ -703,19 +705,19 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpu::getSubsampleLocations( vector<Vector2>::type locations )
     {
-        locations.reserve( mSampleDescription.colorSamples );
-        if( mSampleDescription.colorSamples <= 1u )
+        locations.reserve( mSampleDescription.getColourSamples() );
+        if( mSampleDescription.getColourSamples() <= 1u )
         {
             locations.push_back( Vector2( 0.0f, 0.0f ) );
         }
         else
         {
-            assert( mSampleDescription.pattern != MsaaPatterns::Undefined );
+            assert( mSampleDescription.getMsaaPattern() != MsaaPatterns::Undefined );
 
-            if( mSampleDescription.pattern == MsaaPatterns::Standard )
+            if( mSampleDescription.getMsaaPattern() == MsaaPatterns::Standard )
             {
                 //As defined per D3D11_STANDARD_MULTISAMPLE_PATTERN docs.
-                switch( mSampleDescription.colorSamples )
+                switch( mSampleDescription.getColourSamples() )
                 {
                 case 2:
                     locations.push_back( Vector2( Real(  4.0 / 8.0 ), Real(  4.0 / 8.0 ) ) );
@@ -764,7 +766,7 @@ namespace Ogre
             else
             {
                 //Center
-                for( uint8 i=0; i<mSampleDescription.colorSamples; ++i )
+                for( uint8 i=0; i<mSampleDescription.getColourSamples(); ++i )
                     locations.push_back( Vector2( 0, 0 ) );
             }
         }

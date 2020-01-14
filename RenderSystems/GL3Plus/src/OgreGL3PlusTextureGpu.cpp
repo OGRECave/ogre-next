@@ -149,7 +149,7 @@ namespace Ogre
                 OCGE( glGenRenderbuffers( 1, &mMsaaFramebufferName ) );
                 OCGE( glBindRenderbuffer( GL_RENDERBUFFER, mMsaaFramebufferName ) );
                 OCGE( glRenderbufferStorageMultisample( GL_RENDERBUFFER,
-                                                        mSampleDescription.colorSamples, format,
+                                                        mSampleDescription.getColourSamples(), format,
                                                         GLsizei(mWidth), GLsizei(mHeight) ) );
                 OCGE( glBindRenderbuffer( GL_RENDERBUFFER, 0 ) );
 
@@ -182,14 +182,15 @@ namespace Ogre
 
                 if( mTextureType == TextureTypes::Type2D )
                 {
-                    glTexImage2DMultisample( mGlTextureTarget, mSampleDescription.colorSamples, format,
-                                             GLsizei(mWidth), GLsizei(mHeight), fixedsamplelocations );
+                    glTexImage2DMultisample( mGlTextureTarget, mSampleDescription.getColourSamples(),
+                                             format, GLsizei( mWidth ), GLsizei( mHeight ),
+                                             fixedsamplelocations );
                 }
                 else
                 {
-                    glTexImage3DMultisample( mGlTextureTarget, mSampleDescription.colorSamples, format,
-                                             GLsizei(mWidth), GLsizei(mHeight), GLsizei(mDepthOrSlices),
-                                             fixedsamplelocations );
+                    glTexImage3DMultisample( mGlTextureTarget, mSampleDescription.getColourSamples(),
+                                             format, GLsizei( mWidth ), GLsizei( mHeight ),
+                                             GLsizei( mDepthOrSlices ), fixedsamplelocations );
                 }
 
                 //Set debug name for RenderDoc and similar tools
@@ -710,17 +711,17 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void GL3PlusTextureGpu::getSubsampleLocations( vector<Vector2>::type locations )
     {
-        locations.reserve( mSampleDescription.colorSamples );
-        if( mSampleDescription.colorSamples <= 1u )
+        locations.reserve( mSampleDescription.getColourSamples() );
+        if( mSampleDescription.getColourSamples() <= 1u )
         {
             locations.push_back( Vector2( 0.0f, 0.0f ) );
         }
         else
         {
-            assert( mSampleDescription.pattern != MsaaPatterns::Undefined );
+            assert( mSampleDescription.getMsaaPattern() != MsaaPatterns::Undefined );
 
             float vals[2];
-            for( int i=0; i<mSampleDescription.colorSamples; ++i )
+            for( int i=0; i<mSampleDescription.getColourSamples(); ++i )
             {
                 glGetMultisamplefv( GL_SAMPLE_POSITION, i, vals );
                 locations.push_back( Vector2( vals[0], vals[1] ) * 2.0f - 1.0f );
@@ -776,9 +777,9 @@ namespace Ogre
             }
             else
             {
-                OCGE( glRenderbufferStorageMultisample( GL_RENDERBUFFER, 
-                                                        GLsizei(mSampleDescription.colorSamples),
-                                                        format, GLsizei(mWidth), GLsizei(mHeight) ) );
+                OCGE( glRenderbufferStorageMultisample(
+                    GL_RENDERBUFFER, GLsizei( mSampleDescription.getColourSamples() ), format,
+                    GLsizei( mWidth ), GLsizei( mHeight ) ) );
             }
 
             //Set debug name for RenderDoc and similar tools

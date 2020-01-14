@@ -276,8 +276,8 @@ namespace Ogre
         mTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
         mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8*)0 );
     }
-    //---------------------------------------------------------------------
-    void D3D11WindowSwapChainBased::setFsaa(const String& fsaa)
+    //--------------------------------------------------------------------------
+    void D3D11WindowSwapChainBased::setFsaa( const String &fsaa )
     {
         mFsaa = fsaa;
 
@@ -288,7 +288,9 @@ namespace Ogre
         if( mUseFlipMode )
         {
             // swapchain is not multisampled in flip sequential mode, so we reuse it
-            mSampleDescription = mRenderSystem->determineSampleDescription(mFsaa, _getRenderFormat());
+            mSampleDescription.parseString( fsaa );
+            mSampleDescription =
+                mRenderSystem->determineSampleDescription( mSampleDescription, _getRenderFormat() );
         }
         else
         {
