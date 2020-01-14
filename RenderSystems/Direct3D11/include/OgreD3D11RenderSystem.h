@@ -336,7 +336,7 @@ namespace Ogre
         void preExtraThreadsStarted();
         void postExtraThreadsStarted();
 
-        DXGI_SAMPLE_DESC getMsaaSampleDesc(uint msaa, const String& msaaHint, PixelFormatGpu format);
+        virtual SampleDescription determineSampleDescription(const String& fsaa, PixelFormatGpu format);
 
         /// @copydoc RenderSystem::getDisplayMonitorCount
         unsigned int getDisplayMonitorCount() const;

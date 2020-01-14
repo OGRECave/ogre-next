@@ -129,17 +129,17 @@ namespace Ogre
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "",
                      "D3D11TextureGpuWindow::getSubsampleLocations" );
 #if TODO_OGRE_2_2
-        locations.reserve( mMsaa );
-        if( mMsaa <= 1u )
+        locations.reserve( mSampleDescription.colorSamples );
+        if( mSampleDescription.colorSamples <= 1u )
         {
             locations.push_back( Vector2( 0.0f, 0.0f ) );
         }
         else
         {
-            assert( mMsaaPattern != MsaaPatterns::Undefined );
+            assert( mSampleDescription.pattern != MsaaPatterns::Undefined );
 
             float vals[2];
-            for( int i=0; i<mMsaa; ++i )
+            for( int i=0; i<mSampleDescription.colorSamples; ++i )
             {
                 glGetMultisamplefv( GL_SAMPLE_POSITION, i, vals );
                 locations.push_back( Vector2( vals[0], vals[1] ) * 2.0f - 1.0f );

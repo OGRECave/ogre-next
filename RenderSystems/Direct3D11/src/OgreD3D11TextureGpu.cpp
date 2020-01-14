@@ -132,10 +132,11 @@ namespace Ogre
             desc.Format = D3D11Mappings::getFamily( mPixelFormat );
         else
             desc.Format = D3D11Mappings::get( mPixelFormat );
-        if( mMsaa > 1u && hasMsaaExplicitResolves() )
+        if( isMultisample() && hasMsaaExplicitResolves() )
         {
-            desc.SampleDesc.Count   = mMsaa;
-            desc.SampleDesc.Quality = D3D11Mappings::get( mMsaaPattern );
+            desc.SampleDesc.Count   = mSampleDescription.colorSamples;
+            desc.SampleDesc.Quality = mSampleDescription.coverageSamples ?
+                mSampleDescription.coverageSamples : D3D11Mappings::get( mSampleDescription.pattern );
         }
         else
         {
@@ -193,11 +194,12 @@ namespace Ogre
                             "D3D11TextureGpu::create2DTexture" );
         }
 
-        if( mMsaa > 1u && !hasMsaaExplicitResolves() )
+        if( isMultisample() && !hasMsaaExplicitResolves() )
         {
             //We just created the resolve texture. Must create the actual MSAA surface now.
-            desc.SampleDesc.Count   = mMsaa;
-            desc.SampleDesc.Quality = D3D11Mappings::get( mMsaaPattern );
+            desc.SampleDesc.Count   = mSampleDescription.colorSamples;
+            desc.SampleDesc.Quality = mSampleDescription.coverageSamples ?
+                mSampleDescription.coverageSamples : D3D11Mappings::get( mSampleDescription.pattern );
 
             //Reset bind flags. We won't bind it as SRV, allows more aggressive
             //optimizations on AMD cards (DCC - Delta Color Compression since GCN 1.2)
@@ -451,14 +453,14 @@ namespace Ogre
 
         //Source has explicit resolves. If destination doesn't,
         //we must copy to its internal MSAA surface.
-        if( this->mMsaa > 1u && this->hasMsaaExplicitResolves() )
+        if( this->isMultisample() && this->hasMsaaExplicitResolves() )
         {
             if( !dstD3d->hasMsaaExplicitResolves() )
                 dstTextureName = dstD3d->mMsaaFramebufferName;
         }
         //Destination has explicit resolves. If source doesn't,
         //we must copy from its internal MSAA surface.
-        if( dstD3d->mMsaa > 1u && dstD3d->hasMsaaExplicitResolves() )
+        if( dstD3d->isMultisample() && dstD3d->hasMsaaExplicitResolves() )
         {
             if( !this->hasMsaaExplicitResolves() )
                 srcTextureName = this->mMsaaFramebufferName;
@@ -484,7 +486,7 @@ namespace Ogre
                                             srcTextureName, srcResourceIndex,
                                             d3dBoxPtr );
 
-            if( dstD3d->mMsaa > 1u && !dstD3d->hasMsaaExplicitResolves() )
+            if( dstD3d->isMultisample() && !dstD3d->hasMsaaExplicitResolves() )
             {
                 //Must keep the resolved texture up to date.
                 context->ResolveSubresource( dstD3d->mFinalTextureName,
@@ -554,7 +556,7 @@ namespace Ogre
 
             const TextureTypes::TextureTypes textureType = getInternalTextureType();
 
-            const bool isMsaaSrv = mMsaa > 1u && hasMsaaExplicitResolves();
+            const bool isMsaaSrv = isMultisample() && hasMsaaExplicitResolves();
             srvDesc.ViewDimension = D3D11Mappings::get( textureType, texSlot.cubemapsAs2DArrays,
                                                         isMsaaSrv );
 
@@ -701,19 +703,19 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpu::getSubsampleLocations( vector<Vector2>::type locations )
     {
-        locations.reserve( mMsaa );
-        if( mMsaa <= 1u )
+        locations.reserve( mSampleDescription.colorSamples );
+        if( mSampleDescription.colorSamples <= 1u )
         {
             locations.push_back( Vector2( 0.0f, 0.0f ) );
         }
         else
         {
-            assert( mMsaaPattern != MsaaPatterns::Undefined );
+            assert( mSampleDescription.pattern != MsaaPatterns::Undefined );
 
-            if( mMsaaPattern == MsaaPatterns::Standard )
+            if( mSampleDescription.pattern == MsaaPatterns::Standard )
             {
                 //As defined per D3D11_STANDARD_MULTISAMPLE_PATTERN docs.
-                switch( mMsaa )
+                switch( mSampleDescription.colorSamples )
                 {
                 case 2:
                     locations.push_back( Vector2( Real(  4.0 / 8.0 ), Real(  4.0 / 8.0 ) ) );
@@ -762,7 +764,7 @@ namespace Ogre
             else
             {
                 //Center
-                for( uint8 i=0; i<mMsaa; ++i )
+                for( uint8 i=0; i<mSampleDescription.colorSamples; ++i )
                     locations.push_back( Vector2( 0, 0 ) );
             }
         }

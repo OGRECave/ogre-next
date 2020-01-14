@@ -354,10 +354,11 @@ namespace Ogre
             tex->setNumMipmaps( PixelFormatGpuUtils::getMaxMipmapCount( width, height,
                                                                         tex->getDepth() ) );
         }
-        if( textureDef.msaa != 0 )
+        if( !textureDef.fsaa.empty() )
         {
-            tex->setMsaa( textureDef.msaa );
-            tex->setMsaaPattern( textureDef.msaaPattern );
+            RenderSystem* rs = tex->getTextureManager()->getRenderSystem();
+            SampleDescription desc = rs->determineSampleDescription( textureDef.fsaa, tex->getPixelFormat() );
+            tex->setSampleDescription( desc );
         }
         else
         {

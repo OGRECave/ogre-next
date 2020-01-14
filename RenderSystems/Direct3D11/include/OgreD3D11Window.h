@@ -48,11 +48,10 @@ namespace Ogre
         bool mHwGamma;
         bool mVisible;
 
-        /// Requested MSAA mode
-        uint mMsaa;
-        String mMsaaHint;
-        /// Effective MSAA mode, limited by hardware capabilities
-        DXGI_SAMPLE_DESC mMsaaDesc;
+        /// Requested FSAA mode
+        String mFsaa;
+        /// Effective FSAA mode, limited by hardware capabilities
+        SampleDescription mSampleDescription;
 
         // Window size depended resources - must be released
         // before swapchain resize and recreated later
@@ -122,8 +121,8 @@ namespace Ogre
         virtual void _initialize( TextureGpuManager *textureGpuManager );
         virtual void destroy();
 
-        /// @copydoc Window::setMsaa
-        virtual void setMsaa(uint msaa, const String& msaaHint);
+        /// @copydoc Window::setFsaa
+        virtual void setFsaa(const String& fsaa);
 
         virtual void swapBuffers(void);
     };

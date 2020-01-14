@@ -1189,7 +1189,7 @@ namespace Ogre
                 }
                 texDef->depthBufferFormat = PFG_D32_FLOAT;
                 texDef->preferDepthTexture = false;
-                texDef->msaa = 1u;
+                texDef->fsaa = "1";
 
                 RenderTargetViewDef *rtv = shadowNodeDef->addRenderTextureView( texName );
                 rtv->setForTextureDefinition( texName, texDef );
@@ -1217,7 +1217,7 @@ namespace Ogre
                     texDef->format = PFG_R16_UNORM;
                     texDef->depthBufferId = DepthBuffer::POOL_NO_DEPTH;
                     texDef->preferDepthTexture = false;
-                    texDef->msaa = 1u;
+                    texDef->fsaa = "1";
                     if( supportsCompute )
                         texDef->textureFlags |= TextureFlags::Uav;
                     else

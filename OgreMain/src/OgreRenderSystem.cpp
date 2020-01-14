@@ -625,6 +625,12 @@ namespace Ogre {
         mWBuffer = enabled;
     }
     //-----------------------------------------------------------------------
+    SampleDescription RenderSystem::determineSampleDescription(const String& fsaa, PixelFormatGpu format)
+    {
+        unsigned msaa = StringConverter::parseUnsignedInt(fsaa);
+        return SampleDescription(std::max(msaa, 1u));
+    }
+    //-----------------------------------------------------------------------
     void RenderSystem::shutdown(void)
     {
         // Remove occlusion queries

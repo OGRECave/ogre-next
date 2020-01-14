@@ -360,7 +360,7 @@ namespace Ogre
         optBackBufferCount.currentValue = "Auto";
 
 
-        optAA.name = "MSAA";
+        optAA.name = "FSAA";
         optAA.immutable = false;
         optAA.possibleValues.push_back( "None" );
         optAA.currentValue = "None";
@@ -627,7 +627,7 @@ namespace Ogre
     void D3D11RenderSystem::refreshFSAAOptions(void)
     {
 
-        ConfigOptionMap::iterator it = mOptions.find( "MSAA" );
+        ConfigOptionMap::iterator it = mOptions.find( "FSAA" );
         ConfigOption* optFSAA = &it->second;
         optFSAA->possibleValues.clear();
 
@@ -804,15 +804,9 @@ namespace Ogre
             if( opt == mOptions.end() )
                 OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR, "Can't find sRGB option!", "D3D11RenderSystem::initialise" );
             hwGamma = opt->second.currentValue == "Yes";
-            uint fsaa = 0;
-            String fsaaHint;
-            if( (opt = mOptions.find("MSAA")) != mOptions.end() )
-            {
-                StringVector values = StringUtil::split(opt->second.currentValue, " ", 1);
-                fsaa = StringConverter::parseUnsignedInt(values[0]);
-                if (values.size() > 1)
-                    fsaaHint = values[1];
-            }
+            String fsaa;
+            if( (opt = mOptions.find("FSAA")) != mOptions.end() )
+                fsaa = opt->second.currentValue;
 
             if( !videoMode )
             {
@@ -825,8 +819,7 @@ namespace Ogre
 
             NameValuePairList miscParams;
             miscParams["colourDepth"] = StringConverter::toString(videoMode ? videoMode->getColourDepth() : 32);
-            miscParams["MSAA"] = StringConverter::toString(fsaa);
-            miscParams["MSAAHint"] = fsaaHint;
+            miscParams["FSAA"] = fsaa;
             miscParams["useNVPerfHUD"] = StringConverter::toString(mUseNVPerfHUD);
             miscParams["gamma"] = StringConverter::toString(hwGamma);
             //miscParams["useFlipMode"] = StringConverter::toString(true);
@@ -3657,10 +3650,13 @@ namespace Ogre
         return mDevice.getErrorDescription(errorNumber);
     }
     //---------------------------------------------------------------------
-    DXGI_SAMPLE_DESC D3D11RenderSystem::getMsaaSampleDesc(uint msaa, const String& msaaHint, PixelFormatGpu format)
+    SampleDescription D3D11RenderSystem::determineSampleDescription(const String& fsaa, PixelFormatGpu format)
     {
+        SampleDescription res;
         DXGI_FORMAT dxgiFormat = D3D11Mappings::get(format);
-        bool qualityHint = msaa >= 8 && msaaHint.find("Quality") != String::npos;
+        unsigned samples = StringConverter::parseUnsignedInt(fsaa);
+        bool msaaOnly = fsaa.find("MSAA") != String::npos;
+        bool qualityHint = samples >= 8 && fsaa.find("Quality") != String::npos;
 
         // NVIDIA, AMD - prefer CSAA aka EQAA if available.
         // see http://developer.download.nvidia.com/assets/gamedev/docs/CSAA_Tutorial.pdf
@@ -3687,28 +3683,36 @@ namespace Ogre
                 { NULL },
         };
 
-        // Skip too HQ modes
-        DXGI_SAMPLE_DESC* mode = presets;
-        for(; mode->Count != 0; ++mode)
-        {
-            unsigned modeMsaa = std::max(mode->Count, mode->Quality);
-            bool modeQuality = mode->Count >= 8 && mode->Quality != 0;
-            bool tooHQ = (modeMsaa > msaa || (modeMsaa == msaa && modeQuality && !qualityHint));
-            if(!tooHQ)
-                break;
-        }
-
         // Use first supported mode
-        for(; mode->Count != 0; ++mode)
+        for(DXGI_SAMPLE_DESC* mode = presets; mode->Count != 0; ++mode)
         {
-            UINT outQuality;
-            HRESULT hr = mDevice->CheckMultisampleQualityLevels(dxgiFormat, mode->Count, &outQuality);
+            // Skip too HQ modes
+            unsigned modeSamples = std::max(mode->Count, mode->Quality);
+            bool modeQuality = mode->Count >= 8 && mode->Quality != 0;
+            bool tooHQ = (modeSamples > samples || (modeSamples == samples && modeQuality && !qualityHint));
+            if(tooHQ)
+                continue;
 
-            if(SUCCEEDED(hr) && outQuality > mode->Quality)
-                return *mode;
+            // Skip CSAA modes if specifically MSAA were requested, but not vice versa
+            if(msaaOnly && mode->Quality > 0)
+                continue;
+
+            // Skip unsupported modes
+            UINT numQualityLevels;
+            HRESULT hr = mDevice->CheckMultisampleQualityLevels(dxgiFormat, mode->Count, &numQualityLevels);
+            if(FAILED(hr) || mode->Quality >= numQualityLevels )
+                continue;
+
+            // All checks passed
+            res.colorSamples = mode->Count;
+            res.coverageSamples = mode->Quality;
+            res.pattern = mode->Quality != 0 ? MsaaPatterns::Undefined : // CSAA
+                fsaa.find("Standard") != String::npos ? MsaaPatterns::Standard :
+                fsaa.find("Center") != String::npos ? MsaaPatterns::CenterZero :
+                MsaaPatterns::Undefined;
+            break;
         }
 
-        DXGI_SAMPLE_DESC res = { 1, 0 };
         return res;
     }
     //---------------------------------------------------------------------

@@ -55,13 +55,8 @@ namespace Ogre
         mAlwaysWindowedMode( false ),
         mHwGamma( false ),
         mVisible( true ),
-        mMsaa( 0 ),
-        mMsaaHint(),
         mRenderSystem( renderSystem )
     {
-        mMsaaDesc.Count     = 1u;
-        mMsaaDesc.Quality   = 0;
-
         if( miscParams )
         {
             NameValuePairList::const_iterator opt;
@@ -69,14 +64,10 @@ namespace Ogre
             opt = miscParams->find("hidden");
             if( opt != miscParams->end() )
                 mHidden = StringConverter::parseBool(opt->second);
-            // MSAA
-            opt = miscParams->find("MSAA");
+            // FSAA
+            opt = miscParams->find("FSAA");
             if( opt != miscParams->end() )
-                mMsaa = StringConverter::parseUnsignedInt( opt->second);
-            // MSAA Quality
-            opt = miscParams->find("MSAAHint");
-            if (opt != miscParams->end())
-                mMsaaHint = opt->second;
+                mFsaa = StringConverter::parseUnsignedInt( opt->second);
             // sRGB?
             opt = miscParams->find("gamma");
             if( opt != miscParams->end() )
@@ -239,7 +230,7 @@ namespace Ogre
         //     Due to a bug in the Windows 10 validation layer prior to the Windows 10 Fall Creators
         //     Update (16299), a DirectX 11 Resolve with an sRGB format using new "flip - style"
         //     swapchain would fail. This has been fixed in the newer versions of Windows 10.
-        if( SUCCEEDED(hr) && mHwGamma && mMsaa > 1 && mUseFlipMode && !IsWindows10RS3OrGreater() )
+        if( SUCCEEDED(hr) && mHwGamma && isMultisample() && mUseFlipMode && !IsWindows10RS3OrGreater() )
         {
             D3D11_TEXTURE2D_DESC desc = { 0 };
             mpBackBuffer->GetDesc(&desc);
@@ -279,22 +270,16 @@ namespace Ogre
         D3D11TextureGpuWindow *texWindow = static_cast<D3D11TextureGpuWindow*>( mTexture );
         texWindow->_setBackbuffer( mpBackBufferInterim ? mpBackBufferInterim.Get() : mpBackBuffer.Get() );
 
-        mTexture->setMsaa( mMsaaDesc.Count );
-        mDepthBuffer->setMsaa( mMsaaDesc.Count );
-
-#if TODO_OGRE_2_2
-        mTexture->setMsaaPattern( );
-        mDepthBuffer->setMsaaPattern( );
-#endif
+        mTexture->setSampleDescription( mSampleDescription );
+        mDepthBuffer->setSampleDescription( mSampleDescription );
 
         mTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
         mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8*)0 );
     }
     //---------------------------------------------------------------------
-    void D3D11WindowSwapChainBased::setMsaa(uint msaa, const String& msaaHint)
+    void D3D11WindowSwapChainBased::setFsaa(const String& fsaa)
     {
-        mMsaa = msaa;
-        mMsaaHint = msaaHint;
+        mFsaa = fsaa;
 
         mRenderSystem->fireDeviceEvent( &mDevice,"WindowBeforeResize", this );
 
@@ -303,7 +288,7 @@ namespace Ogre
         if( mUseFlipMode )
         {
             // swapchain is not multisampled in flip sequential mode, so we reuse it
-            mMsaaDesc = mRenderSystem->getMsaaSampleDesc(mMsaa, mMsaaHint, _getRenderFormat());
+            mSampleDescription = mRenderSystem->determineSampleDescription(mFsaa, _getRenderFormat());
         }
         else
         {
@@ -365,7 +350,7 @@ namespace Ogre
 
         if( !mDevice.isNull() )
         {
-            // workaround needed only for mHwGamma && mMsaa > 1 && mUseFlipMode && !IsWindows10RS3OrGreater()
+            // workaround needed only for mHwGamma && isMultisample() && mUseFlipMode && !IsWindows10RS3OrGreater()
             if( mpBackBufferInterim && mpBackBuffer )
                 mDevice.GetImmediateContext()->CopyResource( mpBackBuffer.Get(), mpBackBufferInterim.Get() );
 

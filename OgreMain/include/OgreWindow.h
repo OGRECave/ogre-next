@@ -154,13 +154,12 @@ namespace Ogre
         uint32 getHeight(void) const;
         PixelFormatGpu getPixelFormat(void) const;
 
-        /** Set the level of multisample AA to be used if hardware support it.
+        /** Set the FSAA mode to be used if hardware support it.
             This option will be ignored if the hardware does not support it 
             or setting can not be changed on the fly on per-target level. 
-            @param msaa The number of samples
-            @param msaaHint Any hinting text (@see Root::createRenderWindow)
+            @param fsaa Requesed FSAA mode (@see Root::createRenderWindow)
         */
-        virtual void setMsaa(uint msaa, const String& msaaHint) {}
+        virtual void setFsaa(const String& fsaa) {}
         SampleDescription getSampleDescription(void) const;
         bool isMultisample(void) const;
 
