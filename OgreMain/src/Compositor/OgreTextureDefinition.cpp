@@ -356,7 +356,6 @@ namespace Ogre
         }
         if( !textureDef.fsaa.empty() )
         {
-            RenderSystem *rs = tex->getTextureManager()->getRenderSystem();
             SampleDescription requestedDesc;
             requestedDesc.parseString( textureDef.fsaa );
             tex->setSampleDescription( requestedDesc );
