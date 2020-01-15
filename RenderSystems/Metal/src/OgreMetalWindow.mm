@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "OgreMetalTextureGpuManager.h"
 #include "OgreMetalDevice.h"
 #include "OgrePixelFormatGpuUtils.h"
+#include "OgreRenderSystem.h"
 #include "OgreDepthBuffer.h"
 #include "OgreViewport.h"
 #include "OgreStringConverter.h"
@@ -43,7 +44,6 @@ namespace Ogre
         Window( title, width, height, fullscreenMode ),
         mClosed( false ),
         mHwGamma( true ),
-        mMsaa( 1u ),
         mMetalLayer( 0 ),
         mCurrentDrawable( 0 ),
         mDevice( ownerDevice )
@@ -95,14 +95,14 @@ namespace Ogre
             MetalTextureGpuWindow *texWindow = static_cast<MetalTextureGpuWindow*>( mTexture );
             texWindow->_setMsaaBackbuffer( 0 );
 
-            if( mMsaa > 1u )
+            if( isMultisample() )
             {
                 MTLTextureDescriptor* desc = [MTLTextureDescriptor
                                              texture2DDescriptorWithPixelFormat:
                                              MetalMappings::get( mTexture->getPixelFormat() )
                                              width: widthPx height: heightPx mipmapped: NO];
                 desc.textureType = MTLTextureType2DMultisample;
-                desc.sampleCount = mMsaa;
+                desc.sampleCount = mSampleDescription.getColourSamples();
                 desc.usage       = MTLTextureUsageRenderTarget;
                 desc.storageMode = MTLStorageModePrivate;
 
@@ -205,8 +205,6 @@ namespace Ogre
         destroy();
 
         mClosed = false;
-
-        mMsaa       = 1u;
         mHwGamma    = true;
 
         if( miscParams )
@@ -214,9 +212,9 @@ namespace Ogre
             NameValuePairList::const_iterator opt;
             NameValuePairList::const_iterator end = miscParams->end();
 
-            opt = miscParams->find("MSAA");
+            opt = miscParams->find("FSAA");
             if( opt != end )
-                mMsaa = std::max( 1u, StringConverter::parseUnsignedInt( opt->second ) );
+                mRequestedSampleDescription.parseString( opt->second );
 
             opt = miscParams->find("gamma");
             if( opt != end )
@@ -322,8 +320,10 @@ namespace Ogre
             mTexture->_setDepthBufferDefaults( DepthBuffer::POOL_NO_DEPTH, false, PFG_NULL );
         }
 
-        mTexture->setMsaa( mMsaa );
-        mDepthBuffer->setMsaa( mMsaa );
+        mSampleDescription = textureManager->getRenderSystem()->validateSampleDescription(
+            mRequestedSampleDescription, mTexture->getPixelFormat() );
+        mTexture->_setSampleDescription( mRequestedSampleDescription, mSampleDescription );
+        mDepthBuffer->_setSampleDescription( mRequestedSampleDescription, mSampleDescription );
 
         setResolutionFromView();
         mTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );

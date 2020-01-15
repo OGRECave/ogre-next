@@ -1392,7 +1392,7 @@ namespace Ogre
     void MetalRenderSystem::_hlmsPipelineStateObjectCreated( HlmsPso *newPso )
     {
         MTLRenderPipelineDescriptor *psd = [[MTLRenderPipelineDescriptor alloc] init];
-        [psd setSampleCount: newPso->pass.multisampleCount];
+        [psd setSampleCount: newPso->pass.sampleDescription.getColourSamples()]; // aka .rasterSampleCount
 
         MetalProgram *vertexShader = 0;
         MetalProgram *pixelShader = 0;

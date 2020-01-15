@@ -43,7 +43,6 @@ namespace Ogre
     {
         bool    mClosed;
         bool    mHwGamma;
-        uint8   mMsaa;
 
         CAMetalLayer        *mMetalLayer;
         id<CAMetalDrawable> mCurrentDrawable;
