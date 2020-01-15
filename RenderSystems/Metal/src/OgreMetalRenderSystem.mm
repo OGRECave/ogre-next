@@ -159,7 +159,7 @@ namespace Ogre
         optSRGB.name = "sRGB Gamma Conversion";
         optSRGB.possibleValues.push_back("Yes");
         optSRGB.possibleValues.push_back("No");
-        optSRGB.currentValue = "No";
+        optSRGB.currentValue = "Yes";
         optSRGB.immutable = false;
 
         mOptions[optSRGB.name] = optSRGB;

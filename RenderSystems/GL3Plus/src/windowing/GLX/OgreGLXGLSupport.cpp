@@ -243,7 +243,7 @@ namespace Ogre
         optSRGB.possibleValues.push_back("No");
         optSRGB.possibleValues.push_back("Yes");
 
-        optSRGB.currentValue = optSRGB.possibleValues[0];
+        optSRGB.currentValue = optSRGB.possibleValues[1];
 
 #if OGRE_NO_QUAD_BUFFER_STEREO == 0
 		optStereoMode.name = "Stereo Mode";
