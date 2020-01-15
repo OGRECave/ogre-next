@@ -124,14 +124,21 @@ namespace Ogre
 
         if( csaa )
         {
+            // "8x CSAA", "8xQ CSAA", "16x CSAA", "16xQ CSAA", also "8 [Quality]", "16 [Quality]"
             bool qualityHint = samples >= 8u && ( fsaaSetting.find( "Quality" ) != String::npos ||
                                                   fsaaSetting.find( "xQ CSAA" ) != String::npos );
             setCsaa( samples, qualityHint );
         }
         else if( eqaa )
-            setEqaa( samples, static_cast<uint8>( samples << 1u ) );
+        {
+            // "2f4x EQAA", "4f8x EQAA", "4f16x EQAA", "8f16x EQAA", but not Dx9 only "2f8x EQAA"
+            if( fsaaSetting.find("4f16x") != String::npos )
+                setEqaa( 4, 16 );
+            else
+                setEqaa( samples, static_cast<uint8>( samples << 1u ) );
+        }
         else
-            setMsaa( samples );
+            setMsaa( samples ); // "Nx MSAA", also "Nx", "N"
     }
     //-----------------------------------------------------------------------------------
     bool SampleDescription::isCsaa( void ) const
