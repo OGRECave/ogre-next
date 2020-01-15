@@ -654,12 +654,6 @@ namespace Ogre
                 {
                     optFSAA->possibleValues.push_back( "8x CSAA" );
                 }
-                if( n == 8 &&
-                    SUCCEEDED( device->CheckMultisampleQualityLevels( format, 8, &numLevels ) ) &&
-                    numLevels > 8 )  // 8xQ CSAA
-                {
-                    optFSAA->possibleValues.push_back( "8xQ CSAA" );
-                }
                 if( n == 16 &&
                     SUCCEEDED( device->CheckMultisampleQualityLevels( format, 4, &numLevels ) ) &&
                     numLevels > 16 )  // 16x CSAA
