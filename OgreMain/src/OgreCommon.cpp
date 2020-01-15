@@ -106,10 +106,7 @@ namespace Ogre
                          "SampleDescription::setCsaa" );
         }
 
-        if( bQuality )
-            mColourSamples = samples >> 1u;
-        else
-            mColourSamples = samples >> 2u;
+        mColourSamples = bQuality ? 8u : 4u;
         mCoverageSamples = samples;
     }
     //-----------------------------------------------------------------------------------
@@ -139,13 +136,16 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     bool SampleDescription::isCsaa( void ) const
     {
-        return mCoverageSamples >= 8 && ( mCoverageSamples == ( mColourSamples << 1u ) ||
-                                          mCoverageSamples == ( mColourSamples << 2u ) );
+        // {4,8} {8,8} {4,16} {8,16} 
+        return ( mCoverageSamples == 8u || mCoverageSamples == 16u )
+            && ( mColourSamples == 4u || mColourSamples == 8u );
     }
     //-----------------------------------------------------------------------------------
     bool SampleDescription::isCsaaQuality( void ) const
     {
-        return mCoverageSamples >= 8 && mCoverageSamples == ( mColourSamples << 1u );
+        // {8,8} {8,16}, but not the {4,8} {4,16} 
+        return ( mCoverageSamples == 8u || mCoverageSamples == 16u )
+            && mColourSamples == 8u;
     }
     //-----------------------------------------------------------------------------------
     void SampleDescription::getFsaaDesc( LwString &outFsaaSetting ) const
