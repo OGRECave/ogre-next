@@ -160,9 +160,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     HRESULT D3D11WindowHwnd::_createSwapChainImpl(void)
     {
-        mSampleDescription.parseString( mFsaa );
         mSampleDescription =
-            mRenderSystem->validateSampleDescription( mSampleDescription, _getRenderFormat() );
+            mRenderSystem->validateSampleDescription( mRequestedSampleDescription, _getRenderFormat() );
         HRESULT hr;
 
         // Create swap chain

@@ -154,7 +154,6 @@ namespace Ogre
         bool enableDoubleClick = false;
         int monitorIndex = -1;
         HMONITOR hMonitor = NULL;
-        mFsaa = "1";
 
         if( miscParams )
         {
@@ -182,7 +181,7 @@ namespace Ogre
                 mVSyncInterval = StringConverter::parseUnsignedInt(opt->second);
             opt = miscParams->find("FSAA");
             if( opt != end )
-                mFsaa = opt->second;
+                mRequestedSampleDescription.parseString(opt->second);
             opt = miscParams->find("gamma");
             if( opt != end )
                 mHwGamma = StringConverter::parseBool(opt->second);
@@ -516,7 +515,8 @@ namespace Ogre
 
         if( !mIsExternalGLControl )
         {
-            unsigned msaaCount = StringConverter::parseUnsignedInt( mFsaa );
+            // TODO: move into GL3PlusRenderSystem::validateSampleDescription
+            unsigned msaaCount = mRequestedSampleDescription.getColourSamples();
             int testFsaa = msaaCount > 1u ? msaaCount : 0;
             bool testHwGamma = mHwGamma;
             bool formatOk = mGLSupport.selectPixelFormat( mHDC, mColourDepth, testFsaa,

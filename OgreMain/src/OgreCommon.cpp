@@ -108,12 +108,14 @@ namespace Ogre
 
         mColourSamples = bQuality ? 8u : 4u;
         mCoverageSamples = samples;
+        mPattern = MsaaPatterns::Undefined;
     }
     //-----------------------------------------------------------------------------------
     void SampleDescription::setEqaa( uint8 colourSamples, uint8 coverageSamples )
     {
         mColourSamples = colourSamples;
         mCoverageSamples = coverageSamples;
+        mPattern = MsaaPatterns::Undefined;
     }
     //-----------------------------------------------------------------------------------
     void SampleDescription::parseString( const String &fsaaSetting )

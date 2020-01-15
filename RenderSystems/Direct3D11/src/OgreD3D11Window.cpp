@@ -67,7 +67,7 @@ namespace Ogre
             // FSAA
             opt = miscParams->find("FSAA");
             if( opt != miscParams->end() )
-                mFsaa = opt->second;
+                mRequestedSampleDescription.parseString(opt->second);
             // sRGB?
             opt = miscParams->find("gamma");
             if( opt != miscParams->end() )
@@ -270,10 +270,8 @@ namespace Ogre
         D3D11TextureGpuWindow *texWindow = static_cast<D3D11TextureGpuWindow*>( mTexture );
         texWindow->_setBackbuffer( mpBackBufferInterim ? mpBackBufferInterim.Get() : mpBackBuffer.Get() );
 
-        SampleDescription sampleDesc;
-        sampleDesc.parseString( mFsaa );
-        mTexture->_setSampleDescription( sampleDesc, mSampleDescription );
-        mDepthBuffer->_setSampleDescription( sampleDesc, mSampleDescription );
+        mTexture->_setSampleDescription( mRequestedSampleDescription, mSampleDescription );
+        mDepthBuffer->_setSampleDescription( mRequestedSampleDescription, mSampleDescription );
 
         mTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
         mDepthBuffer->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
@@ -281,7 +279,7 @@ namespace Ogre
     //--------------------------------------------------------------------------
     void D3D11WindowSwapChainBased::setFsaa( const String &fsaa )
     {
-        mFsaa = fsaa;
+        mRequestedSampleDescription.parseString( fsaa );
 
         mRenderSystem->fireDeviceEvent( &mDevice,"WindowBeforeResize", this );
 

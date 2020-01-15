@@ -62,6 +62,9 @@ namespace Ogre
         uint32  mRequestedWidth; // in view points
         uint32  mRequestedHeight; // in view points
 
+        SampleDescription mRequestedSampleDescription; // requested FSAA mode
+        SampleDescription mSampleDescription; // effective FSAA mode, limited by hardware capabilities
+
         bool    mFullscreenMode;
         bool    mRequestedFullscreenMode;
         bool    mBorderless;

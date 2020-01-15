@@ -48,11 +48,6 @@ namespace Ogre
         bool mHwGamma;
         bool mVisible;
 
-        /// Requested FSAA mode
-        String mFsaa;
-        /// Effective FSAA mode, limited by hardware capabilities
-        SampleDescription mSampleDescription;
-
         // Window size depended resources - must be released
         // before swapchain resize and recreated later
         ComPtr<ID3D11Texture2D> mpBackBuffer;

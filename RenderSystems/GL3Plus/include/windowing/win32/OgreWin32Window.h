@@ -50,8 +50,6 @@ namespace Ogre {
         bool    mHidden;
         bool    mVisible;
         bool    mHwGamma;
-        String  mFsaa;
-        SampleDescription mSampleDescription;
         Win32Context *mContext;
         DWORD   mWindowedWinStyle;      // Windowed mode window style flags.
         DWORD   mFullscreenWinStyle;    // Fullscreen mode window style flags.
