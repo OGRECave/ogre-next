@@ -951,7 +951,7 @@ namespace Ogre {
     /// Additionally, device lost events can cause FSAA settings to be degraded on the fly
     /// Listen for TextureGpuListener::FsaaSettingAlteredByApi events to be notified of
     /// this
-    struct SampleDescription
+    struct _OgreExport SampleDescription
     {
     protected:
         uint8 mColourSamples;
