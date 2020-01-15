@@ -263,17 +263,19 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void TextureGpu::setSampleDescription( SampleDescription desc )
     {
+        assert( mResidencyStatus == GpuResidency::OnStorage );
         OGRE_ASSERT_LOW( desc.getColourSamples() > 0u );
         mRequestedSampleDescription = desc;
-        mSampleDescription = desc;
+        mSampleDescription = desc; // would be validated on transition to Resident state
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::_setSampleDescription( SampleDescription desc,
-                                            SampleDescription reqeuestedSampleDesc )
+                                            SampleDescription requestedSampleDesc )
     {
+        assert( mResidencyStatus == GpuResidency::OnStorage );
         OGRE_ASSERT_LOW( desc.getColourSamples() > 0u );
-        mRequestedSampleDescription = reqeuestedSampleDesc;
-        mSampleDescription = desc;
+        mRequestedSampleDescription = requestedSampleDesc;
+        mSampleDescription = desc; // assumed to be validated by caller
     }
     //-----------------------------------------------------------------------------------
     SampleDescription TextureGpu::getSampleDescription(void) const
@@ -419,7 +421,7 @@ namespace Ogre
             // and just call the listeners
             if( !isRenderWindowSpecific() )
             {
-                mSampleDescription = mTextureManager->getRenderSystem()->determineSampleDescription(
+                mSampleDescription = mTextureManager->getRenderSystem()->validateSampleDescription(
                     mRequestedSampleDescription, mPixelFormat );
             }
             if( !( mSampleDescription == mRequestedSampleDescription ) )

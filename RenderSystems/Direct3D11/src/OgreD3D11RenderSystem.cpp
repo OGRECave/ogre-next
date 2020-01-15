@@ -3648,8 +3648,8 @@ namespace Ogre
         return mDevice.getErrorDescription(errorNumber);
     }
     //---------------------------------------------------------------------
-    SampleDescription D3D11RenderSystem::determineSampleDescription( const SampleDescription &sampleDesc,
-                                                                     PixelFormatGpu format )
+    SampleDescription D3D11RenderSystem::validateSampleDescription( const SampleDescription &sampleDesc,
+                                                                    PixelFormatGpu format )
     {
         SampleDescription res;
         DXGI_FORMAT dxgiFormat = D3D11Mappings::get( format );

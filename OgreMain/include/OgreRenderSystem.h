@@ -238,8 +238,8 @@ namespace Ogre
 
         /** Returns supported sample description for requested FSAA mode, with graceful downgrading.
         */
-        virtual SampleDescription determineSampleDescription( const SampleDescription &sampleDesc,
-                                                              PixelFormatGpu format );
+        virtual SampleDescription validateSampleDescription( const SampleDescription &sampleDesc,
+                                                             PixelFormatGpu format );
 
         /** Creates a new rendering window.
         @remarks

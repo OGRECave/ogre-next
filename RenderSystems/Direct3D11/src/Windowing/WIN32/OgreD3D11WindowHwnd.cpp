@@ -162,7 +162,7 @@ namespace Ogre
     {
         mSampleDescription.parseString( mFsaa );
         mSampleDescription =
-            mRenderSystem->determineSampleDescription( mSampleDescription, _getRenderFormat() );
+            mRenderSystem->validateSampleDescription( mSampleDescription, _getRenderFormat() );
         HRESULT hr;
 
         // Create swap chain

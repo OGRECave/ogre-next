@@ -523,7 +523,7 @@ namespace Ogre {
 
         retVal->setResolution( colourTexture->getWidth(), colourTexture->getHeight() );
         retVal->setPixelFormat( depthBufferFormat );
-        retVal->setSampleDescription( colourTexture->getSampleDescription() );
+        retVal->setSampleDescription( colourTexture->getRequestedSampleDescription() );
 
         retVal->_transitionTo( GpuResidency::Resident, (uint8*)0 );
 
@@ -625,8 +625,8 @@ namespace Ogre {
         mWBuffer = enabled;
     }
     //-----------------------------------------------------------------------
-    SampleDescription RenderSystem::determineSampleDescription( const SampleDescription &sampleDesc,
-                                                                PixelFormatGpu format )
+    SampleDescription RenderSystem::validateSampleDescription( const SampleDescription &sampleDesc,
+                                                               PixelFormatGpu format )
     {
         SampleDescription retVal( sampleDesc.getMaxSamples(), sampleDesc.getMsaaPattern() );
         return retVal;
