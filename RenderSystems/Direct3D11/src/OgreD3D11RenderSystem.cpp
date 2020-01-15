@@ -626,7 +626,6 @@ namespace Ogre
     //---------------------------------------------------------------------
     void D3D11RenderSystem::refreshFSAAOptions(void)
     {
-
         ConfigOptionMap::iterator it = mOptions.find( "FSAA" );
         ConfigOption* optFSAA = &it->second;
         optFSAA->possibleValues.clear();
@@ -648,6 +647,12 @@ namespace Ogre
             for( UINT n = 1; n <= D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT; n++ )
             {
                 // new style enumeration, with "8x CSAA", "8x MSAA" values
+                if( n == 2 &&
+                    SUCCEEDED( device->CheckMultisampleQualityLevels( format, 2, &numLevels ) ) &&
+                    numLevels > 4 )  // 2f4x EQAA
+                {
+                    optFSAA->possibleValues.push_back( "2f4x EQAA" );
+                }
                 if( n == 8 &&
                     SUCCEEDED( device->CheckMultisampleQualityLevels( format, 4, &numLevels ) ) &&
                     numLevels > 8 )  // 8x CSAA
@@ -688,7 +693,6 @@ namespace Ogre
         {
             optFSAA->currentValue = optFSAA->possibleValues[0];
         }
-
     }
     //---------------------------------------------------------------------
     String D3D11RenderSystem::validateConfigOptions()
@@ -3678,6 +3682,7 @@ namespace Ogre
             { 8, 0 },  // MSAA 8x
 
             { 6, 0 },  // MSAA 6x
+            { 2, 4 },  // EQAA 2f4x
             { 4, 0 },  // MSAA 4x
             { 2, 0 },  // MSAA 2x
             { 1, 0 },  // MSAA 1x
