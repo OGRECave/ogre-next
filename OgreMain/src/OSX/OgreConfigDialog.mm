@@ -76,19 +76,6 @@ namespace Ogre {
         {
             RenderSystem* rs = *pRend;
 
-            // Set defaults per RenderSystem
-			rs->setConfigOption("Video Mode", "800 x 600");
-			rs->setConfigOption("Colour Depth", "32");
-			rs->setConfigOption("FSAA", "0");
-			rs->setConfigOption("Full Screen", "No");
-			rs->setConfigOption("RTT Preferred Mode", "FBO");
-			rs->setConfigOption("sRGB Gamma Conversion", "No");
-			rs->setConfigOption("Content Scaling Factor", "1.0");
-            
-#if OGRE_NO_QUAD_BUFFER_STEREO == 0
-			rs->setConfigOption("Stereo Mode", "None");
-#endif
-
             // Add to the drop down
             NSString *renderSystemName = [[NSString alloc] initWithCString:rs->getName().c_str() encoding:NSASCIIStringEncoding];
             [[mWindowDelegate getRenderSystemsPopUp] addItemWithTitle:renderSystemName];

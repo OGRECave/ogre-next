@@ -147,8 +147,9 @@ namespace Ogre
 
         virtual const String& getName(void) const;
         virtual const String& getFriendlyName(void) const;
+        void initConfigOptions();
         virtual ConfigOptionMap& getConfigOptions(void) { return mOptions; }
-        virtual void setConfigOption(const String &name, const String &value) {}
+        virtual void setConfigOption(const String &name, const String &value);
 
         virtual HardwareOcclusionQuery* createHardwareOcclusionQuery(void);
 

@@ -188,7 +188,7 @@ namespace Ogre
 		
         void initRenderSystem();
 
-        virtual void initConfigOptions(void);
+        void initConfigOptions(void);
 
         // Overridden RenderSystem functions
         ConfigOptionMap& getConfigOptions(void);

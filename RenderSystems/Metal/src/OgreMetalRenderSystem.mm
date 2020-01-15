@@ -98,6 +98,9 @@ namespace Ogre
         memset( mHistoricalAutoParamsSize, 0, sizeof(mHistoricalAutoParamsSize) );
         for( size_t i=0; i<OGRE_MAX_MULTIPLE_RENDER_TARGETS; ++i )
             mCurrentColourRTs[i] = 0;
+        
+        // set config options defaults
+        initConfigOptions();
     }
     //-------------------------------------------------------------------------
     MetalRenderSystem::~MetalRenderSystem()
@@ -146,6 +149,36 @@ namespace Ogre
     {
         static String strName("Metal_RS");
         return strName;
+    }
+    //-------------------------------------------------------------------------
+    void MetalRenderSystem::initConfigOptions()
+    {
+        ConfigOption optSRGB;
+        
+        // SRGB on auto window
+        optSRGB.name = "sRGB Gamma Conversion";
+        optSRGB.possibleValues.push_back("Yes");
+        optSRGB.possibleValues.push_back("No");
+        optSRGB.currentValue = "No";
+        optSRGB.immutable = false;
+
+        mOptions[optSRGB.name] = optSRGB;
+    }
+    //-------------------------------------------------------------------------
+    void MetalRenderSystem::setConfigOption(const String &name, const String &value)
+    {
+        // Find option
+        ConfigOptionMap::iterator it = mOptions.find( name );
+
+        // Update
+        if( it != mOptions.end() )
+            it->second.currentValue = value;
+        else
+        {
+            StringStream str;
+            str << "Option named '" << name << "' does not exist.";
+            //OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, str.str(), "MetalRenderSystem::setConfigOption" );
+        }
     }
     //-------------------------------------------------------------------------
     HardwareOcclusionQuery* MetalRenderSystem::createHardwareOcclusionQuery(void)
