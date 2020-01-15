@@ -269,13 +269,14 @@ namespace Ogre
         mSampleDescription = desc; // would be validated on transition to Resident state
     }
     //-----------------------------------------------------------------------------------
-    void TextureGpu::_setSampleDescription( SampleDescription desc,
-                                            SampleDescription requestedSampleDesc )
+    void TextureGpu::_setSampleDescription( SampleDescription requestedSampleDesc,
+                                            SampleDescription validatedSampleDesc )
     {
         assert( mResidencyStatus == GpuResidency::OnStorage );
-        OGRE_ASSERT_LOW( desc.getColourSamples() > 0u );
+        OGRE_ASSERT_LOW( requestedSampleDesc.getColourSamples() > 0u );
+        OGRE_ASSERT_LOW( validatedSampleDesc.getColourSamples() > 0u );
         mRequestedSampleDescription = requestedSampleDesc;
-        mSampleDescription = desc; // assumed to be validated by caller
+        mSampleDescription = validatedSampleDesc; // should be validated by caller
     }
     //-----------------------------------------------------------------------------------
     SampleDescription TextureGpu::getSampleDescription(void) const

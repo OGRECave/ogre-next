@@ -313,7 +313,7 @@ namespace Ogre
 
         void setSampleDescription( SampleDescription desc );
         /// For internal use
-        void _setSampleDescription( SampleDescription desc, SampleDescription reqeuestedSampleDesc );
+        void _setSampleDescription( SampleDescription desc, SampleDescription validatedSampleDesc );
 
         /// Returns effective sample description supported by the API.
         /// Note it's only useful after having transitioned to resident.
