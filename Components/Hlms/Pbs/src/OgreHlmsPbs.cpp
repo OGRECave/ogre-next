@@ -1449,9 +1449,8 @@ namespace Ogre
         HlmsCache retVal = Hlms::preparePassHashBase( shadowNode, casterPass,
                                                       dualParaboloid, sceneManager );
 
-        if ( mUseLightBuffers ) {
-            setProperty(PbsProperty::useLightBuffers, 1);
-        }
+        if( mUseLightBuffers )
+            setProperty( PbsProperty::useLightBuffers, 1 );
 
         const RenderSystemCapabilities *capabilities = mRenderSystem->getCapabilities();
         setProperty( PbsProperty::HwGammaRead, capabilities->hasCapability( RSC_HW_GAMMA ) );
@@ -1673,7 +1672,8 @@ namespace Ogre
         assert( mapSizeLight2 <= maxBufferSizeLight2);
 
         size_t maxBufferSize = maxBufferSizeRaw;
-        if (!mUseLightBuffers) {
+        if( !mUseLightBuffers )
+        {
             mapSize += mapSizeLight0 + mapSizeLight1 + mapSizeLight2;
             maxBufferSize += maxBufferSizeLight0 + maxBufferSizeLight1 + maxBufferSizeLight2;
         }
@@ -1697,26 +1697,24 @@ namespace Ogre
         ConstBufferPacked *passBuffer = mPassBuffers[mCurrentPassBuffer++];
         float *passBufferPtr = reinterpret_cast<float*>( passBuffer->map( 0, mapSize ) );
 
-        ConstBufferPacked *light0Buffer = nullptr;
-        ConstBufferPacked *light1Buffer = nullptr;
-        ConstBufferPacked *light2Buffer = nullptr;
-        float *light0BufferPtr = nullptr;
-        float *light1BufferPtr = nullptr;
-        float *light2BufferPtr = nullptr;
-        if ( mUseLightBuffers ) {
-            light0Buffer = mLight0Buffers[mCurrentPassBuffer - 1];
-            light1Buffer = mLight1Buffers[mCurrentPassBuffer - 1];
-            light2Buffer = mLight2Buffers[mCurrentPassBuffer - 1];
+        ConstBufferPacked *light0Buffer = 0;
+        ConstBufferPacked *light1Buffer = 0;
+        ConstBufferPacked *light2Buffer = 0;
+        float *light0BufferPtr = 0;
+        float *light1BufferPtr = 0;
+        float *light2BufferPtr = 0;
+        if( mUseLightBuffers )
+        {
+            light0Buffer = mLight0Buffers[mCurrentPassBuffer - 1u];
+            light1Buffer = mLight1Buffers[mCurrentPassBuffer - 1u];
+            light2Buffer = mLight2Buffers[mCurrentPassBuffer - 1u];
 
-            if (mapSizeLight0 > 0) {
-                light0BufferPtr = reinterpret_cast<float*>(light0Buffer->map(0, mapSizeLight0));
-            }
-            if (mapSizeLight1 > 0) {
-                light1BufferPtr = reinterpret_cast<float*>(light1Buffer->map(0, mapSizeLight1));
-            }
-            if (mapSizeLight2 > 0) {
-                light2BufferPtr = reinterpret_cast<float*>(light2Buffer->map(0, mapSizeLight2));
-            }
+            if( mapSizeLight0 > 0 )
+                light0BufferPtr = reinterpret_cast<float *>( light0Buffer->map( 0, mapSizeLight0 ) );
+            if( mapSizeLight1 > 0 )
+                light1BufferPtr = reinterpret_cast<float *>( light1Buffer->map( 0, mapSizeLight1 ) );
+            if( mapSizeLight2 > 0 )
+                light2BufferPtr = reinterpret_cast<float *>( light2Buffer->map( 0, mapSizeLight2 ) );
         }
 
 #ifndef NDEBUG
@@ -2052,9 +2050,8 @@ namespace Ogre
             passBufferPtr += alignToNextMultiple( numPssmSplits + numPssmBlendsAndFade, 4 ) -
                              ( numPssmSplits + numPssmBlendsAndFade );
 
-            if (!mUseLightBuffers) {
+            if( !mUseLightBuffers )
                 light0BufferPtr = passBufferPtr;
-            }
 
             if( numShadowMapLights > 0 )
             {
@@ -2220,9 +2217,8 @@ namespace Ogre
                 light0BufferPtr += (numDirectionalLights - realNumDirectionalLights) * 4u * 3u;
             }
 
-            if (!mUseLightBuffers) {
+            if( !mUseLightBuffers )
                 passBufferPtr = light0BufferPtr;
-            }
 
             float areaLightNumMipmaps = 0.0f;
             float areaLightNumMipmapsSpecFactor = 0.0f;
@@ -2254,9 +2250,8 @@ namespace Ogre
 
             std::sort( mAreaLights.begin(), mAreaLights.end(), SortByTextureLightMaskIdx );
 
-            if (!mUseLightBuffers) {
+            if( !mUseLightBuffers )
                 light1BufferPtr = passBufferPtr;
-            }
 
             for( size_t i=0; i<realNumAreaApproxLights; ++i )
             {
@@ -2347,9 +2342,8 @@ namespace Ogre
             light1BufferPtr += (numAreaApproxLights - realNumAreaApproxLights) *
                              4u * numAreaApproxFloat4Vars;
 
-            if (!mUseLightBuffers) {
+            if( !mUseLightBuffers )
                 passBufferPtr = light1BufferPtr;
-            }
 
             mAreaLights.reserve( numAreaLtcLights );
             mAreaLights.clear();
@@ -2366,9 +2360,8 @@ namespace Ogre
 
             //std::sort( mAreaLights.begin(), mAreaLights.end(), SortByTextureLightMaskIdx );
 
-            if (!mUseLightBuffers) {
+            if( !mUseLightBuffers )
                 light2BufferPtr = passBufferPtr;
-            }
 
             for( size_t i=0; i<realNumAreaLtcLights; ++i )
             {
@@ -2452,9 +2445,8 @@ namespace Ogre
                     sizeof(float) * 4u * numAreaLtcFloat4Vars );
             light2BufferPtr += (numAreaLtcLights - realNumAreaLtcLights) * 4u * numAreaLtcFloat4Vars;
 
-            if (!mUseLightBuffers) {
+            if( !mUseLightBuffers )
                 passBufferPtr = light2BufferPtr;
-            }
 
             if( shadowNode )
             {
@@ -2528,19 +2520,17 @@ namespace Ogre
 
         assert( (size_t)(passBufferPtr - startupPtr) * 4u == mapSize );
 
-        if (mUseLightBuffers) {
-            assert((size_t)(light0BufferPtr - light0startupPtr) * 4u == mapSizeLight0);
-            assert((size_t)(light1BufferPtr - light1startupPtr) * 4u == mapSizeLight1);
-            assert((size_t)(light2BufferPtr - light2startupPtr) * 4u == mapSizeLight2);
-            if (mapSizeLight0 > 0) {
-                light0Buffer->unmap(UO_KEEP_PERSISTENT);
-            }
-            if (mapSizeLight1 > 0) {
-                light1Buffer->unmap(UO_KEEP_PERSISTENT);
-            }
-            if (mapSizeLight2 > 0) {
-                light2Buffer->unmap(UO_KEEP_PERSISTENT);
-            }
+        if( mUseLightBuffers )
+        {
+            assert( ( size_t )( light0BufferPtr - light0startupPtr ) * 4u == mapSizeLight0 );
+            assert( ( size_t )( light1BufferPtr - light1startupPtr ) * 4u == mapSizeLight1 );
+            assert( ( size_t )( light2BufferPtr - light2startupPtr ) * 4u == mapSizeLight2 );
+            if( mapSizeLight0 > 0 )
+                light0Buffer->unmap( UO_KEEP_PERSISTENT );
+            if( mapSizeLight1 > 0 )
+                light1Buffer->unmap( UO_KEEP_PERSISTENT );
+            if( mapSizeLight2 > 0 )
+                light2Buffer->unmap( UO_KEEP_PERSISTENT );
         }
 
         passBuffer->unmap( UO_KEEP_PERSISTENT );
@@ -2673,18 +2663,25 @@ namespace Ogre
                                                                            passBuffer->
                                                                            getTotalSizeBytes() );
 
-            if ( mUseLightBuffers ) {
+            if( mUseLightBuffers )
+            {
                 ConstBufferPacked *light0Buffer = mLight0Buffers[mCurrentPassBuffer - 1];
-                *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(VertexShader, 4, light0Buffer, 0, light0Buffer->getTotalSizeBytes());
-                *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(PixelShader, 4, light0Buffer, 0, light0Buffer->getTotalSizeBytes());
+                *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(
+                    VertexShader, 4, light0Buffer, 0, light0Buffer->getTotalSizeBytes() );
+                *commandBuffer->addCommand<CbShaderBuffer>() =
+                    CbShaderBuffer( PixelShader, 4, light0Buffer, 0, light0Buffer->getTotalSizeBytes() );
 
                 ConstBufferPacked *light1Buffer = mLight1Buffers[mCurrentPassBuffer - 1];
-                *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(VertexShader, 5, light1Buffer, 0, light1Buffer->getTotalSizeBytes());
-                *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(PixelShader, 5, light1Buffer, 0, light1Buffer->getTotalSizeBytes());
+                *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(
+                    VertexShader, 5, light1Buffer, 0, light1Buffer->getTotalSizeBytes() );
+                *commandBuffer->addCommand<CbShaderBuffer>() =
+                    CbShaderBuffer( PixelShader, 5, light1Buffer, 0, light1Buffer->getTotalSizeBytes() );
 
                 ConstBufferPacked *light2Buffer = mLight2Buffers[mCurrentPassBuffer - 1];
-                *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(VertexShader, 6, light2Buffer, 0, light2Buffer->getTotalSizeBytes());
-                *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(PixelShader, 6, light2Buffer, 0, light2Buffer->getTotalSizeBytes());
+                *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(
+                    VertexShader, 6, light2Buffer, 0, light2Buffer->getTotalSizeBytes() );
+                *commandBuffer->addCommand<CbShaderBuffer>() =
+                    CbShaderBuffer( PixelShader, 6, light2Buffer, 0, light2Buffer->getTotalSizeBytes() );
             }
 
             if( !casterPass )
