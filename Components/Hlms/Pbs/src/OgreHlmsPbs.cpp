@@ -80,6 +80,8 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    const IdString PbsProperty::useLightBuffers   = IdString("use_light_buffers");
+
     const IdString PbsProperty::HwGammaRead       = IdString( "hw_gamma_read" );
     const IdString PbsProperty::HwGammaWrite      = IdString( "hw_gamma_write" );
     const IdString PbsProperty::MaterialsPerBuffer= IdString( "materials_per_buffer" );
@@ -299,6 +301,7 @@ namespace Ogre
         mUseObbRestraintAreaApprox( false ),
         mUseObbRestraintAreaLtc( false ),
 #endif
+        mUseLightBuffers( false ),
         mShadowFilter( PCF_3x3 ),
         mEsmK( 600u ),
         mAmbientLightMode( AmbientAuto )
@@ -1446,6 +1449,10 @@ namespace Ogre
         HlmsCache retVal = Hlms::preparePassHashBase( shadowNode, casterPass,
                                                       dualParaboloid, sceneManager );
 
+        if ( mUseLightBuffers ) {
+            setProperty(PbsProperty::useLightBuffers, 1);
+        }
+
         const RenderSystemCapabilities *capabilities = mRenderSystem->getCapabilities();
         setProperty( PbsProperty::HwGammaRead, capabilities->hasCapability( RSC_HW_GAMMA ) );
 //        setProperty( PbsProperty::HwGammaWrite, capabilities->hasCapability( RSC_HW_GAMMA ) &&
@@ -1492,6 +1499,9 @@ namespace Ogre
 
         //mat4 viewProj;
         size_t mapSize = 16 * 4;
+        size_t mapSizeLight0 = 0;
+        size_t mapSizeLight1 = 0;
+        size_t mapSizeLight2 = 0;
 
         mGridBuffer             = 0;
         mGlobalLightListBuffer  = 0;
@@ -1609,16 +1619,16 @@ namespace Ogre
             if( numShadowMapLights > 0 )
             {
                 //Six variables * 4 (padded vec3) * 4 (bytes) * numLights
-                mapSize += ( 6 * 4 * 4 ) * numLights;
+                mapSizeLight0 += ( 6 * 4 * 4 ) * numLights;
             }
             else
             {
                 //Three variables * 4 (padded vec3) * 4 (bytes) * numDirectionalLights
-                mapSize += ( 3 * 4 * 4 ) * numDirectionalLights;
+                mapSizeLight0 += ( 3 * 4 * 4 ) * numDirectionalLights;
             }
 
-            mapSize += ( numAreaApproxFloat4Vars * 4 * 4 ) * numAreaApproxLights;
-            mapSize += ( numAreaLtcFloat4Vars * 4 * 4 ) * numAreaLtcLights;
+            mapSizeLight1 += ( numAreaApproxFloat4Vars * 4 * 4 ) * numAreaApproxLights;
+            mapSizeLight2 += ( numAreaLtcFloat4Vars * 4 * 4 ) * numAreaLtcLights;
         }
         else
         {
@@ -1652,9 +1662,21 @@ namespace Ogre
                                                  sceneManager );
 
         //Arbitrary 16kb (minimum supported by GL), should be enough.
-        const size_t maxBufferSize = 16 * 1024;
+        const size_t maxBufferSizeRaw = 16 * 1024;
+        const size_t maxBufferSizeLight0 = (6 * 4 * 4) * 32; // 32 forward lights should be enough
+        const size_t maxBufferSizeLight1 = (numAreaApproxFloat4Vars * 4 * 4) * 8; // 8 area lights
+        const size_t maxBufferSizeLight2 = (numAreaLtcFloat4Vars * 4 * 4) * 8; // 8 Ltc area lights
 
-        assert( mapSize <= maxBufferSize );
+        assert( mapSize <= maxBufferSizeRaw );
+        assert( mapSizeLight0 <= maxBufferSizeLight0);
+        assert( mapSizeLight1 <= maxBufferSizeLight1);
+        assert( mapSizeLight2 <= maxBufferSizeLight2);
+
+        size_t maxBufferSize = maxBufferSizeRaw;
+        if (!mUseLightBuffers) {
+            mapSize += mapSizeLight0 + mapSizeLight1 + mapSizeLight2;
+            maxBufferSize += maxBufferSizeLight0 + maxBufferSizeLight1 + maxBufferSizeLight2;
+        }
 
         if( mCurrentPassBuffer >= mPassBuffers.size() )
         {
@@ -1662,11 +1684,46 @@ namespace Ogre
                                                                     0, false ) );
         }
 
+        if (mUseLightBuffers)
+        {
+            while (mCurrentPassBuffer >= mLight0Buffers.size() )
+            {
+                mLight0Buffers.push_back(mVaoManager->createConstBuffer(maxBufferSizeLight0, BT_DYNAMIC_PERSISTENT, 0, false));
+                mLight1Buffers.push_back(mVaoManager->createConstBuffer(maxBufferSizeLight1, BT_DYNAMIC_PERSISTENT, 0, false));
+                mLight2Buffers.push_back(mVaoManager->createConstBuffer(maxBufferSizeLight2, BT_DYNAMIC_PERSISTENT, 0, false));
+            }
+        }
+
         ConstBufferPacked *passBuffer = mPassBuffers[mCurrentPassBuffer++];
         float *passBufferPtr = reinterpret_cast<float*>( passBuffer->map( 0, mapSize ) );
 
+        ConstBufferPacked *light0Buffer = nullptr;
+        ConstBufferPacked *light1Buffer = nullptr;
+        ConstBufferPacked *light2Buffer = nullptr;
+        float *light0BufferPtr = nullptr;
+        float *light1BufferPtr = nullptr;
+        float *light2BufferPtr = nullptr;
+        if ( mUseLightBuffers ) {
+            light0Buffer = mLight0Buffers[mCurrentPassBuffer - 1];
+            light1Buffer = mLight1Buffers[mCurrentPassBuffer - 1];
+            light2Buffer = mLight2Buffers[mCurrentPassBuffer - 1];
+
+            if (mapSizeLight0 > 0) {
+                light0BufferPtr = reinterpret_cast<float*>(light0Buffer->map(0, mapSizeLight0));
+            }
+            if (mapSizeLight1 > 0) {
+                light1BufferPtr = reinterpret_cast<float*>(light1Buffer->map(0, mapSizeLight1));
+            }
+            if (mapSizeLight2 > 0) {
+                light2BufferPtr = reinterpret_cast<float*>(light2Buffer->map(0, mapSizeLight2));
+            }
+        }
+
 #ifndef NDEBUG
         const float *startupPtr = passBufferPtr;
+        const float *light0startupPtr = light0BufferPtr;
+        const float *light1startupPtr = light1BufferPtr;
+        const float *light2startupPtr = light2BufferPtr;
 #endif
 
         //---------------------------------------------------------------------------
@@ -1995,6 +2052,10 @@ namespace Ogre
             passBufferPtr += alignToNextMultiple( numPssmSplits + numPssmBlendsAndFade, 4 ) -
                              ( numPssmSplits + numPssmBlendsAndFade );
 
+            if (!mUseLightBuffers) {
+                light0BufferPtr = passBufferPtr;
+            }
+
             if( numShadowMapLights > 0 )
             {
                 //All directional lights (caster and non-caster) are sent.
@@ -2049,68 +2110,68 @@ namespace Ogre
                         lightPos = viewMatrix * Vector3( lightPos4.x, lightPos4.y, lightPos4.z );
 
                     //vec3 lights[numLights].position
-                    *passBufferPtr++ = lightPos.x;
-                    *passBufferPtr++ = lightPos.y;
-                    *passBufferPtr++ = lightPos.z;
+                    *light0BufferPtr++ = lightPos.x;
+                    *light0BufferPtr++ = lightPos.y;
+                    *light0BufferPtr++ = lightPos.z;
 #if !OGRE_NO_FINE_LIGHT_MASK_GRANULARITY
-                    *reinterpret_cast<uint32 * RESTRICT_ALIAS>( passBufferPtr ) = light->getLightMask();
+                    *reinterpret_cast<uint32 * RESTRICT_ALIAS>(light0BufferPtr) = light->getLightMask();
 #endif
-                    ++passBufferPtr;
+                    ++light0BufferPtr;
 
                     //vec3 lights[numLights].diffuse
                     ColourValue colour = light->getDiffuseColour() *
                                          light->getPowerScale();
-                    *passBufferPtr++ = colour.r;
-                    *passBufferPtr++ = colour.g;
-                    *passBufferPtr++ = colour.b;
-                    *reinterpret_cast<uint32 * RESTRICT_ALIAS>( passBufferPtr ) =
+                    *light0BufferPtr++ = colour.r;
+                    *light0BufferPtr++ = colour.g;
+                    *light0BufferPtr++ = colour.b;
+                    *reinterpret_cast<uint32 * RESTRICT_ALIAS>(light0BufferPtr) =
                             realNumDirectionalLights - shadowCastingDirLights;
-                    ++passBufferPtr;
+                    ++light0BufferPtr;
 
                     //vec3 lights[numLights].specular
                     colour = light->getSpecularColour() * light->getPowerScale();
-                    *passBufferPtr++ = colour.r;
-                    *passBufferPtr++ = colour.g;
-                    *passBufferPtr++ = colour.b;
-                    ++passBufferPtr;
+                    *light0BufferPtr++ = colour.r;
+                    *light0BufferPtr++ = colour.g;
+                    *light0BufferPtr++ = colour.b;
+                    ++light0BufferPtr;
 
                     //vec3 lights[numLights].attenuation;
                     Real attenRange     = light->getAttenuationRange();
                     Real attenLinear    = light->getAttenuationLinear();
                     Real attenQuadratic = light->getAttenuationQuadric();
-                    *passBufferPtr++ = attenRange;
-                    *passBufferPtr++ = attenLinear;
-                    *passBufferPtr++ = attenQuadratic;
-                    ++passBufferPtr;
+                    *light0BufferPtr++ = attenRange;
+                    *light0BufferPtr++ = attenLinear;
+                    *light0BufferPtr++ = attenQuadratic;
+                    ++light0BufferPtr;
 
                     const Vector2 rectSize = light->getDerivedRectSize();
 
                     //vec4 lights[numLights].spotDirection;
                     Vector3 spotDir = viewMatrix3 * light->getDerivedDirection();
-                    *passBufferPtr++ = spotDir.x;
-                    *passBufferPtr++ = spotDir.y;
-                    *passBufferPtr++ = spotDir.z;
-                    *passBufferPtr++ = 1.0f / rectSize.x;
+                    *light0BufferPtr++ = spotDir.x;
+                    *light0BufferPtr++ = spotDir.y;
+                    *light0BufferPtr++ = spotDir.z;
+                    *light0BufferPtr++ = 1.0f / rectSize.x;
 
                     //vec4 lights[numLights].spotParams;
                     if( light->getType() != Light::LT_AREA_APPROX )
                     {
                         Radian innerAngle = light->getSpotlightInnerAngle();
                         Radian outerAngle = light->getSpotlightOuterAngle();
-                        *passBufferPtr++ = 1.0f / ( cosf( innerAngle.valueRadians() * 0.5f ) -
+                        *light0BufferPtr++ = 1.0f / ( cosf( innerAngle.valueRadians() * 0.5f ) -
                                                     cosf( outerAngle.valueRadians() * 0.5f ) );
-                        *passBufferPtr++ = cosf( outerAngle.valueRadians() * 0.5f );
-                        *passBufferPtr++ = light->getSpotlightFalloff();
+                        *light0BufferPtr++ = cosf( outerAngle.valueRadians() * 0.5f );
+                        *light0BufferPtr++ = light->getSpotlightFalloff();
                     }
                     else
                     {
                         Quaternion qRot = light->getParentNode()->_getDerivedOrientation();
                         Vector3 xAxis = viewMatrix3 * qRot.xAxis();
-                        *passBufferPtr++ = xAxis.x;
-                        *passBufferPtr++ = xAxis.y;
-                        *passBufferPtr++ = xAxis.z;
+                        *light0BufferPtr++ = xAxis.x;
+                        *light0BufferPtr++ = xAxis.y;
+                        *light0BufferPtr++ = xAxis.z;
                     }
-                    *passBufferPtr++ = 1.0f / rectSize.y;
+                    *light0BufferPtr++ = 1.0f / rectSize.y;
 
                 }
             }
@@ -2127,36 +2188,40 @@ namespace Ogre
                     Vector3 lightPos = viewMatrix3 * Vector3( lightPos4.x, lightPos4.y, lightPos4.z );
 
                     //vec3 lights[numLights].position
-                    *passBufferPtr++ = lightPos.x;
-                    *passBufferPtr++ = lightPos.y;
-                    *passBufferPtr++ = lightPos.z;
+                    *light0BufferPtr++ = lightPos.x;
+                    *light0BufferPtr++ = lightPos.y;
+                    *light0BufferPtr++ = lightPos.z;
 #if !OGRE_NO_FINE_LIGHT_MASK_GRANULARITY
-                    *reinterpret_cast<uint32 * RESTRICT_ALIAS>( passBufferPtr ) =
+                    *reinterpret_cast<uint32 * RESTRICT_ALIAS>(light0BufferPtr) =
                             globalLightList.lights[i]->getLightMask();
 #endif
-                    ++passBufferPtr;
+                    ++light0BufferPtr;
 
                     //vec3 lights[numLights].diffuse
                     ColourValue colour = globalLightList.lights[i]->getDiffuseColour() *
                                          globalLightList.lights[i]->getPowerScale();
-                    *passBufferPtr++ = colour.r;
-                    *passBufferPtr++ = colour.g;
-                    *passBufferPtr++ = colour.b;
-                    *reinterpret_cast<uint32 * RESTRICT_ALIAS>( passBufferPtr ) =
+                    *light0BufferPtr++ = colour.r;
+                    *light0BufferPtr++ = colour.g;
+                    *light0BufferPtr++ = colour.b;
+                    *reinterpret_cast<uint32 * RESTRICT_ALIAS>(light0BufferPtr) =
                             realNumDirectionalLights;
-                    ++passBufferPtr;
+                    ++light0BufferPtr;
 
                     //vec3 lights[numLights].specular
                     colour = globalLightList.lights[i]->getSpecularColour() * globalLightList.lights[i]->getPowerScale();
-                    *passBufferPtr++ = colour.r;
-                    *passBufferPtr++ = colour.g;
-                    *passBufferPtr++ = colour.b;
-                    ++passBufferPtr;
+                    *light0BufferPtr++ = colour.r;
+                    *light0BufferPtr++ = colour.g;
+                    *light0BufferPtr++ = colour.b;
+                    ++light0BufferPtr;
                 }
 
-                memset( passBufferPtr, 0,
+                memset(light0BufferPtr, 0,
                         (numDirectionalLights - realNumDirectionalLights) * sizeof(float) * 4u * 3u );
-                passBufferPtr += (numDirectionalLights - realNumDirectionalLights) * 4u * 3u;
+                light0BufferPtr += (numDirectionalLights - realNumDirectionalLights) * 4u * 3u;
+            }
+
+            if (!mUseLightBuffers) {
+                passBufferPtr = light0BufferPtr;
             }
 
             float areaLightNumMipmaps = 0.0f;
@@ -2189,6 +2254,10 @@ namespace Ogre
 
             std::sort( mAreaLights.begin(), mAreaLights.end(), SortByTextureLightMaskIdx );
 
+            if (!mUseLightBuffers) {
+                light1BufferPtr = passBufferPtr;
+            }
+
             for( size_t i=0; i<realNumAreaApproxLights; ++i )
             {
                 Light const *light = mAreaLights[i];
@@ -2197,86 +2266,90 @@ namespace Ogre
                 Vector3 lightPos = viewMatrix * Vector3( lightPos4.x, lightPos4.y, lightPos4.z );
 
                 //vec3 areaApproxLights[numLights].position
-                *passBufferPtr++ = lightPos.x;
-                *passBufferPtr++ = lightPos.y;
-                *passBufferPtr++ = lightPos.z;
+                *light1BufferPtr++ = lightPos.x;
+                *light1BufferPtr++ = lightPos.y;
+                *light1BufferPtr++ = lightPos.z;
 #if !OGRE_NO_FINE_LIGHT_MASK_GRANULARITY
-                *reinterpret_cast<uint32 * RESTRICT_ALIAS>( passBufferPtr ) = light->getLightMask();
+                *reinterpret_cast<uint32 * RESTRICT_ALIAS>(light1BufferPtr) = light->getLightMask();
 #endif
-                ++passBufferPtr;
+                ++light1BufferPtr;
 
                 //vec3 areaApproxLights[numLights].diffuse
                 ColourValue colour = light->getDiffuseColour() *
                                      light->getPowerScale();
-                *passBufferPtr++ = colour.r;
-                *passBufferPtr++ = colour.g;
-                *passBufferPtr++ = colour.b;
-                *passBufferPtr++ = areaLightNumMipmaps *
+                *light1BufferPtr++ = colour.r;
+                *light1BufferPtr++ = colour.g;
+                *light1BufferPtr++ = colour.b;
+                *light1BufferPtr++ = areaLightNumMipmaps *
                                    (light->mTexLightMaskDiffuseMipStart / 65535.0f);
 
                 //vec3 areaApproxLights[numLights].specular
                 colour = light->getSpecularColour() * light->getPowerScale();
-                *passBufferPtr++ = colour.r;
-                *passBufferPtr++ = colour.g;
-                *passBufferPtr++ = colour.b;
-                *passBufferPtr++ = areaLightNumMipmapsSpecFactor;
+                *light1BufferPtr++ = colour.r;
+                *light1BufferPtr++ = colour.g;
+                *light1BufferPtr++ = colour.b;
+                *light1BufferPtr++ = areaLightNumMipmapsSpecFactor;
 
                 //vec4 areaApproxLights[numLights].attenuation;
                 Real attenRange     = light->getAttenuationRange();
                 Real attenLinear    = light->getAttenuationLinear();
                 Real attenQuadratic = light->getAttenuationQuadric();
-                *passBufferPtr++ = attenRange;
-                *passBufferPtr++ = attenLinear;
-                *passBufferPtr++ = attenQuadratic;
-                *passBufferPtr++ = static_cast<float>( light->mTextureLightMaskIdx );
+                *light1BufferPtr++ = attenRange;
+                *light1BufferPtr++ = attenLinear;
+                *light1BufferPtr++ = attenQuadratic;
+                *light1BufferPtr++ = static_cast<float>( light->mTextureLightMaskIdx );
 
                 const Vector2 rectSize = light->getDerivedRectSize();
 
                 //vec4 areaApproxLights[numLights].direction;
                 Vector3 areaDir = viewMatrix3 * light->getDerivedDirection();
-                *passBufferPtr++ = areaDir.x;
-                *passBufferPtr++ = areaDir.y;
-                *passBufferPtr++ = areaDir.z;
-                *passBufferPtr++ = 1.0f / rectSize.x;
+                *light1BufferPtr++ = areaDir.x;
+                *light1BufferPtr++ = areaDir.y;
+                *light1BufferPtr++ = areaDir.z;
+                *light1BufferPtr++ = 1.0f / rectSize.x;
 
                 //vec4 areaApproxLights[numLights].tangent;
                 Quaternion qRot = light->getParentNode()->_getDerivedOrientation();
                 Vector3 xAxis = viewMatrix3 * qRot.xAxis();
-                *passBufferPtr++ = xAxis.x;
-                *passBufferPtr++ = xAxis.y;
-                *passBufferPtr++ = xAxis.z;
-                *passBufferPtr++ = 1.0f / rectSize.y;
+                *light1BufferPtr++ = xAxis.x;
+                *light1BufferPtr++ = xAxis.y;
+                *light1BufferPtr++ = xAxis.z;
+                *light1BufferPtr++ = 1.0f / rectSize.y;
 
                 //vec4 doubleSided;
-                *passBufferPtr++ = light->getDoubleSided() ? 1.0f : 0.0f;
-                *reinterpret_cast<uint32 * RESTRICT_ALIAS>( passBufferPtr ) =
+                *light1BufferPtr++ = light->getDoubleSided() ? 1.0f : 0.0f;
+                *reinterpret_cast<uint32 * RESTRICT_ALIAS>(light1BufferPtr) =
                         realNumAreaApproxLights;
-                ++passBufferPtr;
-                *reinterpret_cast<uint32 * RESTRICT_ALIAS>( passBufferPtr ) =
+                ++light1BufferPtr;
+                *reinterpret_cast<uint32 * RESTRICT_ALIAS>(light1BufferPtr) =
                         realNumAreaApproxLightsWithMask;
-                ++passBufferPtr;
-                *passBufferPtr++ = 0.0f;
+                ++light1BufferPtr;
+                *light1BufferPtr++ = 0.0f;
 
 #if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
                 if( mUseObbRestraintAreaApprox )
                 {
                     //float4 obbFadeFactorApprox
                     const Vector3 obbRestraintFadeFactor = light->_getObbRestraintFadeFactor();
-                    *passBufferPtr++ = obbRestraintFadeFactor.x;
-                    *passBufferPtr++ = obbRestraintFadeFactor.y;
-                    *passBufferPtr++ = obbRestraintFadeFactor.z;
-                    *passBufferPtr++ = 0.0f;
+                    *light1BufferPtr++ = obbRestraintFadeFactor.x;
+                    *light1BufferPtr++ = obbRestraintFadeFactor.y;
+                    *light1BufferPtr++ = obbRestraintFadeFactor.z;
+                    *light1BufferPtr++ = 0.0f;
 
                     //float4x3 obbRestraint;
-                    passBufferPtr = fillObbRestraint( light, viewMatrix, passBufferPtr );
+                    light1BufferPtr = fillObbRestraint( light, viewMatrix, light1BufferPtr);
                 }
 #endif
             }
 
-            memset( passBufferPtr, 0, (numAreaApproxLights - realNumAreaApproxLights) *
+            memset(light1BufferPtr, 0, (numAreaApproxLights - realNumAreaApproxLights) *
                     sizeof(float) * 4u * numAreaApproxFloat4Vars );
-            passBufferPtr += (numAreaApproxLights - realNumAreaApproxLights) *
+            light1BufferPtr += (numAreaApproxLights - realNumAreaApproxLights) *
                              4u * numAreaApproxFloat4Vars;
+
+            if (!mUseLightBuffers) {
+                passBufferPtr = light1BufferPtr;
+            }
 
             mAreaLights.reserve( numAreaLtcLights );
             mAreaLights.clear();
@@ -2293,6 +2366,10 @@ namespace Ogre
 
             //std::sort( mAreaLights.begin(), mAreaLights.end(), SortByTextureLightMaskIdx );
 
+            if (!mUseLightBuffers) {
+                light2BufferPtr = passBufferPtr;
+            }
+
             for( size_t i=0; i<realNumAreaLtcLights; ++i )
             {
                 Light const *light = mAreaLights[i];
@@ -2301,30 +2378,30 @@ namespace Ogre
                 Vector3 lightPos = viewMatrix * Vector3( lightPos4.x, lightPos4.y, lightPos4.z );
 
                 //vec3 areaLtcLights[numLights].position
-                *passBufferPtr++ = lightPos.x;
-                *passBufferPtr++ = lightPos.y;
-                *passBufferPtr++ = lightPos.z;
+                *light2BufferPtr++ = lightPos.x;
+                *light2BufferPtr++ = lightPos.y;
+                *light2BufferPtr++ = lightPos.z;
 #if !OGRE_NO_FINE_LIGHT_MASK_GRANULARITY
-                *reinterpret_cast<uint32 * RESTRICT_ALIAS>( passBufferPtr ) = light->getLightMask();
+                *reinterpret_cast<uint32 * RESTRICT_ALIAS>(light2BufferPtr) = light->getLightMask();
 #endif
-                ++passBufferPtr;
+                ++light2BufferPtr;
 
                 const Real attenRange   = light->getAttenuationRange();
 
                 //vec3 areaLtcLights[numLights].diffuse
                 ColourValue colour = light->getDiffuseColour() *
                                      light->getPowerScale();
-                *passBufferPtr++ = colour.r;
-                *passBufferPtr++ = colour.g;
-                *passBufferPtr++ = colour.b;
-                *passBufferPtr++ = attenRange;
+                *light2BufferPtr++ = colour.r;
+                *light2BufferPtr++ = colour.g;
+                *light2BufferPtr++ = colour.b;
+                *light2BufferPtr++ = attenRange;
 
                 //vec3 areaLtcLights[numLights].specular
                 colour = light->getSpecularColour() * light->getPowerScale();
-                *passBufferPtr++ = colour.r;
-                *passBufferPtr++ = colour.g;
-                *passBufferPtr++ = colour.b;
-                *passBufferPtr++ = light->getDoubleSided() ? 1.0f : 0.0f;
+                *light2BufferPtr++ = colour.r;
+                *light2BufferPtr++ = colour.g;
+                *light2BufferPtr++ = colour.b;
+                *light2BufferPtr++ = light->getDoubleSided() ? 1.0f : 0.0f;
 
                 const Vector2 rectSize = light->getDerivedRectSize() * 0.5f;
                 Quaternion qRot = light->getParentNode()->_getDerivedOrientation();
@@ -2345,20 +2422,20 @@ namespace Ogre
 
                 for( size_t j=0; j<4u; ++j )
                 {
-                    *passBufferPtr++ = rectPoints[j].x;
-                    *passBufferPtr++ = rectPoints[j].y;
-                    *passBufferPtr++ = rectPoints[j].z;
+                    *light2BufferPtr++ = rectPoints[j].x;
+                    *light2BufferPtr++ = rectPoints[j].y;
+                    *light2BufferPtr++ = rectPoints[j].z;
 #if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
                     if( j == 0u )
                     {
-                        *reinterpret_cast<uint32 * RESTRICT_ALIAS>(passBufferPtr) = realNumAreaLtcLights;
-                        ++passBufferPtr;
+                        *reinterpret_cast<uint32 * RESTRICT_ALIAS>(light2BufferPtr) = realNumAreaLtcLights;
+                        ++light2BufferPtr;
                     }
                     else
-                        *passBufferPtr++ = obbRestraintFadeFactor[j-1u];
+                        *light2BufferPtr++ = obbRestraintFadeFactor[j-1u];
 #else
-                    *reinterpret_cast<uint32 * RESTRICT_ALIAS>(passBufferPtr) = realNumAreaLtcLights;
-                    ++passBufferPtr;
+                    *reinterpret_cast<uint32 * RESTRICT_ALIAS>(light2BufferPtr) = realNumAreaLtcLights;
+                    ++light2BufferPtr;
 #endif
                 }
 
@@ -2366,14 +2443,18 @@ namespace Ogre
                 if( mUseObbRestraintAreaLtc )
                 {
                     //float4x3 obbRestraint;
-                    passBufferPtr = fillObbRestraint( light, viewMatrix, passBufferPtr );
+                    light2BufferPtr = fillObbRestraint( light, viewMatrix, light2BufferPtr);
                 }
 #endif
             }
 
-            memset( passBufferPtr, 0, (numAreaLtcLights - realNumAreaLtcLights) *
+            memset(light2BufferPtr, 0, (numAreaLtcLights - realNumAreaLtcLights) *
                     sizeof(float) * 4u * numAreaLtcFloat4Vars );
-            passBufferPtr += (numAreaLtcLights - realNumAreaLtcLights) * 4u * numAreaLtcFloat4Vars;
+            light2BufferPtr += (numAreaLtcLights - realNumAreaLtcLights) * 4u * numAreaLtcFloat4Vars;
+
+            if (!mUseLightBuffers) {
+                passBufferPtr = light2BufferPtr;
+            }
 
             if( shadowNode )
             {
@@ -2446,6 +2527,21 @@ namespace Ogre
                                                       sceneManager, passBufferPtr );
 
         assert( (size_t)(passBufferPtr - startupPtr) * 4u == mapSize );
+
+        if (mUseLightBuffers) {
+            assert((size_t)(light0BufferPtr - light0startupPtr) * 4u == mapSizeLight0);
+            assert((size_t)(light1BufferPtr - light1startupPtr) * 4u == mapSizeLight1);
+            assert((size_t)(light2BufferPtr - light2startupPtr) * 4u == mapSizeLight2);
+            if (mapSizeLight0 > 0) {
+                light0Buffer->unmap(UO_KEEP_PERSISTENT);
+            }
+            if (mapSizeLight1 > 0) {
+                light1Buffer->unmap(UO_KEEP_PERSISTENT);
+            }
+            if (mapSizeLight2 > 0) {
+                light2Buffer->unmap(UO_KEEP_PERSISTENT);
+            }
+        }
 
         passBuffer->unmap( UO_KEEP_PERSISTENT );
 
@@ -2576,6 +2672,20 @@ namespace Ogre
                                                                            0, passBuffer, 0,
                                                                            passBuffer->
                                                                            getTotalSizeBytes() );
+
+            if ( mUseLightBuffers ) {
+                ConstBufferPacked *light0Buffer = mLight0Buffers[mCurrentPassBuffer - 1];
+                *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(VertexShader, 4, light0Buffer, 0, light0Buffer->getTotalSizeBytes());
+                *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(PixelShader, 4, light0Buffer, 0, light0Buffer->getTotalSizeBytes());
+
+                ConstBufferPacked *light1Buffer = mLight1Buffers[mCurrentPassBuffer - 1];
+                *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(VertexShader, 5, light1Buffer, 0, light1Buffer->getTotalSizeBytes());
+                *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(PixelShader, 5, light1Buffer, 0, light1Buffer->getTotalSizeBytes());
+
+                ConstBufferPacked *light2Buffer = mLight2Buffers[mCurrentPassBuffer - 1];
+                *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(VertexShader, 6, light2Buffer, 0, light2Buffer->getTotalSizeBytes());
+                *commandBuffer->addCommand<CbShaderBuffer>() = CbShaderBuffer(PixelShader, 6, light2Buffer, 0, light2Buffer->getTotalSizeBytes());
+            }
 
             if( !casterPass )
             {
@@ -3132,6 +3242,51 @@ namespace Ogre
 
             mPassBuffers.clear();
         }
+
+        ///////// light buffers
+        {
+            ConstBufferPackedVec::const_iterator itor = mLight0Buffers.begin();
+            ConstBufferPackedVec::const_iterator end = mLight0Buffers.end();
+
+            while (itor != end)
+            {
+                if ((*itor)->getMappingState() != MS_UNMAPPED)
+                    (*itor)->unmap(UO_UNMAP_ALL);
+                mVaoManager->destroyConstBuffer(*itor);
+                ++itor;
+            }
+
+            mLight0Buffers.clear();
+        }
+        {
+            ConstBufferPackedVec::const_iterator itor = mLight1Buffers.begin();
+            ConstBufferPackedVec::const_iterator end = mLight1Buffers.end();
+
+            while (itor != end)
+            {
+                if ((*itor)->getMappingState() != MS_UNMAPPED)
+                    (*itor)->unmap(UO_UNMAP_ALL);
+                mVaoManager->destroyConstBuffer(*itor);
+                ++itor;
+            }
+
+            mLight1Buffers.clear();
+        }
+        {
+            ConstBufferPackedVec::const_iterator itor = mLight2Buffers.begin();
+            ConstBufferPackedVec::const_iterator end = mLight2Buffers.end();
+
+            while (itor != end)
+            {
+                if ((*itor)->getMappingState() != MS_UNMAPPED)
+                    (*itor)->unmap(UO_UNMAP_ALL);
+                mVaoManager->destroyConstBuffer(*itor);
+                ++itor;
+            }
+
+            mLight2Buffers.clear();
+        }
+
     }
     //-----------------------------------------------------------------------------------
     void HlmsPbs::postCommandBufferExecution( CommandBuffer *commandBuffer )
@@ -3333,6 +3488,10 @@ namespace Ogre
         mUseObbRestraintAreaLtc = areaLtc;
     }
 #endif
+    void HlmsPbs::setUseLightBuffers(bool b)
+    {
+        mUseLightBuffers = b;
+    }
 #if !OGRE_NO_JSON
     //-----------------------------------------------------------------------------------
     void HlmsPbs::_loadJson( const rapidjson::Value &jsonValue, const HlmsJson::NamedBlocks &blocks,

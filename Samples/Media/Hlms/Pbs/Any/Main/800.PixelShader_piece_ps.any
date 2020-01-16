@@ -419,22 +419,22 @@
 @piece( DoDirectionalLights )
 	@property( hlms_lights_directional )
 		@insertpiece( ObjLightMaskCmp )
-			finalColour += BRDF( passBuf.lights[0].position.xyz, passBuf.lights[0].diffuse.xyz, passBuf.lights[0].specular, pixelData ) @insertpiece( DarkenWithShadowFirstLight );
+			finalColour += BRDF( light0Buf.lights[0].position.xyz, light0Buf.lights[0].diffuse.xyz, light0Buf.lights[0].specular, pixelData ) @insertpiece( DarkenWithShadowFirstLight );
 	@end
 	@foreach( hlms_lights_directional, n, 1 )
 		@insertpiece( ObjLightMaskCmp )
-			finalColour += BRDF( passBuf.lights[@n].position.xyz, passBuf.lights[@n].diffuse.xyz, passBuf.lights[@n].specular, pixelData )@insertpiece( DarkenWithShadow );@end
+			finalColour += BRDF( light0Buf.lights[@n].position.xyz, light0Buf.lights[@n].diffuse.xyz, light0Buf.lights[@n].specular, pixelData )@insertpiece( DarkenWithShadow );@end
 
 	@property( !hlms_static_branch_lights )
 		@foreach( hlms_lights_directional_non_caster, n, hlms_lights_directional )
 			@insertpiece( ObjLightMaskCmp )
-				finalColour += BRDF( passBuf.lights[@n].position.xyz, passBuf.lights[@n].diffuse.xyz, passBuf.lights[@n].specular, pixelData );@end
+				finalColour += BRDF( light0Buf.lights[@n].position.xyz, light0Buf.lights[@n].diffuse.xyz, light0Buf.lights[@n].specular, pixelData );@end
 	@else
-		for( int n=0; n<floatBitsToInt( passBuf.numNonCasterDirectionalLights ); ++n )
+		for( int n=0; n<floatBitsToInt( light0Buf.numNonCasterDirectionalLights ); ++n )
 		{
 			int i = @value( hlms_lights_directional ) + n;
 			@insertpiece( ObjLightMaskCmpNonCasterLoop )
-				finalColour += BRDF( passBuf.lights[i].position.xyz, passBuf.lights[i].diffuse.xyz, passBuf.lights[i].specular, pixelData );
+				finalColour += BRDF( light0Buf.lights[i].position.xyz, light0Buf.lights[i].diffuse.xyz, light0Buf.lights[i].specular, pixelData );
 		}
 		/// Increase fineMaskLightIdx to keep it working with spot/point lights
 		@insertpiece( ObjLightMaskCmpNonCasterLoopEnd )
@@ -444,13 +444,13 @@
 //Point lights
 @piece( DoPointLights )
 	@foreach( hlms_lights_point, n, hlms_lights_directional_non_caster )
-		lightDir = passBuf.lights[@n].position.xyz - inPs.pos;
+		lightDir = light0Buf.lights[@n].position.xyz - inPs.pos;
 		fDistance= length( lightDir );
-		if( fDistance <= passBuf.lights[@n].attenuation.x @insertpiece( andObjLightMaskCmp ) )
+		if( fDistance <= light0Buf.lights[@n].attenuation.x @insertpiece( andObjLightMaskCmp ) )
 		{
 			lightDir *= 1.0 / fDistance;
-			tmpColour = BRDF( lightDir, passBuf.lights[@n].diffuse.xyz, passBuf.lights[@n].specular, pixelData )@insertpiece( DarkenWithShadowPoint );
-			float atten = 1.0 / (0.5 + (passBuf.lights[@n].attenuation.y + passBuf.lights[@n].attenuation.z * fDistance) * fDistance );
+			tmpColour = BRDF( lightDir, light0Buf.lights[@n].diffuse.xyz, light0Buf.lights[@n].specular, pixelData )@insertpiece( DarkenWithShadowPoint );
+			float atten = 1.0 / (0.5 + (light0Buf.lights[@n].attenuation.y + light0Buf.lights[@n].attenuation.z * fDistance) * fDistance );
 			finalColour += tmpColour * atten;
 		}
 	@end
@@ -462,25 +462,25 @@
 //spotParams[@value(spot_params)].z = falloff
 @piece( DoSpotLights )
 	@foreach( hlms_lights_spot, n, hlms_lights_point )
-		lightDir = passBuf.lights[@n].position.xyz - inPs.pos;
+		lightDir = light0Buf.lights[@n].position.xyz - inPs.pos;
 		fDistance= length( lightDir );
 		lightDir *= 1.0 / fDistance;
 		@property( !hlms_lights_spot_textured )
-			spotCosAngle = dot( -lightDir, passBuf.lights[@n].spotDirection.xyz );
+			spotCosAngle = dot( -lightDir, light0Buf.lights[@n].spotDirection.xyz );
 		@else
-			spotCosAngle = dot( -lightDir, zAxis( passBuf.lights[@n].spotQuaternion ) );
+			spotCosAngle = dot( -lightDir, zAxis( light0Buf.lights[@n].spotQuaternion ) );
 		@end
-		if( fDistance <= passBuf.lights[@n].attenuation.x && spotCosAngle >= passBuf.lights[@n].spotParams.y @insertpiece( andObjLightMaskCmp ) )
+		if( fDistance <= light0Buf.lights[@n].attenuation.x && spotCosAngle >= light0Buf.lights[@n].spotParams.y @insertpiece( andObjLightMaskCmp ) )
 		{
 			@property( hlms_lights_spot_textured )
 				float3 posInLightSpace = qmul( spotQuaternion[@value(spot_params)], inPs.pos );
 				float spotAtten = texture( texSpotLight, normalize( posInLightSpace ).xy ).x; //TODO
 			@else
-				float spotAtten = saturate( (spotCosAngle - passBuf.lights[@n].spotParams.y) * passBuf.lights[@n].spotParams.x );
-				spotAtten = pow( spotAtten, passBuf.lights[@n].spotParams.z );
+				float spotAtten = saturate( (spotCosAngle - light0Buf.lights[@n].spotParams.y) * light0Buf.lights[@n].spotParams.x );
+				spotAtten = pow( spotAtten, light0Buf.lights[@n].spotParams.z );
 			@end
-			tmpColour = BRDF( lightDir, passBuf.lights[@n].diffuse.xyz, passBuf.lights[@n].specular, pixelData )@insertpiece( DarkenWithShadow );
-			float atten = 1.0 / (0.5 + (passBuf.lights[@n].attenuation.y + passBuf.lights[@n].attenuation.z * fDistance) * fDistance );
+			tmpColour = BRDF( lightDir, light0Buf.lights[@n].diffuse.xyz, light0Buf.lights[@n].specular, pixelData )@insertpiece( DarkenWithShadow );
+			float atten = 1.0 / (0.5 + (light0Buf.lights[@n].attenuation.y + light0Buf.lights[@n].attenuation.z * fDistance) * fDistance );
 			finalColour += tmpColour * (atten * spotAtten);
 		}
 	@end
