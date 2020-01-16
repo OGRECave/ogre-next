@@ -1019,6 +1019,10 @@ namespace Ogre
                 setTextureReg( PixelShader, "gBuf_depthTexture", texUnit++ );
                 depthTextureDefined = true;
             }
+            else
+            {
+                ++texUnit;
+            }
 
             if( getProperty( HlmsBaseProp::UseSsr ) )
                 setTextureReg( PixelShader, "ssrTexture", texUnit++ );
