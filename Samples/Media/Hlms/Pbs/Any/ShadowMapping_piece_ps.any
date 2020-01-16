@@ -352,7 +352,7 @@
 	@pset( CurrentPointLight, hlms_lights_directional_non_caster )
 	@piece( DarkenWithShadowPoint )
 		* getShadowPoint( hlms_shadowmap@value(CurrentShadowMap), @insertpiece( UseSamplerShadow )
-						  inPs.pos.xyz, passBuf.lights[@counter(CurrentPointLight)].position.xyz,
+						  inPs.pos.xyz, light0Buf.lights[@counter(CurrentPointLight)].position.xyz,
 						  passBuf.shadowRcv[@value(CurrentShadowMap)].invShadowMapSize,
 						  passBuf.shadowRcv[@value(CurrentShadowMap)].shadowDepthRange.xy
 						  hlms_shadowmap@counter(CurrentShadowMap)_uv_param PASSBUF_ARG )

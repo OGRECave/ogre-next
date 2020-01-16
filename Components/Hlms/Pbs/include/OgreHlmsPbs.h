@@ -118,6 +118,9 @@ namespace Ogre
 
         PassData                mPreparedPass;
         ConstBufferPackedVec    mPassBuffers;
+        ConstBufferPackedVec    mLight0Buffers; // lights
+        ConstBufferPackedVec    mLight1Buffers; // areaApproxLights
+        ConstBufferPackedVec    mLight2Buffers; // areaLtcLights
         HlmsSamplerblock const  *mShadowmapSamplerblock;    /// GL3+ only when not using depth textures
         HlmsSamplerblock const  *mShadowmapCmpSamplerblock; /// For depth textures & D3D11
         HlmsSamplerblock const  *mShadowmapEsmSamplerblock; /// For ESM.
@@ -157,7 +160,7 @@ namespace Ogre
 #endif
         TextureGpu              *mAreaLightMasks;
         HlmsSamplerblock const  *mAreaLightMasksSamplerblock;
-        LightArray				mAreaLights;
+        LightArray                mAreaLights;
         bool                    mUsingAreaLightMasks;
 
         bool                    mSkipRequestSlotInChangeRS;
@@ -188,6 +191,8 @@ namespace Ogre
         bool mUseObbRestraintAreaApprox;
         bool mUseObbRestraintAreaLtc;
 #endif
+
+        bool mUseLightBuffers;
 
         ShadowFilter    mShadowFilter;
         uint16          mEsmK; /// K parameter for ESM.
@@ -391,6 +396,9 @@ namespace Ogre
         bool getUseObbRestraintsAreaLtc(void) const         { return mUseObbRestraintAreaLtc; }
 #endif
 
+        void setUseLightBuffers(bool b);
+        bool getUseLightBuffers() { return mUseLightBuffers; }
+
 #if !OGRE_NO_JSON
         /// @copydoc Hlms::_loadJson
         virtual void _loadJson( const rapidjson::Value &jsonValue, const HlmsJson::NamedBlocks &blocks,
@@ -409,6 +417,8 @@ namespace Ogre
 
     struct _OgreHlmsPbsExport PbsProperty
     {
+        static const IdString useLightBuffers;
+    
         static const IdString HwGammaRead;
         static const IdString HwGammaWrite;
         static const IdString MaterialsPerBuffer;

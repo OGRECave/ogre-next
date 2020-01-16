@@ -165,9 +165,13 @@ CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
 	float pssmBlendPoints@n;@end @end
 @property( hlms_pssm_fade )
 	float pssmFadePoint;@end
+
+@property( !use_light_buffers )
 	@property( hlms_lights_spot )Light lights[@value(hlms_lights_spot)];@end
 	@property( hlms_lights_area_approx )AreaLight areaApproxLights[@value(hlms_lights_area_approx)];@end
 	@property( hlms_lights_area_ltc )AreaLtcLight areaLtcLights[@value(hlms_lights_area_ltc)];@end
+@end // !use_light_buffers
+
 @end @property( hlms_shadowcaster )
 	//Vertex shader
 	@property( exponential_shadow_maps )float4 viewZRow;@end
@@ -215,11 +219,46 @@ CONST_BUFFER_STRUCT_BEGIN( PassBuffer, 0 )
 #define aspectRatio		aspectRatio_unused3.x
 }
 CONST_BUFFER_STRUCT_END( passBuf );
+
+@property( use_light_buffers )
+
+CONST_BUFFER_STRUCT_BEGIN( Light0Buffer, 4 )
+{
+	Light lights[16];
+}
+CONST_BUFFER_STRUCT_END( light0Buf );
+
+CONST_BUFFER_STRUCT_BEGIN( Light1Buffer, 5 )
+{
+	AreaLight areaApproxLights[2];
+}
+CONST_BUFFER_STRUCT_END( light1Buf );
+
+CONST_BUFFER_STRUCT_BEGIN( Light2Buffer, 6 )
+{
+	AreaLtcLight areaLtcLights[2];
+}
+CONST_BUFFER_STRUCT_END( light2Buf );
+
+
+@else
+
+#define light0Buf		passBuf
+#define light1Buf		passBuf
+#define light2Buf		passBuf
+
+@end // use_light_buffers
+
 @end
 
 @property( syntax == metal )
 	@piece( PassDecl )
 	, constant PassBuffer &passBuf [[buffer(CONST_SLOT_START+0)]]
+	@property( use_light_buffers )
+	, constant Light0Buffer &light0Buf [[buffer(CONST_SLOT_START+4)]]
+	, constant Light1Buffer &light1Buf [[buffer(CONST_SLOT_START+5)]]
+	, constant Light2Buffer &light2Buf [[buffer(CONST_SLOT_START+6)]]
+	@end // use_light_buffers
 	@end
 @end
 
