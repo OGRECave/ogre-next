@@ -1,7 +1,7 @@
 
 //#include "SyntaxHighlightingMisc.h"
 
-@property( needs_env_brdf && ltc_texture_available )
+@property( (needs_env_brdf || hlms_lights_area_ltc) && ltc_texture_available )
 	@piece( DeclAreaLtcTextures )
 		@property( syntax == glsl || syntax == glsles )
 			uniform sampler2DArray ltcMatrix;
