@@ -1686,11 +1686,14 @@ namespace Ogre
 
         if (mUseLightBuffers)
         {
-            while (mCurrentPassBuffer >= mLight0Buffers.size() )
+            while( mCurrentPassBuffer >= mLight0Buffers.size() )
             {
-                mLight0Buffers.push_back(mVaoManager->createConstBuffer(maxBufferSizeLight0, BT_DYNAMIC_PERSISTENT, 0, false));
-                mLight1Buffers.push_back(mVaoManager->createConstBuffer(maxBufferSizeLight1, BT_DYNAMIC_PERSISTENT, 0, false));
-                mLight2Buffers.push_back(mVaoManager->createConstBuffer(maxBufferSizeLight2, BT_DYNAMIC_PERSISTENT, 0, false));
+                mLight0Buffers.push_back( mVaoManager->createConstBuffer(
+                    maxBufferSizeLight0, BT_DYNAMIC_PERSISTENT, 0, false ) );
+                mLight1Buffers.push_back( mVaoManager->createConstBuffer(
+                    maxBufferSizeLight1, BT_DYNAMIC_PERSISTENT, 0, false ) );
+                mLight2Buffers.push_back( mVaoManager->createConstBuffer(
+                    maxBufferSizeLight2, BT_DYNAMIC_PERSISTENT, 0, false ) );
             }
         }
 
