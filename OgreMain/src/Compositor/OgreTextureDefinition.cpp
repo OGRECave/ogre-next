@@ -356,9 +356,7 @@ namespace Ogre
         }
         if( !textureDef.fsaa.empty() )
         {
-            SampleDescription requestedDesc;
-            requestedDesc.parseString( textureDef.fsaa );
-            tex->setSampleDescription( requestedDesc );
+            tex->setSampleDescription( SampleDescription( textureDef.fsaa ) );
         }
         else
         {

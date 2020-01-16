@@ -288,9 +288,8 @@ namespace Ogre
         if( mUseFlipMode )
         {
             // swapchain is not multisampled in flip sequential mode, so we reuse it
-            mSampleDescription.parseString( fsaa );
             mSampleDescription =
-                mRenderSystem->validateSampleDescription( mSampleDescription, _getRenderFormat() );
+                mRenderSystem->validateSampleDescription( mRequestedSampleDescription, _getRenderFormat() );
         }
         else
         {

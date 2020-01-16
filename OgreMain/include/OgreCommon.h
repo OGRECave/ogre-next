@@ -966,6 +966,10 @@ namespace Ogre {
             mPattern( _mPattern )
         {
         }
+        explicit SampleDescription( const String &fsaaSetting )
+        {
+            parseString( fsaaSetting );
+        }
 
         bool operator==( const SampleDescription &rhs ) const
         {
