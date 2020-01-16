@@ -647,7 +647,7 @@ namespace Ogre
             for( UINT n = 1; n <= D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT; n++ )
             {
                 // new style enumeration, with "8x CSAA", "8x MSAA" values
-                if( n == 2 &&
+                if( n == 4 &&
                     SUCCEEDED( device->CheckMultisampleQualityLevels( format, 2, &numLevels ) ) &&
                     numLevels > 4 )  // 2f4x EQAA
                 {
