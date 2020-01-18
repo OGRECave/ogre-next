@@ -9577,6 +9577,24 @@ namespace Ogre{
                         }
                     }
                     break;
+                case ID_GEN_NORMALS_GBUFFER:
+                    if( prop->values.size() != 1 )
+                    {
+                        compiler->addError(
+                            ScriptCompiler::CE_FEWERPARAMETERSEXPECTED, prop->file, prop->line,
+                            "gen_normals_gbuffer requires exactly one parameter (boolean)" );
+                    }
+                    else
+                    {
+                        AbstractNodeList::const_iterator it0 = prop->values.begin();
+
+                        if( !getBoolean( *it0, &passScene->mGenNormalsGBuf ) )
+                        {
+                            compiler->addError( ScriptCompiler::CE_INVALIDPARAMETERS, prop->file,
+                                                prop->line, "gen_normals_gbuffer must be a boolean" );
+                        }
+                    }
+                    break;
                 case ID_USE_REFRACTIONS:
                     if( prop->values.size() != 2u )
                     {

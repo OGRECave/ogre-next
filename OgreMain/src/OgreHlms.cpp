@@ -143,6 +143,7 @@ namespace Ogre
     const IdString HlmsBaseProp::UseUvBaking        = IdString( "hlms_use_uv_baking" );
     const IdString HlmsBaseProp::UvBaking           = IdString( "hlms_uv_baking" );
     const IdString HlmsBaseProp::BakeLightingOnly   = IdString( "hlms_bake_lighting_only" );
+    const IdString HlmsBaseProp::GenNormalsGBuf     = IdString( "hlms_gen_normals_gbuffer" );
     const IdString HlmsBaseProp::PrePass            = IdString( "hlms_prepass" );
     const IdString HlmsBaseProp::UsePrePass         = IdString( "hlms_use_prepass" );
     const IdString HlmsBaseProp::UsePrePassMsaa     = IdString( "hlms_use_prepass_msaa" );
@@ -2751,6 +2752,9 @@ namespace Ogre
 
                 if( passSceneDef->mInstancedStereo )
                     setProperty( HlmsBaseProp::InstancedStereo, 1 );
+
+                if( passSceneDef->mGenNormalsGBuf )
+                    setProperty( HlmsBaseProp::GenNormalsGBuf, 1 );
             }
 
             ForwardPlusBase *forwardPlus = sceneManager->_getActivePassForwardPlus();
@@ -2957,7 +2961,10 @@ namespace Ogre
                      (renderPassDesc->getNumColourEntries() > 0) ? 0 : 1 );
 
         if( sceneManager->getCurrentPrePassMode() == PrePassCreate )
+        {
             setProperty( HlmsBaseProp::PrePass, 1 );
+            setProperty( HlmsBaseProp::GenNormalsGBuf, 1 );
+        }
         else if( sceneManager->getCurrentPrePassMode() == PrePassUse )
         {
             setProperty( HlmsBaseProp::UsePrePass, 1 );

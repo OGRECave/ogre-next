@@ -84,6 +84,15 @@ namespace Ogre
         else
             mCullCamera = mCamera;
 
+        if( mDefinition->mPrePassMode == PrePassNone && mDefinition->mGenNormalsGBuf &&
+            rtv->colourAttachments.size() < 2u )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "Requesting mGenNormalsGBuf (generate normals in GBuffer alongside colour) but "
+                         "there is less than 2 colour render textures to render to!",
+                         "CompositorPassScene::CompositorPassScene" );
+        }
+
         if( mDefinition->mPrePassMode == PrePassUse && !mDefinition->mPrePassTexture.empty() )
         {
             {

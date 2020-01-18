@@ -23,9 +23,13 @@ struct PS_INPUT
 
 @property( !hlms_shadowcaster )
 
-@property( !hlms_render_depth_only && !hlms_shadowcaster && hlms_prepass )
-	#define outPs_normals outPs.normals
-	#define outPs_shadowRoughness outPs.shadowRoughness
+@property( !hlms_render_depth_only )
+	@property( hlms_gen_normals_gbuffer )
+		#define outPs_normals outPs.normals
+	@end
+	@property( hlms_prepass )
+		#define outPs_shadowRoughness outPs.shadowRoughness
+	@end
 @end
 
 @property( use_parallax_correct_cubemaps )

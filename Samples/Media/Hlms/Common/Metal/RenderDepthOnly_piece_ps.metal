@@ -14,7 +14,7 @@
 	{
 		@property( !hlms_shadowcaster )
 			float4 colour0	[[ color(0) ]];
-		@end @property( hlms_shadowcaster )
+		@else
 			@property( !hlms_render_depth_only )
 				float colour0	[[ color(0) ]];
 			@end

@@ -9,18 +9,23 @@
 	@set( hlms_disable_stage, 1 )
 @end
 
+
 @piece( DeclOutputType )
 	struct PS_OUTPUT
 	{
-		@property( !hlms_shadowcaster )
-			float4 colour0 : SV_Target0;
-		@end @property( hlms_shadowcaster )
-			@property( !hlms_render_depth_only )
-				float colour0 : SV_Target0;
-			@end
-			@property( hlms_render_depth_only )
-				float colour0 : SV_Depth;
+		@property( hlms_render_depth_only || hlms_shadowcaster || !hlms_prepass )
+			@property( !hlms_shadowcaster )
+				float4 colour0 : SV_Target@counter(rtv_target);
+			@else
+				@property( !hlms_render_depth_only )
+					float colour0 : SV_Target@counter(rtv_target);
+				@end
+				@property( hlms_render_depth_only )
+					float colour0 : SV_Depth;
+				@end
 			@end
 		@end
+
+		@insertpiece( ExtraOutputTypes )
 	};
 @end

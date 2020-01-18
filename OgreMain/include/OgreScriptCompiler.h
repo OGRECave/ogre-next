@@ -916,6 +916,7 @@ namespace Ogre
                     ID_FLUSH_COMMAND_BUFFERS_AFTER_SHADOW_NODE,
                     ID_IS_PREPASS,
                     ID_USE_PREPASS,
+                    ID_GEN_NORMALS_GBUFFER,
                     ID_USE_REFRACTIONS,
                     ID_UV_BAKING,
                     ID_UV_BAKING_OFFSET,

@@ -1309,6 +1309,7 @@ namespace Ogre
         mIds["flush_command_buffers_after_shadow_node"]= ID_FLUSH_COMMAND_BUFFERS_AFTER_SHADOW_NODE;
         mIds["is_prepass"]      = ID_IS_PREPASS;
         mIds["use_prepass"]     = ID_USE_PREPASS;
+        mIds["gen_normals_gbuffer"]= ID_GEN_NORMALS_GBUFFER;
         mIds["use_refractions"] = ID_USE_REFRACTIONS;
         mIds["uv_baking"]       = ID_UV_BAKING;
         mIds["uv_baking_offset"]= ID_UV_BAKING_OFFSET;

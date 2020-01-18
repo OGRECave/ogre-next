@@ -100,6 +100,9 @@ namespace Ogre
         /// If you modify this, you probably want to modify
         /// mReadOnlyDepth & mReadOnlyStencil too
         PrePassMode     mPrePassMode;
+        /// Generate Normals for a GBuffer in RTV output 1,
+        /// This flag is ignored mPrePassMode if mPrePassMode != PrePassNone
+        bool            mGenNormalsGBuf;
 
         /// First Render Queue ID to render. Inclusive
         uint8           mFirstRQ;
@@ -191,8 +194,9 @@ namespace Ogre
             mLightVisibilityMask( VisibilityFlags::RESERVED_VISIBILITY_FLAGS ),
             mShadowNodeRecalculation( SHADOW_NODE_FIRST_ONLY ),
             mPrePassMode( PrePassNone ),
+            mGenNormalsGBuf( false ),
             mFirstRQ( 0 ),
-            mLastRQ( -1 ),
+            mLastRQ( (uint8)-1 ),
             mEnableForwardPlus( true ),
             mCameraCubemapReorient( false ),
             mUpdateLodLists( true ),
