@@ -11,8 +11,8 @@ fragment_program SSAO_HS_ps_GLSL glsl
 	default_params
 	{
 		param_named depthTexture int 0
-		param_named noiseTexture int 1
-		param_named sampleTexture int 2
+		param_named gBuf_normals int 1
+		param_named noiseTexture int 2
 	}
 }
 
@@ -84,6 +84,12 @@ material SSAO/HS
 			}
 
 			texture_unit depthTexture
+			{
+				filtering			bilinear
+				tex_address_mode	clamp
+			}
+
+			texture_unit gBuf_normals
 			{
 				filtering			bilinear
 				tex_address_mode	clamp
