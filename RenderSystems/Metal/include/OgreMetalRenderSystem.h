@@ -135,6 +135,9 @@ namespace Ogre
         bool                    mVpChanged;
         bool                    mInterruptedRenderCommandEncoder;
 
+        MetalDeviceList* getDeviceList( bool refreshList = false );
+        void refreshFSAAOptions(void);
+
         void setActiveDevice( MetalDevice *device );
 
         id<MTLDepthStencilState> getDepthStencilState( HlmsPso *pso );
@@ -312,7 +315,6 @@ namespace Ogre
 
         virtual void flushCommands(void);
 
-        MetalDeviceList* getDeviceList( bool refreshList = false );
         MetalDevice* getActiveDevice(void)                      { return mActiveDevice; }
         MetalProgramFactory* getMetalProgramFactory(void)       { return mMetalProgramFactory; }
 

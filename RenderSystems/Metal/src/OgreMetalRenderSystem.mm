@@ -162,6 +162,7 @@ namespace Ogre
     void MetalRenderSystem::initConfigOptions()
     {
         ConfigOption optDevice;
+        ConfigOption optFSAA;
         ConfigOption optSRGB;
 
         optDevice.name = "Rendering Device";
@@ -172,6 +173,11 @@ namespace Ogre
             optDevice.possibleValues.push_back( deviceList->item(j)->getDescription() );
         optDevice.immutable = false;
 
+        optFSAA.name = "FSAA";
+        optFSAA.immutable = false;
+        optFSAA.possibleValues.push_back( "None" );
+        optFSAA.currentValue = "None";
+
         // SRGB on auto window
         optSRGB.name = "sRGB Gamma Conversion";
         optSRGB.possibleValues.push_back("Yes");
@@ -180,7 +186,10 @@ namespace Ogre
         optSRGB.immutable = false;
 
         mOptions[optDevice.name] = optDevice;
+        mOptions[optFSAA.name] = optFSAA;
         mOptions[optSRGB.name] = optSRGB;
+
+        refreshFSAAOptions();
     }
     //-------------------------------------------------------------------------
     void MetalRenderSystem::setConfigOption(const String &name, const String &value)
@@ -196,6 +205,40 @@ namespace Ogre
             StringStream str;
             str << "Option named '" << name << "' does not exist.";
             //OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, str.str(), "MetalRenderSystem::setConfigOption" );
+        }
+        
+        // Refresh dependent options
+        if( name == "Rendering Device" )
+            refreshFSAAOptions();
+    }
+    //-------------------------------------------------------------------------
+    void MetalRenderSystem::refreshFSAAOptions(void)
+    {
+        ConfigOptionMap::iterator it = mOptions.find( "FSAA" );
+        ConfigOption* optFSAA = &it->second;
+        optFSAA->possibleValues.clear();
+
+        it = mOptions.find("Rendering Device");
+        if( @available( iOS 9.0, * ) )
+        {
+            const MetalDeviceItem *deviceItem = getDeviceList()->item( it->second.currentValue );
+            id<MTLDevice> device = deviceItem ? deviceItem->getMTLDevice() : MTLCreateSystemDefaultDevice();
+            for( unsigned samples = 1; samples <= 32; ++samples )
+                if( [device supportsTextureSampleCount:samples] )
+                    optFSAA->possibleValues.push_back( StringConverter::toString(samples) + "x" );
+        }
+        
+        if( optFSAA->possibleValues.empty() )
+        {
+            optFSAA->possibleValues.push_back( "1x" );
+            optFSAA->possibleValues.push_back( "4x" );
+        }
+        
+        // Reset FSAA to none if previous doesn't avail in new possible values
+        if( std::find( optFSAA->possibleValues.begin(), optFSAA->possibleValues.end(),
+                       optFSAA->currentValue ) == optFSAA->possibleValues.end() )
+        {
+            optFSAA->currentValue = optFSAA->possibleValues[0];
         }
     }
     //-------------------------------------------------------------------------
