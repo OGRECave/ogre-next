@@ -172,8 +172,12 @@ namespace Ogre {
         // Table column to hold option names
         NSTableColumn *column = [[NSTableColumn alloc] initWithIdentifier: @"optionName"];
         [column setEditable:NO];
-        [column setMinWidth:437];
+        [column setMinWidth:237];
         [mOptionsTable addTableColumn:column];
+        NSTableColumn *column2 = [[NSTableColumn alloc] initWithIdentifier: @"optionValue"];
+        [column2 setEditable:NO];
+        [column2 setMinWidth:200];
+        [mOptionsTable addTableColumn:column2];
 
         // Scroll view to hold the table in case the list grows some day
         NSScrollView *scrollView = [[NSScrollView alloc] initWithFrame:NSMakeRect(22, 42, 439, 135)];
@@ -204,7 +208,7 @@ namespace Ogre {
         const RenderSystemList& renderers = Root::getSingleton().getAvailableRenderers();
         for (RenderSystemList::const_iterator pRend = renderers.begin(); pRend != renderers.end(); ++pRend)
         {
-            NSString *renderSystemName = [[NSString alloc] initWithCString:(*pRend)->getName().c_str() encoding:NSASCIIStringEncoding];
+            NSString *renderSystemName = [NSString stringWithUTF8String:(*pRend)->getName().c_str()];
             [mRenderSystemsPopUp addItemWithTitle:renderSystemName];
         }
 
@@ -215,27 +219,22 @@ namespace Ogre {
 
 -(void) refreshConfigOptions
 {
-    NSMutableDictionary* dict = [NSMutableDictionary dictionary];
-    
+    NSMutableArray* keys = [NSMutableArray array];
+    NSMutableArray* values = [NSMutableArray array];
+
     // Get detected option values and add them to our config dictionary
     String selectedRenderSystemName = String([[[mRenderSystemsPopUp selectedItem] title] UTF8String]);
     RenderSystem *rs = Root::getSingleton().getRenderSystemByName(selectedRenderSystemName);
     const ConfigOptionMap& opts = rs->getConfigOptions();
     for (ConfigOptionMap::const_iterator pOpt = opts.begin(); pOpt != opts.end(); ++pOpt)
     {
-        NSString* key = [[NSString alloc] initWithCString:pOpt->first.c_str()];
-        NSMutableArray* values = [[NSMutableArray alloc] initWithCapacity:10];
-        for(uint i = 0; i < pOpt->second.possibleValues.size(); i++)
-        {
-            NSString *value = [[NSString alloc] initWithCString:pOpt->second.possibleValues[i].c_str()
-                                                            encoding:NSASCIIStringEncoding];
-            [values addObject:value];
-        }
-        
-        [dict setObject:values forKey:key];
+        [keys addObject:[NSString stringWithUTF8String:pOpt->first.c_str()]];
+        [values addObject:[NSString stringWithUTF8String:pOpt->second.currentValue.c_str()]];
     }
 
-    [self setOptions:dict];
+    mOptionsKeys = keys;
+    mOptionsValues = values;
+    [mOptionsTable reloadData];
 }
 
 
@@ -259,6 +258,8 @@ namespace Ogre {
         String name = String([[mOptionsKeys objectAtIndex:[mOptionsTable selectedRow]] UTF8String]);
         
         Root::getSingleton().getRenderSystemByName(selectedRenderSystemName)->setConfigOption(name, value);
+        
+        [self refreshConfigOptions];
     }
 }
 
@@ -296,7 +297,8 @@ namespace Ogre {
 - (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
 #pragma unused(aTableView)
-    return [mOptionsKeys objectAtIndex:rowIndex];
+    bool valueColumn = [aTableColumn.identifier isEqualToString:@"optionValue"];
+    return valueColumn ? [mOptionsValues objectAtIndex:rowIndex] : [mOptionsKeys objectAtIndex:rowIndex];
 }
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
@@ -315,20 +317,26 @@ namespace Ogre {
     // Get the key for the selected table row
     NSString *key = [mOptionsKeys objectAtIndex:rowIndex];
     
-    // Add the available options
-    [mOptionsPopUp addItemsWithTitles:[mOptions objectForKey:key]];
-    
     // Grab a copy of the selected RenderSystem name in String format
     if([mRenderSystemsPopUp numberOfItems] > 0)
     {
         String selectedRenderSystemName = String([[[mRenderSystemsPopUp selectedItem] title] UTF8String]);
         const ConfigOptionMap& opts = Root::getSingleton().getRenderSystemByName(selectedRenderSystemName)->getConfigOptions();
 
+        // Add the available options
         // Select the item that is the current config option, if there is no current setting, just pick the top of the list
         ConfigOptionMap::const_iterator it = opts.find([key UTF8String]);
         if (it != opts.end())
+        {
+            for(uint i = 0; i < it->second.possibleValues.size(); i++)
+            {
+                NSString *value = [NSString stringWithUTF8String:it->second.possibleValues[i].c_str()];
+                [mOptionsPopUp addItemWithTitle:value];
+            }
+
             [mOptionsPopUp selectItemWithTitle:[NSString stringWithCString:it->second.currentValue.c_str()
                                      encoding:NSASCIIStringEncoding]];
+        }
 
         if([mOptionsPopUp indexOfSelectedItem] < 0)
             [mOptionsPopUp selectItemAtIndex:0];
@@ -351,18 +359,6 @@ namespace Ogre {
 - (void)setConfigWindow:(NSWindow *)window
 {
     mConfigWindow = window;
-}
-
-- (NSDictionary *)getOptions
-{
-    return mOptions;
-}
-
-- (void)setOptions:(NSDictionary *)dict
-{
-    mOptions = dict;
-    mOptionsKeys = [[dict allKeys] sortedArrayUsingSelector:@selector(compare:)];
-    [mOptionsTable reloadData];
 }
 
 - (NSPopUpButton *)getRenderSystemsPopUp

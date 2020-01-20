@@ -53,8 +53,8 @@ THE SOFTWARE.
     NSButton *mCancelButton;
     NSTextField *mOptionLabel;
     
-    NSDictionary *mOptions;
     NSArray *mOptionsKeys;
+    NSArray *mOptionsValues;
 }
 
 - (void)cancelButtonPressed:(id)sender;
@@ -63,8 +63,6 @@ THE SOFTWARE.
 - (void)popUpValueChanged:(id)sender;
 
 // Getters and setters
-- (void)setOptions:(NSDictionary *)dict;
-- (NSDictionary *)getOptions;
 - (void)setRenderSystemsPopUp:(NSPopUpButton *)button;
 - (NSPopUpButton *)getRenderSystemsPopUp;
 - (void)setOgreLogo:(NSImageView *)image;
