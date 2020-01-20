@@ -151,10 +151,27 @@ namespace Ogre
         return strName;
     }
     //-------------------------------------------------------------------------
+    MetalDeviceList* MetalRenderSystem::getDeviceList( bool refreshList )
+    {
+        if( refreshList || mDeviceList.count() == 0 )
+            mDeviceList.refresh();
+        
+        return &mDeviceList;
+    }
+    //-------------------------------------------------------------------------
     void MetalRenderSystem::initConfigOptions()
     {
+        ConfigOption optDevice;
         ConfigOption optSRGB;
-        
+
+        optDevice.name = "Rendering Device";
+        optDevice.currentValue = "(default)";
+        optDevice.possibleValues.push_back("(default)");
+        MetalDeviceList* deviceList = getDeviceList();
+        for( unsigned j = 0; j < deviceList->count(); j++ )
+            optDevice.possibleValues.push_back( deviceList->item(j)->getDescription() );
+        optDevice.immutable = false;
+
         // SRGB on auto window
         optSRGB.name = "sRGB Gamma Conversion";
         optSRGB.possibleValues.push_back("Yes");
@@ -162,6 +179,7 @@ namespace Ogre
         optSRGB.currentValue = "Yes";
         optSRGB.immutable = false;
 
+        mOptions[optDevice.name] = optDevice;
         mOptions[optSRGB.name] = optSRGB;
     }
     //-------------------------------------------------------------------------
@@ -385,6 +403,11 @@ namespace Ogre
     //-------------------------------------------------------------------------
     Window* MetalRenderSystem::_initialise( bool autoCreateWindow, const String& windowTitle )
     {
+        ConfigOptionMap::iterator opt = mOptions.find( "Rendering Device" );
+        if( opt == mOptions.end() )
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Can`t find requested Metal device name!", "MetalRenderSystem::initialise" );
+        mDeviceName = opt->second.currentValue;
+
         Window *autoWindow = 0;
         if( autoCreateWindow )
             autoWindow = _createRenderWindow( windowTitle, 1, 1, false );
@@ -399,8 +422,13 @@ namespace Ogre
     {
         if( !mInitialized )
         {
-            mDevice.init();
+            const MetalDeviceItem* deviceItem = getDeviceList(true)->item( mDeviceName );
+            mDevice.init( deviceItem );
             setActiveDevice(&mDevice);
+            String selectedDeviceName = deviceItem ? deviceItem->getDescription() :
+                MetalDeviceItem(mDevice.mDevice, 0).getDescription() + " (system default)";
+            LogManager::getSingleton().stream() << "Metal: Requested \"" << mDeviceName <<
+                "\", selected \"" << selectedDeviceName << "\"";
 
             if( miscParams )
             {

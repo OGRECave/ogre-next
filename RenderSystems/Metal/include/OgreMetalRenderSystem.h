@@ -86,6 +86,8 @@ namespace Ogre
 
         typedef vector<CachedDepthStencilState>::type CachedDepthStencilStateVec;
 
+    private:
+        String mDeviceName;    // it`s hint rather than hard requirement, could be ignored if empty or device removed
         bool mInitialized;
         v1::HardwareBufferManager   *mHardwareBufferManager;
         MetalGpuProgramManager      *mShaderManager;
@@ -119,6 +121,7 @@ namespace Ogre
 
         uint8           mNumMRTs;
         MetalRenderTargetCommon     *mCurrentColourRTs[OGRE_MAX_MULTIPLE_RENDER_TARGETS];
+        MetalDeviceList             mDeviceList;
         MetalDevice                 *mActiveDevice;
         __unsafe_unretained id<MTLRenderCommandEncoder> mActiveRenderEncoder;
 
@@ -309,6 +312,7 @@ namespace Ogre
 
         virtual void flushCommands(void);
 
+        MetalDeviceList* getDeviceList( bool refreshList = false );
         MetalDevice* getActiveDevice(void)                      { return mActiveDevice; }
         MetalProgramFactory* getMetalProgramFactory(void)       { return mMetalProgramFactory; }
 
