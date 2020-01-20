@@ -54,6 +54,7 @@ THE SOFTWARE.
     NSTextField *mOptionLabel;
     
     NSDictionary *mOptions;
+    NSArray *mOptionsKeys;
 }
 
 - (void)cancelButtonPressed:(id)sender;

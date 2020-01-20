@@ -256,7 +256,7 @@ namespace Ogre {
     if((0 <= [mOptionsTable selectedRow]) && [mOptionsPopUp selectedItem])
     {
         String value = String([[[mOptionsPopUp selectedItem] title] UTF8String]);
-        String name = String([[[[mOptions keyEnumerator] allObjects] objectAtIndex:[mOptionsTable selectedRow]] UTF8String]);
+        String name = String([[mOptionsKeys objectAtIndex:[mOptionsTable selectedRow]] UTF8String]);
         
         Root::getSingleton().getRenderSystemByName(selectedRenderSystemName)->setConfigOption(name, value);
     }
@@ -296,13 +296,13 @@ namespace Ogre {
 - (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
 #pragma unused(aTableView)
-    return [[[mOptions keyEnumerator] allObjects] objectAtIndex:rowIndex];
+    return [mOptionsKeys objectAtIndex:rowIndex];
 }
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
 #pragma unused(aTableView)
-    return [mOptions count];
+    return [mOptionsKeys count];
 }
 
 // Intercept the request to select a new row.  Update the popup's values.
@@ -313,7 +313,7 @@ namespace Ogre {
     [mOptionsPopUp removeAllItems];
     
     // Get the key for the selected table row
-    NSString *key = [[[mOptions keyEnumerator] allObjects] objectAtIndex:rowIndex];
+    NSString *key = [mOptionsKeys objectAtIndex:rowIndex];
     
     // Add the available options
     [mOptionsPopUp addItemsWithTitles:[mOptions objectForKey:key]];
@@ -361,6 +361,7 @@ namespace Ogre {
 - (void)setOptions:(NSDictionary *)dict
 {
     mOptions = dict;
+    mOptionsKeys = [[dict allKeys] sortedArrayUsingSelector:@selector(compare:)];
     [mOptionsTable reloadData];
 }
 
