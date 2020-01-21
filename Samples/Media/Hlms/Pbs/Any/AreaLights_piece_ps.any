@@ -31,39 +31,39 @@
 
 	float3 projectedPosInPlane;
 
-	for( int i=0; i<floatBitsToInt( passBuf.numAreaApproxLights ); ++i )
+	for( int i=0; i<floatBitsToInt( light1Buf.numAreaApproxLights ); ++i )
 	{
-		lightDir = passBuf.areaApproxLights[i].position.xyz - inPs.pos;
-		projectedPosInPlane.xyz = inPs.pos - dot( -lightDir.xyz, passBuf.areaApproxLights[i].direction.xyz ) *
-											 passBuf.areaApproxLights[i].direction.xyz;
+		lightDir = light1Buf.areaApproxLights[i].position.xyz - inPs.pos;
+		projectedPosInPlane.xyz = inPs.pos - dot( -lightDir.xyz, light1Buf.areaApproxLights[i].direction.xyz ) *
+											 light1Buf.areaApproxLights[i].direction.xyz;
 		fDistance = length( lightDir );
 
 		@property( obb_restraint_approx )
-			float obbRestraintFade = getObbRestraintFade( passBuf.areaApproxLights[i].obbRestraint, inPs.pos,
-														  passBuf.areaApproxLights[i].obbFadeFactorApprox.xyz );
+			float obbRestraintFade = getObbRestraintFade( light1Buf.areaApproxLights[i].obbRestraint, inPs.pos,
+														  light1Buf.areaApproxLights[i].obbFadeFactorApprox.xyz );
 			@piece( obbRestraintTestApprox )&& obbRestraintFade > 0.0@end
 		@end
 
-		if( fDistance <= passBuf.areaApproxLights[i].attenuation.x
+		if( fDistance <= light1Buf.areaApproxLights[i].attenuation.x
 			@insertpiece( obbRestraintTestApprox )
-		/*&& dot( -lightDir, passBuf.areaApproxLights[i].direction.xyz ) > 0*/ @insertpiece( andObjAreaApproxLightMaskCmp ) )
+		/*&& dot( -lightDir, light1Buf.areaApproxLights[i].direction.xyz ) > 0*/ @insertpiece( andObjAreaApproxLightMaskCmp ) )
 		{
-			projectedPosInPlane.xyz -= passBuf.areaApproxLights[i].position.xyz;
-			float3 areaLightBitangent = cross( passBuf.areaApproxLights[i].direction.xyz,
-											   passBuf.areaApproxLights[i].tangent.xyz );
-			float2 invHalfRectSize = float2( passBuf.areaApproxLights[i].direction.w,
-											 passBuf.areaApproxLights[i].tangent.w );
+			projectedPosInPlane.xyz -= light1Buf.areaApproxLights[i].position.xyz;
+			float3 areaLightBitangent = cross( light1Buf.areaApproxLights[i].direction.xyz,
+											   light1Buf.areaApproxLights[i].tangent.xyz );
+			float2 invHalfRectSize = float2( light1Buf.areaApproxLights[i].direction.w,
+											 light1Buf.areaApproxLights[i].tangent.w );
 			//lightUV is in light space, in range [-0.5; 0.5]
 			float2 lightUVForTex;
 			float2 lightUV;
-			lightUV.x = dot( projectedPosInPlane.xyz, passBuf.areaApproxLights[i].tangent.xyz );
+			lightUV.x = dot( projectedPosInPlane.xyz, light1Buf.areaApproxLights[i].tangent.xyz );
 			lightUV.y = dot( projectedPosInPlane.xyz, areaLightBitangent );
 			lightUV.xy *= invHalfRectSize.xy /*/ sqrt( fDistance )*/;
 			//Displace the UV by the normal to account for edge cases when
 			//a surface is close and perpendicular to the light. This is fully a hack and
 			//the values (e.g. 0.25) is completely eye balled.
 			lightUVForTex.xy = lightUV.xy;
-			lightUV.xy += float2( dot( passBuf.areaApproxLights[i].tangent.xyz, pixelData.normal ),
+			lightUV.xy += float2( dot( light1Buf.areaApproxLights[i].tangent.xyz, pixelData.normal ),
 								  dot( areaLightBitangent, pixelData.normal ) ) * 3.75 * invHalfRectSize.xy;
 			lightUV.xy = clamp( lightUV.xy, -0.5f, 0.5f );
 			lightUVForTex = clamp( lightUVForTex.xy, -0.5f, 0.5f );
@@ -77,21 +77,21 @@
 			float3 diffuseMask = float3( 1.0f, 1.0f, 1.0f );
 		@end
 		@property( hlms_lights_area_tex_mask )
-			if( i < floatBitsToInt( passBuf.numAreaApproxLightsWithMask ) )
+			if( i < floatBitsToInt( light1Buf.numAreaApproxLightsWithMask ) )
 			{
 				// 1 / (1 - 0.02) = 1.020408163
-				float diffuseMipsLeft = passBuf.areaLightNumMipmapsSpecFactor * 0.5 -
-										passBuf.areaLightDiffuseMipmapStart * 1.020408163f;
+				float diffuseMipsLeft = light1Buf.areaLightNumMipmapsSpecFactor * 0.5 -
+										light1Buf.areaLightDiffuseMipmapStart * 1.020408163f;
 				diffuseMask = OGRE_SampleArray2DLevel( areaLightMasks, areaLightMasksSampler,
 													   lightUVForTex + 0.5f,
-													   passBuf.areaApproxLights[i].attenuation.w,
-													   passBuf.areaLightDiffuseMipmapStart +
+													   light1Buf.areaApproxLights[i].attenuation.w,
+													   light1Buf.areaLightDiffuseMipmapStart +
 													   (pixelData.roughness - 0.02f) * diffuseMipsLeft ).AREA_LIGHTS_TEX_SWIZZLE;
 			}
 		@end
 
-			float3 closestPoint = passBuf.areaApproxLights[i].position.xyz +
-					passBuf.areaApproxLights[i].tangent.xyz * lightUV.x / invHalfRectSize.x +
+			float3 closestPoint = light1Buf.areaApproxLights[i].position.xyz +
+					light1Buf.areaApproxLights[i].tangent.xyz * lightUV.x / invHalfRectSize.x +
 					areaLightBitangent.xyz * lightUV.y / invHalfRectSize.y;
 
 			float3 lightDir2 = lightDir / fDistance;
@@ -99,21 +99,21 @@
 			fDistance= length( lightDir );
 
 			float3 toShapeLight = reflect( -pixelData.viewDir, pixelData.normal );
-			float denom = dot( toShapeLight, -passBuf.areaApproxLights[i].direction.xyz );
+			float denom = dot( toShapeLight, -light1Buf.areaApproxLights[i].direction.xyz );
 			@property( !hlms_lights_area_tex_mask || !hlms_lights_area_tex_colour )
 				float specCol = 0;
 			@else
 				float3 specCol = float3( 0, 0, 0 );
 			@end
-			if( denom > 1e-6f || passBuf.areaApproxLights[i].doubleSided.x != 0.0f )
+			if( denom > 1e-6f || light1Buf.areaApproxLights[i].doubleSided.x != 0.0f )
 			{
-				float3 p0l0 = passBuf.areaApproxLights[i].position.xyz - inPs.pos;
-				float t = dot( p0l0, -passBuf.areaApproxLights[i].direction.xyz ) / denom;
+				float3 p0l0 = light1Buf.areaApproxLights[i].position.xyz - inPs.pos;
+				float t = dot( p0l0, -light1Buf.areaApproxLights[i].direction.xyz ) / denom;
 				if( t >= 0 )
 				{
-					float3 posInShape = inPs.pos.xyz + toShapeLight.xyz * t - passBuf.areaApproxLights[i].position.xyz;
+					float3 posInShape = inPs.pos.xyz + toShapeLight.xyz * t - light1Buf.areaApproxLights[i].position.xyz;
 					float2 reflClipSpace;
-					reflClipSpace.x = dot( passBuf.areaApproxLights[i].tangent.xyz, posInShape );
+					reflClipSpace.x = dot( light1Buf.areaApproxLights[i].tangent.xyz, posInShape );
 					reflClipSpace.y = dot( areaLightBitangent, posInShape );
 
 					float specVal;
@@ -131,29 +131,29 @@
 					@end
 
 					@property( hlms_lights_area_tex_mask )
-						if( i < floatBitsToInt( passBuf.numAreaApproxLightsWithMask ) )
+						if( i < floatBitsToInt( light1Buf.numAreaApproxLightsWithMask ) )
 						{
 							specCol *= OGRE_SampleArray2DLevel( areaLightMasks, areaLightMasksSampler,
 																reflClipSpace * invHalfRectSize + 0.5f,
-																passBuf.areaApproxLights[i].attenuation.w,
+																light1Buf.areaApproxLights[i].attenuation.w,
 																(pixelData.roughness - 0.02f) *
-																passBuf.areaLightNumMipmapsSpecFactor ).AREA_LIGHTS_TEX_SWIZZLE;
+																light1Buf.areaLightNumMipmapsSpecFactor ).AREA_LIGHTS_TEX_SWIZZLE;
 						}
 					@end
 				}
 			}
 
 			lightDir *= 1.0 / fDistance;
-			//float fAreaW = dot( lightDir, -passBuf.areaApproxLights[i].direction.xyz ) * 0.5f + 0.5f;
-			//lightDir = (-passBuf.areaApproxLights[i].direction.xyz + lightDir) * 0.50f;
+			//float fAreaW = dot( lightDir, -light1Buf.areaApproxLights[i].direction.xyz ) * 0.5f + 0.5f;
+			//lightDir = (-light1Buf.areaApproxLights[i].direction.xyz + lightDir) * 0.50f;
 			//lightDir = lerp( lightDir2, lightDir, fAreaW );
-			float globalDot = saturate( dot( -lightDir, passBuf.areaApproxLights[i].direction.xyz ) );
-			globalDot = passBuf.areaApproxLights[i].doubleSided.x != 0.0f ? 1.0f : globalDot;
+			float globalDot = saturate( dot( -lightDir, light1Buf.areaApproxLights[i].direction.xyz ) );
+			globalDot = light1Buf.areaApproxLights[i].doubleSided.x != 0.0f ? 1.0f : globalDot;
 			tmpColour = BRDF_AreaLightApprox( lightDir,
-											  passBuf.areaApproxLights[i].diffuse.xyz * diffuseMask,
-											  passBuf.areaApproxLights[i].specular.xyz * specCol,
+											  light1Buf.areaApproxLights[i].diffuse.xyz * diffuseMask,
+											  light1Buf.areaApproxLights[i].specular.xyz * specCol,
 											  pixelData ) * ( globalDot * globalDot ) * booster;
-			float atten = 1.0 / (0.5 + (passBuf.areaApproxLights[i].attenuation.y + passBuf.areaApproxLights[i].attenuation.z * fDistance) * fDistance );
+			float atten = 1.0 / (0.5 + (light1Buf.areaApproxLights[i].attenuation.y + light1Buf.areaApproxLights[i].attenuation.z * fDistance) * fDistance );
 
 			@property( obb_restraint_approx )
 				atten *= obbRestraintFade;

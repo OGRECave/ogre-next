@@ -44,7 +44,8 @@ fragment float main_metal
 	PS_INPUT inPs [[stage_in]],
 
 	texture2d<float>	depthTexture	[[texture(0)]],
-	texture2d<float>	noiseTexture	[[texture(1)]],
+	texture2d<float>	gBuf_normals	[[texture(1)]],
+	texture2d<float>	noiseTexture	[[texture(2)]],
 
 	sampler				samplerState0	[[sampler(0)]],
 	sampler				samplerState1	[[sampler(1)]],
@@ -53,7 +54,8 @@ fragment float main_metal
 )
 {
 	float3 viewPosition = getScreenSpacePos( inPs.uv0, inPs.cameraDir, p, depthTexture, samplerState0 );
-	float3 viewNormal = reconstructNormal( viewPosition );
+	//float3 viewNormal = reconstructNormal( viewPosition );
+	float3 viewNormal = normalize( gBuf_normals.sample( samplerState0, inPs.uv0 ).xyz * 2.0 - 1.0 );
 	float3 randomVec = getNoiseVec( inPs.uv0, p, noiseTexture, samplerState1 );
 
 	float3 tangent = normalize( randomVec - viewNormal * dot(randomVec, viewNormal) );
@@ -66,7 +68,7 @@ fragment float main_metal
 	{
 		for( int a = 0; a < 8; ++a )
 		{
-			float3 sNoise = p.sampleDirs[(a << 2u) + i].xyz;
+			float3 sNoise = p.sampleDirs[(a << 3u) + i].xyz;
 
 			// get sample position
 			float3 oSample = TBN * sNoise; //to view-space

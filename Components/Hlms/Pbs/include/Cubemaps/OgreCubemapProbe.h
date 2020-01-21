@@ -35,10 +35,6 @@ THE SOFTWARE.
 #include "OgreTextureGpu.h"
 #include "OgreHeaderPrefix.h"
 
-//It's slightly more accurate if we render the cubemaps and generate the cubemaps, then blend.
-//But Ogre doesn't yet support RTT to mipmaps, so we generate the mipmaps after blending.
-#define GENERATE_MIPMAPS_ON_BLEND 1
-
 namespace Ogre
 {
     class _OgreHlmsPbsExport CubemapProbe : public UtilityAlloc
@@ -74,7 +70,6 @@ namespace Ogre
         TimeSlicing         mTimeSlicing;
         uint8               mFaceIdx;
         uint32              mWorkspaceExecMask;
-        uint32              mWorkspaceMipmapsExecMask;
         IdString            mWorkspaceDefName;
         CompositorWorkspace *mClearWorkspace;
         CompositorWorkspace *mWorkspaces[6];
@@ -170,9 +165,8 @@ namespace Ogre
             This value allows you to override it with a different workspace definition.
         */
         void initWorkspace( float cameraNear = 0.5f, float cameraFar = 500.0f,
-                            TimeSlicing ts=TS_ONE_FRAME,
-                            uint32 executionMask=0xFFFFFFFF, uint32 mipmapsExecutionMask=0x01,
-                            IdString workspaceDefOverride=IdString() );
+                            TimeSlicing ts = TS_ONE_FRAME, uint32 executionMask = 0xFFFFFFFF,
+                            IdString workspaceDefOverride = IdString() );
         bool isInitialized(void) const;
 
         /** Sets cubemap probe's parameters.

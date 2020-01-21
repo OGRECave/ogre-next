@@ -165,7 +165,11 @@ namespace Ogre
         uint8               mBlendChannelMask;
 
         /// This value calculated by HlmsManager::getBlendblock
-        bool                mIsTransparent;
+        /// mIsTransparent = 0  -> Not transparent
+        /// mIsTransparent |= 1 -> Automatically determined as transparent
+        /// mIsTransparent |= 2 -> Forced to be considered as transparent by RenderQueue for render order
+        /// mIsTransparent = 3  -> Forced & also automatically determined as transparent
+        uint8               mIsTransparent;
         /// Used to determine if separate alpha blending should be used for color and alpha channels
         bool                mSeparateBlend;
 
@@ -189,6 +193,18 @@ namespace Ogre
         /// Sets colour and alpha individually, turns mSeparateBlend on.
         void setBlendType( SceneBlendType colour, SceneBlendType alpha );
 
+        /** Sometimes you want to force the RenderQueue to render back to front even if
+            the object isn't alpha blended (e.g. you're rendering refractive materials)
+        @param bForceTransparent
+            True to always render back to front, like any transparent.
+            False for default behavior (opaque objects are rendered front to back, alpha
+            blended objects are rendered back to front)
+        */
+        void setForceTransparentRenderOrder( bool bForceTransparent );
+
+        bool isAutoTransparent( void ) const { return ( mIsTransparent & 0x01u ) != 0u; }
+        bool isForcedTransparent( void ) const { return ( mIsTransparent & 0x02u ) != 0u; }
+
         bool operator == ( const HlmsBlendblock &_r ) const
         {
             return !(*this != _r);
@@ -197,7 +213,7 @@ namespace Ogre
         bool operator != ( const HlmsBlendblock &_r ) const
         {
             //Don't include the ID in the comparision
-            //AND don't include mIsTransparent, which is filled
+            //AND don't include mIsTransparent's first bit, which is filled
             //automatically only for some managed objects.
             return  mAllowGlobalDefaults    != _r.mAllowGlobalDefaults ||
                     mSeparateBlend          != _r.mSeparateBlend ||
@@ -208,7 +224,8 @@ namespace Ogre
                     mBlendOperation         != _r.mBlendOperation ||
                     mBlendOperationAlpha    != _r.mBlendOperationAlpha ||
                     mAlphaToCoverageEnabled != _r.mAlphaToCoverageEnabled ||
-                    mBlendChannelMask       != _r.mBlendChannelMask;
+                    mBlendChannelMask       != _r.mBlendChannelMask ||
+                    (mIsTransparent & 0x02u) != (_r.mIsTransparent & 0x02u);
         }
     };
 

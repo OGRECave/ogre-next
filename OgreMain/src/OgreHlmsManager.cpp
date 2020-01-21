@@ -248,12 +248,14 @@ namespace Ogre
 
         if( !retVal->mRefCount )
         {
-            retVal->mIsTransparent =
-                    !( baseParams.mDestBlendFactor == SBF_ZERO &&
-                       baseParams.mSourceBlendFactor != SBF_DEST_COLOUR &&
-                       baseParams.mSourceBlendFactor != SBF_ONE_MINUS_DEST_COLOUR &&
-                       baseParams.mSourceBlendFactor != SBF_DEST_ALPHA &&
-                       baseParams.mSourceBlendFactor != SBF_ONE_MINUS_DEST_ALPHA );
+            if( !( baseParams.mDestBlendFactor == SBF_ZERO &&
+                   baseParams.mSourceBlendFactor != SBF_DEST_COLOUR &&
+                   baseParams.mSourceBlendFactor != SBF_ONE_MINUS_DEST_COLOUR &&
+                   baseParams.mSourceBlendFactor != SBF_DEST_ALPHA &&
+                   baseParams.mSourceBlendFactor != SBF_ONE_MINUS_DEST_ALPHA ) )
+            {
+                retVal->mIsTransparent |= 1u;
+            }
             mRenderSystem->_hlmsBlendblockCreated( retVal );
         }
 

@@ -51,11 +51,12 @@ namespace Ogre
         "specular_fresnel",
         "metallic"
     };
-    const char* c_transparencyModes[HlmsPbsDatablock::Fade+1] =
+    const char* c_transparencyModes[HlmsPbsDatablock::Refractive+1] =
     {
         "None",
         "Transparent",
-        "Fade"
+        "Fade",
+        "Refractive"
     };
 
     HlmsJsonPbs::HlmsJsonPbs( HlmsManager *hlmsManager, TextureGpuManager *textureManager,

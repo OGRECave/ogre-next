@@ -408,8 +408,23 @@ namespace Ogre
         /// GpuResidency::OnSystemRam
         void _notifySysRamDownloadIsReady( uint8 *sysRamPtr, bool resyncOnly );
 
+        /**
+        @param dst
+        @param dstBox
+        @param dstMipLevel
+        @param srcBox
+        @param srcMipLevel
+        @param keepResolvedTexSynced
+            When true, if dst is an MSAA texture and is implicitly resolved
+            (i.e. dst->hasMsaaExplicitResolves() == false); the resolved texture
+            is also kept up to date.
+
+            Typically the reason to set this to false is if you plane on rendering more
+            stuff to dst texture and then resolve.
+        */
         virtual void copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
-                             const TextureBox &srcBox, uint8 srcMipLevel );
+                             const TextureBox &srcBox, uint8 srcMipLevel,
+                             bool keepResolvedTexSynced = true );
 
         /** These 3 values  are used as defaults for the compositor to use, but they may be
             explicitly overriden by a RenderPassDescriptor.

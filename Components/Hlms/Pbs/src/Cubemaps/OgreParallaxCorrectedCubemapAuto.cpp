@@ -37,6 +37,8 @@ THE SOFTWARE.
 #include "Compositor/Pass/PassQuad/OgreCompositorPassQuadDef.h"
 #include "Compositor/Pass/PassQuad/OgreCompositorPassQuad.h"
 
+#include "OgreHlmsPbs.h"
+
 #include "OgreBitwise.h"
 
 #include "OgreRoot.h"
@@ -80,9 +82,7 @@ namespace Ogre
         ParallaxCorrectedCubemapBase( id, root, sceneManager, probeWorkspcDef, true ),
         mTrackedPosition( Vector3::ZERO ),
         mRenderTarget( 0 ),
-        mDpmRenderTarget( 0 ),
-        mDpmCamera( 0 ),
-        mCubeToDpmWorkspace( 0 ),
+        mIblTarget( 0 ),
         mListener( 0 )
     {
         const RenderSystemCapabilities *caps =
@@ -96,40 +96,15 @@ namespace Ogre
         destroyAllProbes();
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemapAuto::createCubemapToDpmWorkspaceDef(
-            CompositorManager2 *compositorManager, TextureGpu *cubeTexture )
+    void ParallaxCorrectedCubemapAuto::destroyProbe( CubemapProbe *probe )
     {
-        CompositorNodeDef *nodeDef =
-                compositorManager->addNodeDefinition( "AutoGen_PccCubeToDpm_Node/" +
-                                                      cubeTexture->getNameStr() );
-        nodeDef->addTextureSourceName( "DpmDst", 0, TextureDefinitionBase::TEXTURE_INPUT );
-        nodeDef->addTextureSourceName( "CubemapSrc", 1, TextureDefinitionBase::TEXTURE_INPUT );
-        nodeDef->setNumTargetPass( 1 );
+        CubemapProbeVec::iterator itor = std::find( mDirtyProbes.begin(), mDirtyProbes.end(), probe );
+        if( itor != mDirtyProbes.end() )
+        {
+            efficientVectorRemove( mDirtyProbes, itor );
+        }
 
-        CompositorTargetDef *targetDef = nodeDef->addTargetPass( "DpmDst" );
-        targetDef->setNumPasses( 2u );
-
-        CompositorPassQuadDef *passQuad = static_cast<CompositorPassQuadDef*>(
-                                              targetDef->addPass( PASS_QUAD ) );
-        passQuad->addQuadTextureSource( 0, "CubemapSrc" );
-        passQuad->mMaterialName = "Ogre/DPM/CubeToDpm";
-        passQuad->mIdentifier = c_cubmapToDpmIdentifier;
-        passQuad->mLoadActionColour[0]  = LoadAction::DontCare;
-        passQuad->mStoreActionColour[0] = StoreAction::Store;
-
-        targetDef->addPass( PASS_MIPMAP );
-
-        String workspaceName = "AutoGen_PccAutoCubeToDpm_Workspace/" + cubeTexture->getNameStr();
-        CompositorWorkspaceDef *workDef = compositorManager->addWorkspaceDefinition( workspaceName );
-        workDef->connectExternal( 0, nodeDef->getName(), 0 );
-        workDef->connectExternal( 1, nodeDef->getName(), 1 );
-    }
-    //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemapAuto::destroyCubemapToDpmWorkspaceDef(
-            CompositorManager2 *compositorManager, TextureGpu *cubeTexture )
-    {
-        String workspaceName = "AutoGen_PccAutoCubeToDpm_Workspace/" + cubeTexture->getNameStr();
-        compositorManager->removeWorkspaceDefinition( workspaceName );
+        ParallaxCorrectedCubemapBase::destroyProbe( probe );
     }
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemapAuto::setUpdatedTrackedDataFromCamera( Camera *trackedCamera )
@@ -181,34 +156,35 @@ namespace Ogre
         return mRenderTarget;
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemapAuto::releaseTmpRtt( const TextureGpu *tmpRtt )
+    void ParallaxCorrectedCubemapAuto::releaseTmpRtt( const TextureGpu *tmpRtt ) {}
+    //-----------------------------------------------------------------------------------
+    TextureGpu *ParallaxCorrectedCubemapAuto::findIbl( const TextureGpu *baseParams )
     {
+        OGRE_ASSERT_LOW( mIblTarget && "Must call ParallaxCorrectedCubemapAuto::setEnabled first!" );
+        return mIblTarget;
     }
+    //-----------------------------------------------------------------------------------
+    void ParallaxCorrectedCubemapAuto::releaseIbl( const TextureGpu *ibl ) {}
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemapAuto::_copyRenderTargetToCubemap( uint32 cubemapArrayIdx )
     {
         if( mListener )
             mListener->preCopyRenderTargetToCubemap( mRenderTarget, cubemapArrayIdx );
 
-        TextureGpu *renderTarget = mRenderTarget;
+        TextureGpu *ibl = mIblTarget;
 
-        if( mUseDpm2DArray )
-        {
-            mCubeToDpmWorkspace->_update();
-            renderTarget = mDpmRenderTarget;
-        }
-        else
+        if( !mUseDpm2DArray )
             cubemapArrayIdx *= 6u;
 
-        const uint8 numMipmaps = renderTarget->getNumMipmaps();
+        const uint8 numMipmaps = ibl->getNumMipmaps();
         for( uint8 mip=0; mip<numMipmaps; ++mip )
         {
             //srcBox.numSlices = 6, thus we ask the RenderSystem to copy all 6 slices in one call
-            TextureBox srcBox = renderTarget->getEmptyBox( mip );
+            TextureBox srcBox = ibl->getEmptyBox( mip );
             TextureBox dstBox = srcBox;
             srcBox.sliceStart = 0;
             dstBox.sliceStart = cubemapArrayIdx;
-            renderTarget->copyTo( mBindTexture, dstBox, mip, srcBox, mip );
+            ibl->copyTo( mBindTexture, dstBox, mip, srcBox, mip );
         }
     }
     //-----------------------------------------------------------------------------------
@@ -224,11 +200,7 @@ namespace Ogre
 
         if( bEnabled )
         {
-            //Cubemap target has no mipmaps when using DPM
-            uint32 textureFlags = TextureFlags::RenderToTexture;
-
-            if( !mUseDpm2DArray )
-                textureFlags |= TextureFlags::AllowAutomipmaps;
+            uint32 textureFlags = TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps;
 
             //Create Cubemap
             mRenderTarget =
@@ -240,33 +212,39 @@ namespace Ogre
                         TextureTypes::TypeCube );
             mRenderTarget->setResolution( width, height );
             mRenderTarget->setPixelFormat( pixelFormat );
-            if( !mUseDpm2DArray )
-                mRenderTarget->setNumMipmaps( PixelFormatGpuUtils::getMaxMipmapCount( width, height ) );
-            else
-                mRenderTarget->setNumMipmaps( 1u );
+            mRenderTarget->setNumMipmaps( PixelFormatGpuUtils::getMaxMipmapCount( width, height ) );
             mRenderTarget->_transitionTo( GpuResidency::Resident, (uint8*)0 );
 
-            //Create temporary 2D texture to convert the cubemap -> Dual Paraboloid
+            const uint8 numMipmaps = getIblNumMipmaps( width, height );
+
+            // OVERRIDE textureFlags. mIblTarget is only used by Compute Shaders
+            textureFlags = getIblTargetTextureFlags( pixelFormat );
+
+            TextureTypes::TextureTypes iblTextureType = TextureTypes::TypeCube;
+            String namePostfix = "";
+
             if( mUseDpm2DArray )
             {
-                mDpmRenderTarget = textureGpuManager->createTexture(
-                                       "ParallaxCorrectedCubemapAuto 2D DPM Target " +
-                                       StringConverter::toString( getId() ),
-                                       GpuPageOutStrategy::Discard,
-                                       TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps,
-                                       TextureTypes::Type2D );
-                mDpmRenderTarget->setResolution( width << 1u, height << 1u );
-                mDpmRenderTarget->setPixelFormat( pixelFormat );
-                mDpmRenderTarget->setNumMipmaps(
-                            PixelFormatGpuUtils::getMaxMipmapCount(
-                                mDpmRenderTarget->getWidth(), mDpmRenderTarget->getHeight() ) );
-                mDpmRenderTarget->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+                iblTextureType = TextureTypes::Type2D;
+                namePostfix = "(DPM) ";
             }
 
-            //Create the actual texture to contain the reflections
-            //that will be bound during normal render
-            TextureTypes::TextureTypes bindTextureType = mUseDpm2DArray ? TextureTypes::Type2DArray :
-                                                                          TextureTypes::TypeCubeArray;
+            mIblTarget = textureGpuManager->createTexture(
+                "ParallaxCorrectedCubemapAuto IBL " + namePostfix + StringConverter::toString( getId() ),
+                GpuPageOutStrategy::Discard, textureFlags, iblTextureType );
+            if( !mUseDpm2DArray )
+                mIblTarget->setResolution( width, height );
+            else
+                mIblTarget->setResolution( width << 1u, height << 1u );
+            mIblTarget->setPixelFormat( pixelFormat );
+            mIblTarget->setNumMipmaps( numMipmaps );
+            mIblTarget->scheduleTransitionTo( GpuResidency::Resident );
+
+            // Create the actual texture to contain the reflections
+            // that will be bound during normal render
+            const TextureTypes::TextureTypes bindTextureType =
+                mUseDpm2DArray ? TextureTypes::Type2DArray : TextureTypes::TypeCubeArray;
+
             uint32 numSlices = maxNumProbes;
             if( !mUseDpm2DArray )
                 numSlices *= 6u;
@@ -278,14 +256,10 @@ namespace Ogre
                         GpuPageOutStrategy::Discard,
                         TextureFlags::ManualTexture,
                         bindTextureType );
-            if( mUseDpm2DArray )
-                mBindTexture->setResolution( width << 1u, height << 1u, numSlices );
-            else
-                mBindTexture->setResolution( width, height, numSlices );
+            mBindTexture->setResolution( mIblTarget->getWidth(), mIblTarget->getHeight(), numSlices );
             mBindTexture->setPixelFormat( pixelFormat );
-            mBindTexture->setNumMipmaps( PixelFormatGpuUtils::getMaxMipmapCount(
-                                             mBindTexture->getWidth(), mBindTexture->getHeight() ) );
-            mBindTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+            mBindTexture->setNumMipmaps( numMipmaps );
+            mBindTexture->scheduleTransitionTo( GpuResidency::Resident );
 
             const uint64 remainder = maxNumProbes % 64u;
             mReservedSlotBitset.resize( alignToNextMultiple( maxNumProbes, 64u ) >> 6u,
@@ -297,28 +271,10 @@ namespace Ogre
             CompositorManager2 *compositorManager = mDefaultWorkspaceDef->getCompositorManager();
             compositorManager->addListener( this );
 
-            if( mUseDpm2DArray )
-            {
-                createCubemapToDpmWorkspaceDef( compositorManager, mRenderTarget );
-                mDpmCamera = mSceneManager->createCamera( "Camera/" + mRenderTarget->getNameStr(),
-                                                          false, false );
-                mDpmCamera->setFOVy( Degree(90) );
-                mDpmCamera->setAspectRatio( 1 );
-                mDpmCamera->setFixedYawAxis(false);
-                mDpmCamera->setNearClipDistance( 0.1f );
-                mDpmCamera->setFarClipDistance( 1.0f );
-
-                IdString workspaceName( "AutoGen_PccAutoCubeToDpm_Workspace/" +
-                                        mRenderTarget->getNameStr() );
-                CompositorChannelVec channels;
-                channels.reserve( 2u );
-                channels.push_back( mDpmRenderTarget );
-                channels.push_back( mRenderTarget );
-                mCubeToDpmWorkspace = compositorManager->addWorkspace( mSceneManager, channels,
-                                                                       mDpmCamera, workspaceName,
-                                                                       false );
-                mCubeToDpmWorkspace->setListener( this );
-            }
+            HlmsManager *hlmsManager = mRoot->getHlmsManager();
+            OGRE_ASSERT_HIGH( dynamic_cast<HlmsPbs *>( hlmsManager->getHlms( HLMS_PBS ) ) );
+            HlmsPbs *hlmsPbs = static_cast<HlmsPbs *>( hlmsManager->getHlms( HLMS_PBS ) );
+            hlmsPbs->_notifyIblSpecMipmap( mRenderTarget->getNumMipmaps() );
 
 //            CubemapProbeVec::const_iterator itor = mProbes.begin();
 //            CubemapProbeVec::const_iterator end  = mProbes.end();
@@ -348,19 +304,11 @@ namespace Ogre
 
             mReservedSlotBitset.clear();
 
-            if( mCubeToDpmWorkspace )
+            if( mIblTarget )
             {
-                compositorManager->removeWorkspace( mCubeToDpmWorkspace );
-                mCubeToDpmWorkspace = 0;
-                destroyCubemapToDpmWorkspaceDef( compositorManager, mRenderTarget );
+                textureGpuManager->destroyTexture( mIblTarget );
+                mIblTarget = 0;
             }
-
-            if( mDpmCamera )
-            {
-                mSceneManager->destroyCamera( mDpmCamera );
-                mDpmCamera = 0;
-            }
-
             if( mRenderTarget )
             {
                 textureGpuManager->destroyTexture( mRenderTarget );
@@ -433,7 +381,6 @@ namespace Ogre
     void ParallaxCorrectedCubemapAuto::updateExpensiveCollectedDirtyProbes( uint16 iterationThreshold )
     {
         RenderSystem *renderSystem = mSceneManager->getDestinationRenderSystem();
-        HlmsManager *hlmsManager = mRoot->getHlmsManager();
 
         const uint32 oldVisibilityMask = mSceneManager->getVisibilityMask();
         mSceneManager->setVisibilityMask( 0xffffffff );

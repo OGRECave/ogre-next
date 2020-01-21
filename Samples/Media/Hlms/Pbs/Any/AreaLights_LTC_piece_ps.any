@@ -38,22 +38,6 @@ Adapted to Ogre by Matias N. Goldberg
 */
 
 @property( hlms_lights_area_ltc )
-	@piece( DeclAreaLtcTextures )
-		@property( syntax == glsl || syntax == glsles )
-			uniform sampler2DArray ltcMatrix;
-		@end
-		@property( syntax == hlsl )
-			Texture2DArray<float4> ltcMatrix	: register(t@value(ltcMatrix));
-			SamplerState ltcSampler				: register(s@value(ltcMatrix));
-		@end
-		@property( syntax == metal )
-			, texture2d_array<float> ltcMatrix	[[texture(@value(ltcMatrix))]]
-			, sampler ltcSampler				[[sampler(@value(ltcMatrix))]]
-		@end
-	@end
-@end
-
-@property( hlms_lights_area_ltc )
 @piece( DeclAreaLtcLightFuncs )
 #define LUT_SIZE  64.0
 #define LUT_SCALE ((LUT_SIZE - 1.0)/LUT_SIZE)
@@ -286,21 +270,21 @@ INLINE float LTC_Evaluate( float3 N, float3 V, float3 P, float3x3 Minv,
 
 @property( hlms_lights_area_ltc )
 @piece( DoAreaLtcLights )
-for( int i=0; i<floatBitsToInt( passBuf.numAreaLtcLights ); ++i )
+for( int i=0; i<floatBitsToInt( light2Buf.numAreaLtcLights ); ++i )
 {
-	lightDir = passBuf.areaLtcLights[i].position.xyz - inPs.pos;
+	lightDir = light2Buf.areaLtcLights[i].position.xyz - inPs.pos;
 	fDistance = length( lightDir );
 
 	@property( obb_restraint_ltc )
-		float3 obbFadeFactorLtc = float3( passBuf.areaLtcLights[i].points[1].w,
-										  passBuf.areaLtcLights[i].points[2].w,
-										  passBuf.areaLtcLights[i].points[3].w );
-		float obbRestraintFade = getObbRestraintFade( passBuf.areaLtcLights[i].obbRestraint, inPs.pos,
+		float3 obbFadeFactorLtc = float3( light2Buf.areaLtcLights[i].points[1].w,
+										  light2Buf.areaLtcLights[i].points[2].w,
+										  light2Buf.areaLtcLights[i].points[3].w );
+		float obbRestraintFade = getObbRestraintFade( light2Buf.areaLtcLights[i].obbRestraint, inPs.pos,
 													  obbFadeFactorLtc );
 		@piece( obbRestraintTestLtc )&& obbRestraintFade > 0.0@end
 	@end
 
-	if( fDistance <= passBuf.areaLtcLights[i].diffuse.w
+	if( fDistance <= light2Buf.areaLtcLights[i].diffuse.w
 		@insertpiece( obbRestraintTestLtc )
 		@insertpiece( andObjAreaLtcLightMaskCmp ) )
 	{
@@ -316,17 +300,17 @@ for( int i=0; i<floatBitsToInt( passBuf.numAreaLtcLights ); ++i )
 			float3(ltc0.z, 0, ltc0.w)
 		);
 
-		bool doubleSidedLtc = passBuf.areaLtcLights[i].specular.w != 0.0f;
+		bool doubleSidedLtc = light2Buf.areaLtcLights[i].specular.w != 0.0f;
 
 		@property( !fresnel_scalar )
 			float ltcSpecular = LTC_Evaluate( pixelData.normal.xyz, pixelData.viewDir.xyz, inPs.pos.xyz, Minv,
-											  passBuf.areaLtcLights[i].points, doubleSidedLtc );
+											  light2Buf.areaLtcLights[i].points, doubleSidedLtc );
 			// BRDF shadowing and Fresnel
 			ltcSpecular *= pixelData.F0 * ltc1.x + (1.0 - pixelData.F0) * ltc1.y;
 		@else
 			float3 ltcSpecular;
 			ltcSpecular.x = LTC_Evaluate( pixelData.normal.xyz, pixelData.viewDir.xyz, inPs.pos.xyz, Minv,
-										  passBuf.areaLtcLights[i].points, doubleSidedLtc );
+										  light2Buf.areaLtcLights[i].points, doubleSidedLtc );
 			ltcSpecular.yz = ltcSpecular.xx;
 			// BRDF shadowing and Fresnel
 			ltcSpecular.xyz *= pixelData.F0.xyz * ltc1.x + (1.0 - pixelData.F0.xyz) * ltc1.y;
@@ -334,15 +318,15 @@ for( int i=0; i<floatBitsToInt( passBuf.numAreaLtcLights ); ++i )
 
 		float ltcDiffuse = LTC_Evaluate( pixelData.normal.xyz, pixelData.viewDir.xyz, inPs.pos.xyz,
 										 buildFloat3x3( float3( 1, 0, 0 ), float3( 0, 1, 0 ), float3( 0, 0, 1 ) ),
-										 passBuf.areaLtcLights[i].points, doubleSidedLtc );
+										 light2Buf.areaLtcLights[i].points, doubleSidedLtc );
 
 		@property( obb_restraint_ltc )
 			ltcDiffuse	*= obbRestraintFade;
 			ltcSpecular	*= obbRestraintFade;
 		@end
 
-		finalColour += passBuf.areaLtcLights[i].diffuse.xyz * ltcDiffuse * pixelData.diffuse.xyz;
-		finalColour += passBuf.areaLtcLights[i].specular.xyz * ltcSpecular * pixelData.specular.xyz;
+		finalColour += light2Buf.areaLtcLights[i].diffuse.xyz * ltcDiffuse * pixelData.diffuse.xyz;
+		finalColour += light2Buf.areaLtcLights[i].specular.xyz * ltcSpecular * pixelData.specular.xyz;
 	}
 }
 @end

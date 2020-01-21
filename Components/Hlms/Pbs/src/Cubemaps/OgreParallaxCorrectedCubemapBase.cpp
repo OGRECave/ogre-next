@@ -102,6 +102,31 @@ namespace Ogre
         mSamplerblockTrilinear = 0;
     }
     //-----------------------------------------------------------------------------------
+    uint32 ParallaxCorrectedCubemapBase::getIblTargetTextureFlags( PixelFormatGpu pixelFormat ) const
+    {
+        const RenderSystemCapabilities *caps =
+            mSceneManager->getDestinationRenderSystem()->getCapabilities();
+        uint32 textureFlags;
+        if( caps->hasCapability( RSC_UAV ) )
+        {
+            textureFlags = TextureFlags::Uav;
+            if( PixelFormatGpuUtils::isSRgb( pixelFormat ) )
+                textureFlags |= TextureFlags::Reinterpretable;
+        }
+        else
+        {
+            textureFlags = TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps;
+        }
+        return textureFlags;
+    }
+    //-----------------------------------------------------------------------------------
+    uint8 ParallaxCorrectedCubemapBase::getIblNumMipmaps( uint32 width, uint32 height )
+    {
+        uint8 numMipmaps = PixelFormatGpuUtils::getMaxMipmapCount( width, height );
+        numMipmaps = std::max<uint8>( numMipmaps, 5u ) - 4u;
+        return numMipmaps;
+    }
+    //-----------------------------------------------------------------------------------
     CubemapProbe* ParallaxCorrectedCubemapBase::createProbe(void)
     {
         CubemapProbe *probe = OGRE_NEW CubemapProbe( this );
@@ -224,6 +249,16 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemapBase::releaseTmpRtt( const TextureGpu *tmpRtt )
+    {
+        OGRE_EXCEPT( Exception::ERR_INVALID_CALL, "", "" );
+    }
+    //-----------------------------------------------------------------------------------
+    TextureGpu *ParallaxCorrectedCubemapBase::findIbl( const TextureGpu *baseParams )
+    {
+        OGRE_EXCEPT( Exception::ERR_INVALID_CALL, "", "" );
+    }
+    //-----------------------------------------------------------------------------------
+    void ParallaxCorrectedCubemapBase::releaseIbl( const TextureGpu *ibl )
     {
         OGRE_EXCEPT( Exception::ERR_INVALID_CALL, "", "" );
     }

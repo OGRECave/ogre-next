@@ -1327,6 +1327,18 @@ namespace Ogre {
             /** Provides texture size of the texture unit (index determined by setAutoConstant
                 call). Packed as float4(width, height, depth, 1)
             */
+            ACT_UAV_SIZE,
+            /** Provides inverse uav size of the uav unit (index determined by setAutoConstant
+                call). Packed as float4(1 / width, 1 / height, 1 / depth, 1)
+            */
+            ACT_INVERSE_UAV_SIZE,
+            /** Provides packed uav size of the uav unit (index determined by setAutoConstant
+                call). Packed as float4(width, height, 1 / width, 1 / height)
+            */
+            ACT_PACKED_UAV_SIZE,
+            /** Provides texture size of the texture unit (index determined by setAutoConstant
+                call). Packed as float4(width, height, depth, 1)
+            */
             ACT_TEXTURE_SIZE,
             /** Provides inverse texture size of the texture unit (index determined by setAutoConstant
                 call). Packed as float4(1 / width, 1 / height, 1 / depth, 1)

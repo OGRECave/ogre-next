@@ -1,6 +1,7 @@
 #version 330
 
 uniform sampler2D depthTexture;
+uniform sampler2D gBuf_normals;
 uniform sampler2D noiseTexture;
 
 in block
@@ -42,7 +43,8 @@ vec3 getRandomVec(vec2 uv)
 void main()
 {
     vec3 viewPosition = getScreenSpacePos(inPs.uv0, inPs.cameraDir);
-    vec3 viewNormal = reconstructNormal(viewPosition);
+    //vec3 viewNormal = reconstructNormal(viewPosition);
+    vec3 viewNormal = normalize( texture( gBuf_normals, inPs.uv0 ).xyz * 2.0 - 1.0 );
     vec3 randomVec = getRandomVec(inPs.uv0);
    
     vec3 tangent = normalize(randomVec - viewNormal * dot(randomVec, viewNormal));
@@ -54,14 +56,14 @@ void main()
     {
 		for(int a = 0; a < 8; ++a)
 		{
-			vec3 sNoise = sampleDirs[(a << 2u) + i].xyz;
+			vec3 sNoise = sampleDirs[(a << 3u) + i].xyz;
          
 			// get sample position
-			vec3 sample = TBN * sNoise; // From tangent to view-space
-			sample = viewPosition + sample * kernelRadius; 
+			vec3 oSample = TBN * sNoise; // From tangent to view-space
+			oSample = viewPosition + oSample * kernelRadius;
         
 			// project sample position
-			vec4 offset = vec4(sample, 1.0);
+			vec4 offset = vec4(oSample, 1.0);
 			offset = projection * offset; // from view to clip-space
 			offset.xyz /= offset.w; // perspective divide
 			offset.xyz = offset.xyz * 0.5 + 0.5; // transform to range 0.0 - 1.0
@@ -70,7 +72,7 @@ void main()
 			float sampleDepth = getScreenSpacePos(offset.xy, inPs.cameraDir).z;
 
 			float rangeCheck = smoothstep(0.0, 1.0, kernelRadius / abs(viewPosition.z - sampleDepth));
-			occlusion += (sampleDepth >= sample.z ? 1.0 : 0.0) * rangeCheck;
+			occlusion += (sampleDepth >= oSample.z ? 1.0 : 0.0) * rangeCheck;
 			
 		}      
     }

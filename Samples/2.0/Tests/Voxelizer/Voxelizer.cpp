@@ -55,9 +55,6 @@ namespace Demo
                 "Compute/Algorithms/IrradianceFields",
                 "VCT",
                 "VCT/Visualizer",
-                "Hlms/Common/GLSL",
-                "Hlms/Common/HLSL",
-                "Hlms/Common/Metal",
                 "Hlms/Pbs/Any",
                 "2.0/scripts/materials/Postprocessing/SceneAssets"
             };

@@ -42,6 +42,7 @@ namespace Demo
         mUseMultipleProbes( true ),
         mRegenerateProbes( true ),
         mPerPixelReflections( true ),
+
         mUseDpm2DArray( false ),
         mRoughnessDirty( false )
     {
@@ -81,7 +82,7 @@ namespace Demo
                         mGraphicsSystem->getRoot(),
                         mGraphicsSystem->getSceneManager(),
                         workspaceDef, 250u, 1u << 25u );
-            mParallaxCorrectedCubemapOrig->setEnabled( true, 1024, 1024, Ogre::PFG_RGBA8_UNORM_SRGB );
+            mParallaxCorrectedCubemapOrig->setEnabled( true, 512, 512, Ogre::PFG_RGBA8_UNORM_SRGB );
             mParallaxCorrectedCubemap = mParallaxCorrectedCubemapOrig;
         }
         else
@@ -111,7 +112,7 @@ namespace Demo
         {
             //Probe 00
             probe = mParallaxCorrectedCubemap->createProbe();
-            probe->setTextureParams( 1024, 1024 );
+            probe->setTextureParams( 512, 512 );
             probe->initWorkspace();
 
             probeArea.mCenter = Ogre::Vector3( -0.505, 3.400016, -0.598495 );
@@ -121,7 +122,7 @@ namespace Demo
 
         //Probe 01
         probe = mParallaxCorrectedCubemap->createProbe();
-        probe->setTextureParams( 1024, 1024 );
+        probe->setTextureParams( 512, 512 );
         probe->initWorkspace();
 
         probeArea.mCenter = Ogre::Vector3( -0.505, 3.400016, 5.423867 );
@@ -134,7 +135,7 @@ namespace Demo
         {
             //Probe 02
             probe = mParallaxCorrectedCubemap->createProbe();
-            probe->setTextureParams( 1024, 1024 );
+            probe->setTextureParams( 512, 512 );
             probe->initWorkspace();
 
             probeArea.mCenter = Ogre::Vector3( -0.505, 3.400016, 10.657585 );

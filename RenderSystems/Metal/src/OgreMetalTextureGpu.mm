@@ -240,7 +240,8 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void MetalTextureGpu::copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
-                                  const TextureBox &srcBox, uint8 srcMipLevel )
+                                  const TextureBox &srcBox, uint8 srcMipLevel,
+                                  bool keepResolvedTexSynced )
     {
         TextureGpu::copyTo( dst, dstBox, dstMipLevel, srcBox, srcMipLevel );
 
@@ -256,20 +257,10 @@ namespace Ogre
         id<MTLTexture> srcTextureName = this->mFinalTextureName;
         id<MTLTexture> dstTextureName = dstMetal->mFinalTextureName;
 
-        //Source has explicit resolves. If destination doesn't,
-        //we must copy to its internal MSAA surface.
-        if( this->mMsaa > 1u && this->hasMsaaExplicitResolves() )
-        {
-            if( !dstMetal->hasMsaaExplicitResolves() )
-                dstTextureName = dstMetal->mMsaaFramebufferName;
-        }
-        //Destination has explicit resolves. If source doesn't,
-        //we must copy from its internal MSAA surface.
-        if( dstMetal->mMsaa > 1u && dstMetal->hasMsaaExplicitResolves() )
-        {
-            if( !this->hasMsaaExplicitResolves() )
-                srcTextureName = this->mMsaaFramebufferName;
-        }
+        if( this->mMsaa > 1u && !this->hasMsaaExplicitResolves() )
+            srcTextureName = this->mMsaaFramebufferName;
+        if( dstMetal->mMsaa > 1u && !dstMetal->hasMsaaExplicitResolves() )
+            dstTextureName = dstMetal->mMsaaFramebufferName;
 
         __unsafe_unretained id<MTLBlitCommandEncoder> blitEncoder = device->getBlitEncoder();
         for( uint32 slice=0; slice<numSlices; ++slice )
@@ -286,7 +277,7 @@ namespace Ogre
         }
 
         //Must keep the resolved texture up to date.
-        if( dstMetal->mMsaa > 1u && !dstMetal->hasMsaaExplicitResolves() )
+        if( dstMetal->mMsaa > 1u && !dstMetal->hasMsaaExplicitResolves() && keepResolvedTexSynced )
         {
             device->endAllEncoders();
 
@@ -344,9 +335,9 @@ namespace Ogre
         if( mMsaa > 1u && hasMsaaExplicitResolves() )
             texType = MTLTextureType2DMultisample;
 
-        if( cubemapsAs2DArrays &&
-            (mTextureType == TextureTypes::TypeCube ||
-             mTextureType == TextureTypes::TypeCubeArray) )
+        if( ( cubemapsAs2DArrays || forUav ) &&          //
+            ( mTextureType == TextureTypes::TypeCube ||  //
+              mTextureType == TextureTypes::TypeCubeArray ) )
         {
             texType = MTLTextureType2DArray;
         }

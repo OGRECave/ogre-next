@@ -778,7 +778,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     bool Pass::isTransparent(void) const
     {
-        return mDatablock->getBlendblock()->mIsTransparent;
+        return mDatablock->getBlendblock()->isAutoTransparent();
     }
     //-----------------------------------------------------------------------
     void Pass::setAlphaRejectFunction(CompareFunction func)

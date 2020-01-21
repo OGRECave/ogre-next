@@ -71,6 +71,8 @@ namespace Ogre
         TextureGpuVec   mPrePassTextures;
         TextureGpu      *mPrePassDepthTexture;
         TextureGpu      *mSsrTexture;
+        TextureGpu      *mDepthTextureNoMsaa;
+        TextureGpu      *mRefractionsTexture;
 
     public:
         /** Constructor

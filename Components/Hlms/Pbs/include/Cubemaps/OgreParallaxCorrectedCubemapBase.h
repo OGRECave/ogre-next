@@ -71,9 +71,12 @@ namespace Ogre
                                       bool automaticMode );
         virtual ~ParallaxCorrectedCubemapBase();
 
+        uint32 getIblTargetTextureFlags( PixelFormatGpu pixelFormat ) const;
+        static uint8 getIblNumMipmaps( uint32 width, uint32 height );
+
         /// Adds a cubemap probe.
         CubemapProbe* createProbe(void);
-        void destroyProbe( CubemapProbe *probe );
+        virtual void destroyProbe( CubemapProbe *probe );
         virtual void destroyAllProbes(void);
 
         /// Destroys the Proxy Items. Useful if you need to call sceneManager->clearScene();
@@ -108,6 +111,9 @@ namespace Ogre
         /// Creates one if none found.
         virtual TextureGpu* findTmpRtt( const TextureGpu *baseParams );
         virtual void releaseTmpRtt( const TextureGpu *tmpRtt );
+
+        virtual TextureGpu* findIbl( const TextureGpu *baseParams );
+        virtual void releaseIbl( const TextureGpu *tmpRtt );
 
         virtual void _copyRenderTargetToCubemap( uint32 cubemapArrayIdx );
 

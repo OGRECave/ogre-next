@@ -57,6 +57,7 @@ THE SOFTWARE.
 #include "Compositor/Pass/PassClear/OgreCompositorPassClearDef.h"
 #include "Compositor/Pass/PassCompute/OgreCompositorPassComputeDef.h"
 #include "Compositor/Pass/PassDepthCopy/OgreCompositorPassDepthCopyDef.h"
+#include "Compositor/Pass/PassIblSpecular/OgreCompositorPassIblSpecularDef.h"
 #include "Compositor/Pass/PassMipmap/OgreCompositorPassMipmapDef.h"
 #include "Compositor/Pass/PassQuad/OgreCompositorPassQuadDef.h"
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
@@ -6484,7 +6485,7 @@ namespace Ogre{
         else if( textureType == TextureTypes::TypeCube )
             depthOrSlices = 6u;
 
-        if( !noAutomipmaps && numMipmaps > 1u )
+        if( !noAutomipmaps && numMipmaps != 1u )
             textureFlags |= TextureFlags::AllowAutomipmaps;
 
         // No errors, create
@@ -9576,6 +9577,52 @@ namespace Ogre{
                         }
                     }
                     break;
+                case ID_GEN_NORMALS_GBUFFER:
+                    if( prop->values.size() != 1 )
+                    {
+                        compiler->addError(
+                            ScriptCompiler::CE_FEWERPARAMETERSEXPECTED, prop->file, prop->line,
+                            "gen_normals_gbuffer requires exactly one parameter (boolean)" );
+                    }
+                    else
+                    {
+                        AbstractNodeList::const_iterator it0 = prop->values.begin();
+
+                        if( !getBoolean( *it0, &passScene->mGenNormalsGBuf ) )
+                        {
+                            compiler->addError( ScriptCompiler::CE_INVALIDPARAMETERS, prop->file,
+                                                prop->line, "gen_normals_gbuffer must be a boolean" );
+                        }
+                    }
+                    break;
+                case ID_USE_REFRACTIONS:
+                    if( prop->values.size() != 2u )
+                    {
+                        compiler->addError( ScriptCompiler::CE_FEWERPARAMETERSEXPECTED, prop->file,
+                                            prop->line,
+                                            "use_refractions only supports 2 arguments: the depth "
+                                            "texture & the refraction texture" );
+                    }
+                    else
+                    {
+                        IdString depthTexture, refractions;
+
+                        AbstractNodeList::const_iterator it1 = prop->values.begin();
+                        AbstractNodeList::const_iterator it0 = it1++;
+
+                        if( !getIdString( *it0, &depthTexture ) || !getIdString( *it1, &refractions ) )
+                        {
+                            compiler->addError( ScriptCompiler::CE_INVALIDPARAMETERS, prop->file,
+                                                prop->line,
+                                                "use_refractions must be the name of a texture "
+                                                "available in the local or global scope" );
+                        }
+                        else
+                        {
+                            passScene->setUseRefractions( depthTexture, refractions );
+                        }
+                    }
+                    break;
                 case ID_UV_BAKING:
                     if(prop->values.size() != 1)
                     {
@@ -10489,6 +10536,100 @@ namespace Ogre{
         }
     }
 
+    void CompositorPassTranslator::translateIblSpecular( ScriptCompiler *compiler,
+                                                         const AbstractNodePtr &node,
+                                                         CompositorTargetDef *targetDef )
+    {
+        mPassDef = targetDef->addPass( PASS_IBL_SPECULAR );
+        CompositorPassIblSpecularDef *passIbl = static_cast<CompositorPassIblSpecularDef *>( mPassDef );
+
+        ObjectAbstractNode *obj = reinterpret_cast<ObjectAbstractNode *>( node.get() );
+        obj->context = Any( mPassDef );
+
+        for( AbstractNodeList::iterator i = obj->children.begin(); i != obj->children.end(); ++i )
+        {
+            if( ( *i )->type == ANT_OBJECT )
+            {
+                processNode( compiler, *i );
+            }
+            else if( ( *i )->type == ANT_PROPERTY )
+            {
+                PropertyAbstractNode *prop = reinterpret_cast<PropertyAbstractNode *>( ( *i ).get() );
+                switch( prop->id )
+                {
+                case ID_INPUT:
+                case ID_OUTPUT:
+                    if( prop->values.size() != 1u )
+                    {
+                        compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line,
+                                            "Expecting texture name" );
+                        return;
+                    }
+                    else
+                    {
+                        AbstractNodeList::const_iterator it0 = prop->values.begin();
+                        String name;
+                        if( getString( *it0, &name ) )
+                        {
+                            if( prop->id == ID_INPUT )
+                                passIbl->setCubemapInput( name );
+                            else
+                                passIbl->setCubemapOutput( name );
+                        }
+                        else
+                        {
+                            compiler->addError( ScriptCompiler::CE_INVALIDPARAMETERS, prop->file,
+                                                prop->line );
+                        }
+                    }
+                    break;
+                case ID_SAMPLES_PER_ITERATION:
+                    if( prop->values.size() != 1u )
+                    {
+                        compiler->addError( ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line );
+                        return;
+                    }
+                    else
+                    {
+                        AbstractNodeList::const_iterator it0 = prop->values.begin();
+                        if( !getFloat( *it0, &passIbl->mSamplesPerIteration ) )
+                        {
+                            compiler->addError( ScriptCompiler::CE_NUMBEREXPECTED, prop->file,
+                                                prop->line, "Boolean expected" );
+                        }
+                    }
+                    break;
+                case ID_FORCE_MIPMAP_FALLBACK:
+                    if( prop->values.size() != 1u )
+                    {
+                        compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file, prop->line );
+                        return;
+                    }
+                    else
+                    {
+                        AbstractNodeList::const_iterator it0 = prop->values.begin();
+                        if( !getBoolean( *it0, &passIbl->mForceMipmapFallback ) )
+                        {
+                            compiler->addError( ScriptCompiler::CE_STRINGEXPECTED, prop->file,
+                                                prop->line, "Boolean expected" );
+                        }
+                    }
+                    break;
+                // case ID_VIEWPORT:
+                case ID_IDENTIFIER:
+                case ID_FLUSH_COMMAND_BUFFERS:
+                case ID_NUM_INITIAL:
+                case ID_EXECUTION_MASK:
+                case ID_PROFILING_ID:
+                    break;
+                default:
+                    compiler->addError( ScriptCompiler::CE_UNEXPECTEDTOKEN, prop->file, prop->line,
+                                        "token \"" + prop->name + "\" is not recognized" );
+                }
+            }
+        }
+    }
+
     void CompositorPassTranslator::translateStencilFace( ScriptCompiler *compiler, const AbstractNodePtr &node,
                                                          StencilStateOp *stencilStateOp )
     {
@@ -10570,7 +10711,7 @@ namespace Ogre{
             translateQuad( compiler, node, target );
         else if(obj->name == "render_scene")
             translateScene( compiler, node, target );
-        else if(obj->name == "depth_copy")
+        else if(obj->name == "depth_copy" || obj->name == "texture_copy")
             translateDepthCopy( compiler, node, target );
         else if(obj->name == "bind_uav")
             translateUav( compiler, node, target );
@@ -10578,6 +10719,8 @@ namespace Ogre{
             translateCompute( compiler, node, target );
         else if(obj->name == "generate_mipmaps")
             translateMipmap( compiler, node, target );
+        else if(obj->name == "ibl_specular")
+            translateIblSpecular( compiler, node, target );
         else if(obj->name == "custom")
         {
             IdString customId;

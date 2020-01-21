@@ -1,5 +1,6 @@
 @piece( SetCrossPlatformSettings )
 #define ushort uint
+#define ushort3 uint3
 #define ogre_float4x3 float4x3
 
 //Short used for read operations. It's an int in GLSL & HLSL. An ushort in Metal
@@ -53,6 +54,7 @@
 #define interpolateAtSample( interp, subsample ) EvaluateAttributeAtSample( interp, subsample )
 #define findLSB firstbitlow
 #define findMSB firstbithigh
+#define mod( a, b ) (a - b * floor(a / b))
 
 #define outPs_colour0 outPs.colour0
 #define OGRE_Sample( tex, sampler, uv ) tex.Sample( sampler, uv )

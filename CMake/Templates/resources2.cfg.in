@@ -20,6 +20,12 @@ FileSystem=@OGRE_MEDIA_DIR_REL@/2.0/scripts/materials/Common/GLSL
 FileSystem=@OGRE_MEDIA_DIR_REL@/2.0/scripts/materials/Common/GLSLES
 FileSystem=@OGRE_MEDIA_DIR_REL@/2.0/scripts/materials/Common/HLSL
 FileSystem=@OGRE_MEDIA_DIR_REL@/2.0/scripts/materials/Common/Metal
+FileSystem=@OGRE_MEDIA_DIR_REL@/Hlms/Common/Any
+FileSystem=@OGRE_MEDIA_DIR_REL@/Hlms/Common/GLSL
+FileSystem=@OGRE_MEDIA_DIR_REL@/Hlms/Common/HLSL
+FileSystem=@OGRE_MEDIA_DIR_REL@/Hlms/Common/Metal
+FileSystem=@OGRE_MEDIA_DIR_REL@/Compute/Algorithms/IBL
+FileSystem=@OGRE_MEDIA_DIR_REL@/Compute/Tools/Any
 
 # Do not load this as a resource. It's here merely to tell the code where
 # the Hlms templates are located

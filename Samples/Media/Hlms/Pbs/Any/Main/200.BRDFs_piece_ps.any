@@ -203,25 +203,33 @@ float3 BRDF_IR( float3 lightDir, float3 lightDiffuse, PixelData pixelData )
 /// to white) does not go all the way to white at glancing angles in the case of rough surfaces."
 /// So we use getSpecularFresnelWithRoughness instead.
 @piece( BRDF_EnvMap )
-    //Normally we'd use VdotH. However:
-    //	H = normalize(lightDir + viewDir)
-    //since:
-    //	lightDir = pixelData.reflDir
-    //then:
-    //	H = geomNormal
-    //Thus H = N, and therefore we use VdotN (NdotV)
-    //float VdotH = saturate( dot( pixelData.viewDir, normalize( pixelData.reflDir + pixelData.viewDir ) ) );
-    float_fresnel fresnelS = @insertpiece( getSpecularFresnelWithRoughness );
+	//Normally we'd use VdotH. However:
+	//	H = normalize(lightDir + viewDir)
+	//since:
+	//	lightDir = pixelData.reflDir
+	//then:
+	//	H = geomNormal
+	//Thus H = N, and therefore we use VdotN (NdotV)
+	//float VdotH = saturate( dot( pixelData.viewDir, normalize( pixelData.reflDir + pixelData.viewDir ) ) );
+	float_fresnel fresnelS = @insertpiece( getSpecularFresnelWithRoughness );
+
+	@property( ltc_texture_available )
+		#define brdfLUT ltcMatrix
+		float2 envBRDF = OGRE_SampleArray2D( brdfLUT, ltcSampler,
+											 float2( pixelData.NdotV, 1.0 - pixelData.roughness ), 2 ).xy;
+	@else
+		float2 envBRDF = float2( 1.0f, 0.0f );
+	@end
 
 	@property( fresnel_separate_diffuse )
 		float NdotL = saturate( dot( pixelData.normal, pixelData.reflDir ) );
-        float_fresnel fresnelD = @insertpiece( getDiffuseFresnelWithRoughness );
-    @else
-        float fresnelD = 1.0f - @insertpiece( getMaxFresnelS );
-    @end
+		float_fresnel fresnelD = @insertpiece( getDiffuseFresnelWithRoughness );
+	@else
+		float fresnelD = 1.0f - @insertpiece( getMaxFresnelS );
+	@end
 
 	finalColour += pixelData.envColourD * pixelData.diffuse.xyz * fresnelD +
-                   pixelData.envColourS * pixelData.specular.xyz * fresnelS;
+				   pixelData.envColourS * pixelData.specular.xyz * ( fresnelS * envBRDF.x + envBRDF.y );
 @end
 
 @property( hlms_fine_light_mask || hlms_forwardplus_fine_light_mask )
@@ -234,22 +242,22 @@ float3 BRDF_IR( float3 lightDir, float3 lightDiffuse, PixelData pixelData )
 
 @property( hlms_fine_light_mask )
     @property( syntax != hlsl )
-        @piece( ObjLightMaskCmp )if( (objLightMask & floatBitsToUint( passBuf.lights[@counter(fineMaskLightIdx)].position.w )) != 0u )@end
+        @piece( ObjLightMaskCmp )if( (objLightMask & floatBitsToUint( light0Buf.lights[@counter(fineMaskLightIdx)].position.w )) != 0u )@end
         @property( hlms_static_branch_lights )
-            @piece( ObjLightMaskCmpNonCasterLoop )if( (objLightMask & floatBitsToUint( passBuf.lights[@value(fineMaskLightIdx) + i].position.w )) != 0u )@end
+            @piece( ObjLightMaskCmpNonCasterLoop )if( (objLightMask & floatBitsToUint( light0Buf.lights[@value(fineMaskLightIdx) + i].position.w )) != 0u )@end
             @piece( ObjLightMaskCmpNonCasterLoopEnd )@add( fineMaskLightIdx, hlms_lights_directional_non_caster )@end
         @end
-        @piece( andObjLightMaskCmp )&& ((objLightMask & floatBitsToUint( passBuf.lights[@counter(fineMaskLightIdx)].position.w )) != 0u)@end
-        @piece( andObjAreaApproxLightMaskCmp )&& ((objLightMask & floatBitsToUint( passBuf.areaApproxLights[i].position.w )) != 0u)@end
-        @piece( andObjAreaLtcLightMaskCmp )&& ((objLightMask & floatBitsToUint( passBuf.areaLtcLights[i].position.w )) != 0u)@end
+        @piece( andObjLightMaskCmp )&& ((objLightMask & floatBitsToUint( light0Buf.lights[@counter(fineMaskLightIdx)].position.w )) != 0u)@end
+        @piece( andObjAreaApproxLightMaskCmp )&& ((objLightMask & floatBitsToUint( light1Buf.areaApproxLights[i].position.w )) != 0u)@end
+        @piece( andObjAreaLtcLightMaskCmp )&& ((objLightMask & floatBitsToUint( light2Buf.areaLtcLights[i].position.w )) != 0u)@end
     @else
-        @piece( ObjLightMaskCmp )if( (objLightMask & passBuf.lights[@counter(fineMaskLightIdx)].lightMask) != 0u )@end
+        @piece( ObjLightMaskCmp )if( (objLightMask & light0Buf.lights[@counter(fineMaskLightIdx)].lightMask) != 0u )@end
         @property( hlms_static_branch_lights )
-            @piece( ObjLightMaskCmpNonCasterLoop )if( (objLightMask & passBuf.lights[@value(fineMaskLightIdx) + i].lightMask) != 0u )@end
+            @piece( ObjLightMaskCmpNonCasterLoop )if( (objLightMask & light0Buf.lights[@value(fineMaskLightIdx) + i].lightMask) != 0u )@end
             @piece( ObjLightMaskCmpNonCasterLoopEnd )@add( fineMaskLightIdx, hlms_lights_directional_non_caster )@end
         @end
-        @piece( andObjLightMaskCmp )&& ((objLightMask & passBuf.lights[@counter(fineMaskLightIdx)].lightMask) != 0u)@end
-        @piece( andObjAreaApproxLightMaskCmp )&& ((objLightMask & passBuf.areaApproxLights[i].lightMask) != 0u)@end
-        @piece( andObjAreaLtcLightMaskCmp )&& ((objLightMask & passBuf.areaLtcLights[i].lightMask) != 0u)@end
+        @piece( andObjLightMaskCmp )&& ((objLightMask & light0Buf.lights[@counter(fineMaskLightIdx)].lightMask) != 0u)@end
+        @piece( andObjAreaApproxLightMaskCmp )&& ((objLightMask & light1Buf.areaApproxLights[i].lightMask) != 0u)@end
+        @piece( andObjAreaLtcLightMaskCmp )&& ((objLightMask & light2Buf.areaLtcLights[i].lightMask) != 0u)@end
     @end
 @end

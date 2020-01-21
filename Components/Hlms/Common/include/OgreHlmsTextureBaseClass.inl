@@ -70,21 +70,32 @@ namespace Ogre
 
         HlmsManager *hlmsManager = mCreator->getHlmsManager();
 
+        bool hasDirtyTextures = false;
+        bool hasDirtySamplers = false;
+
         for( size_t i=0; i<OGRE_HLMS_TEXTURE_BASE_MAX_TEX; ++i )
         {
             datablockImpl->mTexIndices[i] = mTexIndices[i];
             datablockImpl->mTextures[i] = mTextures[i];
             if( datablockImpl->mTextures[i] )
+            {
                 datablockImpl->mTextures[i]->addListener( datablockImpl );
+                hasDirtyTextures = true;
+            }
             datablockImpl->mSamplerblocks[i] = mSamplerblocks[i];
             if( datablockImpl->mSamplerblocks[i] )
+            {
                 hlmsManager->addReference( datablockImpl->mSamplerblocks[i] );
+                hasDirtySamplers = true;
+            }
         }
 
         if( mTexturesDescSet )
             datablockImpl->mTexturesDescSet = hlmsManager->getDescriptorSetTexture( *mTexturesDescSet );
         if( mSamplersDescSet )
             datablockImpl->mSamplersDescSet = hlmsManager->getDescriptorSetSampler( *mSamplersDescSet );
+
+        datablockImpl->scheduleConstBufferUpdate( hasDirtyTextures, hasDirtySamplers );
     }
     //-----------------------------------------------------------------------------------
     void OGRE_HLMS_TEXTURE_BASE_CLASS::saveTextures( const String &folderPath,

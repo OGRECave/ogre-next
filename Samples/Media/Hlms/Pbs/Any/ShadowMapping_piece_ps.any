@@ -23,23 +23,16 @@
 @property( syntax == glsl || syntax == glsles )
 	#define OGRE_SAMPLE_SHADOW( tex, sampler, uv, depth ) (OGRE_DEPTH_CMP_GE( depth, OGRE_DEPTH_DEFAULT_CLEAR ) ? 1.0 : texture( tex, vec3( uv, depth ) ))
 	#define OGRE_SAMPLE_SHADOW_ESM( tex, sampler, uv ) textureLod( tex, uv, 0 ).x
-	#define PASSBUF_ARG_DECL
-	#define PASSBUF_ARG
 @end
 
 @property( syntax == hlsl )
 	#define OGRE_SAMPLE_SHADOW( tex, sampler, uv, depth ) (OGRE_DEPTH_CMP_GE( depth, OGRE_DEPTH_DEFAULT_CLEAR ) ? 1.0 : tex.SampleCmpLevelZero( sampler, uv.xy, depth ).x)
 	#define OGRE_SAMPLE_SHADOW_ESM( tex, sampler, uv ) tex.SampleLevel( sampler, uv, 0 ).x
-	#define PASSBUF_ARG_DECL
-	#define PASSBUF_ARG
 @end
 
 @property( syntax == metal )
 	#define OGRE_SAMPLE_SHADOW( tex, sampler, uv, depth ) (OGRE_DEPTH_CMP_GE( depth, OGRE_DEPTH_DEFAULT_CLEAR ) ? 1.0 : tex.sample_compare( sampler, float2( uv.xy ), depth ))
 	#define OGRE_SAMPLE_SHADOW_ESM( tex, sampler, uv ) tex.sample( sampler, float2( uv.xy ), level(0) ).x
-
-	#define PASSBUF_ARG_DECL , constant PassBuffer &passBuf
-	#define PASSBUF_ARG , passBuf
 @end
 @end
 
@@ -359,7 +352,7 @@
 	@pset( CurrentPointLight, hlms_lights_directional_non_caster )
 	@piece( DarkenWithShadowPoint )
 		* getShadowPoint( hlms_shadowmap@value(CurrentShadowMap), @insertpiece( UseSamplerShadow )
-						  inPs.pos.xyz, passBuf.lights[@counter(CurrentPointLight)].position.xyz,
+						  inPs.pos.xyz, light0Buf.lights[@counter(CurrentPointLight)].position.xyz,
 						  passBuf.shadowRcv[@value(CurrentShadowMap)].invShadowMapSize,
 						  passBuf.shadowRcv[@value(CurrentShadowMap)].shadowDepthRange.xy
 						  hlms_shadowmap@counter(CurrentShadowMap)_uv_param PASSBUF_ARG )

@@ -590,7 +590,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void TextureGpu::copyTo( TextureGpu *dst, const TextureBox &dstBox, uint8 dstMipLevel,
-                             const TextureBox &srcBox, uint8 srcMipLevel )
+                             const TextureBox &srcBox, uint8 srcMipLevel, bool keepResolvedTexSynced )
     {
         assert( srcBox.equalSize( dstBox ) );
         assert( this != dst || !srcBox.overlaps( dstBox ) );

@@ -1,0 +1,267 @@
+
+//    IBLBaker is provided under the MIT License(MIT)
+//    https://github.com/derkreature/IBLBaker
+//    Please review the LICENSE file for further details.
+//
+//    Copyright(c) 2014 Matt Davidson
+//    Minor modifications from Matias N. Goldberg to adapt it to Ogre
+//
+//    Permission is hereby granted, free of charge, to any person obtaining a copy
+//    of this software and associated documentation files(the "Software"), to deal
+//    in the Software without restriction, including without limitation the rights
+//    to use, copy, modify, merge, publish, distribute, sublicense, and / or sell
+//    copies of the Software, and to permit persons to whom the Software is
+//    furnished to do so, subject to the following conditions :
+//
+//    1. Redistributions of source code must retain the above copyright notice,
+//    this list of conditions and the following disclaimer.
+//    2. Redistributions in binary form must reproduce the above copyright notice,
+//    this list of conditions and the following disclaimer in the
+//    documentation and / or other materials provided with the distribution.
+//    3. Neither the name of the copyright holder nor the names of its
+//    contributors may be used to endorse or promote products derived
+//    from this software without specific prior written permission.
+//
+//    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE
+//    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//    THE SOFTWARE.
+
+#define p_convolutionSamplesOffset params0.x
+#define p_convolutionSampleCount params0.y
+#define p_convolutionMaxSamples params0.z
+#define p_convolutionRoughness params0.w
+
+#define p_convolutionMip params1.x
+#define p_environmentScale params1.y
+
+#define p_inputResolution params2.xy
+#define p_outputResolution params2.zw
+
+#define p_iblCorrection iblCorrection
+
+@piece( HeaderCS )
+	@insertpiece( DeclSRgbFuncs )
+
+#define PI 3.141592654f
+
+	@property( syntax == metal )
+		inline float radians( float val )
+		{
+			return val * PI / 180.0;
+		}
+	@end
+
+	//
+	// Attributed to:
+	// http://holger.dammertz.org/stuff/notes_HammersleyOnHemisphere.html
+	// Holger Dammertz.
+	//
+
+	INLINE float2 Hammersley( uint i, uint N )
+	{
+		float ri = reversebits( i ) * 2.3283064365386963e-10f;
+		return float2( float( i ) / float( N ), ri );
+	}
+
+	INLINE float3x3 QuaternionToMatrix( float4 quat )
+	{
+		float3 cross = quat.yzx * quat.zxy;
+		float3 square = quat.xyz * quat.xyz;
+		float3 wi = quat.w * quat.xyz;
+
+		square = square.xyz + square.yzx;
+
+		float3 diag = 0.5 - square;
+		float3 a = ( cross + wi );
+		float3 b = ( cross - wi );
+
+		return float3x3( 2.0 * float3( diag.x, b.z, a.y ), 2.0 * float3( a.z, diag.y, b.x ),
+						 2.0 * float3( b.y, a.x, diag.z ) );
+	}
+
+	INLINE float3 rescaleHDR( float3 hdrPixel PARAMS_ARG_DECL )
+	{
+		hdrPixel = max( hdrPixel, float3( 0, 0, 0 ) );
+
+		float intensity = float( dot( hdrPixel, float3( 0.299, 0.587, 0.114 ) ) );
+
+		// Saturation adjustment
+		hdrPixel = lerp( float3( intensity, intensity, intensity ), hdrPixel, p_iblCorrection.y );
+
+		// Hue adjustment
+		float3 root3 = float3( 0.57735, 0.57735, 0.57735 );
+		float half_angle = 0.5 * radians( p_iblCorrection.z );  // Hue is radians of 0 tp 360 degree
+		float4 rot_quat = float4( ( root3 * sin( half_angle ) ), cos( half_angle ) );
+		float3x3 rot_Matrix = QuaternionToMatrix( rot_quat );
+		hdrPixel = mul( rot_Matrix, hdrPixel );
+
+		hdrPixel = hdrPixel * p_environmentScale;
+		return hdrPixel;
+	}
+
+	//------------------------------------------------------------------------------------//
+	// Inputs:                                                                            //
+	//   Spherical hammersley generated coordinate and roughness.                         //
+	//   Roughness                                                                        //
+	//   Normal                                                                           //
+	// Base on GGX example in:                                                            //
+	// http://blog.selfshadow.com/publications/s2013-shading-course/karis/s2013_pbs_epic_notes_v2.pdf
+	//------------------------------------------------------------------------------------//
+	INLINE float3 importanceSampleGGX( float2 Xi, float roughness, float3 N )
+	{
+		float a = roughness * roughness;
+
+		float Phi = 2 * PI * Xi.x;
+		float CosTheta = sqrt( ( 1 - Xi.y ) / ( 1 + ( a * a - 1 ) * Xi.y ) );
+		float SinTheta = sqrt( 1 - CosTheta * CosTheta );
+
+		float3 H;
+		H.x = SinTheta * cos( Phi );
+		H.y = SinTheta * sin( Phi );
+		H.z = CosTheta;
+
+		float3 UpVector = abs( N.z ) < 0.999 ? float3( 0, 0, 1 ) : float3( 1, 0, 0 );
+		float3 TangentX = normalize( cross( UpVector, N ) );
+		float3 TangentY = cross( N, TangentX );
+
+		return TangentX * H.x + TangentY * H.y + N * H.z;
+	}
+
+	INLINE float4 sumSpecular( float3 hdrPixel, float NoL, float4 result )
+	{
+		result.xyz += ( hdrPixel * NoL );
+		result.w += NoL;
+		return result;
+	}
+
+	// Smoth GGX
+	INLINE float specularD( float roughness, float NoH )
+	{
+		float NoH2 = NoH * NoH;
+		float r2 = roughness * roughness;
+		return r2 / pow( NoH2 * ( r2 - 1.0 ) + 1.0, 2.0 );
+	}
+
+	INLINE float4 importanceSample( float3 R PARAMS_ARG_DECL )
+	{
+		float3 N = R;
+		float3 V = R;
+		float4 result = float4( 0, 0, 0, 0 );
+		float alphaValue = 0;
+
+		uint SampleStep = uint( ceil( p_convolutionMaxSamples / p_convolutionSampleCount ) );
+		uint sampleId = uint( p_convolutionSamplesOffset );
+
+		for( uint i = 0u; i < uint( p_convolutionSampleCount ); ++i )
+		{
+			float2 Xi = Hammersley( sampleId, uint( p_convolutionMaxSamples ) );
+
+			float3 H = importanceSampleGGX( Xi, p_convolutionRoughness, N );
+			float3 L = 2 * dot( V, H ) * H - V;
+			float NoL = max( dot( N, L ), 0.0 );
+			// float VoL = max( dot( V, L ), 0.0 );
+			float NoH = max( dot( N, H ), 0.0 );
+			float VoH = max( dot( V, H ), 0.0 );
+			if( NoL > 0 )
+			{
+				//
+				// Compute pdf of BRDF
+				// Taken from Epic's Siggraph 2013 Lecture:
+				// http://blog.selfshadow.com/publications/s2013-shading-course/karis/s2013_pbs_epic_notes_v2.pdf
+				//
+				float Dh = specularD( p_convolutionRoughness, NoH );
+				float pdf = Dh * NoH / ( 4 * VoH );
+				float solidAngleTexel = 4 * PI / ( 6 * p_inputResolution.x * p_inputResolution.x );
+				float solidAngleSample = 1.0 / ( p_convolutionSampleCount * pdf );
+				float lod =
+					p_convolutionRoughness == 0 ? 0 : 0.5 * log2( solidAngleSample / solidAngleTexel );
+
+				float4 sampleValue = OGRE_SampleLevel( convolutionSrc, EnvMapSampler, L, lod );
+				alphaValue += sampleValue.a * NoL;
+
+				float3 hdrPixel = rescaleHDR( sampleValue.xyz PARAMS_ARG );
+				result = sumSpecular( hdrPixel, NoL, result );
+			}
+			sampleId += SampleStep;
+		}
+
+		if( result.w == 0 )
+			return float4( result.xyz, alphaValue );
+		else
+			return ( float4( result.xyz, alphaValue ) / result.w );
+	}
+
+	INLINE float4 runIntegrator( float3 normal, ushort3 loadCoords PARAMS_ARG_DECL )
+	{
+		float3 R = normalize( normal );
+		float4 sampledColor = float4( 0, 0, 0, 1 );
+
+		// Sample source cubemap at specified mip.
+		float4 importanceSampled = importanceSample( R PARAMS_ARG );
+
+		@property( !iOS )
+		if( p_convolutionSamplesOffset >= 1 )
+		{
+			@property( uav0_texture_type == TextureTypes_TypeCube )
+				float4 lastResultVal = OGRE_imageLoad2DArray( lastResult, loadCoords.xyz );
+			@else
+				float4 lastResultVal = OGRE_imageLoad2D( lastResult, loadCoords.xy );
+			@end
+			@property( uav0_orig_pf_srgb )
+				lastResultVal = fromSRGB( lastResultVal );
+			@end
+			sampledColor = lerp( lastResultVal, importanceSampled, 1.0 / ( p_convolutionSamplesOffset ) );
+		}
+		else
+		@end
+		{
+			sampledColor = importanceSampled;
+		}
+
+		return sampledColor;
+	}
+@end
+
+@piece( BodyCS )
+	@property( uav0_texture_type == TextureTypes_TypeCube )
+		float2 normal2d = ( ( float2( gl_GlobalInvocationID.xy ) + 0.5 ) / p_outputResolution.xy ) * 2.0 - 1.0;
+
+		float3 normal;
+		if( gl_GlobalInvocationID.z == 0u )  //+X
+			normal = float3( 1.0f, -normal2d.yx );
+		else if( gl_GlobalInvocationID.z == 1u )  //-X
+			normal = float3( -1.0f, -normal2d.y, normal2d.x );
+		else if( gl_GlobalInvocationID.z == 2u )  //+Y
+			normal = float3( normal2d.x, 1.0f, normal2d.y );
+		else if( gl_GlobalInvocationID.z == 3u )  //-Y
+			normal = float3( normal2d.x, -1.0f, -normal2d.y );
+		else if( gl_GlobalInvocationID.z == 4u )  //+Z
+			normal = float3( normal2d.x, -normal2d.y, 1.0f );
+		else // if( gl_GlobalInvocationID.z == 5u )  //-Z
+			normal = float3( -normal2d.xy, -1.0f );
+	@else
+		float2 uv0 = ( float2( gl_GlobalInvocationID.xy ) + 0.5 ) / p_outputResolution.xy;
+
+		float3 normal;
+		normal.x = mod( uv0.x, 0.5 ) * 4.0 - 1.0;
+		normal.y = uv0.y * 2.0 - 1.0;
+		normal.z = 0.5 - 0.5 * (normal.x * normal.x + normal.y * normal.y);
+		normal.z = uv0.x < 0.5 ? normal.z : -normal.z;
+	@end
+
+	float4 outputValue = runIntegrator( normal, gl_GlobalInvocationID.xyz PARAMS_ARG );
+
+	@property( uav0_orig_pf_srgb )
+		outputValue = toSRGB( outputValue );
+	@end
+
+	@property( uav0_texture_type == TextureTypes_TypeCube )
+		OGRE_imageWrite2DArray4( lastResult, gl_GlobalInvocationID.xyz, outputValue );
+	@else
+		OGRE_imageWrite2D4( lastResult, gl_GlobalInvocationID.xy, outputValue );
+	@end
+@end

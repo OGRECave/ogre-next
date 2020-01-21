@@ -101,6 +101,7 @@ namespace Ogre
         /// resolution and format.
         typedef vector<TempRtt>::type TempRttVec;
         TempRttVec  mTmpRtt;
+        TempRttVec  mIblRtt;
 
         void createProxyGeometry(void);
         void destroyProxyGeometry(void);
@@ -182,10 +183,20 @@ namespace Ogre
         virtual void fillConstBufferData( const Matrix4 &viewMatrix,
                                           float * RESTRICT_ALIAS passBufferPtr ) const;
 
+    protected:
+        TextureGpu *findRtt( const TextureGpu *baseParams, TempRttVec &container, uint32 textureFlags,
+                             bool fullMipmaps );
+        void releaseRtt( const TextureGpu *rtt, TempRttVec &container );
+
+    public:
+
         /// See mTmpRtt. Finds an RTT that is compatible to copy to baseParams.
         /// Creates one if none found.
         virtual TextureGpu* findTmpRtt( const TextureGpu *baseParams );
         virtual void releaseTmpRtt( const TextureGpu *tmpRtt );
+
+        virtual TextureGpu* findIbl( const TextureGpu *baseParams );
+        virtual void releaseIbl( const TextureGpu *tmpRtt );
 
         virtual void _addManuallyActiveProbe( CubemapProbe *probe );
         virtual void _removeManuallyActiveProbe( CubemapProbe *probe );

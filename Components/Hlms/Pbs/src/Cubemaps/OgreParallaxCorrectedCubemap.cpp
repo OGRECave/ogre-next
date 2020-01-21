@@ -38,6 +38,8 @@ THE SOFTWARE.
 #include "Compositor/Pass/PassQuad/OgreCompositorPassQuadDef.h"
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
 
+#include "OgreHlmsPbs.h"
+
 #include "OgreRoot.h"
 #include "OgreSceneManager.h"
 #include "OgreRenderQueue.h"
@@ -274,11 +276,7 @@ namespace Ogre
                                "ParallaxCorrectedCubemap Blend Result " +
                                StringConverter::toString( getId() ),
                                GpuPageOutStrategy::Discard,
-                    #if GENERATE_MIPMAPS_ON_BLEND
                                TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps,
-                    #else
-                               TextureFlags::RenderToTexture,
-                    #endif
                                TextureTypes::TypeCube );
             mBindTexture->setResolution( maxWidth, maxHeight );
             mBindTexture->setPixelFormat( pixelFormat );
@@ -292,6 +290,11 @@ namespace Ogre
             mRoot->addFrameListener( this );
             CompositorManager2 *compositorManager = mDefaultWorkspaceDef->getCompositorManager();
             compositorManager->addListener( this );
+
+            HlmsManager *hlmsManager = mRoot->getHlmsManager();
+            OGRE_ASSERT_HIGH( dynamic_cast<HlmsPbs *>( hlmsManager->getHlms( HLMS_PBS ) ) );
+            HlmsPbs *hlmsPbs = static_cast<HlmsPbs *>( hlmsManager->getHlms( HLMS_PBS ) );
+            hlmsPbs->_notifyIblSpecMipmap( mBindTexture->getNumMipmaps() );
         }
         else
         {
@@ -391,11 +394,7 @@ namespace Ogre
             for( uint32 i=0; i<6; ++i )
             {
                 CompositorTargetDef *targetDef = nodeDef->addTargetPass( "BlendedProbeRT", i );
-#if GENERATE_MIPMAPS_ON_BLEND
                 targetDef->setNumPasses( i == 5 ? 2 : 1 );
-#else
-                targetDef->setNumPasses( 1 );
-#endif
                 {
                     {
                         CompositorPassSceneDef *passScene = static_cast<CompositorPassSceneDef*>
@@ -411,12 +410,10 @@ namespace Ogre
                         passScene->mLoadActionColour[0] = LoadAction::Clear;
                         passScene->mClearColour[0]      = ColourValue::Black;
                     }
-#if GENERATE_MIPMAPS_ON_BLEND
                     if( i == 5 )
                     {
                         targetDef->addPass( PASS_MIPMAP );
                     }
-#endif
                 }
             }
 
@@ -439,11 +436,7 @@ namespace Ogre
             for( uint32 i=0; i<6; ++i )
             {
                 CompositorTargetDef *targetDef = nodeDef->addTargetPass( "CopyProbeRT", i );
-#if GENERATE_MIPMAPS_ON_BLEND
                 targetDef->setNumPasses( i == 5 ? 2 : 1 );
-#else
-                targetDef->setNumPasses( 1 );
-#endif
                 {
                     {
                         CompositorPassQuadDef *passQuad = static_cast<CompositorPassQuadDef*>
@@ -456,12 +449,10 @@ namespace Ogre
                         passQuad->mLoadActionColour[0]  = LoadAction::Clear;
                         passQuad->mClearColour[0]       = ColourValue::Black;
                     }
-#if GENERATE_MIPMAPS_ON_BLEND
                     if( i == 5 )
                     {
                         targetDef->addPass( PASS_MIPMAP );
                     }
-#endif
                 }
             }
 
@@ -1086,12 +1077,13 @@ namespace Ogre
                 fillConstBufferData( mFinalProbe, viewMatrix, invViewMat3, passBufferPtr );
     }
     //-----------------------------------------------------------------------------------
-    TextureGpu* ParallaxCorrectedCubemap::findTmpRtt( const TextureGpu *baseParams )
+    TextureGpu *ParallaxCorrectedCubemap::findRtt( const TextureGpu *baseParams, TempRttVec &container,
+                                                   uint32 textureFlags, bool fullMipmaps )
     {
         TextureGpu *retVal = 0;
 
-        TempRttVec::iterator itor = mTmpRtt.begin();
-        TempRttVec::iterator end  = mTmpRtt.end();
+        TempRttVec::iterator itor = container.begin();
+        TempRttVec::iterator end = container.end();
 
         while( itor != end )
         {
@@ -1109,35 +1101,38 @@ namespace Ogre
 
         if( !retVal )
         {
+            uint8 numMipmaps = PixelFormatGpuUtils::getMaxMipmapCount( baseParams->getWidth(),
+                                                                       baseParams->getHeight() );
+            if( !fullMipmaps )
+                numMipmaps = std::max<uint8>( baseParams->getNumMipmaps(), 5u ) - 4u;
+
             TempRtt tmpRtt;
             TextureGpuManager *textureGpuManager =
-                    mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
+                mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
             retVal = textureGpuManager->createTexture(
-                         "ParallaxCorrectedCubemap Temp RTT " + StringConverter::toString( getId() ),
-                         GpuPageOutStrategy::Discard,
-                         TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps,
-                         TextureTypes::TypeCube );
+                "ParallaxCorrectedCubemap Temp RTT " + StringConverter::toString( getId() ),
+                GpuPageOutStrategy::Discard, textureFlags, TextureTypes::TypeCube );
             retVal->setResolution( baseParams->getWidth(), baseParams->getHeight() );
             retVal->setPixelFormat( baseParams->getPixelFormat() );
-            retVal->setNumMipmaps( baseParams->getNumMipmaps() );
+            retVal->setNumMipmaps( numMipmaps );
             retVal->setMsaa( baseParams->getMsaa() );
             retVal->setMsaaPattern( baseParams->getMsaaPattern() );
-            retVal->_transitionTo( GpuResidency::Resident, (uint8*)0 );
+            retVal->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
 
             tmpRtt.texture = retVal;
             tmpRtt.refCount = 1;
-            mTmpRtt.push_back( tmpRtt );
+            container.push_back( tmpRtt );
         }
 
         return retVal;
     }
     //-----------------------------------------------------------------------------------
-    void ParallaxCorrectedCubemap::releaseTmpRtt( const TextureGpu *tmpRtt )
+    void ParallaxCorrectedCubemap::releaseRtt( const TextureGpu *rtt, TempRttVec &container )
     {
-        TempRttVec::iterator itor = mTmpRtt.begin();
-        TempRttVec::iterator end  = mTmpRtt.end();
+        TempRttVec::iterator itor = container.begin();
+        TempRttVec::iterator end  = container.end();
 
-        while( itor != end && itor->texture != tmpRtt )
+        while( itor != end && itor->texture != rtt )
             ++itor;
 
         if( itor != end )
@@ -1148,9 +1143,31 @@ namespace Ogre
                 TextureGpuManager *textureGpuManager =
                         mSceneManager->getDestinationRenderSystem()->getTextureGpuManager();
                 textureGpuManager->destroyTexture( itor->texture );
-                efficientVectorRemove( mTmpRtt, itor );
+                efficientVectorRemove( container, itor );
             }
         }
+    }
+    //-----------------------------------------------------------------------------------
+    TextureGpu* ParallaxCorrectedCubemap::findTmpRtt( const TextureGpu *baseParams )
+    {
+        return findRtt( baseParams, mTmpRtt,
+                        TextureFlags::RenderToTexture | TextureFlags::AllowAutomipmaps, true );
+    }
+    //-----------------------------------------------------------------------------------
+    void ParallaxCorrectedCubemap::releaseTmpRtt( const TextureGpu *tmpRtt )
+    {
+        releaseRtt( tmpRtt, mTmpRtt );
+    }
+    //-----------------------------------------------------------------------------------
+    TextureGpu* ParallaxCorrectedCubemap::findIbl( const TextureGpu *baseParams )
+    {
+        return findRtt( baseParams, mIblRtt, getIblTargetTextureFlags( baseParams->getPixelFormat() ),
+                        false );
+    }
+    //-----------------------------------------------------------------------------------
+    void ParallaxCorrectedCubemap::releaseIbl( const TextureGpu *tmpRtt )
+    {
+        releaseRtt( tmpRtt, mIblRtt );
     }
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemap::_addManuallyActiveProbe( CubemapProbe *probe )

@@ -539,6 +539,8 @@ namespace Ogre
                                                    const String &sourceFilename,
                                                    const StringVector &includedPieceFiles )
     {
+        OGRE_ASSERT_MEDIUM( mComputeJobs.find( datablockName ) == mComputeJobs.end() );
+
         HlmsComputeJob *retVal = OGRE_NEW HlmsComputeJob( datablockName, this,
                                                           sourceFilename, includedPieceFiles );
         mComputeJobs[datablockName] = ComputeJobEntry( retVal, refName );

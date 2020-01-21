@@ -99,6 +99,7 @@ mStaticMinDepthLevelDirty( 0 ),
 mStaticEntitiesDirty( true ),
 mPrePassMode( PrePassNone ),
 mSsrTexture( 0 ),
+mRefractionsTexture( 0 ),
 mName(name),
 mRenderQueue( 0 ),
 mForwardPlusSystem( 0 ),
@@ -157,6 +158,8 @@ mGpuParamsDirty((uint16)GPV_ALL)
     for( size_t i=0; i<NUM_SCENE_MEMORY_MANAGER_TYPES; ++i )
         mSceneRoot[i] = 0;
     mSceneDummy = 0;
+
+    memset( mAmbientSphericalHarmonics, 0, sizeof( mAmbientSphericalHarmonics ) );
 
     setAmbientLight( ColourValue::Black, ColourValue::Black, Vector3::UNIT_Y, 1.0f );
 
@@ -1178,6 +1181,12 @@ void SceneManager::_setPrePassMode( PrePassMode mode, const TextureGpuVec &prepa
     mPrePassTextures = prepassTextures;
     mPrePassDepthTexture = prepassDepthTexture;
     mSsrTexture = ssrTexture;
+}
+//-----------------------------------------------------------------------
+void SceneManager::_setRefractions( TextureGpu *depthTextureNoMsaa, TextureGpu *refractionsTexture )
+{
+    mPassDepthTextureNoMsaa = depthTextureNoMsaa;
+    mRefractionsTexture = refractionsTexture;
 }
 //-----------------------------------------------------------------------
 void SceneManager::setDecalsDiffuse( TextureGpu *tex )
@@ -2857,6 +2866,16 @@ void SceneManager::setAmbientLight( const ColourValue &upperHemisphere,
     mAmbientLightHemisphereDir.normalise();
     mAmbientLight[0].a = envmapScale;
     mEnvFeatures = envFeatures;
+}
+//-----------------------------------------------------------------------
+void SceneManager::setSphericalHarmonics( Vector3 ambientSphericalHarmonics[9] )
+{
+    for( size_t i = 0u; i < 9u; ++i )
+    {
+        mAmbientSphericalHarmonics[i * 3u + 0u] = (float)ambientSphericalHarmonics[i].x;
+        mAmbientSphericalHarmonics[i * 3u + 1u] = (float)ambientSphericalHarmonics[i].y;
+        mAmbientSphericalHarmonics[i * 3u + 2u] = (float)ambientSphericalHarmonics[i].z;
+    }
 }
 //-----------------------------------------------------------------------
 ViewPoint SceneManager::getSuggestedViewpoint(bool random)

@@ -80,16 +80,13 @@ namespace Ogre
         /// We may need more than one in case we're using DPM instead of cubemap arrays
         FastArray<AsyncTextureTicket *> mAsyncTicket;
 
-        /// For APIs where we have to use fallback routines with mAsyncTicket,
-        /// we store everything contiguously in mDownloadedImageFallback
-        uint8 *mDownloadedImageFallback;
-        TextureGpu *mFallbackDpmMipmap;
+        /// We store everything (mip N of all probes) contiguously in mDownloadedImages
+        uint8 *mDownloadedImages;
 
-        void allocateFallback( void );
-        void deallocateFallback( void );
+        void allocateImages( void );
+        void deallocateImages( void );
 
-        TextureBox getFallbackBox( void ) const;
-        bool needsDpmFallback( void ) const;
+        TextureBox getImagesBox( void ) const;
 
         /** Snaps the new bounds of the new probe to match mFullRegion if the relative
             difference between the two is smaller than mSnapDeviationError.

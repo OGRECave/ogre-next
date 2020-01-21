@@ -872,10 +872,13 @@ namespace Ogre
         static const IdString UseUvBaking;
         static const IdString UvBaking;
         static const IdString BakeLightingOnly;
+        static const IdString GenNormalsGBuf;
         static const IdString PrePass;
         static const IdString UsePrePass;
         static const IdString UsePrePassMsaa;
         static const IdString UseSsr;
+        // Per pass. Related with ScreenSpaceRefractions
+        static const IdString SsRefractionsAvailable;
         static const IdString EnableVpls;
         static const IdString ForwardPlus;
         static const IdString ForwardPlusFlipY;
@@ -897,12 +900,16 @@ namespace Ogre
         static const IdString Forward3D;
         static const IdString ForwardClustered;
         static const IdString VPos;
+        static const IdString ScreenPosInt;
+        static const IdString ScreenPosUv;
         static const IdString VertexId;
 
         //Change per material (hash can be cached on the renderable)
         static const IdString AlphaTest;
         static const IdString AlphaTestShadowCasterOnly;
         static const IdString AlphaBlend;
+        // Per material. Related with SsRefractionsAvailable
+        static const IdString ScreenSpaceRefractions;
 
         //Standard depth range is being used instead of reverse Z.
         static const IdString NoReverseDepth;

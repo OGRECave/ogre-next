@@ -1266,6 +1266,7 @@ namespace Ogre
         mIds["render_scene"]    = ID_RENDER_SCENE;
         mIds["render_quad"]     = ID_RENDER_QUAD;
         mIds["depth_copy"]      = ID_DEPTH_COPY;
+        mIds["texture_copy"]    = ID_DEPTH_COPY;
         mIds["bind_uav"]        = ID_BIND_UAV;
         mIds["read"]            = ID_READ;
         mIds["write"]           = ID_WRITE;
@@ -1308,6 +1309,8 @@ namespace Ogre
         mIds["flush_command_buffers_after_shadow_node"]= ID_FLUSH_COMMAND_BUFFERS_AFTER_SHADOW_NODE;
         mIds["is_prepass"]      = ID_IS_PREPASS;
         mIds["use_prepass"]     = ID_USE_PREPASS;
+        mIds["gen_normals_gbuffer"]= ID_GEN_NORMALS_GBUFFER;
+        mIds["use_refractions"] = ID_USE_REFRACTIONS;
         mIds["uv_baking"]       = ID_UV_BAKING;
         mIds["uv_baking_offset"]= ID_UV_BAKING_OFFSET;
         mIds["bake_lighting_only"] = ID_BAKE_LIGHTING_ONLY;
@@ -1324,6 +1327,7 @@ namespace Ogre
         mIds["camera_far_corners_world_space_centered"] = ID_CAMERA_FAR_CORNERS_WORLD_SPACE_CENTERED;
         mIds["camera_direction"]                = ID_CAMERA_DIRECTION;
         mIds["input"]           = ID_INPUT;
+        mIds["output"]          = ID_OUTPUT;
 
         mIds["non_tilers_only"] = ID_NON_TILERS_ONLY;
         mIds["buffers"]         = ID_BUFFERS;
@@ -1366,6 +1370,9 @@ namespace Ogre
         mIds["compute_hq"]      = ID_COMPUTE_HQ;
         mIds["kernel_radius"]   = ID_KERNEL_RADIUS;
         mIds["gauss_deviation"] = ID_GAUSS_DEVIATION;
+
+        mIds["samples_per_iteration"] = ID_SAMPLES_PER_ITERATION;
+        mIds["force_mipmap_fallback"] = ID_FORCE_MIPMAP_FALLBACK;
 
         mIds["compositor_node_shadow"]  = ID_SHADOW_NODE;
         mIds["num_splits"]              = ID_NUM_SPLITS;

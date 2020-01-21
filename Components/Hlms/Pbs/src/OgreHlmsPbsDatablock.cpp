@@ -61,7 +61,7 @@ namespace Ogre
         "GrainMerge", "Difference"
     };
 
-    const size_t HlmsPbsDatablock::MaterialSizeInGpu          = 56 * 4 + NUM_PBSM_TEXTURE_TYPES * 2;
+    const size_t HlmsPbsDatablock::MaterialSizeInGpu          = 60u * 4u + NUM_PBSM_TEXTURE_TYPES * 2u;
     const size_t HlmsPbsDatablock::MaterialSizeInGpuAligned   = alignToNextMultiple(
                                                                     HlmsPbsDatablock::MaterialSizeInGpu,
                                                                     4 * 4 );
@@ -87,11 +87,13 @@ namespace Ogre
         mFresnelR( 0.818f ), mFresnelG( 0.818f ), mFresnelB( 0.818f ),
         mTransparencyValue( 1.0f ),
         mNormalMapWeight( 1.0f ),
+        mRefractionStrength( 0.075f ),
         mCubemapProbe( 0 ),
         mBrdf( PbsBrdf::Default )
     {
         memset( mUvSource, 0, sizeof( mUvSource ) );
         memset( mBlendModes, 0, sizeof( mBlendModes ) );
+        memset( _padding1, 0, sizeof( _padding1 ) );
         memset( mUserValue, 0, sizeof( mUserValue ) );
 
         mBgDiffuse[0] = mBgDiffuse[1] = mBgDiffuse[2] = mBgDiffuse[3] = 1.0f;
@@ -425,7 +427,7 @@ namespace Ogre
         float oldkDg = mkDg;
         float oldkDb = mkDb;
 
-        if( mTransparencyMode == Transparent )
+        if( mTransparencyMode == Transparent || mTransparencyMode == Refractive )
         {
             //Precompute the transparency CPU-side.
             if( mWorkflow != MetallicWorkflow )
@@ -840,10 +842,12 @@ namespace Ogre
         {
             HlmsBlendblock newBlendblock;
 
-            if( mTransparencyMode == None )
+            if( mTransparencyMode == None || mTransparencyMode == Refractive )
             {
                 newBlendblock.mSourceBlendFactor    = SBF_ONE;
                 newBlendblock.mDestBlendFactor      = SBF_ZERO;
+                if( mTransparencyMode == Refractive )
+                    newBlendblock.setForceTransparentRenderOrder( true );
             }
             else if( mTransparencyMode == Transparent )
             {
@@ -858,6 +862,14 @@ namespace Ogre
 
             if( newBlendblock != *mBlendblock[0] )
                 setBlendblock( newBlendblock );
+
+            if( mTransparencyMode == Refractive && mMacroblock[0]->mDepthWrite )
+            {
+                // When doing refractions, depth write must be forced off
+                HlmsMacroblock macroblock = *mMacroblock[0];
+                macroblock.mDepthWrite = false;
+                setMacroblock( macroblock );
+            }
         }
         else
         {
@@ -880,6 +892,12 @@ namespace Ogre
         scheduleConstBufferUpdate();
         if( mustFlush )
             flushRenderables();
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsPbsDatablock::setRefractionStrength( float strength )
+    {
+        mRefractionStrength = strength;
+        scheduleConstBufferUpdate();
     }
     //-----------------------------------------------------------------------------------
     void HlmsPbsDatablock::setReceiveShadows( bool receiveShadows )
@@ -1086,5 +1104,20 @@ namespace Ogre
     TextureGpu* HlmsPbsDatablock::getEmissiveTexture(void) const
     {
         return getTexture( PBSM_EMISSIVE );
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsPbsDatablock::notifyTextureChanged( TextureGpu *texture,
+                                                             TextureGpuListener::Reason reason,
+                                                             void *extraData )
+    {
+        HlmsPbsBaseTextureDatablock::notifyTextureChanged( texture, reason, extraData );
+        if( texture == mTextures[PBSM_REFLECTION] )
+        {
+            if( reason == TextureGpuListener::FromStorageToSysRam ||
+                reason == TextureGpuListener::GainedResidency )
+            {
+                static_cast<HlmsPbs *>( mCreator )->_notifyIblSpecMipmap( texture->getNumMipmaps() );
+            }
+        }
     }
 }

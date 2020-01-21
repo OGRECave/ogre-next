@@ -93,6 +93,12 @@ namespace Ogre
             /// dynamically very often and this might cause swapping shaders.
             AmbientHemisphere,
 
+            /// Uses spherical harmonics
+            AmbientSh,
+
+            /// Uses spherical harmonics (monochrome / single channel)
+            AmbientShMonochrome,
+
             /// Disable ambient lighting.
             AmbientNone
         };
@@ -112,6 +118,9 @@ namespace Ogre
 
         PassData                mPreparedPass;
         ConstBufferPackedVec    mPassBuffers;
+        ConstBufferPackedVec    mLight0Buffers; // lights
+        ConstBufferPackedVec    mLight1Buffers; // areaApproxLights
+        ConstBufferPackedVec    mLight2Buffers; // areaLtcLights
         HlmsSamplerblock const  *mShadowmapSamplerblock;    /// GL3+ only when not using depth textures
         HlmsSamplerblock const  *mShadowmapCmpSamplerblock; /// For depth textures & D3D11
         HlmsSamplerblock const  *mShadowmapEsmSamplerblock; /// For ESM.
@@ -125,11 +134,17 @@ namespace Ogre
         TexBufferPacked         *mGridBuffer;
         TexBufferPacked         *mGlobalLightListBuffer;
 
+
+        float                   mMaxSpecIblMipmap;
         uint32                  mTexUnitSlotStart;
 
         TextureGpuVec const     *mPrePassTextures;
         TextureGpu              *mPrePassMsaaDepthTexture;
+        /// Used by techniques: SS Reflections, SS Refractions
+        TextureGpu              *mDepthTexture;
         TextureGpu              *mSsrTexture;
+        TextureGpu              *mDepthTextureNoMsaa;
+        TextureGpu              *mRefractionsTexture;
         IrradianceVolume        *mIrradianceVolume;
         VctLighting             *mVctLighting;
         IrradianceField         *mIrradianceField;
@@ -145,12 +160,12 @@ namespace Ogre
 #endif
         TextureGpu              *mAreaLightMasks;
         HlmsSamplerblock const  *mAreaLightMasksSamplerblock;
-        LightArray				mAreaLights;
+        LightArray                mAreaLights;
         bool                    mUsingAreaLightMasks;
 
         bool                    mSkipRequestSlotInChangeRS;
 
-        bool                    mUsingLtcMatrix;
+        /// LTC matrix texture also contains BRDF LUT for specular IBL.
         TextureGpu              *mLtcMatrixTexture;
 
         bool                    mDecalsDiffuseMergedEmissive;
@@ -169,12 +184,15 @@ namespace Ogre
         bool mSetupWorldMatBuf;
         bool mDebugPssmSplits;
 
+        bool mAutoSpecIblMaxMipmap;
         bool mVctFullConeCount;
 
 #if OGRE_ENABLE_LIGHT_OBB_RESTRAINT
         bool mUseObbRestraintAreaApprox;
         bool mUseObbRestraintAreaLtc;
 #endif
+
+        bool mUseLightBuffers;
 
         ShadowFilter    mShadowFilter;
         uint16          mEsmK; /// K parameter for ESM.
@@ -236,6 +254,17 @@ namespace Ogre
 
         virtual void postCommandBufferExecution( CommandBuffer *commandBuffer );
         virtual void frameEnded(void);
+
+        /** By default we see the reflection textures' mipmaps and store the largest one we found.
+            By calling resetIblSpecMipmap; you can reset this process thus if a reflection texture
+            with a large number of mipmaps was removed, these textures can be reevaluated
+        @param numMipmaps
+            When 0; we automatically check for reflection texture.
+            When non-zero, we force the number of mipmaps to the specified value
+        */
+        void resetIblSpecMipmap( uint8 numMipmaps );
+
+        void _notifyIblSpecMipmap( uint8 numMipmaps );
 
         void loadLtcMatrix(void);
 
@@ -367,6 +396,9 @@ namespace Ogre
         bool getUseObbRestraintsAreaLtc(void) const         { return mUseObbRestraintAreaLtc; }
 #endif
 
+        void setUseLightBuffers(bool b);
+        bool getUseLightBuffers() { return mUseLightBuffers; }
+
 #if !OGRE_NO_JSON
         /// @copydoc Hlms::_loadJson
         virtual void _loadJson( const rapidjson::Value &jsonValue, const HlmsJson::NamedBlocks &blocks,
@@ -385,6 +417,8 @@ namespace Ogre
 
     struct _OgreHlmsPbsExport PbsProperty
     {
+        static const IdString useLightBuffers;
+    
         static const IdString HwGammaRead;
         static const IdString HwGammaWrite;
         static const IdString MaterialsPerBuffer;
@@ -472,6 +506,9 @@ namespace Ogre
         static const IdString ExponentialShadowMaps;
 
         static const IdString AmbientHemisphere;
+        static const IdString AmbientSh;
+        static const IdString AmbientShMonochrome;
+        static const IdString LtcTextureAvailable;
         static const IdString EnvMapScale;
         static const IdString AmbientFixed;
         static const IdString TargetEnvprobeMap;

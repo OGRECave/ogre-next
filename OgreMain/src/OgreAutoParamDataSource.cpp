@@ -551,6 +551,39 @@ namespace Ogre {
         return mCurrentJob;
     }
     //-----------------------------------------------------------------------------
+    Vector4 AutoParamDataSource::getUavSize(size_t index) const
+    {
+        Vector4 size = Vector4( 1, 1, 1, 1 );
+
+        if( mCurrentJob && index < mCurrentJob->getNumUavUnits() )
+        {
+            const TextureGpu *tex = mCurrentJob->getUavTexture( static_cast<uint8>( index ) );
+            if( tex )
+            {
+                size.x = static_cast<Real>( tex->getWidth() );
+                size.y = static_cast<Real>( tex->getHeight() );
+                size.z = static_cast<Real>( tex->getDepth() );
+            }
+        }
+
+        size.w = Ogre::max( size.x, size.y );
+        size.w = Ogre::max( size.w, size.z );
+
+        return size;
+    }
+    //-----------------------------------------------------------------------------
+    Vector4 AutoParamDataSource::getInverseUavSize(size_t index) const
+    {
+        Vector4 size = getUavSize(index);
+        return 1 / size;
+    }
+    //-----------------------------------------------------------------------------
+    Vector4 AutoParamDataSource::getPackedUavSize(size_t index) const
+    {
+        Vector4 size = getUavSize(index);
+        return Vector4(size.x, size.y, 1 / size.x, 1 / size.y);
+    }
+    //-----------------------------------------------------------------------------
     Vector4 AutoParamDataSource::getTextureSize(size_t index) const
     {
         Vector4 size = Vector4(1,1,1,1);

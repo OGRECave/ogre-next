@@ -72,19 +72,11 @@ namespace Ogre
         public: Vector3                 mTrackedPosition;
     private:
         TextureGpu                      *mRenderTarget;
-        TextureGpu                      *mDpmRenderTarget;
-        Camera                          *mDpmCamera;
+        TextureGpu                      *mIblTarget;
 
         vector<uint64>::type            mReservedSlotBitset;
 
-        CompositorWorkspace             *mCubeToDpmWorkspace;
-
         ParallaxCorrectedCubemapAutoListener *mListener;
-
-        static void createCubemapToDpmWorkspaceDef( CompositorManager2 *compositorManager,
-                                                    TextureGpu *cubeTexture );
-        static void destroyCubemapToDpmWorkspaceDef( CompositorManager2 *compositorManager,
-                                                     TextureGpu *cubeTexture );
 
         void updateSceneGraph(void);
         /// Probes with a large number of iterations will blow up our memory consumption
@@ -103,6 +95,8 @@ namespace Ogre
                                       const CompositorWorkspaceDef *probeWorkspaceDef );
         ~ParallaxCorrectedCubemapAuto();
 
+        virtual void destroyProbe( CubemapProbe *probe );
+
         void setListener( ParallaxCorrectedCubemapAutoListener *listener ) { mListener = listener; }
         ParallaxCorrectedCubemapAutoListener *getListener( void ) const { return mListener; }
 
@@ -111,6 +105,9 @@ namespace Ogre
 
         virtual TextureGpu* findTmpRtt( const TextureGpu *baseParams );
         virtual void releaseTmpRtt( const TextureGpu *tmpRtt );
+
+        virtual TextureGpu* findIbl( const TextureGpu *baseParams );
+        virtual void releaseIbl( const TextureGpu *tmpRtt );
 
         virtual void _copyRenderTargetToCubemap( uint32 cubemapArrayIdx );
 
