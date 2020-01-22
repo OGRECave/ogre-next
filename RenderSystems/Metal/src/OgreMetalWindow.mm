@@ -59,7 +59,7 @@ namespace Ogre
     float MetalWindow::getViewPointToPixelScale() const
     {
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-        return mMetalView.layer.contentsScale;
+        return mMetalLayer.contentsScale;
 #else
         NSScreen* screen = mMetalView.window.screen ?: [NSScreen mainScreen];
         return screen.backingScaleFactor;
@@ -71,12 +71,6 @@ namespace Ogre
         // Handle display changes here
         if( mMetalView.layerSizeDidUpdate )
         {
-            // set the metal layer to the drawable size in case orientation or size changes
-            float scale = getViewPointToPixelScale();
-            CGSize drawableSize = CGSizeMake( mMetalView.bounds.size.width * scale,
-                                              mMetalView.bounds.size.height * scale );
-            mMetalLayer.drawableSize = drawableSize;
-
             // Resize anything if needed
             this->windowMovedOrResized();
 
@@ -86,10 +80,14 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalWindow::setResolutionFromView(void)
     {
-        const uint32 widthPx = static_cast<uint32>( mMetalLayer.drawableSize.width );
-        const uint32 heightPx = static_cast<uint32>( mMetalLayer.drawableSize.height );
+        // update drawable size to match layer and thus view size
+        float scale = getViewPointToPixelScale();
+        CGSize sizePt = mMetalLayer.frame.size;
+        const uint32 widthPx = std::max(1u, (uint32)floor(sizePt.width * scale + 0.5));
+        const uint32 heightPx = std::max(1u, (uint32)floor(sizePt.height * scale + 0.5));
+        mMetalLayer.drawableSize = CGSizeMake( widthPx, heightPx );
 
-        if( widthPx > 0 && heightPx > 0 && mTexture )
+        if( mTexture )
         {
             assert( dynamic_cast<MetalTextureGpuWindow*>( mTexture ) );
             MetalTextureGpuWindow *texWindow = static_cast<MetalTextureGpuWindow*>( mTexture );
