@@ -148,7 +148,8 @@ namespace Ogre
         }
 
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
-        [blitEncoder synchronizeResource:mVboName];
+        assert( mVboName.storageMode != MTLStorageModeManaged );
+        //[blitEncoder synchronizeResource:mVboName];
 #endif
 
         if( accurateTracking )
