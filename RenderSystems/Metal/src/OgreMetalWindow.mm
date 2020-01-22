@@ -205,7 +205,7 @@ namespace Ogre
         mClosed = false;
         mHwGamma = true;
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
-        NSObject *externalWindowHandle; // NSView or NSWindow
+        NSObject *externalWindowHandle; // OgreMetalView, NSView or NSWindow
 #endif
 
         if( miscParams )
@@ -239,26 +239,48 @@ namespace Ogre
         CGRect frame = CGRectMake(0.0, 0.0, mRequestedWidth, mRequestedHeight);
         mMetalView = [[OgreMetalView alloc] initWithFrame:frame];
 #else
+        // create window if nothing was provided
+        if( !externalWindowHandle )
+        {
+            NSRect frame = NSMakeRect(0.0, 0.0, mRequestedWidth, mRequestedHeight);
+            NSWindowStyleMask style = NSWindowStyleMaskResizable | NSWindowStyleMaskTitled;
+            if( mRequestedFullscreenMode )
+            {
+                frame.size = NSScreen.mainScreen.visibleFrame.size;
+                style = NSWindowStyleMaskBorderless;
+            }
+            NSWindow* window = [[NSWindow alloc] initWithContentRect:frame
+                                                           styleMask:style
+                                                             backing:NSBackingStoreBuffered
+                                                               defer:YES];
+            window.title = @(mTitle.c_str());
+            window.contentView = [[OgreMetalView alloc] initWithFrame:frame];
+            
+            externalWindowHandle = window;
+        }
+
         NSView* externalView;
         if( [externalWindowHandle isKindOfClass:[NSWindow class]] )
         {
             mWindow = (NSWindow*)externalWindowHandle;
             externalView = mWindow.contentView;
         }
-        else if( [externalWindowHandle isKindOfClass:[NSView class]] )
+        else
         {
+            assert( [externalWindowHandle isKindOfClass:[NSView class]] );
             externalView = (NSView*)externalWindowHandle;
             mWindow = externalView.window;
         }
+
+        if( [externalView isKindOfClass:[OgreMetalView class]] )
+            mMetalView = (OgreMetalView*)externalView;
         else
-            assert( false && "Unable to get a pointer to the external NSView or NSWindow."
-               "Was the 'externalWindowHandle' parameter set correctly in the call to createRenderWindow()?");
-
-
-        NSRect frame = externalView.bounds;
-        mMetalView = [[OgreMetalView alloc] initWithFrame:frame];
-        mMetalView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
-        [externalView addSubview:mMetalView];
+        {
+            NSRect frame = externalView.bounds;
+            mMetalView = [[OgreMetalView alloc] initWithFrame:frame];
+            mMetalView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
+            [externalView addSubview:mMetalView];
+        }
 #endif
 
         mMetalLayer = (CAMetalLayer*)mMetalView.layer;
