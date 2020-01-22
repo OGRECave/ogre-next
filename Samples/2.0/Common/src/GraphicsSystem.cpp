@@ -251,9 +251,6 @@ namespace Demo
         #endif
         #if defined(SDL_VIDEO_DRIVER_COCOA)
         case SDL_SYSWM_COCOA:
-            //required to make OGRE play nice with our window
-            params.insert( std::make_pair("macAPICocoaUseNSView", "true") );
-
             winHandle  = Ogre::StringConverter::toString(WindowContentViewHandle(wmInfo));
             break;
         #endif

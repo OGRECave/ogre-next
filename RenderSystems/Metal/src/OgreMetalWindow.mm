@@ -205,7 +205,10 @@ namespace Ogre
         destroy();
 
         mClosed = false;
-        mHwGamma    = true;
+        mHwGamma = true;
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
+        NSObject *externalWindowHandle; // NSView or NSWindow
+#endif
 
         if( miscParams )
         {
@@ -221,33 +224,31 @@ namespace Ogre
                 mHwGamma = StringConverter::parseBool( opt->second );
             
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
-            opt = miscParams->find("macAPICocoaUseNSView");
+            opt = miscParams->find("externalWindowHandle");
             if( opt != end )
+                externalWindowHandle = (__bridge NSObject*)(void*)StringConverter::parseSizeT(opt->second);
+
+            if( !externalWindowHandle )
             {
-                LogManager::getSingleton().logMessage("Mac Cocoa Window: Rendering on an external plain NSView*");
                 opt = miscParams->find("parentWindowHandle");
-                NSView *nsview = (__bridge NSView*)reinterpret_cast<void*>(StringConverter::parseSizeT(opt->second));
-                assert( nsview &&
-                       "Unable to get a pointer to the parent NSView."
-                       "Was the 'parentWindowHandle' parameter set correctly in the call to createRenderWindow()?");
-                mWindow = [nsview window];
+                if( opt != end )
+                    externalWindowHandle = (__bridge NSObject*)(void*)StringConverter::parseSizeT(opt->second);
             }
+
+            if( [externalWindowHandle isKindOfClass:[NSWindow class]] )
+                mWindow = (NSWindow*)externalWindowHandle;
+            else if( [externalWindowHandle isKindOfClass:[NSView class]] )
+                mWindow = [(NSView*)externalWindowHandle window];
+            else
+                assert( false && "Unable to get a pointer to the external NSView or NSWindow."
+                   "Was the 'externalWindowHandle' parameter set correctly in the call to createRenderWindow()?");
 #endif
         }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-        CGRect frame;
+        CGRect frame = CGRectMake(0.0, 0.0, mRequestedWidth, mRequestedHeight);
 #else
-        NSRect frame;
-#endif
-
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-        frame.origin.x = 0;
-        frame.origin.y = 0;
-        frame.size.width = mRequestedWidth;
-        frame.size.height = mRequestedHeight;
-#else
-        frame = [mWindow.contentView bounds];
+        NSRect frame = [mWindow.contentView bounds];
 #endif
         mMetalView = [[OgreMetalView alloc] initWithFrame:frame];
 
