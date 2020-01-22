@@ -46,8 +46,9 @@ namespace Ogre
     public:
         enum TimeSlicing
         {
-            TS_ONE_FRAME = 6,
-            TS_SIX_FRAMES = 1
+            TS_INDIVIDUAL_FACE,
+            TS_ALL_FACES,
+            TS_NONE
         };
 
     protected:
@@ -68,11 +69,11 @@ namespace Ogre
         uint8       mMsaa;
 
         TimeSlicing         mTimeSlicing;
-        uint8               mFaceIdx;
+        uint8               mTargetIdx;
         uint32              mWorkspaceExecMask;
         IdString            mWorkspaceDefName;
         CompositorWorkspace *mClearWorkspace;
-        CompositorWorkspace *mWorkspaces[6];
+        CompositorWorkspace *mWorkspaces[7];
         Camera              *mCamera;
 
         ParallaxCorrectedCubemapBase *mCreator;
@@ -165,7 +166,7 @@ namespace Ogre
             This value allows you to override it with a different workspace definition.
         */
         void initWorkspace( float cameraNear = 0.5f, float cameraFar = 500.0f,
-                            TimeSlicing ts = TS_ONE_FRAME, uint32 executionMask = 0xFFFFFFFF,
+                            TimeSlicing ts = TS_NONE, uint32 executionMask = 0xFFFFFFFF,
                             IdString workspaceDefOverride = IdString() );
         bool isInitialized(void) const;
 
@@ -235,7 +236,7 @@ namespace Ogre
         const Matrix3& getInvOrientation(void) const        { return mInvOrientation; }
         const Aabb& getProbeShape(void) const               { return mProbeShape; }
 
-        CompositorWorkspace **getWorkspaces(void)           { return mWorkspaces; }
+        CompositorWorkspace *getWorkspace( size_t index ) const;
 
         TextureGpu* getInternalTexture(void) const          { return mTexture; }
         void _addReference(void);

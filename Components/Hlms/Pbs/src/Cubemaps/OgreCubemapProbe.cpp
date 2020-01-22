@@ -60,11 +60,11 @@ namespace Ogre
         mTexture( 0 ),
         mCubemapArrayIdx( std::numeric_limits<uint16>::max() ),
         mMsaa( 1u ),
-        mTimeSlicing( TS_ONE_FRAME ),
-        mFaceIdx( 0 ),
+        mTimeSlicing( TS_NONE ),
+        mTargetIdx( 0 ),
         mWorkspaceExecMask( 0xFFFFFFFF ),
         mClearWorkspace( 0 ),
-        mWorkspaces{ 0, 0, 0, 0, 0, 0 },
+        mWorkspaces{ 0, 0, 0, 0, 0, 0, 0 },
         mCamera( 0 ),
         mCreator( creator ),
         mInternalProbe( 0 ),
@@ -98,7 +98,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void CubemapProbe::destroyWorkspace(void)
     {
-        for( size_t i=0; i<6; ++i )
+        for( size_t i=0; i<7; ++i )
         {
             if( mWorkspaces[i] )
             {
@@ -378,7 +378,7 @@ namespace Ogre
         assert( workspaceNodes.size() == 1 );
 
         CompositorNodeDef* probeNode = compositorManager->getNodeDefinitionNonConst( workspaceNodes.begin()->first );
-        assert( probeNode->getNumTargetPasses() % 6 == 0 );
+        assert( probeNode->getNumTargetPasses() > 6 && probeNode->getNumTargetPasses() % 6 == 1 );
         for( size_t i=0; i<probeNode->getNumTargetPasses(); ++i )
         {
             CompositorTargetDef* probeTarget = probeNode->getTargetPass(i);
@@ -386,8 +386,11 @@ namespace Ogre
             const CompositorPassDefVec& probePasses = probeTarget->getCompositorPasses();
             for( size_t j=0; j<probePasses.size(); ++j )
             {
-                probePasses[j]->mExecutionMask = ( ExecutionFlags::FIRST_SLICE_EXECUTION_FLAG << probeTarget->getRtIndex() ) |
-                                                 probePasses[j]->mExecutionMask & ~ExecutionFlags::NO_SLICE_EXECUTION_FLAG;
+                probePasses[j]->mExecutionMask &= ExecutionFlags::RESERVED_EXECUTION_FLAGS;
+                if( i == probeNode->getNumTargetPasses() - 1 )
+                    probePasses[j]->mExecutionMask |= ExecutionFlags::TS_IBL_EXECUTION_FLAG;
+                else
+                    probePasses[j]->mExecutionMask |= ExecutionFlags::TS_FIRST_FACE_EXECUTION_FLAG << probeTarget->getRtIndex();
             }
         }
 
@@ -438,10 +441,13 @@ namespace Ogre
         channels.push_back( rtt );
         channels.push_back( ibl );
 
-        for( size_t i=0; i<6; ++i )
+        for( size_t i=0; i<7; ++i )
         {
-            uint32 workspaceExecutionMask = ( ExecutionFlags::FIRST_SLICE_EXECUTION_FLAG << i ) |
-                                            mWorkspaceExecMask & ExecutionFlags::RESERVED_EXECUTION_FLAGS;
+            uint32 workspaceExecutionMask = mWorkspaceExecMask & ExecutionFlags::RESERVED_EXECUTION_FLAGS;
+            if( i == 6 )
+                workspaceExecutionMask |= ExecutionFlags::TS_IBL_EXECUTION_FLAG;
+            else
+                workspaceExecutionMask |= ExecutionFlags::TS_FIRST_FACE_EXECUTION_FLAG << i;
 
             mWorkspaces[i] =
                 compositorManager->addWorkspace( sceneManager, channels, mCamera, mWorkspaceDefName, false, -1,
@@ -614,8 +620,36 @@ namespace Ogre
             mCreator->_setIsRendering( true );
 
         mCreator->_setProbeRenderInProgress( this );
-        for( size_t i=0; i<mTimeSlicing; ++i )
-            mWorkspaces[mFaceIdx++]->_update();
+
+        size_t targetCount;
+        bool hasTargetIblPass;
+        switch( mTimeSlicing )
+        {
+        case TS_INDIVIDUAL_FACE:
+            targetCount = 1;
+            hasTargetIblPass = mTargetIdx == 6;
+            break;
+        case TS_ALL_FACES:
+            if( mTargetIdx == 6 )
+            {
+                targetCount = 1;
+                hasTargetIblPass = true;
+            }
+            else
+            {
+                targetCount = 6;
+                hasTargetIblPass = false;
+            }
+            break;
+        case TS_NONE:
+            targetCount = 7;
+            hasTargetIblPass = true;
+            break;
+        }
+
+        for( size_t i=0; i<targetCount; ++i )
+            mWorkspaces[mTargetIdx++]->_update();
+
         mCreator->_setProbeRenderInProgress( 0 );
 
         if( automaticMode )
@@ -624,9 +658,20 @@ namespace Ogre
         if( mStatic )
             mCamera->setLightCullingVisibility( false, false );
 
-        mCreator->_copyRenderTargetToCubemap( mCubemapArrayIdx );
+        if( hasTargetIblPass )
+            mCreator->_copyRenderTargetToCubemap( mCubemapArrayIdx );
 
-        mFaceIdx %= 6;
+        mTargetIdx %= 7;
+
+        if( mTargetIdx == 0)
+            mDirty = false;
+    }
+    //-----------------------------------------------------------------------------------
+    CompositorWorkspace * CubemapProbe::getWorkspace( size_t index ) const
+    {
+        assert( index < 7 );
+
+        return mWorkspaces[index];
     }
     //-----------------------------------------------------------------------------------
     void CubemapProbe::_addReference(void)

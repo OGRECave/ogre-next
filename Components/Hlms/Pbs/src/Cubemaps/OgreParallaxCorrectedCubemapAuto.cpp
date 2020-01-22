@@ -400,8 +400,6 @@ namespace Ogre
                 renderSystem->_update();
                 renderSystem->_endFrameOnce();
 
-                probe->mDirty = false;
-
                 if( iterationThreshold > 0u )
                 {
                     //We have to remove only those that are no longer dirty

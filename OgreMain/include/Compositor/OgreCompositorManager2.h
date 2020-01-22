@@ -55,12 +55,13 @@ namespace Ogre
     namespace ExecutionFlags
     {
         // Bit mask
-        // | -Z | +Z | -Y | +Y | -X | +X | n/a | No slice | 24-bits reserved
-        const uint32 FIRST_SLICE_EXECUTION_FLAG = 0x4000000;
-        const uint32 NO_SLICE_EXECUTION_FLAG    = 0x1000000;
-        const uint32 RESERVED_EXECUTION_FLAGS   = 0x0ffffff;
+        // | IBL | -Z | +Z | -Y | +Y | -X | +X | No TS | 24-bits reserved
+        const uint32 TS_IBL_EXECUTION_FLAG        = 0x80000000;
+        const uint32 TS_FIRST_FACE_EXECUTION_FLAG = 0x02000000;
+        const uint32 TS_NONE                      = 0x01000000;
+        const uint32 RESERVED_EXECUTION_FLAGS     = 0x00FFFFFF;
 
-        const uint32 DEFAULT_EXECUTION_FLAGS    = NO_SLICE_EXECUTION_FLAG | RESERVED_EXECUTION_FLAGS;
+        const uint32 DEFAULT_EXECUTION_FLAGS      = TS_NONE | RESERVED_EXECUTION_FLAGS;
     }
 
     /** \addtogroup Core
@@ -260,7 +261,7 @@ namespace Ogre
 
             All passes have a default executionMask = ExecutionFlags::DEFAULT_EXECUTION_FLAGS vpModifierMask = 0xFF
             except for clear passes which default to
-            executionMask = ExecutionFlags::NO_SLICE_EXECUTION_FLAG | 0x1 vpModifierMask = 0x00
+            executionMask = ExecutionFlags::TS_NONE | 0x1 vpModifierMask = 0x00
 
             The reasoning behind this is that often you want to clear the whole renderTarget
             the first time (it's GPU-friendly to discard the entire buffer; aka
