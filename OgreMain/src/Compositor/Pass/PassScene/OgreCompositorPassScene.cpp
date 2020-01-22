@@ -150,9 +150,18 @@ namespace Ogre
 
         profilingBegin();
 
-        CompositorWorkspaceListener *listener = mParentNode->getWorkspace()->getListener();
-        if( listener )
-            listener->passEarlyPreExecute( this );
+        const CompositorWorkspaceListenerVec& listeners = mParentNode->getWorkspace()->getListeners();
+
+        {
+            CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
+            CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
+
+            while( itor != end )
+            {
+                (*itor)->passEarlyPreExecute( this );
+                ++itor;
+            }
+        }
 
         Camera const *usedLodCamera = mLodCamera;
         if( lodCamera && mDefinition->mLodCameraName == IdString() )
@@ -193,8 +202,16 @@ namespace Ogre
         viewport->_setVisibilityMask( mDefinition->mVisibilityMask, mDefinition->mLightVisibilityMask );
 
         //Fire the listener in case it wants to change anything
-        if( listener )
-            listener->passPreExecute( this );
+        {
+            CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
+            CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
+
+            while( itor != end )
+            {
+                (*itor)->passPreExecute( this );
+                ++itor;
+            }
+        }
 
         if( mUpdateShadowNode && shadowNode )
         {
@@ -224,8 +241,16 @@ namespace Ogre
             //We need to restore the previous RT's update
         }
 
-        if( listener )
-            listener->passSceneAfterShadowMaps( this );
+        {
+            CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
+            CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
+
+            while( itor != end )
+            {
+                (*itor)->passSceneAfterShadowMaps( this );
+                ++itor;
+            }
+        }
 
         executeResourceTransitions();
         setRenderPassDescToCurrent();
@@ -240,8 +265,16 @@ namespace Ogre
                                       mDefinition->mFirstRQ, mDefinition->mLastRQ,
                                       mDefinition->mReuseCullData );
 
-        if( listener )
-            listener->passSceneAfterFrustumCulling( this );
+        {
+            CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
+            CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
+
+            while( itor != end )
+            {
+                (*itor)->passSceneAfterFrustumCulling( this );
+                ++itor;
+            }
+        }
 
 #if TODO_OGRE_2_2
         mTarget->setFsaaResolveDirty();
@@ -269,8 +302,16 @@ namespace Ogre
             sceneManager->_setForwardPlusEnabledInPass( false );
         }
 
-        if( listener )
-            listener->passPosExecute( this );
+        {
+            CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
+            CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
+
+            while( itor != end )
+            {
+                (*itor)->passPosExecute( this );
+                ++itor;
+            }
+        }
 
         profilingEnd();
     }

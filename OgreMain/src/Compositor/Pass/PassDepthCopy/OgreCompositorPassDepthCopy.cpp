@@ -80,13 +80,30 @@ namespace Ogre
             --mNumPassesLeft;
         }
 
-        CompositorWorkspaceListener *listener = mParentNode->getWorkspace()->getListener();
-        if( listener )
-            listener->passEarlyPreExecute( this );
+        const CompositorWorkspaceListenerVec& listeners = mParentNode->getWorkspace()->getListeners();
+
+        {
+            CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
+            CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
+
+            while( itor != end )
+            {
+                (*itor)->passEarlyPreExecute( this );
+                ++itor;
+            }
+        }
 
         //Fire the listener in case it wants to change anything
-        if( listener )
-            listener->passPreExecute( this );
+        {
+            CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
+            CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
+
+            while( itor != end )
+            {
+                (*itor)->passPreExecute( this );
+                ++itor;
+            }
+        }
 
         executeResourceTransitions();
 
@@ -99,8 +116,16 @@ namespace Ogre
         TextureBox dstBox = dstChannel->getEmptyBox( 0 );
         srcChannel->copyTo( dstChannel, dstBox, 0, srcBox, 0, false );
 
-        if( listener )
-            listener->passPosExecute( this );
+        {
+            CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
+            CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
+
+            while( itor != end )
+            {
+                (*itor)->passPosExecute( this );
+                ++itor;
+            }
+        }
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassDepthCopy::_placeBarriersAndEmulateUavExecution( BoundUav boundUavs[64],

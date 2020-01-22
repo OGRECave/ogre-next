@@ -53,9 +53,10 @@ namespace Ogre
 
     class CompositorManager2;
 
-    typedef vector<CompositorNode*>::type       CompositorNodeVec;
-    typedef vector<CompositorPass*>::type       CompositorPassVec;
-    typedef vector<CompositorShadowNode*>::type CompositorShadowNodeVec;
+    typedef vector<CompositorNode*>::type              CompositorNodeVec;
+    typedef vector<CompositorPass*>::type              CompositorPassVec;
+    typedef vector<CompositorShadowNode*>::type        CompositorShadowNodeVec;
+    typedef vector<CompositorWorkspaceListener*>::type CompositorWorkspaceListenerVec;
 }
 
 #include "OgreHeaderSuffix.h"

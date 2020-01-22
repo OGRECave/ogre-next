@@ -410,7 +410,7 @@ namespace Ogre
         channels.push_back( ibl );
         mWorkspace =
             compositorManager->addWorkspace( sceneManager, channels, mCamera, mWorkspaceDefName, false );
-        mWorkspace->setListener( mCreator );
+        mWorkspace->addListener( mCreator );
 
         if( !mStatic && !mCreator->getAutomaticMode() )
         {

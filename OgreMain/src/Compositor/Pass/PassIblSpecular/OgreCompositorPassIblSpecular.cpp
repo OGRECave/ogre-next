@@ -298,15 +298,32 @@ namespace Ogre
 
         profilingBegin();
 
-        CompositorWorkspaceListener *listener = mParentNode->getWorkspace()->getListener();
-        if( listener )
-            listener->passEarlyPreExecute( this );
+        const CompositorWorkspaceListenerVec& listeners = mParentNode->getWorkspace()->getListeners();
+
+        {
+            CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
+            CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
+
+            while( itor != end )
+            {
+                (*itor)->passEarlyPreExecute( this );
+                ++itor;
+            }
+        }
 
         executeResourceTransitions();
 
         // Fire the listener in case it wants to change anything
-        if( listener )
-            listener->passPreExecute( this );
+        {
+            CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
+            CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
+
+            while( itor != end )
+            {
+                (*itor)->passPreExecute( this );
+                ++itor;
+            }
+        }
 
         const bool usesCompute = !mJobs.empty();
 
@@ -351,8 +368,16 @@ namespace Ogre
             }
         }
 
-        if( listener )
-            listener->passPosExecute( this );
+        {
+            CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
+            CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
+
+            while( itor != end )
+            {
+                (*itor)->passPosExecute( this );
+                ++itor;
+            }
+        }
 
         profilingEnd();
     }

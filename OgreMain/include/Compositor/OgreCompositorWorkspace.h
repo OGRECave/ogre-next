@@ -90,7 +90,7 @@ namespace Ogre
         bool                    mEnabled;
         bool                    mAmalgamatedProfiling;
 
-        CompositorWorkspaceListener *mListener;
+        CompositorWorkspaceListenerVec mListeners;
 
         /// Main sequence in the order they should be executed
         CompositorNodeVec       mNodeSequence;
@@ -181,8 +181,15 @@ namespace Ogre
         void setAmalgamatedProfiling( bool bEnabled )       { mAmalgamatedProfiling = bEnabled; }
         bool getAmalgamatedProfiling(void) const            { return mAmalgamatedProfiling; }
 
-        void setListener( CompositorWorkspaceListener *listener )   { mListener = listener; }
-        CompositorWorkspaceListener* getListener(void) const        { return mListener; }
+        /// @deprecated use addListener and removeListener instead
+        void setListener( CompositorWorkspaceListener *listener );
+        /// @deprecated use getListeners instead
+        CompositorWorkspaceListener* getListener(void) const;
+
+        void addListener( CompositorWorkspaceListener *listener );
+        void removeListener( CompositorWorkspaceListener *listener );
+
+        const CompositorWorkspaceListenerVec& getListeners(void) const { return mListeners; }
 
         const ResourceLayoutMap& getResourcesLayout(void) const     { return mResourcesLayout; }
         const ResourceAccessMap& getUavsAccess(void) const          { return mUavsAccess; }
