@@ -232,30 +232,33 @@ namespace Ogre
                 if( opt != end )
                     externalWindowHandle = (__bridge NSObject*)(void*)StringConverter::parseSizeT(opt->second);
             }
-
-            if( [externalWindowHandle isKindOfClass:[NSWindow class]] )
-                mWindow = (NSWindow*)externalWindowHandle;
-            else if( [externalWindowHandle isKindOfClass:[NSView class]] )
-                mWindow = [(NSView*)externalWindowHandle window];
-            else
-                assert( false && "Unable to get a pointer to the external NSView or NSWindow."
-                   "Was the 'externalWindowHandle' parameter set correctly in the call to createRenderWindow()?");
 #endif
         }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
         CGRect frame = CGRectMake(0.0, 0.0, mRequestedWidth, mRequestedHeight);
-#else
-        NSRect frame = [mWindow.contentView bounds];
-#endif
         mMetalView = [[OgreMetalView alloc] initWithFrame:frame];
+#else
+        NSView* externalView;
+        if( [externalWindowHandle isKindOfClass:[NSWindow class]] )
+        {
+            mWindow = (NSWindow*)externalWindowHandle;
+            externalView = mWindow.contentView;
+        }
+        else if( [externalWindowHandle isKindOfClass:[NSView class]] )
+        {
+            externalView = (NSView*)externalWindowHandle;
+            mWindow = externalView.window;
+        }
+        else
+            assert( false && "Unable to get a pointer to the external NSView or NSWindow."
+               "Was the 'externalWindowHandle' parameter set correctly in the call to createRenderWindow()?");
 
-#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
-        NSView *view = mWindow.contentView;
-        [view addSubview:mMetalView];
-        mResizeObserver = [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidResizeNotification object:mWindow queue:nil usingBlock:^(NSNotification *){
-          mMetalView.frame = [mWindow.contentView bounds];
-        }];
+
+        NSRect frame = externalView.bounds;
+        mMetalView = [[OgreMetalView alloc] initWithFrame:frame];
+        mMetalView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
+        [externalView addSubview:mMetalView];
 #endif
 
         mMetalLayer = (CAMetalLayer*)mMetalView.layer;
@@ -278,9 +281,6 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void MetalWindow::destroy()
     {
-#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
-        [[NSNotificationCenter defaultCenter] removeObserver:mResizeObserver];
-#endif
         mClosed = true;
 
         OGRE_DELETE mTexture;
