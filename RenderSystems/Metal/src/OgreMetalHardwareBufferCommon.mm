@@ -257,7 +257,10 @@ namespace v1
         memcpy( pDest, srcData, length );
 
         if( stagingBuffer )
+        {
+            stagingBuffer->unmap( 0, 0 );
             stagingBuffer->removeReferenceCount();
+        }
     }
     //-----------------------------------------------------------------------------------
     void MetalHardwareBufferCommon::writeData( size_t offset, size_t length,
