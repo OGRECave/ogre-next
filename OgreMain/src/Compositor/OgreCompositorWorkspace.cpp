@@ -839,6 +839,17 @@ namespace Ogre
             }
             ++itor;
         }
+
+        {
+            CompositorWorkspaceListenerVec::const_iterator itor = mListeners.begin();
+            CompositorWorkspaceListenerVec::const_iterator end  = mListeners.end();
+
+            while( itor != end )
+            {
+                (*itor)->workspacePosUpdate( this );
+                ++itor;
+            }
+        }
     }
     //-----------------------------------------------------------------------------------
     void CompositorWorkspace::_swapFinalTarget( vector<TextureGpu*>::type &swappedTargets )
