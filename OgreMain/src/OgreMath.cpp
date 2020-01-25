@@ -254,7 +254,7 @@ namespace Ogre
         n /= ( abs( n.x ) + abs( n.y ) + abs( n.z ) );
         Vector2 nxy = n.z >= 0 ? n.xy() : octahedronMappingWrap( n.xy() );
         nxy = nxy * Real( 0.5f ) + Real( 0.5f );
-        return n.xy();
+        return nxy;
     }
     //-----------------------------------------------------------------------
     Vector3 Math::octahedronMappingDecode( Vector2 f )
