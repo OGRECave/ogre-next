@@ -64,6 +64,7 @@ struct PS_INPUT
 
 @insertpiece( DeclPlanarReflTextures )
 @insertpiece( DeclAreaApproxTextures )
+@insertpiece( DeclLightProfilesTexture )
 
 @property( hlms_forwardplus )
     Buffer<uint> f3dGrid : register(t@value(f3dGrid));

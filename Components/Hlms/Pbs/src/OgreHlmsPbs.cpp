@@ -167,6 +167,7 @@ namespace Ogre
     const IdString PbsProperty::ExponentialShadowMaps= IdString( "exponential_shadow_maps" );
 
     const IdString PbsProperty::EnvMapScale       = IdString( "envmap_scale" );
+    const IdString PbsProperty::LightProfilesTexture= IdString( "light_profiles_texture" );
     const IdString PbsProperty::LtcTextureAvailable= IdString( "ltc_texture_available" );
     const IdString PbsProperty::AmbientFixed      = IdString( "ambient_fixed" );
     const IdString PbsProperty::AmbientHemisphere = IdString( "ambient_hemisphere" );
@@ -281,6 +282,7 @@ namespace Ogre
         mAreaLightMasks( 0 ),
         mAreaLightMasksSamplerblock( 0 ),
         mUsingAreaLightMasks( false ),
+        mTexturedLightProfiles( 0 ),
         mSkipRequestSlotInChangeRS( false ),
         mLtcMatrixTexture( 0 ),
         mDecalsDiffuseMergedEmissive( false ),
@@ -1074,6 +1076,9 @@ namespace Ogre
         if( getProperty( HlmsBaseProp::LightsAreaTexMask ) > 0 )
             setTextureReg( PixelShader, "areaLightMasks", texUnit++ );
 
+        if( getProperty( PbsProperty::LightProfilesTexture ) > 0 )
+            setTextureReg( PixelShader, "lightProfiles", texUnit++ );
+
         if( getProperty( PbsProperty::LtcTextureAvailable ) )
         {
             if( bNeedsEnvBrdf || getProperty( HlmsBaseProp::LightsAreaLtc ) > 0 )
@@ -1331,6 +1336,8 @@ namespace Ogre
 
         if( !casterPass )
         {
+            if( mTexturedLightProfiles )
+                setProperty( PbsProperty::LightProfilesTexture, 1 );
             if( mLtcMatrixTexture )
                 setProperty( PbsProperty::LtcTextureAvailable, 1 );
 
@@ -2148,14 +2155,14 @@ namespace Ogre
                     *light0BufferPtr++ = attenQuadratic;
                     ++light0BufferPtr;
 
-                    const Vector2 rectSize = light->getDerivedRectSize();
+                    const uint16 texturedProfileIdx = light->getTexturedProfileIdx();
 
                     //vec4 lights[numLights].spotDirection;
                     Vector3 spotDir = viewMatrix3 * light->getDerivedDirection();
                     *light0BufferPtr++ = spotDir.x;
                     *light0BufferPtr++ = spotDir.y;
                     *light0BufferPtr++ = spotDir.z;
-                    *light0BufferPtr++ = 1.0f / rectSize.x;
+                    *light0BufferPtr++ = static_cast<float>( texturedProfileIdx );
 
                     //vec4 lights[numLights].spotParams;
                     if( light->getType() != Light::LT_AREA_APPROX )
@@ -2175,7 +2182,7 @@ namespace Ogre
                         *light0BufferPtr++ = xAxis.y;
                         *light0BufferPtr++ = xAxis.z;
                     }
-                    *light0BufferPtr++ = 1.0f / rectSize.y;
+                    *light0BufferPtr++ = 0.0f;
 
                 }
             }
@@ -2601,6 +2608,8 @@ namespace Ogre
             {
                 mUsingAreaLightMasks = false;
             }
+            if( mTexturedLightProfiles )
+                mTexUnitSlotStart += 1;
 
             /// LTC / BRDF IBL reserved slot
             if( mLtcMatrixTexture )
@@ -2780,6 +2789,14 @@ namespace Ogre
                 {
                     *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit,
                                                                          mAreaLightMasks,
+                                                                         mAreaLightMasksSamplerblock );
+                    ++texUnit;
+                }
+
+                if( mTexturedLightProfiles )
+                {
+                    *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit,
+                                                                         mTexturedLightProfiles,
                                                                          mAreaLightMasksSamplerblock );
                     ++texUnit;
                 }

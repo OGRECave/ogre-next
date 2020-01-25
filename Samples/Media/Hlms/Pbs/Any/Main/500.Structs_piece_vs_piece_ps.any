@@ -28,6 +28,8 @@ struct Light
 	float4 spotDirection;
 	float4 spotParams;
 @end
+
+#define lightTexProfileIdx spotDirection.w
 };
 
 #define numNonCasterDirectionalLights lights[0].diffuse.w

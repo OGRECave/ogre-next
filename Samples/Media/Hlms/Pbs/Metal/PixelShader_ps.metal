@@ -114,7 +114,7 @@ fragment @insertpiece( output_type ) main_metal
 
 	@insertpiece( DeclPlanarReflTextures )
 	@insertpiece( DeclAreaApproxTextures )
-
+	@insertpiece( DeclLightProfilesTexture )
 
 	@property( irradiance_volumes )
 		, texture3d<float>	irradianceVolume		[[texture(@value(irradianceVolume))]]
