@@ -173,6 +173,14 @@ namespace Ogre {
         void loadDynamicImage( void *pData, bool autoDelete, const TextureGpu *texture );
         void loadDynamicImage( void *pData, bool autoDelete, const Image2 *image );
 
+        /// Convenience function. Same as Image2::loadDynamicImage, but allocates an uninitialized
+        /// pointer to store all data and call loadDynamicImage with it
+        void createEmptyImage( uint32 width, uint32 height, uint32 depthOrSlices,
+                               TextureTypes::TextureTypes textureType, PixelFormatGpu format,
+                               uint8 numMipmaps = 1u );
+        /// Same as createEmptyImage, but retrieves all metadata parameters from the input texture
+        void createEmptyImageLike( const TextureGpu *texture );
+
         /** Synchronously downloads the selected mips from a TextureGpu into this Image.
             This function is for convenience for when going async is not important.
         @param minMip

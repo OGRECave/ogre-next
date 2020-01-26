@@ -282,7 +282,7 @@ namespace Ogre
         mAreaLightMasks( 0 ),
         mAreaLightMasksSamplerblock( 0 ),
         mUsingAreaLightMasks( false ),
-        mTexturedLightProfiles( 0 ),
+        mLightProfilesTexture( 0 ),
         mSkipRequestSlotInChangeRS( false ),
         mLtcMatrixTexture( 0 ),
         mDecalsDiffuseMergedEmissive( false ),
@@ -1336,7 +1336,7 @@ namespace Ogre
 
         if( !casterPass )
         {
-            if( mTexturedLightProfiles )
+            if( mLightProfilesTexture )
                 setProperty( PbsProperty::LightProfilesTexture, 1 );
             if( mLtcMatrixTexture )
                 setProperty( PbsProperty::LtcTextureAvailable, 1 );
@@ -2069,6 +2069,10 @@ namespace Ogre
 
             if( numShadowMapLights > 0 )
             {
+                float invHeightLightProfileTex = 1.0f;
+                if( mLightProfilesTexture )
+                    invHeightLightProfileTex = 1.0f / mLightProfilesTexture->getHeight();
+
                 //All directional lights (caster and non-caster) are sent.
                 //Then non-directional shadow-casting shadow lights are sent.
                 size_t shadowLightIdx = 0;
@@ -2155,14 +2159,15 @@ namespace Ogre
                     *light0BufferPtr++ = attenQuadratic;
                     ++light0BufferPtr;
 
-                    const uint16 texturedProfileIdx = light->getTexturedProfileIdx();
+                    const uint16 lightProfileIdx = light->getLightProfileIdx();
 
-                    //vec4 lights[numLights].spotDirection;
+                    // vec4 lights[numLights].spotDirection;
                     Vector3 spotDir = viewMatrix3 * light->getDerivedDirection();
                     *light0BufferPtr++ = spotDir.x;
                     *light0BufferPtr++ = spotDir.y;
                     *light0BufferPtr++ = spotDir.z;
-                    *light0BufferPtr++ = static_cast<float>( texturedProfileIdx );
+                    *light0BufferPtr++ =
+                        ( static_cast<float>( lightProfileIdx ) + 0.5f ) * invHeightLightProfileTex;
 
                     //vec4 lights[numLights].spotParams;
                     if( light->getType() != Light::LT_AREA_APPROX )
@@ -2608,7 +2613,7 @@ namespace Ogre
             {
                 mUsingAreaLightMasks = false;
             }
-            if( mTexturedLightProfiles )
+            if( mLightProfilesTexture )
                 mTexUnitSlotStart += 1;
 
             /// LTC / BRDF IBL reserved slot
@@ -2793,10 +2798,10 @@ namespace Ogre
                     ++texUnit;
                 }
 
-                if( mTexturedLightProfiles )
+                if( mLightProfilesTexture )
                 {
                     *commandBuffer->addCommand<CbTexture>() = CbTexture( texUnit,
-                                                                         mTexturedLightProfiles,
+                                                                         mLightProfilesTexture,
                                                                          mAreaLightMasksSamplerblock );
                     ++texUnit;
                 }
@@ -3488,6 +3493,11 @@ namespace Ogre
     void HlmsPbs::setAreaLightMasks( TextureGpu *areaLightMask )
     {
         mAreaLightMasks = areaLightMask;
+    }
+    //-----------------------------------------------------------------------------------
+    void HlmsPbs::setLightProfilesTexture( TextureGpu *lightProfilesTex )
+    {
+        mLightProfilesTexture = lightProfilesTex;
     }
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
     //-----------------------------------------------------------------------------------

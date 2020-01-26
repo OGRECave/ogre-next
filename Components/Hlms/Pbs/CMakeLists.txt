@@ -17,6 +17,7 @@ file(
 	"${CMAKE_CURRENT_SOURCE_DIR}/include/Cubemaps/*.h"
 	"${CMAKE_CURRENT_SOURCE_DIR}/include/InstantRadiosity/*.h"
 	"${CMAKE_CURRENT_SOURCE_DIR}/include/IrradianceField/*.h"
+	"${CMAKE_CURRENT_SOURCE_DIR}/include/LightProfiles/*.h"
 	"${CMAKE_CURRENT_SOURCE_DIR}/include/Vct/*.h"
 	"${CMAKE_CURRENT_SOURCE_DIR}/../Common/include/*.h"
 	"${CMAKE_CURRENT_SOURCE_DIR}/../Common/include/*.inl"
@@ -27,6 +28,7 @@ file(
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/Cubemaps/*.cpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/InstantRadiosity/*.cpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/IrradianceField/*.cpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/LightProfiles/*.cpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/Vct/*.cpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/../Common/src/*.cpp"
 )

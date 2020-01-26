@@ -5,14 +5,14 @@
 
 @piece( DeclLightProfilesTexture )
 	@property( syntax == glsl || syntax == glsles )
-		uniform sampler2DArray lightProfiles;
+		uniform sampler2D lightProfiles;
 	@end
 	@property( syntax == hlsl )
-		Texture2DArray lightProfiles			: register(t@value(lightProfiles));
+		Texture2D lightProfiles					: register(t@value(lightProfiles));
 		SamplerState lightProfilesSampler		: register(s@value(lightProfiles));
 	@end
 	@property( syntax == metal )
-		, texture2d_array<float> lightProfiles	[[texture(@value(lightProfiles))]]
+		, texture2d<float> lightProfiles		[[texture(@value(lightProfiles))]]
 		, sampler lightProfilesSampler			[[sampler(@value(lightProfiles))]]
 	@end
 @end
@@ -20,7 +20,7 @@
 
 @piece( DeclLightProfilesTextureFuncs )
 	@property( syntax == metal )
-		#define OGRE_PHOTOMETRIC_ARG_DECL , texture2d_array<float> lightProfiles, sampler lightProfilesSampler
+		#define OGRE_PHOTOMETRIC_ARG_DECL , texture2d<float> lightProfiles, sampler lightProfilesSampler
 		#define OGRE_PHOTOMETRIC_ARG , lightProfiles, lightProfilesSampler
 	@else
 		#define OGRE_PHOTOMETRIC_ARG_DECL
@@ -30,8 +30,8 @@
 	float getPhotometricAttenuation( float cosAngle, float profileIdx OGRE_PHOTOMETRIC_ARG_DECL )
 	{
 		float angle = acos( clamp( cosAngle - 1.0, 1.0 ) ) * ( 1.0 / PI );
-		return OGRE_SampleArray2DLevel( lightProfiles, lightProfileSampler,
-										float2( angle, 0.0 ), profileIdx, 0.0 ).r;
+		return OGRE_SampleLevel( lightProfiles, lightProfileSampler,
+								 float2( angle, profileIdx ), 0.0 ).r;
 	}
 @end
 

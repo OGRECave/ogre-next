@@ -243,7 +243,8 @@ namespace Ogre {
         */
         Real getAttenuationQuadric(void) const                      { return mAttenuationQuad; }
 
-        uint16 getTexturedProfileIdx(void) const                    { return mTexturedProfileIdx; }
+        void _setLightProfileIdx( uint16 profileIdx )               { mLightProfileIdx = profileIdx; }
+        uint16 getLightProfileIdx(void) const                       { return mLightProfileIdx; }
 
         /** Sets the direction in which a light points.
         @remarks
@@ -627,7 +628,7 @@ namespace Ogre {
         uint16 mTexLightMaskDiffuseMipStart;
     protected:
         /// Used for IES photogametry
-        uint16 mTexturedProfileIdx;
+        uint16 mLightProfileIdx;
         Real mShadowFarDist;
         Real mShadowFarDistSquared;
 

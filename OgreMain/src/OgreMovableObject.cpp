@@ -69,7 +69,7 @@ namespace Ogre {
         , mGlobalIndex( -1 )
         , mParentIndex( -1 )
     {
-        assert(renderQueueId >= 0 && renderQueueId <= 254);
+        assert( renderQueueId <= 254 );
 
         if (Root::getSingletonPtr())
             mMinPixelSize = Root::getSingleton().getDefaultMinPixelSize();

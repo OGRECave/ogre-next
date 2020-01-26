@@ -293,6 +293,28 @@ namespace Ogre {
                           image->getPixelFormat(), autoDelete, image->getNumMipmaps() );
     }
     //-----------------------------------------------------------------------------------
+    void Image2::createEmptyImage( uint32 width, uint32 height, uint32 depthOrSlices,
+                                   TextureTypes::TextureTypes textureType, PixelFormatGpu format,
+                                   uint8 numMipmaps )
+    {
+        mDepthOrSlices = depthOrSlices;
+        mTextureType = textureType;
+
+        const uint32 rowAlignment = 4u;
+        const size_t totalBytes = PixelFormatGpuUtils::calculateSizeBytes(
+            width, height, getDepth(), getNumSlices(), format, numMipmaps, rowAlignment );
+
+        void *pData = OGRE_MALLOC_SIMD( totalBytes, MEMCATEGORY_RESOURCE );
+        loadDynamicImage( pData, width, height, depthOrSlices, textureType, format, true, numMipmaps );
+    }
+    //-----------------------------------------------------------------------------------
+    void Image2::createEmptyImageLike( const TextureGpu *texture )
+    {
+        createEmptyImage( texture->getWidth(), texture->getHeight(), texture->getDepthOrSlices(),
+                          texture->getTextureType(), texture->getPixelFormat(),
+                          texture->getNumMipmaps() );
+    }
+    //-----------------------------------------------------------------------------------
     void Image2::convertFromTexture( TextureGpu *texture, uint8 minMip, uint8 maxMip,
                                      bool automaticResolve )
     {

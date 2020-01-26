@@ -163,7 +163,7 @@ namespace Ogre
         LightArray                mAreaLights;
         bool                    mUsingAreaLightMasks;
 
-        TextureGpu              *mTexturedLightProfiles;
+        TextureGpu              *mLightProfilesTexture;
 
         bool                    mSkipRequestSlotInChangeRS;
 
@@ -386,6 +386,9 @@ namespace Ogre
 
         void setAreaLightMasks( TextureGpu *areaLightMask );
         TextureGpu* getAreaLightMasks(void) const           { return mAreaLightMasks; }
+
+        void setLightProfilesTexture( TextureGpu *lightProfilesTex );
+        TextureGpu *getLightProfilesTexture( void ) const   { return mLightProfilesTexture; }
 
 #ifdef OGRE_BUILD_COMPONENT_PLANAR_REFLECTIONS
         void setPlanarReflections( PlanarReflections *planarReflections );
