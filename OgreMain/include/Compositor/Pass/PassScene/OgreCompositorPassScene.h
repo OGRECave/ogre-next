@@ -74,6 +74,9 @@ namespace Ogre
         TextureGpu      *mDepthTextureNoMsaa;
         TextureGpu      *mRefractionsTexture;
 
+        void notifyPassSceneAfterShadowMapsListeners(void);
+        void notifyPassSceneAfterFrustumCullingListeners(void);
+
     public:
         /** Constructor
         @param definition

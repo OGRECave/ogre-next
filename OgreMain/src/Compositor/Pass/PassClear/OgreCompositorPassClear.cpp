@@ -106,32 +106,12 @@ namespace Ogre
 
         profilingBegin();
 
-        const CompositorWorkspaceListenerVec& listeners = mParentNode->getWorkspace()->getListeners();
-
-        {
-            CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
-            CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
-
-            while( itor != end )
-            {
-                (*itor)->passEarlyPreExecute( this );
-                ++itor;
-            }
-        }
+        notifyPassEarlyPreExecuteListeners();
 
         executeResourceTransitions();
 
         //Fire the listener in case it wants to change anything
-        {
-            CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
-            CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
-
-            while( itor != end )
-            {
-                (*itor)->passPreExecute( this );
-                ++itor;
-            }
-        }
+        notifyPassPreExecuteListeners();
 
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
 
@@ -146,16 +126,7 @@ namespace Ogre
             renderSystem->clearFrameBuffer( mRenderPassDesc, mAnyTargetTexture, mAnyMipLevel );
         }
 
-        {
-            CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
-            CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
-
-            while( itor != end )
-            {
-                (*itor)->passPosExecute( this );
-                ++itor;
-            }
-        }
+        notifyPassPosExecuteListeners();
 
         profilingEnd();
     }

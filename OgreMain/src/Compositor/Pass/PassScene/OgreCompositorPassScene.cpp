@@ -138,6 +138,34 @@ namespace Ogre
     {
     }
     //-----------------------------------------------------------------------------------
+    void CompositorPassScene::notifyPassSceneAfterShadowMapsListeners(void)
+    {
+        const CompositorWorkspaceListenerVec& listeners = mParentNode->getWorkspace()->getListeners();
+
+        CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
+        CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
+
+        while( itor != end )
+        {
+            (*itor)->passSceneAfterShadowMaps( this );
+            ++itor;
+        }
+    }
+    //-----------------------------------------------------------------------------------
+    void CompositorPassScene::notifyPassSceneAfterFrustumCullingListeners(void)
+    {
+        const CompositorWorkspaceListenerVec& listeners = mParentNode->getWorkspace()->getListeners();
+
+        CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
+        CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
+
+        while( itor != end )
+        {
+            (*itor)->passSceneAfterFrustumCulling( this );
+            ++itor;
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void CompositorPassScene::execute( const Camera *lodCamera )
     {
         //Execute a limited number of times?
@@ -150,18 +178,7 @@ namespace Ogre
 
         profilingBegin();
 
-        const CompositorWorkspaceListenerVec& listeners = mParentNode->getWorkspace()->getListeners();
-
-        {
-            CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
-            CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
-
-            while( itor != end )
-            {
-                (*itor)->passEarlyPreExecute( this );
-                ++itor;
-            }
-        }
+        notifyPassEarlyPreExecuteListeners();
 
         Camera const *usedLodCamera = mLodCamera;
         if( lodCamera && mDefinition->mLodCameraName == IdString() )
@@ -202,16 +219,7 @@ namespace Ogre
         viewport->_setVisibilityMask( mDefinition->mVisibilityMask, mDefinition->mLightVisibilityMask );
 
         //Fire the listener in case it wants to change anything
-        {
-            CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
-            CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
-
-            while( itor != end )
-            {
-                (*itor)->passPreExecute( this );
-                ++itor;
-            }
-        }
+        notifyPassPreExecuteListeners();
 
         if( mUpdateShadowNode && shadowNode )
         {
@@ -241,16 +249,7 @@ namespace Ogre
             //We need to restore the previous RT's update
         }
 
-        {
-            CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
-            CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
-
-            while( itor != end )
-            {
-                (*itor)->passSceneAfterShadowMaps( this );
-                ++itor;
-            }
-        }
+        notifyPassSceneAfterShadowMapsListeners();
 
         executeResourceTransitions();
         setRenderPassDescToCurrent();
@@ -265,16 +264,7 @@ namespace Ogre
                                       mDefinition->mFirstRQ, mDefinition->mLastRQ,
                                       mDefinition->mReuseCullData );
 
-        {
-            CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
-            CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
-
-            while( itor != end )
-            {
-                (*itor)->passSceneAfterFrustumCulling( this );
-                ++itor;
-            }
-        }
+        notifyPassSceneAfterFrustumCullingListeners();
 
 #if TODO_OGRE_2_2
         mTarget->setFsaaResolveDirty();
@@ -302,16 +292,7 @@ namespace Ogre
             sceneManager->_setForwardPlusEnabledInPass( false );
         }
 
-        {
-            CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
-            CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
-
-            while( itor != end )
-            {
-                (*itor)->passPosExecute( this );
-                ++itor;
-            }
-        }
+        notifyPassPosExecuteListeners();
 
         profilingEnd();
     }

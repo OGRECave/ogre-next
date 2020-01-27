@@ -150,18 +150,7 @@ namespace Ogre
 
         profilingBegin();
 
-        const CompositorWorkspaceListenerVec& listeners = mParentNode->getWorkspace()->getListeners();
-
-        {
-            CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
-            CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
-
-            while( itor != end )
-            {
-                (*itor)->passEarlyPreExecute( this );
-                ++itor;
-            }
-        }
+        notifyPassEarlyPreExecuteListeners();
 
         if( mPass )
         {
@@ -263,16 +252,7 @@ namespace Ogre
         setRenderPassDescToCurrent();
 
         //Fire the listener in case it wants to change anything
-        {
-            CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
-            CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
-
-            while( itor != end )
-            {
-                (*itor)->passPreExecute( this );
-                ++itor;
-            }
-        }
+        notifyPassPreExecuteListeners();
 
 #if TODO_OGRE_2_2
         mTarget->setFsaaResolveDirty();
@@ -301,16 +281,7 @@ namespace Ogre
 
         sceneManager->_setCurrentCompositorPass( 0 );
 
-        {
-            CompositorWorkspaceListenerVec::const_iterator itor = listeners.begin();
-            CompositorWorkspaceListenerVec::const_iterator end  = listeners.end();
-
-            while( itor != end )
-            {
-                (*itor)->passPosExecute( this );
-                ++itor;
-            }
-        }
+        notifyPassPosExecuteListeners();
 
         profilingEnd();
     }

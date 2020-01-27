@@ -139,6 +139,10 @@ namespace Ogre
 
         void executeResourceTransitions(void);
 
+        void notifyPassEarlyPreExecuteListeners(void);
+        void notifyPassPreExecuteListeners(void);
+        void notifyPassPosExecuteListeners(void);
+
     public:
         CompositorPass( const CompositorPassDef *definition, CompositorNode *parentNode );
         virtual ~CompositorPass();
