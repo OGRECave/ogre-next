@@ -48,15 +48,20 @@ namespace Ogre
         TextureGpu *mLightProfilesTexture;
 
         HlmsPbs *mHlmsPbs;
+        TextureGpuManager *mTextureGpuManager;
 
         void destroyTexture( void );
 
     public:
-        LightProfiles( HlmsPbs *hlmsPbs );
+        LightProfiles( HlmsPbs *hlmsPbs, TextureGpuManager *textureGpuManager );
         ~LightProfiles();
 
         /// Loads an IES (Illuminating Engineering Society) profile to memory
-        void loadIesProfile( const String &filename, const String &resourceGroup );
+        ///
+        /// When trying to load an IES file that is already loaded,
+        /// if throwOnDuplicate = false then this function does nothing
+        void loadIesProfile( const String &filename, const String &resourceGroup,
+                             bool throwOnDuplicate = true );
 
         /** After you're done with all your loadIesProfile calls, call this function
             to generate the texture required for rendering.
@@ -69,16 +74,17 @@ namespace Ogre
         void build( void );
 
         /** Assigns the given profile to the light.
-            Use:
+            Use either:
             @code
                 lightProfile->assignProfile( IdString(), light );
+                lightProfile->assignProfile( IdString( "" ), light );
             @endcode
             To unset any profile
         @remarks
             Throws if no profile with the given name exists, and profileName is not IdString()
         @param profileName
             Name of the profile to assign to the light.
-            Use IdString() to unset any profile the light might already have
+            Use IdString() or IdString( "" ) to unset any profile the light might already have
         @param light
             Light to set the profile to
         */

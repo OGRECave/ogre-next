@@ -38,7 +38,12 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    LightProfiles::LightProfiles( HlmsPbs *hlmsPbs ) : mLightProfilesTexture( 0 ), mHlmsPbs( hlmsPbs ) {}
+    LightProfiles::LightProfiles( HlmsPbs *hlmsPbs, TextureGpuManager *textureGpuManager ) :
+        mLightProfilesTexture( 0 ),
+        mHlmsPbs( hlmsPbs ),
+        mTextureGpuManager( textureGpuManager )
+    {
+    }
     //-------------------------------------------------------------------------
     LightProfiles::~LightProfiles() { destroyTexture(); }
     //-------------------------------------------------------------------------
@@ -53,8 +58,22 @@ namespace Ogre
             mHlmsPbs->setLightProfilesTexture( 0 );
     }
     //-------------------------------------------------------------------------
-    void LightProfiles::loadIesProfile( const String &filename, const String &resourceGroup )
+    void LightProfiles::loadIesProfile( const String &filename, const String &resourceGroup,
+                                        bool throwOnDuplicate )
     {
+        if( mIesNameMap.find( filename ) != mIesNameMap.end() )
+        {
+            if( throwOnDuplicate )
+            {
+                OGRE_EXCEPT( Exception::ERR_DUPLICATE_ITEM, "IES file '" + filename + "' already loaded",
+                             "LightProfiles::loadIesProfile" );
+            }
+            else
+            {
+                return;
+            }
+        }
+
         DataStreamPtr dataStream =
             ResourceGroupManager::getSingleton().openResource( filename, resourceGroup );
 
@@ -98,10 +117,9 @@ namespace Ogre
         {
             destroyTexture();
 
-            TextureGpuManager *textureGpuManager = 0;
             mLightProfilesTexture =
-                textureGpuManager->createTexture( "LightProfilesTexture", GpuPageOutStrategy::Discard,
-                                                  TextureFlags::ManualTexture, TextureTypes::Type2D );
+                mTextureGpuManager->createTexture( "LightProfilesTexture", GpuPageOutStrategy::Discard,
+                                                   TextureFlags::ManualTexture, TextureTypes::Type2D );
             mLightProfilesTexture->setResolution( suggestedWidth, texHeight );
             mLightProfilesTexture->setPixelFormat( PFG_R16_FLOAT );
             mLightProfilesTexture->scheduleTransitionTo( GpuResidency::Resident );
@@ -128,11 +146,13 @@ namespace Ogre
             ++row;
             ++itor;
         }
+
+        iesImageData.uploadTo( mLightProfilesTexture, 0u, 0u );
     }
     //-------------------------------------------------------------------------
     void LightProfiles::assignProfile( IdString profileName, Light *light )
     {
-        if( profileName == IdString() )
+        if( profileName == IdString() || profileName == IdString( "" ) )
             light->_setLightProfileIdx( 0u );
         else
         {

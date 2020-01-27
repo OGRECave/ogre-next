@@ -29,7 +29,7 @@
 
 	float getPhotometricAttenuation( float cosAngle, float profileIdx OGRE_PHOTOMETRIC_ARG_DECL )
 	{
-		float angle = acos( clamp( cosAngle - 1.0, 1.0 ) ) * ( 1.0 / PI );
+		float angle = acos( clamp( cosAngle, -1.0, 1.0 ) ) * ( 1.0 / 3.14159265359f );
 		return OGRE_SampleLevel( lightProfiles, lightProfileSampler,
 								 float2( angle, profileIdx ), 0.0 ).r;
 	}

@@ -57,7 +57,7 @@ namespace Ogre
     /**
     @class IesLoader
     */
-    class IesLoader : public UtilityAlloc
+    class _OgreHlmsPbsExport IesLoader : public UtilityAlloc
     {
         float mCandelaMult;
         /// Vertical angle aka Cone Angle
@@ -74,6 +74,8 @@ namespace Ogre
         FastArray<float> mCandelaValues;
 
         String mFilename;
+
+        static void skipWhitespace( const char *text, size_t &offset );
 
         void verifyDataIsSorted( void ) const;
         void loadFromString( const char *iesTextData );

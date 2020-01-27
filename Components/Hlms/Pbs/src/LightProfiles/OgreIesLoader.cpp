@@ -56,6 +56,12 @@ namespace Ogre
         loadFromString( iesTextData );
     }
     //-------------------------------------------------------------------------
+    void IesLoader::skipWhitespace( const char *text, size_t &offset )
+    {
+        while( text[offset] == ' ' || text[offset] == '\n' )
+            ++offset;
+    }
+    //-------------------------------------------------------------------------
     void IesLoader::verifyDataIsSorted( void ) const
     {
         FastArray<float>::const_iterator itor = mAngleData.begin();
@@ -114,7 +120,7 @@ namespace Ogre
                          "IesLoader::loadFromString" );
         }
 
-        const size_t numHeaderValues = 14u;
+        const size_t numHeaderValues = 13u;
         float headerValues[numHeaderValues];
         memset( headerValues, 0, sizeof( headerValues ) );
 
@@ -123,7 +129,7 @@ namespace Ogre
 
         while( dataStart != (size_t)-1 && parsedHeaderValues < numHeaderValues )
         {
-            ++dataStart;
+            skipWhitespace( iesData.c_str(), dataStart );
             headerValues[parsedHeaderValues] = static_cast<float>( atof( iesData.c_str() + dataStart ) );
             dataStart = iesData.find_first_of( " \n", dataStart );
             ++parsedHeaderValues;
@@ -182,7 +188,7 @@ namespace Ogre
         size_t parsedAngles = 0u;
         while( dataStart != (size_t)-1 && parsedAngles < totalNumAngles )
         {
-            ++dataStart;
+            skipWhitespace( iesData.c_str(), dataStart );
             mAngleData[parsedAngles] = static_cast<float>( atof( iesData.c_str() + dataStart ) );
             dataStart = iesData.find_first_of( " \n", dataStart );
             ++parsedAngles;
@@ -237,7 +243,7 @@ namespace Ogre
         parsedAngles = 0u;
         while( dataStart != (size_t)-1 && parsedAngles < numCandelas )
         {
-            ++dataStart;
+            skipWhitespace( iesData.c_str(), dataStart );
             mCandelaValues[parsedAngles] = static_cast<float>( atof( iesData.c_str() + dataStart ) );
             dataStart = iesData.find_first_of( " \n", dataStart );
             ++parsedAngles;
