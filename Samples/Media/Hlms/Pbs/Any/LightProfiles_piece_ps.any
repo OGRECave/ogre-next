@@ -33,7 +33,7 @@
 	// https://seblagarde.wordpress.com/2014/12/01/inverse-trigonometric-functions-gpu-optimization-for-amd-gcn-architecture/
 	float fast_acos(float inX)
 	{
-		   float C0 = 1.56467f;
+		float C0 = 1.56467f;
 		float C1 = -0.155972;
 
 		float x = abs(inX);
