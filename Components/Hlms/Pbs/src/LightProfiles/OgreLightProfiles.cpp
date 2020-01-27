@@ -126,6 +126,8 @@ namespace Ogre
 
             if( mHlmsPbs )
                 mHlmsPbs->setLightProfilesTexture( mLightProfilesTexture );
+
+            Root::getSingleton()._setLightProfilesInvHeight( 1.0f / texHeight );
         }
 
         Image2 iesImageData;

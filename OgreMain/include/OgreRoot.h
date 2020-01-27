@@ -121,6 +121,7 @@ namespace Ogre
         Real mFrameSmoothingTime;
         bool mRemoveQueueStructuresOnClear;
         Real mDefaultMinPixelSize;
+        float mLightProfilesInvHeight;
 
     public:
         typedef vector<DynLib*>::type PluginLibList;
@@ -1040,6 +1041,9 @@ namespace Ogre
         /** Get the default minimum pixel size for object to be rendered by
         */
         Real getDefaultMinPixelSize() { return mDefaultMinPixelSize; }
+
+        void _setLightProfilesInvHeight( float invHeight ) { mLightProfilesInvHeight = invHeight; }
+        float getLightProfilesInvHeight( void ) const { return mLightProfilesInvHeight; }
     };
     /** @} */
     /** @} */

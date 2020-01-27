@@ -79,6 +79,8 @@ namespace Demo
 
         Ogre::SceneNode *rootNode = sceneManager->getRootSceneNode();
 
+        sceneManager->setForwardClustered( true, 16, 8, 24, 96, 0, 0, 2, 50 );
+
         // clang-format off
         const char *lightProfiles[c_numAreaLights] =
         {

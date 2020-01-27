@@ -140,6 +140,7 @@ namespace Ogre {
       , mFrameSmoothingTime(0.0f)
       , mRemoveQueueStructuresOnClear(false)
       , mDefaultMinPixelSize(0)
+      , mLightProfilesInvHeight(1.0f)
       , mNextMovableObjectTypeFlag(1)
       , mIsInitialised(false)
       , mFrameStarted( false )

@@ -29,14 +29,6 @@ namespace Demo
 {
     class IesProfilesGraphicsSystem : public GraphicsSystem
     {
-        virtual Ogre::CompositorWorkspace* setupCompositor()
-        {
-            Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
-            mWorkspace = compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(),
-                                                          mCamera, "ShadowMapDebuggingWorkspace", true );
-            return mWorkspace;
-        }
-
         virtual void setupResources(void)
         {
             GraphicsSystem::setupResources();
@@ -84,11 +76,8 @@ namespace Demo
                                          LogicSystem **outLogicSystem )
     {
         IesProfilesGameState *gfxGameState = new IesProfilesGameState(
-        "Shows how to create area light textures dynamically and individually.\n"
-        "This method can also be used for the textures Decals use.\n"
+        "Shows how to use IES photometric profiles.\n"
         "This sample depends on the media files:\n"
-        "   * Samples/Media/2.0/scripts/Compositors/ShadowMapDebugging.compositor\n"
-        "   * Samples/Media/2.0/materials/PbsMaterials/*\n"
         "   * Samples/Media/2.0/materials/IesProfiles/*\n"
         "\n" );
 
@@ -111,6 +100,6 @@ namespace Demo
 
     const char* MainEntryPoints::getWindowTitle(void)
     {
-        return "Updating Decals and Area Lights' textures";
+        return "IES Photometric Profile lights";
     }
 }

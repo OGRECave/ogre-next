@@ -125,8 +125,11 @@
 	@else
 		float4 lightDiffuse	= bufferFetch( f3dLightList, int(idx + 1u) ).xyzw;
 	@end
-		float3 lightSpecular	= bufferFetch( f3dLightList, int(idx + 2u) ).xyz;
+		float3 lightSpecular= bufferFetch( f3dLightList, int(idx + 2u) ).xyz;
 		float4 attenuation	= bufferFetch( f3dLightList, int(idx + 3u) ).xyzw;
+	@property( light_profiles_texture )
+		float4 spotDirection= bufferFetch( f3dLightList, int(idx + 4u) ).xyzw;
+	@end
 
 		float3 lightDir	= posAndType.xyz - inPs.pos;
 		float fDistance	= length( lightDir );
@@ -137,6 +140,12 @@
 			float atten = 1.0 / (0.5 + (attenuation.y + attenuation.z * fDistance) * fDistance );
 			@property( hlms_forward_fade_attenuation_range )
 				atten *= max( (attenuation.x - fDistance) * attenuation.w, 0.0f );
+			@end
+
+			@property( light_profiles_texture )
+				float spotCosAngle = dot( -lightDir, spotDirection.xyz );
+				atten *= getPhotometricAttenuation( spotCosAngle, spotDirection.w
+													OGRE_PHOTOMETRIC_ARG );
 			@end
 
 			//Point light
@@ -164,8 +173,12 @@
 		float4 lightDiffuse	= bufferFetch( f3dLightList, int(idx + 1u) ).xyzw;
 	@end
 		float3 lightSpecular	= bufferFetch( f3dLightList, int(idx + 2u) ).xyz;
-		float4 attenuation	= bufferFetch( f3dLightList, int(idx + 3u) ).xyzw;
+		float4 attenuation      = bufferFetch( f3dLightList, int(idx + 3u) ).xyzw;
+	@property( !light_profiles_texture )
 		float3 spotDirection	= bufferFetch( f3dLightList, int(idx + 4u) ).xyz;
+	@else
+		float4 spotDirection	= bufferFetch( f3dLightList, int(idx + 4u) ).xyzw;
+	@end
 		float3 spotParams		= bufferFetch( f3dLightList, int(idx + 5u) ).xyz;
 
 		float3 lightDir	= posAndType.xyz - inPs.pos;
@@ -189,6 +202,11 @@
 			float spotAtten = saturate( (spotCosAngle - spotParams.y) * spotParams.x );
 			spotAtten = pow( spotAtten, spotParams.z );
 			atten *= spotAtten;
+
+			@property( light_profiles_texture )
+				atten *= getPhotometricAttenuation( spotCosAngle, spotDirection.w
+													OGRE_PHOTOMETRIC_ARG );
+			@end
 
 			if( spotCosAngle >= spotParams.y )
 			{

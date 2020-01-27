@@ -38,6 +38,8 @@ THE SOFTWARE.
 
 #include "OgreHlms.h"
 
+#include "OgreRoot.h"
+
 #include "OgreDecal.h"
 #include "OgreInternalCubemapProbe.h"
 
@@ -207,6 +209,8 @@ namespace Ogre
         Matrix3 viewMatrix3;
         viewMatrix.extract3x3Matrix( viewMatrix3 );
 
+        const float invHeightLightProfileTex = Root::getSingleton().getLightProfilesInvHeight();
+
         float * RESTRICT_ALIAS lightData = reinterpret_cast<float * RESTRICT_ALIAS>(
                     globalLightListBuffer->map( 0, calculateBytesNeeded( numLights,
                                                                          numDecals,
@@ -254,12 +258,14 @@ namespace Ogre
             *lightData++ = attenQuadratic;
             *lightData++ = 1.0f / attenRange;
 
-            //vec3 lights[numLights].spotDirection;
+            const uint16 lightProfileIdx = light->getLightProfileIdx();
+
+            // vec3 lights[numLights].spotDirection;
             Vector3 spotDir = viewMatrix3 * light->getDerivedDirection();
             *lightData++ = spotDir.x;
             *lightData++ = spotDir.y;
             *lightData++ = spotDir.z;
-            ++lightData;
+            *lightData++ = ( static_cast<float>( lightProfileIdx ) + 0.5f ) * invHeightLightProfileTex;
 
             //vec3 lights[numLights].spotParams;
             Radian innerAngle = light->getSpotlightInnerAngle();
