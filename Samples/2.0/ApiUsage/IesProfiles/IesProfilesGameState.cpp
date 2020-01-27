@@ -81,13 +81,19 @@ namespace Demo
 
         sceneManager->setForwardClustered( true, 16, 8, 24, 96, 0, 0, 2, 50 );
 
-        // clang-format off
-        const char *lightProfiles[c_numAreaLights] =
+        struct LightProfileParams
         {
-            0,
-            "x-arrow-soft.ies",
-            "x-arrow-soft.ies",
-            "x-arrow-soft.ies"
+            const char *name;
+            float power;
+        };
+
+        // clang-format off
+        const LightProfileParams lightProfiles[c_numAreaLights] =
+        {
+            { 0, Ogre::Math::PI },
+            { "x-arrow-soft.ies", 180.0f },
+            { "bollard.ies", 18.0f },
+            { "star-focused.ies", 700.0f }
         };
         // clang-format on
 
@@ -96,22 +102,19 @@ namespace Demo
             Ogre::Light *light = sceneManager->createLight();
             Ogre::SceneNode *lightNode = rootNode->createChildSceneNode();
             lightNode->attachObject( light );
-            lightNode->setPosition( i * 4.0f, 8.0f, -0.5f );
-            if( i != 0 )
-                light->setPowerScale( 180.0f );
-            else
-                light->setPowerScale( Ogre::Math::PI );
+            lightNode->setPosition( ( i - c_numAreaLights * 0.5f ) * 6.0f, 8.0f, -0.5f );
+            light->setPowerScale( lightProfiles[i].power );
             light->setType( Ogre::Light::LT_SPOTLIGHT );
             light->setDirection( Ogre::Vector3( 0, -1, 0 ).normalisedCopy() );
             light->setSpotlightInnerAngle( Ogre::Degree( 160.0f ) );
             light->setSpotlightOuterAngle( Ogre::Degree( 170.0f ) );
 
-            if( lightProfiles[i] != 0 )
+            if( lightProfiles[i].name != 0 )
             {
                 mLightProfiles->loadIesProfile(
-                    lightProfiles[i], Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
+                    lightProfiles[i].name, Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME,
                     false );
-                mLightProfiles->assignProfile( lightProfiles[i], light );
+                mLightProfiles->assignProfile( lightProfiles[i].name, light );
             }
         }
 

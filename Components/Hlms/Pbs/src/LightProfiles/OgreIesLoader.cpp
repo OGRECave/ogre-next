@@ -58,7 +58,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void IesLoader::skipWhitespace( const char *text, size_t &offset )
     {
-        while( text[offset] == ' ' || text[offset] == '\n' )
+        while( text[offset] == ' ' || text[offset] == '\n' || text[offset] == ',' )
             ++offset;
     }
     //-------------------------------------------------------------------------
@@ -131,7 +131,7 @@ namespace Ogre
         {
             skipWhitespace( iesData.c_str(), dataStart );
             headerValues[parsedHeaderValues] = static_cast<float>( atof( iesData.c_str() + dataStart ) );
-            dataStart = iesData.find_first_of( " \n", dataStart );
+            dataStart = iesData.find_first_of( " ,\n", dataStart );
             ++parsedHeaderValues;
         }
 
@@ -190,7 +190,7 @@ namespace Ogre
         {
             skipWhitespace( iesData.c_str(), dataStart );
             mAngleData[parsedAngles] = static_cast<float>( atof( iesData.c_str() + dataStart ) );
-            dataStart = iesData.find_first_of( " \n", dataStart );
+            dataStart = iesData.find_first_of( " ,\n", dataStart );
             ++parsedAngles;
         }
 
@@ -247,7 +247,7 @@ namespace Ogre
         {
             skipWhitespace( iesData.c_str(), dataStart );
             mCandelaValues[parsedAngles] = static_cast<float>( atof( iesData.c_str() + dataStart ) );
-            dataStart = iesData.find_first_of( " \n", dataStart );
+            dataStart = iesData.find_first_of( " ,\n", dataStart );
             ++parsedAngles;
         }
 
