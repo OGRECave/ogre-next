@@ -259,7 +259,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    uint32 IesLoader::getSuggestedTexWidth( void ) const { return mNumVertAngles * 4u; }
+    uint32 IesLoader::getSuggestedTexWidth( void ) const { return mNumVertAngles; }
     //-------------------------------------------------------------------------
     void IesLoader::convertToImage1D( Image2 &inOutImage, uint32 row )
     {
