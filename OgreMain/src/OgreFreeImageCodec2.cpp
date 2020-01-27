@@ -393,7 +393,7 @@ namespace Ogre {
                          __FUNCTION__ );
         }
 
-        if( PixelFormatGpuUtils::getNumberOfComponents( supportedFormat ) == 1u )
+        if( PixelFormatGpuUtils::getNumberOfComponents( supportedFormat ) == 1u && bpp == 8 )
         {
             // Must explicitly tell FreeImage that this is greyscale by setting
             // a "grey" palette (otherwise it will save as a normal RGB
