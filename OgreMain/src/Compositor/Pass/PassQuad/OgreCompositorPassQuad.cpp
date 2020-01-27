@@ -150,9 +150,7 @@ namespace Ogre
 
         profilingBegin();
 
-        CompositorWorkspaceListener *listener = mParentNode->getWorkspace()->getListener();
-        if( listener )
-            listener->passEarlyPreExecute( this );
+        notifyPassEarlyPreExecuteListeners();
 
         if( mPass )
         {
@@ -254,8 +252,7 @@ namespace Ogre
         setRenderPassDescToCurrent();
 
         //Fire the listener in case it wants to change anything
-        if( listener )
-            listener->passPreExecute( this );
+        notifyPassPreExecuteListeners();
 
 #if TODO_OGRE_2_2
         mTarget->setFsaaResolveDirty();
@@ -284,8 +281,7 @@ namespace Ogre
 
         sceneManager->_setCurrentCompositorPass( 0 );
 
-        if( listener )
-            listener->passPosExecute( this );
+        notifyPassPosExecuteListeners();
 
         profilingEnd();
     }

@@ -106,15 +106,12 @@ namespace Ogre
 
         profilingBegin();
 
-        CompositorWorkspaceListener *listener = mParentNode->getWorkspace()->getListener();
-        if( listener )
-            listener->passEarlyPreExecute( this );
+        notifyPassEarlyPreExecuteListeners();
 
         executeResourceTransitions();
 
         //Fire the listener in case it wants to change anything
-        if( listener )
-            listener->passPreExecute( this );
+        notifyPassPreExecuteListeners();
 
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
 
@@ -129,8 +126,7 @@ namespace Ogre
             renderSystem->clearFrameBuffer( mRenderPassDesc, mAnyTargetTexture, mAnyMipLevel );
         }
 
-        if( listener )
-            listener->passPosExecute( this );
+        notifyPassPosExecuteListeners();
 
         profilingEnd();
     }

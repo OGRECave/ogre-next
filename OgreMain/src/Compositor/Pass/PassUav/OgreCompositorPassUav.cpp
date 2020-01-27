@@ -215,16 +215,13 @@ namespace Ogre
             --mNumPassesLeft;
         }
 
-        CompositorWorkspaceListener *listener = mParentNode->getWorkspace()->getListener();
-        if( listener )
-            listener->passEarlyPreExecute( this );
+        notifyPassEarlyPreExecuteListeners();
 
         if( !mDescriptorSetUav )
             setupDescriptorSetUav();
 
         //Fire the listener in case it wants to change anything
-        if( listener )
-            listener->passPreExecute( this );
+        notifyPassPreExecuteListeners();
 
         //Do not execute resource transitions. This pass shouldn't have them.
         //The transitions are made when the bindings are needed
@@ -239,8 +236,7 @@ namespace Ogre
 
         renderSystem->queueBindUAVs( mDescriptorSetUav );
 
-        if( listener )
-            listener->passPosExecute( this );
+        notifyPassPosExecuteListeners();
     }
     //-----------------------------------------------------------------------------------
     void CompositorPassUav::_placeBarriersAndEmulateUavExecution(

@@ -270,9 +270,7 @@ namespace Ogre
 
         profilingBegin();
 
-        CompositorWorkspaceListener *listener = mParentNode->getWorkspace()->getListener();
-        if( listener )
-            listener->passEarlyPreExecute( this );
+        notifyPassEarlyPreExecuteListeners();
 
         RenderSystem *renderSystem = mParentNode->getRenderSystem();
         renderSystem->endRenderPassDescriptor();
@@ -283,8 +281,7 @@ namespace Ogre
         setResourcesToJob();
 
         //Fire the listener in case it wants to change anything
-        if( listener )
-            listener->passPreExecute( this );
+        notifyPassPreExecuteListeners();
 
         assert( dynamic_cast<HlmsCompute*>( mComputeJob->getCreator() ) );
 
@@ -295,8 +292,7 @@ namespace Ogre
         HlmsCompute *hlmsCompute = static_cast<HlmsCompute*>( mComputeJob->getCreator() );
         hlmsCompute->dispatch( mComputeJob, sceneManager, mCamera );
 
-        if( listener )
-            listener->passPosExecute( this );
+        notifyPassPosExecuteListeners();
 
         profilingEnd();
     }

@@ -50,6 +50,9 @@ namespace Ogre
             @CompositorWorkspace::_beginUpdate( forceBeginFrame=true )
         */
         virtual void workspacePreUpdate( CompositorWorkspace *workspace ) {}
+        /** Called after all nodes has been updated.
+        */
+        virtual void workspacePosUpdate( CompositorWorkspace *workspace ) {}
         /** Called early on in pass' execution. Happens before passPreExecute,
             before the pass has set anything.
             Warning: calling pass->execute can result in recursive calls.

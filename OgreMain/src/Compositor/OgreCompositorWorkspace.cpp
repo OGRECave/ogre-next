@@ -58,7 +58,6 @@ namespace Ogre
             mValid( false ),
             mEnabled( bEnabled ),
             mAmalgamatedProfiling( false ),
-            mListener( 0 ),
             mDefaultCamera( defaultCam ),
             mSceneManager( sceneManager ),
             mRenderSys( renderSys ),
@@ -609,6 +608,36 @@ namespace Ogre
         return mGlobalTextures[index];
     }
     //-----------------------------------------------------------------------------------
+    void CompositorWorkspace::setListener( CompositorWorkspaceListener *listener )
+    {
+        OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
+                     "This method has been superseded by CompositorWorkspace::addListener "
+                     "and CompositorWorkspace::removeListener.",
+                     "CompositorWorkspace::setListener" );
+    }
+    //-----------------------------------------------------------------------------------
+    CompositorWorkspaceListener* CompositorWorkspace::getListener(void) const
+    {
+        OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
+                     "This method has been superseded by CompositorWorkspace::getListeners.",
+                     "CompositorWorkspace::getListener" );
+    }
+    //-----------------------------------------------------------------------------------
+    void CompositorWorkspace::addListener( CompositorWorkspaceListener *listener )
+    {
+        mListeners.push_back( listener );
+    }
+    //-----------------------------------------------------------------------------------
+    void CompositorWorkspace::removeListener( CompositorWorkspaceListener *listener )
+    {
+        CompositorWorkspaceListenerVec::iterator itor = std::find( mListeners.begin(),
+                                                                   mListeners.end(),
+                                                                   listener );
+
+        if( itor != mListeners.end() )
+            mListeners.erase( itor );
+    }
+    //-----------------------------------------------------------------------------------
     void CompositorWorkspace::recreateAllNodes(void)
     {
         createAllNodes();
@@ -710,8 +739,16 @@ namespace Ogre
             analyzeHazardsAndPlaceBarriers();
         }
 
-        if( mListener )
-            mListener->workspacePreUpdate( this );
+        {
+            CompositorWorkspaceListenerVec::const_iterator itor = mListeners.begin();
+            CompositorWorkspaceListenerVec::const_iterator end  = mListeners.end();
+
+            while( itor != end )
+            {
+                (*itor)->workspacePreUpdate( this );
+                ++itor;
+            }
+        }
 
         TextureGpu *finalTarget = getFinalTarget();
         //We need to do this so that D3D9 (and D3D11?) knows which device
@@ -801,6 +838,17 @@ namespace Ogre
                 }
             }
             ++itor;
+        }
+
+        {
+            CompositorWorkspaceListenerVec::const_iterator itor = mListeners.begin();
+            CompositorWorkspaceListenerVec::const_iterator end  = mListeners.end();
+
+            while( itor != end )
+            {
+                (*itor)->workspacePosUpdate( this );
+                ++itor;
+            }
         }
     }
     //-----------------------------------------------------------------------------------

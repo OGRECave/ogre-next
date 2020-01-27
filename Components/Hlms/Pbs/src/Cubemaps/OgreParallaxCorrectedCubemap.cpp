@@ -507,7 +507,7 @@ namespace Ogre
                                                            mBlendProxyCamera,
                                                            workspaceName,
                                                            false );
-        mBlendWorkspace->setListener( this );
+        mBlendWorkspace->addListener( this );
 
         workspaceName = "AutoGen_ParallaxCorrectedCubemapCopy_Workspace";
         mCopyWorkspace = compositorManager->addWorkspace( mSceneManager,
@@ -515,12 +515,12 @@ namespace Ogre
                                                           mBlendProxyCamera,
                                                           workspaceName,
                                                           false );
-        mCopyWorkspace->setListener( this );
+        mCopyWorkspace->addListener( this );
     }
     //-----------------------------------------------------------------------------------
     void ParallaxCorrectedCubemap::destroyCompositorData(void)
     {
-        mBlendWorkspace->setListener( 0 );
+        mBlendWorkspace->removeListener( this );
         CompositorManager2 *compositorManager = mDefaultWorkspaceDef->getCompositorManager();
         compositorManager->removeWorkspace( mBlendWorkspace );
         mBlendWorkspace = 0;
