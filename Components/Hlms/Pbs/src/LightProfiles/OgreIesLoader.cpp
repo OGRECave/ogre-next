@@ -288,34 +288,35 @@ namespace Ogre
                 if( mLampConeType == LampConeType::Type90 )
                 {
                     // There's no more data past 90°, use black
-                    prevAngle.angle = 180.0f;
-                    prevAngle.candela = 0.0f;
+                    nextAngle.angle = 180.0f;
+                    nextAngle.candela = 0.0f;
                 }
                 else
                 {
                     // This should be impossible and we should never arrive here because fVertAngle is in
                     // range [0; 180] and mAngleData should have that. However due to floating point, we
                     // don't have the guarantee that fVertAngle <= 180.0
-                    prevAngle.angle = 180.0f;
-                    prevAngle.candela = mCandelaValues[numVertAngles - 1u];
+                    nextAngle.angle = 180.0f;
+                    nextAngle.candela = mCandelaValues[numVertAngles - 1u];
                 }
-                nextAngle = prevAngle;
+                prevAngle = nextAngle;
             }
             else
             {
-                prevAngle.angle = *itAngle;
+                nextAngle.angle = *itAngle;
                 const size_t idx = ( size_t )( itAngle - mAngleData.begin() );
-                prevAngle.candela = mCandelaValues[idx];
-                ++itAngle;
+                nextAngle.candela = mCandelaValues[idx];
 
-                if( itAngle != mAngleData.begin() + numVertAngles )
+                if( itAngle != mAngleData.begin() )
                 {
-                    nextAngle.angle = *itAngle;
-                    const size_t idx = ( size_t )( itAngle - mAngleData.begin() );
-                    nextAngle.candela = mCandelaValues[idx];
+                    --itAngle;
+
+                    prevAngle.angle = *itAngle;
+                    const size_t idx2 = ( size_t )( itAngle - mAngleData.begin() );
+                    prevAngle.candela = mCandelaValues[idx2];
                 }
                 else
-                    nextAngle = prevAngle;
+                    prevAngle = nextAngle;
             }
 
             float fDiv = nextAngle.angle - prevAngle.angle;
