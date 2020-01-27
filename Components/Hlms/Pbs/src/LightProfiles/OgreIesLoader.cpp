@@ -218,7 +218,8 @@ namespace Ogre
 
         verifyDataIsSorted();
 
-        const float horizAngle = fabsf( mAngleData[mNumVertAngles] - mAngleData[mNumHorizAngles - 1u] );
+        const float horizAngle =
+            fabsf( mAngleData[mNumVertAngles] - mAngleData[mNumVertAngles + mNumHorizAngles - 1u] );
 
         if( mNumHorizAngles == 1u || fabsf( horizAngle - 360.0f ) <= 1e-6f )
         {
@@ -230,11 +231,12 @@ namespace Ogre
             mLampConeType = LampConeType::Type90;
         else
         {
-            OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED,
-                         "IES '" + mFilename + "' unsupported horizontal angle: " +
-                             StringConverter::toString( mAngleData[0] ) + "-" +
-                             StringConverter::toString( mAngleData[mNumVertAngles - 1u] ),
-                         "IesLoader::loadFromString" );
+            OGRE_EXCEPT(
+                Exception::ERR_NOT_IMPLEMENTED,
+                "IES '" + mFilename + "' unsupported horizontal angle: " +
+                    StringConverter::toString( mAngleData[mNumVertAngles] ) + "-" +
+                    StringConverter::toString( mAngleData[mNumVertAngles + mNumHorizAngles - 1u] ),
+                "IesLoader::loadFromString" );
         }
 
         const size_t numCandelas = mNumVertAngles * mNumHorizAngles;
