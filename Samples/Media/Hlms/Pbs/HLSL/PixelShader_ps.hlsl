@@ -16,6 +16,8 @@
 @insertpiece( custom_ps_uniformDeclaration )
 // END UNIFORM DECLARATION
 
+@insertpiece( DeclLightProfilesTexture )
+
 @insertpiece( DefaultHeaderPS )
 
 struct PS_INPUT
@@ -64,7 +66,6 @@ struct PS_INPUT
 
 @insertpiece( DeclPlanarReflTextures )
 @insertpiece( DeclAreaApproxTextures )
-@insertpiece( DeclLightProfilesTexture )
 
 @property( hlms_forwardplus )
     Buffer<uint> f3dGrid : register(t@value(f3dGrid));

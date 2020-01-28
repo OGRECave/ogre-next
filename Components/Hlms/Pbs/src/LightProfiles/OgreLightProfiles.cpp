@@ -45,7 +45,16 @@ namespace Ogre
     {
     }
     //-------------------------------------------------------------------------
-    LightProfiles::~LightProfiles() { destroyTexture(); }
+    LightProfiles::~LightProfiles()
+    {
+        destroyTexture();
+
+        FastArray<IesLoader *>::const_iterator itor = mIesData.begin();
+        FastArray<IesLoader *>::const_iterator endt = mIesData.end();
+
+        while( itor != endt )
+            delete *itor++;
+    }
     //-------------------------------------------------------------------------
     void LightProfiles::destroyTexture( void )
     {
