@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorNode.h"
 #include "Compositor/OgreCompositorNodeDef.h"
 #include "Compositor/OgreCompositorWorkspace.h"
+#include "Compositor/OgreCompositorWorkspaceListener.h"
 
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreViewport.h"
