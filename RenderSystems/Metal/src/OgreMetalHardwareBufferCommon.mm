@@ -189,7 +189,7 @@ namespace v1
                 //If we're here, the buffer was created with HBU_WRITE_ONLY, but not discardable.
                 //Write to a staging buffer to avoid blocking. We don't have to care about
                 //reading access.
-                assert( (options != HardwareBuffer::HBL_NORMAL ||
+                assert( (options != HardwareBuffer::HBL_NORMAL &&
                         options != HardwareBuffer::HBL_READ_ONLY) &&
                         "Reading from a write-only buffer! Create "
                         "the buffer without HBL_WRITE_ONLY bit (or use readData)" );
