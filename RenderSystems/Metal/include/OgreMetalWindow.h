@@ -43,14 +43,12 @@ namespace Ogre
     {
         bool    mClosed;
         bool    mHwGamma;
-        uint8   mMsaa;
 
         CAMetalLayer        *mMetalLayer;
         id<CAMetalDrawable> mCurrentDrawable;
         OgreMetalView       *mMetalView;
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
         NSWindow            *mWindow;
-        id                  mResizeObserver;
 #endif
         MetalDevice         *mDevice;
 

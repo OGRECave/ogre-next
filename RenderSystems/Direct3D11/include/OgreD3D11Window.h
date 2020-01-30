@@ -48,18 +48,11 @@ namespace Ogre
         bool mHwGamma;
         bool mVisible;
 
-        /// Requested MSAA mode
-        uint mMsaa;
-        String mMsaaHint;
-        /// Effective MSAA mode, limited by hardware capabilities
-        DXGI_SAMPLE_DESC mMsaaDesc;
-
         // Window size depended resources - must be released
         // before swapchain resize and recreated later
         ComPtr<ID3D11Texture2D> mpBackBuffer;
         /// Optional, always holds up-to-date copy data from mpBackBuffer if not NULL
-        ComPtr<ID3D11Texture2D> mpBackBufferNoMSAA;
-        //ComPtr<ID3D11RenderTargetView> mRenderTargetView;
+        ComPtr<ID3D11Texture2D> mpBackBufferInterim;
 
         D3D11RenderSystem       *mRenderSystem;
 
@@ -108,8 +101,9 @@ namespace Ogre
         void _createSwapChain();
         virtual HRESULT _createSwapChainImpl() = 0;
         void _destroySwapChain();
+        void _createSizeDependedD3DResources();
+        void _destroySizeDependedD3DResources();
         void resizeSwapChainBuffers( uint32 width, uint32 height );
-        void setResolutionFromSwapChain(void);
         void notifyResolutionChanged(void);
 
     public:
@@ -121,6 +115,9 @@ namespace Ogre
 
         virtual void _initialize( TextureGpuManager *textureGpuManager );
         virtual void destroy();
+
+        /// @copydoc Window::setFsaa
+        virtual void setFsaa(const String& fsaa);
 
         virtual void swapBuffers(void);
     };

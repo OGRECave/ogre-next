@@ -60,11 +60,11 @@ namespace Ogre
         mRenderEncoder = 0;
     }
     //-------------------------------------------------------------------------
-    void MetalDevice::init(void)
+    void MetalDevice::init( const MetalDeviceItem *device )
     {
         @autoreleasepool
         {
-            mDevice = MTLCreateSystemDefaultDevice();
+            mDevice = device ? device->getMTLDevice() : MTLCreateSystemDefaultDevice();
             mMainCommandQueue = [mDevice newCommandQueue];
             mCurrentCommandBuffer = [mMainCommandQueue commandBuffer];
             mBlitEncoder = 0;
@@ -179,5 +179,85 @@ namespace Ogre
         }
 
         mRenderSystem->_notifyDeviceStalled();
+    }
+    //-------------------------------------------------------------------------
+    // MARK: -
+    //-------------------------------------------------------------------------
+    MetalDeviceItem::MetalDeviceItem()
+        : mSameNameAdapterIndex(0)
+    {
+    }
+    //-------------------------------------------------------------------------
+    MetalDeviceItem::MetalDeviceItem( id<MTLDevice> device, unsigned sameNameIndex )
+        : mDevice( device ), mSameNameAdapterIndex( sameNameIndex )
+    {
+    }
+    //-------------------------------------------------------------------------
+    String MetalDeviceItem::getDescription() const
+    {
+        String desc( mDevice.name.UTF8String ?: "" );
+        if( mSameNameAdapterIndex != 0 )
+        {
+            desc.append( " (" )
+                .append( Ogre::StringConverter::toString( mSameNameAdapterIndex + 1 ) )
+                .append( ")" );
+        }
+        return desc;
+    }
+    //-------------------------------------------------------------------------
+    id<MTLDevice> MetalDeviceItem::getMTLDevice() const
+    {
+        return mDevice;
+    }
+    //-------------------------------------------------------------------------
+    // MARK: -
+    //-------------------------------------------------------------------------
+    void MetalDeviceList::clear()
+    {
+        mItems.clear();
+    }
+    //-------------------------------------------------------------------------
+    void MetalDeviceList::refresh()
+    {
+        clear();
+        map<String, unsigned>::type sameNameCounter;
+
+#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
+        LogManager::getSingleton().logMessage( "Metal: Devices Detection Starts" );
+        
+        NSArray<id<MTLDevice>> *availableDevices = MTLCopyAllDevices();
+        for( id<MTLDevice> device in availableDevices )
+        {
+            String name = device.name.UTF8String;
+
+            // inserted map entry would be zero-initialized by map::operator[]
+            unsigned sameNameIndex = sameNameCounter[name]++;
+
+            mItems.push_back( MetalDeviceItem( device, sameNameIndex ) );
+
+            LogManager::getSingleton().logMessage("Metal: \"" + mItems.back().getDescription() + "\"");
+        }
+        LogManager::getSingleton().logMessage( "Metal: Devices Detection Ends" );
+#endif
+    }
+    //-------------------------------------------------------------------------
+    size_t MetalDeviceList::count() const
+    {
+        return mItems.size();
+    }
+    //-------------------------------------------------------------------------
+    const MetalDeviceItem* MetalDeviceList::item( size_t index ) const
+    {
+        return &mItems.at( index );
+    }
+    //-------------------------------------------------------------------------
+    const MetalDeviceItem* MetalDeviceList::item( const String &name ) const
+    {
+        vector<MetalDeviceItem>::type::const_iterator it = mItems.begin(), it_end = mItems.end();
+        for( ; it != it_end; ++it )
+            if( it->getDescription() == name )
+                return &*it;
+        
+        return NULL;
     }
 }

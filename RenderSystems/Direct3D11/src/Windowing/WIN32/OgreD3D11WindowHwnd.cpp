@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "OgreD3D11RenderSystem.h"
 #include "OgreWindowEventUtilities.h"
 #include "OgreDepthBuffer.h"
+#include "OgreOSVersionHelpers.h"
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreStringConverter.h"
 
@@ -75,14 +76,6 @@ namespace Ogre
     DWORD D3D11WindowHwnd::getWindowStyle( bool fullScreen ) const
     {
         return fullScreen ? mFullscreenWinStyle : mWindowedWinStyle;
-    }
-    //-----------------------------------------------------------------------------------
-    bool D3D11WindowHwnd::isWindows8OrGreater(void)
-    {
-        DWORD version = GetVersion();
-        DWORD major = (DWORD)(LOBYTE(LOWORD(version)));
-        DWORD minor = (DWORD)(HIBYTE(LOWORD(version)));
-        return (major > 6) || ((major == 6) && (minor >= 2));
     }
     //-----------------------------------------------------------------------------------
     BOOL CALLBACK D3D11WindowHwnd::createMonitorsInfoEnumProc(
@@ -151,21 +144,24 @@ namespace Ogre
         }
         else
         {
-            sd.SampleDesc = mMsaaDesc;
+            sd.SampleDesc.Count = mSampleDescription.getColourSamples();
+            sd.SampleDesc.Quality = mSampleDescription.getCoverageSamples()
+                                        ? mSampleDescription.getCoverageSamples()
+                                        : D3D11Mappings::get( mSampleDescription.getMsaaPattern() );
         }
 
         sd.Flags        = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
         sd.BufferUsage  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 
         sd.BufferCount = _getSwapChainBufferCount();
-        sd.SwapEffect   = mUseFlipMode ? DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL :
-                                         DXGI_SWAP_EFFECT_DISCARD;
+        sd.SwapEffect   = !mUseFlipMode ? DXGI_SWAP_EFFECT_DISCARD :
+            IsWindows10OrGreater() ? DXGI_SWAP_EFFECT_FLIP_DISCARD : DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
     }
     //-----------------------------------------------------------------------------------
     HRESULT D3D11WindowHwnd::_createSwapChainImpl(void)
     {
-        D3D11RenderSystem* rsys = static_cast<D3D11RenderSystem*>(Root::getSingleton().getRenderSystem());
-        mMsaaDesc = rsys->getMsaaSampleDesc(mMsaa, mMsaaHint, _getRenderFormat());
+        mSampleDescription =
+            mRenderSystem->validateSampleDescription( mRequestedSampleDescription, _getRenderFormat() );
         HRESULT hr;
 
         // Create swap chain
@@ -271,7 +267,7 @@ namespace Ogre
             opt = miscParams->find("useFlipMode");
             if (opt != miscParams->end())
             {
-                mUseFlipMode = mVSync && isWindows8OrGreater() &&
+                mUseFlipMode = mVSync && IsWindows8OrGreater() &&
                                          StringConverter::parseBool(opt->second);
             }
 #endif

@@ -67,7 +67,7 @@ namespace Ogre
     {
         GLenum format = GL3PlusMappings::get( mPixelFormat );
 
-        if( mMsaa <= 1u || !hasMsaaExplicitResolves() )
+        if( !isMultisample() || !hasMsaaExplicitResolves() )
         {
             OCGE( glGenTextures( 1u, &mFinalTextureName ) );
 
@@ -136,7 +136,7 @@ namespace Ogre
             ogreGlObjectLabel( GL_TEXTURE, mFinalTextureName, getNameStr() );
         }
 
-        if( mMsaa > 1u )
+        if( isMultisample() )
         {
             //const GLboolean fixedsamplelocations = mMsaaPattern != MsaaPatterns::Undefined;
             //RENDERBUFFERS have fixedsamplelocations implicitly set to true. Be consistent
@@ -148,7 +148,8 @@ namespace Ogre
             {
                 OCGE( glGenRenderbuffers( 1, &mMsaaFramebufferName ) );
                 OCGE( glBindRenderbuffer( GL_RENDERBUFFER, mMsaaFramebufferName ) );
-                OCGE( glRenderbufferStorageMultisample( GL_RENDERBUFFER, mMsaa, format,
+                OCGE( glRenderbufferStorageMultisample( GL_RENDERBUFFER,
+                                                        mSampleDescription.getColourSamples(), format,
                                                         GLsizei(mWidth), GLsizei(mHeight) ) );
                 OCGE( glBindRenderbuffer( GL_RENDERBUFFER, 0 ) );
 
@@ -181,14 +182,15 @@ namespace Ogre
 
                 if( mTextureType == TextureTypes::Type2D )
                 {
-                    glTexImage2DMultisample( mGlTextureTarget, mMsaa, format,
-                                             GLsizei(mWidth), GLsizei(mHeight), fixedsamplelocations );
+                    glTexImage2DMultisample( mGlTextureTarget, mSampleDescription.getColourSamples(),
+                                             format, GLsizei( mWidth ), GLsizei( mHeight ),
+                                             fixedsamplelocations );
                 }
                 else
                 {
-                    glTexImage3DMultisample( mGlTextureTarget, mMsaa, format,
-                                             GLsizei(mWidth), GLsizei(mHeight), GLsizei(mDepthOrSlices),
-                                             fixedsamplelocations );
+                    glTexImage3DMultisample( mGlTextureTarget, mSampleDescription.getColourSamples(),
+                                             format, GLsizei( mWidth ), GLsizei( mHeight ),
+                                             GLsizei( mDepthOrSlices ), fixedsamplelocations );
                 }
 
                 //Set debug name for RenderDoc and similar tools
@@ -208,7 +210,7 @@ namespace Ogre
             }
             if( mMsaaFramebufferName )
             {
-                if( mMsaa > 1u && !hasMsaaExplicitResolves() )
+                if( isMultisample() && !hasMsaaExplicitResolves() )
                     glDeleteRenderbuffers( 1, &mMsaaFramebufferName );
                 else
                     glDeleteTextures( 1, &mMsaaFramebufferName );
@@ -299,7 +301,7 @@ namespace Ogre
     {
         const bool isDepth = PixelFormatGpuUtils::isDepth( mPixelFormat );
 
-        return  ( mMsaa > 1u && ((!hasMsaaExplicitResolves() && !isDepth) || !isTexture()) ) ||
+        return  ( isMultisample() && ((!hasMsaaExplicitResolves() && !isDepth) || !isTexture()) ) ||
                 ( isDepth && !isTexture() ) ||
                 isRenderWindowSpecific();
     }
@@ -308,7 +310,7 @@ namespace Ogre
                                                       uint32 depthOrSlice )
     {
         GLuint textureName = mFinalTextureName;
-        bool bindMsaaColourRenderbuffer = mMsaa > 1u && ( !hasMsaaExplicitResolves() || !isTexture() );
+        bool bindMsaaColourRenderbuffer = isMultisample() && ( !hasMsaaExplicitResolves() || !isTexture() );
         if( bindMsaaColourRenderbuffer )
             textureName = mMsaaFramebufferName;
         bindTextureToFrameBuffer( target, textureName, mipLevel, depthOrSlice,
@@ -699,17 +701,17 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void GL3PlusTextureGpu::getSubsampleLocations( vector<Vector2>::type locations )
     {
-        locations.reserve( mMsaa );
-        if( mMsaa <= 1u )
+        locations.reserve( mSampleDescription.getColourSamples() );
+        if( mSampleDescription.getColourSamples() <= 1u )
         {
             locations.push_back( Vector2( 0.0f, 0.0f ) );
         }
         else
         {
-            assert( mMsaaPattern != MsaaPatterns::Undefined );
+            assert( mSampleDescription.getMsaaPattern() != MsaaPatterns::Undefined );
 
             float vals[2];
-            for( int i=0; i<mMsaa; ++i )
+            for( int i=0; i<mSampleDescription.getColourSamples(); ++i )
             {
                 glGetMultisamplefv( GL_SAMPLE_POSITION, i, vals );
                 locations.push_back( Vector2( vals[0], vals[1] ) * 2.0f - 1.0f );
@@ -758,15 +760,16 @@ namespace Ogre
 
             GLenum format = GL3PlusMappings::get( mPixelFormat );
 
-            if( mMsaa <= 1u )
+            if( !isMultisample() )
             {
                 OCGE( glRenderbufferStorage( GL_RENDERBUFFER, format,
                                              GLsizei(mWidth), GLsizei(mHeight) ) );
             }
             else
             {
-                OCGE( glRenderbufferStorageMultisample( GL_RENDERBUFFER, GLsizei(mMsaa), format,
-                                                        GLsizei(mWidth), GLsizei(mHeight) ) );
+                OCGE( glRenderbufferStorageMultisample(
+                    GL_RENDERBUFFER, GLsizei( mSampleDescription.getColourSamples() ), format,
+                    GLsizei( mWidth ), GLsizei( mHeight ) ) );
             }
 
             //Set debug name for RenderDoc and similar tools

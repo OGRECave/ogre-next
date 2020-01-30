@@ -158,6 +158,32 @@ namespace Ogre
             return at( xPos + x, yPos + y, zPos + getZOrSlice() );
         }
 
+        /// Returns true if this TextureBox does not represent a contiguous region of a
+        /// single slice of full texture, and is instead a 2D subregion of a larger texture.
+        bool isSubtextureRegion(void) const
+        {
+            if( x != 0u || y != 0u )
+                return true;
+
+            if( !isCompressed() )
+            {
+                return ( bytesPerRow != bytesPerPixel * width ||  //
+                         bytesPerImage != bytesPerRow * height );
+            }
+            else
+            {
+                const PixelFormatGpu pixelFormat = getCompressedPixelFormat();
+                const uint32 blockWidth =
+                    PixelFormatGpuUtils::getCompressedBlockWidth( pixelFormat, false );
+                const uint32 blockHeight =
+                    PixelFormatGpuUtils::getCompressedBlockHeight( pixelFormat, false );
+                const size_t blockSize = PixelFormatGpuUtils::getCompressedBlockSize( pixelFormat );
+
+                return ( bytesPerRow != blockSize * ( width + blockWidth - 1u ) / blockWidth ) ||
+                       bytesPerImage != bytesPerRow * ( height + blockHeight - 1u / blockHeight );
+            }
+        }
+
         void copyFrom( const TextureBox &src )
         {
             assert( this->width  == src.width &&
@@ -168,10 +194,9 @@ namespace Ogre
             const uint32 srcZorSlice = src.getZOrSlice();
             const uint32 dstZorSlice = this->getZOrSlice();
 
-            if( this->x == 0 && src.x == 0 &&
-                this->y == 0 && src.y == 0 &&
-                this->bytesPerRow == src.bytesPerRow &&
-                this->bytesPerImage == src.bytesPerImage )
+            if( this->bytesPerRow == src.bytesPerRow &&      //
+                this->bytesPerImage == src.bytesPerImage &&  //
+                !this->isSubtextureRegion() && !src.isSubtextureRegion() )
             {
                 //Raw copy
                 const void *srcData = src.at( 0, 0, srcZorSlice );

@@ -312,14 +312,12 @@ namespace Ogre
     void TextureDefinitionBase::setupTexture( TextureGpu *tex, const TextureDefinition &textureDef,
                                               const TextureGpu *finalTarget )
     {
-        uint8 defaultMsaa                               = 1u;
-        MsaaPatterns::MsaaPatterns defaultMsaaPattern   = MsaaPatterns::Undefined;
+        SampleDescription defaultSampleDescription;
         PixelFormatGpu defaultPixelFormat               = PFG_RGBA8_UNORM_SRGB;
         if( finalTarget )
         {
             //Inherit settings from target
-            defaultMsaa         = finalTarget->getMsaa();
-            defaultMsaaPattern  = finalTarget->getMsaaPattern();
+            defaultSampleDescription = finalTarget->getSampleDescription();
             defaultPixelFormat  = finalTarget->getPixelFormat();
         }
         uint32 width  = textureDef.width;
@@ -356,15 +354,13 @@ namespace Ogre
             tex->setNumMipmaps( PixelFormatGpuUtils::getMaxMipmapCount( width, height,
                                                                         tex->getDepth() ) );
         }
-        if( textureDef.msaa != 0 )
+        if( !textureDef.fsaa.empty() )
         {
-            tex->setMsaa( textureDef.msaa );
-            tex->setMsaaPattern( textureDef.msaaPattern );
+            tex->setSampleDescription( SampleDescription( textureDef.fsaa ) );
         }
         else
         {
-            tex->setMsaa( defaultMsaa );
-            tex->setMsaaPattern( defaultMsaaPattern );
+            tex->setSampleDescription( defaultSampleDescription );
         }
 
         tex->_setDepthBufferDefaults( textureDef.depthBufferId, textureDef.preferDepthTexture,

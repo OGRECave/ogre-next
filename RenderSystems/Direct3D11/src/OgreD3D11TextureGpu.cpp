@@ -119,7 +119,7 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void D3D11TextureGpu::create2DTexture(void)
+    void D3D11TextureGpu::create2DTexture( bool msaaTextureOnly /* = false */)
     {
         D3D11_TEXTURE2D_DESC desc;
         memset( &desc, 0, sizeof( desc ) );
@@ -132,10 +132,12 @@ namespace Ogre
             desc.Format = D3D11Mappings::getFamily( mPixelFormat );
         else
             desc.Format = D3D11Mappings::get( mPixelFormat );
-        if( mMsaa > 1u && hasMsaaExplicitResolves() )
+        if( isMultisample() && hasMsaaExplicitResolves() )
         {
-            desc.SampleDesc.Count   = mMsaa;
-            desc.SampleDesc.Quality = D3D11Mappings::get( mMsaaPattern );
+            desc.SampleDesc.Count   = mSampleDescription.getColourSamples();
+            desc.SampleDesc.Quality = mSampleDescription.getCoverageSamples()
+                                          ? mSampleDescription.getCoverageSamples()
+                                          : D3D11Mappings::get( mSampleDescription.getMsaaPattern() );
         }
         else
         {
@@ -169,8 +171,12 @@ namespace Ogre
         D3D11Device &device = textureManagerD3d->getDevice();
 
         ID3D11Texture2D *texture = 0;
-        HRESULT hr = device->CreateTexture2D( &desc, 0, &texture );
-        mFinalTextureName = texture;
+        HRESULT hr = S_FALSE;
+        if( !msaaTextureOnly )
+        {
+            hr = device->CreateTexture2D(&desc, 0, &texture);
+            mFinalTextureName = texture;
+        }
 
         if( FAILED(hr) || device.isError() )
         {
@@ -185,11 +191,13 @@ namespace Ogre
                             "D3D11TextureGpu::create2DTexture" );
         }
 
-        if( mMsaa > 1u && !hasMsaaExplicitResolves() )
+        if( isMultisample() && !hasMsaaExplicitResolves() )
         {
             //We just created the resolve texture. Must create the actual MSAA surface now.
-            desc.SampleDesc.Count   = mMsaa;
-            desc.SampleDesc.Quality = D3D11Mappings::get( mMsaaPattern );
+            desc.SampleDesc.Count = mSampleDescription.getColourSamples();
+            desc.SampleDesc.Quality = mSampleDescription.getCoverageSamples()
+                                          ? mSampleDescription.getCoverageSamples()
+                                          : D3D11Mappings::get( mSampleDescription.getMsaaPattern() );
 
             //Reset bind flags. We won't bind it as SRV, allows more aggressive
             //optimizations on AMD cards (DCC - Delta Color Compression since GCN 1.2)
@@ -442,9 +450,21 @@ namespace Ogre
         ID3D11Resource *srcTextureName = this->mFinalTextureName;
         ID3D11Resource *dstTextureName = dstD3d->mFinalTextureName;
 
-        if( this->mMsaa > 1u && !this->hasMsaaExplicitResolves() )
-            srcTextureName = this->mMsaaFramebufferName;
-        if( dstD3d->mMsaa > 1u && !dstD3d->hasMsaaExplicitResolves() )
+        //Source has explicit resolves. If destination doesn't,
+        //we must copy to its internal MSAA surface.
+        if( this->isMultisample() && this->hasMsaaExplicitResolves() )
+        {
+            if( !dstD3d->hasMsaaExplicitResolves() )
+                dstTextureName = dstD3d->mMsaaFramebufferName;
+        }
+        //Destination has explicit resolves. If source doesn't,
+        //we must copy from its internal MSAA surface.
+        if( dstD3d->isMultisample() && dstD3d->hasMsaaExplicitResolves() )
+        {
+            if( !this->hasMsaaExplicitResolves() )
+                srcTextureName = this->mMsaaFramebufferName;
+        }
+        if( dstD3d->isMultisample() && !dstD3d->hasMsaaExplicitResolves() )
             dstTextureName = dstD3d->mMsaaFramebufferName;
 
         D3D11TextureGpuManager *textureManagerD3d =
@@ -467,7 +487,7 @@ namespace Ogre
                                             srcTextureName, srcResourceIndex,
                                             d3dBoxPtr );
 
-            if( dstD3d->mMsaa > 1u && !dstD3d->hasMsaaExplicitResolves() && keepResolvedTexSynced )
+            if( dstD3d->isMultisample() && !dstD3d->hasMsaaExplicitResolves() )
             {
                 //Must keep the resolved texture up to date.
                 context->ResolveSubresource( dstD3d->mFinalTextureName,
@@ -537,7 +557,7 @@ namespace Ogre
 
             const TextureTypes::TextureTypes textureType = getInternalTextureType();
 
-            const bool isMsaaSrv = mMsaa > 1u && hasMsaaExplicitResolves();
+            const bool isMsaaSrv = isMultisample() && hasMsaaExplicitResolves();
             srvDesc.ViewDimension = D3D11Mappings::get( textureType, texSlot.cubemapsAs2DArrays,
                                                         isMsaaSrv );
 
@@ -684,19 +704,19 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpu::getSubsampleLocations( vector<Vector2>::type locations )
     {
-        locations.reserve( mMsaa );
-        if( mMsaa <= 1u )
+        locations.reserve( mSampleDescription.getColourSamples() );
+        if( mSampleDescription.getColourSamples() <= 1u )
         {
             locations.push_back( Vector2( 0.0f, 0.0f ) );
         }
         else
         {
-            assert( mMsaaPattern != MsaaPatterns::Undefined );
+            assert( mSampleDescription.getMsaaPattern() != MsaaPatterns::Undefined );
 
-            if( mMsaaPattern == MsaaPatterns::Standard )
+            if( mSampleDescription.getMsaaPattern() == MsaaPatterns::Standard )
             {
                 //As defined per D3D11_STANDARD_MULTISAMPLE_PATTERN docs.
-                switch( mMsaa )
+                switch( mSampleDescription.getColourSamples() )
                 {
                 case 2:
                     locations.push_back( Vector2( Real(  4.0 / 8.0 ), Real(  4.0 / 8.0 ) ) );
@@ -745,7 +765,7 @@ namespace Ogre
             else
             {
                 //Center
-                for( uint8 i=0; i<mMsaa; ++i )
+                for( uint8 i=0; i<mSampleDescription.getColourSamples(); ++i )
                     locations.push_back( Vector2( 0, 0 ) );
             }
         }

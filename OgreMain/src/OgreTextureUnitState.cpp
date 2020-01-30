@@ -156,7 +156,8 @@ namespace Ogre {
             vector<TextureGpu*>::type::iterator end  = mFramePtrs.end();
             while( itor != end )
             {
-                (*itor)->addListener( this );
+                if( *itor )
+                    (*itor)->addListener( this );
                 ++itor;
             }
         }

@@ -104,11 +104,10 @@ namespace Ogre
             float heightFactor; //multiple of target height to use (if height = 0)
             /// Use PFG_UNKNOWN to use same format as main target
             PixelFormatGpu format;
-            /// 1u  = Disable.
-            /// >1u = Enable
-            /// 0   = Use same setting as main target
-            uint8 msaa;
-            MsaaPatterns::MsaaPatterns msaaPattern;
+            /// "1"  = Disable.
+            /// "8", "8x", "8x MSAA Center", "8x CSAA" = Enable
+            /// ""   = Use same setting as main target
+            String fsaa;
 
             /// See TextureFlags::TextureFlags. Valid flags are:
             ///     NotTexture (only valid if Uav is present)
@@ -134,7 +133,7 @@ namespace Ogre
             TextureDefinition( IdString _name ) : name(_name), textureType( TextureTypes::Type2D ),
                     width( 0 ), height( 0 ), depthOrSlices( 1u ), numMipmaps( 1u ),
                     widthFactor( 1.0f ), heightFactor( 1.0f ),
-                    format( PFG_UNKNOWN ), msaa( 1u ), msaaPattern( MsaaPatterns::Undefined ),
+                    format( PFG_UNKNOWN ), fsaa( "1" ),
                     textureFlags( TextureFlags::RenderToTexture ),
                     depthBufferId( 1u ), preferDepthTexture( false ), depthBufferFormat( PFG_UNKNOWN ) {}
         };

@@ -77,6 +77,9 @@ if( WINDOWS_STORE OR WINDOWS_PHONE )
 		  ${CMAKE_SOURCE_DIR}/Samples/Media/Compute
 		  ${CMAKE_SOURCE_DIR}/Samples/Media/VCT )
 endif()
+if( WIN32 AND NOT WINDOWS_STORE AND NOT WINDOWS_PHONE )
+	set( SAMPLE_COMMON_RESOURCES ${CMAKE_SOURCE_DIR}/CMake/Templates/OSCompatibility.Win32.manifest )
+endif()
 
 function(ogre_config_sample_pkg SAMPLENAME)
 	if( APPLE )

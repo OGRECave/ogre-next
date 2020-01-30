@@ -140,14 +140,14 @@ namespace Ogre
         return mTexture->getPixelFormat();
     }
     //-----------------------------------------------------------------------------------
-    uint8 Window::getMsaa(void) const
+    SampleDescription Window::getSampleDescription(void) const
     {
-        return mTexture->getMsaa();
+        return mTexture->getSampleDescription();
     }
     //-----------------------------------------------------------------------------------
-    MsaaPatterns::MsaaPatterns Window::getMsaaPatterns(void) const
+    bool Window::isMultisample(void) const
     {
-        return mTexture->getMsaaPattern();
+        return mTexture->isMultisample();
     }
     //-----------------------------------------------------------------------------------
     uint32 Window::getFrequencyNumerator(void) const

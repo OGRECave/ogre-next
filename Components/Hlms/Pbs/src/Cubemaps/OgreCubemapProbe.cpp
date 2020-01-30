@@ -57,8 +57,7 @@ namespace Ogre
         mInvOrientation( Matrix3::IDENTITY ),
         mProbeShape( Aabb::BOX_ZERO ),
         mTexture( 0 ),
-        mCubemapArrayIdx( std::numeric_limits<uint16>::max() ),
-        mMsaa( 1u ),
+        mCubemapArrayIdx( std::numeric_limits<uint32>::max() ),
         mClearWorkspace( 0 ),
         mWorkspace( 0 ),
         mCamera( 0 ),
@@ -291,7 +290,7 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------------------
     void CubemapProbe::setTextureParams( uint32 width, uint32 height, bool useManual,
-                                         PixelFormatGpu pf, bool isStatic, uint8 msaa )
+                                         PixelFormatGpu pf, bool isStatic, SampleDescription sampleDesc )
     {
         if( !mCreator->getAutomaticMode() )
         {
@@ -321,8 +320,8 @@ namespace Ogre
                 flags = mCreator->getIblTargetTextureFlags( pf );
             }
 
-            mMsaa = msaa;
-            msaa = isStatic ? 0 : msaa;
+            mSampleDescription = sampleDesc;
+            sampleDesc = isStatic ? SampleDescription() : sampleDesc;
 
             SceneManager *sceneManager = mCreator->getSceneManager();
             TextureGpuManager *textureManager =
@@ -332,7 +331,7 @@ namespace Ogre
             mTexture->setResolution( width, height );
             mTexture->setPixelFormat( pf );
             mTexture->setNumMipmaps( numMips );
-            mTexture->setMsaa( msaa );
+            mTexture->setSampleDescription( sampleDesc );
 
             mStatic = isStatic;
             mDirty = true;
@@ -483,7 +482,7 @@ namespace Ogre
         if( mStatic != isStatic && mTexture )
         {
             setTextureParams( mTexture->getWidth(), mTexture->getHeight(), mTexture->getNumMipmaps() > 0,
-                              mTexture->getPixelFormat(), isStatic, mTexture->getMsaa() );
+                              mTexture->getPixelFormat(), isStatic, mTexture->getSampleDescription() );
         }
         else
         {

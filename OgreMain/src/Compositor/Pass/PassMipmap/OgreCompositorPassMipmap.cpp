@@ -63,7 +63,7 @@ namespace Ogre
                 mTextures.push_back( mRenderPassDesc->mColour[i].resolveTexture );
             else
             {
-                if( mRenderPassDesc->mColour[i].texture->getMsaa() > 1u )
+                if( mRenderPassDesc->mColour[i].texture->isMultisample() )
                 {
                     OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                                  "Cannot generate mipmaps for MSAA textures! Node: " +

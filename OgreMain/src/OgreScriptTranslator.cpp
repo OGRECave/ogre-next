@@ -1896,6 +1896,7 @@ namespace Ogre{
                             Pass::_getBlendFlags( sbt1,
                                                   blendblock.mSourceBlendFactorAlpha,
                                                   blendblock.mDestBlendFactorAlpha );
+                            blendblock.mSeparateBlend = true;
                         }
                         else
                         {
@@ -1917,6 +1918,8 @@ namespace Ogre{
                                 compiler->addError(ScriptCompiler::CE_INVALIDPARAMETERS, prop->file, prop->line,
                                                    "one of the arguments to separate_scene_blend is not a valid scene blend factor directive");
                             }
+                            else
+                                blendblock.mSeparateBlend = true;
                         }
                         else
                         {
@@ -6254,7 +6257,7 @@ namespace Ogre{
         uint width = 0, height = 0, depthOrSlices = 1u;
         float widthFactor = 1.0f, heightFactor = 1.0f;
         bool widthSet = false, heightSet = false;
-        uint8 msaa = 1u;
+        String fsaa = "1";
         uint32 textureFlags = TextureFlags::RenderToTexture;
         uint16 depthBufferId = DepthBuffer::POOL_INVALID;
         PixelFormatGpu depthBufferFormat = PFG_UNKNOWN;
@@ -6338,15 +6341,15 @@ namespace Ogre{
                     return;
                 }
                 atom = (AtomAbstractNode*)(*it).get();
-                if( !StringConverter::isNumber(atom->value) )
+                if( !StringConverter::parseUnsignedInt(atom->value) )
                 {
                     compiler->addError(ScriptCompiler::CE_NUMBEREXPECTED, prop->file, prop->line);
                     return;
                 }
-                msaa = StringConverter::parseInt(atom->value);
+                fsaa = atom->value;
                 break;
             case ID_MSAA_AUTO:
-                msaa = 0;
+                fsaa = "";
                 break;
             case ID_EXPLICIT_RESOLVE:
                 textureFlags |= TextureFlags::MsaaExplicitResolve;
@@ -6498,7 +6501,7 @@ namespace Ogre{
         td->widthFactor     = widthFactor;
         td->heightFactor    = heightFactor;
         td->format          = format;
-        td->msaa            = msaa;
+        td->fsaa            = fsaa;
         td->textureFlags    = textureFlags;
         td->depthBufferId       = depthBufferId;
         td->preferDepthTexture  = preferDepthTexture;

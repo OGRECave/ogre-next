@@ -190,7 +190,7 @@ namespace Ogre
             memset( &viewDesc, 0, sizeof(viewDesc) );
             viewDesc.Format = D3D11Mappings::get( mColour[i].texture->getPixelFormat() );
 
-            if( mColour[i].texture->getMsaa() > 1u )
+            if( mColour[i].texture->isMultisample() )
             {
                 if( !mColour[i].texture->hasMsaaExplicitResolves() ||
                     mColour[i].texture->getTextureType() != TextureTypes::Type2DArray )
@@ -250,7 +250,7 @@ namespace Ogre
             D3D11TextureGpu *textureD3d = static_cast<D3D11TextureGpu*>( mColour[i].texture );
 
             ID3D11Resource *resourceTex = 0;
-            if( mColour[i].texture->getMsaa() > 1u &&
+            if( mColour[i].texture->isMultisample() &&
                 !mColour[i].texture->hasMsaaExplicitResolves() )
             {
                 resourceTex = textureD3d->getMsaaFramebufferName();
@@ -303,7 +303,7 @@ namespace Ogre
         memset( &depthStencilDesc, 0, sizeof(depthStencilDesc) );
 
         depthStencilDesc.Format = D3D11Mappings::get( mDepth.texture->getPixelFormat() );
-        if( mDepth.texture->getMsaa() > 1u )
+        if( mDepth.texture->isMultisample() )
             depthStencilDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
         else
             depthStencilDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;

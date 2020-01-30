@@ -32,6 +32,7 @@ THE SOFTWARE.
 
 #include "OgreRoot.h"
 #include "OgreLogManager.h"
+#include "OgreOSVersionHelpers.h"
 
 #include <iomanip>
 
@@ -115,8 +116,7 @@ namespace Ogre
     HRESULT D3D11WindowCoreWindow::_createSwapChainImpl()
     {
 #if !__OGRE_WINRT_PHONE
-        D3D11RenderSystem* rsys = static_cast<D3D11RenderSystem*>(Root::getSingleton().getRenderSystem());
-        mMsaaDesc = rsys->getMsaaSampleDesc(mMsaa, mMsaaHint, _getRenderFormat());
+        mSampleDescription = mRenderSystem->validateSampleDescription(mRequestedSampleDescription, _getRenderFormat());
 #endif
         DXGI_SWAP_CHAIN_DESC1 desc = {};
         desc.Width                = 0;                                // Use automatic sizing.
@@ -136,7 +136,7 @@ namespace Ogre
 #else
         desc.BufferCount          = 2;                                // Use two buffers to enable flip effect.
         desc.Scaling              = DXGI_SCALING_NONE;                // Otherwise stretch would be used by default.
-        desc.SwapEffect           = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL; // MS recommends using this swap effect for all applications.
+        desc.SwapEffect           = IsWindows10OrGreater() ? DXGI_SWAP_EFFECT_FLIP_DISCARD : DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
 #endif
         desc.AlphaMode            = DXGI_ALPHA_MODE_UNSPECIFIED;
 
@@ -260,8 +260,7 @@ namespace Ogre
     HRESULT D3D11WindowSwapChainPanel::_createSwapChainImpl()
     {
 #if !__OGRE_WINRT_PHONE
-        D3D11RenderSystem* rsys = static_cast<D3D11RenderSystem*>(Root::getSingleton().getRenderSystem());
-        mMsaaDesc = rsys->getMsaaSampleDesc(mMsaa, mMsaaHint, _getRenderFormat());
+        mSampleDescription = mRenderSystem->validateSampleDescription(mRequestedSampleDescription, _getRenderFormat());
 #endif
 
         int widthPx = std::max(1, (int)floorf(mRequestedWidth * mCompositionScale.Width + 0.5f));
@@ -280,7 +279,7 @@ namespace Ogre
         desc.BufferUsage          = DXGI_USAGE_RENDER_TARGET_OUTPUT;
         desc.BufferCount          = 2;                                // Use two buffers to enable flip effect.
         desc.Scaling              = DXGI_SCALING_STRETCH;             // Required for CreateSwapChainForComposition.
-        desc.SwapEffect           = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL; // MS recommends using this swap effect for all applications.
+        desc.SwapEffect           = IsWindows10OrGreater() ? DXGI_SWAP_EFFECT_FLIP_DISCARD : DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
         desc.AlphaMode            = DXGI_ALPHA_MODE_UNSPECIFIED;
 
         // Create swap chain
@@ -295,7 +294,7 @@ namespace Ogre
         hr = reinterpret_cast<IUnknown*>(mSwapChainPanel)->QueryInterface(IID_PPV_ARGS(panelNative.ReleaseAndGetAddressOf()));
         if(FAILED(hr))
             return hr;
-        hr = panelNative->SetSwapChain(mSwapChain.Get());
+        hr = panelNative->SetSwapChain(mSwapChain1.Get());
         if(FAILED(hr))
             return hr;
 
@@ -317,7 +316,7 @@ namespace Ogre
         inverseScale._11 = 1.0f / mCompositionScale.Width;
         inverseScale._22 = 1.0f / mCompositionScale.Height;
         ComPtr<IDXGISwapChain2> pSwapChain2;
-        HRESULT hr = mSwapChain.As<IDXGISwapChain2>(&pSwapChain2);
+        HRESULT hr = mSwapChain1.As<IDXGISwapChain2>(&pSwapChain2);
         if(FAILED(hr))
             return hr;
 

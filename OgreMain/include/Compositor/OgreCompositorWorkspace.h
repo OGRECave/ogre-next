@@ -318,7 +318,9 @@ namespace Ogre
         TextureGpu* getFinalTarget(void) const;
 
         uint8 getViewportModifierMask(void) const           { return mViewportModifierMask; }
+        void setViewportModifierMask(uint8 mask)            { mViewportModifierMask = mask; }
         const Vector4& getViewportModifier(void) const      { return mViewportModifier; }
+        void setViewportModifier(const Vector4& modifier)   { mViewportModifier = modifier; }
 
         uint8 getExecutionMask(void) const                  { return mExecutionMask; }
 

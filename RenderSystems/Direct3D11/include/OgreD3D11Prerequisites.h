@@ -50,6 +50,9 @@ THE SOFTWARE.
 #define NOMINMAX // required to stop windows.h screwing up std::min definition
 #if defined( _WIN32_WINNT_WIN8 ) || OGRE_COMPILER != OGRE_COMPILER_MSVC
     #include <d3d11_1.h>
+    #if !defined(_WIN32_WINNT_WIN10)
+        #define DXGI_SWAP_EFFECT_FLIP_DISCARD ((DXGI_SWAP_EFFECT)(4)) // we want to use it on Win10 even if building with Win8 SDK
+    #endif
 #else
     #include <d3d11.h>
     #include "OgreD3D11LegacySDKEmulation.h"

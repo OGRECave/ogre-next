@@ -380,23 +380,23 @@ struct Material
 @pset( texcoord, 0 )
 
 @piece( VStoPS_block )
-	@property( !hlms_shadowcaster )
-		@property( syntax == metal )
-			@property( !lower_gpu_overhead )
-				ushort materialId [[flat]];
-			@end
-			@property( hlms_fine_light_mask || hlms_forwardplus_fine_light_mask )
-				uint objLightMask [[flat]];
-			@end
-			@property( use_planar_reflections )
-				ushort planarReflectionIdx [[flat]];
-			@end
-		@else
-			@property( !lower_gpu_overhead )
-				FLAT_INTERPOLANT( ushort drawId, @counter(texcoord) );
-			@end
+	@property( syntax == metal )
+		@property( (!hlms_shadowcaster || alpha_test) && !lower_gpu_overhead )
+			ushort materialId [[flat]];
 		@end
+		@property( hlms_fine_light_mask || hlms_forwardplus_fine_light_mask )
+			uint objLightMask [[flat]];
+		@end
+		@property( use_planar_reflections )
+			ushort planarReflectionIdx [[flat]];
+		@end
+	@else
+		@property( (!hlms_shadowcaster || alpha_test) && !lower_gpu_overhead )
+			FLAT_INTERPOLANT( ushort drawId, @counter(texcoord) );
+		@end
+	@end
 
+	@property( !hlms_shadowcaster )
 		@property( hlms_normal || hlms_qtangent )
 			INTERPOLANT( float3 pos, @counter(texcoord) );
 			INTERPOLANT( float3 normal, @counter(texcoord) );
@@ -421,9 +421,6 @@ struct Material
 		@end
 	@else
 		@property( alpha_test )
-			@property( !lower_gpu_overhead )
-				FLAT_INTERPOLANT( ushort drawId, @counter(texcoord) );
-			@end
 			@foreach( hlms_uv_count, n )
 				INTERPOLANT( float@value( hlms_uv_count@n ) uv@n, @counter(texcoord) );@end
 		@end

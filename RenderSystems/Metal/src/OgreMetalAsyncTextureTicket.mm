@@ -116,8 +116,8 @@ namespace Ogre
 
         __unsafe_unretained id<MTLBlitCommandEncoder> blitEncoder = mDevice->getBlitEncoder();
 
-        size_t bytesPerRow  = srcTextureBox.bytesPerRow;
-        size_t bytesPerImage= srcTextureBox.bytesPerImage;
+        size_t destBytesPerRow = getBytesPerRow();
+        size_t destBytesPerImage = getBytesPerImage();
 
         if( mPixelFormatFamily == PFG_PVRTC2_2BPP || mPixelFormatFamily == PFG_PVRTC2_2BPP_SRGB ||
             mPixelFormatFamily == PFG_PVRTC2_4BPP || mPixelFormatFamily == PFG_PVRTC2_4BPP_SRGB ||
@@ -126,8 +126,8 @@ namespace Ogre
             mPixelFormatFamily == PFG_PVRTC_RGBA2 || mPixelFormatFamily == PFG_PVRTC_RGBA2_SRGB ||
             mPixelFormatFamily == PFG_PVRTC_RGBA4 || mPixelFormatFamily == PFG_PVRTC_RGBA4_SRGB )
         {
-            bytesPerRow = 0;
-            bytesPerImage = 0;
+            destBytesPerRow = 0;
+            destBytesPerImage = 0;
         }
 
         MTLOrigin mtlOrigin = MTLOriginMake( srcTextureBox.x, srcTextureBox.y, srcTextureBox.z );
@@ -137,18 +137,19 @@ namespace Ogre
         for( NSUInteger i=0; i<srcTextureBox.numSlices; ++i )
         {
             [blitEncoder copyFromTexture:srcTextureMetal->getFinalTextureName()
-                             sourceSlice:srcTextureBox.sliceStart
+                             sourceSlice:srcTextureBox.sliceStart + i
                              sourceLevel:mipLevel
                             sourceOrigin:mtlOrigin
                               sourceSize:mtlSize
                                 toBuffer:mVboName
-                       destinationOffset:srcTextureBox.bytesPerImage * i
-                  destinationBytesPerRow:bytesPerRow
-                destinationBytesPerImage:bytesPerImage];
+                       destinationOffset:destBytesPerImage * i
+                  destinationBytesPerRow:destBytesPerRow
+                destinationBytesPerImage:destBytesPerImage];
         }
 
 #if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
-        [blitEncoder synchronizeResource:mVboName];
+        assert( mVboName.storageMode != MTLStorageModeManaged );
+        //[blitEncoder synchronizeResource:mVboName];
 #endif
 
         if( accurateTracking )

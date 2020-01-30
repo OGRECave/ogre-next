@@ -624,9 +624,9 @@ namespace Ogre
         mPreparedPass.viewProjMatrix[0] = projectionMatrix * viewMatrix;
         mPreparedPass.viewProjMatrix[1] = identityProjMat;
 
-        mSetProperties.clear();
+        bool isShadowCastingPointLight =  casterPass && getProperty( HlmsBaseProp::ShadowCasterPoint ) != 0;
 
-        bool isShadowCastingPointLight = false;
+        mSetProperties.clear();
 
         //mat4 viewProj[2] + vec4 invWindowSize;
         size_t mapSize = (16 + 16 + 4) * 4;
@@ -638,8 +638,6 @@ namespace Ogre
 
         if( casterPass )
         {
-            isShadowCastingPointLight = getProperty( HlmsBaseProp::ShadowCasterPoint ) != 0;
-
             //vec4 viewZRow
             if( mUsingExponentialShadowMaps )
                 mapSize += 4 * 4;

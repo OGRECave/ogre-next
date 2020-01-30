@@ -87,6 +87,11 @@ namespace Ogre
             /// Cast Exception *e = reinterpret_cast<Exception*>( extraData );
             /// to know more info
             ExceptionThrown,
+            /// Requested FSAA (MSAA / CSAA / EQAA / etc) is not supported by the API, and thus
+            /// the setting had to be downgraded. Note this may happen on device lost, and a new
+            /// GPU became in use; thus it's possible for a TextureGpu to initially support
+            /// certain FSAA but later change.
+            FsaaSettingAlteredByApi,
             /// This Reason is called when TextureGpu::notifyDataIsReady is called.
             /// This normally means worker thread is done loading texture from file
             /// and uploading it to GPU; and can now be used for rendering.

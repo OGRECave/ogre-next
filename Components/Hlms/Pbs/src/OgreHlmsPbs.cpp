@@ -1289,13 +1289,13 @@ namespace Ogre
         assert( mPrePassTextures->empty() || mPrePassTextures->size() == 2u );
 
         mPrePassMsaaDepthTexture = 0;
-        if( !mPrePassTextures->empty() && (*mPrePassTextures)[0]->getMsaa() > 1u )
+        if( !mPrePassTextures->empty() && (*mPrePassTextures)[0]->isMultisample() )
         {
             TextureGpu *msaaDepthTexture = sceneManager->getCurrentPrePassDepthTexture();
             if( msaaDepthTexture )
                 mPrePassMsaaDepthTexture = msaaDepthTexture;
             assert( (mPrePassMsaaDepthTexture &&
-                     mPrePassMsaaDepthTexture->getMsaa() == (*mPrePassTextures)[0]->getMsaa()) &&
+                     mPrePassMsaaDepthTexture->getSampleDescription() == (*mPrePassTextures)[0]->getSampleDescription()) &&
                     "Prepass + MSAA must specify an MSAA depth texture" );
         }
 

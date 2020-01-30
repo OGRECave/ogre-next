@@ -176,11 +176,11 @@ namespace Ogre
         propName.resize( texturePropSize );
 
         propName.a( "_msaa" );                  //texture0_msaa
-        setProperty( propName.c_str(), texture->getMsaa() > 1u ? 1 : 0 );
+        setProperty( propName.c_str(), texture->isMultisample() ? 1 : 0 );
         propName.resize( texturePropSize );
 
         propName.a( "_msaa_samples" );          //texture0_msaa_samples
-        setProperty( propName.c_str(), texture->getMsaa() );
+        setProperty( propName.c_str(), texture->getSampleDescription().getColourSamples() );
         propName.resize( texturePropSize );
 
         propName.a( "_texture_type" );          //_texture_type
@@ -201,7 +201,7 @@ namespace Ogre
         propName.a( "_data_type" );             //uav0_data_type
         const char *dataType = toShaderType->getDataType( pixelFormat,
                                                           texture->getTextureType(),
-                                                          texture->getMsaa() > 1u,
+                                                          texture->isMultisample(),
                                                           access );
         if( typeName )
             setPiece( propName.c_str(), dataType );

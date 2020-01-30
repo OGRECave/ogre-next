@@ -122,10 +122,8 @@ namespace Ogre
             {
                 mCurrentState.pass.colourFormat[i] =
                         renderPassDesc->mColour[i].texture->getPixelFormat();
-                mCurrentState.pass.multisampleCount =
-                        renderPassDesc->mColour[i].texture->getMsaa();
-                mCurrentState.pass.multisampleQuality =
-                        renderPassDesc->mColour[i].texture->getMsaaPattern();
+                mCurrentState.pass.sampleDescription =
+                        renderPassDesc->mColour[i].texture->getSampleDescription();
             }
             else
                 mCurrentState.pass.colourFormat[i] = PFG_NULL;
@@ -135,8 +133,7 @@ namespace Ogre
         if( renderPassDesc->mDepth.texture )
         {
             mCurrentState.pass.depthFormat          = renderPassDesc->mDepth.texture->getPixelFormat();
-            mCurrentState.pass.multisampleCount     = renderPassDesc->mDepth.texture->getMsaa();
-            mCurrentState.pass.multisampleQuality   = renderPassDesc->mDepth.texture->getMsaaPattern();
+            mCurrentState.pass.sampleDescription    = renderPassDesc->mDepth.texture->getSampleDescription();
         }
 
         mCurrentState.pass.adapterId = 1; //TODO: Ask RenderSystem current adapter ID.

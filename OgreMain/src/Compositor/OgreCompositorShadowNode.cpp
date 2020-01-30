@@ -644,7 +644,7 @@ namespace Ogre
                 while( firstBitSet != 32u )
                 {
                     assert( (smCamera.scenePassesViewportSize[firstBitSet].x < Real( 0.0 ) ||
-                             smCamera.scenePassesViewportSize[firstBitSet].x < Real( 0.0 ) ||
+                             smCamera.scenePassesViewportSize[firstBitSet].y < Real( 0.0 ) ||
                              smCamera.scenePassesViewportSize[firstBitSet] == vpSize) &&
                             "Two scene passes to the same shadow map have different viewport sizes! "
                             "Ogre cannot determine how to prevent jittering. Maybe you meant assign "
@@ -1040,7 +1040,8 @@ namespace Ogre
                                                          bool useEsm,
                                                          uint32 pointLightCubemapResolution,
                                                          Real pssmLambda, Real splitPadding,
-                                                         Real splitBlend, Real splitFade )
+                                                         Real splitBlend, Real splitFade, 
+                                                         uint32 visibilityMask )
     {
         typedef map<uint64, uint32>::type ResolutionsToEsmMap;
 
@@ -1188,7 +1189,7 @@ namespace Ogre
                 }
                 texDef->depthBufferFormat = PFG_D32_FLOAT;
                 texDef->preferDepthTexture = false;
-                texDef->msaa = 1u;
+                texDef->fsaa = "1";
 
                 RenderTargetViewDef *rtv = shadowNodeDef->addRenderTextureView( texName );
                 rtv->setForTextureDefinition( texName, texDef );
@@ -1216,7 +1217,7 @@ namespace Ogre
                     texDef->format = PFG_R16_UNORM;
                     texDef->depthBufferId = DepthBuffer::POOL_NO_DEPTH;
                     texDef->preferDepthTexture = false;
-                    texDef->msaa = 1u;
+                    texDef->fsaa = "1";
                     if( supportsCompute )
                         texDef->textureFlags |= TextureFlags::Uav;
                     else
@@ -1240,7 +1241,7 @@ namespace Ogre
                 texDef->height  = pointLightCubemapResolution;
                 texDef->depthOrSlices = 6u;
                 texDef->textureType = TextureTypes::TypeCube;
-                texDef->format = PFG_R32_FLOAT;
+                texDef->format = useEsm ? PFG_R16_UNORM : PFG_R32_FLOAT;
                 texDef->depthBufferId = 1u;
                 texDef->depthBufferFormat = PFG_D32_FLOAT;
                 texDef->preferDepthTexture = false;
@@ -1313,11 +1314,10 @@ namespace Ogre
             while( itor != end )
             {
                 const ShadowParam &shadowParam = *itor;
+                const size_t numSplits = shadowParam.technique == SHADOWMAP_PSSM ? shadowParam.numPssmSplits : 1u;
                 if( shadowParam.atlasId == atlasId &&
                     shadowParam.supportedLightTypes & spotAndDirMask )
                 {
-                    const size_t numSplits =
-                            shadowParam.technique == SHADOWMAP_PSSM ? shadowParam.numPssmSplits : 1u;
                     for( size_t i=0; i<numSplits; ++i )
                     {
                         CompositorTargetDef *targetDef = shadowNodeDef->addTargetPass( texName );
@@ -1331,12 +1331,13 @@ namespace Ogre
 
                         passScene->mShadowMapIdx = shadowMapIdx;
                         passScene->mIncludeOverlays = false;
+                        passScene->mVisibilityMask = visibilityMask;
                         ++shadowMapIdx;
                     }
                 }
                 else
                 {
-                    ++shadowMapIdx;
+                    shadowMapIdx += numSplits;
                 }
                 ++itor;
             }
@@ -1368,6 +1369,7 @@ namespace Ogre
                             passScene->mCameraCubemapReorient = true;
                             passScene->mShadowMapIdx = shadowMapIdx;
                             passScene->mIncludeOverlays = false;
+                            passScene->mVisibilityMask = visibilityMask;
                         }
                     }
 
@@ -1380,7 +1382,7 @@ namespace Ogre
                     CompositorPassDef *passDef = targetDef->addPass( PASS_QUAD );
                     CompositorPassQuadDef *passQuad = static_cast<CompositorPassQuadDef*>( passDef );
                     passQuad->mMaterialIsHlms = false;
-                    passQuad->mMaterialName = "Ogre/DPSM/CubeToDpsm";
+                    passQuad->mMaterialName = useEsm ? "Ogre/DPSM/CubeToDpsmColour" : "Ogre/DPSM/CubeToDpsm";
                     passQuad->addQuadTextureSource( 0, "tmpCubemap" );
                     passQuad->mShadowMapIdx = shadowMapIdx;
                 }

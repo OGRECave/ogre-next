@@ -89,7 +89,6 @@ namespace Ogre
 
         void freeDevice(void);
         void createDevice( const String &windowTitle );
-        static bool isWindows8OrGreater();
 
         v1::D3D11HardwareBufferManager* mHardwareBufferManager;
         D3D11GpuProgramManager* mGpuProgramManager;
@@ -189,7 +188,7 @@ namespace Ogre
 		
         void initRenderSystem();
 
-        virtual void initConfigOptions(void);
+        void initConfigOptions(void);
 
         // Overridden RenderSystem functions
         ConfigOptionMap& getConfigOptions(void);
@@ -337,7 +336,8 @@ namespace Ogre
         void preExtraThreadsStarted();
         void postExtraThreadsStarted();
 
-        DXGI_SAMPLE_DESC getMsaaSampleDesc(uint msaa, const String& msaaHint, PixelFormatGpu format);
+        virtual SampleDescription validateSampleDescription( const SampleDescription &sampleDesc,
+                                                             PixelFormatGpu format );
 
         /// @copydoc RenderSystem::getDisplayMonitorCount
         unsigned int getDisplayMonitorCount() const;

@@ -70,6 +70,7 @@ THE SOFTWARE.
 #include "Vao/OgreIndirectBufferPacked.h"
 #include "CommandBuffer/OgreCbDrawCall.h"
 
+#include "OgreOSVersionHelpers.h"
 #include "OgreProfiler.h"
 
 #ifdef _WIN32_WINNT_WIN10
@@ -359,7 +360,7 @@ namespace Ogre
         optBackBufferCount.currentValue = "Auto";
 
 
-        optAA.name = "MSAA";
+        optAA.name = "FSAA";
         optAA.immutable = false;
         optAA.possibleValues.push_back( "None" );
         optAA.currentValue = "None";
@@ -385,7 +386,7 @@ namespace Ogre
         optSRGB.name = "sRGB Gamma Conversion";
         optSRGB.possibleValues.push_back("Yes");
         optSRGB.possibleValues.push_back("No");
-        optSRGB.currentValue = "No";
+        optSRGB.currentValue = "Yes";
         optSRGB.immutable = false;
 
         // min feature level
@@ -416,7 +417,7 @@ namespace Ogre
         optMaxFeatureLevels.possibleValues.push_back("10.1");
         optMaxFeatureLevels.possibleValues.push_back("11.0");
 #if defined(_WIN32_WINNT_WIN8)
-        if (isWindows8OrGreater())
+        if (IsWindows8OrGreater())
         {
             optMaxFeatureLevels.possibleValues.push_back("11.1");
             optMaxFeatureLevels.currentValue = "11.1";
@@ -599,7 +600,7 @@ namespace Ogre
         if( name == "Max Requested Feature Levels" )
         {
 #if defined(_WIN32_WINNT_WIN8) && _WIN32_WINNT >= _WIN32_WINNT_WIN8
-        if( isWindows8OrGreater() )
+        if( IsWindows8OrGreater() )
             mMaxRequestedFeatureLevel = D3D11Device::parseFeatureLevel(value, D3D_FEATURE_LEVEL_11_1);
         else
             mMaxRequestedFeatureLevel = D3D11Device::parseFeatureLevel(value, D3D_FEATURE_LEVEL_11_0);
@@ -625,8 +626,7 @@ namespace Ogre
     //---------------------------------------------------------------------
     void D3D11RenderSystem::refreshFSAAOptions(void)
     {
-
-        ConfigOptionMap::iterator it = mOptions.find( "MSAA" );
+        ConfigOptionMap::iterator it = mOptions.find( "FSAA" );
         ConfigOption* optFSAA = &it->second;
         optFSAA->possibleValues.clear();
 
@@ -644,34 +644,38 @@ namespace Ogre
             DXGI_FORMAT format = videoMode ? videoMode->getFormat() : DXGI_FORMAT_R8G8B8A8_UNORM;
             UINT numLevels = 0;
             // set maskable levels supported
-            for (unsigned int n = 1; n <= D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT; n++)
+            for( UINT n = 1; n <= D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT; n++ )
             {
-                HRESULT hr = device->CheckMultisampleQualityLevels(format, n, &numLevels);
-                if (SUCCEEDED(hr) && numLevels > 0)
+                // new style enumeration, with "8x CSAA", "8x MSAA" values
+                if( n == 4 &&
+                    SUCCEEDED( device->CheckMultisampleQualityLevels( format, 2, &numLevels ) ) &&
+                    numLevels > 4 )  // 2f4x EQAA
                 {
-                    optFSAA->possibleValues.push_back(StringConverter::toString(n));
-
-#if TODO_OGRE_2_2
-                    // 8x could mean 8xCSAA, and we need other designation for 8xMSAA
-                    if((n == 8 && SUCCEEDED(device->CheckMultisampleQualityLevels(format, 4, &numLevels)) && numLevels > 8)    // 8x CSAA
-                    || (n == 16 && SUCCEEDED(device->CheckMultisampleQualityLevels(format, 4, &numLevels)) && numLevels > 16)  // 16x CSAA
-                    || (n == 16 && SUCCEEDED(device->CheckMultisampleQualityLevels(format, 8, &numLevels)) && numLevels > 16)) // 16xQ CSAA
-                    {
-                        optFSAA->possibleValues.push_back(StringConverter::toString(n) + " [Quality]");
-                    }
-#endif
+                    optFSAA->possibleValues.push_back( "2f4x EQAA" );
                 }
-#if TODO_OGRE_2_2
-                else if(n == 16) // there could be case when 16xMSAA is not supported but 16xCSAA and may be 16xQ CSAA are supported
+                if( n == 8 &&
+                    SUCCEEDED( device->CheckMultisampleQualityLevels( format, 4, &numLevels ) ) &&
+                    numLevels > 8 )  // 8x CSAA
                 {
-                    bool csaa16x = SUCCEEDED(device->CheckMultisampleQualityLevels(format, 4, &numLevels)) && numLevels > 16;
-                    bool csaa16xQ = SUCCEEDED(device->CheckMultisampleQualityLevels(format, 8, &numLevels)) && numLevels > 16;
-                    if(csaa16x || csaa16xQ)
-                        optFSAA->possibleValues.push_back("16");
-                    if(csaa16x && csaa16xQ)
-                        optFSAA->possibleValues.push_back("16 [Quality]");
+                    optFSAA->possibleValues.push_back( "8x CSAA" );
                 }
-#endif
+                if( n == 16 &&
+                    SUCCEEDED( device->CheckMultisampleQualityLevels( format, 4, &numLevels ) ) &&
+                    numLevels > 16 )  // 16x CSAA
+                {
+                    optFSAA->possibleValues.push_back( "16x CSAA" );
+                }
+                if( n == 16 &&
+                    SUCCEEDED( device->CheckMultisampleQualityLevels( format, 8, &numLevels ) ) &&
+                    numLevels > 16 )  // 16xQ CSAA
+                {
+                    optFSAA->possibleValues.push_back( "16xQ CSAA" );
+                }
+                if( SUCCEEDED( device->CheckMultisampleQualityLevels( format, n, &numLevels ) ) &&
+                    numLevels > 0 )  // Nx MSAA
+                {
+                    optFSAA->possibleValues.push_back( StringConverter::toString( n ) + "x MSAA" );
+                }
             }
         }
 
@@ -689,7 +693,6 @@ namespace Ogre
         {
             optFSAA->currentValue = optFSAA->possibleValues[0];
         }
-
     }
     //---------------------------------------------------------------------
     String D3D11RenderSystem::validateConfigOptions()
@@ -803,15 +806,9 @@ namespace Ogre
             if( opt == mOptions.end() )
                 OGRE_EXCEPT( Exception::ERR_INTERNAL_ERROR, "Can't find sRGB option!", "D3D11RenderSystem::initialise" );
             hwGamma = opt->second.currentValue == "Yes";
-            uint fsaa = 0;
-            String fsaaHint;
-            if( (opt = mOptions.find("MSAA")) != mOptions.end() )
-            {
-                StringVector values = StringUtil::split(opt->second.currentValue, " ", 1);
-                fsaa = StringConverter::parseUnsignedInt(values[0]);
-                if (values.size() > 1)
-                    fsaaHint = values[1];
-            }
+            String fsaa;
+            if( (opt = mOptions.find("FSAA")) != mOptions.end() )
+                fsaa = opt->second.currentValue;
 
             if( !videoMode )
             {
@@ -824,8 +821,7 @@ namespace Ogre
 
             NameValuePairList miscParams;
             miscParams["colourDepth"] = StringConverter::toString(videoMode ? videoMode->getColourDepth() : 32);
-            miscParams["MSAA"] = StringConverter::toString(fsaa);
-            miscParams["MSAAHint"] = fsaaHint;
+            miscParams["FSAA"] = fsaa;
             miscParams["useNVPerfHUD"] = StringConverter::toString(mUseNVPerfHUD);
             miscParams["gamma"] = StringConverter::toString(hwGamma);
             //miscParams["useFlipMode"] = StringConverter::toString(true);
@@ -1710,18 +1706,6 @@ namespace Ogre
         {
             handleDeviceLost();
         }
-    }
-    //---------------------------------------------------------------------
-    bool D3D11RenderSystem::isWindows8OrGreater()
-    {
-#if OGRE_PLATFORM == OGRE_PLATFORM_WINRT
-        return true;
-#else
-        DWORD version = GetVersion();
-        DWORD major = (DWORD)(LOBYTE(LOWORD(version)));
-        DWORD minor = (DWORD)(HIBYTE(LOWORD(version)));
-        return (major > 6) || ((major == 6) && (minor >= 2));
-#endif
     }
     //---------------------------------------------------------------------
     VertexElementType D3D11RenderSystem::getColourVertexElementType(void) const
@@ -3671,58 +3655,70 @@ namespace Ogre
         return mDevice.getErrorDescription(errorNumber);
     }
     //---------------------------------------------------------------------
-    DXGI_SAMPLE_DESC D3D11RenderSystem::getMsaaSampleDesc(uint msaa, const String& msaaHint, PixelFormatGpu format)
+    SampleDescription D3D11RenderSystem::validateSampleDescription( const SampleDescription &sampleDesc,
+                                                                    PixelFormatGpu format )
     {
-        DXGI_FORMAT dxgiFormat = D3D11Mappings::get(format);
-        bool qualityHint = msaa >= 8 && msaaHint.find("Quality") != String::npos;
+        SampleDescription res;
+        DXGI_FORMAT dxgiFormat = D3D11Mappings::get( format );
+        const uint8 samples = sampleDesc.getMaxSamples();
+        const bool msaaOnly = sampleDesc.isMsaa();
 
-        // NVIDIA, AMD - prefer CSAA aka EQAA if available.
-        // see http://developer.download.nvidia.com/assets/gamedev/docs/CSAA_Tutorial.pdf
-        // see http://developer.amd.com/wordpress/media/2012/10/EQAA%20Modes%20for%20AMD%20HD%206900%20Series%20Cards.pdf
-        // also https://www.khronos.org/registry/OpenGL/extensions/NV/NV_framebuffer_multisample_coverage.txt
+        // NVIDIA, AMD - prefer CSAA aka EQAA if available. See
+        // http://developer.download.nvidia.com/assets/gamedev/docs/CSAA_Tutorial.pdf
+        // http://developer.amd.com/wordpress/media/2012/10/EQAA%20Modes%20for%20AMD%20HD%206900%20Series%20Cards.pdf
+        // https://www.khronos.org/registry/OpenGL/extensions/NV/NV_framebuffer_multisample_coverage.txt
 
         // Modes are sorted from high quality to low quality, CSAA aka EQAA are listed first
         // Note, that max(Count, Quality) == MSAA level and (Count >= 8 && Quality != 0) == quality hint
         DXGI_SAMPLE_DESC presets[] = {
-                { 8, 16 }, // CSAA 16xQ, EQAA 8f16x
-                { 4, 16 }, // CSAA 16x,  EQAA 4f16x
-                { 16, 0 }, // MSAA 16x
+            { sampleDesc.getColourSamples(), sampleDesc.getCoverageSamples() }, // exact match
 
-                { 12, 0 }, // MSAA 12x
+            { 16, 0 },  // MSAA 16x
+            { 8, 16 },  // CSAA 16xQ, EQAA 8f16x
+            { 4, 16 },  // CSAA 16x,  EQAA 4f16x
 
-                { 8, 8 },  // CSAA 8xQ
-                { 4, 8 },  // CSAA 8x,  EQAA 4f8x
-                { 8, 0 },  // MSAA 8x
+            { 12, 0 },  // MSAA 12x
 
-                { 6, 0 },  // MSAA 6x
-                { 4, 0 },  // MSAA 4x
-                { 2, 0 },  // MSAA 2x
-                { 1, 0 },  // MSAA 1x
-                { NULL },
+            { 8, 0 },  // MSAA 8x
+            { 4, 8 },  // CSAA 8x,  EQAA 4f8x
+
+            { 6, 0 },  // MSAA 6x
+            { 4, 0 },  // MSAA 4x
+            { 2, 4 },  // EQAA 2f4x
+            { 2, 0 },  // MSAA 2x
+            { 1, 0 },  // MSAA 1x
+            { NULL, NULL },
         };
 
-        // Skip too HQ modes
-        DXGI_SAMPLE_DESC* mode = presets;
-        for(; mode->Count != 0; ++mode)
-        {
-            unsigned modeMsaa = std::max(mode->Count, mode->Quality);
-            bool modeQuality = mode->Count >= 8 && mode->Quality != 0;
-            bool tooHQ = (modeMsaa > msaa || (modeMsaa == msaa && modeQuality && !qualityHint));
-            if(!tooHQ)
-                break;
-        }
-
         // Use first supported mode
-        for(; mode->Count != 0; ++mode)
+        for( DXGI_SAMPLE_DESC *mode = presets; mode->Count != 0; ++mode )
         {
-            UINT outQuality;
-            HRESULT hr = mDevice->CheckMultisampleQualityLevels(dxgiFormat, mode->Count, &outQuality);
+            // Skip too HQ modes
+            unsigned modeSamples = std::max( mode->Count, mode->Quality );
+            if( modeSamples > samples )
+                continue;
 
-            if(SUCCEEDED(hr) && outQuality > mode->Quality)
-                return *mode;
+            // Skip CSAA modes if specifically MSAA were requested, but not vice versa
+            if( msaaOnly && mode->Quality > 0 )
+                continue;
+
+            // Skip unsupported modes
+            UINT numQualityLevels;
+            HRESULT hr =
+                mDevice->CheckMultisampleQualityLevels( dxgiFormat, mode->Count, &numQualityLevels );
+            if( FAILED( hr ) || mode->Quality >= numQualityLevels )
+                continue;
+
+            // All checks passed
+            MsaaPatterns::MsaaPatterns pattern;
+            if( mode->Quality != 0 )
+                pattern = MsaaPatterns::Undefined;  // CSAA / EQAA
+            else
+                pattern = sampleDesc.getMsaaPattern();
+            res._set( static_cast<uint8>( mode->Count ), static_cast<uint8>( mode->Quality ), pattern );
+            break;
         }
 
-        DXGI_SAMPLE_DESC res = { 1, 0 };
         return res;
     }
     //---------------------------------------------------------------------
@@ -3776,7 +3772,7 @@ namespace Ogre
 #if __OGRE_WINRT_PHONE // Windows Phone support only FL 9.3, but simulator can create much more capable device, so restrict it artificially here
         mMaxRequestedFeatureLevel = D3D_FEATURE_LEVEL_9_3;
 #elif defined(_WIN32_WINNT_WIN8)
-        if( isWindows8OrGreater() )
+        if( IsWindows8OrGreater() )
             mMaxRequestedFeatureLevel = D3D_FEATURE_LEVEL_11_1;
         else
             mMaxRequestedFeatureLevel = D3D_FEATURE_LEVEL_11_0;

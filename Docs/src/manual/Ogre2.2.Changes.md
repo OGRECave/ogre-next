@@ -1035,8 +1035,7 @@ documentation.
 You could use `getCustomAttribute` to retrieve several D3D11 internal pointers. These
 have changed:
 
-* "FSAA" -> "MSAA"
-* "FSAAHint" -> "MSAA_quality"
+* "FSAA" + "FSAAHint" -> "FSAA"
 * "First_ID3D11Texture2D" -> TextureGpu::getCustomAttribute( "ID3D11Resource" )
 * "ID3D11RenderTargetView" ->
 RenderPassDescriptor::getCustomAttribute( "ID3D11RenderTargetView" )

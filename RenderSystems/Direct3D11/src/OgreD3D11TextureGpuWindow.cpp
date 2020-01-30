@@ -45,15 +45,14 @@ namespace Ogre
             GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
             VaoManager *vaoManager, IdString name, uint32 textureFlags,
             TextureTypes::TextureTypes initialType,
-            TextureGpuManager *textureManager,
-            ID3D11Texture2D *backbuffer, Window *window ) :
+            TextureGpuManager *textureManager, Window *window ) :
         D3D11TextureGpuRenderTarget( pageOutStrategy, vaoManager, name,
                                      textureFlags, initialType, textureManager ),
         mWindow( window )
     {
         mTextureType = TextureTypes::Type2D;
-        mFinalTextureName = backbuffer;
-        mDisplayTextureName = backbuffer;
+        mFinalTextureName = 0;
+        mDisplayTextureName = 0;
         mDefaultDisplaySrv = 0;
     }
     //-----------------------------------------------------------------------------------
@@ -64,11 +63,14 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpuWindow::createInternalResourcesImpl(void)
     {
+        assert( mFinalTextureName );
+        create2DTexture( true );
     }
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpuWindow::destroyInternalResourcesImpl(void)
     {
         _setBackbuffer( 0 );
+        D3D11TextureGpuRenderTarget::destroyInternalResourcesImpl();
     }
     //-----------------------------------------------------------------------------------
     void D3D11TextureGpuWindow::notifyDataIsReady(void)
@@ -122,27 +124,22 @@ namespace Ogre
                      "D3D11TextureGpuWindow::setTextureType" );
     }
     //-----------------------------------------------------------------------------------
-    PixelFormatGpu D3D11TextureGpuWindow::getInternalPixelFormat(void) const
-    {
-        return PixelFormatGpuUtils::getEquivalentLinear( mPixelFormat );
-    }
-    //-----------------------------------------------------------------------------------
     void D3D11TextureGpuWindow::getSubsampleLocations( vector<Vector2>::type locations )
     {
         OGRE_EXCEPT( Exception::ERR_NOT_IMPLEMENTED, "",
                      "D3D11TextureGpuWindow::getSubsampleLocations" );
 #if TODO_OGRE_2_2
-        locations.reserve( mMsaa );
-        if( mMsaa <= 1u )
+        locations.reserve( mSampleDescription.colorSamples );
+        if( mSampleDescription.colorSamples <= 1u )
         {
             locations.push_back( Vector2( 0.0f, 0.0f ) );
         }
         else
         {
-            assert( mMsaaPattern != MsaaPatterns::Undefined );
+            assert( mSampleDescription.pattern != MsaaPatterns::Undefined );
 
             float vals[2];
-            for( int i=0; i<mMsaa; ++i )
+            for( int i=0; i<mSampleDescription.colorSamples; ++i )
             {
                 glGetMultisamplefv( GL_SAMPLE_POSITION, i, vals );
                 locations.push_back( Vector2( vals[0], vals[1] ) * 2.0f - 1.0f );

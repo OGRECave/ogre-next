@@ -359,7 +359,7 @@ namespace Ogre {
 
         TextureGpu *resolvedTexture = texture;
 
-        if( texture->getMsaa() > 1u && texture->hasMsaaExplicitResolves() && automaticResolve &&
+        if( texture->isMultisample() && texture->hasMsaaExplicitResolves() && automaticResolve &&
             !texture->isOpenGLRenderWindow() )
         {
             resolvedTexture = textureManager->createTexture( texture->getNameStr() + "/Tmp/__ResolveTex",
@@ -367,8 +367,8 @@ namespace Ogre {
                                                              TextureFlags::RenderToTexture,
                                                              texture->getTextureType() );
             resolvedTexture->copyParametersFrom( texture );
-            resolvedTexture->setPixelFormat( texture->getInternalPixelFormat() );
-            resolvedTexture->setMsaa( 1u );
+            resolvedTexture->setPixelFormat( texture->getPixelFormat() );
+            resolvedTexture->setSampleDescription( 1u );
             resolvedTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
             texture->_resolveTo( resolvedTexture );
         }
@@ -398,7 +398,7 @@ namespace Ogre {
             {
                 for( size_t i=0; i<asyncTicket->getNumSlices(); ++i )
                 {
-                    const TextureBox srcBox = asyncTicket->map( i );
+                    const TextureBox srcBox = asyncTicket->map( static_cast<uint32>( i ) );
                     dstBox.copyFrom( srcBox );
                     dstBox.data = dstBox.at( 0, 0, 1u );
                     --dstBox.numSlices;
@@ -415,6 +415,74 @@ namespace Ogre {
 
         if( texture->isOpenGLRenderWindow() )
             flipAroundX();
+    }
+    //-----------------------------------------------------------------------------------
+    void Image2::copyContentsToMemory( TextureGpu *texture, TextureBox srcBox, TextureBox dstBox,
+                                       PixelFormatGpu dstFormat, bool automaticResolve )
+    {
+        if( texture->getResidencyStatus() != GpuResidency::Resident &&
+            texture->getNextResidencyStatus() != GpuResidency::Resident )
+        {
+            OGRE_EXCEPT(
+                Exception::ERR_INVALIDPARAMS,
+                "Texture '" + texture->getNameStr() + "' must be resident or becoming resident!!!",
+                "Image2::copyContentsToMemory" );
+        }
+
+        if( !texture->getEmptyBox( 0 ).fullyContains( srcBox ) || !dstBox.equalSize( srcBox ) )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "Invalid box.", "Image2::copyContentsToMemory" );
+        }
+
+        texture->waitForData();
+
+        TextureGpuManager *textureManager = texture->getTextureManager();
+
+        TextureGpu *resolvedTexture = texture;
+
+        if( texture->isMultisample() && texture->hasMsaaExplicitResolves() && automaticResolve &&
+            !texture->isOpenGLRenderWindow() )
+        {
+            resolvedTexture = textureManager->createTexture(
+                texture->getNameStr() + "/Tmp/__ResolveTex", GpuPageOutStrategy::Discard,
+                TextureFlags::RenderToTexture, texture->getTextureType() );
+            resolvedTexture->copyParametersFrom( texture );
+            resolvedTexture->setPixelFormat( texture->getPixelFormat() );
+            resolvedTexture->setSampleDescription( 1u );
+            resolvedTexture->_transitionTo( GpuResidency::Resident, (uint8 *)0 );
+            texture->_resolveTo( resolvedTexture );
+        }
+
+        AsyncTextureTicket *asyncTicket = textureManager->createAsyncTextureTicket(
+            srcBox.width, srcBox.height, srcBox.getDepthOrSlices(),
+            texture->getTextureType(), texture->getPixelFormat() );
+        asyncTicket->download( resolvedTexture, 0, true, &srcBox );
+
+        if( asyncTicket->canMapMoreThanOneSlice() )
+        {
+            srcBox = asyncTicket->map( 0 );
+            PixelFormatGpuUtils::bulkPixelConversion( srcBox, texture->getPixelFormat(), dstBox,
+                                                      dstFormat );
+            asyncTicket->unmap();
+        }
+        else
+        {
+            dstBox.numSlices = 1;
+            for( size_t i = 0; i < asyncTicket->getNumSlices(); ++i )
+            {
+                srcBox = asyncTicket->map( static_cast<uint32>( i ) );
+                PixelFormatGpuUtils::bulkPixelConversion( srcBox, texture->getPixelFormat(), dstBox,
+                                                          dstFormat );
+                dstBox.data = dstBox.at( 0, 0, 1u );
+                asyncTicket->unmap();
+            }
+        }
+
+        textureManager->destroyAsyncTextureTicket( asyncTicket );
+        asyncTicket = 0;
+
+        if( texture != resolvedTexture )
+            textureManager->destroyTexture( resolvedTexture );
     }
     //-----------------------------------------------------------------------------------
     void Image2::uploadTo( TextureGpu *texture, uint8 minMip, uint8 maxMip,
@@ -594,7 +662,7 @@ namespace Ogre {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, "No image data loaded",
                          "Image2::encode" );
         }
-        if( mipLevel + numMipmaps >= mNumMipmaps )
+        if( mipLevel + numMipmaps > mNumMipmaps )
         {
             OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                          "Invalid mipmaps specified",

@@ -96,6 +96,7 @@ namespace Ogre
         if (mWindow)
         {
             XDestroyWindow(xDisplay, mWindow);
+            XSync(xDisplay, false);
         }
 
         if (mContext)
@@ -536,14 +537,15 @@ namespace Ogre
 
         mTexture = textureManager->createTextureGpuWindow( mContext, this );
 
+        mTexture->setPixelFormat( PFG_RGBA8_UNORM );
+
         ::GLXFBConfig fbConfig = mContext->_getFbConfig();
 
         // Now check the actual supported fsaa value
         GLint maxSamples;
         mGLSupport->getFBConfigAttrib( fbConfig, GLX_SAMPLES, &maxSamples );
-        mTexture->setMsaa( maxSamples );
-
-        mTexture->setPixelFormat( PFG_RGBA8_UNORM );
+        SampleDescription sampleDesc( static_cast<uint8>( maxSamples ) );
+        mTexture->setSampleDescription( sampleDesc );
 
         GLint depthSupport = 0, stencilSupport = 0;
         mGLSupport->getFBConfigAttrib( fbConfig, GLX_DEPTH_SIZE, &depthSupport );
@@ -551,7 +553,7 @@ namespace Ogre
         if( depthSupport != 0 )
         {
             mDepthBuffer = textureManager->createTextureGpuWindow( mContext, this );
-            mDepthBuffer->setMsaa( maxSamples );
+            mDepthBuffer->setSampleDescription( sampleDesc );
 
             if( depthSupport == 24 )
             {

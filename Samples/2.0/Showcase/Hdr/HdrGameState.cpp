@@ -44,7 +44,7 @@ namespace Demo
     //-----------------------------------------------------------------------------------
     void HdrGameState::createScene01(void)
     {
-        HdrUtils::init( mGraphicsSystem->getRenderWindow()->getMsaa() );
+        HdrUtils::init( mGraphicsSystem->getRenderWindow()->getSampleDescription().getColourSamples() );
 
         Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
 

@@ -62,6 +62,9 @@ namespace Ogre
         uint32  mRequestedWidth; // in view points
         uint32  mRequestedHeight; // in view points
 
+        SampleDescription mRequestedSampleDescription; // requested FSAA mode
+        SampleDescription mSampleDescription; // effective FSAA mode, limited by hardware capabilities
+
         bool    mFullscreenMode;
         bool    mRequestedFullscreenMode;
         bool    mBorderless;
@@ -153,8 +156,15 @@ namespace Ogre
         uint32 getWidth(void) const;
         uint32 getHeight(void) const;
         PixelFormatGpu getPixelFormat(void) const;
-        uint8 getMsaa(void) const;
-        MsaaPatterns::MsaaPatterns getMsaaPatterns(void) const;
+
+        /** Set the FSAA mode to be used if hardware support it.
+            This option will be ignored if the hardware does not support it 
+            or setting can not be changed on the fly on per-target level. 
+            @param fsaa Requesed FSAA mode (@see Root::createRenderWindow)
+        */
+        virtual void setFsaa(const String& fsaa) {}
+        SampleDescription getSampleDescription(void) const;
+        bool isMultisample(void) const;
 
         uint32 getFrequencyNumerator(void) const;
         uint32 getFrequencyDenominator(void) const;

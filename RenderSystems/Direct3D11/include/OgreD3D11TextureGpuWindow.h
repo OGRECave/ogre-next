@@ -46,15 +46,12 @@ namespace Ogre
         D3D11TextureGpuWindow( GpuPageOutStrategy::GpuPageOutStrategy pageOutStrategy,
                                VaoManager *vaoManager, IdString name, uint32 textureFlags,
                                TextureTypes::TextureTypes initialType,
-                               TextureGpuManager *textureManager,
-                               ID3D11Texture2D *backbuffer, Window *window );
+                               TextureGpuManager *textureManager, Window *window );
         virtual ~D3D11TextureGpuWindow();
 
         void _setBackbuffer( ID3D11Texture2D *backbuffer );
 
         virtual void setTextureType( TextureTypes::TextureTypes textureType );
-
-        virtual PixelFormatGpu getInternalPixelFormat(void) const;
 
         virtual void getSubsampleLocations( vector<Vector2>::type locations );
 

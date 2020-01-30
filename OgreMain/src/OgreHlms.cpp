@@ -1046,11 +1046,7 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void Hlms::copy( String &outBuffer, const SubStringRef &inSubString, size_t length )
     {
-        String::const_iterator itor = inSubString.begin();
-        String::const_iterator end  = inSubString.begin() + length;
-
-        while( itor != end )
-            outBuffer.push_back( *itor++ );
+        outBuffer.append( inSubString.begin(), inSubString.begin() + length );
     }
     //-----------------------------------------------------------------------------------
     void Hlms::repeat( String &outBuffer, const SubStringRef &inSubString, size_t length,
@@ -2975,8 +2971,11 @@ namespace Ogre
             {
                 const TextureGpuVec &prePassTextures = sceneManager->getCurrentPrePassTextures();
                 assert( !prePassTextures.empty() );
-                if( prePassTextures[0]->getMsaa() > 1u )
-                    setProperty( HlmsBaseProp::UsePrePassMsaa, prePassTextures[0]->getMsaa() );
+                if( prePassTextures[0]->isMultisample() )
+                {
+                    setProperty( HlmsBaseProp::UsePrePassMsaa,
+                                 prePassTextures[0]->getSampleDescription().getColourSamples() );
+                }
             }
 
             if( sceneManager->getCurrentSsrTexture() != 0 )
@@ -3030,8 +3029,7 @@ namespace Ogre
             if( renderPassDesc->mColour[i].texture )
             {
                 passPso.colourFormat[i]     = renderPassDesc->mColour[i].texture->getPixelFormat();
-                passPso.multisampleCount    = renderPassDesc->mColour[i].texture->getMsaa();
-                passPso.multisampleQuality  = renderPassDesc->mColour[i].texture->getMsaaPattern();
+                passPso.sampleDescription   = renderPassDesc->mColour[i].texture->getSampleDescription();
             }
             else
                 passPso.colourFormat[i] = PFG_NULL;
@@ -3040,9 +3038,8 @@ namespace Ogre
         passPso.depthFormat = PFG_NULL;
         if( renderPassDesc->mDepth.texture )
         {
-            passPso.depthFormat     = renderPassDesc->mDepth.texture->getPixelFormat();
-            passPso.multisampleCount= renderPassDesc->mDepth.texture->getMsaa();
-            passPso.multisampleQuality = renderPassDesc->mDepth.texture->getMsaaPattern();
+            passPso.depthFormat         = renderPassDesc->mDepth.texture->getPixelFormat();
+            passPso.sampleDescription   = renderPassDesc->mDepth.texture->getSampleDescription();
         }
         else
         {

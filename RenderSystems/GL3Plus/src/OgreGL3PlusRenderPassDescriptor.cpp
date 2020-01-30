@@ -236,7 +236,7 @@ namespace Ogre
 
                 if( mColour[i].allLayers || !hasLayers )
                 {
-                    if( texture->getMsaa() > 1u && (!texture->hasMsaaExplicitResolves() ||
+                    if( texture->isMultisample() && (!texture->hasMsaaExplicitResolves() ||
                                                     !texture->isTexture()) )
                     {
                         OCGE( glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i,
@@ -252,7 +252,7 @@ namespace Ogre
                 }
                 else
                 {
-                    if( texture->getMsaa() > 1u && (!texture->hasMsaaExplicitResolves() ||
+                    if( texture->isMultisample() && (!texture->hasMsaaExplicitResolves() ||
                                                     !texture->isTexture()) )
                     {
                         OCGE( glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i,
@@ -273,10 +273,11 @@ namespace Ogre
                                                mColour[i].texture->getWidth() ) );
                 OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT,
                                                mColour[i].texture->getHeight() ) );
-
-                OCGE( glFramebufferParameteri( GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_SAMPLES,
-                                               mColour[i].texture->getMsaa() > 1u ?
-                                                   mColour[i].texture->getMsaa() : 0 ) );
+                OCGE( glFramebufferParameteri(
+                    GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_SAMPLES,
+                    mColour[i].texture->isMultisample()
+                        ? mColour[i].texture->getSampleDescription().getColourSamples()
+                        : 0 ) );
             }
 
             if( (mColour[i].storeAction == StoreAction::MultisampleResolve ||

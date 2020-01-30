@@ -182,6 +182,15 @@ namespace Ogre {
 
         // Here ends D3D11 formats (it isn't 1:1 with DXGI_FORMAT_* though)
 
+        /// 24bpp storage formats, CPU only.
+        PFG_RGB8_UNORM,
+        PFG_RGB8_UNORM_SRGB,
+        PFG_BGR8_UNORM,
+        PFG_BGR8_UNORM_SRGB,
+
+        /// 48bpp storage formats, CPU only.
+        PFG_RGB16_UNORM,
+
         /// PVRTC (PowerVR) RGB 2 bpp
         PFG_PVRTC_RGB2,
         PFG_PVRTC_RGB2_SRGB,

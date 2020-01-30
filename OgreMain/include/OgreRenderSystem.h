@@ -236,6 +236,11 @@ namespace Ogre
         */
         bool getWBufferEnabled(void) const;
 
+        /** Returns supported sample description for requested FSAA mode, with graceful downgrading.
+        */
+        virtual SampleDescription validateSampleDescription( const SampleDescription &sampleDesc,
+                                                             PixelFormatGpu format );
+
         /** Creates a new rendering window.
         @remarks
         This method creates a new rendering window as specified

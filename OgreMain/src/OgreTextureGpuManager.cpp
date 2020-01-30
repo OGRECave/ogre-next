@@ -1196,7 +1196,7 @@ namespace Ogre
             text.a( entry.texture->getDepth(), "|", entry.texture->getNumSlices(), "|" );
             text.a( PixelFormatGpuUtils::toString( entry.texture->getPixelFormat() ), "|",
                     entry.texture->getNumMipmaps(), "|" );
-            text.a( entry.texture->getMsaa(), "|",
+            text.a( entry.texture->getSampleDescription().getColourSamples(), "|",
                     (uint32)bytesTexture, "|" );
             text.a( entry.texture->isRenderToTexture(), "|",
                     entry.texture->isUav(), "|",

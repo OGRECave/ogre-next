@@ -34,7 +34,7 @@ namespace Demo
             const Ogre::RenderSystemCapabilities *caps = renderSystem->getCapabilities();
 
             Ogre::String compositorName = "HdrWorkspace";
-            if( mRenderWindow->getMsaa() > 1u && caps->hasCapability( Ogre::RSC_EXPLICIT_FSAA_RESOLVE ) )
+            if( mRenderWindow->isMultisample() && caps->hasCapability( Ogre::RSC_EXPLICIT_FSAA_RESOLVE ) )
                 compositorName = "HdrWorkspaceMsaa";
 
             return compositorManager->addWorkspace( mSceneManager, mRenderWindow->getTexture(),

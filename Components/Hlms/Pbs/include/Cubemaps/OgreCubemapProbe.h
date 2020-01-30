@@ -57,7 +57,7 @@ namespace Ogre
 
         TextureGpu  *mTexture;
         uint16      mCubemapArrayIdx;
-        uint8       mMsaa;
+        SampleDescription mSampleDescription;
 
         IdString            mWorkspaceDefName;
         CompositorWorkspace *mClearWorkspace;
@@ -126,14 +126,15 @@ namespace Ogre
         @param pf
         @param isStatic
             Set to False if it should be updated every frame. True if only updated when dirty
-        @param msaa
+        @param sampleDesc
         @param useManual
             Set to true if you plan on using thie probe for manually rendering, so we keep
             mipmaps at the probe level. User is responsible for supplying a workspace
             definition that will generate mipmaps though!
         */
         void setTextureParams( uint32 width, uint32 height, bool useManual=false,
-                               PixelFormatGpu pf=PFG_RGBA8_UNORM_SRGB, bool isStatic=true, uint8 msaa=0 );
+                               PixelFormatGpu pf=PFG_RGBA8_UNORM_SRGB, bool isStatic=true,
+                               SampleDescription sampleDesc=SampleDescription() );
 
         /** Initializes the workspace so we can actually render to the cubemap.
             You must call setTextureParams first.

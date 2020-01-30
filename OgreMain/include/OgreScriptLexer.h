@@ -30,6 +30,7 @@ THE SOFTWARE.
 #define __ScriptLexer_H_
 
 #include "OgrePrerequisites.h"
+#include <string.h>
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre {
@@ -61,15 +62,17 @@ namespace Ogre {
     */
     struct ScriptToken
     {
-        /// This is the lexeme for this token
-        String lexeme, file;
+        /// This is the lexeme for this token, points into ScriptLexer::lexemeStorage
+        const char* lexemePtr;
+        uint32 lexemeLen;
+        String lexeme(bool unquote = false) const { return String(lexemePtr + unquote, lexemeLen - 2 * unquote); }
+        bool lexemeEquals(const char* str) const { return 0 == strncmp(str, lexemePtr, lexemeLen); }
         /// This is the id associated with the lexeme, which comes from a lexeme-token id mapping
         uint32 type;
         /// This holds the line number of the input stream where the token was found.
         uint32 line;
     };
-    typedef SharedPtr<ScriptToken> ScriptTokenPtr;
-    typedef vector<ScriptTokenPtr>::type ScriptTokenList;
+    typedef vector<ScriptToken>::type ScriptTokenList;
     typedef SharedPtr<ScriptTokenList> ScriptTokenListPtr;
 
     class _OgreExport ScriptLexer : public ScriptCompilerAlloc
@@ -79,11 +82,13 @@ namespace Ogre {
         virtual ~ScriptLexer() {}
 
         /** Tokenizes the given input and returns the list of tokens found */
-        ScriptTokenListPtr tokenize(const String &str, const String &source);
+        ScriptTokenListPtr tokenize(const String &str);
     private: // Private utility operations
-        void setToken(const String &lexeme, uint32 line, const String &source, ScriptTokenList *tokens);
+        void setToken(const String &lexeme, uint32 line, ScriptTokenList *tokens);
         bool isWhitespace(Ogre::String::value_type c) const;
         bool isNewline(Ogre::String::value_type c) const;
+
+        String lexemeStorage;
     };
 
     /** @} */
