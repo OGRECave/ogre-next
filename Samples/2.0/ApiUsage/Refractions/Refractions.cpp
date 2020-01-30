@@ -29,7 +29,7 @@ namespace Demo
         virtual Ogre::CompositorWorkspace* setupCompositor()
         {
             Ogre::CompositorManager2 *compositorManager = mRoot->getCompositorManager2();
-            const bool useMsaa = mRenderWindow->getMsaa() > 1u;
+            const bool useMsaa = mRenderWindow->isMultisample();
 
             //ScreenSpaceReflections::setupSSR( useMsaa, true, compositorManager );
 

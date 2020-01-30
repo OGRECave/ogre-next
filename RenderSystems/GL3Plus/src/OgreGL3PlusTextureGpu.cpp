@@ -582,7 +582,7 @@ namespace Ogre
             OCGE( glBindFramebuffer( GL_DRAW_FRAMEBUFFER, 0 ) );
         }
 
-        if( dstGl->mMsaa > 1u && !dstGl->hasMsaaExplicitResolves() && keepResolvedTexSynced )
+        if( dstGl->isMultisample() && !dstGl->hasMsaaExplicitResolves() && keepResolvedTexSynced )
         {
             OCGE( glBindFramebuffer( GL_READ_FRAMEBUFFER, textureManagerGl->getTemporaryFbo( 0 ) ) );
             OCGE( glBindFramebuffer( GL_DRAW_FRAMEBUFFER, textureManagerGl->getTemporaryFbo( 1 ) ) );
@@ -625,7 +625,7 @@ namespace Ogre
         const GL3PlusSupport &support = textureManagerGl->getGlSupport();
 
         if( !this->isRenderWindowSpecific() && !dst->isRenderWindowSpecific() &&
-            ( this->getMsaa() <= 1u || dst->getMsaa() <= 1u ||
+            ( !this->isMultisample() || !dst->isMultisample() ||
               ( this->hasMsaaExplicitResolves() && dst->hasMsaaExplicitResolves() ) ) )
         {
             if( support.hasMinGLVersion( 4, 3 ) || support.checkExtension( "GL_ARB_copy_image" ) )

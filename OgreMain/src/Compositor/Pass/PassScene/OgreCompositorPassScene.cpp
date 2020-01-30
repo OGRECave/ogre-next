@@ -121,7 +121,7 @@ namespace Ogre
         if( mDefinition->mDepthTextureNoMsaa != IdString() )
         {
             mDepthTextureNoMsaa = parentNode->getDefinedTexture( mDefinition->mDepthTextureNoMsaa );
-            if( mDepthTextureNoMsaa->getMsaa() > 1u )
+            if( mDepthTextureNoMsaa->isMultisample() )
             {
                 OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
                              "CompositorPassSceneDef::mDepthTextureNoMsaa must point to a depth buffer "
