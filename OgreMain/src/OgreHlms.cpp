@@ -110,7 +110,7 @@ namespace Ogre
     const IdString HlmsBaseProp::UvCount5           = IdString( "hlms_uv_count5" );
     const IdString HlmsBaseProp::UvCount6           = IdString( "hlms_uv_count6" );
     const IdString HlmsBaseProp::UvCount7           = IdString( "hlms_uv_count7" );
-    
+
     //Change per frame (grouped together with scene pass)
     const IdString HlmsBaseProp::LightsDirectional  = IdString( "hlms_lights_directional" );
     const IdString HlmsBaseProp::LightsDirNonCaster = IdString( "hlms_lights_directional_non_caster" );
@@ -402,7 +402,7 @@ namespace Ogre
         setProperty( HlmsBaseProp::LightsDirNonCaster, 1 );
         setProperty( HlmsBaseProp::LightsPoint, 2 );
         setProperty( HlmsBaseProp::LightsSpot, 3 );
-        
+
         setProperty( HlmsBaseProp::Pose, 0 );
         setProperty( HlmsBaseProp::PoseHalfPrecision, 0 );
         setProperty( HlmsBaseProp::PoseNormals, 0 );
@@ -581,8 +581,8 @@ namespace Ogre
             {
                 SubStringRef subString( &outSubString.getOriginalBuffer(), it + 1 );
 
-                size_t idx = subString.find( "end" );
-                if( idx == 0 )
+                bool start = subString.startWith( "end" );
+                if( start )
                 {
                     --nesting;
                     it += sizeof( "end" ) - 1;
@@ -591,8 +591,8 @@ namespace Ogre
                 else
                 {
                     if( allowsElse )
-                        idx = subString.find( "else" );
-                    if( idx == 0 )
+                        start = subString.startWith( "else" );
+                    if( start )
                     {
                         if( !allowedElses.test( static_cast<size_t>( nesting ) ) )
                         {
@@ -621,8 +621,8 @@ namespace Ogre
                     {
                         for( size_t i=0; i<sizeof( blockNames ) / sizeof( char* ); ++i )
                         {
-                            size_t idxBlock = subString.find( blockNames[i] );
-                            if( idxBlock == 0 )
+                            bool startBlock = subString.startWith( blockNames[i] );
+                            if( startBlock )
                             {
                                 it = subString.begin() + strlen( blockNames[i] );
                                 if( i == 3 )
@@ -1060,7 +1060,7 @@ namespace Ogre
             if( *itor == '@' && !counterVar.empty() )
             {
                 SubStringRef subString( &inSubString.getOriginalBuffer(), itor + 1 );
-                if( subString.find( counterVar ) == 0 )
+                if( subString.startWith( counterVar ) )
                 {
                     char tmp[16];
                     sprintf( tmp, "%lu", passNum );
@@ -1243,7 +1243,7 @@ namespace Ogre
                 {
                     //This isn't a number. Let's try if it's a variable
                     //count = getProperty( argValues[0], -1 );
-					count = getProperty( argValues[0], 0 );
+                    count = getProperty( argValues[0], 0 );
                 }
 
                 /*if( count < 0 )
@@ -2474,7 +2474,7 @@ namespace Ogre
         mSetProperties.clear();
 
         setProperty( HlmsBaseProp::Skeleton, renderable->hasSkeletonAnimation() );
-        
+
         setProperty( HlmsBaseProp::Pose, renderable->getNumPoses() );
         setProperty( HlmsBaseProp::PoseHalfPrecision, renderable->getPoseHalfPrecision() );
         setProperty( HlmsBaseProp::PoseNormals, renderable->getPoseNormals() );
