@@ -544,7 +544,7 @@ namespace Ogre
         // Now check the actual supported fsaa value
         GLint maxSamples;
         mGLSupport->getFBConfigAttrib( fbConfig, GLX_SAMPLES, &maxSamples );
-        SampleDescription sampleDesc( static_cast<uint8>( maxSamples ) );
+        SampleDescription sampleDesc( std::max<uint8>( 1u, static_cast<uint8>( maxSamples ) ) );
         mTexture->setSampleDescription( sampleDesc );
 
         GLint depthSupport = 0, stencilSupport = 0;
