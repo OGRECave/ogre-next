@@ -1280,16 +1280,19 @@ namespace Ogre {
                     PixelFormatGpuUtils::bulkPixelConversion( temp, srcFormat, dst, dstFormat );
                 }
                 break;
-            case PF_FLOAT32_RGB:
-            case PF_FLOAT32_RGBA:
-                if( dstFormat == PF_FLOAT32_RGB || dstFormat == PF_FLOAT32_RGBA )
+#endif
+            case PFG_RGBA32_FLOAT:
+            case PFG_RGB32_FLOAT:
+            case PFG_RG32_FLOAT:
+            case PFG_R32_FLOAT:
+                if( dstFormat == PFG_RGBA32_FLOAT || dstFormat == PFG_RGB32_FLOAT ||
+                    dstFormat == PFG_RG32_FLOAT || dstFormat == PFG_R32_FLOAT )
                 {
                     // float32 to float32, avoid unpack/repack overhead
-                    LinearResampler_Float32::scale(src, dst);
+                    LinearResampler_Float32::scale(src, srcFormat, dst, dstFormat);
                     break;
                 }
                 // else, fall through
-#endif
             default:
                 // non-optimized: floating-point math, performs conversion but always works
                 LinearResampler::scale(src, srcFormat, dst, dstFormat);
