@@ -450,20 +450,8 @@ namespace Ogre
         ID3D11Resource *srcTextureName = this->mFinalTextureName;
         ID3D11Resource *dstTextureName = dstD3d->mFinalTextureName;
 
-        //Source has explicit resolves. If destination doesn't,
-        //we must copy to its internal MSAA surface.
-        if( this->isMultisample() && this->hasMsaaExplicitResolves() )
-        {
-            if( !dstD3d->hasMsaaExplicitResolves() )
-                dstTextureName = dstD3d->mMsaaFramebufferName;
-        }
-        //Destination has explicit resolves. If source doesn't,
-        //we must copy from its internal MSAA surface.
-        if( dstD3d->isMultisample() && dstD3d->hasMsaaExplicitResolves() )
-        {
-            if( !this->hasMsaaExplicitResolves() )
-                srcTextureName = this->mMsaaFramebufferName;
-        }
+        if( this->isMultisample() && !this->hasMsaaExplicitResolves() )
+            srcTextureName = this->mMsaaFramebufferName;
         if( dstD3d->isMultisample() && !dstD3d->hasMsaaExplicitResolves() )
             dstTextureName = dstD3d->mMsaaFramebufferName;
 
@@ -487,7 +475,7 @@ namespace Ogre
                                             srcTextureName, srcResourceIndex,
                                             d3dBoxPtr );
 
-            if( dstD3d->isMultisample() && !dstD3d->hasMsaaExplicitResolves() )
+            if( dstD3d->isMultisample() && !dstD3d->hasMsaaExplicitResolves() && keepResolvedTexSynced )
             {
                 //Must keep the resolved texture up to date.
                 context->ResolveSubresource( dstD3d->mFinalTextureName,
