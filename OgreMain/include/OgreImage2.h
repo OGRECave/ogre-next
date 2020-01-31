@@ -338,7 +338,6 @@ namespace Ogre {
             FILTER_GAUSSIAN_HIGH,
         };
 
-#if 0
         /** Scale a 1D, 2D or 3D image volume. 
             @param  src         PixelBox containing the source pointer, dimensions and format
             @param  dst         PixelBox containing the destination pointer, dimensions and format
@@ -346,11 +345,11 @@ namespace Ogre {
             @remarks    This function can do pixel format conversion in the process.
             @note   dst and src can point to the same PixelBox object without any problem
         */
-        static void scale(const PixelBox &src, const PixelBox &dst, Filter filter = FILTER_BILINEAR);
+        static void scale( const TextureBox &src, PixelFormatGpu srcFormat,
+                           TextureBox &dst, PixelFormatGpu dstFormat, Filter filter = FILTER_BILINEAR );
         
         /** Resize a 2D image, applying the appropriate filter. */
         void resize( uint32 width, uint32 height, Filter filter = FILTER_BILINEAR );
-#endif
 
         /** Sets the proper downsampler functions to generate mipmaps
         @param format

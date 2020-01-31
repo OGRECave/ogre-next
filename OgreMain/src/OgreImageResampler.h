@@ -51,65 +51,68 @@ namespace Ogre {
 // nearest-neighbor resampler, does not convert formats.
 // templated on bytes-per-pixel to allow compiler optimizations, such
 // as simplifying memcpy() and replacing multiplies with bitshifts
-template<unsigned int elemsize> struct NearestResampler {
-    static void scale(const PixelBox& src, const PixelBox& dst) {
-        // assert(src.format == dst.format);
-
+template<unsigned int elemsize>
+struct NearestResampler
+{
+    static void scale(const TextureBox& src, const TextureBox& dst)
+    {
         // srcdata stays at beginning, pdst is a moving pointer
-        uchar* srcdata = (uchar*)src.getTopLeftFrontPixelPtr();
-        uchar* pdst = (uchar*)dst.getTopLeftFrontPixelPtr();
+        uchar* srcdata = (uchar*)src.atFromOffsettedOrigin( 0, 0, 0 );
+        uchar* dstdata = (uchar*)dst.atFromOffsettedOrigin( 0, 0, 0 );
 
         // sx_48,sy_48,sz_48 represent current position in source
         // using 16/48-bit fixed precision, incremented by steps
-        uint64 stepx = ((uint64)src.getWidth() << 48) / dst.getWidth();
-        uint64 stepy = ((uint64)src.getHeight() << 48) / dst.getHeight();
-        uint64 stepz = ((uint64)src.getDepth() << 48) / dst.getDepth();
+        uint64 stepx = ((uint64)src.width << 48) / dst.width;
+        uint64 stepy = ((uint64)src.height << 48) / dst.height;
+        uint64 stepz = ((uint64)src.depth << 48) / dst.depth;
 
         // note: ((stepz>>1) - 1) is an extra half-step increment to adjust
         // for the center of the destination pixel, not the top-left corner
         uint64 sz_48 = (stepz >> 1) - 1;
-        for (size_t z = dst.front; z < dst.back; z++, sz_48 += stepz) {
-            size_t srczoff = (size_t)(sz_48 >> 48) * src.slicePitch;
+        for (size_t z = 0; z < dst.getDepthOrSlices(); z++, sz_48 += stepz) {
+            size_t srczoff = (size_t)(sz_48 >> 48) * src.bytesPerImage;
             
             uint64 sy_48 = (stepy >> 1) - 1;
-            for (size_t y = dst.top; y < dst.bottom; y++, sy_48 += stepy) {
-                size_t srcyoff = (size_t)(sy_48 >> 48) * src.rowPitch;
+            for (size_t y = 0; y < dst.height; y++, sy_48 += stepy) {
+                size_t srcyoff = (size_t)(sy_48 >> 48) * src.bytesPerRow;
             
+                uchar *psrc = srcdata + srcyoff + srczoff;
+                uchar *pdst = dstdata + y * dst.bytesPerRow + z * dst.bytesPerImage;
+
                 uint64 sx_48 = (stepx >> 1) - 1;
-                for (size_t x = dst.left; x < dst.right; x++, sx_48 += stepx) {
-                    uchar* psrc = srcdata +
-                        elemsize*((size_t)(sx_48 >> 48) + srcyoff + srczoff);
-                    memcpy(pdst, psrc, elemsize);
+                for (size_t x = 0; x < dst.width; x++, sx_48 += stepx) {
+                    memcpy( pdst, psrc + elemsize * ( size_t )( sx_48 >> 48 ), elemsize );
                     pdst += elemsize;
                 }
-                pdst += elemsize*dst.getRowSkip();
             }
-            pdst += elemsize*dst.getSliceSkip();
         }
     }
 };
 
 
 // default floating-point linear resampler, does format conversion
-struct LinearResampler {
-    static void scale(const PixelBox& src, const PixelBox& dst) {
-        size_t srcelemsize = PixelUtil::getNumElemBytes(src.format);
-        size_t dstelemsize = PixelUtil::getNumElemBytes(dst.format);
+struct LinearResampler
+{
+    static void scale( const TextureBox& src, PixelFormatGpu srcFormat,
+                       const TextureBox& dst, PixelFormatGpu dstFormat )
+    {
+        size_t srcelemsize = PixelFormatGpuUtils::getBytesPerPixel( srcFormat );
+        size_t dstelemsize = PixelFormatGpuUtils::getBytesPerPixel( dstFormat );
 
         // srcdata stays at beginning, pdst is a moving pointer
-        uchar* srcdata = (uchar*)src.getTopLeftFrontPixelPtr();
-        uchar* pdst = (uchar*)dst.getTopLeftFrontPixelPtr();
+        uchar* srcdata = (uchar*)src.atFromOffsettedOrigin( 0, 0, 0 );
+        uchar* dstdata = (uchar*)dst.atFromOffsettedOrigin( 0, 0, 0 );
         
         // sx_48,sy_48,sz_48 represent current position in source
         // using 16/48-bit fixed precision, incremented by steps
-        uint64 stepx = ((uint64)src.getWidth() << 48) / dst.getWidth();
-        uint64 stepy = ((uint64)src.getHeight() << 48) / dst.getHeight();
-        uint64 stepz = ((uint64)src.getDepth() << 48) / dst.getDepth();
+        uint64 stepx = ((uint64)src.width << 48) / dst.width;
+        uint64 stepy = ((uint64)src.height << 48) / dst.height;
+        uint64 stepz = ((uint64)src.depth << 48) / dst.depth;
         
         // note: ((stepz>>1) - 1) is an extra half-step increment to adjust
         // for the center of the destination pixel, not the top-left corner
         uint64 sz_48 = (stepz >> 1) - 1;
-        for (size_t z = dst.front; z < dst.back; z++, sz_48+=stepz) {
+        for (size_t z = 0; z < dst.getDepthOrSlices(); z++, sz_48+=stepz) {
             // temp is 16/16 bit fixed precision, used to adjust a source
             // coordinate (x, y, or z) backwards by half a pixel so that the
             // integer bits represent the first sample (eg, sx1) and the
@@ -118,30 +121,32 @@ struct LinearResampler {
 
             temp = (temp > 0x8000)? temp - 0x8000 : 0;
             uint32 sz1 = temp >> 16;                 // src z, sample #1
-            uint32 sz2 = std::min(sz1+1,src.getDepth()-1);// src z, sample #2
+            uint32 sz2 = std::min(sz1+1,src.depth-1);// src z, sample #2
             float szf = (temp & 0xFFFF) / 65536.f; // weight of sample #2
 
             uint64 sy_48 = (stepy >> 1) - 1;
-            for (size_t y = dst.top; y < dst.bottom; y++, sy_48+=stepy) {
+            for (size_t y = 0; y < dst.height; y++, sy_48+=stepy) {
                 temp = static_cast<unsigned int>(sy_48 >> 32);
                 temp = (temp > 0x8000)? temp - 0x8000 : 0;
                 uint32 sy1 = temp >> 16;                    // src y #1
-                uint32 sy2 = std::min(sy1+1,src.getHeight()-1);// src y #2
+                uint32 sy2 = std::min(sy1+1,src.height-1);// src y #2
                 float syf = (temp & 0xFFFF) / 65536.f; // weight of #2
-                
+
+                uchar *pdst = dstdata + y * dst.bytesPerRow + z * dst.bytesPerImage;
+
                 uint64 sx_48 = (stepx >> 1) - 1;
-                for (size_t x = dst.left; x < dst.right; x++, sx_48+=stepx) {
+                for (size_t x = 0; x < dst.width; x++, sx_48+=stepx) {
                     temp = static_cast<unsigned int>(sx_48 >> 32);
                     temp = (temp > 0x8000)? temp - 0x8000 : 0;
                     uint32 sx1 = temp >> 16;                    // src x #1
-                    uint32 sx2 = std::min(sx1+1,src.getWidth()-1);// src x #2
+                    uint32 sx2 = std::min(sx1+1,src.width-1);// src x #2
                     float sxf = (temp & 0xFFFF) / 65536.f; // weight of #2
                 
                     ColourValue x1y1z1, x2y1z1, x1y2z1, x2y2z1;
                     ColourValue x1y1z2, x2y1z2, x1y2z2, x2y2z2;
 
-#define UNPACK(dst,x,y,z) PixelUtil::unpackColour(&dst, src.format, \
-    srcdata + srcelemsize*((x)+(y)*src.rowPitch+(z)*src.slicePitch))
+#define UNPACK(dst,x,y,z) PixelFormatGpuUtils::unpackColour(&dst, srcFormat, \
+    srcdata + srcelemsize*(x)+(y)*src.bytesPerRow+(z)*src.bytesPerImage)
 
                     UNPACK(x1y1z1,sx1,sy1,sz1); UNPACK(x2y1z1,sx2,sy1,sz1);
                     UNPACK(x1y2z1,sx1,sy2,sz1); UNPACK(x2y2z1,sx2,sy2,sz1);
@@ -159,36 +164,37 @@ struct LinearResampler {
                         x1y2z2 * ((1.0f - sxf)*        syf *        szf ) +
                         x2y2z2 * (        sxf *        syf *        szf );
 
-                    PixelUtil::packColour(accum, dst.format, pdst);
+                    PixelFormatGpuUtils::packColour( accum, dstFormat, pdst );
 
                     pdst += dstelemsize;
                 }
-                pdst += dstelemsize*dst.getRowSkip();
             }
-            pdst += dstelemsize*dst.getSliceSkip();
         }
     }
 };
 
 
+#if 0
 // float32 linear resampler, converts FLOAT32_RGB/FLOAT32_RGBA only.
 // avoids overhead of pixel unpack/repack function calls
-struct LinearResampler_Float32 {
-    static void scale(const PixelBox& src, const PixelBox& dst) {
+struct LinearResampler_Float32
+{
+    static void scale(const TextureBox& src, const TextureBox& dst)
+    {
         size_t srcchannels = PixelUtil::getNumElemBytes(src.format) / sizeof(float);
         size_t dstchannels = PixelUtil::getNumElemBytes(dst.format) / sizeof(float);
         // assert(srcchannels == 3 || srcchannels == 4);
         // assert(dstchannels == 3 || dstchannels == 4);
 
         // srcdata stays at beginning, pdst is a moving pointer
-        float* srcdata = (float*)src.getTopLeftFrontPixelPtr();
-        float* pdst = (float*)dst.getTopLeftFrontPixelPtr();
+        float* srcdata = (float*)src.atFromOffsettedOrigin( 0, 0, 0 );
+        float* pdst = (float*)dst.atFromOffsettedOrigin( 0, 0, 0 );
         
         // sx_48,sy_48,sz_48 represent current position in source
         // using 16/48-bit fixed precision, incremented by steps
-        uint64 stepx = ((uint64)src.getWidth() << 48) / dst.getWidth();
-        uint64 stepy = ((uint64)src.getHeight() << 48) / dst.getHeight();
-        uint64 stepz = ((uint64)src.getDepth() << 48) / dst.getDepth();
+        uint64 stepx = ((uint64)src.width << 48) / dst.width;
+        uint64 stepy = ((uint64)src.height << 48) / dst.height;
+        uint64 stepz = ((uint64)src.depth << 48) / dst.depth;
         
         // note: ((stepz>>1) - 1) is an extra half-step increment to adjust
         // for the center of the destination pixel, not the top-left corner
@@ -280,8 +286,11 @@ struct LinearResampler_Float32 {
 // 2D only; punts 3D pixelboxes to default LinearResampler (slow).
 // templated on bytes-per-pixel to allow compiler optimizations, such
 // as unrolling loops and replacing multiplies with bitshifts
-template<unsigned int channels> struct LinearResampler_Byte {
-    static void scale(const PixelBox& src, const PixelBox& dst) {
+template<unsigned int channels>
+struct LinearResampler_Byte
+{
+    static void scale(const PixelBox& src, const PixelBox& dst)
+    {
         // assert(src.format == dst.format);
 
         // only optimized for 2D
@@ -291,8 +300,8 @@ template<unsigned int channels> struct LinearResampler_Byte {
         }
 
         // srcdata stays at beginning of slice, pdst is a moving pointer
-        uchar* srcdata = (uchar*)src.getTopLeftFrontPixelPtr();
-        uchar* pdst = (uchar*)dst.getTopLeftFrontPixelPtr();
+        uchar* srcdata = (uchar*)src.atFromOffsettedOrigin( 0, 0, 0 );
+        uchar* pdst = (uchar*)dst.atFromOffsettedOrigin( 0, 0, 0 );
 
         // sx_48,sy_48 represent current position in source
         // using 16/48-bit fixed precision, incremented by steps
@@ -337,6 +346,7 @@ template<unsigned int channels> struct LinearResampler_Byte {
         }
     }
 };
+#endif
 /** @} */
 /** @} */
 
