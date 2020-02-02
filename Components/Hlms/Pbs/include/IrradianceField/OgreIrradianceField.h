@@ -110,6 +110,8 @@ namespace Ogre
     */
     class _OgreHlmsPbsExport IrradianceField : public IdObject
     {
+        friend class IrradianceFieldRaster;
+
         struct IrradianceFieldGenParams
         {
             float invNumRaysPerPixel;

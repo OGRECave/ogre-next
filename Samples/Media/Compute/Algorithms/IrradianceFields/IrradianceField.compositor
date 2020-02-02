@@ -1,3 +1,6 @@
+// ----------------------------------------------------------------------------
+// IFD based on Voxelization
+// ----------------------------------------------------------------------------
 compositor_node IrradianceField/Gen
 {
 	in 0 colour_if
@@ -27,6 +30,32 @@ compositor_node IrradianceField/Gen
 }
 
 workspace IrradianceField/Gen/Workspace
+{
+	connect_external 0 IrradianceField/Gen 0
+	connect_external 1 IrradianceField/Gen 1
+}
+
+// ----------------------------------------------------------------------------
+// IFD based on rasterization
+// ----------------------------------------------------------------------------
+
+compositor_node IrradianceField/CubemapToIfd
+{
+	in 0 colour_if
+	in 1 depth_if
+
+	target colour_if
+	{
+		pass compute
+		{
+			job IrradianceField/CubemapToIfd
+			uav 0 colour_if write
+			uav 1 depth_if write
+		}
+	}
+}
+
+workspace IrradianceField/CubemapToIfd/Workspace
 {
 	connect_external 0 IrradianceField/Gen 0
 	connect_external 1 IrradianceField/Gen 1
