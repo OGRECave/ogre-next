@@ -31,7 +31,7 @@ kernel void main_metal
 		texture3d<float> vctProbeZ			[[texture(4)]],
 	@end
 
-	sampler probeSampler					[[sampler(2)]],
+	sampler probeSampler					[[sampler(1)]],
 
 	texture2d<@insertpiece(uav0_pf_type), access::write> irradianceField		[[texture(UAV_SLOT_START+0)]],
 	texture2d<@insertpiece(uav1_pf_type), access::write> irradianceFieldDepth	[[texture(UAV_SLOT_START+1)]]
