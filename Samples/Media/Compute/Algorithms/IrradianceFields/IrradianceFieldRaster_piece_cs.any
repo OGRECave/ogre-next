@@ -1,6 +1,10 @@
 
 //#include "SyntaxHighlightingMisc.h"
 
+/// This compute shader simply converts 2 cubemaps (colour & depth) of the same resolution
+/// into 2 2D textures in octahedral mapping, which may be in different resolution,
+/// assuming depth_resolution >= colour_resolution
+
 @piece( HeaderCS )
 	INLINE ushort2 getIrradianceFieldColourBaseXY( ProbeIndex probeIdx )
 	{
@@ -45,7 +49,12 @@
 	float2 offset;
 	float3 samplingDir;
 
-	// Do colour
+	// Do colour.
+	//
+	// We need to sample multiple pixels and average them because
+	// the cubemap resolution tends to be bigger (otherwise glitches caused
+	// by rasterization rules become apparent), so we may be converting a cubemap of 32x32x6 to
+	// a 2D octahedral map of 6x6 or 8x8
 	float4 colourData = float4( 0, 0, 0, 0 );
 	/// Note: There is no vert_samples_per_colour_pixel (Because width == height)
 	@foreach( y, horiz_samples_per_colour_pixel )
@@ -60,6 +69,11 @@
 	OGRE_imageWrite2D4( irradianceField, iColourXY, colourData );
 
 	// Do depth
+	//
+	// This is like depth. While depth res >= colour res; typically 12x12 or 16x16;
+	// we (usually, using default params) have 4 times as many depth pixels than colour.
+	// And this pixel shader run one thread per colour pixel; thus each thread handles
+	// more than one depth pixel
 	float depthData;
 	@foreach( i, depth_to_colour_resolution_ratio )
 		@foreach( j, depth_to_colour_resolution_ratio )
@@ -73,7 +87,7 @@
 			@end
 
 			depthData /= @value( samples_per_depth_pixel );
-			OGRE_imageWrite2D4( irradianceFieldDepth, iColourXY, colourData );
+			OGRE_imageWrite2D1( irradianceFieldDepth, iDepthXY + ushort2( @i, @j ), depthData );
 		@end
 	@end
 @end
