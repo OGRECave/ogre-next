@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorWorkspaceListener.h"
 #include "OgreVector3.h"
 #include "OgrePixelFormatGpu.h"
+#include "OgreShaderParams.h"
 
 #include "OgreHeaderPrefix.h"
 
@@ -73,6 +74,10 @@ namespace Ogre
         TextureGpu *mDepthCubemap;
         CompositorWorkspace *mRenderWorkspace;
         CompositorWorkspace *mConvertToIfdWorkspace;
+
+        HlmsComputeJob *mConvertToIfdJob;
+        ShaderParams *mShaderParamsConvertToIfd;
+        ShaderParams::Param *mProbeIdxParam;
 
         IdString mWorkspaceName;
         PixelFormatGpu mPixelFormat;

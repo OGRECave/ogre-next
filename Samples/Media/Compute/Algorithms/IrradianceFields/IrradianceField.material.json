@@ -101,6 +101,11 @@
                 {}
             ],
 
+            "params" :
+            [
+                ["probeIdx", [0], "uint"]
+            ],
+
             "params_glsl" :
             [
                 ["colourCubemap",           [0], "int"],

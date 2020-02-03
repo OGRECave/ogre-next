@@ -34,8 +34,8 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorWorkspace.h"
 #include "Compositor/Pass/PassQuad/OgreCompositorPassQuad.h"
 #include "Compositor/Pass/PassQuad/OgreCompositorPassQuadDef.h"
-#include "OgreRoot.h"
 #include "OgreDepthBuffer.h"
+#include "OgreRoot.h"
 
 #include "OgreMaterialManager.h"
 #include "OgreTechnique.h"
@@ -51,16 +51,26 @@ THE SOFTWARE.
 #include "Vao/OgreVaoManager.h"
 
 #define TODO_properConvertWorkspace
-#define TODO_setparams
 
 namespace Ogre
 {
+    /// Return closest power of two not smaller than given number
+    static uint32 ClosestPow2( uint32 x )
+    {
+        if( !( x & ( x - 1u ) ) )
+            return x;
+        while( x & ( x + 1u ) )
+            x |= ( x + 1u );
+        return x + 1u;
+    }
+
     IrradianceFieldRaster::IrradianceFieldRaster( IrradianceField *creator ) :
         mCreator( creator ),
         mCubemap( 0 ),
         mDepthCubemap( 0 ),
         mRenderWorkspace( 0 ),
         mConvertToIfdWorkspace( 0 ),
+        mConvertToIfdJob( 0 ),
         mPixelFormat( PFG_RGBA8_UNORM_SRGB ),
         mCameraNear( 0.5f ),
         mCameraFar( 500.0f ),
@@ -76,6 +86,18 @@ namespace Ogre
             depthBufferToCubemap->load();
             mDepthBufferToCubemapPass = depthBufferToCubemap->getTechnique( 0 )->getPass( 0 );
         }
+
+        HlmsCompute *hlmsCompute = mCreator->mRoot->getHlmsManager()->getComputeHlms();
+        mConvertToIfdJob = hlmsCompute->findComputeJobNoThrow( "IrradianceField/CubemapToIfd" );
+
+        if( !mConvertToIfdJob )
+        {
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS,
+                         "To use IrradianceFieldRaster, you must include the resources bundled at "
+                         "Samples/Media/Compute\n"
+                         "Could not find IrradianceField/CubemapToIfd",
+                         "IrradianceFieldRaster::IrradianceFieldRaster" );
+        }
     }
     //-------------------------------------------------------------------------
     IrradianceFieldRaster::~IrradianceFieldRaster() {}
@@ -87,10 +109,13 @@ namespace Ogre
         TextureGpuManager *textureManager =
             sceneManager->getDestinationRenderSystem()->getTextureGpuManager();
 
+        uint32 cubemapRes = mCreator->mSettings.mDepthProbeResolution * 2u;
+        cubemapRes = ClosestPow2( cubemapRes );
+
         mCubemap = textureManager->createTexture(
             "IrradianceFieldRaster/Temp/" + StringConverter::toString( mCreator->getId() ),
             GpuPageOutStrategy::Discard, TextureFlags::RenderToTexture, TextureTypes::TypeCube );
-        mCubemap->setResolution( 32u, 32u );
+        mCubemap->setResolution( cubemapRes, cubemapRes );
         mCubemap->setPixelFormat( mPixelFormat );
 
         mDepthCubemap = textureManager->createTexture(
@@ -124,6 +149,29 @@ namespace Ogre
         TODO_properConvertWorkspace;
         mConvertToIfdWorkspace =
             compositorManager->addWorkspace( sceneManager, channels, mCamera, mWorkspaceName, false );
+
+        const IrradianceFieldSettings &settings = mCreator->mSettings;
+        mConvertToIfdJob->setProperty( "colour_resolution", settings.mIrradianceResolution );
+        mConvertToIfdJob->setProperty( "depth_resolution", settings.mDepthProbeResolution );
+        mConvertToIfdJob->setProperty( "colour_full_width",
+                                       static_cast<int32>( mCreator->mIrradianceTex->getWidth() ) );
+        mConvertToIfdJob->setProperty(
+            "depth_to_colour_resolution_ratio",
+            static_cast<int32>( settings.mIrradianceResolution / settings.mDepthProbeResolution ) );
+        mConvertToIfdJob->setProperty(
+            "horiz_samples_per_colour_pixel",
+            static_cast<int32>( cubemapRes / settings.mIrradianceResolution ) );
+        mConvertToIfdJob->setProperty(
+            "horiz_samples_per_depth_pixel",
+            static_cast<int32>( cubemapRes / settings.mDepthProbeResolution ) );
+
+        mConvertToIfdJob->setThreadsPerGroup( settings.mIrradianceResolution,
+                                              settings.mIrradianceResolution, 1u );
+        mConvertToIfdJob->setNumThreadGroups( 1u, 1u, 1u );
+
+        mShaderParamsConvertToIfd = &mConvertToIfdJob->getShaderParams( "default" );
+        mProbeIdxParam = &mShaderParamsConvertToIfd->mParams[0];
+        OGRE_ASSERT_MEDIUM( mProbeIdxParam->name == "probeIdx" );
     }
     //-------------------------------------------------------------------------
     void IrradianceFieldRaster::destroyWorkspace( void )
@@ -191,10 +239,12 @@ namespace Ogre
             if( numProbesToProcess > 2u )
                 renderSystem->_beginFrameOnce();
 
+            // Render to cubemap (also copies depth buffer into its own cubemap)
             mRenderWorkspace->_update();
 
-            TODO_setparams;
-
+            // Convert both colour & depth cubemaps to the 2D octahedral maps
+            mProbeIdxParam->setManualValue( static_cast<uint32>( i ) );
+            mShaderParamsConvertToIfd->setDirty();
             mConvertToIfdWorkspace->_update();
 
             if( numProbesToProcess > 2u )

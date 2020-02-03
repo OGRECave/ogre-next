@@ -16,11 +16,6 @@
 		return retVal;
 	}
 
-	INLINE ushort2 depthXyToColourXy( ushort2 depthXy )
-	{
-		return depthXy / @value( depth_to_colour_resolution_ratio )u;
-	}
-
 	INLINE float3 octahedronMappingDecode( float2 f )
 	{
 		// https://twitter.com/Stubbesaurus/status/937994790553227264
@@ -44,7 +39,7 @@
 	ushort2 iColourXY = irradianceFieldColourBaseXY + gl_LocalInvocationID.xy;
 	ushort2 iDepthXY = iColourXY * @value( depth_to_colour_resolution_ratio )u;
 
-	float2 samplingXY = float2( gl_LocalInvocationID.xy ) / @value( colour_full_width );
+	float2 samplingXY = float2( gl_LocalInvocationID.xy ) / @value( colour_resolution );
 
 	float2 offset;
 	float3 samplingDir;
@@ -59,13 +54,13 @@
 	/// Note: There is no vert_samples_per_colour_pixel (Because width == height)
 	@foreach( y, horiz_samples_per_colour_pixel )
 		@foreach( x, horiz_samples_per_colour_pixel )
-			offset = float2( @x, @y ) / ( @value( horiz_samples_per_colour_pixel ) * @value( colour_full_width ) );
+			offset = float2( @x, @y ) / ( @value( horiz_samples_per_colour_pixel ) * @value( colour_resolution ) );
 			samplingDir = octahedronMappingDecode( samplingXY + offset );
 			colourData += OGRE_SampleLevel( colourCubemap, bilinearSampler, samplingDir, 0 );
 		@end
 	@end
 
-	colourData /= @value( samples_per_colour_pixel );
+	colourData /= @value( horiz_samples_per_colour_pixel ) * @value( horiz_samples_per_colour_pixel );
 	OGRE_imageWrite2D4( irradianceField, iColourXY, colourData );
 
 	// Do depth
@@ -80,13 +75,13 @@
 			depthData = 0.0f;
 			@foreach( y, horiz_samples_per_depth_pixel )
 				@foreach( x, horiz_samples_per_depth_pixel )
-					offset = float2( @i + @x, @j + @y ) / ( @value( horiz_samples_per_depth_pixel ) * @value( depth_full_width ) );
+					offset = float2( @i + @x, @j + @y ) / ( @value( horiz_samples_per_depth_pixel ) * @value( depth_resolution ) );
 					samplingDir = octahedronMappingDecode( samplingXY + offset );
 					depthData += OGRE_SampleLevel( depthCubemap, bilinearSampler, samplingDir, 0 );
 				@end
 			@end
 
-			depthData /= @value( samples_per_depth_pixel );
+			depthData /= @value( horiz_samples_per_depth_pixel ) * @value( horiz_samples_per_depth_pixel );
 			OGRE_imageWrite2D1( irradianceFieldDepth, iDepthXY + ushort2( @i, @j ), depthData );
 		@end
 	@end
