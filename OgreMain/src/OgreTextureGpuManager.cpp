@@ -3282,7 +3282,7 @@ namespace Ogre
         srcImage._setAutoDelete( false );
         image = srcImage;
 
-        uint32 numMipSlices = numMips * numSlices;
+        uint64 numMipSlices = numMips * numSlices;
 
         assert( numMipSlices < 256u );
 
@@ -3295,7 +3295,7 @@ namespace Ogre
             }
             else
             {
-                mipLevelBitSet[i] = (1ul << numMipSlices) - 1ul;
+                mipLevelBitSet[i] = ( uint64( 1ul ) << numMipSlices ) - uint64( 1ul );
                 numMipSlices = 0;
             }
         }
