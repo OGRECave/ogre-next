@@ -1152,7 +1152,8 @@ namespace Ogre
                     pool.masterTexture->getNumMipmaps(), "|" );
             const size_t bytesInPool = pool.masterTexture->getSizeBytes();
             text.a( (uint32)bytesInPool, "|" );
-            text.a( pool.usedMemory, "|", pool.masterTexture->getDepthOrSlices() );
+            text.a( pool.usedMemory - (uint16)pool.availableSlots.size(), "|",
+                    pool.masterTexture->getDepthOrSlices() );
             text.a( "|", pool.masterTexture->getTexturePoolId() );
 
             bytesInPoolInclWaste += bytesInPool;
