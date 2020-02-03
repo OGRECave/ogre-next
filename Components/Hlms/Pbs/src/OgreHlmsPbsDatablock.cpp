@@ -705,10 +705,8 @@ namespace Ogre
         mDetailNormalWeight[detailNormalMapIdx] = weight;
 
         if( wasOne != (mDetailNormalWeight[detailNormalMapIdx] == 1.0f) )
-        {
             flushRenderables();
-            scheduleConstBufferUpdate();
-        }
+        scheduleConstBufferUpdate();
     }
     //-----------------------------------------------------------------------------------
     Real HlmsPbsDatablock::getDetailNormalWeight( uint8 detailNormalMapIdx ) const
@@ -723,10 +721,8 @@ namespace Ogre
         mNormalMapWeight = weight;
 
         if( wasDisabled != (mNormalMapWeight == 1.0f) )
-        {
             flushRenderables();
-            scheduleConstBufferUpdate();
-        }
+        scheduleConstBufferUpdate();
     }
     //-----------------------------------------------------------------------------------
     Real HlmsPbsDatablock::getNormalMapWeight(void) const
