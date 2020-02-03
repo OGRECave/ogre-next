@@ -50,8 +50,6 @@ THE SOFTWARE.
 #include "Vao/OgreTexBufferPacked.h"
 #include "Vao/OgreVaoManager.h"
 
-#define TODO_properConvertWorkspace
-
 namespace Ogre
 {
     /// Return closest power of two not smaller than given number
@@ -137,18 +135,21 @@ namespace Ogre
         mCamera->setFarClipDistance( mCameraFar );
 
         CompositorManager2 *compositorManager = mCreator->mRoot->getCompositorManager2();
+        ResourceLayoutMap initialLayouts;
+        ResourceAccessMap initialUavAccess;
 
         CompositorChannelVec channels;
         channels.reserve( 2u );
         channels.push_back( mCubemap );
         channels.push_back( mDepthCubemap );
         mRenderWorkspace =
-            compositorManager->addWorkspace( sceneManager, channels, mCamera, mWorkspaceName, false );
+            compositorManager->addWorkspace( sceneManager, channels, mCamera, mWorkspaceName, false, -1,
+                                             0, &initialLayouts, &initialUavAccess );
         mRenderWorkspace->addListener( this );
 
-        TODO_properConvertWorkspace;
-        mConvertToIfdWorkspace =
-            compositorManager->addWorkspace( sceneManager, channels, mCamera, mWorkspaceName, false );
+        mConvertToIfdWorkspace = compositorManager->addWorkspace(
+            sceneManager, channels, mCamera, "IrradianceField/CubemapToIfd", false, -1, 0,
+            &initialLayouts, &initialUavAccess );
 
         const IrradianceFieldSettings &settings = mCreator->mSettings;
         mConvertToIfdJob->setProperty( "colour_resolution", settings.mIrradianceResolution );
