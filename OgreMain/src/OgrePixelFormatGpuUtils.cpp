@@ -1626,14 +1626,14 @@ namespace Ogre
         if( format == PFG_UNKNOWN )
             return false;
         const PixelFormatDesc &desc = getDescriptionFor( format );
-        return ( desc.flags & ( PFF_COMPRESSED | PFF_DEPTH | PFF_STENCIL ) ) != 0;
+        return ( desc.flags & ( PFF_COMPRESSED | PFF_DEPTH | PFF_STENCIL ) ) == 0;
     }
     //-----------------------------------------------------------------------------------
     bool PixelFormatGpuUtils::hasAlpha( PixelFormatGpu format )
-    { 
-        return getNumberOfComponents( format ) == 4
-            && format != PFG_R8G8_B8G8_UNORM && format != PFG_G8R8_G8B8_UNORM
-            || format == PFG_A8_UNORM || format == PFG_A8P8 || format == PFG_IA44 || format == PFG_AI44;
+    {
+        return ( getNumberOfComponents( format ) == 4u && format != PFG_R8G8_B8G8_UNORM &&
+                 format != PFG_G8R8_G8B8_UNORM ) ||
+               format == PFG_A8_UNORM || format == PFG_A8P8 || format == PFG_IA44 || format == PFG_AI44;
     }
     //-----------------------------------------------------------------------------------
     bool PixelFormatGpuUtils::hasSRGBEquivalent( PixelFormatGpu format )
