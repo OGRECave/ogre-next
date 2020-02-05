@@ -1195,6 +1195,23 @@ namespace Ogre {
     {
         assert( PixelFormatGpuUtils::isAccessible( srcFormat ) );
         assert( PixelFormatGpuUtils::isAccessible( dstFormat ) );
+        assert( src.numSlices == dst.numSlices );
+
+        // slices should be scaled individually, without interpolation
+        // also our LinearResampler_Byte implementation is optimized for depthOrSlices == 1 case
+        if( src.numSlices > 1 )
+        {
+            TextureBox srcSlice = src, dstSlice = dst;
+            srcSlice.numSlices = dstSlice.numSlices = 1;
+            for( uint32 sliceIdx = 0; sliceIdx < src.numSlices; ++sliceIdx )
+            {
+                scale( srcSlice, srcFormat, dstSlice, dstFormat );
+                ++srcSlice.sliceStart;
+                ++dstSlice.sliceStart;
+            }
+            return;
+        }
+
         MemoryDataStreamPtr buf; // For auto-delete
         TextureBox temp;
         switch( filter )
