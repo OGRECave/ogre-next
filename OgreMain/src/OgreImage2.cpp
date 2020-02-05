@@ -1242,12 +1242,14 @@ namespace Ogre {
         case FILTER_BILINEAR:
             switch (srcFormat)
             {
-#if 0
-            case PF_L8: case PF_A8: case PF_BYTE_LA:
-            case PF_R8G8B8: case PF_B8G8R8:
-            case PF_R8G8B8A8: case PF_B8G8R8A8:
-            case PF_A8B8G8R8: case PF_A8R8G8B8:
-            case PF_X8B8G8R8: case PF_X8R8G8B8:
+            case PFG_RGBA8_UNORM: case PFG_RGBA8_UINT:
+            case PFG_BGRA8_UNORM:
+            case PFG_BGRX8_UNORM:
+            case PFG_RGB8_UNORM:
+            case PFG_BGR8_UNORM:
+            case PFG_RG8_UNORM: case PFG_RG8_UINT:
+            case PFG_R8_UNORM: case PFG_R8_UINT:
+            case PFG_A8_UNORM:
                 if( srcFormat == dstFormat )
                 {
                     // No intermediate buffer needed
@@ -1266,10 +1268,10 @@ namespace Ogre {
                 // super-optimized: byte-oriented math, no conversion
                 switch( PixelFormatGpuUtils::getBytesPerPixel( srcFormat ) )
                 {
-                case 1: LinearResampler_Byte<1>::scale(src, temp); break;
-                case 2: LinearResampler_Byte<2>::scale(src, temp); break;
-                case 3: LinearResampler_Byte<3>::scale(src, temp); break;
-                case 4: LinearResampler_Byte<4>::scale(src, temp); break;
+                case 1: LinearResampler_Byte<1>::scale(src, srcFormat, temp, srcFormat); break;
+                case 2: LinearResampler_Byte<2>::scale(src, srcFormat, temp, srcFormat); break;
+                case 3: LinearResampler_Byte<3>::scale(src, srcFormat, temp, srcFormat); break;
+                case 4: LinearResampler_Byte<4>::scale(src, srcFormat, temp, srcFormat); break;
                 default:
                     // never reached
                     assert(false);
@@ -1280,7 +1282,6 @@ namespace Ogre {
                     PixelFormatGpuUtils::bulkPixelConversion( temp, srcFormat, dst, dstFormat );
                 }
                 break;
-#endif
             case PFG_RGBA32_FLOAT:
             case PFG_RGB32_FLOAT:
             case PFG_RG32_FLOAT:

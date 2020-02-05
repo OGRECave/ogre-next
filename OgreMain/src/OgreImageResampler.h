@@ -311,7 +311,6 @@ struct LinearResampler_Float32
 
 
 
-#if 0
 // byte linear resampler, does not do any format conversions.
 // only handles pixel formats that use 1 byte per color channel.
 // 2D only; punts 3D pixelboxes to default LinearResampler (slow).
@@ -320,13 +319,12 @@ struct LinearResampler_Float32
 template<unsigned int channels>
 struct LinearResampler_Byte
 {
-    static void scale(const PixelBox& src, const PixelBox& dst)
+    static void scale( const TextureBox& src, PixelFormatGpu srcFormat,
+                       const TextureBox &dst, PixelFormatGpu dstFormat)
     {
-        // assert(src.format == dst.format);
-
         // only optimized for 2D
-        if (src.getDepth() > 1 || dst.getDepth() > 1) {
-            LinearResampler::scale(src, dst);
+        if (src.getDepthOrSlices() > 1 || dst.getDepthOrSlices() > 1) {
+            LinearResampler::scale( src, srcFormat, dst, dstFormat );
             return;
         }
 
@@ -336,11 +334,11 @@ struct LinearResampler_Byte
 
         // sx_48,sy_48 represent current position in source
         // using 16/48-bit fixed precision, incremented by steps
-        uint64 stepx = ((uint64)src.getWidth() << 48) / dst.getWidth();
-        uint64 stepy = ((uint64)src.getHeight() << 48) / dst.getHeight();
+        uint64 stepx = ((uint64)src.width << 48) / dst.width;
+        uint64 stepy = ((uint64)src.height << 48) / dst.height;
         
         uint64 sy_48 = (stepy >> 1) - 1;
-        for (size_t y = dst.top; y < dst.bottom; y++, sy_48+=stepy) {
+        for (size_t y = 0; y < dst.height; y++, sy_48+=stepy) {
             // bottom 28 bits of temp are 16/12 bit fixed precision, used to
             // adjust a source coordinate backwards by half a pixel so that the
             // integer bits represent the first sample (eg, sx1) and the
@@ -349,35 +347,34 @@ struct LinearResampler_Byte
             temp = (temp > 0x800)? temp - 0x800: 0;
             unsigned int syf = temp & 0xFFF;
             uint32 sy1 = temp >> 12;
-            uint32 sy2 = std::min(sy1+1, src.bottom-src.top-1);
-            size_t syoff1 = sy1 * src.rowPitch;
-            size_t syoff2 = sy2 * src.rowPitch;
+            uint32 sy2 = std::min(sy1+1, src.height-1);
+            size_t syoff1 = sy1 * src.bytesPerRow;
+            size_t syoff2 = sy2 * src.bytesPerRow;
 
             uint64 sx_48 = (stepx >> 1) - 1;
-            for (size_t x = dst.left; x < dst.right; x++, sx_48+=stepx) {
+            for (size_t x = 0; x < dst.width; x++, sx_48+=stepx) {
                 temp = static_cast<unsigned int>(sx_48 >> 36);
                 temp = (temp > 0x800)? temp - 0x800 : 0;
                 unsigned int sxf = temp & 0xFFF;
                 uint32 sx1 = temp >> 12;
-                uint32 sx2 = std::min(sx1+1, src.right-src.left-1);
+                uint32 sx2 = std::min(sx1+1, src.width-1);
 
                 unsigned int sxfsyf = sxf*syf;
                 for (unsigned int k = 0; k < channels; k++) {
                     unsigned int accum =
-                        srcdata[(sx1 + syoff1)*channels+k]*(0x1000000-(sxf<<12)-(syf<<12)+sxfsyf) +
-                        srcdata[(sx2 + syoff1)*channels+k]*((sxf<<12)-sxfsyf) +
-                        srcdata[(sx1 + syoff2)*channels+k]*((syf<<12)-sxfsyf) +
-                        srcdata[(sx2 + syoff2)*channels+k]*sxfsyf;
+                        srcdata[syoff1+sx1*channels+k]*(0x1000000-(sxf<<12)-(syf<<12)+sxfsyf) +
+                        srcdata[syoff1+sx2*channels+k]*((sxf<<12)-sxfsyf) +
+                        srcdata[syoff2+sx1*channels+k]*((syf<<12)-sxfsyf) +
+                        srcdata[syoff2+sx2*channels+k]*sxfsyf;
                     // accum is computed using 8/24-bit fixed-point math
                     // (maximum is 0xFF000000; rounding will not cause overflow)
                     *pdst++ = static_cast<uchar>((accum + 0x800000) >> 24);
                 }
             }
-            pdst += channels*dst.getRowSkip();
+            pdst += dst.bytesPerRow;
         }
     }
 };
-#endif
 /** @} */
 /** @} */
 
