@@ -420,7 +420,7 @@ namespace Ogre
                                 blocks.macroblocks.find( LwConstString( array[i].GetString(),
                                                                         array[i].GetStringLength() + 1u ) );
                         if( it != blocks.macroblocks.end() )
-                            datablock->setMacroblock( it->second, i == 0 );
+                            datablock->setMacroblock( it->second, i != 0 );
                     }
                 }
             }
@@ -450,7 +450,7 @@ namespace Ogre
                                     LwConstString( array[i].GetString(),
                                                    array[i].GetStringLength() + 1u ) );
                         if( it != blocks.blendblocks.end() )
-                            datablock->setBlendblock( it->second, i == 0 );
+                            datablock->setBlendblock( it->second, i != 0 );
                     }
                 }
             }
