@@ -858,7 +858,8 @@ namespace Ogre {
         mBuffer = OGRE_MALLOC_SIMD( totalBytes, MEMCATEGORY_RESOURCE );
 
         // scale the image from temp into our resized buffer
-        Image2::scale( temp.getData( 0 ), mPixelFormat, getData( 0 ), mPixelFormat, filter );
+        TextureBox dst = getData( 0 );
+        Image2::scale( temp.getData( 0 ), mPixelFormat, dst, mPixelFormat, filter );
     }
     //-----------------------------------------------------------------------------------
     bool Image2::supportsSwMipmaps( PixelFormatGpu format, uint32 depthOrSlices,
