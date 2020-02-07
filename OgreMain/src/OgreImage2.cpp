@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include "OgrePixelFormatGpuUtils.h"
 #include "OgreColourValue.h"
 #include "OgreMath.h"
-//#include "OgreImageResampler.h"
+#include "OgreImageResampler.h"
 #include "OgreImageDownsampler.h"
 #include "OgreTextureGpuManager.h"
 #include "OgreAsyncTextureTicket.h"
@@ -853,7 +853,6 @@ namespace Ogre {
         return PixelFormatGpuUtils::calculateSizeBytes( mWidth, mHeight, getDepth(), getNumSlices(),
                                                         mPixelFormat, mNumMipmaps, 4u );
     }
-#if 0
     //-----------------------------------------------------------------------------------
     void Image2::resize( uint32 width, uint32 height, Filter filter )
     {
@@ -881,9 +880,9 @@ namespace Ogre {
         mBuffer = OGRE_MALLOC_SIMD( totalBytes, MEMCATEGORY_RESOURCE );
 
         // scale the image from temp into our resized buffer
-        Image2::scale( temp.getPixelBox(), getPixelBox(), filter );
+        TextureBox dst = getData( 0 );
+        Image2::scale( temp.getData( 0 ), mPixelFormat, dst, mPixelFormat, filter );
     }
-#endif
     //-----------------------------------------------------------------------------------
     bool Image2::supportsSwMipmaps( PixelFormatGpu format, uint32 depthOrSlices,
                                     TextureTypes::TextureTypes textureType,
@@ -1214,31 +1213,51 @@ namespace Ogre {
         return true;
     }
     //-----------------------------------------------------------------------------------
-#if 0
-    void Image2::scale(const PixelBox &src, const PixelBox &scaled, Filter filter)
+    void Image2::scale( const TextureBox &src, PixelFormatGpu srcFormat,
+                        TextureBox &dst, PixelFormatGpu dstFormat, Filter filter )
     {
-        assert(PixelUtil::isAccessible(src.format));
-        assert(PixelUtil::isAccessible(scaled.format));
+        assert( PixelFormatGpuUtils::isAccessible( srcFormat ) );
+        assert( PixelFormatGpuUtils::isAccessible( dstFormat ) );
+        assert( src.numSlices == dst.numSlices );
+
+        // slices should be scaled individually, without interpolation
+        // also our LinearResampler_Byte implementation is optimized for depthOrSlices == 1 case
+        if( src.numSlices > 1 )
+        {
+            TextureBox srcSlice = src, dstSlice = dst;
+            srcSlice.numSlices = dstSlice.numSlices = 1;
+            for( uint32 sliceIdx = 0; sliceIdx < src.numSlices; ++sliceIdx )
+            {
+                scale( srcSlice, srcFormat, dstSlice, dstFormat );
+                ++srcSlice.sliceStart;
+                ++dstSlice.sliceStart;
+            }
+            return;
+        }
+
         MemoryDataStreamPtr buf; // For auto-delete
-        PixelBox temp;
-        switch (filter)
+        TextureBox temp;
+        switch( filter )
         {
         default:
         case FILTER_NEAREST:
-            if(src.format == scaled.format)
+            if( srcFormat == dstFormat )
             {
                 // No intermediate buffer needed
-                temp = scaled;
+                temp = dst;
             }
             else
             {
                 // Allocate temporary buffer of destination size in source format
-                temp = PixelBox(scaled.getWidth(), scaled.getHeight(), scaled.getDepth(), src.format);
-                buf.bind(OGRE_NEW MemoryDataStream(temp.getConsecutiveSize()));
+                temp = dst;
+                temp.bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( srcFormat );
+                temp.bytesPerRow = PixelFormatGpuUtils::getSizeBytes( dst.width, 1u, 1u, 1u, srcFormat );
+                temp.bytesPerImage = temp.bytesPerRow * temp.height;
+                buf.bind( OGRE_NEW MemoryDataStream( temp.getSizeBytes() ) );
                 temp.data = buf->getPtr();
             }
             // super-optimized: no conversion
-            switch (PixelUtil::getNumElemBytes(src.format))
+            switch( PixelFormatGpuUtils::getBytesPerPixel( srcFormat ) )
             {
             case 1: NearestResampler<1>::scale(src, temp); break;
             case 2: NearestResampler<2>::scale(src, temp); break;
@@ -1252,68 +1271,76 @@ namespace Ogre {
                 // never reached
                 assert(false);
             }
-            if(temp.data != scaled.data)
+            if( temp.data != dst.data )
             {
                 // Blit temp buffer
-                PixelUtil::bulkPixelConversion(temp, scaled);
+                PixelFormatGpuUtils::bulkPixelConversion( temp, srcFormat, dst, dstFormat );
             }
             break;
 
         case FILTER_LINEAR:
         case FILTER_BILINEAR:
-            switch (src.format)
+            switch (srcFormat)
             {
-            case PF_L8: case PF_A8: case PF_BYTE_LA:
-            case PF_R8G8B8: case PF_B8G8R8:
-            case PF_R8G8B8A8: case PF_B8G8R8A8:
-            case PF_A8B8G8R8: case PF_A8R8G8B8:
-            case PF_X8B8G8R8: case PF_X8R8G8B8:
-                if(src.format == scaled.format)
+            case PFG_RGBA8_UNORM: case PFG_RGBA8_UINT:
+            case PFG_BGRA8_UNORM:
+            case PFG_BGRX8_UNORM:
+            case PFG_RGB8_UNORM:
+            case PFG_BGR8_UNORM:
+            case PFG_RG8_UNORM: case PFG_RG8_UINT:
+            case PFG_R8_UNORM: case PFG_R8_UINT:
+            case PFG_A8_UNORM:
+                if( srcFormat == dstFormat )
                 {
                     // No intermediate buffer needed
-                    temp = scaled;
+                    temp = dst;
                 }
                 else
                 {
                     // Allocate temp buffer of destination size in source format
-                    temp = PixelBox(scaled.getWidth(), scaled.getHeight(), scaled.getDepth(), src.format);
-                    buf.bind(OGRE_NEW MemoryDataStream(temp.getConsecutiveSize()));
+                    temp = dst;
+                    temp.bytesPerPixel = PixelFormatGpuUtils::getBytesPerPixel( srcFormat );
+                    temp.bytesPerRow = PixelFormatGpuUtils::getSizeBytes( dst.width, 1u, 1u, 1u, srcFormat );
+                    temp.bytesPerImage = temp.bytesPerRow * temp.height;
+                    buf.bind( OGRE_NEW MemoryDataStream( temp.getSizeBytes() ) );
                     temp.data = buf->getPtr();
                 }
                 // super-optimized: byte-oriented math, no conversion
-                switch (PixelUtil::getNumElemBytes(src.format))
+                switch( PixelFormatGpuUtils::getBytesPerPixel( srcFormat ) )
                 {
-                case 1: LinearResampler_Byte<1>::scale(src, temp); break;
-                case 2: LinearResampler_Byte<2>::scale(src, temp); break;
-                case 3: LinearResampler_Byte<3>::scale(src, temp); break;
-                case 4: LinearResampler_Byte<4>::scale(src, temp); break;
+                case 1: LinearResampler_Byte<1>::scale(src, srcFormat, temp, srcFormat); break;
+                case 2: LinearResampler_Byte<2>::scale(src, srcFormat, temp, srcFormat); break;
+                case 3: LinearResampler_Byte<3>::scale(src, srcFormat, temp, srcFormat); break;
+                case 4: LinearResampler_Byte<4>::scale(src, srcFormat, temp, srcFormat); break;
                 default:
                     // never reached
                     assert(false);
                 }
-                if(temp.data != scaled.data)
+                if( temp.data != dst.data )
                 {
                     // Blit temp buffer
-                    PixelUtil::bulkPixelConversion(temp, scaled);
+                    PixelFormatGpuUtils::bulkPixelConversion( temp, srcFormat, dst, dstFormat );
                 }
                 break;
-            case PF_FLOAT32_RGB:
-            case PF_FLOAT32_RGBA:
-                if (scaled.format == PF_FLOAT32_RGB || scaled.format == PF_FLOAT32_RGBA)
+            case PFG_RGBA32_FLOAT:
+            case PFG_RGB32_FLOAT:
+            case PFG_RG32_FLOAT:
+            case PFG_R32_FLOAT:
+                if( dstFormat == PFG_RGBA32_FLOAT || dstFormat == PFG_RGB32_FLOAT ||
+                    dstFormat == PFG_RG32_FLOAT || dstFormat == PFG_R32_FLOAT )
                 {
                     // float32 to float32, avoid unpack/repack overhead
-                    LinearResampler_Float32::scale(src, scaled);
+                    LinearResampler_Float32::scale(src, srcFormat, dst, dstFormat);
                     break;
                 }
                 // else, fall through
             default:
                 // non-optimized: floating-point math, performs conversion but always works
-                LinearResampler::scale(src, scaled);
+                LinearResampler::scale(src, srcFormat, dst, dstFormat);
             }
             break;
         }
     }
-#endif
     //-----------------------------------------------------------------------------------
     void Image2::_setAutoDelete( bool autoDelete )
     {
