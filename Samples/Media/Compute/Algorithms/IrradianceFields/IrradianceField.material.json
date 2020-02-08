@@ -114,6 +114,6 @@
                 ["irradianceField",         [0], "int"],
                 ["irradianceFieldDepth",    [1], "int"]
             ]
-        },
+        }
     }
 }

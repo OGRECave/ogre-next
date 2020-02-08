@@ -50,6 +50,17 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    RasterParams::RasterParams() :
+        mPixelFormat( PFG_RGBA8_UNORM_SRGB ),
+        mCameraNear( 0.5f ),
+        mCameraFar( 500.0f ),
+        mFieldOrigin( Vector3::ZERO ),
+        mFieldSize( Vector3::UNIT_SCALE )
+    {
+    }
+    //-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
     IrradianceFieldSettings::IrradianceFieldSettings() :
         mNumRaysPerPixel( 1u ),
         mDepthProbeResolution( 12u ),
@@ -60,8 +71,13 @@ namespace Ogre
         mNumProbes[1] = 8u;
     }
     //-------------------------------------------------------------------------
+    bool IrradianceFieldSettings::isRaster() const { return mRasterParams.mWorkspaceName != IdString(); }
+    //-------------------------------------------------------------------------
     void IrradianceFieldSettings::createSubsamples( void )
     {
+        if( isRaster() )
+            return;
+
         const size_t numRaysPerPixel = mNumRaysPerPixel;
         mSubsamples.resize( numRaysPerPixel );
 
@@ -154,6 +170,7 @@ namespace Ogre
         mDirectionsBuffer( 0 ),
         mDepthTapsIntegrationBuffer( 0 ),
         mColourTapsIntegrationBuffer( 0 ),
+        mIfRaster( 0 ),
         mRoot( root ),
         mSceneManager( sceneManager ),
         mAlreadyWarned( false )
@@ -197,6 +214,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void IrradianceField::fillDirections( float *RESTRICT_ALIAS outBuffer )
     {
+        OGRE_ASSERT_LOW( !mSettings.isRaster() );
+
         float *RESTRICT_ALIAS updateData = reinterpret_cast<float * RESTRICT_ALIAS>( outBuffer );
         const float *RESTRICT_ALIAS updateDataStart = updateData;
 
@@ -434,6 +453,8 @@ namespace Ogre
         mSettings = settings;
         mSettings.createSubsamples();
         mVctLighting = vctLighting;
+        OGRE_ASSERT_LOW( ( mVctLighting || mSettings.isRaster() ) &&
+                         "vctLighting param must be provided when not using rasterization" );
         mFieldOrigin = fieldOrigin;
         mFieldSize = fieldSize;
         mAlreadyWarned = false;
@@ -468,15 +489,20 @@ namespace Ogre
         mIrradianceTex->scheduleTransitionTo( GpuResidency::Resident );
         mDepthVarianceTex->scheduleTransitionTo( GpuResidency::Resident );
 
-        const size_t updateDataSize = sizeof( float ) * 4u * mSettings.mNumRaysPerPixel *
-                                      mSettings.mDepthProbeResolution * mSettings.mDepthProbeResolution;
-        float *directionsBuffer =
-            reinterpret_cast<float *>( OGRE_MALLOC_SIMD( updateDataSize, MEMCATEGORY_GEOMETRY ) );
-        FreeOnDestructor dataPtr( directionsBuffer );
-        fillDirections( directionsBuffer );
         VaoManager *vaoManager = textureManager->getVaoManager();
-        mDirectionsBuffer = vaoManager->createTexBuffer( PFG_RGBA32_FLOAT, updateDataSize, BT_DEFAULT,
-                                                         directionsBuffer, false );
+
+        if( !mSettings.isRaster() )
+        {
+            const size_t updateDataSize = sizeof( float ) * 4u * mSettings.mNumRaysPerPixel *
+                                          mSettings.mDepthProbeResolution *
+                                          mSettings.mDepthProbeResolution;
+            float *directionsBuffer =
+                reinterpret_cast<float *>( OGRE_MALLOC_SIMD( updateDataSize, MEMCATEGORY_GEOMETRY ) );
+            FreeOnDestructor dataPtr( directionsBuffer );
+            fillDirections( directionsBuffer );
+            mDirectionsBuffer = vaoManager->createTexBuffer( PFG_RGBA32_FLOAT, updateDataSize,
+                                                             BT_DEFAULT, directionsBuffer, false );
+        }
 
         mDepthTapsIntegrationBuffer = setupIntegrationTaps(
             vaoManager, mSettings.mDepthProbeResolution, depthWidth, mDepthIntegrationJob,

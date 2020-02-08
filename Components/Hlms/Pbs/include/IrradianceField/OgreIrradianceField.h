@@ -33,12 +33,29 @@ THE SOFTWARE.
 
 #include "OgreId.h"
 
+#include "OgreIdString.h"
+#include "OgrePixelFormatGpu.h"
 #include "OgreShaderPrimitives.h"
 
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
+    class IrradianceFieldRaster;
+
+    struct _OgreHlmsPbsExport RasterParams
+    {
+        IdString mWorkspaceName;
+        PixelFormatGpu mPixelFormat;
+        float mCameraNear;
+        float mCameraFar;
+
+        Vector3 mFieldOrigin;
+        Vector3 mFieldSize;
+
+        RasterParams();
+    };
+
     struct _OgreHlmsPbsExport IrradianceFieldSettings
     {
         /** Number of rays per pixel in terms of mDepthProbeResolution.
@@ -59,6 +76,9 @@ namespace Ogre
         /// Must be power of two
         uint32 mNumProbes[3];
 
+        /// Use rasterization to generate light & depth data, instead of voxelization
+        RasterParams mRasterParams;
+
     protected:
         /// mSubsamples.size() == mNumRaysPerPixel
         /// Contains the offsets for generating the rays
@@ -77,6 +97,8 @@ namespace Ogre
                                  "Num probes must be a power of 2" );
             }
         }
+
+        bool isRaster() const;
 
         void createSubsamples( void );
 
@@ -117,7 +139,7 @@ namespace Ogre
             float invNumRaysPerPixel;
             float invNumRaysPerIrradiancePixel;
             float unused0;
-            uint32 probesPerRow; // Used by integration CS
+            uint32 probesPerRow;  // Used by integration CS
 
             float coneAngleTan;
             uint32 numProcessedProbes;
@@ -157,6 +179,8 @@ namespace Ogre
         TexBufferPacked *mDepthTapsIntegrationBuffer;
         TexBufferPacked *mColourTapsIntegrationBuffer;
 
+        IrradianceFieldRaster *mIfRaster;
+
         Root *mRoot;
         SceneManager *mSceneManager;
         bool mAlreadyWarned;
@@ -190,6 +214,8 @@ namespace Ogre
         @param fieldOrigin
         @param fieldSize
         @param vctLighting
+            This value is ignored if IrradianceFieldSettings::usesRaster() returns true,
+            and must be non-null if it returns false
          */
         void initialize( const IrradianceFieldSettings &settings, const Vector3 &fieldOrigin,
                          const Vector3 &fieldSize, VctLighting *vctLighting );

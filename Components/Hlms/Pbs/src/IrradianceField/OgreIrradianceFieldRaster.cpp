@@ -50,6 +50,8 @@ THE SOFTWARE.
 #include "Vao/OgreTexBufferPacked.h"
 #include "Vao/OgreVaoManager.h"
 
+#define TODO_final_memoryBarrier
+
 namespace Ogre
 {
     /// Return closest power of two not smaller than given number
@@ -69,11 +71,6 @@ namespace Ogre
         mRenderWorkspace( 0 ),
         mConvertToIfdWorkspace( 0 ),
         mConvertToIfdJob( 0 ),
-        mPixelFormat( PFG_RGBA8_UNORM_SRGB ),
-        mCameraNear( 0.5f ),
-        mCameraFar( 500.0f ),
-        mFieldOrigin( Vector3::ZERO ),
-        mFieldSize( Vector3::UNIT_SCALE ),
         mCamera( 0 ),
         mDepthBufferToCubemapPass( 0 )
     {
@@ -102,6 +99,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void IrradianceFieldRaster::createWorkspace( void )
     {
+        const RasterParams &rasterParams = mCreator->mSettings.mRasterParams;
         SceneManager *sceneManager = mCreator->mSceneManager;
 
         TextureGpuManager *textureManager =
@@ -114,7 +112,7 @@ namespace Ogre
             "IrradianceFieldRaster/Temp/" + StringConverter::toString( mCreator->getId() ),
             GpuPageOutStrategy::Discard, TextureFlags::RenderToTexture, TextureTypes::TypeCube );
         mCubemap->setResolution( cubemapRes, cubemapRes );
-        mCubemap->setPixelFormat( mPixelFormat );
+        mCubemap->setPixelFormat( rasterParams.mPixelFormat );
 
         mDepthCubemap = textureManager->createTexture(
             "IrradianceFieldRaster/Depth/" + StringConverter::toString( mCreator->getId() ),
@@ -131,8 +129,8 @@ namespace Ogre
         mCamera->setFOVy( Degree( 90 ) );
         mCamera->setAspectRatio( 1 );
         mCamera->setFixedYawAxis( false );
-        mCamera->setNearClipDistance( mCameraNear );
-        mCamera->setFarClipDistance( mCameraFar );
+        mCamera->setNearClipDistance( rasterParams.mCameraNear );
+        mCamera->setFarClipDistance( rasterParams.mCameraFar );
 
         CompositorManager2 *compositorManager = mCreator->mRoot->getCompositorManager2();
         ResourceLayoutMap initialLayouts;
@@ -142,9 +140,9 @@ namespace Ogre
         channels.reserve( 2u );
         channels.push_back( mCubemap );
         channels.push_back( mDepthCubemap );
-        mRenderWorkspace =
-            compositorManager->addWorkspace( sceneManager, channels, mCamera, mWorkspaceName, false, -1,
-                                             0, &initialLayouts, &initialUavAccess );
+        mRenderWorkspace = compositorManager->addWorkspace( sceneManager, channels, mCamera,
+                                                            rasterParams.mWorkspaceName, false, -1, 0,
+                                                            &initialLayouts, &initialUavAccess );
         mRenderWorkspace->addListener( this );
 
         mConvertToIfdWorkspace = compositorManager->addWorkspace(
@@ -212,8 +210,8 @@ namespace Ogre
         pos += 0.5f;
 
         pos /= settings.getNumProbes3f();
-        pos += mFieldOrigin;
-        pos *= mFieldSize;
+        pos += settings.mRasterParams.mFieldOrigin;
+        pos *= settings.mRasterParams.mFieldSize;
 
         return pos;
     }
@@ -254,6 +252,8 @@ namespace Ogre
                 renderSystem->_endFrameOnce();
             }
         }
+
+        TODO_final_memoryBarrier;
 
         mCreator->mNumProbesProcessed += numProbesToProcess;
 

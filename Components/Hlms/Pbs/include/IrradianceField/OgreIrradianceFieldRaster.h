@@ -32,9 +32,8 @@ THE SOFTWARE.
 #include "OgreHlmsPbsPrerequisites.h"
 
 #include "Compositor/OgreCompositorWorkspaceListener.h"
-#include "OgreVector3.h"
-#include "OgrePixelFormatGpu.h"
 #include "OgreShaderParams.h"
+#include "OgreVector3.h"
 
 #include "OgreHeaderPrefix.h"
 
@@ -78,14 +77,6 @@ namespace Ogre
         HlmsComputeJob *mConvertToIfdJob;
         ShaderParams *mShaderParamsConvertToIfd;
         ShaderParams::Param *mProbeIdxParam;
-
-        IdString mWorkspaceName;
-        PixelFormatGpu mPixelFormat;
-        float mCameraNear;
-        float mCameraFar;
-
-        Vector3 mFieldOrigin;
-        Vector3 mFieldSize;
 
         Camera *mCamera;
         Pass *mDepthBufferToCubemapPass;
