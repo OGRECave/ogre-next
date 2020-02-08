@@ -224,9 +224,8 @@ namespace Ogre
         const uint32 oldVisibilityMask = sceneManager->getVisibilityMask();
         sceneManager->setVisibilityMask( 0xffffffff );
 
-        const size_t totalNumProbes = mCreator->mSettings.getTotalNumProbes();
-        const size_t numProbesToProcess =
-            std::min<size_t>( totalNumProbes - mCreator->mNumProbesProcessed, probesPerFrame );
+        // numProbesToProcess has already been sanitized by caller
+        const size_t numProbesToProcess = probesPerFrame;
         const size_t maxProbeToProcess = mCreator->mNumProbesProcessed + numProbesToProcess;
 
         for( size_t i = mCreator->mNumProbesProcessed; i < maxProbeToProcess; ++i )
@@ -254,8 +253,6 @@ namespace Ogre
         }
 
         TODO_final_memoryBarrier;
-
-        mCreator->mNumProbesProcessed += numProbesToProcess;
 
         sceneManager->setVisibilityMask( oldVisibilityMask );
     }

@@ -85,11 +85,12 @@ namespace Ogre
         void destroyWorkspace( void );
 
         Vector3 getProbeCenter( size_t probeIdx ) const;
-        void renderProbes( uint32 probesPerFrame );
 
     public:
         IrradianceFieldRaster( IrradianceField *creator );
         virtual ~IrradianceFieldRaster();
+
+        void renderProbes( uint32 probesPerFrame );
 
         /// Needed
         virtual void passPreExecute( CompositorPass *pass );

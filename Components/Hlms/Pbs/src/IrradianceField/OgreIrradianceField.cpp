@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "IrradianceField/OgreIrradianceField.h"
+#include "IrradianceField/OgreIrradianceFieldRaster.h"
 #include "Vct/OgreVctLighting.h"
 #include "Vct/OgreVctVoxelizer.h"
 
@@ -393,6 +394,13 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void IrradianceField::setIrradianceFieldGenParams()
     {
+        if( mSettings.isRaster() )
+        {
+            // Avoid Valgrind from complaining when we copy the whole struct to GPU for the integrator
+            memset( &mIfGenParams, 0, sizeof( mIfGenParams ) );
+            return;
+        }
+
         const uint32 numRaysPerPixel = mSettings.mNumRaysPerPixel;
         const uint32 depthProbeRes = mSettings.mDepthProbeResolution;
         const uint32 irradProbeRes = mSettings.mIrradianceResolution;
@@ -491,25 +499,24 @@ namespace Ogre
 
         VaoManager *vaoManager = textureManager->getVaoManager();
 
-        if( !mSettings.isRaster() )
-        {
-            const size_t updateDataSize = sizeof( float ) * 4u * mSettings.mNumRaysPerPixel *
-                                          mSettings.mDepthProbeResolution *
-                                          mSettings.mDepthProbeResolution;
-            float *directionsBuffer =
-                reinterpret_cast<float *>( OGRE_MALLOC_SIMD( updateDataSize, MEMCATEGORY_GEOMETRY ) );
-            FreeOnDestructor dataPtr( directionsBuffer );
-            fillDirections( directionsBuffer );
-            mDirectionsBuffer = vaoManager->createTexBuffer( PFG_RGBA32_FLOAT, updateDataSize,
-                                                             BT_DEFAULT, directionsBuffer, false );
-        }
-
         mDepthTapsIntegrationBuffer = setupIntegrationTaps(
             vaoManager, mSettings.mDepthProbeResolution, depthWidth, mDepthIntegrationJob,
             mIfGenParamsBuffer, mDepthMaxIntegrationTapsPerPixel );
         mColourTapsIntegrationBuffer = setupIntegrationTaps(
             vaoManager, mSettings.mIrradianceResolution, irradWidth, mColourIntegrationJob,
             mIfGenParamsBuffer, mColourMaxIntegrationTapsPerPixel );
+
+        if( !mVctLighting )
+            return;
+
+        const size_t updateDataSize = sizeof( float ) * 4u * mSettings.mNumRaysPerPixel *
+                                      mSettings.mDepthProbeResolution * mSettings.mDepthProbeResolution;
+        float *directionsBuffer =
+            reinterpret_cast<float *>( OGRE_MALLOC_SIMD( updateDataSize, MEMCATEGORY_GEOMETRY ) );
+        FreeOnDestructor dataPtr( directionsBuffer );
+        fillDirections( directionsBuffer );
+        mDirectionsBuffer = vaoManager->createTexBuffer( PFG_RGBA32_FLOAT, updateDataSize, BT_DEFAULT,
+                                                         directionsBuffer, false );
 
         mGenerationJob->setConstBuffer( 0, mIfGenParamsBuffer );
 
@@ -630,9 +637,16 @@ namespace Ogre
 
         mIfGenParamsBuffer->unmap( UO_KEEP_PERSISTENT );
 
-        mGenerationWorkspace->_beginUpdate( false );
-        mGenerationWorkspace->_update();
-        mGenerationWorkspace->_endUpdate( false );
+        if( !mSettings.isRaster() )
+        {
+            mGenerationWorkspace->_beginUpdate( false );
+            mGenerationWorkspace->_update();
+            mGenerationWorkspace->_endUpdate( false );
+        }
+        else
+        {
+            mIfRaster->renderProbes( probesPerFrame );
+        }
 
         mNumProbesProcessed += probesPerFrame;
     }
