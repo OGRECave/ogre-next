@@ -92,6 +92,6 @@ compositor_node IrradianceFieldRasterRendererNode
 
 workspace IrradianceFieldRasterWorkspace
 {
-	connect_external 0 LocalCubemapProbeRendererNode 0
-	connect_external 1 LocalCubemapProbeRendererNode 1
+	connect_external 0 IrradianceFieldRasterRendererNode 0
+	connect_external 1 IrradianceFieldRasterRendererNode 1
 }
