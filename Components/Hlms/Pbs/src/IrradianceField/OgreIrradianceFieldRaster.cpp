@@ -32,13 +32,8 @@ THE SOFTWARE.
 
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorWorkspace.h"
-#include "Compositor/Pass/PassQuad/OgreCompositorPassQuad.h"
-#include "Compositor/Pass/PassQuad/OgreCompositorPassQuadDef.h"
 #include "OgreDepthBuffer.h"
 #include "OgreRoot.h"
-
-#include "OgreMaterialManager.h"
-#include "OgreTechnique.h"
 
 #include "OgreHlmsCompute.h"
 #include "OgreHlmsComputeJob.h"
@@ -71,17 +66,8 @@ namespace Ogre
         mRenderWorkspace( 0 ),
         mConvertToIfdWorkspace( 0 ),
         mConvertToIfdJob( 0 ),
-        mCamera( 0 ),
-        mDepthBufferToCubemapPass( 0 )
+        mCamera( 0 )
     {
-        MaterialPtr depthBufferToCubemap = MaterialManager::getSingleton().getByName(
-            "IFD/DepthBufferToCubemap", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
-        if( depthBufferToCubemap )
-        {
-            depthBufferToCubemap->load();
-            mDepthBufferToCubemapPass = depthBufferToCubemap->getTechnique( 0 )->getPass( 0 );
-        }
-
         HlmsCompute *hlmsCompute = mCreator->mRoot->getHlmsManager()->getComputeHlms();
         mConvertToIfdJob = hlmsCompute->findComputeJobNoThrow( "IrradianceField/CubemapToIfd" );
 
@@ -145,10 +131,11 @@ namespace Ogre
         mRenderWorkspace = compositorManager->addWorkspace( sceneManager, channels, mCamera,
                                                             rasterParams.mWorkspaceName, false, -1, 0,
                                                             &initialLayouts, &initialUavAccess );
-        mRenderWorkspace->addListener( this );
 
+        channels.push_back( mCreator->mIrradianceTex );
+        channels.push_back( mCreator->mDepthVarianceTex );
         mConvertToIfdWorkspace = compositorManager->addWorkspace(
-            sceneManager, channels, mCamera, "IrradianceField/CubemapToIfd", false, -1, 0,
+            sceneManager, channels, mCamera, "IrradianceField/CubemapToIfd/Workspace", false, -1, 0,
             &initialLayouts, &initialUavAccess );
 
         const IrradianceFieldSettings &settings = mCreator->mSettings;
@@ -158,7 +145,7 @@ namespace Ogre
                                        static_cast<int32>( mCreator->mIrradianceTex->getWidth() ) );
         mConvertToIfdJob->setProperty(
             "depth_to_colour_resolution_ratio",
-            static_cast<int32>( settings.mIrradianceResolution / settings.mDepthProbeResolution ) );
+            static_cast<int32>( settings.mDepthProbeResolution / settings.mIrradianceResolution ) );
         mConvertToIfdJob->setProperty(
             "horiz_samples_per_colour_pixel",
             static_cast<int32>( cubemapRes / settings.mIrradianceResolution ) );
@@ -223,20 +210,25 @@ namespace Ogre
         SceneManager *sceneManager = mCreator->mSceneManager;
         RenderSystem *renderSystem = sceneManager->getDestinationRenderSystem();
 
+        sceneManager->updateSceneGraph();
+
         const uint32 oldVisibilityMask = sceneManager->getVisibilityMask();
         sceneManager->setVisibilityMask( 0xffffffff );
 
         // numProbesToProcess has already been sanitized by caller
         const size_t numProbesToProcess = probesPerFrame;
-        const size_t maxProbeToProcess = mCreator->mNumProbesProcessed + numProbesToProcess;
+        const size_t numProbesProcessed = mCreator->mNumProbesProcessed;
+        const size_t maxProbeToProcess = numProbesProcessed + numProbesToProcess;
 
-        for( size_t i = mCreator->mNumProbesProcessed; i < maxProbeToProcess; ++i )
+        for( size_t i = numProbesProcessed; i < maxProbeToProcess; ++i )
         {
+            const size_t idx = i - numProbesProcessed;
+
             Vector3 probeCenter = getProbeCenter( i );
 
             mCamera->setPosition( probeCenter );
 
-            if( numProbesToProcess > 2u )
+            if( idx > 0u && (idx % 8u) == 0u )
                 renderSystem->_beginFrameOnce();
 
             // Render to cubemap (also copies depth buffer into its own cubemap)
@@ -247,7 +239,7 @@ namespace Ogre
             mShaderParamsConvertToIfd->setDirty();
             mConvertToIfdWorkspace->_update();
 
-            if( numProbesToProcess > 2u )
+            if( idx > 0u && (idx % 8u) == 0u )
             {
                 renderSystem->_update();
                 renderSystem->_endFrameOnce();
@@ -257,23 +249,5 @@ namespace Ogre
         TODO_final_memoryBarrier;
 
         sceneManager->setVisibilityMask( oldVisibilityMask );
-    }
-    //-------------------------------------------------------------------------
-    void IrradianceFieldRaster::passPreExecute( CompositorPass *pass )
-    {
-        const CompositorPassDef *passDef = pass->getDefinition();
-        if( passDef->getType() != PASS_QUAD )
-            return;
-
-        OGRE_ASSERT_HIGH( dynamic_cast<CompositorPassQuad *>( pass ) );
-        CompositorPassQuad *passQuad = static_cast<CompositorPassQuad *>( pass );
-        if( passQuad->getPass() == mDepthBufferToCubemapPass )
-        {
-            GpuProgramParametersSharedPtr psParams =
-                mDepthBufferToCubemapPass->getFragmentProgramParameters();
-
-            const uint32 sliceIdx = std::min<uint32>( passDef->getRtIndex(), 5 );
-            psParams->setNamedConstant( "cubemapFaceIdx", sliceIdx );
-        }
     }
 }  // namespace Ogre

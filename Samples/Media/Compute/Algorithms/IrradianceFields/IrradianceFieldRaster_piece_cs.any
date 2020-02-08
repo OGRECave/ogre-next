@@ -6,6 +6,8 @@
 /// assuming depth_resolution >= colour_resolution
 
 @piece( HeaderCS )
+	#define ProbeIndex uint
+
 	INLINE ushort2 getIrradianceFieldColourBaseXY( ProbeIndex probeIdx )
 	{
 		ushort2 retVal;
@@ -52,8 +54,8 @@
 	// a 2D octahedral map of 6x6 or 8x8
 	float4 colourData = float4( 0, 0, 0, 0 );
 	/// Note: There is no vert_samples_per_colour_pixel (Because width == height)
-	@foreach( y, horiz_samples_per_colour_pixel )
-		@foreach( x, horiz_samples_per_colour_pixel )
+	@foreach( horiz_samples_per_colour_pixel, y )
+		@foreach( horiz_samples_per_colour_pixel, x )
 			offset = float2( @x, @y ) / ( @value( horiz_samples_per_colour_pixel ) * @value( colour_resolution ) );
 			samplingDir = octahedronMappingDecode( samplingXY + offset );
 			colourData += OGRE_SampleLevel( colourCubemap, bilinearSampler, samplingDir, 0 );
@@ -70,14 +72,14 @@
 	// And this pixel shader run one thread per colour pixel; thus each thread handles
 	// more than one depth pixel
 	float depthData;
-	@foreach( i, depth_to_colour_resolution_ratio )
-		@foreach( j, depth_to_colour_resolution_ratio )
+	@foreach( depth_to_colour_resolution_ratio, i )
+		@foreach( depth_to_colour_resolution_ratio, j )
 			depthData = 0.0f;
-			@foreach( y, horiz_samples_per_depth_pixel )
-				@foreach( x, horiz_samples_per_depth_pixel )
+			@foreach( horiz_samples_per_depth_pixel, y )
+				@foreach( horiz_samples_per_depth_pixel, x )
 					offset = float2( @i + @x, @j + @y ) / ( @value( horiz_samples_per_depth_pixel ) * @value( depth_resolution ) );
 					samplingDir = octahedronMappingDecode( samplingXY + offset );
-					depthData += OGRE_SampleLevel( depthCubemap, bilinearSampler, samplingDir, 0 );
+					depthData += OGRE_SampleLevel( depthCubemap, bilinearSampler, samplingDir, 0 ).x;
 				@end
 			@end
 

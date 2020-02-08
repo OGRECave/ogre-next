@@ -628,7 +628,7 @@ namespace Ogre
 
         const uint32 numRays = probesPerFrame * depthResolution * depthResolution * numRaysPerPixel;
 
-        OGRE_ASSERT_LOW( ( numRays % threadsPerGroup ) == 0u );
+        OGRE_ASSERT_LOW( ( numRays % threadsPerGroup ) == 0u || mSettings.isRaster() );
 
         const uint32 numWorkGroups = numRays / threadsPerGroup;
 

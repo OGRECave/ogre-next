@@ -56,7 +56,7 @@ abstract target depth_to_cubemap
 			stencil	dont_care
 		}
 
-		material		IFD/DepthBufferToCubemap
+		material		Ogre/Copy/4xFP32
 		input			0 depthTexture
 
 		camera_cubemap_reorient true
