@@ -95,10 +95,12 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    IrradianceFieldRaster::~IrradianceFieldRaster() {}
+    IrradianceFieldRaster::~IrradianceFieldRaster() { destroyWorkspace(); }
     //-------------------------------------------------------------------------
     void IrradianceFieldRaster::createWorkspace( void )
     {
+        destroyWorkspace();
+
         const RasterParams &rasterParams = mCreator->mSettings.mRasterParams;
         SceneManager *sceneManager = mCreator->mSceneManager;
 

@@ -206,6 +206,10 @@ namespace Ogre
     IrradianceField::~IrradianceField()
     {
         destroyTextures();
+
+        delete mIfRaster;
+        mIfRaster = 0;
+
         VaoManager *vaoManager = mRoot->getRenderSystem()->getVaoManager();
         if( mIfGenParamsBuffer->getMappingState() != MS_UNMAPPED )
             mIfGenParamsBuffer->unmap( UO_UNMAP_ALL );
@@ -469,6 +473,18 @@ namespace Ogre
         mNumProbesProcessed = 0u;
         createTextures();
         setIrradianceFieldGenParams();
+
+        if( mSettings.isRaster() )
+        {
+            if( !mIfRaster )
+                mIfRaster = OGRE_NEW IrradianceFieldRaster( this );
+            mIfRaster->createWorkspace();
+        }
+        else
+        {
+            delete mIfRaster;
+            mIfRaster = 0;
+        }
     }
     //-------------------------------------------------------------------------
     void IrradianceField::createTextures( void )

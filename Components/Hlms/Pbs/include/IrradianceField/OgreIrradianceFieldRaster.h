@@ -65,7 +65,8 @@ namespace Ogre
         In short, it may be possible, but there are several issues to workaround,
         hence it is just easier to render the information we need
     */
-    class _OgreHlmsPbsExport IrradianceFieldRaster : public CompositorWorkspaceListener
+    class _OgreHlmsPbsExport IrradianceFieldRaster : public CompositorWorkspaceListener,
+                                                     public UtilityAlloc
     {
         IrradianceField *mCreator;
 
@@ -81,14 +82,14 @@ namespace Ogre
         Camera *mCamera;
         Pass *mDepthBufferToCubemapPass;
 
-        void createWorkspace( void );
-        void destroyWorkspace( void );
-
         Vector3 getProbeCenter( size_t probeIdx ) const;
 
     public:
         IrradianceFieldRaster( IrradianceField *creator );
         virtual ~IrradianceFieldRaster();
+
+        void createWorkspace( void );
+        void destroyWorkspace( void );
 
         void renderProbes( uint32 probesPerFrame );
 
