@@ -213,8 +213,8 @@ namespace Ogre
         pos += 0.5f;
 
         pos /= settings.getNumProbes3f();
-        pos *= settings.mRasterParams.mFieldSize;
-        pos += settings.mRasterParams.mFieldOrigin;
+        pos *= mCreator->mFieldSize;
+        pos += mCreator->mFieldOrigin;
 
         return pos;
     }

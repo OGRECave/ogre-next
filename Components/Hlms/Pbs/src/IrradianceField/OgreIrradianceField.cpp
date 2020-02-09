@@ -53,10 +53,8 @@ namespace Ogre
 {
     RasterParams::RasterParams() :
         mPixelFormat( PFG_RGBA8_UNORM_SRGB ),
-        mCameraNear( 0.5f ),
-        mCameraFar( 500.0f ),
-        mFieldOrigin( Vector3::ZERO ),
-        mFieldSize( Vector3::UNIT_SCALE )
+        mCameraNear( 0.01f ),
+        mCameraFar( 500.0f )
     {
     }
     //-------------------------------------------------------------------------
@@ -464,9 +462,13 @@ namespace Ogre
     {
         mSettings = settings;
         mSettings.createSubsamples();
-        mVctLighting = vctLighting;
-        OGRE_ASSERT_LOW( ( mVctLighting || mSettings.isRaster() ) &&
+
+        OGRE_ASSERT_LOW( ( vctLighting || mSettings.isRaster() ) &&
                          "vctLighting param must be provided when not using rasterization" );
+        if( !mSettings.isRaster() )
+            mVctLighting = vctLighting;
+        else
+            mVctLighting = 0;
         mFieldOrigin = fieldOrigin;
         mFieldSize = fieldSize;
         mAlreadyWarned = false;

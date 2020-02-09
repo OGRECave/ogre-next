@@ -36,6 +36,7 @@ THE SOFTWARE.
 #include "OgreIdString.h"
 #include "OgrePixelFormatGpu.h"
 #include "OgreShaderPrimitives.h"
+#include "Math/Simple/OgreAabb.h"
 
 #include "OgreHeaderPrefix.h"
 
@@ -49,9 +50,6 @@ namespace Ogre
         PixelFormatGpu mPixelFormat;
         float mCameraNear;
         float mCameraFar;
-
-        Vector3 mFieldOrigin;
-        Vector3 mFieldSize;
 
         RasterParams();
     };

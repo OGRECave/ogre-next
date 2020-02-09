@@ -25,6 +25,27 @@ namespace Demo
             NumScenes
         };
 
+        /**
+        @brief The GiMode enum
+            There are 4 different ways to use GI:
+
+                1. IfdOnly (Irradiance Fields with Depth)
+                    a. Using voxels. Requires mVoxelizer, mVctLighting and mIrradianceField
+                       Only hlmsPbs->setIrradianceField( mIrradianceField ) is called
+                    b. Using rasterization. Requires mIrradianceField only.
+                       Only hlmsPbs->setIrradianceField( mIrradianceField ) is called
+                2. VctOnly (Voxel Cone Tracing). Requires mVoxelizer, mVctLighting
+                   Only hlmsPbs->setVctLighting( mVctLighting ) is called
+                3. IfdVct (IFD + VCT hybrid). Requires mVoxelizer, mVctLighting and mIrradianceField
+                   Rasterization may be used instead of voxels for generating IFD.
+                   Both hlmsPbs->setVctLighting & hlmsPbs->setIrradianceField are called
+
+            If tight on memory and data won't be regenerated again (e.g. due to changes in light),
+            mVoxelizer can be deleted.
+
+            Likewise when using mIrradianceField; once it's done generating,
+            mVctLighting (when using voxels) is not needed anymore.
+        */
         enum GiMode
         {
             NoGI,
@@ -38,7 +59,8 @@ namespace Demo
         Ogre::VctLighting   *mVctLighting;
         float               mThinWallCounter;
 
-        Ogre::IrradianceField *mIrradianceField;
+        Ogre::IrradianceField   *mIrradianceField;
+        bool                    mUseRasterIrradianceField;
 
         Ogre::uint32    mDebugVisualizationMode;
         Ogre::uint32    mNumBounces;
@@ -62,6 +84,8 @@ namespace Demo
         void createCornellScene(void);
         void createSibenikScene(void);
         void createStressScene(void);
+
+        bool needsVoxels(void) const;
 
         virtual void generateDebugText( float timeSinceLast, Ogre::String &outText );
 
