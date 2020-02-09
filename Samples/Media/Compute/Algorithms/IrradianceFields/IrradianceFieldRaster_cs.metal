@@ -3,7 +3,16 @@
 
 @insertpiece( PreBindingsHeaderCS )
 
-#define p_probeIdx probeIdx
+struct Params
+{
+	uint probeIdx;
+	float2 projectionParams;
+	float3 numProbes;
+};
+
+#define p_probeIdx			p.probeIdx
+#define p_projectionParams	p.projectionParams
+#define p_numProbes			p.numProbes
 
 @insertpiece( HeaderCS )
 
@@ -17,7 +26,7 @@ kernel void main_metal
 (
 	ushort3 gl_LocalInvocationID		[[thread_position_in_threadgroup]],
 
-	constant uint &probeIdx						[[buffer(0)]],
+	constant Params &p							[[buffer(0)]],
 
 	texturecube<float> colourCubemap			[[texture(0)]],
 	texturecube<float> depthCubemap				[[texture(0)]],

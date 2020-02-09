@@ -73,7 +73,8 @@
 	// And this pixel shader run one thread per colour pixel; thus each thread handles
 	// more than one depth pixel
 	float2 depthData;
-	float tmpDepthData;
+	float dist;
+	float linearDepth;
 	@foreach( depth_to_colour_resolution_ratio, i )
 		@foreach( depth_to_colour_resolution_ratio, j )
 			depthData = float2( 0.0f, 0.0f );
@@ -81,9 +82,15 @@
 				@foreach( horiz_samples_per_depth_pixel, x )
 					offset = float2( @i + @x, @j + @y ) / ( @value( horiz_samples_per_depth_pixel ) * @value( depth_resolution ) );
 					samplingDir = octahedronMappingDecode( samplingXY + offset );
-					tmpDepthData = OGRE_SampleLevel( depthCubemap, bilinearSampler, samplingDir, 0 ).x;
-					depthData.x += tmpDepthData;
-					depthData.y += tmpDepthData * tmpDepthData;
+
+					dist = OGRE_SampleLevel( depthCubemap, bilinearSampler, samplingDir, 0 ).x;
+					linearDepth = p_projectionParams.y / (dist - p_projectionParams.x);
+
+					// Put dist in the same space it will be evaluted in during the pixel shader
+					dist = dot( abs( linearDepth * samplingDir ), p_numProbes.xyz );
+
+					depthData.x += dist;
+					depthData.y += dist * dist;
 				@end
 			@end
 

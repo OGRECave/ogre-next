@@ -6,8 +6,12 @@
 @insertpiece( PreBindingsHeaderCS )
 
 uniform uint probeIdx;
+uniform float2 projectionParams;
+uniform float3 numProbes;
 
-#define p_probeIdx probeIdx
+#define p_probeIdx			probeIdx
+#define p_projectionParams	projectionParams
+#define p_numProbes			numProbes
 
 SamplerState bilinearSampler	: register(s0);
 

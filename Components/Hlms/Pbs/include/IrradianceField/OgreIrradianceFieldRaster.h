@@ -78,6 +78,8 @@ namespace Ogre
         HlmsComputeJob *mConvertToIfdJob;
         ShaderParams *mShaderParamsConvertToIfd;
         ShaderParams::Param *mProbeIdxParam;
+        ShaderParams::Param *mProjectionABParam;
+        ShaderParams::Param *mNumProbesParam;
 
         Camera *mCamera;
 

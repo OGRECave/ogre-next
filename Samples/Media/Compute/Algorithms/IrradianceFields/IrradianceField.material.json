@@ -103,7 +103,9 @@
 
             "params" :
             [
-                ["probeIdx", [0], "uint"]
+                ["probeIdx",            [0],        "uint"],
+                ["projectionParams",    [1, 1],     "float"],
+                ["numProbes",           [0, 0, 0],  "float"]
             ],
 
             "params_glsl" :

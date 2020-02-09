@@ -68,6 +68,10 @@ namespace Ogre
         mConvertToIfdWorkspace( 0 ),
         mIfdIntegrationWorkspace( 0 ),
         mConvertToIfdJob( 0 ),
+        mShaderParamsConvertToIfd( 0 ),
+        mProbeIdxParam( 0 ),
+        mProjectionABParam( 0 ),
+        mNumProbesParam( 0 ),
         mCamera( 0 )
     {
         HlmsCompute *hlmsCompute = mCreator->mRoot->getHlmsManager()->getComputeHlms();
@@ -167,8 +171,9 @@ namespace Ogre
         mConvertToIfdJob->setNumThreadGroups( 1u, 1u, 1u );
 
         mShaderParamsConvertToIfd = &mConvertToIfdJob->getShaderParams( "default" );
-        mProbeIdxParam = &mShaderParamsConvertToIfd->mParams[0];
-        OGRE_ASSERT_MEDIUM( mProbeIdxParam->name == "probeIdx" );
+        mProbeIdxParam = mShaderParamsConvertToIfd->findParameter( "probeIdx" );
+        mProjectionABParam = mShaderParamsConvertToIfd->findParameter( "projectionParams" );
+        mNumProbesParam = mShaderParamsConvertToIfd->findParameter( "numProbes" );
     }
     //-------------------------------------------------------------------------
     void IrradianceFieldRaster::destroyWorkspace( void )
@@ -234,6 +239,10 @@ namespace Ogre
         const size_t numProbesToProcess = probesPerFrame;
         const size_t numProbesProcessed = mCreator->mNumProbesProcessed;
         const size_t maxProbeToProcess = numProbesProcessed + numProbesToProcess;
+
+        Ogre::Vector2 projectionAB = mCamera->getProjectionParamsAB();
+        mProjectionABParam->setManualValue( projectionAB );
+        mNumProbesParam->setManualValue( mCreator->mSettings.getNumProbes3f() );
 
         for( size_t i = numProbesProcessed; i < maxProbeToProcess; ++i )
         {
