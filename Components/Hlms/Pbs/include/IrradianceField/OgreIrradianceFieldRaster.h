@@ -73,6 +73,7 @@ namespace Ogre
         TextureGpu *mDepthCubemap;
         CompositorWorkspace *mRenderWorkspace;
         CompositorWorkspace *mConvertToIfdWorkspace;
+        CompositorWorkspace *mIfdIntegrationWorkspace;
 
         HlmsComputeJob *mConvertToIfdJob;
         ShaderParams *mShaderParamsConvertToIfd;

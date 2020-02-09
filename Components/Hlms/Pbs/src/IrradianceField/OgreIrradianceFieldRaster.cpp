@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "IrradianceField/OgreIrradianceFieldRaster.h"
 
 #include "IrradianceField/OgreIrradianceField.h"
+#include "OgreHlmsPbs.h"
 
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorWorkspace.h"
@@ -65,6 +66,7 @@ namespace Ogre
         mDepthCubemap( 0 ),
         mRenderWorkspace( 0 ),
         mConvertToIfdWorkspace( 0 ),
+        mIfdIntegrationWorkspace( 0 ),
         mConvertToIfdJob( 0 ),
         mCamera( 0 )
     {
@@ -136,6 +138,13 @@ namespace Ogre
         channels.push_back( mCreator->mDepthVarianceTex );
         mConvertToIfdWorkspace = compositorManager->addWorkspace(
             sceneManager, channels, mCamera, "IrradianceField/CubemapToIfd/Workspace", false, -1, 0,
+            &initialLayouts, &initialUavAccess );
+
+        channels.clear();
+        channels.push_back( mCreator->mIrradianceTex );
+        channels.push_back( mCreator->mDepthVarianceTex );
+        mIfdIntegrationWorkspace = compositorManager->addWorkspace(
+            sceneManager, channels, mCamera, "IrradianceField/IntegrationOnly/Workspace", false, -1, 0,
             &initialLayouts, &initialUavAccess );
 
         const IrradianceFieldSettings &settings = mCreator->mSettings;
@@ -210,6 +219,12 @@ namespace Ogre
         SceneManager *sceneManager = mCreator->mSceneManager;
         RenderSystem *renderSystem = sceneManager->getDestinationRenderSystem();
 
+        OGRE_ASSERT_HIGH(
+            dynamic_cast<HlmsPbs *>( mCreator->mRoot->getHlmsManager()->getHlms( HLMS_PBS ) ) );
+        HlmsPbs *pbs = static_cast<HlmsPbs *>( mCreator->mRoot->getHlmsManager()->getHlms( HLMS_PBS ) );
+        IrradianceField *oldIfd = pbs->getIrradianceField();
+        pbs->setIrradianceField( 0 );
+
         sceneManager->updateSceneGraph();
 
         const uint32 oldVisibilityMask = sceneManager->getVisibilityMask();
@@ -228,7 +243,7 @@ namespace Ogre
 
             mCamera->setPosition( probeCenter );
 
-            if( idx > 0u && (idx % 8u) == 0u )
+            if( idx > 0u && ( idx % 8u ) == 0u )
                 renderSystem->_beginFrameOnce();
 
             // Render to cubemap (also copies depth buffer into its own cubemap)
@@ -239,15 +254,21 @@ namespace Ogre
             mShaderParamsConvertToIfd->setDirty();
             mConvertToIfdWorkspace->_update();
 
-            if( idx > 0u && (idx % 8u) == 0u )
+            if( idx > 0u && ( idx % 8u ) == 0u )
             {
                 renderSystem->_update();
                 renderSystem->_endFrameOnce();
             }
         }
 
+        mIfdIntegrationWorkspace->_beginUpdate( false );
+        mIfdIntegrationWorkspace->_update();
+        mIfdIntegrationWorkspace->_endUpdate( false );
+
         TODO_final_memoryBarrier;
 
         sceneManager->setVisibilityMask( oldVisibilityMask );
+
+        pbs->setIrradianceField( oldIfd );
     }
 }  // namespace Ogre

@@ -18,13 +18,13 @@ compositor_node IrradianceField/Gen
 		pass compute
 		{
 			job IrradianceField/Integration/Depth
-			uav 0 depth_if write
+			uav 0 depth_if read write
 		}
 
 		pass compute
 		{
 			job IrradianceField/Integration/Colour
-			uav 0 colour_if write
+			uav 0 colour_if read write
 		}
 	}
 }
@@ -67,4 +67,31 @@ workspace IrradianceField/CubemapToIfd/Workspace
 	connect_external 1 IrradianceField/CubemapToIfd 1
 	connect_external 2 IrradianceField/CubemapToIfd 2
 	connect_external 3 IrradianceField/CubemapToIfd 3
+}
+
+compositor_node IrradianceField/IntegrationOnly
+{
+	in 0 colour_if
+	in 1 depth_if
+
+	target colour_if
+	{
+		pass compute
+		{
+			job IrradianceField/Integration/Depth
+			uav 0 depth_if read write
+		}
+
+		pass compute
+		{
+			job IrradianceField/Integration/Colour
+			uav 0 colour_if read write
+		}
+	}
+}
+
+workspace IrradianceField/IntegrationOnly/Workspace
+{
+	connect_external 0 IrradianceField/IntegrationOnly 0
+	connect_external 1 IrradianceField/IntegrationOnly 1
 }
