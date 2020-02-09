@@ -72,20 +72,23 @@
 	// we (usually, using default params) have 4 times as many depth pixels than colour.
 	// And this pixel shader run one thread per colour pixel; thus each thread handles
 	// more than one depth pixel
-	float depthData;
+	float2 depthData;
+	float tmpDepthData;
 	@foreach( depth_to_colour_resolution_ratio, i )
 		@foreach( depth_to_colour_resolution_ratio, j )
-			depthData = 0.0f;
+			depthData = float2( 0.0f, 0.0f );
 			@foreach( horiz_samples_per_depth_pixel, y )
 				@foreach( horiz_samples_per_depth_pixel, x )
 					offset = float2( @i + @x, @j + @y ) / ( @value( horiz_samples_per_depth_pixel ) * @value( depth_resolution ) );
 					samplingDir = octahedronMappingDecode( samplingXY + offset );
-					depthData += OGRE_SampleLevel( depthCubemap, bilinearSampler, samplingDir, 0 ).x;
+					tmpDepthData = OGRE_SampleLevel( depthCubemap, bilinearSampler, samplingDir, 0 ).x;
+					depthData.x += tmpDepthData;
+					depthData.y += tmpDepthData * tmpDepthData;
 				@end
 			@end
 
 			depthData /= @value( horiz_samples_per_depth_pixel ) * @value( horiz_samples_per_depth_pixel );
-			OGRE_imageWrite2D1( irradianceFieldDepth, iDepthXY + ushort2( @i, @j ), depthData );
+			OGRE_imageWrite2D2( irradianceFieldDepth, iDepthXY + ushort2( @i, @j ), depthData );
 		@end
 	@end
 @end
