@@ -76,7 +76,7 @@ namespace Ogre {
         HlmsManager *hlmsManager = parent->_getDatablock()->getCreator()->getHlmsManager();
         HlmsSamplerblock samplerblock;
         samplerblock.setAddressingMode( TAM_WRAP );
-        mSamplerblock = hlmsManager->getSamplerblock( HlmsSamplerblock() );
+        mSamplerblock = hlmsManager->getSamplerblock( samplerblock );
     }
     //-----------------------------------------------------------------------
     TextureUnitState::TextureUnitState(Pass* parent, const TextureUnitState& oth )
@@ -124,7 +124,7 @@ namespace Ogre {
         HlmsManager *hlmsManager = parent->_getDatablock()->getCreator()->getHlmsManager();
         HlmsSamplerblock samplerblock;
         samplerblock.setAddressingMode( TAM_WRAP );
-        mSamplerblock = hlmsManager->getSamplerblock( HlmsSamplerblock() );
+        mSamplerblock = hlmsManager->getSamplerblock( samplerblock );
     }
     //-----------------------------------------------------------------------
     TextureUnitState::~TextureUnitState()
