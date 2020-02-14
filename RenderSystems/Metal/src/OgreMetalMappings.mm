@@ -322,6 +322,8 @@ namespace Ogre
         case MTLDataTypeBool3:          return MTLVertexFormatFloat3;
         case MTLDataTypeBool4:          return MTLVertexFormatFloat4;
         }
+
+        return MTLVertexFormatInvalid;
     }
     //-----------------------------------------------------------------------------------
     MTLPixelFormat MetalMappings::get( PixelFormatGpu pf )
@@ -579,5 +581,7 @@ namespace Ogre
         case MTLDataTypeBool3:          return GCT_BOOL3;
         case MTLDataTypeBool4:          return GCT_BOOL4;
         }
+
+        return GCT_UNKNOWN;
     }
 }
