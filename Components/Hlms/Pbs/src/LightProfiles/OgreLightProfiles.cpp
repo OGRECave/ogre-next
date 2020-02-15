@@ -92,15 +92,6 @@ namespace Ogre
         mIesData.push_back( iesLoader );
     }
     //-------------------------------------------------------------------------
-    /// Return closest power of two not smaller than given number
-    static uint32 ClosestPow2( uint32 x )
-    {
-        if( !( x & ( x - 1u ) ) )
-            return x;
-        while( x & ( x + 1u ) )
-            x |= ( x + 1u );
-        return x + 1u;
-    }
     void LightProfiles::build( void )
     {
         uint32 suggestedWidth = 0u;
@@ -115,11 +106,11 @@ namespace Ogre
             ++itor;
         }
 
-        suggestedWidth = ClosestPow2( suggestedWidth );
+        suggestedWidth = Math::ClosestPow2( suggestedWidth );
         suggestedWidth = std::min<uint32>( suggestedWidth, 4096u );
 
         // We always need one more, as lights without profile will use that one (which is pure white)
-        const uint32 texHeight = ClosestPow2( static_cast<uint32>( mIesData.size() + 1u ) );
+        const uint32 texHeight = Math::ClosestPow2( static_cast<uint32>( mIesData.size() + 1u ) );
 
         if( !mLightProfilesTexture || texHeight > mLightProfilesTexture->getHeight() ||
             suggestedWidth != mLightProfilesTexture->getWidth() )

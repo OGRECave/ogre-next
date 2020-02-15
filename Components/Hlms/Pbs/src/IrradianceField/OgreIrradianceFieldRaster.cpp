@@ -50,16 +50,6 @@ THE SOFTWARE.
 
 namespace Ogre
 {
-    /// Return closest power of two not smaller than given number
-    static uint32 ClosestPow2( uint32 x )
-    {
-        if( !( x & ( x - 1u ) ) )
-            return x;
-        while( x & ( x + 1u ) )
-            x |= ( x + 1u );
-        return x + 1u;
-    }
-
     IrradianceFieldRaster::IrradianceFieldRaster( IrradianceField *creator ) :
         mCreator( creator ),
         mCubemap( 0 ),
@@ -100,7 +90,7 @@ namespace Ogre
             sceneManager->getDestinationRenderSystem()->getTextureGpuManager();
 
         uint32 cubemapRes = mCreator->mSettings.mDepthProbeResolution * 2u;
-        cubemapRes = ClosestPow2( cubemapRes );
+        cubemapRes = Math::ClosestPow2( cubemapRes );
 
         mCubemap = textureManager->createTexture(
             "IrradianceFieldRaster/Temp/" + StringConverter::toString( mCreator->getId() ),

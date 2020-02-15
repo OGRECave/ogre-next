@@ -521,6 +521,16 @@ namespace Ogre
        /// Takes a 2D value in range [0; 1] and returns a unit-length 3D vector
        static Vector3 octahedronMappingDecode( Vector2 f );
 
+       /// Return closest power of two not smaller than given number
+       static uint32 ClosestPow2( uint32 x )
+       {
+           if( !( x & ( x - 1u ) ) )
+               return x;
+           while( x & ( x + 1u ) )
+               x |= ( x + 1u );
+           return x + 1u;
+       }
+
        /** Checks whether a given point is inside a triangle, in a
             2-dimensional (Cartesian) space.
             @remarks
