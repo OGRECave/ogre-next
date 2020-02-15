@@ -330,7 +330,7 @@ struct LinearResampler_Byte
 
         // srcdata stays at beginning of slice, pdst is a moving pointer
         uchar* srcdata = (uchar*)src.atFromOffsettedOrigin( 0, 0, 0 );
-        uchar* pdst = (uchar*)dst.atFromOffsettedOrigin( 0, 0, 0 );
+        uchar* dstdata = (uchar*)dst.atFromOffsettedOrigin( 0, 0, 0 );
 
         // sx_48,sy_48 represent current position in source
         // using 16/48-bit fixed precision, incremented by steps
@@ -350,6 +350,8 @@ struct LinearResampler_Byte
             uint32 sy2 = std::min(sy1+1, src.height-1);
             size_t syoff1 = sy1 * src.bytesPerRow;
             size_t syoff2 = sy2 * src.bytesPerRow;
+
+            uchar *pdst = (uchar *)( dstdata + y * dst.bytesPerRow );
 
             uint64 sx_48 = (stepx >> 1) - 1;
             for (size_t x = 0; x < dst.width; x++, sx_48+=stepx) {
@@ -371,7 +373,6 @@ struct LinearResampler_Byte
                     *pdst++ = static_cast<uchar>((accum + 0x800000) >> 24);
                 }
             }
-            pdst += dst.bytesPerRow;
         }
     }
 };

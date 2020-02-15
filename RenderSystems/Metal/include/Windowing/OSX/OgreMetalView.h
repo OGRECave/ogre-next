@@ -26,6 +26,9 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
+#ifndef _OgreMetalView_OSX_H_
+#define _OgreMetalView_OSX_H_
+
 #import <QuartzCore/CAMetalLayer.h>
 #import <Metal/Metal.h>
 #import <AppKit/AppKit.h>
@@ -65,3 +68,5 @@ THE SOFTWARE.
 @property (nonatomic) CFTimeInterval presentationTime;
 
 @end
+
+#endif
