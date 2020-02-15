@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "IrradianceField/OgreIrradianceField.h"
+#include "IrradianceField/OgreIrradianceFieldRaster.h"
 #include "Vct/OgreVctLighting.h"
 #include "Vct/OgreVctVoxelizer.h"
 
@@ -50,6 +51,15 @@ THE SOFTWARE.
 
 namespace Ogre
 {
+    RasterParams::RasterParams() :
+        mPixelFormat( PFG_RGBA8_UNORM_SRGB ),
+        mCameraNear( 0.01f ),
+        mCameraFar( 500.0f )
+    {
+    }
+    //-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
     IrradianceFieldSettings::IrradianceFieldSettings() :
         mNumRaysPerPixel( 1u ),
         mDepthProbeResolution( 12u ),
@@ -60,8 +70,13 @@ namespace Ogre
         mNumProbes[1] = 8u;
     }
     //-------------------------------------------------------------------------
+    bool IrradianceFieldSettings::isRaster() const { return mRasterParams.mWorkspaceName != IdString(); }
+    //-------------------------------------------------------------------------
     void IrradianceFieldSettings::createSubsamples( void )
     {
+        if( isRaster() )
+            return;
+
         const size_t numRaysPerPixel = mNumRaysPerPixel;
         mSubsamples.resize( numRaysPerPixel );
 
@@ -154,6 +169,7 @@ namespace Ogre
         mDirectionsBuffer( 0 ),
         mDepthTapsIntegrationBuffer( 0 ),
         mColourTapsIntegrationBuffer( 0 ),
+        mIfRaster( 0 ),
         mRoot( root ),
         mSceneManager( sceneManager ),
         mAlreadyWarned( false )
@@ -188,6 +204,10 @@ namespace Ogre
     IrradianceField::~IrradianceField()
     {
         destroyTextures();
+
+        delete mIfRaster;
+        mIfRaster = 0;
+
         VaoManager *vaoManager = mRoot->getRenderSystem()->getVaoManager();
         if( mIfGenParamsBuffer->getMappingState() != MS_UNMAPPED )
             mIfGenParamsBuffer->unmap( UO_UNMAP_ALL );
@@ -197,6 +217,8 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void IrradianceField::fillDirections( float *RESTRICT_ALIAS outBuffer )
     {
+        OGRE_ASSERT_LOW( !mSettings.isRaster() );
+
         float *RESTRICT_ALIAS updateData = reinterpret_cast<float * RESTRICT_ALIAS>( outBuffer );
         const float *RESTRICT_ALIAS updateDataStart = updateData;
 
@@ -374,6 +396,13 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void IrradianceField::setIrradianceFieldGenParams()
     {
+        if( mSettings.isRaster() )
+        {
+            // Avoid Valgrind from complaining when we copy the whole struct to GPU for the integrator
+            memset( &mIfGenParams, 0, sizeof( mIfGenParams ) );
+            return;
+        }
+
         const uint32 numRaysPerPixel = mSettings.mNumRaysPerPixel;
         const uint32 depthProbeRes = mSettings.mDepthProbeResolution;
         const uint32 irradProbeRes = mSettings.mIrradianceResolution;
@@ -433,13 +462,31 @@ namespace Ogre
     {
         mSettings = settings;
         mSettings.createSubsamples();
-        mVctLighting = vctLighting;
+
+        OGRE_ASSERT_LOW( ( vctLighting || mSettings.isRaster() ) &&
+                         "vctLighting param must be provided when not using rasterization" );
+        if( !mSettings.isRaster() )
+            mVctLighting = vctLighting;
+        else
+            mVctLighting = 0;
         mFieldOrigin = fieldOrigin;
         mFieldSize = fieldSize;
         mAlreadyWarned = false;
         mNumProbesProcessed = 0u;
         createTextures();
         setIrradianceFieldGenParams();
+
+        if( mSettings.isRaster() )
+        {
+            if( !mIfRaster )
+                mIfRaster = OGRE_NEW IrradianceFieldRaster( this );
+            mIfRaster->createWorkspace();
+        }
+        else
+        {
+            delete mIfRaster;
+            mIfRaster = 0;
+        }
     }
     //-------------------------------------------------------------------------
     void IrradianceField::createTextures( void )
@@ -468,15 +515,7 @@ namespace Ogre
         mIrradianceTex->scheduleTransitionTo( GpuResidency::Resident );
         mDepthVarianceTex->scheduleTransitionTo( GpuResidency::Resident );
 
-        const size_t updateDataSize = sizeof( float ) * 4u * mSettings.mNumRaysPerPixel *
-                                      mSettings.mDepthProbeResolution * mSettings.mDepthProbeResolution;
-        float *directionsBuffer =
-            reinterpret_cast<float *>( OGRE_MALLOC_SIMD( updateDataSize, MEMCATEGORY_GEOMETRY ) );
-        FreeOnDestructor dataPtr( directionsBuffer );
-        fillDirections( directionsBuffer );
         VaoManager *vaoManager = textureManager->getVaoManager();
-        mDirectionsBuffer = vaoManager->createTexBuffer( PFG_RGBA32_FLOAT, updateDataSize, BT_DEFAULT,
-                                                         directionsBuffer, false );
 
         mDepthTapsIntegrationBuffer = setupIntegrationTaps(
             vaoManager, mSettings.mDepthProbeResolution, depthWidth, mDepthIntegrationJob,
@@ -484,6 +523,18 @@ namespace Ogre
         mColourTapsIntegrationBuffer = setupIntegrationTaps(
             vaoManager, mSettings.mIrradianceResolution, irradWidth, mColourIntegrationJob,
             mIfGenParamsBuffer, mColourMaxIntegrationTapsPerPixel );
+
+        if( !mVctLighting )
+            return;
+
+        const size_t updateDataSize = sizeof( float ) * 4u * mSettings.mNumRaysPerPixel *
+                                      mSettings.mDepthProbeResolution * mSettings.mDepthProbeResolution;
+        float *directionsBuffer =
+            reinterpret_cast<float *>( OGRE_MALLOC_SIMD( updateDataSize, MEMCATEGORY_GEOMETRY ) );
+        FreeOnDestructor dataPtr( directionsBuffer );
+        fillDirections( directionsBuffer );
+        mDirectionsBuffer = vaoManager->createTexBuffer( PFG_RGBA32_FLOAT, updateDataSize, BT_DEFAULT,
+                                                         directionsBuffer, false );
 
         mGenerationJob->setConstBuffer( 0, mIfGenParamsBuffer );
 
@@ -579,7 +630,7 @@ namespace Ogre
 
         const uint32 numRays = probesPerFrame * depthResolution * depthResolution * numRaysPerPixel;
 
-        OGRE_ASSERT_LOW( ( numRays % threadsPerGroup ) == 0u );
+        OGRE_ASSERT_LOW( ( numRays % threadsPerGroup ) == 0u || mSettings.isRaster() );
 
         const uint32 numWorkGroups = numRays / threadsPerGroup;
 
@@ -604,9 +655,16 @@ namespace Ogre
 
         mIfGenParamsBuffer->unmap( UO_KEEP_PERSISTENT );
 
-        mGenerationWorkspace->_beginUpdate( false );
-        mGenerationWorkspace->_update();
-        mGenerationWorkspace->_endUpdate( false );
+        if( !mSettings.isRaster() )
+        {
+            mGenerationWorkspace->_beginUpdate( false );
+            mGenerationWorkspace->_update();
+            mGenerationWorkspace->_endUpdate( false );
+        }
+        else
+        {
+            mIfRaster->renderProbes( probesPerFrame );
+        }
 
         mNumProbesProcessed += probesPerFrame;
     }

@@ -4,6 +4,7 @@
 #define OGRE_imageLoad2D( inImage, iuv ) inImage.read( ushort2( iuv ) )
 #define OGRE_imageLoad2DArray( inImage, iuvw ) inImage.read( ushort2( iuvw.xy ), ushort( iuvw.z ) )
 
+#define OGRE_imageWrite2D1( outImage, iuv, value ) outImage.write( float4( value, 0, 0, 0 ), iuv )
 #define OGRE_imageWrite2D2( outImage, iuv, value ) outImage.write( value.xyxy, iuv )
 #define OGRE_imageWrite2D4( outImage, iuv, value ) outImage.write( value, iuv )
 

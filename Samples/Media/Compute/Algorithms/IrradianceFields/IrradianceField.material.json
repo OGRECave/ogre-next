@@ -82,6 +82,40 @@
             {
                 "integrate_depth" : 0
             }
+        },
+
+        "IrradianceField/CubemapToIfd" :
+        {
+            "threads_per_group" : [8, 8, 1],
+            "thread_groups" : [1, 1, 1],
+
+            "source" : "IrradianceFieldRaster_cs",
+            "pieces" : ["CrossPlatformSettings_piece_all", "UavCrossPlatform_piece_all", "sRGB.any", "IrradianceFieldRaster_piece_cs.any"],
+            "inform_shader_of_texture_data_change" : true,
+
+            "uav_units" : 2,
+
+            "textures" :
+            [
+                {},
+                {}
+            ],
+
+            "params" :
+            [
+                ["probeIdx",            [0],        "uint"],
+                ["projectionParams",    [1, 1],     "float"],
+                ["numProbes",           [0, 0, 0],  "float"]
+            ],
+
+            "params_glsl" :
+            [
+                ["colourCubemap",           [0], "int"],
+                ["depthCubemap",            [1], "int"],
+
+                ["irradianceField",         [0], "int"],
+                ["irradianceFieldDepth",    [1], "int"]
+            ]
         }
     }
 }

@@ -29,9 +29,10 @@ THE SOFTWARE.
 #ifndef _OgreCompositorWorkspaceListener_H_
 #define _OgreCompositorWorkspaceListener_H_
 
-#include "OgreHeaderPrefix.h"
 #include "Compositor/OgreCompositorCommon.h"
 #include "Compositor/Pass/OgreCompositorPassDef.h"
+
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {

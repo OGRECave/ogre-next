@@ -1,3 +1,6 @@
+// ----------------------------------------------------------------------------
+// IFD based on Voxelization
+// ----------------------------------------------------------------------------
 compositor_node IrradianceField/Gen
 {
 	in 0 colour_if
@@ -15,13 +18,13 @@ compositor_node IrradianceField/Gen
 		pass compute
 		{
 			job IrradianceField/Integration/Depth
-			uav 0 depth_if write
+			uav 0 depth_if read write
 		}
 
 		pass compute
 		{
 			job IrradianceField/Integration/Colour
-			uav 0 colour_if write
+			uav 0 colour_if read write
 		}
 	}
 }
@@ -30,4 +33,65 @@ workspace IrradianceField/Gen/Workspace
 {
 	connect_external 0 IrradianceField/Gen 0
 	connect_external 1 IrradianceField/Gen 1
+}
+
+// ----------------------------------------------------------------------------
+// IFD based on rasterization
+// ----------------------------------------------------------------------------
+
+compositor_node IrradianceField/CubemapToIfd
+{
+	in 0 cubemap
+	in 1 cubemap_depth
+	in 2 colour_if
+	in 3 depth_if
+
+	target colour_if
+	{
+		pass compute
+		{
+			job IrradianceField/CubemapToIfd
+
+			input 0 cubemap
+			input 1 cubemap_depth
+
+			uav 0 colour_if write
+			uav 1 depth_if write
+		}
+	}
+}
+
+workspace IrradianceField/CubemapToIfd/Workspace
+{
+	connect_external 0 IrradianceField/CubemapToIfd 0
+	connect_external 1 IrradianceField/CubemapToIfd 1
+	connect_external 2 IrradianceField/CubemapToIfd 2
+	connect_external 3 IrradianceField/CubemapToIfd 3
+}
+
+compositor_node IrradianceField/IntegrationOnly
+{
+	in 0 colour_if
+	in 1 depth_if
+
+	target colour_if
+	{
+		pass compute
+		{
+			job IrradianceField/Integration/Depth
+			uav 0 depth_if read write
+		}
+
+		pass compute
+		{
+			job IrradianceField/Integration/Colour
+			uav 0 colour_if read write
+		}
+	}
+}
+
+workspace IrradianceField/IntegrationOnly/Workspace
+{
+	connect_external 0 IrradianceField/IntegrationOnly 0
+	connect_external 1 IrradianceField/IntegrationOnly 1
 }

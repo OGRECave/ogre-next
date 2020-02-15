@@ -4,6 +4,7 @@
 #define OGRE_imageLoad2D( inImage, iuv ) inImage[uint2( iuv )]
 #define OGRE_imageLoad2DArray( inImage, iuvw ) inImage[uint3( iuvw )]
 
+#define OGRE_imageWrite2D1( outImage, iuv, value ) outImage[uint2( iuv )] = value
 #define OGRE_imageWrite2D2( outImage, iuv, value ) outImage[uint2( iuv )] = value.xy
 #define OGRE_imageWrite2D4( outImage, iuv, value ) outImage[uint2( iuv )] = value
 
