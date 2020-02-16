@@ -27,6 +27,7 @@ THE SOFTWARE.
 */
 #include "OgreD3D11DeviceResource.h"
 
+#include "ogrestd/vector.h"
 
 namespace Ogre
 {

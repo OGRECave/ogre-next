@@ -28,6 +28,8 @@ THE SOFTWARE.
 #include "OgreD3D11Device.h"
 #include "OgreException.h"
 
+#include "ogrestd/vector.h"
+
 namespace Ogre
 {
     //---------------------------------------------------------------------

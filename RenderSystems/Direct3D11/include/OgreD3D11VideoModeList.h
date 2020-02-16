@@ -30,6 +30,7 @@ THE SOFTWARE.
 
 #include "OgreD3D11Prerequisites.h"
 
+#include "ogrestd/vector.h"
 
 namespace Ogre 
 {

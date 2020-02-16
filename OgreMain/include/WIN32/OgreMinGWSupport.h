@@ -39,9 +39,9 @@ THE SOFTWARE.
 #include <specstrings.h>
 #define __in_z
 #define __in_z_opt
-#ifdef __MINGW64_VERSION_MAJOR
+/*#ifdef __MINGW64_VERSION_MAJOR
 #   define __in
-#endif
+#endif*/
 #define UINT8 uint8_t
 #define WINAPI_INLINE inline
 #ifndef __uuidof
