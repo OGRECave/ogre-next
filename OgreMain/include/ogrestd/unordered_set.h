@@ -57,7 +57,7 @@ namespace Ogre
     };
 
     template <typename K, typename H, typename E, typename A>
-    class StdUnorderedSet : public std::unordered_set<K, H, E, A>
+    class StdUnorderedSet : public OGRE_HASH_NAMESPACE::OGRE_HASHSET_NAME<K, H, E, A>
     {
     };
 }  // namespace Ogre

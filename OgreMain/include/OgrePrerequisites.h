@@ -614,7 +614,7 @@ namespace Ogre
     class StdVector;
 
     template <typename K, typename V, typename P = std::less<K>,
-              typename A = STLAllocator<std::pair<const K, V>, GeneralAllocPolicy>>
+              typename A = STLAllocator<std::pair<const K, V>, GeneralAllocPolicy> >
     class StdMap;
 
     template <typename K, typename V, typename P = std::less<K>,
