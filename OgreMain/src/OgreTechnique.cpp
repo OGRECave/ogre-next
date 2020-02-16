@@ -36,6 +36,7 @@ THE SOFTWARE.
 #include "OgreMaterialManager.h"
 #include "OgreString.h"
 
+#include <sstream>
 
 namespace Ogre {
     //-----------------------------------------------------------------------------

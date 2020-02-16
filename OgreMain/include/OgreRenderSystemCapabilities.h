@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "OgrePrerequisites.h"
 #include "OgreStringVector.h"
 #include "OgreStringConverter.h"
+#include "OgreLwString.h"
 
 #include "ogrestd/set.h"
 
@@ -283,9 +284,10 @@ namespace Ogre
 
         String toString() const 
         {
-            StringStream str;
-            str << major << "." << minor << "." << release << "." << build;
-            return str.str();
+            char tmpBuffer[64];
+            LwString str( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+            str.a( major, ".", minor, ".", release, ".", build );
+            return str.c_str();
         }
 
         void fromString(const String& versionString);

@@ -350,27 +350,7 @@ namespace Ogre {
             }
         }
 
-        _OgreExport friend std::ostream& operator<<( std::ostream& o, const AxisAlignedBox &aab )
-        {
-            switch (aab.mExtent)
-            {
-            case EXTENT_NULL:
-                o << "AxisAlignedBox(null)";
-                return o;
-
-            case EXTENT_FINITE:
-                o << "AxisAlignedBox(min=" << aab.mMinimum << ", max=" << aab.mMaximum << ")";
-                return o;
-
-            case EXTENT_INFINITE:
-                o << "AxisAlignedBox(infinite)";
-                return o;
-
-            default: // shut up compiler
-                assert( false && "Never reached" );
-                return o;
-            }
-        }
+        _OgreExport friend std::ostream &operator<<( std::ostream &o, const AxisAlignedBox &aab );
 
         /** Merges the passed in box into the current box. The result is the
         box which encompasses both.

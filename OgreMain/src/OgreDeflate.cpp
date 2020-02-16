@@ -35,6 +35,7 @@
 #include "macUtils.h"
 #endif
 
+#include <fstream>
 #include <zlib.h>
 
 namespace Ogre

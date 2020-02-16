@@ -33,6 +33,8 @@ THE SOFTWARE.
 
 #include "ogrestd/map.h"
 
+#include <sstream>
+
 namespace Ogre
 {
 

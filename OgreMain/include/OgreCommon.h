@@ -34,16 +34,6 @@ THE SOFTWARE.
 #if OGRE_CPU == OGRE_CPU_X86
     #include <xmmintrin.h>
     #include <emmintrin.h>
-#elif OGRE_CPU == OGRE_CPU_ARM && OGRE_USE_SIMD
-    #include <arm_neon.h>
-#endif
-
-#if defined ( OGRE_GCC_VISIBILITY )
-#   pragma GCC visibility push(default)
-#endif
-
-#if defined ( OGRE_GCC_VISIBILITY )
-#   pragma GCC visibility pop
 #endif
 
 #include "OgreHeaderPrefix.h"
@@ -809,12 +799,12 @@ namespace Ogre {
           }
 
         };
-        template<typename T>
+        /*template<typename T>
         std::ostream& operator<<(std::ostream& o, const TRect<T>& r)
         {
             o << "TRect<>(l:" << r.left << ", t:" << r.top << ", r:" << r.right << ", b:" << r.bottom << ")";
             return o;
-        }
+        }*/
 
         /** Structure used to define a rectangle in a 2-D floating point space.
         */

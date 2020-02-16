@@ -31,6 +31,8 @@ THE SOFTWARE.
 #include "OgrePlatform.h"
 #include "OgreString.h"
 
+#include <sstream>
+
 namespace Ogre {
 
     String StringConverter::msDefaultStringLocale = OGRE_DEFAULT_LOCALE;

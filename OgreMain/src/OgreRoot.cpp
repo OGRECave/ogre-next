@@ -112,6 +112,8 @@ THE SOFTWARE.
 #  include "OgreASTCCodec.h"
 #endif
 
+#include <sstream>
+
 namespace Ogre {
     //-----------------------------------------------------------------------
     template<> Root* Singleton<Root>::msSingleton = 0;
@@ -324,7 +326,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     Root::~Root()
     {
-        LogManager::getSingleton().stream(LML_TRIVIAL)
+        *LogManager::getSingleton().stream(LML_TRIVIAL).raw()
             << "Average FPS: " << mFrameStats->getAvgFps() << "\n"
             << "Average time: \t"<< mFrameStats->getAvgTime() << " ms\n"
             << "Best time: \t"  << mFrameStats->getBestTime() << " ms\n"

@@ -8,6 +8,7 @@
 #include "OgreHardwareBufferManager.h"
 
 #include <iostream>
+#include <sstream>
 
 #include "../UpgradeOptions.h"
 

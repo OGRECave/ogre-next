@@ -254,14 +254,7 @@ namespace Ogre
 
         /** Function for writing to a stream.
         */
-        inline _OgreExport friend std::ostream& operator <<
-            ( std::ostream& o, const Matrix3& mat )
-        {
-            o << "Matrix3(" << mat[0][0] << ", " << mat[0][1] << ", " << mat[0][2] << ", " 
-                            << mat[1][0] << ", " << mat[1][1] << ", " << mat[1][2] << ", " 
-                            << mat[2][0] << ", " << mat[2][1] << ", " << mat[2][2] << ")";
-            return o;
-        }
+        _OgreExport friend std::ostream &operator<<( std::ostream &o, const Matrix3 &mat );
 
         static const Real EPSILON;
         static const Matrix3 ZERO;

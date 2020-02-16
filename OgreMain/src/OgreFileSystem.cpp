@@ -31,6 +31,8 @@ THE SOFTWARE.
 #include "OgreString.h"
 #include "OgreStringVector.h"
 
+#include <fstream>
+
 #include <sys/stat.h>
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX || \

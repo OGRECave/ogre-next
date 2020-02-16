@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "OgreException.h"
 
 #include <iostream>
+#include <fstream>
 
 namespace Ogre {
 

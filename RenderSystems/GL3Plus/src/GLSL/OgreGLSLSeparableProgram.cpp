@@ -184,7 +184,7 @@ namespace Ogre
                 }
                 catch (Exception& e)
                 {
-                    LogManager::getSingleton().stream() << e.getDescription();
+                    LogManager::getSingleton().logMessage( e.getDescription() );
                     mTriedToLinkAndFailed = true;
                     return;
                 }

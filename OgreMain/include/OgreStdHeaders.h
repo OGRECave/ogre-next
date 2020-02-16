@@ -36,9 +36,7 @@
 #include <limits>
 
 // C++ Stream stuff
-#include <fstream>
 #include <iosfwd>
-#include <sstream>
 
 #ifdef __BORLANDC__
 namespace Ogre

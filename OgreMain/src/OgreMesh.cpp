@@ -1213,11 +1213,10 @@ namespace v1 {
             }
             catch (Exception& )
             {
-                LogManager::getSingleton().stream()
-                    << "Error while loading manual LOD level "
-                    << mMeshLodUsageList[index].manualName
-                    << " - this LOD level will not be rendered. You can "
-                    << "ignore this error in offline mesh tools.";
+                LogManager::getSingleton().logMessage( "Error while loading manual LOD level " +
+                                                       mMeshLodUsageList[index].manualName +
+                                                       " - this LOD level will not be rendered. You can "
+                                                       "ignore this error in offline mesh tools." );
             }
 
         }
@@ -2724,10 +2723,9 @@ namespace v1 {
             if ((*i)->getName() == name)
                 return *i;
         }
-        StringStream str;
-        str << "No pose called " << name << " found in Mesh " << mName;
+
         OGRE_EXCEPT(Exception::ERR_ITEM_NOT_FOUND,
-            str.str(),
+            "No pose called " + name + " found in Mesh " + mName,
             "Mesh::getPose");
 
     }
@@ -2758,10 +2756,8 @@ namespace v1 {
                 return;
             }
         }
-        StringStream str;
-        str << "No pose called " << name << " found in Mesh " << mName;
         OGRE_EXCEPT(Exception::ERR_ITEM_NOT_FOUND,
-            str.str(),
+            "No pose called "  + name  + " found in Mesh "  + mName,
             "Mesh::removePose");
     }
     //---------------------------------------------------------------------

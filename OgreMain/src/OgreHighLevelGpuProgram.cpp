@@ -33,6 +33,8 @@ THE SOFTWARE.
 #include "OgreStringConverter.h"
 #include "OgreProfiler.h"
 
+#include <sstream>
+
 namespace Ogre
 {
     //---------------------------------------------------------------------------
@@ -182,7 +184,7 @@ namespace Ogre
             catch (const Exception& e)
             {
                 // will already have been logged
-                LogManager::getSingleton().stream()
+                *LogManager::getSingleton().stream().raw()
                     << "High-level program " << mName << " encountered an error "
                     << "during loading and is thus not supported.\n"
                     << e.getFullDescription();

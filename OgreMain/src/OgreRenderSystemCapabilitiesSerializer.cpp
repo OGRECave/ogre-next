@@ -37,6 +37,7 @@ THE SOFTWARE.
 #include "OgreString.h"
 
 #include <fstream>
+#include <sstream>
 
 
 namespace Ogre

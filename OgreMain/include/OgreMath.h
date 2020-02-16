@@ -84,12 +84,7 @@ namespace Ogre
         bool operator >= ( const Radian& r ) const { return mRad >= r.mRad; }
         bool operator >  ( const Radian& r ) const { return mRad >  r.mRad; }
 
-        inline _OgreExport friend std::ostream& operator <<
-            ( std::ostream& o, const Radian& v )
-        {
-            o << "Radian(" << v.valueRadians() << ")";
-            return o;
-        }
+        _OgreExport friend std::ostream &operator<<( std::ostream &o, const Radian &v );
     };
 
     /** Wrapper class which indicates a given angle value is in Degrees.
@@ -135,12 +130,7 @@ namespace Ogre
         bool operator >= ( const Degree& d ) const { return mDeg >= d.mDeg; }
         bool operator >  ( const Degree& d ) const { return mDeg >  d.mDeg; }
 
-        inline _OgreExport friend std::ostream& operator <<
-            ( std::ostream& o, const Degree& v )
-        {
-            o << "Degree(" << v.valueDegrees() << ")";
-            return o;
-        }
+        _OgreExport friend std::ostream &operator<<( std::ostream &o, const Degree &v );
     };
 
     /** Wrapper class which identifies a value as the currently default angle 

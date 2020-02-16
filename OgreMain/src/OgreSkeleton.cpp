@@ -73,8 +73,7 @@ namespace v1 {
     void Skeleton::loadImpl(void)
     {
         SkeletonSerializer serializer;
-        LogManager::getSingleton().stream()
-            << "Skeleton: Loading " << mName;
+        LogManager::getSingleton().logMessage( "Skeleton: Loading " + mName );
 
         DataStreamPtr stream = 
             ResourceGroupManager::getSingleton().openResource(

@@ -39,6 +39,7 @@ THE SOFTWARE.
 #include "OgrePrerequisites.h"
 #include "OgreException.h"
 #include <typeinfo>
+#include "OgreLwString.h"
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
@@ -398,12 +399,11 @@ namespace Ogre
         const ValueType * result = any_cast<ValueType>(&operand);
         if(!result)
         {
-            StringStream str;
-            str << "Bad cast from type '" << operand.type().name() << "' "
-                << "to '" << typeid(ValueType).name() << "'";
-            OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
-                str.str(), 
-                "Ogre::any_cast");
+            char tmpBuffer[256];
+            LwString str( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+            str.a( "Bad cast from type '", operand.type().name(), "' ", "to '",
+                   typeid( ValueType ).name() );
+            OGRE_EXCEPT( Exception::ERR_INVALIDPARAMS, str.c_str(), "Ogre::any_cast" );
         }
         return *result;
     }

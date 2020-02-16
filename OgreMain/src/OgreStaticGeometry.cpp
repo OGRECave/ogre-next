@@ -42,6 +42,8 @@ THE SOFTWARE.
 #include "OgreLodStrategyManager.h"
 #include "OgreEdgeListBuilder.h"
 
+#include <sstream>
+
 namespace Ogre {
 namespace v1 {
     #define REGION_RANGE 1024

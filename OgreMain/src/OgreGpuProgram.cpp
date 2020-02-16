@@ -34,6 +34,8 @@ THE SOFTWARE.
 #include "OgreStringConverter.h"
 #include "OgreLogManager.h"
 
+#include <sstream>
+
 namespace Ogre
 {
     //-----------------------------------------------------------------------------
@@ -157,7 +159,7 @@ namespace Ogre
         catch (const Exception&)
         {
             // will already have been logged
-            LogManager::getSingleton().stream()
+            *LogManager::getSingleton().stream().raw()
                 << "Gpu program " << mName << " encountered an error "
                 << "during loading and is thus not supported.";
 
@@ -286,7 +288,7 @@ namespace Ogre
             }
             catch(const Exception& e)
             {
-                LogManager::getSingleton().stream() <<
+                *LogManager::getSingleton().stream().raw() <<
                     "Unable to load manual named constants for GpuProgram " << mName <<
                     ": " << e.getDescription();
             }

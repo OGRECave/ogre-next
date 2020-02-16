@@ -41,6 +41,8 @@
 
 #include "OgreLwString.h"
 
+#include <sstream>
+
 namespace Ogre {
 
     String operationTypeToString(OperationType val);

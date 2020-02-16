@@ -37,6 +37,8 @@ THE SOFTWARE.
 #include "OgreDataStream.h"
 #include "OgreLogManager.h"
 
+#include <sstream>
+
 namespace Ogre {
 namespace v1 {
     /// stream overhead = ID + size
@@ -93,12 +95,12 @@ namespace v1 {
 
         // Write all animations
         unsigned short numAnims = pSkeleton->getNumAnimations();
-        LogManager::getSingleton().stream()
+        *LogManager::getSingleton().stream().raw()
             << "Exporting animations, count=" << numAnims;
         for (unsigned short i = 0; i < numAnims; ++i)
         {
             Animation* pAnim = pSkeleton->getAnimation(i);
-            LogManager::getSingleton().stream()
+            *LogManager::getSingleton().stream().raw()
                 << "Exporting animation: " << pAnim->getName();
             writeAnimation(pSkeleton, pAnim, ver);
             LogManager::getSingleton().logMessage("Animation exported.");

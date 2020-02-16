@@ -50,7 +50,7 @@ THE SOFTWARE
 #include FT_GLYPH_H
 #undef generic
 
-
+#include <sstream>
 
 namespace Ogre
 {
