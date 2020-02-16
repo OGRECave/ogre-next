@@ -31,6 +31,8 @@ THE SOFTWARE.
 #include <iomanip>
 #include <iostream>
 
+#include <sstream>
+
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
 #   include <windows.h>
 #endif
