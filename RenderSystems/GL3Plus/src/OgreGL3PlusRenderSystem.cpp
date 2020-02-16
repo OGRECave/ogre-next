@@ -73,6 +73,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreDepthBuffer.h"
 #include "OgreWindow.h"
 #include "OgrePixelFormatGpuUtils.h"
+#include "OgreString.h"
 
 #include "OgreProfiler.h"
 

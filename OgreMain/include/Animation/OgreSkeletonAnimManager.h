@@ -33,6 +33,8 @@ THE SOFTWARE.
 #include "OgreIdString.h"
 #include "Math/Array/OgreBoneMemoryManager.h"
 
+#include "ogrestd/list.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre

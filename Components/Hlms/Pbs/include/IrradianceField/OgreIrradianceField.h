@@ -38,6 +38,8 @@ THE SOFTWARE.
 #include "OgreShaderPrimitives.h"
 #include "Math/Simple/OgreAabb.h"
 
+#include "ogrestd/vector.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre

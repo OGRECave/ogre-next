@@ -31,11 +31,16 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 #include "OgreDataStream.h"
-#include "OgreHeaderPrefix.h"
 
 #ifndef OGRE_SERIALIZER_VALIDATE_CHUNKSIZE
 #define OGRE_SERIALIZER_VALIDATE_CHUNKSIZE OGRE_DEBUG_MODE
 #endif
+
+#if OGRE_SERIALIZER_VALIDATE_CHUNKSIZE
+#    include "ogrestd/vector.h"
+#endif
+
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre {
 

@@ -34,6 +34,8 @@ THE SOFTWARE.
 #include "Compositor/Pass/OgreCompositorPassDef.h"
 #include "OgrePixelFormatGpu.h"
 
+#include "ogrestd/map.h"
+
 namespace Ogre
 {
     class RenderTarget;

@@ -31,6 +31,9 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 #include "OgreVector3.h"
+
+#include "ogrestd/vector.h"
+
 #include "OgreHeaderPrefix.h"
 
 
@@ -53,10 +56,9 @@ namespace Ogre
     {
 
     public:
-        typedef vector<Vector3>::type               VertexList;
-
-        typedef multimap<Vector3, Vector3>::type        EdgeMap;
-        typedef std::pair< Vector3, Vector3>        Edge;
+        typedef vector<Vector3>::type VertexList;
+        typedef StdMultiMap<Vector3, Vector3> EdgeMap;
+        typedef std::pair<Vector3, Vector3> Edge;
 
     protected:
         VertexList      mVertexList;

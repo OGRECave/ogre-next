@@ -34,6 +34,9 @@ THE SOFTWARE.
 #include "OgreSphere.h"
 #include "OgreMath.h"
 #include "OgrePlane.h"
+
+#include "ogrestd/vector.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre {
@@ -49,7 +52,7 @@ namespace Ogre {
     class _OgreExport PlaneBoundedVolume
     {
     public:
-        typedef vector<Plane>::type PlaneList;
+        typedef StdVector<Plane> PlaneList;
         /// Publicly accessible plane list, you can modify this direct
         PlaneList planes;
         Plane::Side outside;

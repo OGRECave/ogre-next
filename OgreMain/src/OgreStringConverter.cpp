@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "OgreStringConverter.h"
 #include "OgreException.h"
 #include "OgrePlatform.h"
+#include "OgreString.h"
 
 namespace Ogre {
 

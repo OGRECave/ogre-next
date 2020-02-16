@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "OgreScriptLoader.h"
 #include "OgreSceneManager.h"
 #include "OgreResourceManager.h"
+#include "OgreString.h"
 
 namespace Ogre {
 

@@ -305,7 +305,7 @@ namespace Ogre {
     };
 
     /// List of DataStream items
-    typedef list<DataStreamPtr>::type DataStreamList;
+    typedef StdList<DataStreamPtr> DataStreamList;
     /// Shared pointer to list of DataStream items
     typedef SharedPtr<DataStreamList> DataStreamListPtr;
 

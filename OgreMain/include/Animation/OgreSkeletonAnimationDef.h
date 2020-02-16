@@ -32,6 +32,8 @@ THE SOFTWARE.
 #include "OgreSkeletonTrack.h"
 #include "OgreIdString.h"
 
+#include "ogrestd/map.h"
+
 namespace Ogre
 {
     namespace v1

@@ -28,6 +28,7 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 #include "OgreFileSystem.h"
 #include "OgreException.h"
+#include "OgreString.h"
 #include "OgreStringVector.h"
 
 #include <sys/stat.h>

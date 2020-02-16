@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "OgreDataStream.h"
 #include "OgreException.h"
 #include "OgreLogManager.h"
+#include "OgreString.h"
 
 #include "OgrePixelFormatGpuUtils.h"
 

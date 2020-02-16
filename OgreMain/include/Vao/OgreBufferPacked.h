@@ -327,8 +327,8 @@ namespace Ogre
         void _setShadowCopy( void* copy );
     };
 
-    typedef vector<BufferPacked*>::type BufferPackedVec;
-    typedef unordered_set<BufferPacked*>::type BufferPackedSet;
+    typedef StdVector<BufferPacked*>BufferPackedVec;
+    typedef StdUnorderedSet<BufferPacked*> BufferPackedSet;
 }
 
 #endif

@@ -329,7 +329,7 @@ namespace Ogre
         }
     };
 
-    typedef vector<IdString>::type IdStringVec;
+    typedef StdVector<IdString> IdStringVec;
 }
 
 #endif

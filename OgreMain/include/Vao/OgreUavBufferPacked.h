@@ -32,6 +32,8 @@ THE SOFTWARE.
 #include "Vao/OgreBufferPacked.h"
 #include "OgrePixelFormatGpu.h"
 
+#include "ogrestd/vector.h"
+
 namespace Ogre
 {
     /** Represents UAV buffers (also known as SSBOs in OpenGL)

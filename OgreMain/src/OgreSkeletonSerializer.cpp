@@ -34,7 +34,6 @@ THE SOFTWARE.
 #include "OgreAnimationTrack.h"
 #include "OgreKeyFrame.h"
 #include "OgreOldBone.h"
-#include "OgreString.h"
 #include "OgreDataStream.h"
 #include "OgreLogManager.h"
 

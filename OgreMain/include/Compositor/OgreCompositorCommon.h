@@ -30,6 +30,9 @@ THE SOFTWARE.
 #define _OgreCompositorCommon_H_
 
 #include "OgrePrerequisites.h"
+
+#include "ogrestd/vector.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre

@@ -30,6 +30,7 @@ THE SOFTWARE.
 #include "OgrePlatformInformation.h"
 #include "OgreLogManager.h"
 #include "OgreStringConverter.h"
+#include "OgreString.h"
 
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC
 #include <excpt.h>      // For SEH values

@@ -134,8 +134,8 @@ namespace Ogre
     {
     };
 
-    typedef map<GpuTrackedResource*, ResourceLayout::Layout>::type ResourceLayoutMap;
-    typedef map<GpuTrackedResource*, ResourceAccess::ResourceAccess>::type ResourceAccessMap;
+    typedef StdMap<GpuTrackedResource*, ResourceLayout::Layout> ResourceLayoutMap;
+    typedef StdMap<GpuTrackedResource*, ResourceAccess::ResourceAccess> ResourceAccessMap;
 
     /** @} */
     /** @} */

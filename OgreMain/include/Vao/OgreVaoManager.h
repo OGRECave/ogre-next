@@ -35,6 +35,8 @@ THE SOFTWARE.
 #include "Vao/OgreIndexBufferPacked.h"
 #include "OgreRenderOperation.h"
 
+#include "ogrestd/unordered_set.h"
+
 namespace Ogre
 {
     typedef vector<StagingBuffer*>::type               StagingBufferVec;

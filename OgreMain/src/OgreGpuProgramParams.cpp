@@ -32,6 +32,7 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreVector4.h"
 #include "OgreDualQuaternion.h"
 #include "OgreRoot.h"
+#include "OgreString.h"
 
 namespace Ogre
 {

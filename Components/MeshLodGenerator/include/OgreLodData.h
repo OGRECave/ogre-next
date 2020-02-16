@@ -34,6 +34,10 @@
 #include "OgreVectorSetImpl.h"
 #include "OgreVector3.h"
 
+#include "ogrestd/map.h"
+#include "ogrestd/unordered_set.h"
+#include "ogrestd/vector.h"
+
 #ifndef MESHLOD_QUALITY
 /// MESHLOD_QUALITY=1 is fastest processing time.
 /// MESHLOD_QUALITY=2 is balanced performance/quality (default)

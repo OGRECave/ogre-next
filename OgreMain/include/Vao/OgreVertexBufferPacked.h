@@ -32,6 +32,8 @@ THE SOFTWARE.
 #include "Vao/OgreBufferPacked.h"
 #include "Vao/OgreVertexElements.h"
 
+#include "ogrestd/vector.h"
+
 namespace Ogre
 {
     struct VertexElement2

@@ -37,6 +37,8 @@ THE SOFTWARE.
 #include "OgreAxisAlignedBox.h"
 #include "OgrePlane.h"
 
+#include "ogrestd/list.h"
+
 
 namespace Ogre
 {
@@ -393,18 +395,18 @@ namespace Ogre
     }
     //-----------------------------------------------------------------------
     std::pair<bool, Real> Math::intersects(const Ray& ray, 
-        const vector<Plane>::type& planes, bool normalIsOutside)
+        const StdVector<Plane>& planes, bool normalIsOutside)
     {
-        list<Plane>::type planesList;
-        for (vector<Plane>::type::const_iterator i = planes.begin(); i != planes.end(); ++i)
+        StdList<Plane> planesList;
+        for (StdVector<Plane>::const_iterator i = planes.begin(); i != planes.end(); ++i)
         {
             planesList.push_back(*i);
         }
         return intersects(ray, planesList, normalIsOutside);
     }
     //-----------------------------------------------------------------------
-    std::pair<bool, Real> Math::intersects(const Ray& ray, 
-        const list<Plane>::type& planes, bool normalIsOutside)
+    std::pair<bool, Real> Math::intersects(const Ray& ray,
+        const StdList<Plane>& planes, bool normalIsOutside)
     {
         list<Plane>::type::const_iterator planeit, planeitend;
         planeitend = planes.end();

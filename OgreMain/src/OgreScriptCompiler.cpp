@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "OgreResourceGroupManager.h"
 #include "OgreLogManager.h"
 #include "OgreStringConverter.h"
+#include "OgreString.h"
 
 namespace Ogre
 {

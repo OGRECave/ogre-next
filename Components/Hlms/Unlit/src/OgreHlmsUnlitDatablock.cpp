@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "OgreTextureGpuManager.h"
 #include "OgreRenderSystem.h"
 #include "OgreLogManager.h"
+#include "OgreString.h"
 
 #define _OgreHlmsTextureBaseClassExport _OgreHlmsUnlitExport
 #define OGRE_HLMS_TEXTURE_BASE_CLASS HlmsUnlitBaseTextureDatablock

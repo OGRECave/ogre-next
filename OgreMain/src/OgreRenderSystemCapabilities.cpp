@@ -28,7 +28,9 @@ THE SOFTWARE.
 #include "OgreStableHeaders.h"
 
 #include "OgreRenderSystemCapabilities.h"
+
 #include "OgreLogManager.h"
+#include "OgreString.h"
 
 namespace Ogre {
 
@@ -416,5 +418,21 @@ namespace Ogre {
             msGPUVendorStrings[GPU_WEBKIT] = "webkit";
         }
     }
-
+    //---------------------------------------------------------------------
+    //---------------------------------------------------------------------
+    //---------------------------------------------------------------------
+    void DriverVersion::fromString( const String &versionString )
+    {
+        StringVector tokens = StringUtil::split( versionString, "." );
+        if( !tokens.empty() )
+        {
+            major = StringConverter::parseInt( tokens[0] );
+            if( tokens.size() > 1 )
+                minor = StringConverter::parseInt( tokens[1] );
+            if( tokens.size() > 2 )
+                release = StringConverter::parseInt( tokens[2] );
+            if( tokens.size() > 3 )
+                build = StringConverter::parseInt( tokens[3] );
+        }
+    }
 }

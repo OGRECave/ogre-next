@@ -39,6 +39,7 @@ THE SOFTWARE.
 #include "OgreHlms.h"
 #include "OgreHlmsManager.h"
 #include "OgreRenderQueue.h"
+#include "OgreString.h"
 
 namespace Ogre {
 namespace v1 {
