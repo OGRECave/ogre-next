@@ -35,6 +35,8 @@ THE SOFTWARE.
 #include "OgreException.h"
 #include "OgreString.h"
 
+#include <functional>
+
 #include <zzip/zzip.h>
 #include <zzip/plugin.h>
 

@@ -37,6 +37,8 @@
 #include "OgreWin32Window.h"
 #include <GL/wglext.h>
 
+#include <sstream>
+
 using namespace Ogre;
 
 namespace Ogre {
@@ -451,7 +453,7 @@ namespace Ogre {
         if(!_wglGetExtensionsStringARB)
             return;
         const char *wgl_extensions = _wglGetExtensionsStringARB(mInitialWindow->getHDC());
-        LogManager::getSingleton().stream()
+        *LogManager::getSingleton().stream().raw()
             << "Supported WGL extensions: " << wgl_extensions;
         // Parse them, and add them to the main list
         StringStream ext;

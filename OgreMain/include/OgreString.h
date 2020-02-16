@@ -68,6 +68,10 @@ namespace __gnu_cxx
 
 #endif
 
+#if OGRE_COMPILER == OGRE_COMPILER_MSVC
+    #include <xhash>
+#endif
+
 namespace Ogre {
     /** \addtogroup Core
     *  @{

@@ -45,6 +45,8 @@ THE SOFTWARE.
 #include "OgreTextureGpuListener.h"
 #include "OgreProfiler.h"
 
+#include <sstream>
+
 #define TODO_notify_listeners
 
 namespace Ogre
@@ -493,7 +495,7 @@ namespace Ogre
 
             WindowEventUtilities::_addRenderWindow(this);
 
-            LogManager::getSingleton().stream()
+            *LogManager::getSingleton().stream().raw()
                 << "Created Win32Window '"
                 << mTitle << "' : " << mRequestedWidth << "x" << mRequestedHeight
                 << ", " << mColourDepth << "bpp";
