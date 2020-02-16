@@ -44,7 +44,8 @@ include(PrecompiledHeader)
 # define header and source files for the library
 file(GLOB HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h"
 	"${CMAKE_CURRENT_SOURCE_DIR}/include/*.inl")
-file(GLOB SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+file(GLOB SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/*.inl")
 
 add_filtered_std("Animation")
 add_filtered_std("CommandBuffer")
