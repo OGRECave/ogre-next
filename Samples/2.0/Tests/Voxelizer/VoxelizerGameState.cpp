@@ -581,6 +581,7 @@ namespace Demo
                 --mNumBounces;
 
             mVctLighting->update( mGraphicsSystem->getSceneManager(), mNumBounces, mThinWallCounter );
+            mIrradianceField->reset();
         }
         else if( arg.keysym.sym == SDLK_F6 )
         {

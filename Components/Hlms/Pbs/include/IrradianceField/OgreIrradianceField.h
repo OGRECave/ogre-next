@@ -218,6 +218,13 @@ namespace Ogre
         void initialize( const IrradianceFieldSettings &settings, const Vector3 &fieldOrigin,
                          const Vector3 &fieldSize, VctLighting *vctLighting );
 
+        /// If VctLighting was updated with minor changes (e.g. light position/direction changed,
+        /// number of bounces setting changed) then call this function so update() process it
+        /// again.
+        ///
+        /// If major changes happens to VctLighting, then call initialize() again
+        void reset();
+
         void update( uint32 probesPerFrame = 200u );
 
         size_t getConstBufferSize( void ) const;

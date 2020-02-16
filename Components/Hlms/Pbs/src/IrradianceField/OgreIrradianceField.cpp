@@ -600,6 +600,11 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
+    void IrradianceField::reset()
+    {
+        mNumProbesProcessed = 0u;
+    }
+    //-------------------------------------------------------------------------
     void IrradianceField::update( uint32 probesPerFrame )
     {
         const uint32 totalNumProbes = mSettings.getTotalNumProbes();
