@@ -204,9 +204,7 @@ namespace Ogre
 
         mClosed = false;
         mHwGamma = true;
-#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
         NSObject *externalWindowHandle; // OgreMetalView, NSView or NSWindow
-#endif
 
         if( miscParams )
         {
@@ -221,7 +219,6 @@ namespace Ogre
             if( opt != end )
                 mHwGamma = StringConverter::parseBool( opt->second );
             
-#if OGRE_PLATFORM != OGRE_PLATFORM_APPLE_IOS
             opt = miscParams->find("externalWindowHandle");
             if( opt != end )
                 externalWindowHandle = (__bridge NSObject*)(void*)StringConverter::parseSizeT(opt->second);
@@ -232,12 +229,18 @@ namespace Ogre
                 if( opt != end )
                     externalWindowHandle = (__bridge NSObject*)(void*)StringConverter::parseSizeT(opt->second);
             }
-#endif
         }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE_IOS
-        CGRect frame = CGRectMake(0.0, 0.0, mRequestedWidth, mRequestedHeight);
-        mMetalView = [[OgreMetalView alloc] initWithFrame:frame];
+        if( externalWindowHandle && [externalWindowHandle isKindOfClass:[OgreMetalView class]] )
+        {
+            mMetalView = (OgreMetalView*)externalWindowHandle;
+        }
+        else
+        {
+            CGRect frame = CGRectMake(0.0, 0.0, mRequestedWidth, mRequestedHeight);
+            mMetalView = [[OgreMetalView alloc] initWithFrame:frame];
+        }
 #else
         // create window if nothing was provided
         if( !externalWindowHandle )
