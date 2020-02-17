@@ -47,6 +47,21 @@ THE SOFTWARE
 #   endif
 #endif
 
+// If:
+//  1. We detected Clang
+//  2. We're using C++98
+//  3. Not using libc++ (using libstdc++ instead; which is common in GCC)
+//
+// Then we're almost certain this is being parsed by QtCreator ClangCodeModel
+// and we need to include tr1/unordered_set for autocomplete to work
+//
+// Otherwise this is still harmless to include, it just makes build times slower
+#if OGRE_COMPILER == OGRE_COMPILER_CLANG
+#    if !defined(_LIBCPP_VERSION) && __cplusplus < 201103L
+#       include <tr1/unordered_set>
+#    endif
+#endif
+
 namespace Ogre {
     // Define ogre version
     #define OGRE_VERSION_MAJOR 2
