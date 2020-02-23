@@ -475,6 +475,13 @@ namespace Ogre
             mVctLighting = 0;
         mFieldOrigin = fieldOrigin;
         mFieldSize = fieldSize;
+
+        // Enlarge our bounds because at the borders we have
+        // limited information thus there's often a hard line
+        Vector3 probeBlockSize = mFieldSize / mSettings.getNumProbes3f();
+        mFieldOrigin -= probeBlockSize;
+        mFieldSize += probeBlockSize * 2.0f;
+
         mAlreadyWarned = false;
         mNumProbesProcessed = 0u;
         createTextures();
