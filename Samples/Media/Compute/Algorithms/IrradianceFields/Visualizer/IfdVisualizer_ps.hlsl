@@ -4,10 +4,12 @@
 #define OGRE_SampleLevel( tex, sampler, uv, lod ) tex.SampleLevel( sampler, uv, lod )
 
 uniform float4 allParams;
+uniform float2 rangeMult;
 
 #define p_resolution		allParams.x
 #define p_fullWidth			allParams.y
 #define p_invFullResolution	allParams.zw
+#define p_rangeMult			rangeMult
 
 Texture2D ifdTex		: register(t0);
 SamplerState ifdSampler	: register(s0);

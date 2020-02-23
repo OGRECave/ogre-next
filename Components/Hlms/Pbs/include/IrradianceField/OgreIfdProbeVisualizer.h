@@ -43,7 +43,8 @@ namespace Ogre
                 tessellation = 16u -> 2.147.418.112 vertices
         */
         void setTrackingIfd( const IrradianceFieldSettings &ifSettings, const Vector3 &fieldSize,
-                             uint8 resolution, TextureGpu *ifdTex, uint8_t tessellation );
+                             uint8 resolution, TextureGpu *ifdTex, const Vector2 &rangeMult,
+                             uint8_t tessellation );
 
         // Overrides from MovableObject
         virtual const String &getMovableType( void ) const;

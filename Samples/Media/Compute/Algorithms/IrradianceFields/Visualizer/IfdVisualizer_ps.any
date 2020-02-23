@@ -54,6 +54,6 @@ INLINE float2 getIrradianceFieldXY( float3 dir, IfdProbeIndex probeIdx, float re
 										 p_invFullResolution );
 	float3 irrVal = OGRE_SampleLevel( ifdTex, ifdSampler, ifdUV, 0 ).xyz;
 
-	outColour.xyz = irrVal;
+	outColour.xyz = irrVal * p_rangeMult.xyx;
 	outColour.w = 1.0;
 #endif

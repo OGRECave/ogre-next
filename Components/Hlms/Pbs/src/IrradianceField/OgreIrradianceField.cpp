@@ -778,7 +778,15 @@ namespace Ogre
         const uint8 resolution = mDebugVisualizationMode == DebugVisualizationColour
                                      ? mSettings.mIrradianceResolution
                                      : mSettings.mDepthProbeResolution;
+        Vector2 rangeMult( 1.0f );
+        if( mDebugVisualizationMode == DebugVisualizationDepth )
+        {
+            // TODO: Find something better than a hardcoded 500
+            rangeMult.x = 500.0f;
+            rangeMult.y = rangeMult.x * rangeMult.x;
+        }
+        rangeMult = 2.0f / rangeMult;
         mDebugIfdProbeVisualizer->setTrackingIfd( mSettings, mFieldSize, resolution, trackedTex,
-                                                  mDebugTessellation );
+                                                  rangeMult, mDebugTessellation );
     }
 }  // namespace Ogre

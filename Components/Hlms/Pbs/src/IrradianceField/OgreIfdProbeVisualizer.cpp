@@ -87,7 +87,8 @@ namespace Ogre
     //-----------------------------------------------------------------------------------
     void IfdProbeVisualizer::setTrackingIfd( const IrradianceFieldSettings &ifSettings,
                                              const Vector3 &fieldSize, uint8 resolution,
-                                             TextureGpu *ifdTex, uint8_t tessellation )
+                                             TextureGpu *ifdTex, const Vector2 &rangeMult,
+                                             uint8_t tessellation )
     {
         OGRE_ASSERT_LOW( tessellation > 2u && tessellation < 17u );
 
@@ -143,6 +144,7 @@ namespace Ogre
         Vector4 allParams( resolution, fColourFullWidth, 1.0f / fColourFullWidth,
                            1.0f / fColourFullHeight );
         psParams->setNamedConstant( "allParams", allParams );
+        psParams->setNamedConstant( "rangeMult", rangeMult );
 
         pass->getTextureUnitState( 0 )->setTexture( ifdTex );
 
