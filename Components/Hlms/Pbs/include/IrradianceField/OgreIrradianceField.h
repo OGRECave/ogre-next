@@ -251,6 +251,7 @@ namespace Ogre
         /**
         @param mode
         @param sceneManager
+            Can be nullptr only if mode == IrradianceField::DebugVisualizationNone
         @param tessellation
             Value in range [3; 16]
             Note this value increases exponentially:
@@ -266,6 +267,7 @@ namespace Ogre
         void setDebugVisualization( IrradianceField::DebugVisualizationMode mode,
                                     SceneManager *sceneManager, uint8 tessellation );
         bool getDebugVisualizationMode( void ) const;
+        uint8 getDebugTessellation( void ) const;
 
         TextureGpu *getIrradianceTex( void ) const { return mIrradianceTex; }
         TextureGpu *getDepthVarianceTex( void ) const { return mDepthVarianceTex; }

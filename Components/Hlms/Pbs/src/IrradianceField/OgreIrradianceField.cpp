@@ -532,6 +532,12 @@ namespace Ogre
         {
             setTextureToDebugVisualizer();
             mDebugIfdProbeVisualizer->setVisible( true );
+
+            // Field AABB may have changed
+            SceneNode *sceneNode = mDebugIfdProbeVisualizer->getParentSceneNode();
+            sceneNode->setPosition( mFieldOrigin );
+            sceneNode->setScale( mFieldSize / mSettings.getNumProbes3f() );
+            sceneNode->getCreator()->notifyStaticDirty( sceneNode );
         }
 
         if( !mVctLighting )
@@ -762,6 +768,8 @@ namespace Ogre
     }
     //-------------------------------------------------------------------------
     bool IrradianceField::getDebugVisualizationMode( void ) const { return mDebugVisualizationMode; }
+    //-------------------------------------------------------------------------
+    uint8 IrradianceField::getDebugTessellation( void ) const { return mDebugTessellation; }
     //-------------------------------------------------------------------------
     void IrradianceField::setTextureToDebugVisualizer( void )
     {
