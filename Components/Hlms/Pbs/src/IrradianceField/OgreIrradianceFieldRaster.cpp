@@ -28,6 +28,7 @@ THE SOFTWARE.
 
 #include "IrradianceField/OgreIrradianceFieldRaster.h"
 
+#include "IrradianceField/OgreIfdProbeVisualizer.h"
 #include "IrradianceField/OgreIrradianceField.h"
 #include "OgreHlmsPbs.h"
 
@@ -230,6 +231,10 @@ namespace Ogre
         const size_t numProbesProcessed = mCreator->mNumProbesProcessed;
         const size_t maxProbeToProcess = numProbesProcessed + numProbesToProcess;
 
+        bool oldDebugIfdVisibility = false;
+        if( mCreator->mDebugIfdProbeVisualizer )
+            oldDebugIfdVisibility = mCreator->mDebugIfdProbeVisualizer->getVisible();
+
         Ogre::Vector2 projectionAB = mCamera->getProjectionParamsAB();
         mProjectionABParam->setManualValue( projectionAB );
         mNumProbesParam->setManualValue( mCreator->mSettings.getNumProbes3f() );
@@ -265,6 +270,9 @@ namespace Ogre
         mIfdIntegrationWorkspace->_endUpdate( false );
 
         TODO_final_memoryBarrier;
+
+        if( mCreator->mDebugIfdProbeVisualizer )
+            mCreator->mDebugIfdProbeVisualizer->setVisible( oldDebugIfdVisibility );
 
         sceneManager->setVisibilityMask( oldVisibilityMask );
 

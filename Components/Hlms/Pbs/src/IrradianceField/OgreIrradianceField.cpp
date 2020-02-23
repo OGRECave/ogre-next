@@ -26,9 +26,9 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#include "OgreStableHeaders.h"
-
 #include "IrradianceField/OgreIrradianceField.h"
+
+#include "IrradianceField/OgreIfdProbeVisualizer.h"
 #include "IrradianceField/OgreIrradianceFieldRaster.h"
 #include "Vct/OgreVctLighting.h"
 #include "Vct/OgreVctVoxelizer.h"
@@ -170,6 +170,9 @@ namespace Ogre
         mDepthTapsIntegrationBuffer( 0 ),
         mColourTapsIntegrationBuffer( 0 ),
         mIfRaster( 0 ),
+        mDebugVisualizationMode( DebugVisualizationNone ),
+        mDebugTessellation( 4u ),
+        mDebugIfdProbeVisualizer( 0 ),
         mRoot( root ),
         mSceneManager( sceneManager ),
         mAlreadyWarned( false )
@@ -203,6 +206,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     IrradianceField::~IrradianceField()
     {
+        setDebugVisualization( DebugVisualizationNone, 0, mDebugTessellation );
         destroyTextures();
 
         delete mIfRaster;
@@ -524,6 +528,12 @@ namespace Ogre
             vaoManager, mSettings.mIrradianceResolution, irradWidth, mColourIntegrationJob,
             mIfGenParamsBuffer, mColourMaxIntegrationTapsPerPixel );
 
+        if( mDebugIfdProbeVisualizer )
+        {
+            setTextureToDebugVisualizer();
+            mDebugIfdProbeVisualizer->setVisible( true );
+        }
+
         if( !mVctLighting )
             return;
 
@@ -564,6 +574,9 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void IrradianceField::destroyTextures( void )
     {
+        if( mDebugIfdProbeVisualizer )
+            mDebugIfdProbeVisualizer->setVisible( false );
+
         TextureGpuManager *textureManager = mRoot->getRenderSystem()->getTextureGpuManager();
 
         if( mGenerationWorkspace )
@@ -600,10 +613,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void IrradianceField::reset()
-    {
-        mNumProbesProcessed = 0u;
-    }
+    void IrradianceField::reset() { mNumProbesProcessed = 0u; }
     //-------------------------------------------------------------------------
     void IrradianceField::update( uint32 probesPerFrame )
     {
@@ -718,5 +728,49 @@ namespace Ogre
         renderParams->depthFullWidth = fDepthFullWidth;
         renderParams->depthInvFullResolution.x = 1.0f / fDepthFullWidth;
         renderParams->depthInvFullResolution.y = 1.0f / fDepthFullHeight;
+    }
+    //-------------------------------------------------------------------------
+    void IrradianceField::setDebugVisualization( DebugVisualizationMode mode, SceneManager *sceneManager,
+                                                 uint8 tessellation )
+    {
+        if( mDebugIfdProbeVisualizer )
+        {
+            SceneNode *sceneNode = mDebugIfdProbeVisualizer->getParentSceneNode();
+            sceneNode->getParentSceneNode()->removeAndDestroyChild( sceneNode );
+            OGRE_DELETE mDebugIfdProbeVisualizer;
+            mDebugIfdProbeVisualizer = 0;
+        }
+
+        mDebugVisualizationMode = mode;
+        mDebugTessellation = tessellation;
+
+        if( mode != DebugVisualizationNone )
+        {
+            SceneNode *rootNode = sceneManager->getRootSceneNode( SCENE_STATIC );
+            SceneNode *visNode = rootNode->createChildSceneNode( SCENE_STATIC );
+
+            mDebugIfdProbeVisualizer = OGRE_NEW IfdProbeVisualizer(
+                Ogre::Id::generateNewId<Ogre::MovableObject>(),
+                &sceneManager->_getEntityMemoryManager( SCENE_STATIC ), sceneManager, 0u );
+
+            setTextureToDebugVisualizer();
+
+            visNode->setPosition( mFieldOrigin );
+            visNode->setScale( mFieldSize / mSettings.getNumProbes3f() );
+            visNode->attachObject( mDebugIfdProbeVisualizer );
+        }
+    }
+    //-------------------------------------------------------------------------
+    bool IrradianceField::getDebugVisualizationMode( void ) const { return mDebugVisualizationMode; }
+    //-------------------------------------------------------------------------
+    void IrradianceField::setTextureToDebugVisualizer( void )
+    {
+        TextureGpu *trackedTex =
+            mDebugVisualizationMode == DebugVisualizationColour ? mIrradianceTex : mDepthVarianceTex;
+        const uint8 resolution = mDebugVisualizationMode == DebugVisualizationColour
+                                     ? mSettings.mIrradianceResolution
+                                     : mSettings.mDepthProbeResolution;
+        mDebugIfdProbeVisualizer->setTrackingIfd( mSettings, mFieldSize, resolution, trackedTex,
+                                                  mDebugTessellation );
     }
 }  // namespace Ogre
