@@ -24,6 +24,9 @@ uniform float3 aspectRatioFixer;
 #define p_numProbes			numProbes
 #define p_aspectRatioFixer	aspectRatioFixer
 
+#define PARAMS_ARG_DECL
+#define PARAMS_ARG
+
 struct VS_INPUT
 {
 	uint vertexId	: SV_VertexID;

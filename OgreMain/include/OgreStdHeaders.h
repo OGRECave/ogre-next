@@ -33,6 +33,7 @@
 // STL algorithms & functions
 #include <algorithm>
 #include <limits>
+#include <functional>
 
 // C++ Stream stuff
 #include <iosfwd>

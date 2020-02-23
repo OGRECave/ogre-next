@@ -17,14 +17,18 @@ struct PS_INPUT
 	float3 normal;
 };
 
+#define HEADER
+	#include "IfdVisualizer_ps.any"
+#undef HEADER
+
 fragment float4 main_metal
 (
 	PS_INPUT inPs [[stage_in]]
 
 	, constant float4 &allParams [[buffer(PARAMETER_SLOT)]]
 
-	, texture2d ifdTex		[[texture(0)]]
-	, sampler ifdSampler	[[sampler(0)]]
+	, texture2d<float> ifdTex		[[texture(0)]]
+	, sampler ifdSampler			[[sampler(0)]]
 )
 {
 	float4 outColour;

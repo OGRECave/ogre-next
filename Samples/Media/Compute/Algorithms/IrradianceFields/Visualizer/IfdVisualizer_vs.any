@@ -24,7 +24,7 @@
 \return
 	Sphere vertex position. It is in range [-1; 1] (i.e. it is centered around 0.0, 0.0, 0.0 )
 */
-INLINE float3 getSphereVertex( uint vertexId )
+INLINE float3 getSphereVertex( uint vertexId PARAMS_ARG_DECL )
 {
 	// using last bit to alternate,+band number (which band)
 	float x_angle = float( vertexId & 1u ) + ( vertexId >> p_bandPower );
@@ -39,10 +39,10 @@ INLINE float3 getSphereVertex( uint vertexId )
 	x_angle *= p_sectionArc * 0.5f;  // remember - 180° x rot not 360
 	y_angle *= -p_sectionArc;
 
-	float3 p =
+	float3 point =
 		float3( sin( x_angle ) * sin( y_angle ), cos( x_angle ), sin( x_angle ) * cos( y_angle ) );
 
-	return p;
+	return point;
 }
 
 #else
@@ -60,7 +60,7 @@ INLINE float3 getSphereVertex( uint vertexId )
 	xyzCoord.z = yRow / p_numProbes.y;
 
 	uint sphereVertId = clamp( uVertexId % ( p_totalPoints + 2u ), 1u, p_totalPoints ) - 1u;
-	float3 localPos = getSphereVertex( sphereVertId );
+	float3 localPos = getSphereVertex( sphereVertId PARAMS_ARG );
 
 	outVs.normal.xyz = normalize( localPos.xyz );
 	outVs.probeIdx = probeIdx;

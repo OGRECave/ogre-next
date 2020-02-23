@@ -7,6 +7,9 @@ using namespace metal;
 
 #define outVs_Position outVs.gl_Position
 
+#define PARAMS_ARG_DECL , constant Params &p
+#define PARAMS_ARG , p
+
 struct Params
 {
 	float4x4 worldViewProjMatrix;

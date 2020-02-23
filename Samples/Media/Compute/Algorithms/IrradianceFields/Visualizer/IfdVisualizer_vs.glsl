@@ -16,6 +16,9 @@
 #define inVs_vertexId gl_VertexID
 #define outVs_Position gl_Position
 
+#define PARAMS_ARG_DECL
+#define PARAMS_ARG
+
 uniform float4x4 worldViewProjMatrix;
 uniform uint vertexBase;
 uniform uint3 bandMaskPower;
