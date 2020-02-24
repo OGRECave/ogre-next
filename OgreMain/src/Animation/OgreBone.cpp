@@ -257,8 +257,8 @@ namespace Ogre {
         OGRE_ALIGNED_DECL( Matrix4, localSpaceBone, OGRE_SIMD_ALIGNMENT );
         OGRE_ALIGNED_DECL( Matrix4, parentNodeTransform, OGRE_SIMD_ALIGNMENT );
 
-        mTransform.mDerivedTransform[mTransform.mIndex].store4x3( &localSpaceBone );
-        mTransform.mParentNodeTransform[mTransform.mIndex]->store4x3( &parentNodeTransform );
+        mTransform.mDerivedTransform[mTransform.mIndex].store( &localSpaceBone );
+        mTransform.mParentNodeTransform[mTransform.mIndex]->store( &parentNodeTransform );
 
         parentNodeTransform = parentNodeTransform.concatenateAffine( localSpaceBone );
 
