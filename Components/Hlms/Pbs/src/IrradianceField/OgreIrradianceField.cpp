@@ -722,7 +722,7 @@ namespace Ogre
         const Vector3 finalSize = numProbes / mFieldSize;
 
         Matrix4 xform;
-        xform.makeTransform( -mFieldOrigin * finalSize - 0.5f, finalSize, Quaternion::IDENTITY );
+        xform.makeTransform( -mFieldOrigin * finalSize, finalSize, Quaternion::IDENTITY );
         xform = xform.concatenateAffine( viewMatrix.inverseAffine() );
 
         const float fDepthFullWidth = static_cast<float>( mDepthVarianceTex->getWidth() );
