@@ -94,6 +94,13 @@ namespace Ogre
 
                 if( track->getNumKeyFrames() > 0 )
                 {
+                    // Old V1 skeletons would wrap around to keyframe[0] if keyframe[n-1] did not
+                    // cover until the end of the animation. We need to mimic that behavior.
+                    // (See v1::AnimationTrack::getKeyFramesAtTime)
+                    const bool extraKeyFrameAtEnd =
+                        track->getKeyFrame( track->getNumKeyFrames() - 1u )->getTime() <
+                        animation->getLength();
+
                     uint32 slotIdx = boneToSlot[boneIdx];
                     uint32 blockIdx = SkeletonDef::slotToBlockIdx( slotIdx );
 
@@ -104,11 +111,21 @@ namespace Ogre
                                             std::make_pair( (size_t)blockIdx, emptyVec ) ).first;
                     }
 
-                    itKeyframes->second.reserve( track->getNumKeyFrames() );
+                    itKeyframes->second.reserve( track->getNumKeyFrames() + (size_t)extraKeyFrameAtEnd );
 
                     for( size_t i=0; i<track->getNumKeyFrames(); ++i )
                     {
                         Real timestamp = track->getKeyFrame(i)->getTime();
+                        TimestampVec::iterator it = std::lower_bound( itKeyframes->second.begin(),
+                                                                      itKeyframes->second.end(),
+                                                                      timestamp );
+                        if( it == itKeyframes->second.end() || *it != timestamp )
+                            itKeyframes->second.insert( it, timestamp );
+                    }
+
+                    if( extraKeyFrameAtEnd )
+                    {
+                        Real timestamp = animation->getLength();
                         TimestampVec::iterator it = std::lower_bound( itKeyframes->second.begin(),
                                                                       itKeyframes->second.end(),
                                                                       timestamp );
