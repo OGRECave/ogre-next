@@ -59,5 +59,5 @@ install (DIRECTORY include/
 # also install HLMS Common folder
 install (DIRECTORY ../Common/include/
         DESTINATION include/OGRE/Hlms/Common
-        FILES_MATCHING PATTERN "*.h"
+        FILES_MATCHING PATTERN "*.h" PATTERN "*.inl"
         )
