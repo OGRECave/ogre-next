@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "OgreIdString.h"
 #include "OgreTextureGpu.h"
 #include "OgreHeaderPrefix.h"
+#include "Compositor/OgreCompositorChannel.h"
 
 namespace Ogre
 {
@@ -155,7 +156,9 @@ namespace Ogre
             This value allows you to override it with a different workspace definition.
         */
         void initWorkspace( float cameraNear = 0.5f, float cameraFar = 500.0f,
-                            IdString workspaceDefOverride = IdString() );
+                            IdString workspaceDefOverride = IdString(),
+                            const CompositorChannelVec &additionalChannels = CompositorChannelVec(),
+                            uint8 executionMask = 0xFF );
         bool isInitialized(void) const;
 
         /** Sets cubemap probe's parameters.

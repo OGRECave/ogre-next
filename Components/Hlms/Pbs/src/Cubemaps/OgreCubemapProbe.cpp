@@ -349,7 +349,10 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
-    void CubemapProbe::initWorkspace( float cameraNear, float cameraFar, IdString workspaceDefOverride )
+    void CubemapProbe::initWorkspace( float cameraNear, float cameraFar,
+                                      IdString workspaceDefOverride,
+                                      const CompositorChannelVec &additionalChannels,
+                                      uint8 executionMask )
     {
         assert( (mTexture != 0 || mCreator->getAutomaticMode()) && "Call setTextureParams first!" );
 
@@ -405,11 +408,18 @@ namespace Ogre
             mTexture->_transitionTo( GpuResidency::Resident, (uint8*)0 );
 
         CompositorChannelVec channels;
-        channels.reserve( 2u );
+        channels.reserve( 2u + additionalChannels.size() );
         channels.push_back( rtt );
         channels.push_back( ibl );
+        channels.insert( channels.end(), additionalChannels.begin(), additionalChannels.end() );
         mWorkspace =
-            compositorManager->addWorkspace( sceneManager, channels, mCamera, mWorkspaceDefName, false );
+            compositorManager->addWorkspace( sceneManager, channels, mCamera, mWorkspaceDefName, false, -1,
+                                             (UavBufferPackedVec*)0,
+                                             (ResourceLayoutMap*)0,
+                                             (ResourceAccessMap*)0,
+                                             Vector4::ZERO,
+                                             0x00,
+                                             executionMask );
         mWorkspace->addListener( mCreator );
 
         if( !mStatic && !mCreator->getAutomaticMode() )
