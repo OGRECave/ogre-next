@@ -1,3 +1,4 @@
+
 /*
 -----------------------------------------------------------------------------
 This source file is part of OGRE
@@ -170,7 +171,7 @@ namespace Ogre
     {
         // default worker thread
 #if OGRE_THREAD_SUPPORT
-        LogManager::getSingleton().stream() << 
+        *LogManager::getSingleton().stream().raw() <<
             "DefaultWorkQueue('" << getName() << "')::WorkerFunc - thread " 
             << OGRE_THREAD_CURRENT_ID << " starting.";
 
@@ -188,7 +189,7 @@ namespace Ogre
             _processNextRequest();
         }
 
-        LogManager::getSingleton().stream() << 
+        *LogManager::getSingleton().stream().raw() <<
             "DefaultWorkQueue('" << getName() << "')::WorkerFunc - thread " 
             << OGRE_THREAD_CURRENT_ID << " stopped.";
 #endif

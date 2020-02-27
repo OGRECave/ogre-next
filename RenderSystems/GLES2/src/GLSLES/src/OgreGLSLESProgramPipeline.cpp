@@ -35,6 +35,8 @@
 #include "OgreGLES2Util.h"
 #include "OgreRoot.h"
 
+#include <sstream>
+
 namespace Ogre
 {
     GLSLESProgramPipeline::GLSLESProgramPipeline(GLSLESShader* vertexShader, GLSLESShader* fragmentShader)
@@ -138,7 +140,7 @@ namespace Ogre
                 }
                 catch (Exception& e)
                 {
-                    LogManager::getSingleton().stream() << e.getDescription();
+                    *LogManager::getSingleton().stream().raw() << e.getDescription();
                     mTriedToLinkAndFailed = true;
                     return;
                 }

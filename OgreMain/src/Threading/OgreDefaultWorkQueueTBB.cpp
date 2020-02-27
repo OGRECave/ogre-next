@@ -32,6 +32,8 @@ THE SOFTWARE.
 #include "OgreRoot.h"
 #include "OgreRenderSystem.h"
 
+#include <sstream>
+
 namespace Ogre
 {
     /// Worker function to register threads with the RenderSystem, if required
@@ -65,7 +67,7 @@ namespace Ogre
         
         mWorkerFunc = OGRE_NEW_T(WorkerFunc(this), MEMCATEGORY_GENERAL);
 
-        LogManager::getSingleton().stream() <<
+        *LogManager::getSingleton().stream().raw() <<
             "DefaultWorkQueue('" << mName << "') initialising.";
 
 #if OGRE_NO_TBB_SCHEDULER == 0
@@ -119,7 +121,7 @@ namespace Ogre
     //---------------------------------------------------------------------
     void DefaultWorkQueue::shutdown()
     {
-        LogManager::getSingleton().stream() <<
+        *LogManager::getSingleton().stream().raw() <<
             "DefaultWorkQueue('" << mName << "') shutting down.";
 
         mShuttingDown = true;
