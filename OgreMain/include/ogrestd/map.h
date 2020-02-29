@@ -41,10 +41,20 @@ namespace Ogre
     template <typename K, typename V, typename P, typename A>
     class StdMap : public std::map<K, V, P, A>
     {
+    public:
+        StdMap() : std::map<K, V, P, A>() {}
+
+#if __cplusplus >= 201103L
+        StdMap( std::initializer_list<typename std::map<K, V, P, A>::value_type> __l,
+                const P &__comp = P() ) :
+            std::map<K, V, P, A>( __l, __comp )
+        {
+        }
+#endif
     };
 
     template <typename K, typename V, typename P, typename A>
-    class StdMultiMap : public std::map<K, V, P, A>
+    class StdMultiMap : public std::multimap<K, V, P, A>
     {
     };
 }  // namespace Ogre
