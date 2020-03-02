@@ -2,6 +2,8 @@
 #define __OGREMONITORINFO_H__
 #include "OgreD3D11Prerequisites.h"
 
+#include "ogrestd/map.h"
+
 namespace Ogre 
 {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32

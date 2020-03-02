@@ -35,11 +35,14 @@ THE SOFTWARE.
 #include "OgreMatrix4.h"
 #include "OgreVector3.h"
 #include "OgreQuaternion.h"
-#include "OgreString.h"
 #include "OgreRenderable.h"
 #include "OgreIteratorWrappers.h"
 #include "OgreMesh.h"
 #include "OgreUserObjectBindings.h"
+
+#include "ogrestd/unordered_map.h"
+#include "ogrestd/set.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre {

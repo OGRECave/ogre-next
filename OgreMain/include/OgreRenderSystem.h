@@ -71,6 +71,18 @@ namespace Ogre
         TEXCALC_PROJECTIVE_TEXTURE
     };
 
+    /// Render window creation parameters.
+    struct RenderWindowDescription
+    {
+        String              name;
+        unsigned int        width;
+        unsigned int        height;
+        bool                useFullScreen;
+        NameValuePairList   miscParams;
+    };
+
+    /// Render window creation parameters container.
+    typedef vector<RenderWindowDescription>::type RenderWindowDescriptionList;
 
     /** Defines the functionality of a 3D API
     @remarks

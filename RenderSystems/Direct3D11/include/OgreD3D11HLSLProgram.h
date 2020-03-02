@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "OgreHighLevelGpuProgram.h"
 #include "OgreHardwareUniformBuffer.h"
 #include "Vao/OgreVertexBufferPacked.h"
-
+#include "OgreString.h"
 
 namespace Ogre {
     typedef vector<byte>::type MicroCode;

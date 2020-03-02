@@ -64,6 +64,7 @@ Copyright (c) 2000-2016 Torus Knot Software Ltd
 #import <Metal/Metal.h>
 #import <Foundation/NSEnumerator.h>
 
+#include <sstream>
 
 namespace Ogre
 {
@@ -470,7 +471,7 @@ namespace Ogre
             setActiveDevice(&mDevice);
             String selectedDeviceName = deviceItem ? deviceItem->getDescription() :
                 MetalDeviceItem(mDevice.mDevice, 0).getDescription() + " (system default)";
-            LogManager::getSingleton().stream() << "Metal: Requested \"" << mDeviceName <<
+            *LogManager::getSingleton().stream().raw() << "Metal: Requested \"" << mDeviceName <<
                 "\", selected \"" << selectedDeviceName << "\"";
 
             if( miscParams )

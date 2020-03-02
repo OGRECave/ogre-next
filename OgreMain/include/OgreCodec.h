@@ -32,6 +32,9 @@ THE SOFTWARE.
 #include "OgreIteratorWrappers.h"
 #include "OgreStringVector.h"
 #include "OgreException.h"
+
+#include "ogrestd/map.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre {

@@ -488,9 +488,7 @@ namespace Ogre {
 
         for (unsigned int i = 0; i < mFrames.size(); ++i)
         {
-            StringStream str;
-            str << baseName << "_" << i << ext;
-            mFrames[i] = str.str();
+            mFrames[i] = baseName + "_" + StringConverter::toString( i ) + ext;
             mFramePtrs[i] = 0;
         }
 

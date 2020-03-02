@@ -42,6 +42,7 @@
 #include "OgreDepthBuffer.h"
 
 #include "OgreProfiler.h"
+#include "OgreString.h"
 
 #include <iostream>
 #include <algorithm>

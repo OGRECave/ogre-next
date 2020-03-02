@@ -40,6 +40,7 @@ namespace Demo
         mIrradianceField( 0 ),
         mUseRasterIrradianceField( false ),
         mDebugVisualizationMode( Ogre::VctVoxelizer::DebugVisualizationNone ),
+        mIfdDebugVisualizationMode( Ogre::IrradianceField::DebugVisualizationNone ),
         mNumBounces( 6u ),
         mCurrentScene( SceneCornell ),
         mTestUtils( 0 )
@@ -113,6 +114,26 @@ namespace Demo
             return NoGI;
     }
     //-----------------------------------------------------------------------------------
+    void VoxelizerGameState::cycleIfdProbeVisualizationMode( bool bPrev )
+    {
+        if( !bPrev )
+        {
+            mIfdDebugVisualizationMode = ( mIfdDebugVisualizationMode + 1u ) %
+                                         ( Ogre::IrradianceField::DebugVisualizationNone + 1u );
+        }
+        else
+        {
+            mIfdDebugVisualizationMode = ( mIfdDebugVisualizationMode +
+                                           Ogre::IrradianceField::DebugVisualizationNone + 1u - 1u ) %
+                                         ( Ogre::IrradianceField::DebugVisualizationNone + 1u );
+        }
+        Ogre::SceneManager *sceneManager = mGraphicsSystem->getSceneManager();
+
+        mIrradianceField->setDebugVisualization(
+            static_cast<Ogre::IrradianceField::DebugVisualizationMode>( mIfdDebugVisualizationMode ),
+            sceneManager, 5u );
+    }
+    //-----------------------------------------------------------------------------------
     void VoxelizerGameState::cycleIrradianceField( bool bPrev )
     {
         Ogre::HlmsManager *hlmsManager = mGraphicsSystem->getRoot()->getHlmsManager();
@@ -129,6 +150,20 @@ namespace Demo
         {
             giMode =
                 static_cast<VoxelizerGameState::GiMode>( ( giMode + NumGiModes - 1u ) % NumGiModes );
+        }
+
+        if( giMode != IfdOnly && giMode != IfdVct )
+        {
+            // Disable IFD visualization while not in use
+            mIrradianceField->setDebugVisualization( Ogre::IrradianceField::DebugVisualizationNone, 0,
+                                                     mIrradianceField->getDebugTessellation() );
+        }
+        else
+        {
+            // Restore IFD visualization if it was in use
+            mIrradianceField->setDebugVisualization(
+                static_cast<Ogre::IrradianceField::DebugVisualizationMode>( mIfdDebugVisualizationMode ),
+                mGraphicsSystem->getSceneManager(), 5u );
         }
 
         switch( giMode )
@@ -208,7 +243,6 @@ namespace Demo
                 fieldAabb.merge( ( *itor )->getWorldAabb() );
                 ++itor;
             }
-
 
             /*for( int i=0;i<3;++i)
                 ifSettings.mNumProbes[i] = 1u;
@@ -506,6 +540,13 @@ namespace Demo
             "[Sibenik]",
             "[Stress Test]",
         };
+
+        static const Ogre::String ifdProbeVisualizationModes[] =
+        {
+            "[Irradiance]",
+            "[Depth]",
+            "[None]"
+        };
         // clang-format on
 
         outText += "\nF2 to cycle visualization modes ";
@@ -549,6 +590,12 @@ namespace Demo
         {
             outText += "\nF8 to generate IFD via rasterization ";
             outText += mUseRasterIrradianceField ? "[Raster]" : "[Voxels]";
+        }
+
+        if( giMode == IfdVct || giMode == IfdOnly )
+        {
+            outText += "\n[Shift+] F9 to cycle IFD debug visualization ";
+            outText += ifdProbeVisualizationModes[mIfdDebugVisualizationMode];
         }
     }
     //-----------------------------------------------------------------------------------
@@ -599,6 +646,12 @@ namespace Demo
                 mUseRasterIrradianceField = !mUseRasterIrradianceField;
                 voxelizeScene();
             }
+        }
+        else if( arg.keysym.sym == SDLK_F9 )
+        {
+            const VoxelizerGameState::GiMode giMode = getGiMode();
+            if( giMode == IfdVct || giMode == IfdOnly )
+                cycleIfdProbeVisualizationMode( arg.keysym.mod & ( KMOD_LSHIFT | KMOD_RSHIFT ) );
         }
         else
         {

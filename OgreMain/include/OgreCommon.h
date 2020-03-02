@@ -34,16 +34,6 @@ THE SOFTWARE.
 #if OGRE_CPU == OGRE_CPU_X86
     #include <xmmintrin.h>
     #include <emmintrin.h>
-#elif OGRE_CPU == OGRE_CPU_ARM && OGRE_USE_SIMD
-    #include <arm_neon.h>
-#endif
-
-#if defined ( OGRE_GCC_VISIBILITY )
-#   pragma GCC visibility push(default)
-#endif
-
-#if defined ( OGRE_GCC_VISIBILITY )
-#   pragma GCC visibility pop
 #endif
 
 #include "OgreHeaderPrefix.h"
@@ -715,20 +705,19 @@ namespace Ogre {
         }
     };
     typedef HashedVector<LightClosest> LightList;
-    typedef vector<LightClosest>::type LightClosestVec;
     typedef FastArray<LightClosest> LightClosestArray;
 
     /// Constant blank string, useful for returning by ref where local does not exist
     const String BLANKSTRING;
 
-    typedef map<String, bool>::type UnaryOptionList;
-    typedef map<String, String>::type BinaryOptionList;
+    typedef StdMap<String, bool> UnaryOptionList;
+    typedef StdMap<String, String> BinaryOptionList;
 
     /// Name / value parameter pair (first = name, second = value)
-    typedef map<String, String>::type NameValuePairList;
+    typedef StdMap<String, String> NameValuePairList;
 
     /// Alias / Texture name pair (first = alias, second = texture name)
-    typedef map<String, String>::type AliasTextureNamePairList;
+    typedef StdMap<String, String> AliasTextureNamePairList;
 
         template< typename T > struct TRect
         {
@@ -810,12 +799,12 @@ namespace Ogre {
           }
 
         };
-        template<typename T>
+        /*template<typename T>
         std::ostream& operator<<(std::ostream& o, const TRect<T>& r)
         {
             o << "TRect<>(l:" << r.left << ", t:" << r.top << ", r:" << r.right << ", b:" << r.bottom << ")";
             return o;
-        }
+        }*/
 
         /** Structure used to define a rectangle in a 2-D floating point space.
         */
@@ -1033,21 +1022,8 @@ namespace Ogre {
         void getFsaaDesc( String &outFsaaSetting ) const;
     };
 
-    /// Render window creation parameters.
-    struct RenderWindowDescription
-    {
-        String              name;
-        unsigned int        width;
-        unsigned int        height;
-        bool                useFullScreen;
-        NameValuePairList   miscParams;
-    };
-
-    /// Render window creation parameters container.
-    typedef vector<RenderWindowDescription>::type RenderWindowDescriptionList;
-
     /// Render window container.
-    typedef vector<Window*>::type WindowList;
+    typedef StdVector<Window*> WindowList;
 
     /** @} */
     /** @} */

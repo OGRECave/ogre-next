@@ -169,12 +169,7 @@ namespace Ogre {
         Function for writing to a stream. Outputs "DualQuaternion(w, x, y, z, dw, dx, dy, dz)" with w, x, y, z, dw, dx, dy, dz
         being the member values of the dual quaternion.
         */
-        inline _OgreExport friend std::ostream& operator <<
-        ( std::ostream& o, const DualQuaternion& q )
-        {
-            o << "DualQuaternion(" << q.w << ", " << q.x << ", " << q.y << ", " << q.z << ", " << q.dw << ", " << q.dx << ", " << q.dy << ", " << q.dz << ")";
-            return o;
-        }
+        _OgreExport friend std::ostream &operator<<( std::ostream &o, const DualQuaternion &q );
     };
     /** @} */
     /** @} */

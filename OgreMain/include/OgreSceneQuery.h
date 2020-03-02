@@ -31,6 +31,10 @@ THE SOFTWARE.
 #include "OgrePrerequisites.h"
 #include "OgreSphere.h"
 #include "OgreRay.h"
+
+#include "ogrestd/list.h"
+#include "ogrestd/set.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre {

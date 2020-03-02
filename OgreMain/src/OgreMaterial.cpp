@@ -35,6 +35,8 @@ THE SOFTWARE.
 #include "OgreLodStrategyManager.h"
 #include "OgreLodStrategy.h"
 
+#include <sstream>
+
 namespace Ogre {
 
     //-----------------------------------------------------------------------
@@ -508,9 +510,11 @@ namespace Ogre {
         // Did we find any?
         if (mSupportedTechniques.empty())
         {
-            LogManager::getSingleton().stream(LML_CRITICAL)
-                << "WARNING: material " << mName << " has no supportable "
-                << "Techniques and will be blank. Explanation: \n" << mUnsupportedReasons;
+            LogManager::getSingleton().logMessage(
+                "WARNING: material " + mName +
+                    " has no supportable Techniques and will be blank. Explanation: \n" +
+                    mUnsupportedReasons,
+                LML_CRITICAL );
         }
     }
     //-----------------------------------------------------------------------

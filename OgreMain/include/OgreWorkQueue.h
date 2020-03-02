@@ -33,6 +33,11 @@ THE SOFTWARE.
 #include "OgreSharedPtr.h"
 #include "OgreCommon.h"
 #include "Threading/OgreThreadHeaders.h"
+
+#include "ogrestd/deque.h"
+#include "ogrestd/list.h"
+#include "ogrestd/map.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre

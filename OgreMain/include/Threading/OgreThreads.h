@@ -118,7 +118,7 @@ namespace Ogre
     };
 
     typedef SharedPtr<ThreadHandle> ThreadHandlePtr;
-    typedef vector<ThreadHandlePtr>::type ThreadHandleVec;
+    typedef StdVector<ThreadHandlePtr> ThreadHandleVec;
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
     typedef unsigned long (OGRE_THREAD_CALL_CONVENTION *THREAD_ENTRY_POINT)( void *lpThreadParameter );

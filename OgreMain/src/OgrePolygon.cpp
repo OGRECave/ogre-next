@@ -31,6 +31,10 @@ THE SOFTWARE.
 #include "OgreException.h"
 #include "OgreVector3.h"
 
+#include "ogrestd/map.h"
+
+#include <sstream>
+
 namespace Ogre
 {
 

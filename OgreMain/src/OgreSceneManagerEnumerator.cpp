@@ -161,9 +161,10 @@ namespace Ogre {
                 if (instanceName.empty())
                 {
                     // generate a name
-                    StringStream s;
-                    s << "SceneManagerInstance" << ++mInstanceCreateCount;
-                    inst = (*i)->createInstance(s.str(), numWorkerThreads);
+                    char tmpBuffer[32];
+                    LwString str( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+                    str.a( "SceneManagerInstance", (uint32)++mInstanceCreateCount );
+                    inst = (*i)->createInstance(str.c_str(), numWorkerThreads);
                 }
                 else
                 {
@@ -208,9 +209,10 @@ namespace Ogre {
         if (name.empty())
         {
             // generate a name
-            StringStream s;
-            s << "SceneManagerInstance" << ++mInstanceCreateCount;
-            name = s.str();
+            char tmpBuffer[32];
+            LwString str( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+            str.a( "SceneManagerInstance", (uint32)++mInstanceCreateCount );
+            name = str.c_str();
         }
 
         // Iterate backwards to find the matching factory registered last

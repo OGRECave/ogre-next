@@ -44,6 +44,11 @@ Ogre-dependent is in the visualization/logging routines and the use of the Timer
 #include "OgrePrerequisites.h"
 #include "OgreSingleton.h"
 #include "OgreProfilerCommon.h"
+
+#include "ogrestd/map.h"
+#include "ogrestd/set.h"
+#include "ogrestd/vector.h"
+
 #if OGRE_PROFILING == OGRE_PROFILING_REMOTERY
     #include "Remotery.h"
 #elif OGRE_PROFILING == OGRE_PROFILING_INTERNAL_OFFLINE

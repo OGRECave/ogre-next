@@ -31,6 +31,8 @@ THE SOFTWARE.
 #include "OgreLogManager.h"
 #include "OgreException.h"
 
+#include <sstream>
+
 namespace Ogre
 {
 namespace v1
@@ -405,7 +407,7 @@ namespace v1
                         splitVertex = true;
                         splitBecauseOfParity = true;
 
-                        LogManager::getSingleton().stream(LML_TRIVIAL)
+                        *LogManager::getSingleton().stream(LML_TRIVIAL).raw()
                             << "TSC parity split - Vpar: " << vertex->parity 
                             << " Fpar: " << faceParity
                             << " faceTsU: " << faceTsU

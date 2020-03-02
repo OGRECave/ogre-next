@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "OgreDataStream.h"
 #include "OgreException.h"
 #include "OgreLogManager.h"
+#include "OgreString.h"
 
 #include "OgrePixelFormatGpuUtils.h"
 
@@ -59,6 +60,8 @@ THE SOFTWARE.
 #endif
 #endif
 
+#include <sstream>
+
 namespace Ogre {
 
     FreeImageCodec2::RegisteredCodecList FreeImageCodec2::msCodecList;
@@ -69,13 +72,13 @@ namespace Ogre {
         const char* typeName = FreeImage_GetFormatFromFIF(fif);
         if (typeName)
         {
-            LogManager::getSingleton().stream() 
+            *LogManager::getSingleton().stream().raw()
                 << "FreeImage error: '" << message << "' when loading format "
                 << typeName;
         }
         else
         {
-            LogManager::getSingleton().stream() 
+            *LogManager::getSingleton().stream().raw()
                 << "FreeImage error: '" << message << "'";
         }
 

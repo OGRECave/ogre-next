@@ -36,6 +36,8 @@ THE SOFTWARE.
 #include "OgreResourceTransition.h"
 #include "OgreRenderPassDescriptor.h"
 
+#include "ogrestd/vector.h"
+
 namespace Ogre
 {
     class CompositorNodeDef;

@@ -73,8 +73,11 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreDepthBuffer.h"
 #include "OgreWindow.h"
 #include "OgrePixelFormatGpuUtils.h"
+#include "OgreString.h"
 
 #include "OgreProfiler.h"
+
+#include <sstream>
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
 extern "C" void glFlushRenderAPPLE();
@@ -145,7 +148,8 @@ static void APIENTRY GLDebugCallback(GLenum source,
     else
         strcpy(debSev, "unknown");
 
-    Ogre::LogManager::getSingleton().stream() << debSource << ":" << debType << "(" << debSev << ") " << id << ": " << message;
+    *Ogre::LogManager::getSingleton().stream().raw()
+        << debSource << ":" << debType << "(" << debSev << ") " << id << ": " << message;
 }
 #endif
 

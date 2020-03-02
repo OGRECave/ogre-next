@@ -37,6 +37,10 @@ THE SOFTWARE.
 #include "Threading/OgreWaitableEvent.h"
 #include "Threading/OgreThreads.h"
 
+#include "ogrestd/list.h"
+#include "ogrestd/map.h"
+#include "ogrestd/set.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre

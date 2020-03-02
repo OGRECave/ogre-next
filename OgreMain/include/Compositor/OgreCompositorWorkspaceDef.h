@@ -32,6 +32,8 @@ THE SOFTWARE.
 #include "OgreHeaderPrefix.h"
 #include "Compositor/OgreTextureDefinition.h"
 
+#include "ogrestd/list.h"
+
 namespace Ogre
 {
     /** \addtogroup Core

@@ -74,6 +74,7 @@ THE SOFTWARE.
 #include "OgreHlmsLowLevel.h"
 #include "Animation/OgreSkeletonManager.h"
 #include "Compositor/OgreCompositorManager2.h"
+#include "OgreString.h"
 
 #if OGRE_NO_FREEIMAGE == 0
 #include "OgreFreeImageCodec2.h"
@@ -110,6 +111,8 @@ THE SOFTWARE.
 #if OGRE_NO_ASTC_CODEC == 0
 #  include "OgreASTCCodec.h"
 #endif
+
+#include <sstream>
 
 namespace Ogre {
     //-----------------------------------------------------------------------
@@ -323,7 +326,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     Root::~Root()
     {
-        LogManager::getSingleton().stream(LML_TRIVIAL)
+        *LogManager::getSingleton().stream(LML_TRIVIAL).raw()
             << "Average FPS: " << mFrameStats->getAvgFps() << "\n"
             << "Average time: \t"<< mFrameStats->getAvgTime() << " ms\n"
             << "Best time: \t"  << mFrameStats->getBestTime() << " ms\n"

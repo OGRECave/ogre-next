@@ -33,16 +33,19 @@ THE SOFTWARE.
 
 #include "OgreId.h"
 
+#include "Math/Simple/OgreAabb.h"
 #include "OgreIdString.h"
 #include "OgrePixelFormatGpu.h"
 #include "OgreShaderPrimitives.h"
-#include "Math/Simple/OgreAabb.h"
+
+#include "ogrestd/vector.h"
 
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {
     class IrradianceFieldRaster;
+    class IfdProbeVisualizer;
 
     struct _OgreHlmsPbsExport RasterParams
     {
@@ -132,6 +135,15 @@ namespace Ogre
     {
         friend class IrradianceFieldRaster;
 
+    public:
+        enum DebugVisualizationMode
+        {
+            DebugVisualizationColour,
+            DebugVisualizationDepth,
+            DebugVisualizationNone
+        };
+
+    protected:
         struct IrradianceFieldGenParams
         {
             float invNumRaysPerPixel;
@@ -179,6 +191,10 @@ namespace Ogre
 
         IrradianceFieldRaster *mIfRaster;
 
+        DebugVisualizationMode mDebugVisualizationMode;
+        uint8 mDebugTessellation;
+        IfdProbeVisualizer *mDebugIfdProbeVisualizer;
+
         Root *mRoot;
         SceneManager *mSceneManager;
         bool mAlreadyWarned;
@@ -197,7 +213,9 @@ namespace Ogre
         */
         static void fillIntegrationWeights( float2 *RESTRICT_ALIAS outBuffer, uint32 probeRes,
                                             uint32 maxTapsPerPixel );
-        void setIrradianceFieldGenParams();
+        void setIrradianceFieldGenParams( void );
+
+        void setTextureToDebugVisualizer( void );
 
     public:
         IrradianceField( Root *root, SceneManager *sceneManager );
@@ -229,6 +247,27 @@ namespace Ogre
 
         size_t getConstBufferSize( void ) const;
         void fillConstBufferData( const Matrix4 &viewMatrix, float *RESTRICT_ALIAS passBufferPtr ) const;
+
+        /**
+        @param mode
+        @param sceneManager
+            Can be nullptr only if mode == IrradianceField::DebugVisualizationNone
+        @param tessellation
+            Value in range [3; 16]
+            Note this value increases exponentially:
+                tessellation = 3u -> 24 vertices (per sphere)
+                tessellation = 4u -> 112 vertices
+                tessellation = 5u -> 480 vertices
+                tessellation = 6u -> 1984 vertices
+                tessellation = 7u -> 8064 vertices
+                tessellation = 8u -> 32512 vertices
+                tessellation = 9u -> 130560 vertices
+                tessellation = 16u -> 2.147.418.112 vertices
+        */
+        void setDebugVisualization( IrradianceField::DebugVisualizationMode mode,
+                                    SceneManager *sceneManager, uint8 tessellation );
+        bool getDebugVisualizationMode( void ) const;
+        uint8 getDebugTessellation( void ) const;
 
         TextureGpu *getIrradianceTex( void ) const { return mIrradianceTex; }
         TextureGpu *getDepthVarianceTex( void ) const { return mDepthVarianceTex; }

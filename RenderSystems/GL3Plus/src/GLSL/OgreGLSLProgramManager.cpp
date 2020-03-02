@@ -34,6 +34,7 @@
 #include "OgreGL3PlusHardwareBufferManager.h"
 #include "OgreRoot.h"
 #include "OgreGL3PlusUtil.h"
+#include "OgreString.h"
 
 #include <iostream>
 

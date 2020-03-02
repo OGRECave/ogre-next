@@ -34,6 +34,8 @@ THE SOFTWARE.
 #include "LightProfiles/OgreIesLoader.h"
 #include "OgreIdString.h"
 
+#include "ogrestd/map.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre

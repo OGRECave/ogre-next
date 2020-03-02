@@ -45,6 +45,8 @@ THE SOFTWARE.
 #include "OgreDeflate.h"
 #include "OgreStringConverter.h"
 
+#include <sstream>
+
 namespace Ogre
 {
     //---------------------------------------------------------------------
@@ -85,7 +87,7 @@ namespace Ogre
         // really this should be empty if read/write was complete, but be tidy
         if (!mChunkStack.empty())
         {
-            LogManager::getSingleton().stream() <<
+            *LogManager::getSingleton().stream().raw() <<
                 "Warning: stream " << mStream->getName() << " was not fully read / written; " <<
                 mChunkStack.size() << " chunks remain unterminated.";
         }
@@ -146,7 +148,7 @@ namespace Ogre
         }
         else if (c->version > maxVersion)
         {
-            LogManager::getSingleton().stream() << "Error: " << msg 
+            *LogManager::getSingleton().stream().raw() << "Error: " << msg
                 << " : Data version is " << c->version << " but this software can only read "
                 << "up to version " << maxVersion;
             // skip

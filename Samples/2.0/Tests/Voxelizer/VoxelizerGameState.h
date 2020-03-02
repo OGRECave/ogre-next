@@ -63,6 +63,7 @@ namespace Demo
         bool                    mUseRasterIrradianceField;
 
         Ogre::uint32    mDebugVisualizationMode;
+        Ogre::uint32    mIfdDebugVisualizationMode;
         Ogre::uint32    mNumBounces;
 
         Ogre::FastArray<Ogre::Item*>    mItems;
@@ -74,6 +75,7 @@ namespace Demo
         void cycleVisualizationMode( bool bPrev );
         void toggletVctQuality(void);
         GiMode getGiMode(void) const;
+        void cycleIfdProbeVisualizationMode( bool bPrev );
         void cycleIrradianceField( bool bPrev );
 
         void voxelizeScene(void);

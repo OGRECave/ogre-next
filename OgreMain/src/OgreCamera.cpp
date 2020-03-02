@@ -806,7 +806,7 @@ namespace Ogre {
 
     }
     // -------------------------------------------------------------------
-    const vector<Plane>::type& Camera::getWindowPlanes(void) const
+    const PlaneList& Camera::getWindowPlanes(void) const
     {
         updateView();
         setWindowImpl();

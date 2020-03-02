@@ -35,6 +35,8 @@ THE SOFTWARE.
 
 #include "Vao/OgreBufferPacked.h"
 
+#include "ogrestd/vector.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre

@@ -31,6 +31,8 @@ THE SOFTWARE.
 #include "OgreD3D11Prerequisites.h"
 #include "OgreSharedPtr.h"
 
+#include "ogrestd/vector.h"
+
 namespace Ogre 
 {
     class _OgreD3D11Export D3D11DriverList

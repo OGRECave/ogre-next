@@ -31,6 +31,9 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 #include "OgreShadowCameraSetupFocused.h"
+
+#include "ogrestd/vector.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre

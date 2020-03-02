@@ -29,6 +29,9 @@ THE SOFTWARE.
 #define _OgreFreeImageCodec2_H_
 
 #include "OgreImageCodec2.h"
+
+#include "ogrestd/list.h"
+
 // Forward-declaration to avoid external dependency on FreeImage
 struct FIBITMAP;
 

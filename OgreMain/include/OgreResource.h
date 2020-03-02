@@ -32,6 +32,9 @@ THE SOFTWARE.
 #include "OgreAtomicScalar.h"
 #include "OgreStringInterface.h"
 #include "OgreHeaderPrefix.h"
+
+#include "ogrestd/set.h"
+
 #include "Threading/OgreThreadHeaders.h"
 
 namespace Ogre {

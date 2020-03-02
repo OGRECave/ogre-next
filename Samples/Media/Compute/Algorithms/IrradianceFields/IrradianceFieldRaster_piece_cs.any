@@ -59,6 +59,7 @@
 		@foreach( horiz_samples_per_colour_pixel, x )
 			offset = float2( @x, @y ) / ( @value( horiz_samples_per_colour_pixel ) * @value( colour_resolution ) );
 			samplingDir = octahedronMappingDecode( samplingXY + offset );
+			samplingDir.z = -samplingDir.z; // cubemaps are left handed
 			colourData += OGRE_SampleLevel( colourCubemap, bilinearSampler, samplingDir, 0 );
 		@end
 	@end
@@ -83,6 +84,7 @@
 					offset = float2( @i + @x, @j + @y ) / ( @value( horiz_samples_per_depth_pixel ) * @value( depth_resolution ) );
 					samplingDir = octahedronMappingDecode( samplingXY + offset );
 
+					samplingDir.z = -samplingDir.z; // cubemaps are left handed
 					dist = OGRE_SampleLevel( depthCubemap, bilinearSampler, samplingDir, 0 ).x;
 					linearDepth = p_projectionParams.y / (dist - p_projectionParams.x);
 

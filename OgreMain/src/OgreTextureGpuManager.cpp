@@ -53,6 +53,7 @@ THE SOFTWARE.
 #include "OgreRenderSystem.h"
 #include "OgreException.h"
 #include "OgreLogManager.h"
+#include "OgreString.h"
 
 #include "OgreProfiler.h"
 

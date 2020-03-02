@@ -30,6 +30,8 @@
 
 #include "OgreLogManager.h"
 
+#include <sstream>
+
 namespace Ogre
 {
     void LodCollapseCost::initCollapseCosts( LodData* data )
@@ -46,12 +48,12 @@ namespace Ogre
             else
             {
 #if OGRE_DEBUG_MODE
-                LogManager::getSingleton().stream() << "In " << data->mMeshName << " never used vertex found with ID: " << data->mCollapseCostHeap.size() << ". "
-                                                    << "Vertex position: ("
-                                                    << it->position.x << ", "
-                                                    << it->position.y << ", "
-                                                    << it->position.z << ") "
-                                                    << "It will be excluded from Lod level calculations.";
+                *LogManager::getSingleton().stream().raw()
+                    << "In " << data->mMeshName
+                    << " never used vertex found with ID: " << data->mCollapseCostHeap.size() << ". "
+                    << "Vertex position: (" << it->position.x << ", " << it->position.y << ", "
+                    << it->position.z << ") "
+                    << "It will be excluded from Lod level calculations.";
 #endif
             }
         }

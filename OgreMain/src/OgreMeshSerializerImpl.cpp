@@ -799,10 +799,10 @@ namespace v1 {
 
         if (vType == VET_COLOUR)
         {
-            LogManager::getSingleton().stream()
-                << "Warning: VET_COLOUR element type is deprecated, you should use "
-                << "one of the more specific types to indicate the byte order. "
-                << "Use OgreMeshUpgrade on " << pMesh->getName() << " as soon as possible. ";
+            LogManager::getSingleton().logMessage(
+                "Warning: VET_COLOUR element type is deprecated, you should use "
+                "one of the more specific types to indicate the byte order. "
+                 "Use OgreMeshUpgrade on " + pMesh->getName() + " as soon as possible. " );
         }
 
     }

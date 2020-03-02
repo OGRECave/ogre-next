@@ -32,6 +32,7 @@ THE SOFTWARE
 #include "OgreStringConverter.h"
 #include "OgreException.h"
 #include "OgreBitwise.h"
+#include "OgreString.h"
 
 #include "OgreRoot.h"
 #include "OgreHlmsManager.h"
@@ -49,7 +50,7 @@ THE SOFTWARE
 #include FT_GLYPH_H
 #undef generic
 
-
+#include <sstream>
 
 namespace Ogre
 {

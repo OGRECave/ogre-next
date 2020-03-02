@@ -46,6 +46,8 @@
 #include <X11/Xlib.h>
 #include <X11/extensions/Xrandr.h>
 
+#include <sstream>
+
 static bool ctxErrorOccurred = false;
 static int ctxErrorHandler( Display *dpy, XErrorEvent *ev )
 {
@@ -440,7 +442,7 @@ namespace Ogre
         // This is more realistic than using glXGetClientString:
         extensionsString = glXQueryExtensionsString(mGLDisplay, DefaultScreen(mGLDisplay));
 
-        LogManager::getSingleton().stream() << "Supported GLX extensions: " << extensionsString;
+        *LogManager::getSingleton().stream().raw() << "Supported GLX extensions: " << extensionsString;
 
         StringStream ext;
         String instr;

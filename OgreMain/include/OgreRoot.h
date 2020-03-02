@@ -37,6 +37,8 @@ THE SOFTWARE.
 #include "Android/OgreAndroidLogListener.h"
 #endif
 
+#include "ogrestd/deque.h"
+
 #include <exception>
 
 namespace Ogre

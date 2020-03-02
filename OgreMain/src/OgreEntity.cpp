@@ -926,11 +926,12 @@ namespace v1 {
                 if (msh->getSharedVertexDataAnimationType() == VAT_POSE && 
                     supportedCount < mHardwarePoseCount)
                 {
-                    LogManager::getSingleton().stream() <<
-                      "Vertex program assigned to Entity '" << mName << 
-                      "' claimed to support " << mHardwarePoseCount << 
-                      " morph/pose vertex sets, but in fact only " << supportedCount <<
-                      " were able to be supported in the shared mesh data.";
+                    LogManager::getSingleton().logMessage(
+                        "Vertex program assigned to Entity '" + mName +                              //
+                        "' claimed to support " + StringConverter::toString( mHardwarePoseCount ) +  //
+                        " morph/pose vertex sets, but in fact only " +                               //
+                        StringConverter::toString( supportedCount ) +
+                        " were able to be supported in the shared mesh data." );
                     mHardwarePoseCount = supportedCount;
                 }
                     
@@ -951,11 +952,13 @@ namespace v1 {
                     if (sub.getSubMesh()->getVertexAnimationType() == VAT_POSE &&
                         supportedCount < sub.mHardwarePoseCount)
                     {
-                        LogManager::getSingleton().stream() <<
-                        "Vertex program assigned to SubEntity of '" << mName << 
-                        "' claimed to support " << sub.mHardwarePoseCount <<
-                        " morph/pose vertex sets, but in fact only " << supportedCount <<
-                        " were able to be supported in the mesh data.";
+                        LogManager::getSingleton().logMessage(
+                            "Vertex program assigned to SubEntity of '" + mName +  //
+                            "' claimed to support " +                              //
+                            StringConverter::toString( sub.mHardwarePoseCount ) +  //
+                            " morph/pose vertex sets, but in fact only " +         //
+                            StringConverter::toString( supportedCount ) +
+                            " were able to be supported in the mesh data." );
                         sub.mHardwarePoseCount = supportedCount;
                     }
                     

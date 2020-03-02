@@ -30,7 +30,10 @@ THE SOFTWARE.
 #define _Ogre_StagingBuffer_H_
 
 #include "OgrePrerequisites.h"
+
 #include "OgreBufferPacked.h"
+
+#include "ogrestd/vector.h"
 
 namespace Ogre
 {

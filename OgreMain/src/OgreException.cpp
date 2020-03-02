@@ -29,6 +29,8 @@ THE SOFTWARE.
 #include "OgreException.h"
 #include "OgreLogManager.h"
 
+#include <sstream>
+
 #ifdef __BORLANDC__
     #include <stdio.h>
 #endif

@@ -32,6 +32,10 @@ THE SOFTWARE.
 #include "OgrePrerequisites.h"
 #include "OgreStringVector.h"
 #include "OgreStringConverter.h"
+#include "OgreLwString.h"
+
+#include "ogrestd/set.h"
+
 #include "OgreHeaderPrefix.h"
 
 // Because there are more than 32 possible Capabilities, more than 1 int is needed to store them all.
@@ -280,25 +284,13 @@ namespace Ogre
 
         String toString() const 
         {
-            StringStream str;
-            str << major << "." << minor << "." << release << "." << build;
-            return str.str();
+            char tmpBuffer[64];
+            LwString str( LwString::FromEmptyPointer( tmpBuffer, sizeof( tmpBuffer ) ) );
+            str.a( major, ".", minor, ".", release, ".", build );
+            return str.c_str();
         }
 
-        void fromString(const String& versionString)
-        {
-            StringVector tokens = StringUtil::split(versionString, ".");
-            if(!tokens.empty())
-            {
-                major = StringConverter::parseInt(tokens[0]);
-                if (tokens.size() > 1)
-                    minor = StringConverter::parseInt(tokens[1]);
-                if (tokens.size() > 2)
-                    release = StringConverter::parseInt(tokens[2]);
-                if (tokens.size() > 3)
-                    build = StringConverter::parseInt(tokens[3]);
-            }
-        }
+        void fromString(const String& versionString);
 
         bool hasMinVersion( int minMajor, int minMinor ) const
         {

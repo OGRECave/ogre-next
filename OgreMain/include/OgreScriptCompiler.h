@@ -35,6 +35,9 @@ THE SOFTWARE.
 #include "OgreGpuProgram.h"
 #include "OgreAny.h"
 #include "Threading/OgreThreadHeaders.h"
+
+#include "ogrestd/list.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre

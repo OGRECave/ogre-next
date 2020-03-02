@@ -39,6 +39,8 @@ THE SOFTWARE.
 #include "OgrePixelFormatGpu.h"
 #include "Compositor/OgreCompositorChannel.h"
 
+#include "ogrestd/map.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre

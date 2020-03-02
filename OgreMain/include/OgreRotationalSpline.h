@@ -30,6 +30,9 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 #include "OgreQuaternion.h"
+
+#include "ogrestd/vector.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre {

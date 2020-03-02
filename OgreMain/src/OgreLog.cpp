@@ -31,6 +31,8 @@ THE SOFTWARE.
 #include <iomanip>
 #include <iostream>
 
+#include <sstream>
+
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32 || OGRE_PLATFORM == OGRE_PLATFORM_WINRT
 #   include <windows.h>
 #endif
@@ -169,4 +171,31 @@ namespace Ogre
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
     LogListener::~LogListener() {}
+    //---------------------------------------------------------------------
+    Log::Stream::Stream( Log *target, LogMessageLevel lml, bool maskDebug ) :
+        mTarget( target ),
+        mLevel( lml ),
+        mMaskDebug( maskDebug ),
+        mCache( new BaseStream() )
+    {
+    }
+    //---------------------------------------------------------------------
+    Log::Stream::Stream(const Stream& rhs)
+        : mTarget(rhs.mTarget), mLevel(rhs.mLevel), mMaskDebug(rhs.mMaskDebug)
+    {
+        // explicit copy of stream required, gcc doesn't like implicit
+        mCache->str(rhs.mCache->str());
+    }
+    //---------------------------------------------------------------------
+    Log::Stream::~Stream()
+    {
+        // flush on destroy
+        if (mCache->tellp() > 0)
+        {
+            mTarget->logMessage(mCache->str(), mLevel, mMaskDebug);
+        }
+
+        delete mCache;
+        mCache = 0;
+    }
 }

@@ -37,6 +37,8 @@ THE SOFTWARE.
 #include "OgreIdString.h"
 #include "OgreId.h"
 
+#include "ogrestd/map.h"
+
 namespace Ogre
 {
     /** \addtogroup Core

@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "OgreHlms.h"
 #include "OgreHlmsManager.h"
 #include "OgreRenderSystem.h"
+#include "OgreString.h"
 
 #ifdef OGRE_BUILD_COMPONENT_HLMS_UNLIT
     #include "OgreHlmsUnlitDatablock.h"

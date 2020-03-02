@@ -1,3 +1,4 @@
+
 /*
 -----------------------------------------------------------------------------
 This source file is part of OGRE
@@ -31,6 +32,8 @@ THE SOFTWARE.
 #include "OgreRoot.h"
 #include "OgreRenderSystem.h"
 
+#include <sstream>
+
 namespace Ogre
 {
     //---------------------------------------------------------------------
@@ -58,7 +61,7 @@ namespace Ogre
 
         mWorkerFunc = OGRE_NEW_T(WorkerFunc(this), MEMCATEGORY_GENERAL);
 
-        LogManager::getSingleton().stream() <<
+        *LogManager::getSingleton().stream().raw() <<
             "DefaultWorkQueue('" << mName << "') initialising on thread " <<
 #if OGRE_THREAD_SUPPORT
             OGRE_THREAD_CURRENT_ID
@@ -109,7 +112,7 @@ namespace Ogre
         if( !mIsRunning )
             return;
 
-        LogManager::getSingleton().stream() <<
+        *LogManager::getSingleton().stream().raw() <<
             "DefaultWorkQueue('" << mName << "') shutting down on thread " <<
 #if OGRE_THREAD_SUPPORT
             OGRE_THREAD_CURRENT_ID
@@ -168,7 +171,7 @@ namespace Ogre
     {
         // default worker thread
 #if OGRE_THREAD_SUPPORT
-        LogManager::getSingleton().stream() << 
+        *LogManager::getSingleton().stream().raw() <<
             "DefaultWorkQueue('" << getName() << "')::WorkerFunc - thread " 
             << OGRE_THREAD_CURRENT_ID << " starting.";
 
@@ -186,7 +189,7 @@ namespace Ogre
             _processNextRequest();
         }
 
-        LogManager::getSingleton().stream() << 
+        *LogManager::getSingleton().stream().raw() <<
             "DefaultWorkQueue('" << getName() << "')::WorkerFunc - thread " 
             << OGRE_THREAD_CURRENT_ID << " stopped.";
 #endif

@@ -35,6 +35,11 @@ Copyright (c) 2000-2014 Torus Knot Software Ltd
 #include "OgreSerializer.h"
 #include "OgreAny.h"
 #include "Threading/OgreThreadHeaders.h"
+
+#include "ogrestd/map.h"
+#include "ogrestd/unordered_map.h"
+#include "ogrestd/vector.h"
+
 #include "OgreHeaderPrefix.h"
 
 namespace Ogre {

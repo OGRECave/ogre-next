@@ -36,6 +36,11 @@ THE SOFTWARE.
 #include "OgreCommon.h"
 #include "Threading/OgreThreadHeaders.h"
 #include <ctime>
+
+#include "ogrestd/list.h"
+#include "ogrestd/map.h"
+#include "ogrestd/unordered_set.h"
+
 #include "OgreHeaderPrefix.h"
 
 // If X11/Xlib.h gets included before this header (for example it happens when

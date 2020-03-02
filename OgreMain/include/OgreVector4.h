@@ -417,12 +417,7 @@ namespace Ogre
         }
         /** Function for writing to a stream.
         */
-        inline _OgreExport friend std::ostream& operator <<
-            ( std::ostream& o, const Vector4& v )
-        {
-            o << "Vector4(" << v.x << ", " << v.y << ", " << v.z << ", " << v.w << ")";
-            return o;
-        }
+        _OgreExport friend std::ostream &operator<<( std::ostream &o, const Vector4 &v );
         // special
         static const Vector4 ZERO;
     };

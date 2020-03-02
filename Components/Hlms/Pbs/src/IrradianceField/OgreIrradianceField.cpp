@@ -26,9 +26,9 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
-#include "OgreStableHeaders.h"
-
 #include "IrradianceField/OgreIrradianceField.h"
+
+#include "IrradianceField/OgreIfdProbeVisualizer.h"
 #include "IrradianceField/OgreIrradianceFieldRaster.h"
 #include "Vct/OgreVctLighting.h"
 #include "Vct/OgreVctVoxelizer.h"
@@ -170,6 +170,9 @@ namespace Ogre
         mDepthTapsIntegrationBuffer( 0 ),
         mColourTapsIntegrationBuffer( 0 ),
         mIfRaster( 0 ),
+        mDebugVisualizationMode( DebugVisualizationNone ),
+        mDebugTessellation( 4u ),
+        mDebugIfdProbeVisualizer( 0 ),
         mRoot( root ),
         mSceneManager( sceneManager ),
         mAlreadyWarned( false )
@@ -203,6 +206,7 @@ namespace Ogre
     //-------------------------------------------------------------------------
     IrradianceField::~IrradianceField()
     {
+        setDebugVisualization( DebugVisualizationNone, 0, mDebugTessellation );
         destroyTextures();
 
         delete mIfRaster;
@@ -471,6 +475,13 @@ namespace Ogre
             mVctLighting = 0;
         mFieldOrigin = fieldOrigin;
         mFieldSize = fieldSize;
+
+        // Enlarge our bounds because at the borders we have
+        // limited information thus there's often a hard line
+        Vector3 probeBlockSize = mFieldSize / mSettings.getNumProbes3f();
+        mFieldOrigin -= probeBlockSize;
+        mFieldSize += probeBlockSize * 2.0f;
+
         mAlreadyWarned = false;
         mNumProbesProcessed = 0u;
         createTextures();
@@ -524,6 +535,18 @@ namespace Ogre
             vaoManager, mSettings.mIrradianceResolution, irradWidth, mColourIntegrationJob,
             mIfGenParamsBuffer, mColourMaxIntegrationTapsPerPixel );
 
+        if( mDebugIfdProbeVisualizer )
+        {
+            setTextureToDebugVisualizer();
+            mDebugIfdProbeVisualizer->setVisible( true );
+
+            // Field AABB may have changed
+            SceneNode *sceneNode = mDebugIfdProbeVisualizer->getParentSceneNode();
+            sceneNode->setPosition( mFieldOrigin );
+            sceneNode->setScale( mFieldSize / mSettings.getNumProbes3f() );
+            sceneNode->getCreator()->notifyStaticDirty( sceneNode );
+        }
+
         if( !mVctLighting )
             return;
 
@@ -564,6 +587,9 @@ namespace Ogre
     //-------------------------------------------------------------------------
     void IrradianceField::destroyTextures( void )
     {
+        if( mDebugIfdProbeVisualizer )
+            mDebugIfdProbeVisualizer->setVisible( false );
+
         TextureGpuManager *textureManager = mRoot->getRenderSystem()->getTextureGpuManager();
 
         if( mGenerationWorkspace )
@@ -600,10 +626,7 @@ namespace Ogre
         }
     }
     //-------------------------------------------------------------------------
-    void IrradianceField::reset()
-    {
-        mNumProbesProcessed = 0u;
-    }
+    void IrradianceField::reset() { mNumProbesProcessed = 0u; }
     //-------------------------------------------------------------------------
     void IrradianceField::update( uint32 probesPerFrame )
     {
@@ -699,7 +722,7 @@ namespace Ogre
         const Vector3 finalSize = numProbes / mFieldSize;
 
         Matrix4 xform;
-        xform.makeTransform( -mFieldOrigin * finalSize - 0.5f, finalSize, Quaternion::IDENTITY );
+        xform.makeTransform( -mFieldOrigin * finalSize, finalSize, Quaternion::IDENTITY );
         xform = xform.concatenateAffine( viewMatrix.inverseAffine() );
 
         const float fDepthFullWidth = static_cast<float>( mDepthVarianceTex->getWidth() );
@@ -718,5 +741,59 @@ namespace Ogre
         renderParams->depthFullWidth = fDepthFullWidth;
         renderParams->depthInvFullResolution.x = 1.0f / fDepthFullWidth;
         renderParams->depthInvFullResolution.y = 1.0f / fDepthFullHeight;
+    }
+    //-------------------------------------------------------------------------
+    void IrradianceField::setDebugVisualization( DebugVisualizationMode mode, SceneManager *sceneManager,
+                                                 uint8 tessellation )
+    {
+        if( mDebugIfdProbeVisualizer )
+        {
+            SceneNode *sceneNode = mDebugIfdProbeVisualizer->getParentSceneNode();
+            sceneNode->getParentSceneNode()->removeAndDestroyChild( sceneNode );
+            OGRE_DELETE mDebugIfdProbeVisualizer;
+            mDebugIfdProbeVisualizer = 0;
+        }
+
+        mDebugVisualizationMode = mode;
+        mDebugTessellation = tessellation;
+
+        if( mode != DebugVisualizationNone )
+        {
+            SceneNode *rootNode = sceneManager->getRootSceneNode( SCENE_STATIC );
+            SceneNode *visNode = rootNode->createChildSceneNode( SCENE_STATIC );
+
+            mDebugIfdProbeVisualizer = OGRE_NEW IfdProbeVisualizer(
+                Ogre::Id::generateNewId<Ogre::MovableObject>(),
+                &sceneManager->_getEntityMemoryManager( SCENE_STATIC ), sceneManager, 0u );
+
+            setTextureToDebugVisualizer();
+
+            visNode->setPosition( mFieldOrigin );
+            visNode->setScale( mFieldSize / mSettings.getNumProbes3f() );
+            visNode->attachObject( mDebugIfdProbeVisualizer );
+        }
+    }
+    //-------------------------------------------------------------------------
+    bool IrradianceField::getDebugVisualizationMode( void ) const { return mDebugVisualizationMode; }
+    //-------------------------------------------------------------------------
+    uint8 IrradianceField::getDebugTessellation( void ) const { return mDebugTessellation; }
+    //-------------------------------------------------------------------------
+    void IrradianceField::setTextureToDebugVisualizer( void )
+    {
+        TextureGpu *trackedTex =
+            mDebugVisualizationMode == DebugVisualizationColour ? mIrradianceTex : mDepthVarianceTex;
+        const uint8 resolution = mDebugVisualizationMode == DebugVisualizationColour
+                                     ? mSettings.mIrradianceResolution
+                                     : mSettings.mDepthProbeResolution;
+        Vector2 rangeMult( 1.0f );
+        if( mDebugVisualizationMode == DebugVisualizationDepth )
+        {
+            // TODO: Find something better than a hardcoded 500
+            rangeMult.x = 500.0f;
+            rangeMult.y = rangeMult.x * rangeMult.x;
+        }
+        rangeMult = 2.0f / rangeMult;
+        mDebugIfdProbeVisualizer->setTrackingIfd( mSettings, mFieldSize, resolution, trackedTex,
+                                                  rangeMult, mDebugTessellation );
     }
 }  // namespace Ogre

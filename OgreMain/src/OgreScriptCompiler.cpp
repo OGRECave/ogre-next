@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "OgreResourceGroupManager.h"
 #include "OgreLogManager.h"
 #include "OgreStringConverter.h"
+#include "OgreString.h"
 
 namespace Ogre
 {
@@ -1199,6 +1200,7 @@ namespace Ogre
         mIds["named"] = ID_NAMED;
         mIds["shadow"] = ID_SHADOW;
         mIds["compositor"] = ID_COMPOSITOR;
+        mIds["automatic_batching"] = ID_AUTOMATIC_BATCHING;
         mIds["texture_source"] = ID_TEXTURE_SOURCE;
         mIds["shared_params"] = ID_SHARED_PARAMS;
         mIds["shared_param_named"] = ID_SHARED_PARAM_NAMED;

@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "OgrePrerequisites.h"
 
 #include "OgreCommon.h"
+#include "OgreString.h"
 
 #include "OgreLogManager.h"
 #include "OgreStringConverter.h"

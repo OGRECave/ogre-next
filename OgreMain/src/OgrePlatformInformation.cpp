@@ -30,6 +30,7 @@ THE SOFTWARE.
 #include "OgrePlatformInformation.h"
 #include "OgreLogManager.h"
 #include "OgreStringConverter.h"
+#include "OgreString.h"
 
 #if OGRE_COMPILER == OGRE_COMPILER_MSVC
 #include <excpt.h>      // For SEH values
@@ -426,7 +427,7 @@ namespace Ogre {
             char CPUString[0x20];
             char CPUBrandString[0x40];
 
-            StringStream detailedIdentStr;
+            String detailedIdentStr;
 
 
             // Has standard feature ?
@@ -442,7 +443,7 @@ namespace Ogre {
                 memcpy(CPUString+4, &result._edx, sizeof(int));
                 memcpy(CPUString+8, &result._ecx, sizeof(int));
 
-                detailedIdentStr << CPUString;
+                detailedIdentStr += CPUString;
 
                 // Calling _performCpuid with 0x80000000 as the query argument
                 // gets the number of valid extended IDs.
@@ -479,9 +480,9 @@ namespace Ogre {
                 String brand(CPUBrandString);
                 StringUtil::trim(brand);
                 if (!brand.empty())
-                    detailedIdentStr << ": " << brand;
+                    detailedIdentStr += ": " + brand;
 
-                return detailedIdentStr.str();
+                return detailedIdentStr;
             }
         }
 

@@ -101,9 +101,7 @@ namespace Ogre {
 
     // Types.
     protected:      
-        typedef map<String, Any>::type          UserObjectsMap;
-        typedef UserObjectsMap::iterator        UserObjectsMapIterator;
-        typedef UserObjectsMap::const_iterator  UserObjectsMapConstIterator;
+        typedef StdMap<String, Any> UserObjectsMap;
 
         /** Internal class that uses as data storage container.
         */
@@ -114,14 +112,7 @@ namespace Ogre {
             Attributes() : mUserObjectsMap(NULL) {}
 
             /** Attribute storage dtor. */
-            ~Attributes()
-            {
-                if (mUserObjectsMap != NULL)
-                {
-                    OGRE_DELETE mUserObjectsMap;
-                    mUserObjectsMap = NULL;
-                }               
-            }
+            ~Attributes();
 
             Any                 mKeylessAny;        // Will hold key less associated user object for fast access.   
             UserObjectsMap*     mUserObjectsMap;    // Will hold a map between user keys to user objects.
