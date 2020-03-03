@@ -29,8 +29,11 @@ THE SOFTWARE.
 #include "OgreStringInterface.h"
 
 namespace Ogre {
-    OGRE_STATIC_MUTEX_INSTANCE( StringInterface::msDictionaryMutex );
-    ParamDictionaryMap StringInterface::msDictionary;
+    OGRE_STATIC_MUTEX( g_DictionaryMutex );
+
+    typedef map<String, ParamDictionary>::type ParamDictionaryMap;
+    /// Dictionary of parameters
+    static ParamDictionaryMap msDictionary;
 
     ParamCommand::~ParamCommand() {}
 
@@ -44,6 +47,26 @@ namespace Ogre {
         else
             return emptyList;
 
+    }
+
+    bool StringInterface::createParamDictionary(const String& className)
+    {
+        OGRE_LOCK_MUTEX( g_DictionaryMutex );
+
+        ParamDictionaryMap::iterator it = msDictionary.find(className);
+
+        if ( it == msDictionary.end() )
+        {
+            mParamDict = &msDictionary.insert( std::make_pair( className, ParamDictionary() ) ).first->second;
+            mParamDictName = className;
+            return true;
+        }
+        else
+        {
+            mParamDict = &it->second;
+            mParamDictName = className;
+            return false;
+        }
     }
 
     bool StringInterface::setParameter(const String& name, const String& value)
@@ -77,7 +100,7 @@ namespace Ogre {
     //-----------------------------------------------------------------------
     void StringInterface::cleanupDictionary ()
     {
-            OGRE_LOCK_MUTEX( msDictionaryMutex );
+            OGRE_LOCK_MUTEX( g_DictionaryMutex );
 
         msDictionary.clear();
     }

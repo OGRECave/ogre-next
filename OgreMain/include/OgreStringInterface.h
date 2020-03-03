@@ -152,7 +152,6 @@ namespace Ogre {
 
 
     };
-    typedef map<String, ParamDictionary>::type ParamDictionaryMap;
     
     /** Class defining the common interface which classes can use to 
         present a reflection-style, self-defining parameter set to callers.
@@ -166,11 +165,6 @@ namespace Ogre {
     class _OgreExport StringInterface 
     {
     private:
-        OGRE_STATIC_MUTEX( msDictionaryMutex );
-
-        /// Dictionary of parameters
-        static ParamDictionaryMap msDictionary;
-
         /// Class name for this instance to be used as a lookup (must be initialised by subclasses)
         String mParamDictName;
         ParamDictionary* mParamDict;
@@ -186,25 +180,7 @@ namespace Ogre {
         @return
             true if a new dictionary was created, false if it was already there
         */
-        bool createParamDictionary(const String& className)
-        {
-            OGRE_LOCK_MUTEX( msDictionaryMutex );
-
-            ParamDictionaryMap::iterator it = msDictionary.find(className);
-
-            if ( it == msDictionary.end() )
-            {
-                mParamDict = &msDictionary.insert( std::make_pair( className, ParamDictionary() ) ).first->second;
-                mParamDictName = className;
-                return true;
-            }
-            else
-            {
-                mParamDict = &it->second;
-                mParamDictName = className;
-                return false;
-            }
-        }
+        bool createParamDictionary(const String& className);
 
     public:
         StringInterface() : mParamDict(NULL) { }
