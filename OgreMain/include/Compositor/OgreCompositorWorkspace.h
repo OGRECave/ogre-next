@@ -29,12 +29,12 @@ THE SOFTWARE.
 #ifndef _OgreCompositorWorkspace_H_
 #define _OgreCompositorWorkspace_H_
 
-#include "OgreHeaderPrefix.h"
 #include "Compositor/OgreCompositorWorkspaceDef.h"
 #include "Compositor/OgreCompositorChannel.h"
 #include "OgreVector4.h"
-#include "OgreCamera.h"
 #include "OgreResourceTransition.h"
+
+#include "OgreHeaderPrefix.h"
 
 namespace Ogre
 {

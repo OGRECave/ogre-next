@@ -40,6 +40,7 @@ THE SOFTWARE.
 #include "Compositor/Pass/PassScene/OgreCompositorPassSceneDef.h"
 
 #include "OgreRoot.h"
+#include "OgreCamera.h"
 #include "OgreSceneManager.h"
 #include "OgreTextureGpuManager.h"
 #include "OgrePixelFormatGpuUtils.h"

@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "Compositor/OgreCompositorWorkspaceListener.h"
 #include "Compositor/OgreCompositorShadowNode.h"
 
+#include "OgreCamera.h"
 #include "OgreViewport.h"
 #include "OgreSceneManager.h"
 

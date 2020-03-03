@@ -42,6 +42,7 @@ THE SOFTWARE.
 #include "OgreBitwise.h"
 
 #include "OgreRoot.h"
+#include "OgreCamera.h"
 #include "OgreSceneManager.h"
 #include "OgreTextureGpuManager.h"
 #include "OgrePixelFormatGpuUtils.h"

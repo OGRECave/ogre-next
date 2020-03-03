@@ -40,6 +40,7 @@ THE SOFTWARE.
 
 #include "Compositor/OgreCompositorManager2.h"
 #include "Compositor/OgreCompositorWorkspace.h"
+#include "OgreCamera.h"
 #include "OgreSceneManager.h"
 
 #include "OgreInternalCubemapProbe.h"

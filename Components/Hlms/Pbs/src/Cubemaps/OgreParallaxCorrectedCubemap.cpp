@@ -41,6 +41,7 @@ THE SOFTWARE.
 #include "OgreHlmsPbs.h"
 
 #include "OgreRoot.h"
+#include "OgreCamera.h"
 #include "OgreSceneManager.h"
 #include "OgreRenderQueue.h"
 #include "OgreTextureGpuManager.h"

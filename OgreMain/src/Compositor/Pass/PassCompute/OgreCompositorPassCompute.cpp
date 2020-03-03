@@ -41,6 +41,8 @@ THE SOFTWARE.
 #include "OgreHlmsCompute.h"
 #include "OgreHlmsComputeJob.h"
 
+#include "OgreCamera.h"
+
 #include "Vao/OgreUavBufferPacked.h"
 
 namespace Ogre

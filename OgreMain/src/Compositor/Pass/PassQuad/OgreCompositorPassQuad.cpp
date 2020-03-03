@@ -40,6 +40,7 @@ THE SOFTWARE.
 #include "OgreRectangle2D.h"
 #include "OgreSceneManager.h"
 #include "OgreTechnique.h"
+#include "OgreCamera.h"
 
 namespace Ogre
 {

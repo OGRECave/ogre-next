@@ -37,6 +37,7 @@ THE SOFTWARE.
 
 #include "OgreViewport.h"
 
+#include "OgreCamera.h"
 #include "OgreSceneManager.h"
 #include "OgreLogManager.h"
 
