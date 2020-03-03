@@ -267,9 +267,10 @@ namespace Ogre {
          int getPassNumber(void) const;
          void setPassNumber(const int passNumber);
          void incPassNumber(void);
-         void updateLightCustomGpuParameter(const GpuProgramParameters::AutoConstantEntry& constantEntry, GpuProgramParameters *params) const;
+         void updateLightCustomGpuParameter( const GpuProgramParameters_AutoConstantEntry &constantEntry,
+                                             GpuProgramParameters *params ) const;
 
-		 const Light& _getBlankLight(void) const		{ return mBlankLight; }
+         const Light& _getBlankLight(void) const		{ return mBlankLight; }
     };
     /** @} */
     /** @} */

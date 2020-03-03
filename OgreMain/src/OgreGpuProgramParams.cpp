@@ -948,7 +948,7 @@ namespace Ogre
     GpuProgramParameters& GpuProgramParameters::operator=(const GpuProgramParameters& oth)
     {
         // let compiler perform shallow copies of structures
-        // AutoConstantEntry, RealConstantEntry, IntConstantEntry
+        // GpuProgramParameters_AutoConstantEntry, RealConstantEntry, IntConstantEntry
         mFloatConstants = oth.mFloatConstants;
         mDoubleConstants = oth.mDoubleConstants;
         mIntConstants  = oth.mIntConstants;
@@ -2275,7 +2275,7 @@ namespace Ogre
             }
         }
         if (!found)
-            mAutoConstants.push_back(AutoConstantEntry(acType, physicalIndex, extraInfo, variability, elementSize));
+            mAutoConstants.push_back(GpuProgramParameters_AutoConstantEntry(acType, physicalIndex, extraInfo, variability, elementSize));
 
         mCombinedVariability |= variability;
 
@@ -2325,7 +2325,7 @@ namespace Ogre
             }
         }
         if (!found)
-            mAutoConstants.push_back(AutoConstantEntry(acType, physicalIndex, rData, variability, elementSize));
+            mAutoConstants.push_back(GpuProgramParameters_AutoConstantEntry(acType, physicalIndex, rData, variability, elementSize));
 
         mCombinedVariability |= variability;
     }
@@ -3333,7 +3333,8 @@ namespace Ogre
         setNamedAutoConstantReal(name, ACT_TIME, factor);
     }
     //---------------------------------------------------------------------------
-    GpuProgramParameters::AutoConstantEntry* GpuProgramParameters::getAutoConstantEntry(const size_t index)
+    GpuProgramParameters_AutoConstantEntry *
+    GpuProgramParameters::getAutoConstantEntry( const size_t index )
     {
         if (index < mAutoConstants.size())
         {
@@ -3345,74 +3346,74 @@ namespace Ogre
         }
     }
     //---------------------------------------------------------------------------
-    const GpuProgramParameters::AutoConstantEntry*
+    const GpuProgramParameters_AutoConstantEntry*
     GpuProgramParameters::findFloatAutoConstantEntry(size_t logicalIndex)
     {
         if (mFloatLogicalToPhysical.isNull())
             OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
                         "This is not a low-level parameter parameter object",
-                        "GpuProgramParameters::findFloatAutoConstantEntry");
+                        "GpuProgramParameters::findFloatGpuProgramParameters_AutoConstantEntry");
 
         return _findRawAutoConstantEntryFloat(
             _getFloatConstantPhysicalIndex(logicalIndex, 0, GPV_GLOBAL));
 
     }
     //---------------------------------------------------------------------------
-    const GpuProgramParameters::AutoConstantEntry*
+    const GpuProgramParameters_AutoConstantEntry*
     GpuProgramParameters::findDoubleAutoConstantEntry(size_t logicalIndex)
     {
         if (mDoubleLogicalToPhysical.isNull())
             OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
                         "This is not a low-level parameter parameter object",
-                        "GpuProgramParameters::findDoubleAutoConstantEntry");
+                        "GpuProgramParameters::findDoubleGpuProgramParameters_AutoConstantEntry");
 
         return _findRawAutoConstantEntryDouble(
             _getDoubleConstantPhysicalIndex(logicalIndex, 0, GPV_GLOBAL));
     }
     //---------------------------------------------------------------------------
-    const GpuProgramParameters::AutoConstantEntry*
+    const GpuProgramParameters_AutoConstantEntry*
     GpuProgramParameters::findIntAutoConstantEntry(size_t logicalIndex)
     {
         if (mIntLogicalToPhysical.isNull())
             OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
                         "This is not a low-level parameter parameter object",
-                        "GpuProgramParameters::findIntAutoConstantEntry");
+                        "GpuProgramParameters::findIntGpuProgramParameters_AutoConstantEntry");
 
         return _findRawAutoConstantEntryInt(
             _getIntConstantPhysicalIndex(logicalIndex, 0, GPV_GLOBAL));
     }
     //---------------------------------------------------------------------------
-    const GpuProgramParameters::AutoConstantEntry*
+    const GpuProgramParameters_AutoConstantEntry*
     GpuProgramParameters::findUnsignedIntAutoConstantEntry(size_t logicalIndex)
     {
         if (mUnsignedIntLogicalToPhysical.isNull())
             OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
                         "This is not a low-level parameter parameter object",
-                        "GpuProgramParameters::findUnsignedIntAutoConstantEntry");
+                        "GpuProgramParameters::findUnsignedIntGpuProgramParameters_AutoConstantEntry");
 
         return _findRawAutoConstantEntryUnsignedInt(
             _getUnsignedIntConstantPhysicalIndex(logicalIndex, 0, GPV_GLOBAL));
     }
     //---------------------------------------------------------------------------
-    // const GpuProgramParameters::AutoConstantEntry*
+    // const GpuProgramParameters_AutoConstantEntry*
     // GpuProgramParameters::findBoolAutoConstantEntry(size_t logicalIndex)
     // {
     //     if (mBoolLogicalToPhysical.isNull())
     //         OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
     //                     "This is not a low-level parameter parameter object",
-    //                     "GpuProgramParameters::findBoolAutoConstantEntry");
+    //                     "GpuProgramParameters::findBoolGpuProgramParameters_AutoConstantEntry");
 
     //     return _findRawAutoConstantEntryBool(
     //         _getBoolConstantPhysicalIndex(logicalIndex, 0, GPV_GLOBAL));
     // }
     //---------------------------------------------------------------------------
-    const GpuProgramParameters::AutoConstantEntry*
-    GpuProgramParameters::findAutoConstantEntry(const String& paramName)
+    const GpuProgramParameters_AutoConstantEntry *GpuProgramParameters::findAutoConstantEntry(
+        const String &paramName )
     {
         if (mNamedConstants.isNull())
             OGRE_EXCEPT(Exception::ERR_INVALIDPARAMS,
                         "This params object is not based on a program with named parameters.",
-                        "GpuProgramParameters::findAutoConstantEntry");
+                        "GpuProgramParameters::findGpuProgramParameters_AutoConstantEntry");
 
         const GpuConstantDefinition& def = getConstantDefinition(paramName);
         if (def.isFloat())
@@ -3425,13 +3426,13 @@ namespace Ogre
         }
     }
     //---------------------------------------------------------------------------
-    const GpuProgramParameters::AutoConstantEntry*
+    const GpuProgramParameters_AutoConstantEntry*
     GpuProgramParameters::_findRawAutoConstantEntryFloat(size_t physicalIndex)
     {
         for(AutoConstantList::iterator i = mAutoConstants.begin();
             i != mAutoConstants.end(); ++i)
         {
-            AutoConstantEntry& ac = *i;
+            GpuProgramParameters_AutoConstantEntry& ac = *i;
             // should check that auto is float and not int so that physicalIndex
             // doesn't have any ambiguity
             // However, all autos are float I think so no need
@@ -3443,13 +3444,13 @@ namespace Ogre
 
     }
     //---------------------------------------------------------------------------
-    const GpuProgramParameters::AutoConstantEntry*
+    const GpuProgramParameters_AutoConstantEntry*
     GpuProgramParameters::_findRawAutoConstantEntryDouble(size_t physicalIndex)
     {
         for(AutoConstantList::iterator i = mAutoConstants.begin();
             i != mAutoConstants.end(); ++i)
         {
-            AutoConstantEntry& ac = *i;
+            GpuProgramParameters_AutoConstantEntry& ac = *i;
             // should check that auto is double and not int or float so that physicalIndex
             // doesn't have any ambiguity
             // However, all autos are float I think so no need
@@ -3461,22 +3462,22 @@ namespace Ogre
 
     }
     //---------------------------------------------------------------------------
-    const GpuProgramParameters::AutoConstantEntry*
+    const GpuProgramParameters_AutoConstantEntry*
     GpuProgramParameters::_findRawAutoConstantEntryInt(size_t physicalIndex)
     {
         // No autos are float?
         return 0;
     }
     //---------------------------------------------------------------------------
-    const GpuProgramParameters::AutoConstantEntry*
-    GpuProgramParameters::_findRawAutoConstantEntryUnsignedInt(size_t physicalIndex)
+    const GpuProgramParameters_AutoConstantEntry *
+    GpuProgramParameters::_findRawAutoConstantEntryUnsignedInt( size_t physicalIndex )
     {
         //TODO  No autos are float?
         return 0;
     }
     //---------------------------------------------------------------------------
-    const GpuProgramParameters::AutoConstantEntry*
-    GpuProgramParameters::_findRawAutoConstantEntryBool(size_t physicalIndex)
+    const GpuProgramParameters_AutoConstantEntry *GpuProgramParameters::_findRawAutoConstantEntryBool(
+        size_t physicalIndex )
     {
         //TODO No autos are float?
         return 0;
@@ -3560,7 +3561,7 @@ namespace Ogre
             for (AutoConstantList::const_iterator i = source.mAutoConstants.begin();
                  i != source.mAutoConstants.end(); ++i)
             {
-                const GpuProgramParameters::AutoConstantEntry& autoEntry = *i;
+                const GpuProgramParameters_AutoConstantEntry& autoEntry = *i;
                 // find dest physical index
                 std::map<size_t, String>::iterator mi = srcToDestNamedMap.find(autoEntry.physicalIndex);
                 if (mi != srcToDestNamedMap.end())

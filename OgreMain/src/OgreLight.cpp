@@ -664,7 +664,9 @@ namespace Ogre {
         return retVal;
     }
     //-----------------------------------------------------------------------
-    void Light::_updateCustomGpuParameter(uint16 paramIndex, const GpuProgramParameters::AutoConstantEntry& constantEntry, GpuProgramParameters *params) const
+    void Light::_updateCustomGpuParameter( uint16 paramIndex,
+                                           const GpuProgramParameters_AutoConstantEntry &constantEntry,
+                                           GpuProgramParameters *params ) const
     {
         CustomParameterMap::const_iterator i = mCustomParameters.find(paramIndex);
         if (i != mCustomParameters.end())

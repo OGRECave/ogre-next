@@ -1492,9 +1492,9 @@ namespace Ogre
                 constIt.getNext();
 
             // get any auto-link
-            const GpuProgramParameters::AutoConstantEntry* autoEntry = 
+            const GpuProgramParameters_AutoConstantEntry* autoEntry =
                 params->findAutoConstantEntry(paramName);
-            const GpuProgramParameters::AutoConstantEntry* defaultAutoEntry = 0;
+            const GpuProgramParameters_AutoConstantEntry* defaultAutoEntry = 0;
             if (defaultParams)
             {
                 defaultAutoEntry = 
@@ -1530,9 +1530,9 @@ namespace Ogre
                 size_t logicalIndex = i->first;
                 const GpuLogicalIndexUse& logicalUse = i->second;
 
-                const GpuProgramParameters::AutoConstantEntry* autoEntry = 
+                const GpuProgramParameters_AutoConstantEntry* autoEntry =
                     params->findFloatAutoConstantEntry(logicalIndex);
-                const GpuProgramParameters::AutoConstantEntry* defaultAutoEntry = 0;
+                const GpuProgramParameters_AutoConstantEntry* defaultAutoEntry = 0;
                 if (defaultParams)
                 {
                     defaultAutoEntry = defaultParams->findFloatAutoConstantEntry(logicalIndex);
@@ -1558,9 +1558,9 @@ namespace Ogre
                 size_t logicalIndex = i->first;
                 const GpuLogicalIndexUse& logicalUse = i->second;
 
-                const GpuProgramParameters::AutoConstantEntry* autoEntry =
+                const GpuProgramParameters_AutoConstantEntry* autoEntry =
                     params->findDoubleAutoConstantEntry(logicalIndex);
-                const GpuProgramParameters::AutoConstantEntry* defaultAutoEntry = 0;
+                const GpuProgramParameters_AutoConstantEntry* defaultAutoEntry = 0;
                 if (defaultParams)
                 {
                     defaultAutoEntry = defaultParams->findDoubleAutoConstantEntry(logicalIndex);
@@ -1586,9 +1586,9 @@ namespace Ogre
                 size_t logicalIndex = i->first;
                 const GpuLogicalIndexUse& logicalUse = i->second;
 
-                const GpuProgramParameters::AutoConstantEntry* autoEntry = 
+                const GpuProgramParameters_AutoConstantEntry* autoEntry =
                     params->findIntAutoConstantEntry(logicalIndex);
-                const GpuProgramParameters::AutoConstantEntry* defaultAutoEntry = 0;
+                const GpuProgramParameters_AutoConstantEntry* defaultAutoEntry = 0;
                 if (defaultParams)
                 {
                     defaultAutoEntry = defaultParams->findIntAutoConstantEntry(logicalIndex);
@@ -1615,9 +1615,9 @@ namespace Ogre
                 size_t logicalIndex = i->first;
                 const GpuLogicalIndexUse& logicalUse = i->second;
 
-                const GpuProgramParameters::AutoConstantEntry* autoEntry = 
+                const GpuProgramParameters_AutoConstantEntry* autoEntry =
                     params->findUnsignedIntAutoConstantEntry(logicalIndex);
-                const GpuProgramParameters::AutoConstantEntry* defaultAutoEntry = 0;
+                const GpuProgramParameters_AutoConstantEntry* defaultAutoEntry = 0;
                 if (defaultParams)
                 {
                     defaultAutoEntry = defaultParams->findUnsignedIntAutoConstantEntry(logicalIndex);
@@ -1644,9 +1644,9 @@ namespace Ogre
         //         size_t logicalIndex = i->first;
         //         const GpuLogicalIndexUse& logicalUse = i->second;
 
-        //         const GpuProgramParameters::AutoConstantEntry* autoEntry = 
+        //         const GpuProgramParameters_AutoConstantEntry* autoEntry =
         //             params->findBoolAutoConstantEntry(logicalIndex);
-        //         const GpuProgramParameters::AutoConstantEntry* defaultAutoEntry = 0;
+        //         const GpuProgramParameters_AutoConstantEntry* defaultAutoEntry = 0;
         //         if (defaultParams)
         //         {
         //             defaultAutoEntry = defaultParams->findBoolAutoConstantEntry(logicalIndex);
@@ -1665,8 +1665,8 @@ namespace Ogre
     //-----------------------------------------------------------------------
     void MaterialSerializer::writeGpuProgramParameter(
         const String& commandName, const String& identifier, 
-        const GpuProgramParameters::AutoConstantEntry* autoEntry, 
-        const GpuProgramParameters::AutoConstantEntry* defaultAutoEntry, 
+        const GpuProgramParameters_AutoConstantEntry* autoEntry,
+        const GpuProgramParameters_AutoConstantEntry* defaultAutoEntry,
         bool isFloat, bool isDouble, bool isInt, bool isUnsignedInt,
         size_t physicalIndex, size_t physicalSize,
         const GpuProgramParametersSharedPtr& params, GpuProgramParameters* defaultParams,

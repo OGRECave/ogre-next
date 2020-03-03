@@ -558,7 +558,7 @@ namespace Ogre {
             set the updated parameters.
         */
         virtual void _updateCustomGpuParameter(uint16 paramIndex, 
-            const GpuProgramParameters::AutoConstantEntry& constantEntry, 
+            const GpuProgramParameters_AutoConstantEntry& constantEntry,
             GpuProgramParameters* params) const;
                 
         /** Check whether a sphere is included in the lighted area of the light 

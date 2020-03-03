@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 #include "OgrePrerequisites.h"
 
-#include "OgreGpuProgram.h"
+#include "OgreVector2.h"
 
 #include "OgreHeaderPrefix.h"
 

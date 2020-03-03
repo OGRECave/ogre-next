@@ -64,6 +64,17 @@ namespace Ogre
         }
     }
     //-----------------------------------------------------------------------------------
+    void Renderable::_updateCustomGpuParameter(
+        const GpuProgramParameters_AutoConstantEntry &constantEntry, GpuProgramParameters *params ) const
+    {
+        CustomParameterMap::const_iterator i = mCustomParameters.find( constantEntry.data );
+        if( i != mCustomParameters.end() )
+        {
+            params->_writeRawConstant( constantEntry.physicalIndex, i->second,
+                                       constantEntry.elementCount );
+        }
+    }
+    //-----------------------------------------------------------------------------------
     void Renderable::setDatablockOrMaterialName( String materialName, String resourceGroup )
     {
         //Try first Hlms materials, then the low level ones.

@@ -182,8 +182,8 @@ namespace Ogre {
                                                const unsigned short level = 4, const bool useMainBuffer = true);
         void writeGpuProgramParameter(
             const String& commandName, const String& identifier, 
-            const GpuProgramParameters::AutoConstantEntry* autoEntry, 
-            const GpuProgramParameters::AutoConstantEntry* defaultAutoEntry, 
+            const GpuProgramParameters_AutoConstantEntry* autoEntry,
+            const GpuProgramParameters_AutoConstantEntry* defaultAutoEntry,
             bool isFloat, bool isDouble, bool isInt, bool isUnsignedInt, 
             size_t physicalIndex, size_t physicalSize,
             const GpuProgramParametersSharedPtr& params, GpuProgramParameters* defaultParams,
