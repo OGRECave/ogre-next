@@ -140,6 +140,7 @@ uint threadId = gl_GlobalInvocationID.x + gl_GlobalInvocationID.y * p.threadsPer
 
 if( threadId < p.numGlobalThreadsForEdges )
 {
+	// Section 1
 	bool bIsColumn = false;
 	ProbeIndex probeIdx = threadId / p.numPixelsInEdges;
 	uint rowThreadId = threadId % p.numPixelsInEdges;
@@ -156,6 +157,7 @@ if( threadId < p.numGlobalThreadsForEdges )
 }
 else if( threadId < p.maxThreadId )
 {
+	// Section 2
 	// Deal with all 4 corners
 	ProbeIndex probeIdx = threadId - p.numGlobalThreadsForEdges;
 
@@ -181,5 +183,9 @@ else if( threadId < p.maxThreadId )
 	OGRE_imageWriteIFD( ifdTex, iUvStart + bottomLeftDst, bottomLeftVal );
 	OGRE_imageWriteIFD( ifdTex, iUvStart + bottomRightDst, bottomRightVal );
 }
+// else
+// {
+	// Section 3
+// }
 
 // @end
