@@ -120,7 +120,7 @@
 
 #define CONST_BUFFER( bufferName, bindingPoint ) layout_constbuffer(binding = bindingPoint) uniform bufferName
 #define CONST_BUFFER_STRUCT_BEGIN( structName, bindingPoint ) layout_constbuffer(binding = bindingPoint) uniform structName
-#define CONST_BUFFER_STRUCT_END( variableName, v ) variableName
+#define CONST_BUFFER_STRUCT_END( variableName ) variableName
 
 #define FLAT_INTERPOLANT( decl, bindingPoint ) flat decl
 #define INTERPOLANT( decl, bindingPoint ) decl

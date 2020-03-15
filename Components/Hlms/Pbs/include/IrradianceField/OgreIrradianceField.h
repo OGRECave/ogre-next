@@ -107,6 +107,12 @@ namespace Ogre
         void getDepthProbeFullResolution( uint32 &outWidth, uint32 &outHeight ) const;
         void getIrradProbeFullResolution( uint32 &outWidth, uint32 &outHeight ) const;
 
+        /// Returns mIrradianceResolution + 2u, since we need to reserverve 1 pixel border
+        /// around the probe for proper interpolation.
+        /// This means a 8x8 probe actually occupies 10x10.
+        uint8 getBorderedIrradResolution() const;
+        uint8 getBorderedDepthResolution() const;
+
         uint32 getNumRaysPerIrradiancePixel( void ) const;
 
         Vector3 getNumProbes3f( void ) const;
@@ -162,6 +168,18 @@ namespace Ogre
             float4x4 irrProbeToVctTransform;
         };
 
+        struct IfdBorderMirrorParams
+        {
+            uint32 probeBorderedRes;
+            uint32 numPixelsInEdges;
+            uint32 numTopBottomPixels;
+            uint32 numGlobalThreadsForEdges;
+
+            uint32 maxThreadId;
+            uint32 threadsPerThreadRow;
+            uint32 padding[2];
+        };
+
         IrradianceFieldSettings mSettings;
         /// Number of probes processed so far.
         /// We process the entire field across multiple frames.
@@ -182,12 +200,16 @@ namespace Ogre
         HlmsComputeJob *mGenerationJob;
         HlmsComputeJob *mDepthIntegrationJob;
         HlmsComputeJob *mColourIntegrationJob;
+        HlmsComputeJob *mDepthMirrorBorderJob;
+        HlmsComputeJob *mColourMirrorBorderJob;
 
         IrradianceFieldGenParams mIfGenParams;
         ConstBufferPacked *mIfGenParamsBuffer;
         TexBufferPacked *mDirectionsBuffer;
         TexBufferPacked *mDepthTapsIntegrationBuffer;
         TexBufferPacked *mColourTapsIntegrationBuffer;
+        ConstBufferPacked *mIfdDepthBorderMirrorParamsBuffer;
+        ConstBufferPacked *mIfdColourBorderMirrorParamsBuffer;
 
         IrradianceFieldRaster *mIfRaster;
 
@@ -206,6 +228,7 @@ namespace Ogre
                                                       ConstBufferPacked *ifGenParamsBuffer,
                                                       uint32 &outMaxIntegrationTapsPerPixel );
         static uint32 countNumIntegrationTaps( uint32 probeRes );
+
         /**
          * @brief fillIntegrationWeights
         @param outBuffer
@@ -214,6 +237,10 @@ namespace Ogre
         static void fillIntegrationWeights( float2 *RESTRICT_ALIAS outBuffer, uint32 probeRes,
                                             uint32 maxTapsPerPixel );
         void setIrradianceFieldGenParams( void );
+
+        void setupBorderMirrorParams( uint32 borderedRes, uint32 fullWidth,
+                                      ConstBufferPacked *ifdBorderMirrorParamsBuffer,
+                                      HlmsComputeJob *job );
 
         void setTextureToDebugVisualizer( void );
 
