@@ -57,16 +57,13 @@ CONST_BUFFER_STRUCT_END( p );
 
 #define ProbeIndex uint
 
-INLINE ushort2 getIrradianceFieldBaseXY( ProbeIndex probeIdx PARAMS_ARG_DECL )
+INLINE ushort2 getIrradianceFieldBorderBaseXY( ProbeIndex probeIdx PARAMS_ARG_DECL )
 {
 	ushort2 retVal;
 	// clang-format off
 	retVal.x = ( probeIdx * p.probeBorderedRes ) % @value( full_width )u;
 	retVal.y = ( ( probeIdx * p.probeBorderedRes ) / @value( full_width )u ) * p.probeBorderedRes;
 	// clang-format on
-
-	// Skip top-left border
-	retVal.xy += 1u;
 
 	return retVal;
 }
@@ -153,16 +150,16 @@ if( threadId < p.numGlobalThreadsForEdges )
 		rowThreadId -= p.numTopBottomPixels;
 	}
 
-	ushort2 irradianceFieldBaseXY = getIrradianceFieldBaseXY( probeIdx PARAMS_ARG );
+	ushort2 irradianceFieldBaseXY = getIrradianceFieldBorderBaseXY( probeIdx PARAMS_ARG );
 
 	processPixelInRow( rowThreadId, bIsColumn, irradianceFieldBaseXY PARAMS_ARG );
 }
 else if( threadId < p.maxThreadId )
 {
 	// Deal with all 4 corners
-	ProbeIndex probeIdx = threadId - p.maxThreadId;
+	ProbeIndex probeIdx = threadId - p.numGlobalThreadsForEdges;
 
-	ushort2 iUvStart = getIrradianceFieldBaseXY( probeIdx PARAMS_ARG );
+	ushort2 iUvStart = getIrradianceFieldBorderBaseXY( probeIdx PARAMS_ARG );
 
 	ushort2 topLeftSrc = ushort2( p.probeBorderedRes - 2u );
 	ushort2 topRightSrc = ushort2( 1u, p.probeBorderedRes - 2u );
