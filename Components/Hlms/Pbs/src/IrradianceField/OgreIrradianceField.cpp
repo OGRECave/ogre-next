@@ -492,14 +492,14 @@ namespace Ogre
         IfdBorderMirrorParams mirrorParams;
         memset( &mirrorParams, 0, sizeof( mirrorParams ) );
         mirrorParams.probeBorderedRes = borderedRes;
-        mirrorParams.numPixelsInEdges = ( borderedRes - 2u ) * 4u;
-        mirrorParams.numTopBottomPixels = ( borderedRes - 2u ) * 2u;
+        mirrorParams.numPixelsInEdges = ( borderedRes - 2u ) * 2u;
+        mirrorParams.numTopBottomPixels = ( borderedRes - 2u );
         mirrorParams.numGlobalThreadsForEdges = mirrorParams.numPixelsInEdges * totalNumProbes;
         mirrorParams.maxThreadId = ( mirrorParams.numPixelsInEdges + 1u ) * totalNumProbes;
 
         const uint32 threadsPerGroup = 128u;
         const uint32 totalThreads =
-            (uint32)alignToNextMultiple( threadsPerGroup, mirrorParams.maxThreadId );
+            (uint32)alignToNextMultiple( mirrorParams.maxThreadId, threadsPerGroup );
         const uint32 numWorkGroups = totalThreads / threadsPerGroup;
         const uint32 numThreadGroupsY = numWorkGroups / 65535u + 1u;
         const uint32 numThreadGroupsX = numWorkGroups / numThreadGroupsY;
