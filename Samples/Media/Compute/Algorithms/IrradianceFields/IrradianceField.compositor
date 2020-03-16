@@ -17,18 +17,6 @@ compositor_node IrradianceField/Gen
 
 		pass compute
 		{
-			job IrradianceField/BorderMirror/Depth
-			uav 0 depth_if read write
-		}
-
-		pass compute
-		{
-			job IrradianceField/BorderMirror/Colour
-			uav 0 colour_if read write
-		}
-
-		pass compute
-		{
 			job IrradianceField/Integration/Depth
 			uav 0 depth_if read write
 		}
@@ -81,18 +69,6 @@ compositor_node IrradianceField/CubemapToIfd
 
 			uav 0 colour_if write
 			uav 1 depth_if write
-		}
-
-		pass compute
-		{
-			job IrradianceField/BorderMirror/Depth
-			uav 0 depth_if read write
-		}
-
-		pass compute
-		{
-			job IrradianceField/BorderMirror/Colour
-			uav 0 colour_if read write
 		}
 	}
 }
