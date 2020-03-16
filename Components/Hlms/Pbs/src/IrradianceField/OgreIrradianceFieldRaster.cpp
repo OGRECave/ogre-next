@@ -236,7 +236,10 @@ namespace Ogre
 
         bool oldDebugIfdVisibility = false;
         if( mCreator->mDebugIfdProbeVisualizer )
+        {
             oldDebugIfdVisibility = mCreator->mDebugIfdProbeVisualizer->getVisible();
+            mCreator->mDebugIfdProbeVisualizer->setVisible( false );
+        }
 
         Ogre::Vector2 projectionAB = mCamera->getProjectionParamsAB();
         mProjectionABParam->setManualValue( projectionAB );
