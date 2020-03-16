@@ -30,6 +30,9 @@
 		retVal.y = ((probeIdx * borderedResolution) / @value( depth_full_width )u) *
 					borderedResolution;
 
+		// Skip top-left border
+		retVal.xy += 1u;
+
 		return retVal;
 	}
 
