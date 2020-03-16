@@ -854,9 +854,9 @@ namespace Ogre
     {
         TextureGpu *trackedTex =
             mDebugVisualizationMode == DebugVisualizationColour ? mIrradianceTex : mDepthVarianceTex;
-        const uint8 resolution = mDebugVisualizationMode == DebugVisualizationColour
-                                     ? mSettings.mIrradianceResolution
-                                     : mSettings.mDepthProbeResolution;
+        const uint8 borderedRes = mDebugVisualizationMode == DebugVisualizationColour
+                                      ? mSettings.getBorderedIrradResolution()
+                                      : mSettings.getBorderedDepthResolution();
         Vector2 rangeMult( 1.0f );
         if( mDebugVisualizationMode == DebugVisualizationDepth )
         {
@@ -865,7 +865,7 @@ namespace Ogre
             rangeMult.y = rangeMult.x * rangeMult.x;
         }
         rangeMult = 2.0f / rangeMult;
-        mDebugIfdProbeVisualizer->setTrackingIfd( mSettings, mFieldSize, resolution, trackedTex,
+        mDebugIfdProbeVisualizer->setTrackingIfd( mSettings, mFieldSize, borderedRes, trackedTex,
                                                   rangeMult, mDebugTessellation );
     }
 }  // namespace Ogre

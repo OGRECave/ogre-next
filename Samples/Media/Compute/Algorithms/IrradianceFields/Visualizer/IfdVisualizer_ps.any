@@ -22,27 +22,27 @@ INLINE float2 octahedronMappingEncode( float3 n )
 	return n.xy;
 }
 
-INLINE float2 getIrradianceFieldXY( float3 dir, IfdProbeIndex probeIdx, float resolution,
+INLINE float2 getIrradianceFieldXY( float3 dir, IfdProbeIndex probeIdx, float borderedRes,
 									float fullWidth, float2 invFullResolution )
 {
 	float2 retVal;
 	/* Perform the following, but in floating point:
-	retVal.x = ( probeIdx * resolution ) % fullWidth;
-	retVal.y = ( ( probeIdx * resolution ) / fullWidth ) * resolution;*/
-	float temp = probeIdx * resolution;
+	retVal.x = ( probeIdx * borderedRes ) % fullWidth;
+	retVal.y = ( ( probeIdx * borderedRes ) / fullWidth ) * borderedRes;*/
+	float temp = probeIdx * borderedRes;
 	retVal.y = floor( temp * invFullResolution.x );
 	retVal.x = temp - retVal.y * fullWidth;
-	retVal.y *= resolution;
+	retVal.y *= borderedRes;
 
-	// Texel's center offset to avoid bleeding with adjacent probes
-	retVal += 0.5;
+	// Skip top-left border
+	retVal.xy += 1.0f;
 
 	// Quantize direction to fix noise artifacts where the texels output from
 	// octahedronMappingEncode keep jumping due to octahedronMappingWrap being too sharp
 	// https://github.com/OGRECave/ogre-next/issues/29#issuecomment-541491145
 	/*dir = ceil( dir * 2048.0 );
 	dir *= 1.0 / 2048.0;*/
-	float2 uv = octahedronMappingEncode( dir ) * resolution;
+	float2 uv = octahedronMappingEncode( dir ) * ( borderedRes - 2.0f );
 
 	retVal += uv;
 	retVal *= invFullResolution;
@@ -50,7 +50,7 @@ INLINE float2 getIrradianceFieldXY( float3 dir, IfdProbeIndex probeIdx, float re
 }
 
 #else
-	float2 ifdUV = getIrradianceFieldXY( inPs.normal.xyz, inPs.probeIdx, p_resolution, p_fullWidth,
+	float2 ifdUV = getIrradianceFieldXY( inPs.normal.xyz, inPs.probeIdx, p_borderedRes, p_fullWidth,
 										 p_invFullResolution );
 	float3 irrVal = OGRE_SampleLevel( ifdTex, ifdSampler, ifdUV, 0 ).xyz;
 

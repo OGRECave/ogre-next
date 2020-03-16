@@ -26,7 +26,7 @@ layout(location = 0, index = 0) out vec4 outColour;
 uniform float4 allParams;
 uniform float2 rangeMult;
 
-#define p_resolution		allParams.x
+#define p_borderedRes		allParams.x
 #define p_fullWidth			allParams.y
 #define p_invFullResolution	allParams.zw
 #define p_rangeMult			rangeMult

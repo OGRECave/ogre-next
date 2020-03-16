@@ -73,12 +73,7 @@
 		retVal.y *= borderedRes;
 
 		// Skip top-left border
-		// retVal.xy += 1.0f;
-		// Texel's center offset to avoid bleeding with adjacent probes
-		// retVal.xy += 0.5f;
-
-		// Skip top-left border & Texel's center offset to avoid bleeding with adjacent probes
-		retVal.xy += 1.5f;
+		retVal.xy += 1.0f;
 
 		//dir.y = -dir.y;
 		// Quantize direction to fix noise artifacts where the texels output from

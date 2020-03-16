@@ -7,7 +7,7 @@ using namespace metal;
 
 #define OGRE_SampleLevel( tex, sampler, uv, lod ) tex.sample( sampler, uv, level( lod ) )
 
-#define p_resolution		p.allParams.x
+#define p_borderedRes		p.allParams.x
 #define p_fullWidth			p.allParams.y
 #define p_invFullResolution	p.allParams.zw
 #define p_rangeMult			p.rangeMult
