@@ -67,6 +67,7 @@
 #define OGRE_ddx( val ) ddx( val )
 #define OGRE_ddy( val ) ddy( val )
 #define OGRE_Load2D( tex, iuv, lod ) tex.Load( int3( iuv, lod ) )
+#define OGRE_LoadArray2D( tex, iuv, arrayIdx, lod ) tex.Load( tex, int4( iuv, arrayIdx, lod ) )
 #define OGRE_Load2DMS( tex, iuv, subsample ) tex.Load( iuv, subsample )
 
 #define OGRE_Load3D( tex, iuv, lod ) tex.Load( int4( iuv, lod ) )

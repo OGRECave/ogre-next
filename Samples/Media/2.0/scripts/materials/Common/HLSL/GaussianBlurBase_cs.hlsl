@@ -22,7 +22,11 @@
 // based on the bound input texture.
 
 SamplerState inputSampler : register(s0);
-Texture2D inputImage : register(t0);
+@property( texture0_texture_type == TextureTypes_Type2DArray )
+	Texture2DArray inputImage : register(t0);
+@else
+	Texture2D inputImage : register(t0);
+@end
 RWTexture2D<@insertpiece(uav0_pf_type)> outputImage : register(u0);
 
 // 32 = 128 / 4
@@ -96,10 +100,10 @@ void ComputeFilterKernel( int iPixelOffset, int iLineOffset, int2 i2Center, int2
 
 	@property( !downscale_lq )
 		@foreach( 4, iPixel )
-			outColour[ @iPixel ].xyz = RDI[ @iPixel ] * c_weights[ @value( kernel_radius ) >> 2u ][ @value( kernel_radius ) & 3u ];@end
+			outColour[ @iPixel ] = RDI[ @iPixel ] * c_weights[ @value( kernel_radius ) >> 2u ][ @value( kernel_radius ) & 3u ];@end
 	@end @property( downscale_lq )
 		@foreach( 2, iPixel )
-			outColour[ @iPixel ].xyz = RDI[ @iPixel * 2 ] * c_weights[ @value( kernel_radius ) >> 2u ][ @value( kernel_radius ) & 3u ];@end
+			outColour[ @iPixel ] = RDI[ @iPixel * 2 ] * c_weights[ @value( kernel_radius ) >> 2u ][ @value( kernel_radius ) & 3u ];@end
 	@end
 
 	@foreach( 4, iPixel )
@@ -112,10 +116,10 @@ void ComputeFilterKernel( int iPixelOffset, int iLineOffset, int2 i2Center, int2
 	@foreach( kernel_radius, iIteration )
 		@property( !downscale_lq )
 			@foreach( 4, iPixel )
-				outColour[ @iPixel ].xyz += RDI[ @iPixel ] * c_weights[ @iIteration >> 2u ][ @iIteration & 3u ];@end
+				outColour[ @iPixel ] += RDI[ @iPixel ] * c_weights[ @iIteration >> 2u ][ @iIteration & 3u ];@end
 		@end @property( downscale_lq )
 			@foreach( 2, iPixel )
-				outColour[ @iPixel ].xyz += RDI[ @iPixel * 2 ] * c_weights[ @iIteration >> 2u ][ @iIteration & 3u ];@end
+				outColour[ @iPixel ] += RDI[ @iPixel * 2 ] * c_weights[ @iIteration >> 2u ][ @iIteration & 3u ];@end
 		@end
 		@foreach( 3, iPixel )
 			RDI[ @iPixel ] = RDI[ @iPixel + ( 1 ) ];@end
@@ -137,10 +141,10 @@ void ComputeFilterKernel( int iPixelOffset, int iLineOffset, int2 i2Center, int2
 	@foreach( kernel_radius2x_plus1, iIteration, kernel_radius_plus1 )
 		@property( !downscale_lq )
 			@foreach( 4, iPixel )
-				outColour[ @iPixel ].xyz += RDI[ @iPixel ] * c_weights[ (@value( kernel_radius2x ) - @iIteration) >> 2u ][ (@value( kernel_radius2x ) - @iIteration) & 3u ];@end
+				outColour[ @iPixel ] += RDI[ @iPixel ] * c_weights[ (@value( kernel_radius2x ) - @iIteration) >> 2u ][ (@value( kernel_radius2x ) - @iIteration) & 3u ];@end
 		@end @property( downscale_lq )
 			@foreach( 2, iPixel )
-				outColour[ @iPixel ].xyz += RDI[ @iPixel * 2 ] * c_weights[ (@value( kernel_radius2x ) - @iIteration) >> 2u ][ (@value( kernel_radius2x ) - @iIteration) & 3u ];@end
+				outColour[ @iPixel ] += RDI[ @iPixel * 2 ] * c_weights[ (@value( kernel_radius2x ) - @iIteration) >> 2u ][ (@value( kernel_radius2x ) - @iIteration) & 3u ];@end
 		@end
 		@foreach( 3, iPixel )
 			RDI[ @iPixel ] = RDI[ @iPixel + ( 1 ) ];@end

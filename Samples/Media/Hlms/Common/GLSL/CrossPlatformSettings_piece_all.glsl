@@ -107,6 +107,7 @@
 #define OGRE_ddx( val ) dFdx( val )
 #define OGRE_ddy( val ) dFdy( val )
 #define OGRE_Load2D( tex, iuv, lod ) texelFetch( tex, iuv, lod )
+#define OGRE_LoadArray2D( tex, iuv, arrayIdx, lod ) texelFetch( tex, ivec3( iuv, arrayIdx ), lod )
 #define OGRE_Load2DMS( tex, iuv, subsample ) texelFetch( tex, iuv, subsample )
 
 #define OGRE_Load3D( tex, iuv, lod ) texelFetch( tex, ivec3( iuv ), lod )

@@ -185,7 +185,7 @@ namespace Ogre
 
         propName.a( "_texture_type" );          //_texture_type
         setProperty( propName.c_str(),
-                     c_textureTypesProps[texture->getTextureType()].mHash );
+                     c_textureTypesProps[texture->getInternalTextureType()].mHash );
         propName.resize( texturePropSize );
 
         propName.a( "_pf_type" );               //uav0_pf_type
@@ -200,7 +200,7 @@ namespace Ogre
 
         propName.a( "_data_type" );             //uav0_data_type
         const char *dataType = toShaderType->getDataType( pixelFormat,
-                                                          texture->getTextureType(),
+                                                          texture->getInternalTextureType(),
                                                           texture->isMultisample(),
                                                           access );
         if( typeName )
@@ -527,7 +527,7 @@ namespace Ogre
                 uint32 resolution[3];
                 resolution[0] = std::max( tex->getWidth() >> mipLevel, 1u );
                 resolution[1] = std::max( tex->getHeight() >> mipLevel, 1u );
-                if( tex->getTextureType() == TextureTypes::Type3D )
+                if( tex->getInternalTextureType() == TextureTypes::Type3D )
                     resolution[2] = std::max( tex->getDepthOrSlices() >> mipLevel, 1u );
                 else
                     resolution[2] = std::max( tex->getDepthOrSlices(), 1u );

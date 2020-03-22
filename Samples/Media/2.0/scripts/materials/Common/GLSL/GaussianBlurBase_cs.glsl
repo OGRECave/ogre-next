@@ -22,7 +22,11 @@
 // The script uses the template syntax to automatically set the num. of threadgroups
 // based on the bound input texture.
 
-uniform sampler2D inputImage;
+@property( texture0_texture_type == TextureTypes_Type2DArray )
+	uniform sampler2DArray inputImage;
+@else
+	uniform sampler2D inputImage;
+@end
 layout (@insertpiece(uav0_pf_type)) uniform restrict writeonly image2D outputImage;
 
 // 32 = 128 / 4
@@ -98,10 +102,10 @@ void ComputeFilterKernel( int iPixelOffset, int iLineOffset, ivec2 i2Center, ive
 
 	@property( !downscale_lq )
 		@foreach( 4, iPixel )
-			outColour[ @iPixel ].xyz = RDI[ @iPixel ] * c_weights[ @value( kernel_radius ) ];@end
+			outColour[ @iPixel ] = RDI[ @iPixel ] * c_weights[ @value( kernel_radius ) ];@end
 	@end @property( downscale_lq )
 		@foreach( 2, iPixel )
-			outColour[ @iPixel ].xyz = RDI[ @iPixel * 2 ] * c_weights[ @value( kernel_radius ) ];@end
+			outColour[ @iPixel ] = RDI[ @iPixel * 2 ] * c_weights[ @value( kernel_radius ) ];@end
 	@end
 
 	@foreach( 4, iPixel )
@@ -114,10 +118,10 @@ void ComputeFilterKernel( int iPixelOffset, int iLineOffset, ivec2 i2Center, ive
 	@foreach( kernel_radius, iIteration )
 		@property( !downscale_lq )
 			@foreach( 4, iPixel )
-				outColour[ @iPixel ].xyz += RDI[ @iPixel ] * c_weights[ @iIteration ];@end
+				outColour[ @iPixel ] += RDI[ @iPixel ] * c_weights[ @iIteration ];@end
 		@end @property( downscale_lq )
 			@foreach( 2, iPixel )
-				outColour[ @iPixel ].xyz += RDI[ @iPixel * 2 ] * c_weights[ @iIteration ];@end
+				outColour[ @iPixel ] += RDI[ @iPixel * 2 ] * c_weights[ @iIteration ];@end
 		@end
 		@foreach( 3, iPixel )
 			RDI[ @iPixel ] = RDI[ @iPixel + ( 1 ) ];@end
@@ -139,10 +143,10 @@ void ComputeFilterKernel( int iPixelOffset, int iLineOffset, ivec2 i2Center, ive
 	@foreach( kernel_radius2x_plus1, iIteration, kernel_radius_plus1 )
 		@property( !downscale_lq )
 			@foreach( 4, iPixel )
-				outColour[ @iPixel ].xyz += RDI[ @iPixel ] * c_weights[ @value( kernel_radius2x ) - @iIteration ];@end
+				outColour[ @iPixel ] += RDI[ @iPixel ] * c_weights[ @value( kernel_radius2x ) - @iIteration ];@end
 		@end @property( downscale_lq )
 			@foreach( 2, iPixel )
-				outColour[ @iPixel ].xyz += RDI[ @iPixel * 2 ] * c_weights[ @value( kernel_radius2x ) - @iIteration ];@end
+				outColour[ @iPixel ] += RDI[ @iPixel * 2 ] * c_weights[ @value( kernel_radius2x ) - @iIteration ];@end
 		@end
 		@foreach( 3, iPixel )
 			RDI[ @iPixel ] = RDI[ @iPixel + ( 1 ) ];@end
