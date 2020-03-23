@@ -138,7 +138,7 @@ namespace Ogre
         outData.mUpperDistance[1][nextSlotIdx]      = std::numeric_limits<Real>::max();
         outData.mVisibilityFlags[nextSlotIdx]       = MovableObject::getDefaultVisibilityFlags();
         outData.mQueryFlags[nextSlotIdx]            = MovableObject::getDefaultQueryFlags();
-        outData.mLightMask[nextSlotIdx]             = 0xFFFFFFFF;
+        outData.mLightMask[nextSlotIdx]             = MovableObject::getDefaultLightMask();
     }
     //-----------------------------------------------------------------------------------
     void ObjectDataArrayMemoryManager::destroyNode( ObjectData &inOutData )

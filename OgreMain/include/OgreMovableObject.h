@@ -126,6 +126,8 @@ namespace Ogre {
         static uint32 msDefaultQueryFlags;
         /// Default visibility flags
         static uint32 msDefaultVisibilityFlags;
+        /// Default light mask
+        static uint32 msDefaultLightMask;
 
     protected:
         Aabb updateSingleWorldAabb();
@@ -553,6 +555,14 @@ namespace Ogre {
             By default, this mask is fully set meaning all lights will affect this object
         */
         inline void setLightMask(uint32 lightMask);
+
+        /** Set the default light mask for all future MovableObject instances.
+        */
+        static void setDefaultLightMask(uint32 mask) { msDefaultLightMask = mask; }
+
+        /** Get the default light mask for all future MovableObject instances.
+        */
+        static uint32 getDefaultLightMask() { return msDefaultLightMask; }
 
         /** Returns a pointer to the current list of lights for this object.
         @remarks
