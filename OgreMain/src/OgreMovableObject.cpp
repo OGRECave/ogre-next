@@ -53,6 +53,7 @@ namespace Ogre {
     const uint32 VisibilityFlags::RESERVED_VISIBILITY_FLAGS = ~(LAYER_SHADOW_CASTER|LAYER_VISIBILITY);
     uint32 MovableObject::msDefaultQueryFlags = 0xFFFFFFFF;
     uint32 MovableObject::msDefaultVisibilityFlags = 0xFFFFFFFF & (~LAYER_VISIBILITY);
+    uint32 MovableObject::msDefaultLightMask = 0xFFFFFFFF;
     //-----------------------------------------------------------------------
     MovableObject::MovableObject( IdType id, ObjectMemoryManager *objectMemoryManager,
                                   SceneManager *manager, uint8 renderQueueId )

@@ -1411,6 +1411,16 @@ namespace Ogre
         if( itor != d.MemberEnd() && itor->value.IsBool() )
             mUseBinaryFloatingPoint = itor->value.GetBool();
 
+        itor = d.FindMember( "MovableObject_msDefaultVisibilityFlags" );
+        if( itor != d.MemberEnd() && itor->value.IsUint() )
+            MovableObject::setDefaultVisibilityFlags( itor->value.GetUint() );
+        itor = d.FindMember( "MovableObject_msDefaultQueryFlags" );
+        if( itor != d.MemberEnd() && itor->value.IsUint() )
+            MovableObject::setDefaultQueryFlags( itor->value.GetUint() );
+        itor = d.FindMember( "MovableObject_msDefaultLightMask" );
+        if( itor != d.MemberEnd() && itor->value.IsUint() )
+            MovableObject::setDefaultLightMask( itor->value.GetUint() );
+
         if( importFlags & SceneFlags::SceneNodes )
         {
             itor = d.FindMember( "scene_nodes" );

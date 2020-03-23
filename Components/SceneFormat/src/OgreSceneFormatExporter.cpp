@@ -978,6 +978,10 @@ namespace Ogre
         jsonStr.a( ",\n\t\"use_binary_floating_point\" : ", toQuotedStr( mUseBinaryFloatingPoint ) );
         jsonStr.a( ",\n\t\"MovableObject_msDefaultVisibilityFlags\" : ",
                    MovableObject::getDefaultVisibilityFlags() );
+        jsonStr.a( ",\n\t\"MovableObject_msDefaultQueryFlags\" : ",
+                   MovableObject::getDefaultQueryFlags() );
+        jsonStr.a( ",\n\t\"MovableObject_msDefaultLightMask\" : ",
+                   MovableObject::getDefaultLightMask() );
 
         if( exportFlags & SceneFlags::TexturesOitd )
             jsonStr.a( ",\n\t\"saved_oitd_textures\" : true" );
